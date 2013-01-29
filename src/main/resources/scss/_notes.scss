@@ -105,6 +105,7 @@
 			background: #ffffff;
 			padding: 0 13px;
 			.toolbar {
+				@include experimental(transition, all 0.5s);
 				position: relative;
 				overflow: hidden;
 				border-bottom: 1px solid #dcdcdc;
@@ -179,6 +180,7 @@
 				&, * {
 					@include allow-select;
 				}
+				@include experimental(transition, all 0.5s);
 				cursor: text;
 				padding: 2px 0 0 0;
 				color: $secondary-grey;
@@ -287,6 +289,7 @@
 				text-align: center;
 				color: $secondary-grey;
 				margin: -1px;
+				@include experimental(transition, all 0.5s);
 
 				&.whiteboard {
 					&::after{
@@ -314,6 +317,7 @@
 					background: $primary-blue;
 					position: relative;
 
+
 					&::after {
 						content: ' ';
 						overflow: hidden;
@@ -322,6 +326,35 @@
 						background: $icons no-repeat;
 						@include sprite($icons,'comment_white',$dimensions: true);
 					}
+				}
+			}
+		}
+
+		&.disabled {
+			.main {
+				opacity: 0.6;
+
+				.toolbar{
+					visibility: hidden;
+					opacity: 0;
+					pointer-events: none;
+				}
+
+				.content { }
+			}
+			.action{
+				&.whiteboard{
+					opacity: 0;
+					visibility: hidden;
+					pointer-events: none;
+				}
+				&.save {
+					pointer-events: none;
+					cursor: default;
+					border-color: #d0d0d0;
+					background: #b8b8b8;
+					color: #ffffff;
+					opacity: 0.5;
 				}
 			}
 		}

@@ -109,6 +109,22 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
+	isActive: function(){ return this.editor.hasCls('active'); },
+
+
+	disable: function(){
+		this.deactivate();
+		this.editor.addCls('active','disabled');
+		this.editor.down('.content').set({'contenteditable':undefined});
+	},
+
+
+	enable: function(){
+		this.editor.removeCls('disabled');
+		this.editor.down('.content').set({'contenteditable':'true'});
+	},
+
+
 	deactivate: function () {
 		this.editor.removeCls('active');
 		this.lastRange = null;
