@@ -417,7 +417,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
 		if( this.questionSet ){
-			this.questionSet.fireEvent('answered', this.question, this.part, true);
+			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()));
 		}
 		this.fireEvent('enable-submission', this.ordinal);
 	},
@@ -427,7 +427,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 		if( this.questionSet ){
-			this.questionSet.fireEvent('answered', this.question, this.part, false);
+			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()));
 		}
 		this.fireEvent('disable-submission', this.ordinal);
 	},
