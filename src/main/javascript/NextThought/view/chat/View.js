@@ -76,7 +76,37 @@ Ext.define('NextThought.view.chat.View', {
         this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
 	    this.mon(this, 'add', this.maybeShowFlagIcon, this);
 	    this.on('resize',this.reanchorLog,this);
+	    this.on('status-change', this.trackChatState, this);
     },
+
+
+	trackChatState: function(notification){
+		if(!notification || !notification.status){ return; }
+
+		var me = this, room, timer= 30000;
+
+		// NOTE: We want to always restart the timer when the receive one of these events
+		// active: window gained focus,
+		// composing: users started typing
+		if(notification.status === 'active' || notification.status === 'composing'){
+			clearTimeout(me.inactiveTimer);
+			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+		}
+
+		if(!me.currentChatStatus || (me.currentChatStatus !== notification.status)){
+			me.currentChatStatus = notification.status;
+			room = this.up('.chat-window') ?  this.up('.chat-window').roomInfo : null;
+			if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
+
+			//We should fire a status change to the controller
+			console.log('setting the chat status to: ', notification.status);
+			me.fireEvent('publish-chat-status', {state: me.currentChatStatus, room:room} );
+
+			clearTimeout(me.inactiveTimer);
+			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+		}
+		// We ignore state change if the currentChatStatus === notification.status
+	},
 
 
     flagMessages: function(){

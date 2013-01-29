@@ -28,16 +28,39 @@ Ext.define('NextThought.view.chat.Entry', {
 		inputEl:'input'
 	},
 
+	initComponent: function(){
+		this.addEvents({ 'status-change': true });
+		this.enableBubble(['status-change']);
+		this.callParent(arguments);
+	},
+
 	afterRender:function () {
 		this.callParent(arguments);
 		this.inputEl.selectable();
 		this.inputEl.on({
 			scope:this,
-			keydown:this.keyDown
+			keydown:this.keyDown,
+			keyup: this.keyUp,
+			focus: function(){ this.fireEvent('status-change', {status: 'active'});}
 		});
 
 		var me = this;
 		this.buttonEl.on('click', this.addWhiteboard, this);
+	},
+
+	keyUp: function(e){
+		var me = this, k = e.getKey(e);
+
+		if( e.ENTER !== k ){
+			this.fireEvent('status-change', {'status': 'composing'});
+			clearTimeout(me.pauseTimer);
+			//If the user pass a given number of seconds without typing, fire a paused event.
+			me.pauseTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'paused'}); }, 5000);
+		}
+		else{
+			clearTimeout(me.pauseTimer);
+			this.fireEvent('status-change', {'status': 'active'});
+		}
 	},
 
 	keyDown:function (e) {

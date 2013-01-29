@@ -37,7 +37,8 @@ Ext.define('NextThought.controller.Chat', {
 //			'POLL': this.onMessagePollChannel,
 //			'META': this.onMessageMetaChannel,
 			'DEFAULT': this.onMessageDefaultChannel,
-			'WHISPER' : this.onMessageDefaultChannel
+			'WHISPER' : this.onMessageDefaultChannel,
+			'STATE' : this.onReceiveStateChannel
 		};
 
 		Socket.register({
@@ -72,7 +73,8 @@ Ext.define('NextThought.controller.Chat', {
             },
 
             'chat-view': {
-                'flag-messages': this.flagMessages
+                'flag-messages': this.flagMessages,
+	            'publish-chat-status': this.publishChatStatus
             },
 
 
@@ -248,6 +250,19 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_postMessage', m, ack);
 	},
 
+	postChatUserStatus: function(room, state,channel, recipients, ack){
+		var m = {
+			state: state,
+			ContainerId: room.getId(),
+			recipients: room.get('Occupants'),  //DO we send everyone including me? for now YES.
+			user: $AppConfig.username,
+			channel: channel
+		};
+
+		//Send it through the socket
+		Socket.emit('chat_postUserState', m, ack);
+	},
+
 
 	approveMessages: function(messageIds){
 		Socket.emit('chat_approveMessages', messageIds);
@@ -402,7 +417,7 @@ Ext.define('NextThought.controller.Chat', {
 	showWhiteboard: function(data, cmp, mid, channel, recipients) {
 		var me = this,
 			room = ClassroomUtils.getRoomInfoFromComponent(cmp),
-			wbWin = Ext.widget('wb-window', {width: 802, value: data}),
+			wbWin = Ext.widget('wb-window', {width: 802, value: data, chatStatusEvent:'status-change', ownerCmp: cmp}),
 			wbData;
 
 		//hook into the window's save and cancel operations:
@@ -440,6 +455,43 @@ Ext.define('NextThought.controller.Chat', {
         //return to non moderation view:
         chatView.up('chat-window').onFlagToolClicked();
     },
+
+	publishChatStatus: function(change){
+		function shouldDropChatStatusChange(stateChange){
+			if(!change || !change.state){ return true; }
+
+			// NOTE: We need to guard against sending duplicate consecutive chat state notifications.
+			var lastState, me = this;
+			if(!me.roomsState){ return false; }
+			Ext.each(me.roomsState, function(s){
+				if(s.room.getId() === stateChange.room.getId()){ lastState = s; }
+			});
+			return lastState ? lastState.state === stateChange.state : false;
+		}
+
+		if(shouldDropChatStatusChange(change)){
+			console.log('Error: Dropping state change because the change state is same the current state. Change: ', change, ' all states: ');
+			return;
+		}
+
+		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false;
+		if(!this.roomsState){ this.roomsState=[]; }
+
+		//Update state of this room or add it to the roomstates.
+		Ext.each(this.roomsState, function(s){
+			if(s.room.getId() === change.room.getId()){
+				s.state = change.state;
+				handled = true;
+			}
+		});
+		if(!handled){ this.roomsState.push(change); }
+		Ext.each(this.roomsState, function(s){
+			console.log('Status of roomId: ', s.room.getId(), ' is ', s.state);
+		});
+
+		//Fire the event on the socket
+		this.postChatUserStatus(change.room, change.state, channel, [],ack);
+	},
 
 
     flagTranscriptMessages: function(messages, chatView){
@@ -935,6 +987,19 @@ Ext.define('NextThought.controller.Chat', {
 
 		if(!moderated && log) {
 			log.removeMessage(msg);
+		}
+	},
+
+	onReceiveStateChannel: function(obj){
+		//FIXME: Once the server starts broadcasting chat state notifications,
+		// this method will handle pushing them to the appropriate UI component. Needs to be updated.
+		var cid = obj.ContainerId, //obj.get('ContainerId'),
+			win = this.getChatWindow(cid);
+
+		if(win && obj && obj.state){
+			if(obj.state === 'composing' || obj.state === 'paused'){
+				win.down('chat-log-view').addStatusNotification(obj.state+'...');
+			}
 		}
 	},
 

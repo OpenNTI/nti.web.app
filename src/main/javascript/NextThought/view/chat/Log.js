@@ -5,6 +5,7 @@ Ext.define('NextThought.view.chat.Log', {
 		'NextThought.model.MessageInfo',
 		'NextThought.view.chat.log.Entry',
 		'NextThought.view.chat.log.NotificationEntry',
+		'NextThought.view.chat.log.NotificationStatus',
 		'NextThought.view.chat.log.Moderated',
 		'NextThought.view.chat.log.Content',
 		'NextThought.view.chat.log.Info',
@@ -76,9 +77,18 @@ Ext.define('NextThought.view.chat.Log', {
 			};
 		}
 
+		this.addEvents({ 'status-change': true });
+		this.enableBubble(['status-change']);
 		this.callParent(arguments);
 	},
 
+//	afterRender: function(){
+//		var me = this;
+//		me.callParent(arguments);
+//		me.mon(me.el, 'scroll', function(){
+//			me.fireEvent('status-change', {status: 'active'});
+//		});
+//	},
 
 	selectall: function() {
 		Ext.each(this.query(this.entryType), function(f){
@@ -149,10 +159,10 @@ Ext.define('NextThought.view.chat.Log', {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
-			mStat = msg.get('Status'),
-			o;
+			mStat = msg.get('Status'), o;
 		if (!id){console.warn('This message has no NTIID, cannot be targeted!', msg);}
 
+		this.clearChatStatusNotifications();
 		if (m){
 			m.update(msg);
 			return;
@@ -192,6 +202,11 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 	},
 
+	clearChatStatusNotifications: function(){
+		var ns = this.query('chat-notification-status'), me = this;
+		if(ns.length > 0){ Ext.Array.each(ns, function(n){ me.remove(n); }); }
+	},
+
 	shouldAddTimestampBeforeMessage: function(msg){
 		var newMsgTime =  msg.get('CreatedTime'),
 			lastTimeStamp, intervalTimeStamp,
@@ -212,6 +227,19 @@ Ext.define('NextThought.view.chat.Log', {
 		intervalTimeStamp = Ext.Date.add(lastTimeStamp, Ext.Date.MINUTE, 5);
 		if( !Ext.Date.between( newMsgTime, lastTimeStamp, intervalTimeStamp ) ){
 			this.addNotification(stamp);
+		}
+	},
+
+	addStatusNotification: function(state){
+		this.clearChatStatusNotifications();
+
+		var o = this.add({
+			xtype: 'chat-notification-status',
+			message: state
+		});
+
+		if(o.el && this.el){
+			o.el.scrollIntoView(this.el);
 		}
 	},
 

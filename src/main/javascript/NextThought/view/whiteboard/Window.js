@@ -151,7 +151,14 @@ Ext.define('NextThought.view.whiteboard.Window',{
 
     afterRender: function(){
         this.callParent(arguments);
-        this.mon(this.el, 'click', this.absorbeClick, this);
+	    var me = this;
+        me.mon(me.el, 'click', me.absorbeClick, this);
+	    me.mon(this.el, 'click', function(){
+		    console.log('WB clicked');
+		    if(me.ownerCmp){
+			    me.ownerCmp.fireEvent('status-change', {status: 'composing'});
+		    }
+	    });
     },
 
 	clearAll: function(){
