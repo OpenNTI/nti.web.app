@@ -162,10 +162,6 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		return this.self.transformToMathquillInput(latex);
 	},
 
-	canHaveAnswerHistory: function(){
-		return true;
-	},
-
 	setValue: function(latex){
 		latex = this.sanitizeForMathquill(latex);
 		//console.log('Setting value to ', latex);

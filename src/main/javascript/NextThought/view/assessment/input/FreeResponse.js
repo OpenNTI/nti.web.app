@@ -86,7 +86,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 	canHaveAnswerHistory: function(){
-		return true;
+		return this.questionSet ? false : true;
 	},
 
 	getValue: function(){
