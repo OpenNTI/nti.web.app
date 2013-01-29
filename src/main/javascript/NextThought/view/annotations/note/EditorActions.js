@@ -114,7 +114,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	disable: function(){
 		this.deactivate();
-		this.editor.addCls('active','disabled');
+		this.editor.addCls(['active','disabled']);
 		this.editor.down('.content').set({'contenteditable':undefined});
 	},
 
