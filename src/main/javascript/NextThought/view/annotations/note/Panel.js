@@ -507,7 +507,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	deactivateReplyEditor: function(){
-		if(!this.editorActive()){
+		var root = this.getRoot();
+		if(!root.editorActive()){
 			return;
 		}
 
@@ -521,7 +522,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.text.show();
 		}
 		delete this.editMode;
-		this.setEditorActive(false);
+		root.setEditorActive(false);
 	},
 
 
