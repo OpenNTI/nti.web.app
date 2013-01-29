@@ -70,7 +70,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 	activateEditor: function(){
 		var me = this;
-		if(me.getRoot().checkAndMarkAsActive()){
+		if(me.getRoot().checkAndMarkAsActive(this)){
 			me.comment.hide();
 			me.editorActions.activate();
 			setTimeout(function(){me.editorActions.focus(true);}, 300);
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			this.editorActions.deactivate();
 			this.editorActions.setValue('');
 			this.comment.show();
-			this.getRoot().setEditorActive(false);
+			this.getRoot().setEditorActive(null);
 		}
 		return false;
 	},

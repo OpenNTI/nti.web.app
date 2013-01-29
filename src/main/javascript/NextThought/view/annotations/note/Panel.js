@@ -464,26 +464,32 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 	editorActive: function(){
-		return Boolean(this.getRoot().isEditorActive);
+		return Boolean(this.getRoot().activeEditorOwner);
 	},
 
 
-	setEditorActive: function(active){
+	//Sets cmp as the component that contains the active editor
+	setEditorActive: function(cmp){
 		var root = this.getRoot();
-		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor');
-		if(root.isEditorActive === active){
-			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
+		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
+		if(root.editorActive() === !!cmp){
+			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?', cmp);
 			return;
 		}
-		root.isEditorActive = active;
-		root.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
+		delete root.activeEditorOwner;
+		if(cmp){
+			root.activeEditorOwner = cmp;
+		}
+		root.fireEvent(cmp ? 'editorActivated' : 'editorDeactivated', this);
 	},
 
-
-	checkAndMarkAsActive: function(){
+	//Checks to see if an editor is active for our root
+	//and sets the active editor to be the one owned by the provided
+	//cmp.  A cmp of null means the editor is no longer active
+	checkAndMarkAsActive: function(cmp){
 		var root = this.getRoot();
 		if(!root.editorActive()){
-			root.setEditorActive(true);
+			root.setEditorActive(cmp);
 			return true;
 		}
 		return false;
@@ -494,7 +500,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var me = this;
 		if(e){e.stopEvent();}
 
-		if(me.noteBody && me.checkAndMarkAsActive()){
+		if(me.noteBody && me.checkAndMarkAsActive(this)){
 			me.replyToId = null;
 			me.noteBody.addCls('editor-active');
 			me.editorActions.activate();
@@ -522,7 +528,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.text.show();
 		}
 		delete this.editMode;
-		root.setEditorActive(false);
+		root.setEditorActive(null);
 	},
 
 

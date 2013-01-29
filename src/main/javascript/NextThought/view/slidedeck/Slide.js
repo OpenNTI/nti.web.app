@@ -238,26 +238,31 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	getRoot:function(){	return this; },
 
 
-	editorActive: function(){ return Boolean(this.isEditorActive); },
+	editorActive: function(){
+		return Boolean(this.getRoot().activeEditorOwner);
+	},
 
 
-	setEditorActive: function(active){
-		active = Boolean(active);
+	setEditorActive: function(cmp){
+		active = Boolean(cmp);
 		var root = this.getRoot();
-		console.log('Will mark Slide as having an ' + (active ? 'active' : 'inactive') + ' editor');
-		if(root.isEditorActive === active){
+		console.log('Will mark Slide as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
+		if(root.editorActive() === !!cmp){
 			console.warn('Slide already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
 			return;
 		}
-		root.isEditorActive = active;
+		delete root.activeEditorOwner;
+		if(cmp){
+			root.activeEditorOwner = cmp;
+		}
 		root.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
 	},
 
 
-	checkAndMarkAsActive: function(){
+	checkAndMarkAsActive: function(cmp){
 		var root = this.getRoot();
 		if(!root.editorActive()){
-			root.setEditorActive(true);
+			root.setEditorActive(cmp);
 			return true;
 		}
 		return false;
