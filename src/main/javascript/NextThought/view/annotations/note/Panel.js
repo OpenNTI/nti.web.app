@@ -470,7 +470,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	//Sets cmp as the component that contains the active editor
 	setEditorActive: function(cmp){
-		var root = this.getRoot();
+		var active = Boolean(cmp),
+			root = this.getRoot();
 		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
 		if(root.editorActive() === !!cmp){
 			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?', cmp);

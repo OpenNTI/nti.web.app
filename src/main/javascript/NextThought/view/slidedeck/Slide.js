@@ -38,7 +38,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		this.on({
 			scope: this,
 //			beforecollapse: this.handleCollapsingThread,
-			beforeexpand: this.handleExpandingThread
+			beforeexpand: this.handleExpandingThread,
+			add: this.updateCount
 		});
 	},
 
@@ -120,7 +121,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		}
 	},
 
-	itemAddedToStore: function(store, records, index){
+
+	itemAddedToStore: function(store, records){
 		console.log('Slide detected records added to store ', store, records);
 		var dom = this.slide.get('dom-clone'), toAdd = [];
 
@@ -157,13 +159,6 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	},
 
 
-	onAdd: function(cmp){
-		this.callParent(arguments);
-		this.updateCount();
-	},
-
-
-
 	componentForRecord: function(record, dom){
 		var guid = IdCache.getComponentId(record, null, 'reply'),
 			add = true,
@@ -183,6 +178,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		return add ? {record: record, id: guid} : null;
 	},
+
 
 	showUserData: function(){
 		var items = this.store.getItems()||[],
@@ -219,7 +215,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	},
 
 
-	handleExpandingThread: function(root,childrenDom){
+	handleExpandingThread: function(root /*,childrenDom*/){
 		var h = 0, t = this.el.getScroll().top;
 		Ext.each(this.query(this.defaultType),function(i){
 			if(i === root){return;}
@@ -244,8 +240,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 
 	setEditorActive: function(cmp){
-		active = Boolean(cmp);
-		var root = this.getRoot();
+		var active = Boolean(cmp),
+			root = this.getRoot();
 		console.log('Will mark Slide as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
 		if(root.editorActive() === !!cmp){
 			console.warn('Slide already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
