@@ -69,7 +69,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 	dismissClick: function(e){
 		var t = e.getTarget(),
-			p = t? t.parentNode: null;
+			p = t? Ext.fly(t).parent('body',true): null;
 
 		if(!this.down('note-main-view').editorActive() //an editor is not active,
 		&& !e.getTarget('.note-window') // the click did not fall inside the note window

@@ -362,8 +362,8 @@ function(){
 		    cls: 'respond',
 		    cn: [
 			    TemplatesForNotes.getReplyOptions(),
-			    TemplatesForNotes.getEditorTpl(),
-			    { tag: 'span', cls: 'time' }
+			    { tag: 'span', cls: 'time' },
+			    TemplatesForNotes.getEditorTpl()
 		    ]
 	    }]
     },{

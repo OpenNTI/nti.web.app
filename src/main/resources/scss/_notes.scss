@@ -895,6 +895,7 @@
 				display: none;
 				.controls {display: none !important;}
 			}
+			.body { display: none; }
 			.avatar {display: none;}
 			.name {display: none;}
 			.respond {
@@ -903,6 +904,7 @@
 					position: static;
 					//float: right;
 					font-style: italic;
+					display: block !important;
 				}
 			}
 			.reply-options {

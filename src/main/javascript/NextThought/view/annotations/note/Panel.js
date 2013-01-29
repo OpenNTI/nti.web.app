@@ -65,6 +65,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.addEvents('chat', 'share', 'save-new-reply','editorActivated','editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.callParent(arguments);
+		this.on('beforedestroy',this.onBeforeDestroyCheck,this);
+	},
+
+
+	onBeforeDestroyCheck: function(){
+		if(this.editorActions.isActive()){
+			this.setPlaceholderContent();
+			return false;//stop the destroy
+		}
+		return true;//allow the destroy to continue
 	},
 
 
@@ -94,16 +104,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		if( $AppConfig.service.canShare() ){
-			me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
-			me.mon(me.shareButton,{ scope: me, click: me.onShare });
+			me.mon(me.replyButton,'click', me.activateReplyEditor, me);
+			me.mon(me.shareButton,'click', me.onShare, me);
 		}
 		else{
 			me.replyButton.remove();
 			me.shareButton.remove();
 		}
 
-		me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
-		me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
+		me.mon(me.editor.down('.cancel'), 'click', me.deactivateReplyEditor, me);
+		me.mon(me.editor.down('.save'), 'click', me.editorSaved, me);
 
 		me.mon(me.editor.down('.content'),{
 			scope: me,
@@ -463,6 +473,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		return cmp;
 	},
 
+
 	editorActive: function(){
 		return Boolean(this.getRoot().activeEditorOwner);
 	},
@@ -484,6 +495,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		root.fireEvent(cmp ? 'editorActivated' : 'editorDeactivated', this);
 	},
 
+
 	//Checks to see if an editor is active for our root
 	//and sets the active editor to be the one owned by the provided
 	//cmp.  A cmp of null means the editor is no longer active
@@ -498,6 +510,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	deactivateEditor: function(){
+		console.trace("Who called this?");
 		this.deactivateReplyEditor.apply(this, arguments);
 	},
 
@@ -693,9 +706,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 	},
 
+
 	onDelete: function(){
 		this.record.destroy();
 	},
+
 
 	wasDeleted: function(){
 		console.log('Deleting panel from record destroy, marking deleteing=true');
@@ -703,20 +718,35 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.destroy();
 	},
 
+
 	setPlaceholderContent: function() {
-		this.time.update("This message has been deleted");
-		this.noteBody.addCls("deleted-reply");
+		var me = this,
+			e = me.editor || {down:Ext.emptyFn},
+			cancel = e.down('.cancel'),
+			save = e.down('.save');
+
+		me.time.update("This message has been deleted");
+		me.noteBody.addCls("deleted-reply");
+
+		if(me.editorActions.isActive()){
+			me.editorActions.disable();
+
+			me.mun(save, 'click', me.editorSaved, me);
+			me.mon(cancel,'click', function(){
+				me.deactivateReplyEditor();
+				//if we didn't get a placeholder, then just let this leaf go
+				if(!me.record.placeholder){
+					me.destroy();
+				}
+			});
+		}
 	},
 
 
-	onChat: function() {
-		this.fireEvent('chat', this.record);
-	},
+	onChat: function() { this.fireEvent('chat', this.record); },
 
 
-	onFlag: function() {
-		this.record.flag(this);
-	},
+	onFlag: function() { this.record.flag(this); },
 
 
 	click: function(e){
@@ -785,8 +815,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				cls: 'respond',
 				cn: [
 					TemplatesForNotes.getReplyOptions(),
-					TemplatesForNotes.getEditorTpl(),
-					{ tag: 'span', cls: 'time' }
+					{ tag: 'span', cls: 'time' },
+					TemplatesForNotes.getEditorTpl()
 				]
 			}]
 	},{
