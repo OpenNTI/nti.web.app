@@ -9,6 +9,13 @@ Ext.define('NextThought.view.menus.JumpTo',{
 	border: false,
 	hideMode: 'display',
 	minWidth: 200,
+	maxWidth: 500,
+
+	layout: {
+        type: 'vbox',
+		align: 'stretch',
+        overflowHandler: 'Scroller'
+    },
 
 	defaults: {
 		ui: 'jumpto-menuitem',

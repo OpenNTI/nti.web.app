@@ -183,7 +183,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			var id = o.get('NTIID');
 			items.push({
 				rememberLastLocation: true,
-				text	: Ext.String.ellipsis(o.get('title'),30,false),
+				text	: o.get('title'),
 				ntiid	: id,
 				cls		: id===locInfo.ntiid?'current':''
 			});
@@ -204,11 +204,11 @@ Ext.define('NextThought.view.content.Navigation',{
 			node = Ext.fly(node).prev(null,true);
 		}
 
-		for(;node.nextSibling; node = node.nextSibling){
+		for(node;node.nextSibling; node = node.nextSibling){
 			if(!/topic/i.test(node.tagName)){ continue; }
 			num++;
 			items.push({
-				text	: num+'. '+Ext.String.ellipsis(node.getAttribute('label'),30,false),
+				text	: num+'. '+node.getAttribute('label'),
 				ntiid	: node.getAttribute('ntiid'),
 				cls		: node===current?'current':''
 			});
