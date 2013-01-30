@@ -23,7 +23,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 						o = me.readerOffsets,
 						r = me.callParent(arguments);
 
-					if(o){
+					if(r && o){
 						r[0] += o.left;
 						r[1] += o.top;
 					}
