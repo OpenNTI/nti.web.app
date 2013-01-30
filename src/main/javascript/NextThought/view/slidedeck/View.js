@@ -92,21 +92,23 @@ Ext.define('NextThought.view.slidedeck.View',{
 	maybeSelect: function(v, slide){
 		var slideView = this.getSlide(),
 			destructiveSelection = slideView.editorActive(),
-			wasPlaying, allowDestructiveAction,
+			wasPlaying,
 			me = this;
 
 		function actOnSelect(){
 			me.doSelect(v, slide);
 		}
 
-		allowDestructiveAction = Ext.Function.createSequence(function(){
+		function allowDestructiveAction(){
 			if(wasPlaying){
 				me.video.resumePlayback();
 			}
 			if(slideView.activeEditorOwner && slideView.activeEditorOwner.deactivateEditor){
 				slideView.activeEditorOwner.deactivateEditor();
 			}
-		}, actOnSelect);
+
+			actOnSelect();
+		}
 
 		if(!destructiveSelection){
 			actOnSelect();

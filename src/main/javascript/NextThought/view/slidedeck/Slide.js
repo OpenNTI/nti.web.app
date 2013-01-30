@@ -243,7 +243,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		var active = Boolean(cmp),
 			root = this.getRoot();
 		console.log('Will mark Slide as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
-		if(root.editorActive() === Boolean(cmp)){
+		if(root.editorActive() === active){
 			console.warn('Slide already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
 			return;
 		}
