@@ -106,7 +106,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 			if(slideView.activeEditorOwner && slideView.activeEditorOwner.deactivateEditor){
 				slideView.activeEditorOwner.deactivateEditor();
 			}
-		}, actOnSelect)
+		}, actOnSelect);
 
 		if(!destructiveSelection){
 			actOnSelect();
