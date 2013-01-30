@@ -45,6 +45,11 @@ Ext.define('NextThought.overrides.data.Connection',{
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/json';
 	Ext.Ajax.on('beforerequest', function(connection,options) {
+
+		if(Ext.Ajax.logRequests){
+			console.debug('Will perform ajax request with ', arguments);
+		}
+
 		if(options&&options.async===false){
 			var loc = null;
 			try { loc.toString(); }//force an error
