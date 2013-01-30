@@ -3,6 +3,7 @@ Ext.define('NextThought.view.assessment.Score',{
 	alias: 'widget.assessment-score',
 	requires: [
 		'Ext.data.JsonStore',
+		'Ext.chart.Chart',
 		'NextThought.chart.series.Score'
 	],
 
