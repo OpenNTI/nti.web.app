@@ -105,6 +105,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
 			selectedNode.markSelected(true);
+			this.updateWith(selectedNode);  //move the anchor arrow.
 		}
 		console.log('test load');
 	},
