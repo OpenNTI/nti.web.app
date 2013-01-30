@@ -2,13 +2,14 @@ Ext.define('NextThought.view.assessment.Score',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-score',
 	requires: [
+		'Ext.data.JsonStore',
 		'NextThought.chart.series.Score'
 	],
 
 	initComponent: function(){
-		this.store = Ext.create('Ext.data.JsonStore', {fields: ['p']});
+		this.store = Ext.data.JsonStore.create({fields: ['p']});
 		this.callParent(arguments);
-		var c = this.add({
+		this.add({
 			xtype: 'chart',
 			width: 75,
 			height: 75,
