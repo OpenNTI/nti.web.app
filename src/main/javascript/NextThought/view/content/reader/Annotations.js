@@ -50,10 +50,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	storeEventsAdd: function(store,records){
+		console.debug('New records in store, adding to page...',store.cacheMapId||store.containerId,records);
 		Ext.each(records,function(r){
 			var cls = r.get('Class');
 			if(!this.createAnnotationWidget(cls,r)){
-				console.log('Apparently this record didn\'t get added',r);
+				console.warn('Apparently this record didn\'t get added',r);
+			}
+			else {
+				console.debug('Added '+cls, r.getId(), 'w/ body:', r.get('body'));
 			}
 		},this);
 	},
@@ -447,11 +451,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				style = record.get('style'),
 				w;
 
-		if(!record.pruned && (record.get('inReplyTo') || record.parent)){
+		if(record.get('inReplyTo') || record.parent){
 			return false;
 		}
 
 		if (this.annotationExists(record)) {
+			console.log('Updating existing annotation?');
 			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
 			return true;
 		}

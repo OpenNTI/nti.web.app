@@ -13,6 +13,13 @@ Ext.define('NextThought.store.PageItem',function(){
 		autoLoad: false,
 		pageSize: 20,
 
+		/**
+		 * @property
+		 * @cfg {Boolean} Stores added to the location provider will automatically forward their events to who ever
+		 * listens to the location provider.  Set this to true to prevent this automatic behavior.
+		 */
+		doesNotShareEventsImplicitly: false,
+
 		groupField: 'Class',
 		groupDir  : 'ASC',
 		proxy: {

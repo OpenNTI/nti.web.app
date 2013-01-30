@@ -96,6 +96,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 						pi.getLink(Globals.USER_GENERATED_DATA),
 						containerId,true);
 
+				// See LocationProvider's addStore for why we set this flag.
+				store.doesNotShareEventsImplicitly = true;
+
 				Ext.apply(store.proxy.extraParams,{
 					accept: NextThought.model.Note.mimeType,
 					filter: 'TopLevel'

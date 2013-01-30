@@ -58,10 +58,36 @@ Ext.define('NextThought.providers.Location', {
 
 
 	addStore: function(id,store){
+		var events = this.storeEvents, monitors = events.managedListeners;
+
 		if(this.hasStore(id) && this.getStore(id) !== store){
 			console.warn('replacing an existing store??');
 		}
+
+		store.cacheMapId = store.cacheMapId || id;
+
 		this.currentPageStores[id] = store;
+
+		/**
+		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
+		 * See the PageItem store's property documentation
+		 * {@see NextThought.store.PageItem}
+		 *
+		 * An example of when you would want to set this is if there are two stores that represent the same set of data
+		 * and they are currently active ...such as the "notes only" store in the slide deck, and the general purpose
+		 * store on the page...  adding to the slide's store would trigger a duplicate event (the page's store would be
+		 * added to as well)
+		 */
+		if(store.doesNotShareEventsImplicitly){
+			return;
+		}
+
+		//Because root is just an alias of the NTIID store that represents the page root, it was causing two monitors
+		// to be put on the store...so we will skip stores we are already monitoring
+		if(Ext.Array.contains(Ext.Array.pluck(monitors,'item'),store)){
+			//This prevents to invocations of event handlers for one event.
+			return;
+		}
 
 		//Discovered a gap in the documentation. It states that the replayEvents() call returns a 'destroyable' object
 		// so we can surgically remove the relayed events after we are done with them.... this didn't get added to ExtJS
@@ -69,7 +95,7 @@ Ext.define('NextThought.providers.Location', {
 		//
 		//The replayEvents call creates managed listeners on the storeEvents object, so to work around the problem, we
 		// will just clear the managed listeners when we clear the stores.
-		/*var relayers = */this.storeEvents.relayEvents(store, ['add','bulkremove','remove']);
+		/*var relayers = */events.relayEvents(store, ['add','bulkremove','remove']);
 		//relayers would be used and tracked, but... because we need 4.1.3 for that, meh...
 	},
 
