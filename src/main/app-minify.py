@@ -8,17 +8,14 @@ import argparse
 import httplib
 import json
 import os
-import BaseHTTPServer
-import SimpleHTTPServer
-import SocketServer
-import socket
 import subprocess
 import sys
-import thread
 import time
 import urllib2 as urllib
 
 BUILDTIME = time.strftime('%Y%m%d%H%M%S')
+EXTJS_SERVER = 'http://localhost'
+APP_ENTRY_SERVER = 'http://localhost'
 
 def _readSenchaProjectFile( filename ):
 	data = None
@@ -27,15 +24,19 @@ def _readSenchaProjectFile( filename ):
 
 	return data
 
-def _fixSenchaProjectFile( projectFile ):
+def _fixSenchaProjectFile( projectFile, extjs_server ):
 	for item in ((projectFile['builds'])[0])['files']:
 		# Remove MathQuill from the project
 		if 'mathquill' in item['path']:
 			(((projectFile['builds'])[0])['files']).remove(item)
 
+		path = item['path'].split('/')
+		if path[0] == '..' and 'ext-' in path[1]:
+			item['path'] = extjs_server + '/' + '/'.join(path[1:])
+
 	# Added ext.js as the first source item
 	item = {}
-	item['path'] = 'https://extjs.cachefly.net/ext-4.1.1-gpl/'
+	item['path'] = '%s/ext-4.1.1-gpl/' % (extjs_server, )
 	item['name'] = 'ext.js'
 	item['clsName'] = 'Ext'
 	(((projectFile['builds'])[0])['files']).insert(0, item)
@@ -50,7 +51,7 @@ def _fixSenchaProjectFile( projectFile ):
 	
 	return projectFile
 
-def _buildProjectFile( app_entry ):
+def _buildProjectFile( app_entry, extjs_server ):
 	print('Building Project File')
 	phantomjs_script = '../../phantomjs-jsb.js'
 	project_file_name = 'minify.jsb3'
@@ -58,7 +59,7 @@ def _buildProjectFile( app_entry ):
 
 	try:
 		subprocess.check_call(command)
-		project_file = _fixSenchaProjectFile( _readSenchaProjectFile( project_file_name ) )
+		project_file = _fixSenchaProjectFile( _readSenchaProjectFile( project_file_name ), extjs_server )
 	finally:
 		if os.path.exists(project_file_name):
 			os.remove( project_file_name )
@@ -69,7 +70,11 @@ def _cacheExtJSFiles( projectFile ):
 	# Check for missing files and download them if necessary.
 	for item in ((projectFile['builds'])[0])['files']:
 		if 'ext-4.1.1' in item['path']:
-			path = '../' + '/'.join(item['path'].split('/')[3:])
+			path = item['path'].split('/')
+			if 'http' in path[0]:
+				path = '../' + '/'.join(item['path'].split('/')[3:])
+			else:
+				path = item['path']
 			if not os.path.exists( os.path.join(path, item['name'])):
 				print('%s is not cached.' % (os.path.join(item['path'], item['name']), ))
 				if not os.path.exists( path ):
@@ -78,7 +83,7 @@ def _cacheExtJSFiles( projectFile ):
 				with open( os.path.join(path, item['name']), 'wb' ) as file:
 					file.write(r.read())
 
-def _buildIndexHtml( version, analytics_key ):
+def _buildIndexHtml( version, analytics_key, extjs_server ):
 	part1 = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,10 +123,10 @@ def _buildIndexHtml( version, analytics_key ):
 """ % (BUILDTIME, BUILDTIME, BUILDTIME)
 
 	part5a = """        <script type="text/javascript"
-                        src="https://alpha.nextthought.com/ext-4.1.1-gpl/ext.js"
+                        src="%s/ext-4.1.1-gpl/ext.js"
                         id="ext-js-library"></script>
 
-"""
+""" % (extjs_server, )
 	part5b = """        <script type="text/javascript"
                         src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
                         id="ext-js-library"></script>
@@ -155,6 +160,9 @@ def _buildIndexHtml( version, analytics_key ):
         </script>
 """ % (analytics_key, )
 
+	if not analytics_key:
+		analytics = ''
+
 	if version == 'ref':
 		return part1 + part3 + part4 + part5a + part6a + part7
 	elif version == 'minify':
@@ -164,57 +172,23 @@ def _buildIndexHtml( version, analytics_key ):
 	else:
 		return ''
 
-def _buildRefIndexHtml():
-	contents = _buildIndexHtml( 'ref', None )
+def _buildRefIndexHtml(extjs_server):
+	contents = _buildIndexHtml( 'ref', None, extjs_server )
 
 	with open( 'index-ref.html', 'wb' ) as file:
 		file.write(contents)
 
 def _buildMinifyIndexHtml(analytics_key):
-	contents = _buildIndexHtml( 'minify', analytics_key )
+	contents = _buildIndexHtml( 'minify', analytics_key, None )
 
 	with open( 'index-minify.html', 'wb' ) as file:
 		file.write(contents)
 
 def _buildUnminifyIndexHtml(analytics_key):
-	contents = _buildIndexHtml( 'unminify', analytics_key )
+	contents = _buildIndexHtml( 'unminify', analytics_key, None )
 
 	with open( 'index-unminify.html', 'wb' ) as file:
 		file.write(contents)
-
-def get_open_port():
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	try:
-		s.bind(("",0))
-		s.listen(1)
-		return s.getsockname()[1]
-	finally:
-		s.close()
-
-class ForkingHTTPServer(SocketServer.ForkingMixIn, BaseHTTPServer.HTTPServer):
-	ForkingHTTPRequestHandler = SimpleHTTPServer.SimpleHTTPRequestHandler
-
-def _launch_server(data_path, port=None):
-
-	if not os.path.exists(data_path):
-		raise Exception("'%s' does not exists" % data_path)
-
-	os.chdir(data_path)
-
-	def ignore(self, *args, **kwargs):
-		pass
-
-	port = port or get_open_port()
-	handler = ForkingHTTPServer.ForkingHTTPRequestHandler
-	handler.log_error = ignore
-	handler.log_message = ignore
-
-	httpd = SocketServer.TCPServer(("", port), handler)
-	def worker():
-		httpd.serve_forever()
-
-	tid = thread.start_new_thread(worker, ())
-	return httpd
 
 def _closureMinify( projectFile ):
 	print('Minifying Project')
@@ -240,22 +214,19 @@ def _closureMinify( projectFile ):
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-a', '--google-analytics', dest='analytics_key', action='store', default=None, help="Key value used with Google Analytics.  If no value is specified, then the index-minify.html will not contain Google Analytics code.")
+	parser.add_argument('--extjs-server', dest='extjs_server', action='store', default=None, help="Server to download ExtJS from")
+	parser.add_argument('--app-entry-server', dest='app_entry_server', action='store', default=None, help="Server to download the app entry point from")
 
 	args = parser.parse_args()
+	extjs_server = args.extjs_server or EXTJS_SERVER
+	app_entry_server = args.app_entry_server or APP_ENTRY_SERVER
 
-
-	httpd = None
-	_buildRefIndexHtml()
-	app_entry = 'http://localhost:%s/index-ref.html'
+	_buildRefIndexHtml( extjs_server )
+	app_entry = '%s/NextThoughtWebApp/index-ref.html' % app_entry_server
 
 	try:
-		port = get_open_port()
-		httpd = _launch_server('.', port)
-		projectfile = _buildProjectFile( app_entry % port )
+		projectfile = _buildProjectFile( app_entry, extjs_server )
 	finally:
-		if httpd:
-			httpd.shutdown()
-			httpd.server_close()
 		os.remove('index-ref.html')
 
 	if not projectfile:
