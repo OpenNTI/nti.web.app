@@ -8,8 +8,13 @@ import argparse
 import httplib
 import json
 import os
+import BaseHTTPServer
+import SimpleHTTPServer
+import SocketServer
+import socket
 import subprocess
 import sys
+import thread
 import time
 import urllib2 as urllib
 
@@ -50,27 +55,27 @@ def _buildProjectFile( app_entry ):
 	phantomjs_script = '../../phantomjs-jsb.js'
 	project_file_name = 'minify.jsb3'
 	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', project_file_name]
-	
+
 	try:
 		subprocess.check_call(command)
 		project_file = _fixSenchaProjectFile( _readSenchaProjectFile( project_file_name ) )
 	finally:
-		os.remove( project_file_name )
+		if os.path.exists(project_file_name):
+			os.remove( project_file_name )
 
 	return project_file
 
 def _cacheExtJSFiles( projectFile ):
-	host = 'https://extjs.cachefly.net'
-
 	# Check for missing files and download them if necessary.
 	for item in ((projectFile['builds'])[0])['files']:
 		if 'ext-4.1.1' in item['path']:
-			if not os.path.exists( os.path.join(item['path'], item['name'])):
+			path = '../' + '/'.join(item['path'].split('/')[3:])
+			if not os.path.exists( os.path.join(path, item['name'])):
 				print('%s is not cached.' % (os.path.join(item['path'], item['name']), ))
-				if not os.path.exists( item['path']):
-					os.makedirs(item['path'], 0755)
-				r = urllib.urlopen('/'.join([ host, (item['path']).replace('../', ''), item['name'] ]))
-				with open( os.path.join(item['path'], item['name']), 'wb' ) as file:
+				if not os.path.exists( path ):
+					os.makedirs(path, 0755)
+				r = urllib.urlopen('/'.join( (item['path'], item['name'] ) ) )
+				with open( os.path.join(path, item['name']), 'wb' ) as file:
 					file.write(r.read())
 
 def _buildIndexHtml( version, analytics_key ):
@@ -113,7 +118,7 @@ def _buildIndexHtml( version, analytics_key ):
 """ % (BUILDTIME, BUILDTIME, BUILDTIME)
 
 	part5a = """        <script type="text/javascript"
-                        src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext.js"
+                        src="https://alpha.nextthought.com/ext-4.1.1-gpl/ext.js"
                         id="ext-js-library"></script>
 
 """
@@ -177,6 +182,40 @@ def _buildUnminifyIndexHtml(analytics_key):
 	with open( 'index-unminify.html', 'wb' ) as file:
 		file.write(contents)
 
+def get_open_port():
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		s.bind(("",0))
+		s.listen(1)
+		return s.getsockname()[1]
+	finally:
+		s.close()
+
+class ForkingHTTPServer(SocketServer.ForkingMixIn, BaseHTTPServer.HTTPServer):
+	ForkingHTTPRequestHandler = SimpleHTTPServer.SimpleHTTPRequestHandler
+
+def _launch_server(data_path, port=None):
+
+	if not os.path.exists(data_path):
+		raise Exception("'%s' does not exists" % data_path)
+
+	os.chdir(data_path)
+
+	def ignore(self, *args, **kwargs):
+		pass
+
+	port = port or get_open_port()
+	handler = ForkingHTTPServer.ForkingHTTPRequestHandler
+	handler.log_error = ignore
+	handler.log_message = ignore
+
+	httpd = SocketServer.TCPServer(("", port), handler)
+	def worker():
+		httpd.serve_forever()
+
+	tid = thread.start_new_thread(worker, ())
+	return httpd
+
 def _closureMinify( projectFile ):
 	print('Minifying Project')
 	cmd = '/usr/bin/java'
@@ -186,11 +225,12 @@ def _closureMinify( projectFile ):
 	command = [cmd, "-jar", "../../closure-compiler.jar", "--compilation_level", optimization_level, "--js_output_file", ((projectFile['builds'])[1])['target']]
 
 	for item in ((projectFile['builds'])[0])['files']:
-		if 'https://extjs.cachefly.net/' in item['path']:
-			item['path'] = (item['path']).replace('https://extjs.cachefly.net/','../')
-		elif '../../extjs.cachefly.net/' in item['path']:
-			item['path'] = (item['path']).replace('../../extjs.cachefly.net/','../')
-		command.extend(['--js', os.path.join(item['path'], item['name'])])
+		path = ''
+		if 'http' in item['path']:
+			path = '../' + '/'.join(item['path'].split('/')[3:])
+		else:
+			path = item['path']
+		command.extend(['--js', os.path.join( path, item['name'])])
 	command.extend(['--js', 'javascript/app.js'])
 
 	_cacheExtJSFiles( projectFile )
@@ -203,14 +243,24 @@ def main():
 
 	args = parser.parse_args()
 
-	_buildRefIndexHtml()
 
-	app_entry = 'index-ref.html'
+	httpd = None
+	_buildRefIndexHtml()
+	app_entry = 'http://localhost:%s/index-ref.html'
 
 	try:
-		projectfile = _buildProjectFile( app_entry )
+		port = get_open_port()
+		httpd = _launch_server('.', port)
+		projectfile = _buildProjectFile( app_entry % port )
 	finally:
+		if httpd:
+			httpd.shutdown()
+			httpd.server_close()
 		os.remove('index-ref.html')
+
+	if not projectfile:
+		print('Dependecy resolution failed. Exiting.')
+		return
 
 	_closureMinify(projectfile)
 
