@@ -71,7 +71,6 @@ Ext.define('NextThought.util.UserDataThreader',{
 			if(!n.placeholder && !contains(list, n)){
 				Ext.Array.push(list, n);
 			}
-			else{console.log('Skipping n b/c its already in the list', n);}
 
 			if(!Ext.isEmpty(n.children)){
 				Ext.each(n.children, function(kid){
@@ -85,6 +84,8 @@ Ext.define('NextThought.util.UserDataThreader',{
 		});
 
 	//	console.log('Flattened list is ', list);
+
+		console.log('Flattened rawList of size ', rawList.length, 'to flattened list of size', list.length);
 
 		Ext.each(list, function clearRefs(r){
 			if(!r.placeholder){

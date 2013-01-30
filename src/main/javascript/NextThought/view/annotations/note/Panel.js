@@ -661,6 +661,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			c = 'ReferencedByCount',
             pageStore, rootid, root;
 
+		//TODO move this logic out of the views into either the model or store
 		LocationMeta.getMeta(cid,function(meta){
 			try{
 				if(!meta){
@@ -678,6 +679,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 					root = pageStore.getById(rootid);
 					if(root){
 						root.set(c, Math.max((root.get(c)||0) + i, 0));
+						root.fireEvent('count-updated');
 					}
 				}
 			}
@@ -709,6 +711,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	onDelete: function(){
 		this.record.destroy();
+		this.adjustRootsReferenceCount(this.record, -1);
 	},
 
 

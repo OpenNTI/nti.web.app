@@ -105,7 +105,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
 			selectedNode.markSelected(true);
-			selectedNode.clicked();
 		}
 		console.log('test load');
 	},
@@ -181,6 +180,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
         if (!this.store){
             this.store = LocationProvider.getStore(rec.get('ContainerId'));
+			 //Listen to add so we don't have to redraw everything when anything is added to the store.
             this.mon(this.store,'datachanged',this.load,this);
 	        this.mon(this.store,'remove',this.removedItem,this);
             this.prefetchNext();
