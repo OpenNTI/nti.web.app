@@ -634,8 +634,7 @@ Ext.define('NextThought.controller.UserData', {
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = c,
-			me = this;
+			container = c;
 
 		if(!container){
 			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
