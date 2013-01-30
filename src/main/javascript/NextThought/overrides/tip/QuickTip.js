@@ -67,24 +67,31 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 		var vW = Ext.dom.Element.getViewportWidth(),
 			w = this.el.getWidth(),
+			r;
+
+		try{
 			r = this.callParent(arguments);
 
-		if(r[1] < this.EDGE_PADDING ){
-			//needs to swap down
-			this.anchor = 'top';
-		}
+			if(r[1] < this.EDGE_PADDING ){
+				//needs to swap down
+				this.anchor = 'top';
+			}
 
-		if(r[0] < this.EDGE_PADDING){
-			//needs to swap left
-			this.anchor = 'left';
-		}
-		else if((vW - (r[0] + w ) ) < this.EDGE_PADDING){
-			//needs to swap right
-			this.anchor = 'right';
-		}
+			if(r[0] < this.EDGE_PADDING){
+				//needs to swap left
+				this.anchor = 'left';
+			}
+			else if((vW - (r[0] + w ) ) < this.EDGE_PADDING){
+				//needs to swap right
+				this.anchor = 'right';
+			}
 
-		if(this.anchor !== 'bottom'){
-			r = this.callParent(arguments);
+			if(this.anchor !== 'bottom'){
+				r = this.callParent(arguments);
+			}
+		}
+		catch(er){
+			console.warn(Globals.getError(er));
 		}
 
 		delete getTargetXY.recursiveCall;
