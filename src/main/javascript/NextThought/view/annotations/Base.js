@@ -3,7 +3,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	requires: [
 		'NextThought.view.annotations.renderer.Manager',
-		'Ext.String'
+		'Ext.String',
+		'Ext.menu.Menu'
 	],
 
 	mixins: {
@@ -295,7 +296,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			});
 		}
 
-		return Ext.create('Ext.menu.Menu',{
+		return Ext.widget('menu',{
 			items: items,
 			ui: 'nt',
 			plain: true,

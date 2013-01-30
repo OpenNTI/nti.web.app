@@ -51,7 +51,6 @@ Ext.define('NextThought.view.Main', {
 
 	detectZoom: function(){
 		var z = DetectZoom.zoom(),
-			el = Ext.getBody(),
 			currentBar;
 		console.log("Zoom:",z);
 
@@ -59,7 +58,7 @@ Ext.define('NextThought.view.Main', {
 		//IE and a zoom level other than 1
 		if(Ext.isIE){
 			if(z!==1){
-				Ext.create('widget.message-bar', {
+				Ext.widget('message-bar', {
 					renderTo: Ext.getBody(),
 					messageType: 'zoom',
 					message: 'Your browser\'s current zoom setting is not fully supported. Please reset it to the default zoom.'

@@ -47,7 +47,7 @@ Ext.define('NextThought.view.classroom.ScriptEntry', {
 		}
 		else {
 			a = Ext.isArray(m) ? m : [m];
-			me.message = Ext.create('NextThought.model.MessageInfo', {body: a});
+			me.message = NextThought.model.MessageInfo.create({body: a});
 		}
 
 		m.compileBodyContent(function(content){

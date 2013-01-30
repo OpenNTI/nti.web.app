@@ -15,7 +15,7 @@ Ext.define('NextThought.mixins.Shareable', {
 	registerDragZone: function(dragSelector){
 		var me = this, el = this.getEl();
 		if(!el){return;}
-		this.dragZone = Ext.create('Ext.dd.DragZone', el, {
+		this.dragZone = Ext.dd.DragZone.create(el, {
 			getDragData: function(e) {
 				var sourceEl = e.getTarget(dragSelector), d;
 				if (sourceEl) {
@@ -42,7 +42,7 @@ Ext.define('NextThought.mixins.Shareable', {
 	registerDropZone: function(dropSelector){
 		var me = this, el = me.getEl();
 		if(!el){return;}
-		this.dropZone = Ext.create('Ext.dd.DropZone', el, {
+		this.dropZone = Ext.dd.DropZone.create(el, {
 			getTargetFromEvent: function(e) { return e.getTarget(dropSelector); },
 			onNodeEnter: function(target, dd, e, data){ Ext.fly(target).addCls('target-hover'); },
 			onNodeOut: function(target, dd, e, data){ Ext.fly(target).removeCls('target-hover'); },

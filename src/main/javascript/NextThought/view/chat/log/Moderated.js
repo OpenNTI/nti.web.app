@@ -171,7 +171,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 	},
 
 	initializeDragZone: function(v) {
-		v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
+		v.dragZone = Ext.dd.DragZone.create(v.getEl(), {
 
 			getDragData: function(e) {
 				var sourceEl = v.box.dom, d;

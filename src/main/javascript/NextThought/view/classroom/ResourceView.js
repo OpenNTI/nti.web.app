@@ -2,6 +2,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.classroom-resource-view',
 	requires:[
+		'Ext.data.Store',
 		'NextThought.model.Link',
 		'NextThought.util.Uploads'
 	],
@@ -73,7 +74,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 
 	initComponent: function(){
 		//create dynamic store:
-		this.store = Ext.create('Ext.data.Store', {
+		this.store = Ext.data.Store.create({
 			fields: ['href','type', 'ntiid'],
 			proxy: 'memory'
 		});
@@ -279,11 +280,11 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 
 	doLegacyUpload: function(fileInput){
 		var me = this,
-			form = Ext.create('Ext.form.Basic',Ext.create('Ext.panel.Panel'),{}),
+			form = Ext.form.Basic.create(Ext.widget('panel'),{}),
 			fieldCacheKey = '_fields',
 			fields;
 
-		fields = form[fieldCacheKey] = Ext.create('Ext.util.MixedCollection');
+		fields = form[fieldCacheKey] = Ext.util.MixedCollection.create();
 		fields.add(fileInput);
 
 		if(form.isValid()){

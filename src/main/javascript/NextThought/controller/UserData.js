@@ -579,7 +579,7 @@ Ext.define('NextThought.controller.UserData', {
         //create a bookmark model
         var bm = this.getBookmarkModel().create({
             ContainerId: LocationProvider.currentNTIID,
-            applicableRange: Ext.create('NextThought.model.anchorables.ContentRangeDescription')
+            applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
         });
 
         //now save this:

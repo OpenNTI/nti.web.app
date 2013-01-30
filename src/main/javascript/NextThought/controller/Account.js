@@ -247,15 +247,15 @@ Ext.define('NextThought.controller.Account', {
     groupButtonClicked: function(btn){
 		var flyBtn = Ext.fly(btn);
         if (flyBtn.hasCls('join-group')){
-            this.codeWin = Ext.create('NextThought.view.account.code.Window');
+            this.codeWin = NextThought.view.account.code.Window.create();
             this.codeWin.show();
         }
 		else if(flyBtn.hasCls('create-group')){
-			this.codeCreationWin = Ext.create('NextThought.view.account.codecreation.Window');
+			this.codeCreationWin = NextThought.view.account.codecreation.Window.create();
             this.codeCreationWin.show();
 		}
 		else if(flyBtn.hasCls('create-list')){
-			this.createListWin = Ext.create('NextThought.view.account.contacts.createlist.Window');
+			this.createListWin = NextThought.view.account.contacts.createlist.Window.create();
 			this.createListWin.show();
 		}
         else {

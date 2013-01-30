@@ -12,7 +12,7 @@ Ext.define('NextThought.model.anchorables.TextContext', {
 			if (!Ext.isArray(o)){o = [o];}
 
 			Ext.each(o, function(tc){
-				result.push(Ext.create('NextThought.model.anchorables.TextContext', {
+				result.push(NextThought.model.anchorables.TextContext.create({
 					contextText: tc.contextText,
 					contextOffset: tc.contextOffset
 				}));

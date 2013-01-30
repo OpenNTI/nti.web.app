@@ -1,6 +1,8 @@
 Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
+	requires: ['Ext.data.reader.Json'],
+
 	/**
 	 * @param items
 	 * @param [supplemental] Properties to add to the parsed items (such as flags)
@@ -73,7 +75,7 @@ Ext.define('NextThought.util.Parsing',{
 		}
 
 		if (!this.readers[o.$className]) {
-			this.readers[o.$className] = Ext.create('reader.json',{
+			this.readers[o.$className] = Ext.data.reader.Json.create({
 				model: o.$className, proxy: 'nti'
 			});
 		}

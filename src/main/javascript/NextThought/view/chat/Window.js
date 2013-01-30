@@ -92,7 +92,7 @@ Ext.define('NextThought.view.chat.Window', {
 
 		var me = this;
 
-		this.dropZone = Ext.create('Ext.dd.DropZone', this.getEl(), {
+		this.dropZone = Ext.dd.DropZone.create(this.getEl(), {
 
 			getTargetFromEvent:function (e) {
 				return e.getTarget('.chat-window');

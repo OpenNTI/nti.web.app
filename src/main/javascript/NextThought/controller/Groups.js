@@ -13,6 +13,7 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
+		'account.coderetrieval.Window',
 		'account.contacts.management.GroupList',
 		'account.contacts.management.Person',
 		'account.contacts.management.AddGroup',
@@ -556,7 +557,7 @@ Ext.define('NextThought.controller.Groups', {
 	getGroupCode: function(record){
 		var dn = record.get('displayName');
 		function onSuccess(code){
-			var win = Ext.create('NextThought.view.account.coderetrieval.Window', {groupName: dn, code: code});
+			var win = Ext.widget('coderetrieval-window', {groupName: dn, code: code});
             win.show();
 		}
 

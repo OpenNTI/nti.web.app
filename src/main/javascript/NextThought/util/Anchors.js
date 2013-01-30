@@ -325,7 +325,7 @@ Ext.define('NextThought.util.Anchors', {
 	createRangeDescriptionFromRange: function(range, docElement) {
 		if(!range){
 			console.log('Returning empty ContentRangeDescription for null range');
-			return {description: Ext.create('NextThought.model.anchorables.ContentRangeDescription', {})};
+			return {description: NextThought.model.anchorables.ContentRangeDescription.create({})};
 		}
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
@@ -353,13 +353,13 @@ Ext.define('NextThought.util.Anchors', {
 		//TODO instead of defaulting to LocationProvider.currentNTIID default to rootContainerIdFromDocument
         result.container = this.getContainerNtiid(ancestorNode, LocationProvider.currentNTIID);
 
-		var ancestorAnchor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+		var ancestorAnchor = NextThought.model.anchorables.ElementDomContentPointer.create({
 			node: ancestorNode,
 			role: 'ancestor'
 		});
 
         try{
-		result.description = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
+		result.description = NextThought.model.anchorables.DomContentRangeDescription.create({
 			start: Anchors.createPointer(pureRange, 'start'),
 			end: Anchors.createPointer(pureRange, 'end'),
 			ancestor: ancestorAnchor
@@ -467,7 +467,7 @@ Ext.define('NextThought.util.Anchors', {
 		else if (Ext.isElement(edgeNode)) {
 			var id = edgeNode.getAttribute('data-ntiid') || edgeNode.getAttribute('id'),
 				tagName = edgeNode.tagName;
-			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+			return NextThought.model.anchorables.ElementDomContentPointer.create({
 				elementTagName: tagName,
 				elementId: id,
 				role: role
@@ -542,7 +542,7 @@ Ext.define('NextThought.util.Anchors', {
 			contexts.push(additionalContext);
 		}
 
-		return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+		return NextThought.model.anchorables.TextDomContentPointer.create({
 			role: role,
 			contexts: contexts,
 			edgeOffset: edgeOffset,
@@ -573,7 +573,7 @@ Ext.define('NextThought.util.Anchors', {
 			offset = relativeNode.textContent.length - offset;
 		}
 
-		return Ext.create('NextThought.model.anchorables.TextContext', {
+		return NextThought.model.anchorables.TextContext.create({
 			contextText: contextText,
 			contextOffset: offset
 		});
@@ -624,7 +624,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//console.log('Created Context, TEXT', "'"+textContent+"'", 'CONTEXT', contextText, 'OFFSET', contextOffset);
 
-		return Ext.create('NextThought.model.anchorables.TextContext', {
+		return NextThought.model.anchorables.TextContext.create({
 			contextText: contextText,
 			contextOffset: contextOffset
 		});
@@ -1571,7 +1571,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 		//TODO - must be a Node, not txt?
-		var referencePointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {node: referenceNode, role: 'ancestor'});
+		var referencePointer = NextThought.model.anchorables.ElementDomContentPointer.create({node: referenceNode, role: 'ancestor'});
 
 		var adaptedResult = {};
 

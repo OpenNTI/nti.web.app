@@ -3,7 +3,8 @@ Ext.define('NextThought.view.classroom.ClassResourceEditor', {
 	alias : 'widget.class-resource-editor',
 	requires: [
 		'NextThought.view.classroom.ResourceView',
-		'NextThought.view.menus.file.BrowserItem'
+		'NextThought.view.menus.file.BrowserItem',
+		'Ext.data.Store'
 	],
 
 	constrain: true,
@@ -80,7 +81,7 @@ Ext.define('NextThought.view.classroom.ClassResourceEditor', {
 		var ci = this.classInfo,
 			me = this,
 			sel,
-			store = Ext.create('Ext.data.Store', {fields: ['ID', 'record']}),
+			store = Ext.data.Store.create({fields: ['ID', 'record']}),
 			tool, button,
 			baseCfg = {
 				xtype: 'button',

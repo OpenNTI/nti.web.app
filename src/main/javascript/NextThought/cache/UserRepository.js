@@ -14,7 +14,10 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	getStore: function() {
-		return (this.store = this.store || Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
+		if(!this.store){
+			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
+		}
+		return this.store;
 	},
 
 

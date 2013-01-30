@@ -8,7 +8,7 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 
 	statics: {
 		createFromObject: function(o){
-			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+			return NextThought.model.anchorables.ElementDomContentPointer.create({
 				role: o.role,
 				elementTagName: o.elementTagName,
 				elementId: o.elementId

@@ -25,7 +25,7 @@ Ext.define('NextThought.controller.Application', {
 			//when the slide view is launched, etc..  Still this is better than
 			//the hard gate we were imposing...
 			if(!swfobject.hasFlashPlayerVersion("9.0.18")){
-				Ext.create('widget.message-bar', {
+				Ext.widget('message-bar', {
 					renderTo: Ext.getBody(),
 					messageType: 'flash-required',
 					message: {cls: 'message',

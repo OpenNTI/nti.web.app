@@ -270,7 +270,7 @@ Ext.define('NextThought.controller.Session', {
                         var doc = Ext.decode(r.responseText),
                             user = doc.Items[0].Title;
 
-                        $AppConfig.service = Ext.create('NextThought.model.Service', doc, user);
+                        $AppConfig.service = NextThought.model.Service.create(doc, user);
                         m.attemptLoginCallback(user,successFn);
                     }
                     catch(e){

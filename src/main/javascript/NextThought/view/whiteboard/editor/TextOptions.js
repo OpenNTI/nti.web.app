@@ -2,6 +2,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 	alias: 'widget.wb-tool-text-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
+		'Ext.data.Store',
 		'NextThought.view.form.fields.ComboBox',
 		'NextThought.view.whiteboard.editor.ColorPickerButton'
 	],
@@ -14,7 +15,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			xtype: 'nt-combobox',
 			width: 70,
 
-			store: Ext.create('Ext.data.Store', {
+			store: Ext.data.Store.create({//define time?
 				fields: ['size'],
 				data : [
 					{"size":"12 pt"},

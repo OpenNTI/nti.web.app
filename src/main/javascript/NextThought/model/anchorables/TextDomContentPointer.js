@@ -15,7 +15,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	statics: {
 		createFromObject: function(o){
 			var cp = NextThought.model.anchorables.ContentPointer;
-			return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+			return NextThought.model.anchorables.TextDomContentPointer.create({
 				role: o.role,
 				contexts: NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
 				edgeOffset:o.edgeOffset,

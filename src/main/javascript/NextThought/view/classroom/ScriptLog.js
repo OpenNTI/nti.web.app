@@ -35,7 +35,7 @@ Ext.define('NextThought.view.classroom.ScriptLog', {
 		for (b in bodies) {
 			if (bodies.hasOwnProperty(b)){
 				if (!Ext.isArray(b)){b = [b];}
-				m = Ext.create('NextThought.model.MessageInfo', {body : [bodies[b]]});
+				m = NextThought.model.MessageInfo.create({body : [bodies[b]]});
 				this.add(
 					{
 						xtype: 'script-entry',

@@ -134,16 +134,17 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 		makeShape: function(data){
 			//reparent shapes
-			var c = this.objectNameRe.exec(data.Class);
+			var c = (this.objectNameRe.exec(data.Class)||[])[1];
 			if(!c){
 				console.warn('Not a shape: '+JSON.stringify(data));
 				return null;
 			}
 
-			if(c[1]==='Polygon' && data.sides<=2){
-				c[1]='Line';
+			if(c ==='Polygon' && data.sides<=2){
+				c ='Line';
 			}
-			return Ext.create('NextThought.view.whiteboard.shapes.'+c[1],data);
+			c = NextThought.view.whiteboard.shapes[c];
+			return c? c.create(data) : null;
 		},
 
 

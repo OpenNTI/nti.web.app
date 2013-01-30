@@ -65,7 +65,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 		}
 		catch (e) {
 			console.error(e.stack||e, records);
-			return Ext.create('Ext.data.ResultSet', {
+			return Ext.data.ResultSet.create({
 				total  : 0,
 				count  : 0,
 				records: [],

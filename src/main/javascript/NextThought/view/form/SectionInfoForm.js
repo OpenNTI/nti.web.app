@@ -114,7 +114,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		var me = this,
 			cmp;
 
-		cmp = Ext.create('Ext.panel.Tool', {
+		cmp = Ext.widget('tool', {
 			getElConfig: function() {
 				return {
 					tag: Ext.isGecko3 ? 'span' : 'div',
@@ -153,7 +153,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		//o.Provider = (o.Provider && o.Provider.ID) ? o.Provider.ID : null;
 		delete o.Provider;
 
-		return Ext.create('NextThought.model.SectionInfo', o, o.NTIID);
+		return NextThought.model.SectionInfo.create(o, o.NTIID);
 	},
 
 

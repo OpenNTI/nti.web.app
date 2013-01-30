@@ -2,10 +2,12 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 	extend: 'NextThought.view.form.fields.ComboBox',
 	alias: 'widget.stroke-select',
 
+	requires:['Ext.data.Store'],
+
 	ui: 'stroke-size-select',
 	width: 85,
 
-	store: Ext.create('Ext.data.Store', {
+	store: Ext.data.Store.create({//define time?
 		fields: ['size','size-class'],
 		data : [
 			{'size': 1, 'size-class': 'fine'},

@@ -384,7 +384,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onAddNewScriptClicked: function() {
-		this.showResourceEditor(Ext.create('NextThought.model.ClassScript'));
+		this.showResourceEditor(NextThought.model.ClassScript.create());
 	},
 
 
@@ -502,7 +502,7 @@ Ext.define('NextThought.controller.Classroom', {
 		ed.el.mask('Saving...');
 
 		if (v && v.length > 0) {
-			cs = r || Ext.create('NextThought.model.ClassScript', {ContainerId:ed.down('classroom-resource-view').record.getId()});
+			cs = r || NextThought.model.ClassScript.create({ContainerId:ed.down('classroom-resource-view').record.getId()});
 			cs.set('body', v);
 			cs.save({
 				headers: {'slug': scriptName},

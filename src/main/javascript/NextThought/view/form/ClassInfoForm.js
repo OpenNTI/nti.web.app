@@ -6,6 +6,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 	requires: [
 		'NextThought.model.ClassInfo',
 		'NextThought.view.form.SectionInfoForm',
+		'Ext.panel.Tool',
 		'Ext.form.field.Text',
 		'Ext.form.FieldSet',
 		'NextThought.view.form.fields.UserListField'
@@ -73,7 +74,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		var me = this,
 			cmp;
 
-		cmp = Ext.create('Ext.panel.Tool', {
+		cmp = Ext.widget('tool', {
 			getElConfig: function() {
 				return {
 					tag: Ext.isGecko3 ? 'span' : 'div',
@@ -107,7 +108,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		v.Sections = sections;
 		v.Description = this.down('textarea[name=Description]').getValue();
 		v.ID = this.down('textfield[name=ID]').getValue();
-		return Ext.create('NextThought.model.ClassInfo', v, v.NTIID);
+		return NextThought.model.ClassInfo.create(v, v.NTIID);
 
 	},
 

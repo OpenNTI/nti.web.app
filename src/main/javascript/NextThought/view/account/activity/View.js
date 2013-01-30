@@ -152,7 +152,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			var s=me.store, max, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
 			max = s.getPageFromRecordIndex(s.getTotalCount());
 			if(s.currentPage < max){
-				Ext.create('Ext.Button', {
+				Ext.widget('button', {
 					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
 					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
 					scale: 'medium',
