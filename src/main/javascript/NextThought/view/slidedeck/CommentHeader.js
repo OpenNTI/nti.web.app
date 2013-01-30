@@ -73,7 +73,10 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		if(me.getRoot().checkAndMarkAsActive(this)){
 			me.comment.hide();
 			me.editorActions.activate();
-			setTimeout(function(){me.editorActions.focus(true);}, 300);
+			setTimeout(function(){
+				me.editorActions.focus(true);
+				me.el.scrollIntoView(me.el.up('.x-container-slide'));
+			}, 300);
 		}
 	},
 
