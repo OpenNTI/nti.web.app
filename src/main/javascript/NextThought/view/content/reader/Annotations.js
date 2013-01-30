@@ -546,17 +546,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow,
-				range, selection;
+				range, selection, txt;
 
 		Anchors.snapSelectionToWord(doc);
 
 		selection = win.getSelection();
-		if (selection.rangeCount > 0) {
+		txt = selection.toString();
+
+		if (selection.rangeCount > 0 && !(/^\s*$/).test(txt)) {
 			range = selection.getRangeAt(0);
 
 			return range;
 		}
-		console.warn('skipping getSelection() no ranges', selection);
+		console.warn('skipping getSelection() no viable selection', selection);
 
 		return null;
 	},
