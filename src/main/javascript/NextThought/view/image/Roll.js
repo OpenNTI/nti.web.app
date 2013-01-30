@@ -11,9 +11,10 @@ Ext.define('NextThought.view.image.Roll',{
 		xtype: 'box',
 		cls: 'image',
 		width: 640,
+		height: 480,
 		autoEl: {
 			tag: 'img',
-			width: 640
+			src: Ext.BLANK_IMAGE_URL
 		}
 	}],
 
@@ -47,6 +48,8 @@ Ext.define('NextThought.view.image.Roll',{
 				url	: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg'
 			}];
 		}
+
+		this.preload(data);
 
 		this.store = store || new Ext.data.Store({
 			fields: [
@@ -85,6 +88,49 @@ Ext.define('NextThought.view.image.Roll',{
 	},
 
 
+	preload: function(data){
+		var me = this,
+			loaded = 0,
+			maxAspect = 0;
+
+		function fin(img){
+			loaded++;
+			var h, w;
+
+			if(img){
+				w = img.width;
+				h = img.height;
+
+				maxAspect = Math.max(maxAspect,w/h);
+
+				console.debug('Image Roll Preloaded Image: Width: '+w+', Height: '+h+', Aspect Ratio: '+(w/h)+', Source: '+img.src);
+			}
+
+			if(data.length <= loaded){
+				console.debug('Image Roll finished preloading, max aspect ratio:', maxAspect);
+				me.updateAspect(maxAspect);
+			}
+		}
+
+		Ext.each(data,function(i){
+			var o = i.img = new Image();
+			o.onload = function(){ fin(o); };
+			o.onerror = function(){ fin(); console.warn('Failed to load: '+i.url); };
+			o.src = i.url;
+		});
+	},
+
+
+	updateAspect: function(aspect){
+		var w = this.image.getWidth(),
+			h = Math.round(w/(aspect||1));
+
+		console.debug('Image Roll: setting new height based on max aspect ratio: ',h);
+		this.image.setHeight(h);
+		this.updateLayout();
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 		Ext.DomHelper.append(this.el,{cls: 'fade-outs', cn: [{cls: 'left'},{cls:'right'}]});
@@ -93,7 +139,12 @@ Ext.define('NextThought.view.image.Roll',{
 
 	selection: function(v,s){
 		if(s && s[0]){
-			this.image.el.dom.setAttribute('src', s[0].get('url'));
+			this.image.el.setStyle({
+				backgroundImage: 'url('+s[0].get('url')+')',
+				backgroundSize: 'contain',
+				backgroundPosition: 'center',
+				backgroundRepeat: 'no-repeat'
+			});
 		}
 	},
 
