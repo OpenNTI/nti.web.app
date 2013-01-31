@@ -149,6 +149,56 @@ describe("Note Tests", function() {
 
 	});
 
+	describe('replyCount', function(){
+
+		it('checks non-nested replyCount', function(){
+			var c1 = createNote('child1', false),
+				c2 = createNote('child2', false),
+				c3 = createNote('child3', false),
+				root = createNote('Root', false, [c1, c2, c3]);
+
+			expect(c1.getReplyCount()).toEqual(0);
+			expect(root.getReplyCount()).toEqual(3);
+		});
+
+		it('checks nested replyCount', function(){
+			var c2 = createNote('child2', false),
+				c1 = createNote('child1', false, [c2]),
+				c4 = createNote('child4', false),
+				c3 = createNote('child3', false, [c4]),
+				root = createNote('Root', false, [c1, c3]);
+
+			expect(c1.getReplyCount()).toEqual(1);
+			expect(root.getReplyCount()).toEqual(4);
+		});
+
+		it('checks more nested replyCount', function(){
+			var c8 = createNote('child8', false),
+				c7 = createNote('child7', false),
+				c6 = createNote('child6', false),
+				c5 = createNote('child5', false, [c6, c7]),
+				c4 = createNote('child4', false, [c8]),
+				c3 = createNote('child3', false, [c5]),
+				c2 = createNote('child2', false, [c3, c4]),
+				c1 = createNote('child1', false),
+				root = createNote('root0', false, [c1, c2]);
+
+			expect(c3.getReplyCount()).toEqual(3);
+			expect(root.getReplyCount()).toEqual(8);
+		});
+
+		it('checks nested replyCount with placeholder child', function(){
+			var c2 = createNote('child2', false),
+				c1 = createNote('child1', false, [c2]),
+				c4 = createNote('child4', false),
+				c3 = createNote('child3', true, [c4]),
+				root = createNote('Root', false, [c1, c3]);
+
+			expect(c1.getReplyCount()).toEqual(1);
+			expect(root.getReplyCount()).toEqual(3);
+		});
+	});
+
 	//TODO test that note with replies causes ajax request to the replies link?
 
 	describe('like and unlike', function(){

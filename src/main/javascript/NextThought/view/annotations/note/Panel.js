@@ -375,7 +375,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		function setReplies(theStore){
 
-			var cmp, items;
+			var items;
 
 			console.log('Store load args', arguments);
 
@@ -585,11 +585,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	addNewChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
-			this.adjustRootsReferenceCount(child, 1);
 			this.addReplies([child]);
-            if (!this.record.children){this.record.children = [];}
-            this.record.children.push(child);
+			if (!this.record.children){this.record.children = [];}
+			this.record.children.push(child);
 			child.parent = this.record;
+			this.adjustRootsReferenceCount(child);
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n',
@@ -655,39 +655,28 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-	adjustRootsReferenceCount: function(r, i){
-        var cid = r.get('ContainerId'),
-			refs = r.get('references') || [],
-			c = 'ReferencedByCount',
-            pageStore, rootid, root;
+	adjustRootsReferenceCount: function(r){
+        var root = r.parent,
+	        rootCmp = this.getRoot();
 
-		//TODO move this logic out of the views into either the model or store
-		LocationMeta.getMeta(cid,function(meta){
-			try{
-				if(!meta){
-					return;
-				}
+		while(root && root.parent){root = root.parent;}
 
-				//add it to the page items store I guess:
-				pageStore = LocationProvider.getStore(cid);
-				if(!pageStore){
-					return;
-				}
+		if(root){
+			setTimeout(function(){
+				/**
+				 *  FIXME: for now we're counting the number of reply components to set the replyCount.
+				 *  Obviously this will break once we start paging replies,
+				 *  since we won't be displaying all replies at once.
+				 **/
+				var c = Ext.util.MixedCollection.create();
+				c.addAll(Ext.Array.pluck(rootCmp.query('note-panel'),'record'));
 
-				rootid = refs.length > 0 ? refs[0] : null;
-				if(rootid){
-					root = pageStore.getById(rootid);
-					if(root){
-						root.set(c, Math.max((root.get(c)||0) + i, 0));
-						root.fireEvent('count-updated');
-					}
-				}
-			}
-			catch(error){
-				console.error(Globals.getError(error));
-			}
-		});
+				c = c.filter('placeholder','undefined');
 
+				root.set({ReferencedByCount: c.getCount()});
+				root.fireEvent('count-updated');
+			},500);
+		}
 	},
 
 
@@ -711,7 +700,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	onDelete: function(){
 		this.record.destroy();
-		this.adjustRootsReferenceCount(this.record, -1);
+		this.adjustRootsReferenceCount(this.record);
 	},
 
 

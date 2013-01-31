@@ -152,7 +152,8 @@ Ext.define('NextThought.model.Note', {
 		}
 
 		return (this.children||[]).reduce(function(sum,child){
-			return sum + 1 + (child.getReplyCount ? (child.getReplyCount()||0) : 0);
+			return sum + 1 + (child.getReplyCount ? (child.getReplyCount()||0) : 0)
+				+ (child.placeholder ? -1 : 0);
 		},0);
 	},
 
