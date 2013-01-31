@@ -50,9 +50,31 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 
 
 	setTally: function(correct,total){
-		var incorrect = total-correct,
+		//force Integers or NaN
+		correct = parseInt(correct,10);
+		total = parseInt(total,10);
+
+		if(total < correct){
+			console.warn('Setting a strange talley where total is less than correct. Total:'+total+', Correct: '+correct);
+		}
+
+		var incorrect = Math.max(total-correct,0),
 			percent = Math.ceil(100*correct/total),
-			messageBucket = this.messages[Math.ceil(percent/10)];
+			//clamp the bucket id to be an integer between 0-10 inclusive.
+			bucketId = Math.min(
+					10,
+					Math.max( Math.ceil(percent/10),0 ) ),
+			messageBucket = this.messages[bucketId],
+			messageId = 0,
+			msg = '';
+
+		try {
+			messageId = Math.floor(Math.random()*100)%messageBucket.length;
+			msg = messageBucket[messageId];
+		}
+		catch(e){
+			console.error('Error getting message: '+ e.message, Globals.getError(e));
+		}
 
 		this.correctCount.update(correct);
 		this.incorrectCount.update(incorrect);
@@ -60,9 +82,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		this.correctBox[correct === 0?'hide':'show']();
 		this.incorrectBox[incorrect === 0?'hide':'show']();
 
-		this.message.update(
-			messageBucket[Math.floor(Math.random()*100)%messageBucket.length]
-		);
+		this.message.update( msg );
 
 	}
 
