@@ -17,6 +17,12 @@ Ext.define('NextThought.overrides.dom.Element',{
 	},
 
 
+	getAttribute: function(attr, ns){
+		var v = this.callParent(arguments);
+		return v || (attr === 'class' ? this.callParent(['className',ns]) : null);
+	},
+
+
 	getAndRemoveAttr: function(attr){
 		var r = this.dom.getAttribute(attr);
 		this.dom.removeAttribute(attr);

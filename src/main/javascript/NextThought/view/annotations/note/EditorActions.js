@@ -327,7 +327,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				this.addWhiteboard();
 			}
 			else{
-				action = t.getAttribute('class').split(' ')[1];
+				action = (t.getAttribute('class')||'').split(' ')[1];
 				this.toggleTypingAttribute(action);
 			}
 		}

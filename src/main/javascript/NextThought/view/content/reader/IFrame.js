@@ -254,7 +254,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	getTopBodyStyles: function(){
-		var mainBodyStyleString = Ext.getBody().getAttribute('class'),
+		var mainBodyStyleString = Ext.getBody().getAttribute('class')||'',
 			mainBodyStyleList = mainBodyStyleString.split(' '),
 			styleBlacklist = [
 				'x-container',
