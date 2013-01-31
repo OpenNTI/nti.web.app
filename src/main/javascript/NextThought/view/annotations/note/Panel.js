@@ -584,16 +584,18 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	addNewChild: function(child){
-		if(child.get('inReplyTo') === this.record.getId()){
+		var r = this.record;
+		if(child.get('inReplyTo') === r.getId()){
 			this.addReplies([child]);
-			if (!this.record.children){this.record.children = [];}
-			this.record.children.push(child);
-			child.parent = this.record;
+			// FIXME: Do we need to add the child and set the parent again since we do it right before we call this method?
+			if (!r.children){r.children = [];}
+			if(!Ext.Array.contains(r.children, child)){ r.children.push(child); }
+			child.parent = r;
 			this.adjustRootsReferenceCount(child);
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n',
-					this.record.getId(), '\n', child.get('inReplyTo'), ' <- new child');
+					r.getId(), '\n', child.get('inReplyTo'), ' <- new child');
 		}
 	},
 

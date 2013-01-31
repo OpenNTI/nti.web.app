@@ -135,7 +135,8 @@ Ext.define('NextThought.store.PageItem',function(){
 				//found our parent:
 				child.parent = parent;
 				if (!parent.children){parent.children = [];}
-				parent.children.push(child);
+				//Check if we are not already in the children array
+				if(!Ext.Array.contains(parent.children, child)){ parent.children.push(child); }
 				//fire events for anyone who cares:
 				parent.fireEvent('child-added', child);
 				child.fireEvent('parent-set', parent);

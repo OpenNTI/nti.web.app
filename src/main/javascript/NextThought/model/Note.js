@@ -147,7 +147,7 @@ Ext.define('NextThought.model.Note', {
 	 * This depends on the linking of models by annotation...
 	 */
 	getReplyCount: function(){
-		if(this.raw.hasOwnProperty('ReferencedByCount')){
+		if(this.raw.hasOwnProperty('ReferencedByCount') && !this.parent){
 			return this.get('ReferencedByCount') || 0;
 		}
 
