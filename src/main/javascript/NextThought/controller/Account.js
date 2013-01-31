@@ -24,7 +24,10 @@ Ext.define('NextThought.controller.Account', {
         'account.code.Main',
         'account.recovery.Email',
         'account.contact.Window',
-        'account.contacts.View'
+        'account.contacts.View',
+		'account.codecreation.Window',
+		'account.contacts.createlist.Window',
+		'account.code.Window'
 	],
 
 	refs: [],
@@ -247,15 +250,15 @@ Ext.define('NextThought.controller.Account', {
     groupButtonClicked: function(btn){
 		var flyBtn = Ext.fly(btn);
         if (flyBtn.hasCls('join-group')){
-            this.codeWin = NextThought.view.account.code.Window.create();
+            this.codeWin = Ext.widget('code-window');
             this.codeWin.show();
         }
 		else if(flyBtn.hasCls('create-group')){
-			this.codeCreationWin = NextThought.view.account.codecreation.Window.create();
+			this.codeCreationWin = Ext.widget('codecreation-window');
             this.codeCreationWin.show();
 		}
 		else if(flyBtn.hasCls('create-list')){
-			this.createListWin = NextThought.view.account.contacts.createlist.Window.create();
+			this.createListWin = Ext.widget('createlist-window');
 			this.createListWin.show();
 		}
         else {
