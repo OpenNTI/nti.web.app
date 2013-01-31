@@ -48,6 +48,8 @@ Ext.define('NextThought.util.UserDataThreader',{
 	cleanupTree: function(tree){
 		//take all children off the main collection... make them accessible only by following the children pointers.
 		Ext.Object.each(tree,function(k,o,a){
+			//turn children object into array
+			o.children = o.children ? Ext.Object.getValues(o.children) : o.children;
 			if(o.parent){ delete a[k]; }
 		});
 
@@ -55,33 +57,29 @@ Ext.define('NextThought.util.UserDataThreader',{
 	},
 
 	buildItemTree: function(rawList, tree){
-		var me = this, list=[];
+		var me = this, threadables = {}, list;
 	//	console.group("Build Tree");
 		//console.log('Using list of objects', rawList);
 
-		function contains(items, o){
-			return Ext.Array.some(items, function(a){
-				return a.getId() === o.getId();
-			});
-		}
-
 		//Flatten an preexisting relationships of list into the array ignoring
 		//duplicates.  A hash could speed this up
-		function flattenNode(n, list){
-			if(!n.placeholder && !contains(list, n)){
-				Ext.Array.push(list, n);
+		function flattenNode(n, result){
+			if(!n.placeholder){
+				result[n.getId()] = n;
 			}
 
 			if(!Ext.isEmpty(n.children)){
 				Ext.each(n.children, function(kid){
-					flattenNode(kid, list);
+					flattenNode(kid, result);
 				});
 			}
 		}
 
 		Ext.Array.each(rawList, function(n){
-			flattenNode(n, list);
+			flattenNode(n, threadables);
 		});
+
+		list = Ext.Object.getValues(threadables);
 
 	//	console.log('Flattened list is ', list);
 
@@ -99,7 +97,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 					parent = g.get('inReplyTo'),
 					p;
 
-			r.children = r.children || [];
+			r.children = r.children || {};
 
 			if(!tree.hasOwnProperty(oid)) {
 				tree[oid] = r;
@@ -116,11 +114,8 @@ Ext.define('NextThought.util.UserDataThreader',{
 					buildTree(p);
 				}
 
-				p.children = p.children || [];
-				if(!contains(p.children, r)){
-				//	console.log('Adding', r, 'as child of', p);
-					p.children.push(r);
-				}
+				p.children = p.children || {};
+				p.children[r.getId()] = r;
 
 				r.parent = p;
 			}

@@ -56,6 +56,7 @@ describe("UserDataThreader utils", function() {
 			var n = createThreadable('Note'), tree = {}, results;
 
 			ThreaderUtil.buildItemTree([n], tree);
+			ThreaderUtil.cleanupTree(tree);
 			results = Ext.Object.getValues(tree);
 			expect(Ext.isEmpty(results)).toBeFalsy();
 			expect(results.length).toEqual(1);
