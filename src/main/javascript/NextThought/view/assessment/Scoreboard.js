@@ -24,7 +24,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 			text: 'Try Again',
 			ui: 'secondary',
 			scale: 'large',
-			handler: function(b){b.up('assessment-scoreboard').resetClicked();}
+			handler: function(b){b.up('assessment-scoreboard').resetBasedOnButtonClick();}
 		}
 	],
 
@@ -45,7 +45,6 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 	doReset:function(){
 		this.hide();
-		this.reader.scrollTo(0);
 	},
 
 
@@ -85,5 +84,5 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	}
 
 }, function(){
-	this.borrow(NextThought.view.assessment.QuizSubmission, ['resetClicked']);
+	this.borrow(NextThought.view.assessment.QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
 });

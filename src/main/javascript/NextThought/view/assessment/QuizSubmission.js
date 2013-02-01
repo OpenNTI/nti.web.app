@@ -18,7 +18,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
 			{tag: 'a', href:'#', cls: 'reset', html: 'Cancel'},
-			{tag: 'a', href:'#', cls: 'submit tabable', html: 'I\'m Finished!'}
+			{tag: 'a', href:'#', cls: 'submit tabable disabled', html: 'I\'m Finished!'}
 		] },
 		{ cls: 'status' }
 	]),
@@ -48,9 +48,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		this.answeredMap = answeredMap;
 	},
 
-
 	afterRender: function(){
 		this.callParent(arguments);
+		this.resetBtn.hide();
 		this.reflectStateChange();
 		this.mon(this.resetBtn,'click',this.resetClicked,this);
 		this.mon(this.submitBtn,'click',this.submitClicked,this);
@@ -63,9 +63,61 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		},1);
 	},
 
+	isActive: function(){
+		return this.state === 'active';
+	},
 
+	isSubmitted: function(){
+		return this.state === 'submitted';
+	},
 
-	updateStatus: function(question, part, status){
+	isReady: function(){
+		return !this.isActive() && !this.isSubmitted;
+	},
+
+	moveToActive: function(){
+		if(this.isActive()){
+			return;
+		}
+		console.log('New status is active');
+		this.state = 'active';
+		this.resetBtn.show();
+		this.submitBtn.update('I\'m Finished');
+		this.submitBtn.removeCls('disabled');
+	},
+
+	moveToSubmitted: function(){
+		if(this.isSubmitted()){
+			return;
+		}
+		console.log('New status is submitted');
+		this.state = 'submitted';
+		this.submitted = true;
+		this.resetBtn.hide();
+		this.submitBtn.update('Try Again');
+
+	},
+
+	moveToReady: function(){
+		if(this.isReady()){
+			return;
+		}
+		console.log('New status is ready');
+		delete this.state;
+		delete this.submitted;
+	},
+
+	transitionToActive: function(){
+		if(this.isSubmitted()){
+			this.maybeDoReset(true);
+		}
+		this.moveToActive();
+	},
+
+	updateStatus: function(question, part, status, enabling){
+		if(enabling){
+			this.transitionToActive();
+		}
 		this.answeredMap[question.getId()] = Boolean(status);
 		this.reflectStateChange();
 	},
@@ -86,26 +138,45 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	reset: function(){
-		this.submitBtn.removeCls('disabled');
-		delete this.submitted;
+		this.moveToReady();
 	},
 
 
 	graded: function(){
-		this.submitted = true;
-		this.submitBtn.addCls('disabled');
+		this.moveToSubmitted();
 	},
 
 
-	resetClicked: function(e){
+	maybeDoReset: function(keepAnswers){
 		var q = this.questionSet;
 		if( q.fireEvent('beforereset') ){
-			q.fireEvent('reset');
+			q.fireEvent('reset', keepAnswers);
 			console.log('fired reset');
+			return true;
 		}
-		else {
-			console.log('reset aborted');
+
+		console.log('reset aborted');
+		return false;
+	},
+
+	resetBasedOnButtonClick: function(e){
+		//If we are in a submitted state we want to reset things
+		if(this.maybeDoReset(true)){
+			this.reader.scrollTo(0);
 		}
+
+		if( e ){
+			e.stopEvent();
+			return false;
+		}
+	},
+
+	resetClicked: function(e){
+		if(this.isSubmitted()){
+			return resetBasedOnButtonClick(e);
+		}
+
+		this.maybeDoReset(false);
 
 		if( e ){
 			e.stopEvent();
@@ -115,9 +186,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	submitClicked: function( e ){
-		if(this.submitted){return;}
 		var q = this.questionSet,
 			submission = {};
+
+		if(this.isSubmitted()){
+			return this.resetBasedOnButtonClick(e);
+		}
+
 		if( !q.fireEvent('beforesubmit',q,submission) ){
 			console.log('submit aborted');
 			return;
