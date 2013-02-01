@@ -21,7 +21,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 		{ xtype:'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
 		{ xtype: 'button',
-			text: 'I can do better!',
+			text: 'Try Again',
 			ui: 'secondary',
 			scale: 'large',
 			handler: function(b){b.up('assessment-scoreboard').resetClicked();}
