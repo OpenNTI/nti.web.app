@@ -397,13 +397,33 @@ $experimental-support-for-svg: true;
 		.note-container.slide {
 			@extend .note-container;
 
+			.comment-link{
+				display: none;
+				color: #656565;
+				color: #949494;
+				font: 600 italic 14px/38px $font;
+			}
+
 			&.collapsed {
 				.note,.note.hover{
 					border-color: #121212;
 					box-shadow: inset 0 1px 0 0 #3a3a3a;
+					.comment-link{
+						opacity: 1;
+					}
 				}
 
 				.note.root{border-bottom-width: 1px;}
+
+				&.hasChildren{
+					.comment-link{
+						opacity: 0.4;
+						display: inline;
+					}
+					.reply-options{
+						display: none;
+					}
+				}
 			}
 
 			&:not(.collapsed) + .note-container {
