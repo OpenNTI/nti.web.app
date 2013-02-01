@@ -95,7 +95,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		me.setRecord(me.record);
 
 		if (me.record.placeholder) {
-            me.setPlaceholderContent();
+            //me.setPlaceholderContent();
+			//just return, setPlaceholderContent is called from updateFromRecord, which is called by setRecord
 			return;
 		}
 
@@ -126,6 +127,31 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
+		}
+	},
+
+
+	disable: function(){
+		var me = this,
+			e = me.editor || {down:Ext.emptyFn},
+			cancel = e.down('.cancel'),
+			save = e.down('.save');
+
+		me.replyOptions.remove();
+
+		console.debug('disabling '+me.record.getId()+', Body: '+me.text.getHTML());
+
+		if(me.editorActions.isActive()){
+			me.editorActions.disable();
+
+			me.mun(save, 'click', me.editorSaved, me);
+			me.mon(cancel,'click', function(){
+				me.deactivateReplyEditor();
+				//if we didn't get a placeholder, then just let this leaf go
+				if(!me.record.placeholder){
+					me.destroy();
+				}
+			});
 		}
 	},
 
@@ -262,6 +288,22 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	recordUpdated: function(newRec){
+		this.recordEvent = 'updated';
+		var r = this.updateFromRecord(newRec);
+		delete this.recordEvent;
+		return r;
+	},
+
+
+	recordChanged: function(){
+		this.recordEvent = 'changed';
+		var r = this.updateFromRecord();
+		delete this.recordEvent;
+		return r;
+	},
+
+
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
@@ -341,7 +383,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		//Multiple containers/cmps involved here
 		//So notice we do the bulkiest suspend resume
-		//we can. Also getting this onto the next even pump
+		//we can. Also getting this onto the next event pump
 		//helps the app not seem like it is hanging
 		Ext.defer(function(){
 			Ext.suspendLayouts();
@@ -578,13 +620,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		return r.isModifiable();
-
-// From Old Reply.js
-//		return r.children === undefined || r.children.length === 0;
-
-// From: Old Main.js
-//		return !this.record || this.record.get('ReferencedByCount') === undefined
-//              || this.record.get('ReferencedByCount') === 0;
 	},
 
 
@@ -726,25 +761,15 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	setPlaceholderContent: function() {
-		var me = this,
-			e = me.editor || {down:Ext.emptyFn},
-			cancel = e.down('.cancel'),
-			save = e.down('.save');
+		var fromUpdatedRecord = Boolean(this.recordEvent);
+		this.time.update("This message has been deleted");
+		this.noteBody.addCls("deleted-reply");
 
-		me.time.update("This message has been deleted");
-		me.noteBody.addCls("deleted-reply");
-
-		if(me.editorActions.isActive()){
-			me.editorActions.disable();
-
-			me.mun(save, 'click', me.editorSaved, me);
-			me.mon(cancel,'click', function(){
-				me.deactivateReplyEditor();
-				//if we didn't get a placeholder, then just let this leaf go
-				if(!me.record.placeholder){
-					me.destroy();
-				}
-			});
+		if(fromUpdatedRecord){
+			console.debug('This record was updated to be a placeholder...references are now dirty, and disabling replys for all children');
+			//When panels are being destroyed, disable their children (we can't reply to them now, not until the records are refreshed from the server)
+			this.disable();
+			Ext.each(this.query('note-panel'),function(p){ p.disable(); });
 		}
 	},
 
@@ -793,9 +818,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 },function(){
 	var proto = this.prototype;
-
-	proto.recordUpdated = proto.recordChanged = proto.updateFromRecord;
-//	proto.recordUpdated = proto.recordChanged = Ext.Function.createBuffered(proto.updateFromRecord, 100,null,null);
 
 	proto.renderTpl = Ext.DomHelper.markup([{
 		//cls: 'note-reply',
