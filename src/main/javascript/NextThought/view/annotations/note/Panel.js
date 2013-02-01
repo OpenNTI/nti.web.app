@@ -639,6 +639,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 	},
 
+
 	removedChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
 			console.log('called to adjust the reference count');
@@ -738,10 +739,27 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onRemove: function(cmp){
-		var c = this.items.getCount();
-		console.log('removed child, it was deleting: ',cmp.deleting);
-		if(c === 0 && (!this.record || this.record.placeholder)){
-			this.deleting = Boolean(cmp.deleting);
+		//direct children count:
+		var c = this.items.getCount(),
+		//panels below this panel:
+			children = this.query('note-panel')||[],
+			pluck = Ext.Array.pluck,
+			contains = Ext.Array.contains,
+		//do any have the deleting flag?
+			anyDeleting = contains(pluck(children,'deleting'), true),
+		//are any of the remaining panels not placeholders? If so, then we can not safely remove this panel.
+		//safeToCleanMe means all the panels below this one are only placeholder panels.
+			safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children,'record'),'placeholder'),Boolean),false),
+		//if the component that was removed from this panel was deleting, or any panel below this was deleting.
+			deleting = cmp.deleting || anyDeleting;
+
+		console.debug('removed child, it was deleting: ',cmp.deleting,
+				', or any child below me is deleting: ', anyDeleting,
+				', alse we have '+c+' children. Safe to delete: ',safeToCleanMe);
+
+		if((c === 0 || safeToCleanMe) && (!this.record || this.record.placeholder)){
+			this.deleting = Boolean(deleting);
+			console.debug('cleaning up placeholder panel now that all children are gone.',this);
 			this.destroy();
 		}
 	},
