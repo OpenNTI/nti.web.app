@@ -308,6 +308,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//Remove the old listener
 		if(this.record){
 			this.mun(this.record, 'child-added', this.addNewChild, this);
+			this.mun(this.record, 'child-removed', this.removedChild, this);
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
@@ -355,7 +356,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 		this.updateToolState();
-		this.mon(r, 'child-added', this.addNewChild, this);
+		this.mon(r, {
+			'child-added': this.addNewChild,
+			'child-removed': this.removedChild,
+			scope: this
+		});
         this.mon(r, {
 	        single:true,
 	        scope: this,
@@ -596,6 +601,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n',
 					r.getId(), '\n', child.get('inReplyTo'), ' <- new child');
+		}
+	},
+
+	removedChild: function(child){
+		if(child.get('inReplyTo') === this.record.getId()){
+			console.log('called to adjust the reference count');
+			this.adjustRootsReferenceCount(child);
 		}
 	},
 

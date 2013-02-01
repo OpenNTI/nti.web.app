@@ -201,6 +201,7 @@ Ext.define('NextThought.store.PageItem',function(){
 			}
 
 			Ext.each(toActuallyRemove, function(record){
+				if(record.parent){ record.parent.fireEvent('child-removed', record);}
 				record.tearDownLinks();
 				record.fireEvent('destroy',record);
 			});
