@@ -326,7 +326,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		    anchor = 'tl-bl';
 
 		if(maxHeight<=150){
-			maxHeight = vH - box.top;
+			maxHeight = box.y;
 			anchor = 'bl-tl?';
 		}
 
@@ -337,6 +337,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		me.setupAnswerHistoryMenu();
 		me.historyMenu.maxHeight = maxHeight;
 
+//		console.log('Viewport height: ', vH,', anchor: ', anchor, ' maxHeight: ', maxHeight, ' box top: ', box.y);
         me.historyMenu.showBy(me.inputBox,anchor,[0,0]);
 		me.answerHistStore.reload();
 	},

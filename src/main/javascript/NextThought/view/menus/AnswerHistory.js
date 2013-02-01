@@ -13,9 +13,8 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 	border: false,
 	hideMode: 'display',
 	cls:'answer_history_menu',
-	autoScroll:true,
-	constrainTo: Ext.getBody(),
-//	constrain: true,
+	overflowHandler: 'Scroller',
+	constrain: true,
 	items: [
 		{
 			text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true},
