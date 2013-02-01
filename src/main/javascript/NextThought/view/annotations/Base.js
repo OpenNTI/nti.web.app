@@ -237,7 +237,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		return null;
 	},
 
-	savePhantom: function(){
+	savePhantom: function(callback){
 		var me = this, p;
 		if(!me.record.phantom){return;}
 
@@ -250,6 +250,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		function success(oldRec, newRec){
 			me.record.fireEvent('updated', newRec);
+			Ext.callback(callback, me, [me]);
 		}
 
 		function failure(){

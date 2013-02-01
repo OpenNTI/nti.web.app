@@ -392,9 +392,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Inline',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record,false);
+					var r = NextThought.model.Redaction.createFromHighlight(record,false),
+						cb = function(w){ w.cleanup(); };
 					try{
-						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom();});
+						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
 					}
 					catch(e){
 						alert('Coud not save redaction');
@@ -406,9 +407,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Block',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record,true);
+					var r = NextThought.model.Redaction.createFromHighlight(record,true),
+						cb = function(w){ w.cleanup(); };
 					try{
-						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom();});
+						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
 					}
 					catch(e){
 						alert('Coud not save redaction');
