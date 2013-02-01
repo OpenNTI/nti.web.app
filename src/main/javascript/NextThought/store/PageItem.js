@@ -128,6 +128,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 
 		add: function(record) {
+			this.suspendEvents(true);
 			//get added to the store:
 			this.callParent(arguments);
 
@@ -158,19 +159,19 @@ Ext.define('NextThought.store.PageItem',function(){
 
 			//find my parent if it's there and add myself to it:
 			var ancestor = null, adopted,
-					refs = (record.get('references') || []).slice();
+			refs = (record.get('references') || []).slice();
 
-			if(Ext.isEmpty(refs)){
-				return;
+			if(!Ext.isEmpty(refs)){
+				while(!adopted && !Ext.isEmpty(refs) ){
+					this.each(checkStoreItem(refs.pop()));
+				}
+
+				if(!adopted){
+					console.warn('Unable to parent child', record);
+				}
 			}
 
-			while(!adopted && !Ext.isEmpty(refs) ){
-				this.each(checkStoreItem(refs.pop()));
-			}
-
-			if(!adopted){
-				console.warn('Unable to parent child', record);
-			}
+			this.resumeEvents();
 		},
 
 
