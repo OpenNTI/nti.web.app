@@ -187,6 +187,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		});
 
+		Ext.each(node.query('img'),function(i){
+			var src = i.getAttribute('src');
+			if(/^\/\//.test(src)){
+				i.setAttribute('src',location.protocol+src);
+			}
+		});
+
 		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
 		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
