@@ -14,11 +14,51 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	},
 
 	afterRender: function(){
+
 		this.callParent(arguments);
+
+		//Inject a link that shows we have comments
+
+		this.commentsLink = Ext.DomHelper.insertAfter(this.time, {tag: 'a', cls: 'comment-link', html: this.textForCommentLink()}, true);
+
+		this.updateHasChildren();
 		this.noteBody.on('click',this.toggleCollapse,this);
 		this.collapse();
 	},
 
+	addAdditionalRecordListeners: function(record){
+		this.mon(record, 'count-updated', this.updateHasChildren, this);
+		this.mon(record, 'count-updated', this.updateCommentLink, this);
+	},
+
+	removeAdditionalRecordListeners: function(record){
+		this.mun(record, 'count-updated', this.updateHasChildren, this);
+		this.mon(record, 'count-updated', this.updateCommentLink, this);
+	},
+
+	textForCommentLink: function(){
+		var commentLinkText = "No Comments",
+			replyCount;
+		replyCount = this.record.getReplyCount();
+		if(replyCount > 0){
+			commentLinkText = Ext.String.format('{0} {1}', replyCount, replyCount > 1 ? 'Replies': 'Reply');
+		}
+		return commentLinkText;
+	},
+
+	updateCommentLink: function(){
+		this.commentsLink.update(this.textForCommentLink());
+	},
+
+	updateHasChildren: function(){
+		if(this.record.getReplyCount() > 0){
+			this.addCls('hasChildren');
+		}
+	},
+
+	rootToCountComponentsFrom: function(){
+		return this;
+	},
 
 	toggleCollapse: function(e){
 		e.stopEvent();

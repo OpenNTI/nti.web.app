@@ -56,7 +56,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		console.log('Set slide:',slide, slide.get('dom-clone'));
 
-		//this.buildItemStore(cid);
+		this.buildItemStore(cid);
 
 		this.slideImage.set({src: slide.get('image')});
 

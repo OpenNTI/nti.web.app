@@ -70,7 +70,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onBeforeDestroyCheck: function(){
-		if(this.editorActions.isActive()){
+		if(this.editorActions && this.editorActions.isActive()){
 			this.setPlaceholderContent();
 			return false;//stop the destroy
 		}
@@ -141,7 +141,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		console.debug('disabling '+me.record.getId()+', Body: '+me.text.getHTML());
 
-		if(me.editorActions.isActive()){
+		if(me.editorActions && me.editorActions.isActive()){
 			me.editorActions.disable();
 
 			me.mun(save, 'click', me.editorSaved, me);
@@ -346,6 +346,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	getRecord: function(){return this.record;},
 
 
+	//For subclasses
+	addAdditionalRecordListeners: function(record){
+
+	},
+
+	//For subclasses
+	removeAdditionalRecordListeners: function(record){
+
+	},
+
 	setRecord: function(r){
 		//Remove the old listener
 		if(this.record){
@@ -354,11 +364,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
+			this.removeAdditionalRecordListeners(this.record);
 		}
 
 		this.record = r;
 		this.guid = IdCache.getIdentifier(r.getId());
-		if(!this.rendered){return;}
+		if(!this.rendered){return false;}
 
 		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 
@@ -410,6 +421,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             'updated': this.recordUpdated,
 	        'destroy': this.wasDeleted
         });
+		this.addAdditionalRecordListeners(r);
+		return true;
 	},
 
 
@@ -705,13 +718,18 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	rootToCountComponentsFrom: function(){
+		return this.getRoot();
+	},
+
 	adjustRootsReferenceCount: function(r){
         var root = r.parent,
-	        rootCmp = this.getRoot();
+	    rootCmp = this.rootToCountComponentsFrom();
 
 		while(root && root.parent){root = root.parent;}
 
 		if(root){
+			// FIXME This needs to not happen here.  We should not be updating the model based on this one views represntation of it...
 			setTimeout(function(){
 				/**
 				 *  FIXME: for now we're counting the number of reply components to set the replyCount.
