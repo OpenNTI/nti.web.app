@@ -73,13 +73,16 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			selectedNode,
 			filter = (me.filter||{}).filter,
 			filterName = (me.filter||{}).filterName,
-			sortFn;
+			sortFn, oldSelectedRecord, oldSelectedRecordId;
 
 		sortFn = function(a, b){
 			return b.record.get('Last Modified') - a.record.get('Last Modified');
 		};
 
 		filter = Ext.isFunction(filter)? filter : null;
+
+		oldSelectedRecord = (me.down('[selected]') || {}).record;
+		oldSelectedRecordId = oldSelectedRecord ? oldSelectedRecord.getId() : null;
 
 		me.removeAll(true);
 		Ext.each(this.store.getItems(),function(item){
@@ -105,6 +108,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
 			selectedNode.markSelected(true);
+			if(oldSelectedRecordId !== selectedNode.record.getId()){
+				selectedNode.clicked();
+			}
 			this.updateWith(selectedNode);  //move the anchor arrow.
 		}
 		console.log('test load');
