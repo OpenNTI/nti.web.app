@@ -10,6 +10,19 @@ Ext.define( 'NextThought.view.views.Base', {
 	},
 
 
+	setTitle: function(newTitle){
+		this.title = newTitle || this.title;
+		if(this.isActive()){
+			document.title = this.title || 'NextThought';
+		}
+	},
+
+
+	isActive: function(){
+		return this.ownerCt? (this.ownerCt.getLayout().getActiveItem() === this) : false;
+	},
+
+
 	activate: function(){
 		var me = this,
 			ct = me.ownerCt,
@@ -34,14 +47,15 @@ Ext.define( 'NextThought.view.views.Base', {
 				ct.getLayout().getActiveItem().deactivate();
 			}
 			catch(e){
-				console.log('Could not call deactivate on active view',e.stack||e.stacktrace,e);
+				console.log('Could not call deactivate on active view',Globals.getError(e));
 			}
 
 			ct.getLayout().setActiveItem(item);
 			me.fireEvent('view-activated');
+			me.setTitle();
 		}
 		catch(er){
-			console.error('Activating View: ', er.message, er.stack||er.stacktrace, er);
+			console.error('Activating View: ', Globals.getError(e));
 			return false;
 		}
 		return true;

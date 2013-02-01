@@ -11,7 +11,7 @@ Ext.define('NextThought.controller.Application', {
 	launchToken: {},
 
 	init: function() {
-		this.application.registerInitializeTask(this.self.launchToken);
+		this.application.registerInitializeTask(this.launchToken);
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
@@ -46,9 +46,9 @@ Ext.define('NextThought.controller.Application', {
 		}
 		catch(e){//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);
-			Ext.getCmp('home').activate();
+			Ext.getCmp('profile').activate();
 		}
-		this.application.finishInitializeTask(this.self.launchToken);
+		this.application.finishInitializeTask(this.launchToken);
 
 	},
 

@@ -61,6 +61,17 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
+	getProfileUrl: function(){
+		var u = encodeURIComponent( this.get('Username') );
+		return '#!profile/'+u;
+	},
+
+
+	goToProfile: function(){
+		window.location.hash = this.getProfileUrl();
+	},
+
+
     save: function(ops){
         Ext.Ajax.request(Ext.apply({
             url: this.getLink('edit'),
@@ -80,6 +91,12 @@ Ext.define(	'NextThought.model.User', {
 				status: 'Unresolved',
 				Presence: 'Offline'
 			},username);
+		},
+
+
+		getProfileIdFromHash: function(hash){
+			var re = /^#!profile\/([^\/]*)$/i, o = re.exec(hash);
+			return o ? decodeURIComponent(o[1]) : null;
 		}
 
 	}

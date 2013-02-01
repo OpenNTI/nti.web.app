@@ -29,7 +29,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			disabled: true,
 			pressed: true,
 			iconCls: 'home',
-			title: 'Home',
+			title: 'Profile',
 			tooltip: 'Home/Profile'
 		},
 		{
@@ -39,13 +39,6 @@ Ext.define('NextThought.view.ViewSelect', {
 			menu: {xtype: 'navigation-menu', items:[
 				{xtype:'navigation-collection'}
 			]}
-		},
-		{
-			hidden: true,
-			disabled: true,
-			iconCls: 'classroom',
-			title: 'Classroom',
-			tooltip: 'Classroom'
 		},
 		{
 			iconCls: 'search',

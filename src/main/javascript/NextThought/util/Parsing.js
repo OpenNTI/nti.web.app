@@ -88,7 +88,7 @@ Ext.define('NextThought.util.Parsing',{
 	 * Parses an id and returns an object containing the split portions
 	 *
 	 * @param id
-	 * @returns - an object containing the components of the id
+	 * @returns {Object} an object containing the components of the id
 	 */
 	parseNtiid: function(id) {
 		var parts = (typeof id !== 'string' ? (id||'').toString() : id ).split(':'),
@@ -137,7 +137,36 @@ Ext.define('NextThought.util.Parsing',{
 			return ['tag', a.join(','), s.join('-'), m.identifier].join(':');
 		};
 
+		result.toURLSuffix = function(){
+			//#!html/mathcounts/mathcounts2013.warm_up_7
+			var m = this;
+
+
+			return '#!'+Ext.Array.map([
+				m.specific.type,
+				m.specific.provider,
+				m.specific.typeSpecific ],
+			encodeURIComponent).join('/');
+		};
+
 		return result;
+	},
+
+
+	parseNtiHash: function(hash){
+		var re = /^#!([^\/]*)\/([^\/]*)\/([^\/]*)/,
+			o =re.exec(hash),
+			type, typeSpec, provider, authority = 'nextthought.com,2011-10',s;
+
+		if(!o) {return null;}
+
+		type = o[1];
+		provider = o[2];
+		typeSpec = o[3];
+
+		s = Ext.Array.map([provider,type,typeSpec],decodeURIComponent);
+
+		return ['tag', authority, s.join('-')].join(':');
 	}
 
 },function(){

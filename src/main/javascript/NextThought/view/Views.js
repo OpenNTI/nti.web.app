@@ -1,16 +1,15 @@
 
 
 Ext.define( 'NextThought.view.Views', {
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.main-views',
 	requires: [
 		'Ext.layout.container.Card',
-		'NextThought.view.views.Home',
+		'NextThought.view.views.Profiles',
 		'NextThought.view.views.Library'
-//		'NextThought.view.views.Classroom'
 	],
 	
-	// plain: true,
+	plain: true,
 	border: false, 
 	frame: false,
 	layout: {
@@ -19,9 +18,8 @@ Ext.define( 'NextThought.view.Views', {
 	},
 	activeItem: 1,
 	items:[
-		{id: 'home',   xtype: 'home-view-container'},
+		{id: 'profile', xtype: 'profile-view-container'},
 		{id: 'library', xtype: 'library-view-container'}
-//		{id: 'classroom', xtype: 'classroom-view-container'}
 	],
 	
 	getActive: function() {

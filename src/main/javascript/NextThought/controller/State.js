@@ -4,6 +4,10 @@ BASE_STATE = { active: 'home' };
 Ext.define('NextThought.controller.State', {
 	extend: 'Ext.app.Controller',
 
+	models: [
+		'User'
+	],
+
 	requires: [
 		'NextThought.providers.Location'
 	],
@@ -36,18 +40,6 @@ Ext.define('NextThought.controller.State', {
 
 
 	onSessionReady: function(){
-		window.onhashchange = function() {
-			var hash = window.location.hash.substring(1);
-			if (hash && window.lastTimeLocationSet && new Date().getTime() - window.lastTimeLocationSet > 1000) {
-				LocationProvider.setLocation(hash,(function() {
-					var token = {};
-					app.registerInitializeTask(token);
-					return function(){ app.finishInitializeTask(token); };
-				}()),true);
-			}
-		};
-
-
 		var me = this,
 			history = window.history,
 			push = history.pushState || function(){};
@@ -55,9 +47,9 @@ Ext.define('NextThought.controller.State', {
 		history.replaceState = history.replaceState || function(){};
 
 		history.updateState = function(s){
-			console.log('update state', arguments);
+			console.debug('update state', arguments);
 			Ext.applyIf(s,{active: me.currentState.active});
-			if(!me.isPoppingHistory && push){
+			if(!me.isPoppingHistory){
 				me.currentState = Ext.Object.merge(me.currentState, s);
 				window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
 				return me.fireEvent('stateChange',s);
@@ -65,13 +57,20 @@ Ext.define('NextThought.controller.State', {
 			return false;
 		};
 
-		history.pushState = function(s){
-			console.log('push state', arguments);
+		history.pushState = function(s,title,url){
+			console.debug('push state',s);
+			var location, ntiid;
 			if (this.updateState(s)) {
-				push.apply(history, arguments);
-				if (Ext.isIE) {
+				location = me.getState().location;
+				title = LocationProvider.findTitle(location,'NextThought');
+				ntiid = ParseUtils.parseNtiid(location);
+				url = ntiid ? ntiid.toURLSuffix() : null;
+
+				push.apply(history, [s,title,url]);
+
+				if (Ext.isIE && url) {
 					window.lastTimeLocationSet = new Date().getTime();
-					window.location.hash = me.getState().location;
+					window.location.hash = url;
 				}
 			}
 		};
@@ -81,6 +80,39 @@ Ext.define('NextThought.controller.State', {
 			me.onPopState(e);
 			me.isPoppingHistory = false;
 		};
+
+		window.onhashchange = function(e) {
+			console.debug('Hash changed', e);
+			var newState = me.interpretHash(location.hash);
+			if(history.updateState(newState)){
+				me.restoreState(newState);
+				history.replaceState(me.getState(),document.title,location.toString());
+			}
+		};
+	},
+
+
+	interpretHash: function(hash){
+		var ntiid = ParseUtils.parseNtiHash(hash),
+			user,
+			result = {};
+		if(ntiid){
+			result.location = ntiid;
+		}
+		else {
+			user = this.getUserModel().getProfileIdFromHash(hash);
+			if(user){
+				result = {
+					active: 'profile',
+					profile: {
+						username: user
+					}
+				};
+			}
+		}
+
+		console.debug('Hash Interpeted:',result);
+		return result;
 	},
 
 
@@ -104,6 +136,7 @@ Ext.define('NextThought.controller.State', {
 		if(this.currentState.active !== viewId && NextThought.isInitialized){
 			//console.debug(this.currentState.active, modeId);
 			this.currentState.active = viewId;
+
 			window.history.pushState(this.currentState, 'NextThought: '+viewId);
 		}
 	},
@@ -123,6 +156,7 @@ Ext.define('NextThought.controller.State', {
 			var token = {};
 			app.registerInitializeTask(token);
 			return function(a,errorDetails){
+				//Error handling... sigh
 				var land = Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage();
 				app.finishInitializeTask(token);
 				if((errorDetails||{}).error && land){
@@ -191,12 +225,22 @@ Ext.define('NextThought.controller.State', {
 		var defaultState = {
 			active: 'library',
 			location : Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage() || undefined
-		}, lastLocation;
+		},
+			lastLocation,
+			previousState,
+			result;
 
 		try {
-			console.log('local state found', window.localStorage.getItem(this.getStateKey()));
-			lastLocation = Ext.decode( window.localStorage.getItem(this.getStateKey()) );
-			return lastLocation && lastLocation.location ? lastLocation : defaultState;
+			previousState = window.localStorage.getItem(this.getStateKey());
+			console.log('local state found', previousState);
+			lastLocation = Ext.decode( previousState );
+
+			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
+			if(location.hash){
+				console.debug('hash trumps state', location.hash);
+				Ext.apply(result,this.interpretHash(location.hash));
+			}
+			return result;
 		}
 		catch(e){
 			console.error('failed to decode local state, use default.', Globals.getError(e), window.localStorage);

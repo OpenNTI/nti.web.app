@@ -55,8 +55,19 @@ Ext.define('NextThought.view.account.Identity',{
     afterRender: function(){
 		var me = this;
         me.callParent(arguments);
-        me.mon(me.menuBtn, 'click', function(){
+        me.mon(me.menuBtn, 'click', function(e){
             me.menu.showBy(me.menuBtn);
+	        e.stopEvent();
+	        return false;
         });
-    }
+
+	    me.mon(me.el,'click', this.openProfile,this);
+    },
+
+
+	openProfile: function(e){
+		e.stopEvent();
+		$AppConfig.userObject.goToProfile();
+		return false;
+	}
 });

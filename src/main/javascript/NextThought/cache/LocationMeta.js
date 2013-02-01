@@ -28,13 +28,13 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
     loadMeta: function(ntiid, cb) {
+		var me = this;
+
         function pageIdLoaded(pi){
-			var me = this;
 			var assessmentItems = pi.get('AssessmentItems') || [],
-				meta = LocationProvider.getLocation(pi.getId()),
 				theId = pi.getId();
 
-            this.meta[pi.getId()] = meta;
+            this.meta[theId] = LocationProvider.getLocation(theId);
             this.ids[ntiid] = theId;
 
 			//Also yank out any assessment items and cache them by id.  Note

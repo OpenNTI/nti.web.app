@@ -37,6 +37,14 @@ Ext.define( 'NextThought.view.views.Library', {
             navigateAbort: this.reader.onNavigationAborted,
 			navigateComplete: this.reader.onNavigateComplete
 		});
+
+		LocationProvider.on('navigateComplete', this.onNavigateComplete, this);
+	},
+
+
+	onNavigateComplete: function(pageInfo){
+		if(!pageInfo || !pageInfo.isModel){return;};
+		this.setTitle(LocationProvider.findTitle(pageInfo.getId(),'NextThought'));
 	},
 
 
