@@ -769,7 +769,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			console.debug('This record was updated to be a placeholder...references are now dirty, and disabling replys for all children');
 			//When panels are being destroyed, disable their children (we can't reply to them now, not until the records are refreshed from the server)
 			this.disable();
-			Ext.each(this.query('note-panel'),function(p){ p.disable(); });
 		}
 	},
 
