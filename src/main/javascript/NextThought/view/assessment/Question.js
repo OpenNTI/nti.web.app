@@ -47,12 +47,19 @@ Ext.define('NextThought.view.assessment.Question',{
 	},
 
 	retrieveAnswerLabel: function(){
-        var sln = Ext.get(this.contentElement).select('.naqsolution'),
-            firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null;
-        // NOTE: We will take the first solution's answer as the preferred solution label in case we might have multiple possible answer.
-        // FIXME: does this still apply for a multi-parts question?
-        return firstSln ? firstSln.getAttribute('data-nti-units') : null;
-    },
+		var sln = Ext.get(this.contentElement).select('.naqsolution'),
+			firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
+			firstUnits;
+		// NOTE: We will take the first solution's answer as the preferred solution label in case we might have multiple possible answer.
+		// FIXME: does this still apply for a multi-parts question?
+		firstUnits = firstSln ? firstSln.getAttribute('data-nti-units') : null;
+
+		if(firstUnits){
+			firstUnits = firstUnits.split(',');
+			firstUnits = firstUnits.first();
+		}
+		return firstUnits;
+	},
 
 
 	determineSubmissionState: function(){
