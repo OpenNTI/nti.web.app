@@ -250,20 +250,6 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_postMessage', m, ack);
 	},
 
-	postChatUserStatus: function(room, state,channel, recipients, ack){
-		var m = {
-			state: state,
-			ContainerId: room.getId(),
-			recipients: room.get('Occupants'),  //DO we send everyone including me? for now YES.
-			user: $AppConfig.username,
-			channel: channel
-		};
-
-		//Send it through the socket
-		Socket.emit('chat_postUserState', m, ack);
-	},
-
-
 	approveMessages: function(messageIds){
 		Socket.emit('chat_approveMessages', messageIds);
 	},
@@ -462,22 +448,21 @@ Ext.define('NextThought.controller.Chat', {
 
 			// NOTE: We need to guard against sending duplicate consecutive chat state notifications.
 			var lastState, me = this;
-			if(!me.roomsState){ return false; }
 			Ext.each(me.roomsState, function(s){
 				if(s.room.getId() === stateChange.room.getId()){ lastState = s; }
 			});
 			return lastState ? lastState.state === stateChange.state : false;
 		}
 
+		if(!this.roomsState){ this.roomsState=[]; }
 		if(shouldDropChatStatusChange(change)){
-			console.log('Error: Dropping state change because the change state is same the current state. Change: ', change, ' all states: ');
+			console.log('Error: Dropping state change to avoid duplicates. Change: ', change, ' all states: ');
 			return;
 		}
 
-		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false;
-		if(!this.roomsState){ this.roomsState=[]; }
+		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false,
+			recipients = Ext.Array.filter(change.room.get('Occupants'), function(t){ return !isMe(t); });
 
-		//Update state of this room or add it to the roomstates.
 		Ext.each(this.roomsState, function(s){
 			if(s.room.getId() === change.room.getId()){
 				s.state = change.state;
@@ -485,12 +470,12 @@ Ext.define('NextThought.controller.Chat', {
 			}
 		});
 		if(!handled){ this.roomsState.push(change); }
-		Ext.each(this.roomsState, function(s){
-			console.log('Status of roomId: ', s.room.getId(), ' is ', s.state);
-		});
+		Ext.each(this.roomsState, function(s){ console.log('Status of roomId: ', s.room.getId(), ' is ', s.state); });
 
-		//Fire the event on the socket
-		this.postChatUserStatus(change.room, change.state, channel, [],ack);
+		//Fire the event on the socket. We don't want to broadcast active state message. It's already implied.
+		if(change.state !== 'active'){
+			this.postMessage(change.room, {'state': change.state}, null, channel, recipients, ack);
+		}
 	},
 
 
@@ -990,15 +975,21 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
-	onReceiveStateChannel: function(obj){
-		//FIXME: Once the server starts broadcasting chat state notifications,
-		// this method will handle pushing them to the appropriate UI component. Needs to be updated.
-		var cid = obj.ContainerId, //obj.get('ContainerId'),
+	onReceiveStateChannel: function(msg){
+		var cid = msg.get('ContainerId'),
+			body = msg.get('body'),
+			owner = msg.get('Creator'),
 			win = this.getChatWindow(cid);
 
-		if(win && obj && obj.state){
-			if(obj.state === 'composing' || obj.state === 'paused'){
-				win.down('chat-log-view').addStatusNotification(obj.state+'...');
+		//NOTE: I can only chat status from other participants, not mine.
+		if(win && owner !== $AppConfig.username && body){
+			if(body.state === 'composing' || body.state === 'paused'){
+				UserRepository.getUser(owner, function(u){
+					var name = u.getName(),
+						txt = name+' '+body.state+'...';
+
+					win.down('chat-log-view').addStatusNotification(txt);
+				}, this);
 			}
 		}
 	},
