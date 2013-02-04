@@ -487,8 +487,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			Ext.fly(me.wbThumbnailTpm.insertBefore(p, [data, guid])).unselectable();
 			Ext.fly(p).remove();
 
-			me.editor.repaint();
-			me.fireEvent('size-changed');
+			//Instead of repainting the editor we use a slightly more brute force approach of hiding
+			//then showing it in a defered action.  That seems to fix the chrome issue with the
+			//controls being drawn in the wrong place when inserting a whiteboard. Trello #858
+			Ext.defer(function(){
+				me.editor.hide();
+				me.editor.show();
+				me.fireEvent('size-changed');
+			}, 1);
 		});
 	},
 
