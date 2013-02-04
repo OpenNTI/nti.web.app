@@ -2,21 +2,28 @@ Ext.define('NextThought.view.profiles.Panel',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-panel',
 
+	requires:[
+		'NextThought.view.profiles.TabPanel'
+	],
+
+	ui: 'profile',
+	layout: 'auto',
+
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'profile-head',
 			cn: [{
-				tag: 'img',
-				cls: 'avatar',
-				src: Ext.BLANK_IMAGE_URL
+				cls: 'avatar'
 			},{
 				cls: 'meta',
 				cn: [{
 					cls: 'name'
 				},{
-					cls: 'etc'
+					html: 'Front-End Engineer at NextThought'
+				},{
+					html: 'Norman, OK'
 				}]
 			}]
 		},
@@ -28,9 +35,19 @@ Ext.define('NextThought.view.profiles.Panel',{
 	]),
 
 	renderSelectors: {
-		avatar: '.profile-head img',
+		avatar: '.profile-head .avatar',
 		name: '.profile-head .meta .name'
 	},
+
+	items: [{
+		xtype: 'profile-tabs',
+		items: [
+			{title: 'A', html: 'Test'},
+			{title: 'B', html: 'Test'},
+			{title: 'C', html: 'Test'},
+			{title: 'D', html: 'Test'}
+		]
+	}],
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -50,7 +67,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
-		this.avatar.set({src: user.get('avatarURL')});
+		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		this.name.update(user.getName());
 	}
 });

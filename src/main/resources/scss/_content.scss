@@ -119,41 +119,6 @@
 	}
 }
 
-.nti-content-tabbar-plain {
-	border-top: 1px solid #f1f1f1 !important;
-
-	.nti-body-content-tabbar{
-
-		.x-tab-content-tab {
-			background: #ffffff;
-			border: 1px solid #f1f1f1;
-			border-right-width: 0 !important;
-			border-top-width: 0 !important;
-			height: 32px;
-			margin: 0 !important;
-
-			&:last-of-type {
-				border-right-width: 1px !important;
-			}
-			em {padding: 0 15px;}
-			.x-tab-inner {
-				color: $secondary-grey;
-				font: 12px/32px $font !important;
-				text-transform: uppercase;
-			}
-
-			&.x-tab-active {
-				background: #ffffff;
-				.x-tab-inner {
-					color: #85b746;
-					font-weight: 600 !important;
-				}
-			}
-
-		}
-	}
-}
-
 .scroll-shadow {
 	border-top: 1px solid #F1F1F1 !important;
 	position: absolute;

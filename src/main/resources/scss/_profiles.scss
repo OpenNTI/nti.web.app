@@ -1,0 +1,51 @@
+
+#profile {
+	padding: 75px 25% 0;
+
+	.x-container-profile {
+
+		.profile-head{
+			position: relative;
+
+			.avatar {
+				top: -45px;
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				box-shadow: inset 0 0 0 2px #fff;
+
+				&::before{
+					content: ' ';
+					display: block;
+					position: absolute;
+					border: 1px solid $border-grey;
+					border-radius: 3px;
+					top: -2px;
+					left: -2px;
+					right: -2px;
+					bottom: -2px;
+					background: #fff;
+					box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
+					z-index: -1;
+				}
+			}
+
+			.meta {
+				margin-left: 215px;
+				min-height: 170px;//Ensure the content after the meta is below the avatar
+				font: normal 500 14px/24px $font;
+				color: $secondary-grey;
+
+				.name {
+					font: italic 300 30px/36px $font;
+					color: $primary-blue;
+					margin-bottom: 5px;
+				}
+			}
+		}
+
+	}
+}
