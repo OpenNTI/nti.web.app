@@ -1,6 +1,6 @@
 Ext.define('NextThought.overrides.app.Application',{
 	override: 'Ext.app.Application',
-	requires: ['NextThought.overrides.app.EventBus'],
+//	requires: ['NextThought.overrides.app.EventBus'],
 
 	registerInitializeTask: function(task) {
 		var method = this.registerInitializeTask.caller;
