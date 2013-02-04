@@ -944,7 +944,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
 					var name = u.getName();
-					log.addNotification(name + ' has left the chat...');
+					log ? log.addNotification(name + ' has left the chat...'): null;
 				}, this);
 			}
 		});
@@ -953,7 +953,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
 					var name = u.getName();
-					log.addNotification(name + ' entered the chat...');
+					log ? log.addNotification(name + ' entered the chat...') : null;
 				}, this);
 			}
 		});
@@ -978,19 +978,26 @@ Ext.define('NextThought.controller.Chat', {
 	onReceiveStateChannel: function(msg){
 		var cid = msg.get('ContainerId'),
 			body = msg.get('body'),
-			owner = msg.get('Creator'),
-			win = this.getChatWindow(cid);
+			sender = msg.get('Creator'),
+			win = this.getChatWindow(cid),
+			isGroupChat = msg.get('recipients').length >= 2; //At least two other people.
 
 		//NOTE: I can only chat status from other participants, not mine.
-		if(win && owner !== $AppConfig.username && body){
-			if(body.state === 'composing' || body.state === 'paused'){
-				UserRepository.getUser(owner, function(u){
-					var name = u.getName(),
-						txt = name+' '+body.state+'...';
+		if(win && !isMe(sender) && body){
+			UserRepository.getUser(sender, function(u){
+				var name = u.getName(),
+					txt = name+' '+body.state+'...';
 
+				if(body.state === 'composing' || body.state === 'paused'){
 					win.down('chat-log-view').addStatusNotification(txt);
-				}, this);
-			}
+					//Set the chat session state to active
+					if(isGroupChat){ win.down('chat-gutter').setChatState('active', name); }
+				}
+				else{
+					win.down('chat-log-view').clearChatStatusNotifications();
+					if(isGroupChat){ win.down('chat-gutter').setChatState(body.state, name); }
+				}
+			}, this);
 		}
 	},
 

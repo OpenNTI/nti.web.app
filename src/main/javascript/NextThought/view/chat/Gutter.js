@@ -87,6 +87,12 @@ Ext.define('NextThought.view.chat.Gutter',{
 		return r;
 	},
 
+	setChatState: function(state, username){
+		Ext.each(this.query('chat-gutter-entry') || [], function(g){
+			if( g.user.getName() === username ){ g.setStatus(state); }
+		});
+	},
+
 
 	updateList: function(users){
 		var list = [];

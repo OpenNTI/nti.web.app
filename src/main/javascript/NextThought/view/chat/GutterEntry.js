@@ -27,6 +27,8 @@ Ext.define('NextThought.view.chat.GutterEntry',{
 			name: this.user.getName()
 			//status: 'Idle...'
 		});
-		this.callParent();
-	}
+		this.callParent(arguments);
+	},
+
+	setStatus: function(state){ this.status.update(state); }
 });
