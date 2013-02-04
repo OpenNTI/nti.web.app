@@ -43,7 +43,7 @@ Ext.define( 'NextThought.view.views.Library', {
 
 
 	onNavigateComplete: function(pageInfo){
-		if(!pageInfo || !pageInfo.isModel){return;};
+		if(!pageInfo || !pageInfo.isModel){return;}
 		this.setTitle(LocationProvider.findTitle(pageInfo.getId(),'NextThought'));
 	},
 
