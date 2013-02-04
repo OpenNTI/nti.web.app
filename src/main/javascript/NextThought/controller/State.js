@@ -46,21 +46,47 @@ Ext.define('NextThought.controller.State', {
 
 		history.replaceState = history.replaceState || function(){};
 
+		/**
+		 * Update the application's state object from various actions in this controller.
+		 *
+		 * @param {Object} s The new state fragment, it will be merged into the current state, replacing keys it has,
+		 *                      and leaving keys it does not have alone.
+		 * @return {Boolean} Returns true if the state was changed, false otherwise.
+		 */
 		history.updateState = function(s){
-			console.debug('update state', arguments);
-			Ext.applyIf(s,{active: me.currentState.active});
-			if(!me.isPoppingHistory){
-				me.currentState = Ext.Object.merge(me.currentState, s);
-				window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
-				return me.fireEvent('stateChange',s);
+			function isDiff(a,b){
+				var ret = false;
+
+				Ext.Object.each(b,function objItr(key,val){
+					if(a[key]!==val || (Ext.isObject(val) && isDiff(a[key],val))){
+						ret = true;
+					}
+					return !ret;//a false value will stop the iteration, if we find a
+				});
+				return ret;
 			}
+
+			var current = me.currentState,
+				diff = isDiff(current,s);
+			console.debug('update state', arguments);
+			Ext.applyIf(s,{active: current.active});
+
+			console.debug('Will state change?', diff);
+
+			//The only thing listening to this event is the Google Hangout controller.
+			if(diff && me.fireEvent('stateChange',s)){
+				Ext.Object.merge(current, s);
+				window.localStorage.setItem(me.getStateKey(),JSON.stringify(current));
+				return true;
+			}
+
 			return false;
 		};
 
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
 			var location, ntiid;
-			if (this.updateState(s)) {
+			if (this.updateState(s) && !me.isPoppingHistory) {
 				location = me.getState().location;
 				title = LocationProvider.findTitle(location,'NextThought');
 				ntiid = ParseUtils.parseNtiid(location);
@@ -76,13 +102,16 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		window.onpopstate = function(e){
+			console.debug('Browser is popping state', e.state);
 			me.isPoppingHistory = true;
 			me.onPopState(e);
 			me.isPoppingHistory = false;
 		};
 
 		window.onhashchange = function(e) {
-			console.debug('Hash changed', e);
+			//Hash changes are their own entry in the history... so we do not need to push history, we just need to
+			// handle the change.
+			console.debug('Hash change');
 			var newState = me.interpretHash(location.hash);
 			if(history.updateState(newState)){
 				me.restoreState(newState);
