@@ -1,3 +1,34 @@
+.nti-profile-tabbar-plain {
+	border: 0 solid $border-grey;
+	border-width: 1px 0 1px !important;
+
+	.x-tab-profile-tab {
+		background: transparent;
+		margin: 0;
+		border: 0 !important;
+		height: 50px;
+		.x-tab-inner {
+			color: $tertiary-grey;
+			font: italic 500 18px/50px $font;
+			text-transform: uppercase;
+			padding: 0 6px;
+		}
+
+		em{padding: 0;}
+
+		&.x-tab-active {
+			box-shadow: inset 0 -4px 0 0 #85b746;
+			.x-tab-inner {
+				color: #85b746;
+			}
+		}
+
+		& + .x-tab-profile-tab{
+			margin-left: 30px;
+		}
+	}
+}
+
 .nti-content-tabbar-plain {
 	border-top: 1px solid #f1f1f1 !important;
 

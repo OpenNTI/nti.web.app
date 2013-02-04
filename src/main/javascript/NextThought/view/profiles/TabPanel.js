@@ -3,7 +3,7 @@ Ext.define('NextThought.view.profiles.TabPanel',{
 	alias: 'widget.profile-tabs',
 
 	plain: true,
-	ui: 'profile-tab',
+	ui: 'profile',
 
 	tabBar: {
 		plain: true,

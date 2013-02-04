@@ -20,10 +20,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 				cls: 'meta',
 				cn: [{
 					cls: 'name'
-				},{
-					html: 'Front-End Engineer at NextThought'
-				},{
-					html: 'Norman, OK'
 				}]
 			}]
 		},
@@ -42,10 +38,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 	items: [{
 		xtype: 'profile-tabs',
 		items: [
-			{title: 'A', html: 'Test'},
-			{title: 'B', html: 'Test'},
-			{title: 'C', html: 'Test'},
-			{title: 'D', html: 'Test'}
+			{title: 'Recent Activity', html: 'Test'},
+			{title: 'Thoughts', html: 'Test'},
+			{title: 'Library', html: 'Test'},
+			{title: 'Connections', html: 'Test'}
 		]
 	}],
 
