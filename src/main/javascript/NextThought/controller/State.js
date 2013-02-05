@@ -179,7 +179,7 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = true;
 		var app = this.application,
 			history = window.history,
-			replaceState = false, c, key, stateScoped, me = this;
+			replaceState = false, c, key, stateScoped, me = this, presentation;
 
 		function fin(){
 			var token = {};
@@ -231,6 +231,14 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		if(typeof stateObject.location !== 'undefined'){
+			//Quick and dirty close the slide view if it exists.
+			//Integrate this with state better so back and forward can
+			//do more of what you would expdect.
+			presentation = Ext.ComponentQuery.query('slidedeck-view');
+			if(!Ext.isEmpty(presentation)){
+				presentation = presentation.first();
+				presentation.destroy();
+			}
 			LocationProvider.setLocation(stateObject.location, fin(), true);
 		}
 
