@@ -30,5 +30,12 @@ Ext.define('NextThought.view.chat.GutterEntry',{
 		this.callParent(arguments);
 	},
 
-	setStatus: function(state){ this.status.update(state); }
+	setStatus: function(state){
+		if(!this.rendered){
+			this.on('afterrender', function(){
+				this.status ? this.status.update(state) : null;
+			});
+		}
+		this.status ? this.status.update(state) : null;
+	}
 });

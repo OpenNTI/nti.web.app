@@ -442,18 +442,20 @@ Ext.define('NextThought.controller.Chat', {
         chatView.up('chat-window').onFlagToolClicked();
     },
 
+	/**
+	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
+	 */
 	publishChatStatus: function(change){
 		function shouldDropChatStatusChange(stateChange){
 			if(!change || !change.state){ return true; }
 
-			// NOTE: We need to guard against sending duplicate consecutive chat state notifications.
+			// NOTE: We need to guard against sending multiple messages of the same chat state consecutively.
 			var lastState, me = this;
 			Ext.each(me.roomsState, function(s){
 				if(s.room.getId() === stateChange.room.getId()){ lastState = s; }
 			});
 			return lastState ? lastState.state === stateChange.state : false;
 		}
-
 		if(!this.roomsState){ this.roomsState=[]; }
 		if(shouldDropChatStatusChange(change)){
 			console.log('Error: Dropping state change to avoid duplicates. Change: ', change, ' all states: ');
@@ -462,7 +464,6 @@ Ext.define('NextThought.controller.Chat', {
 
 		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false,
 			recipients = Ext.Array.filter(change.room.get('Occupants'), function(t){ return !isMe(t); });
-
 		Ext.each(this.roomsState, function(s){
 			if(s.room.getId() === change.room.getId()){
 				s.state = change.state;
@@ -470,12 +471,9 @@ Ext.define('NextThought.controller.Chat', {
 			}
 		});
 		if(!handled){ this.roomsState.push(change); }
-		Ext.each(this.roomsState, function(s){ console.log('Status of roomId: ', s.room.getId(), ' is ', s.state); });
 
-		//Fire the event on the socket. We don't want to broadcast active state message. It's already implied.
-		if(change.state !== 'active'){
-			this.postMessage(change.room, {'state': change.state}, null, channel, recipients, ack);
-		}
+		Ext.each(this.roomsState, function(s){ console.log('Status of roomId: ', s.room.getId(), ' is ', s.state, ' for ', s.sender); });
+		this.postMessage(change.room, {'state': change.state}, null, channel, recipients, ack);
 	},
 
 
@@ -909,7 +907,9 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.channelMap[channel].call(this, m, opts||{});
 
-		if(!w.minimized && !w.isVisible() && w.hasBeenAccepted()){
+		if(!w.minimized && !w.isVisible() && w.hasBeenAccepted() && channel !== 'STATE'){
+			// NOTE: We don't want state channel notifications to trigger showing the window initially,
+			// only when an actual message is sent should we do this.
 			w.show();
 		}
 		else {
@@ -930,7 +930,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
 		var win = this.getChatWindow(newRoomInfo.getId()),
-			log = win.down('chat-log-view[moderated=false]');
+			log = win ? win.down('chat-log-view[moderated=false]') : null;
 
 		if(!win) {
 			return;
@@ -961,15 +961,18 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageDefaultChannel: function(msg, opts) {
-		var cid, win, moderated, log;
+		var cid, win, moderated, log, sender, room, isGroupChat;
 
 		cid = msg.get('ContainerId');
 		win = this.getChatWindow(cid);
 		moderated = Boolean(opts && opts.hasOwnProperty('moderated'));
+		sender = msg.get('Creator');
+		room = this.getRoomInfoFromSessionStorage(cid);
+		isGroupChat = room ? room.get('Occupants').length > 2 : false;
 
 		log = win.down('chat-log-view[moderated=true]');
 		win.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
-
+		this.updateChatState(sender, 'active', win, isGroupChat);
 		if(!moderated && log) {
 			log.removeMessage(msg);
 		}
@@ -982,25 +985,46 @@ Ext.define('NextThought.controller.Chat', {
 			win = this.getChatWindow(cid),
 			isGroupChat = msg.get('recipients').length >= 2; //At least two other people.
 
-		//NOTE: I can only chat status from other participants, not mine.
 		if(win && !isMe(sender) && body){
-			UserRepository.getUser(sender, function(u){
-				var name = u.getName(),
-					txt = name+' '+body.state+'...';
-
-				if(body.state === 'composing' || body.state === 'paused'){
-					win.down('chat-log-view').addStatusNotification(txt);
-					//Set the chat session state to active
-					if(isGroupChat){ win.down('chat-gutter').setChatState('active', name); }
-				}
-				else{
-					win.down('chat-log-view').clearChatStatusNotifications();
-					if(isGroupChat){ win.down('chat-gutter').setChatState(body.state, name); }
-				}
-			}, this);
+			this.updateChatState(sender, body.state, win, isGroupChat);
 		}
 	},
 
+	/**
+	 *  We use this method to update the state of other chat participants.
+	 *  Thus, it is responsible for updating the appropriate view,
+	 *  but we don't keep track of other participants' state, because they manage it themselves.
+	 */
+	updateChatState: function(sender, state, win, isGroupChat){
+		if(!win){ return; }
+		UserRepository.getUser(sender, function(u){
+			var name = u.getName(),
+				txt = name+' '+state+'...',
+				log = win.down('chat-log-view'), gutter =  win.down('chat-gutter');
+
+			log.clearChatStatusNotifications();
+			if(state === 'composing' || state === 'paused'){
+				log.addStatusNotification(txt);
+				//Used to update the sender's current state. in case he was previously 'inactive'
+				state = 'active';
+			}
+
+			if(isGroupChat){ gutter.setChatState(state, name); }
+			else{
+				if(!isMe(sender)){
+					txt = Ext.String.ellipsis(name, 18, false) + ' is ' + state;
+					win.setTitle(txt);
+				}
+			}
+		}, this);
+	},
+
+	startTrackingChatState: function( sender, room, w){
+		if(!this.roomsState){ this.roomsState = [];}
+		if(!w){ w = me.openChatWindow(room); }
+
+		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
+	},
 
 //	onMessageContentChannel: function(msg, opts) {
 //		var win = this.getChatWindow(),
@@ -1072,6 +1096,7 @@ Ext.define('NextThought.controller.Chat', {
         function isAcceptedOrTimedOut(){
             me.setRoomIdStatusAccepted(roomInfo.getId());
             w.accept(true);
+	        me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
             if(isGroupChat){
                 w.show();
             }

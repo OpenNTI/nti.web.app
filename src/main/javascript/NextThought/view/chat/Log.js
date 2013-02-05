@@ -231,8 +231,6 @@ Ext.define('NextThought.view.chat.Log', {
 	},
 
 	addStatusNotification: function(state){
-		this.clearChatStatusNotifications();
-
 		var o = this.add({
 			xtype: 'chat-notification-status',
 			message: state

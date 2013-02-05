@@ -99,8 +99,7 @@ Ext.define('NextThought.view.chat.View', {
 			if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
 
 			//Fire a status change to the controller
-			console.log('setting the chat status to: ', notification.status);
-			me.fireEvent('publish-chat-status', {state: me.currentChatStatus, room:room} );
+			me.currentChatStatus !== 'active' ? me.fireEvent('publish-chat-status', {state: me.currentChatStatus, room:room} ) : null;
 
 			clearTimeout(me.inactiveTimer);
 			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);

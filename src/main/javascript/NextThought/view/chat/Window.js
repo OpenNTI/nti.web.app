@@ -81,7 +81,7 @@ Ext.define('NextThought.view.chat.Window', {
 
 
 		UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
-			me.setTitle(users);
+			me.setTitleInfo(users);
 			list.updateList(users);
 		});
 	},
@@ -147,8 +147,7 @@ Ext.define('NextThought.view.chat.Window', {
         btn.toggleCls('moderating');
     },
 
-
-	setTitle:function (users) {
+	setTitleInfo: function(users){
 		var title = [];
 
 		Ext.each(users, function (u) {
@@ -164,7 +163,7 @@ Ext.define('NextThought.view.chat.Window', {
 			title = Ext.String.format('Chat ({0})', title.length);
 		}
 
-		this.callParent([title]);
+		this.setTitle(title);
 	},
 
 
