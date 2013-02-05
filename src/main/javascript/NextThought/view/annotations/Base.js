@@ -63,8 +63,15 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 			prefix: c.prefix || 'default',
 
-			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
+			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me),
+
+			manager: c.getAnnotationManager()
 		});
+
+		if(!me.manager){
+			//TODO what to actually do here.  Throw exception? this wont work without a manager
+			console.log('No mananger supplied for annotation.  Expect issues', me, c);
+		}
 
 		if(r.data.sharedWith !== undefined){
 			try{ this.mixins.shareable.afterRender.call(this); }
@@ -81,7 +88,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		me.attachRecord(r);
 
-		AnnotationsRenderer.register(me);
+		me.manager.register(me);
 		if(this.getItemId()){
 			Ext.ComponentManager.register(this);
 		}
@@ -190,7 +197,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		if(me.getItemId()){
 			Ext.ComponentManager.unregister(me);
 		}
-		AnnotationsRenderer.unregister(me);
+		me.manager.unregister(me);
 
 		Ext.EventManager.removeResizeListener(me.requestRender, me);
 
@@ -225,7 +232,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 
 	requestRender: function(){
-		AnnotationsRenderer.render(this.prefix);
+		this.manager.render(this.prefix);
 	},
 
 

@@ -1,6 +1,4 @@
 Ext.define('NextThought.view.annotations.renderer.Manager',{
-	singleton: true,
-
 	requires: [
 		'NextThought.util.Line'
 	],
@@ -60,6 +58,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	registerGutter: function(el, reader){
+		//TODO all this junk about prefixes should go away once we aren't
+		//using a singleton here...
 		var p = reader.prefix;
 		if(!p){ Ext.Error.raise('Prefix required'); }
 		if(this.gutter[p]){
@@ -399,16 +399,15 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	}
 
 }, function(){
-	window.AnnotationsRenderer = this;
-
 	var me = this,
-		fn = this.render,
+		fn = this.prototype.render,
 		timerId = {};
 
-	this.render = function(prefix) {
+	me.prototype.render = function(prefix) {
+		var callerScope = this;
 		if (timerId[prefix]) {
 			clearTimeout(timerId[prefix]);
 		}
-		timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
+		timerId[prefix] = setTimeout(function(){ fn.call(callerScope, prefix); }, 100);
 	};
 });

@@ -29,7 +29,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc, ReaderPanel.get().getCleanContent(), this.getRecordField('ContainerId'));
 
 		if(!range){
-			if(AnnotationsRenderer.isDebug){
+			if(this.manager.isDebug){
 				console.error('bad range', this.getRecord());
 			}
 			return null;

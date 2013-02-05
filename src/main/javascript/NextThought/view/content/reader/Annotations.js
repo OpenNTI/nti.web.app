@@ -25,7 +25,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		Ext.apply(me,{
 			annotations: {},
 			filter: null,
-			searchAnnotations: null
+			searchAnnotations: null,
+			annotationManager: NextThought.view.annotations.renderer.Manager.create()
 		});
 
 		me.addEvents('share-with','create-note','should-be-ready');
@@ -43,7 +44,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			afterRender: me.insertAnnotationGutter
 		});
 
-		me.mon(AnnotationsRenderer.events,'finish',me.fireReady,me,{buffer: 500});
+		me.mon(me.annotationManager.events,'finish',me.fireReady,me,{buffer: 500});
 
 		return this;
 	},
@@ -108,9 +109,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			container.remove();
 		},me);
 
-		AnnotationsRenderer.registerGutter(container, me);
+		me.annotationManager.registerGutter(container, me);
 	},
 
+
+	getAnnotationManager: function(){
+		return this.annotationManager;
+	},
 
 
 	loadContentAnnotations: function(containerId, subContainers){

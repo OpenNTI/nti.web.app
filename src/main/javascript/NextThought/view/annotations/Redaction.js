@@ -62,7 +62,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		sel.removeAllRanges();
 		sel.addRange(range);
 
-		AnnotationsRenderer.suspend(this.prefix);
+		me.manager.suspend(this.prefix);
 		return false;
 	},
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if(this.masterSpan.hasCls(this.cls)){
 			t = this.actionSpan.getBoundingClientRect();
 			rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
-			rr = annotationOffsets || AnnotationsRenderer.getReader().getAnnotationOffsets();
+			rr = annotationOffsets || me.manager.getReader().getAnnotationOffsets();
 			rtop = rr.scrollTop + rr.top;
 			rect.top = rect.top + rtop;
 			rect.bottom = rect.bottom + rtop;
@@ -215,14 +215,14 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.makeEditableSpanNotEditable();
 		this.record.set('replacementContent', this.editableSpan.dom.textContent);
 		this.record.save();
-		AnnotationsRenderer.resume(this.prefix);
+		me.manager.resume(this.prefix);
 	},
 
 
 	resetEditorContent: function(){
 		this.makeEditableSpanNotEditable();
 		this.editableSpan.update( this.record.get('replacementContent') );
-		AnnotationsRenderer.resume(this.prefix);
+		me.manager.resume(this.prefix);
 	},
 
 
