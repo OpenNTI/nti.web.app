@@ -45,6 +45,47 @@
 					color: $primary-blue;
 					margin-bottom: 5px;
 				}
+
+				.actions {
+					margin: 20px 0;
+					text-transform: uppercase;
+					color: $tertiary-grey;
+					white-space: nowrap;
+					font: normal 600 10px/20px $font;
+
+					.chat,.message,.email {
+						opacity: 0.8;
+						cursor: pointer;
+						display: inline-block;
+						padding: 0 25px 0 20px;
+						position: relative;
+
+						&:hover {
+							opacity: 1;
+						}
+
+						&::after{
+							content: ' ';
+							position: absolute;
+							top: 4px; left: 0;
+							background: $icons no-repeat;
+						}
+					}
+
+					.chat{
+						padding-left:25px;
+						&::after {
+							@include sprite($icons,'activity-chat',$dimensions: true);
+						}
+					}
+					.email::after {
+						@include sprite($icons,'account-email',$dimensions: true);
+					}
+					.message::after {
+						left: 2px;
+						@include sprite($icons,'activity-comment',$dimensions: true);
+					}
+				}
 			}
 		}
 

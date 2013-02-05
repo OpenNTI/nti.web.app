@@ -18,9 +18,16 @@ Ext.define('NextThought.view.profiles.Panel',{
 				cls: 'avatar'
 			},{
 				cls: 'meta',
-				cn: [{
-					cls: 'name'
-				}]
+				cn: [
+					{ cls: 'name' },
+					{ cn: [{tag: 'span', cls:'role'},' at ',{tag: 'span', cls:'affiliation'}]},
+					{ cls: 'location' },
+					{ cls: 'actions', cn: [
+						{cls: 'message', html: 'Message'},
+						{cls: 'chat', html: 'Chat'},
+						{cls: 'email', html: 'Email'}
+					]}
+				]
 			}]
 		},
 		{
@@ -31,17 +38,25 @@ Ext.define('NextThought.view.profiles.Panel',{
 	]),
 
 	renderSelectors: {
-		avatar: '.profile-head .avatar',
-		name: '.profile-head .meta .name'
+		avatarEl: '.profile-head .avatar',
+		nameEl: '.profile-head .meta .name',
+		roleEl: '.profile-head .meta .role',
+		affiliationEl: '.profile-head .meta .affiliation',
+		locationEl: '.profile-head .meta .location',
+		actionsEl: '.profile-head .meta .actions',
+		messageEl: '.profile-head .meta .actions .message',
+		chatEl: '.profile-head .meta .actions .chat',
+		emailEl: '.profile-head .meta .actions .email'
+
 	},
 
 	items: [{
 		xtype: 'profile-tabs',
 		items: [
-			{title: 'Recent Activity', html: 'Test'},
+			{title: 'Recent Activity', html: 'TestContent'},
 			{title: 'Thoughts', html: 'Test'},
-			{title: 'Library', html: 'Test'},
-			{title: 'Connections', html: 'Test'}
+			{title: 'Library', disabled: true},
+			{title: 'Connections', disabled: true}
 		]
 	}],
 
@@ -54,6 +69,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.chatEl,'click',this.onChatWith,this);
+		this.mon(this.messageEl,'click',this.onMessageUser,this);
+		this.mon(this.emailEl,'click',this.onEmailUser,this);
+	},
+
+
 	setUser: function(user){
 		console.timeEnd(this.timeId);
 		this.fireEvent('loaded');
@@ -63,7 +86,31 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
-		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
-		this.name.update(user.getName());
+		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
+		this.nameEl.update(user.getName());
+		this.affiliationEl.update(user.get('affiliation')||'{Affiliation}');
+		this.roleEl.update(user.get('role')||'{Role}');
+		this.locationEl.update(user.get('location')||'{Location}');
+	},
+
+
+	onChatWith: function(e){
+		e.stopEvent();
+		console.debug('Clicked Chat');
+		return false;
+	},
+
+
+	onMessageUser: function(e){
+		e.stopEvent();
+		console.debug('Clicked Message');
+		return false;
+	},
+
+
+	onEmailUser: function(e){
+		e.stopEvent();
+		console.debug('Clicked Email');
+		return false;
 	}
 });
