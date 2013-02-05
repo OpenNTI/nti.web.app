@@ -502,9 +502,8 @@ Ext.define('NextThought.controller.UserData', {
         }
     },
 
-
-    onDisplayPopover: function(id, html, node) {
-        var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
+    onDisplayPopover: function(sender, id, html, node) {
+        var offsets = sender.getAnnotationOffsets(),
             position = Ext.fly(node).getXY(),
             me=this;
 

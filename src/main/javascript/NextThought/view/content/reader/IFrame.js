@@ -240,7 +240,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		        console.log('Error: Could not find popover content for id:'+href+ ' from target: '+target);
 		        return;
 	        }
-            me.fireEvent('display-popover', href, popContent, target);
+            me.fireEvent('display-popover', me, href, popContent, target);
         });
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
