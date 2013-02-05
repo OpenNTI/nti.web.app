@@ -60,7 +60,7 @@ Ext.define('NextThought.util.Globals', {
 					key = e.getKey(),
 					notInput = (!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable')));
 
-				if( key === e.ESC || (key === e.BACKSPACE && notInput )){
+				if( notInput && (key === e.ESC || key === e.BACKSPACE)){
 					console.log('blocking key for: ',t);
 					e.stopEvent();
 					return false;

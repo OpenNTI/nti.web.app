@@ -3,6 +3,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	alias: 'widget.profile-panel',
 
 	requires:[
+		'Ext.Editor',
 		'NextThought.view.profiles.TabPanel'
 	],
 
@@ -15,13 +16,16 @@ Ext.define('NextThought.view.profiles.Panel',{
 		{
 			cls: 'profile-head',
 			cn: [{
-				cls: 'avatar'
+				cls: 'avatar', cn:[{cls:'edit', html: 'Edit'}]
 			},{
 				cls: 'meta',
 				cn: [
-					{ cls: 'name' },
-					{ cn: [{tag: 'span', cls:'role'},' at ',{tag: 'span', cls:'affiliation'}]},
-					{ cls: 'location' },
+					{ cls: 'name', 'data-field':'name' },
+					{ cn: [
+						{tag: 'span', 'data-field':'role'},
+						' at ',
+						{tag: 'span', 'data-field':'affiliation'}]},
+					{ 'data-field': 'location' },
 					{ cls: 'actions', cn: [
 						{cls: 'message', html: 'Message'},
 						{cls: 'chat', html: 'Chat'},
@@ -40,9 +44,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 	renderSelectors: {
 		avatarEl: '.profile-head .avatar',
 		nameEl: '.profile-head .meta .name',
-		roleEl: '.profile-head .meta .role',
-		affiliationEl: '.profile-head .meta .affiliation',
-		locationEl: '.profile-head .meta .location',
+		roleEl: '.profile-head .meta [data-field=role]',
+		editEl: '.profile-head .avatar .edit',
+		affiliationEl: '.profile-head .meta [data-field=affiliation]',
+		locationEl: '.profile-head .meta [data-field=location]',
 		actionsEl: '.profile-head .meta .actions',
 		messageEl: '.profile-head .meta .actions .message',
 		chatEl: '.profile-head .meta .actions .chat',
@@ -74,6 +79,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.messageEl,'click',this.onMessageUser,this);
 		this.mon(this.emailEl,'click',this.onEmailUser,this);
+		this.mon(this.editEl,'click',this.onEditAvatar,this);
 	},
 
 
@@ -86,11 +92,63 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		this.userObject = user;
+
 		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		this.nameEl.update(user.getName());
 		this.affiliationEl.update(user.get('affiliation')||'{Affiliation}');
 		this.roleEl.update(user.get('role')||'{Role}');
 		this.locationEl.update(user.get('location')||'{Location}');
+
+		this.nameEditor = Ext.Editor.create({
+			autoSize: { width: 'boundEl' },
+			cls: 'name-editor',
+			updateEl: true,
+			field:{ xtype: 'simpletext' }
+		});
+
+		this.metaEditor = Ext.Editor.create({
+			autoSize: { width: 'boundEl' },
+			cls: 'meta-editor',
+			updateEl: true,
+			ignoreNoChange: true,
+			revertInvalid: true,
+			field:{ xtype: 'simpletext', allowBlank:false },
+			listeners:{
+				complete: this.onSaveField,
+				scope: this
+			}
+		});
+
+		this.mon(this.nameEl,'click',this.editName,this);
+		this.mon(this.affiliationEl,'click',this.editMeta,this);
+		this.mon(this.roleEl,'click',this.editMeta, this);
+		this.mon(this.locationEl,'click',this.editMeta, this);
+	},
+
+
+	editMeta: function(e){
+		var t = e.getTarget(null,null,true),
+			ed = this.metaEditor;
+
+		//Ensure the editor is wide enough to see something...
+		function resetWidth(){ t.setWidth(null); }
+		if(t.getWidth() < 100){ t.setWidth(100); }
+		ed.on({deactivate:resetWidth,single:true});
+
+		ed.startEdit(t);
+	},
+
+
+	onSaveField: function(cmp,newValue/*,oldValue*/){
+		var field = cmp.boundEl.getAttribute('data-field');
+
+		console.debug('saving:', field,'=', newValue, 'in', this.userObject);
+	},
+
+
+	editName: function(){
+		this.nameEditor.startEdit(this.nameEl);
 	},
 
 
@@ -104,6 +162,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 	onMessageUser: function(e){
 		e.stopEvent();
 		console.debug('Clicked Message');
+		return false;
+	},
+
+
+	onEditAvatar: function(e){
+		e.stopEvent();
+		console.debug('Clicked Edit');
 		return false;
 	},
 

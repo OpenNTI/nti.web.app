@@ -32,6 +32,25 @@
 					box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
 					z-index: -1;
 				}
+
+				.edit {
+					@include animate($name: fadeIn, $duration: 0.5s, $delay: 0s);
+					position: absolute;
+					bottom: 0; left: 0; right: 0;
+					background: rgba(0,0,0,0.3);
+					color: #fff;
+					text-transform: uppercase;
+					padding: 5px;
+					cursor: pointer;
+					display: none;
+					font: normal 600 10px $font;
+				}
+
+				&:hover {
+					.edit {
+						display: block;
+					}
+				}
 			}
 
 			.meta {
@@ -40,10 +59,17 @@
 				font: normal 500 14px/24px $font;
 				color: $secondary-grey;
 
+				[data-field=role], [data-field=affiliation] {
+					display: inline-block;
+					white-space: nowrap;
+				}
+
 				.name {
 					font: italic 300 30px/36px $font;
 					color: $primary-blue;
 					margin-bottom: 5px;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 
 				.actions {
@@ -89,5 +115,15 @@
 			}
 		}
 
+	}
+}
+
+.name-editor {
+	.input-wrap, .textbox-base{
+		input{
+			font: normal 300 30px/36px $font;
+			height: auto;
+			padding-left: 10px;
+		}
 	}
 }

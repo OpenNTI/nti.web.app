@@ -16,6 +16,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		clearEl: '.clear'
 	},
 
+
 	constructor: function(config){
 		delete config.autoEl;
 		delete config.renderTpl;
@@ -54,13 +55,25 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	},
 
 
+	reset: function(){
+		this.clearValue(true);
+	},
+
+
 	getValue: function(){
 		return this.inputEl.getValue();
 	},
 
 
+	setValue: function(v){
+		this.update(v);
+	},
+
+
     update: function(v){
-        this.inputEl.set({value:v});
+        this.inputEl.dom.value = v;
+	    this.inputEl[(v===''?'add':'remove')+'Cls']('empty');
+	    this.clearEl[ v!==''?'show':'hide' ]();
         this.handleBlur();
     },
 
@@ -70,7 +83,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		var e = this.inputEl;
 		e.addCls('empty');
 
-		if(this.readOnly){ 
+		if(this.readOnly){
 			e.set({readonly:'readonly'}); 
 			this.clearEl.hide();
 		}
@@ -78,9 +91,10 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		this.mon(e, {
 			scope: this,
 			keyup: this.keyPressed,
-			keydown: this.keyDown, //keypress does not always fire for escape
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
+		this.mon(e, Ext.EventManager.getKeyEvent(), this.keyDown, this);
+
 		this.mon(this.clearEl,'click',function(){this.clearValue();},this);
 		this.lastValue = this.getValue();
 
@@ -102,6 +116,12 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 	keyDown: function(event) {
 		var k = event.getKey();
+
+		//We need this to fit in more tightly with Ext's Field interface.
+		if(event.isSpecialKey()){
+            this.fireEvent('specialkey', this, new Ext.EventObjectImpl(event));
+        }
+
 		if(this.specialKeys[k]){
 			if(k === event.ESC){
 				if(this.inputEl.dom.value === ''){return;}
@@ -137,7 +157,6 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	},
 
 
-
 	validate: function(silent){
 		var valid,
 			val = this.getValue()||'';
@@ -154,7 +173,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		}
 
 		return valid;
-	}
+	},
 
+
+	isValid: function(){
+		return this.validate(true);
+	}
 });
 
