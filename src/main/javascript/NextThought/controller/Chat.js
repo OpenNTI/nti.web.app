@@ -453,12 +453,12 @@ Ext.define('NextThought.controller.Chat', {
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
 	publishChatStatus: function(room, newStatus, username){
-		var channel = 'STATE', me = this,  handled = false,
-			oldStatus = room.getRoomState(username || $AppConfig.username);
-
+		var channel = 'STATE', oldStatus;
+		username = username &&  Ext.isString(username) ? username : $AppConfig.username;
+		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if(oldStatus !== newStatus){
 			console.log('transitioning room state for: ', $AppConfig. username, ' from ', oldStatus, ' to ', newStatus);
-			this.postMessage(room, {'state': newStatus}, null, channel);
+			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn );
 		}
 	},
 
@@ -971,7 +971,7 @@ Ext.define('NextThought.controller.Chat', {
 			win = this.getChatWindow(cid),
 			isGroupChat = msg.get('recipients').length >= 2; //At least two other people.
 
-		if(win && !isMe(sender) && body){
+		if(win && body){
 			this.updateChatState(sender, body.state, win, isGroupChat);
 		}
 	},
@@ -982,7 +982,7 @@ Ext.define('NextThought.controller.Chat', {
 	 *  but we don't keep track of other participants' state, because they manage it themselves.
 	 */
 	updateChatState: function(sender, state, win, isGroupChat){
-		if(!win){ return; }
+		if(!win || !sender || sender === ""){ return; }
 		var room = win.roomInfo,
 			log = win.down('chat-log-view'), gutter =  win.down('chat-gutter'), inputStates,
 			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive';
@@ -1011,8 +1011,6 @@ Ext.define('NextThought.controller.Chat', {
 
 	startTrackingChatState: function( sender, room, w){
 		if(!w){ w = me.openChatWindow(room); }
-		room.setRoomState(sender, 'active');
-
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
 	},
 
