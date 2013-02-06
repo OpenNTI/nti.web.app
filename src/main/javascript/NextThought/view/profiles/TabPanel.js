@@ -4,6 +4,7 @@ Ext.define('NextThought.view.profiles.TabPanel',{
 
 	plain: true,
 	ui: 'profile',
+	minWidth: 550,
 
 	tabBar: {
 		plain: true,

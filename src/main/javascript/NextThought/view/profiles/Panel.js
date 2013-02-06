@@ -4,11 +4,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	requires:[
 		'Ext.Editor',
+		'NextThought.view.profiles.parts.Activity',
 		'NextThought.view.profiles.TabPanel'
 	],
 
 	ui: 'profile',
-	layout: 'auto',
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
@@ -58,14 +58,21 @@ Ext.define('NextThought.view.profiles.Panel',{
 	items: [{
 		xtype: 'profile-tabs',
 		items: [
-			{title: 'Recent Activity', html: 'TestContent'},
+			{title: 'Recent Activity', xtype: 'profile-activity'},
 			{title: 'Thoughts', html: 'Test'},
 			{title: 'Library', disabled: true},
 			{title: 'Connections', disabled: true}
 		]
 	}],
 
+
 	initComponent: function(){
+		//prevent prototype corruption... until we clone it, this.hasOwnProperty('items') returns false...
+		this.items = Ext.clone(this.items);
+		//now this.hasOwnProperty('items') will return true...
+		//pass the username down to all our configured child items.
+		Ext.applyRecursively(this.items,{username:this.username});
+
 		this.callParent(arguments);
 		this.addEvents('loaded');
 		this.timeId = 'Resolve User:'+this.username;
