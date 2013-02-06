@@ -113,14 +113,14 @@ Ext.define('NextThought.controller.Chat', {
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.
 		this.application.on('session-ready', this.onSessionReady, this);
-		this.application.on('session-closed', function(){sessionStorage.clear();}, this);
+		this.application.on('session-closed', function(){this.removeSessionObject();}, this);
 	},
 
 
 	onSessionReady: function(){
 		//open any rooms we were currently involved in
 		var me = this,
-			roomInfos = me.getAllRoomInfosFromSessionStorage(),
+			roomInfos = me.getAllRoomInfosFromSession(),
 			w;
 		Ext.each(roomInfos, function(ri) {
 			me.onEnteredRoom(ri);
@@ -194,35 +194,41 @@ Ext.define('NextThought.controller.Chat', {
 	 *1) if there's a roomId sent.  there must be an existing roomId in the active rooms object.
 	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
 	 *
-	 * @param users - list of users
-	 * @param roomId - roomid
-	 * @return {*}
+	 * @param users {Array} list of users
+	 * @param roomId {String} roomid
+	 * @param options {Object}
+	 * @return {NextThought.model.RoomInfo}
 	 */
 	existingRoom: function(users, roomId, options) {
 		//Add ourselves to this list
-		var i, rInfo,
-			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username));
+		var key, rInfo,
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username)),
+			chats = this.getSessionObject();
 
 		if(options && options.ContainerId && !roomId){
 			roomId = options.ContainerId;
 		}
 
-		for (i = 0; i < sessionStorage.length; i++) {
-			rInfo = this.getRoomInfoFromSessionStorage(sessionStorage.key(i));
-			if (rInfo){
-				if (roomId && roomId === rInfo.getId()){
-					return rInfo;
-				}
-				else if (!ClassroomUtils.isClassroomId(rInfo.getId())) {
-					if( Ext.Array.difference(rInfo.get('Occupants'),allUsers).length === 0
-					&&	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
-						return rInfo;
+		for (key in chats) {
+			if(chats.hasOwnProperty(key)){
+				rInfo = this.getRoomInfoFromSession(key,chats[key]);
+				if (rInfo){
+					if (roomId && roomId === rInfo.getId()){
+						break;//leave rInfo as is, so we can return it;
 					}
+					else if (!ClassroomUtils.isClassroomId(rInfo.getId())) {
+
+						if( Ext.Array.difference(rInfo.get('Occupants'),allUsers).length === 0
+						&&	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
+							break;//leave rInfo as is, so we can return it
+						}
+					}
+					rInfo = null;
 				}
 			}
 		}
 
-		return null;
+		return rInfo;
 	},
 
 
@@ -570,11 +576,11 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	updateRoomInfo: function(ri) {
-		var ro = this.getRoomInfoFromSessionStorage(ri.getId());
+		var ro = this.getRoomInfoFromSession(ri.getId());
 		if (ro) {
 			ro.fireEvent('changed', ri);
 		}
-		this.putRoomInfoIntoSessionStorage(ri);
+		this.putRoomInfoIntoSession(ri);
 	},
 
 
@@ -704,7 +710,7 @@ Ext.define('NextThought.controller.Chat', {
 
 //	pinMessage: function(msgCmp) {
 //		var m = msgCmp.message,
-//			ri = this.getRoomInfoFromSessionStorage(m.get('ContainerId'));
+//			ri = this.getRoomInfoFromSession(m.get('ContainerId'));
 //		this.postMessage(ri, {'channel': m.get('channel'), 'action': 'pin', 'ntiid': m.getId()}, null, 'META');
 //	},
 //
@@ -725,7 +731,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onSocketDisconnect: function(){
-	   sessionStorage.clear();
+	   this.removeSessionObject();
 	},
 
 
@@ -773,7 +779,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-			oldRoomInfo = this.getRoomInfoFromSessionStorage(newRoomInfo.getId()),
+			oldRoomInfo = this.getRoomInfoFromSession(newRoomInfo.getId()),
             occupants = newRoomInfo.get('Occupants'),
             toast;
 
@@ -799,7 +805,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onExitedRoom: function(room) {
-		sessionStorage.removeItem(room.ID);
+		this.removeSessionObject(room.ID);
 	},
 
 
@@ -945,7 +951,7 @@ Ext.define('NextThought.controller.Chat', {
 		win = this.getChatWindow(cid);
 		moderated = Boolean(opts && opts.hasOwnProperty('moderated'));
 		sender = msg.get('Creator');
-		room = this.getRoomInfoFromSessionStorage(cid);
+		room = this.getRoomInfoFromSession(cid);
 		isGroupChat = room ? room.get('Occupants').length > 2 : false;
 
 		log = win.down('chat-log-view[moderated=true]');
@@ -1037,7 +1043,7 @@ Ext.define('NextThought.controller.Chat', {
 //			a = b.action,
 //			i = b.ntiid,
 //			e,
-//			r = this.getRoomInfoFromSessionStorage(msg.get('ContainerId')),
+//			r = this.getRoomInfoFromSession(msg.get('ContainerId')),
 //			cv = this.getChatView(r);
 //
 //		if ('clearPinned' === a) {
@@ -1099,7 +1105,7 @@ Ext.define('NextThought.controller.Chat', {
             occupants = roomInfo.get('Occupants'),
             isGroupChat = (occupants.length > 2);
 
-		me.putRoomInfoIntoSessionStorage(roomInfo);
+		me.putRoomInfoIntoSession(roomInfo);
 		w = me.openChatWindow(roomInfo);
 
         //Rules for auto-accepting are getting complicated, I will enumerate them here:
@@ -1139,62 +1145,108 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	putRoomInfoIntoSessionStorage: function(roomInfo){
+	putRoomInfoIntoSession: function(roomInfo){
 		if (!roomInfo){Ext.Error.raise('Requires a RoomInfo object');}
-		var key = roomInfo.getId();
-		sessionStorage.setItem(key, Ext.JSON.encode(roomInfo.getData()));
+		this.setSessionObject(roomInfo.getData(),roomInfo.getId());
 	},
 
 
-	getRoomInfoFromSessionStorage: function(key) {
+	getRoomInfoFromSession: function(key, json) {
 		if (!key){Ext.Error.raise('Requires key to look up RoomInfo');}
-		var jsonString = sessionStorage.getItem(key);
-		if (jsonString){
+
+		json = json || this.getSessionObject(key);
+
+		if (json){
 			try {
-				return new NextThought.model.RoomInfo(Ext.JSON.decode(jsonString));
+				return new NextThought.model.RoomInfo(json);
 			}
 			catch(e) {
-				console.warn('Item in session storage is not a roomInfo', jsonString);
+				console.warn('Item in session storage is not a roomInfo', json);
 			}
 		}
 		return null; //not there
 	},
 
 
-	getAllRoomInfosFromSessionStorage: function(){
-		var i, roomInfos = [], ri, key;
-		for (i = 0; i < sessionStorage.length; i++) {
-            key = sessionStorage.key(i);
-            if (key && key !== 'roomIdsAccepted'){
-                ri = this.getRoomInfoFromSessionStorage(key);
-                if (ri){roomInfos.push(ri);}
+	getAllRoomInfosFromSession: function(){
+		var roomInfos = [], ri, key, chats;
+
+		chats = this.getSessionObject();
+
+		for (key in chats) {
+            if(chats.hasOwnProperty(key)){
+	            if (key && key !== 'roomIdsAccepted'){
+	                ri = this.getRoomInfoFromSession(key,chats[key]);
+	                if (ri){roomInfos.push(ri);}
+	            }
             }
 		}
 		return roomInfos;
 	},
 
     setRoomIdStatusAccepted: function(id){
-         var key = 'roomIdsAccepted',
-             status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
+	    var key = 'roomIdsAccepted',
+            status = this.getSessionObject(key);
 
         status[id] = true;
-        sessionStorage.setItem(key, Ext.JSON.encode(status));
+
+	    this.setSessionObject(status,key);
     },
 
     deleteRoomIdStatusAccepted: function(id){
         var key = 'roomIdsAccepted',
-            status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
+            status = this.getSessionObject(key);
 
         delete status[id];
-        sessionStorage.setItem(key, Ext.JSON.encode(status));
+
+	    this.setSessionObject(status,key);
     },
 
 
     isRoomIdAccepted: function(id){
-        var status = Ext.JSON.decode(sessionStorage.getItem('roomIdsAccepted')) || {},
-            found = status[id];
+        return Boolean((this.getSessionObject('roomIdsAccepted') || {})[id]);
+    },
 
-        return found;
-    }
+
+	/**
+	 *
+	 * @param [key] Optional sub-key
+	 * @return {*}
+	 */
+	getSessionObject: function(key){
+		var o = Ext.JSON.decode(sessionStorage.getItem('chats')||'{}');
+		return o[key] || o;
+	},
+
+
+	/**
+	 *
+	 * @param o {Object} Value to put into session storage.
+	 * @param [key] {String} Optional key. If present, `o` is assumed to be the new value at the `key` instead of
+	 *              the whole session object.
+	 */
+	setSessionObject: function(o,key){
+		var leaf = o;
+		if(!Ext.isEmpty(key)){
+			o = this.getSessionObject();
+			o[key] = leaf;
+		}
+		sessionStorage.setItem('chats',Ext.JSON.encode(o));
+	},
+
+
+	/**
+	 *
+	 * @param [key] {String}
+	 */
+	removeSessionObject: function(key){
+		if(!Ext.isEmpty(key)){
+			var o = this.getSessionObject();
+			delete o[key];
+			this.setSessionObject(o,key);
+			return;
+		}
+		sessionStorage.removeItem('chats');
+	}
 
 });
