@@ -46,6 +46,7 @@ Ext.define('NextThought.view.assessment.Question',{
 		this.setupContentElement();
 	},
 
+
 	findLine: function(){
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
@@ -53,6 +54,13 @@ Ext.define('NextThought.view.assessment.Question',{
 		range.selectNodeContents(this.contentElement);
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	},
+
+
+	setupContentElement: function(){
+		this.callParent(arguments);
+		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox');
+	},
+
 
 	retrieveAnswerLabel: function(){
 		var sln = Ext.get(this.contentElement).select('.naqsolution'),

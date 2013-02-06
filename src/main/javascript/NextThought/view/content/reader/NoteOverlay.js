@@ -253,6 +253,29 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 	},
 
+
+	copyClientRect: function(rect){
+		var mutatedRect = {
+			top: rect.top,
+			bottom: rect.bottom,
+			height: rect.height,
+			left: rect.left,
+			right: rect.right,
+			width: rect.widht
+		};
+
+		return mutatedRect;
+	},
+
+
+	adjustContentRectForTop: function(rect, top){
+		var adjusted = this.copyClientRect(rect);
+		adjusted.top += top;
+		adjusted.bottom += top;
+		return adjusted;
+	},
+
+
 	lineInfoForY: function(y){
 		var overlay = this.overlayedPanelAtY(y),
 			result = null, offsets, mutatedRect;
@@ -270,20 +293,27 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//Ok this was from the iframe so we need to adjust it slightly
 		if(result && result.rect){
 			offsets = this.getAnnotationOffsets();
-			mutatedRect = {
-				top: result.rect.top,
-				bottom: result.rect.bottom,
-				height: result.rect.height,
-				left: result.rect.left,
-				right: result.rect.right,
-				width: result.rect.widht
-			};
-
-			mutatedRect.top += offsets.top;
-			mutatedRect.bottom += offsets.top;
+			mutatedRect = this.adjustContentRectForTop(result.rect, offsets.top);
 			result.rect = mutatedRect;
 		}
 		return result;
+	},
+
+
+	openNoteEditorForRange: function(range, rect2, style){
+		var offsets = this.getAnnotationOffsets();
+		Ext.apply(this.noteOverlayData,{
+			lastLine: {
+				rect: this.adjustContentRectForTop(rect2, offsets.top),
+				range: range,
+				style: style
+			},
+			suspendMoveEvents: true
+		});
+
+		this.noteOverlayPositionInputBox();
+		this.noteOverlayActivateRichEditor();
+		this.noteOverlayScrollEditorIntoView();
 	},
 
 

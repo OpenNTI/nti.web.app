@@ -373,18 +373,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			text: 'Add Note',
 			handler: function(){
 				me.clearSelection();
-				Ext.apply(me.noteOverlayData,{
-					lastLine: {
-						rect: rect2,
-						range: range,
-						style: 'plain'
-					},
-					suspendMoveEvents: true
-				});
-
-				me.noteOverlayPositionInputBox();
-				me.noteOverlayActivateRichEditor();
-				me.noteOverlayScrollEditorIntoView();
+				me.openNoteEditorForRange(range, rect2, 'plain');
 			}
 		});
 

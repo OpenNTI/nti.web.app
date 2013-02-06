@@ -84,6 +84,10 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 	},
 
 
+	//It's not clear stripping contents of the object
+	//tag is the proper thing to do here.  Once they get stripped
+	//they are gone and we have no record of what the content looked like.
+	//It's not even clear why we do this in the first place.
 	setupContentElement: function(){
 		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
@@ -93,7 +97,7 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			'white-space': 'nowrap'
 		});
 
-		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par,object,param');
+		this.removeContent('.hidden,INPUT,object,param');
 	},
 
 
