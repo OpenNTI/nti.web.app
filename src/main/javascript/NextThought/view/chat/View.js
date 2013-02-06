@@ -83,7 +83,9 @@ Ext.define('NextThought.view.chat.View', {
 	trackChatState: function(notification){
 		if(!notification || !notification.status){ return; }
 
-		var me = this, room, timer= 30000;
+		var me = this, timer= 30000,
+			room = this.up('.chat-window') ?  this.up('.chat-window').roomInfo : null;
+		if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
 
 		// NOTE: We want to always restart the timer when the receive one of these events
 		// active: window gained focus,
@@ -93,16 +95,12 @@ Ext.define('NextThought.view.chat.View', {
 			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
 		}
 
-		if(!me.currentChatStatus || (me.currentChatStatus !== notification.status)){
-			me.currentChatStatus = notification.status;
-			room = this.up('.chat-window') ?  this.up('.chat-window').roomInfo : null;
-			if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
-
+		if( room.getRoomState($AppConfig.username) !== notification.status ){
 			//Fire a status change to the controller
-			me.currentChatStatus !== 'active' ? me.fireEvent('publish-chat-status', {state: me.currentChatStatus, room:room} ) : null;
-
+			room.setRoomState($AppConfig.username, notification.status);
+			notification.status !== 'active' ? me.fireEvent('publish-chat-status', room) : null;
 			clearTimeout(me.inactiveTimer);
-			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+			me.inactiveTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
 		}
 	},
 

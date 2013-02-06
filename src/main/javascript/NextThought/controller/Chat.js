@@ -171,6 +171,7 @@ Ext.define('NextThought.controller.Chat', {
                 xOcc = x.roomInfo.get('Occupants');
                 //only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
                 if(xOcc.length > 2){return;}
+	            if(rIsString){ return;} //Be defensive.
                 if(Ext.Array.union(xOcc, r.get('Occupants')).length === xOcc.length){
                     console.log('found a different room with same occupants');
                     x.roomInfoChanged(r);
@@ -445,35 +446,12 @@ Ext.define('NextThought.controller.Chat', {
 	/**
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
-	publishChatStatus: function(change){
-		function shouldDropChatStatusChange(stateChange){
-			if(!change || !change.state){ return true; }
-
-			// NOTE: We need to guard against sending multiple messages of the same chat state consecutively.
-			var lastState, me = this;
-			Ext.each(me.roomsState, function(s){
-				if(s.room.getId() === stateChange.room.getId()){ lastState = s; }
-			});
-			return lastState ? lastState.state === stateChange.state : false;
-		}
-		if(!this.roomsState){ this.roomsState=[]; }
-		if(shouldDropChatStatusChange(change)){
-			console.log('Error: Dropping state change to avoid duplicates. Change: ', change, ' all states: ');
-			return;
-		}
-
+	publishChatStatus: function(room){
 		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false,
-			recipients = Ext.Array.filter(change.room.get('Occupants'), function(t){ return !isMe(t); });
-		Ext.each(this.roomsState, function(s){
-			if(s.room.getId() === change.room.getId()){
-				s.state = change.state;
-				handled = true;
-			}
-		});
-		if(!handled){ this.roomsState.push(change); }
+			recipients = Ext.Array.filter(room.get('Occupants'), function(t){ return !isMe(t); });
 
-		Ext.each(this.roomsState, function(s){ console.log('Status of roomId: ', s.room.getId(), ' is ', s.state, ' for ', s.sender); });
-		this.postMessage(change.room, {'state': change.state}, null, channel, recipients, ack);
+		console.log('setting room state for: ', $AppConfig. username, ' to ', room.getRoomState($AppConfig.username));
+		this.postMessage(room, {'state': room.getRoomState($AppConfig.username)}, null, channel, recipients, ack);
 	},
 
 
@@ -944,7 +922,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
 					var name = u.getName();
-					log ? log.addNotification(name + ' has left the chat...'): null;
+					if(log){ log.addNotification(name + ' has left the chat...'); }
 				}, this);
 			}
 		});
@@ -953,7 +931,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
 					var name = u.getName();
-					log ? log.addNotification(name + ' entered the chat...') : null;
+					if(log){ log.addNotification(name + ' entered the chat...'); }
 				}, this);
 			}
 		});
@@ -997,31 +975,35 @@ Ext.define('NextThought.controller.Chat', {
 	 */
 	updateChatState: function(sender, state, win, isGroupChat){
 		if(!win){ return; }
+		var room = win.roomInfo,
+			log = win.down('chat-log-view'), gutter =  win.down('chat-gutter'), inputStates,
+			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive';
+
+		room.setRoomState(sender, state);
+		console.log('Update chat state: set to ', state,' for ', sender);
+
+		log.clearChatStatusNotifications();
+		inputStates = room.getInputTypeStates();
+		if(inputStates.length > 0){
+			log.showInputStateNotifications(inputStates);
+			// NOTE: if the user is typing that means he is active.
+			if(!wasPreviouslyInactive){ return; }
+			else{ state = 'active'; }
+		}
+
 		UserRepository.getUser(sender, function(u){
-			var name = u.getName(),
-				txt = name+' '+state+'...',
-				log = win.down('chat-log-view'), gutter =  win.down('chat-gutter');
-
-			log.clearChatStatusNotifications();
-			if(state === 'composing' || state === 'paused'){
-				log.addStatusNotification(txt);
-				//Used to update the sender's current state. in case he was previously 'inactive'
-				state = 'active';
-			}
-
+			var name = u.getName(), txt;
 			if(isGroupChat){ gutter.setChatState(state, name); }
-			else{
-				if(!isMe(sender)){
-					txt = Ext.String.ellipsis(name, 18, false) + ' is ' + state;
-					win.setTitle(txt);
-				}
+			else if(!isGroupChat && !isMe(sender)) {
+				txt = Ext.String.ellipsis(name, 18, false) + ' is ' + state;
+				win.setTitle(txt);
 			}
 		}, this);
 	},
 
 	startTrackingChatState: function( sender, room, w){
-		if(!this.roomsState){ this.roomsState = [];}
 		if(!w){ w = me.openChatWindow(room); }
+		room.setRoomState(sender, 'active');
 
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
 	},

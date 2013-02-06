@@ -253,6 +253,18 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 	},
 
+	showInputStateNotifications: function(changes){
+		if(!Ext.isArray(changes)){ return; }
+		var me = this;
+		Ext.each( changes, function(change){
+			UserRepository.getUser(change.user, function(u){
+				var name = u.getName(),
+					txt = name+' '+change.state+'...';
+					me.addStatusNotification(txt);
+			}, me);
+		});
+	},
+
 
 	scroll: function(entry) {
 		var input = entry.nextSibling('chat-reply-to');
