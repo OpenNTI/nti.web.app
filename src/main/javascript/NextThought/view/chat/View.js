@@ -98,7 +98,7 @@ Ext.define('NextThought.view.chat.View', {
 		if( room.getRoomState($AppConfig.username) !== notification.status ){
 			//Fire a status change to the controller
 			room.setRoomState($AppConfig.username, notification.status);
-			notification.status !== 'active' ? me.fireEvent('publish-chat-status', room) : null;
+			if( notification.status !== 'active' ) { me.fireEvent('publish-chat-status', room); }
 			clearTimeout(me.inactiveTimer);
 			me.inactiveTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
 		}

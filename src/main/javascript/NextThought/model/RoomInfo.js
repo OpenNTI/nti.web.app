@@ -11,36 +11,16 @@ Ext.define('NextThought.model.RoomInfo', {
 		{ name: 'references', type: 'auto', defaultValue: [] }
 	],
 
-	getAllRoomStates: function(){
-		return this.roomStates || [];
-	},
+	getAllRoomStates: function(){ return this.roomStates || {}; },
 
 	getRoomState: function(user){
-		if(!this.roomStates || this.roomStates.length === 0){ return null;}
-		var s;
-		Ext.each( this.roomStates, function(r){
-			 if(r.user === user){
-				s = r.state;
-				return false;
-			 }
-		 });
-		return s;
+		if(!this.roomStates){ return null;}
+		return this.roomStates[user];
 	},
 
 	setRoomState: function(user, state){
-		if(!this.roomStates) { this.roomStates =[];}
-		var handled = false;
-		//Avoid changing to the same state.
-		if(this.getRoomState(user) === state){ return; }
-
-		Ext.each(this.roomStates, function(s){
-			if(s.user === user){
-				s.state = state;
-				handled = true;
-				return false;
-			}
-		});
-		if(!handled){ this.roomStates.push({ user: user, state: state }); }
+		if(!this.roomStates) { this.roomStates = {};}
+		this.roomStates[user] = state;
 	},
 
 	getInputTypeStates: function(){
