@@ -1,5 +1,30 @@
 Ext.define('NextThought.overrides.Ext',{
-	override: 'Ext'
+	override: 'Ext',
+
+
+	/**
+	 * This will apply `cfg` to `o` recursively.  This is handy for situations like adding a username to all the
+	 * component configs in your component's item array prior to them becoming instantiated by initComponent.
+	 *
+	 * @param o {Object} The object or array to apply to.
+	 * @param cfg {Object} The values to apply to the object in the first arg.
+	 * @return {*}
+	 */
+	applyRecursively: function applyRecursively(o,cfg){
+		if(!o){return o;}
+
+		if(Ext.isArray(o)){
+			Ext.each(o,function(v,i,a){ a[i] = applyRecursively(v,cfg); });
+		}
+		else if(Ext.isObject(o)){
+			Ext.Object.each(o,function(k,v){ o[k] = applyRecursively(v,cfg); });
+			o = Ext.apply(o,cfg);
+		}
+
+		return o;
+	}
+
+
 },function(){
 
 	var get = Ext.getElementById;
@@ -48,5 +73,4 @@ Ext.define('NextThought.overrides.Ext',{
 
 			return el;
 		};
-
 });
