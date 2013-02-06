@@ -25,6 +25,27 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 	},
 
 
+	overlayedPanelAtY: function(y){
+		var panel,
+			offsets = this.getAnnotationOffsets();
+
+		y += offsets.top;
+
+		//This may need to be optimized
+		Ext.each(Ext.Object.getValues(this.activeOverlayedPanels), function(p){
+			var minY = p.el.getTop(),
+				maxY = minY + p.el.getHeight();
+			if(y >= minY && y <= maxY){
+				panel = p;
+				return false;
+			}
+			return true;
+		});
+
+		return panel;
+	},
+
+
 	/**
 	 *
 	 * @param key String|Object

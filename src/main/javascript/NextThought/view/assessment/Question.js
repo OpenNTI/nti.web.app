@@ -46,6 +46,14 @@ Ext.define('NextThought.view.assessment.Question',{
 		this.setupContentElement();
 	},
 
+	findLine: function(){
+		var doc = this.contentElement.ownerDocument,
+			range = doc.createRange();
+
+		range.selectNodeContents(this.contentElement);
+		return {range: range, rect: this.el.dom.getBoundingClientRect()};
+	},
+
 	retrieveAnswerLabel: function(){
 		var sln = Ext.get(this.contentElement).select('.naqsolution'),
 			firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,

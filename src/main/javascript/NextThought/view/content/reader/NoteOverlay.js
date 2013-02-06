@@ -253,6 +253,39 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 	},
 
+	lineInfoForY: function(y){
+		var overlay = this.overlayedPanelAtY(y),
+			result = null, offsets, mutatedRect;
+		//If there is an overlay at that position it gets
+		//the decision as to if there is a line there.  After
+		if(overlay){
+			if( overlay.findLine ){
+				//TODO normalize y into overlay space and send it along
+				result = overlay.findLine();
+			}
+			return result;
+		}
+		result = LineUtils.findLine(y,this.getDocumentElement());
+
+		//Ok this was from the iframe so we need to adjust it slightly
+		if(result && result.rect){
+			offsets = this.getAnnotationOffsets();
+			mutatedRect = {
+				top: result.rect.top,
+				bottom: result.rect.bottom,
+				height: result.rect.height,
+				left: result.rect.left,
+				right: result.rect.right,
+				width: result.rect.widht
+			};
+
+			mutatedRect.top += offsets.top;
+			mutatedRect.bottom += offsets.top;
+			result.rect = mutatedRect;
+		}
+		return result;
+	},
+
 
 	noteOverlayTrackLineAtEvent:function(e){
 		var o = this.noteOverlayData,
@@ -262,7 +295,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		try {
 			clearTimeout(o.mouseLeaveTimeout);
-			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
+			lineInfo = this.lineInfoForY(y);
 
             if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50){
                 lineInfo = o.lastLine;
@@ -275,7 +308,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				e.stopEvent();
 
 				// We need to check if the new line doesn't overlap with a current lineInfo (which contains notes)
-				if(!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top + offsets.top])){
+				if(!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top])){
 					box.hide();
 					this.noteOverlayMouseOut();
 					return;
@@ -292,16 +325,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayPositionInputBox: function(){
 		var o = this.noteOverlayData,
-			offsets = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
 			oldY = box.getY(),
 			newY = 0;
 
 		if (o.lastLine && o.lastLine.rect){
-			newY = Math.round(o.lastLine.rect.top + offsets.top);
+			newY = Math.round(o.lastLine.rect.top);
 		}
 
-		if(newY < 110){ newY = 110; }
+		//if(newY < 110){ newY = 110; }
 
 		//check for minute scroll changes to prevent jitter:
 		if(Math.abs(oldY - newY) > 4){
