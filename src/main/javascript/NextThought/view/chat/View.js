@@ -95,13 +95,12 @@ Ext.define('NextThought.view.chat.View', {
 			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
 		}
 
-		if( room.getRoomState($AppConfig.username) !== notification.status ){
-			//Fire a status change to the controller
-			room.setRoomState($AppConfig.username, notification.status);
-			if( notification.status !== 'active' ) { me.fireEvent('publish-chat-status', room); }
-			clearTimeout(me.inactiveTimer);
-			me.inactiveTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+		if( notification.status !== 'active' ) {
+			me.fireEvent('publish-chat-status', room, notification.status);
 		}
+		clearTimeout(me.inactiveTimer);
+		me.inactiveTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+
 	},
 
 

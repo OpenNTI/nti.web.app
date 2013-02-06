@@ -452,12 +452,14 @@ Ext.define('NextThought.controller.Chat', {
 	/**
 	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
 	 */
-	publishChatStatus: function(room){
-		var channel = 'STATE', me = this, ack = Ext.bind(me.sendAckHandler, me), handled = false,
-			recipients = Ext.Array.filter(room.get('Occupants'), function(t){ return !isMe(t); });
+	publishChatStatus: function(room, newStatus, username){
+		var channel = 'STATE', me = this,  handled = false,
+			oldStatus = room.getRoomState(username || $AppConfig.username);
 
-		console.log('setting room state for: ', $AppConfig. username, ' to ', room.getRoomState($AppConfig.username));
-		this.postMessage(room, {'state': room.getRoomState($AppConfig.username)}, null, channel, recipients, ack);
+		if(oldStatus !== newStatus){
+			console.log('transitioning room state for: ', $AppConfig. username, ' from ', oldStatus, ' to ', newStatus);
+			this.postMessage(room, {'state': newStatus}, null, channel);
+		}
 	},
 
 
