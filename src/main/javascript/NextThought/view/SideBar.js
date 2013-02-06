@@ -72,7 +72,7 @@ Ext.define('NextThought.view.SideBar',{
 		}
 		else{
             this.stopAnimation();
-			delete this.popstate;
+			this.setPopState(undefined);
 			this.gripper.hide();
 			//this.tool.addCls('maximize');
 			this.host.show();
@@ -85,11 +85,7 @@ Ext.define('NextThought.view.SideBar',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var min = this.gripper.getEl().down('img.tool.minimize');
-        var max = this.gripper.getEl().down('img.tool.maximize');
 
-
-		this.popstate = true;
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 
 
@@ -110,7 +106,7 @@ Ext.define('NextThought.view.SideBar',{
 		if(!this.host.isVisible()){
 			animate = true;
 			size = {height: h-100};
-			y = (this.popstate? up:down)+1;
+			y = (this.getPopState()? up:down)+1;
 			x -= 10;
 		}
 
@@ -122,12 +118,37 @@ Ext.define('NextThought.view.SideBar',{
 
 	togglePopup: function(evt, dom){
         var target = evt.getTarget(),
-            down = Ext.fly(target).hasCls('minimize') ? true : false;
+            down = Ext.fly(target).hasCls('minimize') ? true : false,
+			pop = this.getPopState();
 
-        if ( (down && this.popstate) || (!down && !this.popstate) ) {
-            this.popstate = !this.popstate;
+        if ( (down && pop) || (!down && !pop) ) {
+            this.setPopState(!pop);
             this.syncUp();
         }
-	}
+	},
 
+
+
+	getPopState: function(){
+		var sidebar = Ext.JSON.decode(sessionStorage.getItem('sidebar')||'{}'),
+		    pop = sidebar.hasOwnProperty('popstate')? sidebar.popstate : true;
+
+		if(!this.hasOwnProperty('popstate')){
+			this.popstate = pop;
+		}
+
+		return this.popstate;
+	},
+
+
+	setPopState: function(state){
+		var sidebar = Ext.JSON.decode(sessionStorage.getItem('sidebar')||'{}');
+		if(typeof state !== 'boolean') {
+			delete this.popstate;
+			delete sidebar.popstate;
+		}
+		else { sidebar.popstate = this.popstate = state; }
+
+		sessionStorage.setItem('sidebar',Ext.JSON.encode(sidebar));
+	}
 });
