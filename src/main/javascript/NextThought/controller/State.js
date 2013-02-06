@@ -125,19 +125,18 @@ Ext.define('NextThought.controller.State', {
 		var ntiid = ParseUtils.parseNtiHash(hash),
 			user,
 			result = {};
-		if(ntiid){
-			result.location = ntiid;
+
+		user = this.getUserModel().getProfileIdFromHash(hash);
+		if(user){
+			result = {
+				active: 'profile',
+				profile: {
+					username: user
+				}
+			};
 		}
-		else {
-			user = this.getUserModel().getProfileIdFromHash(hash);
-			if(user){
-				result = {
-					active: 'profile',
-					profile: {
-						username: user
-					}
-				};
-			}
+		else if(ntiid){
+			result.location = ntiid;
 		}
 
 		console.debug('Hash Interpeted:',result);
