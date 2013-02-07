@@ -24,7 +24,7 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 
 		this.addCls(this.option);
 		this.iconCls = this.option;
-		this.tooltip = Ext.String.capitalize(this.option);
+		this.tooltip = Ext.String.capitalize(this.toolTipText());
 
 		this.addEvents({ 'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
@@ -38,6 +38,11 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 			me.overMenuTrigger = true;
 		}
 		return this.callParent(arguments);
+	},
+
+
+	toolTipText: function(){
+		return this.tipText || this.option;
 	},
 
 

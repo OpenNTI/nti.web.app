@@ -24,8 +24,8 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		items: [
 			{ option: 'move back', isEditAction:true},
 			{ option: 'move forward', isEditAction:true},
-			{ option: 'move duplicate ', isEditAction:true},
-			{ option: 'move delete', isEditAction: true}
+			{ option: 'move duplicate', tipText: 'duplicate', isEditAction:true},
+			{ option: 'move delete', tipText: 'delete', isEditAction: true}
 			//		{ text: 'Edit Object'},'-',
 		]
 	},{
