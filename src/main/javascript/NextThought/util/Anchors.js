@@ -22,6 +22,11 @@ Ext.define('NextThought.util.Anchors', {
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
+	isNodeIgnored: function(node){
+		return Boolean(node.getAttribute(this.NON_ANCHORABLE_ATTRIBUTE)
+			|| node.getAttribute(this.NO_ANCHORABLE_CHILDREN_ATTRIBUTE));
+	},
+
 	IGNORE_WHITESPACE_TEXTNODES : true,
 	IGNORE_WHITESPACE_TEXTNODE_FILTER: {
 		acceptNode: function(node){

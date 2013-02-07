@@ -45,6 +45,7 @@ Ext.define('NextThought.util.Ranges',{
 		return r;
 	},
 
+
 	nodeIfObjectOrInObject: function(node){
 		var selector = 'object', n;
 		if(!node){
@@ -56,6 +57,7 @@ Ext.define('NextThought.util.Ranges',{
 		}
 		return n.up(selector);
 	},
+
 
 	rangeIfItemPropSpan: function(range, doc){
 		/*
@@ -77,6 +79,7 @@ Ext.define('NextThought.util.Ranges',{
 		return null;
 	},
 
+
 	//A nicer OO way of doing this so we don't end up with a giant
 	//if else chain
 	contentsForObjectTag: function(object){
@@ -92,49 +95,66 @@ Ext.define('NextThought.util.Ranges',{
 		return object.dom.cloneNode(true);
 	},
 
-    expandRange: function(range, doc){
-		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) || this.nodeIfObjectOrInObject(range.startContainer), nr;
-        if(object) {
-            return this.contentsForObjectTag(object);
+
+	//http://stackoverflow.com/a/2477306
+	coverAll: function(rangeA) {
+		var range = rangeA.cloneRange();
+
+		function test(containerName){
+			var c = range[containerName];
+			return c.nodeType === Node.TEXT_NODE
+				|| Anchors.isNodeIgnored(c)
+				|| /^a|b|i|u|img|li$/i.test(c.tagName);
+//				|| c.childNodes.length === 1;
+		}
+
+        while(test('startContainer')){
+            range.setStartBefore(range.startContainer);
         }
 
-	    nr = this.rangeIfItemPropSpan(range, doc);
-	    if(nr){
-		    return this.clearNonContextualGarbage(nr.cloneContents());
-	    }
-
-        var r = this.getRangyRange(range, doc),
-            sel = rangy.getSelection(doc);
-
-        try {
-            r.moveEnd('character', 50);
-            r.moveStart('character', -50);
-            r.expand('word');
+        while(test('endContainer')){
+            range.setEndAfter(range.endContainer);
         }
-        catch(e){
-            //we might overflow boundries, that's okay, get what we can but be sure to ask for word resolution...
-            r.expand('word');
-        }
+		return range;
+	},
 
-        sel.setSingleRange(r);
-        Anchors.expandSelectionToIncludeMath(sel);
-        r = sel.getRangeAt(0);
-        sel.removeAllRanges();
 
-       return this.clearNonContextualGarbage(r.cloneContents());
-    },
+	expandRange: function(range, doc){
+		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer)
+				|| this.nodeIfObjectOrInObject(range.startContainer),
+			r;
+
+		if(object) {
+			return this.contentsForObjectTag(object);
+		}
+
+		r = this.rangeIfItemPropSpan(range, doc);
+		if(r){
+			return r.cloneContents();
+		}
+
+		r = this.coverAll(range);
+		//Anchors.expandSelectionToIncludeMath(sel);
+		return r.cloneContents();
+	},
+
 
 	expandRangeGetNode: function(range, doc, dontClone){
-		var expanded = this.expandRange(range, doc),
-		    tempDiv = document.createElement('div');
-
-		tempDiv.appendChild(expanded);
-
-		if(!dontClone){
-			tempDiv = tempDiv.cloneNode(true);
+		var tempDiv = doc.createElement('div'),
+			n = this.expandRange(range);
+		try{
+			tempDiv.appendChild(n);
+			this.clearNonContextualGarbage(tempDiv);
 		}
+		catch(e){
+			console.error('Could not clone range contents',Globals.getError(e));
+		}
+//		if(!dontClone){
+//			tempDiv = tempDiv.cloneNode(true);
+//		}
 		return tempDiv;
 	},
+
 
     expandRangeGetString: function(range, doc){
         var tempDiv, str;
@@ -162,14 +182,6 @@ Ext.define('NextThought.util.Ranges',{
             });
         });
         return dom;
-    },
-
-
-    getRangyRange: function(range, doc) {
-        doc.getSelection().removeAllRanges();
-        doc.getSelection().addRange(range);
-        var sel = rangy.getSelection(doc);
-        return sel.getRangeAt(0);
     },
 
 
@@ -232,7 +244,7 @@ Ext.define('NextThought.util.Ranges',{
 	 * @return {Node}
 	 */
 	getContextAroundRange: function(applicableRange, doc, cleanRoot, containerId){
-		var range = Anchors.toDomRange(applicableRange, doc, cleanRoot, containerId);
+		var range = Anchors.toDomRange(applicableRange, doc, cleanRoot, containerId), div;
 		if(range){
 			return this.fixUpCopiedContext(this.expandRangeGetNode(range, doc));
 		}
@@ -246,15 +258,11 @@ Ext.define('NextThought.util.Ranges',{
 	 * @return {Node}
 	 */
 	fixUpCopiedContext: function(n){
-		var node = Ext.get(n),
-			firstChild = node.first();
-
-        //node may be null if child is a text node
-        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
-            node.insertHtml('afterBegin', '[...] ');
-            node.insertHtml('beforeEnd', ' [...]');
-        }
-
+		var node = Ext.get(n);
+//          firstChild = node.first();
+//        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
+//	        node.setHTML('[...][...]');
+//        }
 
 		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
