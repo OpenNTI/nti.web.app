@@ -302,9 +302,11 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	rootContainerIdFromDocument: function(doc){
-		var foundContainer, metaNtiidTag;
-		if(doc.head){
-			metaNtiidTag = doc.head.querySelectorAll( 'meta[name="NTIID"]' );
+		var foundContainer, metaNtiidTag,
+			head = doc.head || doc.getElementsByTagName('head')[0];
+
+		if(head){
+			metaNtiidTag = head.querySelectorAll( 'meta[name="NTIID"]' );
 			if(metaNtiidTag && metaNtiidTag.length > 0){
 				if(metaNtiidTag.length > 1){
 					console.error('Encountered more than one NTIID meta tag. Using first, expect problems', metaNtiidTag);
@@ -315,7 +317,7 @@ Ext.define('NextThought.util.Anchors', {
 				metaNtiidTag = null;
 			}
 			if(metaNtiidTag){
-				foundContainer = metaNtiidTag.content;
+				foundContainer = metaNtiidTag.getAttribute('content');
 			}
 		}
 		return foundContainer;
