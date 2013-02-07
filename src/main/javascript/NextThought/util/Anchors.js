@@ -121,7 +121,7 @@ Ext.define('NextThought.util.Anchors', {
 				cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId);
 			}
 			catch(e){
-				console.error('Unable to generate locator for desc', e);
+				console.error('Unable to generate locator for desc', Globals.getError(e));
 				Globals.getError(e);
 			}
 		});
@@ -162,7 +162,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(!cleanRoot){
-				cleanRoot = (docElement.body || docElement).cloneNode(true);
+				cleanRoot = (docElement.body || docElement.getElementsByTagName('body')[0] || docElement).cloneNode(true);
 				Anchors.purifyNode(cleanRoot);
 			}
 
@@ -181,7 +181,7 @@ Ext.define('NextThought.util.Anchors', {
 			return resultRange;
 		}
 		catch(e){
-			console.warn('Unable to generate range for description', e);
+			console.warn('Unable to generate range for description', Globals.getError(e));
 			Globals.getError(e);
 		}
 		return null;
@@ -247,7 +247,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(!cleanRoot){
-				cleanRoot = (docElement.body || docElement).cloneNode(true);
+				cleanRoot = (docElement.body || docElement.getElementsByTagName('body')[0] || docElement).cloneNode(true);
 				Anchors.purifyNode(cleanRoot);
 			}
 
@@ -266,8 +266,7 @@ Ext.define('NextThought.util.Anchors', {
 			return resultRange;
 		}
 		catch(e){
-			console.warn('Unable to generate range for description', e);
-			Globals.getError(e);
+			console.warn('Unable to generate range for description', Globals.getError(e));
 		}
 		return null;
 	},
@@ -289,7 +288,7 @@ Ext.define('NextThought.util.Anchors', {
 	/*tested*/
 	scopedContainerNode: function(fragOrNode, containerId, rootId){
 		var searchWithin,
-			node = fragOrNode.body ? fragOrNode.body : fragOrNode;
+			node = fragOrNode.body || fragOrNode.getElementsByTagName('body')[0] || fragOrNode;
 
 		if(!containerId){
 			searchWithin = node;
@@ -367,7 +366,7 @@ Ext.define('NextThought.util.Anchors', {
 			ancestor: ancestorAnchor
 		});
         } catch (e) {
-            console.warn('There was an error generating the description, hopefully the container will do.');
+            console.warn('There was an error generating the description, hopefully the container will do.',Globals.getError(e));
         }
         return result;
 	},
@@ -1611,7 +1610,8 @@ Ext.define('NextThought.util.Anchors', {
 		if(!staticResult){return null;}
 
 		var result,
-			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(docElement.body).node,
+			body = docElement.body || docElement.getElementsByTagName('body')[0],
+			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(body).node,
 			container,
 			parts,
 			kids,
