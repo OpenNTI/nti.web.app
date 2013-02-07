@@ -231,7 +231,7 @@ Ext.define('NextThought.util.Ranges',{
 	 * @param containerId {String}
 	 * @return {Node}
 	 */
-	getContextArroundRange: function(applicableRange, doc, cleanRoot, containerId){
+	getContextAroundRange: function(applicableRange, doc, cleanRoot, containerId){
 		var range = Anchors.toDomRange(applicableRange, doc, cleanRoot, containerId);
 		if(range){
 			return this.fixUpCopiedContext(this.expandRangeGetNode(range, doc));

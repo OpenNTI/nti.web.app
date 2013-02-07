@@ -537,7 +537,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var r = this.record, newContext;
 		try {
 			this.context.setHTML('');
-			newContext = RangeUtils.getContextArroundRange(
+			newContext = RangeUtils.getContextAroundRange(
 					r.get('applicableRange'), doc, cleanRoot, r.get('ContainerId'));
 
 			if(newContext){
