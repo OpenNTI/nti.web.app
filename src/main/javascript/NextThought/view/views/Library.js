@@ -38,7 +38,12 @@ Ext.define( 'NextThought.view.views.Library', {
 			navigateComplete: this.reader.onNavigateComplete
 		});
 
-		LocationProvider.on('navigateComplete', this.onNavigateComplete, this);
+
+		LocationProvider.on({
+			'navigateComplete':this.onNavigateComplete,
+			'navigate':this.activate,
+			scope:this
+		});
 	},
 
 
