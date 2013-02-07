@@ -491,9 +491,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			//then showing it in a defered action.  That seems to fix the chrome issue with the
 			//controls being drawn in the wrong place when inserting a whiteboard. Trello #858
 			Ext.defer(function(){
-				var r = selection.ownerDocument.createRange(),
-					sel;
-
 				me.editor.hide();
 				me.editor.show();
 				me.fireEvent('size-changed');
