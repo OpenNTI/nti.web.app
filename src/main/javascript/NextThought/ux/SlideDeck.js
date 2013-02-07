@@ -2,6 +2,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 	singleton: true,
 
 	requires: [
+		'NextThought.util.Content',
 		'NextThought.model.Slide',
 		'NextThought.view.slidedeck.Overlay'
 	],
@@ -14,7 +15,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 			obj = Ext.fly(el).findParentNode('object[data-ntiid]'),
 			startingSlide = (!obj ? null : obj.getAttribute('data-ntiid')) || undefined,
 			startingVideo,
-			slidedeckId;
+			slidedeckId,
+			store = new Ext.data.Store({proxy:'memory'});
 
 		function getParam(name){
 			var el = DQ.select('param[name="'+name+'"]',obj)[0];
@@ -39,9 +41,9 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 		Ext.getBody().mask('Loading Slides...','navigation');
 
-		function finish(store){
+		function finish(){
 			var earliestSlide;
-
+			store.sort('ordinal', 'ASC');
 			store.filter('slidedeck-id',slidedeckId);
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
@@ -57,77 +59,20 @@ Ext.define('NextThought.ux.SlideDeck',{
 			Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide}).show();
 		}
 
-		this.spider(ids, finish);
-	},
 
-
-	parseXML: function(xml) {
-		try{
-			return new DOMParser().parseFromString(xml,"text/xml");
-		}
-		catch(e){
-			console.error('Could not parse content');
-		}
-
-		return undefined;
-	},
-
-
-	spider: function(ids, callback){
-		var service = $AppConfig.service,
-			scope = this,
-			lock = ids.length,
-			data = new Ext.data.Store({proxy:'memory'});
-
-		function maybeFinish(){
-			lock--;
-			if(lock>0){return;}
-			data.sort('ordinal', 'ASC');
-			Ext.callback(callback,scope,[data]);
-		}
-
-		function parseContent(resp,pageInfo){
-			var dom = this.parseXML(resp.responseText),
-				slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]',dom);
+		function parse(dom,pageInfo){
+			var slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]',dom);
 
 			Ext.each(slides,function(dom,i,a){
 				a[i] = NextThought.model.Slide.fromDom(dom,pageInfo.getId());
 			});
 
-			data.add(slides);
-
-			maybeFinish();
+			store.add(slides);
 		}
 
-		function parsePageInfo(pageInfo){
-			var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
-
-			function failed(r) {
-				console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
-				maybeFinish();
-			}
-
-			proxy.request({
-				ntiid: pageInfo.getId(),
-				jsonpUrl: pageInfo.getLink('jsonp_content'),
-				url: pageInfo.getLink('content'),
-				expectedContentType: 'text/html',
-				scope: scope,
-				success: Ext.bind(parseContent,scope,[pageInfo],1),
-				failure: failed
-			});
-		}
-
-
-		Ext.each(ids,function(id){
-			function failure(){
-				console.error(id,arguments);
-				maybeFinish();
-			}
-
-			service.getPageInfo(id, parsePageInfo, failure, scope);
-		});
+		ContentUtils.spider(ids, finish, parse);
 	}
+
 
 },function(){
 	window.SlideDeck = this;

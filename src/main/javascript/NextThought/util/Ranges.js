@@ -220,9 +220,49 @@ Ext.define('NextThought.util.Ranges',{
         }
       // console.log('nodes from getSelectedNdoes', nodes);
         return nodes;
-    }
+    },
 
 
+	/**
+	 *
+	 * @param applicableRange {NextThought.model.anchorables.ContentRangeDescription}
+	 * @param doc {Document}
+	 * @param cleanRoot {Node}
+	 * @param containerId {String}
+	 * @return {Node}
+	 */
+	getContextArroundRange: function(applicableRange, doc, cleanRoot, containerId){
+		var range = Anchors.toDomRange(applicableRange, doc, cleanRoot, containerId);
+		if(range){
+			return this.fixUpCopiedContext(this.expandRangeGetNode(range, doc));
+		}
+		return null;
+	},
+
+
+	/**
+	 *
+	 * @param n {Node}
+	 * @return {Node}
+	 */
+	fixUpCopiedContext: function(n){
+		var node = Ext.get(n),
+			firstChild = node.first();
+
+        //node may be null if child is a text node
+        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
+            node.insertHtml('afterBegin', '[...] ');
+            node.insertHtml('beforeEnd', ' [...]');
+        }
+
+
+		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
+		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
+		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
+		node.select('a[href^=tag]').set({href:undefined,target:undefined});
+
+		return node.dom;
+	}
 
 
 

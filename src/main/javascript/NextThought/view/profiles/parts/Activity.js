@@ -2,10 +2,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-activity',
 
-	defaults: {
-		border: false,
-		plain: true
-	},
+	requires: [
+		'NextThought.view.profiles.parts.ActivityItem'
+	],
+
+	defaultType: 'profile-activity-item',
+	layout: 'auto',
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -42,10 +44,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		var add = [];
 
-		console.debug('Store loaded');
-		this.store.each(function(i){
-			add.push({record: i, html: Ext.encode(i.data)},{html:'<hr/>'});
-		});
+		Ext.each(this.store.getItems(),function(i){add.push({record: i,root:true});});
+
 		this.add(add);
 	}
 

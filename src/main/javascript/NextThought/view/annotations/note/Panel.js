@@ -30,6 +30,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		name: '.meta .name',
 		time: '.time',
 		text: '.body',
+		canvas: '.context canvas',
+		context: '.context .text',
 		sharedTo: '.shared-to',
 		responseBox: '.respond',
 		editor: '.respond .editor',
@@ -122,6 +124,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			keydown: me.editorKeyDown
 		});
 
+		if(me.record.parent){
+			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			me.favorites.hide();
+			me.favoritesSpacer.show();
+		}
+
 		me.mon(me.liked, 'click', function(){ me.record.like(me.liked); }, me);
 		me.mon(me.favorites, 'click', function(){ me.record.favorite(me.favorites); },me);
 
@@ -192,10 +200,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			names.push(' and '+names.pop());
 		}
 
-		val = names.length? ('Shared with '+names.join(', ')) : '';
+		val = names.length? ('Shared with '+names.join(', ')) : 'Private';
 
 		this.sharedTo.update(val);
-		this.sharedTo.set({title:val});
+		this.sharedTo.set({'data-qtip':val});
 	},
 
 
@@ -337,7 +345,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//In case compiling the body content fails silently and doesn't call the callback,
 		//blank us out so we don't ghost note bodies onto the wrong note.
 		this.setContent('');
-		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		if(r.compileBodyContent){
+			r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		}
 
 		this.updateToolState();
 	},
@@ -355,6 +365,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	removeAdditionalRecordListeners: function(record){
 
 	},
+
 
 	setRecord: function(r){
 		//Remove the old listener
@@ -398,7 +409,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//helps the app not seem like it is hanging
 		Ext.defer(function(){
 			Ext.suspendLayouts();
-			if(!r.hasOwnProperty('parent')){
+			if(!r.hasOwnProperty('parent') && r.getLink('replies')){
 				this.loadReplies(r);
 			}
 			else {
@@ -520,6 +531,32 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				this);
 
 	},
+
+
+	setContext: function(doc,cleanRoot){
+		var r = this.record, newContext;
+		try {
+			this.context.setHTML('');
+			newContext = RangeUtils.getContextArroundRange(
+					r.get('applicableRange'), doc, cleanRoot, r.get('ContainerId'));
+
+			if(newContext){
+				newContext = this.fixUpCopiedContext(newContext);
+                this.context.appendChild(newContext);
+			}
+
+			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
+
+		}
+		catch(e2){
+			console.error(Globals.getError(e2));
+		}
+
+	},
+
+
+	//for subclasses
+	fixUpCopiedContext: function(n){ return n; },
 
 
 	generateClickHandler: function(id,data){ this.wbData[id] = data; },

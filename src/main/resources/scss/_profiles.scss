@@ -117,6 +117,121 @@
 			}
 		}
 
+		.x-panel-profile,.x-panel-body-profile {
+			overflow: visible;
+		}
+
+		.profile-activity-item{
+			margin: 40px 0;
+			padding: 0;
+			border: 1px solid $border-grey;
+			box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+
+			@include like-and-favorite;
+			.favorite-spacer{display: none;}
+
+			.avatar {
+				margin: 10px 0 10px 10px;
+				float: left;
+				width: 36px;
+				height: 36px;
+				background:{
+					color: transparent;
+					position: center;
+					repeat: no-repeat;
+					size: cover;
+				}
+			}
+
+			.meta,.body,.reply-options { margin-left: 55px; }
+
+			.context{
+				padding: 30px 40px;
+				display: none;
+				background: $quad-grey;
+				border: 1px solid $border-grey;
+				border-width: 1px 0;
+				position: relative;
+				canvas{
+					position: absolute;
+					top: 0; left: 0; right: 0; bottom: 0;
+				}
+
+				& > span.text {
+					font: normal 400 16px $font;
+					color: $primary-grey;
+					display: inline-block;
+					padding: 0 15px;
+					min-height: 30px;
+					box-shadow: -3px 0 0 0 $tertiary-grey;
+				}
+			}
+
+			.context,.body,.reply-options{ clear: both; }
+
+			.meta{
+				margin-top: 10px;
+				font: normal 600 10px $font;
+				color: $tertiary-grey;
+
+				.link {
+					color: $primary-blue;
+				}
+
+				.subject{
+					font:{size: 14px; weight: 300;}
+				}
+
+				.stamp {
+					text-transform: uppercase;
+				}
+			}
+
+			.body{
+				margin-top: 20px;
+				font: normal 400 16px $font;
+				color: $primary-grey;
+				@include text-pre-wrap;
+			}
+
+			.reply-options {
+				opacity: 0.4;
+				color: $secondary-grey;
+				text-transform: uppercase;
+
+				.reply, .flag {
+					display: inline-block;
+					font: normal 700 11px/45px $font;
+					height: 45px;
+					margin-right: 30px;
+					cursor: pointer;
+
+					opacity: 0.75;
+					&:hover {
+						opacity: 1;
+					}
+
+					padding-left: 24px;
+					position: relative;
+
+					&::after {
+						content: ' ';
+						position: absolute;
+						top: 14px; left: 0;
+						overflow: hidden;
+						background: $icons no-repeat;
+					}
+				}
+
+				.reply::after {
+					@include sprite($icons,'reply',$dimensions: true);
+				}
+
+				.flag::after {
+					@include sprite($icons,'flag-13x15_hover',$dimensions: true);
+				}
+			}
+		}
 	}
 }
 

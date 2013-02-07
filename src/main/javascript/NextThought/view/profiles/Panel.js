@@ -9,6 +9,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	],
 
 	ui: 'profile',
+	layout: 'auto',
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },

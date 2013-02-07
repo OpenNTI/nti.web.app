@@ -15,9 +15,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	renderSelectors:{
 		avatar: 'img.avatar',
-		canvas: 'canvas',
-		addToContacts: '.meta .add-to-contacts',
-		context: '.context .text'
+		addToContacts: '.meta .add-to-contacts'
 	},
 
 
@@ -137,36 +135,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	moveSubstringToWord: function(string, start, left) {
-		var c,
-			inc = left ? -1: 1;
-		try {
-			do{
-				c = string.charAt(start);
-				start += inc;
-
-				if(start < 0 || start > string.length) {
-					return left ? 0: undefined;
-				}
-			} while(!/\s/.test(c));
-		}
-		catch(e) {
-			//pass boundary
-			return left ? 0: undefined;
-		}
-
-		return start - inc;
-	},
 
 	fixUpCopiedContext: function(n){
 		var node = Ext.get(n),
-			firstChild = node.first(),
-			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0 when queried at this point.
-
-        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){ //node may be null if child is a text node
-            node.insertHtml('afterBegin', '[...] ');
-            node.insertHtml('beforeEnd', ' [...]');
-        }
+			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
+			// when queried at this point.
 
 		node.select('.injected-related-items,.related,iframe,.anchor-magic').remove();
 
@@ -187,21 +160,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		});
 
-		Ext.each(node.query('img'),function(i){
-			var src = i.getAttribute('src');
-			if(/^\/\//.test(src)){
-				i.setAttribute('src',location.protocol+src);
-			}
-		});
-
-		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
-		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
-		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
-
 		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
 		this.on('markupenabled-action', this.commentOnAnnototableImage);
-
-		node.select('a[href^=tag]').set({href:undefined,target:undefined});
 
         Ext.each(node.query('.application-highlight'), function(h){
             if(this.record.isModifiable()){
@@ -209,22 +169,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
             }
         }, this);
 
-
-		//NOTE: THis code was moved, don't expect to uncomment this blindly and have it work
-		//
-        //for now, don't draw the stupid canvas...
-        //this.canvas.width = Ext.fly(this.canvas).getWidth();
-        //this.canvas.height = Ext.fly(this.canvas).getHeight();
-        //AnnotationUtils.drawCanvas(this.canvas, this.node, range,
-        //    this.node.down('.application-highlight').getStyle('background-color'), [-20, 30]);
-
-
-		return node;
+		return node.dom;
 	},
 
-	setRecord: function(r){
 
-		var suppressed, context, doc, range, newContext;
+	setRecord: function(r){
+		var reader = ReaderPanel.get(this.prefix);
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.editorActive()){
@@ -239,24 +189,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		if(!this.rendered){return;}
 
-		//this.ownerCt.getEl().dom.scrollTop = 0;
-
-		try {
-			this.context.setHTML('');
-			suppressed = r.get('style') === 'suppressed';
-			doc = ReaderPanel.get(this.prefix).getDocumentElement();
-			range = Anchors.toDomRange(r.get('applicableRange'), doc, ReaderPanel.get(this.prefix).getCleanContent(), r.get('ContainerId'));
-			if(range){
-				newContext = this.fixUpCopiedContext(RangeUtils.expandRangeGetNode(range, doc));
-                this.context.appendChild(newContext);
-			}
-
-			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
-
-		}
-		catch(e2){
-			console.error(Globals.getError(e2));
-		}
+		this.setContext(
+				reader.getDocumentElement(),
+				reader.getCleanContent());
 	},
 
 
@@ -267,6 +202,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.record.destroy();
 		}
 	},
+
 
 	contextAnnotationActions: function(e,dom){
 		e.stopEvent();
@@ -310,6 +246,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		return false;
 	},
+
 
 	commentOnAnnototableImage: function(dom, action){
 		var me = this;
