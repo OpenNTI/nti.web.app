@@ -26,8 +26,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			s = Ext.getStore(id) || NextThought.store.PageItem.create({id:id});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'createdTime',
-			sortOrder: 'descending',
 			filter: 'TopLevel,MeOnly',
 			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight'
 		});
@@ -42,9 +40,18 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			return;
 		}
 
-		var add = [];
+		var add = [],
+			recordCollection = new Ext.util.MixedCollection();
 
-		Ext.each(this.store.getItems(),function(i){add.push({record: i,root:true});});
+		recordCollection.addAll(this.store.getItems() || []);
+		recordCollection.sort({
+			property: 'CreatedTime',
+			direction: 'DESC',
+			transform: Ext.data.SortTypes.asDate,
+			root: 'data'
+		});
+
+		recordCollection.each(function(i){add.push({record: i,root:true});},this);
 
 		this.add(add);
 	}
