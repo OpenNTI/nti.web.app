@@ -1,14 +1,31 @@
 describe('Chat Controller Tests', function(){
 
-	var controller;
+	var controller, socket;
+
 	beforeEach(function(){
+		socket = NextThought.proxy.Socket.self.create(); //May need support for one more level deep (socket.io objects so we can fire emits)
 		controller = NextThought.controller.Chat.create({
+			socket: socket,
 			models: [],
 			views: [],
 			refs: []
 		});
+
+		//init usually gets called automatically when the app is setting up controllers
+		//do that here
+		controller.application = app;
+		controller.init(app);
 	});
 
+	it('Listens for several socket events', function(){
+		var expectedEvents = ['disconnect', 'serverkill', 'chat_enteredRoom', 'chat_exitedRoom',
+							  'chat_roomMembershipChanged', 'chat_presenceOfUserChangedTo', 'chat_recvMessage',
+							  'chat_recvMessageForShadow'];
+
+		Ext.each(expectedEvents, function(e){
+			expect(Ext.isFunction(socket.control[e])).toBeTruthy();
+		});
+	});
 
 	describe('Chat state Tests', function(){
 

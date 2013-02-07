@@ -122,6 +122,8 @@ Ext.application({
 
 		NextThought.phantomRender = true;
 
+		window.app = this;
+
 		Globals.loadScripts([
 			'javascript/specs/example.spec.js',
 			'javascript/specs/Library.spec.js',

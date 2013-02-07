@@ -30,10 +30,12 @@ Ext.define('NextThought.controller.Chat', {
 
 	init: function() {
 		var me = this;
-
 		this.setChannelMap();
 
-		Socket.register({
+		//A reference to the socket to use for live messages
+		this.socket = this.socket || Socket;
+
+		this.socket.register({
 			'disconnect': function(){me.onSocketDisconnect.apply(me, arguments);},
 			'serverkill': function(){me.onSocketDisconnect.apply(me, arguments);},
 			'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments);},
@@ -93,7 +95,7 @@ Ext.define('NextThought.controller.Chat', {
 						people = [people];
 					}
 					o.push.apply(o,people);
-					Socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
+					this.socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
 				}
 			},
 
@@ -257,11 +259,11 @@ Ext.define('NextThought.controller.Chat', {
 			ack = Ext.bind(ack, null, [messageRecord], true);
 		}
 
-		Socket.emit('chat_postMessage', m, ack);
+		this.socket.emit('chat_postMessage', m, ack);
 	},
 
 	approveMessages: function(messageIds){
-		Socket.emit('chat_approveMessages', messageIds);
+		this.socket.emit('chat_approveMessages', messageIds);
 	},
 
 	/*
@@ -343,7 +345,7 @@ Ext.define('NextThought.controller.Chat', {
 			if(options.ContainerId && ClassroomUtils.isClassroomId(options.ContainerId)){
 				roomCfg.Occupants = [];
 			}
-			Socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
+			this.socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
 		}
 	},
 
@@ -568,7 +570,7 @@ Ext.define('NextThought.controller.Chat', {
 //			shouldModerate = this.isModerator(roomInfo) ? false : true;
 //
 //		console.log('moderate clicked, moderation value', shouldModerate);
-//		Socket.emit('chat_makeModerated', roomInfo.getId(), shouldModerate);
+//		this.socket.emit('chat_makeModerated', roomInfo.getId(), shouldModerate);
 //	},
 
 
@@ -656,7 +658,7 @@ Ext.define('NextThought.controller.Chat', {
 //		}
 //
 //		u.push(user.getId());
-//		Socket.emit('chat_shadowUsers',rid, u);
+//		this.socket.emit('chat_shadowUsers',rid, u);
 //	 },
 
 
@@ -668,17 +670,17 @@ Ext.define('NextThought.controller.Chat', {
 
 		if (this.isModerator(room)) {
 			console.log('leaving room but I\'m a moderator, relinquish control');
-			Socket.emit('chat_makeModerated', room.getId(), false,
+			this.socket.emit('chat_makeModerated', room.getId(), false,
 				function(){
 					//unmoderate called, now exit
 					console.log('unmoderated, now exiting room');
-					Socket.emit('chat_exitRoom', room.getId());
+					this.socket.emit('chat_exitRoom', room.getId());
 				}
 			);
 		}
 		else {
 			//im not a moderator, just leave
-			Socket.emit('chat_exitRoom', room.getId());
+			this.socket.emit('chat_exitRoom', room.getId());
 		}
 	},
 
