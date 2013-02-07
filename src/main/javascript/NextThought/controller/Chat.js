@@ -31,15 +31,7 @@ Ext.define('NextThought.controller.Chat', {
 	init: function() {
 		var me = this;
 
-		//table of behavious based on channel
-		this.channelMap = {
-//			'CONTENT': this.onMessageContentChannel,
-//			'POLL': this.onMessagePollChannel,
-//			'META': this.onMessageMetaChannel,
-			'DEFAULT': this.onMessageDefaultChannel,
-			'WHISPER' : this.onMessageDefaultChannel,
-			'STATE' : this.onReceiveStateChannel
-		};
+		this.setChannelMap();
 
 		Socket.register({
 			'disconnect': function(){me.onSocketDisconnect.apply(me, arguments);},
@@ -116,6 +108,17 @@ Ext.define('NextThought.controller.Chat', {
 		this.application.on('session-closed', function(){this.removeSessionObject();}, this);
 	},
 
+	setChannelMap: function(){
+		//table of behaviour based on channel
+		this.channelMap = {
+			//			'CONTENT': this.onMessageContentChannel,
+			//			'POLL': this.onMessagePollChannel,
+			//			'META': this.onMessageMetaChannel,
+			'DEFAULT': this.onMessageDefaultChannel,
+			'WHISPER' : this.onMessageDefaultChannel,
+			'STATE' : this.onReceiveStateChannel
+		};
+	},
 
 	onSessionReady: function(){
 		//open any rooms we were currently involved in

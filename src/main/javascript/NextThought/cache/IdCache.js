@@ -8,6 +8,7 @@ Ext.define('NextThought.cache.IdCache', {
 
 	getIdentifier: function(id)
 	{
+		if(!id){ return null; }
 		return Base64.encode(id);
 	},
 
