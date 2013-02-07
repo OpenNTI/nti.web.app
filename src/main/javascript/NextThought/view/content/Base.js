@@ -21,10 +21,9 @@ Ext.define('NextThought.view.content.Base', {
 
 	relayout: function(){
 		if (this.ownerCt) {
-			this.ownerCt.doComponentLayout();
+			this.ownerCt.updateLayout();
 		}
-		this.doComponentLayout();
-		this.doLayout();
+		this.updateLayout();
 		this.fireEvent('resize');
 	}
 });

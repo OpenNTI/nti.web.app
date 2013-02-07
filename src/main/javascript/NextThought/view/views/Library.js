@@ -59,5 +59,10 @@ Ext.define( 'NextThought.view.views.Library', {
 			this.reader.relayout();
 		}
 		return res;
+	},
+
+
+	getHash: function(){
+		return ParseUtils.parseNtiid(LocationProvider.currentNTIID).toURLSuffix();
 	}
 });

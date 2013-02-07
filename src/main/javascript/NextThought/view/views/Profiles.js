@@ -23,6 +23,12 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	},
 
 
+	getHash: function(){
+		var current = this.down('profile-panel');
+		return current? current.userObject.getProfileUrl() : null;
+	},
+
+
 	setUser: function(username, finishCallback){
 		var current = this.down('profile-panel');
 

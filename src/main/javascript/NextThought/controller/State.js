@@ -124,7 +124,7 @@ Ext.define('NextThought.controller.State', {
 	interpretHash: function(hash){
 		var ntiid = ParseUtils.parseNtiHash(hash),
 			user,
-			result = {};
+			result = {active: 'library'};
 
 		user = this.getUserModel().getProfileIdFromHash(hash);
 		if(user){
@@ -165,7 +165,14 @@ Ext.define('NextThought.controller.State', {
 			//console.debug(this.currentState.active, modeId);
 			this.currentState.active = viewId;
 
-			window.history.pushState(this.currentState, 'NextThought: '+viewId);
+			try{
+				location.hash = Ext.getCmp(viewId).getHash();
+			}
+			catch(e){
+				console.error(Globals.getError(e));
+			}
+
+			window.history.pushState(this.currentState, document.title, location.toString());
 		}
 	},
 

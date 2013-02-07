@@ -18,6 +18,11 @@ Ext.define( 'NextThought.view.views.Base', {
 	},
 
 
+	getHash: function(){
+		return null;
+	},
+
+
 	isActive: function(){
 		return this.ownerCt? (this.ownerCt.getLayout().getActiveItem() === this) : false;
 	},
