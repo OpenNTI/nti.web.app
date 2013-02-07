@@ -42,7 +42,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			cid = r.get('ContainerId');
 
 		function parse(dom){
-			console.debug(dom);
 			me.setContext(dom,dom);
 		}
 
