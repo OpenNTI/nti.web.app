@@ -199,15 +199,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			id = d? d.id : null,
 			img = d && d.is('img') ? d.dom : null,
 			doc = dom ? dom.ownerDocument : null,
-			range;
+			range, offsets;
 
 		if(/mark/i.test(action)){
 			range = doc.createRange();
 			range.selectNode(img);
-			o.lastLine = {
-				range: range,
-				rect: img.getBoundingClientRect()
-			};
+			offsets = this.getAnnotationOffsets();
+			o.lastLine = this.lineInfoForRangeAndRect(range, img.getBoundingClientRect(), offsets);
 
 			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
@@ -231,17 +229,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var o = this.noteOverlayData,
 			w = e.getTarget('.widgetContainer',null,true),
 			r = options.applicableRange,
-			c = options.containerId;
+			c = options.containerId,
+			offsets;
 		if(w){
 			e.stopEvent();
 //			w.hide();
 
 			r = Anchors.toDomRange(r, this.getDocumentElement(), ReaderPanel.get().getCleanContent(), c);
-
-			o.lastLine = {
-				range: r,
-				rect:r.getBoundingClientRect()
-			};
+			offsets = this.getAnnotationOffsets();
+			o.lastLine = this.lineInfoForRangeAndRect(r, r.getBoundingClientRect(), offsets);
 
 			Ext.get(o.box).setY(0);
 
@@ -275,6 +271,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return adjusted;
 	},
 
+	lineInfoForRangeAndRect: function(range, rect, offsets){
+		return {range: range, rect: offsets ? this.adjustContentRectForTop(rect, offsets.top) : rect};
+	},
 
 	lineInfoForY: function(y){
 		var overlay = this.overlayedPanelAtY(y),
@@ -301,13 +300,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	openNoteEditorForRange: function(range, rect2, style){
-		var offsets = this.getAnnotationOffsets();
+		var offsets = this.getAnnotationOffsets(),
+			lastLine = this.lineInfoForRangeAndRect(range, rect, offsets);
+
+		lastLine.style = style;
+
 		Ext.apply(this.noteOverlayData,{
-			lastLine: {
-				rect: this.adjustContentRectForTop(rect2, offsets.top),
-				range: range,
-				style: style
-			},
+			lastLine: lastLine,
 			suspendMoveEvents: true
 		});
 
