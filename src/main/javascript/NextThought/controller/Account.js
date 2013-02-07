@@ -27,7 +27,8 @@ Ext.define('NextThought.controller.Account', {
         'account.contacts.View',
 		'account.codecreation.Window',
 		'account.contacts.createlist.Window',
-		'account.code.Window'
+		'account.code.Window',
+		'profiles.Panel'
 	],
 
 	refs: [],
@@ -58,6 +59,9 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.showTerms
 			},
 
+			'profile-panel':{
+				'edit': this.showAccount
+			},
 			'settings-menu [action=account]' : {
                 'click': this.showAccount
             },

@@ -176,7 +176,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	onEditAvatar: function(e){
 		e.stopEvent();
-		console.debug('Clicked Edit');
+		this.fireEvent('edit');
 		return false;
 	},
 
