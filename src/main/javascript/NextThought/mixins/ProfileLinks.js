@@ -15,7 +15,7 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 		function hoverOff(){ Ext.fly(this).removeCls('over'); }
 		function onUserNameClick(){
 			var u = this.userObject || this.user;
-			if(u && u.isModel){
+			if(u && Ext.isFunction(u.goToProfile)){
 				u.goToProfile();
 			}
 		}
