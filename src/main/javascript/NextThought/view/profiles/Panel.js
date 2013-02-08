@@ -21,10 +21,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 			},{
 				cls: 'meta',
 				cn: [
-					{ cls: 'name', 'data-field':'name' },
+					{ cls: 'name', 'data-field':'alias' },
 					{ cn: [
 						{tag: 'span', 'data-field':'role'},
-						' at ',
+						{tag: 'span', cls: 'separator', html:' at '},
 						{tag: 'span', 'data-field':'affiliation'}]},
 					{ 'data-field': 'location' },
 					{ cls: 'actions', cn: [
@@ -44,10 +44,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	renderSelectors: {
 		avatarEl: '.profile-head .avatar',
+		avatarEditEl: '.profile-head .avatar .edit',
 		nameEl: '.profile-head .meta .name',
 		roleEl: '.profile-head .meta [data-field=role]',
 		editEl: '.profile-head .avatar .edit',
 		affiliationEl: '.profile-head .meta [data-field=affiliation]',
+		affiliationSepEl: '.profile-head .meta .separator',
 		locationEl: '.profile-head .meta [data-field=location]',
 		actionsEl: '.profile-head .meta .actions',
 		messageEl: '.profile-head .meta .actions .message',
@@ -100,19 +102,40 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		var canEdit = isMe(user),
+			affiliation = user.get('affiliation')||(canEdit?'{Affiliation}':''),
+			role = user.get('role')||(canEdit?'{Role}':''),
+			location = user.get('location')||(canEdit?'{Location}':'');
+
 		this.userObject = user;
 
 		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		this.nameEl.update(user.getName());
-		this.affiliationEl.update(user.get('affiliation')||'{Affiliation}');
-		this.roleEl.update(user.get('role')||'{Role}');
-		this.locationEl.update(user.get('location')||'{Location}');
+		this.affiliationEl.update(affiliation);
+		this.roleEl.update(role);
+		this.locationEl.update(location);
+
+		if(!canEdit){
+			if(!affiliation){this.affiliationEl.remove();}
+			if(!role){this.roleEl.remove();}
+			if(!location){this.locationEl.remove();}
+			if(!affiliation || !role){
+				this.affiliationSepEl.remove();
+			}
+
+			this.avatarEditEl.remove();
+			return;
+		}
 
 		this.nameEditor = Ext.Editor.create({
 			autoSize: { width: 'boundEl' },
 			cls: 'name-editor',
 			updateEl: true,
-			field:{ xtype: 'simpletext' }
+			field:{ xtype: 'simpletext' },
+			listeners:{
+				complete: this.onSaveField,
+				scope: this
+			}
 		});
 
 		this.metaEditor = Ext.Editor.create({
@@ -149,9 +172,26 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	onSaveField: function(cmp,newValue/*,oldValue*/){
-		var field = cmp.boundEl.getAttribute('data-field');
+		var field = cmp.boundEl.getAttribute('data-field'),
+			user = this.userObject;
 
-		console.debug('saving:', field,'=', newValue, 'in', this.userObject);
+		if(!isMe(user)){
+			console.warn('Attempting to edit another user\'s record');
+			return;
+		}
+
+		function success(){
+			console.log(arguments);
+		}
+
+		function failure(){
+			alert('Could not save your '+field);
+			console.error(arguments);
+		}
+
+		console.debug('saving:', field,'=', newValue, 'in', user);
+
+		user.saveField(field,newValue,success,failure);
 	},
 
 

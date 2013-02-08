@@ -68,7 +68,7 @@ Ext.define(	'NextThought.model.User', {
 
 
 	goToProfile: function(){
-		//window.location.hash = this.getProfileUrl();
+		window.location.hash = this.getProfileUrl();
 	},
 
 

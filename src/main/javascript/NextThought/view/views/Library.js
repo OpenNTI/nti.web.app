@@ -41,9 +41,16 @@ Ext.define( 'NextThought.view.views.Library', {
 
 		LocationProvider.on({
 			'navigateComplete':this.onNavigateComplete,
-			'navigate':this.activate,
+			'navigate':this.onNavigate,
 			scope:this
 		});
+	},
+
+
+	onNavigate: function(ntiid,fromHistory){
+		if(!fromHistory){
+			this.activate();
+		}
 	},
 
 
