@@ -141,7 +141,15 @@ Ext.define('NextThought.view.slidedeck.View',{
 		var me = this;
 
 		function enterFilter(e) { var k = e.getKey(); return (k === e.ENTER || k === e.SPACE); }
-		function close(){me.destroy();}
+		function close(){
+			var slide = me.getSlide().slide;
+
+			if(me.fireEvent('beforeexit', me, slide) === false){
+				return;
+			}
+			me.destroy();
+			me.fireEvent('exited', me, slide);
+		}
 
 		this.mon(this.exitEl,{
 			click: close,

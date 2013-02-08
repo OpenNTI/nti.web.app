@@ -36,6 +36,9 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'view-select button': {
 				toggle: this.switchViews
+			},
+			'slidedeck-view': {
+				exited: this.slideViewExited
 			}
 		},{});
 	},
@@ -163,6 +166,21 @@ Ext.define('NextThought.controller.Navigation', {
 				continueLoad();
 			}
 		};
+	},
+
+
+	slideViewExited: function(slideview, slide){
+		var goTo = slide.get('ContainerId');
+
+		if(goTo){
+			this.maybeLoadNewPage(goTo, function(reader){
+				var i = slide.getId(),
+					t = slide.get('MimeType'),
+					selector = 'object[type="'+t+'"][data-ntiid="'+i+'"] img';
+
+				(reader||ReaderPanel.get()).scrollToSelector(selector);
+			});
+		}
 	},
 
 

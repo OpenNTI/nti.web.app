@@ -52,6 +52,17 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	},
 
 
+	//Scrolls the reader to the first element matching the provided
+	//selector.
+	scrollToSelector: function(selector){
+		var de = this.getDocumentElement(),
+			elem = de.querySelector(selector);
+		if(elem){
+			this.scrollToNode(elem, true, 0);
+		}
+	},
+
+
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
 			c = Ext.getCmp(target),
