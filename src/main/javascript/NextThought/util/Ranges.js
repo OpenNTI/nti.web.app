@@ -79,6 +79,8 @@ Ext.define('NextThought.util.Ranges',{
 		return null;
 	},
 
+	//How about a registry that maps the mimetype of the object
+	//to a handler that knows how to give contents
 	contentsForObjectTag: function(object){
 		var contents = null;
 
@@ -148,12 +150,12 @@ Ext.define('NextThought.util.Ranges',{
 
 		r = this.rangeIfItemPropSpan(range, doc);
 		if(r){
-			return r.cloneContents();
+			return this.clearNonContextualGarbage(r.cloneContents());
 		}
 
 		r = this.coverAll(range);
 		//Anchors.expandSelectionToIncludeMath(sel);
-		return r.cloneContents();
+		return this.clearNonContextualGarbage(r.cloneContents());
 	},
 
 
@@ -162,7 +164,6 @@ Ext.define('NextThought.util.Ranges',{
 			n = this.expandRange(range);
 		try{
 			tempDiv.appendChild(n);
-			this.clearNonContextualGarbage(tempDiv);
 		}
 		catch(e){
 			console.error('Could not clone range contents',Globals.getError(e));
