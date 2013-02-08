@@ -16,6 +16,10 @@
 		white-space: nowrap;
 		.name {
 			color: $primary-blue;
+			&.over {
+				text-decoration: underline;
+				cursor: pointer;
+			}
 		}
 
 		.shared-to{
@@ -46,6 +50,10 @@
 		.name {
 			color: $primary-blue;
 			font-size: 24px;
+			&.over {
+				text-decoration: underline;
+				cursor: pointer;
+			}
 		}
 
 
@@ -928,6 +936,12 @@
 				background-size: cover;
 				width: 32px;
 				height: auto;
+				&.over {
+					cursor: pointer;
+				}
+			}
+			&.over {
+				cursor: pointer;
 			}
 		}
 

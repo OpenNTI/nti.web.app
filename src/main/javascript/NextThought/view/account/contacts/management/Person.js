@@ -5,6 +5,9 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.management.GroupList'
 	],
+	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
+	},
 	layout: 'auto',
 	componentLayout: 'templated-container',
 	cls: 'person-card',
@@ -33,6 +36,11 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		return this.body;
 	},
 
+	renderSelectors: {
+		avatar: '.contact-card img',
+		name: '.contact-card .name'
+	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -58,6 +66,13 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 //		}
 	},
 
+
+	afterRender: function(){
+		this.callParent(arguments);
+		if(this.user && !isMe(this.user)){
+			this.enableProfileClicks(this.avatar,this.name);
+		}
+	},
 
 	getSelected: function(){
 		var l = this.groupsList;

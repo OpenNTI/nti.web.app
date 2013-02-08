@@ -141,6 +141,9 @@ $over-color: #f4f3f3;
 			float: right;
 			cursor: pointer;
 		}
+		&.over {
+			cursor: pointer;
+		}
 	}
 
 	&.card-over {
@@ -172,6 +175,10 @@ $over-color: #f4f3f3;
 	.name {
 		@include menu-label-text-treatment;
 		color: $primary-blue;
+		&.over {
+			text-decoration: underline;
+			cursor: pointer;
+		}
 	}
 	.status {
 		color: $tertiary-grey;

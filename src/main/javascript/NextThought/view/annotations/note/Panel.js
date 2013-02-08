@@ -9,6 +9,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		'NextThought.view.annotations.note.Templates'
 	],
 
+	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
+	},
+
 	ui: 'nt',
 	cls: 'note-container',//note-reply-container
 	layout: 'auto',
@@ -102,6 +106,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			return;
 		}
 
+		if(this.record && !isMe(this.record.get('Creator'))){
+			me.enableProfileClicks(me.name,me.avatar);
+		}
+
 		if (me.record.isFlagged()) {
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
@@ -175,6 +183,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInUser: function(user){
+		this.userObject = user;
 		this.name.update(user.getName());
 		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		//NOTE: this is probably not the best place where to set the more options menu.
@@ -758,6 +767,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	rootToCountComponentsFrom: function(){
 		return this.getRoot();
 	},
+
 
 	adjustRootsReferenceCount: function(r){
         var root = r.parent,
