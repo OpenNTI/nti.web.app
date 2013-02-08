@@ -141,7 +141,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 			// when queried at this point.
 
-		node.select('.injected-related-items,.related,iframe,.anchor-magic').remove();
+		node.select('.injected-related-items,.related,.anchor-magic').remove();
 
 		//WE want to remove redaction text in the node body of the note viewer.
 		Ext.each(node.query('.redaction '), function(redaction){
@@ -157,6 +157,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			//only strip off the style for width that are too wide.
 			if(parseInt(i.style.width,10) >= maxWidth){
 				e.setStyle({width:undefined});
+			}
+		});
+
+		Ext.each(node.query('iframe'),function(i){
+			var e = Ext.get(i),
+				w, h, r;
+			if(e.parent('div.externalvideo')){
+				w = parseInt(e.getAttribute('width'), 10);
+				h = parseInt(e.getAttribute('height'), 10);
+				r = h !== 0 ? w/h : 0;
+				if(w >= maxWidth && r !== 0){
+					e.set({width: maxWidth, height: maxWidth/r});
+				}
+			}
+			else{
+				e.remove();
 			}
 		});
 

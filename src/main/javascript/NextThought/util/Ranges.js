@@ -94,8 +94,60 @@ Ext.define('NextThought.util.Ranges',{
 		return object.dom.cloneNode(true);
 	},
 
+	nodeThatIsEdgeOfRange: function(range, start){
+		if (!range){
+			Ext.Error.raise('Node is not defined');
+		}
+
+		var container = start ? range.startContainer : range.endContainer,
+			offset = start ? range.startOffset : range.endOffset;
+
+		//If the container is a textNode look no further, that node is the edge
+		if(Ext.isTextNode(container)){
+			return container;
+		}
+
+		if(start){
+			//If we are at the front of the range
+			//the first full node in the range is the containers ith child
+			//where i is the offset
+			var cont = container.childNodes.item(offset);
+			if(!cont) {
+				return container;
+			}
+			else if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
+				return container;
+			}
+			else {
+				return container.childNodes.item(offset);
+			}
+		}
+		else{
+			//At the end the first fully contained node is
+			//at offset-1
+			if(offset < 1){
+				if(container.previousSibling){
+					return container.previousSibling;
+				}
+				while(!container.previousSibling && container.parentNode && offset !== 0){
+					container = container.parentNode;
+				}
+
+				if (!container.previousSibling){
+					//Ext.Error.raise('No possible node');
+					return container;
+				}
+				else {
+					return container.previousSibling;
+				}
+			}
+			return container.childNodes.item(offset - 1);
+		}
+	},
+
 	coverAll: function(rangeA) {
-		var range = rangeA.cloneRange(), newStart, newEnd;
+		var range = rangeA ? rangeA.cloneRange() : null,
+			start, end;
 
 		function test(c){
 			return c.nodeType === Node.TEXT_NODE
@@ -125,12 +177,18 @@ Ext.define('NextThought.util.Ranges',{
 			return result;
 		}
 
+		if(!range){
+			return null;
+		}
 
-		newStart = walkOut(range.startContainer, 'start');
+		start = Ranges.nodeThatIsEdgeOfRange(range, 'start');
+		end = Ranges.nodeThatIsEdgeOfRange(range, 'end');
+
+		newStart = walkOut(start, 'start');
 		if(newStart){
 			range.setStartBefore(newStart);
 		}
-		newEnd = walkOut(range.endContainer, 'end');
+		newEnd = walkOut(end, 'end');
 		if(newEnd){
 			range.setEndAfter(newEnd);
 		}
