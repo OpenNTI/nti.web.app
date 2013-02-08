@@ -3,6 +3,9 @@ Ext.define(	'NextThought.model.UserSearch', {
 	requires: [
 		'NextThought.proxy.UserSearch'
 	],
+
+	mixins: { shareEntity: 'NextThought.mixins.ShareEntity' },
+
 	idProperty: 'Username',
 	fields: [
 		{ name: 'Username', type: 'string' },
@@ -11,7 +14,8 @@ Ext.define(	'NextThought.model.UserSearch', {
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'status', type: 'string' },
-		{ name: 'displayName', convert: function(v,r){return r.getName();}}
+		{ name: 'displayName', convert: function(v,r){return r.getName();}},
+		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
 
 

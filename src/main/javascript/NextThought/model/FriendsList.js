@@ -2,7 +2,10 @@ Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
 	resolveUsers: false,
 
-	mixins: { groupLike: 'NextThought.mixins.GroupLike' },
+	mixins: {
+		groupLike: 'NextThought.mixins.GroupLike',
+		shareEntity: 'NextThought.mixins.ShareEntity'
+	},
 
 	fields: [
 		{ name: 'Username', type: 'string' },
@@ -15,29 +18,22 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
 
-    constructor: function(){
+	constructor: function(){
 		this.callParent(arguments);
 		Ext.Object.defineAttributes(this,{
 			isDFL: {
-				getter: this.isDynamicSharing,
+				getter: this.mixins.shareEntity.isDynamicSharing,
 				setter: function(){ throw 'readonly'; }
 			},
 
 			readableType: {
-				getter: this.getPresentationType,
+				getter: this.mixins.shareEntity.getPresentationType,
 				setter: function(){ throw 'readonly'; }
 			}
 		});
 
 	},
 
-	isDynamicSharing: function(){
-		return this.get('IsDynamicSharing');
-	},
-
-	getPresentationType: function(){
-		return this.isDynamicSharing() ? 'group' : 'list';
-	},
 
 	destroy: function() {
 		this.set('friends', []);

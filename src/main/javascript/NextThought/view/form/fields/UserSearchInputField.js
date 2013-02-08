@@ -41,7 +41,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 				'<img src="{[this.getIcon(values)]}" class="{[this.getType(values)]}">',
 				'<div class="card-body {[this.getType(values)]}">',
 					'<div class="name">{displayName}</div>',
-					'<div class="status">{affiliation-dontshowthis}{[values.Class.replace("FriendsList","Group")]}</div>',
+					'<div class="status">{affiliation-dontshowthis}{[this.getDisplayTypeValue(values)]}</div>',
 			'</div>',
 		{
 			getIcon: function(model){
@@ -49,22 +49,39 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 				return t==='person'? model.avatarURL : Ext.BLANK_IMAGE_URL;
 			},
 
-			getType: function(model){
-				if (!model){return 'person';}
-				if(model.type){ return model.type; }
+			getType: function(modelData){
+				if (!modelData){return 'person';}
+				if(modelData.type){ return modelData.type; }
 
-				var v, m = ((model && model.Class) || '').toLowerCase(),
-					u = model.Username.toLowerCase();
+				var v, m = ((modelData && modelData.Class) || '').toLowerCase(),
+					u = modelData.Username.toLowerCase();
 
 
 				//Tweak logic slightly if our type is community or
 				//our user is public or everyone make it look public
-				v = ((/public|everyone/i).test(u) || (/community/i).test(m))
-						? 'public'
-						//else is it a group or person
-						: (/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
-				model.type = v;
+				if((/public|everyone/i).test(u) || (/community/i).test(m)){
+					v = 'public';
+				}
+				else if((/friendslist|group/i).test(m)||!/@/.test(u)){
+					v = NextThought.mixins.ShareEntity.getPresentationType(modelData);
+				}
+				else{
+					v = 'person';
+				}
+
+				modelData.type = v;
 				return v;
+			},
+
+			getDisplayTypeValue: function(model){
+				var t = this.getType(model),
+					map = {
+						list: 'List',
+						group: 'Group',
+						public: 'Community',
+						person: 'User'
+					};
+				return map[t];
 			}
 		}),
 		xhooks: {
