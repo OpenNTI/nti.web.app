@@ -176,6 +176,10 @@
 
 				.link {
 					color: $primary-blue;
+					&.over {
+						text-decoration: underline;
+						cursor: pointer;
+					}
 				}
 
 				.subject{

@@ -68,6 +68,13 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		this.actionEl.update(action);
 		this.locationEl.update(meta.title.get('title'));
+
+		this.locationEl.hover(
+				function(){Ext.fly(this).addCls('over');},
+				function(){Ext.fly(this).removeCls('over');});
+		this.locationEl.on('click',function(){
+			LocationProvider.setLocation(meta.NTIID);
+		});
 	}
 
 
