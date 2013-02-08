@@ -79,9 +79,6 @@ Ext.define('NextThought.util.Ranges',{
 		return null;
 	},
 
-
-	//A nicer OO way of doing this so we don't end up with a giant
-	//if else chain
 	contentsForObjectTag: function(object){
 		var contents = null;
 
@@ -95,26 +92,47 @@ Ext.define('NextThought.util.Ranges',{
 		return object.dom.cloneNode(true);
 	},
 
-
-	//http://stackoverflow.com/a/2477306
 	coverAll: function(rangeA) {
-		var range = rangeA.cloneRange();
+		var range = rangeA.cloneRange(), newStart, newEnd;
 
-		function test(containerName){
-			var c = range[containerName];
+		function test(c){
 			return c.nodeType === Node.TEXT_NODE
 				|| Anchors.isNodeIgnored(c)
 				|| /^a|b|i|u|img|li$/i.test(c.tagName);
 //				|| c.childNodes.length === 1;
 		}
 
-        while(test('startContainer')){
-            range.setStartBefore(range.startContainer);
-        }
+		function walkOut(node, direction){
+			if (!node){return null;}
 
-        while(test('endContainer')){
-            range.setEndAfter(range.endContainer);
-        }
+			var doc = node.ownerDocument,
+				walker = doc.createTreeWalker(doc, NodeFilter.SHOW_ALL, null, null),
+				nextName = direction === 'start' ? 'previousNode' : 'nextNode',
+				temp, result;
+
+			walker.currentNode = node;
+			temp = walker.currentNode;
+			result = temp;
+
+			while (temp && test(temp)){
+				result = temp;
+				temp = walker[nextName]();
+			}
+
+			//if we got here, we found nada:
+			return result;
+		}
+
+
+		newStart = walkOut(range.startContainer, 'start');
+		if(newStart){
+			range.setStartBefore(newStart);
+		}
+		newEnd = walkOut(range.endContainer, 'end');
+		if(newEnd){
+			range.setEndAfter(newEnd);
+		}
+
 		return range;
 	},
 
