@@ -990,7 +990,7 @@ Ext.define('NextThought.controller.Chat', {
 		if(!win || !sender || sender === ""){ return; }
 		var room = win.roomInfo,
 			log = win.down('chat-log-view'), gutter =  win.down('chat-gutter'), inputStates,
-			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive';
+			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive', me = this;
 
 		room.setRoomState(sender, state);
 		console.log('Update chat state: set to ', state,' for ', sender);
@@ -1008,14 +1008,18 @@ Ext.define('NextThought.controller.Chat', {
 			var name = u.getName(), txt;
 			if(isGroupChat){ gutter.setChatState(state, name); }
 			else if(!isGroupChat && !isMe(sender)) {
-				txt = Ext.String.ellipsis(name, 18, false) + ' is ' + state;
+				txt = Ext.String.ellipsis(name, 18, false) + ' is ' + me.chatUserStatesMap[state];
 				win.setTitle(txt);
 			}
 		}, this);
 	},
 
+
 	startTrackingChatState: function( sender, room, w){
 		if(!w){ w = me.openChatWindow(room); }
+		if(!this.chatUserStatesMap){
+			this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' }
+		}
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
 		w.down('chat-view').fireEvent('status-change', {state: 'active'});
 	},

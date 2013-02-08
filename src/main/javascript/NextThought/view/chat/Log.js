@@ -259,8 +259,13 @@ Ext.define('NextThought.view.chat.Log', {
 		Ext.each( changes, function(change){
 			UserRepository.getUser(change.user, function(u){
 				var name = u.getName(),
-					txt = name+' '+change.state+'...';
-					me.addStatusNotification(txt);
+					state = change.state === 'composing' ? 'typing' : change.state,
+					txt = name+' '+state+'...';
+					if(change.state === 'paused'){
+						this.clearChatStatusNotifications();
+					}else{
+						me.addStatusNotification(txt);
+					}
 			}, me);
 		});
 	},
