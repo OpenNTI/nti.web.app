@@ -83,7 +83,7 @@ Ext.define('NextThought.view.chat.View', {
 	trackChatState: function(notification){
 		if(!notification || !notification.status){ return; }
 
-		var me = this, timer= 30000,
+		var me = this, timer= 180000,
 			room = this.up('.chat-window') ?  this.up('.chat-window').roomInfo : null;
 		if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
 

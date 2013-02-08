@@ -55,7 +55,7 @@ Ext.define('NextThought.view.chat.Entry', {
 			this.fireEvent('status-change', {'status': 'composing'});
 			clearTimeout(me.pauseTimer);
 			//If the user pass a given number of seconds without typing, fire a paused event.
-			me.pauseTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'paused'}); }, 5000);
+			me.pauseTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'paused'}); }, 3000);
 		}
 		else{
 			clearTimeout(me.pauseTimer);

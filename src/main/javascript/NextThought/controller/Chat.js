@@ -974,7 +974,7 @@ Ext.define('NextThought.controller.Chat', {
 			body = msg.get('body'),
 			sender = msg.get('Creator'),
 			win = this.getChatWindow(cid),
-			isGroupChat = msg.get('recipients').length >= 2; //At least two other people.
+			isGroupChat = win.roomInfo.get('Occupants').length > 2;
 
 		if(win && body){
 			this.updateChatState(sender, body.state, win, isGroupChat);
@@ -1017,6 +1017,7 @@ Ext.define('NextThought.controller.Chat', {
 	startTrackingChatState: function( sender, room, w){
 		if(!w){ w = me.openChatWindow(room); }
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
+		w.down('chat-view').fireEvent('status-change', {state: 'active'});
 	},
 
 //	onMessageContentChannel: function(msg, opts) {
@@ -1240,9 +1241,9 @@ Ext.define('NextThought.controller.Chat', {
 			o[key] = leaf;
 		}
 
-		if(o.hasOwnProperty('Class')){
-			debugger;
-		}
+//		if(o.hasOwnProperty('Class')){
+//			debugger;
+//		}
 		sessionStorage.setItem('chats',Ext.JSON.encode(o));
 	},
 
