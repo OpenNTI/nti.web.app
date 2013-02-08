@@ -127,11 +127,16 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		function fieldValidator(val){
+			//this will block empty and whitespace only strings
+			return !/^\s*$/.test(val||'');
+		}
+
 		this.nameEditor = Ext.Editor.create({
 			autoSize: { width: 'boundEl' },
 			cls: 'name-editor',
 			updateEl: true,
-			field:{ xtype: 'simpletext' },
+			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
 			listeners:{
 				complete: this.onSaveField,
 				scope: this
@@ -144,7 +149,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			updateEl: true,
 			ignoreNoChange: true,
 			revertInvalid: true,
-			field:{ xtype: 'simpletext', allowBlank:false },
+			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
 			listeners:{
 				complete: this.onSaveField,
 				scope: this
@@ -190,7 +195,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		console.debug('saving:', field,'=', newValue, 'in', user);
-
+//TODO: Check the schema
 		user.saveField(field,newValue,success,failure);
 	},
 
