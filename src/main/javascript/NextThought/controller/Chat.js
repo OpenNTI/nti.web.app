@@ -1191,7 +1191,7 @@ Ext.define('NextThought.controller.Chat', {
 
     setRoomIdStatusAccepted: function(id){
 	    var key = 'roomIdsAccepted',
-            status = this.getSessionObject(key);
+            status = this.getSessionObject(key)||{};
 
         status[id] = true;
 
@@ -1220,7 +1220,10 @@ Ext.define('NextThought.controller.Chat', {
 	 */
 	getSessionObject: function(key){
 		var o = Ext.JSON.decode(sessionStorage.getItem('chats')||'{}');
-		return o[key] || o;
+		if(!Ext.isEmpty(key)){
+			return o[key];
+		}
+		return o;
 	},
 
 
@@ -1236,6 +1239,10 @@ Ext.define('NextThought.controller.Chat', {
 			o = this.getSessionObject();
 			o[key] = leaf;
 		}
+
+		if(o.hasOwnProperty('Class')){
+			debugger;
+		}
 		sessionStorage.setItem('chats',Ext.JSON.encode(o));
 	},
 
@@ -1248,7 +1255,7 @@ Ext.define('NextThought.controller.Chat', {
 		if(!Ext.isEmpty(key)){
 			var o = this.getSessionObject();
 			delete o[key];
-			this.setSessionObject(o,key);
+			this.setSessionObject(o);
 			return;
 		}
 		sessionStorage.removeItem('chats');
