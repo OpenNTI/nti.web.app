@@ -1008,20 +1008,24 @@ Ext.define('NextThought.controller.Chat', {
 			var name = u.getName(), txt;
 			if(isGroupChat){ gutter.setChatState(state, name); }
 			else if(!isGroupChat && !isMe(sender)) {
+				if(!me.chatUserStatesMap){ me.setChatStatesMap(); }
 				txt = Ext.String.ellipsis(name, 18, false) + ' is ' + me.chatUserStatesMap[state];
 				win.setTitle(txt);
 			}
 		}, this);
 	},
 
+	setChatStatesMap: function(){
+		this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' };
+	},
 
 	startTrackingChatState: function( sender, room, w){
 		if(!w){ w = me.openChatWindow(room); }
-		if(!this.chatUserStatesMap){
-			this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' }
-		}
+		this.setChatStatesMap();
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
-		w.down('chat-view').fireEvent('status-change', {state: 'active'});
+		if(isMe(sender)){
+			w.down('chat-view').fireEvent('status-change', {state: 'active'}); //start active timer.
+		}
 	},
 
 //	onMessageContentChannel: function(msg, opts) {

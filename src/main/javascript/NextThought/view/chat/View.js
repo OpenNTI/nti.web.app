@@ -83,24 +83,22 @@ Ext.define('NextThought.view.chat.View', {
 	trackChatState: function(notification){
 		if(!notification || !notification.status){ return; }
 
-		var me = this, timer= 180000,
+		var me = this, activeTimer= 120000,
+			goneTimer = 600000,
 			room = this.up('.chat-window') ?  this.up('.chat-window').roomInfo : null;
 		if(!room){ console.log("Error: Cannot find the roomInfo, so we drop the chat status change"); return; }
 
-		// NOTE: We want to always restart the timer when the receive one of these events
-		// active: window gained focus,
-		// composing: users started typing
-		if(notification.status === 'active' || notification.status === 'composing'){
+		// NOTE: We want to always restart the timer when the receive one of these events.
+		if(notification.status === 'active' || notification.status === 'composing' || notification.status === 'paused'){
 			clearTimeout(me.inactiveTimer);
-			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
+			clearTimeout(me.awayTimer);
+			me.inactiveTimer = setTimeout(function(){ me.fireEvent('status-change', {status:'inactive'}); }, activeTimer);
+			me.awayTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'gone'}); }, goneTimer);
 		}
 
 		if( notification.status !== 'active' ) {
 			me.fireEvent('publish-chat-status', room, notification.status);
 		}
-		clearTimeout(me.inactiveTimer);
-		me.inactiveTimer = setTimeout( function(){ me.fireEvent('status-change', {status:'inactive'}); }, timer);
-
 	},
 
 
