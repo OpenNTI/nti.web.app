@@ -20,7 +20,8 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}},
-		{ name: 'role', type: 'string'}
+		{ name: 'role', type: 'string'},
+		{ name: 'location', type: 'string'}
 	],
 
 	constructor: function() {
