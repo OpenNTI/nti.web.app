@@ -13,7 +13,7 @@ Ext.define('NextThought.view.menus.Filter',{
 	border: false,
 	hideMode: 'display',
 	minWidth: 300,
-
+	maxWidth: 500,
 	defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menucheckitem',
@@ -23,6 +23,12 @@ Ext.define('NextThought.view.menus.Filter',{
 			'checkchange': function(item){item.up('menu').handleClick(item);}
 		}
 	},
+
+	layout: {
+        type: 'vbox',
+		align: 'stretch',
+        overflowHandler: 'Scroller'
+    },
 
 	initComponent: function(){
 		this.callParent(arguments);
