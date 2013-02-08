@@ -6,6 +6,9 @@ Ext.define('NextThought.view.account.Identity',{
     requires: [
         'NextThought.view.menus.Settings'
     ],
+	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
+	},
 
 	cls: 'identity',
 
@@ -39,16 +42,26 @@ Ext.define('NextThought.view.account.Identity',{
 
 		this.menu = Ext.widget('settings-menu');
 
-		this.mon($AppConfig.userObject,{
+		this.monitorUser($AppConfig.userObject);
+	},
+
+
+	monitorUser: function(u){
+		var me = this, m = {
 			scope: this,
 			'changed': function(r){
 				this.name.update(r.getName());
 				this.status.update(r.get('status'));
 				this.avatar.set({src:r.get('avatarURL')});
+				if(r !== u){
+					me.monitorUser(r);
+				}
 			}
-		});
+		};
 
-
+		this.mun(this.user,m);
+		this.mon(u,m);
+		this.user = u;
 	},
 
 
@@ -61,13 +74,6 @@ Ext.define('NextThought.view.account.Identity',{
 	        return false;
         });
 
-	    me.mon(me.el,'click', this.openProfile,this);
-    },
-
-
-	openProfile: function(e){
-		e.stopEvent();
-		$AppConfig.userObject.goToProfile();
-		return false;
-	}
+	    me.enableProfileClicks(me.avatar,me.name);
+    }
 });
