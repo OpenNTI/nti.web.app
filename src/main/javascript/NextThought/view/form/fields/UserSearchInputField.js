@@ -76,10 +76,10 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 			getDisplayTypeValue: function(model){
 				var t = this.getType(model),
 					map = {
-						list: 'List',
-						group: 'Group',
-						public: 'Community',
-						person: 'User'
+						'list': 'List',
+						'group': 'Group',
+						'public': 'Community',
+						'person': 'User'
 					};
 				return map[t];
 			}
