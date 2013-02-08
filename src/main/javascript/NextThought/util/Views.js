@@ -56,6 +56,11 @@ Ext.define('NextThought.util.Views',{
 		var id = ParseUtils.parseNtiid(roomInfoId);
 		scope = scope || this;
 
+		if(!id){
+			Ext.callback(failure, scope);
+			return;
+		}
+
 		//Swizzle the NTIID
 		id.authority.date = Ext.Date.format(lastMod, 'Y-m-d');
 		id.specific.provider = $AppConfig.username;

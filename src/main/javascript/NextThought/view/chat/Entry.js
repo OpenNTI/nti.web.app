@@ -73,8 +73,8 @@ Ext.define('NextThought.view.chat.Entry', {
 		}
 	},
 
-	focus:function () {
-		this.inputEl.focus();
+	focus: function(defer) {
+		this.inputEl.focus(defer);
 	},
 
 	getValue:function () {

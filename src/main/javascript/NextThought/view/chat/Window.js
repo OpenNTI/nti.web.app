@@ -185,5 +185,13 @@ Ext.define('NextThought.view.chat.Window', {
 
     hasBeenAccepted: function(){
         return this.chatAccepted;
-    }
+    },
+
+
+	show: function(dontFocus){
+		this.callParent();
+		if(!dontFocus){
+			this.down('chat-entry').focus(100);
+		}
+	}
 });
