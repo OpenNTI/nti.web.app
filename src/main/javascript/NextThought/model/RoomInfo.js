@@ -32,5 +32,19 @@ Ext.define('NextThought.model.RoomInfo', {
 			}
 		});
 		return p;
+	},
+
+	/*
+	 *  NOTE: We want to add an additional property 'OriginalOccupants' that we will use to compare 1-1 rooms with the same occupants(to see if we can merge them.)
+	 *  Because Occupants property only contain the live list of occupants and
+	 *  some occupants might have left the chat before, the original occupants will help to compare chat rooms with the same occupants.
+	 */
+
+	setOriginalOccupants: function(occupants){
+		this._originalOccupants = occupants;
+	},
+
+	getOriginalOccupants: function(){
+		return this._originalOccupants || [];
 	}
 });

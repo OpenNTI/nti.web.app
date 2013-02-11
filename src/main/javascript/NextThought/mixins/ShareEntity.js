@@ -10,7 +10,7 @@ Ext.define('NextThought.mixins.ShareEntity',{
 
 	statics: {
 		isDynamicSharing: function(data){
-			return Boolean(data['IsDynamicSharing']);
+			return Boolean(data.IsDynamicSharing);
 		},
 
 		getPresentationType: function(data){

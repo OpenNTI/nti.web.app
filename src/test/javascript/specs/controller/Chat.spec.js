@@ -27,6 +27,58 @@ describe('Chat Controller Tests', function(){
 		});
 	});
 
+	describe('Exit room tests', function(){
+		function createRoomWithOccupants( cid, occupants){
+			return NextThought.model.RoomInfo.create({'Occupants': occupants, 'id': cid});
+		}
+
+		function createChatWindowWithRoom(room){
+			return Ext.widget('chat-window', {roomInfo: room});
+		}
+
+		var oldRoom, win, currentUser, list;
+		beforeEach(function(){
+			currentUser = $AppConfig.username;
+			list = [ currentUser, 'user2'];
+			oldRoom = createRoomWithOccupants('tag:ntiidd-1', list);
+			win = createChatWindowWithRoom(oldRoom);
+			//Overrides
+			controller.getRoomInfoFromSession = function(id){ return oldRoom; };
+			controller.getChatWindow = function(cid){ return win; };
+		});
+
+		it("checks if we disable the input field when only one user is left in the chat", function(){
+			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': "RoomInfo", 'NTIID': 'tag:ntiidd-1'};
+
+			expect(win.roomInfo.get('Occupants')).toEqual([currentUser, 'user2']);
+			expect( win.down('chat-entry').isDisabled()).toBeFalsy();
+
+			//Now let's assume user2 exits the chat and we get 'chat_roomMembershipChanged' socket event
+			controller.onMembershipOrModerationChanged(changedMessage);
+
+			expect(win.roomInfo.get('Occupants')).toEqual([currentUser]);
+			expect( win.down('chat-entry').isDisabled()).toBeTruthy();
+
+		});
+
+		it('checks if when room changes, the list of original occupants stay the same', function(){
+			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': "RoomInfo", 'NTIID': 'tag:ntiidd-1'};
+
+			//Assume we set the original Occupants list( it usually gets sets when a user enters a room.
+			win.roomInfo.setOriginalOccupants(list.slice());
+
+			expect( win.roomInfo.getOriginalOccupants()).toEqual(list);
+			expect( win.roomInfo.get('Occupants')).toEqual([currentUser, 'user2']);
+
+			//Now let's assume user2 exits the chat and we change the roomInfo.
+			controller.onMembershipOrModerationChanged(changedMessage);
+
+			expect( win.roomInfo.getOriginalOccupants()).toEqual(list);
+			expect( win.roomInfo.get('Occupants')).toEqual([currentUser]);
+
+		});
+	});
+
 	describe('Chat state Tests', function(){
 
 		describe('Publish state Test', function(){

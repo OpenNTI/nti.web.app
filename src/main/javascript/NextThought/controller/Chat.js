@@ -173,12 +173,12 @@ Ext.define('NextThought.controller.Chat', {
         if (!w){
             //see if we have rooms with the same occupants list:
             Ext.each(allRooms, function(x){
-                xOcc = x.roomInfo.get('Occupants');
+                xOcc = x.roomInfo.getOriginalOccupants();
                 //only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
                 if(xOcc.length > 2){return;}
 	            if(rIsString){ return;} //Be defensive.
                 if(Ext.Array.union(xOcc, r.get('Occupants')).length === xOcc.length){
-                    console.log('found a different room with same occupants');
+                    console.log('found a different room with same occupants: ', xOcc);
                     x.roomInfoChanged(r);
                     w = x;
                 }
@@ -583,7 +583,8 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	updateRoomInfo: function(ri) {
-		var ro = this.getRoomInfoFromSession(ri.getId());
+		var win = this.getChatWindow(ri.getId()),
+			ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
 		if (ro) {
 			ro.fireEvent('changed', ri);
 		}
@@ -1119,6 +1120,7 @@ Ext.define('NextThought.controller.Chat', {
             occupants = roomInfo.get('Occupants'),
             isGroupChat = (occupants.length > 2);
 
+		roomInfo.setOriginalOccupants(occupants.slice());
 		me.putRoomInfoIntoSession(roomInfo);
 		w = me.openChatWindow(roomInfo);
 

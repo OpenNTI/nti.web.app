@@ -70,20 +70,32 @@ Ext.define('NextThought.view.chat.Window', {
 			return;
 		}  //Only do this if it's there.
 
+		//Even though the occupants list changes, the original occupants stays the same.
+		roomInfo.setOriginalOccupants(this.roomInfo.getOriginalOccupants());
 		//stop listening on old room info, reassign and start listening again.
 		this.roomInfo.un('changed', this.roomInfoChanged, this);
 		this.roomInfo = roomInfo;
 		this.roomInfo.on('changed', this.roomInfoChanged, this);
 		this.roomInfoHash = IdCache.getIdentifier(roomInfo.getId());
 
-		var list = this.down('chat-gutter');
-		var me = this;
+		var list = this.down('chat-gutter'),
+			me = this,
+			occupants = roomInfo.get('Occupants');
 
 
-		UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
-			me.setTitleInfo(users);
-			list.updateList(users);
-		});
+		if(occupants && occupants.length === 1 && isMe(occupants[0])){
+			this.down('chat-entry').disable();
+			this.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
+		} else{
+			this.down('chat-entry').enable();
+		}
+
+		if(occupants.length > 1){
+			UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
+				me.setTitleInfo(users);
+				list.updateList(users);
+			});
+		}
 	},
 
 
