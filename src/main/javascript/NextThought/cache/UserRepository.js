@@ -49,8 +49,13 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(!u){
-			s.add(refreshedUser);
+			this.cacheUser(refreshedUser);
 		}
+	},
+
+	cacheUser: function(user){
+		//console.log('Caching resolved user ', user.getId(), user);
+		this.getStore().add(user);
 	},
 
 	resolveFromStore: function(key){
@@ -108,11 +113,14 @@ Ext.define('NextThought.cache.UserRepository', {
 					return;
 				}
 
+				//console.log('Resolving user on server', name);
+
 				//must make a request, finish in callback so set async flag
 				async = true;
 				this.makeRequest(name, {
 					scope: this,
 					failure: function(){
+					//	console.log('resturning unresolved user', name);
 						result.push(User.getUnresolved(name));
 						if (result.length === l) {
 							finish();
@@ -123,7 +131,7 @@ Ext.define('NextThought.cache.UserRepository', {
 						//except that it only happens for users, we want to cache
 						//groups here also
 						if(!this.resolveFromStore(name)){
-							s.add(u);
+							this.cacheUser(u);
 						}
 						result.push(u);
 
@@ -196,7 +204,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(this.activeRequests[username] && this.activeRequests[username].options){
-//			console.log('active request detected for ' + username);
+		//	console.log('active request detected for ' + username);
 			options = this.activeRequests[username].options;
 			options.callback = Ext.Function.createSequence(
 					options.callback,

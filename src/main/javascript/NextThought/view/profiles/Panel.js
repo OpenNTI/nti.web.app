@@ -63,8 +63,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		items: [
 			{title: 'Recent Activity', xtype: 'profile-activity'},
 			{title: 'Thoughts', html: 'Test'},
-			{title: 'Library', disabled: true},
-			{title: 'Connections', disabled: true}
+			{title: 'Library', disabled: true, hidden: true},
+			{title: 'Connections', disabled: true, hidden: true}
 		]
 	}],
 
@@ -88,7 +88,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.callParent(arguments);
 
 		this.relayEvents(this.el.parent(),['scroll']);
-
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.messageEl,'click',this.onMessageUser,this);
 		this.mon(this.emailEl,'click',this.onEmailUser,this);
@@ -96,38 +95,62 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 
-	setUser: function(user){
-		console.timeEnd(this.timeId);
+	//Returns an object with two fields, shouldBeShown and
+	//editable that describe how (if at all) the profided profile
+	//field should be shown
+	getMetaInfoForField: function(user, field, profileSchema){
+		var r = {}, val = profileSchema[field];
+		r.editable = val && !val.readonly;
+		r.shouldBeShown = r.editable || !Ext.isEmpty(user.get(field));
+		r.field = field;
+		return r;
+	},
+
+
+	updateProfile: function(user, schema){
+		var profileSchema = (schema || {}).ProfileSchema || {},
+			nameInfo = this.getMetaInfoForField(user, 'alias', profileSchema),
+			affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
+			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
+			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
+			roleResult, affiliationResult, me = this;
 		this.fireEvent('loaded');
-
-		if(!this.rendered){
-			this.on('afterrender',Ext.bind(this.setUser,this,[user]), this, {single: true});
-			return;
-		}
-
-		var canEdit = isMe(user),
-			affiliation = user.get('affiliation')||(canEdit?'{Affiliation}':''),
-			role = user.get('role')||(canEdit?'{Role}':''),
-			location = user.get('location')||(canEdit?'{Location}':'');
 
 		this.userObject = user;
 
+		this.mun(this.nameEl,'click',this.editName,this);
+		this.mun(this.affiliationEl,'click',this.editMeta,this);
+		this.mun(this.roleEl,'click',this.editMeta, this);
+		this.mun(this.locationEl,'click',this.editMeta, this);
+
+		//Make more of the UI schema driven
+
 		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
+
 		this.nameEl.update(user.getName());
-		this.affiliationEl.update(affiliation);
-		this.roleEl.update(role);
-		this.locationEl.update(location);
+		if(nameInfo.editable){
+			this.mon(this.nameEl,'click',this.editName,this);
+		}
 
-		if(!canEdit){
-			if(!affiliation){this.affiliationEl.remove();}
-			if(!role){this.roleEl.remove();}
-			if(!location){this.locationEl.remove();}
-			if(!affiliation || !role){
-				this.affiliationSepEl.remove();
+
+		function setupMeta(el, info, placeholderText){
+			if(info.shouldBeShown){
+				el.update(user.get(info.field) || placeholderText);
+				if(info.editable){
+					me.mon(el,'click',me.editMeta,me);
+				}
+				return true;
 			}
+			el.remove();
+			return false;
+		}
 
-			this.avatarEditEl.remove();
-			return;
+		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo, '{Affiliation}');
+		roleResult = setupMeta(this.roleEl, roleInfo, '{Role}');
+		setupMeta(this.locationEl, locationInfo, '{Location}');
+
+		if(!roleResult || !affiliationResult){
+			this.affiliationSepEl.remove();
 		}
 
 		function fieldValidator(val){
@@ -158,11 +181,44 @@ Ext.define('NextThought.view.profiles.Panel',{
 				scope: this
 			}
 		});
+	},
 
-		this.mon(this.nameEl,'click',this.editName,this);
-		this.mon(this.affiliationEl,'click',this.editMeta,this);
-		this.mon(this.roleEl,'click',this.editMeta, this);
-		this.mon(this.locationEl,'click',this.editMeta, this);
+	setUser: function(user){
+		var me = this, profileSchemaUrl;
+
+		console.timeEnd(this.timeId);
+
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.setUser,this,[user]), this, {single: true});
+			return;
+		}
+
+		function onProfileLoaded(u, profile){
+			me.updateProfile(u, profile);
+		}
+
+		profileSchemaUrl = user.getLink('account.profile');
+		if(!profileSchemaUrl){
+			onProfileLoaded(user);
+			return;
+		}
+
+		Ext.Ajax.request({
+            url: profileSchemaUrl,
+            scope: this,
+            callback: function(q,success,r){
+				var schema;
+                if(!success){
+                    console.log('Could not get profile schema');
+                }
+				else{
+					schema = Ext.decode(r.responseText, true);
+				}
+				onProfileLoaded(user, schema);
+            }
+        });
+
+
 	},
 
 

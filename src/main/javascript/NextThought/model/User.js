@@ -26,7 +26,7 @@ Ext.define(	'NextThought.model.User', {
 
 	constructor: function() {
 		var r = this.callParent(arguments);
-		UserRepository.updateUser(this);
+	//	UserRepository.updateUser(this);
 		return r;
 	},
 
