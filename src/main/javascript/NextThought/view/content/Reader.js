@@ -54,6 +54,11 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	activating: function(){
+		delete this.annotationOffsetsCache;
+	},
+
+
 	setSplash: function(){
 		this.scrollTo(0, false);
 		this.updateContent(false);
@@ -222,8 +227,8 @@ Ext.define('NextThought.view.content.Reader', {
 			me.onNavigationAborted();
 		}
 
-		//TODO doing error handling here doesn't really make sense.  We need 
-		//to move it up a few levels (using an error callback?) such that 
+		//TODO doing error handling here doesn't really make sense.  We need
+		//to move it up a few levels (using an error callback?) such that
 		//the thing initiating the navigation request can handle the error.
 		//We may want to do differnt things depending on where the navigation request
 		//occurred from
