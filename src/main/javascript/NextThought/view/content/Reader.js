@@ -191,7 +191,6 @@ Ext.define('NextThought.view.content.Reader', {
 			delete this.annotationOffsetsCache.locationStatics;
 		}
 
-		this.scrollTo(0,false);
 		this.clearAnnotations();
 
 		if(!ntiid) {
