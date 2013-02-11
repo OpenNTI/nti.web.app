@@ -84,6 +84,15 @@ Ext.define('NextThought.view.chat.Entry', {
 		return v;
 	},
 
+	disable: function(){
+		this.callParent(arguments);
+		if(this.inputEl){ this.inputEl.set({disabled:true}); }
+	},
+
+	enable: function(){
+		this.callParent(arguments);
+		if(this.inputEl){ this.inputEl.dom.removeAttribute('disabled'); }
+	},
 
 	addWhiteboard:function () {
 		this.fireEvent('send-whiteboard', this, this.replyTo, this.chanel, this.recipients);
