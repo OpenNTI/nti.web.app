@@ -1,8 +1,6 @@
 Ext.define('NextThought.overrides.dom.Element',{
 	override: 'Ext.dom.Element',
-	requires: [
-		'NextThought.util.Rects'
-	],
+//	requires: ['NextThought.util.Rects'],
 
 	needsScrollIntoView : function(containerEl){
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
