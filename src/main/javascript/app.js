@@ -27,6 +27,7 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Navigation',
+		'Profile',
 		'Search',
 		'Session',
 		'SlideDeck',

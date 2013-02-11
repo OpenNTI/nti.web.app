@@ -125,6 +125,15 @@ Ext.define('NextThought.util.Rects',{
 		}
 
 		return out;
+	},
+
+
+	contains: function(refRect, testRect){
+		return refRect.top <= testRect.top
+			&& refRect.bottom >= testRect.bottom
+			&& refRect.left <= testRect.left
+			&& refRect.right >= testRect.right;
+
 	}
 
 },function(){

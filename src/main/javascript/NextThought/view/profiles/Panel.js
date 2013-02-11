@@ -86,6 +86,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.relayEvents(this.el.parent(),['scroll']);
+
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.messageEl,'click',this.onMessageUser,this);
 		this.mon(this.emailEl,'click',this.onEmailUser,this);

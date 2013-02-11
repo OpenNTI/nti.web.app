@@ -23,8 +23,22 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 	setRecord: function(record){
-		var me = this;
-		me.callParent(arguments);
+		this.callParent(arguments);
+		this.maybeFillIn();
+	},
+
+
+	maybeFillIn: function(){
+		var me = this,
+			loaded = me.loaded,
+			onScreen = loaded || me.el.first().isOnScreenRelativeTo(Ext.get('profile'));
+
+		if(loaded || !onScreen){return;}
+
+		me.loaded = true;
+
+		console.log('Filling in');
+
 		LocationMeta.getMeta(me.record.get('ContainerId'),me.setLocation,me);
 		if(me.root){
 			me.contextEl.show();

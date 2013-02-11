@@ -1,5 +1,8 @@
 Ext.define('NextThought.overrides.dom.Element',{
 	override: 'Ext.dom.Element',
+	requires: [
+		'NextThought.util.Rects'
+	],
 
 	needsScrollIntoView : function(containerEl){
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
@@ -14,6 +17,13 @@ Ext.define('NextThought.overrides.dom.Element',{
             ctBottom = ctTop + ctClientHeight;
 
         return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
+	},
+
+
+	isOnScreenRelativeTo: function(el){
+		var myRect = Ext.getDom(this).getBoundingClientRect(),
+			parentRect = Ext.getDom(el).getBoundingClientRect();
+		return RectUtils.contains(parentRect, myRect);
 	},
 
 
