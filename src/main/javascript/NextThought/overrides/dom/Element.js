@@ -18,10 +18,17 @@ Ext.define('NextThought.overrides.dom.Element',{
 	},
 
 
-	isOnScreenRelativeTo: function(el){
+	/**
+	 *
+	 * @param el
+	 * @param [bufferZone]
+	 * @return {*}
+	 */
+	isOnScreenRelativeTo: function(el, bufferZone){
 		var myRect = Ext.getDom(this).getBoundingClientRect(),
 			parentRect = Ext.getDom(el).getBoundingClientRect();
-		return RectUtils.contains(parentRect, myRect);
+
+		return RectUtils.contains(parentRect, myRect, bufferZone);
 	},
 
 

@@ -50,7 +50,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		var me = this,
 			count,subject,
 			loaded = me.loaded,
-			onScreen = loaded || me.el.first().isOnScreenRelativeTo(Ext.get('profile'));
+			onScreen = loaded || me.el.first().isOnScreenRelativeTo(Ext.get('profile'),{bottom:1000});
 
 		if(loaded || !onScreen){return;}
 

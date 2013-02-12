@@ -128,11 +128,20 @@ Ext.define('NextThought.util.Rects',{
 	},
 
 
-	contains: function(refRect, testRect){
-		return refRect.top <= testRect.top
-			&& refRect.bottom >= testRect.bottom
-			&& refRect.left <= testRect.left
-			&& refRect.right >= testRect.right;
+	contains: function(refRect, testRect, allowances){
+		var a = allowances || 0;
+		if(Ext.isNumber(a)){
+			a = { top: -a, bottom: a, left: -a, right: a };
+		}
+
+		if(!Ext.isObject(a)){Ext.Error.raise('Invalid allowances value');}
+
+		Ext.applyIf(a,{top:0,left:0,right:0,bottom:0});
+
+		return (refRect.top + a.top) <= testRect.top
+			&& (refRect.bottom + a.bottom) >= testRect.bottom
+			&& (refRect.left + a.left) <= testRect.left
+			&& (refRect.right + a.right)>= testRect.right;
 
 	}
 
