@@ -20,7 +20,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	defaultType: 'note-panel',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
-
+	autoFillInReplies: true,
 
 //	root: false,
 	rootQuery: 'note-panel[root]',
@@ -416,24 +416,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.onEdit();
 		}
 
-		Ext.suspendLayouts();
-		this.removeAll(true);
-		Ext.resumeLayouts(true);
-
-		//Multiple containers/cmps involved here
-		//So notice we do the bulkiest suspend resume
-		//we can. Also getting this onto the next event pump
-		//helps the app not seem like it is hanging
-		Ext.defer(function(){
-			Ext.suspendLayouts();
-			if(!r.hasOwnProperty('parent') && r.getLink('replies')){
-				this.loadReplies(r);
-			}
-			else {
-				this.addReplies(r.children);
-			}
-			Ext.resumeLayouts(true);
-		}, 1, this);
+		if(this.autoFillInReplies !== false){
+			this.fillInReplies();
+		}
 
 
 		this.updateToolState();
@@ -501,6 +486,29 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		record.getDescendants(setReplies);
+	},
+
+
+	fillInReplies: function(){
+		var r = this.record;
+		Ext.suspendLayouts();
+		this.removeAll(true);
+		Ext.resumeLayouts(true);
+
+		//Multiple containers/cmps involved here
+		//So notice we do the bulkiest suspend resume
+		//we can. Also getting this onto the next event pump
+		//helps the app not seem like it is hanging
+		Ext.defer(function(){
+			Ext.suspendLayouts();
+			if(!r.hasOwnProperty('parent') && r.getLink('replies')){
+				this.loadReplies(r);
+			}
+			else {
+				this.addReplies(r.children);
+			}
+			Ext.resumeLayouts(true);
+		}, 1, this);
 	},
 
 
