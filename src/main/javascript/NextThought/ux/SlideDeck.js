@@ -60,8 +60,9 @@ Ext.define('NextThought.ux.SlideDeck',{
 		}
 
 
-		function parse(dom,pageInfo){
-			var slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]',dom);
+		function parse(content,pageInfo){
+			var dom = ContentUtils.parseXML(content),
+				slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]',dom);
 
 			Ext.each(slides,function(dom,i,a){
 				a[i] = NextThought.model.Slide.fromDom(dom,pageInfo.getId());

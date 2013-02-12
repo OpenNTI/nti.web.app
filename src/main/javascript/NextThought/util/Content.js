@@ -2,7 +2,7 @@ Ext.define('NextThought.util.Content',{
 	singleton: true,
 
 
-	spider: function(ids, finish, parse, transform){
+	spider: function(ids, finish, parse){
 		if(!Ext.isArray(ids)){ ids = [ids]; }
 
 		var service = $AppConfig.service,
@@ -16,24 +16,11 @@ Ext.define('NextThought.util.Content',{
 
 
 		function parseContent(resp,pageInfo){
-			var result = resp.responseText, dom;
-			if(Ext.isFunction(transform)){
-				try{
-					result = transform(result, pageInfo);
-				}
-				catch(error){
-					console.error('Error invoking transform', Globals.getError(error));
-				}
-			}
-
-			dom = me.parseXML(result);
-
 			try{
-				Ext.callback(parse,null,[dom,pageInfo]);
+				Ext.callback(parse,null,[resp.responseText,pageInfo]);
 			} catch(e){
 				console.error(Globals.getError(e));
 			}
-
 			maybeFinish();
 		}
 
