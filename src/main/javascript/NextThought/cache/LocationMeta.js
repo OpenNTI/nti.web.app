@@ -30,12 +30,21 @@ Ext.define('NextThought.cache.LocationMeta', {
     loadMeta: function(ntiid, cb) {
 		var me = this;
 
+	    function buildPath(s, root){
+            var p = s.split('/'); p.splice(-1,1,'');
+		    p = p.join('/');
+			//trim off the root if its present
+		    return p.replace(new RegExp(RegExp.escape(root)+'$'),'');
+        }
+
         function pageIdLoaded(pi){
 			var assessmentItems = pi.get('AssessmentItems') || [],
-				theId = pi.getId();
+				theId = pi.getId(),meta;
 
-            this.meta[theId] = LocationProvider.getLocation(theId);
+            meta = this.meta[theId] = LocationProvider.getLocation(theId);
             this.ids[ntiid] = theId;
+
+	        meta.baseURI = buildPath(pi.getLink('content'),meta.root);
 
 			//Also yank out any assessment items and cache them by id.  Note
 			//right now this only works because there is a one-to-one question to
