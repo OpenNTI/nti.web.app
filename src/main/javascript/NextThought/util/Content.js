@@ -21,8 +21,8 @@ Ext.define('NextThought.util.Content',{
 				try{
 					result = transform(result, pageInfo);
 				}
-				catch(e){
-					console.error('Error invoking transform', Globals.getError(e));
+				catch(error){
+					console.error('Error invoking transform', Globals.getError(error));
 				}
 			}
 
@@ -124,7 +124,7 @@ Ext.define('NextThought.util.Content',{
 		var me = this;
 
 		return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
-	},
+	}
 
 
 },function(){
