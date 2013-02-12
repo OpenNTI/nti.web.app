@@ -1,17 +1,21 @@
 Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	extend: 'NextThought.view.annotations.note.Panel',
-	requires: ['NextThought.util.Content'],
+	requires: [
+		'NextThought.util.Content',
+		'NextThought.view.profiles.parts.ActivityItemReply'
+	],
 	alias: 'widget.profile-activity-item',
-	defaultType: 'profile-activity-item',
+	defaultType: 'profile-activity-item-reply',
 
 	renderSelectors: {
 		avatar: '.avatar',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
-		locationEl: '.meta .subject .location',
-		actionEl: '.meta .subject .action',
-		contextEl: '.context'
+		locationEl: '.location',
+		contextEl: '.context',
+		subjectEl: '.subject',
+		locationIcon: '.icon'
 	},
 
 	initComponent: function(){
@@ -37,7 +41,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.loaded = true;
 
-		console.log('Filling in');
+		console.debug('Filling in');
 
 		LocationMeta.getMeta(me.record.get('ContainerId'),me.setLocation,me);
 		if(me.root){
@@ -54,19 +58,17 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		var me = this,
 			r = me.record,
 			cid = r.get('ContainerId'),
-			metaInfo;
+			metaInfo,
+			C = ContentUtils;
 
-		function parse(dom){
+		function parse(content){
+			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
 			me.setContext(dom,dom);
-		}
-
-		function transform(string, pageInfo){
-			return ContentUtils.fixReferences(string, metaInfo.absoluteContentRoot);
 		}
 
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
-			ContentUtils.spider(cid,fin,parse,transform);
+			ContentUtils.spider(cid,fin,parse);
 		}, me);
 	},
 
@@ -78,22 +80,28 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			this.on('afterrender',Ext.bind(this.setLocation,this,arguments),this,{single:true});
 			return;
 		}
-		var map = {
-				note : 'commented in',
-				highlight: 'highlighted in'
-			},
-			action = map[this.record.get('Class').toLowerCase()];
 
-		if(this.record.parent){
-			action = 'replied in';
+
+		var location, path, iconPath,
+			lineage = LocationProvider.getLineage(meta.NTIID,true);
+
+		iconPath = meta.icon;
+		if(iconPath.substr(0,meta.root.length) !== meta.root ){
+			iconPath = meta.root+meta.icon;
 		}
 
-		this.actionEl.update(action);
-		this.locationEl.update(meta.title.get('title'));
+		location = lineage.first();
+		path = lineage.last();
+
+		this.locationEl.update(path + '/.../' + location);
+		this.locationIcon.setStyle({
+			backgroundImage: Ext.String.format('url({0})',meta.baseURI+iconPath)
+		});
 
 		this.locationEl.hover(
 				function(){Ext.fly(this).addCls('over');},
 				function(){Ext.fly(this).removeCls('over');});
+
 		this.locationEl.on('click',function(){
 			LocationProvider.setLocation(meta.NTIID);
 		});
@@ -102,40 +110,50 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 },function(){
 
-	this.prototype.renderTpl = Ext.DomHelper.markup([{
-		    cls: 'note profile-activity-item',
-		    cn:[
-			    { cls: 'avatar' },
-			    { cls: 'controls', cn: [
-	                { cls: 'favorite-spacer' },
-	                { cls: 'favorite' },
-	                { cls: 'like' }
-	            ]},
-	            { cls: 'meta', cn: [
-	                { cls: 'subject', cn:[
-	                    {tag: 'span', cls: 'name link'}, ' ',
-	                    {tag: 'span', cls: 'action'},
-	                    {tag: 'span', cls: 'separator', html: ' '},
-	                    {tag: 'span', cls: 'location link'}
-	                ]},
-	                { cls: 'stamp', cn: [
-	                    {tag: 'span', cls: 'time'},
-	                    {tag: 'span', cls: 'separator', html: ' &middot; '},
-	                    {tag: 'span', cls: 'shared-to', html: 'private'}
-	                ]}
-	            ]},
-			    { cls: 'context', cn: [{tag: 'canvas'},{tag: 'span', cls: 'text'}] },
-			    { cls: 'body' },
-			    {
-				    cls: 'respond',
-				    cn: [
-					    TemplatesForNotes.getReplyOptions(),
-					    TemplatesForNotes.getEditorTpl()
-				    ]
-			    }]
-		    },{
-			    id: '{id}-body',
-			    cls: 'note-replies',
-			    tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
-		    }]);
-	});
+	this.prototype.renderTpl = Ext.DomHelper.markup([
+		{
+			cls: 'note profile-activity-item',
+			cn:[
+				{ cls: 'content-callout', cn:[
+					{ cls: 'icon' },
+					{ cn:[
+						{ cls: 'location link'},
+						{ cls: 'context', cn: [{tag: 'canvas'},{tag: 'span', cls: 'text'}] }
+					]}
+				]},
+				{ cls:'item', cn:[
+					{ cls: 'avatar' },
+					{ cls: 'controls', cn: [
+						{ cls: 'favorite-spacer' },
+						{ cls: 'favorite' },
+						{ cls: 'like' }
+					]},
+					{ cls: 'meta', cn: [
+						{ cls: 'subject', html: 'Subject' },
+						{ cls: 'stamp', cn: [
+							{tag: 'span', cls: 'name link'},
+							{tag: 'span', cls: 'separator', html: ' '},
+							{tag: 'span', cls: 'time'},
+							{tag: 'span', cls: 'separator', html: ' &middot; '},
+							{tag: 'span', cls: 'shared-to link', html: 'Private'}
+						]}
+					]},
+					{ cls: 'body' },
+					{
+						cls: 'respond',
+						cn: [
+							TemplatesForNotes.getReplyOptions(),
+							TemplatesForNotes.getEditorTpl()
+						]
+					}]
+				}
+			]
+		},{
+			id: '{id}-body',
+			cls: 'note-replies',
+			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+		},{
+			cls: 'comments', html: '{0} Comments'
+		}
+	]);
+});

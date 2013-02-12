@@ -121,78 +121,150 @@
 			overflow: visible;
 		}
 
+		.comments {
+			padding: 0 0 0 40px;
+			font: normal 600 10px/40px $font;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			box-shadow: inset 0 1px 0 0 #fff;
+
+			&::after{
+				content: ' ';
+				position: absolute;
+				top: 14px; left: 16px;
+				background: $icons no-repeat;
+				@include sprite($icons,'activity-comment',$dimensions: true);
+			}
+		}
+
 		.profile-activity-item{
-			margin: 40px 0;
+			margin: 40px 0 0;
 			padding: 0;
-			border: 1px solid $border-grey;
-			box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
 
-			@include like-and-favorite;
-			.favorite-spacer{display: none;}
-
-			.avatar {
-				margin: 10px 0 10px 10px;
-				float: left;
-				width: 36px;
-				height: 36px;
-				background:{
-					color: transparent;
-					position: center;
-					repeat: no-repeat;
-					size: cover;
+			.link {
+				color: $primary-blue;
+				&.over {
+					text-decoration: underline;
+					cursor: pointer;
 				}
 			}
 
-			.meta,.body,.reply-options { margin-left: 55px; }
-
-			.context{
-				padding: 30px 40px;
-				display: none;
-				background: $quad-grey;
-				border: 1px solid $border-grey;
-				border-width: 1px 0;
+			& + .note-replies,
+			& + .note-replies + .comments,
+			.content-callout{
 				position: relative;
-				canvas{
-					position: absolute;
-					top: 0; left: 0; right: 0; bottom: 0;
-				}
-
-				& > span.text {
-					font: normal 400 16px $font;
-					color: $primary-grey;
-					display: inline-block;
-					padding: 0 15px;
-					min-height: 30px;
-					box-shadow: -3px 0 0 0 $tertiary-grey;
-				}
+				margin: 0 3px;
+				border: 1px solid $border-grey;
+				background: $quad-grey;
+				position: relative;
+				overflow: hidden;
 			}
 
-			.context,.body,.reply-options{ clear: both; }
+			& + .note-replies,
+			& + .note-replies + .comments{
+				border-top-width: 0;
+				top: -1px;
+			}
 
-			.meta{
-				margin-top: 10px;
-				font: normal 600 10px $font;
-				color: $tertiary-grey;
+			.content-callout {
+				padding: 16px 16px 20px;
+				border-bottom-width: 0;
 
-				.link {
-					color: $primary-blue;
-					&.over {
-						text-decoration: underline;
-						cursor: pointer;
+				.icon {
+					float: left;
+					width: 54px; height: 66px;
+
+					box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+								-1px 1px 3px 0 rgba(0,0,0,0.35);
+
+					background:{
+						color: transparent;
+						position: center;
+						repeat: no-repeat;
+						size: cover;
+					}
+
+					& + div {
+						margin-left: 70px;
+
 					}
 				}
 
-				.subject{
-					font:{size: 14px; weight: 300;}
+				.location {
+					text-transform: uppercase;
+					font: normal 600 10px/20px $font;
+					color: $primary-blue;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 
-				.stamp {
-					text-transform: uppercase;
+				.context{
+					display: none;
+					position: relative;
+					canvas{
+						position: absolute;
+						top: 0; left: 0; right: 0; bottom: 0;
+					}
+
+					& > span.text {
+						font: normal 400 16px $font;
+						color: $primary-grey;
+						display: inline-block;
+					}
 				}
 			}
 
+			.item {
+				position: relative;
+				z-index: 2;
+				border: 1px solid $border-grey;
+				box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+				padding: 0 20px 20px;
+
+				@include like-and-favorite;
+				.favorite-spacer{display: none;}
+
+				& > * { margin-top: 20px; }
+				.controls {margin: 0 -20px 0 0;}
+
+				.avatar {
+					float: left;
+					width: 60px;
+					height: 60px;
+					border-radius: 5px;
+					background:{
+						color: transparent;
+						position: center;
+						repeat: no-repeat;
+						size: cover;
+					}
+				}
+
+				.meta {
+					margin: 20px 70px 0 80px;
+					min-height: 60px;
+					font: normal 400 12px $font;
+					color: $tertiary-grey;
+				}
+
+				.stamp {
+					margin-top: 5px;
+					.name {font: inherit;}
+				}
+
+				.subject {
+					color: $primary-grey;
+					font: normal 300 32px/34px $font;
+				}
+
+			}
+
+
+			.body,.reply-options{ clear: both; }
+
 			.body{
-				margin-top: 20px;
+				margin: 20px 0;
 				font: normal 400 16px $font;
 				color: $primary-grey;
 				@include text-pre-wrap;
