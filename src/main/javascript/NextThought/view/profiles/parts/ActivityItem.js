@@ -53,13 +53,21 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	loadContext: function(fin){
 		var me = this,
 			r = me.record,
-			cid = r.get('ContainerId');
+			cid = r.get('ContainerId'),
+			metaInfo;
 
 		function parse(dom){
 			me.setContext(dom,dom);
 		}
 
-		ContentUtils.spider(cid,fin,parse);
+		function transform(string, pageInfo){
+			return ContentUtils.fixReferences(string, metaInfo.root);
+		}
+
+		LocationMeta.getMeta(cid, function(meta){
+			metaInfo = meta;
+			ContentUtils.spider(cid,fin,parse,transform);
+		}, me);
 	},
 
 

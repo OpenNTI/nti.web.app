@@ -2,7 +2,7 @@ Ext.define('NextThought.util.Content',{
 	singleton: true,
 
 
-	spider: function(ids, finish, parse){
+	spider: function(ids, finish, parse, transform){
 		if(!Ext.isArray(ids)){ ids = [ids]; }
 
 		var service = $AppConfig.service,
@@ -16,7 +16,17 @@ Ext.define('NextThought.util.Content',{
 
 
 		function parseContent(resp,pageInfo){
-			var dom = me.parseXML(resp.responseText);
+			var result = resp.responseText, dom;
+			if(Ext.isFunction(transform)){
+				try{
+					result = transform(result, pageInfo);
+				}
+				catch(e){
+					console.error('Error invoking transform', Globals.getError(e));
+				}
+			}
+
+			dom = me.parseXML(result);
 
 			try{
 				Ext.callback(parse,null,[dom,pageInfo]);
@@ -70,7 +80,52 @@ Ext.define('NextThought.util.Content',{
 		}
 
 		return undefined;
-	}
+	},
+
+	/** @private */
+	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
+
+	isExternalUri: function(r){
+		return this.externalUriRegex.test(r);
+	},
+
+
+	fixReferences: function(string, basePath){
+
+		function fixReferences(original,attr,url) {
+			var firstChar = url.charAt(0),
+				absolute = firstChar ==='/',
+				anchor = firstChar === '#',
+				external = me.externalUriRegex.test(url),
+				host = absolute?getURL():basePath,
+				params;
+
+			if(/src/i.test(attr) && /youtube/i.test(url)){
+				params = [
+					'html5=1',
+					'enablejsapi=1',
+					'autohide=1',
+					'modestbranding=1',
+					'rel=0',
+					'showinfo=0',
+					'wmode=opaque',
+					'origin='+encodeURIComponent(location.protocol+'//'+location.host)];
+
+				return Ext.String.format('src="{0}?{1}"',
+						url.replace(/http:/i,'https:').replace(/\?.*/i,''),
+						params.join('&') );
+			}
+
+			//inline
+			return (anchor || external || /^data:/i.test(url)) ?
+					original : attr+'="'+host+url+'"';
+		}
+
+		var me = this;
+
+		return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+	},
+
 
 },function(){
 	window.ContentUtils = this;

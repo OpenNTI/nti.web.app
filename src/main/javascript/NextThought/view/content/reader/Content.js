@@ -376,7 +376,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 //		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) || []);
 		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) || []);
 
-		return this.fixReferences(body,basePath);
+		return ContentUtils.fixReferences(body, basePath);
 	},
 
 
@@ -407,48 +407,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 		body.setStyle(bodyStylesObj);
 	},
 
-
-	fixReferences: function(string, basePath){
-
-		function fixReferences(original,attr,url) {
-			var firstChar = url.charAt(0),
-				absolute = firstChar ==='/',
-				anchor = firstChar === '#',
-				external = me.externalUriRegex.test(url),
-				host = absolute?getURL():basePath,
-				params;
-
-			if(/src/i.test(attr) && /youtube/i.test(url)){
-				params = [
-					'html5=1',
-					'enablejsapi=1',
-					'autohide=1',
-					'modestbranding=1',
-					'rel=0',
-					'showinfo=0',
-					'wmode=opaque',
-					'origin='+encodeURIComponent(location.protocol+'//'+location.host)];
-
-				return Ext.String.format('src="{0}?{1}"',
-						url.replace(/http:/i,'https:').replace(/\?.*/i,''),
-						params.join('&') );
-			}
-
-			//inline
-			return (anchor || external || /^data:/i.test(url)) ?
-					original : attr+'="'+host+url+'"';
-		}
-
-		var me = this;
-
-		return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
-	},
-
-
-	/** @private */
-	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
-
-
 	onClick: function(e, el){
 		e.stopEvent();
 		var m = this,
@@ -463,7 +421,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		//pop out links that point to external resources
-		if(!ParseUtils.parseNtiid(newLocation) && m.externalUriRegex.test(r) && r.indexOf(whref) < 0 ){
+		if(!ParseUtils.parseNtiid(newLocation) && ContentUtils.isExternalUri(r) && r.indexOf(whref) < 0 ){
 			//popup a leaving platform notice here...
 			try {
 				window.open(r, '_blank');
