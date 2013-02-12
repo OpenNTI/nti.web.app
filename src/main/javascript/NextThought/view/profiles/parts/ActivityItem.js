@@ -61,7 +61,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 
 		function transform(string, pageInfo){
-			return ContentUtils.fixReferences(string, metaInfo.root);
+			return ContentUtils.fixReferences(string, metaInfo.absoluteContentRoot);
 		}
 
 		LocationMeta.getMeta(cid, function(meta){

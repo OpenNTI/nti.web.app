@@ -45,6 +45,7 @@ Ext.define('NextThought.cache.LocationMeta', {
             this.ids[ntiid] = theId;
 
 	        meta.baseURI = buildPath(pi.getLink('content'),meta.root);
+			meta.absoluteContentRoot = meta.baseURI + meta.root;
 
 			//Also yank out any assessment items and cache them by id.  Note
 			//right now this only works because there is a one-to-one question to
