@@ -5,24 +5,25 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 	defaultType: 'profile-activity-item-reply',
 
 	renderSelectors: {
+		noteBody: '.reply',
 		avatar: '.avatar'
 	}
 
 },function(){
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([{
-		cls: 'note',
+		cls: 'reply profile-activity-reply-item',
 		cn: [
 			{ cls: 'avatar' },
 			{ cls: 'meta', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'favorite-spacer' },
 					{ cls: 'like' }]},
-				{ tag: 'span', cls: 'name' },
+				{ tag: 'span', cls: 'name' },' ',
 				{ tag: 'span', cls: 'time' }
 			]},
-			{ cls: 'body' },{
-				cls: 'respond',
+			{ cls: 'body' },
+			{ cls: 'respond',
 				cn: [
 					TemplatesForNotes.getReplyOptions(),
 					TemplatesForNotes.getEditorTpl()

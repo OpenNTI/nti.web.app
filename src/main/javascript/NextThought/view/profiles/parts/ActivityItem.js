@@ -15,7 +15,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		locationEl: '.location',
 		contextEl: '.context',
 		subjectEl: '.subject',
-		locationIcon: '.icon'
+		locationIcon: '.icon',
+		commentsEl: '.comments'
 	},
 
 	initComponent: function(){
@@ -34,6 +35,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	maybeFillIn: function(){
 		var me = this,
+			count,subject,
 			loaded = me.loaded,
 			onScreen = loaded || me.el.first().isOnScreenRelativeTo(Ext.get('profile'));
 
@@ -42,6 +44,21 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		me.loaded = true;
 
 		console.debug('Filling in');
+
+		count = me.record.get('ReferencedByCount');
+		if(typeof count === 'number'){
+			me.commentsEl.update(count+me.commentsEl.getAttribute('data-label'));
+		}
+		else {
+			me.commentsEl.remove();
+		}
+
+		subject = me.record.get('subject');
+		me.subjectEl.update(subject||'Subject');
+		if(!subject){
+			me.subjectEl.addCls('no-subject');
+			me.name.addCls('no-subject');
+		}
 
 		LocationMeta.getMeta(me.record.get('ContainerId'),me.setLocation,me);
 		if(me.root){
@@ -129,7 +146,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 						{ cls: 'like' }
 					]},
 					{ cls: 'meta', cn: [
-						{ cls: 'subject', html: 'Subject' },
+						{ cls: 'subject', html: '' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link'},
 							{tag: 'span', cls: 'separator', html: ' '},
@@ -153,7 +170,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			cls: 'note-replies',
 			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
 		},{
-			cls: 'comments', html: '{0} Comments'
+			cls: 'comments', 'data-label': ' Comments', html: ' '
 		}
 	]);
 });

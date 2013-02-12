@@ -119,6 +119,11 @@
 
 		.x-panel-profile,.x-panel-body-profile {
 			overflow: visible;
+			padding-bottom: 1em;
+		}
+
+		.note-replies:empty {
+			display: none !important;
 		}
 
 		.comments {
@@ -140,9 +145,10 @@
 		.profile-activity-item{
 			margin: 40px 0 0;
 			padding: 0;
+			z-index: 1;
 
 			.link {
-				color: $primary-blue;
+				color: $primary-blue !important;
 				&.over {
 					text-decoration: underline;
 					cursor: pointer;
@@ -154,8 +160,8 @@
 			.content-callout{
 				position: relative;
 				margin: 0 3px;
-				border: 1px solid $border-grey;
-				background: $quad-grey;
+				border: 1px solid #eaeaea;
+				background: #fbfbfb;
 				position: relative;
 				overflow: hidden;
 			}
@@ -164,6 +170,7 @@
 			& + .note-replies + .comments{
 				border-top-width: 0;
 				top: -1px;
+				z-index: -1;
 			}
 
 			.content-callout {
@@ -203,7 +210,7 @@
 					display: none;
 					position: relative;
 					canvas{
-						position: absolute;
+						position: absolute; display:none;
 						top: 0; left: 0; right: 0; bottom: 0;
 					}
 
@@ -218,8 +225,9 @@
 			.item {
 				position: relative;
 				z-index: 2;
-				border: 1px solid $border-grey;
-				box-shadow: 0 0 1px 0 rgba(0,0,0,0.3);
+				border: 1px solid rgba(223, 223, 223, 1);
+				box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05),
+							0 -2px 4px -1px rgba(30, 30, 30, 0.05);
 				padding: 0 20px 20px;
 
 				@include like-and-favorite;
@@ -253,9 +261,14 @@
 					.name {font: inherit;}
 				}
 
-				.subject {
+				.subject, .name.no-subject {
+					display: block;
 					color: $primary-grey;
 					font: normal 300 32px/34px $font;
+				}
+
+				.subject.no-subject{
+					display: none;
 				}
 
 			}
@@ -306,6 +319,52 @@
 				.flag::after {
 					@include sprite($icons,'flag-13x15_hover',$dimensions: true);
 				}
+			}
+		}
+
+
+		.profile-activity-reply-item {
+			position: relative;
+			padding: 30px 20px 0;
+			@include like-and-favorite;
+			.avatar {
+				float: left;
+				width: 35px; height: 35px;
+				border-radius: 3px;
+				background:{
+					color: transparent;
+					position: center;
+					repeat: no-repeat;
+					size: cover;
+				}
+			}
+
+			.meta,.body,.respond {
+				margin-left: 50px;
+			}
+
+			.meta {
+				.time{
+					color: $tertiary-grey;
+					text-transform: uppercase;
+					font: normal 600 10px $font;
+					vertical-align: text-bottom;
+				}
+				.name {
+					font: normal 400 14px $font;
+					vertical-align: text-bottom;
+					color: $primary-blue;
+				}
+			}
+
+			.body {
+				color: $primary-grey;
+				margin-top: 10px;
+				font: normal 500 14px/20px $font;
+			}
+
+			.respond {
+				@include note-editor;
 			}
 		}
 	}
