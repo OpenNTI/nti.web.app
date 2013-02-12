@@ -105,17 +105,33 @@ Ext.define('NextThought.model.Note', {
 		}
 	},
 
-	/*
+	/**
 	 * Asynchronously loads replies using the "replies" link type
+	 *
+	 * @param callback {Function}
+	 * @param scope {Object}
+	 * @param [pageSize] {Integer} Size of the pages to get back.
+	 * @param additionalParams {Object} An optional object describing params to send to the server.
+	 *          Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
 	 */
-	loadReplies: function(callback, scope){
+	loadReplies: function(callback, scope, pageSize, additionalParams){
 		var me = this,
 			link = this.getLink('replies'),
-			store = NextThought.store.PageItem.create();
+			store = NextThought.store.PageItem.create(),
+			params = store.proxy.extraParams || {};
 
 		if(!link){
 			Ext.callback(callback, scope, [store]);
 			return;
+		}
+
+		if(pageSize !== undefined){
+			store.pageSize = pageSize;
+		}
+
+		if(additionalParams){
+			params = Ext.apply(params, additionalParams);
+			store.proxy.extraParams = params;
 		}
 
 		store.proxy.url = link;

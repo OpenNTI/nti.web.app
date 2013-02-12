@@ -34,6 +34,18 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
+	},
+
+
+	clickedRevealAllReplies: function(){
+		this.commentsEl.remove();
+		this.fillInReplies();
+	},
+
+
 	maybeFillIn: function(){
 		var me = this,
 			count,subject,
@@ -44,11 +56,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.loaded = true;
 
-		me.fillInReplies();
-
 		count = me.record.get('ReferencedByCount');
 		if(typeof count === 'number'){
 			me.commentsEl.update(count+me.commentsEl.getAttribute('data-label'));
+			if(count){
+				me.loadLatestReply();
+			}
 		}
 		else {
 			me.commentsEl.remove();
@@ -69,6 +82,27 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				me.contextEl.unmask();
 			});
 		}
+	},
+
+
+	loadLatestReply: function(){
+		var me = this,
+			r = me.record;
+
+		function cb(store, records){
+			if(store.getCount() !== 1){
+				console.error('We did not recieve what we expected.', arguments);
+			}
+
+			var rec = null;
+			//get the newest record (should only be 1, so this should nearly be a no-op)
+			store.each(function(r){
+				if(!rec || rec.get('CreatedTime') < r.get('CreatedTime')){ rec = r; } });
+
+			if(rec){ me.add({record: rec}); }
+		}
+
+		r.loadReplies(cb,me,1,{sortOn: 'CreatedTime', sortOrder: 'descending'});
 	},
 
 
