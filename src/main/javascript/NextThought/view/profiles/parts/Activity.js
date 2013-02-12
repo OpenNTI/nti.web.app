@@ -12,13 +12,18 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		this.store = this.getStore();
-		this.mon(this.store,{
-			scope: this,
-			load: this.storeLoaded
-		});
+		if(isMe(this.username)){
+			this.store = this.getStore();
+			this.mon(this.store,{
+				scope: this,
+				load: this.storeLoaded
+			});
 
-		this.store.load();
+			this.store.load();
+		}
+		else{
+			console.warn("Only support activity for authenticated user right now.", this.username, $AppConfig.username);
+		}
 	},
 
 	getStore: function(){

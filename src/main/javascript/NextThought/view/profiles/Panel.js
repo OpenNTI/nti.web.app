@@ -80,7 +80,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.addEvents('loaded');
 		this.timeId = 'Resolve User:'+this.username;
 		console.time(this.timeId);
-		UserRepository.getUser(this.username,this.setUser, this);
+		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
 
 
@@ -114,7 +114,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
 			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
 			roleResult, affiliationResult, me = this;
-		this.fireEvent('loaded');
 
 		this.userObject = user;
 
@@ -187,6 +186,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		var me = this, profileSchemaUrl;
 
 		console.timeEnd(this.timeId);
+
+		this.fireEvent('loaded');
 
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setUser,this,[user]), this, {single: true});

@@ -299,6 +299,6 @@ Ext.define('NextThought.controller.Session', {
                 console.log('could not resolve user',username, arguments);
                 failureCallback.call(me);
             }
-        });
+        }, me, true);
     }
 });

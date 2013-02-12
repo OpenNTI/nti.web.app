@@ -24,9 +24,12 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'location', type: 'string'}
 	],
 
+	summaryObject: true,
+
 	constructor: function() {
 		var r = this.callParent(arguments);
-	//	UserRepository.updateUser(this);
+		//romeconsole.error('User created', this);
+		UserRepository.updateUser(this);
 		return r;
 	},
 

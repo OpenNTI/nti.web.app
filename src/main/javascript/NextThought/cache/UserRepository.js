@@ -63,7 +63,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID',key,0,false,true,true);
 	},
 
-	getUser: function(username, callback, scope) {
+	getUser: function(username, callback, scope, forceFullResolve) {
 		if (!Ext.isArray(username)) {
 			username = [username];
 			username.returnSingle = true;
@@ -108,7 +108,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 
 				r = this.resolveFromStore(name);
-				if (r && r.raw){
+				if (r && r.raw && (!forceFullResolve || !r.summaryObject)){
 					result.push(r);
 					return;
 				}
@@ -189,7 +189,13 @@ Ext.define('NextThought.cache.UserRepository', {
 				console.warn('many matching users: "', username, '"', list);
 			}
 
-			Ext.each(list,function(u){ if(u.get('Username')===username){result=u;return false;}});
+			Ext.each(list,function(u){
+				if(u.get('Username')===username){
+					result=u;
+					result.summaryObject = false;
+					return false;
+				}
+			});
 
 			if(result && callbacks && callbacks.success){
 				callbacks.success.call(callbacks.scope || this, result);
