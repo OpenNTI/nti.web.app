@@ -132,14 +132,18 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			keydown: me.editorKeyDown
 		});
 
-		if(me.record.parent){
-			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
-			me.favorites.hide();
-			me.favoritesSpacer.show();
+		if( me.record.parent ){
+			if( me.favorites ){
+				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
+				me.favorites.hide();
+			}
+			if( me.favoritesSpacer ){
+				me.favoritesSpacer.show();
+			}
 		}
 
-		me.mon(me.liked, 'click', function(){ me.record.like(me.liked); }, me);
-		me.mon(me.favorites, 'click', function(){ me.record.favorite(me.favorites); },me);
+		if( me.liked ){     me.mon(me.liked,    'click', function(){ me.record.like(me.liked); }, me); }
+		if( me.favorites ){ me.mon(me.favorites,'click', function(){ me.record.favorite(me.favorites); },me); }
 
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
@@ -329,7 +333,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		try {
             UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
-		    UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+
+			if(this.sharedTo){
+				UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+			}
+
             this.time.update(r.getRelativeTimeString());
 			this.noteBody.removeCls("deleted-reply");
 
