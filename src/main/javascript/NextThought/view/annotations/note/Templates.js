@@ -52,6 +52,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 	},
 
 	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, record){
+		if(!optionsEl){return;}
 		var scroller = optionsEl.up('{overflow=auto}');
 
 		if(scroller){

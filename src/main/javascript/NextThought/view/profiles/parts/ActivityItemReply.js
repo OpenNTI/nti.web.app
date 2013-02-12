@@ -25,7 +25,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 			{ cls: 'body' },
 			{ cls: 'respond',
 				cn: [
-					TemplatesForNotes.getReplyOptions(),
+					{
+						cls: 'reply-options',
+						cn: [
+							{ cls: 'reply', html: 'Reply' },
+							{ cls: 'edit', html: 'Edit' },
+							{ cls: 'delete', html: 'Delete' }
+						]
+					},
 					TemplatesForNotes.getEditorTpl()
 				]
 			}

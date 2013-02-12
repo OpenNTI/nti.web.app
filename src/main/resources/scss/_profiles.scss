@@ -126,6 +126,11 @@
 			display: none !important;
 		}
 
+		.separator {
+			font-size: 14px;
+			vertical-align: middle;
+		}
+
 		.comments {
 			padding: 0 0 0 40px;
 			font: normal 600 10px/40px $font;
@@ -170,7 +175,7 @@
 			& + .note-replies + .comments{
 				border-top-width: 0;
 				top: -1px;
-				z-index: -1;
+				z-index: 0;
 			}
 
 			.content-callout {
@@ -220,6 +225,10 @@
 						display: inline-block;
 					}
 				}
+			}
+
+			&.editor-active {
+				.item .reply-options { display: none; }
 			}
 
 			.item {
@@ -284,40 +293,33 @@
 			}
 
 			.reply-options {
-				opacity: 0.4;
-				color: $secondary-grey;
-				text-transform: uppercase;
+				opacity: 1;
+				color: #bdbdbd;
+				padding: 0;
+				border: 1px solid #dcdcdc;
 
-				.reply, .flag {
-					display: inline-block;
-					font: normal 700 11px/45px $font;
-					height: 45px;
-					margin-right: 30px;
+				div {
+					font: italic 400 14px/40px $font;
 					cursor: pointer;
-
+					display: inline-block;
+					height: 40px;
 					opacity: 0.75;
-					&:hover {
-						opacity: 1;
+					padding: 0 0 0 0.5em;
+					margin: 0;
+					&:hover { opacity: 1; }
+					&::after{
+						font: italic 600 14px/40px $font;
+						position: static;
+						content: '\00B7';
+						vertical-align: middle;
+						display: inline;
+						padding: 0 0 0 0.5em;
+						background: none;
 					}
-
-					padding-left: 24px;
-					position: relative;
-
-					&::after {
-						content: ' ';
-						position: absolute;
-						top: 14px; left: 0;
-						overflow: hidden;
-						background: $icons no-repeat;
+					&:last-of-type::after {
+						content: '';
+						display: none;
 					}
-				}
-
-				.reply::after {
-					@include sprite($icons,'reply',$dimensions: true);
-				}
-
-				.flag::after {
-					@include sprite($icons,'flag-13x15_hover',$dimensions: true);
 				}
 			}
 		}
@@ -325,8 +327,9 @@
 
 		.profile-activity-reply-item {
 			position: relative;
-			padding: 30px 20px 0;
+			padding: 25px 0 0 20px;
 			@include like-and-favorite;
+
 			.avatar {
 				float: left;
 				width: 35px; height: 35px;
@@ -339,8 +342,8 @@
 				}
 			}
 
-			.meta,.body,.respond {
-				margin-left: 50px;
+			.meta,.body,.reply-options {
+				margin-left: 45px;
 			}
 
 			.meta {
@@ -359,11 +362,45 @@
 
 			.body {
 				color: $primary-grey;
-				margin-top: 10px;
+				margin-top: 5px;
 				font: normal 500 14px/20px $font;
 			}
 
+			&.editor-active {
+				.reply-options { display: none; }
+			}
+
 			.respond {
+				margin: 15px 20px 15px 0;
+
+				.reply-options {
+					div {
+						opacity: 0.6;
+						cursor: pointer;
+						color: $tertiary-grey;
+						display: inline-block;
+						font: normal 600 10px $font;
+						text-transform: uppercase;
+
+						&:hover {
+							opacity: 1;
+						}
+
+						&::after {
+							content: '\00B7';
+							font: normal 600 14px/20px $font;
+							vertical-align: middle;
+							display: inline;
+							padding: 0.5em;
+						}
+
+						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
+					}
+				}
+
 				@include note-editor;
 			}
 		}

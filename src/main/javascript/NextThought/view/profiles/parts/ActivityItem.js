@@ -6,6 +6,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	],
 	alias: 'widget.profile-activity-item',
 	defaultType: 'profile-activity-item-reply',
+	autoFillInReplies: false,
 
 	renderSelectors: {
 		avatar: '.avatar',
@@ -43,7 +44,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.loaded = true;
 
-		console.debug('Filling in');
+		me.fillInReplies();
 
 		count = me.record.get('ReferencedByCount');
 		if(typeof count === 'number'){
@@ -159,7 +160,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					{
 						cls: 'respond',
 						cn: [
-							TemplatesForNotes.getReplyOptions(),
+							{
+								cls: 'reply-options',
+								cn: [
+									{ cls: 'reply', html: 'Reply' },
+									{ cls: 'flag', html: 'Report' },
+									{ cls: 'mute', html: 'Mute' }
+								]
+							},
 							TemplatesForNotes.getEditorTpl()
 						]
 					}]
