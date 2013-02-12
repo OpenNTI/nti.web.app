@@ -155,6 +155,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				function(){Ext.fly(this).removeCls('over');});
 
 		this.locationEl.on('click',function(){
+
 			LocationProvider.setLocation(meta.NTIID);
 		});
 	}

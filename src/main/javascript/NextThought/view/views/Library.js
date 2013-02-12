@@ -44,7 +44,7 @@ Ext.define( 'NextThought.view.views.Library', {
 
 		LocationProvider.on({
 			'navigateComplete':this.onNavigateComplete,
-			'navigate':this.onNavigate,
+			'beforeNavigate':this.onBeforeNavigate,
 			scope:this
 		});
 	},
@@ -57,7 +57,7 @@ Ext.define( 'NextThought.view.views.Library', {
 	},
 
 
-	onNavigate: function(ntiid,fromHistory){
+	onBeforeNavigate: function(ntiid,fromHistory){
 		if(!fromHistory){
 			this.activate();
 		}

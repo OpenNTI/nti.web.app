@@ -11,6 +11,7 @@ Ext.define('NextThought.providers.Location', {
 		this.storeEvents = new Ext.util.Observable();
 
 		this.addEvents({
+			beforeNavigate: true,
 			navigate: true,
             navigateAbort: true,
 			navigateComplete: true,
@@ -151,6 +152,8 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,
 			e = Ext.getBody(),
 			rootId = this.getLineage(ntiid).last();
+
+		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory)){ return; }
 
 		if(me.currentNTIID === ntiid){
 			Ext.callback(callback);
