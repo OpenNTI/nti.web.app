@@ -354,13 +354,17 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 
-	onSaveField: function(cmp,newValue/*,oldValue*/){
+	onSaveField: function(cmp, newValue, oldValue){
 		var field = cmp.boundEl.getAttribute('data-field'),
 			user = this.userObject,
 			me = this;
 
 		if(!isMe(user)){
 			console.warn('Attempting to edit another user\'s record');
+			return;
+		}
+
+		if(newValue === oldValue){
 			return;
 		}
 
