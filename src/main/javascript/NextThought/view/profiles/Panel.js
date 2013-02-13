@@ -188,6 +188,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			roleResult, affiliationResult, me = this, homePageValue;
 
 		this.userObject = user;
+		this.profileSchema = schema;
 
 		this.mun(this.nameEl,'click',this.editName,this);
 		this.mun(this.affiliationEl,'click',this.editMeta,this);
@@ -270,6 +271,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			autoSize: { width: 'boundEl' },
 			cls: 'name-editor',
 			updateEl: true,
+			ignoreNoChange: true,
 			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
 			listeners:{
 				complete: this.onSaveField,
@@ -361,10 +363,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		if(!isMe(user)){
 			console.warn('Attempting to edit another user\'s record');
-			return;
-		}
-
-		if(newValue === oldValue){
 			return;
 		}
 
