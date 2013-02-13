@@ -42,10 +42,9 @@ Ext.define( 'NextThought.view.views.Profiles', {
 			return;
 		}
 
-		this.removeAll(true);
-
 		UserRepository.getUser(username, function(user){
 			var toAdd, shouldFireLaoded;
+			this.removeAll(true);
 			try{
 				if(user.isUnresolved()){
 					console.error('Can\'t show profile for unresolved user', user);
