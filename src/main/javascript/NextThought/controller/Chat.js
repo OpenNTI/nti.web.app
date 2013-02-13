@@ -286,7 +286,7 @@ Ext.define('NextThought.controller.Chat', {
 		options = options || {};
 		var users = [], k, ri, roomCfg,
 			openPersistently = options.persistent !== undefined ? options.persistent : true,
-			isListOrDFL = usersOrList.get && usersOrList.get('friends');
+			isListOrDFL = usersOrList.get && usersOrList.get('friends'), w, me = this;
 
 		//Don't send the persistent option to the ds
 		delete options.persistent;
@@ -302,8 +302,9 @@ Ext.define('NextThought.controller.Chat', {
 		if(isListOrDFL && openPersistently){
 			//OK it is something that can be opened persistently, and we want it
 			//persistent.  Update the ContainerId to reflect it.  In this case we don't
-			//specify users
+			//specify users(Why ?).
 			options.ContainerId = usersOrList.get('NTIID');
+			users = usersOrList.get('friends');
 			console.log('Will start a persistent room for container', options.ContainerId);
 		}
 		else{
@@ -341,6 +342,10 @@ Ext.define('NextThought.controller.Chat', {
 		ri = this.existingRoom(users, (options.ContainerId || null), options);
 		if (ri) {
 			this.onEnteredRoom(ri);
+			w = this.getChatWindow(ri);
+			if(w){
+				w.show();
+			}
 		}
 		else { //If we get here, there were no existing rooms, so create a new one.
 			roomCfg = {'Occupants': users};
@@ -349,7 +354,16 @@ Ext.define('NextThought.controller.Chat', {
 			if(options.ContainerId && ClassroomUtils.isClassroomId(options.ContainerId)){
 				roomCfg.Occupants = [];
 			}
-			this.socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
+			this.socket.emit('chat_enterRoom', Ext.apply(roomCfg, options), Ext.bind(me.shouldShowRoom, me));
+		}
+	},
+
+	shouldShowRoom: function(msg){
+		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
+		var rInfo =  msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0], w;
+		if(rInfo){
+			w = this.getChatWindow(rInfo);
+			if(w){ w.show(); }
 		}
 	},
 
@@ -611,19 +625,12 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	openChatWindow: function(roomInfo){
-		var w = this.getChatWindow(roomInfo), existingChatWindow;
+		var w = this.getChatWindow(roomInfo);
 		if(!w){
 			w = Ext.widget(
 				'chat-window', {
 				roomInfo: roomInfo
 			});
-		}
-		else{
-			existingChatWindow = true;
-		}
-
-		if(isMe(roomInfo.get('Creator')) || existingChatWindow){
-			w.show();
 		}
         return w;
 	},
@@ -995,7 +1002,7 @@ Ext.define('NextThought.controller.Chat', {
 		if(!win || !sender || sender === ""){ return; }
 		var room = win.roomInfo,
 			log = win.down('chat-log-view'), gutter =  win.down('chat-gutter'), inputStates,
-			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive', me = this;
+			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive' || !room.getRoomState(sender);
 
 		room.setRoomState(sender, state);
 		console.log('Update chat state: set to ', state,' for ', sender);
@@ -1009,24 +1016,11 @@ Ext.define('NextThought.controller.Chat', {
 			else{ state = 'active'; }
 		}
 
-		UserRepository.getUser(sender, function(u){
-			var name = u.getName(), txt;
-			if(isGroupChat){ gutter.setChatState(state, name); }
-			else if(!isGroupChat && !isMe(sender)) {
-				if(!me.chatUserStatesMap){ me.setChatStatesMap(); }
-				txt = Ext.String.ellipsis(name, 18, false) + ' is ' + me.chatUserStatesMap[state];
-				win.setTitle(txt);
-			}
-		}, this);
-	},
-
-	setChatStatesMap: function(){
-		this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' };
+		win.updateDisplayState(sender, state, isGroupChat);
 	},
 
 	startTrackingChatState: function( sender, room, w){
-		if(!w){ w = me.openChatWindow(room); }
-		this.setChatStatesMap();
+		if(!w){ return; }
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
 		if(isMe(sender)){
 			w.down('chat-view').fireEvent('status-change', {state: 'active'}); //start active timer.
@@ -1167,18 +1161,25 @@ Ext.define('NextThought.controller.Chat', {
 
 	putRoomInfoIntoSession: function(roomInfo){
 		if (!roomInfo){Ext.Error.raise('Requires a RoomInfo object');}
-		this.setSessionObject(roomInfo.getData(),roomInfo.getId());
+		var roomData = roomInfo.getData();
+		roomData.originalOccupants= roomInfo.getOriginalOccupants();
+//		console.log('****** setting original occupants of room', roomInfo.getId(), ' to: ', roomInfo.getOriginalOccupants());
+
+		this.setSessionObject(roomData, roomInfo.getId());
 	},
 
 
 	getRoomInfoFromSession: function(key, json) {
 		if (!key){Ext.Error.raise('Requires key to look up RoomInfo');}
 
+		var m;
 		json = json || this.getSessionObject(key);
 
 		if (json){
 			try {
-				return new NextThought.model.RoomInfo(json);
+				m = new NextThought.model.RoomInfo(json);
+				m.setOriginalOccupants(json.originalOccupants);
+				return m;
 			}
 			catch(e) {
 				console.warn('Item in session storage is not a roomInfo', json);
@@ -1216,6 +1217,7 @@ Ext.define('NextThought.controller.Chat', {
     deleteRoomIdStatusAccepted: function(id){
         var key = 'roomIdsAccepted',
             status = this.getSessionObject(key);
+	    if(!status){ return; }
 
         delete status[id];
 

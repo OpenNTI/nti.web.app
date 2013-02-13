@@ -60,7 +60,7 @@ Ext.define('NextThought.view.chat.Window', {
 			'hide'  : this.dragMaskOff
 		});
 
-
+		this.setChatStatesMap();
 		this.roomInfoChanged(this.roomInfo);
 	},
 
@@ -70,6 +70,13 @@ Ext.define('NextThought.view.chat.Window', {
 			return;
 		}  //Only do this if it's there.
 
+		var list = this.down('chat-gutter'),
+			me = this,
+			newOccupants = roomInfo.get('Occupants'),
+			oldOccupants = this.roomInfo.get('Occupants'),
+			whoLeft = Ext.Array.difference(oldOccupants, newOccupants),
+			isGroupChat = this.roomInfo.get('Occupants').length > 2;
+
 		//Even though the occupants list changes, the original occupants stays the same.
 		roomInfo.setOriginalOccupants(this.roomInfo.getOriginalOccupants());
 		//stop listening on old room info, reassign and start listening again.
@@ -78,22 +85,22 @@ Ext.define('NextThought.view.chat.Window', {
 		this.roomInfo.on('changed', this.roomInfoChanged, this);
 		this.roomInfoHash = IdCache.getIdentifier(roomInfo.getId());
 
-		var list = this.down('chat-gutter'),
-			me = this,
-			occupants = roomInfo.get('Occupants');
-
-
-		if(occupants && occupants.length === 1 && isMe(occupants[0])){
+		if(newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])){
 			this.down('chat-entry').disable();
 			this.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
 		} else{
 			this.down('chat-entry').enable();
 		}
 
-		if(occupants.length > 1){
+		if(newOccupants.length > 1){
 			UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
 				me.setTitleInfo(users);
 				list.updateList(users);
+			});
+		} else{
+			console.log('Users who left the chat: ', whoLeft);
+			Ext.Array.each(whoLeft, function(aUser){
+				me.updateDisplayState(aUser, 'GONE', isGroupChat);
 			});
 		}
 	},
@@ -178,6 +185,23 @@ Ext.define('NextThought.view.chat.Window', {
 		this.setTitle(title);
 	},
 
+	updateDisplayState: function( targetUser, state, isGroupChat){
+		UserRepository.getUser(targetUser, function(u){
+			var name = u.getName(), txt,
+				displayState = this.chatUserStatesMap[state] || state;
+			if(isGroupChat){
+				this.down('chat-gutter').setChatState(displayState, name);
+			}
+			else if(!isGroupChat && !isMe(targetUser)) {
+				txt = Ext.String.ellipsis(name, 16, false) + ' is ' + displayState;
+				this.setTitle(txt);
+			}
+		}, this);
+	},
+
+	setChatStatesMap: function(){
+		this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' };
+	},
 
 	disableChat:function () {
 		this.down('chat-log-view').setDisabled(true);

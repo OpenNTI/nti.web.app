@@ -11,6 +11,15 @@ Ext.define('NextThought.model.RoomInfo', {
 		{ name: 'references', type: 'auto', defaultValue: [] }
 	],
 
+	isGroupChat: function(){
+		var participants = this.getOriginalOccupants();
+
+		if( Ext.isEmpty(participants, false) ){
+			participants = this.get('Occupants');
+		}
+		return participants.length > 2;
+	},
+
 	getAllRoomStates: function(){ return this.roomStates || {}; },
 
 	getRoomState: function(user){
