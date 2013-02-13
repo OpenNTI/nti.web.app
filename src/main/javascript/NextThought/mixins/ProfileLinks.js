@@ -11,7 +11,7 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 	enableProfileClicks: function(){
 		var me = this;
 
-		if(!isMe(this.userObject || this.user)){
+		if($AppConfig.disableProfiles === true || !isMe(this.userObject || this.user)){
 			return;
 		}
 
