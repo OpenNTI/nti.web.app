@@ -56,7 +56,18 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			root: 'data'
 		});
 
-		recordCollection.each(function(i){add.push({record: i,root:true});},this);
+		recordCollection.each(function(i){
+			var n = 'profile-activity-'+(i.get('Class')||'default').toLowerCase()+'-item',
+				alias = 'widget.'+ n,
+				xtype;
+
+			if(Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias),false)){
+				console.error('Unsupported type: ', n,' record: ',i, ', using the default');
+			}
+			else { xtype = n; }
+
+			add.push({record: i,root:true, xtype: xtype});
+		},this);
 
 		this.add(add);
 	}

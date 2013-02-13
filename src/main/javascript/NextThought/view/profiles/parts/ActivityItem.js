@@ -4,7 +4,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		'NextThought.util.Content',
 		'NextThought.view.profiles.parts.ActivityItemReply'
 	],
-	alias: 'widget.profile-activity-item',
+	alias: [
+		'widget.profile-activity-item',
+		'widget.profile-activity-default-item',
+		'widget.profile-activity-note-item'
+	],
 	defaultType: 'profile-activity-item-reply',
 	autoFillInReplies: false,
 
