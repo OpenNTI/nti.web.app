@@ -84,7 +84,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		e.addCls('empty');
 
 		if(this.readOnly){
-			e.set({readonly:'readonly'}); 
+			e.set({readonly:'readonly'});
 			this.clearEl.hide();
 		}
 
@@ -165,6 +165,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		valid = (this.allowBlank===false) ? (val.length >= (this.minLength||1)) : true;
 
 		if(valid && this.validator){
+			//The docs say validator should return true or an error string, both of which are truthy here :/
 			valid = Boolean(this.validator(val));
 		}
 

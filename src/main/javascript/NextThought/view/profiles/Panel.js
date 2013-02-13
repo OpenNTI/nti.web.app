@@ -24,14 +24,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 				cn: [
 					{ cls: 'name', 'data-field':'alias' },
 					{ cls: 'add-to-contacts', html: 'ADD'},
-					{ 'data-field': 'email' },
+					{ 'data-field': 'email', 'data-placeholder': 'Email' },
 					{ cn: [
-						{tag: 'span', 'data-field':'role'},
+						{tag: 'span', 'data-field':'role', 'data-placeholder': 'Role'},
 						{tag: 'span', cls: 'separator', html:' at '},
-						{tag: 'span', 'data-field':'affiliation'}]},
-					{ 'data-field': 'location' },
-					{ 'data-field': 'home_page',
-					  cn: [{tag: 'a', cls: 'homePageLink', 'target': '_blank'}]},
+						{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'Affiliation'}]},
+					{ 'data-field': 'location' , 'data-placeholder': 'Location'},
+					{ 'data-field': 'home_page', 'data-placeholder': 'Home Page'},
 					{ cls: 'actions', cn: [
 						{cls: 'chat', html: 'Chat'}
 					]}
@@ -58,7 +57,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		emailEl: '.profile-head .meta [data-field=email]',
 		actionsEl: '.profile-head .meta .actions',
 		chatEl: '.profile-head .meta .actions .chat',
-		homePageLinkEl: '.profile-head .meta [data-field=home_page] a',
 		addToContacts: '.add-to-contacts'
 	},
 
@@ -169,7 +167,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	//editable that describe how (if at all) the profided profile
 	//field should be shown
 	getMetaInfoForField: function(user, field, profileSchema){
-		var r = {}, val = profileSchema[field];
+		var r = {}, val = (profileSchema||{})[field];
 		r.editable = val && !val.readonly;
 		r.shouldBeShown = r.editable || !Ext.isEmpty(user.get(field));
 		r.field = field;
@@ -178,7 +176,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	updateProfile: function(user, schema){
-		var profileSchema = (schema || {}).ProfileSchema || {},
+		var profileSchema = (schema || {}).ProfileSchema,
 			nameInfo = this.getMetaInfoForField(user, 'alias', profileSchema),
 			affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
 			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
@@ -188,7 +186,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			roleResult, affiliationResult, me = this, homePageValue;
 
 		this.userObject = user;
-		this.profileSchema = schema;
+		this.profileSchema = profileSchema;
 
 		this.mun(this.nameEl,'click',this.editName,this);
 		this.mun(this.affiliationEl,'click',this.editMeta,this);
@@ -225,9 +223,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 
-		function setupMeta(el, info, placeholderText){
+		function setupMeta(el, info){
 			if(info.shouldBeShown){
-				el.update(user.get(info.field) || placeholderText);
+				me.updateField(el, info.field, user.get(info.field));
 				if(info.editable){
 					me.mon(el,'click',me.editMeta,me);
 				}
@@ -237,34 +235,21 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return false;
 		}
 
-		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo, '{Affiliation}');
-		setupMeta(this.emailEl, emailInfo, '{Email}');
-		roleResult = setupMeta(this.roleEl, roleInfo, '{Role}');
-		setupMeta(this.locationEl, locationInfo, '{Location}');
-		//setupMeta(this.homePageEl, homePageInfo, '{Home page}');
-		if(homePageInfo.shouldBeShown){
-			homePageValue = user.get(homePageInfo.field);
-			if(homePageValue){
-				this.homePageLinkEl.set({href: homePageValue});
-				this.homePageLinkEl.update(homePageValue);
-			}
-			if(homePageInfo.editable){
-					me.mon(this.homePageEl,'click',me.editMeta,me);
-			}
+		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo);
+		setupMeta(this.emailEl, emailInfo);
+		roleResult = setupMeta(this.roleEl, roleInfo);
+		setupMeta(this.locationEl, locationInfo);
+		setupMeta(this.homePageEl, homePageInfo);
 
-		}
-		else{
-			this.homePageEl.remove();
-		}
-		//this.homePageEl.down('a').update(homePageInfo.field || '{Home Page}');
 
 		if(!roleResult || !affiliationResult){
 			this.affiliationSepEl.remove();
 		}
 
-		function fieldValidator(val){
-			//this will block empty and whitespace only strings
-			return !/^\s*$/.test(val||'');
+		function validateAgainstSchema(value){
+			var editor = this.ownerCt;
+				field = editor.boundEl.getAttribute('data-field');
+			return me.validate(field, value);
 		}
 
 		this.nameEditor = Ext.Editor.create({
@@ -272,7 +257,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			cls: 'name-editor',
 			updateEl: true,
 			ignoreNoChange: true,
-			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
+			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema },
 			listeners:{
 				complete: this.onSaveField,
 				scope: this
@@ -285,7 +270,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			updateEl: false,
 			ignoreNoChange: true,
 			revertInvalid: true,
-			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
+			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema },
 			listeners:{
 				complete: this.onSaveField,
 				scope: this
@@ -293,9 +278,29 @@ Ext.define('NextThought.view.profiles.Panel',{
 		});
 	},
 
-	homePageChanged: function(newValue){
-		this.homePageLinkEl.set({href: newValue});
-		this.homePageLinkEl.update(newValue);
+	homePageChanged: function(value, placeholderText){
+		var a;
+		if(!value){
+			this.homePageEl.update(placeholderText);
+		}
+		else{
+			a = this.homePageEl.down('a');
+			if(a){
+				a.set({href: value});
+				a.update(value);
+			}
+			else{
+				Ext.DomHelper.overwrite(this.homePageEl,
+									 {
+										 tag: 'a',
+										 cls: 'homePageLink',
+										 'target': '_blank',
+										 'href': value,
+										 html: value
+									 }
+				);
+			}
+		}
 	},
 
 	setUser: function(user){
@@ -355,6 +360,42 @@ Ext.define('NextThought.view.profiles.Panel',{
 		ed.startEdit(t);
 	},
 
+	validate: function(field, value){
+		var rules = (this.profileSchema || {})[field];
+		if(!field || !rules){
+			console.warn('No rules or field. Treating as valid', field, value, this.profileSchema);
+		}
+
+		//treat empty string as null
+		if(Ext.isEmpty(value)){
+			value = null;
+		}
+
+		if(rules.required === true && (value === null || value === undefined)){
+			return false;
+		}
+
+		if(rules.type && rules.type === 'string'){
+			if(value && value.length < (rules.min_length || 0)){
+				return false;
+			}
+		}
+
+		return true;
+	},
+
+	updateField: function(el, n, v){
+		var placeholderText = '{'+el.getAttribute('data-placeholder')+'}';
+		if(this.onSaveMap.hasOwnProperty(n)){
+			Ext.callback(this.onSaveMap[n], this, [v, placeholderText]);
+		}
+		else if(this['set'+n]){
+			Ext.callback(this['set'+n], this, [v, placeholderText]);
+		}
+		else{
+			el.update(v || placeholderText);
+		}
+	},
 
 	onSaveField: function(cmp, newValue, oldValue){
 		var field = cmp.boundEl.getAttribute('data-field'),
@@ -366,19 +407,21 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		//treat empty string as null
+		if(Ext.isEmpty(newValue)){
+			newValue = null;
+		}
+
 		function success(n, v){
 			console.log(arguments);
-			if(me.onSaveMap.hasOwnProperty(n)){
-				Ext.callback(me.onSaveMap[n], me, [v]);
-			}
-			else{
-				cmp.boundEl.update(v);
-			}
+			me.updateField(cmp.boundEl, n, v);
 		}
 
 		function failure(){
-			alert('Could not save your '+field);
+			//alert('Could not save your '+field);
 			console.error(arguments);
+			cmp.startEdit(cmp.boundEl);
+			cmp.field.setError();
 		}
 
 		console.debug('saving:', field,'=', newValue, 'in', user);
