@@ -36,7 +36,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
+		if(this.commentsEl.dom){
+			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
+		}
 	},
 
 

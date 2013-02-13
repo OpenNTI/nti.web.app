@@ -43,7 +43,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 		}
 
 		UserRepository.getUser(username, function(user){
-			var toAdd, shouldFireLaoded;
+			var toAdd, shouldFireLoaded;
 			this.removeAll(true);
 			try{
 				if(user.isUnresolved()){
