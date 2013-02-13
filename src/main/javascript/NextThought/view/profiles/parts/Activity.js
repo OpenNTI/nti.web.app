@@ -16,6 +16,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			this.store = this.getStore();
 			this.mon(this.store,{
 				scope: this,
+				single: true,
 				load: this.storeLoaded
 			});
 
@@ -35,6 +36,14 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight'
 		});
 
+		this.mon(s,{
+			scope: this,
+			//TODO: make smarter
+			add: function(){console.debug('Added item(s)');this.storeLoaded();},
+			remove: function(){console.debug('Removed item(s)');this.storeLoaded();},
+			bulkremove:function(){console.debug('Bulk Removed item(s)');this.storeLoaded();}
+		});
+
 		return s;
 	},
 
@@ -46,7 +55,15 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		}
 
 		var add = [],
+			s = this.store,
 			recordCollection = new Ext.util.MixedCollection();
+
+		if(!LocationProvider.hasStore(s.storeId)){
+			s.doesNotClear = true;
+			s.doesNotShareEventsImplicitly = true;
+			s.profileStoreFor = this.username;
+			LocationProvider.addStore(s.storeId,s);
+		}
 
 		recordCollection.addAll(this.store.getItems() || []);
 		recordCollection.sort({
@@ -69,7 +86,10 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			add.push({record: i,root:true, xtype: xtype});
 		},this);
 
+		Ext.suspendLayouts();
+		this.removeAll(true);
 		this.add(add);
+		Ext.resumeLayouts(true);
 	}
 
 });

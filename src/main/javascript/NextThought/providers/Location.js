@@ -35,7 +35,15 @@ Ext.define('NextThought.providers.Location', {
 					for(key in m){
 						if(m.hasOwnProperty(key)){
 							o = m[key]; delete m[key];
-							if(o){ o.clearListeners(); o.removeAll(); }
+							if(o){
+								if(!o.doesNotClear){
+									o.fireEvent('cleanup');
+									o.clearListeners();
+									o.removeAll();
+								} else {
+									s[key] = o;
+								}
+							}
 						}
 					}
 				}

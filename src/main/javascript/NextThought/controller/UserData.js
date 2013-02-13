@@ -222,11 +222,12 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingCreatedChange: function(change,item,meta){
 		var cid = item.get('ContainerId'),
+			creator = item.get('Creator')||'nobody',
 			actedOn = false,
 			recordForStore = item;
 
 		LocationProvider.applyToStores(function(id,store){
-			if(store && store.containerId===cid){
+			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
 				actedOn = true;
 				console.log(store, cid);
 
@@ -255,11 +256,13 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	incomingDeletedChange: function(change,item,meta){
-		var cid = item.get('ContainerId'),actedOn = false;
+		var cid = item.get('ContainerId'),
+			creator = item.get('Creator')||'nobody',
+			actedOn = false;
 
 		LocationProvider.applyToStores(function(id,store){
 			var r;
-			if(store && store.containerId===cid){
+			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
 				actedOn = true;
 				console.log(store, cid);
 				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
@@ -280,11 +283,13 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	incomingModifiedChange: function(change,item,meta){
-		var cid = item.get('ContainerId'),actedOn = false;
+		var cid = item.get('ContainerId'),
+			creator = item.get('Creator')||'nobody',
+			actedOn = false;
 
 		LocationProvider.applyToStores(function(id,store){
 			var r;
-			if(store && store.containerId===cid){
+			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
 				actedOn = true;
 				console.log(store, cid);
 				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
