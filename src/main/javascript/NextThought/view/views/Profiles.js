@@ -43,12 +43,23 @@ Ext.define( 'NextThought.view.views.Profiles', {
 
 		this.removeAll(true);
 
-		try{
-			current = this.add({username: username, listeners: { loaded:fin, scope:this, single: true, delay:1 }});
-		}
-		catch(exception){
-			console.error(Globals.getError(exception));
-			Ext.callback(finishCallback,this);
-		}
+		UserRepository.getUser(username, function(user){
+			try{
+				if(user.isUnresolved()){
+					console.error('Can\'t show profile for unresolved user', user);
+					//TODO push generic unknown object handler here
+					Ext.callback(fin, this);
+				}
+				else{
+					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
+					current = this.add({username: username, listeners: { loaded:fin, scope:this, single: true, delay:1 }});
+				}
+			}
+			catch(exception){
+				console.error(Globals.getError(exception));
+				Ext.callback(finishCallback,this);
+			}
+
+		}, this, true);
 	}
 });

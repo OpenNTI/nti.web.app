@@ -85,6 +85,10 @@ Ext.define(	'NextThought.model.User', {
         },ops));
     },
 
+	isUnresolved: function(){
+		return this.get('status') === 'Unresolved';
+	},
+
 
 	statics: {
 

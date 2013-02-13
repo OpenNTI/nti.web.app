@@ -27,4 +27,16 @@ describe("User Tests", function() {
 		});
 
 	});
+
+	descibe('isUnresolved works', function(){
+		it('Returns true for unresolved users', function(){
+			var u = NextThought.model.User.getUnresolved('foobar');
+			expect(u.isUnresolved()).toBeTruthy();
+		});
+
+		it('Returns false for resolved users', function(){
+			var u = createUser('a', 'b', 'c');
+			expect(u.isUnresolved()).toBeFalsy();
+		});
+	});
 });
