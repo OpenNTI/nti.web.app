@@ -241,6 +241,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		setupMeta(this.locationEl, locationInfo);
 		setupMeta(this.homePageEl, homePageInfo);
 
+		this.maybeShowChat();
+
 
 		if(!roleResult || !affiliationResult){
 			this.affiliationSepEl.remove();
@@ -276,6 +278,28 @@ Ext.define('NextThought.view.profiles.Panel',{
 				scope: this
 			}
 		});
+	},
+
+	shouldShowChat: function(){
+		//We show the chat button if the following conditions are true
+		//1)We can chat and we have a user object
+		//2)The profile we are looking at is not us
+		//3)The user is online
+		if(!this.userObject || isMe(this.userObject) || !$AppConfig.service.canChat()){
+			return false;
+		}
+
+		//Note obviously this doesn't update live when users come and go.
+		return this.userObject.get('Presence') === 'Online'
+	},
+
+	maybeShowChat: function(){
+		if(this.shouldShowChat()){
+			this.chatEl.show();
+		}
+		else{
+			this.chatEl.hide();
+		}
 	},
 
 	homePageChanged: function(value, placeholderText){
@@ -437,7 +461,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	onChatWith: function(e){
 		e.stopEvent();
+		if(!this.userObject){
+			console.warn('No userobject to chat with');
+			return false;
+		}
 		console.debug('Clicked Chat');
+		this.fireEvent('chat', this.userObject)
 		return false;
 	},
 

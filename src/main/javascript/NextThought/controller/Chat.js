@@ -101,7 +101,11 @@ Ext.define('NextThought.controller.Chat', {
 
 			'script-entry' : {
 				'script-to-chat': this.send
-			}
+			},
+
+			'profile-panel' : {
+				'chat': this.enterRoom
+			},
 
 		},{});
 
