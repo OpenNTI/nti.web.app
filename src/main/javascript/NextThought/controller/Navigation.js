@@ -222,12 +222,7 @@ Ext.define('NextThought.controller.Navigation', {
 		function loadPageId(pi){
 			var pageId = pi.getId();
 
-			if(LocationProvider.currentNTIID === pageId){
-				Ext.callback(cb);
-			}
-			else {
-				LocationProvider.setLocation(id, cb);
-			}
+			LocationProvider.setLocation(id, cb);
 		}
 
 		function fail(){
