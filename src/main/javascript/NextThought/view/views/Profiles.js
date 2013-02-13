@@ -2,7 +2,8 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	extend: 'NextThought.view.views.Base',
 	alias:	'widget.profile-view-container',
 	requires: [
-		'NextThought.view.profiles.Panel'
+		'NextThought.view.profiles.Panel',
+		'NextThought.view.ResourceNotFound'
 	],
 
 
@@ -44,15 +45,22 @@ Ext.define( 'NextThought.view.views.Profiles', {
 		this.removeAll(true);
 
 		UserRepository.getUser(username, function(user){
+			var toAdd, shouldFireLaoded;
 			try{
 				if(user.isUnresolved()){
 					console.error('Can\'t show profile for unresolved user', user);
 					//TODO push generic unknown object handler here
-					Ext.callback(fin, this);
+					toAdd = {xtype: 'notfound'};
+					shouldFireLoaded = true;
 				}
 				else{
 					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
-					current = this.add({username: username, listeners: { loaded:fin, scope:this, single: true, delay:1 }});
+					toAdd = {username: username};
+				}
+				toAdd = Ext.apply(toAdd, {listeners: { loaded:fin, scope:this, single: true, delay:1 }});
+				current = this.add(toAdd);
+				if(shouldFireLoaded){
+					fin();
 				}
 			}
 			catch(exception){
