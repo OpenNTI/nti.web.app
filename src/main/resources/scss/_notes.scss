@@ -1427,7 +1427,7 @@
 }
 
 
-.note-add-to-contacts-popout::after{
+.contact-popout.note-add-to-contacts-popout::after{
 	background: $elements no-repeat;
 	@include sprite($elements,'add_contact_pointer_left',$dimensions: true);
 	top: 26px;

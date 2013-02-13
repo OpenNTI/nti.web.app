@@ -31,7 +31,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 					{ 'data-field': 'home_page',
 					  cn: [{tag: 'a', cls: 'homePageLink', 'target': '_blank'}]},
 					{ cls: 'actions', cn: [
-						{cls: 'chat', html: 'Chat'},
+						{cls: 'chat', html: 'Chat'}
 					]}
 				]
 			}]
