@@ -405,12 +405,12 @@ Ext.define('NextThought.model.Base', {
 
 		//If there's a value, set it on the model
 		//Do explicit check so you can set values to 0 or ''
-		if (value !== null) {
+		if (value !== undefined) {
 			this.set(fieldName, value);
 		}
 
 		//put together the json we want to save.
-		var json = Ext.JSON.encode(value||this.get(fieldName)),
+		var json = Ext.JSON.encode(value),
 			me=this;
 
 		Ext.Ajax.request({
