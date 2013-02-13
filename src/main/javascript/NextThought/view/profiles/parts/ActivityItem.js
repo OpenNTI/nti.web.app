@@ -21,7 +21,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		contextEl: '.context',
 		subjectEl: '.subject',
 		locationIcon: '.icon',
-		commentsEl: '.comments'
+		commentsEl: '.comments',
+		flagEl: '.reply-options .flag'
 	},
 
 	initComponent: function(){
@@ -43,6 +44,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
+		this.mon( this.flagEl, 'click', this.onFlag, this);
 	},
 
 
@@ -205,8 +207,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 								cls: 'reply-options',
 								cn: [
 									{ cls: 'reply', html: 'Reply' },
-									{ cls: 'flag', html: 'Report' },
-									{ cls: 'mute', html: 'Mute' }
+									{ cls: 'flag', html: 'Report' }
 								]
 							},
 							TemplatesForNotes.getEditorTpl()
