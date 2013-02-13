@@ -86,7 +86,7 @@ Ext.define('NextThought.providers.Location', {
 		//Because root is just an alias of the NTIID store that represents the page root, it was causing two monitors
 		// to be put on the store...so we will skip stores we are already monitoring
 		if(Ext.Array.contains(Ext.Array.pluck(monitors,'item'),store)){
-			//This prevents to invocations of event handlers for one event.
+			//This prevents two invocations of event handlers for one event.
 			return;
 		}
 
