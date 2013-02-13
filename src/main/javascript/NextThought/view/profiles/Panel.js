@@ -290,7 +290,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		//Note obviously this doesn't update live when users come and go.
-		return this.userObject.get('Presence') === 'Online'
+		return this.userObject.get('Presence') === 'Online';
 	},
 
 	maybeShowChat: function(){
@@ -466,7 +466,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return false;
 		}
 		console.debug('Clicked Chat');
-		this.fireEvent('chat', this.userObject)
+		this.fireEvent('chat', this.userObject);
 		return false;
 	},
 
