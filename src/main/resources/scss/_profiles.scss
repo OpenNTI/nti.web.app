@@ -231,7 +231,7 @@
 
 					& + div {
 						margin-left: 70px;
-
+						min-height: 65px;
 					}
 				}
 
@@ -245,17 +245,22 @@
 				}
 
 				.context{
-					display: none;
+					//display: none;
+					overflow: hidden;
 					position: relative;
+					min-height: 45px;
+
 					canvas{
 						position: absolute; display:none;
 						top: 0; left: 0; right: 0; bottom: 0;
 					}
 
-					& > span.text {
+					& > .text {
+						position: relative;
+						overflow: hidden;
 						font: normal 400 16px $font;
 						color: $primary-grey;
-						display: inline-block;
+						display: block;
 					}
 				}
 			}

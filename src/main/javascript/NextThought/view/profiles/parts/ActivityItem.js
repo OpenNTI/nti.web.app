@@ -171,7 +171,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					{ cls: 'icon' },
 					{ cn:[
 						{ cls: 'location link'},
-						{ cls: 'context', cn: [{tag: 'canvas'},{tag: 'span', cls: 'text'}] }
+						{ cls: 'context', cn: [{tag: 'canvas'},{cls: 'text'}] }
 					]}
 				]},
 				{ cls:'item', cn:[
