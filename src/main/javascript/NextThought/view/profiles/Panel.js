@@ -22,6 +22,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 				cls: 'meta',
 				cn: [
 					{ cls: 'name', 'data-field':'alias' },
+					{ 'data-field': 'email' },
 					{ cn: [
 						{tag: 'span', 'data-field':'role'},
 						{tag: 'span', cls: 'separator', html:' at '},
@@ -30,9 +31,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 					{ 'data-field': 'home_page',
 					  cn: [{tag: 'a', cls: 'homePageLink', 'target': '_blank'}]},
 					{ cls: 'actions', cn: [
-						{cls: 'message', html: 'Message'},
 						{cls: 'chat', html: 'Chat'},
-						{cls: 'email', html: 'Email'}
 					]}
 				]
 			}]
@@ -54,10 +53,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		affiliationSepEl: '.profile-head .meta .separator',
 		locationEl: '.profile-head .meta [data-field=location]',
 		homePageEl: '.profile-head .meta [data-field=home_page]',
+		emailEl: '.profile-head .meta [data-field=email]',
 		actionsEl: '.profile-head .meta .actions',
-		messageEl: '.profile-head .meta .actions .message',
 		chatEl: '.profile-head .meta .actions .chat',
-		emailEl: '.profile-head .meta .actions .email',
 		homePageLinkEl: '.profile-head .meta [data-field=home_page] a'
 	},
 
@@ -95,8 +93,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.relayEvents(this.el.parent(),['scroll']);
 		this.mon(this.chatEl,'click',this.onChatWith,this);
-		this.mon(this.messageEl,'click',this.onMessageUser,this);
-		this.mon(this.emailEl,'click',this.onEmailUser,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
 	},
 
@@ -120,6 +116,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
 			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
 			homePageInfo = this.getMetaInfoForField(user, 'home_page', profileSchema),
+			emailInfo = this.getMetaInfoForField(user, 'email', profileSchema),
 			roleResult, affiliationResult, me = this, homePageValue;
 
 		this.userObject = user;
@@ -128,6 +125,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mun(this.affiliationEl,'click',this.editMeta,this);
 		this.mun(this.roleEl,'click',this.editMeta, this);
 		this.mun(this.locationEl,'click',this.editMeta, this);
+		this.mun(this.emailEl,'click',this.editMeta, this);
+		this.mun(this.homePageEl,'click',this.editMeta, this);
 
 		//Make more of the UI schema driven
 
@@ -152,6 +151,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo, '{Affiliation}');
+		setupMeta(this.emailEl, emailInfo, '{Email}');
 		roleResult = setupMeta(this.roleEl, roleInfo, '{Role}');
 		setupMeta(this.locationEl, locationInfo, '{Location}');
 		//setupMeta(this.homePageEl, homePageInfo, '{Home page}');
@@ -310,24 +310,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		return false;
 	},
 
-
-	onMessageUser: function(e){
-		e.stopEvent();
-		console.debug('Clicked Message');
-		return false;
-	},
-
-
 	onEditAvatar: function(e){
 		e.stopEvent();
 		this.fireEvent('edit');
-		return false;
-	},
-
-
-	onEmailUser: function(e){
-		e.stopEvent();
-		console.debug('Clicked Email');
 		return false;
 	}
 });
