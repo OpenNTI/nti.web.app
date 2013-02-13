@@ -21,7 +21,8 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'Communities', type: 'UserList' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}},
 		{ name: 'role', type: 'string'},
-		{ name: 'location', type: 'string'}
+		{ name: 'location', type: 'string'},
+		{ name: 'home_page', type: 'string'}
 	],
 
 	summaryObject: true,

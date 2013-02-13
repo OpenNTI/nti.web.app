@@ -6,7 +6,7 @@ a{
 		&:active, &:hover, &:visited { @include content-link-def; }
 	}
 
-	#NTIContent &{
+	#NTIContent &, #profile .profile-head &{
 		@include content-link-def;
 		line-height: inherit;
 		color: $primary-blue;

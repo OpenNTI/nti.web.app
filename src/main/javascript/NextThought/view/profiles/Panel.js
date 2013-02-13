@@ -27,6 +27,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 						{tag: 'span', cls: 'separator', html:' at '},
 						{tag: 'span', 'data-field':'affiliation'}]},
 					{ 'data-field': 'location' },
+					{ 'data-field': 'home_page',
+					  cn: [{tag: 'a', cls: 'homePageLink', 'target': '_blank'}]},
 					{ cls: 'actions', cn: [
 						{cls: 'message', html: 'Message'},
 						{cls: 'chat', html: 'Chat'},
@@ -51,11 +53,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 		affiliationEl: '.profile-head .meta [data-field=affiliation]',
 		affiliationSepEl: '.profile-head .meta .separator',
 		locationEl: '.profile-head .meta [data-field=location]',
+		homePageEl: '.profile-head .meta [data-field=home_page]',
 		actionsEl: '.profile-head .meta .actions',
 		messageEl: '.profile-head .meta .actions .message',
 		chatEl: '.profile-head .meta .actions .chat',
-		emailEl: '.profile-head .meta .actions .email'
-
+		emailEl: '.profile-head .meta .actions .email',
+		homePageLinkEl: '.profile-head .meta [data-field=home_page] a'
 	},
 
 	items: [{
@@ -79,6 +82,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.callParent(arguments);
 		this.addEvents('loaded');
 		this.timeId = 'Resolve User:'+this.username;
+
+		this.onSaveMap = {home_page: this.homePageChanged};
+
 		console.time(this.timeId);
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
@@ -113,7 +119,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 			affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
 			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
 			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
-			roleResult, affiliationResult, me = this;
+			homePageInfo = this.getMetaInfoForField(user, 'home_page', profileSchema),
+			roleResult, affiliationResult, me = this, homePageValue;
 
 		this.userObject = user;
 
@@ -147,6 +154,22 @@ Ext.define('NextThought.view.profiles.Panel',{
 		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo, '{Affiliation}');
 		roleResult = setupMeta(this.roleEl, roleInfo, '{Role}');
 		setupMeta(this.locationEl, locationInfo, '{Location}');
+		//setupMeta(this.homePageEl, homePageInfo, '{Home page}');
+		if(homePageInfo.shouldBeShown){
+			homePageValue = user.get(homePageInfo.field);
+			if(homePageValue){
+				this.homePageLinkEl.set({href: homePageValue});
+				this.homePageLinkEl.update(homePageValue);
+			}
+			if(homePageInfo.editable){
+					me.mon(this.homePageEl,'click',me.editMeta,me);
+			}
+
+		}
+		else{
+			this.homePageEl.remove();
+		}
+		//this.homePageEl.down('a').update(homePageInfo.field || '{Home Page}');
 
 		if(!roleResult || !affiliationResult){
 			this.affiliationSepEl.remove();
@@ -171,7 +194,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.metaEditor = Ext.Editor.create({
 			autoSize: { width: 'boundEl' },
 			cls: 'meta-editor',
-			updateEl: true,
+			updateEl: false,
 			ignoreNoChange: true,
 			revertInvalid: true,
 			field:{ xtype: 'simpletext', allowBlank:false, validator: fieldValidator },
@@ -180,6 +203,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 				scope: this
 			}
 		});
+	},
+
+	homePageChanged: function(newValue){
+		this.homePageLinkEl.set({href: newValue});
+		this.homePageLinkEl.update(newValue);
 	},
 
 	setUser: function(user){
@@ -227,6 +255,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 		var t = e.getTarget(null,null,true),
 			ed = this.metaEditor;
 
+		if(e.getTarget('a[href]')){
+			return;
+		}
+
 		//Ensure the editor is wide enough to see something...
 		function resetWidth(){ t.setWidth(null); }
 		if(t.getWidth() < 100){ t.setWidth(100); }
@@ -238,15 +270,22 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	onSaveField: function(cmp,newValue/*,oldValue*/){
 		var field = cmp.boundEl.getAttribute('data-field'),
-			user = this.userObject;
+			user = this.userObject,
+			me = this;
 
 		if(!isMe(user)){
 			console.warn('Attempting to edit another user\'s record');
 			return;
 		}
 
-		function success(){
+		function success(n, v){
 			console.log(arguments);
+			if(me.onSaveMap.hasOwnProperty(n)){
+				Ext.callback(me.onSaveMap[n], me, [v]);
+			}
+			else{
+				cmp.boundEl.update(v);
+			}
 		}
 
 		function failure(){
