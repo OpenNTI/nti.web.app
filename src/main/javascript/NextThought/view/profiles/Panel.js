@@ -5,7 +5,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 	requires:[
 		'Ext.Editor',
 		'NextThought.view.profiles.parts.Activity',
-		'NextThought.view.profiles.TabPanel'
+		'NextThought.view.profiles.TabPanel',
+		'NextThought.view.account.contacts.management.Popout'
 	],
 
 	ui: 'profile',
@@ -22,6 +23,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 				cls: 'meta',
 				cn: [
 					{ cls: 'name', 'data-field':'alias' },
+					{ cls: 'add-to-contacts', html: 'ADD'},
 					{ 'data-field': 'email' },
 					{ cn: [
 						{tag: 'span', 'data-field':'role'},
@@ -56,7 +58,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		emailEl: '.profile-head .meta [data-field=email]',
 		actionsEl: '.profile-head .meta .actions',
 		chatEl: '.profile-head .meta .actions .chat',
-		homePageLinkEl: '.profile-head .meta [data-field=home_page] a'
+		homePageLinkEl: '.profile-head .meta [data-field=home_page] a',
+		addToContacts: '.add-to-contacts'
 	},
 
 	items: [{
@@ -87,13 +90,78 @@ Ext.define('NextThought.view.profiles.Panel',{
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
 
-
 	afterRender: function(){
+		var me = this;
+
 		this.callParent(arguments);
 
 		this.relayEvents(this.el.parent(),['scroll']);
+
+		this.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
+	},
+
+
+	contactsMaybeChanged: function(){
+		var me = this;
+		if(me.addToContacts){
+			me.mun(me.addToContacts, 'click');
+		}
+		if(!me.shouldShowAddContact(this.userObject ? this.userObject.getId() : this.username)){
+			me.addToContacts.hide();
+		}
+		else{
+			me.addToContacts.show();
+			me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
+		}
+	},
+
+
+	shouldShowAddContact: function(username){
+		if(!$AppConfig.service.canFriend()){
+			return false;
+		}
+		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
+	},
+
+
+	addToContactsClicked: function(e){
+		var me = this;
+		console.log('Should add to contacts');
+
+		function onResolvedUser(record){
+			var pop,
+				el = e.target,
+				alignmentEl = e.target,
+				alignment = 'tr-tl?',
+				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
+				id = record.getId(),
+				open = false,
+				offsets = [10, -18];
+
+				Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
+					if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
+					else { open = true;  o.toFront();}
+				});
+
+			if(open){return;}
+
+			pop = NextThought.view.account.contacts.management.Popout.create({record: record, refEl: Ext.get(el)});
+
+			pop.addCls('profile-add-to-contacts-popout');
+			pop.show();
+			pop.alignTo(alignmentEl,alignment,offsets);
+
+		}
+
+		if(this.userObject){
+			onResolvedUser(this.userObject);
+		}
+		else{
+			UserRepository.getUser(this.username, onResolvedUser, this);
+		}
 	},
 
 
@@ -128,13 +196,31 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mun(this.emailEl,'click',this.editMeta, this);
 		this.mun(this.homePageEl,'click',this.editMeta, this);
 
+		try {
+			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+			me.contactsMaybeChanged();
+			//Maybe this goes in controller?
+			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+		}
+		catch(e){
+			console.error(Globals.getError(e));
+		}
+
 		//Make more of the UI schema driven
 
 		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 
 		this.nameEl.update(user.getName());
+
+		//If the name is editable it is guarenteed (right now) to be
+		//us.  Given that it is also guarenteed that we won't have the add to contacts
+		//button. so if its not editable we tag it with a class so we can snug the button
+		//up if it exists
 		if(nameInfo.editable){
 			this.mon(this.nameEl,'click',this.editName,this);
+		}
+		else{
+			this.nameEl.addCls('readonly');
 		}
 
 
