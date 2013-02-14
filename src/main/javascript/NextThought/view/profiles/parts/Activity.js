@@ -114,7 +114,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 			if(c === 'highlight'){
 				//This may simplify to line-item-like activity items in the future
-				if(lastHighlightContainer && lastHighlightContainer.date === getDate(i)){
+				if(lastHighlightContainer && lastHighlightContainer.date.getTime() === getDate(i).getTime()){
 					lastHighlightContainer.items.push(i);
 				}
 				else {
