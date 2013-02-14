@@ -45,6 +45,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
 		this.mon( this.flagEl, 'click', this.onFlag, this);
+		this.mon( this.contextEl, 'click', this.goToObject, this);
 	},
 
 
@@ -136,6 +137,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}, me);
 	},
 
+	goToObject: function(){
+		var rec = this.record,
+			cid = rec ? rec.get('ContainerId') : null;
+		rec = this.record;
+		if(rec && cid){
+			this.fireEvent('navigation-selected', cid, rec, null);
+		}
+	},
 
 	setLocation: function(meta){
 		if(!meta){return;}
@@ -147,7 +156,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 		var location, path, iconPath,
-			lineage = LocationProvider.getLineage(meta.NTIID,true);
+			lineage = LocationProvider.getLineage(meta.NTIID,true),
+			me = this;
 
 		iconPath = meta.icon;
 		if(iconPath.substr(0,meta.root.length) !== meta.root ){
@@ -167,8 +177,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				function(){Ext.fly(this).removeCls('over');});
 
 		this.locationEl.on('click',function(){
-
-			LocationProvider.setLocation(meta.NTIID);
+			me.fireEvent('navigation-selected', meta.NTIID, null, null);
 		});
 	}
 

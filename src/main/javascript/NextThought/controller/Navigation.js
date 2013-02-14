@@ -39,6 +39,9 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'slidedeck-view': {
 				exited: this.slideViewExited
+			},
+			'profile-activity *':{
+				'navigation-selected': this.navigate
 			}
 		},{});
 	},
