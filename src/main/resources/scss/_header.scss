@@ -39,26 +39,51 @@
 
 			button { @include view-button-def; overflow: visible; }
 			@include view-button-def;
-			
+			.x-btn-inner{display: none;}
 			.x-btn-icon{
+				display: block;
+				position: relative;
 				top: 5px;
 				left: 0;
-				background: url(../images/old_sprites/spr_main_nav.png) no-repeat;
-				width: 69px;
-				height: 73px;
+				width: 70px;
+				height: 72px;
 
-				&.classroom { background-position:  0 0; }
-				&.home { background-position:  -68px 0; }
-				&.library { background-position:  -136px 0; }
-				&.search { background-position:  -136px -70px; }
+				&::after{
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					background: $icons no-repeat;
+					top: 10px;
+				}
+
+				&.home::after {
+					left: 17px;
+					@include sprite($icons,'main-nav-home',$dimensions: true); }
+
+				&.library::after {
+					left: 11px;
+					@include sprite($icons,'main-nav-library',$dimensions: true); }
+
+				&.forums::after {
+					left: 10px;
+					@include sprite($icons,'main-nav-forums',$dimensions: true); }
+
+				&.contacts::after {
+					left: 5px;
+					@include sprite($icons,'main-nav-contacts',$dimensions: true); }
+
+				&.search::after {
+					left: 12px;
+					@include sprite($icons,'main-nav-search',$dimensions: true); }
 			}
 
 			&.x-pressed{
 				background: #f7f7f7;
-				.classroom { background-position:  0 -70px; }
-				.home { background-position:  -68px -70px; }
-				.library { background-position:  -204px 0; }
-				.search { background-position:  -204px -70px; }
+				.home::after { @include sprite($icons,'main-nav-home_active',$dimensions: true); }
+				.library::after { @include sprite($icons,'main-nav-library_active',$dimensions: true); }
+				.forums::after { @include sprite($icons,'main-nav-forums_active',$dimensions: true); }
+				.contacts::after { @include sprite($icons,'main-nav-contacts_active',$dimensions: true); }
+				.search::after { @include sprite($icons,'main-nav-search_active',$dimensions: true); }
 			}
 		}
 	}

@@ -19,7 +19,9 @@ Ext.define( 'NextThought.view.Views', {
 	activeItem: 0,
 	items:[
 		{id: 'profile', xtype: 'profile-view-container'},
-		{id: 'library', xtype: 'library-view-container'}
+		{id: 'library', xtype: 'library-view-container'},
+		{id: 'forums', xtype: 'view-container'},
+		{id: 'contacts', xtype: 'view-container'}
 	],
 	
 	getActive: function() {
