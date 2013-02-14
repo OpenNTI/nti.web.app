@@ -104,6 +104,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
-	},
+	}
 
 });
