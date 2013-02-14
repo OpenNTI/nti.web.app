@@ -11,7 +11,10 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+	},
 
+	afterRender: function(){
+		this.callParent(arguments);
 		if(isMe(this.username)){
 			this.store = this.getStore();
 			this.mon(this.store,{
@@ -57,11 +60,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 
 	storeLoaded: function(store, records, success){
-		if(!this.rendered){
-			this.on('afterrender',this.storeLoaded,this,{single:true});
-			return;
-		}
-
 		console.log('loaded ', records.length, ' items ');
 
 		var add = [],
