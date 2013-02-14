@@ -10,7 +10,10 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 			scope: this,
 			'content-updated': this.clearOverlayedPanels,
 			'image-loaded': this.adjustOverlayedPanels,
-			'afterRender': this.insertComponentOverlay
+			'afterRender': this.insertComponentOverlay,
+			'afterLayout': function(){
+				NextThought.view.content.overlay.Panel.syncPositioning();
+			}
 		});
 
 		this.overlayedPanelTabIndexer = new NextThought.util.TabIndexTracker();

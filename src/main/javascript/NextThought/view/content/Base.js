@@ -20,9 +20,6 @@ Ext.define('NextThought.view.content.Base', {
 
 
 	relayout: function(){
-		if (this.ownerCt) {
-			this.ownerCt.updateLayout();
-		}
 		this.updateLayout();
 		this.fireEvent('resize');
 	}

@@ -73,8 +73,6 @@ Ext.define( 'NextThought.view.views.Base', {
 
 
 	relayout: function(){
-		this.ownerCt.doComponentLayout();
-		this.doComponentLayout();
-		this.doLayout();
+		this.updateLayout();
 	}
 });
