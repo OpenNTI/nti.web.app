@@ -1,15 +1,15 @@
 describe("User Tests", function() {
 
-	describe('getName is correct', function(){
+	function createUser(alias, realname, username){
+		var user = Ext.create('NextThought.model.User', {
+			alias: alias,
+			realname: realname,
+			Username: username
+		});
+		return user;
+	}
 
-		function createUser(alias, realname, username){
-			var user = Ext.create('NextThought.model.User', {
-				alias: alias,
-				realname: realname,
-				Username: username
-			});
-			return user;
-		}
+	describe('getName is correct', function(){
 
 		it('Prefers alias', function(){
 			var user = createUser('a', 'b', 'c');
@@ -28,7 +28,7 @@ describe("User Tests", function() {
 
 	});
 
-	descibe('isUnresolved works', function(){
+	describe('isUnresolved works', function(){
 		it('Returns true for unresolved users', function(){
 			var u = NextThought.model.User.getUnresolved('foobar');
 			expect(u.isUnresolved()).toBeTruthy();
