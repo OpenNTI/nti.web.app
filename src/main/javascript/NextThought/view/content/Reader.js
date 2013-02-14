@@ -198,10 +198,16 @@ Ext.define('NextThought.view.content.Reader', {
 			this.relayout();
 		}
 
-		this.navigating = true;
-		return true;
+		if(this.iframeReady){
+			this.navigating = true;
+			return true;
+		}
+		return false;
 	},
 
+	restore: function(){
+		console.debug('Restring?',arguments);
+	},
 
     onNavigationAborted: function() {
         this.setSplash();

@@ -85,6 +85,7 @@ Ext.define( 'NextThought.view.views.Library', {
 
 
 	getHash: function(){
-		return ParseUtils.parseNtiid(LocationProvider.currentNTIID).toURLSuffix();
+		var o = ParseUtils.parseNtiid(LocationProvider.currentNTIID);
+		return o? o.toURLSuffix() : null;
 	}
 });

@@ -46,7 +46,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			listeners: {
 				scope: this,
 				afterRender: function(){
-					this.resetFrame(function(){me.fireEvent('iframe-ready');});
+					this.resetFrame(function(){
+						me.iframeReady = true;
+						me.fireEvent('iframe-ready');
+					});
 				}
 			}
 		};

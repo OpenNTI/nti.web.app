@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.Views', {
 		type: 'card',
 		deferredRender: true
 	},
-	activeItem: 1,
+	activeItem: 0,
 	items:[
 		{id: 'profile', xtype: 'profile-view-container'},
 		{id: 'library', xtype: 'library-view-container'}

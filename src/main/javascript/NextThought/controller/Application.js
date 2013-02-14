@@ -53,6 +53,14 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
+	startReader: function(){
+		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
+		// reader is rendered.
+		var l = this.getController('State').currentState.location;
+		LocationProvider.setLocation(l,null,true);
+	},
+
+
 	openViewport: function(){
 		try{
 			Ext.widget('master-view');
@@ -60,8 +68,11 @@ Ext.define('NextThought.controller.Application', {
 		catch(e1){
 			console.error('Loading View: ', Globals.getError(e1));
 		}
+
 		try{
-			Ext.getCmp('readerPanel').on('iframe-ready', Library.load, Library, {single: true});
+			Library.load();
+
+			Ext.getCmp('readerPanel').on('iframe-ready', this.startReader, this, {single: true});
 		}
 		catch(e2){
 			console.error('Loading Library: ', Globals.getError(e2));
