@@ -433,6 +433,10 @@
 
 			&.editor-active {
 				.reply-options { display: none; }
+				.editor {
+					display: block;
+					.action.share {display: none !important;}
+				}
 			}
 
 			.respond {
