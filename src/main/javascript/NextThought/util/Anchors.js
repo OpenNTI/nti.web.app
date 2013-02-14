@@ -168,7 +168,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(!cleanRoot){
-				cleanRoot = (docElement.body || docElement.getElementsByTagName('body')[0] || docElement).cloneNode(true);
+				cleanRoot = (docElement.body || this.findElementsWithTagName(docElement, 'body')[0] || docElement).cloneNode(true);
 				Anchors.purifyNode(cleanRoot);
 			}
 
@@ -192,6 +192,15 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		return null;
 	},
+
+
+	findElementsWithTagName: function(root, name){
+		if(Ext.isFunction(root.getElementsByTagName)){
+			return root.getElementsByTagName(name);
+		}
+		return root.querySelectorAll(name);
+	},
+
 
 	/*
 	 *	Returns a boolean indicating whether or not the provided contentRangeDescription
@@ -253,7 +262,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(!cleanRoot){
-				cleanRoot = (docElement.body || docElement.getElementsByTagName('body')[0] || docElement).cloneNode(true);
+				cleanRoot = (docElement.body || this.findElementsWithTagName(docElement, 'body')[0] || docElement).cloneNode(true);
 				Anchors.purifyNode(cleanRoot);
 			}
 
@@ -294,7 +303,7 @@ Ext.define('NextThought.util.Anchors', {
 	/*tested*/
 	scopedContainerNode: function(fragOrNode, containerId, rootId){
 		var searchWithin,
-			node = fragOrNode.body || fragOrNode.getElementsByTagName('body')[0] || fragOrNode;
+			node = fragOrNode.body || this.findElementsWithTagName(fragOrNode, 'body')[0] || fragOrNode;
 
 		if(!containerId){
 			searchWithin = node;
@@ -308,7 +317,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	rootContainerIdFromDocument: function(doc){
 		var foundContainer, metaNtiidTag,
-			head = doc.head || doc.getElementsByTagName('head')[0];
+		head = doc.head || this.findElementsWithTagName(doc, 'head')[0];
 
 		if(head){
 			metaNtiidTag = head.querySelectorAll( 'meta[name="NTIID"]' );
@@ -1569,7 +1578,7 @@ Ext.define('NextThought.util.Anchors', {
 		if(!staticResult){return null;}
 
 		var result,
-			body = docElement.body || docElement.getElementsByTagName('body')[0],
+			body = docElement.body || this.findElementsWithTagName(docElement, 'body'),
 			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(body).node,
 			container,
 			parts,
