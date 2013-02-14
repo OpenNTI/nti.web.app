@@ -74,6 +74,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.on('beforedestroy',this.onBeforeDestroyCheck,this);
 	},
 
+	replyIdPrefix: function(){
+		return [this.xtype, 'reply'].join('-');
+	},
+
 
 	onBeforeDestroyCheck: function(){
 		if(this.editorActions && this.editorActions.isActive()){
@@ -513,16 +517,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	maybeOpenReplyEditor: function(){
-		var cmp;
+		var cmp, prefix = this.getRoot().replyIdPrefix();
         if(this.replyToId){
-            cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, 'reply'));
+            cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, prefix));
             if(cmp){
                 cmp.activateReplyEditor();
                 delete this.replyToId;
             }
         }
         else if(this.scrollToId) {
-            cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, 'reply'));
+            cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, prefix));
             if(cmp){
                 cmp.scrollIntoView();
                 delete this.scrollToId;
@@ -734,7 +738,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	addReplies: function(records){
-		var toAdd = [], recordCollection;
+		var toAdd = [], recordCollection, prefix = this.getRoot().replyIdPrefix();
 
 		//Shortcircuit
 		if(Ext.isEmpty(records)){
@@ -752,14 +756,14 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		});
 		recordCollection.each(function(record){
 
-			var guid = IdCache.getComponentId(record, null, 'reply'),
+			var guid = IdCache.getComponentId(record, null, prefix),
 				add = true;
 
 			if (record.getModelName() !== 'Note') {
 				console.warn('can not add item, it is not a note and I am not prepared to handle that.');
 				add=false;
 			}
-			else if (Ext.getCmp(guid)) {
+			else if(this.getComponent(guid)) {
 				console.log('already showing this reply');
 				add=false;
 			}
@@ -767,7 +771,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			if(add){
 				toAdd.push({record: record, id: guid});
 			}
-		});
+		}, this);
 		console.log('Adding note records', toAdd);
 
 		//multiple components/containers involved here so

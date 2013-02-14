@@ -237,6 +237,11 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	getRoot:function(){	return this; },
 
 
+	replyIdPrefix: function(){
+		return [this.xtype, 'reply'].join('-');
+	},
+
+
 	editorActive: function(){
 		return Boolean(this.getRoot().activeEditorOwner);
 	},
