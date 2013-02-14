@@ -124,7 +124,7 @@ Ext.define('NextThought.controller.State', {
 	interpretHash: function(hash){
 		var ntiid = ParseUtils.parseNtiHash(hash),
 			user,
-			result = {active: 'library'};
+			result = {};
 
 		user = this.getUserModel().getProfileIdFromHash(hash);
 		if(user){
@@ -136,7 +136,7 @@ Ext.define('NextThought.controller.State', {
 			};
 		}
 		else if(ntiid){
-			result.location = ntiid;
+			result = {active: 'library', location: ntiid};
 		}
 
 		console.debug('Hash Interpeted:',result);
