@@ -74,7 +74,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 						  },
 						  single: true
 					  }
-				  }})
+				  }});
 	},
 
 	clearLoadingBar: function(){
