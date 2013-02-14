@@ -224,6 +224,10 @@
 				background: #fbfbfb;
 				position: relative;
 				overflow: hidden;
+
+				img {
+					max-width: 50% !important;
+				}
 			}
 
 			& + .note-replies,
