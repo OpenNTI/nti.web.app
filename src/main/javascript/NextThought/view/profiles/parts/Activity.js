@@ -3,7 +3,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	alias: 'widget.profile-activity',
 
 	requires: [
-		'NextThought.view.profiles.parts.ActivityItem'
+		'NextThought.view.profiles.parts.ActivityItem',
+		'NextThought.view.profiles.parts.HighlightContainer'
 	],
 
 	defaultType: 'profile-activity-item',
@@ -86,27 +87,60 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		}
 	},
 
-	storeLoaded: function(store, records, success){
+	storeLoaded: function(store, records){
 		console.log('loaded ', records.length, ' items ');
 
 		var add = [],
-			s = this.store,
-			recordCollection = new Ext.util.MixedCollection();
+			recordCollection = new Ext.util.MixedCollection(),
+			lastHightlightContainer;
 
 		recordCollection.addAll(records || []);
 
+		function getDate(rec){
+			var d = rec.get('CreatedTime')||new Date(0);
+			return new Date(
+					d.getFullYear(),
+					d.getMonth(),
+					d.getDate());
+		}
+
+		function newContainer(rec){
+			lastHightlightContainer = {
+				xtype: 'profile-activity-highlight-container',
+				date: getDate(rec),
+				items:[rec]
+			};
+			add.push(lastHightlightContainer);
+		}
+
 		recordCollection.each(function(i){
-			var n = 'profile-activity-'+(i.get('Class')||'default').toLowerCase()+'-item',
+			var c = (i.get('Class')||'default').toLowerCase(),
+				n = 'profile-activity-'+c+'-item',
 				alias = 'widget.'+ n,
 				xtype;
+
+			//Aaron wants highlights aggrigated. :/
+			if(c === 'highlight'){
+				//This may simplify to line-item-like activity items in the future
+				if(lastHightlightContainer && lastHightlightContainer.date === getDate(i)){
+					lastHightlightContainer.items.push(i);
+				}
+				else {
+					newContainer(i);
+				}
+				return;
+			}
 
 			if(Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias),false)){
 				console.error('Unsupported type: ', n,' record: ',i, ', using the default');
 			}
-			else { xtype = n; }
+			else {
+				xtype = n;
+			}
 
 			add.push({record: i,root:true, xtype: xtype});
 		},this);
+
 
 		this.suspendLayouts();
 		this.clearLoadingBar();
