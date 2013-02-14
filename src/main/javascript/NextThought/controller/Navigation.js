@@ -254,10 +254,13 @@ Ext.define('NextThought.controller.Navigation', {
 		if(state){
 			try {
 				this.track(id);//always switch the menus even if the view is already active
-				Ext.getCmp(id).activate();
+				//search doesn't have a "view"...just a menu
+				if(id!=='search'){
+					Ext.getCmp(id).activate();
+				}
 			}
 			catch(e){
-				console.log('Oops, a view button was defined, but the related view was not added: '+id);
+				console.debug('Oops, a view button was defined, but the related view was not added: '+id);
 			}
 		}
 	}
