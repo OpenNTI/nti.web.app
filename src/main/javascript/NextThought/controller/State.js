@@ -166,7 +166,7 @@ Ext.define('NextThought.controller.State', {
 			this.currentState.active = viewId;
 
 			try{
-				location.hash = Ext.getCmp(viewId).getHash();
+				location.hash = Ext.getCmp(viewId).getHash()||'';
 			}
 			catch(e){
 				console.error(Globals.getError(e));
