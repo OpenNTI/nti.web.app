@@ -332,9 +332,9 @@ Ext.define('NextThought.model.Base', {
 		var me = this,
 			l = this.getLink(link);
 
-        if (!l){
-            console.error('Cannot find link "' + link + ' on this model.', this);
-        }
+		if (!l){
+			console.error('Cannot find link "' + link + ' on this model.', this);
+		}
 
 		if (l && !this.activePostTos[link]) {
 			this.activePostTos[link] = Ext.Ajax.request({
@@ -367,10 +367,10 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	getFieldEditURL: function(editLink,field){
-        if (/.*\+\+fields\+\+.*/.test(editLink)){
-            //edit link is already edit link for that field
-            return editLink;
-        }
+		if (/.*\+\+fields\+\+.*/.test(editLink)){
+			//edit link is already edit link for that field
+			return editLink;
+		}
 
 		var f = Ext.String.format("/++fields++{0}", field);
 
@@ -383,16 +383,16 @@ Ext.define('NextThought.model.Base', {
 	 *
 	 * @param fieldName - name of the field that we want to save
 	 * @param [value] - if undefined the field from the model will be saved.  If not undefined the field
-	 * 					will be set on the model prior to saving
-     * @param [optionalLinkName] = provide if you want a specific link other than the edit link
+	 *					will be set on the model prior to saving
+	 * @param [optionalLinkName] = provide if you want a specific link other than the edit link
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback, optionalLinkName) {
 		var editLink = this.getLink(optionalLinkName || 'edit');
 
-        //special case, pageInfos are not editable (no link), but can take sharedPrefs
-        if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
-            editLink = $AppConfig.service.getObjectURL(this.getId());
-        }
+		//special case, pageInfos are not editable (no link), but can take sharedPrefs
+		if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
+			editLink = $AppConfig.service.getObjectURL(this.getId());
+		}
 
 		//check to make sure we can do this, and we have the info we need
 		if (!fieldName || (!this.hasField(fieldName) && !new RegExp('.*'+fieldName+'$').test(fieldName))){
@@ -579,44 +579,44 @@ Ext.define('NextThought.model.Base', {
 		return data;
 	},
 
-    //yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
-    timeDifference: function(current, previous) {
-        var msPerMinute = 60 * 1000,
-		    msPerHour = msPerMinute * 60,
-		    msPerDay = msPerHour * 24,
-		    msPerMonth = msPerDay * 30,
-		    elapsed = current - previous,
-		    result;
+	//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
+	timeDifference: function(current, previous) {
+		var msPerMinute = 60 * 1000,
+			msPerHour = msPerMinute * 60,
+			msPerDay = msPerHour * 24,
+			msPerMonth = msPerDay * 30,
+			elapsed = current - previous,
+			result;
 
-        if (elapsed < msPerMinute) {
-            result = Math.round(elapsed/1000) + ' seconds ago';
-        }
+		if (elapsed < msPerMinute) {
+			result = Math.round(elapsed/1000) + ' seconds ago';
+		}
 
-        else if (elapsed < msPerHour) {
-            result = Math.round(elapsed/msPerMinute) + ' minutes ago';
-        }
+		else if (elapsed < msPerHour) {
+			result = Math.round(elapsed/msPerMinute) + ' minutes ago';
+		}
 
-        else if (elapsed < msPerDay ) {
-            result = Math.round(elapsed/msPerHour ) + ' hours ago';
-        }
+		else if (elapsed < msPerDay ) {
+			result = Math.round(elapsed/msPerHour ) + ' hours ago';
+		}
 
-        else if (elapsed < msPerMonth) {
-            result = Math.round(elapsed/msPerDay) + ' days ago';
-        }
+		else if (elapsed < msPerMonth) {
+			result = Math.round(elapsed/msPerDay) + ' days ago';
+		}
 
-        if (!result) {
-            return Ext.Date.format(previous, 'M j, Y, g:i a');
-        }
-        else {
-            if(/^1\s/.test(result)){
-                result = result.replace('s ago', ' ago');
-            }
-            return result;
-        }
-    },
+		if (!result) {
+			return Ext.Date.format(previous, 'M j, Y, g:i a');
+		}
+		else {
+			if(/^1\s/.test(result)){
+				result = result.replace('s ago', ' ago');
+			}
+			return result;
+		}
+	},
 
 
-    getRelativeTimeString: function(){
+	getRelativeTimeString: function(){
 		return this.timeDifference(Ext.Date.now(),this.get('CreatedTime'));
 	},
 
