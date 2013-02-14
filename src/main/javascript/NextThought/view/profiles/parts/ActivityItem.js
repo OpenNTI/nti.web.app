@@ -22,7 +22,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		subjectEl: '.subject',
 		locationIcon: '.icon',
 		commentsEl: '.comments',
-		flagEl: '.reply-options .flag'
+		editEl: '.reply-options .edit',
+		flagEl: '.reply-options .flag',
+		deleteEl: '.reply-options .delete'
 	},
 
 	initComponent: function(){
@@ -44,6 +46,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
+		this.mon( this.deleteEl, 'click', this.onDelete, this);
+		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
 		this.mon( this.contextEl, 'click', this.goToObject, this);
 	},
@@ -57,6 +61,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	maybeFillIn: function(){
 		var me = this,
+			D = Ext.dom.Element.DISPLAY,
 			count,subject,
 			loaded = me.loaded,
 			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.get('profile'),{bottom:1000}));
@@ -85,6 +90,18 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(!subject){
 			me.subjectEl.addCls('no-subject');
 			me.name.addCls('no-subject');
+		}
+
+		me.flagEl.setVisibilityMode(D);
+		me.editEl.setVisibilityMode(D);
+		me.deleteEl.setVisibilityMode(D);
+
+		if(isMe(me.record.get('Creator'))){
+			me.flagEl.hide();
+		}
+		else {
+			me.editEl.hide();
+			me.deleteEl.hide();
 		}
 
 		LocationMeta.getMeta(me.record.get('ContainerId'),me.setLocation,me);
@@ -220,7 +237,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 								cls: 'reply-options',
 								cn: [
 									{ cls: 'reply', html: 'Reply' },
-									{ cls: 'flag', html: 'Report' }
+									{ cls: 'edit', html: 'Edit' },
+									{ cls: 'flag', html: 'Report' },
+									{ cls: 'delete', html: 'Delete' }
 								]
 							},
 							TemplatesForNotes.getEditorTpl()
