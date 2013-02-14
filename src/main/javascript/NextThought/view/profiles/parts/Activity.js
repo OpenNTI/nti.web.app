@@ -19,7 +19,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			this.store = this.getStore();
 			this.mon(this.store,{
 				scope: this,
-				load: this.storeLoaded
+				load: this.storeLoaded,
+				beforeload: this.showLoadingBar
 			});
 
 			this.store.load();
@@ -58,6 +59,32 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		return s;
 	},
 
+	showLoadingBar: function(){
+		console.log('Show loading bar');
+		//TOOD how to get the height into css.  If we don't specify it here it gets an
+		//inline styled height
+		this.add({xtype: 'panel',
+				  cls: 'loading-bar',
+				  itemId: 'loadingbar',
+				  height: 40,
+				  listeners: {
+					  afterrender: {
+						  fn: function(cmp){
+							  cmp.el.mask('Loading...');
+						  },
+						  single: true
+					  }
+				  }})
+	},
+
+	clearLoadingBar: function(){
+		var bar = this.down('#loadingbar');
+		console.log('Clear loading bar');
+		if(bar){
+			bar.unmask();
+			this.remove(bar);
+		}
+	},
 
 	storeLoaded: function(store, records, success){
 		console.log('loaded ', records.length, ' items ');
@@ -81,7 +108,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			add.push({record: i,root:true, xtype: xtype});
 		},this);
 
+		this.suspendLayouts();
+		this.clearLoadingBar();
+
 		this.add(add);
+		this.resumeLayouts(true);
 
 		console.log('Showing', this.items.length, ' objects ');
 	},
