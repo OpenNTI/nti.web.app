@@ -51,8 +51,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		this.mon(s,{
 			scope: this,
-			//TODO: make smarter
-			add: function(){console.debug('Added item(s)');},
+			add: this.itemsAddedToStore,
 			remove: function(){console.debug('Removed item(s)');},
 			bulkremove:function(){console.debug('Bulk Removed item(s)');}
 		});
@@ -87,14 +86,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		}
 	},
 
-	storeLoaded: function(store, records){
-		console.log('loaded ', records.length, ' items ');
-
-		var add = [],
-			recordCollection = new Ext.util.MixedCollection(),
-			lastHightlightContainer;
-
-		recordCollection.addAll(records || []);
+	cmpsFromRecords: function(records){
+		var cmps = [], lastHighlightContainer;
 
 		function getDate(rec){
 			var d = rec.get('CreatedTime')||new Date(0);
@@ -105,25 +98,24 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		}
 
 		function newContainer(rec){
-			lastHightlightContainer = {
+			lastHighlightContainer = {
 				xtype: 'profile-activity-highlight-container',
 				date: getDate(rec),
 				items:[rec]
 			};
-			add.push(lastHightlightContainer);
+			cmps.push(lastHighlightContainer);
 		}
 
-		recordCollection.each(function(i){
+		Ext.Array.each(records || [], function(i){
 			var c = (i.get('Class')||'default').toLowerCase(),
 				n = 'profile-activity-'+c+'-item',
 				alias = 'widget.'+ n,
 				xtype;
 
-			//Aaron wants highlights aggrigated. :/
 			if(c === 'highlight'){
 				//This may simplify to line-item-like activity items in the future
-				if(lastHightlightContainer && lastHightlightContainer.date === getDate(i)){
-					lastHightlightContainer.items.push(i);
+				if(lastHighlightContainer && lastHighlightContainer.date === getDate(i)){
+					lastHighlightContainer.items.push(i);
 				}
 				else {
 					newContainer(i);
@@ -138,9 +130,16 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				xtype = n;
 			}
 
-			add.push({record: i,root:true, xtype: xtype});
+			cmps.push({record: i,root:true, xtype: xtype});
 		},this);
 
+		return cmps;
+	},
+
+	storeLoaded: function(store, records){
+		console.log('loaded ', records.length, ' items ');
+
+		var add = this.cmpsFromRecords(records);
 
 		this.suspendLayouts();
 		this.clearLoadingBar();
@@ -151,6 +150,27 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		console.log('Showing', this.items.length, ' objects ');
 	},
 
+	itemsAddedToStore: function(store, records, index){
+		var cmps;
+		console.log('Records added at index', index, records);
+
+		//For now we only do top level stuff
+		records = Ext.Array.filter(records, function(rec){
+			return !rec.isTopLevel || rec.isTopLevel();
+		});
+
+
+		if(Ext.isEmpty(records)){
+			return;
+		}
+
+		//We don't maintain a sorted store so assume things
+		//coming in an add method are the most recent.  Therefore
+		//we just sort them adn stick them at the top
+		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime'));
+		cmps = this.cmpsFromRecords(records);
+		this.add(0, cmps);
+	},
 
 	onScrolledToBottom: function(){
 		this.prefetchNext();

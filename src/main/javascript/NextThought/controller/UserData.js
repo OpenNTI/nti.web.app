@@ -599,7 +599,7 @@ Ext.define('NextThought.controller.UserData', {
                     if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
                 }
                 catch(err){
-                    console.error('Something went teribly wrong... ',err);
+                    console.error('Something went teribly wrong... ', Globals.getError(err));
                 }
             }
         });
