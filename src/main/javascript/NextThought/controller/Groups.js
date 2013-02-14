@@ -458,12 +458,12 @@ Ext.define('NextThought.controller.Groups', {
 			if(groupList.length){
 				tracker.push({});
 			}
-			contacts.addFriend(username).saveField('friends',null,finish);
+			contacts.addFriend(username).saveField('friends', undefined ,finish);
 		}
 
 		Ext.each(groupList,function(g) {
 			if( g.get('Username') !== contactsId && !g.hasFriend(username) ){
-				g.addFriend(username).saveField('friends',null,finish);
+				g.addFriend(username).saveField('friends', undefined ,finish);
 			}
 			else {
 				//skip it, we did this up front.
@@ -498,7 +498,7 @@ Ext.define('NextThought.controller.Groups', {
 		function remove(record){
 			if( record.hasFriend(userId) ){
 				modified = true;
-				record.removeFriend(userId).saveField('friends',null,finish);
+				record.removeFriend(userId).saveField('friends', undefined, finish);
 			} else {
 				finish();
 			}

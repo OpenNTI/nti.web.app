@@ -379,10 +379,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	/**
-	 * Save a specific field of this model, optionally set a value and save it if value is sent.
+	 * Save a specific field off this model, optionally set a value and save it if value is sent.
 	 *
 	 * @param fieldName - name of the field that we want to save
-	 * @param [value] - optional value to save (also set it on model)
+	 * @param [value] - if undefined the field from the model will be saved.  If not undefined the field
+	 * 					will be set on the model prior to saving
      * @param [optionalLinkName] = provide if you want a specific link other than the edit link
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback, optionalLinkName) {
@@ -407,6 +408,9 @@ Ext.define('NextThought.model.Base', {
 		//Do explicit check so you can set values to 0 or ''
 		if (value !== undefined) {
 			this.set(fieldName, value);
+		}
+		else{
+			value = this.get(fieldName);
 		}
 
 		//put together the json we want to save.
