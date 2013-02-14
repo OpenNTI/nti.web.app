@@ -274,7 +274,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var doc = this.getDocumentElement();
 		if (doc) {
 			this.syncFrame(doc.getElementsByTagName('html')[0]);
-			if(Ext.Date.now()-this.lastFrameSync > 1000){
+			if(Ext.Date.now()-this.lastSyncFrame > 1000){
 				clearInterval(this.syncInterval);
 				this.syncInterval = setInterval(this.checkFrame,
 						this.baseFrameCheckIntervalInMillis*this.frameCheckRateChangeFactor);
@@ -303,7 +303,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		i.setHeight(h);
 		this.doLayout();
 		this.lastHeight = h;
-		this.lastFrameSync = Ext.Date.now();
+		this.lastSyncFrame = Ext.Date.now();
 		this.fireEvent('sync-height',h);
 	},
 
