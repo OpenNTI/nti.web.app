@@ -16,6 +16,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		clearEl: '.clear'
 	},
 
+	silentIsValid: true,
 
 	constructor: function(config){
 		delete config.autoEl;
@@ -178,7 +179,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 
 	isValid: function(){
-		return this.validate(true);
+		return this.validate(this.silentIsValid);
 	}
 });
 

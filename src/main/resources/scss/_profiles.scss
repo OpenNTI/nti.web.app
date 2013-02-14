@@ -147,6 +147,17 @@
 						left: 5px;
 					}
 				}
+
+				.error-msg{
+					margin-top: 4px;
+					color: red;
+					font-style: italic;
+					margin-top: 4px;
+					font-weight: 300;
+					&::before{
+						content: '*'
+					}
+				}
 			}
 		}
 

@@ -6,6 +6,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		'Ext.Editor',
 		'NextThought.view.profiles.parts.Activity',
 		'NextThought.view.profiles.TabPanel',
+		'NextThought.view.profiles.ProfileFieldEditor',
 		'NextThought.view.account.contacts.management.Popout'
 	],
 
@@ -31,6 +32,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 						{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'Affiliation'}]},
 					{ 'data-field': 'location' , 'data-placeholder': 'Location'},
 					{ 'data-field': 'home_page', 'data-placeholder': 'Home Page'},
+					{ cls: 'error-msg' },
 					{ cls: 'actions', cn: [
 						{cls: 'chat', html: 'Chat'}
 					]}
@@ -57,7 +59,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		emailEl: '.profile-head .meta [data-field=email]',
 		actionsEl: '.profile-head .meta .actions',
 		chatEl: '.profile-head .meta .actions .chat',
-		addToContacts: '.add-to-contacts'
+		addToContacts: '.add-to-contacts',
+		errorMsgEl: '.error-msg'
+
 	},
 
 	items: [{
@@ -96,6 +100,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.relayEvents(this.el.parent(),['scroll']);
 
 		this.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.errorMsgEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
@@ -278,27 +283,25 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return me.validate(field, value);
 		}
 
-		this.nameEditor = Ext.Editor.create({
-			autoSize: { width: 'boundEl' },
+		this.nameEditor = NextThought.view.profiles.ProfileFieldEditor.create({
 			cls: 'name-editor',
 			updateEl: true,
-			ignoreNoChange: true,
-			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema },
+			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
 			listeners:{
 				complete: this.onSaveField,
+				canceledit: this.clearError,
 				scope: this
 			}
 		});
 
-		this.metaEditor = Ext.Editor.create({
+		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
 			autoSize: { width: 'boundEl' },
 			cls: 'meta-editor',
 			updateEl: false,
-			ignoreNoChange: true,
-			revertInvalid: true,
-			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema },
+			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
 			listeners:{
 				complete: this.onSaveField,
+				canceledit: this.clearError,
 				scope: this
 			}
 		});
@@ -394,10 +397,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	editMeta: function(e){
 		var t = e.getTarget(null,null,true),
-			ed = this.metaEditor;
+			ed = this.metaEditor, value, a;
 
 		if(e.getTarget('a[href]')){
 			return;
+		}
+
+		if(ed.editing){
+			ed.cancelEdit();
 		}
 
 		//Ensure the editor is wide enough to see something...
@@ -405,27 +412,78 @@ Ext.define('NextThought.view.profiles.Panel',{
 		if(t.getWidth() < 100){ t.setWidth(100); }
 		ed.on({deactivate:resetWidth,single:true});
 
-		ed.startEdit(t);
+		if(t === this.homePageEl){
+			a = t.down('a');
+			value = a ? a.dom.innerHTML : '';
+			value = Ext.String.trim(value);
+		}
+
+		ed.startEdit(t, value);
+	},
+
+	showError: function(text){
+		this.errorMsgEl.update(text);
+		this.errorMsgEl.show();
+	},
+
+	clearError: function(){
+		this.errorMsgEl.hide();
 	},
 
 	validate: function(field, value){
-		var rules = (this.profileSchema || {})[field];
+		var rules = (this.profileSchema || {})[field],
+			numColons;
 		if(!field || !rules){
 			console.warn('No rules or field. Treating as valid', field, value, this.profileSchema);
 		}
+
+		rules = rules || {};
 
 		//treat empty string as null
 		if(Ext.isEmpty(value)){
 			value = null;
 		}
 
+		//TODO encapsulate all these validations rules in some kind of profile model
+		//this will let us share it and test it...
+
 		if(rules.required === true && (value === null || value === undefined)){
+			this.showError('Rrequired.')
 			return false;
 		}
 
-		if(rules.type && rules.type === 'string'){
-			if(value && value.length < (rules.min_length || 0)){
+		if(!value){
+			return true;
+		}
+
+		if(rules.base_type === 'string'){
+			//for strings we expect a min and a max length and if they exist our string must fit in
+			//those bounds
+			if(value.length < (rules.min_length || 0 )){
+				this.showError('Must contain at least '+(rules.min_length || 0 )+' characters.');
 				return false;
+			}
+
+			if( value.length > (rules.max_length || Infinity)){
+				this.showError('May only use '+(rules.max_length || Infinity)+' characters.');
+				return false;
+			}
+
+			if(rules.type === 'URI'){
+				//We use some basic URI validation here, similar to what the ds
+				//does as of r15860.  Note the ds will add http if there is no
+				//scheme.  However if we detect what looks like a scheme we
+				//require it to start with http[s]
+				numColons = (value.match(/:/g)||[]).length;
+				if(numColons > 1){
+					this.showError('Must be a valid URL.');
+					return false;
+				}
+				else if(numColons === 1 && value.indexOf('http:') !== 0 && value.indexOf('https:') !== 0){
+					this.showError('Must be a valid URL.');
+					return false;
+				}
+				return true;
 			}
 		}
 
@@ -460,16 +518,23 @@ Ext.define('NextThought.view.profiles.Panel',{
 			newValue = null;
 		}
 
+		me.clearError();
+
 		function success(n, v){
 			console.log(arguments);
 			me.updateField(cmp.boundEl, n, v);
 		}
 
-		function failure(){
+		function failure(rsp){
+			var resultJson = {};
+			if(/application\/json/.test(rsp.getResponseHeader('Content-Type') || "")){
+				resultJson = Ext.JSON.decode(rsp.responseText, true);
+			}
 			//alert('Could not save your '+field);
 			console.error(arguments);
-			cmp.startEdit(cmp.boundEl);
+			cmp.startEdit(cmp.boundEl, newValue);
 			cmp.field.setError();
+			me.showError(resultJson.message || 'An unknown error occurred');
 		}
 
 		console.debug('saving:', field,'=', newValue, 'in', user);
@@ -479,6 +544,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	editName: function(){
+		if(!this.nameEditor.isHidden()){
+			return;
+		}
+
+		if(this.nameEditor.editing){
+			this.nameEditor.cancelEdit();
+		}
+
 		this.nameEditor.startEdit(this.nameEl);
 	},
 
