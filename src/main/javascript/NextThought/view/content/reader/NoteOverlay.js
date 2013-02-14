@@ -299,7 +299,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	openNoteEditorForRange: function(range, rect2, style){
+	openNoteEditorForRange: function(range, rect, style){
 		var offsets = this.getAnnotationOffsets(),
 			lastLine = this.lineInfoForRangeAndRect(range, rect, offsets);
 
