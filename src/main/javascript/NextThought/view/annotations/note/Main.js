@@ -44,6 +44,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	disable: function(){
+		//don't call the parent, its destructive. This panel is meant to be reused.
+		this.replyOptions.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+	},
+
+
 	contactsMaybeChanged: function(){
 		var me = this, r = this.record;
 		if(me.addToContacts){
@@ -205,6 +211,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		if(!this.rendered){return;}
 
+		this.replyOptions.show();
 		this.setContext(
 				reader.getDocumentElement(),
 				reader.getCleanContent());
