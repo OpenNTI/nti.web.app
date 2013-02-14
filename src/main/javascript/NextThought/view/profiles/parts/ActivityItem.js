@@ -73,6 +73,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 		else {
 			me.commentsEl.remove();
+			//also remove response box for things that don't look like notes
+			if(me.responseBox){
+				me.responseBox.remove();
+			}
 		}
 
 		subject = me.record.get('subject');

@@ -345,6 +345,11 @@ Ext.define('NextThought.controller.UserData', {
 
 		LocationProvider.applyToStores(function(k,s){
 			var params = s.proxy.extraParams || {};
+
+			if(!s.hasOwnProperty('containerId')){
+				return;
+			}
+
 			params = Ext.apply(params, {
 				sortOn: 'lastModified',
 				sortOrder: 'descending'

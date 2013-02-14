@@ -16,7 +16,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			this.store = this.getStore();
 			this.mon(this.store,{
 				scope: this,
-				single: true,
 				load: this.storeLoaded
 			});
 
@@ -33,30 +32,10 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel,MeOnly',
-			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight'
+			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight',
+			sortOn: 'createdTime',
+			sortOrder: 'descending'
 		});
-
-		this.mon(s,{
-			scope: this,
-			//TODO: make smarter
-			add: function(){console.debug('Added item(s)');this.storeLoaded();},
-			remove: function(){console.debug('Removed item(s)');this.storeLoaded();},
-			bulkremove:function(){console.debug('Bulk Removed item(s)');this.storeLoaded();}
-		});
-
-		return s;
-	},
-
-
-	storeLoaded: function(){
-		if(!this.rendered){
-			this.on('afterrender',this.storeLoaded,this,{single:true});
-			return;
-		}
-
-		var add = [],
-			s = this.store,
-			recordCollection = new Ext.util.MixedCollection();
 
 		if(!LocationProvider.hasStore(s.storeId)){
 			s.doesNotClear = true;
@@ -65,13 +44,31 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			LocationProvider.addStore(s.storeId,s);
 		}
 
-		recordCollection.addAll(this.store.getItems() || []);
-		recordCollection.sort({
-			property: 'CreatedTime',
-			direction: 'DESC',
-			transform: Ext.data.SortTypes.asDate,
-			root: 'data'
+		this.mon(s,{
+			scope: this,
+			//TODO: make smarter
+			add: function(){console.debug('Added item(s)');},
+			remove: function(){console.debug('Removed item(s)');},
+			bulkremove:function(){console.debug('Bulk Removed item(s)');}
 		});
+
+		return s;
+	},
+
+
+	storeLoaded: function(store, records, success){
+		if(!this.rendered){
+			this.on('afterrender',this.storeLoaded,this,{single:true});
+			return;
+		}
+
+		console.log('loaded ', records.length, ' items ');
+
+		var add = [],
+			s = this.store,
+			recordCollection = new Ext.util.MixedCollection();
+
+		recordCollection.addAll(records || []);
 
 		recordCollection.each(function(i){
 			var n = 'profile-activity-'+(i.get('Class')||'default').toLowerCase()+'-item',
@@ -86,10 +83,29 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			add.push({record: i,root:true, xtype: xtype});
 		},this);
 
-		Ext.suspendLayouts();
-		this.removeAll(true);
 		this.add(add);
-		Ext.resumeLayouts(true);
-	}
+
+		console.log('Showing', this.items.length, ' objects ');
+	},
+
+
+	onScrolledToBottom: function(){
+		this.prefetchNext();
+	},
+
+	prefetchNext: function(){
+		var s = this.store, max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount());
+		if(s.currentPage < max && !s.isLoading()){
+			console.log('Fetching next page of data', s);
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
+	},
 
 });

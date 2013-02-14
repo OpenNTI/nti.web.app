@@ -99,7 +99,31 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
+		this.mon(this, 'scroll', this.onScroll, this);
+
+		this.tabs = this.down('profile-tabs');
 	},
+
+
+
+	onScroll: function(e,dom){
+		var activeTab = this.tabs.activeTab,
+			el, offsets, top, ctBottom;
+
+		if(!activeTab || !Ext.isFunction(activeTab.onScrolledToBottom)){
+			return;
+		}
+
+		el = dom.lastChild;
+		offsets = Ext.fly(el).getOffsetsTo(dom);
+		top = offsets[1] + dom.scrollTop;
+		ctBottom = dom.scrollTop + dom.clientHeight;
+
+		if(ctBottom > top){
+			activeTab.onScrolledToBottom();
+		}
+	},
+
 
 
 	contactsMaybeChanged: function(){
