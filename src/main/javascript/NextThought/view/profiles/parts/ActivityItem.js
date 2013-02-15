@@ -51,7 +51,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
 		this.mon( this.contextEl, 'click', this.goToObject, this);
-		this.on( 'reveal-replies', this.clickedRevealAllReplies);
 	},
 
 

@@ -12,6 +12,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		deleteEl: '.reply-options .delete'
 	},
 
+	onBeforeDestroyCheck: function(){
+		//allow preview notes to die in order to expand the tree
+		if(!this.up('profile-activity-item').isExpanded()){return true;}
+		return this.callParent(arguments);
+	},
+
 	afterRender: function(){
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
@@ -19,8 +25,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		this.deleteEl.setVisibilityMode(D);
 
 		try{
+			//If the parent is not expanded, we're a preview...and need
 			if(!this.up('profile-activity-item').isExpanded()){
-				this.mon( this.replyButton, 'click', this.shouldRevealReplies, this);
+				this.mon( this.el, 'click', this.destroy, this);
+				this.on('save-new-reply',this.destroy,this);
 			}
 		}
 		catch(e){
@@ -31,15 +39,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
-	},
-
-	shouldRevealReplies: function(e){
-		this.mun( this.replyButton, 'click', this.shouldRevealReplies, this);
-
-		var activityItem = this.up('profile-activity-item');
-		if(!activityItem || activityItem.isExpanded()){ return; }
-		activityItem.replyToId = this.record.getId();
-		activityItem.fireEvent('reveal-replies');
 	},
 
 
