@@ -93,8 +93,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 	afterRender: function(){
-		var me = this;
-
 		this.callParent(arguments);
 
 		this.relayEvents(this.el.parent(),['scroll']);
@@ -366,6 +364,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		me.user = user;
+
 		function onProfileLoaded(u, profile){
 			me.updateProfile(u, profile);
 		}
@@ -448,7 +448,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		//this will let us share it and test it...
 
 		if(rules.required === true && (value === null || value === undefined)){
-			this.showError('Rrequired.')
+			this.showError('Rrequired.');
 			return false;
 		}
 
