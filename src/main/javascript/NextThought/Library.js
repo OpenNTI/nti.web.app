@@ -118,6 +118,7 @@ Ext.define('NextThought.Library', {
 		}
 		else {
 			console.error('FAILED: load library');
+			Ext.callback(go,this);
 		}
 	},
 
