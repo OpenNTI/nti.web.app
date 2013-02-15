@@ -46,6 +46,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
+		this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
@@ -54,9 +55,22 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 	clickedRevealAllReplies: function(){
+		this.mun( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		this.commentsEl.remove();
+		delete this.commentsEl;
 		this.fillInReplies();
 	},
+
+
+	onRemove: function(){
+		if(!this.isExpanded()){
+			this.clickedRevealAllReplies();
+		}
+		this.callParent(arguments);
+	},
+
+
+	isExpanded: function(){ return !this.commentsEl; },
 
 
 	maybeFillIn: function(){

@@ -12,12 +12,28 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		deleteEl: '.reply-options .delete'
 	},
 
+	onBeforeDestroyCheck: function(){
+		//allow preview notes to die in order to expand the tree
+		if(!this.up('profile-activity-item').isExpanded()){return true;}
+		return this.callParent(arguments);
+	},
 
 	afterRender: function(){
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
 		this.editEl.setVisibilityMode(D);
 		this.deleteEl.setVisibilityMode(D);
+
+		try{
+			//If the parent is not expanded, we're a preview...and need
+			if(!this.up('profile-activity-item').isExpanded()){
+				this.mon( this.el, 'click', this.destroy, this);
+				this.on('save-new-reply',this.destroy,this);
+			}
+		}
+		catch(e){
+			console.warn('ActivityItemReply was not in an ActivityItem');
+		}
 
 		this.callParent(arguments);
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
