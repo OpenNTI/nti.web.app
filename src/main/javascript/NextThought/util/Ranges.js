@@ -181,8 +181,8 @@ Ext.define('NextThought.util.Ranges',{
 			return null;
 		}
 
-		start = this.nodeThatIsEdgeOfRange(range, 'start');
-		end = this.nodeThatIsEdgeOfRange(range, 'end');
+		start = this.nodeThatIsEdgeOfRange(range, true);
+		end = this.nodeThatIsEdgeOfRange(range);
 
 		newStart = walkOut(start, 'start');
 		if(newStart){
