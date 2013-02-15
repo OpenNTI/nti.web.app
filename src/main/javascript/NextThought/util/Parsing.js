@@ -1,3 +1,5 @@
+/*jslint continue: true*/
+/*globals document, DOMParser */
 Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
@@ -201,8 +203,7 @@ Ext.define('NextThought.util.Parsing',{
 	 */
 
 	/*! @source https://gist.github.com/1129031 */
-	/*global document, DOMParser*/
-
+	/* global document, DOMParser */
 	(function(DOMParser) {
 	    "use strict";
 	    var DOMParser_proto = DOMParser.prototype
@@ -211,7 +212,7 @@ Ext.define('NextThought.util.Parsing',{
 	    // Firefox/Opera/IE throw errors on unsupported types
 	    try {
 	        // WebKit returns null on unsupported types
-	        if ((new DOMParser).parseFromString("", "text/html")) {
+	        if ((new DOMParser()).parseFromString('', 'text/html')) {
 	            // text/html parsing is natively supported
 	            return;
 	        }
@@ -219,7 +220,7 @@ Ext.define('NextThought.util.Parsing',{
 
 	    DOMParser_proto.parseFromString = function(markup, type) {
 	        if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-	            var doc = document.implementation.createHTMLDocument("")
+	            var doc = document.implementation.createHTMLDocument('')
 	              , doc_elt = doc.documentElement
 	              , first_elt;
 
@@ -227,14 +228,13 @@ Ext.define('NextThought.util.Parsing',{
 	            first_elt = doc_elt.firstElementChild;
 
 	            if (doc_elt.childElementCount === 1
-	                && first_elt.localName.toLowerCase() === "html") {
+	                && first_elt.localName.toLowerCase() === 'html') {
 	                doc.replaceChild(first_elt, doc_elt);
 	            }
 
 	            return doc;
-	        } else {
-	            return real_parseFromString.apply(this, arguments);
 	        }
+	        return real_parseFromString.apply(this, arguments);
 	    };
 	}(DOMParser));
 });
