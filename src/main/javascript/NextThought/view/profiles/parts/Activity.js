@@ -144,6 +144,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	storeLoaded: function(store, records){
 		console.log('loaded ', records.length, ' items ');
 
+		//For now we only do top level stuff
+		records = Ext.Array.filter(records, function(rec){
+			return !rec.isTopLevel || rec.isTopLevel();
+		});
+
+
 		var add = this.cmpsFromRecords(records);
 
 		this.suspendLayouts();
