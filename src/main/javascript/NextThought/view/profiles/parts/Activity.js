@@ -35,6 +35,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		var id = 'profile-activity-'+this.username,
 			s = Ext.getStore(id) || NextThought.store.PageItem.create({id:id});
 
+		s.proxy.url = (s.proxy.url||'').replace(
+				//The wrapping slashes are an attempt to limit the scope of the search&replace :/
+				'/'+encodeURIComponent($AppConfig.username)+'/',
+				'/'+encodeURIComponent(this.username)+'/');
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel,MeOnly',
 			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight',
