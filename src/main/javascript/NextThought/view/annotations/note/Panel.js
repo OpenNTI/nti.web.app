@@ -444,7 +444,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	loadReplies: function(record){
-		var me = this, toMask = me.el.down('.note-replies');
+		var me = this, toMask = me.el ? me.el.down('.note-replies') : null;
 		if(toMask){
 			toMask.mask('Loading...');
 		}

@@ -70,6 +70,24 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.callParent(arguments);
 	},
 
+	onDelete: function(){
+		var me = this;
+		Ext.Msg.show({
+			msg: 'The following action will delete your note',
+			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					me.record.destroy();
+					me.adjustRootsReferenceCount(me.record);
+				}
+			}
+		});
+	},
+
 
 	isExpanded: function(){ return !this.commentsEl; },
 
