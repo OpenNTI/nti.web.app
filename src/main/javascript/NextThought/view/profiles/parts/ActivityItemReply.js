@@ -14,15 +14,15 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 
 
 	afterRender: function(){
-		this.callParent(arguments);
-		this.mon( this.deleteEl, 'click', this.onDelete, this);
-		this.mon( this.editEl, 'click', this.onEdit, this);
-		this.mon( this.flagEl, 'click', this.onFlag, this);
-
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
 		this.editEl.setVisibilityMode(D);
 		this.deleteEl.setVisibilityMode(D);
+
+		this.callParent(arguments);
+		this.mon( this.deleteEl, 'click', this.onDelete, this);
+		this.mon( this.editEl, 'click', this.onEdit, this);
+		this.mon( this.flagEl, 'click', this.onFlag, this);
 	},
 
 

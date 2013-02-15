@@ -175,6 +175,14 @@
 			vertical-align: middle;
 		}
 
+		.link {
+			color: $primary-blue !important;
+			&.over {
+				text-decoration: underline;
+				cursor: pointer;
+			}
+		}
+
 		.comments {
 			padding: 0 0 0 40px;
 			font: normal 600 10px/40px $font;
@@ -207,14 +215,6 @@
 			padding: 0;
 			z-index: 1;
 
-			.link {
-				color: $primary-blue !important;
-				&.over {
-					text-decoration: underline;
-					cursor: pointer;
-				}
-			}
-
 			& + .note-replies,
 			& + .note-replies + .comments,
 			.content-callout{
@@ -224,10 +224,6 @@
 				background: #fbfbfb;
 				position: relative;
 				overflow: hidden;
-
-				img {
-					max-width: 50% !important;
-				}
 			}
 
 			& + .note-replies,
@@ -288,6 +284,7 @@
 						font: normal 400 16px $font;
 						color: $primary-grey;
 						display: block;
+						img { max-width: 50% !important; }
 					}
 				}
 			}
@@ -371,7 +368,7 @@
 					opacity: 0.75;
 					padding: 0 0 0 0.5em;
 					margin: 0;
-					&:hover { opacity: 1; }
+					&:hover { opacity: 1; &::after{opacity: 0.75;} }
 					&::after{
 						font: italic 600 14px/40px $font;
 						position: static;
@@ -453,6 +450,9 @@
 
 						&:hover {
 							opacity: 1;
+							&::after{
+								opacity: 0.6;
+							}
 						}
 
 						&::after {
@@ -471,6 +471,49 @@
 				}
 
 				@include note-editor;
+			}
+		}
+
+
+		.profile-activity-item,.profile-activity-reply-item{
+			.body {
+				@include note-body;
+			}
+		}
+
+		.note-container.child {
+			& > .reply.first{
+				&::after {
+					content: ' ';
+					position: absolute;
+					overflow: hidden;
+					top: 30px; left: 5px;
+					background: $icons no-repeat;
+					@include sprite($icons,'reply_arrow',$dimensions: true);
+				}
+			}
+			.note-container.child > .reply {
+				padding-left: 60px;
+				&.first{
+					&::after{
+						left: 45px;
+					}
+				}
+			}
+		}
+
+
+
+		.activity-highlight-container {
+			margin: 15px 0 0;
+			border: 1px solid #eaeaea;
+
+			.header {
+				padding: 0 20px;
+				border: 1px solid #eaeaea;
+				border-width: 0 0 1px 0;
+				font: normal 500 14px/38px $font;
+				color: $tertiary-grey;
 			}
 		}
 	}

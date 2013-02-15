@@ -262,6 +262,35 @@
 }
 
 
+@mixin text-pre-wrap {
+	white-space: pre-wrap;      // CSS3
+	white-space: -moz-pre-wrap; // Firefox
+	white-space: -o-pre-wrap;   // Opera
+	word-wrap: break-word;      // IE
+	word-break: break-word;     // WEBKIT
+}
+
+@mixin note-body {
+	@include text-pre-wrap;
+
+	a {
+		word-wrap: break-word;
+	}
+
+	strong, em strong {
+		font-weight: bold !important;
+	}
+
+	em, strong em {
+		font-style: italic !important;
+	}
+
+	.body-divider .whiteboard-thumbnail{
+		width: 240px !important;
+		clear: both;
+	}
+}
+
 @mixin data-view {
 	background: #ffffff;
 	font: 11px Arial, Helvetica, sans-serif;
