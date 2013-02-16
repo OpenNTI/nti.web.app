@@ -448,7 +448,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		//this will let us share it and test it...
 
 		if(rules.required === true && (value === null || value === undefined)){
-			this.showError('Rrequired.');
+			this.showError('Required.');
 			return false;
 		}
 
