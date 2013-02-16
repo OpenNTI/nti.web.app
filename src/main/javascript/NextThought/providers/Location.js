@@ -293,7 +293,21 @@ Ext.define('NextThought.providers.Location', {
 					root: getAttribute([l,d],'base'),
 					title: getAttribute([l,d],'title'),
 					label: getAttribute([l,d],'label'),
-					thumbnail: getAttribute([l,d],'thumbnail')
+					thumbnail: getAttribute([l,d],'thumbnail'),
+					getIcon: function(fromBook){
+						var iconPath = fromBook? this.title.get('icon') : this.icon;
+						if(iconPath.substr(0,this.root.length) !== this.root ){
+							iconPath = this.root+this.icon;
+						}
+						return this.baseURI+iconPath;
+					},
+					getPathLabel: function(ntiid){
+						var lineage = LocationProvider.getLineage(ntiid||this.NTIID,true),
+							sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
+							base = lineage.last(),
+							leaf = lineage.first();
+						return lineage.length === 1 ? base : base + sep + leaf;
+					}
 				},r);
 		}
 

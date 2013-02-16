@@ -187,6 +187,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}, me);
 	},
 
+
 	goToObject: function(){
 		var rec = this.record,
 			cid = rec ? rec.get('ContainerId') : null;
@@ -196,6 +197,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 	},
 
+	
 	setLocation: function(meta){
 		if(!meta){return;}
 
@@ -204,22 +206,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			return;
 		}
 
-
-		var location, path, iconPath,
-			lineage = LocationProvider.getLineage(meta.NTIID,true),
-			me = this;
-
-		iconPath = meta.icon;
-		if(iconPath.substr(0,meta.root.length) !== meta.root ){
-			iconPath = meta.root+meta.icon;
-		}
-
-		location = lineage.first();
-		path = lineage.last();
-
-		this.locationEl.update(path + '/.../' + location);
+		this.locationEl.update(meta.getPathLabel());
 		this.locationIcon.setStyle({
-			backgroundImage: Ext.String.format('url({0})',meta.baseURI+iconPath)
+			backgroundImage: Ext.String.format('url({0})',meta.getIcon())
 		});
 
 		this.locationEl.hover(
