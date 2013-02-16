@@ -63,18 +63,20 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		console.log('Show loading bar');
 		//TOOD how to get the height into css.  If we don't specify it here it gets an
 		//inline styled height
-		this.add({xtype: 'panel',
-				  cls: 'loading-bar',
-				  itemId: 'loadingbar',
-				  height: 40,
-				  listeners: {
-					  afterrender: {
-						  fn: function(cmp){
-							  cmp.el.mask('Loading...');
-						  },
-						  single: true
-					  }
-				  }});
+		this.add({
+			xtype: 'panel',
+			cls: 'loading-bar',
+			itemId: 'loadingbar',
+			height: 40,
+			frame: false, border: false, plain: true,
+			listeners: {
+				afterrender: {
+					fn: function(cmp){
+						cmp.el.mask('Loading...');
+					},
+					single: true
+				}
+			}});
 	},
 
 	clearLoadingBar: function(){
