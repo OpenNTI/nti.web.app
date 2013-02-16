@@ -23,14 +23,33 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 		bodyEl: '.box'
 	},
 
+	selectedTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+			{tag:'tpl', 'for':'.', cn:[
+				{tag:'tpl', 'if':'.',cn:[
+					{tag:'span', html:'{.}' }
+				]}
+			]}
+	)),
 
-	bookTpl: new Ext.XTemplate(Ext.DomHelper.markup([])),
-
-
-	sectionTpl: new Ext.XTemplate(Ext.DomHelper.markup([])),
-
-
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup([])),
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
+		{ tag: 'tpl', 'for': 'books', cn:[
+			{ cls: 'book', cn: [
+				{ cls: 'icon', style: 'background-image: url({icon});'},
+				{ cn:[
+					{ tag: 'tpl', 'for': 'pages', cn:[
+						{ cls: 'page', cn: [
+							{ cls: 'label', html: '{label}' },
+							{ tag: 'tpl', 'for': 'items', cn:[
+								{ cls: 'selected-text', 'data-ntiid':'{ntiid}', cn:[
+									{tag: 'span', html: '{text}'},{cls:'tip'}
+								]}
+							]}
+						]}
+					]}
+				]}
+			]}
+		]}
+	)),
 
 
 	setupContainerRenderData: function(){
@@ -55,15 +74,17 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 				i.meta = meta;
 				count--;
 
-				if(!LocationMeta.getValue(meta.NTIID)){
-					console.error('strang...not in the cache');
+				var root = meta.ContentNTIID,
+					page = meta.NTIID;
+
+				root = (books[root] = books[root] || {});
+				page = (root[page] = root[page] || []);
+				page.push(i);
+
+				if(!count){
+					me.setupBookRenderData(d,books);
+					me.maybeFillIn(d);
 				}
-
-				books[meta.root] = books[meta.root] || {};
-				books[meta.root][meta.NTIID] = books[meta.root][meta.NTIID] || [];
-				books[meta.root][meta.NTIID].push(i);
-
-				if(!count){ me.setupBookRenderData(d,books); }
 			});
 		});
 
@@ -76,18 +97,38 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	 * @param groupings {Object} the input
 	 */
 	setupBookRenderData: function(data,groupings){
-
 		data.books = [];
-
 		Ext.Object.each(groupings,function(k,root){
-			Ext.Object.each(root,function(page,items){
+			var book = {pages:[]};
+			data.books.push(book);
+			Ext.Object.each(root,function(k,items){
+				var page = {items:[]};
+				book.pages.push(page);
 				Ext.each(items,function(i){
-
+					if(!book.hasOwnProperty('icon')){ book.icon = i.meta.getIcon(true); }
+					if(!page.hasOwnProperty('label')){ page.label = i.meta.getPathLabel(); }
+					page.items.push({text: i.get('selectedText'), ntiid: i.getId()});
 				});
 			});
 		});
-
 	},
+
+
+	maybeFillIn: function(data){
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.maybeFillIn,this,[data]),this,{single:true});
+			return;
+		}
+
+		this.tpl.overwrite(this.bodyEl,data);
+
+		var me = this;
+		this.bodyEl.select('.selected-text > span').each(function(s){
+			var words = (s.dom.innerHTML||'').trim();
+			me.selectedTpl.overwrite(s,words.split(' '));
+		});
+	},
+
 
 
 	/**
