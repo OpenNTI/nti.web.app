@@ -121,7 +121,7 @@ Ext.define('NextThought.providers.Location', {
 				theStore = root;
 			}
 		}
-		return theStore || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad };
+		return theStore || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad, getItems: bad };
 	},
 
 
@@ -193,7 +193,7 @@ Ext.define('NextThought.providers.Location', {
 					//We were displaying an alert box here on 403s, but since we don't know why we
 					//are being called we shouldn't do that.  I.E. unless the user triggered this action
 					//an alert box will just be unexpected and they won't know what to do about it. Until
-					//we move the error handling out to the caller the most friendly thing seems to 
+					//we move the error handling out to the caller the most friendly thing seems to
 					//just log the issue and leave the splash showing.
 					return;//jslint hates empty blocks
 				}
