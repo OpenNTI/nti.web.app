@@ -201,8 +201,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	setLocation: function(meta){
 		if(!meta){return;}
 
-		var me = this;
-
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setLocation,this,arguments),this,{single:true});
 			return;
@@ -217,9 +215,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				function(){Ext.fly(this).addCls('over');},
 				function(){Ext.fly(this).removeCls('over');});
 
-		this.locationEl.on('click',function(){
-			me.fireEvent('navigation-selected', meta.NTIID, null, null);
-		});
+		this.locationEl.on('click',
+				Ext.bind(this.fireEvent,this,['navigation-selected', meta.NTIID, null, null]));
 	}
 
 
