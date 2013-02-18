@@ -64,6 +64,13 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			}
 		});
 
+	},
+
+
+	enableRevealSlide: function(){
+		if(this.slideEnabled){return;}
+		this.slideEnabled = true;
+
 		var i = this.itemEl, t;
 
 		function min(){
@@ -72,7 +79,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 		function mout(){
 			clearTimeout(t);
-			t = setTimeout(function(){i.removeCls('reveal');},1000);
+			t = setTimeout(function(){i.removeCls('reveal');},500);
 		}
 
 		this.contextEl.hover(min,mout);
@@ -119,7 +126,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 	syncFloatingHeight: function(){
-		var h = this.itemEl.getHeight();
+		var h = this.itemEl.getHeight() - 1;//don't let the bottom peek through the floating part.
 		this.spacerEl.setHeight(h);
 	},
 
@@ -176,6 +183,13 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			me.loadContext(function(){
 				me.contextEl.unmask();
 				me.syncFloatingHeight();
+
+				var c = me.context.getHeight(),
+					b = me.contextEl.getHeight();
+
+				if(c > b || me.context.select('img').getCount() > 0){
+					me.enableRevealSlide();
+				}
 			});
 		}
 	},

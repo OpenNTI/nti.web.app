@@ -269,12 +269,10 @@
 				}
 
 				.context{
-					//display: none;
 					overflow: hidden;
 					position: relative;
-					min-height: 45px;
 					cursor: pointer;
-					max-height: 64px;
+					height: 64px;
 
 					canvas{
 						position: absolute; display:none;
@@ -306,7 +304,7 @@
 
 			.item-spacer {
 				border-width: 0 1px;
-				min-height: 206px;
+				min-height: 205px;
 				padding-left: 85px;
 				cursor: pointer;
 				text-transform: uppercase;
