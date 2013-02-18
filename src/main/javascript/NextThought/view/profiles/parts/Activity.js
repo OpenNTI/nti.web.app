@@ -172,6 +172,10 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			return;
 		}
 
+		//Here is where we could loop over existing cmps and ask them if
+		//they want to handle addition.  That is one way we could support
+		//coalescing highlights as they are added live.=
+
 		//We don't maintain a sorted store so assume things
 		//coming in an add method are the most recent.  Therefore
 		//we just sort them adn stick them at the top
