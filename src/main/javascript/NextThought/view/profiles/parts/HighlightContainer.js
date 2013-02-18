@@ -58,7 +58,8 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	setupContainerRenderData: function(){
 		var me = this,
 			c = me.up('[user]'),
-			name = c ? c.user.getName() : '...',
+			u = c ? c.user : null,
+			name = u ? u.getName() : '...',
 			items = me.items,
 			count = items.length,
 			books = {},
