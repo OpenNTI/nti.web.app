@@ -4,8 +4,12 @@ Ext.define('NextThought.view.ResourceNotFound',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'resource-not-found', cn:[
-			{ cls: 'heading', html: 'The page you requested was not found.'},
-			{ cls: 'subtext', html: 'You may have clicked an expired link or mistyped the address. Some web addresses are case sensitive.'}
+			{ cls: 'heading', html: 'Sorry, this page doesn\'t exist...'},
+			{ cls: 'subtext', html: 'Your link may contain errors or the page may no longer exist.'},
+			{ cls: 'actions', cn: [
+				{cls: 'library', tag: 'a', html: 'Library'},
+				{cls: 'back', tag: 'a', html: 'Previous Page'}
+			]}
 		]}
 	])
 });

@@ -31,10 +31,10 @@ Ext.define( 'NextThought.view.views.Profiles', {
 
 
 	setUser: function(username, finishCallback){
-		var current = this.down('profile-panel');
+		var current = this.down('profile-panel'), me = this;
 
 		function fin(){
-			this.unmask();
+			me.unmask();
 			Ext.callback(finishCallback,this,[current]);
 		}
 
