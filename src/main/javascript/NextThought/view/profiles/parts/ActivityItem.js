@@ -197,9 +197,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 	},
 
-	
+
 	setLocation: function(meta){
 		if(!meta){return;}
+
+		var me = this;
 
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setLocation,this,arguments),this,{single:true});
