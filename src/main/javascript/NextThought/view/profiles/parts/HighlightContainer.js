@@ -3,6 +3,9 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	alias: 'widget.profile-activity-highlight-container',
 
 	cls: 'activity-highlight-container',
+	mixins: {
+		profileLink: 'NextThought.mixins.ProfileLinks'
+	},
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn:[
@@ -34,11 +37,11 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
 		{ tag: 'tpl', 'for': 'books', cn:[
 			{ cls: 'book', cn: [
-				{ cls: 'icon', style: 'background-image: url({icon});'},
+				{ cls: 'icon', style: 'background-image: url({icon});', 'data-ntiid':'{ntiid}' },
 				{ cn:[
 					{ tag: 'tpl', 'for': 'pages', cn:[
 						{ cls: 'page', cn: [
-							{ cls: 'label', html: '{label}' },
+							{ cls: 'label', html: '{label}', 'data-ntiid':'{ntiid}' },
 							{ tag: 'tpl', 'for': 'items', cn:[
 								{ cls: 'selected-text', 'data-ntiid':'{ntiid}', cn:[
 									{tag: 'span', html: '{text}'},{cls:'tip'}
@@ -99,10 +102,10 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	setupBookRenderData: function(data,groupings){
 		data.books = [];
 		Ext.Object.each(groupings,function(k,root){
-			var book = {pages:[]};
+			var book = {pages:[], ntiid: k};
 			data.books.push(book);
 			Ext.Object.each(root,function(k,items){
-				var page = {items:[]};
+				var page = {items:[], ntiid: k};
 				book.pages.push(page);
 				Ext.each(items,function(i){
 					if(!book.hasOwnProperty('icon')){ book.icon = i.meta.getIcon(true); }
@@ -141,6 +144,40 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 
 
 	afterRender: function(){
-		this.callParent(arguments);
+		var me = this;
+		me.callParent(arguments);
+		me.enableProfileClicks(me.nameEl);
+		me.mon(me.bodyEl,'click', me.onClick, me);
+
+		Ext.each(this.items,function(i){ me.mon(i, 'destroy', me.onHighlightRemoved, me); });
+	},
+
+
+	onHighlightRemoved: function(item){
+		Ext.Array.remove(this.items,item);
+		this.mun(item,'destroy',this.onHighlightRemoved,this);
+
+		if(this.items.length > 0){
+			this.setupContainerRenderData();
+			return;
+		}
+
+		this.destroy();
+	},
+
+
+	onClick: function(e){
+		var t = e.getTarget('[data-ntiid]',null,true);
+		if(!t){ return; }
+
+		e.stopEvent();
+
+		if(t.is('.selected-text')){
+			//highlight
+			console.debug('clicked highlight: ', t.getAttribute('data-ntiid'));
+			return;
+		}
+
+		console.debug('clicked content path/icon, goto: ', t.getAttribute('data-ntiid'));
 	}
 });

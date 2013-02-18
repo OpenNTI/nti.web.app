@@ -528,6 +528,7 @@
 					.icon {
 						float: left;
 						width: 54px; height: 66px;
+						cursor: pointer;
 
 						box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3),
 									-1px 1px 3px 0 rgba(0,0,0,0.35);
@@ -565,9 +566,15 @@
 							color: $tertiary-grey;
 							font: normal 600 10px/30px $font;
 							text-transform: uppercase;
+							cursor: pointer;
+
+							&:hover {
+								text-decoration: underline;
+							}
 						}
 
 						.selected-text {
+							cursor: pointer;
 							position: relative;
 							margin: 0 0 20px 0;
 							left: -3px;
