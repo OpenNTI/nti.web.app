@@ -148,7 +148,9 @@ Ext.define('NextThought.view.UserDataPanel',{
                             store.sort();
                         }
                         else {
-                            store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
+	                        //Do not use the PageItem store's remove() implementation. This is a simple store levaraging
+	                        // the PageItem's loading/url logic. (So call the base class's remove)
+	                        Ext.data.Store.prototype.remove.call(store,store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
                         }
                     }
                 });
