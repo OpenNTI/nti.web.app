@@ -122,7 +122,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		top = offsets[1] + dom.scrollTop;
 		ctBottom = dom.scrollTop + dom.clientHeight;
 
-		if(ctBottom > top){
+		if(ctBottom >= top){
 			activeTab.onScrolledToBottom();
 		}
 	},
