@@ -57,7 +57,8 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 
 	setupContainerRenderData: function(){
 		var me = this,
-			u = me.up('[user]').user,
+			c = me.up('[user]'),
+			name = c ? c.user.getName() : '...',
 			items = me.items,
 			count = items.length,
 			books = {},
@@ -66,11 +67,20 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 		if(this.rendered){ delete me.renderData; }
 
 		d = Ext.apply(me.renderData||{},{
-			name: u.getName(),
+			name: name,
 			count: count === 1 ? 'a' : count,
 			plural: count === 1 ? '' : 's',
 			date: Ext.Date.format(me.date,'F j, Y')
 		});
+
+		function byTime(a,b){
+			function g(x){ return x.get ? x.get('CreatedTime').getTime() : 0; }
+			a = g(a);
+			b = g(b);
+			return a - b;
+		}
+
+		Ext.Array.sort(this.items,byTime);
 
 		Ext.each(items,function( i ){
 			LocationMeta.getMeta(i.get('ContainerId'),function(meta){
@@ -149,7 +159,32 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 		me.enableProfileClicks(me.nameEl);
 		me.mon(me.bodyEl,'click', me.onClick, me);
 
+		me.setupContainerRenderData = Ext.Function.createBuffered(me.setupContainerRenderData,10,me,null);
 		Ext.each(this.items,function(i){ me.mon(i, 'destroy', me.onHighlightRemoved, me); });
+	},
+
+
+	/**
+	 * Attempts to add the record to this container.  If the date is a match it adds it. Otherwise it skips it.
+	 *
+	 * @param {NextThought.model.Highlight} record
+	 * @returns {boolean} True if it was added, false otherwise.
+	 */
+	collate: function(record){
+		var d = record.get('CreatedTime'),
+			n = new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+		if(n === this.date.getTime() && /highlight$/i.test(record.get('Class')||'')){
+			this.addHighlight(record);
+			return true;
+		}
+
+		return false;
+	},
+
+
+	addHighlight: function(record){
+		this.items.unshift(record);
+		this.setupContainerRenderData();
 	},
 
 
