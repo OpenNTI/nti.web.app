@@ -21,6 +21,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		contextEl: '.context',
 		subjectEl: '.subject',
 		locationIcon: '.icon',
+		spacerEl: '.item-spacer',
+		itemEl: '.item',
 		commentsEl: '.comments',
 		editEl: '.reply-options .edit',
 		flagEl: '.reply-options .flag',
@@ -51,7 +53,23 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
 		this.mon( this.contextEl, 'click', this.goToObject, this);
+		this.mon( this.spacerEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
+
+		var i = this.itemEl, t;
+
+		function min(){
+			clearTimeout(t);
+			i.addCls('reveal');
+		}
+		function mout(){
+			clearTimeout(t);
+			t = setTimeout(function(){i.removeCls('reveal');},1000);
+		}
+
+		this.contextEl.hover(min,mout);
+		this.spacerEl.hover(min,mout);
+
 	},
 
 
@@ -90,6 +108,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 	isExpanded: function(){ return !this.commentsEl; },
+
+
+	syncFloatingHeight: function(){
+		var h = this.itemEl.getHeight();
+		this.spacerEl.setHeight(h);
+	},
 
 
 	maybeFillIn: function(){
@@ -143,8 +167,21 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			me.contextEl.mask('Loading...');
 			me.loadContext(function(){
 				me.contextEl.unmask();
+				me.syncFloatingHeight();
 			});
 		}
+	},
+
+
+	activateReplyEditor: function(){
+		this.callParent(arguments);
+		Ext.defer(this.syncFloatingHeight,1,this);
+	},
+
+
+	deactivateReplyEditor: function(){
+		this.callParent(arguments);
+		Ext.defer(this.syncFloatingHeight,1,this);
 	},
 
 
@@ -233,6 +270,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 						{ cls: 'context', cn: [{tag: 'canvas'},{cls: 'text'}] }
 					]}
 				]},
+				{ cls:'item-spacer', html: 'Reveal more' },
 				{ cls:'item', cn:[
 					{ cls: 'avatar' },
 					{ cls: 'controls', cn: [

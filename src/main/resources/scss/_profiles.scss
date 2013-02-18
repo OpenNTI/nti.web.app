@@ -214,9 +214,11 @@
 			margin: 40px 0 0;
 			padding: 0;
 			z-index: 1;
+			border-bottom-width: 0;
 
 			& + .note-replies,
 			& + .note-replies + .comments,
+			.item-spacer,
 			.content-callout{
 				position: relative;
 				margin: 0 3px;
@@ -234,7 +236,7 @@
 			}
 
 			.content-callout {
-				padding: 16px 16px 20px;
+				padding: 16px 16px 0px;
 				border-bottom-width: 0;
 
 				.icon {
@@ -272,6 +274,7 @@
 					position: relative;
 					min-height: 45px;
 					cursor: pointer;
+					max-height: 64px;
 
 					canvas{
 						position: absolute; display:none;
@@ -286,6 +289,14 @@
 						display: block;
 						img { max-width: 50% !important; }
 					}
+
+					&::after {
+						content: ' ';
+						position: absolute;
+						left: 0; right: 0;
+						bottom: -4px; height: 10px;
+						@include background-image(linear-gradient(top,  rgba(251,251,251,0) 0%,rgba(251,251,251,1) 100%));
+					}
 				}
 			}
 
@@ -293,8 +304,28 @@
 				.item .reply-options { display: none; }
 			}
 
+			.item-spacer {
+				border-width: 0 1px;
+				min-height: 206px;
+				padding-left: 85px;
+				cursor: pointer;
+				text-transform: uppercase;
+				font: normal 600 10px/20px $font;
+				color: $primary-blue;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				&:hover{
+					text-decoration: underline;
+				}
+			}
 			.item {
-				position: relative;
+				&.reveal { top: 120px; }
+				@include experimental(transition, top 0.7s ease);
+				position: absolute;
+				background: white;
+				left: 0; right: 0;
+				top: 100px;
 				z-index: 2;
 				border: 1px solid rgba(223, 223, 223, 1);
 				box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05),
