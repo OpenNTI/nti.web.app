@@ -138,7 +138,7 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 
 		var me = this;
 		this.bodyEl.select('.selected-text > span').each(function(s){
-			var words = (s.dom.innerHTML||'').trim();
+			var words = Ext.String.ellipsis( s.dom.innerHTML.trim(), 200, true);
 			me.selectedTpl.overwrite(s,words.split(' '));
 		});
 	},
