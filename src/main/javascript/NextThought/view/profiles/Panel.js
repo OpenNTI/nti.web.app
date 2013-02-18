@@ -48,7 +48,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	renderSelectors: {
 		avatarEl: '.profile-head .avatar',
-		avatarEditEl: '.profile-head .avatar .edit',
 		nameEl: '.profile-head .meta .name',
 		roleEl: '.profile-head .meta [data-field=role]',
 		editEl: '.profile-head .avatar .edit',
@@ -61,7 +60,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		chatEl: '.profile-head .meta .actions .chat',
 		addToContacts: '.add-to-contacts',
 		errorMsgEl: '.error-msg'
-
 	},
 
 	items: [{
@@ -97,7 +95,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.relayEvents(this.el.parent(),['scroll']);
 
+		this.affiliationSepEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.editEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorMsgEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 
 		this.mon(this.chatEl,'click',this.onChatWith,this);
@@ -235,6 +235,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 		//Make more of the UI schema driven
 
 		this.avatarEl.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
+		if(profileSchema && profileSchema.avatarURL && !profileSchema.avatarURL.readonly){
+			this.editEl.show();
+		}
+		else{
+			this.editEl.hide();
+		}
+
 
 		this.nameEl.update(user.getName());
 
@@ -272,7 +279,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 		if(!roleResult || !affiliationResult){
-			this.affiliationSepEl.remove();
+			this.affiliationSepEl.hide();
+		}
+		else{
+			this.affiliationSepEl.show();
 		}
 
 		function validateAgainstSchema(value){

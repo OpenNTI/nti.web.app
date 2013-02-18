@@ -138,7 +138,13 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		return cmps;
 	},
 
-	storeLoaded: function(store, records){
+	storeLoaded: function(store, records, successful){
+
+		if(!successful){
+			this.clearLoadingBar();
+			return;
+		}
+
 		console.log('loaded ', records.length, ' items ');
 
 		//For now we only do top level stuff
