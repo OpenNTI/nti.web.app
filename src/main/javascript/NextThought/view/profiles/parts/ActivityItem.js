@@ -56,6 +56,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.mon( this.spacerEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
 
+		//NOTE: We run into a case where a reply to one of our replies doesn't trigger opening the reply editor.
+		// It was mainly a timing issue, so now listen to add events.
+		this.on('add', function(cmp, child){
+			if( this.replyToId && child.record && child.record.getId() === this.replyToId){
+				Ext.defer(this.maybeOpenReplyEditor, 1, this);
+			}
+		});
+
 		var i = this.itemEl, t;
 
 		function min(){
