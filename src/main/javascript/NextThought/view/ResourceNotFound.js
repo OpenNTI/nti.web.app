@@ -13,6 +13,25 @@ Ext.define('NextThought.view.ResourceNotFound',{
 				]}
 			]}
 		]}
-	])
+	]),
+
+	renderSelectors:{
+		backEl: 'a.back',
+		libraryEl: 'a.library'
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.backEl, 'click', this.goBack, this);
+		this.mon(this.libraryEl, 'click', this.goLibrary, this);
+	},
+
+	goBack: function(){
+		history.back();
+	},
+
+	goLibrary: function(){
+		this.fireEvent('go-to-library');
+	}
 });
 

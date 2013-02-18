@@ -42,6 +42,9 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'profile-activity *':{
 				'navigation-selected': this.navigate
+			},
+			'notfound':{
+				'go-to-library': this.goToLibrary
 			}
 		},{});
 	},
@@ -251,6 +254,9 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 	},
 
+	goToLibrary: function(){
+		Ext.getCmp('library').activate();
+	},
 
 	switchViews: function(button, state){
 		var id = button.viewId || button.title.toLowerCase();
