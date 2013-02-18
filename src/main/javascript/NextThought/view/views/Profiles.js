@@ -34,6 +34,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 		var current = this.down('profile-panel');
 
 		function fin(){
+			this.unmask();
 			Ext.callback(finishCallback,this,[current]);
 		}
 
@@ -41,6 +42,8 @@ Ext.define( 'NextThought.view.views.Profiles', {
 			fin();
 			return;
 		}
+
+		this.mask('Loading...');
 
 		UserRepository.getUser(username, function(user){
 			var toAdd, shouldFireLoaded;
