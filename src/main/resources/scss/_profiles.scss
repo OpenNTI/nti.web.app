@@ -140,6 +140,7 @@
 
 			&.editable {
 				[data-field]:hover {
+					color: $primary-grey;
 					position: relative;
 					z-index: 1000;
 
