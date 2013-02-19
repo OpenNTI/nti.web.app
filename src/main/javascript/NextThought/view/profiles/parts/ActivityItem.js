@@ -66,6 +66,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	},
 
+	onBeforeAdd: function(cmp){
+		this.callParent(arguments);
+		if(!this.isExpanded()){
+			if(this.items.last()){
+				this.items.last().destroy();
+			}
+		}
+	},
 
 	enableRevealSlide: function(){
 		if(this.slideEnabled){return;}
@@ -93,14 +101,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.commentsEl.remove();
 		delete this.commentsEl;
 		this.fillInReplies();
-	},
-
-
-	onRemove: function(){
-		if(!this.isExpanded()){
-			this.clickedRevealAllReplies();
-		}
-		this.callParent(arguments);
 	},
 
 	onDelete: function(){
