@@ -305,6 +305,7 @@
 
 			&.editor-active {
 				.item .reply-options { display: none; }
+				.item.reveal { top: 100px; }//don't animate down when the editor is active.
 			}
 
 			.item-spacer {
