@@ -239,6 +239,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		r.loadReplies(cb,me,1,{sortOn: 'CreatedTime', sortOrder: 'descending'});
 	},
 
+	setContent: function(){
+		this.callParent(arguments);
+		Ext.defer(this.syncFloatingHeight,1,this);
+	},
 
 	loadContext: function(fin){
 		var me = this,
