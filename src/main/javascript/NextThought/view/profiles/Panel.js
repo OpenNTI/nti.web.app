@@ -48,6 +48,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	renderSelectors: {
+		profileInfoEl: '.profile-head',
 		avatarEl: '.profile-head .avatar',
 		nameEl: '.profile-head .meta .name',
 		roleEl: '.profile-head .meta [data-field=role]',
@@ -424,6 +425,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		profileSchemaUrl = user.getLink('account.profile');
 		if(!profileSchemaUrl){
+			me.profileInfoEl.removeCls('editable');
 			onProfileLoaded(user);
 			return;
 		}
