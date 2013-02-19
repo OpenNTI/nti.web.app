@@ -127,12 +127,9 @@ Ext.define('NextThought.cache.UserRepository', {
 						}
 					},
 					success: function(u){
-						//not necessary since the user model calls update
-						//except that it only happens for users, we want to cache
-						//groups here also
-						if(!this.resolveFromStore(name)){
-							this.cacheUser(u);
-						}
+						//Note we recache the user here no matter what
+						//if we requestsd it we cache the new values
+						this.cacheUser(u);
 						result.push(u);
 
 						//our list of results is as expected, finish
