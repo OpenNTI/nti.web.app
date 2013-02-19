@@ -487,10 +487,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			Ext.fly(me.wbThumbnailTpm.insertBefore(p, [data, guid])).unselectable();
 			Ext.fly(p).remove();
 
-			Ext.defer(function(){
-				me.fireEvent('size-changed');
-				me.focus(true);
-			}, 0);
+			me.fireEvent('size-changed');
+			me.focus(true);
 		});
 	},
 
