@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			},{
 				cls: 'meta',
 				cn: [
-					{ cls: 'name', 'data-field':'alias' },
+					{ cls: 'name', 'data-field': 'alias' },
 					{ cls: 'add-to-contacts', html: 'ADD'},
 					{ 'data-field': 'email', 'data-placeholder': 'Email' },
 					{ cn: [
@@ -105,6 +105,18 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mon(this, 'scroll', this.onScroll, this);
 
 		this.tabs = this.down('profile-tabs');
+
+		//They want to disable profile fields for everyone
+		//in some environements.  If the config flag is set
+		//hide everything but avatar and username
+		if($AppConfig.disableProfiles === true){
+			this.roleEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			this.affiliationEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			this.affiliationSepEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			this.locationEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			this.homePageEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		}
 	},
 
 
@@ -189,7 +201,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 	},
 
-
 	//Returns an object with two fields, shouldBeShown and
 	//editable that describe how (if at all) the profided profile
 	//field should be shown
@@ -201,26 +212,78 @@ Ext.define('NextThought.view.profiles.Panel',{
 		return r;
 	},
 
-
-	updateProfile: function(user, schema){
-		var profileSchema = (schema || {}).ProfileSchema,
-			nameInfo = this.getMetaInfoForField(user, 'alias', profileSchema),
-			affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
+	updateProfileDetail: function(user, profileSchema){
+		//Don't do anything if we are disabled in the config
+		if($AppConfig.disableProfiles === true){
+			return;
+		}
+		var affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
 			locationInfo = this.getMetaInfoForField(user,'location', profileSchema),
 			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
 			homePageInfo = this.getMetaInfoForField(user, 'home_page', profileSchema),
 			emailInfo = this.getMetaInfoForField(user, 'email', profileSchema),
-			roleResult, affiliationResult, me = this, homePageValue;
+			roleResult, affiliationResult, me = this, homePageValue,
+			me = this;
 
-		this.userObject = user;
-		this.profileSchema = profileSchema;
-
-		this.mun(this.nameEl,'click',this.editName,this);
 		this.mun(this.affiliationEl,'click',this.editMeta,this);
 		this.mun(this.roleEl,'click',this.editMeta, this);
 		this.mun(this.locationEl,'click',this.editMeta, this);
 		this.mun(this.emailEl,'click',this.editMeta, this);
 		this.mun(this.homePageEl,'click',this.editMeta, this);
+
+		function setupMeta(el, info){
+			if(info.shouldBeShown){
+				me.updateField(el, info.field, user.get(info.field));
+				if(info.editable){
+					me.mon(el,'click',me.editMeta,me);
+				}
+				return true;
+			}
+			el.remove();
+			return false;
+		}
+
+		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo);
+		setupMeta(this.emailEl, emailInfo);
+		roleResult = setupMeta(this.roleEl, roleInfo);
+		setupMeta(this.locationEl, locationInfo);
+		setupMeta(this.homePageEl, homePageInfo);
+
+		if(!roleResult || !affiliationResult){
+			this.affiliationSepEl.hide();
+		}
+		else{
+			this.affiliationSepEl.show();
+		}
+
+		function validateAgainstSchema(value){
+			var editor = this.ownerCt;
+				field = editor.boundEl.getAttribute('data-field');
+			return  me.validate(field, value);
+		}
+
+		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
+			autoSize: { width: 'boundEl' },
+			cls: 'meta-editor',
+			updateEl: false,
+			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			listeners:{
+				complete: this.onSaveField,
+				canceledit: this.clearError,
+				scope: this
+			}
+		});
+	},
+
+	updateProfile: function(user, schema){
+		var profileSchema = (schema || {}).ProfileSchema,
+			nameInfo = this.getMetaInfoForField(user, 'alias', profileSchema),
+			me = this;
+
+		this.userObject = user;
+		this.profileSchema = profileSchema;
+
+		this.mun(this.nameEl,'click',this.editName,this);
 
 		try {
 			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
@@ -256,45 +319,18 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.nameEl.addCls('readonly');
 		}
 
-
-		function setupMeta(el, info){
-			if(info.shouldBeShown){
-				me.updateField(el, info.field, user.get(info.field));
-				if(info.editable){
-					me.mon(el,'click',me.editMeta,me);
-				}
-				return true;
-			}
-			el.remove();
-			return false;
-		}
-
-		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo);
-		setupMeta(this.emailEl, emailInfo);
-		roleResult = setupMeta(this.roleEl, roleInfo);
-		setupMeta(this.locationEl, locationInfo);
-		setupMeta(this.homePageEl, homePageInfo);
-
 		this.maybeShowChat();
-
-
-		if(!roleResult || !affiliationResult){
-			this.affiliationSepEl.hide();
-		}
-		else{
-			this.affiliationSepEl.show();
-		}
 
 		function validateAgainstSchema(value){
 			var editor = this.ownerCt;
 				field = editor.boundEl.getAttribute('data-field');
-			return me.validate(field, value);
+			return  me.validate(field, value);
 		}
 
 		this.nameEditor = NextThought.view.profiles.ProfileFieldEditor.create({
 			cls: 'name-editor',
 			updateEl: true,
-			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			field:{ xtype: 'simpletext', allowBlank: true, validator:  validateAgainstSchema, silentIsValid: false },
 			listeners:{
 				complete: this.onSaveField,
 				canceledit: this.clearError,
@@ -302,17 +338,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			}
 		});
 
-		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
-			autoSize: { width: 'boundEl' },
-			cls: 'meta-editor',
-			updateEl: false,
-			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
-			listeners:{
-				complete: this.onSaveField,
-				canceledit: this.clearError,
-				scope: this
-			}
-		});
+		this.updateProfileDetail(user, profileSchema);
 	},
 
 	shouldShowChat: function(){

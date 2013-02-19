@@ -73,9 +73,6 @@ Ext.define(	'NextThought.model.User', {
 
 
 	goToProfile: function(){
-		if($AppConfig.disableProfiles === true){
-			return;
-		}
 		window.location.hash = this.getProfileUrl();
 	},
 

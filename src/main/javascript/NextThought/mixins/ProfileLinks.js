@@ -11,10 +11,6 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 	enableProfileClicks: function(){
 		var me = this;
 
-		if($AppConfig.disableProfiles === true){
-			return;
-		}
-
 		function hoverOn(){ Ext.fly(this).addCls('over'); }
 		function hoverOff(){ Ext.fly(this).removeCls('over'); }
 		function onUserNameClick(){
