@@ -4,7 +4,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 	requires: [
 		'NextThought.view.profiles.parts.ActivityItem',
-		'NextThought.view.profiles.parts.HighlightContainer'
+		'NextThought.view.profiles.parts.HighlightContainer',
+		'NextThought.view.profiles.parts.Joined'
 	],
 
 	defaultType: 'profile-activity-item',
@@ -158,7 +159,13 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		});
 
 
-		var add = this.cmpsFromRecords(records);
+		var add = this.cmpsFromRecords(records),
+			s = this.store,
+			done = s.currentPage === s.getPageFromRecordIndex(s.getTotalCount());
+
+		if(done){
+			add.push({ xtype: 'joined-event', username: this.username });
+		}
 
 		this.suspendLayouts();
 		this.clearLoadingBar();
