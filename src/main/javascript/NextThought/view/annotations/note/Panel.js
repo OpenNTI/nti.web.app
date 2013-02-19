@@ -250,6 +250,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record){
+			if(me.isDestroyed){ return; }
 			me.editor.unmask();
 			if (success) {
 				me.deactivateReplyEditor();
@@ -298,7 +299,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 		me.editor.mask('Saving...');
 		me.updateLayout();
-		Ext.defer(save, 500);
+		Ext.defer(save, 1);
 	},
 
 
@@ -504,6 +505,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//we can. Also getting this onto the next event pump
 		//helps the app not seem like it is hanging
 		Ext.defer(function(){
+			if(this.isDestroyed){ return; }
+
 			Ext.suspendLayouts();
 			if(!r.hasOwnProperty('parent') && r.getLink('replies')){
 				this.loadReplies(r);
@@ -517,6 +520,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	maybeOpenReplyEditor: function(){
+		if(!this.getRoot()){ return; }
+
 		var cmp, prefix = this.getRoot().replyIdPrefix();
         if(this.replyToId){
             cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, prefix));
@@ -550,12 +555,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		Ext.each(this.text.query('.whiteboard-container'),
 				function(wb){
-					Ext.fly(wb).on('click', this.click, this);
+						Ext.fly(wb).on('click', this.click, this);
 
-					if(!$AppConfig.service.canShare()){
-						Ext.fly(wb).select('.overlay').setStyle({bottom:0});
-						Ext.fly(wb).select('.toolbar').remove();
-					}
+						if(!$AppConfig.service.canShare()){
+							Ext.fly(wb).select('.overlay').setStyle({bottom:0});
+							Ext.fly(wb).select('.toolbar').remove();
+						}
 				},
 				this);
 
@@ -594,7 +599,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	getRoot:function(){
 		var cmp = this.is(this.rootQuery) ? this : this.up(this.rootQuery);
 		if(!cmp){
-			Ext.Error.raise('No root found');
+			console.error('No root found');
 		}
 		return cmp;
 	},
@@ -736,7 +741,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	addReplies: function(records){
-		var toAdd = [], recordCollection, prefix = this.getRoot().replyIdPrefix();
+		var toAdd = [], recordCollection, prefix = this.getRoot() ? this.getRoot().replyIdPrefix() : null;
 
 		//Shortcircuit
 		if(Ext.isEmpty(records)){
