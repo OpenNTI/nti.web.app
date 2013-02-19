@@ -211,9 +211,32 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 		if(t.is('.selected-text')){
 			//highlight
 			console.debug('clicked highlight: ', t.getAttribute('data-ntiid'));
+			this.goToObject(t.getAttribute('data-ntiid'));
+			return;
+		}
+		console.debug('clicked content path/icon, goto: ', t.getAttribute('data-ntiid'));
+		this.fireEvent('navigation-selected', t.getAttribute('data-ntiid'), null, null);
+	},
+
+	goToObject: function(id){
+		var item, cid;
+
+		if(!id){
 			return;
 		}
 
-		console.debug('clicked content path/icon, goto: ', t.getAttribute('data-ntiid'));
+		Ext.Array.each(this.items, function(i){
+			if(i.getId() === id){
+				item = i;
+				return false;
+			}
+			return true;
+		});
+
+		cid = item.get('ContainerId');
+
+		if(item && cid){
+			this.fireEvent('navigation-selected', cid, item, null);
+		}
 	}
 });
