@@ -119,8 +119,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		Ext.Array.each(records || [], function(i){
 			var c = (i.get('Class')||'default').toLowerCase(),
 				n = 'profile-activity-'+c+'-item',
-				alias = 'widget.'+ n,
-				xtype;
+				alias = 'widget.'+ n;
 
 			if(c === 'highlight'){
 				//This may simplify to line-item-like activity items in the future
@@ -134,13 +133,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			}
 
 			if(Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias),false)){
-				console.error('Unsupported type: ', n,' record: ',i, ', using the default');
-			}
-			else {
-				xtype = n;
+				console.error('Unsupported type: ', n,' record: ',i, ', skipping');
+				return;
 			}
 
-			cmps.push({record: i,root:true, xtype: xtype});
+			cmps.push({record: i,root:true, xtype: n});
 		},this);
 
 		return cmps;
