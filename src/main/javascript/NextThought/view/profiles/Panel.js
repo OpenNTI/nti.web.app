@@ -3,7 +3,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 	alias: 'widget.profile-panel',
 
 	requires:[
-		'Ext.Editor',
 		'NextThought.view.profiles.parts.Activity',
 		'NextThought.view.profiles.TabPanel',
 		'NextThought.view.profiles.ProfileFieldEditor',
