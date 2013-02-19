@@ -63,6 +63,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				Ext.defer(this.maybeOpenReplyEditor, 1, this);
 			}
 		});
+		if(this.record){
+			this.mon(this.record,'count-updated',this.updateCount,this);
+		}
 
 	},
 
@@ -95,6 +98,13 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	},
 
+	updateCount: function(){
+		if(this.commentsEl){
+			var c = this.record.getReplyCount() || 0;
+			console.log('count was update to: ', c);
+			this.commentsEl.update(c + ' comments');
+		}
+	},
 
 	clickedRevealAllReplies: function(){
 		this.mun( this.replyButton, 'click', this.clickedRevealAllReplies, this);

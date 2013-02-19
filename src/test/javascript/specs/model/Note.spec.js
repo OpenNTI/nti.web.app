@@ -151,51 +151,51 @@ describe("Note Tests", function() {
 
 	describe('replyCount', function(){
 
-		it('checks non-nested replyCount', function(){
+		it('checks adding a reply', function(){
 			var c1 = createNote('child1', false),
-				c2 = createNote('child2', false),
-				c3 = createNote('child3', false),
-				root = createNote('Root', false, [c1, c2, c3]);
+				root = createNote('Root', false);
 
-			expect(c1.getReplyCount()).toEqual(0);
-			expect(root.getReplyCount()).toEqual(3);
+			expect(root.getReplyCount()).toEqual(0);
+			//Simulate that a reply c1 was added
+			root.adjustReplyCountOnChange(c1.getId(), true);
+			expect(root.getReplyCount()).toEqual(1);
 		});
 
-		it('checks nested replyCount', function(){
-			var c2 = createNote('child2', false),
-				c1 = createNote('child1', false, [c2]),
-				c4 = createNote('child4', false),
-				c3 = createNote('child3', false, [c4]),
-				root = createNote('Root', false, [c1, c3]);
+		it('checks removing a reply', function(){
+			var c1 = createNote('child1', false),
+				root = createNote('Root', false),
+				c2 = createNote('child2', false);
 
-			expect(c1.getReplyCount()).toEqual(1);
-			expect(root.getReplyCount()).toEqual(4);
+			expect(root.getReplyCount()).toEqual(0);
+
+			//Simulate that a reply c1, c2 were added, which triggered replyCount to update.
+			root.adjustReplyCountOnChange(c1.getId(), true);
+			root.adjustReplyCountOnChange(c2.getId(), true);
+			expect(root.getReplyCount()).toEqual(2);
+
+			//Simulate that c1 was removed
+			root.adjustReplyCountOnChange(c1.getId(), false);
+			expect(root.getReplyCount()).toEqual(1);
 		});
 
-		it('checks more nested replyCount', function(){
-			var c8 = createNote('child8', false),
-				c7 = createNote('child7', false),
-				c6 = createNote('child6', false),
-				c5 = createNote('child5', false, [c6, c7]),
-				c4 = createNote('child4', false, [c8]),
-				c3 = createNote('child3', false, [c5]),
-				c2 = createNote('child2', false, [c3, c4]),
-				c1 = createNote('child1', false),
-				root = createNote('root0', false, [c1, c2]);
+		it('if we decrement the count only once when a reply is removed', function(){
+			var c1 = createNote('child1', false),
+				root = createNote('Root', false),
+				c2 = createNote('child2', false);
 
-			expect(c3.getReplyCount()).toEqual(3);
-			expect(root.getReplyCount()).toEqual(8);
-		});
+			expect(root.getReplyCount()).toEqual(0);
 
-		it('checks nested replyCount with placeholder child', function(){
-			var c2 = createNote('child2', false),
-				c1 = createNote('child1', false, [c2]),
-				c4 = createNote('child4', false),
-				c3 = createNote('child3', true, [c4]),
-				root = createNote('Root', false, [c1, c3]);
+			//Simulate that a reply c1, c2 were added, which triggered replyCount to update.
+			root.adjustReplyCountOnChange(c1.getId(), true);
+			root.adjustReplyCountOnChange(c2.getId(), true);
+			expect(root.getReplyCount()).toEqual(2);
 
-			expect(c1.getReplyCount()).toEqual(1);
-			expect(root.getReplyCount()).toEqual(3);
+			//Simulate that c1 was removed
+			root.adjustReplyCountOnChange(c1.getId(), false);
+			//Another call with the same id, shouldn't change the count, since the child item was already removed.
+			root.adjustReplyCountOnChange(c1.getId(), false);
+
+			expect(root.getReplyCount()).toEqual(1);
 		});
 	});
 

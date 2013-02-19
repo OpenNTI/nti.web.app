@@ -706,11 +706,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var r = this.record;
 		if(child.get('inReplyTo') === r.getId()){
 			this.addReplies([child]);
-			// FIXME: Do we need to add the child and set the parent again since we do it right before we call this method?
 			if (!r.children){r.children = [];}
 			if(!Ext.Array.contains(r.children, child)){ r.children.push(child); }
 			child.parent = r;
-			this.adjustRootsReferenceCount(child);
+			this.adjustRootsReferenceCount(child, true);
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n',
@@ -721,8 +720,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	removedChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
-			console.log('called to adjust the reference count');
-			this.adjustRootsReferenceCount(child);
+			this.adjustRootsReferenceCount(child, false);
 		}
 	},
 
@@ -789,28 +787,15 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-	adjustRootsReferenceCount: function(r){
+	adjustRootsReferenceCount: function(r, added){
         var root = r.parent,
 	    rootCmp = this.rootToCountComponentsFrom();
 
 		while(root && root.parent){root = root.parent;}
 
 		if(root){
-			// FIXME This needs to not happen here.  We should not be updating the model based on this one views represntation of it...
-			setTimeout(function(){
-				/**
-				 *  FIXME: for now we're counting the number of reply components to set the replyCount.
-				 *  Obviously this will break once we start paging replies,
-				 *  since we won't be displaying all replies at once.
-				 **/
-				var c = Ext.util.MixedCollection.create();
-				c.addAll(Ext.Array.pluck(rootCmp.query('note-panel'),'record'));
-
-				c = c.filter('placeholder','undefined');
-
-				root.set({ReferencedByCount: c.getCount()});
-				root.fireEvent('count-updated');
-			},500);
+			root.adjustReplyCountOnChange(r.getId(), added);
+			root.fireEvent('count-updated');
 		}
 	},
 
@@ -852,7 +837,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	onDelete: function(){
 		this.record.destroy();
-		this.adjustRootsReferenceCount(this.record);
+		this.adjustRootsReferenceCount(this.record, false);
 	},
 
 

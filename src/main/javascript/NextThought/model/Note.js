@@ -159,18 +159,49 @@ Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-	/**
-	 * This depends on the linking of models by annotation...
-	 */
-	getReplyCount: function(){
-		if(this.raw.hasOwnProperty('ReferencedByCount') && !this.parent){
-			return this.get('ReferencedByCount') || 0;
+	set: function(key, value){
+		this.callParent(arguments);
+		if(key === 'ReferencedByCount'){
+			//NOTE: We should only update this field from what we get from the dataserver.
+			this._currentReplyCount = value;
 		}
+	},
 
-		return (this.children||[]).reduce(function(sum,child){
-			return sum + 1 + (child.getReplyCount ? (child.getReplyCount()||0) : 0)
-				+ (child.placeholder ? -1 : 0);
-		},0);
+	getReplyCount: function(hard){
+		var defaultCount = (this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
+		if(hard){ return defaultCount; } //If hard is specified, we only want the count from the server.
+
+		return this._currentReplyCount || defaultCount;
+	},
+
+	/*
+	*   NOTE: We set the initial replyCount based on what we get from the server.
+	*   As replies gets added and removed we want to keep track of those changes.
+	*   Mainly we want to ensure that a reply get added ONLY once and get
+	*   removed ONLY once, despite how many times this function could be called on a change.
+	*   Thus 'this._incomingReplies' and  'this._alreadyDeletedReplies' are used to ensure the condition.
+	 */
+	adjustReplyCountOnChange: function(replyId, added){
+		if(!this._currentReplyCount){
+			this._currentReplyCount = (this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
+		}
+		if( !this._incomingReplies){ this._incomingReplies = {}; }
+		if( !this._alreadyDeletedReplies){ this._alreadyDeletedReplies = {}; }
+
+
+		if(!this._incomingReplies[replyId] && added){
+			this._incomingReplies[replyId] = true;
+			this._currentReplyCount +=1;
+		}
+		else if( this._incomingReplies[replyId] && !added ){
+			this._currentReplyCount -=1;
+			delete this._incomingReplies[replyId];
+			this._alreadyDeletedReplies[replyId]= true;
+		}
+		else if(!added && !this._alreadyDeletedReplies[replyId]){
+			this._currentReplyCount -=1;
+			this._alreadyDeletedReplies[replyId]= true;
+		}
 	},
 
 	debugString: function(){
