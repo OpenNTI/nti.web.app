@@ -28,7 +28,15 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 	getStore: function(){
 		var id = 'profile-activity-'+this.username,
-			s = Ext.getStore(id) || NextThought.store.PageItem.create({id:id});
+			s = Ext.getStore(id);
+
+		if(!s){
+			s = NextThought.store.PageItem.create({
+				id: id,
+				wantsItem: function(rec){
+					return this.hasOwnProperty('profileStoreFor') && this.profileStoreFor === rec.get('Creator');
+				}});
+		}
 
 		s.proxy.url = (s.proxy.url||'').replace(
 				//The wrapping slashes are an attempt to limit the scope of the search&replace :/

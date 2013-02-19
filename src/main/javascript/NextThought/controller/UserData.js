@@ -222,12 +222,11 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingCreatedChange: function(change,item,meta){
 		var cid = item.get('ContainerId'),
-			creator = item.get('Creator')||'nobody',
 			actedOn = false,
 			recordForStore = item;
 
-		LocationProvider.applyToStores(function(id,store){
-			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
+		LocationProvider.applyToStoresThatWantItem(function(id,store){
+			if(store){
 				actedOn = true;
 				console.log(store, cid);
 
@@ -247,7 +246,7 @@ Ext.define('NextThought.controller.UserData', {
 				// another store. (I don't think our threading algorithm would appreciate that)
 				recordForStore = null;
 			}
-		});
+		}, item);
 
 		if(!actedOn){
 			console.warn('We did not act on this created change event:',change,' location meta:',meta);
@@ -257,12 +256,11 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingDeletedChange: function(change,item,meta){
 		var cid = item.get('ContainerId'),
-			creator = item.get('Creator')||'nobody',
 			actedOn = false;
 
-		LocationProvider.applyToStores(function(id,store){
+		LocationProvider.applyToStoresThatWantItem(function(id,store){
 			var r;
-			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
+			if(store){
 				actedOn = true;
 				console.log(store, cid);
 				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
@@ -274,7 +272,7 @@ Ext.define('NextThought.controller.UserData', {
 				//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
 				store.remove(r);
 			}
-		});
+		}, item);
 
 		if(!actedOn){
 			console.warn('We did not act on this created change event:',change,' location meta:',meta);
@@ -284,12 +282,11 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingModifiedChange: function(change,item,meta){
 		var cid = item.get('ContainerId'),
-			creator = item.get('Creator')||'nobody',
 			actedOn = false;
 
-		LocationProvider.applyToStores(function(id,store){
+		LocationProvider.applyToStoresThatWantItem(function(id,store){
 			var r;
-			if(store && (store.containerId===cid || store.profileStoreFor === creator)){
+			if(store){
 				actedOn = true;
 				console.log(store, cid);
 				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
@@ -303,7 +300,7 @@ Ext.define('NextThought.controller.UserData', {
 				r.fireEvent('updated',r);
 				r.fireEvent('changed');
 			}
-		});
+		}, item);
 
 		if(!actedOn){
 			console.warn('We did not act on this created change event:',change,' location meta:',meta);
@@ -342,13 +339,12 @@ Ext.define('NextThought.controller.UserData', {
 			cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
 		}
 
+		function containerStorePredicate(k, s){
+			return s.hasOwnProperty('containerId');
+		}
 
 		LocationProvider.applyToStores(function(k,s){
 			var params = s.proxy.extraParams || {};
-
-			if(!s.hasOwnProperty('containerId')){
-				return;
-			}
 
 			params = Ext.apply(params, {
 				sortOn: 'lastModified',
@@ -376,7 +372,7 @@ Ext.define('NextThought.controller.UserData', {
 
 			s.removeAll();
 			s.loadPage(1);
-		});
+		}, containerStorePredicate);
 	},
 
 

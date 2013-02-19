@@ -125,13 +125,23 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	applyToStores: function(fn){
+	//Calls the provided fn on all the stores.  Optionally takes a predicate
+	//which skips stores that do not match the predicate
+	applyToStores: function(fn, predicate){
 		Ext.Object.each(this.currentPageStores,function(k){
 			if(k==='root'){return;}//root is an alisas of the ntiid
-			Ext.callback(fn,null,arguments);
+			if(!Ext.isFunction(predicate) || predicate.apply(null, arguments)){
+				Ext.callback(fn,null,arguments);
+			}
 		});
 	},
 
+	applyToStoresThatWantItem: function(fn, item){
+		function predicate(id, store){
+			return store && store.wantsItem(item);
+		}
+		this.applyToStores(fn, predicate);
+	},
 
 	setLastLocationOrRoot: function(ntiid) {
 		var lastNtiid = localStorage[ntiid] || ntiid;

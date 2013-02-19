@@ -363,7 +363,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 	setUser: function(user){
-		var me = this, profileSchemaUrl;
+		var me = this, profileSchemaUrl,
+			toMask;
 
 		console.timeEnd(this.timeId);
 
@@ -374,10 +375,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
+		toMask = me.up('#profile');
+		toMask.getEl().mask('Loading...');
+
 		me.user = user;
 
 		function onProfileLoaded(u, profile){
 			me.updateProfile(u, profile);
+			toMask.unmask();
 		}
 
 		profileSchemaUrl = user.getLink('account.profile');

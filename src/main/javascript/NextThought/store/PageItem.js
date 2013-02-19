@@ -70,11 +70,16 @@ Ext.define('NextThought.store.PageItem',function(){
 			this.mon(coordinator,{
 				delay: 1,//move this handler to the next event pump
 				scope: this,
-				'removed-item':this.removeByIdsFromEvent
+				'removed-item': this.removeByIdsFromEvent,
+				'added-item': this.addFromEvent
 			});
 			return r;
 		},
 
+		//By default PageItems want things that match the container
+		wantsItem: function(record){
+			return this.containerId === record.get('ContainerId');
+		},
 
 		onWrite: function(store, info) {
 			if (info.action === 'destroy') {
@@ -127,8 +132,11 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
+		//TODO the docs say this can take an array instead of a single instance.  We don't handle
+		//that here
 		add: function(record) {
 			this.suspendEvents(true);
+			console.log('Adding record to store', record, this);
 			//get added to the store:
 			this.callParent(arguments);
 
@@ -148,17 +156,15 @@ Ext.define('NextThought.store.PageItem',function(){
 					if (ancestor === storeItem.getId()) {
 						adopted = true;
 						adoptChild(storeItem, record);
-						return false; //Break if adopted
 					}
 					else if(!Ext.isEmpty(storeItem.children)){
 						Ext.each(storeItem.children, checkItem);
 					}
-					return true;
 				};
 			}
 
 			//find my parent if it's there and add myself to it:
-			var ancestor = null, adopted,
+			var ancestor = null, adopted, anyAdopted;
 			refs = (record.get('references') || []).slice();
 
 			if(!Ext.isEmpty(refs)){
@@ -170,6 +176,8 @@ Ext.define('NextThought.store.PageItem',function(){
 					console.warn('Unable to parent child', record);
 				}
 			}
+
+			coordinator.fireEvent('added-item', [record]);
 
 			this.resumeEvents();
 		},
@@ -212,6 +220,38 @@ Ext.define('NextThought.store.PageItem',function(){
 			coordinator.fireEvent('removed-item', idsToBoradcast);
 		},
 
+		addFromEvent: function(records){
+			//don't fire more coordinator events
+			coordinator.suspendEvents();
+
+			var me = this;
+
+			try{
+				Ext.each(records, function(rec){
+					var current,
+						newRecord;
+
+					if(!me.wantsItem(rec)){
+						return;
+					}
+
+					current = me.getById(rec.getId());
+
+					if(!current){
+						//create a new one since the record we were given was already added somewhere
+						newRecord = ParseUtils.parseItems([rec.raw])[0];
+						if(newRecord){
+							me.add(newRecord);
+						}
+					}
+				});
+			}
+			catch(er){
+				console.warn(Globals.getError(er));
+			}
+
+			coordinator.resumeEvents();
+		},
 
 		removeByIdsFromEvent: function(ids){
 			coordinator.suspendEvents();
