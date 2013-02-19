@@ -8,7 +8,7 @@ Ext.define('NextThought.view.profiles.parts.Joined',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
 		{ cls: 'meta', cn:[
-			{ cls: 'label', cn:[{cls:'name link',html:'{name}'},' joined NextThought']},
+			{ cls: 'label', cn:[{tag:'span',cls:'name link',html:'{name}'},' joined NextThought!']},
 			{ cls: 'date', html: '{date}' }
 		]}
 	]),

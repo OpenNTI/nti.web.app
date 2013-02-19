@@ -182,6 +182,39 @@
 			}
 		}
 
+		.joined-event {
+			margin-top: 20px;
+			background: #fbfbfb;
+			border: 0 solid #f2f2f2;
+			border-bottom-width: 1px;
+			overflow: hidden;
+			position: relative;
+			padding: 18px;
+
+			.avatar{
+				float: left;
+				width: 60px; height: 60px;
+				border-radius: 3px;
+				background:{
+					position: center;
+					repeat: no-repeat;
+					size: cover;
+				}
+			}
+
+			.meta {
+				margin: 5px 0 0 75px;
+				.label {
+					color: $primary-grey;
+					font: normal 400 15px/30px $font;
+				}
+				.date {
+					color: $tertiary-grey;
+					font: normal 400 11px/20px $font;
+				}
+			}
+		}
+
 		.profile-activity-item{
 			margin: 40px 0 0;
 			padding: 0;
@@ -387,7 +420,6 @@
 			}
 		}
 
-
 		.profile-activity-reply-item {
 			position: relative;
 			padding: 25px 0 0 20px;
@@ -475,7 +507,6 @@
 			}
 		}
 
-
 		.profile-activity-item,.profile-activity-reply-item{
 			.body {
 				@include note-body;
@@ -502,8 +533,6 @@
 				}
 			}
 		}
-
-
 
 		.activity-highlight-container {
 			margin: 15px 0 0;
