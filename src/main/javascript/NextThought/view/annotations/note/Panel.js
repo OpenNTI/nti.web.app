@@ -888,7 +888,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		guid = t.up('.body-divider').getAttribute('id');
 		if(t && this.wbData[guid]){
-			t = e.getTarget('.reply',null,true);
+			t = e.getTarget('.reply:not(.profile-activity-reply-item)',null,true);
 			if(t){
 				t.up('.toolbar').down('.include').addCls('checked');
 				this.activateReplyEditor();
