@@ -24,7 +24,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			beforeload: this.showLoadingBar
 		});
 
-		this.store.load();
+		this.store.load({callback: this.loadCallback, scope: this});
 	},
 
 	getStore: function(){
@@ -144,6 +144,15 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		return cmps;
 	},
 
+	loadCallback: function(records, operation, success){
+		if(!success && operation.error && operation.error.status === 404){
+			//If we don't have a joined-event child add one now
+			if(!this.down('joined-event')){
+				this.add({ xtype: 'joined-event', username: this.username });
+			}
+		}
+	},
+
 	storeLoaded: function(store, records, successful){
 
 		if(!successful){
@@ -217,7 +226,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		if(s.currentPage < max && !s.isLoading()){
 			console.log('Fetching next page of data', s);
 			s.clearOnPageLoad = false;
-			s.nextPage();
+			s.nextPage({callback: this.loadCallback, scope: this});
 		}
 	}
 
