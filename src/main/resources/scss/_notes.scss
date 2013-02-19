@@ -84,6 +84,7 @@
 
 		&.x-repaint{
 			background: #ffffff;
+			visibility: hidden;
 		}
 
 		@include animate(fadeIn,0.3s);

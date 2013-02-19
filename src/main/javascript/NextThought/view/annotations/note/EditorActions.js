@@ -481,10 +481,16 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		wb.getThumbnail(function (data) {
 			el = Ext.get(guid).up('.whiteboard-divider');
-			var p = placeholder.insertBefore(el);
+			var p = placeholder.insertBefore(el),
+				wbt;
 			el.remove();
 			//recreate image with data
-			Ext.fly(me.wbThumbnailTpm.insertBefore(p, [data, guid])).unselectable();
+			wbt = me.wbThumbnailTpm.insertBefore(p, [data, guid], true);
+			wbt.select('img').on('load',function(){
+				me.fireEvent('size-changed');
+				me.editor.repaint();
+			});
+			wbt.unselectable();
 			Ext.fly(p).remove();
 
 			me.fireEvent('size-changed');
