@@ -11,10 +11,9 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 	autoSize: {width: 'boundEl'},
 
 
-	onFieldBlur: function(){
-		if(this.allowBlur !== true && this.cancelOnBlur === true){
-			this.cancelEdit();
-		}
+	afterRender: function(){
 		this.callParent(arguments);
+		//Add overflow:visible,
+		//Hang buttons off the this.el
 	}
 });
