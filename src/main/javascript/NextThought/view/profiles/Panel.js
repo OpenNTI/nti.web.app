@@ -15,9 +15,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
+
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'profile-head',
+			cls: 'profile-head editable',
 			cn: [{
 				cls: 'avatar', cn:[{cls:'edit', html: 'Edit'}]
 			},{
@@ -46,6 +47,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 	]),
 
+
 	renderSelectors: {
 		avatarEl: '.profile-head .avatar',
 		nameEl: '.profile-head .meta .name',
@@ -61,6 +63,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		addToContacts: '.add-to-contacts',
 		errorMsgEl: '.error-msg'
 	},
+
 
 	items: [{
 		xtype: 'profile-tabs',
@@ -89,6 +92,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		console.time(this.timeId);
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -120,7 +124,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 
-
 	onScroll: function(e,dom){
 		var activeTab = this.tabs.activeTab,
 			el, offsets, top, ctBottom;
@@ -138,7 +141,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 			activeTab.onScrolledToBottom();
 		}
 	},
-
 
 
 	contactsMaybeChanged: function(){
@@ -201,9 +203,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 	},
 
-	//Returns an object with two fields, shouldBeShown and
-	//editable that describe how (if at all) the profided profile
-	//field should be shown
+
+	/**
+	 * Returns an object with two fields, shouldBeShown and editable that describe how (if at all) the profided profile
+	 * field should be shown
+	 *
+	 * @returns {Object}
+	 */
 	getMetaInfoForField: function(user, field, profileSchema){
 		var r = {}, val = (profileSchema||{})[field];
 		r.editable = val && !val.readonly;
@@ -211,6 +217,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		r.field = field;
 		return r;
 	},
+
 
 	updateProfileDetail: function(user, profileSchema){
 		//Don't do anything if we are disabled in the config
@@ -274,6 +281,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			}
 		});
 	},
+
 
 	updateProfile: function(user, schema){
 		var profileSchema = (schema || {}).ProfileSchema,
@@ -341,6 +349,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.updateProfileDetail(user, profileSchema);
 	},
 
+
 	shouldShowChat: function(){
 		//We show the chat button if the following conditions are true
 		//1)We can chat and we have a user object
@@ -354,6 +363,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		return this.userObject.get('Presence') === 'Online';
 	},
 
+
 	maybeShowChat: function(){
 		if(this.shouldShowChat()){
 			this.chatEl.show();
@@ -362,6 +372,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.chatEl.hide();
 		}
 	},
+
 
 	homePageChanged: function(value, placeholderText){
 		var a;
@@ -387,6 +398,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			}
 		}
 	},
+
 
 	setUser: function(user){
 		var me = this, profileSchemaUrl,
@@ -431,8 +443,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 				onProfileLoaded(user, schema);
             }
         });
-
-
 	},
 
 
@@ -462,14 +472,17 @@ Ext.define('NextThought.view.profiles.Panel',{
 		ed.startEdit(t, value);
 	},
 
+
 	showError: function(text){
 		this.errorMsgEl.update(text);
 		this.errorMsgEl.show();
 	},
 
+
 	clearError: function(){
 		this.errorMsgEl.hide();
 	},
+
 
 	validate: function(field, value){
 		var rules = (this.profileSchema || {})[field],
@@ -531,6 +544,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		return true;
 	},
 
+
 	updateField: function(el, n, v){
 		var placeholderText = '{'+el.getAttribute('data-placeholder')+'}';
 		if(this.onSaveMap.hasOwnProperty(n)){
@@ -543,6 +557,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			el.update(v || placeholderText);
 		}
 	},
+
 
 	onSaveField: function(cmp, newValue, oldValue){
 		var field = cmp.boundEl.getAttribute('data-field'),
@@ -607,6 +622,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.fireEvent('chat', this.userObject);
 		return false;
 	},
+
 
 	onEditAvatar: function(e){
 		e.stopEvent();
