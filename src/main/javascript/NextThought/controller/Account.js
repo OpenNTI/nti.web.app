@@ -183,7 +183,7 @@ Ext.define('NextThought.controller.Account', {
 				var store;
                 btn.removeCls('disabled');
                 if(!success){
-                    view.setError({field:'Code', message: 'Group Code: The code you entered is not valid.'});
+                    view.setError({field:'Group Code', message: 'The code you entered is not valid.'});
                     return;
                 }
                 else {
