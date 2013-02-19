@@ -66,7 +66,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		xtype: 'profile-tabs',
 		items: [
 			{title: 'Recent Activity', xtype: 'profile-activity'},
-			{title: 'Thoughts', html: 'Test'},
+			{title: 'Thoughts', html: 'Test', disabled: true, hidden: true},
 			{title: 'Library', disabled: true, hidden: true},
 			{title: 'Connections', disabled: true, hidden: true}
 		]
