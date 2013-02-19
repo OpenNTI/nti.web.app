@@ -108,7 +108,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
 			selectedNode.markSelected(true);
-			if(oldSelectedRecordId !== selectedNode.record.getId()){
+			if(oldSelectedRecordId !== selectedNode.record.getId() || oldSelectedRecord !== selectedNode.record){
 				selectedNode.clicked();
 			}
 			this.updateWith(selectedNode);  //move the anchor arrow.
