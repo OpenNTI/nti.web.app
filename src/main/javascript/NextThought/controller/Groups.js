@@ -18,10 +18,23 @@ Ext.define('NextThought.controller.Groups', {
 		'account.contacts.management.Person',
 		'account.contacts.management.AddGroup',
 		'account.codecreation.Main',
-		'account.contacts.createlist.Main'
+		'account.contacts.createlist.Main',
+		'contacts.Panel',
+		'contacts.TabPanel',
+		'contacts.Card'
 	],
 
+
+	refs: [
+		{ ref: 'contactsTab', selector: 'contacts-tabs-panel[source="contacts"]'},
+		{ ref: 'followingTab', selector: 'contacts-tabs-panel[source="following"]'},
+		{ ref: 'listsTab', selector: 'contacts-tabs-panel[source="lists"]'},
+		{ ref: 'groupsTab', selector: 'contacts-tabs-panel[source="groups"]'}
+	],
+
+
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
+
 
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
@@ -79,13 +92,12 @@ Ext.define('NextThought.controller.Groups', {
 		if(!coll || !coll.href){return;}
 
 		app.registerInitializeTask(token);
-		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
 		store.on('datachanged', this.publishGroupsData, this);
 		store.proxy.url = getURL(coll.href);
 		store.load();
 	},
-
 
 
 	getResolvedContacts: function(callback){
@@ -94,11 +106,18 @@ Ext.define('NextThought.controller.Groups', {
 		names = Ext.Array.sort(Ext.Array.unique(names));
 
 		UserRepository.getUser(names,function(users){
-			var friends = {Online: {}, Offline: {}};
+			var friends = {Online: {}, Offline: {}, all:[]},
+				all = {};
 			Ext.each(users,function(user){
-				var p = user.get('Presence');
-				if(p){ friends[p][user.get('Username')] = user; }
+				var p = user.get('Presence'),
+					n = user.get('Username');
+
+				if(p){ friends[p][n] = user; }
+
+				all[n] = user;
 			});
+
+			Ext.Object.each(all,function(n,u){ friends.all.push(u); });
 
 			Ext.callback(callback,null,[friends]);
 		});
@@ -126,6 +145,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 	},
 
+
 	maybePublishContacts: function(contactList){
 		if(this.publishingContacts){
 			console.log('Defering contacts publication');
@@ -147,9 +167,20 @@ Ext.define('NextThought.controller.Groups', {
 		return true;
 	},
 
+
 	publishContacts: function(contactList, onComplete){
 		var me = this;
 		this.getResolvedContacts(function(friends){
+
+			function makeCfg(i){ return {record: i}; }
+
+			try{
+				me.getContactsTab().add(Ext.Array.map(friends.all,makeCfg));
+			}
+			catch(e){
+				console.error(Globals.getError(e));
+			}
+
 			console.log('Removing all sub components for contactlist');
 			contactList.removeAll(true);
 
@@ -160,6 +191,7 @@ Ext.define('NextThought.controller.Groups', {
 			Ext.callback(onComplete, me);
 		});
 	},
+
 
 	maybePublishGroupsAndLists: function(groups, lists){
 		if(this.publishingGroups){
@@ -181,6 +213,7 @@ Ext.define('NextThought.controller.Groups', {
 		});
 		return true;
 	},
+
 
 	publishGroupsAndLists: function(groups, lists, onComplete){
 		var store = this.getFriendsListStore(), me = this,
@@ -270,6 +303,7 @@ Ext.define('NextThought.controller.Groups', {
 			}
 		});
 	},
+
 
 	//It is unfortunate we have to synchonize this...
 	publishGroupsData: function(){
@@ -371,6 +405,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	},
 
+
 	generateUsername: function(newGroupName){
 		var username = newGroupName
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
@@ -416,9 +451,11 @@ Ext.define('NextThought.controller.Groups', {
 		});
 	},
 
+
 	createGroupUnguarded: function(displayName, username, friends, callback, scope, error){
 		this.createFriendsListUnguarded(displayName, username, friends, false, callback, error, scope);
 	},
+
 
 	createDFLUnguarded: function(displayName, username, friends, callback, error, scope){
 		this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
@@ -554,6 +591,7 @@ Ext.define('NextThought.controller.Groups', {
 		});
 	},
 
+
 	getGroupCode: function(record){
 		var dn = record.get('displayName');
 		function onSuccess(code){
@@ -567,6 +605,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.fetchGroupCode(record, dn, onSuccess, onError);
 	},
+
 
 	createGroupAndCode: function(btn){
         function handleError(errorText){
@@ -623,6 +662,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 	},
 
+
 	addList: function(btn){
 
         function handleError(errorText){
@@ -666,6 +706,7 @@ Ext.define('NextThought.controller.Groups', {
 		btn.setDisabled(true);
 		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
 	},
+
 
 	leaveGroup: function(record){
 		//onSuccess instead of reloading the whole store

@@ -5,8 +5,9 @@ Ext.define( 'NextThought.view.Views', {
 	alias: 'widget.main-views',
 	requires: [
 		'Ext.layout.container.Card',
-		'NextThought.view.views.Profiles',
-		'NextThought.view.views.Library'
+		'NextThought.view.views.Contacts',
+		'NextThought.view.views.Library',
+		'NextThought.view.views.Profiles'
 	],
 	
 	plain: true,
@@ -21,7 +22,7 @@ Ext.define( 'NextThought.view.Views', {
 		{id: 'profile', xtype: 'profile-view-container'},
 		{id: 'library', xtype: 'library-view-container'},
 		{id: 'forums', xtype: 'view-container'},
-		{id: 'contacts', xtype: 'view-container'}
+		{id: 'contacts', xtype: 'contacts-view-container'}
 	],
 	
 	getActive: function() {
