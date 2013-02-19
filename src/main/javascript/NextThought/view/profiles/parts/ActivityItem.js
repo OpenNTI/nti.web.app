@@ -48,7 +48,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
-		this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
+		if(this.replyButton.dom){
+			this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
+		}
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.flagEl, 'click', this.onFlag, this);
