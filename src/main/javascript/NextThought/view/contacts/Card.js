@@ -50,7 +50,7 @@ Ext.define('NextThought.view.contacts.Card',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-
+		this.userObject = this.record;
 		this.enableProfileClicks(this.el, this.el.down('.avatar'), this.el.down('.name'));
 	}
 });

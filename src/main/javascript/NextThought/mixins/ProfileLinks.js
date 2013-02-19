@@ -22,6 +22,9 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 			if(u && Ext.isFunction(u.goToProfile)){
 				u.goToProfile();
 			}
+			else {
+				console.error('This (',this,') does not have a user object');
+			}
 		}
 
 		Ext.each(arguments,function(el){
