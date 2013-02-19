@@ -240,8 +240,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 	setContent: function(){
-		this.callParent(arguments);
-		Ext.defer(this.syncFloatingHeight,1,this);
+		var me = this;
+		me.callParent(arguments);
+		me.noteBody.select('img').on('load',function(){
+			me.syncFloatingHeight();
+		});
 	},
 
 	loadContext: function(fin){
