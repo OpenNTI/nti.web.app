@@ -156,10 +156,12 @@ Ext.define('NextThought.store.PageItem',function(){
 					if (ancestor === storeItem.getId()) {
 						adopted = true;
 						adoptChild(storeItem, record);
+						return false;
 					}
 					else if(!Ext.isEmpty(storeItem.children)){
 						Ext.each(storeItem.children, checkItem);
 					}
+					return true;
 				};
 			}
 
@@ -177,7 +179,7 @@ Ext.define('NextThought.store.PageItem',function(){
 				}
 			}
 
-			coordinator.fireEvent('added-item', [record]);
+		//	coordinator.fireEvent('added-item', [record]);
 
 			this.resumeEvents();
 		},
