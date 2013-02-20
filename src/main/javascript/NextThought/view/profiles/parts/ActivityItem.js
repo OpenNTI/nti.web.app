@@ -112,7 +112,20 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.mun( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		this.commentsEl.remove();
 		delete this.commentsEl;
-		this.fillInReplies();
+
+		this.shouldShowReplies();
+	},
+
+	shouldShowReplies: function(){
+		this.suspendLayouts();
+		this.removeAll();
+		this.resumeLayouts();
+
+		Ext.defer(function(){
+			Ext.suspendLayouts();
+			this.addReplies(this.record.children);
+			Ext.resumeLayouts(true);
+		}, 1, this);
 	},
 
 	onDelete: function(){
@@ -156,13 +169,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		count = me.record.get('ReferencedByCount');
 		if(typeof count === 'number'){
-			me.commentsEl.update(count+me.commentsEl.getAttribute('data-label'));
-			if(count){
-				me.loadLatestReply();
-			}
+			me.getItemReplies();
 		}
 		else {
 			me.commentsEl.remove();
+			delete me.commentsEl;
 			//also remove response box for things that don't look like notes
 			if(me.responseBox){
 				me.responseBox.remove();
@@ -219,24 +230,39 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 
-	loadLatestReply: function(){
+	getItemReplies: function(){
 		var me = this,
 			r = me.record;
 
 		function cb(store, records){
-			if(store.getCount() !== 1){
-				console.error('We did not recieve what we expected.', arguments);
+			var count = store.getCount(), rec = null, items;
+
+			//Set comments count
+			me.commentsEl.update( count + me.commentsEl.getAttribute('data-label'));
+			if(count === 0 || count === 1){
+				me.commentsEl.remove();
+				delete me.commentsEl;
 			}
 
-			var rec = null;
-			//get the newest record (should only be 1, so this should nearly be a no-op)
-			store.each(function(r){
-				if(!rec || rec.get('CreatedTime') < r.get('CreatedTime')){ rec = r; } });
+			//Stash replies on the record
+			items = store.getItems();
+			if(items.length === 1 && items[0].getId() === me.record.getId()){
+				items = (items[0].children||[]).slice();
+			}
+			else {
+				console.warn('There was an unexpected result from the reply store.');
+			}
+			me.record.children = items;
 
-			if(rec){ me.add({record: rec}); }
+			//Set the latest direct reply
+			store.each(function(r){
+				if(!rec || ( (rec.get('CreatedTime') < r.get('CreatedTime')) && (r.get('inReplyTo') === me.record.getId())) ){ rec = r; }
+			});
+
+			if(rec){ me.add({record: rec, autoFillInReplies:false}); }
 		}
 
-		r.loadReplies(cb,me,1,{sortOn: 'CreatedTime', sortOrder: 'descending'});
+		r.loadReplies(cb,me,undefined,{sortOn: 'CreatedTime', sortOrder: 'descending'});
 	},
 
 	setContent: function(){
