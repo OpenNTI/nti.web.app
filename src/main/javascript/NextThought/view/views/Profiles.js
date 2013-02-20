@@ -11,6 +11,11 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	defaultType: 'profile-panel',
 	layout: 'ux.center',
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mon(this, 'deactivate', this.onDeactivated, this);
+	},
+
 	restore: function(state){
 		var user = ((state||{}).profile||{}).username,
 			me = this;
@@ -75,5 +80,12 @@ Ext.define( 'NextThought.view.views.Profiles', {
 			}
 
 		}, this, true);
+	},
+
+	onDeactivated: function(){
+		var profile = this.down('profile-panel');
+		if(profile && Ext.isFunction(profile.onDeactivated)){
+			profile.onDeactivated.apply(profile, arguments);
+		}
 	}
 });
