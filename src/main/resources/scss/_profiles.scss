@@ -138,30 +138,28 @@
 				}
 			}
 
-			&.editable {
-				[data-field]:hover {
-					color: $primary-grey;
-					position: relative;
-					z-index: 1000;
+			[data-field].editable:hover {
+				color: $primary-grey;
+				position: relative;
+				z-index: 1000;
 
-					&::before {
-						content: ' ';
-						overflow: hidden;
-						position: absolute;
-						top: -2px; left: -5px; bottom:-2px; right: -28px;
-						background: #f4f4f4;
-						border: 0 solid #dcdcdc;
-						border-bottom-width: 1px;
-						z-index: -1;
-					}
-					&::after{
-						content: ' ';
-						overflow: hidden;
-						position: absolute;
-						background: $icons no-repeat;
-						top: 3px; right: -24px;
-						@include sprite($icons,'edit-15_hover',$dimensions: true);
-					}
+				&::before {
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: -2px; left: -5px; bottom:-2px; right: -28px;
+					background: #f4f4f4;
+					border: 0 solid #dcdcdc;
+					border-bottom-width: 1px;
+					z-index: -1;
+				}
+				&::after{
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					background: $icons no-repeat;
+					top: 3px; right: -24px;
+					@include sprite($icons,'edit-15_hover',$dimensions: true);
 				}
 			}
 		}
