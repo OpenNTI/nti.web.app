@@ -15,7 +15,11 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 		function hoverOff(){ Ext.fly(this).removeCls('over'); }
 		function onUserNameClick(e){
 			if(e){e.stopEvent();}
-			var u = this.userObject || this.user;
+			var u = this.userObject || this.user,
+				t = e.getTarget('.note-window');
+			//Dismiss the note-window before we navigate to the profile.
+			if(t){ this.up('note-window').destroy(); }
+
 			if(u && Ext.isFunction(u.goToProfile)){
 				u.goToProfile();
 			}
