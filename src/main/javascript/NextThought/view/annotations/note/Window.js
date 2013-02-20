@@ -43,7 +43,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	initComponent: function(){
-		var a = this.annotation, m;
+		var a = this.annotation, m, c;
 		this.callParent(arguments);
 
 		m = this.down('note-main-view');
@@ -58,14 +58,21 @@ Ext.define('NextThought.view.annotations.note.Window',{
         if (this.scrollToId) {
             m.scrollToId = this.scrollToId;
         }
-		m.setRecord(a.getRecord());
-		this.down('note-carousel').setRecord(a.getRecord());
+
+		c = this.down('note-carousel').setRecord(a.getRecord());
 
 		this.mon(LocationProvider, 'navigateComplete', this.destroy, this);
 
 		this.mon(Ext.getBody(),'click',this.dismissClick, this);
 	},
 
+	canSelectRecord: function(){
+		return !this.down('note-main-view').editorActive();
+	},
+
+	recordSelected: function(r){
+		this.down('note-main-view').setRecord(r);
+	},
 
 	dismissClick: function(e){
 		var t = e.getTarget(),
