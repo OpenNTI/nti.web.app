@@ -49,14 +49,16 @@ Ext.define('NextThought.view.account.contacts.View',{
 						  layout: 'anchor',
 						  defaults: {anchor: '100%'},
                           items:[
-                            { xtype: 'container', id: 'my-lists', layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
+                            { xtype: 'container', id: 'my-lists', defaultType: 'contacts-panel',
+	                            layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
 							{ xtype: 'list-buttons', height: '50px'}
                         ]},
 						{ title: 'Groups',
 						  layout: 'anchor',
 						  defaults: {anchor: '100%'},
                           items:[
-                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
+                            { xtype: 'container', id: 'my-groups', defaultType: 'contacts-panel',
+	                            layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
                             { xtype: 'group-buttons', height: '50px'}
                         ]}
 					]

@@ -101,9 +101,15 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	getResolvedContacts: function(callback){
-		var names = this.getFriendsListStore().getContacts();
+		var names = this.getFriendsListStore().getContacts(),
+			following = this.getFollowingTab();
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
+
+		UserRepository.getUser($AppConfig.userObject.get('following'),function(users){
+			following.removeAll(true);
+			following.add( Ext.Array.map(users,function(i){return {record: i};}) );
+		});
 
 		UserRepository.getUser(names,function(users){
 			var friends = {Online: {}, Offline: {}, all:[]},
@@ -172,10 +178,9 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this;
 		this.getResolvedContacts(function(friends){
 
-			function makeCfg(i){ return {record: i}; }
-
 			try{
-				me.getContactsTab().add(Ext.Array.map(friends.all,makeCfg));
+				me.getContactsTab().removeAll(true);
+				me.getContactsTab().add(Ext.Array.map(friends.all,function(i){return {record: i};}));
 			}
 			catch(e){
 				console.error(Globals.getError(e));
@@ -240,13 +245,16 @@ Ext.define('NextThought.controller.Groups', {
 				return;
 			}
 			target = group.isDFL ? groupCmps : listCmps;
-			target.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
+			target.push({title: name, associatedGroup: group});
 		});
 
 		//Now we need to actually add the components into the view.  we suspend layouts here
 		//to cut down on work
 		groups.removeAll(true);
 		lists.removeAll(true);
+
+		me.getGroupsTab().removeAll(true);
+		me.getListsTab().removeAll(true);
 
 		groups.suspendLayouts();
 		lists.suspendLayouts();
@@ -264,6 +272,8 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		//Add the contactpanels
+		Ext.Array.push(addedCmps, me.getGroupsTab().add(Ext.clone(groupCmps)));
+		Ext.Array.push(addedCmps, me.getListsTab().add(Ext.clone(listCmps)));
 		Ext.Array.push(addedCmps, groups.add(groupCmps));
 		Ext.Array.push(addedCmps, lists.add(listCmps));
 
