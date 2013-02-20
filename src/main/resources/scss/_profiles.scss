@@ -677,14 +677,48 @@
 .meta-editor,
 .name-editor{
 	overflow: visible;
+	border: 1px solid #dbdbdb;
+
+	.input-wrap, .textbox-base {
+		input {
+			border-width: 0;
+			box-shadow: none;
+			color: $primary-grey;
+			font-style: italic;
+			padding-top: 0;
+			padding-bottom: 0;
+			height: 25px;
+		}
+		.clear {
+			top: 5px;
+		}
+	}
+
 	.controls{
 		position: absolute;
-		right:-70px;
-		top:0px;
+		overflow: hidden;
+		right:-104px;
+		top:-1px;
+		bottom: -1px;
 
 		.save,
 		.cancel{
-			display: inline-block;
+			padding: 0 8px;
+			height: 100%;
+			line-height: 25px;
+			font-weight: bold;
+			display: block;
+			float: left;
+			background: #ebebeb;
+			border: 1px solid #dbdbdb;
+			color: $secondary-grey;
+			cursor: pointer;
+		}
+
+		.save {
+			border-color: $primary-blue;
+			background: $primary-blue;
+			color: #fff;
 		}
 	}
 }
@@ -692,9 +726,20 @@
 .name-editor {
 	.input-wrap, .textbox-base{
 		input{
-			font: normal 300 30px/36px $font;
+			font: italic 300 30px/36px $font;
 			height: auto;
 			padding-left: 10px;
+		}
+		.clear {
+			top: 10px;
+			right: 10px;
+		}
+	}
+
+	.controls{
+		.save,
+		.cancel{
+			line-height: 36px;
 		}
 	}
 }
