@@ -10,10 +10,16 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 
 	autoSize: {width: 'boundEl'},
 
+	controlTemplateObj: {
+		cls: 'controls',
+		cn: [{cls: 'cancel', html: 'Cancel'}, {cls: 'save', html: 'Save'}]
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
-		//Add overflow:visible,
-		//Hang buttons off the this.el
+		Ext.DomHelper.append(this.el, this.controlTemplateObj);
+		this.mon(this.el.down('.save'), 'click', this.completeEdit, this);
+		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
 	}
 });

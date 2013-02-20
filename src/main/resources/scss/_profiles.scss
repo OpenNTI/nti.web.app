@@ -674,6 +674,21 @@
 	}
 }
 
+.meta-editor,
+.name-editor{
+	overflow: visible;
+	.controls{
+		position: absolute;
+		right:-70px;
+		top:0px;
+
+		.save,
+		.cancel{
+			display: inline-block;
+		}
+	}
+}
+
 .name-editor {
 	.input-wrap, .textbox-base{
 		input{
