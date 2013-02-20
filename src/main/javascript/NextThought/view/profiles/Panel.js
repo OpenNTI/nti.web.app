@@ -243,6 +243,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 				me.updateField(el, info.field, user.get(info.field));
 				if(info.editable){
 					me.mon(el,'click',me.editMeta,me);
+					el.addCls('editable');
+				}
+				else{
+					el.removeCls('editable');
 				}
 				return true;
 			}
@@ -322,9 +326,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 		//up if it exists
 		if(nameInfo.editable){
 			this.mon(this.nameEl,'click',this.editName,this);
+			this.nameEl.addCls('editable');
 		}
 		else{
 			this.nameEl.addCls('readonly');
+			this.nameEl.removeCls('editable');
 		}
 
 		this.maybeShowChat();
