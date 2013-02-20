@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.views.Contacts', {
 		widthRatio: 0.8,
 		items: [
 			{title: 'Contacts', source: 'contacts' },
-			{title: 'Following', source: 'following' },
+//			{title: 'Following', source: 'following' },
 			{title: 'Distribution Lists', source: 'lists', defaultType: 'contacts-tabs-grouping' },
 			{title: 'Groups', source: 'groups', defaultType: 'contacts-tabs-grouping' }
 		]

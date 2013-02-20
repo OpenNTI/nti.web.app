@@ -106,10 +106,10 @@ Ext.define('NextThought.controller.Groups', {
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
 
-		UserRepository.getUser($AppConfig.userObject.get('following'),function(users){
-			following.removeAll(true);
-			following.add( Ext.Array.map(users,function(i){return {record: i};}) );
-		});
+//		UserRepository.getUser($AppConfig.userObject.get('following'),function(users){
+//			following.removeAll(true);
+//			following.add( Ext.Array.map(users,function(i){return {record: i};}) );
+//		});
 
 		UserRepository.getUser(names,function(users){
 			var friends = {Online: {}, Offline: {}, all:[]},
