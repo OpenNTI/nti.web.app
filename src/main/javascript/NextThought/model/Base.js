@@ -19,14 +19,14 @@ Ext.define('NextThought.model.Base', {
 	proxy: { type: 'nti' },
 	fields: [
 		{ name: 'Class', type: 'string', persist: false },
-		{ name: 'ContainerId', type: 'string' },
+		{ name: 'ContainerId', type: 'string', useNull: true },
 		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Creator', type: 'auto', persist: false },
 		{ name: 'ID', type: 'string', persist: false },
 		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
-		{ name: 'MimeType', type: 'string' },
-		{ name: 'NTIID', type: 'string' },
+		{ name: 'MimeType', type: 'string', useNull: true },
+		{ name: 'NTIID', type: 'string', useNull: true },
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false },
@@ -38,6 +38,20 @@ Ext.define('NextThought.model.Base', {
 		data.proxy = {type:'nti', model: cls};
 		Ext.applyIf(cls,mime);//Allow overriding
 		Ext.applyIf(data,mime);//Allow overriding
+
+		//We don't want to be turning null into empty strings so we must set useNull
+		//Failure to do so creates havok with server side validation and also
+		//results in us potentially unexpectedly changing fields.
+
+		//This will only effect subclasses, so note above where we manually set useNull on the base set of fields where
+		// we do not set persist:false
+		Ext.each(data.fields,function(f){
+			//If the field has not set this flag, and its going to be sent to the server... then set flag on the
+			// fields behalf.
+			if(f && !f.hasOwnProperty('useNull') && f.persist!==false){
+				f.useNull=true;
+			}
+		});
 	},
 
 

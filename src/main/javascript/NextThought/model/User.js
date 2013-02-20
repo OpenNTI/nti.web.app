@@ -19,15 +19,10 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}},
-		//We don't want to be turning null into empty strings so we must set useNull
-		//Failure to do so creates havok with server side validation and also
-		//results in us potentially unexpectedly changing fields.
-		//TODO should probably do this for all fields of any type (create our own type maybe?), trying to minimize the impact
-		//of this change right now so only tweaking a few fields
-		{ name: 'affiliation', type: 'string', useNull: true},
-		{ name: 'role', type: 'string', useNull: true},
-		{ name: 'location', type: 'string', useNull: true},
-		{ name: 'home_page', type: 'string', useNull: true}
+		{ name: 'affiliation', type: 'string'},
+		{ name: 'role', type: 'string'},
+		{ name: 'location', type: 'string'},
+		{ name: 'home_page', type: 'string'}
 	],
 
 	summaryObject: true,
