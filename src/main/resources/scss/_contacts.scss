@@ -617,5 +617,78 @@ div.contact-buttons {
 		}
 	}
 
+	.contact-grouping {
+		position: relative;
+		overflow: hidden;
 
+
+		.contact-card-container {
+			float: left;
+			width: 140px;
+			height: 140px;
+			border: none;
+			margin:0;
+			padding: 0;
+
+			.contact-card {
+				width: 140px;
+				height: 140px;
+				min-height: auto;
+				margin:0;
+				padding: 0;
+
+				.avatar{
+					position: static;
+					top: initial; left: initial;
+				}
+				.meta {
+					position: absolute;
+					bottom: 0; left: 0; right: 0;
+					background: rgba(0,0,0,0.8);
+					margin: 0;
+
+					[data-field]:not(.name),.separator,.composite-line{
+						display: none;
+					}
+
+					.name{
+						font: italic 300 14px/20px $font;
+						max-width: 140px;
+						color: $tertiary-grey;
+						margin: 0;
+						padding: 0 2px;
+					}
+
+					.add-to-contacts {
+						margin: 0;
+						padding: 0 0 0 25px;
+						width: 0;
+						border: 0;
+						overflow: hidden;
+					}
+
+					.actions {
+						display: inline;
+
+						& > div {
+							padding-right: 0;
+							width: 0;
+							overflow: hidden;
+							&::after{
+								top: 5px;
+								left: 2px;
+							}
+						}
+					}
+				}
+
+				&.not-contact {
+					.meta {
+						.name { max-width: 90px; }
+						.add-to-contacts { display: inline-block; }
+					}
+				}
+			}
+		}
+	}
 }
