@@ -523,22 +523,7 @@ div.contact-buttons {
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
-			//box-shadow: inset 0 0 0 1px #fff;
-
-			&::before{
-				content: ' ';
-				display: block;
-				position: absolute;
-				//border: 1px solid $border-grey;
-				//border-radius: 3px;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				//background: #fff;
-				box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
-				z-index: -1;
-			}
+			box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
 		}
 
 		.meta {
