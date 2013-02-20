@@ -41,11 +41,11 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]',this)[0];
 		btn.setDisabled(empty);
-		if(Ext.isEmpty(val)){
-			t.addClass('empty');
+		if(empty){
+			t.getEl().down('input').addCls('empty');
 		}
 		else{
-			t.removeCls('empty');
+			t.getEl().down('input').removeCls('empty');
 		}
 	},
 

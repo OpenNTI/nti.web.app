@@ -43,10 +43,10 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 			btn = this.query('[name=submit]',this)[0];
 		btn.setDisabled(empty);
 		if(Ext.isEmpty(val)){
-			t.addClass('empty');
+			t.getEl().down('input').addCls('empty');
 		}
 		else{
-			t.removeCls('empty');
+			t.getEl().down('input').removeCls('empty');
 		}
 	},
 
