@@ -312,7 +312,7 @@ Ext.define('NextThought.model.Service', {
 
 	//Right now the cabability isn't enough so hack some crap in client
 	//side which I'm sure will break terribly at some point.  Logic is
-	//users with the capability and (those users that have no role field or a role field 
+	//users with the capability and (those users that have no role field or a role field
 	//not equal to student) should be allowed to create them.  The purpose
 	//is to further restrict the capability for mathcounts users that are students
 	//as specified by the unverified role field.
@@ -337,6 +337,12 @@ Ext.define('NextThought.model.Service', {
 		return !!coll;
 	},
 
+	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
+	//       until permissioning of actions can be accomplished.
+	canShareRedaction: function(){
+		var canShare =  /(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
+		return canShare;
+	},
 
 	canRedact: function() {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
