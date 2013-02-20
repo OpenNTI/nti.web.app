@@ -3,13 +3,13 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	alias:	'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
-		'NextThought.view.ResourceNotFound'
+		'NextThought.view.ResourceNotFound',
+		'Ext.ux.layout.Center'
 	],
 
 
 	defaultType: 'profile-panel',
-	layout: 'auto',
-
+	layout: 'ux.center',
 
 	restore: function(state){
 		var user = ((state||{}).profile||{}).username,
@@ -59,7 +59,11 @@ Ext.define( 'NextThought.view.views.Profiles', {
 					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
 					toAdd = {username: username};
 				}
-				toAdd = Ext.apply(toAdd, {listeners: { loaded:fin, scope:this, single: true, delay:1 }});
+				toAdd = Ext.apply(toAdd, {
+					listeners: { loaded:fin, scope:this, single: true, delay:1 },
+					minWidth: 700,
+					widthRatio: 0.8
+				});
 				current = this.add(toAdd);
 				if(shouldFireLoaded){
 					fin();

@@ -1,6 +1,7 @@
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
 Ext.Loader.setPath('swfobject', 'resources/lib/swfobject.js');
+Ext.Loader.setPath('Ext.ux', Ext.Loader.getPath('Ext').replace(/\/src$/,'/examples/ux'));
 
 Ext.application({
 	name: 'NextThought',
