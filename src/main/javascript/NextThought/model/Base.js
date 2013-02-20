@@ -75,7 +75,7 @@ Ext.define('NextThought.model.Base', {
 			noReferences = (this.get('references')||[]).length===0,
 			noParent = !this.parent;
 
-		console.log('record is toplevel? ', notAReply, noReferences, noParent, this.raw);
+		//console.log('record is toplevel? ', notAReply, noReferences, noParent, this.raw);
 
 		return notAReply && noReferences && noParent;
 	},
