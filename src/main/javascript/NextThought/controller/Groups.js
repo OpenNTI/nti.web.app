@@ -222,7 +222,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	publishGroupsAndLists: function(groups, lists, onComplete){
 		var store = this.getFriendsListStore(), me = this,
-			groupCmps = [], listCmps = [], remaining = {groups: 0, lists: 0},
+			groupCmps = [], listCmps = [], remaining = 0,
 			addedCmps = [], contactsId = this.getMyContactsId();
 
 		//First we build up a list of the group and list cmps
@@ -256,15 +256,10 @@ Ext.define('NextThought.controller.Groups', {
 		me.getGroupsTab().removeAll(true);
 		me.getListsTab().removeAll(true);
 
-		groups.suspendLayouts();
-		lists.suspendLayouts();
-
 		//This part is asynchronous b/c we need to resolve users
 		//when we are complete we need to unsuspend and layout
 		function maybeCallback(){
-			if(remaining.groups <= 0 && remaining.lists <= 0){
-				groups.resumeLayouts(true);
-				lists.resumeLayouts(true);
+			if(remaining <= 0){
 				Ext.callback(onComplete, me);
 				return true;
 			}
@@ -277,8 +272,7 @@ Ext.define('NextThought.controller.Groups', {
 		Ext.Array.push(addedCmps, groups.add(groupCmps));
 		Ext.Array.push(addedCmps, lists.add(listCmps));
 
-		remaining.lists = listCmps.length;
-		remaining.groups = groupCmps.length;
+		remaining = addedCmps.length;
 
 		//We might be finished before we started.
 		//this is the case of no groups or lists to show
@@ -306,7 +300,7 @@ Ext.define('NextThought.controller.Groups', {
 
 				UserRepository.getUser(usersToAdd, function(resolvedUsers){
 					cmp.setUsers(resolvedUsers);
-					remaining[groupOrList.isDFL ? 'groups' : 'lists']--;
+					remaining--;
 					maybeCallback();
 				});
 
