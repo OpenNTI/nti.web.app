@@ -9,7 +9,7 @@ Ext.define('NextThought.view.contacts.Card',{
 	cls: 'contact-card-container',
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'contact-card',
+		cls: 'contact-card {Presence}',
 		cn: [{
 			cls: 'avatar', style: {backgroundImage: 'url({avatarURL});'}
 		},{

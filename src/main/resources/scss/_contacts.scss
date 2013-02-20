@@ -641,6 +641,21 @@ div.contact-buttons {
 					position: static;
 					top: initial; left: initial;
 				}
+
+				&.Offline {
+
+					.meta {
+						@include experimental(transition, all 0.5s ease);
+						bottom: -100px;
+					}
+
+					&:hover {
+						.meta {
+							bottom: 0;
+						}
+					}
+				}
+
 				.meta {
 					position: absolute;
 					bottom: 0; left: 0; right: 0;
@@ -653,10 +668,10 @@ div.contact-buttons {
 
 					.name{
 						font: italic 300 14px/20px $font;
-						max-width: 140px;
+						max-width: 115px;
 						color: $tertiary-grey;
 						margin: 0;
-						padding: 0 2px;
+						padding: 0 0 0 3px;
 					}
 
 					.add-to-contacts {
