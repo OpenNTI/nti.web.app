@@ -13,7 +13,8 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 
 		function hoverOn(){ Ext.fly(this).addCls('over'); }
 		function hoverOff(){ Ext.fly(this).removeCls('over'); }
-		function onUserNameClick(){
+		function onUserNameClick(e){
+			if(e){e.stopEvent();}
 			var u = this.userObject || this.user;
 			if(u && Ext.isFunction(u.goToProfile)){
 				u.goToProfile();
@@ -21,6 +22,7 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 			else {
 				console.error('This (',this,') does not have a user object');
 			}
+			return false;
 		}
 
 		Ext.each(arguments,function(el){
