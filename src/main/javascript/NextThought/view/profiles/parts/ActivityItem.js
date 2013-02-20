@@ -220,12 +220,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	activateReplyEditor: function(){
 		this.callParent(arguments);
+		this.addCls('has-active-editor');
 		Ext.defer(this.syncFloatingHeight,1,this);
 	},
 
 
 	deactivateReplyEditor: function(){
 		this.callParent(arguments);
+		this.removeCls('has-active-editor');
 		Ext.defer(this.syncFloatingHeight,1,this);
 	},
 
