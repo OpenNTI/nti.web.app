@@ -1,5 +1,5 @@
 //CSS in _contact-search.scss
-Ext.define('NextThought.view.account.contacts.Search',{
+Ext.define('NextThought.view.contacts.Search',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contact-search',
 	requires: [
@@ -127,16 +127,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 	itemClicked: function(view,record,item){
 		var add = Ext.fly(item).down('img:not(.add)');
-
-
-//		function show(){
-			NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10,-18]);
-//		}
-//
-//		Ext.fly(item).scrollIntoView(
-//				item.parentNode,false,{diration: 500});
-//
-//		Ext.defer(show,500,this);
+		NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10,-18]);
 	},
 
 	//We buffer this slightly to avoid unecessary searches

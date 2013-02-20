@@ -1,9 +1,9 @@
 
 
 @mixin contact-card {
-	posititon: relative;
 	overflow: hidden;
 	padding: 5px 8px 3px 20px;
+	margin: 10px;
 
 	img {
 		width: 32px;
@@ -21,6 +21,51 @@
 		.affiliation {
 			color: $secondary-grey;
 			font: { size: 12px; weight: 400; }
+			margin-left: 2px;
+		}
+	}
+}
+
+
+@mixin contact-card-large {
+	position: relative;
+	overflow: hidden;
+	padding: 5px 8px 3px 20px;
+	min-height: 150px;
+	margin: 0 10px 0;
+
+	img:not(.add) {
+		top: 3px;
+		left: 3px;
+		width: 140px;
+		height: 140px;
+		position: absolute;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		box-shadow: 0 0 3.5px 0.5px rgba(30, 30, 30, 1);
+	}
+
+	.text-wrap {
+		margin: 15px 0 0 140px;
+
+		.name {
+			padding-left: 10px;
+			margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
+			margin-bottom: 5px;
+			font: italic 300 30px/40px $font;
+			color: $primary-blue;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			text-transform: none;
+			display:inline-block;
+			max-width: 400px;
+		}
+
+		.affiliation {
+			color: $primary-grey;
+			font: normal 500 14px/25px $font;
 			margin-left: 2px;
 		}
 	}
@@ -94,19 +139,18 @@
 
 	.search-field {
 		background: #ffffff;
-		border-top: 1px solid #ededed;
-		//border-left: 1px solid #cacaca;
-		border-bottom: 1px solid #d5d5d5;
+		border: 0 solid #ededed;
+		border-width: 1px 0;
 		box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
 		padding: 10px;
 
 		&::after{
 			content: ' ';
 			position: absolute;
-			width: 38px;
-			height: 10px;
+			width: 37px;
+			height: 1px;
 			background: #ffffff;
-			top: -5px;
+			top: -1px;
 			right: 0;
 		}
 	}
@@ -162,6 +206,31 @@
 			}
 		}
 
+	}
+
+
+	&.large{
+		.search-field {
+			border-width: 1px;
+		}
+
+		.search-results {
+			.item {
+				@include contact-card-large;
+				img.add {
+					margin-top: 7px;
+				}
+
+				&.my-contact {
+					img.add {
+						margin-top: 5px;
+					}
+					.text-wrap {
+						margin-right: 36px;
+					}
+				}
+			}
+		}
 	}
 }
 

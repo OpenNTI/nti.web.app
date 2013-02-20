@@ -495,9 +495,23 @@ div.contact-buttons {
 			&::after{
 				content: ' ';
 				position: absolute;
-				top: 17px; left: 8px;
+				top: 17px; left: 5px;
 				background: transparent $icons no-repeat;
 				@include sprite($icons,'search',$dimensions: true);
+			}
+
+			&:active,
+			&.active {
+				&::before{
+					border: 1px solid #ededed;
+					border-bottom-width: 0;
+					background: #ffffff;
+					content: ' ';
+					position: absolute;
+					top: 10px; left: -7px;
+					right: 0;
+					bottom: 9px;
+				}
 			}
 		}
 	}

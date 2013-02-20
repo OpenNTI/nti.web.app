@@ -2,7 +2,8 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.contacts-tabs',
 	requires: [
-		'NextThought.view.contacts.Panel'
+		'NextThought.view.contacts.Panel',
+		'NextThought.view.contacts.Search'
 	],
 
 	defaultType: 'contacts-tabs-panel',
@@ -18,8 +19,58 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 		xhooks: {
 			afterRender: function(){
 				this.callParent(arguments);
-				this.searchButtonEl = Ext.DomHelper.append(this.el,{cls: 'search'},true);
+				var owner = this.up('contacts-tabs'),
+					searchButtonEl = Ext.DomHelper.append(this.el,{cls: 'search'},true);
+				owner.mon(searchButtonEl,'click',owner.toggleSearch,owner);
+				owner.searchBtn = searchButtonEl;
 			}
+		}
+	},
+
+
+	initComponent: function(){
+		var me = this;
+		me.callParent(arguments);
+		me.contactSearch = Ext.widget('contact-search',{floatParent:me, cls: 'contact-search large'});
+		me.mon(me.contactSearch,{
+			scope: me,
+			show: me.onSearchShow,
+			hide: me.onSearchHide
+		});
+
+		me.on('afterlayout',function(){ me.contactSearch.setWidth(me.getWidth()); });
+	},
+
+
+	onAdded: function(parentCmp){
+		this.callParent(arguments);
+		this.mon(parentCmp,'deactivate',this.contactSearch.hide,this.contactSearch);
+	},
+
+
+	toggleSearch: function(e){
+		var p = this.contactSearch;
+		if(e.getTarget('.search')){
+			p[p.isVisible()?'hide':'show']();
+		}
+		else {
+			p.hide();
+		}
+	},
+
+	onSearchShow: function(cmp){
+		var b = this.searchBtn;
+		if( !b ){ return; }
+		b.addCls('active');
+
+		cmp.alignTo(b,'tr-br',[0,-10]);
+		Ext.defer(function(){ cmp.down('simpletext').focus(); },10);
+	},
+
+
+	onSearchHide: function(){
+		if( this.searchBtn ){
+			this.searchBtn.removeCls('active');
 		}
 	}
 });

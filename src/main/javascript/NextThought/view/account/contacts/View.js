@@ -3,7 +3,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	alias: 'widget.contacts-view',
 	requires: [
 		'NextThought.view.SecondaryTabPanel',
-		'NextThought.view.account.contacts.Search',
+		'NextThought.view.contacts.Search',
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel',
         'NextThought.view.account.contacts.GroupButtons',
@@ -185,8 +185,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	afterLayout: function(){
 		this.callParent(arguments);
-		var cmp = this.contactSearch;
-		cmp.setWidth(this.getWidth());
+		this.contactSearch.setWidth(this.getWidth());
 	},
 
 
