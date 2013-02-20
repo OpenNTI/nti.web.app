@@ -5,7 +5,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	requires: [
 		'NextThought.view.profiles.parts.ActivityItem',
 		'NextThought.view.profiles.parts.HighlightContainer',
-		'NextThought.view.profiles.parts.Joined'
+		'NextThought.view.profiles.parts.Joined',
+		'NextThought.store.ProfileItem'
 	],
 
 	defaultType: 'profile-activity-item',
@@ -32,11 +33,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			s = Ext.getStore(id);
 
 		if(!s){
-			s = NextThought.store.PageItem.create({
-				id: id,
-				wantsItem: function(rec){
-					return this.hasOwnProperty('profileStoreFor') && this.profileStoreFor === rec.get('Creator');
-				}});
+			s = NextThought.store.ProfileItem.create({ id: id });
 		}
 
 		s.proxy.url = (s.proxy.url||'').replace(
