@@ -39,4 +39,17 @@ describe("User Tests", function() {
 			expect(u.isUnresolved()).toBeFalsy();
 		});
 	});
+
+	it('doesn\'t change null fields to empty string', function(){
+		var user = Ext.create('NextThought.model.User', {
+			home_page: null,
+			Username: 'user1'
+		}), json;
+
+		expect(user.get('home_page')).toBe(null);
+		json = user.asJSON();
+
+		expect(user.home_page).toBeFalsy();
+		expect(user.home_page).not.toBe('');
+	});
 });
