@@ -2,7 +2,8 @@ Ext.define('NextThought.view.contacts.Card',{
 	extend: 'Ext.Component',
 	alias: 'widget.contacts-tabs-card',
 	mixins: {
-		profileLink: 'NextThought.mixins.ProfileLinks'
+		profileLink: 'NextThought.mixins.ProfileLinks',
+		chatLink: 'NextThought.mixins.ChatLinks'
 	},
 
 	ui: 'contacts-tabs-card',
@@ -40,6 +41,9 @@ Ext.define('NextThought.view.contacts.Card',{
 		}]
 	}),
 
+	renderSelectors:{
+		chatEl: '.actions .chat'
+	},
 
 	beforeRender: function(){
 		var u = this.record;
@@ -52,5 +56,6 @@ Ext.define('NextThought.view.contacts.Card',{
 		this.callParent(arguments);
 		this.userObject = this.record;
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
+		this.maybeShowChat(this.chatEl);
 	}
 });

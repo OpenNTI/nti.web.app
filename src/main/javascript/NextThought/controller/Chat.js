@@ -105,6 +105,10 @@ Ext.define('NextThought.controller.Chat', {
 
 			'profile-panel' : {
 				'chat': this.enterRoom
+			},
+
+			'contacts-tabs-card': {
+				'chat': this.enterRoom
 			}
 
 		},{});
