@@ -327,6 +327,13 @@
 						text-decoration: underline;
 					}
 				}
+
+				.displayname {
+					max-width: 326px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: inline-block;
+				}
 			}
 		}
 

@@ -15,6 +15,7 @@ Ext.define('NextThought.view.menus.Share',{
 	border: false,
 	hideMode: 'display',
 	minWidth: 150,
+	maxWidth: 350,
     cls: 'share-menu',
 	constrainTo: Ext.getBody(),
 
@@ -22,6 +23,12 @@ Ext.define('NextThought.view.menus.Share',{
 		ui: 'nt-menuitem',
 		plain: true
 	},
+
+	layout: {
+        type: 'vbox',
+		align: 'stretch',
+        overflowHandler: 'Scroller'
+    },
 
 	initComponent: function(){
 		var me = this;

@@ -296,7 +296,9 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	deleteGroup: function(){
 		var me = this,
-			msg = 'The '+this.associatedGroup.readableType+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
+		msg = Ext.DomHelper.markup(['The ', this.associatedGroup.readableType, ' ',
+									{tag: 'span', cls: 'displayname', html: this.associatedGroup.get('displayName')},
+									' will be permanently deleted...']);
 
 		Ext.Msg.show({
 			msg: msg,
