@@ -623,6 +623,9 @@ div.contact-buttons {
 
 
 		.contact-card-container {
+			//limit our rows to 5 squares wide (select every 6th one and make it start a new line)
+			&:nth-of-type(6n+6) { float:none; }
+
 			float: left;
 			width: 140px;
 			height: 140px;
@@ -647,6 +650,7 @@ div.contact-buttons {
 						@include grayscale;
 					}
 					.meta {
+						&::before{ background: #ababab; }
 						@include experimental(transition, all 0.5s ease);
 						bottom: -100px;
 					}
@@ -659,9 +663,22 @@ div.contact-buttons {
 				}
 
 				.meta {
+					&::before{
+						content: ' ';
+						background: #2db651;
+						border-radius: 90px;
+						width: 7px;
+						height: 7px;
+						overflow: hidden;
+						z-index: 2;
+						position: absolute;
+						top: 10px;
+						left: 5px;
+					}
+
 					position: absolute;
 					bottom: 0; left: 0; right: 0;
-					background: rgba(0,0,0,0.8);
+					background: rgba(38,38,38,0.94);
 					margin: 0;
 
 					[data-field]:not(.name),.separator,.composite-line{
@@ -669,11 +686,11 @@ div.contact-buttons {
 					}
 
 					.name{
-						font: italic 300 14px/20px $font;
-						max-width: 115px;
-						color: $tertiary-grey;
+						font: italic 300 16px/27px $font;
+						max-width: 95px;
+						color: #ababab;
 						margin: 0;
-						padding: 0 0 0 3px;
+						padding: 0 0 0 20px;
 					}
 
 					.add-to-contacts {
