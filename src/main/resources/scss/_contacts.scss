@@ -665,6 +665,10 @@ div.contact-buttons {
 					}
 				}
 
+				&.idle {
+					.meta::before{ background: #ebcd25; }
+				}
+
 				.meta {
 					&::before{
 						content: ' ';
