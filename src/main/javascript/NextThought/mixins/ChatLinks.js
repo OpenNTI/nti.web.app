@@ -25,7 +25,12 @@ Ext.define('NextThought.mixins.ChatLinks', {
 		}
 
 		var me = this;
-		me.shouldShowChat() ? el.show() : el.hide();
+		if(me.shouldShowChat()){
+			el.show();
+		}
+		else{
+			el.hide();
+		}
 		me.mon(el, {click: me.onChatWith, scope:me});
 	},
 
