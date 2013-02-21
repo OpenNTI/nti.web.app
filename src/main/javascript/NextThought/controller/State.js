@@ -85,13 +85,7 @@ Ext.define('NextThought.controller.State', {
 
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
-			var location, ntiid;
 			if (this.updateState(s) && !me.isPoppingHistory) {
-				location = me.getState().location;
-				title = LocationProvider.findTitle(location,'NextThought');
-				ntiid = ParseUtils.parseNtiid(location);
-				url = ntiid ? ntiid.toURLSuffix() : null;
-
 				push.apply(history, [s,title,url]);
 
 				if (Ext.isIE && url) {
@@ -161,18 +155,19 @@ Ext.define('NextThought.controller.State', {
 
 
 	track: function(viewId){
+		var hash, state = {active:viewId},
+			path = location.pathname;
 		if(this.currentState.active !== viewId && NextThought.isInitialized){
-			//console.debug(this.currentState.active, modeId);
-			this.currentState.active = viewId;
 
-			try{
-				location.hash = Ext.getCmp(viewId).getHash()||'';
-			}
-			catch(e){
-				console.error(Globals.getError(e));
+			try{ hash = Ext.getCmp(viewId).getHash(); }
+			catch(e){ console.error(Globals.getError(e)); }
+
+			location.hash = hash||'';
+			if(hash){
+				path = location.toString();
 			}
 
-			window.history.pushState(this.currentState, document.title, location.toString());
+			window.history.pushState(state, document.title, path);
 		}
 	},
 

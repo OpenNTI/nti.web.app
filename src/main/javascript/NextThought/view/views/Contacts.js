@@ -20,5 +20,7 @@ Ext.define( 'NextThought.view.views.Contacts', {
 			{title: 'Distribution Lists', source: 'lists', defaultType: 'contacts-tabs-grouping' },
 			{title: 'Groups', source: 'groups', defaultType: 'contacts-tabs-grouping' }
 		]
-	}]
+	}],
+
+	title: 'NextThought: Contacts'
 });
