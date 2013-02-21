@@ -14,6 +14,7 @@ Ext.define( 'NextThought.view.views.Contacts', {
 	items: [{
 		xtype: 'contacts-tabs',
 		minWidth: 700,
+		maxWidth: 800,
 		widthRatio: 0.8,
 		items: [
 			{title: 'Contacts', source: 'contacts' },

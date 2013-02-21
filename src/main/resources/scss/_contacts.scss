@@ -486,7 +486,7 @@ div.contact-buttons {
 }
 
 #contacts {
-	margin: 0;
+	margin: 0 0 0 10%;
 
 	.nti-contacts-tabbar-plain {
 		.search {
@@ -635,9 +635,15 @@ div.contact-buttons {
 			}
 		}
 
+		&.show-all {
+			//remove our limiter
+			.contact-card-container:nth-of-type(1n+16) { display: block; }
+		}
+
 		.contact-card-container {
-			//limit our rows to 5 squares wide (select every 6th one and make it start a new line)
-			&:nth-of-type(6n+6) { float:none; }
+			// 1*0+16=16, 1*1+16=17, 1*2+16=18, 1*n+16=...you get the idea...
+			// Make the 16th and on instance hidden.
+			&:nth-of-type(1n+16) { display: none; }
 
 			float: left;
 			width: 140px;
