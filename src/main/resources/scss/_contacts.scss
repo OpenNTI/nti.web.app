@@ -618,9 +618,18 @@ div.contact-buttons {
 	}
 
 	.contact-grouping {
+		margin: 35px 0;
 		position: relative;
 		overflow: hidden;
 
+		.x-panel-header-contact-grouping {
+			&.x-panel-header-horizontal{ padding:0; }
+
+			.x-panel-header-text-contact-grouping{
+				font: normal 500 18px/25px $font;
+				color: $primary-grey;
+			}
+		}
 
 		.contact-card-container {
 			//limit our rows to 5 squares wide (select every 6th one and make it start a new line)
