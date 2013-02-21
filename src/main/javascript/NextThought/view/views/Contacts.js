@@ -9,18 +9,42 @@ Ext.define( 'NextThought.view.views.Contacts', {
 
 	cls: 'contacts-view',
 	layout: 'ux.center',
-
+	title: 'NextThought: Contacts',
+	
 	items: [{
 		xtype: 'contacts-tabs',
 		minWidth: 700,
 		widthRatio: 0.8,
 		items: [
 			{title: 'Contacts', source: 'contacts' },
-//			{title: 'Following', source: 'following' },
 			{title: 'Distribution Lists', source: 'lists', defaultType: 'contacts-tabs-grouping' },
 			{title: 'Groups', source: 'groups', defaultType: 'contacts-tabs-grouping' }
 		]
 	}],
 
-	title: 'NextThought: Contacts'
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.tabs = this.down('contacts-tabs');
+		this.mon(this.tabs,'tabchange',this.monitorTabs,this);
+	},
+
+	monitorTabs: function(panel,newTab,oldTab){
+		if(this.restoring){return;}
+		var state = {};
+		state[this.getId()] = {source:newTab.source};
+		history.pushState(state,this.title,location.toString());
+	},
+
+	restore: function(state){
+		var myState = state[this.getId()], tab;
+		if(myState && myState.source){
+			tab = this.down('[source="'+myState.source+'"]');
+			this.restoring = true;
+			this.tabs.setActiveTab(tab);
+			delete this.restoring;
+		}
+		this.fireEvent('finished-restore');
+	}
 });
