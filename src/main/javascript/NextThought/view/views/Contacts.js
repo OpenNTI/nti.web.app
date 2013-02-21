@@ -38,13 +38,15 @@ Ext.define( 'NextThought.view.views.Contacts', {
 	},
 
 	restore: function(state){
+		this.fireEvent('finished-restore');
+
 		var myState = state[this.getId()], tab;
 		if(myState && myState.source){
 			tab = this.down('[source="'+myState.source+'"]');
 			this.restoring = true;
 			this.tabs.setActiveTab(tab);
 			delete this.restoring;
+			this.updateLayout();
 		}
-		this.fireEvent('finished-restore');
 	}
 });
