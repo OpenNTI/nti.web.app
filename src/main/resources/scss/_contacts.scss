@@ -37,6 +37,10 @@ $over-color: #f4f3f3;
 		padding-right: 10px;
 		@include contact-header;
 
+		span{
+			cursor: pointer;
+		}
+
 		.x-tool {
 			height: 20px;
 			margin-left: 0px;
