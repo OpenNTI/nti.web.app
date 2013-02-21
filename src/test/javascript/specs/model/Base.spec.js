@@ -91,15 +91,14 @@ describe("Base Model Tests", function() {
 			beforeEach(function(){
 				m = createModel({'ContainerId': 'bar'});
 				observer = new Ext.util.Observable({fieldChanged: Ext.emptyFn});
-
+				spyOn(observer, 'fieldChanged');
 				m.addObserverForField(observer, field, observer.fieldChanged, scope);
-				spyOn(observer);
 			});
 
 			it('calls the observer when a field is changed', function(){
 				m.set('ContainerId', 'foo');
 				expect(observer.fieldChanged.calls.length).toEqual(1);
-				expect(observer.filedChanged).toHaveBeenCalledWith(field, 'foo');
+				expect(observer.fieldChanged).toHaveBeenCalledWith(field, 'foo', jasmine.any(Object));
 			});
 
 			it('Only calls if field changed', function(){
