@@ -14,7 +14,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 	ui: 'profile',
-	layout: 'auto',
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
@@ -130,18 +129,16 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	onScroll: function(e,dom){
 		var activeTab = this.tabs.activeTab,
-			el, offsets, top, ctBottom;
+			el, height;
 
 		if(!activeTab || !Ext.isFunction(activeTab.onScrolledToBottom)){
 			return;
 		}
 
-		el = dom.lastChild;
-		offsets = Ext.fly(el).getOffsetsTo(dom);
-		top = offsets[1] + dom.scrollTop;
-		ctBottom = dom.scrollTop + dom.clientHeight;
+		el = e.getTarget();
+		height = Ext.fly(el).getHeight();
 
-		if(ctBottom >= top){
+		if(el.scrollTop + height >= el.scrollHeight){
 			activeTab.onScrolledToBottom();
 		}
 	},

@@ -2,6 +2,8 @@ Ext.define('NextThought.view.ResourceNotFound',{
 	extend: 'Ext.Component',
 	alias: 'widget.notfound',
 
+	ui: 'resource-not-found',
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'resource-not-found', cn:[
 			{ cls: 'body', cn: [
@@ -19,6 +21,8 @@ Ext.define('NextThought.view.ResourceNotFound',{
 		backEl: 'a.back',
 		libraryEl: 'a.library'
 	},
+
+	layout: 'auto',
 
 	afterRender: function(){
 		this.callParent(arguments);
