@@ -229,7 +229,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
 			homePageInfo = this.getMetaInfoForField(user, 'home_page', profileSchema),
 			emailInfo = this.getMetaInfoForField(user, 'email', profileSchema),
-			roleResult, affiliationResult, me = this, homePageValue,
+			roleResult, affiliationResult, homePageValue,
 			me = this;
 
 		this.mun(this.affiliationEl,'click',this.editMeta,this);

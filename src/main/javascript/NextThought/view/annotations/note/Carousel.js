@@ -148,7 +148,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			var selected, cmp;
 			if(item instanceof NextThought.model.Note && (!filter || filter(item))){
 				selected = item.getId() === selectedRecordId;
-				cmp = {record: item, autoRender: Boolean(me.rendered), selected: selected}
+				cmp = {record: item, autoRender: Boolean(me.rendered), selected: selected};
 				m.push(cmp);
 			}
 		});
@@ -350,7 +350,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		//The "difference" is a sum because the pointer coordinate is
 		//actually the background's negative offset coordinate
 		this.pointerCoordDifference = bgx + this.body.dom.scrollLeft;
-		Ext.defer(function(){me.syncIt()}, 10);
 	},
 
 
