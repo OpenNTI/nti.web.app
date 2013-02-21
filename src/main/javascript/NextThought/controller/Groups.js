@@ -179,8 +179,7 @@ Ext.define('NextThought.controller.Groups', {
 		this.getResolvedContacts(function(friends){
 
 			try{
-				me.getContactsTab().removeAll(true);
-				me.getContactsTab().add(Ext.Array.map(friends.all,function(i){return {record: i};}));
+				me.getContactsTab().setUsers(friends.all);
 			}
 			catch(e){
 				console.error(Globals.getError(e));
@@ -345,7 +344,8 @@ Ext.define('NextThought.controller.Groups', {
 			contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
 			offline = contacts.down('[offline]'),
 			online = contacts.down('[online]'),
-			map = { offline: offline, online: online };
+			map = { offline: offline, online: online },
+			cards = [], query;
 
 		if(!online || !offline){
 			//ui not ready
@@ -358,28 +358,24 @@ Ext.define('NextThought.controller.Groups', {
 		//clear that was benificial.  It may be find to just constrain the component
 		//query benieth the contacts-view-panel which is what we do now
 
-		Ext.each(
-				Ext.ComponentQuery.query(Ext.String.format('contact-card[username={0}]',name), ct),
+		query = Ext.String.format('contact-card[username={0}],contacts-tabs-card[username={0}]',name);
+		cards = Ext.Array.push(cards, Ext.ComponentQuery.query(query, ct));
+		cards = Ext.Array.push(cards, Ext.ComponentQuery.query(query, Ext.getCmp('contacts')|| {down:Ext.emptyFn}));
+
+		Ext.each(cards,
 				function(u){
 					var panel;
 					u[/offline/i.test(presence)? 'addCls':'removeCls']('offline');
-					panel = u.up('panel');
-					if( panel && !(panel.is('[offline]') || panel.is('[online]')) && panel.removeUser ){
-						panel.suspendLayouts();
-						if(panel.removeUser(name)){
-							UserRepository.getUser(name, function(u) {
-								if(panel.addUser){
-									panel.addUser(u);
-								}
-								else {
-									console.log('No panel for presence: ',presence);
-								}
-								panel.resumeLayouts(true);
-							});
-						}
-						else{
+					panel = u.up('[removeUser][addUser]');
+					if( panel && !(panel.is('[offline]') || panel.is('[online]'))){
+
+						UserRepository.getUser(name, function(u) {
+							panel.suspendLayouts();
+							if(panel.removeUser(name)){
+								panel.addUser(u);
+							}
 							panel.resumeLayouts(true);
-						}
+						});
 					}
 				});
 

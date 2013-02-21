@@ -85,5 +85,9 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		catch(er){
 			this.fireEvent('blocked-click', this, this.user.getId());
 		}
+	},
+
+	getUserObject: function(){
+		return this.user;
 	}
 });

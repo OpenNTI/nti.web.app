@@ -4,6 +4,10 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	requires: ['NextThought.view.contacts.Card'],
 	defaultType: 'contacts-tabs-card',
 
+	mixins: {
+		userContainer: 'NextThought.mixins.UserContainer'
+	},
+
 	ui: 'contact-grouping',
 	cls: 'contact-grouping',
 
@@ -12,6 +16,11 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	border: false,
 
 	setUsers: function(users){
-		this.add(Ext.Array.map(users,function(i){return {record: i};}));
+		var usersToAdd = Ext.Array.sort(users, this.userSorterFunction);
+		this.add(Ext.Array.map(usersToAdd, this.createUserComponent));
+	},
+
+	createUserComponent: function(i){
+		return {record: i};
 	}
 });

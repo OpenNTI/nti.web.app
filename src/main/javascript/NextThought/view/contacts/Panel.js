@@ -3,5 +3,19 @@ Ext.define('NextThought.view.contacts.Panel',{
 	alias: 'widget.contacts-tabs-panel',
 	requires: ['NextThought.view.contacts.Card'],
 	defaultType: 'contacts-tabs-card',
-	autoScroll:true
+	autoScroll:true,
+
+	mixins:{
+		userContainer: 'NextThought.mixins.UserContainer'
+	},
+
+	setUsers: function(users){
+		var usersToAdd = Ext.Array.sort(users, this.userSorterFunction);
+		this.removeAll(true);
+		this.add(Ext.Array.map(usersToAdd, this.createUserComponent));
+	},
+
+	createUserComponent: function(i){
+		return {record: i};
+	}
 });

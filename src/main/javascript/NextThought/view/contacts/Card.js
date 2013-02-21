@@ -55,7 +55,12 @@ Ext.define('NextThought.view.contacts.Card',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.userObject = this.record;
+		this.username = this.userObject.getId();
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
+	},
+
+	getUserObject: function(){
+		return this.userObject;
 	}
 });
