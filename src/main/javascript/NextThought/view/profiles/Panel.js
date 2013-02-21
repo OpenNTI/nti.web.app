@@ -355,6 +355,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.updateProfileDetail(user, profileSchema);
 	},
 
+	userChanged: function(){
+		var avatarUrl = this.user.get('avatarURL');
+		//Pass fields along with the changed event
+		//and only do this is the avatar url changed
+		if(avatarUrl){
+			this.avatarEl.setStyle({backgroundImage: 'url('+avatarUrl+')'});
+		}
+	},
 
 	shouldShowChat: function(){
 		//We show the chat button if the following conditions are true
@@ -422,7 +430,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 		toMask = me.up('#profile');
 		toMask.getEl().mask('Loading...');
 
+		me.mun(me.user, 'changed', this.userChanged, this);
+
 		me.user = user;
+
+		me.mon(me.user, 'changed', this.userChanged, this);
 
 		function onProfileLoaded(u, profile){
 			me.updateProfile(u, profile);
