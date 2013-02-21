@@ -92,7 +92,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 		function mout(){
 			clearTimeout(t);
-			t = setTimeout(function(){i.removeCls('reveal');},500);
+			t = setTimeout(function(){
+				if(i){ i.removeCls('reveal'); }
+			},500);
 		}
 
 		this.contextEl.hover(min,mout);
@@ -110,6 +112,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	clickedRevealAllReplies: function(){
 		this.mun( this.replyButton, 'click', this.clickedRevealAllReplies, this);
+		if(!this.commentsEl){ return; }
 		this.commentsEl.remove();
 		delete this.commentsEl;
 
