@@ -658,5 +658,32 @@ Ext.define('NextThought.model.Base', {
 		if(!this.destroyDoesNotClearListeners){
 			this.callParent(arguments);
 		}
+	},
+
+	fieldEvent: function(name){
+		return name+'-set';
+	},
+
+	addObserverForField: function(observer, field, fn, scope){
+		if(!observer){
+			return;
+		}
+		observer.mon(this, this.fieldEvent(field), fn, scope);
+	},
+
+	removeObserverForField: function(observer, field, fn, scope){
+		if(!observer){
+			return;
+		}
+		observer.mun(this, this.fieldEvent(field), fn, scope);
+	},
+
+	set: function(){
+		var changed = this.callParent(arguments);
+
+		//TODO we don't do anything about begin/end edit here
+		Ext.Array.each(changed, function(f){
+			this.fireEvent(this.fieldEvent(f), f, this.get(f));
+		}, this);
 	}
 });

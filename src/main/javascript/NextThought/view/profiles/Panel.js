@@ -355,8 +355,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.updateProfileDetail(user, profileSchema);
 	},
 
-	userChanged: function(){
-		var avatarUrl = this.user.get('avatarURL');
+	avatarChanged: function(field, value){
+		var avatarUrl = value;
 		//Pass fields along with the changed event
 		//and only do this is the avatar url changed
 		if(avatarUrl){
@@ -430,11 +430,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 		toMask = me.up('#profile');
 		toMask.getEl().mask('Loading...');
 
-		me.mun(me.user, 'changed', this.userChanged, this);
+		//This isn't as nice as beingable to just send message to null
+		if(me.user){
+			me.user.removeObserverForField(this, 'avatarURL', this.avatarChanged, this);
+		}
 
 		me.user = user;
-
-		me.mon(me.user, 'changed', this.userChanged, this);
+		me.user.addObserverForField(this, 'avatarURL', this.avatarChanged, this);
 
 		function onProfileLoaded(u, profile){
 			me.updateProfile(u, profile);

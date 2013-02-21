@@ -68,4 +68,50 @@ describe("Base Model Tests", function() {
             expect(b.timeDifference(now, then)).toEqual('2 days ago');
         });
     });
+
+	describe('field events', function(){
+
+		function createModel(opts){
+			var m = Ext.create('NextThought.model.Base', opts);
+			return m;
+		}
+
+		it('doesn\'t crater on a null observer', function(){
+			var m = createModel();
+
+			m.addObserverForField(null);
+			m.removeObserverForField(null);
+		});
+
+		describe('Test set triggers events appropriately', function(){
+
+			var m, observer, scope = {};
+			var field = 'ContainerId';
+
+			beforeEach(function(){
+				m = createModel({'ContainerId': 'bar'});
+				observer = new Ext.util.Observable({fieldChanged: Ext.emptyFn});
+
+				m.addObserverForField(observer, field, observer.fieldChanged, scope);
+				spyOn(observer);
+			});
+
+			it('calls the observer when a field is changed', function(){
+				m.set('ContainerId', 'foo');
+				expect(observer.fieldChanged.calls.length).toEqual(1);
+				expect(observer.filedChanged).toHaveBeenCalledWith(field, 'foo');
+			});
+
+			it('Only calls if field changed', function(){
+				m.set('ContainerId', 'bar');
+				expect(observer.fieldChanged).not.toHaveBeenCalled();
+			});
+
+			it('Wont call if observer is removed', function(){
+				m.removeObserverForField(observer, field, observer.fieldChanged, scope);
+				m.set('ContainerId', 'foo');
+				expect(observer.fieldChanged).not.toHaveBeenCalled();
+			});
+		});
+	});
 });
