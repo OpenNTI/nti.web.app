@@ -10,7 +10,7 @@ Ext.define('NextThought.view.contacts.Card',{
 	cls: 'contact-card-container',
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'contact-card {Presence}',
+		cls: 'contact-card',
 		cn: [{
 			cls: 'avatar', style: {backgroundImage: 'url({avatarURL});'}
 		},{
@@ -42,6 +42,7 @@ Ext.define('NextThought.view.contacts.Card',{
 	}),
 
 	renderSelectors:{
+		cardEl: '.contact-card',
 		chatEl: '.actions .chat'
 	},
 
@@ -58,6 +59,12 @@ Ext.define('NextThought.view.contacts.Card',{
 		this.username = this.userObject.getId();
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
+		this.updateLayout();
+
+		//For a fun effect, make these drop offline after the user sees it. (also fixes a browser bug that prevent it from showing at first)
+		if(this.userObject.get('Presence')!=='Online'){
+			Ext.defer(this.cardEl.addCls,2500,this.cardEl,['Offline']);
+		}
 	},
 
 	getUserObject: function(){
