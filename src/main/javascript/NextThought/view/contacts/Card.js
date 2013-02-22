@@ -60,7 +60,7 @@ Ext.define('NextThought.view.contacts.Card',{
 
 		//For a fun effect, make these drop offline after the user sees it. (also fixes a browser bug that prevent it from showing at first)
 		if(this.userObject.get('Presence')!=='Online'){
-			Ext.defer(this.cardEl.addCls,2500,this.cardEl,['Offline']);
+			Ext.defer(this.cardEl.addCls,1000,this.cardEl,['Offline']);
 		}
 	},
 
