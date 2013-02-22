@@ -23,6 +23,17 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getUserBlogURL: function(username){
+		function w(s){return '/'+s+'/';}
+
+		var href = (this.getCollection('Pages')||{}).href||'',
+			me = RegExp.escape(encodeURIComponent($AppConfig.username));
+
+		me = new RegExp(w(me),'g');
+		return getURL(href.replace(/Pages$/,'Blog').replace(me,w(username)));
+	},
+
+
 	getUserSearchURL: function(username){
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_SEARCH_REL);

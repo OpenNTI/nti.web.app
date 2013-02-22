@@ -4,6 +4,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	requires:[
 		'NextThought.view.profiles.parts.Activity',
+		'NextThought.view.profiles.parts.Blog',
 		'NextThought.view.profiles.TabPanel',
 		'NextThought.view.profiles.ProfileFieldEditor',
 		'NextThought.view.account.contacts.management.Popout'
@@ -72,8 +73,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 	items: [{
 		xtype: 'profile-tabs',
 		items: [
-			{title: 'Recent Activity', xtype: 'profile-activity'},
-			{title: 'Thoughts', html: 'Test', disabled: true, hidden: true},
+			{title: 'Recent Activity', xtype: 'profile-activity' },
+			{title: 'Thoughts', xtype: 'profile-blog' },
 			{title: 'Library', disabled: true, hidden: true},
 			{title: 'Connections', disabled: true, hidden: true}
 		]

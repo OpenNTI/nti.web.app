@@ -3,7 +3,9 @@ Ext.define('NextThought.controller.Profile', {
 
 	models: [],
 
-	stores: [],
+	stores: [
+		'Blog'
+	],
 
 	views: [
 		'profiles.Panel',

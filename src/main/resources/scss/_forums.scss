@@ -1,0 +1,20 @@
+
+#profile {
+
+	.blog {
+		.x-component-nti-tool-action{
+			.icon {
+				&.post::after{
+					@include sprite($icons,'add-comment-19x17',$dimensions: true);
+				}
+			}
+			&:hover,&.over {
+				&:not(.disabled){
+					.icon {
+						&.post::after{ @include sprite($icons,'add-comment-19x17_hover'); }
+					}
+				}
+			}
+		}
+	}
+}

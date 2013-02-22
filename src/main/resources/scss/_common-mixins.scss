@@ -410,3 +410,41 @@
 		-webkit-filter: grayscale(0%);
 	}
 }
+
+
+.x-component-nti-tool-action {
+	margin: 0 0 0 20px;
+	white-space: nowrap;
+	position: relative;
+	cursor: pointer;
+	&.disabled { cursor: default; }
+
+	&:first-of-type{ margin: 0; }
+
+	.icon {
+		float: left;
+		position: relative;
+		width: 25px;
+		height: 20px;
+		&::after{
+			content: '';
+			background: $icons no-repeat;
+			left: 0; top: 1px;
+			position: absolute;
+			overflow: hidden;
+		}
+	}
+	.label{
+		margin-left: 25px;
+		white-space: nowrap;
+		font: normal bold 10px/20px $font;
+		text-transform: uppercase;
+		color: #b8b8b8;
+	}
+
+	&:hover,&.over {
+		&:not(.disabled){
+			.label{ color: #757474; }
+		}
+	}
+}
