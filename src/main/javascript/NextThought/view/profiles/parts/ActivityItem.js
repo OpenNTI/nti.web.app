@@ -42,6 +42,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.maybeFillIn();
 	},
 
+	updateFromRecord: function(){
+		this.callParent(arguments);
+		this.syncFloatingHeight();
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);

@@ -361,6 +361,16 @@
 					text-decoration: underline;
 				}
 			}
+
+			&.deleted-reply{
+				.item-spacer{
+					min-height: 0;
+				}
+				.controls{
+					display: none;
+				}
+			}
+
 			.item {
 				&.reveal { top: 120px; }
 				@include experimental(transition, top 0.7s ease);
@@ -498,6 +508,10 @@
 				color: $primary-grey;
 				margin-top: 5px;
 				font: normal 500 14px/20px $font;
+			}
+
+			&.deleted-reply{
+				controls: display:none;
 			}
 
 			&.editor-active {
