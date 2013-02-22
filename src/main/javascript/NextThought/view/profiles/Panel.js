@@ -132,9 +132,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 		var activeTab = this.tabs.activeTab,
 			el, height;
 
-		if(!activeTab || !Ext.isFunction(activeTab.onScrolledToBottom)){
-			return;
+		function alignEditor(ed){
+			if(ed && ed.rendered){
+				ed.realign();
+			}
 		}
+
+		alignEditor(this.metaEditor);
+		alignEditor(this.nameEditor);
 
 		el = e.getTarget();
 		height = Ext.fly(el).getHeight();

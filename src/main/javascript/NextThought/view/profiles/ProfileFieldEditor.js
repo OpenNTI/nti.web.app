@@ -8,7 +8,8 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 
 	ignoreNoChange: true,
 	revertInvalid: false,
-	alignment: 'l-l?',
+	alignment: 'l-l',
+
 	autoSize: {width: 'boundEl'},
 
 	controlTemplateObj: {
