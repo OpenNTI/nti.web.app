@@ -22,6 +22,7 @@ Ext.define('NextThought.model.Service', {
 		return r;
 	},
 
+
 	getUserSearchURL: function(username){
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_SEARCH_REL);
@@ -30,6 +31,7 @@ Ext.define('NextThought.model.Service', {
 		}
 		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
 	},
+
 
 	getResolveUserURL: function(username){
 		var w = this.getWorkspace('Global') || {},
@@ -272,7 +274,6 @@ Ext.define('NextThought.model.Service', {
 		},
 
 
-
 	getObject: function (ntiid, success, failure, scope){
 		return this.getObjectRaw(ntiid,
 				function(resp){
@@ -310,6 +311,7 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
+
 	//Right now the cabability isn't enough so hack some crap in client
 	//side which I'm sure will break terribly at some point.  Logic is
 	//users with the capability and (those users that have no role field or a role field
@@ -327,15 +329,18 @@ Ext.define('NextThought.model.Service', {
 		return !roleField || roleField.toLowerCase() !== 'student';
 	},
 
+
 	hasCapability: function(c){
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
 
+
 	canCanvasURL: function() {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
 		return !!coll;
 	},
+
 
 	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 	//       until permissioning of actions can be accomplished.
@@ -344,10 +349,12 @@ Ext.define('NextThought.model.Service', {
 		return canShare;
 	},
 
+
 	canRedact: function() {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	},
+
 
     isPotentiallyCoppa: function(){
         return (/mathcounts/i).test(window.location.hostname);
