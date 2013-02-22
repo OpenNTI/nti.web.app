@@ -664,6 +664,10 @@ Ext.define('NextThought.model.Base', {
 		return name+'-set';
 	},
 
+	notifyObserversOfFieldChange: function(f){
+		this.fireEvent(this.fieldEvent(f), f, this.get(f));
+	},
+
 	addObserverForField: function(observer, field, fn, scope){
 		if(!observer){
 			return;
@@ -682,8 +686,8 @@ Ext.define('NextThought.model.Base', {
 		var changed = this.callParent(arguments);
 
 		//TODO we don't do anything about begin/end edit here
-		Ext.Array.each(changed, function(f){
-			this.fireEvent(this.fieldEvent(f), f, this.get(f));
-		}, this);
+		Ext.Array.each(changed, this.notifyObserversOfFieldChange, this);
+
+		return changed;
 	}
 });
