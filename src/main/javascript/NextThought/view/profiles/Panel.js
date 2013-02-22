@@ -18,6 +18,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
+	placeholderTextTpl: Ext.DomHelper.createTemplate({tag:'span',cls:'placeholder',html:'{0}'}),
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'profile-head editable',
@@ -26,15 +28,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 			},{
 				cls: 'meta',
 				cn: [
-					{ cls: 'name', 'data-field': 'alias' },
-					{ cls: 'add-to-contacts', html: 'ADD'},
-					{ 'data-field': 'email', 'data-placeholder': 'Email' },
+					{cn:[{tag: 'span', cls: 'name', 'data-field': 'alias' },{ cls: 'add-to-contacts', html: 'ADD'}]},
+					{cn:{tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' }},
 					{ cn: [
 						{tag: 'span', 'data-field':'role', 'data-placeholder': 'Role'},
 						{tag: 'span', cls: 'separator', html:' at '},
 						{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'Affiliation'}]},
-					{ 'data-field': 'location' , 'data-placeholder': 'Location'},
-					{ 'data-field': 'home_page', 'data-placeholder': 'Home Page'},
+					{cn:{tag: 'span', 'data-field': 'location' , 'data-placeholder': 'Location'}},
+					{cn:{tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page'}},
 					{ cls: 'error-msg' },
 					{ cls: 'actions', cn: [
 						{cls: 'chat', html: 'Chat'}
@@ -277,7 +278,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
 			autoSize: { width: 'boundEl' },
 			cls: 'meta-editor',
-			updateEl: false,
 			field:{ xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
 			listeners:{
 				complete: this.onSaveField,
@@ -446,8 +446,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	editMeta: function(e){
-		var t = e.getTarget(null,null,true),
-			ed = this.metaEditor, value, a;
+		var t = e.getTarget('[data-field]',null,true),
+			ed = this.metaEditor;
 
 		if(e.getTarget('a[href]')){
 			return;
@@ -457,18 +457,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			ed.cancelEdit();
 		}
 
-		//Ensure the editor is wide enough to see something...
-		function resetWidth(){ t.setWidth(null); }
-		if(t.getWidth() < 100){ t.setWidth(100); }
-		ed.on({deactivate:resetWidth,single:true});
-
-		if(t === this.homePageEl){
-			a = t.down('a');
-			value = a ? a.dom.innerHTML : '';
-			value = Ext.String.trim(value);
-		}
-
-		ed.startEdit(t, value);
+		ed.startEdit(t);
 	},
 
 
@@ -532,7 +521,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 					this.showError('Must be a valid URL.');
 					return false;
 				}
-				else if(numColons === 1 && value.indexOf('http:') !== 0 && value.indexOf('https:') !== 0){
+				if(numColons === 1 && value.indexOf('http:') !== 0 && value.indexOf('https:') !== 0){
 					this.showError('Must be a valid URL.');
 					return false;
 				}
@@ -545,7 +534,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	updateField: function(el, n, v){
-		var placeholderText = '{'+el.getAttribute('data-placeholder')+'}';
+		var placeholderText = this.placeholderTextTpl.apply([el.getAttribute('data-placeholder')]);
 		if(this.onSaveMap.hasOwnProperty(n)){
 			Ext.callback(this.onSaveMap[n], this, [v, placeholderText]);
 		}

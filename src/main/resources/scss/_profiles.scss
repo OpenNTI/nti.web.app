@@ -68,6 +68,11 @@
 				font: normal 500 14px/24px $font;
 				color: $secondary-grey;
 
+				.placeholder{
+					color: $tertiary-grey !important;
+					font-style: italic !important;
+				}
+
 				.separator{
 					vertical-align: inherit;
 					position:relative;
@@ -705,6 +710,7 @@
 
 	.input-wrap, .textbox-base {
 		input {
+			border-radius: 0;
 			border-width: 0;
 			box-shadow: none;
 			color: $primary-grey;
@@ -753,6 +759,7 @@
 			font: italic 300 30px/36px $font;
 			height: auto;
 			padding-left: 10px;
+			padding-right: 30px;
 		}
 		.clear {
 			top: 10px;

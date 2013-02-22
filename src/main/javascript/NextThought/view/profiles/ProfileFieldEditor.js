@@ -2,12 +2,13 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 	extend: 'Ext.Editor',
 	alias: 'widget.profile-field-editor',
 
+	updateEl: false,
 	allowBlur: false,
 	cancelOnBlur: true, //Only valid if allowBlur is true this has no effect.  If allowBlur is false this will trigger a blur to cancel edit
 
 	ignoreNoChange: true,
 	revertInvalid: false,
-
+	alignment: 'l-l?',
 	autoSize: {width: 'boundEl'},
 
 	controlTemplateObj: {
@@ -21,5 +22,18 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
 		this.mon(this.el.down('.save'), 'click', this.completeEdit, this);
 		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
+	},
+
+	startEdit: function(t,v){
+		var me = this;
+		//Ensure the editor is wide enough to see something...
+		function resetWidth(){ me.autoSize.width='boundEl'; }
+		if(t.getWidth() < 150){
+			me.autoSize.width = 150;
+		}
+
+		this.on({deactivate:resetWidth,single:true});
+
+		return this.callParent([t,v]);
 	}
 });
