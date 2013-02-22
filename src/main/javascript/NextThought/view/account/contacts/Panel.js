@@ -106,7 +106,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	setUsers: function(users){
-		var p = [], usersToAdd = [];
+		var p,usersToAdd = [];
 
 		if(!Ext.isArray(users)) {
 			Ext.Object.each(users, function(n, u){ usersToAdd.push(u); });
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
 
-		Ext.each(usersToAdd,this.createUserComponent,this);
+		p = Ext.Array.map(usersToAdd,this.createUserComponent,this);
 
 		this.removeAll(true);
 		this.add(p);
