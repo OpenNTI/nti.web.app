@@ -57,6 +57,10 @@ Ext.define('NextThought.view.contacts.Card',{
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
 		this.updateLayout();
+
+		if(this.userObject.get('Presence')!=='Online'){
+			this.cardEl.addCls('Offline');
+		}
 	},
 
 	getUserObject: function(){
