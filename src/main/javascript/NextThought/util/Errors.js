@@ -20,8 +20,8 @@ Ext.define('NextThought.util.Errors', {
 		'Default' : {
 			msg : "An unknown error occured.",
 		},
-		'Censored' : {
-			msg : "{name} contains a censored {type}",
+		'FieldContainsCensoredSequence' : {
+			msg : "{name} contains censored {type}",
 			defaults: {
 				'name' : 'Item',
 				'type' : 'material'

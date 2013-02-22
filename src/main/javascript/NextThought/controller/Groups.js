@@ -625,12 +625,13 @@ Ext.define('NextThought.controller.Groups', {
         }
 
         function onError(record, operation, response){
-			var msg = response.message;
-				field = response.field;
+			var msg = response.message,
+				field = response.field,
+				code = response.code;
 			if(msg){
 				//Try and swizzle any field names to match what the user inputs
 				if(field){
-					msg = NTIError.getError('Censored',{'name':'Group code'});
+					msg = NTIError.getError(code,{'name':'Group code'});
 				}
 			}
 			else{
