@@ -307,9 +307,11 @@ Ext.define('NextThought.controller.Groups', {
 				Ext.Array.remove(usersToAdd, $AppConfig.username);
 
 				UserRepository.getUser(usersToAdd, function(resolvedUsers){
-					cmp.setUsers(resolvedUsers);
-					remaining--;
-					maybeCallback();
+					Ext.defer(function(){
+						cmp.setUsers(resolvedUsers);
+						remaining--;
+						maybeCallback();
+					}, 1);
 				});
 
 			}
