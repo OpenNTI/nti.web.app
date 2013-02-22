@@ -76,5 +76,14 @@ Ext.define('NextThought.view.ViewSelect', {
 				}
 			}
 		}
-	]
+	],
+
+	afterRender: function(){
+		this.callParent(arguments);
+		//This is our way for identifying coppa right now, don't give them the contacts view
+		//TODO let them click it but show a resend consent page, it is safer
+		if(!$AppConfig.service.canFriend()){
+			this.down('[title=Contacts]').hide();
+		}
+	}
 });
