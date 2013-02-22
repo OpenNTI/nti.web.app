@@ -22,11 +22,15 @@ Ext.define('NextThought.view.contacts.Card',{
 					{ cls: 'email', html: '{email}', 'data-field':'email' }]},
 
 				{ tag: 'tpl', 'if':'!hideProfile && (role || affiliation)', cn:[
-				{ cls: 'composite-line', cn: [
-					{ tag: 'span', html:'{role}', 'data-field':'role'},
-					{ tag: 'tpl', 'if':'role && affiliation', cn:[{tag: 'span', cls: 'separator', html:' at '}]},
-					{ tag: 'span', html:'{affiliation}', 'data-field':'affiliation' }]}]},
-
+					{ cls: 'composite-line', cn: [
+						{ tag: 'tpl',  'if': 'role', cn:[
+							{ tag: 'span', html:'{role}', 'data-field':'role'}]},
+						{ tag: 'tpl', 'if':'role && affiliation', cn:[{tag: 'span', cls: 'separator', html:' at '}]},
+						{ tag: 'tpl', 'if': 'affiliation', cn:[
+							{ tag: 'span', html:'{affiliation}', 'data-field':'affiliation' }]
+						}]
+					}]
+				},
 				{ tag: 'tpl', 'if':'!hideProfile && location', cn:[
 					{ cls: 'location', html:'{location}', 'data-field':'location' }]},
 
