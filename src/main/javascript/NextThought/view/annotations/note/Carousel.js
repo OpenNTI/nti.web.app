@@ -182,7 +182,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			c = this.query('note-carousel-item').length-1;
 
 		if(selectedRecordId === record.getId() && !isMe(record.get('Creator'))){
-			this.updateWith(null);
+			this.showAsSelected(null);
+			this.up('window').down('note-main-view').disable();
 			console.warn('The active note was removed but was not yours. We will leave the selection alone');
 			return;
 		}
@@ -193,7 +194,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		}
 
 		idx = Math.max(idx-1,0);
-		this.record = store.getAt(idx);
+		this.setRecord(store.getAt(idx));
 	},
 
 
