@@ -120,13 +120,11 @@ Ext.define('NextThought.controller.State', {
 			user,
 			result = {};
 
-		user = this.getUserModel().getProfileIdFromHash(hash);
+		user = this.getUserModel().getProfileStateFromHash(hash);
 		if(user){
 			result = {
 				active: 'profile',
-				profile: {
-					username: user
-				}
+				profile: user
 			};
 		}
 		else if(ntiid){

@@ -95,7 +95,20 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.onSaveMap = {home_page: this.homePageChanged};
 
 		console.time(this.timeId);
+
+		this.tabs = this.down('profile-tabs');
+		if(this.activeTab){
+			this.setActiveTab(this.activeTab);
+		}
+
 		UserRepository.getUser(this.username,this.setUser, this, true);
+	},
+
+
+	setActiveTab: function(tab){
+		delete this.activeTab;
+		var t = this.down('[title="'+tab+'"]');
+		this.tabs.setActiveTab(t||0);
 	},
 
 

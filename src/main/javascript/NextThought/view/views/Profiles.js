@@ -17,11 +17,12 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	},
 
 	restore: function(state){
-		var user = ((state||{}).profile||{}).username,
+		state = ((state||{}).profile||{});
+		var user = state.username,
 			me = this;
 
 		console.debug('Setting user in profile:',user);
-		me.setUser(user,function(panel){
+		me.setUser(state,function(panel){
 			console.debug('fire finish');
 			me.setTitle('Profile: '+user);
 			me.fireEvent('finished-restore');
@@ -35,8 +36,10 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	},
 
 
-	setUser: function(username, finishCallback){
-		var current = this.down('profile-panel'), me = this;
+	setUser: function(state, finishCallback){
+		var current = this.down('profile-panel'),
+			username = state.username,
+			me = this;
 
 		function fin(){
 			me.unmask();
@@ -44,6 +47,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 		}
 
 		if(current && current.username === username){
+			current.setActiveTab(state.activeTab);
 			fin();
 			return;
 		}
@@ -62,7 +66,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 				}
 				else{
 					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
-					toAdd = {username: username};
+					toAdd = {username: username, activeTab: state.activeTab};
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: { loaded:fin, scope:this, single: true, delay:1 },
