@@ -42,10 +42,18 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 
 	initComponent: function(){
+		var chatTool;
 		this.callParent(arguments);
 		this.setTitle(this.title);
 		this.setupActions(this.associatedGroup);
-		this.down('nti-tool-action[chat]').assignExtAction(this.groupChatAction);
+
+		chatTool = this.down('nti-tool-action[chat]');
+		chatTool.assignExtAction(this.groupChatAction);
+		if(this.groupChatAction.isHidden()){
+			chatTool.hide();
+		}
+
+
 		this.mon(this.down('nti-tool-action[settings]'),'click',this.showMenu,this);
 		this.on('destroy',this.cleanupActions,this);
 
