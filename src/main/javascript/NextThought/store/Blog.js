@@ -5,7 +5,7 @@ Ext.define('NextThought.store.Blog',{
 	requires: [
 		'NextThought.proxy.reader.Json'
 	],
-	model: 'NextThought.model.forums.PersonalBlog',
+	model: 'NextThought.model.forums.StoryTopic',
 
 	proxy: {
 		url: 'tbd',
@@ -15,7 +15,7 @@ Ext.define('NextThought.store.Blog',{
 			root: 'Items',
 			totalProperty: 'TopicCount'
 		},
-		headers: { 'Accept': 'application/vnd.nextthought.forums.personalblog+json' },
-		model: 'NextThought.model.forums.PersonalBlog'
+		headers: { 'Accept': 'application/vnd.nextthought.collection+json' },
+		model: 'NextThought.model.forums.StoryTopic'
 	}
 });
