@@ -101,7 +101,12 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
-		store.on('datachanged', this.publishGroupsData, this);
+		store.on({
+			scope: this,
+			load: this.publishGroupsData,
+			add: this.publishGroupsData, //More intelligence coming...
+			remove: this.publishGroupsData //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
+		});
 		store.proxy.url = getURL(coll.href);
 		store.load();
 	},
@@ -445,7 +450,7 @@ Ext.define('NextThought.controller.Groups', {
 			scope: this,
 			success: function(record, operation){
 				Ext.callback(callback,scope, [true, record, operation]);
-				store.load();
+				Ext.defer(function(){store.add(record);}, 500);
 			},
 			failed: function(record, operation, response){
 				if(errorCallback){
@@ -474,9 +479,7 @@ Ext.define('NextThought.controller.Groups', {
             name = record.get('Username');
 
 		if(name !== this.getMyContactsId()){
-			record.destroy({callback: function(){
-				store.load();
-			}});
+			record.destroy();
 		}
 	},
 

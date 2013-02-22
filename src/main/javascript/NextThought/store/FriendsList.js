@@ -56,13 +56,31 @@ Ext.define('NextThought.store.FriendsList',{
 		}
 	],
 
+	constructor: function(){
+		var r = this.callParent(arguments);
+
+		this.on('write', this.onWrite);
+
+		return r;
+	},
+
+	//Taken from PageItem store. move to subclass?
+	onWrite: function(store, info) {
+		if (info.action === 'destroy') {
+			Ext.each(info.records, function(record){
+				store.remove(record);
+			});
+		}
+	},
+
+
 	getContacts: function(){
 		var names = [];
 		this.each(function(g){
 			//Only people in your lists are your contacts.
 			//skip dfls
 			if(!g.isDFL){
-				names.push.apply(names,g.get('friends')); 
+				names.push.apply(names,g.get('friends'));
 			}
 		});
 		names = Ext.Array.sort(Ext.Array.unique(names));
@@ -74,7 +92,7 @@ Ext.define('NextThought.store.FriendsList',{
 		//
 		//Note: now that we are skipping dfls above, we probably don't need to do this
 		names = Ext.Array.remove(names, $AppConfig.username);
-		return names; 
+		return names;
 	},
 
 
@@ -94,7 +112,6 @@ Ext.define('NextThought.store.FriendsList',{
 		return names;
 	},
 
-	
 	isContact: function(username){
 		if(username && username.isModel){
 			username = username.get('Username');

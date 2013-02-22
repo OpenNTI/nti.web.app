@@ -303,8 +303,21 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	goToObject: function(){
 		var rec = this.record,
-			cid = rec ? rec.get('ContainerId') : null;
-		rec = this.record;
+			cid;
+
+		//If we are a placholder find a reply to navigate to
+		if(!rec || rec.placeholder){
+			Ext.Array.each(this.down('[record]'), function(cmp){
+				if(cmp.record && !cmp.record.placholder){
+					rec = cmp.record;
+					return false; //break
+				}
+				return true;
+			});
+		}
+
+		cid = rec ? rec.get('ContainerId') : null;
+
 		if(rec && cid){
 			this.fireEvent('navigation-selected', cid, rec, null);
 		}
