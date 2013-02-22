@@ -256,6 +256,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		//Now we need to actually add the components into the view.  we suspend layouts here
 		//to cut down on work
+		Ext.suspendLayouts();
 		groups.removeAll(true);
 		lists.removeAll(true);
 
@@ -266,6 +267,7 @@ Ext.define('NextThought.controller.Groups', {
 		//when we are complete we need to unsuspend and layout
 		function maybeCallback(){
 			if(remaining <= 0){
+				Ext.resumeLayouts();
 				Ext.callback(onComplete, me);
 				return true;
 			}
