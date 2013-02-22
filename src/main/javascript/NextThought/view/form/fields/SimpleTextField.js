@@ -74,7 +74,9 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
     update: function(v){
         this.inputEl.dom.value = v;
 	    this.inputEl[(v===''?'add':'remove')+'Cls']('empty');
-	    this.clearEl[ v!==''?'show':'hide' ]();
+		if(!this.readOnly){
+			this.clearEl[ v!==''?'show':'hide' ]();
+		}
         this.handleBlur();
     },
 
