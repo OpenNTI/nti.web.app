@@ -681,6 +681,7 @@ div.contact-buttons {
 			&.x-panel-header-horizontal{ padding:0; margin: 10px 0;}
 
 			.x-panel-header-text-contact-grouping{
+				white-space: nowrap;
 				font: normal 500 18px/25px $font;
 				color: $primary-grey;
 				span { color: #b8b8b8; }
@@ -742,22 +743,8 @@ div.contact-buttons {
 				}
 
 				&.Offline {
-					.avatar{
-						@include grayscale;
-					}
 					.meta {
-						&::before{ display: none; }
-						@include experimental(transition, all 0.5s ease);
-						bottom: -100px;
-						.name {
-							padding-left: 5px;
-						}
-					}
-
-					&:hover {
-						.meta {
-							bottom: 0;
-						}
+						&::before{ background: #f55631; }
 					}
 				}
 
