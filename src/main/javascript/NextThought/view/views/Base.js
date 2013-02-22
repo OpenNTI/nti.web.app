@@ -60,7 +60,7 @@ Ext.define( 'NextThought.view.views.Base', {
 			me.setTitle();
 		}
 		catch(er){
-			console.error('Activating View: ', Globals.getError(e));
+			console.error('Activating View: ', Globals.getError(er));
 			return false;
 		}
 		return true;
