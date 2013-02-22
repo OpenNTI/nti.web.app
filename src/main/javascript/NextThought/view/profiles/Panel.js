@@ -100,15 +100,38 @@ Ext.define('NextThought.view.profiles.Panel',{
 		if(this.activeTab){
 			this.setActiveTab(this.activeTab);
 		}
+		//this is intentionally added after we "restore" the tab
+		this.mon(this.tabs,'tabchange', this.trackTabs, this);
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
 
 
+	trackTabs: function(tabPanel, newTab){
+		if(!this.user || this.settingTab){
+			return;
+		}
+		var tab = newTab.is('profile-activity')?null : newTab.title,
+			url = this.user.getProfileUrl(tab);
+
+		console.debug('new url:'+url);
+
+		if(location.hash !== url){
+			location.hash = url;
+		}
+	},
+
+
 	setActiveTab: function(tab){
 		delete this.activeTab;
-		var t = this.down('[title="'+tab+'"]');
-		this.tabs.setActiveTab(t||0);
+		this.settingTab = true;
+		var t = tab? this.down('[title="'+tab+'"]') : null;
+		if(t !== this.tabs.activeTab){
+			this.tabs.suspendEvents(false);
+			this.tabs.setActiveTab(t||0);
+			this.tabs.resumeEvents();
+		}
+		delete this.settingTab;
 	},
 
 
@@ -375,6 +398,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.updateProfileDetail(user, profileSchema);
 	},
 
+
 	avatarChanged: function(field, value){
 		var avatarUrl = value;
 		//Pass fields along with the changed event
@@ -624,6 +648,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.fireEvent('edit');
 		return false;
 	},
+
 
 	onDeactivated: function(){
 		if(this.nameEditor){

@@ -66,9 +66,10 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
-	getProfileUrl: function(){
+	getProfileUrl: function(subPage){
 		var u = encodeURIComponent( this.get('Username') );
-		return '#!profile/'+u;
+		subPage = Ext.isEmpty(subPage,false) ? '' :'/'+encodeURIComponent(subPage);
+		return ['#!profile/',u,subPage].join('') ;
 	},
 
 
