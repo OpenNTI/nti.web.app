@@ -285,7 +285,7 @@ Ext.define('NextThought.controller.Groups', {
 			var groupOrList = cmp.associatedGroup,
 				usersToAdd, creator = groupOrList.get('Creator');
 			if(cmp.setUsers && groupOrList){
-				usersToAdd = cmp.associatedGroup.get('friends');
+				usersToAdd = cmp.associatedGroup.get('friends').slice();
 
 				//We want dfls owners to look like members, even though they arent.
 				//but make sure if we own it we don't look like a member
