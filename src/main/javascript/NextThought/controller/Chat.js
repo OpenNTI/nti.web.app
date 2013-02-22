@@ -76,6 +76,10 @@ Ext.define('NextThought.controller.Chat', {
                 'flag-messages': this.flagTranscriptMessages
             },
 
+			'contacts-tabs-grouping':{
+				'group-chat': this.enterRoom
+			},
+
 			'contacts-panel': {
 				'group-chat': this.enterRoom
 			},

@@ -53,6 +53,13 @@ Ext.define('NextThought.controller.Groups', {
 				'remove-contact': this.removeContact
 			},
 
+			'contacts-tabs-grouping':{
+				'delete-group': this.deleteGroup,
+				'get-group-code': this.getGroupCode,
+				'leave-group': this.leaveGroup,
+				'remove-contact': this.removeContact
+			},
+
 			'management-group-list': {
 				'add-group': this.addGroup,
 				'delete-group': this.deleteGroup,

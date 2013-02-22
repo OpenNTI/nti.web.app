@@ -626,24 +626,101 @@ div.contact-buttons {
 		position: relative;
 		overflow: hidden;
 
+		.x-component-nti-tool-action{
+			margin: 0 0 0 20px;
+			white-space: nowrap;
+			position: relative;
+			cursor: pointer;
+			&.disabled { cursor: default; }
+
+			&:first-of-type{ margin: 0; }
+
+			.icon {
+				float: left;
+				position: relative;
+				width: 25px;
+				height: 20px;
+				&::after{
+					content: '';
+					background: $icons no-repeat;
+					left: 0; top: 1px;
+					position: absolute;
+					overflow: hidden;
+				}
+
+				&.chat::after {
+					top: 4px;
+					@include sprite($icons,'chat-18x12',$dimensions: true);
+				}
+
+				&.settings::after{
+					@include sprite($icons,'settings-28x17',$dimensions: true);
+					width: 18px;//crop off the down-arrow nib
+				}
+			}
+			.label{
+				margin-left: 25px;
+				white-space: nowrap;
+				font: normal bold 10px/20px $font;
+				text-transform: uppercase;
+				color: #b8b8b8;
+			}
+
+			&:hover,&.over {
+				&:not(.disabled){
+					.icon {
+						&.chat::after { @include sprite($icons,'chat-18x12_hover'); }
+						&.settings::after{ @include sprite($icons,'settings-28x17_hover'); }
+					}
+					.label{ color: #757474; }
+				}
+			}
+		}
+
 		.x-panel-header-contact-grouping {
-			&.x-panel-header-horizontal{ padding:0; }
+			&.x-panel-header-horizontal{ padding:0; margin: 10px 0;}
 
 			.x-panel-header-text-contact-grouping{
 				font: normal 500 18px/25px $font;
 				color: $primary-grey;
+				span { color: #b8b8b8; }
+			}
+		}
+
+		.show-more{
+			cursor: pointer;
+			position: relative;
+			background: #f8f8f8;
+			width: 140px; height: 140px;
+			float: left;
+			text-align: center;
+			color: #b8b8b8;
+			font: italic 300 16px/30px $font;
+
+			.dots {
+				line-height: 0;
+				margin-top: 50px;
+				div {
+					display: inline-block;
+					background: #b8b8b8;
+					border-radius: 90px;
+					width: 7px;
+					height: 7px;
+					overflow: hidden;
+					margin: 5px;
+				}
 			}
 		}
 
 		&.show-all {
 			//remove our limiter
-			.contact-card-container:nth-of-type(1n+16) { display: block; }
+			.contact-card-container:nth-of-type(1n+15) { display: block; }
 		}
 
 		.contact-card-container {
 			// 1*0+16=16, 1*1+16=17, 1*2+16=18, 1*n+16=...you get the idea...
-			// Make the 16th and on instance hidden.
-			&:nth-of-type(1n+16) { display: none; }
+			// Make the 15th and on instance hidden.
+			&:nth-of-type(1n+15) { display: none; }
 
 			float: left;
 			width: 140px;

@@ -30,164 +30,32 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		handler: function(event, toolEl, panel){ panel.up('contacts-panel').showMenu(toolEl); }
 	}],
 
+
 	initComponent: function(){
-		var g = this.associatedGroup,
-			listOrGroup = g && Ext.String.capitalize(g.readableType);
+		var g = this.associatedGroup;
 		if(!g){
 			this.tools = null;
 		}
 		this.callParent(arguments);
 		this.setTitle(this.title);
 
-		this.deleteGroupAction = new Ext.Action({
-			text: 'Delete '+listOrGroup,
-			scope: this,
-			handler: this.deleteGroup,
-			itemId: 'delete-group',
-			ui: 'nt-menuitem', plain: true,
-			hidden: g && !g.getLink('edit')
-		});
-
-		this.leaveGroupAction = new Ext.Action({
-			text: 'Leave '+listOrGroup,
-			scope: this,
-			handler: this.leaveGroup,
-			itemId: 'leave-group',
-			ui: 'nt-menuitem', plain: true,
-			hidden: g && !g.getLink('my_membership')
-		});
-
-		this.groupChatAction = new Ext.Action({
-			text: 'Chat With '+listOrGroup,
-			scope: this,
-			handler: this.chatWithGroup,
-			itemId: 'group-chat',
-			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat() || !g || !isMe(g.get('Creator')) || g.getFriendCount() === 0
-		});
-
-		this.getGroupCodeAction =  new Ext.Action({
-			text: 'Group Code',
-			scope: this,
-			handler: this.getGroupCode,
-			itemId: 'get-group-code',
-			ui: 'nt-menuitem', plain: true,
-			hidden: !g || !g.getLink('default-trivial-invitation-code')
-		});
-
-		this.menu = Ext.widget('menu',{
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
-			parentItem: this,
-			items: [
-				this.leaveGroupAction,
-				this.deleteGroupAction,
-				this.groupChatAction,
-				this.getGroupCodeAction
-			]
-		});
-
-		this.mon(this.menu, {
-			scope: this,
-			'mouseleave': this.startHide,
-			'mouseenter': this.stopHide
-		});
-
-		this.forcefullyRemoveUser =	 new Ext.Action({
-			text: 'Remove User',
-			scope: this,
-			handler: this.forcefullyRemoveUser,
-			itemId: 'remove-user',
-			ui: 'nt-menuitem', plain: true
-		});
-
-		this.userMenu = Ext.widget('menu',{
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
-			parentItem: this,
-			items: [
-				this.forcefullyRemoveUser
-			]
-		});
-
-		this.mon(this.userMenu, {
-			scope: this,
-			'mouseleave': this.startHideUser,
-			'mouseenter': this.stopHideUser
-		});
+		this.setupActions(g);
 
 		this.on('nibClicked', this.nibClicked, this);
+		this.on('destroy',this.cleanupActions,this);
+		this.on('add',this.updateStuff,this,{buffer:100});
+		this.on('remove',this.updateStuff,this,{buffer:100});
 	},
 
 
-	destroy: function(){
-		this.menu.destroy();
-		return this.callParent(arguments);
-	},
-
-
-	showMenu: function(toolEl){
-		var g = this.associatedGroup, me = this;
-
-		//Update group chat state.
-		//TODO listen for changes instead of rechecking each time
-		if(g){
-			friends = g.get('friends');
-			if(Ext.isEmpty(friends)){
-				this.groupChatAction.setDisabled(true);
-			}
-			else{
-				UserRepository.getUser(friends, function(rFriends){
-					var canGroupChat = Ext.Array.some(rFriends, function(f){
-											return f.get('Presence') === 'Online';
-									   });
-					me.groupChatAction.setDisabled(!canGroupChat);
-				});
-			}
-		}
-
-		this.menu.showBy(toolEl,'tr-tl',[0,0]);
-	},
+	showMenu: function(toolEl){ this.menu.showBy(toolEl,'tr-tl',[0,0]); },
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.getHeader().on('click',
-			function(){
-				//panel collapse causes permanent failure if there are no items, avoid that.
-			//	if (this.items.length > 0) {
-					this.toggleCollapse();
-			//	}
-			}
-			,this);
+		this.getHeader().on('click',this.toggleCollapse,this);
 	},
 
-	startHide: function(){
-		var me = this;
-		me.stopHide();
-		me.leaveTimer = setTimeout(function(){me.menu.hide();}, 500);
-	},
-
-
-	stopHide: function(){ clearTimeout(this.leaveTimer); },
-
-	startHideUser: function(){
-		var me = this;
-		me.stopHideUser();
-		me.leaveTimerUser = setTimeout(function(){me.userMenu.hide();}, 500);
-	},
-
-	stopHideUser: function(){ clearTimeout(this.leaveTimerUser); },
 
 	setTitle: function(title){
 		var itemsShown = 0;
@@ -208,9 +76,17 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		return this;
 	},
 
+
 	updateTitle: function(){
 		this.setTitle(this.initialConfig.title);
 	},
+
+
+	updateStuff: function(){
+		this.updateTitle();
+		this.updateChatState(this.associatedGroup);
+	},
+
 
 	//The nib is used to show either the group manangement screen or a remove user button for dfls
 	shouldHideUserNib: function(){
@@ -223,14 +99,6 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		return this.associatedGroup.isDFL && !isMe(this.associatedGroup.get('Creator'));
 	},
 
-	afterUserAdd: function(username){
-		//FIXME: we should probably hook into added and remove events on the cmp rather than the mixin implementing them.
-		this.updateTitle();
-	},
-
-	afterUserRemoved: function(username){
-		this.updateTitle();
-	},
 
 	createUserComponent: function(user){
 		return {user: user, group: this.associatedGroup, hideNib: this.shouldHideUserNib()};
@@ -238,87 +106,24 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	setUsers: function(users){
-		var p = [],
-			g = this.associatedGroup,
-			hide = this.shouldHideUserNib(),
-			usersToAdd = [];
+		var p = [], usersToAdd = [];
 
-		if(!Ext.isArray(users)){
-			Ext.Object.each(users, function(n, u){
-				usersToAdd.push(u);
-			});
+		if(!Ext.isArray(users)) {
+			Ext.Object.each(users, function(n, u){ usersToAdd.push(u); });
 		}
-		else{
+		else {
 			usersToAdd = users.slice();
 		}
+
 		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
-		Ext.each(usersToAdd,function(u){ p.push({user: u, group: g, hideNib: hide}); });
+
+		Ext.each(usersToAdd,this.createUserComponent,this);
+
 		this.removeAll(true);
 		this.add(p);
 		this.updateTitle();
 	},
 
-
-	deleteGroup: function(){
-		var me = this,
-		msg = Ext.DomHelper.markup(['The ', this.associatedGroup.readableType, ' ',
-									{tag: 'span', cls: 'displayname', html: this.associatedGroup.get('displayName')},
-									' will be permanently deleted...']);
-
-		Ext.Msg.show({
-			msg: msg,
-			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
-			fn: function(str){
-				if(str === 'ok'){
-					me.fireEvent('delete-group',me.associatedGroup);
-				}
-			}
-		});
-	},
-
-
-	chatWithGroup: function(){
-		if(this.associatedGroup.getFriendCount() > 0){
-			this.fireEvent('group-chat', this.associatedGroup);
-		}
-	},
-
-	getGroupCode: function(){
-		if(this.associatedGroup.getLink('default-trivial-invitation-code')){
-			this.fireEvent('get-group-code', this.associatedGroup);
-		}
-	},
-
-	leaveGroup: function(){
-		if(this.associatedGroup.getLink('my_membership')){
-			this.fireEvent('leave-group', this.associatedGroup);
-		}
-	},
-
-	forcefullyRemoveUser: function(t){
-		var user = t.up('menu').user;
-
-		var me = this,
-			msg = user.get('displayName')+' will no longer be a member of '+this.associatedGroup.get('displayName');
-
-		Ext.Msg.show({
-			msg: msg,
-			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
-			fn: function(str){
-				if(str === 'ok'){
-					this.fireEvent('remove-contact', this.associatedGroup, user.getId());
-				}
-			}
-		});
-	},
 
 	nibClicked: function(card, record, nib){
 		if(!this.associatedGroup || !this.associatedGroup.isDFL){
