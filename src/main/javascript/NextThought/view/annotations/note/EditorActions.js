@@ -564,6 +564,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		r = Ext.Array.filter(r, function(i){
 			var tmp;
+
+			if(!Ext.isString(i)){
+				return true;
+			}
+
 			if(Ext.isEmpty(i)){
 				return false;
 			}
