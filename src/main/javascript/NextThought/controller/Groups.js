@@ -630,7 +630,7 @@ Ext.define('NextThought.controller.Groups', {
 			if(msg){
 				//Try and swizzle any field names to match what the user inputs
 				if(field){
-					msg = msg.replace(field, 'Group name');
+					msg = NTIError.getError('Censored',{'name':'Group code'});
 				}
 			}
 			else{

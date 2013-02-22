@@ -19,6 +19,13 @@ Ext.define('NextThought.util.Errors', {
 	errorMsgs: {
 		'Default' : {
 			msg : "An unknown error occured.",
+		},
+		'Censored' : {
+			msg : "{name} contains a censored {type}",
+			defaults: {
+				'name' : 'Item',
+				'type' : 'material'
+			}
 		}
 	},
 
@@ -38,4 +45,7 @@ Ext.define('NextThought.util.Errors', {
 	addMsg: function(msgs){
 		Ext.applyIf(this.errorMsgs,msgs);
 	}
+},
+function(){
+	window.NTIError = this;
 });
