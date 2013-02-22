@@ -21,7 +21,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 				if(items.hasOwnProperty(key)){
 					item = items[key];
 
-					if(typeof(item)==='string'){
+					if(typeof item ==='string'){
 						console.warn('IGNORING: Received string item at key:', key, item);
 						continue;
 					}
