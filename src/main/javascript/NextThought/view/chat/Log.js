@@ -90,12 +90,13 @@ Ext.define('NextThought.view.chat.Log', {
 	},
 
 	onScroll: function(){
-		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight);
+		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight),
+			minOffset = 50;
 
-		if((me.previousScroll > me.el.dom.scrollTop) && scrollVal > 50){
+		if((me.previousScroll > me.el.dom.scrollTop) && scrollVal > minOffset){
 			this.shouldAllowScrollingOnAdd = false;
 		}
-		else if( !this.shouldAllowScrollingOnAdd && scrollVal < 50){
+		else if( !this.shouldAllowScrollingOnAdd && scrollVal < minOffset){
 			this.shouldAllowScrollingOnAdd = true;
 		}
 
@@ -210,7 +211,7 @@ Ext.define('NextThought.view.chat.Log', {
 			messageId: IdCache.getIdentifier(msg.getId())
 		});
 
-		if(o.el && this.el){
+		if(o.el && this.el && this.shouldAllowScrollingOnAdd){
 			o.el.scrollIntoView(this.el);
 		}
 	},
@@ -261,7 +262,7 @@ Ext.define('NextThought.view.chat.Log', {
 			message: msg
 		});
 
-		if(o.el && this.el){
+		if(o.el && this.el && this.shouldAllowScrollingOnAdd){
 			o.el.scrollIntoView(this.el);
 		}
 	},
