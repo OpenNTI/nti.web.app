@@ -515,10 +515,6 @@
 				font: normal 500 14px/20px $font;
 			}
 
-			&.deleted-reply{
-				controls: display:none;
-			}
-
 			&.editor-active {
 				.reply-options { display: none; }
 				.editor {
