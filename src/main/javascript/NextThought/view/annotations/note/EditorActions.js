@@ -520,29 +520,20 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	getNoteBody: function (str) {
+	getNoteBody: function (parts) {
 		var r = [],
-			regex = /<img.*?>/gi,
-			splits,
-			whiteboards,
-			s, w = 0, t, wbid;
+			regex = /<img.*?>/i,
+			wbid;
 
-		//split it up, then interleave:
-		splits = str.split(regex);
-		whiteboards = str.match(regex) || [];
-		if (splits.length === 0) {
-			splits.push('');
-		} //no text before WB?  just trick it.
-		for (s = 0; s < splits.length; s++) {
-			t = splits[s];
-			if (t && t.length > 0) {
-				r.push(t);
-			}
-			for (w; w < whiteboards.length; w++) {
-				wbid = whiteboards[w].match(/id="(.*?)"/)[1];
+		Ext.Array.each(parts, function(part){
+			if(regex.test(part)){
+				wbid = part.match(/id="(.*?)"/)[1];
 				r.push(this.openWhiteboards[wbid].getEditor().getValue());
 			}
-		}
+			else{
+				r.push(part);
+			}
+		}, this);
 
 		return r;
 	},
@@ -613,6 +604,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 					html = tmp.innerHTML || '';
 				}
 				out.push(html.replace(/\u200B|<br\/?>/g,''));
+				out = Ext.Array.filter(out, function(i){return !Ext.isEmpty(i)});
 			}
 			catch(er){
 				console.warn('Oops, '+er.message);
@@ -620,7 +612,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		});
 
 		return {
-			body     : this.getNoteBody(out.join('<br/>')),
+			body     : this.getNoteBody(out),
 			shareWith: this.shareMenu.getValue()
 		};
 	},
