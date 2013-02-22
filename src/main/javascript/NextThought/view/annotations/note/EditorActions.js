@@ -522,18 +522,55 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	getNoteBody: function (parts) {
 		var r = [],
-			regex = /<img.*?>/i,
-			wbid;
+			regex = /<img.*?>/i, i, part, me = this;
 
-		Ext.Array.each(parts, function(part){
+		function whiteboardFromPart(wp){
+			var wbid = wp.match(/id="(.*?)"/)[1];
+			return me.openWhiteboards[wbid].getEditor().getValue();
+		}
+
+		function stripTrailingBreak(text){
+			return text.replace(/<br\/?>$/, '');
+		}
+
+		parts = parts || [];
+
+		for(i = 0; i<parts.length; i++){
+			part = parts[i];
+			//if its a whiteboard do our thing
 			if(regex.test(part)){
-				wbid = part.match(/id="(.*?)"/)[1];
-				r.push(this.openWhiteboards[wbid].getEditor().getValue());
+				r.push(whiteboardFromPart(part));
 			}
 			else{
-				r.push(part);
+				part = stripTrailingBreak(part);
+				//if this is the first part or the thing before us
+				//is not an array push this part as an array,
+				//otherwise push us onto the previos part which should be an array
+				if(r.length === 0 || !Ext.isArray(r[r.length-1])){
+					r.push([part]);
+				}
+				else{
+					r[r.length-1].push(part);
+				}
 			}
-		}, this);
+		}
+
+		//Now make a pass over r joining any multiple text parts by <br>
+		for(i = 0; i<r.length; i++){
+			if(Ext.isArray(r[i])){
+				r[i] = r[i].join('<br/>');
+			}
+		}
+
+		r = Ext.Array.filter(r, function(i){
+			var tmp;
+			if(Ext.isEmpty(i)){
+				return false;
+			}
+			//if we are just whitespace and html whitespace
+			tmp = i.replace(/<br\/?>/g, '');
+			return !Ext.isEmpty(tmp.trim());
+		});
 
 		return r;
 	},
@@ -603,8 +640,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 					tmp.appendChild(div.dom);
 					html = tmp.innerHTML || '';
 				}
-				out.push(html.replace(/\u200B|<br\/?>/g,''));
-				out = Ext.Array.filter(out, function(i){return !Ext.isEmpty(i)});
+				html = html.replace(/\u200B/g,'');
+				out.push(html);
 			}
 			catch(er){
 				console.warn('Oops, '+er.message);
