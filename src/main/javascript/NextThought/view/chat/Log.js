@@ -79,16 +79,29 @@ Ext.define('NextThought.view.chat.Log', {
 
 		this.addEvents({ 'status-change': true });
 		this.enableBubble(['status-change']);
+		this.shouldAllowScrollingOnAdd = true;
 		this.callParent(arguments);
 	},
 
-//	afterRender: function(){
-//		var me = this;
-//		me.callParent(arguments);
-//		me.mon(me.el, 'scroll', function(){
-//			me.fireEvent('status-change', {status: 'active'});
-//		});
-//	},
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.el, { scroll: this.onScroll, scope: this });
+		this.previousScroll = 0;
+	},
+
+	onScroll: function(){
+		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight);
+
+		if((me.previousScroll > me.el.dom.scrollTop) && scrollVal > 50){
+			this.shouldAllowScrollingOnAdd = false;
+		}
+		else if( !this.shouldAllowScrollingOnAdd && scrollVal < 50){
+			this.shouldAllowScrollingOnAdd = true;
+		}
+
+		// Set the new scrolling.
+		me.previousScroll = me.el.dom.scrollTop;
+	},
 
 	selectall: function() {
 		Ext.each(this.query(this.entryType), function(f){
@@ -236,7 +249,7 @@ Ext.define('NextThought.view.chat.Log', {
 			message: state
 		});
 
-		if(o.el && this.el){
+		if(o.el && this.el && this.shouldAllowScrollingOnAdd){
 			o.el.scrollIntoView(this.el);
 		}
 	},
