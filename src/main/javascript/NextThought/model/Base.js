@@ -686,7 +686,7 @@ Ext.define('NextThought.model.Base', {
 		var changed = this.callParent(arguments);
 
 		//TODO we don't do anything about begin/end edit here
-		Ext.Array.each(changed, this.notifyObserversOfFieldChange, this);
+		Ext.Array.each(changed || [], this.notifyObserversOfFieldChange, this);
 
 		return changed;
 	}
