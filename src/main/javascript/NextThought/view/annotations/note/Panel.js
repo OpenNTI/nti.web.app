@@ -152,6 +152,34 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
 		}
+
+		//Ideally we just listen on our record for favorite changed
+		//but since we end up with multiple in memory records that doesn't really
+		//work.  It would be nice to use an object cache to ensure that there is
+		//one in memory record that gets passed around and everything else (all the various stores)
+		//just have a reference to it.  I don't think we are close to that, so for now we
+		//are stuck with something like this
+		NextThought.model.events.Bus.on({
+                    scope: this,
+                    'favorite-changed': function(rec){
+                        //If this is our exact record we will have
+						//handled the event from the model
+						if(rec === this.record){
+							return;
+						}
+
+						//ok we match ids. we could just update the ui
+						//but then we are out of sync with the model
+						//so we update the model and let kvo fire.  Updating
+						//the model isn't something we should do here, so this
+						//needs to be generalized into some kind of multi-record
+						//event framework until we can get to an object cache like
+						//described above
+
+						//Ick
+						this.record.copyFields(rec, 'Links');
+                    }
+                });
 	},
 
 

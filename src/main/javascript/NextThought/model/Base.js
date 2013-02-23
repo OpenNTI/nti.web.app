@@ -355,7 +355,7 @@ Ext.define('NextThought.model.Base', {
 		me.postTo(action, function(s){
 			if (s) {
 				//put "me" in the bookmark view?
-				NextThought.model.events.Bus.fireEvent('favorate-changed',me);
+				NextThought.model.events.Bus.fireEvent('favorite-changed',me);
 			}
 			else {
 				widget[postPost]('on');

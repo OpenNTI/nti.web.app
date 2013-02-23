@@ -136,7 +136,7 @@ Ext.define('NextThought.view.UserDataPanel',{
                 this.store = this.buildStore('Bookmarks',storeId,'MimeType');
                 NextThought.model.events.Bus.on({
                     scope: this,
-                    'favorate-changed': function(rec){
+                    'favorite-changed': function(rec){
                         var store = this.getStore();
 
                         if (store.isLoading()){

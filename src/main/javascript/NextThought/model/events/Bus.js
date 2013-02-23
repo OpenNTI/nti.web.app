@@ -10,7 +10,7 @@ Ext.define('NextThought.model.events.Bus',{
 
 			'item-destroyed': 1,
 
-			'favorate-changed': 1
+			'favorite-changed': 1
 		});
 	}
 

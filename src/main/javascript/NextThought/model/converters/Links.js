@@ -6,7 +6,8 @@ Ext.define('NextThought.model.converters.Links', {
 
 		convert: function(v){
 			if (v && v.getRelHref) {
-				console.trace('v already converted, figure out why...');
+				//This happens if you set the links field on one record from another.
+				//e.g. calling rec1.copyFields(rec2, 'Links')
 				return v;
 			}
 			return {
