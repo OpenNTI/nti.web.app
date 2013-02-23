@@ -155,6 +155,17 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	markAsFavorited: function(field, value){
+		var favorited = value === undefined ? field : value;
+			method = favorited ? 'addCls' : 'removeCls';
+		if(!this.favorites){
+			return;
+		}
+		this.favorites[method]('on');
+		this.favorites.set({'title': favorited ? 'Bookmarked' : 'Add to bookmarks'});
+	},
+
+
 	disable: function(){
 		var me = this,
 			e = me.editor || {down:Ext.emptyFn},
@@ -357,8 +368,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             }
 
             if(this.favorites){
-	            this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
-	            this.favorites.set({'title': r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks'});
+				this.markAsFavorited(r.isFavorited());
             }
 		}
 		catch(e1){
@@ -397,6 +407,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
+			this.record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
 			this.removeAdditionalRecordListeners(this.record);
 		}
 
@@ -439,6 +450,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             'updated': this.recordUpdated,
 	        'destroy': this.wasDeleted
         });
+		this.record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
 		this.addAdditionalRecordListeners(r);
 		return true;
 	},
