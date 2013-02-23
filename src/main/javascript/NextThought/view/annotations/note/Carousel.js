@@ -114,10 +114,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				me.showAsSelected(null);
 				me.syncIt();
 			}, 100);
+			return;
 		}
 		//If our store has data we assume it loaded and we dont load it
 		//we just draw from it, otherwise we load the next page of data
-		if(this.store.getCount() === 0){
+		if(this.store.getCount()){
 			Ext.defer(function(){
 				me.syncIt();
 				me.updateCarouselFromStore();
