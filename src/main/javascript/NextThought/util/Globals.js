@@ -282,12 +282,32 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
-	arrayEquals: function(a, b) {
-		var l = a.length;
-		if (l !== b.length) {
+	/*
+	 * Returns whether two Arrays are equal.
+	 *
+	 * They are equal if they are the same
+	 * length and contain equal elemens in order
+	 *
+	 * @param a - first array
+	 * @param b - second array
+	 * @param [fn] - an equality function.  If this is ommited === is used on each elment
+	 */
+	arrayEquals: function(a, b, fn) {
+		var i;
+		if(a.length !== b.length){
 			return false;
 		}
-		return Ext.Array.merge(a, b).length === l;
+
+		for( i=0; i< a.length; i++ ){
+			if(fn && !fn(a[i], b[i])){
+				return false;
+			}
+			else if(a[i] !== b[i]){
+				return false;
+			}
+		}
+
+		return true;
 	},
 
 

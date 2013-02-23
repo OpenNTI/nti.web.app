@@ -57,6 +57,31 @@ Ext.define('NextThought.model.Base', {
 
 	is: function(selector){return false;},
 
+	//Override isEqual so we can test more complex equality and
+	//avoid resetting fields that haven't changed
+	isEqual: function(a, b){
+		//Super checks === so if it is equal by that
+		//return true
+		if( this.callParent(arguments) ){
+			return true;
+		}
+
+		//If one is an array, to be equal they must both
+		//be arrays and they must contain equal objects in the proper order
+		if(Ext.isArray(a) || Ext.isArray(b)){
+			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, this.isEqual)
+		}
+
+		//if a defines an equals method return the result of that
+		if(a && Ext.isFunction(a.equal)){
+			return a.equal(b);
+		}
+
+		//TODO Do anything for "normal" js object here
+
+		return false;
+	},
+
 
 	constructor: function(data,id,raw){
 		var f = this.fields,
@@ -545,20 +570,11 @@ Ext.define('NextThought.model.Base', {
 				var fa = a.get(f.name),
 					fb = b.get(f.name);
 
-				if (fa !== fb){
-
-					if(Ext.isArray(fa) && Ext.isArray(fb) && Globals.arrayEquals(fa, fb)){
-						return;
-					}
-
-					if(Ext.isDate(fa) && Ext.isDate(fb) && (+fa) === (+fb)){
-						return;
-					}
-
-
-					r=false;
-					return false;
+				if(!a.isEqual(fa, fb)){
+					r = false;
+					return false;//break
 				}
+				return true;
 			}
 		);
 
@@ -654,19 +670,23 @@ Ext.define('NextThought.model.Base', {
 		}
 	},
 
+
 	clearListeners: function(){
 		if(!this.destroyDoesNotClearListeners){
 			this.callParent(arguments);
 		}
 	},
 
+
 	fieldEvent: function(name){
 		return name+'-set';
 	},
 
+
 	notifyObserversOfFieldChange: function(f){
 		this.fireEvent(this.fieldEvent(f), f, this.get(f));
 	},
+
 
 	addObserverForField: function(observer, field, fn, scope){
 		if(!observer){
@@ -675,12 +695,14 @@ Ext.define('NextThought.model.Base', {
 		observer.mon(this, this.fieldEvent(field), fn, scope);
 	},
 
+
 	removeObserverForField: function(observer, field, fn, scope){
 		if(!observer){
 			return;
 		}
 		observer.mun(this, this.fieldEvent(field), fn, scope);
 	},
+
 
 	afterEdit: function(fnames){
 		this.callParent(fnames);
