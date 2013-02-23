@@ -69,7 +69,7 @@ Ext.define('NextThought.model.Base', {
 		//If one is an array, to be equal they must both
 		//be arrays and they must contain equal objects in the proper order
 		if(Ext.isArray(a) || Ext.isArray(b)){
-			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, this.isEqual)
+			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, Ext.Function.bind(this.isEqual, this))
 		}
 
 		//if a defines an equals method return the result of that
@@ -107,6 +107,39 @@ Ext.define('NextThought.model.Base', {
 		return this;
 	},
 
+
+	//A model may have some derived fields that
+	//are readonly values that depend on other traditional fields
+	//one such property is 'flagged' it isn't a real field but
+	//it is derived from Links.  We support getting those values by
+	//looking for a properly named getter
+	//
+	//First we look for a traditional field with the given name
+	//Second we look for a properly named getter function. ie. isField or getField
+	get: function(f){
+		var capitalizedFieldName, possibleGetters, val;
+
+		if(this.fields.map[f]){
+			return this.callParent(arguments);
+		}
+
+		capitalizedFieldName = Ext.String.capitalize(f);
+		possibleGetters = ['get'+capitalizedFieldName, 'is'+capitalizedFieldName];
+
+		Ext.Array.each(possibleGetters, function(g){
+			if(Ext.isFunction(this[g])){
+				val = this[g]();
+				return false;
+			}
+		}, this);
+
+		return val;
+	},
+
+
+	valuesAffectedByLinks: function(){
+		return ['flagged'];
+	},
 
 
 	isTopLevel: function(){
@@ -565,6 +598,13 @@ Ext.define('NextThought.model.Base', {
 		var a = this,
 			r = true;
 
+		//If they aren't both models
+		//they are not equal
+		//type check here?
+		if(!a.isModel || !b.isModel){
+			return false;
+		}
+
 		a.fields.each(
 			function(f){
 				var fa = a.get(f.name),
@@ -678,13 +718,27 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	fieldEvent: function(name){
-		return name+'-set';
-	},
 
+	fieldEvent: function(name){
+		return name+'-changed';
+	},
 
 	notifyObserversOfFieldChange: function(f){
 		this.fireEvent(this.fieldEvent(f), f, this.get(f));
+	},
+
+
+	//Fires an event signaling the given field has changed.
+	//If there are dependent fields those events are also fired
+	//To signal dependent fields implement a function valuesAffectedByField
+	//that returns an array of dependent field names
+	onFieldChanged: function(f){
+		var dependentFunctionName = 'valuesAffectedBy'+f,
+			fn = this[dependentFunctionName];
+		this.notifyObserversOfFieldChange(f);
+		if(Ext.isFunction(fn)){
+			Ext.Array.each(fn.call(this), this.notifyObserversOfFieldChange, this);
+		}
 	},
 
 
@@ -706,6 +760,6 @@ Ext.define('NextThought.model.Base', {
 
 	afterEdit: function(fnames){
 		this.callParent(fnames);
-		Ext.Array.each(fnames || [], this.notifyObserversOfFieldChange, this);
+		Ext.Array.each(fnames || [], this.onFieldChanged, this);
 	}
 });

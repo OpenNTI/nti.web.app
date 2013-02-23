@@ -112,5 +112,26 @@ describe("Base Model Tests", function() {
 				expect(observer.fieldChanged).not.toHaveBeenCalled();
 			});
 		});
+
+		describe('dependent fields get notified also', function(){
+			var m, observer, scope = {};
+			var field = 'ContainerId', dependentField = 'foo';
+
+			beforeEach(function(){
+				m = createModel({'ContainerId': 'one'});
+				m.valuesAffectedByContainerId = function(){ return [dependentField]; };
+				m.getFoo = function(){ return this.get('ContainerId')};
+
+				observer = new Ext.util.Observable({fieldChanged: Ext.emptyFn});
+				spyOn(observer, 'fieldChanged');
+				m.addObserverForField(observer, dependentField, observer.fieldChanged, scope);
+			});
+
+			it('fires for dependent field', function(){
+				m.set('ContainerId', 'baz');
+				expect(observer.fieldChanged.calls.length).toEqual(1);
+				expect(observer.fieldChanged).toHaveBeenCalledWith(dependentField, 'baz', jasmine.any(Object));
+			});
+		});
 	});
 });
