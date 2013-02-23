@@ -682,12 +682,8 @@ Ext.define('NextThought.model.Base', {
 		observer.mun(this, this.fieldEvent(field), fn, scope);
 	},
 
-	set: function(){
-		var changed = this.callParent(arguments);
-
-		//TODO we don't do anything about begin/end edit here
-		Ext.Array.each(changed || [], this.notifyObserversOfFieldChange, this);
-
-		return changed;
+	afterEdit: function(fnames){
+		this.callParent(fnames);
+		Ext.Array.each(fnames || [], this.notifyObserversOfFieldChange, this);
 	}
 });
