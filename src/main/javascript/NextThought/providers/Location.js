@@ -121,7 +121,7 @@ Ext.define('NextThought.providers.Location', {
 				theStore = root;
 			}
 		}
-		return theStore || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad, getItems: bad };
+		return theStore || { bad: true, add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad, getItems: bad, getCount: bad };
 	},
 
 

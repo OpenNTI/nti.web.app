@@ -104,9 +104,20 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
             this.mon(this.store,'datachanged',this.updateCarouselFromStore,this);
 	        this.mon(this.store,'remove',this.removedItem,this);
         }
+
+		//Ok a bad store, we are opening the note window outside the context of
+		//a page that exists.  In this case its exceptable for the carousel to be blank(?) or
+		//maybe we create one carousel item that represents our current note
+		if(this.store.bad){
+			console.warn('No store for ', this.containerId, ' non existent content?');
+			Ext.defer(function(){
+				me.showAsSelected(null);
+				me.syncIt();
+			}, 100);
+		}
 		//If our store has data we assume it loaded and we dont load it
 		//we just draw from it, otherwise we load the next page of data
-		if(this.store.getCount()){
+		if(this.store.getCount() === 0){
 			Ext.defer(function(){
 				me.syncIt();
 				me.updateCarouselFromStore();
