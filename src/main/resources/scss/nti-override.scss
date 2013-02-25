@@ -93,8 +93,17 @@ body.x-body {margin:0;}
 		text-decoration: underline;
 	}
 
+	.lineout {
+		text-decoration: line-through;
+	}
+
 	.overline {
 		text-decoration: overline;
+	}
+
+	.modified {
+		text-decoration: underline;
+		color: #1fd26f;
 	}
 
 	a.footnote {
