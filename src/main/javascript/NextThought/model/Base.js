@@ -540,7 +540,7 @@ Ext.define('NextThought.model.Base', {
 	 * Calls the href and fills in the values missing.
 	 */
 	resolve: function(){
-		console.error("still called?");
+		console.trace("still called?");
 		var me = this,
 			href = this.get('href');
 
@@ -567,8 +567,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	//Only seems to be called from legacy classroom stuff
 	getParent: function(callback, scope) {
 		var href = this.getLink('parent');
+
+		console.trace('Still called?');
 
 		if (!callback) {
 			Ext.Error.raise('this method requires a callback');
