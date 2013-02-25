@@ -1,33 +1,29 @@
 Ext.define('NextThought.view.profiles.parts.Blog',{
-	extend: 'Ext.Component',
+	extend: 'Ext.container.Container',
 	alias: 'widget.profile-blog',
+
+	requires: [
+		'NextThought.layout.component.TemplatedContainer',
+		'NextThought.view.profiles.parts.BlogPost'
+	],
+
+	layout: 'auto',
+	componentLayout: 'templated-container',
+	defaultType: 'profile-blog-post',
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	ui: 'blog',
 	cls: 'blog',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header', html: 'Share your thoughts...' },
-		{ cls: 'body'}
+		{ cls: 'header', html: 'My next thought...' },
+		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 	]),
 
 
-	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-			{ tag: 'tpl', 'for':'.', cn: [
-				{ cls: 'entry', 'data-ntiid':'{NTIID}', cn: [
-					{ cls: 'title', html:'{title}' },
-					{ cls: 'meta', cn: [
-						{ tag:'span', cls: 'comment-count', html: '{PostCount} Comments' },
-						{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")}'},
-						{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("g:m A")}'}
-					]}
-				]}
-			]}
-	)),
-
-
 	renderSelectors: {
-		headerEl: '.header',
-		bodyEl: '.body'
+		headerEl: '.header'
 	},
 
 
@@ -54,23 +50,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.headerEl,'click',this.onNewPost,this);
-		this.mon(this.bodyEl,'click',this.onItemClick,this);
 	},
 
 
 	onNewPost: function(e){
 		e.stopEvent();
-	},
-
-
-	onItemClick: function(e){
-		e.stopEvent();
-		var id, c = e.getTarget('[data-ntiid]');
-		if(!c){return;}
-
-		id = c.getAttribute('data-ntiid');
-
-		console.debug('clicked on: ',id);
 	},
 
 
@@ -95,11 +79,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	loadedContents: function(store, records, success){
-		var m = Ext.Array.map(records,function(i){
-			i = i.getData();
-			i.story = i.story.getData();
-			return i;
-		});
-		this.itemTpl.append(this.bodyEl,m);
+		var m = Ext.Array.map(records,function(i){ return {record: i}; });
+		this.add(m);
 	}
 });
