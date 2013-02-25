@@ -626,7 +626,6 @@ Ext.define('NextThought.controller.Groups', {
 
         function onError(record, operation, response){
 			var msg = response.message,
-				field = response.field,
 				code = response.code;
 			if(msg){
 				//Try and swizzle any field names to match what the user inputs

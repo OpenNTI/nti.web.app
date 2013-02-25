@@ -28,8 +28,8 @@ Ext.define('NextThought.util.Errors', {
 			}
 		}
 	},
-
-	getError: function(errCode,replace){
+	//change it so if the errCode deosn't exist return the default
+	getError: function(errCode,replace,default){
 		var error = this.errorMsgs[errCode] || this.errorMsgs['Default'],
 			msg = error.msg,
 			defaults = error.defaults || {},
