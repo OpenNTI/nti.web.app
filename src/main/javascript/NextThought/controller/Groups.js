@@ -626,12 +626,14 @@ Ext.define('NextThought.controller.Groups', {
 
         function onError(record, operation, response){
 			var msg = response.message,
+				field = response.field,
 				code = response.code;
 			if(msg){
-				//Try and swizzle any field names to match what the user inputs
+				//get the error from the error util
 				if(field){
-					msg = NTIError.getError(code,{'name':'Group code'});
+					msg = msg.replace(field,"Group Name");
 				}
+				msg = NTIError.getError(code,{'name':'Group Name'},msg);
 			}
 			else{
 				if(operation.error && operation.error === 422){
@@ -682,14 +684,15 @@ Ext.define('NextThought.controller.Groups', {
         }
 
         function onError(record, operation, response){
-			var msg = response.message;
-				field = response.field;
+			var msg = response.message,
+				field = response.field,
+				code = response.code;
 
 			if(msg){
-				//Try and swizzle any field names to match what the user inputs
 				if(field){
-					msg = msg.replace(field, 'List name');
+					msg = msg.replace(field,"List name");
 				}
+				msg = NTIError.getError(code,{'name':'List name'});
 			}
 			else{
 				if(operation.error && operation.error === 422){
