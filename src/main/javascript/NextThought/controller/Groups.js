@@ -628,20 +628,22 @@ Ext.define('NextThought.controller.Groups', {
 			var msg = response.message,
 				field = response.field,
 				code = response.code;
+
 			if(msg){
 				//get the error from the error util
 				if(field){
 					msg = msg.replace(field,"Group Name");
 				}
-				msg = NTIError.getError(code,{'name':'Group Name'},msg);
 			}
-			else{
-				if(operation.error && operation.error === 422){
-					//Well a field was wrong, in this case the user only put one thing
-					//in so tell him that is invalid
-					msg = 'Invalid group name '+displayName;
-				}
+
+			msg = NTIError.getError(code, {'name':'Group Name'}, msg);
+
+			if(!msg && operation.error && operation.error === 422){
+				//Well a field was wrong, in this case the user only put one thing
+				//in so tell him that is invalid
+				msg = 'Invalid group name '+displayName;
 			}
+
             Ext.callback(handleError, this, [msg]);
         }
 

@@ -756,35 +756,10 @@ Ext.define('NextThought.model.Base', {
 		observer.mun(this, this.fieldEvent(field), fn, scope);
 	},
 
-	editAllInMemoryObjects: function(rec, fnames){
-		var inProgress = this.self.idsBeingGloballyUpdated;
-
-		if(inProgress){
-			return;
-		}
-
-
-
-		//If we are already in progress for this id just short ciruit
-
-	},
 
 	afterEdit: function(fnames){
 		this.callParent(fnames);
-
-		//Buffer the firing of our field events until we have
-		//updated all the objects with the same id
-		this.suspendEvents(true);
-		try{
-			this.editAllInMemoryObjects(this, fnames);
-			Ext.Array.each(fnames || [], this.onFieldChanged, this);
-		}
-		catch(e){
-			throw e;
-		}
-		finally{
-			this.resumeEvents();
-		}
+		Ext.Array.each(fnames || [], this.onFieldChanged, this);
 	},
 
 	//Methods for updating all copies of an object in memory when one changes,
@@ -813,7 +788,7 @@ Ext.define('NextThought.model.Base', {
 		//If we haven't already started calling fname on other in memory objects
 		//set the flag and notify.  Make sure we clear it at the end
 		active[rec.getId()] = true;
-
+		//console.time('looking for objects');
 		//Use the store manager to iterate all stores looking for an object
 		//that has the same id.  If it isn't the exact record call the function
 		//fname on it with the provided args
@@ -826,7 +801,7 @@ Ext.define('NextThought.model.Base', {
 			}
 		});
 
-
+		//console.timeEnd('looking for objects');
 		delete active[rec.getId()];
 	},
 
