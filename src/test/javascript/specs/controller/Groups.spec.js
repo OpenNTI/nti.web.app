@@ -17,25 +17,64 @@ describe('Groups Controller Tests', function(){
 	});
 
 	describe("createGroupAndCode", function(){
+		var btn,w;
 
-		it("Sets Invalid error on 422", function(){
-			var btn = jasmine.createSpyObj('button', ['up', 'setDisabled']),
-				window = jasmine.createSpyObj('window', ['showError', 'getGroupName']);
+		beforeEach(function(){
+			btn = jasmine.createSpyObj('button', ['up', 'setDisabled']);
+			w = jasmine.createSpyObj('w', ['showError', 'getGroupName']);
 
 			$AppConfig.service.canCreateDynamicGroups = function(){return true;}
 
-			btn.up.andReturn(window);
-			window.getGroupName.andReturn('groupname');
+			btn.up.andReturn(w);
+			w.getGroupName.andReturn('groupname');
+		});
 
+
+		function failCreation(arg1,arg2,arg3){
 			spyOn(controller, 'createDFLUnguarded').andCallFake(function(dn, un, friends, onCreated, onError, scope){
-				Ext.callback(onError, scope, [null, {error: 422}, {code: 'SomethingWeHaventSeen'}]);
+				Ext.callback(onError, scope, [arg1,arg2,arg3]);
 			});
+		}
+
+
+		it("Sets Invalid error with no message on 422", function(){
+			failCreation(null,{error: 422}, {code:'SomethingWeHaventSeen'});
 
 			controller.createGroupAndCode(btn);
 
-			expect(window.showError.calls.length).toBe(1);
-			expect(window.showError).toHaveBeenCalledWith(jasmine.any(String));
+			expect(w.showError.calls.length).toBe(1);
+			expect(w.showError).toHaveBeenCalledWith(jasmine.any(String));
 		});
+
+
+		it("Sets Invalid error with message on 422", function(){
+			failCreation(null,{error: 422}, {code:'SomethingWeHaventSeen', message:'Default Message'});
+
+			controller.createGroupAndCode(btn);
+
+			expect(w.showError.calls.length).toBe(1);
+			expect(w.showError).toHaveBeenCalledWith("Default Message");
+		});
+
+
+		it("Sets valid error with no message on 422", function(){
+			failCreation(null,{error: 422}, {code:'FieldContainsCensoredSequence'});
+
+			controller.createGroupAndCode(btn);
+
+			expect(w.showError.calls.length).toBe(1);
+			expect(w.showError).toHaveBeenCalledWith("Group name contains censored material.");
+		});
+
+		it("Sets valid error with message on 422", function(){
+			failCreation(null,{error: 422}, {code:'FieldContainsCensoredSequence', message:'Default Message'});
+
+			controller.createGroupAndCode(btn);
+
+			expect(w.showError.calls.length).toBe(1);
+			expect(w.showError).toHaveBeenCalledWith("Group name contains censored material.");
+		});
+
 	});
 
 });

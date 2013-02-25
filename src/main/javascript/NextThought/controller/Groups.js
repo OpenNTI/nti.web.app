@@ -636,7 +636,7 @@ Ext.define('NextThought.controller.Groups', {
 				}
 			}
 
-			msg = NTIError.getError(code, {'name':'Group Name'}, msg);
+			msg = NTIError.getError(code, {'name':'Group name'}, msg);
 
 			if(!msg && operation.error && operation.error === 422){
 				//Well a field was wrong, in this case the user only put one thing
