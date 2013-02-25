@@ -57,7 +57,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 					}
 				}
 				catch(e1){
-					console.error(record, 'No model for record?');
+					console.error(Globals.getError(e1),'\n\nNo model for record? : ',record);
 				}
 			}
 
