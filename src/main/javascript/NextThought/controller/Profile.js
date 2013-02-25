@@ -1,7 +1,11 @@
 Ext.define('NextThought.controller.Profile', {
 	extend: 'Ext.app.Controller',
 
-	models: [],
+	models: [
+		'forums.PersonalBlog',
+		'forums.PersonalBlogEntry',
+		'forums.Post'
+	],
 
 	stores: [
 		'Blog'

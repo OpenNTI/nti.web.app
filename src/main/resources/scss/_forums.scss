@@ -2,16 +2,47 @@
 #profile {
 
 	.blog {
-		.x-component-nti-tool-action{
-			.icon {
-				&.post::after{
-					@include sprite($icons,'add-comment-19x17',$dimensions: true);
+		.header {
+			font: italic 300 28px/28px $font;
+			color: $tertiary-grey;
+			padding: 30px 20px;
+			border: 0 solid #f1f1f1;
+			border-width: 0 0 1px 0;
+			cursor: pointer;
+		}
+
+		.body {
+			.entry {
+				padding: 30px 20px;
+				border: 0 solid #f1f1f1;
+				border-width: 0 0 1px 0;
+				cursor: pointer;
+
+				.title {
+					font: normal 300 28px/28px $font;
+					color: $primary-grey;
+					margin-bottom: 20px;
 				}
-			}
-			&:hover,&.over {
-				&:not(.disabled){
-					.icon {
-						&.post::after{ @include sprite($icons,'add-comment-19x17_hover'); }
+				.meta {
+					text-transform: uppercase;
+					font: normal 400 12px/12px $font;
+					color: $tertiary-grey;
+					.comment-count { color: $primary-blue; }
+					span{
+						&::after{
+							color: $tertiary-grey;
+							font-weight: 600;
+							position: static;
+							content: '\00B7';
+							vertical-align: middle;
+							display: inline;
+							padding: 0 0.25em;
+							background: none;
+						}
+						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
 					}
 				}
 			}
