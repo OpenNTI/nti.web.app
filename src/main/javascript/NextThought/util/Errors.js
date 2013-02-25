@@ -1,8 +1,8 @@
-Ext.define('NextThought.util.Errors', { 
+Ext.define('NextThought.util.Errors', {
 	singleton: true,
 	/*
 		Error Message template
-		
+
 		'error code': {
 			msg: 'Error message {replace}',
 			default: {
@@ -24,32 +24,43 @@ Ext.define('NextThought.util.Errors', {
 	//error messages
 	errorMsgs: {
 		'FieldContainsCensoredSequence' : {
-			msg : "{name} contains censored {type}",
+			msg : "{name} contains censored {type}.",
 			defaults: {
 				'name' : 'Item',
 				'type' : 'material'
 			}
 		}
 	},
+
+
 	//either returns this.errorMsgs[errCode].msg (with replacements), defaultMsg, or undefined
 	getError: function(errCode,replace,defaultMsg){
 		var error = this.errorMsgs[errCode],
-			msg = (error || {}).msg || defaultMsg,
-			defaults = (error || {}).defaults || {},
-			replace = Ext.applyIf(replace || {},defaults);
-		
-		if(msg != defaultMsg){
-			Ext.Object.each(replace,function(key,value,self){
-				msg = msg.replace("{"+key+"}",value);
-			})
+			msg;
+
+		if(!error || !error.msg){
+			return defaultMsg;
 		}
+
+		if(error.defaults){
+			replace = Ext.applyIf(replace || {}, error.defaults);
+		}
+
+		msg = error.msg;
+
+		Ext.Object.each(replace, function(key,value,self){
+			msg = msg.replace("{"+key+"}",value);
+		})
+
 		return msg;
 	},
+
+
 	//adds messages to the errorMsgs for testing purposes
 	addMsg: function(msgs){
 		Ext.applyIf(this.errorMsgs,msgs);
 	}
-},
-function(){
+
+},function(){
 	window.NTIError = this;
 });
