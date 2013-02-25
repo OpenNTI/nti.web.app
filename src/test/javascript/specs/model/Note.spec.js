@@ -204,20 +204,11 @@ describe("Note Tests", function() {
 	describe('like and unlike', function(){
 
 		function createMockLikeWidget(){
-			var m = jasmine.createSpyObj('mockWidget', ['addCls', 'removeCls', 'update']);
+			var m = jasmine.createSpyObj('mockWidget', ['markAsLiked', 'update']);
 			//setup the mock widget to track some things
-			m.addCls.andCallFake(function(cls){
-				this[cls] = true;
+			m.markAsLiked.andCallFake(function(liked){
+				this.liked = liked;
 			});
-			m.removeCls.andCallFake(function(cls){
-				delete this[cls];
-			});
-			m.update.andCallFake(function(v){
-				this.value = v;
-			});
-			m.hasClass = function(cls){
-				return !!this[cls];
-			};
 			return m;
 		}
 
@@ -272,8 +263,7 @@ describe("Note Tests", function() {
 
 			//Widget assertions, addCls should have been called with on
 			//and update should ahve been called with the new like count
-			expect(mockWidget.hasClass('on')).toBeTruthy();
-			expect(mockWidget.value).toBe('1');
+			expect(mockWidget.liked).toBeTruthy();
 		});
 
 		it('unlike works with ds success', function(){
@@ -302,8 +292,7 @@ describe("Note Tests", function() {
 
 			//Widget assertions, addCls should have been called with on
 			//and update should ahve been called with the new like count
-			expect(mockWidget.hasClass('on')).toBeFalsy();
-			expect(mockWidget.value).toBe('');
+			expect(mockWidget.liked).toBeFalsy();
 		});
 
 		it('unlike works with ds failure', function(){
@@ -332,8 +321,7 @@ describe("Note Tests", function() {
 
 			//Widget assertions, addCls should have been called with on
 			//and update should ahve been called with the new like count
-			expect(mockWidget.hasClass('on')).toBeTruthy();
-			expect(mockWidget.value).toBe('1');
+			expect(mockWidget.liked).toBeTruthy();
 		});
 
 
@@ -363,8 +351,7 @@ describe("Note Tests", function() {
 
 			//Widget assertions, addCls should have been called with on
 			//and update should ahve been called with the new like count
-			expect(mockWidget.hasClass('on')).toBeFalsy();
-			expect(mockWidget.value).toBe('');
+			expect(mockWidget.liked).toBeFalsy();
 		});
 	});
 });
