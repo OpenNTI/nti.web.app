@@ -15,6 +15,10 @@ Ext.define('NextThought.model.Base', {
 		hasLinks: 'NextThought.mixins.HasLinks'
 	},
 
+	inheritableStatics: {
+		idsBeingGloballyUpdated: {}
+	},
+
 	idProperty: 'NTIID',
 	proxy: { type: 'nti' },
 	fields: [
@@ -109,8 +113,8 @@ Ext.define('NextThought.model.Base', {
 
 
 	//A model may have some derived fields that
-	//are readonly values that depend on other traditional fields
-	//one such property is 'flagged' it isn't a real field but
+	//are readonly values.  These values depend on other traditional fields.
+	//one such property is 'flagged', it isn't a real field but
 	//it is derived from Links.  We support getting those values by
 	//looking for a properly named getter
 	//
@@ -138,7 +142,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	valuesAffectedByLinks: function(){
-		return ['flagged', 'favorited'];
+		return ['flagged', 'favorited', 'liked'];
 	},
 
 
@@ -185,8 +189,6 @@ Ext.define('NextThought.model.Base', {
 	hasField: function(fieldName){
 		return this[this.persistenceProperty].hasOwnProperty(fieldName);
 	},
-
-
 
 	tearDownLinks: function(){
 		var p = this.parent, cn = (this.children||[]),
@@ -344,13 +346,13 @@ Ext.define('NextThought.model.Base', {
 
 	favorite: function(widget){
 		var me = this,
-			action = me.isFavorited() ? 'unfavorite' : 'favorite',
-			prePost = action === 'favorite' ? 'addCls' : 'removeCls',
-			postPost = action === 'favorite' ? 'removeCls' : 'addCls';
+			currentValue = this.isFavorited(),
+			action = currentValue ? 'unfavorite' : 'favorite'
 
 		if (me.activePostTos && me.activePostTos[action]){return;}
 
-		widget[prePost]('on');
+		//We will assume it completes and then update it if it actually fails
+		widget.markAsFavorited(!currentValue);
 
 		me.postTo(action, function(s){
 			if (s) {
@@ -358,7 +360,7 @@ Ext.define('NextThought.model.Base', {
 				NextThought.model.events.Bus.fireEvent('favorite-changed',me);
 			}
 			else {
-				widget[postPost]('on');
+				widget.markAsFavorited(currentValue);
 			}
 		});
 	},
@@ -367,23 +369,20 @@ Ext.define('NextThought.model.Base', {
 	like: function(widget){
 		var me = this,
 			lc = this.get('LikeCount'),
-			action = this.isLiked() ? 'unlike' : 'like',
-			prePost = action === 'like' ? 'addCls' : 'removeCls',
-			postPost = action === 'like' ? 'removeCls' : 'addCls',
+			currentValue = this.isLiked(),
+			action = currentValue ? 'unlike' : 'like',
 			polarity = action === 'like' ? 1 : -1;
 
 		if (this.activePostTos && this.activePostTos[action]){return;}
 
-		widget[prePost]('on');
+		widget.markAsLiked(!currentValue);
 		me.set('LikeCount', lc + polarity);
-		widget.update(me.getFriendlyLikeCount());
 
 		this.postTo(action, function(s){
 			var r;
 			if (!s) {
-				widget[postPost]('on');
+				widget.markAsLiked(currentValue);
 				me.set('LikeCount', lc);
-				widget.update(me.getFriendlyLikeCount());
 			}
 			else{
 				//Find the root if we are in a tree and update its recursive
@@ -699,7 +698,6 @@ Ext.define('NextThought.model.Base', {
 		return this.callParent(arguments);
 	},
 
-
 	/**
 	 * @private
 	 * @property {Boolean} destroyDoesNotClearListeners
@@ -719,8 +717,6 @@ Ext.define('NextThought.model.Base', {
 			this.callParent(arguments);
 		}
 	},
-
-
 
 	fieldEvent: function(name){
 		return name+'-changed';
@@ -760,9 +756,97 @@ Ext.define('NextThought.model.Base', {
 		observer.mun(this, this.fieldEvent(field), fn, scope);
 	},
 
+	editAllInMemoryObjects: function(rec, fnames){
+		var inProgress = this.self.idsBeingGloballyUpdated;
+
+		if(inProgress){
+			return;
+		}
+
+
+
+		//If we are already in progress for this id just short ciruit
+
+	},
 
 	afterEdit: function(fnames){
 		this.callParent(fnames);
-		Ext.Array.each(fnames || [], this.onFieldChanged, this);
+
+		//Buffer the firing of our field events until we have
+		//updated all the objects with the same id
+		this.suspendEvents(true);
+		try{
+			this.editAllInMemoryObjects(this, fnames);
+			Ext.Array.each(fnames || [], this.onFieldChanged, this);
+		}
+		catch(e){
+			throw e;
+		}
+		finally{
+			this.resumeEvents();
+		}
+	},
+
+	//Methods for updating all copies of an object in memory when one changes,
+	//ideally we have one in memory object that is just referenced everywhere.
+	//We are a bit far away from that (mostly because of how we represent threads)
+	//so we brute force it by passing these calls
+	//through to other in memory objects with the same ids
+	maybeCallOnAllObjects: function(fname, rec, args){
+
+		//Allow a way to turn it off
+		if(this.dontNotifyOtherObjects === false){return;}
+
+		var active = this.self.idsBeingGloballyUpdated[fname];
+
+
+		if(!rec.getId()){return;}
+
+		if(!active){
+			this.self.idsBeingGloballyUpdated[fname] = active = {};
+		}
+
+		if(active[rec.getId()]){
+			return;
+		}
+
+		//If we haven't already started calling fname on other in memory objects
+		//set the flag and notify.  Make sure we clear it at the end
+		active[rec.getId()] = true;
+
+		//Use the store manager to iterate all stores looking for an object
+		//that has the same id.  If it isn't the exact record call the function
+		//fname on it with the provided args
+		Ext.data.StoreManager.each(function(s){
+			var recById = s.getById(rec.getId());
+
+			//Ok we found one and it isn't the same object
+			if(recById && rec !== recById){
+				recById[fname].apply(recById, args);
+			}
+		});
+
+
+		delete active[rec.getId()];
+	},
+
+	beginEdit: function(){
+		this.callParent(arguments);
+		this.maybeCallOnAllObjects('beginEdit', this, arguments);
+	},
+
+	endEdit: function(){
+		this.callParent(arguments);
+		this.maybeCallOnAllObjects('endEdit', this, arguments);
+	},
+
+	cancelEdit: function(){
+		this.callParent(arguments);
+		this.maybeCallOnAllObjects('cancelEdit', this, arguments);
+	},
+
+	set: function(){
+		this.callParent(arguments);
+		this.maybeCallOnAllObjects('set', this, arguments);
 	}
 });

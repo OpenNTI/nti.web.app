@@ -146,42 +146,29 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 		}
 
-		if( me.liked ){     me.mon(me.liked,    'click', function(){ me.record.like(me.liked); }, me); }
-		if( me.favorites ){ me.mon(me.favorites,'click', function(){ me.record.favorite(me.favorites); },me); }
+		if( me.liked ){     me.mon(me.liked,    'click', function(){ me.record.like(me); }, me); }
+		if( me.favorites ){ me.mon(me.favorites,'click', function(){ me.record.favorite(me); },me); }
 
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
 		}
-
-		//Ideally we just listen on our record for favorite changed
-		//but since we end up with multiple in memory records that doesn't really
-		//work.  It would be nice to use an object cache to ensure that there is
-		//one in memory record that gets passed around and everything else (all the various stores)
-		//just have a reference to it.  I don't think we are close to that, so for now we
-		//are stuck with something like this
-		NextThought.model.events.Bus.on({
-                    scope: this,
-                    'favorite-changed': function(rec){
-                        //If this is our exact record we will have
-						//handled the event from the model
-						if(rec === this.record){
-							return;
-						}
-
-						//ok we match ids. we could just update the ui
-						//but then we are out of sync with the model
-						//so we update the model and let kvo fire.  Updating
-						//the model isn't something we should do here, so this
-						//needs to be generalized into some kind of multi-record
-						//event framework until we can get to an object cache like
-						//described above
-
-						//Ick
-						this.record.copyFields(rec, 'Links');
-                    }
-                });
 	},
 
+	updateLikeCount: function(){
+		if(this.liked){
+			this.liked.update(this.record.getFriendlyLikeCount());
+		}
+	},
+
+	markAsLiked: function(field, value){
+		var liked = value === undefined ? field : value;
+			method = liked ? 'addCls' : 'removeCls';
+		if(!this.liked){
+			return;
+		}
+		this.liked[method]('on');
+		this.liked.set({'title': liked ? 'Liked' : 'Like'});
+	},
 
 	markAsFavorited: function(field, value){
 		var favorited = value === undefined ? field : value;
@@ -390,9 +377,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 
             if (this.liked){
-                this.liked.update(r.getFriendlyLikeCount());
-                this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
-                this.liked.set({'title': r.isLiked() ? 'Liked' : 'Like'});
+				this.updateLikeCount();
+                this.markAsLiked(r.isLiked());
             }
 
             if(this.favorites){
@@ -426,7 +412,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	},
 
-
 	setRecord: function(r){
 		//Remove the old listener
 		if(this.record){
@@ -436,6 +421,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
 			this.record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
+			this.record.removeObserverForField(this, 'liked', this.markAsLiked, this);
+			this.record.removeObserverForField(this, 'LikeCount', this.updateLikeCount, this);
 			this.removeAdditionalRecordListeners(this.record);
 		}
 
@@ -479,6 +466,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	        'destroy': this.wasDeleted
         });
 		this.record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
+		this.record.addObserverForField(this, 'liked', this.markAsLiked, this);
+		this.record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
 		this.addAdditionalRecordListeners(r);
 		return true;
 	},
