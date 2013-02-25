@@ -1,6 +1,6 @@
 describe("Error Message", function(){
 	var errors;
-
+	var defaultMsg = "Default Error Msg";
 	beforeEach(function(){
 		errors = {};
 		/*jslint sub:true */ //no way to ignore reserved property if using don notation
@@ -21,69 +21,119 @@ describe("Error Message", function(){
 				}
 			}
 		});
+		efaultMsg = "Default Error Msg";
 	});
 
-	describe("Given correct formatting",function(){
-		it("Getting Default Error msg passing no replacements",function(){
-			var msg = errors.getError('Default');
-
-			expect(msg).toBe('An unknown error occured.');
-		});
-
-		it("Getting 'Not Found' error msg passing no replacements",function(){
+	describe("Given an Error code that exists",function(){
+		it("0/1 replacements no default",function(){
 			var msg = errors.getError('Not Found');
 
-			expect(msg).toBe('The item you are looking for does not exist.');
+			expect(msg).toBe("The item you are looking for does not exist.");
 		});
 
-		it("Getting 'Not Found error msg passing replacements",function(){
-			var msg = errors.getError('Not Found',{ 'name' : 'droid'});
+		it("0/1 replacements default",function(){
+			var msg = errors.getError('Not Found',{},defaultMsg);
 
-			expect(msg).toBe('The droid you are looking for does not exist.');
+			expect(msg).toBe("The item you are looking for does not exist.");
 		});
 
-		it("Getting 'Invalid' error msg passing no replacements",function(){
+		it("0/2 replacements no default",function(){
 			var msg = errors.getError('Invalid');
 
-			expect(msg).toBe('The code you entered is invalid');
+			expect(msg).toBe("The code you entered is invalid");
 		});
 
-		it("Getting 'Invalid' error msg passing 1st replacement",function(){
-			var msg = errors.getError('Invalid',{ 'code':'number'});
+		it("0/2 replacements default",function(){
+			var msg = errors.getError('Invalid',{},defaultMsg);
 
-			expect(msg).toBe('The number you entered is invalid');
+			expect(msg).toBe("The code you entered is invalid");
+		});		
+		it("1/1 replacements no default",function(){
+			var msg = errors.getError("Not Found",{'name':'droid'});
+
+			expect(msg).toBe("The droid you are looking for does not exist.");
 		});
 
-		it("Getting 'Invalid' error msg passing 2nd replacement",function(){
-			var msg = errors.getError('Invalid',{ 'msg':'is dumb'});
+		it("1/1 replacements default",function(){
+			var msg = errors.getError("Not Found",{'name':'droid'},defaultMsg);
+
+			expect(msg).toBe("The droid you are looking for does not exist.");
+		});
+
+		it("1/2 (first) replacements no default",function(){
+			var msg = errors.getError("Invalid",{'code':'word'});
+
+			expect(msg).toBe("The word you entered is invalid");
+		});
+
+		it("1/2 (first) replacements default",function(){
+			var msg = errors.getError("Invalid",{'code':'word'},defaultMsg);
+
+			expect(msg).toBe("The word you entered is invalid");
+		});
+
+		it("1/2 (second) replacements no default",function(){
+			var msg = errors.getError("Invalid",{'msg':'is dumb'});
 
 			expect(msg).toBe('The code you entered is dumb');
 		});
 
-		it("Getting 'Invalid' error msg passing both replacements",function(){
-			var msg = errors.getError('Invalid',{'code':'number','msg':'is dumb'});
+		it("1/2 (second) replacements default",function(){
+			var msg = errors.getError("Invalid",{'msg':'is dumb'},defaultMsg);
 
-			expect(msg).toBe('The number you entered is dumb');
+			expect(msg).toBe('The code you entered is dumb');
+		});
+
+		it("2/2 (wrong order) replacements no default",function(){
+			var msg = errors.getError("Invalid",{'msg':'is dumb','code':'word'});
+
+			expect(msg).toBe('The word you entered is dumb');
+		});
+
+		it("2/2 (wrong order) replacements default",function(){
+			var msg = errors.getError("Invalid",{'msg':'is dumb','code':'word'},defaultMsg);
+
+			expect(msg).toBe('The word you entered is dumb');
+		});
+
+		it("2/2 (right order) replacements no default",function(){
+			var msg = errors.getError("Invalid",{'code':'word','msg':'is dumb'});
+
+			expect(msg).toBe('The word you entered is dumb');
+		});
+
+		it("2/2 (right order) replacements default",function(){
+			var msg = errors.getError("Invalid",{'code':'word','msg':'is dumb'},defaultMsg);
+
+			expect(msg).toBe('The word you entered is dumb');
 		});
 	});
 
-	describe("Given incorrect formatting",function(){
-		it("Passing no existent error code",function(){
-			var msg = errors.getError("Imaginary");
+	describe("Given an error code that doesn't exist",function(){
+		it("Replacements passed",function(){
+			var msg = errors.getError("Nonexistent",{'test':'test'},defaultMsg);
 
-			expect(msg).toBe('An unknown error occured.');
+			expect(msg).toBe(defaultMsg);
 		});
 
-		it("Passing too many replacements",function(){
-			var msg = errors.getError('Not Found', { 'name' : 'droid', 'item' : 'nothing'});
+		it("Replacements not passed",function(){
+			var msg = errors.getError("Nonexistent",{},defaultMsg);
 
-			expect(msg).toBe('The droid you are looking for does not exist.');
+			expect(msg).toBe(defaultMsg);
 		});
 
-		it("Passing nothing",function(){
-			var msg = errors.getError();
+		it("Replacements no default",function(){
+			var msg = errors.getError("Nonexistent",{'test':'test'});
 
-			expect(msg).toBe('An unknown error occured.');
+			expect(msg).toBeFalsy();
 		});
+
+		it("No Replacements no default",function(){
+			var msg = errors.getError("Nonexistent");
+
+			expect(msg).toBeFalsy();
+		});
+
+
 	});
 });

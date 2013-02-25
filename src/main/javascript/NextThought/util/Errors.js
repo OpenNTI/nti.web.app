@@ -1,6 +1,5 @@
 Ext.define('NextThought.util.Errors', { 
 	singleton: true,
-	//Error code/message object
 	/*
 		Error Message template
 		
@@ -12,14 +11,18 @@ Ext.define('NextThought.util.Errors', {
 		}
 
 		Example call
-		error.getError('error code',{ "replace" : "call"});
+		error.getError('error code',{ "replace" : "call"},"default message");
 		the default will be put in if the replace object doesn't have an item
 		to file a {} with
+
+		if there is no erroMsg with 'error code' the defaultMsg will be returned
+		or falsy if the defaultMsg is undefined
+
+		note: if you want to pass a default message you have pass something for replace
+			ex. NTIError.getError("Nonexistent",{},"default message");
 	*/
+	//error messages
 	errorMsgs: {
-		'Default' : {
-			msg : "An unknown error occured.",
-		},
 		'FieldContainsCensoredSequence' : {
 			msg : "{name} contains censored {type}",
 			defaults: {
@@ -28,17 +31,18 @@ Ext.define('NextThought.util.Errors', {
 			}
 		}
 	},
-	//change it so if the errCode deosn't exist return the default
-	getError: function(errCode,replace,default){
-		var error = this.errorMsgs[errCode] || this.errorMsgs['Default'],
-			msg = error.msg,
-			defaults = error.defaults || {},
+	//either returns this.errorMsgs[errCode].msg (with replacements), defaultMsg, or undefined
+	getError: function(errCode,replace,defaultMsg){
+		var error = this.errorMsgs[errCode],
+			msg = (error || {}).msg || defaultMsg,
+			defaults = (error || {}).defaults || {},
 			replace = Ext.applyIf(replace || {},defaults);
 		
-		Ext.Object.each(replace,function(key,value,self){
-			msg = msg.replace("{"+key+"}",value);
-		})
-
+		if(msg != defaultMsg){
+			Ext.Object.each(replace,function(key,value,self){
+				msg = msg.replace("{"+key+"}",value);
+			})
+		}
 		return msg;
 	},
 	//adds messages to the errorMsgs for testing purposes
