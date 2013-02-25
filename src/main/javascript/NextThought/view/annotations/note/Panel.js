@@ -423,6 +423,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
 			this.record.removeObserverForField(this, 'liked', this.markAsLiked, this);
 			this.record.removeObserverForField(this, 'LikeCount', this.updateLikeCount, this);
+			this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 			this.removeAdditionalRecordListeners(this.record);
 		}
 
@@ -468,10 +469,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
 		this.record.addObserverForField(this, 'liked', this.markAsLiked, this);
 		this.record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
+		this.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 		this.addAdditionalRecordListeners(r);
 		return true;
 	},
 
+	//Subclass can override it they care.
+	updateCount: Ext.emptyFn,
 
 	loadReplies: function(record){
 		var me = this, toMask = me.el ? me.el.down('.note-replies') : null;
@@ -829,7 +833,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		if(root){
 			root.adjustReplyCountOnChange(r.getId(), added);
-			root.fireEvent('count-updated');
+//			root.fireEvent('count-updated');
 		}
 	},
 

@@ -47,7 +47,8 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false},
+		{ name: 'AdjustedReferenceCount', type:'int', persist: false, convert: function(v,r){return r.getRefsCount(v);}}
 	],
 
 	/*
@@ -159,19 +160,34 @@ Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-	set: function(key, value){
-		this.callParent(arguments);
-		if(key === 'ReferencedByCount'){
-			//NOTE: We should only update this field from what we get from the dataserver.
-			this._currentReplyCount = value;
+	getRefsCount: function(v){
+		if(Ext.isNumber(v)){
+			return v;
+		}else{
+			return this.placeholder ? this.countChildren() :
+				(this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
 		}
 	},
 
-	getReplyCount: function(hard){
-		var defaultCount = (this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
-		if(hard){ return defaultCount; } //If hard is specified, we only want the count from the server.
+	getReplyCount: function(){
+		if(this.placeholder && this.isTopLevel()){
+			return this.countChildren();
+		}
+		return  this.get('AdjustedReferenceCount') || 0;
+	},
 
-		return this._currentReplyCount || defaultCount;
+
+	countChildren: function(){
+		function allDescendants (rec) {
+			for (var i = 0; i < (rec.children || []).length; i++) {
+				var child = rec.children[i];
+				sum = sum + (child.placeholder ? 0 : 1);
+				allDescendants(child);
+			}
+		}
+		var sum = 0;
+		allDescendants(this);
+		return sum;
 	},
 
 	/*
@@ -182,24 +198,22 @@ Ext.define('NextThought.model.Note', {
 	*   Thus 'this._incomingReplies' and  'this._alreadyDeletedReplies' are used to ensure the condition.
 	 */
 	adjustReplyCountOnChange: function(replyId, added){
-		if(!this._currentReplyCount){
-			this._currentReplyCount = (this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
-		}
 		if( !this._incomingReplies){ this._incomingReplies = {}; }
 		if( !this._alreadyDeletedReplies){ this._alreadyDeletedReplies = {}; }
 
-
+		var count = this.get('AdjustedReferenceCount') || 0,
+			newCount = added ? count + 1 : count - 1;
 		if(!this._incomingReplies[replyId] && added){
+			this.set('AdjustedReferenceCount', newCount);
 			this._incomingReplies[replyId] = true;
-			this._currentReplyCount +=1;
 		}
 		else if( this._incomingReplies[replyId] && !added ){
-			this._currentReplyCount -=1;
+			this.set('AdjustedReferenceCount', newCount);
 			delete this._incomingReplies[replyId];
 			this._alreadyDeletedReplies[replyId]= true;
 		}
 		else if(!added && !this._alreadyDeletedReplies[replyId]){
-			this._currentReplyCount -=1;
+			this.set('AdjustedReferenceCount', newCount);
 			this._alreadyDeletedReplies[replyId]= true;
 		}
 	},
@@ -244,7 +258,7 @@ Ext.define('NextThought.model.Note', {
 		me.set('inReplyTo', data.inReplyTo);
 		me.set('references', data.references);
 		me.set('style',data.style);
-
+		me.set('AdjustedReferenceCount', data.AdjustedReferenceCount);
 		me.resumeEvents();
 	}
 });

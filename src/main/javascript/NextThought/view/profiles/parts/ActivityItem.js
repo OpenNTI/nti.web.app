@@ -69,10 +69,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				Ext.defer(this.maybeOpenReplyEditor, 1, this);
 			}
 		});
-		if(this.record){
-			this.mon(this.record,'count-updated',this.updateCount,this);
-		}
-
 	},
 
 	onBeforeAdd: function(cmp){

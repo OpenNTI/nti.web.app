@@ -28,7 +28,6 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		this.callParent(arguments);
 		var m = this.record;
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
-		this.mon(m,'count-updated',this.updateCount,this);
 	},
 
 
