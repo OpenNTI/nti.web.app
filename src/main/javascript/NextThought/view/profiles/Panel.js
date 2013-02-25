@@ -619,7 +619,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 			}
 			//alert('Could not save your '+field);
 			console.error(arguments);
-			cmp.startEdit(cmp.boundEl, newValue);
+			//Note we start editing against the oldValue here
+			//and then set the value to newValue so that the logic
+			//to detect if a value actually changed remains the same regardless of whether
+			//you are saving after a failure.
+			cmp.startEdit(cmp.boundEl, oldValue);
+			cmp.setValue(newValue);
 			cmp.field.setError();
 			me.showError(resultJson.message || 'An unknown error occurred');
 		}
