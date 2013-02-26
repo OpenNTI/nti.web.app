@@ -655,8 +655,8 @@ Ext.define('NextThought.controller.Groups', {
 				if(field){
 					msg = msg.replace(field,"List name");
 				}
-				msg = NTIError.getError(code,{'name':'List name'});
 			}
+			msg = NTIError.getError(code,{'name':'List name'},msg);
 			else{
 				if(operation.error && operation.error === 422){
 					//Well a field was wrong, in this case the user only put one thing
