@@ -2,7 +2,11 @@
 #profile {
 
 	.blog {
+		&.owner {
+			.header {display: block;}
+		}
 		.header {
+			display: none;
 			font: italic 300 18px/18px "Open Sans", sans-serif;
 			color: #b8b8b8;
 			padding: 15px;

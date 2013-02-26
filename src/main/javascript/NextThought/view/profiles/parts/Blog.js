@@ -22,9 +22,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	]),
 
 
-	renderSelectors: {
-		headerEl: '.header'
-	},
+	renderSelectors: {},
 
 
 	initComponent: function(){
@@ -43,13 +41,20 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			}
 		};
 
+		if(isMe(me.username)){
+			me.addCls('owner');
+			me.renderSelectors.headerEl = '.header';
+		}
+
 		Ext.Ajax.request(req);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.headerEl,'click',this.onNewPost,this);
+		if(this.headerEl){
+			this.mon(this.headerEl,'click',this.onNewPost,this);
+		}
 	},
 
 
