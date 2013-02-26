@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Parsing',{
 			if(items.hasOwnProperty(key)) {
 				item = items[key] || {};
 
-				if (typeof(item) === 'string'){item = Ext.JSON.decode(item);}
+				if (typeof item === 'string'){item = Ext.JSON.decode(item);}
 
 				if (item instanceof Ext.data.Model) {
 					results.push(item);
@@ -166,7 +166,7 @@ Ext.define('NextThought.util.Parsing',{
 
 	parseNtiHash: function(hash){
 		var authority = 'nextthought.com,2011-10',
-			parts, type, provider, typeSpecific;
+			parts, type, provider, typeSpecific, s;
 
 		if(Ext.isEmpty(hash) || hash.indexOf('#!') !== 0){
 			return null;
@@ -219,22 +219,28 @@ Ext.define('NextThought.util.Parsing',{
 	    } catch (ex) {}
 
 	    DOMParser_proto.parseFromString = function(markup, type) {
-	        if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-	            var doc = document.implementation.createHTMLDocument('')
-	              , doc_elt = doc.documentElement
-	              , first_elt;
+		    if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
+			    var doc = document.implementation.createHTMLDocument(''),
+				    doc_elt = doc.documentElement,
+				    first_elt;
 
-	            doc_elt.innerHTML = markup;
-	            first_elt = doc_elt.firstElementChild;
+			    try{
+				    doc_elt.innerHTML = markup;
+				    first_elt = doc_elt.firstElementChild;
 
-	            if (doc_elt.childElementCount === 1
-	                && first_elt.localName.toLowerCase() === 'html') {
-	                doc.replaceChild(first_elt, doc_elt);
-	            }
+				    if (doc_elt.childElementCount === 1
+						    && first_elt.localName.toLowerCase() === 'html') {
+					    doc.replaceChild(first_elt, doc_elt);
+				    }
+			    }
+			    catch(IE_SUCKS){
+				    console.warn('Head tags may not be returned from queries, due to polyfill/browser shortcomings');
+				    doc.body.innerHTML = markup;
+			    }
 
-	            return doc;
-	        }
-	        return real_parseFromString.apply(this, arguments);
+			    return doc;
+		    }
+		    return real_parseFromString.apply(this, arguments);
 	    };
 	}(DOMParser));
 });
