@@ -200,6 +200,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		this.resumeLayouts(true);
 
 		console.log('Showing', this.items.length, ' objects ');
+		this.maybeShowMoreItems();
 	},
 
 
@@ -227,6 +228,19 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime'));
 		cmps = this.cmpsFromRecords(records);
 		this.add(0, cmps);
+	},
+
+	
+	maybeShowMoreItems: function(){
+		var viewportHeight = Ext.Element.getViewportHeight(),
+			scrollHeight = this.up('profile-view-container').el.dom.scrollHeight, me = this,
+			max = me.store.getPageFromRecordIndex(me.store.getTotalCount());
+
+		if(viewportHeight >= scrollHeight && (me.store.currentPage < max)){
+			console.log('loading the next page. the viewport height: ', viewportHeight, ' and scroll height is: ', scrollHeight);
+			me.prefetchNext();
+			setTimeout(function(){ me.maybeShowMoreItems(); }, 2000);
+		}
 	},
 
 
