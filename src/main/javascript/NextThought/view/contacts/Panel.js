@@ -9,11 +9,18 @@ Ext.define('NextThought.view.contacts.Panel',{
 		userContainer: 'NextThought.mixins.UserContainer'
 	},
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.listenForPresenceChanges();
+	},
+
+
 	setUsers: function(users){
 		var usersToAdd = Ext.Array.sort(users, this.userSorterFunction);
 		this.removeAll(true);
 		this.add(Ext.Array.map(usersToAdd, this.createUserComponent));
 	},
+
 
 	createUserComponent: function(i){
 		return {record: i};

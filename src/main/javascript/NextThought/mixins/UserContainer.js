@@ -84,6 +84,22 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
+	listenForPresenceChanges: function(){
+		this.on('presence-changed', this.presenceOfComponentChanged, this);
+	},
+
+
+	presenceOfComponentChanged: function(cmp){
+		var users;
+		if(this.online || this.offline){
+			return;
+		}
+		console.warn('presence of component changed', arguments);
+		this.updateCmpPosition(cmp);
+		return false; //Stop bubble we handled it
+	},
+
+
 	cleanupActions: function(){
 		this.userMenu.destroy();
 		this.menu.destroy();
@@ -136,6 +152,15 @@ Ext.define('NextThought.mixins.UserContainer', {
 		return idx;
 	},
 
+	addCmpInSortedPosition: function(cmp){
+		users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
+		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
+	},
+
+	updateCmpPosition: function(cmp){
+		this.remove(cmp, false);
+		this.addCmpInSortedPosition(cmp);
+	},
 
 	addUser: function(user){
 		var existing = this.down('[username='+user.get('Username')+']'), users;

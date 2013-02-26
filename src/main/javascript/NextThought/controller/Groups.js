@@ -77,15 +77,13 @@ Ext.define('NextThought.controller.Groups', {
 
 			'createlist-main-view button[name=submit]' : {
 				'click': this.addList
+			},
+
+			'#contact-list contact-card': {
+				'presence-changed': this.presenceOfContactChanged
 			}
 
 		},{});
-
-		//Listen for changes of presence to notify the online/offline lists
-		var me = this;
-		Socket.register({
-			'chat_presenceOfUserChangedTo': function(){me.incomingPresenceChange.apply(me, arguments);}
-		});
 	},
 
 
@@ -350,71 +348,23 @@ Ext.define('NextThought.controller.Groups', {
 		this.maybePublishGroupsAndLists(groups, lists);
 	},
 
-
-	incomingPresenceChange: function(name, presence){
-		var ct = Ext.getCmp('contacts-view-panel'),
-			contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
+	presenceOfContactChanged: function(cmp){
+		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
 			offline = contacts.down('[offline]'),
 			online = contacts.down('[online]'),
 			map = { offline: offline, online: online },
-			cards = [], query;
+			presence = cmp.getUserObject().get('Presence'),
+			panel = map[presence.toLowerCase()];
 
-		if(!online || !offline){
-			//ui not ready
-			return;
+		if(panel){
+			if(panel !== cmp.ownerCt){
+				cmp.ownerCt.remove(cmp, false);
+				panel.addCmpInSortedPosition(cmp);
+			}
 		}
-
-		//We used to do a preflight check here to see if the name was a contact
-		//before we made the component query.  But now since my contacts isn't
-		//necessarily everyone we show cards for, it iPs not that simple.  Its not even
-		//clear that was benificial.  It may be find to just constrain the component
-		//query benieth the contacts-view-panel which is what we do now
-
-		query = Ext.String.format('contact-card[username={0}],contacts-tabs-card[username={0}]',name);
-		cards = Ext.Array.push(cards, Ext.ComponentQuery.query(query, ct));
-		cards = Ext.Array.push(cards, Ext.ComponentQuery.query(query, Ext.getCmp('contacts')|| {down:Ext.emptyFn}));
-
-		Ext.each(cards,
-				function(u){
-					var panel;
-					u[/offline/i.test(presence)? 'addCls':'removeCls']('offline');
-					panel = u.up('[removeUser][addUser]');
-					if( panel && !(panel.is('[offline]') || panel.is('[online]'))){
-
-						UserRepository.getUser(name, function(u) {
-							panel.suspendLayouts();
-							if(panel.removeUser(name)){
-								panel.addUser(u);
-							}
-							panel.resumeLayouts(true);
-						});
-					}
-				});
-
-		online.suspendLayouts();
-		offline.suspendLayouts();
-		offline.removeUser(name);
-		online.removeUser(name);
-
-		if(this.getFriendsListStore().isContact(name)){
-			UserRepository.getUser(name, function(u) {
-
-				var panel = map[presence.toLowerCase()];
-				if(panel){
-					panel.addUser(u);
-				}
-				else {
-					console.log('No panel for presence: ',presence);
-				}
-				online.resumeLayouts(true);
-				offline.resumeLayouts(true);
-			});
+		else {
+			console.log('No panel for presence: ',presence);
 		}
-		else{
-			online.resumeLayouts(true);
-			offline.resumeLayouts(true);
-		}
-
 	},
 
 

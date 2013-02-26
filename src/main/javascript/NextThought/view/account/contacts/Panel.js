@@ -45,6 +45,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.on('destroy',this.cleanupActions,this);
 		this.on('add',this.updateStuff,this,{buffer:100});
 		this.on('remove',this.updateStuff,this,{buffer:100});
+		this.listenForPresenceChanges();
 	},
 
 

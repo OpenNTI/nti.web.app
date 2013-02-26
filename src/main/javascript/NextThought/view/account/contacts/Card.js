@@ -29,7 +29,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			Ext.Error.raise('No user specified');
 		}
 		this.addEvents('nibClicked');
-		this.enableBubble('nibClicked');
+		this.enableBubble('nibClicked', 'presence-changed');
 
 		//for querying later:
 		this.username = this.user.getId();
@@ -42,12 +42,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			status: this.user.get('status'),
 			from: this.group ? 'this Group' : 'my contacts'
 		});
-	},
 
+		this.user.addObserverForField(this, 'Presence', this.presenceChanged, this);
+	},
 
 	afterRender: function(){
 		var el = this.getEl(),
-			online = this.user.get('Presence') === 'Online';
+			online = this.isOnline();
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
@@ -58,6 +59,24 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		if(online){
 			el.dom.setAttribute('data-qtip', 'Start a chat');
 		}
+	},
+
+	isOnline: function(val){
+		return (val || this.user.get('Presence')) === 'Online';
+	},
+
+	updatePresenceState: function(value){
+		if(this.isOnline(value)){
+			this.removeCls('offline');
+		}
+		else{
+			this.addCls('offline');
+		}
+	},
+
+	presenceChanged: function(key, value){
+		this.updatePresenceState(value);
+		this.fireEvent('presence-changed', this);
 	},
 
 

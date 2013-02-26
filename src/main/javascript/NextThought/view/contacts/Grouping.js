@@ -59,6 +59,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 		this.on('add',this.updateStuff,this,{buffer:100});
 		this.on('remove',this.updateStuff,this,{buffer:100});
+		this.listenForPresenceChanges()
 	},
 
 

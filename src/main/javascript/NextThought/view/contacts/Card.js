@@ -46,6 +46,14 @@ Ext.define('NextThought.view.contacts.Card',{
 		chatEl: '.actions .chat'
 	},
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble('presence-changed');
+		this.userObject = this.record;
+		this.username = this.userObject.getId();
+		this.userObject.addObserverForField(this, 'Presence', this.presenceChanged, this);
+	},
+
 	beforeRender: function(){
 		var u = this.record;
 		this.callParent(arguments);
@@ -56,15 +64,32 @@ Ext.define('NextThought.view.contacts.Card',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.userObject = this.record;
-		this.username = this.userObject.getId();
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
 		this.updateLayout();
 
-		if(this.userObject.get('Presence')!=='Online'){
+		this.updatePresenceState();
+	},
+
+	isOnline: function(val){
+		return (val || this.userObject.get('Presence')) === 'Online';
+	},
+
+	updatePresenceState: function(value){
+		if(!this.cardEl){
+			return;
+		}
+		if(this.isOnline(value)){
+			this.cardEl.removeCls('Offline');
+		}
+		else{
 			this.cardEl.addCls('Offline');
 		}
+	},
+
+	presenceChanged: function(key, value){
+		this.updatePresenceState(value);
+		this.fireEvent('presence-changed', this);
 	},
 
 	getUserObject: function(){
