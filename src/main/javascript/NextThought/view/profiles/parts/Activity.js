@@ -57,7 +57,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		s.proxy.url = this.user.getLink('Activity');
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			filter: 'TopLevel,MeOnly',
+			filter: 'TopLevel',
 			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight',
 			sortOn: 'createdTime',
 			sortOrder: 'descending'
