@@ -2,6 +2,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-post',
 
+	mixins: {
+		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
+	},
+
 	cls: 'entry',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -27,12 +31,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	renderSelectors: {
-		bodyEl: '.body'
+		bodyEl: '.body',
+		liked: '.controls .like',
+		favorites: '.controls .favorite'
 	},
 
 
 	beforeRender: function(){
 		this.callParent(arguments);
+		this.mixins.likeAndFavorateActions.constructor.call(this);
 		var r = this.record;
 		if(!r || !r.getData){
 			Ext.defer(this.destroy,1,this);
@@ -58,6 +65,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		//TODO: hook up favorite & like actions, and "more" and comment links.
 		// Clicking should open the post. (and scrolling to the corresponding region)
+	},
+
+
+	getRecord: function(){
+		return this.record.get('headline');
 	},
 
 
