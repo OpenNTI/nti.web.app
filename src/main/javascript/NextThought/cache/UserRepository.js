@@ -147,7 +147,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	},
 
-//TODO: make this smart enough to know if a request is already busy with a given username, just listen for the result instead of issuing a new request.
+
 	/**
 	 * Once called, if the user is not in the cache, a placeholder object will be injected. If something requests that
 	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
