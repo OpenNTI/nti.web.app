@@ -121,6 +121,7 @@ Ext.define('NextThought.util.Content',{
 	 */
 	getHTMLSnippet:function(html, max){
 		var i = /[^\.\?!]+[\.\?!]?/,
+			spaces = /(\s{2,})/,
 			df = document.createDocumentFragment(),
 			d = document.createElement('div'),
 			out = document.createElement('div'),
@@ -145,6 +146,11 @@ Ext.define('NextThought.util.Content',{
 			var o = c + t.length,
 				v = t.nodeValue,
 				offset;
+
+			Ext.each(spaces.exec(v)||[],function(gap){
+				o -= (gap.length-1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
+			});
+
 
 			if( o > max ){ //Time to split!
 				offset = max - c;
