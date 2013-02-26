@@ -28,13 +28,14 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'Creator', type: 'auto', persist: false },
 		{ name: 'ID', type: 'string', persist: false },
 		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'LikeCount', type: 'int', persist: false },
 		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
 		{ name: 'MimeType', type: 'string', useNull: true },
 		{ name: 'NTIID', type: 'string', useNull: true },
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false },
-		{ name: 'LikeCount', type: 'int', persist: false }
+		{ name: 'tags', type: 'auto', persist: false, defaultValue: [] }
 	],
 
 	onClassExtended: function(cls, data) {

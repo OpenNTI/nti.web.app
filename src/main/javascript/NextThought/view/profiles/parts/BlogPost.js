@@ -15,7 +15,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'foot', cn: [
 			{ tag:'span', cls: 'comment-count', html: '{PostCount} Comments' },
 			{ tag:'span', cls: 'tags', cn:[
-					//for:tags: span:.
+				{tag:'tpl', 'for':'story.tags', cn:[
+					{tag:'span', cls:'tag', html: '{.}'}
+				]}
 			]}
 		]}
 	]),
@@ -39,14 +41,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
 		r.story = r.story.getData();
-		console.debug(this.record);
+		console.log(r.story);
 		return true;
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
 		this.record.get('story').compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 	},
 
@@ -66,6 +67,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	showMore: function(e){
 		e.stopEvent();
-
+		console.log('Clicked More');
 	}
 });

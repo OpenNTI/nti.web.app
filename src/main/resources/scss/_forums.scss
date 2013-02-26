@@ -26,9 +26,12 @@
 					@include like-and-favorite;
 				}
 				.title {
-					font: normal 300 28px/28px $font;
 					color: $primary-grey;
+					font: normal 300 28px/28px $font;
 					margin-bottom: 20px;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 				}
 				.meta,
 				.foot {
@@ -48,12 +51,26 @@
 							padding: 0 0.6em;
 							background: none;
 						}
+
+						.tag:last-of-type::after,
 						&:empty::before,
 						&:first-of-type::before {
 							content: '';
 							display: none;
 						}
 
+						.tag{
+							display: inline-block;
+							white-space: nowrap;
+
+							&::after {
+								color: $tertiary-grey;
+								position: static;
+								content: ', ';
+								display: inline;
+								padding: 0 0.25em 0 0.1em;
+							}
+						}
 					}
 				}
 
@@ -66,7 +83,9 @@
 						text-decoration: none;
 					}}
 				}
-				.foot { margin: 40px 0; }
+				.foot {
+					margin: 40px 0;
+				}
 			}
 		}
 	}
