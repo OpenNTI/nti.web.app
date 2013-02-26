@@ -15,20 +15,33 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
 
 
-	afterRender: function(){
-		this.callParent(arguments);
-		this.store = this.getStore();
-		this.mon(this.store,{
-			scope: this,
-			load: this.storeLoaded,
-			beforeload: this.showLoadingBar
-		});
+	setUser: function(user){
+		var me = this;
+		me.user = user;
 
-		this.store.load({callback: this.loadCallback, scope: this});
+		function setupStore(){
+			var s = me.store = me.getStore();
+			this.mon(s,{
+				scope: me,
+				load: me.storeLoaded,
+				beforeload: me.showLoadingBar
+			});
+			this.store.load({callback: me.loadCallback, scope: me});
+		}
+
+		if(!me.rendered){
+			me.on('afterrender', setupStore, me, {single:true});
+			return;
+		}
+
+		setupStore();
 	},
+
+
 
 
 	getStore: function(){
@@ -39,10 +52,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			s = NextThought.store.ProfileItem.create({ id: id });
 		}
 
-		s.proxy.url = (s.proxy.url||'').replace(
-				//The wrapping slashes are an attempt to limit the scope of the search&replace :/
-				'/'+encodeURIComponent($AppConfig.username)+'/',
-				'/'+encodeURIComponent(this.username)+'/');
+		if(!this.user){
+			Ext.Error.raise('No user object!');
+		}
+
+		s.proxy.url = this.user.getLink('Activity');
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel,MeOnly',
