@@ -12,9 +12,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
 
+
 	initComponent: function(){
 		this.callParent(arguments);
 	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -27,6 +29,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		this.store.load({callback: this.loadCallback, scope: this});
 	},
+
 
 	getStore: function(){
 		var id = 'profile-activity-'+this.username,
@@ -65,6 +68,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		return s;
 	},
 
+
 	showLoadingBar: function(){
 		console.log('Show loading bar');
 		//TOOD how to get the height into css.  If we don't specify it here it gets an
@@ -85,6 +89,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			}});
 	},
 
+
 	clearLoadingBar: function(){
 		var bar = this.down('#loadingbar');
 		console.log('Clear loading bar');
@@ -93,6 +98,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			this.remove(bar);
 		}
 	},
+
 
 	cmpsFromRecords: function(records){
 		var cmps = [], lastHighlightContainer;
@@ -141,6 +147,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		return cmps;
 	},
 
+
 	loadCallback: function(records, operation, success){
 		if(!success && operation.error && operation.error.status === 404){
 			//If we don't have a joined-event child add one now
@@ -149,6 +156,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			}
 		}
 	},
+
 
 	storeLoaded: function(store, records, successful){
 
@@ -182,6 +190,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		console.log('Showing', this.items.length, ' objects ');
 	},
 
+
 	itemsAddedToStore: function(store, records, index){
 		var cmps;
 		console.log('Records added at index', index, records);
@@ -208,9 +217,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		this.add(0, cmps);
 	},
 
+
 	onScrolledToBottom: function(){
 		this.prefetchNext();
 	},
+
 
 	prefetchNext: function(){
 		var s = this.store, max;
