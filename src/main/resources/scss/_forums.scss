@@ -3,11 +3,11 @@
 
 	.blog {
 		.header {
-			font: italic 300 28px/28px $font;
-			color: $tertiary-grey;
-			padding: 30px 20px;
-			border: 0 solid #f1f1f1;
-			border-width: 0 0 1px 0;
+			font: italic 300 18px/18px "Open Sans", sans-serif;
+			color: #b8b8b8;
+			padding: 15px;
+			margin: 30px 0 50px 0;
+			border: 1px solid #f1f1f1;
 			cursor: pointer;
 		}
 
@@ -15,36 +15,58 @@
 			.entry {
 				padding: 30px 20px;
 				border: 0 solid #f1f1f1;
-				border-width: 0 0 1px 0;
+				border-width: 1px 0 0 0;
 				cursor: pointer;
+				position: relative;
 
+				.controls {
+					position: absolute;
+					right: 0;
+					top: 0;
+					@include like-and-favorite;
+				}
 				.title {
 					font: normal 300 28px/28px $font;
 					color: $primary-grey;
 					margin-bottom: 20px;
 				}
-				.meta {
-					text-transform: uppercase;
-					font: normal 400 12px/12px $font;
+				.meta,
+				.foot {
+					font: normal 400 14px/14px $font;
 					color: $tertiary-grey;
+
+					.state,
 					.comment-count { color: $primary-blue; }
-					span{
-						&::after{
+					& > span{
+						&::before{
 							color: $tertiary-grey;
 							font-weight: 600;
 							position: static;
 							content: '\00B7';
 							vertical-align: middle;
 							display: inline;
-							padding: 0 0.25em;
+							padding: 0 0.6em;
 							background: none;
 						}
-						&:last-of-type::after {
+						&:empty::before,
+						&:first-of-type::before {
 							content: '';
 							display: none;
 						}
+
 					}
 				}
+
+				.body {
+					margin: 20px 0;
+					font: normal 400 14px/28px $font;
+
+					a {&:link,&:active,&:visited{
+						color: $primary-blue;
+						text-decoration: none;
+					}}
+				}
+				.foot { margin: 40px 0; }
 			}
 		}
 	}

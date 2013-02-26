@@ -37,7 +37,6 @@ Ext.define('NextThought.util.Content',{
 	},
 
 
-
 	getContentForPageInfo: function(pageInfo,callback,failure){
 		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
@@ -111,9 +110,62 @@ Ext.define('NextThought.util.Content',{
 		var me = this;
 
 		return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+	},
+
+
+	/**
+	 *
+	 * @param html {String|Node}
+	 * @param max {int}
+	 * @returns {String}
+	 */
+	getHTMLSnippet:function(html, max){
+		var i = /[^\.\?!]+[\.\?!]?/,
+			df = document.createDocumentFragment(),
+			d = document.createElement('div'),
+			out = document.createElement('div'),
+			texts, c = 0,
+			r = document.createRange();
+
+		df.appendChild(d);
+		if(Ext.isString(html)){
+			d.innerHTML = html;
+		}
+		else if(Ext.isDomNode(html)){
+			d.appendChild(html.cloneNode(true));
+		}
+		else {
+			Ext.Error.raise('IllegalArgument');
+		}
+
+		r.setStartBefore(d.firstChild);
+		texts = AnnotationUtils.getTextNodes(d);
+
+		Ext.each(texts,function(t){
+			var o = c + t.length,
+				v = t.nodeValue,
+				offset;
+
+			if( o > max ){ //Time to split!
+				offset = max - c;
+				v = v.substr(offset);
+				v = i.exec(v);
+				offset += (v&&v.length>0?v[0].length:0);
+				r.setEnd(t,offset);
+				return false;
+			}
+
+			c = o;
+			return true;
+		});
+
+		if(!r.collapsed){
+			out.appendChild(r.cloneContents());
+			return out.innerHTML;
+		}
+
+		return null;
 	}
-
-
 },function(){
 	window.ContentUtils = this;
 });
