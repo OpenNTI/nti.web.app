@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'foot', cn: [
 			{ tag:'span', cls: 'comment-count', html: '{PostCount} Comments' },
 			{ tag:'span', cls: 'tags', cn:[
-				{tag:'tpl', 'for':'story.tags', cn:[
+				{tag:'tpl', 'for':'headline.tags', cn:[
 					{tag:'span', cls:'tag', html: '{.}'}
 				]}
 			]}
@@ -34,21 +34,28 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		var r = this.record;
-		if(!r){
-			this.destroy();
-			return false;
+		if(!r || !r.getData){
+			Ext.defer(this.destroy,1,this);
+			return;
 		}
 
 		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
-		r.story = r.story.getData();
-		console.log(r.story);
-		return true;
+		if(!r.headline || !r.headline.getData){
+			console.warn('The record does not have a story field or it does not implement getData()',r);
+
+			Ext.defer(this.destroy,1,this);
+			return;
+		}
+		r.headline = r.headline.getData();
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.record.get('story').compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		var h = this.record.get('headline');
+		if(!h){return;}
+
+		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		//TODO: hook up favorite & like actions, and "more" and comment links.
 		// Clicking should open the post. (and scrolling to the corresponding region)
 	},
