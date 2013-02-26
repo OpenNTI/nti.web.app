@@ -49,6 +49,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.record.get('story').compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		//TODO: hook up favorite & like actions, and "more" and comment links.
+		// Clicking should open the post. (and scrolling to the corresponding region)
 	},
 
 
