@@ -111,8 +111,15 @@ Ext.define('NextThought.view.profiles.Panel',{
 		if(!this.user || this.settingTab){
 			return;
 		}
-		var tab = newTab.is('profile-activity')?null : newTab.title,
-			url = this.user.getProfileUrl(tab);
+		var tab = newTab.is('profile-activity')?undefined : newTab.title,
+			params = tab && newTab.getParams ? newTab.getParams() : undefined,
+			url;
+
+		if( params ){
+			tab = [tab,params].join('/');
+		}
+
+		url = this.user.getProfileUrl(tab);
 
 		console.debug('new url:'+url);
 
@@ -125,12 +132,27 @@ Ext.define('NextThought.view.profiles.Panel',{
 	setActiveTab: function(tab){
 		delete this.activeTab;
 		this.settingTab = true;
-		var t = tab? this.down('[title="'+tab+'"]') : null;
+
+		var n = tab? tab.indexOf('/') : 0,
+			params = null,
+			t;
+
+		if(n>0){
+			params = tab.substr(n+1);
+			tab = tab.substr(0,n);
+		}
+
+		t =  tab ? this.down('[title="'+tab+'"]') : null;
 		if(t !== this.tabs.activeTab){
 			this.tabs.suspendEvents(false);
 			this.tabs.setActiveTab(t||0);
 			this.tabs.resumeEvents();
 		}
+
+		if( t && t.setParams ){
+			t.setParams(params);
+		}
+
 		delete this.settingTab;
 	},
 

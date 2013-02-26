@@ -37,6 +37,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.addEvents(['show-post']);
+		this.enableBubble(['show-post']);
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.mixins.likeAndFavorateActions.constructor.call(this);
@@ -92,6 +99,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	goToPost: function(e){
 		e.stopEvent();
-		console.log('Clicked More');
+		this.fireEvent('show-post',this.record.get('ID'));
 	}
 });

@@ -67,9 +67,14 @@ Ext.define(	'NextThought.model.User', {
 
 
 	getProfileUrl: function(subPage){
-		var u = encodeURIComponent( this.get('Username') );
-		subPage = Ext.isEmpty(subPage,false) ? '' :'/'+encodeURIComponent(subPage);
-		return ['#!profile/',u,subPage].join('') ;
+		var u = encodeURIComponent( this.get('Username')),
+			subPages = subPage||[];
+
+		if(!Ext.isArray(subPages) && arguments.length>0){
+			subPages = Ext.Array.clone(arguments);
+		}
+		subPages = Ext.isEmpty(subPages,false) ? '' :'/'+Ext.Array.map(subPages,encodeURIComponent).join('/');
+		return ['#!profile/',u,subPages].join('') ;
 	},
 
 

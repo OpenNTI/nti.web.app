@@ -17,12 +17,18 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	cls: 'blog',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header', html: 'My next thought...' },
-		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
+		{ cls: 'post-view' },
+		{ cls: 'list-view', cn:[
+			{ cls: 'header', html: 'My next thought...' },
+			{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
+		]}
 	]),
 
 
-	renderSelectors: {},
+	renderSelectors: {
+		listViewEl: '.list-view',
+		postViewEl: '.post-view'
+	},
 
 
 	initComponent: function(){
@@ -43,6 +49,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		}
 
 		UserRepository.getUser(me.username,function(user){
+			me.user = user;
 			var req = {
 				url: user.getLink('Blog'),
 				scope: me,
@@ -57,14 +64,20 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 			Ext.Ajax.request(req);
 		});
+
+		this.on('show-post',this.updateLocation,this);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.listViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		if(this.headerEl){
 			this.mon(this.headerEl,'click',this.onNewPost,this);
 		}
+
+		this.mon(this.tab,'click',this.closePost, this);
 	},
 
 
@@ -96,5 +109,85 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	loadedContents: function(store, records, success){
 		var m = Ext.Array.map(records,function(i){ return {record: i}; });
 		this.add(m);
+	},
+
+
+	updateLocation: function(postId){
+
+		var u = this.user,
+			hash, args=[this.title, postId];
+
+		if(!postId){args.pop();}
+
+		hash = u.getProfileUrl.apply(u,args);
+
+		if(location.hash !== hash){
+			location.hash = hash;
+		}
+	},
+
+
+	setParams: function(paramsString){
+
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.setParams,this,arguments),this,{single:true});
+			return;
+		}
+
+		var s = this.store, r,
+			id = paramsString && decodeURIComponent(paramsString);
+
+		console.debug('setting params',id);
+		this.closePost(true);
+
+		if(!id){ return; }
+
+		r = s && s.findRecord('ID', id, 0, false, true, true);
+		if(r){
+			this.showPost(r);
+			return;
+		}
+
+		r = {
+			url: this.user.getLink('Blog')+'/'+paramsString,
+			scope: this,
+			failure: function(){this.setParams(); alert('Could not load post');},
+			success: function(resp){
+				var j = ParseUtils.parseItems( resp.responseText ).first();
+				this.showPost(j);
+			}
+		};
+
+		Ext.Ajax.request(r);
+	},
+
+
+	getParams: function(){
+		console.debug('getting params');
+		return '';
+	},
+
+
+	closePost: function(leaveLocation){
+		if( this.activePost ){
+			this.activePost.destroy();
+			delete this.activePost;
+		}
+		if(leaveLocation !== true){
+			this.updateLocation();
+		}
+		this.listViewEl.show();
+		this.postViewEl.hide();
+		this.updateLayout();
+	},
+
+
+	showPost: function(record){
+		console.debug(record);
+		this.listViewEl.hide();
+		this.postViewEl.show();
+		//Create Post Component, set renderTo:this.postViewEl
+
+		this.updateLayout();
 	}
 });
