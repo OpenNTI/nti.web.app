@@ -30,6 +30,6 @@ Ext.define('NextThought.view.contacts.Panel',{
 
 	getUserListFieldName: function(){
 		return 'friends';
-	},
+	}
 
 });

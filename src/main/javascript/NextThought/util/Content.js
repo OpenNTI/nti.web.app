@@ -62,7 +62,7 @@ Ext.define('NextThought.util.Content',{
 			return new DOMParser().parseFromString(xml,"text/html");
 		}
 		catch(e){
-			console.error('Could not parse content');
+			console.error('Could not parse content', Globals.getError(e));
 		}
 
 		return undefined;

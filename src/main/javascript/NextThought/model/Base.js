@@ -74,7 +74,7 @@ Ext.define('NextThought.model.Base', {
 		//If one is an array, to be equal they must both
 		//be arrays and they must contain equal objects in the proper order
 		if(Ext.isArray(a) || Ext.isArray(b)){
-			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, Ext.Function.bind(this.isEqual, this))
+			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, Ext.Function.bind(this.isEqual, this));
 		}
 
 		//if a defines an equals method return the result of that
@@ -348,7 +348,7 @@ Ext.define('NextThought.model.Base', {
 	favorite: function(widget){
 		var me = this,
 			currentValue = this.isFavorited(),
-			action = currentValue ? 'unfavorite' : 'favorite'
+			action = currentValue ? 'unfavorite' : 'favorite';
 
 		if (me.activePostTos && me.activePostTos[action]){return;}
 

@@ -179,8 +179,9 @@ Ext.define('NextThought.model.Note', {
 
 	countChildren: function(){
 		function allDescendants (rec) {
-			for (var i = 0; i < (rec.children || []).length; i++) {
-				var child = rec.children[i];
+			var i, child;
+			for (i = 0; i < (rec.children || []).length; i++) {
+				child = rec.children[i];
 				sum = sum + (child.placeholder ? 0 : 1);
 				allDescendants(child);
 			}

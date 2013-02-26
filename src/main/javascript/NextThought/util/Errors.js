@@ -50,7 +50,7 @@ Ext.define('NextThought.util.Errors', {
 
 		Ext.Object.each(replace, function(key,value,self){
 			msg = msg.replace("{"+key+"}",value);
-		})
+		});
 
 		return msg;
 	},
