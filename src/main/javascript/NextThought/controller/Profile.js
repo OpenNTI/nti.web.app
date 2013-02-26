@@ -3,8 +3,9 @@ Ext.define('NextThought.controller.Profile', {
 
 	models: [
 		'forums.PersonalBlog',
+		'forums.PersonalBlogComment',
 		'forums.PersonalBlogEntry',
-		'forums.Post'
+		'forums.PersonalBlogEntryPost'
 	],
 
 	stores: [
