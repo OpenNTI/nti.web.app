@@ -28,25 +28,35 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var me = this,
-			req = {
-			url: $AppConfig.service.getUserBlogURL(me.username),
-			scope: me,
-			success: me.loadContents,
-			failure: function(response){
-				console.warn('No blog object ('+response.status+') :'+response.responseText);
-				//ensure that the destroy happens after the construction/component plumbing.
-				//If the request is cached in the browser, this may be a synchronous call.
-				Ext.defer(me.destroy,1,me);
-			}
-		};
+		var me = this;
 
 		if(isMe(me.username)){
 			me.addCls('owner');
 			me.renderSelectors.headerEl = '.header';
 		}
 
-		Ext.Ajax.request(req);
+		function fail(response){
+			console.warn('No blog object ('+response.status+') :'+response.responseText);
+			//ensure that the destroy happens after the construction/component plumbing.
+			//If the request is cached in the browser, this may be a synchronous call.
+			Ext.defer(me.destroy,1,me);
+		}
+
+		UserRepository.getUser(me.username,function(user){
+			var req = {
+				url: user.getLink('Blog'),
+				scope: me,
+				success: me.loadContents,
+				failure: fail
+			};
+
+			if(Ext.isEmpty(req.url)){
+				fail({status:0,responseText:'User object did not have a Blog url'});
+				return;
+			}
+
+			Ext.Ajax.request(req);
+		});
 	},
 
 
