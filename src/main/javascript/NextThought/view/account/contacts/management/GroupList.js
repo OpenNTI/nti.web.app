@@ -233,6 +233,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		me.store.on('datachanged',function(){
 			me.selectNewGroup(groupName, pendingSelections);
+			me.reset();
 		},me,{single:true});
 	}
 
