@@ -82,7 +82,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			if(lastChild){ appendTo = lastChild; }
 
 			this.moreEl = this.moreTpl.append(appendTo,null,true);
-			this.mon(this.moreEl,'click', this.showMore,this);
+			this.mon(this.moreEl,'click', this.goToPost,this);
 		}
 	},
 
@@ -90,7 +90,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	generateClickHandler: function(){},
 
 
-	showMore: function(e){
+	goToPost: function(e){
 		e.stopEvent();
 		console.log('Clicked More');
 	}
