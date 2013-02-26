@@ -62,10 +62,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	setContent: function(html){
-		var snip = ContentUtils.getHTMLSnippet(html,300);
+		var snip = ContentUtils.getHTMLSnippet(html,300),
+			lastChild, appendTo = this.bodyEl;
 		this.bodyEl.update(snip||html);
 		if(snip){
-			this.moreEl = this.moreTpl.append(this.bodyEl,null,true);
+			lastChild = this.bodyEl.last();//this will not return text nodes
+			if(lastChild){ appendTo = lastChild; }
+
+			this.moreEl = this.moreTpl.append(appendTo,null,true);
 			this.mon(this.moreEl,'click', this.showMore,this);
 		}
 	},
