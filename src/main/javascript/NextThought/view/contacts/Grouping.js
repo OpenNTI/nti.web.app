@@ -59,7 +59,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 		this.on('add',this.updateStuff,this,{buffer:100});
 		this.on('remove',this.updateStuff,this,{buffer:100});
-		this.listenForPresenceChanges()
+		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
 
@@ -82,13 +82,17 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	getTitle: function(){ return this.initialConfig.title; },
 
 
-	setUsers: function(users){
-		var usersToAdd = Ext.Array.sort(users, this.userSorterFunction);
-		this.add(Ext.Array.map(usersToAdd, this.createUserComponent));
+	createUserComponent: function(i){ return {record: i}; },
+
+
+	getModelObject: function(){
+		return this.associatedGroup;
 	},
 
 
-	createUserComponent: function(i){ return {record: i}; },
+	getUserListFieldName: function(){
+		return 'friends';
+	},
 
 
 	updateStuff:function(){

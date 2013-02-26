@@ -1,8 +1,19 @@
 /**
  *  We assume that the component that mixes this in should implement 'createUserComponent' and the its children should
- *  implement 'getUserObject' method.
+ *  implement 'getUserObject' method.  User containers drive their contents (child components) off a specified model objects
+ *  specified field.  This information should be provided as two functions, getModelObject and getUserListFiendName, on the component that mixes in this mixin.
+ *  The fieldName provided should map to a field of type UserList on the given model.  People mixing this in should call the constructor
+ *  of this mixin in initComponent.  By default this mixin will handle presence-changed events from it's children. You can set the property
+ *  reactToChildPresenceChanged to false to stop that behaviour.  By default this component will also watch the underlying model for changes
+ *  to the specified field.  Set the property reactToModelChanges to false to turn off this behaviour
  */
 Ext.define('NextThought.mixins.UserContainer', {
+
+	//Should be called from initComponent
+	constructor: function(){
+		this.on('presence-changed', this.presenceOfComponentChanged, this);
+		this.on('afterRender', this.onCmpRendered, this);
+	},
 
 	setupActions: function(group){
 		var listOrGroup = group && Ext.String.capitalize(group.readableType),
@@ -84,16 +95,66 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	listenForPresenceChanges: function(){
-		this.on('presence-changed', this.presenceOfComponentChanged, this);
+	getUserList: function(){
+		var model = this.getModelObject();
+		if(!model){
+			return;
+		}
+		return model.get(this.getUserListFieldName() || '');
+	},
+
+
+	onCmpRendered: function(){
+		var model = this.getModelObject(),
+			fn = this.getUserListFieldName(),
+			users;
+		if(this.reactToModelChanges === false || !model || !fn){
+			return true;
+		}
+
+		users = model.get(fn);
+
+		this.updateFromModelObject(users);
+
+		//listen for changes to the list
+		model.addObserverForField(this, fn, this.updateFromModelObject, this);
+	},
+
+
+	updateFromModelObject: function(key, value){
+		var users = value ? value : key;
+		console.log('updating user container with new users');
+		UserRepository.getUser(users, this.setUsers, this);
+	},
+
+
+	setUsers: function(resolvedUsers){
+		var p,usersToAdd = [];
+
+		//For legacy online/offling meta groups
+		if(!Ext.isArray(resolvedUsers)) {
+			Ext.Object.each(resolvedUsers, function(n, u){ usersToAdd.push(u); });
+		}
+		else {
+			usersToAdd = resolvedUsers.slice();
+		}
+
+		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
+
+		p = Ext.Array.map(usersToAdd,this.createUserComponent,this);
+
+		this.removeAll(true);
+		this.add(p);
 	},
 
 
 	presenceOfComponentChanged: function(cmp){
 		var users;
-		if(this.online || this.offline){
+
+		if(this.reactToChildPresenceChanged === false){
 			return;
 		}
+
 		console.warn('presence of component changed', arguments);
 		this.updateCmpPosition(cmp);
 		return false; //Stop bubble we handled it

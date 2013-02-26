@@ -5,24 +5,31 @@ Ext.define('NextThought.view.contacts.Panel',{
 	defaultType: 'contacts-tabs-card',
 	autoScroll:true,
 
+	reactToModelChanges: false,
+
 	mixins:{
 		userContainer: 'NextThought.mixins.UserContainer'
 	},
 
+
 	initComponent: function(){
 		this.callParent(arguments);
-		this.listenForPresenceChanges();
-	},
-
-
-	setUsers: function(users){
-		var usersToAdd = Ext.Array.sort(users, this.userSorterFunction);
-		this.removeAll(true);
-		this.add(Ext.Array.map(usersToAdd, this.createUserComponent));
+		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
 
 	createUserComponent: function(i){
 		return {record: i};
-	}
+	},
+
+
+	getModelObject: function(){
+		return this.associatedGroup;
+	},
+
+
+	getUserListFieldName: function(){
+		return 'friends';
+	},
+
 });

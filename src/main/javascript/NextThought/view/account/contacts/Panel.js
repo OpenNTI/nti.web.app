@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	],
 
 	mixins: {
-		userContacts: 'NextThought.mixins.UserContainer'
+		userContainer: 'NextThought.mixins.UserContainer'
 	},
 
 	alias: 'widget.contacts-panel',
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.on('destroy',this.cleanupActions,this);
 		this.on('add',this.updateStuff,this,{buffer:100});
 		this.on('remove',this.updateStuff,this,{buffer:100});
-		this.listenForPresenceChanges();
+		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
 
@@ -106,23 +106,13 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 
-	setUsers: function(users){
-		var p,usersToAdd = [];
+	getModelObject: function(){
+		return this.associatedGroup;
+	},
 
-		if(!Ext.isArray(users)) {
-			Ext.Object.each(users, function(n, u){ usersToAdd.push(u); });
-		}
-		else {
-			usersToAdd = users.slice();
-		}
 
-		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
-
-		p = Ext.Array.map(usersToAdd,this.createUserComponent,this);
-
-		this.removeAll(true);
-		this.add(p);
-		this.updateTitle();
+	getUserListFieldName: function(){
+		return 'friends';
 	},
 
 

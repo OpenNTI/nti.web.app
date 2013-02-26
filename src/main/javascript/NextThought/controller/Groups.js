@@ -199,9 +199,16 @@ Ext.define('NextThought.controller.Groups', {
 			contactList.removeAll(true);
 
 			console.log('Adding online group to people');
-			contactList.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
+			contactList.add({ xtype: 'contacts-panel',
+							  title: 'Online', online :true,
+							  reactToChildPresenceChanged: false,
+							  reactToModelChanges: false}).setUsers(friends.Online);
 			console.log('Adding offling group to people');
-			contactList.add({ xtype: 'contacts-panel', title: 'Offline', offline:true }).setUsers(friends.Offline);
+			contactList.add({ xtype: 'contacts-panel',
+							  title: 'Offline',
+							  offline: true,
+							  reactToChildPresenceChanged: false,
+							  reactToModelChanges: false}).setUsers(friends.Offline);
 			Ext.callback(onComplete, me);
 		});
 	},
@@ -283,7 +290,10 @@ Ext.define('NextThought.controller.Groups', {
 
 		remaining = addedCmps.length;
 
-		//We might be finished before we started.
+		remaining = 0;
+		maybeCallback();
+
+/*		//We might be finished before we started.
 		//this is the case of no groups or lists to show
 		if( maybeCallback() ){
 			return;
@@ -315,6 +325,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			}
 		});
+*/
 	},
 
 
