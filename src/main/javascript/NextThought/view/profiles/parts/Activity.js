@@ -54,7 +54,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			Ext.Error.raise('No user object!');
 		}
 
-		s.proxy.url = this.user.getLink('Activity');
+		s.proxy.url = this.user.getLink('Activitys');
+		if(!s.proxy.url){
+			//don't attempt to do anything if no url
+			s.setProxy('memory');
+		}
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel',
@@ -106,7 +110,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		var bar = this.down('#loadingbar');
 		console.log('Clear loading bar');
 		if(bar){
-			bar.unmask();
 			this.remove(bar);
 		}
 	},
