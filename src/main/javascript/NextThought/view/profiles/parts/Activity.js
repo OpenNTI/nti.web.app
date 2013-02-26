@@ -42,8 +42,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	},
 
 
-
-
 	getStore: function(){
 		var id = 'profile-activity-'+this.username,
 			s = Ext.getStore(id);
