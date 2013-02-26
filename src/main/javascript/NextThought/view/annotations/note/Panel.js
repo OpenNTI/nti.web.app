@@ -10,7 +10,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	],
 
 	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks'
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
+		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	ui: 'nt',
@@ -71,6 +72,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.addEvents('chat', 'share', 'save-new-reply','editorActivated','editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.callParent(arguments);
+		this.mixins.likeAndFavorateActions.constructor.call(this);
 		this.on('beforedestroy',this.onBeforeDestroyCheck,this);
 	},
 
@@ -136,48 +138,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			keydown: me.editorKeyDown
 		});
 
-		if( me.record.parent ){
-			if( me.favorites ){
-				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
-				me.favorites.hide();
-			}
-			if( me.favoritesSpacer ){
-				me.favoritesSpacer.show();
-			}
-		}
 
-		if( me.liked ){     me.mon(me.liked,    'click', function(){ me.record.like(me); }, me); }
-		if( me.favorites ){ me.mon(me.favorites,'click', function(){ me.record.favorite(me); },me); }
 
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
 		}
-	},
-
-	updateLikeCount: function(){
-		if(this.liked){
-			this.liked.update(this.record.getFriendlyLikeCount());
-		}
-	},
-
-	markAsLiked: function(field, value){
-		var liked = value === undefined ? field : value;
-			method = liked ? 'addCls' : 'removeCls';
-		if(!this.liked){
-			return;
-		}
-		this.liked[method]('on');
-		this.liked.set({'title': liked ? 'Liked' : 'Like'});
-	},
-
-	markAsFavorited: function(field, value){
-		var favorited = value === undefined ? field : value;
-			method = favorited ? 'addCls' : 'removeCls';
-		if(!this.favorites){
-			return;
-		}
-		this.favorites[method]('on');
-		this.favorites.set({'title': favorited ? 'Bookmarked' : 'Add to bookmarks'});
 	},
 
 
@@ -376,14 +341,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				this.setPlaceholderContent();
 			}
 
-            if (this.liked){
-				this.updateLikeCount();
-                this.markAsLiked(r.isLiked());
-            }
-
-            if(this.favorites){
-				this.markAsFavorited(r.isFavorited());
-            }
+            this.reflectLikeAndFavorite(r);
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
@@ -420,10 +378,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
-			this.record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
-			this.record.removeObserverForField(this, 'liked', this.markAsLiked, this);
-			this.record.removeObserverForField(this, 'LikeCount', this.updateLikeCount, this);
 			this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
+			this.stopListeningForLikeAndFavoriteChanges(this.record);
 			this.removeAdditionalRecordListeners(this.record);
 		}
 
@@ -466,11 +422,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             'updated': this.recordUpdated,
 	        'destroy': this.wasDeleted
         });
-		this.record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
-		this.record.addObserverForField(this, 'liked', this.markAsLiked, this);
-		this.record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
+
 		this.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 		this.addAdditionalRecordListeners(r);
+		this.listenForLikeAndFavoriteChanges(r);
 		return true;
 	},
 
