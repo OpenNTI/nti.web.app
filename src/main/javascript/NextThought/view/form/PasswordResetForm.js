@@ -36,7 +36,12 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 				},{
 					name: 'password',
 					placeholder: 'New Password',
-					minLength: 5
+					validator: function(value){
+						if(value.length >= 5){
+							return true;
+						}
+						throw 'Password is too short.';
+					}
 				}, {
 					name: 'password-verify',
 					placeholder: 'Verify New Password',
