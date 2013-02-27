@@ -251,7 +251,7 @@ Ext.define('NextThought.model.Note', {
 		me.set('inReplyTo', data.inReplyTo);
 		me.set('references', data.references);
 		me.set('style',data.style);
-		me.set('AdjustedReferenceCount', data.AdjustedReferenceCount);
+		me.set('ReferencedByCount', data.ReferencedByCount);
 		me.resumeEvents();
 	}
 });
