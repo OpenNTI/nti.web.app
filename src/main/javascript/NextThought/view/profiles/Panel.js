@@ -187,7 +187,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 
-	onScroll: function(e,dom){
+	onScroll: function(e){
 		var activeTab = this.tabs.activeTab,
 			el, height;
 
@@ -203,7 +203,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		el = e.getTarget();
 		height = Ext.fly(el).getHeight();
 
-		if(el.scrollTop + height >= el.scrollHeight){
+		if(el.scrollTop + height >= el.scrollHeight && activeTab && activeTab.onScrolledToBottom){
 			activeTab.onScrolledToBottom();
 		}
 	},
