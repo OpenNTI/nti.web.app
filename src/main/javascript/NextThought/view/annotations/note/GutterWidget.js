@@ -77,6 +77,8 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			me.text.update(r.getBodyText());
 		}
 
+		r.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
+
 		me.mon(r,{
 			scope: this,
 			single: true,
@@ -85,6 +87,9 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		});
 	},
 
+	updateCount: function(){
+		this.replyCount.update(this.record.getReplyCount());
+	},
 
 	fillInUser: function(user){
 		if(!this.rendered){
@@ -110,6 +115,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 
 	onDelete: function(){
+		this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 		this.record.destroy();
 	},
 

@@ -1,8 +1,9 @@
 describe("Note Tests", function() {
 
-	function createNote(id, placeholder, children){
+	function createNote(id, placeholder, children, referenceCount){
 		var note = Ext.create('NextThought.model.Note', {
-			NTIID: id
+			NTIID: id,
+			ReferencedByCount: referenceCount
 		});
 		note.placeholder = placeholder;
 		note.children = children ? children.slice() : undefined;
@@ -149,53 +150,39 @@ describe("Note Tests", function() {
 
 	});
 
+
 	describe('replyCount', function(){
 
-		it('checks adding a reply', function(){
-			var c1 = createNote('child1', false),
-				root = createNote('Root', false);
+		it('checks if replies have been loaded', function(){
+			var child1 = createNote('c1', false),
+				note = createNote('n1', true, [child1], 3);
 
-			expect(root.getReplyCount()).toEqual(0);
-			//Simulate that a reply c1 was added
-			root.adjustReplyCountOnChange(c1.getId(), true);
-			expect(root.getReplyCount()).toEqual(1);
+			expect(note.get('ReferencedByCount')).toEqual(3);
+			//For a placeholder, it's been loaded, if all its children have.
+			expect(note.hasRepliesBeenLoaded(note)).toBeFalsy();
 		});
 
-		it('checks removing a reply', function(){
-			var c1 = createNote('child1', false),
-				root = createNote('Root', false),
-				c2 = createNote('child2', false);
+		it('checks counting children', function(){
+			var grandChild1 = createNote('gcn', false),
+				grandChild2 = createNote('gcn2', false),
+				grandkids = [grandChild1, grandChild2],
+				child1 = createNote('cn', false),
+				child2 = createNote('cp', true, grandkids),
+				kids = [child1, child2],
+				rootP = createNote('missing-root', true, kids);
 
-			expect(root.getReplyCount()).toEqual(0);
-
-			//Simulate that a reply c1, c2 were added, which triggered replyCount to update.
-			root.adjustReplyCountOnChange(c1.getId(), true);
-			root.adjustReplyCountOnChange(c2.getId(), true);
-			expect(root.getReplyCount()).toEqual(2);
-
-			//Simulate that c1 was removed
-			root.adjustReplyCountOnChange(c1.getId(), false);
-			expect(root.getReplyCount()).toEqual(1);
+			expect(rootP.countChildren()).toEqual(3);
 		});
 
-		it('if we decrement the count only once when a reply is removed', function(){
-			var c1 = createNote('child1', false),
-				root = createNote('Root', false),
-				c2 = createNote('child2', false);
+		it('checks summing all referenceCount', function(){
+			var child1 = createNote('c1', false),
+				child2 = createNote('c2', false, [], 3),
+				child3 = createNote('c3', false, [],2),
+				kids = [child1, child2, child3],
+				rootP = createNote('missing-root', true, kids);
 
-			expect(root.getReplyCount()).toEqual(0);
-
-			//Simulate that a reply c1, c2 were added, which triggered replyCount to update.
-			root.adjustReplyCountOnChange(c1.getId(), true);
-			root.adjustReplyCountOnChange(c2.getId(), true);
-			expect(root.getReplyCount()).toEqual(2);
-
-			//Simulate that c1 was removed
-			root.adjustReplyCountOnChange(c1.getId(), false);
-			//Another call with the same id, shouldn't change the count, since the child item was already removed.
-			root.adjustReplyCountOnChange(c1.getId(), false);
-
-			expect(root.getReplyCount()).toEqual(1);
+			delete rootP.raw.ReferencedByCount;
+			expect(rootP.sumReferenceByCount(rootP)).toEqual(8);
 		});
 	});
 

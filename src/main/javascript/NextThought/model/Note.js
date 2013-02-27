@@ -47,8 +47,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false},
-		{ name: 'AdjustedReferenceCount', type:'int', persist: false, convert: function(v,r){return r.getRefsCount(v);}}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
 	],
 
 	/*
@@ -160,22 +159,26 @@ Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-	getRefsCount: function(v){
-		if(Ext.isNumber(v)){
-			return v;
-		}else{
-			return this.placeholder ? this.countChildren() :
-				(this.raw.hasOwnProperty('ReferencedByCount') && !this.parent) ? this.get('ReferencedByCount') : 0;
-		}
-	},
-
 	getReplyCount: function(){
-		if(this.placeholder && this.isTopLevel()){
+		if(this.hasRepliesBeenLoaded(this)){
 			return this.countChildren();
 		}
-		return  this.get('AdjustedReferenceCount') || 0;
+		return this.sumReferenceByCount();
 	},
 
+	/**
+	 * 'AdjustedReferenceCount' is a derived field. Thus, we need to implement at least a getter fn.
+	 * When it's triggered, things that are listening to it will update their replyCount.
+	 */
+	getAdjustedReferenceCount: Ext.emptyFn,
+
+	hasRepliesBeenLoaded: function(rec){
+		if(!rec.placeholder){
+			return rec.get('ReferencedByCount') === 0 || ((rec.children || []).length > 0);
+		}
+
+		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
+	},
 
 	countChildren: function(){
 		function allDescendants (rec) {
@@ -191,32 +194,21 @@ Ext.define('NextThought.model.Note', {
 		return sum;
 	},
 
-	/*
-	*   NOTE: We set the initial replyCount based on what we get from the server.
-	*   As replies gets added and removed we want to keep track of those changes.
-	*   Mainly we want to ensure that a reply get added ONLY once and get
-	*   removed ONLY once, despite how many times this function could be called on a change.
-	*   Thus 'this._incomingReplies' and  'this._alreadyDeletedReplies' are used to ensure the condition.
-	 */
-	adjustReplyCountOnChange: function(replyId, added){
-		if( !this._incomingReplies){ this._incomingReplies = {}; }
-		if( !this._alreadyDeletedReplies){ this._alreadyDeletedReplies = {}; }
+	sumReferenceByCount: function(rec){
+		var sum = 0;
+		if(!rec){
+			rec = this;
+		}
 
-		var count = this.get('AdjustedReferenceCount') || 0,
-			newCount = added ? count + 1 : count - 1;
-		if(!this._incomingReplies[replyId] && added){
-			this.set('AdjustedReferenceCount', newCount);
-			this._incomingReplies[replyId] = true;
+		if(rec.raw.hasOwnProperty('ReferencedByCount')){
+			return rec.get('ReferencedByCount') + (rec.parent ? 1:0);
 		}
-		else if( this._incomingReplies[replyId] && !added ){
-			this.set('AdjustedReferenceCount', newCount);
-			delete this._incomingReplies[replyId];
-			this._alreadyDeletedReplies[replyId]= true;
-		}
-		else if(!added && !this._alreadyDeletedReplies[replyId]){
-			this.set('AdjustedReferenceCount', newCount);
-			this._alreadyDeletedReplies[replyId]= true;
-		}
+
+		Ext.Array.each((rec.children || []), function(a){
+			sum += rec.sumReferenceByCount(a);
+		});
+
+		return sum;
 	},
 
 	debugString: function(){

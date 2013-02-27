@@ -787,8 +787,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		while(root && root.parent){root = root.parent;}
 
 		if(root){
-			root.adjustReplyCountOnChange(r.getId(), added);
-//			root.fireEvent('count-updated');
+			root.notifyObserversOfFieldChange('AdjustedReferenceCount');
 		}
 	},
 
@@ -830,7 +829,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	onDelete: function(){
 		this.record.destroy();
-		this.adjustRootsReferenceCount(this.record, false);
 	},
 
 

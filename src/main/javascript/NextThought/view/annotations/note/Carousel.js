@@ -248,8 +248,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var me = this,
 		myWindow = me.up('window');
 
-		if(me.record){ me.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateReplyCount, this); }
-
 		//Don't let the user click the same item again
 		if(sender && this.down('[selected=true]') === sender){
 			return;
@@ -270,13 +268,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		myWindow.recordSelected(rec);
 
 		me.showAsSelected(rec);
-		me.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateReplyCount, this);
-	},
-
-	updateReplyCount: function(){
-		if(this.down('[selected=true]')){
-			this.down('[selected=true]').updateCount();
-		}
 	},
 
 	prefetchNext: function(){

@@ -98,6 +98,11 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		}
 	},
 
+	onDelete: function(){
+		this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
+		this.callParent(arguments);
+	},
+
 	openWindow: function(replyToId, isEdit){
 		if(Ext.isArray(replyToId)){
 			replyToId = replyToId.slice(-1);
@@ -217,6 +222,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		el = this.setupMultiGutterDom(dom);
 
+		this.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
+
 		UserRepository.getUser(creator, function(u){
 			var url = u.get('avatarURL'),
 				name = u.getName(),
@@ -227,7 +234,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		}, this);
 
 		return el;
+	},
+
+	updateCount: function(){
+		var replyCountEl = this.multiGutterWidget.down('.reply-count');
+		if(replyCountEl){
+			replyCountEl.update(this.record.getReplyCount());
+		}
 	}
-
-
 });
