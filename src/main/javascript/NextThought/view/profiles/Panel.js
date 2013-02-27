@@ -116,7 +116,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			url;
 
 		if( params ){
-			tab = [tab,params].join('/');
+			tab = [tab,params];
 		}
 
 		url = this.user.getProfileUrl(tab);
