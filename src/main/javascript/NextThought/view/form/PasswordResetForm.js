@@ -38,6 +38,9 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 					placeholder: 'New Password',
 					//minLength: 5, // validator doesn't get called if this is set, and the value is less than
 					validator: function(value){
+						if(!Ext.String.trim(value)){
+							throw "Password can't be all whitespace.";
+						}
 						if(value.length >= 5){
 							return true;
 						}
