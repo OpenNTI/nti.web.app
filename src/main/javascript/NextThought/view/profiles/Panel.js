@@ -513,7 +513,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	editMeta: function(e){
 		var t = e.getTarget('[data-field]',null,true),
 			field = Ext.fly(t).getAttribute('data-field'),
-			value = this.userObject.data[field] || '',
+			value = this.userObject.get(field) || '',
 			ed = this.metaEditor;
 
 		if(e.getTarget('a[href]')){
