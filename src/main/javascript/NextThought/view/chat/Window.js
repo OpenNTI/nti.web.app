@@ -89,6 +89,10 @@ Ext.define('NextThought.view.chat.Window', {
 			this.down('chat-entry').disable();
 			this.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
 		} else{
+			// for empty chat, remove all notifications.
+			if(Ext.isEmpty(this.query('chat-log-entry'))){
+				Ext.each(this.query('chat-notification-entry'), function(el){ el.destroy(); });
+			}
 			this.down('chat-entry').enable();
 		}
 

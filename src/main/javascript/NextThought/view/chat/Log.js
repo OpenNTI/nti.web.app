@@ -218,7 +218,7 @@ Ext.define('NextThought.view.chat.Log', {
 
 	clearChatStatusNotifications: function(){
 		var ns = this.query('chat-notification-status'), me = this;
-		if(ns.length > 0){ Ext.Array.each(ns, function(n){ me.remove(n); }); }
+		Ext.Array.each(ns, function(n){ me.remove(n); });
 	},
 
 	shouldAddTimestampBeforeMessage: function(msg){
