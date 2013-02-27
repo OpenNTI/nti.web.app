@@ -72,7 +72,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(!h){return;}
 
 		this.mon(this.titleEl,'click', this.goToPost,this);
-		this.mon(this.commentEl,'click', this.goToPostComments,this);
+		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 	},
 
