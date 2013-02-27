@@ -68,6 +68,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(!h){return;}
 
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		this.bodyEl.selectable();
 	},
 
 

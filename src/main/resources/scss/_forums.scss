@@ -15,82 +15,86 @@
 			cursor: pointer;
 		}
 
-		.body {
-			.entry {
-				padding: 30px 20px;
-				border: 0 solid #f1f1f1;
-				border-width: 1px 0 0 0;
-				position: relative;
+		.post-view .entry {
+			//.controls { top: -1px; }
+			border-width: 0;
+		}
+		.entry {
+			padding: 30px 20px;
+			border: 0 solid #f1f1f1;
+			border-width: 1px 0 0 0;
+			position: relative;
 
-				.controls {
-					position: absolute;
-					right: 0;
-					top: 0;
-					@include like-and-favorite;
-				}
-				.title {
-					color: $primary-grey;
-					font: normal 300 28px/28px $font;
-					padding-bottom: 20px;
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					cursor: pointer;
-				}
-				.meta,
-				.foot {
-					font: normal 400 14px/14px $font;
-					color: $tertiary-grey;
+			.controls {
+				position: absolute;
+				right: 0;
+				top: 0;
+				@include like-and-favorite;
+			}
+			.title {
+				color: $primary-grey;
+				font: normal 300 28px/28px $font;
+				padding-bottom: 20px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				cursor: pointer;
+			}
+			.meta,
+			.foot {
+				font: normal 400 14px/14px $font;
+				color: $tertiary-grey;
 
-					.state,
-					.comment-count { color: $primary-blue; }
-					& > span{
-						&::before{
+				.state,
+				.comment-count { color: $primary-blue; }
+				& > span{
+					&::before{
+						color: $tertiary-grey;
+						font-weight: 600;
+						position: static;
+						content: '\00B7';
+						vertical-align: middle;
+						display: inline;
+						padding: 0 0.6em;
+						background: none;
+					}
+
+					.tag:last-of-type::after,
+					&:empty::before,
+					&:first-of-type::before {
+						content: '';
+						display: none;
+					}
+
+					.tag{
+						display: inline-block;
+						white-space: nowrap;
+
+						&::after {
 							color: $tertiary-grey;
-							font-weight: 600;
 							position: static;
-							content: '\00B7';
-							vertical-align: middle;
+							content: ', ';
 							display: inline;
-							padding: 0 0.6em;
-							background: none;
-						}
-
-						.tag:last-of-type::after,
-						&:empty::before,
-						&:first-of-type::before {
-							content: '';
-							display: none;
-						}
-
-						.tag{
-							display: inline-block;
-							white-space: nowrap;
-
-							&::after {
-								color: $tertiary-grey;
-								position: static;
-								content: ', ';
-								display: inline;
-								padding: 0 0.25em 0 0.1em;
-							}
+							padding: 0 0.25em 0 0.1em;
 						}
 					}
 				}
-
-				.body {
-					margin: 20px 0;
-					font: normal 400 14px/28px $font;
-
-					a {&:link,&:active,&:visited{
-						color: $primary-blue;
-						text-decoration: none;
-					}}
-				}
-				.foot {
-					margin: 40px 0;
-				}
 			}
+
+			.body {
+				@include text-content;
+				margin: 20px 0;
+				font: normal 400 14px/28px $font;
+
+				a {&:link,&:active,&:visited{
+					color: $primary-blue;
+					text-decoration: none;
+				}}
+			}
+			.foot {
+				margin: 40px 0;
+			}
+
 		}
 	}
 }
