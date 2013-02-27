@@ -59,7 +59,14 @@ Ext.define('NextThought.store.FriendsList',{
 	constructor: function(){
 		var r = this.callParent(arguments);
 
-		this.on('write', this.onWrite);
+		this.on({
+			scope: this,
+			write: this.onWrite,
+			add: this.fireContactsChanged,
+			remove: this.fireContactsChanged,
+			update: this.fireContactsChanged,
+			load: this.fireContactsChanged
+		});
 
 		return r;
 	},
@@ -71,6 +78,12 @@ Ext.define('NextThought.store.FriendsList',{
 				store.remove(record);
 			});
 		}
+	},
+
+
+	fireContactsChanged: function(){
+		console.log('firing contacts changed');
+		this.fireEvent('contacts-changed', this);
 	},
 
 

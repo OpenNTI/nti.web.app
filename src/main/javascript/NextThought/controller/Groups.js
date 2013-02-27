@@ -101,10 +101,9 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
-		store.on('load', this.publishGroupsData, this);
+		store.on('contacts-changed', this.publishGroupsData, this);
 		store.on({
 			scope: this,
-			//datachanged: this.publishGroupsData,
 			load: this.friendsListsLoaded,
 			add: this.friendsListsAdded,
 			remove: this.friendsListRemoved //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
