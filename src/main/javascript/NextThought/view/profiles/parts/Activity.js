@@ -54,7 +54,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			Ext.Error.raise('No user object!');
 		}
 
-		s.proxy.url = this.user.getLink('Activitys');
+		s.proxy.url = this.user.getLink('Activity');
 		if(!s.proxy.url){
 			//don't attempt to do anything if no url
 			s.setProxy('memory');
