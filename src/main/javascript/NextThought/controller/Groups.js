@@ -29,7 +29,9 @@ Ext.define('NextThought.controller.Groups', {
 		{ ref: 'contactsTab', selector: 'contacts-tabs-panel[source="contacts"]'},
 		{ ref: 'followingTab', selector: 'contacts-tabs-panel[source="following"]'},
 		{ ref: 'listsTab', selector: 'contacts-tabs-panel[source="lists"]'},
-		{ ref: 'groupsTab', selector: 'contacts-tabs-panel[source="groups"]'}
+		{ ref: 'groupsTab', selector: 'contacts-tabs-panel[source="groups"]'},
+		{ ref: 'accountListsTab', selector: '#my-lists'},
+		{ ref: 'accountGroupsTab', selector: '#my-groups'}
 	],
 
 
@@ -99,14 +101,26 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
+		store.on('load', this.publishGroupsData, this);
 		store.on({
 			scope: this,
-			load: this.publishGroupsData,
-			add: this.publishGroupsData, //More intelligence coming...
-			remove: this.publishGroupsData //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
+			//datachanged: this.publishGroupsData,
+			load: this.friendsListsLoaded,
+			add: this.friendsListsAdded,
+			remove: this.friendsListRemoved //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
 		});
 		store.proxy.url = getURL(coll.href);
 		store.load();
+	},
+
+
+	getGroupContainers: function(){
+		return [this.getGroupsTab(), this.getAccountGroupsTab()];
+	},
+
+
+	getListContainers: function(){
+		return [this.getListsTab(), this.getAccountListsTab()];
 	},
 
 
@@ -141,7 +155,10 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	getMyContactsId: function(){
-		return Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN,$AppConfig.username);
+		if(!this.myContactsId){
+			this.myContactsId = Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN,$AppConfig.username);
+		}
+		return this.myContactsId;
 	},
 
 
@@ -151,13 +168,8 @@ Ext.define('NextThought.controller.Groups', {
 			rec = store.findRecord('Username',id,0,false,true,true),
 			contacts = [];
 
-		//TODO why reload here, createGroupUnguarded does a load
-		function finish(){
-			store.reload();
-		}
-
 		if(!rec){
-			this.createGroupUnguarded('My Contacts', id, store.getContacts(), finish);
+			this.createGroupUnguarded('My Contacts', id, store.getContacts());
 		}
 	},
 
@@ -214,118 +226,109 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	maybePublishGroupsAndLists: function(groups, lists){
-		if(this.publishingGroups){
-			console.log('Deferring groups publication');
-			this.groupsNeedRepublished = true;
+	isPresentableFriendsList: function(fl){
+		var list, id;
+
+		if(fl.get('Username') === this.getMyContactsId()){
 			return false;
 		}
 
-		this.publishingGroups = true;
-		this.groupsNeedRepublished = false;
-		console.log('Publishing groups');
-		this.publishGroupsAndLists(groups, lists, function(){
-			console.log('group publication complete');
-			this.publishingGroups = false;
-			if(this.groupsNeedRepublished){
-				console.log('Will republish groups');
-				this.maybePublishGroupsAndLists(groups, lists);
+		//TODO still need to do this everyone check
+		list = fl.get('friends');
+		if(list.length === 1 && list[0] === 'Everyone'){
+			id = ParseUtils.parseNtiid(fl.getId());
+			if(id.specific.provider === 'system'){
+				return false;
 			}
-		});
+		}
+
 		return true;
 	},
 
 
-	publishGroupsAndLists: function(groups, lists, onComplete){
-		var store = this.getFriendsListStore(), me = this,
-			groupCmps = [], listCmps = [], remaining = 0,
-			addedCmps = [], contactsId = this.getMyContactsId();
+	cmpConfigForRecord: function(rec){
+		return {title: rec.getName(), associatedGroup: rec}
+	},
 
-		//First we build up a list of the group and list cmps
-		//that will be added (these are the sections that can be collapsed)
-		store.each(function(group){
-			var id = ParseUtils.parseNtiid(group.getId()),
-				list = group.get('friends'), name, target;
 
-			if(list.length === 1 && list[0] === 'Everyone'
-				&& id.specific.provider === 'zope.security.management.system_user'){
-				return;
+	friendsListsAdded: function(store, records){
+		var me = this;
+
+		console.log('FLs added', arguments);
+
+		Ext.Array.each(records, function(rec){
+			var containers, idx, i=0;
+			if(!this.isPresentableFriendsList(rec)){
+				return; //keep going
 			}
 
-			name = group.getName();
+			containers = rec.isDFL ? this.getGroupContainers() : this.getListContainers();
 
-			//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
-			if(group.get('Username')===contactsId){
-				group = null;
-				//lets just not show this in the view we now have the overall view in place.
-				return;
-			}
-			target = group.isDFL ? groupCmps : listCmps;
-			target.push({title: name, associatedGroup: group});
+			Ext.Array.each(containers, function(container){
+				var displayedRecords = Ext.Array.pluck(container.query('[associatedGroup]'), 'associatedGroup'),
+					collection = new Ext.util.MixedCollection(),
+					idx = 0;
+
+				//We create a mixed collection of the cmps records
+				//and find the insertion location using the stores
+				//comparator
+				collection.addAll(displayedRecords);
+				idx = collection.findInsertionIndex(rec, store.generateComparator());
+
+				container.add(idx, me.cmpConfigForRecord(rec));
+			});
+
+		}, this);
+	},
+
+
+	friendsListRemoved: function(store, record){
+		var containers = record.isDFL ? this.getGroupContainers() : this.getListContainers();
+		console.log('FL removed', arguments);
+
+		Ext.Array.each(containers, function(container){
+			Ext.Array.each(container.query('[associatedGroup]'), function(c){
+				if(c.associatedGroup === record){
+					c.destroy();
+				}
+			});
 		});
+	},
 
-		//Now we need to actually add the components into the view.  we suspend layouts here
-		//to cut down on work
-		groups.removeAll(true);
-		lists.removeAll(true);
 
-		me.getGroupsTab().removeAll(true);
-		me.getListsTab().removeAll(true);
+	friendsListsLoaded: function(store, records, successful){
+		var groupsToAdd = [], listsToAdd = [], me = this;
 
-		//This part is asynchronous b/c we need to resolve users
-		//when we are complete we need to unsuspend and layout
-		function maybeCallback(){
-			if(remaining <= 0){
-				Ext.callback(onComplete, me);
-				return true;
-			}
-			return false;
-		}
-
-		//Add the contactpanels
-		Ext.Array.push(addedCmps, me.getGroupsTab().add(Ext.clone(groupCmps)));
-		Ext.Array.push(addedCmps, me.getListsTab().add(Ext.clone(listCmps)));
-		Ext.Array.push(addedCmps, groups.add(groupCmps));
-		Ext.Array.push(addedCmps, lists.add(listCmps));
-
-		remaining = addedCmps.length;
-
-		remaining = 0;
-		maybeCallback();
-
-/*		//We might be finished before we started.
-		//this is the case of no groups or lists to show
-		if( maybeCallback() ){
+		if(!successful){
+			console.warn('Friends list load callback was unsuccesful', arguments);
 			return;
 		}
+		console.log('FLs loaded', arguments);
 
-		//Now for each panel figure out what users we need to add,
-		//resolve them, add them, and then call finished if necessary
-		Ext.each(addedCmps, function(cmp){
-			var groupOrList = cmp.associatedGroup,
-				usersToAdd, creator = groupOrList.get('Creator');
-			if(cmp.setUsers && groupOrList){
-				usersToAdd = cmp.associatedGroup.get('friends').slice();
+		store.each(function(rec){
+			var target;
 
-				//We want dfls owners to look like members, even though they arent.
-				//but make sure if we own it we don't look like a member
-				if(groupOrList.isDFL && !isMe(creator)){
-					usersToAdd.push(creator);
-				}
-
-				//Now with dfls there are cases where the friends array may
-				//contain the appuser.  Make sure we strip that out
-				Ext.Array.remove(usersToAdd, $AppConfig.username);
-
-				UserRepository.getUser(usersToAdd, function(resolvedUsers){
-						cmp.setUsers(resolvedUsers);
-						remaining--;
-						maybeCallback();
-				});
-
+			if(!this.isPresentableFriendsList(rec)){
+				return; //keep going
 			}
-		});
-*/
+
+			target = rec.isDFL ? groupsToAdd : listsToAdd;
+			target.push(rec);
+		}, this);
+
+
+		function addRecordsToContainers(containers, records){
+			Ext.Array.each(containers, function(container){
+				container.removeAll(true);
+				container.add(Ext.Array.map(records, function(r){
+					return me.cmpConfigForRecord(r);
+				}));
+			});
+		}
+
+		//OK now create cmps and add them to the containers that care about them
+		addRecordsToContainers(this.getGroupContainers(), groupsToAdd);
+		addRecordsToContainers(this.getListContainers(), listsToAdd);
 	},
 
 
@@ -334,11 +337,11 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this,
 			store = me.getFriendsListStore(),
 			ct = Ext.getCmp('contacts-view-panel'),
-			people = Ext.getCmp('contact-list'),
-			lists = Ext.getCmp('my-lists'),
-			groups = Ext.getCmp('my-groups');
+			people = Ext.getCmp('contact-list');
 
-		if(!groups){
+		//TODO figure out how to use an event here and get rid of the
+		//bloody setTimout
+		if(!people){
 			setTimeout(function(){ me.publishGroupsData(); },10);
 			return;
 		}
@@ -346,9 +349,6 @@ Ext.define('NextThought.controller.Groups', {
 		//If there are no contacts or no friendslists other than omnipresent mycontacts group
 		//hence < 2. Show the coppa or empty view
 		if(store.getContacts().length === 0 && store.getCount() < 2){
-			groups.removeAll(true);
-			people.removeAll(true);
-			lists.removeAll(true);
 			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
 			return;
 		}
@@ -356,7 +356,6 @@ Ext.define('NextThought.controller.Groups', {
 		ct.getLayout().setActiveItem(0);
 
 		this.maybePublishContacts(people);
-		this.maybePublishGroupsAndLists(groups, lists);
 	},
 
 	presenceOfContactChanged: function(cmp){
@@ -449,29 +448,37 @@ Ext.define('NextThought.controller.Groups', {
 		var store = this.getFriendsListStore(),
 			contactsId = this.getMyContactsId(),
 			contacts = store.findRecord('Username',contactsId,0,false,true,true),
-			tracker = Globals.getAsynchronousTaskQueueForList(groupList);
+			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
+			oldContacts;
 
 		function finish(){
 			if(!tracker.pop()){
-				store.reload();
-			}
-
-			if(callback){
 				Ext.callback(callback);
 			}
 		}
 
+		function revertEditOnError(group, oldValue){
+			return function(){
+				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+				group.set('friends', oldValue);
+			};
+		}
+
+		//TODO simplify this further
 		if(!contacts.hasFriend(username) ){
 			//add one just in case the contacts group is already in the list...
 			if(groupList.length){
 				tracker.push({});
 			}
-			contacts.addFriend(username).saveField('friends', undefined ,finish);
+			oldContacts = contacts.get('friends').slice();
+			contacts.addFriend(username).saveField('friends', undefined ,finish, revertEditOnError(contacts, oldContacts));
 		}
 
 		Ext.each(groupList,function(g) {
+			var oldValue;
 			if( g.get('Username') !== contactsId && !g.hasFriend(username) ){
-				g.addFriend(username).saveField('friends', undefined ,finish);
+				oldValue = g.get('friends').slice();
+				g.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(g, oldValue));
 			}
 			else {
 				//skip it, we did this up front.
@@ -481,7 +488,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	deleteContact: function(user, groups,callback){
+	deleteContact: function(user, groups, callback){
 		var username = (user && user.isModel) ? user.get('Username') : user;
 		this.removeContact(null,username, callback);
 	},
@@ -490,24 +497,28 @@ Ext.define('NextThought.controller.Groups', {
 	removeContact: function(record, contact, callback){
 		var store = this.getFriendsListStore(),
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
-			count = Globals.getAsynchronousTaskQueueForList(store.getCount()),
-			modified = false;
+		count = Globals.getAsynchronousTaskQueueForList(store.getCount()); //Again with the funky task queue
 
 		function finish(){
-			if(!count.pop() && modified){
-				store.reload();
-			}
-
-			if(callback){
+			if(!count.pop()){
 				Ext.callback(callback);
 			}
 		}
 
+		function revertEditOnError(group, oldValue){
+			return function(){
+				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+				group.set('friends', oldValue);
+			};
+		}
+
 		function remove(record){
+			var oldValue;
 			if( record.hasFriend(userId) ){
-				modified = true;
-				record.removeFriend(userId).saveField('friends', undefined, finish);
-			} else {
+				oldValue = record.get('friends').slice();
+				record.removeFriend(userId).saveField('friends', undefined, finish, revertEditOnError(record, oldValue));
+			}
+			else{
 				finish();
 			}
 		}
@@ -691,10 +702,6 @@ Ext.define('NextThought.controller.Groups', {
 
 			if(idx >= 0){
 				store.removeAt(idx);
-			}
-			else{
-				console.warn('Falling back to expensive reload');
-				store.reload();
 			}
 		}
 

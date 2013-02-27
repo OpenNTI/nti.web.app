@@ -12,7 +12,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 	//Should be called from initComponent
 	constructor: function(){
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
-		this.on('afterRender', this.onCmpRendered, this);
+		this.on('beforeRender', this.onCmpRendered, this);
 	},
 
 	setupActions: function(group){
@@ -122,8 +122,15 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	updateFromModelObject: function(key, value){
-		var users = value ? value : key;
+		var users = value ? value : key,
+			model = this.getModelObject();
 		console.log('updating user container with new users');
+
+		users = users.slice();
+		if(model && model.isDFL){
+			users.push(model.get('Creator'));
+		}
+		Ext.Array.remove(users, $AppConfig.username);
 		UserRepository.getUser(users, this.setUsers, this);
 	},
 
@@ -202,15 +209,10 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 	//Users isn't very big here so do the naive thing
 	indexToInsertAt: function(users, newUser){
-		var idx = 0, me = this;
-		Ext.Array.each(users, function(u){
-			if(me.userSorterFunction(u, newUser) < 0){
-				idx++;
-				return true;
-			}
-			return false;
-		});
-		return idx;
+		var collection = new Ext.util.MixedCollection();
+		collection.addAll(users);
+
+		return collection.findInsertionIndex(newUser, this.userSorterFunction);
 	},
 
 	addCmpInSortedPosition: function(cmp){
