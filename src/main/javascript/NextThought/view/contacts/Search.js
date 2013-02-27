@@ -127,8 +127,8 @@ Ext.define('NextThought.view.contacts.Search',{
 	},
 
 	itemClicked: function(view,record,item){
-		var add = Ext.fly(item).down('img:not(.add)');
-		NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10,-18]);
+		var add = Ext.fly(item).down('.add');
+		NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10, -18]);
 	},
 
 	//We buffer this slightly to avoid unecessary searches
