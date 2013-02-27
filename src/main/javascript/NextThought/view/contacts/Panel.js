@@ -5,6 +5,8 @@ Ext.define('NextThought.view.contacts.Panel',{
 	defaultType: 'contacts-tabs-card',
 	autoScroll:true,
 
+	layout: 'auto',
+
 	reactToModelChanges: false,
 
 	mixins:{

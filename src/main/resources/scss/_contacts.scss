@@ -649,14 +649,26 @@ div.contact-buttons {
 			}
 		}
 
-		.x-panel-header-contact-grouping {
-			&.x-panel-header-horizontal{ padding:0; margin: 10px 0;}
+		.grouping-header{
+			margin: 10px 0;
 
-			.x-panel-header-text-contact-grouping{
+			.tools{
+				margin-top: 3px;
+				float: right;
+				.nti-tool-action{
+					display: inline-block;
+				}
+			}
+
+			span{
 				white-space: nowrap;
 				font: normal 500 18px/25px $font;
 				color: $primary-grey;
-				span { color: #b8b8b8; }
+			}
+
+			span.count{
+				padding-left: 4px;
+				color: #b8b8b8;
 			}
 		}
 

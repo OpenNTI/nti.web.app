@@ -270,14 +270,13 @@ Ext.define('NextThought.controller.Groups', {
 				var displayedRecords = Ext.Array.pluck(container.query('[associatedGroup]'), 'associatedGroup'),
 					collection = new Ext.util.MixedCollection(),
 					idx = 0;
-
 				//We create a mixed collection of the cmps records
 				//and find the insertion location using the stores
 				//comparator
 				collection.addAll(displayedRecords);
 				idx = collection.findInsertionIndex(rec, store.generateComparator());
 
-				container.add(idx, me.cmpConfigForRecord(rec));
+				container.insert(idx, me.cmpConfigForRecord(rec));
 			});
 
 		}, this);

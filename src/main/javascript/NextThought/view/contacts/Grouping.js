@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.contacts.Grouping',{
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-tabs-grouping',
 	requires: [
 		'NextThought.view.tool.Action',
@@ -13,6 +13,8 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 	ui: 'contact-grouping',
 	cls: 'contact-grouping',
+
+	layout: 'auto',
 
 	width: 700,
 	plain: true,
@@ -40,6 +42,25 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		]
 	}),
 
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
+
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: 'grouping-header',
+			cn: [{cls: 'tools'}, {tag: 'span', cls: 'name'}, {tag: 'span', cls: 'count'}]
+		},
+		{
+			id: '{id}-body',
+			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+		}
+	]),
+
+	renderSelectors: {
+		toolsEl: '.grouping-header .tools',
+		nameEl: '.grouping-header .name',
+		countEl: '.grouping-header .count'
+	},
 
 	initComponent: function(){
 		var chatTool;
@@ -47,19 +68,44 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		this.setTitle(this.title);
 		this.setupActions(this.associatedGroup);
 
-		chatTool = this.down('nti-tool-action[chat]');
-		chatTool.assignExtAction(this.groupChatAction);
+		this.tools = Ext.Array.map(this.tools, function(t){
+			return Ext.widget(t);
+		});
+
+		Ext.Array.each(this.tools, function(t){
+			if(t.chat){
+				this.chatTool = t;
+			}
+			else if(t.settings){
+				this.settingsTool = t;
+			}
+		}, this);
+
+		this.chatTool.assignExtAction(this.groupChatAction);
 		if(this.groupChatAction.isHidden()){
-			chatTool.hide();
+			this.chatTool.hide();
 		}
 
+		this.mon(this.settingsTool,'click',this.showMenu,this);
 
-		this.mon(this.down('nti-tool-action[settings]'),'click',this.showMenu,this);
 		this.on('destroy',this.cleanupActions,this);
 
 		this.on('add',this.updateStuff,this,{buffer:100});
 		this.on('remove',this.updateStuff,this,{buffer:100});
+		this.on({
+			scope: this,
+			add: this.updateLayout,
+			remove: this.updateLayout
+		})
 		this.mixins.userContainer.constructor.apply(this, arguments);
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		Ext.Array.each(this.tools, function(t){
+			t.render(this.toolsEl);
+		}, this);
 	},
 
 
@@ -73,9 +119,9 @@ Ext.define('NextThought.view.contacts.Grouping',{
 			this.on('afterrender',Ext.bind(this.setTitle,this,[newTitle]));
 		} else {
 			this.initialConfig.title = newTitle || this.initialConfig.title;
-			newTitle = this.titleTpl.apply([newTitle||this.initialConfig.title,this.items.getCount()]);
+			this.nameEl.update(newTitle||this.initialConfig.title);
+			this.countEl.update(this.items.getCount()+'');
 		}
-		return this.callParent([newTitle]);
 	},
 
 
@@ -124,7 +170,6 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	showAll: function(){
 		this.el.addCls('show-all');
 		this.updateMore();
-		this.updateLayout();
 	}
 
 });
