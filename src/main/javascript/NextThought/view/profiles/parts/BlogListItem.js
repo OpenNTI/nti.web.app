@@ -13,7 +13,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
-			{ tag:'span', cls: 'state', html: 'Private'}
+			{ tag:'span', cls: 'state', html: 'Draft'}
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
@@ -27,11 +27,13 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	]),
 
 
-	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'See More', href:'#'}]),
+	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
 
 
 	renderSelectors: {
 		bodyEl: '.body',
+		titleEl: '.title',
+		commentsEl: '.comment-count',
 		liked: '.controls .like',
 		favorites: '.controls .favorite'
 	},
@@ -39,8 +41,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.addEvents(['show-post']);
-		this.enableBubble(['show-post']);
+		this.addEvents(['show-comments','show-post']);
+		this.enableBubble(['show-comments','show-post']);
 	},
 
 
@@ -69,7 +71,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		var h = this.record.get('headline');
 		if(!h){return;}
 
-		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		this.mon(this.titleEl,'click', this.goToPost,this);
+		this.mon(this.commentEl,'click', this.goToPostComments,this);
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 	},
 
 
@@ -92,11 +96,17 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	},
 
 
-	generateClickHandler: function(){},
+	mapWhiteboardData: function(){},
 
 
 	goToPost: function(e){
 		e.stopEvent();
 		this.fireEvent('show-post',this.record.get('ID'));
+	},
+
+
+	goToPostComments: function(e){
+		e.stopEvent();
+		this.fireEvent('show-comments',this.record.get('ID'));
 	}
 });
