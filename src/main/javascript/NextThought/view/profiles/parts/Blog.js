@@ -78,7 +78,15 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			this.mon(this.headerEl,'click',this.onNewPost,this);
 		}
 
-		this.mon(this.tab,'click',this.closePost, this);
+		this.mon(this.tab,'click',this.onTabClicked, this);
+	},
+
+
+	onTabClicked: function(){
+		//only close the post if we are visible
+		if(this.isVisible()){
+			this.closePost();
+		}
 	},
 
 
@@ -166,8 +174,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	getParams: function(){
-		console.debug('getting params');
-		return '';
+		var a = (this.activePost||{}).record;
+		return a ? a.get('ID') : undefined;
 	},
 
 
