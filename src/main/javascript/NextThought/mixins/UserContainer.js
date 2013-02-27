@@ -138,7 +138,6 @@ Ext.define('NextThought.mixins.UserContainer', {
 	setUsers: function(resolvedUsers){
 		var p,usersToAdd = [];
 
-		//For legacy online/offling meta groups
 		if(!Ext.isArray(resolvedUsers)) {
 			Ext.Object.each(resolvedUsers, function(n, u){ usersToAdd.push(u); });
 		}

@@ -101,9 +101,12 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
-		store.on('contacts-changed', this.publishGroupsData, this);
+		store.on('contacts-changed', this.publishContacts, this);
 		store.on({
 			scope: this,
+			'contacts-changed': this.publishContacts,
+			'contacts-added': this.contactsAdded,
+			'contacts-removed': this.contactsRemoved,
 			load: this.friendsListsLoaded,
 			add: this.friendsListsAdded,
 			remove: this.friendsListRemoved //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
@@ -183,7 +186,7 @@ Ext.define('NextThought.controller.Groups', {
 		this.publishingContacts = true;
 		this.contactsNeedRepublished = false;
 		console.log('publishing contacts');
-		this.publishContacts(contactList, function(){
+		this.doPublishContacts(contactList, function(){
 			console.log('contact publication complete');
 			this.publishingContacts = false;
 			if(this.contactsNeedRepublished){
@@ -195,7 +198,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	publishContacts: function(contactList, onComplete){
+	doPublishContacts: function(contactList, onComplete){
 		var me = this;
 		this.getResolvedContacts(function(friends){
 
@@ -332,7 +335,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	//It is unfortunate we have to synchonize this...
-	publishGroupsData: function(){
+	publishContacts: function(){
 		var me = this,
 			store = me.getFriendsListStore(),
 			ct = Ext.getCmp('contacts-view-panel'),
@@ -341,7 +344,7 @@ Ext.define('NextThought.controller.Groups', {
 		//TODO figure out how to use an event here and get rid of the
 		//bloody setTimout
 		if(!people){
-			setTimeout(function(){ me.publishGroupsData(); },10);
+			setTimeout(function(){ me.publishContacts(); },10);
 			return;
 		}
 
@@ -356,6 +359,73 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.maybePublishContacts(people);
 	},
+
+
+	contactsAdded: function(newContacts){
+		var me = this;
+		//TODO this needs to go away. We end up doing extra work when
+		//we get into this condition (its rare and timing related...)
+		if(this.publishingContacts){
+			this.maybePublishContacts();
+			return;
+		}
+
+		UserRepository.getUser(newContacts, function(users){
+			var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
+				offline = contacts.down('[offline]'),
+				online = contacts.down('[online]'),
+				map = { offline: offline, online: online },
+				contactsTab = me.getContactsTab(),
+				containers = [offline, online, contactsTab];
+
+				Ext.Array.each(containers, function(c){
+					c.suspendLayouts();
+				});
+
+				Ext.Array.each(users, function(user){
+					var presence = user.get('Presence'),
+						panel = map[presence.toLowerCase()];
+					contactsTab.addUser(user);
+					panel.addUser(user);
+				});
+
+				Ext.Array.each(containers, function(c){
+					c.resumeLayouts(true);
+				});
+		});
+	},
+
+
+	contactsRemoved: function(oldContacts){
+		//TODO this needs to go away. We end up doing extra work when
+		//we get into this condition (its rare and timing related...)
+		if(this.publishingContacts){
+			this.maybePublishContacts();
+			return;
+		}
+
+		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
+			offline = contacts.down('[offline]'),
+			online = contacts.down('[online]'),
+			containers = [offline, online, this.getContactsTab()];
+
+		Ext.Array.each(containers, function(c){
+			c.suspendLayouts();
+
+			Ext.Array.each(oldContacts, function(contact){
+				try{
+					c.removeUser(contact);
+				}
+				catch(e){
+					console.log('An error occured removing contact from container', contact, c, Globals.getError(e));
+				}
+			});
+
+			c.resumeLayouts(true);
+		});
+
+	},
+
 
 	presenceOfContactChanged: function(cmp){
 		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
