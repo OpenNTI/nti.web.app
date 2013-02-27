@@ -86,8 +86,7 @@ Ext.define('NextThought.view.contacts.Search',{
 
 		this.mon(Ext.getStore('FriendsList'),{
 			scope: this.view,
-			load: this.view.refresh,
-			datachanged: this.view.refresh
+			'contacts-changed': this.view.refresh
 		});
 
 		this.mon(this.down('simpletext'),{
