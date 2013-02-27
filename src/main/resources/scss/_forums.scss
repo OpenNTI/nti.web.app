@@ -46,7 +46,13 @@
 				color: $tertiary-grey;
 
 				.state,
-				.comment-count { color: $primary-blue; cursor: pointer; }
+				.comment-count {
+					color: $primary-blue;
+					&.draft {
+						color: $primary-red;
+					}
+				}
+				.comment-count {cursor: pointer;}
 				& > span{
 					&::before{
 						color: $tertiary-grey;
