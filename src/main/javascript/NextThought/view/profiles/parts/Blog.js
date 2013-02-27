@@ -4,12 +4,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
+		'NextThought.view.profiles.parts.BlogListItem',
 		'NextThought.view.profiles.parts.BlogPost'
 	],
 
 	layout: 'auto',
 	componentLayout: 'templated-container',
-	defaultType: 'profile-blog-post',
+	defaultType: 'profile-blog-list-item',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
@@ -128,33 +129,35 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	setParams: function(paramsString){
+	
+		var me = this,
+			s = me.store, r,
+			id = paramsString && decodeURIComponent(paramsString);
 
-		if(!this.rendered){
-			this.on('afterrender',Ext.bind(this.setParams,this,arguments),this,{single:true});
+		if(!me.rendered){
+			me.on('afterrender',Ext.bind(me.setParams,me,arguments),me,{single:true});
 			return;
 		}
 
-		var s = this.store, r,
-			id = paramsString && decodeURIComponent(paramsString);
 
 		console.debug('setting params',id);
-		this.closePost(true);
+		me.closePost(true);
 
 		if(!id){ return; }
 
 		r = s && s.findRecord('ID', id, 0, false, true, true);
 		if(r){
-			this.showPost(r);
+			me.showPost(r);
 			return;
 		}
 
 		r = {
-			url: this.user.getLink('Blog')+'/'+paramsString,
-			scope: this,
-			failure: function(){this.setParams(); alert('Could not load post');},
+			url: me.user.getLink('Blog')+'/'+paramsString,
+			scope: me,
+			failure: function(){me.setParams(); alert('Could not load post');},
 			success: function(resp){
 				var j = ParseUtils.parseItems( resp.responseText ).first();
-				this.showPost(j);
+				me.showPost(j);
 			}
 		};
 
@@ -168,25 +171,46 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
+	cleanPreviousPost: function(){
+		var post = this.activePost;
+		delete this.activePost;
+
+		if( post && !post.isDestroyed){
+			post.destroy();
+			return true;
+		}
+		return false;
+	},
+
+
 	closePost: function(leaveLocation){
-		if( this.activePost ){
-			this.activePost.destroy();
-			delete this.activePost;
-		}
-		if(leaveLocation !== true){
-			this.updateLocation();
-		}
 		this.listViewEl.show();
 		this.postViewEl.hide();
 		this.updateLayout();
+
+		this.cleanPreviousPost();
+
+		if(leaveLocation !== true){
+			this.updateLocation();
+		}
 	},
 
 
 	showPost: function(record){
-		console.debug(record);
 		this.listViewEl.hide();
 		this.postViewEl.show();
-		//Create Post Component, set renderTo:this.postViewEl
+
+		this.cleanPreviousPost();
+
+		this.activePost = Ext.widget('profile-blog-post',{
+			renderTo:this.postViewEl,
+			record: record,
+			listeners: {
+				scope: this,
+				destroy: this.closePost,
+				buffer: 1
+			}
+		});
 
 		this.updateLayout();
 	}

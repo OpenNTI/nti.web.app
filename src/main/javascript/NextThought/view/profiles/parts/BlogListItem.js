@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.profiles.parts.BlogPost',{
+Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	extend: 'Ext.Component',
-	alias: 'widget.profile-blog-post',
+	alias: 'widget.profile-blog-list-item',
 
 	mixins: {
 		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
@@ -39,6 +39,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.addEvents(['show-post']);
+		this.enableBubble(['show-post']);
 	},
 
 
@@ -77,11 +79,24 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	setContent: function(html){
-		this.bodyEl.update(html);
+		var snip = ContentUtils.getHTMLSnippet(html,300),
+			lastChild, appendTo = this.bodyEl;
+		this.bodyEl.update(snip||html);
+		if(snip){
+			lastChild = this.bodyEl.last();//this will not return text nodes
+			if(lastChild){ appendTo = lastChild; }
+
+			this.moreEl = this.moreTpl.append(appendTo,null,true);
+			this.mon(this.moreEl,'click', this.goToPost,this);
+		}
 	},
 
 
-	generateClickHandler: function(){}
+	generateClickHandler: function(){},
 
 
+	goToPost: function(e){
+		e.stopEvent();
+		this.fireEvent('show-post',this.record.get('ID'));
+	}
 });
