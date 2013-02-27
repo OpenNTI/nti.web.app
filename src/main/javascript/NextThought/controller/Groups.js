@@ -320,10 +320,12 @@ Ext.define('NextThought.controller.Groups', {
 
 		function addRecordsToContainers(containers, records){
 			Ext.Array.each(containers, function(container){
-				container.removeAll(true);
-				container.add(Ext.Array.map(records, function(r){
-					return me.cmpConfigForRecord(r);
-				}));
+				Ext.batchLayouts(function(){
+					container.removeAll(true);
+					container.add(Ext.Array.map(records, function(r){
+						return me.cmpConfigForRecord(r);
+					}));
+				});
 			});
 		}
 

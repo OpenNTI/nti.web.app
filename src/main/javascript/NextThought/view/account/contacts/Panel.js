@@ -43,8 +43,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 		this.on('nibClicked', this.nibClicked, this);
 		this.on('destroy',this.cleanupActions,this);
-		this.on('add',this.updateStuff,this,{buffer:100});
-		this.on('remove',this.updateStuff,this,{buffer:100});
+		this.on('add',this.updateStuff,this, {buffer:100});
+		this.on('remove',this.updateStuff,this, {buffer:100});
 		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 
 		if (this.rendered) {
-			this.getHeader().setTitle(this.title);
+			Ext.defer(function(){this.getHeader().setTitle(this.title)}, 1);
 		}
 		return this;
 	},

@@ -71,6 +71,14 @@ Ext.define('NextThought.store.FriendsList',{
 		return r;
 	},
 
+	//TODO make this a smart reload that requests new data with a proper last modified.
+	//If we receive more data we should merge it in appropriately.  Updating any existing objects
+	//whose last modified times are more recent, adding any new records and removing any records that
+	//should no longer exist. Not sure where all that behavour hooks in but it should occur on reloads.
+	reload: function(){
+		return this.callParent(arguments);
+	},
+
 	//Taken from PageItem store. move to subclass?
 	onWrite: function(store, info) {
 		if (info.action === 'destroy') {

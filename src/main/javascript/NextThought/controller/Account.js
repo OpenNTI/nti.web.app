@@ -189,8 +189,8 @@ Ext.define('NextThought.controller.Account', {
                 else {
 					store = this.getFriendsListStore();
 					if(store){
-						console.warn('Performing expensive load of friends list store.', store);
-						store.load();
+						console.warn('Performing expensive reload of friends list store.', store);
+						store.reload();
 					}
                     w.close();
                 }
