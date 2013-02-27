@@ -107,6 +107,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	goToPostComments: function(e){
 		e.stopEvent();
-		this.fireEvent('show-comments',this.record.get('ID'));
+		this.fireEvent('show-post',this.record.get('ID'),'comments');
 	}
 });

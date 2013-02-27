@@ -121,12 +121,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	updateLocation: function(postId){
-
+	updateLocation: function(postId,subsection){
 		var u = this.user,
-			hash, args=[this.title, postId];
+			hash, args=[this.title, postId, subsection];
 
-		if(!postId){args.pop();}
+		if(!subsection || !Ext.isString(subsection)){ args.pop(); }
+		if(!postId || !Ext.isString(postId)){args.pop();}
 
 		hash = u.getProfileUrl.apply(u,args);
 
@@ -137,16 +137,16 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	setParams: function(paramsString){
-	
-		var me = this,
-			s = me.store, r,
-			id = paramsString && decodeURIComponent(paramsString);
+		var me = this, id, r, s = me.store, sections;
 
 		if(!me.rendered){
 			me.on('afterrender',Ext.bind(me.setParams,me,arguments),me,{single:true});
 			return;
 		}
 
+		sections = (decodeURIComponent(paramsString)||'').split('/');
+
+		id = sections[0];
 
 		console.debug('setting params',id);
 		me.closePost(true);
@@ -155,17 +155,18 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		r = s && s.findRecord('ID', id, 0, false, true, true);
 		if(r){
-			me.showPost(r);
+			sections[0] = r;
+			me.showPost.apply(me,sections);
 			return;
 		}
 
 		r = {
-			url: me.user.getLink('Blog')+'/'+paramsString,
+			url: me.user.getLink('Blog')+'/'+encodeURIComponent(id),
 			scope: me,
 			failure: function(){me.setParams(); alert('Could not load post');},
 			success: function(resp){
-				var j = ParseUtils.parseItems( resp.responseText ).first();
-				me.showPost(j);
+				sections[0] = ParseUtils.parseItems( resp.responseText ).first();
+				me.showPost.apply(me,sections);
 			}
 		};
 
@@ -213,6 +214,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.activePost = Ext.widget('profile-blog-post',{
 			renderTo:this.postViewEl,
 			record: record,
+			selectedSections: Ext.Array.clone(arguments).splice(1),
 			listeners: {
 				scope: this,
 				destroy: this.closePost,

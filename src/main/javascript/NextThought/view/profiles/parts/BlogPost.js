@@ -69,6 +69,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		this.bodyEl.selectable();
+
+		if(this.selectedSections){
+			console.debug('Do something with this/these:',this.selectedSections);
+		}
 	},
 
 
