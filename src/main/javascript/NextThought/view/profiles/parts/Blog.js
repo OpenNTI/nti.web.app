@@ -144,14 +144,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			return;
 		}
 
-		sections = (decodeURIComponent(paramsString)||'').split('/');
+		sections = ((paramsString && decodeURIComponent(paramsString))||'').split('/');
 
 		id = sections[0];
 
 		console.debug('setting params',id);
 		me.closePost(true);
 
-		if(!id){ return; }
+		if(!id || !paramsString){ return; }
 
 		r = s && s.findRecord('ID', id, 0, false, true, true);
 		if(r){
