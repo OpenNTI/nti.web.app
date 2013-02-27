@@ -36,6 +36,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 				},{
 					name: 'password',
 					placeholder: 'New Password',
+					//minLength: 5, // validator doesn't get called if this is set, and the value is less than
 					validator: function(value){
 						if(value.length >= 5){
 							return true;
