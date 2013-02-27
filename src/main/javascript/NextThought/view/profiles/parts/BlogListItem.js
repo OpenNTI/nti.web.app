@@ -13,7 +13,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
-			{ tag:'span', cls: 'state', html: 'Draft'}
+			{ tag:'span', cls: 'state draft', html: 'Draft'}
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
