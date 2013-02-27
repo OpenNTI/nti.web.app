@@ -249,7 +249,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	cmpConfigForRecord: function(rec){
-		return {title: rec.getName(), associatedGroup: rec}
+		return {title: rec.getName(), associatedGroup: rec};
 	},
 
 

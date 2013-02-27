@@ -203,7 +203,7 @@ Ext.define('NextThought.util.Parsing',{
 	 */
 
 	/*! @source https://gist.github.com/1129031 */
-	/* global document, DOMParser */
+	/* global document, DOMParser, console */
 	(function(DOMParser) {
 	    "use strict";
 	    var DOMParser_proto = DOMParser.prototype
