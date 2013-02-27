@@ -510,7 +510,7 @@ Ext.define('NextThought.model.Base', {
 
 				//it worked, reset the dirty flag, and reset the field
 				//because the server may have sanitized it.
-				this.dirty = false;
+				this.commit();
 
 				if (successCallback){
 					Ext.callback(successCallback, null, [fieldName, sanitizedValue, me, newMe]);
