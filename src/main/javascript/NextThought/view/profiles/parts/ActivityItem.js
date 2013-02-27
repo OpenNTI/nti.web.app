@@ -382,7 +382,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 								cn: [
 									{ cls: 'reply', html: 'Reply' },
 									{ cls: 'edit', html: 'Edit' },
-									{ cls: 'flag', html: 'Report' },
+									{ cls: 'flag', html: 'Flag as Inappropiate' },
 									{ cls: 'delete', html: 'Delete' }
 								]
 							},

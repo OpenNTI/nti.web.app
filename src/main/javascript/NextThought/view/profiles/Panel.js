@@ -34,7 +34,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 					{ cn: [
 						{tag: 'span', 'data-field':'role', 'data-placeholder': 'Role'},
 						{tag: 'span', cls: 'separator', html:' at '},
-						{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'Affiliation'}]},
+						{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company'}]},
 					{cn:{tag: 'span', 'data-field': 'location' , 'data-placeholder': 'Location'}},
 					{cn:{tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page'}},
 					{ cls: 'error-msg' },
@@ -512,6 +512,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	editMeta: function(e){
 		var t = e.getTarget('[data-field]',null,true),
+			field = Ext.fly(t).getAttribute('data-field'),
+			value = this.userObject.data[field] || '',
 			ed = this.metaEditor;
 
 		if(e.getTarget('a[href]')){
@@ -522,7 +524,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			ed.cancelEdit();
 		}
 
-		ed.startEdit(t);
+		ed.startEdit(t,value);
 	},
 
 
