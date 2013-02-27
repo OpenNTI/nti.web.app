@@ -35,7 +35,7 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 
 	addFriend: function(username){
-		var list = this.get('friends') || [];
+		var list = (this.get('friends') || []).slice();
 		if(!Ext.Array.contains(list,username)){
 			list.push(username);
 			this.set('friends',list);
@@ -45,7 +45,7 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 
 	removeFriend: function(username){
-		var list = this.get('friends') || [];
+		var list = (this.get('friends') || []).slice();
 		this.set('friends',Ext.Array.remove(list,username));
 		return this;
 	},
