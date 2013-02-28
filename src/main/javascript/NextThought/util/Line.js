@@ -24,10 +24,11 @@ Ext.define('NextThought.util.Line',{
 
 		var range, objectSelector = 'object[type$=naquestion]',
 			ancestor, questionObject;
-		//The "IE9" search is actually more accurate for assessment pages
+
+		//The "IE" search is actually more accurate for assessment pages
 		if (Ext.isIE) {
 			range = this.rangeByRecursiveSearch(y,doc);
-			//Experimental line resolver for IE9... seems pretty fast.
+			//Experimental line resolver for IE... seems pretty fast.
 			//range = this.rangeForLineByPointIE(y,doc);
 		}
 		else if (doc.caretRangeFromPoint){

@@ -286,11 +286,13 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	syncFrame: function(content){
 		var i = this.getIframe(), h, contentHeight = 150, ii;
 			//We need the buffer because otherwise the end of the doc would go offscreen
+
 		if(!i){
 			console.warn('Cannot syncFrame, the iFrame is not ready');
 			return;
 		}
-		if (Ext.isIE9) {
+
+		if (Ext.isIE) { //This still seems wonky in IE10.  Make it just check IE so we can scroll the content
 			contentHeight = 150;
 			for (ii = 0; ii < content.childNodes.length; ii++) {
 				contentHeight += content.childNodes[ii].offsetHeight;
