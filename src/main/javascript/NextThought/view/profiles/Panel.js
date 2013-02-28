@@ -82,6 +82,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 	initComponent: function(){
+
+		// We want to enable or disable blogs in some environments. So this checks the appConfig first.
+		if($AppConfig.disableBlogs === true){
+			this.items.last().items = Ext.Array.filter( this.items.last().items, function(i){ return i.xtype !== 'profile-blog'});
+		}
+
 		//prevent prototype corruption... until we clone it, this.hasOwnProperty('items') returns false...
 		this.items = Ext.clone(this.items);
 		//now this.hasOwnProperty('items') will return true...

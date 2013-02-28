@@ -96,22 +96,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	loadContents: function(resp){
-		var me = this, j;
-
-		/**
-		 * There is a request to enable or disable blogs in some environments.
-		 * So this checks the appConfig first.
-		 */
-		if($AppConfig.disableBlogs === true){
-			Ext.defer(me.destroy,1,me);
-		}
-
 		if(!this.rendered){
 			this.on('afterrender', Ext.bind(this.loadContents, this, arguments), this, {single:true});
 			return;
 		}
 
-		j = ParseUtils.parseItems( resp.responseText ).first();
+		var j = ParseUtils.parseItems( resp.responseText ).first();
 		this.store = NextThought.store.Blog.create();
 		this.store.proxy.url = j.getLink('contents');
 
