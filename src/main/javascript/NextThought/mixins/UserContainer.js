@@ -252,8 +252,8 @@ Ext.define('NextThought.mixins.UserContainer', {
 	userSorterFunction: function(a, b){
 		var aPresence = a.get('Presence') || '',
 			bPresence = b.get('Presence') || '',
-			aName = a.get('displayName'),
-			bName = b.get('displayName'),
+			aName = a.get('displayName') || '',
+			bName = b.get('displayName') || '',
 			presenceResult, nameResult;
 
 		presenceResult = bPresence.localeCompare(aPresence);
