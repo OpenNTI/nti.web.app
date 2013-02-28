@@ -231,17 +231,9 @@ Ext.define('NextThought.controller.Groups', {
 	isPresentableFriendsList: function(fl){
 		var list, id;
 
+		//Don't show our internal My Contacts group
 		if(fl.get('Username') === this.getMyContactsId()){
 			return false;
-		}
-
-		//TODO still need to do this everyone check
-		list = fl.get('friends');
-		if(list.length === 1 && list[0] === 'Everyone'){
-			id = ParseUtils.parseNtiid(fl.getId());
-			if(id.specific.provider === 'system'){
-				return false;
-			}
 		}
 
 		return true;

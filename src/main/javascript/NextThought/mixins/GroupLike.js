@@ -8,16 +8,23 @@ Ext.define('NextThought.mixins.GroupLike',{
 	isGroup: true,
 
 
+	//As of 2/28/2013 no new objects should be coming back
+	//with these system creators.  The creator must be a valid
+	//entity.  Old objects that used to have these system creators
+	//should now be coming back with no creator and the provider portion
+	//of the ntiid would be 'Unknown'
 	isSystem: function(){
 		var c = this.get('Creator').toLowerCase();
+		console.trace('This is for legacy data that we shouldnt need to take into consideration again. None of it should be in prod');
 		return this.SYSTEM_CREATOR === c || this.OLD_SYSTEM_CREATOR === c;
 	},
 
 
+	//A method that can be used to detect if this is the old system created 'Everyone' group.
+	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
 	isEveryone: function(){
-		//We used to also verify it was a system group but its not coming back with a Creator
-		//anymore.
-		return this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
+		console.trace('This is for legacy data that we shouldnt need to take into consideration again. None of it should be in prod');
+		return (!this.get('Creator') || this.isSystem()) && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
 	},
 
 

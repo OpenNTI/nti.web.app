@@ -23,7 +23,10 @@ Ext.define('NextThought.store.FriendsList',{
 		model: 'NextThought.model.FriendsList'
 	},
 
-	filters: {
+	//We were filtering out the old system created 'Everyone' group.
+	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
+	//as of 2/28/2013 we remove this filtering.
+/*	filters: {
 		fn: function(rec){
 			if(rec.isSystem && rec.isSystem()){
 				return false;
@@ -35,7 +38,7 @@ Ext.define('NextThought.store.FriendsList',{
 
 			return true;
 		}
-	},
+	}, */
 
 	sorters: [
 		{
