@@ -117,7 +117,7 @@ Ext.define('NextThought.providers.Location', {
 		theStore =  this.currentPageStores[id];
 		if(!theStore){
 			root = this.currentPageStores.root;
-			if(id === root.containerId){
+			if(root && (id === root.containerId)){
 				theStore = root;
 			}
 		}

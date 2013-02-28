@@ -286,6 +286,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	syncFrame: function(content){
 		var i = this.getIframe(), h, contentHeight = 150, ii;
 			//We need the buffer because otherwise the end of the doc would go offscreen
+		if(!i){
+			console.warn('Cannot syncFrame, the iFrame is not ready');
+			return;
+		}
 		if (Ext.isIE9) {
 			contentHeight = 150;
 			for (ii = 0; ii < content.childNodes.length; ii++) {
@@ -309,8 +313,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	getIframe: function(){
-		var el = this.items.first().el,
-			iframe = el.dom;
+		var iframe, el = this.items.first().el;
+		if(!el){ return null; }
+		iframe = el.dom;
 		el.win = iframe.contentWindow || window.frames[iframe.name];
 		return el;
 	},
@@ -321,6 +326,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		if(!doc){
 			iframe = this.getIframe();
+
+			if(!iframe){
+				console.warn('The iframe is not rendered');
+				return null;
+			}
 			dom = iframe.dom;
 			win = iframe.win;
 

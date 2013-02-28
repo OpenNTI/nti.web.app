@@ -316,6 +316,8 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	rootContainerIdFromDocument: function(doc){
+		if(!doc){ return null; }
+
 		var foundContainer, metaNtiidTag,
 		head = doc.head || this.findElementsWithTagName(doc, 'head')[0];
 
