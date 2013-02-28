@@ -115,7 +115,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		} else {
 			this.initialConfig.title = newTitle || this.initialConfig.title;
 			this.nameEl.update(newTitle||this.initialConfig.title);
-			this.countEl.update(this.items.getCount()+'');
+			this.countEl.update(Ext.String.format('{0}', this.items.getCount()));
 		}
 	},
 
