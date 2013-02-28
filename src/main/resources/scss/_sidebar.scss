@@ -73,6 +73,11 @@
 				top: 0;
 			}
 
+			.x-strict .x-ie &{
+				overflow-x: hidden;
+				overflow-y: hidden;
+			}
+
 			.x-tab-inner {
 				position: absolute;
 				top: 5px; right: -10px;
