@@ -59,7 +59,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	setTitle: function(title){
-		var itemsShown = 0;
+		var itemsShown = 0, me = this;
 
 		this.title = title;
 
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 
 		if (this.rendered) {
-			Ext.defer(function(){this.getHeader().setTitle(this.title)}, 1);
+			Ext.defer(function(){me.getHeader().setTitle(me.title)}, 1);
 		}
 		return this;
 	},
