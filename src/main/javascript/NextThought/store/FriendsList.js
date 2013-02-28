@@ -25,7 +25,15 @@ Ext.define('NextThought.store.FriendsList',{
 
 	filters: {
 		fn: function(rec){
-			return !rec.isSystem || !rec.isSystem();
+			if(rec.isSystem && rec.isSystem()){
+				return false;
+			}
+
+			if(rec.isEveryone && rec.isEveryone()){
+				return false;
+			}
+
+			return true;
 		}
 	},
 

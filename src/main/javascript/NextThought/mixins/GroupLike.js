@@ -15,7 +15,9 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 
 	isEveryone: function(){
-		return this.isSystem() && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
+		//We used to also verify it was a system group but its not coming back with a Creator
+		//anymore.
+		return this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
 	},
 
 
