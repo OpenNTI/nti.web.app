@@ -4,31 +4,23 @@ Ext.define('NextThought.view.form.fields.PlaceholderPolyfill',{
 		var p = 'Placeholder';
 		if(Ext.supports[p] || !this.placeholder){return;}
 
-		p = this.placeholderEl = Ext.DomHelper.append(
-				this.inputEl.parent(), {cls: 'placeholder', html: this.placeholder}, true);
+		function handleBlur(){
+			var v = inputEl.getValue()||'';
+			if(p){ p[v===''?'show':'hide'](); }
+		}
+
+		p = Ext.DomHelper.append(
+				inputEl.parent(), {cls: 'placeholder', html: this.placeholder}, true);
 
 		p.setVisibilityMode(Ext.Element.DISPLAY);
 		this.mon(p,'click',this.focus,this);
 
-		this.handleBlur();
+		handleBlur();
+
 
 		this.mon(inputEl,{
-			scope: this,
-			focus: this.handleFocus,
-			blur: this.handleBlur
+			focus: function handleFocus(){ if(p){ p.hide(); } },
+			blur: handleBlur
 		});
-	},
-
-	handleFocus: function(){
-		if(this.placeholderEl){
-			this.placeholderEl.hide();
-		}
-	},
-
-	handleBlur: function(){
-		var v = this.getValue()||'';
-		if(this.placeholderEl){
-			this.placeholderEl[v===''?'show':'hide']();
-		}
 	}
 });
