@@ -297,6 +297,11 @@ Ext.define('NextThought.model.Service', {
     },
 
 
+	canBlog: function(){
+		return this.hasCapability('nti.platform.blogging.createblogentry');
+	},
+
+
 	canChat: function() {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},

@@ -4,6 +4,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
+		'NextThought.view.profiles.parts.BlogEditor',
 		'NextThought.view.profiles.parts.BlogListItem',
 		'NextThought.view.profiles.parts.BlogPost'
 	],
@@ -59,6 +60,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			};
 
 			if(Ext.isEmpty(req.url)){
+				if(isMe(user) && $AppConfig.service.canBlog()){
+					//Our user can blog, but does not have any blog posts yet. So lets not fire fail() as that will
+					// remove the blogging widgets.
+					return;
+				}
+
 				fail({status:0,responseText:'User object did not have a Blog url'});
 				return;
 			}
@@ -92,6 +99,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	onNewPost: function(e){
 		e.stopEvent();
+		this.showPost(null,'edit');
 	},
 
 
@@ -204,13 +212,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	showPost: function(record){
+	showPost: function(record,action){
 		this.listViewEl.hide();
 		this.postViewEl.show();
 
 		this.cleanPreviousPost();
 
-		this.activePost = Ext.widget('profile-blog-post',{
+		var xtype = 'profile-blog-post',
+			cfg = {
 			renderTo:this.postViewEl,
 			record: record,
 			selectedSections: Ext.Array.clone(arguments).splice(1),
@@ -219,7 +228,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				destroy: this.closePost,
 				buffer: 1
 			}
-		});
+		};
+
+		if(!record && action==='edit'){
+			xtype = 'profile-blog-editor';
+		}
+
+		this.activePost = Ext.widget(xtype,cfg);
 
 		this.updateLayout();
 	}
