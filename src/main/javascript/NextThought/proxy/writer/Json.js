@@ -14,13 +14,10 @@ Ext.define('NextThought.proxy.writer.Json', {
 		function getJSON(obj) {
 			var a=[];
 			if (obj && Ext.isFunction(obj.asJSON)) {
-				return obj.asJSON();
+				obj = obj.asJSON();
 			}
 			else if (Ext.isArray(obj)) {
-				Ext.each(obj, function (o){
-					a.push(getJSON(o));
-				});
-				return a;
+				obj = Ext.Array.map(obj,getJSON);
 			}
 			return obj;
 		}
