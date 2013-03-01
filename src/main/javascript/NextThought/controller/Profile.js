@@ -58,6 +58,7 @@ Ext.define('NextThought.controller.Profile', {
 		});
 
 		record.save({
+			scope: this,
 			success: function(){console.debug('success',arguments);},
 			failure: function(){console.debug('failure',arguments);}
 		});
