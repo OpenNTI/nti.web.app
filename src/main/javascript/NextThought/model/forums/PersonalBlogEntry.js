@@ -26,7 +26,7 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 		Ext.callback(widget.markAsPublished,widget,[!currentValue]);
 
 		me.postTo(action, function(s){
-			Ext.callback(cb,scope||window,s);
+			Ext.callback(cb,scope||window,[me,s]);
 			if (!s) {
 				Ext.callback(widget.markAsPublished,widget,[currentValue]);
 			}
