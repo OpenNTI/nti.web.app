@@ -107,13 +107,13 @@
 			.title {
 				input {
 					display: block;
-					font: normal 300 25px/50px $font;
+					font: normal 300 25px/40px $font;
 					border: 0;
-					margin: 0;
+					margin: 5px 0;
 					width: 100%;
 					color: $primary-grey;
 
-					&[type=text]:not([value=""]),
+					&[type=text]:not([value]),
 					&[type=text][value=""]{
 						font-style: italic;
 
