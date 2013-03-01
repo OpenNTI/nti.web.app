@@ -76,7 +76,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 						cn: [
 							{ cls: 'reply', html: 'Reply' },
 							{ cls: 'edit', html: 'Edit' },
-							{ cls: 'flag', html: 'Flag as Inappropiate' },
+							{ cls: 'flag', html: 'Flag as Inappropriate' },
 							{ cls: 'delete', html: 'Delete' }
 						]
 					},
