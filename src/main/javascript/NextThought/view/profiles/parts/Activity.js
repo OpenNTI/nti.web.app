@@ -5,6 +5,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	requires: [
 		'NextThought.view.profiles.parts.ActivityItem',
 		'NextThought.view.profiles.parts.HighlightContainer',
+		'NextThought.view.profiles.parts.Blogged',
 		'NextThought.view.profiles.parts.Joined',
 		'NextThought.store.ProfileItem'
 	],
@@ -62,7 +63,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel',
-			accept: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight',
 			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		});
@@ -156,7 +156,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				return;
 			}
 
-			cmps.push({record: i,root:true, xtype: n});
+			cmps.push({record: i, root:true, xtype: n});
 		},this);
 
 		return cmps;
