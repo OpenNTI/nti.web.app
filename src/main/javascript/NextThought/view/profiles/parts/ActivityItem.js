@@ -162,7 +162,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	maybeFillIn: function(){
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
-			count,subject,
+			subject,
 			loaded = me.loaded,
 			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.get('profile'),{bottom:1000}));
 
@@ -170,18 +170,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.loaded = true;
 
-		count = me.record.get('ReferencedByCount');
-		if(typeof count === 'number'){
-			me.getItemReplies();
-		}
-		else {
-			me.commentsEl.remove();
-			delete me.commentsEl;
-			//also remove response box for things that don't look like notes
-			if(me.responseBox){
-				me.responseBox.remove();
-			}
-		}
+		me.getItemReplies();
 
 		subject = me.record.get('subject');
 		me.subjectEl.update(subject||'Subject');
