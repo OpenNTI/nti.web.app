@@ -335,11 +335,12 @@ Ext.define('NextThought.model.Base', {
 
 		if (this.activePostTos && this.activePostTos[action]){return;}
 
-		widget[prePost]('on');
+		widget = widget||{};
+		Ext.callback(widget[prePost],widget,['on']);
 
 		this.postTo(action, function(s){
 			if (!s) {
-				widget[postPost]('on');
+				Ext.callback(widget[postPost],widget,['on']);
 			}
 		});
 	},
@@ -354,7 +355,8 @@ Ext.define('NextThought.model.Base', {
 		if (me.activePostTos && me.activePostTos[action]){return;}
 
 		//We will assume it completes and then update it if it actually fails
-		widget.markAsFavorited(!currentValue);
+		widget = widget||{};
+		Ext.callback(widget.markAsFavorited,widget,[!currentValue]);
 
 		me.postTo(action, function(s){
 			if (s) {
@@ -362,7 +364,7 @@ Ext.define('NextThought.model.Base', {
 				NextThought.model.events.Bus.fireEvent('favorite-changed',me);
 			}
 			else {
-				widget.markAsFavorited(currentValue);
+				Ext.callback(widget.markAsFavorited,widget,[currentValue]);
 			}
 		});
 	},
@@ -377,13 +379,14 @@ Ext.define('NextThought.model.Base', {
 
 		if (this.activePostTos && this.activePostTos[action]){return;}
 
-		widget.markAsLiked(!currentValue);
+		widget = widget||{};
+		Ext.callback(widget.markAsLiked,widget,[!currentValue]);
 		me.set('LikeCount', lc + polarity);
 
 		this.postTo(action, function(s){
 			var r;
 			if (!s) {
-				widget.markAsLiked(currentValue);
+				Ext.callback(widget.markAsLiked,widget,[currentValue]);
 				me.set('LikeCount', lc);
 			}
 			else{
@@ -402,7 +405,7 @@ Ext.define('NextThought.model.Base', {
 
 	postTo: function(link, callback){
 		this.activePostTos = this.activePostTos || {};
-		var me = this,
+		var me = this, req,
 			l = this.getLink(link);
 
 		if (!l){
@@ -410,7 +413,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		if (l && !this.activePostTos[link]) {
-			this.activePostTos[link] = Ext.Ajax.request({
+			req = {
 				url: l,
 				jsonData: '',
 				method: 'POST',
@@ -423,7 +426,9 @@ Ext.define('NextThought.model.Base', {
 						this.fireEvent('updated',this);
 					}
 				}
-			});
+			};
+
+			this.activePostTos[link] = Ext.Ajax.request(req);
 		}
 		return this.activePostTos[link];
 	},
