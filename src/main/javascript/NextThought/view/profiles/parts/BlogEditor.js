@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-editor',
+	mixins: {
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
 
 	cls: 'blog-editor',
 
@@ -11,7 +14,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				cls: 'main',
 				cn:[{
 					cls: 'title',
-					cn:[{tag:'input'}]
+					cn:[{tag:'input', type:'text', placeholder: 'My Next Thought...'}]
 				},{
 					cn:[
 						{cls: 'action publish', 'data-qtip': 'Publish'},
@@ -49,5 +52,16 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	renderSelectors: {
+		titleEl: '.title input'
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.titleEl.on('keydown',function(e){
+			var t = e.getTarget();
+			t.setAttribute('value',t.value);
+		});
 	}
 });

@@ -4,7 +4,27 @@
 	.blog {
 
 		.post-view .blog-editor{
+			margin: 8px 0;
+			border: 1px solid #dcdcdc;
+
 			@include note-editor;
+			.editor {
+				.main {
+					padding: 0;
+
+					.title {
+						padding: 0 15px;
+						border: 0 solid #f2f2f2;
+						border-width: 0 0 1px 0;
+					}
+
+					.toolbar {
+						border-top: 1px solid #dcdcdc;
+						background: #f9f9f9;
+						padding: 0 15px;
+					}
+				}
+			}
 		}
 
 		&.owner {

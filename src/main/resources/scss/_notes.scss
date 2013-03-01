@@ -104,6 +104,28 @@
 		.main {
 			background: #ffffff;
 			padding: 0 13px;
+			.title {
+				input {
+					display: block;
+					font: normal 300 25px/50px $font;
+					border: 0;
+					margin: 0;
+					width: 100%;
+					color: $primary-grey;
+
+					&[type=text]:not([value=""]),
+					&[type=text][value=""]{
+						font-style: italic;
+
+						&:focus {
+							font-style: normal;
+						}
+					}
+
+
+				}
+			}
+
 			.toolbar {
 				@include experimental(transition, all 0.5s);
 				position: relative;
