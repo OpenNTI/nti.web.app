@@ -164,7 +164,9 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		var valid,
 			val = this.getValue()||'';
 
-		if(!silent)	this.inputEl.removeCls('error');
+		if(!silent){ 
+			this.inputEl.removeCls('error');
+		}
 		valid = (this.allowBlank===false) ? (val.length >= (this.minLength||1)) : true;
 
 		if(valid && this.validator){

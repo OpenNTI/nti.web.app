@@ -144,10 +144,8 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 				return i.validate(!!s);
 			}
 			catch(msg){
-				//if(!s){
 					i.setError();
 					me.setError({message: msg});
-				//}
 			}
 			return false;
 		}
@@ -159,11 +157,6 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			me.setMessage();
 			v = me.inputs.reduce( function(accum,o){ return accum && val(o,true); }, true);
 			if(input.name == 'password'){
-				/*me.inputs.reduce(function(accum,o){ 
-					if(o.name == 'password-verify'){
-						val(o);
-					}
-				});*/
 			}
 		}
 
