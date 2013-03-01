@@ -195,7 +195,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		var post = this.activePost;
 		delete this.activePost;
 
-		if( post && !post.isDestroyed){
+		if( post && !post.isDestroyed && !post.destroying){
 			post.destroy();
 			return true;
 		}
@@ -229,8 +229,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			selectedSections: Ext.Array.clone(arguments).splice(1),
 			listeners: {
 				scope: this,
-				destroy: this.closePost,
-				buffer: 1
+				destroy: this.closePost
 			}
 		};
 
