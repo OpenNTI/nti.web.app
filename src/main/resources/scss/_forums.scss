@@ -18,6 +18,10 @@
 						border-width: 0 0 1px 0;
 					}
 
+					.action {
+						&.share {display:none;}
+					}
+
 					.toolbar {
 						border-top: 1px solid #dcdcdc;
 						background: #f9f9f9;

@@ -5,6 +5,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
 	},
 
+	requires:['NextThought.view.annotations.note.EditorActions'],
+
 	cls: 'blog-editor',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -18,6 +20,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				},{
 					cn:[
 						{cls: 'action publish', 'data-qtip': 'Publish'},
+						{cls: 'action share'},
 						{cls: 'tags'}
 					]
 				},{
@@ -52,12 +55,15 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	renderSelectors: {
-		titleEl: '.title input'
+		titleEl: '.title input',
+		editor: '.editor'
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.editorActions = new NoteEditorActions(this,this.editor);
 
 		this.titleEl.on('keydown',function(e){
 			var t = e.getTarget();
