@@ -31,6 +31,10 @@ Ext.define('NextThought.controller.Profile', {
 				'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
 			},
 
+			//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
+			'profile-blog-post':{ 'delete-post': this.deleteBlogPost },
+			'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
+
 			'profile-blog-editor':{
 				'save-post': this.saveBlogPost
 			}
@@ -91,6 +95,12 @@ Ext.define('NextThought.controller.Profile', {
 				Ext.callback(editorCmp.onSaveFailure,editorCmp,[]);
 			}
 		});
+	},
+
+
+	deleteBlogPost: function(record, cmp){
+
+
 	}
 
 });

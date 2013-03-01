@@ -13,7 +13,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
-			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'}
+			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
+			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+				{ tag:'span', cls: 'edit link', html: 'Edit'},
+				{ tag:'span', cls: 'delete link', html: 'Delete'}
+			]}
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
@@ -27,18 +31,19 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	]),
 
 
-	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'See More', href:'#'}]),
-
-
 	renderSelectors: {
 		bodyEl: '.body',
 		liked: '.controls .like',
-		favorites: '.controls .favorite'
+		favorites: '.controls .favorite',
+		editEl: '.meta .edit',
+		deleteEl: '.meta .delete'
 	},
 
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.addEvents(['delete-post','show-post']);
+		this.enableBubble(['delete-post','show-post']);
 	},
 
 
@@ -73,6 +78,26 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(this.selectedSections){
 			console.debug('Do something with this/these:',this.selectedSections);
 		}
+
+		if( this.deleteEl ){
+			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+		}
+
+		if( this.editEl ){
+			this.mon(this.editEl,'click',this.onEditPost,this);
+		}
+	},
+
+
+	onDeletePost: function(e){
+		e.stopEvent();
+		this.fireEvent('delete-post',this.record, this);
+	},
+
+
+	onEditPost: function(e){
+		e.stopEvent();
+		this.fireEvent('show-post',this.record.get('ID'),'edit');
 	},
 
 

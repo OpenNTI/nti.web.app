@@ -205,6 +205,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		delete this.activePost;
 
 		if( post && !post.isDestroyed && !post.destroying){
+			post.clearListeners();
 			post.destroy();
 			return true;
 		}
@@ -249,7 +250,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			}
 		};
 
-		if(!record && action==='edit'){
+		if(action==='edit'){
 			xtype = 'profile-blog-editor';
 		}
 

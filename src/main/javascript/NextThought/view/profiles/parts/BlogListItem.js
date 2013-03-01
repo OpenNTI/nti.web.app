@@ -13,7 +13,11 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
-			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'}
+			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
+			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+				{ tag:'span', cls: 'edit link', html: 'Edit'},
+				{ tag:'span', cls: 'delete link', html: 'Delete'}
+			]}
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
@@ -35,14 +39,16 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		titleEl: '.title',
 		commentsEl: '.comment-count',
 		liked: '.controls .like',
-		favorites: '.controls .favorite'
+		favorites: '.controls .favorite',
+		editEl: '.meta .edit',
+		deleteEl: '.meta .delete'
 	},
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.addEvents(['show-comments','show-post']);
-		this.enableBubble(['show-comments','show-post']);
+		this.addEvents(['delete-post','show-post']);
+		this.enableBubble(['delete-post','show-post']);
 	},
 
 
@@ -74,6 +80,26 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
+
+		if( this.deleteEl ){
+			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+		}
+
+		if( this.editEl ){
+			this.mon(this.editEl,'click',this.onEditPost,this);
+		}
+	},
+
+
+	onDeletePost: function(e){
+		e.stopEvent();
+		this.fireEvent('delete-post',this.record, this);
+	},
+
+
+	onEditPost: function(e){
+		e.stopEvent();
+		this.fireEvent('show-post',this.record.get('ID'),'edit');
 	},
 
 

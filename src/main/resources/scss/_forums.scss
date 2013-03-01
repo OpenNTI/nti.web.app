@@ -70,8 +70,10 @@
 		}
 
 		.post-view .entry {
-			//.controls { top: -1px; }
 			border-width: 0;
+			.title {
+				cursor: default;
+			}
 		}
 		.entry {
 			padding: 30px 20px;
@@ -106,6 +108,15 @@
 						color: $primary-red;
 					}
 				}
+
+				.link {
+					color: $primary-blue;
+					cursor: pointer;
+					&:hover, &.over, &.hover {
+						text-decoration: underline;
+					}
+				}
+
 				.comment-count {cursor: pointer;}
 				& > span{
 					&::before{
@@ -117,6 +128,7 @@
 						display: inline;
 						padding: 0 0.6em;
 						background: none;
+						text-decoration: none;
 					}
 
 					.tag:last-of-type::after,
