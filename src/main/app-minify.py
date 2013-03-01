@@ -89,7 +89,7 @@ def _buildIndexHtml( version, analytics_key, extjs_server ):
 <head>
         <title>NextThought</title>
 	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="X-UA-Compatible" content="IE=9">
 """
 	part2 = """        <link rel="shortcut icon" href="resources/images/favicon.ico?_dc=%s">
 
