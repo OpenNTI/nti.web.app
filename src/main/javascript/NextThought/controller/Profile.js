@@ -2,6 +2,7 @@ Ext.define('NextThought.controller.Profile', {
 	extend: 'Ext.app.Controller',
 
 	models: [
+		'forums.Post',
 		'forums.PersonalBlog',
 		'forums.PersonalBlogComment',
 		'forums.PersonalBlogEntry',
@@ -44,7 +45,23 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogPost: function(editorCmp, record, title, body, autoPublish){
+	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
+
+		if(!record){
+			record = NextThought.model.forums.Post.create();
+		}
+
+		record.set({
+			'title':title,
+			'body':body,
+			'tags':tags||[]
+		});
+
+		record.save({
+			callback: function(){
+				console.debug('Callback',arguments);
+			}
+		});
 	}
 
 });
