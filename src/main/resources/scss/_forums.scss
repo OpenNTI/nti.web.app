@@ -26,19 +26,25 @@
 						min-height: 30px;
 						position: relative;
 						.tags{
-							margin: 0 101px 0 0;
+							margin: 0 105px 0 0;
 						}
 						.action{
 							float: right;
 							&.publish{
-								width: 101px;
+								width: 105px;
 								height: 30px;
-								background: url('../images/elements/btn_toggle_draft.png') 0 5px no-repeat;
-								cursor: pointer;
-								margin-right: 4px;
+								position: relative;
 
-								&.on{
-									background: url('../images/elements/btn_toggle_published.png') 0 5px no-repeat;
+								&::after{
+									content: '';
+									position: absolute;
+									left: 0; top: 5px;
+									background: $elements no-repeat;
+									@include sprite($elements,'btn_toggle_draft',$dimensions: true);
+								}
+
+								&.on::after{
+									@include sprite($elements,'btn_toggle_published');
 								}
 							}
 						}
