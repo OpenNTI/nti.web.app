@@ -363,10 +363,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mun(this.nameEl,'click',this.editName,this);
 
 		try {
-			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+			me.mun(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
 			me.contactsMaybeChanged();
 			//Maybe this goes in controller?
-			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+			me.mon(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
 		}
 		catch(e){
 			console.error(Globals.getError(e));

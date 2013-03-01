@@ -36,7 +36,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				}
 			});
 
-			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+			me.mon(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
 		}
 		catch(e){
 			console.error(Globals.getError(e));

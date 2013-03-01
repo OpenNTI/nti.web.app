@@ -101,10 +101,9 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
-		store.on('contacts-changed', this.publishContacts, this);
 		store.on({
 			scope: this,
-			'contacts-changed': this.publishContacts,
+			'contacts-loaded': this.publishContacts,
 			'contacts-added': this.contactsAdded,
 			'contacts-removed': this.contactsRemoved,
 			load: this.friendsListsLoaded,

@@ -76,7 +76,7 @@ Ext.define('NextThought.store.FriendsList',{
 			add: this.contactsMaybeAdded,
 			remove: this.contactsMaybeRemoved,
 			update: this.contactsMaybeChanged,
-			load: this.fireContactsChanged
+			load: this.fireContactsLoaded
 		});
 
 		return r;
@@ -100,16 +100,16 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	fireContactsChanged: function(){
-		console.log('firing contacts changed');
-		this.fireEvent('contacts-changed', this);
+	fireContactsLoaded: function(){
+		console.log('firing contacts loaded');
+		this.fireEvent('contacts-loaded', this);
 	},
 
 
 	//TODO The following functions handling sending
 	//contacts-added and contacts-removed events probably
 	//need to be optimized at some point
-	maybeFireContactsAdded: function(newFriends){
+	maybeFireContactsAdded: function(newFriends, /*private*/noUpdatedEvent){
 		var contactsWithDups, newContacts = [];
 
 		//console.log('Maybe added contacts', arguments);
@@ -137,7 +137,12 @@ Ext.define('NextThought.store.FriendsList',{
 		if(!Ext.isEmpty(newContacts)){
 			console.log('Firing contacts added', newContacts);
 			this.fireEvent('contacts-added', newContacts);
+			if(!noUpdatedEvent){
+				this.fireEvent('contacts-updated');
+			}
+			return true;
 		}
+		return false;
 	},
 
 	contactsMaybeAdded: function(store, records){
@@ -151,7 +156,7 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	maybeFireContactsRemoved: function(possiblyRemoved){
+	maybeFireContactsRemoved: function(possiblyRemoved, /*private*/noUpdatedEvent){
 		var contacts, contactsRemoved = [];
 		//console.log('Maybe removed contacts', arguments);
 
@@ -172,7 +177,13 @@ Ext.define('NextThought.store.FriendsList',{
 		if(!Ext.isEmpty(contactsRemoved)){
 			console.log('Firing contacts removed', contactsRemoved);
 			this.fireEvent('contacts-removed', contactsRemoved);
+			if(!noUpdatedEvent){
+				this.fireEvent('contacts-updated');
+			}
+			return true;
 		}
+
+		return false
 	},
 
 
@@ -183,7 +194,7 @@ Ext.define('NextThought.store.FriendsList',{
 
 
 	contactsMaybeChanged: function(store, record, operation, field){
-		var newValue, oldValue, possibleAdds, possibleRemoves;
+		var newValue, oldValue, possibleAdds, possibleRemoves, fireUpdated;
 		//console.log('Maybe updated contacts', arguments);
 
 		if(operation !== Ext.data.Model.EDIT || field !== 'friends'){
@@ -196,8 +207,15 @@ Ext.define('NextThought.store.FriendsList',{
 		//Things in new but not in old are new friends
 		possibleAdds = Ext.Array.difference(newValue, oldValue);
 		possibleRemoves = Ext.Array.difference(oldValue, newValue);
-		this.maybeFireContactsAdded(possibleAdds);
-		this.maybeFireContactsRemoved(possibleRemoves);
+		if(this.maybeFireContactsAdded(possibleAdds, true)){
+			fireUpdated = true;
+		}
+		if(this.maybeFireContactsRemoved(possibleRemoves, true)){
+			fireUpdated = true;
+		}
+		if(fireUpdated){
+			this.fireEvent('contacts-updated');
+		}
 	},
 
 
