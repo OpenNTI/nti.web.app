@@ -237,7 +237,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	},
 
 	updateCount: function(){
-		var replyCountEl = this.multiGutterWidget.down('.reply-count');
+		var replyCountEl = this.multiGutterWidget ?  this.multiGutterWidget.down('.reply-count') : null;
 		if(replyCountEl){
 			replyCountEl.update(this.record.getReplyCount());
 		}
