@@ -52,12 +52,31 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	renderSelectors: {
-		editor: '.editor'
+		editor: '.editor',
+		cancelEl: '.action.cancel',
+		saveEl: '.action.save'
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.editorActions = new NoteEditorActions(this,this.editor);
+
+		this.mon(this.saveEl,'click', this.onSave, this);
+		this.mon(this.cancelEl,'click', this.onCancel, this);
+	},
+
+
+	onSave: function(e){
+		e.stopEvent();
+		console.debug('Save:',this.editorActions.getValue());
+	},
+
+
+	onCancel: function(e){
+		e.stopEvent();
+
+		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.
+		this.destroy();
 	}
 });
