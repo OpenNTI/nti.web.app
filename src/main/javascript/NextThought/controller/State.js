@@ -12,6 +12,8 @@ Ext.define('NextThought.controller.State', {
 		'NextThought.providers.Location'
 	],
 
+	hasPushState: Boolean(history.pushState),
+
 	constructor: function(){
 		var m = this.callParent(arguments);
 
@@ -83,12 +85,13 @@ Ext.define('NextThought.controller.State', {
 			return false;
 		};
 
+
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
 			if (this.updateState(s) && !me.isPoppingHistory) {
 				push.apply(history, [s,title,url]);
 
-				if (Ext.isIE && url) {
+				if(this.hasPushState && url) {
 					window.lastTimeLocationSet = new Date().getTime();
 					window.location.hash = url;
 				}
