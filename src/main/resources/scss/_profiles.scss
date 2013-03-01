@@ -470,6 +470,10 @@
 						content: '';
 						display: none;
 					}
+					&.last::after{
+						content: '';
+						display: none;
+					}
 				}
 			}
 		}
@@ -557,6 +561,11 @@
 						}
 
 						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
+
+						&.last::after{
 							content: '';
 							display: none;
 						}

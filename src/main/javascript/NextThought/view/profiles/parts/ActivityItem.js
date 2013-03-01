@@ -189,6 +189,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		else {
 			me.editEl.hide();
 			me.deleteEl.hide();
+			me.flagEl.addCls('last');
 		}
 
 		LocationMeta.getMeta(me.record.get('ContainerId'),me.setLocation,me);

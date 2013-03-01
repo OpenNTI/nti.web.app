@@ -51,6 +51,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		else {
 			this.editEl.hide();
 			this.deleteEl.hide();
+			this.flagEl.addCls('last');
 		}
 	}
 
