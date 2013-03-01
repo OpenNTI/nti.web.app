@@ -27,6 +27,7 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 		{ cls: 'type-filter books', text: 'Books', model: 'Content' },
 		{ cls: 'type-filter highlight', text: 'Highlights', model: 'Highlight' },
 		{ cls: 'type-filter note', text: 'Notes', model: 'Note' },
+//		{ cls: 'type-filter chat', text: 'Chats', model: 'MessageInfo'},
 //		{ cls: 'type-filter transcript', text: 'Transcripts', model: 'TranscriptSummary' },
 //		{ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'QuizResult' },
 //		{ cls: 'type-filter redaction', text: 'Redactions', model: 'Redaction' },

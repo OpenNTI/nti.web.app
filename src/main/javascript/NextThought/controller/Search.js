@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Search', {
 		else{
 			//get the groups storted by type, cause the display to chunk them.
 			var resultGroups = store.getGroups(),
-			result, loc,
+			result, loc, type, alias,
 			me = this;
 
 			if(resultGroups.length === 0){
@@ -84,6 +84,8 @@ Ext.define('NextThought.controller.Search', {
 				result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
 				results.push(result);
 				result = result.items;
+				type = "search-result";//default type
+				alias = "widget.search-result-"+group.name;
 
 				Ext.each(group.children, function(hit){
 					var id = hit.get('ContainerId'),
@@ -91,8 +93,15 @@ Ext.define('NextThought.controller.Search', {
 
 					sortIndexes.reverse();
 
+					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
+						//custom component for type exists
+						type = "search-result-"+group.name;
+					}
+
+
 					//Refactor to just pas the hit model a
 					result.push( {
+						xtype: type,
 						sortId: sortIndexes,
 						hit: hit
 					});
@@ -114,6 +123,9 @@ Ext.define('NextThought.controller.Search', {
 	sanitizeCategoryName: function(n){
 		if (n.toLowerCase()==='content') {
 			return 'Books';
+		}
+		if(n.toLowerCase() === 'messageinfo'){
+			return  'Chats';
 		}
 		return n;
 	},
