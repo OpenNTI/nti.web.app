@@ -51,15 +51,10 @@ Ext.define('NextThought.controller.Profile', {
 
 	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
 
-		//Because of the note below (see the success note) we don't want the passed record to be used...as it will be
-		// corrupted.
-		if( record ){ record = record.getData(); }
+		var isEdit = Boolean(record),
+			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create();
 
-		var isEdit = Boolean(record);
-
-		record = NextThought.model.forums.Post.create(record);
-
-		record.set({
+		post.set({
 			'title':title,
 			'body':body,
 			'tags':tags||[]
@@ -74,14 +69,16 @@ Ext.define('NextThought.controller.Profile', {
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
 		}
 
-		record.save({
+		post.save({
 			scope: this,
-			success: function(trash,operation){
+			success: function(post,operation){
 				//the first argument is the record...problem is, it was a post, and the response from the server is
 				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
 				// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
 				// one off re-parse of the responseText is necissary to get at what we want.
-				var blogEntry = ParseUtils.parseItems(operation.response.responseText)[0];
+				// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+
+				var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
 
 				if(autoPublish && !blogEntry.isPublished()){
 					blogEntry.publish(editorCmp,finish,this);
