@@ -33,8 +33,13 @@
 							&.publish{
 								width: 101px;
 								height: 30px;
-								background: red;
+								background: url('../images/elements/btn_toggle_draft.png') 0 5px no-repeat;
 								cursor: pointer;
+								margin-right: 4px;
+
+								&.on{
+									background: url('../images/elements/btn_toggle_published.png') 0 5px no-repeat;
+								}
 							}
 						}
 					}

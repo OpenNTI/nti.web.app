@@ -55,7 +55,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	renderSelectors: {
 		editor: '.editor',
 		cancelEl: '.action.cancel',
-		saveEl: '.action.save'
+		saveEl: '.action.save',
+		publishEl: '.action.publish'
 	},
 
 
@@ -71,7 +72,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);
-
+		this.mon(this.publishEl, 'click', this.togglePublish, this);
+		
 		if( r ){
 			h = r.get('headline');
 			e.setValue(h.get('body'));
@@ -81,6 +83,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		}
 	},
 
+	togglePublish: function(e){
+		var t = e.getTarget('.on'),
+			action = t ? 'removeCls' : 'addCls';
+		this.publishEl[action]('on');
+	},
 
 	onSave: function(e){
 		e.stopEvent();

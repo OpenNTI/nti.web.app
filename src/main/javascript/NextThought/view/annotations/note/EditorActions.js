@@ -682,12 +682,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return {
 			body : this.getNoteBody(out),
 			shareWith : this.shareMenu.getValue(),
-			publish: false,//TODO: wire up
+			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined//,
 //			tags: this.tagList.toList()
 		};
 	},
 
+	getPublished: function(){
+		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : false;
+	},
 
 	setTitle: function(){},
 
@@ -695,7 +698,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	setTags: function(){},
 
 
-	setPublished: function(){},
+	setPublished: function(value){
+		var action = value ? 'addCls' : 'removeCls';
+		if(this.cmp.publishEl){
+			this.cmp.publishEl[action]('on');
+		}
+	},
 
 
 	setValue: function (text, putCursorAtEnd, focus) {
