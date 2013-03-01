@@ -51,6 +51,8 @@ Ext.define('NextThought.controller.Profile', {
 		// corrupted.
 		if( record ){ record = record.getData(); }
 
+		var isEdit = Boolean(record);
+
 		record = NextThought.model.forums.Post.create(record);
 
 		record.set({
@@ -61,8 +63,9 @@ Ext.define('NextThought.controller.Profile', {
 
 		function finish(entry){
 			var blogCmp = editorCmp.up('profile-blog');
-
-			blogCmp.store.insert(0,entry);
+			if(!isEdit){
+				blogCmp.store.insert(0,entry);
+			}
 
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
 		}
@@ -73,7 +76,7 @@ Ext.define('NextThought.controller.Profile', {
 				//the first argument is the record...problem is, it was a post, and the response from the server is
 				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
 				// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-				// one off re-parse the responseText is necissary to get at what we want.
+				// one off re-parse of the responseText is necissary to get at what we want.
 				var blogEntry = ParseUtils.parseItems(operation.response.responseText)[0];
 
 				if(autoPublish && !blogEntry.isPublished()){

@@ -119,10 +119,19 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		this.mon(this.store,{
 			scope: this,
+			add: this.addedContents,
 			load: this.loadedContents
 		});
 
 		this.store.load();
+	},
+
+
+	addedContents: function(store,records,index){
+		var me = this;
+		me.suspendLayouts();
+		Ext.each(records, function(i){ me.insert(index,{record: i}); }, me, true);
+		me.resumeLayouts(true);
 	},
 
 
