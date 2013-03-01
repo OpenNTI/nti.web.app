@@ -58,6 +58,12 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.addEvents(['save-post']);
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 		this.editorActions = new NoteEditorActions(this,this.editor);
@@ -69,7 +75,10 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	onSave: function(e){
 		e.stopEvent();
-		console.debug('Save:',this.editorActions.getValue());
+		var v = this.editorActions.getValue();
+		console.debug('Save:',v);
+		//If new there will not be a record on this, it will be undefined
+		this.fireEvent('save-post',this, this.record, v.title, v.body, v.publish);
 	},
 
 
