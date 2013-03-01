@@ -682,7 +682,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return {
 			body : this.getNoteBody(out),
 			shareWith : this.shareMenu.getValue(),
-			publish: false,
+			publish: false,//TODO: wire up
 			title: this.titleEl ? this.titleEl.getValue() : undefined//,
 //			tags: this.tagList.toList()
 		};
