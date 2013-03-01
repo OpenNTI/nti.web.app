@@ -57,10 +57,26 @@ Ext.define('NextThought.controller.Profile', {
 			'tags':tags||[]
 		});
 
+		function finish(){
+			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
+		}
+
 		record.save({
 			scope: this,
-			success: function(){console.debug('success',arguments);},
-			failure: function(){console.debug('failure',arguments);}
+			success: function(blogEntry,operation){
+				console.debug('success',arguments, editorCmp.up('profile-blog'));
+
+				if(autoPublish && !blogEntry.isPublished()){
+					blogEntry.publish(editorCmp,finish,this);
+					return;
+				}
+
+				finish();
+			},
+			failure: function(){
+				console.debug('failure',arguments);
+				Ext.callback(editorCmp.onSaveFailure,editorCmp,[]);
+			}
 		});
 	}
 

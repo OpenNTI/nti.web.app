@@ -83,6 +83,16 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	},
 
 
+	onSaveSuccess: function(){
+		this.destroy();
+	},
+
+
+	onSaveFailure: function(){
+
+	},
+
+
 	onCancel: function(e){
 		e.stopEvent();
 
