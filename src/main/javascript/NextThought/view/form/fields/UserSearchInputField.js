@@ -59,10 +59,10 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 
 				//Tweak logic slightly if our type is community or
 				//our user is public or everyone make it look public
-				if((/public|everyone/i).test(u) || (/community/i).test(m)){
+				if(/^community$/.test(m)){
 					v = 'public';
 				}
-				else if((/friendslist|group/i).test(m)||!/@/.test(u)){
+				else if(/^friendslist$/.test(m)){
 					v = NextThought.mixins.ShareEntity.getPresentationType(modelData);
 				}
 				else{
