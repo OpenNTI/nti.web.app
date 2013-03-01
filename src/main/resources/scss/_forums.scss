@@ -22,7 +22,26 @@
 						&.share {display:none;}
 					}
 
+					.aux {
+						min-height: 30px;
+						position: relative;
+						.tags{
+							margin: 0 100px 0 0;
+						}
+						.action{
+							float: right;
+							&.publish{
+								width: 100px;
+								height: 30px;
+								background: red;
+								cursor: pointer;
+							}
+						}
+					}
+
 					.toolbar {
+						clear:both;
+						position: relative;
 						border-top: 1px solid #dcdcdc;
 						background: #f9f9f9;
 						padding: 0 15px;
