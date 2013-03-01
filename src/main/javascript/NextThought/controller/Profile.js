@@ -47,9 +47,11 @@ Ext.define('NextThought.controller.Profile', {
 
 	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
 
-		if(!record){
-			record = NextThought.model.forums.Post.create();
-		}
+		//Because of the note below (see the success note) we don't want the passed record to be used...as it will be
+		// corrupted.
+		if( record ){ record = record.getData(); }
+
+		record = NextThought.model.forums.Post.create(record);
 
 		record.set({
 			'title':title,
@@ -57,21 +59,29 @@ Ext.define('NextThought.controller.Profile', {
 			'tags':tags||[]
 		});
 
-		function finish(){
+		function finish(entry){
+			var blogCmp = editorCmp.up('profile-blog');
+
+			blogCmp.store.insert(0,entry);
+
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
 		}
 
 		record.save({
 			scope: this,
-			success: function(blogEntry,operation){
-				console.debug('success',arguments, editorCmp.up('profile-blog'));
+			success: function(trash,operation){
+				//the first argument is the record...problem is, it was a post, and the response from the server is
+				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+				// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+				// one off re-parse the responseText is necissary to get at what we want.
+				var blogEntry = ParseUtils.parseItems(operation.response.responseText)[0];
 
 				if(autoPublish && !blogEntry.isPublished()){
 					blogEntry.publish(editorCmp,finish,this);
 					return;
 				}
 
-				finish();
+				finish(blogEntry);
 			},
 			failure: function(){
 				console.debug('failure',arguments);
