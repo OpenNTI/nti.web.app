@@ -41,7 +41,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		editEl: '.meta .edit',
-		deleteEl: '.meta .delete'
+		deleteEl: '.meta .delete',
+		publishStateEl: '.meta .state'
 	},
 
 
@@ -74,11 +75,14 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var h = this.record.get('headline');
+		var h = this.record.get('headline'), me = this;
 		if(!h){return;}
 
+		this.setupPublishMenu();
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
+		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
+//		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 
 		if( this.deleteEl ){
@@ -90,6 +94,55 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		}
 	},
 
+	showPublishMenu: function(){
+		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
+	},
+
+	setupPublishMenu: function(){
+		var items = [], me = this, menuCfg;
+
+		items.push({
+			text: 'Publish',
+			checked: me.record.isPublished() === true,
+			published: true,
+			handler: function(item){
+				item.up('.menu').ownerCmp.publishAction(item);
+			}
+		},{
+			text: 'Unpublish',
+			checked: me.record.isPublished() === false,
+			published: false,
+			handler: function(item){
+				item.up('.menu').ownerCmp.publishAction(item);
+			}
+		});
+
+		menuCfg = {
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			parentItem: this,
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				plain: true,
+				group: 'publish'
+			}
+		};
+
+		this.publishMenu = Ext.widget('menu', Ext.apply({items: items, ownerCmp: me}, menuCfg));
+	},
+
+	publishAction: function(item){
+		var action = item.published;
+		if(this.record.isPublished() === action){ return; }
+
+		this.record.publish(this);
+	},
 
 	onDeletePost: function(e){
 		e.stopEvent();
@@ -119,6 +172,14 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			this.moreEl = this.moreTpl.append(appendTo,null,true);
 			this.mon(this.moreEl,'click', this.goToPost,this);
 		}
+	},
+
+	markAsPublished: function(value){
+		var val = value ? 'published' : 'draft',
+			removeCls = value ? 'draft' : 'published';
+		this.publishStateEl.addCls(val);
+		this.publishStateEl.update(Ext.String.capitalize(val));
+		this.publishStateEl.removeCls(removeCls);
 	},
 
 

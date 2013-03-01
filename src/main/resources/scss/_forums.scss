@@ -40,11 +40,11 @@
 									position: absolute;
 									left: 0; top: 5px;
 									background: $elements no-repeat;
-									@include sprite($elements,'btn_toggle_draft',$dimensions: true);
+									@include sprite($elements,'btn_toggle_onlyme',$dimensions: true);
 								}
 
 								&.on::after{
-									@include sprite($elements,'btn_toggle_published');
+									@include sprite($elements,'btn_toggle_public');
 								}
 							}
 						}

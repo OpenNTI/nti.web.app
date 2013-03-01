@@ -32,6 +32,12 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 			}
 		});
 
+	},
+
+	valuesAffectedByLinks: function(){
+		var result = this.callParent(arguments);
+		(result || []).push('published');
+		return result;
 	}
 });
 
