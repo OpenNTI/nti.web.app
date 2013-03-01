@@ -71,6 +71,16 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		});
 	},
 
+	addAdditionalRecordListeners: function(record){
+		this.callParent(arguments);
+		this.mon( record, 'convertedToPlaceholder', this.destroy, this);
+	},
+
+	removeAdditionalRecordListeners: function(record){
+		this.callParent(arguments);
+		this.mun( record, 'convertedToPlaceholder', this.destroy, this);
+	},
+
 	onBeforeAdd: function(cmp){
 		this.callParent(arguments);
 		if(!this.isExpanded()){

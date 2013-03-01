@@ -250,6 +250,7 @@ Ext.define('NextThought.model.Base', {
 			}
 		});
 
+		me.fireEvent('convertedToPlaceholder');
 		me.fireEvent('updated', me);
 		me.fireEvent('changed');
 	},
