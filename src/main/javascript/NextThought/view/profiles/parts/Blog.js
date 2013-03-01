@@ -224,6 +224,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		var xtype = 'profile-blog-post',
 			cfg = {
+			ownerCt: this,
 			renderTo:this.postViewEl,
 			record: record,
 			selectedSections: Ext.Array.clone(arguments).splice(1),
