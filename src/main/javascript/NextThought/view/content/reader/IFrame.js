@@ -116,7 +116,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		meta = doc.createElement('meta');
 		//<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		meta.setAttribute('http-equiv','X-UA-Compatible');
-		meta.setAttribute('content','IE=edge');
+		meta.setAttribute('content','IE=9');
 		doc.getElementsByTagName('head')[0].appendChild(meta);
 
 		g.loadStyleSheet({
