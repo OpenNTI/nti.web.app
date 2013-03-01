@@ -700,7 +700,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : false;
 	},
 
-	setTitle: function(){},
+	setTitle: function(title){
+		var t = this.titleEl;
+		if(t){
+			t.set({value:title});
+		}
+	},
 
 
 	setTags: function(){},
