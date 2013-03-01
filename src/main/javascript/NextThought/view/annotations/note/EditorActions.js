@@ -5,7 +5,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	],
 
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
 	},
 
 	statics: {
@@ -43,17 +44,33 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}]
 	}).compile(),
 
+
 	constructor: function (cmp, editorEl) {
 		var me = this,
 			Ce = Ext.CompositeElement;
+
+		me.mixins.observable.constructor.call(me);
+		me.mixins.placeholderFix.constructor.call(me);
 
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
 		me.shareMenu = Ext.widget('share-menu');
-		this.updateShareWithLabel();
-		me.mixins.observable.constructor.call(me);
 
+		me.titleEl = editorEl.down('.title input');
+		if( me.titleEl ){
+			me.renderPlaceholder(me.titleEl);
+			me.mon(me.titleEl,{
+				'click':function(e){e.stopPropagation();},
+				'mousedown':function(e){e.stopPropagation();},
+				'keydown':function(e){
+					var t = e.getTarget();
+					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
+				}
+			});
+		}
+
+		this.updateShareWithLabel();
 
 		(new Ce(editorEl.query('.action,.content'))).set({tabIndex: 1});
 
@@ -71,7 +88,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			scope      : me,
 			mousedown  : me.editorMouseDown,
 			click      : function (e) {
-				if(!e.getTarget('.content') && !e.getTarget('.action') && !e.getTarget('.content')){
+				if(!e.getTarget('.content') && !e.getTarget('.action')){
 					editorEl.down('.content').focus();
 					this.collapseToEnd();
 				}
@@ -171,12 +188,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			this.waitForPasteData(offScreenBuffer, savedRange, elem);
 			return false;
 		}
+
 		// Everything else allow browser to paste content into it, then cleanup
-		else {
-			offScreenBuffer.innerHTML = '';
-			this.waitForPasteData(offScreenBuffer, savedRange, elem);
-			return true;
-		}
+		offScreenBuffer.innerHTML = '';
+		this.waitForPasteData(offScreenBuffer, savedRange, elem);
+		return true;
 	},
 
 
@@ -284,14 +300,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
+
 	syncTypingAttributeButtons: function(){
-		var me = this;
-		var buttonsName = ['bold', 'italic', 'underline'];
+		var me = this,
+			buttonsName = ['bold', 'italic', 'underline'];
+
 		Ext.each(buttonsName, function(bn){
 			var b = me.editor.down('.'+bn);
 			b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
 		});
 	},
+
 
 	setTypingAttributes: function(attrs, alreadyFocused){
 		this.typingAttributes = attrs.slice();
@@ -303,12 +322,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		this.applyTypingAttributesToEditable();
 	},
 
+
 	getTypingAttributes: function(){
 		if(this.typingAttributes === undefined){
 			this.typingAttributes = [];
 		}
 		return this.typingAttributes;
 	},
+
 
 	applyTypingAttributesToEditable: function(){
 		var actions = this.self.supportedTypingAttributes, me = this;
@@ -319,6 +340,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		});
 	},
+
 
 	editorContentAction: function(e){
 		var t = e.getTarget('.action', undefined, true), action;
@@ -333,6 +355,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
+
 	toggleTypingAttribute: function(action){
 		var attrs = this.getTypingAttributes().slice();
 		if(Ext.Array.contains(attrs, action)){
@@ -343,6 +366,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 		this.setTypingAttributes(attrs);
 	},
+
 
 	detectTypingAttributes: function(){
 		var actions = this.self.supportedTypingAttributes;
@@ -580,6 +604,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return r;
 	},
 
+
 	collapseToEnd: function(){
 		var s, me = this, content, c = me.editor.down('.content').dom, r;
 		if (c.innerHTML) {
@@ -598,6 +623,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		}
 	},
+
 
 	focus: function (collapse) {
 		this.editor.down('[contenteditable=true]').focus();
@@ -654,8 +680,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		});
 
 		return {
-			body     : this.getNoteBody(out),
-			shareWith: this.shareMenu.getValue()
+			body : this.getNoteBody(out),
+			shareWith : this.shareMenu.getValue(),
+			publish: false,
+			title: this.titleEl ? this.titleEl.getValue() : undefined//,
+//			tags: this.tagList.toList()
 		};
 	},
 

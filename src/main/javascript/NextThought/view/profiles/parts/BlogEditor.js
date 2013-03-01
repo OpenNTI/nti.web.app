@@ -1,9 +1,6 @@
 Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-editor',
-	mixins: {
-		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
-	},
 
 	requires:['NextThought.view.annotations.note.EditorActions'],
 
@@ -55,19 +52,12 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	renderSelectors: {
-		titleEl: '.title input',
 		editor: '.editor'
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
 		this.editorActions = new NoteEditorActions(this,this.editor);
-
-		this.titleEl.on('keydown',function(e){
-			var t = e.getTarget();
-			t.setAttribute('value',t.value);
-		});
 	}
 });
