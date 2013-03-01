@@ -30,7 +30,7 @@ Ext.define('NextThought.proxy.writer.Json', {
 		}
 
 		//remove unnecessary JSON
-		delete output.Class;
+		//delete output.Class;
 		delete output.Links;
 
 		//console.debug('Output:',output);
