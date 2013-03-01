@@ -124,7 +124,7 @@ Ext.define('NextThought.model.Base', {
 	get: function(f){
 		var capitalizedFieldName, possibleGetters, val;
 
-		if(this.fields.map[f]){
+		if(!f || this.fields.map[f]){
 			return this.callParent(arguments);
 		}
 
@@ -733,7 +733,12 @@ Ext.define('NextThought.model.Base', {
 	//To signal dependent fields implement a function valuesAffectedByField
 	//that returns an array of dependent field names
 	onFieldChanged: function(f){
-		var dependentFunctionName = 'valuesAffectedBy'+f,
+		if(!f){
+			return;
+		}
+
+		var capitalizedFieldName = Ext.String.capitalize(f),
+			dependentFunctionName = 'valuesAffectedBy'+f,
 			fn = this[dependentFunctionName];
 		this.notifyObserversOfFieldChange(f);
 		if(Ext.isFunction(fn)){
