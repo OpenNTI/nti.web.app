@@ -15,6 +15,10 @@ Ext.define('NextThought.store.Blog',{
 			root: 'Items',
 			totalProperty: 'TopicCount'
 		},
+		extraParams:{
+			sortOn: 'createdTime',
+			sortOrder: 'descending'
+		},
 		headers: { 'Accept': 'application/vnd.nextthought.collection+json' },
 		model: 'NextThought.model.forums.PersonalBlogEntry'
 	}
