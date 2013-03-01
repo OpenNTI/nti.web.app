@@ -70,6 +70,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			});
 		}
 
+		me.publishEl = editorEl.down('.action.publish');
+		if( me.publishEl ){
+			cmp.mon(me.publishEl, 'click', function togglePublish(e){
+				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
+				me.publishEl[action]('on');
+			});
+		}
+
 		this.updateShareWithLabel();
 
 		(new Ce(editorEl.query('.action,.content'))).set({tabIndex: 1});
