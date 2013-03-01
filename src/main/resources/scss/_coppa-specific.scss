@@ -114,6 +114,10 @@
 				}
 			}
 
+			border: 1px solid $border-grey;//#dcdcdc;
+			padding-right: 30px;
+			background: #ffffff;
+
 			textarea,
 			input {
 				&:focus {
@@ -131,8 +135,9 @@
 				font-size: 14px;
 				font-weight: 500;
 				line-height: 25px;
-				border: 1px solid $border-grey;//#dcdcdc;
-				border-left-width: 0px;
+
+				border: 0;
+
 				background: #ffffff;
 				padding: 6px 10px;
 				margin: 0;
@@ -239,12 +244,10 @@
 
 		.input-box {
 			textarea, input {
-				width: 402px !important;
-				box-shadow: none;
-				border-left: 1px solid $border-grey;
-				&:focus {
-					outline: none;
-					box-shadow: none;
+				outline: none;
+				box-shadow: -4px 0 0 0 $border-grey;
+				&:focus{
+					box-shadow: -4px 0 0 0 $border-grey;
 				}
 			}
 		}
@@ -273,16 +276,7 @@
 	.codecreation-main-view,
 	.coderetrieval-main-view,
 	.createlist-main-view{
-		.group-name {
-			input {
-				color: $secondary-grey;
-				border-left-width: 4px;
-				border-left-color: $primary_green;
-				padding-right: 30px;
-			}
-			input.empty{
-				border-left-color: $border_grey;
-			}
+		.input-box.group-name {
 			.x-mask{
 				background-color: white;
 				opacity: 0;
@@ -292,11 +286,25 @@
 					display: none !important;
 				}
 			}
+
+			input {
+				box-shadow: -4px 0 0 0 $primary_green;
+			}
+			input.empty{
+				box-shadow: -4px 0 0 0 $border_grey;
+			}
 		}
 
 		.group-code{
+			background-color: $quad-grey;
+
 			input{
+				cursor: text;
+			}
+
+			input, input:focus{
 				background-color: $quad-grey;
+				box-shadow: -4px 0 0 0 $primary_green;
 			}
 		}
 

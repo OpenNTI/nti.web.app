@@ -40,6 +40,9 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		var e = this.inputEl;
 		e.removeCls('error');//if there is an animation, we have to remove the class before it will play again.
 		e.addCls('error');
+		//this.removeCls('error');
+		//this.addCls('error');
+
 	},
 
 
@@ -70,21 +73,25 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		this.update(v);
 	},
 
+	maybeTagEmpty: function(v){
+		this.inputEl[(Ext.isEmpty(v)?'add':'remove')+'Cls']('empty');
+		this[(Ext.isEmpty(v)?'add':'remove')+'Cls']('empty');
+	},
 
     update: function(v){
         this.inputEl.dom.value = v;
-	    this.inputEl[(v===''?'add':'remove')+'Cls']('empty');
+	    this.maybeTagEmpty(v);
 		if(!this.readOnly){
 			this.clearEl[ v!==''?'show':'hide' ]();
 		}
-        this.handleBlur();
+        //this.handleBlur();
     },
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		var e = this.inputEl;
-		e.addCls('empty');
+	    this.maybeTagEmpty();
 
 		if(this.readOnly){
 			e.set({readonly:'readonly'});
@@ -154,7 +161,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 		if( this.lastValue !== v ){
 			this.lastValue = v;
-			e[(v===''?'add':'remove')+'Cls']('empty');
+			this.maybeTagEmpty(v);
 			this.fireEvent('changed', v, this );
 		}
 	},
