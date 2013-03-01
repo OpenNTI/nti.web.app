@@ -75,7 +75,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		if( r ){
 			h = r.get('headline');
-			e.setValue(h.get('body'));
+			e.editBody(h.get('body'));
 			e.setTitle(h.get('title'));
 			e.setTags(h.get('tags'));
 			e.setPublished(r.isPublished());
