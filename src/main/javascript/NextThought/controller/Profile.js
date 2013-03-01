@@ -16,6 +16,8 @@ Ext.define('NextThought.controller.Profile', {
 		'profiles.Panel',
 		'profiles.parts.Activity',
 		'profiles.parts.ActivityItem',
+		'profiles.parts.Blog',
+		'profiles.parts.BlogEditor',
 		'profiles.TabPanel'
 	],
 
@@ -26,6 +28,10 @@ Ext.define('NextThought.controller.Profile', {
 		this.control({
 			'profile-panel':{
 				'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
+			},
+
+			'profile-blog-editor':{
+				'save-post': this.saveBlogPost
 			}
 		},{});
 	},
@@ -35,6 +41,10 @@ Ext.define('NextThought.controller.Profile', {
 		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function(item){
 			item.maybeFillIn();
 		});
+	},
+
+
+	saveBlogPost: function(editorCmp, record, title, body, autoPublish){
 	}
 
 });

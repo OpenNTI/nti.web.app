@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	onSave: function(e){
 		e.stopEvent();
 		var v = this.editorActions.getValue();
-		console.debug('Save:',v);
+		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
 		this.fireEvent('save-post',this, this.record, v.title, v.body, v.publish);
 	},
