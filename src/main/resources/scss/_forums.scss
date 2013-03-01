@@ -2,6 +2,11 @@
 #profile {
 
 	.blog {
+
+		.post-view .blog-editor{
+			@include note-editor;
+		}
+
 		&.owner {
 			.header {display: block;}
 		}

@@ -2,11 +2,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-editor',
 
-
+	cls: 'blog-editor',
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'editor',
+			cls: 'editor active',
 			cn:[{
 				cls: 'main',
 				cn:[{
