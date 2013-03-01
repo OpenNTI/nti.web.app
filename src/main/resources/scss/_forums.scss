@@ -23,6 +23,12 @@
 						background: #f9f9f9;
 						padding: 0 15px;
 					}
+
+					.content {
+						max-height: auto;
+						min-height: 300px;
+						padding: 20px 15px 0;
+					}
 				}
 			}
 		}
