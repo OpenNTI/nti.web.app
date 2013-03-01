@@ -32,23 +32,34 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			items: [
 				{
 					name: 'old_password',
-					placeholder: 'Old Password'
+					placeholder: 'Old Password',
+					allowBlank: true,
+					validator: function(value){
+						if(Ext.isEmpty(value)){
+							throw 'Old password must not be empty';
+						}
+						return true;
+					}
 				},{
 					name: 'password',
 					placeholder: 'New Password',
-					//minLength: 5, // validator doesn't get called if this is set, and the value is less than
+					//minLength: 6, // validator doesn't get called if this is set, and the value is less than
 					validator: function(value){
+						if(Ext.isEmpty(value)){
+							throw 'New password must not be empty';
+						}
 						if(!Ext.String.trim(value)){
-							throw "Password must not be all whitespace.";
+							throw "New password must not be all whitespace.";
 						}
-						if(value.length >= 5){
-							return true;
+						if(value.length < 6){
+							throw 'Password is too short.';
 						}
-						throw 'Password is too short.';
+						return true
 					}
 				}, {
 					name: 'password-verify',
 					placeholder: 'Verify New Password',
+					allowBlank: true,
 					validator: function(value) {
 						var password = this.previousSibling('[name=password]').getValue();
 						if (value === password) {
@@ -120,7 +131,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 		this.inputs = this.query('simpletext');
 		Ext.each(this.inputs,function(i){
-			this.mon(i,'changed',this.checkValidity,this,{buffer: 500});
+			this.mon(i,'changed',this.checkValidity,this,{buffer: 250});
 		},this);
 	},
 
@@ -129,11 +140,14 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 		function val(i,s){
 			try {
+				me.setError({message: ''});
 				return i.validate(!!s);
 			}
 			catch(msg){
-				input.setError();
-				me.setError({message: msg});
+				//if(!s){
+					i.setError();
+					me.setError({message: msg});
+				//}
 			}
 			return false;
 		}
@@ -144,6 +158,13 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		if( val(input) ){
 			me.setMessage();
 			v = me.inputs.reduce( function(accum,o){ return accum && val(o,true); }, true);
+			if(input.name == 'password'){
+				/*me.inputs.reduce(function(accum,o){ 
+					if(o.name == 'password-verify'){
+						val(o);
+					}
+				});*/
+			}
 		}
 
 		me.down('button[save]')[v?'enable':'disable']();
