@@ -47,6 +47,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				scope: this,
 				afterRender: function(){
 					this.resetFrame(function(){
+						var frame = this.getIframe();
+						if(frame){
+							frame.selectable();
+						}
 						me.iframeReady = true;
 						me.fireEvent('iframe-ready');
 					});
