@@ -231,6 +231,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			listeners: {
 				scope: this,
 				destroy: this.closePost
+			},
+			xhooks:{
+				destroy: function(){
+					delete this.ownerCt;
+					return this.callParent(arguments);
+				}
 			}
 		};
 
