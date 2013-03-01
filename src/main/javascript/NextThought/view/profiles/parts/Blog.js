@@ -34,9 +34,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	initComponent: function(){
-		this.callParent(arguments);
-
 		var me = this;
+		me.callParent(arguments);
+		if(me.disabled){
+			Ext.defer(me.destroy,1,me);
+			return;
+		}
+
 
 		if(isMe(me.username)){
 			me.addCls('owner');
