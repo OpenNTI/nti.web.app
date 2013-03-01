@@ -67,10 +67,18 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.editorActions = new NoteEditorActions(this,this.editor);
+		var r = this.record, h,e = this.editorActions = new NoteEditorActions(this,this.editor);
 
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);
+
+		if( r ){
+			h = r.get('headline');
+			e.setValue(h.get('body'));
+			e.setTitle(h.get('title'));
+			e.setTags(h.get('tags'));
+			e.setPublished(r.isPublished());
+		}
 	},
 
 

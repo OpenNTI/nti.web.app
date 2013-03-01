@@ -689,6 +689,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
+	setTitle: function(){},
+
+
+	setTags: function(){},
+
+
+	setPublished: function(){},
+
+
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		this.updatePrefs();
