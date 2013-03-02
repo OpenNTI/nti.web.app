@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.annotations.note.EditorActions', {
 	requires: [
 		'NextThought.util.Ranges',
-		'NextThought.view.menus.Share'
+		'NextThought.view.menus.Share',
+		'NextThought.view.form.fields.TagField'
 	],
 
 	mixins: {
@@ -76,6 +77,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 				me.publishEl[action]('on');
 			});
+		}
+
+		me.tagsEl = editorEl.down('.tags');
+		if( me.tagsEl ){
+			me.tags = Ext.widget('tags',{renderTo: me.tagsEl});
 		}
 
 		this.updateShareWithLabel();
@@ -708,7 +714,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	setTags: function(){},
+	setTags: function(tags){
+		if(this.tags){
+			this.tags.setValue(tags);
+		}
+	},
 
 
 	setPublished: function(value){
