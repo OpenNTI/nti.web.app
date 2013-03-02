@@ -119,7 +119,7 @@
 				.comment-count {
 					cursor: pointer;
 					color: $primary-blue;
-					&.draft {
+					&.only.me {
 						color: $primary-red;
 					}
 				}

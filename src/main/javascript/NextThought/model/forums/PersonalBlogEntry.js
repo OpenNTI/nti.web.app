@@ -3,7 +3,7 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 
 	fields: [
 		{ name: 'publish-state', convert: function(v,r){
-			return r.isPublished() ? 'Published':'Draft';
+			return r.isPublished() ? 'Public':'Only Me';
 		} }
 	],
 

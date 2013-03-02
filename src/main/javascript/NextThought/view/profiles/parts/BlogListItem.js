@@ -102,14 +102,14 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		var items = [], me = this, menuCfg;
 
 		items.push({
-			text: 'Publish',
+			text: 'Public',
 			checked: me.record.isPublished() === true,
 			published: true,
 			handler: function(item){
 				item.up('.menu').ownerCmp.publishAction(item);
 			}
 		},{
-			text: 'Unpublish',
+			text: 'Only Me',
 			checked: me.record.isPublished() === false,
 			published: false,
 			handler: function(item){
@@ -175,10 +175,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	},
 
 	markAsPublished: function(value){
-		var val = value ? 'published' : 'draft',
-			removeCls = value ? 'draft' : 'published';
+		var val = value ? 'public' : 'only me',
+			removeCls = value ? 'only me' : 'public';
 		this.publishStateEl.addCls(val);
-		this.publishStateEl.update(Ext.String.capitalize(val));
+		this.publishStateEl.update(Ext.Array.map(val.split(' '),Ext.String.capitalize).join(' '));
 		this.publishStateEl.removeCls(removeCls);
 	},
 
