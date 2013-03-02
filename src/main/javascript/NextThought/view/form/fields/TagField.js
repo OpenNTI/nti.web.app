@@ -8,10 +8,9 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	cls: 'token-field',
 	ui: 'tokens',
 	hideLabel: true,
-	regex: /[^\t\n ,]+/,
+	regex: /[^\t\r\n\s,]+/,
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag:'input', type:'hidden', value:'{value}'},
 		{tag:'span', cls:'token-input-wrap', cn:[
 			{tag:'input', type:'text', size:'1', placeholder: 'Tags'},
 			{tag:'span', cls:'token-input-sizer', html:'####'}
@@ -123,7 +122,9 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			this.working = true;
 			if (this.isToken(val)) {
 				el.dom.value = '';
-				this.tokenTpl.insertBefore(this.wrapEl,[val]);
+				if(!Ext.Array.contains(this.getValue(),val)){
+					this.tokenTpl.insertBefore(this.wrapEl,[val]);
+				}
 				this.el.repaint();
 			}
 
@@ -139,26 +140,35 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			return;
 		}
 		this.readOnly = readOnly;
+		this.el[readOnly?'addCls':'removeCls']('readOnly');
 		this.inputEl[readOnly?'hide':'show']();
 	},
 
 
 	setValue: function(value){
+		if(!this.rendered){
+			Ext.Error.raise('Should only be called after rendering');
+		}
+
+		Ext.each(value||[],function(v){
+			this.tokenTpl.insertBefore(this.wrapEl,[v]); },this);
 
 		return this;
 	},
 
 
-	initValue: function(){
-	},
+	initValue: Ext.emptyFn,
 
 
-	isValid: function() {
-		return true;
-	},
+	isValid: function() { return true; },
 
 
 	getValue: function(){
-		return [];
+		return Ext.Array.map(
+			this.el.query('.token .value'),
+			function(el){
+				return el.innerHTML||'';
+			}
+		);
 	}
 });
