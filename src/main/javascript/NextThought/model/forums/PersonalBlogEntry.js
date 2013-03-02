@@ -8,6 +8,12 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	],
 
 
+	//TODO: workaround for no-edit link
+	isModifiable: function(){
+		return isMe(this.get('Creator'));
+	},
+
+
 	isPublished: function(){
 		return Boolean(this.getLink('unpublish'));
 	},

@@ -60,7 +60,7 @@ Ext.define('NextThought.proxy.Rest', {
 		}
 		
 		if (action==='update' || action==='destroy'){
-			href = record.getLink('edit');
+			href = record.getLink('edit') || record.get('href');
 		}
 		else if(action === 'create'){
 			collection = $AppConfig.service.getCollectionFor(mimeType,null) || {};

@@ -96,8 +96,17 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	deleteBlogPost: function(record, cmp){
-
-
+		if(!record.get('href')){
+			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
+		}
+		record.destroy({
+			success:function(){
+				Ext.callback((cmp||{}).destroy,cmp);
+			},
+			failure: function(){
+				alert('Sorry, could not delete that')
+			}
+		});
 	}
 
 });
