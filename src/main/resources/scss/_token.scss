@@ -77,6 +77,14 @@ div.nt-token-wrapper{
 		display: none;
 	}
 
+	.readOnly {
+		.token {
+			.x {
+				display: none;
+			}
+		}
+	}
+
 	.token {
 		font: normal 400 12px/20px $font;
 		display: inline-block;
