@@ -116,7 +116,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	onBlur: function(){
 		var el = this.inputEl,
-			val = el.getValue();
+			val = (el.getValue()||'').toLowerCase();
 
 		if (!this.working) {
 			this.working = true;

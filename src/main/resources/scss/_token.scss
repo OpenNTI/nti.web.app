@@ -137,6 +137,8 @@ div.nt-token-wrapper{
 			margin: 0;
 			border: 0;
 
+			text-transform: lowercase;
+
 			//&[value=""],&:not([value]){
 			//	font-style: italic;
 			//}
