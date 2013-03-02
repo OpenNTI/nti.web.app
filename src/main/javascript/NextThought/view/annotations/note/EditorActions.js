@@ -697,8 +697,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			body : this.getNoteBody(out),
 			shareWith : this.shareMenu.getValue(),
 			publish: this.getPublished(),
-			title: this.titleEl ? this.titleEl.getValue() : undefined//,
-//			tags: this.tagList.toList()
+			title: this.titleEl ? this.titleEl.getValue() : undefined,
+			tags: this.tags ? this.tags.getValue() : []
 		};
 	},
 
