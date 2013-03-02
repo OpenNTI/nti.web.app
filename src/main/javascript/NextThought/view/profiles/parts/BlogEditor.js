@@ -13,11 +13,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				cls: 'main',
 				cn:[{
 					cls: 'title',
-					cn:[{tag:'input', type:'text', placeholder: 'My Next Thought...'}]
+					cn:[{tag:'input', type:'text', placeholder: 'Title...'}]
 				},{
 					cls: 'aux',
 					cn:[
-						{cls: 'action publish', 'data-qtip': 'Publish'},
+						{cls: 'action publish', 'data-qtip': 'Publish State'},
 						{cls: 'action share'},
 						{cls: 'tags'}
 					]

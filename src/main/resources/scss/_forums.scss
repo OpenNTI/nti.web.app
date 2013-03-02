@@ -59,9 +59,12 @@
 					}
 
 					.content {
-						max-height: auto;
+						max-height: none;
 						min-height: 300px;
 						padding: 20px 15px 0;
+						font-family: $font;
+						font-size: 12px;
+						line-height: 2em;
 					}
 				}
 			}
