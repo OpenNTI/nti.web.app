@@ -109,8 +109,10 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 
 	updateSize: function(){
-		var v = this.inputEl.getValue();
+		var i = this.inputEl,
+			v = i.getValue();
 		this.sizerEl.update(v+'####');
+		i[v?'removeCls':'addCls']('empty');
 	},
 
 
