@@ -19,7 +19,10 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		]}
 	]),
 
-	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', html:'{0}', cls:'token'}),
+	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token', cn:[
+		{tag:'span', cls:'value', html:'{0}'},
+		{tag:'span', cls:'x'}
+	]}),
 
 	renderSelectors: {
 		wrapEl: '.token-input-wrap',
@@ -39,7 +42,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	afterRender: function(){
 		this.callParent();
 
-		this.mon(this.el,'click',function(e){e.stopEvent();this.inputEl.focus();},this);
+		this.mon(this.el,'click',this.onClick,this);
 
 		this.mon(this.inputEl,{
 			scope: this,
@@ -55,6 +58,17 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			keypress: this.onKeyPress,
 			blur: this.onBlur
 		});
+	},
+
+
+	onClick: function(e){
+		e.stopEvent();
+		var t = e.getTarget('.x',null,true),
+			p = t ? t.up('.token') : null;
+		if( t && p ){
+			p.remove();
+		}
+		this.inputEl.focus();
 	},
 
 

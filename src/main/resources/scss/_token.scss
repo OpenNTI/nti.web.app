@@ -81,10 +81,38 @@ div.nt-token-wrapper{
 		font: normal 400 12px/20px $font;
 		display: inline-block;
 		white-space: normal;
-		padding: 2px;
+		padding: 0 0 0 4px;
 		margin: 3px 3px 3px 0;
 		border-radius: 3px;
-		border: 1px solid #dcdcdc;
+		border: 1px solid $border-blue;
+		background: $toast-border-top;
+		color: rgba(255,255,255,0.7);
+
+		.value,.x{
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.x{
+			position: relative;
+			display: inline-block;
+			width: 15px;
+			height: 20px;
+
+			&::after{
+				content: '';
+				display: block;
+				position: absolute;
+				background: $icons no-repeat;
+				@include sprite($icons,'light-x',$dimensions: true);
+				top: 6px; left: 4px;
+				cursor: pointer;
+			}
+			&:hover::after {
+				@include sprite($icons,'light-x-hover');
+			}
+		}
 	}
 
 	.token-input-wrap{
