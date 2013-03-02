@@ -35,7 +35,7 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false },
-		{ name: 'tags', type: 'auto', persist: false, defaultValue: [] },
+		{ name: 'tags', type: 'auto', defaultValue: [] },
 		{ name: 'isModifiable', persist: false, convert:function(v,r){return r.phantom||r.getLink('edit')!==null;} }
 	],
 
