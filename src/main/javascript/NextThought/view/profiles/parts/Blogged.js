@@ -8,11 +8,11 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
 		{ cls: 'meta', cn:[
-			{ cls: 'label path', cn:[{tag:'span',cls:'name',html:'{name}'},' / Thoughts / {date}']},
 			{ cls: 'title', html: '{headline.title}' },
 			{ cls: 'counts', cn:[
 				{ tag: 'span', cls:'link', html: '{PostCount} Comments', 'data-target':'comments' },
-				{ tag: 'span', cls:'link', html: '{LikeCount} Likes' }
+				{ tag: 'span', cls:'link', html: '{LikeCount} Likes' },
+				{ tag: 'span', html: '{date}'}
 			] }
 		]}
 	]),

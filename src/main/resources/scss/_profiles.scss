@@ -225,6 +225,26 @@
 			}
 		}
 
+
+
+		.blogged-event{
+			position: relative;
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 38px;
+				right: 20px;
+				opacity: 0.3;
+				background: $icons no-repeat;
+				@include sprite($icons,'arrow-next',$dimensions: true);
+			}
+
+			&:hover{
+				&::after{opacity: 1;}
+			}
+		}
+
 		.blogged-event,
 		.joined-event {
 			margin-top: 20px;
@@ -252,21 +272,7 @@
 
 			.meta {
 				margin: 0 0 0 75px;
-				.label {
-					margin-top: 5px;
-					color: $primary-grey;
-					font: normal 400 15px/30px $font;
-					&.path {
-						@include menu-label-text-treatment;
-						margin-top: 0;
-						color: $tertiary-grey;
-						line-height: 14px;
-					}
-				}
-				.date {
-					color: $tertiary-grey;
-					font: normal 400 11px/20px $font;
-				}
+				color: $tertiary-grey;
 				.title{
 					color: $primary-grey;
 					font: normal 300 20px/30px $font;
@@ -274,8 +280,6 @@
 				.counts {
 					font: normal 400 12px/20px $font;
 					span{
-						color: $primary-blue;
-
 						&::after{
 							color: $tertiary-grey;
 							font: normal 500 12px/20px $font;
