@@ -8,7 +8,6 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	cls: 'token-field',
 	ui: 'tokens',
 	hideLabel: true,
-	delimiters: '\t\n ,',
 	regex: /[^\t\n ,]+/,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -55,7 +54,6 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.mon(this.inputEl,{
 			scope: this,
 			keydown: this.onKeyDown,
-			keypress: this.onKeyPress,
 			blur: this.onBlur
 		});
 	},
@@ -73,32 +71,37 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 
 	isDelimiter: function(ch){
-		return String.fromCharCode(ch).match(new RegExp('['+this.delimiters+']'));
+		return Boolean(String.fromCharCode(ch).match(/[\t\r\n\s,]/));
 	},
 
 
 	isToken: function(text) { return (text||'').match(this.regex); },
 
 	onKeyDown: function(e){
-		var el = this.inputEl;
-		if (e.getKey() === e.TAB && el.getValue()) {
-			el.blur();
-			Ext.defer(el.focus,1,el);
-			e.stopEvent();
-			return false;
-		}
-		return true;
-	},
-
-
-	onKeyPress: function(e){
 		var el = this.inputEl,
-				key = e.getKey();
+			key = e.getKey(),
+			val = el.getValue(),
+			t;
+
 		if (key === e.ENTER || this.isDelimiter(key)) {
 			el.blur();
 			if (this.isDelimiter(key)){
 				Ext.defer(el.focus,1,el);
 			}
+			e.stopEvent();
+			return false;
+		}
+
+		if( key === e.TAB && val) {
+			el.blur();
+			Ext.defer(el.focus,1,el);
+			e.stopEvent();
+			return false;
+		}
+
+		if(key === e.BACKSPACE && !val) {
+			t = this.el.query('.token').last();
+			if(t){ Ext.fly(t).remove(); }
 			e.stopEvent();
 			return false;
 		}
@@ -115,7 +118,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	onBlur: function(){
 		var el = this.inputEl,
 			val = el.getValue();
-		console.log('Blurred',val);
+
 		if (!this.working) {
 			this.working = true;
 			if (this.isToken(val)) {
