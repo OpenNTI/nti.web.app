@@ -68,26 +68,108 @@ Ext.define('NextThought.store.FriendsList',{
 	],
 
 	constructor: function(){
-		var r = this.callParent(arguments);
+		var r = this.callParent(arguments),
+			me = this;
 
+	/*	this.proxy.afterRequest = function(request, operation){
+			//We end up parsing the reponse again here.  Can
+			//we hook in somewhere else and avoid the double parse
+			var result = this.reader.jsonData;
+
+			if(result && result['Last Modified']){
+				me.lastModified = new Date(result['Last Modified'] * 1000);
+				console.log('FriendsList last modified set to', me.lastModified);
+			}
+		}
+	*/
 		this.on({
 			scope: this,
 			write: this.onWrite,
 			add: this.contactsMaybeAdded,
 			remove: this.contactsMaybeRemoved,
 			update: this.contactsMaybeChanged,
-			load: this.fireContactsLoaded
+			refresh: this.fireContactsRefreshed
 		});
 
 		return r;
 	},
 
+
 	//TODO make this a smart reload that requests new data with a proper last modified.
 	//If we receive more data we should merge it in appropriately.  Updating any existing objects
 	//whose last modified times are more recent, adding any new records and removing any records that
 	//should no longer exist. Not sure where all that behavour hooks in but it should occur on reloads.
-	reload: function(){
-		return this.callParent(arguments);
+	reload: function(options){
+	/*	var ifModSince = this.lastModified ? this.lastModified.toUTCString() : undefined;
+
+		if(ifModSince){
+			this.proxy.headers = Ext.apply(this.proxy.headers, {
+				'If-Modified-Since': new Date().toUTCString()
+			});
+		}*/
+
+		//Pass along a flag so we know this is a reload
+		options = Ext.apply(options||{},{
+			reload: true
+		});
+
+		return this.callParent([options]);
+	},
+
+	loadRecords: function(records, options){
+		console.log('load records called with', arguments);
+		if(options.reload){
+			this.mergeRecords(records, options);
+		}
+		else{
+			this.callParent(arguments);
+		}
+	},
+
+	mergeRecords: function(newRecords, options){
+		console.log('need to merge records', newRecords);
+		var oldRecordIds = Ext.Array.map(this.data.items, function(i){return i.getId();}),
+			toAdd = [];
+
+		Ext.Array.each(newRecords, function(rec){
+			var current = this.getById(rec.getId()),
+				serverTime, localTime;
+
+			//if we have one already merge based on last modified time
+			if(current){
+				//If the current last mod is newer on server we move
+				//in.  In the webapp right now we should never
+				//have a local last mod that is newer so we warn.
+				serverTime = rec.get('Last Modified').getTime();
+				localTime = current.get('Last Modified').getTime();
+
+				if(serverTime > localTime){
+					console.log('Merging', rec, ' into ', current);
+					current.set(rec.raw);
+				}
+				else if(serverTime < localTime){
+					console.warn('local last modified time < server last modified. What gives?', current, rec);
+				}
+			}
+			else{
+				toAdd.push(rec);
+			}
+
+			//now remove the id from oldRecordsIds
+			Ext.Array.remove(oldRecordIds, rec.getId());
+		}, this);
+
+		//Any that are left in oldRecordsId no longer exist on the server
+		//so we remove them
+		console.log('Removing records with ids as part of merge', oldRecordIds);
+		Ext.Array.each(oldRecordIds, function(id){
+			this.removeAt(this.indexOfId(id));
+		}, this);
+
+		if(!Ext.isEmpty(toAdd)){
+			console.log('Adding fls as part of merge', toAdd);
+			this.add(toAdd);
+		}
 	},
 
 	//Taken from PageItem store. move to subclass?
@@ -100,9 +182,9 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	fireContactsLoaded: function(){
-		console.log('firing contacts loaded');
-		this.fireEvent('contacts-loaded', this);
+	fireContactsRefreshed: function(){
+		console.log('firing contacts refreshed');
+		this.fireEvent('contacts-refreshed', this);
 	},
 
 

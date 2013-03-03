@@ -103,10 +103,10 @@ Ext.define('NextThought.controller.Groups', {
 		store.on('load', this.ensureContactsGroup, this);
 		store.on({
 			scope: this,
-			'contacts-loaded': this.publishContacts,
+			'contacts-refreshed': this.publishContacts,
 			'contacts-added': this.contactsAdded,
 			'contacts-removed': this.contactsRemoved,
-			load: this.friendsListsLoaded,
+			refresh: this.friendsListsRefreshed,
 			add: this.friendsListsAdded,
 			remove: this.friendsListRemoved //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
 		});
@@ -288,14 +288,10 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	friendsListsLoaded: function(store, records, successful){
+	friendsListsRefreshed: function(store){
 		var groupsToAdd = [], listsToAdd = [], me = this;
 
-		if(!successful){
-			console.warn('Friends list load callback was unsuccesful', arguments);
-			return;
-		}
-		console.log('FLs loaded', arguments);
+		console.log('FLs refreshed', arguments);
 
 		store.each(function(rec){
 			var target;
