@@ -6,6 +6,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
+	requires:[
+		'NextThought.view.menus.BlogTogglePublish'
+	],
+
 	cls: 'entry',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -82,7 +86,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-//		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
+		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 
 		if( this.deleteEl ){
@@ -99,42 +103,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	},
 
 	setupPublishMenu: function(){
-		var items = [], me = this, menuCfg;
-
-		items.push({
-			text: 'Public',
-			checked: me.record.isPublished() === true,
-			published: true,
-			handler: function(item){
-				item.up('.menu').ownerCmp.publishAction(item);
-			}
-		},{
-			text: 'Only Me',
-			checked: me.record.isPublished() === false,
-			published: false,
-			handler: function(item){
-				item.up('.menu').ownerCmp.publishAction(item);
-			}
-		});
-
-		menuCfg = {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
-			parentItem: this,
-			defaults: {
-				ui: 'nt-menuitem',
-				xtype: 'menucheckitem',
-				plain: true,
-				group: 'publish'
-			}
-		};
-
-		this.publishMenu = Ext.widget('menu', Ext.apply({items: items, ownerCmp: me}, menuCfg));
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
 	},
 
 	publishAction: function(item){
@@ -174,7 +143,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		}
 	},
 
-	markAsPublished: function(value){
+	markAsPublished: function(key, value){
 		var val = value ? 'public' : 'only me',
 			removeCls = value ? 'only me' : 'public';
 		this.publishStateEl.addCls(val);

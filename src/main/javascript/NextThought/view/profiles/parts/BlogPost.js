@@ -6,6 +6,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
+	requires:[
+		'NextThought.view.menus.BlogTogglePublish'
+	],
+
 	cls: 'entry',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -36,7 +40,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		editEl: '.meta .edit',
-		deleteEl: '.meta .delete'
+		deleteEl: '.meta .delete',
+		publishStateEl: '.meta .state'
 	},
 
 
@@ -72,6 +77,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var h = this.record.get('headline');
 		if(!h){return;}
 
+		this.setupPublishMenu();
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		this.bodyEl.selectable();
 
@@ -103,6 +109,25 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	getRecord: function(){
 		return this.record.get('headline');
+	},
+
+	showPublishMenu: function(){
+		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
+	},
+
+	setupPublishMenu: function(){
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
+
+		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
+		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
+	},
+
+	markAsPublished: function(key, value){
+		var val = value ? 'public' : 'only me',
+			removeCls = value ? 'only me' : 'public';
+		this.publishStateEl.addCls(val);
+		this.publishStateEl.update(Ext.Array.map(val.split(' '),Ext.String.capitalize).join(' '));
+		this.publishStateEl.removeCls(removeCls);
 	},
 
 
