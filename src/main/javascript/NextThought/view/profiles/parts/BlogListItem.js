@@ -83,7 +83,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(!h){return;}
 
 		this.setPublishState();
-		this.publishStateEl.update(this.record.get('publish-state'));
+
+		h.addObserverForField(this, 'title', this.updateField, this);
+		h.addObserverForField(this, 'body', this.updateField, this);
+		h.addObserverForField(this, 'tags', this.updateField, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
@@ -115,7 +118,17 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	},
 
 
+	updateField: function(key, value){
+		var el = this.el.down('.'+key);
+		if(el){ el.update(value); }
+	},
+
+
 	onDestroy: function(){
+		var h = this.record.get('headline');
+		h.removeObserverForField(this, 'title', this.updateField, this);
+		h.removeObserverForField(this, 'body', this.updateField, this);
+		h.removeObserverForField(this, 'tags', this.updateField, this);
 		this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
 		this.callParent(arguments);
 	},
