@@ -88,8 +88,10 @@ Ext.define( 'NextThought.view.views.Profiles', {
 
 	onDeactivated: function(){
 		var profile = this.down('profile-panel');
-		if(profile && Ext.isFunction(profile.onDeactivated)){
-			profile.onDeactivated.apply(profile, arguments);
+		//save memory/dom by cleaning out the profile object while its not active.
+		if(profile){
+			//console.debug('Destroying profile widget');
+			profile.destroy();
 		}
 	}
 });

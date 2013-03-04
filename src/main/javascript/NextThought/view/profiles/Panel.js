@@ -676,15 +676,5 @@ Ext.define('NextThought.view.profiles.Panel',{
 		e.stopEvent();
 		this.fireEvent('edit');
 		return false;
-	},
-
-
-	onDeactivated: function(){
-		if(this.nameEditor){
-			this.nameEditor.cancelEdit();
-		}
-		if(this.metaEditor){
-			this.metaEditor.cancelEdit();
-		}
 	}
 });
