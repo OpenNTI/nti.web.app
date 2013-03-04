@@ -143,6 +143,11 @@ div.nt-token-wrapper{
 			margin: 0;
 			border: 0;
 
+			.x-gecko &{
+				width: 99%;
+				top: 9px;
+			}
+
 			text-transform: lowercase;
 
 			&.empty{

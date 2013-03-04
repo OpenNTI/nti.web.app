@@ -12,7 +12,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'span', cls:'token-input-wrap', cn:[
-			{tag:'input', type:'text', size:'1', placeholder: 'Tags'},
+			{tag:'input', type:'text', placeholder: 'Tags'},
 			{tag:'span', cls:'token-input-sizer', html:'####'}
 		]}
 	]),
