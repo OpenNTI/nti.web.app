@@ -34,50 +34,61 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	initComponent: function(){
-		var me = this;
-		me.callParent(arguments);
-		if(me.disabled){
-			Ext.defer(me.destroy,1,me);
+		this.callParent(arguments);
+		if(this.disabled){
+			Ext.defer(this.destroy,1,this);
 			return;
 		}
 
 
-		if(isMe(me.username)){
-			me.addCls('owner');
-			me.renderSelectors.headerEl = '.header';
+		if(isMe(this.username)){
+			this.addCls('owner');
+			this.renderSelectors.headerEl = '.header';
 		}
 
+		this.buildBlog();
+
+		this.on('show-post',this.updateLocation,this);
+	},
+
+
+	buildBlog: function(reresolveUser){
 		function fail(response){
 			console.warn('No blog object ('+response.status+') :'+response.responseText);
 			//ensure that the destroy happens after the construction/component plumbing.
 			//If the request is cached in the browser, this may be a synchronous call.
-			Ext.defer(me.destroy,1,me);
+			Ext.defer(this.destroy,1,this);
 		}
 
-		UserRepository.getUser(me.username,function(user){
-			me.user = user;
-			var req = {
-				url: user.getLink('Blog'),
-				scope: me,
-				success: me.loadContents,
-				failure: fail
-			};
+		var user = this.user,
+			req = {
+			url: user?user.getLink('Blog'):null,
+			scope: this,
+			success: this.loadContents,
+			failure: fail
+		};
 
-			if(Ext.isEmpty(req.url)){
-				if(isMe(user) && $AppConfig.service.canBlog()){
-					//Our user can blog, but does not have any blog posts yet. So lets not fire fail() as that will
-					// remove the blogging widgets.
-					return;
-				}
 
-				fail({status:0,responseText:'User object did not have a Blog url'});
+		if(Ext.isEmpty(req.url)){
+			if(reresolveUser || !user){
+				UserRepository.getUser(this.username,function(user){
+					this.user = user;
+					this.buildBlog();
+				},this,Boolean(reresolveUser));
 				return;
 			}
 
-			Ext.Ajax.request(req);
-		});
+			if(isMe(user) && $AppConfig.service.canBlog()){
+				//Our user can blog, but does not have any blog posts yet. So lets not fire fail() as that will
+				// remove the blogging widgets.
+				return;
+			}
 
-		this.on('show-post',this.updateLocation,this);
+			fail({status:0,responseText:'User object did not have a Blog url'});
+			return;
+		}
+
+		Ext.Ajax.request(req);
 	},
 
 

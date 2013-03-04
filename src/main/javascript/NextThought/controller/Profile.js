@@ -63,7 +63,16 @@ Ext.define('NextThought.controller.Profile', {
 		function finish(entry){
 			var blogCmp = editorCmp.up('profile-blog');
 			if(!isEdit){
-				blogCmp.store.insert(0,entry);
+				try {
+					if(blogCmp.store){
+						blogCmp.store.insert(0,entry);
+					} else {
+						blogCmp.buildBlog(true);
+					}
+				}
+				catch(e){
+					console.error('Could not insert blog post into blog widget',Globals.getError(e));
+				}
 			}
 
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
