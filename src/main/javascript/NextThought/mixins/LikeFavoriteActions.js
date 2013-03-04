@@ -2,8 +2,9 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 	constructor: function(){
 		function onAfterRender(){
-			var me = this;
-			if( me.getRecord().parent ){
+			var me = this,
+				rec = me.getRecord();
+			if( rec.parent ){
 				if( me.favorites ){
 					me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
 					me.favorites.hide();
@@ -13,8 +14,15 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 				}
 			}
 
-			if( me.liked ){     me.mon(me.liked,    'click', function(){ me.getRecord().like(me); }, me); }
-			if( me.favorites ){ me.mon(me.favorites,'click', function(){ me.getRecord().favorite(me); },me); }
+			if( !rec.isLikeable() ){
+				me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			}
+			if( !rec.isFavoritable() ){
+				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+			}
+
+			if( me.liked ){  me.mon(me.liked,    'click', function(){ rec.like(me); }, me); }
+			if( me.favorites ){ me.mon(me.favorites,'click', function(){ rec.favorite(me); },me); }
 		}
 
 		this.on('afterrender',onAfterRender,this,{single:true});

@@ -108,7 +108,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	getRecord: function(){
-		return this.record.get('headline');
+		return this.record;
 	},
 
 

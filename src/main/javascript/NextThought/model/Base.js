@@ -314,6 +314,16 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	isLikeable: function(){
+		return Boolean(this.getLink('like')) || Boolean(this.getLink('unlike'));
+	},
+
+
+	isFavoritable: function(){
+		return Boolean(this.getLink('favorite')) || Boolean(this.getLink('unfavorite'));
+	},
+
+
 	isFavorited: function(){
 		return Boolean(this.getLink('unfavorite'));
 	},
