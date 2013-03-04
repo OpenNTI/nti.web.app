@@ -136,7 +136,20 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	onDeletePost: function(e){
 		e.stopEvent();
-		this.fireEvent('delete-post',this.record, this);
+		var me = this;
+		Ext.Msg.show({
+			msg: 'The following action will delete permanently your blog post',
+			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					me.fireEvent('delete-post',me.record, me);
+				}
+			}
+		});
 	},
 
 
