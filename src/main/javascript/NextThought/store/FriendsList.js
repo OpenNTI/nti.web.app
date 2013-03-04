@@ -71,7 +71,7 @@ Ext.define('NextThought.store.FriendsList',{
 		var r = this.callParent(arguments),
 			me = this;
 
-	/*	this.proxy.afterRequest = function(request, operation){
+		/*this.proxy.afterRequest = function(request, operation){
 			//We end up parsing the reponse again here.  Can
 			//we hook in somewhere else and avoid the double parse
 			var result = this.reader.jsonData;
@@ -80,8 +80,8 @@ Ext.define('NextThought.store.FriendsList',{
 				me.lastModified = new Date(result['Last Modified'] * 1000);
 				console.log('FriendsList last modified set to', me.lastModified);
 			}
-		}
-	*/
+		}*/
+
 		this.on({
 			scope: this,
 			write: this.onWrite,
@@ -100,17 +100,17 @@ Ext.define('NextThought.store.FriendsList',{
 	//whose last modified times are more recent, adding any new records and removing any records that
 	//should no longer exist. Not sure where all that behavour hooks in but it should occur on reloads.
 	reload: function(options){
-	/*	var ifModSince = this.lastModified ? this.lastModified.toUTCString() : undefined;
+		/*var ifModSince = this.lastModified ? this.lastModified.toUTCString() : undefined;
 
 		if(ifModSince){
 			this.proxy.headers = Ext.apply(this.proxy.headers, {
-				'If-Modified-Since': new Date().toUTCString()
+				'If-Modified-Since': ifModSince
 			});
 		}*/
 
 		//Pass along a flag so we know this is a reload
 		options = Ext.apply(options||{},{
-			reload: true
+			merge: true
 		});
 
 		return this.callParent([options]);
@@ -118,7 +118,7 @@ Ext.define('NextThought.store.FriendsList',{
 
 	loadRecords: function(records, options){
 		console.log('load records called with', arguments);
-		if(options.reload){
+		if(options.merge){
 			this.mergeRecords(records, options);
 		}
 		else{
@@ -265,7 +265,7 @@ Ext.define('NextThought.store.FriendsList',{
 			return true;
 		}
 
-		return false
+		return false;
 	},
 
 
