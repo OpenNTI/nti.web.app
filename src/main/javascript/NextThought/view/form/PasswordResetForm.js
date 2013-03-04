@@ -54,7 +54,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 						if(value.length < 6){
 							throw 'Password is too short.';
 						}
-						return true
+						return true;
 					}
 				}, {
 					name: 'password-verify',
@@ -156,8 +156,8 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		if( val(input) ){
 			me.setMessage();
 			v = me.inputs.reduce( function(accum,o){ return accum && val(o,true); }, true);
-			if(input.name == 'password'){
-			}
+//			if(input.name === 'password'){
+//			}
 		}
 
 		me.down('button[save]')[v?'enable':'disable']();

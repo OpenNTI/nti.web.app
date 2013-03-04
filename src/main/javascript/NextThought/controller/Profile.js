@@ -113,7 +113,7 @@ Ext.define('NextThought.controller.Profile', {
 				Ext.callback((cmp||{}).destroy,cmp);
 			},
 			failure: function(){
-				alert('Sorry, could not delete that')
+				alert('Sorry, could not delete that');
 			}
 		});
 	}

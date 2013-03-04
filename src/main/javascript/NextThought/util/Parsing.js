@@ -1,5 +1,5 @@
 /*jslint continue: true*/
-/*globals document, DOMParser */
+/*globals console, document, DOMParser */
 Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
@@ -203,7 +203,6 @@ Ext.define('NextThought.util.Parsing',{
 	 */
 
 	/*! @source https://gist.github.com/1129031 */
-	/* global document, DOMParser, console */
 	(function(DOMParser) {
 	    "use strict";
 	    var DOMParser_proto = DOMParser.prototype
