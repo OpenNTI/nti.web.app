@@ -85,7 +85,19 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	onSave: function(e){
 		e.stopEvent();
-		var v = this.editorActions.getValue();
+		var v = this.editorActions.getValue(),
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+
+		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
+			console.error('bad blog post');
+			return;
+		}
+
+		if(Ext.isEmpty(v.title)){
+			console.error('You need a title');
+			return;
+		}
+
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
 		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.publish);
