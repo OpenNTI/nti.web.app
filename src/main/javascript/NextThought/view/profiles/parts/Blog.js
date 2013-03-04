@@ -71,6 +71,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		if(Ext.isEmpty(req.url)){
 			if(reresolveUser || !user){
+				//flag the user object as needing to be re-resolved
+				if(user){ user.summaryObject = user.summaryObject || Boolean(reresolveUser); }
 				UserRepository.getUser(this.username,function(user){
 					this.user = user;
 					this.buildBlog();
