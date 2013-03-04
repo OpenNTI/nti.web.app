@@ -151,3 +151,58 @@
 		color: #fff;
 	}
 }
+
+
+.error-tip {
+	position: relative;
+	overflow: visible !important;
+
+	&[data-error-tip]{
+		&::before {
+			display: block;
+
+			position: absolute;
+			top: -16px; left: 5px;
+			z-index: 999;
+
+			content: attr(data-error-tip);
+			color: $quad-grey;
+			background: $primary-red;
+			border: 1px solid $secondary-red;
+			box-shadow: 2px 2px 5px 0 rgba(0,0,0,0.1);
+
+			padding: 1px 5px 1px 3px;
+			font-size: 11px;
+			font-style: italic;
+			font-weight: 500;
+
+			text-align: left;
+			text-shadow: 0 1px 0 $primary-red;
+			text-transform: uppercase;
+		}
+
+		&::after {
+			//TODO: put a triangle tip here
+			content: '';
+			//content: url(../images/tooltip_pointer.png);
+			display: block;
+			position: absolute;
+
+			top: 7px;
+			left: 10px;
+			z-index: 9999;
+		}
+
+
+		&.error-on-bottom {
+			&::before {
+				top: initial;
+				bottom: -16px;
+			}
+			&::after {
+				//TODO: put a triangle tip here thats flipped
+			}
+		}
+
+	}
+}

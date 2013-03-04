@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 	ui: 'profile',
-
+	layout: 'auto',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
@@ -72,6 +72,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 	items: [{
 		xtype: 'profile-tabs',
+		layout: 'auto',
 		items: [
 			{title: 'Recent Activity', xtype: 'profile-activity' },
 			{title: 'Thoughts', xtype: 'profile-blog', disabled: $AppConfig.disableBlogs === true },

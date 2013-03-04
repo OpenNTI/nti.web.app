@@ -217,6 +217,7 @@
 			}
 		}
 		.footer {
+			@include experimental(transition, all 0.5s);
 			position: absolute;
 			bottom: 0;
 			left: 0; right: 0;

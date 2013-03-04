@@ -3,14 +3,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	alias: 'widget.profile-blog',
 
 	requires: [
-		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.profiles.parts.BlogEditor',
 		'NextThought.view.profiles.parts.BlogListItem',
 		'NextThought.view.profiles.parts.BlogPost'
 	],
 
 	layout: 'auto',
-	componentLayout: 'templated-container',
 	defaultType: 'profile-blog-list-item',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },

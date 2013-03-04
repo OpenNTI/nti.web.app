@@ -56,7 +56,10 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		editor: '.editor',
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
-		publishEl: '.action.publish'
+		publishEl: '.action.publish',
+		titleEl: '.title',
+		footerEl: '.footer',
+		editorBodyEl: '.content'
 	},
 
 
@@ -68,7 +71,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var r = this.record, h,e = this.editorActions = new NoteEditorActions(this,this.editor);
+		var r = this.record,
+			h,
+			e = this.editorActions = new NoteEditorActions(this,this.editor);
 
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);
@@ -80,7 +85,40 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			e.setTags(h.get('tags'));
 			e.setPublished(r.isPublished());
 		}
+
+		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
+		Ext.get('profile').addCls('scroll-lock');
+		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
+		this.syncHeight();
 	},
+
+
+	destroy: function(){
+		Ext.get('profile').removeCls('scroll-lock');
+		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
+
+		return this.callParent(arguments);
+	},
+
+
+	syncHeight: function(){
+		var el = this.editorBodyEl,
+			top = el.getTop();
+
+		el.setHeight(Ext.dom.Element.getViewportHeight() - top - this.footerEl.getHeight() - 10);
+		Ext.defer(this.updateLayout,700,this,[]);
+	},
+
+
+	onKeyUp: function(){
+		this.clearError(this.editorBodyEl);
+	},
+
+
+	clearError:function(el){ el.removeCls('error-top').set({'data-error-tip':undefined}); },
+
+
+	markError: function(el,message){ el.addCls('error-tip').set({'data-error-tip':message}); },
 
 
 	onSave: function(e){
@@ -90,11 +128,14 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
 			console.error('bad blog post');
+			this.markError(this.editorBodyEl,'You need to type something');
 			return;
 		}
 
 		if(Ext.isEmpty(v.title)){
 			console.error('You need a title');
+			this.markError(this.titleEl,'You need a title');
+			this.titleEl.addCls('error-on-bottom');
 			return;
 		}
 

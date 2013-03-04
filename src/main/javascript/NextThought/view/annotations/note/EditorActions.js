@@ -300,6 +300,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
 		this.checkWhiteboards();
+		Ext.callback(this.cmp.onKeyUp,this.cmp,[e]);
 	},
 
 

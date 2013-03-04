@@ -4,6 +4,10 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 
+	&.scroll-lock{
+		overflow: hidden;
+	}
+
 	.x-component-resource-not-found{
 		position: absolute;
 		padding-top: 75px;
