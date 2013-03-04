@@ -22,6 +22,8 @@ Ext.define('NextThought.view.account.coderetrieval.Main',{
     ],
 
 	updateCode: function(c){
-		this.down('[name=code]').update(c);
+		var code = this.down('[name=code]');
+		code.update(c);
+		code.el.selectable();
 	}
 });
