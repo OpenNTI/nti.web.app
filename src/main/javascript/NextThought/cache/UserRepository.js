@@ -108,7 +108,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 
 				r = this.resolveFromStore(name);
-				if (r && r.raw && (!forceFullResolve && !r.summaryObject)){
+				if (r && r.raw && (!forceFullResolve || !r.summaryObject)){
 					result.push(r);
 					return;
 				}
