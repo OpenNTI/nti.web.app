@@ -19,6 +19,7 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	defaultType: 'search-result',
 
 	MAX_RESULTS_AT_FIRST: 2,
+	PAGE_SIZE: 25,
 	childEls: ['body'],
 
 	initComponent: function(){
@@ -31,13 +32,31 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 
 		this.callParent(arguments);
 		this.renderData = Ext.copyTo({},this,'category');
+		this.on('more-clicked', this.showMore, this);
 	},
 
+	showMore: function(cmp){
+		var count;
 
-	showAll: function(){
-		if(!this.fullResults){return;}
-		this.removeAll(true);
-		this.add(this.fullResults);
-		delete this.fullResults;
+		this.suspendLayouts();
+
+		try{
+			if(cmp){
+				this.remove(cmp);
+			}
+			count = this.items.length;
+			this.add(this.fullResults.slice(count, count+this.PAGE_SIZE));
+
+			if(this.items.length < this.fullResults.length){
+				this.add({xtype: 'search-more'});
+			}
+		}
+		catch(e){
+			console.error('An error occurred showing more', Globals.getError(e));
+		}
+
+		this.resumeLayouts(true);
+
+		return false;
 	}
 });

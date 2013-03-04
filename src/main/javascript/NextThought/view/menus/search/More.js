@@ -3,8 +3,13 @@ Ext.define('NextThought.view.menus.search.More',{
 	alias: 'widget.search-more',
 	cls: 'search-more search-result',
 	renderTpl: [
-		'<div class="see-all"><a href="#">See all...</a></div>'
+		'<div class="see-all"><a href="#">Show more...</a></div>'
 	],
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble(['more-clicked']);
+	},
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -23,7 +28,7 @@ Ext.define('NextThought.view.menus.search.More',{
 
 	clicked: function(){
 		this.getEl().addCls('pulse');
-		this.fireEvent('click', this);
+		this.fireEvent('more-clicked', this);
 	}
 
 });

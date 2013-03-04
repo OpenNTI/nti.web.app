@@ -271,11 +271,5 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		$AppConfig.service.getObject(result.hit.getId(), success, failure);
-	},
-
-
-	showAllForCategoryClicked: function(more) {
-		var cat = more.up('search-result-category');
-		cat.showAll();
 	}
 });
