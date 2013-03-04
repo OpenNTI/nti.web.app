@@ -172,6 +172,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	setContent: function(html){
 		this.bodyEl.update(html);
+		//TODO this may need to be tweaked if/when we have internal links
+		this.bodyEl.select('a[href]', true).set({target: '_blank'});
 	},
 
 
