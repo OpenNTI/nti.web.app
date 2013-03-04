@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var h = this.record.get('headline');
 		if(!h){return;}
 
-		this.setupPublishMenu();
+		this.setPublishState();
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		this.bodyEl.selectable();
 
@@ -111,16 +111,23 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		return this.record.get('headline');
 	},
 
+
 	showPublishMenu: function(){
 		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
 	},
 
-	setupPublishMenu: function(){
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
 
+	setPublishState: function(){
+		if(!this.record.isModifiable()){
+			this.publishStateEl.remove();
+			return;
+		}
+
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
 		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 	},
+
 
 	markAsPublished: function(key, value){
 		var val = value ? 'public' : 'only me',

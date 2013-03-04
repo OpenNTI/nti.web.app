@@ -82,11 +82,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		var h = this.record.get('headline'), me = this;
 		if(!h){return;}
 
-		this.setupPublishMenu();
+		this.setPublishState();
+		this.publishStateEl.update(this.record.get('publish-state'));
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
-		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 
 		if( this.deleteEl ){
@@ -98,20 +97,29 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		}
 	},
 
+
 	showPublishMenu: function(){
 		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
 	},
 
-	setupPublishMenu: function(){
+
+	setPublishState: function(){
+		if(!this.record.isModifiable()){
+			this.publishStateEl.remove();
+			return;
+		}
+
 		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
+		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
+		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 	},
 
-	publishAction: function(item){
-		var action = item.published;
-		if(this.record.isPublished() === action){ return; }
 
-		this.record.publish(this);
+	onDestroy: function(){
+		this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
+		this.callParent(arguments);
 	},
+
 
 	onDeletePost: function(e){
 		e.stopEvent();
