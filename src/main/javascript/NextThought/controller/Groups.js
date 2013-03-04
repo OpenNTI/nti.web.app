@@ -247,6 +247,8 @@ Ext.define('NextThought.controller.Groups', {
 	friendsListsAdded: function(store, records){
 		var me = this;
 
+		this.ensureActiveItem();
+
 		console.log('FLs added', arguments);
 
 		Ext.Array.each(records, function(rec){
@@ -278,6 +280,8 @@ Ext.define('NextThought.controller.Groups', {
 		var containers = record.isDFL ? this.getGroupContainers() : this.getListContainers();
 		console.log('FL removed', arguments);
 
+		this.ensureActiveItem();
+
 		Ext.Array.each(containers, function(container){
 			Ext.Array.each(container.query('[associatedGroup]'), function(c){
 				if(c.associatedGroup === record){
@@ -290,6 +294,8 @@ Ext.define('NextThought.controller.Groups', {
 
 	friendsListsRefreshed: function(store){
 		var groupsToAdd = [], listsToAdd = [], me = this;
+
+		this.ensureActiveItem();
 
 		console.log('FLs refreshed', arguments);
 
@@ -322,11 +328,29 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
+	//Ensures we show the proper card which may be our normal
+	//contacts management, the empty helper, or the coppa panel.
+	//returns true if the standard contact managements
+	//views are showing, false otherwise
+	ensureActiveItem: function(){
+		var store = this.getFriendsListStore(),
+			ct = Ext.getCmp('contacts-view-panel');
+
+		//If there are no contacts or no friendslists other than omnipresent mycontacts group
+		//hence < 2. Show the coppa or empty view
+		if(store.getContacts().length === 0 && store.getCount() < 2){
+			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1: 2 );
+			return false;
+		}
+
+		ct.getLayout().setActiveItem(0);
+		return true;
+	},
+
+
 	//It is unfortunate we have to synchonize this...
 	publishContacts: function(){
 		var me = this,
-			store = me.getFriendsListStore(),
-			ct = Ext.getCmp('contacts-view-panel'),
 			people = Ext.getCmp('contact-list');
 
 		//TODO figure out how to use an event here and get rid of the
@@ -336,16 +360,18 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		//If there are no contacts or no friendslists other than omnipresent mycontacts group
-		//hence < 2. Show the coppa or empty view
-		if(store.getContacts().length === 0 && store.getCount() < 2){
-			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
-			return;
-		}
-
-		ct.getLayout().setActiveItem(0);
-
+		this.ensureActiveItem();
 		this.maybePublishContacts(people);
+	},
+
+
+	ensureContactsPublished: function(){
+		var people = Ext.getCmp('contact-list') || {down:Ext.emptyFn};
+		if(!people.down('[offline]') || !people.down('[online]')){
+			this.maybePublishContacts(people);
+			return false;
+		}
+		return true;
 	},
 
 
@@ -357,6 +383,12 @@ Ext.define('NextThought.controller.Groups', {
 			this.maybePublishContacts();
 			return;
 		}
+
+		if(!this.ensureContactsPublished()){
+			return;
+		}
+
+		this.ensureActiveItem();
 
 		UserRepository.getUser(newContacts, function(users){
 			var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
@@ -391,6 +423,12 @@ Ext.define('NextThought.controller.Groups', {
 			this.maybePublishContacts();
 			return;
 		}
+
+		if(!this.ensureContactsPublished()){
+			return;
+		}
+
+		this.ensureActiveItem();
 
 		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
 			offline = contacts.down('[offline]'),
