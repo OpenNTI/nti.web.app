@@ -118,7 +118,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		e.stopEvent();
 		var me = this;
 		Ext.Msg.show({
-			msg: 'Deleting your blog post will permanently remove it and any comments.',
+			msg: 'Deleting your thought will permanently remove it and any comments.',
 			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
