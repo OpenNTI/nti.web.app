@@ -49,8 +49,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.callParent(arguments);
 		this.addEvents(['delete-post','show-post']);
 		this.enableBubble(['delete-post','show-post']);
+		this.mon(this.record, 'destroy', this.destroy, this);
 	},
-
 
 	beforeRender: function(){
 		this.callParent(arguments);

@@ -136,12 +136,27 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	deleteBlogPost: function(record, cmp){
+		var idToDestroy;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
 		}
+		idToDestroy = record.get('NTIID');
 		record.destroy({
 			success:function(){
-				Ext.callback((cmp||{}).destroy,cmp);
+				LocationProvider.applyToStoresThatWantItem(function(id,store){
+					var r;
+					if(store){
+						actedOn = true;
+						r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
+						if(!r){
+							console.warn('Could not remove, the store did not have item with id: '+idToDestroy, item);
+							return;
+						}
+
+						//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+						store.remove(r);
+					}
+				}, record);
 			},
 			failure: function(){
 				alert('Sorry, could not delete that');

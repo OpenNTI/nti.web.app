@@ -11,12 +11,16 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 			{ cls: 'title', html: '{headline.title}' },
 			{ cls: 'counts', cn:[
 				{ tag: 'span', cls:'link', html: '{PostCount} Comments', 'data-target':'comments' },
-				{ tag: 'span', cls:'link', html: '{LikeCount} Likes' },
+				{ tag: 'span', cls:'link likes', html: '{LikeCount} Likes' },
 				{ tag: 'span', html: '{date}'}
 			] }
 		]}
 	]),
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mon(this.record, 'destroy', this.destroy, this);
+	},
 
 	beforeRender: function(){
 		var me = this, rd, r = me.record,
@@ -43,6 +47,14 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el,'click',this.onClick,this);
+		this.record.addObserverForField(this, 'LikeCount', this.likeCountUpdated, this);
+	},
+
+
+	likeCountUpdated: function(f, v){
+		if(this.rendered){
+			this.el.down('.likes').update(v+' Likes');
+		}
 	},
 
 

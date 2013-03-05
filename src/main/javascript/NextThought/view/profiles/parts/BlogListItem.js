@@ -54,6 +54,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		this.callParent(arguments);
 		this.addEvents(['delete-post','show-post']);
 		this.enableBubble(['delete-post','show-post']);
+		this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
 
