@@ -98,6 +98,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if( this.editEl ){
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
+
+		this.reflectLikeAndFavorite(this.record);
+		this.listenForLikeAndFavoriteChanges(this.record);
 	},
 
 
