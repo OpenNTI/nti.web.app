@@ -121,7 +121,7 @@ Ext.define('NextThought.controller.Profile', {
 				if(autoPublish !== undefined){
 					if(autoPublish !== blogEntry.isPublished()){
 						blogEntry.publish(editorCmp,finish,this);
-						return
+						return;
 					}
 				}
 
@@ -135,7 +135,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	deleteBlogPost: function(record, cmp){
+	deleteBlogPost: function(record){
 		var idToDestroy;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
@@ -146,10 +146,9 @@ Ext.define('NextThought.controller.Profile', {
 				LocationProvider.applyToStoresThatWantItem(function(id,store){
 					var r;
 					if(store){
-						actedOn = true;
 						r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
 						if(!r){
-							console.warn('Could not remove, the store did not have item with id: '+idToDestroy, item);
+							console.warn('Could not remove, the store did not have item with id: '+idToDestroy, r);
 							return;
 						}
 
