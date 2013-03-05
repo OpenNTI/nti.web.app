@@ -163,13 +163,15 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	ensureContactsGroup: function(){
-		var store = this.getFriendsListStore(),
-			id = this.getMyContactsId(),
-			rec = store.findRecord('Username',id,0,false,true,true),
-			contacts = [];
+	ensureContactsGroup: function(store, records, success){
+		var id = this.getMyContactsId(), rec, contacts;
 
-		if(!rec){
+		if(!success){
+			console.log('Store load failed with arguments. Expect empty contacts', arguments);
+			return;
+		}
+
+		if(!store.findRecord('Username',id,0,false,true,true)){
 			this.createGroupUnguarded('My Contacts', id, store.getContacts());
 		}
 	},
