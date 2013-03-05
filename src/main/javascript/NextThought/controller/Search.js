@@ -65,7 +65,9 @@ Ext.define('NextThought.controller.Search', {
 
 
 	storeLoad: function(store, records, success, opts, searchVal){
-		var results = [], menu = Ext.getCmp('search-results');
+		var results = [], menu = Ext.getCmp('search-results'),
+			resultGroups, result, loc, type, alias, me = this;
+
 		Ext.getCmp('search-results').el.unmask();
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
@@ -73,9 +75,7 @@ Ext.define('NextThought.controller.Search', {
 		}
 		else{
 			//get the groups storted by type, cause the display to chunk them.
-			var resultGroups = store.getGroups(),
-			result, loc, type, alias,
-			me = this;
+			resultGroups = store.getGroups(false);
 
 			if(resultGroups.length === 0){
 				results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
@@ -120,18 +120,15 @@ Ext.define('NextThought.controller.Search', {
 		menu.hide().show();
 	},
 
+	categoryNamesMap: {
+		'content':'Books',
+		'messageinfo':'Chats',
+		'post':'Thoughts'
+	},
 
 	sanitizeCategoryName: function(n){
-		if (n.toLowerCase()==='content') {
-			return 'Books';
-		}
-		if(n.toLowerCase() === 'messageinfo'){
-			return  'Chats';
-		}
-		if(n.toLowerCase() === 'post'){
-			return 'Thoughts'
-		}
-		return n;
+		var s = this.categoryNamesMap[n.toLowerCase()];
+		return s||n;
 	},
 
 	sortByRelevanceScore: function(a, b){
@@ -144,8 +141,7 @@ Ext.define('NextThought.controller.Search', {
 	sortSearchHits: function(aa,bb){
 
 		function compareIndices(i, j){
-			if(i===j) { return 0; }
-			return i < j ? -1: 1;
+			return i===j ? 0 : i < j ? -1: 1;
 		}
 
 		var a = aa.sortId,
