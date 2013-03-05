@@ -6,7 +6,8 @@ Ext.define('NextThought.controller.Profile', {
 		'forums.PersonalBlog',
 		'forums.PersonalBlogComment',
 		'forums.PersonalBlogEntry',
-		'forums.PersonalBlogEntryPost'
+		'forums.PersonalBlogEntryPost',
+		'NextThought.providers.Location'
 	],
 
 	stores: [
@@ -49,10 +50,37 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
+	applyBlogPostToStores: function(entry){
+		var recordForStore;
+		LocationProvider.applyToStoresThatWantItem(function(id,store){
+			if(store){
+				console.log(store, entry);
+
+				if(store.findRecord('NTIID',entry.get('NTIID'),0,false,true,true)){
+					console.warn('Store already has item with id: '+entry.get('NTIID'), entry);
+				}
+
+				if(!recordForStore){
+					//Each store gets its own copy of the record. A null value indicates we already added one to a
+					// store, so we need a new instance.  Read it out of the orginal raw value.
+					recordForStore = ParseUtils.parseItems([entry.raw])[0];
+				}
+
+				//The store will handle making all the threading/placement, etc
+				store.add(recordForStore);
+				//once added, null out this pointer so that subsequant loop iterations don't readd the same instance to
+				// another store. (I don't think our threading algorithm would appreciate that)
+				recordForStore = null;
+			}
+		}, entry);
+	},
+
+
 	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
 
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create();
+			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
+			me = this;
 
 		post.set({
 			'title':title,
@@ -69,6 +97,7 @@ Ext.define('NextThought.controller.Profile', {
 					} else {
 						blogCmp.buildBlog(true);
 					}
+					me.applyBlogPostToStores(entry);
 				}
 				catch(e){
 					console.error('Could not insert blog post into blog widget',Globals.getError(e));
