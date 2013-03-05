@@ -46,5 +46,5 @@ Ext.define('NextThought.store.Blog',{
 			record.fireEvent('destroy',record);
 		});
 
-	},
+	}
 });
