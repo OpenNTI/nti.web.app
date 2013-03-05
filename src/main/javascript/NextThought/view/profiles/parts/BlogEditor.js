@@ -72,6 +72,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		this.callParent(arguments);
 		var r = this.record,
 			h,
+			title = this.titleEl.down('input'),
 			e = this.editorActions = new NoteEditorActions(this,this.editor);
 
 		this.mon(this.saveEl,'click', this.onSave, this);
@@ -90,7 +91,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
-		this.titleEl.down('input').focus();
+		title.focus();
+		this.moveCursorToEnd(title);
 	},
 
 
@@ -99,6 +101,21 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
 		return this.callParent(arguments);
+	},
+
+
+	moveCursorToEnd: function(el) {
+		//this is only for input/textarea elements
+		el = Ext.getDom(el);
+		if (typeof el.selectionStart === "number") {
+			el.selectionStart = el.selectionEnd = el.value.length;
+		}
+		else if (el.createTextRange !== undefined) {
+			el.focus();
+			var range = el.createTextRange();
+			range.collapse(false);
+			range.select();
+		}
 	},
 
 
