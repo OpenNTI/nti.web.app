@@ -47,9 +47,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
 
+
 	constructor: function (cmp, editorEl) {
 		var me = this,
-			Ce = Ext.CompositeElement, tabs = 1;
+			Ce = Ext.CompositeElement;
 
 		me.mixins.observable.constructor.call(me);
 		me.mixins.placeholderFix.constructor.call(me);
@@ -61,7 +62,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		me.titleEl = editorEl.down('.title input');
 		if( me.titleEl ){
-			me.titleEl.set({tabIndex:tabs}); tabs++;
+			me.titleEl.set({tabIndex:1});
 			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl,{
 				'click':function(e){e.stopPropagation();},
@@ -75,8 +76,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		me.tagsEl = editorEl.down('.tags');
 		if( me.tagsEl ){
-			me.tags = Ext.widget('tags',{renderTo: me.tagsEl,tabIndex:tabs});
-			tabs++;
+			me.tags = Ext.widget('tags',{renderTo: me.tagsEl, tabIndex:2});
 			me.mon(me.tags,'blur',function(){
 				var el = editorEl.down('.content');
 				Ext.defer(el.focus,10,el);
@@ -85,7 +85,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		me.publishEl = editorEl.down('.action.publish');
 		if( me.publishEl ){
-			me.publishEl.set({tabIndex:tabs}); tabs++;
 			cmp.mon(me.publishEl, 'click', function togglePublish(e){
 				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 				me.publishEl[action]('on');
@@ -95,7 +94,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		this.updateShareWithLabel();
 
-		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: tabs});
+		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: -1});
 
 		cmp.mon(me.shareMenu, {
 			scope  : me,
@@ -353,24 +352,36 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		var s = window.getSelection(),
 			n = s && s.focusNode,
 			o = s && s.focusOffset,
-			v = n && n.nodeValue;
+			v = n && n.nodeValue,
+			modKey = e.altKey || e.ctrlKey;
 
 		this.detectAndFixDanglingNodes();
 
-		if(e.getKey() === e.TAB && n){
-			e.stopEvent();
 
-			if(v) {
-				v = v.substr(0,o)+'\t'+v.substr(o);
-				n.nodeValue = v;
+		if(e.getKey() === e.TAB && n){
+			if(modKey){
+				//tab next
+				this.editor.down('.save').focus();
+			}
+			else if(e.shiftKey){
+				//tab back
+				this.tags.focus();
 			}
 			else {
-				n = this.tabTpl.overwrite(n).firstChild;
-				o = 0;
-			}
+				e.stopEvent();
 
-			this.moveCaret(n,o+1);
-			return false;
+				if(v) {
+					v = v.substr(0,o)+'\t'+v.substr(o);
+					n.nodeValue = v;
+				}
+				else {
+					n = this.tabTpl.overwrite(n).firstChild;
+					o = 0;
+				}
+
+				this.moveCaret(n,o+1);
+				return false;
+			}
 		}
 
 		return true;

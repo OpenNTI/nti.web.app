@@ -35,9 +35,12 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.initField();
 		this.setReadOnly(!!this.readOnly);
 		this.renderData = Ext.apply(this.renderData||{},{
-			tabIndex: typeof this.tabIndex === 'number' ? this.tabIndex : 1
+			tabIndex: typeof this.tabIndex === 'number' ? this.tabIndex : -1
 		});
 	},
+
+
+	getFocusEl: function(){return this.inputEl;},
 
 
 	afterRender: function(){
