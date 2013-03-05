@@ -753,17 +753,21 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out =[], sel = this.editor.select('.content > *');
 		sel.each(function(div){
-			var html, tmp;
+			var html, tmp, dom;
 			try {
+				//don't let manipulations here effect the dom
+				dom = Ext.getDom(div).cloneNode(true);
+				div = Ext.fly(dom,'__editer-flyweight');
 				html = div.getHTML() || '';
+
 				if(div.is('.whiteboard-divider') || div.is('.whiteboard-wrapper')){
 					html = '';
-					div = div.down('img');
+					dom = Ext.getDom(div.down('img'));
 				}
 
-				if(!html && div.dom.tagName === 'IMG'){
+				if(!html && dom.tagName === 'IMG'){
 					tmp = document.createElement("div");
-					tmp.appendChild(div.dom);
+					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
 				}
 				html = html.replace(/\u200B/g,'');
