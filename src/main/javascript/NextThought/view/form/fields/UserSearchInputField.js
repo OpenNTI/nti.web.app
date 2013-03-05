@@ -38,7 +38,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		emptyText: '<div class="x-menu-item">No results</div>',
 		itemTpl: new Ext.XTemplate(
 				'<img class="nib" src="',Ext.BLANK_IMAGE_URL,'">',
-				'<img src="{[this.getIcon(values)]}" class="{[this.getType(values)]}">',
+				'<div style="background-image: url({[this.getIcon(values)]})" class="avatar {[this.getType(values)]}"></div>',
 				'<div class="card-body {[this.getType(values)]}">',
 					'<div class="name">{displayName}</div>',
 					'<div class="status">{affiliation-dontshowthis}{[this.getDisplayTypeValue(values)]}</div>',
@@ -46,31 +46,11 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		{
 			getIcon: function(model){
 				var t = this.getType(model);
-				return t==='person'? model.avatarURL : Ext.BLANK_IMAGE_URL;
+				return t==='person'? model.avatarURL : 'inherit';
 			},
 
 			getType: function(modelData){
-				if (!modelData){return 'person';}
-				if(modelData.type){ return modelData.type; }
-
-				var v, m = ((modelData && modelData.Class) || '').toLowerCase(),
-					u = modelData.Username.toLowerCase();
-
-
-				//Tweak logic slightly if our type is community or
-				//our user is public or everyone make it look public
-				if(/^community$/.test(m)){
-					v = 'public';
-				}
-				else if(/^friendslist$/.test(m)){
-					v = NextThought.mixins.ShareEntity.getPresentationType(modelData);
-				}
-				else{
-					v = 'person';
-				}
-
-				modelData.type = v;
-				return v;
+				return NextThought.model.UserSearch.getType(modelData);
 			},
 
 			getDisplayTypeValue: function(model){

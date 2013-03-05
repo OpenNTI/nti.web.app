@@ -52,7 +52,10 @@ div.nt-token-wrapper{
 
 				&.nt-token-nib-person { display: none; }
 				&.nt-token-nib-public { background-position: 0 0; font-weight: bold;}
-				&.nt-token-nib-group { background-position: -14px -14px; font-weight: bold;}
+				&.nt-token-nib-group,
+				&.nt-token-nib-list {
+					background-position: -14px -14px; font-weight: bold;
+				}
 			}
 
 			.nt-token-nib-end {

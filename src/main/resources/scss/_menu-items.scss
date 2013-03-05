@@ -40,7 +40,7 @@
 
 
 		&.share-with::after {
-			@include dropdown-share-menu-sprite;
+			background: $icons no-repeat;
 			content: ' ';
 			top: 0;
 			left: 0;
@@ -50,42 +50,42 @@
 		&.onlyme-menu-item::after {
 			top: 12px;
 			left: 12px;
-			@include sprite-lock;
+			@include sprite($icons, 'share-options-lock', $dimensions: true);
 		}
 		&.onlyme-menu-item:hover::after {
-			@include sprite-lock-active;
+			@include sprite($icons, 'share-options-lock', $dimensions: true);
 		}
 		&.community-menu-item::after {
 			top: 11px;
 			left: 11px;
-			@include sprite-globe;
+			@include sprite($icons, 'share-options-globe', $dimensions: true);
 		}
 		&.community-menu-item:hover::after {
-			@include sprite-globe-active;
+			@include sprite($icons, 'share-options-globe_hover', $dimensions: true);
 		}
 		&.group-menu-item::after {
 			top: 13px;
 			left: 10px;
-			@include sprite-groups;
+			@include sprite($icons, 'share-options-groups', $dimensions: true);
 		}
 		&.group-menu-item:hover::after {
-			@include sprite-groups-active;
+			@include sprite($icons, 'share-options-groups_hover', $dimensions: true);
 		}
 		&.list-menu-item::after {
 			top: 13px;
 			left: 10px;
-			@include sprite-list;
+			@include sprite($icons, 'create-list', $dimensions: true);
 		}
 		&.list-menu-item:hover::after {
-			@include sprite-list-active;
+			@include sprite($icons, 'lists-white_hover', $dimensions: true);
 		}
 		&.custom-menu-item::after {
 			top: 11px;
 			left: 11px;
-			@include sprite-gear;
+			@include sprite($icons, 'share-options-gear', $dimensions: true);
 		}
 		&.custom-menu-item:hover::after {
-			@include sprite-gear-active;
+			@include sprite($icons, 'share-options-gear_hover', $dimensions: true);
 		}
 	}
 }

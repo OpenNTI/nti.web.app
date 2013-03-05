@@ -124,20 +124,11 @@ $over-color: #f4f3f3;
 		}
 	}
 
-
-	img {
+	div.avatar, img{
 		float: left;
 		width: 32px;
 		height: 32px;
 		margin-top: 2px;
-
-		&.public,
-		&.group {
-			background: url(../images/old_sprites/spr_groups_dark.png) 0 0 no-repeat;
-		}
-		&.group {
-			background-position: -32px 0;
-		}
 
 		&.nib {
 			background: transparent $icons no-repeat;
@@ -150,6 +141,45 @@ $over-color: #f4f3f3;
 		}
 		&.over {
 			cursor: pointer;
+		}
+	}
+
+	img {
+		&.public,
+		&.group {
+			background: url(../images/old_sprites/spr_groups_dark.png) 0 0 no-repeat;
+		}
+		&.group {
+			background-position: -32px 0;
+		}
+	}
+
+	div.avatar {
+		position: relative;
+		background-size: cover;
+
+		&.public,
+		&.group,
+		&.list{
+			&::after{
+				background: $icons no-repeat;
+				content: ' ';
+				top: 0;
+				left: 0;
+				position: absolute;
+			}
+		}
+
+		&.public::after{
+			@include sprite($icons, 'dark-globe-26x26', $dimensions: true);
+		}
+
+		&.group::after{
+			@include sprite($icons, 'dark-groups-32x22', $dimensions: true);
+		}
+
+		&.list::after{
+			@include sprite($icons, 'dark-lists-31x21', $dimensions: true);
 		}
 	}
 
