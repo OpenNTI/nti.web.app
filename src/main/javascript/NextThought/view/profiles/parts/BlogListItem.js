@@ -87,8 +87,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		this.setPublishState();
 
 		h.addObserverForField(this, 'title', this.updateField, this);
-		h.addObserverForField(this, 'body', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
+		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
@@ -127,6 +127,11 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	updateField: function(key, value){
 		var el = this.el.down('.'+key);
 		if(el){ el.update(value); }
+	},
+
+	updateContent: function(key, value){
+		var h = this.record.get('headline');
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 	},
 
 

@@ -80,8 +80,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(!h){return;}
 
 		h.addObserverForField(this, 'title', this.updateField, this);
-		h.addObserverForField(this, 'body', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
+		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.setPublishState();
 		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 		this.bodyEl.selectable();
@@ -106,6 +106,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	updateField: function(key, value){
 		var el = this.el.down('.'+key);
 		if(el){ el.update(value); }
+	},
+
+
+	updateContent: function(key, value){
+		var h = this.record.get('headline');
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
 	},
 
 
