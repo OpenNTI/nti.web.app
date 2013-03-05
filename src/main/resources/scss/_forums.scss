@@ -7,10 +7,10 @@
 			margin: 8px 0;
 			border: 1px solid #dcdcdc;
 
-			@include note-editor;
+			@include editor;
 			.editor {
 				.main {
-					padding: 0 0 45px 0;
+					padding: 0 0 46px;
 
 					.title {
 						padding: 0 15px;
@@ -64,7 +64,6 @@
 						font-family: $font;
 						font-size: 12px;
 						line-height: 2em;
-						margin-bottom: 0;
 					}
 				}
 			}

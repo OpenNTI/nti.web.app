@@ -117,13 +117,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		});
 
-		editorEl.down('.content').selectable();
+		me.contentEl = editorEl.down('.content');
+		me.contentEl.selectable();
 
-		cmp.mon(editorEl.down('.content'), {
-			scope      : me,
-			keyup      : me.handleOnKeyup,
-			paste      : me.handlePaste,
-			click      : me.handleClick,
+		cmp.mon(me.contentEl, {
+			scope: me,
+			keydown: me.onKeyDown,
+			keyup: me.onKeyup,
+			paste: me.handlePaste,
+			click: me.handleClick,
 			contextmenu: me.handleContext
 		});
 
@@ -304,7 +306,57 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	handleOnKeyup: function(e){
+	moveCaret: function(n){
+		var s = window.getSelection(),
+			range = document.createRange();
+
+		range.selectNodeContents(n);
+		range.collapse(false);
+		s.removeAllRanges();
+		s.addRange(range);
+	},
+
+
+	detectAndFixDanglingNodes: function(){
+		var s = window.getSelection(),
+			n = s && s.focusNode,
+			c = Ext.getDom(this.contentEl);
+		//detect elements that have fallen out of the nest
+		Ext.each(c.childNodes,function(el){
+			if(!/^div$/i.test(el.tagName)){
+				el = Ext.getDom(el);
+				var div = document.createElement('div');
+				c.insertBefore(div,el);
+				div.appendChild(el);
+			}
+		});
+
+		if(n){
+			//Mybe a restore caret instead?
+			this.moveCaret(n);
+		}
+	},
+
+
+	onKeyDown: function(e){
+		var s = window.getSelection(),
+			n = s && s.focusNode;
+
+		this.detectAndFixDanglingNodes();
+
+		if(e.getKey() === e.TAB && n){
+			e.stopEvent();
+
+			n.nodeValue += '\t';
+			this.moveCaret(n);
+			return false;
+		}
+
+		return true;
+	},
+
+
+	onKeyup: function(e){
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
 		this.checkWhiteboards();
@@ -710,9 +762,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		};
 	},
 
+
 	getPublished: function(){
 		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : false;
 	},
+
 
 	setTitle: function(title){
 		var t = this.titleEl;
@@ -737,6 +791,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
+	/** @private */
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		this.updatePrefs();
@@ -746,6 +801,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
+	/** @private */
 	setHTML: function (html) {
 		//if we are given a blank value, or the value doesn't begin with a div, wrap it.
 		if(!html || !/^<div/im.test(html)){

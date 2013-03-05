@@ -349,7 +349,7 @@ $experimental-support-for-svg: true;
 			background: #2c2c2c;
 			padding: 10px;
 
-			@include note-editor;
+			@include editor;
 
 			.editor {
 				margin: 10px;
