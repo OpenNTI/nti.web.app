@@ -129,7 +129,7 @@ Ext.define('NextThought.controller.Profile', {
 			},
 			failure: function(){
 				console.debug('failure',arguments);
-				Ext.callback(editorCmp.onSaveFailure,editorCmp,[]);
+				Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
 			}
 		});
 	},

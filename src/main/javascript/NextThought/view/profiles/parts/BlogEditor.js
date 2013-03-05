@@ -155,8 +155,12 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	},
 
 
-	onSaveFailure: function(){
+	onSaveFailure: function(rec, operation, response){
+		var msg = 'An unknown error occurred saving your Thought.';
 
+		//FIXME look at response code and give better errors.  Right
+		//now we seem to just get 500s
+		alert({title: 'Error', msg: msg, icon: 'warning-red'});
 	},
 
 
