@@ -213,9 +213,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				var c = me.context.getHeight(),
 					b = me.contextEl.getHeight();
 
-				if(c > b || me.context.select('img').getCount() > 0){
+				//if(c > b || me.context.select('img').getCount() > 0){
 					//me.enableRevealSlide();
-				}
+				//}
 			});
 		}
 	},
