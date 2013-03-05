@@ -1,18 +1,15 @@
 Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
-	fields: [
-		{ name: 'publish-state', convert: function(v,r){
-			return r.isPublished() ? 'Public':'Only Me';
-		} }
-	],
-
 
 	//TODO: workaround for no-edit link
 	isModifiable: function(){
 		return isMe(this.get('Creator'));
 	},
 
+	getPublishState: function(){
+		return this.isPublished() ? 'Public':'Only Me';
+	},
 
 	isPublished: function(){
 		return Boolean(this.getLink('unpublish'));

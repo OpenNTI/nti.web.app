@@ -66,7 +66,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			return;
 		}
 
-		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
+		this.renderData = Ext.apply(this.renderData||{}, r.getData());
+		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
+		r = this.renderData;
 		if(!r.headline || !r.headline.getData){
 			console.warn('The record does not have a story field or it does not implement getData()',r);
 
