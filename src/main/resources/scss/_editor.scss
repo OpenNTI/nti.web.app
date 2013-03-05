@@ -209,6 +209,11 @@ span.tab{
 					}
 				}
 			}
+
+			&.x-repaint{
+				background: #ffffff;
+				visibility: hidden;
+			}
 		}
 
 		&.disabled {
