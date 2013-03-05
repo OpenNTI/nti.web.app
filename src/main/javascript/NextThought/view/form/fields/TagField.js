@@ -12,7 +12,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'span', cls:'token-input-wrap', cn:[
-			{tag:'input', type:'text', placeholder: 'Tags'},
+			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Tags'},
 			{tag:'span', cls:'token-input-sizer', html:'####'}
 		]}
 	]),
@@ -34,6 +34,9 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.xtypes.push('field');
 		this.initField();
 		this.setReadOnly(!!this.readOnly);
+		this.renderData = Ext.apply(this.renderData||{},{
+			tabIndex: typeof this.tabIndex === 'number' ? this.tabIndex : 1
+		});
 	},
 
 
@@ -82,18 +85,13 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			val = el.getValue(),
 			t;
 
-		if (key === e.ENTER || this.isDelimiter(key)) {
+		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
 			el.blur();
-			if (this.isDelimiter(key)){
+			if (this.isDelimiter(key) && key !== e.TAB){
 				Ext.defer(el.focus,1,el);
+			} else {
+				this.fireEvent('blur',this);
 			}
-			e.stopEvent();
-			return false;
-		}
-
-		if( key === e.TAB && val) {
-			el.blur();
-			Ext.defer(el.focus,1,el);
 			e.stopEvent();
 			return false;
 		}

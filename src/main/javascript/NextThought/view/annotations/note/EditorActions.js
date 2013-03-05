@@ -48,7 +48,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	constructor: function (cmp, editorEl) {
 		var me = this,
-			Ce = Ext.CompositeElement;
+			Ce = Ext.CompositeElement, tabs = 1;
 
 		me.mixins.observable.constructor.call(me);
 		me.mixins.placeholderFix.constructor.call(me);
@@ -60,6 +60,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		me.titleEl = editorEl.down('.title input');
 		if( me.titleEl ){
+			me.titleEl.set({tabIndex:tabs}); tabs++;
 			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl,{
 				'click':function(e){e.stopPropagation();},
@@ -71,22 +72,29 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			});
 		}
 
+		me.tagsEl = editorEl.down('.tags');
+		if( me.tagsEl ){
+			me.tags = Ext.widget('tags',{renderTo: me.tagsEl,tabIndex:tabs});
+			tabs++;
+			me.mon(me.tags,'blur',function(){
+				var el = editorEl.down('.content');
+				Ext.defer(el.focus,10,el);
+			});
+		}
+
 		me.publishEl = editorEl.down('.action.publish');
 		if( me.publishEl ){
+			me.publishEl.set({tabIndex:tabs}); tabs++;
 			cmp.mon(me.publishEl, 'click', function togglePublish(e){
 				var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 				me.publishEl[action]('on');
 			});
 		}
 
-		me.tagsEl = editorEl.down('.tags');
-		if( me.tagsEl ){
-			me.tags = Ext.widget('tags',{renderTo: me.tagsEl});
-		}
 
 		this.updateShareWithLabel();
 
-		(new Ce(editorEl.query('.action,.content'))).set({tabIndex: 1});
+		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: tabs});
 
 		cmp.mon(me.shareMenu, {
 			scope  : me,
@@ -282,7 +290,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorFocus: function (e) {
+	editorFocus: function () {
 		var s = window.getSelection();
 		if (this.lastRange) {
 			if(s.rangeCount > 0){
@@ -339,7 +347,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	getTypingAttributes: function(){
-		if(this.typingAttributes === undefined){
+		if(!this.typingAttributes){
 			this.typingAttributes = [];
 		}
 		return this.typingAttributes;
@@ -383,9 +391,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	detectTypingAttributes: function(){
-		var actions = this.self.supportedTypingAttributes;
-		var attrs = [];
+	detectTypingAttributes: function(e){
+		var actions = this.self.supportedTypingAttributes, attrs = [];
 		Ext.each(actions, function(action){
 			if(document.queryCommandState(action)){
 				attrs.push(action);
@@ -443,7 +450,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		var me = this, wbWin, content;
 
-		if(typeof(guid) !== 'string'){
+		if(typeof guid !== 'string'){
 			guid = guidGenerator();
 		}
 		if(this.openWhiteboards[guid]){

@@ -32,7 +32,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				},{
 					cls: 'content',
 					contentEditable: true,
-					tabIndex: 1,
 					unselectable: 'off',
 					cn: [{ //inner div for IE
 						html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
@@ -87,9 +86,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
-		Ext.get('profile').addCls('scroll-lock');
+		Ext.get('profile').addCls('scroll-lock').scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
-		this.syncHeight();
+		Ext.defer(this.syncHeight,1,this);
+
+		this.titleEl.down('input').focus();
 	},
 
 

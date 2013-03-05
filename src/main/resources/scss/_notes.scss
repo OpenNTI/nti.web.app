@@ -99,6 +99,13 @@
 			cursor: pointer;
 			display: inline-block;
 			color: $secondary-grey;
+
+			&:focus {
+				&::after{
+					outline: 1px dotted $primary-blue;
+					outline-offset: 1px;
+				}
+			}
 		}
 
 		.main {
@@ -146,8 +153,7 @@
 						height: 28px;
 
 						&::after{
-							content: ' ';
-							overflow: hidden;
+							content: '';
 							position: absolute;
 							top: 5px; left: 2px;
 							background: $icons no-repeat;
@@ -240,8 +246,7 @@
 
 				&.whiteboard {
 					&::after{
-						content: ' ';
-						overflow: hidden;
+						content: '';
 						position: absolute;
 						top: 12px; left: 9px;
 						background: $icons no-repeat;
