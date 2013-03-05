@@ -92,7 +92,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
@@ -132,7 +132,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	updateContent: function(key, value){
 		var h = this.record.get('headline');
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 	},
 
 
@@ -189,6 +189,11 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		}
 		//TODO this may need to be tweaked if/when we have internal links
 		this.bodyEl.select('a[href]', true).set({target: '_blank'});
+
+		this.bodyEl.select('img.whiteboard-thumbnail').each(function(el){
+			var wrapper = el.up('.body-divider');
+			el.replace(wrapper);
+		});
 	},
 
 	markAsPublished: function(key, value){

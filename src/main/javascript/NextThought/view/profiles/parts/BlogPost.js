@@ -83,7 +83,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.setPublishState();
-		h.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 		this.bodyEl.selectable();
 
 		if(this.selectedSections){
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	updateContent: function(key, value){
 		var h = this.record.get('headline');
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, 226 );
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 	},
 
 
@@ -186,10 +186,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.bodyEl.update(html);
 		//TODO this may need to be tweaked if/when we have internal links
 		this.bodyEl.select('a[href]', true).set({target: '_blank'});
-	},
 
-
-	generateClickHandler: function(){}
+		this.bodyEl.select('img.whiteboard-thumbnail').each(function(el){
+			var wrapper = el.up('.body-divider');
+			el.replace(wrapper);
+		});
+	}
 
 
 });
