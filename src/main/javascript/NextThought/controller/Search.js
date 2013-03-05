@@ -47,7 +47,8 @@ Ext.define('NextThought.controller.Search', {
 				'clear-search' : this.clearSearchResults
 			},
 			'search-result' : {
-				'click': this.searchResultClicked
+				'click': this.searchResultClicked,
+				'click-blog-result': this.searchBlogResultClicked
 			},
 			'search-more' : {
 				'click': this.showAllForCategoryClicked
@@ -126,6 +127,9 @@ Ext.define('NextThought.controller.Search', {
 		}
 		if(n.toLowerCase() === 'messageinfo'){
 			return  'Chats';
+		}
+		if(n.toLowerCase() === 'post'){
+			return 'Thoughts'
 		}
 		return n;
 	},
@@ -217,6 +221,22 @@ Ext.define('NextThought.controller.Search', {
 		}, this);
 
 		this.searchForValue(searchValue);
+	},
+
+	searchBlogResultClicked: function(result){
+		var u = result.user,
+			r = result.record,
+			postId = r.get('ID'),
+			title = 'Thoughts',
+			hash, args=[title, postId];
+
+		if(!postId || !Ext.isString(postId)){args.pop();}
+
+		hash = u.getProfileUrl.apply(u,args);
+
+		if(location.hash !== hash){
+			location.hash = hash;
+		}
 	},
 
 	searchResultClicked: function(result, fragIdx){

@@ -3,6 +3,7 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	alias: 'widget.search-result-category',
 	requires: [
 		'NextThought.view.menus.search.Result',
+		'NextThought.view.menus.search.BlogResult',
 		'NextThought.layout.component.TemplatedContainer'
 	],
 	cls: 'search-result-category',
