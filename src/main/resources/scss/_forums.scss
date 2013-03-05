@@ -172,6 +172,13 @@
 				margin: 20px 0;
 				font: normal 400 14px/28px $font;
 
+				img.whiteboard-thumbnail {
+					width: 80%;
+					height: auto;
+					display: block;
+					margin: 1em auto;
+				}
+
 				a {&:link,&:active,&:visited{
 					color: $primary-blue;
 					text-decoration: none;
