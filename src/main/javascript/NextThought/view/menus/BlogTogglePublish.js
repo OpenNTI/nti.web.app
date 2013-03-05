@@ -32,7 +32,10 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 
 	initComponent: function(config){
 		this.callParent(arguments);
-		if(this.record && this.record.isPublished()){
+	},
+
+	updateFromRecord: function(rec){
+		if(rec && rec.isPublished()){
 			this.down('[published=true]').setChecked(true, true);
 		}else{
 			this.down('[published=false]').setChecked(true, true);

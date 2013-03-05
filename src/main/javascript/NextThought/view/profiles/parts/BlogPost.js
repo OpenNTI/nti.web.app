@@ -148,6 +148,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	showPublishMenu: function(){
+		this.publishMenu.updateFromRecord(this.record);
 		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
 	},
 

@@ -103,7 +103,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	syncHeight: function(){
 		var el = this.editorBodyEl,
-			top = el.getTop();
+			top;
+		if(!el){
+			return;
+		}
+		top = el.getTop();
 
 		el.setHeight(Ext.dom.Element.getViewportHeight() - top - this.footerEl.getHeight() - 10);
 		Ext.defer(this.updateLayout,700,this,[]);

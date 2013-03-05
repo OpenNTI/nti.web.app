@@ -89,9 +89,11 @@ Ext.define('NextThought.controller.Profile', {
 
 				var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
 
-				if(autoPublish && !blogEntry.isPublished()){
-					blogEntry.publish(editorCmp,finish,this);
-					return;
+				if(autoPublish !== undefined){
+					if(autoPublish !== blogEntry.isPublished()){
+						blogEntry.publish(editorCmp,finish,this);
+						return
+					}
 				}
 
 				finish(blogEntry);
