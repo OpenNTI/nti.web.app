@@ -320,6 +320,19 @@
 				background: #fbfbfb;
 				position: relative;
 				overflow: hidden;
+				&::after {
+					content: '';
+					position: absolute;
+					top: 38px;
+					right: 20px;
+					opacity: 0.3;
+					background: $icons no-repeat;
+					@include sprite($icons,'arrow-next',$dimensions: true);
+				}
+
+				&:hover{
+					&::after{opacity: 1;}
+				}
 			}
 
 			& + .note-replies,
@@ -330,7 +343,7 @@
 			}
 
 			.content-callout {
-				padding: 16px 16px 0px;
+				padding: 16px 36px 0px 16px;
 				border-bottom-width: 0;
 
 				.icon {
