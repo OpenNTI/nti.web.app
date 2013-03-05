@@ -45,6 +45,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}]
 	}).compile(),
 
+	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
 
 	constructor: function (cmp, editorEl) {
 		var me = this,
@@ -306,12 +307,20 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	moveCaret: function(n){
+	moveCaret: function(n,offset){
 		var s = window.getSelection(),
 			range = document.createRange();
 
-		range.selectNodeContents(n);
-		range.collapse(false);
+		if(typeof offset !== 'number') {
+			range.selectNodeContents(n);
+			range.collapse(false);
+		}
+		else {
+			range.setStart(n,offset);
+			range.setEnd(n,offset);
+		}
+
+
 		s.removeAllRanges();
 		s.addRange(range);
 	},
@@ -320,10 +329,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	detectAndFixDanglingNodes: function(){
 		var s = window.getSelection(),
 			n = s && s.focusNode,
-			c = Ext.getDom(this.contentEl);
+			c = Ext.getDom(this.contentEl),
+			acted = false;
 		//detect elements that have fallen out of the nest
 		Ext.each(c.childNodes,function(el){
 			if(!/^div$/i.test(el.tagName)){
+				acted = true;
 				el = Ext.getDom(el);
 				var div = document.createElement('div');
 				c.insertBefore(div,el);
@@ -331,7 +342,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		});
 
-		if(n){
+		if(n && acted){
 			//Mybe a restore caret instead?
 			this.moveCaret(n);
 		}
@@ -340,15 +351,25 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	onKeyDown: function(e){
 		var s = window.getSelection(),
-			n = s && s.focusNode;
+			n = s && s.focusNode,
+			o = s && s.focusOffset,
+			v = n && n.nodeValue;
 
 		this.detectAndFixDanglingNodes();
 
 		if(e.getKey() === e.TAB && n){
 			e.stopEvent();
 
-			n.nodeValue += '\t';
-			this.moveCaret(n);
+			if(v) {
+				v = v.substr(0,o)+'\t'+v.substr(o);
+				n.nodeValue = v;
+			}
+			else {
+				n = this.tabTpl.overwrite(n).firstChild;
+				o = 0;
+			}
+
+			this.moveCaret(n,o+1);
 			return false;
 		}
 
