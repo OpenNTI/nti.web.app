@@ -60,7 +60,23 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.addEvents(['delete-post','show-post']);
 		this.enableBubble(['delete-post','show-post']);
 		this.mon(this.record, 'destroy', this.destroy, this);
+		this.buildStore();
 	},
+
+
+	buildStore: function(){
+		this.store = NextThought.store.Blog.create();
+		this.store.proxy.url = this.getRecord().getLink('contents');
+
+		this.mon(this.store,{
+			scope: this,
+			add: this.addComments,
+			load: this.loadComments
+		});
+
+		this.store.load();
+	},
+
 
 	beforeRender: function(){
 		this.callParent(arguments);
@@ -216,7 +232,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
+	},
+
+
+	addComments: function(store,addedRecords){
+		console.debug('added',arguments);
+	},
+
+
+	loadComments: function(store,records){
+		console.debug('loaded',arguments);
 	}
-
-
 });
