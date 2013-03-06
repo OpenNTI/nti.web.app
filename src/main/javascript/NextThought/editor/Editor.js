@@ -88,5 +88,12 @@ Ext.define('NextThought.editor.Editor',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el);
-	}
+	},
+
+
+	//Mixin's can't replace existing functions...so lets call them directly and replace the Ext.Component impl's with ours
+	disable:function(){ return this.mixins.editorActions.disable.apply(this,arguments); },
+	enable:function(){ return this.mixins.editorActions.enable.apply(this,arguments); },
+	focus:function(){ return this.mixins.editorActions.focus.apply(this,arguments); },
+	onKeyDown:function(){ return this.mixins.editorActions.onKeyDown.apply(this,arguments); }
 });
