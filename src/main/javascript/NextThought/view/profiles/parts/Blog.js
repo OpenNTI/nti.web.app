@@ -46,6 +46,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		this.buildBlog();
 
+		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('show-post',this.updateLocation,this);
 	},
 
@@ -109,6 +110,26 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		if(this.isVisible()){
 			this.closePost();
 		}
+	},
+
+
+	warnBeforeDismissingEditor: function(cb){
+		var me = this;
+		Ext.Msg.show({
+			msg: "All your current progress will be lost",
+			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: Ext.Msg.WARNING,
+			fn: function(str){
+				if(str === 'ok'){
+					Ext.callback(cb, me, []);
+				}
+			}
+		});
+	},
+
+	onBeforeDeactivate: function(){
+		return !Boolean(this.isVisible() && this.el.down('.blog-editor'));
 	},
 
 

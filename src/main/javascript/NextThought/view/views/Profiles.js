@@ -14,6 +14,12 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
+		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+	},
+
+	onBeforeDeactivate: function(){
+		var child = this.down('profile-panel');
+		return child && child.fireEvent('beforedeactivate');
 	},
 
 	restore: function(state){

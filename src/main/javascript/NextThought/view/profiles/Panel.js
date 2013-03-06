@@ -103,6 +103,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 		//this is intentionally added after we "restore" the tab
 		this.mon(this.tabs,'tabchange', this.trackTabs, this);
+		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
@@ -232,6 +233,17 @@ Ext.define('NextThought.view.profiles.Panel',{
 		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
 	},
 
+
+	destroy: function(){
+		if(this.metaEditor){
+			this.metaEditor.destroy();
+		}
+		if(this.nameEditor){
+			this.nameEditor.destroy();
+		}
+
+		this.callParent(arguments);
+	},
 
 	addToContactsClicked: function(e){
 		var me = this;
@@ -670,6 +682,15 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		this.nameEditor.startEdit(this.nameEl);
+	},
+
+
+	onBeforeDeactivate: function(){
+		console.log('about to deactivate the profile tabs');
+
+		return Ext.Array.every(this.tabs.items.items, function(item){
+			return item.fireEvent('beforedeactivate');
+		});
 	},
 
 
