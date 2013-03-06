@@ -5,8 +5,14 @@ span.tab{
 	height: 1em;
 }
 
-@mixin editor {
-	.editor {
+@mixin editor($useParent:false) {
+	$selector: '.editor';
+
+	@if $useParent == true {
+		$selector: '&.editor';
+	}
+
+	#{$selector} {
 		position: relative;//default
 
 		&.active {
@@ -245,4 +251,8 @@ span.tab{
 			}
 		}
 	}
+}
+
+.x-component-editor {
+	@include editor(true);
 }
