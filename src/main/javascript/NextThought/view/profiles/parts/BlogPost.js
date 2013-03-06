@@ -96,10 +96,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 		this.bodyEl.selectable();
 
-		if(this.selectedSections){
-			console.debug('Do something with this/these:',this.selectedSections);
-		}
-
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
 		}
@@ -113,12 +109,21 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		this.editor = Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
 		this.mon(this.commentHeaderEl,'click',this.showEditor,this);
+
+		if(!Ext.isEmpty(this.selectedSections)){
+			console.debug('Do something with this/these:',this.selectedSections);
+			if(this.selectedSections[0]==='comments'){
+				Ext.defer(this.showEditor,500,this);
+			}
+		}
 	},
 
 
 	showEditor: function(){
 		this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		this.editor.activate();
+		this.editor.focus(true);
+		Ext.get('profile').scrollChildIntoView(this.editor.getEl());
 	},
 
 
