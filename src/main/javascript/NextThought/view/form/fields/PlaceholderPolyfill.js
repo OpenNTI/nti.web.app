@@ -2,18 +2,22 @@ Ext.define('NextThought.view.form.fields.PlaceholderPolyfill',{
 
 	renderPlaceholder: function(inputEl){
 		var p = 'Placeholder';
-		if(Ext.supports[p] || !this.placeholder){return;}
+		if(Ext.supports[p] || !inputEl.getAttribute('placeholder')){return;}
 
 		function handleBlur(){
-			var v = inputEl.getValue()||'';
-			if(p){ p[v===''?'show':'hide'](); }
+			var v = Ext.getDom(inputEl).value;
+			if(p){ p[Ext.isEmpty(v)?'show':'hide'](); }
 		}
 
-		p = Ext.DomHelper.append(
-				inputEl.parent(), {cls: 'placeholder', html: this.placeholder}, true);
+		p = Ext.DomHelper.append( inputEl.parent(),
+				{ cls: 'placeholder', html: inputEl.getAttribute('placeholder') }, true);
+
+		p.setStyle( inputEl.getStyles(
+				'font-size', 'font-weight','font-family',
+				'text-transform', 'letter-spacing'));
 
 		p.setVisibilityMode(Ext.Element.DISPLAY);
-		this.mon(p,'click',this.focus,this);
+		this.mon(p,'click',inputEl.focus,inputEl);
 
 		handleBlur();
 

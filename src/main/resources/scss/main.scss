@@ -63,6 +63,7 @@ body.x-border-layout-ct { background: white; }
 	font-family: $font !important;
 }
 
+.placeholder { @include placeholder-style(); }
 :-webkit-input-placeholder { @include placeholder-style(); }
 :-moz-placeholder { @include placeholder-style(); }
 :-ms-input-placeholder{ @include placeholder-style(); }

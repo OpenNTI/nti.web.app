@@ -166,6 +166,10 @@ div.nt-token-wrapper{
 				//font-style: italic;
 			}
 		}
+		.placeholder {
+			position: absolute;
+			top: 0; left: 0;
+		}
 
 		span.token-input-sizer{
 			display: inline-block;

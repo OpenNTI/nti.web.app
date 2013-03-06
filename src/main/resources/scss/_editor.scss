@@ -51,9 +51,14 @@ span.tab{
 
 			.title {
 				@include experimental(transition, all 0.5s);
+				position: relative;
 				border: 0 solid #f2f2f2;
 				border-width: 0 0 1px 0;
-
+				.placeholder {
+					position: absolute;
+					top: 3px;
+					left: 15px;
+				}
 				input {
 					display: block;
 					font: normal 300 25px/40px $font;
