@@ -40,7 +40,7 @@
 		&.owner {
 			.header {display: block;}
 		}
-		.header {
+		.header,.comment {
 			display: none;
 			font: italic 300 18px/18px "Open Sans", sans-serif;
 			color: #b8b8b8;
@@ -48,6 +48,10 @@
 			margin: 30px 0 50px 0;
 			border: 1px solid #f1f1f1;
 			cursor: pointer;
+		}
+
+		.comment {
+			display: block;
 		}
 
 		.post-view .entry {

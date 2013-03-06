@@ -88,6 +88,5 @@ Ext.define('NextThought.editor.Editor',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el);
-		this.activate();
 	}
 });

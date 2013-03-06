@@ -50,7 +50,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		deleteEl: '.meta .delete',
 		publishStateEl: '.meta .state',
 		commentBoxEl: '.comment-box',
-		commentHeader: '.comment-box .comment',
+		commentHeaderEl: '.comment-box .comment',
 		commentEditorBox: '.comment-box .editor-box'
 	},
 
@@ -112,6 +112,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.listenForLikeAndFavoriteChanges(this.record);
 
 		this.editor = Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
+		this.mon(this.commentHeaderEl,'click',this.showEditor,this);
+	},
+
+
+	showEditor: function(){
+		this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		this.editor.activate();
 	},
 
 
