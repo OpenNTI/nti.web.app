@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.profiles.parts.BlogPost',{
-	extend: 'Ext.Component',
+	extend: 'Ext.container.Container',
 	alias: 'widget.profile-blog-post',
 
 	mixins: {
@@ -7,10 +7,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 	requires:[
-		'NextThought.view.menus.BlogTogglePublish'
+		'NextThought.view.menus.BlogTogglePublish',
+		'NextThought.view.annotations.note.Templates'
 	],
 
 	cls: 'entry',
+	layout: 'auto',
+	defaultType: 'profile-blog-comment',
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
@@ -25,13 +30,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
-			{ tag:'span', cls: 'comment-count', html: '{PostCount} Comments' },
 			{ tag:'span', cls: 'tags', cn:[
 				{tag:'tpl', 'for':'headline.tags', cn:[
 					{tag:'span', cls:'tag', html: '{.}'}
 				]}
 			]}
-		]}
+		]},
+		{ cls: 'comment', html: 'Comment...' },
+		'{editor}',
+		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 	]),
 
 
@@ -71,6 +78,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			return;
 		}
 		r.headline = r.headline.getData();
+		r.editor = Ext.DomHelper.markup(TemplatesForNotes.getEditorTpl());
 	},
 
 
