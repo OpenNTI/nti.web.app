@@ -35,6 +35,10 @@ Ext.define( 'NextThought.view.views.Profiles', {
 		});
 	},
 
+	isInEditMode: function(){
+		return Boolean(this.el.down('.blog-editor'));
+	},
+
 
 	getHash: function(){
 		var current = this.down('profile-panel');

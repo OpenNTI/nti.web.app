@@ -196,7 +196,13 @@ Ext.define('NextThought.controller.Navigation', {
 	 */
 	navigate: function(ntiid, rec, options) {
 		var callback = Ext.emptyFn(),
-			reply, targets;
+			reply, targets, p;
+
+		p = Ext.ComponentQuery.query('profile-view-container');
+		if(!Ext.isEmpty(p) && p.first().isInEditMode && p.first().isInEditMode()){
+			p.first().down('profile-blog').fireEvent('beforedeactivate');
+			return;
+		}
 
 		if (rec) {
 			reply = (options || {}).reply;

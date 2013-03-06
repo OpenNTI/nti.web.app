@@ -181,7 +181,7 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = true;
 		var app = this.application,
 			history = window.history,
-			replaceState = false, c, key, stateScoped, me = this, presentation;
+			replaceState = false, c, key, stateScoped, me = this, presentation, p;
 
 		function fin(){
 			var token = {};
@@ -208,8 +208,24 @@ Ext.define('NextThought.controller.State', {
 
 		c = Ext.getCmp(stateObject.active);
 		if(c){
-			this.currentState.active = stateObject.active;
-			c.activate();
+			//Check if we're not editing a blog
+			p = Ext.ComponentQuery.query('profile-view-container');
+			if(!Ext.isEmpty(p) && p.first().isInEditMode && p.first().isInEditMode()){
+				//Ensure we only go back once.
+				if(!/edit$/.test(location.hash) && !Ext.isEmpty(location.hash)){
+					c.deactivate();
+					history.back();
+					//Display warning
+					p.first().down('profile-blog').fireEvent('beforedeactivate');
+				}
+				//We don't want to redraw the current page.
+				this.restoringState = false;
+				return;
+			}
+			else{
+				this.currentState.active = stateObject.active;
+				c.activate();
+			}
 		}
 
 		for(key in stateObject){
