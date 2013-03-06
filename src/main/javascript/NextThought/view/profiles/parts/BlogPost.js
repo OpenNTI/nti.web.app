@@ -140,6 +140,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	onDestroy: function(){
+		this.editor.destroy();
 		var h = this.record.get('headline');
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
