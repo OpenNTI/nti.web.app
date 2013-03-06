@@ -18,7 +18,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 					cls: 'aux',
 					cn:[
 						{cls: 'action publish', 'data-qtip': 'Publish State'},
-						{cls: 'action share'},
 						{cls: 'tags'}
 					]
 				},{
