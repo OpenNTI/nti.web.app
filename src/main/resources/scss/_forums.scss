@@ -27,7 +27,7 @@
 
 					.content {
 						max-height: none;
-						min-height: none;
+						min-height: auto;
 						padding: 20px 15px 0;
 						font-family: $font;
 						font-size: 12px;
@@ -160,6 +160,17 @@
 				margin: 40px 0;
 			}
 
+			.comment-box {
+				.editor {
+					.main {
+						.content{
+							min-height: auto;
+							max-height: none;
+							height: 200px;
+						}
+					}
+				}
+			}
 		}
 	}
 }
