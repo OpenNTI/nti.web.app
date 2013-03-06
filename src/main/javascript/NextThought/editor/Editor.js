@@ -88,6 +88,35 @@ Ext.define('NextThought.editor.Editor',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el);
+		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
+		this.mon(this.el.down('.action.save'),'click',this.onSave,this);
+	},
+
+
+	onCancel: function(e){
+		e.stopEvent();
+		this.deactivate();
+	},
+
+
+	onSave: function(e){
+		e.stopEvent();
+		var v = this.getValue(),
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+
+		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
+			if(!this.fireEvent('no-body-content')){
+				return;
+			}
+		}
+
+		if(this.titleEl && Ext.isEmpty(v.title)){
+			if(!this.fireEvent('no-title-content')){
+				return;
+			}
+		}
+
+		this.fireEvent('save',this, this.record, v);
 	},
 
 

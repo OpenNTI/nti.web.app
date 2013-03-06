@@ -150,6 +150,7 @@ Ext.define('NextThought.editor.Actions', {
 	activate: function () {
 		this.updatePrefs();
 		this.editor.addCls('active');
+		this.fireEvent('activated-editor',this);
 	},
 
 
@@ -173,6 +174,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.editor.removeCls('active');
 		this.lastRange = null;
 		this.cleanOpenWindows();
+		this.fireEvent('deactivated-editor',this);
 	},
 
 

@@ -125,6 +125,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		this.editor = Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
 		this.mon(this.commentHeaderEl,'click',this.showEditor,this);
+		this.mon(this.editor,{
+			scope: this,
+			'activated-editor':function(){this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();},
+			'deactivated-editor':function(){this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).show();}
+		});
 
 		if(!Ext.isEmpty(this.selectedSections)){
 			console.debug('Do something with this/these:',this.selectedSections);
@@ -136,7 +141,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	showEditor: function(){
-		this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		this.editor.activate();
 		this.editor.focus(true);
 		Ext.get('profile').scrollChildIntoView(this.editor.getEl());
