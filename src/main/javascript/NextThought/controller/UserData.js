@@ -321,12 +321,12 @@ Ext.define('NextThought.controller.UserData', {
 	    if(!Ext.isArray(records)){ records = [records]; }
         var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
 	    function loadTranscript(r){
-	    	if(r.get('Class') == 'TranscriptSummary'){
-	    		//the record is a summary
-	    		this.onLoadTranscript(r,w);
-	    	}else if(r.get('Class') == 'Transcript'){
-	    		//the record ia a transcript
+	    	if(r.isTranscript){
+	    		//its a transcript so load it straight to the window
 	    		w.insertTranscript(r);
+	    	}else{
+		    	//its a summary so get the transcript first
+		    	this.onLoadTranscript(r,w);	
 	    	}
 	    }
 	    Ext.each(records,loadTranscript, this);

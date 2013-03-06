@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.menus.search.BlogResult', {
 	extend: 'NextThought.view.menus.search.Result',
-	alias: 'widget.search-result-Post',
+	alias: 'widget.search-result-post',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'title',html:'{title}'},
