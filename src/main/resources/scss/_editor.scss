@@ -112,15 +112,8 @@ span.tab{
 				overflow: hidden;
 				height: 32px;
 				border-bottom: 1px solid #dcdcdc;
-				.left,.right {
-					overflow: hidden;
-					display: inline-block;
-					position: absolute;
-					top: 0;
-				}
-
-				.left { left:0; }
-				.right { right: 0; }
+				.left .action {float: left;}
+				.right .action {float: right;}
 
 				.action {
 					width: 20px;
