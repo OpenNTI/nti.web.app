@@ -46,10 +46,14 @@ span.tab{
 		}
 
 		.main {
-			background: #ffffff;
-			padding: 0 13px 46px;
+			background: #fff;
+			padding: 0 0 46px;
 
 			.title {
+				@include experimental(transition, all 0.5s);
+				border: 0 solid #f2f2f2;
+				border-width: 0 0 1px 0;
+
 				input {
 					display: block;
 					font: normal 300 25px/40px $font;
@@ -71,8 +75,39 @@ span.tab{
 				}
 			}
 
-			.toolbar {
+			.aux {
+				background: #fff;
 				@include experimental(transition, all 0.5s);
+				position: relative;
+				.tags{
+					margin: 0 105px 0 0;
+				}
+				.action{
+					float: right;
+					&.publish{
+						width: 105px;
+						height: 30px;
+						position: relative;
+
+						&::after{
+							content: '';
+							position: absolute;
+							left: 0; top: 5px;
+							background: $elements no-repeat;
+							@include sprite($elements,'btn_toggle_onlyme',$dimensions: true);
+						}
+
+						&.on::after{
+							@include sprite($elements,'btn_toggle_public');
+						}
+					}
+				}
+			}
+
+			.toolbar {
+				background: #fff;
+				@include experimental(transition, all 0.5s);
+				clear:both;
 				position: relative;
 				overflow: hidden;
 				border-bottom: 1px solid #dcdcdc;
@@ -159,6 +194,7 @@ span.tab{
 
 		.footer {
 			@include experimental(transition, all 0.5s);
+			background: #fff;
 			position: absolute;
 			bottom: 0;
 			left: 0; right: 0;

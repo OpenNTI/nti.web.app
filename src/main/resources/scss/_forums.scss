@@ -10,49 +10,16 @@
 			@include editor;
 			.editor {
 				.main {
-					padding: 0 0 46px;
-
-					.title {
-						padding: 0 15px;
-						border: 0 solid #f2f2f2;
-						border-width: 0 0 1px 0;
-					}
-
-					.action {
-						&.share {display:none;}
-					}
+					.title { padding: 0 15px; }
 
 					.aux {
-						min-height: 30px;
 						position: relative;
 						.tags{
-							margin: 0 105px 0 15px;
-						}
-						.action{
-							float: right;
-							&.publish{
-								width: 105px;
-								height: 30px;
-								position: relative;
-
-								&::after{
-									content: '';
-									position: absolute;
-									left: 0; top: 5px;
-									background: $elements no-repeat;
-									@include sprite($elements,'btn_toggle_onlyme',$dimensions: true);
-								}
-
-								&.on::after{
-									@include sprite($elements,'btn_toggle_public');
-								}
-							}
+							margin-left: 15px;
 						}
 					}
 
 					.toolbar {
-						clear:both;
-						position: relative;
 						border-top: 1px solid #dcdcdc;
 						background: #f9f9f9;
 						padding: 0 15px;
@@ -60,6 +27,7 @@
 
 					.content {
 						max-height: none;
+						min-height: none;
 						padding: 20px 15px 0;
 						font-family: $font;
 						font-size: 12px;

@@ -707,6 +707,8 @@
 			@include editor;
 			.editor {
 				.main{
+					padding-left: 13px;
+					padding-right: 13px;
 					border: 1px solid #dcdcdc;
 					border-bottom-width: 0;
 				}

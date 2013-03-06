@@ -8,10 +8,10 @@ Ext.define('NextThought.editor.Editor',{
 
 	enableShareControls:false,
 	enablePublishControls:false,
-	enableTextControls:false,
+	enableTextControls:true,
 	enableTags:false,
 	enableTitle:false,
-	enableWhiteboards:false,
+	enableWhiteboards:true,
 
 	saveButtonLabel: 'Save',
 	cancelButtonLabel: 'Cancel',
@@ -62,7 +62,7 @@ Ext.define('NextThought.editor.Editor',{
 				cls: 'right',
 				cn: [
 					{cls:'action save', tabIndex:-1, html: '{saveLabel}'},
-					{cls:'action cancel', tabIndex:-1, html: '{cancelLabel}'}
+					{tag:'tpl', 'if':'cancelLabel', cn:{cls:'action cancel', tabIndex:-1, html: '{cancelLabel}'}}
 				]
 			}]
 		}

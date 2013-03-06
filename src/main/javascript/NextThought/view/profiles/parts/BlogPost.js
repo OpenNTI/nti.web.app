@@ -111,7 +111,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
+		this.editor = Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
 	},
 
 
