@@ -7,7 +7,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
-		'NextThought.view.annotations.note.EditorActions',
+		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates'
 	],
 

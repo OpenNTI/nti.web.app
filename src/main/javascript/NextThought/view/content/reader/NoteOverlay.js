@@ -2,7 +2,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	requires: [
 		'NextThought.util.Line',
-		'NextThought.view.annotations.note.EditorActions',
+		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.view.whiteboard.Window',
 		'NextThought.view.whiteboard.Utils'

@@ -5,7 +5,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.cache.UserRepository',
-		'NextThought.view.annotations.note.EditorActions',
+		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates'
 	],
 

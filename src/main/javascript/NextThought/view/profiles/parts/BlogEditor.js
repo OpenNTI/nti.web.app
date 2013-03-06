@@ -2,7 +2,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-editor',
 
-	requires:['NextThought.view.annotations.note.EditorActions'],
+	requires:['NextThought.editor.Actions'],
 
 	cls: 'blog-editor',
 

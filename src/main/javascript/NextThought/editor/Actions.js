@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.annotations.note.EditorActions', {
+Ext.define('NextThought.editor.Actions', {
 	requires: [
 		'NextThought.util.Ranges',
 		'NextThought.view.menus.Share',
