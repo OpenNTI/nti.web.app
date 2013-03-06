@@ -21,6 +21,7 @@ Ext.define('NextThought.controller.Search', {
 	views: [
 		'form.fields.SearchField',
 		'menus.search.ResultCategory',
+		'menus.search.Result-Chat',
 		'menus.search.Result',
 		'menus.search.More',
 		'menus.search.NoResults',
@@ -86,17 +87,17 @@ Ext.define('NextThought.controller.Search', {
 				results.push(result);
 				result = result.items;
 				type = "search-result";//default type
-				alias = "widget.search-result-"+group.name;
+				alias = "widget.search-result-"+group.name.toLowerCase();
 
 				Ext.each(group.children, function(hit){
 					var id = hit.get('ContainerId'),
 					    sortIndexes = LocationProvider.getSortIndexes(id);
 
 					sortIndexes.reverse();
-
+					console.log(alias);
 					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
 						//custom component for type exists
-						type = "search-result-"+group.name;
+						type = "search-result-"+group.name.toLowerCase();
 					}
 
 
