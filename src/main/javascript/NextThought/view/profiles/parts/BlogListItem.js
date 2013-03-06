@@ -188,8 +188,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			this.moreEl = this.moreTpl.append(appendTo,null,true);
 			this.mon(this.moreEl,'click', this.goToPost,this);
 		}
-		//TODO this may need to be tweaked if/when we have internal links
-		this.bodyEl.select('a[href]', true).set({target: '_blank'});
+
+		DomUtils.adjustLinks(this.bodyEl, window.location.href);
 
 		this.bodyEl.select('img.whiteboard-thumbnail').each(function(el){
 			var wrapper = el.up('.body-divider');

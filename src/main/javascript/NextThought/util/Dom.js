@@ -34,7 +34,32 @@ Ext.define('NextThought.util.Dom',{
 			imageObjects.push(imageObj);
 		});
 		return imageObjects;
+	},
+
+	/*
+	 * A terribly named function that adjust links displayed to the user.  Note this
+	 * is different then any content reference cleanup that happens when content loads.
+	 * Right now the purpose it so detect links that are external (absolute and aren't the same
+	 * base path) and set there target to _blank.  The base url check allows us to just do fragment
+	 * navigatio in the same tab so if people get clever and insert links to things like profile we
+	 * do the right thing.
+	 */
+	adjustLinks: function(dom, baseUrl){
+		if(!dom){
+			return;
+		}
+		Ext.Array.each(dom.query('a[href]') || [], function(link){
+			var href = Ext.fly(link).getAttribute('href') || '',
+				base = baseUrl.split('#')[0],
+				changeTarget = href.indexOf(base) !== 0;
+
+
+			if(changeTarget){
+				Ext.fly(link).set({target: '_blank'});
+			}
+		});
 	}
+
 
 },function(){
 	window.DomUtils = this;

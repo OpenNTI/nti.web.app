@@ -538,7 +538,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		this.text.update(text);
-		this.text.select('a[href]',true).set({target:'_blank'});
+		DomUtils.adjustLinks(this.text, window.location.href);
 
 
 		Ext.each(this.text.query('.whiteboard-container'),
