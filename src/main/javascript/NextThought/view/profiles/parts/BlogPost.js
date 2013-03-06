@@ -36,9 +36,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				]}
 			]}
 		]},
-		{ cls: 'comment', html: 'Comment...' },
-		'{editor}',
-		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
+		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') },
+		{ cls: 'comment-box', cn: [{ cls: 'comment', html: 'Comment...' },{cls:'editor-box'}] }
 	]),
 
 
@@ -48,7 +47,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		favorites: '.controls .favorite',
 		editEl: '.meta .edit',
 		deleteEl: '.meta .delete',
-		publishStateEl: '.meta .state'
+		publishStateEl: '.meta .state',
+		commentBoxEl: '.comment-box',
+		commentHeader: '.comment-box .comment',
+		commentEditorBox: '.comment-box .editor-box'
 	},
 
 
@@ -78,7 +80,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			return;
 		}
 		r.headline = r.headline.getData();
-		r.editor = Ext.DomHelper.markup(TemplatesForNotes.getEditorTpl());
 	},
 
 
@@ -108,6 +109,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
+
+		Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
 	},
 
 
