@@ -58,11 +58,13 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 			containerId = hit.get('ContainerId');
 
 		function success(obj){
-			var occupants = obj.get('Occupants'), 
-				started = obj.get('CreatedTime'),
+			var RoomInfo = obj.get('RoomInfo'),
+				occupants = RoomInfo.get('Occupants'), 
+				started = RoomInfo.get('CreatedTime'),
 				ended = hit.get('Last Modified'),
 				date = new Date (hit.get('Last Modified')),
 				creator = hit.get('Creator');
+				me.record = obj;
 
 			//look for the user email in occupants and replace it with me
 			occupants.forEach(function(element,index,array){
@@ -80,7 +82,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 			me.renderData = Ext.apply(me.renderData || {},{
 				occupants:"Between "+occupants[0]+" and "+((occupants.length - 1 > 1) ? (occupants.length - 1)+" others" : "1 other"),
 				sent: Ext.Date.format(date, 'M-j g:i A'),
-				duration: obj.timeDifference(ended,started).replace(/ ago/i,''),
+				duration: RoomInfo.timeDifference(ended,started).replace(/ ago/i,''),
 				creator: creator
 			});
 			if(me.rendered){
@@ -95,7 +97,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 			console.log("Error fetching chat transcript");
 		}
 		this.wrapFragmentHits();
-		$AppConfig.service.getObject(containerId,success,failure);
+		ViewUtils.getTranscript(containerId,hit.get('Last Modified'),success,failure);
 		//this.callParent(arguments);
 		this.getEl().on({
 			scope: this,
@@ -106,6 +108,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 	},
 
 	clicked: function(e){
+		this.fireEvent('open-chat-transcript',this.record,'Opening chat transcript.');
 	}
 
 	
