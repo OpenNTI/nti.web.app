@@ -203,6 +203,7 @@ Ext.define('NextThought.view.menus.Share',{
         }
 
 		this.add(items);
+		this.fireEvent('changed',this);
 	},
 
 

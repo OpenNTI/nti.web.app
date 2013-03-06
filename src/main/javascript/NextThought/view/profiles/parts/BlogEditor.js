@@ -73,7 +73,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		var r = this.record,
 			h,
 			title = this.titleEl.down('input'),
-			e = this.editorActions = new NoteEditorActions(this,this.editor);
+			e = this.editorActions = new EditorActions(this,this.editor);
 
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);

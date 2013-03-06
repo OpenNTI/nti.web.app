@@ -58,7 +58,24 @@ Ext.define('NextThought.editor.Actions', {
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
-		me.shareMenu = Ext.widget('share-menu');
+
+		function updateLabel() { me.shareEl.update(me.shareMenu.getLabel()); }
+
+		me.shareEl = this.editor.down('.action.share');
+		if( me.shareEl ){
+			me.shareMenu = Ext.widget('share-menu');
+			if (!$AppConfig.service.canShare()) {
+				me.shareEl.hide();
+			}
+			cmp.mon(me.shareEl, 'click', function (e) {
+				e.stopEvent();
+				me.shareMenu.showBy(me.shareEl, 't-b?');
+				return false;
+			});
+
+			cmp.mon(me.shareMenu, 'changed', updateLabel);
+			updateLabel();
+		}
 
 		me.titleEl = editorEl.down('.title input');
 		if( me.titleEl ){
@@ -91,15 +108,8 @@ Ext.define('NextThought.editor.Actions', {
 			});
 		}
 
-
-		this.updateShareWithLabel();
-
 		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: -1});
 
-		cmp.mon(me.shareMenu, {
-			scope  : me,
-			changed: me.updateShareWithLabel
-		});
 
 		cmp.mon(new Ce(editorEl.query('.left .action')), {
 			scope: me,
@@ -129,13 +139,6 @@ Ext.define('NextThought.editor.Actions', {
 			contextmenu: me.handleContext
 		});
 
-		if (!$AppConfig.service.canShare()) {
-			editorEl.down('.action.share').hide();
-		}
-		cmp.mon(editorEl.down('.action.share'), {
-			scope: me,
-			click: me.openShareMenu
-		});
 
 		cmp.on('destroy',function(){
 			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();}); });
@@ -277,18 +280,6 @@ Ext.define('NextThought.editor.Actions', {
 				this.lastRange = s.getRangeAt(0);
 			}
 		}
-	},
-
-
-	updateShareWithLabel: function () {
-		this.editor.down('.action.share').update(this.shareMenu.getLabel());
-	},
-
-
-	openShareMenu: function (e) {
-		e.stopEvent();
-		this.shareMenu.showBy(this.editor.down('.action.share'), 't-b?');
-		return false;
 	},
 
 
@@ -650,7 +641,7 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	getNoteBody: function (parts) {
+	getBody: function (parts) {
 		var r = [],
 			regex = /<img.*?>/i, i, part, me = this;
 
@@ -762,7 +753,9 @@ Ext.define('NextThought.editor.Actions', {
 	getValue: function () {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
-		var out =[], sel = this.editor.select('.content > *');
+		var out =[],
+			sel = this.editor.select('.content > *');
+
 		sel.each(function(div){
 			var html, tmp, dom;
 			try {
@@ -790,17 +783,17 @@ Ext.define('NextThought.editor.Actions', {
 		});
 
 		return {
-			body : this.getNoteBody(out),
-			shareWith : this.shareMenu.getValue(),
+			body : this.getBody(out),
+			shareWith: this.shareMenu ? this.shareMenu.getValue() : undefined,
 			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
-			tags: this.tags ? this.tags.getValue() : []
+			tags: this.tags ? this.tags.getValue() : undefined
 		};
 	},
 
 
 	getPublished: function(){
-		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : false;
+		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : undefined;
 	},
 
 
@@ -873,11 +866,12 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	updatePrefs: function (v) {
-		this.shareMenu.reload(v);
-		this.updateShareWithLabel();
+		if( this.shareMenu ){
+			this.shareMenu.reload(v);
+		}
 	}
 
 
 }, function () {
-	window.NoteEditorActions = this;
+	window.EditorActions = this;
 });

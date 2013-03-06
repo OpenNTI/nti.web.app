@@ -7,6 +7,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 	requires:[
+		'NextThought.editor.Editor',
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.view.annotations.note.Templates'
 	],

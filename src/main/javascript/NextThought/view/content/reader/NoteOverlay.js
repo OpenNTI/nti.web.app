@@ -161,7 +161,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			click: me.noteOverlayActivateRichEditor
 		});
 
-		data.editorActions = new NoteEditorActions(me, data.editor);
+		data.editorActions = new EditorActions(me, data.editor);
 	},
 
 

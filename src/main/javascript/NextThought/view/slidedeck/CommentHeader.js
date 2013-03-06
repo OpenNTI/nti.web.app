@@ -34,7 +34,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 		me.comment.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		me.mon(me.comment,'click',me.activateEditor,me);
-		me.editorActions = new NoteEditorActions(me,me.editor);
+		me.editorActions = new EditorActions(me,me.editor);
 
 		me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateEditor });
 		me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });

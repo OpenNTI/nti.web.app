@@ -97,7 +97,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.first){ me.noteBody.addCls('first'); }
 		if(this.root){ me.noteBody.addCls('root'); }
 
-		me.editorActions = new NoteEditorActions(me,me.editor);
+		me.editorActions = new EditorActions(me,me.editor);
 
 		this.noteBody.hover(this.onMouseOver,this.onMouseOut,this);
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
