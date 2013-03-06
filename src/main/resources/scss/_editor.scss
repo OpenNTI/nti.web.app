@@ -105,14 +105,22 @@ span.tab{
 			}
 
 			.toolbar {
-				background: #fff;
 				@include experimental(transition, all 0.5s);
+				background: #fff;
 				clear:both;
 				position: relative;
 				overflow: hidden;
+				height: 32px;
 				border-bottom: 1px solid #dcdcdc;
-				.left .action {float: left;}
-				.right .action {float: right;}
+				.left,.right {
+					overflow: hidden;
+					display: inline-block;
+					position: absolute;
+					top: 0;
+				}
+
+				.left { left:0; }
+				.right { right: 0; }
 
 				.action {
 					width: 20px;
