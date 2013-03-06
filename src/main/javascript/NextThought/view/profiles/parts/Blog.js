@@ -107,30 +107,27 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	onTabClicked: function(){
 		//only close the post if we are visible
-		if(this.isVisible()){
+		if(this.isVisible() && this.el.down('.blog-editor')){
+			this.warnBeforeDismissingEditor();
+		}
+		else if(this.isVisible()){
 			this.closePost();
 		}
 	},
 
 
-	warnBeforeDismissingEditor: function(cb){
-		var me = this;
-		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
-		Ext.Msg.show({
-			msg: "All your current progress will be lost",
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: Ext.Msg.WARNING,
-			fn: function(str){
-				if(str === 'ok'){
-					Ext.callback(cb, me, []);
-				}
-			}
-		});
+	warnBeforeDismissingEditor: function(){
+		var msg = "You are currently editing a thought, please save or dismiss it first.";
+		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
+	
 
 	onBeforeDeactivate: function(){
-		return !Boolean(this.isVisible() && this.el.down('.blog-editor'));
+		var b = Boolean(this.isVisible() && this.el.down('.blog-editor'));
+		if(b){
+			this.warnBeforeDismissingEditor();
+		}
+		return !b;
 	},
 
 
