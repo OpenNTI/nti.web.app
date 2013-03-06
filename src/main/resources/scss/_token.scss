@@ -76,6 +76,13 @@ div.nt-token-wrapper{
 
 	font: normal 400 12px/30px $font;
 
+	.x-gecko & {
+		padding-top: 1px;
+		& > * {
+			float: left;
+		}
+	}
+
 	&.x-repaint {
 		display: none;
 	}
@@ -140,6 +147,7 @@ div.nt-token-wrapper{
 		input{
 			font: normal 400 10px/20px $font;
 			position: absolute;
+			background: #fff;
 			top: 0; left: 0;
 			bottom: 0; right: 0;
 			padding: 0;
@@ -147,8 +155,8 @@ div.nt-token-wrapper{
 			border: 0;
 
 			.x-gecko &{
-				width: 99%;
-				top: 9px;
+				width: 100%;
+				top: 7px;
 			}
 
 			text-transform: lowercase;
@@ -163,7 +171,8 @@ div.nt-token-wrapper{
 			display: inline-block;
 			font: normal 400 10px/30px $font;
 			visibility: hidden;
-			background: #fff; color: #fff;
+			background: #fff;
+			color: #fff;
 			white-space: normal;
 			padding: 0 0.2em;
 			min-width: 50px;
