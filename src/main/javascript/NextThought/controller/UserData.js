@@ -320,7 +320,16 @@ Ext.define('NextThought.controller.UserData', {
     openChatTranscript: function(records, clonedWidgetMarkup){
 	    if(!Ext.isArray(records)){ records = [records]; }
         var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
-	    Ext.each(records,function(r){ this.onLoadTranscript(r,w); }, this);
+	    function loadTranscript(r){
+	    	if(r.get('Class') == 'TranscriptSummary'){
+	    		//the record is a summary
+	    		this.onLoadTranscript(r,w);
+	    	}else if(r.get('Class') == 'Transcript'){
+	    		//the record ia a transcript
+	    		w.insertTranscript(r);
+	    	}
+	    }
+	    Ext.each(records,loadTranscript, this);
     },
 
 

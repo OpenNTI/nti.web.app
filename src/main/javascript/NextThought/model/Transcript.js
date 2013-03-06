@@ -12,5 +12,7 @@ Ext.define('NextThought.model.Transcript', {
 		appendId: false,
 		headers: { 'Accept': 'application/vnd.nextthought.transcript+json' },
 		url: ''//pupulated by caller
-	}
+	},
+
+	isTranscript: true
 });

@@ -7,16 +7,20 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls:'title', cn: [
-			{cls: 'occupants', cn:[
-					{tag: 'span', cls: 'names', html: '{occupants}'}
+			{tag :'tpl', 'if':'isRendered', cn:[
+				{cls: 'occupants', cn:[
+						{tag: 'span', cls: 'names', html: '{occupants}'}
+				]}
 			]},
 			{cls: 'time', cn:[
 				{tag: 'span', cls: 'started', html: 'Sent: {sent}'}
 				
 			]},
-			{cls: 'lasted',cn:[
-				{tag: 'span', cls: 'lasted', html: 'Lasted: {duration}'}
-			]},
+			{tag:'tpl', 'if':'isRendered', cn:[
+				{cls: 'lasted', cn:[
+					{tag: 'span', cls: 'lasted', html: 'Lasted: {duration}'}
+				]}
+			]}
 		]},
 
 		{ cls: 'wrap',
@@ -30,67 +34,64 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 						]}
 				]}
 			],
-	}]),
+		}
+	]),
 
 	initComponent: function(){
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId'),
+			date = new Date(hit.get('Last Modified')),
 			name = hit.get('Creator');
-		me.callParent(arguments);
+			me.callParent(arguments);
 
-		me.renderData = Ext.apply(me.renderData || {},{
-			occupants: 'Rendering...',
-            count: '',
-            started: '',
-			date: '',
-			duration: '',
-			creator: '',
-			fragments: ''
-		});
+			UserRepository.getUser(name,function(user){
+				me.renderData = Ext.apply(me.renderData || {},{
+					creator: user.get('displayName'),
+					sent: Ext.Date.format(date, 'M-j g:i A'),
+					fragments: ''
+				});
+			});
+
+		
 
 
 	},
 
-	afterRender: function(){
+	fillInData: function(){
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId');
 
 		function success(obj){
-			var RoomInfo = obj.get('RoomInfo'),
-				occupants = RoomInfo.get('Occupants'), 
-				started = RoomInfo.get('CreatedTime'),
-				ended = hit.get('Last Modified'),
-				date = new Date (hit.get('Last Modified')),
-				creator = hit.get('Creator');
-				me.record = obj;
+			UserRepository.getUser(hit.get('Creator'),function(user){
+				var RoomInfo = obj.get('RoomInfo'),
+					occupants = RoomInfo.get('Occupants'), 
+					started = RoomInfo.get('CreatedTime'),
+					ended = hit.get('Last Modified'),
+					date = new Date (hit.get('Last Modified')),
+					creator = user.get('displayName');
+					me.record = obj;
 
-			//look for the user email in occupants and replace it with me
-			occupants.forEach(function(element,index,array){
-				if(isMe(element)){
-					occupants[index] = 'me';
+				//check if the user created it
+				if(isMe(creator)){
+					creator = 'I';
 				}
-				return;
-			});
 
-			//check if the user created it
-			if(isMe(creator)){
-				creator = 'I';
-			}
-
-			me.renderData = Ext.apply(me.renderData || {},{
-				occupants:"Between "+occupants[0]+" and "+((occupants.length - 1 > 1) ? (occupants.length - 1)+" others" : "1 other"),
-				sent: Ext.Date.format(date, 'M-j g:i A'),
-				duration: RoomInfo.timeDifference(ended,started).replace(/ ago/i,''),
-				creator: creator
+				me.renderData = Ext.apply(me.renderData || {},{
+					isRendered: true,
+					occupants:"Between me and "+((occupants.length - 1 > 1) ? (occupants.length - 1)+" others" : "1 other"),
+					sent: Ext.Date.format(date, 'M-j g:i A'),
+					duration: RoomInfo.timeDifference(ended,started).replace(/ ago/i,''),
+					creator: creator
+				});
+				if(me.rendered){
+					me.renderTpl.overwrite(me.el, me.renderData);
+				}
+				else{
+					me.renderTpl.overwrite(me.renderData);
+				}
 			});
-			if(me.rendered){
-				me.renderTpl.overwrite(me.el, me.renderData);
-			}
-			else{
-				me.renderTpl.overwrite(me.renderData);
-			}
 		}
 
 		function failure(req,resp){
@@ -98,16 +99,18 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 		}
 		this.wrapFragmentHits();
 		ViewUtils.getTranscript(containerId,hit.get('Last Modified'),success,failure);
-		//this.callParent(arguments);
-		this.getEl().on({
-			scope: this,
-			animationend: this.animationEnd,
-			webkitAnimationEnd: this.animationEnd,
-			click: this.clicked
-		});
 	},
 
+	afterRender: function(){
+		this.fillInData();
+		this.callParent(arguments);
+	},
 	clicked: function(e){
+		var errMsg = "Unable to load chat transcript.";
+		if(!this.record){
+			alert({ title : 'Error' , msg : errMsg, icon: 'warning-red'});
+			return;
+		}
 		this.fireEvent('open-chat-transcript',this.record,'Opening chat transcript.');
 	}
 
