@@ -116,9 +116,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 		}
 
 		wasPlaying = this.video.pausePlayback();
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'Leaving this slide will cause any unsaved data to be lost.',
-			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'caution:Continue'},

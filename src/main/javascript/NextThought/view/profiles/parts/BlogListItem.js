@@ -149,9 +149,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	onDeletePost: function(e){
 		e.stopEvent();
 		var me = this;
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'Deleting your thought will permanently remove it and any comments.',
-			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},

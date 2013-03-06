@@ -263,10 +263,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		else if(/^slide$/.test(action)){
 			if(this.editorActive()){
+				/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
 					msg: "This will discard the contents of your current message",
 					scope: me,
-					buttons: 9,
+					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 					icon: 'warning-red',
 					title: 'Are you sure?',
 					buttonText: {ok: 'caution:OK'},

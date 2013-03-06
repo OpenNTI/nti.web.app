@@ -143,9 +143,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	onDelete: function(){
 		var me = this;
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'The following action will delete your note',
-			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
