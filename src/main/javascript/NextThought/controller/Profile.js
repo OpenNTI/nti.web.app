@@ -41,9 +41,7 @@ Ext.define('NextThought.controller.Profile', {
 			},
 
 			'profile-blog-post nti-editor':{
-				'save': function(){
-					console.debug('save',arguments);
-				}
+				'save': this.saveBlogComment
 			}
 		},{});
 	},
@@ -82,10 +80,37 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
+	saveBlogComment: function(editor,record,valueObject){
+		var postCmp = editor.up('profile-blog-post'),
+			postRecord = postCmp && postCmp.record,
+			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+
+		commentPost.set({ body:valueObject.body });
+
+		commentPost.save({
+			url: postRecord && postRecord.get('href'),
+			scope: this,
+			success: function(rec){
+				if(postCmp.store && !postCmp.isDestroyed){
+					postCmp.store.insert(0,rec);
+					editor.deactivate();
+					editor.reset();
+				}
+				//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
+				postRecord.set('PostCount',postRecord.get('PostCount')+1);
+			},
+			failure: function(){
+				editor.markError(editor.getEl(),'Could not save comment');
+				console.debug('failure',arguments);
+			}
+		});
+	},
+
+
 	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
 
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
+			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			me = this;
 
 		post.set({
