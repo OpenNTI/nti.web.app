@@ -38,6 +38,12 @@ Ext.define('NextThought.controller.Profile', {
 
 			'profile-blog-editor':{
 				'save-post': this.saveBlogPost
+			},
+
+			'profile-blog-post nti-editor':{
+				'save': function(){
+					console.debug('save',arguments);
+				}
 			}
 		},{});
 	},
