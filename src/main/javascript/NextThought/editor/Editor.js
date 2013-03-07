@@ -93,6 +93,12 @@ Ext.define('NextThought.editor.Editor',{
 	},
 
 
+	clearError:function(el){ el.removeCls('error-top').set({'data-error-tip':undefined}); },
+
+
+	markError: function(el,message){ el.addCls('error-tip').set({'data-error-tip':message}); },
+
+
 	onCancel: function(e){
 		e.stopEvent();
 		this.deactivate();
@@ -105,13 +111,13 @@ Ext.define('NextThought.editor.Editor',{
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
-			if(!this.fireEvent('no-body-content')){
+			if(!this.fireEvent('no-body-content',this, this.contentEl)){
 				return;
 			}
 		}
 
 		if(this.titleEl && Ext.isEmpty(v.title)){
-			if(!this.fireEvent('no-title-content')){
+			if(!this.fireEvent('no-title-content',this, this.titleEl)){
 				return;
 			}
 		}
@@ -124,5 +130,8 @@ Ext.define('NextThought.editor.Editor',{
 	disable:function(){ return this.mixins.editorActions.disable.apply(this,arguments); },
 	enable:function(){ return this.mixins.editorActions.enable.apply(this,arguments); },
 	focus:function(){ return this.mixins.editorActions.focus.apply(this,arguments); },
-	onKeyDown:function(){ return this.mixins.editorActions.onKeyDown.apply(this,arguments); }
+	onKeyDown:function(){ return this.mixins.editorActions.onKeyDown.apply(this,arguments); },
+	onKeyUp:function(){
+		this.clearError(this.contentEl);
+		return this.mixins.editorActions.onKeyDown.apply(this,arguments); }
 });

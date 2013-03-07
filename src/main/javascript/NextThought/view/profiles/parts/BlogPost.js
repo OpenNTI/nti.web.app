@@ -102,7 +102,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var h = this.record.get('headline');
+		var h = this.record.get('headline'),
+			commentHeader = this.commentHeaderEl;
 		if(!h){return;}
 
 		h.addObserverForField(this, 'title', this.updateField, this);
@@ -123,12 +124,18 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
+		commentHeader.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.commentEditorBox});
-		this.mon(this.commentHeaderEl,'click',this.showEditor,this);
+		this.mon(commentHeader,'click',this.showEditor,this);
 		this.mon(this.editor,{
 			scope: this,
-			'activated-editor':function(){this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();},
-			'deactivated-editor':function(){this.commentHeaderEl.setVisibilityMode(Ext.dom.Element.DISPLAY).show();}
+			'activated-editor':Ext.bind(commentHeader.hide,commentHeader),
+			'deactivated-editor':Ext.bind(commentHeader.show,commentHeader),
+			'no-body-content': function(editor,bodyEl){
+				editor.markError(bodyEl,'You need to type something');
+				return false;
+			}
 		});
 
 		if(!Ext.isEmpty(this.selectedSections)){
