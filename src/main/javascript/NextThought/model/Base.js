@@ -40,6 +40,10 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
+		{ name: 'editied', type: 'bool', persist: false, convert: function(v,r){
+			var cd=r.get('CreatedTime'), lm=r.get('Last Modified');
+			return ((cd && cd.getTime())||0) !== ((lm && lm.getTime())||0);
+		}},
 		{ name: 'isModifiable', persist: false, convert:function(v,r){return r.phantom||r.getLink('edit')!==null;} }
 	],
 
