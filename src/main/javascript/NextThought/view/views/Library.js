@@ -33,6 +33,7 @@ Ext.define( 'NextThought.view.views.Library', {
 		this.reader = Ext.getCmp('readerPanel');
 
 		this.mon(this, 'beforeactivate', this.beforeactivate, this);
+		this.mon(this, 'deactivate', this.onDeactivated, this);
 
 		LocationProvider.on({
 			scope: this.reader,
@@ -57,9 +58,22 @@ Ext.define( 'NextThought.view.views.Library', {
 	},
 
 
+	onDeactivated: function(){
+		var presentation = Ext.ComponentQuery.query('slidedeck-view'),
+			noteWindow = Ext.ComponentQuery.query('note-window');
+
+		if(!Ext.isEmpty(presentation)){
+			presentation.first().destroy();
+		}
+		if(!Ext.isEmpty(noteWindow)){
+			noteWindow.first().destroy();
+		}
+	},
+
+
 	onBeforeNavigate: function(ntiid,fromHistory){
 		if(!fromHistory){
-			this.activate();
+			return this.fireEvent('activate-main-view', 'library');
 		}
 	},
 

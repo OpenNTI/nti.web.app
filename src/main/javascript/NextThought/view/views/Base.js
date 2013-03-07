@@ -7,6 +7,7 @@ Ext.define( 'NextThought.view.views.Base', {
 	initComponent: function(){
 		this.addEvents('activate-view');
 		this.callParent(arguments);
+		this.mon(this, 'activate', this.activate, this);
 	},
 
 
@@ -28,41 +29,14 @@ Ext.define( 'NextThought.view.views.Base', {
 	},
 
 
+	beforeRestore: function(){ return true; },
+
+
 	activate: function(){
-		var me = this,
-			ct = me.ownerCt,
-			item = 0;
+		if(!this.ownerCt){ console.error('No parent view(ownerCt) was provided. Failing to activate properly'); }
 
-		if(!ct){
-			console.error('No container??');
-			return false;
-		}
-
-		ct.fireEvent('activate-view', me.getId());
-
-		ct.items.each(function(o,i){
-			if(o===me) {
-				item = i;
-				return false;
-			}
-		},this);
-
-		try{
-			try{
-				ct.getLayout().getActiveItem().deactivate();
-			}
-			catch(e){
-				console.log('Could not call deactivate on active view',Globals.getError(e));
-			}
-
-			ct.getLayout().setActiveItem(item);
-			me.fireEvent('view-activated');
-			me.setTitle();
-		}
-		catch(er){
-			console.error('Activating View: ', Globals.getError(er));
-			return false;
-		}
+		this.ownerCt.fireEvent('activate-view', this.getId());
+		this.setTitle();
 		return true;
 	},
 

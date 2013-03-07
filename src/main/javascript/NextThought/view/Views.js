@@ -27,5 +27,14 @@ Ext.define( 'NextThought.view.Views', {
 	
 	getActive: function() {
 		return this.getLayout().getActiveItem();
+	},
+
+	switchActiveViewTo: function(id){
+		var layout = this.getLayout(), activeItem = layout.getActiveItem();
+
+		if(activeItem.getId() === id){
+			return activeItem;
+		}
+		return layout.setActiveItem(id);
 	}
 });

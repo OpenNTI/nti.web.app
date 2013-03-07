@@ -34,7 +34,8 @@ Ext.define('NextThought.controller.State', {
 
 		me.control({
 			'main-views': {
-				'activate-view': me.track
+				'activate-view': me.track,
+				'activate-main-view': me.activateMainView
 			}
 		},{});
 		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
@@ -173,6 +174,12 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
+	activateMainView: function(id){
+		var p = Ext.ComponentQuery.query('main-views').first();
+		return p.switchActiveViewTo(id);
+	},
+
+
 	restoreState: function(stateObject){
 		if(this.restoringState){
 			console.warn('Restoring state while one is already restoring...');
@@ -181,7 +188,7 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = true;
 		var app = this.application,
 			history = window.history,
-			replaceState = false, c, key, stateScoped, me = this, presentation, p;
+			replaceState = false, c, key, stateScoped, me = this, presentation;
 
 		function fin(){
 			var token = {};
@@ -206,26 +213,16 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		c = Ext.getCmp(stateObject.active);
-		if(c){
-			//Check if we're not editing a blog
-			p = Ext.ComponentQuery.query('profile-view-container');
-			if(!Ext.isEmpty(p) && p.first().isInEditMode && p.first().isInEditMode()){
-				//Ensure we only go back once.
-				if(!/edit$/.test(location.hash) && !Ext.isEmpty(location.hash)){
-					c.deactivate();
-					history.back();
-					//Display warning
-					p.first().down('profile-blog').fireEvent('beforedeactivate');
-				}
-				//We don't want to redraw the current page.
-				this.restoringState = false;
-				return;
-			}
-			else{
-				this.currentState.active = stateObject.active;
-				c.activate();
-			}
+		c = Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', stateObject.active);
+		// c equals false means that we got cancelled in beforedeactivate event.
+		// i.e we can get cancelled if the activeView has blog editor open.
+		if(c === false){
+			history.back();
+			this.restoringState = false;
+			return;
+		}
+		else{
+			this.currentState.active = stateObject.active;
 		}
 
 		for(key in stateObject){
@@ -249,14 +246,6 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		if(typeof stateObject.location !== 'undefined'){
-			//Quick and dirty close the slide view if it exists.
-			//Integrate this with state better so back and forward can
-			//do more of what you would expdect.
-			presentation = Ext.ComponentQuery.query('slidedeck-view');
-			if(!Ext.isEmpty(presentation)){
-				presentation = presentation.first();
-				presentation.destroy();
-			}
 			LocationProvider.setLocation(stateObject.location, fin(), true);
 		}
 

@@ -46,7 +46,7 @@ Ext.define('NextThought.controller.Application', {
 		}
 		catch(e){//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);
-			Ext.getCmp('profile').activate();
+			Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', 'profile');
 		}
 		this.application.finishInitializeTask(this.launchToken);
 

@@ -196,13 +196,8 @@ Ext.define('NextThought.controller.Navigation', {
 	 */
 	navigate: function(ntiid, rec, options) {
 		var callback = Ext.emptyFn(),
-			reply, targets, p;
+			reply, targets;
 
-		p = Ext.ComponentQuery.query('profile-view-container');
-		if(!Ext.isEmpty(p) && p.first().isInEditMode && p.first().isInEditMode()){
-			p.first().down('profile-blog').fireEvent('beforedeactivate');
-			return;
-		}
 
 		if (rec) {
 			reply = (options || {}).reply;
@@ -261,7 +256,7 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 	goToLibrary: function(){
-		Ext.getCmp('library').activate();
+		Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', 'library');
 	},
 
 	switchViews: function(button, state){
@@ -271,7 +266,7 @@ Ext.define('NextThought.controller.Navigation', {
 				this.track(id);//always switch the menus even if the view is already active
 				//search doesn't have a "view"...just a menu
 				if(id!=='search'){
-					Ext.getCmp(id).activate();
+					Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', id);
 				}
 			}
 			catch(e){
