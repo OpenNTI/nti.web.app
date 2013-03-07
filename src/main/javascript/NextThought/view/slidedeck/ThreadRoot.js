@@ -61,6 +61,10 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	},
 
 	toggleCollapse: function(e){
+		if(e.getTarget('a[href]')){
+			return true; //if the user clicked on a url link, let it continue to propagate.
+		}
+
 		e.stopEvent();
 		//We need to find all the click handlers in the note panel and make sure they are stopped...other wise this will trigger as well.
 		return (this.getTargetEl().hasCls(this.collapsedCls) ? this.expand() : this.collapse()) && false;

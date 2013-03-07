@@ -469,6 +469,10 @@ $experimental-support-for-svg: true;
 				.body {
 					color: #949494;
 					font: normal 14px $font;
+
+					a {
+						color: #3a9bd3;
+					}
 				}
 
 				.respond {
