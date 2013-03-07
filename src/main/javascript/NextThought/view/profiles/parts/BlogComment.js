@@ -6,9 +6,18 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	ui: 'blog-comment',
 
 	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'}},
 		{ cls: 'wrap', cn:[
-			{ cls: 'meta', html: '{displayName} {CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
+			{ cls: 'meta', cn: [
+				{ tag: 'span', html: '{displayName}', cls: 'name link'},
+				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:m A")}'},
+				{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+					//{ tag:'span', cls: 'edit link', html: 'Edit'},
+					{ tag:'span', cls: 'delete link', html: 'Delete'}
+				]}
+			]},
+			//flag?
 			{ cls: 'body' }
 		] }
 	]),

@@ -171,6 +171,32 @@
 					}
 				}
 			}
+
+			.x-component-blog-comment{
+				margin: 20px 0;
+				border: 0 solid #f1f1f1;
+				border-top-width: 1px;
+				position: relative;
+
+				.avatar {
+					position: absolute;
+					top: 0; left: 0;
+					width: 35px; height: 35px;
+					border-radius: 3px;
+					background:{
+						color: transparent;
+						position: center;
+						repeat: no-repeat;
+						size: cover;
+					}
+				}
+				.controls {
+					right: -20px;
+				}
+				.wrap {
+					margin: 0 0 0 45px;
+				}
+			}
 		}
 	}
 }
