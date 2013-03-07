@@ -39,7 +39,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		}
 
 
-		if(isMe(this.username)){
+		if(isMe(this.username) && $AppConfig.service.canBlog()){
 			this.addCls('owner');
 			this.renderSelectors.headerEl = '.header';
 		}
@@ -120,7 +120,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		var msg = "You are currently editing a thought, please save or dismiss it first.";
 		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
-	
+
 
 	onBeforeDeactivate: function(){
 		var b = Boolean(this.isVisible() && this.el.down('.blog-editor'));
