@@ -96,12 +96,22 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.listViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.swapViews('list');
 		if(this.headerEl){
 			this.mon(this.headerEl,'click',this.onNewPost,this);
 		}
 
 		this.mon(this.tab,'click',this.onTabClicked, this);
+	},
+
+
+	swapViews: function(viewToShow){
+		var fnm = {true:'show',false:'hide'},
+			v = viewToShow !== 'post';
+
+		this.listViewEl[fnm[v]]();
+		this.postViewEl[fnm[!v]]();
 	},
 
 
@@ -244,8 +254,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	closePost: function(leaveLocation){
-		this.listViewEl.show();
-		this.postViewEl.hide();
+		this.swapViews('list');
 		this.updateLayout();
 
 		this.cleanPreviousPost();
@@ -257,8 +266,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	showPost: function(record,action){
-		this.listViewEl.hide();
-		this.postViewEl.show();
+		this.swapViews('post');
 
 		this.cleanPreviousPost();
 
