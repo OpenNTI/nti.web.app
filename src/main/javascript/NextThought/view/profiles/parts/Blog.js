@@ -107,7 +107,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	swapViews: function(viewToShow){
-		var fnm = {true:'show',false:'hide'},
+		var fnm = {'true':'show','false':'hide'},
 			v = viewToShow !== 'post';
 
 		this.listViewEl[fnm[v]]();
