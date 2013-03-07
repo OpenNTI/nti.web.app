@@ -14,7 +14,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 			]},
 			{cls: 'time', cn:[
 				{tag: 'span', cls: 'started', html: 'Sent: {sent}'}
-				
+
 			]},
 			{tag:'tpl', 'if':'isRendered', cn:[
 				{cls: 'lasted', cn:[
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 							{cls: 'fragment', ordinal: '{#}', html: '{.}'}
 						]}
 				]}
-			],
+			]
 		}
 	]),
 
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 				});
 			});
 
-		
+
 
 
 	},
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 		function success(obj){
 			UserRepository.getUser(hit.get('Creator'),function(user){
 				var RoomInfo = obj.get('RoomInfo'),
-					occupants = RoomInfo.get('Occupants'), 
+					occupants = RoomInfo.get('Occupants'),
 					started = RoomInfo.get('CreatedTime'),
 					ended = hit.get('Last Modified'),
 					date = new Date (hit.get('Last Modified')),
@@ -114,5 +114,5 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 		this.fireEvent('open-chat-transcript',this.record,'Opening chat transcript.');
 	}
 
-	
+
 });

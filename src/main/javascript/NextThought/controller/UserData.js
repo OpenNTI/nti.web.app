@@ -6,7 +6,7 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
 		'NextThought.providers.Location',
-        'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket'
 	],
 
 
@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.UserData', {
 		'QuizResult',
 		'TranscriptSummary',
 		'Transcript',
-        'Bookmark'
+		'Bookmark'
 	],
 
 
@@ -37,13 +37,13 @@ Ext.define('NextThought.controller.UserData', {
 		'annotations.note.Window',
 		'chat.transcript.Window',
 		'content.Reader',
-        'content.PageWidgets',
-        'content.SimplePopoverWidget',
+		'content.PageWidgets',
+		'content.SimplePopoverWidget',
 		'definition.Window',
 		'sharing.Window',
 		'views.Library',
 		'whiteboard.Window',
-        'UserDataPanel'
+		'UserDataPanel'
 	],
 
 
@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	init: function() {
-        var me = this;
+		var me = this;
 
 		this.application.on('session-ready', this.onSessionReady, this);
 
@@ -68,8 +68,8 @@ Ext.define('NextThought.controller.UserData', {
 				'define'		: this.define,
 				'redact'		: this.redact,
 				'save-new-note' : this.saveNewNote,
-                'display-popover': this.onDisplayPopover,
-                'dismiss-popover': this.onDismissPopover
+				'display-popover': this.onDisplayPopover,
+				'dismiss-popover': this.onDismissPopover
 			},
 
 
@@ -106,21 +106,21 @@ Ext.define('NextThought.controller.UserData', {
 			'chat-log-view': {
 				'load-transcript': this.onLoadTranscript
 			},
-            'user-data-panel': {
-                'open-chat-transcript': this.openChatTranscript
-            },
+			'user-data-panel': {
+				'open-chat-transcript': this.openChatTranscript
+			},
 		'search-result-messageinfo':{
 			'open-chat-transcript': this.openChatTranscript
 		},
-            'content-page-widgets': {
-                'save-new-bookmark': this.saveNewBookmark
-            }
+			'content-page-widgets': {
+				'save-new-bookmark': this.saveNewBookmark
+			}
 
 		},{});
 
-        Socket.register({
-            'data_noticeIncomingChange': function(c){me.incomingChange.apply(me, [c]);}
-        });
+		Socket.register({
+			'data_noticeIncomingChange': function(c){me.incomingChange.apply(me, [c]);}
+		});
 
 		Ext.apply(this.changeActionMap,{
 			created: this.incomingCreatedChange,
@@ -160,9 +160,9 @@ Ext.define('NextThought.controller.UserData', {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
 		 *
-		 *  @param change Object/Ext.data.Model -  the change record.
-		 *  @param item Object/Ext.data.Model - Item the change is about.
-		 *  @param meta Object - Location meta data
+		 *	@param change Object/Ext.data.Model -  the change record.
+		 *	@param item Object/Ext.data.Model - Item the change is about.
+		 *	@param meta Object - Location meta data
 		 *
 		 * these are assigned in the init() above
 		 */
@@ -174,18 +174,18 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    incomingChange: function withMeta(change, meta, reCalled) {
-	    //fancy callback that calls this function back with addtional arguments
-	    function reCall(meta){ withMeta.call(me,change,meta,true); }
+	incomingChange: function withMeta(change, meta, reCalled) {
+		//fancy callback that calls this function back with addtional arguments
+		function reCall(meta){ withMeta.call(me,change,meta,true); }
 
-	    //we require at least a change object
-	    if(!change){
-		    console.error('Invalid Argument for change');
-		    return;
-	    }
+		//we require at least a change object
+		if(!change){
+			console.error('Invalid Argument for change');
+			return;
+		}
 
-	    //if this is the raw json from the event, parse it.
-	    if(!change.isModel){ change = ParseUtils.parseItems([change])[0]; }
+		//if this is the raw json from the event, parse it.
+		if(!change.isModel){ change = ParseUtils.parseItems([change])[0]; }
 
 		var me = this,
 			item = change.get('Item'),
@@ -193,20 +193,20 @@ Ext.define('NextThought.controller.UserData', {
 			type = (change.get('ChangeType')||'').toLowerCase(),//ensure lowercase
 			fn;
 
-	    //only call this on first call
-	    if(!reCalled){
-		    //update the stream
-		    this.getController('Stream').incomingChange(change);
-	    }
+		//only call this on first call
+		if(!reCalled){
+			//update the stream
+			this.getController('Stream').incomingChange(change);
+		}
 
-	    //callback with ourself, only if we haven't already and there is a containerId to resolve
-	    if(!meta && !reCalled && cid){ LocationMeta.getMeta(cid,reCall,me); return; }
+		//callback with ourself, only if we haven't already and there is a containerId to resolve
+		if(!meta && !reCalled && cid){ LocationMeta.getMeta(cid,reCall,me); return; }
 
-	    //if there was a container id, but it didn't resolve, we're in trouble.
-	    if(!meta && cid){
-		    console.warn('No meta data for Container: '+cid);
-		    return;
-	    }
+		//if there was a container id, but it didn't resolve, we're in trouble.
+		if(!meta && cid){
+			console.warn('No meta data for Container: '+cid);
+			return;
+		}
 
 		try{
 			//Now that all the data is in order, lets dole out the responsibility to chageType specific functions and,
@@ -317,20 +317,20 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    openChatTranscript: function(records, clonedWidgetMarkup){
-	    if(!Ext.isArray(records)){ records = [records]; }
-        var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
-	    function loadTranscript(r){
-	    	if(r.isTranscript){
-	    		//its a transcript so load it straight to the window
-	    		w.insertTranscript(r);
-	    	}else{
-		    	//its a summary so get the transcript first
-		    	this.onLoadTranscript(r,w);	
-	    	}
-	    }
-	    Ext.each(records,loadTranscript, this);
-    },
+	openChatTranscript: function(records, clonedWidgetMarkup){
+		if(!Ext.isArray(records)){ records = [records]; }
+		var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
+		function loadTranscript(r){
+			if(r.isTranscript){
+				//its a transcript so load it straight to the window
+				w.insertTranscript(r);
+			}else{
+				//its a summary so get the transcript first
+				this.onLoadTranscript(r,w);
+			}
+		}
+		Ext.each(records,loadTranscript, this);
+	},
 
 
 	onAnnotationsFilter: function(cmp){
@@ -365,7 +365,7 @@ Ext.define('NextThought.controller.UserData', {
 
 			s.on('load', loaded, this, { single: true });
 
-			//Clear out any old filter information.  It has changed after all
+			//Clear out any old filter information.	 It has changed after all
 			delete params.filter;
 			delete params.accept;
 			delete params.sharedWith;
@@ -513,33 +513,33 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    onDismissPopover: function() {
-        var me = this;
-        if (me.popoverWidget){
-            me.popoverWidget.startCloseTimer();
-        }
-    },
+	onDismissPopover: function() {
+		var me = this;
+		if (me.popoverWidget){
+			me.popoverWidget.startCloseTimer();
+		}
+	},
 
-    onDisplayPopover: function(sender, id, html, node) {
-        var offsets = sender.getAnnotationOffsets(),
-            position = Ext.fly(node).getXY(),
-            me=this;
+	onDisplayPopover: function(sender, id, html, node) {
+		var offsets = sender.getAnnotationOffsets(),
+			position = Ext.fly(node).getXY(),
+			me=this;
 
-        function adjustPosition(position){
+		function adjustPosition(position){
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth()/2;
 
 			//adjust position depending on whether it should be shown on top or bottom
-            if ((position[1] -offsets.scrollTop) < me.popoverWidget.getHeight()) {
-                //bottom
-                position[1] = position[1] + offsets.top + 30;
-                me.popoverWidget.addCls('top');
-            }
-            else{
-                //top
-                position[1] = position[1] + offsets.top;
-                position[1] = position[1] - me.popoverWidget.getHeight() - 20;
-                me.popoverWidget.addCls('bottom');
-            }
+			if ((position[1] -offsets.scrollTop) < me.popoverWidget.getHeight()) {
+				//bottom
+				position[1] = position[1] + offsets.top + 30;
+				me.popoverWidget.addCls('top');
+			}
+			else{
+				//top
+				position[1] = position[1] + offsets.top;
+				position[1] = position[1] - me.popoverWidget.getHeight() - 20;
+				me.popoverWidget.addCls('bottom');
+			}
 
 			//adjust position for left and right.  If we can be centered above it
 			//we allow that, otherwise we move the bubble left and right
@@ -559,19 +559,19 @@ Ext.define('NextThought.controller.UserData', {
 			}
 			position[0] = position[0] + offsets.gutter + 80;
 
-            return position;
-        }
+			return position;
+		}
 
-        if (me.popoverWidget){
-            me.popoverWidget.destroy();
-            delete this.popoverWidget;
-        }
+		if (me.popoverWidget){
+			me.popoverWidget.destroy();
+			delete this.popoverWidget;
+		}
 
-	    Ext.fly(html).select('a[href]', true).set({target:'_blank'});
+		Ext.fly(html).select('a[href]', true).set({target:'_blank'});
 
-        me.popoverWidget = Ext.widget('simple-popover-widget', {text: html.innerHTML});
-        me.popoverWidget.showAt(adjustPosition(position));
-    },
+		me.popoverWidget = Ext.widget('simple-popover-widget', {text: html.innerHTML});
+		me.popoverWidget.showAt(adjustPosition(position));
+	},
 
 
 	onLoadTranscript: function(record, cmp) {
@@ -592,26 +592,26 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    saveNewBookmark: function(){
-        //create a bookmark model
-        var bm = this.getBookmarkModel().create({
-            ContainerId: LocationProvider.currentNTIID,
-            applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
-        });
+	saveNewBookmark: function(){
+		//create a bookmark model
+		var bm = this.getBookmarkModel().create({
+			ContainerId: LocationProvider.currentNTIID,
+			applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
+		});
 
-        //now save this:
-        bm.save({
-            scope: this,
-            callback:function(record, operation){
-                try{
-                    if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
-                }
-                catch(err){
-                    console.error('Something went teribly wrong... ', Globals.getError(err));
-                }
-            }
-        });
-    },
+		//now save this:
+		bm.save({
+			scope: this,
+			callback:function(record, operation){
+				try{
+					if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
+				}
+				catch(err){
+					console.error('Something went teribly wrong... ', Globals.getError(err));
+				}
+			}
+		});
+	},
 
 
 	getSaveCallback: function(callback){
@@ -623,7 +623,7 @@ Ext.define('NextThought.controller.UserData', {
 				rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
 				if (success){
 					me.incomingCreatedChange({}, rec, {});
-                    AnnotationUtils.addToHistory(rec);
+					AnnotationUtils.addToHistory(rec);
 				}
 			}
 			catch(err){
@@ -670,7 +670,7 @@ Ext.define('NextThought.controller.UserData', {
 		noteRecord = this.getNoteModel().create({
 			applicableRange: rangeDescription.description,
 			body: body,
-            selectedText: range ? range.toString() : '',
+			selectedText: range ? range.toString() : '',
 			sharedWith: shareWith,
 			style: style,
 			ContainerId: container
