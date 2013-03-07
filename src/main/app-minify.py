@@ -96,7 +96,7 @@ def _buildIndexHtml( version, analytics_key, extjs_server ):
 	<link rel="stylesheet" id="ext-base" type="text/css"
 		  href="https://extjs.cachefly.net/ext-4.1.1-gpl/resources/css/ext-all-gray.css">
 	<link rel='stylesheet' type='text/css'
-		  href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'>
+		  href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'>
         <link rel="stylesheet" id="mathquill-stylesheet" type="text/css"
 		  href="resources/lib/mathquill/mathquill.css?_dc=%s">
         <link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css?_dc%s">

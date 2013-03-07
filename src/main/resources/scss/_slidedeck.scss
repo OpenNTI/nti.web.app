@@ -468,7 +468,7 @@ $experimental-support-for-svg: true;
 
 				.body {
 					color: #949494;
-					font: normal 14px "Droid Serif";
+					font: normal 14px $font;
 				}
 
 				.respond {
