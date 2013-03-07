@@ -3,11 +3,14 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	alias: 'widget.search-result-post',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls:'title',html:'{title}'},
+		{cls:'title', cn: [
+			{tag:'span', html:"{title}"},
+			{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By: {name}'}]},
+			{tag:'tpl', 'if':'tags', cn:[{cls:'wrap', html:'{tags}'}]}
+		]},
 		{
 			cls:'wrap',
 			cn:[
-				{tag:'tpl', 'if':'name',cn:[{cls:'name',html:'{name}'}]},
 				{cls: 'fragments', cn: [
 					{tag:'tpl', 'for':'fragments', cn:[
 						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
@@ -30,7 +33,19 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		});
 
 		function finish(r){
+			var tags = r.get('headline').get('tags'), tagMsg;
 			me.renderData = Ext.apply(me.renderData, r.getData());
+			
+			//check how many tags there are and display accordingly
+			if(tags.length == 0){
+				//no tags display nothing
+				tagMsg = false;
+			}else{
+				//comma seperate the tags
+				tagMsg = ((tags.length > 2)? "Tags" : "Tag") + ": "+tags.join(", ");
+			}
+
+			me.renderData.tags = tagMsg;
 
 			me.record = r;
 			if(isMe(name)){

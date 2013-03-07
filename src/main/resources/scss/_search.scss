@@ -73,6 +73,7 @@
 		.search-result {
 			white-space: normal;
 			margin: 0 0 20px 70px;
+			cursor: pointer;
 			.title, .section {
 				white-space: nowrap;
 				text-overflow: ellipsis;
@@ -82,7 +83,7 @@
 				text-transform: uppercase;
 				font-weight: 700;
 			}
-
+			
 			.chapter {
 				display: inline;
 			}
