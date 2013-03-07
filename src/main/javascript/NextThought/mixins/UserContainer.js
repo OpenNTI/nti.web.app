@@ -53,7 +53,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 			handler: Ext.bind(this.chatWithGroup,this,[group]),
 			itemId: 'group-chat',
 			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0
+			hidden: this.groupChatHidden(group)
 		});
 
 		this.getGroupCodeAction =  new Ext.Action({
@@ -94,6 +94,10 @@ Ext.define('NextThought.mixins.UserContainer', {
 		this.updateChatState(group);
 	},
 
+
+	groupChatHidden: function(group){
+		return !$AppConfig.service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
+	},
 
 	getUserList: function(){
 		var model = this.getModelObject();
@@ -149,6 +153,10 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 		p = Ext.Array.map(usersToAdd,this.createUserComponent,this);
 
+
+		if(this.groupChatAction){
+			this.groupChatAction.setHidden(this.groupChatHidden(this.getModelObject()));
+		}
 		this.removeAll(true);
 		this.add(p);
 	},
