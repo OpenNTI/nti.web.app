@@ -23,7 +23,9 @@ Ext.define('NextThought.model.Base', {
 	proxy: { type: 'nti' },
 	fields: [
 		{ name: 'Class', type: 'string', persist: false },
-		{ name: 'ContainerId', type: 'string', useNull: true },
+		{ name: 'ContainerId', type: 'string', useNull: true, convert: function(v){
+			if(v && v.isModel){ v = v.getId(); } return v; }
+		},
 		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Creator', type: 'auto', persist: false },
 		{ name: 'ID', type: 'string', persist: false },
