@@ -55,7 +55,11 @@ Ext.define('NextThought.proxy.Rest', {
 		Ext.apply(this.headers,  { 'Content-Type': mimeType+'+json' });
 
 		if (request.operation.url || request.url) {
-			console.log('returning set url. not generating a new one', 'operation url', this.operation ? this.operation.url: 'NA', 'request url', request.url);
+			if($AppConfig.debug){
+				console.debug('Using a set url. Will not look up URL from service.',
+						'\n\tOperation URL:', ((this.operation && this.operation.url) || undefined),
+						'\n\tRequested URL:', request.url);
+			}
 			return request.operation.url || request.url;
 		}
 		
