@@ -1,12 +1,13 @@
 Ext.define('NextThought.view.menus.search.BlogResult', {
 	extend: 'NextThought.view.menus.search.Result',
 	alias: 'widget.search-result-post',
+	cls: 'search-result search-result-post',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'title', cn: [
 			{tag:'span', html:"{title}"},
 			{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By: {name}'}]},
-			{tag:'tpl', 'if':'tags', cn:[{cls:'wrap', html:'{tags}'}]}
+			{tag:'tpl', 'if':'tags', cn:[{cls:'tags', html:'{tags}'}]}
 		]},
 		{
 			cls:'wrap',
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			me.renderData = Ext.apply(me.renderData, r.getData());
 			
 			//check how many tags there are and display accordingly
-			if(tags.length == 0){
+			if(Ext.isEmpty(tags)){
 				//no tags display nothing
 				tagMsg = false;
 			}else{

@@ -123,7 +123,15 @@
 			}
 
 		}
-
+		
+		.search-result-post{
+			.tags{
+				margin-top: 1em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}	
+		
 		.see-all, .see-all a {
 			color: $primary-blue;
 			text-decoration: none;
