@@ -46,7 +46,7 @@ Ext.define('NextThought.controller.Application', {
 		}
 		catch(e){//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);
-			Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', 'profile');
+			this.getController('Navigation').setView('profile');
 		}
 		this.application.finishInitializeTask(this.launchToken);
 
@@ -62,8 +62,9 @@ Ext.define('NextThought.controller.Application', {
 
 
 	openViewport: function(){
+		var navCtrl = this.getController('Navigation');
 		try{
-			Ext.widget('master-view');
+			navCtrl.viewport = Ext.widget('master-view');
 		}
 		catch(e1){
 			console.error('Loading View: ', Globals.getError(e1));

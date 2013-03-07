@@ -32,7 +32,12 @@ Ext.define('NextThought.controller.Navigation', {
                 'navigation-selected': this.navigate
             },
 			'main-views': {
-				'activate-view': this.track
+				'activate-view': this.track,
+				/** @private handler */
+				'activate-main-view': function(id){
+					//viewport is set by Application controller
+					return this.viewport.views.switchActiveViewTo(id);
+				}
 			},
 			'view-select button': {
 				toggle: this.switchViews
@@ -243,21 +248,25 @@ Ext.define('NextThought.controller.Navigation', {
 
 	track: function(view){
 		var query = 'view-select button[title='+Ext.String.capitalize(view)+'], view-select button[viewId='+view+']';
-//			menus = Ext.getCmp('navigation-menu-container');
 		try {
-
 			Ext.ComponentQuery.query(query)[0].toggle(true);
-//			menus.getLayout().setActiveItem(menus.down(view+'-menu'));
-
 		}
 		catch(e){
 			console.error('Looks like the "'+view+'" button was not included or was typo\'ed', e.stack);
 		}
 	},
 
-	goToLibrary: function(){
-		Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', 'library');
+
+	setView: function(id){
+		//This smells funny...
+		return this.viewport.activateView(id);
 	},
+
+
+	goToLibrary: function(){
+		this.setView('library');
+	},
+
 
 	switchViews: function(button, state){
 		var id = button.viewId || button.title.toLowerCase();
@@ -266,7 +275,7 @@ Ext.define('NextThought.controller.Navigation', {
 				this.track(id);//always switch the menus even if the view is already active
 				//search doesn't have a "view"...just a menu
 				if(id!=='search'){
-					Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', id);
+					this.setView(id);
 				}
 			}
 			catch(e){

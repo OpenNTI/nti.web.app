@@ -34,8 +34,7 @@ Ext.define('NextThought.controller.State', {
 
 		me.control({
 			'main-views': {
-				'activate-view': me.track,
-				'activate-main-view': me.activateMainView
+				'activate-view': me.track
 			}
 		},{});
 		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
@@ -174,12 +173,6 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	activateMainView: function(id){
-		var p = Ext.ComponentQuery.query('main-views').first();
-		return p.switchActiveViewTo(id);
-	},
-
-
 	restoreState: function(stateObject){
 		if(this.restoringState){
 			console.warn('Restoring state while one is already restoring...');
@@ -213,7 +206,7 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		c = Ext.ComponentQuery.query('main-views').first().fireEvent('activate-main-view', stateObject.active);
+		c = this.getController('Navigation').setView(stateObject.active);
 		// c equals false means that we got cancelled in beforedeactivate event.
 		// i.e we can get cancelled if the activeView has blog editor open.
 		if(c === false){
@@ -221,9 +214,8 @@ Ext.define('NextThought.controller.State', {
 			this.restoringState = false;
 			return;
 		}
-		else{
-			this.currentState.active = stateObject.active;
-		}
+
+		this.currentState.active = stateObject.active;
 
 		for(key in stateObject){
 			if(stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {

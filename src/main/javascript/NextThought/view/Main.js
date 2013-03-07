@@ -43,9 +43,16 @@ Ext.define('NextThought.view.Main', {
 
 		Ext.EventManager.onWindowResize(this.detectZoom,this);
 		this.detectZoom();
-		Ext.widget('main-sidebar', {
+		this.navbar = this.down('main-navigation');
+		this.views = this.down('main-views');
+		this.sidebar = Ext.widget('main-sidebar', {
 			host: this.down('[region=east]'), hidden: this.hidden
 		});
+	},
+
+
+	activateView: function(id){
+		return this.views.fireEvent('activate-main-view', id);
 	},
 
 
