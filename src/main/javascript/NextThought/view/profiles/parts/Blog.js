@@ -295,5 +295,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.activePost = Ext.widget(xtype,cfg);
 
 		this.updateLayout();
+	},
+
+
+	getRefItems: function(){
+		var ret = this.callParent(arguments)||[];
+		if(this.activePost){
+			ret.push(this.activePost);
+		}
+		return ret;
 	}
 });

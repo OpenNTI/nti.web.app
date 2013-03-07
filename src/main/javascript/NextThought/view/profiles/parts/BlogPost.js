@@ -123,7 +123,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		this.editor = Ext.widget('nti-editor',{renderTo:this.commentEditorBox});
+		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.commentEditorBox});
 		this.mon(this.commentHeaderEl,'click',this.showEditor,this);
 		this.mon(this.editor,{
 			scope: this,
@@ -137,6 +137,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				Ext.defer(this.showEditor,500,this);
 			}
 		}
+	},
+
+
+	getRefItems: function(){
+		var ret = this.callParent(arguments)||[];
+		ret.push(this.editor);
+		return ret;
 	},
 
 
