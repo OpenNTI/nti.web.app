@@ -24,7 +24,9 @@ Ext.define('NextThought.model.Base', {
 	fields: [
 		{ name: 'Class', type: 'string', persist: false },
 		{ name: 'ContainerId', type: 'string', useNull: true, convert: function(v){
-			if(v && v.isModel){ v = v.getId(); } return v; }
+			if(v && v.isModel){ v = v.getId(); }
+			if(!Ext.isString(v)){console.error('The ContainerId value is unacceptable:',v);v=null;}
+			return v; }
 		},
 		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Creator', type: 'auto', persist: false },
