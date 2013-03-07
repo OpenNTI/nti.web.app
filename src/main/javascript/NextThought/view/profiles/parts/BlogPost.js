@@ -9,7 +9,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	requires:[
 		'NextThought.editor.Editor',
 		'NextThought.view.menus.BlogTogglePublish',
-		'NextThought.view.annotations.note.Templates'
+		'NextThought.view.annotations.note.Templates',
+		'NextThought.view.profiles.parts.BlogComment'
 	],
 
 	cls: 'entry',
@@ -22,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
-			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
+			{ tag:'span', cls: 'datetime', html: '{Last Modified:date("F j, Y")} at {Last Modified:date("g:m A")}'},
 			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				]}
 			]}
 		]},
-		{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') },
+		{ id: '{id}-body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') },
 		{ cls: 'comment-box', cn: [{ cls: 'comment', html: 'Comment...' },{cls:'editor-box'}] }
 	]),
 
@@ -253,12 +254,17 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
-	addComments: function(store,addedRecords){
-		console.debug('added',arguments);
+	addComments: function(store,records){
+		if(!Ext.isEmpty(records)){
+			records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
+			this.add(Ext.Array.map(records,function(r){return {record: r};}));
+		}
 	},
 
 
 	loadComments: function(store,records){
-		console.debug('loaded',arguments);
+		this.removeAll(true);
+		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
+		this.add(Ext.Array.map(records,function(r){return {record: r};}));
 	}
 });
