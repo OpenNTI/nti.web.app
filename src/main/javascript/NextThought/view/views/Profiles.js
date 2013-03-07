@@ -3,13 +3,12 @@ Ext.define( 'NextThought.view.views.Profiles', {
 	alias:	'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
-		'NextThought.view.ResourceNotFound',
-		'Ext.ux.layout.Center'
+		'NextThought.view.ResourceNotFound'
 	],
 
 
 	defaultType: 'profile-panel',
-	layout: 'ux.center',
+	layout: 'auto',
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -79,9 +78,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 					toAdd = {username: username, activeTab: state.activeTab};
 				}
 				toAdd = Ext.apply(toAdd, {
-					listeners: { loaded:fin, scope:this, single: true, delay:1 },
-					minWidth: 700,
-					widthRatio: 0.8
+					listeners: { loaded:fin, scope:this, single: true, delay:1 }
 				});
 				current = this.add(toAdd);
 				if(shouldFireLoaded){
