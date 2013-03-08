@@ -918,13 +918,15 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.channelMap[channel].call(this, m, opts||{});
 
-		if(!w.minimized && !w.isVisible() && w.hasBeenAccepted() && channel !== 'STATE'){
-			// NOTE: We don't want state channel notifications to trigger showing the window initially,
-			// only when an actual message is sent should we do this.
-			w.show();
-		}
-		else {
-			w.notify();
+		if(channel !== 'STATE'){
+			// NOTE: We don't want state channel notifications to trigger showing the window initially or adding
+			// notification counts, only when an actual message is sent should we do this.
+			if(!w.minimized && !w.isVisible() && w.hasBeenAccepted()){
+				w.show();
+			}
+			else {
+				w.notify();
+			}
 		}
 	},
 
