@@ -57,6 +57,10 @@ Ext.define('NextThought.controller.Search', {
 			},
 			'search-advanced-menu': {
 				'changed': this.searchFilterChanged
+			},
+
+			'profile-blog-post' :{
+				'ready': this.blogPostReady
 			}
 		},{});
 
@@ -95,7 +99,6 @@ Ext.define('NextThought.controller.Search', {
 					    sortIndexes = LocationProvider.getSortIndexes(id);
 
 					sortIndexes.reverse();
-					console.log(alias);
 					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
 						//custom component for type exists
 						type = "search-result-"+group.name.toLowerCase();
@@ -223,30 +226,30 @@ Ext.define('NextThought.controller.Search', {
 
 	gotoBlog: function(user, postId, commentId){
 		var title = 'Thoughts',
-			hash,
-			args = [title];
+		hash,
+		args = [title];
 
-			if(postId){
-				args.push(postId);
-			}
+		if(postId){
+			args.push(postId);
+		}
 
-			if(postId && commentId){
-				args.push('comments');
-				args.push(commentId);
-			}
+		if(postId && commentId){
+			args.push('comments');
+			args.push(commentId);
+		}
 
-			hash = user.getProfileUrl.apply(user, args);
+		hash = user.getProfileUrl.apply(user, args);
 
-			if(location.hash !== hash){
-				location.hash = hash;
-			}
+		if(location.hash !== hash){
+			location.hash = hash;
+		}
 	},
 
 	searchBlogResultClicked: function(result){
 		var u = result.user,
 			r = result.record,
 			postId = r.get('ID');
-			
+
 			this.gotoBlog(u,postId);
 	},
 
@@ -310,5 +313,9 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		$AppConfig.service.getObject(result.hit.getId(), success, failure);
+	},
+
+	blogPostReady: function(){
+		console.log('Blog post ready recieved', arguments);
 	}
 });
