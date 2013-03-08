@@ -94,7 +94,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		}
 
 		if(this.record && !isMe(this.record.get('Creator'))){
-			this.enableProfileClicks(this.nameEl,me.avatarEl);
+			this.enableProfileClicks(this.nameEl,this.avatarEl);
 		}
 
 		this.reflectLikeAndFavorite(this.record);
