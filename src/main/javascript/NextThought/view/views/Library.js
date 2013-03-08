@@ -73,7 +73,7 @@ Ext.define( 'NextThought.view.views.Library', {
 
 	onBeforeNavigate: function(ntiid,fromHistory){
 		if(!fromHistory){
-			return this.ownerCt.fireEvent('activate-main-view', 'library');
+			return this.up('main-views').fireEvent('activate-main-view', 'library');
 		}
 	},
 
