@@ -39,8 +39,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			]},
 			{ cls: 'comment-box', cn: [
 				{ cls: 'response', cn:[
-					{ tag:'span', cls:'reply link', html: 'Reply' },
-					{ tag:'span', cls:'report link', html: 'Report' }
+					{ tag:'span', cls:'reply link', html: 'Reply' }//,
+					//{ tag:'span', cls:'report link', html: 'Report' }
 				]},
 				{ cls:'editor-box'}
 			]}
@@ -131,6 +131,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if( this.editEl ){
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
+
+		//TODO: hook up flagging.
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);

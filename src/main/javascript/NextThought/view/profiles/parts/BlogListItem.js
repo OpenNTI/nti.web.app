@@ -21,7 +21,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
-			]}
+			]}//flag?
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
