@@ -141,7 +141,8 @@ Ext.define('NextThought.editor.Actions', {
 
 
 		cmp.on('destroy',function(){
-			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();}); });
+			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();});
+		});
 
 		this.typingAttributes = [];
 	},
@@ -515,14 +516,13 @@ Ext.define('NextThought.editor.Actions', {
 
 		if(el){ el.parent('.whiteboard-divider').remove();}
 
-		if(w){
-			w.destroy();
-			delete this.openWhiteboards[guid];
-		}
+		//Note we don't remove the whiteboard from openWhiteboards here.
+		//if the author does an undo and the dom elements get added back
+		//we need to retain the model or we are in an inconsistent state
 	},
 
 
-	addWhiteboard: function (data,guid) {
+	addWhiteboard: function (data, guid, append) {
 		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
 
 		var me = this, wbWin, content;
@@ -549,14 +549,14 @@ Ext.define('NextThought.editor.Actions', {
 
 
 		if (data) {
-			me.insertWhiteboardThumbnail(content, guid, wbWin.down('whiteboard-editor'));
+			me.insertWhiteboardThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
 		}
 
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
 			save  : function (win, wb) {
 				data = wb.getValue();
-				me.insertWhiteboardThumbnail(content, guid, wb);
+				me.insertWhiteboardThumbnail(content, guid, wb, append);
 				if (Ext.query('.nav-helper')[0]) {
 					Ext.fly(Ext.query('.nav-helper')[0]).show();
 				}
@@ -578,9 +578,69 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	insertWhiteboardThumbnail: function (content, guid, wb) {
+	insertPartAtSelection: function(html) {
+		var sel, selectionRange, beforeRange, afterRange,
+			beforeContent, afterContent, el, frag, node, lastNode,
+		content = this.editor.down('.content', true);
+
+		if (window.getSelection) {
+			// IE9 and non-IE
+			sel = window.getSelection();
+			if (sel.getRangeAt && sel.rangeCount) {
+				range = sel.getRangeAt(0);
+
+				beforeRange = document.createRange();
+				beforeRange.setStart(content, 0);
+				beforeRange.setEnd(range.startContainer, range.startOffset);
+				beforeContent = beforeRange.cloneContents();
+				beforeRange.detach();
+
+				afterRange = document.createRange();
+				afterRange.setStart(range.endContainer, range.endOffset);
+				afterRange.setEnd(content, content.childNodes.length);
+				afterContent = afterRange.cloneContents();
+				afterRange.detach();
+
+				range.detach();
+
+				el = document.createElement("div");
+				el.innerHTML = html;
+
+				frag = document.createDocumentFragment(), node, lastNode;
+				frag.appendChild(beforeContent);
+				while ( (node = el.firstChild) ) {
+					lastNode = frag.appendChild(node);
+				}
+				frag.appendChild(afterContent);
+
+				content.innerHTML = '';
+				content.appendChild(frag);
+
+				// Preserve the selection
+				if (lastNode) {
+					range = document.createRange();
+					range.setStartAfter(lastNode);
+					range.collapse(true);
+					sel.removeAllRanges();
+					sel.addRange(range);
+				}
+			}
+		}
+		/*else if(document.selection && document.selection.type != "Control") {
+			// IE < 9
+			document.selection.createRange().pasteHTML(html);
+		}*/
+		else {
+			return false;
+		}
+		return true;
+	},
+
+
+	insertWhiteboardThumbnail: function (content, guid, wb, append) {
 		var me = this,
-			el = Ext.get(guid), placeholder, test;
+			el = Ext.get(guid), placeholder, test, html,
+			htmlCfg, handled = false, range, isSelectionInContent, focusNode;
 
 		//We need empty divs to allow to insert text before or after a WB.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
@@ -593,12 +653,42 @@ Ext.define('NextThought.editor.Actions', {
 				}
 			});
 
-			placeholder.append(content);
+			//Focus the editor so that we have the selection we when we blured on
+			//whatever click triggered this
+			this.editor.down('.content').focus();
+			this.editorFocus();
 
-			el = me.wbThumbnailTpm.append(content, ['', guid]);
-			Ext.fly(el).unselectable();
+			htmlCfg = [{html: me.defaultValue}, me.wbThumbnailTpm.apply(['', guid]) ,{html: me.defaultValue}]
 
-			placeholder.append(content);
+			//Need to see if we have a selection and it is in our content element
+			if(document && document.getSelection){
+				focusNode = document.getSelection().focusNode;
+				focusNode = focusNode ? Ext.fly(focusNode) : null;
+				isSelectionInContent = focusNode && (focusNode.is('.content') || focusNode.parent('.content', true));
+			}
+
+			if(!append && isSelectionInContent){
+				//If we support insertHTML use it
+				handled = this.insertPartAtSelection(Ext.DomHelper.markup(htmlCfg));
+
+				if(!handled){
+					console.log('Falling back to old style appending of whiteboards');
+					Ext.DomHelper.append(content, htmlCfg);
+				}
+				else{
+					console.log('Inserted whiteboard at selection');
+				}
+
+			}
+			else{
+				console.log('Appending whiteboard');
+				Ext.DomHelper.append(content, htmlCfg);
+			}
+
+			el = content.down('#'+guid);
+			if(el){
+				Ext.fly(el).unselectable();
+			}
 		}
 
 
@@ -746,7 +836,7 @@ Ext.define('NextThought.editor.Actions', {
 				c.appendChild(d);
 			}
 			else {
-				me.addWhiteboard(part);
+				me.addWhiteboard(part, undefined, true);
 			}
 		});
 		return me;
