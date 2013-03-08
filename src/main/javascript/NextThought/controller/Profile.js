@@ -84,16 +84,19 @@ Ext.define('NextThought.controller.Profile', {
 	saveBlogComment: function(editor,record,valueObject){
 		var postCmp = editor.up('profile-blog-post'),
 			postRecord = postCmp && postCmp.record,
+			isEdit = Boolean(record),
 			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
 		commentPost.set({ body:valueObject.body });
 
 		commentPost.save({
-			url: record ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
+			url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
 			scope: this,
 			success: function(rec){
 				if(postCmp.store && !postCmp.isDestroyed){
-					postCmp.store.insert(0,rec);
+					if(!isEdit){
+						postCmp.store.insert(0,rec);
+					}
 					editor.deactivate();
 					editor.setValue('');
 					editor.reset();
