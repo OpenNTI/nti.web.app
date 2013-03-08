@@ -31,18 +31,10 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var start = this.store.getAt(0),
-			startOn = this.startOn,
-			keyMap;
-
-		if(startOn){
-			start = this.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
-		}
+		var	keyMap;
 
 		this.on('select',this.markLastSelectedTime,this);
-
-		this.selectSlide(start);
-
+		
 		keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
@@ -56,8 +48,41 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 			}]
 		});
 		this.on('destroy',function(){keyMap.destroy(false);});
+		this.on('viewready',this.onViewReady,this,{single: true, defer: 100});
 	},
 
+	onViewReady: function(){
+		var me = this,
+			imgs = me.el.select('img'),
+			count = imgs.getCount();
+		function gotoStart(){
+			var start = me.store.getAt(0),
+				startOn = me.startOn;
+
+			if(startOn){
+				start = me.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
+			}
+
+			me.selectSlide(start);
+		}
+
+		function maybeFinish(){
+			count--;
+
+			if(count <= 0){
+				gotoStart();
+			}
+		}
+
+		imgs.on('load',maybeFinish);
+		imgs.on('error',maybeFinish);
+
+		imgs.each(function(img){
+			if(img.complete){
+				maybeFinish();
+			}
+		});
+	},
 
 	markLastSelectedTime: function(){
 		this.lastChanged = new Date().getTime();
