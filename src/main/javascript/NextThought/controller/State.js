@@ -200,8 +200,9 @@ Ext.define('NextThought.controller.State', {
 			history = window.history,
 			replaceState = false, c, key, stateScoped, me = this, presentation;
 
-		function fin(){
+		function fin(key,stateFrag){
 			var token = {};
+			token[key] = stateFrag;
 			app.registerInitializeTask(token);
 			return function(a,errorDetails){
 				//Error handling... sigh
@@ -241,7 +242,7 @@ Ext.define('NextThought.controller.State', {
 					try{
 						stateScoped = {};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
-						c.on('finished-restore',fin(),this,{ single: true });
+						c.on('finished-restore',fin(key,stateScoped),this,{ single: true });
 						c.restore(stateScoped);
 					}
 					catch(e){

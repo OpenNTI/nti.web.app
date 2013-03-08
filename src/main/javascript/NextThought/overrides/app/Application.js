@@ -16,7 +16,7 @@ Ext.define('NextThought.overrides.app.Application',{
 
 		this.initTasks.push(task);
 		task.timerId = setTimeout(function(){
-			console.log('Abandoned init task from: '+ method);
+			console.log('Abandoned init task from: '+ method, task);
 		},30000);
 	},
 
