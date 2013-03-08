@@ -6,6 +6,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	],
 
 	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
@@ -78,8 +79,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		var bodyEl = this.bodyEl,
 			ctrlEl = this.ctrlEl,
 			metaEl = this.metaEl,
-			hide, show,
-			Fn = Ext.Function;
+			hide, show;
 
 		this.record.addObserverForField(this, 'body', this.updateContent, this);
 		this.updateContent();
@@ -91,6 +91,10 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 		if( this.editEl ){
 			this.mon(this.editEl,'click',this.onEditPost,this);
+		}
+
+		if(this.record && !isMe(this.record.get('Creator'))){
+			this.enableProfileClicks(this.nameEl,me.avatarEl);
 		}
 
 		this.reflectLikeAndFavorite(this.record);
