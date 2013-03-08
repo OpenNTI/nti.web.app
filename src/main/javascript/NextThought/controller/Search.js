@@ -49,7 +49,8 @@ Ext.define('NextThought.controller.Search', {
 			},
 			'search-result' : {
 				'click': this.searchResultClicked,
-				'click-blog-result': this.searchBlogResultClicked
+				'click-blog-result': this.searchBlogResultClicked,
+				'click-blog-comment': this.searchBlogCommentClicked
 			},
 			'search-more' : {
 				'click': this.showAllForCategoryClicked
@@ -220,20 +221,42 @@ Ext.define('NextThought.controller.Search', {
 		this.searchForValue(searchValue);
 	},
 
+	gotoBlog: function(user, postId, commentId){
+		var title = 'Thoughts',
+			hash,
+			args = [title];
+
+			if(postId){
+				args.push(postId);
+			}
+
+			if(postId && commentId){
+				args.push('comments');
+				args.push(commentId);
+			}
+
+			hash = user.getProfileUrl.apply(user, args);
+
+			if(location.hash !== hash){
+				location.hash = hash;
+			}
+	},
+
 	searchBlogResultClicked: function(result){
 		var u = result.user,
 			r = result.record,
+			postId = r.get('ID');
+			
+			this.gotoBlog(u,postId);
+	},
+
+	searchBlogCommentClicked: function(result){
+		var u = result.user,
+			r = result.record,
 			postId = r.get('ID'),
-			title = 'Thoughts',
-			hash, args=[title, postId];
+			commentId = result.hit.get('ID');
 
-		if(!postId || !Ext.isString(postId)){args.pop();}
-
-		hash = u.getProfileUrl.apply(u,args);
-
-		if(location.hash !== hash){
-			location.hash = hash;
-		}
+			this.gotoBlog(u,postId,commentId);
 	},
 
 	searchResultClicked: function(result, fragIdx){

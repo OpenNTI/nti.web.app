@@ -42,6 +42,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			containerId = hit.get('ContainerId'),
 			name = hit.get('Creator'),
 			comment = /.*?personalblogcomment$/.test(hit.get('MimeType'));
+		me.comment = comment;
 
 		me.renderData = Ext.apply(me.renderData || {},{
 			title: 'Resolving...',
@@ -96,6 +97,12 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	},
 
 	clicked: function(){
-		this.fireEvent('click-blog-result', this);
+		if(this.comment){
+			//its a comment
+			this.fireEvent('click-blog-comment',this);
+		}else{
+			//its a post 
+			this.fireEvent('click-blog-result', this);
+		}
 	}
 });
