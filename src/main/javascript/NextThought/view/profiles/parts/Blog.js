@@ -196,7 +196,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	setParams: function(paramsString, queryString){
+	setParams: function(paramsString, queryObject){
 		var me = this, id, r, s = me.store, sections, args = [];
 
 		if(!me.rendered){
@@ -206,7 +206,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		sections = ((paramsString && decodeURIComponent(paramsString))||'').split('/');
 
-		args.push(null,sections.splice(1),queryString);
+		args.push(null,sections.splice(1),queryObject);
 		id = sections[0];
 
 		console.debug('setting params',id);
@@ -277,7 +277,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			renderTo:this.postViewEl,
 			record: record,
 			selectedSections: action,
-			queryString: query,
+			queryObject: query,
 			listeners: {
 				scope: this,
 				destroy: this.closePost

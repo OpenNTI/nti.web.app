@@ -118,9 +118,22 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
+	parseQueryString: function(qStr){
+		if(Ext.isEmpty(qStr)){return null;}
+		var r = {};
+
+		Ext.each(qStr.split('&'),function(kv){
+			kv = kv.split('=');
+			r[kv[0]]=kv[1];
+		});
+
+		return r;
+	},
+
+
 	interpretHash: function(hashStr){
 		hashStr = hashStr.split('?');
-		var query = hashStr[1],
+		var query = this.parseQueryString(hashStr[1]),
 			hash = hashStr[0],
 			ntiid = ParseUtils.parseNtiHash(hash),
 			user,
@@ -132,7 +145,7 @@ Ext.define('NextThought.controller.State', {
 				active: 'profile',
 				profile: user
 			};
-			result.profile.queryString = query;
+			result.profile.queryObject = query;
 		}
 		else if(ntiid){
 			result = {active: 'library', location: ntiid, library:{query:query}};

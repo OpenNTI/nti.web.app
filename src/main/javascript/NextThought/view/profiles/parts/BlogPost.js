@@ -273,7 +273,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 		this.add(Ext.Array.map(records,function(r){return {record: r};}));
 
-		Ext.defer(this.fireEvent,1,this,['ready',this.queryString]);
+		Ext.defer(this.fireEvent,1,this,['ready',this,this.queryObject]);
 	},
 
 

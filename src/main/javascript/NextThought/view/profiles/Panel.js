@@ -152,7 +152,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		if( t && t.setParams ){
-			t.setParams(params,this.queryString);
+			t.setParams(params,this.queryObject);
 		}
 
 		delete this.settingTab;
