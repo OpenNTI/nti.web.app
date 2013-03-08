@@ -4,32 +4,50 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	cls: 'search-result search-result-post',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls:'title', cn: [
-			{tag:'span', html:"{title}"},
-			{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By: {name}'}]},
-			{tag:'tpl', 'if':'tags', cn:[{cls:'tags', html:'{tags}'}]}
+		{tag:'tpl', 'if':'isPost', cn:[
+			{cls:'title', cn: [
+				{tag:'span', html:"{title}"},
+				{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By: {name}'}]},
+				{tag:'tpl', 'if':'tags', cn:[{cls:'tags', html:'{tags}'}]}
+			]},
+			{
+				cls:'wrap',
+				cn:[
+					{cls: 'fragments', cn: [
+						{tag:'tpl', 'for':'fragments', cn:[
+							{cls: 'fragment', ordinal: '{#}', html: '{.}'}
+						]}
+					]}
+				]
+			}
 		]},
-		{
-			cls:'wrap',
-			cn:[
-				{cls: 'fragments', cn: [
+		{tag:'tpl', 'if':'isComment', cn:[
+			{cls:'title', cn: [
+				{cls:'commenter', html:"{name} commented on:"},
+				{tag:'span', html:"{title}"}
+			]},
+			{cls:'wrap', cn:[
+				{cls:'fragments', cn: [
 					{tag:'tpl', 'for':'fragments', cn:[
-						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
+						{cls:'fragment', ordinal:'{#}', html: '{.}'}
 					]}
 				]}
-			]
-		}
+			]}
+		]}
 	]),
 
 	fillInData: function(){
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId'),
-			name = hit.get('Creator');
+			name = hit.get('Creator'),
+			comment = /.*?personalblogcomment$/.test(hit.get('MimeType'));
 
 		me.renderData = Ext.apply(me.renderData || {},{
 			title: 'Resolving...',
 			name: name,
+			isComment: comment,
+			isPost: !comment,
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
@@ -50,7 +68,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 			me.record = r;
 			if(isMe(name)){
-				me.renderData.name = 'me';
+				me.renderData.name = (comment)? 'I' : 'me' ;
 				me.user = $AppConfig.userObject;
 			}
 			if(!isMe(name) && name){
