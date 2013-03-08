@@ -749,6 +749,7 @@ Ext.define('NextThought.editor.Actions', {
 				me.addWhiteboard(part);
 			}
 		});
+		return me;
 	},
 
 
