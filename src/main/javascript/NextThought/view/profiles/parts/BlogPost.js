@@ -36,10 +36,16 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				{tag:'tpl', 'for':'headline.tags', cn:[
 					{tag:'span', cls:'tag', html: '{.}'}
 				]}
+			]},
+			{ cls: 'comment-box', cn: [
+				{ cls: 'response', cn:[
+					{ tag:'span', cls:'reply link', html: 'Reply' },
+					{ tag:'span', cls:'report link', html: 'Report' }
+				]},
+				{ cls:'editor-box'}
 			]}
 		]},
-		{ id: '{id}-body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') },
-		{ cls: 'comment-box', cn: [{ cls: 'comment', html: 'Comment...' },{cls:'editor-box'}] }
+		{ id: '{id}-body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 	]),
 
 
@@ -51,7 +57,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		deleteEl: '.meta .delete',
 		publishStateEl: '.meta .state',
 		commentBoxEl: '.comment-box',
-		commentHeaderEl: '.comment-box .comment',
+		responseEl: '.comment-box .response',
+		replyLinkEl: '.comment-box .response .reply',
+		reportLinkEl: '.comment-box .response .report',
 		commentEditorBox: '.comment-box .editor-box'
 	},
 
@@ -106,7 +114,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.callParent(arguments);
 		var h = this.record.get('headline'),
 			commentId,
-			commentHeader = this.commentHeaderEl;
+			box = this.responseEl;
 		if(!h){return;}
 
 		h.addObserverForField(this, 'title', this.updateField, this);
@@ -127,14 +135,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		commentHeader.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.commentEditorBox});
-		this.mon(commentHeader,'click',this.showEditor,this);
+		this.mon(this.replyLinkEl,'click',this.showEditor,this);
 		this.mon(this.editor,{
 			scope: this,
-			'activated-editor':Ext.bind(commentHeader.hide,commentHeader),
-			'deactivated-editor':Ext.bind(commentHeader.show,commentHeader),
+			'activated-editor':Ext.bind(box.hide,box),
+			'deactivated-editor':Ext.bind(box.show,box),
 			'no-body-content': function(editor,bodyEl){
 				editor.markError(bodyEl,'You need to type something');
 				return false;

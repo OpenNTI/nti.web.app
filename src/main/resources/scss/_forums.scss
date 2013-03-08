@@ -105,6 +105,8 @@
 				}
 
 				.comment-count {cursor: pointer;}
+
+				.comment-box .response > span,
 				& > span{
 					&::before{
 						color: $tertiary-grey;
@@ -157,6 +159,10 @@
 					color: $primary-blue;
 					text-decoration: none;
 				}}
+			}
+
+			.comment-box {
+				margin: 25px 0;
 			}
 
 			.comment-box,.x-component-blog-comment {
