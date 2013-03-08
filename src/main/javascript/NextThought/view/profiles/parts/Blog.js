@@ -290,7 +290,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			}
 		};
 
-		if(action==='edit'){
+		if(action[0]==='edit'){
 			xtype = 'profile-blog-editor';
 		}
 
