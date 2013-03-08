@@ -102,6 +102,7 @@ Ext.define('NextThought.editor.Editor',{
 	onCancel: function(e){
 		e.stopEvent();
 		this.deactivate();
+		this.setValue('');
 	},
 
 

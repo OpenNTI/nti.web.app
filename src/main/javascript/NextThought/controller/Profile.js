@@ -95,6 +95,7 @@ Ext.define('NextThought.controller.Profile', {
 				if(postCmp.store && !postCmp.isDestroyed){
 					postCmp.store.insert(0,rec);
 					editor.deactivate();
+					editor.setValue('');
 					editor.reset();
 				}
 				//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
