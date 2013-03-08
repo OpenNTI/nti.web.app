@@ -546,11 +546,12 @@ Ext.define('NextThought.view.UserDataPanel',{
 			guid = guidGenerator(),
 			creator = rec.get('Creator'),
 			containerId = rec.get('ContainerId'),
+			body  = Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(rec.getBodyText(),80,true));
 			data = {
 				isComment: true,
 				guid: guid,
 				author:'...',
-				body: '"'+rec.get('body')+'"',
+				body: body,
 				title: 'resolving...'
 			};
 
