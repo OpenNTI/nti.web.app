@@ -608,9 +608,13 @@ Ext.define('NextThought.editor.Actions', {
 
 				frag = document.createDocumentFragment();
 				frag.appendChild(beforeContent);
-				while ( (node = el.firstChild) ) {
-					lastNode = frag.appendChild(node);
-				}
+				do {
+					node = el.firstChild;
+					if(node) {
+						lastNode = frag.appendChild(node);
+					}
+				} while( node );
+
 				frag.appendChild(afterContent);
 
 				content.innerHTML = '';
@@ -658,7 +662,7 @@ Ext.define('NextThought.editor.Actions', {
 			this.editor.down('.content').focus();
 			this.editorFocus();
 
-			htmlCfg = [{html: me.defaultValue}, me.wbThumbnailTpm.apply(['', guid]) ,{html: me.defaultValue}]
+			htmlCfg = [{html: me.defaultValue}, me.wbThumbnailTpm.apply(['', guid]) ,{html: me.defaultValue}];
 
 			//Need to see if we have a selection and it is in our content element
 			if(document && document.getSelection){

@@ -203,5 +203,5 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	onEditPost: function(e){
 		e.stopEvent();
 		this.editor.editBody(this.record.get('body')).activate();
-	},
+	}
 });
