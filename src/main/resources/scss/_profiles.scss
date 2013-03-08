@@ -321,6 +321,9 @@
 				background: #fbfbfb;
 				position: relative;
 				overflow: hidden;
+			}
+
+			.content-callout {
 				&::after {
 					content: '';
 					position: absolute;
