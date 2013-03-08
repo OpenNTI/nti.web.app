@@ -160,13 +160,20 @@
 				margin: 40px 0;
 			}
 
-			.comment-box {
+			.comment-box,.x-component-blog-comment {
 				.editor {
+					border: 1px solid #dcdcdc;
 					.main {
+						.toolbar{
+							.left {
+								margin-left: 13px;
+							}
+						}
 						.content{
 							min-height: auto;
 							max-height: none;
 							height: 200px;
+							padding: 5px 13px;
 						}
 					}
 				}
@@ -196,6 +203,10 @@
 				}
 				.wrap {
 					margin: 0 0 0 45px;
+				}
+
+				.editor {
+					top: -10px;
 				}
 			}
 		}

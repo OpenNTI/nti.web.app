@@ -35,6 +35,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		bodyEl: '.body',
 		nameEl: '.name',
 		avatarEl: '.avatar',
+		ctrlEl: '.controls',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		editEl: '.meta .edit',
@@ -71,6 +72,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
+			ctrlEl = this.ctrlEl,
 			metaEl = this.metaEl,
 			hide, show,
 			Fn = Ext.Function;
@@ -91,10 +93,11 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		this.listenForLikeAndFavoriteChanges(this.record);
 
 		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		ctrlEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		show = Fn.createSequence(Ext.bind(bodyEl.show,bodyEl),Ext.bind(metaEl.show,metaEl),this);
-		hide = Fn.createSequence(Ext.bind(bodyEl.hide,bodyEl),Ext.bind(metaEl.hide,metaEl),this);
+		hide = function(){bodyEl.hide();ctrlEl.hide();metaEl.hide();};
+		show = function(){bodyEl.show();ctrlEl.show();metaEl.show();};
 
 		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl});
 		this.mon(this.editor,{
