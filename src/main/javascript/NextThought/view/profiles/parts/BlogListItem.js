@@ -51,6 +51,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	initComponent: function(){
+		this.mixins.likeAndFavorateActions.constructor.call(this);
 		this.callParent(arguments);
 		this.addEvents(['delete-post','show-post']);
 		this.enableBubble(['delete-post','show-post']);
@@ -60,7 +61,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
-		this.mixins.likeAndFavorateActions.constructor.call(this);
 		var r = this.record;
 		if(!r || !r.getData){
 			Ext.defer(this.destroy,1,this);
@@ -86,13 +86,13 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(!h){return;}
 
 		this.setPublishState();
-
+		this.bodyEl.selectable();
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
+		this.updateContent();
 
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
@@ -130,7 +130,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(el){ el.update(value); }
 	},
 
-	updateContent: function(key, value){
+
+	updateContent: function(){
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 	},
@@ -196,6 +197,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			el.replace(wrapper);
 		});
 	},
+
 
 	markAsPublished: function(key, value){
 		var val = value ? 'public' : 'only me',

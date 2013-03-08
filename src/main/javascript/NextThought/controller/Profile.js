@@ -34,6 +34,7 @@ Ext.define('NextThought.controller.Profile', {
 
 			//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
 			'profile-blog-post':{ 'delete-post': this.deleteBlogPost },
+			'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
 			'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
 
 			'profile-blog-editor':{
