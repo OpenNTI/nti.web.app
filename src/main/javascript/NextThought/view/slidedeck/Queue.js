@@ -31,7 +31,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var	keyMap;
+		var keyMap;
 
 		this.on('select',this.markLastSelectedTime,this);
 		
