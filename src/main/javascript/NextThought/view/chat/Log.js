@@ -83,11 +83,13 @@ Ext.define('NextThought.view.chat.Log', {
 		this.callParent(arguments);
 	},
 
+
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el, { scroll: this.onScroll, scope: this });
 		this.previousScroll = 0;
 	},
+
 
 	onScroll: function(){
 		var me = this, scrollVal = Math.abs(me.el.dom.scrollHeight - me.el.dom.scrollTop - me.el.dom.offsetHeight),
@@ -103,6 +105,7 @@ Ext.define('NextThought.view.chat.Log', {
 		// Set the new scrolling.
 		me.previousScroll = me.el.dom.scrollTop;
 	},
+
 
 	selectall: function() {
 		Ext.each(this.query(this.entryType), function(f){
@@ -130,11 +133,13 @@ Ext.define('NextThought.view.chat.Log', {
 		this.fireEvent('approve', a);
 	},
 
+
 	reject: function() {
 		Ext.each(this.query(this.entryType), function(f){
 			if(f.getValue()){this.remove(f);}
 		},this);
 	},
+
 
 	removeMessage: function(msg) {
 		var c,m = this.down(this.getMessageQuery(msg.getId()));
@@ -168,6 +173,7 @@ Ext.define('NextThought.view.chat.Log', {
 	failedToLoadTranscript: function(){
 		console.error('failed to load transcript', arguments);
 	},
+
 
 	addMessage: function(msg) {
 		var id = msg.getId(),
@@ -216,10 +222,12 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 	},
 
+
 	clearChatStatusNotifications: function(){
 		var ns = this.query('chat-notification-status'), me = this;
 		Ext.Array.each(ns, function(n){ me.remove(n); });
 	},
+
 
 	shouldAddTimestampBeforeMessage: function(msg){
 		var newMsgTime =  msg.get('CreatedTime'),
@@ -244,6 +252,7 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 	},
 
+
 	addStatusNotification: function(state){
 		var o = this.add({
 			xtype: 'chat-notification-status',
@@ -254,6 +263,7 @@ Ext.define('NextThought.view.chat.Log', {
 			o.el.scrollIntoView(this.el);
 		}
 	},
+
 
 	addNotification: function(msg) {
 		//we are going to add then scroll to
@@ -266,6 +276,7 @@ Ext.define('NextThought.view.chat.Log', {
 			o.el.scrollIntoView(this.el);
 		}
 	},
+
 
 	showInputStateNotifications: function(changes){
 		if(!Ext.isArray(changes)){ return; }

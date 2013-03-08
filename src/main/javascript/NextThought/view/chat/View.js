@@ -114,6 +114,7 @@ Ext.define('NextThought.view.chat.View', {
         this.fireEvent('flag-messages', allFlaggedMessages, this);
     },
 
+
 	maybeShowFlagIcon: function(view, entry){
 		if(this.showFlagIcon){ return; }
 
@@ -131,6 +132,7 @@ Ext.define('NextThought.view.chat.View', {
 			}
 		}
 	},
+
 
     maybeEnableButtons: function(){
         var b = this.down('[flagButton]');

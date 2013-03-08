@@ -45,6 +45,7 @@ Ext.define('NextThought.view.chat.Window', {
         }
 	},
 
+
 	initComponent:function () {
 		this.callParent(arguments);
 
@@ -170,6 +171,7 @@ Ext.define('NextThought.view.chat.Window', {
         btn.toggleCls('moderating');
     },
 
+
 	setTitleInfo: function(users){
 		var title = [];
 
@@ -189,6 +191,7 @@ Ext.define('NextThought.view.chat.Window', {
 		this.setTitle(title);
 	},
 
+
 	updateDisplayState: function( targetUser, state, isGroupChat){
 		UserRepository.getUser(targetUser, function(u){
 			var name = u.getName(), txt,
@@ -203,9 +206,11 @@ Ext.define('NextThought.view.chat.Window', {
 		}, this);
 	},
 
+
 	setChatStatesMap: function(){
 		this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' };
 	},
+
 
 	disableChat:function () {
 		this.down('chat-log-view').setDisabled(true);
