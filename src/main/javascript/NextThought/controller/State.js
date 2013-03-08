@@ -148,7 +148,7 @@ Ext.define('NextThought.controller.State', {
 			result.profile.queryObject = query;
 		}
 		else if(ntiid){
-			result = {active: 'library', location: ntiid, library:{query:query}};
+			result = {active: 'library', location: ntiid};
 		}
 
 		console.debug('Hash Interpeted:',result);
