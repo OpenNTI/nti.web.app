@@ -6,7 +6,7 @@ Ext.define('NextThought.view.content.SimplePopoverWidget',{
 
     renderTo: Ext.getBody(),
     width: 400,
-    maxHeight: 200,
+    maxHeight: 400,
 
     layout: 'fit',
 
