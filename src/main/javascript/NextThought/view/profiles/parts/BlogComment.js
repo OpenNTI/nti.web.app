@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	extend: 'Ext.Component',
 	alias: 'widget.profile-blog-comment',
+	require:[
+		'NextThought.editor.Editor'
+	],
 
 	mixins: {
 		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
@@ -17,12 +20,13 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 				{ tag: 'span', html: '{displayName}', cls: 'name link'},
 				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:m A")}'},
 				{ tag: 'tpl', 'if':'isModifiable', cn:[
-					//{ tag:'span', cls: 'edit link', html: 'Edit'},
+					{ tag:'span', cls: 'edit link', html: 'Edit'},
 					{ tag:'span', cls: 'delete link', html: 'Delete'}
 				]}
 			]},
 			//flag?
-			{ cls: 'body' }
+			{ cls: 'body' },
+			{ cls: 'editor-box' }
 		] }
 	]),
 
@@ -34,7 +38,9 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		editEl: '.meta .edit',
-		deleteEl: '.meta .delete'
+		deleteEl: '.meta .delete',
+		editorBoxEl: '.editor-box',
+		metaEl: '.meta'
 	},
 
 
@@ -63,20 +69,47 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		var bodyEl = this.bodyEl,
+			metaEl = this.metaEl,
+			hide, show,
+			Fn = Ext.Function;
+
 		this.record.addObserverForField(this, 'body', this.updateContent, this);
 		this.updateContent();
-		this.bodyEl.selectable();
+		bodyEl.selectable();
+
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
 		}
 
-//		if( this.editEl ){
-//			this.mon(this.editEl,'click',this.onEditPost,this);
-//		}
+		if( this.editEl ){
+			this.mon(this.editEl,'click',this.onEditPost,this);
+		}
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
+
+		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		show = Fn.createSequence(Ext.bind(bodyEl.show,bodyEl),Ext.bind(metaEl.show,metaEl),this);
+		hide = Fn.createSequence(Ext.bind(bodyEl.hide,bodyEl),Ext.bind(metaEl.hide,metaEl),this);
+
+		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl});
+		this.mon(this.editor,{
+			scope: this,
+			'activated-editor':hide,
+			'deactivated-editor':show,
+			'no-body-content': function(editor,el){
+				editor.markError(el,'You need to type something');
+				return false;
+			}
+		});
 	},
+
+
+	getRefItems: function(){ return [this.editor]; },
 
 
 	getRecord: function(){
@@ -122,5 +155,11 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 				}
 			}
 		});
+	},
+
+
+	onEditPost: function(e){
+		e.stopEvent();
+		this.editor.editBody(this.record.get('body')).activate();
 	}
 });
