@@ -200,7 +200,6 @@ span.tab{
 
 		.footer {
 			@include experimental(transition, all 0.5s);
-			background: #fff;
 			position: absolute;
 			bottom: 0;
 			left: 0; right: 0;

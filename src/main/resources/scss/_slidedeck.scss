@@ -353,6 +353,10 @@ $experimental-support-for-svg: true;
 
 			.editor {
 				margin: 10px;
+				.main{
+					padding-left: 13px;
+					padding-right: 13px;
+				}
 			}
 
 			.comment {

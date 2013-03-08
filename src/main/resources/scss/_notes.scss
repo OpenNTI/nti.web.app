@@ -227,6 +227,10 @@
 
 		@include editor;
 		.editor {
+			.main{
+				padding-left: 13px;
+				padding-right: 13px;
+			}
 			//instance specific style
 			background: #ffffff;
 			border: 1px solid #dcdcdc;
