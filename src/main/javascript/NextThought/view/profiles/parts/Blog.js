@@ -143,7 +143,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	onNewPost: function(e){
 		e.stopEvent();
-		this.showPost(null,'edit');
+		this.showPost(null,['edit']);
 	},
 
 
@@ -285,6 +285,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			xhooks:{
 				destroy: function(){
 					delete this.ownerCt;
+					console.log('destroy?');
 					return this.callParent(arguments);
 				}
 			}
