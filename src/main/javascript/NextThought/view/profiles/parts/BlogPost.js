@@ -58,8 +58,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.addEvents(['delete-post','show-post']);
+		this.addEvents(['delete-post','show-post','ready']);
 		this.enableBubble(['delete-post','show-post']);
+		this.on('ready',this.onReady,this);
 		this.mon(this.record, 'destroy', this.destroy, this);
 		this.buildStore();
 	},
@@ -104,6 +105,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	afterRender: function(){
 		this.callParent(arguments);
 		var h = this.record.get('headline'),
+			commentId,
 			commentHeader = this.commentHeaderEl;
 		if(!h){return;}
 
@@ -140,9 +142,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		});
 
 		if(!Ext.isEmpty(this.selectedSections)){
+			commentId = this.selectedSections[1];
 			console.debug('Do something with this/these:',this.selectedSections);
-			if(this.selectedSections[0]==='comments'){
+			if(this.selectedSections[0]==='comments' && !commentId){
 				Ext.defer(this.showEditor,500,this);
+			}
+			else if(commentId){
+				this.scrollToComment = commentId;
 			}
 		}
 	},
@@ -266,5 +272,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.removeAll(true);
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 		this.add(Ext.Array.map(records,function(r){return {record: r};}));
+
+		Ext.defer(this.fireEvent,1,this,['ready',this.queryString]);
+	},
+
+
+	onReady: function(){
+		console.debug('ready',arguments);
+		if(this.scrollToComment){
+			console.log(this.scrollToComment, this.el.down('[data-commentid="'+this.scrollToComment+'"]'));
+		}
 	}
 });

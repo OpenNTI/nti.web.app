@@ -75,7 +75,7 @@ Ext.define( 'NextThought.view.views.Profiles', {
 				}
 				else{
 					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
-					toAdd = {username: username, activeTab: state.activeTab};
+					toAdd = Ext.applyIf({username: username},state);
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: { loaded:fin, scope:this, single: true, delay:1 }

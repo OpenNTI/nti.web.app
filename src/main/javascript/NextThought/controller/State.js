@@ -118,8 +118,11 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretHash: function(hash){
-		var ntiid = ParseUtils.parseNtiHash(hash),
+	interpretHash: function(hashStr){
+		hashStr = hashStr.split('?');
+		var query = hashStr[1],
+			hash = hashStr[0],
+			ntiid = ParseUtils.parseNtiHash(hash),
 			user,
 			result = {};
 
@@ -129,9 +132,10 @@ Ext.define('NextThought.controller.State', {
 				active: 'profile',
 				profile: user
 			};
+			result.profile.queryString = query;
 		}
 		else if(ntiid){
-			result = {active: 'library', location: ntiid};
+			result = {active: 'library', location: ntiid, library:{query:query}};
 		}
 
 		console.debug('Hash Interpeted:',result);

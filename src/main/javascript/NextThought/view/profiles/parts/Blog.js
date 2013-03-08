@@ -196,8 +196,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	setParams: function(paramsString){
-		var me = this, id, r, s = me.store, sections;
+	setParams: function(paramsString, queryString){
+		var me = this, id, r, s = me.store, sections, args = [];
 
 		if(!me.rendered){
 			me.on('afterrender',Ext.bind(me.setParams,me,arguments),me,{single:true});
@@ -206,6 +206,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		sections = ((paramsString && decodeURIComponent(paramsString))||'').split('/');
 
+		args.push(null,sections.splice(1),queryString);
 		id = sections[0];
 
 		console.debug('setting params',id);
@@ -215,8 +216,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		r = s && s.findRecord('ID', id, 0, false, true, true);
 		if(r){
-			sections[0] = r;
-			me.showPost.apply(me,sections);
+			args[0] = r;
+			me.showPost.apply(me,args);
 			return;
 		}
 
@@ -225,8 +226,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			scope: me,
 			failure: function(){me.setParams(); alert('Could not load post');},
 			success: function(resp){
-				sections[0] = ParseUtils.parseItems( resp.responseText ).first();
-				me.showPost.apply(me,sections);
+				args[0] = ParseUtils.parseItems( resp.responseText ).first();
+				me.showPost.apply(me,args);
 			}
 		};
 
@@ -265,7 +266,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	showPost: function(record,action){
+	showPost: function(record,action,query){
 		this.swapViews('post');
 
 		this.cleanPreviousPost();
@@ -275,7 +276,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			ownerCt: this,
 			renderTo:this.postViewEl,
 			record: record,
-			selectedSections: Ext.Array.clone(arguments).splice(1),
+			selectedSections: action,
+			queryString: query,
 			listeners: {
 				scope: this,
 				destroy: this.closePost

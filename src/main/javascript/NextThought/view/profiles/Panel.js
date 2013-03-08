@@ -152,7 +152,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 
 		if( t && t.setParams ){
-			t.setParams(params);
+			t.setParams(params,this.queryString);
 		}
 
 		delete this.settingTab;
@@ -244,6 +244,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.callParent(arguments);
 	},
+
 
 	addToContactsClicked: function(e){
 		var me = this;
