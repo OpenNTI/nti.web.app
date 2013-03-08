@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		'NextThought.view.menus.BlogTogglePublish'
 	],
 
-	cls: 'entry',
+	cls: 'entry list-item',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
