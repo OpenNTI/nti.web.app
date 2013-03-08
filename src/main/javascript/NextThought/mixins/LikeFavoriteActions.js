@@ -29,8 +29,21 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 	},
 
 
+	tearDownLikeAndFavorite: function(){
+		if( this.liked ){
+			this.mun(this.liked, 'click', function(){ rec.like(this); }, this);
+			this.liked.remove();
+		}
+		if( this.favorites ){
+			this.mon(this.favorites,'click', function(){ rec.favorite(this); },this);
+			this.favorites.remove();
+		}
+
+		this.stopListeningForLikeAndFavoriteChanges(this.record);
+	},
+
+
 	getRecord: function(){
-		console.warn('Class mixed into does not implement getRecord() using potentially unsafe this.record');
 		return this.record;
 	},
 

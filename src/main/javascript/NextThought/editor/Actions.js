@@ -606,7 +606,7 @@ Ext.define('NextThought.editor.Actions', {
 				el = document.createElement("div");
 				el.innerHTML = html;
 
-				frag = document.createDocumentFragment(), node, lastNode;
+				frag = document.createDocumentFragment();
 				frag.appendChild(beforeContent);
 				while ( (node = el.firstChild) ) {
 					lastNode = frag.appendChild(node);

@@ -50,7 +50,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		this.callParent();
 		this.addEvents(['delete-post']);
 		this.enableBubble(['delete-post']);
-		this.mon(this.record, 'destroy', this.destroy, this);
+		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 	},
 
 
@@ -65,6 +65,10 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 				me.renderTpl.overwrite(me.el,rd);
 			}
 		});
+
+		if(this.record.get('Deleted')){
+			this.addCls('deleted');
+		}
 	},
 
 
@@ -135,9 +139,44 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		});
 	},
 
-	onDestroy: function(){
-		this.record.removeObserverForField(this, 'body', this.updateField, this);
-		this.callParent(arguments);
+	/*
+	 * The normal pattern employed is to have the records destroy trigger this
+	 * component to go away. But, for blog (and forum I assume) comments
+	 * the server deletes them but then continues to return them as placeholder looking
+	 * objects.  With a little work we could employ the placeholder logic we give to notes,
+	 * where a delete turns certain records into placeholders.  However we drive many different views
+	 * history, activity off of destory events that don't get fired in that case.  Since the ds still
+	 * does all its other deletion logic as normal we opt to do the same.
+	 *
+	 * For now, for simplicity, we just have the record destory remove our record reference and update the UI components
+	 * appropriately.  We tear down any observers first so we don't get events and fall down code paths
+	 * requiring the record.
+	 *
+	 * FIXME I don't really like this way of handling this.  I really want to use the placeholder logic but sill have
+	 * the ability for destroy and our store removal logic to kick in.
+	 */
+	onRecordDestroyed: function(){
+		//First remove the delete and edit link listeners followed by the els
+		if( this.deleteEl ){
+			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+			this.deleteEl.remove();
+		}
+
+		if( this.editEl ){
+			this.mon(this.editEl,'click',this.onEditPost,this);
+			this.editEl.remove();
+		}
+
+		//Now tear down like and favorites
+		this.tearDownLikeAndFavorite();
+
+
+		//Now clear the rest of our field listeners
+		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+
+		//Now update the body to the same text the server uses.
+		this.bodyEl.update('This object has been removed.');
+		this.addCls('deleted');
 	},
 
 
@@ -164,5 +203,5 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	onEditPost: function(e){
 		e.stopEvent();
 		this.editor.editBody(this.record.get('body')).activate();
-	}
+	},
 });
