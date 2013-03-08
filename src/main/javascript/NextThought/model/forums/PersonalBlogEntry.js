@@ -1,6 +1,9 @@
 Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
+	fields:[
+		{name: 'GroupingField', defaultValue:'Thoughts', persist: false}
+	],
 
 	//TODO: workaround for no-edit link
 	isModifiable: function(){

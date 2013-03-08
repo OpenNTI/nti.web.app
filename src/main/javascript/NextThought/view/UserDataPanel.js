@@ -44,7 +44,25 @@ Ext.define('NextThought.view.UserDataPanel',{
 					]
 				}]},
 
+			{tag:'tpl', 'if': 'isPost', cn:[{
+				'data-guid': '{guid}',
+				cls: 'history post',
+				cn:[
+					{cls: 'title', html:'{title} by:'},
+					{cls: 'author', html:'{author}'},
+					{cls: 'tags', html:'Tags: {tags}'}
+				]}
+			]},
 
+			{tag:'tpl', 'if':'isComment', cn:[{
+				'data-guid': '{guid}',
+				cls: 'history comment',
+				cn:[
+					{cls:'author', html:'{author}', 'data-label': ' commented on: '},
+					{cls: 'title', html:'{title}'},
+					{cls: 'text', html:'{body}'}
+				]
+			}]},
 			{tag:'tpl', 'if':'isChat', cn:[
 				{
 					'data-guid': '{guid}',
@@ -100,6 +118,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
 		m[data.TranscriptSummary.prototype.mimeType] = this.getChatItem;
 		m[data.Transcript.prototype.mimeType] = this.getChatItem;
+		m[data.forums.PersonalBlogEntry.prototype.mimeType] = this.getPersonalBlogEntryItem;
+		m[data.forums.PersonalBlogComment.prototype.mimeType] = this.getPersonalBlogCommentItem;
 
 		this.callParent(arguments);
 
@@ -133,7 +153,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             }
             else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
                 this.mimeTypes = [];
-                this.store = this.buildStore('Bookmarks',storeId,'MimeType');
+                this.store = this.buildStore('Bookmarks',storeId,'GroupingField');
                 NextThought.model.events.Bus.on({
                     scope: this,
                     'favorite-changed': function(rec){
@@ -307,10 +327,55 @@ Ext.define('NextThought.view.UserDataPanel',{
 		if(mt === data.TranscriptSummary.prototype.mimeType){
 			this.getTranscriptsForOccupants(rec, historyElement);
 		}
+		else if(/.*?personalblogentry$/.test(mt)){
+			this.blogEntryClicked(rec);
+		}
+		else if(/.*?personalblogcomment$/.test(mt)){
+			this.blogCommentClicked(rec);
+		}
 		else {
 			cid = rec.get('ContainerId');
 			this.fireEvent('navigation-selected', cid, rec);
 		}
+	},
+
+
+	gotoBlog: function(user, postId, commentId){
+		var title = 'Thoughts',
+			hash,
+			args = [title];
+
+		if(postId){
+			args.push(postId);
+		}
+
+		if(postId && commentId){
+			args.push('comments');
+			args.push(commentId);
+		}
+
+		hash = user.getProfileUrl.apply(user, args);
+
+		if(location.hash !== hash){
+			location.hash = hash;
+		}
+	},
+
+
+	blogEntryClicked: function(rec){
+		var u = rec.user,
+			postId = rec.get('ID');
+
+		this.gotoBlog(u,postId);
+	},
+
+
+	blogCommentClicked: function(rec){
+		var u = rec.user,
+			postId = rec.container.get('ID'),
+			commentId = rec.get('ID');
+
+		this.gotoBlog(u,postId,commentId);
 	},
 
 
@@ -422,6 +487,93 @@ Ext.define('NextThought.view.UserDataPanel',{
 
         return note;
     },
+
+
+	getPersonalBlogEntryItem: function(rec){
+		var guid = guidGenerator(),
+			creator = rec.get('Creator'),
+			h = rec.get('headline'),
+			tags = h && !Ext.isEmpty(h.get('tags')) ? h.get('tags').join(', ') : '',
+			data = {
+				isPost: true,
+				guid: guid,
+				author:'...',
+				title: h.get('title'),
+				tags: tags
+			};
+
+		this.fillInUser(creator, data, guid, rec);
+		return data;
+	},
+
+
+	fillInUser: function(username, config, guid, rec){
+		var me  = this, dom, el, name;
+
+		if(isMe(username)){
+			rec.user = $AppConfig.userObject;
+
+			name = config.author = config.isPost ? 'Me': 'I';
+			dom = me.el.down('[data-guid='+guid+']');
+			if(dom){
+				el = dom.down('.author');
+				el.update(name + el.getAttribute('data-label'));
+			}
+		}
+		else {
+			UserRepository.getUser(username, function(u){
+				var dom, el;
+				rec.user = u;
+
+				try{
+					config.author = u.getName();
+					dom = me.el.down('[data-guid='+guid+']');
+					if(dom){
+						el = dom.down('.author');
+						el.update(u.getName() + el.getAttribute('data-label'));
+					}
+				}
+				catch(e){
+					console.log('Failed to update author. ', e.message, e.stack);
+				}
+			}, me);
+		}
+	},
+
+
+	getPersonalBlogCommentItem: function(rec){
+		var me = this,
+			guid = guidGenerator(),
+			creator = rec.get('Creator'),
+			containerId = rec.get('ContainerId'),
+			data = {
+				isComment: true,
+				guid: guid,
+				author:'...',
+				body: '"'+rec.get('body')+'"',
+				title: 'resolving...'
+			};
+
+		function success(r){
+			var title = r.get('headline').get('title'),
+				dom  = me.el.down('[data-guid='+guid+']');
+
+			rec.container = r;
+			data.title = title;
+			if(dom){
+				dom.down('.title').update(title);
+			}
+
+			me.fillInUser(creator, data, guid, rec);
+		}
+
+		function fail(){
+			console.log('there was an error retrieving the object.', arguments);
+		}
+
+		$AppConfig.service.getObject(containerId, success, fail, me);
+		return data;
+	},
 
 
 	getNoteItem: function(rec){
