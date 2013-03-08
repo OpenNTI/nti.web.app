@@ -279,8 +279,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	onReady: function(){
 		console.debug('ready',arguments);
+		var el;
 		if(this.scrollToComment){
-			console.log(this.scrollToComment, this.el.down('[data-commentid="'+this.scrollToComment+'"]'));
+			el = this.el.down('[data-commentid="'+this.scrollToComment+'"]');
+			if(el){
+				Ext.get('profile').scrollChildIntoView(el);
+			}
+			console.log(this.scrollToComment, el);
 		}
 	}
 });
