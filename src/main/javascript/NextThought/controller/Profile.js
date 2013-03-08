@@ -89,7 +89,7 @@ Ext.define('NextThought.controller.Profile', {
 		commentPost.set({ body:valueObject.body });
 
 		commentPost.save({
-			url: postRecord && postRecord.get('href'),
+			url: record ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
 			scope: this,
 			success: function(rec){
 				if(postCmp.store && !postCmp.isDestroyed){
