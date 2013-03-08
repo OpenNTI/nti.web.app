@@ -45,7 +45,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 		this.doUpload = this.readFile;
 		file.target=this;
-		file[(typeof window.FileReader==='undefined')?'disable':'enable']();
+		file[(window.FileReader===undefined)?'disable':'enable']();
 	},
 
 
@@ -123,6 +123,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 		//file.size
 		if(!file || !(/image\/.*/i).test(file.type)){
+			//TODO: alert user
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
@@ -136,7 +137,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 
 
-	handlePaste:function(event, domEl){
+	handlePaste:function(event){
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
@@ -239,7 +240,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 		return {};
 	},
 
-	setOptions: function(o){
+	setOptions: function(){
 		console.warn('no need to set options on image toolbar');
 	},
 
