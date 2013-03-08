@@ -64,7 +64,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel',
 			sortOn: 'createdTime',
-			sortOrder: 'descending'
+			sortOrder: 'descending',
+			exclude: 'application/vnd.nextthought.forums.personalblogcomment'
 		});
 
 		if(!LocationProvider.hasStore(s.storeId)){
@@ -233,7 +234,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		this.add(0, cmps);
 	},
 
-	
+
 	maybeShowMoreItems: function(){
 		var viewportHeight = Ext.Element.getViewportHeight(),
 			scrollHeight = this.up('profile-view-container').el.dom.scrollHeight, me = this,
