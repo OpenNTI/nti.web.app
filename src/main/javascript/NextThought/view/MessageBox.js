@@ -62,7 +62,6 @@ Ext.define('NextThought.view.MessageBox',{
 						this.setUI('primary');
 					}
 					else {
-						console.log('hey!',arguments);
 						this.setUI('secondary');
 					}
 
