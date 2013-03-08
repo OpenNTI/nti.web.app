@@ -457,6 +457,9 @@ Ext.define('NextThought.model.Base', {
 
 	isModifiable: function(){
 		try{
+			//This isn't necessarily true for all objects. For instance anyone's blog comments
+			//can be edited or deleted by the blogs author.  I notice the field logic is correct
+			//and different from this.
 			return this.phantom||(this.getLink('edit')!==null&&isMe(this.get('Creator')));
 		}
 		catch(e){
