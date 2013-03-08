@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
-			{ tag:'span', cls: 'datetime', html: '{Last Modified:date("F j, Y")} at {Last Modified:date("g:m A")}'},
+			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:m A")}'},
 			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
