@@ -306,7 +306,7 @@ Ext.define('NextThought.controller.Search', {
 			return;
 		}
 
-		this.getController('Navitagion').setView('library');
+		nav.setView('library');
 		if(cat==='Books'){
 			nav.navigateAndScrollToSearchHit(cid, result, clickedFragment);
 			return;
