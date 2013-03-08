@@ -3,12 +3,11 @@ Ext.define( 'NextThought.view.views.Contacts', {
 	alias:	'widget.contacts-view-container',
 	requires: [
 		'NextThought.view.contacts.Grouping',
-		'NextThought.view.contacts.TabPanel',
-		'Ext.ux.layout.Center'
+		'NextThought.view.contacts.TabPanel'
 	],
 
 	cls: 'contacts-view',
-	layout: 'ux.center',
+	layout: 'fit',
 	title: 'NextThought: Contacts',
 	
 	items: [{

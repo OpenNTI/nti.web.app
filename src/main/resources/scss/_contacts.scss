@@ -516,7 +516,12 @@ div.contact-buttons {
 }
 
 #contacts {
-	margin: 0 0 0 10%;
+	//margin: 0 0 0 10%;
+
+	& > .x-panel-contacts {
+		margin: 0 auto;
+		width: 725px;
+	}
 
 	.nti-contacts-tabbar-plain {
 		.search {
