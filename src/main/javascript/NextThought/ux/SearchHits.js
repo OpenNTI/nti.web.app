@@ -1,7 +1,6 @@
 Ext.define('NextThought.ux.SearchHits', {
 	alias: 'widget.search-hits',
-	mixins: {observable: 'Ext.util.Observable',
-			 textRangeFinder: 'NextThought.ux.TextRangeFinder'},
+	mixins: {observable: 'Ext.util.Observable'},
 	requires: ['NextThought.util.Search'],
 
 	constructor: function(config){
@@ -88,7 +87,7 @@ Ext.define('NextThought.ux.SearchHits', {
 			return toAppend;
 		}
 		Ext.each(rangesToRender, function(sel){
-            redactionAction = this.getRedactionActionSpan(sel);
+            redactionAction = TextRangeFinderUtils.getRedactionActionSpan(sel);
             if (redactionAction){
                 redactionAction.addCls('searchHitInside');
                 sel.getClientRects = function(){

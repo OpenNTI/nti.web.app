@@ -15,10 +15,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.view.annotations.QuizResults',
 		'NextThought.view.assessment.Scoreboard',
 		'NextThought.cache.IdCache',
-		'NextThought.util.Search'
+		'NextThought.util.Search',
+		'NextThought.util.TextRangeFinder'
 	],
-
-	mixins: {textRangeFinder: 'NextThought.ux.TextRangeFinder'},
 
 	constructor: function(){
 		var me = this;
@@ -160,16 +159,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		//We get ranges from two places, the iframe content
 		//and the overlays
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
-		ranges = this.findTextRanges(contentDoc, contentDoc, regex);
+		ranges = TextRangeFinderUtils.findTextRanges(contentDoc, contentDoc, regex);
 		result.push({ranges: ranges.slice(),
 					 key: 'content'});
 
 		//Now look in assessment overlays
-		indexedOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
+		indexedOverlayData = TextRangeFinderUtils.indexText(this.componentOverlayEl.dom, function(node){
 			return Ext.fly(node).parent('.indexed-content');
 		});
 
-		ranges = this.findTextRanges(this.componentOverlayEl.dom,
+		ranges = TextRangeFinderUtils.findTextRanges(this.componentOverlayEl.dom,
 													 this.componentOverlayEl.dom.ownerDocument,
 												 regex, undefined, indexedOverlayData);
 		result.push({ranges: ranges.slice(),
@@ -197,17 +196,17 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	getFragmentLocation: function(fragment, phrase){
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			doc = this.getDocumentElement(),
-			ranges = this.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
+			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
 			range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
 			assessmentBodyClass = 'x-panel-body-assessment';
 
 		if(Ext.isEmpty(ranges)){
 			//We are pretty tightly coupled here for assessment.  Each overlay needs to be
 			//asked to find the match
-			indexOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
+			indexOverlayData = TextRangeFinderUtils.indexText(this.componentOverlayEl.dom, function(node){
 				return Ext.fly(node).parent('.indexed-content');
 			});
-			ranges = this.findTextRanges(this.componentOverlayEl.dom, this.componentOverlayEl.dom.ownerDocument,
+			ranges = TextRangeFinderUtils.findTextRanges(this.componentOverlayEl.dom, this.componentOverlayEl.dom.ownerDocument,
 										 fragRegex.re, fragRegex.matchingGroups, indexOverlayData);
 			assessmentAdjustment = 150;
 		}
