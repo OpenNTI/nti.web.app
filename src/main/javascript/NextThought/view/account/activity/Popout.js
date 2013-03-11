@@ -5,7 +5,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	requires: [
 		'NextThought.view.account.contacts.management.Person',
 		'NextThought.view.account.activity.Preview',
-		'NextThought.view.account.activity.BlogPreview'
+		'NextThought.view.account.activity.BlogPreview',
+		'NextThought.view.account.activity.BlogCommentPreview'
 	],
 
 	floating: true,

@@ -10,10 +10,6 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 			cn:[
 				{cls: 'title blog-label', html:'{title: ellispis(150)}'},
 				{cls: 'tags blog-label', html:'{tags:ellipsis(150)}'},
-				{cls: 'context', cn:[
-					{tag: 'canvas'},
-					{cls: 'text',html: '{contextText:ellipsis(300)}'}
-				]}
 			]
 		},
 		{ cls: 'footer', cn: [
@@ -27,7 +23,6 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 	renderSelectors: {
 		author: '.author',
 		title: '.title',
-		body:'.context .text',
 		commentCountEl: '.counts .comment',
 		likeCountEl: '.counts .likes'
 	},
@@ -41,7 +36,6 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 		me.renderData = Ext.apply(me.renderData||{},{
 			title: headline.get('title'),
 			tags: headline.get('tags') ? 'Tags: '+headline.get('tags'):'',
-			ContextText: headline.getBodyText(),
 			commentCount:me.record.get('PostCount')+' Comments',
 			likeCount:me.record.get('LikeCount')+' Likes'
 		});

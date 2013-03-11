@@ -289,6 +289,9 @@ Ext.define('NextThought.view.account.activity.View',{
 		else if(item.getModelName() === 'PersonalBlogEntry'){
 			return Ext.String.format('shared a thought: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
 		}
+		else if(item.getModelName() === 'PersonalBlogComment'){
+			return Ext.String.format('commented &ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true));
+		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
 					Ext.String.ellipsis(item.getBodyText(),50,true),
@@ -323,6 +326,9 @@ Ext.define('NextThought.view.account.activity.View',{
 					me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 				});
 			}
+			else if(/.*?personalblogcomment$/.test(rec.get('MimeType'))){
+				this.blogCommentItemClicked(rec);
+			}
 			else{
 				this.fireEvent('navigation-selected', item.ContainerId, rec);
 			}
@@ -331,6 +337,18 @@ Ext.define('NextThought.view.account.activity.View',{
 			console.error(Globals.getError(er));
 		}
 		return false;
+	},
+
+	blogCommentItemClicked: function(rec){
+		if(!rec.container){
+			console.error('The blog comment record container is not set, ', rec);
+			return;
+		}
+
+		var me = this;
+		UserRepository.getUser(rec.container.get('Creator'), function(user){
+			me.fireEvent('navigate-to-blog', user, rec.container.get('ID'),rec.get('ID'));
+		});
 	},
 
 
