@@ -22,6 +22,7 @@ Ext.define('NextThought.store.Hit',{
 		var response = Ext.JSON.decode(options.response.responseText, true),
 			me = this;
 		if(response){
+			this.query = response.Query;
 			this.phraseSearch = response.PhraseSearch;
 			if(this.phraseSearch !== undefined){
 				// Until we decide we want to replum all the search stuff to take an
