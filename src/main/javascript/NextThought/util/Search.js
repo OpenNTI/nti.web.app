@@ -52,14 +52,10 @@ Ext.define('NextThought.util.Search',{
 	},
 
 	contentRegexPartsForHit: function(hit){
-		function isContent(hit){
-			return (/content/i).test(hit.get('Type'));
-		}
-
 		var fragments = hit.get('Fragments'),
 			terms = [];
 
-		if(!isContent(hit) || Ext.isEmpty(fragments)){
+		if(Ext.isEmpty(fragments)){
 			return null;
 		}
 

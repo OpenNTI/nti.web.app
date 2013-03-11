@@ -140,7 +140,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	showSearchHit: function(hit) {
 		this.clearSearchHit();
-		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
+		if(hit.isContent()){
+			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
+		}
 	},
 
 	//generalize this

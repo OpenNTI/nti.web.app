@@ -10,7 +10,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		'NextThought.editor.Editor',
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.view.annotations.note.Templates',
-		'NextThought.view.profiles.parts.BlogComment'
+		'NextThought.view.profiles.parts.BlogComment',
+		'NextThought.ux.SearchHits'
 	],
 
 	cls: 'entry',
@@ -297,5 +298,57 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			}
 			console.log(this.scrollToComment, el);
 		}
+	},
+
+	//Search hit highlighting
+	showSearchHit: function(hit) {
+		this.clearSearchHit();
+		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
+	},
+
+	//generalize this
+	//Returns an array of objects with two propertes.  ranges is a list
+	//of dom ranges that should be used to position the highlights.
+	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
+	rangesForSearchHits: function(hit){
+		var phrase = hit.get('PhraseSearch'),
+			fragments = hit.get('Fragments'),
+			regex, ranges,
+			searchIn = this.el.dom,
+			doc = searchIn.ownerDocument,
+			result = [];
+
+
+		console.log('Getting ranges for search hits');
+
+		//We get ranges from two places, the iframe content
+		//and the overlays
+		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
+		ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, regex);
+		result.push({ranges: ranges.slice(),
+					 key: 'blog'});
+		return result;
+	},
+
+	//	@returns an object with top and left properties used to adjust the
+	//  coordinate space of the ranges bounding client rects.
+	//  It decides based on the type of container( main content or overlays).
+	getRangePositionAdjustments: function(key){
+		return {top: -1*this.el.getTop(), left: -1*this.el.getLeft()};
+	},
+
+	clearSearchHit: function() {
+		if (!this.searchAnnotations) {
+			return;
+		}
+
+		this.searchAnnotations.cleanup();
+		delete this.searchAnnotations;
+	},
+
+	getInsertionPoint: function(){
+		return this.el;
 	}
+
+
 });

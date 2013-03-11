@@ -15,5 +15,10 @@ Ext.define('NextThought.model.Hit', {
 	//but for legacy reasons people expect to call getId and get the ntiid
 	getId: function(){
 		return this.get('NTIID');
+	},
+
+	isContent: function(){
+			return (/content/i).test(this.get('Type'));
 	}
+
 });
