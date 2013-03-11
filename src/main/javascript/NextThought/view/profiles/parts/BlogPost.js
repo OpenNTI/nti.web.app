@@ -306,7 +306,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
 	},
 
-	//generalize this
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
@@ -321,8 +320,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		console.log('Getting ranges for search hits');
 
-		//We get ranges from two places, the iframe content
-		//and the overlays
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
 		ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, regex);
 		result.push({ranges: ranges.slice(),
