@@ -124,6 +124,12 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 		//file.size
 		if(!file || !(/image\/.*/i).test(file.type)){
 			//TODO: alert user
+            cfg = {
+                title: 'Sorry.',
+                icon: 'warning-red',
+                msg:"You can't upload that type of file."
+            };
+            alert(cfg, "You can't upload that type of file.");
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
