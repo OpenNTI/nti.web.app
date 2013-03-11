@@ -286,6 +286,9 @@ Ext.define('NextThought.view.account.activity.View',{
 		else if (item.getModelName() === 'Redaction') {
             Ext.defer(getName,1,this,['redaction']);
 		}
+		else if(item.getModelName() === 'PersonalBlogEntry'){
+			return Ext.String.format('shared a thought: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
+		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
 					Ext.String.ellipsis(item.getBodyText(),50,true),
@@ -303,7 +306,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	itemClick: function(e){
 		var activityTarget = e.getTarget('div.activity', null, true),
-			guid, item, rec;
+			guid, item, rec, me = this;
 
 		guid = (activityTarget||{}).id;
 		item = this.stream[guid];
@@ -312,10 +315,17 @@ Ext.define('NextThought.view.account.activity.View',{
 		if (!rec || rec.get('Class') === 'User'){
 			return false;
 		}
-
 		e.stopEvent();
+
 		try{
-			this.fireEvent('navigation-selected', item.ContainerId, rec);
+			if(/.*?personalblogentry$/.test(rec.get('MimeType'))){
+				UserRepository.getUser(rec.get('Creator'), function(user){
+					me.fireEvent('navigate-to-blog', user, rec.get('ID'));
+				});
+			}
+			else{
+				this.fireEvent('navigation-selected', item.ContainerId, rec);
+			}
 		}
 		catch(er){
 			console.error(Globals.getError(er));

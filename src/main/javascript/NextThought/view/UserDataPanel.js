@@ -340,33 +340,11 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-	gotoBlog: function(user, postId, commentId){
-		var title = 'Thoughts',
-			hash,
-			args = [title];
-
-		if(postId){
-			args.push(postId);
-		}
-
-		if(postId && commentId){
-			args.push('comments');
-			args.push(commentId);
-		}
-
-		hash = user.getProfileUrl.apply(user, args);
-
-		if(location.hash !== hash){
-			location.hash = hash;
-		}
-	},
-
-
 	blogEntryClicked: function(rec){
 		var u = rec.user,
 			postId = rec.get('ID');
 
-		this.gotoBlog(u,postId);
+		this.fireEvent('navigate-to-blog', u, postId)
 	},
 
 
@@ -375,7 +353,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 			postId = rec.container.get('ID'),
 			commentId = rec.get('ID');
 
-		this.gotoBlog(u,postId,commentId);
+		this.fireEvent('navigate-to-blog', u, postId, commentId);
 	},
 
 

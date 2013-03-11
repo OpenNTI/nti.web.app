@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	requires: [
 		'NextThought.view.account.contacts.management.Person',
-		'NextThought.view.account.activity.Preview'
+		'NextThought.view.account.activity.Preview',
+		'NextThought.view.account.activity.BlogPreview'
 	],
 
 	floating: true,
@@ -15,14 +16,22 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 
 	constructor: function(config){
-		var isContact = Ext.getStore('FriendsList').isContact(config.user);
+		var isContact = Ext.getStore('FriendsList').isContact(config.user),
+			type = 'activity-preview',
+			className = config.record.get('Class');
+			alias = "widget.activity-preview-"+className;
+
+		if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
+			type = 'activity-preview-'+className;
+		}
+
 		this.items = [ {
 			xtype: 'person-card',
 			hideGroups: true,
 			user: config.user,
 			isContact: isContact
 		}, {
-			xtype: 'activity-preview',
+			xtype: type,
 			record: config.record,
 			user: config.user
 		} ];

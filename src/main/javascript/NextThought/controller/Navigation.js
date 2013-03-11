@@ -23,13 +23,19 @@ Ext.define('NextThought.controller.Navigation', {
 				}
 			},
 			'activity-view': {
-				'navigation-selected': this.navigate
+				'navigation-selected': this.navigate,
+				'navigate-to-blog': this.gotoBlog
 			},
 			'activity-preview': {
-				'navigation-selected': this.navigate
+				'navigation-selected': this.navigate,
+				'navigate-to-blog': this.gotoBlog
+			},
+			'activity-preview-blog':{
+				'navigate-to-blog': this.gotoBlog
 			},
             'user-data-panel': {
-                'navigation-selected': this.navigate
+                'navigation-selected': this.navigate,
+	            'navigate-to-blog': this.gotoBlog
             },
 			'main-views': {
 				'activate-view': this.track,
@@ -217,6 +223,31 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		this.maybeLoadNewPage(ntiid, callback);
+	},
+
+	/**
+	 * Navigates to a profile blog or profile blog comment
+	 */
+
+	gotoBlog: function(user, postId, commentId){
+		var title = 'Thoughts',
+			hash,
+			args = [title];
+
+		if(postId){
+			args.push(postId);
+		}
+
+		if(postId && commentId){
+			args.push('comments');
+			args.push(commentId);
+		}
+
+		hash = user.getProfileUrl.apply(user, args);
+
+		if(location.hash !== hash){
+			location.hash = hash;
+		}
 	},
 
 

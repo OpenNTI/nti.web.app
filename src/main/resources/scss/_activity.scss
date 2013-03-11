@@ -46,7 +46,7 @@
 			&.user::after{ background-position: -20px -20px; }
 			&.comment::after { background-position: -38px 0; }
 			&.highlight::after { background-position: 0 0; }
-			&.note{
+			&.note,&.personalblogentry{
 				&::after{ background-position: -20px 0; }
 
 				font-style: italic;
@@ -98,7 +98,7 @@
 			background: #ffffff;
 			padding: 16px 10px;
 
-			.path,.location-label {
+			.path,.location-label, .blog-label {
 				color: $tertiary-grey;
 				font-family: $font;
 			}
@@ -112,7 +112,7 @@
 				overflow: hidden;
 			}
 
-			.location-label {
+			.location-label, .blog-label{
 				font-size: 14px;
 				font-weight: 500;
 				font-style: italic;
@@ -181,6 +181,33 @@
 					&.share { margin-right: 55px; }
 				}
 
+			}
+
+			.counts {
+				font: normal 400 12px/20px $font;
+				padding-left:10px;
+				padding-top: 15px;
+				span{
+					&::after{
+						color: $tertiary-grey;
+						font: normal 500 12px/20px $font;
+
+						position: static;
+						content: '\00B7';
+						vertical-align: middle;
+						display: inline;
+						padding: 0 0.5em;
+						background: none;
+					}
+					&:last-of-type::after {
+						content: '';
+						display: none;
+					}
+				}
+
+				.link{
+					color: #3fb3f6 !important;
+				}
 			}
 		}
 	}
