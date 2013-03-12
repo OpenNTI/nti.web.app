@@ -83,9 +83,9 @@ Ext.define('NextThought.controller.Profile', {
 
 	saveBlogComment: function(editor,record,valueObject){
 		var postCmp = editor.up('profile-blog-post'),
-			postRecord = postCmp && postCmp.record,
-			isEdit = Boolean(record),
-			commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+		postRecord = postCmp && postCmp.record,
+		isEdit = Boolean(record),
+		commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
 		commentPost.set({ body:valueObject.body });
 
@@ -100,28 +100,36 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		commentPost.save({
-			url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
-			scope: this,
-			success: function(rec){
-				unmask();
-				if(postCmp.store && !postCmp.isDestroyed){
-					if(!isEdit){
-						postCmp.store.insert(0,rec);
+		try{
+
+			commentPost.save({
+				url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
+				scope: this,
+				success: function(rec){
+					unmask();
+					if(postCmp.store && !postCmp.isDestroyed){
+						if(!isEdit){
+							postCmp.store.insert(0,rec);
+						}
+						editor.deactivate();
+						editor.setValue('');
+						editor.reset();
 					}
-					editor.deactivate();
-					editor.setValue('');
-					editor.reset();
+					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
+					postRecord.set('PostCount',postRecord.get('PostCount')+1);
+				},
+				failure: function(){
+					editor.markError(editor.getEl(),'Could not save comment');
+					unmask();
+					console.debug('failure',arguments);
 				}
-				//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
-				postRecord.set('PostCount',postRecord.get('PostCount')+1);
-			},
-			failure: function(){
-				editor.markError(editor.getEl(),'Could not save comment');
-				unmask();
-				console.debug('failure',arguments);
-			}
-		});
+			});
+
+		}
+		catch(e){
+			console.error('An error occurred saving comment', Globals.getError(e));
+			unmask();
+		}
 	},
 
 
@@ -166,33 +174,39 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		post.save({
-			scope: this,
-			success: function(post,operation){
-				//the first argument is the record...problem is, it was a post, and the response from the server is
-				// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-				// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-				// one off re-parse of the responseText is necissary to get at what we want.
-				// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+		try{
+			post.save({
+				scope: this,
+				success: function(post,operation){
+					//the first argument is the record...problem is, it was a post, and the response from the server is
+					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+					// one off re-parse of the responseText is necissary to get at what we want.
+					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 
-				var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
+					var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
 
-				if(autoPublish !== undefined){
-					if(autoPublish !== blogEntry.isPublished()){
-						blogEntry.publish(editorCmp,finish,this);
-						return;
+					if(autoPublish !== undefined){
+						if(autoPublish !== blogEntry.isPublished()){
+							blogEntry.publish(editorCmp,finish,this);
+							return;
+						}
 					}
-				}
 
-				unmask();
-				finish(blogEntry);
-			},
-			failure: function(){
-				console.debug('failure',arguments);
-				unmask();
-				Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
-			}
-		});
+					unmask();
+					finish(blogEntry);
+				},
+				failure: function(){
+					console.debug('failure',arguments);
+					unmask();
+					Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
+				}
+			});
+		}
+		catch(e){
+			console.error('An error occurred saving blog', Globals.getError(e));
+			unmask();
+		}
 	},
 
 
