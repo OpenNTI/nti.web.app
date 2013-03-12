@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 			cls: 'header',
 			cn:[
 				{cls: 'title blog-label', html:'{title: ellispis(150)}'},
-				{cls: 'tags blog-label', html:'{tags:ellipsis(150)}'},
+				{cls: 'tags blog-label', html:'{tags:ellipsis(150)}'}
 			]
 		},
 		{ cls: 'footer', cn: [
