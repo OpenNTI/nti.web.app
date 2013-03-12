@@ -48,8 +48,14 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 		this.callParent(arguments);
 		this.mon(this.el,'click',this.onClick,this);
 		this.record.addObserverForField(this, 'LikeCount', this.likeCountUpdated, this);
+		this.record.addObserverForField(this, 'title', this.titleUpdated, this);
 	},
 
+	titleUpdated: function(f, v){
+		if(this.rendered){
+			this.el.down('.title').update(v);
+		}
+	},
 
 	likeCountUpdated: function(f, v){
 		if(this.rendered){

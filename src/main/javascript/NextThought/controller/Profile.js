@@ -139,11 +139,18 @@ Ext.define('NextThought.controller.Profile', {
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			me = this;
 
+		//TODO save old values so we can revert them on error?
+		//See also beginEdit cancelEdit
+
 		post.set({
 			'title':title,
 			'body':body,
 			'tags':tags||[]
 		});
+
+		//The title is on both the PersonalBlogEntryPost (headline)
+		//and the wrapping PersonalBlogEntry
+		record.set({'title': title})
 
 		function finish(entry){
 			var blogCmp = editorCmp.up('profile-blog');
