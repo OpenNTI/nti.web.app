@@ -153,7 +153,14 @@ Ext.define('NextThought.view.UserDataPanel',{
             }
             else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
                 this.mimeTypes = [];
-                this.store = this.buildStore('Bookmarks',storeId,'GroupingField');
+	            /**
+	             * FIXME: For bookmarks, there is a need to group thoughts and their comments(PersonalBlogEntry & PersonalBlogComment) into one group.
+	             * Initially we were sorting bookmarks by MimeType, but we end up with different sections the latter.
+	             * So for now, we added a new field 'FavoriteGroupingField' to different models, that basically has the type of group we want.
+	             * It's not ideal since it's not dynamic and for the most part looks like the mimetype or className.
+	             * The alternative, would be to do the grouping and sorting ourselves or figure out a better way to approach this.
+	             */
+                this.store = this.buildStore('Bookmarks',storeId,'FavoriteGroupingField');
                 NextThought.model.events.Bus.on({
                     scope: this,
                     'favorite-changed': function(rec){

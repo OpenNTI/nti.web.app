@@ -47,7 +47,8 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false},
+		{name: 'FavoriteGroupingField', defaultValue:'Note', persist: false}
 	],
 
 	/*
