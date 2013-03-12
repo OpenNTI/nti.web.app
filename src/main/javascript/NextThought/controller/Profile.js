@@ -89,10 +89,22 @@ Ext.define('NextThought.controller.Profile', {
 
 		commentPost.set({ body:valueObject.body });
 
+		if(editor.el){
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		function unmask(){
+			if(editor.el){
+				editor.el.unmask();
+			}
+		}
+
 		commentPost.save({
 			url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
 			scope: this,
 			success: function(rec){
+				unmask();
 				if(postCmp.store && !postCmp.isDestroyed){
 					if(!isEdit){
 						postCmp.store.insert(0,rec);
@@ -106,6 +118,7 @@ Ext.define('NextThought.controller.Profile', {
 			},
 			failure: function(){
 				editor.markError(editor.getEl(),'Could not save comment');
+				unmask();
 				console.debug('failure',arguments);
 			}
 		});
@@ -143,6 +156,16 @@ Ext.define('NextThought.controller.Profile', {
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
 		}
 
+		if(editorCmp.el){
+			editorCmp.el.mask('Saving...');
+		}
+
+		function unmask(){
+			if(editorCmp.el){
+				editorCmp.el.unmask();
+			}
+		}
+
 		post.save({
 			scope: this,
 			success: function(post,operation){
@@ -161,10 +184,12 @@ Ext.define('NextThought.controller.Profile', {
 					}
 				}
 
+				unmask();
 				finish(blogEntry);
 			},
 			failure: function(){
 				console.debug('failure',arguments);
+				unmask();
 				Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
 			}
 		});
