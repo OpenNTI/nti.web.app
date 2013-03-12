@@ -95,8 +95,7 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 					me.authorName.update('By '+user.getName());
 					me.authorAvatar.set({'src':user.get('avatarURL')});
 				}else{
-					Ext.apply(me.renderData, {name: user.getName()});
-					Ext.apply(me.renderData, {authorAvatarURL: user.get('avatarURL')});
+					Ext.apply(me.renderData, {name: user.getName(), authorAvatarURL: user.get('avatarURL')});
 				}
 			});
 		}
