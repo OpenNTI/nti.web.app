@@ -319,36 +319,34 @@
 		}
 	}
 
-	&.font {
-		border-radius: 3px;
+	&.prev,&.next {
 		.x-btn-icon {
-			background-position: 6px 9px;
-			background-image: url(../images/icons/font.png);
-		}
-	}
-
-	&.settings {
-		width: 48px;
-		border-radius: 3px;
-		.x-btn-icon {
-			width: 46px;
-			background-position: 10px 7px;
-			background-image: url(../images/icons/settings.png);
+			&::after {
+				content: '';
+				position: absolute;
+				top: 6px; left: 11px;
+				background: $icons no-repeat;
+			}
 		}
 	}
 
 	&.prev {
 		border-radius: 3px 0 0 3px;
 		.x-btn-icon {
-			background-image: url(../images/icons/prev.png);
+			&::after {
+				@include sprite($icons,'prev',$dimensions: true);
+			}
 		}
 	}
+
 	&.next {
 		border-radius: 0 3px 3px 0;
 		border-left-width: 0 !important;
 		.x-btn-icon {
 			left: 1px;
-			background-image: url(../images/icons/next.png);
+			&::after {
+				@include sprite($icons,'next',$dimensions: true);
+			}
 		}
 	}
 }
