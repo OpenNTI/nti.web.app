@@ -123,7 +123,7 @@
 
 				.submit{
 					background: $primary-blue;
-					border: 1px solid #39a1dd;
+					border: 1px solid $border-blue;
 					color: #ffffff;
 					font:{
 						weight: bold;
@@ -539,7 +539,7 @@
 
 						&.check {
 							background: $primary-blue;
-							border: 1px solid #39a1dd;
+							border: 1px solid $border-blue;
 							color: #ffffff;
 							font: {
 								style: italic;
