@@ -67,7 +67,7 @@
 	.x-panel-assessment {
 
 		&.question { //main frame of the question
-			background: #fbfbfb;
+			background: $panel-background;
 			border: 1px solid #e2e2e2;
 			border-radius: 3px;
 			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);

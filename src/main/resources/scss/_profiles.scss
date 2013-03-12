@@ -223,7 +223,7 @@
 			margin-top: 40px;
 			margin-bottom: -40px;
 			height: 40px;
-			background: #fbfbfb;
+			background: $panel-background;
 
 			.x-mask{
 				opacity: 0;
@@ -253,7 +253,7 @@
 		.blogged-event,
 		.joined-event {
 			margin-top: 20px;
-			background: #fbfbfb;
+			background: $panel-background;
 			border: 0 solid #f2f2f2;
 			border-bottom-width: 1px;
 			overflow: hidden;
@@ -318,7 +318,7 @@
 				position: relative;
 				margin: 0 3px;
 				border: 1px solid #eaeaea;
-				background: #fbfbfb;
+				background: $panel-background;
 				position: relative;
 				overflow: hidden;
 			}

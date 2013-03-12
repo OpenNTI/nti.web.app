@@ -34,7 +34,7 @@
 	.history {
 		&.chat {
 			@include chat-history-item;
-			background: #fbfbfb;
+			background: $panel-background;
 			border: 1px solid #eaeaea;
 			border-radius: 6px;
 			padding: 10px 20px 10px 30px;
