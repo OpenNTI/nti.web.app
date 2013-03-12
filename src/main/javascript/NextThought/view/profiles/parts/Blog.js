@@ -19,7 +19,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'post-view' },
 		{ cls: 'list-view', cn:[
-			{ cls: 'header', html: 'My next thought...' },
+			{ cls: 'header', html: 'New Entry' },
 			{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 		]}
 	]),
