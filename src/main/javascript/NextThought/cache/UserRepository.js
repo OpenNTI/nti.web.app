@@ -22,9 +22,16 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	updateUser: function(refreshedUser) {
-		var s = this.getStore(),
-			uid = refreshedUser.getId(),
-			u = s.getById(uid); //user from the store
+		var s = this.getStore(), uid, u;
+
+		if(refreshedUser.getId === undefined){
+			refreshedUser = ParseUtils.parseItems(refreshedUser)[0];
+		}
+
+		uid = refreshedUser.getId(),
+		u = s.getById(uid); //user from the store
+
+		console.log('Update user called with', refreshedUser);
 
 		//if the store had the user
 		// AND it was not equal to the refreshedUser (the user resolved from the server)
@@ -43,9 +50,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				$AppConfig.userObject = refreshedUser;
 			}
 
-			u.fireEvent('changed', refreshedUser);
-			s.remove(u);
-			u=null;
+			this.mergeUser(u, refreshedUser);
 		}
 
 		if(!u){
@@ -53,9 +58,28 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 	},
 
-	cacheUser: function(user){
-		//console.log('Caching resolved user ', user.getId(), user);
+
+	mergeUser: function(fromStore, newUser){
+		//Do an in place update so things holding references to us
+		//don't lose their listeners
+		console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
+		fromStore.set(newUser.raw);
+
+		//For things listening to changed events
+		fromStore.fireEvent('changed', fromStore);
+	},
+
+	cacheUser: function(user, maybeMerge){
+		var s = this.getStore(),
+			id = user.getId() || user.raw[user.idProperty],
+			fromStore = s.getById(id);
+		if(maybeMerge && fromStore){
+			this.mergeUser(fromStore, user);
+			return fromStore;
+		}
+		console.debug('Adding resolved user to store', user.getId(), user);
 		this.getStore().add(user);
+		return user;
 	},
 
 	resolveFromStore: function(key){
@@ -129,8 +153,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					success: function(u){
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						this.cacheUser(u);
-						result.push(u);
+						result.push(this.cacheUser(u, true));
 
 						//our list of results is as expected, finish
 						if (result.length === l) {
@@ -227,21 +250,16 @@ Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
-
-	getTheEveryoneEntity: function(){
-		var w = this.getStore().getById('Everyone');
-		if(!w){
-			//We should NEVER hit this... but just in case, make it synchronous so its obvoius.
-			w = this.makeRequest('Everyone',undefined);
-		}
-		return w;
-	},
-
 	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username);
+		console.log('User repository recieved a presence change for ', username, arguments);
 		if (u) {
+			console.debug('updating presence for found user', u);
 			u.set('Presence', presence);
 			u.fireEvent('changed', u);
+		}
+		else{
+			console.debug('no user found to update presence');
 		}
 	}
 },

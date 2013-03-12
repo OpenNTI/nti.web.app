@@ -20,8 +20,9 @@ Ext.define('NextThought.model.Community', {
 	],
 
 	constructor: function() {
-		this.callParent(arguments);
-		UserRepository.updateUser(this);
+		var r = this.callParent(arguments);
+		//UserRepository.updateUser(this);
+		return r;
 	},
 
 
