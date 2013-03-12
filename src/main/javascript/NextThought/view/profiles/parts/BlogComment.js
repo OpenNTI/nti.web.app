@@ -7,7 +7,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	cls: 'blog-comment',
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 
 	initComponent: function(){
-		this.mixins.likeAndFavorateActions.constructor.call(this);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent();
 		this.addEvents(['delete-post']);
 		this.enableBubble(['delete-post']);

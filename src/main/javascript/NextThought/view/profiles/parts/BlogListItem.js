@@ -3,7 +3,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	alias: 'widget.profile-blog-list-item',
 
 	mixins: {
-		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	requires:[
@@ -51,7 +51,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	initComponent: function(){
-		this.mixins.likeAndFavorateActions.constructor.call(this);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.addEvents(['delete-post','show-post']);
 		this.enableBubble(['delete-post','show-post']);

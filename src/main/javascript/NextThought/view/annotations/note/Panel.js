@@ -11,7 +11,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	ui: 'nt',
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.addEvents('chat', 'share', 'save-new-reply','editorActivated','editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.callParent(arguments);
-		this.mixins.likeAndFavorateActions.constructor.call(this);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.on('beforedestroy',this.onBeforeDestroyCheck,this);
 	},
 
