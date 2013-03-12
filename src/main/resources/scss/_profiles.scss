@@ -187,7 +187,7 @@
 		}
 
 		.note-replies:empty {
-			display: none !important;
+			display: none;
 		}
 
 		.separator {
@@ -196,7 +196,7 @@
 		}
 
 		.link {
-			color: $primary-blue !important;
+			color: $primary-blue;
 			&.over {
 				text-decoration: underline;
 				cursor: pointer;

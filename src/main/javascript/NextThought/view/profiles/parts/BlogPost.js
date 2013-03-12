@@ -3,7 +3,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	alias: 'widget.profile-blog-post',
 
 	mixins: {
-		likeAndFavorateActions: 'NextThought.mixins.LikeFavoriteActions'
+		flagActions: 'NextThought.mixins.FlagActions',
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	requires:[
@@ -40,8 +41,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			]},
 			{ cls: 'comment-box', cn: [
 				{ cls: 'response', cn:[
-					{ tag:'span', cls:'reply link', html: 'Reply' }//,
-					//{ tag:'span', cls:'report link', html: 'Report' }
+					{ tag:'span', cls:'reply link', html: 'Reply' },
+					{ tag:'span', cls:'report link', html: 'Report' }
 				]},
 				{ cls:'editor-box'}
 			]}
@@ -54,6 +55,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		bodyEl: '.body',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
+		flagEl: '.report.link',
 		editEl: '.meta .edit',
 		deleteEl: '.meta .delete',
 		publishStateEl: '.meta .state',
@@ -91,7 +93,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
-		this.mixins.likeAndFavorateActions.constructor.call(this);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
+		this.mixins.flagActions.constructor.call(this);
 		var r = this.record;
 		if(!r || !r.getData){
 			Ext.defer(this.destroy,1,this);
@@ -118,11 +121,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			box = this.responseEl;
 		if(!h){return;}
 
+		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.setPublishState();
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
+
+		this.updateContent();
 		this.bodyEl.selectable();
 
 		if( this.deleteEl ){
@@ -133,7 +138,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
-		//TODO: hook up flagging.
+
+		this.reflectFlagged(this.record);
+		this.listenForFlagChanges(this.record);
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
@@ -185,7 +192,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
-	updateContent: function(key, value){
+	updateContent: function(){
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
 	},
