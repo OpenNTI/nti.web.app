@@ -22,6 +22,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'navigation-bar', cn:[
+			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title'}]},
+			{cls:'buttons'}
+		]},
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [

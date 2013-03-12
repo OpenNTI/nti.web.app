@@ -1,4 +1,25 @@
 
+@mixin post-navigation {
+	.navigation-bar {
+		background: white;
+		border: 0 solid $border-grey;
+		border-width: 1px 0 1px;
+
+		.path {
+			padding: 0 4px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			color: $tertiary-grey;
+			font: italic 500 18px/50px $font;
+			text-transform: uppercase;
+			.title {
+				color: $primary-green;
+			}
+		}
+	}
+}
+
 #profile {
 
 	.blog {
@@ -80,6 +101,14 @@
 			border: 0 solid #f1f1f1;
 			border-width: 1px 0 0 0;
 			position: relative;
+
+			@include post-navigation;
+			.navigation-bar {
+				z-index: 10;
+				position: absolute;
+				top: -52px;
+				left: 0; right: 0;
+			}
 
 			.controls {
 				position: absolute;
