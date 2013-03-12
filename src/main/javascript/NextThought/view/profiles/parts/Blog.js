@@ -265,6 +265,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
+	nextPrevPost: function(cmp,rec,direction){
+		console.log('Nav?',arguments);
+	},
+
+
 	closePost: function(leaveLocation){
 		this.swapViews('list');
 		this.updateLayout();
@@ -304,7 +309,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			queryObject: query,
 			listeners: {
 				scope: this,
-				destroy: this.closePost
+				destroy: this.closePost,
+				'navigate-post': this.nextPrevPost
 			},
 			xhooks:{
 				destroy: function(){
@@ -318,6 +324,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			xtype = 'profile-blog-editor';
 		}
 
+		Ext.get('profile').scrollTo('top',0);
 		this.activePost = Ext.widget(xtype,cfg);
 
 		this.updateLayout();

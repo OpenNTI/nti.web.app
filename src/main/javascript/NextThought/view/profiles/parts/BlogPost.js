@@ -230,7 +230,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var direction = Boolean(e.getTarget('.next')),
 			disabled = Boolean(e.getTarget('.disabled'));
 
-		console.log(direction);
+		this.fireEvent('navigate-post',this, this.record, direction?'next':'prev');
 
 		return false;
 	},
