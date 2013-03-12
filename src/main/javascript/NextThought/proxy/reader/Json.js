@@ -51,6 +51,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 					if(record instanceof NextThought.model.Base) {
 						modelName = record.get('Class');
 						if(record.modelName.substr(-modelName.length) !== modelName){
+							console.trace('Is this still happening?');
 							result.records[i] = ParseUtils.findModel(modelName).create( record.raw, record.getId() );
 							delete record.raw;
 						}
