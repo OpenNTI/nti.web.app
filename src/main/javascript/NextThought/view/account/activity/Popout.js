@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	floating: true,
 
-	width: 255,
+	width: 400,
 	cls: 'activity-popout',
 	hideMode: 'visibility',
 
@@ -26,7 +26,12 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			type = 'activity-preview-'+className;
 		}
 
-		this.items = [ {
+		this.addItems(config, type, isContact);
+		return this.callParent(arguments);
+	},
+
+	addItems: function(config, type, isContact){
+		this.items = [{
 			xtype: 'person-card',
 			hideGroups: true,
 			user: config.user,
@@ -36,7 +41,6 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			record: config.record,
 			user: config.user
 		} ];
-		return this.callParent(arguments);
 	},
 
 
@@ -69,7 +73,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 
 
-	statics: {
+	inheritableStatics: {
 
 		popup: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
 			var id = record.getId(), open = false;

@@ -5,6 +5,7 @@ Ext.define('NextThought.view.account.activity.View',{
 	requires: [
 		'NextThought.view.account.activity.Popout',
 		'NextThought.view.account.contacts.management.Popout',
+		'NextThought.view.account.activity.BlogPopout',
 		'NextThought.model.converters.GroupByTime'
 	],
 
@@ -373,6 +374,9 @@ Ext.define('NextThought.view.account.activity.View',{
 
 			if (rec.get('Class') === 'User'){
 				popout = NextThought.view.account.contacts.management.Popout;
+			}
+			else if(rec.get('Class') === 'PersonalBlogEntry' || rec.get('Class') === 'PersonalBlogComment'){
+				popout =  NextThought.view.account.activity.BlogPopout;
 			}
 			popout.popup(rec,target,target,[-10,-12],0.5, me);
 

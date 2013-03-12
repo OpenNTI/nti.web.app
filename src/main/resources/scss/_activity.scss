@@ -98,7 +98,7 @@
 			background: #ffffff;
 			padding: 16px 10px;
 
-			.path,.location-label, .blog-label {
+			.path,.location-label {
 				color: $tertiary-grey;
 				font-family: $font;
 			}
@@ -112,7 +112,7 @@
 				overflow: hidden;
 			}
 
-			.location-label, .blog-label{
+			.location-label {
 				font-size: 14px;
 				font-weight: 500;
 				font-style: italic;
@@ -179,34 +179,98 @@
 				div {
 					margin-right: 20px;
 					&.share { margin-right: 55px; }
+					&.more{ float:right; }
 				}
 
 			}
+		}
+	}
 
-			.counts {
-				font: normal 400 12px/20px $font;
-				padding-left:10px;
-				padding-top: 15px;
-				span{
-					&::after{
-						color: $tertiary-grey;
-						font: normal 500 12px/20px $font;
+	.activity-blog-preview{
+		.header, .footer{
+			margin-top: 0px;
+			background: $panel-background;
+			border: 0 solid #f2f2f2;
+			border-bottom-width: 1px;
+			overflow: hidden;
+			position: relative;
+			padding: 16px 10px;
 
-						position: static;
-						content: '\00B7';
-						vertical-align: middle;
-						display: inline;
-						padding: 0 0.5em;
-						background: none;
-					}
-					&:last-of-type::after {
-						content: '';
-						display: none;
-					}
+			.avatar{
+				float: left;
+				width: 60px; height: 60px;
+				border-radius: 5px;
+				background:{
+					position: center;
+					repeat: no-repeat;
+					size: cover;
+				}
+			}
+
+			.meta {
+				margin: 0 0 0 70px;
+				color: $tertiary-grey;
+				.title{
+					color: $primary-grey;
+					font: normal 300 20px/30px $font;
+					line-height: 25px;
 				}
 
-				.link{
-					color: #3fb3f6 !important;
+				.body{
+					font-family: $font;
+					font-size: 14px;
+					font-weight: normal;
+					color: $secondary-grey;
+					margin-bottom: 10px;
+					word-wrap: break-word;
+					line-height: 25px;
+				}
+
+				.counts, .meta-tag {
+					font: normal 400 12px/20px $font;
+					span{
+						&::after{
+							color: $tertiary-grey;
+							font: normal 500 12px/20px $font;
+
+							position: static;
+							content: '\00B7';
+							vertical-align: middle;
+							display: inline;
+							padding: 0 0.5em;
+							background: none;
+						}
+						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
+					}
+
+					&.meta-tag{
+						font-size: 10px;
+						font-weight: 600;
+						text-transform: uppercase;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+
+					.link{
+						color:$primary-blue !important;
+					}
+				}
+			}
+
+			&.footer{
+				background-color: $quad-grey;
+				.avatar{
+					width: 48px; height: 48px;
+					margin-left:12px;
+				}
+				.meta{
+					.body{
+						margin-bottom: 0;
+					}
 				}
 			}
 		}
