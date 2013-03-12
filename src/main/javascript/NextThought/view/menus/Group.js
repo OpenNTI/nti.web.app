@@ -51,8 +51,6 @@ Ext.define('NextThought.view.menus.Group',{
 			items.push.apply(items,this.actions);
 		}
 
-		//items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
-
 		if(!this.hideCommunities && communities.length>0){
 			Ext.each(communities,function(c){
 				items.push({

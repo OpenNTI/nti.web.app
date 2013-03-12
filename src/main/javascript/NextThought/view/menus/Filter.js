@@ -54,7 +54,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
 		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true,
-			allowUncheck:false, isEveryone:true, record: UserRepository.getTheEveryoneEntity() });
+			allowUncheck: false, isEveryone:true });
 		items.push({ cls: 'group-filter', text: 'Me', isMe: true, record: $AppConfig.userObject, isActor: true });
 
 

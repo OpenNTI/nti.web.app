@@ -116,22 +116,11 @@ Ext.define('NextThought.view.menus.Share',{
 			communities = $AppConfig.userObject.getCommunities(),
 			customSelected = false,
 			onlyMeSelected,
-			everyone = UserRepository.getTheEveryoneEntity(),
 			groups=[], lists=[];
 
 		this.custom.setValue(sharedWith);
 
 		onlyMeSelected = sharedWith.length === 0;
-
-//		items.push({
-//			cls: 'share-with everyone',
-//			text: 'Everyone',
-//			allowUncheck:false,
-//			isEveryone:true,
-//			record: everyone,
-//			selected: Ext.Array.contains(sharedWith, everyone.get('Username'))
-//		});
-//		Ext.Array.remove(sharedWith, everyone.get('Username'));
 
 		items.push({
 			cls: 'share-with only-me onlyme-menu-item',
