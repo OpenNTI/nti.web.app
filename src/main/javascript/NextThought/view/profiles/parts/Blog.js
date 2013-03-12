@@ -56,16 +56,17 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			console.warn('No blog object ('+response.status+') :'+response.responseText);
 			//ensure that the destroy happens after the construction/component plumbing.
 			//If the request is cached in the browser, this may be a synchronous call.
-			Ext.defer(this.destroy,1,this);
+			Ext.defer(me.destroy,1,me);
 		}
 
 		var user = this.user,
 			req = {
-			url: user?user.getLink('Blog'):null,
-			scope: this,
-			success: this.loadContents,
-			failure: fail
-		};
+				url: user?user.getLink('Blog'):null,
+				scope: this,
+				success: this.loadContents,
+				failure: fail
+			},
+			me = this;
 
 
 		if(Ext.isEmpty(req.url)){
