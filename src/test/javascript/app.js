@@ -101,7 +101,6 @@ Ext.application({
 		'Application',
 		'Assessment',
 		'Chat',
-		'Classroom',
 		'FilterControl',
 		'Google',
 		'Groups',
