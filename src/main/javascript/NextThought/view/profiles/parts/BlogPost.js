@@ -24,7 +24,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'blog-post navigation-bar', cn:[
 			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title-part', html:'{title}'}]},
-			{cls:'buttons'}
+			{cls:'pager',cn:[{cls:'prev'},{cls:'next'}]}
 		]},
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
