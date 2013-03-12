@@ -22,7 +22,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'navigation-bar', cn:[
+		{ cls: 'blog-post navigation-bar', cn:[
 			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title-part', html:'{title}'}]},
 			{cls:'buttons'}
 		]},
@@ -134,6 +134,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.setPublishState();
 
 		this.mon(this.navigationBarEl,'click',this.destroy,this);
+		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
 
 		this.updateContent();
 		this.bodyEl.selectable();
@@ -180,6 +181,21 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
+	handleScrollHeaderLock: function(e,profileDom){
+		var profileDomParent = profileDom && profileDom.parentNode,
+			profileScroll = Ext.fly(profileDom).getScroll().top,
+			navBarParent = Ext.getDom(this.navigationBarEl).parentNode,
+			cutoff = 268;
+
+		if(navBarParent === profileDomParent && profileScroll < cutoff){
+			this.navigationBarEl.insertBefore(this.getEl().first());
+		}
+		else if(navBarParent !== profileDomParent && profileScroll >= cutoff){
+			this.navigationBarEl.appendTo(profileDomParent);
+		}
+	},
+
+
 	getRefItems: function(){
 		var ret = this.callParent(arguments)||[];
 		ret.push(this.editor);
@@ -209,6 +225,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	onDestroy: function(){
 		this.editor.destroy();
 		var h = this.record.get('headline');
+		this.navigationBarEl.insertBefore(this.getEl().first());//make sure this is inside our container before we destroy
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
 		h.removeObserverForField(this, 'tags', this.updateField, this);

@@ -1,24 +1,31 @@
 
 @mixin post-navigation {
-	.navigation-bar {
-		background: white;
-		border: 0 solid $border-grey;
-		border-width: 1px 0 1px;
+	background: white;
+	border: 0 solid $border-grey;
+	border-width: 1px 0 1px;
 
-		.path {
-			cursor: pointer;
-			padding: 0 4px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			color: $tertiary-grey;
-			font: italic 500 18px/50px $font;
-			text-transform: uppercase;
-			.title-part {
-				color: $primary-green;
-			}
+	.path {
+		cursor: pointer;
+		padding: 0 4px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: $tertiary-grey;
+		font: italic 500 18px/50px $font;
+		text-transform: uppercase;
+		.title-part {
+			color: $primary-green;
 		}
 	}
+}
+
+#view-ctr > .blog-post.navigation-bar {
+	@include post-navigation;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	width: 700px;
+	margin: 0 auto;
+	z-index: 100;
 }
 
 #profile {
@@ -103,8 +110,8 @@
 			border-width: 1px 0 0 0;
 			position: relative;
 
-			@include post-navigation;
 			.navigation-bar {
+				@include post-navigation;
 				z-index: 10;
 				position: absolute;
 				top: -52px;
