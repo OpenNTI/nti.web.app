@@ -69,7 +69,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
 		commentEditorBox: '.comment-box .editor-box',
-		navigationBarEl: '.navigation-bar'
+		navigationBarEl: '.navigation-bar',
+		nextPostEl: '.navigation-bar .next',
+		prevPostEl: '.navigation-bar .prev'
 	},
 
 
@@ -134,6 +136,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.setPublishState();
 
 		this.mon(this.navigationBarEl,'click',this.destroy,this);
+
+		this.mon(this.nextPostEl,'click',this.navigationClick,this);
+		this.mon(this.prevPostEl,'click',this.navigationClick,this);
+
 		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
 
 		this.updateContent();
@@ -193,6 +199,16 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		else if(navBarParent !== profileDomParent && profileScroll >= cutoff){
 			this.navigationBarEl.appendTo(profileDomParent);
 		}
+	},
+
+
+	navigationClick: function(e,dom){
+		e.stopEvent();
+		var direction = Boolean(e.getTarget('.next'));
+
+		console.log(direction);
+
+		return false;
 	},
 
 
