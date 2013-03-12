@@ -351,7 +351,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		var u = rec.user,
 			postId = rec.get('ID');
 
-		this.fireEvent('navigate-to-blog', u, postId)
+		this.fireEvent('navigate-to-blog', u, postId);
 	},
 
 

@@ -8,6 +8,6 @@ Ext.define('NextThought.view.account.activity.BlogPopout', {
 			xtype:type,
 			record: config.record,
 			user: config.user
-		}]
+		}];
 	}
 });
