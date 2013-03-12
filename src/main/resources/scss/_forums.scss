@@ -21,6 +21,7 @@
 
 #view-ctr > .blog-post.navigation-bar {
 	@include post-navigation;
+	border-top-color: white;
 	position: absolute;
 	top: 0; left: 0; right: 0;
 	width: 700px;
