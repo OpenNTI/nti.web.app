@@ -17,7 +17,7 @@ Ext.define('NextThought.mixins.FlagActions',{
 	},
 
 
-	tearDownLikeAndFavorite: function(){
+	tearDownFlagging: function(){
 		if( this.flagEl ){
 			this.mon(this.flagEl,'click', this.flagEl.clickHandler, this);
 			this.flagEl.remove();
