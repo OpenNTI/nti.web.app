@@ -115,6 +115,7 @@
 				position: absolute;
 				right: 0;
 				top: 0;
+				z-index: 10;
 				@include like-and-favorite;
 			}
 			.title {
