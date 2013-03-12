@@ -79,6 +79,16 @@
 	}
 }
 
+
+.animateProfileTabsLeft {
+	overflow: hidden;
+	& > .nti-body { @include animate($name: profileTabsLeft, $duration: 0.7s, $delay: 0s); }}
+
+.animateProfileTabsBack {
+	overflow: hidden;
+	& > .nti-body { @include animate($name: unProfileTabsLeft, $duration: 0.9s, $delay: 0s); }}
+
+
 #view-ctr > .blog-post.navigation-bar {
 	@include post-navigation;
 	border-top-color: white;
@@ -177,6 +187,20 @@
 				position: absolute;
 				top: -52px;
 				left: 0; right: 0;
+
+				&.animateIn{
+					background: none;
+					.path {
+						@include animate($name: postHeaderIn, $duration: 0.9s, $delay: 0s);
+					}
+				}
+
+				&.animateOut {
+					background: none;
+					.path {
+						@include animate($name: postHeaderOut, $duration: 0.7s, $delay: 0s);
+					}
+				}
 			}
 
 			.controls {

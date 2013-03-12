@@ -17,11 +17,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	cls: 'blog',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'post-view' },
 		{ cls: 'list-view', cn:[
 			{ cls: 'header', html: 'New Entry' },
 			{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
-		]}
+		]},
+		{ cls: 'post-view' }
 	]),
 
 

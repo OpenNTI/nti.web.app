@@ -126,8 +126,18 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.callParent(arguments);
 		var h = this.record.get('headline'),
 			commentId,
-			box = this.responseEl;
+			box = this.responseEl,
+			tabBar = this.ownerCt.tab.ownerCt;
 		if(!h){return;}
+
+//Animation code
+		this.tabBar = tabBar;
+		tabBar.addCls('animateProfileTabsLeft');
+		this.navigationBarEl.addCls('animateIn');
+		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
+		this.on('destroy',this.closePost,this);
+//Animation code end
+
 
 		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
 		h.addObserverForField(this, 'title', this.updateField, this);
@@ -135,7 +145,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.setPublishState();
 
-		this.mon(this.navigationBarEl,'click',this.destroy,this);
+		this.mon(this.navigationBarEl,'click',this.closePost,this);
 
 		this.mon(this.nextPostEl,'click',this.navigationClick,this);
 		this.mon(this.prevPostEl,'click',this.navigationClick,this);
@@ -186,6 +196,29 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				this.scrollToComment = commentId;
 			}
 		}
+	},
+
+
+	closePost: function(){
+		if(this.closedPost){
+			return;
+		}
+		//All of this belongs somewhere else... its animation code (css implements the keyframes)
+		this.closedPost = true;
+		var tabBar = this.tabBar,
+			bar = this.navigationBarEl;
+
+
+		tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
+		tabBar.addCls('animateProfileTabsBack');
+
+		bar.removeCls('animateIn animateOut');
+		bar.addCls('animateOut');
+
+		this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
+
+		Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
+		Ext.defer(this.destroy,1001,this);
 	},
 
 
