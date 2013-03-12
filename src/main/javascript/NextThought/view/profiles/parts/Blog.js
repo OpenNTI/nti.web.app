@@ -267,7 +267,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	nextPrevPost: function(cmp,rec,direction){
 		var s = this.store,
-			dx = (direction==='next' ? 1 : -1),
+			dx = (direction==='next' ? -1 : 1),
 			r = s && s.find('ID', rec.get('ID'), 0, false, true, true);
 
 		r = s && s.getAt(r+dx);

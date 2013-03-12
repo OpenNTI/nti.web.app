@@ -199,13 +199,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		if(!s){ return; }
 
-		//We may want to reverse what prev/next mean? Next = newer?
 		if(idx > 0) {
-			this.prevPostEl.removeCls('disabled');
+			this.nextPostEl.removeCls('disabled');
 		}
 
 		if(idx < max){
-			this.nextPostEl.removeCls('disabled');
+			this.prevPostEl.removeCls('disabled');
 		}
 	},
 
