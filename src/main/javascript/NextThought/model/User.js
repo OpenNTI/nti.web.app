@@ -27,17 +27,10 @@ Ext.define(	'NextThought.model.User', {
 
 	summaryObject: true,
 
-	constructor: function() {
-		var r = this.callParent(arguments);
-		//UserRepository.updateUser(this);
-		return r;
-	},
-
-
 	getCommunities: function(){
 		var r = [], u;
 
-		Ext.each($AppConfig.userObject.get('Communities'),function(c){
+		Ext.each(this.get('Communities'),function(c){
 			var field = 'Username';
 
 			if(/^everyone$/i.test(c)){ return; }

@@ -285,7 +285,7 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
-    attemptLoginCallback: function(username,successCallback, failureCallback){
+    attemptLoginCallback: function(username, successCallback, failureCallback){
         var me = this;
         Socket.setup();
 

@@ -18,33 +18,6 @@ Ext.define('NextThought.model.converters.Users', {
 						}
 						else  {
 							u.push(p);
-
-							//On top of all the commments below, this is a terrible place to do this.
-							//The intent for this logic is for it to happen when loading from the server
-							//however this will be called anytime 'set' gets called on a field of this type.
-							if(record.resolveUsers){
-								//So when resolving a user we resolve any referenced users
-								//upfront.  That seems like a lot of upfront work we really don't
-								//need to do.  No wonder failing to pre cache users from friendslists
-								//leads to a gajillion resolve user requests on load.  Additionally
-								//this resolves the user even if it comes as an object from the server
-								//in that case should we just call updateUser to update the cache.  Seems
-								//like we are throwing away a bunch of stuff here.
-								//
-								//TODO I think we should try and make this go away, defering user resolution until
-								//we need to display the user. CMU
-
-								//asynchronously resolve this user so its cached and ready
-								console.log('Resolving user '+p+' when parsing', record, o);
-								UserRepository.getUser(o);
-							}
-							else if(o.isModel || Ext.isObject(o)){
-								//If we were given a model from the server go ahead and cache it
-								//so we don't have to resolve it again.
-								console.log('Updating user '+p+' when parsing', record, o);
-								UserRepository.updateUser(o);
-							}
-
 						}
 					});
 				}

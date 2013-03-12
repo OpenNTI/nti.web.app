@@ -21,17 +21,17 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 
-	updateUser: function(refreshedUser) {
+	precacheUser: function(refreshedUser) {
 		var s = this.getStore(), uid, u;
 
 		if(refreshedUser.getId === undefined){
 			refreshedUser = ParseUtils.parseItems(refreshedUser)[0];
 		}
 
-		uid = refreshedUser.getId(),
+		uid = refreshedUser.getId();
 		u = s.getById(uid); //user from the store
 
-		console.log('Update user called with', refreshedUser);
+		//console.log('Update user called with', refreshedUser);
 
 		//if the store had the user
 		// AND it was not equal to the refreshedUser (the user resolved from the server)
@@ -44,13 +44,18 @@ Ext.define('NextThought.cache.UserRepository', {
 					console.warn('AppConfig user instance is different');
 					//if the user in the store is not the same object as our global reference, then we need to make sure
 					// that we fire changed event just incase someone is listening to it.
-					$AppConfig.userObject.fireEvent('changed', refreshedUser);
-				}
+					$AppConfig.userObject.fireEvent('changed', u);
 
-				$AppConfig.userObject = refreshedUser;
+					//Correct the problem
+					$AppConfig.userObject = u;
+				}
 			}
 
-			this.mergeUser(u, refreshedUser);
+			//If the incoming object is a summary object (not from a resolve user call)
+			//we don't want to merge into a non summary object.  We end up losing data
+			if(!refreshedUser.summaryObject || u.summaryObject){
+				this.mergeUser(u, refreshedUser);
+			}
 		}
 
 		if(!u){
@@ -62,7 +67,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	mergeUser: function(fromStore, newUser){
 		//Do an in place update so things holding references to us
 		//don't lose their listeners
-		console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
+		//console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
 		fromStore.set(newUser.raw);
 
 		//For things listening to changed events
@@ -77,7 +82,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			this.mergeUser(fromStore, user);
 			return fromStore;
 		}
-		console.debug('Adding resolved user to store', user.getId(), user);
+		//console.debug('Adding resolved user to store', user.getId(), user);
 		this.getStore().add(user);
 		return user;
 	},

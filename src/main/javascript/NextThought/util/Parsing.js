@@ -3,7 +3,7 @@
 Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
-	requires: ['Ext.data.reader.Json'],
+	requires: ['NextThought.proxy.reader.Json'],
 
 	/**
 	 * @param items
@@ -77,7 +77,7 @@ Ext.define('NextThought.util.Parsing',{
 		}
 
 		if (!this.readers[o.$className]) {
-			this.readers[o.$className] = Ext.data.reader.Json.create({
+			this.readers[o.$className] = NextThought.proxy.reader.Base.create({
 				model: o.$className, proxy: 'nti'
 			});
 		}

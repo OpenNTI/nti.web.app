@@ -1,5 +1,5 @@
 Ext.define('NextThought.proxy.reader.Json', {
-	extend: 'Ext.data.reader.Json',
+	extend: 'NextThought.proxy.reader.Base',
 	alias : 'reader.nti',
 	initialConfig: {root: 'Items'},
 
@@ -48,10 +48,12 @@ Ext.define('NextThought.proxy.reader.Json', {
 			for(i; i>=0; i--){
 				record = result.records[i];
 				try{
+					//Stores like to have one type of model in them, but we need non-homogenous stores.
+					//e.g. PageItem stores have notes, highlights, redaction, etc.  So make sure we coerce the proper model
+					//here.  TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
 					if(record instanceof NextThought.model.Base) {
 						modelName = record.get('Class');
 						if(record.modelName.substr(-modelName.length) !== modelName){
-							console.trace('Is this still happening?');
 							result.records[i] = ParseUtils.findModel(modelName).create( record.raw, record.getId() );
 							delete record.raw;
 						}
