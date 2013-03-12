@@ -332,11 +332,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 	},
 
+
 	//Search hit highlighting
 	showSearchHit: function(hit) {
 		this.clearSearchHit();
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
 	},
+
 
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
@@ -359,12 +361,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		return result;
 	},
 
+
 	//	@returns an object with top and left properties used to adjust the
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
 	getRangePositionAdjustments: function(key){
 		return {top: -1*this.el.getTop(), left: -1*this.el.getLeft()};
 	},
+
 
 	clearSearchHit: function() {
 		if (!this.searchAnnotations) {
@@ -374,6 +378,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.searchAnnotations.cleanup();
 		delete this.searchAnnotations;
 	},
+
 
 	getInsertionPoint: function(){
 		return this.el;
