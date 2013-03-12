@@ -739,12 +739,16 @@ Ext.define('NextThought.editor.Actions', {
 
 	getBody: function (parts) {
 		var r = [],
-			regex = /<img.*?>/i, i, part, me = this;
+			regex = /<img.*?>/i, i, p, part, me = this;
 
 		function whiteboardFromPart(wp){
-			var wbid = wp.match(/id="(.*?)"/)[1];
-			return me.openWhiteboards[wbid].getEditor().getValue();
+			var m = wp.match(/id="(.*?)"/),
+			    id = m && m[1],
+				wb = id && me.openWhiteboards[id],
+				ed = wb && wb.getEditor();
+			return ed && ed.getValue();
 		}
+
 
 		function stripTrailingBreak(text){
 			return text.replace(/<br\/?>$/, '');
@@ -756,9 +760,13 @@ Ext.define('NextThought.editor.Actions', {
 			part = parts[i];
 			//if its a whiteboard do our thing
 			if(regex.test(part)){
-				r.push(whiteboardFromPart(part));
+				p = whiteboardFromPart(part);
+				if(p){
+					r.push(p);
+				}
 			}
-			else{
+
+			if(!p){
 				part = stripTrailingBreak(part);
 				//if this is the first part or the thing before us
 				//is not an array push this part as an array,
