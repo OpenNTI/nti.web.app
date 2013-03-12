@@ -19,6 +19,7 @@ Ext.define('NextThought.model.converters.Users', {
 						else  {
 							u.push(p);
 
+							/*
 							//On top of all the commments below, this is a terrible place to do this.
 							//The intent for this logic is for it to happen when loading from the server
 							//however this will be called anytime 'set' gets called on a field of this type.
@@ -44,6 +45,7 @@ Ext.define('NextThought.model.converters.Users', {
 								console.log('Updating user '+p+' when parsing', record, o);
 								UserRepository.updateUser(o);
 							}
+							*/
 						}
 					});
 				}
