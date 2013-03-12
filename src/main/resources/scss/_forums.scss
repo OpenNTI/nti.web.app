@@ -38,7 +38,7 @@
 			}
 
 			&.disabled {
-				&,&:hover{ opacity: 0.1; }
+				&,&:hover{ opacity: 0.1; cursor: default; }
 			}
 
 			&.prev,&.next {
@@ -291,6 +291,7 @@
 
 			.comment-container{
 				position: relative;
+
 				&::after{
 					content: '';
 					position: absolute;
@@ -301,6 +302,11 @@
 					box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
 					border-radius: 90px;
 				}
+
+				&:empty::after{
+					display: none;
+				}
+
 			}
 
 			.x-component-blog-comment{

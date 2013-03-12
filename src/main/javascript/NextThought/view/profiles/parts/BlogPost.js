@@ -140,6 +140,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.mon(this.nextPostEl,'click',this.navigationClick,this);
 		this.mon(this.prevPostEl,'click',this.navigationClick,this);
 
+		this.updateRecord(this.record);
+
 		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
 
 		this.updateContent();
@@ -187,6 +189,27 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
+	updateRecord: function(record){
+		var s = record && record.store,
+			max = s && (s.getCount()-1),
+			idx = record && record.index;
+
+		this.nextPostEl.addCls('disabled');
+		this.prevPostEl.addCls('disabled');
+
+		if(!s){ return; }
+
+		//We may want to reverse what prev/next mean? Next = newer?
+		if(idx > 0) {
+			this.prevPostEl.removeCls('disabled');
+		}
+
+		if(idx < max){
+			this.nextPostEl.removeCls('disabled');
+		}
+	},
+
+
 	handleScrollHeaderLock: function(e,profileDom){
 		var profileDomParent = profileDom && profileDom.parentNode,
 			profileScroll = Ext.fly(profileDom).getScroll().top,
@@ -204,7 +227,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	navigationClick: function(e,dom){
 		e.stopEvent();
-		var direction = Boolean(e.getTarget('.next'));
+		var direction = Boolean(e.getTarget('.next')),
+			disabled = Boolean(e.getTarget('.disabled'));
 
 		console.log(direction);
 

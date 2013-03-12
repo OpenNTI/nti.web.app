@@ -177,7 +177,17 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	loadedContents: function(store, records, success){
-		var m = Ext.Array.map(records,function(i){ return {record: i}; });
+		var a = this.activePost,
+			r = a && a.record,
+			m = Ext.Array.map(records,function(i){
+
+				if(r && i.get('ID') === r.get('ID')){
+					console.debug('Loaded active record into store...');
+					a.updateRecord(r);
+				}
+
+				return {record: i};
+			});
 		this.add(m);
 	},
 
@@ -268,9 +278,22 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	showPost: function(record,action,query){
+		var s = this.store, r;
 		this.swapViews('post');
 
 		this.cleanPreviousPost();
+
+		if(!record.store){
+			console.debug('Record did not belong to a store, finding...');
+			r = s && s.findRecord('ID', record.get('ID'), 0, false, true, true);
+			if(r){
+				console.debug('Found',r,record, r===record);
+				record = r;
+			}
+			else {
+				console.debug('Not found in store yet.');
+			}
+		}
 
 		var xtype = 'profile-blog-post',
 			cfg = {
@@ -286,7 +309,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			xhooks:{
 				destroy: function(){
 					delete this.ownerCt;
-					console.log('destroy?');
 					return this.callParent(arguments);
 				}
 			}
