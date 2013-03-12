@@ -230,7 +230,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var direction = Boolean(e.getTarget('.next')),
 			disabled = Boolean(e.getTarget('.disabled'));
 
-		this.fireEvent('navigate-post',this, this.record, direction?'next':'prev');
+		if(!disabled){
+			this.fireEvent('navigate-post',this, this.record, direction?'next':'prev');
+		}
 
 		return false;
 	},
@@ -263,6 +265,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	onDestroy: function(){
+		delete this.editor.ownerCt;
 		this.editor.destroy();
 		var h = this.record.get('headline');
 		this.navigationBarEl.insertBefore(this.getEl().first());//make sure this is inside our container before we destroy
