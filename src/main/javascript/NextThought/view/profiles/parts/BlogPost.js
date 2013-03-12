@@ -47,7 +47,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 				{ cls:'editor-box'}
 			]}
 		]},
-		{ id: '{id}-body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
+		{ id: '{id}-body', cls: 'comment-container',
+			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 	]),
 
 
