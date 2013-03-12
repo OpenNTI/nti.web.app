@@ -6,6 +6,7 @@
 		border-width: 1px 0 1px;
 
 		.path {
+			cursor: pointer;
 			padding: 0 4px;
 			white-space: nowrap;
 			overflow: hidden;
@@ -13,7 +14,7 @@
 			color: $tertiary-grey;
 			font: italic 500 18px/50px $font;
 			text-transform: uppercase;
-			.title {
+			.title-part {
 				color: $primary-green;
 			}
 		}

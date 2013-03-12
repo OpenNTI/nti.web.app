@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'navigation-bar', cn:[
-			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title'}]},
+			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title-part', html:'{title}'}]},
 			{cls:'buttons'}
 		]},
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
@@ -68,7 +68,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		responseEl: '.comment-box .response',
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
-		commentEditorBox: '.comment-box .editor-box'
+		commentEditorBox: '.comment-box .editor-box',
+		navigationBarEl: '.navigation-bar'
 	},
 
 
@@ -131,6 +132,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.setPublishState();
+
+		this.mon(this.navigationBarEl,'click',this.destroy,this);
 
 		this.updateContent();
 		this.bodyEl.selectable();
