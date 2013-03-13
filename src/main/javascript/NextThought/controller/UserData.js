@@ -197,6 +197,7 @@ Ext.define('NextThought.controller.UserData', {
 		if(!reCalled){
 			//update the stream
 			this.getController('Stream').incomingChange(change);
+			this.getController('Profile').incomingChange(change);
 		}
 
 		//callback with ourself, only if we haven't already and there is a containerId to resolve

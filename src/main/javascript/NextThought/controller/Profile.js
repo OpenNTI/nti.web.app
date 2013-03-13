@@ -132,6 +132,25 @@ Ext.define('NextThought.controller.Profile', {
 		}
 	},
 
+	incomingChange: function(change){
+		if(!change.isModel){
+			change = ParseUtils.parseItems([change])[0];
+		}
+
+		var item = change.get('Item'), blogCmp;
+
+		if(item && /personalblogcomment$/.test(item.get('MimeType'))){
+			blogCmp = Ext.ComponentQuery.query('profile-blog-post');
+			if(blogCmp.length > 0){
+				blogCmp.first().addIncomingComment(item);
+			}
+			else if(Ext.ComponentQuery.query('profile-blog').length > 0){
+				blogCmp = Ext.ComponentQuery.query('profile-blog').first();
+				blogCmp.updatePostCountOnNewComment(item);
+			}
+		}
+	},
+
 
 	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
 

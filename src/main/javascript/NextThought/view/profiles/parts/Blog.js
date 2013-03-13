@@ -221,6 +221,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
+	updatePostCountOnNewComment: function(item){
+		var postRecord = this.store.getById(item.get('ContainerId'));
+		if(postRecord && isMe(postRecord.get('Creator'))){
+			postRecord.set('PostCount', postRecord.get('PostCount')+1);
+		}
+	},
+
+
 	updateLocation: function(postId,subsection){
 		var u = this.user,
 			hash, args=[this.title, postId, subsection];

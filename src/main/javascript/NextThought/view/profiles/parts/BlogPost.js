@@ -397,6 +397,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
+	addIncomingComment: function(item){
+		if(this.isVisible() && item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))){
+			this.addComments(this.store, [item]);
+		}
+	},
+
+
 	onReady: function(){
 		console.debug('ready',arguments);
 		var el;
