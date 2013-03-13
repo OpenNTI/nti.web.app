@@ -131,7 +131,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(!h){return;}
 
 //Animation code
-		tabBar && tabBar.addCls('animateProfileTabsLeft');
+		tabBar && Ext.fly(tabBar).addCls('animateProfileTabsLeft');
 		this.navigationBarEl.addCls('animateIn');
 		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
 //Animation code end
@@ -203,7 +203,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
 		this.closedPost = true;
-		var tabBar = Ext.query('.nti-profile-tabbar-plain-docked-top').first(),
+		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first()),
 			bar = this.navigationBarEl;
 
 
