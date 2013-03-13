@@ -31,7 +31,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
-			this.store.load({page:1, callback: me.loadCallback, scope: me});
+			if(this.store.getCount()){
+				this.storeLoaded(this.store, this.store.data.items, true);
+			}
+			else{
+				this.store.load({page:1, callback: me.loadCallback, scope: me});
+			}
 		}
 
 		if(!me.rendered){
@@ -55,7 +60,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			Ext.Error.raise('No user object!');
 		}
 
-		s.currentPage = 1;
 		s.proxy.url = this.user.getLink('Activity');
 		if(!s.proxy.url){
 			//don't attempt to do anything if no url
@@ -202,7 +206,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		this.add(add);
 
 		console.log('Showing', this.items.length, ' objects ');
-		this.maybeShowMoreItems();
+		Ext.defer(this.maybeShowMoreItems, 100, this);
 	},
 
 
@@ -241,6 +245,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		if(viewportHeight >= scrollHeight && (me.store.currentPage < max)){
 			console.log('loading the next page. the viewport height: ', viewportHeight, ' and scroll height is: ', scrollHeight);
 			me.prefetchNext();
+
+			//FIXME why are we doing this here
 			setTimeout(function(){ me.maybeShowMoreItems(); }, 2000);
 		}
 	},

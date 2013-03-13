@@ -1,6 +1,14 @@
 Ext.define('NextThought.store.ProfileItem', {
 	extend: 'NextThought.store.PageItem',
 
+	sorters: [{
+		property: 'Last Modified',
+		direction: 'DESC'
+	}],
+
+	groupField: null,
+	groupDir: null,
+
 	wantsItem: function(rec){
 		function checkForItem(storeItem, index, count){
 			if(storeItem.getId() === refId){
