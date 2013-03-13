@@ -127,12 +127,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var h = this.record.get('headline'),
 			commentId,
 			box = this.responseEl,
-			tabBar = this.ownerCt.tab.ownerCt;
+			tabBar = Ext.query('.nti-profile-tabbar-plain-docked-top').first();
 		if(!h){return;}
 
 //Animation code
-		this.tabBar = tabBar;
-		tabBar.addCls('animateProfileTabsLeft');
+		tabBar && tabBar.addCls('animateProfileTabsLeft');
 		this.navigationBarEl.addCls('animateIn');
 		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
 //Animation code end
@@ -204,12 +203,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
 		this.closedPost = true;
-		var tabBar = this.tabBar,
+		var tabBar = Ext.query('.nti-profile-tabbar-plain-docked-top').first(),
 			bar = this.navigationBarEl;
 
 
-		tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
-		tabBar.addCls('animateProfileTabsBack');
+		if( tabBar ){
+			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
+			tabBar.addCls('animateProfileTabsBack');
+			Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
+		}
 
 		bar.removeCls('animateIn animateOut');
 		bar.addCls('animateOut');
@@ -218,7 +220,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
 		}
 
-		Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
 		Ext.defer(this.destroy,1001,this);
 	},
 
