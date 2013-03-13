@@ -757,6 +757,7 @@ Ext.define('NextThought.editor.Actions', {
 		parts = parts || [];
 
 		for(i = 0; i<parts.length; i++){
+			p = null;//reset after each iteration.
 			part = parts[i];
 			//if its a whiteboard do our thing
 			if(regex.test(part)){
