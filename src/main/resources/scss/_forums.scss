@@ -285,6 +285,7 @@
 			.body {
 				@include text-content;
 				margin: 20px 0;
+				color: $primary-grey;
 				font: normal 400 14px/28px $font;
 
 				img.whiteboard-thumbnail {
