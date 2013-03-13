@@ -103,7 +103,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 		//this is intentionally added after we "restore" the tab
 		this.mon(this.tabs,'tabchange', this.trackTabs, this);
-		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
@@ -171,7 +171,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
-		this.mon(this, 'scroll', this.onScroll, this);
+		this.on('scroll', this.onScroll, this);
 
 		this.tabs = this.down('profile-tabs');
 
