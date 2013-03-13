@@ -402,8 +402,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var el;
 		if(this.scrollToComment){
 			el = this.el.down('[data-commentid="'+this.scrollToComment+'"]');
-			if(el){
-				Ext.get('profile').scrollChildIntoView(el);
+			if( el ) {
+				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'),false,true]);
 			}
 			console.log(this.scrollToComment, el);
 		}
