@@ -108,11 +108,20 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	swapViews: function(viewToShow){
+		if(this.destroying || this.isDestroyed){
+			return;
+		}
+
 		var fnm = {'true':'show','false':'hide'},
 			v = viewToShow !== 'post';
 
-		if(this.listViewEl){ this.listViewEl[fnm[v]](); }
-		if(this.postViewEl){ this.postViewEl[fnm[!v]](); }
+		try {
+			this.listViewEl[fnm[v]]();
+			this.postViewEl[fnm[!v]]();
+		}
+		catch(e){
+			console.error('Major problems!! Internal element pointers are missing!\n',Globals.getError(e));
+		}
 	},
 
 

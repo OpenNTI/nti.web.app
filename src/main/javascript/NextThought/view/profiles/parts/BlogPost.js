@@ -204,7 +204,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
 		var bar = this.navigationBarEl;
-		bar && bar.removeCls('animateIn animateOut').addCls('animateOut');
+		if( bar ) {
+			bar.removeCls('animateIn animateOut').addCls('animateOut');
+		}
 
 		Ext.get('profile').scrollTo('top',0,true);
 
