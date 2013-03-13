@@ -99,12 +99,13 @@ div.nt-token-wrapper{
 		font: normal 400 10px/17px $font;
 		display: inline-block;
 		white-space: normal;
-		padding: 0 0 0 4px;
+		padding: 0 10px 0 10px;
 		margin: 3px 3px 3px 0;
-		border-radius: 2px;
-		border: 1px solid $border-blue;
-		background: $toast-border-top;
-		color: #fff;
+		border-radius: 90px;
+		text-transform: uppercase;
+		border: 1px solid #ececec;
+		background: #ececec;
+		color: $secondary-grey;
 
 		.value,.x{
 			position: relative;
@@ -112,29 +113,32 @@ div.nt-token-wrapper{
 			vertical-align: middle;
 		}
 		.value{
-			opacity: 0.7;
 		}
 
+		&:hover {
+			color: #fff;
+			border-color: $border-blue;
+			background: $primary-blue;
+
+			padding: 0 7px 0 10px;
+			.x {
+				display: inline-block;
+			}
+		}
 		.x{
 			position: relative;
-			display: inline-block;
 			width: 15px;
 			height: 18px;
+			display: none;
 
 			&::after{
 				content: '';
 				display: block;
 				position: absolute;
 				background: $icons no-repeat;
-				@include sprite($icons,'light-x',$dimensions: true);
-				top: 6px; left: 4px;
+				@include sprite($icons,'light-x-hover',$dimensions: true);
+				top: 6px; left: 6px;
 				cursor: pointer;
-			}
-			&:hover{
-				.value{opacity: 1;}
-				&::after {
-					@include sprite($icons,'light-x-hover');
-				}
 			}
 		}
 	}
@@ -145,7 +149,7 @@ div.nt-token-wrapper{
 		display: inline-block;
 
 		input{
-			font: normal 400 10px/20px $font;
+			font: normal 700 10px/20px $font;
 			position: absolute;
 			background: #fff;
 			top: 0; left: 0;
@@ -159,7 +163,7 @@ div.nt-token-wrapper{
 				top: 7px;
 			}
 
-			text-transform: lowercase;
+			text-transform: uppercase;
 
 			&.empty{
 				text-transform: none;
@@ -173,7 +177,7 @@ div.nt-token-wrapper{
 
 		span.token-input-sizer{
 			display: inline-block;
-			font: normal 400 10px/30px $font;
+			font: normal 700 10px/30px $font;
 			visibility: hidden;
 			background: #fff;
 			color: #fff;
