@@ -148,10 +148,10 @@ Ext.define('NextThought.view.UserDataPanel',{
         var storeId = this.self.storeIds[this.mimeType[0]];
 		this.alwaysShowHeading = true;
         if (!this.store){
-            if(Ext.Array.contains(this.mimeTypes, 'note')){
+            if(Ext.Array.contains(this.mimeType, 'note')){
                 this.store = this.buildStore('MeOnly',storeId,'GroupingField');
             }
-            else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
+            else if (Ext.Array.contains(this.mimeType, 'favorite')){
                 this.mimeTypes = [];
 	            /**
 	             * FIXME: For bookmarks, there is a need to group thoughts and their comments(PersonalBlogEntry & PersonalBlogComment) into one group.
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.UserDataPanel',{
                     }
                 });
             }
-            else if (Ext.Array.contains(this.mimeTypes, 'transcriptsummary')){
+            else if (Ext.Array.contains(this.mimeType, 'transcriptsummary')){
                 this.store = this.buildStore(null,storeId,'MimeType');
 				this.alwaysShowHeading = false;
                 //TODO - what about adding/deleting?
