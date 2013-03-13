@@ -31,7 +31,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
-			this.store.load({callback: me.loadCallback, scope: me});
+			this.store.load({page:1, callback: me.loadCallback, scope: me});
 		}
 
 		if(!me.rendered){
@@ -55,6 +55,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			Ext.Error.raise('No user object!');
 		}
 
+		s.currentPage = 1;
 		s.proxy.url = this.user.getLink('Activity');
 		if(!s.proxy.url){
 			//don't attempt to do anything if no url
