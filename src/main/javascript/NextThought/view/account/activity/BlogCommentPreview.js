@@ -15,8 +15,8 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 				]},
 				{cls:'body', html:'{body}'},
 				{cls:'counts', cn:[
-					{tag:'span', cls: 'link commentCount', html:'{commentCount}', 'data-label':' comments'},
-					{tag:'span', cls: 'link likeCount', html:'{likeCount}', 'data-label': ' likes'}
+					{tag:'span', cls: 'link commentCount', html:'{commentCount} Comment{[values.commentCount===1 ? "" : "s"]}'},
+					{tag:'span', cls: 'link likeCount', html:'{likeCount} Like{[values.likeCount===1 ? "" : "s"]}'}
 				]}
 			]}
 		]},
@@ -78,16 +78,16 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 				me.title.update(title);
 				me.body.update(body);
 				me.authorTime.update(timeDiff);
-				me.commentCount.update(r.get('PostCount')+me.commentCount.getAttribute('data-label'));
-				me.likeCount.update(r.get('LikeCount')+me.likeCount.getAttribute('data-label'));
+				me.commentCount.update(r.get('PostCount') + ' Comment' + (r.get('PostCount')=== 1 ? "":"s")) ;
+				me.likeCount.update(r.get('LikeCount')+ ' Like'+ (r.get('LikeCount') === 1 ? "":"s"));
 			}
 			else{
 				Ext.apply(me.renderData, {
 					title:title,
 					body:body,
 					authorTime:timeDiff,
-					commentCount:r.get('PostCount')+' Comments',
-					likeCount:r.get('LikeCount')+' Likes'
+					commentCount:r.get('PostCount'),
+					likeCount:r.get('LikeCount')
 				});
 			}
 

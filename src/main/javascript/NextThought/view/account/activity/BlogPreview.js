@@ -15,8 +15,8 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 				]},
 				{cls:'body', html:'{body}'},
 				{cls:'counts', cn:[
-					{tag:'span', cls: 'link comment', html:'{commentCount}', 'data-label':' comments'},
-					{tag:'span', cls: 'link likes', html:'{likeCount}', 'data-label': ' likes'}
+					{tag:'span', cls: 'link comment', html:'{commentCount} Comment{[values.commentCount===1 ? "" : "s"]}'},
+					{tag:'span', cls: 'link likes', html:'{likeCount} Like{[values.likeCount===1 ? "" : "s"]}'}
 				]}
 			]}
 		]}
@@ -43,8 +43,8 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 			title: headline.get('title'),
 			time: timeDiff,
 			body: body,
-			commentCount:me.record.get('PostCount')+' Comments',
-			likeCount:me.record.get('LikeCount')+' Likes'
+			commentCount:me.record.get('PostCount'),
+			likeCount:me.record.get('LikeCount')
 		});
 	},
 
