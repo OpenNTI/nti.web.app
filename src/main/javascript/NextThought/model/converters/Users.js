@@ -1,5 +1,9 @@
 Ext.define('NextThought.model.converters.Users', {
 	override: 'Ext.data.Types',
+	requires: [
+		'Ext.data.SortTypes'
+	],
+
 	USERLIST: {
 		type: 'UserList',
 		convert: function(v,record) {
@@ -29,13 +33,13 @@ Ext.define('NextThought.model.converters.Users', {
 
 			return u;
 		},
-		sortType: Ext.data.SortTypes.none
+		sortType: 'none'
 	},
 
 
 	AVATARURL: {
 		type: 'AvatarURL',
-		sortType: Ext.data.SortTypes.asUCString,
+		sortType: 'asUCString',
 		convert: function convert(v){
 			var re = convert.re = (convert.re || /https/i);
 			function c(v,i,a){
@@ -55,7 +59,7 @@ Ext.define('NextThought.model.converters.Users', {
 
 	AVATARURLLIST: {
 		type: 'AvatarURLList',
-		sortType: Ext.data.SortTypes.asUCString,
+		sortType: 'asUCString',
 		convert: function convert(v){
 			Ext.each(v,function(o,i,a){
 				a[i] = Ext.data.Types.AVATARURL.convert(o);
@@ -63,4 +67,10 @@ Ext.define('NextThought.model.converters.Users', {
 			return v;
 		}
 	}
+},function(){
+	function set(o){ o.sortType = Ext.data.SortTypes[o.sortType]; }
+
+	set(this.USERLIST);
+	set(this.AVATARURL);
+	set(this.AVATARURLLIST);
 });

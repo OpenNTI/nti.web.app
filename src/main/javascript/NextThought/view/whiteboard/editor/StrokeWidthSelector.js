@@ -7,16 +7,7 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 	ui: 'stroke-size-select',
 	width: 85,
 
-	store: Ext.data.Store.create({//define time?
-		fields: ['size','size-class'],
-		data : [
-			{'size': 1, 'size-class': 'fine'},
-			{'size': 2, 'size-class': 'thin'},
-			{'size': 5, 'size-class': 'medium'},
-			{'size': 9, 'size-class': 'heavy'},
-			{'size': 14, 'size-class': 'thick'}
-		]
-	}),
+	store: '',//defined in callback below
 
 	queryMode: 'local',
 	displayField: 'size-class',
@@ -61,4 +52,15 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 		},this);
 		this.setValue(1);
 	}
+},function(){
+	this.prototype.store = Ext.data.Store.create({
+		fields: ['size','size-class'],
+		data : [
+			{'size': 1, 'size-class': 'fine'},
+			{'size': 2, 'size-class': 'thin'},
+			{'size': 5, 'size-class': 'medium'},
+			{'size': 9, 'size-class': 'heavy'},
+			{'size': 14, 'size-class': 'thick'}
+		]
+	});
 });

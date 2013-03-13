@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.converters.Items', {
 	override: 'Ext.data.Types',
+	requires: ['Ext.data.SortTypes'],
 
 	/* converters for models which reference other models*/
 	SINGLEITEM: {
@@ -12,7 +13,7 @@ Ext.define('NextThought.model.converters.Items', {
 			if(v){ console.warn('unexpected value', v); }
 			return null;
 		},
-		sortType: Ext.data.SortTypes.none
+		sortType: 'none'
 	},
 
 
@@ -32,7 +33,7 @@ Ext.define('NextThought.model.converters.Items', {
 			if(v){ console.warn('unexpected value', v); }
 			return null;
 		},
-		sortType: Ext.data.SortTypes.none
+		sortType: 'none'
 	},
 
 
@@ -58,7 +59,13 @@ Ext.define('NextThought.model.converters.Items', {
 			return null;
 
 		},
-		sortType: Ext.data.SortTypes.none
+		sortType: 'none'
 	}
 
+}, function(){
+	function set(o){ o.sortType = Ext.data.SortTypes[o.sortType]; }
+
+	set(this.SINGLEITEM);
+	set(this.ARRAYITEM);
+	set(this.COLLECTIONITEM);
 });

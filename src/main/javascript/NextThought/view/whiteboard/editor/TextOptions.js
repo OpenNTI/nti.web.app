@@ -15,19 +15,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			xtype: 'nt-combobox',
 			width: 70,
 
-			store: Ext.data.Store.create({//define time?
-				fields: ['size'],
-				data : [
-					{"size":"12 pt"},
-					{"size":"14 pt"},
-					{"size":"18 pt"},
-					{"size":"24 pt"},
-					{"size":"30 pt"},
-					{"size":"36 pt"},
-					{"size":"48 pt"},
-					{"size":"60 pt"}
-				]
-			}),
+			store: '',//store defined in callback see below ---v
 			queryMode: 'local',
 			displayField: 'size',
 			valueField: 'size',
@@ -52,4 +40,18 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			enableToggle: true
 		}
 	]
+}, function(){
+	this.prototype.items[0].store = Ext.data.Store.create({
+		fields: ['size'],
+		data : [
+			{"size":"12 pt"},
+			{"size":"14 pt"},
+			{"size":"18 pt"},
+			{"size":"24 pt"},
+			{"size":"30 pt"},
+			{"size":"36 pt"},
+			{"size":"48 pt"},
+			{"size":"60 pt"}
+		]
+	});
 });

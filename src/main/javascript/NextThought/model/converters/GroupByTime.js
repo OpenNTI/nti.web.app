@@ -1,9 +1,10 @@
 Ext.define('NextThought.model.converters.GroupByTime',{
 	override: 'Ext.data.Types',
+	requires: ['Ext.data.SortTypes'],
 
 	GROUPBYTIME:{
 		type: 'groupByTime',
-		sortType: Ext.data.SortTypes.asUCString,
+		sortType: 'asUCString',
 
 		groupStringForElapsedTime: function(n, v){
 			var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
@@ -69,4 +70,6 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 			return this.type.groupStringForElapsedTime(now, v);
 		}
 	}
+}, function(){
+	this.GROUPBYTIME.sortType = Ext.data.SortTypes.asUCString;
 });

@@ -1,8 +1,11 @@
 Ext.define('NextThought.model.converters.Links', {
 	override: 'Ext.data.Types',
+	requires:[
+		'Ext.data.SortTypes'
+	],
 	LINKS : {
 		type: 'links',
-		sortType: Ext.data.SortTypes.none,
+		sortType: null,
 
 		convert: function(v){
 			if (v && v.getRelHref) {
@@ -46,5 +49,7 @@ Ext.define('NextThought.model.converters.Links', {
 			};
 		}
 	}
+},function(){
+	this.LINKS.sortType = Ext.data.SortTypes.none;
 });
 
