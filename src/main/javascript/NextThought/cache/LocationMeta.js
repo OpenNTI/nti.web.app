@@ -39,9 +39,15 @@ Ext.define('NextThought.cache.LocationMeta', {
 
         function pageIdLoaded(pi){
 			var assessmentItems = pi.get('AssessmentItems') || [],
-				theId = pi.getId(),meta;
+				theId = pi.getId(),
+				meta = LocationProvider.getLocation(theId);
 
-            meta = this.meta[theId] = LocationProvider.getLocation(theId);
+			if(!meta){
+				fail.call(this);
+				return;
+			}
+
+            this.meta[theId] = meta;
             this.ids[ntiid] = theId;
 
 	        meta.baseURI = buildPath(pi.getLink('content'),meta.root);
