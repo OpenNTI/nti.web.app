@@ -197,11 +197,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			add.push({ xtype: 'joined-event', username: this.username });
 		}
 
-		this.suspendLayouts();
 		this.clearLoadingBar();
-
 		this.add(add);
-		this.resumeLayouts(true);
 
 		console.log('Showing', this.items.length, ' objects ');
 		this.maybeShowMoreItems();
