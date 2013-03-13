@@ -19,7 +19,7 @@ Ext.define('NextThought.controller.FilterControl', {
 				'filter-control-loaded': this.setState,
 				'changed': this.rebuildFilter
 			}
-		},{});
+		});
 	},
 
 	

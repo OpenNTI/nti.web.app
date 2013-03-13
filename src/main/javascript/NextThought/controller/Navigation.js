@@ -60,7 +60,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'notfound':{
 				'go-to-library': this.goToLibrary
 			}
-		},{});
+		});
 	},
 
 

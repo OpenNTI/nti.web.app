@@ -44,7 +44,7 @@ Ext.define('NextThought.controller.Profile', {
 			'profile-blog-post nti-editor':{
 				'save': this.saveBlogComment
 			}
-		},{});
+		});
 	},
 
 

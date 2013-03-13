@@ -13,6 +13,6 @@ Ext.define('NextThought.controller.SlideDeck',{
 //			'':{
 //
 //			}
-//		},{});
+//		});
 	}
 });

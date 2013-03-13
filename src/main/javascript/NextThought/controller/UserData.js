@@ -116,7 +116,7 @@ Ext.define('NextThought.controller.UserData', {
 				'save-new-bookmark': this.saveNewBookmark
 			}
 
-		},{});
+		});
 
 		Socket.register({
 			'data_noticeIncomingChange': function(c){me.incomingChange.apply(me, [c]);}

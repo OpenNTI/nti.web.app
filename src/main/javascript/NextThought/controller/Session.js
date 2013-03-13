@@ -29,7 +29,7 @@ Ext.define('NextThought.controller.Session', {
 			'settings-menu [action=logout]' : {
 				'click': me.handleLogout
 			}
-		},{});
+		});
 
 
 		me.sessionId = guidGenerator();

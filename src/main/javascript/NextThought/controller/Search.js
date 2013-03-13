@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Search', {
 			'profile-blog-post' :{
 				'ready': this.blogPostReady
 			}
-		},{});
+		});
 
 		this.getHitStore().on('beforeload', function(){
 			Ext.getCmp('search-results').el.mask('Searching...');

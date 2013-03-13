@@ -36,7 +36,7 @@ Ext.define('NextThought.controller.State', {
 			'main-views': {
 				'activate-view': me.track
 			}
-		},{});
+		});
 		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
 	},
 
