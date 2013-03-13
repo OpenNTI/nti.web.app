@@ -295,7 +295,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		this.cleanPreviousPost();
 
-		if(!record.store){
+		if(record && !record.store){
 			console.debug('Record did not belong to a store, finding...');
 			r = s && s.findRecord('ID', record.get('ID'), 0, false, true, true);
 			if(r){
