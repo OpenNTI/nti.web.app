@@ -340,7 +340,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			xtype = 'profile-blog-editor';
 		}
 
-		Ext.get('profile').scrollTo('top',0);
+		Ext.get('profile').scrollTo('top',0,true);
 		this.activePost = Ext.widget(xtype,cfg);
 
 		this.updateLayout();

@@ -201,8 +201,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(this.closedPost){
 			return;
 		}
-		//All of this belongs somewhere else... its animation code (css implements the keyframes)
+
 		this.closedPost = true;
+
+		//All of this belongs somewhere else... its animation code (css implements the keyframes)
 		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first()),
 			bar = this.navigationBarEl;
 
@@ -220,7 +222,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
 		}
 
-		Ext.defer(this.destroy,1001,this);
+		Ext.get('profile').scrollTo('top',0,true);
+		Ext.defer(this.destroy,this.headerLocked?0:1001,this);
 	},
 
 
@@ -251,9 +254,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			cutoff = 268;
 
 		if(navBarParent === profileDomParent && profileScroll < cutoff){
+			delete this.headerLocked;
 			this.navigationBarEl.insertBefore(this.getEl().first());
 		}
 		else if(navBarParent !== profileDomParent && profileScroll >= cutoff){
+			this.headerLocked = true;
 			this.navigationBarEl.appendTo(profileDomParent);
 		}
 	},
