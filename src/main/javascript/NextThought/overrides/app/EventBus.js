@@ -8,6 +8,11 @@ Ext.define('NextThought.overrides.app.EventBus',{
 				NextThought.model.Base
 			];
 
+		if(Ext.versions.extjs.isGreaterThan('4.1.1')){
+			console.warn('You\'re using Ext 4.2 or newer, commit to it and replace this hack. Model/Store events are supported natively');
+			return;
+		}
+
 		Ext.each(list,function(o){
 	        Ext.override(o, {
 	            fireEvent: function(ev) {
