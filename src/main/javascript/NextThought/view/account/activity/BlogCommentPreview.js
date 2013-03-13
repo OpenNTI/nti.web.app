@@ -45,6 +45,7 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.enableBubble('resize');
 
 		var lastModified = this.record.get('Last Modified'),
 			timeDiff = this.record.timeDifference(Ext.Date.now(), lastModified),
@@ -98,6 +99,12 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 					Ext.apply(me.renderData, {name: user.getName(), authorAvatarURL: user.get('avatarURL')});
 				}
 			});
+
+			if(me.rendered){
+				Ext.defer( function(){
+					me.fireEvent('resize', me, me.getWidth(), me.getHeight());
+				}, 1);
+			}
 		}
 
 		function fail(){

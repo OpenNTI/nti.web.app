@@ -95,22 +95,25 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					alignment = 'tr-tl?',
 					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
 
+				function align(){
+					if( pop.getHeight() > play ){
+						pop.addCls('bottom-aligned');
+						alignment = 'br-bl?';
+						offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
+					}
+					pop.show();
+					pop.alignTo(alignmentEl,alignment,offsets);
+				}
+
                 pop.show().hide();
+				pop.on('resize', align);
 
                 if(viewRef) {
                     pop.mon( pop.getEl(), 'mouseover', function(){
 						viewRef.cancelPopupTimeout();
 					});
                 }
-
-                if( pop.getHeight() > play ){
-					pop.addCls('bottom-aligned');
-					alignment = 'br-bl?';
-					offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
-				}
-
-				pop.show();
-				pop.alignTo(alignmentEl,alignment,offsets);
+				align();
 			},this);
 		}
 
