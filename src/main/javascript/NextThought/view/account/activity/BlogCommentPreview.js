@@ -116,6 +116,9 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 
 	onClick: function(e){
 		e.stopEvent();
-		this.fireEvent('navigate-to-blog', this.user, this.record.container.get('ID'), this.record.get('ID'));
+		var me = this;
+		UserRepository.getUser(this.record.container.get('Creator'),function(u){
+			me.fireEvent('navigate-to-blog', u, me.record.container.get('ID'), me.record.get('ID'));
+		});
 	}
 });
