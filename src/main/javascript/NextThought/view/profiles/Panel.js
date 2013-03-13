@@ -530,7 +530,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			value = this.userObject.get(field) || '',
 			ed = this.metaEditor;
 
-		if(e.getTarget('a[href]')){
+		if(e.getTarget('a[href]') || this.savingField){
 			return;
 		}
 
@@ -648,6 +648,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		function success(n, v){
 			console.log(arguments);
 			me.updateField(cmp.boundEl, n, v);
+			delete me.savingField;
 		}
 
 		function failure(rsp){
@@ -665,10 +666,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 			cmp.setValue(newValue);
 			cmp.field.setError();
 			me.showError(resultJson.message || 'An unknown error occurred');
+			delete me.savingField;
 		}
 
 		console.debug('saving:', field,'=', newValue, 'in', user);
 //TODO: Check the schema
+		me.savingField = true;
 		user.saveField(field,newValue,success,failure);
 	},
 
