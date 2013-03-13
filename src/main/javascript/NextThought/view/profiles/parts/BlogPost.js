@@ -186,7 +186,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			commentId = this.selectedSections[1];
 			console.debug('Do something with this/these:',this.selectedSections);
 			if(this.selectedSections[0]==='comments' && !commentId){
-				Ext.defer(this.showEditor,500,this);
+				this.scrollToComment = true;
 			}
 			else if(commentId){
 				this.scrollToComment = commentId;
@@ -408,11 +408,17 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		console.debug('ready',arguments);
 		var el;
 		if(this.scrollToComment){
-			el = this.el.down('[data-commentid="'+this.scrollToComment+'"]');
+
+			if(typeof(this.scrollToComment)==='boolean'){
+				el = this.getTargetEl();
+			}
+			else {
+				el = this.el.down('[data-commentid="'+this.scrollToComment+'"]');
+			}
+
 			if( el ) {
 				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'),false,true]);
 			}
-			console.log(this.scrollToComment, el);
 		}
 	},
 
