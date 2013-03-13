@@ -138,6 +138,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		if(b){
 			this.warnBeforeDismissingEditor();
 		}
+		else {
+			this.closePost(true);
+		}
 		return !b;
 	},
 

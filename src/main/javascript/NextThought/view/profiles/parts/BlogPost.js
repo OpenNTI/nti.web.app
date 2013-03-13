@@ -135,7 +135,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		tabBar.addCls('animateProfileTabsLeft');
 		this.navigationBarEl.addCls('animateIn');
 		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
-		this.on('destroy',this.closePost,this);
 //Animation code end
 
 
@@ -215,7 +214,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		bar.removeCls('animateIn animateOut');
 		bar.addCls('animateOut');
 
-		this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
+		if( this.ownerCt ){
+			this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
+		}
 
 		Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
 		Ext.defer(this.destroy,1001,this);
@@ -297,6 +298,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	onDestroy: function(){
+		this.closePost();
+
 		delete this.editor.ownerCt;
 		this.editor.destroy();
 		var h = this.record.get('headline');
