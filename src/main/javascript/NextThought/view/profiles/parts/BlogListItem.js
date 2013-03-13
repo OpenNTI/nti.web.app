@@ -25,7 +25,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
-			{ tag:'span', cls: 'comment-count', html: '{PostCount} Comments' },
+			{ tag:'span', cls: 'comment-count', html: '{PostCount} Comment{[values.PostCount===1 ? "" : "s"]}' },
 			{ tag:'span', cls: 'tags', cn:[
 				{tag:'tpl', 'for':'headline.tags', cn:[
 					{tag:'span', cls:'tag', html: '{.}'}

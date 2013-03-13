@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 		{ cls: 'meta', cn:[
 			{ cls: 'title', html: '{headline.title}' },
 			{ cls: 'counts', cn:[
-				{ tag: 'span', cls:'link comment-count', html: '{PostCount} Comments', 'data-target':'comments' },
+				{ tag: 'span', cls:'link comment-count', html: '{PostCount} Comment{[values.PostCount===1 ? "" : "s"]}', 'data-target':'comments' },
 				{ tag: 'span', cls:'link likes', html: '{LikeCount} Likes' },
 				{ tag: 'span', html: '{date}'}
 			] }
