@@ -102,8 +102,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		if(this.headerEl){
 			this.mon(this.headerEl,'click',this.onNewPost,this);
 		}
-
-		this.mon(this.tab,'click',this.onTabClicked, this);
 	},
 
 
@@ -140,17 +138,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		}
 	},1),
-
-
-	onTabClicked: function(){
-		//only close the post if we are visible
-		if(this.isVisible() && this.el.down('.blog-editor')){
-			this.warnBeforeDismissingEditor();
-		}
-		else if(this.isVisible()){
-			this.closePost();
-		}
-	},
 
 
 	warnBeforeDismissingEditor: function(){
@@ -323,7 +310,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	closePost: function(leaveLocation){
 		this.swapViews('list');
 		this.updateLayout();
-		this.animateTabs(true);
 
 		this.cleanPreviousPost();
 
@@ -375,6 +361,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			xtype = 'profile-blog-editor';
 		}
 		else {
+			clearTimeout(this.animateTabsStart);
+			cfg.listeners.destroy = function(){
+				this.closePost();
+				this.animateTabsStart = Ext.defer(this.animateTabs,10,this,[true]);
+			};
 			this.animateTabs();
 		}
 
