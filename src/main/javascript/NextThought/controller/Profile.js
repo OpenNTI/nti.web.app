@@ -116,7 +116,9 @@ Ext.define('NextThought.controller.Profile', {
 						editor.reset();
 					}
 					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
-					postRecord.set('PostCount',postRecord.get('PostCount')+1);
+					if(!isEdit){
+						postRecord.set('PostCount',postRecord.get('PostCount')+1);
+					}
 				},
 				failure: function(){
 					editor.markError(editor.getEl(),'Could not save comment');
