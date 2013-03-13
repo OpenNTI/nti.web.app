@@ -266,7 +266,17 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = false;
 	},
 
-
+	//Current default state is to load the library on either the nti.landing_page or the first page in the
+	//library. And to put the profile on the app user.  The library will be the active view if the location came
+	//from the ds, otherwise we will show the company
+	buildDefaultState: function(){
+		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
+		return {
+			active: dsLandingPage ? 'library' : 'profile',
+			location : dsLandingPage || Library.getFirstPage() || undefined,
+			profile: { username: $AppConfig.username }
+		};
+	},
 
 	loadState: function(){
 		if(this.isHangout){
@@ -276,10 +286,7 @@ Ext.define('NextThought.controller.State', {
 
 		// Default to the landing page of the first book if available,
 		// rather than the library landing page.
-		var defaultState = {
-			active: 'library',
-			location : Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage() || undefined
-		},
+		var defaultState = this.buildDefaultState(),
 			lastLocation,
 			previousState,
 			result;
@@ -290,6 +297,7 @@ Ext.define('NextThought.controller.State', {
 			lastLocation = Ext.decode( previousState );
 
 			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
+			result = defaultState;
 			if(location.hash){
 				console.debug('hash trumps state', location.hash);
 				Ext.apply(result,this.interpretHash(location.hash));
