@@ -60,12 +60,17 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		UserRepository.getUser(r.get('Creator'),function(u){
+			me.userObject = u;
 			Ext.applyIf(rd, u.getData());
 			if(this.rendered){
 				console.warn('Rendered late');
 				me.renderTpl.overwrite(me.el,rd);
 			}
 		});
+
+		if(isMe(r.get('Creator'))){
+			this.addCls('me');
+		}
 
 		if(this.record.get('Deleted')){
 			this.addCls('deleted');

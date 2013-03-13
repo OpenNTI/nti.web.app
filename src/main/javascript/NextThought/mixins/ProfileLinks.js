@@ -6,7 +6,7 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 	 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
 	 *
 	 * This mixin method assumes we are mixed into a class thta is Observable, and has a userObject property (or a user
-	 * property), where the object is an instance of {NextThought.model.User}
+	 * property), where the object is an instance of {NextThought.model.User}.
 	 */
 	enableProfileClicks: function(){
 		var me = this;
@@ -17,6 +17,8 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 			if(e){e.stopEvent();}
 			var u = this.userObject || this.user,
 				t = e.getTarget('.note-window');
+
+			//FIXME this doesn't belong here.
 			//Dismiss the note-window before we navigate to the profile.
 			if(t){ this.up('note-window').destroy(); }
 
