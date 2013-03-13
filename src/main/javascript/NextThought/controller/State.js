@@ -297,7 +297,6 @@ Ext.define('NextThought.controller.State', {
 			lastLocation = Ext.decode( previousState );
 
 			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
-			result = defaultState;
 			if(location.hash){
 				console.debug('hash trumps state', location.hash);
 				Ext.apply(result,this.interpretHash(location.hash));
