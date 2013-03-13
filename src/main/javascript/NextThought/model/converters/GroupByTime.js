@@ -63,7 +63,7 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 		},
 
 		convert: function(r,o){
-			if(!r && this.mapping){ r = o.raw[this.mapping]; }
+			if(!r && this.mapping){ r = o.get(this.mapping); }
 
 			var now = new Date(),
 				v = new Date(r*1000);
