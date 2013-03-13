@@ -433,7 +433,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	applyTypingAttributesToEditable: function(){
-		var actions = this.self.supportedTypingAttributes, me = this;
+		var actions = NextThought.editor.Actions.supportedTypingAttributes, me = this;
 		Ext.each(actions, function(action){
 			if(   document.queryCommandSupported(action)
 			   && document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)){
@@ -470,7 +470,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	detectTypingAttributes: function(e){
-		var actions = this.self.supportedTypingAttributes, attrs = [];
+		var actions = NextThought.editor.Actions.supportedTypingAttributes, attrs = [];
 		Ext.each(actions, function(action){
 			if(document.queryCommandState(action)){
 				attrs.push(action);

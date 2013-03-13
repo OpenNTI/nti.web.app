@@ -279,6 +279,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	showEditor: function(){
+		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
 		Ext.get('profile').scrollChildIntoView(this.editor.getEl());
