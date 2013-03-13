@@ -46,7 +46,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		this.buildBlog();
 
-		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('show-post',this.updateLocation,this);
 	},
 
@@ -249,6 +249,12 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	getParams: function(){
 		var a = (this.activePost||{}).record;
 		return a ? a.get('ID') : undefined;
+	},
+
+
+	onDestroy: function(){
+		this.cleanPreviousPost();
+		this.callParent(arguments);
 	},
 
 
