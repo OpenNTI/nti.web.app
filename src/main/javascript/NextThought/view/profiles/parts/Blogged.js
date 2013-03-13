@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 		{ cls: 'meta', cn:[
 			{ cls: 'title', html: '{headline.title}' },
 			{ cls: 'counts', cn:[
-				{ tag: 'span', cls:'link', html: '{PostCount} Comments', 'data-target':'comments' },
+				{ tag: 'span', cls:'link comment-count', html: '{PostCount} Comments', 'data-target':'comments' },
 				{ tag: 'span', cls:'link likes', html: '{LikeCount} Likes' },
 				{ tag: 'span', html: '{date}'}
 			] }
@@ -49,7 +49,9 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 		this.mon(this.el,'click',this.onClick,this);
 		this.record.addObserverForField(this, 'LikeCount', this.likeCountUpdated, this);
 		this.record.addObserverForField(this, 'title', this.titleUpdated, this);
+		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
 	},
+
 
 	titleUpdated: function(f, v){
 		if(this.rendered){
@@ -57,9 +59,22 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 		}
 	},
 
+
 	likeCountUpdated: function(f, v){
 		if(this.rendered){
 			this.el.down('.likes').update(v+' Likes');
+		}
+	},
+
+
+	updatePostCount: function(k, v){
+		if(!this.rendered){
+			return;
+		}
+
+		var el = this.el.down('.comment-count');
+		if(el){
+			el.update(Ext.String.format('{0} Comment{1}', v, v === 1 ? '' : 's'));
 		}
 	},
 

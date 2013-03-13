@@ -90,6 +90,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
+		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		this.updateContent();
@@ -134,6 +135,14 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	updateContent: function(){
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
+	},
+
+
+	updatePostCount: function(k, v){
+		var el = this.el.down('.comment-count');
+		if(el){
+			el.update(Ext.String.format('{0} Comment{1}', v, v === 1 ? '' : 's'));
+		}
 	},
 
 
