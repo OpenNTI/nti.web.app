@@ -126,12 +126,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.callParent(arguments);
 		var h = this.record.get('headline'),
 			commentId,
-			box = this.responseEl,
-			tabBar = Ext.query('.nti-profile-tabbar-plain-docked-top').first();
+			box = this.responseEl;
 		if(!h){return;}
 
 //Animation code
-		tabBar && Ext.fly(tabBar).addCls('animateProfileTabsLeft');
 		this.navigationBarEl.addCls('animateIn');
 		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
 //Animation code end
@@ -205,25 +203,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.closedPost = true;
 
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
-		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first()),
-			bar = this.navigationBarEl;
-
-
-		if( tabBar ){
-			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
-			tabBar.addCls('animateProfileTabsBack');
-			Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
-		}
-
-		bar.removeCls('animateIn animateOut');
-		bar.addCls('animateOut');
-
-		if( this.ownerCt ){
-			this.ownerCt.listViewEl.show();//hack-- makes it look like it destroyed immediately
-		}
+		var bar = this.navigationBarEl;
+		bar && bar.removeCls('animateIn animateOut').addCls('animateOut');
 
 		Ext.get('profile').scrollTo('top',0,true);
-		Ext.defer(this.destroy,this.headerLocked?0:1001,this);
+
+		if(!this.destroying){
+			this.destroy();
+		}
 	},
 
 
@@ -264,7 +251,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
-	navigationClick: function(e,dom){
+	navigationClick: function(e){
 		e.stopEvent();
 		var direction = Boolean(e.getTarget('.next')),
 			disabled = Boolean(e.getTarget('.disabled'));
@@ -305,16 +292,19 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	onDestroy: function(){
+		this.navigationBarEl.remove();
+
 		this.closePost();
 
 		delete this.editor.ownerCt;
 		this.editor.destroy();
 		var h = this.record.get('headline');
-		this.navigationBarEl.insertBefore(this.getEl().first());//make sure this is inside our container before we destroy
+
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
 		h.removeObserverForField(this, 'tags', this.updateField, this);
 		this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
+
 		this.callParent(arguments);
 	},
 

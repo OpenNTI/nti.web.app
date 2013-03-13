@@ -116,6 +116,23 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
+	animateTabs: Ext.Function.createBuffered(function(v){
+		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first());
+		if( tabBar ){
+			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
+			if(v){
+				tabBar.addCls('animateProfileTabsBack');
+				Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
+			}
+			else{
+				tabBar.addCls('animateProfileTabsLeft');
+			}
+
+
+		}
+	},1),
+
+
 	onTabClicked: function(){
 		//only close the post if we are visible
 		if(this.isVisible() && this.el.down('.blog-editor')){
@@ -289,6 +306,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	closePost: function(leaveLocation){
 		this.swapViews('list');
 		this.updateLayout();
+		this.animateTabs(true);
 
 		this.cleanPreviousPost();
 
@@ -338,6 +356,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		if(action && action[0]==='edit'){
 			xtype = 'profile-blog-editor';
+		}
+		else {
+			this.animateTabs();
 		}
 
 		Ext.get('profile').scrollTo('top',0,true);
