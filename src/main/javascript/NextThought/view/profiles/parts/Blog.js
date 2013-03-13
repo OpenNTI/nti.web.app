@@ -111,8 +111,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		var fnm = {'true':'show','false':'hide'},
 			v = viewToShow !== 'post';
 
-		this.listViewEl[fnm[v]]();
-		this.postViewEl[fnm[!v]]();
+		if(this.listViewEl){ this.listViewEl[fnm[v]](); }
+		if(this.postViewEl){ this.postViewEl[fnm[!v]](); }
 	},
 
 
