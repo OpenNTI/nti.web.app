@@ -188,15 +188,12 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	setContent: function(html){
-		var snip = ContentUtils.getHTMLSnippet(html,300),
-			lastChild, appendTo = this.bodyEl;
+		var snip = ContentUtils.getHTMLSnippet(html,300);
+
 		this.bodyEl.update(snip||html);
 		if(snip){
-			lastChild = this.bodyEl.last();//this will not return text nodes
-			if(lastChild){ appendTo = lastChild; }
-
-			this.moreEl = this.moreTpl.append(appendTo,null,true);
-			this.mon(this.moreEl,'click', this.goToPost,this);
+			this.moreTpl.append(this.bodyEl,null,true);
+			this.mon(this.bodyEl.down('a.more'),'click', this.goToPost,this);
 		}
 
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
