@@ -33,7 +33,10 @@ Ext.define('NextThought.controller.Profile', {
 			},
 
 			//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
-			'profile-blog-post':{ 'delete-post': this.deleteBlogPost },
+			'profile-blog-post':{
+				'delete-post': this.deleteBlogPost,
+				'scroll-to': this.scrollProfileTo
+			},
 			'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
 			'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
 
@@ -266,6 +269,13 @@ Ext.define('NextThought.controller.Profile', {
 				alert('Sorry, could not delete that');
 			}
 		});
+	},
+
+	scrollProfileTo: function(pos, cmp){
+		var p = Ext.get('profile');
+		if(p){
+			p.scrollTo('top', pos, true);
+		}
 	}
 
 });

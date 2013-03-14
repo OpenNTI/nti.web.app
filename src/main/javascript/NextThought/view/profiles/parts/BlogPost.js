@@ -453,13 +453,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 		if(range && range.getClientRects().length > 0){
 			nodeTop = range.getClientRects()[0].top;
-			//Assessment items aren't in the iframe so they don't take into account scroll
 			scrollOffset = this.body.getScroll().top;
-			//scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
 			pos = nodeTop + scrollOffset;
 		}
 
 		console.log('Need to scroll to calculated pos', pos);
+		this.fireEvent('scroll-to', pos, this);
 	},
 
 
