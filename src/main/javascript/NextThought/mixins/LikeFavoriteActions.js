@@ -2,30 +2,58 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 	constructor: function(){
 		function onAfterRender(){
-			var me = this,
-				rec = me.getRecord();
-			if( rec.parent ){
-				if( me.favorites ){
-					me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
-					me.favorites.hide();
-				}
-				if( me.favoritesSpacer ){
-					me.favoritesSpacer.show();
-				}
-			}
+			var me = this;
 
-			if( !rec.isLikeable() ){
-				me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
-			}
-			if( !rec.isFavoritable() ){
-				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
-			}
+			me.updateLikeAndFavoriteFromRecord();
 
-			if( me.liked ){  me.mon(me.liked,    'click', function(){ rec.like(me); }, me); }
-			if( me.favorites ){ me.mon(me.favorites,'click', function(){ rec.favorite(me); },me); }
+			if( me.liked ){  me.mon(me.liked, 'click', me.likeClicked, me); }
+			if( me.favorites ){ me.mon(me.favorites,'click', me.favoriteClicked, me); }
 		}
 
 		this.on('afterrender',onAfterRender,this,{single:true});
+	},
+
+
+	likeClicked: function(){
+		var rec = this.getRecord();
+		if(!rec){
+			console.warn('No record to like', this);
+			return;
+		}
+		rec.like(this);
+	},
+
+
+	favoriteClicked: function(){
+		var rec = this.getRecord();
+		if(!rec){
+			console.warn('No record to favorite', this);
+			return;
+		}
+		rec.favorite(this);
+	},
+
+
+	updateLikeAndFavoriteFromRecord: function(){
+		var rec = this.getRecord(),
+			me = this;
+		if( rec.parent ){
+			if( me.favorites ){
+				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
+				me.favorites.hide();
+			}
+			if( me.favoritesSpacer ){
+				me.favoritesSpacer.show();
+			}
+		}
+
+		if( !rec.isLikeable() ){
+			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		}
+		if( !rec.isFavoritable() ){
+			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		}
+
 	},
 
 
