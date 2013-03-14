@@ -30,7 +30,14 @@ Ext.define('NextThought.util.Search',{
 	},
 
 	contentRegexFromSearchTerm: function(term, isPhrase){
-		//Do any regex escaping required
+
+		term = term.replace(/[^a-zA-Z0-9]/g, "[^a-zA-Z0-9]+");
+		if(isPhrase){
+			term = term.replace(/\s([^\]]|$)/g, '[^a-zA-Z0-9]+$1');
+		}
+		return term;
+
+/*		//Do any regex escaping required
 		term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
 
 		//to make things like qoutes in the term match unicode apostrophe their
@@ -44,7 +51,7 @@ Ext.define('NextThought.util.Search',{
 			term = term.replace(/\s([^\]]|$)/g, '[^a-zA-Z0-9]+$1');
 		}
 
-		return term;
+		return term;*/
 	},
 
 	extractMatchFromFragment: function(fragText, match){
