@@ -69,7 +69,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if(this.user && !isMe(this.user)){
+		if(this.user){
 			this.enableProfileClicks(this.avatar,this.name);
 		}
 	},

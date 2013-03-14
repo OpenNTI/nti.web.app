@@ -98,7 +98,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
-		if(this.record && !isMe(this.record.get('Creator'))){
+		if(this.record){
 			this.enableProfileClicks(this.nameEl,this.avatarEl);
 		}
 

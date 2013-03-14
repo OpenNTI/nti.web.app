@@ -112,7 +112,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			return;
 		}
 
-		if(this.record && !isMe(this.record.get('Creator'))){
+		if(this.record){
 			me.enableProfileClicks(me.name,me.avatar);
 		}
 

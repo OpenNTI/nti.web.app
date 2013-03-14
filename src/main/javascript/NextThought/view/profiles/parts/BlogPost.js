@@ -424,9 +424,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	//Search hit highlighting
-	showSearchHit: function(hit) {
+	showSearchHit: function(hit, scroll) {
 		this.clearSearchHit();
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
+		if(scroll){
+			console.log('Scroll to hit here.');
+		}
 	},
 
 
