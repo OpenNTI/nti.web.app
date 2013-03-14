@@ -2,7 +2,7 @@ Ext.define('NextThought.store.ProfileItem', {
 	extend: 'NextThought.store.PageItem',
 
 	sorters: [{
-		property: 'Last Modified',
+		property: 'CreatedTime',
 		direction: 'DESC'
 	}],
 
