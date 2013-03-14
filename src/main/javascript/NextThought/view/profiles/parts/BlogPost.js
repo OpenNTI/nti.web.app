@@ -45,7 +45,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			]},
 			{ cls: 'comment-box', cn: [
 				{ cls: 'response', cn:[
-					{ tag:'span', cls:'reply link', html: 'Reply' },
+					{ tag:'span', cls:'reply link', html: 'Add a Comment' },
 					{ tag:'span', cls:'report link', html: 'Report' }
 				]},
 				{ cls:'editor-box'}
