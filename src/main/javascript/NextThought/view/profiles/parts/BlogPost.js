@@ -424,12 +424,42 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	//Search hit highlighting
-	showSearchHit: function(hit, scroll) {
+	showSearchHit: function(hit, scrollToFragment) {
 		this.clearSearchHit();
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
-		if(scroll){
-			console.log('Scroll to hit here.');
+		if(scrollToFragment){
+			this.scrollToHit(scrollToFragment, hit.get('PhraseSearch'));
 		}
+	},
+
+
+	scrollToHit: function(fragment, phrase){
+		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
+			searchIn = this.el.dom,
+			doc = searchIn.ownerDocument,
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups),
+			range, pos = -2, nodeTop, scrollOffset;
+
+
+		if(Ext.isEmpty(ranges)){
+			console.warn('Could not find location of fragment', fragment);
+			return;
+		}
+
+		if(ranges.length > 1){
+			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
+		}
+		range = ranges[0];
+
+		if(range && range.getClientRects().length > 0){
+			nodeTop = range.getClientRects()[0].top;
+			//Assessment items aren't in the iframe so they don't take into account scroll
+			scrollOffset = this.body.getScroll().top;
+			//scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
+			pos = nodeTop + scrollOffset;
+		}
+
+		console.log('Need to scroll to calculated pos', pos);
 	},
 
 

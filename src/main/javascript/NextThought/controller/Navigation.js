@@ -236,8 +236,8 @@ Ext.define('NextThought.controller.Navigation', {
 		var title = 'Thoughts',
 			hash,
 			args = [title],
-			pId = arguments.length > 2 ? postId : undefined,
-			cId = arguments.length > 3 ? commentId : undefined;
+			pId = arguments.length > 1 ? postId : undefined,
+			cId = arguments.length > 2 ? commentId : undefined;
 
 		if(pId){
 			args.push(pId);

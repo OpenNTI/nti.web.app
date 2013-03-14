@@ -105,14 +105,17 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 		this.fillInData();
 		this.callParent(arguments);
 	},
+
 	clicked: function(e){
 		var errMsg = "Unable to load chat transcript.";
 		if(!this.record){
 			alert({ title : 'Error' , msg : errMsg, icon: 'warning-red'});
 			return;
 		}
+		this.callParent(arguments);
+	},
+
+	doClicked: function(){
 		this.fireEvent('open-chat-transcript',this.record,'Opening chat transcript.');
 	}
-
-
 });

@@ -168,6 +168,11 @@ Ext.define('NextThought.view.menus.search.Result',{
 		Ext.defer(function(){
 			Ext.fly(toFlash).removeCls('pulse');
 		}, 1000);
+
+		this.doClicked(fragIdx);
+	},
+
+	doClicked: function(fragIdx){
 		this.fireEvent('click', this, fragIdx);
 	}
 });

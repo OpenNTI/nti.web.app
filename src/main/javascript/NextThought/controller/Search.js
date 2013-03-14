@@ -225,43 +225,41 @@ Ext.define('NextThought.controller.Search', {
 		this.searchForValue(searchValue);
 	},
 
-	gotoBlog: function(user, postId, commentId){
-		var title = 'Thoughts',
-		hash,
-		args = [title];
 
-		if(postId){
-			args.push(postId);
+	fragmentWithIndex: function(hit, fragIdx){
+		fragments = hit.get('Fragments');
+		if(fragIdx >= 0 && fragIdx < fragments.length){
+			return fragments[fragIdx];
 		}
 
-		if(postId && commentId){
-			args.push('comments');
-			args.push(commentId);
-		}
-
-		hash = user.getProfileUrl.apply(user, args);
-
-		if(location.hash !== hash){
-			location.hash = hash;
-		}
+		console.warn('Bad fragment index', fragIdx, fragments);
+		return null;
 	},
 
-	searchBlogResultClicked: function(result){
+	gotoBlog: function(){
+		//Some kind of cross controller event we can use instead?
+		var navController = app.getController('Navigation');
+		navController.gotoBlog.apply(navController, arguments);
+	},
+
+	searchBlogResultClicked: function(result, fragIdx){
 		var u = result.user,
 			r = result.record,
 			postId = r.get('ID');
 
-			this.gotoBlog(u,postId);
+		this.gotoBlog(u,postId);
 	},
 
 	searchBlogCommentClicked: function(result){
 		var u = result.user,
 			r = result.record,
+			hit = result.hit,
 			postId = r.get('ID'),
 			commentId = result.hit.get('ID');
 
-			this.gotoBlog(u,postId,commentId);
+		this.gotoBlog(u,postId,commentId);
 	},
+
 
 	searchResultClicked: function(result, fragIdx){
 		var nav = this.getController('Navigation'),
@@ -269,14 +267,8 @@ Ext.define('NextThought.controller.Search', {
 			cat = result.up('search-result-category').category,
 			fragments, clickedFragment;
 
-		if(fragIdx !== fragments){
-			fragments = result.hit.get('Fragments');
-			if(fragIdx >= 0 && fragIdx < fragments.length){
-				clickedFragment = fragments[fragIdx];
-			}
-			else{
-				console.warn('Bad fragment index', fragIdx, fragments);
-			}
+		if(fragIdx !== undefined){
+			clickedFragment = this.fragmentWithIndex(result.hit, fragIdx);
 		}
 
 		function success(obj){

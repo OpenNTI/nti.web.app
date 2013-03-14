@@ -55,7 +55,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		function finish(r){
 			var tags = r.get('headline').get('tags'), tagMsg;
 			me.renderData = Ext.apply(me.renderData, r.getData());
-			
+
 			//check how many tags there are and display accordingly
 			if(Ext.isEmpty(tags)){
 				//no tags display nothing
@@ -96,13 +96,13 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		$AppConfig.service.getObject(containerId, finish, fail, me);
 	},
 
-	clicked: function(){
+	doClicked: function(fragIdx){
 		if(this.comment){
 			//its a comment
 			this.fireEvent('click-blog-comment',this);
 		}else{
-			//its a post 
-			this.fireEvent('click-blog-result', this);
+			//its a post
+			this.fireEvent('click-blog-result', this, fragIdx);
 		}
 	}
 });
