@@ -118,7 +118,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			this.postViewEl[fnm[!v]]();
 		}
 		catch(e){
-			console.error('Major problems!! Internal element pointers are missing!\n',Globals.getError(e));
+			//console.warn('Swap failed. ListViewEl and PostViewEl are missing!\n',Globals.getError(e));
+			swallow(e);
 		}
 	},
 
