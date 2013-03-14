@@ -7,7 +7,7 @@ Ext.define( 'NextThought.view.views.Contacts', {
 	],
 
 	cls: 'contacts-view',
-	layout: 'fit',
+	layout: 'auto',
 	title: 'NextThought: Contacts',
 	
 	items: [{
@@ -23,9 +23,13 @@ Ext.define( 'NextThought.view.views.Contacts', {
 
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.tabs = this.down('contacts-tabs');
-		this.mon(this.tabs,'tabchange',this.monitorTabs,this);
+		var me = this;
+		me.callParent(arguments);
+		me.tabs = me.down('contacts-tabs');
+		me.mon(me.tabs,'tabchange',me.monitorTabs,me);
+		me.on('resize',function(){
+			me.tabs.setHeight(me.getHeight());
+		});
 	},
 
 	monitorTabs: function(panel,newTab,oldTab){
