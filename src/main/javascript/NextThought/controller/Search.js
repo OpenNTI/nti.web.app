@@ -194,7 +194,8 @@ Ext.define('NextThought.controller.Search', {
 		s.proxy.url = url.join('');
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'relevance',
-			sortOrder: 'descending'
+			sortOrder: 'descending',
+			exclude: 'application/vnd.nextthought.redaction'
 		});
 
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
