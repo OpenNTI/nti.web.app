@@ -235,15 +235,17 @@ Ext.define('NextThought.controller.Navigation', {
 	gotoBlog: function(user, postId, commentId){
 		var title = 'Thoughts',
 			hash,
-			args = [title];
+			args = [title],
+			pId = arguments.length > 2 ? postId : undefined,
+			cId = arguments.length > 3 ? commentId : undefined;
 
-		if(postId){
-			args.push(postId);
+		if(pId){
+			args.push(pId);
 		}
 
-		if(postId && commentId){
+		if(pId && cId){
 			args.push('comments');
-			args.push(commentId);
+			args.push(cId);
 		}
 
 		hash = user.getProfileUrl.apply(user, args);

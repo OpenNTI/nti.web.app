@@ -72,7 +72,7 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 				lastModified = headline.get('Last Modified'),
 				timeDiff = headline.timeDifference(Ext.Date.now(), lastModified);
 
-			rec.container = r;
+			me.container = r;
 
 			if(me.rendered){
 				me.title.update(title);
@@ -124,8 +124,8 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 	onClick: function(e){
 		e.stopEvent();
 		var me = this;
-		UserRepository.getUser(this.record.container.get('Creator'),function(u){
-			me.fireEvent('navigate-to-blog', u, me.record.container.get('ID'), me.record.get('ID'));
+		UserRepository.getUser(me.container.get('Creator'),function(u){
+			me.fireEvent('navigate-to-blog', u, me.container.get('ID'), me.record.get('ID'));
 		});
 	}
 });

@@ -341,15 +341,19 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 	blogCommentItemClicked: function(rec){
-		if(!rec.container){
-			console.error('The blog comment record container is not set, ', rec);
-			return;
+		var me = this;
+
+		function success(r){
+			UserRepository.getUser(r.get('Creator'), function(user){
+				me.fireEvent('navigate-to-blog', user, r.get('ID'),rec.get('ID'));
+			});
 		}
 
-		var me = this;
-		UserRepository.getUser(rec.container.get('Creator'), function(user){
-			me.fireEvent('navigate-to-blog', user, rec.container.get('ID'),rec.get('ID'));
-		});
+		function fail(){
+			console.log('Can\t find blog entry to navigate to', arguments);
+		}
+
+		$AppConfig.service.getObject(rec.get('ContainerId'), success, fail, me);
 	},
 
 
