@@ -136,7 +136,8 @@ Ext.define('NextThought.editor.Actions', {
 			keyup: me.onKeyup,
 			paste: me.handlePaste,
 			click: me.handleClick,
-			contextmenu: me.handleContext
+			contextmenu: me.handleContext,
+			mouseup: me.onMouseUp
 		});
 
 
@@ -387,6 +388,10 @@ Ext.define('NextThought.editor.Actions', {
 		this.detectTypingAttributes();
 		this.checkWhiteboards();
 		Ext.callback(this.cmp.onKeyUp,this.cmp,[e]);
+	},
+
+	onMouseUp: function(e){
+		this.detectTypingAttributes();
 	},
 
 
