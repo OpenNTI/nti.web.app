@@ -548,6 +548,11 @@ Ext.define('NextThought.controller.Groups', {
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
 			oldContacts;
 
+		if(isMe(username)){
+			console.warn('You should not add yourself to your groups.');
+			return;
+		}
+
 		function finish(){
 			if(!tracker.pop()){
 				Ext.callback(callback);
