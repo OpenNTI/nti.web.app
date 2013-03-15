@@ -146,13 +146,22 @@ Ext.define('NextThought.controller.Profile', {
 
 		if(item && /personalblogcomment$/.test(item.get('MimeType'))){
 			blogCmp = Ext.ComponentQuery.query('profile-blog-post');
+
+			//Add the comment into the view if it is present
 			if(blogCmp.length > 0){
 				blogCmp.first().addIncomingComment(item);
 			}
-			else if(Ext.ComponentQuery.query('profile-blog').length > 0){
-				blogCmp = Ext.ComponentQuery.query('profile-blog').first();
-				blogCmp.updatePostCountOnNewComment(item);
-			}
+
+			//See if we can find an item in a store some where
+			//and increment the post count.
+			Ext.StoreManager.each(function(s){
+				var found = s.getById(item.get('ContainerId'));
+				if(found){
+					found.set('PostCount', found.get('PostCount')+1);
+					return false; //Note we break here because set will have updated the remaining instances;
+				}
+				return true;
+			});
 		}
 	},
 
@@ -269,13 +278,5 @@ Ext.define('NextThought.controller.Profile', {
 				alert('Sorry, could not delete that');
 			}
 		});
-	},
-
-	scrollProfileTo: function(pos, cmp){
-		var p = Ext.get('profile');
-		if(p){
-			p.scrollTo('top', pos, true);
-		}
 	}
-
 });

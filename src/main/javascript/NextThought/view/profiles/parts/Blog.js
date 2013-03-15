@@ -184,7 +184,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		}
 
 		var j = ParseUtils.parseItems( resp.responseText ).first();
-		this.store = NextThought.store.Blog.create();
+		this.store = NextThought.store.Blog.create({storeId: 'blog-'+this.username});
 		this.store.proxy.url = j.getLink('contents');
 
 		this.mon(this.store,{
@@ -220,14 +220,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				return {record: i};
 			});
 		this.add(m);
-	},
-
-
-	updatePostCountOnNewComment: function(item){
-		var postRecord = this.store.getById(item.get('ContainerId'));
-		if(postRecord && isMe(postRecord.get('Creator'))){
-			postRecord.set('PostCount', postRecord.get('PostCount')+1);
-		}
 	},
 
 
