@@ -152,8 +152,9 @@ Ext.define('NextThought.view.form.fields.TagField',{
 				el.dom.value = '';
 				if(!Ext.Array.contains(this.getValue(),val)){
 					this.tokenTpl.insertBefore(this.wrapEl,[val]);
+					this.fireEvent('new-tag',val);
 				}
-				this.el.repaint();
+
 			}
 
 			delete this.working;

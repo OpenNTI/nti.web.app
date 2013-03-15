@@ -74,6 +74,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			title = this.titleEl.down('input'),
 			e = this.editorActions = new EditorActions(this,this.editor);
 
+		this.mon(e.tags,'new-tag', this.syncHeight,this);
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);
 
