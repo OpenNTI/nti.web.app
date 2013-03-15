@@ -66,11 +66,19 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			s.setProxy('memory');
 		}
 
+		function makeMime(v){
+			return 'application/vnd.nextthought.'+ v.toLowerCase();
+		}
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			filter: 'TopLevel',
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
-			exclude: 'application/vnd.nextthought.forums.personalblogcomment'
+			exclude: Ext.Array.map([
+				'bookmark',
+				'forums.PersonalBlogComment',
+				'assessment.AssessedQuestion'
+			],makeMime).join(',')
 		});
 
 		if(!LocationProvider.hasStore(s.storeId)){
