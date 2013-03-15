@@ -51,6 +51,12 @@ describe("Search utils", function() {
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
 			expect(new RegExp(re).test(content)).toBeTruthy();
 		});
+
+		it('Survives punctuation that are regex special chars', function(){
+			var content = "of basketball have developed for casual play. Competitive basketball is primarily an indoor sport played";
+			re = TestSearchUtils.contentRegexFromSearchTerm(content, true);
+			expect(new RegExp(re).test(content)).toBeTruthy();
+		});
 	});
 
 	describe("extractMatchFromFragment", function(){
@@ -67,18 +73,6 @@ describe("Search utils", function() {
 	});
 
 	describe("contentRegexPartsForHit", function(){
-		it('Short ciruits for bad input', function(){
-			var hit = Ext.create('NextThought.model.Hit', {
-				Type: 'Content'
-			});
-
-			expect(TestSearchUtils.contentRegexPartsForHit(hit)).toBeFalsy();
-
-			hit.set('Fragments', [{}]);
-			hit.set('Type', 'Note');
-
-			expect(TestSearchUtils.contentRegexPartsForHit(hit)).toBeFalsy();
-		});
 
 		function hitWithFragments(frags){
 			var hit = Ext.create('NextThought.model.Hit', {

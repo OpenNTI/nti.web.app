@@ -433,12 +433,25 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
+	buildSearchIndex: function(){
+		//We index only things in body, title, and tags
+		function interesting(child){
+			var f = Ext.fly(child);
+
+			return f.parent('.body', true) || f.parent('.title', true) || f.parent('.tags');
+		}
+
+		return TextRangeFinderUtils.indexText(this.el.dom, interesting);
+	},
+
+
 	scrollToHit: function(fragment, phrase){
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,
-			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups),
-			range, pos = -2, nodeTop, scrollOffset;
+			index = this.buildSearchIndex(),
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
+			range, pos = -2, nodeTop, scrollOffset, p;
 
 
 		if(Ext.isEmpty(ranges)){
@@ -458,7 +471,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 
 		console.log('Need to scroll to calculated pos', pos);
-		this.fireEvent('scroll-to', pos, this);
+		if(pos > 0){
+			p = Ext.get('profile');
+			pos -= p.getHeight()/2;
+			if(p){
+				p.scrollTo('top', pos, true);
+			}
+		}
 	},
 
 
@@ -470,6 +489,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			fragments = hit.get('Fragments'),
 			regex, ranges,
 			searchIn = this.el.dom,
+			index = this.buildSearchIndex(),
 			doc = searchIn.ownerDocument,
 			result = [];
 
@@ -477,7 +497,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		console.log('Getting ranges for search hits');
 
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
-		ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, regex);
+		ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, regex, undefined, index);
 		result.push({ranges: ranges.slice(),
 					 key: 'blog'});
 		return result;

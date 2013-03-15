@@ -209,7 +209,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		which = Ext.Array.sort(which);
 
 		function allButQuestions(child){
-			return !Ext.fly(child).parent('.naquestion');
+			return !Ext.fly(child).parent('.naquestion', true);
 		}
 
 		//Index all the text beneath node

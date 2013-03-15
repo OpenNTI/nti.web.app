@@ -232,12 +232,13 @@ Ext.define('NextThought.controller.Navigation', {
 	 * Navigates to a profile blog or profile blog comment
 	 */
 
-	gotoBlog: function(user, postId, commentId){
+	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
 			hash,
 			args = [title],
 			pId = arguments.length > 1 ? postId : undefined,
-			cId = arguments.length > 2 ? commentId : undefined;
+			cId = arguments.length > 2 ? commentId : undefined,
+			ps = arguments.length > 3 ? params : undefined;
 
 		if(pId){
 			args.push(pId);
@@ -249,6 +250,9 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		hash = user.getProfileUrl.apply(user, args);
+		if(ps){
+			hash = hash + '?' + Ext.Object.toQueryString(ps);
+		}
 
 		if(location.hash !== hash){
 			location.hash = hash;

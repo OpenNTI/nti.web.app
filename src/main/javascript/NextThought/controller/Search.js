@@ -244,16 +244,41 @@ Ext.define('NextThought.controller.Search', {
 
 	searchBlogResultClicked: function(result, fragIdx){
 		var u = result.user,
-			r = result.record,
-			postId = r.get('ID');
+		r = result.record,
+		postId = r.get('ID'),
+		hit = result.hit,
+		frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
+		qStr = this.getHitStore().queryString;
 
-		this.gotoBlog(u,postId);
+		function clearCallback(){
+			if(me.onReadyCallbacks){
+				delete me.onReadyCallbacks[qStr];
+			}
+		}
+
+		function onReady(cmp, params){
+			var lookup = params.queryString;
+			clearTimeout(onReady.timeoutTimer);
+			clearCallback();
+			cmp.showSearchHit(hit, frag);
+		}
+
+		if(qStr){
+			if(!this.onReadyCallbacks){
+				this.onReadyCallbacks = {};
+			}
+			this.onReadyCallbacks[qStr] = onReady;
+			onReady.timeoutTimer = setInterval(clearCallback, 3000);
+
+		}
+
+		this.gotoBlog(u,postId, undefined, {queryString: qStr});
 	},
 
 	searchBlogCommentClicked: function(result){
-		var u = result.user,
+		var me = this,
+			u = result.user,
 			r = result.record,
-			hit = result.hit,
 			postId = r.get('ID'),
 			commentId = result.hit.get('ID');
 
@@ -308,7 +333,15 @@ Ext.define('NextThought.controller.Search', {
 		$AppConfig.service.getObject(result.hit.getId(), success, failure);
 	},
 
-	blogPostReady: function(){
-		console.log('Blog post ready recieved', arguments);
+	blogPostReady: function(cmp, params){
+		var qStr = (params || {}).queryString,
+			fn;
+
+		if(qStr && this.onReadyCallbacks){
+			fn = this.onReadyCallbacks[qStr];
+			if(Ext.isFunction(fn)){
+				Ext.callback(fn, this, arguments);
+			}
+		}
 	}
 });
