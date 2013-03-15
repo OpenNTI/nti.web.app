@@ -219,7 +219,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	updateRecord: function(record){
 		var s = record && record.store,
 			max = s && (s.getCount()-1),
-			idx = record && record.index;
+			idx = s && s.indexOf(record);
 
 		this.nextPostEl.addCls('disabled');
 		this.prevPostEl.addCls('disabled');
