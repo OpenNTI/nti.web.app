@@ -19,7 +19,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		{ cls: 'wrap', 'data-commentid':'{ID}', cn:[
 			{ cls: 'meta', cn: [
 				{ tag: 'span', html: '{displayName}', cls: 'name link'},
-				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:m A")}'},
+				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'},
 				{ tag: 'tpl', 'if':'isModifiable', cn:[
 					{ tag:'span', cls: 'edit link', html: 'Edit'},
 					{ tag:'span', cls: 'delete link', html: 'Delete'}
@@ -59,6 +59,8 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		var me = this, r = me.record, rd;
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
+		rd.LastModified = rd['Last Modified'];
+		console.log(rd);
 		UserRepository.getUser(r.get('Creator'),function(u){
 			me.userObject = u;
 			Ext.applyIf(rd, u.getData());
