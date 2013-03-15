@@ -26,16 +26,16 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		function setupStore(){
 			var s = me.store = me.getStore();
-			this.mon(s,{
+			me.mon(s,{
 				scope: me,
 				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
-			if(this.store.getCount()){
-				this.storeLoaded(this.store, this.store.data.items, true);
+			if(me.store.getCount()){
+				me.storeLoaded(me.store, me.store.data.items, true);
 			}
 			else{
-				this.store.load({page:1, callback: me.loadCallback, scope: me});
+				me.store.load({page:1, callback: me.loadCallback, scope: me});
 			}
 		}
 
