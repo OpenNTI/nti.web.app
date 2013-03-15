@@ -1,3 +1,6 @@
+.main-container{
+	overflow: hidden;
+}
 .main-container img{
 	padding-bottom: 50px;
 }
