@@ -66,7 +66,7 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 			if(!r && this.mapping){ r = o.get(this.mapping); }
 
 			var now = new Date(),
-				v = new Date(r*1000);
+				v = Ext.isDate(r) ? r : new Date(r*1000);
 			return this.type.groupStringForElapsedTime(now, v);
 		}
 	}
