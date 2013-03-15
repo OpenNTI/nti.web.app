@@ -33,7 +33,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		if(this.disabled){
+
+		//TODO this whole bit about us destroying ourselves is kinda weird
+		//shouldn't our container manage whether or not we are present
+		//and just not even create us if we will be destroyed
+		if(this.user && !this.user.hasBlog()){
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
@@ -61,7 +65,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		var user = this.user,
 			req = {
-				url: user?user.getLink('Blog'):null,
+				url: user && user.hasBlog() ? user.getLink('Blog') : null,
 				scope: this,
 				success: this.loadContents,
 				failure: fail

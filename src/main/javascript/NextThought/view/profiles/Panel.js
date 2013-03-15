@@ -75,7 +75,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		layout: 'auto',
 		items: [
 			{title: 'Recent Activity', xtype: 'profile-activity' },
-			{title: 'Thoughts', xtype: 'profile-blog', disabled: $AppConfig.disableBlogs === true },
+			{title: 'Thoughts', xtype: 'profile-blog'},
 			{title: 'Library', disabled: true, hidden: true},
 			{title: 'Connections', disabled: true, hidden: true}
 		]

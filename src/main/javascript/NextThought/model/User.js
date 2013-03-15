@@ -70,6 +70,11 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
+	hasBlog: function(){
+		return Boolean(this.getLink('Blog'));
+	},
+
+
 	goToProfile: function(){
 		window.location.hash = this.getProfileUrl();
 	},
