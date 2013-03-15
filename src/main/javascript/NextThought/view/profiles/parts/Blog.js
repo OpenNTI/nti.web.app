@@ -208,7 +208,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 				if(r && i.get('ID') === r.get('ID')){
 					console.debug('Loaded active record into store...');
-					a.updateRecord(i);
+					if( a.updateRecord ){
+						a.updateRecord(i);
+					}
 				}
 
 				return {record: i};
