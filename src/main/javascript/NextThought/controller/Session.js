@@ -16,7 +16,8 @@ Ext.define('NextThought.controller.Session', {
 		'Window',
 		'account.coppa.Window',
 		'account.recovery.Window',
-        'menus.Settings'
+        'menus.Settings',
+		'NextThought.ux.WelcomeGuide'
 	],
 
 	sessionTrackerCookie: 'sidt',
@@ -103,6 +104,19 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
+	maybeShowWelcomePage: function(){
+		var user = $AppConfig.userObject,
+			links = user.get('Links') || {},
+			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.welcome_page'): null;
+
+		if(Ext.isEmpty(welcomeLink)){ return;}
+
+		welcomeLink = welcomeLink[0];
+		this.guideWin = Ext.widget('welcome-guide', {link:welcomeLink});
+		this.guideWin.show();
+	},
+
+
 	maybeTakeImmediateAction: function(r){
 		var m = this;
         if (m.getLink(r, 'account.profile.needs.updated')){
@@ -132,6 +146,8 @@ Ext.define('NextThought.controller.Session', {
         else if (this.bouncedEmail){
             this.showEmailRecoveryWindow('email', 'state-bounced-email');
         }
+
+		this.maybeShowWelcomePage();
     },
 
 

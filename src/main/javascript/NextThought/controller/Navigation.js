@@ -11,7 +11,8 @@ Ext.define('NextThought.controller.Navigation', {
 		'ViewSelect',
 		'Views',
 		'menus.Navigation',
-        'UserDataPanel'
+        'UserDataPanel',
+		'NextThought.ux.WelcomeGuide'
 	],
 
 	init: function() {
@@ -59,6 +60,9 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'notfound':{
 				'go-to-library': this.goToLibrary
+			},
+			'welcome-guide':{
+				'go-to-help': this.goToHelp
 			}
 		});
 	},
@@ -305,6 +309,16 @@ Ext.define('NextThought.controller.Navigation', {
 
 	goToLibrary: function(){
 		this.setView('library');
+	},
+
+	goToHelp: function(){
+		var helpIndex = Library.getStore().findBy(function(r){
+			return /nextthought/i.test(r.get('author'));
+		});
+
+		if(helpIndex >= 0){
+			this.navigate(Library.getStore().getAt(helpIndex).get('NTIID'));
+		}
 	},
 
 

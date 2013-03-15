@@ -1,0 +1,28 @@
+
+.guide-window{
+	@extend .nti-window;
+	background-color: $quad-grey;
+	box-shadow: 0 10px 40px rgba(0,0,0,0.61);
+
+	iframe{
+		&.help-iframe{
+			top: 0 !important;
+			margin: 0 15px 0px 3px !important;
+		}
+		height: 100%;
+	}
+
+	.nti-window-header{
+		display: none;
+	}
+	.nti-window-footer{
+		background-color: #f3f3f3;
+		padding: 15px 10px;
+
+		.x-btn-primary-large{
+			&.dismiss{
+				padding: 8px 30px;
+			}
+		}
+	}
+}

@@ -1,0 +1,7 @@
+.main-container img{
+	padding-bottom: 50px;
+}
+
+.main-container img:first-of-type{
+	padding-top: 45px;
+}
