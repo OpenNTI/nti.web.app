@@ -115,7 +115,7 @@ Ext.define('NextThought.controller.Chat', {
 				'chat': this.enterRoom
 			}
 
-		},{});
+		});
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.
 		this.application.on('session-ready', this.onSessionReady, this);

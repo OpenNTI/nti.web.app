@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Groups', {
 				'presence-changed': this.presenceOfContactChanged
 			}
 
-		},{});
+		});
 	},
 
 

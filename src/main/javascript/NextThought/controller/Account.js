@@ -107,7 +107,7 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.groupButtonClicked
 			}
 
-		},{});
+		});
 	},
 
 
