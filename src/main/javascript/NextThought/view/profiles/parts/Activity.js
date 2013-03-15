@@ -204,17 +204,30 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		var add = this.cmpsFromRecords(records),
 			s = this.store,
-			done = s.currentPage === s.getPageFromRecordIndex(s.getTotalCount());
+			done = s.currentPage === s.getPageFromRecordIndex(s.getTotalCount()),
+			added, lastAdded;
 
 		if(done){
 			add.push({ xtype: 'joined-event', username: this.username });
 		}
 
 		this.clearLoadingBar();
-		this.add(add);
 
 		console.log('Showing', this.items.length, ' objects ');
-		Ext.defer(this.maybeShowMoreItems, 100, this);
+		added = this.add(add) || [];
+		if(!Ext.isEmpty(added)){
+			lastAdded = added.last();
+			if(lastAdded.rendered){
+				this.maybeShowMoreItems();
+			}
+			else{
+				lastAdded.on('afterrender', this.maybeShowMoreItems, this, {single: true});
+			}
+		}
+		else{
+			this.maybeShowMoreItems();
+		}
+
 	},
 
 
@@ -247,15 +260,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 	maybeShowMoreItems: function(){
 		var viewportHeight = Ext.Element.getViewportHeight(),
-			scrollHeight = this.up('profile-view-container').el.dom.scrollHeight, me = this,
-			max = me.store.getPageFromRecordIndex(me.store.getTotalCount());
+			minCount = viewportHeight / 100,
+		me = this;
 
-		if(viewportHeight >= scrollHeight && (me.store.currentPage < max)){
-			console.log('loading the next page. the viewport height: ', viewportHeight, ' and scroll height is: ', scrollHeight);
+		if(minCount > this.items.getCount()){
+			console.log('loading the next page. ', minCount, this.items.getCount());
 			me.prefetchNext();
-
-			//FIXME why are we doing this here
-			setTimeout(function(){ me.maybeShowMoreItems(); }, 2000);
 		}
 	},
 
