@@ -241,6 +241,24 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+	onDelete: function(){
+		this.callParent(arguments);
+		this.hideImageCommentLink();
+	},
+
+	hideImageCommentLink: function(){
+		var aLink =  this.context ? this.context.down('a[href=#mark]') : null;
+		if(aLink){
+			aLink.hide();
+		}
+	},
+
+	setContext: function(){
+		this.callParent(arguments);
+		if(this.record.placeholder){
+			this.hideImageCommentLink();
+		}
+	},
 
 	contextAnnotationActions: function(e,dom){
 		e.stopEvent();
