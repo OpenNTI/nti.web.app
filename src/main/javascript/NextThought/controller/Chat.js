@@ -160,7 +160,7 @@ Ext.define('NextThought.controller.Chat', {
 				},
 				function(){
 					console.error('Could not recover chat history.');
-					w.destroy();
+					me.onExitedRoom(ri.getData());
 				}, this);
 
 		});
