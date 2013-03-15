@@ -35,6 +35,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	]),
 
 
+	tagTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag:'tpl', 'for':'.', cn:[ {tag:'span', cls:'tag', html: '{.}'} ]})),
+
+
 	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
 
 
@@ -128,7 +132,14 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	updateField: function(key, value){
 		var el = this.el.down('.'+key);
-		if(el){ el.update(value); }
+		if(el){
+			if(Ext.isArray(value) && key === 'tags'){
+
+				el.update(this.tagTpl.apply(value));
+				return;
+			}
+			el.update(value);
+		}
 	},
 
 
