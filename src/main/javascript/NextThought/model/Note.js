@@ -234,8 +234,8 @@ Ext.define('NextThought.model.Note', {
 		}
 
 		return (this.children||[]).reduce(function(sum,child){
-			return sum + 1 + (child.getTotalLikeCount ? (child.getTotalLikeCount()||0) : 0);
-		},0);
+			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount()||0) : 0);
+		}, (this.isLiked() ? 1 : 0));
 	},
 
 	convertToPlaceholder: function(){
