@@ -121,6 +121,10 @@ div.nt-token-wrapper{
 			background: $primary-blue;
 
 			padding: 0 7px 0 10px;
+			margin-right: -9px;
+			position: relative;
+			z-index: 2;
+
 			.x {
 				display: inline-block;
 			}
