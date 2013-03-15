@@ -73,7 +73,8 @@ Ext.define('NextThought.view.contacts.Search',{
 		this.store = new NextThought.store.UserSearch();
 		this.store.filter([
 			{ fn: function(rec){ return !rec.isGroup; } },
-			{ fn: function(rec){ return !rec.isCommunity; }}
+			{ fn: function(rec){ return !rec.isCommunity; }},
+			{ fn: function(rec){ return !isMe(rec); }}
 		]);
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
