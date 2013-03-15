@@ -9,7 +9,8 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	cls: 'token-field',
 	ui: 'tokens',
 	hideLabel: true,
-	regex: /[^\t\r\n\s,]+/,
+	delimiterRe: /[\t\r\n\s,]/i,
+	regex: /^[^\t\r\n\s,]+$/,
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'span', cls:'token-input-wrap', cn:[
@@ -60,7 +61,8 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.mon(this.inputEl,{
 			scope: this,
 			keydown: this.onKeyDown,
-			blur: this.onBlur
+			blur: this.onBlur,
+			paste: this.onPaste
 		});
 		this.renderPlaceholder(this.inputEl);
 	},
@@ -101,11 +103,20 @@ Ext.define('NextThought.view.form.fields.TagField',{
             ch = this.to_ascii[ch];
         }
 
-		return Boolean(String.fromCharCode(ch).match(/[\t\r\n\s,]/i));
+		return Boolean(String.fromCharCode(ch).match(this.delimiterRe));
 	},
 
 
 	isToken: function(text) { return (text||'').match(this.regex); },
+
+
+	isMultipleTokens: function(text){
+		var me = this,
+			t = (text||'').split(me.delimiterRe);
+		t = Ext.Array.clean(t);
+		return t.reduce( function(acc, val){ return acc && me.isToken(val); }, true );
+	},
+
 
 	onKeyDown: function(e){
 		var el = this.inputEl,
@@ -143,23 +154,37 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 
 	onBlur: function(){
-		var el = this.inputEl,
+		var me = this,
+			el = me.inputEl,
 			val = (el.getValue()||'').toLowerCase();
 
-		if (!this.working) {
-			this.working = true;
-			if (this.isToken(val)) {
-				el.dom.value = '';
-				if(!Ext.Array.contains(this.getValue(),val)){
-					this.tokenTpl.insertBefore(this.wrapEl,[val]);
-					this.fireEvent('new-tag',val);
-				}
+		function addTag(val){
+			el.dom.value = '';
+			if(!Ext.Array.contains(me.getValue(),val)){
+				me.tokenTpl.insertBefore(me.wrapEl,[val]);
+				me.fireEvent('new-tag',val);
+			}
+		}
 
+		if (!me.working) {
+			me.working = true;
+			if (me.isToken(val)) {
+				addTag(val);
+			} else if(me.isMultipleTokens(val)){
+				val = val.split(me.delimiterRe);
+				val = Ext.Array.clean(val);
+				Ext.each(val,addTag,me);
 			}
 
 			delete this.working;
 		}
 		return true;
+	},
+
+
+	onPaste: function(e){
+		//wait for paste data to actually populate tne input
+		Ext.defer(this.onBlur,100,this);
 	},
 
 
