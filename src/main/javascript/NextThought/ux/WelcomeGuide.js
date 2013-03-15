@@ -44,7 +44,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 			defaults: { xtype:'button', ui:'primary', scale:'large'},
 			items:[
 				{text: 'Learn More',  action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
-				{text: 'Dismiss', cls:'.x-btn-primary-large dismiss', action: 'cancel', handler: function(b, e){ e.stopEvent(); b.up('window').close()}}
+				{text: 'Dismiss', cls:'.x-btn-primary-large dismiss', action: 'cancel', handler: function(b, e){ e.stopEvent(); b.up('window').close();}}
 			]
 		}]
 	},
@@ -53,7 +53,9 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		this.callParent(arguments);
 		this.down('component[cls=help-iframe]').autoEl.src = this.link.href;
 		this.on('show', this.addCustomMask, this);
-		this.on('destroy', this.deleteLink, this);
+		if(this.deleteOnDestroy){
+			this.on('destroy', this.deleteLink, this);
+		}
 	},
 
 	addCustomMask: function(){

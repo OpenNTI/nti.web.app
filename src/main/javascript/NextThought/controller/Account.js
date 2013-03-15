@@ -62,8 +62,13 @@ Ext.define('NextThought.controller.Account', {
 			'profile-panel':{
 				'edit': this.showAccount
 			},
+
 			'settings-menu [action=account]' : {
                 'click': this.showAccount
+            },
+
+			'settings-menu [action=welcome]' : {
+                'click': this.showPermanantWelcome
             },
 
             'settings-menu [action=contact]' : {
@@ -140,6 +145,12 @@ Ext.define('NextThought.controller.Account', {
 
         me.contactUsWin.show();
     },
+
+
+	showPermanantWelcome: function(cmp){
+		this.guideWin = Ext.widget('welcome-guide', {link: cmp.link});
+		this.guideWin.show();
+	},
 
 
     changePassword: function(btn){

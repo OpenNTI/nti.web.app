@@ -107,12 +107,12 @@ Ext.define('NextThought.controller.Session', {
 	maybeShowWelcomePage: function(){
 		var user = $AppConfig.userObject,
 			links = user.get('Links') || {},
-			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.welcome_page'): null;
+			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.initial_welcome_page'): null;
 
 		if(Ext.isEmpty(welcomeLink)){ return;}
 
 		welcomeLink = welcomeLink[0];
-		this.guideWin = Ext.widget('welcome-guide', {link:welcomeLink});
+		this.guideWin = Ext.widget('welcome-guide', {link: welcomeLink, deleteOnDestroy: true});
 		this.guideWin.show();
 	},
 

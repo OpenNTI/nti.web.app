@@ -23,8 +23,16 @@ Ext.define('NextThought.view.menus.Settings',{
         this.callParent(arguments);
 
         //setup fields:
-        var items = [];
+        var items = [],
+			links = $AppConfig.userObject.get('Links') || {},
+			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null;
+
         items.push({ action: 'account', text: 'My Account'});
+
+		if(!Ext.isEmpty(welcomeLink)){
+			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink.first()});
+		}
+
         items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
 
         //disable help because there are now 3 seperate help documents for different environments.  ugh!
