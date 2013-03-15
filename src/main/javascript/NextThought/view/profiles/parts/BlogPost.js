@@ -129,10 +129,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			box = this.responseEl;
 		if(!h){return;}
 
-//Animation code
-		this.navigationBarEl.addCls('animateIn');
-		Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
-//Animation code end
+		//Animation code
+		//this.navigationBarEl.addCls('animateIn');
+		//Ext.defer(this.navigationBarEl.removeCls,1000,this.navigationBarEl,['animateIn animateOut']);
+		//Animation code end
 
 
 		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
@@ -203,10 +203,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.closedPost = true;
 
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
-		var bar = this.navigationBarEl;
-		if( bar ) {
-			bar.removeCls('animateIn animateOut').addCls('animateOut');
-		}
+//		var bar = this.navigationBarEl;
+//		if( bar ) {
+//			bar.removeCls('animateIn animateOut').addCls('animateOut');
+//		}
 
 		Ext.get('profile').scrollTo('top',0,true);
 

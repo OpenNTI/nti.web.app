@@ -129,23 +129,27 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
-	animateTabs: Ext.Function.createBuffered(function(v){
-		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first());
-		if( tabBar ){
-			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
+	animateTabs: Ext.emptyFn,
 
-			if(v!=='remove'){
-				if(v){
-					tabBar.addCls('animateProfileTabsBack');
-					Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
-				}
-				else{
-					tabBar.addCls('animateProfileTabsLeft');
-				}
-			}
 
-		}
-	},1),
+//	animateTabs: Ext.Function.createBuffered(function(v){
+//
+//		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first());
+//		if( tabBar ){
+//			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
+//
+//			if(v!=='remove'){
+//				if(v){
+//					tabBar.addCls('animateProfileTabsBack');
+//					Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
+//				}
+//				else{
+//					tabBar.addCls('animateProfileTabsLeft');
+//				}
+//			}
+//
+//		}
+//	},1),
 
 
 	warnBeforeDismissingEditor: function(){
