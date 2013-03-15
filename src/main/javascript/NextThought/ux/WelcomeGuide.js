@@ -27,7 +27,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		xtype: 'container',
 		dock:'bottom',
 		ui: 'footer',
-		height:65,
+		height:55,
 		baseCls: 'nti-window',
 		layout: {
 			type: 'hbox',
