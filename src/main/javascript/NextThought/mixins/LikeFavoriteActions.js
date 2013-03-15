@@ -47,10 +47,10 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 			}
 		}
 
-		if( !rec.isLikeable() ){
+		if( me.liked && !rec.isLikeable() ){
 			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		}
-		if( !rec.isFavoritable() ){
+		if( me.favorites && !rec.isFavoritable() ){
 			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		}
 
