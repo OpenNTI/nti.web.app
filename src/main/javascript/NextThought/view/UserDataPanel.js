@@ -160,7 +160,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 	             * It's not ideal since it's not dynamic and for the most part looks like the mimetype or className.
 	             * The alternative, would be to do the grouping and sorting ourselves or figure out a better way to approach this.
 	             */
-                this.store = this.buildStore('Bookmarks',storeId,'FavoriteGroupingField');
+                this.store = this.buildStore('Bookmarks',storeId,'GroupingField');
                 NextThought.model.events.Bus.on({
                     scope: this,
                     'favorite-changed': function(rec){
