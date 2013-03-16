@@ -120,6 +120,17 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toString()).toEqual(id);
 			expect(r.toURLSuffix()).toEqual('#!d/c/e%3Af');
 		});
+
+		it('Escapes provider when setting provider', function(){
+			var id = 'tag:a,b:c-d-e:f',
+				r = parse(id);
+
+			expect(r.specific.provider).toEqual('c');
+
+			r.specific.provider = 'Jumbo-MC-13';
+
+			expect(r.specific.provider).toEqual('Jumbo_MC_13');
+		});
 	});
 
 	describe("parseNTIHash", function(){

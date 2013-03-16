@@ -52,8 +52,20 @@ Ext.define('NextThought.util.Views',{
 	},
 
 
-	getTranscript: function(roomInfoId, lastMod, success, failure, scope) {
+	convertToTranscriptId: function(roomInfoId, uname){
 		var id = ParseUtils.parseNtiid(roomInfoId);
+		if(!id){
+			return null;
+		}
+		id.specific.provider = uname;
+		id.specific.type = 'Transcript';
+
+		return id;
+	},
+
+
+	getTranscript: function(roomInfoId, lastMod, success, failure, scope) {
+		var id = this.convertToTranscriptId(roomInfoId, $AppConfig.username);
 		scope = scope || this;
 
 		if(!id){
@@ -61,10 +73,6 @@ Ext.define('NextThought.util.Views',{
 			return;
 		}
 
-		//Swizzle the NTIID
-		id.authority.date = Ext.Date.format(lastMod, 'Y-m-d');
-		id.specific.provider = $AppConfig.username;
-		id.specific.type = 'Transcript';
 		$AppConfig.service.getObject(id, success, failure, scope);
 	}
 

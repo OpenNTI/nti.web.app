@@ -122,11 +122,27 @@ Ext.define('NextThought.util.Parsing',{
 		//TODO yank the fragment off the end
 		specific = parts.slice(2).join(':');
 		specific = specific.split('-');
+
 		result.specific = {
-			provider: specific.length === 3 ? specific[0] : null,
 			type: specific.length === 3 ? specific[1] : specific[0],
 			typeSpecific: specific.length === 3 ? specific[2] : specific[1]
 		};
+
+		//Define a setter on provider property so we can match the ds escaping of
+		//'-' to '_'
+		Ext.Object.defineAttributes(result.specific, {
+			provider: {
+				getter: function(){return this._provider;},
+				setter: function(p){
+					if(p && p.replace){
+						p = p.replace(/-/g,'_');
+					}
+					this._provider = p;
+				}
+			}
+		});
+
+		result.specific.provider = specific.length === 3 ? specific[0] : null;
 
 		result.toString = function() {
 			var m = this,

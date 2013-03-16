@@ -139,6 +139,7 @@ Ext.application({
 			'javascript/specs/util/Search.spec.js',
 			'javascript/specs/util/UserDataThreader.spec.js',
 			'javascript/specs/util/Content.spec.js',
+			'javascript/specs/util/Views.spec.js',
             'javascript/specs/model/Base.spec.js',
 			'javascript/specs/model/Note.spec.js',
 			'javascript/specs/model/Hit.spec.js',
