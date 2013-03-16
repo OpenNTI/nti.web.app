@@ -41,10 +41,10 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		},
 		items:[{
 			layout: {type:'hbox', pack:'end'},
-			defaults: { xtype:'button', ui:'primary', scale:'large'},
+			defaults: { xtype:'button', ui:'blue', scale:'large'},
 			items:[
 				//{text: 'Learn More',  action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
-				{text: 'Get Started!', cls:'.x-btn-primary-large dismiss', action: 'cancel', handler: function(b, e){ e.stopEvent(); b.up('window').close();}}
+				{text: 'Get Started!', cls:'.x-btn-blue-large dismiss', action: 'cancel', handler: function(b, e){ e.stopEvent(); b.up('window').close();}}
 			]
 		}]
 	},

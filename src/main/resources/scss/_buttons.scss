@@ -119,3 +119,28 @@ $button-text-weights: 500,500,600,500;
 	}
 }
 
+.x-btn-blue-large,
+.x-btn-blue-medium {
+	cursor: pointer;
+	button {
+		padding: 8px 20px;
+		letter-spacing: 0.1em;
+		background: #3fb3f6;
+		border: 1px solid #39a1dd;
+		border-radius: 3px;
+		cursor: pointer;
+		z-index: 10;
+
+		.x-btn-inner{
+			font: {
+				size: 14px;
+				style: italic;
+				weight: 600;
+				family: $font;
+			}
+			color: #ffffff;
+			padding-right: 2px;
+		}
+	}
+}
+
