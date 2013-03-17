@@ -19,7 +19,7 @@ Ext.define('NextThought.util.Annotations',{
 			refs = (note.get('references') || []).slice(),
 			//Make sure we create a new date object so we don't mutate the
 			//the field in the child record.
-			ct = new Date(note.get('CreatedTime').getTime());
+			ct = new Date(note.get('CreatedTime').getTime()), lm;
 
 		if(refs.length){
 			refs = Ext.Array.clone(refs);
@@ -32,10 +32,11 @@ Ext.define('NextThought.util.Annotations',{
 
 		//this placeholder "happened in the past" so take the existing time and move it back
 		ct.setMinutes(ct.getMinutes()-1);
+		lm = new Date(ct.getTime());
 
 		holder.beginEdit();
 		holder.set('CreatedTime', ct);
-		holder.set('Last Modified', ct);
+		holder.set('Last Modified', lm);
 		holder.set('Creator', User.getUnresolved('Unknown'));
 		holder.set('references', refs);
 
