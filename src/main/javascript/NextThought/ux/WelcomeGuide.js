@@ -53,6 +53,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		this.callParent(arguments);
 		this.down('component[cls=help-iframe]').autoEl.src = this.link.href;
 		this.on('show', this.addCustomMask, this);
+		this.on('close', this.removeCustomMask, this);
 		if(this.deleteOnDestroy){
 			this.on('destroy', this.deleteLink, this);
 		}
@@ -62,6 +63,15 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		var mask = this.zIndexManager.mask;
 		mask.addCls('nti-black-clear');
 	},
+
+
+	removeCustomMask: function(){
+		var mask = this.zIndexManager.mask;
+		if(mask){
+			mask.removeCls('nti-black-clear');
+		}
+	},
+
 
 	learnMore: function(){
 		console.log('Learn more was clicked');
