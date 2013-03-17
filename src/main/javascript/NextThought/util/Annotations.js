@@ -17,7 +17,9 @@ Ext.define('NextThought.util.Annotations',{
 	replyToPlaceHolder: function(note){
 		var holder = new NextThought.model.Note(),
 			refs = (note.get('references') || []).slice(),
-			ct = note.get('CreatedTime');
+			//Make sure we create a new date object so we don't mutate the
+			//the field in the child record.
+			ct = new Date(note.get('CreatedTime').getTime());
 
 		if(refs.length){
 			refs = Ext.Array.clone(refs);
