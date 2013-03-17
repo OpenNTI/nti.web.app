@@ -75,6 +75,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
 			exclude: Ext.Array.map([
+				'redaction',
+				'transcriptsummary',
 				'bookmark',
 				'forums.PersonalBlogComment',
 				'assessment.AssessedQuestion'
