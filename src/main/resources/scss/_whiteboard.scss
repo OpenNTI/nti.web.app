@@ -57,7 +57,7 @@
 			@include color-button-base;
 			position: absolute;
 			top: 0; left: 0;
-
+            text-indent: -1em;
 			border-width: 0;
 			opacity: 0.5;
 			$g: linear-gradient(107deg,
