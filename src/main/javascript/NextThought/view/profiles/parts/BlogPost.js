@@ -405,20 +405,27 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	onReady: function(){
-		console.debug('ready',arguments);
-		var el;
-		if(this.scrollToComment){
-
-			if(typeof(this.scrollToComment)==='boolean'){
-				el = this.getTargetEl();
+		function scrollCommentIntoView(){
+			if(typeof(me.scrollToComment)==='boolean'){
+				el = me.getTargetEl();
 			}
 			else {
-				el = this.el.down('[data-commentid="'+this.scrollToComment+'"]');
+				el = me.el.down('[data-commentid="'+me.scrollToComment+'"]');
 			}
 
 			if( el ) {
 				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'),false,true]);
 			}
+		}
+
+		console.debug('ready',arguments);
+		var el, images, me = this;
+		if(this.scrollToComment){
+			images = this.el.query('img');
+			Ext.each(images, function(img){
+				img.onload = function(){ scrollCommentIntoView(); }
+			});
+			scrollCommentIntoView();
 		}
 	},
 
