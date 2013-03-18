@@ -209,20 +209,38 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	},
 
 
+	handleNoVisiblePosts: function(){
+		//TODO show something to the user here.  At this point
+		//we don't want to just destroy the tab because we don't
+		//know this condition until they have clicked on the tab
+		//So we probably should just show some placeholder message
+		//about not having any published blogs.
+		console.log('No visible blog bosts');
+	},
+
+
 	loadedContents: function(store, records, success){
 		var a = this.activePost,
-			r = a && a.record,
-			m = Ext.Array.map(records,function(i){
+		r = a && a.record, m;
 
-				if(r && i.get('ID') === r.get('ID')){
-					console.debug('Loaded active record into store...');
-					if( a.updateRecord ){
-						a.updateRecord(i);
-					}
+		//Note This probably changes or gets moved when paging is involved
+		if(success && Ext.isEmpty(records)){
+			this.handleNoVisiblePosts();
+			return;
+		}
+
+
+		m = Ext.Array.map(records,function(i){
+
+			if(r && i.get('ID') === r.get('ID')){
+				console.debug('Loaded active record into store...');
+				if( a.updateRecord ){
+					a.updateRecord(i);
 				}
+			}
 
-				return {record: i};
-			});
+			return {record: i};
+		});
 		this.add(m);
 	},
 
