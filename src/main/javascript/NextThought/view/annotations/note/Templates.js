@@ -263,8 +263,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			buttonText: {'ok': 'Flag'},
 			ui:'caution',
 			title: 'Are you sure?',
-			fn: callback,
-			autoDestroy: false
+			fn: callback
 		});
 	}
 

@@ -423,7 +423,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if(this.scrollToComment){
 			images = this.el.query('img');
 			Ext.each(images, function(img){
-				img.onload = function(){ scrollCommentIntoView(); }
+				img.onload = function(){ scrollCommentIntoView(); };
 			});
 			scrollCommentIntoView();
 		}

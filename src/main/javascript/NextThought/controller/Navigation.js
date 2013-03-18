@@ -313,7 +313,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	goToHelp: function(){
 		var helpIndex = Library.getStore().findBy(function(r){
-			return /nextthought/i.test(r.get('author'));
+			return (/nextthought/i).test(r.get('author'));
 		});
 
 		if(helpIndex >= 0){
