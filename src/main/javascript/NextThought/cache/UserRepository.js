@@ -230,7 +230,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				if (callbacks && callbacks.failure) {
 					callbacks.failure.call(callbacks.scope || this);
 				}
-				console.error('result is null', username, list, url, json);
+				console.warn('result is null', username, list, url, json);
 			}
 		}
 
