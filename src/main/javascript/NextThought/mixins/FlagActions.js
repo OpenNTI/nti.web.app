@@ -5,7 +5,9 @@ Ext.define('NextThought.mixins.FlagActions',{
 			var me = this,
 				rec = me.getRecord();
 
-			function handler(){ rec.flag(me); }
+			function handler(){
+				TemplatesForNotes.areYouSure('Reporting this object cannot be undone.', function(btn){ if(btn === 'ok') rec.flag(me); });
+			}
 
 			if( me.flagEl ){
 				me.mon(me.flagEl, 'click', handler, me);

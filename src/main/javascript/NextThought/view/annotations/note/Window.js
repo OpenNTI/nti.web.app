@@ -80,6 +80,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 		if(!this.down('note-main-view').editorActive() //an editor is not active,
 		&& !e.getTarget('.note-window') // the click did not fall inside the note window
+		&& !e.getTarget('.nti-alert')   // the click did not fall in a messageBox( confirmation box)...
 		&& p //the thing clicked, has to still have a parent node. (if it was a button in a dialog that has been destroyed,...)
 		&& this.zIndexManager.getActive() === this){ // the note window is the top most active window
 			this.destroy(); //then you can close the note window

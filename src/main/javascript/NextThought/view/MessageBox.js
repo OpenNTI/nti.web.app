@@ -55,7 +55,7 @@ Ext.define('NextThought.view.MessageBox',{
 
 					//If there is no formatter do the same
 					//magical stuff we used to do
-					if(/delete/i.test(text)){
+					if(/delete/i.test(text) || /flag/i.test(text)){
 						this.setUI('caution');
 					}
 					else if(/accept/i.test(text)){

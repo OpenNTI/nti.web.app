@@ -105,6 +105,18 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			}
 		}
 
+		function flagItemClick(item , e){
+			e.stopEvent();
+			var menuCls = 'onFlag', me = this;
+
+			TemplatesForNotes.areYouSure('Flagging this item cannot be undone', function(btn){
+				if(btn !== 'ok'){ return; }
+				if (me[menuCls]){
+					me[menuCls].call(me);
+				}
+			});
+		}
+
 		function hasUser(users, name){
 			var found = false;
 			Ext.each(users, function(user){
@@ -140,7 +152,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			itemId: 'Flag',
 			scope: this,
 			ui: 'nt-menuitem', plain: true,
-			handler:moreMenuClick
+			handler:flagItemClick
 		});
 
 		deleteItem = new Ext.Action({
@@ -240,6 +252,20 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 	replyOptionsMouseIn: function() {
 		clearTimeout(this.moreReplyOptionsMouseOutTimer);
+	},
+
+	areYouSure: function(msg,callback){
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: msg,
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Flag'},
+			ui:'caution',
+			title: 'Are you sure?',
+			fn: callback,
+			autoDestroy: false
+		});
 	}
 
 
