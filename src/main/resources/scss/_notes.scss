@@ -230,6 +230,16 @@
 			.main{
 				padding-left: 13px;
 				padding-right: 13px;
+
+				.toolbar{
+					.action.share{
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						width: 36%;
+						overflow: hidden;
+						padding: 0px 10px 0 18px;
+					}
+				}
 			}
 			//instance specific style
 			background: #ffffff;
