@@ -65,19 +65,30 @@ Ext.define('NextThought.util.Ranges',{
 		 * And since we usually expand by a given number of characters,
 		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
 		 */
-		var node = range.commonAncestorContainer, r;
+		var node = range.commonAncestorContainer, r, container;
+
+		if(!node){
+			return null;
+		}
+
+		if(Ext.fly(node).is('[itemprop=nti-data-markupenabled]')){
+			container = node;
+		}
+		else{
+			container = Ext.fly(node).parent('[itemprop=nti-data-markupenabled]', true);
+		}
 
 		//If we are an annotatable image make sure we get the enclosing span so that it is
-		//annotatable in the note window.  TODO also see if we are actually on the image and our parent
-		//is the wrapper
-		if(node.getAttribute && node.getAttribute('itemprop') === 'nti-data-markupenabled'){
-			console.log("we're inside a itemprop span.", node, ', itemprop: ',node.getAttribute('itemprop'));
+		//annotatable in the note window.
+		if(container){
+			console.log("we're inside a itemprop span.", container);
 			r = document.createRange();
-			r.selectNode(range.commonAncestorContainer);
+			r.selectNode(container);
 			return r;
 		}
 		return null;
 	},
+
 
 	//How about a registry that maps the mimetype of the object
 	//to a handler that knows how to give contents
