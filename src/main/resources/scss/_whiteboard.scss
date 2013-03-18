@@ -50,7 +50,7 @@
 			rgba(244,82,82,.7) 50%,
 			rgba(249,249,249,1) 55%);
 		$experimental-support-for-svg: true;
-		@include experimental-value(background, $g);
+		@include background-image($g);
 
 		span.whiteboard-color-inner{display: none;}
 		span.whiteboard-color-icon {
@@ -65,6 +65,7 @@
 				rgba(255,255,255,0) 42%,
 				rgba(255,255,255,0.21) 51%,
 				rgba(255,255,255,1) 100%);
+            $experimental-support-for-svg: true;
 			@include experimental-value(background, $g);
 		}
 
