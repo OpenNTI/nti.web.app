@@ -190,7 +190,14 @@ Ext.define('NextThought.editor.Actions', {
 	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
 	 */
 	handlePaste: function (e, elem) {
-		elem = e.getTarget('.content');
+		console.debug('Called');
+
+		elem = e.getTarget('.content', Number.MAX_VALUE);
+		if(!elem){
+			console.log('Could not paste, the target was not found:',e.getTarget());
+			e.stopEvent();
+			return false;
+		}
 		var be = e.browserEvent,
 		cd = be ? be.clipboardData : null,
 		sel = window.getSelection(),
@@ -241,36 +248,40 @@ Ext.define('NextThought.editor.Actions', {
 			}, 20);
 		}
 		else {
-			console.log('timedout waiting for paste');
+			console.log('timed out waiting for paste');
 			document.body.removeChild(offScreenBuffer);
 		}
 	},
 
 
 	processPaste: function (offScreenBuffer, savedRange, elem) {
-		var pasteddata = offScreenBuffer.innerHTML, range, frag;
+		var pasteData = offScreenBuffer.innerHTML, range, frag;
 
 		try {
 			range = RangeUtils.restoreSavedRange(savedRange);
 		} catch (e) {
-			console.log('Error recreating rangeDesc during processPaste.', savedRange, pasteddata);
+			console.log('Error recreating rangeDesc during processPaste.', savedRange, pasteData);
 			document.body.removeChild(offScreenBuffer);
 			return;
 		}
 
 		try {
-			pasteddata = pasteddata.replace(/\s*(style|class)=".+?"\s*/ig, ' ').replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;').replace(/<meta.*?>/ig, '');
-			frag = range.createContextualFragment(pasteddata);
+			pasteData = pasteData
+					.replace(/\s*(style|class)=".+?"\s*/ig, ' ')
+					.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;')
+					.replace(/<meta.*?>/ig, '');
+
+			frag = range.createContextualFragment(pasteData);
 			range.deleteContents();
 			range.insertNode(frag);
 			range.collapse(false);
-			//Note this I think this breaks badily in IE < 9
-			window.getSelection().removeAllRanges();
+
 			this.lastRange = range;
+			window.getSelection().removeAllRanges();
 			window.getSelection().addRange(range);
 		}
 		catch (e2) {
-			console.log(pasteddata, e2);
+			console.log(pasteData, e2);
 		}
 		elem.focus();
 		document.body.removeChild(offScreenBuffer);
