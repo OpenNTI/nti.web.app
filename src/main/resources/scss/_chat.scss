@@ -431,6 +431,8 @@
 
 			.body {
 				color: $primary-grey;
+				word-wrap: break-word;
+				word-break: break-word;
 				.body-divider {
 					margin-right: 30px;
 
