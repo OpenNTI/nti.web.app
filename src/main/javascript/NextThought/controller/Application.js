@@ -2,11 +2,10 @@ Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
 	requires: [
 		'swfobject',
-		'NextThought.Library',
-		'NextThought.view.MessageBar'
+		'NextThought.Library'
 	],
 
-	views: ['Main'],
+	views: ['Main','MessageBar'],
 
 	launchToken: {},
 

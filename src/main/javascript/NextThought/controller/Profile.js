@@ -1,13 +1,16 @@
 Ext.define('NextThought.controller.Profile', {
 	extend: 'Ext.app.Controller',
 
+	requires:[
+		'NextThought.providers.Location'
+	],
+
 	models: [
 		'forums.Post',
 		'forums.PersonalBlog',
 		'forums.PersonalBlogComment',
 		'forums.PersonalBlogEntry',
-		'forums.PersonalBlogEntryPost',
-		'NextThought.providers.Location'
+		'forums.PersonalBlogEntryPost'
 	],
 
 	stores: [
