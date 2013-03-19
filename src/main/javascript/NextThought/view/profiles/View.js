@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.profiles.View', {
-	extend: 'NextThought.view.ViewBase',
+	extend: 'NextThought.view.View',
 	alias:	'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',

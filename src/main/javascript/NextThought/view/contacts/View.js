@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.contacts.View', {
-	extend: 'NextThought.view.ViewBase',
+	extend: 'NextThought.view.View',
 	alias:	'widget.contacts-view-container',
 	requires: [
 		'NextThought.view.contacts.Grouping',

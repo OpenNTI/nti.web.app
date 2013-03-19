@@ -1,4 +1,4 @@
-Ext.define( 'NextThought.view.ViewBase', {
+Ext.define( 'NextThought.view.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.view-container',
 	layout: 'fit',
