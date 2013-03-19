@@ -328,7 +328,7 @@ Ext.define('NextThought.controller.Navigation', {
 			try {
 				this.track(id);//always switch the menus even if the view is already active
 				//search doesn't have a "view"...just a menu
-				if(id!=='search'){
+				if(button.switchView !== false){
 					this.setView(id);
 				}
 			}
