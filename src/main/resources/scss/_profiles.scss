@@ -240,7 +240,8 @@
 
 
 
-		.blogged-event{
+		.blogged-event,
+		.transcriptsummary-event{
 			position: relative;
 
 			&::after {
@@ -268,6 +269,10 @@
 			padding: 10px 0px 60px 0px;
 			cursor: pointer;
 
+
+			&::after{
+				top: 26px;
+			}
 
 			.icon{
 				float: left;
