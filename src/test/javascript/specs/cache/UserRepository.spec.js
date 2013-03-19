@@ -35,16 +35,19 @@ describe("User Repository/Store/Cache Behavior", function(){
 		var hans;
 
 		beforeEach(function(){
-			hans = createUser('hans', {Presence: 'Online'});
+			hans = createUser('hans', {Presence: 'Offline'});
 			spyOn(hans, 'fireEvent');
 
 			TUR.cacheUser(hans);
 		});
 
+		afterEach(function(){
+			TUR.getStore().remove(hans);
+		});
+
 		it('Updates hans', function(){
 			TUR.presenceChanged('hans', 'Online');
 
-			expect(hans.fireEvent.calls.length).toBe(1);
 			expect(hans.fireEvent).toHaveBeenCalledWith('changed', hans);
 
 			expect(hans.get('Presence')).toBe('Online');
@@ -54,7 +57,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			TUR.presenceChanged('bruce', 'away');
 
 			expect(hans.fireEvent).not.toHaveBeenCalled();
-			expect(hans.get('Presence')).toBe('Online');
+			expect(hans.get('Presence')).toBe('Offline');
 		})
 	});
 
