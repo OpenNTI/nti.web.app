@@ -1,4 +1,3 @@
-$tokens-sprite: url(../images/old_sprites/spr_groups_light.png);
 
 div.nt-token-wrapper{
 	display: inline-block;
@@ -43,23 +42,26 @@ div.nt-token-wrapper{
 			.nt-token-label { vertical-align: middle; }
 
 			.nt-token-nib {
-				background-image: $tokens-sprite;
-				background-repeat: no-repeat;
+				background: $icons no-repeat;
 				display: inline-block;
 				height: 13px;
 				vertical-align: middle;
 				width: 13px;
 
 				&.nt-token-nib-person { display: none; }
-				&.nt-token-nib-public { background-position: 0 0; font-weight: bold;}
-				&.nt-token-nib-group,
+				&.nt-token-nib-public {
+					@include sprite($icons,'light-globe-13x13',$dimensions: true);
+				}
+				&.nt-token-nib-group {
+					@include sprite($icons,'light-groups-12x9',$dimensions: true);
+				}
 				&.nt-token-nib-list {
-					background-position: -14px -14px; font-weight: bold;
+					@include sprite($icons,'lists-white_hover',$dimensions: true);
 				}
 			}
 
 			.nt-token-nib-end {
-				background-position: -28px 0;
+				@include sprite($icons,'light-x-hover',$dimensions: true);
 				height: 7px;
 				width: 7px;
 				margin: 3px;
