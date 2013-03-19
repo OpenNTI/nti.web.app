@@ -79,6 +79,24 @@
 	}
 }
 
+@mixin new-post{
+	&.owner {display: block;}
+
+	display: none;
+	overflow: hidden;
+	height: 32px;
+	font: italic 600 14px/30px "Open Sans", sans-serif;
+	letter-spacing: 0.1em;
+	padding: 0 15px;
+
+	color: #ffffff;
+	background: $primary-blue;
+	border: 1px solid $border-blue;
+	border-radius: 3px;
+
+	cursor: pointer;
+	z-index: 10;
+}
 
 .animateProfileTabsLeft {
 	overflow: hidden;
@@ -96,7 +114,21 @@
 	top: 0; left: 0; right: 0;
 	width: 700px;
 	margin: 0 auto;
-	z-index: 100;
+	z-index: 103;
+}
+
+#view-ctr > .new-blog-post {
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	width: 700px;
+	margin: 0 auto;
+
+	.header {
+		@include new-post;
+		position: absolute;
+		top: 5px; right:0;
+		z-index: 101;
+	}
 }
 
 #profile {
@@ -137,29 +169,12 @@
 			}
 		}
 
-		&.owner {
-			.header {display: block;}
-		}
 
 		.header {
+			@include new-post;
 			position: absolute;
 			top: -42px;
 			right: 0;
-
-			display: none;
-			overflow: hidden;
-			height: 32px;
-			font: italic 600 14px/30px "Open Sans", sans-serif;
-			letter-spacing: 0.1em;
-			padding: 0 15px;
-
-			color: #ffffff;
-			background: $primary-blue;
-			border: 1px solid $border-blue;
-			border-radius: 3px;
-
-			cursor: pointer;
-			z-index: 10;
 		}
 
 

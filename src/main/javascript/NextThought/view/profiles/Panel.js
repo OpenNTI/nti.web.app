@@ -173,8 +173,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
 		this.on('scroll', this.onScroll, this);
 
-		this.tabs = this.down('profile-tabs');
-
 		//They want to disable profile fields for everyone
 		//in some environements.  If the config flag is set
 		//hide everything but avatar and username
@@ -185,6 +183,27 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.locationEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 			this.homePageEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 			this.emailEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		}
+
+		this.tabBarEl = this.tabs.getTabBar().getEl();
+		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
+
+	},
+
+
+	handleScrollHeaderLock: function(e,profileDom){
+		var profileDomParent = profileDom && profileDom.parentNode,
+			profileScroll = Ext.fly(profileDom).getScroll().top,
+			tabBarParent = Ext.getDom(this.tabBarEl).parentNode,
+			cutoff = 268;
+
+		if(tabBarParent === profileDomParent && profileScroll < cutoff){
+			delete this.headerLocked;
+			this.tabBarEl.insertBefore(this.tabs.getEl().first());
+		}
+		else if(tabBarParent !== profileDomParent && profileScroll >= cutoff){
+			this.headerLocked = true;
+			this.tabBarEl.appendTo(profileDomParent);
 		}
 	},
 
@@ -240,6 +259,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 		if(this.nameEditor){
 			this.nameEditor.destroy();
+		}
+
+		//This might not be needed since the el is owned by a component. But better safe than sorry.
+		if(this.headerLocked){
+			this.tabBarEl.insertBefore(this.tabs.getEl().first());
 		}
 
 		this.callParent(arguments);

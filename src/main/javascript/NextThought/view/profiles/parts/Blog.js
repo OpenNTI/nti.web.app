@@ -44,7 +44,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 		if(isMe(this.username) && $AppConfig.service.canBlog()){
-			this.addCls('owner');
 			this.renderSelectors.headerEl = '.header';
 		}
 
@@ -104,9 +103,39 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
 		if(this.headerEl){
+			this.headerEl.addCls('owner');
 			this.mon(this.headerEl,'click',this.onNewPost,this);
+			this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
 		}
 	},
+
+
+	handleScrollHeaderLock: function(e,profileDom){
+		var profileDomParent = profileDom && profileDom.parentNode,
+			profileScroll = Ext.fly(profileDom).getScroll().top,
+			parent = Ext.getDom(this.headerEl).parentNode,
+			cutoff = 268,
+			wrapper;
+
+		if(Ext.fly(parent).is('.new-blog-post')){
+			wrapper = parent;
+			parent = wrapper.parentNode;
+		}
+
+		if(parent === profileDomParent && (profileScroll < cutoff || !this.isVisible())){
+			delete this.headerLocked;
+			this.headerEl.insertBefore(this.getEl().first());
+			if(wrapper){
+				Ext.fly(wrapper).remove();
+			}
+		}
+		else if(this.isVisible() && parent !== profileDomParent && profileScroll >= cutoff){
+			this.headerLocked = true;
+			wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post'});
+			this.headerEl.appendTo(wrapper);
+		}
+	},
+
 
 
 	swapViews: function(viewToShow){
