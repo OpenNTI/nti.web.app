@@ -36,7 +36,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		//TODO this whole bit about us destroying ourselves is kinda weird
 		//shouldn't our container manage whether or not we are present
-		//and just not even create us if we will be destroyed
+		//and just not even create us if we will be destroyed.
+		//
+		// - JG: not if that's not known in the container. If the container drives, then this logic moves up.  But as it
+		// stands, the Blog component attempts to completely encapsulate the blog feature.  The Tab view above this
+		// doesn't know anything about its tabs. So, I believe, while its weird, its still the best way.  A feature
+		// self-destructs itself if its not available. (Its been an idea of mine to attempt to make all features
+		// self-encapsulated-- though, I admit, I haven't succeeded in all cases)
 		if(this.user && !this.user.hasBlog()){
 			Ext.defer(this.destroy,1,this);
 			return;
