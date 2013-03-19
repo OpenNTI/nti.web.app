@@ -49,17 +49,38 @@ Ext.define('NextThought.controller.Forums', {
 			return c === 'Everyone' ? null
 					: getURL([$AppConfig.server.data, 'users/', c, '/Forum'].join('')); }
 
-		var urls = Ext.Array.map($AppConfig.userObject.get('Communities'),makeUrl);
+		//Just for now...
+		function fn(resp){
+			forums.push.apply(forums, ParseUtils.parseItems(resp.responseText));
+			maybeFinish();
+		}
+
+		function maybeFinish(){
+			urls.handled--;
+			if(urls.handled === 0){
+				console.log('List of forums:',forums);
+				//add forums to a Board Store.
+				//Set the store on the boardCmp
+			}
+		}
+
+		var urls = Ext.Array.map($AppConfig.userObject.get('Communities'),makeUrl),
+			forums = [];
+
+		urls.handled = urls.length;
 
 		Ext.each(urls,function(u){
-			if(!u){return;}
 
-//			Ext.Ajax.request({
-//				url: u, method: 'POST',
-//				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
-//			});
+			if(!u){ maybeFinish(); return; }
 
-			Ext.Ajax.request({ url:u });
+			/*
+			//Adds a test post
+			Ext.Ajax.request({
+				url: u, method: 'POST',
+				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
+			}); */
+
+			Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
 		})
 	}
 
