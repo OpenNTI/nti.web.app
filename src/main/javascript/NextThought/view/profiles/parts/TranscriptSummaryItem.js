@@ -46,10 +46,10 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			var less = 0,
 				m = new Ext.util.TextMetrics(),
 				occupantsString,
-				owner = (OwnerIndex >= 0)? u[OwnerIndex].get('alias') : RoomInfo.get('Creator');
+				owner = (OwnerIndex >= 0)? u[OwnerIndex].getId() : RoomInfo.get('Creator');
 			m.bind(me.el.down('.title'));
 
-			owner = (isMe(owner))? 'You' : owner;
+			owner = (isMe(owner))? 'You' : u[OwnerIndex].get('displayName');
 
 			//remove the owner
 			u = Ext.Array.remove(u,u[OwnerIndex]);
