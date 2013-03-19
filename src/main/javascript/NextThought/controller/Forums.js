@@ -24,4 +24,9 @@ Ext.define('NextThought.controller.Forums', {
 
 		});
 	}
+
+
+	/**
+	 * This module will implement its navigation as a stack.  Both in tracking, and in literal view placement.
+	 */
 });

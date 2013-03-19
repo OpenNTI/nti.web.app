@@ -8,6 +8,7 @@ Ext.define( 'NextThought.view.forums.View', {
 	layout: 'auto',
 	title: 'NextThought: Forums',
 
+	//on render we will add the Board to this view.
 
 	restore: function(state){
 		this.fireEvent('finished-restore');
