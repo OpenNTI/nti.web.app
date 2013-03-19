@@ -133,7 +133,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			//its cached
 			success(page);
 		}else{
-			$AppConfig.service.getObject(RoomInfo.get('ContainerId')+"asdfsdf",success,failure,this,true);
+			$AppConfig.service.getObject(RoomInfo.get('ContainerId'),success,failure,this,true);
 		}
 		
 		
