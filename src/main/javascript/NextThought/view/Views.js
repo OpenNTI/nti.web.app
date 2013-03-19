@@ -1,13 +1,11 @@
-
-
 Ext.define( 'NextThought.view.Views', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.main-views',
 	requires: [
 		'Ext.layout.container.Card',
-		'NextThought.view.views.Contacts',
-		'NextThought.view.views.Library',
-		'NextThought.view.views.Profiles'
+		'NextThought.view.contacts.View',
+		'NextThought.view.library.View',
+		'NextThought.view.profiles.View'
 	],
 	
 	plain: true,

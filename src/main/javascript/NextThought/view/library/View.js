@@ -1,5 +1,5 @@
-Ext.define( 'NextThought.view.views.Library', {
-	extend: 'NextThought.view.views.Base',
+Ext.define( 'NextThought.view.library.View', {
+	extend: 'NextThought.view.ViewBase',
 	alias: 'widget.library-view-container',
 	requires: [
 		'NextThought.view.content.Reader',

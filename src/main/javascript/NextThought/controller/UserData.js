@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.UserData', {
 		'content.SimplePopoverWidget',
 		'definition.Window',
 		'sharing.Window',
-		'views.Library',
+		'library.View',
 		'whiteboard.Window',
 		'UserDataPanel'
 	],

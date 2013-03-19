@@ -43,8 +43,7 @@ Ext.define('NextThought.view.ViewSelect', {
 		{
 			iconCls: 'forums',
 			title: 'Forums',
-			tooltip: 'Forums',
-			hidden: true
+			tooltip: 'Forums'
 		},
 		{
 			iconCls: 'contacts',
