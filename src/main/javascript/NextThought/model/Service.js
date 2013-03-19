@@ -274,10 +274,21 @@ Ext.define('NextThought.model.Service', {
 		},
 
 
-	getObject: function (ntiid, success, failure, scope){
+	getObject: function (ntiid, success, failure, scope, safe){
 		return this.getObjectRaw(ntiid,
 				function(resp){
-					Ext.callback(success, scope, ParseUtils.parseItems(resp.responseText));
+					var arg;
+
+					try{
+						arg = ParseUtils.parseItems(resp.responseText);
+					}catch(e){
+						if(safe){
+							Ext.callback(success,scope);
+						}else{
+							throw e;
+						}
+					}
+					Ext.callback(success, scope, arg);
 				},
 				function(req,resp){
 					Ext.callback(failure,scope, [req,resp]);

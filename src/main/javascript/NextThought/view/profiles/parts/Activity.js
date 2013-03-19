@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			sortOrder: 'descending',
 			exclude: Ext.Array.map([
 				'redaction',
-				'transcriptsummary',
+				//'transcriptsummary',
 				'bookmark',
 				'forums.PersonalBlogComment',
 				'assessment.AssessedQuestion'
