@@ -6,6 +6,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		'NextThought.view.profiles.parts.ActivityItem',
 		'NextThought.view.profiles.parts.HighlightContainer',
 		'NextThought.view.profiles.parts.Blogged',
+		'NextThought.view.profiles.parts.TranscriptSummaryItem',
 		'NextThought.view.profiles.parts.Joined',
 		'NextThought.store.ProfileItem'
 	],
