@@ -102,6 +102,7 @@ Ext.application({
 		'Assessment',
 		'Chat',
 		'FilterControl',
+		'Forums',
 		'Google',
 		'Groups',
 		'Navigation',
