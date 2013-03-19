@@ -1,4 +1,6 @@
 Ext.define('NextThought.view.forums.Board',{
+	extend: 'Ext.container.Container',
+	alias: 'widget.forums-board',
 
 	requires: [
 		'NextThought.view.forums.ForumListItem'

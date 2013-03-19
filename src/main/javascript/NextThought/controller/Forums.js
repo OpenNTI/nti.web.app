@@ -28,8 +28,31 @@ Ext.define('NextThought.controller.Forums', {
 	init: function() {
 
 		this.control({
-
+			'forums-board': {
+				'afterrender':this.loadBoards
+			}
 		});
+	},
+
+
+
+	loadBoards: function(boardCmp){
+		function makeUrl(c){
+			return c === 'Everyone' ? null
+					: getURL([$AppConfig.server.data, 'users/', c, '/Forum'].join('')); }
+
+		var urls = Ext.Array.map($AppConfig.userObject.get('Communities'),makeUrl);
+
+		Ext.each(urls,function(u){
+			if(!u){return;}
+
+//			Ext.Ajax.request({
+//				url: u, method: 'POST',
+//				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
+//			});
+
+			Ext.Ajax.request({ url:u });
+		})
 	}
 
 

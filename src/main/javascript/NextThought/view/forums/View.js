@@ -8,10 +8,17 @@ Ext.define( 'NextThought.view.forums.View', {
 	cls: 'forums-view',
 	layout: 'auto',
 	title: 'NextThought: Forums',
+	defaultType: 'forums-board',
 
-	//on render we will add the Board to this view.
 
 	restore: function(state){
 		this.fireEvent('finished-restore');
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.add({});
 	}
+
 });

@@ -411,3 +411,13 @@
 		}
 	}
 }
+
+
+#forums {
+	& > div.x-component,
+	& > div.x-container, {
+		width: 700px;
+		margin: 0 auto;
+		background: rgba(0,0,0,0.2);
+	}
+}
