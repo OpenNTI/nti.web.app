@@ -57,7 +57,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
-		this.mon( this.flagEl, 'click', this.onFlag, this);
 		this.mon( this.contextEl, 'click', this.goToObject, this);
 		this.mon( this.spacerEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
@@ -383,7 +382,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 								cn: [
 									{ cls: 'reply', html: 'Reply' },
 									{ cls: 'edit', html: 'Edit' },
-									{ cls: 'flag', html: 'Flag as Inappropriate' },
+									{ cls: 'flag', html: 'Report' },
 									{ cls: 'delete', html: 'Delete' }
 								]
 							},

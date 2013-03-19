@@ -47,7 +47,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
                     xtype: 'button',
                     flagButton: true,
                     ui: 'caution',
-                    text: 'Flag',
+                    text: 'Report',
                     scale: 'large',
                      disabled: true,
                     handler: function(){
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
     tools:{
         'flag-for-moderation':{
-            tip:'Flag as Inappropriate',
+            tip:'Report',
             handler:'onFlagToolClicked'
         }
     },

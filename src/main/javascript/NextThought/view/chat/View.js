@@ -57,7 +57,7 @@ Ext.define('NextThought.view.chat.View', {
                             xtype: 'button',
                             flagButton: true,
                             ui: 'caution',
-                            text: 'Flag',
+                            text: 'Report',
                             scale: 'large',
                             disabled: true,
                             handler: function(){

@@ -11,7 +11,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	ui: 'nt',
@@ -73,6 +74,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.callParent(arguments);
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
+		this.mixins.flagActions.constructor.call(this);
 		this.on('beforedestroy',this.onBeforeDestroyCheck,this);
 	},
 
@@ -295,13 +297,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	updateToolState: function(){
-		this.liked.set({'title':  this.record.isLiked() ? 'Liked' : 'Like'});
-		if (this.record.isFlagged()){
-			var flagItem = this.replyOptions.down('.flag');
-			if(flagItem){
-				flagItem.setHTML('Flagged');
-			}
-		}
+		this.reflectLikeAndFavorite(this.record);
+		this.reflectFlagged(this.record);
 	},
 
 
@@ -380,6 +377,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             this.mun(this.record, 'updated', this.recordUpdated, this);
 			this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 			this.stopListeningForLikeAndFavoriteChanges(this.record);
+			this.stopListeningForFlagChanges(this.record);
 			this.removeAdditionalRecordListeners(this.record);
 		}
 
@@ -426,6 +424,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 		this.addAdditionalRecordListeners(r);
 		this.listenForLikeAndFavoriteChanges(r);
+		this.listenForFlagChanges(r);
 		return true;
 	},
 

@@ -30,7 +30,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 		this.callParent(arguments);
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
-		this.mon( this.flagEl, 'click', this.onFlag, this);
 	},
 
 	shouldRevealReplies: function(){
@@ -76,7 +75,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 						cn: [
 							{ cls: 'reply', html: 'Reply' },
 							{ cls: 'edit', html: 'Edit' },
-							{ cls: 'flag', html: 'Flag as Inappropriate' },
+							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
 						]
 					},

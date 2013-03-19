@@ -58,6 +58,5 @@ Ext.define('NextThought.mixins.FlagActions',{
 		}
 		this.flagEl[method]('on');
 		this.flagEl.update(flagged?'Reported':'Report');
-		this.flagEl.set({'title': flagged ? 'Flagged as inappropriate' : 'Flag as inappropriate'});
 	}
 });

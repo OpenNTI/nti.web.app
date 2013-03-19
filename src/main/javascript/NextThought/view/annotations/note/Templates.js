@@ -147,7 +147,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 //		});
 
 		flagItem = new Ext.Action({
-			text: 'Flag as Inappropriate',
+			text: 'Report',
 			cls: 'reply-option flag',
 			itemId: 'Flag',
 			scope: this,
@@ -195,7 +195,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
             }
 
 			if( options.record.isFlagged && options.record.isFlagged() ){
-				flagItem.setText('Flagged');
+				flagItem.setText('Reported');
 			}
 		}
 		items.push(flagItem);
@@ -260,7 +260,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			msg: msg,
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Flag'},
+			buttonText: {'ok': 'Report'},
 			ui:'caution',
 			title: 'Are you sure?',
 			fn: callback
