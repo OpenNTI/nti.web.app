@@ -258,7 +258,22 @@
 			}
 		}
 
+		.transcriptsummary-event{
+			position: relative;
+
+			.meta{
+				.title{
+					font-size: 17px !important;
+
+					.name{
+						color: #3FB3F6;
+					}
+				}
+			}
+		}
+
 		.blogged-event,
+		.transcriptsummary-event,
 		.joined-event {
 			margin-top: 20px;
 			background: $panel-background;
