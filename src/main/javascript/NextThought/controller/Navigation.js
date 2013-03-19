@@ -63,6 +63,9 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'welcome-guide':{
 				'go-to-help': this.goToHelp
+			},
+			'view-select menu':{
+				'hide': this.syncButton
 			}
 		});
 	},
@@ -290,14 +293,39 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
+	viewSelectButton: function(id){
+
+		if(!id){return null;}
+
+		var query = 'view-select button[title='+Ext.String.capitalize(id)+'], view-select button[viewId='+id+']',
+			btns = Ext.ComponentQuery.query(query);
+		if(!Ext.isEmpty(btns)){
+			return btns.first();
+		}
+		return null;
+	},
+
+
 	track: function(view){
-		var query = 'view-select button[title='+Ext.String.capitalize(view)+'], view-select button[viewId='+view+']';
+		var btn = this.viewSelectButton(view);
 		try {
-			Ext.ComponentQuery.query(query)[0].toggle(true);
+			if(btn){
+				btn.toggle(true);
+			}
 		}
 		catch(e){
 			console.error('Looks like the "'+view+'" button was not included or was typo\'ed', e.stack);
 		}
+	},
+
+
+	syncButton: function(){
+		console.log('Need to sync button');
+		var mainViews = this.viewport.views,
+			activeItem = mainViews.getActive(),
+			activeId = activeItem ? activeItem.id : null;
+
+		this.track(activeId);
 	},
 
 

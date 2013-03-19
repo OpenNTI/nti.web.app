@@ -37,9 +37,12 @@ Ext.define('NextThought.view.ViewSelect', {
 			title: 'Library',
 			tooltip: 'Library',
 			switchView: false,
-			menu: {xtype: 'navigation-menu', items:[
-				{xtype:'navigation-collection'}
-			]}
+			menu: {
+				xtype: 'navigation-menu',
+				items:[
+				   {xtype:'navigation-collection'}
+				]
+			}
 		},
 		{
 			iconCls: 'forums',
@@ -64,11 +67,11 @@ Ext.define('NextThought.view.ViewSelect', {
 				items:[
 					{ xtype: 'searchfield' },
 					{ xtype: 'container',
-						overflowX: 'hidden',
-						overflowY: 'scroll',
-						id: 'search-results',
-						hideMode: 'display',
-						flex: 1 }
+					  overflowX: 'hidden',
+					  overflowY: 'scroll',
+					  id: 'search-results',
+					  hideMode: 'display',
+					  flex: 1 }
 				],
 				listeners:{
 					show: function(m){
