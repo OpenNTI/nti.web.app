@@ -40,6 +40,15 @@ Ext.define('NextThought.controller.Search', {
 		}
 	],
 
+	statics:{
+		mimeTypes:{
+			Content:"application/vnd.nextthought.bookcontent",
+			Note:  "application/vnd.nextthought.note",
+			Highlight: "application/vnd.nextthought.highlight",
+			Post: ["application/vnd.nextthought.forums.personalblogentrypost", "application/vnd.nextthought.forums.personalblogcomment"],
+			MessageInfo: "application/vnd.nextthought.messageinfo"
+		}
+	},
 
 	init: function() {
 		this.control({
@@ -180,7 +189,7 @@ Ext.define('NextThought.controller.Search', {
 				'/',
 				value,
 				partial? '*':''
-			];
+			], selectedMimeTypes = [], me = this;
 
 		//clear old results from both store and search results.
 		this.clearSearchResults();
@@ -188,6 +197,16 @@ Ext.define('NextThought.controller.Search', {
 
 		s.clearFilter();
 		if(filter){
+			Ext.each( filter.value, function(item){
+				var mt = me.self.mimeTypes[item.value];
+				if(mt){
+					if(Ext.isArray(mt)){
+						selectedMimeTypes = Ext.Array.merge(selectedMimeTypes, mt);
+					}else{
+						selectedMimeTypes.push(mt);
+					}
+				}
+			});
 			s.filter([{filterFn: function(item) {
 				return filter.test(item); }} ]);
 		}
@@ -195,7 +214,7 @@ Ext.define('NextThought.controller.Search', {
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'relevance',
 			sortOrder: 'descending',
-			exclude: 'application/vnd.nextthought.redaction'
+			accept: selectedMimeTypes.join(',')
 		});
 
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
