@@ -10,15 +10,12 @@ Ext.define( 'NextThought.view.forums.View', {
 	title: 'NextThought: Forums',
 	defaultType: 'forums-board',
 
+	items: [
+		{}//forums-board
+	],
 
 	restore: function(state){
 		this.fireEvent('finished-restore');
-	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.add({});
 	}
 
 });
