@@ -1,4 +1,9 @@
 Ext.define('NextThought.view.forums.Forum',{
+
+	requires: [
+		'NextThought.view.forums.TopicListItem'
+	]
+
 	/**
 	 * https://docs.google.com/a/nextthought.com/presentation/d/18qyM3011F_AXjwAPGpE-94DPKmuPPPnKQ0EepyAoXmQ/edit#slide=id.gb09172a6_02
 	 *

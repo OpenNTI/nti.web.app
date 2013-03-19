@@ -11,9 +11,16 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	stores: [
+		//'Board','Forums'...
 	],
 
 	views: [
+		'forums.Board',
+		'forums.Forum',
+		'forums.ForumListItem',
+		'forums.Topic',
+		'forums.TopicListItem',
+		'forums.View'
 	],
 
 	refs: [],
