@@ -85,8 +85,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}else{
 					occupantsString = owner + "had a chat with" + me.stringifyNames(u, less - 1);
 				}
-				//width of the element - width of the icon -  the margins of the icon
-				width = me.el.down('.title').getWidth() - me.el.down('.icon').getWidth() - ( 2 * me.el.down('.icon').getMargin().left +  me.el.down('.icon').getMargin().right);
+				//width of the element
+				width = me.el.down('.title').getWidth();
 				if( width < m.getSize(occupantsString).width){
 					break;
 				}
