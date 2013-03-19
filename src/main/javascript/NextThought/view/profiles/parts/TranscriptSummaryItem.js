@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					{tag:'tpl', 'if':'single', html:' had a chat with '},
 					{tag:'tpl', 'if':'meeting', html:' had a group chat'}
 				]},
-				{tag:'span', cls:'name recepients', html: '{recepient}'}
+				{tag:'span', cls:'name recepients', html: '{recepient}.'}
 
 			] },
 			{cls: 'date', html: '{date}'}
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 		me.callParent(arguments);
 
 		function showRecepients(u){
-			var less = 0,
+			var width, less = 0,
 				m = new Ext.util.TextMetrics(),
 				occupantsString,
 				owner = (OwnerIndex >= 0)? u[OwnerIndex].getId() : RoomInfo.get('Creator');
@@ -80,12 +80,14 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					me.renderTpl.overwrite(me.renderData);
 				}
 
-				if(u.length !== 1){
+				if(u.length > 1){
 					occupantsString = owner + "had a group chat with" + me.stringifyNames(u, less - 1);
 				}else{
 					occupantsString = owner + "had a chat with" + me.stringifyNames(u, less - 1);
 				}
-				if((!me.el.down('.title')) || me.el.down('.title').getWidth() < m.getSize(occupantsString).width){
+				//width of the element - width of the icon -  the margins of the icon
+				width = me.el.down('.title').getWidth() - me.el.down('.icon').getWidth() - ( 2 * me.el.down('.icon').getMargin().left +  me.el.down('.icon').getMargin().right);
+				if( width < m.getSize(occupantsString).width){
 					break;
 				}
 			}
