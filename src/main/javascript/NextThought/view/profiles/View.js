@@ -16,10 +16,12 @@ Ext.define( 'NextThought.view.profiles.View', {
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 	},
 
+
 	onBeforeDeactivate: function(){
 		var child = this.down('profile-panel');
 		return child && child.fireEvent('beforedeactivate');
 	},
+
 
 	restore: function(state){
 		state = ((state||{}).profile||{});
@@ -33,6 +35,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 			me.fireEvent('finished-restore');
 		});
 	},
+
 
 	beforeRestore: function(){
 		return !Boolean(this.el.down('.blog-editor'));
@@ -93,6 +96,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 
 		}, this, true);
 	},
+
 
 	onDeactivated: function(){
 		var profile = this.down('profile-panel');
