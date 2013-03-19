@@ -6,7 +6,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 	cls: 'transcriptsummary-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'avatar', style: {backgroundImage: ''}},
+		{ cls: 'avatar', style: {backgroundImage: "url('resources/images/icons/chat-32-blue.png')"}},
 		{ cls: 'meta', cn:[
 			{ cls: 'title', cn: [
 				{tag:'span', cls:'name', html: '{owner}'},
@@ -40,7 +40,13 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 
 
 		UserRepository.getUser(occupants, function(u){
-			var owner = (OwnerIndex > 0)? u[OwnerIndex].get('ID') : RoomInfo.get('Creator');
+			var less = 0,
+				m = new Ext.util.TextMetrics(),
+				occupantsString,
+				owner = (OwnerIndex > 0)? u[OwnerIndex].get('ID') : RoomInfo.get('Creator');
+				m.bind(me.el);
+
+
 			//remove the owner
 			u = Ext.Array.remove(u,u[OwnerIndex]);
 
@@ -52,22 +58,33 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					u[index] = item.get('ID');
 				}
 			}, me);
+			u = ['you','me','him','her','guy','dog','cat'];
 
-			//get recepients string
-			me.renderData = Ext.apply(me.renderData || {},{
-				owner: (isMe(owner))? 'You' : owner,
-				group: (u.length != 1),
-				single: (u.length == 1),
-				recepient: me.stringifyNames(u),
-				date:  Ext.Date.format(date, 'F j, Y')
-			});
-			if(me.rendered){
-				//oops...we resolved later than the render...re-render
-				me.renderTpl.overwrite(me.el,me.renderData);
-			}else{
-				me.renderTpl.overwrite(me.renderData);
+			occupantsString = me.stringifyNames(u,less);
+
+			//check the size of the names
+			while(m.getWidth() < m.getSize(occupantsString).width && less <= u.length){
+				less++;
+				occupantsString = me.stringifyNames(u,less);
+				me.renderData = Ext.apply(me.renderData || {},{
+					owner: (isMe(owner))? 'You' : owner,
+					group: (u.length != 1),
+					single: (u.length == 1),
+					recepient: occupantsString,
+					date:  Ext.Date.format(date, 'F j, Y')
+				});
+				if(me.rendered){
+					//oops...we resolved later than the render...re-render
+					me.renderTpl.overwrite(me.el,me.renderData);
+				}else{
+					me.renderTpl.overwrite(me.renderData);
+				}
 			}
+
+				
 		});
+
+		this.mon(this.el,'click',this.onClick,this);
 	},
 
 	stringifyNames: function(names,less){
@@ -98,6 +115,15 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}
 			}
 		}
+	},
+
+	onClick: function(){
+		var errMsg = "Unable to load chat transcript.";
+		if(!this.record){
+			alert({ title : 'Error' , msg : errMsg, icon: 'warning-red'});
+			return;
+		}
+		this.fireEvent('open-chat-transcript',this.record,'Opening chat transcript.');
 	}
 
 	

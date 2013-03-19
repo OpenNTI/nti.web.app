@@ -109,9 +109,12 @@ Ext.define('NextThought.controller.UserData', {
 			'user-data-panel': {
 				'open-chat-transcript': this.openChatTranscript
 			},
-		'search-result-messageinfo':{
-			'open-chat-transcript': this.openChatTranscript
-		},
+			'search-result-messageinfo':{
+				'open-chat-transcript': this.openChatTranscript
+			},
+			'profile-activity-transcriptsummary-item':{
+				'open-chat-transcript': this.openChatTranscript
+			},
 			'content-page-widgets': {
 				'save-new-bookmark': this.saveNewBookmark
 			}

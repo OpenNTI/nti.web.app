@@ -261,6 +261,9 @@
 		.transcriptsummary-event{
 			position: relative;
 
+			.avatar{
+				background-size: contain !important;
+			}
 			.meta{
 				.title{
 					font-size: 17px !important;
