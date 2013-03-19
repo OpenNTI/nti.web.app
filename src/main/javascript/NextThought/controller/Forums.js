@@ -3,7 +3,15 @@ Ext.define('NextThought.controller.Forums', {
 
 	models: [
 		'forums.Board',
+		'forums.CommunityForum',
+		'forums.CommunityHeadlineTopic',
 		'forums.Forum',
+		'forums.GeneralForum',
+		'forums.GeneralForumComment',
+		'forums.GeneralHeadlinePost',
+		'forums.GeneralHeadlineTopic',
+		'forums.GeneralPost',
+		'forums.GeneralTopic',
 		'forums.HeadlinePost',
 		'forums.HeadlineTopic',
 		'forums.Post',
