@@ -63,6 +63,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}
 			}, me);
 
+			//u = ['you','me','she','he','her','him','dog','cat','cow'];
+
 			for(less = u.length; less >= 0; less--){
 
 				me.renderData = Ext.apply(me.renderData || {},{
@@ -86,7 +88,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					occupantsString = owner + "had a chat with" + me.stringifyNames(u, less - 1);
 				}
 				//width of the element
-				width = me.el.down('.title').getWidth();
+				width = me.el.down('.title').getWidth() - parseInt(me.el.getStyle('padding-right'));
 				if( width < m.getSize(occupantsString).width){
 					break;
 				}
