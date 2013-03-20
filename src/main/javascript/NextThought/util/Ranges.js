@@ -65,17 +65,18 @@ Ext.define('NextThought.util.Ranges',{
 		 * And since we usually expand by a given number of characters,
 		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
 		 */
-		var node = range.commonAncestorContainer, r, container;
+		var node = range.commonAncestorContainer, r, container,
+			markupSelector = '[itemprop~=nti-data-markupenabled]';
 
 		if(!node){
 			return null;
 		}
 
-		if(Ext.fly(node).is('[itemprop=nti-data-markupenabled]')){
+		if(Ext.fly(node).is(markupSelector)){
 			container = node;
 		}
 		else{
-			container = Ext.fly(node).parent('[itemprop=nti-data-markupenabled]', true);
+			container = Ext.fly(node).parent(markupSelector, true);
 		}
 
 		//If we are an annotatable image make sure we get the enclosing span so that it is
