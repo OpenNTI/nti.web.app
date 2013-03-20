@@ -8,7 +8,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions: 'NextThought.mixins.FlagActions',
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	cls: 'blog-comment',
