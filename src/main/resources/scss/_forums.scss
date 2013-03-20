@@ -98,6 +98,60 @@
 	z-index: 10;
 }
 
+
+@mixin forum-list-item {
+
+	.forum-list-item {
+		margin: 30px 0 0 0;
+		cursor: pointer;
+		border: 0 solid $border-grey;
+		border-bottom-width: 1px;
+
+		.title {
+			color: $primary-grey;
+			font: normal 300 28px/40px $font;
+			padding-bottom: 5px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+		.description {
+			color: $primary-grey;
+			font: normal normal 14px/1.8em $font;
+		}
+		.meta {
+			margin: 30px 0 10px 0;
+			text-transform: uppercase;
+			font: normal 600 12px $font;
+			color: $tertiary-grey;
+
+			.count {
+				color: $primary-blue;
+			}
+
+			span {
+				display: inline-block;
+				&::after{
+					color: $tertiary-grey;
+					font: normal 500 12px/20px $font;
+
+					position: static;
+					content: '\00B7';
+					vertical-align: middle;
+					display: inline;
+					padding: 0 0.5em;
+					background: none;
+				}
+				&:last-of-type::after {
+					content: '';
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+
 .animateProfileTabsLeft {
 	overflow: hidden;
 	& > .nti-body { @include animate($name: profileTabsLeft, $duration: 0.7s, $delay: 0s); }}
@@ -413,11 +467,18 @@
 }
 
 
+
+
 #forums {
+	overflow: auto;
+
 	& > div.x-component,
 	& > div.x-container, {
 		width: 700px;
-		margin: 0 auto;
-		background: rgba(0,0,0,0.2);
+		margin: 60px auto 0 auto;
+
+		&.forum-list {
+			@include forum-list-item;
+		}
 	}
 }

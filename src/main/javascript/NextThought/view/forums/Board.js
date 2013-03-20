@@ -1,13 +1,29 @@
+function db(){debugger;}
 Ext.define('NextThought.view.forums.Board',{
 	extend: 'Ext.view.View',
 	alias: ['widget.forums-board','widget.forums-forum-list'],
 
+	requires: [ 'NextThought.util.Time' ],
 
-	itemSelector: '.item',
+	cls: 'forum-list',
+	itemSelector: '.forum-list-item',
 
 	tpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for':'.', cn: [
-			{ cls: 'item', html: '{Creator} / {title}'}
+			{ cls: 'forum-list-item', cn: [
+				{ tag: 'tpl', 'if':'title == \'Forum\'', cn: { cls: 'title', html: '{Creator} / {title}' } },
+				{ tag: 'tpl', 'if':'title != \'Forum\'', cn: { cls: 'title', html: '{title}' } },
+				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
+				{ cls: 'meta', cn:[
+					{ tag: 'span', cls:'count', html: '{TopicCount} Discussions' },
+					//Aaron's design has an aggregate comment(post) count for the entire forum at the list level...
+					// I'm just putting the field in the template for shits and giggles. It won't show up unless this
+					// value is populated.
+					{ tag: 'tpl', 'if':'CommentCount', cn: { tag: 'span', cls:'count', html: '{CommentCount} Comments' }},
+
+					{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
+				]}
+			]}
 		]
 	})
 
