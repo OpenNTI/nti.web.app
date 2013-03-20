@@ -19,15 +19,14 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	stores: [
+		'NTI'
 		//'Board','Forums'...
 	],
 
 	views: [
 		'forums.Board',
 		'forums.Forum',
-		'forums.ForumListItem',
 		'forums.Topic',
-		'forums.TopicListItem',
 		'forums.View'
 	],
 
@@ -61,13 +60,19 @@ Ext.define('NextThought.controller.Forums', {
 				console.log('List of forums:',forums);
 				//add forums to a Board Store.
 				//Set the store on the boardCmp
+				store.add(forums);
 			}
 		}
 
 		var urls = Ext.Array.map($AppConfig.userObject.get('Communities'),makeUrl),
-			forums = [];
+			forums = [],
+			store = NextThought.store.NTI.create({
+				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
+			});
 
 		urls.handled = urls.length;
+
+		boardCmp.bindStore(store);
 
 		Ext.each(urls,function(u){
 

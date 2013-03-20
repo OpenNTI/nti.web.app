@@ -1,10 +1,15 @@
 Ext.define('NextThought.view.forums.Board',{
-	extend: 'Ext.container.Container',
-	alias: 'widget.forums-board',
+	extend: 'Ext.view.View',
+	alias: ['widget.forums-board','widget.forums-forum-list'],
 
-	requires: [
-		'NextThought.view.forums.ForumListItem'
-	]
+
+	itemSelector: '.item',
+
+	tpl: Ext.DomHelper.markup({
+		tag: 'tpl', 'for':'.', cn: [
+			{ cls: 'item', html: '{Creator} / {title}'}
+		]
+	})
 
 	/**
 	 * https://docs.google.com/a/nextthought.com/presentation/d/18qyM3011F_AXjwAPGpE-94DPKmuPPPnKQ0EepyAoXmQ/edit#slide=id.g9418ebe4_053
@@ -18,4 +23,6 @@ Ext.define('NextThought.view.forums.Board',{
 	 * When a user selects one we will add that view (Forum) onto the stack, suppressing this one. (The stack and impl
 	 * to be handled in the controller)
 	 */
+
+
 });

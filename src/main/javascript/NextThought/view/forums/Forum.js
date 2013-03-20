@@ -1,8 +1,14 @@
 Ext.define('NextThought.view.forums.Forum',{
+	extend: 'Ext.view.View',
+	alias: ['widget.forums-forum','widget.forums-topic-list'],
 
-	requires: [
-		'NextThought.view.forums.TopicListItem'
-	]
+	itemSelector: '.item',
+
+	tpl: Ext.DomHelper.markup({
+		tag: 'tpl', 'for':'.', cn: [
+			{ cls: 'item', html: '{title}'}
+		]
+	})
 
 	/**
 	 * https://docs.google.com/a/nextthought.com/presentation/d/18qyM3011F_AXjwAPGpE-94DPKmuPPPnKQ0EepyAoXmQ/edit#slide=id.gb09172a6_02
