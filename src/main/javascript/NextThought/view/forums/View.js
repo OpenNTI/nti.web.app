@@ -19,7 +19,7 @@ Ext.define( 'NextThought.view.forums.View', {
 	},
 
 
-	getHash: function(){
+	getFragment: function(){
 		return '!forums';
 	}
 

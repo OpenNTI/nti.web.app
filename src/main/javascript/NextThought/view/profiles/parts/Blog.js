@@ -286,15 +286,16 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	updateLocation: function(postId,subsection){
 		var u = this.user,
-			hash, args=[this.title, postId, subsection];
+			fragment,
+			args=[this.title, postId, subsection];
 
 		if(!subsection || !Ext.isString(subsection)){ args.pop(); }
 		if(!postId || !Ext.isString(postId)){args.pop();}
 
-		hash = u.getProfileUrl.apply(u,args);
+		fragment = u.getProfileUrl.apply(u,args);
 
-		if(location.hash !== hash){
-			location.hash = hash;
+		if(location.hash !== fragment){
+			location.hash = fragment;
 		}
 	},
 

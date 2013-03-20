@@ -211,7 +211,7 @@ Ext.define('NextThought.providers.Location', {
 			}
 
 			if(fromHistory!==true){
-				history.pushState({location: ntiid}, me.findTitle(ntiid,'NextThought'), me.getHash(ntiid));
+				history.pushState({location: ntiid}, me.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 			}
 
 			//remember last ntiid for this book if it is truthy
@@ -239,7 +239,7 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	getHash: function(ntiid) {
+	getFragment: function(ntiid) {
 		var o = ParseUtils.parseNtiid(ntiid);
 		return o? o.toURLSuffix() : '';
 	},

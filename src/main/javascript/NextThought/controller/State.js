@@ -20,9 +20,9 @@ Ext.define('NextThought.controller.State', {
 		this.addEvents('restore');
 		this.on('restore',this.restoreState,this);
 
-		this.hashInterpreterMap = {
-			'#!profile': Ext.bind(this.interpretProfileHash,this),
-			'#!forums': Ext.bind(this.interpretForumsHash,this)
+		this.fragmentInterpreterMap = {
+			'#!profile': Ext.bind(this.interpretProfileFragment,this),
+			'#!forums': Ext.bind(this.interpretForumsFragment,this)
 		};
 
 		return m;
@@ -114,7 +114,7 @@ Ext.define('NextThought.controller.State', {
 			//Hash changes are their own entry in the history... so we do not need to push history, we just need to
 			// handle the change.
 			console.debug('Hash change');
-			var newState = me.interpretHash(location.hash);
+			var newState = me.interpretFragment(location.hash);
 			if(history.updateState(newState)){
 				me.restoreState(newState);
 				history.replaceState(me.getState(),document.title,location.toString());
@@ -136,15 +136,15 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretForumsHash: function(hash,query){
-		console.debug('Hash:', hash, 'Query: ', query);
+	interpretForumsFragment: function(fragment,query){
+		console.debug('Fragment:', fragment, 'Query: ', query);
 		return {};
 	},
 
 
-	interpretProfileHash: function(hash,query){
+	interpretProfileFragment: function(fragment,query){
 		var result = {},
-			user = this.getUserModel().getProfileStateFromHash(hash);
+			user = this.getUserModel().getProfileStateFromFragment(fragment);
 		if(user){
 			result = {
 				active: 'profile',
@@ -156,23 +156,23 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretHash: function(hashStr){
-		hashStr = hashStr.split('?');
-		var query = this.parseQueryString(hashStr[1]),
-			hash = hashStr[0]||'',
-			hashRoot = (hash.substr(0, hash.indexOf('/'))||hash).toLowerCase(),
-			ntiid = ParseUtils.parseNtiHash(hash),
+	interpretFragment: function(fragmentStr){
+		fragmentStr = fragmentStr.split('?');
+		var query = this.parseQueryString(fragmentStr[1]),
+			fragment = fragmentStr[0]||'',
+			root = (fragment.substr(0, fragment.indexOf('/'))||fragment).toLowerCase(),
+			ntiid = ParseUtils.parseNtiFragment(fragment),
 			result = {};
 
 
-		if(this.hashInterpreterMap.hasOwnProperty(hashRoot)){
-			result = this.hashInterpreterMap[hashRoot](hash,query);
+		if(this.fragmentInterpreterMap.hasOwnProperty(root)){
+			result = this.fragmentInterpreterMap[root](fragment,query);
 		}
 		else if(ntiid){
 			result = {active: 'library', location: ntiid};
 		}
 
-		console.debug('Hash Interpeted:',result);
+		console.debug('Fragment interpreted:',result);
 		return result;
 	},
 
@@ -194,15 +194,15 @@ Ext.define('NextThought.controller.State', {
 
 
 	track: function(viewId){
-		var hash, state = {active:viewId},
+		var fragment, state = {active:viewId},
 			path = location.pathname;
 		if(this.currentState.active !== viewId && NextThought.isInitialized){
 
-			try{ hash = Ext.getCmp(viewId).getHash(); }
+			try{ fragment = Ext.getCmp(viewId).getFragment(); }
 			catch(e){ console.error(Globals.getError(e)); }
 
-			location.hash = hash||'';
-			if(hash){
+			location.hash = fragment||'';
+			if(fragment){
 				path = location.toString();
 			}
 
@@ -319,8 +319,8 @@ Ext.define('NextThought.controller.State', {
 
 			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
 			if(location.hash){
-				console.debug('hash trumps state', location.hash);
-				Ext.apply(result,this.interpretHash(location.hash));
+				console.debug('fragment trumps state', location.hash);
+				Ext.apply(result,this.interpretFragment(location.hash));
 			}
 			return result;
 		}

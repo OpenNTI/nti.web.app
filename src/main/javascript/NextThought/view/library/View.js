@@ -98,7 +98,7 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
-	getHash: function(){
+	getFragment: function(){
 		var o = ParseUtils.parseNtiid(LocationProvider.currentNTIID);
 		return o? o.toURLSuffix() : null;
 	}

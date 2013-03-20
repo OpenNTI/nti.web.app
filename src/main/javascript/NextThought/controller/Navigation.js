@@ -241,7 +241,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
-			hash,
+			fragment,
 			args = [title],
 			pId = arguments.length > 1 ? postId : undefined,
 			cId = arguments.length > 2 ? commentId : undefined,
@@ -256,13 +256,13 @@ Ext.define('NextThought.controller.Navigation', {
 			args.push(cId);
 		}
 
-		hash = user.getProfileUrl.apply(user, args);
+		fragment = user.getProfileUrl.apply(user, args);
 		if(ps){
-			hash = hash + '?' + Ext.Object.toQueryString(ps);
+			fragment = fragment + '?' + Ext.Object.toQueryString(ps);
 		}
 
-		if(location.hash !== hash){
-			location.hash = hash;
+		if(location.hash !== fragment){
+			location.hash = fragment;
 		}
 	},
 

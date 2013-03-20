@@ -19,7 +19,7 @@ Ext.define( 'NextThought.view.View', {
 	},
 
 
-	getHash: function(){
+	getFragment: function(){
 		return null;
 	},
 

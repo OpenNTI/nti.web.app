@@ -133,31 +133,31 @@ describe("Check Parsing Utility Functions", function() {
 		});
 	});
 
-	describe("parseNTIHash", function(){
-		var parse = ParseUtils.parseNtiHash;
+	describe("parseNTIFragment", function(){
+		var parse = ParseUtils.parseNtiFragment;
 
 		it('Parses result of ntiid', function(){
-			var hash = '#!d/c/e',
-				expected = 'tag:nextthought.com,2011-10:c-d-e';
-				r = parse(hash);
+			var fragment = '#!d/c/e',
+				expected = 'tag:nextthought.com,2011-10:c-d-e',
+				r = parse(fragment);
 
 			expect(r).toBeTruthy();
 			expect(r.toString()).toEqual(expected);
 		});
 
 		it('Parses result of ntiid with no provider', function(){
-			var hash = '#!d/e',
-				expected = 'tag:nextthought.com,2011-10:d-e';
-				r = parse(hash);
+			var fragment = '#!d/e',
+				expected = 'tag:nextthought.com,2011-10:d-e',
+				r = parse(fragment);
 
 			expect(r).toBeTruthy();
 			expect(r.toString()).toEqual(expected);
 		});
 
 		it('Parses result of ntiid with : in type specific part', function(){
-			var hash = '#!d/c/e%3Af',
-				expected = 'tag:nextthought.com,2011-10:c-d-e:f';
-				r = parse(hash);
+			var fragment = '#!d/c/e%3Af',
+				expected = 'tag:nextthought.com,2011-10:c-d-e:f',
+				r = parse(fragment);
 
 			expect(r).toBeTruthy();
 			expect(r.toString()).toEqual(expected);

@@ -42,7 +42,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 	},
 
 
-	getHash: function(){
+	getFragment: function(){
 		var current = this.down('profile-panel');
 		return current? current.userObject.getProfileUrl() : null;
 	},

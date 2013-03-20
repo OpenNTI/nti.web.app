@@ -180,15 +180,15 @@ Ext.define('NextThought.util.Parsing',{
 	},
 
 
-	parseNtiHash: function(hash){
+	parseNtiFragment: function(fragment){
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
 
-		if(Ext.isEmpty(hash) || hash.indexOf('#!') !== 0){
+		if(Ext.isEmpty(fragment) || fragment.indexOf('#!') !== 0){
 			return null;
 		}
-		hash = hash.slice(2);
-		parts = hash.split('/');
+		fragment = fragment.slice(2);
+		parts = fragment.split('/');
 		if(parts.length < 2 || parts.length > 3){
 			return null;
 		}

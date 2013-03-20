@@ -106,8 +106,8 @@ Ext.define(	'NextThought.model.User', {
 		},
 
 
-		getProfileStateFromHash: function(hash){
-			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(hash);
+		getProfileStateFromFragment: function(fragment){
+			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
 			return o ? {
 					username: decodeURIComponent(o[1]),
 					activeTab: o[2]
