@@ -305,22 +305,15 @@ Ext.define('NextThought.controller.Navigation', {
 		return null;
 	},
 
-	silentlyUnToggleSelected: function(){
-		var btns = Ext.ComponentQuery.query('view-select button[pressed]');
-		Ext.each(btns, function(btn){
-			if(btn.pressed){ btn.toggle(false, true); }
-		});
-	},
-
 
 	track: function(view){
 		var btn = this.viewSelectButton(view), altBtn;
 		try {
 			if(btn.alternateId){
 				altBtn = this.viewSelectButton(btn.alternateId);
-				this.silentlyUnToggleSelected();
-				//altBtn.shouldNotFireViewSelected = true;
-				altBtn.toggle(true, true);
+				altBtn.shouldNotFireViewSelected = true;
+				altBtn.toggle(true);
+				delete altBtn.shouldNotFireViewSelected;
 			}
 			else{
 				btn.toggle(true);

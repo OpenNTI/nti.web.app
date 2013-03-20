@@ -9,10 +9,9 @@ Ext.define('NextThought.view.ViewSelectButton', {
 	},
 
 	fireViewSelected: function(state){
-		//if(this.shouldNotFireViewSelected !== true){
+		if(this.shouldNotFireViewSelected !== true){
 			this.fireEvent('view-selected', this, state);
-		//}
-		//delete this.shouldNotFireViewSelected;
+		}
 	},
 
 	toggleHandler: function(btn, state){ this.fireViewSelected(state); },
