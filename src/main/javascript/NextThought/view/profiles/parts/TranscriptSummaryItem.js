@@ -95,7 +95,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					occupantsString = owner + "had a chat with" + me.stringifyNames(u, less - 1);
 				}
 				//width of the element
-				width = me.el.down('.title').getWidth() - parseInt(me.el.getStyle('padding-right'));
+				width = me.el.down('.title').getWidth() - parseInt(me.el.getStyle('padding-right'),10);
 				if( width < m.getSize(occupantsString).width){
 					break;
 				}

@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.Forums', {
 			}); */
 
 			Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
-		})
+		});
 	}
 
 

@@ -26,7 +26,7 @@ Ext.define('NextThought.overrides.builtins.Array',{
 			isValueSet = true;
 		}
 		for ( ; length > index; ++index) {
-			if (!this.hasOwnProperty(index)) continue;
+			if (!this.hasOwnProperty(index)){ continue; }
 			if (isValueSet) {
 				value = callback(value, this[index], index, this);
 			} else {
