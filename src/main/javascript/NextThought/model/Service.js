@@ -182,11 +182,12 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	linkWithQueryParams: function(base, obj){
-		if(base.indexOf('?') > 0 || !Ext.isObject(obj)){
+	urlWithQueryParams: function(base, obj){
+		if(!Ext.isObject(obj)){
 			return base;
 		}
-		return Ext.String.format('{0}?{1}', base, Ext.Object.toQueryString(obj));
+
+		return [base, Ext.Object.toQueryString(obj)].join(base.indexOf('?') < 0 ? '?' : '&');
 	},
 
 
@@ -227,7 +228,7 @@ Ext.define('NextThought.model.Service', {
 		//not return the wrong damn thing from cache.
 		if(Ext.isChrome){
 			//Give chrome the finger
-			url = this.linkWithQueryParams(url, {'accept_buster': 'link+json'});
+			url = this.urlWithQueryParams(url, {'accept_buster': 'link+json'});
 		}
 
 		try{
@@ -274,7 +275,7 @@ Ext.define('NextThought.model.Service', {
 		//not return the wrong damn thing from cache.
 		if(Ext.isChrome){
 			//Give chrome the finger
-			url = this.linkWithQueryParams(url, {'accept_buster': 'pageinfo+json'});
+			url = this.urlWithQueryParams(url, {'accept_buster': 'pageinfo+json'});
 		}
 
 
