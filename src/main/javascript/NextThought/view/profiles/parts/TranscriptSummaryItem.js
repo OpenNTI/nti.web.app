@@ -42,7 +42,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			involved = Ext.Array.merge(r.get('Contributors'),[r.get('Creator')],[RoomInfo.get('Creator')]),
 			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator')),
 			started = RoomInfo.get('CreatedTime'),
-			ended = r.get('Last Modified')
+			ended = r.get('Last Modified'),
 			duration = TimeUtils.timeDifference(ended,started).replace(/ ago/i,'');
 
 		//mask the element until its loaded
