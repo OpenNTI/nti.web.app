@@ -1,3 +1,29 @@
+Ext.define('NextThought.view.ViewSelectButton', {
+	extend: 'Ext.button.Button',
+	alias: 'widget.view-select-button',
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.on('toggle', this.toggleHandler, this);
+		this.on('click', this.clickHandler, this);
+	},
+
+	fireViewSelected: function(state){
+		//if(this.shouldNotFireViewSelected !== true){
+			this.fireEvent('view-selected', this, state);
+		//}
+		//delete this.shouldNotFireViewSelected;
+	},
+
+	toggleHandler: function(btn, state){ this.fireViewSelected(state); },
+
+	clickHandler: function(e){
+		if(this.pressed && this.allowNavigationClick){
+			this.fireViewSelected(true);
+		}
+	}
+});
+
 Ext.define('NextThought.view.ViewSelect', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.view-select',
@@ -14,7 +40,7 @@ Ext.define('NextThought.view.ViewSelect', {
 	},
 
 	defaults: {
-		xtype: 'button',
+		xtype: 'view-select-button',
 		ui: 'view',
 		scale: 'large',
 		cls: 'view-button',
@@ -30,6 +56,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			pressed: true,
 			iconCls: 'home',
 			title: 'Profile',
+			alternateId:'Contacts',
 			tooltip: 'Home/Profile'
 		},
 		{
@@ -52,7 +79,8 @@ Ext.define('NextThought.view.ViewSelect', {
 		{
 			iconCls: 'contacts',
 			title: 'Contacts',
-			tooltip: 'Contacts'
+			tooltip: 'Contacts',
+			allowNavigationClick: true
 		},
 		{
 			iconCls: 'search',

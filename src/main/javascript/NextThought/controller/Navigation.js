@@ -50,7 +50,7 @@ Ext.define('NextThought.controller.Navigation', {
 				}
 			},
 			'view-select button': {
-				toggle: this.switchViews
+				'view-selected': this.switchViews
 			},
 			'slidedeck-view': {
 				exited: this.slideViewExited
@@ -305,11 +305,24 @@ Ext.define('NextThought.controller.Navigation', {
 		return null;
 	},
 
+	silentlyUnToggleSelected: function(){
+		var btns = Ext.ComponentQuery.query('view-select button[pressed]');
+		Ext.each(btns, function(btn){
+			if(btn.pressed){ btn.toggle(false, true); }
+		});
+	},
+
 
 	track: function(view){
-		var btn = this.viewSelectButton(view);
+		var btn = this.viewSelectButton(view), altBtn;
 		try {
-			if(btn){
+			if(btn.alternateId){
+				altBtn = this.viewSelectButton(btn.alternateId);
+				this.silentlyUnToggleSelected();
+				//altBtn.shouldNotFireViewSelected = true;
+				altBtn.toggle(true, true);
+			}
+			else{
 				btn.toggle(true);
 			}
 		}
