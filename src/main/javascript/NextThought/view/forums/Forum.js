@@ -12,9 +12,10 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	itemSelector: '.item',
 
-	tpl: Ext.DomHelper.markup({
-		tag: 'tpl', 'for':'.', cn: [
+	tpl: Ext.DomHelper.markup([
+		{ cls: 'heading' },//put path and controls here. This will need to be scroll locked
+		{ tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'item', html: '{title}'}
-		]
-	})
+		]}
+	])
 });
