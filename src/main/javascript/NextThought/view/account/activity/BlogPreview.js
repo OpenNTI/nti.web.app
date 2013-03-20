@@ -2,6 +2,8 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 	extend: 'Ext.Component',
 	alias: ['widget.activity-preview-blog', 'widget.activity-preview-PersonalBlogEntry'],
 
+	requires: ['NextThought.util.Time'],
+
 	cls: 'activity-blog-preview',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -35,7 +37,7 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 			headline = me.record.get('headline'),
 			body = Ext.String.format('{0}', Ext.String.ellipsis(headline.getBodyText(),250,true)),
 			lastModified = me.record.get('Last Modified'),
-			timeDiff = me.record.timeDifference(Ext.Date.now(), lastModified);
+			timeDiff = TimeUtils.timeDifference(Ext.Date.now(), lastModified);
 
 		me.renderData = Ext.apply(me.renderData||{},{
 			avatarURL: this.user.get('avatarURL'),

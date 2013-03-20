@@ -3,7 +3,10 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 	alias: 'widget.search-result-messageinfo',
 	cls: 'search-result',
 
-	requires: ['NextThought.util.Search'],
+	requires: [
+		'NextThought.util.Search',
+		'NextThought.util.Time'
+	],
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls:'title', cn: [
@@ -82,7 +85,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat',{
 					isRendered: true,
 					occupants:"Between me and "+((occupants.length - 1 > 1) ? (occupants.length - 1)+" others" : "1 other"),
 					sent: Ext.Date.format(date, 'M-j g:i A'),
-					duration: RoomInfo.timeDifference(ended,started).replace(/ ago/i,''),
+					duration: TimeUtils.timeDifference(ended,started).replace(/ ago/i,''),
 					creator: creator
 				});
 				if(me.rendered){

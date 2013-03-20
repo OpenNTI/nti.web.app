@@ -5,6 +5,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 	requires: [
 		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem',
+		'NextThought.util.Time',
 		'NextThought.model.converters.GroupByTime'
 	],
 
@@ -623,7 +624,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 					occupants: rec.get('Contributors'),
 					date: Ext.Date.format(started, 'F j'),
 					started: Ext.Date.format(started, 'g:i A'),
-					duration: rec.timeDifference(ended, started).replace(/ ago/i, '')
+					duration: TimeUtils.timeDifference(ended, started).replace(/ ago/i, '')
 				};
 
 		UserRepository.getUser(data.occupants, function(users){

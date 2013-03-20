@@ -91,6 +91,7 @@ Ext.application({
 		'NextThought.util.Globals',
 		'NextThought.util.shared.Anchors',
 		'NextThought.util.Anchors',
+		'NextThought.util.Time',
 		'NextThought.util.Errors',
 		'NextThought.model.anchorables.ContentPointer'
 	],
@@ -138,6 +139,7 @@ Ext.application({
 			'javascript/specs/util/anchorables/ChangingDomAnchors.spec.js',
 			'javascript/specs/util/anchorables/Utils.spec.js',
 			'javascript/specs/util/Search.spec.js',
+			'javascript/specs/util/Time.spec.js',
 			'javascript/specs/util/UserDataThreader.spec.js',
 			'javascript/specs/util/Content.spec.js',
 			'javascript/specs/util/Views.spec.js',

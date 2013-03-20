@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 	extend: 'Ext.Component',
 	alias: ['widget.activity-preview-comment-blog', 'widget.activity-preview-PersonalBlogComment'],
+	requires: [
+		'NextThought.util.Time'
+	],
 
 	cls: 'activity-blog-preview',
 
@@ -48,7 +51,7 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 		this.enableBubble('resize');
 
 		var lastModified = this.record.get('Last Modified'),
-			timeDiff = this.record.timeDifference(Ext.Date.now(), lastModified),
+			timeDiff = TimeUtils.timeDifference(Ext.Date.now(), lastModified),
 			body = Ext.String.format('{0}', Ext.String.ellipsis(this.record.getBodyText(),120,true));
 
 		this.renderData = Ext.apply(this.renderData||{},{
@@ -70,7 +73,7 @@ Ext.define('NextThought.view.account.activity.BlogCommentPreview', {
 				title = headline.get('title'),
 				body = Ext.String.format('{0}', Ext.String.ellipsis(headline.getBodyText(),250,true)),
 				lastModified = headline.get('Last Modified'),
-				timeDiff = headline.timeDifference(Ext.Date.now(), lastModified);
+				timeDiff = TimeUtils.timeDifference(Ext.Date.now(), lastModified);
 
 			me.container = r;
 
