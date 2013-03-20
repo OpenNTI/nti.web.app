@@ -40,7 +40,16 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			involved = Ext.Array.merge(r.get('Contributors'),[r.get('Creator')],[RoomInfo.get('Creator')]),
 			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator'));
 
+		//mask the element until its loaded
+		me.el.mask('loading');
 		me.callParent(arguments);
+
+		function unMask(){
+			if(me.el){
+				me.el.unmask();
+			}
+		}
+		
 
 		function showRecepients(u){
 			var width, less = 0,
@@ -100,6 +109,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					break;
 				}
 			}
+			unMask();
 		}
 
 		function success(obj){
@@ -122,15 +132,16 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 							me.renderTpl.overwrite(me.renderData);
 						}
 					});
+					unMask();
 					return;
 				}
 			}
 			
 			UserRepository.getUser(involved,showRecepients);
-			
 		}
 
 		function failure(obj){
+			
 			console.log("Faild to load page info");
 			UserRepository.getUser(involved,showRecepients);
 		}
