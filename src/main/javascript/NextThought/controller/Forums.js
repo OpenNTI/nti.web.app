@@ -59,7 +59,11 @@ Ext.define('NextThought.controller.Forums', {
 			if(urls.handled === 0){
 				console.log('List of forums:',forums);
 				//add forums to a Board Store.
-				//Set the store on the boardCmp
+				Ext.each(forums,function(f){
+					if(Ext.isEmpty(f.get('description'))){
+						f.set('description','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+					}
+				});
 				store.add(forums);
 			}
 		}
