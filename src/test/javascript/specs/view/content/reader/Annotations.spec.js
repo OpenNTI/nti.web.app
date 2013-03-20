@@ -79,19 +79,19 @@ describe('Annotation detection tests', function() {
         });
 
         it('two word punctuation between no space', function() {
-            testFunction('hello-world', 'helloworld');
+            testFunction('hello-world', 'hello-world');
         });
 
         it('two word punctuation between with space', function() {
-            testFunction('hello, world', 'hello world');
+            testFunction('hello, world', 'hello, world');
         });
 
         it('two word punctuation before, after and between no space', function() {
-            testFunction('"hello-world"', 'helloworld');
+            testFunction('"hello-world"', 'hello-world');
         });
 
         it('two word punctuation before, after, and between with space', function() {
-            testFunction('"hello, world"', 'hello world');
+            testFunction('"hello, world"', 'hello, world');
         });
 
         it('no definition', function() {
