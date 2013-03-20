@@ -96,6 +96,13 @@
 
 	cursor: pointer;
 	z-index: 10;
+
+	&.disabled{
+		background-color: #E4E4E4;
+		color: $tertiary-grey;
+		cursor: default;
+		border: none;
+	}
 }
 
 
@@ -229,13 +236,6 @@
 			position: absolute;
 			top: -42px;
 			right: 0;
-		}
-
-		.disabled{
-			background-color: #E4E4E4 !important;
-			color: $tertiary-grey !important;
-			cursor: default !important;
-			border: none !important;
 		}
 
 		.post-view .entry {

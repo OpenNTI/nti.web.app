@@ -27,6 +27,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	renderSelectors: {
 		listViewEl: '.list-view',
+		listViewBodyEl: '.list-view .body',
 		postViewEl: '.post-view'
 	},
 
@@ -105,7 +106,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.listViewEl.down('.body').setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
 		if(this.headerEl){
@@ -153,14 +154,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			v = viewToShow !== 'post';
 
 		try {
-			this.listViewEl.down('.body')[fnm[v]]();
+			this.listViewBodyEl[fnm[v]]();
 			this.postViewEl[fnm[!v]]();
-			if(!v){
-				//disable the button
-				this.headerEl.addCls("disabled");
-			}else{
-				this.headerEl.removeCls("disabled");
-			}
+			this.headerEl[(v)? 'removeCls' : 'addCls']('disabled');
 		}
 		catch(e){
 			//console.warn('Swap failed. ListViewEl and PostViewEl are missing!\n',Globals.getError(e));
