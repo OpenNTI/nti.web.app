@@ -182,6 +182,14 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	linkWithQueryParams: function(base, obj){
+		if(base.indexOf('?') > 0 || !Ext.isObject(obj)){
+			return base;
+		}
+		return Ext.String.format('{0}?{1}', base, Ext.Object.toQueryString(obj));
+	},
+
+
 	getObjectRaw: function (ntiid, success, failure, scope){
 		var url = this.getObjectURL(ntiid),
 			q = {};
@@ -209,6 +217,17 @@ Ext.define('NextThought.model.Service', {
 			catch(e){
 				Ext.callback(failure,scope,[{},e]);
 			}
+		}
+
+		//Chrome 25,26 and 27 don't seem to listen to any of the caching
+		//headers that would prevent a request for an object using one Accept
+		//type from being cached and returned on a later request for the same object
+		//with a different Accept header.  Even giving it no-store doesn't seem to work
+		//So send a query param that roughly matchs the accept header to force chrome to
+		//not return the wrong damn thing from cache.
+		if(Ext.isChrome){
+			//Give chrome the finger
+			url = this.linkWithQueryParams(url, {'accept_buster': 'link+json'});
 		}
 
 		try{
@@ -239,39 +258,51 @@ Ext.define('NextThought.model.Service', {
 
 
 	getPageInfo: function(ntiid, success, failure, scope){
-			var url = this.getObjectURL(ntiid),
-				q = {};
+		var url = this.getObjectURL(ntiid),
+			q = {};
 
-			if(!ParseUtils.parseNtiid(ntiid)){
-				Ext.callback(failure,scope, ['']);
-				return null;
-			}
+		if(!ParseUtils.parseNtiid(ntiid)){
+			Ext.callback(failure,scope, ['']);
+			return null;
+		}
 
-			try{
-				//lookup step
-				q.request = Ext.Ajax.request({
-					url: url,
-					scope: scope,
-					headers: {
-						Accept: 'application/vnd.nextthought.pageinfo+json'
-					},
-					callback: function(req,s,resp){
-						var pageInfos;
-						if(s){
-							pageInfos = ParseUtils.parseItems(resp.responseText);
-							Ext.callback(success, scope, pageInfos);
-						} else {
-							Ext.callback(failure,scope, [req,resp]);
-						}
+		//Chrome 25,26 and 27 don't seem to listen to any of the caching
+		//headers that would prevent a request for an object using one Accept
+		//type from being cached and returned on a later request for the same object
+		//with a different Accept header.  Even giving it no-store doesn't seem to work
+		//So send a query param that roughly matchs the accept header to force chrome to
+		//not return the wrong damn thing from cache.
+		if(Ext.isChrome){
+			//Give chrome the finger
+			url = this.linkWithQueryParams(url, {'accept_buster': 'pageinfo+json'});
+		}
+
+
+		try{
+			//lookup step
+			q.request = Ext.Ajax.request({
+				url: url,
+				scope: scope,
+				headers: {
+					Accept: 'application/vnd.nextthought.pageinfo+json'
+				},
+				callback: function(req,s,resp){
+					var pageInfos;
+					if(s){
+						pageInfos = ParseUtils.parseItems(resp.responseText);
+						Ext.callback(success, scope, pageInfos);
+					} else {
+						Ext.callback(failure,scope, [req,resp]);
 					}
-				});
-			}
-			catch(e){
-				Ext.callback(failure,scope,[{},e]);
-			}
+				}
+			});
+		}
+		catch(e){
+			Ext.callback(failure,scope,[{},e]);
+		}
 
-			return q;
-		},
+		return q;
+	},
 
 
 	getObject: function (ntiid, success, failure, scope, safe){
