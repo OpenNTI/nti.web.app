@@ -18,10 +18,7 @@ Ext.define('NextThought.controller.Navigation', {
 	init: function() {
 		this.control({
 			'navigation-collection': {
-				'select': function(sm,rec){
-					var ntiid = rec.get('NTIID');
-					LocationProvider.setLastLocationOrRoot(ntiid);
-				}
+				'itemclick': this.selectLibraryEntry
 			},
 			'activity-view': {
 				'navigation-selected': this.navigate,
@@ -210,6 +207,9 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 	},
 
+	selectLibraryEntry: function(view, rec){
+		LocationProvider.setLastLocationOrRoot(rec.get('NTIID'));
+	},
 
 	/*
 	 *	Navigates to the provided content, optionally targets the provided
