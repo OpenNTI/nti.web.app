@@ -19,8 +19,9 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 
 			] },
 			{cls:'time', cn:[
-				{tag:'span', cls: 'date', html: '{date}'},
-				{tag:'span', cls: 'date', html: 'Lasted: {duration}'}
+				{tag:'span', html: '{date}'},
+				{tag:'span', html: 'Lasted: {duration}'},
+				{tag:'span', html: '{messages}'}
 			]}
 		]}
 	]),
@@ -43,11 +44,19 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator')),
 			started = RoomInfo.get('CreatedTime'),
 			ended = r.get('Last Modified'),
-			duration = TimeUtils.timeDifference(ended,started).replace(/ ago/i,'');
+			duration = TimeUtils.timeDifference(ended,started).replace(/ ago/i,''),
+			messageCount = RoomInfo.get('MessageCount');
 
 		//mask the element until its loaded
 		me.el.mask('loading');
 		me.callParent(arguments);
+
+		//add the render data that shows up in every case
+		me.renderData =Ext.apply(me.rednerData || {},{
+				date: Ext.Date.format(date, 'F j, Y'),
+				duration: duration,
+				messages: (messageCount === 1)? '1 message' : messageCount+" messages"
+		});
 
 		function unMask(){
 			if(me.el){
@@ -81,9 +90,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				ne.renderData = Ext.apply(me.renderData || {},{
 					owner: owner,
 					lonely: true,
-					recepient: "",
-					date: Ext.Date.format(date, 'F j, Y'),
-					duration: duration
+					recepient: ""
 				});
 			}
 
@@ -93,9 +100,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					owner: owner,
 					group: (u.length > 1),
 					single: (u.length <= 1),
-					recepient: me.stringifyNames(u,less),
-					date:  Ext.Date.format(date, 'F j, Y'),
-					duration: duration
+					recepient: me.stringifyNames(u,less)
 				});
 
 				if(me.rendered){
@@ -128,9 +133,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 						me.renderData = Ext.apply(me.renderData || {},{
 							owner: (isMe(u))? 'You': u.get('alias'),
 							group: true,
-							recepient: obj.get('alias'),
-							date: Ext.Date.format(date," F j, Y"),
-							duration: duration
+							recepient: obj.get('alias')
 						});
 
 						if(me.rendered){
