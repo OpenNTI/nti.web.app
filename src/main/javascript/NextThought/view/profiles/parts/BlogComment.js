@@ -7,7 +7,8 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		flagActions: 'NextThought.mixins.FlagActions',
 	},
 
 	cls: 'blog-comment',
@@ -19,14 +20,18 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		{ cls: 'wrap', 'data-commentid':'{ID}', cn:[
 			{ cls: 'meta', cn: [
 				{ tag: 'span', html: '{displayName}', cls: 'name link'},
-				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'},
+				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
+			]},
+			{ cls: 'body' },
+			{ cls: 'foot', cn:[
 				{ tag: 'tpl', 'if':'isModifiable', cn:[
 					{ tag:'span', cls: 'edit link', html: 'Edit'},
 					{ tag:'span', cls: 'delete link', html: 'Delete'}
+				]},
+				{ tag: 'tpl', 'if':'!isModifiable', cn:[
+					{ tag:'span', cls: 'flag link', html: 'Report'}
 				]}
 			]},
-			//flag?
-			{ cls: 'body' },
 			{ cls: 'editor-box' }
 		] }
 	]),
@@ -39,8 +44,9 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		ctrlEl: '.controls',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
-		editEl: '.meta .edit',
-		deleteEl: '.meta .delete',
+		editEl: '.foot .edit',
+		deleteEl: '.foot .delete',
+		flagEl:'.foot .flag',
 		editorBoxEl: '.editor-box',
 		metaEl: '.meta'
 	},
@@ -48,7 +54,8 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 	initComponent: function(){
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
-		this.callParent();
+		this.mixins.flagActions.constructor.call(this);
+		this.callParent(arguments);
 		this.addEvents(['delete-post']);
 		this.enableBubble(['delete-post']);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
@@ -106,6 +113,8 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
+		this.reflectFlagged(this.record);
+		this.listenForFlagChanges(this.record);
 
 		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		ctrlEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
