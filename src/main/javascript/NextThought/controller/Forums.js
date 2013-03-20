@@ -36,7 +36,15 @@ Ext.define('NextThought.controller.Forums', {
 
 		this.control({
 			'forums-board': {
-				'afterrender':this.loadBoards
+				'afterrender':this.loadBoards,
+				'select':function(selModel,record){
+					//allow reselect since we don't style the selected state, this has no
+					// visual effect other than the ability to click on it again
+					selModel.deselect(record);
+
+
+					console.log(record.getData());
+				}
 			}
 		});
 	},
@@ -59,11 +67,6 @@ Ext.define('NextThought.controller.Forums', {
 			if(urls.handled === 0){
 				console.log('List of forums:',forums);
 				//add forums to a Board Store.
-				Ext.each(forums,function(f){
-					if(Ext.isEmpty(f.get('description'))){
-						f.set('description','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
-					}
-				});
 				store.add(forums);
 			}
 		}
