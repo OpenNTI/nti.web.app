@@ -13,7 +13,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				{tag:'span', cn: [
 					{tag:'tpl', 'if':'group', html:' had a group chat with '},
 					{tag:'tpl', 'if':'single', html:' had a chat with '},
-					{tag:'tpl', 'if':'meeting', html:' had a group chat'}
+					{tag:'tpl', 'if':'lonely', html:' had a chat'}
 				]},
 				{tag:'span', cls:'name recepients', html: '{recepient}.'}
 
@@ -37,8 +37,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			r = me.record,
 			date = new Date(r.get('CreatedTime')),
 			RoomInfo = r.get('RoomInfo'),
-			occupants = r.get('Contributors'),
-			OwnerIndex = Ext.Array.indexOf(occupants, RoomInfo.get('Creator'));
+			involved = Ext.Array.merge(r.get('Contributors'),[r.get('Creator')],[RoomInfo.get('Creator')]),
+			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator'));
 
 		me.callParent(arguments);
 
@@ -63,7 +63,14 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}
 			}, me);
 
-			//u = ['you','me','she','he','her','him','dog','cat','cow'];
+			if(u.length <= 0){
+				ne.renderData = Ext.apply(me.renderData || {},{
+					owner: owner,
+					lonely: true,
+					recepient: "",
+					date: Ext.Date.format(date, 'F j, Y')
+				});
+			}
 
 			for(less = u.length; less >= 0; less--){
 
@@ -119,13 +126,13 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}
 			}
 			
-			UserRepository.getUser(occupants,showRecepients);
+			UserRepository.getUser(involved,showRecepients);
 			
 		}
 
 		function failure(obj){
 			console.log("Faild to load page info");
-			UserRepository.getUser(occupants,showRecepients);
+			UserRepository.getUser(involved,showRecepients);
 		}
 
 		//get the page info
