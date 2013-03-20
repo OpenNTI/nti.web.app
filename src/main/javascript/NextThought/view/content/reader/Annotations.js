@@ -301,7 +301,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		//Rangy likes to grab trailing punctuation so strip
 		//it here
-		text = text.replace(/[^\w\s\n\t]+$/,'');
+		text = text.replace(/[^\w\s\n\t]+/g,'');
 
 		if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
 			result = {
