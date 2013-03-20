@@ -16,6 +16,11 @@ Ext.define( 'NextThought.view.forums.View', {
 
 	restore: function(state){
 		this.fireEvent('finished-restore');
+	},
+
+
+	getHash: function(){
+		return '!forums';
 	}
 
 });

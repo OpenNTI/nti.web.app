@@ -20,6 +20,11 @@ Ext.define('NextThought.controller.State', {
 		this.addEvents('restore');
 		this.on('restore',this.restoreState,this);
 
+		this.hashInterpreterMap = {
+			'#!profile': Ext.bind(this.interpretProfileHash,this),
+			'#!forums': Ext.bind(this.interpretForumsHash,this)
+		};
+
 		return m;
 	},
 
@@ -131,21 +136,37 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretHash: function(hashStr){
-		hashStr = hashStr.split('?');
-		var query = this.parseQueryString(hashStr[1]),
-			hash = hashStr[0],
-			ntiid = ParseUtils.parseNtiHash(hash),
-			user,
-			result = {};
+	interpretForumsHash: function(hash,query){
+		console.debug('Hash:', hash, 'Query: ', query);
+		return {};
+	},
 
-		user = this.getUserModel().getProfileStateFromHash(hash);
+
+	interpretProfileHash: function(hash,query){
+		var result = {},
+			user = this.getUserModel().getProfileStateFromHash(hash);
 		if(user){
 			result = {
 				active: 'profile',
 				profile: user
 			};
 			result.profile.queryObject = query;
+		}
+		return result;
+	},
+
+
+	interpretHash: function(hashStr){
+		hashStr = hashStr.split('?');
+		var query = this.parseQueryString(hashStr[1]),
+			hash = hashStr[0]||'',
+			hashRoot = (hash.substr(0, hash.indexOf('/'))||hash).toLowerCase(),
+			ntiid = ParseUtils.parseNtiHash(hash),
+			result = {};
+
+
+		if(this.hashInterpreterMap.hasOwnProperty(hashRoot)){
+			result = this.hashInterpreterMap[hashRoot](hash,query);
 		}
 		else if(ntiid){
 			result = {active: 'library', location: ntiid};
