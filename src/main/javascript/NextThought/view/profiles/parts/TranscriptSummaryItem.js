@@ -18,8 +18,10 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				{tag:'span', cls:'name recepients', html: '{recepient}.'}
 
 			] },
-			{cls: 'date', html: '{date}'}
-
+			{cls:'time', cn:[
+				{tag:'span', cls: 'date', html: '{date}'},
+				{tag:'span', cls: 'date', html: 'Lasted: {duration}'}
+			]}
 		]}
 	]),
 
@@ -38,7 +40,10 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			date = new Date(r.get('CreatedTime')),
 			RoomInfo = r.get('RoomInfo'),
 			involved = Ext.Array.merge(r.get('Contributors'),[r.get('Creator')],[RoomInfo.get('Creator')]),
-			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator'));
+			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator')),
+			started = RoomInfo.get('CreatedTime'),
+			ended = r.get('Last Modified')
+			duration = TimeUtils.timeDifference(ended,started).replace(/ ago/i,'');
 
 		//mask the element until its loaded
 		me.el.mask('loading');
@@ -77,7 +82,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					owner: owner,
 					lonely: true,
 					recepient: "",
-					date: Ext.Date.format(date, 'F j, Y')
+					date: Ext.Date.format(date, 'F j, Y'),
+					duration: duration
 				});
 			}
 
@@ -88,7 +94,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 					group: (u.length > 1),
 					single: (u.length <= 1),
 					recepient: me.stringifyNames(u,less),
-					date:  Ext.Date.format(date, 'F j, Y')
+					date:  Ext.Date.format(date, 'F j, Y'),
+					duration: duration
 				});
 
 				if(me.rendered){
@@ -122,7 +129,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 							owner: (isMe(u))? 'You': u.get('alias'),
 							group: true,
 							recepient: obj.get('alias'),
-							date: Ext.Date.format(date," F j, Y")
+							date: Ext.Date.format(date," F j, Y"),
+							duration: duration
 						});
 
 						if(me.rendered){

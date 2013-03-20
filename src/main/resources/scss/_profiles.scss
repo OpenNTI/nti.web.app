@@ -295,9 +295,26 @@
 						color: #3FB3F6;
 					}
 				}
-				.date{
+				.time{
 					font: normal 400 12px/20px $font;
 					color: $tertiary-grey;
+					span{
+						&::after{
+							color: $tertiary-grey;
+							font: normal 500 12px/20px $font;
+
+							position: static;
+							content: '\00B7';
+							vertical-align: middle;
+							display: inline;
+							padding: 0 0.5em;
+							background: none;
+						}
+						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
+					}
 				}
 			}
 		}
