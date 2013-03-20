@@ -7,7 +7,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		{tag:'tpl', 'if':'isPost', cn:[
 			{cls:'title', cn: [
 				{tag:'span', html:"{title}"},
-				{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By: {name}'}]},
+				{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By {name}'}]},
 				{tag:'tpl', 'if':'tags', cn:[{cls:'tags', html:'{tags}'}]}
 			]},
 			{

@@ -12,7 +12,7 @@ Ext.define('NextThought.view.account.activity.BlogPreview', {
 			{ cls: 'meta', cn: [
 				{cls:'title', html:'{title: ellipsis(150)}'},
 				{cls:'meta-tag', cn:[
-					{tag:'span', cls:'name', html:'by: {name: ellipsis(60)}'},
+					{tag:'span', cls:'name', html:'by {name: ellipsis(60)}'},
 					{tag:'span', html:'{time}'}
 				]},
 				{cls:'body', html:'{body}'},
