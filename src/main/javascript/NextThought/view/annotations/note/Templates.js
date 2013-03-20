@@ -109,7 +109,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			e.stopEvent();
 			var menuCls = 'onFlag', me = this;
 
-			TemplatesForNotes.areYouSure('Flagging this item cannot be undone', function(btn){
+			TemplatesForNotes.areYouSure('Reporting this item cannot be undone', function(btn){
 				if(btn !== 'ok'){ return; }
 				if (me[menuCls]){
 					me[menuCls].call(me);
