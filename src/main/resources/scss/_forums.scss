@@ -231,6 +231,12 @@
 			right: 0;
 		}
 
+		.disabled{
+			background-color: #E4E4E4 !important;
+			color: $tertiary-grey !important;
+			cursor: default !important;
+			border: none !important;
+		}
 
 		.post-view .entry {
 			border-width: 0;
