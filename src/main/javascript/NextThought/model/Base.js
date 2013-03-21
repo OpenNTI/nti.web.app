@@ -45,7 +45,11 @@ Ext.define('NextThought.model.Base', {
 			var cd=r.get('CreatedTime'), lm=r.get('Last Modified');
 			return ((cd && cd.getTime())||0) !== ((lm && lm.getTime())||0);
 		}},
-		{ name: 'isModifiable', persist: false, convert:function(v,r){return r.phantom||r.getLink('edit')!==null;} }
+
+		//For templates
+		{ name: 'isModifiable', persist: false, convert:function(v,r){return r.phantom||r.getLink('edit')!==null;} },
+		{ name: 'favoriteState', persist: false, type: 'auto', convert: function(o,r){ return r.getLink('unfavorite') ? 'on': 'off'; }},
+		{ name: 'likeState', persist: false, type: 'auto', convert: function(o,r){ return r.getLink('unlike') ? 'on': 'off'; }}
 	],
 
 	onClassExtended: function(cls, data) {
@@ -101,7 +105,7 @@ Ext.define('NextThought.model.Base', {
 	constructor: function(data,id,raw){
 		var f = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			cField = f.getByKey('Class');
+			cField = f.getByKey('Class'), get = this.get;
 
 		//Workaround for objects that don't have an NTIID yet.
 		if (data && this.idProperty==='NTIID' && id && raw) {
