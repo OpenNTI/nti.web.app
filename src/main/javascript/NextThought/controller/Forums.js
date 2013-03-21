@@ -51,8 +51,14 @@ Ext.define('NextThought.controller.Forums', {
 		function makeUrl(c){ return c && c.getLink('Forum'); }
 
 		//Just for now...
-		function fn(resp){
-			forums.push.apply(forums, ParseUtils.parseItems(resp.responseText));
+		function fn(resp,req){
+			var o = ParseUtils.parseItems(resp.responseText);
+			if(req && req.community){
+				Ext.each(o,function(o){
+					o.set('Creator',req.community);
+				});
+			}
+			forums.push.apply(forums, o);
 			maybeFinish();
 		}
 
@@ -77,9 +83,9 @@ Ext.define('NextThought.controller.Forums', {
 
 			boardCmp.bindStore(store);
 
-			Ext.each(urls,function(u){
+			Ext.each(urls,function(url,i){
 
-				if(!u){ maybeFinish(); return; }
+				if(!url){ maybeFinish(); return; }
 
 				/*
 				//Adds a test post
@@ -88,7 +94,7 @@ Ext.define('NextThought.controller.Forums', {
 					jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
 				}); */
 
-				Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
+				Ext.Ajax.request({ url:url, community: u[i], success: fn, failure: maybeFinish });
 			});
 
 		});

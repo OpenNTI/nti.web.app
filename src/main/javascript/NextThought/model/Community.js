@@ -22,5 +22,9 @@ Ext.define('NextThought.model.Community', {
 
 	getName: function(){
 		return this.get('alias') || this.get('realname');
+	},
+
+	toString: function(){
+		return this.getName();
 	}
 });
