@@ -18,7 +18,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'list-view', cn:[
-			{ tag: 'tpl', 'if':'canBlog', cn:{ cls: 'header', html: 'New Entry' }},
+			{ tag: 'tpl', 'if':'canBlog', cn:{ cls: 'new-entry-btn header', html: 'New Entry' }},
 			{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 		]},
 		{ cls: 'post-view' }
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		listViewEl: '.list-view',
 		listViewBodyEl: '.list-view .body',
 		postViewEl: '.post-view',
-		headerEl: '.header'
+		btnNewEntryEl: '.new-entry-btn'
 	},
 
 
@@ -40,10 +40,11 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		//Additional logging to see if this.username is for "me" but we're viewing another profile?
 		console.debug('Who is this for?',this.username, this.user && this.user.getId(), 'Can blog? ',this.canBlog);
 
-		//TODO: its probably not necessarily true that if one user can blog they all can on a domain.
-		// There probably needs to be a site-level flag for this.
-		if(!$AppConfig.service.canBlog() //Allow us to to turn it off after they already have data.
-				|| (this.user && !this.user.hasBlog())){
+		if(this.user && !this.user.hasBlog()){
+			//If we already have a user and we know it does not have a blog url, this tells us there is no blog.
+			// So destroy our self.
+			//
+			// This condition is probably never hit, because all we have at this point is a username.
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
@@ -59,18 +60,17 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	buildBlog: function(reresolveUser){
 		function fail(response){
-			console.warn('No blog object ('+response.status+') :'+response.responseText);
-			if(isMe(user) && $AppConfig.service.canBlog()){
-				//Our user can blog, but does not have any blog posts yet. So lets not remove the blogging widgets.
-				return;
-			}
-
-			//TODO: its probably not necessarily true that if one user can blog they all can on a domain.
-			// There probably needs to be a site-level flag for this.
-			if(!$AppConfig.service.canBlog()){
-				//ensure that the destroy happens after the construction/component plumbing.
-				//If the request is cached in the browser, this may be a synchronous call.
-				Ext.defer(me.destroy,1,me);
+			console.warn('No blog object (Status: '+response.status+'): '+response.responseText);
+			try {
+				if(response.status === 0 && Ext.isEmpty(response.request.options.url)){
+					//We destroy the tab view if, and only if, the url is not present.
+					Ext.defer(me.destroy,1,me);
+				}
+				else {
+					console.error('Error loading blog: ', response);
+				}
+			} catch(e){
+				console.error('problem in determining error :(',Globals.getError(e));
 			}
 		}
 
@@ -95,7 +95,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				return;
 			}
 
-			fail({status:0,responseText:'User object did not have a Blog url'});
+			fail({status:0,responseText:'User object did not have a Blog url', request:{options:req}});
 			return;
 		}
 
@@ -108,20 +108,27 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
-		if(this.headerEl && this.canBlog){
-			this.headerEl.addCls('owner');
-			this.mon(this.headerEl,'click',this.onNewPost,this);
-			this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
+		if(this.btnNewEntryEl && this.canBlog){
+			this.btnNewEntryEl.addCls('owner');
+			this.mon(this.btnNewEntryEl,'click',this.onNewPost,this);
+			this.mon(Ext.get('profile'),'scroll',this.handleScrollNewEntryBtnLock,this);
 		}
 	},
 
 
-	handleScrollHeaderLock: function(e,profileDom){
-		var profileDomParent = profileDom && profileDom.parentNode,
+	handleScrollNewEntryBtnLock: function(e,profileDom){
+		//This is only called on scroll for when the btnNewEntryEl is present.
+		var btnEl = this.btnNewEntryEl,
+			profileDomParent = profileDom && profileDom.parentNode,
 			profileScroll = Ext.fly(profileDom).getScroll().top,
-			parent = Ext.getDom(this.headerEl).parentNode,
+			parent = btnEl && Ext.getDom(btnEl).parentNode,
 			cutoff = 268,
 			wrapper;
+
+		if(!btnEl || !parent){
+			console.error('Nothing to handle, btnNewEntryEl is falsey');
+			return;
+		}
 
 		if(Ext.fly(parent).is('.new-blog-post')){
 			wrapper = parent;
@@ -129,16 +136,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		}
 
 		if(parent === profileDomParent && (profileScroll < cutoff || !this.isVisible())){
-			delete this.headerLocked;
-			this.headerEl.insertBefore(this.getEl().first());
+			btnEl.insertBefore(this.getEl().first());
 			if(wrapper){
 				Ext.fly(wrapper).remove();
 			}
 		}
 		else if(this.isVisible() && parent !== profileDomParent && profileScroll >= cutoff){
-			this.headerLocked = true;
 			wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post'});
-			this.headerEl.appendTo(wrapper);
+			btnEl.appendTo(wrapper);
 		}
 	},
 
@@ -155,7 +160,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		try {
 			this.listViewBodyEl[fnm[v]]();
 			this.postViewEl[fnm[!v]]();
-			this.headerEl[(v)? 'removeCls' : 'addCls']('disabled');
+			this.btnNewEntryEl[(v)? 'removeCls' : 'addCls']('disabled');
 		}
 		catch(e){
 			//console.warn('Swap failed. ListViewEl and PostViewEl are missing!\n',Globals.getError(e));
@@ -213,7 +218,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	onNewPost: function(e){
 		e.stopEvent();
-		if(!this.headerEl.hasCls('disabled')){
+		if(!this.btnNewEntryEl.hasCls('disabled')){
 			this.showPost(null,['edit']);
 		}
 	},
