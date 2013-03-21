@@ -79,6 +79,7 @@
 	}
 }
 
+
 @mixin new-post{
 	&.owner {display: block;}
 
@@ -159,6 +160,85 @@
 }
 
 
+@mixin topic-list-item {
+
+	.topic-list-item {
+		padding: 30px 0 0 0;
+		cursor: pointer;
+		border: 0 solid $border-grey;
+		border-bottom-width: 1px;
+		position: relative;
+		&:last-of-type { border-bottom-width: 0; }
+
+		.controls {
+			position: absolute;
+			overflow: hidden;
+			top: 0; right: 0;
+			@include like-and-favorite;
+		}
+
+		.title {
+			color: $primary-grey;
+			font: normal 400 26px/40px $font;
+			padding-bottom: 5px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+		.meta {
+			margin: 0 0 20px 0;
+			font: normal 400 14px $font;
+			color: $tertiary-grey;
+
+			.count, .name, .link {
+				color: $primary-blue;
+			}
+
+			& > span {
+				display: inline-block;
+				&::after{
+					color: $tertiary-grey;
+					font: normal 500 12px/20px $font;
+
+					position: static;
+					content: '\00B7';
+					vertical-align: middle;
+					display: inline;
+					padding: 0 0.5em;
+					background: none;
+				}
+				&:last-of-type::after {
+					content: '';
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+
+@mixin forum-navigation{
+	height: 52px;
+	position: relative;
+	@include post-navigation;
+	border-top-color: white;
+
+	.path {
+		font-style: normal;
+	}
+
+	.new-topic {
+		@include new-post;
+		display: block;
+	}
+
+	.controls {
+		position: absolute;
+		top: 8px; right: 0;
+	}
+}
+
+
 .animateProfileTabsLeft {
 	overflow: hidden;
 	& > .nti-body { @include animate($name: profileTabsLeft, $duration: 0.7s, $delay: 0s); }}
@@ -170,6 +250,16 @@
 
 #view-ctr > .blog-post.navigation-bar {
 	@include post-navigation;
+	border-top-color: white;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	width: 700px;
+	margin: 0 auto;
+	z-index: 103;
+}
+
+#view-ctr > .forum-topic-list.header{
+	@include forum-navigation;
 	border-top-color: white;
 	position: absolute;
 	top: 0; left: 0; right: 0;
@@ -485,6 +575,18 @@
 
 		&.forum-list {
 			@include forum-list-item;
+		}
+
+		&.topic-list {
+			margin-top: 0;
+			@include topic-list-item;
+
+			.header-container {
+				height: 52px;
+				.header {
+					@include forum-navigation;
+				}
+			}
 		}
 	}
 }

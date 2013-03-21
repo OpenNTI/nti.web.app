@@ -29,23 +29,38 @@ Ext.define('NextThought.view.forums.Forum',{
 			{ cls: 'controls', cn:[
 				{ cls: 'new-topic', html: 'New Discussion'}
 			] },
-			{ cls: 'path', html: '{forumTitle}'}
+			{ cls: 'path', html: '{forumTitle}Path'}
 		]}},
 		{ tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'topic-list-item', cn: [
-				{ tag: 'tpl', 'if':'title == \'Forum\'', cn: { cls: 'title', html: '{Creator} / {title}' } },
-				{ tag: 'tpl', 'if':'title != \'Forum\'', cn: { cls: 'title', html: '{title}' } },
-				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
+				{ cls: 'controls', cn: [
+					{ cls: 'favorite {favoriteState}' },
+					{ cls: 'like {likeState}' }
+				]},
+				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{TopicCount} Discussions' },
-					//Aaron's design has an aggregate comment(post) count for the entire forum at the list level...
-					// I'm just putting the field in the template for shits and giggles. It won't show up unless this
-					// value is populated.
-					{ tag: 'tpl', 'if':'CommentCount', cn: { tag: 'span', cls:'count', html: '{CommentCount} Comments' }},
-
-					{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
+					{ tag: 'span', cls:'count', html: '{PostCount} Comments' },
+					{ tag: 'span', cn: [
+						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
+						' {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'
+					]}
 				]}
 			]}
 		]}
-	])
+	]),
+
+
+	onContainerClick: function(e){
+		if(e.getTarget('.path')){
+			this.destroy();
+		}
+		else if(e.getTarget('.new-topic')){
+			console.log('new topic!');
+		}
+	},
+
+
+	onItemClick: function(record,dom,index,event){
+		console.log('item click', arguments);
+	}
 });
