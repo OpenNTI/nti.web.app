@@ -103,12 +103,12 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadForum: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		var c = this.getForumViewContainer();
+		var c = this.getForumViewContainer(),
+			url = record.getLink('contents'),
+			store;
 
-//		console.log(c, record);
-		c.add({xtype: 'forums-topic-list'});
 
+		store = NextThought.store.NTI.create({ storeId: 'forum-'+record.getId(), url:url, autoLoad:true });
+		c.add({xtype: 'forums-topic-list', record: record, store: store});
 	}
-
-
 });
