@@ -12,6 +12,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	defaultType: 'profile-blog-list-item',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
+	hidden: true,
 
 	ui: 'blog',
 	cls: 'blog',
@@ -65,6 +66,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				if(response.status === 0 && Ext.isEmpty(response.request.options.url)){
 					//We destroy the tab view if, and only if, the url is not present.
 					Ext.defer(me.destroy,1,me);
+					return;
 				}
 				else {
 					console.error('Error loading blog: ', response);
@@ -72,6 +74,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			} catch(e){
 				console.error('problem in determining error :(',Globals.getError(e));
 			}
+			me.tab.show();
 		}
 
 		var user = this.user,
@@ -225,6 +228,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	loadContents: function(resp){
+		if(this.tab.isHidden()){this.tab.show();}
 		if(!this.rendered){
 			this.on('afterrender', Ext.bind(this.loadContents, this, arguments), this, {single:true});
 			return;
