@@ -14,6 +14,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	cls: 'topic-list',
 	itemSelector: '.topic-list-item',
+	preserveScrollOnRefresh: true,
 
 	listeners: {
 		select: function(selModel,record){
@@ -23,14 +24,18 @@ Ext.define('NextThought.view.forums.Forum',{
 		}
 	},
 
+	headerTpl: Ext.DomHelper.createTemplate({
+		cls: 'header-container', cn: {
+			cls: 'forum-topic-list header', cn:[
+				{ cls: 'controls', cn:[
+					{ cls: 'new-topic', html: 'New Discussion'}
+				] },
+				{ cls: 'path', html: '{forumTitle}&nbsp;'}
+			]
+		}
+	}),
+
 	tpl: Ext.DomHelper.markup([
-		{ cls: 'header-container', cn: {
-			cls: 'header', cn:[
-			{ cls: 'controls', cn:[
-				{ cls: 'new-topic', html: 'New Discussion'}
-			] },
-			{ cls: 'path', html: '{forumTitle}Path'}
-		]}},
 		{ tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'topic-list-item', cn: [
 				{ cls: 'controls', cn: [
@@ -48,6 +53,48 @@ Ext.define('NextThought.view.forums.Forum',{
 			]}
 		]}
 	]),
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var title = this.record.get('title');
+		if( title === 'Forum' ){
+			title = this.record.get('Creator')+' / '+title;
+		}
+
+		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: title },true);
+		this.headerEl = this.headerElContainer.down('.header');
+
+		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+	},
+
+
+	destroy:function(){
+		this.headerEl.remove();//make sure we remove this just in case its not in our components element.
+		return this.callParent(arguments);
+	},
+
+
+	handleScrollHeaderLock: function(e,forumDom){
+		var headerEl = this.headerEl,
+			domParent = forumDom && forumDom.parentNode,
+			scroll = Ext.fly(forumDom).getScroll().top,
+			parent = headerEl && Ext.getDom(headerEl).parentNode,
+			cutoff = 0;
+
+		if(!headerEl || !parent){
+			console.error('Nothing to handle, el is falsey');
+			return;
+		}
+
+		if(parent === domParent && (scroll <= cutoff || !this.isVisible())){
+			headerEl.appendTo(this.headerElContainer);
+		}
+		else if(this.isVisible() && parent !== domParent && scroll > cutoff){
+			headerEl.appendTo(domParent);
+		}
+	},
 
 
 	onContainerClick: function(e){
