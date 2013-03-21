@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 	extend: 'NextThought.view.assessment.input.Base',
-	alias: ['widget.question-input-waitingforName', 
+	alias: ['widget.question-input-waitingforName',
                 'widget.question-input-multiplechoicemultipleanswerpart'],
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'multi-choice {choice-style}', cn:[{
@@ -9,7 +9,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 			cn:[
 				{ tag: 'span', cls: 'control tabable', tabIndex:'{[xindex-1+parent.tabIndex]}', 'data-index':'{[xindex-1]}'},//xindex is 1 based
 				{ tag: 'span', cls: 'label', html:'{[String.fromCharCode(64+xindex)]}.' },
-				{ tag: 'span', html:'{.}'  }
+				{ tag: 'span', cls: 'indexed-content', html:'{.}'  }
 			]
 		}]}
 	]}),
@@ -115,7 +115,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 			var value=s.get('value');
 			Ext.each(value, function(s){c[s]=true;});
 		});
-		
+
 		this.getEl().select('.choice').removeCls(['correct','incorrect']);
 
 		Ext.each(this.getEl().query('.control.checked'),function(e){
