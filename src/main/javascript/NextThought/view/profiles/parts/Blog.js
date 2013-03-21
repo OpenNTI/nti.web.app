@@ -18,7 +18,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'list-view', cn:[
-			{ cls: 'header', html: 'New Entry' },
+			{ tag: 'tpl', 'if':'canBlog', cn:{ cls: 'header', html: 'New Entry' }},
 			{ id: '{id}-body', cls: 'body', tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
 		]},
 		{ cls: 'post-view' }
@@ -28,31 +28,27 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	renderSelectors: {
 		listViewEl: '.list-view',
 		listViewBodyEl: '.list-view .body',
-		postViewEl: '.post-view'
+		postViewEl: '.post-view',
+		headerEl: '.header'
 	},
 
 
 	initComponent: function(){
+		this.canBlog = isMe(this.username) && $AppConfig.service.canBlog();
 		this.callParent(arguments);
 
-		//TODO this whole bit about us destroying ourselves is kinda weird
-		//shouldn't our container manage whether or not we are present
-		//and just not even create us if we will be destroyed.
-		//
-		// - JG: not if that's not known in the container. If the container drives, then this logic moves up.  But as it
-		// stands, the Blog component attempts to completely encapsulate the blog feature.  The Tab view above this
-		// doesn't know anything about its tabs. So, I believe, while its weird, its still the best way.  A feature
-		// self-destructs itself if its not available. (Its been an idea of mine to attempt to make all features
-		// self-encapsulated-- though, I admit, I haven't succeeded in all cases)
-		if(this.user && !this.user.hasBlog()){
+		//Additional logging to see if this.username is for "me" but we're viewing another profile?
+		console.debug('Who is this for?',this.username, this.user && this.user.getId(), 'Can blog? ',this.canBlog);
+
+		//TODO: its probably not necessarily true that if one user can blog they all can on a domain.
+		// There probably needs to be a site-level flag for this.
+		if(!$AppConfig.service.canBlog() //Allow us to to turn it off after they already have data.
+				|| (this.user && !this.user.hasBlog())){
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
 
-
-		if(isMe(this.username) && $AppConfig.service.canBlog()){
-			this.renderSelectors.headerEl = '.header';
-		}
+		this.renderData = Ext.apply(this.renderData||{},{canBlog: this.canBlog});
 
 		this.buildBlog();
 
@@ -64,9 +60,18 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	buildBlog: function(reresolveUser){
 		function fail(response){
 			console.warn('No blog object ('+response.status+') :'+response.responseText);
-			//ensure that the destroy happens after the construction/component plumbing.
-			//If the request is cached in the browser, this may be a synchronous call.
-			Ext.defer(me.destroy,1,me);
+			if(isMe(user) && $AppConfig.service.canBlog()){
+				//Our user can blog, but does not have any blog posts yet. So lets not remove the blogging widgets.
+				return;
+			}
+
+			//TODO: its probably not necessarily true that if one user can blog they all can on a domain.
+			// There probably needs to be a site-level flag for this.
+			if(!$AppConfig.service.canBlog()){
+				//ensure that the destroy happens after the construction/component plumbing.
+				//If the request is cached in the browser, this may be a synchronous call.
+				Ext.defer(me.destroy,1,me);
+			}
 		}
 
 		var user = this.user,
@@ -90,12 +95,6 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				return;
 			}
 
-			if(isMe(user) && $AppConfig.service.canBlog()){
-				//Our user can blog, but does not have any blog posts yet. So lets not fire fail() as that will
-				// remove the blogging widgets.
-				return;
-			}
-
 			fail({status:0,responseText:'User object did not have a Blog url'});
 			return;
 		}
@@ -109,7 +108,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
-		if(this.headerEl){
+		if(this.headerEl && this.canBlog){
 			this.headerEl.addCls('owner');
 			this.mon(this.headerEl,'click',this.onNewPost,this);
 			this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
