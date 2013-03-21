@@ -97,9 +97,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	selectSlide: function(slide){
 		var n = Ext.get(this.getNode(slide));
-            if(n && n.needsScrollIntoView(this.el)){
-                this.el.scroll('b', n.dom.offsetTop, true);
-
+        if(n && n.needsScrollIntoView(this.el)){
+            this.el.scroll('b', n.dom.offsetTop, true);
 		}
 		this.getSelectionModel().select(slide);
 	},
