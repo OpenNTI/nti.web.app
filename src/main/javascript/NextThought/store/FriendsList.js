@@ -118,7 +118,7 @@ Ext.define('NextThought.store.FriendsList',{
 
 	loadRecords: function(records, options){
 		console.log('load records called with', arguments);
-		if(options.merge){
+		if(options && options.merge){
 			this.mergeRecords(records, options);
 		}
 		else{
@@ -185,6 +185,7 @@ Ext.define('NextThought.store.FriendsList',{
 	fireContactsRefreshed: function(){
 		console.log('firing contacts refreshed');
 		this.fireEvent('contacts-refreshed', this);
+		this.fireEvent('contacts-updated');
 	},
 
 
