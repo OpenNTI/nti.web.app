@@ -54,7 +54,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	onViewReady: function(){
 		var me = this,
 			imgs = me.el.select('img'),
-			count = imgs.getCount();
+			count = imgs.getCount(),
+            imgLength = count;
 		function gotoStart(){
 			var start = me.store.getAt(0),
 				startOn = me.startOn;
@@ -70,6 +71,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 			count--;
 
 			if(count <= 0){
+//                gotoEnd();
 				gotoStart();
 			}
 		}
@@ -95,11 +97,21 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	selectSlide: function(slide){
 		var n = Ext.get(this.getNode(slide));
-		if(n && n.needsScrollIntoView(this.el)){
-			n.scrollIntoView(this.el);
+            if(n && n.needsScrollIntoView(this.el)){
+                this.el.scroll('b', n.dom.offsetTop, true);
+
 		}
 		this.getSelectionModel().select(slide);
 	},
+
+    adjustSlide: function(slide){
+        var n = Ext.get(this.getNode(slide));
+        if(n && n.needsScrollIntoView(this.el)){
+			n.scrollIntoView(this.el);
+
+        }
+        this.getSelectionModel().select(slide);
+    },
 
 
 	changeSlide: function(direction){
@@ -108,7 +120,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		sel = sel? sel.getSibling(direction) : null;
 
 		if( sel ){
-			this.selectSlide(sel);
+			this.adjustSlide(sel);
 		}
 	},
 
