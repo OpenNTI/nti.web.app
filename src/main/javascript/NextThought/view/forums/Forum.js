@@ -47,7 +47,7 @@ Ext.define('NextThought.view.forums.Forum',{
 					{ tag: 'span', cls:'count', html: '{PostCount} Comments' },
 					{ tag: 'span', cn: [
 						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
-						' {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'
+						' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
 					]}
 				]}
 			]}
