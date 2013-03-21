@@ -48,9 +48,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	loadBoards: function(boardCmp){
-		function makeUrl(c){
-			return c === 'Everyone' ? null
-					: getURL([$AppConfig.server.data, 'users/', c, '/Forum'].join('')); }
+		function makeUrl(c){ return c && c.getLink('Forum'); }
 
 		//Just for now...
 		function fn(resp){
@@ -66,29 +64,33 @@ Ext.define('NextThought.controller.Forums', {
 				store.add(forums);
 			}
 		}
-
-		var urls = Ext.Array.map($AppConfig.userObject.get('Communities'),makeUrl),
-			forums = [],
+		var urls, forums = [],
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
 			});
 
-		urls.handled = urls.length;
 
-		boardCmp.bindStore(store);
+		UserRepository.getUser($AppConfig.userObject.get('Communities'),function(u){
 
-		Ext.each(urls,function(u){
+			urls = Ext.Array.map(u,makeUrl);
+			urls.handled = urls.length;
 
-			if(!u){ maybeFinish(); return; }
+			boardCmp.bindStore(store);
 
-			/*
-			//Adds a test post
-			Ext.Ajax.request({
-				url: u, method: 'POST',
-				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
-			}); */
+			Ext.each(urls,function(u){
 
-			Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
+				if(!u){ maybeFinish(); return; }
+
+				/*
+				//Adds a test post
+				Ext.Ajax.request({
+					url: u, method: 'POST',
+					jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
+				}); */
+
+				Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
+			});
+
 		});
 	},
 
