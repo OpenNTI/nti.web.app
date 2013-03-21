@@ -29,12 +29,11 @@ Ext.define('NextThought.util.Time', {
 		if (!result) {
 			return Ext.Date.format(previous, 'M j, Y, g:i a');
 		}
-		else {
-			if(/^1\s/.test(result)){
-				result = result.replace('s ago', ' ago');
-			}
-			return result;
+
+		if(/^1\s/.test(result)){
+			result = result.replace('s ago', ' ago');
 		}
+		return result;
 	}
 
 },
