@@ -48,7 +48,8 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		deleteEl: '.foot .delete',
 		flagEl:'.foot .flag',
 		editorBoxEl: '.editor-box',
-		metaEl: '.meta'
+		metaEl: '.meta',
+		footEl: '.foot'
 	},
 
 
@@ -93,6 +94,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		var bodyEl = this.bodyEl,
 			ctrlEl = this.ctrlEl,
 			metaEl = this.metaEl,
+			footEl = this.footEl,
 			hide, show;
 
 		this.record.addObserverForField(this, 'body', this.updateContent, this);
@@ -119,9 +121,10 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		ctrlEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		footEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		hide = function(){bodyEl.hide();ctrlEl.hide();metaEl.hide();};
-		show = function(){bodyEl.show();ctrlEl.show();metaEl.show();};
+		hide = function(){bodyEl.hide();ctrlEl.hide();metaEl.hide();footEl.hide();};
+		show = function(){bodyEl.show();ctrlEl.show();metaEl.show();footEl.show();};
 
 		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl});
 		this.mon(this.editor,{
