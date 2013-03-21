@@ -2,16 +2,16 @@ Ext.define( 'NextThought.view.forums.View', {
 	extend: 'NextThought.view.View',
 	alias:	'widget.forums-view-container',
 	requires: [
+		'NextThought.layout.container.Stack',
 		'NextThought.view.forums.Board'
 	],
 
 	cls: 'forums-view',
-	layout: 'auto',
+	layout: 'stack',
 	title: 'NextThought: Forums',
-	defaultType: 'forums-board',
 
 	items: [
-		{}//forums-board
+		{xtype: 'forums-board'}
 	],
 
 	restore: function(state){
@@ -22,5 +22,4 @@ Ext.define( 'NextThought.view.forums.View', {
 	getFragment: function(){
 		return '!forums';
 	}
-
 });

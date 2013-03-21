@@ -30,21 +30,17 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.View'
 	],
 
-	refs: [],
+	refs: [
+		{ ref: 'forumViewContainer', selector: 'forums-view-container#forums'}
+	],
+
 
 	init: function() {
 
 		this.control({
 			'forums-board': {
 				'afterrender':this.loadBoards,
-				'select':function(selModel,record){
-					//allow reselect since we don't style the selected state, this has no
-					// visual effect other than the ability to click on it again
-					selModel.deselect(record);
-
-
-					console.log(record.getData());
-				}
+				'select':this.loadForum
 			}
 		});
 	},
@@ -94,10 +90,17 @@ Ext.define('NextThought.controller.Forums', {
 
 			Ext.Ajax.request({ url:u, success: fn, failure: maybeFinish });
 		});
+	},
+
+
+	loadForum: function(selModel, record){
+		if( Ext.isArray(record) ){ record = record[0]; }
+		var c = this.getForumViewContainer();
+
+//		console.log(c, record);
+		c.add({xtype: 'forums-topic-list'});
+
 	}
 
 
-	/**
-	 * This module will implement its navigation as a stack.  Both in tracking, and in literal view placement.
-	 */
 });
