@@ -54,8 +54,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	onViewReady: function(){
 		var me = this,
 			imgs = me.el.select('img'),
-			count = imgs.getCount(),
-            imgLength = count;
+			count = imgs.getCount();
+
 		function gotoStart(){
 			var start = me.store.getAt(0),
 				startOn = me.startOn;
@@ -64,14 +64,13 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 				start = me.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
 			}
 
-			me.selectSlide(start);
+			me.setStartingSlide(start);
 		}
 
 		function maybeFinish(){
 			count--;
 
 			if(count <= 0){
-//                gotoEnd();
 				gotoStart();
 			}
 		}
@@ -94,8 +93,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		return Boolean((new Date().getTime() - this.lastChanged) < 1000);
 	},
 
-
-	selectSlide: function(slide){
+    // when entering slidedeck, moves the active slide to the top
+    setStartingSlide: function(slide){
 		var n = Ext.get(this.getNode(slide));
         if(n && n.needsScrollIntoView(this.el)){
             this.el.scroll('b', n.dom.offsetTop, true);
@@ -103,7 +102,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		this.getSelectionModel().select(slide);
 	},
 
-    adjustSlide: function(slide){
+    selectSlide: function(slide){
         var n = Ext.get(this.getNode(slide));
         if(n && n.needsScrollIntoView(this.el)){
 			n.scrollIntoView(this.el);
@@ -112,14 +111,15 @@ Ext.define('NextThought.view.slidedeck.Queue',{
         this.getSelectionModel().select(slide);
     },
 
-
+    // moves the active slide into view when navigating or
+    // watching the clip
 	changeSlide: function(direction){
 		var sel = this.getSelectionModel().getLastSelected();
 
 		sel = sel? sel.getSibling(direction) : null;
 
 		if( sel ){
-			this.adjustSlide(sel);
+			this.selectSlide(sel);
 		}
 	},
 
