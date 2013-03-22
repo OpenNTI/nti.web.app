@@ -51,7 +51,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 				cn:[
 					{cls: 'title', html:'{title} by:'},
 					{cls: 'author', html:'{author}'},
-					{cls: 'tags', html:'Tags: {tags}'}
+					{tag: 'tpl', 'if': 'tags.length &gt; 0', cn:[
+						{cls: 'tags', html:'Tags: {tags}'}]}
 				]}
 			]},
 

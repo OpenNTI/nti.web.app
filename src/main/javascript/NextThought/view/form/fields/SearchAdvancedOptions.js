@@ -30,7 +30,7 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 		{ cls: 'type-filter books', text: 'Books', model: 'bookcontent' },
 		{ cls: 'type-filter highlight', text: 'Highlights', model: 'highlight' },
 		{ cls: 'type-filter note', text: 'Notes', model: 'note' },
-		{ cls: 'type-filter post', text: 'Thoughts', model: ['forums.personalblogcomment', 'forums.personalblogcomment']},
+		{ cls: 'type-filter post', text: 'Thoughts', model: ['forums.personalblogcomment', 'forums.personalblogentrypost']},
 		{ cls: 'type-filter chat', text: 'Chats', model: 'messageinfo'},
 		{ xtype: 'labeledseparator', text: 'Return', hidden: true },
 //		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Exact Matches', checked: true },
