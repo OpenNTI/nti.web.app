@@ -10,9 +10,6 @@ Ext.define( 'NextThought.view.forums.View', {
 	layout: 'stack',
 	title: 'NextThought: Forums',
 
-	items: [
-		{xtype: 'forums-board'}
-	],
 
 	restore: function(state){
 		this.fireEvent('finished-restore');

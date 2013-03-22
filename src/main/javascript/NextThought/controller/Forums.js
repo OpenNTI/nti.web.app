@@ -3,6 +3,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	models: [
 		'forums.Board',
+		'forums.CommunityBoard',
 		'forums.CommunityForum',
 		'forums.CommunityHeadlinePost',
 		'forums.CommunityHeadlineTopic',
@@ -25,6 +26,7 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	views: [
+		'forums.Root',
 		'forums.Board',
 		'forums.Comment',
 		'forums.Forum',
@@ -40,8 +42,13 @@ Ext.define('NextThought.controller.Forums', {
 	init: function() {
 
 		this.control({
+			'forums-view-container':{
+				'render': this.loadRoot
+			},
+			'forums-root': {
+				'select': this.loadBoard
+			},
 			'forums-board': {
-				'afterrender':this.loadBoards,
 				'select':this.loadForum
 			},
 			'forums-forum': {
@@ -52,75 +59,77 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	showLevel: function(level,record){
+		var c = this.getForumViewContainer(),
+			url = record.getLink('contents'),
+			store;
 
-	loadBoards: function(boardCmp){
-		function makeUrl(c){ return c && c.getLink('Forum'); }
+
+		store = NextThought.store.NTI.create({ storeId: record.get('Class')+'-'+record.getId(), url:url, autoLoad:true });
+		//Because the View is tied to the store and its events, any change to
+		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
+		// Creator string with the user model and presto!
+		store.on('load',this.fillInUsers,this);
+		c.add({xtype: 'forums-'+level+'-list', record: record, store: store});
+	},
+
+
+	loadRoot: function(view){
+		function makeUrl(c){ return c && c.getLink('DiscussionBoard'); }
 
 		//Just for now...
 		function fn(resp,req){
-			var o = ParseUtils.parseItems(resp.responseText);
-			if(req && req.community){
+			var o = ParseUtils.parseItems(resp.responseText),
+				c;
+
+			if(req && req.community) {
+				c = req.community;
 				Ext.each(o,function(o){
-					o.set('Creator',req.community);
-				});
+					if(o.get('Creator') === c.getId()){ o.set('Creator',c); }});
 			}
-			forums.push.apply(forums, o);
+
+			boards.push.apply(boards, o);
 			maybeFinish();
 		}
 
 		function maybeFinish(){
 			urls.handled--;
 			if(urls.handled === 0){
-				console.log('List of forums:',forums);
-				//add forums to a Board Store.
-				store.add(forums);
+				console.log('List of boards:',boards);
+				store.add(boards);
 			}
 		}
 
-		var communities,
-			urls, forums = [],
+		var communities = $AppConfig.userObject.getCommunities(),
+			urls = Ext.Array.map(communities,makeUrl),
+			boards = [],
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
 			});
 
 
-		communities = $AppConfig.userObject.getCommunities();
-
-		urls = Ext.Array.map(communities,makeUrl);
 		urls.handled = urls.length;
 
-		boardCmp.bindStore(store);
+		view.add({store:store, xtype: 'forums-root'});
 
 		Ext.each(urls,function(url,i){
 
 			if(!url){ maybeFinish(); return; }
 
-			/*
-			//Adds a test post
-			Ext.Ajax.request({
-				url: u, method: 'POST',
-				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
-			}); */
-
 			Ext.Ajax.request({ url:url, community: communities[i], success: fn, failure: maybeFinish });
 		});
+	},
 
+
+	loadBoard: function(selModel, record){
+		if( Ext.isArray(record) ){ record = record[0]; }
+		this.showLevel('forum',record);
 	},
 
 
 	loadForum: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		var c = this.getForumViewContainer(),
-			url = record.getLink('contents'),
-			store;
-
-
-		store = NextThought.store.NTI.create({ storeId: 'forum-'+record.getId(), url:url, autoLoad:true });
-		//Because the View is tied to the store and its events, any change to
-		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
-		// Creator string with the user model and presto!
-		store.on('load',this.fillInUsers,this);
-		c.add({xtype: 'forums-topic-list', record: record, store: store});
+		this.showLevel('topic',record);
 	},
 
 
