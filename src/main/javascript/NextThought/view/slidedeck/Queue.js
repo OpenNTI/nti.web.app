@@ -50,6 +50,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 		this.on('destroy',function(){keyMap.destroy(false);});
 		this.on('viewready',this.onViewReady,this,{single: true, defer: 100});
+        this.on('selectionchange', this.onSelectionChange, this);
 	},
 
 	onViewReady: function(){
@@ -124,7 +125,6 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		}
 	},
 
-
 	nextSlide: function(){ this.changeSlide(1); },
 
 
@@ -133,5 +133,14 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	updateSlideFromVideo: function(){
 		console.log('updateSlideFromVideo',arguments);
+	},
+
+    onSelectionChange: function(sm, records){
+        if(records && Ext.isEmpty(records)){
+            var lastSelected = sm.getLastSelected();
+            if (lastSelected) {
+                sm.select(sm.getLastSelected());
+            }
+        }
 	}
 });
