@@ -136,7 +136,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	},
 
     onSelectionChange: function(sm, records){
-        if(records && Ext.isEmpty(records)){
+        if(Ext.isEmpty(records)){
             var lastSelected = sm.getLastSelected();
             if (lastSelected) {
                 sm.select(sm.getLastSelected());
