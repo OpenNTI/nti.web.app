@@ -14,21 +14,30 @@ Ext.define('NextThought.layout.container.Stack',{
     hideInactive: true,
     deferredRender : true,
 
+
+	enforceStackActiveItem: function(){
+		var last = this.getLayoutItems().last();
+		if( last ){
+			this.setActiveItem(last);
+		}
+	},
+
+
 	initLayout: function(){
 		this.callParent(arguments);
-		this.setActiveItem(this.getLayoutItems().last());
+		this.enforceStackActiveItem();
 	},
 
 
 	onAdd: function(){
 		this.callParent(arguments);
-		this.setActiveItem(this.getLayoutItems().last());
+		this.enforceStackActiveItem()
 	},
 
 
 	onRemove: function(){
 		this.card.onRemove.apply(this,arguments);
-		this.setActiveItem(this.getLayoutItems().last());
+		this.enforceStackActiveItem();
 	},
 
 
@@ -47,6 +56,11 @@ Ext.define('NextThought.layout.container.Stack',{
 
 
 	setActiveItem: function(item){
+		if(!item){
+			console.warn('You did something wrong. This should never be fasley');
+			return false;
+		}
+
 		if(this.parseActiveItem(item) !== this.getLayoutItems().last()){
 			return false;
 		}
