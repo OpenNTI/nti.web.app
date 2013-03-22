@@ -1,15 +1,20 @@
 describe('Transcript Summary Item tests', function(){
-	var body, view, noop = function(){};
+	var testBody, view, noop = function(){};
 
 	beforeEach(function(){
-		body = document.createElement('div');
-		document.body.appendChild(body);
+		testBody = document.createElement('div');
+		document.body.appendChild(testBody);
 		view = Ext.create('NextThought.view.profiles.parts.TranscriptSummaryItem',{
-			renderTo : body,
+			renderTo : testBody,
 			initComponent : noop,
 			afterRender : noop
 		});
-	})
+	});
+
+	afterEach(function(){
+		document.body.removeChild(testBody);
+	});
+
 	describe('No array passed', function(){
 		it('Passing nothing',function(){
 			var result = view.stringifyNames();
