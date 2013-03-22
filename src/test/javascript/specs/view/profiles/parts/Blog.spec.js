@@ -1,9 +1,5 @@
 describe('Blog Tests', function(){
 	var blog, testBody, username;
-	beforeEach(function(){
-
-	});
-
 	describe('tests app user capability', function(){
 		beforeEach(function(){
 			testBody = document.createElement('div');
