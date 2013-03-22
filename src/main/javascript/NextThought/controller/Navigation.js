@@ -306,8 +306,8 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	track: function(view){
-		var btn = this.viewSelectButton(view), altBtn;
+	track: function(id){
+		var btn = this.viewSelectButton(id), altBtn;
 		try {
 			if(btn.alternateId){
 				altBtn = this.viewSelectButton(btn.alternateId);
@@ -320,7 +320,7 @@ Ext.define('NextThought.controller.Navigation', {
 			}
 		}
 		catch(e){
-			console.error('Looks like the "'+view+'" button was not included or was typo\'ed', e.stack);
+			console.error('Looks like the "'+id+'" button was not included or was typo\'ed', e.stack);
 		}
 	},
 

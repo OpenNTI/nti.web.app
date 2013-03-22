@@ -174,9 +174,11 @@ Ext.application({
 			'javascript/specs/view/assessment/Question.spec.js',
 			'javascript/specs/view/annotations/renderer/Manager.js',
 			'javascript/specs/view/profiles/parts/TranscriptSummaryItem.spec.js',
-            'javascript/specs/view/content/reader/Annotations.spec.js',
+			'javascript/specs/view/profiles/parts/Blog.spec.js',
+			'javascript/specs/view/content/reader/Annotations.spec.js',
 			'javascript/specs/controller/Chat.spec.js',
-			'javascript/specs/controller/Groups.spec.js'
+			'javascript/specs/controller/Groups.spec.js',
+			'javascript/specs/controller/Navigation.spec.js'
         ],
 		go);
 	}

@@ -36,18 +36,15 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	initComponent: function(){
-		// We will drive showing the newEntry btn based on whether or not the user has the capability.
-		this.canBlog = isMe(this.username) && $AppConfig.service.canBlog();
 		this.callParent(arguments);
 
-		// NOTE: we will drive showing the tab or not showing the tab based off the workspace.
-		if(!$AppConfig.service.canWorkspaceBlog()){
+		if(!this.shouldShowThoughtTab()){
 			console.warn("the workspace doesn't allow blogging");
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
 
-		this.renderData = Ext.apply(this.renderData||{},{canBlog: this.canBlog});
+		this.renderData = Ext.apply(this.renderData||{},{canBlog: this.canCreateNewBlog()});
 
 		this.buildBlog();
 
@@ -55,6 +52,15 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.on('show-post',this.updateLocation,this);
 	},
 
+	shouldShowThoughtTab: function(){
+		// NOTE: we will drive showing the tab or not showing the tab based off the workspace.
+		return $AppConfig.service.canWorkspaceBlog();
+	},
+
+	canCreateNewBlog: function(){
+		// We will drive showing the newEntry btn based on whether or not the user has the capability.
+		return isMe(this.username) && $AppConfig.service.canBlog();
+	},
 
 	buildBlog: function(reresolveUser){
 		function fail(response){
@@ -66,7 +72,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 					return;
 				}
 
-				if(me.canBlog){
+				if(me.canCreateNewBlog()){
 					me.handleNoVisiblePosts();
 				}
 				else {
@@ -75,7 +81,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			} catch(e){
 				console.error('problem in determining error :(',Globals.getError(e));
 			}
-			me.tab.show();
+			if(me.tab){ me.tab.show(); }
 		}
 
 		var user = this.user,
@@ -112,10 +118,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
-		if(this.btnNewEntryEl && this.canBlog){
+		if(this.btnNewEntryEl && this.canCreateNewBlog()){
 			this.btnNewEntryEl.addCls('owner');
 			this.mon(this.btnNewEntryEl,'click',this.onNewPost,this);
-			this.mon(Ext.get('profile'),'scroll',this.handleScrollNewEntryBtnLock,this);
+			if(Ext.get('profile')){
+				this.mon(Ext.get('profile'),'scroll',this.handleScrollNewEntryBtnLock,this);
+			}else{
+				console.error('Bad Error. Better be in a test. We expect the profile View to exist always.');
+			}
 		}
 	},
 
