@@ -406,5 +406,11 @@ Ext.define('NextThought.model.Service', {
 
     isPotentiallyCoppa: function(){
         return (/mathcounts/i).test(window.location.hostname);
-    }
+    },
+
+
+	canWorkspaceBlog: function(){
+		return Boolean($AppConfig.service.getCollection('Blog'));
+	}
+
 });

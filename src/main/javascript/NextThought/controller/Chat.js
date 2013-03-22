@@ -111,6 +111,10 @@ Ext.define('NextThought.controller.Chat', {
 				'chat': this.enterRoom
 			},
 
+			'no-thought': {
+				'chat': this.enterRoom
+			},
+
 			'contacts-tabs-card': {
 				'chat': this.enterRoom
 			}

@@ -5,7 +5,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	requires: [
 		'NextThought.view.profiles.parts.BlogEditor',
 		'NextThought.view.profiles.parts.BlogListItem',
-		'NextThought.view.profiles.parts.BlogPost'
+		'NextThought.view.profiles.parts.BlogPost',
+		'NextThought.view.profiles.parts.NoThought'
 	],
 
 	layout: 'auto',
@@ -35,17 +36,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	initComponent: function(){
+		// We will drive showing the newEntry btn based on whether or not the user has the capability.
 		this.canBlog = isMe(this.username) && $AppConfig.service.canBlog();
 		this.callParent(arguments);
 
-		//Additional logging to see if this.username is for "me" but we're viewing another profile?
-		console.debug('Who is this for?',this.username, this.user && this.user.getId(), 'Can blog? ',this.canBlog);
-
-		if(this.user && !this.user.hasBlog()){
-			//If we already have a user and we know it does not have a blog url, this tells us there is no blog.
-			// So destroy our self.
-			//
-			// This condition is probably never hit, because all we have at this point is a username.
+		// NOTE: we will drive showing the tab or not showing the tab based off the workspace.
+		if(!$AppConfig.service.canWorkspaceBlog()){
+			console.warn("the workspace doesn't allow blogging");
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
@@ -63,10 +60,14 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		function fail(response){
 			console.warn('No blog object (Status: '+response.status+'): '+response.responseText);
 			try {
-				if(response.status === 0 && Ext.isEmpty(response.request.options.url)){
-					//We destroy the tab view if, and only if, the url is not present.
+				//We destroy the tab view if, and only if, the url is not present and i'm not the AppUser
+				if( !isMe(me.username) && response.status === 0 && Ext.isEmpty(response.request.options.url)){
 					Ext.defer(me.destroy,1,me);
 					return;
+				}
+
+				if(me.canBlog){
+					me.handleNoVisiblePosts();
 				}
 				else {
 					console.error('Error loading blog: ', response);
@@ -93,7 +94,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				if(user){ user.summaryObject = user.summaryObject || Boolean(reresolveUser); }
 				UserRepository.getUser(this.username,function(user){
 					this.user = user;
-					this.buildBlog();
+					Ext.defer(this.buildBlog, 1, this);
 				},this,Boolean(reresolveUser));
 				return;
 			}
@@ -241,7 +242,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		this.mon(this.store,{
 			scope: this,
 			add: this.addedContents,
-			load: this.loadedContents
+			load: this.loadedContents,
+			remove: this.removedContent
+
 		});
 
 		this.store.load();
@@ -251,17 +254,25 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	addedContents: function(store,records,index){
 		var me = this;
 		me.suspendLayouts();
+		if(me.noPostPlaceholder){
+			me.noPostPlaceholder.destroy();
+		}
 		Ext.each(records, function(i){ me.insert(index,{record: i}); }, me, true);
 		me.resumeLayouts(true);
 	},
 
+	removedContent: function(store, record, index){
+		if(store.getCount() === 0){
+			this.handleNoVisiblePosts();
+		}
+	},
+
 
 	handleNoVisiblePosts: function(){
-		//TODO show something to the user here.  At this point
-		//we don't want to just destroy the tab because we don't
-		//know this condition until they have clicked on the tab
-		//So we probably should just show some placeholder message
-		//about not having any published blogs.
+		this.noPostPlaceholder = this.add({
+			xtype:'no-thought',
+			userObject: this.user
+		});
 		console.log('No visible blog bosts');
 	},
 
@@ -275,7 +286,9 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			this.handleNoVisiblePosts();
 			return;
 		}
-
+		if(this.noPostPlaceholder){
+			this.noPostPlaceholder.destroy();
+		}
 
 		m = Ext.Array.map(records,function(i){
 
