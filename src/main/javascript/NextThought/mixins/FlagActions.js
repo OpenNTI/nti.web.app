@@ -2,16 +2,10 @@ Ext.define('NextThought.mixins.FlagActions',{
 
 	constructor: function(){
 		function onAfterRender(){
-			var me = this,
-				rec = me.getRecord();
-
-			function handler(){
-				TemplatesForNotes.areYouSure('Reporting this object cannot be undone.', function(btn){ if(btn === 'ok'){ rec.flag(me); }});
-			}
+			var me = this;
 
 			if( me.flagEl ){
-				me.mon(me.flagEl, 'click', handler, me);
-				me.flagEl.clickHandler = handler;
+				me.mon(me.flagEl, 'click', me.clickHandler, me);
 			}
 		}
 
@@ -19,10 +13,18 @@ Ext.define('NextThought.mixins.FlagActions',{
 	},
 
 
+	clickHandler: function(){
+		var me = this,
+			rec = me.getRecord();
+		TemplatesForNotes.areYouSure('Reporting this object cannot be undone.', function(btn){ if(btn === 'ok'){ rec.flag(me); }});
+	},
+
+
 	tearDownFlagging: function(){
 		if( this.flagEl ){
-			this.mon(this.flagEl,'click', this.flagEl.clickHandler, this);
+			this.mun(this.flagEl,'click', this.clickHandler, this);
 			this.flagEl.remove();
+			delete  this.flagEl;
 		}
 
 		this.stopListeningForFlagChanges(this.record);

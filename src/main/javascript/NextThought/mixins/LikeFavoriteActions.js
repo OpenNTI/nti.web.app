@@ -67,6 +67,9 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 			this.favorites.remove();
 		}
 
+		//Cleanup
+		delete this.liked;
+		delete this.favorites;
 		this.stopListeningForLikeAndFavoriteChanges(this.record);
 	},
 

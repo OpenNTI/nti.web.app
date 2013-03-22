@@ -12,7 +12,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	},
 
 	cls: 'blog-comment',
-	ui: 'blog-comment',
+	ui: 'forum-comment',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
@@ -118,6 +118,10 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		this.reflectFlagged(this.record);
 		this.listenForFlagChanges(this.record);
 
+		if(this.record.get('Deleted')){
+			this.tearDownFlagging();
+		}
+
 		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		ctrlEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -181,12 +185,12 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	onRecordDestroyed: function(){
 		//First remove the delete and edit link listeners followed by the els
 		if( this.deleteEl ){
-			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+			this.mun(this.deleteEl,'click',this.onDeletePost,this);
 			this.deleteEl.remove();
 		}
 
 		if( this.editEl ){
-			this.mon(this.editEl,'click',this.onEditPost,this);
+			this.mun(this.editEl,'click',this.onEditPost,this);
 			this.editEl.remove();
 		}
 

@@ -56,6 +56,9 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-forum': {
 				'new-topic':this.newTopic,
 				'select':this.loadTopic
+			},
+			'forums-topic nti-editor': {
+				'save': this.saveTopicComment
 			}
 		});
 	},
@@ -189,6 +192,64 @@ Ext.define('NextThought.controller.Forums', {
 			store.resumeEvents();
 
 		});
+	},
+
+
+	saveTopicComment: function(editor,record,valueObject){
+
+		var postCmp = editor.up('forums-topic'),
+			postRecord = postCmp && postCmp.record,
+			isEdit = Boolean(record),
+			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
+
+		commentForum.set({ body:valueObject.body });
+
+		if(editor.el){
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		function unmask(){
+			if(editor.el){
+				editor.el.unmask();
+			}
+		}
+
+		try{
+
+			commentForum.save({
+				url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
+				scope: this,
+				success: function(rec){
+					console.log('Success: ', rec);
+					unmask();
+					if(postCmp.store && !postCmp.isDestroyed){
+						if(!isEdit){
+							postCmp.store.insert(0,rec);
+						}
+						editor.deactivate();
+						editor.setValue('');
+						editor.reset();
+					}
+					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
+					if(!isEdit){
+						postRecord.set('PostCount',postRecord.get('PostCount')+1);
+					}
+				},
+				failure: function(){
+					console.log('Failed: ', arguments);
+					editor.markError(editor.getEl(),'Could not save comment');
+					unmask();
+					console.debug('failure',arguments);
+				}
+			});
+
+		}
+		catch(e){
+			console.error('An error occurred saving comment', Globals.getError(e));
+			unmask();
+		}
+
 	},
 
 
