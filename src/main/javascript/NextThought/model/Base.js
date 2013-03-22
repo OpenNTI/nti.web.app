@@ -445,11 +445,13 @@ Ext.define('NextThought.model.Base', {
 				method: 'POST',
 				scope: this,
 				callback: function(r, s, response){
-					me.set(Ext.JSON.decode(response.responseText));
-					delete this.activePostTos[link];
+					var o = Ext.JSON.decode(response.responseText);
+					delete o.Creator;//ignore this, we don't want to lose the Record that is potentially there.
+					me.set(o);
+					delete me.activePostTos[link];
 					Ext.callback(callback, null, [s]);
 					if(s){
-						this.fireEvent('updated',this);
+						this.fireEvent('updated',me);
 					}
 				}
 			};
