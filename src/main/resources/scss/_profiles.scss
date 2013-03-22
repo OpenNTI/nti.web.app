@@ -9,8 +9,10 @@
 
 #profile {
 	padding:0;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow:{
+		x: hidden;
+		y: scroll;
+	}
 
 	&.scroll-lock{
 		overflow: hidden;

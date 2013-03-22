@@ -601,7 +601,10 @@
 
 
 #forums {
-	overflow: auto;
+	overflow:{
+		x: hidden;
+		y: scroll;
+	}
 
 	& > div.x-component,
 	& > div.x-container, {
