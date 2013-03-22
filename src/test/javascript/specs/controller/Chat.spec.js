@@ -1,8 +1,18 @@
 describe('Chat Controller Tests', function(){
 
-	var controller, socket;
+	var controller, socket, oldUserRepo;
 
 	beforeEach(function(){
+		var userRepo = NTITestUtils.newInstanceOfSingleton(UserRepository);
+
+		//Swizzle out the global UserRepository so we don't pollute global state
+		//would be nice to get things like this at a higher level so we don't have
+		//to be careful about it in every test.  Also we are assuming the contents of
+		//this spec run together at once
+		oldUserRepo = UserRepository;
+		UserRepository = userRepo;
+		precacheUsers(userRepo);
+
 		socket = NextThought.proxy.Socket.self.create(); //May need support for one more level deep (socket.io objects so we can fire emits)
 		controller = NextThought.controller.Chat.create({
 			socket: socket,
@@ -15,6 +25,30 @@ describe('Chat Controller Tests', function(){
 		//do that here
 		controller.application = app;
 		controller.init(app);
+	});
+
+	afterEach(function(){
+		UserRepository = oldUserRepo;
+	});
+
+	function precacheUsers(repo){
+
+		function userForName(name){
+			return new NextThought.model.User({Username: name});
+		}
+
+		//Note we don't use precacheUser here
+		//bercause that does some special handling if
+		//the user is the AppUser.  I think that ends up
+		//polluting some global state
+		repo.cacheUser($AppConfig.userObject);
+		repo.cacheUser(userForName('user2'));
+		repo.cacheUser(userForName('user1'));
+	};
+
+	it('Is not using the global UserRepo for tests', function(){
+		expect(UserRepository).toBeTruthy();
+		expect(UserRepository).not.toBe(oldUserRepo);
 	});
 
 	it('Listens for several socket events', function(){

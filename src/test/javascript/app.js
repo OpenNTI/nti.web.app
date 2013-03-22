@@ -83,6 +83,16 @@ var mockService = {
 	"Class": "Service"
 };
 
+var NTITestUtils = {
+	newInstanceOfSingleton: function(singleton){
+		var obj = {};
+		/*jslint sub:true */ //no way to ignore reserved property if using dot notation
+		obj['__proto__'] = singleton['__proto__'];
+		/*jslint sub:false */
+		return obj;
+	}
+}
+
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'javascript/NextThought',
