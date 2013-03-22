@@ -4,6 +4,7 @@ Ext.define('NextThought.controller.Forums', {
 	models: [
 		'forums.Board',
 		'forums.CommunityForum',
+		'forums.CommunityHeadlinePost',
 		'forums.CommunityHeadlineTopic',
 		'forums.Forum',
 		'forums.GeneralForum',
@@ -43,9 +44,8 @@ Ext.define('NextThought.controller.Forums', {
 				'select':this.loadForum
 			},
 			'forums-forum': {
-				'select':function(){
-					console.log('selected a topic',arguments);
-				}
+				'new-topic':this.newTopic,
+				'select':this.loadTopic
 			}
 		});
 	},
@@ -149,5 +149,18 @@ Ext.define('NextThought.controller.Forums', {
 			store.resumeEvents();
 
 		});
+	},
+
+
+	newTopic: function(cmp, forumRecord){
+		var c = this.getForumViewContainer().add({xtype:'box', html: 'Put editor here'});
+		Ext.defer(c.destroy,5000,c);
+		console.log('New Topic! Show editor :)');
+	},
+
+
+	loadTopic: function(selModel, record){
+		if( Ext.isArray(record) ){ record = record[0]; }
+		this.getForumViewContainer().add({xtype: 'forums-topic', record: record});
 	}
 });
