@@ -10,6 +10,7 @@ Ext.define('NextThought.model.Hit', {
 			'bookcontent': 'Books',
 			'forums.personalblogentrypost': 'Thoughts',
 			'forums.personalblogcomment': 'Thoughts',
+			'forums.communityheadlinepost': 'Forums',
 			'messageinfo': 'Chats'
 		}
 	},

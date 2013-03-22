@@ -26,6 +26,8 @@ Ext.define('NextThought.controller.Search', {
 		'menus.search.More',
 		'menus.search.NoResults',
 		'menus.search.Error',
+		'menus.search.BlogResult',
+		'menus.search.ForumResult',
 		'form.fields.SearchAdvancedOptions'
 	],
 
