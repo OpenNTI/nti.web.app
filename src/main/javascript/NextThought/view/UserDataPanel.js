@@ -122,6 +122,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		m[data.Transcript.prototype.mimeType] = this.getChatItem;
 		m[data.forums.PersonalBlogEntry.prototype.mimeType] = this.getPersonalBlogEntryItem;
 		m[data.forums.PersonalBlogComment.prototype.mimeType] = this.getPersonalBlogCommentItem;
+		m[data.forums.CommunityHeadlineTopic.prototype.mimeType] =  this.getPersonalBlogEntryItem; //TODO Probably something else custom
 
 		this.callParent(arguments);
 
