@@ -12,6 +12,11 @@ Ext.define( 'NextThought.view.forums.View', {
 
 
 	restore: function(state){
+		this.fireEvent('restore-forum-state', state);
+	},
+
+
+	finishedRestoring: function(state){
 		this.fireEvent('finished-restore');
 	},
 

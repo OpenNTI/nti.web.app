@@ -43,6 +43,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		this.control({
 			'forums-view-container':{
+				'restore-forum-state': this.restoreState,
 				'render': this.loadRoot
 			},
 			'forums-root': {
@@ -59,7 +60,26 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showLevel: function(level,record){
+	restoreState: function(state){
+		var c = this.getForumViewContainer();
+		console.log('Handle restore of state here', state);
+		if(c){
+			c.fireEvent('finished-restore');
+		}
+		else{
+			//Ruh roh
+			console.error('No forum container to fire finish restoring.  Expect problems', this);
+		}
+	},
+
+
+	pushState: function(s){
+		s = {'forums': s};
+		console.log('Need to push updated state here', s);
+	},
+
+
+	showLevel: function(level, record, pushState){
 		var c = this.getForumViewContainer(),
 			url = record.getLink('contents'),
 			store;
@@ -71,6 +91,8 @@ Ext.define('NextThought.controller.Forums', {
 		// Creator string with the user model and presto!
 		store.on('load',this.fillInUsers,this);
 		c.add({xtype: 'forums-'+level+'-list', record: record, store: store});
+
+
 	},
 
 
@@ -122,14 +144,21 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	loadBoard: function(selModel, record){
+		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('forum',record);
+		this.showLevel('forum', record);
+		community = record.get('Creator');
+		if(community.isModel){
+			community = community.get('Username');
+		}
+		this.pushState({'board': community}); //The communities board we are viewing
 	},
 
 
 	loadForum: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('topic',record);
+		this.showLevel('topic', record);
+		this.pushState({'forum': record.get('ID')}); //The forum we are viewing
 	},
 
 
@@ -177,5 +206,6 @@ Ext.define('NextThought.controller.Forums', {
 		if(o && !o.getPath) { o = null; }
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath()});
+		this.pushState({'topic': record.get('ID')});
 	}
 });
