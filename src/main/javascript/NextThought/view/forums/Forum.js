@@ -40,7 +40,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			{ cls: 'topic-list-item', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'favorite {favoriteState}' },
-					{ cls: 'like {likeState}' }
+					{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
 				]},
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
@@ -108,6 +108,19 @@ Ext.define('NextThought.view.forums.Forum',{
 
 
 	onItemClick: function(record,dom,index,event){
+		if(event.getTarget('.controls')){
+			event.stopEvent();
+			if(event.getTarget('.favorite')){
+				record.favorite();
+			}
+			else if(event.getTarget('.like')){
+				record.like();
+			}
+			return false;
+		}
+
 		console.log('item click', arguments);
+
+		return true;
 	}
 });

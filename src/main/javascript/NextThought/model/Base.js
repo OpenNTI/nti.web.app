@@ -390,6 +390,7 @@ Ext.define('NextThought.model.Base', {
 			else {
 				Ext.callback(widget.markAsFavorited,widget,[currentValue]);
 			}
+			me.set('favoriteState',s);//it doesn't matter what we pass as the value, the converter returns its own value
 		});
 	},
 
@@ -423,6 +424,7 @@ Ext.define('NextThought.model.Base', {
 					r.set('RecursiveLikeCount', (r.get('RecursiveLikeCount') || 0) + polarity);
 				}
 			}
+			me.set('likeState',s);//it doesn't matter what we pass as the value, the converter returns its own value
 		});
 	},
 
