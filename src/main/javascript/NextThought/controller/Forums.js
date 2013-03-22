@@ -70,34 +70,35 @@ Ext.define('NextThought.controller.Forums', {
 				store.add(forums);
 			}
 		}
-		var urls, forums = [],
+
+		var communities,
+			urls, forums = [],
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
 			});
 
 
-		UserRepository.getUser($AppConfig.userObject.get('Communities'),function(u){
+		communities = $AppConfig.userObject.getCommunities();
 
-			urls = Ext.Array.map(u,makeUrl);
-			urls.handled = urls.length;
+		urls = Ext.Array.map(communities,makeUrl);
+		urls.handled = urls.length;
 
-			boardCmp.bindStore(store);
+		boardCmp.bindStore(store);
 
-			Ext.each(urls,function(url,i){
+		Ext.each(urls,function(url,i){
 
-				if(!url){ maybeFinish(); return; }
+			if(!url){ maybeFinish(); return; }
 
-				/*
-				//Adds a test post
-				Ext.Ajax.request({
-					url: u, method: 'POST',
-					jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
-				}); */
+			/*
+			//Adds a test post
+			Ext.Ajax.request({
+				url: u, method: 'POST',
+				jsonData: {'Class':'Post',title: 'Foobar', body:['baz']}
+			}); */
 
-				Ext.Ajax.request({ url:url, community: u[i], success: fn, failure: maybeFinish });
-			});
-
+			Ext.Ajax.request({ url:url, community: communities[i], success: fn, failure: maybeFinish });
 		});
+
 	},
 
 
