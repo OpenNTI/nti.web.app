@@ -26,6 +26,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	views: [
 		'forums.Board',
+		'forums.Comment',
 		'forums.Forum',
 		'forums.Topic',
 		'forums.View'
@@ -161,6 +162,11 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadTopic: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.getForumViewContainer().add({xtype: 'forums-topic', record: record});
+		var c = this.getForumViewContainer(),
+			o = c.items.last();
+
+		if(o && !o.getPath) { o = null; }
+
+		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath()});
 	}
 });

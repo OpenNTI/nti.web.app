@@ -15,7 +15,8 @@ Ext.define('NextThought.view.forums.Forum',{
 	cls: 'topic-list',
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
-	loadingHeight: 300,
+	loadMask: false,
+//	loadingHeight: 300,
 
 	listeners: {
 		select: function(selModel,record){
@@ -63,11 +64,28 @@ Ext.define('NextThought.view.forums.Forum',{
 		if( title === 'Forum' ){
 			title = this.record.get('Creator')+' / '+title;
 		}
-
+		this.path = title;
 		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: title },true);
 		this.headerEl = this.headerElContainer.down('.header');
 
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+	},
+
+
+	getPath: function(){
+		var p = this.path,
+			o = this.ownerCt,
+			l = o && o.getLayout(),
+			items, index, c;
+
+		if(l){
+			items = l.getLayoutItems();
+            index = Ext.Array.indexOf(items, this);
+			c = items[index-1];
+			c = c && c.getpath && c.getPath();
+		}
+
+		return c ? [c, p].join(' / '): p;
 	},
 
 
