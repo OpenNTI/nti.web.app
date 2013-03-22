@@ -124,7 +124,7 @@ Ext.define('NextThought.util.Globals', {
 	 * @param [onError]
 	 * @param [scope]
 	 */
-	loadScript: function(url, onLoad, onError, scope){
+	loadScript: function(url, onLoad, onError, scope, bustCache){
 		var head, doc = document,
 			script, onLoadFn, onErrorFn;
 
@@ -150,6 +150,9 @@ Ext.define('NextThought.util.Globals', {
 		onLoadFn = buildCallback(onLoad,scope);
 		onErrorFn = buildCallback(onError,scope);
 
+		if(bustCache===true){
+			url += (url.indexOf('?')<0 ? '?':'&')+'_dc='+(new Date().getTime());
+		}
 
 		script.type = 'text/javascript';
 		script.setAttribute('src',url);
@@ -169,7 +172,7 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
-	loadScripts: function(urls, onLoad, scope){
+	loadScripts: function(urls, onLoad, scope, bustCache){
 		var u, stack = [], errors = false;
 		function tick(){
 			stack.pop();
@@ -187,7 +190,7 @@ Ext.define('NextThought.util.Globals', {
 		for(u in urls) {
 			if (urls.hasOwnProperty(u)){
 				stack.push(u);
-				Globals.loadScript(urls[u], tick, fail, this);
+				Globals.loadScript(urls[u], tick, fail, this, bustCache);
 			}
 		}
 	},
