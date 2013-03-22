@@ -41,6 +41,11 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-board': {
 				'afterrender':this.loadBoards,
 				'select':this.loadForum
+			},
+			'forums-forum': {
+				'select':function(){
+					console.log('selected a topic',arguments);
+				}
 			}
 		});
 	},
