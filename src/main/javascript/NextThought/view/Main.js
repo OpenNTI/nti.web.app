@@ -37,8 +37,27 @@ Ext.define('NextThought.view.Main', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		var map = {
+			width: 'right',
+			height: 'bottom',
+			widthp: 'left',
+			heightp: 'top'
+		};
+
 		Ext.Object.each(Ext.getScrollbarSize(),function(k,v){
-			if(v){ Ext.getBody().addCls('detected-scrollbars'); }
+			if(v){ Ext.getBody().addCls('detected-scrollbars');
+
+				var style = document.createElement('style');
+				style.type = 'text/css';
+				style.innerHTML = [
+					'.scroll-pos-'+map[k]+' { '+map[k+'p']+':-'+v+'px !important; } ',
+					'.scroll-margin-'+map[k]+' { margin-'+map[k]+':'+v+'px !important; } ',
+					'.scroll-padding-'+map[k]+' { padding-'+map[k]+':'+v+'px !important; } '
+				].join(' \r\n ');
+
+				document.getElementsByTagName('head')[0].appendChild(style);
+
+			}
 		});
 
 		Ext.EventManager.onWindowResize(this.detectZoom,this);
