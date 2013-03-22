@@ -74,7 +74,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			title = this.titleEl.down('input'),
 			e = this.editorActions = new EditorActions(this,this.editor),
 			profileEl = Ext.get('profile'),
-			hasScrollBar = Ext.getDom(profileEl).scrollHeight != profileEl.getHeight();
+			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
 		this.mon(e.tags,'new-tag', this.syncHeight,this);
 		this.mon(this.saveEl,'click', this.onSave, this);
