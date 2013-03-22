@@ -26,6 +26,7 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	views: [
+		'forums.Editor',
 		'forums.Root',
 		'forums.Board',
 		'forums.Comment',
@@ -192,9 +193,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	newTopic: function(cmp, forumRecord){
-		var c = this.getForumViewContainer().add({xtype:'box', html: 'Put editor here'});
-		Ext.defer(c.destroy,5000,c);
-		console.log('New Topic! Show editor :)');
+		this.getForumViewContainer().add({xtype:'forums-topic-editor'});
 	},
 
 
