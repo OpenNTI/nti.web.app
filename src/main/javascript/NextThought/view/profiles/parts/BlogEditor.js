@@ -87,7 +87,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
-		Ext.get('profile').addCls('scroll-lock').scrollTo(0);
+		Ext.get('profile').addCls('scroll-lock scroll-padding-right').scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	destroy: function(){
-		Ext.get('profile').removeCls('scroll-lock');
+		Ext.get('profile').removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
 		return this.callParent(arguments);

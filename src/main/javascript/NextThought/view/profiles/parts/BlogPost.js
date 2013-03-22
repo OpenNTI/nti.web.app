@@ -240,15 +240,16 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		var profileDomParent = profileDom && profileDom.parentNode,
 			profileScroll = Ext.fly(profileDom).getScroll().top,
 			navBarParent = Ext.getDom(this.navigationBarEl).parentNode,
-			cutoff = 268;
+			cutoff = 268,
+			cls = 'scroll-pos-right';
 
 		if(navBarParent === profileDomParent && profileScroll < cutoff){
 			delete this.headerLocked;
-			this.navigationBarEl.insertBefore(this.getEl().first());
+			this.navigationBarEl.removeCls(cls).insertBefore(this.getEl().first());
 		}
 		else if(navBarParent !== profileDomParent && profileScroll >= cutoff){
 			this.headerLocked = true;
-			this.navigationBarEl.appendTo(profileDomParent);
+			this.navigationBarEl.addCls(cls).appendTo(profileDomParent);
 		}
 	},
 

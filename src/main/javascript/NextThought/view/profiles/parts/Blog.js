@@ -146,7 +146,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			}
 		}
 		else if(this.isVisible() && parent !== profileDomParent && profileScroll >= cutoff){
-			wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post'});
+			wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post scroll-pos-right'});
 			btnEl.appendTo(wrapper);
 		}
 	},

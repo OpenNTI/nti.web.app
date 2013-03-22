@@ -195,15 +195,16 @@ Ext.define('NextThought.view.profiles.Panel',{
 		var profileDomParent = profileDom && profileDom.parentNode,
 			profileScroll = Ext.fly(profileDom).getScroll().top,
 			tabBarParent = Ext.getDom(this.tabBarEl).parentNode,
-			cutoff = 268;
+			cutoff = 268,
+			cls = 'scroll-pos-right';
 
 		if(tabBarParent === profileDomParent && profileScroll < cutoff){
 			delete this.headerLocked;
-			this.tabBarEl.insertBefore(this.tabs.getEl().first());
+			this.tabBarEl.removeCls(cls).insertBefore(this.tabs.getEl().first());
 		}
 		else if(tabBarParent !== profileDomParent && profileScroll >= cutoff){
 			this.headerLocked = true;
-			this.tabBarEl.appendTo(profileDomParent);
+			this.tabBarEl.addCls(cls).appendTo(profileDomParent);
 		}
 	},
 
