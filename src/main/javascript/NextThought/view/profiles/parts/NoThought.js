@@ -9,14 +9,14 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 	cls:'entry no-blog',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', if:'isMe', cn:[
+		{tag: 'tpl', 'if':'isMe', cn:[
 			{cls:'title', html:'Share your thoughts and ideas with others.'},
 			{ cls: 'meta', cn:[
 //				{cls:'link more', tag:'span', html:'Learn more'},
 				{cls:'link start', tag:'span', html:'Get Started!'}
 			]}
 		]},
-		{tag: 'tpl', if:'!isMe', cn:[
+		{tag: 'tpl', 'if':'!isMe', cn:[
 			{cls:'title others', html:'Sorry! Im still collecting my thoughts...'},
 			{ cls: 'meta', cn:[
 				{cls:'link back', tag:'span', html:'Go Back'},

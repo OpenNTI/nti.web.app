@@ -191,7 +191,7 @@ Ext.define('NextThought.controller.Search', {
 		s.clearFilter();
 		if(filter){
 			Ext.each( filter.value, function(item){
-				var mt = item.value
+				var mt = item.value;
 				if(mt){
 					selectedMimeTypes.push(mt);
 				}
