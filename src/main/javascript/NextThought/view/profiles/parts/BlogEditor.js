@@ -72,7 +72,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		var r = this.record,
 			h,
 			title = this.titleEl.down('input'),
-			e = this.editorActions = new EditorActions(this,this.editor);
+			e = this.editorActions = new EditorActions(this,this.editor),
+			profileEl = Ext.get('profile'),
+			hasScrollBar = Ext.getDom(profileEl).scrollHeight != profileEl.getHeight();
 
 		this.mon(e.tags,'new-tag', this.syncHeight,this);
 		this.mon(this.saveEl,'click', this.onSave, this);
@@ -87,7 +89,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
-		Ext.get('profile').addCls('scroll-lock scroll-padding-right').scrollTo(0);
+		profileEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
