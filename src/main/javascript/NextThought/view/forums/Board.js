@@ -34,8 +34,12 @@ Ext.define('NextThought.view.forums.Board',{
 					{ tag: 'span', cls:'count', html: '{TopicCount} Discussions' },
 
 					//{ tag: 'tpl', 'if':'CommentCount', cn: { tag: 'span', cls:'count', html: '{CommentCount} Comments' }},
-
-					{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
+					{ tag: 'tpl', 'if':'values[\'Last Modified\'] &lt; 1', cn: [
+						{ tag: 'span', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+					]},
+					{ tag: 'tpl', 'if':'values[\'Last Modified\'] &gt; 0', cn: [
+						{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
+					]},
 				]}
 			]}
 		]
