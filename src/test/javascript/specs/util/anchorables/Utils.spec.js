@@ -265,7 +265,7 @@ describe("Anchor Utils", function() {
             expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
         });
 
-        xit ('Range of with Text Node, start', function(){
+        it ('Range of with Text Node, start', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 txtNode1 = document.createTextNode('text node');
@@ -275,10 +275,10 @@ describe("Anchor Utils", function() {
             range.setStart(nonTxtNode1, 0);
             range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true)).toEqual(txtNode1);
         });
 
-        xit ('Range of with Text Node, end', function(){
+        it ('Range of with Text Node, end', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 txtNode1 = document.createTextNode('text node');
@@ -288,7 +288,7 @@ describe("Anchor Utils", function() {
             range.setStart(nonTxtNode1, 0);
             range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
         });
 
         xit ('Range of Nodes, start', function(){
