@@ -9,7 +9,7 @@ Ext.define('NextThought.store.Hit',{
 
 	model: 'NextThought.model.Hit',
 	autoLoad: false,
-	groupField: 'Type',
+	groupField: 'GroupingField',
 	proxy: {
 		type: 'nti',
 		reader: {

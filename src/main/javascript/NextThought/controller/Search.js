@@ -40,16 +40,6 @@ Ext.define('NextThought.controller.Search', {
 		}
 	],
 
-	statics:{
-		mimeTypes:{
-			Content:"application/vnd.nextthought.bookcontent",
-			Note:  "application/vnd.nextthought.note",
-			Highlight: "application/vnd.nextthought.highlight",
-			Post: ["application/vnd.nextthought.forums.personalblogentrypost", "application/vnd.nextthought.forums.personalblogcomment"],
-			MessageInfo: "application/vnd.nextthought.messageinfo"
-		}
-	},
-
 	init: function() {
 		this.control({
 			'searchfield': {
@@ -78,6 +68,16 @@ Ext.define('NextThought.controller.Search', {
 		});
 	},
 
+	mimeToXType: function(mime){
+		if(Ext.isEmpty(mime)){
+			return 'search-result';
+		}
+
+		mime = mime.replace('application/vnd.nextthought.', '');
+		mime = mime.replace('.', '-');
+
+		return 'search-result-'+mime;
+	},
 
 	storeLoad: function(store, records, success, opts, searchVal){
 		var results = [], menu = Ext.getCmp('search-results'),
@@ -97,22 +97,21 @@ Ext.define('NextThought.controller.Search', {
 			}
 
 			Ext.each(resultGroups, function(group){
-				result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
+				result = {xtype:'search-result-category', category: group.name, items:[]};
 				results.push(result);
 				result = result.items;
-				type = "search-result";//default type
-				alias = "widget.search-result-"+group.name.toLowerCase();
 
 				Ext.each(group.children, function(hit){
 					var id = hit.get('ContainerId'),
-					    sortIndexes = LocationProvider.getSortIndexes(id);
+						sortIndexes = LocationProvider.getSortIndexes(id),
+						type ='search-result',
+						xtype = this.mimeToXType(hit.get('MimeType'));
 
 					sortIndexes.reverse();
-					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
+					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.'+xtype))){
 						//custom component for type exists
-						type = "search-result-"+group.name.toLowerCase();
+						type = xtype;
 					}
-
 
 					//Refactor to just pas the hit model a
 					result.push( {
@@ -134,14 +133,8 @@ Ext.define('NextThought.controller.Search', {
 		menu.hide().show();
 	},
 
-	categoryNamesMap: {
-		'content':'Books',
-		'messageinfo':'Chats',
-		'post':'Thoughts'
-	},
-
 	sanitizeCategoryName: function(n){
-		var s = this.categoryNamesMap[n.toLowerCase()];
+		var s = this.self.categoryNamesMap[n.toLowerCase()];
 		return s||n;
 	},
 
@@ -173,8 +166,6 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-
-
 	searchForValue: function(value) {
 		if(!value){return;}
 
@@ -198,13 +189,9 @@ Ext.define('NextThought.controller.Search', {
 		s.clearFilter();
 		if(filter){
 			Ext.each( filter.value, function(item){
-				var mt = me.self.mimeTypes[item.value];
+				var mt = item.value
 				if(mt){
-					if(Ext.isArray(mt)){
-						selectedMimeTypes = Ext.Array.merge(selectedMimeTypes, mt);
-					}else{
-						selectedMimeTypes.push(mt);
-					}
+					selectedMimeTypes.push(mt);
 				}
 			});
 			s.filter([{filterFn: function(item) {
@@ -236,8 +223,11 @@ Ext.define('NextThought.controller.Search', {
 		this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
 
 		Ext.each(allItems, function(item){
-			if ((everything || item.checked) && item.model) {
-				this.modelFilter.addFilter(new Filter('Type',Filter.OPERATION_INCLUDE, item.model));
+			var models = item.model;
+			if ((everything || item.checked) && models) {
+				Ext.Array.each(Ext.Array.from(models), function(m){
+					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.'+m));
+				}, this);
 			}
 		}, this);
 

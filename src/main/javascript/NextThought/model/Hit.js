@@ -1,6 +1,19 @@
 Ext.define('NextThought.model.Hit', {
 	extend: 'NextThought.model.Base',
+
+	requires: ['Ext.util.Inflector'],
+
 	idProperty: null,
+
+	statics: {
+		mimeTypes: {
+			'bookcontent': 'Books',
+			'forums.personalblogentrypost': 'Thoughts',
+			'forums.personalblogcomment': 'Thoughts',
+			'messageinfo': 'Chats'
+		}
+	},
+
 	fields: [
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'Title', type: 'string' },
@@ -8,7 +21,25 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Fragments', type: 'auto'},
 		{ name: 'Score', type: 'auto'},
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
-		{ name: 'PhraseSearch', type: 'auto'}
+		{ name: 'PhraseSearch', type: 'auto'},
+		{ name: 'GroupingField', persist: false, type: 'auto', convert: function(o, r){
+			var mime = r.get('MimeType'),
+				group, type;
+
+			if(mime){
+				group = NextThought.model.Hit.mimeTypes[mime.replace('application/vnd.nextthought.', '')];
+				if(group){
+					return group;
+				}
+			}
+
+			type = r.get('Type');
+			if(type){
+				type = Ext.String.capitalize(type);
+				type = Ext.util.Inflector.pluralize(type);
+			}
+			return type;
+		}}
 	],
 
 	//We don't use the idProperty because there isn't a unique id,
