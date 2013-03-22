@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.slidedeck.Queue',{
 	extend: 'Ext.view.View',
 	alias: 'widget.slidedeck-queue',
-
+    selModel: {enableKeyNav: false},
 	singleSelect: true,
 	allowDeselect: false,
 	overItemCls: 'over',
@@ -33,8 +33,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 		var keyMap;
 
-		this.on('select',this.markLastSelectedTime,this);
-		
+		this.on('select',this.markLastSelectedTime, this);
+
 		keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
@@ -47,6 +47,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 				scope: this
 			}]
 		});
+
 		this.on('destroy',function(){keyMap.destroy(false);});
 		this.on('viewready',this.onViewReady,this,{single: true, defer: 100});
 	},
@@ -87,7 +88,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	markLastSelectedTime: function(){
 		this.lastChanged = new Date().getTime();
-	},
+    },
 
 	justChanged: function(){
 		return Boolean((new Date().getTime() - this.lastChanged) < 1000);
