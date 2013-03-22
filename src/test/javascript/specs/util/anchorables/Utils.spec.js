@@ -217,6 +217,173 @@ describe("Anchor Utils", function() {
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false).textContent).toEqual(txtNode2.textContent);
 		});
 
+        it ('Range Without Children, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div');
+
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+        });
+
+        it ('Range Without Children, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div');
+
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+        });
+
+        it ('Range of Space Nodes, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                txtNode1 = document.createTextNode('  ');
+
+            nonTxtNode1.appendChild(txtNode1);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+        });
+
+        xit ('Range of Space Nodes, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                txtNode1 = document.createTextNode('  ');
+
+            nonTxtNode1.appendChild(txtNode1);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+        });
+
+        xit ('Range of with Text Node, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                txtNode1 = document.createTextNode('text node');
+
+            nonTxtNode1.appendChild(txtNode1);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+        });
+
+        xit ('Range of with Text Node, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                txtNode1 = document.createTextNode('text node');
+
+            nonTxtNode1.appendChild(txtNode1);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+        });
+
+        xit ('Range of Nodes, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('p'),
+                nonTxtNode3 = document.createElement('span');
+
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.appendChild(nonTxtNode3);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode3, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('DIV');
+        });
+
+        it ('Range of Nodes, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('p'),
+                nonTxtNode3 = document.createElement('span');
+
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.appendChild(nonTxtNode3);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode3, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
+        });
+
+        xit ('Range of Nested Nodes, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('span'),
+                nonTxtNode3 = document.createElement('p');
+
+            nonTxtNode2.appendChild(nonTxtNode3);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode3, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+        });
+
+        it ('Range of Nested Nodes, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('span'),
+                nonTxtNode3 = document.createElement('p');
+
+            nonTxtNode2.appendChild(nonTxtNode3);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode3, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
+        });
+
+        it ('Range of Node and Nested Node, start', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('a'),
+                nonTxtNode3 = document.createElement('span'),
+                nonTxtNode4 = document.createElement('p');
+
+            nonTxtNode3.appendChild(nonTxtNode4);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.appendChild(nonTxtNode3);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode4, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('A');
+        });
+
+        xit ('Range of Node and Nested Node, end', function(){
+            var range = document.createRange(),
+                nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('a'),
+                nonTxtNode3 = document.createElement('span'),
+                nonTxtNode4 = document.createElement('p');
+
+            nonTxtNode3.appendChild(nonTxtNode4);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.appendChild(nonTxtNode3);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode4, 0);
+
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('A');
+        });
 
 		it ('Range of Non Text Nodes, start', function(){
 			var range = document.createRange(),

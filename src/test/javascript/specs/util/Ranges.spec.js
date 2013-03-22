@@ -10,7 +10,7 @@ describe("RangeUtils tests", function() {
 
 	describe('rangeIfItemPropSpan', function(){
 
-		var testBody, itemProp, img, div, range;
+		var testBody, itemProp, multiItemProp, img, img2, div, range;
 
 		//Setup fixture
 		beforeEach(function(){
@@ -19,13 +19,18 @@ describe("RangeUtils tests", function() {
 			itemProp = document.createElement('div');
 			itemProp.setAttribute('itemprop', 'nti-data-markupenabled');
 
+            multiItemProp = document.createElement('div');
+            multiItemProp.setAttribute('itemprop', 'nti-data-markupenabled hello');
 
 			img = document.createElement('span');
+            img2 = document.createElement('span');
 			itemProp.appendChild(img);
+            multiItemProp.appendChild(img2);
 
 			div = document.createElement('div')
 
 			testBody.appendChild(itemProp);
+            testBody.appendChild(multiItemProp);
 			testBody.appendChild(div);
 			document.body.appendChild(testBody);
 
@@ -53,6 +58,22 @@ describe("RangeUtils tests", function() {
 			r = TestRangeUtils.rangeIfItemPropSpan(range, document);
 			expect(r).not.toBe(null);
 		});
+
+        it('Returns a range if multiple itemprop provided', function(){
+            var r;
+
+            range.selectNodeContents(multiItemProp);
+            r = TestRangeUtils.rangeIfItemPropSpan(range, document);
+            expect(r).not.toBe(null);
+        });
+
+        it('Returns a range if multi-itemprop descendant provided', function(){
+            var r;
+
+            range.selectNodeContents(img2);
+            r = TestRangeUtils.rangeIfItemPropSpan(range, document);
+            expect(r).not.toBe(null);
+        });
 
 		it('Doesnt return a range for anything else', function(){
 			var r;
