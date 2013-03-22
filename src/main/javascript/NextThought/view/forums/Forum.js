@@ -15,6 +15,7 @@ Ext.define('NextThought.view.forums.Forum',{
 	cls: 'topic-list',
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
+	loadingHeight: 300,
 
 	listeners: {
 		select: function(selModel,record){
@@ -102,7 +103,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			this.destroy();
 		}
 		else if(e.getTarget('.new-topic')){
-			console.log('new topic!');
+			this.fireEvent('new-topic', this, this.record);
 		}
 	},
 
@@ -118,8 +119,6 @@ Ext.define('NextThought.view.forums.Forum',{
 			}
 			return false;
 		}
-
-		console.log('item click', arguments);
 
 		return true;
 	}
