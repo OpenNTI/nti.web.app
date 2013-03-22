@@ -53,6 +53,11 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
+	toString: function(){
+		return this.getName();
+	},
+
+
 	getName: function(){
 		return this.get('alias') || this.get('realname') || this.get('Username');
 	},
