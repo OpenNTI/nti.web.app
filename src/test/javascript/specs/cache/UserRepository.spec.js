@@ -6,6 +6,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 		/*jslint sub:true */ //no way to ignore reserved property if using don notation
 		TUR['__proto__'] = NextThought.cache.UserRepository['__proto__'];
 		TUR.constructor();
+		console.log('Creating a new user repository');
 	});
 
 
@@ -60,6 +61,118 @@ describe("User Repository/Store/Cache Behavior", function(){
 			expect(hans.fireEvent).not.toHaveBeenCalled();
 			expect(hans.get('Presence')).toBe('Offline');
 		})
+	});
+
+	describe('resolveFromStore', function(){
+
+		var hans, terrorists;
+
+		beforeEach(function(){
+			hans = createUser('hans');
+			terrorists = new NextThought.model.FriendsList({Username: 'terrorists', NTIID: 'foobar'});
+
+			TUR.cacheUser(hans);
+			TUR.cacheUser(terrorists);
+		});
+
+		afterEach(function(){
+			TUR.getStore().remove(hans);
+			TUR.getStore().remove(terrorists);
+		});
+
+		it('Finds things whose id property is username', function(){
+			expect(hans.idProperty).toEqual('Username');
+			expect(TUR.resolveFromStore(hans.getId())).toBe(hans);
+		});
+
+		it('Also finds things whose id property is NTIID', function(){
+			expect(terrorists.idProperty).toEqual('NTIID');
+			expect(TUR.resolveFromStore(terrorists.getId())).toBe(terrorists);
+		});
+	});
+
+	describe('cacheUser', function(){
+
+		var hans, terrorists;
+
+		beforeEach(function(){
+			hans = createUser('hans', {alias: 'hans'});
+			spyOn(hans, 'fireEvent');
+			TUR.cacheUser(hans);
+		});
+
+		afterEach(function(){
+			TUR.getStore().remove(hans);
+		});
+
+		it('adds new users', function(){
+			expect(TUR.resolveFromStore('hans')).toBe(hans);
+		});
+
+		it('clobers existing users if not asked to merge', function(){
+			var hansTwin = createUser('hans');
+			TUR.cacheUser(hansTwin);
+
+			expect(TUR.resolveFromStore('hans')).not.toBe(hans);
+			expect(TUR.resolveFromStore('hans')).toBe(hansTwin);
+		});
+
+		it('merges users when asked', function(){
+			var hansTwin = createUser('hans', {alias: 'new hans'});
+			TUR.cacheUser(hansTwin, true);
+
+			expect(TUR.resolveFromStore('hans')).toBe(hans);
+			expect(hans.fireEvent).toHaveBeenCalledWith('changed', hans);
+			expect(hans.get('alias')).toEqual('new hans');
+		});
+	});
+
+	describe('getUser', function(){
+		describe('Callsback with what it receives', function(){
+			it('Gives a single object if asked for one', function(){
+
+			});
+
+			it('Gives an array if asked for one', function(){
+
+			});
+		});
+
+		describe('Will take many tupes of input', function(){
+			it('handles a string', function(){
+
+			});
+
+			it('handles a model', function(){
+
+			});
+
+			it('handles a json string', function(){
+
+			});
+		});
+
+		describe('Resolves users remotely at the right time', function(){
+			it('Will return summary objects unless asked not to', function(){
+
+			});
+
+			it('Allways preferes non summary objects', function(){
+
+			});
+
+			it('Will refresh a summary object if asked', function(){
+
+			});
+
+			it('Will return placeholders if resolution fails', function(){
+
+			});
+
+			it('Handles a mix of these cases appropriately', function(){
+
+			});
+		});
 	});
 
 	describe('makeRequest', function(){

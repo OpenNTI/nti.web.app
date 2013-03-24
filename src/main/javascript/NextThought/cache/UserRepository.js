@@ -70,7 +70,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		//console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
 		fromStore.set(newUser.raw);
 
-		//For things listening to changed events
+		//For things (hopefully legacy things only) listening to changed events
 		fromStore.fireEvent('changed', fromStore);
 	},
 
@@ -78,12 +78,17 @@ Ext.define('NextThought.cache.UserRepository', {
 		var s = this.getStore(),
 			id = user.getId() || user.raw[user.idProperty],
 			fromStore = s.getById(id);
-		if(maybeMerge && fromStore){
-			this.mergeUser(fromStore, user);
-			return fromStore;
+		if(fromStore){
+			if(maybeMerge){
+				this.mergeUser(fromStore, user);
+				return fromStore;
+			}
+			else{
+				s.remove(fromStore);
+			}
 		}
 		//console.debug('Adding resolved user to store', user.getId(), user);
-		this.getStore().add(user);
+		s.add(user);
 		return user;
 	},
 
