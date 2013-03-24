@@ -128,49 +128,149 @@ describe("User Repository/Store/Cache Behavior", function(){
 	});
 
 	describe('getUser', function(){
+
+		function mockMakeRequest(repo, users){
+			spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
+				var user = users[username],
+					callback = user ? callbacks.success : callbacks.failure;
+
+				if(user){
+					user.summaryObject = false;
+				}
+				Ext.callback(callback, callbacks.scope, [user]);
+			});
+		};
+
+		var scope = {}, hans, holly;
+
+		beforeEach(function(){
+			hans = createUser('hans');
+			holly =  createUser('holly');
+			mockMakeRequest(TUR, {
+				'hans': hans,
+				'holly': holly
+			});
+		});
+
+		function createCallbackExpecting(expected, s){
+			return function(users){
+				var returnedUserNames;
+				expect(this).toBe(s);
+				if(Ext.isArray(expected)){
+					expect(Ext.isArray(users)).toBeTruthy();
+					returnedUserNames = Ext.Array.pluck(users, 'data');
+					returnedUserNames = Ext.Array.pluck(returnedUserNames, 'Username');
+					expect(returnedUserNames).toEqual(expected);
+				}
+				else{
+					expect(users.isModel).toBeTruthy();
+					expect(users.get('Username')).toBe('hans');
+				}
+			}
+		}
+
 		describe('Callsback with what it receives', function(){
 			it('Gives a single object if asked for one', function(){
-
+				TUR.getUser('hans', createCallbackExpecting('hans', scope), scope);
 			});
 
 			it('Gives an array if asked for one', function(){
-
+				TUR.getUser(['hans', 'holly'], createCallbackExpecting(['hans', 'holly'], scope), scope);
 			});
 		});
 
 		describe('Will take many tupes of input', function(){
 			it('handles a string', function(){
-
+				TUR.getUser('hans', createCallbackExpecting('hans', scope), scope);
 			});
 
 			it('handles a model', function(){
-
+				TUR.getUser(hans, createCallbackExpecting('hans', scope), scope);
 			});
 
 			it('handles a json string', function(){
-
+				var data = {Class: 'User', Username: 'hans'};
+				TUR.getUser(data, createCallbackExpecting('hans', scope), scope);
 			});
 		});
 
 		describe('Resolves users remotely at the right time', function(){
 			it('Will return summary objects unless asked not to', function(){
+				TUR.cacheUser(hans);
 
+				expect(hans.summaryObject).toBeTruthy();
+				TUR.getUser('hans', function(users){
+					expect(this).toBe(scope);
+					expect(users).toBe(hans);
+					expect(users.summaryObject).toBeTruthy();
+				}, scope);
+
+				expect(TUR.makeRequest).not.toHaveBeenCalled();
+				TUR.getStore().remove(hans);
 			});
 
 			it('Allways preferes non summary objects', function(){
+				hans.summaryObject = false;
+				TUR.cacheUser(hans);
 
+				expect(hans.summaryObject).toBeFalsy();
+				TUR.getUser('hans', function(users){
+					expect(this).toBe(scope);
+					expect(users).toBe(hans);
+					expect(users.summaryObject).toBeFalsy();
+				}, scope);
+
+				expect(TUR.makeRequest).not.toHaveBeenCalled();
+
+				TUR.getStore().remove(hans);
 			});
 
 			it('Will refresh a summary object if asked', function(){
+				TUR.cacheUser(hans);
 
+				expect(hans.summaryObject).toBeTruthy();
+				TUR.getUser('hans', function(users){
+					expect(this).toBe(scope);
+					expect(users).toBe(hans);
+					expect(users.summaryObject).toBeFalsy();
+				}, scope, true);
+
+				expect(TUR.makeRequest).toHaveBeenCalledWith('hans', jasmine.any(Object));
+				TUR.getStore().remove(hans);
 			});
 
 			it('Will return placeholders if resolution fails', function(){
 
+				TUR.getUser('Igor', function(users){
+					expect(this).toBe(scope);
+					expect(users).toBeTruthy(hans);
+					expect(users.get('Username')).toEqual('Igor');
+					expect(users.get('status')).toEqual('Unresolved');
+				}, scope);
+
+				expect(TUR.makeRequest).toHaveBeenCalled();
 			});
 
 			it('Handles a mix of these cases appropriately', function(){
+				TUR.cacheUser(hans);
+				expect(hans.summaryObject).toBeTruthy();
 
+				TUR.getUser(['hans', holly, 'Igor'], function(users){
+					expect(this).toBe(scope);
+
+					expect(users.length).toEqual(3);
+					expect(users[0].summaryObject).toBeTruthy();
+					expect(users[0]).toBe(hans);
+					expect(users[1].summaryObject).toBeFalsy();
+					expect(users[1]).toBe(holly);
+					expect(users[2].get('status')).toEqual('Unresolved');
+					expect(users[2].get('Username')).toEqual('Igor');
+				}, scope);
+
+				expect(TUR.makeRequest).not.toHaveBeenCalledWith('hans', jasmine.any(Object));
+				expect(TUR.makeRequest).toHaveBeenCalledWith('holly', jasmine.any(Object));
+				expect(TUR.makeRequest).toHaveBeenCalledWith('Igor', jasmine.any(Object));
+				TUR.getStore().remove(hans);
 			});
 		});
 	});
