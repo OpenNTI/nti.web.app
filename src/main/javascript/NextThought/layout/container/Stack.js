@@ -52,6 +52,17 @@ Ext.define('NextThought.layout.container.Stack',{
 				}
 			};
 		}
+
+		if(!owner.pushView){
+			owner.pushView = owner.add;
+		}
+
+		if(!owner.peek){
+			owner.peek = function(){
+				if(this.items.getCount() < 1){ return undefined; }
+				return this.items.getAt(this.items.getCount() - 1);
+			}
+		}
 	},
 
 
