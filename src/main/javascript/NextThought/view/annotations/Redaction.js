@@ -306,6 +306,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	assureRedactedFootnoteText: function(footnotes){
 		var me = this;
+
+		if(!footnotes){
+			return;
+		}
+
 		footnotes.each(function(footnote){
 			var toAdd;
 			if(!footnote.down('.redacted-text')){
@@ -317,6 +322,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
     containedFootnotes: function(){
         var me = this,
             footnotes = [];
+
+		if(!this.compElements){
+			return null;
+		}
+
         this.compElements.each(function(e){
             var fns = e.query('a.footnote');
             Ext.Array.each(fns, function(fn){
