@@ -163,7 +163,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
-		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.publish);
+		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body);
 	},
 
 

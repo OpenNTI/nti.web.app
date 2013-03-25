@@ -57,6 +57,9 @@ Ext.define('NextThought.controller.Forums', {
 				'new-topic':this.newTopic,
 				'select':this.loadTopic
 			},
+			'forums-topic-editor':{
+				'save-post': this.saveTopicPost
+			},
 			'forums-topic nti-editor': {
 				'save': this.saveTopicComment
 			}
@@ -267,5 +270,72 @@ Ext.define('NextThought.controller.Forums', {
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath()});
 		this.pushState({'topic': record.get('ID')});
+	},
+
+
+	saveTopicPost: function(editorCmp, record, title, tags, body){
+
+		var isEdit = Boolean(record),
+			cmp = editorCmp.prev(),
+			post = isEdit ? record.get('headline') : NextThought.model.forums.CommunityHeadlinePost.create(),
+			forumRecord = cmp && cmp.record;
+
+		post.set({
+			'title':title,
+			'body':body,
+			'tags':tags||[]
+		});
+
+		if(isEdit){
+			record.set({'title': title});
+		}
+
+		function finish(entry){
+			if(!isEdit){
+				try {
+					if(cmp.store){
+						cmp.store.insert(0,entry);
+					}
+				}
+				catch(e){
+					console.error('Could not insert post into widget',Globals.getError(e));
+				}
+			}
+
+			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
+		}
+
+		if(editorCmp.el){
+			editorCmp.el.mask('Saving...');
+		}
+
+		function unmask(){
+			if(editorCmp.el){
+				editorCmp.el.unmask();
+			}
+		}
+
+		try{
+			post.save({
+				url: isEdit ? undefined : forumRecord && forumRecord.get('href'),//only use postRecord if its a new post.
+				scope: this,
+				success: function(post,operation){
+
+					var entry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
+
+					unmask();
+					finish(entry);
+				},
+				failure: function(){
+					console.debug('failure',arguments);
+					unmask();
+					Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
+				}
+			});
+		}
+		catch(e){
+			console.error('An error occurred saving blog', Globals.getError(e));
+			unmask();
+		}
 	}
 });
