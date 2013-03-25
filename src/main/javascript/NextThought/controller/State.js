@@ -168,7 +168,7 @@ Ext.define('NextThought.controller.State', {
 		//Right now the 'u' signifies what follows is the community
 		//name that onse the board (or really any user like object probably suffices.
 
-		if((parts[0] || '').toLowerCase() === '!forums'){
+		if((parts[0] || '').toLowerCase() === '#!forums'){
 			result.active = 'forums';
 			parts = parts.slice(1);
 
