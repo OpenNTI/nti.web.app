@@ -39,7 +39,7 @@ Ext.define('NextThought.view.forums.Board',{
 					]},
 					{ tag: 'tpl', 'if':'values[\'Last Modified\'] &gt; 0', cn: [
 						{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
-					]},
+					]}
 				]}
 			]}
 		]

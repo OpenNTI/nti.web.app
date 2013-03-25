@@ -31,7 +31,7 @@ Ext.define('NextThought.layout.container.Stack',{
 
 	onAdd: function(){
 		this.callParent(arguments);
-		this.enforceStackActiveItem()
+		this.enforceStackActiveItem();
 	},
 
 
@@ -61,7 +61,7 @@ Ext.define('NextThought.layout.container.Stack',{
 			owner.peek = function(){
 				if(this.items.getCount() < 1){ return undefined; }
 				return this.items.getAt(this.items.getCount() - 1);
-			}
+			};
 		}
 	},
 
