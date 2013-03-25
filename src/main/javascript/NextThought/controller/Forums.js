@@ -44,8 +44,7 @@ Ext.define('NextThought.controller.Forums', {
 		this.control({
 			'forums-view-container':{
 				'restore-forum-state': this.restoreState,
-				'render': this.loadRoot,
-				'remove': this.componentPopped
+				'render': this.loadRoot
 			},
 			'forums-root': {
 				'select': this.loadBoard
