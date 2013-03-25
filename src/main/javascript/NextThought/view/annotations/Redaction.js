@@ -101,12 +101,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			}
 
 			//add the redaction class and the click handlers for redacted spans:
-			this.compElements.addCls(this.redactionCls);
-
-			//Sigh, I hate this, but if we don't get this onto the next event loop
-			//it seems to crash IE in certain cases.  Seems to be the perfect combination
-			//of location, overlap with other redactions, and timing...
-			Ext.defer(this.toggleRedaction, 1, this);
+			if(this.compElements){
+				this.compElements.addCls(this.redactionCls);
+				//Sigh, I hate this, but if we don't get this onto the next event loop
+				//it seems to crash IE in certain cases.  Seems to be the perfect combination
+				//of location, overlap with other redactions, and timing...
+				Ext.defer(this.toggleRedaction, 1, this);
+			}
 		}
 
 		return y;
@@ -145,6 +146,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before, block){
+
+		if(!before){return null;}
+
 		this.masterSpan = this.actionTpl.insertBefore(before, {
 			replacementContent: this.record.get('replacementContent'),
 			block: Boolean(block),
