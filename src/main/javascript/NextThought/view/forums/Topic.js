@@ -139,7 +139,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 
-		this.mon(this.navigationBarEl,'click',this.destroy,this);
+		this.mon(this.navigationBarEl,'click',this.closeTopic,this);
 
 		this.mon(this.nextPostEl,'click',this.navigationClick,this);
 		this.mon(this.prevPostEl,'click',this.navigationClick,this);
@@ -261,6 +261,11 @@ Ext.define('NextThought.view.forums.Topic',{
 	updateContent: function(){
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
+	},
+
+
+	closeTopic: function(){
+		this.fireEvent('pop-view', this);
 	},
 
 

@@ -27,7 +27,7 @@ Ext.define('NextThought.controller.State', {
 
 		this.generateFragmentMap = {
 			'forums': Ext.bind(this.generateForumsFragment, this)
-		}
+		};
 
 		return m;
 	},
@@ -116,7 +116,7 @@ Ext.define('NextThought.controller.State', {
 				// support history.pushState natively.
 				if(!me.hasPushState && url) {
 					//The intention is we only get here for IE9 so lets make sure that is the case
-					if(Ext.isIE9){
+					if(!Ext.isIE9){
 						console.error('Why are we getting here?');
 						console.trace();
 					}
@@ -174,8 +174,7 @@ Ext.define('NextThought.controller.State', {
 
 			//We expect at least two parts ('u', and '{community}')
 			if(parts.length >= 2 && parts[0] === 'u'){
-				forums.isUser = true;
-				forums.community = parts[1];
+				forums.board = {community: parts[1], isUser: true};
 				forums.forum = parts[2];
 				forums.topic = parts[3];
 				forums.comment = parts[4];
@@ -187,11 +186,12 @@ Ext.define('NextThought.controller.State', {
 
 
 	generateForumsFragment: function(state){
-		var resultParts = [], result;
+		var resultParts = [], result,
+			board = state && state.board;
 
-		if(state.isUser && state.community){
+		if(board && board.isUser && board.community){
 			resultParts.push('u');
-			resultParts.push(state.community);
+			resultParts.push(board.community);
 
 			Ext.Array.each(['forum', 'topic', 'comment'], function(prop){
 				if(state.hasOwnProperty(prop) && state[prop]){

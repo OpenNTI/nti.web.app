@@ -46,6 +46,11 @@ Ext.define('NextThought.controller.Forums', {
 				'restore-forum-state': this.restoreState,
 				'render': this.loadRoot
 			},
+
+			'forums-view-container > *':{
+				'pop-view': this.popView
+			},
+
 			'forums-root': {
 				'select': this.loadBoard
 			},
@@ -70,6 +75,9 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		});
 	},
+
+
+	stateKeyPrecedence: ['board','forum','topic','comment'],
 
 
 	restoreState: function(s){
@@ -155,11 +163,43 @@ Ext.define('NextThought.controller.Forums', {
 	},*/
 
 
+	popView: function(view){
+		var stack = view.ownerCt,
+			keyIx = Ext.Array.indexOf(this.stateKeyPrecedence,view.stateKey),
+			state = {};
+
+		//assert that the view is the top of the stack
+		if(stack.peek() !== view){
+			console.error('View was not at the top of stack when it requested to pop.', view);
+			return false;
+		}
+
+		try {
+			stack.popView();//this should destroy view for us, but just in case...
+			if(!view.isDestroyed){
+				view.destroy();
+			}
+
+			for(keyIx; keyIx>=0 && keyIx<this.stateKeyPrecedence.length; keyIx++){
+				state[this.stateKeyPrecedence[keyIx]] = null;
+			}
+
+			this.pushState(state);
+
+		} catch(e) {
+			console.warn(Globals.getError(e));
+		}
+
+		return true;
+	},
+
+
 	pushState: function(s){
 		s = {'forums': s};
 		console.log('Need to push updated state here', s);
 		history.pushState(s);
 	},
+
 
 	showLevel: function(level, record, cfg){
 		var c = this.getForumViewContainer(),
@@ -227,20 +267,21 @@ Ext.define('NextThought.controller.Forums', {
 	loadBoard: function(selModel, record){
 		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('forum', record, {stateKey: 'community'});
+		this.showLevel('forum', record, {stateKey: 'board'});
 
 		community = record.get('Creator');
 		if(community.isModel){
 			community = community.get('Username');
 		}
-		this.pushState({community: community, 'isUser': true}); //The communities board we are viewing
+		//The communities board we are viewing
+		this.pushState({board:{community: community,isUser: true}, forum: null, topic: null, comment: null});
 	},
 
 
 	loadForum: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
 		this.showLevel('topic', record, {stateKey: 'forum'});
-		this.pushState({'forum': record.get('ID')}); //The forum we are viewing
+		this.pushState({'forum': record.get('ID'), topic: null, comment: null}); //The forum we are viewing
 	},
 
 
@@ -344,7 +385,7 @@ Ext.define('NextThought.controller.Forums', {
 		if(o && !o.getPath) { o = null; }
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
-		this.pushState({'topic': record.get('ID')});
+		this.pushState({'topic': record.get('ID'), comment: null});
 	},
 
 

@@ -24,21 +24,21 @@ describe('State Controller Tests', function(){
 
 		it('handles community', function(){
 			var expected = 'u/NextThought';
-			expect(getFragment({isUser: true,
-								community: 'NextThought'})).toBe(expected);
+			expect(getFragment({board:{isUser: true,
+								community: 'NextThought'}})).toBe(expected);
 		});
 
 		it('handles portion', function(){
 			var expected = 'u/NextThought/Food';
-			expect(getFragment({isUser: true,
-								community: 'NextThought',
+			expect(getFragment({board:{isUser: true,
+								community: 'NextThought'},
 								forum: 'Food'})).toBe(expected);
 		});
 
 		it('handles all the way through comments', function(){
 			var expected = 'u/NextThought/Food/HotDog/1';
-			expect(getFragment({isUser: true,
-								community: 'NextThought',
+			expect(getFragment({board:{isUser: true,
+								community: 'NextThought'},
 								forum: 'Food',
 								topic: 'HotDog',
 								comment: '1'})).toBe(expected);
@@ -71,29 +71,33 @@ describe('State Controller Tests', function(){
 			expect(obj).toEqual({active: 'forums'});
 
 			obj = getStateObject(['u', 'NextThought']);
-			expect(obj.isUser).toBeTruthy();
-			expect(obj.community).toBe('NextThought');
+			expect(obj.board).toBeTruthy();
+			expect(obj.board.isUser).toBeTruthy();
+			expect(obj.board.community).toBe('NextThought');
 		});
 
 		it('handles up through forum', function(){
 			var obj = getStateObject(['u', 'NextThought', 'Bearfoot']);
-			expect(obj.isUser).toBeTruthy();
-			expect(obj.community).toBe('NextThought');
+			expect(obj.board).toBeTruthy();
+			expect(obj.board.isUser).toBeTruthy();
+			expect(obj.board.community).toBe('NextThought');
 			expect(obj.forum).toBe('Bearfoot');
 		});
 
 		it('handles up through topic', function(){
 			var obj = getStateObject(['u', 'NextThought', 'Bearfoot', 'food']);
-			expect(obj.isUser).toBeTruthy();
-			expect(obj.community).toBe('NextThought');
+			expect(obj.board).toBeTruthy();
+			expect(obj.board.isUser).toBeTruthy();
+			expect(obj.board.community).toBe('NextThought');
 			expect(obj.forum).toBe('Bearfoot');
 			expect(obj.topic).toBe('food');
 		});
 
 		it('handles up through comment', function(){
 			var obj = getStateObject(['u', 'NextThought', 'Bearfoot', 'food', 'kids']);
-			expect(obj.isUser).toBeTruthy();
-			expect(obj.community).toBe('NextThought');
+			expect(obj.board).toBeTruthy();
+			expect(obj.board.isUser).toBeTruthy();
+			expect(obj.board.community).toBe('NextThought');
 			expect(obj.forum).toBe('Bearfoot');
 			expect(obj.topic).toBe('food');
 			expect(obj.comment).toBe('kids');

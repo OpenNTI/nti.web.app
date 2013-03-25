@@ -118,7 +118,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	onContainerClick: function(e){
 		if(e.getTarget('.path')){
-			this.destroy();
+			this.fireEvent('pop-view', this);
 		}
 		else if(e.getTarget('.new-topic')){
 			this.fireEvent('new-topic', this, this.record);

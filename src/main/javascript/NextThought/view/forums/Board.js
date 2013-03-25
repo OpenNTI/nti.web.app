@@ -84,7 +84,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 	onContainerClick: function(e){
 		if(e.getTarget('.path')){
-			this.destroy();
+			this.fireEvent('pop-view', this);
 		}
 	}
 });
