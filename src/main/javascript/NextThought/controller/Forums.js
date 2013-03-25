@@ -86,7 +86,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		console.log('Handle restore of state here', state);
 		this.popToLastKnownMatchingState(state);
-		//this.pushKnownState(state);
+		this.pushKnownState(state);
 
 		if(c){
 			c.fireEvent('finished-restore');
@@ -125,28 +125,77 @@ Ext.define('NextThought.controller.Forums', {
 		return Ext.isObject(vVal) ? equals(vVal,val) : vVal === val;
 	},
 
-/*
+
 	pushKnownState: function(state){
 		var c = this.getForumViewContainer(),
-			item = c.peek(),
-			i = item.stateKey ? this.stackOrder.indexOf(item.stateKey) : -1,
-			toLoad = [];
+			stackOrder = this.stateKeyPrecedence,
+			i = stackOrder.indexOf((c.peek()||{}).stateKey),
+			toLoad = [],
+			me = this;
 
 		if(i < 0){
 			return;
 		}
 
-		for(i = i + 1; i < this.stackOrder.length; i++){
-			if(!state[this.stackOrder[i]]){
+		for(i = i + 1; i < stackOrder.length; i++){
+			if(!state[stackOrder[i]]){
 				break;
 			}
-			toLoad.push(state[this.stackOrder[i]]);
-			item = c.peek();
+
+			toLoad.push([stackOrder[i],state[stackOrder[i]]]);
 		}
 
-		console.log('Need to push', toLoad);
+		this.getRecords(c.peek().record.get('href'),toLoad,function(records){
+
+			Ext.each(records,function(pair){
+				var rec = pair.last(),
+					type = Ext.String.capitalize(pair.first());
+
+				if(!rec){
+					return false;
+				}
+
+				me['load'+type](null,rec,true);
+
+				return true;
+			});
+
+		});
 	},
-*/
+
+
+	getRecords: function(base, ids, callback){
+		var href = getURL(base),
+			finish = ids.length,
+			me = this;
+
+		function maybeFinish(){
+			finish--;
+			if(finish===0){
+				Ext.callback(callback,me,[ids]);
+			}
+		}
+
+		Ext.each(ids,function(pair){
+			var r = {
+				url: href+'/'+pair[1],
+				callback: function(req,s,resp){
+					try {
+						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
+					}
+					catch(e){
+						pair[1] = null;
+						console.error('Could not load record',Globals.getError(e));
+					}
+					maybeFinish();
+				}
+			};
+
+			Ext.Ajax.request(r);
+			href = r.url;
+		});
+	},
+
 
 	popToLastKnownMatchingState: function(state){
 		var c = this.getForumViewContainer(), i, item,
@@ -274,7 +323,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadBoard: function(selModel, record){
+	loadBoard: function(selModel, record, silent){
 		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
 		this.showLevel('forum', record, {stateKey: 'board'});
@@ -283,15 +332,19 @@ Ext.define('NextThought.controller.Forums', {
 		if(community.isModel){
 			community = community.get('Username');
 		}
-		//The communities board we are viewing
-		this.pushState({board:{community: community,isUser: true}, forum: null, topic: null, comment: null});
+		if(!silent){
+			//The communities board we are viewing
+			this.pushState({board:{community: community,isUser: true}, forum: null, topic: null, comment: null});
+		}
 	},
 
 
-	loadForum: function(selModel, record){
+	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
 		this.showLevel('topic', record, {stateKey: 'forum'});
-		this.pushState({'forum': record.get('ID'), topic: null, comment: null}); //The forum we are viewing
+		if(!silent){
+			this.pushState({'forum': record.get('ID'), topic: null, comment: null}); //The forum we are viewing
+		}
 	},
 
 
@@ -387,7 +440,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadTopic: function(selModel, record){
+	loadTopic: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
 		var c = this.getForumViewContainer(),
 			o = c.items.last();
@@ -395,7 +448,10 @@ Ext.define('NextThought.controller.Forums', {
 		if(o && !o.getPath) { o = null; }
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
-		this.pushState({'topic': record.get('ID'), comment: null});
+
+		if(!silent){
+			this.pushState({'topic': record.get('ID'), comment: null});
+		}
 	},
 
 
