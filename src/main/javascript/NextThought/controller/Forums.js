@@ -57,6 +57,9 @@ Ext.define('NextThought.controller.Forums', {
 				'new-topic':this.newTopic,
 				'select':this.loadTopic
 			},
+			'forums-topic': {
+				'delete-post': this.deleteObject
+			},
 			'forums-topic-editor':{
 				'save-post': this.saveTopicPost
 			},
@@ -337,5 +340,34 @@ Ext.define('NextThought.controller.Forums', {
 			console.error('An error occurred saving blog', Globals.getError(e));
 			unmask();
 		}
+	},
+
+
+	deleteObject: function(record){
+		var idToDestroy;
+		if(!record.get('href')){
+			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
+		}
+		idToDestroy = record.get('NTIID');
+		record.destroy({
+			success:function(){
+				LocationProvider.applyToStoresThatWantItem(function(id,store){
+					var r;
+					if(store){
+						r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
+						if(!r){
+							console.warn('Could not remove, the store did not have item with id: '+idToDestroy, r);
+							return;
+						}
+
+						//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+						store.remove(r);
+					}
+				}, record);
+			},
+			failure: function(){
+				alert('Sorry, could not delete that');
+			}
+		});
 	}
 });
