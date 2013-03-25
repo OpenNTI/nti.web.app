@@ -63,6 +63,9 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic-editor':{
 				'save-post': this.saveTopicPost
 			},
+			'forums-topic-comment':{
+				'delete-topic-comment': this.deleteObject
+			},
 			'forums-topic nti-editor': {
 				'save': this.saveTopicComment
 			}
