@@ -94,7 +94,8 @@ Ext.define('NextThought.controller.State', {
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
 			if (this.updateState(s) && !me.isPoppingHistory) {
-				push.apply(history, [s,title,url]);
+				//updateState already updated current if it returned true
+				push.apply(history, [me.currentState,title,url]);
 
 				if(this.hasPushState && url) {
 					window.lastTimeLocationSet = new Date().getTime();
