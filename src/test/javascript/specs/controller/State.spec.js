@@ -19,15 +19,22 @@ describe('State Controller Tests', function(){
 			return '!forums/'+parts.join('/');
 		}
 
-		function getStateObject(parts){
-			return controller.interpretForumsFragment(createFragString(parts));
+		function getStateObject(parts, dontCheck){
+			var result = controller.interpretForumsFragment(createFragString(parts));
+
+			if(!dontCheck){
+				expect(result.active).toEqual('forums');
+				expect(result.forums).toBeTruthy();
+				return result.forums;
+			}
+
+			return result;
 		}
 
 		it('Requires at least u and Community', function(){
-			var obj = getStateObject([]);
+			var obj = getStateObject([], true);
 
-			expect(obj.isUser).toBeUndefined();
-			expect(obj.community).toBeUndefined();
+			expect(obj).toEqual({active: 'forums'});
 
 			obj = getStateObject(['u', 'NextThought']);
 			expect(obj.isUser).toBeTruthy();
@@ -59,8 +66,8 @@ describe('State Controller Tests', function(){
 		});
 
 		it('handles junk', function(){
-			var obj = getStateObject(['asdlfkjadls;fkjads;lfkj']);
-			expect(obj).toEqual({});
+			var obj = getStateObject(['asdlfkjadls;fkjads;lfkj'], true);
+			expect(obj).toEqual({active: 'forums'});
 		});
 	});
 });

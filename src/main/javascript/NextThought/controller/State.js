@@ -25,6 +25,10 @@ Ext.define('NextThought.controller.State', {
 			'#!forums': Ext.bind(this.interpretForumsFragment,this)
 		};
 
+		this.generateHashMap = {
+			'forums': Ext.bind(this.interpretProfileFragment, this)
+		}
+
 		return m;
 	},
 
@@ -150,8 +154,8 @@ Ext.define('NextThought.controller.State', {
 
 
 	interpretForumsFragment: function(fragment, query){
-		var parts = (fragment||'').split('/').slice(1),
-			result = {};
+		var parts = (fragment||'').split('/').slice(0),
+			result = {}, forums = {};
 		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
 
 		//We expect something of the form
@@ -159,17 +163,27 @@ Ext.define('NextThought.controller.State', {
 		//Right now the 'u' signifies what follows is the community
 		//name that onse the board (or really any user like object probably suffices.
 
-		//We expect at least two parts ('u', and '{community}')
-		if(parts.length >= 2 && parts[0] === 'u'){
-			result.isUser = true;
-			result.community = parts[1];
-			result.forum = parts[2];
-			result.topic = parts[3];
-			result.comment = parts[4];
-		}
+		if((parts[0] || '').toLowerCase() === '!forums'){
+			result.active = 'forums';
+			parts = parts.slice(1);
 
+			//We expect at least two parts ('u', and '{community}')
+			if(parts.length >= 2 && parts[0] === 'u'){
+				forums.isUser = true;
+				forums.community = parts[1];
+				forums.forum = parts[2];
+				forums.topic = parts[3];
+				forums.comment = parts[4];
+				result.forums = forums;
+			}
+		}
 		return result;
 	},
+
+
+	generateForumsHash: function(state){
+
+	}
 
 
 	interpretProfileFragment: function(fragment,query){
@@ -183,6 +197,19 @@ Ext.define('NextThought.controller.State', {
 			result.profile.queryObject = query;
 		}
 		return result;
+	},
+
+
+	generateHash: function(state){
+		var root = (state.activeTab || '').toLowerCase(),
+			hash;
+
+		if(this.generateHashMap[root]){
+			//We pass it the state for that particular tab
+			hash = this.generateHashMap[root](state[root] || {});
+		}
+
+		return hash;
 	},
 
 
