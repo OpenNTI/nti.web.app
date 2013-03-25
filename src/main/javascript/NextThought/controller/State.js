@@ -97,8 +97,9 @@ Ext.define('NextThought.controller.State', {
 				//updateState already updated current if it returned true
 				push.apply(history, [me.currentState,title,url]);
 
-				if(this.hasPushState && url) {
-					window.lastTimeLocationSet = new Date().getTime();
+				//me = State controller. (this = window.history) And, we only want to change the fragment if we do not
+				// support history.pushState natively.
+				if(!me.hasPushState && url) {
 					window.location.hash = url;
 				}
 			}
