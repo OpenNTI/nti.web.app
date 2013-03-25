@@ -12,7 +12,36 @@ describe('State Controller Tests', function(){
 	});
 
 	describe('Forum fragment generation', function(){
+		var stateObject;
 
+		function getFragment(state){
+			return controller.generateForumsFragment(state);
+		}
+
+		it('handles junk', function(){
+			expect(getFragment({foo: 'bar'})).toBeFalsy();
+		});
+
+		it('handles community', function(){
+			var expected = 'u/NextThought';
+			expect(getFragment({isUser: true, community: 'NextThought'})).toBe(expected);
+		});
+
+		it('handles portion', function(){
+			var expected = 'u/NextThought/Food';
+			expect(getFragment({isUser: true,
+								community: 'NextThought',
+								forum: 'Food'})).toBe(expected);
+		});
+
+		it('handles all the way through comments', function(){
+			var expected = 'u/NextThought/Food/HotDog/1';
+			expect(getFragment({isUser: true,
+								community: 'NextThought',
+								forum: 'Food',
+								topic: 'HotDog',
+								comment: '1'})).toBe(expected);
+		});
 	});
 
 	describe('Forum fragment parsing', function(){
