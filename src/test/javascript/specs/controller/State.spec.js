@@ -11,7 +11,11 @@ describe('State Controller Tests', function(){
 		});
 	});
 
-	describe('Forum has parsing', function(){
+	describe('Forum fragment generation', function(){
+
+	});
+
+	describe('Forum fragment parsing', function(){
 
 		var fragString;
 

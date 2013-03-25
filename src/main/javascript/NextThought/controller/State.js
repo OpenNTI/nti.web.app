@@ -25,7 +25,7 @@ Ext.define('NextThought.controller.State', {
 			'#!forums': Ext.bind(this.interpretForumsFragment,this)
 		};
 
-		this.generateHashMap = {
+		this.generateFragmentMap = {
 			'forums': Ext.bind(this.interpretProfileFragment, this)
 		}
 
@@ -181,9 +181,26 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	generateForumsHash: function(state){
+	generateForumsFragment: function(state){
+		var resultParts = [], result;
 
-	}
+		if(state.isUser && state.community){
+			resultParts.push('u');
+			resultParts.push(state.community);
+
+			Ext.Array.each(['forum', 'topic', 'comment'], function(prop){
+				if(state.hasOwnProperty(prop)){
+					resultParts.push(state[prop]);
+				}
+			});
+		}
+
+		if(!Ext.isEmpty(resultParts)){
+			result = resultParts.join('/');
+		}
+
+		return result;
+	},
 
 
 	interpretProfileFragment: function(fragment,query){
@@ -200,16 +217,23 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	generateHash: function(state){
+	generateFragment: function(state){
 		var root = (state.activeTab || '').toLowerCase(),
-			hash;
+			fragment, generated;
 
-		if(this.generateHashMap[root]){
-			//We pass it the state for that particular tab
-			hash = this.generateHashMap[root](state[root] || {});
+		if(root){
+			fragment = '!'+root;
 		}
 
-		return hash;
+		if(this.generateFragmentMap[root]){
+			//We pass it the state for that particular tab
+			generated = this.generateFragmentMap[root](state[root] || {});
+			if(generated){
+				fragment = [fragment, generated].join('/');
+			}
+		}
+
+		return fragment;
 	},
 
 
