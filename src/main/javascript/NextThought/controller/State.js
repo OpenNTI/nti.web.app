@@ -93,13 +93,24 @@ Ext.define('NextThought.controller.State', {
 
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
-			if (this.updateState(s) && !me.isPoppingHistory) {
+
+			if(!s || !url){
+				console.warn('Should provide both state and a url', arguments);
+			}
+
+			if (this.updateState(s) && !me.isPoppingHistory){
 				//updateState already updated current if it returned true
 				push.apply(history, [me.currentState,title,url]);
+
 
 				//me = State controller. (this = window.history) And, we only want to change the fragment if we do not
 				// support history.pushState natively.
 				if(!me.hasPushState && url) {
+					//The intention is we only get here for IE9 so lets make sure that is the case
+					if(Ext.isIE9){
+						console.error('Why are we getting here?');
+						console.trace();
+					}
 					window.location.hash = url;
 				}
 			}
@@ -138,9 +149,26 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretForumsFragment: function(fragment,query){
-		console.debug('Fragment:', fragment, 'Query: ', query);
-		return {};
+	interpretForumsFragment: function(fragment, query){
+		var parts = (fragment||'').split('/').slice(1),
+			result = {};
+		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
+
+		//We expect something of the form
+		//"#!forums/u/NextThought/board1/forum1/topic1"
+		//Right now the 'u' signifies what follows is the community
+		//name that onse the board (or really any user like object probably suffices.
+
+		//We expect at least two parts ('u', and '{community}')
+		if(parts.length >= 2 && parts[0] === 'u'){
+			result.isUser = true;
+			result.community = parts[1];
+			result.forum = parts[2];
+			result.topic = parts[3];
+			result.comment = parts[4];
+		}
+
+		return result;
 	},
 
 
