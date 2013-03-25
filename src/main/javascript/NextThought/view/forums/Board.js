@@ -24,6 +24,14 @@ Ext.define('NextThought.view.forums.Board',{
 		}
 	},
 
+	headerTpl: Ext.DomHelper.createTemplate({
+		cls: 'header-container', cn: {
+			cls: 'header', cn:[
+				{ cls: 'path', html: '{forumTitle} &nbsp;'}
+			]
+		}
+	}),
+
 	tpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'forum-list-item', cn: [
@@ -43,5 +51,40 @@ Ext.define('NextThought.view.forums.Board',{
 				]}
 			]}
 		]
-	})
+	}),
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: 'Discussion Board' },true);
+		this.headerEl = this.headerElContainer.down('.header');
+		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+	},
+
+
+	handleScrollHeaderLock: function(e,forumDom){
+		var headerEl = this.headerEl,
+			domParent = forumDom && forumDom.parentNode,
+			scroll = Ext.fly(forumDom).getScroll().top,
+			parent = headerEl && Ext.getDom(headerEl).parentNode,
+			cutoff = 0;
+
+		if(!headerEl || !parent){
+			console.error('Nothing to handle, el is falsey');
+			return;
+		}
+
+		if(parent === domParent && (scroll <= cutoff || !this.isVisible())){
+			headerEl.appendTo(this.headerElContainer);
+		}
+		else if(this.isVisible() && parent !== domParent && scroll > cutoff){
+			headerEl.appendTo(domParent);
+		}
+	},
+
+
+	onContainerClick: function(e){
+		if(e.getTarget('.path')){
+			this.destroy();
+		}
+	}
 });

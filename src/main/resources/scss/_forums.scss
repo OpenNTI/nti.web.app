@@ -622,6 +622,14 @@
 
 		&.forum-list {
 			@include forum-list-item;
+			margin-top: 0;
+			.header-container {
+				height: 52px;
+				.header {
+					@include forum-navigation;
+				}
+				margin-bottom: 60px;
+			}
 		}
 
 		&.topic-list {

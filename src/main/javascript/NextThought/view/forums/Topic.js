@@ -215,7 +215,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		if(navBarParent === domParent && scroll <= cutoff){
 			delete this.headerLocked;
-			this.navigationBarEl.append(this.navigationBarCtrEl);
+			this.navigationBarEl.appendTo(this.navigationBarCtrEl);
 		}
 		else if(navBarParent !== domParent && scroll > cutoff){
 			this.headerLocked = true;
