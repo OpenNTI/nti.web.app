@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Forums', {
 			state = s.forums || {};
 
 		console.log('Handle restore of state here', state);
-		//this.popToLastKnownMatchingState(state);
+		this.popToLastKnownMatchingState(state);
 		//this.pushKnownState(state);
 
 		if(c){
@@ -98,24 +98,34 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-/*	doesViewMatchState: function(v, key, val){
+	doesViewMatchState: function(v, key, val){
 		var vVal;
 		if(!v.record || v.stateKey !== key){
 			return false;
 		}
 
 		vVal = v.record.get('ID');
-		if(key === 'board'){
-			vVal = v.record.get('Creator');
-			if(vVal.isModel){
-				vVal.get('Username');
-			}
+
+		function equals(a,b){
+			return a.community === b.community
+				&& a.isUser === b.isUser;
 		}
 
-		return vVal === val.ID;
+		if(Ext.isObject(val) && val.isUser){
+			vVal = v.record.get('Creator');
+			if(vVal.isModel){
+				vVal = vVal.get('Username');
+			}
+			vVal = {
+				isUser: true,
+				community: vVal
+			};
+		}
+
+		return Ext.isObject(vVal) ? equals(vVal,val) : vVal === val;
 	},
 
-
+/*
 	pushKnownState: function(state){
 		var c = this.getForumViewContainer(),
 			item = c.peek(),
@@ -136,13 +146,13 @@ Ext.define('NextThought.controller.Forums', {
 
 		console.log('Need to push', toLoad);
 	},
-
+*/
 
 	popToLastKnownMatchingState: function(state){
-		var c = this.getForumViewContainer(),
+		var c = this.getForumViewContainer(), i, item,
 			lastKnownMatcher, part; //Skip the root element
 
-		if(c.items.getCount() === 0){
+		if(c.items.getCount() <= 1){
 			return;
 		}
 
@@ -150,8 +160,8 @@ Ext.define('NextThought.controller.Forums', {
 
 		for(i=1; i<c.items.getCount(); i++){
 			item = c.items.getAt(i);
-			part = this.stackOrder[i];
-			if(!part || !state[part] || this.doesViewMatchState(item, part, state[part])){
+			part = this.stateKeyPrecedence[i-1];
+			if(!part || !state[part] || !this.doesViewMatchState(item, part, state[part])){
 				break;
 			}
 			lastKnownMatcher = item;
@@ -160,7 +170,7 @@ Ext.define('NextThought.controller.Forums', {
 		while(c.peek() !== lastKnownMatcher){
 			c.popView();
 		}
-	},*/
+	},
 
 
 	popView: function(view){
