@@ -128,12 +128,35 @@ Ext.define('NextThought.controller.Forums', {
 
 	pushKnownState: function(state){
 		var c = this.getForumViewContainer(),
+			community = state && state.board && state.board.community,
 			stackOrder = this.stateKeyPrecedence,
-			i = stackOrder.indexOf((c.peek()||{}).stateKey),
+			stateKey = (c.peek()||{}).stateKey,
+			i = stackOrder.indexOf(stateKey),
 			toLoad = [],
 			me = this;
 
-		if(i < 0){
+		function getBaseUrl(rec){
+			var base = rec && rec.get('href');
+
+			if(!base && stateKey !== 'root'){
+				return null;
+			}
+
+			if(!base && community){
+				Ext.each($AppConfig.userObject.getCommunities(),function(r){
+					if(r.get('Username') === community){
+						base = r.getLink('DiscussionBoard');
+						return false;
+					}
+					return true;
+				});
+			}
+
+			return base;
+		}
+
+
+		if(i < 0 && stateKey !== 'root'){
 			return;
 		}
 
@@ -145,7 +168,7 @@ Ext.define('NextThought.controller.Forums', {
 			toLoad.push([stackOrder[i],state[stackOrder[i]]]);
 		}
 
-		this.getRecords(c.peek().record.get('href'),toLoad,function(records){
+		this.getRecords(getBaseUrl(c.peek().record),toLoad,function(records){
 
 			Ext.each(records,function(pair){
 				var rec = pair.last(),
@@ -169,6 +192,15 @@ Ext.define('NextThought.controller.Forums', {
 			finish = ids.length,
 			me = this;
 
+
+		if(!base){
+			if( ids[0] ){
+				ids[0][1] = null;
+			}
+			Ext.callback(callback,me,[ids]);
+			return;
+		}
+
 		function maybeFinish(){
 			finish--;
 			if(finish===0){
@@ -177,8 +209,12 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		Ext.each(ids,function(pair){
+
+			//Only "board" level will have a non-string. And its already accounted for in the base.
+			href += (!Ext.isString(pair[1]) ? '' : '/'+pair[1]);
+
 			var r = {
-				url: href+'/'+pair[1],
+				url: href,
 				callback: function(req,s,resp){
 					try {
 						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
@@ -192,7 +228,6 @@ Ext.define('NextThought.controller.Forums', {
 			};
 
 			Ext.Ajax.request(r);
-			href = r.url;
 		});
 	},
 
@@ -332,7 +367,7 @@ Ext.define('NextThought.controller.Forums', {
 		if(community.isModel){
 			community = community.get('Username');
 		}
-		if(!silent){
+		if(silent !== true){
 			//The communities board we are viewing
 			this.pushState({board:{community: community,isUser: true}, forum: null, topic: null, comment: null});
 		}
@@ -342,7 +377,7 @@ Ext.define('NextThought.controller.Forums', {
 	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
 		this.showLevel('topic', record, {stateKey: 'forum'});
-		if(!silent){
+		if(silent !== true){
 			this.pushState({'forum': record.get('ID'), topic: null, comment: null}); //The forum we are viewing
 		}
 	},
@@ -449,7 +484,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
 
-		if(!silent){
+		if(silent !== true){
 			this.pushState({'topic': record.get('ID'), comment: null});
 		}
 	},
