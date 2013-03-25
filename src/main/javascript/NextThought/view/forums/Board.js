@@ -55,7 +55,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: 'Discussion Board' },true);
+		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
 		this.headerEl = this.headerElContainer.down('.header');
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
