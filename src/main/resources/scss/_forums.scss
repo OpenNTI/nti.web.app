@@ -660,6 +660,10 @@
 			.navigation-bar {
 				@include forum-navigation;
 			}
+
+			.title{
+				cursor: default;
+			}
 		}
 	}
 }
