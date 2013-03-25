@@ -26,7 +26,7 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		this.generateFragmentMap = {
-			'forums': Ext.bind(this.interpretProfileFragment, this)
+			'forums': Ext.bind(this.generateForumsFragment, this)
 		}
 
 		return m;
@@ -98,11 +98,16 @@ Ext.define('NextThought.controller.State', {
 		history.pushState = function(s,title,url){
 			console.debug('push state',s);
 
-			if(!s || !url){
-				console.warn('Should provide both state and a url', arguments);
-			}
-
 			if (this.updateState(s) && !me.isPoppingHistory){
+
+				if(!url){
+					url = me.generateFragment(me.currentState);
+				}
+
+				if(!s || !url){
+					console.warn('Should provide both state and a url', arguments);
+				}
+
 				//updateState already updated current if it returned true
 				push.apply(history, [me.currentState,title,url]);
 
@@ -189,7 +194,7 @@ Ext.define('NextThought.controller.State', {
 			resultParts.push(state.community);
 
 			Ext.Array.each(['forum', 'topic', 'comment'], function(prop){
-				if(state.hasOwnProperty(prop)){
+				if(state.hasOwnProperty(prop) && state[prop]){
 					resultParts.push(state[prop]);
 				}
 			});
@@ -218,11 +223,11 @@ Ext.define('NextThought.controller.State', {
 
 
 	generateFragment: function(state){
-		var root = (state.activeTab || '').toLowerCase(),
+		var root = (state.active || '').toLowerCase(),
 			fragment, generated;
 
 		if(root){
-			fragment = '!'+root;
+			fragment = '#!'+root;
 		}
 
 		if(this.generateFragmentMap[root]){

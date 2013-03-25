@@ -24,7 +24,8 @@ describe('State Controller Tests', function(){
 
 		it('handles community', function(){
 			var expected = 'u/NextThought';
-			expect(getFragment({isUser: true, community: 'NextThought'})).toBe(expected);
+			expect(getFragment({isUser: true,
+								community: 'NextThought'})).toBe(expected);
 		});
 
 		it('handles portion', function(){

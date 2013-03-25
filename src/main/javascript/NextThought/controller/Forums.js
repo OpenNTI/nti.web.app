@@ -39,13 +39,13 @@ Ext.define('NextThought.controller.Forums', {
 		{ ref: 'forumViewContainer', selector: 'forums-view-container#forums'}
 	],
 
-
 	init: function() {
 
 		this.control({
 			'forums-view-container':{
 				'restore-forum-state': this.restoreState,
-				'render': this.loadRoot
+				'render': this.loadRoot,
+				'remove': this.componentPopped
 			},
 			'forums-root': {
 				'select': this.loadBoard
@@ -73,9 +73,14 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	restoreState: function(state){
-		var c = this.getForumViewContainer();
+	restoreState: function(s){
+		var c = this.getForumViewContainer(),
+			state = s.forums || {};
+
 		console.log('Handle restore of state here', state);
+		//this.popToLastKnownMatchingState(state);
+		//this.pushKnownState(state);
+
 		if(c){
 			c.fireEvent('finished-restore');
 		}
@@ -86,26 +91,90 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	pushState: function(s){
-		s = {'forums': s};
-		console.log('Need to push updated state here', s);
+/*	doesViewMatchState: function(v, key, val){
+		var vVal;
+		if(!v.record || v.stateKey !== key){
+			return false;
+		}
+
+		vVal = v.record.get('ID');
+		if(key === 'board'){
+			vVal = v.record.get('Creator');
+			if(vVal.isModel){
+				vVal.get('Username');
+			}
+		}
+
+		return vVal === val.ID;
 	},
 
 
-	showLevel: function(level, record, pushState){
+	pushKnownState: function(state){
+		var c = this.getForumViewContainer(),
+			item = c.peek(),
+			i = item.stateKey ? this.stackOrder.indexOf(item.stateKey) : -1,
+			toLoad = [];
+
+		if(i < 0){
+			return;
+		}
+
+		for(i = i + 1; i < this.stackOrder.length; i++){
+			if(!state[this.stackOrder[i]]){
+				break;
+			}
+			toLoad.push(state[this.stackOrder[i]]);
+			item = c.peek();
+		}
+
+		console.log('Need to push', toLoad);
+	},
+
+
+	popToLastKnownMatchingState: function(state){
+		var c = this.getForumViewContainer(),
+			lastKnownMatcher, part; //Skip the root element
+
+		if(c.items.getCount() === 0){
+			return;
+		}
+
+		lastKnownMatcher = c.items.getAt(0);
+
+		for(i=1; i<c.items.getCount(); i++){
+			item = c.items.getAt(i);
+			part = this.stackOrder[i];
+			if(!part || !state[part] || this.doesViewMatchState(item, part, state[part])){
+				break;
+			}
+			lastKnownMatcher = item;
+		}
+
+		while(c.peek() !== lastKnownMatcher){
+			c.popView();
+		}
+	},*/
+
+
+	pushState: function(s){
+		s = {'forums': s};
+		console.log('Need to push updated state here', s);
+		history.pushState(s);
+	},
+
+	showLevel: function(level, record, cfg){
 		var c = this.getForumViewContainer(),
 			url = record.getLink('contents'),
-			store;
+			store, cmpCfg;
 
 
-		store = NextThought.store.NTI.create({ storeId: record.get('Class')+'-'+record.getId(), url:url, autoLoad:true });
+		store = NextThought.store.NTI.create({ storeId: record.get('Class')+'-'+record.get('ID'), url:url, autoLoad:true });
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
 		// Creator string with the user model and presto!
 		store.on('load',this.fillInUsers,this);
-		c.add({xtype: 'forums-'+level+'-list', record: record, store: store});
-
-
+		cmpCfg = Ext.applyIf({xtype: 'forums-'+level+'-list', record: record, store: store}, cfg || {});
+		c.add(cmpCfg);
 	},
 
 
@@ -145,7 +214,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		urls.handled = urls.length;
 
-		view.add({store:store, xtype: 'forums-root'});
+		view.add({store:store, xtype: 'forums-root', stateKey: 'root'});
 
 		Ext.each(urls,function(url,i){
 
@@ -159,18 +228,19 @@ Ext.define('NextThought.controller.Forums', {
 	loadBoard: function(selModel, record){
 		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('forum', record);
+		this.showLevel('forum', record, {stateKey: 'community'});
+
 		community = record.get('Creator');
 		if(community.isModel){
 			community = community.get('Username');
 		}
-		this.pushState({'board': community}); //The communities board we are viewing
+		this.pushState({community: community, 'isUser': true}); //The communities board we are viewing
 	},
 
 
 	loadForum: function(selModel, record){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('topic', record);
+		this.showLevel('topic', record, {stateKey: 'forum'});
 		this.pushState({'forum': record.get('ID')}); //The forum we are viewing
 	},
 
@@ -274,7 +344,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		if(o && !o.getPath) { o = null; }
 
-		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath()});
+		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
 		this.pushState({'topic': record.get('ID')});
 	},
 
