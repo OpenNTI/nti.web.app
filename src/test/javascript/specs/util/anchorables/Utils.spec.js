@@ -239,7 +239,7 @@ describe("Anchor Utils", function() {
             expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
         });
 
-        it ('Range of Space Nodes, start', function(){
+        it ('Range of Space Text Node, start', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 txtNode1 = document.createTextNode('  ');
@@ -252,7 +252,7 @@ describe("Anchor Utils", function() {
             expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
         });
 
-        xit ('Range of Space Nodes, end', function(){
+        it ('Range of Space Text Node, end', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 txtNode1 = document.createTextNode('  ');
@@ -262,7 +262,7 @@ describe("Anchor Utils", function() {
             range.setStart(nonTxtNode1, 0);
             range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+            expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
         });
 
         it ('Range of with Text Node, start', function(){
@@ -291,7 +291,7 @@ describe("Anchor Utils", function() {
             expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
         });
 
-        xit ('Range of Nodes, start', function(){
+        it ('Range of Nodes, start', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 nonTxtNode2 = document.createElement('p'),
@@ -303,7 +303,7 @@ describe("Anchor Utils", function() {
             range.setStart(nonTxtNode1, 0);
             range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('DIV');
+            expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('P');
         });
 
         it ('Range of Nodes, end', function(){
@@ -321,7 +321,7 @@ describe("Anchor Utils", function() {
             expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
         });
 
-        xit ('Range of Nested Nodes, start', function(){
+        it ('Range of Nested Nodes, start', function(){
             var range = document.createRange(),
                 nonTxtNode1 = document.createElement('div'),
                 nonTxtNode2 = document.createElement('span'),
@@ -333,7 +333,7 @@ describe("Anchor Utils", function() {
             range.setStart(nonTxtNode1, 0);
             range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
         });
 
         it ('Range of Nested Nodes, end', function(){
