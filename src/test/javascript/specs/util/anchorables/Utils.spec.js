@@ -103,28 +103,28 @@ describe("Anchor Utils", function() {
 			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('id'));
 		});
 
-        it('Create Desciption from range of image with id', function(){
-            var img = document.createElement('img'),
-                span = document.createElement('span'),
-               range, result;
+		it('Create Desciption from range of image with id', function(){
+			var img = document.createElement('img'),
+				span = document.createElement('span'),
+			   range, result;
 
-            //set up img with data:
-            span.setAttribute('id', 'sdfasdfsdfasd');
-            img.setAttribute('id', '234234efjsdlkfjal2j4lkj');
-            img.setAttribute('src', '#');
+			//set up img with data:
+			span.setAttribute('id', 'sdfasdfsdfasd');
+			img.setAttribute('id', '234234efjsdlkfjal2j4lkj');
+			img.setAttribute('src', '#');
 
-            span.appendChild(img);
-            testBody.appendChild(span);
+			span.appendChild(img);
+			testBody.appendChild(span);
 
-            range = document.createRange();
-            range.selectNode(img);
+			range = document.createRange();
+			range.selectNode(img);
 
-            result =  Anchors.createRangeDescriptionFromRange(range, document);
-            expect(result).toBeTruthy();
-            expect(result.description).toBeTruthy();
-            expect(result.description.getStart()).toBeTruthy();
-            expect(result.description.getEnd()).toBeTruthy();
-        });
+			result =  Anchors.createRangeDescriptionFromRange(range, document);
+			expect(result).toBeTruthy();
+			expect(result.description).toBeTruthy();
+			expect(result.description.getStart()).toBeTruthy();
+			expect(result.description.getEnd()).toBeTruthy();
+		});
 	});
 
 	describe("isNodeAnchorable Tests", function(){
@@ -153,24 +153,24 @@ describe("Anchor Utils", function() {
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 
-        it('Anchor with name but no id', function(){
-            var node = document.createElement('a');
-            node.setAttribute('name', '00120323423');
-            expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
-        });
+		it('Anchor with name but no id', function(){
+			var node = document.createElement('a');
+			node.setAttribute('name', '00120323423');
+			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+		});
 
-        it('Anchor with invalidId id', function(){
-            var node = document.createElement('a');
-            node.setAttribute('id', 'a12309841');
-            expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
-        });
+		it('Anchor with invalidId id', function(){
+			var node = document.createElement('a');
+			node.setAttribute('id', 'a12309841');
+			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+		});
 
 
-        it('node with data-ntiid attr', function(){
-            var node = document.createElement('div');
-            node.setAttribute('data-ntiid', 'something-great');
-            expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
-        });
+		it('node with data-ntiid attr', function(){
+			var node = document.createElement('div');
+			node.setAttribute('data-ntiid', 'something-great');
+			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
+		});
 
 		it('Node with Id', function(){
 			var node = document.createElement('span');
@@ -196,14 +196,14 @@ describe("Anchor Utils", function() {
 		it('Null Range', function(){
 			try {
 				Anchors.nodeThatIsEdgeOfRange(null, true);
- 	 			expect(false).toBeTruthy();
+				expect(false).toBeTruthy();
 			}
 			catch(e) {
 				expect(e.message).toEqual('Node is not defined');
 			}
 		});
 
-		it ('Range of Text Nodes, start and end', function(){
+		it('Range of Text Nodes, start and end', function(){
 			var range = document.createRange(),
 				txtNode1 = document.createTextNode('Text node 1'),
 				txtNode2 = document.createTextNode('Text node 2');
@@ -213,179 +213,179 @@ describe("Anchor Utils", function() {
 			range.setStart(txtNode1, 5);
 			range.setEnd(txtNode2, 5);
 
- 			expect(Anchors.nodeThatIsEdgeOfRange(range, true).textContent).toEqual(txtNode1.textContent);
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).textContent).toEqual(txtNode1.textContent);
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false).textContent).toEqual(txtNode2.textContent);
 		});
 
-        it ('Range Without Children, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div');
+		it('Range Without Children, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div');
 
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 0);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+		});
 
-        it ('Range Without Children, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div');
+		it('Range Without Children, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div');
 
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 0);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('DIV');
+		});
 
-        it ('Range of Space Text Node, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                txtNode1 = document.createTextNode('  ');
+		it('Range of Space Text Node, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				txtNode1 = document.createTextNode('  ');
 
-            nonTxtNode1.appendChild(txtNode1);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 1);
+			nonTxtNode1.appendChild(txtNode1);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('DIV');
+		});
 
-        it ('Range of Space Text Node, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                txtNode1 = document.createTextNode('  ');
+		it('Range of Space Text Node, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				txtNode1 = document.createTextNode('  ');
 
-            nonTxtNode1.appendChild(txtNode1);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 1);
+			nonTxtNode1.appendChild(txtNode1);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
+		});
 
-        it ('Range of with Text Node, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                txtNode1 = document.createTextNode('text node');
+		it('Range of with Text Node, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				txtNode1 = document.createTextNode('text node');
 
-            nonTxtNode1.appendChild(txtNode1);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 1);
+			nonTxtNode1.appendChild(txtNode1);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true)).toEqual(txtNode1);
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true)).toEqual(txtNode1);
+		});
 
-        it ('Range of with Text Node, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                txtNode1 = document.createTextNode('text node');
+		it('Range of with Text Node, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				txtNode1 = document.createTextNode('text node');
 
-            nonTxtNode1.appendChild(txtNode1);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode1, 1);
+			nonTxtNode1.appendChild(txtNode1);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode1, 1);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
+		});
 
-        it ('Range of Nodes, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('p'),
-                nonTxtNode3 = document.createElement('span');
+		xit('Range of Nodes, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('p'),
+				nonTxtNode3 = document.createElement('span');
 
-            nonTxtNode1.appendChild(nonTxtNode2);
-            nonTxtNode1.appendChild(nonTxtNode3);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode3, 0);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			nonTxtNode1.appendChild(nonTxtNode3);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('P');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('P');
+		});
 
-        it ('Range of Nodes, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('p'),
-                nonTxtNode3 = document.createElement('span');
+		it('Range of Nodes, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('p'),
+				nonTxtNode3 = document.createElement('span');
 
-            nonTxtNode1.appendChild(nonTxtNode2);
-            nonTxtNode1.appendChild(nonTxtNode3);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode3, 0);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			nonTxtNode1.appendChild(nonTxtNode3);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
+		});
 
-        it ('Range of Nested Nodes, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('span'),
-                nonTxtNode3 = document.createElement('p');
+		it('Range of Nested Nodes, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('span'),
+				nonTxtNode3 = document.createElement('p');
 
-            nonTxtNode2.appendChild(nonTxtNode3);
-            nonTxtNode1.appendChild(nonTxtNode2);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode3, 0);
+			nonTxtNode2.appendChild(nonTxtNode3);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
+		});
 
-        it ('Range of Nested Nodes, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('span'),
-                nonTxtNode3 = document.createElement('p');
+		it('Range of Nested Nodes, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('span'),
+				nonTxtNode3 = document.createElement('p');
 
-            nonTxtNode2.appendChild(nonTxtNode3);
-            nonTxtNode1.appendChild(nonTxtNode2);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode3, 0);
+			nonTxtNode2.appendChild(nonTxtNode3);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode3, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('P');
+		});
 
-        it ('Range of Node and Nested Node, start', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('a'),
-                nonTxtNode3 = document.createElement('span'),
-                nonTxtNode4 = document.createElement('p');
+		it('Range of Node and Nested Node, start', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('a'),
+				nonTxtNode3 = document.createElement('span'),
+				nonTxtNode4 = document.createElement('p');
 
-            nonTxtNode3.appendChild(nonTxtNode4);
-            nonTxtNode1.appendChild(nonTxtNode2);
-            nonTxtNode1.appendChild(nonTxtNode3);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode4, 0);
+			nonTxtNode3.appendChild(nonTxtNode4);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			nonTxtNode1.appendChild(nonTxtNode3);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode4, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('A');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('A');
+		});
 
-        xit ('Range of Node and Nested Node, end', function(){
-            var range = document.createRange(),
-                nonTxtNode1 = document.createElement('div'),
-                nonTxtNode2 = document.createElement('a'),
-                nonTxtNode3 = document.createElement('span'),
-                nonTxtNode4 = document.createElement('p');
+		xit('Range of Node and Nested Node, end', function(){
+			var range = document.createRange(),
+				nonTxtNode1 = document.createElement('div'),
+				nonTxtNode2 = document.createElement('a'),
+				nonTxtNode3 = document.createElement('span'),
+				nonTxtNode4 = document.createElement('p');
 
-            nonTxtNode3.appendChild(nonTxtNode4);
-            nonTxtNode1.appendChild(nonTxtNode2);
-            nonTxtNode1.appendChild(nonTxtNode3);
-            testBody.appendChild(nonTxtNode1);
-            range.setStart(nonTxtNode1, 0);
-            range.setEnd(nonTxtNode4, 0);
+			nonTxtNode3.appendChild(nonTxtNode4);
+			nonTxtNode1.appendChild(nonTxtNode2);
+			nonTxtNode1.appendChild(nonTxtNode3);
+			testBody.appendChild(nonTxtNode1);
+			range.setStart(nonTxtNode1, 0);
+			range.setEnd(nonTxtNode4, 0);
 
-            expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('A');
-        });
+			expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('A');
+		});
 
-		it ('Range of Non Text Nodes, start', function(){
+		it('Range of Non Text Nodes, start', function(){
 			var range = document.createRange(),
 				nonTxtNode1 = document.createElement('div'),
 				nonTxtNode2 = document.createElement('span'),
@@ -404,7 +404,7 @@ describe("Anchor Utils", function() {
 			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
 		});
 
-		it ('Range of Non Text Nodes, end', function(){
+		it('Range of Non Text Nodes, end', function(){
 			var range = document.createRange(),
 				nonTxtNode1 = document.createElement('div'),
 				nonTxtNode2 = document.createElement('span'),
@@ -424,7 +424,7 @@ describe("Anchor Utils", function() {
 		});
 
 
-		it ('Range of Mixed Nodes', function(){
+		it('Range of Mixed Nodes', function(){
 			var range = document.createRange(),
 				div = document.createElement('div'),
 				p = document.createElement('p'),
@@ -442,7 +442,7 @@ describe("Anchor Utils", function() {
 		});
 
 
-		it ('Range of Non Text Nodes, negative offset', function(){
+		it('Range of Non Text Nodes, negative offset', function(){
 			var range = document.createRange(),
 				nonTxtNode1 = document.createElement('div'),
 				nonTxtNode2 = document.createElement('span'),
@@ -466,7 +466,7 @@ describe("Anchor Utils", function() {
 	});
 
 	describe('searchFromRangeStartInwardForAnchorableNode Tests', function(){
-		it ('Null Node', function(){
+		it('Null Node', function(){
 			expect(Anchors.searchFromRangeStartInwardForAnchorableNode(null)).toBeNull();
 		});
 
@@ -566,39 +566,39 @@ describe("Anchor Utils", function() {
 			expect(result).toBe(t2);
 		});
 
-        it('Interesting mathcounts case, firefox uses empty txt nodes', function(){
-            /*
-             <div id="a0000000044" class="naquestionpart naqsymmathpart">
-                 <a name="a0000000044">
-                    <span> What is the product of the digits of 7! ? </span>
-                 </a>
-             </div>
-             */
-            var div = document.createElement('div'),
-                a = document.createElement('a'),
-                s = document.createElement('span'),
-                t = document.createTextNode(' What is the product of the digits of 7! ? '),
-                empty = document.createTextNode(' '),
-                result;
+		it('Interesting mathcounts case, firefox uses empty txt nodes', function(){
+			/*
+			 <div id="a0000000044" class="naquestionpart naqsymmathpart">
+				 <a name="a0000000044">
+					<span> What is the product of the digits of 7! ? </span>
+				 </a>
+			 </div>
+			 */
+			var div = document.createElement('div'),
+				a = document.createElement('a'),
+				s = document.createElement('span'),
+				t = document.createTextNode(' What is the product of the digits of 7! ? '),
+				empty = document.createTextNode(' '),
+				result;
 
-            div.setAttribute('id', 'a0000000044');
-            a.setAttribute('name', 'a0000000044');
+			div.setAttribute('id', 'a0000000044');
+			a.setAttribute('name', 'a0000000044');
 
-            //setup heirarchy
-            s.appendChild(t);
-            a.appendChild(s);
-            div.appendChild(a);
-            div.appendChild(a);
+			//setup heirarchy
+			s.appendChild(t);
+			a.appendChild(s);
+			div.appendChild(a);
+			div.appendChild(a);
 
-            result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
-            expect(result).toBeTruthy();
-            expect(result).toBe(t);
-        });
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
+			expect(result).toBeTruthy();
+			expect(result).toBe(t);
+		});
 
 	});
 
 	describe('walkDownToLastNode Tests', function(){
-		it ('Null Node', function(){
+		it('Null Node', function(){
 			try {
 				Anchors.walkDownToLastNode(null);
 				expect(false).toBeTruthy();
@@ -608,12 +608,12 @@ describe("Anchor Utils", function() {
 			}
 		});
 
-		it ('Already At Bottom', function(){
+		it('Already At Bottom', function(){
 			var bottom = document.createElement('a');
 			expect(Anchors.walkDownToLastNode(bottom)).toBe(bottom);
 		});
 
-		it ('Several Layers Deep', function(){
+		it('Several Layers Deep', function(){
 			var n4 = document.createTextNode('Text Node'),
 				n3 = document.createElement('p'),
 				n2 = document.createElement('span'),
@@ -626,7 +626,7 @@ describe("Anchor Utils", function() {
 			expect(Anchors.walkDownToLastNode(n1)).toBe(n4);
 		});
 
-		it ('Several Layers Deep With Siblings', function(){
+		it('Several Layers Deep With Siblings', function(){
 			var n5 = document.createTextNode('More Text'),
 				n4 = document.createTextNode('Text Node'),
 				n4a = document.createElement('p'),
@@ -743,7 +743,7 @@ describe("Anchor Utils", function() {
 		});
 
 		it('Walks Down Into Current Node', function(){
-            var div = document.createElement('div'),
+			var div = document.createElement('div'),
 				span1 = document.createElement('span'),
 				t1 = document.createTextNode('Foo'),
 				span2 = document.createElement('span'),
@@ -757,8 +757,8 @@ describe("Anchor Utils", function() {
 
 			testBody.appendChild(div);
 			result = Anchors.searchFromRangeEndInwardForAnchorableNode(span1);
-            expect(result).toBe(t1);
-        });
+			expect(result).toBe(t1);
+		});
 
 		it('End digs up out and into prior sibling', function(){
 			var div = document.createElement('div'),
@@ -853,7 +853,7 @@ describe("Anchor Utils", function() {
 				t2 = document.createTextNode('See spot run'),
 				range, anchorableRange;
 
-            div.setAttribute('id', 'sdfgkljsdflkjslkcms');
+			div.setAttribute('id', 'sdfgkljsdflkjslkcms');
 
 			big.appendChild(replacementText);
 			innerRedactionSpan.appendChild(big);
@@ -872,12 +872,12 @@ describe("Anchor Utils", function() {
 			range.setEnd(t2, t2.textContent.length);
 
 			anchorableRange = Anchors.makeRangeAnchorable(range, document);
-            Anchors.createRangeDescriptionFromRange(range, document);
+			Anchors.createRangeDescriptionFromRange(range, document);
 			expect(anchorableRange).toBeTruthy();
-            expect(anchorableRange.toString()).toEqual(t2.textContent);
+			expect(anchorableRange.toString()).toEqual(t2.textContent);
 		});
 
-		it ('Null Range', function(){
+		it('Null Range', function(){
 			try {
 				Anchors.makeRangeAnchorable(null, null);
 				expect(false).toBeTruthy();
@@ -887,7 +887,7 @@ describe("Anchor Utils", function() {
 			}
 		});
 
-		it ('Range With NO Anchorables', function(){
+		it('Range With NO Anchorables', function(){
 			var div = document.createElement('div'),
 				span = document.createElement('span'),
 				p = document.createElement('p'),
@@ -912,16 +912,16 @@ describe("Anchor Utils", function() {
 	});
 
 	describe('referenceNodeForNode Tests', function(){
-		it ('Null Node', function(){
+		it('Null Node', function(){
 			expect(Anchors.referenceNodeForNode(null)).toBeNull();
 		});
 
-		it ('Node Already Anchorable', function(){
+		it('Node Already Anchorable', function(){
 			var textNode = document.createTextNode('Scott Pilgram vs. The World');
 			expect(Anchors.referenceNodeForNode(textNode)).toBe(textNode);
 		});
 
-		it ('Parent Node Anchorable', function(){
+		it('Parent Node Anchorable', function(){
 			var first = document.createElement('div'),
 				second = document.createElement('span'),
 				third = document.createElement('p');
@@ -1051,7 +1051,7 @@ describe("Anchor Utils", function() {
 			div.appendChild(p);
 			testBody.appendChild(div);
 
-			var pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer',  {node: p,  role: 'start'} );
+			var pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer',	{node: p,  role: 'start'} );
 
 			result = Anchors.locateElementDomContentPointer(pointer, p, {});
 			expect(result.confidence).toEqual(1);
@@ -1536,7 +1536,7 @@ describe("Anchor Utils", function() {
 	describe('Range Putrification Tests', function(){
 		it('Purify Range Test', function(){
 			var p = document.createElement('p'),
-				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t1 = document.createTextNode('this is a text node, yay!	 go us!'),
 				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
 				spanNoAnchors = document.createElement('span'),
 				em = document.createElement('em'),
@@ -1579,7 +1579,7 @@ describe("Anchor Utils", function() {
 		it('Purify Range Where Ancestor is non-anchorable', function(){
 			var div = document.createElement('div'),
 				p = document.createElement('p'),
-				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t1 = document.createTextNode('this is a text node, yay!	 go us!'),
 				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
 				spanNoAnchors = document.createElement('span'),
 				em = document.createElement('em'),
@@ -1617,7 +1617,7 @@ describe("Anchor Utils", function() {
 		it('Purify Range Where Endpoints are elements', function(){
 			var div = document.createElement('div'),
 				p = document.createElement('p'),
-				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t1 = document.createTextNode('this is a text node, yay!	 go us!'),
 				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
 				spanNoAnchors = document.createElement('span'),
 				em = document.createElement('em'),
@@ -1689,7 +1689,7 @@ describe("Anchor Utils", function() {
 			expect(textNode.textContent).toEqual(expected);
 		});
 
-		it ('Tag Finding Tests', function(){
+		it('Tag Finding Tests', function(){
 			var p1 = document.createElement('p'),
 				s1 = document.createElement('span'),
 				p2 = document.createElement('p'),
@@ -1723,9 +1723,9 @@ describe("Anchor Utils", function() {
 
 		});
 
-		it ('Purification Offset With Singular Text Node', function(){
+		it('Purification Offset With Singular Text Node', function(){
 			var p = document.createElement('p'),
-				textNode = document.createTextNode('This is a single text node that exists inside a paragraph!  Can you believe that?'),
+				textNode = document.createTextNode('This is a single text node that exists inside a paragraph!	Can you believe that?'),
 				pureRange, range;
 
 			//add some stuff to span, clone it, add some more, see if it worked
@@ -1748,7 +1748,7 @@ describe("Anchor Utils", function() {
 	});
 
 	describe('cleanRangeFromBadStartAndEndContainers Tests', function(){
-		it ('Clean Range of nodes with interleaved empty space nodes, start and end', function(){
+		it('Clean Range of nodes with interleaved empty space nodes, start and end', function(){
 			var li = document.createElement('li'),
 				a = document.createElement('a'),
 				s1 = document.createTextNode(' '),
@@ -2019,13 +2019,13 @@ describe("Anchor Utils", function() {
 			var empty = Anchors.createRangeDescriptionFromRange(null, document);
 			expect(empty).toBeTruthy();
 			expect(empty.getAncestor).toBe(undefined);
-		  	expect(empty.getStart).toBe(undefined);
-		   	expect(empty.getEnd).toBe(undefined);
+			expect(empty.getStart).toBe(undefined);
+			expect(empty.getEnd).toBe(undefined);
 		});
 
 		it('Wraps the container for empty ranges', function(){
 			var emptyDesc = Anchors.createRangeDescriptionFromRange(null, document),
-			    root = document.createElement('div'), //this should be the ancestor
+				root = document.createElement('div'), //this should be the ancestor
 				p1 = document.createElement('p'),
 				t1 = document.createTextNode('This is some text.'), //same as t2
 				p2 = document.createElement('p'),
@@ -2099,52 +2099,52 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 		});
 
-        it('Ancestor Spanning Identical Text Node Bug with data-ntiids', function(){
-            var root = document.createElement('div'), //this should be the ancestor
-                p1 = document.createElement('p'),
-                t1 = document.createTextNode('This is some text.'), //same as t2
-                p2 = document.createElement('p'),
-                t2 = document.createTextNode('This is some text.'),
-                range, desc, recreatedRange;
+		it('Ancestor Spanning Identical Text Node Bug with data-ntiids', function(){
+			var root = document.createElement('div'), //this should be the ancestor
+				p1 = document.createElement('p'),
+				t1 = document.createTextNode('This is some text.'), //same as t2
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('This is some text.'),
+				range, desc, recreatedRange;
 
-            //set up ids and heirarchy
-            root.setAttribute('data-ntiid', 'tag:nextthought.com,2011-123242354543523'); //Note this needs to look like an ntiid
-            p1.setAttribute('position', 1);
-            p1.appendChild(t1);
-            p2.setAttribute('position', 2);
-            p2.appendChild(t2);
-            root.appendChild(p1);
-            root.appendChild(p2);
-            testBody.appendChild(root);
+			//set up ids and heirarchy
+			root.setAttribute('data-ntiid', 'tag:nextthought.com,2011-123242354543523'); //Note this needs to look like an ntiid
+			p1.setAttribute('position', 1);
+			p1.appendChild(t1);
+			p2.setAttribute('position', 2);
+			p2.appendChild(t2);
+			root.appendChild(p1);
+			root.appendChild(p2);
+			testBody.appendChild(root);
 
-            //create a range now starting at the first char of t1 and the last of t2
-            range = document.createRange();
-            range.setStart(t1, 0);
-            range.setEnd(t2, t2.length);
+			//create a range now starting at the first char of t1 and the last of t2
+			range = document.createRange();
+			range.setStart(t1, 0);
+			range.setEnd(t2, t2.length);
 
-            //double check that my range has different nodes and is set up correctly
-            expect(range.startContainer).toBe(t1);
-            expect(range.endContainer).toBe(t2);
-            expect(t1).not.toBe(t2);
-            expect(range.startContainer).not.toBe(range.endContainer);
-            expect(range.toString()).toEqual(t1.textContent+t2.textContent);
+			//double check that my range has different nodes and is set up correctly
+			expect(range.startContainer).toBe(t1);
+			expect(range.endContainer).toBe(t2);
+			expect(t1).not.toBe(t2);
+			expect(range.startContainer).not.toBe(range.endContainer);
+			expect(range.toString()).toEqual(t1.textContent+t2.textContent);
 
-            //now turn that into a description, and check a few assumptions
-            desc = Anchors.createRangeDescriptionFromRange(range, document).description;
-            expect(desc).toBeTruthy();
-            expect(desc.getAncestor()).toBeTruthy();
-            expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('data-ntiid'));
+			//now turn that into a description, and check a few assumptions
+			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
+			expect(desc).toBeTruthy();
+			expect(desc.getAncestor()).toBeTruthy();
+			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('data-ntiid'));
 
-            //now round trip back to a range, verify that it is the same range as before
-            recreatedRange = Anchors.toDomRange(desc, document, document.body);
-            expect(recreatedRange).toBeTruthy();
-            expect(recreatedRange.startContainer).toBe(range.startContainer);
-            expect(recreatedRange.endContainer).toBe(range.endContainer);
-            expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
-        });
+			//now round trip back to a range, verify that it is the same range as before
+			recreatedRange = Anchors.toDomRange(desc, document, document.body);
+			expect(recreatedRange).toBeTruthy();
+			expect(recreatedRange.startContainer).toBe(range.startContainer);
+			expect(recreatedRange.endContainer).toBe(range.endContainer);
+			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
+		});
 
 
-        it('Ambigious Model Causing Incorrect Highlight Bug', function(){
+		it('Ambigious Model Causing Incorrect Highlight Bug', function(){
 			/*
 			From the documentation:, this does not highlight correctly
 			<p id="id">
