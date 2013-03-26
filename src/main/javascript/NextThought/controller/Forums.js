@@ -190,6 +190,102 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	pushNecessaryViews: function(record, cb, scope){
+		var c = this.getForumViewContainer(),
+			stackOrder = this.stateKeyPrecedence,
+			showingStateKey = (c.peek() || {}).stateKey,
+			recordType = 'topic',
+			href = record.get('href'),
+			i, toLoad = [], parts = [], base, pieces,
+			state = {},
+			me = this;
+
+		//First order of business is to figure out the base url
+		//followed by the ids that need to load.  Unlike state we work
+		//backwards here.  We also assume our record is topic
+		//this may need to change breifly for comments but it is a start
+
+		//The idea here is to pop pieces off the end of the href we want to show
+		//collecting ids for each of the views between where we are and where we are going
+		//Stop when we run out of parts to show or we get to something that looks
+		//like the top view
+		i = stackOrder.indexOf(recordType);
+		pieces = href.split('/');
+		for(i; i>=0; i--){
+			if(showingStateKey === stackOrder[i]){
+				break;
+			}
+			if(Ext.isEmpty(pieces)){
+				Ext.callback(cb, scope, [false]);
+				return;
+			}
+			parts.unshift(pieces.pop());
+		}
+		base = pieces.join('/');
+
+
+		console.log('Show from', base, 'Parts ', parts);
+
+		i = stackOrder.indexOf(recordType);
+		Ext.Array.each(parts, function(part){
+			toLoad.unshift([stackOrder[i], part]);
+			i--;
+		}, this, true);
+
+		if(Ext.isEmpty(toLoad)){
+			Ext.callback(cb, scope, [true]);
+			return;
+		}
+
+		console.log('Base', base, 'toLoad', toLoad);
+
+		//Ok we have built up what we need to show.  Fetch all the needed records
+		//and start pushing views.  Note we do this silently so state does get updated
+		//in many chunks.  Instead, we gather state as it is needed and push it once at
+		//the end.  This keeps back and forward (at least within this function) working
+		//like you would expect.  There are still issues with state not being transactional
+		//with the action the user expects.  For instance coming from another tab has
+		//a state change for the tab showing and then our state change.  We should
+		//fix that.
+
+		function stateForKey(key, rec){
+			var community;
+			if(key === 'board'){
+				community = rec.get('Creator');
+				if(community.isModel){
+					community = rec.get('Username');
+				}
+				return {isUser: true, community: community};
+			}
+			return rec.get('ID');
+		}
+
+		this.getRecords(base, toLoad, function(records){
+			var j = stackOrder.indexOf(records.first()[0]);
+			Ext.each(records,function(pair){
+				var rec = pair.last(),
+					type = Ext.String.capitalize(pair.first());
+
+				if(!rec){
+					return false;
+				}
+
+				me['load'+type](null,rec,true);
+				state[pair[0]] = stateForKey(pair[0], pair[1]);
+				j++;
+
+				return true;
+			});
+
+			for(j;j<stackOrder.length;j++){
+				state[stackOrder[j]] = null;
+			}
+			this.pushState(state);
+			Ext.callback(cb, scope, [true]);
+		});
+	},
+
+
 	getRecords: function(base, ids, callback){
 		var href = getURL(base),
 			finish = ids.length,
@@ -236,10 +332,21 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	popToLastKnownMatchingState: function(state){
+		var me = this;
+		function predicate(item, i){
+			var part = me.stateKeyPrecedence[i-1];
+			return part && state[part] && me.doesViewMatchState(item, part, state[part]);
+		}
+
+		this.popToLastViewMatchingPredicate(predicate);
+	},
+
+
+	popToLastViewMatchingPredicate: function(predicate){
 		var c = this.getForumViewContainer(), i, item,
 			lastKnownMatcher, part; //Skip the root element
 
-		if(c.items.getCount() <= 1){
+		if(c.items.getCount() <= 1 || !Ext.isFunction(predicate)){
 			return;
 		}
 
@@ -247,8 +354,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		for(i=1; i<c.items.getCount(); i++){
 			item = c.items.getAt(i);
-			part = this.stateKeyPrecedence[i-1];
-			if(!part || !state[part] || !this.doesViewMatchState(item, part, state[part])){
+			if(!predicate(item, i)){
 				break;
 			}
 			lastKnownMatcher = item;
@@ -298,9 +404,32 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	presentTopic: function(record, cb, eOpts){
-		var callback = Ext.isFunction(cb) ? cb : undefined;
+	presentTopic: function(record, cb, scope, eOpts){
+		var callback = Ext.isFunction(cb) ? cb : undefined,
+			toShowHref = record ? record.get('href') : null;
+
+		if(!record || !toShowHref){
+			Ext.callback(callback, scope, [false]);
+			return;
+		}
+
 		console.log('should navigate to forum topic: ', record, callback);
+
+		//The idea here is similar to state restoration.  Pop us down to the last
+		//stack view that matches (which is worst case the root).  Then using the
+		//href on the passed record build record hrefs that we need, fetch them,
+		//and then build the necessary stores.
+
+		//First we pop down the first view whose records href is a prefix of ours
+		//or the root
+		function predicate(item, i){
+			var rec = item.record,
+				href = rec.get('href');
+			return rec && href && toShowHref.indexOf(href) === 0;
+		}
+
+		this.popToLastViewMatchingPredicate(predicate);
+		this.pushNecessaryViews(record, cb, scope);
 	},
 
 
