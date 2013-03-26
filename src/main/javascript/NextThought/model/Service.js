@@ -134,7 +134,9 @@ Ext.define('NextThought.model.Service', {
 					item = items[i];
 
 					if(Ext.Array.contains(item.accepts,mimeType)){
-						if(title && item.Title !== title) { continue; }
+						if(title && item.Title !== title) {
+							continue;
+						}
 
 						collection = item;
 						break;
@@ -260,7 +262,8 @@ Ext.define('NextThought.model.Service', {
 
 	getPageInfo: function(ntiid, success, failure, scope){
 		var url = this.getObjectURL(ntiid),
-			q = {};
+			q = {},
+			mime = 'application/vnd.nextthought.pageinfo';
 
 		if(!ParseUtils.parseNtiid(ntiid)){
 			Ext.callback(failure,scope, ['']);
@@ -285,12 +288,22 @@ Ext.define('NextThought.model.Service', {
 				url: url,
 				scope: scope,
 				headers: {
-					Accept: 'application/vnd.nextthought.pageinfo+json'
+					Accept: mime+'+json'
 				},
 				callback: function(req,s,resp){
-					var pageInfos;
+					var pageInfos, pageInfo;
 					if(s){
 						pageInfos = ParseUtils.parseItems(resp.responseText);
+
+						//We claim success but the damn browsers like to give the wrong object
+						//type from cache.  They don't seem to listen to Vary: Accept or any
+						//of the other myriad of caching headers supplied by the server
+						pageInfo = pageInfos.first();
+						if(pageInfo && pageInfo.get('MimeType') !== mime){
+							//Maybe call the failure callback if we find ourselves in this state?
+							console.error('Unexpected object type from request.  Most likely this is the browsers returning bad things from cache.  Expected', mime, 'Recieved', pageInfos);
+						}
+
 						Ext.callback(success, scope, pageInfos);
 					} else {
 						Ext.callback(failure,scope, [req,resp]);
