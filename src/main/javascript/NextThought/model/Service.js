@@ -193,6 +193,11 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	appendTypeView: function(base, type){
+		return base + '/@@' + type;
+	},
+
+
 	getObjectRaw: function (ntiid, success, failure, scope){
 		var url = this.getObjectURL(ntiid),
 			q = {};
@@ -222,16 +227,12 @@ Ext.define('NextThought.model.Service', {
 			}
 		}
 
-		//Chrome 25,26 and 27 don't seem to listen to any of the caching
+		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
 		//headers that would prevent a request for an object using one Accept
 		//type from being cached and returned on a later request for the same object
-		//with a different Accept header.  Even giving it no-store doesn't seem to work
-		//So send a query param that roughly matchs the accept header to force chrome to
-		//not return the wrong damn thing from cache.
-		if(Ext.isChrome){
-			//Give chrome the finger
-			url = this.urlWithQueryParams(url, {'accept_buster': 'link+json'});
-		}
+		//with a different Accept header.  So request a special url by type that
+		//is safe to caching
+		url = this.appendTypeView(url, 'link+json');
 
 		try{
 			//lookup step
@@ -270,16 +271,12 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		//Chrome 25,26 and 27 don't seem to listen to any of the caching
+		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
 		//headers that would prevent a request for an object using one Accept
 		//type from being cached and returned on a later request for the same object
-		//with a different Accept header.  Even giving it no-store doesn't seem to work
-		//So send a query param that roughly matchs the accept header to force chrome to
-		//not return the wrong damn thing from cache.
-		if(Ext.isChrome){
-			//Give chrome the finger
-			url = this.urlWithQueryParams(url, {'accept_buster': 'pageinfo+json'});
-		}
+		//with a different Accept header.  So request a special url by type that
+		//is safe to caching
+		url = this.appendTypeView(url, 'pageinfo+json');
 
 
 		try{
