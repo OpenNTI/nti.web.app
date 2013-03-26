@@ -909,7 +909,8 @@ Ext.define('NextThought.editor.Actions', {
 			shareWith: this.shareMenu ? this.shareMenu.getValue() : undefined,
 			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
-			tags: this.tags ? this.tags.getValue() : undefined
+			tags: this.tags ? this.tags.getValue() : undefined,
+			published: this.getPublished()
 		};
 	},
 

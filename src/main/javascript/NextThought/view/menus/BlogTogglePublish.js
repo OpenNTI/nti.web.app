@@ -46,6 +46,6 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 		var action = item.published;
 		if(this.record.isPublished() === action){ return; }
 
-		this.record.publish(this);
+		this.record.publish(this.owner || this);
 	}
 });

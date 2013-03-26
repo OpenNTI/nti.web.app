@@ -499,7 +499,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	saveTopicPost: function(editorCmp, record, title, tags, body){
+	saveTopicPost: function(editorCmp, record, title, tags, body, autoPublish){
 
 		var isEdit = Boolean(record),
 			cmp = editorCmp.prev(),
@@ -548,6 +548,12 @@ Ext.define('NextThought.controller.Forums', {
 				success: function(post,operation){
 
 					var entry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
+					if(autoPublish !== undefined){
+						if(autoPublish !== entry.isPublished()){
+							entry.publish(editorCmp,finish,this);
+							return;
+						}
+					}
 
 					unmask();
 					finish(entry);

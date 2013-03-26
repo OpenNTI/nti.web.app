@@ -18,7 +18,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.editor.Editor',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.view.forums.Comment',
-		'NextThought.ux.SearchHits'
+		'NextThought.ux.SearchHits',
+		'NextThought.view.menus.BlogTogglePublish'
 	],
 
 	cls: 'topic-post',
@@ -39,6 +40,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}
@@ -78,7 +80,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		navigationBarCtrEl: '.header-container',
 		navigationBarEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
-		prevPostEl: '.navigation-bar .prev'
+		prevPostEl: '.navigation-bar .prev',
+		publishStateEl: '.meta .state'
 	},
 
 
@@ -116,6 +119,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		}
 
 		this.renderData = Ext.apply(this.renderData||{}, r.getData());
+		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
 		this.renderData.path = this.path;
 		r = this.renderData;
 		if(!r.headline || !r.headline.getData){
@@ -159,6 +163,11 @@ Ext.define('NextThought.view.forums.Topic',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
+		if(this.publishStateEl){
+			this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
+			this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
+			this.record.addObserverForField(this, 'published', this.markAsPublished, this);
+		}
 
 		this.reflectFlagged(this.record);
 		this.listenForFlagChanges(this.record);
@@ -184,6 +193,21 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	onReady: function(){
 		console.debug('ready',arguments);
+	},
+
+
+	showPublishMenu: function(){
+		this.publishMenu.updateFromRecord(this.record);
+		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
+	},
+
+
+	markAsPublished: function(key, value){
+		var val = value ? 'public' : 'only me',
+			removeCls = value ? 'only me' : 'public';
+		this.publishStateEl.addCls(val);
+		this.publishStateEl.update(Ext.Array.map(val.split(' '),Ext.String.capitalize).join(' '));
+		this.publishStateEl.removeCls(removeCls);
 	},
 
 

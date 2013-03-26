@@ -17,8 +17,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
-			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}//flag?
@@ -89,7 +89,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		var h = this.record.get('headline'), me = this;
 		if(!h){return;}
 
-		this.setPublishState();
 		this.bodyEl.selectable();
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
@@ -107,6 +106,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
+		if( this.publishStateEl ){ this.setPublishState(); }
+
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 	},
@@ -119,12 +120,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	setPublishState: function(){
-		if(!this.record.isModifiable()){
-			this.publishStateEl.remove();
-			return;
-		}
-
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
 		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 	},

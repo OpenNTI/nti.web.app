@@ -30,8 +30,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
-			{ tag:'span', cls: 'state {publish-state:lowercase}', html: '{publish-state}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
+				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}
@@ -139,7 +139,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
-		this.setPublishState();
 
 		this.mon(this.navigationBarEl,'click',this.closePost,this);
 
@@ -156,6 +155,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
 		}
+
+		if( this.publishStateEl ){ this.setPublishState(); }
 
 		if( this.editEl ){
 			this.mon(this.editEl,'click',this.onEditPost,this);
@@ -350,12 +351,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	setPublishState: function(){
-		if(!this.record.isModifiable()){
-			this.publishStateEl.remove();
-			return;
-		}
-
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record});
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
 		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 	},
