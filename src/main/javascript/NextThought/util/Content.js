@@ -45,6 +45,13 @@ Ext.define('NextThought.util.Content',{
 			Ext.callback(failure);
 		}
 
+		//If we don't start with a pageInfo, which we have seen happen
+		//before, call the failure callback
+		if(!pageInfo || !pageInfo.isPageInfo){
+			console.error('Page info was not supplied', pageInfo);
+			Ext.callback(failure);
+		}
+
 		proxy.request({
 			ntiid: pageInfo.getId(),
 			jsonpUrl: pageInfo.getLink('jsonp_content'),

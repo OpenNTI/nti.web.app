@@ -12,6 +12,7 @@ Ext.define('NextThought.model.PageInfo', {
 		{ name: 'dataFilterPreference', type: 'auto' }
 	],
 
+	isPageInfo: true,
 
 	getSubContainerURL: function(rel,id){
 		var url = this.getLink(rel),
