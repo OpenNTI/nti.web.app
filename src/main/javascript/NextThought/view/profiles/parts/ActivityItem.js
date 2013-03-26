@@ -26,7 +26,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		commentsEl: '.comments',
 		editEl: '.reply-options .edit',
 		flagEl: '.reply-options .flag',
-		deleteEl: '.reply-options .delete'
+		deleteEl: '.reply-options .delete',
+		contextWrapEl: '.content-callout'
 	},
 
 	initComponent: function(){
@@ -57,7 +58,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
-		this.mon( this.contextEl, 'click', this.goToObject, this);
+		this.mon( this.contextWrapEl, 'click', this.goToObject, this);
 		this.mon( this.spacerEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
 
