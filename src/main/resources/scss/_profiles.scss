@@ -243,7 +243,8 @@
 
 
 		.blogged-event,
-		.transcriptsummary-event{
+		.transcriptsummary-event,
+		.discussion-event{
 			position: relative;
 
 			&::after {
@@ -322,7 +323,8 @@
 		}
 
 		.blogged-event,
-		.joined-event {
+		.joined-event,
+		.discussion-event {
 			margin-top: 20px;
 			background: $panel-background;
 			border: 0 solid #f2f2f2;
