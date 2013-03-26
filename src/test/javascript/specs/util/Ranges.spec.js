@@ -84,7 +84,7 @@ describe("RangeUtils tests", function() {
 		});
 	});
 
-    describe('Expand Range Get String', function() {
+    describe('Expand Range Get String', function(){
 
         var testBody;
 
