@@ -34,9 +34,6 @@ Ext.define('NextThought.controller.Navigation', {
 			'activity-preview-comment-blog':{
 				'navigate-to-blog': this.gotoBlog
 			},
-			'profile-forum-activity-item': {
-				'show-topic': this.goToForum
-			},
 
             'user-data-panel': {
                 'navigation-selected': this.navigate,
@@ -269,12 +266,6 @@ Ext.define('NextThought.controller.Navigation', {
 			location.hash = fragment;
 		}
 	},
-
-	goToForum: function(){
-		console.log('should navigate to a forum: ', arguments);
-		//TODO: To be filled in.
-	},
-
 
 	navigateAndScrollToSearchHit: function(ntiid, result, fragment){
 		function callback(reader){
