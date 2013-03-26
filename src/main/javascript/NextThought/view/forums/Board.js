@@ -26,7 +26,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 	headerTpl: Ext.DomHelper.createTemplate({
 		cls: 'header-container', cn: {
-			cls: 'header', cn:[
+			cls: 'forum-forum-list header', cn:[
 				{ cls: 'path', html: '{forumTitle} &nbsp;'}
 			]
 		}

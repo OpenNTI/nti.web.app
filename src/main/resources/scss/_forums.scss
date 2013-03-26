@@ -478,6 +478,7 @@
 
 
 #view-ctr > .blog-post.navigation-bar,
+#view-ctr > .forum-forum-list.header,
 #view-ctr > .forum-topic-list.header,
 #view-ctr > .forum-topic.navigation-bar {
 	@include forum-navigation;
