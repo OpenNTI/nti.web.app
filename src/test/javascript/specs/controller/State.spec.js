@@ -50,7 +50,7 @@ describe('State Controller Tests', function(){
 		var fragString;
 
 		function createFragString(parts){
-			return '!forums/'+parts.join('/');
+			return '#!forums/'+parts.join('/');
 		}
 
 		function getStateObject(parts, dontCheck){
