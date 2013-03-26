@@ -18,6 +18,7 @@ Ext.define('NextThought.view.forums.Editor',{
 				},{
 					cls: 'aux',
 					cn:[
+						{cls: 'action publish on', 'data-qtip': 'Publish State'},
 						{cls: 'tags'}
 					]
 				},{
@@ -56,7 +57,8 @@ Ext.define('NextThought.view.forums.Editor',{
 		saveEl: '.action.save',
 		titleEl: '.title',
 		footerEl: '.footer',
-		editorBodyEl: '.content'
+		editorBodyEl: '.content',
+		publishEl: '.action.publish'
 	},
 
 
@@ -163,7 +165,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
-		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body);
+		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.published);
 	},
 
 
