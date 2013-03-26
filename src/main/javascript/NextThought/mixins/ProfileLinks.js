@@ -22,8 +22,8 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 			//Dismiss the note-window before we navigate to the profile.
 			if(t){ this.up('note-window').destroy(); }
 
-			if(u && Ext.isFunction(u.goToProfile)){
-				u.goToProfile();
+			if(u && Ext.isFunction(u.getProfileUrl)){
+				this.fireEvent('change-hash', u.getProfileUrl());
 			}
 			else {
 				console.error('This (',this,') does not have a user object');

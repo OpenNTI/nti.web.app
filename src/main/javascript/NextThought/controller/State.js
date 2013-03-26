@@ -44,6 +44,9 @@ Ext.define('NextThought.controller.State', {
 		me.control({
 			'main-views': {
 				'activate-view': me.track
+			},
+			'*': {
+				'change-hash': me.changeHash
 			}
 		});
 		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
@@ -120,7 +123,7 @@ Ext.define('NextThought.controller.State', {
 						console.error('Why are we getting here?');
 						console.trace();
 					}
-					window.location.hash = url;
+					me.changeHash(url);
 				}
 			}
 		};
@@ -430,5 +433,13 @@ Ext.define('NextThought.controller.State', {
 	navigatePreviousPage: function(){
 		history.back();
 		return true;
+	},
+
+	changeHash: function(hash){
+		if(!hash || window.location.hash === hash){
+			return;
+		}
+		console.debug('Modifying window.location.hash', hash);
+		window.location.hash = hash;
 	}
 });

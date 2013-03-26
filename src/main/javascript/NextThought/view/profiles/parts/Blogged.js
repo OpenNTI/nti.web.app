@@ -90,8 +90,6 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 
 		fragment = u.getProfileUrl.apply(u,args);
 
-		if(location.hash !== fragment){
-			location.hash = fragment;
-		}
+		this.fireEvent('change-hash', fragment);
 	}
 });

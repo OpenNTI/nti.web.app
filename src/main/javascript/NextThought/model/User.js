@@ -80,11 +80,6 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
-	goToProfile: function(){
-		window.location.hash = this.getProfileUrl();
-	},
-
-
     save: function(ops){
         Ext.Ajax.request(Ext.apply({
             url: this.getLink('edit'),

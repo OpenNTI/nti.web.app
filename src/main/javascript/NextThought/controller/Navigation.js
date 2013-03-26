@@ -245,6 +245,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
+			state = app.getController('State'),
 			fragment,
 			args = [title],
 			pId = arguments.length > 1 ? postId : undefined,
@@ -265,8 +266,8 @@ Ext.define('NextThought.controller.Navigation', {
 			fragment = fragment + '?' + Ext.Object.toQueryString(ps);
 		}
 
-		if(location.hash !== fragment){
-			location.hash = fragment;
+		if(state.changeHash){
+			state.changeHash(fragment);
 		}
 	},
 

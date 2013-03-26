@@ -125,9 +125,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		console.debug('new url:'+url);
 
-		if(location.hash !== url){
-			location.hash = url;
-		}
+		this.fireEvent('change-hash', url);
 	},
 
 
