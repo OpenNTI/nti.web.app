@@ -270,5 +270,66 @@ describe("RangeUtils tests", function() {
             range.setEnd(txtNode2, 1);
             expect(TestRangeUtils.expandRangeGetString(range, document)).toEqual('<p>hello</p> world');
         });
+
+        it('Object Node Question', function(){
+            var nonTxtNode1 = document.createElement('object'),
+                nonTxtNode2 = document.createElement('div'),
+                txtNode = document.createTextNode('hello'),
+                range = document.createRange();
+
+            nonTxtNode2.appendChild(txtNode);
+            nonTxtNode2.setAttribute('class', 'naquestion');
+            nonTxtNode1.appendChild(nonTxtNode2);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+            expect(TestRangeUtils.expandRangeGetString(range, document)).toMatch(/^<div class="naquestion" id="ext-gen\d{4}">hello<[/]div>$/);
+        });
+
+        it('Object Node Non Question', function(){
+            var nonTxtNode1 = document.createElement('object'),
+                nonTxtNode2 = document.createElement('div'),
+                txtNode = document.createTextNode('hello'),
+                range = document.createRange();
+
+            nonTxtNode2.appendChild(txtNode);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+            expect(TestRangeUtils.expandRangeGetString(range, document)).toMatch(/^<object id="ext-gen\d{4}"><div>hello<[/]div><[/]object>$/);
+        });
+
+        it('Markup Enabled with Object', function(){
+            var nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('span'),
+                nonTxtNode3 = document.createElement('object'),
+                txtNode = document.createTextNode('hello'),
+                range = document.createRange();
+
+            nonTxtNode1.appendChild(txtNode);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.appendChild(nonTxtNode3);
+            nonTxtNode1.setAttribute('itemprop', 'nti-data-markupenabled');
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+            expect(TestRangeUtils.expandRangeGetString(range, document)).toMatch(/^<div itemprop="nti-data-markupenabled">hello<span><[/]span><[/]div>$/);
+        });
+
+        it('Markup Enabled without Object', function(){
+            var nonTxtNode1 = document.createElement('div'),
+                nonTxtNode2 = document.createElement('span'),
+                txtNode = document.createTextNode('hello'),
+                range = document.createRange();
+
+            nonTxtNode1.appendChild(txtNode);
+            nonTxtNode1.appendChild(nonTxtNode2);
+            nonTxtNode1.setAttribute('itemprop', 'nti-data-markupenabled');
+            testBody.appendChild(nonTxtNode1);
+            range.setStart(nonTxtNode1, 0);
+            range.setEnd(nonTxtNode1, 1);
+            expect(TestRangeUtils.expandRangeGetString(range, document)).toMatch(/^<div itemprop="nti-data-markupenabled">hello<span><[/]span><[/]div>$/);
+        });
     });
 });
