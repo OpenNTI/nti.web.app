@@ -2,6 +2,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	extend: 'Ext.Component',
 	alias: ['widget.profile-activity-communityheadlinetopic-item', 'widget.profile-forum-activity-item'],
 
+	mixins:{
+		topicActions: 'NextThought.mixins.ForumTopicLinks'
+	},
+
 	ui: 'activity',
 	cls: 'discussion-event',
 
@@ -16,6 +20,11 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			] }
 		]}
 	]),
+
+	constructor: function(){
+		this.callParent(arguments);
+		this.mixins.topicActions.constructor.call(this);
+	},
 
 	beforeRender: function(){
 		var me = this, rd, r = me.record,
@@ -36,16 +45,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 				me.renderTpl.overwrite(me.el,rd);
 			}
 		});
-	},
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.mon(this.el, 'click', this.clickHandler, this);
-	},
-
-	clickHandler: function(e){
-		console.log('fire navigate to forum event...');
-		this.fireEvent('show-topic', this.record);
 	}
 
 });

@@ -56,6 +56,9 @@ Ext.define('NextThought.controller.Navigation', {
 			'profile-activity *':{
 				'navigation-selected': this.navigate
 			},
+			'profile-forum-activity-item': {
+				'before-show-topic': this.beforeTopicShow
+			},
 			'notfound':{
 				'go-to-library': this.goToLibrary
 			},
@@ -266,6 +269,13 @@ Ext.define('NextThought.controller.Navigation', {
 			location.hash = fragment;
 		}
 	},
+
+
+	beforeTopicShow: function(){
+		console.log('implement beforeTopicShow...about to set the Forums View');
+		return this.setView('forums');
+	},
+
 
 	navigateAndScrollToSearchHit: function(ntiid, result, fragment){
 		function callback(reader){

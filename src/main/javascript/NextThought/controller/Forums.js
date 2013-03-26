@@ -298,21 +298,9 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showForumsView: function(){
-		//Some kind of cross controller event we can use instead? Or
-		//maybe we allow the nav controller to do this and we just build any
-		//needed subviews
-		var navController = app.getController('Navigation');
-		navController.setView('forums');
-	},
-
-
 	presentTopic: function(record, cb, eOpts){
 		var callback = Ext.isFunction(cb) ? cb : undefined;
-
 		console.log('should navigate to forum topic: ', record, callback);
-
-		this.showForumsView();
 	},
 
 
