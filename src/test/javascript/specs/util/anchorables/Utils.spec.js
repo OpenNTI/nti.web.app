@@ -291,7 +291,7 @@ describe("Anchor Utils", function() {
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false)).toEqual(txtNode1);
 		});
 
-		xit('Range of Nodes, start', function(){
+		it('Range of Nodes, start', function(){
 			var range = document.createRange(),
 				nonTxtNode1 = document.createElement('div'),
 				nonTxtNode2 = document.createElement('p'),
@@ -303,7 +303,7 @@ describe("Anchor Utils", function() {
 			range.setStart(nonTxtNode1, 0);
 			range.setEnd(nonTxtNode3, 0);
 
-			expect(Anchors.nodeThatIsEdgeOfRange(range, start).tagName).toEqual('P');
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('P');
 		});
 
 		it('Range of Nodes, end', function(){
