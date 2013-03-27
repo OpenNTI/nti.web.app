@@ -73,6 +73,10 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic nti-editor': {
 				'save': this.saveTopicComment
 			},
+			'search-result':{
+				'click-forum-comment': this.showForumSearchResult,
+				'click-forum-result': this.showForumSearchResult
+			},
 			'*': {
 				'show-topic': this.presentTopic
 			}
@@ -729,5 +733,13 @@ Ext.define('NextThought.controller.Forums', {
 				alert('Sorry, could not delete that');
 			}
 		});
+	},
+
+	//Search functions
+	showForumSearchResult: function(result, fragIdx){
+		var r = result.record;
+		this.presentTopic(r, function(success){
+			console.log('Do search highlighting here.');
+		}, this);
 	}
 });
