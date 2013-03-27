@@ -435,7 +435,7 @@ Ext.define('NextThought.controller.Forums', {
 		//or the root
 		function predicate(item, i){
 			var rec = item.record,
-				href = rec.get('href');
+			href = rec ? rec.get('href') : undefined;
 			return rec && href && toShowHref.indexOf(href) === 0;
 		}
 
