@@ -198,8 +198,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-
-
 	getObjectRaw: function (url, mime, forceMime, success, failure, scope){
 		var q = {}, headers = {};
 
@@ -268,7 +266,7 @@ Ext.define('NextThought.model.Service', {
 		//type from being cached and returned on a later request for the same object
 		//with a different Accept header.  In this case it is very important we get PageInfo
 		//objects back so request them at a special view to influence cache logic
-		url = this.appendTypeView(url, 'pageinfo+json');
+		//url = this.appendTypeView(url, 'pageinfo+json');
 
 		try{
 
