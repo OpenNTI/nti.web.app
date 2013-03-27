@@ -213,21 +213,6 @@
 			}
 		}
 
-		.comments {
-			padding: 0 0 0 40px;
-			font: normal 600 10px/40px $font;
-			color: $tertiary-grey;
-			text-transform: uppercase;
-			box-shadow: inset 0 1px 0 0 #fff;
-
-			&::after{
-				content: ' ';
-				position: absolute;
-				top: 14px; left: 16px;
-				background: $icons no-repeat;
-				@include sprite($icons,'activity-comment',$dimensions: true);
-			}
-		}
 
 		.loading-bar{
 			margin-top: 40px;
@@ -380,10 +365,9 @@
 			z-index: 1;
 			border-bottom-width: 0;
 
+			.content-callout,
 			& + .note-replies,
-			& + .note-replies + .comments,
-			.item-spacer,
-			.content-callout{
+			& + .note-replies + .respond {
 				position: relative;
 				border: 1px solid #eaeaea;
 				background: $panel-background;
@@ -391,11 +375,32 @@
 			}
 
 			& + .note-replies,
-			& + .note-replies + .comments{
+			& + .note-replies + .respond{
+				border-color: #f0f0f0;
 				border-top-width: 0;
 				top: -1px;
 				z-index: 0;
 			}
+
+			& + .note-replies + .respond{
+				box-shadow: inset 0 1px 0 0 white;
+				padding: 10px;
+				& > div {
+					background: white;
+					border: 1px solid #dcdcdc;
+					color: #dcdcdc;
+					font: italic 400 14px/37px $font;
+					padding: 0 10px;
+					.editor {
+						margin-bottom: 10px;
+					}
+				}
+			}
+
+			&.editor-active ~ .respond {
+				.reply-options { display: none; }
+			}
+
 
 			.content-callout {
 				padding: 16px 36px 0px 16px;
@@ -485,10 +490,6 @@
 				}
 			}
 
-			&.editor-active {
-				.item .reply-options { display: none; }
-				.item.reveal { top: 100px; }//don't animate down when the editor is active.
-			}
 
 			&.deleted-reply{
 				.item-spacer{
@@ -555,7 +556,7 @@
 			}
 
 
-			.body,.reply-options{ clear: both; }
+			.body,.foot{ clear: both; }
 
 			.body{
 				margin: 20px 0;
@@ -564,23 +565,24 @@
 				@include text-pre-wrap;
 			}
 
-			.reply-options {
+
+			.foot {
+				clear: both;
 				opacity: 1;
-				color: #bdbdbd;
 				padding: 0;
-				border: 1px solid #ececec;
+				color: $primary-blue;
 
 				div {
-					font: italic 400 14px/40px $font;
+					font: normal 400 14px/20px $font;
 					cursor: pointer;
 					display: inline-block;
-					height: 40px;
+					height: 20px;
 					opacity: 0.75;
 					padding: 0 0 0 0.5em;
 					margin: 0;
 					&:hover { opacity: 1; &::after{opacity: 0.75;} }
 					&::after{
-						font: italic 600 14px/40px $font;
+						font: normal 600 14px/20px $font;
 						position: static;
 						content: '\00B7';
 						vertical-align: middle;
@@ -598,7 +600,12 @@
 					}
 				}
 			}
+
+			.respond {
+
+			}
 		}
+
 
 		.profile-activity-reply-item {
 			position: relative;
@@ -698,7 +705,6 @@
 					}
 				}
 
-				@include editor;
 				.editor {
 					.main{
 						padding-left: 13px;

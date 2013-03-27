@@ -26,9 +26,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		locationIcon: '.icon',
 		itemEl: '.item',
 		commentsEl: '.comments',
-		editEl: '.reply-options .edit',
-		flagEl: '.reply-options .flag',
-		deleteEl: '.reply-options .delete',
+		flagEl: '.foot .flag',
+		deleteEl: '.foot .delete',
 		contextWrapEl: '.content-callout'
 	},
 
@@ -64,7 +63,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
-		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.contextWrapEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
 
@@ -111,7 +109,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	clickedRevealAllReplies: function(){
 		this.mun( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		if(!this.commentsEl){ return; }
-		this.commentsEl.remove();
 		delete this.commentsEl;
 
 		this.shouldShowReplies();
@@ -175,14 +172,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 
 		me.flagEl.setVisibilityMode(D);
-		me.editEl.setVisibilityMode(D);
 		me.deleteEl.setVisibilityMode(D);
 
 		if(isMe(me.record.get('Creator'))){
 			me.flagEl.hide();
 		}
 		else {
-			me.editEl.hide();
 			me.deleteEl.hide();
 			me.flagEl.addCls('last');
 		}
@@ -342,18 +337,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					]},
 					{ cls: 'body' },
 					{
-						cls: 'respond',
+						cls: 'foot',
 						cn: [
-							{
-								cls: 'reply-options',
-								cn: [
-									{ cls: 'reply', html: 'Reply' },
-									{ cls: 'edit', html: 'Edit' },
-									{ cls: 'flag', html: 'Report' },
-									{ cls: 'delete', html: 'Delete' }
-								]
-							},
-							TemplatesForNotes.getEditorTpl()
+							{ cls: 'comments', 'data-label': ' Comments', html: ' ' },
+							{ cls: 'flag', html: 'Report' },
+							{ cls: 'delete', html: 'Delete' }
 						]
 					}]
 				}
@@ -363,7 +351,16 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			cls: 'note-replies',
 			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
 		},{
-			cls: 'comments', 'data-label': ' Comments', html: ' '
+			cls: 'respond', cn: {
+			cn: [
+				{
+					cls: 'reply-options',
+					cn: [
+						{ cls: 'reply', html: 'Add a comment' }
+					]
+				},
+				TemplatesForNotes.getEditorTpl()
+			]}
 		}
 	]);
 });
