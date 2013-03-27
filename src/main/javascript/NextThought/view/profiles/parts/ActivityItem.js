@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	extend: 'NextThought.view.annotations.note.Panel',
 	requires: [
-		'NextThought.util.Content',
+		'NextThought.util.Content'
 	],
 	alias: [
 		'widget.profile-activity-item',
