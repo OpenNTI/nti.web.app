@@ -9,8 +9,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		'widget.profile-activity-default-item',
 		'widget.profile-activity-note-item'
 	],
+
+
 	defaultType: 'profile-activity-item-reply',
 	autoFillInReplies: false,
+
 
 	renderSelectors: {
 		avatar: '.avatar',
@@ -21,7 +24,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		contextEl: '.context',
 		subjectEl: '.subject',
 		locationIcon: '.icon',
-		spacerEl: '.item-spacer',
 		itemEl: '.item',
 		commentsEl: '.comments',
 		editEl: '.reply-options .edit',
@@ -29,6 +31,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		deleteEl: '.reply-options .delete',
 		contextWrapEl: '.content-callout'
 	},
+
 
 	initComponent: function(){
 		if(!this.record || !this.record.isModel){
@@ -43,23 +46,26 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.maybeFillIn();
 	},
 
+
 	updateFromRecord: function(){
 		this.callParent(arguments);
-		this.syncFloatingHeight();
 	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
+
 		if(this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
+
 		if(this.replyButton.dom){
 			this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		}
+
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.editEl, 'click', this.onEdit, this);
 		this.mon( this.contextWrapEl, 'click', this.goToObject, this);
-		this.mon( this.spacerEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
 
 		//NOTE: We run into a case where a reply to one of our replies doesn't trigger opening the reply editor.
@@ -71,15 +77,18 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		});
 	},
 
+
 	addAdditionalRecordListeners: function(record){
 		this.callParent(arguments);
 		this.mon( record, 'convertedToPlaceholder', this.destroy, this);
 	},
 
+
 	removeAdditionalRecordListeners: function(record){
 		this.callParent(arguments);
 		this.mun( record, 'convertedToPlaceholder', this.destroy, this);
 	},
+
 
 	onBeforeAdd: function(cmp){
 		this.callParent(arguments);
@@ -90,27 +99,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 	},
 
-	enableRevealSlide: function(){
-		if(this.slideEnabled){return;}
-		this.slideEnabled = true;
-
-		var i = this.itemEl, t;
-
-		function min(){
-			clearTimeout(t);
-			i.addCls('reveal');
-		}
-		function mout(){
-			clearTimeout(t);
-			t = setTimeout(function(){
-				if(i){ i.removeCls('reveal'); }
-			},500);
-		}
-
-		this.contextEl.hover(min,mout);
-		this.spacerEl.hover(min,mout);
-
-	},
 
 	updateCount: function(){
 		if(this.commentsEl){
@@ -129,6 +117,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		this.shouldShowReplies();
 	},
 
+
 	shouldShowReplies: function(){
 		this.suspendLayouts();
 		this.removeAll();
@@ -140,6 +129,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			Ext.resumeLayouts(true);
 		}, 1, this);
 	},
+
 
 	onDelete: function(){
 		var me = this;
@@ -162,12 +152,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 
 	isExpanded: function(){ return !this.commentsEl; },
-
-
-	syncFloatingHeight: function(){
-		var h = this.itemEl.getHeight() - 1;//don't let the bottom peek through the floating part.
-		this.spacerEl.setHeight(h);
-	},
 
 
 	maybeFillIn: function(){
@@ -209,14 +193,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			me.contextEl.mask('Loading...');
 			me.loadContext(function(){
 				me.contextEl.unmask();
-				me.syncFloatingHeight();
-
-				var c = me.context.getHeight(),
-					b = me.contextEl.getHeight();
-
-				//if(c > b || me.context.select('img').getCount() > 0){
-					//me.enableRevealSlide();
-				//}
 			});
 		}
 	},
@@ -225,14 +201,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	activateReplyEditor: function(){
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
-		Ext.defer(this.syncFloatingHeight,1,this);
 	},
 
 
 	deactivateReplyEditor: function(){
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
-		Ext.defer(this.syncFloatingHeight,1,this);
 	},
 
 
@@ -271,13 +245,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		r.loadReplies(cb,me,undefined,{sortOn: 'CreatedTime', sortOrder: 'descending'});
 	},
 
-	setContent: function(){
-		var me = this;
-		me.callParent(arguments);
-		me.noteBody.select('img').on('load',function(){
-			me.syncFloatingHeight();
-		});
-	},
 
 	loadContext: function(fin){
 		var me = this,
@@ -356,7 +323,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 						{ cls: 'context', cn: [{tag: 'canvas'},{cls: 'text'}] }
 					]}
 				]},
-				{ cls:'item-spacer', html: 'Reveal more' },
 				{ cls:'item', cn:[
 					{ cls: 'avatar' },
 					{ cls: 'controls', cn: [

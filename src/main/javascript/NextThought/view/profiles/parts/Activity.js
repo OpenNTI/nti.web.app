@@ -78,8 +78,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			sortOrder: 'descending',
 			exclude: Ext.Array.map([
 				'redaction',
-				//'transcriptsummary',
 				'bookmark',
+				'forums.CommunityHeadlineTopic',
 				'forums.PersonalBlogComment',
 				'assessment.AssessedQuestion'
 			],makeMime).join(',')

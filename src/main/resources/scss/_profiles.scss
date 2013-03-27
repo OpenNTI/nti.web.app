@@ -243,8 +243,7 @@
 
 
 		.blogged-event,
-		.transcriptsummary-event,
-		.discussion-event{
+		.transcriptsummary-event {
 			position: relative;
 
 			&:hover{
@@ -321,8 +320,7 @@
 		}
 
 		.blogged-event,
-		.joined-event,
-		.discussion-event {
+		.joined-event {
 			margin-top: 20px;
 			background: $panel-background;
 			border: 0 solid #f2f2f2;
@@ -376,7 +374,7 @@
 			}
 		}
 
-		.profile-activity-item{
+		.profile-activity-item {
 			margin: 40px 0 0;
 			padding: 0;
 			z-index: 1;
@@ -387,25 +385,9 @@
 			.item-spacer,
 			.content-callout{
 				position: relative;
-				margin: 0 3px;
 				border: 1px solid #eaeaea;
 				background: $panel-background;
 				position: relative;
-				overflow: hidden;
-			}
-
-			.content-callout {
-				&:hover{
-					&::after {
-						content: '';
-						position: absolute;
-						top: 38px;
-						right: 20px;
-						opacity: 1;
-						background: $icons no-repeat;
-						@include sprite($icons,'arrow-next',$dimensions: true);
-					}
-				}
 			}
 
 			& + .note-replies,
@@ -419,6 +401,30 @@
 				padding: 16px 36px 0px 16px;
 				border-bottom-width: 0;
 				cursor: pointer;
+				border-color: #eaeaea;
+				background: white;
+
+				&:hover{
+					&::after {
+						content: '';
+						position: absolute;
+						top: 38px;
+						right: 20px;
+						opacity: 1;
+						background: $icons no-repeat;
+						@include sprite($icons,'arrow-next',$dimensions: true);
+					}
+				}
+
+				&::before {
+					content: '';
+					position: absolute;
+					bottom: -1px;
+					left: 90px;
+					z-index: 20;
+					background: $elements no-repeat;
+					@include sprite($elements,'up-border-arrow',$dimensions: true);
+				}
 
 				.icon {
 					float: left;
@@ -484,22 +490,6 @@
 				.item.reveal { top: 100px; }//don't animate down when the editor is active.
 			}
 
-			.item-spacer {
-				border-width: 0 1px;
-				min-height: 205px;
-				padding-left: 85px;
-				cursor: pointer;
-				text-transform: uppercase;
-				font: normal 600 10px/20px $font;
-				color: $primary-blue;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				&:hover{
-					text-decoration: underline;
-				}
-			}
-
 			&.deleted-reply{
 				.item-spacer{
 					min-height: 0;
@@ -510,16 +500,15 @@
 			}
 
 			.item {
-				&.reveal { top: 120px; }
-				@include experimental(transition, top 0.7s ease);
-				position: absolute;
+				//position: absolute;
 				background: white;
 				left: 0; right: 0;
 				top: 100px;
 				z-index: 2;
-				border: 1px solid rgba(223, 223, 223, 1);
-				box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05),
-							0 -2px 4px -1px rgba(30, 30, 30, 0.05);
+				border: 1px solid #eaeaea;
+				border-top-color: #f0f0f0;
+				border-bottom-color: #ececec;
+				box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05);
 				padding: 0 20px 20px;
 
 				@include like-and-favorite;
@@ -579,7 +568,7 @@
 				opacity: 1;
 				color: #bdbdbd;
 				padding: 0;
-				border: 1px solid #dcdcdc;
+				border: 1px solid #ececec;
 
 				div {
 					font: italic 400 14px/40px $font;
