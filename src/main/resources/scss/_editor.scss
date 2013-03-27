@@ -164,7 +164,7 @@ span.tab{
 							content: ' ';
 							overflow: hidden;
 							position: absolute;
-							top: 15px; right: 4px;
+							top: 15px; right: 0;
 							background: $elements no-repeat;
 							@include sprite($elements,'share-drop-arrow',$dimensions: true);
 						}
