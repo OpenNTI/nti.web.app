@@ -272,7 +272,7 @@
 			overflow: hidden;
 
 
-			&::after{
+			&:hover::after{
 				top: 26px;
 			}
 
@@ -643,6 +643,10 @@
 					font: normal 400 14px $font;
 					vertical-align: text-bottom;
 					color: $primary-blue;
+					&.over {
+						text-decoration: underline;
+						cursor: pointer;
+					}
 				}
 			}
 
