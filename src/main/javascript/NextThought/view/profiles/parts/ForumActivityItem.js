@@ -60,9 +60,22 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	]),
 
 
-	constructor: function(){
-		this.callParent(arguments);
-		this.mixins.topicActions.constructor.call(this);
+	renderSelectors: {
+		avatarEl: '.avatar',
+		nameEl: '.name',
+
+		liked: '.controls .like',
+		favorites: '.controls .favorite',
+		favoritesSpacer: '.controls .favorite-spacer',
+
+		pathEl: '.path',
+		subjectEl: '.subject',
+		itemEl: '.item',
+
+		commentsEl: '.comments',
+
+		flagEl: '.foot .flag',
+		deleteEl: '.foot .delete'
 	},
 
 	beforeRender: function(){
@@ -81,7 +94,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			rd.Creator = u.getName();
 			if(me.rendered){
 				//oops...we resolved later than the render...update elements
-				console.debug('TODO: update elements');
+				me.avatarEl.setStyle({backgroundImage:'url('+rd.avatarURL+');'});
+				me.nameEl.update(rd.Creator);
 			}
 		});
 	}
