@@ -121,7 +121,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			this.fireEvent('pop-view', this);
 		}
 		else if(e.getTarget('.new-topic')){
-			this.fireEvent('new-topic', this, this.record);
+			this.fireEvent('new-topic', this);
 		}
 	},
 

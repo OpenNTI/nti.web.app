@@ -62,7 +62,8 @@ Ext.define('NextThought.controller.Forums', {
 				'select':this.loadTopic
 			},
 			'forums-topic': {
-				'delete-post': this.deleteObject
+				'delete-post': this.deleteObject,
+				'edit-topic':this.newTopic
 			},
 			'forums-topic-editor':{
 				'save-post': this.saveTopicPost
@@ -619,7 +620,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	newTopic: function(cmp, forumRecord){
-		this.getForumViewContainer().add({xtype:'forums-topic-editor'});
+		this.getForumViewContainer().add({xtype:'forums-topic-editor', record: forumRecord});
 	},
 
 

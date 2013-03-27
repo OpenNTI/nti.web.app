@@ -330,7 +330,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	onEditPost: function(e){
 		e.stopEvent();
-		this.fireEvent('show-post',this.record.get('ID'),'edit');
+		this.fireEvent('edit-topic', this, this.record);
 	},
 
 
