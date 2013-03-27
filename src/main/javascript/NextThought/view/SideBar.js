@@ -103,13 +103,14 @@ Ext.define('NextThought.view.SideBar',{
 			up = 100,
 			down = h - this.gripper.getHeight();
 
+		clearTimeout(this.syncHeight);
 		if(!this.host.isVisible()){
 			animate = true;
 			size = {height: h-100};
 			y = (this.getPopState()? up:down)+1;
 			x -= 10;
 			if(!this.getPopState()){
-				Ext.defer(this.setHeight,1000,this,[27]);
+				this.syncHeight = Ext.defer(this.setHeight,1000,this,[27]);
 			}
 		}
 
