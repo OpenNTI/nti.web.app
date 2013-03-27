@@ -225,7 +225,6 @@
 			right: 33px;
 		}
 
-		@include editor;
 		.editor {
 			.main{
 				padding-left: 13px;
@@ -718,7 +717,6 @@
 				font-weight: 400;
 			}
 
-			@include editor;
 			.editor {
 				.main{
 					padding-left: 13px;

@@ -294,6 +294,8 @@ span.tab{
 	}
 }
 
+@include editor();
+
 .x-component-editor {
 	@include editor(true);
 }
