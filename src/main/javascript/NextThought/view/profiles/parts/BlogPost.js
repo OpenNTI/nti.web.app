@@ -175,8 +175,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.mon(this.replyLinkEl,'click',this.showEditor,this);
 		this.mon(this.editor,{
 			scope: this,
-			'activated-editor':Ext.bind(box.hide,box),
-			'deactivated-editor':Ext.bind(box.show,box),
+			'activated-editor':Ext.bind(box.hide,box,[false]),
+			'deactivated-editor':Ext.bind(box.show,box,[false]),
 			'no-body-content': function(editor,bodyEl){
 				editor.markError(bodyEl,'You need to type something');
 				return false;

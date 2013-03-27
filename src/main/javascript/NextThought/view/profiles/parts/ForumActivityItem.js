@@ -5,6 +5,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		'widget.profile-forum-activity-item'
 	],
 
+	requires: [
+		'NextThought.editor.Editor'
+	],
+
 	mixins:{
 		topicActions: 'NextThought.mixins.ForumTopicLinks'
 	},
@@ -37,7 +41,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 					{
 						cls: 'foot',
 						cn: [
-							{ cls: 'comments', 'data-label': ' Comments', html: ' ' },
+							{ cls: 'comments', 'data-label': ' Comments',
+								html: '{PostCount} Comment{[values.PostCount!=1?\'s\':\'\']}' },
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
 						]
@@ -75,7 +80,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		commentsEl: '.comments',
 
 		flagEl: '.foot .flag',
-		deleteEl: '.foot .delete'
+		deleteEl: '.foot .delete',
+		replyEl: '.reply',
+		replyBoxEl: '.respond > div',
+		respondEl: '.respond'
 	},
 
 
@@ -108,7 +116,32 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		var box = this.replyBoxEl;
 
+
+		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.respondEl});
+
+		this.mon(this.replyEl,'click',this.showEditor,this);
+
+		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		this.mon(this.editor,{
+			scope: this,
+			'activated-editor':Ext.bind(box.hide,box,[false]),
+			'deactivated-editor':Ext.bind(box.show,box,[false]),
+			'no-body-content': function(editor,bodyEl){
+				editor.markError(bodyEl,'You need to type something');
+				return false;
+			}
+		});
+
+	},
+
+
+	showEditor: function(){
+		this.editor.reset();
+		this.editor.activate();
+		this.editor.focus(true);
 	},
 
 
