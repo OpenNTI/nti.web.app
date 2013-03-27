@@ -175,6 +175,10 @@ Ext.define('NextThought.controller.Forums', {
 			toLoad.push([stackOrder[i],state[stackOrder[i]]]);
 		}
 
+		if(Ext.isEmpty(toLoad)){
+			return;
+		}
+
 		this.pushViews(getBaseUrl(c.peek().record),toLoad, null, null, true);
 	},
 
