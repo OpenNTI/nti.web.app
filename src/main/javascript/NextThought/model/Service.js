@@ -232,7 +232,8 @@ Ext.define('NextThought.model.Service', {
 		//type from being cached and returned on a later request for the same object
 		//with a different Accept header.  So request a special url by type that
 		//is safe to caching
-		url = this.appendTypeView(url, 'link+json');
+		//url = this.appendTypeView(url, 'link+json');
+		url = this.urlWithQueryParams(url, {bust: 'link+json'});
 
 		try{
 			//lookup step
@@ -276,7 +277,8 @@ Ext.define('NextThought.model.Service', {
 		//type from being cached and returned on a later request for the same object
 		//with a different Accept header.  So request a special url by type that
 		//is safe to caching
-		url = this.appendTypeView(url, 'pageinfo+json');
+		//url = this.appendTypeView(url, 'pageinfo+json');
+		url = this.urlWithQueryParams(url, {bust: 'pageinfo+json'});
 
 
 		try{
