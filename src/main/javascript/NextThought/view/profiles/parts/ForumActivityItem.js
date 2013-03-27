@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		{
 			cls: 'topic profile-activity-item',
 			cn:[
-				{ cls: 'path' },
+				{ cls: 'path', html:'forums / {board} / {forum}' },
 				{ cls:'item', cn:[
 					{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
 					{ cls: 'controls', cn: [
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 							{tag: 'span', cls: 'shared-to link', html: 'Private'}
 						]}
 					]},
-					{ cls: 'body' },
+					{ cls: 'body', html: '{body}' },
 					{
 						cls: 'foot',
 						cn: [
@@ -78,15 +78,18 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		deleteEl: '.foot .delete'
 	},
 
+
 	beforeRender: function(){
 		var me = this, rd, r = me.record,
+			h = r.get('headline'),
 			username = me.record.get('Creator');
 
 		me.callParent(arguments);
 
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
-		rd.headline = rd.headline.getData();
-		rd.date = Ext.Date.format(r.get('headline').get('CreatedTime'),'F j, Y');
+		rd.headline = h.getData();
+		rd.date = Ext.Date.format(h.get('CreatedTime'),'F j, Y');
+		h.compileBodyContent(me.setBody,me);
 
 		UserRepository.getUser(username, function(u){
 			me.user = u;
@@ -98,6 +101,23 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 				me.nameEl.update(rd.Creator);
 			}
 		});
+
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+
+	},
+
+
+	setBody: function(text){
+		if(!this.rendered){
+			this.renderData.body = text;
+			return;
+		}
+		this.bodyEl.update(text);
 	}
 
 });

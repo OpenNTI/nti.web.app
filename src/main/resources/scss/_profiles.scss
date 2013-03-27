@@ -365,6 +365,7 @@
 			z-index: 1;
 			border-bottom-width: 0;
 
+			.path,
 			.content-callout,
 			& + .note-replies,
 			& + .note-replies + .respond,
@@ -406,14 +407,7 @@
 				.reply-options { display: none; }
 			}
 
-
 			.content-callout {
-				padding: 16px 36px 0px 16px;
-				border-bottom-width: 0;
-				cursor: pointer;
-				border-color: #eaeaea;
-				background: white;
-
 				&:hover{
 					&::after {
 						content: '';
@@ -435,6 +429,15 @@
 					background: $elements no-repeat;
 					@include sprite($elements,'up-border-arrow',$dimensions: true);
 				}
+			}
+
+			.path,
+			.content-callout {
+				padding: 16px 36px 0px 16px;
+				border-bottom-width: 0;
+				cursor: pointer;
+				border-color: #eaeaea;
+				background: white;
 
 				.icon {
 					float: left;
@@ -495,6 +498,12 @@
 				}
 			}
 
+			.path {
+				color: $tertiary-grey;
+				text-transform: uppercase;
+				padding: 0 20px;
+				font: normal 700 10px/40px $font;
+			}
 
 			&.deleted-reply{
 				.item-spacer{
@@ -605,10 +614,6 @@
 						display: none;
 					}
 				}
-			}
-
-			.respond {
-
 			}
 		}
 
