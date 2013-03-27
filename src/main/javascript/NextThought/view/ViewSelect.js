@@ -116,5 +116,31 @@ Ext.define('NextThought.view.ViewSelect', {
 		if(!$AppConfig.service.canFriend()){
 			this.down('[title=Contacts]').hide();
 		}
+
+		if(this.canHaveForum() !== true){
+			this.down('[title=Forums]').hide();
+		}
+
+		this.mon($AppConfig.userObject, 'preResolvingUsersComplete', this.shouldShowForumTab, this);
+	},
+
+	canHaveForum: function(){
+		return $AppConfig.service.canHaveForum();
+	},
+
+	shouldShowForumTab: function(){
+		function makeUrl(c){ return c && c.getLink('DiscussionBoard'); }
+
+		var communities = $AppConfig.userObject.getCommunities(),
+			urls = Ext.Array.map(communities,makeUrl);
+
+		// Because we don't have a way for users to create boards,
+		// therefore, if a user isn't in a community with at least one discussionBoard, then don't show the tab.
+		// This last condition will need to be revisited as we go.
+		if(Ext.isEmpty(urls)){
+			this.down('[title=Forums]').hide();
+		}else{
+			if(this.canHaveForum()){ this.down('[title=Forums]').show(); }
+		}
 	}
 });

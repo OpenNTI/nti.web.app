@@ -3,9 +3,10 @@ Ext.define('NextThought.proxy.reader.Base', {
 	alias : 'reader.nti-base',
 
 	preresolveUserList: function(record, field){
-		var users = (record.raw || {})[field];
+		var users = (record.raw || {})[field], userCount;
 
 		if(!Ext.isEmpty(users)){
+			userCount = users.length;
 			//console.debug('Need to preresolve userlist for' , record.getId(), field, users);
 			Ext.Array.each(users, function(user){
 				//User could be a string, model, or obj
@@ -17,7 +18,13 @@ Ext.define('NextThought.proxy.reader.Base', {
 					console.warn("WARNING: Could not handle Object: ", user);
 				}
 				else{
-					UserRepository.getUser(name);
+					UserRepository.getUser(name, function(){
+						userCount--;
+						if(userCount === 0){
+							record.fireEvent('preResolvingUsersComplete', record);
+//							console.debug('Fired preResolvingUsersComplete event for ', record);
+						}
+					});
 				}
 			});
 		}

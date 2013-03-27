@@ -371,6 +371,10 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
+	canHaveForum: function(){
+		return this.hasCapability('nti.platform.forums.communityforums');
+	},
+
 
 	//Right now the cabability isn't enough so hack some crap in client
 	//side which I'm sure will break terribly at some point.  Logic is
