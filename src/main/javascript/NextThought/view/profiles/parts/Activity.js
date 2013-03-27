@@ -79,7 +79,6 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			exclude: Ext.Array.map([
 				'redaction',
 				'bookmark',
-				'forums.CommunityHeadlineTopic',
 				'forums.PersonalBlogComment',
 				'assessment.AssessedQuestion'
 			],makeMime).join(',')

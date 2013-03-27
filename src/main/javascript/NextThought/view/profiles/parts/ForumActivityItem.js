@@ -1,25 +1,64 @@
 Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
-	extend: 'Ext.Component',
-	alias: ['widget.profile-activity-communityheadlinetopic-item', 'widget.profile-forum-activity-item'],
+	extend: 'Ext.container.Container',
+	alias: [
+		'widget.profile-activity-communityheadlinetopic-item',
+		'widget.profile-forum-activity-item'
+	],
 
 	mixins:{
 		topicActions: 'NextThought.mixins.ForumTopicLinks'
 	},
 
 	ui: 'activity',
-	cls: 'discussion-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
-		{ cls: 'meta', cn:[
-			{ cls: 'title', html: '{headline.title}' },
-			{ cls: 'counts', cn:[
-				{ tag: 'span', cls:'link comment-count', html: '{PostCount} Comment{[values.PostCount===1 ? "" : "s"]}', 'data-target':'comments' },
-				{ tag: 'span', cls:'link likes', html: '{LikeCount} Like{[values.LikeCount===1 ? "" : "s"]}' },
-				{ tag: 'span', html: '{date}'}
-			] }
-		]}
+		{
+			cls: 'topic profile-activity-item',
+			cn:[
+				{ cls: 'path' },
+				{ cls:'item', cn:[
+					{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
+					{ cls: 'controls', cn: [
+						{ cls: 'favorite-spacer' },
+						{ cls: 'favorite' },
+						{ cls: 'like' }
+					]},
+					{ cls: 'meta', cn: [
+						{ cls: 'subject', html: '{title}' },
+						{ cls: 'stamp', cn: [
+							{tag: 'span', cls: 'name link', html: '{Creator}'},
+							{tag: 'span', cls: 'separator', html: ' '},
+							{tag: 'span', cls: 'time', html:'{date}'},
+							{tag: 'span', cls: 'separator', html: ' &middot; '},
+							{tag: 'span', cls: 'shared-to link', html: 'Private'}
+						]}
+					]},
+					{ cls: 'body' },
+					{
+						cls: 'foot',
+						cn: [
+							{ cls: 'comments', 'data-label': ' Comments', html: ' ' },
+							{ cls: 'flag', html: 'Report' },
+							{ cls: 'delete', html: 'Delete' }
+						]
+					}]
+				}
+			]
+		},{
+			id: '{id}-body',
+			cls: 'topic-replies',
+			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+		},{
+			cls: 'respond', cn: {
+			cn: [ {
+				cls: 'reply-options',
+				cn: [
+					{ cls: 'reply', html: 'Add a comment' }
+				]
+			} ]}
+		}
 	]),
+
 
 	constructor: function(){
 		this.callParent(arguments);
@@ -39,10 +78,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		UserRepository.getUser(username, function(u){
 			me.user = u;
 			rd.avatarURL = u.get('avatarURL');
-			rd.name = u.getName();
+			rd.Creator = u.getName();
 			if(me.rendered){
-				//oops...we resolved later than the render...re-render
-				me.renderTpl.overwrite(me.el,rd);
+				//oops...we resolved later than the render...update elements
+				console.debug('TODO: update elements');
 			}
 		});
 	}

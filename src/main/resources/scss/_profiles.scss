@@ -367,7 +367,9 @@
 
 			.content-callout,
 			& + .note-replies,
-			& + .note-replies + .respond {
+			& + .note-replies + .respond,
+			& + .topic-replies,
+			& + .topic-replies + .respond {
 				position: relative;
 				border: 1px solid #eaeaea;
 				background: $panel-background;
@@ -375,13 +377,16 @@
 			}
 
 			& + .note-replies,
-			& + .note-replies + .respond{
+			& + .note-replies + .respond,
+			& + .topic-replies,
+			& + .topic-replies + .respond{
 				border-color: #f0f0f0;
 				border-top-width: 0;
 				top: -1px;
 				z-index: 0;
 			}
 
+			& + .topic-replies + .respond,
 			& + .note-replies + .respond{
 				box-shadow: inset 0 1px 0 0 white;
 				padding: 10px;
@@ -549,6 +554,7 @@
 					font: normal 300 32px/34px $font;
 				}
 
+				.subject:empty,
 				.subject.no-subject{
 					display: none;
 				}
