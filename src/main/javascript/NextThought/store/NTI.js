@@ -7,6 +7,9 @@ Ext.define('NextThought.store.NTI',{
 	autoLoad: false,
 	proxy: {
 		type: 'rest',
+		limitParam: 'batchSize',
+		pageParam: undefined,
+		startParam: 'batchStart',
 		reader: {
 			type: 'nti',
 			root: 'Items'
@@ -15,6 +18,7 @@ Ext.define('NextThought.store.NTI',{
 			'Accept': 'application/vnd.nextthought.collection+json'
 		}
 	},
+
 
 	constructor: function(){
 		var r = this.callParent(arguments);

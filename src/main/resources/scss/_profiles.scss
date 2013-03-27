@@ -518,8 +518,7 @@
 			.item {
 				//position: absolute;
 				background: white;
-				left: 0; right: 0;
-				top: 100px;
+				position: relative;
 				z-index: 2;
 				border: 1px solid #eaeaea;
 				border-top-color: #f0f0f0;
@@ -622,6 +621,7 @@
 		.profile-activity-reply-item {
 			position: relative;
 			padding: 25px 0 0 20px;
+			min-height: 100px;
 			@include like-and-favorite;
 
 			.avatar {

@@ -214,7 +214,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			//Set comments count
 			me.commentsEl.update( count + me.commentsEl.getAttribute('data-label'));
 			if(count === 0 || count === 1){
-				me.commentsEl.remove();
 				delete me.commentsEl;
 			}
 

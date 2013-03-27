@@ -13,13 +13,17 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		topicActions: 'NextThought.mixins.ForumTopicLinks'
 	},
 
+	defaultType: 'profile-forum-activity-item-reply',
 	ui: 'activity',
+
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'topic profile-activity-item',
 			cn:[
-				{ cls: 'path', html:'forums / {board} / {forum}' },
+				{ cls: 'path', html:'forums / {board} / {forum}' },//this will be reworked... it will be a set of spans and the "/" will be a css element.
 				{ cls:'item', cn:[
 					{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
 					{ cls: 'controls', cn: [
@@ -76,6 +80,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		pathEl: '.path',
 		subjectEl: '.subject',
 		itemEl: '.item',
+		messageBodyEl: '.body',
 
 		commentsEl: '.comments',
 
@@ -90,7 +95,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	beforeRender: function(){
 		var me = this, rd, r = me.record,
 			h = r.get('headline'),
-			username = me.record.get('Creator');
+			username = me.record.get('Creator'),
+			store;
 
 		me.callParent(arguments);
 
@@ -110,6 +116,31 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			}
 		});
 
+		store = NextThought.store.NTI.create({
+			storeId: r.get('Class')+'-'+r.get('ID')+'-activity-view',
+			url: r.getLink('contents'),
+			pageSize: 1
+		});
+
+
+		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, {
+			sortOn: 'lastModified',
+			sortOrder: 'descending'
+		});
+
+
+		store.on('load',this.fillInReplies,this);
+		if(rd.PostCount >0){
+			store.load();
+		}
+	},
+
+
+	fillInReplies: function(s,recs){
+		this.removeAll(true);
+		this.add(Ext.Array.map(recs,function(r){
+			return {record: r};
+		}));
 	},
 
 
@@ -150,7 +181,68 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			this.renderData.body = text;
 			return;
 		}
-		this.bodyEl.update(text);
+		this.messageBodyEl.update(text);
 	}
 
+});
+
+
+
+Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
+	extend: 'Ext.Component',
+	alias: 'widget.profile-forum-activity-item-reply',
+
+	renderTpl: Ext.DomHelper.markup({
+		cls: 'reply profile-activity-reply-item',
+		cn: [
+			{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
+			{ cls: 'meta', cn: [
+				{ cls: 'controls', cn: [
+					{ cls: 'favorite-spacer' },
+					{ cls: 'like' }]},
+				{ tag: 'span', cls: 'name link', html: '{Creator}' },' ',
+				{ tag: 'span', cls: 'time', html: '{date}' }
+			]},
+			{ cls: 'body', html: '{body}' }
+		]
+	}),
+
+	renderSelectors: {
+		avatarEl: '.avatar',
+		nameEl: '.name',
+		messageBodyEl: '.body',
+
+		liked: '.controls .like'
+	},
+
+	beforeRender: function(){
+		var me = this, rd, r = me.record,
+			username = me.record.get('Creator');
+
+		me.callParent(arguments);
+
+		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
+		rd.date = Ext.Date.format(r.get('CreatedTime'),'F j, Y');
+		r.compileBodyContent(me.setBody,me);
+
+		UserRepository.getUser(username, function(u){
+			me.user = u;
+			rd.avatarURL = u.get('avatarURL');
+			rd.Creator = u.getName();
+			if(me.rendered){
+				//oops...we resolved later than the render...update elements
+				me.avatarEl.setStyle({backgroundImage:'url('+rd.avatarURL+');'});
+				me.nameEl.update(rd.Creator);
+			}
+		});
+	},
+
+
+	setBody: function(text){
+		if(!this.rendered){
+			this.renderData.body = text;
+			return;
+		}
+		this.messageBodyEl.update(text);
+	}
 });
