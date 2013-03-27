@@ -60,6 +60,11 @@ Ext.define('NextThought.view.forums.Board',{
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
+	destroy: function(){
+		this.headerEl.remove();
+		this.callParent(arguments);
+	},
+
 
 	handleScrollHeaderLock: function(e,forumDom){
 		var headerEl = this.headerEl,
