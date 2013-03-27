@@ -282,7 +282,7 @@ Ext.define('NextThought.controller.Forums', {
 			});
 
 			for(j;j<stackOrder.length;j++){
-				state[stackOrder[j]] = null;
+				state[stackOrder[j]] = undefined;
 			}
 
 			//Push state if not requested to be silent
@@ -394,7 +394,7 @@ Ext.define('NextThought.controller.Forums', {
 			}
 
 			for(keyIx; keyIx>=0 && keyIx<this.stateKeyPrecedence.length; keyIx++){
-				state[this.stateKeyPrecedence[keyIx]] = null;
+				state[this.stateKeyPrecedence[keyIx]] = undefined;
 			}
 
 			this.pushState(state);
@@ -517,7 +517,7 @@ Ext.define('NextThought.controller.Forums', {
 		}
 		if(silent !== true){
 			//The communities board we are viewing
-			this.pushState({board:{community: community,isUser: true}, forum: null, topic: null, comment: null});
+			this.pushState({board:{community: community,isUser: true}, forum: undefined, topic: undefined, comment: undefined});
 		}
 	},
 
@@ -526,7 +526,7 @@ Ext.define('NextThought.controller.Forums', {
 		if( Ext.isArray(record) ){ record = record[0]; }
 		this.showLevel('topic', record, {stateKey: 'forum'});
 		if(silent !== true){
-			this.pushState({'forum': record.get('ID'), topic: null, comment: null}); //The forum we are viewing
+			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 		}
 	},
 
@@ -633,7 +633,7 @@ Ext.define('NextThought.controller.Forums', {
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
 
 		if(silent !== true){
-			this.pushState({'topic': record.get('ID'), comment: null});
+			this.pushState({'topic': record.get('ID'), comment: undefined});
 		}
 	},
 

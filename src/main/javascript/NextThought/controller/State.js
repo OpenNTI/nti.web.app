@@ -72,9 +72,16 @@ Ext.define('NextThought.controller.State', {
 				var ret = false;
 
 				Ext.Object.each(b,function objItr(key,val){
-					if(a[key]!==val || (Ext.isObject(val) && isDiff(a[key],val))){
+					if(!Ext.isObject(val)){
+						//Not an object do identity comparison
+						if(!a || a[key] !== val){
+							ret = true;
+						}
+					}
+					else if(isDiff(a[key], val)){ //Ok so val is an object do a deep equals
 						ret = true;
 					}
+
 					return !ret;//a false value will stop the iteration, if we find a
 				});
 				return ret;
@@ -130,6 +137,7 @@ Ext.define('NextThought.controller.State', {
 
 		window.onpopstate = function(e){
 			console.debug('Browser is popping state', e.state);
+
 			me.isPoppingHistory = true;
 			me.onPopState(e);
 			me.isPoppingHistory = false;
@@ -141,6 +149,7 @@ Ext.define('NextThought.controller.State', {
 			console.debug('Hash change');
 			var newState = me.interpretFragment(location.hash);
 			if(history.updateState(newState)){
+				console.debug('restoring state from hash change', newState);
 				me.restoreState(newState);
 				history.replaceState(me.getState(),document.title,location.toString());
 			}
