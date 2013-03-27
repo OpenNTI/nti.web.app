@@ -11,6 +11,7 @@ Ext.define('NextThought.model.Hit', {
 			'forums.personalblogentrypost': 'Thoughts',
 			'forums.personalblogcomment': 'Thoughts',
 			'forums.communityheadlinepost': 'Forums',
+			'forums.generalforumcomment': 'Forums',
 			'messageinfo': 'Chats'
 		}
 	},

@@ -36,12 +36,18 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		]}
 	]),
 
+
+	isComment: function(hit){
+		return (/.*?personalblogcomment$/).test(hit.get('MimeType'));
+	},
+
+
 	fillInData: function(){
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId'),
 			name = hit.get('Creator'),
-			comment = /.*?personalblogcomment$/.test(hit.get('MimeType'));
+			comment = this.isComment(hit);
 		me.comment = comment;
 
 		me.renderData = Ext.apply(me.renderData || {},{
