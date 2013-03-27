@@ -300,7 +300,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			);
 		}
 		else {
-			console.error('Not sure what activity text to use for ', item, change);
+			console.error('Not sure what activity text to use for ', type, item.getModelName(), item, change);
 			return 'Unknown';
 		}
 
