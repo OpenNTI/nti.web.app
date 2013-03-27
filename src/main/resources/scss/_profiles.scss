@@ -405,6 +405,7 @@
 
 			&.editor-active ~ .respond {
 				.reply-options { display: none; }
+				.editor .action.share {display: none !important;}
 			}
 
 			.content-callout {
