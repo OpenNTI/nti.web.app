@@ -171,22 +171,7 @@ Ext.define('NextThought.controller.Forums', {
 			toLoad.push([stackOrder[i],state[stackOrder[i]]]);
 		}
 
-		this.getRecords(getBaseUrl(c.peek().record),toLoad,function(records){
-
-			Ext.each(records,function(pair){
-				var rec = pair.last(),
-					type = Ext.String.capitalize(pair.first());
-
-				if(!rec){
-					return false;
-				}
-
-				me['load'+type](null,rec,true);
-
-				return true;
-			});
-
-		});
+		this.pushViews(getBaseUrl(c.peek().record),toLoad, null, null, true);
 	},
 
 
@@ -237,16 +222,24 @@ Ext.define('NextThought.controller.Forums', {
 			return;
 		}
 
-		console.log('Base', base, 'toLoad', toLoad);
+		//Ok we have built up what we need to show.Show it
+		this.pushViews(base, toLoad, cb, scope);
 
-		//Ok we have built up what we need to show.  Fetch all the needed records
-		//and start pushing views.  Note we do this silently so state does get updated
-		//in many chunks.  Instead, we gather state as it is needed and push it once at
-		//the end.  This keeps back and forward (at least within this function) working
-		//like you would expect.  There are still issues with state not being transactional
-		//with the action the user expects.  For instance coming from another tab has
-		//a state change for the tab showing and then our state change.  We should
-		//fix that.
+	},
+
+
+	//Fetch all the needed records
+	//and start pushing views.  Note we do this silently so state does not get updated
+	//in many chunks.  We gather state as it is needed and push it once at
+	//the end if requested.  This keeps back and forward (at least within this function) working
+	//like you would expect.  There are still issues with state not being transactional
+	//with the action the user expects.  For instance coming from another tab has
+	//a state change for the tab showing and then our state change.  We should
+	//fix that.
+	pushViews: function(base, toLoad, cb, scope, silent){
+		var stackOrder = this.stateKeyPrecedence,
+			state = {},
+			me = this;
 
 		function stateForKey(key, rec){
 			var community;
@@ -260,6 +253,8 @@ Ext.define('NextThought.controller.Forums', {
 			return rec.get('ID');
 		}
 
+		console.log('Need to push views. Base', base, 'toLoad', toLoad);
+
 		this.getRecords(base, toLoad, function(records){
 			var j = stackOrder.indexOf(records.first()[0]);
 			Ext.each(records,function(pair){
@@ -267,6 +262,7 @@ Ext.define('NextThought.controller.Forums', {
 					type = Ext.String.capitalize(pair.first());
 
 				if(!rec){
+					//Error callback here?
 					return false;
 				}
 
@@ -280,7 +276,13 @@ Ext.define('NextThought.controller.Forums', {
 			for(j;j<stackOrder.length;j++){
 				state[stackOrder[j]] = null;
 			}
-			this.pushState(state);
+
+			//Push state if not requested to be silent
+			if(silent !== true){
+				this.pushState(state);
+			}
+
+			//callback
 			Ext.callback(cb, scope, [true]);
 		});
 	},
