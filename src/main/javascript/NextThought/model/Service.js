@@ -198,58 +198,47 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getObjectRaw: function (ntiid, success, failure, scope){
-		var url = this.getObjectURL(ntiid),
-			q = {};
 
-		if(!ParseUtils.parseNtiid(ntiid)){
+
+	getObjectRaw: function (url, mime, forceMime, success, failure, scope){
+		var q = {}, headers = {};
+
+		if(!url){
 			Ext.callback(failure,scope, ['']);
 			return null;
 		}
 
-		function continueRequest(resolvedUrl){
-			try {
-				q.request = Ext.Ajax.request({
-					url: resolvedUrl,
-					scope: scope,
-					callback: function(req, s, resp){
-						if(s){
-							resp.responseLocation = resolvedUrl;
-							Ext.callback(success, scope, [resp]);
-						} else {
-							Ext.callback(failure,scope, [req,resp]);
-						}
-					}
-				});
-			}
-			catch(e){
-				Ext.callback(failure,scope,[{},e]);
-			}
+		if(mime){
+			headers.Accept = mime;
 		}
-
-		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
-		//headers that would prevent a request for an object using one Accept
-		//type from being cached and returned on a later request for the same object
-		//with a different Accept header.  So request a special url by type that
-		//is safe to caching
-		//url = this.appendTypeView(url, 'link+json');
-		url = this.urlWithQueryParams(url, {bust: 'link+json'});
 
 		try{
 			//lookup step
 			q.request = Ext.Ajax.request({
 				url: url,
 				scope: scope,
-				headers: {
-					Accept: 'application/vnd.nextthought.link+json'
-				},
+				headers: headers,
 				callback: function(req,s,resp){
-					var href;
+					//If sent an Accept header the server
+					//may return a 406 if the Accept value is not supported
+					//or it may just return whatever it wants.  If we send
+					//Accept we check the Content-Type to see if that is what
+					//we get back.  If it's not and forceMime is truthy
+					//we call the failure callback
+					var href, contentType;
 					if(s){
-						href = Ext.JSON.decode(resp.responseText).href;
-						continueRequest(getURL(href));
+						if(mime && forceMime){
+							contentType = resp.getResponseHeader('Content-Type');
+							if(contentType && contentType.indexOf(mime) < 0){
+								console.info('Requested with an explicit accept value of', mime, 'but got contenttype.  Calling failure', arguments);
+								Ext.callback(failure, scope, [req, resp]);
+								return;
+							}
+						}
+
+						Ext.callback(success, scope, [resp]);
 					} else {
-						Ext.callback(failure,scope, [req,resp]);
+						Ext.callback(failure, scope, [req, resp]);
 					}
 				}
 			});
@@ -262,9 +251,9 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+
 	getPageInfo: function(ntiid, success, failure, scope){
-		var url = this.getObjectURL(ntiid),
-			q = {},
+		var url, q,
 			mime = 'application/vnd.nextthought.pageinfo';
 
 		if(!ParseUtils.parseNtiid(ntiid)){
@@ -272,43 +261,39 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
+		url = this.getObjectURL(ntiid);
+
 		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
 		//headers that would prevent a request for an object using one Accept
 		//type from being cached and returned on a later request for the same object
-		//with a different Accept header.  So request a special url by type that
-		//is safe to caching
-		//url = this.appendTypeView(url, 'pageinfo+json');
-		url = this.urlWithQueryParams(url, {bust: 'pageinfo+json'});
-
+		//with a different Accept header.  In this case it is very important we get PageInfo
+		//objects back so request them at a special view to influence cache logic
+		url = this.appendTypeView(url, 'pageinfo+json');
 
 		try{
-			//lookup step
-			q.request = Ext.Ajax.request({
-				url: url,
-				scope: scope,
-				headers: {
-					Accept: mime+'+json'
-				},
-				callback: function(req,s,resp){
-					var pageInfos, pageInfo;
-					if(s){
-						pageInfos = ParseUtils.parseItems(resp.responseText);
 
-						//We claim success but the damn browsers like to give the wrong object
-						//type from cache.  They don't seem to listen to Vary: Accept or any
-						//of the other myriad of caching headers supplied by the server
-						pageInfo = pageInfos.first();
-						if(pageInfo && pageInfo.get('MimeType') !== mime){
-							//Maybe call the failure callback if we find ourselves in this state?
-							console.error('Unexpected object type from request.  Most likely this is the browsers returning bad things from cache.  Expected', mime, 'Recieved', pageInfos);
-						}
+			function onSuccess(resp){
+				pageInfos = ParseUtils.parseItems(resp.responseText);
 
-						Ext.callback(success, scope, pageInfos);
-					} else {
-						Ext.callback(failure,scope, [req,resp]);
-					}
+				//We claim success but the damn browsers like to give the wrong object
+				//type from cache.  They don't seem to listen to Vary: Accept or any
+				//of the other myriad of caching headers supplied by the server
+				pageInfo = pageInfos.first();
+				if(pageInfo && pageInfo.get('MimeType') !== mime){
+					console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
+					Ext.callback(failure, scope, [{}, resp]);
+					return;
 				}
-			});
+				Ext.callback(success, scope, pageInfos);
+			}
+
+			function onFailure(req,resp){
+				Ext.callback(failure,scope, [req,resp]);
+			}
+
+
+			q = this.getObjectRaw(url, mime+'+json', true, onSuccess, onFailure, this);
+
 		}
 		catch(e){
 			Ext.callback(failure,scope,[{},e]);
@@ -319,7 +304,16 @@ Ext.define('NextThought.model.Service', {
 
 
 	getObject: function (ntiid, success, failure, scope, safe){
-		return this.getObjectRaw(ntiid,
+		var url;
+
+		if(!ParseUtils.parseNtiid(ntiid)){
+			Ext.callback(failure,scope, ['']);
+			return null;
+		}
+
+		url = this.getObjectURL(ntiid);
+
+		return this.getObjectRaw(url, null, false,
 				function(resp){
 					var arg;
 
@@ -327,7 +321,7 @@ Ext.define('NextThought.model.Service', {
 						arg = ParseUtils.parseItems(resp.responseText);
 					}catch(e){
 						if(safe){
-							Ext.callback(success,scope);
+							Ext.callback(success, scope);
 						}else{
 							throw e;
 						}
@@ -335,7 +329,7 @@ Ext.define('NextThought.model.Service', {
 					Ext.callback(success, scope, arg);
 				},
 				function(req,resp){
-					Ext.callback(failure,scope, [req,resp]);
+					Ext.callback(failure,scope, [req, resp]);
 				},
 				this
 		);
