@@ -75,7 +75,6 @@ Ext.define('NextThought.controller.Forums', {
 				'save': this.saveTopicComment
 			},
 			'search-result':{
-				'click-forum-comment': this.showForumSearchResult,
 				'click-forum-result': this.showForumSearchResult
 			},
 			'*': {
@@ -84,7 +83,7 @@ Ext.define('NextThought.controller.Forums', {
 		});
 	},
 
-
+	//An array denoting the precedence of data in state
 	stateKeyPrecedence: ['board','forum','topic','comment'],
 
 
@@ -176,20 +175,14 @@ Ext.define('NextThought.controller.Forums', {
 			toLoad.push([stackOrder[i],state[stackOrder[i]]]);
 		}
 
-		if(Ext.isEmpty(toLoad)){
-			return;
-		}
-
 		this.pushViews(getBaseUrl(c.peek().record),toLoad, null, null, true);
 	},
 
 
-	pushNecessaryViews: function(record, cb, scope){
+	pushNecessaryViews: function(href, recordType, cb, scope){
 		var c = this.getForumViewContainer(),
 			stackOrder = this.stateKeyPrecedence,
 			showingStateKey = (c.peek() || {}).stateKey,
-			recordType = 'topic',
-			href = record.get('href'),
 			i, toLoad = [], parts = [], base, pieces,
 			state = {},
 			me = this;
@@ -226,11 +219,6 @@ Ext.define('NextThought.controller.Forums', {
 			i--;
 		}, this, true);
 
-		if(Ext.isEmpty(toLoad)){
-			Ext.callback(cb, scope, [true]);
-			return;
-		}
-
 		//Ok we have built up what we need to show.Show it
 		this.pushViews(base, toLoad, cb, scope);
 
@@ -248,6 +236,7 @@ Ext.define('NextThought.controller.Forums', {
 	pushViews: function(base, toLoad, cb, scope, silent){
 		var stackOrder = this.stateKeyPrecedence,
 			state = {},
+			comment,
 			me = this;
 
 		function stateForKey(key, rec){
@@ -264,8 +253,13 @@ Ext.define('NextThought.controller.Forums', {
 
 		console.log('Need to push views. Base', base, 'toLoad', toLoad);
 
+		if(toLoad.last() && toLoad.last()[0] === 'comment'){
+			comment = toLoad.pop();
+		}
+
 		this.getRecords(base, toLoad, function(records){
-			var j = stackOrder.indexOf(records.first()[0]);
+			var j =  records.first() ? (stackOrder.indexOf(records.first()[0])) : (stackOrder.length - 1),
+				maybeTopic;
 			Ext.each(records,function(pair){
 				var rec = pair.last(),
 					type = Ext.String.capitalize(pair.first());
@@ -286,6 +280,21 @@ Ext.define('NextThought.controller.Forums', {
 				state[stackOrder[j]] = undefined;
 			}
 
+			//If we have a comment push it onto the last view
+			//which should be the topic.  Also make sure we push it into
+			//state since we just blanked it out
+			maybeTopic = me.getForumViewContainer().peek();
+			if(maybeTopic.goToComment){
+				if(comment){
+					maybeTopic.goToComment(comment[1]);
+					state[comment[0]] = comment[1];
+				}
+				else{
+					maybeTopic.goToComment(null);
+				}
+			}
+
+
 			//Push state if not requested to be silent
 			if(silent !== true){
 				this.pushState(state);
@@ -303,7 +312,7 @@ Ext.define('NextThought.controller.Forums', {
 			me = this;
 
 
-		if(!base){
+		if(!base || Ext.isEmpty(ids)){
 			if( ids[0] ){
 				ids[0][1] = null;
 			}
@@ -415,7 +424,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	presentTopic: function(record, cb, scope, eOpts){
+	presentTopic: function(record, commentId, cb, scope, eOpts){
 		var callback = Ext.isFunction(cb) ? cb : undefined,
 			toShowHref = record ? record.get('href') : null;
 
@@ -424,7 +433,11 @@ Ext.define('NextThought.controller.Forums', {
 			return;
 		}
 
-		console.log('should navigate to forum topic: ', record, callback);
+		if(toShowHref){
+			toShowHref = toShowHref + '/' + commentId;
+		}
+
+		console.log('should navigate to forum topic: ', record, commentId, callback);
 
 		//The idea here is similar to state restoration.  Pop us down to the last
 		//stack view that matches (which is worst case the root).  Then using the
@@ -440,7 +453,7 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		this.popToLastViewMatchingPredicate(predicate);
-		this.pushNecessaryViews(record, cb, scope);
+		this.pushNecessaryViews(toShowHref, commentId ? 'comment' : 'topic', cb, scope);
 	},
 
 
@@ -742,8 +755,10 @@ Ext.define('NextThought.controller.Forums', {
 
 	//Search functions
 	showForumSearchResult: function(result, fragIdx){
-		var r = result.record;
-		this.presentTopic(r, function(success){
+		var r = result.record,
+			comment = result.comment,
+			id = comment ? result.hit.get('ID') : null;
+		this.presentTopic(r, id, function(success){
 			console.log('Do search highlighting here.');
 		}, this);
 	}

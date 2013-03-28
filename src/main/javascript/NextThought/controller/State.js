@@ -173,6 +173,9 @@ Ext.define('NextThought.controller.State', {
 	interpretForumsFragment: function(fragment, query){
 		var parts = (fragment||'').split('/').slice(0),
 			result = {}, forums = {};
+
+		parts = Ext.Array.clean(parts);
+
 		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
 
 		//We expect something of the form

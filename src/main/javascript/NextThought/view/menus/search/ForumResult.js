@@ -9,12 +9,6 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 
 	doClicked: function(fragIdx){
-		if(this.comment){
-			this.fireEvent('click-forum-comment', this);
-		}
-		else{
-			this.fireEvent('click-forum-result', this, fragIdx);
-		}
-
+		this.fireEvent('click-forum-result', this, fragIdx);
 	}
 });

@@ -191,8 +191,39 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
+	scrollCommentIntoView: function(commentId){
+		function scrollIntoView(){
+			if(typeof(commentId)==='boolean'){
+				el = me.getTargetEl();
+			}
+			else {
+				el = me.el.down('[data-commentid="'+commentId+'"]');
+			}
+
+			if( el ) {
+				Ext.defer(el.scrollIntoView,500,el,[Ext.get('forums'),false,true]);
+			}
+		}
+
+		var el, images, me = this;
+		if(commentId){
+			images = this.el.query('img');
+			Ext.each(images, function(img){
+				img.onload = function(){ scrollIntoView(); };
+			});
+			scrollIntoView();
+		}
+		else{
+			Ext.get('forums').scrollTo('top', 0, true);
+		}
+	},
+
+
 	onReady: function(){
 		console.debug('ready',arguments);
+		if(this.scrollToComment){
+			this.scrollCommentIntoView(this.scrollToComment);
+		}
 	},
 
 
@@ -363,6 +394,22 @@ Ext.define('NextThought.view.forums.Topic',{
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 		this.add(Ext.Array.map(records,function(r){return {record: r};}));
 
+		this.ready = true;
 		Ext.defer(this.fireEvent,1,this,['ready',this,this.queryObject]);
+	},
+
+
+	goToComment: function(commentId){
+		if(!this.ready){
+			this.scrollToComment = commentId;
+			return;
+		}
+
+		if(commentId){
+			this.scrollCommentIntoView(commentId);
+		}
+		else{
+			this.scrollCommentIntoView(null);
+		}
 	}
 });
