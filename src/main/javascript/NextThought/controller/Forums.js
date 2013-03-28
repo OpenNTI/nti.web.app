@@ -823,6 +823,26 @@ Ext.define('NextThought.controller.Forums', {
 		});
 	},
 
+	//Socket handling
+	incomingChange: function(change){
+		var item,
+			maybeTopic = this.getForumViewContainer().peek();
+
+		if(!maybeTopic || !maybeTopic.addIncomingComment){
+			return;
+		}
+
+		if(!change.isModel){
+			change = ParseUtils.parseItems([change])[0];
+		}
+
+		item = change.get('Item');
+		if(item && /generalforumcomment$/.test(item.get('MimeType'))){
+			maybeTopic.addIncomingComment(item);
+		}
+	},
+
+
 	//Search functions
 	highlightSearchResult: function(result, fragIdx){
 		console.log('Do search highlighting here.', arguments);
