@@ -59,7 +59,12 @@ Ext.define('NextThought.view.forums.Forum',{
 	deferEmptyText: false,
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty',
-		html: 'Nothing to see here. (yet)'
+		html: 'Be the first to start a discussion.',
+		cn: {cn:[
+			{ tag: 'a', html:'Go back', href: 'javascript:history.go(-1);'},
+			' &middot ',
+			{ tag: 'a', html:'New discussion', href: '#'}
+		]}
 	}),
 
 
@@ -151,6 +156,16 @@ Ext.define('NextThought.view.forums.Forum',{
 		else if(e.getTarget('.new-topic')){
 			this.fireEvent('new-topic');
 		}
+	},
+
+
+	onContainerClick: function(e){
+		e.stopEvent();
+		var t = e.getTarget('a[href=#]');
+		if(t){
+			this.fireEvent('new-topic');
+		}
+		return false;
 	},
 
 
