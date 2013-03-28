@@ -201,6 +201,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		this.mon(this.replyEl,'click',this.showEditor,this);
 
+		this.mon(this.pathEl,'click', this.forumClickHandler,this);
+
 		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		this.mon(this.editor,{
