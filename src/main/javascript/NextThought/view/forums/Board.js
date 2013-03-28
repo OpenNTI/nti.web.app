@@ -72,7 +72,8 @@ Ext.define('NextThought.view.forums.Board',{
 			domParent = forumDom && forumDom.parentNode,
 			scroll = Ext.fly(forumDom).getScroll().top,
 			parent = headerEl && Ext.getDom(headerEl).parentNode,
-			cutoff = 0;
+			cutoff = 0,
+			cls = 'scroll-pos-right';
 
 		if(!headerEl || !parent){
 			console.error('Nothing to handle, el is falsey');
@@ -80,10 +81,10 @@ Ext.define('NextThought.view.forums.Board',{
 		}
 
 		if(parent === domParent && (scroll <= cutoff || !this.isVisible())){
-			headerEl.appendTo(this.headerElContainer);
+			headerEl.removeCls(cls).appendTo(this.headerElContainer);
 		}
 		else if(this.isVisible() && parent !== domParent && scroll > cutoff){
-			headerEl.appendTo(domParent);
+			headerEl.addCls(cls).appendTo(domParent);
 		}
 	},
 
