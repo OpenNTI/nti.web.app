@@ -108,6 +108,7 @@ div.nt-token-wrapper{
 		border: 1px solid #ececec;
 		background: #ececec;
 		color: $secondary-grey;
+		vertical-align: middle;
 
 		.value,.x{
 			position: relative;
@@ -150,6 +151,7 @@ div.nt-token-wrapper{
 	}
 
 	.token-input-wrap{
+		vertical-align: middle;
 		position: relative;
 		overflow: hidden;
 		display: inline-block;
@@ -163,6 +165,12 @@ div.nt-token-wrapper{
 			padding: 0;
 			margin: 0;
 			border: 0;
+
+			.x-ie & {
+				height: 30px;//for IE
+				bottom: inherit;
+				right: inherit;
+			}
 
 			.x-gecko &{
 				width: 100%;
