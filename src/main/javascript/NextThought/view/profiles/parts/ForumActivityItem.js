@@ -136,6 +136,13 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	},
 
 
+	getRefItems: function(){
+		var ret = this.callParent(arguments)||[];
+		ret.push(this.editor);
+		return ret;
+	},
+
+
 	fillInReplies: function(s,recs){
 		this.removeAll(true);
 		this.add(Ext.Array.map(recs,function(r){
