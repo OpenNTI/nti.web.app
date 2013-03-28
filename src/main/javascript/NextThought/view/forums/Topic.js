@@ -96,7 +96,9 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	buildStore: function(){
-		this.store = NextThought.store.NTI.create({url:this.getRecord().getLink('contents')});
+		this.store = NextThought.store.NTI.create({
+			url: this.getRecord().getLink('contents')
+		});
 
 		this.mon(this.store,{
 			scope: this,
@@ -383,6 +385,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	addComments: function(store,records){
 		if(!Ext.isEmpty(records)){
+			//Umm it renders sorted ASC but we pass DESC
 			records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 			this.add(Ext.Array.map(records,function(r){return {record: r};}));
 		}

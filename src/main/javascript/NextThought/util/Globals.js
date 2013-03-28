@@ -331,6 +331,11 @@ Ext.define('NextThought.util.Globals', {
 
 			if($a !== $b){
 				c = $a < $b? -1 : 1;
+
+				//FIXME this seems backwards. If a < b it would sort to a lower
+				//position and be -1.  That is the proper order for ascending
+				//We should only negate it for desc. Yet it seems things using
+				//it render properly.  Seems unlikely the logic is backwards everywhere.
 				if(dir && dir === 'ASC'){
 					c*=-1;
 				}

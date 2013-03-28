@@ -467,7 +467,20 @@ Ext.define('NextThought.controller.Forums', {
 			store, cmpCfg;
 
 
-		store = NextThought.store.NTI.create({ storeId: record.get('Class')+'-'+record.get('ID'), url:url, autoLoad:true });
+		store = NextThought.store.NTI.create({
+			storeId: record.get('Class')+'-'+record.get('ID'),
+			url: url,
+			sorters: [{
+				property: 'CreatedTime',
+				direction: 'DESC'
+			}]
+		});
+		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, {
+			sortOn: 'CreatedTime',
+			sortOrder: 'descending'
+		});
+		store.load();
+
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
 		// Creator string with the user model and presto!
