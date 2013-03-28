@@ -38,6 +38,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
+			{ tag:'span', cls: 'name link', html: '{headline.Creator}'},
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
 				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
@@ -67,6 +68,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	renderSelectors: {
 		bodyEl: '.body',
+		nameEl: '.meta .name',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		flagEl: '.report.link',
@@ -114,16 +116,21 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.callParent(arguments);
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
-		var r = this.record;
+
+		var me = this,
+			r = this.record,s;
+
 		if(!r || !r.getData){
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
+		s = r.getPublishState();
+		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
+		Ext.apply(r, {
+			'publish-state': s,
+			path: this.path
+		});
 
-		this.renderData = Ext.apply(this.renderData||{}, r.getData());
-		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
-		this.renderData.path = this.path;
-		r = this.renderData;
 		if(!r.headline || !r.headline.getData){
 			console.warn('The record does not have a story field or it does not implement getData()',r);
 
@@ -131,6 +138,13 @@ Ext.define('NextThought.view.forums.Topic',{
 			return;
 		}
 		r.headline = r.headline.getData();
+
+		UserRepository.getUser(r.headline.Creator,function(u){
+			r.headline.Creator = u;
+			if(me.rendered){
+				me.nameEl.update(u.getName());
+			}
+		});
 	},
 
 
