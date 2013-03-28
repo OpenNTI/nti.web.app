@@ -10,6 +10,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	],
 
 	mixins:{
+		flagActions: 'NextThought.mixins.FlagActions',
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		topicActions: 'NextThought.mixins.ForumTopicLinks'
 	},
 
@@ -41,7 +43,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						{ cls: 'like' }
 					]},
 					{ cls: 'meta', cn: [
-						{ cls: 'subject', html: '{title}' },
+						{ cls: 'subject', html: '{[values.phantom?\'(Deleted) \':\'\']}{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link', html: '{Creator}'},
 							{tag: 'span', cls: 'separator', html: ' '},
@@ -51,7 +53,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						]}
 					]},
 					{ cls: 'body', html: '{body}' },
-					{
+					{ tag:'tpl', 'if':'!phantom', cn:{
 						cls: 'foot',
 						cn: [
 							{ cls: 'comments', 'data-label': ' Comments',
@@ -59,7 +61,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
 						]
-					}]
+					}}]
 				}
 			]
 		},{
@@ -108,6 +110,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			store;
 
 		me.callParent(arguments);
+		me.mixins.likeAndFavoriteActions.constructor.call(me);
+		me.mixins.flagActions.constructor.call(me);
 
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		rd.headline = h.getData();
@@ -142,9 +146,37 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		store.on('add',this.fillInReplies,this);
 		store.on('load',this.fillInReplies,this);
-		if(rd.PostCount >0){
+		if(rd.PostCount >0 && store.proxy.url){
 			store.load();
 		}
+		else if(!store.proxy.url){
+			rd.phantom = true;
+		}
+	},
+
+
+	onDeletePost: function(e){
+		e.stopEvent();
+		var me = this;
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: 'Deleting this topic will permanently remove it and any comments.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					me.fireEvent('delete-post',me.record, me);
+				}
+			}
+		});
+	},
+
+
+	getRecord: function(){
+		return this.record;
 	},
 
 
@@ -201,7 +233,14 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		this.mon(this.replyEl,'click',this.showEditor,this);
 
+		if( this.deleteEl ){
+			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+		}
+
 		this.mon(this.pathEl,'click', this.forumClickHandler,this);
+
+		this.reflectLikeAndFavorite(this.record);
+		this.listenForLikeAndFavoriteChanges(this.record);
 
 		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
@@ -215,6 +254,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			}
 		});
 
+		this.mon(this.record,'destroy',this.destroy,this);
 	},
 
 
