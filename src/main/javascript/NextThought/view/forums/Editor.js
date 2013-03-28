@@ -4,11 +4,19 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	requires:['NextThought.editor.Actions'],
 
-	cls: 'forums-topic-editor',
+	cls: 'forums-topic-editor-box',
 	border: 1,
 
 	renderTpl: Ext.DomHelper.markup([
-		{
+		{ cls: 'header-container', cn:
+			{ cls: 'header', cn:[
+				{ tag: 'tpl', 'if':'!isEdit', cn:{ cls: 'controls', cn:[
+					{ cls: 'new-topic disabled', html: 'New Discussion'}
+				] }},
+				{ cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
+			]}
+		},
+		{ cls: 'forums-topic-editor', cn: {
 			cls: 'editor active',
 			cn:[{
 				cls: 'main',
@@ -47,7 +55,7 @@ Ext.define('NextThought.view.forums.Editor',{
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
 				}]
 			}]
-		}
+		}}
 	]),
 
 
@@ -65,6 +73,16 @@ Ext.define('NextThought.view.forums.Editor',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
+	},
+
+
+	beforeRender: function(){
+		this.callParent(arguments);
+		var rd = this.renderData = this.renderData || {};
+
+		rd.path = this.path;
+		rd.isEdit = Boolean(this.record);
+		rd.title = rd.isEdit ? this.record.get('title') : 'New Topic';
 	},
 
 

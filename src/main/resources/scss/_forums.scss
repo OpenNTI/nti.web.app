@@ -619,9 +619,19 @@
 		width: 700px;
 		margin: 60px auto 0 auto;
 
-		&.forums-topic-editor{
-			@include forum-post-editor;
-			margin: 8px auto;
+		&.forums-topic-editor-box{
+			margin: 0 auto;
+
+			.header-container {
+				height: 52px;
+				.header {
+					@include forum-navigation;
+				}
+			}
+			.forums-topic-editor{
+				@include forum-post-editor;
+				margin: 8px auto;
+			}
 		}
 
 		&.forum-list {
