@@ -116,7 +116,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			}
 		});
 
-		store = NextThought.store.NTI.create({
+		store = me.store = NextThought.store.NTI.create({
 			storeId: r.get('Class')+'-'+r.get('ID')+'-activity-view',
 			url: r.getLink('contents'),
 			pageSize: 1
@@ -129,6 +129,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		});
 
 
+		store.on('add',this.fillInReplies,this);
 		store.on('load',this.fillInReplies,this);
 		if(rd.PostCount >0){
 			store.load();

@@ -71,6 +71,9 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic-comment':{
 				'delete-topic-comment': this.deleteObject
 			},
+			'profile-forum-activity-item nti-editor':{
+				'save': this.saveTopicComment
+			},
 			'forums-topic nti-editor': {
 				'save': this.saveTopicComment
 			},
@@ -577,7 +580,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	saveTopicComment: function(editor,record,valueObject){
 
-		var postCmp = editor.up('forums-topic'),
+		var postCmp = editor.up('forums-topic') || editor.up('profile-forum-activity-item'),
 			postRecord = postCmp && postCmp.record,
 			isEdit = Boolean(record),
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
