@@ -93,7 +93,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		itemEl: '.item',
 		messageBodyEl: '.body',
 
-		commentsEl: '.comments',
+		commentsEl: '.foot .comments',
 
 		flagEl: '.foot .flag',
 		deleteEl: '.foot .delete',
@@ -191,9 +191,11 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	fillInReplies: function(s,recs){
 		this.removeAll(true);
-		this.add(Ext.Array.map(recs,function(r){
-			return {record: r};
-		}));
+		if(recs){
+			this.add(Ext.Array.map(recs,function(r){
+				return {record: r};
+			}));
+		}
 	},
 
 
@@ -237,6 +239,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+		}
+
+		if(this.commentsEl){
+			this.mon(this.commentsEl,'click',this.forumClickHandlerGoToComments,this);
 		}
 
 		this.mon(this.pathEl,'click', this.forumClickHandler,this);

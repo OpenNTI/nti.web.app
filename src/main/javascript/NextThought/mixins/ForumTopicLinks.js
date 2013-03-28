@@ -16,5 +16,11 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 		if(this.fireEvent('before-show-topic', this.record)){
 			this.fireEvent('show-topic', this.record);
 		}
+	},
+
+	forumClickHandlerGoToComments: function(){
+		if(this.fireEvent('before-show-topic', this.record)){
+			this.fireEvent('show-topic', this.record, true);
+		}
 	}
 });
