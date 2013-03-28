@@ -56,6 +56,12 @@ Ext.define('NextThought.view.forums.Forum',{
 		]}
 	]),
 
+	deferEmptyText: false,
+	emptyText: Ext.DomHelper.markup({
+		cls: 'empty',
+		html: 'Nothing to see here. (yet)'
+	}),
+
 
 	afterRender: function(){
 		this.callParent(arguments);
