@@ -57,6 +57,7 @@ Ext.define('NextThought.view.forums.Board',{
 		this.callParent(arguments);
 		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
 		this.headerEl = this.headerElContainer.down('.header');
+		this.mon(this.headerEl,'click',this.onHeaderClick,this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
@@ -87,7 +88,7 @@ Ext.define('NextThought.view.forums.Board',{
 	},
 
 
-	onContainerClick: function(e){
+	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
 			this.fireEvent('pop-view', this);
 		}

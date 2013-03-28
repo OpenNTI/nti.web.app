@@ -68,6 +68,8 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: title },true);
 		this.headerEl = this.headerElContainer.down('.header');
 
+		this.mon(this.headerEl,'click',this.onHeaderClick,this);
+
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
@@ -116,7 +118,7 @@ Ext.define('NextThought.view.forums.Forum',{
 	},
 
 
-	onContainerClick: function(e){
+	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
 			this.fireEvent('pop-view', this);
 		}
