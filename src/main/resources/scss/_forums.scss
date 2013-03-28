@@ -610,6 +610,10 @@
 		y: auto;
 	}
 
+	&.scroll-lock{
+		overflow: hidden;
+	}
+
 	& > div.x-component,
 	& > div.x-container, {
 		width: 700px;
