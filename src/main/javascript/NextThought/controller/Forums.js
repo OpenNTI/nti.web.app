@@ -62,6 +62,7 @@ Ext.define('NextThought.controller.Forums', {
 				'select':this.loadTopic
 			},
 			'forums-topic': {
+				'navigate-topic':this.switchTopic,
 				'delete-post': this.deleteObject,
 				'edit-topic':this.newTopic
 			},
@@ -704,6 +705,20 @@ Ext.define('NextThought.controller.Forums', {
 
 	newTopic: function(cmp, forumRecord){
 		this.getForumViewContainer().add({xtype:'forums-topic-editor', record: forumRecord});
+	},
+
+
+	switchTopic: function(cmp, record, direction){
+		var s = record.store,
+			dx = (direction==='next' ? -1 : 1),
+			r = s && s.find('ID', record.get('ID'), 0, false, true, true);
+
+		r = s && s.getAt(r+dx);
+		console.log(r);
+		if(r){
+			cmp.destroy();
+			this.loadTopic(null,r);
+		}
 	},
 
 

@@ -311,7 +311,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			disabled = Boolean(e.getTarget('.disabled'));
 
 		if(!disabled){
-			this.fireEvent('navigate-post',this, this.record, direction?'next':'prev');
+			this.fireEvent('navigate-topic',this, this.record, direction?'next':'prev');
 		}
 
 		return false;
