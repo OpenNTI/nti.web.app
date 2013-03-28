@@ -622,6 +622,27 @@
 		overflow: hidden;
 	}
 
+	.empty{
+		margin: 100px 20px 0;
+		text-align: center;
+		font: normal 300 30px $font;
+		color: $tertiary-grey;
+
+		& > div {
+			margin: 1em;
+			color: $primary-blue;
+			font: normal 300 13px $font;
+			a {
+				margin: 0 4px;
+				&,&:visited,&:link,&:active {
+					font-family: $font;
+					color: $primary-blue;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
 	& > div.x-component,
 	& > div.x-container, {
 		width: 700px;
