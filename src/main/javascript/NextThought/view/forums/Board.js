@@ -58,22 +58,19 @@ Ext.define('NextThought.view.forums.Board',{
 		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
 		this.headerEl = this.headerElContainer.down('.header');
 		this.mon(this.headerEl,'click',this.onHeaderClick,this);
-		this.on('destroy', this.destroy, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
-	destroy: function(){
+	onDestroy: function(){
 		this.headerEl.remove();
-		this.callParent(arguments);
 	},
 
 	onBeforeDeactivate: function(){
 		if(this.isVisible() && this.headerLocked){
 			this.headerEl.insertBefore(this.el.first());
 		}
-		return true;
 	},
 
 	onBeforeActivate: function(){

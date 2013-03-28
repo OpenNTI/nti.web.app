@@ -80,7 +80,6 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.headerEl = this.headerElContainer.down('.header');
 
 		this.mon(this.headerEl,'click',this.onHeaderClick,this);
-		this.on('destroy', this.destroy, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
@@ -104,16 +103,14 @@ Ext.define('NextThought.view.forums.Forum',{
 	},
 
 
-	destroy:function(){
+	onDestroy:function(){
 		this.headerEl.remove();//make sure we remove this just in case its not in our components element.
-		return this.callParent(arguments);
 	},
 
 	onBeforeDeactivate: function(){
 		if(this.isVisible() && this.headerLocked){
 			this.headerEl.insertBefore(this.el.first());
 		}
-		return true;
 	},
 
 	onBeforeActivate: function(){
