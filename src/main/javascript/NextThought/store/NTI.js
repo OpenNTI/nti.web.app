@@ -5,6 +5,7 @@ Ext.define('NextThought.store.NTI',{
 	],
 	model: 'NextThought.model.Base',
 	autoLoad: false,
+	defaultPageSize: undefined,
 	proxy: {
 		type: 'rest',
 		limitParam: 'batchSize',
@@ -28,6 +29,11 @@ Ext.define('NextThought.store.NTI',{
 			delete this.url;
 		}
 		this.on('write', this.onWrite);
+
+		if(!this.pageSize){
+			this.proxy.limitParam = undefined;
+			this.proxy.startParam = undefined;
+		}
 		return r;
 	},
 
