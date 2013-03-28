@@ -366,7 +366,7 @@ Ext.define('NextThought.view.account.activity.View',{
 	forumCommentClicked: function(rec){
 		var me = this;
 		function success(r){
-			if(me.fireEvent('before-show-topic', r)){ me.fireEvent('show-topic', r); }
+			if(me.fireEvent('before-show-topic', r)){ me.fireEvent('show-topic', r, rec.get('ID')); }
 		}
 
 		function fail(){ console.log('Can\t find forum topic to navigate to', arguments); }

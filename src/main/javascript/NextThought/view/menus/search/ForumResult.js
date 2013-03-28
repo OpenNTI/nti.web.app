@@ -9,6 +9,13 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 
 	doClicked: function(fragIdx){
-		this.fireEvent('click-forum-result', this, fragIdx);
+		var me = this;
+		if(this.fireEvent('before-show-topic', this.record)){
+			this.fireEvent('show-topic', this.record, this.hit.get('ID'), function(success){
+				if(success){
+					me.fireEvent('highlight-topic-hit', me, fragIdx);
+				}
+			});
+		}
 	}
 });

@@ -75,7 +75,7 @@ Ext.define('NextThought.controller.Forums', {
 				'save': this.saveTopicComment
 			},
 			'search-result':{
-				'click-forum-result': this.showForumSearchResult
+				'highlight-topic-hit': this.highlightSearchResult
 			},
 			'*': {
 				'show-topic': this.presentTopic
@@ -425,7 +425,8 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	presentTopic: function(record, commentId, cb, scope, eOpts){
-		var callback = Ext.isFunction(cb) ? cb : undefined,
+		var callback = arguments.length > 3 ? cb : undefined,
+			cid = arguments.length > 2 ? commentId : undefined,
 			toShowHref = record ? record.get('href') : null;
 
 		if(!record || !toShowHref){
@@ -433,11 +434,11 @@ Ext.define('NextThought.controller.Forums', {
 			return;
 		}
 
-		if(toShowHref){
-			toShowHref = toShowHref + '/' + commentId;
+		if(!Ext.isEmpty(cid)){
+			toShowHref = toShowHref + '/' + cid;
 		}
 
-		console.log('should navigate to forum topic: ', record, commentId, callback);
+		console.log('should navigate to forum topic: ', record, cid, callback);
 
 		//The idea here is similar to state restoration.  Pop us down to the last
 		//stack view that matches (which is worst case the root).  Then using the
@@ -453,7 +454,7 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		this.popToLastViewMatchingPredicate(predicate);
-		this.pushNecessaryViews(toShowHref, commentId ? 'comment' : 'topic', cb, scope);
+		this.pushNecessaryViews(toShowHref, cid ? 'comment' : 'topic', cb, scope);
 	},
 
 
@@ -754,12 +755,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 	//Search functions
-	showForumSearchResult: function(result, fragIdx){
-		var r = result.record,
-			comment = result.comment,
-			id = comment ? result.hit.get('ID') : null;
-		this.presentTopic(r, id, function(success){
-			console.log('Do search highlighting here.');
-		}, this);
+	highlightSearchResult: function(result, fragIdx){
+		console.log('Do search highlighting here.', arguments);
 	}
 });
