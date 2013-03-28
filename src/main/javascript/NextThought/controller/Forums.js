@@ -58,13 +58,13 @@ Ext.define('NextThought.controller.Forums', {
 				'select':this.loadForum
 			},
 			'forums-forum': {
-				'new-topic':this.newTopic,
+				'new-topic':this.showTopicEditor,
 				'select':this.loadTopic
 			},
 			'forums-topic': {
 				'navigate-topic':this.switchTopic,
 				'delete-post': this.deleteObject,
-				'edit-topic':this.newTopic
+				'edit-topic':this.showTopicEditor
 			},
 			'forums-topic-editor':{
 				'save-post': this.saveTopicPost
@@ -703,8 +703,20 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	newTopic: function(cmp, forumRecord){
-		this.getForumViewContainer().add({xtype:'forums-topic-editor', record: forumRecord});
+	showTopicEditor: function(cmp, topicRecord){
+		var c = this.getForumViewContainer(),
+			o = c.items.last();
+
+		while(o && !o.getPath){
+			o = o.prev();
+		}
+
+		if(o && !o.getPath) {
+
+			o = null;
+		}
+
+		this.getForumViewContainer().add({xtype:'forums-topic-editor', record: topicRecord, path: o && o.getPath()});
 	},
 
 
@@ -714,7 +726,6 @@ Ext.define('NextThought.controller.Forums', {
 			r = s && s.find('ID', record.get('ID'), 0, false, true, true);
 
 		r = s && s.getAt(r+dx);
-		console.log(r);
 		if(r){
 			cmp.destroy();
 			this.loadTopic(null,r);
