@@ -11,7 +11,8 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	mixins: {
 		flagActions: 'NextThought.mixins.FlagActions',
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		profileLink: 'NextThought.mixins.ProfileLinks'
 	},
 
 	requires:[
@@ -141,6 +142,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		UserRepository.getUser(r.headline.Creator,function(u){
 			r.headline.Creator = u;
+			me.user = u;
 			if(me.rendered){
 				me.nameEl.update(u.getName());
 			}
@@ -169,6 +171,9 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.mon(Ext.get('forums'),'scroll',this.handleScrollHeaderLock,this);
+
+
+		this.enableProfileClicks(this.nameEl);
 
 		this.updateContent();
 		this.bodyEl.selectable();
