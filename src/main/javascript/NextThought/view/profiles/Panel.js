@@ -204,6 +204,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.headerLocked = true;
 			this.tabBarEl.addCls(cls).appendTo(profileDomParent);
 		}
+		else if(tabBarParent !== profileDomParent) {
+			this.tabBarEl.removeCls(cls);
+		}
 	},
 
 
