@@ -79,6 +79,13 @@ Ext.define('NextThought.view.account.activity.View',{
 			'click':this.itemClick,
 			'mouseover': this.itemHover
 		});
+
+		this.itemClickMap = {
+			'personalblogentry': this.blogEntryClicked,
+			'personalblogcomment': this.blogCommentItemClicked,
+			'communityheadlinetopic': this.forumTopicClicked,
+			'generalforumcomment': this.forumCommentClicked
+		};
 	},
 
     fetchMore: function(){
@@ -290,7 +297,13 @@ Ext.define('NextThought.view.account.activity.View',{
 		else if(item.getModelName() === 'PersonalBlogEntry'){
 			return Ext.String.format('shared a thought: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
 		}
+		else if(item.getModelName() === 'CommunityHeadlineTopic'){
+			return Ext.String.format('started a discussion: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
+		}
 		else if(item.getModelName() === 'PersonalBlogComment'){
+			return Ext.String.format('commented &ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true));
+		}
+		else if(item.getModelName() === 'GeneralForumComment'){
 			return Ext.String.format('commented &ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true));
 		}
 		else if (item.getModelName() === 'Note'){
@@ -310,7 +323,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	itemClick: function(e){
 		var activityTarget = e.getTarget('div.activity', null, true),
-			guid, item, rec, me = this;
+			guid, item, rec, me = this, className;
 
 		guid = (activityTarget||{}).id;
 		item = this.stream[guid];
@@ -321,14 +334,11 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 		e.stopEvent();
 
+		className = rec.get('Class').toLowerCase();
+
 		try{
-			if(/.*?personalblogentry$/.test(rec.get('MimeType'))){
-				UserRepository.getUser(rec.get('Creator'), function(user){
-					me.fireEvent('navigate-to-blog', user, rec.get('ID'));
-				});
-			}
-			else if(/.*?personalblogcomment$/.test(rec.get('MimeType'))){
-				this.blogCommentItemClicked(rec);
+			if(this.itemClickMap[className]){
+				this.itemClickMap[className].call(this, rec);
 			}
 			else{
 				this.fireEvent('navigation-selected', item.ContainerId, rec);
@@ -338,6 +348,30 @@ Ext.define('NextThought.view.account.activity.View',{
 			console.error(Globals.getError(er));
 		}
 		return false;
+	},
+
+	blogEntryClicked: function(rec){
+		var me = this;
+		UserRepository.getUser(rec.get('Creator'), function(user){
+			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
+		});
+	},
+
+	forumTopicClicked: function(rec){
+		if(this.fireEvent('before-show-topic', rec)){
+			this.fireEvent('show-topic', rec);
+		}
+	},
+
+	forumCommentClicked: function(rec){
+		var me = this;
+		function success(r){
+			if(me.fireEvent('before-show-topic', r)){ me.fireEvent('show-topic', r); }
+		}
+
+		function fail(){ console.log('Can\t find forum topic to navigate to', arguments); }
+		$AppConfig.service.getObject(rec.get('ContainerId'), success, fail, me);
+
 	},
 
 	blogCommentItemClicked: function(rec){
@@ -364,26 +398,21 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	itemHover: function(e){
 		var me = this,
-				target = e.getTarget('div.activity',null,true),
-				guid = (target||{}).id,
-				item = me.stream[guid],
-				rec = (item||{}).record,
-				popout = NextThought.view.account.activity.Popout;
+			target = e.getTarget('div.activity',null,true),
+			guid = (target||{}).id,
+			item = me.stream[guid],
+			rec = (item||{}).record,
+			recordClassName = rec && rec.get ? rec.get('Class') : '',
+			alias = "widget.activity-popout-"+recordClassName,
+			classRef = Ext.ClassManager.getByAlias(alias),
+			popout = !Ext.isEmpty(classRef) ? classRef : NextThought.view.account.activity.Popout;
 
 		if(!rec){return;}
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
-
-			if (rec.get('Class') === 'User'){
-				popout = NextThought.view.account.contacts.management.Popout;
-			}
-			else if(rec.get('Class') === 'PersonalBlogEntry' || rec.get('Class') === 'PersonalBlogComment'){
-				popout =  NextThought.view.account.activity.BlogPopout;
-			}
 			popout.popup(rec,target,target,[-10,-12],0.5, me);
-
 		},500);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});

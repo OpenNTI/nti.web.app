@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.contacts.management.Popout',{
 	extend: 'Ext.container.Container',
-	alias: 'widget.contact-popout',
+	alias: ['widget.contact-popout', 'widget.activity-popout-User'],
 
 	requires: [
 		'NextThought.view.account.contacts.management.Person'

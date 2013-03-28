@@ -44,9 +44,11 @@
 			}
 
 			&.user::after{ background-position: -20px -20px; }
-			&.comment::after, &.personalblogcomment::after { background-position: -38px 0; }
+			&.comment, &.personalblogcomment, &.generalforumcomment{
+				&::after{ background-position: -38px 0; }
+			}
 			&.highlight::after { background-position: 0 0; }
-			&.note,&.personalblogentry{
+			&.note,&.personalblogentry, &.communityheadlinetopic{
 				&::after{ background-position: -20px 0; }
 
 				font-style: italic;

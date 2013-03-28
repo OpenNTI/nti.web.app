@@ -56,7 +56,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'profile-activity *':{
 				'navigation-selected': this.navigate
 			},
-			'profile-forum-activity-item': {
+			'*': {
 				'before-show-topic': this.beforeTopicShow
 			},
 			'notfound':{
