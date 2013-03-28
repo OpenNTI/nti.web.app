@@ -53,7 +53,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						]}
 					]},
 					{ cls: 'body', html: '{body}' },
-					{ tag:'tpl', 'if':'!phantom', cn:{
+					{ tag:'tpl', 'if':'values.phantom!==true', cn:{
 						cls: 'foot',
 						cn: [
 							{ cls: 'comments', 'data-label': ' Comments',
@@ -107,7 +107,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		var me = this, rd, r = me.record,
 			h = r.get('headline'),
 			username = me.record.get('Creator'),
-			store;
+			store,
+			url = r.getLink('contents');
 
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
@@ -133,7 +134,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		store = me.store = NextThought.store.NTI.create({
 			storeId: r.get('Class')+'-'+r.get('ID')+'-activity-view',
-			url: r.getLink('contents'),
+			url: url,
 			pageSize: 1
 		});
 
@@ -146,10 +147,11 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		store.on('add',this.fillInReplies,this);
 		store.on('load',this.fillInReplies,this);
-		if(rd.PostCount >0 && store.proxy.url){
+
+		if(rd.PostCount >0 && !Ext.isEmpty(url)){
 			store.load();
 		}
-		else if(!store.proxy.url){
+		else if(Ext.isEmpty(url)){
 			rd.phantom = true;
 		}
 	},
