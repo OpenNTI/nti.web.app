@@ -58,7 +58,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	deferEmptyText: false,
 	emptyText: Ext.DomHelper.markup({
-		cls: 'empty',
+		cls: 'empty-forum',
 		html: 'Be the first to start a discussion.',
 		cn: {cn:[
 			{ tag: 'a', html:'Go back', href: 'javascript:history.go(-1);'},
