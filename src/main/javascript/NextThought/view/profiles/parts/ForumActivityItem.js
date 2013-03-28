@@ -19,11 +19,20 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'span',
+		cls: 'path-part',
+		html: '{[values.title!==\'Discussion Board\'? values.title : values.Creator]}',
+		'data-ntiid':'{NTIID}',
+		'data-id':'{ID}',
+		'data-href':'{href}'
+	})),
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'topic profile-activity-item',
 			cn:[
-				{ cls: 'path', html:'forums / {board} / {forum}' },//this will be reworked... it will be a set of spans and the "/" will be a css element.
+				{ cls: 'path' },
 				{ cls:'item', cn:[
 					{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
 					{ cls: 'controls', cn: [
@@ -105,6 +114,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		rd.date = Ext.Date.format(h.get('CreatedTime'),'F j, Y');
 		h.compileBodyContent(me.setBody,me);
 
+		me.fillInPath();
+
 		UserRepository.getUser(username, function(u){
 			me.user = u;
 			rd.avatarURL = u.get('avatarURL');
@@ -149,6 +160,34 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		this.add(Ext.Array.map(recs,function(r){
 			return {record: r};
 		}));
+	},
+
+
+	fillInPath: function(data){
+		if(!data){
+			this.fireEvent('fill-in-path', this, this.record, Ext.bind(this.fillInPath,this));
+			return;
+		}
+		else if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.fillInPath,this,[data]),this,{single:true});
+			return;
+		}
+
+		///OK! lets do this finally
+		var me = this,
+			el = me.pathEl,
+			t = me.pathTpl;
+
+		data = data.slice();
+		data.unshift('forums');
+
+		Ext.each(data, function(o){
+			if(!o){return;}
+
+			t.append(el, o.getData ? o.getData() : {
+				title: o
+			});
+		});
 	},
 
 

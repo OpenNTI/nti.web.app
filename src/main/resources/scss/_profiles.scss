@@ -504,6 +504,15 @@
 				text-transform: uppercase;
 				padding: 0 20px;
 				font: normal 700 10px/40px $font;
+
+				span.path-part {
+					&::after{
+						content: ' / ';
+					}
+					&:last-of-type::after{
+						content: '';
+					}
+				}
 			}
 
 			&.deleted-reply{

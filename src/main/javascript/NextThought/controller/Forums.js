@@ -71,6 +71,9 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic-comment':{
 				'delete-topic-comment': this.deleteObject
 			},
+			'profile-forum-activity-item':{
+				'fill-in-path': this.fillInPath
+			},
 			'profile-forum-activity-item nti-editor':{
 				'save': this.saveTopicComment
 			},
@@ -85,6 +88,56 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		});
 	},
+
+
+	fillInPath: function(cmp, record, callback){
+		var i = 0,
+			parts = [],
+			r = record,
+			href = r.get('href').split('/');
+
+		for(i;i<2;i++){
+			href.pop();
+			parts.unshift(getURL(href.join('/')));
+		}
+
+
+		function maybeFinish(){
+			i--;
+			if(i>0){ return; }
+
+			Ext.callback(callback,cmp,[parts]);
+		}
+
+		function getObject(url,ix){
+			var req = {
+				url: url,
+				success: function(rep){
+					var o = parts[ix] = ParseUtils.parseItems(rep.responseText)[0];
+					if(!/board$|forum$/i.test(o.get('Class'))){
+						console.error('Unexpected object: ', o, ' from: ',url, 'and: ', r.get('href'));
+						parts[ix] = null;
+						return;
+					}
+
+					UserRepository.getUser(o.get('Creator'),function(u){
+						o.set('Creator',u);
+						maybeFinish();
+					});
+				},
+				failure: function(){
+					console.error('Could not load part: '+url, ' from: ',r.get('href'));
+					parts[ix] = null;
+					maybeFinish();
+				}
+			};
+
+			Ext.Ajax.request(req);
+		}
+
+		Ext.each(parts,getObject);
+	},
+
 
 	//An array denoting the precedence of data in state
 	stateKeyPrecedence: ['board','forum','topic','comment'],
