@@ -80,6 +80,7 @@ Ext.define('NextThought.view.forums.Editor',{
 		this.mon(e.tags,'new-tag', this.syncHeight,this);
 		this.mon(this.saveEl,'click', this.onSave, this);
 		this.mon(this.cancelEl,'click', this.onCancel, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 
 		if( r ){
 			h = r.get('headline');
@@ -103,6 +104,26 @@ Ext.define('NextThought.view.forums.Editor',{
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
 		return this.callParent(arguments);
+	},
+
+
+	onBeforeDeactivate: function(){
+		/*
+		*   NOTE: For now, since forums views aren't destroyed when you go away,
+		*   and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
+		*   If we change at some point, just uncomment the following lines to display a warning message.
+		*/
+//		if(this.isVisible()){
+//			this.warnBeforeDismissingEditor();
+//		}
+//		return !this.isVisible();
+		return true;
+	},
+
+
+	warnBeforeDismissingEditor: function(){
+		var msg = "You are currently editing or creating a discussion topic, please save or dismiss it first.";
+		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
 
 

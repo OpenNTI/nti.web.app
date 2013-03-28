@@ -152,6 +152,8 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		this.updateRecord(this.record);
 
+		this.on('beforeactivate', this.onBeforeActivate, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.mon(Ext.get('forums'),'scroll',this.handleScrollHeaderLock,this);
 
 		this.updateContent();
@@ -260,6 +262,28 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		if(idx < max){
 			this.prevPostEl.removeCls('disabled');
+		}
+	},
+
+
+	onBeforeDeactivate: function(){
+		if(this.isVisible() && this.headerLocked){
+			this.navigationBarEl.insertBefore(this.el.first());
+		}
+		return true;
+	},
+
+
+	onBeforeActivate: function(){
+		var parentDom, forumDom;
+		if(this.isVisible() && this.headerLocked && this.navigationBarEl){
+			forumDom = this.el.up('.forums-view');
+			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
+			this.navigationBarEl.appendTo(parentDom);
+		}
+
+		if(this.isVisible() && this.down('')){
+
 		}
 	},
 
