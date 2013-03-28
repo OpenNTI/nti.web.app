@@ -86,7 +86,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			items = l.getLayoutItems();
             index = Ext.Array.indexOf(items, this);
 			c = items[index-1];
-			c = c && c.getpath && c.getPath();
+			c = c && c.getPath && c.getPath();
 		}
 
 		return c ? [c, p].join(' / '): p;
