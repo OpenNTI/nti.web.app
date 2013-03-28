@@ -90,7 +90,7 @@ Ext.define('NextThought.view.forums.Board',{
 			cutoff = 0,
 			cls = 'scroll-pos-right';
 
-		if(!headerEl || !parent){
+		if(this.isVisible() && (!headerEl || !parent)){
 			console.error('Nothing to handle, el is falsey');
 			return;
 		}

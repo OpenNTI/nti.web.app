@@ -67,6 +67,18 @@ Ext.define('NextThought.view.forums.Forum',{
 		]}
 	}),
 
+	
+	initComponent: function(){
+		this.callParent(arguments);
+
+		this.mon(this.store,{
+			scope: this,
+			add: this.incrementTopicCount,
+			remove: this.decrementTopicCount,
+			load: this.updateTopicCount
+		});
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -83,6 +95,22 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+	},
+
+
+	incrementTopicCount: function(store, record){
+		this.record.set({'TopicCount': (store.totalCount + 1)});
+	},
+
+	decrementTopicCount: function(store, record){
+		this.record.set({'TopicCount': (store.totalCount - 1)});
+	},
+
+	updateTopicCount: function(store, record){
+		//Make sure we're in sync with the store.
+		if(this.record.get('TopicCount') !== store.totalCount){
+			this.record.set({'TopicCount': store.totalCount});
+		}
 	},
 
 
@@ -130,7 +158,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			cutoff = 0,
 			cls = 'scroll-pos-right';
 
-		if(!headerEl || !parent){
+		if(this.isVisible() &&( !headerEl || !parent)){
 			console.error('Nothing to handle, el is falsey');
 			return;
 		}

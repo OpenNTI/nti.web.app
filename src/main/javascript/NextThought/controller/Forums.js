@@ -852,12 +852,24 @@ Ext.define('NextThought.controller.Forums', {
 
 	//Socket handling
 	incomingChange: function(change){
+		function updateRecordFieldCount(id, field){
+			if(!id || !field){
+				return;
+			}
+
+			Ext.StoreManager.each(function(s){
+				var found = s.getById(id);
+				if(found){
+					found.set(field, found.get(field)+1);
+					return false; //Note we break here because set will have updated the remaining instances;
+				}
+				return true;
+			});
+		}
+
+
 		var item,
 			maybeTopic = this.getForumViewContainer().peek();
-
-		if(!maybeTopic || !maybeTopic.addIncomingComment){
-			return;
-		}
 
 		if(!change.isModel){
 			change = ParseUtils.parseItems([change])[0];
@@ -865,7 +877,14 @@ Ext.define('NextThought.controller.Forums', {
 
 		item = change.get('Item');
 		if(item && /generalforumcomment$/.test(item.get('MimeType'))){
-			maybeTopic.addIncomingComment(item);
+			if(maybeTopic && maybeTopic.addIncomingComment){
+				maybeTopic.addIncomingComment(item);
+				return;
+			}
+			updateRecordFieldCount(item.get('ContainerId'), 'PostCount');
+		}
+		else if(item && /communityheadlinetopic$/.test(item.get('MimeType'))){
+			updateRecordFieldCount(item.get('ContainerId'), 'TopicCount');
 		}
 	},
 
