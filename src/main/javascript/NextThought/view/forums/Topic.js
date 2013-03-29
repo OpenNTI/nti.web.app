@@ -450,11 +450,13 @@ Ext.define('NextThought.view.forums.Topic',{
 		Ext.defer(this.fireEvent,1,this,['ready',this,this.queryObject]);
 	},
 
+
 	addIncomingComment: function(item){
 		if(item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))){
 			this.addComments(this.store, [item]);
 		}
 	},
+
 
 	goToComment: function(commentId){
 		if(!this.ready){
