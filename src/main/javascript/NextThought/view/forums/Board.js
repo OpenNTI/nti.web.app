@@ -55,12 +55,15 @@ Ext.define('NextThought.view.forums.Board',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
-		this.headerEl = this.headerElContainer.down('.header');
-		this.mon(this.headerEl,'click',this.onHeaderClick,this);
-		this.on('beforedeactivate', this.onBeforeDeactivate, this);
-		this.on('beforeactivate', this.onBeforeActivate, this);
-		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+
+		if(!this.isRoot){
+			this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
+			this.headerEl = this.headerElContainer.down('.header');
+			this.mon(this.headerEl,'click',this.onHeaderClick,this);
+			this.on('beforedeactivate', this.onBeforeDeactivate, this);
+			this.on('beforeactivate', this.onBeforeActivate, this);
+			this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+		}
 	},
 
 	onDestroy: function(){
