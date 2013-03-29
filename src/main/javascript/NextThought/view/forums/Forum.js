@@ -137,7 +137,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	onBeforeDeactivate: function(){
 		if(this.isVisible() && this.headerLocked){
-			this.headerEl.insertBefore(this.headerElContainer);
+			this.headerEl.appendTo(this.headerElContainer);
 		}
 	},
 

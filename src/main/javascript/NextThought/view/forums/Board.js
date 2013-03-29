@@ -69,7 +69,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 	onBeforeDeactivate: function(){
 		if(this.isVisible() && this.headerLocked){
-			this.headerEl.insertBefore(this.headerElContainer);
+			this.headerEl.appendTo(this.headerElContainer);
 		}
 	},
 
