@@ -47,7 +47,7 @@ Ext.define('NextThought.layout.container.Stack',{
 		if(!owner.popView){
 			owner.popView = function(){
 				var l = this.items.last();
-				if( l && this.items.getCount() > 1 ){
+				if( l ){
 					l.destroy();
 				}
 			};
