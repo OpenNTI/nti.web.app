@@ -56,7 +56,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 	keyUp: function(event){
 		var len = event.getTarget().value.trim().length;
-		this.addGroupDom.down('.input-wrap')[(len > 0)? "removeCls" : "addCls"]('epmty');
+		this.addGroupDom.down('.input-wrap')[(len > 0)? "removeCls" : "addCls"]('empty');
 		this.addGroupDom.down('.save-button')[(len > 0)? "removeCls" : "addCls"]('save-button-disabled');
 	},
 	
