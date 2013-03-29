@@ -334,6 +334,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		rec = this.dataGuidMap[historyElement.getAttribute('data-guid')];
 		mt = rec.get('MimeType');
 
+		//FIXME Dear god this needs to go away
 		if(mt === data.TranscriptSummary.prototype.mimeType){
 			this.getTranscriptsForOccupants(rec, historyElement);
 		}
@@ -342,6 +343,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 		}
 		else if(/.*?personalblogcomment$/.test(mt)){
 			this.blogCommentClicked(rec);
+		}
+		else if(/.*?communityheadlinetopic$/.test(mt)){
+			this.forumTopicClicked(rec);
 		}
 		else {
 			cid = rec.get('ContainerId');
@@ -364,6 +368,13 @@ Ext.define('NextThought.view.UserDataPanel',{
 			commentId = rec.get('ID');
 
 		this.fireEvent('navigate-to-blog', u, postId, commentId);
+	},
+
+
+	forumTopicClicked: function(rec){
+		if(this.fireEvent('before-show-topic', rec)){
+			this.fireEvent('show-topic', rec);
+		}
 	},
 
 
