@@ -565,7 +565,7 @@ Ext.define('NextThought.controller.Forums', {
 
 			Ext.each(o,function(b){
 				//We create forums on the backend, so if the board has 0, don't show it.
-				if(b.get('ForumCount') > 0){
+				if(b.get('ForumCount') > -1){
 					boards.push(b);
 				}
 			});
