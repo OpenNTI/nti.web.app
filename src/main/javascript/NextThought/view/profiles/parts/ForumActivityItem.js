@@ -309,10 +309,13 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	setBody: function(text){
 		if(!this.rendered){
-			this.renderData.body = text;
+//			this.renderData.body = text;
+			this.on('afterrender',Ext.bind(this.setBody,this,arguments));
 			return;
 		}
 		this.messageBodyEl.update(text);
+		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
+		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
 	},
 
 
