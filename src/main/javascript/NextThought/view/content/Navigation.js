@@ -268,6 +268,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		return num;
 	},
 
+	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
 	toRomanNumeral: function(num){
 		var digits, key, roman, i;
 
