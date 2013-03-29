@@ -196,7 +196,7 @@
 
 		&.error-on-bottom {
 			&::before {
-				top: initial;
+				top: auto;
 				bottom: -16px;
 			}
 			&::after {
