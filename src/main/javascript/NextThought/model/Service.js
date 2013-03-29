@@ -228,7 +228,7 @@ Ext.define('NextThought.model.Service', {
 						if(mime && forceMime){
 							contentType = resp.getResponseHeader('Content-Type');
 							if(contentType && contentType.indexOf(mime) < 0){
-								console.info('Requested with an explicit accept value of', mime, 'but got contenttype.  Calling failure', arguments);
+								console.info('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
 								Ext.callback(failure, scope, [req, resp]);
 								return;
 							}
