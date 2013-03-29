@@ -80,6 +80,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				'redaction',
 				'bookmark',
 				'forums.PersonalBlogComment',
+				'forums.GeneralForumComment',
 				'assessment.AssessedQuestion'
 			],makeMime).join(',')
 		});
