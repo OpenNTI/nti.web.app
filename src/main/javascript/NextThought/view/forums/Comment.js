@@ -67,7 +67,7 @@ Ext.define('NextThought.view.forums.Comment',{
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		rd.LastModified = rd['Last Modified'];
-		console.log(rd);
+
 		UserRepository.getUser(r.get('Creator'),function(u){
 			me.userObject = u;
 			Ext.applyIf(rd, u.getData());
@@ -152,7 +152,7 @@ Ext.define('NextThought.view.forums.Comment',{
 	},
 
 
-	getRefItems: function(){ return this.editor? [this.editor] : []; },
+	getRefItems: function(){ return this.editor ? [this.editor] : []; },
 
 
 	getRecord: function(){

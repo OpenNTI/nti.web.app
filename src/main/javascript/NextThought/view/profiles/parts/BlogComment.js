@@ -68,7 +68,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		rd.LastModified = rd['Last Modified'];
-		console.log(rd);
+
 		UserRepository.getUser(r.get('Creator'),function(u){
 			me.userObject = u;
 			Ext.applyIf(rd, u.getData());
@@ -241,4 +241,5 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		e.stopEvent();
 		this.editor.editBody(this.record.get('body')).activate();
 	}
+
 });
