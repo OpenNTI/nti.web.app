@@ -248,9 +248,9 @@ Ext.define('NextThought.controller.Navigation', {
 			state = app.getController('State'),
 			fragment,
 			args = [title],
-			pId = arguments.length > 1 ? postId : undefined,
-			cId = arguments.length > 2 ? commentId : undefined,
-			ps = arguments.length > 3 ? params : undefined;
+			pId = arguments.length > 2 ? postId : undefined,
+			cId = arguments.length > 3 ? commentId : undefined,
+			ps = arguments.length > 4 ? params : undefined;
 
 		if(pId){
 			args.push(pId);
