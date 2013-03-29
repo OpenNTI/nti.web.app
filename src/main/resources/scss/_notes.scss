@@ -7,10 +7,7 @@
 		white-space: nowrap;
 		.name {
 			color: $primary-blue;
-			&.over {
-				text-decoration: underline;
-				cursor: pointer;
-			}
+			cursor: pointer;
 		}
 
 		.shared-to{
@@ -41,10 +38,7 @@
 		.name {
 			color: $primary-blue;
 			font-size: 24px;
-			&.over {
-				text-decoration: underline;
-				cursor: pointer;
-			}
+			cursor: pointer;
 		}
 
 
@@ -647,17 +641,13 @@
 
 		.avatar {
 			float: left;
+			cursor: pointer;
 			img {
 				border-radius: 2px;
 				margin-left: 4px;
 				background-size: cover;
 				width: 32px;
 				height: auto;
-				&.over {
-					cursor: pointer;
-				}
-			}
-			&.over {
 				cursor: pointer;
 			}
 		}

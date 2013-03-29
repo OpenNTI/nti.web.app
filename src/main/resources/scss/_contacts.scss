@@ -129,6 +129,7 @@ $over-color: #f4f3f3;
 		width: 32px;
 		height: 32px;
 		margin-top: 2px;
+		cursor: pointer;
 
 		&.nib {
 			background: transparent $icons no-repeat;
@@ -137,9 +138,6 @@ $over-color: #f4f3f3;
 			margin-top: 7px;
 			border: none !important;
 			float: right;
-			cursor: pointer;
-		}
-		&.over {
 			cursor: pointer;
 		}
 	}
@@ -212,10 +210,7 @@ $over-color: #f4f3f3;
 	.name {
 		@include menu-label-text-treatment;
 		color: $primary-blue;
-		&.over {
-			text-decoration: underline;
-			cursor: pointer;
-		}
+		cursor: pointer;
 	}
 	.status {
 		color: $tertiary-grey;
