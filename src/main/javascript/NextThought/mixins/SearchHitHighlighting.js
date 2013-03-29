@@ -96,6 +96,7 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 			p = Ext.get(mainViewId);
 			pos -= p.getHeight()/2;
 			if(p){
+				//console.log('Scroll To pos: ', pos, 'current scroll: ', scrollOffset, ' view: ', p);
 				p.scrollTo('top', pos, true);
 			}
 		}

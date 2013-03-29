@@ -478,6 +478,48 @@ Ext.define('NextThought.view.forums.Topic',{
 			key: 'forum',
 			mainViewId: 'forums'
 		};
+	},
+
+
+	/*  NOTE: There was inconsistency scrolling to the right place in the forum view.
+	 *  While the parent view( i.e forums view) scrolls, this view doesn't scroll,
+	 *  thus we override it to account for the scrolling from the view that scrolls
+ 	 */
+	scrollToHit: function(fragment, phrase){
+		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
+			searchIn = this.el.dom,
+			doc = searchIn.ownerDocument,
+			index = this.buildSearchIndex(),
+			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
+			range, pos = -2, nodeTop, scrollOffset, p;
+
+
+		if(Ext.isEmpty(ranges)){
+			console.warn('Could not find location of fragment', fragment);
+			return;
+		}
+
+		if(ranges.length > 1){
+			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
+		}
+		range = ranges[0];
+		var mainViewId = this.getSearchHitConfig ? this.getSearchHitConfig().mainViewId : 'profile';
+		p = Ext.get(mainViewId);
+
+		if(range && range.getClientRects().length > 0){
+			nodeTop = range.getClientRects()[0].top;
+			scrollOffset = p.getScroll().top;
+			pos = nodeTop + scrollOffset;
+		}
+
+		console.log('Need to scroll to calculated pos', pos);
+		if(pos > 0){
+			pos -= p.getHeight()/2;
+			if(p){
+				console.log('Scroll To pos: ', pos, 'current scroll: ', scrollOffset, ' view: ', p);
+				p.scrollTo('top', pos, true);
+			}
+		}
 	}
 
 });
