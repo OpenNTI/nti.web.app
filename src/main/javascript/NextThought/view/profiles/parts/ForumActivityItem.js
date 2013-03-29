@@ -48,10 +48,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						{ cls: 'subject link', html: '{[values.phantom?\'(Deleted) \':\'\']}{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link', html: '{Creator}'},
-							{tag: 'span', cls: 'separator', html: ' '},
 							{tag: 'span', cls: 'time', html:'{date}'},
-							{tag: 'span', cls: 'separator', html: ' &middot; '},
-							{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
+							{tag: 'tpl', 'if':'isModifiable', cn:[
+								{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}' }
+							]}
 						]}
 					]},
 					{ cls: 'body', html: '{body}' },
@@ -60,8 +60,12 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						cn: [
 							{ cls: 'comments', 'data-postcount':'{PostCount}' ,'data-label': ' Comments',
 								html: '{PostCount} Comment{[values.PostCount!=1?\'s\':\'\']}' },
-							{ cls: 'flag', html: 'Report' },
-							{ cls: 'delete', html: 'Delete' }
+							{tag:'tpl', 'if':'!isModifiable', cn:[
+								{ cls: 'flag', html: 'Report' }
+							]},
+							{tag:'tpl', 'if': 'isModifiable', cn:[
+								{ cls: 'delete', html: 'Delete' }
+							]}
 						]
 					}}]
 				}
@@ -123,6 +127,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		Ext.apply(rd, {
 			'publish-state': r.getPublishState(),
+			'isModifiable': isMe(username),
 			headline: h.getData(),
 			date: Ext.Date.format(h.get('CreatedTime'),'F j, Y')
 		});
