@@ -580,7 +580,7 @@ Ext.define('NextThought.controller.Forums', {
 				console.log('List of boards:',boards);
 				store.add(boards);
 				if(boards.length === 1){
-					me.loadBoard(null,r,true,{isRoot:true});
+					me.loadBoard(null,r,true);
 					me.replaceState({
 						board:{
 							community: r.communityUsername,
