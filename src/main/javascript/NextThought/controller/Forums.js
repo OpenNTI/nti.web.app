@@ -476,9 +476,12 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	pushState: function(s){
-		s = {'forums': s};
-		console.log('Need to push updated state here', s);
-		history.pushState(s);
+		history.pushState({forums: s});
+	},
+
+
+	replaceState: function(s){
+		history.replaceState({forums: s});
 	},
 
 
@@ -556,24 +559,46 @@ Ext.define('NextThought.controller.Forums', {
 			if(req && req.community) {
 				c = req.community;
 				Ext.each(o,function(o){
+					o.communityUsername = c.getId();
 					if(o.get('Creator') === c.getId()){ o.set('Creator',c); }});
 			}
 
-			boards.push.apply(boards, o);
+			Ext.each(o,function(b){
+				//We create forums on the backend, so if the board has 0, don't show it.
+				if(b.get('ForumCount') > 0){
+					boards.push(b);
+				}
+			});
+
 			maybeFinish();
 		}
 
 		function maybeFinish(){
 			urls.handled--;
+			var r = boards.first();
 			if(urls.handled === 0){
 				console.log('List of boards:',boards);
 				store.add(boards);
+				if(boards.length === 1){
+					me.loadBoard(null,r,true,{isRoot:true});
+					me.replaceState({
+						board:{
+							community: r.communityUsername,
+							isUser: true
+						},
+						forum: undefined,
+						topic: undefined,
+						comment: undefined
+					});
+				}
 			}
 		}
 
 		var communities = $AppConfig.userObject.getCommunities(),
 			urls = Ext.Array.map(communities,makeUrl),
 			boards = [],
+			me = this,
+			root,
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
 			});
@@ -581,7 +606,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		urls.handled = urls.length;
 
-		view.add({store:store, xtype: 'forums-root', stateKey: 'root'});
+		root = view.add({store:store, xtype: 'forums-root', stateKey: 'root'});
 
 		Ext.each(urls,function(url,i){
 
@@ -592,10 +617,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadBoard: function(selModel, record, silent){
+	loadBoard: function(selModel, record, silent, cfg){
 		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('forum', record, {stateKey: 'board'});
+		this.showLevel('forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}));
 
 		community = record.get('Creator');
 		if(community.isModel){
