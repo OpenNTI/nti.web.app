@@ -475,10 +475,10 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	getRefItems: function(){
-		var ret = this.callParent(arguments)||[];
+		var items = this.callParent(arguments) || [];
 		if(this.activePost){
-			ret.push(this.activePost);
+			items.push(this.activePost);
 		}
-		return ret;
+		return items;
 	}
 });

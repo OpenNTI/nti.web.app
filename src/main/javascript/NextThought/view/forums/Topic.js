@@ -340,7 +340,9 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	getRefItems: function(){
 		var ret = this.callParent(arguments)||[];
-		ret.push(this.editor);
+		if( this.editor ){
+			ret.push(this.editor);
+		}
 		return ret;
 	},
 

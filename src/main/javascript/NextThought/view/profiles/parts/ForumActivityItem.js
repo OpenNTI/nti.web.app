@@ -205,6 +205,14 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	onDestroy: function(){
 		this.record.removeObserverForField(this, 'PostCount', this.updateCount, this);
+
+		if( this.editor ) {
+			delete this.editor.ownerCt;
+			this.editor.destroy();
+			delete this.editor;
+		}
+
+		this.callParent(arguments);
 	},
 
 
@@ -215,7 +223,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	getRefItems: function(){
 		var ret = this.callParent(arguments)||[];
-		ret.push(this.editor);
+		if( this.editor ){
+			ret.push(this.editor);
+		}
 		return ret;
 	},
 

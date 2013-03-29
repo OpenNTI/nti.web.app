@@ -142,7 +142,17 @@ Ext.define('NextThought.view.forums.Comment',{
 	},
 
 
-	getRefItems: function(){ return [this.editor]; },
+	onDestroy: function(){
+		if( this.editor ) {
+			delete this.editor.ownerCt;
+			this.editor.destroy();
+			delete this.editor;
+		}
+		this.callParent(arguments);
+	},
+
+
+	getRefItems: function(){ return this.editor? [this.editor] : []; },
 
 
 	getRecord: function(){
