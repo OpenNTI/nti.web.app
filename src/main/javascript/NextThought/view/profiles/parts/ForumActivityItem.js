@@ -335,6 +335,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 
 	setPublishState: function(){
+		if(!isMe(this.record.get('Creator'))){
+			return;
+		}
 		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
 		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
