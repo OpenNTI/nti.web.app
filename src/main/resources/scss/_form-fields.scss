@@ -149,6 +149,13 @@
 		background: $primary-blue;
 		border: 1px solid $border-blue;
 		color: #fff;
+
+		&.save-button-disabled {
+			background-color: #E4E4E4;
+			color: $tertiary-grey;
+			cursor: default;
+			border: 1px solid #E4E4E4;
+		}
 	}
 }
 

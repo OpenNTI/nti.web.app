@@ -14,7 +14,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 						{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
 							{ cls: 'clear' },
 							{ tag: 'input', type: 'text', cls: 'new-group-input' },
-							{ cls: 'save-button', html: 'Add' }
+							{ cls: 'save-button save-button-disabled', html: 'Add' }
 						]}
 					]
 				}, true);
@@ -27,6 +27,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 		link.down('input').on({
 			scope: this,
 			keypress: this.newGroupKeyPressed,
+			keyup: this.keyUp,
 			keydown: this.newGroupKeyDown
 		});
 	},
@@ -53,7 +54,17 @@ Ext.define('NextThought.mixins.AddGroup', {
 		}
 	},
 
-
+	keyUp: function(event){
+		console.log("'" + event.getTarget().value + "'");
+		if(event.getTarget().value.trim().length > 0){
+			this.addGroupDom.down('.input-wrap').removeCls('empty');
+			this.addGroupDom.down('.save-button').removeCls('save-button-disabled');
+		}else{
+			this.addGroupDom.down('.input-wrap').addCls('empty');
+			this.addGroupDom.down('.save-button').addCls('save-button-disabled');
+		}
+	},
+	
 	newGroupKeyPressed: function(event){
 		var k = event.getKey();
 		if(k === event.ESC){
@@ -81,7 +92,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 			me = this,
 			friends = [];
 
-		if((groupName||'').length === 0){
+		if((groupName.trim()||'').length === 0){
 			return;
 		}
 
