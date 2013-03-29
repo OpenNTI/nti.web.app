@@ -261,6 +261,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		if( this.publishStateEl ){ this.setPublishState(); }
 
+		this.reflectFlagged(this.record);
+		this.listenForFlagChanges(this.record);
+
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
