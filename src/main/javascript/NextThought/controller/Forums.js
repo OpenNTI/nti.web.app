@@ -818,6 +818,10 @@ Ext.define('NextThought.controller.Forums', {
 
 		function finish(entry){
 			if(!isEdit){
+				//This is how the views are reading the display name... pre-set the Creator as your userObject.
+				if(isMe(entry.get('Creator'))){
+					entry.set('Creator',$AppConfig.userObject);
+				}
 				try {
 					if(cmp.store){
 						cmp.store.insert(0,entry);
