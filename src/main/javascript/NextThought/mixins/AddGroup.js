@@ -55,14 +55,9 @@ Ext.define('NextThought.mixins.AddGroup', {
 	},
 
 	keyUp: function(event){
-		console.log("'" + event.getTarget().value + "'");
-		if(event.getTarget().value.trim().length > 0){
-			this.addGroupDom.down('.input-wrap').removeCls('empty');
-			this.addGroupDom.down('.save-button').removeCls('save-button-disabled');
-		}else{
-			this.addGroupDom.down('.input-wrap').addCls('empty');
-			this.addGroupDom.down('.save-button').addCls('save-button-disabled');
-		}
+		var len = event.getTarget().value.trim().length;
+		this.addGroupDom.down('.input-wrap')[(len > 0)? "removeCls" : "addCls"]('epmty');
+		this.addGroupDom.down('.save-button')[(len > 0)? "removeCls" : "addCls"]('save-button-disabled');
 	},
 	
 	newGroupKeyPressed: function(event){
