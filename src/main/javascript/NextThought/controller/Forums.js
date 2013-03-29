@@ -749,12 +749,37 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	applyTopicToStores: function(topic){
+		var recordForStore;
+		LocationProvider.applyToStoresThatWantItem(function(id,store){
+			if(store){
+				if(store.findRecord('NTIID',topic.get('NTIID'),0,false,true,true)){
+					console.warn('Store already has item with id: '+topic.get('NTIID'), topic);
+				}
+
+				if(!recordForStore){
+					//Each store gets its own copy of the record. A null value indicates we already added one to a
+					// store, so we need a new instance.  Read it out of the orginal raw value.
+					recordForStore = ParseUtils.parseItems([topic.raw])[0];
+				}
+
+				//The store will handle making all the threading/placement, etc
+				store.add(recordForStore);
+				//once added, null out this pointer so that subsequant loop iterations don't readd the same instance to
+				// another store. (I don't think our threading algorithm would appreciate that)
+				recordForStore = null;
+			}
+		}, topic);
+	},
+
+
 	saveTopicPost: function(editorCmp, record, title, tags, body, autoPublish){
 
 		var isEdit = Boolean(record),
 			cmp = editorCmp.prev(),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.CommunityHeadlinePost.create(),
-			forumRecord = cmp && cmp.record;
+			forumRecord = cmp && cmp.record,
+			me = this;
 
 		post.set({
 			'title': title,
@@ -776,6 +801,8 @@ Ext.define('NextThought.controller.Forums', {
 				catch(e){
 					console.error('Could not insert post into widget',Globals.getError(e));
 				}
+
+				me.applyTopicToStores(entry);
 			}
 
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
