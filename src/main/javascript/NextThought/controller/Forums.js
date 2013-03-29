@@ -757,9 +757,9 @@ Ext.define('NextThought.controller.Forums', {
 			forumRecord = cmp && cmp.record;
 
 		post.set({
-			'title':title,
-			'body':body,
-			'tags':tags||[]
+			'title': title,
+			'body': body,
+			'tags': tags||[]
 		});
 
 		if(isEdit){
@@ -796,13 +796,21 @@ Ext.define('NextThought.controller.Forums', {
 				url: isEdit ? undefined : forumRecord && forumRecord.get('href'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(post,operation){
-
 					var entry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
+
 					if(autoPublish !== undefined){
 						if(autoPublish !== entry.isPublished()){
 							entry.publish(editorCmp,finish,this);
 							return;
 						}
+					}
+
+					//We have nested objects here.  The entry contains a headline whose body, title, and tags
+					//have been updated.  Our magic multi object setter won't find the nested object in the store
+					//so we set it back on the original record to trigger other instances of the entry to be updated.
+					//Not doing this reflects itself by the body of the topic not updating in the activity view
+					if(isEdit && record){
+						record.set('headline', record.get('headline'));
 					}
 
 					unmask();
