@@ -65,6 +65,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 	onDestroy: function(){
 		this.headerEl.remove();
+		return this.callParent(arguments);
 	},
 
 	onBeforeDeactivate: function(){

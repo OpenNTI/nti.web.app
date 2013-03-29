@@ -133,6 +133,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	onDestroy:function(){
 		this.headerEl.remove();//make sure we remove this just in case its not in our components element.
+		return this.callParent(arguments);
 	},
 
 	onBeforeDeactivate: function(){
