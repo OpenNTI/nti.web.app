@@ -432,12 +432,6 @@ Ext.define('NextThought.view.forums.Topic',{
 			records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 			this.add(Ext.Array.map(records,function(r){return {record: r};}));
 		}
-		this.increasePostCount(store, records);
-	},
-
-
-	increasePostCount: function(store, records){
-		this.record.set({'PostCount': (store.totalCount + records.length)});
 	},
 
 
@@ -454,6 +448,9 @@ Ext.define('NextThought.view.forums.Topic',{
 	addIncomingComment: function(item){
 		if(item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))){
 			this.addComments(this.store, [item]);
+
+			//Adding a comment in this way doesn't trigger updating the containerView, so we will update the record ourselves.
+			this.record.set({'PostCount': (this.store.getCount() + 1)});
 		}
 	},
 
