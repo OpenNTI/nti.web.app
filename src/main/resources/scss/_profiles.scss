@@ -207,6 +207,7 @@
 
 		.link {
 			color: $primary-blue;
+			&:hover,
 			&.over {
 				text-decoration: underline;
 				cursor: pointer;

@@ -12,11 +12,20 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 		this.on('afterrender', onAfterRender, this, {single:true});
 	},
 
+
 	forumClickHandler: function(){
 		if(this.fireEvent('before-show-topic', this.record)){
 			this.fireEvent('show-topic', this.record);
 		}
 	},
+
+
+	forumClickHandlerGoToComment: function(){
+		if(this.fireEvent('before-show-topic', this.record)){
+			this.fireEvent('show-topic', this.record, this.record);
+		}
+	},
+
 
 	forumClickHandlerGoToComments: function(){
 		if(this.fireEvent('before-show-topic', this.record)){

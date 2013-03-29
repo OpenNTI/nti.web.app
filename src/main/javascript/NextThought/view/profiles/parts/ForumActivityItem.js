@@ -13,6 +13,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	mixins:{
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		profileLink: 'NextThought.mixins.ProfileLinks',
 		topicActions: 'NextThought.mixins.ForumTopicLinks'
 	},
 
@@ -37,14 +38,14 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			cn:[
 				{ cls: 'path' },
 				{ cls:'item', cn:[
-					{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
+					{ cls: 'avatar link', style: { backgroundImage: 'url({avatarURL});'} },
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
 						{ cls: 'favorite' },
 						{ cls: 'like' }
 					]},
 					{ cls: 'meta', cn: [
-						{ cls: 'subject', html: '{[values.phantom?\'(Deleted) \':\'\']}{title}' },
+						{ cls: 'subject link', html: '{[values.phantom?\'(Deleted) \':\'\']}{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link', html: '{Creator}'},
 							{tag: 'span', cls: 'separator', html: ' '},
@@ -253,7 +254,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			this.mon(this.commentsEl,'click',this.forumClickHandlerGoToComments,this);
 		}
 
+		this.enableProfileClicks(this.avatarEl,this.nameEl);
+
 		this.mon(this.pathEl,'click', this.forumClickHandler,this);
+		this.mon(this.subjectEl, 'click', this.forumClickHandler, this);
 
 		if( this.publishStateEl ){ this.setPublishState(); }
 
