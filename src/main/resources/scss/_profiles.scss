@@ -561,27 +561,27 @@
 					min-height: 60px;
 					font: normal 400 12px $font;
 					color: $tertiary-grey;
+				}
 
-					.stamp {
-						margin-top: 5px;
-						.name {font: inherit;}
+				.stamp {
+					margin-top: 5px;
+					.name {font: inherit;}
 
-						span{
-							&::after{
-								color: $tertiary-grey;
-								font: normal 500 12px/20px $font;
+					span{
+						&::after{
+							color: $tertiary-grey;
+							font: normal 500 12px/20px $font;
 
-								position: static;
-								content: '\00B7';
-								vertical-align: middle;
-								display: inline;
-								padding: 0 0.5em;
-								background: none;
-							}
-							&:last-of-type::after {
-								content: '';
-								display: none;
-							}
+							position: static;
+							content: '\00B7';
+							vertical-align: middle;
+							display: inline;
+							padding: 0 0.5em;
+							background: none;
+						}
+						&:last-of-type::after {
+							content: '';
+							display: none;
 						}
 					}
 				}
@@ -590,6 +590,10 @@
 					display: block;
 					color: $primary-grey;
 					font: normal 300 32px/34px $font;
+					&::after{
+						content: '';
+						display: none;
+					}
 				}
 
 				.subject:empty,
