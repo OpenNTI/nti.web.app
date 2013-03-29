@@ -955,6 +955,12 @@ Ext.define('NextThought.controller.Forums', {
 
 	//Search functions
 	highlightSearchResult: function(result, fragIdx){
-		console.log('Do search highlighting here.', arguments);
+		var topicView = this.getForumViewContainer().peek(),
+			hit = result.hit,
+			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined;
+
+		if(topicView && topicView.showSearchHit){
+			topicView.showSearchHit(hit, frag);
+		}
 	}
 });

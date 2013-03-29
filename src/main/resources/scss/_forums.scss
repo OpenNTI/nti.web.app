@@ -697,7 +697,12 @@
 			}
 			
 			@include post-view;
-			
+
+			.searchHit-overlay{
+				z-index: -1;
+				left: 0;
+			}
+
 			.navigation-bar {
 				@include forum-navigation;
 			}

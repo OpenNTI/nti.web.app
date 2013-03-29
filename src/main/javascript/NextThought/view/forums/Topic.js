@@ -12,7 +12,8 @@ Ext.define('NextThought.view.forums.Topic',{
 	mixins: {
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		profileLink: 'NextThought.mixins.ProfileLinks'
+		profileLink: 'NextThought.mixins.ProfileLinks',
+		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
 	},
 
 	requires:[
@@ -470,5 +471,13 @@ Ext.define('NextThought.view.forums.Topic',{
 		else{
 			this.scrollCommentIntoView(null);
 		}
+	},
+
+	getSearchHitConfig: function(){
+		return {
+			key: 'forum',
+			mainViewId: 'forums'
+		};
 	}
+
 });
