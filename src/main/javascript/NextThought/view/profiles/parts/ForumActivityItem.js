@@ -58,7 +58,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 					{ tag:'tpl', 'if':'values.phantom!==true', cn:{
 						cls: 'foot',
 						cn: [
-							{ cls: 'comments', 'data-label': ' Comments',
+							{ cls: 'comments', 'data-postcount':'{PostCount}' ,'data-label': ' Comments',
 								html: '{PostCount} Comment{[values.PostCount!=1?\'s\':\'\']}' },
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
@@ -117,6 +117,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
 		me.mixins.flagActions.constructor.call(me);
+		me.record.addObserverForField(this, 'PostCount', this.updateCount, this);
 
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 
@@ -166,6 +167,17 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	},
 
 
+	updateCount: function(key, value){
+		console.log(arguments);
+		if(this.rendered){
+			this.commentsEl.update(value+' Comment'+(value > 1 ? 's' : ''));
+		}
+		else{
+			Ext.apply(this.renderedData || {}, {'PostCount':value});
+		}
+	},
+
+
 	onDeletePost: function(e){
 		e.stopEvent();
 		var me = this;
@@ -183,6 +195,11 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 				}
 			}
 		});
+	},
+
+
+	onDestroy: function(){
+		this.record.removeObserverForField(this, 'PostCount', this.updateCount, this);
 	},
 
 
