@@ -186,12 +186,12 @@ Ext.define('NextThought.view.forums.Forum',{
 
 
 	onContainerClick: function(e){
-		e.stopEvent();
 		var t = e.getTarget('a[href=#]');
 		if(t){
+			e.stopEvent();
 			this.fireEvent('new-topic');
 		}
-		return false;
+		return !t;
 	},
 
 
