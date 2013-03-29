@@ -56,9 +56,9 @@ Ext.define('NextThought.controller.State', {
 	onSessionReady: function(){
 		var me = this,
 			history = window.history,
-			push = history.pushState || function(){};
+			push = history.pushState || function(){},
+			replace = history.replaceState || function(){};
 
-		history.replaceState = history.replaceState || function(){};
 
 		/**
 		 * Update the application's state object from various actions in this controller.
@@ -132,6 +132,20 @@ Ext.define('NextThought.controller.State', {
 					}
 					me.changeHash(url);
 				}
+			}
+		};
+
+		history.replaceState = function(s,title,url){
+			console.debug('replace state',s);
+			console.trace();
+
+			if (this.updateState(s)){
+
+				replace.apply(history, [
+					me.currentState,
+					title,
+					url || me.generateFragment(me.currentState)
+				]);
 			}
 		};
 
