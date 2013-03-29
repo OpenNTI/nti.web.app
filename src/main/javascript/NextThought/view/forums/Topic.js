@@ -311,15 +311,16 @@ Ext.define('NextThought.view.forums.Topic',{
 		var domParent = dom && dom.parentNode,
 			scroll = Ext.fly(dom).getScroll().top,
 			navBarParent = Ext.getDom(this.navigationBarEl).parentNode,
-			cutoff = 0;
+			cutoff = 0,
+			cls = 'scroll-pos-right';
 
 		if(navBarParent === domParent && scroll <= cutoff){
 			delete this.headerLocked;
-			this.navigationBarEl.appendTo(this.navigationBarCtrEl);
+			this.navigationBarEl.removeCls(cls).appendTo(this.navigationBarCtrEl);
 		}
 		else if(navBarParent !== domParent && scroll > cutoff){
 			this.headerLocked = true;
-			this.navigationBarEl.appendTo(domParent);
+			this.navigationBarEl.addCls(cls).appendTo(domParent);
 		}
 	},
 
