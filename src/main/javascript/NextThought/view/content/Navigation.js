@@ -198,9 +198,16 @@ Ext.define('NextThought.view.content.Navigation',{
 			type = '1', separate = '. ', suppress = false;
 
 		if(parent){
+			//FIXME 1) Result of getTitle could be undefined  so code defensively against
+			//that.  It is unlikely but possible.  2) Same with result of get('PresentationProperties')
+			//e.g. pres = blah || {} - CMU
 			pres = Library.getTitle(parent).get('PresentationProperties');
 
 			if(pres.numbering){
+
+				//FIXME recall 0 is falsy so if it says to start at 0 your
+				//condition fails and you start at 1 instead.  Does the spec
+				//allow 0 indexing? -CMU
 				if(pres.numbering.start){
 					num = pres.numbering.start;
 				}
@@ -230,6 +237,10 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		for(node;node.nextSibling; node = node.nextSibling){
 			if(!/topic/i.test(node.tagName)){ continue; }
+
+			//FIXME Can this be condensed?  It's all the same except for the
+			//text property -CMU
+
 			if(suppress){
 				items.push({
 					text	: node.getAttribute('label'),
@@ -238,7 +249,7 @@ Ext.define('NextThought.view.content.Navigation',{
 				});
 			}else{
 				items.push({
-					text	: this.styleList(num,type) + separate +node.getAttribute('label'),
+					text	: this.styleList(num,type) + separate + node.getAttribute('label'),
 					ntiid	: node.getAttribute('ntiid'),
 					cls		: node===current?'current':''
 				});
@@ -246,9 +257,24 @@ Ext.define('NextThought.view.content.Navigation',{
 			num++;
 		}
 	},
-	
+
 	//num - the number in the list; style - type of numbering '1','a','A','i','I'
 	styleList: function(num,style){
+		//NOTE A common pattern for this is to create an object
+		//to map the style values to function calls. e.g
+		//var formatters = {
+		//	'a': functionThatDoesSomething(num){
+		//		//format num
+		//		}
+		//}
+
+		//if(Ext.isFunction(format[style])){
+		//	//call it
+		//}
+		//else{
+		//	//default
+		//}
+
 		if(style === 'a'){
 			return this.toBase26SansNumbers(num);
 		}
@@ -284,7 +310,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		return new Array(+digits.join("") + 1).join("M") + roman;
 	},
 
-	toBase26SansNumbers: function(num){		
+	toBase26SansNumbers: function(num){
 		var val = (num -1) % 26,
 			letter = String.fromCharCode(97 + val),
 			num2 = Math.floor((num-1)/26);
