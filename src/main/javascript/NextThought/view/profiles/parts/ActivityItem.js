@@ -327,9 +327,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 						{ cls: 'subject', html: '' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link'},
-							{tag: 'span', cls: 'separator', html: ' '},
 							{tag: 'span', cls: 'time'},
-							{tag: 'span', cls: 'separator', html: ' &middot; '},
 							{tag: 'span', cls: 'shared-to link', html: 'Private'}
 						]}
 					]},
