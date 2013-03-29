@@ -53,6 +53,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			c,
 			loc = lp.getLocation(ntiid),
 			lineage = lp.getLineage(ntiid),
+			parent = lineage.last(),
 			book = lineage[0] ? lp.getLocation(lineage[0]) : null,
 			path = me.getBreadcrumbPath(),
 			iconPath;
@@ -68,7 +69,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
 			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 
-			me.buildMenu(e,c);
+			me.buildMenu(e,c,parent);
 			c = l;
 			path.add(e);
 		}
@@ -138,7 +139,7 @@ Ext.define('NextThought.view.content.Navigation',{
 	},
 
 
-	buildMenu: function(pathPartEl,locationInfo){
+	buildMenu: function(pathPartEl,locationInfo,parent){
 		var me = this, m,
 			menus = me.menuMap || {},
 			cfg = { xtype:'jump-menu', ownerButton: me, items: [] },
@@ -151,7 +152,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			this.enumerateBookSiblings(locationInfo,cfg.items);
 		}
 		else {
-			this.enumerateTopicSiblings(currentNode,cfg.items);
+			this.enumerateTopicSiblings(currentNode,cfg.items,parent);
 		}
 
 		m = menus[key] = Ext.widget(Ext.apply({},cfg));
@@ -192,8 +193,31 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 
-	enumerateTopicSiblings: function(node,items){
-		var current = node, num = 0;
+	enumerateTopicSiblings: function(node,items,parent){
+		var pres,current = node, num = 1,
+			type = '1', separate = '. ', suppress = false;
+
+		if(parent){
+			pres = Library.getTitle(parent).get('PresentationProperties');
+
+			if(pres.numbering){
+				if(pres.numbering.start){
+					num = pres.numbering.start;
+				}
+
+				if(pres.numbering.type){
+					type = pres.numbering.type;
+				}
+
+				if(pres.numbering.separator){
+					separate = pres.numbering.separator;
+				}
+
+				if(pres.numbering.suppressed){
+					suppress = pres.numbering.suppressed;
+				}
+			}
+		}
 
 		if(!current.parentNode){
 			console.warn('null parentNode in toc');
@@ -206,12 +230,67 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		for(node;node.nextSibling; node = node.nextSibling){
 			if(!/topic/i.test(node.tagName)){ continue; }
+			if(suppress){
+				items.push({
+					text	: node.getAttribute('label'),
+					ntiid	: node.getAttribute('ntiid'),
+					cls		: node===current?'current':''
+				});
+			}else{
+				items.push({
+					text	: this.styleList(num,type) + separate +node.getAttribute('label'),
+					ntiid	: node.getAttribute('ntiid'),
+					cls		: node===current?'current':''
+				});
+			}
 			num++;
-			items.push({
-				text	: num+'. '+node.getAttribute('label'),
-				ntiid	: node.getAttribute('ntiid'),
-				cls		: node===current?'current':''
-			});
+		}
+	},
+	
+	//num - the number in the list; style - type of numbering '1','a','A','i','I'
+	styleList: function(num,style){
+		if(style === 'a'){
+			return this.toBase26SansNumbers(num);
+		}
+
+		if(style === 'A'){
+			return this.toBase26SansNumbers(num).toUpperCase();
+		}
+
+		if(style === 'i'){
+			return this.toRomanNumeral(num).toLowerCase();
+		}
+
+		if(style === 'I'){
+			return this.toRomanNumeral(num).toUpperCase();
+		}
+
+		return num;
+	},
+
+	toRomanNumeral: function(num){
+		var digits, key, roman, i;
+
+		digits = String(+num).split("");
+		key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+		       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+		       "","I","II","III","IV","V","VI","VII","VIII","IX"];
+		roman = "";
+		i = 3;
+		while (i--){
+			roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+		}
+		return new Array(+digits.join("") + 1).join("M") + roman;
+	},
+
+	toBase26SansNumbers: function(num){		
+		var val = (num -1) % 26,
+			letter = String.fromCharCode(97 + val),
+			num2 = Math.floor((num-1)/26);
+		if(num2 > 0){
+			return this.toBase26SansNumbers(num2) + letter;
+		}else{
+			return letter;
 		}
 	},
 
