@@ -296,10 +296,6 @@
 			color: $primary-blue;
 			cursor: pointer;
 			&.on{ color: $primary-red; }
-
-			&:hover, &.over, &.hover {
-				text-decoration: underline;
-			}
 		}
 
 		.comment-count {cursor: pointer;}
