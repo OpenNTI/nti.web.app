@@ -194,21 +194,14 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 	enumerateTopicSiblings: function(node,items,parent){
-		var pres,current = node, num = 1,
+		var pres,current = node, num = 1, text,
 			type = '1', separate = '. ', suppress = false;
 
 		if(parent){
-			//FIXME 1) Result of getTitle could be undefined  so code defensively against
-			//that.  It is unlikely but possible.  2) Same with result of get('PresentationProperties')
-			//e.g. pres = blah || {} - CMU
 			pres = Library.getTitle(parent).get('PresentationProperties');
 
-			if(pres.numbering){
-
-				//FIXME recall 0 is falsy so if it says to start at 0 your
-				//condition fails and you start at 1 instead.  Does the spec
-				//allow 0 indexing? -CMU
-				if(pres.numbering.start){
+			if( pres && pres.numbering){
+				if(pres.numbering.start > 0 ){
 					num = pres.numbering.start;
 				}
 
@@ -240,58 +233,35 @@ Ext.define('NextThought.view.content.Navigation',{
 
 			//FIXME Can this be condensed?  It's all the same except for the
 			//text property -CMU
-
-			if(suppress){
-				items.push({
-					text	: node.getAttribute('label'),
-					ntiid	: node.getAttribute('ntiid'),
-					cls		: node===current?'current':''
-				});
-			}else{
-				items.push({
-					text	: this.styleList(num,type) + separate + node.getAttribute('label'),
-					ntiid	: node.getAttribute('ntiid'),
-					cls		: node===current?'current':''
-				});
-			}
+			text = (suppress)? node.getAttribute('label') : (this.styleList(num,type) + separate + node.getAttribute('label'));
+			
+			items.push({
+				text	: text,
+				ntiid	: node.getAttribute('ntiid'),
+				cls		: node===current?'current':''
+			});
 			num++;
 		}
 	},
 
 	//num - the number in the list; style - type of numbering '1','a','A','i','I'
 	styleList: function(num,style){
-		//NOTE A common pattern for this is to create an object
-		//to map the style values to function calls. e.g
-		//var formatters = {
-		//	'a': functionThatDoesSomething(num){
-		//		//format num
-		//		}
-		//}
+		var me = this, formatters = {
+			'a' :  me.toBase26SansNumbers,
+			'A' : function(num){
+				return me.toBase26SansNumbers(num).toUpperCase();
+			},
+			'i' : function(num){
+				return me.toRomanNumeral(num).toLowerCase();
+			},
+			'I' : me.toRomanNumeral
+		};
 
-		//if(Ext.isFunction(format[style])){
-		//	//call it
-		//}
-		//else{
-		//	//default
-		//}
-
-		if(style === 'a'){
-			return this.toBase26SansNumbers(num);
+		if(Ext.isFunction(formatters[style])){
+			return formatters[style].apply(me,[num]);
+		}else{
+			return num;
 		}
-
-		if(style === 'A'){
-			return this.toBase26SansNumbers(num).toUpperCase();
-		}
-
-		if(style === 'i'){
-			return this.toRomanNumeral(num).toLowerCase();
-		}
-
-		if(style === 'I'){
-			return this.toRomanNumeral(num).toUpperCase();
-		}
-
-		return num;
 	},
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
