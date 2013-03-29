@@ -142,7 +142,7 @@
 				&::after{
 					color: $tertiary-grey;
 					font: normal 500 12px/20px $font;
-
+					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
 					vertical-align: middle;
@@ -199,7 +199,7 @@
 				&::after{
 					color: $tertiary-grey;
 					font: normal 500 12px/20px $font;
-
+					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
 					vertical-align: middle;
@@ -311,6 +311,7 @@
 				font-weight: 600;
 				position: static;
 				content: '\00B7';
+				text-decoration: none !important;
 				vertical-align: middle;
 				display: inline-block;
 				padding: 0 0.6em;

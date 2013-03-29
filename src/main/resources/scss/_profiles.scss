@@ -288,7 +288,7 @@
 						&::after{
 							color: $tertiary-grey;
 							font: normal 500 12px/20px $font;
-
+							text-decoration: none !important;
 							position: static;
 							content: '\00B7';
 							vertical-align: middle;
@@ -343,7 +343,7 @@
 						&::after{
 							color: $tertiary-grey;
 							font: normal 500 12px/20px $font;
-
+							text-decoration: none !important;
 							position: static;
 							content: '\00B7';
 							vertical-align: middle;
@@ -615,6 +615,7 @@
 						position: static;
 						content: '\00B7';
 						vertical-align: middle;
+						text-decoration: none !important;
 						display: inline;
 						padding: 0 0 0 0.5em;
 						background: none;
@@ -713,6 +714,7 @@
 
 						&::after {
 							content: '\00B7';
+							text-decoration: none !important;
 							font: normal 600 14px/20px $font;
 							vertical-align: middle;
 							display: inline;
