@@ -351,6 +351,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
 
+	mixins: {
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	},
+
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'reply profile-activity-reply-item',
 		cn: [
@@ -379,6 +383,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 			username = me.record.get('Creator');
 
 		me.callParent(arguments);
+		me.mixins.likeAndFavoriteActions.constructor.call(me);
 
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		rd.date = Ext.Date.format(r.get('CreatedTime'),'F j, Y');
@@ -394,6 +399,13 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 				me.nameEl.update(rd.Creator);
 			}
 		});
+	},
+
+
+	afterRender: function(){
+		this.callParent();
+		this.reflectLikeAndFavorite(this.record);
+		this.listenForLikeAndFavoriteChanges(this.record);
 	},
 
 
