@@ -468,11 +468,35 @@ Ext.define('NextThought.view.account.activity.View',{
 		return foundInCommunities;
 	},
 
+
 	filterStore: function(change){
 		var communities = ($AppConfig.userObject.getCommunities() || []),
 			community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
 			me = this, communityNames = [];
+
+		//Filter out "Modified" change events for community headline
+		//topics.  See trello 1269
+		function filterModifiedTopics(c){
+			if(!c){
+				return true;
+			}
+			var type = c.get('ChangeType') || '',
+				item = c.get('Item'), mime;
+
+			if(item && (/modified/i).test(type)){
+				mime = item.get('MimeType');
+				if(mime && (/.*?communityheadlinetopic$/i).test(mime)){
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		if(!filterModifiedTopics(change)){
+			return false;
+		}
 
 		// Strip away all DFL in communities.
 		Ext.Array.each(communities, function(c){
