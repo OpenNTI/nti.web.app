@@ -235,7 +235,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			if(rec){ me.add({record: rec, autoFillInReplies:false}); }
 		}
 
-		r.loadReplies(cb,me,undefined,{sortOn: 'CreatedTime', sortOrder: 'descending'});
+		//Sigh even though in some cases we only want one reply we still fetch them all.
+		//We do this b/c what they really want is the most recently created direct reply...
+		r.loadReplies(cb,me,{sortOn: 'createdTime', sortOrder: 'descending'});
 	},
 
 

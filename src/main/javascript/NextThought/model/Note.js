@@ -111,31 +111,28 @@ Ext.define('NextThought.model.Note', {
 	 *
 	 * @param callback {Function}
 	 * @param scope {Object}
-	 * @param [pageSize] {Integer} Size of the pages to get back.
 	 * @param additionalParams {Object} An optional object describing params to send to the server.
 	 *          Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
 	 */
-	loadReplies: function(callback, scope, pageSize, additionalParams){
+	loadReplies: function(callback, scope, additionalParams){
 		var me = this,
 			link = this.getLink('replies'),
-			store = NextThought.store.PageItem.create(),
-			params = store.proxy.extraParams || {};
+			store,
+			params;
 
 		if(!link){
-			Ext.callback(callback, scope, [store]);
+			Ext.callback(callback, scope, [NextThought.store.PageItem.create()]);
 			return;
 		}
 
-		if(pageSize !== undefined){
-			store.pageSize = pageSize;
-		}
+		store = NextThought.store.PageItem.make(link, undefined, true)
+		params = store.proxy.extraParams || {}
 
 		if(additionalParams){
 			params = Ext.apply(params, additionalParams);
 			store.proxy.extraParams = params;
 		}
 
-		store.proxy.url = link;
 		store.on('load', callback, me, {single: true, scope: scope});
 		store.load({});
 	},

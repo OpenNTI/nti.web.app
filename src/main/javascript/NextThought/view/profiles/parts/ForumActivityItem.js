@@ -155,7 +155,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 
 		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, {
-			sortOn: 'lastModified',
+			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		});
 
