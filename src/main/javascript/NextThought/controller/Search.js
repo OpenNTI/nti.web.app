@@ -81,6 +81,28 @@ Ext.define('NextThought.controller.Search', {
 		return 'search-result-'+mime;
 	},
 
+
+	componentConfigForHit: function(hit){
+		var id = hit.get('ContainerId'),
+			sortIndexes = LocationProvider.getSortIndexes(id),
+			type ='search-result',
+			xtype = this.mimeToXType(hit.get('MimeType'));
+
+		sortIndexes.reverse();
+		if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.'+xtype))){
+			//custom component for type exists
+			type = xtype;
+		}
+
+		//Refactor to just pas the hit model a
+		return {
+			xtype: type,
+			sortId: sortIndexes,
+			hit: hit
+		};
+	},
+
+
 	storeLoad: function(store, records, success, opts, searchVal){
 		var results = [], menu = Ext.getCmp('search-results'),
 			resultGroups, result, loc, type, alias, me = this;
@@ -104,23 +126,8 @@ Ext.define('NextThought.controller.Search', {
 				result = result.items;
 
 				Ext.each(group.children, function(hit){
-					var id = hit.get('ContainerId'),
-						sortIndexes = LocationProvider.getSortIndexes(id),
-						type ='search-result',
-						xtype = this.mimeToXType(hit.get('MimeType'));
-
-					sortIndexes.reverse();
-					if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.'+xtype))){
-						//custom component for type exists
-						type = xtype;
-					}
-
-					//Refactor to just pas the hit model a
-					result.push( {
-						xtype: type,
-						sortId: sortIndexes,
-						hit: hit
-					});
+					var cfg = this.componentConfigForHit(hit);
+					result.push(cfg);
 				},	this);
 
 				//result = Ext.Array.sort(result, me.sortByRelevanceScore, me);
@@ -129,15 +136,10 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		menu.removeAll(true);
-
 		menu.add(results);
+
 		//show results...
 		menu.hide().show();
-	},
-
-	sanitizeCategoryName: function(n){
-		var s = this.self.categoryNamesMap[n.toLowerCase()];
-		return s||n;
 	},
 
 	sortByRelevanceScore: function(a, b){

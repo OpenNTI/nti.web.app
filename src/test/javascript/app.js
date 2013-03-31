@@ -181,7 +181,8 @@ Ext.application({
 			'javascript/specs/controller/Chat.spec.js',
 			'javascript/specs/controller/Groups.spec.js',
 			'javascript/specs/controller/Navigation.spec.js',
-			'javascript/specs/controller/State.spec.js'
+			'javascript/specs/controller/State.spec.js',
+			'javascript/specs/controller/Search.spec.js'
         ],
 		go);
 	}
