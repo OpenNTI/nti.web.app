@@ -29,28 +29,35 @@ describe('Search Controller Tests', function(){
 			return Ext.ComponentManager.create(cfg);
 		}
 
-		it('book, content, and highlights all get the old search result', function(){
-			var hits = [createHit('note'), createHit('highlight'), createHit('bookcontent')];
+		function verifyHitsAreType(hits, type){
 
 			Ext.Array.each(hits, function(hit){
 				var cmp = componentFromCfg(controller.componentConfigForHit(hit));
 
 				expect(cmp).toBeTruthy();
-				expect(cmp.$className).toBe('NextThought.view.menus.search.Result');
+				expect(cmp.$className).toBe(type);
 				cmp.destroy();
 			});
+		}
+
+		it('book, content, and highlights all get the old search result', function(){
+			var hits = [createHit('note'), createHit('highlight'), createHit('bookcontent')];
+			verifyHitsAreType(hits, 'NextThought.view.menus.search.Result');
 		});
 
-		xit('chat gets it\'s own component', function(){
-
+		it('chat gets it\'s own component', function(){
+			var hits = [createHit('messageinfo')];
+			verifyHitsAreType(hits, 'NextThought.view.menus.search.Result-Chat');
 		});
 
-		xit('Topic and topic comments share a component', function(){
-
+		it('Topic and topic comments share a component', function(){
+			var hits = [createHit('forums.communityheadlinepost'), createHit('forums.generalforumcomment')];
+			verifyHitsAreType(hits, 'NextThought.view.menus.search.ForumResult');
 		});
 
-		xit('Blogs and blog comment share a component', function(){
-
+		it('Blogs and blog comment share a component', function(){
+			var hits = [createHit('forums.personalblogentrypost'), createHit('forums.personalblogcomment')];
+			verifyHitsAreType(hits, 'NextThought.view.menus.search.BlogResult');
 		});
 	});
 });
