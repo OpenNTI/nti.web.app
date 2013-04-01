@@ -66,8 +66,8 @@ Ext.define('NextThought.controller.Search', {
 		});
 
 		this.getHitStore().on('beforeload', function(){
-			Ext.getCmp('search-results').el.mask('Searching...');
-		});
+			this.getSearchResultsMenu().el.mask('Searching...');
+		}, this);
 	},
 
 	mimeToXType: function(mime){
@@ -103,11 +103,16 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
+	getSearchResultsMenu: function(){
+		return Ext.getCmp('search-results');
+	},
+
+
 	storeLoad: function(store, records, success, opts, searchVal){
-		var results = [], menu = Ext.getCmp('search-results'),
+		var results = [], menu = this.getSearchResultsMenu(),
 			resultGroups, result, loc, type, alias, me = this;
 
-		Ext.getCmp('search-results').el.unmask();
+		menu.el.unmask();
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
 			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-error'}]});
@@ -213,7 +218,7 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 	clearSearchResults: function() {
-		Ext.getCmp('search-results').removeAll(true);
+		this.getSearchResultsMenu().removeAll(true);
 	},
 
 
