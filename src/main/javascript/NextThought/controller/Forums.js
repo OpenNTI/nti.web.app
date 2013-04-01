@@ -698,7 +698,7 @@ Ext.define('NextThought.controller.Forums', {
 		try{
 
 			commentForum.save({
-				url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
+				url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(rec){
 					console.log('Success: ', rec);
@@ -853,7 +853,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		try{
 			post.save({
-				url: isEdit ? undefined : forumRecord && forumRecord.get('href'),//only use postRecord if its a new post.
+				url: isEdit ? undefined : forumRecord && forumRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(post,operation){
 					var entry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
