@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 	ui: 'forum-comment',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
+		{ cls: 'controls', cn:[{cls:'favorite-spacer'},{cls:'like'}]},
 		{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'}},
 		{ cls: 'wrap', 'data-commentid':'{ID}', cn:[
 			{ cls: 'meta', cn: [
@@ -43,7 +43,6 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 		avatarEl: '.avatar',
 		ctrlEl: '.controls',
 		liked: '.controls .like',
-		favorites: '.controls .favorite',
 		editEl: '.foot .edit',
 		deleteEl: '.foot .delete',
 		flagEl:'.foot .flag',
