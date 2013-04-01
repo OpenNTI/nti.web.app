@@ -5,6 +5,7 @@ Ext.define('NextThought.view.menus.Group',{
 	],
 
 	ui: 'nt',
+	cls: 'custom-share-menu',
 	plain: true,
 	showSeparator: false,
 	shadow: false,
@@ -45,7 +46,7 @@ Ext.define('NextThought.view.menus.Group',{
 			hideMyContacts = this.hideMyContacts,
 			check = this.checklist,
 			name = this.username,
-			communities = $AppConfig.userObject.getCommunities();
+			communities = $AppConfig.userObject.getCommunities(), lists = [], groups = [];
 
 		if(this.actions){
 			items.push.apply(items,this.actions);
@@ -55,14 +56,12 @@ Ext.define('NextThought.view.menus.Group',{
 			Ext.each(communities,function(c){
 				items.push({
 					xtype: check ? 'menucheckitem': undefined,
-					cls: 'group-filter',
+					cls: 'share-with group-filter community-menu-item',
 					text: c.getName(),
 					record: c,
 					isGroup: true
 				});
 			});
-
-			items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
 		}
 
 		this.store.each(function(v){
@@ -70,16 +69,22 @@ Ext.define('NextThought.view.menus.Group',{
 				return;
 			}
 
+			var dfl = v.isDFL, target = dfl ? groups : lists;
 
-			items.push({
+			target.push({
 				xtype: check ? 'menucheckitem': undefined,
-				cls: 'group-filter',
+				cls: 'share-with '+v.readableType+'-menu-item',
 				text: v.getName(),
 				record: v,
 				isGroup: true,
 				checked: check && Ext.Array.contains(v.get('friends'),name)
 			});
 		});
+
+		items.push({ xtype: 'labeledseparator', text: 'Lists'});
+		Ext.Array.push(items, lists);
+		items.push({ xtype: 'labeledseparator', text: 'Groups'});
+		Ext.Array.push(items, groups);
 
 		this.add(items);
 	}
