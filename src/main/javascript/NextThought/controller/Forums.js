@@ -317,7 +317,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		this.getRecords(base, toLoad, function(records){
 			var j =  records.first() ? (stackOrder.indexOf(records.first()[0])) : (stackOrder.length - 1),
-				maybeTopic;
+				maybeTopic, shouldFireCallBack = true;
 			Ext.each(records,function(pair){
 				var rec = pair.last(),
 					type = Ext.String.capitalize(pair.first());
@@ -344,8 +344,10 @@ Ext.define('NextThought.controller.Forums', {
 			maybeTopic = me.getForumViewContainer().peek();
 			if(maybeTopic.goToComment){
 				if(comment){
+					maybeTopic.on('commentReady', function(){ Ext.callback(cb, scope, [true]);}, null, { single: true});
 					maybeTopic.goToComment(comment[1]);
 					state[comment[0]] = comment[1];
+					shouldFireCallBack = false;
 				}
 				else{
 					maybeTopic.goToComment(null);
@@ -359,7 +361,9 @@ Ext.define('NextThought.controller.Forums', {
 			}
 
 			//callback
-			Ext.callback(cb, scope, [true]);
+			if(shouldFireCallBack){
+				Ext.callback(cb, scope, [true]);
+			}
 		});
 	},
 

@@ -689,6 +689,7 @@
 			margin-top: 0;
 			.header-container {
 				height: 52px;
+				z-index: 3;
 			}
 
 			& > .wrap {
@@ -699,7 +700,7 @@
 			@include post-view;
 
 			.searchHit-overlay{
-				z-index: -1;
+				z-index: 1;
 				left: 0;
 			}
 
@@ -712,5 +713,11 @@
 				white-space: normal;
 			}
 		}
+	}
+}
+
+.x-container.x-border-item.x-box-item.x-container-default.x-layout-fit{
+	.navigation-bar{
+		z-index: 3;
 	}
 }
