@@ -9,41 +9,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
 
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header-container', cn:
-		{ cls: 'blog-post navigation-bar', cn:[
-			{cls:'path', cn:['Thoughts / ',{tag:'span',cls:'title-part', html:'{title}'}]},
-			{cls:'pager',cn:[{cls:'prev'},{cls:'next'}]}
-		]}},
-		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
-		{ cls: 'title', html:'{title}' },
-		{ cls: 'meta', cn: [
-			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
-			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
-				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
-				{ tag:'span', cls: 'edit link', html: 'Edit'},
-				{ tag:'span', cls: 'delete link', html: 'Delete'}
-			]}
-		]},
-		{ cls: 'body' },
-		{ cls: 'foot', cn: [
-			{ tag:'span', cls: 'tags', cn:[
-				{tag:'tpl', 'for':'headline.tags', cn:[
-					{tag:'span', cls:'tag', html: '{.}'}
-				]}
-			]},
-			{ cls: 'comment-box', cn: [
-				{ cls: 'response', cn:[
-					{ tag:'span', cls:'reply link', html: 'Add a Comment' },
-					{ tag:'span', cls:'report link', html: 'Report' }
-				]},
-				{ cls:'editor-box'}
-			]}
-		]},
-		{ id: '{id}-body', cls: 'comment-container',
-			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
-	]),
+	beforeRender: function(){
+		this.callParent(arguments);
 
+		this.renderData = Ext.apply(this.renderData||{},{
+			showName: false,
+			headerCls: 'blog-post',
+			path:'Thoughts'
+		});
+	},
 
 	buildStore: function(){
 		this.store = NextThought.store.Blog.create();

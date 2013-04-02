@@ -24,7 +24,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn:
-		{ cls: 'forum-topic navigation-bar', cn:[
+		{ cls: '{headerCls} navigation-bar', cn:[
 			{cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]},
 			{cls:'pager',cn:[{cls:'prev'},{cls:'next'}]}
 		]}},
@@ -32,7 +32,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
-			{ tag:'span', cls: 'name link', html: '{headline.Creator}'},
+			{ tag: 'tpl', 'if':'showName', cn:
+				{ tag:'span', cls: 'name link', html: '{headline.Creator}'}},
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
 				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
@@ -122,7 +123,9 @@ Ext.define('NextThought.view.forums.Topic',{
 		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
 		Ext.apply(r, {
 			'publish-state': s,
-			path: this.path
+			path: this.path,
+			showName: true,
+			headerCls: 'forum-topic'
 		});
 
 		if(!r.headline || !r.headline.getData){
@@ -210,8 +213,8 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	scrollCommentIntoView: function(commentId){
-		function scrollIntoView(){
-			if(typeof(commentId)==='boolean'){
+		function scrollIntoView() {
+			if ( typeof(commentId)==='boolean'){
 				el = me.getTargetEl();
 			}
 			else {
@@ -395,7 +398,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	destroyWarningMessage: function(){
-		return 'Deleting your topic will permanently remove it and any comments.'
+		return 'Deleting your topic will permanently remove it and any comments.';
 	},
 
 
