@@ -140,10 +140,6 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	setQuestionContent: function(part){
 		var root = LocationProvider.getContentRoot(), c, p;
-		function fixRef(original,attr,url) {
-			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
-					? original
-					: attr+'="'+root+url+'"'; }
 
 		c = this.question.get('content') || '';
 		p = part ? part.get('content'): '';
@@ -153,7 +149,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			c += '<br/>';
 		}
 
-		this.update((c + p).replace(/(src)="(.*?)"/igm, fixRef));
+		this.update(ContentUtils.fixReferences(c+p, root));
 		this.updateLayout();
 	},
 

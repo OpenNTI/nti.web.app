@@ -82,6 +82,28 @@ Ext.define('NextThought.util.Content',{
 		return this.externalUriRegex.test(r);
 	},
 
+	bustCorsForResources: function(string, name, value){
+		//Look for things we know come out of a different domain
+		//and append a query param.  This allows us to, for example,
+		//add a query param related to our location host so that
+		//we can tell amazon's caching servers to take that into consideration
+
+		//We are looking for an attribute whose valus is a quoted string
+		//referenceing resources.  We ignore urls with a protocol or protcolless
+		//absolute urls (//).  We look for relative urls rooted at resources.
+		//or absolute urls whose first folder is resources.
+		//TODO Processing html with a regex is stupid
+		//consider parsing and using selectors here instead.  Note
+		//we omit things that contain query strings here
+		var regex = /(\S+)\s*=\s*"(((\/[^"\/]+\/)||\/)resources\/[^?"]*?)"/igm;
+
+		function cleanup(original, attr, url){
+			return attr+'="'+url+'?'+name+'='+value+'"';
+		}
+
+		return string.replace(regex, cleanup);
+	},
+
 
 	fixReferences: function(string, basePath){
 
@@ -114,9 +136,29 @@ Ext.define('NextThought.util.Content',{
 					original : attr+'="'+host+url+'"';
 		}
 
-		var me = this;
+		//We eeed a hash for the location.hostname.  We could
+		//b64 encode it but that seems like overkill, a simple
+		//hash should suffice
+		function stringHash(str){
+			var hash = 0, i, c;
+			if(Ext.isEmpty(str)){
+				return hash;
+			}
 
-		return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+			for (i = 0; i < str.length; i++) {
+				c = str.charCodeAt(i);
+				hash = ((hash<<5)-hash)+c;
+				hash = hash & hash; // Convert to 32bit integer
+			}
+			return hash;
+		};
+
+		var me = this,
+			locationHash = stringHash(window.location.hostname);
+
+		string = this.bustCorsForResources(string, 'h', locationHash);
+		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+		return string;
 	},
 
 
