@@ -162,7 +162,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 
-		this.mon(this.navigationBarEl,'click',this.closeTopic,this);
+		this.mon(this.navigationBarEl,'click',this.closeView,this);
 
 		this.mon(this.nextPostEl,'click',this.navigationClick,this);
 		this.mon(this.prevPostEl,'click',this.navigationClick,this);
@@ -171,10 +171,12 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
-		this.mon(Ext.get('forums'),'scroll',this.handleScrollHeaderLock,this);
+		this.mon(this.getMainView(),'scroll',this.handleScrollHeaderLock,this);
 
 
-		this.enableProfileClicks(this.nameEl);
+		if(this.nameEl){
+			this.enableProfileClicks(this.nameEl);
+		}
 
 		this.updateContent();
 		this.bodyEl.selectable();
@@ -304,12 +306,15 @@ Ext.define('NextThought.view.forums.Topic',{
 		}
 	},
 
+	getScrollHeaderCutoff: function(){
+		return 0;
+	},
 
 	handleScrollHeaderLock: function(e,dom){
 		var domParent = dom && dom.parentNode,
 			scroll = Ext.fly(dom).getScroll().top,
 			navBarParent = Ext.getDom(this.navigationBarEl).parentNode,
-			cutoff = 0,
+			cutoff = this.getScrollHeaderCutoff(),
 			cls = 'scroll-pos-right';
 
 		if(navBarParent === domParent && scroll <= cutoff){
@@ -345,11 +350,16 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
+	getMainView: function(){
+		return Ext.get('forums');
+	},
+
+
 	showEditor: function(){
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-		Ext.get('forums').scrollChildIntoView(this.editor.getEl());
+		this.getMainView().scrollChildIntoView(this.editor.getEl());
 	},
 
 
@@ -365,7 +375,7 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
-	closeTopic: function(){
+	closeView: function(){
 		this.fireEvent('pop-view', this);
 	},
 
@@ -377,6 +387,10 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.editor.destroy();
 		var h = this.record.get('headline');
 
+		if(this.publishStateEl){
+			this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
+		}
+
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
 		h.removeObserverForField(this, 'tags', this.updateField, this);
@@ -385,12 +399,20 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
+	fireDeleteEvent: function(){ this.fireEvent('delete-post',this.record, this); },
+
+
+	destroyWarningMessage: function(){
+		return 'Deleting your topic will permanently remove it and any comments.'
+	},
+
+
 	onDeletePost: function(e){
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'Deleting your thought will permanently remove it and any comments.',
+			msg: me.destroyWarningMessage(),
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
@@ -398,7 +420,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			title: 'Are you sure?',
 			fn: function(str){
 				if(str === 'ok'){
-					me.fireEvent('delete-post',me.record, me);
+					me.fireDeleteEvent();
 				}
 			}
 		});
@@ -501,8 +523,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
 		}
 		range = ranges[0];
-		var mainViewId = this.getSearchHitConfig ? this.getSearchHitConfig().mainViewId : 'profile';
-		p = Ext.get(mainViewId);
+		p = this.getMainView();
 
 		if(range && range.getClientRects().length > 0){
 			nodeTop = range.getClientRects()[0].top;
