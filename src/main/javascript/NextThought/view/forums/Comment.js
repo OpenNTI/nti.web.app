@@ -229,10 +229,15 @@ Ext.define('NextThought.view.forums.Comment',{
 			title: 'Are you sure?',
 			fn: function(str){
 				if(str === 'ok'){
-					me.fireEvent('delete-topic-comment',me.record, me);
+					me.fireDeleteEvent();
 				}
 			}
 		});
+	},
+
+
+	fireDeleteEvent: function(){
+		me.fireEvent('delete-topic-comment',me.record, me);
 	},
 
 
