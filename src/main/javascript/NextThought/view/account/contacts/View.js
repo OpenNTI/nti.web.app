@@ -42,7 +42,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
-
+					stateId: 'contacts-side-view',
 					items: [
 						{ id: 'contact-list',
 						  title: 'All Contacts',

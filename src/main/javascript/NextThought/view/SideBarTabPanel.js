@@ -5,6 +5,8 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 	ui: 'sidebar',
 	plain: true,
 	cls: 'sidebar-panel-container',
+	stateful: true,
+	stateEvents:['tabchange'],
 	tabBar: {
 		baseCls: 'sidebar-tab-bar',
 		plain: true,
@@ -13,7 +15,15 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 			plain: true,
 			ui: 'sidebar'
 		}
+	},
+
+	applyState: function(state){
+		var t = (state||{}).t||0;
+
+		this.setActiveTab(t);
+	},
+
+	getState: function(){
+		return {t:this.items.indexOf(this.getActiveTab())};
 	}
-
-
 });

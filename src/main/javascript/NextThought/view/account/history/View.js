@@ -28,6 +28,7 @@ Ext.define('NextThought.view.account.history.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
+					stateId: 'history-side-view',
 					defaults: {xtype:'user-data-panel'},
 					items: [
 						{ title: 'Notes', mimeType: ['note','highlight'] },

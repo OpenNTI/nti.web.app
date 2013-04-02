@@ -9,6 +9,9 @@ Ext.define('NextThought.controller.State', {
 	],
 
 	requires: [
+		'Ext.state.Manager',
+		'Ext.state.LocalStorageProvider',
+		'Ext.state.CookieProvider',
 		'NextThought.providers.Location'
 	],
 
@@ -57,7 +60,15 @@ Ext.define('NextThought.controller.State', {
 		var me = this,
 			history = window.history,
 			push = history.pushState || function(){},
-			replace = history.replaceState || function(){};
+			replace = history.replaceState || function(){},
+			SEVEN_DAYS = 604800000,
+			p = me.getStateKey()+'non-history-state-',
+			provider = window.localStorage
+					? new Ext.state.LocalStorageProvider({prefix:p})
+					: new Ext.state.CookieProvider({prefix:p,
+						expires: new Date(new Date().getTime()+SEVEN_DAYS) });
+
+		Ext.state.Manager.setProvider(provider);
 
 
 		/**

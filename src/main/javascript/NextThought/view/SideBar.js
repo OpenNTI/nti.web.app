@@ -34,6 +34,7 @@ Ext.define('NextThought.view.SideBar',{
 		{ xtype: 'identity'},
 		{ xtype: 'sidebar-tabpanel',
 			flex: 1,
+			stateId: 'sidebar',
 			items: [
 				{xtype: 'contacts-view'},
 				{xtype: 'activity-tab-view'},

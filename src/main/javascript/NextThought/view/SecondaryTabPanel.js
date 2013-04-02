@@ -5,6 +5,9 @@ Ext.define('NextThought.view.SecondaryTabPanel',{
 	plain: true,
 	ui: 'secondary-tabpanel',
 	flex: 1,
+	stateful: true,
+	stateEvents:['tabchange'],
+
 
 	tabBar: {
 		plain: true,
@@ -18,6 +21,15 @@ Ext.define('NextThought.view.SecondaryTabPanel',{
 				this.layout.pack = 'center';
 			}
 		}
+	},
+
+	applyState: function(state){
+		var t = (state||{}).t||0;
+		this.setActiveTab(t);
+	},
+
+	getState: function(){
+		return {t:this.items.indexOf(this.getActiveTab())};
 	}
 
 });
