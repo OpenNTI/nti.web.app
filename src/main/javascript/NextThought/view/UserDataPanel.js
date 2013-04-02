@@ -283,9 +283,12 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-	afterRender: function(){
-		this.callParent(arguments);
+	maybeLoad:function(){
 		var s = this.getStore();
+		if(!s){
+			Ext.defer(this.maybeLoad,100,this);
+			return;
+		}
 		try{
 			if (!s.initialLoaded){
 				s.initialLoaded = true;
@@ -301,6 +304,12 @@ Ext.define('NextThought.view.UserDataPanel',{
 		catch(e){
 			console.error(e.message, e.stack || e.stacktrace);
 		}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.maybeLoad();
 
 		this.mon(this.el, {
 			scope: this,
