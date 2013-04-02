@@ -68,14 +68,7 @@ Ext.define('NextThought.view.forums.Comment',{
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 		rd.LastModified = rd['Last Modified'];
 
-		UserRepository.getUser(r.get('Creator'),function(u){
-			me.userObject = u;
-			Ext.applyIf(rd, u.getData());
-			if(this.rendered){
-				console.warn('Rendered late');
-				me.renderTpl.overwrite(me.el,rd);
-			}
-		});
+		me.loadUser(r.get('Creator'));
 
 		if(isMe(r.get('Creator'))){
 			this.addCls('me');
@@ -83,6 +76,25 @@ Ext.define('NextThought.view.forums.Comment',{
 
 		if(this.record.get('Deleted')){
 			this.addCls('deleted');
+		}
+	},
+
+	loadUser: function(creator){
+		var me = this;
+		UserRepository.getUser(creator,me.addUser,me);
+	},
+
+	addUser: function(u){
+		var me = this, r = me.record,
+		rd = Ext.apply(me.renderData || {}, r.getData());
+		rd.lastModified = rd['Last Modified'];
+		me.userObject = u;
+		Ext.applyIf(rd, u.getData());
+		me.renderData = rd;
+		if(me.rendered){
+			console.warn('Rendered late');
+			me.nameEl.update(u.get('displayName'));
+			me.avatarEl.setStyle('backgroundImage','url('+u.get('avatarURL')+')');
 		}
 	},
 
