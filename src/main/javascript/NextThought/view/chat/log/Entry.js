@@ -122,13 +122,36 @@ Ext.define('NextThought.view.chat.log.Entry', {
         return this.el.down('.log-entry').hasCls('flagged');
     },
 
+	getHashChange: function(href,base){
+		var hash = href.split('#'),
+			newLocation = hash[0],
+			target = hash[1];
 
+		if(newLocation.indexOf(base) === 0 && href !== window.location.href && target.indexOf('!') === 0){
+			return target;
+		}
+
+		return null;
+	},
+	
 	click: function(event){
 		event.stopEvent();
-		var t = event.getTarget('.whiteboard-container', null, true);
+		var t = event.getTarget('.whiteboard-container', null, true),
+			a = event.getTarget('a'),
+			href,hash,target,
+			whref = window.location.href.split('#')[0];
 
-		if(!t){ return false; }
+		function openHref(link, t){
+			try {
+				window.open(link, t);
+			}
+			catch(er){
+				window.location.href = link;
+			}
+		}
 
+		if(!t && !a){return false;}
+		
 		if(event.getTarget('.reply')){
 			this.fireEvent('reply-to-whiteboard',
 					Ext.clone(this.message.get('body')[0]), //wbData
@@ -137,8 +160,25 @@ Ext.define('NextThought.view.chat.log.Entry', {
 					this.message.get('channel'),    //channel
 					this.message.get('recipients')  //recipients
 			);
-		}
-		else {
+		}else if(a){
+			//its a link
+			href = a.href;
+			target = this.getHashChange(href,whref);
+			console.log(a +"-"+ whref);
+
+			if (a.getAttribute('onclick') || !href || whref+'#' === href) {
+				return false;
+			}
+
+			if(target){
+				window.location.hash = target;
+				return false;
+			}else{
+				openHref(href,'_blank');
+				return false;
+			}
+
+		}else {
 			Ext.widget('wb-window', { width: 802, value:this.message.get('body')[0], readonly: true}).show();
 		}
 		return false;
