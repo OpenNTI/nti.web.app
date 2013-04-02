@@ -416,19 +416,33 @@ Ext.define('NextThought.view.content.reader.Content',{
 			target = hash[1],
 			whref = window.location.href.split('#')[0];
 
+
+		function openHref(link, t){
+			try {
+				window.open(link, t);
+			}
+			catch(er){
+				window.location.href = link;
+			}
+		}
+
+
 		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
+			return false;
+		}
+
+		//Some special logic for internal urls
+		//Don't open internal urls in other windows, instead use a hash
+		//change
+		if(newLocation.indexOf(whref) === 0 && r !== window.location.href && target.indexOf('!') === 0){
+			window.location.hash = target;
 			return false;
 		}
 
 		//pop out links that point to external resources
 		if(!ParseUtils.parseNtiid(newLocation) && ContentUtils.isExternalUri(r) && r.indexOf(whref) < 0 ){
 			//popup a leaving platform notice here...
-			try {
-				window.open(r, '_blank');
-			}
-			catch(er){
-				window.location.href = r;
-			}
+			openHref(r, '_blank');
 			return false;
 		}
 
