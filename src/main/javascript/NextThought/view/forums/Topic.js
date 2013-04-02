@@ -302,10 +302,6 @@ Ext.define('NextThought.view.forums.Topic',{
 			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
 			this.navigationBarEl.appendTo(parentDom);
 		}
-
-		if(this.isVisible() && this.down('')){
-
-		}
 	},
 
 
@@ -486,7 +482,7 @@ Ext.define('NextThought.view.forums.Topic',{
 	/*  NOTE: There was inconsistency scrolling to the right place in the forum view.
 	 *  While the parent view( i.e forums view) scrolls, this view doesn't scroll,
 	 *  thus we override it to account for the scrolling from the view that scrolls
- 	 */
+	 */
 	scrollToHit: function(fragment, phrase){
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			searchIn = this.el.dom,

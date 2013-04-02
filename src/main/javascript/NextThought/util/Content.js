@@ -151,7 +151,7 @@ Ext.define('NextThought.util.Content',{
 				hash = hash & hash; // Convert to 32bit integer
 			}
 			return hash;
-		};
+		}
 
 		var me = this,
 			locationHash = stringHash(window.location.hostname);

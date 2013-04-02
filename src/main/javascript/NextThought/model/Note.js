@@ -125,8 +125,8 @@ Ext.define('NextThought.model.Note', {
 			return;
 		}
 
-		store = NextThought.store.PageItem.make(link, undefined, true)
-		params = store.proxy.extraParams || {}
+		store = NextThought.store.PageItem.make(link, undefined, true);
+		params = store.proxy.extraParams || {};
 
 		if(additionalParams){
 			params = Ext.apply(params, additionalParams);

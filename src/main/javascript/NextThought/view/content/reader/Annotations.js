@@ -391,7 +391,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					cb = function(w){
 						w.cleanup();
 						if(w.tempId){
-							me.removeAnnotation(w.tempId)
+							me.removeAnnotation(w.tempId);
 						}
 					};
 				try{
@@ -422,8 +422,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
         //on close make sure it get's destroyed.
         menu.on('hide', function(){menu.close();});
-
-
 
 
 		offset = me.el.getXY();
