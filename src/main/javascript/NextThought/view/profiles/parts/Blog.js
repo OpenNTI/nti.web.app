@@ -123,7 +123,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			this.mon(this.btnNewEntryEl,'click',this.onNewPost,this);
 			if(Ext.get('profile')){
 				this.mon(Ext.get('profile'),'scroll',this.handleScrollNewEntryBtnLock,this);
-			}else{
+			}
+			else{
 				console.error('Bad Error. Better be in a test. We expect the profile View to exist always.');
 			}
 		}
