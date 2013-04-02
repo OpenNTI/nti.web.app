@@ -61,7 +61,7 @@ Ext.define('NextThought.view.forums.Forum',{
 		cls: 'empty-forum',
 		html: 'Be the first to start a discussion.',
 		cn: {cn:[
-			{ tag: 'a', html:'Go back', href: 'javascript:history.go(-1);'},
+			{ tag: 'a', html:'Go back', href: '#back'},
 			' &middot ',
 			{ tag: 'a', html:'New discussion', href: '#'}
 		]}
@@ -186,10 +186,15 @@ Ext.define('NextThought.view.forums.Forum',{
 
 
 	onContainerClick: function(e){
-		var t = e.getTarget('a[href=#]');
+		var t = e.getTarget('a[href^=#]');
 		if(t){
 			e.stopEvent();
-			this.fireEvent('new-topic');
+			if(/#back$/i.test(t.href)){
+				history.go(-1);
+			}
+			else {
+				this.fireEvent('new-topic');
+			}
 		}
 		return !t;
 	},
