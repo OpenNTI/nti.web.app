@@ -250,10 +250,10 @@ Ext.define('NextThought.util.Annotations',{
 
     addToHistory: function(rec){
         try{
-            var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
-            clone = ParseUtils.parseItems(rec.raw)[0];
-
-            if (s){
+	        var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
+		        clone;
+	        if (s){
+		        clone = ParseUtils.parseItems(rec.raw)[0];
                 s.add(clone);
                 s.sort('CreatedTime', 'DESC');
             }

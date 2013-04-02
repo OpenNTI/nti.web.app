@@ -145,6 +145,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 	},
 
+
 	//generalize this
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
@@ -179,6 +180,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		return result;
 	},
 
+
 	//	@returns an object with top and left properties used to adjust the
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
@@ -194,6 +196,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		overlayXAdjustment = -annotationOffsets.left;
 		return {top: overlayYAdjustment, left: overlayXAdjustment };
 	},
+
 
 	getFragmentLocation: function(fragment, phrase){
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
@@ -233,6 +236,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		return pos;
 	},
+
 
 	clearSearchHit: function() {
 		if (!this.searchAnnotations) {
@@ -289,6 +293,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		return !!this.annotations[oid];
 	},
+
 
 	getDefinitionMenuItem: function(range){
 		try {
@@ -378,6 +383,27 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 		});
 
+
+		function redaction(block){
+			return function(){
+				me.clearSelection();
+				var r = NextThought.model.Redaction.createFromHighlight(record,block),
+					cb = function(w){
+						w.cleanup();
+						if(w.tempId){
+							me.removeAnnotation(w.tempId)
+						}
+					};
+				try{
+					me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
+				}
+				catch(e){
+					alert('Could not save redaction');
+				}
+			};
+		}
+
+
 		//TODO - official way of redaction feature enablement:
 		//if($AppConfig.service.canRedact()){
 		//hack to allow redactions only in legal texts for now...
@@ -385,32 +411,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			//inject other menu items:
 			menu.add({
 				text: 'Redact Inline',
-				handler: function(){
-					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record,false),
-						cb = function(w){ w.cleanup(); };
-					try{
-						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
-					}
-					catch(e){
-						alert('Coud not save redaction');
-					}
-				}
+				handler: redaction(false)
 			});
 
 			menu.add({
 				text: 'Redact Block',
-				handler: function(){
-					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record,true),
-						cb = function(w){ w.cleanup(); };
-					try{
-						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
-					}
-					catch(e){
-						alert('Coud not save redaction');
-					}
-				}
+				handler: redaction(true)
 			});
 		}
 
@@ -469,8 +475,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				}
 				record.on('updated',function(r){
 					this.annotations[r.get('NTIID')] = this.annotations[oid];
+
 					delete this.annotations[oid];
 				}, this);
+
+				w.tempId =  oid;
 			}
 
 			this.annotations[oid] = w;

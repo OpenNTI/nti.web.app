@@ -103,7 +103,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
         getHistoryStoreForMimeType: function(mt) {
             var id = this.storeIds[mt.toLowerCase()];
-            return Ext.getStore(id);
+            return id ? Ext.getStore(id) : undefined;
         }
     },
 

@@ -9,7 +9,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	cls: 'redacted',
 
 
-	constructor: function(){
+	constructor: function(config){
+		var r = config && config.record;
+		if(r && r.phantom){
+			this.record = r;
+			return this;
+		}
+
 		this.callParent(arguments);
 
 
@@ -83,6 +89,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	render: function(){
 		var y = this.callParent(arguments),
 			isBlock = this.isBlockRedaction();
+
+		console.debug('render', this.record.phantom);
 
         if (!this.innerFootnotes){
             this.innerFootnotes = this.containedFootnotes();
@@ -255,6 +263,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	cleanup: function(){
+		console.debug('cleanup', this.record.phantom);
 		try{
 			if (this.actionSpan){Ext.fly(this.actionSpan).remove();}
 		}
@@ -268,6 +277,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	toggleRedaction: function(e){
 		var redactionCollapsed = !this.compElements.first().hasCls(this.cls),
 			me = this;
+
+		console.debug('toggle', this.record.phantom);
 
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);

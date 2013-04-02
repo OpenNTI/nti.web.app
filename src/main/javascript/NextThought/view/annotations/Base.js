@@ -197,11 +197,14 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		if(me.getItemId()){
 			Ext.ComponentManager.unregister(me);
 		}
-		me.manager.unregister(me);
+
+		if(me.manager){
+			me.manager.unregister(me);
+		}
 
 		Ext.EventManager.removeResizeListener(me.requestRender, me);
 
-		if( c.annotationExists(r)){
+		if( c && c.annotationExists(r)){
 			c.removeAnnotation(id);
 		}
 
@@ -232,7 +235,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 
 	requestRender: function(){
-		this.manager.render(this.prefix);
+		if( this.manager ){
+			this.manager.render(this.prefix);
+		}
 	},
 
 
