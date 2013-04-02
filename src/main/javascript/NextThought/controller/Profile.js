@@ -109,7 +109,7 @@ Ext.define('NextThought.controller.Profile', {
 		try{
 
 			commentPost.save({
-				url: isEdit ? undefined : postRecord && postRecord.get('href'),//only use postRecord if its a new post.
+				url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(rec){
 					unmask();
@@ -173,6 +173,7 @@ Ext.define('NextThought.controller.Profile', {
 
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
+			blogRecord = editorCmp.up('profile-blog') ? editorCmp.up('profile-blog').record : null;
 			me = this;
 
 		//TODO save old values so we can revert them on error?
@@ -221,6 +222,7 @@ Ext.define('NextThought.controller.Profile', {
 
 		try{
 			post.save({
+				url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
 				scope: this,
 				success: function(post,operation){
 					//the first argument is the record...problem is, it was a post, and the response from the server is

@@ -245,7 +245,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			return;
 		}
 
-		var j = ParseUtils.parseItems( resp.responseText ).first();
+		var j;
+		this.record = j = ParseUtils.parseItems( resp.responseText ).first(); //Set the blog record.
 		this.store = NextThought.store.Blog.create({storeId: 'blog-'+this.username});
 		this.store.proxy.url = j.getLink('contents');
 
