@@ -486,7 +486,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 			if(item && (/modified/i).test(type)){
 				mime = item.get('MimeType');
-				if(mime && (/.*?communityheadlinetopic$/i).test(mime)){
+				if(mime &&
+				   ((/.*?communityheadlinetopic$/i).test(mime) || (/.*?personalblogentry$/i).test(mime))){
 					return false;
 				}
 			}
