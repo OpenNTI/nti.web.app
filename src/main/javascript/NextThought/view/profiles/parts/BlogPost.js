@@ -3,7 +3,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	alias: 'widget.profile-blog-post',
 
 	requires:[
-		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.view.profiles.parts.BlogComment'
 	],
 
