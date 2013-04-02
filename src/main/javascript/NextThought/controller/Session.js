@@ -207,7 +207,7 @@ Ext.define('NextThought.controller.Session', {
 
             Ext.Ajax.request({
                 timeout: 60000,
-                url: getURL(d + ping) + '?t='+(new Date().getTime()),
+                url: getURL(d + ping),
                 callback: function(q,s,r){
                     var l = m.getLink(r,'logon.handshake');
                     if(!s || !l){
@@ -269,7 +269,7 @@ Ext.define('NextThought.controller.Session', {
 
         try{
             Ext.Ajax.request({
-                url: getURL(s.data) + '?t='+(new Date().getTime()),
+                url: getURL(s.data),
                 timeout: 20000,
                 headers:{
                     'Accept': 'application/vnd.nextthought.workspace+json'
