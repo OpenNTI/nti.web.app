@@ -2,25 +2,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	extend: 'NextThought.view.forums.Topic',
 	alias: 'widget.profile-blog-post',
 
-	mixins: {
-		flagActions: 'NextThought.mixins.FlagActions',
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
-	},
-
 	requires:[
-		'NextThought.editor.Editor',
 		'NextThought.view.menus.BlogTogglePublish',
-		'NextThought.view.annotations.note.Templates',
-		'NextThought.view.profiles.parts.BlogComment',
-		'NextThought.ux.SearchHits'
+		'NextThought.view.profiles.parts.BlogComment'
 	],
 
 	cls: 'entry',
-	layout: 'auto',
 	defaultType: 'profile-blog-comment',
-	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn:

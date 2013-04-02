@@ -1,10 +1,3 @@
-/**
- * https://docs.google.com/a/nextthought.com/presentation/d/18qyM3011F_AXjwAPGpE-94DPKmuPPPnKQ0EepyAoXmQ/edit#slide=id.gb09172a6_09
- *
- * This will be, for the most part (from Aaron's design), HeadlineTopics. Much like PersonalBlogEntry(s).
- *
- * It will define the headline post and contain followup posts.
- */
 Ext.define('NextThought.view.forums.Topic',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-topic',
@@ -18,10 +11,9 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	requires:[
 		'NextThought.editor.Editor',
-		'NextThought.view.annotations.note.Templates',
 		'NextThought.view.forums.Comment',
-		'NextThought.ux.SearchHits',
-		'NextThought.view.menus.BlogTogglePublish'
+		'NextThought.view.menus.BlogTogglePublish',
+		'NextThought.ux.SearchHits'
 	],
 
 	cls: 'topic-post',
