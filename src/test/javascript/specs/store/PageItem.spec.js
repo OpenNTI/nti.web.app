@@ -62,4 +62,39 @@ describe("PageItem Store Tests", function(){
 			root.un('child-added', onChildAdded);
         });
     });
+
+	describe('ProfileItem tests: want item', function(){
+		var store, username;
+
+		beforeEach(function(){
+			username = 'testUser1';
+			store = Ext.create('NextThought.store.ProfileItem')	;
+			store.profileStoreFor = username;
+		});
+
+		it('accepts item given creator as string', function(){
+			var rec =  Ext.create('NextThought.model.Note', {NTIID: 'tag:ntiid1', Creator: username});
+
+			expect(rec.isTopLevel()).toBeTruthy();
+			expect(rec.get('Creator')).toEqual(store.profileStoreFor);
+			expect(store.wantsItem(rec)).toBeTruthy();
+		});
+
+		it('accepts item given creator is a userObject', function(){
+			var userObject = Ext.create('NextThought.model.User', {'Username': username}),
+				rec = Ext.create('NextThought.model.forums.CommunityHeadlinePost', {'Creator': userObject});
+
+			expect(rec.isTopLevel()).toBeTruthy();
+			expect(rec.get('Creator')).not.toEqual(store.profileStoreFor); //one is a string and the other is a model object
+			expect(store.wantsItem(rec)).toBeTruthy();
+		});
+
+		it('rejects item because the user is not the creator', function(){
+			var rec = Ext.create('NextThought.model.forums.CommunityHeadlinePost', {'Creator': 'testUser2'});
+
+			expect(rec.isTopLevel()).toBeTruthy();
+			expect(rec.get('Creator')).not.toEqual(store.profileStoreFor); //both strings but with different values.
+			expect(store.wantsItem(rec)).toBeFalsy();
+		});
+	});
 });
