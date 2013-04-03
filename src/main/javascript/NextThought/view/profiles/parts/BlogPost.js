@@ -104,7 +104,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	destroyWarningMessage: function(){
-		return 'Deleting your thought will permanently remove it and any comments.'
+		return 'Deleting your thought will permanently remove it and any comments.';
 	},
 
 
