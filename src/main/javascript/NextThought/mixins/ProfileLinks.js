@@ -33,8 +33,10 @@ Ext.define('NextThought.mixins.ProfileLinks',{
 
 		Ext.each(arguments,function(el){
 			el = Ext.get(el);
-			me.mon(el,{click:onUserNameClick, scope:me});
-			el.hover(hoverOn,hoverOff);
+			if(!Ext.isEmpty(el)){
+				me.mon(el,{click:onUserNameClick, scope:me});
+				el.hover(hoverOn,hoverOff);
+			}
 		});
 	}
 });
