@@ -113,7 +113,7 @@ Ext.define('NextThought.view.ViewSelect', {
 		this.callParent(arguments);
 		//This is our way for identifying coppa right now, don't give them the contacts view
 		//TODO let them click it but show a resend consent page, it is safer
-		if(!$AppConfig.service.canFriend()){
+		if( this.canHaveContacts() !== true){
 			this.down('[title=Contacts]').hide();
 		}
 
@@ -124,20 +124,26 @@ Ext.define('NextThought.view.ViewSelect', {
 		this.mon($AppConfig.userObject, 'preResolvingUsersComplete', this.shouldShowForumTab, this);
 	},
 
+	canHaveContacts: function(){
+		return $AppConfig.service.canFriend();
+	},
+
 	canHaveForum: function(){
 		return $AppConfig.service.canHaveForum();
 	},
 
-	shouldShowForumTab: function(){
+	shouldShowForumTab: function(user){
 		function makeUrl(c){ return c && c.getLink('DiscussionBoard'); }
 
-		var communities = $AppConfig.userObject.getCommunities(),
+		if(!user){ user= $AppConfig.userObject; }
+
+		var communities = user.getCommunities(),
 			urls = Ext.Array.map(communities,makeUrl);
 
 		// Because we don't have a way for users to create boards,
 		// therefore, if a user isn't in a community with at least one discussionBoard, then don't show the tab.
 		// This last condition will need to be revisited as we go.
-		if(Ext.isEmpty(urls)){
+		if(Ext.isEmpty(Ext.Array.clean(urls))){
 			this.down('[title=Forums]').hide();
 		}else{
 			if(this.canHaveForum()){ this.down('[title=Forums]').show(); }

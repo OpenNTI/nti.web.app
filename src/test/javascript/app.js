@@ -180,6 +180,7 @@ Ext.application({
 			'javascript/specs/view/chat/log/Entry.spec.js',
 			'javascript/specs/view/content/Navigation.spec.js',
 			'javascript/specs/view/forums/Comment.spec.js',
+			'javascript/specs/view/ViewSelect.spec.js',
 			'javascript/specs/controller/Chat.spec.js',
 			'javascript/specs/controller/Groups.spec.js',
 			'javascript/specs/controller/Navigation.spec.js',
