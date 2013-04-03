@@ -45,7 +45,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						{ cls: 'like' }
 					]},
 					{ cls: 'meta', cn: [
-						{ cls: 'subject link', html: '{[values.phantom?\'(Deleted) \':\'\']}{title}' },
+						{ cls: 'subject link', html: '{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link', html: '{Creator}'},
 							{tag: 'span', cls: 'time', html:'{date}'},
@@ -167,7 +167,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			store.load();
 		}
 		else if(Ext.isEmpty(url)){
-			rd.phantom = true;
+			console.error('We think this item has been deleted, no Content link available. Record: ', this.record);
+			Ext.defer(this.destroy, 1, this);
 		}
 	},
 
