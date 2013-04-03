@@ -17,7 +17,7 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 			]}
 		]},
 		{tag: 'tpl', 'if':'!isMe', cn:[
-			{cls:'title others', html:'Sorry! Im still collecting my thoughts...'},
+			{cls:'title others', html:'Sorry! I\'m still collecting my thoughts...'},
 			{ cls: 'meta', cn:[
 				{cls:'link back', tag:'span', html:'Go Back'},
 				{cls:'link chat', tag:'span', html:'Chat'}
