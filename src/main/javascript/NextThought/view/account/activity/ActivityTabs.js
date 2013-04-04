@@ -22,7 +22,7 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
     },
 
     items: [
-        {xtype: 'box', cls: 'view-title', autoEl: {html: 'Recent Activity'}},
+        {xtype: 'box', cls: 'view-title', autoEl: {}},
         {
             xtype: 'container',
             layout: 'fit',

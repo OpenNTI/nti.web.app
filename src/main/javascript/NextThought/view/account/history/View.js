@@ -20,7 +20,7 @@ Ext.define('NextThought.view.account.history.View',{
 	},
 
 	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: 'My History'}},
+		{xtype: 'box', cls: 'view-title', autoEl: {}},
 		{
 			xtype: 'container',
 			layout: 'fit',

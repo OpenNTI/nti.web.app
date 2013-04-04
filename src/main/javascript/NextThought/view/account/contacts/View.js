@@ -26,7 +26,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'search', 'data-qtip': 'Search for contacts'}]}},
+		{xtype: 'box', cls: 'view-title', autoEl: {html: '',cn:[{cls: 'search', 'data-qtip': 'Search for contacts'}]}},
 		{
 			xtype: 'container',
 			layout: 'card',
