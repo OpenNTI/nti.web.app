@@ -93,6 +93,13 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(!this.down('note-main-view').editorActive()){
 			this.callParent(arguments);
 		}
+		else{ this.warnBeforeDismissingEditor(); }
+	},
+
+
+	warnBeforeDismissingEditor: function(){
+		var msg = "You are currently creating a reply, please save or dismiss it first.";
+		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
 
 
