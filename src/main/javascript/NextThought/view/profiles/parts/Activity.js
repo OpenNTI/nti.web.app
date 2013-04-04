@@ -202,7 +202,18 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		//For now we only do top level stuff
 		records = Ext.Array.filter(records, function(rec){
-			return !rec.isTopLevel || rec.isTopLevel();
+
+			//If it responds to isTopLevel and it is
+			//not top level we don't want it.
+			if(rec.isTopLevel && !rec.isTopLevel()){
+				return false;
+			}
+
+			//To we are a root (toplevel) object here
+			//we also don't want placeholders.  The ds only sends
+			//us true top level notes in Activity so filter them out
+			//locally if they sneak in
+			return !rec.placeholder;
 		});
 
 
