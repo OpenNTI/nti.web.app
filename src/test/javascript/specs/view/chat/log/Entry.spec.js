@@ -25,5 +25,5 @@ describe('Entry Link Tests',function(){
 		var link = Entry.getHashChange('www.google.com#!newlink','www.google.com');
 
 		expect(link).toBe('!newlink');
-	})
+	});
 });
