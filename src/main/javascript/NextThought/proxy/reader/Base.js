@@ -62,7 +62,7 @@ Ext.define('NextThought.proxy.reader.Base', {
 			//in that case maybe we should just call precacheUser to update the cache.  Seems
 			//like we are throwing away a bunch of stuff here.
 			//
-			//TODO Ideally this goes away all together. We shoudl defer user resolution until
+			//TODO Ideally this goes away all together. We should defer user resolution until
 			//we need to display the user. Unfortunately there are still so many views taht get created up
 			//front so we actually don't defer this very much.
 

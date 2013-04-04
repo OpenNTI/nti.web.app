@@ -167,6 +167,7 @@ Ext.application({
 			'javascript/specs/store/Hit.spec.js',
 			'javascript/specs/store/PageItem.spec.js',
 			'javascript/specs/store/FriendsList.spec.js',
+			'javascript/specs/store/Stream.spec.js',
 			'javascript/specs/view/whiteboard/NTMatrix.spec.js',
 			'javascript/specs/view/whiteboard/ToolOptionsState.spec.js',
 			'javascript/specs/view/whiteboard/editor/ToolOption.spec.js',

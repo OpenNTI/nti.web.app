@@ -59,6 +59,9 @@ Ext.define('NextThought.view.account.activity.View',{
 		var me = this;
 		this.callParent(arguments);
 		this.store = Ext.getStore('Stream');
+
+		//FIXME, eww more datachanged listening.
+		//use add, remove, load, and refresh instead like for FLs
 		this.mon(this.store,{
 			scope: this,
 			datachanged: this.maybeReload,
@@ -88,6 +91,12 @@ Ext.define('NextThought.view.account.activity.View',{
 		};
 	},
 
+	//FIXME we can't rely on the counts anymore for determining
+	//if there are more pages to load.  They have been inaccurate for a long
+	//time and now they are no longer useful (this isn't new to this change, I
+	//have been seeing strangeness for a few days? now). Instead the hueristic
+	//should be driven off whether or not the number of records loaded with a
+	//page is < the requested page size.
     fetchMore: function(){
         var s = this.store, max;
 
@@ -125,6 +134,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		this.store = store = store||this.store;
 
+		//I think this junk can go away in favor
+		//of unfilteredLast now.
 		this.store.suspendEvents();
 		this.store.clearFilter(true);
 		this.store.sort();
