@@ -12,8 +12,6 @@ Ext.application({
 		'swfobject',
 		'NextThought.util.Globals',
 		'NextThought.util.Errors',
-		'NextThought.model.anchorables.ContentPointer',
-		'NextThought.model.anchorables.DomContentPointer',
 		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox' //Require this early so we have it if we need it
 	],

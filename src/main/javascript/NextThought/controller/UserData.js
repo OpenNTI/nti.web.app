@@ -11,6 +11,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	models: [
+		'anchorables.ContentPointer',
+		'anchorables.DomContentPointer',
 		'GenericObject',
 		'PageInfo',
 		'Highlight',
