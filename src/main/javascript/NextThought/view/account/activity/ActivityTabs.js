@@ -58,6 +58,8 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
     afterRender: function(){
         this.callParent(arguments);
 
+	    this.badge = Ext.DomHelper.append( this.tab.getEl(),{cls:'badge'},true);
+
         this.mon(this, {
             scope: this,
             'deactivate': this.resetNotificationCount
@@ -111,6 +113,6 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
 
 
     setNotificationCountValue: function(count){
-//        this.tab.setText(count || '&nbsp;');
+        this.badge.update(count || '&nbsp;');
     }
 });
