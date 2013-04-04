@@ -53,11 +53,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		if(this.commentsEl.dom){
+		if(this.commentsEl && this.commentsEl.dom){
 			this.mon(this.commentsEl, 'click', this.clickedRevealAllReplies,this);
 		}
 
-		if(this.replyButton.dom){
+		if(this.replyButton && this.replyButton.dom){
 			this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		}
 
