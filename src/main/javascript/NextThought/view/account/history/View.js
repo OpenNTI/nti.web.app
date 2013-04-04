@@ -6,6 +6,8 @@ Ext.define('NextThought.view.account.history.View',{
 		'NextThought.view.SecondaryTabPanel',
 		'NextThought.view.UserDataPanel'
 	],
+
+	title: 'History',
 	tabConfig:{tooltip: 'History'},
 	iconCls: 'history',
 	ui: 'history',

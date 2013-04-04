@@ -7,6 +7,8 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
         'NextThought.view.account.activity.View'
     ],
     iconCls: 'activity',
+
+	title: 'Activity',
     tabConfig:{
 		tooltip: 'Recent Activity'
     },
@@ -109,6 +111,6 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
 
 
     setNotificationCountValue: function(count){
-        this.tab.setText(count || '&nbsp;');
+//        this.tab.setText(count || '&nbsp;');
     }
 });

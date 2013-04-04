@@ -10,8 +10,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 		'NextThought.view.account.contacts.ListButtons'
 	],
 
+	title: 'Chat',
 	tabConfig: {
-		tooltip: 'Contacts'
+		tooltip: 'Chat'
 	},
 
 	iconCls: 'contacts',

@@ -4,7 +4,6 @@ Ext.define('NextThought.view.SideBar',{
 
 	requires: [
 		'NextThought.view.SideBarTabPanel',
-		'NextThought.view.account.View',
         'NextThought.view.account.activity.ActivityTabs',
 		'NextThought.view.account.contacts.View',
 		'NextThought.view.account.history.View',
@@ -39,7 +38,7 @@ Ext.define('NextThought.view.SideBar',{
 				{xtype: 'contacts-view'},
 				{xtype: 'activity-tab-view'},
 				{xtype: 'history-view' },
-				{xtype: 'account-view', hidden: true}
+				{ iconCls: 'inbox', title: 'inbox' }
 			]}
 	],
 
