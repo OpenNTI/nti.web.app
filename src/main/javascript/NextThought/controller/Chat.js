@@ -445,9 +445,12 @@ Ext.define('NextThought.controller.Chat', {
 
 	showWhiteboard: function(data, cmp, mid, channel, recipients) {
 		var me = this,
+			component = cmp,
 			room = ClassroomUtils.getRoomInfoFromComponent(cmp),
 			wbWin = Ext.widget('wb-window', {width: 802, value: data, chatStatusEvent:'status-change', ownerCmp: cmp}),
-			wbData;
+			wbData,
+			scrollEl = component.up('.chat-view').el.down('.chat-log-view'),
+			scrollTop = scrollEl.getScroll().top;
 
 		//hook into the window's save and cancel operations:
 		wbWin.on({
@@ -460,6 +463,9 @@ Ext.define('NextThought.controller.Chat', {
 			cancel: function(){
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				wbWin.close();
+				if(scrollEl.getScroll().top === 0){
+					scrollEl.scrollTo('top',scrollTop);
+				}
 			}
 		});
 

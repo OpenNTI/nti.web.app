@@ -135,6 +135,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		if( e ){
 			e.reset();
 		}
+		this.cancel = function(){};
 		this.fireEvent('cancel', this);
 	},
 
