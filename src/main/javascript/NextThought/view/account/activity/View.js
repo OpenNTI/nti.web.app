@@ -536,9 +536,8 @@ Ext.define('NextThought.view.account.activity.View',{
 		if(community){
 			return me.belongsInCommunity(change, flStore, communityNames);
 		}
-		else{
-			return me.belongsInMyContacts(change, flStore, communityNames);
-		}
+
+		return me.belongsInMyContacts(change, flStore, communityNames);
     },
 
     onActivate: function(){
