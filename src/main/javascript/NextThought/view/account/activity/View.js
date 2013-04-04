@@ -91,22 +91,15 @@ Ext.define('NextThought.view.account.activity.View',{
 		};
 	},
 
-	//FIXME we can't rely on the counts anymore for determining
-	//if there are more pages to load.  They have been inaccurate for a long
-	//time and now they are no longer useful (this isn't new to this change, I
-	//have been seeing strangeness for a few days? now). Instead the hueristic
-	//should be driven off whether or not the number of records loaded with a
-	//page is < the requested page size.
     fetchMore: function(){
-        var s = this.store, max;
+        var s = this.store;
 
         if (!s.hasOwnProperty('data')) {
             return;
         }
 
-        max = s.getPageFromRecordIndex(s.getTotalCount());
 		this.currentCount = s.getCount();
-        if(s.currentPage < max){
+        if(s.hasAdditionalPagesToLoad()){
             this.el.parent().mask('Loading...','loading');
             s.clearOnPageLoad = false;
             s.nextPage();
@@ -134,13 +127,11 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		this.store = store = store||this.store;
 
-		//I think this junk can go away in favor
-		//of unfilteredLast now.
 		this.store.suspendEvents();
 		this.store.clearFilter(true);
 		this.store.sort();
 		//For bonus points tell the user how far back they are asking for
-		oldestRecord = this.store.last();
+		oldestRecord = this.store.unfilteredLast();
 		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
@@ -168,9 +159,8 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		function maybeAddMoreButton(){
-			var s=me.store, max, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
-			max = s.getPageFromRecordIndex(s.getTotalCount());
-			if(s.currentPage < max){
+			var s=me.store, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
+			if(s.hasAdditionalPagesToLoad()){
 				Ext.widget('button', {
 					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
 					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),

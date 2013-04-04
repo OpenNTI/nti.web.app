@@ -78,6 +78,11 @@ Ext.define('NextThought.store.Stream',{
 	},
 
 
+	hasAdditionalPagesToLoad: function(){
+		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
+	},
+
+
 	previousPage: function(){
 		Ext.Error.raise('previousPage not supported for stream store');
 	},
@@ -109,6 +114,24 @@ Ext.define('NextThought.store.Stream',{
 
 	load: function(options){
 		options = Ext.applyIf(options || {}, {start: null});
+
+		function isMoreDetector(records, operation, success){
+			//Set some state that indicates if we may have more
+
+			//If we fail with a 404 we treat that as no more
+			if(!success && operation.response && operation.response.status === 404){
+				this.mayHaveAdditionalPages = false;
+			}
+			else{
+				this.mayHaveAdditionalPages = (!success || operation.limit === undefined || records.length === operation.limit);
+			}
+
+
+			console.log('Load finished.  Do we have additional pages', this.mayHaveAdditionalPages);
+		}
+
+		options.callback = Ext.Function.createSequence(isMoreDetector, options.callback, this);
+
 		this.callParent([options]);
 	}
 });

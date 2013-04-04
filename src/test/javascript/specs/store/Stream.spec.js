@@ -143,6 +143,66 @@ describe("Stream Store Tests", function() {
 			opts = store.proxy.read.calls[0].args[0];
 			expect(opts.start).toBeNull();
 		});
+
+		function proxyCallbackWith(){
+			var args = Array.prototype.slice.call(arguments);
+			store.proxy.read.andCallFake(function(opts){
+				args[1] = opts;
+				Ext.callback(opts.callback, store, args);
+			});
+		}
+
+		it('Still calls provided callback', function(){
+			var myCb = jasmine.createSpy('myCb'), opts = {callback: myCb, foo: 'bar'};
+			proxyCallbackWith([], opts, true);
+
+			expect(store.mayHaveAdditionalPages).toBeUndefined();
+			store.load(opts);
+
+			expect(store.proxy.read).toHaveBeenCalled();
+			expect(myCb).toHaveBeenCalledWith([], jasmine.any(Object), true);
+			opts = myCb.calls[0].args[1];
+			expect(opts.foo).toBe('bar');
+		});
+
+		it('has additional pages before any loads', function(){
+			expect(store.hasAdditionalPagesToLoad()).toBeTruthy();
+		});
+
+		describe('load influences hasAdditionalPagesToLoad', function(){
+
+			it('No more pages if load less than limit', function(){
+				var opts = {limit: 100};
+				proxyCallbackWith([1, 2, 3, 4], opts, true);
+				store.load(opts);
+				expect(store.mayHaveAdditionalPages).toBeDefined();
+				expect(store.hasAdditionalPagesToLoad()).toBeFalsy();
+			});
+
+			it('on failure still more pages', function(){
+				var opts = {limit: 100};
+				proxyCallbackWith([], opts, false);
+				store.load(opts);
+				expect(store.mayHaveAdditionalPages).toBeDefined();
+				expect(store.hasAdditionalPagesToLoad()).toBeTruthy();
+			});
+
+			it('404 is the same as no more', function(){
+				var opts = {limit: 100, response: {status: 404}};
+				proxyCallbackWith([], opts, false);
+				store.load(opts);
+				expect(store.mayHaveAdditionalPages).toBeDefined();
+				expect(store.hasAdditionalPagesToLoad()).toBeFalsy();
+			});
+
+			it('more pages if load hits limit', function(){
+				var opts = {limit: 4};
+				proxyCallbackWith([1, 2, 3, 4], opts, true);
+				store.load(opts);
+				expect(store.mayHaveAdditionalPages).toBeDefined();
+				expect(store.hasAdditionalPagesToLoad()).toBeTruthy();
+			});
+		});
 	});
 });
 
