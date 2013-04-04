@@ -58,8 +58,6 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
     afterRender: function(){
         this.callParent(arguments);
 
-	    this.badge = Ext.DomHelper.append( this.tab.getEl(),{cls:'badge'},true);
-
         this.mon(this, {
             scope: this,
             'deactivate': this.resetNotificationCount
@@ -112,7 +110,30 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
     },
 
 
+	addBadge: function(){
+		var tab = this.tab;
+
+		if(!tab.rendered){
+			if(!tab.isListening('afterrender',this.addBadge,this)){
+				tab.on('afterrender',this.addBadge,this);
+			}
+			return;
+		}
+		this.badge = Ext.DomHelper.append( tab.getEl(),{cls:'badge', html:tab.badge},true);
+		delete tab.badge;
+	},
+
+
     setNotificationCountValue: function(count){
-        this.badge.update(count || '&nbsp;');
+	    var v = count || '&nbsp;',
+			tab = this.tab;
+
+	    if(!this.badge){
+		    tab.badge = v;
+		    this.addBadge();
+		    return;
+	    }
+
+        this.badge.update(v);
     }
 });

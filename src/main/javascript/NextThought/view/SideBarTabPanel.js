@@ -1,4 +1,15 @@
 //SCSS in _sidebar.scss
+Ext.define('NextThought.view.SideBarTab',{
+	extend: 'Ext.tab.Tab',
+	alias: 'widget.sidebar-tab',
+	mixins: {
+		isListening: 'NextThought.mixins.IsListening'
+	},
+	plain: true,
+	ui: 'sidebar'
+});
+
+
 Ext.define('NextThought.view.SideBarTabPanel',{
 	extend: 'Ext.tab.Panel',
 	requires: [
@@ -14,9 +25,6 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 		baseCls: 'sidebar-tab-bar',
 		plain: true,
 		ui: 'sidebar',
-		layout: {
-			manageOverflow: 0
-		},
 		xhooks: {
 			initComponent: function(){
 				this.callParent(arguments);
@@ -24,12 +32,14 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 						new Ext.layout.container.boxOverflow.None(this.layout,{});
 				this.layout.overflowHandler.scrollToItem = Ext.emptyFn;
 			}
-
-		},
-		defaults: {
-			plain: true,
-			ui: 'sidebar'
 		}
+	},
+
+	onAdd: function(item, index){
+		item.tabConfig = Ext.applyIf(item.tabConfig||{},{
+			xtype: 'sidebar-tab'
+		});
+		return this.callParent([item,index]);
 	},
 
 	applyState: function(state){
