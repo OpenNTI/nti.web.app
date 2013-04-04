@@ -88,6 +88,14 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	},
 
 
+	close: function(e){
+		//Only close if the editor is not active.
+		if(!this.down('note-main-view').editorActive()){
+			this.callParent(arguments);
+		}
+	},
+
+
 	getSearchTerm: function(){
 		var search = this.down('note-filter-bar').down('simpletext');
 		return search ? search.getValue() : '';
