@@ -13,6 +13,7 @@ Ext.define('NextThought.view.SideBarTab',{
 Ext.define('NextThought.view.SideBarTabPanel',{
 	extend: 'Ext.tab.Panel',
 	requires: [
+		'NextThought.mixins.IsListening',
 		'Ext.layout.container.boxOverflow.None'
 	],
 	alias: 'widget.sidebar-tabpanel',
