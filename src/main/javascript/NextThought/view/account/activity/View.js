@@ -6,7 +6,12 @@ Ext.define('NextThought.view.account.activity.View',{
 		'NextThought.view.account.activity.Popout',
 		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.view.account.activity.BlogPopout',
-		'NextThought.model.converters.GroupByTime'
+		'NextThought.model.converters.GroupByTime',
+		'NextThought.model.Highlight',
+		'NextThought.model.Redaction',
+		'NextThought.model.Note',
+		'NextThought.model.forums.Post',
+		'NextThought.model.forums.HeadlineTopic'
 	],
 
 	overflowY: 'hidden',
@@ -45,7 +50,11 @@ Ext.define('NextThought.view.account.activity.View',{
 			{tag:'tpl', 'if':'activity', cn:[{
 				cls:'activity {type}',
 				id: '{guid}',
-				cn: [{cls: 'name', tag: 'span', html: '{name}'},' {message} ',{tag:'tpl', 'if':'with', cn:['with-name']}]
+				cn: [
+					{cls: 'name', tag: 'span', html: '{name}'},
+					{tag:'tpl', 'if':'verb', cn:[{tag:'span', cls:'verb', html:' {verb} '}]},
+					' {message} ',
+					{tag:'tpl', 'if':'with', cn:['with {with}']}]
 			}]},
 			{tag:'tpl', 'if':'label', cn:[{
 				cls: 'divider', html: '{label}'
@@ -56,7 +65,6 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	initComponent: function(){
-		var me = this;
 		this.callParent(arguments);
 		this.store = Ext.getStore('Stream');
 
@@ -233,8 +241,9 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	changeToActivity: function(c, maybeFinish, extend){
 		var item = c.get('Item'),
-				cid = item? item.get('ContainerId') : undefined,
-				guid = guidGenerator();
+			cid = item? item.get('ContainerId') : undefined,
+			guid = guidGenerator(),
+			activity;
 
 		function getType(item){
 			if(!item){return '';}
@@ -247,30 +256,41 @@ Ext.define('NextThought.view.account.activity.View',{
 			return type;
 		}
 
-		this.stream[guid] = {
+		activity = this.stream[guid] = Ext.apply({
 			activity: true,
 			guid: guid,
 			name: c.get('Creator'),
 			record: item,
 			type: getType(item),
-			message: this.getMessage(c, cid, guid, maybeFinish, extend),
 			ContainerId: cid,
 			ContainerIdHash: cid? IdCache.getIdentifier(cid): undefined
-		};
-		return this.stream[guid];
+		},this.getMessage(c, cid, guid, maybeFinish, extend));
+
+		Ext.callback(extend);
+		UserRepository.getUser(c.get('Creator'),function(u){
+			activity.name = u.getName();
+			Ext.callback(maybeFinish);
+		});
+
+		return activity;
 	},
 
 
 	getMessage: function(change, cid, guid, maybeFinish, extend) {
 		var item = change.get('Item'),
 				type = change.get('ChangeType'),
-				stream = this.stream;
+				stream = this.stream,
+				result = null;
+
+		//TODO: XXX: FIX this to be better... if/ifelse/else branches are ugly.
 
         function getName(type){
 
             function resolve(meta){
-                stream[guid] = Ext.String.format('Shared a {0} {1}&rdquo;', type,
-                    Ext.String.ellipsis( (meta ? (' in &ldquo'+meta.label): '&ldquo;'),50,true));
+
+                stream[guid].verb = 'Shared a '+type;
+	            stream[guid].message = Ext.String.ellipsis(' in &ldquo'+((meta||{}).label||''),50,true)+'&rdquo;';
+
                 Ext.callback(maybeFinish);
             }
 
@@ -283,42 +303,48 @@ Ext.define('NextThought.view.account.activity.View',{
         }
 
 
-		if (!item){return 'Unknown';}
+		if (!item){
+			result = {message:'Unknown'};
+		}
 
-		if (item.getModelName() === 'User') {
-			return item.getName() + (/circled/i).test(type)
-					? ' added you as a contact.' : '?';
+		else if (item instanceof NextThought.model.User ) {
+			result = {
+				name: item.getName(),
+				verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
+			};
 		}
-		else if (item.getModelName() === 'Highlight') {
-			Ext.defer(getName,1,this,['highlight']);
+
+		else if (item instanceof NextThought.model.Note ){
+			result = {
+				message:Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(item.getBodyText(),50,true)),
+				verb: item.get('inReplyTo') ? 'said':'shared a note'
+			};
 		}
-		else if (item.getModelName() === 'Redaction') {
-            Ext.defer(getName,1,this,['redaction']);
+
+		else if (item instanceof NextThought.model.Highlight ) {
+			console.trace(); //does this branch (highlight and redaction) get called??
+			Ext.defer(getName,1,this,[item.getModelName().toLowerCase()]);
+			result = {};
 		}
-		else if(item.getModelName() === 'PersonalBlogEntry'){
-			return Ext.String.format('shared a thought: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
+
+		else if(item instanceof NextThought.model.forums.HeadlineTopic ){
+			result = {
+				message: Ext.String.ellipsis(item.get('headline').get('title'),50,true),
+				verb: 'shared a thought:'
+			};
 		}
-		else if(item.getModelName() === 'CommunityHeadlineTopic'){
-			return Ext.String.format('started a discussion: {0}', Ext.String.ellipsis(item.get('headline').get('title'),50,true));
+
+		else if(item instanceof NextThought.model.forums.Post ){
+			result = {
+				message: Ext.String.format('&ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true)),
+				verb: 'commented'
+			};
 		}
-		else if(item.getModelName() === 'PersonalBlogComment'){
-			return Ext.String.format('commented &ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true));
-		}
-		else if(item.getModelName() === 'GeneralForumComment'){
-			return Ext.String.format('commented &ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(),50,true));
-		}
-		else if (item.getModelName() === 'Note'){
-			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
-					Ext.String.ellipsis(item.getBodyText(),50,true),
-					(item.get('inReplyTo') ? 'said ':'')
-			);
-		}
-		else {
+
+		if(!result){
 			console.error('Not sure what activity text to use for ', type, item.getModelName(), item, change);
-			return 'Unknown';
 		}
-
-        return '...';
+		return result;
 	},
 
 
