@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	extend: 'NextThought.view.annotations.note.Panel',
 	requires: [
+		'NextThought.mixins.note-feature.GetLatestReply',
 		'NextThought.util.Content'
 	],
 	alias: [
@@ -9,6 +10,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		'widget.profile-activity-note-item'
 	],
 
+	mixins: {
+		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply'
+	},
 
 	defaultType: 'profile-activity-item-reply',
 	autoFillInReplies: false,
@@ -201,43 +205,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	deactivateReplyEditor: function(){
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
-	},
-
-
-	getItemReplies: function(){
-		var me = this,
-			r = me.record;
-
-		function cb(store, records){
-			var count = store.getCount(), rec = null, items;
-
-			//Set comments count
-			me.commentsEl.update( count + me.commentsEl.getAttribute('data-label'));
-			if(count === 0 || count === 1){
-				delete me.commentsEl;
-			}
-
-			//Stash replies on the record
-			items = store.getItems();
-			if(items.length === 1 && items[0].getId() === me.record.getId()){
-				items = (items[0].children||[]).slice();
-			}
-			else {
-				console.warn('There was an unexpected result from the reply store.');
-			}
-			me.record.children = items;
-
-			//Set the latest direct reply
-			store.each(function(r){
-				if(!rec || ( (rec.get('CreatedTime') < r.get('CreatedTime')) && (r.get('inReplyTo') === me.record.getId())) ){ rec = r; }
-			});
-
-			if(rec){ me.add({record: rec, autoFillInReplies:false}); }
-		}
-
-		//Sigh even though in some cases we only want one reply we still fetch them all.
-		//We do this b/c what they really want is the most recently created direct reply...
-		r.loadReplies(cb,me,{sortOn: 'createdTime', sortOrder: 'descending'});
 	},
 
 
