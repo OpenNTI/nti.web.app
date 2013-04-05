@@ -730,8 +730,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	addReplies: function(records){
 		var toAdd = [], recordCollection, prefix = this.getRoot() ? this.getRoot().replyIdPrefix() : null;
 
-		//Shortcircuit
-		if(Ext.isEmpty(records)){
+		//Shortcircuit. Also check if we've been destroyed before adding replies.
+		if(Ext.isEmpty(records) || this.isDestroyed || this.destroying){
 			return;
 		}
 
