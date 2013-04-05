@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.forums.Forum', {
-	extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.forums.Base',
 
 	fields: [
 		{ name: 'DCDescription', type: 'string' },

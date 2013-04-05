@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.forums.Topic', {
-	extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.forums.Base',
 
 	fields: [
 		{ name: 'PostCount', type: 'int', persist: false },
