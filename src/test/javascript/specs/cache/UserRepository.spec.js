@@ -283,7 +283,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 				}
 			};
 
-			spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
+		spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
 				var user = users[username],
 					callback = user ? callbacks.success : callbacks.failure;
 

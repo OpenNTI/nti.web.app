@@ -104,30 +104,44 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		var s = this.getStore(),
-			result = [],
+			result = {},
 			l = username.length,
-			async = false;
+			names = [];
 
-		function finish() {
-			if(username.returnSingle){
-				result = result[0];
+		function maybeFinish(k, v) {
+			result[k] = v;
+			l -= 1;
+
+			if(l === 0){
+				result = Ext.Array.map(names, function(n){
+					return result[n];
+				});
+
+				if(username.returnSingle){
+					result = result.first();
+				}
+				Ext.callback(callback, scope, [result]);
 			}
-			Ext.callback(callback,scope, [result]);
+		}
+
+		//Did someone do something stupid and send in an empty array
+		if(Ext.isEmpty(username)){
+			Ext.callback(callback, scope, [[]]);
+			return;
 		}
 
 		Ext.each(
 			username,
 			function(o){
+				var name, r;
 
-				var name,
-					r;
-
-				if(typeof(o) === 'string') {
+				if(Ext.isString(o)) {
 					name = o;
 				}
 				else if(o.getId !== undefined){
 					if(o.get('status') === 'Unresolved'){
-						result.push(o);
+						names.push(o.getId());
+						maybeFinish(o.getId(), o);
 						return;
 					}
 					name = o.getId();
@@ -140,44 +154,31 @@ Ext.define('NextThought.cache.UserRepository', {
 					}
 					name = r.getId();
 				}
+				names.push(name);
 
 				r = this.resolveFromStore(name);
 				if (r && r.raw && (!forceFullResolve || !r.summaryObject)){
-					result.push(r);
+					maybeFinish(r.getId(), r);
 					return;
 				}
 
 				//console.log('Resolving user on server', name);
-
-				//must make a request, finish in callback so set async flag
-				async = true;
+				result[name] = null;
 				this.makeRequest(name, {
 					scope: this,
 					failure: function(){
+						var unresolved = User.getUnresolved(name);
 					//	console.log('resturning unresolved user', name);
-						result.push(User.getUnresolved(name));
-						if (result.length === l) {
-							finish();
-						}
+						maybeFinish(name, unresolved);
 					},
 					success: function(u){
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						result.push(this.cacheUser(u, true));
-
-						//our list of results is as expected, finish
-						if (result.length === l) {
-							finish();
-						}
+						maybeFinish(u.getId(), this.cacheUser(u, true));
 					}
 				}, cacheBust);
 			},
 			this);
-
-		if (!async) {
-			finish();//we finish linerally, everything is in the store already
-		}
-
 	},
 
 
