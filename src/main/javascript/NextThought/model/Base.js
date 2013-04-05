@@ -74,6 +74,21 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	getClassForModel: function(aliasPrefix,fallback){
+		var c = this,
+			cls = null,
+			name;
+
+		while(c && !cls){
+			name = ((c.$className||'').split('.').last()||'').toLowerCase();
+			cls = Ext.ClassManager.getByAlias(aliasPrefix+name);
+			c = c.superclass;
+		}
+
+		return cls || fallback;
+	},
+
+
 	is: function(selector){return false;},
 
 	//Override isEqual so we can test more complex equality and
