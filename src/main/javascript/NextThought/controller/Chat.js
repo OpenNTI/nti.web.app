@@ -62,19 +62,23 @@ Ext.define('NextThought.controller.Chat', {
 				'send-whiteboard': this.sendWhiteboard
 			},
 
-            'chat-view chat-log-entry': {
-	            'reply-to-whiteboard': this.replyToWhiteboard
-            },
+			'chat-view chat-log-entry': {
+				'reply-to-whiteboard': this.replyToWhiteboard
+			},
 
-            'chat-view': {
-                'flag-messages': this.flagMessages,
-	            'publish-chat-status': this.publishChatStatus
-            },
-
-
-            'chat-transcript-window': {
-                'flag-messages': this.flagTranscriptMessages
-            },
+			'chat-view': {
+				'flag-messages': this.flagMessages,
+				'publish-chat-status': this.publishChatStatus
+			},
+			'chat-log-entry':{
+				'link-clicked' : this.linkClicked,
+				'show-whiteboard' : this.zoomWhiteboard
+			},
+			'chat-transcript-window': {
+				'flag-messages': this.flagTranscriptMessages,
+				'link-clicked' : this.linkClicked,
+				'show-whiteboard' : this.zoomWhiteboard
+			},
 
 			'contacts-tabs-grouping':{
 				'group-chat': this.enterRoom
@@ -433,6 +437,55 @@ Ext.define('NextThought.controller.Chat', {
 		this.postMessage(room, val, mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
 
 		f.focus();
+	},
+
+	getHashChange: function(href,base){
+		var hash = href.split('#'),
+			newLocation = hash[0],
+			target = hash[1];
+
+		if(newLocation.indexOf(base) === 0 && href !== window.location.href && target.indexOf('!') === 0){
+			return target;
+		}
+
+		return null;
+	},
+
+	linkClicked: function(cmp,href){
+		var target,
+			whref = window.location.href.split('#')[0];
+
+		function openHref(link, t){
+			try {
+				window.open(link, t);
+			}
+			catch(er){
+				window.location.href = link;
+			}
+		}
+		
+		if(href.href){
+			href = href.href;
+		}
+
+		//if there is no href, or the href if the current location return
+		if (!href || whref+'#' === href || href === window.location.href) {
+			return false;
+		}
+
+		target = this.getHashChange(href,whref);
+
+		if(target){
+			window.location.hash = target;
+			return false;
+		}else{
+			openHref(href,'_blank');
+			return false;
+		}
+	},
+
+	zoomWhiteboard: function(cmp,id){
+		Ext.widget('wb-window', { width: 802, value:id, readonly: true}).show();
 	},
 
 	replyToWhiteboard: function(wbData, cmp, midReplyOf, channel, recipients){

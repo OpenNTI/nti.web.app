@@ -127,16 +127,35 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		}
 		this.readOnlyWBsData[id] = data;
 	},
-
+	
 	click: function(e){
-		var t = e.getTarget('.whiteboard-container', null, true), guid;
+		e.stopEvent();
+		var me = this, t = e.getTarget('.whiteboard-container', null, true), guid,
+			a = e.getTarget('a');
 
-		if(!t){ return;}
-
-		guid = t.up('.body-divider').getAttribute('id');
-		if(t && this.readOnlyWBsData[guid]){
-			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+		function openHref(link, t){
+			try {
+				window.open(link, t);
+			}
+			catch(er){
+				window.location.href = link;
+			}
 		}
+
+		if(!t && !a){ return;}
+
+		
+		if(t){
+			guid = t.up('.body-divider').getAttribute('id');
+			if(me.readOnlyWBsData[guid]){
+				me.up('chat-transcript-window').fireEvent('show-whiteboard',me,me.readOnlyWBsData[guid]);
+				//Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+			}
+		}else{
+			me.up('chat-transcript-window').fireEvent('link-clicked',me,a.href);
+		}
+
+		return false;
 	},
 
 
