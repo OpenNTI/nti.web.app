@@ -58,7 +58,9 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 
 
 	updateCount: function(){
-		this.count.update(this.record.getReplyCount()||'');
+		if(this.count){
+			this.count.update(this.record.getReplyCount()||'');
+		}
 	},
 
 	clicked: function(){
