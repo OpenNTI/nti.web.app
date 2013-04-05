@@ -1,16 +1,20 @@
 Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 	constructor: function(){
-		function onAfterRender(){
-			var me = this;
+		var me = this;
 
+		function onAfterRender(){
 			me.updateLikeAndFavoriteFromRecord();
 
 			if( me.liked ){  me.mon(me.liked, 'click', me.likeClicked, me); }
 			if( me.favorites ){ me.mon(me.favorites,'click', me.favoriteClicked, me); }
+
+			me.reflectLikeAndFavorite(this.record);
+			me.listenForLikeAndFavoriteChanges(this.record);
 		}
 
 		this.on('afterrender',onAfterRender,this,{single:true});
+		this.on('destroy',this.tearDownLikeAndFavorite,this);
 	},
 
 
