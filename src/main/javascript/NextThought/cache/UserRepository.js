@@ -97,7 +97,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID',key,0,false,true,true);
 	},
 
-	getUser: function(username, callback, scope, forceFullResolve) {
+	getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
 		if (!Ext.isArray(username)) {
 			username = [username];
 			username.returnSingle = true;
@@ -170,7 +170,7 @@ Ext.define('NextThought.cache.UserRepository', {
 							finish();
 						}
 					}
-				});
+				}, cacheBust);
 			},
 			this);
 
@@ -189,11 +189,16 @@ Ext.define('NextThought.cache.UserRepository', {
 	 * @param username
 	 * @param callbacks
 	 */
-	makeRequest: function(username, callbacks) {
+	makeRequest: function(username, callbacks, cacheBust) {
 		var me = this,
 			result = null,
 			url = $AppConfig.service.getResolveUserURL(username),
 			options;
+
+		if(cacheBust){
+			url += (url.indexOf('?')<0 ? '?':'&')
+					+ '_dc=' + (new Date()).getTime();
+		}
 
 		if(!username){
 			console.error('no user to look up');
