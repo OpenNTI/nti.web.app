@@ -79,7 +79,7 @@ Ext.define('NextThought.controller.Forums', {
 			'profile-forum-activity-item nti-editor':{
 				'save': this.saveTopicComment
 			},
-			'forums-topic nti-editor': {
+			'#forums > forums-topic nti-editor': {
 				'save': this.saveTopicComment
 			},
 			'search-result':{
