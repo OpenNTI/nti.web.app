@@ -299,7 +299,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			return result;
 		}
 
-		var scope = {}, hans, holly, makeRequest;
+		var hans, holly, makeRequest;
 
 		beforeEach(function(){
 			hans = createUser('hans');
