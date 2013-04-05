@@ -330,7 +330,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		else if(item instanceof NextThought.model.forums.HeadlineTopic ){
 			result = {
 				message: Ext.String.ellipsis(item.get('headline').get('title'),50,true),
-				verb: 'shared a thought:'
+				verb: item.getActivityLabel()
 			};
 		}
 
