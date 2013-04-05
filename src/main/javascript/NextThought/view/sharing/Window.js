@@ -135,10 +135,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			return true;
 		}
 		refCount = this.record.get('ReferencedByCount');
-		if(refCount !== undefined){
-			return refCount > 0;
-		}
-		return this.record.children && this.record.children > 0;
+		return (this.record.children && this.record.children.length > 0) || (!Ext.isEmpty(refCount) && refCount > 0);
 	},
 
 	getValue: function(){
