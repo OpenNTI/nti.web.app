@@ -87,118 +87,146 @@
 
 
 .activity-popout{
-	@extend .contact-popout;
+	&.x-layer { overflow: visible; }
+	background-color: #fff;
+	@include box-shadow(0 2px 4px 1px rgba(0,0,0,.14),
+						inset 0 2px rgba(255,255,255,.5));
+	border: solid 1px #cecece;
 
-	.activity-preview{
-		@include reply-options;//in _note.scss
-
-		.header {
-			background: #ffffff;
-			padding: 16px 10px;
-
-			.path,.location-label {
-				color: $tertiary-grey;
-				font-family: $font;
-			}
-
-			.path {
-				font-size: 10px;
-				font-weight: 600;
-				text-transform: uppercase;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
-			}
-
-			.location-label {
-				font-size: 14px;
-				font-weight: 500;
-				font-style: italic;
-				margin: 2px 0 8px;
-			}
-
-			.context {
-				max-height: 300px;
-				overflow-x: hidden;
-				overflow-y: auto;
-				color: #136ea5;
-				font-family: $font;
-				font-size: 14px;
-				margin: 0 10px 0 25px;
-				position: relative;
-				canvas { position: absolute; top:0; left:0; width: 100%; height: 100%; }
-				.text {
-					display: inline;
-					background: #e1f2fc;
-					line-height: 25px;
-				}
-			}
-		}
-
-		.footer {
-			background: #f8f8f8;
-			border-top: 1px solid #e6e6e6;
-			box-shadow: inset 0 1px 0 0 #fdfdfd;
-			min-height: 65px;
-
-			.body,.filler {
-				padding: 15px 15px 15px 32px;
-			}
-			.body {
-				font-family: $font;
-				font-size: 14px;
-				font-weight: normal;
-				color: $primary-grey;
-				word-wrap: break-word;
-				position: relative;
-
-				&::before {
-					content: ' ';
-					overflow: hidden;
-					position: absolute;
-					top: 15px; left: 15px;
-					background: transparent $icons no-repeat;
-					@include sprite($icons,'ldquo',$dimensions: true);
-				}
-
-				&::after{
-					content: ' ';
-					display: inline-block;
-					margin-left: 5px;
-					background: transparent $icons no-repeat;
-					@include sprite($icons,'rdquo',$dimensions: true);
-				}
-			}
-
-			.reply-options {
-				opacity: 1;
-				padding-left: 10px;
-
-				div {
-					margin-right: 20px;
-					&.share { margin-right: 55px; }
-					&.more{ float:right; }
-				}
-
-			}
-		}
+	&::after{
+		content: ' '; overflow: hidden;
+		background: $elements no-repeat;
+		@include sprite($elements,'rhp_flyout_nib_wht',$dimensions: true);
+		position: absolute;
+		top: 35px;
+		right: -12px;
 	}
 
-	.activity-blog-preview{
-		.header, .footer{
-			margin-top: 0px;
-			background: $panel-background;
-			border: 0 solid #f2f2f2;
-			border-bottom-width: 1px;
-			overflow: hidden;
-			position: relative;
-			padding: 16px 10px;
+	&.communityheadlinetopic::after { top: 66px; }
+	&.note::after { top: 117px; }
 
-			.avatar{
+	&.bottom-aligned::after {
+		@include sprite($elements,'rhp_flyout_nib_gry',$dimensions: true);
+		top: auto !important;
+		bottom: 18px;
+	}
+
+	.activity-preview {
+
+		.foot, .replies, .respond {
+			background: #f9f9f9;
+			padding:{ left: 15px; right: 15px; }
+		}
+
+		.replies + .respond {
+			border-top: 1px solid #e7e7e7;
+			box-shadow: inset 0 1px 0 0 white;
+			padding: 10px;
+			& > div {
+				border: 1px solid #dcdcdc;
+				color: #dcdcdc;
+				background: white;
+				font: italic 400 14px/37px $font;
+				padding: 0 10px;
+				.editor {
+					margin-bottom: 10px;
+				}
+			}
+		}
+
+		&.editor-active ~ .respond {
+			.reply-options { display: none; }
+			.editor .action.share {display: none !important;}
+		}
+
+
+		.path,
+		.content-callout {
+			padding: 16px 36px 0px 16px;
+			height: 91px;
+			border-bottom-width: 0;
+			cursor: pointer;
+			border-color: #eaeaea;
+
+			.location {
+				text-transform: uppercase;
+				font: normal 600 10px/20px $font;
+				color: $tertiary-grey !important;
+				height: 20px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.context{
+				overflow: hidden;
+				position: relative;
+				cursor: pointer;
+				height: 55px;
+
+				& > .text {
+					position: relative;
+					overflow: hidden;
+					font: normal 400 14px/20px $font;
+					color: $primary-grey;
+					display: block;
+					height: 40px;
+					img { max-width: 50% !important; }
+				}
+
+				&::after {
+					content: ' ';
+					position: absolute;
+					left: 0; right: 0;
+					bottom: 0; height: 10px;
+					@include background-image(linear-gradient(top,  rgba(251,251,251,0) 0%,rgba(251,251,251,1) 100%));
+				}
+			}
+		}
+
+
+		.path {
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			padding: 0 20px;
+			font: normal 700 10px/40px $font;
+			min-height: 40px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			span.path-part {
+				&::after{
+					content: ' / ';
+				}
+				&:last-of-type::after{
+					content: '';
+				}
+			}
+		}
+
+
+		.item {
+			position: relative;
+			z-index: 2;
+			border: 0;
+			border-top: 1px solid #f0f0f0;
+			border-bottom: 1px solid #ececec;
+			box-shadow: 0 1px 4px 0px rgba(30, 30, 30, 0.05);
+			padding: 0 20px 0;
+
+			@include like-and-favorite;
+
+			& > * { margin-top: 20px; }
+			.controls {margin: 0 -20px 0 0;}
+
+			.avatar {
 				float: left;
-				width: 60px; height: 60px;
+				width: 60px;
+				height: 60px;
 				border-radius: 5px;
 				background:{
+					color: transparent;
 					position: center;
 					repeat: no-repeat;
 					size: cover;
@@ -206,73 +234,155 @@
 			}
 
 			.meta {
-				margin: 0 0 0 70px;
+				margin: 20px 70px 0 80px;
+				min-height: 60px;
+				font: normal 400 12px $font;
 				color: $tertiary-grey;
-				.title{
-					color: $primary-grey;
-					font: normal 300 20px/30px $font;
-					line-height: 25px;
-				}
+			}
 
-				.body{
-					font-family: $font;
-					font-size: 14px;
-					font-weight: normal;
-					color: $secondary-grey;
-					margin-bottom: 10px;
-					word-wrap: break-word;
-					line-height: 25px;
-				}
+			.stamp {
+				margin-top: 5px;
+				.name {font: inherit;}
 
-				.counts, .meta-tag {
-					font: normal 400 12px/20px $font;
-					span{
-						&::after{
-							color: $tertiary-grey;
-							font: normal 500 12px/20px $font;
+				span{
+					&::after{
+						color: $tertiary-grey;
+						font: normal 500 12px/20px $font;
 
-							position: static;
-							content: '\00B7';
-							vertical-align: middle;
-							text-decoration: none !important;
-							display: inline;
-							padding: 0 0.5em;
-							background: none;
-						}
-						&:last-of-type::after {
-							content: '';
-							display: none;
-						}
+						position: static;
+						content: '\00B7';
+						vertical-align: middle;
+						display: inline;
+						padding: 0 0.5em;
+						background: none;
 					}
-
-					&.meta-tag{
-						font-size: 10px;
-						font-weight: 600;
-						text-transform: uppercase;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						overflow: hidden;
-					}
-
-					.link{
-						color:$primary-blue !important;
+					&:last-of-type::after {
+						content: '';
+						display: none;
 					}
 				}
 			}
 
-			&.footer{
-				background-color: $quad-grey;
-				padding: 10px;
-				.avatar{
-					width: 48px; height: 48px;
-					margin-left:12px;
+			.subject, .name.no-subject {
+				display: block;
+				color: $primary-grey;
+				font: normal 300 32px/34px "Open Sans Condensed", $font;
+				&::after{
+					content: '';
+					display: none;
 				}
-				.meta{
-					.body{
-						margin-bottom: 0;
+			}
+
+			.subject:empty,
+			.subject.no-subject{
+				display: none;
+			}
+
+		}
+
+
+		.body{
+			margin: 20px 0;
+			font: normal 400 16px $font;
+			color: $primary-grey;
+			@include text-pre-wrap;
+		}
+
+
+		.foot {
+			clear: both;
+			opacity: 1;
+			padding: 15px;
+			color: $primary-blue;
+
+			div {
+				font: normal 600 12px/15px $font;
+				cursor: pointer;
+				display: inline-block;
+				//opacity: 0.75;
+				padding: 0 0 0 0.5em;
+				margin: 0;
+				//&:hover { opacity: 1; &::after{opacity: 0.75;} }
+				&::after{
+					font: normal 600 14px/20px $font;
+					position: static;
+					content: '\00B7';
+					vertical-align: middle;
+					text-decoration: none !important;
+					display: inline;
+					padding: 0 0 0 0.5em;
+					background: none;
+				}
+				&:last-of-type::after {
+					content: '';
+					display: none;
+				}
+				&.last::after{
+					content: '';
+					display: none;
+				}
+			}
+		}
+
+		.replies {
+			.x-component-reply {
+				position: relative;
+				padding-bottom: 10px;
+
+				.controls {
+					position: absolute;
+					top: -5px;
+					right: 0;
+				}
+
+				@include like-and-favorite;
+
+				.avatar {
+					float: left;
+					width: 35px; height: 35px;
+					border-radius: 3px;
+					background:{
+						color: transparent;
+						position: center;
+						repeat: no-repeat;
+						size: cover;
 					}
-					.meta-tag{
-						span::after{content: '';}
+				}
+
+				.meta,.body,.foot {
+					margin-left: 45px;
+				}
+
+				.foot {
+					padding: 0;
+				}
+
+				.meta {
+					font: normal 600 10px $font;
+
+					.name {
+						color: $primary-blue;
+						cursor: pointer;
+						&::after{
+							content: ' ';
+						}
+					}
+
+					.time{
+						color: $tertiary-grey;
+						text-transform: uppercase;
+					}
+				}
+
+				.body {
+					color: $primary-grey;
+					margin:{ top: 5px; bottom: 5px; }
+					font: normal 500 14px/20px $font;
+				}
+
+				&.deleted-reply{
+					.controls{
+						display: none;
 					}
 				}
 			}

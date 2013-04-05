@@ -1,144 +1,158 @@
 Ext.define('NextThought.view.account.activity.Preview',{
-	extend: 'Ext.Component',
-	alias: 'widget.activity-preview',
+	extend: 'Ext.container.Container',
 
 	requires: [
-		'NextThought.view.annotations.note.Templates',
         'NextThought.cache.LocationMeta'
 	],
+
+
+	onClassExtended: function(cls, data) {
+		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
+		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
+
+
+		//allow a toolbar template to be defined
+		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
+
+		//merge in subclass's templates
+		var tpl = this.prototype.renderTpl
+				.replace('{toolbar}',data.toolbarTpl||'');
+
+		if(!data.renderTpl){
+			data.renderTpl = tpl;
+		}
+		//Allow the subclass to redefine the template and include the super's template
+		else {
+			data.renderTpl = data.renderTpl.replace('{super}',tpl);
+		}
+	},
+
+	mixins: {
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	},
+
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	cls: 'activity-preview',
 
 	renderSelectors: {
-		canvas: 'canvas',
-		liked: '.meta .controls .like',
-		favorites: '.meta .controls .favorite',
-		sharedTo: '.shared-to',
-		context: '.context .text',
-		text: '.body',
-        path: '.path',
-        location: '.location-label',
-
-		replyOptions: '.footer .reply-options',
-		replyButton: '.footer .reply',
-		shareButton: '.footer .share',
-		more: '.footer .reply-options .more'
+		avatar: '.avatar',
+		name: '.name',
+		liked: '.controls .like',
+		favorites: '.controls .favorite',
+		subjectEl: '.subject',
+		itemEl: '.item',
+		commentsEl: '.comments',
+		messageBodyEl: '.body'
 	},
 
-	initComponent: function(){
-        var me = this;
-		me.callParent(arguments);
-
-		this.renderData = Ext.apply(this.renderData||{},{
-			location: 'Loading...',
-			path: '&nbsp;',
-			contextText: this.record.get('selectedText'),
-			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
-		});
-
-        LocationMeta.getMeta(me.record.get('ContainerId'),function(meta){
-			var lineage = [],
-				location = '';
-
-			if(!meta){
-				console.warn('No meta for '+me.record.get('ContainerId'));
-				Ext.apply(me.renderData, {
-					location: '',
-					path: ''
-				});
-			}
-			else {
-				lineage = LocationProvider.getLineage(meta.NTIID,true);
-				location = lineage.shift();
-				lineage.reverse();
-
-				Ext.apply(me.renderData, {
-					location: location,
-					path: lineage.join(' / ')
-				});
-			}
-
-            if (me.rendered) {
-                me.path.update(me.renderData.path);
-                me.location.update(me.renderData.location);
-            }
-        }, this);
-    },
-
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-
-		this.mon(this.replyButton, 'click', this.onReply, this);
-		this.mon(this.shareButton, 'click', this.onShare, this);
-
-		if(!this.record.canReply || !$AppConfig.service.canShare()){
-			this.replyButton.hide();
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: '{type} activity-preview-body',
+			cn:[
+				'{toolbar}',
+				{ cls:'item', cn:[
+					{ cls: 'avatar', style:{backgroundImage:'url({avatarURL})'} },
+					{ cls: 'controls', cn: [
+						{ cls: 'favorite' },
+						{ cls: 'like' }
+					]},
+					{ cls: 'meta', cn: [
+						{ cls: 'subject {[values.title? "":"no-subject"]}', html: '{title}' },
+						{ cls: 'stamp', cn: [
+							{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: '{name}'},
+							{tag: 'span', cls: 'time', html:'{relativeTime}'}
+						]}
+					]},
+					{ cls: 'body' }
+				]},
+				{
+					cls: 'foot',
+					cn: [
+						{ cls: 'comments', 'data-label': ' Comments',
+							html: '{CommentCount} Comment{[values.CommentCount===1?"":"s"]}' }
+					]
+				}
+			]
+		},{
+			id: '{id}-body',
+			cls: 'replies',
+			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+		},{
+			cls: 'respond', cn: {
+			cn: [
+				{
+					cls: 'reply-options',
+					cn: [
+						{ cls: 'reply', html: 'Add a comment' }
+					]
+				}
+			]}
 		}
-
-		if(!$AppConfig.service.canShare()){
-			this.shareButton.hide();
-		}
-
-		this.el.on('click',this.onReply,this);
-		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, this.user, this.record);
-	},
+	]),
 
 
-	onReply: function(event){
-		event.preventDefault();
-		event.stopPropagation();
-
-		var rec = this.record;
-
-		if (!rec || rec.get('Class') === 'User'){
+	setBody: function(body){
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
 			return;
 		}
-
-		try{
-			this.fireEvent('navigation-selected', rec.get('ContainerId'), rec, {reply: Boolean(event.getTarget('.reply'))});
-		}
-		catch(er){
-			console.error(Globals.getError(er));
-		}
+		this.messageBodyEl.update(body);
 	},
 
 
-	onShare: function(event){
-		event.preventDefault();
-		event.stopPropagation();
-		this.fireEvent('share', this.record);
+	/**
+	 * Maps the records 'reply/comment/post' counts to a single value.
+	 *
+	 * @param record
+	 * @returns Number
+	 */
+	getCommentCount: function(record){
+		throw 'Do not use the base class directly. Subclass and implement this';
 	},
 
 
-	onFlag: function(){
-		this.record.flag(this);
+	/**
+	 * Place to derive fields that should be put into the template.
+	 *
+	 * @param record
+	 * @returns Object
+	 */
+	getDerivedData: function(record){
+		return {
+			relativeTime: record.getRelativeTimeString()
+		};
 	},
 
 
-	onChat: function() {
-		this.fireEvent('chat', this.record);
+	/** @private */
+	prepareRenderData: function(record){
+		var me = this,
+			o = record.getData();
+		o.type = o.Class.toLowerCase();
+		o.CommentCount = this.getCommentCount(record);
+		Ext.apply(o,this.getDerivedData(record));
+
+		me.ownerCt.addCls(o.type);
+
+		UserRepository.getUser(o.Creator,function(u){
+			o.avatarURL = u.get('avatarURL');
+			o.name = u.getName();
+			if(me.rendered){
+				me.avatar.setStyle({backgroundImage: 'url('+ o.avatarURL + ');'});
+				me.name.update(o.name);
+			}
+		});
+
+		return Ext.apply(this.renderData||{}, o);
+	},
+
+
+	beforeRender: function(){
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
+		this.callParent(arguments);
+		this.renderData = this.prepareRenderData(this.record);
 	}
 
-
-
-}, function(){
-	this.prototype.renderTpl = Ext.DomHelper.markup([
-			{
-				cls: 'header',
-				cn:[
-					{cls: 'path', html:'{path}'},
-					{cls: 'location-label', html:'{location:ellipsis(150)}'},
-					{cls: 'context', cn:[
-						{tag: 'canvas'},
-						{cls: 'text',html: '{contextText:ellipsis(400)}'}
-					]}
-				]
-			},
-			{ cls: 'footer', cn: [
-				{tag: 'tpl', 'if':'textContent', cn:[{cls: 'body', html: '{textContent:ellipsis(200)}'}]},
-				{tag: 'tpl', 'if':'!textContent', cn:[{cls: 'filler'}]},
-				TemplatesForNotes.getReplyOptions() ] }
-		]);
 });

@@ -4,8 +4,10 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	requires: [
 		'NextThought.view.account.activity.Popout',
+		'NextThought.view.account.activity.blog.Popout',
+		'NextThought.view.account.activity.note.Popout',
+		'NextThought.view.account.activity.topic.Popout',
 		'NextThought.view.account.contacts.management.Popout',
-		'NextThought.view.account.activity.BlogPopout',
 		'NextThought.model.converters.GroupByTime',
 		'NextThought.model.Highlight',
 		'NextThought.model.Redaction',
@@ -106,6 +108,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		};
 	},
 
+
     fetchMore: function(){
         var s = this.store;
 
@@ -125,11 +128,13 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}
     },
 
+
     maybeReload: function(){
         if (this.isVisible() && this.rendered){
             this.reloadActivity();
         }
     },
+
 
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
@@ -384,6 +389,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		return false;
 	},
 
+
 	blogEntryClicked: function(rec){
 		var me = this;
 		UserRepository.getUser(rec.get('Creator'), function(user){
@@ -391,11 +397,13 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		});
 	},
 
+
 	forumTopicClicked: function(rec){
 		if(this.fireEvent('before-show-topic', rec)){
 			this.fireEvent('show-topic', rec);
 		}
 	},
+
 
 	forumCommentClicked: function(rec){
 		var me = this;
@@ -407,6 +415,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		$AppConfig.service.getObject(rec.get('ContainerId'), success, fail, me);
 
 	},
+
 
 	blogCommentItemClicked: function(rec){
 		var me = this;
@@ -436,10 +445,11 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			guid = (target||{}).id,
 			item = me.stream[guid],
 			rec = (item||{}).record,
-			recordClassName = rec && rec.get ? rec.get('Class') : '',
-			alias = "widget.activity-popout-"+recordClassName,
-			classRef = Ext.ClassManager.getByAlias(alias),
-			popout = !Ext.isEmpty(classRef) ? classRef : NextThought.view.account.activity.Popout;
+			popout = NextThought.view.account.activity.Popout;
+
+		if(rec && rec.getClassForModel) {
+			popout = rec.getClassForModel('widget.activity-popout-',NextThought.view.account.activity.Popout);
+		}
 
 		if(!rec){return;}
 
@@ -451,6 +461,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	},
+
 
 	//Right now things in the contacts are things shared
 	//directly to you, or creators that are connected to you.  Circled change
@@ -546,6 +557,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		return me.belongsInMyContacts(change, flStore, communityNames);
     },
+
 
     onActivate: function(){
 		//Suspend events and let the last sort take care of it

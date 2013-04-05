@@ -72,6 +72,9 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic-comment':{
 				'delete-topic-comment': this.deleteObject
 			},
+			'activity-preview-topic':{
+				'fill-in-path': this.fillInPath
+			},
 			'profile-forum-activity-item':{
 				'delete-post': this.deleteObject,
 				'fill-in-path': this.fillInPath

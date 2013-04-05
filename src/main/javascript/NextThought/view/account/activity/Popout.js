@@ -3,12 +3,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	alias: 'widget.activity-popout',
 
 	requires: [
-		'NextThought.view.account.contacts.management.Person',
-		'NextThought.view.account.activity.Preview',
-		'NextThought.view.account.activity.BlogPreview',
-		'NextThought.view.account.activity.BlogCommentPreview',
-		'NextThought.view.account.activity.ForumCommentPreview',
-		'NextThought.view.account.activity.ForumTopicPreview'
+		'NextThought.view.account.activity.Preview'
 	],
 
 	floating: true,
@@ -18,31 +13,21 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	hideMode: 'visibility',
 
 
-	constructor: function(config){
-		var isContact = Ext.getStore('FriendsList').isContact(config.user),
-			type = 'activity-preview',
-			className = config.record.get('Class');
-			alias = "widget.activity-preview-"+className;
+	initComponent:function(){
+		this.callParent(arguments);
+		var	cls = this.record.getClassForModel('widget.activity-preview-',false),
+			type;
 
-		if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias))){
-			type = 'activity-preview-'+className;
+		if(!cls){
+			Ext.Error.raise('Developer Error: a view is not defined for: '+this.record.$className);
 		}
 
-		this.addItems(config, type, isContact);
-		return this.callParent(arguments);
-	},
+		type = cls.xtype;
+		if(Ext.isArray(type)){
+			type = type.first();
+		}
 
-	addItems: function(config, type, isContact){
-		this.items = [{
-			xtype: 'person-card',
-			hideGroups: true,
-			user: config.user,
-			isContact: isContact
-		}, {
-			xtype: type,
-			record: config.record,
-			user: config.user
-		} ];
+		this.add({ xtype: type, record: this.record, user: this.user });
 	},
 
 
@@ -51,7 +36,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		me.callParent(arguments);
 		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
 
-		me.on('blur',me.destroy,me);
+		//me.on('blur',me.destroy,me);
 
 		Ext.defer(function(){
 			me.mon(me.el.up('body'),{
