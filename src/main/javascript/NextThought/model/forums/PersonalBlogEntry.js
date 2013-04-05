@@ -9,6 +9,10 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 		{name: 'FavoriteGroupingField', defaultValue:'Thoughts', persist: false}
 	],
 
+	getActivityLabel: function(){
+		return 'shared a thought:';
+	},
+
 	//TODO: workaround for no-edit link
 	isModifiable: function(){
 		return isMe(this.get('Creator'));

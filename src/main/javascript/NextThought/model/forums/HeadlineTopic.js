@@ -4,5 +4,10 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 	fields: [
 		{ name: 'headline', type: 'singleItem' },
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
-	]
+	],
+
+
+	getActivityLabel: function(){
+		return 'started a discussion:';
+	}
 });
