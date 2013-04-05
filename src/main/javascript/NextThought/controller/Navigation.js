@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'navigation-collection': {
 				'itemclick': this.selectLibraryEntry
 			},
-			'activity-view': {
+			'activity-panel': {
 				'navigation-selected': this.navigate,
 				'navigate-to-blog': this.gotoBlog
 			},
