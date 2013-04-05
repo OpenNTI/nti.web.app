@@ -106,7 +106,12 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
     resetNotificationCount: function(){
-        $AppConfig.userObject.saveField('NotificationCount', 0);
+	    try {
+            $AppConfig.userObject.saveField('NotificationCount', 0);
+	    }
+	    catch(e){
+		    console.warn('Problem saving NotificationCount on active user account', $AppConfig.userObject);
+	    }
         this.setNotificationCountValue(0);
     },
 
