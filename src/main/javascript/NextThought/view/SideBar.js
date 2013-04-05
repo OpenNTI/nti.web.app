@@ -4,7 +4,7 @@ Ext.define('NextThought.view.SideBar',{
 
 	requires: [
 		'NextThought.view.SideBarTabPanel',
-        'NextThought.view.account.activity.ActivityTabs',
+        'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.View',
 		'NextThought.view.account.history.View',
 		'NextThought.view.account.Identity'
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.SideBar',{
 			stateId: 'sidebar',
 			items: [
 				{xtype: 'contacts-view'},
-				{xtype: 'activity-tab-view'},
+				{xtype: 'activity-view'},
 				{xtype: 'history-view' }
 				//{ iconCls: 'inbox', title: 'inbox' }
 			]}

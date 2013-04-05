@@ -1,8 +1,8 @@
 
 
-.activity-tab-view{
+.activity-view{
 	@include side-panel-view-title;
-	.activity-view {
+	.activity-panel {
 		.activity {
 			cursor: pointer;
 			position: relative;
