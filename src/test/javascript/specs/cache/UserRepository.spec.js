@@ -235,7 +235,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 					expect(users.summaryObject).toBeFalsy();
 				}, scope, true);
 
-				expect(TUR.makeRequest).toHaveBeenCalledWith('hans', jasmine.any(Object));
+				expect(TUR.makeRequest).toHaveBeenCalledWith('hans', jasmine.any(Object), undefined);
 				TUR.getStore().remove(hans);
 			});
 
@@ -267,9 +267,9 @@ describe("User Repository/Store/Cache Behavior", function(){
 					expect(users[2].get('Username')).toEqual('Igor');
 				}, scope);
 
-				expect(TUR.makeRequest).not.toHaveBeenCalledWith('hans', jasmine.any(Object));
-				expect(TUR.makeRequest).toHaveBeenCalledWith('holly', jasmine.any(Object));
-				expect(TUR.makeRequest).toHaveBeenCalledWith('Igor', jasmine.any(Object));
+				expect(TUR.makeRequest).not.toHaveBeenCalledWith('hans', jasmine.any(Object), undefined);
+				expect(TUR.makeRequest).toHaveBeenCalledWith('holly', jasmine.any(Object), undefined);
+				expect(TUR.makeRequest).toHaveBeenCalledWith('Igor', jasmine.any(Object), undefined);
 				TUR.getStore().remove(hans);
 			});
 		});
