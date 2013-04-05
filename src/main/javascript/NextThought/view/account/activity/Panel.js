@@ -79,6 +79,13 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			update: function(){console.log('stream update',arguments);}
 		});
 
+		//Our contacts/community split makes us dependent on knowing our contacts.
+		//Now that the stream is so fast we are often ready to go before we have that info.
+		//so if contacts get loaded or refreshed do an update if we are rendered.  Note
+		//we don't listen to contacts-updated b/c we don't want to do a lot of work when people add/remove
+		//contacts
+		this.mon(Ext.getStore('FriendsList'), {scope: this, 'contacts-refreshed': this.maybeReload});
+
         this.on('activate', this.onActivate, this);
 	},
 
