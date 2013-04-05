@@ -275,6 +275,58 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
+	describe('getUser maintains order', function(){
+		function mockMakeRequest(repo, users){
+			var result = {
+				finishUser: function(u){
+					this[u]();
+				}
+			};
+
+			spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
+				var user = users[username],
+					callback = user ? callbacks.success : callbacks.failure;
+
+				if(user){
+					user.summaryObject = false;
+				}
+
+				result[username] = function(){
+					Ext.callback(callback, callbacks.scope, [user]);
+				};
+			});
+
+			return result;
+		}
+
+		var scope = {}, hans, holly, makeRequest;
+
+		beforeEach(function(){
+			hans = createUser('hans');
+			holly =  createUser('holly');
+			makeRequest = mockMakeRequest(TUR, {
+				'hans': hans,
+				'holly': holly
+			});
+		});
+
+		it('maintaines order independent of response order', function(){
+			var names = ['hans', 'holly'];
+
+			TUR.getUser(names, function(users){
+				var resolvedNames = Ext.Array.map(users, function(u){ return u.getId()});
+				expect(resolvedNames).toEqual(names);
+			});
+
+			expect(TUR.makeRequest).toHaveBeenCalledWith('hans', jasmine.any(Object), undefined);
+			expect(TUR.makeRequest).toHaveBeenCalledWith('holly', jasmine.any(Object), undefined);
+
+			//Trigger make request to finish in the opposite order we requested
+			makeRequest.finishUser('holly');
+			makeRequest.finishUser('hans');
+		});
+	});
+
 	describe('makeRequest', function(){
 
 		var mockAjax, realAjax;
