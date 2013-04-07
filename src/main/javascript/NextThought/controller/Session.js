@@ -284,10 +284,10 @@ Ext.define('NextThought.controller.Session', {
                     }
                     try{
                         var doc = Ext.decode(r.responseText),
-                            user = doc.Items[0].Title;
+                            user = doc.Items[0].Title; //Eww this assumption needs to go away
 
                         $AppConfig.service = NextThought.model.Service.create(doc, user);
-                        m.attemptLoginCallback(user,successFn);
+                        m.attemptLoginCallback($AppConfig.service, user, successFn);
                     }
                     catch(e){
                         console.error(Globals.getError(e));
@@ -301,20 +301,68 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
-    attemptLoginCallback: function(username, successCallback, failureCallback){
-        var me = this;
+    attemptLoginCallback: function(service, username, successCallback, failureCallback){
+        var me = this, href;
         Socket.setup();
 
-        UserRepository.getUser(username, function(user){
-            if(user){
-                user.data.Presence = 'Online';
-                $AppConfig.userObject = user;
-                successCallback.call(me);
-            }
-            else{
-                console.log('could not resolve user',username, arguments);
-                failureCallback.call(me);
-            }
-        }, me, true, true);
+		function findResolveSelfLink(s){
+			var items = s.get('Items') || [],
+				l;
+
+			Ext.Array.each(items, function(item){
+				var links = item.Links || [];
+				l = s.getLinkFrom(links, 'ResolveSelf');
+				if(l){
+					return false;
+				}
+				return true;
+			});
+
+			return l;
+		}
+
+		function onFailure(){
+			console.log('could not resolve user', username, service, arguments);
+			failureCallback.call(me);
+		}
+
+		function onSuccess(user){
+			user.data.Presence = 'Online';
+			$AppConfig.userObject = user;
+			successCallback.call(me);
+		}
+
+		href = findResolveSelfLink(service);
+
+		if(!href){
+			console.error('No link found to resolve app user', arguments);
+			onFailure();
+			return;
+		}
+
+		Ext.Ajax.request({
+			url: getURL(href),
+			scope: this,
+			headers: {
+				Accept: 'application/json'
+			},
+			callback: function(q, success, r){
+				var json, user;
+				if(!success){
+					onFailure(arguments);
+					return;
+				}
+				json = Ext.decode(r.responseText, true);
+				user = json ? ParseUtils.parseItems(json) : null;
+				user = user ? user.first() : null;
+
+				if(user && user.get('Username') === username){
+					onSuccess(user);
+				}
+				else{
+					onFailure(arguments);
+				}
+			}
+		});
     }
 });
