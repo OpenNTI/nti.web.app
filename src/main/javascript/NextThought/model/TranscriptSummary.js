@@ -9,7 +9,7 @@ Ext.define('NextThought.model.TranscriptSummary', {
 		{ name: 'RoomInfo', type: 'singleItem'},
 		{ name: 'Contributors', type: 'auto' },
 
-        { name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
+        { name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
 	],
 
 //	isThreadable: true,

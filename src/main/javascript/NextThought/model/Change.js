@@ -7,7 +7,7 @@ Ext.define('NextThought.model.Change', {
 	fields: [
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
-		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime'}
+		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'}
 	],
 
 	getItemValue: function(field) {

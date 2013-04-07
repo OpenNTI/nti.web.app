@@ -1,3 +1,22 @@
+Ext.define('NextThought.model.TestBase', {
+	extend: 'NextThought.model.Base',
+
+	requires: [
+		'NextThought.model.converters.GroupByTime'
+	],
+
+	fields: [
+		{
+			name: 'GroupingField',
+			mapping: 'Last Modified',
+			type: 'groupByTime',
+			persist: false,
+			affectedBy: 'Last Modified'
+		}
+	]
+});
+
+
 describe("Base Model Tests", function() {
     describe ('Relative Time Tests', function(){
         it('test day code executes', function(){
@@ -71,6 +90,17 @@ describe("Base Model Tests", function() {
 				expect(observer.fieldChanged.calls.length).toEqual(1);
 				expect(observer.fieldChanged).toHaveBeenCalledWith(dependentField, 'baz', jasmine.any(Object));
 			});
+		});
+	});
+
+	describe('affectedBy', function(){
+
+		it('Affecting fields trigger affected by fields to be reconverted', function(){
+			var model = NextThought.model.TestBase.create({'Last Modified': 0});
+
+			expect(model.get('GroupingField')).toBe('I Older');
+			model.set('Last Modified', new Date().getTime() / 1000);
+			expect(model.get('GroupingField')).toBe('A ');
 		});
 	});
 });

@@ -52,6 +52,8 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'likeState', persist: false, type: 'auto', convert: function(o,r){ return r.getLink('unlike') ? 'on': 'off'; }}
 	],
 
+	observer: new Ext.util.Observable(),
+
 	onClassExtended: function(cls, data) {
 		var mime = {mimeType: 'application/vnd.nextthought.'+data.$className.replace(/^.*?model\./,'').toLowerCase()};
 		data.proxy = {type:'nti', model: cls};
@@ -118,9 +120,9 @@ Ext.define('NextThought.model.Base', {
 
 
 	constructor: function(data,id,raw){
-		var f = this.fields,
+		var fs = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			cField = f.getByKey('Class'), get = this.get;
+			cField = fs.getByKey('Class'), get = this.get, me = this;
 
 		//Workaround for objects that don't have an NTIID yet.
 		if (data && this.idProperty==='NTIID' && id && raw) {
@@ -133,11 +135,35 @@ Ext.define('NextThought.model.Base', {
 
 		cField.defaultValue = cName;
 		cField.value = cName;
-		f.getByKey('MimeType').defaultValue = this.mimeType;
+		fs.getByKey('MimeType').defaultValue = this.mimeType;
 
 		this.callParent(arguments);
 		this.addEvents('changed','destroy','child-added','parent-set','modified');
 		this.enableBubble('changed','child-added','parent-set');
+
+		//Piggyback on field events to support reconverting dependent readonly fields.
+		//Fields  marked with affectedBy that also have a converter will be reset
+		//when their affectedBy fields change
+		fs.each(function(f){
+			var affectedBy = f.affectedBy,
+				fnName = f.name+'-affectedByHandler';
+			if(affectedBy && Ext.isFunction(f.convert)){
+				if(!Ext.isArray(affectedBy)){
+					affectedBy = [affectedBy];
+				}
+
+
+				me.observer[fnName] = function(){
+					//Note set will end up calling the necessary converter
+					this.set(f.name,  this.get(f.mapping || f.name));
+				}
+
+				Ext.Array.each(affectedBy, function(a){
+					me.addObserverForField(me.observer, a, me.observer[fnName], me);
+				});
+			}
+		});
+
 		return this;
 	},
 
