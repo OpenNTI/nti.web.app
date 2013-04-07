@@ -10,19 +10,6 @@ Ext.define('NextThought.model.Service', {
 		{ name: 'CapabilityList', type: 'auto'}
 	],
 
-
-	constructor: function(doc, user){
-		var r = this.callParent([doc]);
-
-		if(!this.getWorkspace(user)){
-			console.error('Could not locate workspace for:', user);
-			Ext.Error.raise('bad service doc');
-		}
-
-		return r;
-	},
-
-
 	getUserSearchURL: function(username){
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_SEARCH_REL);

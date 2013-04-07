@@ -262,6 +262,23 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
+	findResolveSelfWorkspace: function(s){
+		var items = s.get('Items') || [],
+			w, l;
+
+		Ext.Array.each(items, function(item){
+			var links = item.Links || [];
+			l = s.getLinkFrom(links, 'ResolveSelf');
+			if(l){
+				w = item;
+				return false;
+			}
+			return true;
+		});
+
+		return w;
+	},
+
 
     resolveService: function(successFn, failureFn){
         var m = this,
@@ -283,14 +300,21 @@ Ext.define('NextThought.controller.Session', {
                         return;
                     }
                     try{
-                        var doc = Ext.decode(r.responseText),
-                            user = doc.Items[0].Title; //Eww this assumption needs to go away
+                        var sDoc = Ext.decode(r.responseText);
+						sDoc = NextThought.model.Service.create(sDoc);
 
-                        $AppConfig.service = NextThought.model.Service.create(doc, user);
-                        m.attemptLoginCallback($AppConfig.service, user, successFn);
+
+						if(!m.findResolveSelfWorkspace(sDoc)){
+							console.error('Could not locate ResolveSelf link in:', sDoc);
+							Ext.Error.raise('bad service doc');
+						}
+
+                        $AppConfig.service = sDoc;
+                        m.attemptLoginCallback($AppConfig.service, successFn);
                     }
                     catch(e){
                         console.error(Globals.getError(e));
+						failureFn.call(m);
                     }
                 }
             });
@@ -301,28 +325,12 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
-    attemptLoginCallback: function(service, username, successCallback, failureCallback){
-        var me = this, href;
+    attemptLoginCallback: function(service, successCallback, failureCallback){
+        var me = this, href, workspace;
         Socket.setup();
 
-		function findResolveSelfLink(s){
-			var items = s.get('Items') || [],
-				l;
-
-			Ext.Array.each(items, function(item){
-				var links = item.Links || [];
-				l = s.getLinkFrom(links, 'ResolveSelf');
-				if(l){
-					return false;
-				}
-				return true;
-			});
-
-			return l;
-		}
-
 		function onFailure(){
-			console.log('could not resolve user', username, service, arguments);
+			console.log('could not resolve app user', arguments);
 			failureCallback.call(me);
 		}
 
@@ -332,7 +340,8 @@ Ext.define('NextThought.controller.Session', {
 			successCallback.call(me);
 		}
 
-		href = findResolveSelfLink(service);
+		workspace = this.findResolveSelfWorkspace(service);
+		href = service.getLinkFrom( (workspace || {}).Links || [], 'ResolveSelf');
 
 		if(!href){
 			console.error('No link found to resolve app user', arguments);
@@ -356,7 +365,7 @@ Ext.define('NextThought.controller.Session', {
 				user = json ? ParseUtils.parseItems(json) : null;
 				user = user ? user.first() : null;
 
-				if(user && user.get('Username') === username){
+				if(user && user.get('Username') === workspace.Title){
 					onSuccess(user);
 				}
 				else{
