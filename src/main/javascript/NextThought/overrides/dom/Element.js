@@ -2,6 +2,23 @@ Ext.define('NextThought.overrides.dom.Element',{
 	override: 'Ext.dom.Element',
 //	requires: ['NextThought.util.Rects'],
 
+	getScrollingEl: function(){
+
+		var el = this, found = 0, max = 100, flow;
+
+		do {
+			el = el && el.parent();
+			if(el){
+				flow = el.getStyle('overflow-y');
+				if(flow !== 'hidden' && el.dom.scrollHeight > el.getHeight()){
+					found = max;
+				}
+			}
+		}while(el && found < max);
+
+		return el || this;
+	},
+
 	needsScrollIntoView : function(containerEl){
 		var container = Ext.getDom(containerEl) || Ext.getBody().dom,
 			el = this.dom,
