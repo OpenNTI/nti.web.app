@@ -156,7 +156,7 @@ Ext.define('NextThought.model.Base', {
 				me.observer[fnName] = function(){
 					//Note set will end up calling the necessary converter
 					this.set(f.name,  this.get(f.mapping || f.name));
-				}
+				};
 
 				Ext.Array.each(affectedBy, function(a){
 					me.addObserverForField(me.observer, a, me.observer[fnName], me);

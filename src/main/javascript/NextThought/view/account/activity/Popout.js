@@ -7,25 +7,26 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		'NextThought.ux.Pointer'
 	],
 
-	floating: true, shadow: false,
+	floating: true,
+	shadow: false,
 
 	width: 400,
 	cls: 'activity-popout',
 	hideMode: 'visibility',
+	previewPrefix: 'widget.activity-preview-',
 
 
-	initComponent:function(){
+	initComponent: function(){
 		this.callParent(arguments);
-		var	cls = this.record.getClassForModel('widget.activity-preview-',false),
-			type;
 
-		if(!cls){
-			Ext.Error.raise('Developer Error: a view is not defined for: '+this.record.$className);
+		var	wName = this.getPreviewPanel();
+
+		if(Ext.isArray(wName)){
+			wName = wName.first();
 		}
 
-		type = cls.xtype;
-		if(Ext.isArray(type)){
-			type = type.first();
+		if( Ext.isEmpty(wName) ){
+			Ext.Error.raise('Developer Error: a view is not defined for: '+this.record.$className);
 		}
 
 		this.pointer = Ext.widget('pointer',{
@@ -41,7 +42,13 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			scope: this.pointer
 		});
 
-		this.preview = this.add({ xtype: type, record: this.record, user: this.user });
+		this.preview = this.add({ xtype: wName, record: this.record, user: this.user });
+	},
+
+
+	getPreviewPanel: function(){
+		var c = this.record.getClassForModel( this.previewPrefix, false);
+		return (c && c.xtype) || '';
 	},
 
 
