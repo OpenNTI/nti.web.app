@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	requires: [
 		'NextThought.view.account.activity.Popout',
-		'NextThought.view.account.activity.blog.Popout',
+		'NextThought.view.account.activity.blog.Preview',
 		'NextThought.view.account.activity.note.Popout',
 		'NextThought.view.account.activity.topic.Popout',
 		'NextThought.view.account.contacts.management.Popout',
