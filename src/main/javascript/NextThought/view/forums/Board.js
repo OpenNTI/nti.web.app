@@ -27,7 +27,7 @@ Ext.define('NextThought.view.forums.Board',{
 	headerTpl: Ext.DomHelper.createTemplate({
 		cls: 'header-container', cn: {
 			cls: 'forum-forum-list header', cn:[
-				{ cls: 'path', html: '{forumTitle} &nbsp;'}
+				{ cls: 'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
 			]
 		}
 	}),
@@ -57,11 +57,12 @@ Ext.define('NextThought.view.forums.Board',{
 		this.callParent(arguments);
 
 		if(!this.isRoot){
-			this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: this.record.get('Creator') +' / '+ this.record.get('title') },true);
+			this.headerElContainer = this.headerTpl.append(this.el,{ path: this.record.get('Creator'), title: this.record.get('title') },true);
 			this.headerEl = this.headerElContainer.down('.header');
 			this.mon(this.headerEl,'click',this.onHeaderClick,this);
 			this.on('beforedeactivate', this.onBeforeDeactivate, this);
 			this.on('beforeactivate', this.onBeforeActivate, this);
+			this.on('activate', this.onActivate, this);
 			this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 		}
 	},
@@ -76,6 +77,13 @@ Ext.define('NextThought.view.forums.Board',{
 			this.headerEl.appendTo(this.headerElContainer);
 		}
 	},
+
+
+	onActivate: function(){
+		//console.log('The board view is activated');
+		this.store.load();
+	},
+
 
 	onBeforeActivate: function(){
 		var parentDom, forumDom;

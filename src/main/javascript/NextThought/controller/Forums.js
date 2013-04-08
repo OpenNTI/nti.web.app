@@ -64,7 +64,8 @@ Ext.define('NextThought.controller.Forums', {
 			'forums-topic': {
 				'navigate-topic':this.switchTopic,
 				'delete-post': this.deleteObject,
-				'edit-topic':this.showTopicEditor
+				'edit-topic':this.showTopicEditor,
+				'topic-navigation-store': this.enableTopicNavigation
 			},
 			'forums-topic-editor':{
 				'save-post': this.saveTopicPost
@@ -321,13 +322,23 @@ Ext.define('NextThought.controller.Forums', {
 		this.getRecords(base, toLoad, function(records){
 			var j =  records.first() ? (stackOrder.indexOf(records.first()[0])) : (stackOrder.length - 1),
 				maybeTopic, shouldFireCallBack = true;
-			Ext.each(records,function(pair){
+			Ext.each(records,function(pair, index, allItems){
 				var rec = pair.last(),
-					type = Ext.String.capitalize(pair.first());
+					type = Ext.String.capitalize(pair.first()),
+					f = me.getForumViewContainer();
 
 				if(!rec){
 					//Error callback here?
 					return false;
+				}
+
+				// NOTE: When we push views as a bulk, we only want to activate the last item.
+				// Thus we suspend activating views till we're on the last item.
+				// This allows us to only load store based on 'activate' events
+				if(index < allItems.length - 1){
+					f.suspendActivateEvents();
+				} else{
+					f.resumeActivateEvents();
 				}
 
 				me['load'+type](null,rec,true);
@@ -517,7 +528,7 @@ Ext.define('NextThought.controller.Forums', {
 		//or the root
 		function predicate(item, i){
 			var rec = item.record,
-			href = rec ? rec.get('href') : undefined;
+				href = rec ? rec.get('href') : undefined;
 			return rec && href && toShowHref.indexOf(href) === 0;
 		}
 
@@ -533,7 +544,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 		store = NextThought.store.NTI.create({
-			storeId: record.get('Class')+'-'+record.get('ID'),
+			storeId: record.get('Class')+'-'+record.get('NTIID'),
 			url: url,
 			sorters: [{
 				property: 'CreatedTime',
@@ -544,7 +555,6 @@ Ext.define('NextThought.controller.Forums', {
 			sortOn: 'CreatedTime',
 			sortOrder: 'descending'
 		});
-		store.load();
 
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
@@ -753,11 +763,36 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	enableTopicNavigation: function(cmp, record, callback){
+		if(!record || !cmp){ return; }
+		var storeId = 'CommunityForum'+'-'+record.get('ContainerId'),
+			store = Ext.StoreManager.lookup(storeId);
+
+		if(store){
+			store.on('load', function(){
+				Ext.callback(callback, null, [cmp, store]);
+			}, null, {'single': true});
+
+			if(!store.isLoading()){
+				store.load();
+			}
+		}
+		else{
+			console.warn('Could not find store which owns record: ', record);
+		}
+	},
+
+
 	switchTopic: function(cmp, record, direction){
 		var s = record.store,
 			dx = (direction==='next' ? -1 : 1),
-			r = s && s.find('ID', record.get('ID'), 0, false, true, true);
+			r, sid;
 
+		if(!s){
+			sid = 'CommunityForum'+'-'+record.get('ContainerId');
+			s =  Ext.StoreManager.lookup(sid);
+		}
+		r = s && s.find('ID', record.get('ID'), 0, false, true, true);
 		r = s && s.getAt(r+dx);
 		if(r){
 			cmp.destroy();

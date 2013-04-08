@@ -94,6 +94,7 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.mon(this.headerEl,'click',this.onHeaderClick,this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
+		this.on('activate', this.onActivate, this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
@@ -141,6 +142,13 @@ Ext.define('NextThought.view.forums.Forum',{
 			this.headerEl.appendTo(this.headerElContainer);
 		}
 	},
+
+
+	onActivate: function(){
+		console.log('The forum view is activated');
+		this.store.load();
+	},
+
 
 	onBeforeActivate: function(){
 		var parentDom, forumDom;

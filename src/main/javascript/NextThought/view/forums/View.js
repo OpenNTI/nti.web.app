@@ -28,6 +28,16 @@ Ext.define( 'NextThought.view.forums.View', {
 	},
 
 
+	suspendActivateEvents: function(){
+		this.getLayout().suspendStackActiveEvents = true;
+	},
+
+
+	resumeActivateEvents: function(){
+		delete this.getLayout().suspendStackActiveEvents;
+	},
+
+
 	onBeforeActivate: function(){
 //		console.log('Forum view received beforeActivate event');
 		return Ext.Array.every(this.items.items, function(item){

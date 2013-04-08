@@ -22,11 +22,14 @@ Ext.define('NextThought.view.forums.Topic',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
+	pathTpl: Ext.DomHelper.markup([
+		{cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
+	]),
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn:
 		{ cls: '{headerCls} navigation-bar', cn:[
-			{cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]},
-			{cls:'pager',cn:[{cls:'prev'},{cls:'next'}]}
+			{cls:'pager',cn:[{cls:'prev disabled'},{cls:'next disabled'}]}
 		]}},
 		{ cls: 'wrap', cn:[
 		{ cls: 'controls', cn:[{cls:'favorite'},{cls:'like'}]},
@@ -107,6 +110,28 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
+	setPath: function(){
+		var me = this,
+			containerId = this.record.get('ContainerId');
+
+		function success(r){
+			var forumTitle = r.get('title'),
+				topicTitle = me.record.get('title'), tpl;
+
+			if(me.rendered){
+				tpl = new Ext.XTemplate(me.pathTpl);
+				tpl.insertFirst(me.navigationBarEl, {path:forumTitle, title: topicTitle}, true);
+			}
+		}
+
+		function fail(){
+			console.log('there was an error retrieving the object.', arguments);
+		}
+
+		$AppConfig.service.getObject(containerId, success, fail, me);
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
@@ -127,6 +152,8 @@ Ext.define('NextThought.view.forums.Topic',{
 			showName: true,
 			headerCls: 'forum-topic'
 		});
+
+		me.setPath();
 
 		if(!r.headline || !r.headline.getData){
 			console.warn('The record does not have a story field or it does not implement getData()',r);
@@ -265,21 +292,31 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	updateRecord: function(record){
-		var s = record && record.store,
-			max = s && (s.getCount()-1),
-			idx = s && s.indexOf(record);
+		function reflectPrevAndNext(cmp, s){
+			if(!s){ return; }
 
-		this.nextPostEl.addCls('disabled');
-		this.prevPostEl.addCls('disabled');
+			var max = s.getCount()-1,
+				idx = s.find('NTIID', record.get('NTIID'));
 
-		if(!s){ return; }
+			//NOTE: the particular the record and its copy in the store may be different.
+			if(!record.store){
+				record.store = s;
+			}
 
-		if(idx > 0) {
-			this.nextPostEl.removeCls('disabled');
+			if(idx > 0) {
+				cmp.nextPostEl.removeCls('disabled');
+			}
+
+			if(idx < max){
+				cmp.prevPostEl.removeCls('disabled');
+			}
 		}
 
-		if(idx < max){
-			this.prevPostEl.removeCls('disabled');
+		if(!record.store){
+			this.fireEvent('topic-navigation-store', this, this.record, reflectPrevAndNext);
+		}else{
+			console.log('update next and prev...with store', record.store);
+			reflectPrevAndNext(this, record.store);
 		}
 	},
 

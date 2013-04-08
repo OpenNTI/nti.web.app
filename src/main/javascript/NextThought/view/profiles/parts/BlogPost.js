@@ -19,6 +19,19 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		});
 	},
 
+
+	setPath: function(){
+		var me = this, tpl, title;
+		Ext.defer(function(){
+			if(me.rendered){
+				tpl = new Ext.XTemplate(me.pathTpl);
+				title = me.record.get('title');
+				tpl.insertFirst(me.navigationBarEl, {path:'Thoughts', title: title}, true);
+			}
+		}, 1);
+	},
+
+
 	buildStore: function(){
 		this.store = NextThought.store.Blog.create();
 		this.store.proxy.url = this.getRecord().getLink('contents');
