@@ -74,9 +74,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		me.callParent(arguments);
 		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
 
-		if(!$AppConfig.debug){
-			me.on('blur',me.destroy,me);
-		}
+		me.on('blur',me.destroy,me);
 
 		Ext.defer(function(){
 			me.mon(me.el.up('body'),{
