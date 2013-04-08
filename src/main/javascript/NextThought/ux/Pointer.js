@@ -53,7 +53,7 @@ Ext.define('NextThought.ux.Pointer',{
 
 
 		this.el.setStyle({zIndex:z});
-		this.removeCls('grey');
+		this.removeCls('grey contact');
 		this.addCls(this.getPointerStyle(x,y + (h/2)));
 		this.setPagePosition(x, y, false);
 	}

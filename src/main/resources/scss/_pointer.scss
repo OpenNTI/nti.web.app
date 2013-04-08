@@ -5,7 +5,7 @@
 	background: $elements no-repeat;
 	@include sprite($elements,'rhp_flyout_nib_wht',$dimensions: true);
 
-	&.grey {
-		@include sprite($elements,'rhp_flyout_nib_gry',$dimensions: true);
-	}
+	&.grey { @include sprite($elements,'rhp_flyout_nib_gry',$dimensions: true); }
+
+	&.contact { @include sprite($elements,'add_contact_pointer2',$dimensions: true); }
 }

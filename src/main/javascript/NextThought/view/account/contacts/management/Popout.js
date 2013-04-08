@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.contacts.management.Popout',{
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.view.account.activity.Popout',
 	alias: ['widget.contact-popout', 'widget.activity-popout-user'],
 
 	requires: [
@@ -10,15 +10,11 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	width: 255,
 	cls: 'contact-popout',
-	hideMode: 'visibility',
 
-	items: [
-		{xtype: 'person-card'},
-		{
-			xtype: 'container',
-			cls: 'add-button',
-			layout: 'fit',
-			items: [{
+	setupItems: function(){
+		this.buttonEvent = 'add-contact';
+		var isContact = Ext.getStore('FriendsList').isContact(this.record),
+			buttonCfg = {
 				xtype: 'button',
 				ui: 'primary',
 				text: 'Add to Contacts',
@@ -26,45 +22,41 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				handler: function(btn){
 					btn.up('.contact-popout').actOnContact();
 				}
-			}]
-		}
-	],
+			};
 
-	constructor: function(config){
-		this.buttonEvent = 'add-contact';
-		var isContact = Ext.getStore('FriendsList').isContact(config.record);
-		this.items = Ext.clone(this.items);
-
-		Ext.apply(this.items[0],{
-			user: config.record,
+		this.person = this.add({xtype: 'person-card',
+			user: this.record,
 			isContact: isContact
 		});
 
 		if(isContact){
 			this.buttonEvent = 'delete-contact';
-			Ext.apply(this.items[1].items[0],{
+			Ext.apply(buttonCfg,{
 				ui: 'caution',
 				text: 'Remove Contact'
 			});
 		}
 
-
-//		this.startChatAction = new Ext.Action({
-//			text: 'Start a Chat',
-//			scope: this,
-//			handler: this.startChat,
-//			itemId: 'start-chat',
-//			ui: 'nt-menuitem', plain: true,
-//			hidden: !$AppConfig.service.canChat(),
-//			disabled: this.user.get('Presence')==='Offline'
-//		});
-
-		return this.callParent(arguments);
+		this.preview = this.add({
+			xtype: 'container',
+			cls: 'add-button',
+			layout: 'fit',
+			items: [buttonCfg]
+		});
 	},
 
 
 	destroy: function(e){
 		this.callParent(arguments);
+	},
+
+
+	getPointerStyle: function(x,y){
+		var el = this.person.getTargetEl(),
+			t = el.getTop(),
+			b = el.getBottom();
+
+		return (t <= y && y <= b) ? '' : 'contact';
 	},
 
 
@@ -85,64 +77,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	detectBlur: function(e){
-		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id) && !e.getTarget('.x-mask')){
-			clearTimeout(this.hideTimer);
-			this.hideTimer = Ext.defer(function(){this.fireEvent('blur', e);},500,this);
-		}
-		else {
-			clearTimeout(this.hideTimer);
-		}
-	},
-
-
-
 	actOnContact: function(){
-		var data = this.down('person-card').getSelected(), me = this,
+		var data = this.person.getSelected(), me = this,
 			fin = function(){ me.destroy(); };
 
 		this.fireEvent(this.buttonEvent, data.user, data.groups, fin);
-	},
-
-
-	statics: {
-
-		popup: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
-			var pop,
-				alignment = 'tr-tl?',
-				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
-				id = record.getId(),
-				open = false;
-
-			offsets = offsets || [0,0];
-
-			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
-				if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
-				else { open = true; }
-			});
-
-			if(open){return;}
-
-			pop = this.create({record: record, refEl: Ext.get(el)});
-
-
-			pop.show().hide();
-
-            if(viewRef) {
-                pop.mon(pop.getEl(), 'mouseover', function(){
-                    viewRef.cancelPopupTimeout();
-                });
-            }
-
-			if( pop.getHeight() > play ){
-				pop.addCls('bottom-aligned');
-				alignment = 'br-bl?';
-				offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
-			}
-
-			pop.show();
-			pop.alignTo(alignmentEl,alignment,offsets);
-		}
-
 	}
 });

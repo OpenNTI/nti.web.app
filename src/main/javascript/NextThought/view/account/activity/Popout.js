@@ -19,16 +19,6 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var	wName = this.getPreviewPanel();
-
-		if(Ext.isArray(wName)){
-			wName = wName.first();
-		}
-
-		if( Ext.isEmpty(wName) ){
-			Ext.Error.raise('Developer Error: a view is not defined for: '+this.record.$className);
-		}
-
 		this.pointer = Ext.widget('pointer',{
 			baseCmp: this,
 			pointToEl: this.refEl,
@@ -42,6 +32,20 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			scope: this.pointer
 		});
 
+		this.setupItems();
+	},
+
+
+	setupItems: function(){
+		var	wName = this.getPreviewPanel();
+
+		if(Ext.isArray(wName)){
+			wName = wName.first();
+		}
+
+		if( Ext.isEmpty(wName) ){
+			Ext.Error.raise('Developer Error: a view is not defined for: '+this.record.$className);
+		}
 		this.preview = this.add({ xtype: wName, record: this.record, user: this.user });
 	},
 
@@ -55,6 +59,13 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	getPointerStyle: function(x,y){
 		var p = this.preview;
 		return p.getPointerStyle ? p.getPointerStyle(x,y) : '';
+	},
+
+
+	updateRefEl: function(el){
+		this.refEl = el;
+		this.pointer.pointToEl = el;
+		this.pointer.point();
 	},
 
 
@@ -89,34 +100,27 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	inheritableStatics: {
 
-		popup: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
+		popup: function(record, el, viewRef){
 			var id = record.getId(), open = false;
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
 					o.destroy();
 				}
 				else {
+					o.updateRefEl(el);
 					open = true;
 				}
 			});
 
 			if(open){return;}
 
-			offsets = offsets||[0,0];
-
 			UserRepository.getUser(record.get('Creator'),function(user){
 				var pop = this.create({record: record, user: user, refEl: Ext.get(el)}),
-					alignment = 'tr-tl?',
-					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
+					alignment = 'tr-tl?';
 
 				function align(){
-					if( pop.getHeight() > play ){
-						pop.addCls('bottom-aligned');
-						alignment = 'br-bl?';
-						offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
-					}
 					pop.show();
-					pop.alignTo(alignmentEl,alignment,offsets);
+					pop.alignTo(el,alignment,[0,0]);
 				}
 
                 pop.show().hide();

@@ -456,7 +456,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			popout.popup(rec,target,target,[-10,-12],0.5, me);
+			popout.popup(rec, target, me);
 		},500);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
