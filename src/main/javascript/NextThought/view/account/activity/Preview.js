@@ -62,7 +62,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 					{ cls: 'meta', cn: [
 						{ cls: 'subject {[values.title? "":"no-subject"]}', html: '{title}' },
 						{ cls: 'stamp', cn: [
-							{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: '{name}'},
+							{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: 'By {name}'},
 							{tag: 'span', cls: 'time', html:'{relativeTime}'}
 						]}
 					]},
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			o.name = u.getName();
 			if(me.rendered){
 				me.avatar.setStyle({backgroundImage: 'url('+ o.avatarURL + ');'});
-				me.name.update(o.name);
+				me.name.update(me.name.getHTML()+o.name);
 			}
 		});
 

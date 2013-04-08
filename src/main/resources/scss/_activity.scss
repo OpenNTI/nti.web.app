@@ -96,6 +96,22 @@
 
 	.activity-preview {
 
+		.thought-label {
+			position: absolute;
+			color: #8fbc30;
+			font: normal bold 10px $font;
+			text-transform: uppercase;
+			left: 20px;
+			top: 20px;
+
+			& + .item {
+				padding-top: 30px;
+				.controls { margin:{top:-31px;}}
+				.avatar { display: none; }
+				.meta { margin:{ left: 0; top: 35px; } }
+			}
+		}
+
 		.foot, .replies, .respond {
 			background: #f9f9f9;
 			padding:{ left: 15px; right: 15px; }
@@ -225,12 +241,16 @@
 
 			.stamp {
 				margin-top: 5px;
-				.name {font: inherit;}
+				.name {
+					font: normal 600 10px/20px $font;
+					color: $primary-blue;
+					text-transform: uppercase;
+				}
 
 				span{
 					&::after{
 						color: $tertiary-grey;
-						font: normal 500 12px/20px $font;
+						font: normal 500 10px/20px $font;
 
 						position: static;
 						content: '\00B7';
