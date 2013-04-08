@@ -3,10 +3,11 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	alias: 'widget.activity-popout',
 
 	requires: [
-		'NextThought.view.account.activity.Preview'
+		'NextThought.view.account.activity.Preview',
+		'NextThought.ux.Pointer'
 	],
 
-	floating: true,
+	floating: true, shadow: false,
 
 	width: 400,
 	cls: 'activity-popout',
@@ -27,7 +28,26 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			type = type.first();
 		}
 
-		this.add({ xtype: type, record: this.record, user: this.user });
+		this.pointer = Ext.widget('pointer',{
+			baseCmp: this,
+			pointToEl: this.refEl,
+			getPointerStyle: Ext.bind(this.getPointerStyle,this)
+		});
+
+		this.on({
+			destroy: this.pointer.destroy,
+			show: this.pointer.show,
+			hide: this.pointer.hide,
+			scope: this.pointer
+		});
+
+		this.preview = this.add({ xtype: type, record: this.record, user: this.user });
+	},
+
+
+	getPointerStyle: function(x,y){
+		var p = this.preview;
+		return p.getPointerStyle ? p.getPointerStyle(x,y) : '';
 	},
 
 

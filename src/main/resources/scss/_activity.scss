@@ -93,23 +93,6 @@
 						inset 0 2px rgba(255,255,255,.5));
 	border: solid 1px #cecece;
 
-	&::after{
-		content: ' '; overflow: hidden;
-		background: $elements no-repeat;
-		@include sprite($elements,'rhp_flyout_nib_wht',$dimensions: true);
-		position: absolute;
-		top: 35px;
-		right: -12px;
-	}
-
-	&.communityheadlinetopic::after { top: 66px; }
-	&.note::after { top: 117px; }
-
-	&.bottom-aligned::after {
-		@include sprite($elements,'rhp_flyout_nib_gry',$dimensions: true);
-		top: auto !important;
-		bottom: 18px;
-	}
 
 	.activity-preview {
 

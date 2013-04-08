@@ -1,0 +1,11 @@
+
+.x-component-nt.pointer {
+	position: absolute;
+	overflow: hidden;
+	background: $elements no-repeat;
+	@include sprite($elements,'rhp_flyout_nib_wht',$dimensions: true);
+
+	&.grey {
+		@include sprite($elements,'rhp_flyout_nib_gry',$dimensions: true);
+	}
+}

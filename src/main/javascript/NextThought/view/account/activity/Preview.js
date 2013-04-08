@@ -43,6 +43,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		favorites: '.controls .favorite',
 		subjectEl: '.subject',
 		itemEl: '.item',
+		footEl: '.foot',
 		commentsEl: '.comments',
 		messageBodyEl: '.body'
 	},
@@ -153,6 +154,11 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.renderData = this.prepareRenderData(this.record);
+	},
+
+
+	getPointerStyle: function(x,y){
+		return y >= this.footEl.getTop() ? 'grey' : '';
 	}
 
 });
