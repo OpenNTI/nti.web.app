@@ -200,5 +200,21 @@ describe('Chat Controller Tests', function(){
 			});
 		});
 	});
+	
+	describe('linkClicked tests',function(){
+		it('Passing external',function(){
+			var link = 'www.google.com',
+				result = controller.getHashChange(link,"www.facebook.com");
+
+			expect(result).toBeNull();
+		});
+
+		it('Passing internal',function(){
+			var link = 'www.google.com/#!hash';
+				result = controller.getHashChange(link,"www.google.com");
+
+			expect(result).toBe('!hash');
+		});
+	})
 });
 
