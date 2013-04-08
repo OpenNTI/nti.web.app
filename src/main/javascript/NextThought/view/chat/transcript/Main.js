@@ -127,7 +127,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		}
 		this.readOnlyWBsData[id] = data;
 	},
-	
+
 	click: function(e){
 		e.stopEvent();
 		var me = this, t = e.getTarget('.whiteboard-container', null, true), guid,
@@ -148,11 +148,11 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		if(t){
 			guid = t.up('.body-divider').getAttribute('id');
 			if(me.readOnlyWBsData[guid]){
-				me.up('chat-transcript-window').fireEvent('show-whiteboard',me,me.readOnlyWBsData[guid]);
+				me.fireEvent('show-whiteboard',me,me.readOnlyWBsData[guid]);
 				//Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 			}
 		}else{
-			me.up('chat-transcript-window').fireEvent('link-clicked',me,a.href);
+			me.fireEvent('link-clicked',me,a.href);
 		}
 
 		return false;

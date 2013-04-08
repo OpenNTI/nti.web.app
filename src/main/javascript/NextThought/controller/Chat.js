@@ -76,6 +76,9 @@ Ext.define('NextThought.controller.Chat', {
 			},
 			'chat-transcript-window': {
 				'flag-messages': this.flagTranscriptMessages,
+			},
+
+			'chat-transcript': {
 				'link-clicked' : this.linkClicked,
 				'show-whiteboard' : this.zoomWhiteboard
 			},
