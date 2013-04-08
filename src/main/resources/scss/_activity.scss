@@ -126,7 +126,6 @@
 		.path,
 		.content-callout {
 			padding: 16px 36px 0px 16px;
-			height: 91px;
 			border-bottom-width: 0;
 			cursor: pointer;
 			border-color: #eaeaea;
@@ -173,10 +172,11 @@
 			text-transform: uppercase;
 			padding: 0 20px;
 			font: normal 700 10px/40px $font;
-			min-height: 40px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+
+			&:empty { display: none; }
 
 			span.path-part {
 				&::after{
