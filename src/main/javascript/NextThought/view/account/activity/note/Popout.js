@@ -8,20 +8,17 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 
 	statics: {
 
-		popupAfterResolvingParent: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
+		popupAfterResolvingParent: function(record, el, viewRef){
 
 			var service = $AppConfig.service,
 				me = this,
 				ref = record.get('references').first();
 
-			offsets[1] -= 91;
-			flipFactor = -0.1;
-
 			function load(resolvedRecord){
 				if(resolvedRecord !== record){
 					resolvedRecord.focusRecord = record;
 				}
-				me.popupNow(resolvedRecord, alignmentEl, el, offsets, flipFactor, viewRef);
+				me.popupNow(resolvedRecord, el, viewRef);
 			}
 
 			if(!ref){

@@ -11,14 +11,11 @@ Ext.define('NextThought.view.account.activity.topic.Popout',{
 
 	statics: {
 
-		popupAfterResolvingTopic: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
+		popupAfterResolvingTopic: function(record, el, viewRef){
 			var args = Array.prototype.slice.call(arguments),
 				request, popup;
 
 			args.shift();//remove the passed record from the front of the list
-			args[2][1] -= 40;
-			args[3] = -0.15;
-
 			popup = Ext.bind(this.popupNow,this,args,true);
 
 
