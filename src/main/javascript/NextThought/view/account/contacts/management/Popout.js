@@ -46,34 +46,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	destroy: function(e){
-		this.callParent(arguments);
-	},
-
-
 	getPointerStyle: function(x,y){
 		var el = this.person.getTargetEl(),
 			t = el.getTop(),
 			b = el.getBottom();
 
 		return (t <= y && y <= b) ? '' : 'contact';
-	},
-
-
-	afterRender: function(){
-		var me = this;
-		me.callParent(arguments);
-		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
-
-		me.on('blur',me.destroy,me);
-
-		Ext.defer(function(){
-			me.mon(me.el.up('body'),{
-				scope: me,
-				'click':me.detectBlur,
-				'mouseover':me.detectBlur
-			});
-		},1);
 	},
 
 
