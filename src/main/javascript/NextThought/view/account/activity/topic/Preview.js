@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 	alias: 'widget.activity-preview-topic',
 
 	requires: [
-		'NextThought.mixins.forum-feature.Path'
+		'NextThought.mixins.forum-feature.Path',
+		'NextThought.view.account.activity.note.Reply'
 	],
 
 	mixins: {

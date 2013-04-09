@@ -2,6 +2,10 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 	extend: 'NextThought.view.account.activity.Preview',
 	alias: 'widget.activity-preview-personalblogentry',
 
+	requires: [
+		'NextThought.view.account.activity.note.Reply'
+	],
+
 	defaultType: 'activity-preview-blog-reply',
 
 	toolbarTpl: Ext.DomHelper.markup({ cls: 'thought-label',html: 'Thought'}),
