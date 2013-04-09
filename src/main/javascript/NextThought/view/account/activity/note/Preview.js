@@ -72,6 +72,10 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 	},
 
 
+	navigateToItem: function(){
+		this.fireEvent('navigation-selected', this.record.get('ContainerId'), this.record);
+	},
+
 
 	getCommentCount: function(record){
 		return record.getReplyCount();
@@ -82,5 +86,11 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		this.callParent(arguments);
 		this.loadContext();
 		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.locationEl, 'click', this.navigateToItem, this);
+		this.mon(this.context, 'click', this.navigateToItem, this);
 	}
 });

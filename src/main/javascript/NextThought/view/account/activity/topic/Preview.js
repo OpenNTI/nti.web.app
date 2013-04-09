@@ -25,6 +25,13 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 	},
 
 
+	navigateToItem: function(){
+		if(this.fireEvent('before-show-topic', this.record)){
+			this.fireEvent('show-topic', this.record);
+		}
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.record.get('headline').compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
@@ -33,6 +40,11 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 		if(this.record.focusRecord){
 			this.add({record: this.record.focusRecord});
 		}
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.pathEl, 'click', this.navigateToItem, this);
 	}
 
 });

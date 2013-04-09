@@ -13,6 +13,13 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 
 	getCommentCount: function(record){ return record.get('PostCount'); },
 
+	navigateToItem: function(){
+		var me = this, rec = this.record;
+		UserRepository.getUser(rec.get('Creator'), function(user){
+			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
+		});
+	},
+
 
 	beforeRender: function(){
 		this.callParent(arguments);

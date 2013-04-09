@@ -242,6 +242,7 @@
 				width: 60px;
 				height: 60px;
 				border-radius: 5px;
+				cursor: pointer;
 				background:{
 					color: transparent;
 					position: center;
@@ -263,6 +264,7 @@
 					font: normal 600 10px/20px $font;
 					color: $primary-blue;
 					text-transform: uppercase;
+					cursor: pointer;
 				}
 
 				@include dot-separated-list;
@@ -272,6 +274,7 @@
 				display: block;
 				color: $primary-grey;
 				font: normal 300 32px/34px "Open Sans Condensed", $font;
+				cursor: pointer;
 				&::after{
 					content: '';
 					display: none;

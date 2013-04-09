@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 	requires: [
         'NextThought.cache.LocationMeta',
-		'NextThought.editor.Editor'
+		'NextThought.editor.Editor',
+		'NextThought.mixins.ProfileLinks'
 	],
 
 
@@ -34,7 +35,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
 	childEls: ['body'],
@@ -107,6 +109,12 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble('resize');
+	},
+
+
 	setBody: function(body){
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
@@ -117,8 +125,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.messageBodyEl.update(snip||body);
 		if(snip){
 			this.moreTpl.append(this.messageBodyEl,null,true);
-			//TODO: Enable clicks, make it take you to the previewed item.
-//			this.mon(this.messageBodyEl.down('a.more'),'click', this.goToPost,this);
+			this.mon(this.messageBodyEl.down('a.more'),'click', this.navigateToItem,this);
 		}
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
@@ -127,6 +134,13 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
+
+		Ext.defer(this.fireEvent, 1, this, ['resize']);
+	},
+
+
+	navigateToItem: function(){
+		console.warn('Should be overridden by its children');
 	},
 
 
@@ -171,6 +185,10 @@ Ext.define('NextThought.view.account.activity.Preview',{
 				me.avatar.setStyle({backgroundImage: 'url('+ o.avatarURL + ');'});
 				me.name.update(me.name.getHTML()+o.name);
 			}
+
+			// This allows navigating to the profile of the creator.
+			// Our mixin 'ProfileLinks' expects it.
+			this.user = u;
 		});
 
 		return Ext.apply(this.renderData||{}, o);
@@ -220,6 +238,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		});
 
 		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
+		this.mon(this.messageBodyEl, 'click', this.navigateToItem, this);
+		this.mon(this.subjectEl, 'click', this.navigateToItem, this);
+		this.enableProfileClicks(this.name, this.avatar);
 	},
 
 

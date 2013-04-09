@@ -34,7 +34,12 @@ Ext.define('NextThought.controller.Navigation', {
 			'activity-preview-comment-blog':{
 				'navigate-to-blog': this.gotoBlog
 			},
-
+			'activity-preview-personalblogentry':{
+				'navigate-to-blog': this.gotoBlog
+			},
+			'activity-preview-note': {
+				'navigation-selected': this.navigate
+			},
             'user-data-panel': {
                 'navigation-selected': this.navigate,
 	            'navigate-to-blog': this.gotoBlog
