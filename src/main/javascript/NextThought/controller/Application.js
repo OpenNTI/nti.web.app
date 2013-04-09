@@ -1,7 +1,6 @@
 Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
 	requires: [
-		'swfobject',
 		'NextThought.Library'
 	],
 

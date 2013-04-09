@@ -1,7 +1,4 @@
 // Config stubbing
-Ext.Loader.setPath('swfobject', 'resources/lib/swfobject.js');
-Ext.Loader.setPath('Ext.ux', Ext.Loader.getPath('Ext').replace(/\/src$/,'/examples/ux'));
-
 var $AppConfig = {
 	server: {
 		host: 'mock',

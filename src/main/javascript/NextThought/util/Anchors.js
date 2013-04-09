@@ -1,17 +1,10 @@
-Ext.Loader.setPath('rangy', 'resources/lib/rangy-1.3alpha.681/rangy-core.js');
-Ext.Loader.setPath('rangy.modules.TextRange', 'resources/lib/rangy-1.3alpha.681/rangy-textrange.js');
-
 Ext.define('NextThought.util.Anchors', {
 	requires: [
 		'NextThought.model.anchorables.TextDomContentPointer',
 		'NextThought.model.anchorables.ElementDomContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
 		'NextThought.model.anchorables.ContentRangeDescription',
-		'NextThought.util.Ranges',
-		'rangy'
-	],
-	uses: [
-		'rangy.modules.TextRange'
+		'NextThought.util.Ranges'
 	],
 
 	singleton: true,
@@ -1834,13 +1827,4 @@ Ext.define('NextThought.util.Anchors', {
 },
 function(){
 	window.Anchors = this;
-	function rangyReady(){
-//		console.log('rangy ready...');
-		if(!window.rangy || !rangy.modules.TextRange){
-			setTimeout(rangyReady, 100);
-			return;
-		}
-		rangy.init();
-	}
-	rangyReady();
 });

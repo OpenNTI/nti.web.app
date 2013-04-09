@@ -1,14 +1,6 @@
-Ext.Loader.loadScript({
-	url:'https://www.youtube.com/iframe_api',
-	onError:function(){console.error('YouTube API failed to load');},
-	onLoad:function(){console.log('YouTube API loaded');}
-});
-
 Ext.define('NextThought.view.slidedeck.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.slidedeck-video',
-
-	requires:['swfobject'],
 
 	plain: true,
 	ui: 'slidedeck-video',

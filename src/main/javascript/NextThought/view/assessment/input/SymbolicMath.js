@@ -1,11 +1,7 @@
-Ext.Loader.setPath('jQuery.fn.mathquill', 'resources/lib/mathquill/mathquill.min.js');
-
-
 Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	extend: 'NextThought.view.assessment.input.FreeResponse',
 
 	requires: [
-		'jQuery.fn.mathquill',
 		'NextThought.view.menus.SymbolicMathMenuItem'
 	],
 
