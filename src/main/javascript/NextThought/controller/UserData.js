@@ -85,6 +85,10 @@ Ext.define('NextThought.controller.UserData', {
 				'chat': this.replyAsChat
 			},
 
+			'activity-preview-note nti-editor': {
+				'save': this.savePreviewNoteReply
+			},
+
 			'note-gutter-widget': {
 				'share': this.shareWith,
 				'chat': this.replyAsChat
@@ -686,6 +690,23 @@ Ext.define('NextThought.controller.UserData', {
 		console.log('Saving new record', noteRecord);
 		//now save this:
 		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
+	},
+
+
+	savePreviewNoteReply: function(editor,record,valueObject,successCallback){
+		var cmp = editor.up('[record]'),
+			replyToRecord = cmp && cmp.record;
+
+		function callback(success, rec){
+			if(success){
+				Ext.callback(successCallback, null, [editor, cmp, rec]);
+			}
+			else{
+				console.error('Could not save your reply: ', arguments);
+			}
+		}
+
+		this.saveNewReply(replyToRecord, valueObject.body, valueObject.sharedWith, callback);
 	},
 
 
