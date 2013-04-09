@@ -702,6 +702,7 @@
 			.searchHit-overlay{
 				z-index: 1;
 				left: 0;
+				pointer-events: none;
 			}
 
 			.navigation-bar {
