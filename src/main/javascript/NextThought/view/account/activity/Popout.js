@@ -102,7 +102,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		// i.e when the editor is active.
 		if(this.fireEvent('beforedeactivate') && this.preview.fireEvent('beforedeactivate')){
 			this.destroy();
+			return true;
 		}
+		return false;
 	},
 
 
@@ -112,7 +114,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			var id = record.getId(), open = false;
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
-					o.destroy();
+					if(!o.maybeHidePopout()){
+						open = true;//leave it open
+					}
 				}
 				else {
 					o.updateRefEl(el);
