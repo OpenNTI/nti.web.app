@@ -1,8 +1,5 @@
 Ext.define('NextThought.model.Service', {
 	extend: 'NextThought.model.Base',
-	requires: [
-		'Ext.String'
-	],
 	idProperty: 'Class',
 	fields: [
 		{ name: 'Items', type: 'auto', defaultValue: {Items:[]}},

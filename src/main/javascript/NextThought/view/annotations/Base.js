@@ -3,7 +3,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	requires: [
 		'NextThought.view.annotations.renderer.Manager',
-		'Ext.String',
 		'Ext.menu.Menu'
 	],
 
