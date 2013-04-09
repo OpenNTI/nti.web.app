@@ -693,7 +693,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	saveTopicComment: function(editor,record,valueObject, successCallback){
 
-		var postCmp = editor.up('forums-topic') || editor.up('profile-forum-activity-item') || editor.up('activity-preview-topic'),
+		var postCmp = editor.up('[record]'),
 			postRecord = postCmp && postCmp.record,
 			isEdit = Boolean(record),
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();

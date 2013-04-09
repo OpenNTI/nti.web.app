@@ -92,7 +92,7 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	saveBlogComment: function(editor,record,valueObject, saveCallback){
-		var postCmp = editor.up('profile-blog-post') || editor.up('activity-preview-personalblogentry'),
+		var postCmp = editor.up('[record]'),
 		postRecord = postCmp && postCmp.record,
 		isEdit = Boolean(record),
 		commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
