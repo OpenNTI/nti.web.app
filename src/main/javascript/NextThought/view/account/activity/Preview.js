@@ -2,7 +2,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	extend: 'Ext.container.Container',
 
 	requires: [
-        'NextThought.cache.LocationMeta'
+        'NextThought.cache.LocationMeta',
+		'NextThought.editor.Editor'
 	],
 
 
@@ -45,7 +46,10 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		itemEl: '.item',
 		footEl: '.foot',
 		commentsEl: '.comments',
-		messageBodyEl: '.body'
+		messageBodyEl: '.body',
+		replyEl: '.reply',
+		replyBoxEl: '.respond > div',
+		respondEl: '.respond'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -150,10 +154,61 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
+	getRefItems: function(){
+		var ret = this.callParent(arguments)||[];
+		if( this.editor ){
+			ret.push(this.editor);
+		}
+		return ret;
+	},
+
+
 	beforeRender: function(){
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.renderData = this.prepareRenderData(this.record);
+	},
+
+
+	saveCallback: function(editor, cmp, replyRecord){
+		editor.deactivate();
+		editor.setValue('');
+		editor.reset();
+		cmp.add({record: replyRecord});
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var box = this.replyBoxEl;
+		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.respondEl, 'saveCallback': this.saveCallback});
+		this.mon(this.replyEl, 'click', this.showEditor, this);
+		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		this.mon(this.editor,{
+			scope: this.editor,
+			'activated-editor':Ext.bind(box.hide,box,[false]),
+			'deactivated-editor':Ext.bind(box.show,box,[false]),
+			'no-body-content': function(editor,bodyEl){
+				editor.markError(bodyEl,'You need to type something');
+				return false;
+			}
+		});
+
+		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
+	},
+
+
+	handleBeforeDeactivate: function(){
+		return !(this.editor && this.editor.isActive());
+	},
+
+
+	showEditor: function(){
+		this.editor.reset();
+		this.editor.activate();
+		this.editor.focus(true);
 	},
 
 

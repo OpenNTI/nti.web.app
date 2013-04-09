@@ -123,7 +123,7 @@ Ext.define('NextThought.editor.Editor',{
 			}
 		}
 
-		this.fireEvent('save',this, this.record, v);
+		this.fireEvent('save',this, this.record, v, this.saveCallback || Ext.emptyFn);
 	},
 
 

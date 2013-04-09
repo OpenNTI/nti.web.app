@@ -76,6 +76,9 @@ Ext.define('NextThought.controller.Forums', {
 			'activity-preview-topic':{
 				'fill-in-path': this.fillInPath
 			},
+			'activity-preview-topic nti-editor': {
+				'save': this.saveTopicComment
+			},
 			'profile-forum-activity-item':{
 				'delete-post': this.deleteObject,
 				'fill-in-path': this.fillInPath
@@ -688,9 +691,9 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	saveTopicComment: function(editor,record,valueObject){
+	saveTopicComment: function(editor,record,valueObject, successCallback){
 
-		var postCmp = editor.up('forums-topic') || editor.up('profile-forum-activity-item'),
+		var postCmp = editor.up('forums-topic') || editor.up('profile-forum-activity-item') || editor.up('activity-preview-topic'),
 			postRecord = postCmp && postCmp.record,
 			isEdit = Boolean(record),
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
@@ -701,6 +704,7 @@ Ext.define('NextThought.controller.Forums', {
 			editor.el.mask('Saving...');
 			editor.el.repaint();
 		}
+
 
 		function unmask(){
 			if(editor.el){
@@ -724,6 +728,9 @@ Ext.define('NextThought.controller.Forums', {
 						editor.setValue('');
 						editor.reset();
 					}
+
+					Ext.callback(successCallback, null, [editor, postCmp, rec]);
+
 					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
 					if(!isEdit){
 						postRecord.set('PostCount',postRecord.get('PostCount')+1);

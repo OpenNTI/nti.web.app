@@ -49,6 +49,10 @@ Ext.define('NextThought.controller.Profile', {
 
 			'#profile profile-blog-post nti-editor':{
 				'save': this.saveBlogComment
+			},
+
+			'activity-preview-personalblogentry nti-editor':{
+				'save': this.saveBlogComment
 			}
 		});
 	},
@@ -87,8 +91,8 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogComment: function(editor,record,valueObject){
-		var postCmp = editor.up('profile-blog-post'),
+	saveBlogComment: function(editor,record,valueObject, saveCallback){
+		var postCmp = editor.up('profile-blog-post') || editor.up('activity-preview-personalblogentry'),
 		postRecord = postCmp && postCmp.record,
 		isEdit = Boolean(record),
 		commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
@@ -121,6 +125,9 @@ Ext.define('NextThought.controller.Profile', {
 						editor.setValue('');
 						editor.reset();
 					}
+
+					Ext.callback(saveCallback, null, [editor, postCmp, rec]);
+
 					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
 					if(!isEdit){
 						postRecord.set('PostCount',postRecord.get('PostCount')+1);

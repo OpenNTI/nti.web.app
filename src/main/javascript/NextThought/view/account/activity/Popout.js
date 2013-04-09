@@ -74,7 +74,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		me.callParent(arguments);
 		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
 
-		me.on('blur',me.destroy,me);
+		me.on('blur',me.maybeHidePopout,me);
 
 		Ext.defer(function(){
 			me.mon(me.el.up('body'),{
@@ -96,6 +96,14 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		}
 	},
 
+
+	maybeHidePopout: function(){
+		// NOTE: This allows for children, especially the preview to cancel hiding the Popout
+		// i.e when the editor is active.
+		if(this.fireEvent('beforedeactivate') && this.preview.fireEvent('beforedeactivate')){
+			this.destroy();
+		}
+	},
 
 
 	inheritableStatics: {

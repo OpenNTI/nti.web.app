@@ -1,4 +1,22 @@
+@mixin dot-separated-list{
+	span{
+		&::after{
+			color: $tertiary-grey;
+			font: normal 500 10px/20px $font;
 
+			position: static;
+			content: '\00B7';
+			vertical-align: middle;
+			display: inline;
+			padding: 0 0.5em;
+			background: none;
+		}
+		&:last-of-type::after {
+			content: '';
+			display: none;
+		}
+	}
+}
 
 .activity-view{
 	@include side-panel-view-title;
@@ -247,23 +265,7 @@
 					text-transform: uppercase;
 				}
 
-				span{
-					&::after{
-						color: $tertiary-grey;
-						font: normal 500 10px/20px $font;
-
-						position: static;
-						content: '\00B7';
-						vertical-align: middle;
-						display: inline;
-						padding: 0 0.5em;
-						background: none;
-					}
-					&:last-of-type::after {
-						content: '';
-						display: none;
-					}
-				}
+				@include dot-separated-list;
 			}
 
 			.subject, .name.no-subject {
@@ -358,6 +360,7 @@
 
 				.foot {
 					padding: 0;
+					@include dot-separated-list;
 				}
 
 				.meta {
