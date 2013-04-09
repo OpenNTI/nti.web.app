@@ -25,6 +25,15 @@ Ext.define('NextThought.ux.SearchHits', {
 
 	insertSearchHitsOverlay: function(){
 		var container = Ext.DomHelper.append(this.ownerCmp.getInsertionPoint('innerCt'), { cls:'searchHit-overlay' }, true);
+		if(Ext.isIE){
+			container.on('click',function(e){
+				var el = Ext.fly(e.target);
+				
+				if(el.dom.className === 'searchHit-entry'){
+					el.remove();
+				}
+			});
+		}
 		this.on('destroy' , function(){ container.remove(); });
 		this.searchHitsOverlay = container;
 		this.showAllHits();
