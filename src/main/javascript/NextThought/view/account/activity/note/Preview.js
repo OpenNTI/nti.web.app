@@ -81,6 +81,6 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.loadContext();
-		this.record.compileBodyContent(this.setBody,this);
+		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
 	}
 });

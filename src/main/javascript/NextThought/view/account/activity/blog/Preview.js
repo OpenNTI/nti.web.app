@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
-		this.record.get('headline').compileBodyContent(this.setBody,this);
+		this.record.get('headline').compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
 		//Load the last comment or the this.record.focusRecord (if its set)
 		if(this.record.focusRecord){
 			this.add({record: this.record.focusRecord});

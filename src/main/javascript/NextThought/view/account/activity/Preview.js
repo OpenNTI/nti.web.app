@@ -7,6 +7,11 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	],
 
 
+	inheritableStatics: {
+		WhiteboardSize: 360
+	},
+
+
 	onClassExtended: function(cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
@@ -98,12 +103,30 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	]),
 
 
+
+	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
+
+
 	setBody: function(body){
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
 			return;
 		}
-		this.messageBodyEl.update(body);
+
+		var snip = ContentUtils.getHTMLSnippet(body,300);
+		this.messageBodyEl.update(snip||body);
+		if(snip){
+			this.moreTpl.append(this.messageBodyEl,null,true);
+			//TODO: Enable clicks, make it take you to the previewed item.
+//			this.mon(this.messageBodyEl.down('a.more'),'click', this.goToPost,this);
+		}
+
+		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
+
+		this.messageBodyEl.select('img.whiteboard-thumbnail').each(function(el){
+			var wrapper = el.up('.body-divider');
+			el.replace(wrapper);
+		});
 	},
 
 
@@ -143,7 +166,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		UserRepository.getUser(o.Creator,function(u){
 			o.avatarURL = u.get('avatarURL');
-			o.name = u.getName();
+			o.name = Ext.String.ellipsis(u.getName(), 20);
 			if(me.rendered){
 				me.avatar.setStyle({backgroundImage: 'url('+ o.avatarURL + ');'});
 				me.name.update(me.name.getHTML()+o.name);
