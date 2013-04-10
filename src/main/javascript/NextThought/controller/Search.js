@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Search', {
 				'click-blog-comment': this.searchBlogCommentClicked
 			},
 			'search-more' : {
-				'click': this.showAllForCategoryClicked
+//				'click': this.showAllForCategoryClicked
 			},
 			'search-advanced-menu': {
 				'changed': this.searchFilterChanged
