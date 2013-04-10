@@ -422,7 +422,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				window.open(link, t);
 			}
 			catch(er){
-				window.location.href = link;
+				m.fireEvent('change-hash', link);
 			}
 		}
 
