@@ -213,7 +213,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	warnBeforeDismissingEditor: function(){
-		var msg = "You are currently editing a thought, please save or dismiss it first.";
+		var msg = "You are currently editing a thought, please save or cancel it first.";
 		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
 

@@ -98,7 +98,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	warnBeforeDismissingEditor: function(){
-		var msg = "You are currently creating a reply, please save or dismiss it first.";
+		var msg = "You are currently creating a reply, please save or cancel it first.";
 		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
 
