@@ -42,6 +42,9 @@ Ext.define('NextThought.controller.Profile', {
 			},
 			'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
 			'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
+			'activity-preview-blog-reply':{
+				'delete-blog-comment': this.deleteBlogPost
+			},
 
 			'profile-blog-editor':{
 				'save-post': this.saveBlogPost
@@ -264,7 +267,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	deleteBlogPost: function(record){
+	deleteBlogPost: function(record, cmp, successCallback){
 		var idToDestroy;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
@@ -285,6 +288,8 @@ Ext.define('NextThought.controller.Profile', {
 						store.remove(r);
 					}
 				}, record);
+
+				Ext.callback(successCallback, null, [cmp]);
 			},
 			failure: function(){
 				alert('Sorry, could not delete that');

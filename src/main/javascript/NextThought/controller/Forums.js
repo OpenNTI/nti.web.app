@@ -83,6 +83,9 @@ Ext.define('NextThought.controller.Forums', {
 				'delete-post': this.deleteObject,
 				'fill-in-path': this.fillInPath
 			},
+			'activity-preview-topic-reply':{
+				'delete-topic-comment': this.deleteObject
+			},
 			'profile-forum-activity-item nti-editor':{
 				'save': this.saveTopicComment
 			},
@@ -935,7 +938,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	deleteObject: function(record){
+	deleteObject: function(record, cmp, callback){
 		var idToDestroy;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
@@ -956,6 +959,8 @@ Ext.define('NextThought.controller.Forums', {
 						store.remove(r);
 					}
 				}, record);
+
+				Ext.callback(callback, null, [cmp]);
 			},
 			failure: function(){
 				alert('Sorry, could not delete that');

@@ -25,6 +25,34 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 	},
 
 
+	buildStore: function(){
+		var store = NextThought.store.NTI.create({
+			url: this.record.getLink('contents')
+		});
+
+		this.mon(store,{
+			scope: this,
+			load: this.fillInReplies
+		});
+
+		store.load();
+	},
+
+
+	fillInReplies: function(store, records){
+		if(Ext.isEmpty(records)){ return; }
+
+		this.removeAll(true);
+		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
+		this.add(Ext.Array.map(records,function(r){return {record: r};}));
+	},
+
+
+	showReplies: function(){
+		this.buildStore();
+	},
+
+
 	navigateToItem: function(){
 		if(this.fireEvent('before-show-topic', this.record)){
 			this.fireEvent('show-topic', this.record);
@@ -52,5 +80,10 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 
 Ext.define('NextThought.view.account.activity.topic.Reply',{
 	extend: 'NextThought.view.account.activity.note.Reply',
-	alias: 'widget.activity-preview-topic-reply'
+	alias: 'widget.activity-preview-topic-reply',
+
+
+	deleteComment: function(){
+		this.fireEvent('delete-topic-comment',this.record, this, this.onRecordDestroyed);
+	}
 });

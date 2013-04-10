@@ -7,6 +7,9 @@ Ext.define('NextThought.mixins.FlagActions',{
 			if( me.flagEl ){
 				me.mon(me.flagEl, 'click', me.flagActionClickHandler, me);
 			}
+
+			me.reflectFlagged(me.record);
+			me.listenForFlagChanges(me.record);
 		}
 
 		this.on('afterrender',onAfterRender,this,{single:true});

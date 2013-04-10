@@ -89,6 +89,10 @@ Ext.define('NextThought.controller.UserData', {
 				'save': this.savePreviewNoteReply
 			},
 
+			'activity-preview-note-reply': {
+				'delete-reply': this.deleteNoteReply
+			},
+
 			'note-gutter-widget': {
 				'share': this.shareWith,
 				'chat': this.replyAsChat
@@ -722,6 +726,21 @@ Ext.define('NextThought.controller.UserData', {
 
 		//now save this:
 		replyRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
+	},
+
+
+	deleteNoteReply: function(record, cmp, callback){
+		if(!record){ return; }
+
+		record.destroy({
+			success: function(){
+				//TODO: do we need to look through all the store to see who cares about this record? or it's already handled.
+				Ext.callback(callback, null, [cmp]);
+			},
+			failure: function(){
+				alert('Sorry, could not delete that');
+			}
+		});
 	},
 
 

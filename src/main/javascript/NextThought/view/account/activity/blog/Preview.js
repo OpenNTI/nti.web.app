@@ -28,12 +28,42 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 		if(this.record.focusRecord){
 			this.add({record: this.record.focusRecord});
 		}
-	}
+	},
+
+
+	buildStore: function(){
+		var store = NextThought.store.Blog.create();
+		store.proxy.url = this.record.getLink('contents');
+
+		this.mon(store,{
+			scope: this,
+			load: this.fillInReplies
+		});
+
+		store.load();
+	},
+
+
+	fillInReplies: function(store, records){
+		if(Ext.isEmpty(records)){ return; }
+
+		this.removeAll(true);
+		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
+		this.add(Ext.Array.map(records,function(r){return {record: r};}));
+	},
+
+
+	showReplies: function(){ this.buildStore(); }
 
 });
 
 
 Ext.define('NextThought.view.account.activity.blog.Reply',{
 	extend: 'NextThought.view.account.activity.note.Reply',
-	alias: 'widget.activity-preview-blog-reply'
+	alias: 'widget.activity-preview-blog-reply',
+
+
+	deleteComment: function(){
+		this.fireEvent('delete-blog-comment',this.record, this, this.onRecordDestroyed);
+	}
 });

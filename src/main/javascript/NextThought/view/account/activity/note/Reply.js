@@ -5,7 +5,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	ui: 'reply',
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		flagActions: 'NextThought.mixins.FlagActions',
+		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -30,6 +32,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	]),
 
 
+	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
+
+
 	renderSelectors: {
 		avatarEl: '.avatar',
 		nameEl: '.name',
@@ -44,6 +49,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	},
 
 	beforeRender: function(){
+		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
 		var me = this,
 			rd = this.renderData = Ext.apply(this.renderData||{},this.record.getData());
@@ -57,13 +63,44 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 				me.avatarEl.setStyle({backgroundImage:'url('+rd.avatarURL+')'});
 				me.nameEl.update(rd.Creator);
 			}
+			me.user = u;
 		});
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.record.compileBodyContent(this.setBody,this);
+		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
+		this.enableProfileClicks(this.nameEl, this.avatarEl);
+		if(this.deleteEl){
+			this.mon(this.deleteEl, 'click', this.deleteComment, this);
+		}
+		if(this.editEl){
+			this.mon(this.editEl, 'click', this.editComment, this);
+		}
+		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
+	},
+
+
+	onRecordDestroyed: function(cmp){
+		console.log('Record has bee destroyed');
+		if(cmp.deleteEl){
+			cmp.mun(cmp.deleteEl, 'click', cmp.deleteComment, cmp);
+		}
+		if(cmp.editEl){
+			cmp.mun(cmp.editEl, 'click', cmp.editComment, cmp);
+		}
+
+		Ext.defer(cmp.destroy, 1, cmp);
+	},
+
+
+	handleBeforeDeactivate: function(){
+		var m = Ext.getBody().down('.x-mask');
+		// NOTE: for 'reporting' an item, we mask the body
+		// but we don't want to dismiss the popout just yet, since we come back to it
+
+		return !(m && m.isVisible());
 	},
 
 
@@ -72,6 +109,33 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this,{single:true});
 			return;
 		}
-		this.bodyEl.update(html);
+
+		var snip = ContentUtils.getHTMLSnippet(html,180);
+		this.bodyEl.update(snip||html);
+		if(snip){
+			this.moreTpl.append(this.bodyEl,null,true);
+			this.mon(this.bodyEl.down('a.more'),'click', this.expandComment,this);
+		}
+
+		DomUtils.adjustLinks(this.bodyEl, window.location.href);
+	},
+
+	deleteComment: function(){
+		this.fireEvent('delete-reply', this.record, this, this.onRecordDestroyed);
+	},
+
+
+	editComment: function(){
+		console.log('should edit comment');
+	},
+
+
+	expandComment: function(){
+		console.log('should expand comment');
+	},
+
+
+	inheritableStatics: {
+		WhiteboardSize: 360
 	}
 });

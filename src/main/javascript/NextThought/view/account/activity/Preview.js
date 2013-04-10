@@ -129,18 +129,17 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		}
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
-
-		this.messageBodyEl.select('img.whiteboard-thumbnail').each(function(el){
-			var wrapper = el.up('.body-divider');
-			el.replace(wrapper);
-		});
-
 		Ext.defer(this.fireEvent, 1, this, ['resize']);
 	},
 
 
 	navigateToItem: function(){
 		console.warn('Should be overridden by its children');
+	},
+
+
+	showReplies: function(){
+		console.warn('Show replies inline. Subclass should override this with their implementation.');
 	},
 
 
@@ -240,12 +239,16 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
 		this.mon(this.messageBodyEl, 'click', this.navigateToItem, this);
 		this.mon(this.subjectEl, 'click', this.navigateToItem, this);
+		this.mon(this.commentsEl, 'click', this.showReplies, this);
 		this.enableProfileClicks(this.name, this.avatar);
 	},
 
 
 	handleBeforeDeactivate: function(){
-		return !(this.editor && this.editor.isActive());
+		if((this.editor && this.editor.isActive())){
+			return false;
+		}
+		return	Ext.Array.every(this.items.items, function(item){ return item.fireEvent('beforedeactivate'); });
 	},
 
 
