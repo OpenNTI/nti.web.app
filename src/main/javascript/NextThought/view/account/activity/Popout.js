@@ -17,6 +17,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 
 	initComponent: function(){
+		var me = this;
+
 		this.callParent(arguments);
 
 		this.pointer = Ext.widget('pointer',{
@@ -29,12 +31,16 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			destroy: this.pointer.destroy,
 			show: this.pointer.show,
 			hide: this.pointer.hide,
-			scope: this.pointer
+			scope: this.pointer,
+			resize: function(){ me.fireEvent('realign'); }
 		});
+
+		Ext.EventManager.onWindowResize(function(){
+			me.fireEvent('realign');
+		},this,null);
 
 		this.setupItems();
 	},
-
 
 	setupItems: function(){
 		var	wName = this.getPreviewPanel();
@@ -108,6 +114,12 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	},
 
 
+	destroy: function(){
+		this.callParent(arguments);
+		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
+	},
+
+
 	inheritableStatics: {
 
 		beforeShowPopup: function(record, el){
@@ -144,7 +156,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				}
 
                 pop.show().hide();
-				pop.on('resize', align);
+				pop.on('realign', align);
 
                 if(viewRef) {
                     pop.mon( pop.getEl(), 'mouseover', function(){
