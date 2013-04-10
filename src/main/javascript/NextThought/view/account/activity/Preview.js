@@ -256,6 +256,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
+		this.fireEvent('resize');
 	},
 
 
