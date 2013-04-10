@@ -723,8 +723,8 @@ Ext.define('NextThought.controller.Forums', {
 				success: function(rec){
 					console.log('Success: ', rec);
 					unmask();
-					if(postCmp.store && !postCmp.isDestroyed){
-						if(!isEdit){
+					if(!postCmp.isDestroyed){
+						if(!isEdit && postCmp.store){
 							postCmp.store.insert(0,rec);
 						}
 						editor.deactivate();
