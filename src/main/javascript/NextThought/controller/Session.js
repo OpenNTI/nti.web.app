@@ -336,6 +336,8 @@ Ext.define('NextThought.controller.Session', {
 
 		function onSuccess(user){
 			user.data.Presence = 'Online';
+			user.summaryObject = false;
+			UserRepository.cacheUser(user, true);
 			$AppConfig.userObject = user;
 			successCallback.call(me);
 		}
