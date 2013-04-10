@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 		bodyEl: '.body',
 
-		like: '.controls .like',
+		liked: '.controls .like',
 
 		flagEl: '.flag',
 		editEl: '.edit',
@@ -49,6 +49,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	},
 
 	beforeRender: function(){
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
 		var me = this,
