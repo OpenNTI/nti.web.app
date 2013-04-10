@@ -15,6 +15,11 @@ Ext.define('NextThought.view.account.activity.topic.Popout',{
 			var args = Array.prototype.slice.call(arguments),
 				request, popup;
 
+
+			if(!this.beforeShowPopup(record, el)){
+				return;
+			}
+
 			args.shift();//remove the passed record from the front of the list
 			popup = Ext.bind(this.popupNow,this,args,true);
 

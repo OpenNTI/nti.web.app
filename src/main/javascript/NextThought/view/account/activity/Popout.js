@@ -110,21 +110,29 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	inheritableStatics: {
 
-		popup: function(record, el, viewRef){
-			var id = record.getId(), open = false;
+		beforeShowPopup: function(record, el){
+			var id = record.getId(), canShow = true;
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
 					if(!o.maybeHidePopout()){
-						open = true;//leave it open
+						canShow = false;//leave it open
 					}
 				}
 				else {
 					o.updateRefEl(el);
-					open = true;
+					canShow = false;
 				}
 			});
 
-			if(open){return;}
+			return canShow;
+		},
+
+		popup: function(record, el, viewRef){
+			var id = record.getId();
+
+			if(!this.beforeShowPopup(record, el)){
+				return;
+			}
 
 			UserRepository.getUser(record.get('Creator'),function(user){
 				var pop = this.create({record: record, user: user, refEl: Ext.get(el)}),

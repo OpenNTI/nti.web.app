@@ -21,6 +21,10 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 				me.popupNow(resolvedRecord, el, viewRef);
 			}
 
+			if(!this.beforeShowPopup(record, el)){
+				return;
+			}
+
 			if(!ref){
 				load(record);
 				return;
