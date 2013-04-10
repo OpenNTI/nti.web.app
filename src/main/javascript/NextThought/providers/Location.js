@@ -166,9 +166,10 @@ Ext.define('NextThought.providers.Location', {
 	 * @param [callback]
 	 * @param [fromHistory]
 	 */
-	setLocation: function(ntiid, callback, fromHistory){
+	setLocation: function(ntiidOrPageInfo, callback, fromHistory){
 		var me = this,
 			e = Ext.getBody(),
+			ntiid = ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
 			rootId = this.getLineage(ntiid).last();
 
 		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory)){ return; }
@@ -232,7 +233,7 @@ Ext.define('NextThought.providers.Location', {
 			}
 
 			me.clearStore();
-			me.resolvePageInfo(ntiid, finish, Boolean(callback));
+			me.resolvePageInfo(ntiidOrPageInfo, finish, Boolean(callback));
 
 			me.currentNTIID = ntiid;
 		},1);
@@ -245,7 +246,7 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	resolvePageInfo: function(ntiid, finish, hasCallback){
+	resolvePageInfo: function(ntiidOrPageInfo, finish, hasCallback){
 		var me = this,
 			service = $AppConfig.service;
 
@@ -265,7 +266,12 @@ Ext.define('NextThought.providers.Location', {
 			me.fireEvent('navigateComplete',r);
 		}
 
-		service.getPageInfo(ntiid, success, failure, me);
+		if(ntiidOrPageInfo.isPageInfo){
+			success(ntiidOrPageInfo);
+		}
+		else{
+			service.getPageInfo(ntiidOrPageInfo, success, failure, me);
+		}
 	},
 
 

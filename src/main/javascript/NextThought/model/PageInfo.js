@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.PageInfo', {
 	extend: 'NextThought.model.Base',
-	idProperty: 'ID',
+	idProperty: 'ID', //TODO shouldn't this be the NTIID
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing',
