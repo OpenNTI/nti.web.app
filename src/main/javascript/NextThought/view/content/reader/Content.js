@@ -435,7 +435,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		//Don't open internal urls in other windows, instead use a hash
 		//change
 		if(newLocation.indexOf(whref) === 0 && r !== window.location.href && target.indexOf('!') === 0){
-			window.location.hash = target;
+			this.fireEvent('change-hash', '#'+target);
 			return false;
 		}
 
