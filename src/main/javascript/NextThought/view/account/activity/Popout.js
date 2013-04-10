@@ -35,12 +35,16 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			resize: function(){ me.fireEvent('realign'); }
 		});
 
-		Ext.EventManager.onWindowResize(function(){
-			me.fireEvent('realign');
-		},this,null);
+		Ext.EventManager.onWindowResize(this.windowResized, this,null);
 
 		this.setupItems();
 	},
+
+
+	windowResized: function(){
+		this.fireEvent('realign');
+	},
+
 
 	setupItems: function(){
 		var	wName = this.getPreviewPanel();
@@ -116,7 +120,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	destroy: function(){
 		this.callParent(arguments);
-		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
+		Ext.EventManager.removeResizeListener(this.windowResized,this);
 	},
 
 
