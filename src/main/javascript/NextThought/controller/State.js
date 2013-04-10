@@ -473,7 +473,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 	changeHash: function(hash){
-		if(!hash || window.location.hash === hash){
+		if(!hash ||  hash.indexOf('#') !== 0 || window.location.hash === hash){
 			return;
 		}
 		console.debug('Modifying window.location.hash', hash);

@@ -407,45 +407,22 @@ Ext.define('NextThought.view.content.reader.Content',{
 		body.setStyle(bodyStylesObj);
 	},
 
+	navigateToFragment: function(frag){
+		this.scrollToTarget(frag);
+	},
+
 	onClick: function(e, el){
 		e.stopEvent();
 		var m = this,
 			r = el.href,
 			hash = r.split('#'),
-			newLocation = hash[0],
 			target = hash[1],
 			whref = window.location.href.split('#')[0];
 
-
-		function openHref(link, t){
-			try {
-				window.open(link, t);
-			}
-			catch(er){
-				m.fireEvent('change-hash', link);
-			}
-		}
-
-
+		//Is this a special internal link that we need to handle
 		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
 			return false;
 		}
-
-		//Some special logic for internal urls
-		//Don't open internal urls in other windows, instead use a hash
-		//change
-		if(newLocation.indexOf(whref) === 0 && r !== window.location.href && target.indexOf('!') === 0){
-			this.fireEvent('change-hash', '#'+target);
-			return false;
-		}
-
-		//pop out links that point to external resources
-		if(!ParseUtils.parseNtiid(newLocation) && ContentUtils.isExternalUri(r) && r.indexOf(whref) < 0 ){
-			//popup a leaving platform notice here...
-			openHref(r, '_blank');
-			return false;
-		}
-
 
 		if(Ext.fly(el).is('.disabled')){
 			return false;
@@ -471,16 +448,13 @@ Ext.define('NextThought.view.content.reader.Content',{
 			return false;
 		}
 
-		if (newLocation.toLowerCase() === whref.toLowerCase() && target) {
-			this.scrollToTarget(target);
+
+		if(m.fireEvent('navigate-to-href', m, r)){
+			//Someone handled us so stop the event
+			return false;
 		}
-		else {
-			LocationProvider.setLocation(newLocation, function(me){
-				if(target) {
-					me.scrollToTarget(target);
-				}
-			});
-		}
+
+		console.warn('Unable to handle content link navigation for ', el, r);
 		return undefined;
 	}
 

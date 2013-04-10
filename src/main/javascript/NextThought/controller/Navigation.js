@@ -62,7 +62,8 @@ Ext.define('NextThought.controller.Navigation', {
 				'navigation-selected': this.navigate
 			},
 			'*': {
-				'before-show-topic': this.beforeTopicShow
+				'before-show-topic': this.beforeTopicShow,
+				'navigate-to-href': this.navigateToHref
 			},
 			'notfound':{
 				'go-to-library': this.goToLibrary
@@ -72,7 +73,7 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'view-select menu':{
 				'hide': this.syncButton
-			}
+			},
 		});
 	},
 
@@ -414,7 +415,8 @@ Ext.define('NextThought.controller.Navigation', {
 			currentLocation = window.location.href,
 			currentParts = currentLocation.split('#'),
 			currentBase = currentParts[0],
-			currentFragment = currentParts[1];
+			currentFragment = currentParts[1],
+			state = app.getController('State');
 
 		//Are we an nttid?
 		if(ParseUtils.parseNtiid(newBase)){
@@ -430,8 +432,8 @@ Ext.define('NextThought.controller.Navigation', {
 			catch(er){
 				console.error('Unable to open ', href, 'with target _blank.  Falling back to hash change', Globals.getError(href));
 				//I think we can be certain that this shouldn't just be a hash change, so this may not make sense
-				//as a fallback anymore
-				this.fireEvent('change-hash', href);
+				//as a fallback anymore.  When we get to Ext 4.2 use controller event and drop this tight coupling
+				state.changeHash(href);
 			}
 			return true;
 		}
@@ -443,7 +445,8 @@ Ext.define('NextThought.controller.Navigation', {
 			//bail we don't want to reload/navigate to the same location
 			if(newFragment !== currentFragment){
 				if(newFragment.indexOf('!') === 0){
-					this.fireEvent('change-hash', newFragment);
+					//When we get to Ext 4.2 use controller event and drop this tight coupling
+					state.changeHash('#'+newFragment);
 					return true;
 				}
 				else if(Ext.isFunction(sender.navigateToFragment)){
@@ -461,6 +464,39 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 	navigateToNtiid: function(ntiid, fragment){
-		console.log('Need to navigate to ', ntiid, fragment);
+		var object = ntiid.isModel ? ntiid : undefined;
+
+		function onSuccess(obj){
+			//With Ext 4.2 we can have controllers listen to events from other controllers.
+			//That will allow is to decouble this more with something like
+			//me.fireEvent('show-object', obj) or a registry that knows how to display objects
+			//in their cannonical location
+
+			if(obj.isPageInfo){
+				//FIXME Use the callback here for error handling once it supports
+				//an error callback.
+				LocationProvider.setLocation(obj, function(content){
+					if(content && fragment) {
+						content.scrollToTarget(fragment);
+					}
+				});
+			}
+			else{
+				console.log('Dont know how to navigate to object', obj);
+			}
+		}
+
+		function onFailure(){
+			//TODO failure callback here
+			console.error('An error occurred resolving ntiid as object for navigation', ntiid, arguments);
+		}
+
+		if(!object){
+			$AppConfig.service.getObject(ntiid, onSuccess, onFailure, this);
+		}
+		else{
+			onSuccess(object);
+		}
+
 	}
 });
