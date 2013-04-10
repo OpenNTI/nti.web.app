@@ -56,7 +56,7 @@ Ext.define('NextThought.view.forums.Forum',{
 		]}
 	]),
 
-	deferEmptyText: false,
+	//deferEmptyText: false,
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',
 		html: 'Be the first to start a discussion.',
