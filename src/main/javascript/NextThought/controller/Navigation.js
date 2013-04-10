@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			'view-select menu':{
 				'hide': this.syncButton
-			},
+			}
 		});
 	},
 
