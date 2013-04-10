@@ -174,6 +174,7 @@ Ext.application({
 			'javascript/specs/view/annotations/renderer/Manager.js',
 			'javascript/specs/view/profiles/parts/TranscriptSummaryItem.spec.js',
 			'javascript/specs/view/profiles/parts/Blog.spec.js',
+			'javascript/specs/view/profiles/parts/ForumActivityItem.spec.js',
 			'javascript/specs/view/content/reader/Annotations.spec.js',
 			'javascript/specs/view/chat/log/Entry.spec.js',
 			'javascript/specs/view/chat/transcript/Main.spec.js',

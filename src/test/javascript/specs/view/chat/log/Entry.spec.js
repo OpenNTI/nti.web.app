@@ -21,7 +21,7 @@ describe('Entry Link Tests',function(){
 		document.body.removeChild(testBody);
 	});
 
-	it('passing an anchor fires link-open',function(){
+	it('passing an anchor fires navigate-to-href',function(){
 		var e = {
 			stopEvent: noop,
 			getTarget: function(v){
@@ -35,7 +35,7 @@ describe('Entry Link Tests',function(){
 
 		Entry.click(e);
 
-		expect(Entry.fireEvent).toHaveBeenCalledWith('link-clicked',Entry,'www.google.com');
+		expect(Entry.fireEvent).toHaveBeenCalledWith('navigate-to-href',Entry,'www.google.com');
 	});
 
 	it('passing a whiteboard container for reply',function(){

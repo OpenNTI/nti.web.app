@@ -152,7 +152,9 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 				//Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 			}
 		}else{
-			me.fireEvent('link-clicked',me,a.href);
+			if(me.fireEvent('navigate-to-href',me,a.href)){
+				return false;
+			}
 		}
 
 		return false;

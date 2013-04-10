@@ -141,7 +141,9 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			);
 		}else if(a){
 			//its a link
-			me.fireEvent('link-clicked',me,a.href);
+			if(me.fireEvent('navigate-to-href',me,a.href)){
+				return false;
+			}
 
 		}else {
 			me.fireEvent('show-whiteboard',this, me.message.get('body')[0]);

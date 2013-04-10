@@ -256,6 +256,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		this.mon(this.pathEl,'click', this.forumClickHandler,this);
 		this.mon(this.subjectEl, 'click', this.forumClickHandler, this);
+		this.mon(this.messageBodyEl,'click',this.bodyClickHandler,this);
 
 		if( this.publishStateEl ){ this.setPublishState(); }
 
@@ -280,6 +281,18 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		this.mon(this.record,'destroy',this.destroy,this);
 	},
 
+	bodyClickHandler: function(event){
+		event.stopEvent();
+		var me = this,
+			a = event.getTarget('a');
+
+		if(a){
+			//link clicked
+			if(me.fireEvent('navigate-to-href',me,a.href)){
+				return false;
+			}
+		}
+	},
 
 	showEditor: function(){
 		this.editor.reset();
@@ -322,6 +335,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
 		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
 		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
+	},
+	click: function(e){
+		alert("Clicked");
+		return false;
 	}
 
 });
@@ -387,8 +404,21 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 		this.callParent();
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
+		this.mon(this.messageBodyEl,'click',this.bodyClickHandler,this);
 	},
 
+	bodyClickHandler: function(event){
+		event.stopEvent();
+		var me = this,
+			a = event.getTarget('a');
+
+		if(a){
+			//link clicked
+			if(me.fireEvent('navigate-to-href',me,a.href)){
+				return false;
+			}
+		}
+	},
 
 	setBody: function(text){
 		if(!this.rendered){

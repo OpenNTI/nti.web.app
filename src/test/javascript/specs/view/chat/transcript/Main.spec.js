@@ -18,7 +18,7 @@ describe('Transcript link tests',function(){
 		document.body.removeChild(testBody);
 	});
 
-	it('passing an anchor fires link-open',function(){
+	it('passing an anchor fires navigate-to-href',function(){
 		var e = {
 			stopEvent: noop,
 			getTarget: function(v){
@@ -32,7 +32,7 @@ describe('Transcript link tests',function(){
 
 		Transcript.click(e);
 
-		expect(Transcript.fireEvent).toHaveBeenCalledWith('link-clicked',Transcript,'www.google.com');
+		expect(Transcript.fireEvent).toHaveBeenCalledWith('navigate-to-href',Transcript,'www.google.com');
 	});
 
 	it('passing a whiteboard-container fires show-whiteboard',function(){
