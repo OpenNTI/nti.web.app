@@ -50,6 +50,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 		this.removeAll(true);
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime','DESC'));
 		this.add(Ext.Array.map(records,function(r){return {record: r};}));
+		this.fireEvent('resize');
 	},
 
 
