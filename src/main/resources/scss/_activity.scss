@@ -265,9 +265,12 @@
 					color: $primary-blue;
 					text-transform: uppercase;
 					cursor: pointer;
+					&::after{
+						content:' ';
+						padding-right: 0.3em;
+					}
 				}
 
-				@include dot-separated-list;
 			}
 
 			.subject, .name.no-subject {
@@ -333,6 +336,9 @@
 		}
 
 		.replies {
+			max-height: 200px;
+			overflow-y: scroll;
+
 			.x-component-reply {
 				position: relative;
 				padding-bottom: 10px;
@@ -372,8 +378,10 @@
 					.name {
 						color: $primary-blue;
 						cursor: pointer;
+						text-transform: uppercase;
 						&::after{
-							content: ' ';
+							content:' ';
+							padding-right: 0.3em;
 						}
 					}
 
