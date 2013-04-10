@@ -395,17 +395,72 @@ Ext.define('NextThought.controller.Navigation', {
 	 * by calling this function with a sender and an href.  Objects will usually trigger this
 	 * function by firing an event in something like an anchor click handler.  We first try and parse the href as
 	 * an ntiid.  If it parses and resolves to an object we may be able to navigate to the canonical
-	 * location of that object. After tha we attempt to indentify external urls and open them in a new
+	 * location of that object. After that we attempt to identify external urls and open them in a new
 	 * tab.  Internal urls and app state fragments are handled inside the application.  Lastly all other
 	 * fragments will be handled by calling sender.navigateToFragment, if it exists, with the provided href.
 	 *
 	 * @param sender The object requesting navigation
 	 * @param href A string representing the location to navigate to
 	 *
+	 * @return a boolean indicating whether navigation was handled
+	 *
 	 * TODO Work an error callback into here.  Right now we are at the mercy of many of the
 	 * same problems that plague error callbacks in the LocationProvider
 	 */
 	navigateToHref: function(sender, href){
+		var parts = href.split('#'),
+			newBase = parts[0],
+			newFragment = parts[1],
+			currentLocation = window.location.href,
+			currentParts = currentLocation.split('#'),
+			currentBase = currentParts[0],
+			currentFragment = currentParts[1];
 
+		//Are we an nttid?
+		if(ParseUtils.parseNtiid(newBase)){
+			this.navigateToNtiid(newBase, newFragment);
+			return true;
+		}
+
+		//Is href an exteranl url whose base does not match the current base (i.e. not in our app)?
+		if(ContentUtils.isExternalUri(href) && newBase.indexOf(currentBase) !== 0){
+			try {
+				window.open(href, '_blank');
+			}
+			catch(er){
+				console.error('Unable to open ', href, 'with target _blank.  Falling back to hash change', Globals.getError(href));
+				//I think we can be certain that this shouldn't just be a hash change, so this may not make sense
+				//as a fallback anymore
+				this.fireEvent('change-hash', href);
+			}
+			return true;
+		}
+
+		//Ok so at this point we should be an internal url that amounts to either a has change
+		//or a fragment internal to who called us
+		if(newBase.indexOf(currentBase) === 0){
+			//ok so we are a fragment change.  if the new href is the same as the current href
+			//bail we don't want to reload/navigate to the same location
+			if(newFragment !== currentFragment){
+				if(newFragment.indexOf('!') === 0){
+					this.fireEvent('change-hash', newFragment);
+					return true;
+				}
+				else if(Ext.isFunction(sender.navigateToFragment)){
+					sender.navigateToFragment(newFragment);
+					return true;
+				}
+			}
+			return false;
+		}
+		else{
+			console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
+		}
+
+		return false;
+	},
+
+	navigateToNtiid: function(ntiid, fragment){
+		console.log('Need to navigate to ', ntiid, fragment);
 	}
 });
