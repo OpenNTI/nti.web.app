@@ -361,6 +361,7 @@ Ext.define('NextThought.controller.Navigation', {
 		this.setView('library');
 	},
 
+
 	goToHelp: function(){
 		var helpIndex = Library.getStore().findBy(function(r){
 			return (/nextthought/i).test(r.get('author'));
@@ -386,5 +387,25 @@ Ext.define('NextThought.controller.Navigation', {
 				console.debug('Oops, a view button was defined, but the related view was not added: '+id);
 			}
 		}
+	},
+
+	/**
+	 * The idea here is that navigation to an href (which may be an absolute external url,
+	 * an internal url, an app state fragment, a fragment, or even an ntiid) can be triggered
+	 * by calling this function with a sender and an href.  Objects will usually trigger this
+	 * function by firing an event in something like an anchor click handler.  We first try and parse the href as
+	 * an ntiid.  If it parses and resolves to an object we may be able to navigate to the canonical
+	 * location of that object. After tha we attempt to indentify external urls and open them in a new
+	 * tab.  Internal urls and app state fragments are handled inside the application.  Lastly all other
+	 * fragments will be handled by calling sender.navigateToFragment, if it exists, with the provided href.
+	 *
+	 * @param sender The object requesting navigation
+	 * @param href A string representing the location to navigate to
+	 *
+	 * TODO Work an error callback into here.  Right now we are at the mercy of many of the
+	 * same problems that plague error callbacks in the LocationProvider
+	 */
+	navigateToHref: function(sender, href){
+
 	}
 });
