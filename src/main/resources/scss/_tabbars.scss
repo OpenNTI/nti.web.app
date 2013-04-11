@@ -1,5 +1,5 @@
 @mixin tabbar($ui, $font, $border-widths){
-	.nti-#{$ui}-tabbar-plain {
+	.nti-#{$ui}-tabbar {
 		border: 0 solid $border-grey;
 		border-width: $border-widths !important;
 
@@ -15,7 +15,7 @@
 				padding: 0 6px;
 			}
 
-			em{padding: 0;}
+			.x-tab-wrap{padding: 0;}
 
 			&.x-tab-active {
 				box-shadow: inset 0 -4px 0 0 #85b746;
@@ -35,7 +35,7 @@
 @include tabbar(profile, italic 500 18px/50px $font, 1px 0 1px);
 
 
-.nti-content-tabbar-plain {
+.nti-content-tabbar {
 	border-top: 1px solid #f1f1f1 !important;
 
 	.nti-body-content-tabbar{
@@ -51,7 +51,7 @@
 			&:last-of-type {
 				border-right-width: 1px !important;
 			}
-			em {padding: 0 15px;}
+			.x-tab-wrap {padding: 0 15px;}
 			.x-tab-inner {
 				color: $secondary-grey;
 				font: 12px/32px $font !important;
@@ -71,7 +71,7 @@
 }
 
 
-.nti-secondary-tabbar-plain {
+.nti-secondary-tabbar {
 	div.x-tab {
 		&.x-tab-top-active {
 			$experimental-support-for-svg: true;
@@ -97,9 +97,9 @@
 		@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.65) 100%));
 		box-shadow: 0 1px 0 0 #ffffff, inset 0 2px 0 0 rgba(255,255,255,0.4);
 
-		em {padding: 0;}
+		.x-tab-wrap {padding: 0;}
 
-		button {
+		a {
 			.x-ie & {&,&:active {
 				left: 0;
 				top: 0;

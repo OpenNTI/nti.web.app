@@ -43,7 +43,7 @@
 	}
 
 	em.button,
-	button{
+	a[role=button]{
 		@include color-button-base;
 		$g: linear-gradient(left top,
 			rgba(249,249,249,1) 45%,
@@ -53,7 +53,7 @@
 		@include background-image($g);
 
 		span.whiteboard-color-inner{display: none;}
-		span.whiteboard-color-icon {
+		span.whiteboard-color-icon-el {
 			@include color-button-base;
 			position: absolute;
 			top: 0; left: 0;
@@ -71,17 +71,17 @@
 
 	}
 
-	&.black {em.button,button  { background: #333333; border-color: #333333; }}
-	&.grey1 {em.button,button  { background: #858585; border-color: #707070; }}
-	&.grey2 {em.button,button  { background: #e1e1e1; border-color: #acacac; }}
-	&.white {em.button,button  { background: #ffffff; border-color: #b3b3b3; div {opacity: 0.9;} }}
-	&.red {em.button,button    { background: #d34f39; border-color: #c6452f; }}
-	&.blue {em.button,button   { background: #2b89c5; border-color: #2880b9; }}
-	&.green {em.button,button  { background: #a0c94c; border-color: #82a835; }}
-	&.orange {em.button,button { background: #fa8700; border-color: #d97704; }}
-	&.magenta {em.button,button{ background: #b42789; border-color: #b42789; }}
-	&.purple {em.button,button { background: #6f3d93; border-color: #6f3d93; }}
-	&.yellow {em.button,button { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
+	&.black {em.button,a[role=button]  { background: #333333; border-color: #333333; }}
+	&.grey1 {em.button,a[role=button]  { background: #858585; border-color: #707070; }}
+	&.grey2 {em.button,a[role=button]  { background: #e1e1e1; border-color: #acacac; }}
+	&.white {em.button,a[role=button]  { background: #ffffff; border-color: #b3b3b3; div {opacity: 0.9;} }}
+	&.red {em.button,a[role=button]    { background: #d34f39; border-color: #c6452f; }}
+	&.blue {em.button,a[role=button]   { background: #2b89c5; border-color: #2880b9; }}
+	&.green {em.button,a[role=button]  { background: #a0c94c; border-color: #82a835; }}
+	&.orange {em.button,a[role=button] { background: #fa8700; border-color: #d97704; }}
+	&.magenta {em.button,a[role=button]{ background: #b42789; border-color: #b42789; }}
+	&.purple {em.button,a[role=button] { background: #6f3d93; border-color: #6f3d93; }}
+	&.yellow {em.button,a[role=button] { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
 }
 
 .x-panel-nt,
@@ -118,9 +118,13 @@
 
 	.x-btn-new-medium,
 	.x-btn-history-medium {
-		width: 50px;
-		height: 30px;
-		.x-btn-icon {
+
+		&, a {
+			width: 50px;
+			height: 30px;
+		}
+
+		.x-btn-icon-el {
 			top: 0; left: 0;
 			width: 50px;
 			height: 30px;
@@ -131,13 +135,13 @@
 			&.new-page { background-position:  -525px -1335px; }
 		}
 
-		&.x-over .x-btn-icon{
+		&.x-over .x-btn-icon-el{
 			&.undo{ background-position:  -325px -1435px; }
 			&.redo{ background-position:  -425px -1435px; }
 			&.new-page { background-position:  -525px -1435px; }
 		}
 
-		&.x-pressed .x-btn-icon{
+		&.x-pressed .x-btn-icon-el{
 			&.undo{ background-position:  -325px -1235px; }
 			&.redo{ background-position:  -425px -1235px; }
 			&.new-page { background-position:  -525px -1235px; }
@@ -228,21 +232,21 @@
 				background: #ffffff;
 			}
 
-			&.x-over .x-btn-icon{
+			&.x-over .x-btn-icon-el{
 				&.bold { background-position: -36px -1436px; }
 				&.italic { background-position: -136px -1436px; }
 				&.underline { background-position: -236px -1436px; }
 			}
 
-			&.x-pressed .x-btn-icon{
+			&.x-pressed .x-btn-icon-el{
 				&.bold { background-position: -36px -1236px !important; }
 				&.italic { background-position: -136px -1236px !important; }
 				&.underline { background-position: -236px -1236px !important; }
 			}
 
-			button {
+			a {
 				@include button-base(30px, 3px);
-				span.x-btn-icon {
+				span.x-btn-icon-el {
 					@include button-base(30px, 3px);
 					position: absolute;
 					top: 0; left: 0;
@@ -333,7 +337,7 @@
 				}
 			}
 
-			button {
+			a {
 				@include whiteboard-toolbar-common;
 				position: relative;
 				background: none;
@@ -344,7 +348,7 @@
 				top: 10px !important;
 			}
 
-			.whiteboard-tool-option-icon{
+			.whiteboard-tool-option-icon-el{
 				@include whiteboard-toolbar-common;
 				position: absolute; top: 0; left: 0;
 				width: 32px; height: 32px;
@@ -373,7 +377,7 @@
 				}
 			}
 
-			&.x-pressed .whiteboard-tool-option-icon{
+			&.x-pressed .whiteboard-tool-option-icon-el{
 				&.stroke {
 					&.fine { background-position: -34px -934px !important; }
 					&.small { background-position: -134px -934px !important; }
@@ -396,7 +400,7 @@
 				}
 			}
 
-			&.x-over .whiteboard-tool-option-icon {
+			&.x-over .whiteboard-tool-option-icon-el {
 				&.stroke {
 					&.fine { background-position: -34px -1134px; }
 					&.small { background-position: -134px -1134px; }
@@ -422,13 +426,13 @@
 	}
 
 	.whiteboard-tool {
-		button{
+		a{
 			@include whiteboard-tool-button-common;
 			background: none;
 			position: relative;
 
 			.whiteboard-tool-inner { display: none; }
-			.whiteboard-tool-icon {
+			.whiteboard-tool-icon-el {
 				position: absolute; top: 0; left: 0;
 				@include whiteboard-tool-button-common;
 				background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
@@ -442,11 +446,11 @@
 			}
 		}
 
-		&.x-item-disabled .whiteboard-tool-icon {
+		&.x-item-disabled .whiteboard-tool-icon-el {
 			opacity: 0.5;
 		}
 
-		&.x-pressed .whiteboard-tool-icon {
+		&.x-pressed .whiteboard-tool-icon-el {
 			&.move { background-position: -10px -10px !important; }
 			&.pencil{ background-position: -110px -10px !important; }
 			&.shape{ background-position: -210px -10px !important; }
@@ -455,7 +459,7 @@
 			&.eraser{ background-position: -510px -10px !important; }
 		}
 
-		&.x-over .whiteboard-tool-icon {
+		&.x-over .whiteboard-tool-icon-el {
 			&.move { background-position: -10px -210px; }
 			&.pencil{ background-position: -110px -210px; }
 			&.shape{ background-position: -210px -210px; }

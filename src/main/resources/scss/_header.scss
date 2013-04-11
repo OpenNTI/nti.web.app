@@ -29,7 +29,7 @@
 		margin-top: 33px;
 		.view-button {
 
-			em.x-btn-arrow{
+			.x-btn-arrow{
 				&, &.x-btn-arrow-left, .x-btn-arrow-right{
 				padding: 0;
 				display: inline;
@@ -37,10 +37,10 @@
 				}
 			}
 
-			button { @include view-button-def; overflow: visible; }
+			a { @include view-button-def; overflow: visible; }
 			@include view-button-def;
 			.x-btn-inner{display: none;}
-			.x-btn-icon{
+			.x-btn-icon-el{
 				display: block;
 				position: relative;
 				top: 5px;
@@ -48,7 +48,7 @@
 				width: 70px;
 				height: 72px;
 
-				&::after{
+				&::after {
 					content: ' ';
 					overflow: hidden;
 					position: absolute;

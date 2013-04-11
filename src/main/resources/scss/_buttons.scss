@@ -40,7 +40,7 @@ $button-text-weights: 500,500,600,500;
 
 		@each $type in icon, noicon {
 			.x-btn-#{$skin}-#{$size}-#{$type} {
-				button {
+				a {
 					background: none;
 					border: none;
 					padding: 0;
@@ -102,7 +102,7 @@ $button-text-weights: 500,500,600,500;
 .x-btn-flat-large,
 .x-btn-flat-medium {
 	cursor: pointer;
-	button {
+	a {
 		background: none;
 		border: none;
 		padding: 12px 20px;
@@ -122,7 +122,7 @@ $button-text-weights: 500,500,600,500;
 .x-btn-blue-large,
 .x-btn-blue-medium {
 	cursor: pointer;
-	button {
+	a {
 		padding: 8px 20px;
 		letter-spacing: 0.1em;
 		background: #3fb3f6;

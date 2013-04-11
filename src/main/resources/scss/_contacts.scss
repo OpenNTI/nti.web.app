@@ -364,7 +364,7 @@ $over-color: #f4f3f3;
 		div.x-tab{
 			text-align: center;
 
-			button {
+			a {
 				.x-strict .x-ie9 &, & {
 					overflow: hidden;
 					height: 29px;
@@ -513,7 +513,7 @@ div.contact-buttons {
 #contacts {
 	//margin: 0 0 0 10%;
 
-	& > .x-panel-contacts {
+	.x-panel-contacts {
 		margin: 0 auto;
 		width: 725px;
 	}
