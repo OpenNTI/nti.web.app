@@ -1,6 +1,5 @@
-Ext.define('NextThought.overrides.builtins.Console',{
-
-},function(){
+Ext.define('NextThought.overrides.builtins.Console',{});
+(function(){
 	Ext.applyIf(window,{
 		console:{ log: Ext.emptyFn }
 	});
@@ -17,4 +16,4 @@ Ext.define('NextThought.overrides.builtins.Console',{
 		time: Ext.emptyFn,
 		timeEnd: Ext.emptyFn
 	});
-});
+}());

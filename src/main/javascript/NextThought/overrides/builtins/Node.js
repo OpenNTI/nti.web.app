@@ -1,6 +1,6 @@
-Ext.define('NextThought.overrides.builtins.Node',{
+Ext.define('NextThought.overrides.builtins.Node',{});
 	//Patch-in features that might be missing.
-},function(){
+(function(){
 	window.Node = window.Node || function(){};
 
 	Ext.applyIf(window.Node.prototype, {
@@ -12,4 +12,4 @@ Ext.define('NextThought.overrides.builtins.Node',{
 		DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: 32,
 		TEXT_NODE: 3
 	});
-});
+}());

@@ -1,6 +1,5 @@
-Ext.define('NextThought.overrides.builtins.RegExp',{
-
-},function(){
+Ext.define('NextThought.overrides.builtins.RegExp',{});
+(function(){
 	Ext.applyIf(RegExp,{
 		escape:function me(text) {
 			if(!me.Re){
@@ -9,4 +8,4 @@ Ext.define('NextThought.overrides.builtins.RegExp',{
 			return text.replace(me.Re, "\\$&");
 		}
 	});
-});
+}());

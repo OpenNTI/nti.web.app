@@ -1,6 +1,6 @@
-Ext.define('NextThought.overrides.builtins.Array',{
+Ext.define('NextThought.overrides.builtins.Array',{});
 
-},function(){
+(function(){
 
 	/** @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
 	 *
@@ -56,4 +56,5 @@ Ext.define('NextThought.overrides.builtins.Array',{
 		peek: function peek(){ return this[this.length-1]; },
 		reduce: reduce
 	}));
-});
+
+}());
