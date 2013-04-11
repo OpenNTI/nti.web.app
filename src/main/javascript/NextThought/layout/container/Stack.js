@@ -19,7 +19,6 @@ Ext.define('NextThought.layout.container.Stack',{
 
 
 	enforceStackActiveItem: function(){
-		console.log(this.getLayoutItems());
 		if(this.suspendStackActiveEvents === true){ return; }
 
 		var last = this.getLayoutItems().last();
