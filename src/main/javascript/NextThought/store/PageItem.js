@@ -1,5 +1,6 @@
 Ext.define('NextThought.store.PageItem',function(){
 
+	//TODO: use event domains
 	var coordinator = new Ext.util.Observable();
 
 	return {
@@ -116,8 +117,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 
 		buildThreads: function(bins){
-			var tree = {},
-					bms = bins.Bookmark;
+			var bms = bins.Bookmark;
 
 			//handle bookmarks here:
 			if(bms){
@@ -158,7 +158,8 @@ Ext.define('NextThought.store.PageItem',function(){
 						adoptChild(storeItem, record);
 						return false;
 					}
-					else if(!Ext.isEmpty(storeItem.children)){
+
+					if(!Ext.isEmpty(storeItem.children)){
 						Ext.each(storeItem.children, checkItem);
 					}
 					return true;
@@ -166,8 +167,8 @@ Ext.define('NextThought.store.PageItem',function(){
 			}
 
 			//find my parent if it's there and add myself to it:
-			var ancestor = null, adopted, anyAdopted;
-			refs = (record.get('references') || []).slice();
+			var adopted,
+				refs = (record.get('references') || []).slice();
 
 			if(!Ext.isEmpty(refs)){
 				while(!adopted && !Ext.isEmpty(refs) ){
@@ -185,19 +186,47 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
-		remove: function(records){
-			var toActuallyRemove = [], idsToBoradcast = [];
+		resolveRange: function(range){
+			var i = range.start,
+				length = range.end+ 1,
+				ret = [];
+
+			for(i; i<length; i++){
+				ret.push(this.getAt(i));
+			}
+
+			return ret;
+		},
+
+
+		remove: function(){
+			var toActuallyRemove = [],
+				idsToBoradcast = [],
+				args = Array.prototype.slice.call(arguments),
+				records = args[0];
+
+			args[0] = toActuallyRemove;
 
 			if(Ext.isEmpty(records)){
 				console.warn('Remove called with no records', records);
 				return;
 			}
 
-			if (!Ext.isArray(records)) {
-				records = [records];
+			if (!Ext.isIterable(records)) {
+
+				if (typeof records === 'object' && !records.isModel) {
+		           records = this.resolveRange(records);
+		        }
+				else {
+					records = [records];
+				}
 			}
 
 			Ext.each(records, function(record){
+				if(Ext.isNumber(record)){
+					record = this.getAt(record);
+				}
+
 				if(record.placeholder || !record.wouldBePlaceholderOnDelete()){
 					Ext.Array.push(toActuallyRemove, record);
 					Ext.Array.push(idsToBoradcast, record.getId());
@@ -208,7 +237,7 @@ Ext.define('NextThought.store.PageItem',function(){
 			}, this);
 
 			if(!Ext.isEmpty(toActuallyRemove)){
-				this.callParent([toActuallyRemove]);
+				this.callParent(args);
 			}
 
 			Ext.each(toActuallyRemove, function(record){
