@@ -46,13 +46,13 @@ Ext.define('NextThought.view.Window',{
 				data.layout = data.layout || 'auto';//dialogs define their own view
 			}
 			else {
-				Ext.apply(frame.last(),{
+				Ext.apply(frame[frame.length-1],{
 					items: data.items,
 					layout: data.layout,
 					autoScroll: data.autoScroll
 				});
 
-				Ext.apply(frame.first(),{
+				Ext.apply(frame[0],{
 					title: data.title || '',
 					tools: data.tools || []
 				});
