@@ -136,15 +136,4 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
         default: return 'b-t';
         }
     }
-
-},function(){
-	// Init the singleton.  Any tag-based quick tips will start working.
-	try {
-		if(!Ext.versions.extjs.isGreaterThan('4.1.1')){
-			Ext.tip.QuickTipManager.init();
-		}
-	}
-	catch(e){
-		console.debug('No QuickTips?',Globals.getError(e));
-	}
 });
