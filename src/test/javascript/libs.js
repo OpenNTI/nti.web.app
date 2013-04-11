@@ -1,1 +1,1 @@
-src/main/javascript/libs.js
+../../main/javascript/libs.js
