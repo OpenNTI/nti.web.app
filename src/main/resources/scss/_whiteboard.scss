@@ -339,6 +339,7 @@
 
 			a {
 				@include whiteboard-toolbar-common;
+				display: block;
 				position: relative;
 				background: none;
 				width: 32px; height: 32px;
@@ -428,6 +429,7 @@
 	.whiteboard-tool {
 		a{
 			@include whiteboard-tool-button-common;
+			display: block;
 			background: none;
 			position: relative;
 

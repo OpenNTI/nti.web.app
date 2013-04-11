@@ -203,6 +203,11 @@
 			&.selection-item-over,
 			&.x-menu-item-over,
 			&.x-menu-item-active {
+				border:{
+					radius: 0;
+					border-width: 0;
+					style: none;
+				}
 				background-color: #efefef;
 				color: #3c3c3c !important;
 			}
