@@ -1,24 +1,4 @@
 Ext.define('NextThought.util.Globals', {
-	requires: [
-		'NextThought.overrides.app.Application',
-		'NextThought.overrides.builtins.Array',
-		'NextThought.overrides.builtins.Console',
-		'NextThought.overrides.builtins.Node',
-		'NextThought.overrides.builtins.Object',
-		'NextThought.overrides.builtins.RegExp',
-		'NextThought.overrides.data.proxy.Server',
-		'NextThought.overrides.data.Connection',
-		'NextThought.overrides.dom.Element',
-		'NextThought.overrides.draw.engine.Svg',
-		'NextThought.overrides.layout.container.Container',
-		'NextThought.overrides.panel.Panel',
-		'NextThought.overrides.picker.Color',
-		'NextThought.overrides.tip.QuickTip',
-		'NextThought.overrides.Component',
-		'NextThought.overrides.Ext',
-		'NextThought.overrides.JSON',
-		'NextThought.overrides.XTemplate'
-	],
 	singleton: true,
 
 

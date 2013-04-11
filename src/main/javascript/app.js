@@ -16,7 +16,6 @@
 
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
-Ext.Loader.loadScript('javascript/libs.js');
 
 Ext.application({
 	name: 'NextThought',
@@ -24,8 +23,9 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
-		'NextThought.util.Globals',
-		'NextThought.util.Errors',
+		'NextThought.overrides.*',
+		'NextThought.util.*',
+
 		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox'
