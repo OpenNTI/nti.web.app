@@ -3,7 +3,7 @@
  * It also will enforce that the last item is always active.
  */
 Ext.define('NextThought.layout.container.Stack',{
-	extend: 'Ext.layout.container.Container',
+	extend: 'Ext.layout.container.Card',
 	alias: 'layout.stack',
 	type: 'stack',
 
@@ -15,10 +15,11 @@ Ext.define('NextThought.layout.container.Stack',{
     deferredRender : true,
 
 
-	calculate: function(){ this.done = true; },//no-op
+	calculate: function(){},//no-op
 
 
 	enforceStackActiveItem: function(){
+		console.log(this.getLayoutItems());
 		if(this.suspendStackActiveEvents === true){ return; }
 
 		var last = this.getLayoutItems().last();
@@ -34,20 +35,12 @@ Ext.define('NextThought.layout.container.Stack',{
 	},
 
 
-	onAdd: function(){
-		this.callParent(arguments);
-		this.enforceStackActiveItem();
-	},
-
-
-	onRemove: function(){
-		this.card.onRemove.apply(this,arguments);
-		this.enforceStackActiveItem();
-	},
-
+	onAdd: function(){ this.enforceStackActiveItem(); },
+	onRemove: function(){ this.enforceStackActiveItem(); },
 
 	setOwner: function(owner){
 		this.callParent(arguments);
+
 		if(!owner.popView){
 			owner.popView = function(){
 				var l = this.items.last();
@@ -75,38 +68,39 @@ Ext.define('NextThought.layout.container.Stack',{
 			console.warn('You did something wrong. This should never be fasley');
 			return false;
 		}
-
 		if(this.parseActiveItem(item) !== this.getLayoutItems().last()){
 			return false;
 		}
-		return this.card.setActiveItem.apply(this,arguments);
+		return this.callParent(arguments);
+//		return this.card.setActiveItem.apply(this,arguments);
 	}
 
 
-}, function(){
-	var me = this,
-		card = Ext.layout.container.Card.prototype;
-
-	var functions = [
-		'getRenderTree',
-		'renderChildren',
-		'isValidParent',
-		'getActiveItem',
-		'parseActiveItem',
-		'configureItem',
-		'onRemove',
-		'getAnimation',
-		'getNext',
-		'next',
-		'getPrev',
-		'prev',
-		'setActiveItem'
-	];
-
-	me.prototype.card = card;
-	Ext.each(functions,function(fn){
-		me.prototype[fn] = function(){
-			return card[fn].apply(this,arguments);
-		};
-	});
+//}, function(){
+//	return;
+//	var me = this,
+//		card = Ext.layout.container.Card.prototype;
+//
+//	var functions = [
+//		'getRenderTree',
+//		'renderChildren',
+//		'isValidParent',
+//		'getActiveItem',
+//		'parseActiveItem',
+//		'configureItem',
+//		'onRemove',
+//		'getAnimation',
+//		'getNext',
+//		'next',
+//		'getPrev',
+//		'prev',
+//		'setActiveItem'
+//	];
+//
+//	me.prototype.card = card;
+//	Ext.each(functions,function(fn){
+//		me.prototype[fn] = function(){
+//			return card[fn].apply(this,arguments);
+//		};
+//	});
 });
