@@ -17,7 +17,7 @@ Ext.define('NextThought.view.SideBar',{
 	},
 	floating: true,
 	autoShow: true,
-	constrain: true,
+	constrain: false,
 	frame: false,
 	plain: true,
 	shadow: false,
@@ -106,7 +106,7 @@ Ext.define('NextThought.view.SideBar',{
 		clearTimeout(this.syncHeight);
 		if(!this.host.isVisible()){
 			animate = true;
-			size = {height: h-100};
+			size = {height: h-up};
 			y = (this.getPopState()? up:down)+1;
 			x -= 10;
 			if(!this.getPopState()){
