@@ -3,7 +3,7 @@
  * It also will enforce that the last item is always active.
  */
 Ext.define('NextThought.layout.container.Stack',{
-	extend: 'Ext.layout.container.Auto',
+	extend: 'Ext.layout.container.Container',
 	alias: 'layout.stack',
 	type: 'stack',
 
@@ -13,6 +13,9 @@ Ext.define('NextThought.layout.container.Stack',{
 
     hideInactive: true,
     deferredRender : true,
+
+
+	calculate: function(){ this.done = true; },//no-op
 
 
 	enforceStackActiveItem: function(){
@@ -45,7 +48,6 @@ Ext.define('NextThought.layout.container.Stack',{
 
 	setOwner: function(owner){
 		this.callParent(arguments);
-
 		if(!owner.popView){
 			owner.popView = function(){
 				var l = this.items.last();
@@ -86,17 +88,20 @@ Ext.define('NextThought.layout.container.Stack',{
 		card = Ext.layout.container.Card.prototype;
 
 	var functions = [
-		'configureItem',
-	    'isValidParent',
-	    'getActiveItem',
-		'getAnimation',
-	    'getNext',
-	    'getPrev',
 		'getRenderTree',
-		'next',
+		'renderChildren',
+		'isValidParent',
+		'getActiveItem',
 		'parseActiveItem',
+		'configureItem',
+		'onRemove',
+		'getAnimation',
+		'getNext',
+		'next',
+		'getPrev',
 		'prev',
-	    'renderChildren'];
+		'setActiveItem'
+	];
 
 	me.prototype.card = card;
 	Ext.each(functions,function(fn){
