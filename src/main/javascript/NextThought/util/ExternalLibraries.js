@@ -16,10 +16,7 @@ Ext.define('NextThought.util.ExternalLibraries',{
 				Ext.Loader.loadScript({
 					url: url,
 					onError:function(){console.error(name+' failed to load');},
-					onLoad:function(){
-						Ext.callback(cb);
-						console.debug(name+' loaded');
-					}
+					onLoad:function(){ Ext.callback(cb); }
 				});
 			});
 		});
