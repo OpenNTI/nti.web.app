@@ -89,6 +89,10 @@ Ext.define('NextThought.controller.UserData', {
 				'save': this.savePreviewNoteReply
 			},
 
+			'activity-preview-note-reply nti-editor':{
+				'save': this.savePreviewNoteReply
+			},
+
 			'activity-preview-note-reply': {
 				'delete-reply': this.deleteNoteReply
 			},
@@ -699,6 +703,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	savePreviewNoteReply: function(editor,record,valueObject,successCallback){
 		var cmp = editor.up('[record]'),
+			isEdit = Boolean(record),
 			replyToRecord = cmp && cmp.record;
 
 		function callback(success, rec){
@@ -710,7 +715,25 @@ Ext.define('NextThought.controller.UserData', {
 			}
 		}
 
-		this.saveNewReply(replyToRecord, valueObject.body, valueObject.sharedWith, callback);
+		if(isEdit){
+			record.set({ body:valueObject.body });
+			try{
+				record.save({
+					callback: function(record, request){
+						var success = request.success,
+							rec = success ? request.records[0]: null;
+						if(success){
+							Ext.callback(successCallback, null, [editor, cmp, rec]);
+						}
+					}
+				});
+			}
+			catch(e){
+				console.error('FAIL: could not save the record properly! ', e);
+			}
+		} else{
+			this.saveNewReply(replyToRecord, valueObject.body, valueObject.sharedWith, callback);
+		}
 	},
 
 

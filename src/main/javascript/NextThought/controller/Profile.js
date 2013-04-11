@@ -56,6 +56,9 @@ Ext.define('NextThought.controller.Profile', {
 
 			'activity-preview-personalblogentry nti-editor':{
 				'save': this.saveBlogComment
+			},
+			'activity-preview-blog-reply nti-editor':{
+				'save': this.saveBlogComment
 			}
 		});
 	},

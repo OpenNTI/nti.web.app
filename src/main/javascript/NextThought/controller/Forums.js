@@ -79,6 +79,9 @@ Ext.define('NextThought.controller.Forums', {
 			'activity-preview-topic nti-editor': {
 				'save': this.saveTopicComment
 			},
+			'activity-preview-topic-reply nti-editor':{
+				'save': this.saveTopicComment
+			},
 			'profile-forum-activity-item':{
 				'delete-post': this.deleteObject,
 				'fill-in-path': this.fillInPath

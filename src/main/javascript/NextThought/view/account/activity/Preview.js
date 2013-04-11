@@ -133,6 +133,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.messageBodyEl.select('img').on('load', function(){
 			me.fireEvent('realign');
 		});
+		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
 	},
 
 

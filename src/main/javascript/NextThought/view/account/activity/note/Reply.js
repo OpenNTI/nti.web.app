@@ -27,8 +27,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 				{ tag: 'tpl', 'if':'!isModifiable', cn:[
 					{ tag:'span', cls: 'flag link', html: 'Report'}
 				]}
-			]}
-		] }
+			]},
+			{ cls: 'editor-box reply' }
+		]}
 	]),
 
 
@@ -45,7 +46,12 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 		flagEl: '.flag',
 		editEl: '.edit',
-		deleteEl: '.delete'
+		deleteEl: '.delete',
+		editorBoxEl: '.editor-box',
+		metaEl:'.meta',
+		footEl:'.foot',
+		ctrEl: '.controls',
+		boxEl: '.respond'
 	},
 
 	initComponent: function(){
@@ -75,9 +81,22 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	},
 
 
+	getRefItems: function(){ return this.editor ? [this.editor] : []; },
+
+
 	afterRender: function(){
 		this.callParent(arguments);
-		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
+
+		var bodyEl = this.bodyEl,
+			metaEl = this.metaEl,
+			footEl = this.footEl,
+			ctrEl = this.ctrEl,
+			avatarEl = this.avatarEl,
+			hide, show;
+
+		this.record.addObserverForField(this, 'body', this.updateContent, this);
+		this.updateContent();
+
 		this.enableProfileClicks(this.nameEl, this.avatarEl);
 		if(this.deleteEl){
 			this.mon(this.deleteEl, 'click', this.deleteComment, this);
@@ -86,6 +105,35 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			this.mon(this.editEl, 'click', this.editComment, this);
 		}
 		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
+
+		bodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		footEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		ctrEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		avatarEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		if(this.record.get('Deleted')){
+			this.tearDownFlagging();
+		}
+
+		hide = function(){bodyEl.hide(); metaEl.hide(); footEl.hide(); ctrEl.hide(); avatarEl.hide();};
+		show = function(){bodyEl.show(); metaEl.show(); footEl.show(); ctrEl.show(); avatarEl.show();};
+
+		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl, 'saveCallback': this.saveCallback});
+		this.mon(this.editor,{
+			scope: this,
+			'activated-editor':hide,
+			'deactivated-editor':show,
+			'no-body-content': function(editor,el){
+				editor.markError(el,'You need to type something');
+				return false;
+			}
+		});
+	},
+
+
+	updateContent: function(){
+		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
 	},
 
 
@@ -98,15 +146,22 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			cmp.mun(cmp.editEl, 'click', cmp.editComment, cmp);
 		}
 
+		//Now clear the rest of our field listeners
+		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+
 		Ext.defer(cmp.destroy, 1, cmp);
 	},
 
 
 	handleBeforeDeactivate: function(){
 		var m = Ext.getBody().down('.x-mask');
+
+		if((this.editor && this.editor.isActive())){
+			return false;
+		}
+
 		// NOTE: for 'reporting' an item, we mask the body
 		// but we don't want to dismiss the popout just yet, since we come back to it
-
 		return !(m && m.isVisible());
 	},
 
@@ -128,6 +183,8 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		this.bodyEl.select('img').on('load', function(){
 			me.fireEvent('realign');
 		});
+
+		this.bodyEl.select('.whiteboard-container .toolbar').remove();
 	},
 
 	deleteComment: function(){
@@ -135,8 +192,16 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	},
 
 
-	editComment: function(){
-		console.log('should edit comment');
+	editComment: function(e){
+		e.stopEvent();
+		this.editor.editBody(this.record.get('body')).activate();
+	},
+
+
+	saveCallback: function(editor, cmp, replyRecord){
+		editor.deactivate();
+		editor.setValue('');
+		editor.reset();
 	},
 
 
