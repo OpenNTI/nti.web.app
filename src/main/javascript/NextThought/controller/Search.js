@@ -302,12 +302,13 @@ Ext.define('NextThought.controller.Search', {
 
 	searchBlogCommentClicked: function(result){
 		var me = this,
-			u = result.user,
 			r = result.record,
 			postId = r.get('ID'),
 			commentId = result.hit.get('ID');
 
-		this.gotoBlog(u,postId,commentId);
+		UserRepository.getUser(r.get('Creator'), function(u){
+			me.gotoBlog(u,postId,commentId);
+		});
 	},
 
 
