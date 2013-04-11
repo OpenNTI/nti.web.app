@@ -1,1 +1,1 @@
-src/main/bootstrap.js
+../main/bootstrap.js
