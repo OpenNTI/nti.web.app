@@ -26,8 +26,9 @@ Ext.application({
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.Errors',
+		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
-		'NextThought.view.MessageBox' //Require this early so we have it if we need it
+		'NextThought.view.MessageBox'
 	],
 
 	controllers: [
@@ -50,6 +51,8 @@ Ext.application({
 	],
 
 	launch: function(){
+		console.debug('launching');
+
 		function start() {
 			me.getController('Session').login(app);
 			NextThought.isReady = true;

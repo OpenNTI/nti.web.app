@@ -43,25 +43,27 @@ Ext.define('NextThought.controller.Search', {
 	],
 
 	init: function() {
-		this.control({
-			'searchfield': {
-				'search' : this.searchForValue,
-				'clear-search' : this.clearSearchResults
-			},
-			'search-result' : {
-				'click': this.searchResultClicked,
-				'click-blog-result': this.searchBlogResultClicked,
-				'click-blog-comment': this.searchBlogCommentClicked
-			},
-			'search-more' : {
-//				'click': this.showAllForCategoryClicked
-			},
-			'search-advanced-menu': {
-				'changed': this.searchFilterChanged
-			},
+		this.listen({
+			component:{
+				'searchfield': {
+					'search' : this.searchForValue,
+					'clear-search' : this.clearSearchResults
+				},
+				'search-result' : {
+					'click': this.searchResultClicked,
+					'click-blog-result': this.searchBlogResultClicked,
+					'click-blog-comment': this.searchBlogCommentClicked
+				},
+				'search-more' : {
+					//'click': this.showAllForCategoryClicked
+				},
+				'search-advanced-menu': {
+					'changed': this.searchFilterChanged
+				},
 
-			'profile-blog-post' :{
-				'ready': this.blogPostReady
+				'profile-blog-post' :{
+					'ready': this.blogPostReady
+				}
 			}
 		});
 

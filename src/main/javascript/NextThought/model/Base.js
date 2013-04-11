@@ -52,7 +52,9 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'likeState', persist: false, type: 'auto', convert: function(o,r){ return r.getLink('unlike') ? 'on': 'off'; }}
 	],
 
+	//TODO: move into model event domain??
 	observer: new Ext.util.Observable(),
+
 
 	onClassExtended: function(cls, data) {
 		var mime = {mimeType: 'application/vnd.nextthought.'+data.$className.replace(/^.*?model\./,'').toLowerCase()};
@@ -91,7 +93,10 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	is: function(selector){return false;},
+	is: function(selector){
+		console.debug('TODO: define this,',arguments);
+		return false;
+	},
 
 	//Override isEqual so we can test more complex equality and
 	//avoid resetting fields that haven't changed
@@ -289,6 +294,7 @@ Ext.define('NextThought.model.Base', {
 		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children));
 	},
 
+
 	convertToPlaceholder: function(){
 		var me = this, keepList = {
 			'Class':1,
@@ -309,6 +315,7 @@ Ext.define('NextThought.model.Base', {
 		me.fireEvent('updated', me);
 		me.fireEvent('changed');
 	},
+
 
 	destroy: function(options){
 		var me = this,
@@ -355,6 +362,7 @@ Ext.define('NextThought.model.Base', {
 		}
 	},
 
+
 	getModelName: function() {
 		return this.get('Class');
 	},
@@ -363,7 +371,7 @@ Ext.define('NextThought.model.Base', {
 	getFriendlyLikeCount: function(){
 		var c = this.get('LikeCount');
 		if (c <= 0) {return '';}
-		else if (c >= 1000){ return '999+';}
+		if (c >= 1000){ return '999+';}
 		return String(c);
 	},
 
@@ -374,7 +382,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	isFavoritable: function(){
-		return Boolean(this.getLink('favorite')) || Boolean(this.getLink('unfavorite'));
+		return Boolean(this.getLink('favorite') || this.getLink('unfavorite'));
 	},
 
 
@@ -409,7 +417,6 @@ Ext.define('NextThought.model.Base', {
 			}
 		});
 	},
-
 
 
 	favorite: function(widget){
@@ -516,6 +523,7 @@ Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
+
 	getFieldEditURL: function(editLink,field){
 		if (/.*\+\+fields\+\+.*/.test(editLink)){
 			//edit link is already edit link for that field
@@ -528,12 +536,15 @@ Ext.define('NextThought.model.Base', {
 			editLink,f));
 	},
 
+
 	/**
 	 * Save a specific field off this model, optionally set a value and save it if value is sent.
 	 *
 	 * @param fieldName - name of the field that we want to save
 	 * @param [value] - if undefined the field from the model will be saved.  If not undefined the field
 	 *					will be set on the model prior to saving
+	 * @param successCallback
+	 * @param failCallback
 	 * @param [optionalLinkName] = provide if you want a specific link other than the edit link
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback, optionalLinkName) {
@@ -761,9 +772,11 @@ Ext.define('NextThought.model.Base', {
 		}
 	},
 
+
 	fieldEvent: function(name){
 		return name+'-changed';
 	},
+
 
 	notifyObserversOfFieldChange: function(f){
 		this.fireEvent(this.fieldEvent(f), f, this.get(f));
@@ -810,6 +823,7 @@ Ext.define('NextThought.model.Base', {
 		Ext.Array.each(fnames || [], this.onFieldChanged, this);
 	},
 
+
 	//Methods for updating all copies of an object in memory when one changes,
 	//ideally we have one in memory object that is just referenced everywhere.
 	//We are a bit far away from that (mostly because of how we represent threads)
@@ -853,20 +867,24 @@ Ext.define('NextThought.model.Base', {
 		delete active[rec.getId()];
 	},
 
+
 	beginEdit: function(){
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('beginEdit', this, arguments);
 	},
+
 
 	endEdit: function(){
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('endEdit', this, arguments);
 	},
 
+
 	cancelEdit: function(){
 		this.callParent(arguments);
 		this.maybeCallOnAllObjects('cancelEdit', this, arguments);
 	},
+
 
 	set: function(){
 		this.callParent(arguments);

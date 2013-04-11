@@ -41,50 +41,52 @@ Ext.define('NextThought.controller.Groups', {
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		this.control({
+		this.listen({
+			component:{
 
-			'contact-popout':{
-				'add-contact': this.addContact,
-				'delete-contact': this.deleteContact
-			},
+				'contact-popout':{
+					'add-contact': this.addContact,
+					'delete-contact': this.deleteContact
+				},
 
-			'contacts-panel':{
-				'delete-group': this.deleteGroup,
-				'get-group-code': this.getGroupCode,
-				'leave-group': this.leaveGroup,
-				'remove-contact': this.removeContact
-			},
+				'contacts-panel':{
+					'delete-group': this.deleteGroup,
+					'get-group-code': this.getGroupCode,
+					'leave-group': this.leaveGroup,
+					'remove-contact': this.removeContact
+				},
 
-			'contacts-tabs-grouping':{
-				'delete-group': this.deleteGroup,
-				'get-group-code': this.getGroupCode,
-				'leave-group': this.leaveGroup,
-				'remove-contact': this.removeContact
-			},
+				'contacts-tabs-grouping':{
+					'delete-group': this.deleteGroup,
+					'get-group-code': this.getGroupCode,
+					'leave-group': this.leaveGroup,
+					'remove-contact': this.removeContact
+				},
 
-			'management-group-list': {
-				'add-group': this.addGroup,
-				'delete-group': this.deleteGroup,
-				'add-contact': this.addContact,
-				'remove-contact': this.removeContact
-			},
+				'management-group-list': {
+					'add-group': this.addGroup,
+					'delete-group': this.deleteGroup,
+					'add-contact': this.addContact,
+					'remove-contact': this.removeContact
+				},
 
-			'add-group' : {
-				'add-group': this.addGroup
-			},
+				'add-group' : {
+					'add-group': this.addGroup
+				},
 
-			'codecreation-main-view button[name=submit]': {
-				'click': this.createGroupAndCode
-			},
+				'codecreation-main-view button[name=submit]': {
+					'click': this.createGroupAndCode
+				},
 
-			'createlist-main-view button[name=submit]' : {
-				'click': this.addList
-			},
+				'createlist-main-view button[name=submit]' : {
+					'click': this.addList
+				},
 
-			'#contact-list contact-card': {
-				'presence-changed': this.presenceOfContactChanged
+				'#contact-list contact-card': {
+					'presence-changed': this.presenceOfContactChanged
+				}
+
 			}
-
 		});
 	},
 

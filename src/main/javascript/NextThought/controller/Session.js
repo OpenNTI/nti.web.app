@@ -26,9 +26,11 @@ Ext.define('NextThought.controller.Session', {
 	init: function() {
 		var me = this;
 
-		me.control({
-			'settings-menu [action=logout]' : {
-				'click': me.handleLogout
+		me.listen({
+			component:{
+				'settings-menu [action=logout]' : {
+					'click': me.handleLogout
+				}
 			}
 		});
 

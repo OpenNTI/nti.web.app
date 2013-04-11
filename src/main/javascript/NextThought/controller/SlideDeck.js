@@ -6,13 +6,5 @@ Ext.define('NextThought.controller.SlideDeck',{
 		'slidedeck.Slide',
 		'slidedeck.Video',
 		'slidedeck.View'
-	],
-
-	init: function() {
-//		this.control({
-//			'':{
-//
-//			}
-//		});
-	}
+	]
 });

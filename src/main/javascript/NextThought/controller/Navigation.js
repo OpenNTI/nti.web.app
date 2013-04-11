@@ -16,63 +16,65 @@ Ext.define('NextThought.controller.Navigation', {
 	],
 
 	init: function() {
-		this.control({
-			'navigation-collection': {
-				'itemclick': this.selectLibraryEntry
-			},
-			'activity-panel': {
-				'navigation-selected': this.navigate,
-				'navigate-to-blog': this.gotoBlog
-			},
-			'activity-preview': {
-				'navigation-selected': this.navigate,
-				'navigate-to-blog': this.gotoBlog
-			},
-			'activity-preview-blog':{
-				'navigate-to-blog': this.gotoBlog
-			},
-			'activity-preview-comment-blog':{
-				'navigate-to-blog': this.gotoBlog
-			},
-			'activity-preview-personalblogentry':{
-				'navigate-to-blog': this.gotoBlog
-			},
-			'activity-preview-note': {
-				'navigation-selected': this.navigate
-			},
-            'user-data-panel': {
-                'navigation-selected': this.navigate,
-	            'navigate-to-blog': this.gotoBlog
-            },
-			'main-views': {
-				'activate-view': this.track,
-				/** @private handler */
-				'activate-main-view': function(id){
-					//viewport is set by Application controller
-					return this.viewport.views.switchActiveViewTo(id);
+		this.listen({
+			component:{
+				'navigation-collection': {
+					'itemclick': this.selectLibraryEntry
+				},
+				'activity-panel': {
+					'navigation-selected': this.navigate,
+					'navigate-to-blog': this.gotoBlog
+				},
+				'activity-preview': {
+					'navigation-selected': this.navigate,
+					'navigate-to-blog': this.gotoBlog
+				},
+				'activity-preview-blog':{
+					'navigate-to-blog': this.gotoBlog
+				},
+				'activity-preview-comment-blog':{
+					'navigate-to-blog': this.gotoBlog
+				},
+				'activity-preview-personalblogentry':{
+					'navigate-to-blog': this.gotoBlog
+				},
+				'activity-preview-note': {
+					'navigation-selected': this.navigate
+				},
+	            'user-data-panel': {
+	                'navigation-selected': this.navigate,
+		            'navigate-to-blog': this.gotoBlog
+	            },
+				'main-views': {
+					'activate-view': this.track,
+					/** @private handler */
+					'activate-main-view': function(id){
+						//viewport is set by Application controller
+						return this.viewport.views.switchActiveViewTo(id);
+					}
+				},
+				'view-select button': {
+					'view-selected': this.switchViews
+				},
+				'slidedeck-view': {
+					exited: this.slideViewExited
+				},
+				'profile-activity *':{
+					'navigation-selected': this.navigate
+				},
+				'*': {
+					'before-show-topic': this.beforeTopicShow,
+					'navigate-to-href': this.navigateToHref
+				},
+				'notfound':{
+					'go-to-library': this.goToLibrary
+				},
+				'welcome-guide':{
+					'go-to-help': this.goToHelp
+				},
+				'view-select menu':{
+					'hide': this.syncButton
 				}
-			},
-			'view-select button': {
-				'view-selected': this.switchViews
-			},
-			'slidedeck-view': {
-				exited: this.slideViewExited
-			},
-			'profile-activity *':{
-				'navigation-selected': this.navigate
-			},
-			'*': {
-				'before-show-topic': this.beforeTopicShow,
-				'navigate-to-href': this.navigateToHref
-			},
-			'notfound':{
-				'go-to-library': this.goToLibrary
-			},
-			'welcome-guide':{
-				'go-to-help': this.goToHelp
-			},
-			'view-select menu':{
-				'hide': this.syncButton
 			}
 		});
 	},

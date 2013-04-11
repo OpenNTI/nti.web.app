@@ -49,13 +49,15 @@ Ext.define('NextThought.controller.Assessment', {
 	refs: [],
 
 	init: function() {
-		this.control({
-			'assessment-question':{
-				'check-answer': this.checkAnswer
-			},
+		this.listen({
+			component: {
+				'assessment-question':{
+					'check-answer': this.checkAnswer
+				},
 
-			'assessment-quiz-submission': {
-				'grade-it': this.grade
+				'assessment-quiz-submission': {
+					'grade-it': this.grade
+				}
 			}
 		});
 	},

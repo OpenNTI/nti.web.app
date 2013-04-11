@@ -14,10 +14,12 @@ Ext.define('NextThought.controller.FilterControl', {
 	],
 
 	init: function() {
-		this.control({
-			'filter-menu':{
-				'filter-control-loaded': this.setState,
-				'changed': this.rebuildFilter
+		this.listen({
+			component:{
+				'filter-menu':{
+					'filter-control-loaded': this.setState,
+					'changed': this.rebuildFilter
+				}
 			}
 		});
 	},

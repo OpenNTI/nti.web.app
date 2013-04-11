@@ -34,79 +34,81 @@ Ext.define('NextThought.controller.Account', {
 	refs: [],
 
 	init: function() {
-		this.control({
-			'contact-card':{
-				'click': this.contactCardClicked
-			},
+		this.listen({
+			component: {
+				'contact-card':{
+					'click': this.contactCardClicked
+				},
 
-			'settings-menu [href]' : {
-				'click': this.openHref
-			},
+				'settings-menu [href]' : {
+					'click': this.openHref
+				},
 
-			'settings-menu [action=privacy]' : {
-                'click': this.showPrivacy
-            },
+				'settings-menu [action=privacy]' : {
+					'click': this.showPrivacy
+				},
 
-            'settings-menu [action=childrens-privacy]' : {
-                'click': this.showChildrensPrivacy
-            },
+				'settings-menu [action=childrens-privacy]' : {
+					'click': this.showChildrensPrivacy
+				},
 
-			'settings-menu [action=help]' : {
-				'click': this.openHelp
-			},
+				'settings-menu [action=help]' : {
+					'click': this.openHelp
+				},
 
-			'settings-menu [action=terms]' : {
-				'click': this.showTerms
-			},
+				'settings-menu [action=terms]' : {
+					'click': this.showTerms
+				},
 
-			'profile-panel':{
-				'edit': this.showAccount
-			},
+				'profile-panel':{
+					'edit': this.showAccount
+				},
 
-			'settings-menu [action=account]' : {
-                'click': this.showAccount
-            },
+				'settings-menu [action=account]' : {
+					'click': this.showAccount
+				},
 
-			'settings-menu [action=welcome]' : {
-                'click': this.showPermanantWelcome
-            },
+				'settings-menu [action=welcome]' : {
+					'click': this.showPermanantWelcome
+				},
 
-            'settings-menu [action=contact]' : {
-                'click': this.showContactUs
-            },
+				'settings-menu [action=contact]' : {
+					'click': this.showContactUs
+				},
 
-            'password-reset-form button[save]' : {
-                'click': this.changePassword
-            },
+				'password-reset-form button[save]' : {
+					'click': this.changePassword
+				},
 
-            'coppa-main-view button[name=submit]' : {
-                'click': this.submitCoppaInfo
-            },
+				'coppa-main-view button[name=submit]' : {
+					'click': this.submitCoppaInfo
+				},
 
-            'recovery-email-view button[name=submit]': {
-                'click': this.fixEmail
-            },
+				'recovery-email-view button[name=submit]': {
+					'click': this.fixEmail
+				},
 
-            'contact-main-view button[name=submit]': {
-                'click': this.contactFormSubmit
-            },
+				'contact-main-view button[name=submit]': {
+					'click': this.contactFormSubmit
+				},
 
-            'code-main-view button[name=submit]': {
-                'click': this.groupCodeSubmit
-            },
+				'code-main-view button[name=submit]': {
+					'click': this.groupCodeSubmit
+				},
 
-            'contacts-view': {
-                'resendConsent': this.resendConsent
-            },
+				'contacts-view': {
+					'resendConsent': this.resendConsent
+				},
 
-            'contacts-view group-buttons' : {
-                'click': this.groupButtonClicked
-            },
+				'contacts-view group-buttons' : {
+					'click': this.groupButtonClicked
+				},
 
-			'contacts-view list-buttons' : {
-				'click': this.groupButtonClicked
+				'contacts-view list-buttons' : {
+					'click': this.groupButtonClicked
+				}
+
 			}
-
 		});
 	},
 

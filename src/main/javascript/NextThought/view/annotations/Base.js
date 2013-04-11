@@ -25,12 +25,18 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			onBeforeClassCreated.call(this, cls, data, hooks);
 		};
 
+		function getType(t){
+			if(Ext.isArray(t)){
+				return Ext.Array.map(t,getType);
+			}
+			return (t||'').replace(/^annotations\./i,'');
+		}
 
 		a = data.annotationsType = (cls.prototype.annotationsType || []).slice();
 		if(a.length === 0){
-			a.push.apply(a,cls.prototype.alias);
+			a.push.apply(a,getType(cls.prototype.alias));
 		}
-		a.push.apply(a, Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]);
+		a.push.apply(a, getType(Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]));
 	},
 
 	hasGutterWidgets: false,
@@ -97,6 +103,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		console.log(this.annotationsType);
 		return Ext.Array.contains(this.annotationsType,selector);
 	},
+
 	getBubbleTarget: function(){return this.ownerCmp; },
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},

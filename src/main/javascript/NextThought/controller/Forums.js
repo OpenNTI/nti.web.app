@@ -41,65 +41,67 @@ Ext.define('NextThought.controller.Forums', {
 
 	init: function() {
 
-		this.control({
-			'forums-view-container':{
-				'restore-forum-state': this.restoreState,
-				'render': this.loadRoot
-			},
+		this.listen({
+			component:{
+				'forums-view-container':{
+					'restore-forum-state': this.restoreState,
+					'render': this.loadRoot
+				},
 
-			'forums-view-container > *':{
-				'pop-view': this.popView
-			},
+				'forums-view-container > *':{
+					'pop-view': this.popView
+				},
 
-			'forums-root': {
-				'select': this.loadBoard
-			},
-			'forums-board': {
-				'select':this.loadForum
-			},
-			'forums-forum': {
-				'new-topic':this.showTopicEditor,
-				'select':this.loadTopic
-			},
-			'forums-topic': {
-				'navigate-topic':this.switchTopic,
-				'delete-post': this.deleteObject,
-				'edit-topic':this.showTopicEditor,
-				'topic-navigation-store': this.enableTopicNavigation
-			},
-			'forums-topic-editor':{
-				'save-post': this.saveTopicPost
-			},
-			'forums-topic-comment':{
-				'delete-topic-comment': this.deleteObject
-			},
-			'activity-preview-topic':{
-				'fill-in-path': this.fillInPath
-			},
-			'activity-preview-topic nti-editor': {
-				'save': this.saveTopicComment
-			},
-			'activity-preview-topic-reply nti-editor':{
-				'save': this.saveTopicComment
-			},
-			'profile-forum-activity-item':{
-				'delete-post': this.deleteObject,
-				'fill-in-path': this.fillInPath
-			},
-			'activity-preview-topic-reply':{
-				'delete-topic-comment': this.deleteObject
-			},
-			'profile-forum-activity-item nti-editor':{
-				'save': this.saveTopicComment
-			},
-			'#forums > forums-topic nti-editor': {
-				'save': this.saveTopicComment
-			},
-			'search-result':{
-				'highlight-topic-hit': this.highlightSearchResult
-			},
-			'*': {
-				'show-topic': this.presentTopic
+				'forums-root': {
+					'select': this.loadBoard
+				},
+				'forums-board': {
+					'select':this.loadForum
+				},
+				'forums-forum': {
+					'new-topic':this.showTopicEditor,
+					'select':this.loadTopic
+				},
+				'forums-topic': {
+					'navigate-topic':this.switchTopic,
+					'delete-post': this.deleteObject,
+					'edit-topic':this.showTopicEditor,
+					'topic-navigation-store': this.enableTopicNavigation
+				},
+				'forums-topic-editor':{
+					'save-post': this.saveTopicPost
+				},
+				'forums-topic-comment':{
+					'delete-topic-comment': this.deleteObject
+				},
+				'activity-preview-topic':{
+					'fill-in-path': this.fillInPath
+				},
+				'activity-preview-topic nti-editor': {
+					'save': this.saveTopicComment
+				},
+				'activity-preview-topic-reply nti-editor':{
+					'save': this.saveTopicComment
+				},
+				'profile-forum-activity-item':{
+					'delete-post': this.deleteObject,
+					'fill-in-path': this.fillInPath
+				},
+				'activity-preview-topic-reply':{
+					'delete-topic-comment': this.deleteObject
+				},
+				'profile-forum-activity-item nti-editor':{
+					'save': this.saveTopicComment
+				},
+				'#forums > forums-topic nti-editor': {
+					'save': this.saveTopicComment
+				},
+				'search-result':{
+					'highlight-topic-hit': this.highlightSearchResult
+				},
+				'*': {
+					'show-topic': this.presentTopic
+				}
 			}
 		});
 	},

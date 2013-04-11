@@ -3,6 +3,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	requires: [
+		'NextThought.app.domain.Annotation',
+		'NextThought.app.domain.Model',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
 		'NextThought.providers.Location',
@@ -57,37 +59,38 @@ Ext.define('NextThought.controller.UserData', {
 
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		this.control({
-			'annotations.base':{
-				'save-phantom': this.savePhantomAnnotation
+		this.listen({
+			annotation:{
+				'base':{
+					'save-phantom': this.savePhantomAnnotation
+				}
 			},
+			model:{
 
-			'reader-panel':{
-				'annotations-load': this.onAnnotationsLoad,
-				'filter-annotations': this.onAnnotationsFilter,
-
-				'share-with'	: this.shareWith,
-				'define'		: this.define,
-				'redact'		: this.redact,
-				'save-new-note' : this.saveNewNote,
-				'display-popover': this.onDisplayPopover,
-				'dismiss-popover': this.onDismissPopover
 			},
+			component:{
+				'reader-panel':{
+					'annotations-load': this.onAnnotationsLoad,
+					'filter-annotations': this.onAnnotationsFilter,
+
+					'share-with'	: this.shareWith,
+					'define'		: this.define,
+					'redact'		: this.redact,
+					'save-new-note' : this.saveNewNote,
+					'display-popover': this.onDisplayPopover,
+					'dismiss-popover': this.onDismissPopover
+				},
 
 
-			'slide-comment-header': {
-				'save-new-note': this.saveNewNote
-			},
+				'slide-comment-header': {
+					'save-new-note': this.saveNewNote
+				},
 
 
-			'activity-preview': {
-				'share': this.shareWith,
-				'chat': this.replyAsChat
-			},
-
-			'activity-preview-note nti-editor': {
-				'save': this.savePreviewNoteReply
-			},
+				'activity-preview': {
+					'share': this.shareWith,
+					'chat': this.replyAsChat
+				},
 
 			'activity-preview-note-reply nti-editor':{
 				'save': this.savePreviewNoteReply
@@ -102,37 +105,42 @@ Ext.define('NextThought.controller.UserData', {
 				'chat': this.replyAsChat
 			},
 
-			'note-panel': {
-				'save-new-reply' : this.saveNewReply,
-				'share': this.shareWith,
-				'chat': this.replyAsChat
-			},
+				'note-gutter-widget': {
+					'share': this.shareWith,
+					'chat': this.replyAsChat
+				},
+
+				'note-panel': {
+					'save-new-reply' : this.saveNewReply,
+					'share': this.shareWith,
+					'chat': this.replyAsChat
+				},
 
 
-			'share-window[record] button[action=save]':{
-				'click': this.onShareWithSaveClick
-			},
+				'share-window[record] button[action=save]':{
+					'click': this.onShareWithSaveClick
+				},
 
-			'share-window button[action=save]':{
-				'click': this.onShareSettingsSaveClick
-			},
+				'share-window button[action=save]':{
+					'click': this.onShareSettingsSaveClick
+				},
 
-			'chat-log-view': {
-				'load-transcript': this.onLoadTranscript
-			},
-			'user-data-panel': {
-				'open-chat-transcript': this.openChatTranscript
-			},
-			'search-result-messageinfo':{
-				'open-chat-transcript': this.openChatTranscript
-			},
-			'profile-activity-transcriptsummary-item':{
-				'open-chat-transcript': this.openChatTranscript
-			},
-			'content-page-widgets': {
-				'save-new-bookmark': this.saveNewBookmark
+				'chat-log-view': {
+					'load-transcript': this.onLoadTranscript
+				},
+				'user-data-panel': {
+					'open-chat-transcript': this.openChatTranscript
+				},
+				'search-result-messageinfo':{
+					'open-chat-transcript': this.openChatTranscript
+				},
+				'profile-activity-transcriptsummary-item':{
+					'open-chat-transcript': this.openChatTranscript
+				},
+				'content-page-widgets': {
+					'save-new-bookmark': this.saveNewBookmark
+				}
 			}
-
 		});
 
 		Socket.register({

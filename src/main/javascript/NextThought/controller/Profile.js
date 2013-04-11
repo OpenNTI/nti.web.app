@@ -30,35 +30,37 @@ Ext.define('NextThought.controller.Profile', {
 
 	init: function() {
 
-		this.control({
-			'profile-panel':{
-				'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
-			},
+		this.listen({
+			component:{
+				'profile-panel':{
+					'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
+				},
 
-			//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
-			'profile-blog-post':{
-				'delete-post': this.deleteBlogPost
-//				'scroll-to': this.scrollProfileTo
-			},
-			'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
-			'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
-			'activity-preview-blog-reply':{
-				'delete-blog-comment': this.deleteBlogPost
-			},
+				//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
+				'profile-blog-post':{
+					'delete-post': this.deleteBlogPost
+	//				'scroll-to': this.scrollProfileTo
+				},
+				'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
+				'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
+				'activity-preview-blog-reply':{
+					'delete-blog-comment': this.deleteBlogPost
+				},
 
-			'profile-blog-editor':{
-				'save-post': this.saveBlogPost
-			},
+				'profile-blog-editor':{
+					'save-post': this.saveBlogPost
+				},
 
-			'#profile profile-blog-post nti-editor':{
-				'save': this.saveBlogComment
-			},
+				'#profile profile-blog-post nti-editor':{
+					'save': this.saveBlogComment
+				},
 
-			'activity-preview-personalblogentry nti-editor':{
-				'save': this.saveBlogComment
-			},
-			'activity-preview-blog-reply nti-editor':{
-				'save': this.saveBlogComment
+				'activity-preview-personalblogentry nti-editor':{
+					'save': this.saveBlogComment
+				},
+				'activity-preview-blog-reply nti-editor':{
+					'save': this.saveBlogComment
+				}
 			}
 		});
 	},

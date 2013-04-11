@@ -50,82 +50,83 @@ Ext.define('NextThought.controller.Chat', {
 //			'chat_failedToEnterRoom' : function(){me.onFailedToEnterRoom.apply(me, arguments);}
 		});
 
-		this.control({
+		this.listen({
+			component: {
 
-//			'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
-//			'chat-log-view button[action]':{'click': this.toolClicked},
-//			'chat-log-view tool[action]':{'click': this.toolClicked},
+//			    'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
+//			    'chat-log-view button[action]':{'click': this.toolClicked},
+//			    'chat-log-view tool[action]':{'click': this.toolClicked},
 
-			'chat-view chat-entry' : {
-				//'classroom': this.classroom,
-				'send': this.send,
-				'send-whiteboard': this.sendWhiteboard
-			},
+				'chat-view chat-entry' : {
+					//'classroom': this.classroom,
+					'send': this.send,
+					'send-whiteboard': this.sendWhiteboard
+				},
 
-			'chat-view chat-log-entry': {
-				'reply-to-whiteboard': this.replyToWhiteboard
-			},
+				'chat-view chat-log-entry': {
+					'reply-to-whiteboard': this.replyToWhiteboard
+				},
 
-			'chat-view': {
-				'flag-messages': this.flagMessages,
-				'publish-chat-status': this.publishChatStatus
-			},
-			'chat-log-entry':{
-				'link-clicked' : this.linkClicked,
-				'show-whiteboard' : this.zoomWhiteboard
-			},
-			'chat-transcript-window': {
-				'flag-messages': this.flagTranscriptMessages
-			},
+				'chat-view': {
+					'flag-messages': this.flagMessages,
+					'publish-chat-status': this.publishChatStatus
+				},
+				'chat-log-entry':{
+					'link-clicked' : this.linkClicked,
+					'show-whiteboard' : this.zoomWhiteboard
+				},
+				'chat-transcript-window': {
+					'flag-messages': this.flagTranscriptMessages
+				},
 
-			'chat-transcript': {
-				'link-clicked' : this.linkClicked,
-				'show-whiteboard' : this.zoomWhiteboard
-			},
+				'chat-transcript': {
+					'link-clicked' : this.linkClicked,
+					'show-whiteboard' : this.zoomWhiteboard
+				},
 
-			'contacts-tabs-grouping':{
-				'group-chat': this.enterRoom
-			},
+				'contacts-tabs-grouping':{
+					'group-chat': this.enterRoom
+				},
 
-			'contacts-panel': {
-				'group-chat': this.enterRoom
-			},
+				'contacts-panel': {
+					'group-chat': this.enterRoom
+				},
 
-			'chat-window': {
-				'beforedestroy': function(cmp){
-					if (!cmp.disableExitRoom) {
-						this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
+				'chat-window': {
+					'beforedestroy': function(cmp){
+						if (!cmp.disableExitRoom) {
+							this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
+						}
+					},
+
+					'add-people': function(cmp,people){
+						var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
+							o = ri.data.Occupants;
+
+						if(!Ext.isArray(people)){
+							people = [people];
+						}
+						o.push.apply(o,people);
+						this.socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
 					}
 				},
 
-				'add-people': function(cmp,people){
-					var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
-						o = ri.data.Occupants;
+				'script-entry' : {
+					'script-to-chat': this.send
+				},
 
-					if(!Ext.isArray(people)){
-						people = [people];
-					}
-					o.push.apply(o,people);
-					this.socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
+				'profile-panel' : {
+					'chat': this.enterRoom
+				},
+
+				'no-thought': {
+					'chat': this.enterRoom
+				},
+
+				'contacts-tabs-card': {
+					'chat': this.enterRoom
 				}
-			},
-
-			'script-entry' : {
-				'script-to-chat': this.send
-			},
-
-			'profile-panel' : {
-				'chat': this.enterRoom
-			},
-
-			'no-thought': {
-				'chat': this.enterRoom
-			},
-
-			'contacts-tabs-card': {
-				'chat': this.enterRoom
 			}
-
 		});
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.

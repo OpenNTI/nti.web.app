@@ -44,12 +44,14 @@ Ext.define('NextThought.controller.State', {
 
 		me.isHangout = this.getController('Google').isHangout();
 
-		me.control({
-			'main-views': {
-				'activate-view': me.track
-			},
-			'*': {
-				'change-hash': me.changeHash
+		me.listen({
+			component:{
+				'main-views': {
+					'activate-view': me.track
+				},
+				'*': {
+					'change-hash': me.changeHash
+				}
 			}
 		});
 		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
