@@ -88,6 +88,27 @@ Ext.define('NextThought.view.SideBar',{
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 
+		/**
+		 * There floating point animation is causing some jitters as the side bar is animated up & down.
+		 * This replacement implementation works by making function return what is passed, (whole integers) so no
+		 * fractional number jitters can occur.  AND, we only want to do this with THIS element, not all elements.
+		 *
+		 * @see {Ext.dom.Element#translateXY}
+		 *
+		 * @param x {Number/Number[]}
+		 * @param y {Number}
+		 * @returns {{x: Number, y: Number}}
+		 */
+		this.el.translateXY = function(x,y){
+			if(Ext.isArray(x)){
+				y = x[1];
+				x = x[0];
+			}
+			return {
+				x: x,
+				y: y
+			};
+		};
 
 		this.mon(this.gripper.el,'click',this.togglePopup,this);
 	},
