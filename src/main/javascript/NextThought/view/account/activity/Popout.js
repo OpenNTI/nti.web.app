@@ -157,6 +157,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				function align(){
 					pop.show();
 					pop.alignTo(el,alignment,[0,0]);
+					if(pop.getEl() && pop.container){
+						pop.getEl().setStyle('max-height', pop.container.getHeight()+'px');
+					}
 				}
 
                 pop.show().hide();
