@@ -10,21 +10,19 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 	componentLayout: 'templated-container',
 
-	renderTpl: new Ext.XTemplate(
-		'<div class="log-entry-wrapper {me}">',
-			'<img src="{avatarURL}" class="avatar" alt="{name}">',
-            '<span class="control"></span>',
-			'<div class="message-bounding-box">',
-			'<div class="log-entry {me}" data-qtip="{timestamp}">',
-				'<div class="name">{name}</div> ',
-				'<div class="body-text">{body}</div> ',
-			'</div>',
-			'</div>',
-		'</div>',
-		'<div id="{id}-body" class="replies">',
-			'{%this.renderContainer(out,values)%}',
-		'</div>'
-	),
+	renderTpl: Ext.DomHelper.markup([
+		{ cls:'log-entry-wrapper {me}', cn:[
+			{tag:'img', src:'{avatarURL}', cls:'avatar', alt:'{name}'},
+			{tag:'span', cls:'control'},
+			{cls:'message-bounding-box', cn:[
+				{cls:'log-entry {me}', 'data-qtip':'{timestamp}', cn:[
+					{cls:'name',html:'{name}'},' ',
+					{cls: 'body-text', html:'{body}'},' '
+				]}
+			]}
+		]},
+		{id:'{id}-body', cls:'replies', html: '{%this.renderContainer(out,values)%}'}
+	]),
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },

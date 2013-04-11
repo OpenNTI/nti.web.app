@@ -60,7 +60,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			]}
 		]}]},
 		{ id: '{id}-body', cls: 'comment-container',
-			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}') }
+			html:'{%this.renderContainer(out,values)%}' }
 	]),
 
 

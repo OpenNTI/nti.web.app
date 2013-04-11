@@ -90,7 +90,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		},{
 			id: '{id}-body',
 			cls: 'replies',
-			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+			html: '{%this.renderContainer(out,values)%}'
 		},{
 			cls: 'respond', cn: {
 			cn: [

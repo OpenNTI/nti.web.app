@@ -12,7 +12,7 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	componentLayout: 'templated-container',
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'label', html:'{category}'},
-		{cls:'body', id:'{id}-body', cn:['{%this.renderContainer(out,values);%}']}
+		{cls:'body', id:'{id}-body', html:'{%this.renderContainer(out,values);%}'}
 	]),
 
 	getTargetEl: function () { return this.body; },

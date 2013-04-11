@@ -66,7 +66,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		},{
 			id: '{id}-body',
 			cls: 'topic-replies',
-			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+			html:'{%this.renderContainer(out,values)%}'
 		},{
 			cls: 'respond', cn: {
 			cn: [ {

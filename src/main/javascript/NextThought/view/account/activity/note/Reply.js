@@ -62,6 +62,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	beforeRender: function(){
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		var me = this,
 			rd = this.renderData = Ext.apply(this.renderData||{},this.record.getData());

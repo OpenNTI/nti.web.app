@@ -7,10 +7,11 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		'NextThought.ux.Pointer'
 	],
 
+	width: 400,
 	floating: true,
 	shadow: false,
 
-	width: 400,
+	layout: 'auto',
 	cls: 'activity-popout',
 	hideMode: 'visibility',
 	previewPrefix: 'widget.activity-preview-',
@@ -36,6 +37,10 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		});
 
 		Ext.EventManager.onWindowResize(this.windowResized, this,null);
+
+		this.on('destroy',function(){
+			Ext.EventManager.removeResizeListener(this.windowResized,this);
+		},this);
 
 		this.setupItems();
 	},
@@ -83,6 +88,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
+		me.relayEvents(me.el,['mousemove']);
 
 		me.on('blur',me.maybeHidePopout,me);
 
@@ -118,12 +124,6 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	},
 
 
-	destroy: function(){
-		this.callParent(arguments);
-		Ext.EventManager.removeResizeListener(this.windowResized,this);
-	},
-
-
 	inheritableStatics: {
 
 		beforeShowPopup: function(record, el){
@@ -144,31 +144,35 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		},
 
 		popup: function(record, el, viewRef){
-			var id = record.getId();
-
 			if(!this.beforeShowPopup(record, el)){
 				return;
 			}
 
 			UserRepository.getUser(record.get('Creator'),function(user){
-				var pop = this.create({record: record, user: user, refEl: Ext.get(el)}),
-					alignment = 'tr-tl?';
+				var pop;
 
 				function align(){
+					pop.alignTo(el,'tr-tl?');
 					pop.show();
-					pop.alignTo(el,alignment,[0,0]);
 					if(pop.getEl() && pop.container){
 						pop.getEl().setStyle('max-height', pop.container.getHeight()+'px');
 					}
 				}
 
-                pop.show().hide();
-				pop.on('realign', align);
+
+				pop = Ext.create(this.$className,{
+					renderTo: Ext.getBody(),
+					record: record,
+					user: user,
+					refEl: Ext.get(el),
+					hidden: true,
+					listeners:{
+						realign:align
+					}
+				});
 
                 if(viewRef) {
-                    pop.mon( pop.getEl(), 'mouseover', function(){
-						viewRef.cancelPopupTimeout();
-					});
+                    pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
                 }
 				align();
 			},this);

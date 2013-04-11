@@ -927,6 +927,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},{
 		id: '{id}-body',
 		cls: 'note-replies',
-		tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+		html:'{%this.renderContainer(out,values)%}'
 	}]);
 });

@@ -52,7 +52,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		},
 		{
 			id: '{id}-body',
-			tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+			html:'{%this.renderContainer(out,values)%}'
 		}
 	]),
 
