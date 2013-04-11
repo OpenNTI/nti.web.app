@@ -370,6 +370,10 @@
 				.foot {
 					padding: 0;
 					@include dot-separated-list;
+
+                  .link{
+                    cursor: pointer;
+                  }
 				}
 
 				.meta {
