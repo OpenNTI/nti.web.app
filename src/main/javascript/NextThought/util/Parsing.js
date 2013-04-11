@@ -3,7 +3,10 @@
 Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
-	requires: ['NextThought.proxy.reader.Json'],
+	requires: [
+		'NextThought.util.Object',
+		'NextThought.proxy.reader.Json'
+	],
 
 	/**
 	 * @param items
@@ -128,16 +131,15 @@ Ext.define('NextThought.util.Parsing',{
 			typeSpecific: specific.length === 3 ? specific[2] : specific[1]
 		};
 
-		//Define a setter on provider property so we can match the ds escaping of
-		//'-' to '_'
-		Ext.Object.defineAttributes(result.specific, {
+		//Define a setter on provider property so we can match the ds escaping of '-' to '_'
+		ObjectUtils.defineAttributes(result.specific, {
 			provider: {
-				getter: function(){return this._provider;},
+				getter: function(){return this.$$provider;},
 				setter: function(p){
 					if(p && p.replace){
 						p = p.replace(/-/g,'_');
 					}
-					this._provider = p;
+					this.$$provider = p;
 				}
 			}
 		});

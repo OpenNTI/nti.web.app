@@ -4,6 +4,7 @@ Ext.define('NextThought.providers.Location', {
 	requires: [
 		'NextThought.Library',
 		'NextThought.ContentAPIRegistry',
+		'NextThought.util.Object',
 		'NextThought.view.video.Window'
 	],
 
@@ -26,7 +27,7 @@ Ext.define('NextThought.providers.Location', {
 
         //init the page store.
         var currentPageStoresMap = {};
-		Ext.Object.defineAttributes(this,{
+		ObjectUtils.defineAttributes(this,{
 			currentPageStores: {
 				getter: function(){return currentPageStoresMap;},
 				setter: function(s){

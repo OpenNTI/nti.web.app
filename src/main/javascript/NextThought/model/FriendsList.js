@@ -2,6 +2,10 @@ Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
 	resolveUsers: false,
 
+	requires: [
+		'NextThought.util.Object'
+	],
+
 	mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
 		shareEntity: 'NextThought.mixins.ShareEntity'
@@ -20,7 +24,7 @@ Ext.define('NextThought.model.FriendsList', {
 
 	constructor: function(){
 		this.callParent(arguments);
-		Ext.Object.defineAttributes(this,{
+		ObjectUtils.defineAttributes(this,{
 			isDFL: {
 				getter: this.mixins.shareEntity.isDynamicSharing,
 				setter: function(){ throw 'readonly'; }

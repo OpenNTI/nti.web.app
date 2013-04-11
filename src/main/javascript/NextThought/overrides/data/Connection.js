@@ -1,6 +1,6 @@
 Ext.define('NextThought.overrides.data.Connection',{
 	override: 'Ext.data.Connection',
-	requires: ['NextThought.overrides.builtins.Object','Ext.Ajax'],
+	requires: ['Ext.Ajax'],
 
 	disableCaching: Ext.isGecko === true,
 	withCredentials: true,

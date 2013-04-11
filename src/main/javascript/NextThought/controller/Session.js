@@ -4,6 +4,7 @@ Ext.define('NextThought.controller.Session', {
 	requires:[
 		'NextThought.cache.UserRepository',
 		'NextThought.proxy.Socket',
+		'NextThought.util.Object',
 		'Ext.util.Cookies'
 	],
 
@@ -341,6 +342,12 @@ Ext.define('NextThought.controller.Session', {
 			user.summaryObject = false;
 			UserRepository.cacheUser(user, true);
 			$AppConfig.userObject = user;
+			ObjectUtils.defineAttributes($AppConfig,{
+				username: {
+					getter: function(){ try { return this.userObject.getId(); } catch(e){console.error(e.stack);} },
+					setter: function(){ throw 'readonly'; }
+				}
+			});
 			successCallback.call(me);
 		}
 
