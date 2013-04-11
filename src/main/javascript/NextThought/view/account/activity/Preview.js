@@ -111,7 +111,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.enableBubble('resize');
+		this.enableBubble(['resize', 'realign']);
 	},
 
 
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			return;
 		}
 
-		var snip = ContentUtils.getHTMLSnippet(body,300);
+		var snip = ContentUtils.getHTMLSnippet(body,300), me = this;
 		this.messageBodyEl.update(snip||body);
 		if(snip){
 			this.moreTpl.append(this.messageBodyEl,null,true);
@@ -129,7 +129,10 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		}
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
-		Ext.defer(this.fireEvent, 1, this, ['resize']);
+
+		this.messageBodyEl.select('img').on('load', function(){
+			me.fireEvent('realign');
+		});
 	},
 
 
@@ -256,7 +259,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-		this.fireEvent('resize');
+		this.fireEvent('realign');
 	},
 
 

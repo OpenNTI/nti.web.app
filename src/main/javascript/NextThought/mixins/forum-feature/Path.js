@@ -36,5 +36,6 @@ Ext.define('NextThought.mixins.forum-feature.Path',{
 				title: o
 			});
 		});
+		this.fireEvent('realign')
 	}
 });

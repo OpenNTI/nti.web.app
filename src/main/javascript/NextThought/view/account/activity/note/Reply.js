@@ -48,6 +48,11 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		deleteEl: '.delete'
 	},
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble('realign');
+	},
+
 	beforeRender: function(){
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
@@ -63,6 +68,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			if(me.rendered){
 				me.avatarEl.setStyle({backgroundImage:'url('+rd.avatarURL+')'});
 				me.nameEl.update(rd.Creator);
+				me.fireEvent('realign');
 			}
 			me.user = u;
 		});
@@ -111,7 +117,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			return;
 		}
 
-		var snip = ContentUtils.getHTMLSnippet(html,180);
+		var snip = ContentUtils.getHTMLSnippet(html,180), me = this;
 		this.bodyEl.update(snip||html);
 		if(snip){
 			this.moreTpl.append(this.bodyEl,null,true);
@@ -119,6 +125,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		}
 
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
+		this.bodyEl.select('img').on('load', function(){
+			me.fireEvent('realign');
+		});
 	},
 
 	deleteComment: function(){
