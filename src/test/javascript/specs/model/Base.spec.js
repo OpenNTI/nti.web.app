@@ -56,7 +56,7 @@ describe("Base Model Tests", function() {
 			it('calls the observer when a field is changed', function(){
 				m.set('ContainerId', 'foo');
 				expect(observer.fieldChanged.calls.length).toEqual(1);
-				expect(observer.fieldChanged).toHaveBeenCalledWith(field, 'foo', jasmine.any(Object));
+				expect(observer.fieldChanged).toHaveBeenCalledWith(field, 'foo');
 			});
 
 			it('Only calls if field changed', function(){
@@ -88,7 +88,7 @@ describe("Base Model Tests", function() {
 			it('fires for dependent field', function(){
 				m.set('ContainerId', 'baz');
 				expect(observer.fieldChanged.calls.length).toEqual(1);
-				expect(observer.fieldChanged).toHaveBeenCalledWith(dependentField, 'baz', jasmine.any(Object));
+				expect(observer.fieldChanged).toHaveBeenCalledWith(dependentField, 'baz');
 			});
 		});
 	});

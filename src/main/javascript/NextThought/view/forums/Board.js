@@ -43,10 +43,10 @@ Ext.define('NextThought.view.forums.Board',{
 
 					//{ tag: 'tpl', 'if':'CommentCount', cn: { tag: 'span', cls:'count', html: '{CommentCount} Comments' }},
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+						{ tag: 'span', cls: 'descendant', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
 					]},
 					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by {[values["NewestDescendant"].get("Creator")]}'}
+						{ tag: 'span', cls: 'descendant', html: 'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by {[values["NewestDescendant"].get("Creator")]}'}
 					]}
 				]}
 			]}
@@ -104,6 +104,7 @@ Ext.define('NextThought.view.forums.Board',{
 			this.on('beforedeactivate', this.onBeforeDeactivate, this);
 			this.on('beforeactivate', this.onBeforeActivate, this);
 			this.on('activate', this.onActivate, this);
+			this.on('beforeitemclick', this.onBeforeItemClick, this);
 			this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 		}
 	},
@@ -163,5 +164,10 @@ Ext.define('NextThought.view.forums.Board',{
 		if(e.getTarget('.path')){
 			this.fireEvent('pop-view', this);
 		}
+	},
+
+
+	onBeforeItemClick: function(record, item, idx, event, opts){
+		console.log('Before click');
 	}
 });

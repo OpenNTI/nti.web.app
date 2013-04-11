@@ -95,13 +95,14 @@ Ext.application({
 	appFolder: 'javascript/NextThought',
 
 	requires: [
-		'NextThought.util.Globals',
-		'NextThought.util.shared.Anchors',
-		'NextThought.util.Anchors',
-		'NextThought.util.Time',
-		'NextThought.util.Errors',
-		'NextThought.model.anchorables.ContentPointer'
+		'NextThought.overrides.*',
+		'NextThought.util.*',
+
+		//Require this early so we have it if we need it
+		'NextThought.view.MessageBar',
+		'NextThought.view.MessageBox'
 	],
+
 
 	controllers: [
 		'Account',
@@ -114,6 +115,7 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Navigation',
+		'Profile',
 		'Search',
 		'Session',
 		'SlideDeck',
