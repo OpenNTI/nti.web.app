@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.form.fields.SearchField', {
 	extend: 'Ext.Component',
-	alias: 'widget.searchfield',
+	alias: 'widget.searchfield',//TODO: Fix Ext collision
 	requires: [
 		'NextThought.view.form.fields.SearchAdvancedOptions'
 	],
