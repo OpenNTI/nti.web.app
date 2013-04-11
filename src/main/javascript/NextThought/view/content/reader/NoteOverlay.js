@@ -16,16 +16,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		this.on({
 			scope: this,
 			'content-updated': function(){
-				var r = this.getContentRoot();
-				try {
-					r = r.getBoundingClientRect();
-				}
-				catch(e) {
-					r = {left:0,width:0};
-				}
-				data.left = r.left;
-				data.width = r.width;
-                this.noteOverlayClearRestrictedRanges();
+			    this.noteOverlayClearRestrictedRanges();
 			},
 			'afterRender': this.insertNoteOverlay,
 
@@ -257,7 +248,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			height: rect.height,
 			left: rect.left,
 			right: rect.right,
-			width: rect.widht
+			width: rect.width
 		};
 
 		return mutatedRect;
@@ -271,9 +262,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return adjusted;
 	},
 
+
 	lineInfoForRangeAndRect: function(range, rect, offsets){
 		return {range: range, rect: offsets ? this.adjustContentRectForTop(rect, offsets.top) : rect};
 	},
+
 
 	lineInfoForY: function(y){
 		var overlay = this.overlayedPanelAtY(y),
@@ -379,7 +372,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(o.suspendMoveEvents){
 			return;
 		}
-		else if(!this.noteOverlayXYAllowed.apply(this,xy)){
+
+		if(!this.noteOverlayXYAllowed.apply(this,xy)){
 			Ext.get(o.box).hide();
 			return;
 		}
