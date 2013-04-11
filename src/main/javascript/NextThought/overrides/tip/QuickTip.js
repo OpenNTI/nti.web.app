@@ -14,10 +14,14 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	//Apply defaults
 	constructor: function(config){
 		config = Ext.apply(config||{},{
+			header: false,
 			showDelay: 500,
 			anchorTarget: true,
 			trackMouse: false,
 			shadow:false,
+			componentLayout:'auto',
+			layout: 'auto',
+			html: 'WWWWWWWWW',//provide a default so the initial isn't so small.
 			xhooks: {
 				getTargetXY: function(){
 					var me = this,
@@ -36,6 +40,9 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 		return this.callParent([config]);
 	},
 
+	getDockingRefItems: function(deep,items){
+		return items;
+	},
 
 	onTargetOver: function(e,dom,opts){
 		delete this.readerOffsets;
@@ -102,12 +109,14 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	//Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
 	showAt: function(){
 		var size = this.el.getSize(),
-			sizeAfter = this.el.getSize();
+			sizeAfter;
 
 		this.callParent(arguments);
 
+		sizeAfter = this.el.getSize();
+
 		if(size.width !== sizeAfter.width || size.height !== sizeAfter.height){
-			this.showAt(this.getTargetXY());
+			Ext.defer(this.showAt,1,this,[this.getTargetXY()]);
 		}
 	},
 
@@ -116,7 +125,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	//We prefer to align to the center posisitions instead of the corner positions.
 	syncAnchor: function() {
         var me = this, pos;
-		me.callParent();
+		me.callParent(arguments);
         switch (me.tipAnchor.charAt(0)) {
         case 't': pos = 'b-t'; break;
         case 'r': pos = 'l-r'; break;
