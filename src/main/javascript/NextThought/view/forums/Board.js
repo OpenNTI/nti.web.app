@@ -46,12 +46,53 @@ Ext.define('NextThought.view.forums.Board',{
 						{ tag: 'span', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
 					]},
 					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(),values["Last Modified"])]}'}
+						{ tag: 'span', html: 'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by {[values["NewestDescendant"].get("Creator")]}'}
 					]}
 				]}
 			]}
 		]
 	}),
+
+
+	fillInNewestDescendant: function(){
+		var map = {}, me = this;
+		this.store.each(function(r){
+			var desc = r.get('NewestDescendant'),
+				creator = desc ? desc.get('Creator') : undefined;
+
+			if(creator){
+				if(Ext.isArray(map[creator])){
+					map[creator].push(r);
+				}
+				else{
+					map[creator] = [r];
+				}
+			}
+		});
+
+		function apply(resolvedUser, i){
+			var recs = map[resolvedUser.get('Username')] || [];
+			Ext.Array.each(recs, function(rec){
+				var desc = rec.get('NewestDescendant');
+				if(desc){
+					desc.set('Creator', resolvedUser);
+				}
+			});
+		}
+
+		UserRepository.getUser(Ext.Object.getKeys(map),function(users){
+			me.store.suspendEvents(true);
+			Ext.each(users, apply);
+			me.store.resumeEvents();
+		});
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.on('refresh', this.fillInNewestDescendant, this);
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
