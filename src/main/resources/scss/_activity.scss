@@ -286,7 +286,10 @@
 			.subject, .name.no-subject {
 				display: block;
 				color: $primary-grey;
-				font: normal 300 32px/34px "Open Sans Condensed", $font;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				font: normal 300 28px/30px "Open Sans Condensed", $font;
 				cursor: pointer;
 				&::after{
 					content: '';
@@ -304,7 +307,7 @@
 
 		.body{
 			margin: 20px 0;
-			font: normal 400 16px $font;
+			font: normal 400 14px $font;
 			color: $primary-grey;
 			@include text-pre-wrap;
 		}
