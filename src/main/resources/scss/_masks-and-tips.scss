@@ -49,7 +49,14 @@
 		}
 	}
 
-	div {
+	.x-mask-msg-inner {
+		background: none;
+		border: none;
+	}
+
+	.x-mask-msg-text {
+		color: #555;
+		font-family: $font;
 		border: none;
 		background: {
 			repeat: no-repeat;
@@ -69,7 +76,7 @@
 	}
 
 	&.navigation{
-		div {
+		.x-mask-msg-text {
 			border: none;
 			padding: 1em 0 1.5em 1em;
 			font-size: 18px;
