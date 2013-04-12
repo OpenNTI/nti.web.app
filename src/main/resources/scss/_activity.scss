@@ -119,7 +119,7 @@
 
 .activity-popout{
 	&.x-layer {
-      overflow: visible;
+      overflow: hidden;
       overflow-y: auto;
     }
 	background-color: #fff;

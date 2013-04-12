@@ -11,6 +11,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	floating: true,
 	shadow: false,
 
+	componentLayout: 'auto',
 	layout: 'auto',
 	cls: 'activity-popout',
 	hideMode: 'visibility',
