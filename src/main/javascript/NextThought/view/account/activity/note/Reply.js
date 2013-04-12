@@ -148,7 +148,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		}
 
 		//Now clear the rest of our field listeners
-		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+		if(this.record){
+			this.record.removeObserverForField(this, 'body', this.updateContent, this);
+		}
 
 		Ext.defer(cmp.destroy, 1, cmp);
 	},
