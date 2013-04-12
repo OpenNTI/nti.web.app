@@ -366,6 +366,7 @@
 		//@include hardware-accelerate();
 	}
 
+	.x-ie10 & #readerPanel-innerCt,
 	.x-ie & #readerPanel-innerCt {
 		text-align: right;
 		* { text-align: left; }
