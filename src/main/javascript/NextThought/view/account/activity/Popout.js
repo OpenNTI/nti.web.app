@@ -37,20 +37,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			resize: function(){ me.fireEvent('realign'); }
 		});
 
-		Ext.EventManager.onWindowResize(this.windowResized, this,null);
-
-		this.on('destroy',function(){
-			Ext.EventManager.removeResizeListener(this.windowResized,this);
-		},this);
-
 		this.setupItems();
 	},
-
-
-	windowResized: function(){
-		this.fireEvent('realign');
-	},
-
 
 	setupItems: function(){
 		var	wName = this.getPreviewPanel();
@@ -150,11 +138,12 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			}
 
 			UserRepository.getUser(record.get('Creator'),function(user){
-				var pop;
+				var pop, sidebar;
 
 				function align(){
 					pop.alignTo(el,'tr-tl?');
 					pop.show();
+					pop.pointer.point();
 					if(pop.getEl() && pop.container){
 						pop.getEl().setStyle('max-height', pop.container.getHeight()+'px');
 					}
@@ -168,12 +157,18 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					refEl: Ext.get(el),
 					hidden: true,
 					listeners:{
-						realign:align
+						realign: align
 					}
 				});
 
-                if(viewRef && viewRef.cancelPopupTimeout) {
-                    pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
+                if(viewRef) {
+					if(viewRef.cancelPopupTimeout){
+                    	pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
+					}
+					sidebar = viewRef.up('main-sidebar');
+					if(sidebar){
+						pop.mon(sidebar, 'move', align);
+					}
                 }
 				align();
 			},this);
