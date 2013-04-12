@@ -363,8 +363,11 @@
 .x-reader-pane {
 
 	&, iframe {
-		//@include hardware-accelerate();
+		@include hardware-accelerate();
+	}
 
+	iframe {
+		margin: 0 0 0 auto;
 	}
 
 	.x-panel-body-reader {
