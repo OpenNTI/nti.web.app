@@ -91,13 +91,19 @@ Ext.define('NextThought.view.WindowManager',{
 			Ext.Error.raise('duplicate');
 		}
 
+		win.dockManagementNotReady = true;
+
 		this.registry.push(win);
 		this.initWindow(win, this.tpl.append(this.tracker,[win.getTitle()], true));
 
 		win.notify = this.notifyTracker();
 
-		if(!win.rendered || win.minimized){ this.handleMinimize(win); }
-		else { this.handleRestore(win); }
+		if( win.minimized ){
+			this.handleMinimize(win);
+		}
+		else{
+			this.handleRestore(win);
+		}
 	},
 
 
@@ -201,6 +207,10 @@ Ext.define('NextThought.view.WindowManager',{
 		var bottom = y+win.getHeight(),
 			zone = Ext.Element.getViewportHeight() - this.snapZone;
 
+		if(win.dockManagementNotReady){
+			return;
+		}
+
 		win.snapped = (bottom >= zone);
 
 		if(!win.snapped){
@@ -231,6 +241,8 @@ Ext.define('NextThought.view.WindowManager',{
 
 		Ext.each(me.registry,function(win){
 			if(!win.rendered || !win.snapped || win.minimized===true || win.dragging){return;}
+
+			delete win.dockManagementNotReady;
 
 			win.placeholder.show();
 
