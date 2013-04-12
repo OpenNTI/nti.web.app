@@ -18,7 +18,6 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 		this.callParent(arguments);
 
 		//Inject a link that shows we have comments
-
 		this.commentsLink = Ext.DomHelper.insertAfter(this.time, {tag: 'a', cls: 'comment-link', html: this.textForCommentLink()}, true);
 
 		this.updateHasChildren();
@@ -74,7 +73,6 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	collapse: function(){
 		var el = this.getTargetEl();
 		if(this.fireEvent('beforecollapse', this, el) !== false){
-			this.collapsed = true;
 			el.addCls(this.collapsedCls);
 			this.addCls(this.collapsedCls);
 			this.updateLayout();
@@ -85,7 +83,6 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	expand: function(){
 		var el = this.getTargetEl();
 		if(this.fireEvent('beforeexpand', this, el) !== false){
-			delete this.collapsed;
 			el.removeCls(this.collapsedCls);
 			this.removeCls(this.collapsedCls);
 			this.updateLayout();

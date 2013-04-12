@@ -15,15 +15,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 	ui: 'nt',
-	cls: 'note-container',//note-reply-container
+	cls: 'note-container',
 	layout: 'auto',
-//	componentLayout: 'templated-container',
 	defaultType: 'note-panel',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 	autoFillInReplies: true,
 
-//	root: false,
 	rootQuery: 'note-panel[root]',
 
 	renderSelectors: {
