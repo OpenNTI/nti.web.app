@@ -18,12 +18,12 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		this.mon(this.canvas.el, {
 			scope: this,
-			mousedown: this.onMouseDown,
-			mousemove: this.onMouseMove,
-			mouseup: this.onMouseUp,
+			mousedown: this.onCanvasMouseDown,
+			mousemove: this.onCanvasMouseMove,
+			mouseup: this.onCanvasMouseUp,
 
-			mouseenter: this.onMouseEnter,
-            mouseout: this.onMouseLeave
+			mouseenter: this.onCanvasMouseEnter,
+            mouseout: this.onCanvasMouseLeave
 		});
 
 		this.mon(this.toolbar.el, {
@@ -177,13 +177,13 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		}
 	},
 
-	onMouseEnter: function(e){
+	onCanvasMouseEnter: function(e){
 		if(this.mouseLeftNoMouseUp){
-			this.onMouseDown(e);
+			this.onCanvasMouseDown(e);
 		}
 	},
 
-	onMouseLeave: function(e){
+	onCanvasMouseLeave: function(e){
 		var tool = this.toolbar.getCurrentTool();
 		if( tool ){
 			tool = tool.getToolType();
@@ -191,11 +191,11 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		if(!this.clickedNib && /^(move|pencil)$/i.test(tool)){
 			this.mouseLeftNoMouseUp = this.mouseDown;
 		}
-		this.onMouseUp(e);
+		this.onCanvasMouseUp(e);
 	},
 
 
-	onMouseDown: function(e){
+	onCanvasMouseDown: function(e){
         e.stopEvent();
 		var s = this.selected;
 		this.mouseDown = true;
@@ -207,7 +207,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	onMouseMove: function(e){
+	onCanvasMouseMove: function(e){
 		if(!this.mouseDown){ return; }
 		var tool = this.toolbar.getCurrentTool(),
 			c = this.mouseMoveHandlerMap[tool.getToolType()];
@@ -215,11 +215,12 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			console.warn('No handler for tool: ',tool.getToolType());
 		}
 
+		console.log('Mouse move', e, c);
 		return c.apply(this,arguments);
 	},
 
 
-	onMouseUp: function(e){
+	onCanvasMouseUp: function(e){
         e.stopEvent();
 		delete this.clickedNib;
 		delete this.mouseDown;

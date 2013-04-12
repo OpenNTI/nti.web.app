@@ -135,5 +135,6 @@ Ext.define('NextThought.editor.Editor',{
 	onKeyUp:function(){
 		this.clearError(this.contentEl);
 		return this.mixins.editorActions.onKeyDown.apply(this,arguments); },
-	reset: function(){ return this.mixins.editorActions.reset.apply(this,arguments);}
+	reset: function(){ return this.mixins.editorActions.reset.apply(this,arguments);},
+	onMouseUp:function(){ return this.mixins.editorActions.onMouseUp.apply(this,arguments); }
 });
