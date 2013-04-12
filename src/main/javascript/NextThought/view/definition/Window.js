@@ -33,19 +33,9 @@ Ext.define('NextThought.view.definition.Window', {
 	initComponent: function(){
 		var me = this, p, nib = 20, top, y, x;
 
-		me.callParent(arguments);
-
 		if(!me.term){
 			Ext.Error.raise('definition term required');
 		}
-
-		me.loadDefinition(me.term);
-
-		me.on({
-			'close':function(){ me.dragMaskOff(); },
-			'show': me.fixMask,
-			'destroy': me.unfixMask
-		});
 
 		//figure out xy
 		p = this.pointTo;
@@ -54,9 +44,18 @@ Ext.define('NextThought.view.definition.Window', {
 			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib);
 			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
 
-			me.setPosition(x,y);
+			Ext.apply(me,{x:x,y:y});
 			me.addCls(top?'south':'north');
 		}
+
+		me.callParent(arguments);
+		me.on({
+			scope: me,
+			close:function(){ me.dragMaskOff(); },
+			show: me.fixMask,
+			destroy: me.unfixMask,
+			afterrender: Ext.bind(me.loadDefinition, me, [me.term])
+		});
 	},
 
 
