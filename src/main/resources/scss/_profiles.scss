@@ -361,6 +361,10 @@
 			padding: 0;
 			z-index: 1;
 			border-bottom-width: 0;
+			
+			.whiteboard-container{
+				cursor: default;
+			}
 
 			.path,
 			.content-callout,
@@ -397,6 +401,12 @@
 					.editor {
 						margin-bottom: 10px;
 					}
+				}
+			}
+
+			& + .topic-replies .reply{
+				.whiteboard-container{
+					cursor: default;
 				}
 			}
 

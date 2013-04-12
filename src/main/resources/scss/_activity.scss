@@ -313,6 +313,8 @@
 			margin: 20px 0;
 			font: normal 400 14px $font;
 			color: $primary-grey;
+
+			.whiteboard-container{ cursor: default; }
 			@include text-pre-wrap;
 		}
 
@@ -415,6 +417,8 @@
 					color: $primary-grey;
 					margin:{ top: 5px; bottom: 5px; }
 					font: normal 500 14px/20px $font;
+
+					.whiteboard-container{ cursor: default; }
 				}
 
 				&.deleted-reply{

@@ -186,6 +186,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		});
 
 		this.bodyEl.select('.whiteboard-container .toolbar').remove();
+		this.bodyEl.select('.whiteboard-container .overlay').remove();
 	},
 
 	deleteComment: function(){
