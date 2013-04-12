@@ -608,7 +608,7 @@ Ext.define('NextThought.controller.UserData', {
 		var model = this.getModel('Transcript'),
 			id = record.get('RoomInfo').getId();
 
-		model.proxy.url = record.getLink('transcript');
+		model.getProxy().url = record.getLink('transcript');
 
 		model.load(id,{
 			scope: this,

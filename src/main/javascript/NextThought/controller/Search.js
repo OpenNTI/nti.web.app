@@ -261,11 +261,6 @@ Ext.define('NextThought.controller.Search', {
 		var navController = app.getController('Navigation'),
 			args = Array.prototype.slice.call(arguments);
 
-		//gotoBlog is an event handler on navController
-		//and looks at var args trying to pluck useful info out
-		//being an event handler it assumes listener params
-		args.push({});
-
 		navController.gotoBlog.apply(navController, args);
 	},
 
@@ -296,10 +291,9 @@ Ext.define('NextThought.controller.Search', {
 			}
 			this.onReadyCallbacks[qStr] = onReady;
 			onReady.timeoutTimer = setInterval(clearCallback, 3000);
-
 		}
 
-		this.gotoBlog(u,postId, undefined, {queryString: qStr});
+		this.gotoBlog(u, postId, undefined, {queryString: qStr});
 	},
 
 	searchBlogCommentClicked: function(result){
@@ -309,7 +303,7 @@ Ext.define('NextThought.controller.Search', {
 			commentId = result.hit.get('ID');
 
 		UserRepository.getUser(r.get('Creator'), function(u){
-			me.gotoBlog(u,postId,commentId);
+			me.gotoBlog(u, postId, commentId);
 		});
 	},
 
