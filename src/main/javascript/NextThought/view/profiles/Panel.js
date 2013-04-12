@@ -160,7 +160,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.relayEvents(this.el.parent(),['scroll']);
+		this.relayEvents(Ext.get('profile'),['scroll']);
 
 		this.affiliationSepEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
