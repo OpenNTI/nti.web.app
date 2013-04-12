@@ -30,7 +30,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			var s = me.store = me.getStore();
 			me.mon(s,{
 				scope: me,
-				load: me.storeLoaded,
+//				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
 			if(me.store.getCount()){
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		//TOOD how to get the height into css.  If we don't specify it here it gets an
 		//inline styled height
 		this.add({
-			xtype: 'panel',
+			xtype: 'box',
 			cls: 'loading-bar',
 			itemId: 'loadingbar',
 			height: 40,
@@ -116,7 +116,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			listeners: {
 				afterrender: {
 					fn: function(cmp){
-						cmp.el.mask('Loading...');
+						Ext.defer(cmp.el.mask,1,cmp.el,['Loading...']);
 					},
 					single: true
 				}
