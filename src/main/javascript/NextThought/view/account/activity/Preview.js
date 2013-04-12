@@ -54,7 +54,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		footEl: '.foot',
 		commentsEl: '.comments',
 		messageBodyEl: '.body',
-		replyEl: '.reply',
+		replyEl: '.respond .reply-options > .reply',
 		replyBoxEl: '.respond > div',
 		respondEl: '.respond'
 	},
