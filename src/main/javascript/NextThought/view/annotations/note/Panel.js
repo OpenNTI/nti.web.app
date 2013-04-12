@@ -3,7 +3,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	alias: 'widget.note-panel',
 
 	requires: [
-		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.cache.UserRepository',
 		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates'
@@ -18,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	ui: 'nt',
 	cls: 'note-container',//note-reply-container
 	layout: 'auto',
-	componentLayout: 'templated-container',
+//	componentLayout: 'templated-container',
 	defaultType: 'note-panel',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },

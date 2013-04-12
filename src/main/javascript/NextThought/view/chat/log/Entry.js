@@ -3,12 +3,9 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	alias: 'widget.chat-log-entry',
 
 	requires: [
-		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache'
 	],
-
-	componentLayout: 'templated-container',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls:'log-entry-wrapper {me}', cn:[

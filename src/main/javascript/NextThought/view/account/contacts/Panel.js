@@ -2,7 +2,6 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	extend: 'Ext.panel.Panel',
 	requires: [
 		'Ext.Action',
-		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.Card'
 	],
 

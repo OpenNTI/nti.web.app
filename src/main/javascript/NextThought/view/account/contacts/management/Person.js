@@ -2,14 +2,12 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.person-card',
 	requires: [
-		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.management.GroupList'
 	],
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 	layout: 'auto',
-	componentLayout: 'templated-container',
 	cls: 'person-card',
 
 	renderTpl: Ext.DomHelper.markup([{
