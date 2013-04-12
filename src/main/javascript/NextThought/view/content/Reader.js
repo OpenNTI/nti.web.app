@@ -118,12 +118,12 @@ Ext.define('NextThought.view.content.Reader', {
 		   || windowSizeStatics.windowSize.width !== currentWindowSize.width
 		   || windowSizeStatics.windowSize.height !== currentWindowSize.height){
 			windowSizeStatics.windowSize = currentWindowSize;
-			windowSizeStatics.left = f.getLeft();
+			windowSizeStatics.left = f.getX();
 			windowSizeStatics.height = f.getHeight();
 			if(!l){
-				l = windowSizeStatics.left - this.getEl().getLeft();
+				l = windowSizeStatics.left - this.getEl().getX();
 			}
-			windowSizeStatics.gutter = l + f.getMargin('l');
+			windowSizeStatics.gutter = l;
 		}
 
 		cache.windowSizeStatics = windowSizeStatics;
