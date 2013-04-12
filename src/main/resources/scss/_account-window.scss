@@ -24,7 +24,7 @@
 	}
 
 	.x-btn-account-small {
-		&, button {
+		&, a[role=button] {
 			height: 35px;
 		}
 
@@ -42,8 +42,7 @@
 
 		.x-btn-inner {
 			text-transform: uppercase;
-			font-size: 12px;
-			font-weight: 600;
+			font: normal 600 12px/35px $font;
 			color: $secondary-grey;
 			padding: 0 10px;
 		}
@@ -160,7 +159,7 @@
 	.footer {
 		.x-btn-flat-medium {
 			cursor: pointer;
-			button {
+			a[role=button] {
 				background: none;
 				border: none;
 				padding: 12px 20px;
@@ -185,11 +184,11 @@
 		}
 
 		.x-btn-flat-blue-medium {
-			&, button{
+			&, a[role=button]{
 				border-radius: 0 0 3px 0;
 			}
 			cursor: pointer;
-			button {
+			a[role=button] {
 				background: $primary-blue;
 				border: 1px solid $border-blue;
 				padding: 12px 20px;
@@ -207,7 +206,7 @@
 
 
 			&.x-btn-disabled {
-				button {
+				a[role=button] {
 					span { opacity: 1; }
 
 					cursor: default;
