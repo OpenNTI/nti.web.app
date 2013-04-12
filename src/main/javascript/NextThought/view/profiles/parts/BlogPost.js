@@ -151,7 +151,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			}
 
 			if( el ) {
-				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'),false,true]);
+				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'), false, Globals.ANIMATE_NO_FLASH]);
 			}
 		}
 

@@ -3,6 +3,9 @@ Ext.define('NextThought.model.forums.Post', {
 	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
+
+	isPost: true,
+
 	fields: [
 		{ name: 'body', type: 'auto' },
 		{ name: 'title', type: 'string' }

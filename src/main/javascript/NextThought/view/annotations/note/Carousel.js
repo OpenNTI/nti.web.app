@@ -349,7 +349,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		Ext.resumeLayouts();
 
 		if( item ){
-			item.getEl().scrollIntoView(this.body,true);
+			item.getEl().scrollIntoView(this.body, Globals.ANIMATE_NO_FLASH);
 		}
 
 		//Find the item for this record

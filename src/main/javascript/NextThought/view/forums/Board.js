@@ -168,6 +168,25 @@ Ext.define('NextThought.view.forums.Board',{
 
 
 	onBeforeItemClick: function(record, item, idx, event, opts){
-		console.log('Before click');
+		var t = event && event.getTarget && event.getTarget(),
+			d = record.get && record.get('NewestDescendant'),
+			topicHref;
+		if(d && t && Ext.fly(t).hasCls('descendant')){
+			console.log('Need to show newest descendant', d);
+			/*if(d.isPost){
+				topicHref = d.get('href');
+				topicHref = topicHref.replace('/'+ d.get('ID'), '');
+				this.fireEvent('show-topic', topicHref, d.isPost ? d.get('ID') : undefined);
+				return false;
+			}
+			else if(d.isTopic){
+				this.fireEvent('show-topic', d);
+				return false;
+			}
+			else{*/
+				console.warn('Only support last descendants of topics or comments', d);
+			//}
+
+		}
 	}
 });

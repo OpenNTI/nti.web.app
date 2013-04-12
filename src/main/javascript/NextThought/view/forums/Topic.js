@@ -249,7 +249,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			}
 
 			if( el ) {
-				Ext.defer(el.scrollIntoView,500,el,[Ext.get('forums'),false,true]);
+				Ext.defer(el.scrollIntoView,500,el,[Ext.get('forums'),false, Globals.ANIMATE_NO_FLASH]);
 			}
 		}
 

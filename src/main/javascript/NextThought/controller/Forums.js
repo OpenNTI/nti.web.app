@@ -514,10 +514,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	presentTopic: function(record, commentId, cb, scope, eOpts){
-		var callback = arguments.length > 3 ? cb : undefined,
-			cid = arguments.length > 2 ? commentId : undefined,
-			toShowHref = record ? record.get('href') : null;
+	presentTopic: function(record, commentId, cb, scope){
+		var callback = arguments.length > 2 ? cb : undefined,
+			cid = arguments.length > 1 ? commentId : undefined,
+			toShowHref = record && record.get ? record.get('href') : record;
 
 		if(!record || !toShowHref){
 			Ext.callback(callback, scope, [false]);
