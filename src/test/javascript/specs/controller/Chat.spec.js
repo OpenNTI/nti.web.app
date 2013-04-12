@@ -81,6 +81,10 @@ describe('Chat Controller Tests', function(){
 			controller.getChatWindow = function(cid){ return win; };
 		});
 
+		afterEach(function(){
+			win.close();
+		});
+
 		it("checks if we disable the input field when only one user is left in the chat", function(){
 			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': "RoomInfo", 'NTIID': 'tag:ntiidd-1'};
 
@@ -171,6 +175,10 @@ describe('Chat Controller Tests', function(){
 				controller.getChatWindow = function(cid){
 					return win;
 				};
+			});
+
+			afterEach(function(){
+				win.close();
 			});
 
 			it("Checks if we change state to 'active' when a user receive his own message", function(){
