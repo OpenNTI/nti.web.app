@@ -366,6 +366,11 @@
 		//@include hardware-accelerate();
 	}
 
+	.x-ie & #readerPanel-innerCt {
+		text-align: right;
+		* { text-align: left; }
+	}
+
 	iframe {
 		margin: 0 0 0 auto;
 	}
