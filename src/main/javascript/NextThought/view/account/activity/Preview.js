@@ -56,7 +56,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		messageBodyEl: '.body',
 		replyEl: '.respond .reply-options > .reply',
 		replyBoxEl: '.respond > div',
-		respondEl: '.respond'
+		respondEl: '.respond',
+		timeEl: '.stamp > .time'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -120,6 +121,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
 			return;
 		}
+
+		if(this.record.placeholder){ return; }
 
 		var snip = ContentUtils.getHTMLSnippet(body,300), me = this;
 		this.messageBodyEl.update(snip||body);

@@ -141,7 +141,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				}
 			});
 
-			return canShow;
+			return canShow && !el.hasCls('deleted');
 		},
 
 		popup: function(record, el, viewRef){

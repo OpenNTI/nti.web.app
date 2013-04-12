@@ -361,7 +361,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 
 	itemClick: function(e){
-		var activityTarget = e.getTarget('div.activity', null, true),
+		var activityTarget = e.getTarget('div.activity:not(.deleted)', null, true),
 			guid, item, rec, me = this, className;
 
 		guid = (activityTarget||{}).id;

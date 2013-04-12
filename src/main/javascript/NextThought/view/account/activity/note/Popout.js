@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 	alias: ['widget.activity-popout-note'],
 
 	requires: [
-		'NextThought.view.account.activity.note.Preview'
+		'NextThought.view.account.activity.note.Preview',
+		'NextThought.util.UserDataThreader'
 	],
 
 	statics: {
@@ -29,7 +30,10 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 				load(record);
 				return;
 			}
-            service.getObject(ref, load, function failure(){ load(record); }, me);
+            service.getObject(ref, load, function failure(){
+	            var recs = NextThought.util.UserDataThreader.threadUserData(record);
+	            load((recs || []).first());
+            }, me);
 		}
 
 	}

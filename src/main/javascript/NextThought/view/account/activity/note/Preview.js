@@ -39,7 +39,12 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 			},this,{single:true});
 		}
 
-		this.getItemReplies();
+		if(!r.placeholder){
+			this.getItemReplies();
+		}
+		else if(r.placeholder && !Ext.isEmpty(r.children)){
+			this.add({record: r.children.first(), autoFillInReplies:false});
+		}
 
 		function parse(content){
 			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
@@ -92,5 +97,12 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		this.callParent(arguments);
 		this.mon(this.locationEl, 'click', this.navigateToItem, this);
 		this.mon(this.context, 'click', this.navigateToItem, this);
+
+		if(this.record.placeholder){
+			this.respondEl.remove();
+			this.name.update('Deleted');
+			this.timeEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.timeEl.hide();
+		}
 	}
 });

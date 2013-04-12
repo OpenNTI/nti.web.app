@@ -39,6 +39,8 @@ Ext.define('NextThought.view.account.activity.topic.Popout',{
 				url:getURL(record.getParentHref()),
 				success: success,
 				failure: function(){
+					el.addCls('deleted');
+					el.clearListeners();
 					console.error('There was a problem loading the topic');
 				}
 			};

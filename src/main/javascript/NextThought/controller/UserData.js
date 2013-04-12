@@ -92,6 +92,9 @@ Ext.define('NextThought.controller.UserData', {
 					'chat': this.replyAsChat
 				},
 
+			'activity-preview-note nti-editor':{
+				'save': this.savePreviewNoteReply
+			},
 			'activity-preview-note-reply nti-editor':{
 				'save': this.savePreviewNoteReply
 			},

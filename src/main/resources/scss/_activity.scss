@@ -53,6 +53,10 @@
 			//	left: 0;
 			//	background: $icons no-repeat;
 			//}
+			
+			&.deleted{
+				cursor: default;
+			}
 
 			&.nothing{
 				&::after{display: none;}
