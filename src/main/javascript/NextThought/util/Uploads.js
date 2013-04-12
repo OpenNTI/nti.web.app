@@ -61,7 +61,7 @@ Ext.define('NextThought.util.Uploads',{
 			worker.postMessage('');
 		}
 		else {
-			console.error("Not able to use Workers for uploads");
+			//console.error("Not able to use Workers for uploads");
 			this.worker = {
 				postMessage: function(data){
 					me.dispatch(data);
