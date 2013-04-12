@@ -31,7 +31,11 @@ Ext.define('NextThought.model.UserPasswordSet',{
 
 	statics : {
 		fromUser: function(user){
-			return this.create( {Links: Ext.clone($AppConfig.userObject.raw.Links)}, user.get('Username'));
+			var u = $AppConfig.userObject;
+			if(!u.raw || !u.raw.Links){
+				Ext.Error.raise("No links for userobject", u);
+			}
+			return this.create( {Links: Ext.clone(u.raw.Links)}, user.get('Username'));
 		}
 	}
 

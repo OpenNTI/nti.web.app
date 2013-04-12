@@ -198,7 +198,7 @@ Ext.define('NextThought.model.Note', {
 			rec = this;
 		}
 
-		if(rec.raw.hasOwnProperty('ReferencedByCount')){
+		if(rec.raw && rec.raw.hasOwnProperty('ReferencedByCount')){
 			return rec.get('ReferencedByCount') + (rec.parent ? 1:0);
 		}
 
@@ -226,7 +226,7 @@ Ext.define('NextThought.model.Note', {
 	},
 
 	getTotalLikeCount: function(){
-		if(this.raw.hasOwnProperty('RecursiveLikeCount') ){
+		if(this.raw && this.raw.hasOwnProperty('RecursiveLikeCount') ){
 			return this.get('RecursiveLikeCount') || 0;
 		}
 
