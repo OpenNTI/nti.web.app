@@ -6,7 +6,7 @@ Ext.define('NextThought.view.profiles.parts.BlogComment',{
 
 
 	fireDeleteEvent: function(){
-		me.fireEvent('delete-post',me.record, me);
+		this.fireEvent('delete-post', this.record, this);
 	}
 
 });

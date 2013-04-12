@@ -249,7 +249,7 @@ Ext.define('NextThought.view.forums.Comment',{
 
 
 	fireDeleteEvent: function(){
-		me.fireEvent('delete-topic-comment',me.record, me);
+		this.fireEvent('delete-topic-comment', this.record, this);
 	},
 
 
