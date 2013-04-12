@@ -40,13 +40,14 @@ Ext.define('NextThought.view.forums.Board',{
 				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
 				{ cls: 'meta', cn:[
 					{ tag: 'span', cls:'count', html: '{TopicCount} Discussions' },
-
-					//{ tag: 'tpl', 'if':'CommentCount', cn: { tag: 'span', cls:'count', html: '{CommentCount} Comments' }},
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
 						{ tag: 'span', cls: 'descendant', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
 					]},
 					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', cls: 'descendant', html: 'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by {[values["NewestDescendant"].get("Creator")]}'}
+						{ tag: 'span', cls: 'descendant', cn: [
+							'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by ',
+							{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'}
+						]}
 					]}
 				]}
 			]}

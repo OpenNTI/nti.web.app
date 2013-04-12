@@ -133,7 +133,7 @@
 			font: normal 600 12px $font;
 			color: $tertiary-grey;
 
-			.count {
+			.count, .name, .link {
 				color: $primary-blue;
 			}
 
