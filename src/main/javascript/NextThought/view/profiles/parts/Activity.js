@@ -30,7 +30,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			var s = me.store = me.getStore();
 			me.mon(s,{
 				scope: me,
-//				load: me.storeLoaded,
+				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
 			if(me.store.getCount()){
