@@ -47,10 +47,19 @@ Ext.define('NextThought.view.forums.Forum',{
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
 					{ tag: 'span', cls:'count', html: '{PostCount} Comments' },
-					{ tag: 'span', cn: [
-						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
-						' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
+					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
+						{ tag: 'span', cn: [
+							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
+							' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
+						]}
+					]},
+					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
+						{ tag: 'span', cn: [
+							'Commented on by ',{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
+							' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
+						]}
 					]}
+
 				]}
 			]}
 		]}
@@ -67,7 +76,7 @@ Ext.define('NextThought.view.forums.Forum',{
 		]}
 	}),
 
-	
+
 	initComponent: function(){
 		this.callParent(arguments);
 
@@ -77,8 +86,42 @@ Ext.define('NextThought.view.forums.Forum',{
 			remove: this.decrementTopicCount,
 			load: this.updateTopicCount
 		});
+		this.on('refresh', this.fillInNewestDescendant, this);
 	},
 
+
+	fillInNewestDescendant: function(){
+		var map = {}, me = this;
+		this.store.each(function(r){
+			var desc = r.get('NewestDescendant'),
+				creator = desc ? desc.get('Creator') : undefined;
+
+			if(creator){
+				if(Ext.isArray(map[creator])){
+					map[creator].push(r);
+				}
+				else{
+					map[creator] = [r];
+				}
+			}
+		});
+
+		function apply(resolvedUser, i){
+			var recs = map[resolvedUser.get('Username')] || [];
+			Ext.Array.each(recs, function(rec){
+				var desc = rec.get('NewestDescendant');
+				if(desc){
+					desc.set('Creator', resolvedUser);
+				}
+			});
+		}
+
+		UserRepository.getUser(Ext.Object.getKeys(map),function(users){
+			me.store.suspendEvents(true);
+			Ext.each(users, apply);
+			me.store.resumeEvents();
+		});
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);

@@ -548,24 +548,25 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showLevel: function(level, record, cfg){
+	showLevel: function(level, record, cfg, storeCfg, extraParams){
 		var c = this.getForumViewContainer(),
 			url = record.getLink('contents'),
 			store, cmpCfg;
 
 
-		store = NextThought.store.NTI.create({
+		store = NextThought.store.NTI.create(Ext.apply({
 			storeId: record.get('Class')+'-'+record.get('NTIID'),
 			url: url,
 			sorters: [{
 				property: 'CreatedTime',
 				direction: 'DESC'
 			}]
-		});
-		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, {
+		}, storeCfg || {}));
+		extraParams = Ext.apply({
 			sortOn: 'CreatedTime',
 			sortOrder: 'descending'
-		});
+		}, extraParams || {});
+		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, extraParams);
 
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
@@ -640,7 +641,7 @@ Ext.define('NextThought.controller.Forums', {
 
 			if(!url){ maybeFinish(); return; }
 
-			Ext.Ajax.request({ url:url, community: communities[i], success: fn, failure: maybeFinish });
+			Ext.Ajax.request({ url: url, community: communities[i], success: fn, failure: maybeFinish });
 		});
 	},
 
@@ -663,7 +664,17 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('topic', record, {stateKey: 'forum'});
+		this.showLevel('topic', record, {stateKey: 'forum'},
+			{
+				sorters: [{
+					property: 'NewestDescendantCreatedTime',
+					direction: 'DESC'
+				}]
+			},
+			{
+				sortOn: 'NewestDescendantCreatedTime'
+			}
+		);
 		if(silent !== true){
 			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 		}
