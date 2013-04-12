@@ -13,7 +13,7 @@ Ext.define('NextThought.util.Uploads',{
 		var worker, me = this;
 		this.requests = {};
 
-		if(window.Worker){
+		if(window.Worker && this.enabled){
 			worker = (function(){
 				var b, bb, result, url, script = [
 					'self.addEventListener("message", function(e){dispatch(e.data);}, false);',
@@ -47,7 +47,7 @@ Ext.define('NextThought.util.Uploads',{
 
 		if(worker){
 			worker.onmessage = function(e){me.onMessageFromWorker(e.data); };
-			worker.onerror = worker.onerror = function(e) {
+			worker.onerror = function(e) {
 				console.error("Error in file: "+e.filename+"\nline: "+e.lineno+"\nDescription: "+e.message);
 			};
 
