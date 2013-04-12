@@ -96,7 +96,7 @@ Ext.define('NextThought.view.WindowManager',{
 
 		win.notify = this.notifyTracker();
 
-		if(win.minimized){ this.handleMinimize(win); }
+		if(!win.rendered || win.minimized){ this.handleMinimize(win); }
 		else { this.handleRestore(win); }
 	},
 
@@ -230,7 +230,7 @@ Ext.define('NextThought.view.WindowManager',{
 		});
 
 		Ext.each(me.registry,function(win){
-			if(!win.snapped || win.minimized===true || win.dragging){return;}
+			if(!win.rendered || !win.snapped || win.minimized===true || win.dragging){return;}
 
 			win.placeholder.show();
 
@@ -238,9 +238,14 @@ Ext.define('NextThought.view.WindowManager',{
 			var box = win.placeholder.getPageBox();
 
 
-			win.setPosition(
-				box.right-win.getWidth(),
-				box.bottom-win.getHeight());
+			try {
+				win.setPosition(
+					box.right-win.getWidth(),
+					box.bottom-win.getHeight());
+			}
+			catch(e){
+				console.error(e.message);
+			}
 
 		});
 	},
