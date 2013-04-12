@@ -172,7 +172,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					}
 				});
 
-                if(viewRef) {
+                if(viewRef && viewRef.cancelPopupTimeout) {
                     pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
                 }
 				align();
