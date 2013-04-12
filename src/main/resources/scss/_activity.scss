@@ -311,8 +311,10 @@
 
 		.body{
 			margin: 20px 0;
-			font: normal 400 14px $font;
+			font: normal 400 14px/19px $font;
 			color: $primary-grey;
+			max-height: 57px;
+			overflow: hidden;
 
 			.whiteboard-container{ cursor: default; }
 			@include text-pre-wrap;
@@ -358,15 +360,17 @@
 
 			.x-component-reply {
 				position: relative;
-				padding-bottom: 10px;
+				padding-bottom: 30px;
 
 				.controls {
 					position: absolute;
 					top: -5px;
 					right: 0;
+					@include like-and-favorite;
+					.like:not(.on){
+						display: none;
+					}
 				}
-
-				@include like-and-favorite;
 
 				.avatar {
 					float: left;
@@ -386,12 +390,25 @@
 				}
 
 				.foot {
+					display:none;
+					height: 20px;
 					padding: 0;
 					@include dot-separated-list;
 
                   .link{
                     cursor: pointer;
                   }
+				}
+
+				&:hover{
+					padding-bottom: 10px;
+					.foot{
+						display: block;
+					}
+
+					.controls .like{
+						display: block;
+					}
 				}
 
 				.meta {
