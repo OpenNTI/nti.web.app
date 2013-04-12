@@ -154,9 +154,9 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 		var c = this.items.getCount() - 14,
 			layout = this.layout||{},
-			el = layout.clearEl;
+			el = layout.innerCt;
 		if(c > 0 && (!this.el || !this.el.hasCls('show-all'))){
-			this.moreEl = this.showMoreTpl[el?'insertBefore':'append'](el||this.getTargetEl(),{count:c},true);
+			this.moreEl = this.showMoreTpl.append(el||this.getTargetEl(),{count:c},true);
 			this.moreEl.on('click', this.showAll, this);
 		}
 	},
