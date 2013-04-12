@@ -16,6 +16,7 @@ Ext.define('NextThought.view.MessageBox',{
 	OK : 8,
 
 	iconHeight: 75,
+	iconWidth: 80,
 
 	buttonText: {
 		ok: 'OK',
@@ -75,8 +76,6 @@ Ext.define('NextThought.view.MessageBox',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.bottomTb.layout.pack='end';
-		this.iconComponent.setWidth(80);
-
 	},
 
 
