@@ -48,13 +48,13 @@ Ext.define('NextThought.view.forums.Forum',{
 				{ cls: 'meta', cn:[
 					{ tag: 'span', cls:'count', html: '{PostCount} Comments' },
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', cn: [
+						{ tag: 'span', cls: 'descendant', cn: [
 							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
 							' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
 						]}
 					]},
 					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
-						{ tag: 'span', cn: [
+						{ tag: 'span', cls: 'descendant', cn: [
 							'Commented on by ',{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
 							' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
 						]}
@@ -264,5 +264,28 @@ Ext.define('NextThought.view.forums.Forum',{
 		}
 
 		return true;
+	},
+
+
+	onBeforeItemClick: function(record, item, idx, event, opts){
+		var t = event && event.getTarget && event.getTarget(),
+			d = record.get && record.get('NewestDescendant'),
+			topicHref;
+
+		function isDescendantClick(tar){
+			if(!tar){
+				return false;
+			}
+
+			var target = Ext.fly(tar),
+				sel = '.descendant';
+
+			return target.is(sel) || target.parent(sel, true);
+		}
+
+		if(d && t && isDescendantClick(t)){
+			this.fireEvent('show-topic', record, d.get('ID'));
+			return false;
+		}
 	}
 });

@@ -172,22 +172,46 @@ Ext.define('NextThought.view.forums.Board',{
 		var t = event && event.getTarget && event.getTarget(),
 			d = record.get && record.get('NewestDescendant'),
 			topicHref;
-		if(d && t && Ext.fly(t).hasCls('descendant')){
-			console.log('Need to show newest descendant', d);
-			/*if(d.isPost){
-				topicHref = d.get('href');
-				topicHref = topicHref.replace('/'+ d.get('ID'), '');
-				this.fireEvent('show-topic', topicHref, d.isPost ? d.get('ID') : undefined);
+
+		function isDescendantClick(tar){
+			if(!tar){
 				return false;
+			}
+
+			var target = Ext.fly(tar),
+				sel = '.descendant';
+
+			return target.is(sel) || target.parent(sel, true);
+		}
+
+		if(d && t && isDescendantClick(t)){
+			if(this.processingDescendant){
+				return false;
+			}
+			console.log('Need to show newest descendant', d);
+
+			if(d.isPost){
+				$AppConfig.service.getObject(d.get('ContainerId'),
+					function(o){
+						this.fireEvent('show-topic', o, d.isComment ? d.get('ID') : undefined);
+						delete this.processingDescendant;
+					},
+					function(){
+						console.error('An error occurred navigating to newest descendant', arguments);
+						delete this.processingDescendant;
+					},
+					this);
 			}
 			else if(d.isTopic){
+				this.processingDescendant = true;
 				this.fireEvent('show-topic', d);
-				return false;
+				delete this.processingDescendant;
 			}
-			else{*/
-				console.warn('Only support last descendants of topics or comments', d);
-			//}
+			else{
+				console.warn('Unknown newest descendant', d);
+			}
 
+			return false;
 		}
 	}
 });
