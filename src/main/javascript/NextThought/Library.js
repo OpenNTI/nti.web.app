@@ -53,16 +53,19 @@ Ext.define('NextThought.Library', {
 					}
 				},
 				sorters: [{sorterFn: function(a, b){
-							   if(/nextthought/i.test(a.get('author'))){
-								   return 1;
-							   }
-							   if(/nextthought/i.test(b.get('author'))){
-								   return -1;
-							   }
-							   return 0;
-						   }},
-						  {property: 'title', direction: 'asc'}]
+					if(/nextthought/i.test(a.get('author'))){
+						return 1;
+					}
+					if(/nextthought/i.test(b.get('author'))){
+						return -1;
+					}
+					return 0;
+				}},
+					{property: 'title', direction: 'asc'}
+				]
 			});
+
+			this.store.on('load',this.purgeTocs,this);
 		}
 		return this.store;
 	},
@@ -84,6 +87,17 @@ Ext.define('NextThought.Library', {
 		}
 
 		return this.getStore().findRecord(field, index, 0, false, true, true);
+	},
+
+
+	purgeTocs: function(){
+		var me = this;
+
+		Ext.Object.each(this.tocs,function(index,toc,o){
+			if(!me.getTitle(index)){
+				delete o[index];
+			}
+		});
 	},
 
 
