@@ -311,8 +311,26 @@
 		}
 
 
+		a.more {
+			position: absolute;
+			left: 20px; bottom: 4px;
+			text-decoration: none;
+			display: block;
+			background: white;
+
+			div {
+				display: inline-block;
+				border-radius: 90px;
+				width: 4px; height: 4px;
+				margin: 2px;
+				background: $primary-blue;
+			}
+
+		}
+
 		.body{
-			margin: 20px 0;
+			position: relative;
+			margin: 20px 0 25px 0;
 			font: normal 400 14px/19px $font;
 			color: $primary-grey;
 			max-height: 57px;

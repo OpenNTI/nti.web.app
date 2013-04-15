@@ -108,7 +108,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 
-	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
+	moreTpl: Ext.DomHelper.createTemplate({tag:'a', cls:'more', href:'#',cn:[{},{},{}]}),
 
 
 	initComponent: function(){
@@ -127,10 +127,6 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		var snip = ContentUtils.getHTMLSnippet(body,300), me = this;
 		this.messageBodyEl.update(snip||body);
-		if(snip){
-			this.moreTpl.append(this.messageBodyEl,null,true);
-			this.mon(this.messageBodyEl.down('a.more'),'click', this.navigateToItem,this);
-		}
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
 
@@ -138,7 +134,19 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
 		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
 
+		//Allow dom to reflect style changes
 		Ext.defer(this.setupReplyScrollZone,1,this);
+		Ext.defer(this.maybeShowMoreLink,1,this);
+	},
+
+
+	maybeShowMoreLink: function(){
+		var el = this.messageBodyEl;
+		if(el.dom.scrollHeight <= el.getHeight()){
+			return;
+		}
+
+		this.moreTpl.insertAfter(el,null,true);
 	},
 
 
