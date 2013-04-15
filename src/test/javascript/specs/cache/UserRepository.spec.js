@@ -18,6 +18,10 @@ describe("User Repository/Store/Cache Behavior", function(){
 		return new NextThought.model.User(cfg);
 	}
 
+	function createList(username){
+		return new NextThought.model.FriendsList({Username: username, NTIID: 'ntiid'+username});
+	}
+
 
 	it('Defines UserRepository', function(){
 		expect(UserRepository).toBeTruthy();
@@ -191,6 +195,22 @@ describe("User Repository/Store/Cache Behavior", function(){
 			it('handles a json string', function(){
 				var data = {Class: 'User', Username: 'hans'};
 				TUR.getUser(data, createCallbackExpecting('hans', scope), scope);
+			});
+		});
+
+		describe('Handles friendslists', function(){
+			it('Gives back list for uname', function(){
+				var fl = createList('foo');
+				TUR.precacheUser(fl);
+
+				TUR.getUser(['foo'], createCallbackExpecting([fl.get('Username')], scope), scope);
+			});
+
+			it('Gives back list for fl', function(){
+				var fl = createList('foo');
+				TUR.precacheUser(fl);
+
+				TUR.getUser([fl], createCallbackExpecting([fl.get('Username')], scope), scope);
 			});
 		});
 

@@ -158,7 +158,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 				r = this.resolveFromStore(name);
 				if (r && r.raw && (!forceFullResolve || !r.summaryObject)){
-					maybeFinish(r.getId(), r);
+					maybeFinish(name, r);
 					return;
 				}
 
@@ -174,7 +174,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					success: function(u){
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						maybeFinish(u.getId(), this.cacheUser(u, true));
+						maybeFinish(name, this.cacheUser(u, true));
 					}
 				}, cacheBust);
 			},
