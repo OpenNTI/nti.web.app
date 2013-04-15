@@ -178,12 +178,16 @@ Ext.define('NextThought.view.forums.Comment',{
 
 
 	setContent: function(html){
-		var el = this.bodyEl;
+		var el = this.bodyEl, me = this;
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
 		el.select('img.whiteboard-thumbnail').each(function(el){
 			el.replace(el.up('.body-divider'));
+		});
+
+		el.select('img').each(function(img){
+			img.on('load', function(){ me.up('[record]').fireEvent('sync-height'); });
 		});
 	},
 
@@ -255,7 +259,12 @@ Ext.define('NextThought.view.forums.Comment',{
 
 	onEditPost: function(e){
 		e.stopEvent();
-		this.editor.editBody(this.record.get('body')).activate();
+		var parentCmp = this.up('forums-topic');
+		if(parentCmp && parentCmp.clearSearchHit){
+			parentCmp.clearSearchHit();
+		}
+		this.editor.editBody(this.record.get('body'));
+		this.editor.activate();
 	}
 
 });

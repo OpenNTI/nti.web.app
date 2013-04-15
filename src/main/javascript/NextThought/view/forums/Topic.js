@@ -471,12 +471,17 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	setContent: function(html){
+		var me = this;
 		this.bodyEl.update(html);
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
 
 		this.bodyEl.select('img.whiteboard-thumbnail').each(function(el){
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
+		});
+
+		this.bodyEl.select('img').each(function(img){
+			img.on('load', function(){ me.fireEvent('sync-height'); });
 		});
 	},
 

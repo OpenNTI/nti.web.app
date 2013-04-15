@@ -255,23 +255,20 @@ Ext.define('NextThought.controller.Navigation', {
 		var title = 'Thoughts',
 			state = app.getController('State'),
 			fragment,
-			args = [title],
-			pId = arguments.length > 2 ? postId : undefined,
-			cId = arguments.length > 3 ? commentId : undefined,
-			ps = arguments.length > 4 ? params : undefined;
+			args = [title];
 
-		if(pId){
-			args.push(pId);
+		if(postId){
+			args.push(postId);
 		}
 
-		if(pId && cId){
+		if(postId && commentId){
 			args.push('comments');
-			args.push(cId);
+			args.push(commentId);
 		}
 
 		fragment = user.getProfileUrl.apply(user, args);
-		if(ps){
-			fragment = fragment + '?' + Ext.Object.toQueryString(ps);
+		if(params){
+			fragment = fragment + '?' + Ext.Object.toQueryString(params);
 		}
 
 		if(state.changeHash){

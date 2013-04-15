@@ -264,14 +264,7 @@ Ext.define('NextThought.controller.Search', {
 		navController.gotoBlog.apply(navController, args);
 	},
 
-	searchBlogResultClicked: function(result, fragIdx){
-		var u = result.user,
-		r = result.record,
-		postId = r.get('ID'),
-		hit = result.hit,
-		frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
-		qStr = this.getHitStore().queryString;
-
+	searchBlogResultClicked: function(result, fragIdx, isComment){
 		function clearCallback(){
 			if(me.onReadyCallbacks){
 				delete me.onReadyCallbacks[qStr];
@@ -285,6 +278,18 @@ Ext.define('NextThought.controller.Search', {
 			cmp.showSearchHit(hit, frag);
 		}
 
+		var u = result.user,
+			r = result.record,
+			postId = r.get('ID'),
+			hit = result.hit,
+			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
+			qStr = this.getHitStore().queryString,
+			commentId = undefined;
+
+		if(isComment){
+			commentId = hit.get('ID');
+		}
+
 		if(qStr){
 			if(!this.onReadyCallbacks){
 				this.onReadyCallbacks = {};
@@ -293,20 +298,8 @@ Ext.define('NextThought.controller.Search', {
 			onReady.timeoutTimer = setInterval(clearCallback, 3000);
 		}
 
-		this.gotoBlog(u, postId, undefined, {queryString: qStr});
+		this.gotoBlog(u, postId, commentId, {queryString: qStr});
 	},
-
-	searchBlogCommentClicked: function(result){
-		var me = this,
-			r = result.record,
-			postId = r.get('ID'),
-			commentId = result.hit.get('ID');
-
-		UserRepository.getUser(r.get('Creator'), function(u){
-			me.gotoBlog(u, postId, commentId);
-		});
-	},
-
 
 	searchResultClicked: function(result, fragIdx){
 		var nav = this.getController('Navigation'),

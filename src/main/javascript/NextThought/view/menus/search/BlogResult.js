@@ -103,12 +103,6 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	},
 
 	doClicked: function(fragIdx){
-		if(this.comment){
-			//its a comment
-			this.fireEvent('click-blog-comment',this);
-		}else{
-			//its a post
-			this.fireEvent('click-blog-result', this, fragIdx);
-		}
+		this.fireEvent('click-blog-result', this, fragIdx, this.comment);
 	}
 });
