@@ -10,12 +10,6 @@ loadExternalLibraries([
 	{"Rangy TextRange":{
 		url:"resources/lib/rangy-1.3alpha.681/rangy-textrange.js",
 		waitFor:"rangy",
-		cb:function rangyReady(){
-			if(!window.rangy || !rangy.modules.TextRange){
-				setTimeout(rangyReady, 100);
-				return;
-			}
-			rangy.init();
-		}
+		cb:function(){rangy.init();}
 	}}
 ]);
