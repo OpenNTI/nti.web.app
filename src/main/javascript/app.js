@@ -50,6 +50,7 @@ Ext.application({
 		'Session',
 		'SlideDeck',
 		'State',
+		'Store',
 		'Stream'
 	],
 
