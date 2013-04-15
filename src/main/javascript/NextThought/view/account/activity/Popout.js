@@ -9,6 +9,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	width: 400,
 	floating: true,
+	constrain: true,
 	shadow: false,
 
 	componentLayout: 'auto',
@@ -144,9 +145,6 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					pop.alignTo(el,'tr-tl?');
 					pop.show();
 					pop.pointer.point();
-					if(pop.getEl() && pop.container){
-						pop.getEl().setStyle('max-height', pop.container.getHeight()+'px');
-					}
 				}
 
 

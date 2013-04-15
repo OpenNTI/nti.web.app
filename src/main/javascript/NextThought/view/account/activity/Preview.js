@@ -57,6 +57,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		replyEl: '.respond .reply-options > .reply',
 		replyBoxEl: '.respond > div',
 		respondEl: '.respond',
+		topEl: '.activity-preview-body',
 		timeEl: '.stamp > .time'
 	},
 
@@ -136,6 +137,18 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.messageBodyEl.select('img').on('load', function(){ me.fireEvent('realign'); });
 		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
 		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
+
+		Ext.defer(this.setupReplyScrollZone,1,this);
+	},
+
+
+	setupReplyScrollZone: function(){
+		var max = Ext.dom.Element.getViewportHeight()
+				- this.topEl.getHeight()
+				- this.respondEl.getHeight();
+
+		console.log(max,this.body);
+		this.body.setStyle({maxHeight: max+'px'});
 	},
 
 
@@ -259,6 +272,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 	showEditor: function(){
+		Ext.defer(this.setupReplyScrollZone,1,this);
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);

@@ -124,8 +124,8 @@
 .activity-popout{
 	&.x-layer {
       overflow: hidden;
-      overflow-y: auto;
     }
+
 	background-color: #fff;
 	@include box-shadow(0 2px 4px 1px rgba(0,0,0,.14),
 						inset 0 2px rgba(255,255,255,.5));
@@ -221,6 +221,7 @@
 			text-transform: uppercase;
 			padding: 0 20px;
 			font: normal 700 10px/40px $font;
+			height: 40px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -358,6 +359,7 @@
 		}
 
 		.replies {
+			overflow: {x: hidden; y: scroll;}
 
 			.x-component-reply {
 				position: relative;
