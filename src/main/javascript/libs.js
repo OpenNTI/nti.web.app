@@ -1,4 +1,5 @@
 loadExternalLibraries([
+	{"Stripe":"https://js.stripe.com/v1/"},
 	{"YouTube API":"https://www.youtube.com/iframe_api"},
 	{"Flash API":"resources/lib/swfobject.js"},
 	{"Zoom Detection":"resources/lib/detect-zoom.js"},
@@ -6,7 +7,6 @@ loadExternalLibraries([
 	{"jQuery NoConflict":{url:"resources/lib/jQuery-noconflict.js", waitFor: "jQuery"}},
 	{"MathQuill":{url:"resources/lib/mathquill/mathquill.min.js", waitFor: "jQuery"}},
 	{"rangy":"resources/lib/rangy-1.3alpha.681/rangy-core.js"},
-	{"stripe" :"https://js.stripe.com/v1/"},
 	{"Rangy TextRange":{
 		url:"resources/lib/rangy-1.3alpha.681/rangy-textrange.js",
 		waitFor:"rangy",
