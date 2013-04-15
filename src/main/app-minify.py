@@ -81,6 +81,13 @@ def _closure_compile( output_file, input_files, optimizations='WHITESPACE_ONLY' 
 
 	subprocess.check_call(command)
 
+def _combine_javascript( output_file, input_files ):
+	with open( output_file, 'wb' ) as output:
+		for input_file in input_files:
+			with open( input_file, 'rb' ) as input:
+				for line in input.readlines():
+					output.write( line )
+
 def _minify_app( app_root, extjs_sdk ):
 	libraries = [ 'resources/lib/jQuery-1.8.0min.js',
 		      'resources/lib/jQuery-noconflict.js',
@@ -90,10 +97,13 @@ def _minify_app( app_root, extjs_sdk ):
 		      'resources/lib/rangy-1.3alpha.681/rangy-core.js',
 		      'resources/lib/rangy-1.3alpha.681/rangy-textrange.js' ]
 	library_file = 'libraries.js'
-	app_file = 'app_core.js'
+	app_core_file = 'app_core.js'
+	app_main_files = [ 'javascript/libs.js',
+			   'javascript/app.js' ]
+	app_main_file = 'app_main.js'
 	app_files = [ library_file,
-		      app_file,
-		      'javascript/app.js' ]
+		      app_core_file,
+		      app_main_file ]
 	output_file = 'javascript/app.min.js'
 
 	sencha_bootstrap_command = [ 'sencha',
@@ -107,17 +117,17 @@ def _minify_app( app_root, extjs_sdk ):
 				   '-sdk', extjs_sdk,
 				   'compile', '-classpath=javascript/NextThought',
 				   'concat', '-r', '-st', '-y', 
-				   '-o', app_file ]
+				   '-o', app_core_file ]
 	try:
 		_closure_compile( library_file, libraries, 'SIMPLE_OPTIMIZATIONS' )
+		_closure_compile( app_main_file, app_main_files, 'SIMPLE_OPTIMIZATIONS' )
 		subprocess.check_call(sencha_bootstrap_command)
 		subprocess.check_call(sencha_compile_command)
-		_closure_compile( output_file, app_files )
+		_combine_javascript( output_file, app_files )
 	finally:
-		if os.path.exists( library_file ):
-			os.remove( library_file )
-		if os.path.exists( app_file ):
-			os.remove( app_file )
+		for file in app_files:
+			if os.path.exists( file ):
+				os.remove( file )
 	
 def main():
 	parser = ArgumentParser()
