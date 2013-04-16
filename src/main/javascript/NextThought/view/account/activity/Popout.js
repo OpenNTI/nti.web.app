@@ -163,7 +163,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					if(viewRef.cancelPopupTimeout){
                     	pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
 					}
-					sidebar = viewRef.up('main-sidebar');
+
+					sidebar = (viewRef.up && viewRef.up('main-sidebar')) ||
+						Ext.ComponentQuery.query('main-sidebar').first();
 					if(sidebar){
 						pop.mon(sidebar, 'move', align);
 					}
