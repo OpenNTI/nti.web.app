@@ -92,21 +92,16 @@ Ext.define('NextThought.controller.UserData', {
 					'chat': this.replyAsChat
 				},
 
-			'activity-preview-note nti-editor':{
-				'save': this.savePreviewNoteReply
-			},
-			'activity-preview-note-reply nti-editor':{
-				'save': this.savePreviewNoteReply
-			},
+				'activity-preview-note nti-editor':{
+					'save': this.savePreviewNoteReply
+				},
+				'activity-preview-note-reply nti-editor':{
+					'save': this.savePreviewNoteReply
+				},
 
-			'activity-preview-note-reply': {
-				'delete-reply': this.deleteNoteReply
-			},
-
-			'note-gutter-widget': {
-				'share': this.shareWith,
-				'chat': this.replyAsChat
-			},
+				'activity-preview-note-reply': {
+					'delete-reply': this.deleteNoteReply
+				},
 
 				'note-gutter-widget': {
 					'share': this.shareWith,
