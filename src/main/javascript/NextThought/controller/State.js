@@ -150,7 +150,7 @@ Ext.define('NextThought.controller.State', {
 
 		history.replaceState = function(s,title,url){
 			console.debug('replace state',s);
-			console.trace();
+//			console.trace();
 
 			if (this.updateState(s)){
 
