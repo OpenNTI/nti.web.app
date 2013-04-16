@@ -61,6 +61,10 @@
 			border-width: 0 !important;
 			background: none;
 			padding: 0;
+
+			&::-ms-clear {
+				display: none;
+			}
 		}
 		.x-form-item-body {
 			position: static;
