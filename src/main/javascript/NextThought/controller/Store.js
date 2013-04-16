@@ -15,7 +15,7 @@ Ext.define('NextThought.controller.Store', {
 	],
 
 	views: [
-		'store.PurchaseWindow',
+		'store.purchase.Window',
 		'store.menus.Collection'
 	],
 
@@ -82,7 +82,7 @@ Ext.define('NextThought.controller.Store', {
 			return null;
 		}
 
-		win = NextThought.view.store.PurchaseWindow.create({purchasable: purchasable});
+		win = this.getView('store.purchase.Window').create({record: purchasable});
 		win.show();
 		return win;
 	},

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.store.PurchaseWindow', {
+Ext.define('NextThought.view.store.purchase.Window', {
 	extend: 'NextThought.view.Window',
 	alias: 'widget.purchase-window',
 
