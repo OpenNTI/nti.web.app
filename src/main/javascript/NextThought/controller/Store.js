@@ -1,6 +1,10 @@
 Ext.define('NextThought.controller.Store', {
 	extend: 'Ext.app.Controller',
 
+	requires: [
+		'NextThought.Library'
+	],
+
 	models: [
 		'store.Purchasable',
 		'store.PurchaseAttempt'
@@ -36,15 +40,23 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 	onSessionReady: function(){
-		var app = this.application,
-			store = this.getPurchasableStore(),
-			token = {};
-
-		app.registerInitializeTask(token);
-		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
+		var store = this.getPurchasableStore();
+		store.on('load', this.maybeAddPurchasables,this);
 		store.proxy.url = $AppConfig.service.getPurchasableItemURL();
-		store.load();
+		Library.on('loaded',function(){store.load();},this,{single:true});
 	},
+
+
+	maybeAddPurchasables: function(){
+
+		//the 0, is for dev only, will remove later.
+		this.getNavigationMenu().add(0,{
+			xtype: 'navigation-collection',
+			store: this.getPurchasableStore(),
+			name: 'Available for Purchase'
+		});
+	},
+
 
 	/**
 	 * Show the detail/purchase view for the given purchasable
