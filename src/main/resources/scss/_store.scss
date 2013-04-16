@@ -69,8 +69,50 @@
 			}
 		}
 		.info {
+			padding: 18px;
 			background: white;
+			overflow: hidden;
 			box-shadow: inset 0 -1px 0 0 #dcdcdc;
+
+			.bookcover {
+				background:{
+					color: #f9f9f9;
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				}
+				box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
+				border-radius: 1px;
+				float: left;
+				width: 55px;
+				height: 70px;
+			}
+
+			.meta {
+				margin-left: 70px;
+				min-height: 70px;
+
+				.title, .byline, .price {
+					color: $primary-grey;
+					font: normal 600 14px/20px $font;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					//white-space: nowrap;
+				}
+
+				.byline {
+					color: #ababab;
+					font-size: 10px;
+					line-height: 15px;
+					white-space: nowrap;
+					text-transform: uppercase;
+				}
+
+				.price {
+					color: $primary-green;
+					line-height: 30px;
+				}
+			}
 		}
 	}
 
