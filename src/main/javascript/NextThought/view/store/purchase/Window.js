@@ -18,7 +18,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'header', cn:[
 			{ cls: 'titlebar', cn:[
-				{ cls:'tab', html:'Course Details' },
+				{ cls:'tab active', html:'Course Details' },
 				{ cls:'tab', html:'Payment Info', 'data-order':1 },
 				{ cls:'tab', html:'Review Order', 'data-order':2 },
 				{ cls:'tab', html:'Confirmation', 'data-order':3 },
@@ -42,6 +42,12 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		]
 	}]),
 
+	renderSelectors: {
+		closeEl: '.header .titlebar .close',
+		cancelEl: '.footer a.cancel',
+		confirmEl: '.footer a.confirm'
+	},
+
 	componentLayout: 'auto',
 	layout: 'auto',
 	items: [],
@@ -62,6 +68,30 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.applyIf(this.renderData||{},this.record.getData());
+	},
+
+
+	afterRender: function(){
+		var me = this;
+		me.callParent(arguments);
+		me.mon(me.closeEl,'click','close',me);
+		me.mon(me.cancelEl,'click','close',me);
+		me.mon(me.confirmEl,'click','onConfirm',me);
+		me.getEl().select('.titlebar .tab').each(function(e){
+			me.mon(e,'click','onTabClicked',me);
+		});
+	},
+
+
+	onConfirm: function(){
+		console.debug('Confirmed!');
+	},
+
+
+	onTabClicked: function(e){
+		var t = e.getTarget('.tab');
+		t = (t && t.getAttribute('data-order')) || 0;
+		console.log('go to page: '+t);
 	},
 
 
