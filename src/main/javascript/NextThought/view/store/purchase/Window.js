@@ -25,7 +25,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 				{ cls: 'close' }
 			]},
 			{ cls: 'info', cn:[
-				{ cls:'bookcover', style: {backgroundImage: 'url({icon})'} },
+				{ cls:'bookcover', style: {backgroundImage: 'url({Icon})'} },
 				{ cls:'meta', cn:[
 					{cls: 'title', html: '{Title}'},
 					{cls: 'byline', html: 'By {Author}, {Provider}'},
