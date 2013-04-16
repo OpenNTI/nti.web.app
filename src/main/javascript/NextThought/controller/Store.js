@@ -11,7 +11,10 @@ Ext.define('NextThought.controller.Store', {
 	],
 
 	views: [
+	],
 
+	refs: [
+		{ ref: 'navigationMenu', selector: 'navigation-menu'}
 	],
 
 	init: function(){
