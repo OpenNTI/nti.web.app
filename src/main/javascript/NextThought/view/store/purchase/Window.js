@@ -2,6 +2,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	extend: 'NextThought.view.Window',
 	alias: 'widget.purchase-window',
 
+	requires: [
+		'NextThought.view.store.purchase.DetailView'
+	],
+
 	cls:'purchase-window',
 	width: 520,
 	height: 690,
@@ -80,11 +84,37 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		me.getEl().select('.titlebar .tab').each(function(e){
 			me.mon(e,'click','onTabClicked',me);
 		});
+
+		this.add({xtype: 'purchase-detailview', record: this.record});
+	},
+
+
+	onAdd: function(cmp){
+		var ordinal = cmp.ordinal,
+			confirmLabel = cmp.confirmLabel || 'Purchase';
+
+		if(this.rendered){
+			this.syncTab(ordinal);
+			this.confirmEl.update(confirmLabel);
+		}
+	},
+
+
+	syncTab: function(ordinal){
+		var tabs = this.getEl().select('.titlebar .tab');
+		tabs.removeCls('active');
+		tabs.item(ordinal || 0).addCls('active');
+
 	},
 
 
 	onConfirm: function(){
+		if(this.confirmEl.hasCls('disabled')){
+			return;
+		}
+
 		console.debug('Confirmed!');
+		this.down('[onConfirm]').onConfirm();
 	},
 
 
@@ -106,6 +136,13 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		var mask = this.zIndexManager.mask;
 		if(mask){
 			mask.removeCls('nti-black-clear');
+		}
+	},
+
+
+	setConfirmState: function(enabled){
+		if(this.confirmEl){
+			this.confirmEl[!enabled ? 'addCls' : 'removeCls']('disabled');
 		}
 	}
 });

@@ -8,10 +8,16 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 
 	closeWithoutWarn: true,
 
+	ordinal: 0,
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			Description: this.record.get('Description')
 		});
+	},
+
+	onConfirm: function(){
+		this.fireEvent('show-purchase-form', this, this.record);
 	}
 });

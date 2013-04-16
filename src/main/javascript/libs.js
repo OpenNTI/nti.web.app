@@ -6,6 +6,7 @@ loadExternalLibraries([
 	{"jQuery":"resources/lib/jQuery-1.8.0min.js"},
 	{"jQuery NoConflict":{url:"resources/lib/jQuery-noconflict.js", waitFor: "jQuery"}},
 	{"MathQuill":{url:"resources/lib/mathquill/mathquill.min.js", waitFor: "jQuery"}},
+	{"jQuery.payment": {url: "resources/lib/jquery.payment.js", waitFor: "jQuery"}},
 	{"rangy":"resources/lib/rangy-1.3alpha.681/rangy-core.js"},
 	{"Rangy TextRange":{
 		url:"resources/lib/rangy-1.3alpha.681/rangy-textrange.js",

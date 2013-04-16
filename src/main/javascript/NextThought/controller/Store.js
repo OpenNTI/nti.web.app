@@ -16,6 +16,7 @@ Ext.define('NextThought.controller.Store', {
 
 	views: [
 		'store.purchase.Window',
+		'store.purchase.Form',
 		'store.menus.Collection'
 	],
 
@@ -38,6 +39,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchasable-collection': {
 					'select': this.purhcasableCollectionSelection
+				},
+				'purchase-detailview':{
+					'show-purchase-form': this.showPurchaseForm
 				}
 			}
 		});
@@ -83,6 +87,19 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		return this.getView('store.purchase.Window').create({record: purchasable});
+	},
+
+
+	showPurchaseForm: function(view, purchasable){
+		var win = this.getPurchaseWindow();
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		console.log('Show purchase form', arguments);
+		win.remove(view, true);
+		win.add({xtype: 'purchase-form', record: purchasable});
 	},
 
 
@@ -133,6 +150,7 @@ Ext.define('NextThought.controller.Store', {
 	purchaseWindowCancel: function(btn){
 		btn.up('window').close();
 	},
+
 
 	maybeClosePurchaseWindow: function(win){
 		//Detect this by looking at what stage in the process we are in.
