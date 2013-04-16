@@ -14,8 +14,10 @@
             display: inline;
 }
 
-.x-ie li > p.par {
+.x-ie10, .x-ie{
+	li > p.par {
 		display: inline;
+	}
 }
 
 .x-gecko .mathjax.math.tex2jax_process {
