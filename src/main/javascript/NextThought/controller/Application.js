@@ -11,7 +11,7 @@ Ext.define('NextThought.controller.Application', {
 	init: function() {
 		this.application.registerInitializeTask(this.launchToken);
 
-		Library.on('loaded', this.restore, this);
+		Library.on('loaded', this.restore, this, {single: true});
 		this.application.on('finished-loading', function(){
 			NextThought.isInitialized = true;
 			Globals.removeLoaderSplash();
