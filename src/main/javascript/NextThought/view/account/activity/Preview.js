@@ -108,7 +108,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 
-	moreTpl: Ext.DomHelper.createTemplate({tag:'a', cls:'more', href:'#',cn:[{},{},{}]}),
+	moreTpl: Ext.DomHelper.createTemplate({tag:'a', cls:'more',cn:[{},{},{}]}),
 
 
 	initComponent: function(){
@@ -147,6 +147,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		}
 
 		this.moreTpl.insertAfter(el,null,true);
+		this.mon(this.el.down('a.more'), 'click', this.navigateToItem, this);
 	},
 
 
