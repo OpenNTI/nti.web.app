@@ -19,7 +19,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			{tag: 'legend', html: 'Payment Information'},
 			{cn: [{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Name on card', name: 'name'}]},
 			{cn: [
-				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number'},
+				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number'},
 				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry', placeholder: 'MM / YY', name: 'exp_'},
 				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC', placeholder: 'Code', name: 'cvc'}
 			]}
@@ -80,6 +80,13 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
+	getCardNumberVal: function(input){
+		var val = input.value;
+
+		return val.replace(/[^0-9]/g, '');
+	},
+
+
 	generateTokenData: function(){
 		var inputs = this.getEl().select('input'),
 			data = {}, failed;
@@ -90,7 +97,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			val = input.value;
 			getter = input.getAttribute('data-getter');
 			if(getter){
-				val = jQuery(input).payment(getter);
+				if(this[getter]){
+					val = this[getter](input);
+				}
+				else{
+					val = jQuery(input).payment(getter);
+				}
 			}
 
 			required = input.getAttribute('data-required');
@@ -113,10 +125,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 					data[input.getAttribute('name')+k] = v;
 				});
 			}
-			else{
+			else if(!Ext.isEmpty(val)){
 				data[input.getAttribute('name')] = val;
 			}
-		});
+		}, this);
 
 		this.enableSubmission(!failed);
 
