@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.menus.navigation.Collection',{
 	extend: 'Ext.view.View',
-	alias: 'widget.navigation-collection',
+	//disabling invoking this directly. Only use this through subclasses
+	//alias: 'widget.navigation-collection',
 
 	ui: 'navigation-collection',
 
@@ -14,21 +15,42 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 			{cls:'count',html: '&nbsp;'}
 		]},
 
-		{ tag: 'tpl', 'for':'items', cn: [
-			{ cls: 'stratum item', 'data-qtip': '{title}', cn:[
-				{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'bookcover', style: {
-					backgroundImage: 'url({icon})'
-				}},
-				{ cls: 'wrap', cn:[
-					{ cls: 'title', html: '{title}' },
-					{ cls: 'author', html: '{author}' }
-				]}
-			]}
-		]}//,
+		{ tag: 'tpl', 'for':'items', cn:['{menuitem}']}//,
 
 //		{ cls: 'stratum drawer documents', cn:['Course Documents',{cls:'count',html: '&nbsp;'}] },
 //		{ cls: 'stratum drawer dashboard', cn:['Dashboard',{cls:'count',html: '&nbsp;'}] }
 	]),
+
+
+	menuItemTpl: Ext.DomHelper.markup({
+		cls: 'stratum item', 'data-qtip': '{title}', cn:[
+			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'bookcover', style: {
+				backgroundImage: 'url({icon})'
+			}},
+			{ cls: 'wrap', cn:[
+				{ cls: 'title', html: '{title}' },
+				{ cls: 'author', html: '{author}' }
+			]}
+		]
+	}),
+
+
+	onClassExtended: function(cls, data) {
+		data.menuItemTpl = data.menuItemTpl || cls.superclass.menuItemTpl || false;
+
+		//merge in subclass's templates
+		var tpl = this.prototype.tpl
+				.replace('{menuitem}',data.menuItemTpl||'');
+
+		console.debug(tpl);
+		if(!data.tpl){
+			data.tpl = tpl;
+		}
+		//Allow the subclass to redefine the template and include the super's template
+		else {
+			data.tpl = data.tpl.replace('{super}',tpl);
+		}
+	},
 
 
 	collectData: function(){

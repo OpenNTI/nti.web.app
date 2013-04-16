@@ -15,7 +15,8 @@ Ext.define('NextThought.controller.Store', {
 	],
 
 	views: [
-		'NextThought.view.store.PurchaseWindow'
+		'store.PurchaseWindow',
+		'store.menus.Collection'
 	],
 
 	refs: [
@@ -51,7 +52,7 @@ Ext.define('NextThought.controller.Store', {
 
 		//the 0, is for dev only, will remove later.
 		this.getNavigationMenu().add(0,{
-			xtype: 'navigation-collection',
+			xtype: 'purchasable-collection',
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'
 		});
