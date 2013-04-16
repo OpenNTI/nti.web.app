@@ -8,7 +8,7 @@ Ext.define('NextThought.model.store.Purchasable', {
 		{ name: 'Discountable', type: 'bool', persist: false },
 		{ name: 'Provider', type: 'string', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
-		{ name: 'URL', type: 'string', persist: false },
+		{ name: 'Icon', type: 'string', persist: false },
 		{ name: 'Description', type: 'string', persist: false }
 	]
 });

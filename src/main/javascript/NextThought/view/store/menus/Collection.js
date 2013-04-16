@@ -15,7 +15,7 @@ Ext.define('NextThought.view.store.menus.Collection',{
 	menuItemTpl: Ext.DomHelper.markup({
 		cls: 'stratum purchasable item', 'data-qtip': '{Title}', cn:[
 			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'bookcover', style: {
-				backgroundImage: 'url({icon})'
+				backgroundImage: 'url({Icon})'
 			}},
 			{ cls: 'wrap', cn:[
 				{ cls: 'title', html: '{Title}' },
