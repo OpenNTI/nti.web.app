@@ -35,6 +35,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-window' : {
 					'beforeclose': this.maybeClosePurchaseWindow
+				},
+				'purchasable-collection': {
+					'select': this.purhcasableCollectionSelection
 				}
 			}
 		});
@@ -56,6 +59,11 @@ Ext.define('NextThought.controller.Store', {
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'
 		});
+	},
+
+
+	purhcasableCollectionSelection: function(cmp, record){
+		this.showPurchasable(record);
 	},
 
 

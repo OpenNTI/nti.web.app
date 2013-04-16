@@ -13,5 +13,13 @@ Ext.define('NextThought.view.store.menus.Collection',{
 				{ cls: 'price', html: '${Amount}'}
 			]}
 		]
-	})
+	}),
+
+	listeners: {
+		select: function(selModel,record){
+			//allow reselect since we don't style the selected state, this has no
+			// visual effect other than the ability to click on it again
+			selModel.deselect(record);
+		}
+	},
 });
