@@ -37,7 +37,7 @@
 				0 3px 0 0 #eaeaea;
 	margin-bottom: 3px;
 
-	padding: 0 6px;
+	padding: 0 6px 15px;
 
 	.stratum {
 		padding: 10px;
@@ -114,6 +114,7 @@
 
 		img.bookcover {
 			background:{
+				color: $tertiary-grey;
 				size: cover;
 				position: center center;
 				repeat: no-repeat;
@@ -126,11 +127,11 @@
 		}
 
 		.wrap {
-			margin-left: 75px;
+			margin-left: 65px;
 
 			.title, .author, .price {
 				color: $primary-grey;
-				font: normal bold 12px $font;
+				font: normal bold 12px/18px $font;
 				text-overflow: ellipsis;
 				overflow: hidden;
 				white-space: nowrap;
@@ -139,12 +140,35 @@
 			.author {
 				color: #ababab;//757474
 				font-size: 10px;
+				line-height: 15px;
 				white-space: nowrap;
 				text-transform: uppercase;
 			}
 
 			.price {
 				color: $primary-blue;
+				font-style: italic;
+				line-height: 30px;
+			}
+		}
+
+		&.purchasable {
+			img.bookcover {
+				width: 65px;
+				height: 85px;
+				box-shadow: none;
+			}
+			.wrap {
+				.title, .author{
+					white-space: normal;
+				}
+
+				background: white;
+				min-height: 85px;
+				margin-left: 0;
+				padding-left: 75px;
+				padding-top: 10px;
+				box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
 			}
 		}
 	}
