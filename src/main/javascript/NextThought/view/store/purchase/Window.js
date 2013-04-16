@@ -3,42 +3,64 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	alias: 'widget.purchase-window',
 
 	cls:'purchase-window',
-	width: 695,
-	height: 640,
-	layout: 'fit',
+	width: 520,
+	height: 690,
+	autoShow: true,
+	resizable: false,
+	draggable: false,
 	modal: true,
-	header: true,
-	dockedItems:{
-		xtype: 'container',
-		dock:'bottom',
-		ui: 'footer',
-		height:55,
-		baseCls: 'nti-window',
-		layout: {
-			type: 'hbox',
-			align: 'stretchmax'
-		},
-		defaults:{
-			cls: 'footer-region',
-			xtype: 'container',
-			flex: 1,
-			layout: 'hbox'
-		},
-		items:[{
-			layout: {type:'hbox', pack:'end'},
-			defaults: { xtype:'button', ui:'blue', scale:'large'},
-			items:[
-				{text: 'Cancel',  action: 'cancel', ui: 'secondary' },
-				{text: 'Redeem Code', cls:'.x-btn-blue-large', action: 'redeem'},
-				{text: 'Buy!', cls:'.x-btn-blue-large', action: 'buy'}
-			]
-		}]
+	dialog: true,
+	managed: false,
+
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
+
+	renderTpl: Ext.DomHelper.markup([{
+		cls: 'header', cn:[
+			{ cls: 'titlebar', cn:[
+				{ cls:'tab', html:'Course Details' },
+				{ cls:'tab', html:'Payment Info', 'data-order':1 },
+				{ cls:'tab', html:'Review Order', 'data-order':2 },
+				{ cls:'tab', html:'Confirmation', 'data-order':3 },
+				{ cls: 'close' }
+			]},
+			{ cls: 'info', cn:[
+				{ cls:'bookcover', style: {backgroundImage: 'url({icon})'} },
+				{ cls:'meta', cn:[
+					{cls: 'title', html: '{Title}'},
+					{cls: 'byline', html: 'By {Author}, {Provider}'},
+					{cls: 'price', html:'${Amount}'}
+				]}
+			] }
+		]
+	},{
+		id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
+	},{
+		cls: 'footer', cn: [
+			{tag:'a', cls:'button cancel',role:'button', html:'Cancel'},
+			{tag:'a', cls:'button confirm',role:'button', html:'Purchase'}
+		]
+	}]),
+
+	componentLayout: 'auto',
+	layout: 'auto',
+	items: [],
+
+
+	getDockedItems: function(){
+		return [];
+	},
+
+
+	listeners: {
+//		show: 'addCustomMask',
+//		close: 'removeCustomMask',
+		afterRender: 'center'
 	},
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.on('show', this.addCustomMask, this);
-		this.on('close', this.removeCustomMask, this);
+
 	},
 
 	addCustomMask: function(){

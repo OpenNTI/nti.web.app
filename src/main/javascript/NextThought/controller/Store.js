@@ -73,18 +73,16 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchasable The Purchasable object to show
 	 */
 	showPurchasable: function(purchasable){
-		var win;
+		var win = this.getPurchaseWindow();
 
 		//If we are currently showing a purchase window
 		//don't show another one, we shouldn't be able to get into this state
-		if(this.getPurchaseWindow()){
+		if(win){
 			console.error('Purhcase already in progress.  How did you manage this', win);
 			return null;
 		}
 
-		win = this.getView('store.purchase.Window').create({record: purchasable});
-		win.show();
-		return win;
+		return this.getView('store.purchase.Window').create({record: purchasable});
 	},
 
 
