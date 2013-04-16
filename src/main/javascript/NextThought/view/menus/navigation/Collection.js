@@ -42,7 +42,6 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		var tpl = this.prototype.tpl
 				.replace('{menuitem}',data.menuItemTpl||'');
 
-		console.debug(tpl);
 		if(!data.tpl){
 			data.tpl = tpl;
 		}
