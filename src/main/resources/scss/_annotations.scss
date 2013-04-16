@@ -318,6 +318,7 @@
 
 	[itemprop~="nti-data-markupenabled"],
 	[itemprop~="nti-slide-video"]{
+		@include hardware-accelerate();
 		display: inline-block;
 		//overflow: hidden;
 		position: relative;
