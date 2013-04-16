@@ -5,7 +5,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		'NextThought.view.menus.Group'
 	],
 
-	width: 100,
+	width: '100%',
 	allowBlank: true,
 	displayField: 'realname',
 	typeAhead: false,
@@ -94,13 +94,20 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 
 	afterRender: function(){
 		this.callParent();
+
+		var w, me = this;
 		this.mon( this.inputEl, {
 			'mousedown':function(e){ e.dragTracked = true; },
 			'keydown':function(e){if(e.getKey() !== e.ESC){e.stopPropagation();}}
 		});
-		this.inputEl.setStyle({width: null});
+
+		w = this.el.getWidth() +'px';
 
 		this.triggerEl.first().parent().addCls('hidden');
+
+		Ext.defer(function(){
+			me.inputEl.setStyle({width: w});
+		}, 1);
 	},
 
 
