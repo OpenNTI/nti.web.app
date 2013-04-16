@@ -39,6 +39,12 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getPurchasableItemURL: function(){
+		//Until we get this hung off some workspace
+		return getURL('/dataserver2/store/get_purchasables');
+	},
+
+
 	forceTrailingSlash: function(uri){
 		if(uri.charAt(uri.length-1)==='/') {
 			return uri;
