@@ -138,7 +138,7 @@ Ext.define('NextThought.controller.Store', {
 		//Detect this by looking at what stage in the process we are in.
 		//I.E its safe to close from the detail view, but not once we have started
 		//a purchase process
-		var destructive = true;
+		var destructive = !win.down('[closeWithoutWarn=true]');
 
 		if(!win.forceClosing && destructive){
 
