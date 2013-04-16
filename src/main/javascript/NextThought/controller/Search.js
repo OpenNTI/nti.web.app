@@ -283,7 +283,7 @@ Ext.define('NextThought.controller.Search', {
 			hit = result.hit,
 			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
 			qStr = this.getHitStore().queryString,
-			commentId = undefined;
+			commentId;
 
 		if(isComment){
 			commentId = hit.get('ID');
