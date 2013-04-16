@@ -2,11 +2,6 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	extend: 'Ext.view.View',
 	alias: 'widget.navigation-collection',
 
-	requires: [
-		'NextThought.providers.Location',
-		'NextThought.Library'
-	],
-
 	ui: 'navigation-collection',
 
 	trackOver: true,
@@ -14,7 +9,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	itemSelector: '.stratum.item',
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'stratum collection-name', cn: [
-			/*{ cls: 'settings', hidden: true },*/
+			/*{ cls: 'settings' },*/
 			'{name}',
 			{cls:'count',html: '&nbsp;'}
 		]},
@@ -36,37 +31,9 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	]),
 
 
-	initComponent: function(){
-		this.store = Library.getStore();
-		this.callParent(arguments);
-
-		this.mon(LocationProvider,'navigate',this.updateSelection,this);
-	},
-
-
-	updateSelection: function(ntiid){
-		var last = LocationProvider.getLineage(ntiid).last();
-		var r = this.store.findRecord('NTIID',last,0,false,true,true);
-		if(r){
-			this.getSelectionModel().select(r,false, true);
-		}
-		else{
-			this.getSelectionModel().deselectAll();
-		}
-	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.updateSelection();
-	},
-
-
 	collectData: function(){
 		var data = {items: this.callParent(arguments)};
-
-		data.name = 'All Books';
-
+		data.name = this.name;
 		return data;
 	}
 });

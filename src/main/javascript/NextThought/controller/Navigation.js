@@ -3,22 +3,24 @@ Ext.define('NextThought.controller.Navigation', {
 
 	require: [
 		'NextThought.providers.Location',
-		'NextThought.util.UserDataThreader'
+		'NextThought.util.UserDataThreader',
+		'NextThought.ux.WelcomeGuide'
 	],
 
 	views: [
 		'Navigation',
 		'ViewSelect',
 		'Views',
-		'menus.Navigation',
         'UserDataPanel',
-		'NextThought.ux.WelcomeGuide'
+		'menus.Navigation',
+		'menus.navigation.Collection',
+		'library.menus.Collection'
 	],
 
 	init: function() {
 		this.listen({
 			component:{
-				'navigation-collection': {
+				'library-collection': {
 					'itemclick': this.selectLibraryEntry
 				},
 				'activity-panel': {

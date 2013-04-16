@@ -29,7 +29,7 @@ Ext.define('NextThought.view.ViewSelect', {
 
 	requires: [
 		'NextThought.view.menus.Navigation',
-		'NextThought.view.menus.navigation.Collection'
+		'NextThought.view.library.menus.Collection'
 	],
 
 	cls: 'view-switcher',
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			menu: {
 				xtype: 'navigation-menu',
 				items:[
-				   {xtype:'navigation-collection'}
+				   {xtype:'library-collection', name: 'All Books'}
 				]
 			}
 		},
