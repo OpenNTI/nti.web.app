@@ -58,14 +58,18 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		afterRender: 'center'
 	},
 
-	initComponent: function(){
-		this.callParent(arguments);
 
+	beforeRender: function(){
+		this.callParent(arguments);
+		this.renderData = Ext.applyIf(this.renderData||{},this.record.getData());
 	},
+
 
 	addCustomMask: function(){
 		var mask = this.zIndexManager.mask;
-		mask.addCls('nti-black-clear');
+		if(mask){
+			mask.addCls('nti-black-clear');
+		}
 	},
 
 	removeCustomMask: function(){
