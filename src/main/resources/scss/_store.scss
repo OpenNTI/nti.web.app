@@ -202,6 +202,7 @@
     white-space: pre-wrap;
 }
 
+.x-component-purchaseconfirm-panel,
 .x-component-purchase-form {
 
 	fieldset {
@@ -242,5 +243,9 @@
 			border-left-width: 0;
 			box-shadow: inset 5px 0 0 0 #a0a0a0;
 		}
+	}
+
+	[data-label]{
+		white-space: pre-wrap;
 	}
 }

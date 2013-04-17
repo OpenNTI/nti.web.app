@@ -18,19 +18,20 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	//Use this flag only for testing locally to make those fields not required.  I miss preprocessor statements...
 	//ignoreClientSideValidation: true,
 
-	renderTpl: Ext.DomHelper.markup([
+	renderTpl: Ext.DomHelper.markup({tag:'form', autocomplete:'on', cn:[
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Payment Information'},
 			{cn: [{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Name on card', name: 'name'}]},
 			{cn: [
 				{tag: 'input', type: 'text', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number',
+					required:'required', pattern:'\\d*', autocompletetype:'cc-number',
 					'data-required': true, 'data-width':'1/2',
 					'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal' },
 				{tag: 'input', type: 'text', placeholder: 'MM / YY', name: 'exp_',
-					'data-required': true, 'data-width':'1/4',
+					'data-required': true, 'data-width':'1/4', autocomplete:'off',
 					'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry'},
 				{tag: 'input', type: 'text', placeholder: 'Code', name: 'cvc',
-					'data-required': true, 'data-width':'1/4',
+					'data-required': true, 'data-width':'1/4', autocomplete:'off', required:'required', pattern:'\\d*',
 					'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC'}
 			]}
 		]},
@@ -43,10 +44,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			{cn: [
 				{tag: 'input', type: 'text', 'data-required': true, 'data-width':'2/3',
 					placeholder: 'Country', name: 'address_country'},
-				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip', 'data-width':'1/3'}
+				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip',
+					pattern:'\\d*', 'data-width':'1/3', 'data-formatter':'restrictNumeric'}
 			]}
 		]}
-	]),
+	]}),
 
 
 	afterRender: function(){
@@ -205,7 +207,17 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 	},
 
-	handleError: function(error){
-		console.log('Form needs to handle error', arguments);
+	handleError: function(errorObject){
+		console.log('Form needs to handle error', errorObject);
+		var el = this.getEl(),
+			error = errorObject.error,
+			p = error.param||'',
+			field = el.down('input[name="'+p+'"]') || el.down('input[name^='+(p.split('_')[0])+']');
+
+		if( field ){
+			field.addCls('invalid');
+		}
+
+		this.up('window').showError(error.message);
 	}
 });

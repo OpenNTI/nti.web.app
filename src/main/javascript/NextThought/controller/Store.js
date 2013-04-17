@@ -132,7 +132,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
 	createPurchase: function(cmp, purchasable, cardinfo){
-		var connectInfo = purchasable.get('StripeConnectKey') || {},
+		var connectInfo = purchasable.get('StripeConnectKey'),
 			pKey = connectInfo && connectInfo.get('PublicKey'),
 			win = this.getPurchaseWindow();
 
@@ -141,16 +141,12 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		if(!connectInfo){
-			console.error('Expected a connectInfo', arguments);
-			return;
-		}
-
 		if(!pKey){
 			//In real environments we shouldn't ever have a purchasable
 			//without strip information (at this point) and if we do we shouldn't
 			//get this far.  But in any event crap breaks in unexpected ways so don't die
 			console.error('No Stripe connection info for purchasable', purchasable);
+			win.showError('Expected connection info');
 			return;
 		}
 

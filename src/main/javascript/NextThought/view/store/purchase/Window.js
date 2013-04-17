@@ -123,6 +123,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			confirmLabel = cmp.confirmLabel || 'Purchase';
 
 		if(this.rendered){
+			this.hideError();
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
 		}
