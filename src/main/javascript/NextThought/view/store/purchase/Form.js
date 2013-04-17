@@ -19,20 +19,27 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			{tag: 'legend', html: 'Payment Information'},
 			{cn: [{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Name on card', name: 'name'}]},
 			{cn: [
-				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number'},
-				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry', placeholder: 'MM / YY', name: 'exp_'},
-				{tag: 'input', type: 'text', 'data-required': true, 'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC', placeholder: 'Code', name: 'cvc'}
+				{tag: 'input', type: 'text', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number',
+					'data-required': true, 'data-width':'1/2',
+					'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal' },
+				{tag: 'input', type: 'text', placeholder: 'MM / YY', name: 'exp_',
+					'data-required': true, 'data-width':'1/4',
+					'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry'},
+				{tag: 'input', type: 'text', placeholder: 'Code', name: 'cvc',
+					'data-required': true, 'data-width':'1/4',
+					'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC'}
 			]}
 		]},
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Billing Address'},
 			{cn: [{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Address', name: 'address_line1'}]},
 			{cn: [{tag: 'input', type: 'text', placeholder: 'Address', name: 'address_line2'}]},
-			{cn: [{tag: 'input', type: 'text', placeholder: 'City / Town', name: 'address_city'}]},
+			{cn: [{tag: 'input', type: 'text', placeholder: 'City / Town', name: 'address_city', 'data-width':'2/3'}]},
 			{cn: [{tag: 'input', type: 'text', placeholder: 'State / Province / Territory / Region', name: 'address_state'}]},
 			{cn: [
-				{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Country', name: 'address_country'},
-				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip'}
+				{tag: 'input', type: 'text', 'data-required': true, 'data-width':'2/3',
+					placeholder: 'Country', name: 'address_country'},
+				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip', 'data-width':'1/3'}
 			]},
 		]}
 	]),
