@@ -40,7 +40,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				{tag: 'input', type: 'text', 'data-required': true, 'data-width':'2/3',
 					placeholder: 'Country', name: 'address_country'},
 				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip', 'data-width':'1/3'}
-			]},
+			]}
 		]}
 	]),
 
