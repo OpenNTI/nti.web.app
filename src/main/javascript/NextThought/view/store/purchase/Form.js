@@ -72,6 +72,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				jqd.payment(formatter);
 			}
 			jqd.blur(validator).keypress(bufferedValidator);
+			jqd.focus(function(){
+				jqd.attr('data-visited','true');
+			});
 		});
 
 		this.enableSubmission(false);
@@ -116,18 +119,24 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 	validateForRequired: function(input, val){
-		var required = input.getAttribute('data-required');
+		var required = input.getAttribute('data-required'),
+			visited = input.getAttribute('data-visited');
 		if(required && !val){
-			Ext.fly(input).addCls('invalid');
+			if( visited ){
+				Ext.fly(input).addCls('invalid');
+			}
 			return false;
 		}
 		return true;
 	},
 
 	validateWithValidator: function(input, val){
-		var validator = input.getAttribute('data-validator');
+		var validator = input.getAttribute('data-validator'),
+			visited = input.getAttribute('data-visited');
 		if(validator && !jQuery.payment[validator](val)){
-			Ext.fly(input).addCls('invalid');
+			if( visited ){
+				Ext.fly(input).addCls('invalid');
+			}
 			return false;
 		}
 		return true;
