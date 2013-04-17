@@ -156,6 +156,12 @@
 				color: #ffffff;
 				outline: 1px solid #69a92b;
 				background: #75bc30;
+
+				&.disabled {
+					opacity: 0.6;
+					background: #dcdcdc;
+					outline: none;
+				}
 			}
 		}
 
