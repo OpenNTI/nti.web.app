@@ -203,8 +203,10 @@
 		width: 410px;
 
 		&.invalid {
-			border-left-width: 0;
-			box-shadow: inset 5px 0 0 0 $primary-red;
+			&,&[data-required="true"]{
+				border-left-width: 0;
+				box-shadow: inset 5px 0 0 0 $primary-red;
+			}
 		}
 
 		&[data-width="2/3"]{ width: 260px; }
