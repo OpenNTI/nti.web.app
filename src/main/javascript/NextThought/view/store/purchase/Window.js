@@ -40,6 +40,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},{
 		id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
 	},{
+		cls:'error', cn:[{cls:'label'},{cls:'message'}]
+	},{
 		cls: 'footer', cn: [
 			{tag:'a', cls:'button cancel',role:'button', html:'Cancel'},
 			{tag:'a', cls:'button confirm',role:'button', html:'Purchase'}
@@ -49,7 +51,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	renderSelectors: {
 		closeEl: '.header .titlebar .close',
 		cancelEl: '.footer a.cancel',
-		confirmEl: '.footer a.confirm'
+		confirmEl: '.footer a.confirm',
+		errorEl: '.error',
+		errorLabelEl: '.error .label',
+		errorMessageEl: '.error .message'
 	},
 
 	componentLayout: 'auto',
@@ -86,6 +91,30 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		});
 
 		this.add({xtype: 'purchase-detailview', record: this.record});
+		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.errorEl.hide();
+	},
+
+
+	hideError: function(){
+		this.getTargetEl().setStyle({height:undefined});
+		this.errorEl.hide();
+	},
+
+
+	showError: function(message, label){
+		var el = this.getTargetEl(),
+			errorEl = this.errorEl;
+		function syncHeight(){
+			var h = errorEl.getY() - el.getY();
+			el.setHeight(h);
+		}
+
+		this.errorLabelEl.update(label||'Error:');
+		this.errorMessageEl.update(message||'');
+
+		errorEl.show();
+		Ext.defer(syncHeight,1);
 	},
 
 

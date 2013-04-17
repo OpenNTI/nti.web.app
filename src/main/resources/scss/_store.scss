@@ -116,6 +116,27 @@
 		}
 	}
 
+	.error {
+		position: absolute;
+		bottom: 45px; left: 0; right: 0;
+		overflow: hidden;
+		background: #f35252;
+		font: normal 600 12px $font;
+
+		.label {
+			float: left;
+			width: 75px;
+			text-align: right;
+			color: #730000;
+			padding: 10px 0;
+		}
+
+		.message {
+			color: #fff;
+			margin: 10px 10px 10px 85px;
+		}
+	}
+
 	.footer {
 		position: absolute;
 		bottom: 0;
@@ -168,7 +189,10 @@
 	}
 
 	.container-body {
-
+		overflow: {
+			x: hidden;
+			y: auto;
+		}
 	}
 }
 
