@@ -133,11 +133,16 @@ Ext.define('NextThought.controller.Store', {
 	 */
 	createPurchase: function(cmp, purchasable, cardinfo){
 		var connectInfo = purchasable.get('StripeConnectKey') || {},
-			pKey = connectInfo.get('PublicKey'),
+			pKey = connectInfo && connectInfo.get('PublicKey'),
 			win = this.getPurchaseWindow();
 
 		if(!win){
 			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		if(!connectInfo){
+			console.error('Expected a connectInfo', arguments);
 			return;
 		}
 
