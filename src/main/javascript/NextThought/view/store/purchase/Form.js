@@ -29,7 +29,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 					'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal' },
 				{tag: 'input', type: 'text', placeholder: 'MM / YY', name: 'exp_',
 					'data-required': true, 'data-width':'1/4', autocomplete:'off',
-					'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry'},
+					'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry',
+					'data-cardfields': 'exp_month,exp_year', 'data-cardfields-separator': '/'},
 				{tag: 'input', type: 'text', placeholder: 'Code', name: 'cvc',
 					'data-required': true, 'data-width':'1/4', autocomplete:'off', required:'required', pattern:'\\d*',
 					'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC'}
@@ -71,12 +72,38 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		});
 
 		this.enableSubmission(false);
-		this.fillFromToken();
+
+		if(this.tokenObject && this.tokenObject.card){
+			this.fillFromToken(this.tokenObject.card);
+		}
 	},
 
 
-	fillFromToken: function(){
+	fillFromToken: function(card){
+		var inputs = this.getEl().select('input');
+		inputs.each(function(input){
+			input = Ext.getDom(input);
+			var fields = input.getAttribute('data-cardfields'),
+				name = input.getAttribute('name'),
+				val, formatter;
 
+			if(fields){
+				fields = fields.split(',');
+				val = Ext.Array.map(fields, function(f){return card[f]});
+				if(!Ext.Array.some(val, function(v){return v === null || v ===undefined;})){
+					val = val.join(input.getAttribute('data-cardfields-separator') || '');
+				}
+			}
+			else if(name){
+				val = card[name];
+			}
+
+			if(val !== undefined && val !== null){
+				input.value = val;
+				jQuery(input).keypress();
+			}
+
+		});
 	},
 
 

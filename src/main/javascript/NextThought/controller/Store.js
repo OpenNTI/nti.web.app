@@ -53,6 +53,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-complete': {
 					'close': this.forceCloseWindow
+				},
+				'purchase-window *': {
+					'price-purchase': this.pricePurchase
 				}
 			}
 		});
@@ -67,7 +70,6 @@ Ext.define('NextThought.controller.Store', {
 
 
 	maybeAddPurchasables: function(){
-
 		//the 0, is for dev only, will remove later.
 		this.getNavigationMenu().add(0,{
 			xtype: 'purchasable-collection',
@@ -116,15 +118,14 @@ Ext.define('NextThought.controller.Store', {
 
 	/**
 	 *
-	 * Validates the given coupone code for the provided purchasable item.
+	 * Validates the given coupon code for the provided purchasable item.
 	 *
 	 * @param cmp The owner cmp
-	 * @param purchaseDesc an object containing the Purchasable,
-	 * @param coupon The coupon code to validate
+	 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param success The success callback called if the provided coupone is valid
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	validateCouponCode: function(cmp, purchaseDesc, coupon, success, failure){
+	pricePurchase: function(cmp, purchaseDesc, success, failure){
 
 	},
 
