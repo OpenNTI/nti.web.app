@@ -46,6 +46,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-form': {
 					'create-payment-token': this.createPurchase
+				},
+				'purchase-complete': {
+					'close': this.forceCloseWindow
 				}
 			}
 		});
@@ -211,7 +214,8 @@ Ext.define('NextThought.controller.Store', {
 		//Detect this by looking at what stage in the process we are in.
 		//I.E its safe to close from the detail view, but not once we have started
 		//a purchase process
-		var destructive = !win.down('[closeWithoutWarn=true]');
+		var destructive = !win.down('[closeWithoutWarn=true]'),
+			me = this;
 
 		if(!win.forceClosing && destructive){
 
@@ -224,9 +228,7 @@ Ext.define('NextThought.controller.Store', {
 				title: 'Are you sure?',
 				fn: function(str){
 					if(str === 'ok'){
-						win.forceClosing = true;
-						win.close();
-						delete win.forceClosing;
+						me.forceCloseWindow(null, win);
 					}
 				}
 			});
@@ -234,5 +236,18 @@ Ext.define('NextThought.controller.Store', {
 			return false;
 		}
 		return true;
+	},
+
+	forceCloseWindow: function(cmp, w){
+		var win = w || this.getPurchaseWindow();
+
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		win.forceClosing = true;
+		win.close();
+		delete win.forceClosing;
 	}
 });
