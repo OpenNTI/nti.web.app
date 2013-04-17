@@ -70,13 +70,19 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 		getTargetXY.recursiveCall = true;
 
-		this.anchorTarget = Ext.getDom( getTarget((this.activeTarget||{}).el) );
+		delete this.delegate;
+		//Only update it, if activeTarget is set.
+		this.anchorTarget = this.activeTarget ? Ext.getDom( getTarget(this.activeTarget.el)) : this.anchorTarget;
 		this.anchor = 'bottom';
 
 		var vW = Ext.dom.Element.getViewportWidth(),
 			w = this.el.getWidth(),
 			r;
 
+		if(Ext.isEmpty(this.anchorTarget)){
+			console.warn('Tooltip anchorTarget is null. It shouldn\'t be');
+			return null;
+		}
 		try{
 			r = this.callParent(arguments);
 
@@ -107,7 +113,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	},
 
 	//Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
-	showAt: function(){
+	showAt: function(xy){
 		var size = this.el.getSize(),
 			sizeAfter;
 
@@ -116,7 +122,8 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 		sizeAfter = this.el.getSize();
 
 		if(size.width !== sizeAfter.width || size.height !== sizeAfter.height){
-			Ext.defer(this.showAt,1,this,[this.getTargetXY()]);
+			//NOTE: if for some reasons, getTargetXY() returns null, return the default xy that was passed in.
+			Ext.defer(this.showAt,1,this,[this.getTargetXY() || xy]);
 		}
 	},
 
