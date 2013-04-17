@@ -72,6 +72,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
+	fillFromToken: function(){
+
+	},
+
+
 	enableSubmission: function(enabled){
 		var win = this.up('window');
 		if(win){
@@ -87,57 +92,90 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
+	valueForInput: function(input){
+		var val = input.value,
+			getter = input.getAttribute('data-getter');
+
+		if(getter){
+			if(this[getter]){
+				val = this[getter](input);
+			}
+			else{
+				val = jQuery(input).payment(getter);
+			}
+		}
+
+		return val;
+	},
+
+	validateForRequired: function(input, val){
+		var required = input.getAttribute('data-required');
+		if(required && !val){
+			Ext.fly(input).addCls('invalid');
+			return false;
+		}
+		return true;
+	},
+
+	validateWithValidator: function(input, val){
+		var validator = input.getAttribute('data-validator');
+		if(validator && !jQuery.payment[validator](val)){
+			Ext.fly(input).addCls('invalid');
+			return false;
+		}
+		return true;
+	},
+
+
+	validateInput: function(input){
+		var val;
+		input = Ext.getDom(input);
+
+		val = this.valueForInput(input);
+
+		if(!this.validateForRequired(input, val)){
+			return null;
+		}
+
+		if(!this.validateWithValidator(input, val)){
+			return null;
+		}
+
+		Ext.fly(input).removeCls('invalid');
+		return val;
+	},
+
+	collectVal: function(data, input, val){
+		if(Ext.isObject(val)){
+			Ext.Object.each(val, function(k, v){
+				data[input.getAttribute('name')+k] = v;
+			});
+		}
+		else if(!Ext.isEmpty(val)){
+			data[input.getAttribute('name')] = val;
+		}
+	},
+
+
 	generateTokenData: function(){
 		var inputs = this.getEl().select('input'),
-			data = {}, failed;
+			data = {}, failed = false;
 		inputs.each(function(input){
-			var val, getter, required, validator;
-			input = Ext.getDom(input);
-
-			val = input.value;
-			getter = input.getAttribute('data-getter');
-			if(getter){
-				if(this[getter]){
-					val = this[getter](input);
-				}
-				else{
-					val = jQuery(input).payment(getter);
-				}
-			}
-
-			required = input.getAttribute('data-required');
-			if(required && !val){
-				Ext.fly(input).addCls('invalid');
+			//First we validate
+			var val = this.validateInput(input);
+			if(val === null){
 				failed = true;
-				return true;
+				return true; //continue
 			}
 
-			validator = input.getAttribute('data-validator');
-			if(validator && !jQuery.payment[validator](val)){
-				Ext.fly(input).addCls('invalid');
-				failed = true;
-				return true;
-			}
+			//If that passed we collect
+			this.collectVal(data, input, val);
 
-			Ext.fly(input).removeCls('invalid');
-			if(Ext.isObject(val)){
-				Ext.Object.each(val, function(k, v){
-					data[input.getAttribute('name')+k] = v;
-				});
-			}
-			else if(!Ext.isEmpty(val)){
-				data[input.getAttribute('name')] = val;
-			}
 		}, this);
 
 		this.enableSubmission(!failed);
 
 		return failed ? undefined : data;
-	},
-
-
-	fillFromToken: function(){
-
 	},
 
 
