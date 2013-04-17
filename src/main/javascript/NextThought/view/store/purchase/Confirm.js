@@ -3,6 +3,8 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 	alias: 'widget.purchase-confirm',
 
 	ordinal: 2,
+	confirmLabel: 'Complete',
+
 	ui: 'purchaseconfirm-panel',
 
 	renderTpl: Ext.DomHelper.markup([

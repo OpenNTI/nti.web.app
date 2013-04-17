@@ -125,6 +125,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		if(this.rendered){
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
+			this.cancelEl[cmp.omitCancel ? 'hide' : 'show']();
 		}
 	},
 

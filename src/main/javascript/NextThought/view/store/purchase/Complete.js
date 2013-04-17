@@ -7,6 +7,8 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 	renderTpl: 'Hooray revenue',
 
 	ordinal: 3,
+	confirmLabel: 'Done',
+	omitCancel: true,
 
 	onConfirm: function(){
 		this.fireEvent('close', this);

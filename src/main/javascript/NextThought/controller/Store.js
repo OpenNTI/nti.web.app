@@ -293,7 +293,6 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param btn the button triggering the cancel
 	 */
-
 	purchaseWindowCancel: function(btn){
 		btn.up('window').close();
 	},
