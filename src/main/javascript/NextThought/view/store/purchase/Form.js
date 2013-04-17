@@ -14,6 +14,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	ordinal: 1,
 	confirmLabel: 'Continue',
 
+	//To use some of stipes test cards we cant send address or cvc but those are required on our form.
+	//Use this flag only for testing locally to make those fields not required.  I miss preprocessor statements...
+	//ignoreClientSideValidation: true,
+
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Payment Information'},
@@ -43,19 +47,6 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			]}
 		]}
 	]),
-
-
-	validators: {
-
-	},
-
-
-	renderSelectors: {
-		nameEl: 'input[name=name]',
-		numberEl: 'input[name=number]',
-		cvcEl: 'input[name=cvc]',
-
-	},
 
 
 	afterRender: function(){
@@ -121,6 +112,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	validateForRequired: function(input, val){
 		var required = input.getAttribute('data-required'),
 			visited = input.getAttribute('data-visited');
+
+		if(this.ignoreClientSideValidation){
+			console.warn('Ignoring client side validation this should only be used in specific test cases');
+			return true;
+		}
+
 		if(required && !val){
 			if( visited ){
 				Ext.fly(input).addCls('invalid');
@@ -133,6 +130,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	validateWithValidator: function(input, val){
 		var validator = input.getAttribute('data-validator'),
 			visited = input.getAttribute('data-visited');
+
+		if(this.ignoreClientSideValidation){
+			console.warn('Ignoring client side validation this should only be used in specific test cases');
+			return true;
+		}
+
 		if(validator && !jQuery.payment[validator](val)){
 			if( visited ){
 				Ext.fly(input).addCls('invalid');
@@ -200,5 +203,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		if(data){
 			this.fireEvent('create-payment-token', this, this.record, data);
 		}
+	},
+
+	handleError: function(error){
+		console.log('Form needs to handle error', arguments);
 	}
 });

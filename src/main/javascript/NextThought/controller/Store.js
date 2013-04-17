@@ -17,6 +17,7 @@ Ext.define('NextThought.controller.Store', {
 	views: [
 		'store.purchase.Window',
 		'store.purchase.Form',
+		'store.purchase.Confirm',
 		'store.menus.Collection'
 	],
 
@@ -42,6 +43,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-detailview':{
 					'show-purchase-form': this.showPurchaseForm
+				},
+				'purchase-form': {
+					'create-payment-token': this.createPurchase
 				}
 			}
 		});
@@ -121,12 +125,63 @@ Ext.define('NextThought.controller.Store', {
 	 * Called to generate a stripe payment token from purchase information
 	 *
 	 * @param cmp the owner cmp
-	 * @param purchaseDesc an object containing the Purchasable, Quantity and card information
-	 * @param success The success callback called with the generated stripe token
-	 * @param failure The failure callback called if the token generation fails
+	 * @param purchasable the purchasable object
+	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
-	createPurchase: function(cmp, purchaseDesc, success, failure){
+	createPurchase: function(cmp, purchasable, cardinfo){
+		var connectInfo = purchasable.get('StripeConnectKey') || {},
+			pKey = connectInfo.get('PublicKey'),
+			win = this.getPurchaseWindow();
 
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		if(!pKey){
+			//In real environments we shouldn't ever have a purchasable
+			//without strip information (at this point) and if we do we shouldn't
+			//get this far.  But in any event crap breaks in unexpected ways so don't die
+			console.error('No Stripe connection info for purchasable', purchasable);
+			return;
+		}
+
+		function tokenResponseHandler(status, response){
+			//https://stripe.com/docs/api#errors
+			if(status !== 200 || response.error){
+				console.error('An error occured during token generation for purchasable', purchasable, response);
+				cmp.handleError(response);
+			}
+			else{
+				console.log('Stripe token response handler', arguments);
+				win.remove(cmp, true);
+				win.add({xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
+			}
+			win.getEl().unmask();
+			delete win.lockPurchaseAction;
+		}
+
+		if(win.lockPurchaseAction){
+			return false;
+		}
+		win.lockPurchaseAction = true;
+
+		try{
+			//Mask the window or the form?
+			win.getEl().mask('Processing');
+
+			//Make sure we are using the correct public key
+			Stripe.setPublishableKey(pKey);
+			Stripe.createToken(cardinfo, tokenResponseHandler);
+
+		}
+		catch(e){
+			console.error('An exception occurred creating stripe token', Globals.getError(e));
+			//TODO Pass this to the view for display?  It would most likely be a programming error
+			cmp.handleError('An unknown error occurred.  Please try again later.');
+			delete win.lockPurchaseAction;
+			win.getEl().unmask();
+		}
 	},
 
 	/**
