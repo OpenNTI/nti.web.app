@@ -171,6 +171,7 @@ Ext.define('NextThought.controller.Store', {
 		win.lockPurchaseAction = true;
 
 		try{
+			win.hideError();
 			//Mask the window or the form?
 			win.getEl().mask('Processing');
 
