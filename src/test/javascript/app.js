@@ -120,6 +120,7 @@ Ext.application({
 		'Session',
 		'SlideDeck',
 		'State',
+		'Store',
 		'Stream'
 	],
 
@@ -189,6 +190,7 @@ Ext.application({
 			'javascript/specs/view/content/Navigation.spec.js',
 			'javascript/specs/view/forums/Comment.spec.js',
 			'javascript/specs/view/ViewSelect.spec.js',
+			'javascript/specs/view/store/purchase/Form.js',
 			'javascript/specs/controller/Chat.spec.js',
 			'javascript/specs/controller/Groups.spec.js',
 			'javascript/specs/controller/Navigation.spec.js',
