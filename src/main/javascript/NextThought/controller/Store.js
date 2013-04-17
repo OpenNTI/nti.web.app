@@ -18,6 +18,7 @@ Ext.define('NextThought.controller.Store', {
 		'store.purchase.Window',
 		'store.purchase.Form',
 		'store.purchase.Confirm',
+		'store.purchase.Complete',
 		'store.menus.Collection'
 	],
 
@@ -46,6 +47,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-form': {
 					'create-payment-token': this.createPurchase
+				},
+				'purchase-confirm': {
+					'process-purchase': this.submitPurchase
 				},
 				'purchase-complete': {
 					'close': this.forceCloseWindow
@@ -132,7 +136,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
 	createPurchase: function(cmp, purchasable, cardinfo){
-		var connectInfo = purchasable.get('StripeConnectKey'),
+		var connectInfo = purchasable.get('StripeConnectKey') || {},
 			pKey = connectInfo && connectInfo.get('PublicKey'),
 			win = this.getPurchaseWindow();
 
@@ -190,16 +194,99 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 	/**
+	 * Make the purchase for purhcasable using tokenObject
 	 *
 	 * @param cmp the owner cmp
-	 * @param purchaseDesc an object containing the Purchasable, Quantity and PaymentInfo
-	 * @param token a stripe payment token from createPurchase
-	 * @param success the callback called when the purchase has completed succesfully
-	 * @param failure the callback for error conditions
+	 * @param purchasable the item to purchase
+	 * @param tokenObject the stripe token object
 	 */
-	submitPurchase: function(cmp, purchaseDesc, token, success, failure){
+	submitPurchase: function(cmp, purchasable, tokenObject){
+		//TODO need to pass quantity and coupon code once the UI collects it
+		//TODO also send along expected price so ds can verify against it?
 
+		var connectInfo = purchasable.get('StripeConnectKey') || {},
+			pKey = connectInfo.get('PublicKey'),
+			tokenId = (tokenObject || {}).id,
+			win = this.getPurchaseWindow();
+
+
+		//At this point we shouldn't get here without a purchasable and tokenObject.  The
+		//tokenObject should have a token id at this point.  We should also have a window.
+		//All these various error conditions should be handled else where but if crap hits the fan fail somewhat
+		//gracefully.  These should all be programming error cases
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		if(!pKey){
+			//In real environments we shouldn't ever have a purchasable
+			//without strip information (at this point) and if we do we shouldn't
+			//get this far.  But in any event crap breaks in unexpected ways so don't die
+			console.error('No Stripe connection info for purchasable', purchasable);
+			return;
+		}
+
+		if(!tokenId){
+			//In real environments we shouldn't ever have a purchasable
+			//without strip information (at this point) and if we do we shouldn't
+			//get this far.  But in any event crap breaks in unexpected ways so don't die
+			console.error('No token id to make purchase with', arguments);
+			return;
+		}
+
+		//Ok the idea here is to make an ajax request to start the payment processing.
+		//then we start polling for the processing to complete.  On success we move
+		//the user to the thank you page.  On an error we move them back to the payment form
+		if(win.lockPurchaseAction){
+			return false;
+		}
+		win.lockPurchaseAction = true;
+
+		win.getEl().mask('Your purchase is being finalized.  This may take several moments');
+		try{
+			this.initiatePayment(cmp, purchasable, tokenObject, function(){
+				delete win.lockPurchaseAction;
+				win.getEl().unmask();
+			});
+		}
+		catch(e){
+			//An exception here means we shouldn't have even started the purchase on the ds.
+			//in this case the users card shouldn't have been carged yet.
+
+			console.error('An error occurred initiating payment.  Please try again later.', Globals.getError(e), arguments);
+
+			//Treat this like a failure and pop back to the payment form?
+			delete win.lockPurchaseAction;
+			win.getEl().unmask();
+		}
 	},
+
+	/**
+	 * Submit a payment request for the given purchasable and token
+	 * When a PaymentAttempt finishes logic is handed off to handleCompletedPurchase.
+	 * A completion callback can be provided that will be
+	 */
+	initiatePayment: function(cmp, purchasable, token, completion){
+		this.handleCompletedPurchase(purchasable, token, null, completion);
+	},
+
+
+	/**
+	 * Inspect the completed purchase attempt and handle success or failurs.
+	 * On success move the user to the thank you page.  On failure move the user
+	 * back to the form view (asking to populate from the card info on the token object)
+	 * and displaying the necessary error from the server.  On completion call the callback
+	 */
+	handleCompletedPurchase: function(purchasable, token, completedAttempt, completion){
+		var win = this.getPurchaseWindow(),
+			cmp = win ? win.items.first() : undefined;
+
+		win.remove(cmp, true);
+		win.add({xtype: 'purchase-complete', record: purchasable, purchaseAttempt: completedAttempt});
+		Ext.callback(completion);
+	},
+
 
 	/**
 	 * Handler for canceling an in progress purchase.
