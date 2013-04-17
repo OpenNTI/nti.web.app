@@ -247,5 +247,25 @@
 
 	[data-label]{
 		white-space: pre-wrap;
+		position: relative;
+		margin: 20px 40px 20px 0;
+		font: normal normal 14px/20px $font;
+		color: $primary-grey;
+
+		&::before{
+			color: #a0a0a0;
+			content: attr(data-label) ":";
+			position: absolute;
+			top: -16px;
+			left: 0;
+			white-space: nowrap;
+			font-size: 10px;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
 	}
+}
+
+.x-component-purchaseconfirm-panel fieldset {
+	padding-top: 1px;
 }

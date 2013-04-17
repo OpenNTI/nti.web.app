@@ -10,9 +10,8 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 			{ tag: 'legend', html: 'Payment Information' },
 			{ cn: [{ 'data-label': 'Name on card', html:'{name}' }] },
 			{ cn: [
-				{ tag:'span', 'data-label': 'Card Number', html:'enging in {last4}' },
-				{ tag:'span', 'data-label': 'Expiry', html: '{exp_month} / {exp_year}' },
-				{ tag:'span', 'data-label': 'Code', html: '{cvc}' }
+				{ tag:'span', 'data-label': 'Card Number', html:'{type} enging in {last4}' },
+				{ tag:'span', 'data-label': 'Expiry', html: '{exp_month} / {exp_year}' }
 			]}
 		]},
 		{tag: 'fieldset', cn:[
