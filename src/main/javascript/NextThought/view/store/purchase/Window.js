@@ -22,7 +22,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'header', cn:[
 			{ cls: 'titlebar', cn:[
-				{ cls:'tab active', html:'Course Details' },
+				{ cls:'tab visited', html:'Course Details' },
 				{ cls:'tab', html:'Payment Info', 'data-order':1 },
 				{ cls:'tab', html:'Review Order', 'data-order':2 },
 				{ cls:'tab', html:'Confirmation', 'data-order':3 },
@@ -131,7 +131,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 
 	syncTab: function(ordinal){
-		var tabs = this.getEl().select('.titlebar .tab');
+		var el = this.getEl(),
+			tabs = el.select('.titlebar .tab');
+
+		if(ordinal>0){
+			el.select('.titlebar').addCls('started');
+			el.select('.titlebar .tab.acitive').addCls('visited');
+		}
+
 		tabs.removeCls('active');
 		tabs.item(ordinal || 0).addCls('active');
 
