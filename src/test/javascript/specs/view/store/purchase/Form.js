@@ -111,24 +111,20 @@ describe('Purchase form tests', function(){
 
 		it('Excepts truthy if not required', function(){
 			expect(form.validateForRequired(notRequired, notRequired.value)).toBeTruthy();
-			expect(Ext.fly(notRequired).hasCls('invalid')).toBeFalsy();
 		});
 
 		it('Excepts falsy if not required', function(){
 			notRequired.value = '';
 			expect(form.validateForRequired(notRequired, notRequired.value)).toBeTruthy();
-			expect(Ext.fly(notRequired).hasCls('invalid')).toBeFalsy();
 		});
 
 		it('Excepts truthy if required', function(){
 			expect(form.validateForRequired(required, required.value)).toBeTruthy();
-			expect(Ext.fly(required).hasCls('invalid')).toBeFalsy();
 		});
 
 		it('Rejects falsy if not required', function(){
 			required.value = '';
 			expect(form.validateForRequired(required, required.value)).toBeFalsy();
-			expect(Ext.fly(required).hasCls('invalid')).toBeTruthy();
 		});
 	});
 
@@ -142,7 +138,6 @@ describe('Purchase form tests', function(){
 		it('no validator passes', function(){
 			input.value = '12345';
 			expect(form.validateWithValidator(input, input.value)).toBeTruthy();
-			expect(Ext.fly(input).hasCls('invalid')).toBeFalsy();
 		});
 
 		describe('validator calls jquery.payment validator', function(){
@@ -154,14 +149,12 @@ describe('Purchase form tests', function(){
 			it('marks failing values invalid', function(){
 				input.value = '12345';
 				expect(form.validateWithValidator(input, input.value)).toBeFalsy();
-				expect(Ext.fly(input).hasCls('invalid')).toBeTruthy();
 				expect(jQuery.payment.validateCardCVC).toHaveBeenCalledWith(input.value);
 			});
 
 			it('leaves passing values alone', function(){
 				input.value = '456';
 				expect(form.validateWithValidator(input, input.value)).toBeTruthy();
-				expect(Ext.fly(input).hasCls('invalid')).toBeFalsy();
 				expect(jQuery.payment.validateCardCVC).toHaveBeenCalledWith(input.value);
 			});
 		});
@@ -194,7 +187,6 @@ describe('Purchase form tests', function(){
 			input.value = '';
 
 			expect(form.validateInput(input)).toBeNull();
-			expect(Ext.fly(input).hasCls('invalid')).toBeTruthy();
 		});
 
 		it('Remove invalid if input validates', function(){
