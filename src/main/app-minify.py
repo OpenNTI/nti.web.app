@@ -91,7 +91,7 @@ def _combine_javascript( output_file, input_files ):
 def _minify_app( app_root, extjs_sdk ):
 	libraries = [ 'resources/lib/jQuery-1.8.0min.js',
 		      'resources/lib/jQuery-noconflict.js',
-		      'resources/lib/mathquill/mathquill.js',
+		      'resources/lib/mathquill/mathquill.min.js',
 		      'resources/lib/swfobject.js',
 		      'resources/lib/detect-zoom.js',
 		      'resources/lib/rangy-1.3alpha.681/rangy-core.js',
