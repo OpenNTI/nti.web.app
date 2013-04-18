@@ -203,6 +203,10 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			me.fireEvent('realign');
 			me.maybeShowMoreLink();
 		});
+
+		this.bodyEl.select('img').each(function(el){
+			me.mon(el, 'click', me.navigateToComment, me);
+		});
 		this.bodyEl.select('.whiteboard-container .toolbar').remove();
 		this.bodyEl.select('.whiteboard-container .overlay').remove();
 	},
