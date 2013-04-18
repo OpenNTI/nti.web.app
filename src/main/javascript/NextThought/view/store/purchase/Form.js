@@ -100,7 +100,6 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			if(val !== undefined && val !== null){
 				input.value = val;
-				jQuery(input).keypress();
 			}
 
 		});
