@@ -80,6 +80,7 @@ Ext.define('NextThought.controller.Store', {
 
 
 	purhcasableCollectionSelection: function(cmp, record){
+		Ext.menu.Manager.hideAll();
 		this.showPurchasable(record);
 	},
 
