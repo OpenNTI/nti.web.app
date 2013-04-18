@@ -205,6 +205,16 @@ Ext.define('NextThought.store.PageItem',function(){
 				args = Array.prototype.slice.call(arguments),
 				records = args[0];
 
+			//Prior to ext4.2 remove all did its own thing.  But now it calls
+			//remove passing a range (removeAt also calls this but requires a new second optional
+			//arg of count which isn't used anywhere in our code). This means that now, in ext4.2,
+			//calling removeAll (like when we navigate pages) triggers all our special placeholder
+			//and coordinator logic.  This is bad and does some really terrible and unexplainable behaviour
+			//so just call super. This makes sure we have the same behaviour as pre ext4.2.
+			if (typeof records === 'object' && !records.isModel) {
+				return this.callParent(arguments);
+			}
+
 			args[0] = toActuallyRemove;
 
 			if(Ext.isEmpty(records)){

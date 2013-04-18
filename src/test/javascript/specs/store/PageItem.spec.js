@@ -97,4 +97,20 @@ describe("PageItem Store Tests", function(){
 			expect(store.wantsItem(rec)).toBeFalsy();
 		});
 	});
+
+	describe('removeAll', function(){
+		it('Doesnt trigger coordinator logic', function(){
+			var p1 = NextThought.store.PageItem.create({}),
+				p2 = NextThought.store.PageItem.create({}),
+				note = NextThought.model.Note.create({'NTIID': 'ID1'});
+
+			p1.add(note);
+			p2.add(note);
+
+			p1.removeAll();
+			expect(p1.indexOf(note)).toBeLessThan(0);
+			expect(p2.indexOf(note)).toBeGreaterThan(-1);
+
+		});
+	});
 });
