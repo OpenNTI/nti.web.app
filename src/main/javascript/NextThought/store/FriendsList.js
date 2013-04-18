@@ -84,7 +84,6 @@ Ext.define('NextThought.store.FriendsList',{
 
 		this.on({
 			scope: this,
-			write: this.onWrite,
 			add: this.contactsMaybeAdded,
 			remove: this.contactsMaybeRemoved,
 			update: this.contactsMaybeChanged,
@@ -169,15 +168,6 @@ Ext.define('NextThought.store.FriendsList',{
 		if(!Ext.isEmpty(toAdd)){
 			console.log('Adding fls as part of merge', toAdd);
 			this.add(toAdd);
-		}
-	},
-
-	//Taken from PageItem store. move to subclass?
-	onWrite: function(store, info) {
-		if (info.action === 'destroy') {
-			Ext.each(info.records, function(record){
-				store.remove(record);
-			});
 		}
 	},
 

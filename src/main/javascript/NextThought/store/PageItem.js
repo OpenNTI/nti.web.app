@@ -65,9 +65,6 @@ Ext.define('NextThought.store.PageItem',function(){
 		constructor: function(){
 			var r = this.callParent(arguments);
 
-			this.on('write', this.onWrite);
-
-
 			this.mon(coordinator,{
 				delay: 1,//move this handler to the next event pump
 				scope: this,
@@ -80,14 +77,6 @@ Ext.define('NextThought.store.PageItem',function(){
 		//By default PageItems want things that match the container
 		wantsItem: function(record){
 			return this.containerId === record.get('ContainerId');
-		},
-
-		onWrite: function(store, info) {
-			if (info.action === 'destroy') {
-				Ext.each(info.records, function(record){
-					store.remove(record);
-				});
-			}
 		},
 
 

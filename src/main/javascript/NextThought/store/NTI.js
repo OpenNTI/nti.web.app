@@ -28,22 +28,12 @@ Ext.define('NextThought.store.NTI',{
 			this.proxy.url = this.url;
 			delete this.url;
 		}
-		this.on('write', this.onWrite);
 
 		if(!this.pageSize){
 			this.proxy.limitParam = undefined;
 			this.proxy.startParam = undefined;
 		}
 		return r;
-	},
-
-
-	onWrite: function(store, info) {
-		if (info.action === 'destroy') {
-			Ext.each(info.records, function(record){
-				store.remove(record);
-			});
-		}
 	},
 
 
