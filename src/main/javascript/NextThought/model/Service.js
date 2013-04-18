@@ -45,6 +45,11 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getPurchasePricingURL: function(){
+		return getURL('/dataserver2/store/price_purchasable_with_stripe_coupon');
+	},
+
+
 	forceTrailingSlash: function(uri){
 		if(uri.charAt(uri.length-1)==='/') {
 			return uri;

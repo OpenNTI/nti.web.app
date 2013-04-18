@@ -126,7 +126,44 @@ Ext.define('NextThought.controller.Store', {
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
 	pricePurchase: function(cmp, purchaseDesc, success, failure){
+		var url = $AppConfig.service.getPurchasePricingURL(),
+			purchaseDesc = purchaseDesc || {},
+			purchasable = purchaseDesc.Purchasable,
+			mockResult = {};
 
+		if(!purchasable){
+			console.error('Must supply a purchasable', arguments);
+			Ext.Error.raise('Must supply a purchasable');
+		}
+
+		if(purchaseDesc.Coupon === 'EXPLODE'){
+			Ext.callback(failure, window, [{}, {}]);
+			return;
+		}
+
+		mockResult.PurchasableId = purchasable.getId();
+		mockResult.Quantity = purchaseDesc.Quantity || 1;
+		if(purchaseDesc.Coupon){
+			if(purchaseDesc.Coupon === 'INVALID'){
+				mockResult.Coupon = null;
+			}
+			else{
+				mockResult.Coupon = {};
+				mockResult.Coupon.Duration = 'forever';
+				mockResult.Coupon.ID = purchaseDesc.Coupon;
+				mockResult.Coupon.PercentOff = 10;
+			}
+		}
+		mockResult.Currency = purchasable.get('Currency');
+		mockResult.Amount = purchasable.get('Amount');
+		mockResult.PurchasePrice = mockResult.Amount * mockResult.Quantity;
+
+		if(mockResult.Coupon){
+			mockResult.NonDiscountedPrice = mockResult.Amount * mockResult.Quantity;
+			mockResult.PurchasePrice = mockResult.PurchasePrice - ((mockResult.Coupon.PercentOff/100) * mockResult.PurchasePrice);
+		}
+
+		Ext.callback(success, window, [mockResult]);
 	},
 
 	/**
