@@ -60,22 +60,20 @@
 					&::after{
 						content: attr(data-order);
 						position: absolute;
-						color: white;
 						top: 0px;
-						left: 16px;
+						left: 17px;
 					}
 					&::before {
 						content: '';
 						position: absolute;
-						color: white;
-						background: $tertiary-grey;
+						border: 2px solid $tertiary-grey;
 						border-radius: 10px;
 						display: block;
 						line-height: normal;
-						top: 10px;
+						top: 9px;
 						left: 11px;
-						width: 16px;
-						height: 16px;
+						width: 14px;
+						height: 14px;
 					}
 
 					&.active {
@@ -97,7 +95,7 @@
 				&.active {
 					color: $primary-green;
 					&::before {
-						background: #8eb737;
+						border-color: #8eb737;
 					}
 				}
 			}
