@@ -382,7 +382,7 @@
 
 			.x-component-reply {
 				position: relative;
-				padding-bottom: 30px;
+				padding-bottom: 10px;
 
 				.controls {
 					position: absolute;
@@ -412,20 +412,29 @@
 				}
 
 				.foot {
-					display:none;
+					display:block;
 					height: 20px;
 					padding: 0;
 					@include dot-separated-list;
 
-                  .link{
-                    cursor: pointer;
-                  }
+                	.link{
+						display: none;
+						cursor: pointer;
+
+						&.flag{
+							color: $primary-red;
+						}
+						&.flag.on{
+							display: block;
+						}
+                  	}
 				}
 
 				&:hover{
-					padding-bottom: 10px;
 					.foot{
-						display: block;
+						.link{
+							display: inline-block;
+						}
 					}
 
 					.controls .like{
@@ -456,8 +465,17 @@
 					color: $primary-grey;
 					margin:{ top: 5px; bottom: 5px; }
 					font: normal 500 14px/20px $font;
+					max-height: 300px;
 
 					.whiteboard-container{ cursor: default; }
+				}
+
+				a.more{
+					position: relative;
+					left: 52px;
+					cursor: pointer;
+					background: transparent;
+					width: 100px;
 				}
 
 				&.deleted-reply{
