@@ -101,8 +101,10 @@ def _minify_app( app_root, extjs_sdk ):
 	app_main_files = [ 'javascript/libs.js',
 			   'javascript/app.js' ]
 	app_main_file = 'app_main.js'
-	app_files = [ library_file,
-		      app_core_file,
+	#app_files = [ library_file,
+	#	      app_core_file,
+	#	      app_main_file ]
+	app_files = [ app_core_file,
 		      app_main_file ]
 	output_file = 'javascript/app.min.js'
 
@@ -119,7 +121,7 @@ def _minify_app( app_root, extjs_sdk ):
 				   'concat', '-r', '-st', '-y', 
 				   '-o', app_core_file ]
 	try:
-		_combine_javascript( library_file, libraries )
+		#_combine_javascript( library_file, libraries )
 		_closure_compile( app_main_file, app_main_files )
 		subprocess.check_call(sencha_bootstrap_command)
 		subprocess.check_call(sencha_compile_command)
