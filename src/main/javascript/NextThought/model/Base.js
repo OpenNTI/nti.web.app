@@ -746,12 +746,6 @@ Ext.define('NextThought.model.Base', {
 		return TimeUtils.timeDifference(Ext.Date.now(),this.get('CreatedTime'));
 	},
 
-
-	fireEvent: function(event){
-		console.debug('Record firing event: '+event, this);
-		return this.callParent(arguments);
-	},
-
 	/**
 	 * @private
 	 * @property {Boolean} destroyDoesNotClearListeners
