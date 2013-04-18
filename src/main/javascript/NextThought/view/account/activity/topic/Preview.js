@@ -86,5 +86,21 @@ Ext.define('NextThought.view.account.activity.topic.Reply',{
 
 	deleteComment: function(){
 		this.fireEvent('delete-topic-comment',this.record, this, this.onRecordDestroyed);
+	},
+
+	navigateToComment: function(){
+		var me = this,
+			rec = this.record,
+			r = this.up('[record]') && this.up('[record]').record,
+			cid = rec.get('ID');
+
+		if(!r){
+			console.warn('could not find the parent record');
+			return;
+		}
+
+		if(me.fireEvent('before-show-topic', r)){
+			me.fireEvent('show-topic', r, cid);
+		}
 	}
 });

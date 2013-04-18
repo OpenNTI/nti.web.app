@@ -66,5 +66,19 @@ Ext.define('NextThought.view.account.activity.blog.Reply',{
 
 	deleteComment: function(){
 		this.fireEvent('delete-blog-comment',this.record, this, this.onRecordDestroyed);
+	},
+
+	navigateToComment: function(){
+		var rec = this.record,
+			containerRecord = this.up('[record]') && this.up('[record]').record,
+			me = this;
+		if(!containerRecord){
+			console.warn('could not find the parent record');
+			return;
+		}
+
+		UserRepository.getUser(containerRecord.get('Creator'), function(user){
+			me.fireEvent('navigate-to-blog', user, containerRecord.get('ID'), rec.get('ID'));
+		});
 	}
 });

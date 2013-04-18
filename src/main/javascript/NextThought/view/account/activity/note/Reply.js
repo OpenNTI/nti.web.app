@@ -33,7 +33,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	]),
 
 
-	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
+	moreTpl: Ext.DomHelper.createTemplate({tag:'a', cls:'more',cn:[{},{},{}]}),
 
 
 	renderSelectors: {
@@ -130,11 +130,32 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 				return false;
 			}
 		});
+
+		Ext.defer(this.maybeShowMoreLink, 1, this);
+	},
+
+
+	maybeShowMoreLink: function(){
+		var el = this.bodyEl;
+		if(el.dom.scrollHeight <= el.getHeight() || this.hasMoreLink){
+			return;
+		}
+
+		this.moreTpl.insertAfter(el,null,true);
+		this.hasMoreLink = true;
+		this.mon(this.el.down('a.more'), 'click', this.navigateToComment, this);
 	},
 
 
 	updateContent: function(){
 		this.record.compileBodyContent(this.setBody,this, null, this.self.WhiteboardSize);
+	},
+
+
+	navigateToComment: function(){
+		var r = this.up('[record]').record,
+			rec = this.record;
+		this.fireEvent('navigation-selected', r.get('ContainerId'), rec);
 	},
 
 
@@ -177,19 +198,15 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 		var snip = ContentUtils.getHTMLSnippet(html,180), me = this;
 		this.bodyEl.update(snip||html);
-		if(snip){
-			this.moreTpl.append(this.bodyEl,null,true);
-			this.mon(this.bodyEl.down('a.more'),'click', this.expandComment,this);
-		}
-
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
 		this.bodyEl.select('img').on('load', function(){
 			me.fireEvent('realign');
+			me.maybeShowMoreLink();
 		});
-
 		this.bodyEl.select('.whiteboard-container .toolbar').remove();
 		this.bodyEl.select('.whiteboard-container .overlay').remove();
 	},
+
 
 	deleteComment: function(){
 		this.fireEvent('delete-reply', this.record, this, this.onRecordDestroyed);
@@ -206,11 +223,6 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		editor.deactivate();
 		editor.setValue('');
 		editor.reset();
-	},
-
-
-	expandComment: function(){
-		console.log('should expand comment');
 	},
 
 
