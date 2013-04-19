@@ -2,12 +2,13 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.person-card',
 	requires: [
-		'NextThought.view.account.contacts.management.GroupList'
+		'NextThought.view.account.contacts.management.GroupList',
+		'NextThought.layout.component.Natural'
 	],
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
-	layout: 'auto',
+
 	cls: 'person-card',
 
 	renderTpl: Ext.DomHelper.markup([{
@@ -25,14 +26,13 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 				}
 			]
 		}]
-	},{id: '{id}-body', cls:'person-card-body', html: '{%this.renderContainer(out,values)%}'}]),
+	},{id: '{id}-body', cls:'person-card-body', cn:['{%this.renderContainer(out,values)%}']}]),
 
 
+	layout: 'auto',
+	componentLayout: 'natural',
 	childEls: ['body'],
-
-	getTargetEl: function () {
-		return this.body;
-	},
+	getTargetEl: function () { return this.body; },
 
 	renderSelectors: {
 		avatar: '.contact-card img',

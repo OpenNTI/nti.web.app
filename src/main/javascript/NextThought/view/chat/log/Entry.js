@@ -3,6 +3,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	alias: 'widget.chat-log-entry',
 
 	requires: [
+		'NextThought.layout.component.Natural',
 		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache'
 	],
@@ -18,9 +19,11 @@ Ext.define('NextThought.view.chat.log.Entry', {
 				]}
 			]}
 		]},
-		{id:'{id}-body', cls:'replies', html: '{%this.renderContainer(out,values)%}'}
+		{id:'{id}-body', cls:'replies', cn:['{%this.renderContainer(out,values)%}']}
 	]),
 
+	componentLayout: 'natural',
+	layout: 'auto',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 

@@ -2,6 +2,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-tabs-grouping',
 	requires: [
+		'NextThought.layout.component.Natural',
 		'NextThought.view.tool.Action',
 		'NextThought.view.contacts.Card'
 	],
@@ -15,6 +16,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	cls: 'contact-grouping',
 
 	layout: 'auto',
+	componentLayout: 'natural',
 
 	width: 700,
 	plain: true,
@@ -52,7 +54,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		},
 		{
 			id: '{id}-body',
-			html:'{%this.renderContainer(out,values)%}'
+			cn:['{%this.renderContainer(out,values)%}']
 		}
 	]),
 

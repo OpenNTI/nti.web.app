@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	requires: [
         'NextThought.cache.LocationMeta',
 		'NextThought.editor.Editor',
-		'NextThought.mixins.ProfileLinks'
+		'NextThought.mixins.ProfileLinks',
+		'NextThought.layout.component.Natural'
 	],
 
 
@@ -39,6 +40,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
+
+	componentLayout: 'natural',
+	layout: 'auto',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
@@ -92,7 +96,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		},{
 			id: '{id}-body',
 			cls: 'replies',
-			html: '{%this.renderContainer(out,values)%}'
+			cn:['{%this.renderContainer(out,values)%}']
 		},{
 			cls: 'respond', cn: {
 			cn: [
@@ -290,7 +294,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 	getPointerStyle: function(x,y){
-		return y >= this.footEl.getTop() ? 'grey' : '';
+		return y >= this.footEl.getY() ? 'grey' : '';
 	}
 
 });

@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'list-view', cn:[
 			{ tag: 'tpl', 'if':'canBlog', cn:{ cls: 'new-entry-btn header', html: 'New Entry' }},
-			{ id: '{id}-body', cls: 'body', html: '{%this.renderContainer(out,values)%}' }
+			{ id: '{id}-body', cls: 'body', cn:['{%this.renderContainer(out,values)%}'] }
 		]},
 		{ cls: 'post-view' }
 	]),

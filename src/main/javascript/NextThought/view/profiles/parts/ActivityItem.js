@@ -314,7 +314,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		},{
 			id: '{id}-body',
 			cls: 'note-replies',
-			html: '{%this.renderContainer(out,values)%}'
+			cn:['{%this.renderContainer(out,values)%}']
 		},{
 			cls: 'respond', cn: {
 			cn: [
@@ -422,6 +422,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 	},{
 		id: '{id}-body',
 		cls: 'note-replies',
-		html: '{%this.renderContainer(out,values)%}'
+		cn:['{%this.renderContainer(out,values)%}']
 	}]);
 });

@@ -49,7 +49,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		{
 			id: '{id}-body',
 			cls:'profile-items',
-			html:'{%this.renderContainer(out,values)%}'
+			cn:['{%this.renderContainer(out,values)%}']
 		}
 	]),
 

@@ -2,6 +2,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-slide',
 	requires: [
+		'NextThought.layout.component.Natural',
 		'NextThought.providers.Location',
 		'NextThought.view.slidedeck.CommentHeader',
 		'NextThought.view.slidedeck.ThreadRoot',
@@ -9,10 +10,11 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	],
 
 	ui: 'slide',
-	layout: 'auto',
 
 	defaultType: 'slidedeck-slide-note',
 
+	layout: 'auto',
+	componentLayout: 'natural',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 	renderTpl: Ext.DomHelper.markup([
@@ -21,7 +23,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			{cls: 'left', cn:[{cls: 'prev'}]},
 			{cls: 'right',cn:[{cls: 'next'}]}
 		]},
-		{id: '{id}-body', cls:'slide-notes', html:'{%this.renderContainer(out,values)%}'}
+		{id: '{id}-body', cls:'slide-notes', cn:['{%this.renderContainer(out,values)%}']}
 	]),
 
 	renderSelectors: {

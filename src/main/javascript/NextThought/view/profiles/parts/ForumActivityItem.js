@@ -22,6 +22,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	defaultType: 'profile-forum-activity-item-reply',
 	ui: 'activity',
 
+	layout: 'auto',
 	componentLayout: 'natural',
 	getTargetEl: function(){return this.body;},
 	childEls: ['body'],
@@ -68,7 +69,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		},{
 			id: '{id}-body',
 			cls: 'topic-replies',
-			html:'{%this.renderContainer(out,values)%}'
+			cn:['{%this.renderContainer(out,values)%}']
 		},{
 			cls: 'respond', cn: {
 			cn: [ {

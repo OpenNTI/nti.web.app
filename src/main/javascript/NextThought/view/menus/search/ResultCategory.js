@@ -2,15 +2,17 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.search-result-category',
 	requires: [
+		'NextThought.layout.component.Natural',
 		'NextThought.view.menus.search.Result',
 		'NextThought.view.menus.search.BlogResult'
 	],
 	cls: 'search-result-category',
 
+	componentLayout: 'natural',
 	layout: 'auto',
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'label', html:'{category}'},
-		{cls:'body', id:'{id}-body', html:'{%this.renderContainer(out,values);%}'}
+		{cls:'body', id:'{id}-body', cn:['{%this.renderContainer(out,values);%}']}
 	]),
 
 	getTargetEl: function () { return this.body; },

@@ -3,6 +3,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	alias: 'widget.activity-popout',
 
 	requires: [
+//		'NextThought.layout.component.Natural',
 		'NextThought.view.account.activity.Preview',
 		'NextThought.ux.Pointer'
 	],
@@ -12,7 +13,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	constrain: true,
 	shadow: false,
 
-	componentLayout: 'auto',
+//	componentLayout: 'natural',
 	layout: 'auto',
 	cls: 'activity-popout',
 	hideMode: 'visibility',

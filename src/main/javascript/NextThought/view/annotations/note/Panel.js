@@ -917,6 +917,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},{
 		id: '{id}-body',
 		cls: 'note-replies',
-		html:'{%this.renderContainer(out,values)%}'
+		cn:['{%this.renderContainer(out,values)%}']
 	}]);
 });

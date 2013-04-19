@@ -3,6 +3,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	alias: 'widget.purchase-window',
 
 	requires: [
+		'NextThought.layout.component.Natural',
 		'NextThought.view.store.purchase.DetailView'
 	],
 
@@ -57,7 +58,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		errorMessageEl: '.error .message'
 	},
 
-	componentLayout: 'auto',
+	componentLayout: 'natural',
 	layout: 'auto',
 	items: [],
 
