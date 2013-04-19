@@ -106,13 +106,29 @@
 			}
 		}
 		.columns{
+			display: none;
+			height: 45px;
+			padding: 0 18px;
 			background: #fff;
+			box-shadow: inset 0 -1px 0 0 #e6e6e6;
+
+			div {
+				display: inline-block;
+				font: normal 600 10px/15px $font;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				padding-top: 25px;
+
+				&.b {
+					margin: 0 30px 0 300px;
+				}
+			}
 		}
 		.info {
 			padding: 18px;
 			background: #f7fcff;
 			overflow: hidden;
-			box-shadow: inset 0 -1px 0 0 #dcdcdc;
+			box-shadow: inset 0 -1px 0 0 #e6e6e6;
 
 			.bookcover {
 				background:{
@@ -130,9 +146,10 @@
 
 			.meta {
 				margin-left: 70px;
+				margin-right: 100px;
 				min-height: 70px;
 
-				.title, .byline, .price {
+				.title, .byline {
 					color: $primary-grey;
 					font: normal 600 14px/20px $font;
 					text-overflow: ellipsis;
@@ -147,10 +164,45 @@
 					white-space: nowrap;
 					text-transform: uppercase;
 				}
+			}
 
-				.price {
-					color: $primary-green;
-					line-height: 30px;
+			.quantity, .price {
+				float: right;
+				white-space: nowrap;
+				color: $primary-grey;
+				font: normal 600 16px/30px $font;
+				width: 75px;
+				text-align: center;
+				margin: 2px 8px 0 0;
+			}
+
+			.quantity {
+				display: none;
+			}
+
+			.price {
+				color: #fff;
+				position: relative;
+				z-index: 1;
+
+				&::before {
+					content: '';
+					background: $primary-green;
+					position: absolute;
+					top: 0; left: 0; right: 0; bottom: 0;
+					border-radius: 3px;
+					z-index: -1;
+				}
+			}
+		}
+		&.show-columns{
+			.columns { display: block; }
+			.info {
+				.meta {
+					margin-right: 175px;
+				}
+				.quantity {
+					display: block;
 				}
 			}
 		}

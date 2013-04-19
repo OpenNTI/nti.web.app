@@ -12,6 +12,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	ui: 'purchase-form',
 
 	ordinal: 1,
+	showColumns: true,//for debugging in this view
 	confirmLabel: 'Continue',
 	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',html:'licencing terms.'}]),
 
@@ -82,6 +83,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.enableBubble('purchase-info-updated');
+	},
+
+
+	publishQuantityAndPrice: function(quantity, price){
+		this.up('window').publishQuantityAndPrice(quantity,price);
 	},
 
 
@@ -225,6 +231,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		return val;
 	},
 
+
 	validateForRequired: function(input, val){
 		var required = input.getAttribute('data-required'),
 			visited = input.getAttribute('data-visited');
@@ -242,6 +249,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 		return true;
 	},
+
 
 	validateWithValidator: function(input, val){
 		var validator = input.getAttribute('data-validator'),
@@ -279,6 +287,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		Ext.fly(input).removeCls('invalid');
 		return val;
 	},
+
 
 	collectVal: function(data, input, val){
 		if(Ext.isObject(val)){
@@ -320,6 +329,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			this.fireEvent('create-payment-token', this, this.record, data);
 		}
 	},
+
 
 	handleError: function(errorModel){
 		console.log('Form needs to handle error', errorModel);

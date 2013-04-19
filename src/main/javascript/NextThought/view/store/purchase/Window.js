@@ -29,12 +29,18 @@ Ext.define('NextThought.view.store.purchase.Window', {
 				{ cls:'tab', html:'Confirmation', 'data-order':3 },
 				{ cls: 'close' }
 			]},
+			{ cls: 'columns',cn:[
+				{cls:'a', html:'Item'},
+				{cls:'b', html:'Quantity'},
+				{cls:'c', html:'Total Price'}
+			]},
 			{ cls: 'info', cn:[
 				{ cls:'bookcover', style: {backgroundImage: 'url({Icon})'} },
+				{cls: 'price', html:'${[values.price||values.Amount]}'},
+				{cls: 'quantity', html:'{quantity}'},
 				{ cls:'meta', cn:[
 					{cls: 'title', html: '{Title}'},
-					{cls: 'byline', html: 'By {Author}, {Provider}'},
-					{cls: 'price', html:'${Amount}'}
+					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'}
 				]}
 			] }
 		]
@@ -53,13 +59,17 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	}]),
 
 	renderSelectors: {
+		headerEl: '.header',
 		closeEl: '.header .titlebar .close',
+
 		footerEl: '.footer',
 		cancelEl: '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
+
 		errorEl: '.error',
 		errorLabelEl: '.error .label',
 		errorMessageEl: '.error .message',
+
 		checkboxLabelEl: '.footer label input + div',
 		checkboxEl: '.footer label input',
 		checkboxBoxEl: '.footer label'
@@ -111,6 +121,23 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
+	publishQuantityAndPrice: function(quantity, price){
+		var currency = '$';
+		this.priceInfo = {
+			quantity: quantity,
+			price: price
+		};
+
+		if(!this.rendered){
+			this.renderData = Ext.apply(this.renderData||{},this.priceInfo);
+			return;
+		}
+
+		this.headerEl.select('.quantity').update(quantity||1);
+		this.headerEl.select('.price').update(currency+price);
+	},
+
+
 	updateContentHeight: function(){
 		var el = this.getTargetEl(),
 			h = this.footerEl.getY() - el.getY();
@@ -145,14 +172,19 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			confirmLabel = cmp.confirmLabel || 'Purchase',
 			checkLabel = cmp.checkboxLabel;
 
+		this.activeView = cmp;
+
 		if(this.rendered){
 			this.checkboxEl.dom.checked = false;
 			this.checkboxLabelEl.update(checkLabel||'');
 			this.checkboxBoxEl[checkLabel?'addCls':'removeCls']('active');
 
+			this.headerEl[cmp.showColumns ? 'addCls':'removeCls']('show-columns');
+
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
 			this.cancelEl[cmp.omitCancel ? 'hide' : 'show']();
+			Ext.defer(this.updateContentHeight,1,this);
 		}
 	},
 
