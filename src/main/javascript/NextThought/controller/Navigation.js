@@ -80,6 +80,12 @@ Ext.define('NextThought.controller.Navigation', {
 				'view-select menu':{
 					'hide': this.syncButton
 				}
+			},
+			controller:{
+				'*': {
+					'show-object': 'navigateToContent',
+					'show-view': 'setView'
+				}
 			}
 		});
 	},
@@ -469,6 +475,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	navigateToNtiid: function(ntiid, fragment){
 		var object = ntiid.isModel ? ntiid : undefined;
+		var me = this;
 
 		function onSuccess(obj){
 			//With Ext 4.2 we can have controllers listen to events from other controllers.
@@ -476,18 +483,7 @@ Ext.define('NextThought.controller.Navigation', {
 			//me.fireEvent('show-object', obj) or a registry that knows how to display objects
 			//in their cannonical location
 
-			if(obj.isPageInfo){
-				//FIXME Use the callback here for error handling once it supports
-				//an error callback.
-				LocationProvider.setLocation(obj, function(content){
-					if(content && fragment) {
-						content.scrollToTarget(fragment);
-					}
-				});
-			}
-			else{
-				console.log('Dont know how to navigate to object', obj);
-			}
+			me.fireEvent('show-object', obj, fragment);
 		}
 
 		function onFailure(){
@@ -502,5 +498,20 @@ Ext.define('NextThought.controller.Navigation', {
 			onSuccess(object);
 		}
 
+	},
+
+	navigateToContent: function(obj, fragment){
+		if(obj.isPageInfo){
+			//FIXME Use the callback here for error handling once it supports
+			//an error callback.
+			LocationProvider.setLocation(obj, function(content){
+				if(content && fragment) {
+					content.scrollToTarget(fragment);
+				}
+			});
+			return false;
+		}
+		console.log('Dont know how to navigate to object', obj);
+		return true;
 	}
 });

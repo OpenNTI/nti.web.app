@@ -102,6 +102,11 @@ Ext.define('NextThought.controller.Forums', {
 				'*': {
 					'show-topic': this.presentTopic
 				}
+			},
+			controller:{
+				'*': {
+					'show-object': this.navigateToForumContent
+				}
 			}
 		});
 	},
@@ -1032,5 +1037,18 @@ Ext.define('NextThought.controller.Forums', {
 		if(topicView && topicView.showSearchHit){
 			topicView.showSearchHit(hit, frag);
 		}
+	},
+
+	//NTIID navigation handler
+	navigateToForumContent: function(obj, fragment){
+		var me = this;
+
+		if(obj instanceof NextThought.model.forums.Base){
+			if(me.fireEvent('show-view', 'forums') === false){
+				me.presentTopic(obj);
+				return false;
+			}
+		}
+		return true;
 	}
 });

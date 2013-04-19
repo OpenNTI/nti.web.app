@@ -1,6 +1,6 @@
 describe('Navigation Controller Tests', function(){
 
-	var controller, navMenu, testBody;
+	var controller, mockObjects, navMenu, testBody;
 
 	beforeEach(function(){
 		controller = NextThought.controller.Navigation.create({
@@ -20,6 +20,13 @@ describe('Navigation Controller Tests', function(){
 		testBody = document.createElement('div');
 		document.body.appendChild(testBody);
 		navMenu = Ext.create('NextThought.view.ViewSelect', { renderTo : testBody });
+
+		mockObjects = {
+			'book1': Ext.create('NextThought.model.PageInfo', {
+				NTIID: 'book1'
+			})
+		};
+
 	});
 
 	describe('ToggleContactsOnProfile', function(){
@@ -52,6 +59,29 @@ describe('Navigation Controller Tests', function(){
 			expect(profileBtn.toggle).not.toHaveBeenCalledWith(true);
 			expect(contactsBtn.toggle).toHaveBeenCalled();
 			expect(contactsBtn.pressed).toBeTruthy();
+		});
+	});
+
+	describe('Test navigateToNtiid', function(){
+		function mockGetObject(ntiid, success, fail, scope){
+			if(mockObjects[ntiid] !== undefined){
+				Ext.callback(success, scope, [mockObjects[ntiid]]);
+			}
+			Ext.callback(fail, scope, []);
+		}
+
+		it('Expect to look up and object with the NTIID \'book1\'', function(){
+			spyOn($AppConfig.service, 'getObject').andCallFake(mockGetObject);
+			controller.navigateToNtiid('book1');
+			expect($AppConfig.service.getObject).toHaveBeenCalled();
+		});
+	});
+
+	describe('Test navigateToContent', function(){
+		it('Expects going to the content \'book1\'', function(){
+			spyOn(controller, 'navigateToContent').andCallThrough();
+			controller.navigateToContent(mockObjects['book1']);
+			expect(controller.navigateToContent).toHaveBeenCalledWith(mockObjects['book1']);
 		});
 	});
 
