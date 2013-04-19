@@ -480,9 +480,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	fillInReplies: function(){
 		var r = this.record;
-		Ext.suspendLayouts();
 		this.removeAll(true);
-		Ext.resumeLayouts(true);
 
 		//Multiple containers/cmps involved here
 		//So notice we do the bulkiest suspend resume
@@ -491,14 +489,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		Ext.defer(function(){
 			if(this.isDestroyed){ return; }
 
-			Ext.suspendLayouts();
 			if(!r.hasOwnProperty('parent') && r.getLink('replies')){
 				this.loadReplies(r);
 			}
 			else {
 				this.addReplies(r.children);
 			}
-			Ext.resumeLayouts(true);
 		}, 1, this);
 	},
 
@@ -761,12 +757,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}, this);
 		console.log('Adding note records', toAdd);
 
-		//multiple components/containers involved here so
-		//we batch them for the entire fwk
-		Ext.batchLayouts(function(){
-			this.add(toAdd);
-		}, this);
-
+		this.add(toAdd);
 		Ext.defer(this.maybeOpenReplyEditor, 1, this);
 	},
 
