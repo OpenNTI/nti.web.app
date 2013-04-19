@@ -266,7 +266,7 @@ Ext.define('NextThought.controller.Store', {
 			}
 			else{
 				console.log('Stripe token response handler', arguments);
-				this.transitionToComponent(win, {xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
+				me.transitionToComponent(win, {xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
 			}
 			me.safelyUnmaskWindow(win);
 			delete win.lockPurchaseAction;
