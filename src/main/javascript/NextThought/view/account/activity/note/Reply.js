@@ -178,15 +178,11 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 
 	handleBeforeDeactivate: function(){
-		var m = Ext.getBody().down('.x-mask');
-
 		if((this.editor && this.editor.isActive())){
 			return false;
 		}
 
-		// NOTE: for 'reporting' an item, we mask the body
-		// but we don't want to dismiss the popout just yet, since we come back to it
-		return !(m && m.isVisible());
+		return !this.flagging;
 	},
 
 
