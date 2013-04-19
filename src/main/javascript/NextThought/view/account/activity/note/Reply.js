@@ -57,6 +57,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.enableBubble('realign');
+		this.mon(this.record, 'destroy', this.handleDestroy, this);
 	},
 
 	beforeRender: function(){
@@ -158,25 +159,6 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		this.fireEvent('navigation-selected', r.get('ContainerId'), rec);
 	},
 
-
-	onRecordDestroyed: function(cmp){
-		console.log('Record has bee destroyed');
-		if(cmp.deleteEl){
-			cmp.mun(cmp.deleteEl, 'click', cmp.deleteComment, cmp);
-		}
-		if(cmp.editEl){
-			cmp.mun(cmp.editEl, 'click', cmp.editComment, cmp);
-		}
-
-		//Now clear the rest of our field listeners
-		if(this.record){
-			this.record.removeObserverForField(this, 'body', this.updateContent, this);
-		}
-
-		Ext.defer(cmp.destroy, 1, cmp);
-	},
-
-
 	handleBeforeDeactivate: function(){
 		if((this.editor && this.editor.isActive())){
 			return false;
@@ -209,7 +191,7 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 
 	deleteComment: function(){
-		this.fireEvent('delete-reply', this.record, this, this.onRecordDestroyed);
+		this.fireEvent('delete-reply', this.record, this);
 	},
 
 
@@ -225,6 +207,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 		editor.reset();
 	},
 
+	handleDestroy: function(){
+
+	},
 
 	inheritableStatics: {
 		WhiteboardSize: 360

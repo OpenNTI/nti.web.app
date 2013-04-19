@@ -78,7 +78,7 @@ Ext.define('NextThought.view.account.activity.blog.Reply',{
 
 
 	deleteComment: function(){
-		this.fireEvent('delete-blog-comment',this.record, this, this.onRecordDestroyed);
+		this.fireEvent('delete-blog-comment',this.record, this);
 	},
 
 	navigateToComment: function(){
@@ -93,5 +93,29 @@ Ext.define('NextThought.view.account.activity.blog.Reply',{
 		UserRepository.getUser(containerRecord.get('Creator'), function(user){
 			me.fireEvent('navigate-to-blog', user, containerRecord.get('ID'), rec.get('ID'));
 		});
+	},
+
+	handleDestroy: function(){
+		//First remove the delete and edit link listeners followed by the els
+		if( this.deleteEl ){
+			this.mun(this.deleteEl,'click',this.onDeletePost,this);
+			this.deleteEl.remove();
+		}
+
+		if( this.editEl ){
+			this.mun(this.editEl,'click',this.onEditPost,this);
+			this.editEl.remove();
+		}
+
+		//Now tear down like and favorites
+		this.tearDownLikeAndFavorite();
+
+
+		//Now clear the rest of our field listeners
+		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+
+		//Now update the body to the same text the server uses.
+		this.bodyEl.update('This object has been removed.');
+		this.addCls('deleted');
 	}
 });

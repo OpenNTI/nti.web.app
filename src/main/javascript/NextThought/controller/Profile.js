@@ -124,10 +124,16 @@ Ext.define('NextThought.controller.Profile', {
 				url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(rec){
+					var blogCmp = Ext.ComponentQuery.query('profile-blog-post')[0];
 					unmask();
 					if(!postCmp.isDestroyed){
-						if( !isEdit && postCmp.store ){
-							postCmp.store.insert(0,rec);
+						if( !isEdit ){
+							if(postCmp.store){
+								postCmp.store.insert(0,rec);
+							}
+							if(blogCmp && postCmp !== blogCmp && blogCmp.store){
+								blogCmp.store.add(rec);
+							}
 						}
 						editor.deactivate();
 						editor.setValue('');
@@ -278,21 +284,29 @@ Ext.define('NextThought.controller.Profile', {
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
 		}
 		idToDestroy = record.get('NTIID');
+
+		function maybeDeleteFromStore(id, store){
+			var r;
+			if(store){
+				r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
+				if(!r){
+					console.warn('Could not remove, the store did not have item with id: '+idToDestroy, r);
+					return;
+				}
+
+				//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+				store.remove(r);
+			}
+		}
+
 		record.destroy({
 			success:function(){
-				LocationProvider.applyToStoresThatWantItem(function(id,store){
-					var r;
-					if(store){
-						r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
-						if(!r){
-							console.warn('Could not remove, the store did not have item with id: '+idToDestroy, r);
-							return;
-						}
+				LocationProvider.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
-						//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
-						store.remove(r);
-					}
-				}, record);
+				//Delete anything left that we know of
+				Ext.StoreManager.each(function(s){
+					maybeDeleteFromStore(null, s);
+				});
 
 				Ext.callback(successCallback, null, [cmp]);
 			},

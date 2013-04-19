@@ -94,7 +94,7 @@ Ext.define('NextThought.view.account.activity.topic.Reply',{
 
 
 	deleteComment: function(){
-		this.fireEvent('delete-topic-comment',this.record, this, this.onRecordDestroyed);
+		this.fireEvent('delete-topic-comment',this.record, this);
 	},
 
 	navigateToComment: function(){
@@ -111,5 +111,29 @@ Ext.define('NextThought.view.account.activity.topic.Reply',{
 		if(me.fireEvent('before-show-topic', r)){
 			me.fireEvent('show-topic', r, cid);
 		}
+	},
+
+	handleDestroy: function(){
+		//First remove the delete and edit link listeners followed by the els
+		if( this.deleteEl ){
+			this.mun(this.deleteEl,'click',this.onDeletePost,this);
+			this.deleteEl.remove();
+		}
+
+		if( this.editEl ){
+			this.mun(this.editEl,'click',this.onEditPost,this);
+			this.editEl.remove();
+		}
+
+		//Now tear down like and favorites
+		this.tearDownLikeAndFavorite();
+
+
+		//Now clear the rest of our field listeners
+		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+
+		//Now update the body to the same text the server uses.
+		this.bodyEl.update('This object has been removed.');
+		this.addCls('deleted');
 	}
 });
