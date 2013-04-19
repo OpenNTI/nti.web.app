@@ -9,6 +9,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 	ordinal: 3,
 	confirmLabel: 'Done',
 	omitCancel: true,
+	closeWithoutWarn: true,
 
 	onConfirm: function(){
 		this.fireEvent('close', this);

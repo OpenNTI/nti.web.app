@@ -278,7 +278,8 @@ Ext.define('NextThought.controller.Store', {
 
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = (tokenObject || {}).id,
-			win = this.getPurchaseWindow(), delegate;
+			win = this.getPurchaseWindow(), delegate,
+			me = this;
 
 
 		//At this point we shouldn't get here without a purchasable and tokenObject.  The
@@ -302,6 +303,7 @@ Ext.define('NextThought.controller.Store', {
 		win.getEl().mask('Your purchase is being finalized.  This may take several moments');
 
 		function done(){
+			delete me.paymentProcessor;
 			delete win.lockPurchaseAction;
 			win.getEl().unmask();
 		}
@@ -331,7 +333,7 @@ Ext.define('NextThought.controller.Store', {
 		};
 
 		try{
-			new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, delegate, this);
+			this.paymentProcessor = new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, delegate, this);
 		}
 		catch(e){
 			//An exception here means we shouldn't have even started the purchase on the ds.
@@ -373,6 +375,15 @@ Ext.define('NextThought.controller.Store', {
 		//a purchase process
 		var destructive = !win.down('[closeWithoutWarn=true]'),
 			me = this;
+
+		//If we are in the step where payment has been submitted and we
+		//are waiting on the payment attempt to complete don't let them close the window.
+		//At this point they are getting charged, there is no going back.
+		if(this.paymentProcessor){
+			//TODO consider an alert here?
+			console.warn('Presenting payment window from being closed will purchase is in progress', this.paymentProcessor);
+			return false;
+		}
 
 		if(!win.forceClosing && destructive){
 
