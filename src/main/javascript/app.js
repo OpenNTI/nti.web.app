@@ -22,6 +22,7 @@ Ext.Loader.setConfig('disableCaching',
 
 Ext.application({
 	name: 'NextThought',
+	appProperty: 'appInstance',
 	appFolder: 'javascript/NextThought',
 	autoCreateViewport: false,
 
@@ -58,7 +59,7 @@ Ext.application({
 		console.debug('launching');
 
 		function start() {
-			me.getController('Session').login(app);
+			me.getController('Session').login(me);
 			NextThought.isReady = true;
 		}
 
@@ -90,7 +91,6 @@ Ext.application({
 
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
-		window.app = me;
 		g = me.getController('Google');
 
 
