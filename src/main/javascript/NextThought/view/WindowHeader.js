@@ -48,13 +48,6 @@ Ext.define('NextThought.view.WindowHeader', {
 		minimizeEl: 'img.tool.minimize'
 	},
 
-	childEls: ['body'],
-
-
-	getTargetEl: function () {
-		return this.body;
-	},
-
 
 	initComponent: function(){
 		this.callParent(arguments);
