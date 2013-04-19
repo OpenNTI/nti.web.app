@@ -51,6 +51,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	renderSelectors: {
 		closeEl: '.header .titlebar .close',
+		footerEl: '.footer',
 		cancelEl: '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
 		errorEl: '.error',
@@ -94,11 +95,19 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		this.add({xtype: 'purchase-detailview', record: this.record});
 		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorEl.hide();
+		this.updateContentHeight();
+	},
+
+
+	updateContentHeight: function(){
+		var el = this.getTargetEl(),
+			h = this.footerEl.getY() - el.getY();
+		el.setHeight(h);
 	},
 
 
 	hideError: function(){
-		this.getTargetEl().setStyle({height:undefined});
+		this.updateContentHeight();
 		this.errorEl.hide();
 	},
 
