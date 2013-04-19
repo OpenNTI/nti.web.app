@@ -62,6 +62,9 @@
 
 body.x-border-layout-ct { background: white; }
 
+//Firefox: make sure we do not outline focusable elements
+.x-gecko [tabindex] { outline: 0; }
+
 .x-form-item,
 .x-form-field,
 .x-body {
