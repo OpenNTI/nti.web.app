@@ -57,7 +57,10 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 	},
 
 
-	showReplies: function(){ this.buildStore(); },
+	showReplies: function(){
+		this.callParent(arguments);
+		this.buildStore();
+	},
 
 	destroy: function(){
 		if(this.store){

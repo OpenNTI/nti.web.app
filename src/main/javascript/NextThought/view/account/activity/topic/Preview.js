@@ -51,6 +51,7 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 
 
 	showReplies: function(){
+		this.callParent(arguments);
 		this.buildStore();
 	},
 

@@ -156,11 +156,13 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 	setupReplyScrollZone: function(){
-		var max = Ext.dom.Element.getViewportHeight()
-				- this.topEl.getHeight()
-				- this.respondEl.getHeight();
+		var rH = this.respondEl.getHeight(),
+			tH = this.topEl.getHeight(),
+			max = Ext.dom.Element.getViewportHeight()
+				- tH
+				- rH;
 
-		console.log(max,this.body);
+		console.log(rH,tH,max,this.body);
 		this.body.setStyle({maxHeight: max+'px'});
 	},
 
@@ -171,7 +173,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 	showReplies: function(){
-		console.warn('Show replies inline. Subclass should override this with their implementation.');
+		this.setupReplyScrollZone();
 	},
 
 
@@ -267,6 +269,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 				return false;
 			}
 		});
+
+		this.mon(this.editor,'deactivated-editor',this.setupReplyScrollZone,this,{delay:1});
 
 		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
 		this.mon(this.messageBodyEl, 'click', this.navigateToItem, this);
