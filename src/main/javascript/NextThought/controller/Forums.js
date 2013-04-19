@@ -1058,7 +1058,7 @@ Ext.define('NextThought.controller.Forums', {
 		var me = this;
 
 		if(obj instanceof NextThought.model.forums.Base){
-			if(me.fireEvent('show-view', 'forums') === false){
+			if(me.fireEvent('show-view', 'forums') === true){
 				me.presentTopic(obj);
 				return false;
 			}
