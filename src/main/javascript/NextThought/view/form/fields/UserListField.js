@@ -25,16 +25,20 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 		me.initField();
 
-		me.inputField = me.add({xtype: 'usersearchinput', xhooks: {
-			alignPicker: function(){
-				var o = this.inputEl,
-					b = this.bodyEl;
-				this.bodyEl = this.inputEl = me.getEl();
-				this.callParent();
-				this.inputEl = o;
-				this.bodyEl = b;
+		me.inputField = me.add({
+			xtype: 'usersearchinput',
+			width: 'auto',
+			xhooks: {
+				alignPicker: function(){
+					var o = this.inputEl,
+						b = this.bodyEl;
+					this.bodyEl = this.inputEl = me.getEl();
+					this.callParent();
+					this.inputEl = o;
+					this.bodyEl = b;
+				}
 			}
-		}});
+		});
 		me.mon(me.inputField,{
 			scope: me,
 			'select': me.select,
