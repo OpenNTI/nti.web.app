@@ -257,7 +257,7 @@ Ext.define('NextThought.controller.Search', {
 
 	gotoBlog: function(){
 		//Some kind of cross controller event we can use instead?
-		var navController = app.getController('Navigation'),
+		var navController = this.getController('Navigation'),
 			args = Array.prototype.slice.call(arguments);
 
 		navController.gotoBlog.apply(navController, args);

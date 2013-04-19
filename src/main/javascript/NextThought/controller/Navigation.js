@@ -258,7 +258,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
-			state = app.getController('State'),
+			state = this.getController('State'),
 			fragment,
 			args = [title];
 
@@ -420,7 +420,7 @@ Ext.define('NextThought.controller.Navigation', {
 			currentParts = currentLocation.split('#'),
 			currentBase = currentParts[0],
 			currentFragment = currentParts[1],
-			state = app.getController('State');
+			state = this.getController('State');
 
 		//Are we an nttid?
 		if(ParseUtils.parseNtiid(newBase)){
