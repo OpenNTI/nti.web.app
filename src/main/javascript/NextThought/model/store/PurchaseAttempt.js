@@ -13,7 +13,7 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
         { name: 'InvitationCode', type: 'string', persist: false }
     ],
 
-	//TODO we want the pricing link on the actual purchasable
+	//TODO we want the polling link on the attempt
 	getLink: function(rel){
 		if(rel === 'get_purchase_attempt'){
 			return getURL('/dataserver2/store/get_purchase_attempt');
