@@ -166,6 +166,7 @@ div.nt-token-wrapper{
 			margin: 0;
 			border: 0;
 
+			.x-ie10 &,
 			.x-ie & {
 				height: 30px;//for IE
 				bottom: inherit;
