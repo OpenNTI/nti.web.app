@@ -6,6 +6,8 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 
 	renderTpl: '{Description}',
 
+	checkboxLabel: Ext.DomHelper.markup(['I have an ',{tag:'a',href:'#',html:'Activation Key.'}]),
+
 	closeWithoutWarn: true,
 
 	ordinal: 0,

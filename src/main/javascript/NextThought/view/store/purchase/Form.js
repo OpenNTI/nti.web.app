@@ -13,6 +13,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	ordinal: 1,
 	confirmLabel: 'Continue',
+	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',html:'licencing terms.'}]),
 
 	//To use some of stipes test cards we cant send address or cvc but those are required on our form.
 	//Use this flag only for testing locally to make those fields not required.  I miss preprocessor statements...

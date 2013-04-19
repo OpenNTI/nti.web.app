@@ -44,6 +44,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		cls:'error', cn:[{cls:'label'},{cls:'message'}]
 	},{
 		cls: 'footer', cn: [
+			{tag:'label', cls: 'agree', cn:[
+				{tag: 'input', type: 'checkbox'},{}
+			]},
 			{tag:'a', cls:'button cancel',role:'button', html:'Cancel'},
 			{tag:'a', cls:'button confirm',role:'button', html:'Purchase'}
 		]
@@ -56,7 +59,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		confirmEl: '.footer a.confirm',
 		errorEl: '.error',
 		errorLabelEl: '.error .label',
-		errorMessageEl: '.error .message'
+		errorMessageEl: '.error .message',
+		checkboxLabelEl: '.footer label input + div',
+		checkboxEl: '.footer label input',
+		checkboxBoxEl: '.footer label'
 	},
 
 	componentLayout: 'natural',
@@ -130,9 +136,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	onAdd: function(cmp){
 		var ordinal = cmp.ordinal,
-			confirmLabel = cmp.confirmLabel || 'Purchase';
+			confirmLabel = cmp.confirmLabel || 'Purchase',
+			checkLabel = cmp.checkboxLabel;
 
 		if(this.rendered){
+			this.checkboxEl.dom.checked = false;
+			this.checkboxLabelEl.update(checkLabel||'');
+			this.checkboxBoxEl[checkLabel?'addCls':'removeCls']('active');
+
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
 			this.cancelEl[cmp.omitCancel ? 'hide' : 'show']();
@@ -146,7 +157,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		if(ordinal>0){
 			el.select('.titlebar').addCls('started');
-			el.select('.titlebar .tab.acitive').addCls('visited');
+			el.select('.titlebar .tab.active').addCls('visited');
 		}
 
 		tabs.removeCls('active');
@@ -160,7 +171,6 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			return;
 		}
 
-		console.debug('Confirmed!');
 		this.down('[onConfirm]').onConfirm();
 	},
 
