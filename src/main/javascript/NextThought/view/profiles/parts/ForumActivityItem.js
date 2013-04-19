@@ -7,7 +7,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	requires: [
 		'NextThought.editor.Editor',
-		'NextThought.view.menus.BlogTogglePublish'
+		'NextThought.view.menus.BlogTogglePublish',
+		'NextThought.layout.component.Natural'
 	],
 
 	mixins:{
@@ -21,8 +22,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	defaultType: 'profile-forum-activity-item-reply',
 	ui: 'activity',
 
+	componentLayout: 'natural',
+	getTargetEl: function(){return this.body;},
 	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
 
 
 	renderTpl: Ext.DomHelper.markup([

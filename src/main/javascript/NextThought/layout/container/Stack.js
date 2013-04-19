@@ -15,7 +15,18 @@ Ext.define('NextThought.layout.container.Stack',{
     deferredRender : true,
 
 
-	calculate: function(){},//no-op
+	calculate: function(ownerContext){
+		var childItems = ownerContext.childItems;
+
+		Ext.each(childItems,function(i){
+			try{
+				i.setHeight(i.el.getHeight(),false);
+				i.setWidth(i.el.getWidth(),false);
+			}catch(e){}
+		});
+
+		this.done = true;
+	},
 
 
 	enforceStackActiveItem: function(){

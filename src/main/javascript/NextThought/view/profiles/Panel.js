@@ -7,7 +7,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		'NextThought.view.profiles.parts.Blog',
 		'NextThought.view.profiles.TabPanel',
 		'NextThought.view.profiles.ProfileFieldEditor',
-		'NextThought.view.account.contacts.management.Popout'
+		'NextThought.view.account.contacts.management.Popout',
+		'NextThought.layout.component.Natural'
 	],
 
 	mixins:{
@@ -15,6 +16,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 	},
 
 	ui: 'profile',
+	componentLayout: 'natural',
 	layout: 'auto',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },

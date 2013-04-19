@@ -6,11 +6,13 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		'NextThought.view.profiles.parts.BlogEditor',
 		'NextThought.view.profiles.parts.BlogListItem',
 		'NextThought.view.profiles.parts.BlogPost',
-		'NextThought.view.profiles.parts.NoThought'
+		'NextThought.view.profiles.parts.NoThought',
+		'NextThought.layout.component.Natural'
 	],
 
-	layout: 'auto',
 	defaultType: 'profile-blog-list-item',
+	layout: 'auto',
+	componentLayout: 'natural',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 	hidden: true,

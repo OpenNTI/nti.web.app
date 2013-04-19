@@ -13,14 +13,16 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.editor.Editor',
 		'NextThought.view.forums.Comment',
 		'NextThought.view.menus.BlogTogglePublish',
-		'NextThought.ux.SearchHits'
+		'NextThought.ux.SearchHits',
+		'NextThought.layout.component.Natural'
 	],
 
 	cls: 'topic-post',
-	layout: 'auto',
 	defaultType: 'forums-topic-comment',
+	layout: 'auto',
+	componentLayout: 'natural',
+	getTargetEl: function(){return this.body;},
 	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
 
 	pathTpl: Ext.DomHelper.markup([
 		{cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
@@ -60,7 +62,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			]}
 		]}]},
 		{ id: '{id}-body', cls: 'comment-container',
-			html:'{%this.renderContainer(out,values)%}' }
+			cn:['{%this.renderContainer(out,values)%}'] }
 	]),
 
 
