@@ -126,45 +126,74 @@ Ext.define('NextThought.controller.Store', {
 	 * @param success The success callback called if the provided coupone is valid
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	pricePurchase: function(cmp, purchaseDesc, success, failure){
-		var url = $AppConfig.service.getPurchasePricingURL(),
-			purchaseDesc = purchaseDesc || {},
+	pricePurchase: function(cmp, purchaseDesc, success, failure, scope){
+		var purchaseDesc = purchaseDesc || {},
 			purchasable = purchaseDesc.Purchasable,
-			mockResult = {};
+			data = {},
+			win = this.getPurchaseWindow();
 
-		if(!purchasable){
-			console.error('Must supply a purchasable', arguments);
+		if(!purchasable || !purchasable.getLink('pricing')){
+			console.error('Must supply a purchasable with a pricing link', arguments);
 			Ext.Error.raise('Must supply a purchasable');
 		}
 
-		if(purchaseDesc.Coupon === 'EXPLODE'){
-			Ext.callback(failure, window, [{}, {}]);
+		if(!win){
+			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		mockResult.PurchasableId = purchasable.getId();
-		mockResult.Quantity = purchaseDesc.Quantity || 1;
+		//We do our safety locking of the window here but we don't do any masking
+		//The caller may or may not want to mask various
+		if(win.lockPurchaseAction){
+			console.error('Window already locked aborting pricePurchase', arguments);
+			return false;
+		}
+		win.lockPurchaseAction = true;
+
+		data.purchasableID = purchasable.getId();
 		if(purchaseDesc.Coupon){
-			if(purchaseDesc.Coupon === 'INVALID'){
-				mockResult.Coupon = null;
-			}
-			else{
-				mockResult.Coupon = {};
-				mockResult.Coupon.Duration = 'forever';
-				mockResult.Coupon.ID = purchaseDesc.Coupon;
-				mockResult.Coupon.PercentOff = 10;
-			}
+			data.Coupon = purchaseDesc.Coupon.ID || purchaseDesc.Coupon;
 		}
-		mockResult.Currency = purchasable.get('Currency');
-		mockResult.Amount = purchasable.get('Amount');
-		mockResult.PurchasePrice = mockResult.Amount * mockResult.Quantity;
-
-		if(mockResult.Coupon){
-			mockResult.NonDiscountedPrice = mockResult.Amount * mockResult.Quantity;
-			mockResult.PurchasePrice = mockResult.PurchasePrice - ((mockResult.Coupon.PercentOff/100) * mockResult.PurchasePrice);
+		if(purchaseDesc.Quantity >= 0){
+			data.Quantity = purchaseDesc.Quantity;
 		}
 
-		Ext.callback(success, window, [mockResult]);
+		try{
+			Ext.Ajax.request({
+				url: purchasable.getLink('pricing'),
+				jsonData: data,
+				method: 'POST',
+				scope: this,
+				callback: function(r, s, response){
+					delete win.lockPurchaseAction;
+					try{
+						var result;
+						if(!s){
+							console.error('Pricing call failed', arguments);
+							Ext.callback(failure, scope, [r, response]);
+						}
+						else{
+							result = Ext.JSON.decode(response.responseText, true);
+							if(!result){
+								console.error('Unknown response from pricing call', arguments);
+								Ext.callback(failure, scope, [r, response]);
+							}
+							else{
+								Ext.callback(success, scope, [result]);
+							}
+						}
+					}
+					catch(e){
+						console.log('An error occured processing pricing callback', arguments);
+						Ext.callback(failure, scope, [r, response]);
+					}
+				}
+			});
+		}
+		catch(e){
+			Ext.callback(failure, scope, {error: e});
+			delete win.lockPurchaseAction;
+		}
 	},
 
 	/**
@@ -209,6 +238,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		if(win.lockPurchaseAction){
+			console.error('Window already locked aborting createPurchase', arguments);
 			return false;
 		}
 		win.lockPurchaseAction = true;
@@ -278,6 +308,7 @@ Ext.define('NextThought.controller.Store', {
 		//then we start polling for the processing to complete.  On success we move
 		//the user to the thank you page.  On an error we move them back to the payment form
 		if(win.lockPurchaseAction){
+			console.error('Window already locked aborting submitPurchase', arguments);
 			return false;
 		}
 		win.lockPurchaseAction = true;
