@@ -36,12 +36,19 @@ Ext.define('NextThought.ux.Pointer',{
 
 
 	point: function(){
+		if(!this.rendered){
+			return;
+		}
+
+
 		var bEl = this.baseCmp.getEl(),
-			bTop = bEl.getTop() + this.shadowBuffer,
-			bBottom = bEl.getBottom() - this.shadowBuffer,
+			bTop = bEl.getY() + this.shadowBuffer,
+			bBottom = (bEl.getY() + bEl.getHeight()) - this.shadowBuffer,
+
 			h = this.getHeight(),
 			x = this.el.getAlignToXY(bEl,'l-r',[-2,0])[0],
 			y = this.el.getAlignToXY(this.pointToEl,'r-l',[0,1])[1],
+
 			bottom = y + (h - this.shadowBuffer),
 			z = this.baseCmp.el.getZIndex()+1;
 
