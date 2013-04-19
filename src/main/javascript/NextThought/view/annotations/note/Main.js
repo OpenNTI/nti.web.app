@@ -45,17 +45,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	fillInReplies: function(){
 		var r = this.record, me = this;
-		Ext.suspendLayouts();
 		this.removeAll(true);
-		Ext.resumeLayouts(true);
 
 		Ext.defer(function(){
 			if(me.isDestroyed){ return; }
 
-			Ext.suspendLayouts();
 			me.loadReplies(r);
 			me.record.notifyObserversOfFieldChange('AdjustedReferenceCount');
-			Ext.resumeLayouts(true);
 		}, 1, this);
 	},
 
