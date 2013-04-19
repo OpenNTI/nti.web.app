@@ -23,7 +23,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Who are you purchasing for?'},
 			{tag: 'label', cn: [
-				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
+				{tag: 'input', type: 'radio', name:'quantity', value:'self', checked:true},
 				{html:'Myself. I want to licence this for my account.'}]},
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'other'},
