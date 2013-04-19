@@ -20,6 +20,25 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	renderTpl: Ext.DomHelper.markup({tag:'form', autocomplete:'on', cn:[
 		{tag: 'fieldset', cn:[
+			{tag: 'legend', html: 'Who are you purchasing for?'},
+			{tag: 'label', cn: [
+				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
+				{html:'Myself. I want to licence this for my account.'}]},
+			{tag: 'label', cn: [
+				{tag: 'input', type: 'radio', name:'quantity', value:'other'},
+				{cn:[
+					{html:'I want to purchase Licence Activation Keys for others.'},
+					{tag: 'input', type: 'text', placeholder: '1', name: 'count',
+						'data-width':'1/8', autocomplete:'off', pattern:'\\d*',
+						'data-formatter': 'restrictNumeric'},'Licence'
+				]}
+			]}
+		]},
+		{tag: 'fieldset', cls:'smaller-margin', cn:[
+			{tag: 'legend', html: 'Coupon'},
+			{cn: [{tag: 'input', type: 'text', placeholder: 'Coupon', name: 'coupon'}]}
+		]},
+		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Payment Information'},
 			{cn: [{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Name on card', name: 'name'}]},
 			{cn: [
