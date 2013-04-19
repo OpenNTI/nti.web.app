@@ -80,14 +80,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
-		this.enableBubble('purchase-info-updated');
-	},
-
-
 	publishQuantityAndPrice: function(quantity, price){
-		this.up('window').publishQuantityAndPrice(quantity,price);
+		this.up('window').publishQuantityAndPrice(quantity, price);
 	},
 
 
@@ -96,7 +90,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		var inputs = this.getEl().select('input'),
 			validator = Ext.bind(this.generateTokenData, this),
-			bufferedValidator = Ext.Function.createBuffered(validator, 250);
+			bufferedValidator = Ext.Function.createBuffered(validator, 250),
+			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 250, this);
 
 		inputs.each(function(input){
 			var formatter = input.getAttribute('data-formatter'),
@@ -110,7 +105,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			});
 		});
 
-
+		this.quantityEl.on('click', this.pricePurchase, this);
+		this.getEl().select('input[name=count]').on('blur', this.pricePurchase, this);
+		this.getEl().select('input[name=count]').on('keypress', bufferedPricer, this);
+		this.couponEl.on('blur', this.pricePurchase, this);
 
 		this.enableSubmission(false);
 
@@ -183,7 +181,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			this.couponEl[couponValid ? 'removeCls' : 'addCls']('invalid');
 
-			this.fireEvent('purchase-info-updated', this, desc, pricing);
+			this.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'));
 		}
 
 		function onFailure(){
