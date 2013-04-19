@@ -12,11 +12,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
-	defaultType: 'box',
-
-	childEls: ['body'],
-	getTargetEl: function(){ return this.body; },
-
 	renderSelectors:{
 		avatar: 'img.avatar',
 		addToContacts: '.meta .add-to-contacts'
