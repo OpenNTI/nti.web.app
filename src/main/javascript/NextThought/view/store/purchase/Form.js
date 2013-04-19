@@ -91,7 +91,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		var inputs = this.getEl().select('input'),
 			validator = Ext.bind(this.generateTokenData, this),
 			bufferedValidator = Ext.Function.createBuffered(validator, 250),
-			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 250, this);
+			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 1000, this);
 
 		inputs.each(function(input){
 			var formatter = input.getAttribute('data-formatter'),
@@ -105,9 +105,18 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			});
 		});
 
-		this.quantityEl.on('click', this.pricePurchase, this);
+		this.getEl().select('input[name=quantity]').on('click', function(e){
+			var t = e.getTarget();
+			if(t && Ext.fly(t).is('input')){
+				this.pricePurchase();
+			}
+			else{
+				console.log('Ignoring target t', t);
+			}
+		}, this);
 		this.getEl().select('input[name=count]').on('blur', this.pricePurchase, this);
 		this.getEl().select('input[name=count]').on('keypress', bufferedPricer, this);
+		this.couponEl.on('keypress', bufferedPricer, this);
 		this.couponEl.on('blur', this.pricePurchase, this);
 
 		this.enableSubmission(false);
@@ -168,6 +177,13 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		var desc = this.gatherPricingInfo(),
 			sendingCoupon = Boolean(desc.Coupon);
 
+		if(this.lastPricingDesc
+			&& desc.Coupon === this.lastPricingDesc.Coupon
+			&& desc.Quantity === this.lastPricingDesc.Quantity){
+			return;
+		}
+
+
 		function unmask(){
 			var el = this.getEl();
 			if(el){
@@ -194,6 +210,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		console.log('Pricing purchase info', desc);
 		this.getEl().mask('Calculating price.');
+		this.lastPricingDesc = desc;
 		this.fireEvent('price-purchase', this, desc, onSuccess, onFailure, this);
 	},
 
