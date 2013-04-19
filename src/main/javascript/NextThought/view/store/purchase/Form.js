@@ -253,17 +253,17 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 	},
 
-	handleError: function(errorObject){
-		console.log('Form needs to handle error', errorObject);
+	handleError: function(errorModel){
+		console.log('Form needs to handle error', errorModel);
 		var el = this.getEl(),
-			error = errorObject.error,
-			p = error.param||'',
+			msg = errorModel.get('Message') || 'An unknown error occurred.',
+			p = errorModel.get('Param') || '',
 			field = el.down('input[name="'+p+'"]') || el.down('input[name^='+(p.split('_')[0])+']');
 
 		if( field ){
 			field.addCls('invalid');
 		}
 
-		this.up('window').showError(error.message);
+		this.up('window').showError(msg);
 	}
 });

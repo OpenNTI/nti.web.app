@@ -8,7 +8,8 @@ Ext.define('NextThought.controller.Store', {
 	models: [
 		'store.Purchasable',
 		'store.PurchaseAttempt',
-		'store.PricedPurchasable'
+		'store.PricedPurchasable',
+		'store.StripePurchaseError'
 	],
 
 	stores: [
@@ -330,12 +331,12 @@ Ext.define('NextThought.controller.Store', {
 			return false;
 		}
 		win.lockPurchaseAction = true;
-		this.safelyMaskWindow('Your purchase is being finalized.  This may take several moments');
+		this.safelyMaskWindow(win, 'Your purchase is being finalized.  This may take several moments');
 
 		function done(){
 			delete me.paymentProcessor;
 			delete win.lockPurchaseAction;
-			this.safelyUnmaskWindow(win);
+			me.safelyUnmaskWindow(win);
 		}
 
 		delegate = {
@@ -379,10 +380,15 @@ Ext.define('NextThought.controller.Store', {
 		var form;
 		form = this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
 		if(error){
-			if(Ext.isString(error)){
-				error = {error: {message: error}};
+			try{
+				if(Ext.isString(error)){
+					error = NextThought.model.store.StripePurchaseError({Message: error});
+				}
+				form.handleError(error);
 			}
-			form.handleError(error);
+			catch(e){
+				console.error('An error occurred setting an error. Ruh Roh', Globals.getError(e));
+			}
 		}
 	},
 
