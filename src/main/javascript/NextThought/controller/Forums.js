@@ -77,10 +77,10 @@ Ext.define('NextThought.controller.Forums', {
 				'activity-preview-topic':{
 					'fill-in-path': this.fillInPath
 				},
-				'activity-preview-topic nti-editor': {
+				'activity-preview-topic > nti-editor': {
 					'save': this.saveTopicComment
 				},
-				'activity-preview-topic-reply nti-editor':{
+				'activity-preview-topic-reply > nti-editor':{
 					'save': this.saveTopicComment
 				},
 				'profile-forum-activity-item':{

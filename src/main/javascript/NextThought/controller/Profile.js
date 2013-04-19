@@ -55,10 +55,10 @@ Ext.define('NextThought.controller.Profile', {
 					'save': this.saveBlogComment
 				},
 
-				'activity-preview-personalblogentry nti-editor':{
+				'activity-preview-personalblogentry > nti-editor':{
 					'save': this.saveBlogComment
 				},
-				'activity-preview-blog-reply nti-editor':{
+				'activity-preview-blog-reply > nti-editor':{
 					'save': this.saveBlogComment
 				}
 			}
