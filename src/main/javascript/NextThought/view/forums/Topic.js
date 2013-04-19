@@ -99,6 +99,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	buildStore: function(){
 		this.store = NextThought.store.NTI.create({
+			storeId: this.getRecord().get('Class')+'-'+this.getRecord().get('NTIID'),
 			url: this.getRecord().getLink('contents')
 		});
 
@@ -428,6 +429,10 @@ Ext.define('NextThought.view.forums.Topic',{
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
 		h.removeObserverForField(this, 'tags', this.updateField, this);
+
+		if(this.store){
+			this.store.destroyStore();
+		}
 
 		this.callParent(arguments);
 	},

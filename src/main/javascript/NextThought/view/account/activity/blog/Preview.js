@@ -32,15 +32,18 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 
 
 	buildStore: function(){
-		var store = NextThought.store.Blog.create();
-		store.proxy.url = this.record.getLink('contents');
+		//Seems like this might be what Ext.util.Bindable is for...
+		//Note we want our store in the StoreManager so objects in it interact with
+		//objects in other stores.
+		this.store = NextThought.store.Blog.create({storeId: 'activity-popout-blog-preview'+guidGenerator()});
+		this.store.proxy.url = this.record.getLink('contents');
 
-		this.mon(store,{
+		this.mon(this.store,{
 			scope: this,
 			load: this.fillInReplies
 		});
 
-		store.load();
+		this.store.load();
 	},
 
 
@@ -54,7 +57,14 @@ Ext.define('NextThought.view.account.activity.blog.Preview',{
 	},
 
 
-	showReplies: function(){ this.buildStore(); }
+	showReplies: function(){ this.buildStore(); },
+
+	destroy: function(){
+		if(this.store){
+			this.store.destroyStore();
+		}
+		this.callParent(arguments);
+	}
 
 });
 

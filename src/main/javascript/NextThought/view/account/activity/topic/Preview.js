@@ -26,16 +26,17 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 
 
 	buildStore: function(){
-		var store = NextThought.store.NTI.create({
+		this.store = NextThought.store.NTI.create({
+			storeId: 'activity-popout-topic-preview'+guidGenerator(),
 			url: this.record.getLink('contents')
 		});
 
-		this.mon(store,{
+		this.mon(this.store,{
 			scope: this,
 			load: this.fillInReplies
 		});
 
-		store.load();
+		this.store.load();
 	},
 
 
@@ -74,6 +75,13 @@ Ext.define('NextThought.view.account.activity.topic.Preview',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.pathEl, 'click', this.navigateToItem, this);
+	},
+
+	destroy: function(){
+		if(this.store){
+			this.store.destroyStore();
+		}
+		this.callParent(arguments);
 	}
 
 });

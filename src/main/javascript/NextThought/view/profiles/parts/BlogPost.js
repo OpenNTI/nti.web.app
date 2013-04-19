@@ -33,7 +33,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	buildStore: function(){
-		this.store = NextThought.store.Blog.create();
+		this.store = NextThought.store.Blog.create({
+			storeId: this.record.get('Class')+'-'+this.record.get('NTIID')
+		});
 		this.store.proxy.url = this.getRecord().getLink('contents');
 
 		this.mon(this.store,{
