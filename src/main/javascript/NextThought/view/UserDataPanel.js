@@ -654,7 +654,10 @@ Ext.define('NextThought.view.UserDataPanel',{
 					dom;
 			Ext.each(users, function(u){
 				if (!isMe(u) && names.length < 4){
-					names.push(u.getName().split(/\s/)[0]);
+					//Umm no, if we want to use first name we should use
+					//the first name, the below hueristic has obvious problems...
+					//names.push(u.getName().split(/\s/)[0]);
+					names.push(u.getName());
 				}
 			});
 			if (users.length > 5){data.count = '('+(users.length-1)+')';}
