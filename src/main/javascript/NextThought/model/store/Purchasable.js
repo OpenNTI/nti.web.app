@@ -22,6 +22,9 @@ Ext.define('NextThought.model.store.Purchasable', {
 		if(rel === 'pricing'){
 			return getURL('/dataserver2/store/price_purchasable_with_stripe_coupon');
 		}
+		if(rel === 'purchase'){
+			return getURL('/dataserver2/store/post_stripe_payment');
+		}
 		return this.mixins.hasLinks.getLink.call(this, rel);
 	}
 });

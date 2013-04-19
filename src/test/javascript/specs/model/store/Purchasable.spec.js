@@ -6,6 +6,10 @@ describe('Purchasable model tests', function(){
 			expect(purchasable.getLink('pricing')).toBeTruthy();
 		});
 
+		it('Has a purchase link', function(){
+			expect(purchasable.getLink('purchase')).toBeTruthy();
+		});
+
 		it('Uses the standard mixin for other', function(){
 			expect(purchasable.getLink('like')).toBeFalsy();
 		});

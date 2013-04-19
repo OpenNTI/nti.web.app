@@ -7,7 +7,8 @@ Ext.define('NextThought.controller.Store', {
 
 	models: [
 		'store.Purchasable',
-		'store.PurchaseAttempt'
+		'store.PurchaseAttempt',
+		'store.PricedPurchasable'
 	],
 
 	stores: [
@@ -174,7 +175,11 @@ Ext.define('NextThought.controller.Store', {
 						}
 						else{
 							result = Ext.JSON.decode(response.responseText, true);
-							if(!result){
+							if(result){
+								result = ParseUtils.parseItems(result)[0];
+							}
+
+							if(!result || !result.isPricedPurchase){
 								console.error('Unknown response from pricing call', arguments);
 								Ext.callback(failure, scope, [r, response]);
 							}
@@ -266,17 +271,14 @@ Ext.define('NextThought.controller.Store', {
 	 * Make the purchase for purhcasable using tokenObject
 	 *
 	 * @param cmp the owner cmp
-	 * @param purchasable the item to purchase
+	 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param tokenObject the stripe token object
 	 */
-	submitPurchase: function(cmp, purchasable, tokenObject){
-		//TODO need to pass quantity and coupon code once the UI collects it
-		//TODO also send along expected price so ds can verify against it?
+	submitPurchase: function(cmp, purchaseDescription, tokenObject){
 
-		var connectInfo = purchasable.get('StripeConnectKey') || {},
-			pKey = connectInfo.get('PublicKey'),
+		var purchasable = purchaseDescription.Purchasable,
 			tokenId = (tokenObject || {}).id,
-			win = this.getPurchaseWindow();
+			win = this.getPurchaseWindow(), delegate;
 
 
 		//At this point we shouldn't get here without a purchasable and tokenObject.  The
@@ -288,21 +290,6 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		if(!pKey){
-			//In real environments we shouldn't ever have a purchasable
-			//without strip information (at this point) and if we do we shouldn't
-			//get this far.  But in any event crap breaks in unexpected ways so don't die
-			console.error('No Stripe connection info for purchasable', purchasable);
-			return;
-		}
-
-		if(!tokenId){
-			//In real environments we shouldn't ever have a purchasable
-			//without strip information (at this point) and if we do we shouldn't
-			//get this far.  But in any event crap breaks in unexpected ways so don't die
-			console.error('No token id to make purchase with', arguments);
-			return;
-		}
 
 		//Ok the idea here is to make an ajax request to start the payment processing.
 		//then we start polling for the processing to complete.  On success we move
@@ -312,49 +299,61 @@ Ext.define('NextThought.controller.Store', {
 			return false;
 		}
 		win.lockPurchaseAction = true;
-
 		win.getEl().mask('Your purchase is being finalized.  This may take several moments');
+
+		function done(){
+			delete win.lockPurchaseAction;
+			win.getEl().unmask();
+		}
+
+		delegate = {
+			purchaseAttemptCompleted: function(helper, purchaseAttempt){
+				win.remove(cmp, true);
+				win.add({xtype: 'purchase-complete'});
+				done();
+			},
+			purchaseAttemptFailed: function(helper, purchaseAttempt){
+				this.showFormWithError(win, cmp, purchasable, purchaseAttempt.get('Error'), tokenObject);
+				done();
+			},
+			purchaseAttemptTimedOut: function(helper, purchaseAttempt){
+				this.showFormWithError(win, cmp, purchasable, 'Purchase timed out.', tokenObject);
+				done();
+			},
+			purchaseAttemptRequestFailed: function(helper, responseOrMsg, exception){
+				this.showFormWithError(win, cmp, purchasable, responseOrMsg, tokenObject);
+				done();
+			},
+			purchaseAttemptCompletedWithUnknownStatus: function(helper, purchaseAttempt){
+				this.showFormWithError(win, cmp, purchasable, 'Unable to complete purchase at this time.', tokenObject);
+				done();
+			}
+		};
+
 		try{
-			this.initiatePayment(cmp, purchasable, tokenObject, function(){
-				delete win.lockPurchaseAction;
-				win.getEl().unmask();
-			});
+			new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, delegate, this);
 		}
 		catch(e){
 			//An exception here means we shouldn't have even started the purchase on the ds.
 			//in this case the users card shouldn't have been carged yet.
-
 			console.error('An error occurred initiating payment.  Please try again later.', Globals.getError(e), arguments);
-
 			//Treat this like a failure and pop back to the payment form?
-			delete win.lockPurchaseAction;
-			win.getEl().unmask();
+			this.showFormWithError(win, cmp, purchasable, 'An error occurred initiating payment.  Please try again later.', tokenObject);
+			done();
 		}
 	},
 
-	/**
-	 * Submit a payment request for the given purchasable and token
-	 * When a PaymentAttempt finishes logic is handed off to handleCompletedPurchase.
-	 * A completion callback can be provided that will be
-	 */
-	initiatePayment: function(cmp, purchasable, token, completion){
-		this.handleCompletedPurchase(purchasable, token, null, completion);
-	},
 
-
-	/**
-	 * Inspect the completed purchase attempt and handle success or failurs.
-	 * On success move the user to the thank you page.  On failure move the user
-	 * back to the form view (asking to populate from the card info on the token object)
-	 * and displaying the necessary error from the server.  On completion call the callback
-	 */
-	handleCompletedPurchase: function(purchasable, token, completedAttempt, completion){
-		var win = this.getPurchaseWindow(),
-			cmp = win ? win.items.first() : undefined;
-
+	showFormWithError: function(win, cmp, purchasable, error, tokenObject){
+		var form;
 		win.remove(cmp, true);
-		win.add({xtype: 'purchase-complete', record: purchasable, purchaseAttempt: completedAttempt});
-		Ext.callback(completion);
+		form = win.add({xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
+		if(error){
+			if(Ext.isString(error)){
+				error = {error: {message: error}};
+			}
+			form.handleError(error);
+		}
 	},
 
 
@@ -407,5 +406,188 @@ Ext.define('NextThought.controller.Store', {
 		win.forceClosing = true;
 		win.close();
 		delete win.forceClosing;
+	}
+});
+
+
+/**
+ * A "private" utility class to start a purchase and poll for it's completion.
+ * It should be created with a purchaseRequest, a token object, and a delegate object
+ * that handles errors and completion.  The delegate should implement the following function
+ * that will be called with the provided scope
+ *
+ * purchaseAttemptCompleted(this, purchaseAttempt)
+ * purchaseAttemptFailed(this, purchaseAttempt)
+ * purchaseAttemptTimedOut(this, purchaseAttempt)
+ * purchaseAttemptRequestFailed(this, responseOrMsg, exception)
+ * purchaseAttemptCompletedWithUnknownStatus(this, purchaseAttempt)
+ *
+ */
+Ext.define('NextThought.controller.store.PurchaseHelper', {
+
+	maxWaitInMillis: 2 * 60 * 1000, //2 minutes
+	pollingIntervalInMillis: 5 * 1000, //5 seconds
+
+	constructor: function(purchaseDesc, tokenObject, delegate, scope){
+		var purchasable = purchaseDesc.Purchasable,
+			tokenId = tokenObject.id;
+
+		if(!purchasable || !tokenId || !delegate){
+			Ext.Error.raise('Must supply purchasable, token, and delegate', arguments);
+		}
+
+		this.purchasable = purchasable;
+		this.coupon = purchaseDesc.Coupon;
+		this.quantity = purchaseDesc.Quantity;
+		this.expectedPrice = purchaseDesc.ExpectedPrice; //Note this is just so the ds can sanity check
+		this.tokenId = tokenId;
+		this.delegate = delegate;
+		this.scope = scope;
+
+		this.initiatePurchase();
+	},
+
+
+	parsePurchaseAttemptResponse: function(response){
+		var result = Ext.JSON.decode(response.responseText, true);
+		if(result){
+			result = ParseUtils.parseItems(result.Items || result)[0];
+		}
+		if(!result || !result.isPurchaseAttempt){
+			Ext.Error.raise('Unexpected response type');
+		}
+		return result;
+	},
+
+	initiatePurchase: function(){
+		var url = this.purchasable.getLink('purchase'),
+			data;
+
+		if(!url){
+			Ext.Error.raise('No purchase url for purchasable');
+		}
+
+		data = {
+			token: this.tokenId,
+			purchasableID: this.purchasable.getId(),
+		};
+		if(this.coupon !== undefined){
+			data.coupon = this.coupon;
+		}
+		if(this.quantity > 0){
+			data.quantity = this.quantity;
+		}
+		if(this.expectedPrice !== undefined){
+			data.expectedPrice = this.expectedPrice;
+		}
+
+		//TODO this needs to go away but the ds dies without it. Note this isn't even the right price
+		data.Amount = this.purchasable.get('Amount');
+
+		Ext.Ajax.request({
+			url: url,
+			jsonData: data,
+			method: 'POST',
+			scope: this,
+			callback: function(req, s, resp){
+				try{
+					var result;
+					if(!s){
+						console.error('Purchase attempt was unsuccessful', arguments);
+						this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, resp);
+					}
+					else{
+						try{
+							result = this.parsePurchaseAttemptResponse(resp);
+							this.startedPollingAt = new Date().getTime();
+							this.processPurchaseAttempt(result, true);
+						}
+						catch(parseError){
+							console.error('An error occurred parsing successful? response to begin purchase', arguments, Globals.getError(parseError));
+							this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, 'Unparsable return value', parseError);
+						}
+					}
+				}
+				catch(e){
+					console.error('An error occured initiating purchase attempt', arguments, Globals.getError(e));
+					this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, 'An unknown error occurred initiating payment.', e);
+				}
+			}
+		});
+	},
+
+
+	pollPurchaseAttempt: function(purchaseAttempt){
+		var url = purchaseAttempt.getLink('get_purchase_attempt');
+		console.log('Polling for purchase attempt', purchaseAttempt);
+		Ext.Ajax.request({
+			url: url,
+			method: 'GET',
+			scope: this,
+			callback: function(req, s, resp){
+				try{
+					var result;
+					if(!s){
+						console.error('Purchase attempt poll was unsuccesful.  Will keep trying', arguments);
+						this.processPurchaseAttempt(purchaseAttempt);
+					}
+					else{
+						try{
+							result = this.parsePurchaseAttemptResponse(resp);
+							console.log('PurchaseAttempt polling complete.  Procceesing', result);
+							this.processPurchaseAttempt(result);
+						}
+						catch(parseError){
+							console.error('An error occurred parsing successful? polling response.  Will keep trying', arguments, Globals.getError(parseError));
+							this.processPurchaseAttempt(purchaseAttempt);
+						}
+					}
+				}
+				catch(e){
+					console.error('An error occurred polling for payment attempt', arguments, Globals.getError(e));
+					this.processPurchaseAttempt(purchaseAttempt);
+				}
+			}
+		});
+	},
+
+
+	processPurchaseAttempt: function(purchaseAttempt, immediate){
+		if(purchaseAttempt && purchaseAttempt.isComplete()){
+			this.handleCompletedPaymentAttempt(purchaseAttempt);
+			return;
+		}
+
+		var now = new Date().getTime();
+
+		if(this.startedPollingAt + this.maxWaitInMillis < now){
+			//Hmm, not good.  We didn't complete in the time we wanted to wait.
+			//It's not our job to handle this, but what in the world will our caller do
+			console.error('Max polling time exceeded for purchase attempt', this, purchaseAttempt);
+			this.delegate.purchaseAttemptTimedOut.call(this.scope, this, purchaseAttempt);
+			return;
+		}
+
+		if(immediate){
+			this.pollPurchaseAttempt(purchaseAttempt);
+		}
+		else{
+			Ext.defer(this.pollPurchaseAttempt, this.pollingIntervalInMillis ,this, [purchaseAttempt]);
+		}
+	},
+
+	handleCompletedPaymentAttempt: function(purchaseAttempt){
+		if(purchaseAttempt.isSuccess()){
+			console.log('Purchase attempt returned success', purchaseAttempt);
+			this.delegate.purchaseAttemptCompleted.call(this.scope, this, purchaseAttempt);
+		}
+		else if(purchaseAttempt.isFailure()){
+			console.warn('Purchase attempt returned failure', purchaseAttempt);
+			this.delegate.purchaseAttemptFailed.call(this.scope, this, purchaseAttempt);
+		}
+		else{
+			console.error('Purchase attempt finished with unknown status', purchaseAttempt);
+			this.delegate.purchaseAttemptCompletedWithUnknownStatus.call(this.scope, this, purchaseAttempt)
+		}
 	}
 });

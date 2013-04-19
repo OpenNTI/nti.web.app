@@ -1,6 +1,13 @@
 Ext.define('NextThought.model.store.PurchaseAttempt', {
     extend: 'NextThought.model.Base',
 
+	statics:{
+		STATE_UNKNOWN: 'Unknown',
+		STATE_FAILURE: 'Failed',
+		STATE_SUCCESS: 'Success',
+		STATE_STARTED: 'Started'
+	},
+
     fields: [
         { name: 'Items', type: 'auto', persist: false },
         { name: 'State', type: 'string', persist: false },
@@ -13,11 +20,26 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
         { name: 'InvitationCode', type: 'string', persist: false }
     ],
 
+	isPurchaseAttempt: true,
+
 	//TODO we want the polling link on the attempt
 	getLink: function(rel){
 		if(rel === 'get_purchase_attempt'){
-			return getURL('/dataserver2/store/get_purchase_attempt');
+			return getURL('/dataserver2/store/get_purchase_attempt?'+Ext.Object.toQueryString({purchaseID: this.getId()}));
 		}
 		return this.mixins.hasLinks.getLink.call(this, rel);
+	},
+
+	isComplete: function(){
+		return this.isSuccess() || this.isFailure();
+	},
+
+	isSuccess: function(){
+		return this.get('State') === this.self.STATE_SUCCESS;
+	},
+
+	isFailure: function(){
+		return this.get('State') === this.self.STATE_FAILURE;
 	}
+
 });

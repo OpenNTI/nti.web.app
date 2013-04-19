@@ -36,6 +36,6 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 
 
 	onConfirm: function(){
-		this.fireEvent('process-purchase', this, this.record, this.tokenObject);
+		this.fireEvent('process-purchase', this, {Purchasable: this.record}, this.tokenObject);
 	}
 });
