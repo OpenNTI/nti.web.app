@@ -109,7 +109,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			if(fields){
 				fields = fields.split(',');
-				val = Ext.Array.map(fields, function(f){return card[f]});
+				val = Ext.Array.map(fields, function(f){return card[f];});
 				if(!Ext.Array.some(val, function(v){return v === null || v ===undefined;})){
 					val = val.join(input.getAttribute('data-cardfields-separator') || '');
 				}

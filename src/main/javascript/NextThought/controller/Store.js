@@ -70,6 +70,8 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
+	//TODO a way to have this collection show up only if there are purchasable
+	//items that have not yet been purchased?
 	maybeAddPurchasables: function(){
 		//the 0, is for dev only, will remove later.
 		this.getNavigationMenu().add(0,{
@@ -105,6 +107,32 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
+	transitionToComponent: function(win, cfg){
+		win.removeAll(true);
+		return win.add(cfg);
+	},
+
+
+	safelyMaskWindow: function(win, msg){
+		var el = win ? win.getEl() : undefined;
+		if(el){
+			el.mask(msg);
+			return true;
+		}
+		return false;
+	},
+
+
+	safelyUnmaskWindow: function(win){
+		var el = win ? win.getEl() : undefined;
+		if(el){
+			el.unmask();
+			return true;
+		}
+		return false;
+	},
+
+
 	showPurchaseForm: function(view, purchasable){
 		var win = this.getPurchaseWindow();
 		if(!win){
@@ -113,8 +141,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		console.log('Show purchase form', arguments);
-		win.remove(view, true);
-		win.add({xtype: 'purchase-form', record: purchasable});
+		this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable});
 	},
 
 
@@ -127,8 +154,8 @@ Ext.define('NextThought.controller.Store', {
 	 * @param success The success callback called if the provided coupone is valid
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	pricePurchase: function(cmp, purchaseDesc, success, failure, scope){
-		var purchaseDesc = purchaseDesc || {},
+	pricePurchase: function(sender, desc, success, failure, scope){
+		var purchaseDesc = desc || {},
 			purchasable = purchaseDesc.Purchasable,
 			data = {},
 			win = this.getPurchaseWindow();
@@ -138,6 +165,10 @@ Ext.define('NextThought.controller.Store', {
 			Ext.Error.raise('Must supply a purchasable');
 		}
 
+		//We don't strictly require a window other than for safety locking,
+		//but this really shouldnt ever be called out of the context of a purchase
+		//in some for or another.  If it is called outside of a window treat it as a programming error and raise
+		//an exception.
 		if(!win){
 			console.error('Expected a purchase window', arguments);
 			return;
@@ -211,7 +242,7 @@ Ext.define('NextThought.controller.Store', {
 	createPurchase: function(cmp, purchasable, cardinfo){
 		var connectInfo = purchasable.get('StripeConnectKey') || {},
 			pKey = connectInfo && connectInfo.get('PublicKey'),
-			win = this.getPurchaseWindow();
+			win = this.getPurchaseWindow(), me = this;
 
 		if(!win){
 			console.error('Expected a purchase window', arguments);
@@ -235,10 +266,9 @@ Ext.define('NextThought.controller.Store', {
 			}
 			else{
 				console.log('Stripe token response handler', arguments);
-				win.remove(cmp, true);
-				win.add({xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
+				this.transitionToComponent(win, {xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
 			}
-			win.getEl().unmask();
+			this.safelyUnmaskWindow(win);
 			delete win.lockPurchaseAction;
 		}
 
@@ -251,7 +281,7 @@ Ext.define('NextThought.controller.Store', {
 		try{
 			win.hideError();
 			//Mask the window or the form?
-			win.getEl().mask('Processing');
+			this.safelyMaskWindow(win, 'Processing');
 
 			//Make sure we are using the correct public key
 			Stripe.setPublishableKey(pKey);
@@ -263,7 +293,7 @@ Ext.define('NextThought.controller.Store', {
 			//TODO Pass this to the view for display?  It would most likely be a programming error
 			cmp.handleError('An unknown error occurred.  Please try again later.');
 			delete win.lockPurchaseAction;
-			win.getEl().unmask();
+			this.safelyUnmaskWindow(win);
 		}
 	},
 
@@ -300,18 +330,17 @@ Ext.define('NextThought.controller.Store', {
 			return false;
 		}
 		win.lockPurchaseAction = true;
-		win.getEl().mask('Your purchase is being finalized.  This may take several moments');
+		this.safelyMaskWindow('Your purchase is being finalized.  This may take several moments');
 
 		function done(){
 			delete me.paymentProcessor;
 			delete win.lockPurchaseAction;
-			win.getEl().unmask();
+			this.safelyUnmaskWindow(win);
 		}
 
 		delegate = {
 			purchaseAttemptCompleted: function(helper, purchaseAttempt){
-				win.remove(cmp, true);
-				win.add({xtype: 'purchase-complete'});
+				this.transitionToComponent(win, {xtype: 'purchase-complete'});
 				done();
 			},
 			purchaseAttemptFailed: function(helper, purchaseAttempt){
@@ -348,8 +377,7 @@ Ext.define('NextThought.controller.Store', {
 
 	showFormWithError: function(win, cmp, purchasable, error, tokenObject){
 		var form;
-		win.remove(cmp, true);
-		form = win.add({xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
+		form = this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
 		if(error){
 			if(Ext.isString(error)){
 				error = {error: {message: error}};
@@ -381,7 +409,7 @@ Ext.define('NextThought.controller.Store', {
 		//At this point they are getting charged, there is no going back.
 		if(this.paymentProcessor){
 			//TODO consider an alert here?
-			console.warn('Presenting payment window from being closed will purchase is in progress', this.paymentProcessor);
+			console.warn('Presenting payment window from being closed while purchase is in progress', this.paymentProcessor);
 			return false;
 		}
 
@@ -480,7 +508,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 
 		data = {
 			token: this.tokenId,
-			purchasableID: this.purchasable.getId(),
+			purchasableID: this.purchasable.getId()
 		};
 		if(this.coupon !== undefined){
 			data.coupon = this.coupon;
@@ -598,7 +626,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 		}
 		else{
 			console.error('Purchase attempt finished with unknown status', purchaseAttempt);
-			this.delegate.purchaseAttemptCompletedWithUnknownStatus.call(this.scope, this, purchaseAttempt)
+			this.delegate.purchaseAttemptCompletedWithUnknownStatus.call(this.scope, this, purchaseAttempt);
 		}
 	}
 });
