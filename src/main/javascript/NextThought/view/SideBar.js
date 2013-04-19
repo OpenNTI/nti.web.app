@@ -21,6 +21,11 @@ Ext.define('NextThought.view.SideBar',{
 	frame: false,
 	plain: true,
 	shadow: false,
+	/*
+		http://docs.sencha.com/extjs/4.2.0/source/ZIndexManager.html#Ext-ZIndexManager-method-bringToFront
+		The bringToFront method checks if this property is true before moving it to the front
+	*/
+	preventBringToFront: true,
 	ui: 'sidebar',
 	cls: 'sidebar',
 
