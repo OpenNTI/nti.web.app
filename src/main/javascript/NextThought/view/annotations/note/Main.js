@@ -12,6 +12,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
+	defaultType: 'box',
+
+	childEls: ['body'],
+	getTargetEl: function(){ return this.body; },
 
 	renderSelectors:{
 		avatar: 'img.avatar',
@@ -92,7 +96,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				el = e.target,
 				alignmentEl = e.target,
 				alignment = 'tl-tr?',
-				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
+				//play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
 				id = record.getId(),
 				open = false,
 				offsets = [10, -18];
@@ -310,7 +314,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	resizeMathJax: function(node) {
+	resizeMathJax: function(/*node*/) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size','13px');
 	},
@@ -366,6 +370,6 @@ function(){
     },{
 	    id: '{id}-body',
 	    cls: 'note-replies',
-	    html:'{%this.renderContainer(out,values)%}'
+	    cn:['{%this.renderContainer(out,values)%}']
     }]);
 });

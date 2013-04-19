@@ -5,7 +5,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	requires: [
 		'NextThought.cache.UserRepository',
 		'NextThought.editor.Actions',
-		'NextThought.view.annotations.note.Templates'
+		'NextThought.view.annotations.note.Templates',
+		'NextThought.layout.component.CustomTemplate',
 	],
 
 	mixins: {
@@ -16,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	ui: 'nt',
 	cls: 'note-container',
-	componentLayout: 'autocomponent',
+	componentLayout: 'customtemplate',
 	layout: 'auto',
 	defaultType: 'note-panel',
 	childEls: ['body'],

@@ -2,11 +2,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.note-carousel',
 	requires: [
+		'NextThought.layout.component.CustomTemplate',
 		'NextThought.view.annotations.note.CarouselItem'
 	],
 
 	cls: 'carousel',
 	height: 68,
+	componentLayout: 'customtemplate',
 	layout: 'auto',
 	defaultType: 'note-carousel-item',
 	childEls: ['body'],
@@ -21,7 +23,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			{
 				id: '{id}-body',
 				cls: 'carousel-body',
-				cn:'{%this.renderContainer(out,values)%}'
+				cn:['{%this.renderContainer(out,values)%}']
 			},
 			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}], 'data-qtip': 'Slide left' },
 			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}], 'data-qtip': 'Slide right'}
