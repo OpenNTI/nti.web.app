@@ -72,6 +72,19 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	]}),
 
 
+	renderSelectors:{
+		couponEl: 'input[name=coupon]',
+		quantityEl: 'input[name=count]',
+		othersEl: 'input[name=quantity][value=other]'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble('purchase-info-updated');
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
@@ -90,6 +103,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				jqd.attr('data-visited','true');
 			});
 		});
+
+
 
 		this.enableSubmission(false);
 
@@ -123,6 +138,59 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			}
 
 		});
+	},
+
+
+	gatherPricingInfo: function(){
+		var desc = {Purchasable: this.record},
+			wantsCode = this.othersEl.dom.checked,
+			coupon = (this.couponEl.dom.value || '').trim(),
+			quantity = (this.quantityEl.dom.value || '').trim();
+
+		if(wantsCode){
+			quantity = quantity ? parseInt(quantity, 10) : 1;
+			desc.Quantity = quantity || 1;
+		}
+
+		if(coupon){
+			desc.Coupon = coupon;
+		}
+
+		return desc;
+	},
+
+
+	pricePurchase: function(){
+		var desc = this.gatherPricingInfo(),
+			sendingCoupon = Boolean(desc.Coupon);
+
+		function unmask(){
+			var el = this.getEl();
+			if(el){
+				el.unmask();
+			}
+		}
+
+		function onSuccess(pricing){
+			var couponValid = !sendingCoupon || pricing.get('Coupon');
+			unmask.call(this);
+
+			this.couponEl[couponValid ? 'removeCls' : 'addCls']('invalid');
+
+			this.fireEvent('purchase-info-updated', this, desc, pricing);
+		}
+
+		function onFailure(){
+			unmask.call(this);
+			//What to actually do here, if we can't price we really can't let them purchase.
+			//maybe let it go and up the final pricing before submission works, then if
+			//that fails abort?
+			console.error('Unable to price purchase', desc, arguments);
+		}
+
+		console.log('Pricing purchase info', desc);
+		this.getEl().mask('Calculating price.');
+		this.fireEvent('price-purchase', this, desc, onSuccess, onFailure, this);
 	},
 
 

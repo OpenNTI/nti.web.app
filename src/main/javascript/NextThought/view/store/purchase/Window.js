@@ -78,7 +78,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	listeners: {
 //		show: 'addCustomMask',
 //		close: 'removeCustomMask',
-		afterRender: 'center'
+		afterRender: 'center',
+		'purchase-info-updated': 'updatePurchaseInfo'
 	},
 
 
@@ -102,6 +103,11 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorEl.hide();
 		this.updateContentHeight();
+	},
+
+
+	updatePurchaseInfo: function(sender, desc, pricing){
+		console.log('Need to update view with new pricing info', pricing);
 	},
 
 
