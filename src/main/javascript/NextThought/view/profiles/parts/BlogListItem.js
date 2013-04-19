@@ -39,7 +39,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		tag:'tpl', 'for':'.', cn:[ {tag:'span', cls:'tag', html: '{.}'} ]})),
 
 
-	moreTpl: Ext.DomHelper.createTemplate([' ',{tag:'a', cls:'more', html:'Read More', href:'#'}]),
+	ellipsis: Ext.DomHelper.markup({cls:'ellipsis',cn:[{},{},{}]}),
+
+	moreTpl: Ext.DomHelper.createTemplate({cn:{tag:'a', cls:'more', html:'Read More', href:'#'}}),
 
 
 	renderSelectors: {
@@ -197,7 +199,12 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	setContent: function(html){
 		var snip = ContentUtils.getHTMLSnippet(html,300);
 
-		this.bodyEl.update(snip||html);
+		if(snip){
+			//add ellipsis if there is a snip AND there is a closing tag, otherwise just use the Read More
+			snip = snip.replace(/(<\/[^<>]+>)$/,this.ellipsis+'$1');
+		}
+
+		this.bodyEl.update((snip||html));
 		if(snip){
 			this.moreTpl.append(this.bodyEl,null,true);
 			this.mon(this.bodyEl.down('a.more'),'click', this.goToPost,this);

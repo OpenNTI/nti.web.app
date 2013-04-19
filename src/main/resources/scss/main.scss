@@ -76,3 +76,16 @@ body.x-border-layout-ct { background: white; }
 :-moz-placeholder { @include placeholder-style(); }
 :-ms-input-placeholder{ @include placeholder-style(); }
 
+.ellipsis {
+	margin: 0 10px;
+	text-decoration: none;
+	display: inline-block;
+
+	div {
+		display: inline-block;
+		border-radius: 90px;
+		width: 4px; height: 4px;
+		margin: 2px;
+		background: $primary-blue;
+	}
+}
