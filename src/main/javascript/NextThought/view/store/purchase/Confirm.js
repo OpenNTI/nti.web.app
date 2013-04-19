@@ -25,13 +25,34 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 				{ tag:'span', 'data-label': 'Country', html: '{address_country}'},
 				{ tag:'span', 'data-label': 'ZIP / Postal Code', html: '{address_zip}'}
 			]}
-		]}
+		]},
+		{
+			cn:[{tag: 'a', cls:'edit', href:'#', html: 'Edit this order'}]
+		}
 	]),
+
+
+	renderSelectors: {
+		editLinkEl: 'a.edit'
+	},
 
 
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},((this.tokenObject||{}).card||{}));
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.editLinkEl,'click',this.onEditOrder,this);
+	},
+
+
+	onEditOrder: function(e){
+		e.stopEvent();
+		this.fireEvent('edit-purchase',this,this.tokenObject);
+		return false;
 	},
 
 
