@@ -51,7 +51,8 @@ Ext.define('NextThought.controller.Store', {
 					'create-payment-token': this.createPurchase
 				},
 				'purchase-confirm': {
-					'process-purchase': this.submitPurchase
+					'process-purchase': this.submitPurchase,
+					'edit-purchase': this.editPurchase
 				},
 				'purchase-complete': {
 					'close': this.forceCloseWindow
@@ -143,6 +144,18 @@ Ext.define('NextThought.controller.Store', {
 
 		console.log('Show purchase form', arguments);
 		this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable});
+	},
+
+
+	editPurchase: function(sender, desc, token){
+		var win = this.getPurchaseWindow();
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		console.log('Editing purchase', arguments);
+		this.transitionToComponent(win, {xtype: 'purchase-form', purchaseDescription: desc, tokenObject: token});
 	},
 
 

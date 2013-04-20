@@ -76,7 +76,16 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	renderSelectors:{
 		couponEl: 'input[name=coupon]',
 		quantityEl: 'input[name=count]',
-		othersEl: 'input[name=quantity][value=other]'
+		othersEl: 'input[name=quantity][value=other]',
+		selfEl: 'input[name=quantity][value=self]'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		if(!this.record && this.purchaseDescription){
+			this.record = this.purchaseDescription.Purchasable;
+		}
 	},
 
 
@@ -124,6 +133,23 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		if(this.tokenObject && this.tokenObject.card){
 			this.fillFromToken(this.tokenObject.card);
 		}
+
+		if(this.purchaseDescription){
+			this.fillFromDescription(this.purchaseDescription);
+		}
+	},
+
+
+	fillFromDescription: function(desc){
+		this.couponEl.dom.value = desc.Coupon || '';
+		if(desc.Quantity !== undefined){
+			this.othersEl.dom.checked = true;
+			this.quantityEl.dom.value = desc.Quantity;
+		}
+		else{
+			this.selfEl.dom.checked = true;
+		}
+		this.pricePurchase();
 	},
 
 

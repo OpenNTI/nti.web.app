@@ -51,7 +51,7 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 
 	onEditOrder: function(e){
 		e.stopEvent();
-		this.fireEvent('edit-purchase',this,this.tokenObject);
+		this.fireEvent('edit-purchase', this, this.purchaseDescription, this.tokenObject);
 		return false;
 	},
 
