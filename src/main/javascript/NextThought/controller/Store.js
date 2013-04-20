@@ -177,11 +177,14 @@ Ext.define('NextThought.controller.Store', {
 
 		//We do our safety locking of the window here but we don't do any masking
 		//The caller may or may not want to mask various
-		if(win.lockPurchaseAction){
+		if(sender !== this && win.lockPurchaseAction){
 			console.error('Window already locked aborting pricePurchase', arguments);
 			return false;
 		}
-		win.lockPurchaseAction = true;
+
+		if(sender !== this){
+			win.lockPurchaseAction = true;
+		}
 
 		data.purchasableID = purchasable.getId();
 		if(purchaseDesc.Coupon){
@@ -198,7 +201,9 @@ Ext.define('NextThought.controller.Store', {
 				method: 'POST',
 				scope: this,
 				callback: function(r, s, response){
-					delete win.lockPurchaseAction;
+					if(sender !== this){
+						delete win.lockPurchaseAction;
+					}
 					try{
 						var result;
 						if(!s){
@@ -229,7 +234,9 @@ Ext.define('NextThought.controller.Store', {
 		}
 		catch(e){
 			Ext.callback(failure, scope, {error: e});
-			delete win.lockPurchaseAction;
+			if(sender !== this){
+				delete win.lockPurchaseAction;
+			}
 		}
 	},
 
@@ -240,8 +247,9 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchasable the purchasable object
 	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
-	createPurchase: function(cmp, purchasable, cardinfo){
-		var connectInfo = purchasable.get('StripeConnectKey') || {},
+	createPurchase: function(cmp, desc, cardinfo){
+		var purchasable = desc.Purchasable || {},
+			connectInfo = purchasable.get('StripeConnectKey') || {},
 			pKey = connectInfo && connectInfo.get('PublicKey'),
 			win = this.getPurchaseWindow(), me = this;
 
@@ -261,16 +269,30 @@ Ext.define('NextThought.controller.Store', {
 
 		function tokenResponseHandler(status, response){
 			//https://stripe.com/docs/api#errors
+			function done(){
+				me.safelyUnmaskWindow(win);
+				delete win.lockPurchaseAction;
+			}
+
 			if(status !== 200 || response.error){
 				console.error('An error occured during token generation for purchasable', purchasable, response);
 				cmp.handleError(response);
 			}
 			else{
 				console.log('Stripe token response handler', arguments);
-				me.transitionToComponent(win, {xtype: 'purchase-confirm', record: purchasable, tokenObject: response});
+				me.pricePurchase(me, desc, function(priced){
+					console.log('Final pricing complete', priced, desc);
+					me.transitionToComponent(win, {xtype: 'purchase-confirm', purchaseDescription: desc, tokenObject: response, pricingInfo: priced});
+					done();
+				},
+				function(){
+					console.error('An error occurred doing final pricing of', desc);
+					if(win && win.showError){
+						win.showError('Unable to price your purchase.  Please try again later')
+					}
+					done();
+				});
 			}
-			me.safelyUnmaskWindow(win);
-			delete win.lockPurchaseAction;
 		}
 
 		if(win.lockPurchaseAction){
@@ -291,8 +313,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 		catch(e){
 			console.error('An exception occurred creating stripe token', Globals.getError(e));
-			//TODO Pass this to the view for display?  It would most likely be a programming error
-			cmp.handleError('An unknown error occurred.  Please try again later.');
+			win.showError('An unknown error occurred.  Please try again later.');
 			delete win.lockPurchaseAction;
 			this.safelyUnmaskWindow(win);
 		}
