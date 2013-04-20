@@ -1,20 +1,10 @@
 describe('Navigation Controller Tests', function(){
 
-	var controller, mockObjects, navMenu, testBody;
+	var controller, mockObjects, navMenu, testBody, oldViewPort;
 
 	beforeEach(function(){
-		controller = NextThought.controller.Navigation.create({
-			models: [],
-			views:[],
-			refs: [],
-			store:[]
-		});
-
-		//init usually gets called automatically when the app is setting up controllers
-		//do that here
-//		controller.application = app;
-//		controller.init(app);
 		controller = app.getController('Navigation');
+		oldViewPort = controller.viewport;
 		controller.viewport = { activateView: Ext.emptyFn};
 
 		testBody = document.createElement('div');
@@ -27,6 +17,21 @@ describe('Navigation Controller Tests', function(){
 			})
 		};
 
+	});
+
+	afterEach(function(){
+		controller.viewport = oldViewPort;
+
+		navMenu.destroy();
+		var s = Ext.ComponentQuery.query('#search-results');
+
+		//FIXME: Apparently ExtJS doesn't clean up menus, since destroying the parent menu should have cleaned everything.
+		// So we check and clean.
+		if(!Ext.isEmpty(s)){
+			s = s.first();
+			s.destroy();
+		}
+		document.body.removeChild(testBody);
 	});
 
 	describe('ToggleContactsOnProfile', function(){
@@ -83,19 +88,6 @@ describe('Navigation Controller Tests', function(){
 			controller.navigateToContent(mockObjects['book1']);
 			expect(controller.navigateToContent).toHaveBeenCalledWith(mockObjects['book1']);
 		});
-	});
-
-	afterEach(function(){
-		navMenu.destroy();
-		var s = Ext.ComponentQuery.query('#search-results');
-
-		//FIXME: Apparently ExtJS doesn't clean up menus, since destroying the parent menu should have cleaned everything.
-		// So we check and clean.
-		if(!Ext.isEmpty(s)){
-			s = s.first();
-			s.destroy();
-		}
-		document.body.removeChild(testBody);
 	});
 
 });
