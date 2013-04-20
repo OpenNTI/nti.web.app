@@ -282,6 +282,7 @@ Ext.define('NextThought.controller.Store', {
 				console.log('Stripe token response handler', arguments);
 				me.pricePurchase(me, desc, function(priced){
 					console.log('Final pricing complete', priced, desc);
+					win.publishQuantityAndPrice(priced.get('Quantity'), priced.get('PurchasePrice'));
 					me.transitionToComponent(win, {xtype: 'purchase-confirm', purchaseDescription: desc, tokenObject: response, pricingInfo: priced});
 					done();
 				},
