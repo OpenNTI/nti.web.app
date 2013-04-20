@@ -8,7 +8,7 @@ Ext.define('NextThought.controller.Store', {
 	models: [
 		'store.Purchasable',
 		'store.PurchaseAttempt',
-		'store.PricedPurchasable',
+		'store.StripePricedPurchasable',
 		'store.StripePurchaseError'
 	],
 
