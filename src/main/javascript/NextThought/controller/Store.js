@@ -159,6 +159,16 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
+	doPricingRequest: function(url, data, callback){
+		Ext.Ajax.request({
+			url: url,
+			jsonData: data,
+			method: 'POST',
+			scope: this,
+			callback: callback
+		});
+	},
+
 	/**
 	 *
 	 * Validates the given coupon code for the provided purchasable item.
@@ -203,45 +213,39 @@ Ext.define('NextThought.controller.Store', {
 		if(purchaseDesc.Coupon){
 			data.Coupon = purchaseDesc.Coupon.ID || purchaseDesc.Coupon;
 		}
-		if(purchaseDesc.Quantity >= 0){
+		if(purchaseDesc.Quantity > 0){
 			data.Quantity = purchaseDesc.Quantity;
 		}
 
 		try{
-			Ext.Ajax.request({
-				url: purchasable.getLink('pricing'),
-				jsonData: data,
-				method: 'POST',
-				scope: this,
-				callback: function(r, s, response){
-					if(sender !== this){
-						delete win.lockPurchaseAction;
+			this.doPricingRequest(purchasable.getLink('pricing'), data, function(r, s, response){
+				if(sender !== this){
+					delete win.lockPurchaseAction;
+				}
+				try{
+					var result;
+					if(!s){
+						console.error('Pricing call failed', arguments);
+						Ext.callback(failure, scope, [r, response]);
 					}
-					try{
-						var result;
-						if(!s){
-							console.error('Pricing call failed', arguments);
+					else{
+						result = Ext.JSON.decode(response.responseText, true);
+						if(result){
+							result = ParseUtils.parseItems(result)[0];
+						}
+
+						if(!result || !result.isPricedPurchase){
+							console.error('Unknown response from pricing call', arguments);
 							Ext.callback(failure, scope, [r, response]);
 						}
 						else{
-							result = Ext.JSON.decode(response.responseText, true);
-							if(result){
-								result = ParseUtils.parseItems(result)[0];
-							}
-
-							if(!result || !result.isPricedPurchase){
-								console.error('Unknown response from pricing call', arguments);
-								Ext.callback(failure, scope, [r, response]);
-							}
-							else{
-								Ext.callback(success, scope, [result]);
-							}
+							Ext.callback(success, scope, [result]);
 						}
 					}
-					catch(e){
-						console.log('An error occured processing pricing callback', arguments);
-						Ext.callback(failure, scope, [r, response]);
-					}
+				}
+				catch(e){
+					console.log('An error occured processing pricing callback', arguments);
+					Ext.callback(failure, scope, [r, response]);
 				}
 			});
 		}
