@@ -30,7 +30,10 @@ describe('Store controller', function(){
 		});
 
 		function closeImmediately(w){
-			w.forceClose = true;
+			if(!w.getEl()){
+				return;
+			}
+			w.forceClosing = true;
 			w.close();
 		}
 
@@ -89,6 +92,55 @@ describe('Store controller', function(){
 				expect(win.items.getCount()).toBe(1);
 				controller.transitionToComponent(win, {xtype: 'purchase-complete'});
 				expect(win.items.getCount()).toBe(1);
+			});
+		});
+
+		describe('Closing', function(){
+
+			describe('closeWithoutWarn', function(){
+				it('Closes immediately if components allows it', function(){
+					var cmp = win.items.first();
+					cmp.closeWithoutWarn = true;
+					win.close();
+
+					expect(win.getEl()).toBeFalsy();
+
+				});
+			});
+
+			describe('Requires verification by default', function(){
+
+				var cmp, alert, cancel, confirm;
+
+				beforeEach(function(){
+					cmp = win.items.first();
+					cmp.closeWithoutWarn = false;
+					win.close();
+
+					alert = Ext.ComponentQuery.query('messagebox[activeUI=nti-alert]').first();
+					cancel = Ext.ComponentQuery.query('messagebox[activeUI=nti-alert] [itemId=cancel]').first();
+					confirm = Ext.ComponentQuery.query('messagebox[activeUI=nti-alert] [itemId=ok]').first();
+				});
+
+				function clickButton(btn){
+					btn.onClick({type: 'mouse', button: 0, preventDefault: Ext.emptyFn})
+				}
+
+				it('Shows an alert and doesnt close', function(){
+					expect(alert).toBeTruthy();
+					expect(win.getEl()).toBeTruthy();
+					clickButton(cancel);
+				});
+
+				it('Canceling verfication leaves window alone', function(){
+					clickButton(cancel);
+					expect(win.getEl()).toBeTruthy();
+				});
+
+				it('Confirming verfication closes it', function(){
+					clickButton(confirm);
+					expect(win.getEl()).toBeFalsy();
+				});
 			});
 		});
 	});
