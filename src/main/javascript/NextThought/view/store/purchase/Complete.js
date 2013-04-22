@@ -38,7 +38,9 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 			b = 'Your Activation Key has been created.',
 			code = false;
 
-		this.InvitationCode = 'XYxG77hs8-hzy13W';
+		if(this.purchaseAttempt && this.purchaseAttempt.isPurchaseAttempt){
+			this.InvitationCode = this.purchaseAttempt.get('InvitationCode');
+		}
 
 		if(this.InvitationCode){
 			a = b;

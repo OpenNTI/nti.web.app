@@ -382,7 +382,7 @@ Ext.define('NextThought.controller.Store', {
 
 		delegate = {
 			purchaseAttemptCompleted: function(helper, purchaseAttempt){
-				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDesciption, purchaseAttempt: purchaseAttempt});
+				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
 				done();
 			},
 			purchaseAttemptFailed: function(helper, purchaseAttempt){

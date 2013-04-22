@@ -46,10 +46,20 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 
 
 	beforeRender: function(){
+		var quantity, times;
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},((this.tokenObject||{}).card||{}));
 
-		this.renderData.message = 'Your licence will be automatically activated for this acount.';
+		if(this.purchaseDescription && this.purchaseDescription.Quantity !== undefined){
+			quantity = this.purchaseDescription.Quantity;
+			times = Ext.util.Format.plural(quantity, 'time');
+			this.renderData.message = 'An activation code will be generated that can be used to gain access to the content' +
+				' at a later date.  This code will work ' + times +'.';
+		}
+		else{
+			this.renderData.message = 'Your licence will be automatically activated for this acount.';
+		}
+
 
 //		this.renderData.code = 'PRE10';
 //		this.renderData.reduction = '$5.00';
