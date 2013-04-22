@@ -45,6 +45,11 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getStoreActivationURL: function(){
+		return getURL('/dataserver2/store/redeem_purchase_code')	;
+	},
+
+
 	forceTrailingSlash: function(uri){
 		if(uri.charAt(uri.length-1)==='/') {
 			return uri;

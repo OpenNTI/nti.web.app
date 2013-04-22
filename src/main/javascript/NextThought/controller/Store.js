@@ -470,14 +470,7 @@ Ext.define('NextThought.controller.Store', {
 
 
 	doActivateWithCode: function(url, data, callback){
-		if(data.invitation_code === 'DIE'){
-			Ext.callback(callback, this, [{}, false, {}]);
-		}
-		else{
-			Ext.callback(callback, this, [{}, true, {}]);
-		}
-
-		/*Ext.Ajax.request({
+		Ext.Ajax.request({
 			url: url,
 			scope: this,
 			jsonData: data,
@@ -486,12 +479,12 @@ Ext.define('NextThought.controller.Store', {
 				Accept: 'application/json'
 			},
 			callback: callback
-		});*/
+		});
 	},
 
 
 	activateWithCode: function(cmp, purchasable, code){
-		var url = getURL('foo'),
+		var url = $AppConfig.service.getStoreActivationURL(),
 			win= this.getPurchaseWindow(),
 			me = this;
 
