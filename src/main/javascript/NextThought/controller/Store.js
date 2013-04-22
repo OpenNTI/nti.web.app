@@ -45,7 +45,8 @@ Ext.define('NextThought.controller.Store', {
 					'select': this.purhcasableCollectionSelection
 				},
 				'purchase-detailview':{
-					'show-purchase-form': this.showPurchaseForm
+					'show-purchase-form': this.showPurchaseForm,
+					'purchase-with-activation': this.activateWithCode
 				},
 				'purchase-form': {
 					'create-payment-token': this.createPurchase
@@ -380,7 +381,7 @@ Ext.define('NextThought.controller.Store', {
 
 		delegate = {
 			purchaseAttemptCompleted: function(helper, purchaseAttempt){
-				this.transitionToComponent(win, {xtype: 'purchase-complete'});
+				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDesciption, purchaseAttempt: purchaseAttempt});
 				done();
 			},
 			purchaseAttemptFailed: function(helper, purchaseAttempt){
@@ -428,6 +429,75 @@ Ext.define('NextThought.controller.Store', {
 			catch(e){
 				console.error('An error occurred setting an error. Ruh Roh', Globals.getError(e));
 			}
+		}
+	},
+
+
+	doActivateWithCode: function(url, data, callback){
+		Ext.Ajax.request({
+			url: url,
+			scope: this,
+			jsonData: data,
+			method: 'POST',
+			headers: {
+				Accept: 'application/json'
+			},
+			callback: callback
+		});
+	},
+
+
+	activateWithCode: function(cmp, purchasable, code){
+		var url = getURL('foo'),
+			win= this.getPurchaseWindow(),
+			me = this;
+
+		if(!win){
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		if(win.lockPurchaseAction){
+			console.error('Window already locked aborting activation code', arguments);
+			return false;
+		}
+		win.lockPurchaseAction = true;
+		this.safelyMaskWindow(win, 'Redeeming activation code.');
+
+
+		if (!url){
+			win.showError('Unable to redeem your activation key');
+			return;
+		}
+
+
+		try{
+			this.doActivateWithCode(url, data, function(r, s, response){
+				try{
+					this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function(q,success,r){
+						this.safelyUnmaskWindow(win);
+						delete win.lockPurchaseAction;
+						if(!success){
+							win.showError('The activation key you entered is invalid.', 'Activation Key');
+						}
+						else {
+							this.transitionToComponent(win, {xtype: 'purchase-complete', {Purchasable: purchasable}});
+						}
+					});
+				}
+				catch(error){
+					Globals.getError('An unexpected exception occurred in activation code callback', Globals.getError(e), arguments);
+					win.showError('A problem occurred redeeming your activation key');
+					this.safelyUnmaskWindow(win);
+					delete win.lockPurchaseAction;
+				}
+			});
+		}
+		catch(e){
+			Globals.getError('An unexpected exception occurred redeeming activation code', Globals.getError(e), arguments);
+			win.showError('A problem occurred redeeming your activation key');
+			this.safelyUnmaskWindow(win);
+			delete win.lockPurchaseAction;
 		}
 	},
 
