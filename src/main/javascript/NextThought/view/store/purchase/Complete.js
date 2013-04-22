@@ -39,12 +39,8 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 			code = false;
 
 		if(this.purchaseAttempt && this.purchaseAttempt.isPurchaseAttempt){
-			this.InvitationCode = this.purchaseAttempt.get('InvitationCode');
-		}
-
-		if(this.InvitationCode){
 			a = b;
-			code = this.InvitationCode;
+			code = this.purchaseAttempt.get('InvitationCode');
 		}
 
 		this.renderData = Ext.apply(this.renderData||{},{
