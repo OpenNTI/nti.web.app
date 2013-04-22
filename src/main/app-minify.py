@@ -9,25 +9,28 @@ import time
 BUILDTIME = time.strftime('%Y%m%d%H%M%S')
 
 def _buildIndexHtml( minify, analytics_key='', app_root='.' ):
-	bust_cache = """        <script type="text/javascript">window.disableCaching = true;</script>""" + '\n'
+	bust_cache = """\t\t\t<script type="text/javascript">window.disableCaching = true;</script>""" + '\n'
 
-	analytics = """    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', '%s']);
-        _gaq.push(['_setDomainName', 'nextthought.com']);
-        _gaq.push(['_trackPageview']);
-        (function() {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-    </script>
+	analytics = """\t<script type="text/javascript">
+\t\tvar _gaq = _gaq || [];
+\t\t_gaq.push(['_setAccount', '%s']);
+\t\t_gaq.push(['_setDomainName', 'nextthought.com']);
+\t\t_gaq.push(['_trackPageview']);
+\t\t(function() {
+\t\t\tvar ga = document.createElement('script');
+\t\t\tga.type = 'text/javascript';
+\t\t\tga.async = true;
+\t\t\tga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+\t\t\tvar s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+\t\t})();
+\t</script>
 """ % (analytics_key, )
 
 	lines = []
-	with open( os.path.join( app_root, 'index.html.in' ), 'rb' ) as file:
+	input_file = 'index.html.in'
+	if minify:
+		input_file = 'index.html.out'
+	with open( os.path.join( app_root, input_file ), 'rb' ) as file:
 		lines = file.readlines()
 
 	output = ''
@@ -39,7 +42,7 @@ def _buildIndexHtml( minify, analytics_key='', app_root='.' ):
 			continue
 		line = line.replace( 'main.css', 'main.css?dc=%s' % BUILDTIME )
 		if minify:
-			line = line.replace( 'app.js', 'app.min.js?dc=%s' % BUILDTIME )
+			line = line.replace( 'app.min.js', 'app.min.js?dc=%s' % BUILDTIME )
 			if '<x-bootstrap>' in line:
 				in_bootstrap = True
 				continue
@@ -48,8 +51,10 @@ def _buildIndexHtml( minify, analytics_key='', app_root='.' ):
 				line = bust_cache + line
 			line = line.replace( 'bootstrap.js', 'bootstrap.js?dc=%s' % BUILDTIME )
 			line = line.replace( 'app.js', 'app.js?dc=%s' % BUILDTIME )
-		if '</x-compile>' in line and analytics_key is not '':
-			line = line + analytics
+		if '<!-- analytics -->' in line and analytics_key is not '':
+			line = analytics
+		elif '<!-- analytics -->' in line and analytics_key is '':
+			line = ''
 		output = output + line
 
 	return output
@@ -89,47 +94,33 @@ def _combine_javascript( output_file, input_files ):
 					output.write( line )
 
 def _minify_app( app_root, extjs_sdk ):
-	libraries = [ 'resources/lib/jQuery-1.8.0min.js',
-		      'resources/lib/jQuery-noconflict.js',
-		      'resources/lib/mathquill/mathquill.min.js',
-		      'resources/lib/swfobject.js',
-		      'resources/lib/detect-zoom.js',
-		      'resources/lib/rangy-1.3alpha.681/rangy-core.js',
-		      'resources/lib/rangy-1.3alpha.681/rangy-textrange.js' ]
-	library_file = 'libraries.js'
-	app_core_file = 'app_core.js'
-	app_main_files = [ 'javascript/libs.js',
-			   'javascript/app.js' ]
-	app_main_file = 'app_main.js'
-	#app_files = [ library_file,
-	#	      app_core_file,
-	#	      app_main_file ]
-	app_files = [ app_core_file,
-		      app_main_file ]
 	output_file = 'javascript/app.min.js'
 
 	sencha_bootstrap_command = [ 'sencha',
 				     '-sdk', extjs_sdk,
-				     'compile', '-classpath=javascript/NextThought',
+				     'compile', 
+				     '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
 				     'meta', '-alias', 
 				     '-out', 'bootstrap.js',
 				     'and',
 				     'meta', '-alt', '-append', '-out', 'bootstrap.js' ]
 	sencha_compile_command = [ 'sencha',
 				   '-sdk', extjs_sdk,
-				   'compile', '-classpath=javascript/NextThought',
-				   'concat', '-r', '-st', '-y', 
-				   '-o', app_core_file ]
-	try:
-		#_combine_javascript( library_file, libraries )
-		_closure_compile( app_main_file, app_main_files )
-		subprocess.check_call(sencha_bootstrap_command)
-		subprocess.check_call(sencha_compile_command)
-		_combine_javascript( output_file, app_files )
-	finally:
-		for file in app_files:
-			if os.path.exists( file ):
-				os.remove( file )
+				   'compile', 
+				   '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+				   'exclude', '-namespace', 'Ext.diag',
+				   'and',
+				   '-option', 'debug:false',
+				   'page',
+				   '-r',
+				   '-str',
+				   '-y',
+				   '-cla', output_file,
+				   '-i', 'index.html.in',
+				   '-o', 'index.html.out' ]
+
+	subprocess.check_call(sencha_bootstrap_command)
+	subprocess.check_call(sencha_compile_command)
 	
 def main():
 	parser = ArgumentParser()
@@ -143,6 +134,10 @@ def main():
 
 	_buildMinifyIndexHtml(args.analytics_key)
 	_buildUnminifyIndexHtml(args.analytics_key)
+
+	# Clean-up:
+	if os.path.exists('index.html.out'):
+		os.remove('index.html.out')
 
 if __name__ == '__main__':
         main()
