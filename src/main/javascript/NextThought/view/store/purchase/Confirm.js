@@ -64,8 +64,8 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		if(Ext.isObject(coupon)){
 			try{
 				this.renderData.code = coupon.ID;
-				//FIXME currency assumption here...
-				this.renderData.reduction = '$'+this.pricingInfo.calculatePurchaseDiscount();
+				this.renderData.reduction = NTIFormat.formatCurrency(this.pricingInfo.calculatePurchaseDiscount(),
+					this.pricingInfo.get('Currency'));
 			}
 			catch(e){
 				delete this.renderData.code;

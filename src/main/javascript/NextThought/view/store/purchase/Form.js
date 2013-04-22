@@ -89,8 +89,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	publishQuantityAndPrice: function(quantity, price){
-		this.up('window').publishQuantityAndPrice(quantity, price);
+	publishQuantityAndPrice: function(quantity, price, currency){
+		this.up('window').publishQuantityAndPrice(quantity, price, currency);
 	},
 
 
@@ -223,7 +223,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			this.couponEl[couponValid ? 'removeCls' : 'addCls']('invalid');
 
-			this.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'));
+			this.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'), pricing.get('Currency'));
 		}
 
 		function onFailure(){

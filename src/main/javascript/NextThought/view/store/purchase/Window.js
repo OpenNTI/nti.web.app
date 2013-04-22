@@ -36,7 +36,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			]},
 			{ cls: 'info', cn:[
 				{ cls:'bookcover', style: {backgroundImage: 'url({Icon})'} },
-				{cls: 'price', html:'${[values.price||values.Amount]}'},
+				{cls: 'price', html:'{[NTIFormat.formatCurrency((values.price||values.Amount), values.Currency)]}'},
 				{cls: 'quantity', html:'{quantity}'},
 				{ cls:'meta', cn:[
 					{cls: 'title', html: '{Title}'},
@@ -118,8 +118,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	publishQuantityAndPrice: function(quantity, price){
-		var currency = '$';
+	publishQuantityAndPrice: function(quantity, price, currency){
 		this.priceInfo = {
 			quantity: quantity,
 			price: price
@@ -131,7 +130,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		}
 
 		this.headerEl.select('.quantity').update(quantity||1);
-		this.headerEl.select('.price').update(currency+price);
+		this.headerEl.select('.price').update(NTIFormat.formatCurrency(price, currency));
 	},
 
 
