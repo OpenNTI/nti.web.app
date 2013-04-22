@@ -172,6 +172,7 @@ Ext.application({
 			'javascript/specs/model/converters/GroupByTime.spec.js',
 			'javascript/specs/model/store/Purchasable.spec.js',
 			'javascript/specs/model/store/PurchaseAttempt.spec.js',
+			'javascript/specs/model/store/StripePricedPurchasable.spec.js',
 			'javascript/specs/store/Hit.spec.js',
 			'javascript/specs/store/PageItem.spec.js',
 			'javascript/specs/store/FriendsList.spec.js',

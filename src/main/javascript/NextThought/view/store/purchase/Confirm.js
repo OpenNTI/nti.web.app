@@ -46,7 +46,7 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 
 
 	beforeRender: function(){
-		var quantity, times;
+		var quantity, times, coupon;
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},((this.tokenObject||{}).card||{}));
 
@@ -60,7 +60,19 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 			this.renderData.message = 'Your licence will be automatically activated for this acount.';
 		}
 
+		coupon = (this.pricingInfo && this.pricingInfo.get) ? this.pricingInfo.get('Coupon') : undefined;
+		if(Ext.isObject(coupon)){
+			try{
+				this.renderData.code = coupon.ID;
+				//FIXME currency assumption here...
+				this.renderData.reduction = '$'+this.pricingInfo.calculatePurchaseDiscount();
+			}
+			catch(e){
+				delete this.renderData.code;
+				console.error('Unable to calculate savings for display', Globals.getError(e));
+			}
 
+		}
 //		this.renderData.code = 'PRE10';
 //		this.renderData.reduction = '$5.00';
 	},
