@@ -105,6 +105,7 @@
 				}
 			}
 		}
+
 		.columns{
 			display: none;
 			height: 45px;
@@ -124,6 +125,7 @@
 				}
 			}
 		}
+
 		.info {
 			padding: 18px;
 			background: #f7fcff;
@@ -195,6 +197,7 @@
 				}
 			}
 		}
+
 		&.show-columns{
 			.columns { display: block; }
 			.info {
@@ -203,6 +206,15 @@
 				}
 				.quantity {
 					display: block;
+				}
+			}
+		}
+
+		&.final-price{
+			.price{
+				color: $primary-grey;
+				&::before {
+					display: none;
 				}
 			}
 		}
@@ -319,6 +331,11 @@
 				color: #ffffff;
 				outline: 1px solid #69a92b;
 				background: #75bc30;
+
+				&.alt {
+					background: $primary-blue;
+					outline: 1px solid $border-blue;
+				}
 
 				&.disabled {
 					opacity: 0.6;
@@ -533,4 +550,57 @@
 
 .x-component-purchaseconfirm-panel fieldset {
 	padding-top: 1px;
+}
+
+
+.x-component-purchasecomplete-panel {
+	padding: 0 15px 20px 80px;
+	font: normal 400 14/25px $font;
+	color: $secondary-grey;
+
+	.gap {
+		margin-top: 30px;
+	}
+
+	a {
+		display: block;
+		margin: 10px 0;
+		text-decoration: none;
+
+		&,&:link,&:active,&:visited{
+			color: $primary-blue;
+		}
+	}
+
+	h3 {
+		margin: 0;
+		color: $primary-grey;
+		font: normal 400 21px/30px $font;
+	}
+
+	[data-label]{
+		cursor: text;
+		top: 30px;
+		white-space: pre-wrap;
+		position: relative;
+		display: inline-block;
+		min-width: 250px;
+		font: normal 600 14px/30px $font;
+		color: $secondary-grey;
+		background: #eeeeee;
+		border-radius: 3px;
+		padding: 1px 10px;
+
+		&::before{
+			color: $tertiary-grey;
+			content: attr(data-label) ":";
+			position: absolute;
+			top: -30px;
+			left: 10px;
+			white-space: nowrap;
+			font-size: 10px;
+			text-transform: uppercase;
+			font-weight: 500;
+		}
+	}
 }

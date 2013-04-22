@@ -174,9 +174,11 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			this.checkboxBoxEl[checkLabel?'addCls':'removeCls']('active');
 
 			this.headerEl[cmp.showColumns ? 'addCls':'removeCls']('show-columns');
+			this.headerEl[cmp.finalPrice ? 'addCls':'removeCls']('final-price');
 
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
+			this.confirmEl[cmp.omitCancel? 'addCls': 'removeCls']('alt');
 			this.cancelEl[cmp.omitCancel ? 'hide' : 'show']();
 			Ext.defer(this.updateContentHeight,1,this);
 		}
