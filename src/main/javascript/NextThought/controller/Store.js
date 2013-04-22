@@ -39,7 +39,8 @@ Ext.define('NextThought.controller.Store', {
 					'click': this.purchaseWindowCancel
 				},
 				'purchase-window' : {
-					'beforeclose': this.maybeClosePurchaseWindow
+					'beforeclose': this.maybeClosePurchaseWindow,
+					'show-purchase-view': this.showPurchaseView
 				},
 				'purchasable-collection': {
 					'select': this.purhcasableCollectionSelection
@@ -134,6 +135,40 @@ Ext.define('NextThought.controller.Store', {
 			return true;
 		}
 		return false;
+	},
+
+
+	showPurchaseView: function(win, ordinal, data){
+		var views = ['detailview', 'form', 'confirm', 'complete'],
+			cfg = {}, me = this;
+
+		if(ordinal < 0 || ordinal > views.length){
+			console.error('Unexpected ordinal', ordinal, views);
+			return;
+		}
+
+		cfg.xtype = 'purchase-'+views[ordinal];
+		cfg = Ext.applyIf(cfg, data);
+
+		if(cfg.xtype === 'purchase-detailview'){
+			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+			Ext.Msg.show({
+				msg: 'Your current progress will be lost.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				icon: 'warning-red',
+				buttonText: {'ok': 'caution:Take me anyway'},
+				title: 'Are you sure?',
+				fn: function(str){
+					if(str === 'ok'){
+						me.transitionToComponent(win, cfg);
+					}
+				}
+			});
+		}
+		else{
+			this.transitionToComponent(win, cfg);
+		}
+
 	},
 
 

@@ -21,8 +21,15 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 		});
 	},
 
-	onConfirm: function(cmp, activationCode, checkBoxState){
-		this.fireEvent('show-purchase-form', this, this.record);
+
+	onConfirm: function(win, activationCode, checkState){
+		var code = (activationCode || '').trim();
+		if(checkState && code){
+			this.fireEvent('purchase-with-activation', this, this.record, code);
+		}
+		else{
+			this.fireEvent('show-purchase-form', this, this.record);
+		}
 	},
 
 

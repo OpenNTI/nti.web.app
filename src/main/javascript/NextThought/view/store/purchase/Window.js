@@ -182,6 +182,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 			this.headerEl[cmp.showColumns ? 'addCls':'removeCls']('show-columns');
 			this.headerEl[cmp.finalPrice ? 'addCls':'removeCls']('final-price');
+			this.headerEl.removeCls('show-activation-code');
 
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
@@ -204,6 +205,12 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		tabs.removeCls('active');
 		tabs.item(ordinal || 0).addCls('active');
 
+		tabs.each(function(t, c, i){
+			t[i<ordinal ? 'removeCls' : 'addCls']('locked');
+			if(i>=ordinal){
+				t.removeCls('visited');
+			}
+		});
 	},
 
 
@@ -220,14 +227,34 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		var checkState = this.checkboxEl.dom.checked,
 			activationCode = this.activationCodeEl.getValue();
 
-		this.down('[onConfirm]').onConfirm( this, activationCode,checkState );
+		this.down('[onConfirm]').onConfirm( this, activationCode, checkState );
 	},
 
 
 	onTabClicked: function(e){
-		var t = e.getTarget('.tab');
+		var target = e.getTarget('.tab'),
+			cmp = this.activeView,
+			currentOrdinal = cmp ? cmp.ordinal : -1,
+			t = target;
 		t = (t && t.getAttribute('data-order')) || 0;
+
+		if(t >= currentOrdinal){
+			console.warn('Cant go forward', t, currentOrdinal);
+			return;
+		}
+
+		if(Ext.fly(target).is('.locked')){
+			console.warn('Tab locked', target);
+			return;
+		}
+
 		console.log('go to page: '+t);
+		this.fireEvent('show-purchase-view', this, t, {
+				purchaseDescription: cmp.purchaseDescription,
+				tokenObject: cmp.tokenObject,
+				record: this.record
+			}
+		);
 	},
 
 

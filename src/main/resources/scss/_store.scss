@@ -142,6 +142,10 @@
 						border-color: #8eb737;
 					}
 				}
+
+                &.locked {
+                    cursor: default;
+                }
 			}
 		}
 

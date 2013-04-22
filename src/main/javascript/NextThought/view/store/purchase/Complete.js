@@ -51,6 +51,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 
 	afterRender: function(){
+		var win;
 		this.callParent(arguments);
 
 		if(this.linkEl){
@@ -60,6 +61,9 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 		if(this.keyEl){
 			this.keyEl.selectable();
 		}
+
+		win = this.up('window');
+		win.headerEl.select('.tab').addCls('visited locked');
 	},
 
 

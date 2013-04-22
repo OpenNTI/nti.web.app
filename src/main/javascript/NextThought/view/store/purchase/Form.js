@@ -109,7 +109,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			if(formatter){
 				jqd.payment(formatter);
 			}
-			jqd.blur(validator).keypress(bufferedValidator);
+			jqd.blur(validator).keypress(bufferedValidator).keyup(bufferedValidator);
 			jqd.focus(function(){
 				jqd.attr('data-visited','true');
 			});
@@ -125,8 +125,16 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			}
 		}, this);
 		this.getEl().select('input[name=count]').on('blur', this.pricePurchase, this);
-		this.getEl().select('input[name=count]').on('keypress', bufferedPricer, this);
-		this.couponEl.on('keypress', bufferedPricer, this);
+		this.getEl().select('input[name=count]').on({
+			keypress: bufferedPricer,
+			keyup: bufferedPricer,
+			scope: this
+		});
+		this.couponEl.on({
+			keypress: bufferedPricer,
+			keyup: bufferedPricer,
+			scope: this
+		});
 		this.couponEl.on('blur', this.pricePurchase, this);
 
 		this.enableSubmission(false);
@@ -359,6 +367,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		}, this);
 
+		failed = !this.agreed || failed;
+
 		this.enableSubmission(!failed);
 
 		return failed ? undefined : data;
@@ -371,7 +381,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	setAgreementState: function(state){
-		console.log('The check box is checked? ',state);
+		this.agreed = state;
+		this.validateForm();
 	},
 
 
@@ -396,4 +407,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		this.up('window').showError(msg);
 	}
+}, function(){
+	//Alias a poorly named function to make it a bit more readible.  Refactor this..
+	this.prototype.validateForm = this.prototype.generateTokenData;
 });

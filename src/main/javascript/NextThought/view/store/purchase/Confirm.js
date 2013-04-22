@@ -73,8 +73,6 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 			}
 
 		}
-//		this.renderData.code = 'PRE10';
-//		this.renderData.reduction = '$5.00';
 	},
 
 
