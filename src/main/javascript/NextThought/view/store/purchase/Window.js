@@ -42,7 +42,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 					{cls: 'title', html: '{Title}'},
 					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'},
 					{cls: 'activation-code', cn:[
-						{tag: 'input', type:'text', name:'activation', 'data-required':true, cls:'required'}
+						{tag: 'input', type:'text', name:'activation', placeholder:'Activation Code',
+							//To discourage attacks, give no indication that this is a valid/invalid code until submission.
+							'data-required':true, cls:'required valid'}
 					]}
 				]}
 			] }
@@ -57,7 +59,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 				{tag: 'input', type: 'checkbox'},{}
 			]},
 			{tag:'a', cls:'button cancel',role:'button', html:'Cancel'},
-			{tag:'a', cls:'button confirm',role:'button', html:'Purchase'}
+			{tag:'a', cls:'button confirm',role:'button', html:''}
 		]
 	}]),
 
@@ -68,6 +70,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		footerEl: '.footer',
 		cancelEl: '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
+
+		activationCodeEl: '.activation-code input',
 
 		errorEl: '.error',
 		errorLabelEl: '.error .label',
@@ -89,8 +93,6 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 
 	listeners: {
-//		show: 'addCustomMask',
-//		close: 'removeCustomMask',
 		afterRender: 'center'
 	},
 
@@ -110,6 +112,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		me.getEl().select('.titlebar .tab').each(function(e){
 			me.mon(e,'click','onTabClicked',me);
 		});
+
+		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
+		me.mon(me.checkboxBoxEl,'click','onCheckboxClicked',me);
 
 		this.add({xtype: 'purchase-detailview', record: this.record});
 		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -202,12 +207,20 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
+	onActivationCodeChange: function(e){
+		console.log('Code:', this.activationCodeEl.getValue());
+	},
+
+
 	onConfirm: function(){
 		if(this.confirmEl.hasCls('disabled')){
 			return;
 		}
 
-		this.down('[onConfirm]').onConfirm();
+		var checkState = this.checkboxEl.dom.checked,
+			activationCode = this.activationCodeEl.getValue();
+
+		this.down('[onConfirm]').onConfirm( this, activationCode,checkState );
 	},
 
 
@@ -218,24 +231,39 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	addCustomMask: function(){
-		var mask = this.zIndexManager.mask;
-		if(mask){
-			mask.addCls('nti-black-clear');
-		}
-	},
-
-	removeCustomMask: function(){
-		var mask = this.zIndexManager.mask;
-		if(mask){
-			mask.removeCls('nti-black-clear');
-		}
-	},
-
-
 	setConfirmState: function(enabled){
 		if(this.confirmEl){
 			this.confirmEl[!enabled ? 'addCls' : 'removeCls']('disabled');
 		}
+	},
+
+
+	onCheckboxClicked: function(e){
+		var t = e.getTarget(),
+			active = this.activeView,
+			linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
+
+		if(t.tagName ==='A'){
+			e.stopEvent();
+			Ext.callback(linkClicked,active,[this]);
+			return false;
+		}
+
+		Ext.defer(this.updateContentHeight,1,this);
+		(this[active.checkboxAction||'none'] || Ext.emptyFn).call(this);
+	},
+
+
+	toggleActivationCode: function(){
+		var c = this.checkboxEl.dom.checked;
+		this.confirmEl.update(c? 'Activate':this.activeView.confirmLabel);
+		this.headerEl[c?'addCls':'removeCls']('show-activation-code');
+	},
+
+
+	agreeToTerms: function(){
+		var c = this.checkboxEl.dom.checked,
+			a = this.activeView;
+		Ext.callback(a && a.setAgreementState,a,[c]);
 	}
 });

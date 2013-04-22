@@ -14,6 +14,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	ordinal: 1,
 	showColumns: false,//for debugging in this view
 	confirmLabel: 'Continue',
+	checkboxAction: 'agreeToTerms',
 	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',html:'licencing terms.'}]),
 
 	//To use some of stipes test cards we cant send address or cvc but those are required on our form.
@@ -361,6 +362,16 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		this.enableSubmission(!failed);
 
 		return failed ? undefined : data;
+	},
+
+
+	onCheckboxLinkClicked: function(){
+		console.log('show terms of service/agreement thingy');
+	},
+
+
+	setAgreementState: function(state){
+		console.log('The check box is checked? ',state);
 	},
 
 
