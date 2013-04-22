@@ -40,7 +40,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 				{cls: 'quantity', html:'{quantity}'},
 				{ cls:'meta', cn:[
 					{cls: 'title', html: '{Title}'},
-					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'}
+					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'},
+					{cls: 'activation-code', cn:[
+						{tag: 'input', type:'text', name:'activation', 'data-required':true, cls:'required'}
+					]}
 				]}
 			] }
 		]
