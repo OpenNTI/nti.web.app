@@ -12,7 +12,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	ui: 'purchase-form',
 
 	ordinal: 1,
-	showColumns: true,//for debugging in this view
+	showColumns: false,//for debugging in this view
 	confirmLabel: 'Continue',
 	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',html:'licencing terms.'}]),
 

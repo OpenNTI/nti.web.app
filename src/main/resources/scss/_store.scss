@@ -254,10 +254,14 @@
 			position: absolute;
 			left: 0; top: 0;
 			height: 45px;
-			display: inline-block;
+			display: none;
 			text-align: left;
 			color: $secondary-grey;
 			font: normal normal 11px/45px $font;
+
+			&.active {
+				display: block;
+			}
 
 			a:link, a:visited, a:active {
 				color: $primary-blue;
