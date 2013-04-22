@@ -434,7 +434,14 @@ Ext.define('NextThought.controller.Store', {
 
 
 	doActivateWithCode: function(url, data, callback){
-		Ext.Ajax.request({
+		if(data.invitation_code === 'DIE'){
+			Ext.callback(callback, this, [{}, false, {}]);
+		}
+		else{
+			Ext.callback(callback, this, [{}, true, {}]);
+		}
+
+		/*Ext.Ajax.request({
 			url: url,
 			scope: this,
 			jsonData: data,
@@ -443,7 +450,7 @@ Ext.define('NextThought.controller.Store', {
 				Accept: 'application/json'
 			},
 			callback: callback
-		});
+		});*/
 	},
 
 
@@ -472,21 +479,19 @@ Ext.define('NextThought.controller.Store', {
 
 
 		try{
-			this.doActivateWithCode(url, data, function(r, s, response){
+			this.doActivateWithCode(url,  {purchasableID: purchasable.getId(), invitation_code: code}, function(r, s, response){
 				try{
-					this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function(q,success,r){
-						this.safelyUnmaskWindow(win);
-						delete win.lockPurchaseAction;
-						if(!success){
-							win.showError('The activation key you entered is invalid.', 'Activation Key');
-						}
-						else {
-							this.transitionToComponent(win, {xtype: 'purchase-complete', {Purchasable: purchasable}});
-						}
-					});
+					this.safelyUnmaskWindow(win);
+					delete win.lockPurchaseAction;
+					if(!s){
+						win.showError('The activation key you entered is invalid.', 'Activation Key');
+					}
+					else {
+						this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: {Purchasable: purchasable}});
+					}
 				}
 				catch(error){
-					Globals.getError('An unexpected exception occurred in activation code callback', Globals.getError(e), arguments);
+					console.error('An unexpected exception occurred in activation code callback', Globals.getError(error), arguments);
 					win.showError('A problem occurred redeeming your activation key');
 					this.safelyUnmaskWindow(win);
 					delete win.lockPurchaseAction;
@@ -494,7 +499,7 @@ Ext.define('NextThought.controller.Store', {
 			});
 		}
 		catch(e){
-			Globals.getError('An unexpected exception occurred redeeming activation code', Globals.getError(e), arguments);
+			console.error('An unexpected exception occurred in activation code callback', Globals.getError(e), arguments);
 			win.showError('A problem occurred redeeming your activation key');
 			this.safelyUnmaskWindow(win);
 			delete win.lockPurchaseAction;
