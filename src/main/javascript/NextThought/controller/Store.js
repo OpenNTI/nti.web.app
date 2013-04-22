@@ -111,6 +111,7 @@ Ext.define('NextThought.controller.Store', {
 
 
 	transitionToComponent: function(win, cfg){
+		win.hideError();
 		win.removeAll(true);
 		return win.add(cfg);
 	},
