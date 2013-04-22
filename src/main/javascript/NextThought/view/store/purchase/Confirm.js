@@ -4,31 +4,39 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 
 	ordinal: 2,
 	confirmLabel: 'Complete',
+	showColumns: true,
 
 	ui: 'purchaseconfirm-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'fieldset', cn:[
-			{ tag: 'legend', html: 'Payment Information' },
+		{tag: 'tpl', 'if':'code', cn:
+			{ cls: 'coupon', html: 'Code {code} reduced your total by {reduction}'}},
+		{ cls: 'message', cn:[
+			'{message}',
+			{tag:'br'},
+			'Pleae carefully review and submit your order.'
+		]},
+		{tag: 'fieldset', cls:'div', cn:[
+			{ tag: 'legend', cls:'card', html: 'Payment Information' },
 			{ cn: [{ 'data-label': 'Name on card', html:'{name}' }] },
 			{ cn: [
-				{ tag:'span', 'data-label': 'Card Number', html:'{type} enging in {last4}' },
-				{ tag:'span', 'data-label': 'Expiry', html: '{exp_month} / {exp_year}' }
+				{ tag:'span', 'data-label': '{type}', html:'xxxx - xxxx - xxxx - {last4}' },
+				{ tag:'span', 'data-label': 'Expires', html: '{exp_month} / {exp_year}' }
 			]}
 		]},
-		{tag: 'fieldset', cn:[
-			{tag: 'legend', html: 'Billing Address'},
-			{'data-label': 'Address', html: '{address_line1}\n{address_line2}' },
-			{'data-label': 'City / Town', html: '{address_city}'},
-			{'data-label': 'State / Province / Territory / Region', html: '{address_state}'},
-			{cn: [
-				{ tag:'span', 'data-label': 'Country', html: '{address_country}'},
-				{ tag:'span', 'data-label': 'ZIP / Postal Code', html: '{address_zip}'}
-			]}
+		{tag: 'fieldset', cls:'div', cn:[
+			{tag: 'legend', cls:'location', html: 'Billing Address'},
+			{ html: '{name}'},
+			{ html: '{address_line1}'},
+			{ html: '{address_line2}'},
+			{ cn:[
+				{ tag: 'tpl', 'if':'address_city', html:'{address_city} '},
+				{ tag: 'tpl', 'if':'address_state', html:'{address_state}, '},
+				{ tag: 'tpl', 'if':'address_zip', html:'{address_zip}'}
+			]},
+			{ html: '{address_country}'}
 		]},
-		{
-			cn:[{tag: 'a', cls:'edit', href:'#', html: 'Edit this order'}]
-		}
+		{ cn:[{tag: 'a', cls:'edit', href:'#', html: 'Edit this order'}] }
 	]),
 
 
@@ -40,6 +48,11 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},((this.tokenObject||{}).card||{}));
+
+		this.renderData.message = 'Your licence will be automatically activated for this acount.';
+
+//		this.renderData.code = 'PRE10';
+//		this.renderData.reduction = '$5.00';
 	},
 
 
