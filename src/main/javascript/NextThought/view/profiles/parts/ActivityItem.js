@@ -208,6 +208,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 
+	setContext: function(){
+		this.callParent(arguments);
+		this.context.select('iframe').remove();
+	},
+
+
 	loadContext: function(fin){
 		var me = this,
 			r = me.record,
