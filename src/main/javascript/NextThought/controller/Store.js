@@ -100,6 +100,9 @@ Ext.define('NextThought.controller.Store', {
 				if(title){
 					title.set('sample', true);
 				}
+				else {
+					console.warn('This purchasable item is not in the library:',itemId);
+				}
 			}, this);
 		}, this);
 	},
