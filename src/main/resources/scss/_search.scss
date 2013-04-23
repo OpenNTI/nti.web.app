@@ -70,9 +70,11 @@
 	padding: 15px 12px 0 6px;
 
 	.body {
+		margin: 0 0 0 70px;
+
 		.search-result {
 			white-space: normal;
-			margin: 0 0 20px 70px;
+			margin: 0 0 20px 0;
 			cursor: pointer;
 			.title, .section {
 				white-space: nowrap;
