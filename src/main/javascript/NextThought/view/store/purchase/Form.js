@@ -376,7 +376,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	onCheckboxLinkClicked: function(){
-		console.log('show terms of service/agreement thingy');
+		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
+		window.open('https://docs.google.com/document/pub?id=1rM40we-bbPNvq8xivEKhkoLE7wmIETmO4kerCYmtISM&embedded=true', '_blank');
 	},
 
 
