@@ -15,6 +15,7 @@ Ext.define('NextThought.model.Title', {
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping:'DCCreator', defaultValue: ['Author Name Here']},
 		{ name: 'version', type: 'string'},
 		{ name: 'PresentationProperties', type: 'auto'},
-		{ name: 'path', type: 'string', defaultValue: ''}
+		{ name: 'path', type: 'string', defaultValue: ''},
+		{ name: 'sample', type: 'bool', defaultValue: false, persist: false}
 	]
 });

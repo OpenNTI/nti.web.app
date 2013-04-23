@@ -83,6 +83,25 @@ Ext.define('NextThought.controller.Store', {
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'
 		});
+
+		//TODO Ok they want to identify the sample content
+		//so do a nasty hack here that probably breaks
+		//with the next client using the store.  We make an assumption
+		//that if a purchasable item has not been activated, and we find
+		//entries in the library that match the purchasables items list,
+		//those things are samples. Set a sample property as such
+		this.getPurchasableStore().each(function(p){
+			if(p.get('Activated')){
+				return;
+			}
+
+			Ext.Array.each(p.get('Items') || [], function(itemId){
+				var title = Library.getTitle(itemId);
+				if(title){
+					title.set('sample', true);
+				}
+			}, this);
+		}, this);
 	},
 
 

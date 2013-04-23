@@ -6,6 +6,7 @@ Ext.define('NextThought.model.store.Purchasable', {
 	],
 
 	fields: [
+		{ name: 'Activated', type: 'bool', persist: false },
 		{ name: 'Amount', type: 'float', persist: false },
 		{ name: 'Currency', type: 'string', persist: false },
 		{ name: 'BulkPurchase', type: 'bool', persist: false },
@@ -14,7 +15,8 @@ Ext.define('NextThought.model.store.Purchasable', {
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Icon', type: 'string', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
-		{ name: 'StripeConnectKey', type: 'singleitem', persist: false }
+		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
+		{ name: 'Items', type: 'auto', persist: false }
 	],
 
 	//TODO we want the pricing link on the actual purchasable
