@@ -25,9 +25,16 @@ Ext.define('NextThought.view.forums.Root',{
 				{ cls: 'title', html: '{Creator}' },
 				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{ForumCount} Forums' }
+					{ tag: 'span', cls:'count', html: '{ForumCount} {parent.kind:plurality(values.PostCount)}' }
 				]}
 			]}
 		]
-	})
+	}),
+
+	collectData: function(){
+		var r = this.callParent(arguments);
+		r.kind = 'Forum';
+		return r;
+	}
+
 });

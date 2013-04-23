@@ -46,7 +46,7 @@ Ext.define('NextThought.view.forums.Forum',{
 				]},
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{PostCount} Comments' },
+					{ tag: 'span', cls:'count', html: '{PostCount} {parent.kind:plurality(values.PostCount)}' },
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
 							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
@@ -64,6 +64,14 @@ Ext.define('NextThought.view.forums.Forum',{
 			]}
 		]}
 	]),
+
+
+	collectData: function(){
+		var r = this.callParent(arguments);
+		r.kind = 'Comment';
+		return r;
+	},
+
 
 	//deferEmptyText: false,
 	emptyText: Ext.DomHelper.markup({

@@ -39,7 +39,7 @@ Ext.define('NextThought.view.forums.Board',{
 				{ tag: 'tpl', 'if':'title != \'Forum\'', cn: { cls: 'title', html: '{title}' } },
 				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{TopicCount} Discussions' },
+					{ tag: 'span', cls:'count', html: '{TopicCount} {parent.kind:plurality(values.PostCount)}' },
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
 						{ tag: 'span', cls: 'descendant', html: 'Created {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
 					]},
@@ -53,6 +53,13 @@ Ext.define('NextThought.view.forums.Board',{
 			]}
 		]
 	}),
+
+
+	collectData: function(){
+		var r = this.callParent(arguments);
+		r.kind = 'Discussion';
+		return r;
+	},
 
 
 	fillInNewestDescendant: function(){
