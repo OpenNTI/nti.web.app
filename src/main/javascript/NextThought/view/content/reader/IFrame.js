@@ -79,7 +79,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
 				doc.open();
-				doc.write('<!DOCTYPE html><html lang="en"><head></head><body></body></html>');
+				doc.write('<!DOCTYPE html><head><title>Content</title></head><html lang="en"><head></head><body></body></html>');
 				doc.close();
 				delete me.contentDocumentElement;
 				setTimeout(function(){
@@ -101,6 +101,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			con = console, tip,
 			meta, g = Globals;
 
+		ContentAPIRegistry.register('reloadCSS',Globals.reloadCSS,Globals);
 
 		function on(dom,event,fn){
 			if(!Ext.isArray(event)){

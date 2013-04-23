@@ -406,6 +406,29 @@ Ext.define('NextThought.util.Globals', {
 		catch(e){
 			return null;
 		}
+	},
+
+
+	reloadCSS: function(doc){
+		doc = (doc||document);
+		console.log('Document Title:',doc.title);
+		var cb = '_dc=',
+			nodes = doc.querySelectorAll('link[rel=stylesheet]'),
+			href, i = nodes.length-1, v;
+
+		for(i; i>0; i--) {
+			v = nodes[i];
+			href = v.getAttribute('href');
+			if(href.indexOf(cb) < 0){
+				href += ((href.indexOf('?') < 0? '?':'&') +cb+Ext.Date.now());
+			}
+			else {
+				href = href.replace(new RegExp(RegExp.escape(cb)+'\\d+','g'),cb+Ext.Date.now());
+			}
+
+			v.href = href;
+			console.debug(v.getAttribute('href'));
+		}
 	}
 
 },
@@ -417,6 +440,7 @@ function(){
 	window.getURL = this.getURL;
 	window.swallow = function(e){};
 	window.getResourceURL = this.getResourceURL;
+	window.reloadCSS = Ext.bind(this.reloadCSS,this);
 
 	this.stopBackspace(document);
 
@@ -425,7 +449,7 @@ function(){
 
 
 	Ext.Object.each(this[proto],function(k,v,o){
-		if(/_IMAGE$/.test(k) && typeof(v) === 'string'){
+		if(/_IMAGE$/.test(k) && typeof v === 'string'){
 			o[k] = new Image();
 			o[k].src = getResourceURL(v);
 		}
