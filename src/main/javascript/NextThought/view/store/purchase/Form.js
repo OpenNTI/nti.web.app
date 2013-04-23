@@ -24,9 +24,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	renderTpl: Ext.DomHelper.markup({tag:'form', autocomplete:'on', cn:[
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Who are you purchasing for?'},
+			{tag:'tpl', 'if':'!Activated', cn:
 			{tag: 'label', cn: [
-				{tag: 'input', type: 'radio', name:'quantity', value:'self', checked:true},
-				{html:'Myself. I want to licence this for my account.'}]},
+				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
+				{html:'Myself. I want to licence this for my account.'}]}},
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'other'},
 				{cn:[
@@ -87,6 +88,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		if(!this.record && this.purchaseDescription){
 			this.record = this.purchaseDescription.Purchasable;
 		}
+
+		this.renderData = Ext.apply(this.renderData||{},this.record.getData());
 	},
 
 
@@ -101,7 +104,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		var inputs = this.getEl().select('input'),
 			validator = Ext.bind(this.generateTokenData, this),
 			bufferedValidator = Ext.Function.createBuffered(validator, 250),
-			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 1000, this);
+			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 1000, this),
+			firstRadio = this.getEl().select('input[type=radio]').first();
+
+		if( firstRadio ){
+			firstRadio.set({checked:'true'});
+		}
 
 		inputs.each(function(input){
 			var formatter = input.getAttribute('data-formatter'),
