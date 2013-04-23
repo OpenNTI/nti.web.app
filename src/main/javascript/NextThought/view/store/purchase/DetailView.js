@@ -13,7 +13,7 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 			cls: 'activation',
 		 	href: '#',
 		 	html: 'Activation Key.',
-			cn: [{ cls: 'desc', html: 'An activation code is a key code that gives you access to purchased content.'}]
+			cn: [{ cls: 'desc', html: 'An activation key is a key code that gives you access to purchased content.'}]
 		}
 	]),
 
