@@ -6,7 +6,16 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 
 	renderTpl: '{Description}',
 
-	checkboxLabel: Ext.DomHelper.markup(['I have an ',{tag:'a',href:'#',html:'Activation Key.'}]),
+	checkboxLabel: Ext.DomHelper.markup([
+		'I have an ',
+		{
+			tag: 'a',
+			cls: 'activation',
+		 	href: '#',
+		 	html: 'Activation Key.',
+			cn: [{ cls: 'desc', html: 'An activation code is a key code that gives you access to purchased content.'}]
+		}
+	]),
 
 	checkboxAction: 'toggleActivationCode',
 	confirmLabel: 'Purchase',

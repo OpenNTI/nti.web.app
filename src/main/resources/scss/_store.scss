@@ -372,6 +372,13 @@
 					}
 				}
 			}
+
+            & a.activation .desc{
+                display: none;
+                &.shown{
+                    display: block;
+                }
+            }
 		}
 
 		a.button {
