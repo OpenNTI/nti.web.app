@@ -400,7 +400,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param tokenObject the stripe token object
 	 */
-	submitPurchase: function(cmp, purchaseDescription, tokenObject){
+	submitPurchase: function(cmp, purchaseDescription, tokenObject, pricingInfo){
 
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = (tokenObject || {}).id,
@@ -458,7 +458,7 @@ Ext.define('NextThought.controller.Store', {
 		};
 
 		try{
-			this.paymentProcessor = new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, delegate, this);
+			this.paymentProcessor = new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, this);
 		}
 		catch(e){
 			//An exception here means we shouldn't have even started the purchase on the ds.
@@ -635,7 +635,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	maxWaitInMillis: 2 * 60 * 1000, //2 minutes
 	pollingIntervalInMillis: 5 * 1000, //5 seconds
 
-	constructor: function(purchaseDesc, tokenObject, delegate, scope){
+	constructor: function(purchaseDesc, tokenObject, expectedPrice, delegate, scope){
 		var purchasable = purchaseDesc.Purchasable,
 			tokenId = tokenObject.id;
 
@@ -646,7 +646,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 		this.purchasable = purchasable;
 		this.coupon = purchaseDesc.Coupon;
 		this.quantity = purchaseDesc.Quantity;
-		this.expectedPrice = purchaseDesc.ExpectedPrice; //Note this is just so the ds can sanity check
+		this.expectedPrice = expectedPrice;
 		this.tokenId = tokenId;
 		this.delegate = delegate;
 		this.scope = scope;
@@ -685,11 +685,8 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 			data.quantity = this.quantity;
 		}
 		if(this.expectedPrice !== undefined){
-			data.expectedPrice = this.expectedPrice;
+			data.expectedAmount = this.expectedPrice;
 		}
-
-		//TODO this needs to go away but the ds dies without it. Note this isn't even the right price
-		data.Amount = this.purchasable.get('Amount');
 
 		Ext.Ajax.request({
 			url: url,
