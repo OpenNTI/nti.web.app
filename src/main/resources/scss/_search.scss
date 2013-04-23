@@ -77,7 +77,7 @@
 			margin: 0 0 20px 0;
 			cursor: pointer;
 			.title, .section {
-				white-space: nowrap;
+				white-space: nowrap;//Do we want search hits to not show the whole title?
 				text-overflow: ellipsis;
 				overflow: hidden;
 				color: $tertiary-grey;
