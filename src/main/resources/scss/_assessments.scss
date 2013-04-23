@@ -1,4 +1,28 @@
+@mixin draggable-zone{
+	.draggable-area{
+		width: 592px;
+		border: 0px solid #b8b8b8;
+		border-bottom-width: 1px;
+		padding-left: 15px;
+		position: relative;
+		cursor: move;
 
+		&:hover{
+			&::after{
+				@include sprite($icons,'drag-controls-hover',$dimensions: true);
+			}
+		}
+
+		&::after{
+			content: ' ';
+			position: absolute;
+			top: 12px;
+			right: 20px;
+			background: $icons no-repeat;
+			@include sprite($icons,'drag-controls',$dimensions: true);
+		}
+	}
+}
 
 .component-overlay {
 	.tabable:active,
@@ -466,6 +490,83 @@
 						}
 					}
 
+					.match{
+						@extend .assessment-content;
+						position: relative;
+						display: table-row;
+						color: $primary-grey;
+						vertical-align: middle;
+						background: #ffffff;
+						border: 0 solid $tertiary-grey;
+						border-bottom-width: 1px;
+						&:last-of-type {
+							border-bottom-width: 0px;
+							.draggable-area{ border-bottom-width: 0px;}
+							.label{ border-bottom-width: 0px;}
+						}
+
+						.text{
+							line-height: 38px;
+							width: 530px;
+						}
+
+						.label {
+							display: table-cell;
+							width: 54px;
+							padding-left: 20px;
+							font-weight: bold;
+							background-color: rgba(209,209,209, 0.6);
+							border: 0 solid #d1d1d1;
+							border-bottom-width: 1px;
+							border-right-width: 1px;
+						}
+
+						&.target-hover{
+							.label{
+								background-color: $panel-background;
+							}
+						}
+
+						@include draggable-zone;
+
+						.draggable-area{
+							.control {
+								position: absolute;
+								top: 7px; left: 0;
+								width: 20px;
+								height: 38px;
+								border: none;
+								display: none;
+								margin-left: 20px;
+
+								&::after{
+									position: absolute;
+									left: 0px; top: 3px;
+									content: ' ';
+									background: $icons no-repeat;
+									@include sprite($icons,'circle-check-green-18',$dimensions: true);
+								}
+							}
+
+							&.correct, &.incorrect{
+								.control{
+									display: inline-block;
+								}
+
+								.text{
+									width: 500px;
+									padding-left: 38px;
+								}
+							}
+
+							&.incorrect .control{
+								&::after{
+									@include sprite($icons,'circle-x-red-18',$dimensions: true);
+								}
+							}
+						}
+					}
+
 					.solution {
 						@extend .assessment-content;
 						padding: 10px 20px 15px 20px;
@@ -488,6 +589,17 @@
 							.solution-choice-text {
 								font-weight: normal;
 								margin-left: 10px;
+							}
+
+							.matching-solution{
+								span{
+									display: inline-block;
+									padding-right: 20px;
+									vertical-align: middle;
+								}
+								.solution-matching-text{
+									width: 570px;
+								}
 							}
 						}
 						.explanation {
@@ -625,6 +737,44 @@
 		}
 	}
 }
+
+.x-dd-drag-ghost{
+	@include draggable-zone;
+	margin-left: 60px;
+	top: -30px;
+	color: $primary-grey;
+	vertical-align: middle;
+	background: #ffffff;
+	border: 0 solid $tertiary-grey;
+	border-bottom-width: 1px;
+	&:last-of-type {
+		border-bottom-width: 0px;
+		.draggable-area{ border-bottom-width: 0px;}
+		.label{ border-bottom-width: 0px;}
+	}
+
+	.draggable-area{
+		height: 100%;
+
+		.text{
+			line-height: 38px;
+			width: 530px;
+			font: {
+				size: 14px;
+				style: normal;
+				weight: normal;
+			}
+		}
+
+		&.selected{
+			border: 1px solid #b8b8b8;
+			background-color: #fff;
+			@include box-shadow(0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22));
+			border: solid 1px #3fb3f6;
+		}
+	}
+}
+
 
 //in the iframe
 .x-ie9 #NTIContent .naquestion {
