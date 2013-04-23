@@ -150,6 +150,16 @@
 				font-style: italic;
 				line-height: 30px;
 			}
+
+			.sample {
+				text-transform: uppercase;
+				color: #fff;
+				background: $primary-green;
+				display: inline-block;
+				font: normal 600 10px/16px $font;
+				padding: 0 5px;
+				margin: 5px 0;
+			}
 		}
 
 		&.purchasable {
