@@ -29,7 +29,10 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 			}},
 			{ cls: 'wrap', cn:[
 				{ cls: 'title', html: '{title}' },
-				{ cls: 'author', html: '{author}' }
+				{ cls: 'author', html: '{author}' },
+				{tag:'tpl', 'if':'sample', cn:{
+					cls:'sample', html:'Sample'
+				}}
 			]}
 		]
 	}),
