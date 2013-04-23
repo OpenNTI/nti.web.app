@@ -20,7 +20,7 @@ Ext.define('NextThought.view.store.menus.Collection',{
 			{ cls: 'wrap', cn:[
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
-				{ cls: 'price', html: '{Amount:ntiFormatCurrency(values.Currency)}'}
+				{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}
 			]}
 		]
 	})

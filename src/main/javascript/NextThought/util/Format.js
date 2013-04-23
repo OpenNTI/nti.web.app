@@ -9,11 +9,11 @@ Ext.define('NextThought.util.Format', {
 	},
 
 
-	formatCurrency: function(value, currency){
+	currency: function(value, currency){
 		var info = this.currencyInfo[currency] || {},
 			sign = info.sign || currency,
 			decimals = info.decimals,
-			end = info.end || !Boolean(info.sign);
+			end = info.end || !info.sign;
 
 		return Ext.util.Format.currency(value, sign, decimals, end);
 	}
@@ -21,5 +21,5 @@ Ext.define('NextThought.util.Format', {
 
 },function(){
 	window.NTIFormat = this;
-	Ext.util.Format.ntiFormatCurrency = Ext.Function.bind( NTIFormat.formatCurrency, NTIFormat);
+	Ext.util.Format.ntiCurrency = Ext.Function.bind( NTIFormat.currency, NTIFormat);
 });

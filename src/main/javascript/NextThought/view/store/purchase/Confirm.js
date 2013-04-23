@@ -64,7 +64,7 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		if(Ext.isObject(coupon)){
 			try{
 				this.renderData.code = coupon.ID;
-				this.renderData.reduction = NTIFormat.formatCurrency(this.pricingInfo.calculatePurchaseDiscount(),
+				this.renderData.reduction = NTIFormat.currency(this.pricingInfo.calculatePurchaseDiscount(),
 					this.pricingInfo.get('Currency'));
 			}
 			catch(e){
