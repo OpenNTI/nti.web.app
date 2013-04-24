@@ -133,9 +133,9 @@
 						top: 14px; left: 15px;
 						background: $icons no-repeat;
 						@include sprite($icons,'check_progress',$dimensions: true);
-						&.active {
-							@include sprite($icons,'check_progress_grn',$dimensions: true);
-						}
+					}
+					&[data-order].active::after {
+						@include sprite($icons,'check_progress_grn',$dimensions: true);
 					}
 				}
 
