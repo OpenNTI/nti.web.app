@@ -382,11 +382,14 @@
 					border: 1px solid $border-grey;
 					border-radius: 5px;
 
-                    display: none;
+					pointer-events: none;
+
+                    display: block;
+					visibility: hidden;
                     top: -75px;
                     left: 15px;
                     position: absolute;
-                    opacity: 1;
+                    opacity: 0;
                     width: 330px;
                     line-height: normal;
                     line-height: 2em;
@@ -396,6 +399,8 @@
                     color: #757474;
                     padding: 10px 30px;
                     z-index: 100000;
+
+					@include transition(all 0.3s ease-in);
 
 					&::after{
 						content: "";
@@ -411,7 +416,9 @@
                 }
 
                 &:hover .desc{
-                    display: block;
+                    //display: block;
+					visibility: visible;
+					opacity: 1;
                 }
             }
 		}
