@@ -49,7 +49,7 @@ Ext.define('NextThought.view.menus.Filter',{
 			cls: 'type-filter highlight',
 			text: 'Highlights',
 			model: 'NextThought.model.Highlight',
-			hidden: /mathcounts/i.test(LocationProvider.currentNTIID)
+			hidden: /mathcounts/i.test(LocationProvider.currentNTIID) //FIXME eww, hack to prohibit highlighting in mathcounts
 		});
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
@@ -98,6 +98,8 @@ Ext.define('NextThought.view.menus.Filter',{
 	},
 
 	maybeChangeVisibiltiy: function(){
+		//FIXME eww.  This looks like a hack to prevent highlight filter option
+		//in mathcounts b/c we also hack out filtering there
 		var i = this.down('[model=NextThought.model.Highlight]'),
 			show = /mathcounts/i.test(LocationProvider.currentNTIID);
 		if(!i){ return; }
