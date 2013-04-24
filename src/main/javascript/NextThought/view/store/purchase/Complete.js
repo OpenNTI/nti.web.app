@@ -6,7 +6,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'h3', cls:'gap', html: 'Thank you for your purchase!'},
-		{ html: '{message} You will receive an email receipt shortly, store it for your records.'},
+		{ html: 'You will receive an emailed receipt shortly. Please store it for your records.'},
 		{ cls:'gap', cn: [
 			{tag:'tpl', 'if':'!key', cn:{ tag: 'a', href:'#', html:'View your content now!' }},
 			{tag:'tpl', 'if':'key', cn:{ cls:'activation-key', html:'{key}', 'data-label':'Activation Key' }}
@@ -34,19 +34,13 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 	beforeRender: function(){
 		this.callParent(arguments);
 
-		var a = 'Your content has been added to your library.',
-			b = 'Your Activation Key has been created.',
-			code = false;
+		var code = false;
 
 		if(this.purchaseAttempt && this.purchaseAttempt.isPurchaseAttempt){
 			code = this.purchaseAttempt.get('InvitationCode');
-			if(code){
-				a = b;
-			}
 		}
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			message: a,
 			key: code
 		});
 	},
