@@ -28,6 +28,10 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 		this.renderData = Ext.apply(this.renderData || {}, {
 			Description: this.record.get('Description')
 		});
+
+		if(this.record.get('Activated')){
+			this.checkboxLabel = null;
+		}
 	},
 
 
