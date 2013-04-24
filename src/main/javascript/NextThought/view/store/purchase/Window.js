@@ -113,6 +113,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			me.mon(e,'click','onTabClicked',me);
 		});
 
+		me.mon(me.activationCodeEl,'keyup','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.checkboxBoxEl,'click','onCheckboxClicked',me);
 
@@ -176,6 +177,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		this.activeView = cmp;
 
 		if(this.rendered){
+			this.setConfirmState(true);
 			this.checkboxEl.dom.checked = false;
 			this.checkboxLabelEl.update(checkLabel||'');
 			this.checkboxBoxEl[checkLabel?'addCls':'removeCls']('active');
@@ -215,7 +217,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 
 	onActivationCodeChange: function(e){
-		console.log('Code:', this.activationCodeEl.getValue());
+		var code = this.activationCodeEl.getValue();
+		console.log('Code:', code);
+		this.setConfirmState(!Ext.isEmpty(code.trim()));
 	},
 
 
@@ -285,6 +289,12 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		var c = this.checkboxEl.dom.checked;
 		this.confirmEl.update(c? 'Activate':this.activeView.confirmLabel);
 		this.headerEl[c?'addCls':'removeCls']('show-activation-code');
+		if(c){
+			this.onActivationCodeChange();
+		}
+		else{
+			this.setConfirmState(true);
+		}
 	},
 
 
