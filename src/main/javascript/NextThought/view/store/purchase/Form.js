@@ -23,7 +23,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	renderTpl: Ext.DomHelper.markup({tag:'form', autocomplete:'on', cn:[
 		{tag: 'fieldset', cn:[
-			{tag: 'legend', html: 'Who are you purchasing for?'},
+			{tag: 'tpl', 'if': 'Activated', cn: [ {tag: 'legend', html: 'You\'ve already purchased this item, but you can still buy licenses for others.'} ]},
+			{tag: 'tpl', 'if': '!Activated', cn: [ {tag: 'legend', html: 'Who are you purchasing for?'} ]},
 			{tag:'tpl', 'if':'!Activated', cn:
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
