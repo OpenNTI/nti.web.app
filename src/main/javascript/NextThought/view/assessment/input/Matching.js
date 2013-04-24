@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		'Ext.dd.StatusProxy'
 	],
 
-	inputTpl: Ext.DomHelper.markup({ cls: 'dragzone', cn:[
+	inputTpl: Ext.DomHelper.markup({ cls: 'matching-dd-zone', cn:[
 		{'tag':'tpl', 'for': 'matches', cn:[{
 			cls: 'match', cn:[
 				{ cls: 'label', 'data-part':'{[xindex-1]}', html:'{[String.fromCharCode(64+xindex)]}.' },
@@ -32,7 +32,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	renderSelectors: {
 		draggableEl: '.match .draggable-area',
 		floaterEl: '.floater',
-		dragzoneEl: '.dragzone'
+		dragzoneEl: '.matching-dd-zone'
 	},
 
 
@@ -203,10 +203,10 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	swapNodes: function(target, dd){
 		var sourceDom = dd.dragData.ddel,
 			targetParent = target.up('.match', null, true),
-			d, sourceEl,
 			a = sourceDom.getAttribute('data-match'),
 			b = target.getAttribute('data-match');
 
+		dd.dragData.sourceEl.removeCls('selected');
 		Ext.fly(sourceDom).removeCls('selected');
 		Ext.fly(targetParent).removeCls('target-hover');
 
@@ -225,7 +225,6 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		var me = this,
 			proxy = new Ext.dd.StatusProxy({
 			id: me.el.id + '-drag-status-proxy',
-			animRepair: true,
 			constrain: true
 		});
 
@@ -249,6 +248,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			getRepairXY: function(){
 				return this.dragData.repairXY;
 			},
+
+			animRepair: true,
 
 			proxy: proxy,
 

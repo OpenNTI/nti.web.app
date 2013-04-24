@@ -1,7 +1,8 @@
 @mixin draggable-zone{
 	.draggable-area{
+		display: table-cell;
 		width: 592px;
-		border: 0px solid #b8b8b8;
+		border: 0px solid $tertiary-grey-alt;
 		border-bottom-width: 1px;
 		padding-left: 15px;
 		position: relative;
@@ -11,12 +12,13 @@
 			&::after{
 				@include sprite($icons,'drag-controls-hover',$dimensions: true);
 			}
+			outline: 1px solid $tertiary-grey;
 		}
 
 		&::after{
 			content: ' ';
 			position: absolute;
-			top: 12px;
+			top: 40%;
 			right: 20px;
 			background: $icons no-repeat;
 			@include sprite($icons,'drag-controls',$dimensions: true);
@@ -490,78 +492,87 @@
 						}
 					}
 
-					.match{
-						@extend .assessment-content;
-						position: relative;
-						display: table-row;
-						color: $primary-grey;
-						vertical-align: middle;
-						background: #ffffff;
-						border: 0 solid $tertiary-grey;
-						border-bottom-width: 1px;
-						&:last-of-type {
-							border-bottom-width: 0px;
-							.draggable-area{ border-bottom-width: 0px;}
-							.label{ border-bottom-width: 0px;}
-						}
+					.matching-dd-zone{
+						display: table;
+						table-layout: fixed;
 
-						.text{
-							line-height: 38px;
-							width: 530px;
-						}
-
-						.label {
-							display: table-cell;
-							width: 54px;
-							padding-left: 20px;
-							font-weight: bold;
-							background-color: rgba(209,209,209, 0.6);
-							border: 0 solid #d1d1d1;
+						.match{
+							@extend .assessment-content;
+							position: relative;
+							display: table-row;
+							color: $primary-grey;
+							vertical-align: middle;
+							background: #ffffff;
+							border: 0 solid $tertiary-grey;
 							border-bottom-width: 1px;
-							border-right-width: 1px;
-						}
-
-						&.target-hover{
-							.label{
-								background-color: $panel-background;
+							&:last-of-type {
+								border-bottom-width: 0px;
+								.draggable-area{ border-bottom-width: 0px;}
+								.label{ border-bottom-width: 0px;}
 							}
-						}
 
-						@include draggable-zone;
+							.text{
+								line-height: 26px;
+								width: 530px;
+							}
 
-						.draggable-area{
-							.control {
-								position: absolute;
-								top: 7px; left: 0;
-								width: 20px;
-								height: 38px;
-								border: none;
-								display: none;
-								margin-left: 20px;
+							.label {
+								display: table-cell;
+								width: 54px;
+								padding-left: 20px;
+								font-weight: bold;
+								background-color: rgba(209,209,209, 0.6);
+								border: 0 solid $tertiary-grey-alt;
+								border-bottom-width: 1px;
+								border-right-width: 1px;
+							}
 
-								&::after{
+							&.target-hover{
+								.label{
+									background-color: $panel-background;
+								}
+							}
+
+							@include draggable-zone;
+
+							.draggable-area{
+								.control {
 									position: absolute;
-									left: 0px; top: 3px;
-									content: ' ';
-									background: $icons no-repeat;
-									@include sprite($icons,'circle-check-green-18',$dimensions: true);
-								}
-							}
+									top: 7px; left: 0;
+									width: 20px;
+									height: 38px;
+									border: none;
+									display: none;
+									margin-left: 20px;
 
-							&.correct, &.incorrect{
-								.control{
-									display: inline-block;
+									&::after{
+										position: absolute;
+										left: 0px; top: 12px;
+										content: ' ';
+										background: $icons no-repeat;
+										@include sprite($icons,'circle-check-green-18',$dimensions: true);
+									}
 								}
 
-								.text{
-									width: 500px;
-									padding-left: 38px;
+								&.selected{
+									opacity: 0.3;
 								}
-							}
 
-							&.incorrect .control{
-								&::after{
-									@include sprite($icons,'circle-x-red-18',$dimensions: true);
+								&.correct, &.incorrect{
+									.control{
+										display: inline-block;
+									}
+
+									.text{
+										width: 500px;
+										padding-left: 38px;
+									}
+								}
+
+								&.incorrect .control{
+									&::after{
+										@include sprite($icons,'circle-x-red-18',$dimensions: true);
+									}
 								}
 							}
 						}
@@ -757,7 +768,7 @@
 		height: 100%;
 
 		.text{
-			line-height: 38px;
+			line-height: 26px;
 			width: 530px;
 			font: {
 				size: 14px;
@@ -767,7 +778,7 @@
 		}
 
 		&.selected{
-			border: 1px solid #b8b8b8;
+			border: 1px solid $tertiary-grey;
 			background-color: #fff;
 			@include box-shadow(0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22));
 			border: solid 1px #3fb3f6;
