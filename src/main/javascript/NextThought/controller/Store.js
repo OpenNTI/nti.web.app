@@ -77,6 +77,11 @@ Ext.define('NextThought.controller.Store', {
 	//TODO a way to have this collection show up only if there are purchasable
 	//items that have not yet been purchased?
 	maybeAddPurchasables: function(){
+
+		if(!this.getPurchasableStore().getCount()){
+			return;
+		}
+
 		//the 0, is for dev only, will remove later.
 		this.getNavigationMenu().add(0,{
 			xtype: 'purchasable-collection',
