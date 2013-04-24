@@ -15,7 +15,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	showColumns: false,//for debugging in this view
 	confirmLabel: 'Continue',
 	checkboxAction: 'agreeToTerms',
-	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',target:'_blank',html:'licencing terms.'}]),
+	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ',{tag:'a',href:'#',target:'_blank',html:'licensing terms.'}]),
 
 	//To use some of stipes test cards we cant send address or cvc but those are required on our form.
 	//Use this flag only for testing locally to make those fields not required.  I miss preprocessor statements...
@@ -28,14 +28,14 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			{tag:'tpl', 'if':'!Activated', cn:
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
-				{html:'Myself. I want to licence this for my account.'}]}},
+				{html:'Myself. I want to license this account.'}]}},
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'other'},
 				{cn:[
-					{html:'I want to purchase Licence Activation Keys for others.'},
+					{html:'I want to purchase Activation Keys for others.'},
 					{tag: 'input', type: 'text', placeholder: '1', name: 'count',
 						'data-width':'1/8', autocomplete:'off', pattern:'\\d*',
-						'data-formatter': 'restrictNumeric'},'Licence'
+						'data-formatter': 'restrictNumeric'},'License'
 				]}
 			]}
 		]},

@@ -14,7 +14,7 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		{ cls: 'message', cn:[
 			'{message}',
 			{tag:'br'},
-			'Pleae carefully review and submit your order.'
+			'Please carefully review and submit your order.'
 		]},
 		{tag: 'fieldset', cls:'div', cn:[
 			{ tag: 'legend', cls:'card', html: 'Payment Information' },
@@ -53,11 +53,11 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		if(this.purchaseDescription && this.purchaseDescription.Quantity !== undefined){
 			quantity = this.purchaseDescription.Quantity;
 			times = Ext.util.Format.plural(quantity, 'time');
-			this.renderData.message = 'An activation code will be generated that can be used to gain access to the content' +
-				' at a later date.  This code will work ' + times +'.';
+			this.renderData.message = 'An activation key will be generated that can be used to gain access to the content' +
+				' at a later date.  This key will work ' + times +'.';
 		}
 		else{
-			this.renderData.message = 'Your licence will be automatically activated for this acount.';
+			this.renderData.message = 'Your license will be automatically activated for this account.';
 		}
 
 		coupon = (this.pricingInfo && this.pricingInfo.get) ? this.pricingInfo.get('Coupon') : undefined;
