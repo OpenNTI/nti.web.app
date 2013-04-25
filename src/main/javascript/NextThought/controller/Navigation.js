@@ -83,6 +83,7 @@ Ext.define('NextThought.controller.Navigation', {
 			},
 			controller:{
 				'*': {
+					'show-ntiid': 'navigateToNtiid',
 					'show-object': 'navigateToContent',
 					'show-view': 'setView'
 				}
