@@ -146,6 +146,7 @@ Ext.application({
 		Globals.loadScripts([
 			'javascript/specs/example.spec.js',
 			'javascript/specs/Library.spec.js',
+			'javascript/specs/cache/LocationMeta.spec.js',
 			'javascript/specs/cache/UserRepository.spec.js',
 			'javascript/specs/util/AnnotationUtils.spec.js',
 			'javascript/specs/util/ParseUtils.spec.js',

@@ -27,12 +27,7 @@ Ext.define('NextThought.cache.LocationMeta', {
     },
 
 
-	createAndCacheMeta: function(ntiid, pi, metaId){
-		var assessmentItems = [],
-			theId = metaId || pi.getId(),
-			meta = LocationProvider.getLocation(theId),
-			me = this;
-
+	attachContentRootToMeta: function(meta, pi){
 		function buildPath(s, root){
 			var p = s.split('/'); p.splice(-1,1,'');
 			p = p.join('/');
@@ -40,27 +35,42 @@ Ext.define('NextThought.cache.LocationMeta', {
 			return p.replace(new RegExp(RegExp.escape(root)+'$'),'');
 		}
 
-		if(!meta){
-			return null;
-		}
-
-		if(!metaId){
-			assessmentItems = pi.get('AssessmentItems') || [];
-		}
-
-		this.meta[theId] = meta;
-		this.ids[ntiid] = theId;
-
 		meta.baseURI = buildPath(pi.getLink('content'),meta.root);
 		meta.absoluteContentRoot = meta.baseURI + meta.root;
+
+		return meta;
+	},
+
+
+	cacheMeta: function(meta, theId, ntiid, assessmentItems){
+		this.meta[theId] = meta;
+		this.ids[ntiid] = theId;
 
 		//Also yank out any assessment items and cache them by id.  Note
 		//right now this only works because there is a one-to-one question to
 		//PageInfo mapping.  If I recall that is happening on the server now also
 		//but is probably temporary. IE mashups probably break this
-		Ext.each(assessmentItems, function(assessmentItem){
+		Ext.each(assessmentItems||[], function(assessmentItem){
 			me.ids[assessmentItem.getId()] = theId;
 		});
+	},
+
+
+	createAndCacheMeta: function(ntiid, pi, ignoreCache){
+		var assessmentItems = pi.get('AssessmentItems') || [],
+			theId = pi.getId(),
+			meta = LocationProvider.getLocation(theId),
+			me = this;
+
+		if(!meta){
+			return null;
+		}
+
+		this.attachContentRootToMeta(meta, pi);
+
+		if(!ignoreCache){
+			this.cacheMeta(meta, theId, ntiid, assessmentItems);
+		}
 
 		return meta;
 	},
@@ -90,11 +100,11 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 * @param ntiid the ntiid we want content metadata for
 	 * @param cb completion callback.  If meta can be determined it will be the first arg
 	 */
-    loadMeta: function(ntiid, cb) {
+    loadMeta: function(ntiid, cb, ignoreCache) {
 		var me = this;
 
         function pageIdLoaded(pi){
-			var meta = this.createAndCacheMeta(ntiid, pi);
+			var meta = this.createAndCacheMeta(ntiid, pi, ignoreCache);
 			if(!meta){
 				fail.call(this);
 			}
@@ -104,13 +114,73 @@ Ext.define('NextThought.cache.LocationMeta', {
         function fail(req, resp){
 			if(resp && resp.status === 403){
 				console.log('Unauthorized when requesting page info', ntiid);
-				return;
+				this.handleUnauthorized(ntiid, cb);
 			}
-            console.error('fail', arguments);
-            Ext.callback(cb, this);
+			else{
+            	console.error('fail', arguments);
+            	Ext.callback(cb, this);
+			}
         }
         $AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, this);
-    }
+    },
+
+
+	handleUnauthorized: function(ntiid, cb){
+		var meta = LocationProvider.getLocation(ntiid),
+			bookPrefix;
+
+		if(meta){
+			$AppConfig.service.getPageInfo(meta.ContentNTIID, function(pageInfo){
+				if(pageInfo.isPageInfo){
+					this.attachContentRootToMeta(meta, pageInfo);
+					this.cacheMeta(meta, ntiid, ntiid);
+					Ext.callback(cb, this, [meta]);
+				}
+				else{
+					Ext.callback(cb, this);
+				}
+			}, function(req, resp){
+				Ext.callback(cb, this);
+			}, this);
+		}
+		else{
+			console.log('Looking to see if ntiid is question', ntiid);
+			bookPrefix = this.bookPrefixIfQuestion(ntiid);
+			bookPrefix = bookPrefix ? this.findTitleWithPrefix(bookPrefix) : null;
+			if(bookPrefix){
+				this.loadMeta(bookPrefix.get('NTIID'), cb);
+			}
+			else{
+				Ext.callback(cb, this);
+			}
+		}
+	},
+
+
+	findTitleWithPrefix: function(prefix){
+		var result = null;
+		Library.each(function(e){
+			if(e.get('NTIID').indexOf(prefix) === 0){
+				result = e;
+			}
+			return !result;
+		});
+
+		return result;
+	},
+
+
+	bookPrefixIfQuestion: function(id){
+		var ntiid = ParseUtils.parseNtiid(id);
+		if(!ntiid || ntiid.specific.type !== 'NAQ'){
+			return null;
+		}
+
+		ntiid.specific.type = 'HTML';
+		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+
+		return ntiid.toString();
+	}
 
 },
 function(){
