@@ -38,6 +38,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 	},
 
 	beforeRender: function(){
+		var w;
 		this.callParent(arguments);
 
 		var a = 'Your content has been added to your library.',
@@ -49,6 +50,15 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 			if(code){
 				a = b;
 			}
+		}
+
+		if(!this.purchaseAttempt){
+			w = this.up('window');
+			if(w){
+				w.addCls('activation-complete');
+				w.updateTabTitleForChild(this, 'Activated');
+			}
+
 		}
 
 		this.renderData = Ext.apply(this.renderData||{},{

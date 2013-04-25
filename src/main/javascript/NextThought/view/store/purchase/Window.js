@@ -318,6 +318,16 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
+	updateTabTitleForChild: function(cmp, text){
+		var ordinal = cmp.ordinal,
+			t = this.headerEl.down('.titlebar .tab[data-order='+ordinal+']');
+
+		if(t){
+			t.update(text);
+		}
+	},
+
+
 	agreeToTerms: function(){
 		var c = this.checkboxEl.dom.checked,
 			a = this.activeView;

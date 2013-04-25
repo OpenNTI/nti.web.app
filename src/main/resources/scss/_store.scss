@@ -492,6 +492,27 @@
 
 		font: normal 400 14px/25px $font;
 	}
+
+    &.activation-complete{
+        .header{
+            &.show-columns .columns{
+              display: none;
+            }
+            .titlebar .tab.visited{
+                display: none;
+                &.active{
+                   display: inline-block;
+                }
+            }
+        }
+
+        .info{
+            .price, .quantity{
+                display: none;
+            }
+        }
+
+    }
 }
 
 
