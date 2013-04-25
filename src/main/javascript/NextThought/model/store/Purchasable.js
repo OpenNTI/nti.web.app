@@ -16,7 +16,10 @@ Ext.define('NextThought.model.store.Purchasable', {
 		{ name: 'Icon', type: 'string', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
-		{ name: 'Items', type: 'auto', persist: false }
+		{ name: 'Items', type: 'auto', persist: false },
+		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v,r){
+			return r && r.hasHistory();
+		}}
 	],
 
 	//TODO we want the pricing link on the actual purchasable

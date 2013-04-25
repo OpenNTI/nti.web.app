@@ -43,7 +43,8 @@ Ext.define('NextThought.controller.Store', {
 					'show-purchase-view': this.showPurchaseView
 				},
 				'purchasable-collection': {
-					'select': this.purhcasableCollectionSelection
+					'select': this.purhcasableCollectionSelection,
+					'history-click': this.showPurchaseHistory
 				},
 				'purchase-detailview':{
 					'show-purchase-form': this.showPurchaseForm,
@@ -135,6 +136,11 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		return this.getView('store.purchase.Window').create({record: purchasable});
+	},
+
+
+	showPurchaseHistory: function(purchasable){
+		console.log('Need to show purchase history for', purchasable);
 	},
 
 
