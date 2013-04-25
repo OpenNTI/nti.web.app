@@ -131,6 +131,20 @@ Ext.define('NextThought.view.forums.Forum',{
 		});
 	},
 
+	itemUpdate: function(record, index, node){
+		console.log('Refreshed');
+		//this.fillInNewestDescendant();
+		var creator = record.get('NewestDescendant').get('Creator');
+
+		function resolve(user){
+			record.get('NewestDescendant').set('Creator',user);
+		}
+		if(!creator.isModel){
+			//not an object resolve user
+			UserRepository.getUser(creator,resolve);
+		}
+	},
+
 	afterRender: function(){
 		this.callParent(arguments);
 
@@ -146,6 +160,7 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.on('activate', this.onActivate, this);
+		this.on('itemupdate',this.itemUpdate,this);
 		this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 	},
 
