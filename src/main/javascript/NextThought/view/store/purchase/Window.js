@@ -4,7 +4,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	requires: [
 		'NextThought.layout.component.Natural',
-		'NextThought.view.store.purchase.DetailView'
+		'NextThought.view.store.purchase.DetailView',
+		'NextThought.view.store.purchase.History'
 	],
 
 	cls:'purchase-window',
@@ -23,8 +24,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'header', cn:[
 			{ cls: 'titlebar', cn:[
-				{ cls:'tab visited', html:'Course Details' },
-				{ cls:'tab', html:'Payment Information', 'data-order':1 },
+				{ cls:'tab visited', html:'Course Details', 'data-order':'detail', 'data-no-decoration':true },
+				{ cls:'tab', html:'Purchase History', 'data-order':'history', 'data-no-decoration':true },
+				{ cls:'tab', html:'Payment Info', 'data-order':1 },
 				{ cls:'tab', html:'Review Order', 'data-order':2 },
 				{ cls:'tab', html:'Confirmation', 'data-order':3 },
 				{ cls: 'close' }
@@ -117,7 +119,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.checkboxBoxEl,'click','onCheckboxClicked',me);
 
-		this.add({xtype: 'purchase-detailview', record: this.record});
+		if( this.initialOrdinal === 4 ){
+			this.add({xtype: 'purchase-history', record: this.record});
+			this.el.select('.titlebar').addCls('show-history');
+		}
+		else {
+			this.add({xtype: 'purchase-detailview', record: this.record});
+		}
+
 		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorEl.hide();
 		this.updateContentHeight();
@@ -200,15 +209,25 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			tabs = el.select('.titlebar .tab');
 
 		if(ordinal>0){
-			el.select('.titlebar').addCls('started');
+			el.select('.titlebar').addCls('started').removeCls('show-history');
 			el.select('.titlebar .tab.active').addCls('visited');
 		}
 
 		tabs.removeCls('active');
-		tabs.item(ordinal || 0).addCls('active');
+		el.select('.titlebar .tab[data-order="'+(ordinal || 0)+'"]').addCls('active');
 
-		tabs.each(function(t, c, i){
-			t[i<ordinal ? 'removeCls' : 'addCls']('locked');
+		if( ordinal==='history' ){
+			ordinal = 4;
+			tabs.removeCls('locked').addCls('visited');
+			return;
+		}
+
+		tabs.each(function(t, c){
+			var i = t.getAttribute('data-order');
+			if(i==='history'){ i=4; }
+			else {
+				t[i<ordinal  ? 'removeCls' : 'addCls']('locked');
+			}
 			if(i>=ordinal){
 				t.removeCls('visited');
 			}
@@ -216,7 +235,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	onActivationCodeChange: function(e){
+	onActivationCodeChange: function(){
 		var code = this.activationCodeEl.getValue();
 		console.log('Code:', code);
 		this.setConfirmState(!Ext.isEmpty(code.trim()));
@@ -282,6 +301,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		Ext.defer(this.updateContentHeight,1,this);
 		(this[active.checkboxAction||'none'] || Ext.emptyFn).call(this);
+		return true;
 	},
 
 

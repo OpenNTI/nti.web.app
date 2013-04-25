@@ -19,6 +19,7 @@ Ext.define('NextThought.controller.Store', {
 	views: [
 		'store.purchase.Window',
 		'store.purchase.Form',
+		'store.purchase.History',
 		'store.purchase.Confirm',
 		'store.purchase.Complete',
 		'store.menus.Collection'
@@ -172,7 +173,14 @@ Ext.define('NextThought.controller.Store', {
 
 
 	showPurchaseView: function(win, ordinal, data){
-		var views = ['detailview', 'form', 'confirm', 'complete'],
+		var views = {
+				history: 'history',
+				detail:'detailview',
+				0:'detailview',
+				1:'form',
+				2:'confirm',
+				3:'complete'
+			},
 			cfg = {}, me = this;
 
 		if(ordinal < 0 || ordinal > views.length){
