@@ -4,7 +4,9 @@ Ext.define('NextThought.view.store.purchase.History',{
 
 	ui: 'purchase-history-panel',
 
-	renderTpl: Ext.DomHelper.markup({
+	renderTpl:Ext.DomHelper.markup({cls:'loading', html:'Loading...'}),
+
+	historyTpl: Ext.DomHelper.markup({
 		tag: 'table',
 		cn:[{
 			tag: 'thead', cn:{ tag:'tr', cn:[
@@ -24,6 +26,25 @@ Ext.define('NextThought.view.store.purchase.History',{
 	ordinal: 'history',
 
 	setupRenderData: function(){
+		var req = {
+				url: this.record.getLink('history'),
+				scope: this,
+				success: this.applyHistory,
+				failure: this.failedToLoadHistoy
+			};
+
+		Ext.Ajax.request(req);
+	},
+
+
+	applyHistory: function(){
+		console.debug(arguments);
+	},
+
+
+	failedToLoadHistoy: function(){
+		console.error(arguments);
 	}
+
 
 });
