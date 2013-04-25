@@ -28,7 +28,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			{tag:'tpl', 'if':'!Activated', cn:
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'self'},
-				{html:'Myself. I want to license this account.'}]}},
+				{html:'Me. I want to buy a license for my account.'}]}},
 			{tag: 'label', cn: [
 				{tag: 'input', type: 'radio', name:'quantity', value:'other'},
 				{cn:[

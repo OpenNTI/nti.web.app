@@ -24,7 +24,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		cls: 'header', cn:[
 			{ cls: 'titlebar', cn:[
 				{ cls:'tab visited', html:'Course Details' },
-				{ cls:'tab', html:'Payment Info', 'data-order':1 },
+				{ cls:'tab', html:'Payment Information', 'data-order':1 },
 				{ cls:'tab', html:'Review Order', 'data-order':2 },
 				{ cls:'tab', html:'Confirmation', 'data-order':3 },
 				{ cls: 'close' }

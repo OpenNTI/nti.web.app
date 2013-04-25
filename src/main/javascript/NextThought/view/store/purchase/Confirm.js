@@ -14,7 +14,8 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		{ cls: 'message', cn:[
 			'{message}',
 			{tag:'br'},
-			'Please carefully review and submit your order.'
+			'Please carefully review and submit your order.', {tag:'br'},
+			'Please note that no refunds will be issued for purchases.'
 		]},
 		{tag: 'fieldset', cls:'div', cn:[
 			{ tag: 'legend', cls:'card', html: 'Payment Information' },
@@ -57,7 +58,7 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 				' at a later date.  This key will work ' + times +'.';
 		}
 		else{
-			this.renderData.message = 'Your license will be automatically activated for this account.';
+			this.renderData.message = 'Your license will be activated automatically for this account.';
 		}
 
 		coupon = (this.pricingInfo && this.pricingInfo.get) ? this.pricingInfo.get('Coupon') : undefined;
