@@ -49,12 +49,13 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		function parse(content){
 			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
 			me.setContext(dom,dom);
-			me.locationEl.update(metaInfo.getPathLabel());
 		}
 
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
-			ContentUtils.spider(cid,fin,parse);
+			ContentUtils.spider(cid,Ext.Function.createSequence(function(){
+				me.locationEl.update(metaInfo.getPathLabel());
+			} ,fin),parse);
 		}, me);
 	},
 
