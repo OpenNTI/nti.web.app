@@ -422,16 +422,26 @@ Ext.define('NextThought.controller.Account', {
 
 
     showChildrensPrivacy: function(item){
+        var user = $AppConfig.userObject,
+            link = user.getLink('childrens-privacy');
+
+        if(Ext.isEmpty(link)){ return; }
+
         if (!this.childPrivacyWin) {
-            this.childPrivacyWin = this.createWin('Children\'s Privacy', 'https://docs.google.com/document/pub?id=1kNo6hwwKwWdhq7jzczAysUWhnsP9RfckIet11pWPW6k');
+            this.childPrivacyWin = this.createWin('Children\'s Privacy', getURL(link));
         }
         this.childPrivacyWin.show();
     },
 
 
 	showPrivacy: function(item){
-		if (!this.privacyWin) {
-			this.privacyWin = this.createWin('Privacy', 'https://docs.google.com/document/pub?id=1W9R8s1jIHWTp38gvacXOStsfmUz5TjyDYYy3CVJ2SmM&embedded=true');
+		var user = $AppConfig.userObject,
+            link = user.getLink('content.permanent_general_privacy_page');
+
+        if(Ext.isEmpty(link)){ return; }
+
+        if (!this.privacyWin) {
+			this.privacyWin = this.createWin('Privacy', getURL(link));
 		}
 		this.privacyWin.show();
 	},

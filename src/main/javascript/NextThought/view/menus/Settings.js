@@ -25,7 +25,8 @@ Ext.define('NextThought.view.menus.Settings',{
         //setup fields:
         var items = [],
 			links = $AppConfig.userObject.get('Links') || {},
-			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null;
+			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null,
+            childsLink = links.getLinksForRel ? links.getLinksForRel('childrens-privacy') : null;
 
         items.push({ action: 'account', text: 'My Account'});
 
@@ -39,7 +40,7 @@ Ext.define('NextThought.view.menus.Settings',{
         //items.push({ action: 'help', text: 'Help'});
 
         items.push({ action: 'privacy', text: 'Privacy'});
-        if($AppConfig.service.isPotentiallyCoppa()){
+        if(!Ext.isEmpty(childsLink)){
             items.push({ action: 'childrens-privacy', text: 'Children\'s Privacy'});
         }
         items.push({ action: 'terms', text: 'Terms of Service'});
