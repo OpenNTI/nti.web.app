@@ -181,10 +181,12 @@
 				box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
 			}
             .history{
+				border-top: 1px solid #e6e6e6;
+				clear: both;
+				margin-left: -75px;
                 text-align: center;
                 padding: 10px;
                 background: white;
-                box-shadow: -1px 0px 3px 0 rgba(0, 0, 0, 0.35);
                 color: #ababab;
                 font-size: 12px;
                 line-height: 15px;
