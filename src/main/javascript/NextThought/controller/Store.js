@@ -121,8 +121,8 @@ Ext.define('NextThought.controller.Store', {
 				//p should be the instance of the record out of the store
 				//but just in case look for it in the store and merge into that
 				var fromStore = this.getPurchasableStore().getById(p.getId());
-				if(fromStore){
-					fromStore.set(p.getData());
+				if(fromStore && newP.isPurchasable){
+					fromStore.set(newP.getData());
 					this.updateLibraryWithPurchasable(fromStore);
 				}
 			},

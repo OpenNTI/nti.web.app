@@ -22,6 +22,8 @@ Ext.define('NextThought.model.store.Purchasable', {
 		}}
 	],
 
+	isPurchasable: true,
+
 	//TODO we want the pricing link on the actual purchasable
 	getLink: function(rel){
 		if(rel === 'pricing'){
