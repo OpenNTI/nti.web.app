@@ -25,7 +25,8 @@ Ext.define('NextThought.controller.State', {
 
 		this.fragmentInterpreterMap = {
 			'#!profile': Ext.bind(this.interpretProfileFragment,this),
-			'#!forums': Ext.bind(this.interpretForumsFragment,this)
+			'#!forums': Ext.bind(this.interpretForumsFragment,this),
+			'#!object': Ext.bind(this.interpretObjectFragment,this)
 		};
 
 		this.generateFragmentMap = {
@@ -175,7 +176,12 @@ Ext.define('NextThought.controller.State', {
 			// handle the change.
 			console.debug('Hash change');
 			var newState = me.interpretFragment(location.hash);
-			if(history.updateState(newState)){
+			if(newState.active == 'object'){
+				if(newState.domain == 'ntiid'){
+					me.fireEvent('show-ntiid', newState.ntiid);
+				}
+			}
+			else if(history.updateState(newState)){
 				console.debug('restoring state from hash change', newState);
 				me.restoreState(newState);
 				history.replaceState(me.getState(),document.title,location.toString());
@@ -259,6 +265,29 @@ Ext.define('NextThought.controller.State', {
 				profile: user
 			};
 			result.profile.queryObject = query;
+		}
+		return result;
+	},
+
+
+	interpretObjectFragment: function(fragment, query){
+		var parts = (fragment||'').split('/').slice(0),
+			result = {};
+
+		parts = Ext.Array.clean(parts);
+		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
+
+		if((parts[0] || '').toLowerCase() === '#!object'){
+			result.active = 'object';
+			result.domain = parts[1];
+			parts = parts.slice(2);
+
+			if(result.domain === 'ntiid' && parts.length == 1 && ParseUtils.parseNtiid(parts[0])){
+				result.ntiid = parts[0];
+			}
+			else{
+				result = {}
+			}
 		}
 		return result;
 	},
