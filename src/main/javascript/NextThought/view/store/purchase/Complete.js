@@ -5,8 +5,14 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'h3', cls:'gap', html: 'Thank you for your purchase!'},
-		{ html: '{message} You will receive an emailed receipt shortly. Please store it for your records.'},
+		{ tag: 'tpl', 'if': 'activation', cn: [
+			{ tag: 'h3', cls:'gap', html: 'Activation Successful!'},
+			{ html: 'Your content has been added to your library.'}
+		]},
+		{ tag: 'tpl', 'if': '!activation', cn: [
+			{ tag: 'h3', cls:'gap', html: 'Thank you for your purchase!'},
+			{ html: '{message} You will receive an emailed receipt shortly. Please store it for your records.'}
+		]},
 		{ cls:'gap', cn: [
 			{tag:'tpl', 'if':'!key', cn:{ tag: 'a', href:'#', html:'View your content now!' }},
 			{tag:'tpl', 'if':'key', cn:{ cls:'activation-key', html:'{key}', 'data-label':'Activation Key' }}
@@ -47,7 +53,8 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 		this.renderData = Ext.apply(this.renderData||{},{
 			message: a,
-			key: code
+			key: code,
+			activation: !this.purchaseAttempt
 		});
 	},
 

@@ -97,21 +97,39 @@ Ext.define('NextThought.controller.Store', {
 		//that if a purchasable item has not been activated, and we find
 		//entries in the library that match the purchasables items list,
 		//those things are samples. Set a sample property as such
-		this.getPurchasableStore().each(function(p){
-			if(p.get('Activated')){
-				return;
-			}
+		this.getPurchasableStore().each(this.updateLibraryWithPurchasable, this);
+	},
 
-			Ext.Array.each(p.get('Items') || [], function(itemId){
-				var title = Library.getTitle(itemId);
-				if(title){
-					title.set('sample', true);
-				}
-				else {
-					console.warn('This purchasable item is not in the library:',itemId);
-				}
-			}, this);
+
+	//For marking sample state
+	updateLibraryWithPurchasable: function(p){
+		Ext.Array.each(p.get('Items') || [], function(itemId){
+			var title = Library.getTitle(itemId);
+			if(title){
+				title.set('sample', !p.get('Activated'));
+			}
+			else {
+				console.warn('This purchasable item is not in the library:',itemId);
+			}
 		}, this);
+	},
+
+
+	refreshPurchasable: function(p){
+		$AppConfig.service.getObject(p.getId(),
+			function(newP){
+				//p should be the instance of the record out of the store
+				//but just in case look for it in the store and merge into that
+				var fromStore = this.getPurchasableStore().getById(p.getId());
+				if(fromStore){
+					fromStore.set(p.getData());
+					this.updateLibraryWithPurchasable(fromStore);
+				}
+			},
+			function(){
+				console.warn('An error occurred refreshing purchasable', arguments);
+			},
+		this, true);
 	},
 
 
@@ -460,6 +478,7 @@ Ext.define('NextThought.controller.Store', {
 
 		delegate = {
 			purchaseAttemptCompleted: function(helper, purchaseAttempt){
+				this.refreshPurchasable(purchasable);
 				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
 				done();
 			},
@@ -559,6 +578,7 @@ Ext.define('NextThought.controller.Store', {
 						win.showError('The activation key you entered is invalid.', 'Activation Key');
 					}
 					else {
+						this.refreshPurchasable(purchasable);
 						this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: {Purchasable: purchasable}});
 					}
 				}
