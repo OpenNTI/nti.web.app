@@ -22,6 +22,7 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
         { name: 'Quantity', type: 'int', persist: false },
         { name: 'TokenID', type: 'string', persist: false },
 		{ name: 'InvitationCode', type: 'string', persist: false },
+		{ name: 'RemainingInvitations', type: 'int', persist: false },
 		{ name: 'Order', type: 'singleitem', persist: false}
     ],
 
