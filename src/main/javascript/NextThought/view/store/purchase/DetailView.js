@@ -25,13 +25,18 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {}, {
-			Description: this.record.get('Description')
-		});
+		this.setupRenderData();
 
 		if(this.record.get('Activated')){
 			this.checkboxLabel = null;
 		}
+	},
+
+
+	setupRenderData: function(){
+		this.renderData = Ext.apply(this.renderData || {}, {
+			Description: this.record.get('Description')
+		});
 	},
 
 

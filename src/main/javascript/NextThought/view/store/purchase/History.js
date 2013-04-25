@@ -23,8 +23,7 @@ Ext.define('NextThought.view.store.purchase.History',{
 
 	ordinal: 'history',
 
-	initComponent: function(){
-		this.callParent(arguments);
+	setupRenderData: function(){
 	}
 
 });
