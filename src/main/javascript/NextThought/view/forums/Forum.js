@@ -132,7 +132,6 @@ Ext.define('NextThought.view.forums.Forum',{
 	},
 
 	itemUpdate: function(record, index, node){
-		console.log('Refreshed');
 		//this.fillInNewestDescendant();
 		var creator = record.get('NewestDescendant').get('Creator');
 
