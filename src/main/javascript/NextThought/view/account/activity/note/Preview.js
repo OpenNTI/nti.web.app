@@ -54,7 +54,9 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
 			ContentUtils.spider(cid,Ext.Function.createSequence(function(){
-				me.locationEl.update(metaInfo.getPathLabel());
+				if(metaInfo){
+					me.locationEl.update(metaInfo.getPathLabel());
+				}
 			} ,fin),parse);
 		}, me);
 	},

@@ -28,5 +28,9 @@ Ext.define('NextThought.model.store.Purchasable', {
 			return getURL('/dataserver2/store/post_stripe_payment');
 		}
 		return this.mixins.hasLinks.getLink.call(this, rel);
+	},
+
+	hasHistory: function(){
+		return Boolean(this.getLink('history'));
 	}
 });
