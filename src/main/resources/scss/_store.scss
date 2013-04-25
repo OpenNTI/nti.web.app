@@ -502,6 +502,38 @@
 
 .x-component-purchase-history-panel {
 	padding: 30px 15px 20px 80px;
+
+	.loading {
+		margin-left: -65px;
+
+		div{
+			width: 100px;
+			position: relative;
+			margin: 20px auto;
+			padding: 2px 2px 2px 24px;
+			&::after {
+				content: url(../images/elements/ajax-loader.gif);
+				position: absolute;
+				top: 5px; left: 0;
+			}
+		}
+
+		&.problem {
+			div{
+				padding-left: 15px;
+				width: 60px;
+				color: $primary-red;
+
+				&::after {
+					content: '';
+					top: 9px;
+					background: $icons no-repeat;
+					@include sprite($icons, 'red-x-10', $dimensions: true);
+				}
+			}
+
+		}
+	}
 }
 
 .x-component-purchaseconfirm-panel,

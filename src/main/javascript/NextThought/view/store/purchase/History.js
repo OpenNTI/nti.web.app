@@ -4,9 +4,11 @@ Ext.define('NextThought.view.store.purchase.History',{
 
 	ui: 'purchase-history-panel',
 
-	renderTpl:Ext.DomHelper.markup({cls:'loading', html:'Loading...'}),
+	renderTpl:Ext.DomHelper.markup({cls:'loading', cn:{html:'Loading...'}}),
 
-	historyTpl: Ext.DomHelper.markup({
+	errorTpl:Ext.DomHelper.createTemplate({cls:'loading problem', cn:{html:'Oops!'}}),
+
+	historyTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'table',
 		cn:[{
 			tag: 'thead', cn:{ tag:'tr', cn:[
@@ -21,7 +23,7 @@ Ext.define('NextThought.view.store.purchase.History',{
 				{tag: 'td', cls: 'tot', html: '{price}'}
 			]}}
 		}]
-	}),
+	})),
 
 	ordinal: 'history',
 
@@ -44,6 +46,8 @@ Ext.define('NextThought.view.store.purchase.History',{
 
 	failedToLoadHistoy: function(){
 		console.error(arguments);
+		this.errorTpl.overwrite(this.el);
+		this.up('[showError]').showError('Could not load purchase history. Please try again later.')
 	}
 
 
