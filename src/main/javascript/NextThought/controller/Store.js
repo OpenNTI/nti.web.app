@@ -32,37 +32,37 @@ Ext.define('NextThought.controller.Store', {
 
 	init: function(){
 		this.callParent(arguments);
-		this.application.on('session-ready', this.onSessionReady, this);
+		this.application.on('session-ready', 'onSessionReady', this);
 
 		this.listen({
 			component:{
 				'purchase-window button[action=cancel]': {
-					'click': this.purchaseWindowCancel
+					'click': 'purchaseWindowCancel'
 				},
 				'purchase-window' : {
-					'beforeclose': this.maybeClosePurchaseWindow,
-					'show-purchase-view': this.showPurchaseView
+					'beforeclose': 'maybeClosePurchaseWindow',
+					'show-purchase-view': 'showPurchaseView'
 				},
 				'purchasable-collection': {
-					'select': this.purhcasableCollectionSelection,
-					'history-click': this.showPurchaseHistory
+					'select': 'purhcasableCollectionSelection',
+					'history-click': 'showPurchaseHistory'
 				},
 				'purchase-detailview':{
-					'show-purchase-form': this.showPurchaseForm,
-					'purchase-with-activation': this.activateWithCode
+					'show-purchase-form': 'showPurchaseForm',
+					'purchase-with-activation': 'activateWithCode'
 				},
 				'purchase-form': {
-					'create-payment-token': this.createPurchase
+					'create-payment-token': 'createPurchase'
 				},
 				'purchase-confirm': {
-					'process-purchase': this.submitPurchase,
-					'edit-purchase': this.editPurchase
+					'process-purchase': 'submitPurchase',
+					'edit-purchase': 'editPurchase'
 				},
 				'purchase-complete': {
-					'close': this.forceCloseWindow
+					'close': 'forceCloseWindow'
 				},
 				'purchase-window *': {
-					'price-purchase': this.pricePurchase
+					'price-purchase': 'pricePurchase'
 				}
 			}
 		});
@@ -126,8 +126,9 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param purchasable The Purchasable object to show
 	 */
-	showPurchasable: function(purchasable){
+	showPurchasable: function(purchasable, showHistory){
 		var win = this.getPurchaseWindow();
+
 
 		//If we are currently showing a purchase window
 		//don't show another one, we shouldn't be able to get into this state
@@ -136,12 +137,13 @@ Ext.define('NextThought.controller.Store', {
 			return null;
 		}
 
-		return this.getView('store.purchase.Window').create({record: purchasable});
+		return this.getView('store.purchase.Window').create({record: purchasable, showHistory:Boolean(showHistory)});
 	},
 
 
 	showPurchaseHistory: function(purchasable){
 		console.log('Need to show purchase history for', purchasable);
+		this.showPurchasable(purchasable,true);
 	},
 
 

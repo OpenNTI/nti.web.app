@@ -119,7 +119,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.checkboxBoxEl,'click','onCheckboxClicked',me);
 
-		if( this.initialOrdinal === 4 ){
+		if( this.showHistory ){
 			this.add({xtype: 'purchase-history', record: this.record});
 			this.el.select('.titlebar').addCls('show-history');
 		}
