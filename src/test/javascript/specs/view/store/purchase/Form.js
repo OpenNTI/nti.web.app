@@ -1,11 +1,12 @@
 describe('Purchase form tests', function(){
 
-	var form, testBody;
+	var form, testBody, rec;
 
 	beforeEach(function(){
 		testBody = document.createElement('div');
 		document.body.appendChild(testBody);
-		form = NextThought.view.store.purchase.Form.create({});
+		rec = NextThought.model.store.Purchasable.create({});
+		form = NextThought.view.store.purchase.Form.create({record: rec});
 		spyOn(form, 'enableSubmission');
 		form.render(testBody);
 	});
