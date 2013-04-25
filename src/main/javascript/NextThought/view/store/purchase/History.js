@@ -18,8 +18,8 @@ Ext.define('NextThought.view.store.purchase.History',{
 			]}
 		},{
 			tag: 'tbody', cn:{ tag: 'tpl', 'for':'.', cn:{ tag:'tr', cls:'{type}', cn:[
-				{tag: 'td', cls: 'key', cn:['{key}',{html:'Purchased {date:format("m d, Y")}'}]},
-				{tag: 'td', cls: 'qty', html: '{usage} / {qty}'},
+				{tag: 'td', cls: 'key', cn:['{key}',{html:'Purchased {CreatedTime:date("F j, Y")}'}]},
+				{tag: 'td', cls: 'qty', html: '{usage} / {Quantity}'},
 				{tag: 'td', cls: 'tot', html: '{price}'}
 			]}}
 		}]
@@ -39,8 +39,23 @@ Ext.define('NextThought.view.store.purchase.History',{
 	},
 
 
-	applyHistory: function(){
-		console.debug(arguments);
+	applyHistory: function(resp){
+		var data = [];
+		resp = Ext.decode(resp.responseText) || {};
+		Ext.each(ParseUtils.parseItems(resp.Items||''),function(h){
+			var d = h.getData();
+			console.log(d);
+			if(!Ext.isEmpty(d.InvitationCode)){
+				d.type = 'bulk';
+				d.key = d.InvitationCode;
+			}
+			else {
+				d.key = d.Creator;
+			}
+			data.push(d);
+		});
+
+		this.historyTpl.overwrite(this.el,data);
 	},
 
 
