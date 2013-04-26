@@ -13,10 +13,11 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	inputTpl: Ext.DomHelper.markup({ cls: 'matching-dd-zone', cn:[
 		{'tag':'tpl', 'for': 'matches', cn:[{
 			cls: 'match', cn:[
-				{ cls: 'label', 'data-part':'{[xindex-1]}', html:'{[String.fromCharCode(64+xindex)]}.' },
+				{ cls: 'label', 'data-part':'{[xindex-1]}', html:'{label}' },
 				{ cls: 'draggable-area', 'data-match':'{[xindex-1]}', cn:[
 					{ tag: 'span', cls: 'control'},
-					{ cls: 'text', html:'{.}' }
+					{ cls: 'text', html:'{value}' },
+					{ tag: 'span', cls: 'drag-control'}
 				]}
 			]}
 		]}
@@ -25,7 +26,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	solTpl: Ext.DomHelper.createTemplate({
 		cls: 'matching-solution',
-		cn: [{ tag:'span', html:'{0}.'},{tag: 'span', cls: 'solution-matching-text', html:'{1}'}]
+		cn: [{ tag:'span', html:'{0}'},{tag: 'span', cls: 'solution-matching-text', html:'{1}'}]
 	}).compile(),
 
 
@@ -39,19 +40,31 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var me = this;
-		this.matches = Ext.clone(this.part.get('values'));
+		var values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels')),
+			i=0, m = [];
+
+		for(i; i < values.length; i++){
+			m.push({
+				label: labels[i],
+				value: values[i]
+			});
+		}
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			matches: me.matches
+			matches: m
 		});
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.initializeDragZone(this);
-		this.initializeDropZone();
 
+		var me = this;
+		Ext.defer(function(){ me.dragzoneEl.setStyle({'width': '100%'}); }, 1, this);
+
+		this.initializeDragZone();
+		this.initializeDropZone();
 		this.dragzoneEl.dom.id = Ext.id();
 	},
 
@@ -61,30 +74,30 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 		this.el.select('.match').each(function(e){
 			var p1 = e.down('.label'),
+				labelIndex, valueIndex,
 				p2 = e.down('.draggable-area');
 
-			p1 = p1 && parseInt(p1.getAttribute('data-part'), 10);
-			p2 = p2 && parseInt(p2.getAttribute('data-match'), 10);
-			if(!Ext.isEmpty(p1) && !Ext.isEmpty(p2)){
-				val[p1] = parseInt(p2);
-			}
+			labelIndex = p1 && parseInt(p1.getAttribute('data-part'));
+			valueIndex = p2 && parseInt(p2.getAttribute('data-match'));
+			val[labelIndex] = valueIndex;
 		});
-		console.log('match question values: ', val);
 		return val;
 	},
 
 
 	getSolutionContent: function(part) {
-		var m = this.matches,
+		var values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels')),
 			out = [], tpl = this.solTpl;
 
 		Ext.each(part.get('solutions'),function(s){
-			var x = s.get('value'), i;
+			var x = s.get('value'), i, valueIndex;
 
 			for(i in x){
 				if(x.hasOwnProperty(i)){
 					i = parseInt(i);
-					out.push( tpl.apply( [String.fromCharCode(65+i), m[x[i]]]));
+					valueIndex = x[i];
+					out.push( tpl.apply( [labels[i], values[valueIndex]]));
 				}
 			}
 		});
@@ -103,37 +116,50 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	mark: function(){
 		var s = this.part.get('solutions')[0],
-			c = s.get('value');
+			c = s.get('value'), i = 0, me = this,
+			values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels'));
 
 		this.getEl().select('.match').removeCls(['correct','incorrect']);
 
 		Ext.each(this.getEl().query('.match'),function(e){
 			var l = Ext.fly(e).down('.label'),
-				x = parseInt(l.getAttribute('data-part'),10),
+				labelIndex = parseInt(l.getAttribute('data-part'),10),
 				d = Ext.fly(e).down('.draggable-area'),
-				m = parseInt(d.getAttribute('data-match'), 10),
-				cls = c[x]=== m ?'correct':'incorrect';
+				valueIndex = parseInt(d.getAttribute('data-match'), 10),
+				cls = (labelIndex === i && valueIndex === c[i]) ? 'correct' : 'incorrect';
 
 			d.addCls(cls);
+			i++;
 		});
 	},
 
 
 	markCorrect: function(){
+		var me = this;
+
+		//NOTE: The dragZoneEl has a display property of 'table' which allows its child elements to flex the box.
+		// Since marking a question alters the dom, we want to only set the width to 100% only after we've updated the layout.
+		// Otherwise, it will force its child elements to be each have a width of 50%, which alters the flex layout. --Pacifique M.
+		this.dragzoneEl.setStyle({'width':undefined});
 		this.callParent();
+		me.dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
 
 	markIncorrect: function(){
+		var me = this;
+		this.dragzoneEl.setStyle({'width':undefined});
 		this.callParent();
+		me.dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
 
 	reset: function(){
 		this.el.select('.match .draggable-area').removeCls(['correct','incorrect']);
-		this.resetOrder();
+//		this.resetOrder();
 		this.callParent();
 	},
 
@@ -141,6 +167,14 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	resetOrder: function(){
 		var draggableParts = this.el.select('.match .draggable-area');
 		this.quickSort(draggableParts.elements);
+	},
+
+
+	hideSolution: function(){
+		var me = this;
+		this.dragzoneEl.setStyle({'width':undefined});
+		this.callParent();
+		me.dragzoneEl.setStyle({'width': '100%'});
 	},
 
 
@@ -192,7 +226,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			ap = ad.up('.match'),
 			bp = bd.up('.match');
 
-		console.log('Will swap draggable parts of index: ', a, ' ', b);
+//		console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
@@ -233,7 +267,6 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 				var sourceEl = e.getTarget('.draggable-area', undefined, true), d;
 
 				if(sourceEl){
-					sourceEl.addCls('selected');
 					d = sourceEl.dom.cloneNode(true);
 					d.id = Ext.id();
 
@@ -254,10 +287,25 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			proxy: proxy,
 
 			onStartDrag: function(){
+				var el = this.getProxy().el.down('.draggable-area'),
+					w = this.dragData.sourceEl.getWidth() + 'px',
+					h = this.dragData.sourceEl.getHeight() + 'px',
+					m = this.dragData.sourceEl.up('.match'),
+					leftMargin = m && m.down('.label').getWidth() + 6;
+
 				//NOTE: We only want to drag vertically
 				this.setXConstraint(0,0);
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(0, 40);
+
+				if(el){
+					el.setStyle( {
+						'width': w,
+						'height': h,
+						'marginLeft': leftMargin + 'px'
+					});
+				}
+				this.dragData.sourceEl.addCls('selected');
 			}
 		});
 	},

@@ -1,12 +1,19 @@
 @mixin draggable-zone{
 	.draggable-area{
 		display: table-cell;
-		width: 592px;
+		min-width: 54px;
 		border: 0px solid $tertiary-grey-alt;
 		border-bottom-width: 1px;
 		padding-left: 15px;
 		position: relative;
 		cursor: move;
+
+		.text{
+			position: relative;
+			margin-right: 45px;
+			line-height: 26px;
+			min-width: 30px;
+		}
 
 		&:hover{
 			&::after{
@@ -15,8 +22,7 @@
 			outline: 1px solid $tertiary-grey;
 		}
 
-		&::after{
-			content: ' ';
+		.drag-control{
 			position: absolute;
 			top: 40%;
 			right: 20px;
@@ -513,13 +519,14 @@
 
 							.text{
 								line-height: 26px;
-								width: 530px;
+								min-width: 54px;
 							}
 
 							.label {
 								display: table-cell;
-								width: 54px;
+								min-width: 54px;
 								padding-left: 20px;
+								padding-right: 20px;
 								font-weight: bold;
 								background-color: rgba(209,209,209, 0.6);
 								border: 0 solid $tertiary-grey-alt;
@@ -564,8 +571,7 @@
 									}
 
 									.text{
-										width: 500px;
-										padding-left: 38px;
+										margin-left: 38px;
 									}
 								}
 
@@ -607,9 +613,6 @@
 									display: inline-block;
 									padding-right: 20px;
 									vertical-align: middle;
-								}
-								.solution-matching-text{
-									width: 570px;
 								}
 							}
 						}
@@ -751,37 +754,25 @@
 
 .x-dd-drag-ghost{
 	@include draggable-zone;
-	margin-left: 60px;
 	top: -30px;
 	color: $primary-grey;
 	vertical-align: middle;
-	background: #ffffff;
-	border: 0 solid $tertiary-grey;
-	border-bottom-width: 1px;
-	&:last-of-type {
-		border-bottom-width: 0px;
-		.draggable-area{ border-bottom-width: 0px;}
-		.label{ border-bottom-width: 0px;}
-	}
+	background: transparent;
 
 	.draggable-area{
 		height: 100%;
+		display: block;
+		background: #ffffff;
+		border: solid 1px #3fb3f6;
+		background-color: #fff;
+		@include box-shadow(0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22));
 
 		.text{
-			line-height: 26px;
-			width: 530px;
 			font: {
 				size: 14px;
 				style: normal;
 				weight: normal;
 			}
-		}
-
-		&.selected{
-			border: 1px solid $tertiary-grey;
-			background-color: #fff;
-			@include box-shadow(0 0 5px rgba(63,179,246,.23), 0 3px 8px rgba(0,0,0,.22));
-			border: solid 1px #3fb3f6;
 		}
 	}
 }
