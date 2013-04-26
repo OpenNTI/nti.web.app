@@ -40,7 +40,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash initial"></div>',true);
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.scrollShadow = this.getEl().insertHtml('beforeEnd','<div class="scroll-shadow"></div>',true);
 		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
@@ -185,16 +185,6 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
 
-
-	onBeforeNavigate: function(){
-		if(this.iframeReady){
-			this.navigating = true;
-			return true;
-		}
-		return false;
-	},
-
-
 	onBeginNavigate: function(ntiid) {
 
 	},
@@ -216,6 +206,7 @@ Ext.define('NextThought.view.content.Reader', {
 			delete me.navigating;
 			me.primeReadyEvent();
 			me.splash.hide();
+			me.splash.removeCls('initial');
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 

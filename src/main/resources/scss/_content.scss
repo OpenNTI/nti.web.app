@@ -392,6 +392,12 @@ div.no-content-splash {
 	background-color: white;
     margin-right: -140px;
 
+    &.initial{
+        .x-component-resource-not-found{
+            visibility: hidden;
+        }
+    }
+
     .x-component-resource-not-found{
         margin: 50px auto;
         width: 70%;

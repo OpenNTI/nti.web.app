@@ -37,7 +37,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 		LocationProvider.on({
 			scope: this.reader,
-			beforeNavigate: 'onBeforeNavigate',
+			//beforeNavigate: 'onBeforeNavigate',
 			beginNavigate: 'onBeginNavigate',
             navigateAbort: 'onNavigationAborted',
 			navigateComplete: 'onNavigateComplete'
@@ -84,10 +84,17 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 
-	onBeforeNavigate: function(ntiid,fromHistory){
+	onBeforeNavigate: function(ntiid, fromHistory){
 		if(!fromHistory){
-			return this.up('main-views').fireEvent('activate-main-view', 'library');
+			if(this.up('main-views').fireEvent('activate-main-view', 'library') === false){
+				return false;
+			}
 		}
+		if(this.reader.iframeReady){
+			this.reader.navigating = true;
+			return true;
+		}
+		return false;
 	},
 
 
