@@ -6,7 +6,8 @@ Ext.define('NextThought.view.library.menus.Collection',{
 		this.store = Library.getStore();
 		this.callParent(arguments);
 
-		this.mon(LocationProvider,'navigate',this.updateSelection,this);
+		//FIXME do this at the completion of navigation in case it fails
+		this.mon(LocationProvider,'beginNavigate',this.updateSelection,this);
 	},
 
 

@@ -37,7 +37,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 		LocationProvider.on({
 			scope: this.reader,
-			navigate: this.reader.onNavigate,
+			'beginNavigate': this.reader.onNavigate,
             navigateAbort: this.reader.onNavigationAborted,
 			navigateComplete: this.reader.onNavigateComplete
 		});

@@ -228,7 +228,7 @@ Ext.define('NextThought.providers.Location', {
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
-			if(!me.fireEvent('navigate',ntiid, fromHistory)){
+			if(!me.fireEvent('beginNavigate',ntiid, fromHistory)){
 				finish();
 				return;
 			}
