@@ -18,9 +18,9 @@ Ext.define('NextThought.view.store.purchase.History',{
 			]}
 		},{
 			tag: 'tbody', cn:{ tag: 'tpl', 'for':'.', cn:{ tag:'tr', cls:'{type}', cn:[
-				{tag: 'td', cls: 'key', cn:[{tag: 'span', html: '{key}'},{html:'Purchased {CreatedTime:date("F j, Y")}'}]},
+				{tag: 'td', cls: 'key', cn:[{tag: 'span', html: '{key}'},{html:'{Action} {Time:date("F j, Y")}'}]},
 				{tag: 'td', cls: 'qty', cn:{tag: 'span', html: '{usage} / {Order.Quantity}'}},
-				{tag: 'td', cls: 'tot', cn:{tag: 'span', html: '{Pricing.TotalPurchasePrice:ntiCurrency(values.Pricing.Currency)}'}}
+				{tag: 'td', cls: 'tot', cn:{tag: 'span', html: '{Price}'}}
 			]}}
 		}]
 	})),
@@ -53,6 +53,10 @@ Ext.define('NextThought.view.store.purchase.History',{
 			d.key = isMe(d.Creator) ? $AppConfig.userObject : d.Creator;
 			d.Order.Quantity = d.Order.Quantity || 1;
 			q = d.usage = d.Order.Quantity;
+			d.Action = 'Purchased';
+			d.Time = d.StartTime;
+
+			d.Price = NTIFormat.currency(d.Pricing.TotalPurchasePrice, d.Pricing.Currency);
 
 
 			console.log(d);
@@ -61,6 +65,12 @@ Ext.define('NextThought.view.store.purchase.History',{
 				d.type = 'bulk';
 				d.key = d.InvitationCode;
 				d.usage = q - (d.RemainingInvitations||q);
+			}
+
+			if(d.RedemptionCode){
+				d.Action = 'Redeemed';
+				d.Time = d.RedemptionTime;
+				d.Price = 'n/a';
 			}
 
 			data.push(d);
