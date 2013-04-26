@@ -51,13 +51,20 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 			me.setContext(dom,dom);
 		}
 
+		function error(req,resp){
+			console.error(arguments);
+		}
+
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
-			ContentUtils.spider(cid,Ext.Function.createSequence(function(){
+
+			function upLoc(){
 				if(metaInfo){
 					me.locationEl.update(metaInfo.getPathLabel());
 				}
-			} ,fin),parse);
+			}
+
+			C.spider(cid,Ext.Function.createSequence(upLoc ,fin, me),parse,error);
 		}, me);
 	},
 

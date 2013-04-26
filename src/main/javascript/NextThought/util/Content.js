@@ -2,7 +2,7 @@ Ext.define('NextThought.util.Content',{
 	singleton: true,
 
 
-	spider: function(ids, finish, parse){
+	spider: function(ids, finish, parse, pageFailure){
 		if(!Ext.isArray(ids)){ ids = [ids]; }
 
 		var service = $AppConfig.service,
@@ -25,8 +25,8 @@ Ext.define('NextThought.util.Content',{
 		}
 
 		Ext.each(ids,function(id){
-			function failure(){
-				console.error(id,arguments);
+			function failure(req,resp){
+				Ext.callback(pageFailure,null,arguments);
 				maybeFinish();
 			}
 
