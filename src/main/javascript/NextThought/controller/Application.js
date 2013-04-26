@@ -51,10 +51,10 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	startReader: function(){
+	startReader: function(loc){
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.
-		var l = this.getController('State').currentState.location;
+		var l = loc || this.getController('State').currentState.location;
 		LocationProvider.setLocation(l,null,true);
 	},
 

@@ -94,6 +94,8 @@ Ext.define( 'NextThought.view.library.View', {
 			this.reader.navigating = true;
 			return true;
 		}
+
+		this.reader.ntiidOnFrameReady = ntiid;
 		return false;
 	},
 

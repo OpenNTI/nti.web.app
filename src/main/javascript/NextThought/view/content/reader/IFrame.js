@@ -52,7 +52,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 							frame.selectable();
 						}
 						me.iframeReady = true;
-						me.fireEvent('iframe-ready');
+						me.fireEvent('iframe-ready', me.ntiidOnFrameReady);
+						delete me.ntiidOnFrameReady;
 					});
 				}
 			}
