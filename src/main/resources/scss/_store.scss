@@ -555,6 +555,58 @@
 
 		}
 	}
+
+	table {
+		table-layout: fixed;
+		border-collapse: collapse;
+		border: 0;
+
+		td, th {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+			padding: 0 5px;
+			border: 0 solid $border-grey;
+			border-bottom-width: 1px;
+			text-align: center;
+			color: $secondary-grey;
+			font: normal 600 16px/45px $font;
+
+			div {
+				font: normal 400 12px/20px $font;
+				color: $tertiary-grey;
+				margin: -10px 0 10px;
+				cursor: default;
+			}
+
+			&:first-of-type {
+				padding-left: 0;
+			}
+
+			&:first-of-type, &:last-of-type{
+				text-align: left;
+			}
+		}
+
+		th {
+			font: normal 600 10px/30px $font;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			vertical-align: bottom;
+		}
+
+		td {vertical-align: top;}
+
+
+		tbody {
+			tr.bulk {
+				td:first-of-type {
+					color: $primary-blue;
+					cursor: text;
+				}
+			}
+		}
+	}
 }
 
 .x-component-purchaseconfirm-panel,
