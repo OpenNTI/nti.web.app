@@ -11,11 +11,21 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'if':'code', cn:
 			{ cls: 'coupon', html: 'Code {code} reduced your total by {reduction}'}},
-		{ cls: 'message', cn:[
-			'{message}',
-			{tag:'br'},
-			'Please carefully review and submit your order.', {tag:'br'},
-			'Please note that no refunds will be issued for purchases.'
+		{tag:'tpl', 'if': '!bulkOrder', cn:[
+			{ cls: 'message', cn:[
+				'{message}',
+				{tag:'br'},
+				'Please carefully review and submit your order.', {tag:'br'},
+				'Please note that no refunds will be issued for purchases.'
+			]}
+		]},
+		{tag:'tpl', 'if': 'bulkOrder', cn:[
+			{ cls: 'message', cn:[
+				'Please review your order. Once submitted, you will receive an activation key to access your purchased items. ',
+				'This key will work ',
+				'{message}',
+				'. Please note that all sales are final.'
+			]}
 		]},
 		{tag: 'fieldset', cls:'div', cn:[
 			{ tag: 'legend', cls:'card', html: 'Payment Information' },
@@ -54,10 +64,11 @@ Ext.define('NextThought.view.store.purchase.Confirm',{
 		if(this.purchaseDescription && this.purchaseDescription.Quantity !== undefined){
 			quantity = this.purchaseDescription.Quantity;
 			times = Ext.util.Format.plural(quantity, 'time');
-			this.renderData.message = 'An activation key will be generated that can be used to gain access to the content' +
-				' at a later date.  This key will work ' + times +'.';
+			this.renderData.bulkOrder = true;
+			this.renderData.message = times;
 		}
 		else{
+			this.renderData.bulkOrder = false;
 			this.renderData.message = 'Your license will be activated automatically for this account.';
 		}
 
