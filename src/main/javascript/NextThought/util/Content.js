@@ -26,7 +26,12 @@ Ext.define('NextThought.util.Content',{
 
 		Ext.each(ids,function(id){
 			function failure(req,resp){
+				try {
 				Ext.callback(pageFailure,null,arguments);
+				}
+				catch(e){
+					console.error(e.message);
+				}
 				maybeFinish();
 			}
 

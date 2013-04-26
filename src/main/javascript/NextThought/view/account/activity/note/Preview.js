@@ -24,6 +24,13 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 	]}),
 
 
+	purchaseTpl: Ext.DomHelper.createTemplate({
+		cls: 'buy-this',
+		cn:{
+			cls: 'button', html: 'Buy'
+		}
+	}),
+
 	loadContext: function(fin){
 		var me = this,
 			r = me.record,
@@ -48,11 +55,19 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 
 		function parse(content){
 			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
-			me.setContext(dom,dom);
+			me.setContext(dom);
 		}
 
 		function error(req,resp){
-			console.error(arguments);
+			var el = me.context.up('.context');
+			if(resp.status === 403 /*&& isAPurchasableItem*/){
+				me.requiresPurchase = true;
+				me.purchasable = {};
+				el.addCls('purchase').removeCls('context');
+				me.purchaseTpl.overwrite(el);
+				return;
+			}
+			el.remove();
 		}
 
 		LocationMeta.getMeta(cid, function(meta){
@@ -61,7 +76,9 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 			function upLoc(){
 				if(metaInfo){
 					me.locationEl.update(metaInfo.getPathLabel());
+					return;
 				}
+				me.locationEl.remove();
 			}
 
 			C.spider(cid,Ext.Function.createSequence(upLoc ,fin, me),parse,error);
@@ -88,6 +105,12 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 
 
 	navigateToItem: function(){
+		//Show purchase window if we're purchase-able
+		if(this.requiresPurchase){
+
+			return;
+		}
+
 		this.fireEvent('navigation-selected', this.record.get('ContainerId'), this.record);
 	},
 
