@@ -23,7 +23,7 @@ Ext.define('NextThought.view.content.TabPanel',{
 	 * of the tabbar
 	 */
 	initComponent: function(){
-		this.dockedItems = [{dock: 'top', xtype: 'content-page-widgets'}];
+		this.dockedItems = [{dock: 'top', xtype: 'content-page-widgets', hidden: true}];
 		this.callParent(arguments);
 		this.removeDocked(this.tabBar,false);
 		this.dockedItems.first().add(this.tabBar);

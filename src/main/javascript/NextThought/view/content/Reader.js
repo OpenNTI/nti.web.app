@@ -194,6 +194,7 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
     onNavigationAborted: function(resp, ntiid) {
+		this.splash.removeCls('initial');
 	    delete this.navigating;
     },
 
