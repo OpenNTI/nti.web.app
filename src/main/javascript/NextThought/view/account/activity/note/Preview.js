@@ -63,7 +63,7 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 				me.requiresPurchase = true;
 				me.purchasable = p;
 				el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
-				me.needsPurchaseTpl.overwrite(el, p.getData());
+				me.needsPurchaseTpl.overwrite(el, p.getData(), true).on('click', me.navigateToItem, me);
 
 				Ext.DomHelper.append(me.getEl(), {
 					cls: 'purchasable-mask',
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 	navigateToItem: function(){
 		//Show purchase window if we're purchase-able
 		if(this.requiresPurchase){
-
+			this.fireEvent('show-purchasable', this, this.purchasable);
 			return;
 		}
 

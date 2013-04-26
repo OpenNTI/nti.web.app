@@ -26,7 +26,9 @@ Ext.define('NextThought.controller.Profile', {
 		'profiles.TabPanel'
 	],
 
-	refs: [],
+	refs: [
+		{ ref: 'profileActivity', selector: '#profile profile-activity'}
+	],
 
 	init: function() {
 
@@ -61,6 +63,11 @@ Ext.define('NextThought.controller.Profile', {
 				'activity-preview-blog-reply > nti-editor':{
 					'save': this.saveBlogComment
 				}
+			},
+			controller: {
+				'#Store': {
+					'purchase-complete': 'redrawActivity'
+				}
 			}
 		});
 	},
@@ -70,6 +77,18 @@ Ext.define('NextThought.controller.Profile', {
 		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function(item){
 			item.maybeFillIn();
 		});
+	},
+
+
+	redrawActivity: function(){
+		var c = this.getProfileActivity(),
+			s = c && c.getStore();
+
+		if(c && s){
+			s.currentPage = 1;
+			c.removeAll(true);
+			s.load();
+		}
 	},
 
 

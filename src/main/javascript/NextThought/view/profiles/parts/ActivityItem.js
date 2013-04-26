@@ -262,7 +262,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		//Show purchase window if we're purchase-able
 		if(this.requiresPurchase){
-
+			this.fireEvent('show-purchasable', this, this.purchasable);
 			return;
 		}
 

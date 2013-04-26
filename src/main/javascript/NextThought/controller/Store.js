@@ -63,6 +63,9 @@ Ext.define('NextThought.controller.Store', {
 				},
 				'purchase-window *': {
 					'price-purchase': 'pricePurchase'
+				},
+				'*': {
+					'show-purchasable': 'showPurchaseWindow'
 				}
 			},
 			'controller': {
@@ -122,6 +125,7 @@ Ext.define('NextThought.controller.Store', {
 
 
 	refreshPurchasable: function(p){
+		this.fireEvent('purchase-complete', this, p);
 		$AppConfig.service.getObject(p.getId(),
 			function(newP){
 				//p should be the instance of the record out of the store
@@ -142,6 +146,11 @@ Ext.define('NextThought.controller.Store', {
 	purhcasableCollectionSelection: function(cmp, record){
 		Ext.menu.Manager.hideAll();
 		this.showPurchasable(record);
+	},
+
+
+	showPurchaseWindow: function(sender, purchasable){
+		this.showPurchasable(purchasable);
 	},
 
 
