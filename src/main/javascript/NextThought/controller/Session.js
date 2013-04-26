@@ -18,7 +18,8 @@ Ext.define('NextThought.controller.Session', {
 		'account.coppa.Window',
 		'account.recovery.Window',
         'menus.Settings',
-		'NextThought.ux.WelcomeGuide'
+		'NextThought.ux.WelcomeGuide',
+		'NextThought.ux.UpdatedTos'
 	],
 
 	sessionTrackerCookie: 'sidt',
@@ -107,18 +108,27 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
-	maybeShowWelcomePage: function(){
-		var user = $AppConfig.userObject,
-			links = user.get('Links') || {},
-			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.initial_welcome_page'): null;
-
-		if(Ext.isEmpty(welcomeLink)){ return;}
-
-		welcomeLink = welcomeLink[0];
-		this.guideWin = Ext.widget('welcome-guide', {link: welcomeLink, deleteOnDestroy: true});
+	showWelcomePage: function() {
+		var link = this.linkElementForRel('content.initial_welcome_page');
+		this.guideWin = Ext.widget('welcome-guide', {link: link, deleteOnDestroy: true});
 		this.guideWin.show();
 	},
 
+	showNewTermsOfService: function() {
+		var link = this.linkElementForRel('content.initial_tos_page');
+		this.guideWin = Ext.widget('updated-tos', {link: link, deleteOnDestroy: true});
+		this.guideWin.show();
+	},
+
+	shouldShowContentFor: function(linkRel) {
+		return !Ext.isEmpty(this.linkElementForRel(linkRel));
+	},
+
+	linkElementForRel: function(linkRel) {
+		var user = $AppConfig.userObject,
+				links = user.get('Links') || {};
+		return links.getLinksForRel ? links.getLinksForRel(linkRel)[0] : null;
+	},
 
 	maybeTakeImmediateAction: function(r){
 		var m = this;
@@ -150,7 +160,15 @@ Ext.define('NextThought.controller.Session', {
             this.showEmailRecoveryWindow('email', 'state-bounced-email');
         }
 
-		this.maybeShowWelcomePage();
+        // what is the exactly relationships between these windows?
+        // currently above and below are piling on top of one another
+
+        if (this.shouldShowContentFor('content.initial_tos_page')) {
+        	this.showNewTermsOfService();
+        }
+        if (this.shouldShowContentFor('content.initial_welcome_page')) {
+					this.showWelcomePage();
+				}
     },
 
 
