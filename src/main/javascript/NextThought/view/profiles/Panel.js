@@ -238,13 +238,13 @@ Ext.define('NextThought.view.profiles.Panel',{
 		var me = this;
 		if(me.addToContacts){
 			me.mun(me.addToContacts, 'click');
-		}
-		if(!me.shouldShowAddContact(this.userObject ? this.userObject.getId() : this.username)){
-			me.addToContacts.hide();
-		}
-		else{
-			me.addToContacts.show();
-			me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
+			if(!me.shouldShowAddContact(this.userObject ? this.userObject.getId() : this.username)){
+				me.addToContacts.hide();
+			}
+			else{
+				me.addToContacts.show();
+				me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
+			}
 		}
 	},
 
