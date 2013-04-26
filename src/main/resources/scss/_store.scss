@@ -558,7 +558,6 @@
 
 	table {
         width: 100%;
-		table-layout: fixed;
 		border-collapse: collapse;
 		border: 0;
 
@@ -567,6 +566,7 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;
+                display: block;
 			}
 			padding: 0 5px;
 			border: 0 solid $border-grey;

@@ -18,9 +18,9 @@ Ext.define('NextThought.view.store.purchase.History',{
 			]}
 		},{
 			tag: 'tbody', cn:{ tag: 'tpl', 'for':'.', cn:{ tag:'tr', cls:'{type}', cn:[
-				{tag: 'td', cls: 'key', cn:{tag: 'span', cn:['{key}',{html:'Purchased {CreatedTime:date("F j, Y")}'}]}},
+				{tag: 'td', cls: 'key', cn:[{tag: 'span', html: '{key}'},{html:'Purchased {CreatedTime:date("F j, Y")}'}]},
 				{tag: 'td', cls: 'qty', cn:{tag: 'span', html: '{usage} / {Order.Quantity}'}},
-				{tag: 'td', cls: 'tot', cn:{tag: 'span', html: '{Pricing.TotalPurchasePrice}'}}
+				{tag: 'td', cls: 'tot', cn:{tag: 'span', html: '{Pricing.TotalPurchasePrice:ntiCurrency(values.Pricing.Currency)}'}}
 			]}}
 		}]
 	})),

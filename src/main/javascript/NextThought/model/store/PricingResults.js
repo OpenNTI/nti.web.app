@@ -6,6 +6,7 @@ Ext.define('NextThought.model.store.PricingResults', {
 	],
 
 	fields: [
+		{ name: 'Currency', type: 'string', persist: false },
 		{ name: 'TotalPurchasePrice', type: 'float', persist: false },
 		{ name: 'TotalNonDiscountedPrice', type: 'float', persist: false },
 		{ name: 'Items', type: 'arrayitem', persist: false}
