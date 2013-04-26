@@ -378,4 +378,46 @@ describe('Store controller', function(){
 			});
 		});
 	});
+
+	describe('Navigate to a purchasable NTIID', function(){
+		var mockObjects, navController, oldViewPort;
+
+		beforeEach(function(){
+			navController = app.getController('Navigation');
+			oldViewPort = navController.viewport;
+			navController.viewport = { activateView: Ext.emptyFn};
+
+			mockObjects = {
+				'purchasable1': Ext.create('NextThought.model.store.Purchasable', {
+					NTIID: 'purchasable1'
+				}),
+
+				'book1': Ext.create('NextThought.model.PageInfo', {
+					NTIID: 'book1'
+				})
+			};
+		});
+
+		afterEach(function(){
+			navController.viewport = oldViewPort;
+		});
+
+		describe('Test navigateToPurchasable', function(){
+			it('Expects going to the Purchasable \'purchasable1\'', function(){
+				spyOn(controller, 'navigateToPurchasable').andCallThrough();
+				spyOn(controller, 'showPurchasable');
+				controller.navigateToPurchasable(mockObjects['purchasable1']);
+				expect(controller.navigateToPurchasable).toHaveBeenCalledWith(mockObjects['purchasable1']);
+				expect(controller.showPurchasable).toHaveBeenCalledWith(mockObjects['purchasable1']);
+			});
+
+			it('Expects to not go to the content \'book1\'', function(){
+				spyOn(controller, 'navigateToPurchasable').andCallThrough();
+				spyOn(controller, 'showPurchasable');
+				controller.navigateToPurchasable(mockObjects['book1']);
+				expect(controller.navigateToPurchasable).toHaveBeenCalledWith(mockObjects['book1']);
+				expect(controller.showPurchasable).not.toHaveBeenCalled();
+			});
+		});
+	});
 });

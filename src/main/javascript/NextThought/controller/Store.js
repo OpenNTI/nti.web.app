@@ -64,6 +64,11 @@ Ext.define('NextThought.controller.Store', {
 				'purchase-window *': {
 					'price-purchase': 'pricePurchase'
 				}
+			},
+			'controller': {
+				'*' : {
+					'show-object': this.navigateToPurchasable
+				}
 			}
 		});
 	},
@@ -162,6 +167,17 @@ Ext.define('NextThought.controller.Store', {
 	showPurchaseHistory: function(purchasable){
 		console.log('Need to show purchase history for', purchasable);
 		this.showPurchasable(purchasable,true);
+	},
+
+
+	navigateToPurchasable: function(obj, fragment){
+		var me = this;
+
+		if(obj instanceof NextThought.model.store.Purchasable){
+			me.showPurchasable(obj);
+			return false;
+		}
+		return true;
 	},
 
 
