@@ -90,6 +90,20 @@ Ext.define('NextThought.Library', {
 	},
 
 
+	findTitleWithPrefix: function(prefix){
+		var result = null;
+		this.each(function(e){
+			if(e.get('NTIID').indexOf(prefix) === 0){
+				result = e;
+			}
+			return !result;
+		});
+
+		return result;
+	},
+
+
+
 	purgeTocs: function(){
 		var me = this;
 

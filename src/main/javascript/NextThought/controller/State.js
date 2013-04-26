@@ -373,7 +373,7 @@ Ext.define('NextThought.controller.State', {
 			var token = {};
 			token[key] = stateFrag;
 			app.registerInitializeTask(token);
-			return function(a,errorDetails){
+			return function(a){
 				app.finishInitializeTask(token);
 			};
 		}

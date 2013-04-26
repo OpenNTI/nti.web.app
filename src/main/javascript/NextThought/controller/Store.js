@@ -153,15 +153,23 @@ Ext.define('NextThought.controller.Store', {
 		//NOTE this again assumes 1-to-1 purchase to content root.
 		//but what the hell
 
-		purchasable = s.findBy(function(record){
-			var items = record.get('Items') || [];
-			return Ext.Array.contains(items, root);
-		}, this);
+		if(!root){
+			root = ParseUtils.bookPrefixIfQuestionNtiid(ntiid);
+			root = root ? Library.findTitleWithPrefix(root) : null;
+			root = root ? root.get('NTIID') : null;
+		}
 
-		purchasable = purchasable >= 0 ? s.getAt(purchasable) : null;
+		if(root){
+			purchasable = s.findBy(function(record){
+				var items = record.get('Items') || [];
+				return Ext.Array.contains(items, root);
+			}, this);
 
-		if(purchasable){
-			this.showPurchasable(purchasable);
+			purchasable = purchasable >= 0 ? s.getAt(purchasable) : null;
+
+			if(purchasable){
+				this.showPurchasable(purchasable);
+			}
 		}
 		return !purchasable;
 	},

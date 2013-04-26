@@ -128,7 +128,7 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 
-		return function(reader) {
+		return function(reader, errorObject) {
 			reader = (reader||ReaderPanel.get());
 			var id = findExisting(reader.prefix),
 				service = $AppConfig.service;
@@ -210,7 +210,12 @@ Ext.define('NextThought.controller.Navigation', {
 				return;
 			}
 
-			if(reader.needsWaitingOnReadyEvent()){
+			if(errorObject && errorObject.error){
+				console.error('Navigation failed so not showing object.', arguments);
+				return;
+			}
+
+			if(reader.needsWaitingOnReadyEvent && reader.needsWaitingOnReadyEvent()){
 				reader.on('should-be-ready',continueLoad,me,{single:true});
 			}
 			else {
@@ -318,19 +323,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	maybeLoadNewPage: function(id, cb){
-
-		function loadPageId(pi){
-			var pageId = pi.getId();
-
-			LocationProvider.setLocation(id, cb);
-		}
-
-		function fail(){
-			console.error('fail', arguments);
-			Ext.callback(cb);
-		}
-
-		$AppConfig.service.getPageInfo(id, loadPageId, fail, this);
+		LocationProvider.setLocation(id, cb);
 	},
 
 
@@ -492,11 +485,6 @@ Ext.define('NextThought.controller.Navigation', {
 		var me = this;
 
 		function onSuccess(obj){
-			//With Ext 4.2 we can have controllers listen to events from other controllers.
-			//That will allow is to decouble this more with something like
-			//me.fireEvent('show-object', obj) or a registry that knows how to display objects
-			//in their cannonical location
-
 			me.fireEvent('show-object', obj, fragment);
 		}
 

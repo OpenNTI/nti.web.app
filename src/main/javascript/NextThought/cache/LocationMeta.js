@@ -158,28 +158,11 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	findTitleWithPrefix: function(prefix){
-		var result = null;
-		Library.each(function(e){
-			if(e.get('NTIID').indexOf(prefix) === 0){
-				result = e;
-			}
-			return !result;
-		});
-
-		return result;
+		return Library.findTitleWithPrefix(prefix);
 	},
 
-
 	bookPrefixIfQuestion: function(id){
-		var ntiid = ParseUtils.parseNtiid(id);
-		if(!ntiid || ntiid.specific.type !== 'NAQ'){
-			return null;
-		}
-
-		ntiid.specific.type = 'HTML';
-		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
-
-		return ntiid.toString();
+		return ParseUtils.bookPrefixIfQuestionNtiid(id);
 	}
 
 },

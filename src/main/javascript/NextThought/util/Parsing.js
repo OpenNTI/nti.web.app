@@ -182,6 +182,19 @@ Ext.define('NextThought.util.Parsing',{
 	},
 
 
+	bookPrefixIfQuestionNtiid: function(id){
+		var ntiid = this.parseNtiid(id);
+		if(!ntiid || ntiid.specific.type !== 'NAQ'){
+			return null;
+		}
+
+		ntiid.specific.type = 'HTML';
+		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+
+		return ntiid.toString();
+	},
+
+
 	parseNtiFragment: function(fragment){
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
