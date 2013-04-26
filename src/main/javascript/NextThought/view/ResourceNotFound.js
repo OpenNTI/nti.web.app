@@ -10,7 +10,7 @@ Ext.define('NextThought.view.ResourceNotFound',{
 				{ cls: 'heading', html: 'Sorry, this page doesn\'t exist...'},
 				{ cls: 'subtext', html: 'Your link may contain errors or the page may no longer exist.'},
 				{ cls: 'actions', cn: [
-					{cls: 'library', tag: 'a', html: 'Library'},
+					{tag: 'tpl', 'if': '!hideLibrary', cn: {cls: 'library', tag: 'a', html: 'Library'}},
 					{cls: 'back', tag: 'a', html: 'Previous Page'}
 				]}
 			]}
@@ -24,15 +24,26 @@ Ext.define('NextThought.view.ResourceNotFound',{
 
 	layout: 'auto',
 
+
+	beforeRender: function(){
+		this.callParent(arguments);
+		this.renderData = Ext.apply(this.renderData || {}, {hideLibrary: this.hideLibrary});
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.backEl, 'click', this.goBack, this);
-		this.mon(this.libraryEl, 'click', this.goLibrary, this);
+		if(this.libraryEl){
+			this.mon(this.libraryEl, 'click', this.goLibrary, this);
+		}
 	},
+
 
 	goBack: function(){
 		history.back();
 	},
+
 
 	goLibrary: function(){
 		this.fireEvent('go-to-library');

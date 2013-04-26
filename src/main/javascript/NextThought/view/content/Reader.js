@@ -4,7 +4,8 @@ Ext.define('NextThought.view.content.Reader', {
 	requires: [
 		'NextThought.providers.Location',
 		'NextThought.proxy.JSONP',
-		'NextThought.util.Base64'
+		'NextThought.util.Base64',
+		'NextThought.view.ResourceNotFound'
 	],
 	mixins:{
 		annotations: 'NextThought.view.content.reader.Annotations',
@@ -43,6 +44,8 @@ Ext.define('NextThought.view.content.Reader', {
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.scrollShadow = this.getEl().insertHtml('beforeEnd','<div class="scroll-shadow"></div>',true);
 		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
+
+		this.notFoundCmp = NextThought.view.ResourceNotFound.create({renderTo: this.splash, hideLibrary: true});
 	},
 
 	scrollShadowMonitor: function(e,dom){
