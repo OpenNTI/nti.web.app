@@ -206,15 +206,17 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	syncTab: function(ordinal){
 		var el = this.getEl(),
-			tabs = el.select('.titlebar .tab');
+			tabs = el.select('.titlebar .tab'),
+			defaultTab = this.started ? 0 : 'detail';
 
 		if(ordinal>0){
+			this.started = true;
 			el.select('.titlebar').addCls('started').removeCls('show-history');
 			el.select('.titlebar .tab.active').addCls('visited');
 		}
 
 		tabs.removeCls('active');
-		el.select('.titlebar .tab[data-order="'+(ordinal || 0)+'"]').addCls('active');
+		el.select('.titlebar .tab[data-order="'+(ordinal || defaultTab)+'"]').addCls('active');
 
 		if( ordinal==='history' ){
 			ordinal = 4;
@@ -226,6 +228,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			var i = t.getAttribute('data-order');
 			if(i==='history'){ i=4; }
 			else {
+				if(i === 'detail'){
+					i = 0;
+				}
 				t[i<ordinal  ? 'removeCls' : 'addCls']('locked');
 			}
 			if(i>=ordinal){

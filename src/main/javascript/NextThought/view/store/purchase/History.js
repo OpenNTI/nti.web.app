@@ -51,7 +51,8 @@ Ext.define('NextThought.view.store.purchase.History',{
 			d.Order = (d.Order && d.Order.getData()) || {};
 			d.Pricing = (d.Pricing && d.Pricing.getData()) || {};
 			d.key = d.Creator;
-			q = d.usage = d.Order.Quantity || 1;
+			d.Order.Quantity = d.Order.Quantity || 1;
+			q = d.usage = d.Order.Quantity;
 
 
 			console.log(d);

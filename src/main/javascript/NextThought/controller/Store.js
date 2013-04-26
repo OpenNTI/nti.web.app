@@ -227,7 +227,7 @@ Ext.define('NextThought.controller.Store', {
 		cfg.xtype = 'purchase-'+views[ordinal];
 		cfg = Ext.applyIf(cfg, data);
 
-		if(cfg.xtype === 'purchase-detailview'){
+		if(cfg.xtype === 'purchase-detailview' && win.started){
 			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 			Ext.Msg.show({
 				msg: 'Your current progress will be lost.',
