@@ -41,14 +41,13 @@ Ext.define('NextThought.view.content.Navigation',{
 		var me = this;
 		this.callParent(arguments);
 		me.locationChanged();
-		LocationProvider.on('change',me.locationChanged,me);
+		LocationProvider.on('navigateComplete',me.locationChanged,me);
 	},
 
 
-	locationChanged: function(ntiid){
-
-		console.log('location changed to:',ntiid);
+	locationChanged: function(pageInfo){
 		var me = this,
+			ntiid = pageInfo && pageInfo.getId(),
 			lp = LocationProvider,
 			c,
 			loc = lp.getLocation(ntiid),

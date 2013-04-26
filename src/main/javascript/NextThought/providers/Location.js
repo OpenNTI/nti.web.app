@@ -235,8 +235,6 @@ Ext.define('NextThought.providers.Location', {
 
 			me.clearStore();
 			me.resolvePageInfo(ntiidOrPageInfo, finish, Boolean(callback));
-
-			me.currentNTIID = ntiid;
 		},1);
 	},
 
@@ -256,15 +254,12 @@ Ext.define('NextThought.providers.Location', {
 			me.updatePreferences(pageInfo);
 			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
-            me.fireEvent('change', me.currentNTIID);
 		}
 
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
-            me.fireEvent('change', undefined);
             Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
-			delete me.currentNTIID;
-			me.fireEvent('navigateComplete',r);
+			me.fireEvent('navigateAbort',r);
 		}
 
 		if(ntiidOrPageInfo.isPageInfo){

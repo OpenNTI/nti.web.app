@@ -27,11 +27,12 @@ Ext.define('NextThought.view.content.Pager',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		LocationProvider.on('change', this.updateState, this);
+		LocationProvider.on('navigateComplete', this.updateState, this);
 	},
 
-	updateState: function(ntiid){
-		var info = LocationProvider.getNavigationInfo(ntiid),
+	updateState: function(pageInfo){
+		var ntiid = pageInfo.getId(),
+			info = LocationProvider.getNavigationInfo(ntiid),
 			nextBtn = this.down('[cls=next]'),
 			prevBtn = this.down('[cls=prev]'),
 			nextTitle = LocationProvider.findTitle(info.next, null),

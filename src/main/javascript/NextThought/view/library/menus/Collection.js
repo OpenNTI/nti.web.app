@@ -6,14 +6,14 @@ Ext.define('NextThought.view.library.menus.Collection',{
 		this.store = Library.getStore();
 		this.callParent(arguments);
 
-		//FIXME do this at the completion of navigation in case it fails
-		this.mon(LocationProvider,'beginNavigate',this.updateSelection,this);
+		this.mon(LocationProvider,'navigateComplete',this.updateSelection,this);
 	},
 
 
-	updateSelection: function(ntiid){
-		var last = LocationProvider.getLineage(ntiid).last();
-		var r = this.store.findRecord('NTIID',last,0,false,true,true);
+	updateSelection: function(pageInfo){
+		var ntiid = pageInfo.getId(),
+			last = LocationProvider.getLineage(ntiid).last(),
+			r = this.store.findRecord('NTIID',last,0,false,true,true);
 		if(r){
 			this.getSelectionModel().select(r,false, true);
 		}
