@@ -201,7 +201,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
     onNavigationAborted: function(resp, ntiid) {
-		this.fireEvent('navigation-failed', this, ntiid, resp);
 	    delete this.navigating;
     },
 

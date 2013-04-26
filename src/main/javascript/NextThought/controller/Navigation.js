@@ -226,10 +226,7 @@ Ext.define('NextThought.controller.Navigation', {
 			notHandled = this.fireEvent('unauthorized-navigation', this, ntiid);
 		}
 
-		if(notHandled === true){
-			reader.setSplash();
-			reader.relayout();
-		}
+		return notHandled;
 	},
 
 

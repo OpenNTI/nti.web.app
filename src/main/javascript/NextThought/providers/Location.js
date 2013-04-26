@@ -194,7 +194,11 @@ Ext.define('NextThought.providers.Location', {
 			//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
 			Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
 
+			if(fromHistory!==true){
+				history.pushState({location: ntiid}, me.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
+			}
 			if(error){
+				delete me.currentNTIID;
 				//Ok no bueno.  The page info request failed.  Ideally whoever
 				//initiated this request handles the error  but we aren't really setup for
 				//that everywhere. Need to work on error handling.
@@ -210,9 +214,6 @@ Ext.define('NextThought.providers.Location', {
 				return;
 			}
 
-			if(fromHistory!==true){
-				history.pushState({location: ntiid}, me.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
-			}
 
 			//remember last ntiid for this book if it is truthy
 			if(ntiid){

@@ -47,6 +47,7 @@ Ext.define( 'NextThought.view.library.View', {
 		LocationProvider.on({
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
+			'navigateAbort': 'onNavigationAborted',
 			scope:this
 		});
 	},
@@ -72,6 +73,17 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
+	onNavigationAborted: function(resp, ntiid) {
+		if(this.fireEvent('navigation-failed', this, ntiid, resp) !== false){
+			this.reader.setSplash();
+			this.reader.relayout();
+			this.down('content-toolbar').hide();
+			this.down('content-page-widgets').hide();
+		}
+	},
+
+
+
 	onBeforeNavigate: function(ntiid,fromHistory){
 		if(!fromHistory){
 			return this.up('main-views').fireEvent('activate-main-view', 'library');
@@ -81,6 +93,8 @@ Ext.define( 'NextThought.view.library.View', {
 
 	onNavigateComplete: function(pageInfo){
 		if(!pageInfo || !pageInfo.isModel){return;}
+		this.down('content-toolbar').show();
+		this.down('content-page-widgets').show();
 		this.setTitle(LocationProvider.findTitle(pageInfo.getId(),'NextThought'));
 	},
 
