@@ -50,7 +50,7 @@ Ext.define('NextThought.view.store.purchase.History',{
 			var d = h.getData(), q;
 			d.Order = (d.Order && d.Order.getData()) || {};
 			d.Pricing = (d.Pricing && d.Pricing.getData()) || {};
-			d.key = d.Creator;
+			d.key = isMe(d.Creator) ? $AppConfig.userObject : d.Creator;
 			d.Order.Quantity = d.Order.Quantity || 1;
 			q = d.usage = d.Order.Quantity;
 
