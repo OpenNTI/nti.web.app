@@ -43,6 +43,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	cacheMeta: function(meta, theId, ntiid, assessmentItems){
+		var me = this;
 		this.meta[theId] = meta;
 		this.ids[ntiid] = theId;
 
@@ -59,8 +60,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 	createAndCacheMeta: function(ntiid, pi, ignoreCache){
 		var assessmentItems = pi.get('AssessmentItems') || [],
 			theId = pi.getId(),
-			meta = LocationProvider.getLocation(theId),
-			me = this;
+			meta = LocationProvider.getLocation(theId);
 
 		if(!meta){
 			return null;
