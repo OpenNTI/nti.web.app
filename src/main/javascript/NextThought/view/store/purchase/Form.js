@@ -41,7 +41,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		]},
 		{tag: 'fieldset', cls:'smaller-margin', cn:[
 			{tag: 'legend', html: 'Coupon'},
-			{cn: [{tag: 'input', type: 'text', placeholder: 'Coupon', name: 'coupon'}]}
+			{cn: [{tag: 'input', type: 'text', placeholder: 'Coupon', name: 'coupon', 'data-no-autovalidate': true}]}
 		]},
 		{tag: 'fieldset', cn:[
 			{tag: 'legend', html: 'Payment Information'},
@@ -150,6 +150,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		if(this.tokenObject && this.tokenObject.card){
 			this.fillFromToken(this.tokenObject.card);
+			this.validateForm();
 		}
 
 		if(this.purchaseDescription){
@@ -191,6 +192,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			}
 
 			if(val !== undefined && val !== null){
+				input.setAttribute('data-visited', 'true');
 				input.value = val;
 			}
 
@@ -236,10 +238,13 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		function onSuccess(pricing){
-			var couponValid = !sendingCoupon || pricing.get('Coupon');
 			unmask.call(this);
 
-			this.couponEl[couponValid ? 'removeCls' : 'addCls']('invalid');
+			this.couponEl.removeCls(['invalid', 'valid']);
+			if(sendingCoupon){
+				this.couponEl.addCls(pricing.Coupon ? 'valid' : 'invalid');
+			}
+
 
 			this.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'), pricing.get('Currency'));
 		}
@@ -332,10 +337,15 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	validateInput: function(input){
-		var val, visited = input.getAttribute('data-visited');
+		var val, visited = input.getAttribute('data-visited'),
+			auto = input.getAttribute('data-no-autovalidate');
 		input = Ext.getDom(input);
 
 		val = this.valueForInput(input);
+
+		if(auto){
+			return val;
+		}
 
 		if(!this.validateForRequired(input, val)){
 			return null;
