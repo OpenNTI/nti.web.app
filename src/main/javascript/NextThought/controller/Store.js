@@ -93,8 +93,7 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		//the 0, is for dev only, will remove later.
-		this.getNavigationMenu().add(0,{
+		this.getNavigationMenu().add({
 			xtype: 'purchasable-collection',
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'
