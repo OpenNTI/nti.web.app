@@ -374,14 +374,7 @@ Ext.define('NextThought.controller.State', {
 			token[key] = stateFrag;
 			app.registerInitializeTask(token);
 			return function(a,errorDetails){
-				//Error handling... sigh
-				var land = Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage();
 				app.finishInitializeTask(token);
-				if((errorDetails||{}).error && land){
-					me.currentState.location = land;
-					window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
-					LocationProvider.setLocation( land, null, true);
-				}
 			};
 		}
 
