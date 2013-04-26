@@ -239,7 +239,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				me.purchasable = p;
 				el.removeCls('content-callout').addCls('purchase');
 				me.needsPurchaseTpl.overwrite(el, p.getData());
-				me.el.select('.controls,.respond,.comments').hide();
+				Ext.DomHelper.append(me.getEl(), {
+					cls: 'purchasable-mask',
+					style: {top: (me.itemEl.getY() - me.el.getY())+'px'}
+				});
 				return;
 			}
 			el.remove();
