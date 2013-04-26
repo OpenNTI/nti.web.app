@@ -2,7 +2,8 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
     extend: 'NextThought.model.Base',
 
 	requires: [
-		'NextThought.model.store.StripePurchaseOrder'
+		'NextThought.model.store.StripePurchaseOrder',
+		'NextThought.model.store.PricingResults'
 	],
 
 	statics:{
@@ -23,7 +24,8 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
         { name: 'TokenID', type: 'string', persist: false },
 		{ name: 'InvitationCode', type: 'string', persist: false },
 		{ name: 'RemainingInvitations', type: 'int', persist: false },
-		{ name: 'Order', type: 'singleitem', persist: false}
+		{ name: 'Order', type: 'singleitem', persist: false},
+		{ name: 'Pricing', type: 'singleitem', persist: false}
     ],
 
 	isPurchaseAttempt: true,
