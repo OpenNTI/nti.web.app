@@ -64,6 +64,8 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 				me.purchasable = p;
 				el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
 				me.needsPurchaseTpl.overwrite(el, p.getData());
+
+				me.el.select('.controls,.respond,.comments').hide();
 				return;
 			}
 			el.remove();

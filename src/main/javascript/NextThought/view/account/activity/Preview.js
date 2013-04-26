@@ -255,10 +255,13 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var box = this.replyBoxEl;
+		var DISPLAY = Ext.dom.Element.DISPLAY,
+			box = this.replyBoxEl;
 		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.respondEl, 'saveCallback': this.saveCallback});
 		this.mon(this.replyEl, 'click', this.showEditor, this);
-		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		box.setVisibilityMode(DISPLAY);
+
+		this.respondEl.setVisibilityMode(DISPLAY);
 
 		this.mon(this.editor,{
 			scope: this.editor,

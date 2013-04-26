@@ -239,6 +239,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				me.purchasable = p;
 				el.removeCls('content-callout').addCls('purchase');
 				me.needsPurchaseTpl.overwrite(el, p.getData());
+				me.el.select('.controls,.respond,.comments').hide();
 				return;
 			}
 			el.remove();
