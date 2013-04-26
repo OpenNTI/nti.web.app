@@ -67,7 +67,8 @@ Ext.define('NextThought.controller.Store', {
 			},
 			'controller': {
 				'*' : {
-					'show-object': this.navigateToPurchasable
+					'show-object': 'navigateToPurchasable',
+					'unauthorized-navigation': 'maybeShowPurchasableForContent'
 				}
 			}
 		});
@@ -141,6 +142,28 @@ Ext.define('NextThought.controller.Store', {
 	purhcasableCollectionSelection: function(cmp, record){
 		Ext.menu.Manager.hideAll();
 		this.showPurchasable(record);
+	},
+
+
+	maybeShowPurchasableForContent: function(sender, ntiid){
+		var root = LocationProvider.getLineage(ntiid).last(),
+			s = this.getPurchasableStore(),
+			purchasable;
+
+		//NOTE this again assumes 1-to-1 purchase to content root.
+		//but what the hell
+
+		purchasable = s.findBy(function(record){
+			var items = record.get('Items') || [];
+			return Ext.Array.contains(items, root);
+		}, this);
+
+		purchasable = purchasable >= 0 ? s.getAt(purchasable) : null;
+
+		if(purchasable){
+			this.showPurchasable(purchasable);
+		}
+		return !purchasable;
 	},
 
 

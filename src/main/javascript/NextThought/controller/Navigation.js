@@ -79,6 +79,9 @@ Ext.define('NextThought.controller.Navigation', {
 				},
 				'view-select menu':{
 					'hide': this.syncButton
+				},
+				'reader-panel' : {
+					'navigation-failed': 'readerNavigationFailed'
 				}
 			},
 			controller:{
@@ -214,6 +217,19 @@ Ext.define('NextThought.controller.Navigation', {
 				continueLoad();
 			}
 		};
+	},
+
+
+	readerNavigationFailed: function(reader, ntiid, response){
+		var notHandled = true;
+		if(response && response.status === 403){
+			notHandled = this.fireEvent('unauthorized-navigation', this, ntiid);
+		}
+
+		if(notHandled === true){
+			reader.setSplash();
+			reader.relayout();
+		}
 	},
 
 

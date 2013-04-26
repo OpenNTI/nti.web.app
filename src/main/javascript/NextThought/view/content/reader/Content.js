@@ -292,6 +292,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 			c = me.parseHTML(resp),
 			subContainers;
 
+		me.clearAnnotations();
+
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
 		me.listenForImageLoads();
 		me.scrollTo(0, false);

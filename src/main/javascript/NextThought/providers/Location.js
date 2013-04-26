@@ -173,9 +173,7 @@ Ext.define('NextThought.providers.Location', {
 			ntiid = ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
 			rootId = this.getLineage(ntiid).last();
 
-		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory)){ return; }
-
-		if(me.currentNTIID === ntiid){
+		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory) || me.currentNTIID === ntiid){
 			Ext.callback(callback);
 			return;
 		}
@@ -259,7 +257,7 @@ Ext.define('NextThought.providers.Location', {
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
             Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
-			me.fireEvent('navigateAbort',r);
+			me.fireEvent('navigateAbort',r, ntiidOrPageInfo);
 		}
 
 		if(ntiidOrPageInfo.isPageInfo){

@@ -37,15 +37,16 @@ Ext.define( 'NextThought.view.library.View', {
 
 		LocationProvider.on({
 			scope: this.reader,
-			'beginNavigate': this.reader.onNavigate,
-            navigateAbort: this.reader.onNavigationAborted,
-			navigateComplete: this.reader.onNavigateComplete
+			beforeNavigate: 'onBeforeNavigate',
+			beginNavigate: 'onBeginNavigate',
+            navigateAbort: 'onNavigationAborted',
+			navigateComplete: 'onNavigateComplete'
 		});
 
 
 		LocationProvider.on({
-			'navigateComplete':this.onNavigateComplete,
-			'beforeNavigate':this.onBeforeNavigate,
+			'navigateComplete': 'onNavigateComplete',
+			'beforeNavigate': 'onBeforeNavigate',
 			scope:this
 		});
 	},

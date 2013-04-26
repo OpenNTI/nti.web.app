@@ -183,18 +183,7 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	onNavigate: function(ntiid) {
-		if(this.annotationOffsetsCache){
-			delete this.annotationOffsetsCache.locationStatics;
-		}
-
-		this.clearAnnotations();
-
-		if(!ntiid) {
-			this.setSplash();
-			this.relayout();
-		}
-
+	onBeforeNavigate: function(){
 		if(this.iframeReady){
 			this.navigating = true;
 			return true;
@@ -202,13 +191,17 @@ Ext.define('NextThought.view.content.Reader', {
 		return false;
 	},
 
+
+	onBeginNavigate: function(ntiid) {
+
+	},
+
 	restore: function(){
 		console.debug('Restring?',arguments);
 	},
 
-    onNavigationAborted: function() {
-        this.setSplash();
-        this.relayout();
+    onNavigationAborted: function(resp, ntiid) {
+		this.fireEvent('navigation-failed', this, ntiid, resp);
 	    delete this.navigating;
     },
 
@@ -224,9 +217,15 @@ Ext.define('NextThought.view.content.Reader', {
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 
+		if(this.annotationOffsetsCache){
+			delete this.annotationOffsetsCache.locationStatics;
+		}
+
 		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
 		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
 		if(!pageInfo){
+			console.warn('onNavigateComplete called with no page info. Shouldnt happen', arguments);
+			console.trace();
 			me.onNavigationAborted();
 		}
 
