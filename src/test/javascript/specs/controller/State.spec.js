@@ -115,21 +115,21 @@ describe('State Controller Tests', function(){
 		}
 
 		it('Handle NTIIDs', function(){
-			var result = controller.interpretObjectFragment(createFragString(['ntiid', 'tag:nextthought.com,2011-10:NextThought-book1']));
-
-			expect(result).toEqual({'active': 'object', 'domain': 'ntiid', 'ntiid': 'tag:nextthought.com,2011-10:NextThought-book1'});
+			spyOn(Ext, 'defer').andCallThrough();
+			controller.interpretObjectFragment(createFragString(['ntiid', 'tag:nextthought.com,2011-10:NextThought-book1']));
+			expect(Ext.defer).toHaveBeenCalled();
 		});
 
 		it('Handle unknown object domain', function(){
-			var result = controller.interpretObjectFragment(createFragString(['foobar', 'asjsdjhadsfljkasd']));
-
-			expect(result).toEqual({});
+			spyOn(Ext, 'defer').andCallThrough();
+			controller.interpretObjectFragment(createFragString(['foobar', 'asjsdjhadsfljkasd']));
+			expect(Ext.defer).not.toHaveBeenCalled();
 		});
 
 		it('Handle garbage', function(){
-			var result = controller.interpretObjectFragment(createFragString(['ntiid', 'asjsdjhadsfljkasd']));
-
-			expect(result).toEqual({});
+			spyOn(Ext, 'defer').andCallThrough();
+			controller.interpretObjectFragment(createFragString(['ntiid', 'asjsdjhadsfljkasd']));
+			expect(Ext.defer).not.toHaveBeenCalled();
 		});
 	});
 });

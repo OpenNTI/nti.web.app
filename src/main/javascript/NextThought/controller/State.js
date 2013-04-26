@@ -176,12 +176,7 @@ Ext.define('NextThought.controller.State', {
 			// handle the change.
 			console.debug('Hash change');
 			var newState = me.interpretFragment(location.hash);
-			if(newState.active == 'object'){
-				if(newState.domain == 'ntiid'){
-					me.fireEvent('show-ntiid', newState.ntiid);
-				}
-			}
-			else if(history.updateState(newState)){
+			if(history.updateState(newState)){
 				console.debug('restoring state from hash change', newState);
 				me.restoreState(newState);
 				history.replaceState(me.getState(),document.title,location.toString());
@@ -271,25 +266,21 @@ Ext.define('NextThought.controller.State', {
 
 
 	interpretObjectFragment: function(fragment, query){
-		var parts = (fragment||'').split('/').slice(0),
-			result = {};
+		var domain,
+			parts = (fragment||'').split('/').slice(0);
 
 		parts = Ext.Array.clean(parts);
 		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
 
 		if((parts[0] || '').toLowerCase() === '#!object'){
-			result.active = 'object';
-			result.domain = parts[1];
+			domain = parts[1];
 			parts = parts.slice(2);
 
-			if(result.domain === 'ntiid' && parts.length == 1 && ParseUtils.parseNtiid(parts[0])){
-				result.ntiid = parts[0];
-			}
-			else{
-				result = {}
+			if(domain === 'ntiid' && parts.length == 1 && ParseUtils.parseNtiid(parts[0])){
+				Ext.defer(this.fireEvent,1,this,['show-ntiid', parts[0]]);
 			}
 		}
-		return result;
+		return {};
 	},
 
 
