@@ -368,6 +368,7 @@
 
 			.path,
 			.content-callout,
+			.purchase,
 			& + .note-replies,
 			& + .note-replies + .respond,
 			& + .topic-replies,
@@ -376,6 +377,10 @@
 				border: 1px solid #eaeaea;
 				background: $panel-background;
 				position: relative;
+
+				.missing-context-info{
+					box-shadow: none;
+				}
 			}
 
 			& + .note-replies,
