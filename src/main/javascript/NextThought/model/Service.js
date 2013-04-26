@@ -286,6 +286,7 @@ Ext.define('NextThought.model.Service', {
 
 
 			q = this.getObjectRaw(url, mime+'+json', true, onSuccess, onFailure, this);
+			q.request.ntiid = ntiid;
 
 		}
 		catch(e){

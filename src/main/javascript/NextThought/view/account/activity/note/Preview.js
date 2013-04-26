@@ -8,7 +8,8 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 	],
 
 	mixins: {
-		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply'
+		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply',
+		purchasable: 'NextThought.mixins.store-feature.Purchasable'
 	},
 
 	renderSelectors: {
@@ -23,13 +24,6 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		{ cls: 'context', cn: [{cls: 'text'}] }
 	]}),
 
-
-	purchaseTpl: Ext.DomHelper.createTemplate({
-		cls: 'buy-this',
-		cn:{
-			cls: 'button', html: 'Buy'
-		}
-	}),
 
 	loadContext: function(fin){
 		var me = this,
@@ -59,12 +53,18 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 		}
 
 		function error(req,resp){
-			var el = me.context.up('.context');
-			if(resp.status === 403 /*&& isAPurchasableItem*/){
+			req = resp.request;
+			var el = me.context.up('.context'),
+				ntiid = req && req.ntiid,
+				s = Ext.getStore('Purchasable'),
+				p = s && s.purchasableForContentNTIID(ntiid);
+
+			if(resp.status === 403 && p){
 				me.requiresPurchase = true;
-				me.purchasable = {};
+				me.purchasable = p;
+				el.up('.content-callout').removeCls('content-callout');
 				el.addCls('purchase').removeCls('context');
-				me.purchaseTpl.overwrite(el);
+				me.needsPurchaseTpl.overwrite(el, p.getData());
 				return;
 			}
 			el.remove();

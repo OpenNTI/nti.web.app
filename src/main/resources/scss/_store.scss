@@ -37,6 +37,70 @@
 	}
 }
 
+@mixin purchasable-info-panel {
+	padding: 18px;
+	background: #f7fcff;
+	overflow: hidden;
+	box-shadow: inset 0 -1px 0 0 #e6e6e6;
+
+	.bookcover {
+		background:{
+			color: #f9f9f9;
+			size: cover;
+			position: center center;
+			repeat: no-repeat;
+		}
+		box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
+		border-radius: 1px;
+		float: left;
+		width: 55px;
+		height: 70px;
+	}
+
+	.meta {
+		margin-left: 70px;
+		margin-right: 100px;
+		min-height: 70px;
+
+		.title, .byline {
+			color: $primary-grey;
+			font: normal 600 14px/20px $font;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			//white-space: nowrap;
+		}
+
+		.byline {
+			color: #ababab;
+			font-size: 10px;
+			line-height: 15px;
+			white-space: nowrap;
+			text-transform: uppercase;
+		}
+
+		.button {
+			white-space: nowrap;
+			font: normal 600 16px/30px $font;
+			margin: 2px 0;
+			padding: 0 8px;
+			color: #fff;
+			position: relative;
+			z-index: 1;
+			display: inline-block;
+
+			&::before {
+				content: '';
+				background: $primary-green;
+				position: absolute;
+				top: 0; bottom: 0;
+				left: -5px; right: -5px;
+				border-radius: 3px;
+				z-index: -1;
+			}
+		}
+	}
+}
+
 .purchase-window {
 	@extend .nti-window;
 	@include reset-window-border-radius(3px);
@@ -198,53 +262,14 @@
 		}
 
 		.info {
-			padding: 18px;
-			background: #f7fcff;
-			overflow: hidden;
-			box-shadow: inset 0 -1px 0 0 #e6e6e6;
+			@include purchasable-info-panel;
 
-			.bookcover {
-				background:{
-					color: #f9f9f9;
-					size: cover;
-					position: center center;
-					repeat: no-repeat;
-				}
-				box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
-				border-radius: 1px;
-				float: left;
-				width: 55px;
-				height: 70px;
-			}
-
-			.meta {
-				margin-left: 70px;
-				margin-right: 100px;
-				min-height: 70px;
-
-				.title, .byline {
-					color: $primary-grey;
-					font: normal 600 14px/20px $font;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					//white-space: nowrap;
-				}
-
-				.byline {
-					color: #ababab;
-					font-size: 10px;
-					line-height: 15px;
-					white-space: nowrap;
-					text-transform: uppercase;
-				}
-
-				.activation-code {
-					display: none;
-					@include input-box-style;
-					input[type=text] {
-						margin: 15px 0 0 0;
-						width: 200px;
-					}
+			.activation-code {
+				display: none;
+				@include input-box-style;
+				input[type=text] {
+					margin: 15px 0 0 0;
+					width: 200px;
 				}
 			}
 
@@ -515,6 +540,10 @@
     }
 }
 
+
+.missing-context-info{
+	@include purchasable-info-panel;
+}
 
 .x-component-detailview-panel{
     padding: 45px 20px;
