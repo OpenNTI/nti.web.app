@@ -11,7 +11,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	],
 
 	mixins: {
-		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply'
+		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply',
+		purchasable: 'NextThought.mixins.store-feature.Purchasable'
 	},
 
 	defaultType: 'profile-activity-item-reply',
@@ -226,9 +227,27 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			me.setContext(dom,dom);
 		}
 
+		function error(req,resp){
+			req = resp.request;
+			var el = me.context.up('.content-callout'),
+				ntiid = req && req.ntiid,
+				s = Ext.getStore('Purchasable'),
+				p = s && s.purchasableForContentNTIID(ntiid);
+
+			if(resp.status === 403 && p){
+				me.requiresPurchase = true;
+				me.purchasable = p;
+				el.removeCls('content-callout').addCls('purchase');
+				me.needsPurchaseTpl.overwrite(el, p.getData());
+				return;
+			}
+			el.remove();
+		}
+
+
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
-			ContentUtils.spider(cid,fin,parse);
+			C.spider(cid,fin,parse,error);
 		}, me);
 	},
 
