@@ -268,6 +268,11 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			getDragData: function(e){
 				var sourceEl = e.getTarget('.draggable-area', undefined, true), d;
 
+				//We want to make it un-draggable when it's in a grade mode.
+				if(e.getTarget('.correct') || e.getTarget('.incorrect')){
+					sourceEl = null;
+				}
+
 				if(sourceEl){
 					d = sourceEl.dom.cloneNode(true);
 					d.id = Ext.id();
