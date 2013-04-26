@@ -87,8 +87,21 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 
 	onNavigateToNewlyPurchasedContentClicked: function(e){
+		var purchasable = this.purchaseDescription && this.purchaseDescription.Purchasable,
+			items = purchasable && purchasable.get('Items');
 		e.stopEvent();
-		console.log('Go to content');
+
+		//Again with these damn assumptions
+		if(items.length > 1){
+			console.log('More than one item for this purchasable.  Content roulette', items);
+		}
+
+		items = items.first();
+		if(items){
+			LocationProvider.setLocation(items);
+			this.up('window').close();
+		}
+
 		return false;
 	}
 });
