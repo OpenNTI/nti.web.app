@@ -11,7 +11,7 @@ Ext.define('NextThought.view.library.menus.Collection',{
 
 
 	updateSelection: function(pageInfo){
-		var ntiid = pageInfo ? pageInfo.getId() : null,
+		var ntiid = pageInfo && pageInfo.getId(),
 			last = LocationProvider.getLineage(ntiid).last(),
 			r = this.store.findRecord('NTIID',last,0,false,true,true);
 		if(r){
