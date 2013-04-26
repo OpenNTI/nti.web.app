@@ -12,15 +12,15 @@ Ext.define('NextThought.view.store.purchase.History',{
 		tag: 'table',
 		cn:[{
 			tag: 'thead', cn:{ tag:'tr', cn:[
-				{tag: 'th', cls: 'key', html: 'Licence or Activation Key'},
-				{tag: 'th', cls: 'qty', html: 'Usage / Qty'},
-				{tag: 'th', cls: 'tot', html: 'Total'}
+				{tag: 'th', cls: 'key', cn:{tag: 'span', html: 'Licence or Activation Key'}},
+				{tag: 'th', cls: 'qty', cn:{tag: 'span', html: 'Usage / Qty'}},
+				{tag: 'th', cls: 'tot', cn:{tag: 'span', html: 'Total'}}
 			]}
 		},{
 			tag: 'tbody', cn:{ tag: 'tpl', 'for':'.', cn:{ tag:'tr', cls:'{type}', cn:[
-				{tag: 'td', cls: 'key', cn:['{key}',{html:'Purchased {CreatedTime:date("F j, Y")}'}]},
-				{tag: 'td', cls: 'qty', html: '{usage} / {Order.Quantity}'},
-				{tag: 'td', cls: 'tot', html: '{Pricing.TotalPurchasePrice}'}
+				{tag: 'td', cls: 'key', cn:{tag: 'span', cn:['{key}',{html:'Purchased {CreatedTime:date("F j, Y")}'}]}},
+				{tag: 'td', cls: 'qty', cn:{tag: 'span', html: '{usage} / {Order.Quantity}'}},
+				{tag: 'td', cls: 'tot', cn:{tag: 'span', html: '{Pricing.TotalPurchasePrice}'}}
 			]}}
 		}]
 	})),
