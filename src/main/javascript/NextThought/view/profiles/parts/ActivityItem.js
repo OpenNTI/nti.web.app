@@ -256,6 +256,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		var rec = this.record,
 			cid;
 
+		//Show purchase window if we're purchase-able
+		if(this.requiresPurchase){
+
+			return;
+		}
+
 		//If we are a placholder find a reply to navigate to
 		if(!rec || rec.placeholder){
 			Ext.Array.each(this.down('[record]'), function(cmp){
