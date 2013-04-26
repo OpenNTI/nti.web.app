@@ -303,6 +303,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		if(required && !val){
 			if( visited ){
 				Ext.fly(input).addCls('invalid');
+				Ext.fly(input).removeCls('valid');
 			}
 			return false;
 		}
@@ -322,6 +323,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		if(validator && !jQuery.payment[validator](val)){
 			if( visited ){
 				Ext.fly(input).addCls('invalid');
+				Ext.fly(input).removeCls('valid');
 			}
 			return false;
 		}
@@ -330,7 +332,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	validateInput: function(input){
-		var val;
+		var val, visited = input.getAttribute('data-visited');
 		input = Ext.getDom(input);
 
 		val = this.valueForInput(input);
@@ -344,6 +346,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		Ext.fly(input).removeCls('invalid');
+
+		if(visited){
+			Ext.fly(input).addCls('valid');
+		}
+
 		return val;
 	},
 
