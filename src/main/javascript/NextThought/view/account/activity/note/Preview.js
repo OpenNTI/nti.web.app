@@ -62,8 +62,7 @@ Ext.define('NextThought.view.account.activity.note.Preview',{
 			if(resp.status === 403 && p){
 				me.requiresPurchase = true;
 				me.purchasable = p;
-				el.up('.content-callout').removeCls('content-callout');
-				el.addCls('purchase').removeCls('context');
+				el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
 				me.needsPurchaseTpl.overwrite(el, p.getData());
 				return;
 			}
