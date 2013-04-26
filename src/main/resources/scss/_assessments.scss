@@ -22,12 +22,16 @@
 			outline: 1px solid $tertiary-grey;
 		}
 
-		.drag-control{
-			position: absolute;
-			top: 40%;
-			right: 20px;
-			background: $icons no-repeat;
-			@include sprite($icons,'drag-controls',$dimensions: true);
+		.controls{
+			position: relative;
+
+			.drag-control{
+				position: absolute;
+				top: 20px;
+				right: 20px;
+				background: $icons no-repeat;
+				@include sprite($icons,'drag-controls',$dimensions: true);
+			}
 		}
 	}
 }
@@ -517,6 +521,10 @@
 								.label{ border-bottom-width: 0px;}
 							}
 
+							&.selected{
+								opacity: 0.3;
+							}
+
 							.text{
 								line-height: 26px;
 								min-width: 54px;
@@ -543,30 +551,28 @@
 							@include draggable-zone;
 
 							.draggable-area{
-								.control {
-									position: absolute;
-									top: 7px; left: 0;
-									width: 20px;
-									height: 38px;
-									border: none;
-									display: none;
-									margin-left: 20px;
 
-									&::after{
+								.controls{
+									.control {
 										position: absolute;
-										left: 0px; top: 12px;
-										content: ' ';
-										background: $icons no-repeat;
-										@include sprite($icons,'circle-check-green-18',$dimensions: true);
+										top: 7px; left: 0;
+										width: 20px;
+										height: 38px;
+										border: none;
+										display: none;
+
+										&::after{
+											position: absolute;
+											left: 0px; top: 12px;
+											content: ' ';
+											background: $icons no-repeat;
+											@include sprite($icons,'circle-check-green-18',$dimensions: true);
+										}
 									}
 								}
 
-								&.selected{
-									opacity: 0.3;
-								}
-
 								&.correct, &.incorrect{
-									.control{
+									.controls .control{
 										display: inline-block;
 									}
 
@@ -575,7 +581,7 @@
 									}
 								}
 
-								&.incorrect .control{
+								&.incorrect .controls .control{
 									&::after{
 										@include sprite($icons,'circle-x-red-18',$dimensions: true);
 									}

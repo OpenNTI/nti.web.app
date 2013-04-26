@@ -15,9 +15,11 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			cls: 'match', cn:[
 				{ cls: 'label', 'data-part':'{[xindex-1]}', html:'{label}' },
 				{ cls: 'draggable-area', 'data-match':'{[xindex-1]}', cn:[
-					{ tag: 'span', cls: 'control'},
-					{ cls: 'text', html:'{value}' },
-					{ tag: 'span', cls: 'drag-control'}
+					{cls:'controls', cn:[
+						{ tag: 'span', cls: 'control'},
+						{ tag: 'span', cls: 'drag-control'}
+					]},
+					{ cls: 'text', html:'{value}' }
 				]}
 			]}
 		]}
