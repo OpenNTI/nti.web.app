@@ -64,7 +64,7 @@ Ext.define('NextThought.view.store.purchase.History',{
 			if(!Ext.isEmpty(d.InvitationCode)){
 				d.type = 'bulk';
 				d.key = d.InvitationCode;
-				d.usage = q - (d.RemainingInvitations||q);
+				d.usage = q - (q >= 0 ? d.RemainingInvitations : q);
 			}
 
 			if(d.RedemptionCode){
