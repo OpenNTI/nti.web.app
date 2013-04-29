@@ -30,16 +30,16 @@ Ext.define('NextThought.controller.Store', {
 		{ ref: 'purchaseWindow', selector: 'purchase-window'}
 	],
 
-	init: function(){
+	init: function () {
 		this.callParent(arguments);
 		this.application.on('session-ready', 'onSessionReady', this);
 
 		this.listen({
-			component:{
+			component: {
 				'purchase-window button[action=cancel]': {
 					'click': 'purchaseWindowCancel'
 				},
-				'purchase-window' : {
+				'purchase-window': {
 					'beforeclose': 'maybeClosePurchaseWindow',
 					'show-purchase-view': 'showPurchaseView'
 				},
@@ -47,7 +47,7 @@ Ext.define('NextThought.controller.Store', {
 					'select': 'purhcasableCollectionSelection',
 					'history-click': 'showPurchaseHistory'
 				},
-				'purchase-detailview':{
+				'purchase-detailview': {
 					'show-purchase-form': 'showPurchaseForm',
 					'purchase-with-activation': 'activateWithCode'
 				},
@@ -69,7 +69,7 @@ Ext.define('NextThought.controller.Store', {
 				}
 			},
 			'controller': {
-				'*' : {
+				'*': {
 					'show-object': 'navigateToPurchasable',
 					'unauthorized-navigation': 'maybeShowPurchasableForContent'
 				}
@@ -77,19 +77,21 @@ Ext.define('NextThought.controller.Store', {
 		});
 	},
 
-	onSessionReady: function(){
+	onSessionReady: function () {
 		var store = this.getPurchasableStore();
-		store.on('load', this.maybeAddPurchasables,this);
+		store.on('load', this.maybeAddPurchasables, this);
 		store.proxy.url = $AppConfig.service.getPurchasableItemURL();
-		Library.on('loaded',function(){store.load();},this,{single:true});
+		Library.on('loaded', function () {
+			store.load();
+		}, this, {single: true});
 	},
 
 
 	//TODO a way to have this collection show up only if there are purchasable
 	//items that have not yet been purchased?
-	maybeAddPurchasables: function(){
+	maybeAddPurchasables: function () {
 
-		if(!this.getPurchasableStore().getCount()){
+		if (!this.getPurchasableStore().getCount()) {
 			return;
 		}
 
@@ -110,52 +112,52 @@ Ext.define('NextThought.controller.Store', {
 
 
 	//For marking sample state
-	updateLibraryWithPurchasable: function(p){
-		Ext.Array.each(p.get('Items') || [], function(itemId){
+	updateLibraryWithPurchasable: function (p) {
+		Ext.Array.each(p.get('Items') || [], function (itemId) {
 			var title = Library.getTitle(itemId);
-			if(title){
+			if (title) {
 				title.set('sample', !p.get('Activated'));
 			}
 			else {
-				console.warn('This purchasable item is not in the library:',itemId);
+				console.warn('This purchasable item is not in the library:', itemId);
 			}
 		}, this);
 	},
 
 
-	refreshPurchasable: function(p){
+	refreshPurchasable: function (p) {
 		this.fireEvent('purchase-complete', this, p);
 		$AppConfig.service.getObject(p.getId(),
-			function(newP){
+			function (newP) {
 				//p should be the instance of the record out of the store
 				//but just in case look for it in the store and merge into that
 				var fromStore = this.getPurchasableStore().getById(p.getId());
-				if(fromStore && newP.isPurchasable){
+				if (fromStore && newP.isPurchasable) {
 					fromStore.set(newP.getData());
 					this.updateLibraryWithPurchasable(fromStore);
 				}
 			},
-			function(){
+			function () {
 				console.warn('An error occurred refreshing purchasable', arguments);
 			},
-		this, true);
+			this, true);
 	},
 
 
-	purhcasableCollectionSelection: function(cmp, record){
+	purhcasableCollectionSelection: function (cmp, record) {
 		Ext.menu.Manager.hideAll();
 		this.showPurchasable(record);
 	},
 
 
-	showPurchaseWindow: function(sender, purchasable){
+	showPurchaseWindow: function (sender, purchasable) {
 		this.showPurchasable(purchasable);
 	},
 
 
-	maybeShowPurchasableForContent: function(sender, ntiid){
+	maybeShowPurchasableForContent: function (sender, ntiid) {
 		var purchasable = this.getPurchasableStore().purchasableForContentNTIID(ntiid);
-		if(purchasable){
+		if (purchasable) {
 			this.showPurchasable(purchasable);
 		}
 		return !purchasable;
@@ -167,31 +169,31 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param purchasable The Purchasable object to show
 	 */
-	showPurchasable: function(purchasable, showHistory){
+	showPurchasable: function (purchasable, showHistory) {
 		var win = this.getPurchaseWindow();
 
 
 		//If we are currently showing a purchase window
 		//don't show another one, we shouldn't be able to get into this state
-		if(win){
+		if (win) {
 			console.error('Purhcase already in progress.  How did you manage this', win);
 			return null;
 		}
 
-		return this.getView('store.purchase.Window').create({record: purchasable, showHistory:Boolean(showHistory)});
+		return this.getView('store.purchase.Window').create({record: purchasable, showHistory: Boolean(showHistory)});
 	},
 
 
-	showPurchaseHistory: function(purchasable){
+	showPurchaseHistory: function (purchasable) {
 		console.log('Need to show purchase history for', purchasable);
-		this.showPurchasable(purchasable,true);
+		this.showPurchasable(purchasable, true);
 	},
 
 
-	navigateToPurchasable: function(obj, fragment){
+	navigateToPurchasable: function (obj, fragment) {
 		var me = this;
 
-		if(obj instanceof NextThought.model.store.Purchasable){
+		if (obj instanceof NextThought.model.store.Purchasable) {
 			me.showPurchasable(obj);
 			return false;
 		}
@@ -199,16 +201,16 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	transitionToComponent: function(win, cfg){
+	transitionToComponent: function (win, cfg) {
 		win.hideError();
 		win.removeAll(true);
 		return win.add(cfg);
 	},
 
 
-	safelyMaskWindow: function(win, msg){
+	safelyMaskWindow: function (win, msg) {
 		var el = win ? win.getEl() : undefined;
-		if(el){
+		if (el) {
 			el.mask(msg);
 			return true;
 		}
@@ -216,9 +218,9 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	safelyUnmaskWindow: function(win){
+	safelyUnmaskWindow: function (win) {
 		var el = win ? win.getEl() : undefined;
-		if(el){
+		if (el) {
 			el.unmask();
 			return true;
 		}
@@ -226,26 +228,26 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showPurchaseView: function(win, ordinal, data){
+	showPurchaseView: function (win, ordinal, data) {
 		var views = {
 				history: 'history',
-				detail:'detailview',
-				0:'detailview',
-				1:'form',
-				2:'confirm',
-				3:'complete'
+				detail: 'detailview',
+				0: 'detailview',
+				1: 'form',
+				2: 'confirm',
+				3: 'complete'
 			},
 			cfg = {}, me = this;
 
-		if(ordinal < 0 || ordinal > views.length){
+		if (ordinal < 0 || ordinal > views.length) {
 			console.error('Unexpected ordinal', ordinal, views);
 			return;
 		}
 
-		cfg.xtype = 'purchase-'+views[ordinal];
+		cfg.xtype = 'purchase-' + views[ordinal];
 		cfg = Ext.applyIf(cfg, data);
 
-		if(cfg.xtype === 'purchase-detailview' && win.started){
+		if (cfg.xtype === 'purchase-detailview' && win.started) {
 			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 			Ext.Msg.show({
 				msg: 'Your current progress will be lost.',
@@ -253,23 +255,23 @@ Ext.define('NextThought.controller.Store', {
 				icon: 'warning-red',
 				buttonText: {'ok': 'caution:Take me anyway'},
 				title: 'Are you sure?',
-				fn: function(str){
-					if(str === 'ok'){
+				fn: function (str) {
+					if (str === 'ok') {
 						me.transitionToComponent(win, cfg);
 					}
 				}
 			});
 		}
-		else{
+		else {
 			this.transitionToComponent(win, cfg);
 		}
 
 	},
 
 
-	showPurchaseForm: function(view, purchasable){
+	showPurchaseForm: function (view, purchasable) {
 		var win = this.getPurchaseWindow();
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
@@ -279,9 +281,9 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	editPurchase: function(sender, desc, token){
+	editPurchase: function (sender, desc, token) {
 		var win = this.getPurchaseWindow();
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
@@ -291,7 +293,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	doPricingRequest: function(url, data, callback){
+	doPricingRequest: function (url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			jsonData: data,
@@ -310,13 +312,13 @@ Ext.define('NextThought.controller.Store', {
 	 * @param success The success callback called if the provided coupone is valid
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	pricePurchase: function(sender, desc, success, failure, scope){
+	pricePurchase: function (sender, desc, success, failure, scope) {
 		var purchaseDesc = desc || {},
 			purchasable = purchaseDesc.Purchasable,
 			data = {},
 			win = this.getPurchaseWindow();
 
-		if(!purchasable || !purchasable.getLink('pricing')){
+		if (!purchasable || !purchasable.getLink('pricing')) {
 			console.error('Must supply a purchasable with a pricing link', arguments);
 			Ext.Error.raise('Must supply a purchasable');
 		}
@@ -325,65 +327,65 @@ Ext.define('NextThought.controller.Store', {
 		//but this really shouldnt ever be called out of the context of a purchase
 		//in some for or another.  If it is called outside of a window treat it as a programming error and raise
 		//an exception.
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
 		//We do our safety locking of the window here but we don't do any masking
 		//The caller may or may not want to mask various
-		if(sender !== this && win.lockPurchaseAction){
+		if (sender !== this && win.lockPurchaseAction) {
 			console.error('Window already locked aborting pricePurchase', arguments);
 			return false;
 		}
 
-		if(sender !== this){
+		if (sender !== this) {
 			win.lockPurchaseAction = true;
 		}
 
 		data.purchasableID = purchasable.getId();
-		if(purchaseDesc.Coupon){
+		if (purchaseDesc.Coupon) {
 			data.Coupon = purchaseDesc.Coupon.ID || purchaseDesc.Coupon;
 		}
-		if(purchaseDesc.Quantity > 0){
+		if (purchaseDesc.Quantity > 0) {
 			data.Quantity = purchaseDesc.Quantity;
 		}
 
-		try{
-			this.doPricingRequest(purchasable.getLink('pricing'), data, function(r, s, response){
-				if(sender !== this){
+		try {
+			this.doPricingRequest(purchasable.getLink('pricing'), data, function (r, s, response) {
+				if (sender !== this) {
 					delete win.lockPurchaseAction;
 				}
-				try{
+				try {
 					var result;
-					if(!s){
+					if (!s) {
 						console.error('Pricing call failed', arguments);
 						Ext.callback(failure, scope, [r, response]);
 					}
-					else{
+					else {
 						result = Ext.JSON.decode(response.responseText, true);
-						if(result){
+						if (result) {
 							result = ParseUtils.parseItems(result)[0];
 						}
 
-						if(!result || !result.isPricedPurchase){
+						if (!result || !result.isPricedPurchase) {
 							console.error('Unknown response from pricing call', arguments);
 							Ext.callback(failure, scope, [r, response]);
 						}
-						else{
+						else {
 							Ext.callback(success, scope, [result]);
 						}
 					}
 				}
-				catch(e){
+				catch (e) {
 					console.log('An error occured processing pricing callback', arguments);
 					Ext.callback(failure, scope, [r, response]);
 				}
 			});
 		}
-		catch(e){
+		catch (e) {
 			Ext.callback(failure, scope, {error: e});
-			if(sender !== this){
+			if (sender !== this) {
 				delete win.lockPurchaseAction;
 			}
 		}
@@ -396,18 +398,18 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchasable the purchasable object
 	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
-	createPurchase: function(cmp, desc, cardinfo){
+	createPurchase: function (cmp, desc, cardinfo) {
 		var purchasable = desc.Purchasable || {},
 			connectInfo = purchasable.get('StripeConnectKey') || {},
 			pKey = connectInfo && connectInfo.get('PublicKey'),
 			win = this.getPurchaseWindow(), me = this;
 
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		if(!pKey){
+		if (!pKey) {
 			//In real environments we shouldn't ever have a purchasable
 			//without strip information (at this point) and if we do we shouldn't
 			//get this far.  But in any event crap breaks in unexpected ways so don't die
@@ -416,42 +418,42 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		function tokenResponseHandler(status, response){
+		function tokenResponseHandler(status, response) {
 			//https://stripe.com/docs/api#errors
-			function done(){
+			function done() {
 				me.safelyUnmaskWindow(win);
 				delete win.lockPurchaseAction;
 			}
 
-			if(status !== 200 || response.error){
+			if (status !== 200 || response.error) {
 				console.error('An error occured during token generation for purchasable', purchasable, response);
 				cmp.handleError(response);
 			}
-			else{
+			else {
 				console.log('Stripe token response handler', arguments);
-				me.pricePurchase(me, desc, function(priced){
-					console.log('Final pricing complete', priced, desc);
-					win.publishQuantityAndPrice(priced.get('Quantity'), priced.get('PurchasePrice'), priced.get('Currency'));
-					me.transitionToComponent(win, {xtype: 'purchase-confirm', purchaseDescription: desc, tokenObject: response, pricingInfo: priced});
-					done();
-				},
-				function(){
-					console.error('An error occurred doing final pricing of', desc);
-					if(win && win.showError){
-						win.showError('Unable to price your purchase.  Please try again later')
-					}
-					done();
-				});
+				me.pricePurchase(me, desc, function (priced) {
+						console.log('Final pricing complete', priced, desc);
+						win.publishQuantityAndPrice(priced.get('Quantity'), priced.get('PurchasePrice'), priced.get('Currency'));
+						me.transitionToComponent(win, {xtype: 'purchase-confirm', purchaseDescription: desc, tokenObject: response, pricingInfo: priced});
+						done();
+					},
+					function () {
+						console.error('An error occurred doing final pricing of', desc);
+						if (win && win.showError) {
+							win.showError('Unable to price your purchase.  Please try again later')
+						}
+						done();
+					});
 			}
 		}
 
-		if(win.lockPurchaseAction){
+		if (win.lockPurchaseAction) {
 			console.error('Window already locked aborting createPurchase', arguments);
 			return false;
 		}
 		win.lockPurchaseAction = true;
 
-		try{
+		try {
 			win.hideError();
 			//Mask the window or the form?
 			this.safelyMaskWindow(win, 'Processing');
@@ -461,7 +463,7 @@ Ext.define('NextThought.controller.Store', {
 			Stripe.createToken(cardinfo, tokenResponseHandler);
 
 		}
-		catch(e){
+		catch (e) {
 			console.error('An exception occurred creating stripe token', Globals.getError(e));
 			win.showError('An unknown error occurred.  Please try again later.');
 			delete win.lockPurchaseAction;
@@ -476,7 +478,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param tokenObject the stripe token object
 	 */
-	submitPurchase: function(cmp, purchaseDescription, tokenObject, pricingInfo){
+	submitPurchase: function (cmp, purchaseDescription, tokenObject, pricingInfo) {
 
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = (tokenObject || {}).id,
@@ -488,7 +490,7 @@ Ext.define('NextThought.controller.Store', {
 		//tokenObject should have a token id at this point.  We should also have a window.
 		//All these various error conditions should be handled else where but if crap hits the fan fail somewhat
 		//gracefully.  These should all be programming error cases
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
@@ -497,47 +499,47 @@ Ext.define('NextThought.controller.Store', {
 		//Ok the idea here is to make an ajax request to start the payment processing.
 		//then we start polling for the processing to complete.  On success we move
 		//the user to the thank you page.  On an error we move them back to the payment form
-		if(win.lockPurchaseAction){
+		if (win.lockPurchaseAction) {
 			console.error('Window already locked aborting submitPurchase', arguments);
 			return false;
 		}
 		win.lockPurchaseAction = true;
 		this.safelyMaskWindow(win, 'Your purchase is being finalized.  This may take several moments');
 
-		function done(){
+		function done() {
 			delete me.paymentProcessor;
 			delete win.lockPurchaseAction;
 			me.safelyUnmaskWindow(win);
 		}
 
 		delegate = {
-			purchaseAttemptCompleted: function(helper, purchaseAttempt){
+			purchaseAttemptCompleted: function (helper, purchaseAttempt) {
 				this.refreshPurchasable(purchasable);
 				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
 				done();
 			},
-			purchaseAttemptFailed: function(helper, purchaseAttempt){
+			purchaseAttemptFailed: function (helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, purchaseAttempt.get('Error'), tokenObject);
 				done();
 			},
-			purchaseAttemptTimedOut: function(helper, purchaseAttempt){
+			purchaseAttemptTimedOut: function (helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, 'Purchase timed out.', tokenObject);
 				done();
 			},
-			purchaseAttemptRequestFailed: function(helper, responseOrMsg, exception){
+			purchaseAttemptRequestFailed: function (helper, responseOrMsg, exception) {
 				this.showFormWithError(win, cmp, purchasable, responseOrMsg, tokenObject);
 				done();
 			},
-			purchaseAttemptCompletedWithUnknownStatus: function(helper, purchaseAttempt){
+			purchaseAttemptCompletedWithUnknownStatus: function (helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, 'Unable to complete purchase at this time.', tokenObject);
 				done();
 			}
 		};
 
-		try{
+		try {
 			this.paymentProcessor = new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, this);
 		}
-		catch(e){
+		catch (e) {
 			//An exception here means we shouldn't have even started the purchase on the ds.
 			//in this case the users card shouldn't have been carged yet.
 			console.error('An error occurred initiating payment.  Please try again later.', Globals.getError(e), arguments);
@@ -548,24 +550,24 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showFormWithError: function(win, cmp, purchasable, error, tokenObject){
+	showFormWithError: function (win, cmp, purchasable, error, tokenObject) {
 		var form;
 		form = this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
-		if(error){
-			try{
-				if(Ext.isString(error)){
+		if (error) {
+			try {
+				if (Ext.isString(error)) {
 					error = NextThought.model.store.StripePurchaseError({Message: error});
 				}
 				form.handleError(error);
 			}
-			catch(e){
+			catch (e) {
 				console.error('An error occurred setting an error. Ruh Roh', Globals.getError(e));
 			}
 		}
 	},
 
 
-	doActivateWithCode: function(url, data, callback){
+	doActivateWithCode: function (url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			scope: this,
@@ -579,17 +581,17 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	activateWithCode: function(cmp, purchasable, code){
+	activateWithCode: function (cmp, purchasable, code) {
 		var url = $AppConfig.service.getStoreActivationURL(),
-			win= this.getPurchaseWindow(),
+			win = this.getPurchaseWindow(),
 			me = this;
 
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		if(win.lockPurchaseAction){
+		if (win.lockPurchaseAction) {
 			console.error('Window already locked aborting activation code', arguments);
 			return false;
 		}
@@ -597,18 +599,18 @@ Ext.define('NextThought.controller.Store', {
 		this.safelyMaskWindow(win, 'Redeeming activation code.');
 
 
-		if (!url){
+		if (!url) {
 			win.showError('Unable to redeem your activation key');
 			return;
 		}
 
 
-		try{
-			this.doActivateWithCode(url,  {purchasableID: purchasable.getId(), invitation_code: code}, function(r, s, response){
-				try{
+		try {
+			this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function (r, s, response) {
+				try {
 					this.safelyUnmaskWindow(win);
 					delete win.lockPurchaseAction;
-					if(!s){
+					if (!s) {
 						win.showError('The activation key you entered is invalid.', 'Activation Key');
 					}
 					else {
@@ -616,7 +618,7 @@ Ext.define('NextThought.controller.Store', {
 						this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: {Purchasable: purchasable}});
 					}
 				}
-				catch(error){
+				catch (error) {
 					console.error('An unexpected exception occurred in activation code callback', Globals.getError(error), arguments);
 					win.showError('A problem occurred redeeming your activation key');
 					this.safelyUnmaskWindow(win);
@@ -624,7 +626,7 @@ Ext.define('NextThought.controller.Store', {
 				}
 			});
 		}
-		catch(e){
+		catch (e) {
 			console.error('An unexpected exception occurred in activation code callback', Globals.getError(e), arguments);
 			win.showError('A problem occurred redeeming your activation key');
 			this.safelyUnmaskWindow(win);
@@ -638,12 +640,12 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param btn the button triggering the cancel
 	 */
-	purchaseWindowCancel: function(btn){
+	purchaseWindowCancel: function (btn) {
 		btn.up('window').close();
 	},
 
 
-	maybeClosePurchaseWindow: function(win){
+	maybeClosePurchaseWindow: function (win) {
 		//Detect this by looking at what stage in the process we are in.
 		//I.E its safe to close from the detail view, but not once we have started
 		//a purchase process
@@ -653,23 +655,24 @@ Ext.define('NextThought.controller.Store', {
 		//If we are in the step where payment has been submitted and we
 		//are waiting on the payment attempt to complete don't let them close the window.
 		//At this point they are getting charged, there is no going back.
-		if(this.paymentProcessor){
+		if (this.paymentProcessor) {
 			//TODO consider an alert here?
 			console.warn('Presenting payment window from being closed while purchase is in progress', this.paymentProcessor);
 			return false;
 		}
 
-		if(!win.forceClosing && destructive){
+		if (!win.forceClosing && destructive) {
 
 			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 			Ext.Msg.show({
 				msg: 'This will cancel your current purchase.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				icon: 'warning-red',
-				buttonText: {'ok': 'caution:Cancel my purchase'},
+				buttonText: {'ok': 'caution:Cancel my purchase',
+					'cancel': 'Go back'},
 				title: 'Are you sure?',
-				fn: function(str){
-					if(str === 'ok'){
+				fn: function (str) {
+					if (str === 'ok') {
 						me.forceCloseWindow(null, win);
 					}
 				}
@@ -680,10 +683,10 @@ Ext.define('NextThought.controller.Store', {
 		return true;
 	},
 
-	forceCloseWindow: function(cmp, w){
+	forceCloseWindow: function (cmp, w) {
 		var win = w || this.getPurchaseWindow();
 
-		if(!win){
+		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
@@ -713,11 +716,11 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	maxWaitInMillis: 2 * 60 * 1000, //2 minutes
 	pollingIntervalInMillis: 5 * 1000, //5 seconds
 
-	constructor: function(purchaseDesc, tokenObject, expectedPrice, delegate, scope){
+	constructor: function (purchaseDesc, tokenObject, expectedPrice, delegate, scope) {
 		var purchasable = purchaseDesc.Purchasable,
 			tokenId = tokenObject.id;
 
-		if(!purchasable || !tokenId || !delegate){
+		if (!purchasable || !tokenId || !delegate) {
 			Ext.Error.raise('Must supply purchasable, token, and delegate', arguments);
 		}
 
@@ -733,22 +736,22 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	parsePurchaseAttemptResponse: function(response){
+	parsePurchaseAttemptResponse: function (response) {
 		var result = Ext.JSON.decode(response.responseText, true);
-		if(result){
+		if (result) {
 			result = ParseUtils.parseItems(result.Items || result)[0];
 		}
-		if(!result || !result.isPurchaseAttempt){
+		if (!result || !result.isPurchaseAttempt) {
 			Ext.Error.raise('Unexpected response type');
 		}
 		return result;
 	},
 
-	initiatePurchase: function(){
+	initiatePurchase: function () {
 		var url = this.purchasable.getLink('purchase'),
 			data;
 
-		if(!url){
+		if (!url) {
 			Ext.Error.raise('No purchase url for purchasable');
 		}
 
@@ -756,13 +759,13 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 			token: this.tokenId,
 			purchasableID: this.purchasable.getId()
 		};
-		if(this.coupon !== undefined){
+		if (this.coupon !== undefined) {
 			data.coupon = this.coupon;
 		}
-		if(this.quantity > 0){
+		if (this.quantity > 0) {
 			data.quantity = this.quantity;
 		}
-		if(this.expectedPrice !== undefined){
+		if (this.expectedPrice !== undefined) {
 			data.expectedAmount = this.expectedPrice;
 		}
 
@@ -771,26 +774,26 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 			jsonData: data,
 			method: 'POST',
 			scope: this,
-			callback: function(req, s, resp){
-				try{
+			callback: function (req, s, resp) {
+				try {
 					var result;
-					if(!s){
+					if (!s) {
 						console.error('Purchase attempt was unsuccessful', arguments);
 						this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, resp);
 					}
-					else{
-						try{
+					else {
+						try {
 							result = this.parsePurchaseAttemptResponse(resp);
 							this.startedPollingAt = new Date().getTime();
 							this.processPurchaseAttempt(result, true);
 						}
-						catch(parseError){
+						catch (parseError) {
 							console.error('An error occurred parsing successful? response to begin purchase', arguments, Globals.getError(parseError));
 							this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, 'Unparsable return value', parseError);
 						}
 					}
 				}
-				catch(e){
+				catch (e) {
 					console.error('An error occured initiating purchase attempt', arguments, Globals.getError(e));
 					this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, 'An unknown error occurred initiating payment.', e);
 				}
@@ -799,33 +802,33 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	pollPurchaseAttempt: function(purchaseAttempt){
+	pollPurchaseAttempt: function (purchaseAttempt) {
 		var url = purchaseAttempt.getLink('get_purchase_attempt');
 		console.log('Polling for purchase attempt', purchaseAttempt);
 		Ext.Ajax.request({
 			url: url,
 			method: 'GET',
 			scope: this,
-			callback: function(req, s, resp){
-				try{
+			callback: function (req, s, resp) {
+				try {
 					var result;
-					if(!s){
+					if (!s) {
 						console.error('Purchase attempt poll was unsuccesful.  Will keep trying', arguments);
 						this.processPurchaseAttempt(purchaseAttempt);
 					}
-					else{
-						try{
+					else {
+						try {
 							result = this.parsePurchaseAttemptResponse(resp);
 							console.log('PurchaseAttempt polling complete.  Procceesing', result);
 							this.processPurchaseAttempt(result);
 						}
-						catch(parseError){
+						catch (parseError) {
 							console.error('An error occurred parsing successful? polling response.  Will keep trying', arguments, Globals.getError(parseError));
 							this.processPurchaseAttempt(purchaseAttempt);
 						}
 					}
 				}
-				catch(e){
+				catch (e) {
 					console.error('An error occurred polling for payment attempt', arguments, Globals.getError(e));
 					this.processPurchaseAttempt(purchaseAttempt);
 				}
@@ -834,15 +837,15 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	processPurchaseAttempt: function(purchaseAttempt, immediate){
-		if(purchaseAttempt && purchaseAttempt.isComplete()){
+	processPurchaseAttempt: function (purchaseAttempt, immediate) {
+		if (purchaseAttempt && purchaseAttempt.isComplete()) {
 			this.handleCompletedPaymentAttempt(purchaseAttempt);
 			return;
 		}
 
 		var now = new Date().getTime();
 
-		if(this.startedPollingAt + this.maxWaitInMillis < now){
+		if (this.startedPollingAt + this.maxWaitInMillis < now) {
 			//Hmm, not good.  We didn't complete in the time we wanted to wait.
 			//It's not our job to handle this, but what in the world will our caller do
 			console.error('Max polling time exceeded for purchase attempt', this, purchaseAttempt);
@@ -850,24 +853,24 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 			return;
 		}
 
-		if(immediate){
+		if (immediate) {
 			this.pollPurchaseAttempt(purchaseAttempt);
 		}
-		else{
-			Ext.defer(this.pollPurchaseAttempt, this.pollingIntervalInMillis ,this, [purchaseAttempt]);
+		else {
+			Ext.defer(this.pollPurchaseAttempt, this.pollingIntervalInMillis, this, [purchaseAttempt]);
 		}
 	},
 
-	handleCompletedPaymentAttempt: function(purchaseAttempt){
-		if(purchaseAttempt.isSuccess()){
+	handleCompletedPaymentAttempt: function (purchaseAttempt) {
+		if (purchaseAttempt.isSuccess()) {
 			console.log('Purchase attempt returned success', purchaseAttempt);
 			this.delegate.purchaseAttemptCompleted.call(this.scope, this, purchaseAttempt);
 		}
-		else if(purchaseAttempt.isFailure()){
+		else if (purchaseAttempt.isFailure()) {
 			console.warn('Purchase attempt returned failure', purchaseAttempt);
 			this.delegate.purchaseAttemptFailed.call(this.scope, this, purchaseAttempt);
 		}
-		else{
+		else {
 			console.error('Purchase attempt finished with unknown status', purchaseAttempt);
 			this.delegate.purchaseAttemptCompletedWithUnknownStatus.call(this.scope, this, purchaseAttempt);
 		}
