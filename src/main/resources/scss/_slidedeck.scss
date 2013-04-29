@@ -351,10 +351,25 @@ $experimental-support-for-svg: true;
 
 
 			.editor {
+				background: #222222;
 				margin: 10px;
 				.main{
 					padding-left: 13px;
 					padding-right: 13px;
+					background-color: $slidedeck-controls-background;
+					border: 1px solid #323232;
+				}
+				.toolbar {
+					background-color: $slidedeck-controls-background;
+					border-bottom: 1px solid #2b2b2b;
+				}
+				.content {
+					background-color: $slidedeck-controls-background;
+					color: #999999
+				}
+				.footer {
+					background: rgba(44,44,44,0.98);
+					border-top: 1px solid #323232;
 				}
 			}
 
