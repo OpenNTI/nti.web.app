@@ -79,6 +79,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 		if(this.keyEl){
 			this.keyEl.selectable();
+			this.keyEl.on('contextmenu',function(e){e.stopPropagation();});
 		}
 
 		win = this.up('window');
