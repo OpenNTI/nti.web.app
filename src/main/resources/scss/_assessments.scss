@@ -619,13 +619,17 @@
 									display: inline-block;
 									padding-right: 20px;
 									vertical-align: middle;
+									color: $primary-grey;
+
+									&.solution-matching-text{
+										color: $primary-green;
+									}
 								}
 							}
 						}
 						.explanation {
 							color: $secondary-grey;
 						}
-
 					}
 				}
 				.footer {
