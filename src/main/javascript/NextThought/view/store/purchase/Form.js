@@ -151,7 +151,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			}
 			jqd.blur(validator).keypress(bufferedValidator).keyup(bufferedValidator);
 			jqd.focus(function () {
-				jqd.attr('data-visited', 'true');
+				jqd.attr('data-focused', 'true');
+			});
+			jqd.keypress(function(){
+				jqd.attr('data-visited',
+					(jqd.attr('data-focused') && (jqd.val() || jqd.attr('data-visited'))) ? 'true' : undefined
+				);
 			});
 		});
 
@@ -391,10 +396,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		Ext.fly(input).removeCls('invalid');
-
-		if (visited) {
-			Ext.fly(input).addCls('valid');
-		}
+		Ext.fly(input)[(visited && !Ext.isEmpty(val)) ?'addCls':'removeCls']('valid');
 
 		return val;
 	},
