@@ -59,5 +59,11 @@ Ext.define('NextThought.overrides.dom.Element',{
 		var r = this.dom.getAttribute(attr);
 		this.dom.removeAttribute(attr);
 		return r;
+	},
+
+
+	allowContextMenu: function(){
+		this.on('contextmenu',function(e){e.stopPropagation();});
+		return this;
 	}
 });

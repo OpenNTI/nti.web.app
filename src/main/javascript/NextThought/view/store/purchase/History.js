@@ -78,7 +78,7 @@ Ext.define('NextThought.view.store.purchase.History',{
 
 		this.historyTpl.overwrite(this.el,data);
 		this.el.select('tr.bulk td:first-of-type span')
-				.on('contextmenu',function(e){e.stopPropagation();})
+				.allowContextMenu()
 				.selectable();
 	},
 

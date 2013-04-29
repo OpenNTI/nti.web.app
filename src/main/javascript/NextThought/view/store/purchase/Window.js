@@ -120,6 +120,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		});
 
 		me.renderPlaceholder(me.activationCodeEl);
+		me.activationCodeEl.allowContextMenu();
 
 		me.mon(me.activationCodeEl,'keyup','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
