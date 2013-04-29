@@ -9,6 +9,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	extend: 'Ext.Component',
 	alias: 'widget.purchase-form',
 
+	mixins: {
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
+
 	ui: 'purchase-form',
 
 	ordinal: 1,
@@ -126,6 +130,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	afterRender: function () {
 		this.callParent(arguments);
+
+		this.fixPlaceholders(this.getEl().query('input'));
 
 		var inputs = this.getEl().select('input'),
 			validator = Ext.bind(this.generateTokenData, this),

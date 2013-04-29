@@ -681,6 +681,8 @@
 	padding-left: 80px;
 	padding-right: 15px;
 	padding-bottom: 100px;
+	margin-right: -14px;
+
 
 	color: $secondary-grey;
 
@@ -692,6 +694,13 @@
 		&,&:link,&:active,&:visited{
 			color: $primary-blue;
 		}
+	}
+
+	.placeholder {
+		position: absolute;
+		top: 5px;
+		left: 15px; right: 0;
+		font: italic normal 14px/36px $font;
 	}
 
 	div.message {
