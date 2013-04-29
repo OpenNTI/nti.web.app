@@ -242,7 +242,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			this.couponEl.removeCls(['invalid', 'valid']);
 			if(sendingCoupon){
-				this.couponEl.addCls(pricing.Coupon ? 'valid' : 'invalid');
+				this.couponEl.addCls(pricing.get('Coupon') ? 'valid' : 'invalid');
 			}
 
 
