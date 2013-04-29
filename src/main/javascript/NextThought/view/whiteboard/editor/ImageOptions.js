@@ -34,8 +34,8 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 					{ text: 'Web', disabled: true }
 				]
 			}
-		},
-		{ text: 'Take Picture', menu: [], disabled: true }
+		/*},
+		{ text: 'Take Picture', menu: [], disabled: true*/ }
 	],
 
 
