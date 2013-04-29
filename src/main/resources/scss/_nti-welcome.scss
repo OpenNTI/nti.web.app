@@ -13,14 +13,23 @@
 
 		}
 		/*height: 100%;*/
-		/* removed top and height attrs, unnecessary if layout is fit or vbox
+		/* removed top and height attrs, unnecessary if layout is fit or vbox */
 	}
 
 	.tos-header { /*tos*/
 		margin: 8px 24px;
-		font-size: 1.4em;
-		font-weight: bold;
 		width: 675px !important;
+		h3 {
+			font-size: 16px;
+			font-weight: bold;
+			color: #fd817f;
+			margin: 0;
+			padding: 0;
+		}
+		.you-should {
+			font-size: 12px;
+			color: #b8b8b8;
+		}
 	}
 
 	.nti-window-header{

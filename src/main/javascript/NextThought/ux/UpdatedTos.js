@@ -11,7 +11,7 @@ Ext.define('NextThought.ux.UpdatedTos', {
 	items: [
 		{ 
 			xtype: 'box',
-			html: 'We recently updated our Terms of Service and Privacy Policy. Please take a moment to read them carefully.',
+			html: '<h3>We recently updated our Terms of Service and Privacy Policy.</h3><span class="you-should">Please take a moment to read them carefully.</span>',
 			cls: 'tos-header',
 			flex: 0
 		},
