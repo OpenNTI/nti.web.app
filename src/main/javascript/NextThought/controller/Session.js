@@ -163,15 +163,11 @@ Ext.define('NextThought.controller.Session', {
         // what is the exactly relationships between these windows?
         // currently above and below are piling on top of one another
 
-        console.debug('checking for terms of service');
-
         if (this.shouldShowContentFor('content.initial_tos_page')) {
 			var u = $AppConfig.userObject,
 				link = u.getLink('content.initial_tos_page'),
 				created = u.get('CreatedTime'),
 				timeThreshold = 2 * 60 * 1000; //2 minutes in milliseconds
-
-				console.debug('should i show new terms of service?');
 
 			//Users accepts terms at account creation.  Heres a hueristic to detect
 			//new accounts and delete the tos link automatically (they just accepted it)
