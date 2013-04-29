@@ -9,7 +9,7 @@ Ext.define('NextThought.view.form.fields.PlaceholderPolyfill',{
 			if(p){ p[Ext.isEmpty(v)?'show':'hide'](); }
 		}
 
-		p = Ext.DomHelper.append( inputEl.parent(),
+		p = Ext.DomHelper.insertAfter( inputEl,
 				{ cls: 'placeholder', html: inputEl.getAttribute('placeholder') }, true);
 
 		p.setStyle( inputEl.getStyles(

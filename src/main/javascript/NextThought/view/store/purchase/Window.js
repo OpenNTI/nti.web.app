@@ -2,6 +2,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	extend: 'NextThought.view.Window',
 	alias: 'widget.purchase-window',
 
+	mixins:{
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
+
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.view.store.purchase.DetailView',
@@ -115,6 +119,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			me.mon(e,'click','onTabClicked',me);
 		});
 
+		me.renderPlaceholder(me.activationCodeEl);
+
 		me.mon(me.activationCodeEl,'keyup','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.activationCodeEl,'keypress','onActivationCodeChange',me,{buffer: 500});
 		me.mon(me.checkboxBoxEl,'click','onCheckboxClicked',me);
@@ -153,6 +159,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		var el = this.getTargetEl(),
 			h = this.footerEl.getY() - el.getY();
 		el.setHeight(h);
+		this.getEl().repaint();
 	},
 
 
