@@ -150,10 +150,14 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				jqd.payment(formatter);
 			}
 			jqd.blur(validator).keypress(bufferedValidator).keyup(bufferedValidator);
+			'' +
+			jqd.on('paste', function () {
+				setTimeout(validator, 250);
+			});
 			jqd.focus(function () {
 				jqd.attr('data-focused', 'true');
 			});
-			jqd.keypress(function(){
+			jqd.keypress(function () {
 				jqd.attr('data-visited',
 					(jqd.attr('data-focused') && (jqd.val() || jqd.attr('data-visited'))) ? 'true' : undefined
 				);
@@ -396,7 +400,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		Ext.fly(input).removeCls('invalid');
-		Ext.fly(input)[(visited && !Ext.isEmpty(val)) ?'addCls':'removeCls']('valid');
+		Ext.fly(input)[(visited && !Ext.isEmpty(val)) ? 'addCls' : 'removeCls']('valid');
 
 		return val;
 	},
