@@ -550,15 +550,27 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
+	processError: function (errorOrString) {
+		var error = errorOrString;
+		if (Ext.isString(error)) {
+			error = NextThought.model.store.StripePurchaseError.create({Message: error});
+		}
+		else if (error.get('Type') && /NTIException/i.test(error.get('Type'))) {
+			//Stripe promisses use that message is user presentable, but if the ds blows up internally
+			//it returns a stripe error (bad) and gives us an unfriendly python error.  So try and
+			//detect that
+			error = NextThought.model.store.StripePurchaseError.create({Message: 'An unknown error occurred.'});
+		}
+		return error;
+	},
+
+
 	showFormWithError: function (win, cmp, purchasable, error, tokenObject) {
 		var form;
 		form = this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
 		if (error) {
 			try {
-				if (Ext.isString(error)) {
-					error = NextThought.model.store.StripePurchaseError({Message: error});
-				}
-				form.handleError(error);
+				form.handleError(this.processError(error));
 			}
 			catch (e) {
 				console.error('An error occurred setting an error. Ruh Roh', Globals.getError(e));

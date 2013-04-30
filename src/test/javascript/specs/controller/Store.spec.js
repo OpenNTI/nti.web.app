@@ -1,28 +1,28 @@
-describe('Store controller', function(){
+describe('Store controller', function () {
 	var controller, rec;
 
-	function closeImmediately(w){
-		if(!w.getEl()){
+	function closeImmediately(w) {
+		if (!w.getEl()) {
 			return;
 		}
 		w.forceClosing = true;
 		w.close();
 	}
 
-	beforeEach(function(){
+	beforeEach(function () {
 		controller = app.getController('Store');
 		rec = NextThought.model.store.Purchasable.create({NTIID: 'Purchasable_1'});
 	});
 
-	it('Should exist', function(){
+	it('Should exist', function () {
 		expect(controller).toBeDefined();
 	});
 
-	describe('Purchase window', function(){
+	describe('Purchase window', function () {
 
 		var pCollection, win;
 
-		beforeEach(function(){
+		beforeEach(function () {
 			pCollection = Ext.ComponentManager.create({
 				xtype: 'purchasable-collection',
 				name: 'Available for Purchase',
@@ -32,47 +32,47 @@ describe('Store controller', function(){
 			win = controller.getPurchaseWindow();
 		});
 
-		afterEach(function(){
+		afterEach(function () {
 			closeImmediately(win);
 			win.destroy();
 		});
 
-		describe('Showing purchase window', function(){
+		describe('Showing purchase window', function () {
 
-			it('Clicking purchasable menu item shows window', function(){
+			it('Clicking purchasable menu item shows window', function () {
 				expect(win).toBeDefined();
 				expect(win.isVisible(true)).toBeTruthy();
 				expect(win.record).toBe(rec);
 			});
 
-			it('Allows one window at a time', function(){
+			it('Allows one window at a time', function () {
 				var newRec = NextThought.model.store.Purchasable.create({});
 				expect(controller.showPurchasable(newRec)).toBeFalsy();
 			});
 		});
 
-		describe('Masking window safely', function(){
+		describe('Masking window safely', function () {
 
-			it('Masks window', function(){
+			it('Masks window', function () {
 				expect(controller.safelyMaskWindow(win, 'mask')).toBeTruthy();
 				expect(win.getEl().isMasked()).toBeTruthy();
 			});
 
-			it('Unmasks window', function(){
+			it('Unmasks window', function () {
 				expect(controller.safelyMaskWindow(win, 'mask')).toBeTruthy();
 				expect(win.getEl().isMasked()).toBeTruthy();
 				expect(controller.safelyUnmaskWindow(win)).toBeTruthy();
 				expect(win.getEl().isMasked()).toBeFalsy();
 			});
 
-			it('Mask handles an unrendered window', function(){
+			it('Mask handles an unrendered window', function () {
 				expect(controller.safelyMaskWindow(null)).toBeFalsy();
 				spyOn(win, 'getEl').andReturn(null);
 				expect(win.getEl()).toBeFalsy();
 				expect(controller.safelyMaskWindow(win, 'mask')).toBeFalsy();
 			});
 
-			it('Unmask handles an unredered window', function(){
+			it('Unmask handles an unredered window', function () {
 				expect(controller.safelyMaskWindow(win, 'foo')).toBeTruthy();
 				spyOn(win, 'getEl').andReturn(null);
 				expect(win.getEl()).toBeFalsy();
@@ -80,25 +80,25 @@ describe('Store controller', function(){
 			});
 		});
 
-		describe('Transitions to views', function(){
+		describe('Transitions to views', function () {
 
-			it('Returns component added', function(){
+			it('Returns component added', function () {
 				var a = controller.transitionToComponent(win, {xtype: 'purchase-complete'});
 				expect(a).toBeTruthy();
 				expect(a.xtype).toBe('purchase-complete');
 			});
 
-			it('Removes any old main views', function(){
+			it('Removes any old main views', function () {
 				expect(win.items.getCount()).toBe(1);
 				controller.transitionToComponent(win, {xtype: 'purchase-complete'});
 				expect(win.items.getCount()).toBe(1);
 			});
 		});
 
-		describe('Closing', function(){
+		describe('Closing', function () {
 
-			describe('closeWithoutWarn', function(){
-				it('Closes immediately if components allows it', function(){
+			describe('closeWithoutWarn', function () {
+				it('Closes immediately if components allows it', function () {
 					var cmp = win.items.first();
 					cmp.closeWithoutWarn = true;
 					win.close();
@@ -108,11 +108,11 @@ describe('Store controller', function(){
 				});
 			});
 
-			describe('Requires verification by default', function(){
+			describe('Requires verification by default', function () {
 
 				var cmp, alert, cancel, confirm;
 
-				beforeEach(function(){
+				beforeEach(function () {
 					cmp = win.items.first();
 					cmp.closeWithoutWarn = false;
 					win.close();
@@ -122,45 +122,45 @@ describe('Store controller', function(){
 					confirm = Ext.ComponentQuery.query('messagebox[activeUI=nti-alert] [itemId=ok]').first();
 				});
 
-				function clickButton(btn){
+				function clickButton(btn) {
 					btn.onClick({type: 'mouse', button: 0, preventDefault: Ext.emptyFn})
 				}
 
-				it('Shows an alert and doesnt close', function(){
+				it('Shows an alert and doesnt close', function () {
 					expect(alert).toBeTruthy();
 					expect(win.getEl()).toBeTruthy();
 					clickButton(cancel);
 				});
 
-				it('Canceling verfication leaves window alone', function(){
+				it('Canceling verfication leaves window alone', function () {
 					clickButton(cancel);
 					expect(win.getEl()).toBeTruthy();
 				});
 
-				it('Confirming verfication closes it', function(){
+				it('Confirming verfication closes it', function () {
 					clickButton(confirm);
 					expect(win.getEl()).toBeFalsy();
 				});
 			});
 		});
 
-		describe('Purchase flows', function(){
+		describe('Purchase flows', function () {
 
 			var confirmBtn;
 
-			beforeEach(function(){
+			beforeEach(function () {
 				confirmBtn = win.confirmEl;
 			});
 
-			describe('Detail advances to form', function(){
+			describe('Detail advances to form', function () {
 
-				it('Starts on detail', function(){
+				it('Starts on detail', function () {
 					var cmp = win.items.first();
 					expect(cmp).toBeTruthy();
 					expect(cmp.xtype).toBe('purchase-detailview');
 				});
 
-				it('onConfirm transistions to form', function(){
+				it('onConfirm transistions to form', function () {
 					var cmp;
 					win.onConfirm();
 					cmp = win.items.first();
@@ -170,11 +170,11 @@ describe('Store controller', function(){
 				});
 			});
 
-			describe('Confirm can transistion to edit', function(){
+			describe('Confirm can transistion to edit', function () {
 
 				var purchasable, token, pricing;
 
-				beforeEach(function(){
+				beforeEach(function () {
 
 					purchasable = {Purchasable: rec};
 					token = {};
@@ -188,13 +188,13 @@ describe('Store controller', function(){
 					});
 				});
 
-				it('starts on confirm', function(){
+				it('starts on confirm', function () {
 					var cmp = win.items.first();
 					expect(cmp).toBeTruthy();
 					expect(cmp.xtype).toBe('purchase-confirm');
 				});
 
-				it('transaltes to form to edit', function(){
+				it('transaltes to form to edit', function () {
 					var cmp = win.items.first();
 					cmp.onEditOrder({stopEvent: Ext.emptyFn});
 					cmp = win.items.first();
@@ -206,15 +206,15 @@ describe('Store controller', function(){
 		});
 	});
 
-	describe('Pricing purchases', function(){
+	describe('Pricing purchases', function () {
 
 		//Returns an object with one function called
 		//returnPricing that when called simulates a response
 		//from the server with the args provided to this call
-		function mockDoPricingRequest(){
-			var fakeServer = {args : arguments};
-			spyOn(controller, 'doPricingRequest').andCallFake(function(url, data, cb){
-				fakeServer.returnPricing = function(){
+		function mockDoPricingRequest() {
+			var fakeServer = {args: arguments};
+			spyOn(controller, 'doPricingRequest').andCallFake(function (url, data, cb) {
+				fakeServer.returnPricing = function () {
 					Ext.callback(cb, controller, fakeServer.args);
 				}
 			});
@@ -224,34 +224,34 @@ describe('Store controller', function(){
 
 		var desc, win;
 
-		beforeEach(function(){
+		beforeEach(function () {
 			desc = {Purchasable: rec};
 			win = NextThought.view.store.purchase.Window.create({record: rec});
 		});
 
-		afterEach(function(){
+		afterEach(function () {
 			closeImmediately(win);
 			win.destroy();
 		});
 
-		describe('Locking', function(){
+		describe('Locking', function () {
 
 			var fakeServer;
-			beforeEach(function(){
+			beforeEach(function () {
 				fakeServer = mockDoPricingRequest({}, false, {});
 			});
 
-			it('Locks when sender is the window', function(){
+			it('Locks when sender is the window', function () {
 				controller.pricePurchase(win, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(win.lockPurchaseAction).toBeTruthy();
 			});
 
-			it('Doesnt lock if controller is window', function(){
+			it('Doesnt lock if controller is window', function () {
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(win.lockPurchaseAction).toBeUndefined();
 			});
 
-			it('If window is locked callling with window sender is noop', function(){
+			it('If window is locked callling with window sender is noop', function () {
 				var r;
 
 				win.lockPurchaseAction = true;
@@ -260,58 +260,58 @@ describe('Store controller', function(){
 				expect(controller.doPricingRequest).not.toHaveBeenCalled();
 			});
 
-			it('Lets the controller price even if window is locked', function(){
+			it('Lets the controller price even if window is locked', function () {
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(controller.doPricingRequest).toHaveBeenCalled();
 			});
 		});
 
-		describe('Data payload', function(){
+		describe('Data payload', function () {
 
 			var fakeServer;
-			beforeEach(function(){
+			beforeEach(function () {
 				fakeServer = mockDoPricingRequest({}, false, {});
 			});
 
-			it('Includes the purchasable id', function(){
+			it('Includes the purchasable id', function () {
 				var expected = {purchasableID: 'Purchasable_1'};
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(controller.doPricingRequest).toHaveBeenCalledWith(jasmine.any(String), expected, jasmine.any(Function));
 			});
 
-			it('Includes quantities > 0 if specified', function(){
+			it('Includes quantities > 0 if specified', function () {
 				var expected = {purchasableID: 'Purchasable_1', Quantity: 10};
 				desc.Quantity = 10;
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(controller.doPricingRequest).toHaveBeenCalledWith(jasmine.any(String), expected, jasmine.any(Function));
 			});
 
-			it('Includes coupon code', function(){
+			it('Includes coupon code', function () {
 				var expected = {purchasableID: 'Purchasable_1', Coupon: 'FOOBAR'};
 				desc.Coupon = 'FOOBAR';
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(controller.doPricingRequest).toHaveBeenCalledWith(jasmine.any(String), expected, jasmine.any(Function));
 			});
 
-			it('Makes query to pricing link', function(){
+			it('Makes query to pricing link', function () {
 				var u = desc.Purchasable.getLink('pricing');
 				controller.pricePurchase(controller, desc, Ext.emptyFn, Ext.emptyFn, this);
 				expect(controller.doPricingRequest).toHaveBeenCalledWith(u, jasmine.any(Object), jasmine.any(Function));
 			});
 		});
 
-		describe('Pricing response', function(){
+		describe('Pricing response', function () {
 
 			var fakeServer, successCallback, failureCallback, scope;
 
-			beforeEach(function(){
+			beforeEach(function () {
 				scope = {};
 				successCallback = jasmine.createSpy('successCallback');
 				failureCallback = jasmine.createSpy('failureCallback');
 			});
 
-			describe('error conditions', function(){
-				it('handles error response by calling failure callback', function(){
+			describe('error conditions', function () {
+				it('handles error response by calling failure callback', function () {
 					fakeServer = mockDoPricingRequest({}, false, {});
 					controller.pricePurchase(controller, desc, successCallback, failureCallback, scope);
 					fakeServer.returnPricing();
@@ -320,7 +320,7 @@ describe('Store controller', function(){
 					expect(successCallback).not.toHaveBeenCalled();
 				});
 
-				it('handles bad data in a succesful resposne', function(){
+				it('handles bad data in a succesful resposne', function () {
 					var resp = {};
 					resp.responseText = '{"Class": "Note"}';
 
@@ -333,8 +333,8 @@ describe('Store controller', function(){
 					expect(successCallback).not.toHaveBeenCalled();
 				});
 
-				it('handles explosions in parsing', function(){
-					spyOn(ParseUtils, 'parseItems').andCallFake(function(){
+				it('handles explosions in parsing', function () {
+					spyOn(ParseUtils, 'parseItems').andCallFake(function () {
 						Ext.Error.raise('Boom');
 					});
 					fakeServer = mockDoPricingRequest({}, true, {responseText: ''});
@@ -345,8 +345,8 @@ describe('Store controller', function(){
 					expect(successCallback).not.toHaveBeenCalled();
 				});
 
-				it('handles explosions in initial request', function(){
-					spyOn(controller, 'doPricingRequest').andCallFake(function(){
+				it('handles explosions in initial request', function () {
+					spyOn(controller, 'doPricingRequest').andCallFake(function () {
 						Ext.Error.raise('Boom');
 					});
 					controller.pricePurchase(controller, desc, successCallback, failureCallback, scope);
@@ -357,8 +357,8 @@ describe('Store controller', function(){
 				});
 			});
 
-			describe('success conditions', function(){
-				it('calls success with pricing info model', function(){
+			describe('success conditions', function () {
+				it('calls success with pricing info model', function () {
 					var resp = {},
 						pricedObject;
 
@@ -379,10 +379,10 @@ describe('Store controller', function(){
 		});
 	});
 
-	describe('Navigate to a purchasable NTIID', function(){
+	describe('Navigate to a purchasable NTIID', function () {
 		var mockObjects, navController, oldViewPort;
 
-		beforeEach(function(){
+		beforeEach(function () {
 			navController = app.getController('Navigation');
 			oldViewPort = navController.viewport;
 			navController.viewport = { activateView: Ext.emptyFn};
@@ -398,12 +398,12 @@ describe('Store controller', function(){
 			};
 		});
 
-		afterEach(function(){
+		afterEach(function () {
 			navController.viewport = oldViewPort;
 		});
 
-		describe('Test navigateToPurchasable', function(){
-			it('Expects going to the Purchasable \'purchasable1\'', function(){
+		describe('Test navigateToPurchasable', function () {
+			it('Expects going to the Purchasable \'purchasable1\'', function () {
 				spyOn(controller, 'navigateToPurchasable').andCallThrough();
 				spyOn(controller, 'showPurchasable');
 				controller.navigateToPurchasable(mockObjects['purchasable1']);
@@ -411,13 +411,36 @@ describe('Store controller', function(){
 				expect(controller.showPurchasable).toHaveBeenCalledWith(mockObjects['purchasable1']);
 			});
 
-			it('Expects to not go to the content \'book1\'', function(){
+			it('Expects to not go to the content \'book1\'', function () {
 				spyOn(controller, 'navigateToPurchasable').andCallThrough();
 				spyOn(controller, 'showPurchasable');
 				controller.navigateToPurchasable(mockObjects['book1']);
 				expect(controller.navigateToPurchasable).toHaveBeenCalledWith(mockObjects['book1']);
 				expect(controller.showPurchasable).not.toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe('Error processing', function () {
+		it('wraps up strings', function () {
+			var error = controller.processError('Some error message');
+			expect(error.isModel).toBeTruthy();
+			expect(error.get('Message')).toBe('Some error message');
+
+		});
+
+		it('Obscures type NTIException', function () {
+			var error = NextThought.model.store.StripePurchaseError.create({Type: 'NTIException', Message: 'Incomprehensible message'}),
+				result = controller.processError(error);
+			expect(result.isModel).toBeTruthy();
+			expect(result.get('Message')).toBe('An unknown error occurred.');
+		});
+
+		it('Passes other types untouched', function () {
+			var error = NextThought.model.store.StripePurchaseError.create({Type: 'card_error', Message: 'STOLEN!!!'}),
+				result = controller.processError(error);
+			expect(result.isModel).toBeTruthy();
+			expect(result.get('Message')).toBe('STOLEN!!!');
 		});
 	});
 });
