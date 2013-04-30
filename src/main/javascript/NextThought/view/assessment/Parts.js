@@ -11,7 +11,8 @@ Ext.define('NextThought.view.assessment.Parts',{
 		'NextThought.view.assessment.input.MultipleChoice',
 		'NextThought.view.assessment.input.NumericMath',
 		'NextThought.view.assessment.input.SingleChoice',
-		'NextThought.view.assessment.input.SymbolicMath'//...add all the possible input types here
+		'NextThought.view.assessment.input.SymbolicMath',   //...add all the possible input types here
+		'NextThought.view.assessment.input.DDMatching'
 	],
 
 	plain: true,

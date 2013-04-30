@@ -34,7 +34,6 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	renderSelectors: {
 		draggableEl: '.match .draggable-area',
-		floaterEl: '.floater',
 		dragzoneEl: '.matching-dd-zone'
 	},
 
@@ -79,8 +78,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 				labelIndex, valueIndex,
 				p2 = e.down('.draggable-area');
 
-			labelIndex = p1 && parseInt(p1.getAttribute('data-part'));
-			valueIndex = p2 && parseInt(p2.getAttribute('data-match'));
+			labelIndex = p1 && parseInt(p1.getAttribute('data-part'), 10);
+			valueIndex = p2 && parseInt(p2.getAttribute('data-match'), 10);
 			val[labelIndex] = valueIndex;
 		});
 		return val;
@@ -97,7 +96,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 			for(i in x){
 				if(x.hasOwnProperty(i)){
-					i = parseInt(i);
+					i = parseInt(i, 10);
 					valueIndex = x[i];
 					out.push( tpl.apply( [labels[i], values[valueIndex]]));
 				}
@@ -199,13 +198,13 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		}
 
 		function partition(a, begin, end, pivot){
-			var p = parseInt(a[pivot].getAttribute('data-match')),
+			var p = parseInt(a[pivot].getAttribute('data-match'), 10),
 				s, i, t;
 
 			me.swap(p, end-1);
 			s = begin;
 			for(i=begin; i<end-1; i++){
-				t = parseInt(a[i].getAttribute('data-match'));
+				t = parseInt(a[i].getAttribute('data-match'), 10);
 				if(t <= p){
 					me.swap(p, end-1);
 					s++;

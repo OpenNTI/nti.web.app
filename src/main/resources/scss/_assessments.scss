@@ -10,7 +10,7 @@
 
 		.text{
 			position: relative;
-			margin-right: 45px;
+			margin-right: 61px;
 			line-height: 26px;
 			min-width: 30px;
 		}
@@ -31,6 +31,52 @@
 				right: 20px;
 				background: $icons no-repeat;
 				@include sprite($icons,'drag-controls',$dimensions: true);
+			}
+		}
+	}
+}
+
+@mixin draggable-span{
+	.dd-label-token{
+		display: inline-block;
+		position: relative;
+		padding: 0 10px;
+		margin: 0 10px 10px 0;
+		border: 1px solid $primary-blue;
+		border-radius: 3px;
+		@include box-shadow(1px 1px 2px rgba(0,0,0,.09));
+		cursor: move;
+		font-weight: 600;
+		color: $primary-blue;
+
+		p{margin: 0;}
+
+		&:hover{
+			background-color: $primary-blue;
+			color: #fff;
+		}
+
+		.value{
+			position: relative;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.x{
+			position: relative;
+			width: 15px;
+			height: 18px;
+			display: none;
+			vertical-align: middle;
+
+			&::after{
+				content: '';
+				display: block;
+				position: absolute;
+				background: $icons no-repeat;
+				@include sprite($icons,'light-x-hover',$dimensions: true);
+				top: 6px; left: 9px;
+				cursor: pointer;
 			}
 		}
 	}
@@ -113,6 +159,11 @@
 				padding: 17px 40px 15px 40px;
 				background: #ffffff;
 				color: $primary-grey;
+
+				.labels{
+					padding: 10px 15px 0 0;
+					@include draggable-span;
+				}
 			}
 		}
 
@@ -590,6 +641,116 @@
 						}
 					}
 
+					.dd-matching{
+						.match{
+							@extend .assessment-content;
+							position: relative;
+							display: block;
+							color: $primary-grey;
+							vertical-align: middle;
+							background: #ffffff;
+							border: 0 solid $tertiary-grey;
+							border-bottom-width: 1px;
+							&:last-of-type {
+								border-bottom-width: 0px;
+							}
+
+							.value-part{
+								padding-left: 40px;
+								padding-bottom: 10px;
+								line-height: 20px;
+								color: $primary-grey;
+							}
+
+							.label-part{
+								padding: 15px 0 0 40px;
+								color: $tertiary-grey;
+
+								@include draggable-span;
+								.dd-label-token:hover{
+									.x{
+										display: inline-block;
+									}
+								}
+
+								.placeholder{
+									display: inline-block;
+									font-style: normal !important;
+								}
+
+								&.matched{
+									.placeholder{
+										display: none;
+									}
+								}
+							}
+
+							&.target-hover{
+								display: block;
+								outline: 1px solid #3fb3f6;
+								background-color: #fff;
+								@include box-shadow(0 0 5px rgba(63,179,246,.23));
+							}
+
+							.control{
+								position: absolute;
+								top: 10px; left: 10px;
+								width: 20px;
+								height: 38px;
+								border: none;
+								display: none;
+
+								&::after{
+									position: absolute;
+									left: 0px; top: 12px;
+									content: ' ';
+									background: $icons no-repeat;
+									@include sprite($icons,'circle-check-green-18',$dimensions: true);
+								}
+							}
+
+							&.correct, &.incorrect{
+								.control{
+									display: inline-block;
+								}
+							}
+
+							&.correct{
+								.dd-label-token{
+									background: $primary-green;
+									border-color: $primary-green;
+									color: #fff;
+
+									&:hover{
+										background: $primary-green;
+										color: #fff;
+										.x{ display: none; }
+									}
+								}
+							}
+
+							&.incorrect{
+								.dd-label-token{
+									background-color: $primary-red;
+									border-color: #d84343;
+									color: #fff;
+
+									&:hover{
+										background: $primary-red;
+										color: #fff;
+										.x{ display: none; }
+									}
+								}
+							}
+
+							&.incorrect .control{
+								&::after{
+									@include sprite($icons,'circle-x-red-18',$dimensions: true);
+								}
+							}
+						}
+					}
+
 					.solution {
 						@extend .assessment-content;
 						padding: 10px 20px 15px 20px;
@@ -784,6 +945,24 @@
 				weight: normal;
 			}
 			white-space: normal;
+		}
+	}
+
+	@include draggable-span;
+	.dd-label-token{
+		color: #fff !important;
+		cursor: move;
+		white-space: normal;
+		border: 1px solid $primary-blue;
+		background-color: $primary-blue;
+		line-height: 26px;
+		@include border-radius(3px);
+		@include box-shadow(0 3px 8px rgba(0,0,0,.22));
+
+		font: {
+			size: 14px;
+			style: normal;
+			weight: normal;
 		}
 	}
 }
