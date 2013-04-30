@@ -135,7 +135,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		me.mon(me.activationCodeEl, 'keyup', 'onActivationCodeChange', me, {buffer: 500});
 		me.mon(me.activationCodeEl, 'keypress', 'onActivationCodeChange', me, {buffer: 500});
-		me.mon(me.activationCodeEl, 'paste', 'onActivationCodeChange', me, {defer: 250});
+		me.mon(me.activationCodeEl, 'paste', 'onActivationCodeChange', me, {delay: 500});
 		me.mon(me.checkboxBoxEl, 'click', 'onCheckboxClicked', me);
 
 		if (this.showHistory) {

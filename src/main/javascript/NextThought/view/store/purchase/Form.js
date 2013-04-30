@@ -151,7 +151,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			}
 			jqd.blur(validator).keypress(bufferedValidator).keyup(bufferedValidator);
 			jqd.on('paste', function () {
-				setTimeout(validator, 250);
+				setTimeout(validator, 500);
 			});
 			jqd.focus(function () {
 				jqd.attr('data-focused', 'true');
