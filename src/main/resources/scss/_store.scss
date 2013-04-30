@@ -75,32 +75,33 @@
       z-index: 100000;
 
       @include transition(all 0.3s ease-in);
-      .x-safari5 &
-      (-WebKit-transition:none:}
+      .x-safari5 & {
+        -WebKit-transition: none;
+      }
 
-    &::after {
-      content: "";
-      position: absolute;
-      z-index: 1;
-      bottom: -14px;
-      left: $pointer-left;
-      background: $elements no-repeat;
-      @include sprite($elements, 'window-nib-south', $dimensions: true);
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        bottom: -14px;
+        left: $pointer-left;
+        background: $elements no-repeat;
+        @include sprite($elements, 'window-nib-south', $dimensions: true);
+      }
+
+      &.shown {
+        display: block;
+      }
     }
 
-    &.shown {
-      display: block;
+    &:hover .desc {
+      //display: block;
+      visibility: visible;
+      opacity: 1;
     }
   }
 
-  &:hover .desc {
-    //display: block;
-    visibility: visible;
-    opacity: 1;
-  }
 }
-
-  }
 
 @mixin purchasable-info-panel {
   padding: 18px;
