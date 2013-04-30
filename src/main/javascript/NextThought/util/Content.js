@@ -1,58 +1,63 @@
-Ext.define('NextThought.util.Content',{
+Ext.define('NextThought.util.Content', {
 	singleton: true,
 
 
-	spider: function(ids, finish, parse, pageFailure){
-		if(!Ext.isArray(ids)){ ids = [ids]; }
+	spider: function (ids, finish, parse, pageFailure) {
+		if (!Ext.isArray(ids)) {
+			ids = [ids];
+		}
 
 		var service = $AppConfig.service,
 			me = this,
 			lock = ids.length;
 
-		function maybeFinish(){
-			lock--; if(lock>0){return;}
+		function maybeFinish() {
+			lock--;
+			if (lock > 0) {
+				return;
+			}
 			Ext.callback(finish);
 		}
 
 
-		function parseContent(resp,pageInfo){
-			try{
-				Ext.callback(parse,null,[resp.responseText,pageInfo]);
-			} catch(e){
+		function parseContent(resp, pageInfo) {
+			try {
+				Ext.callback(parse, null, [resp.responseText, pageInfo]);
+			} catch (e) {
 				console.error(Globals.getError(e));
 			}
 			maybeFinish();
 		}
 
-		Ext.each(ids,function(id){
-			function failure(req,resp){
+		Ext.each(ids, function (id) {
+			function failure(req, resp) {
 				try {
-				Ext.callback(pageFailure,null,arguments);
+					Ext.callback(pageFailure, null, arguments);
 				}
-				catch(e){
+				catch (e) {
 					console.error(e.message);
 				}
 				maybeFinish();
 			}
 
 			service.getPageInfo(id,
-					Ext.bind(me.getContentForPageInfo,me,[parseContent,failure],1),
-					failure, me);
+				Ext.bind(me.getContentForPageInfo, me, [parseContent, failure], 1),
+				failure, me);
 		});
 	},
 
 
-	getContentForPageInfo: function(pageInfo,callback,failure){
+	getContentForPageInfo: function (pageInfo, callback, failure) {
 		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		function failed(r) {
-			console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
+			console.log('server-side failure with status code ' + r.status + ': Message: ' + r.responseText);
 			Ext.callback(failure);
 		}
 
 		//If we don't start with a pageInfo, which we have seen happen
 		//before, call the failure callback
-		if(!pageInfo || !pageInfo.isPageInfo){
+		if (!pageInfo || !pageInfo.isPageInfo) {
 			console.error('Page info was not supplied', pageInfo);
 			Ext.callback(failure);
 		}
@@ -63,17 +68,17 @@ Ext.define('NextThought.util.Content',{
 			url: pageInfo.getLink('content'),
 			expectedContentType: 'text/html',
 			scope: this,
-			success: Ext.bind(callback,null,[pageInfo],1),
+			success: Ext.bind(callback, null, [pageInfo], 1),
 			failure: failed
 		});
 	},
 
 
-	parseXML: function(xml) {
-		try{
-			return new DOMParser().parseFromString(xml,"text/html");
+	parseXML: function (xml) {
+		try {
+			return new DOMParser().parseFromString(xml, "text/html");
 		}
-		catch(e){
+		catch (e) {
 			console.error('Could not parse content', Globals.getError(e));
 		}
 
@@ -81,13 +86,13 @@ Ext.define('NextThought.util.Content',{
 	},
 
 	/** @private */
-	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
+	externalUriRegex: /^([a-z][a-z0-9\+\-\.]*):/i,
 
-	isExternalUri: function(r){
+	isExternalUri: function (r) {
 		return this.externalUriRegex.test(r);
 	},
 
-	bustCorsForResources: function(string, name, value){
+	bustCorsForResources: function (string, name, value) {
 		//Look for things we know come out of a different domain
 		//and append a query param.  This allows us to, for example,
 		//add a query param related to our location host so that
@@ -102,25 +107,25 @@ Ext.define('NextThought.util.Content',{
 		//we omit things that contain query strings here
 		var regex = /(\S+)\s*=\s*"(((\/[^"\/]+\/)||\/)resources\/[^?"]*?)"/igm;
 
-		function cleanup(original, attr, url){
-			return attr+'="'+url+'?'+name+'='+value+'"';
+		function cleanup(original, attr, url) {
+			return attr + '="' + url + '?' + name + '=' + value + '"';
 		}
 
 		return string.replace(regex, cleanup);
 	},
 
 
-	fixReferences: function(string, basePath){
+	fixReferences: function (string, basePath) {
 
-		function fixReferences(original,attr,url) {
+		function fixReferences(original, attr, url) {
 			var firstChar = url.charAt(0),
-				absolute = firstChar ==='/',
+				absolute = firstChar === '/',
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
-				host = absolute?getURL():basePath,
+				host = absolute ? getURL() : basePath,
 				params;
 
-			if(/src/i.test(attr) && /youtube/i.test(url)){
+			if (/src/i.test(attr) && /youtube/i.test(url)) {
 				params = [
 					'html5=1',
 					'enablejsapi=1',
@@ -129,37 +134,38 @@ Ext.define('NextThought.util.Content',{
 					'rel=0',
 					'showinfo=0',
 					'wmode=opaque',
-					'origin='+encodeURIComponent(location.protocol+'//'+location.host)];
+					'origin=' + encodeURIComponent(location.protocol + '//' + location.host)];
 
 				return Ext.String.format('src="{0}?{1}"',
-						url.replace(/http:/i,'https:').replace(/\?.*/i,''),
-						params.join('&') );
+					url.replace(/http:/i, 'https:').replace(/\?.*/i, ''),
+					params.join('&'));
 			}
 
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
-					original : attr+'="'+host+url+'"';
+				original : attr + '="' + host + url + '"';
 		}
 
 		//We eeed a hash for the location.hostname.  We could
 		//b64 encode it but that seems like overkill, a simple
 		//hash should suffice
-		function stringHash(str){
+		function stringHash(str) {
 			var hash = 0, i, c;
-			if(Ext.isEmpty(str)){
+			if (Ext.isEmpty(str)) {
 				return hash;
 			}
 
 			for (i = 0; i < str.length; i++) {
 				c = str.charCodeAt(i);
-				hash = ((hash<<5)-hash)+c;
+				hash = ((hash << 5) - hash) + c;
 				hash = hash & hash; // Convert to 32bit integer
 			}
 			return hash;
 		}
 
 		var me = this,
-			locationHash = stringHash(window.location.hostname);
+			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
+			locationHash = stringHash(window.location.hostname + envSalt);
 
 		string = this.bustCorsForResources(string, 'h', locationHash);
 		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
@@ -173,7 +179,7 @@ Ext.define('NextThought.util.Content',{
 	 * @param max {int}
 	 * @returns {String}
 	 */
-	getHTMLSnippet:function(html, max){
+	getHTMLSnippet: function (html, max) {
 		var i = /[^\.\?!]+[\.\?!]?/,
 			spaces = /(\s{2,})/,
 			df = document.createDocumentFragment(),
@@ -183,10 +189,10 @@ Ext.define('NextThought.util.Content',{
 			r = document.createRange();
 
 		df.appendChild(d);
-		if(Ext.isString(html)){
+		if (Ext.isString(html)) {
 			d.innerHTML = html;
 		}
-		else if(Ext.isDomNode(html)){
+		else if (Ext.isDomNode(html)) {
 			d.appendChild(html.cloneNode(true));
 		}
 		else {
@@ -196,22 +202,22 @@ Ext.define('NextThought.util.Content',{
 		r.setStartBefore(d.firstChild);
 		texts = AnnotationUtils.getTextNodes(d);
 
-		Ext.each(texts,function(t){
+		Ext.each(texts, function (t) {
 			var o = c + t.length,
 				v = t.nodeValue,
 				offset;
 
-			Ext.each(spaces.exec(v)||[],function(gap){
-				o -= (gap.length-1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
+			Ext.each(spaces.exec(v) || [], function (gap) {
+				o -= (gap.length - 1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
 			});
 
 
-			if( o > max ){ //Time to split!
+			if (o > max) { //Time to split!
 				offset = max - c;
 				v = v.substr(offset);
 				v = i.exec(v);
-				offset += (v&&v.length>0?v[0].length:0);
-				r.setEnd(t,offset);
+				offset += (v && v.length > 0 ? v[0].length : 0);
+				r.setEnd(t, offset);
 				return false;
 			}
 
@@ -219,13 +225,13 @@ Ext.define('NextThought.util.Content',{
 			return true;
 		});
 
-		if(!r.collapsed){
+		if (!r.collapsed) {
 			out.appendChild(r.cloneContents());
 			return out.innerHTML;
 		}
 
 		return null;
 	}
-},function(){
+}, function () {
 	window.ContentUtils = this;
 });
