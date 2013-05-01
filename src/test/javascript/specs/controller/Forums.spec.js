@@ -82,9 +82,9 @@ describe('Forums Controller Tests', function(){
 
 		it('callback before restoreState',function(){
 			controller.loadRoot(root);
-			expect(controller.rootLoaded).toBeFalsy();
+			expect(controller.loadingRoot).toBeTruthy();
 			fakeServer.doRequest();
-			expect(controller.rootLoaded).toBeTruthy();
+			expect(controller.loadingRoot).toBeFalsy();
 			expect(controller.fireEvent).toHaveBeenCalledWith("root-loaded");
 			expect(controller.handleRestoreState).not.toHaveBeenCalled();
 			controller.restoreState(restore);
@@ -94,11 +94,11 @@ describe('Forums Controller Tests', function(){
 		it('callback after restoreState',function(){
 			controller.loadRoot(root);
 			controller.restoreState(restore);
-			expect(controller.rootLoaded).toBeFalsy();
+			expect(controller.loadingRoot).toBeTruthy();
 			expect(controller.handleRestoreState).not.toHaveBeenCalled();
 			expect(controller.on).toHaveBeenCalledWith('root-loaded',jasmine.any(Function),jasmine.any(Object),jasmine.any(Object));
 			fakeServer.doRequest();
-			expect(controller.rootLoaded).toBeTruthy();
+			expect(controller.loadingRoot).toBeFalsy();
 			expect(controller.fireEvent).toHaveBeenCalledWith('root-loaded');
 			expect(controller.handleRestoreState).toHaveBeenCalled();
 		});

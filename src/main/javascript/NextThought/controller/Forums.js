@@ -190,11 +190,10 @@ Ext.define('NextThought.controller.Forums', {
 		}
 		
 		//make sure loadRoot has finished
-		if(this.rootLoaded){
-			delete this.rootLoaded;
-			handle();
-		}else{
+		if(me.loadingRoot){
 			me.on('root-loaded',handle,me,{single: true});
+		}else{
+			handle();
 		}
 	},
 
@@ -639,7 +638,7 @@ Ext.define('NextThought.controller.Forums', {
 					comment: undefined
 				});
 			}		
-			me.rootLoaded = true;
+			delete me.loadingRoot
 			me.fireEvent('root-loaded');
 		}
 	},
@@ -671,7 +670,8 @@ Ext.define('NextThought.controller.Forums', {
 				model: 'NextThought.model.forums.Forum', id:'flattened-boards-forums'
 			});
 
-
+		me.loadingRoot = true;
+		
 		urls.handled = urls.length;
 
 		root = view.add({store:store, xtype: 'forums-root', stateKey: 'root'});
