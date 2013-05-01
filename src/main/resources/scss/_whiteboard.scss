@@ -53,6 +53,7 @@
 		@include background-image($g);
 
 		span.whiteboard-color-inner{display: none;}
+		span.whiteboard-color-icon{display: none;}
 		span.whiteboard-color-icon-el {
 			@include color-button-base;
 			position: absolute;
