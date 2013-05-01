@@ -51,4 +51,57 @@ describe('Forums Controller Tests', function(){
 			expect(controller.presentTopic).not.toHaveBeenCalled();
 		});
 	});
+
+	describe('Test Loading', function(){
+		var root, restore, fakeServer;
+
+		function mockAjax (){
+			var server = {args: arguments};
+			spyOn(controller, 'loadRootRequest').andCallFake(function(urls,communities,success,failure,scope){
+				server.doRequest = function(){
+					Ext.callback(success,controller,server.args);
+				}
+			});
+
+			return server;
+		}
+
+		beforeEach(function(){
+			spyOn(controller,'fireEvent').andCallThrough();
+			spyOn(controller,'handleRestoreState');
+			spyOn(controller,'on').andCallThrough();
+			spyOn($AppConfig.userObject,"getCommunities").andReturn([{
+				getLink : function(){
+					return 'google.com';
+				}
+			}])
+			root = { add: function(){}};
+			restore = { forums: 'forums'};
+			fakeServer = mockAjax({},{});
+		});
+
+		it('callback before restoreState',function(){
+			controller.loadRoot(root);
+			expect(controller.rootLoaded).toBeFalsy();
+			fakeServer.doRequest();
+			expect(controller.rootLoaded).toBeTruthy();
+			expect(controller.fireEvent).toHaveBeenCalledWith("root-loaded");
+			expect(controller.handleRestoreState).not.toHaveBeenCalled();
+			controller.restoreState(restore);
+			expect(controller.handleRestoreState).toHaveBeenCalled();
+		});
+		
+		it('callback after restoreState',function(){
+			controller.loadRoot(root);
+			controller.restoreState(restore);
+			expect(controller.rootLoaded).toBeFalsy();
+			expect(controller.handleRestoreState).not.toHaveBeenCalled();
+			expect(controller.on).toHaveBeenCalledWith('root-loaded',jasmine.any(Function),jasmine.any(Object),jasmine.any(Object));
+			fakeServer.doRequest();
+			expect(controller.rootLoaded).toBeTruthy();
+			expect(controller.fireEvent).toHaveBeenCalledWith('root-loaded');
+			expect(controller.handleRestoreState).toHaveBeenCalled();
+		});
+
+	});
 });

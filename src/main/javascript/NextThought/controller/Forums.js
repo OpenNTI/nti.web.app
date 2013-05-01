@@ -165,20 +165,36 @@ Ext.define('NextThought.controller.Forums', {
 	stateKeyPrecedence: ['board','forum','topic','comment'],
 
 
-	restoreState: function(s){
-		var c = this.getForumViewContainer(),
-			state = s.forums || {};
-
+	handleRestoreState: function(state, c){
 		console.log('Handle restore of state here', state);
 		this.popToLastKnownMatchingState(state);
 		this.pushKnownState(state);
-
+	
 		if(c){
 			c.fireEvent('finished-restore');
 		}
 		else{
 			//Ruh roh
 			console.error('No forum container to fire finish restoring.  Expect problems', this);
+		}
+	},
+
+
+	restoreState: function(s){
+		var c = this.getForumViewContainer(),
+			state = s.forums || {},
+			me = this;
+
+		function handle(){
+			me.handleRestoreState(state,c);
+		}
+		
+		//make sure loadRoot has finished
+		if(this.rootLoaded){
+			delete this.rootLoaded;
+			handle();
+		}else{
+			me.on('root-loaded',handle,me,{single: true});
 		}
 	},
 
@@ -582,12 +598,8 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadRoot: function(view){
-		function makeUrl(c){ return c && c.getLink('DiscussionBoard'); }
-
-		//Just for now...
-		function fn(resp,req){
-			var o = ParseUtils.parseItems(resp.responseText),
+	loadRootCallBack: function(resp, req, boards, urls, store){
+		var o = ParseUtils.parseItems(resp.responseText),
 				c;
 
 			if(req && req.community) {
@@ -604,28 +616,50 @@ Ext.define('NextThought.controller.Forums', {
 				}
 			});
 
-			maybeFinish();
+			this.loadRootMaybeFinish(urls,boards,store);
+	},
+
+	
+	loadRootMaybeFinish: function(urls,boards,store){
+		urls.handled--;
+		var r = boards.first(),
+			me = this;
+		if(urls.handled === 0){
+			console.log('List of boards:',boards);
+			store.add(boards);
+			if(boards.length === 1){
+				me.loadBoard(null,r,true);
+				me.replaceState({
+					board:{
+						community: r.communityUsername,
+						isUser: true
+					},
+					forum: undefined,
+					topic: undefined,
+					comment: undefined
+				});
+			}		
+			me.rootLoaded = true;
+			me.fireEvent('root-loaded');
+		}
+	},
+
+
+	loadRootRequest: function(url,community,success,failure,scope){
+		Ext.Ajax.request({url: url, community: community, success: success, failure: failure, scope: scope});
+	},
+
+
+	loadRoot: function(view){
+		function makeUrl(c){ return c && c.getLink('DiscussionBoard'); }
+
+		//Just for now...
+		function fn(resp,req){
+			me.loadRootCallBack(resp,req,boards,urls,store);
 		}
 
 		function maybeFinish(){
-			urls.handled--;
-			var r = boards.first();
-			if(urls.handled === 0){
-				console.log('List of boards:',boards);
-				store.add(boards);
-				if(boards.length === 1){
-					me.loadBoard(null,r,true);
-					me.replaceState({
-						board:{
-							community: r.communityUsername,
-							isUser: true
-						},
-						forum: undefined,
-						topic: undefined,
-						comment: undefined
-					});
-				}
-			}
+			me.loadRootMaybeFinish(urls,boards,store);
 		}
 
 		var communities = $AppConfig.userObject.getCommunities(),
@@ -646,8 +680,9 @@ Ext.define('NextThought.controller.Forums', {
 
 			if(!url){ maybeFinish(); return; }
 
-			Ext.Ajax.request({ url: url, community: communities[i], success: fn, failure: maybeFinish });
-		});
+			me.loadRootRequest(url,communities[i],fn,maybeFinish,me);
+			//Ext.Ajax.request({ url: url, community: communities[i], success: fn, failure: maybeFinish, scope: me});
+		});	
 	},
 
 
