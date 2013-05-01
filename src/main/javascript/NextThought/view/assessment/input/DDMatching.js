@@ -144,6 +144,31 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
+
+	getSolutionContent: function(part) {
+		var values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels')),
+			out = [], tpl = this.solTpl;
+
+
+		values = this.filterHTML(values);
+		labels = this.filterHTML(labels);
+		Ext.each(part.get('solutions'),function(s){
+			var x = s.get('value'), i, valueIndex;
+
+			for(i in x){
+				if(x.hasOwnProperty(i)){
+					i = parseInt(i, 10);
+					valueIndex = x[i];
+					out.push( tpl.apply( [labels[i], values[valueIndex]]));
+				}
+			}
+		});
+
+		return out.join('');
+	},
+
+
 	mark: function(){
 		var s = this.part.get('solutions')[0],
 			c = s.get('value'),
@@ -227,8 +252,16 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 				}
 			},
 			getRepairXY: function(){
-				return this.dragData.repairXY;
+				return this.dragData.sourceEl.getXY();
 			},
+
+			repairHighlightColor: "ffffff",
+
+			afterInvalidDrop: function(){
+				var s = this.dragData.sourceEl;
+				s.show();
+			},
+
 
 			animRepair: true,
 

@@ -687,8 +687,8 @@
 
 							&.target-hover{
 								display: block;
-								outline: 1px solid #3fb3f6;
-								background-color: #fff;
+								outline: 1px solid $primary-blue;
+								border-bottom-color: $primary-blue;
 								@include box-shadow(0 0 5px rgba(63,179,246,.23));
 							}
 
