@@ -1,8 +1,8 @@
-describe('Purchase form tests', function(){
+describe('Purchase form tests', function () {
 
 	var form, testBody, rec;
 
-	beforeEach(function(){
+	beforeEach(function () {
 		testBody = document.createElement('div');
 		document.body.appendChild(testBody);
 		rec = NextThought.model.store.Purchasable.create({});
@@ -11,19 +11,19 @@ describe('Purchase form tests', function(){
 		form.render(testBody);
 	});
 
-	afterEach(function(){
+	afterEach(function () {
 		form.destroy();
 		document.body.removeChild(testBody);
 	});
 
-	it('Starts disabled', function(){
+	it('Starts disabled', function () {
 		expect(form.enableSubmission.calls.length).toBe(1);
 		expect(form.enableSubmission).toHaveBeenCalledWith(false);
 	});
 
-	it('Delegates setting confirm state to window', function(){
+	it('Delegates setting confirm state to window', function () {
 		var win = jasmine.createSpyObj('window', ['setConfirmState']);
-		spyOn(form, 'up').andCallFake(function(sel){
+		spyOn(form, 'up').andCallFake(function (sel) {
 			return sel === 'window' ? win : null;
 		});
 
@@ -33,38 +33,38 @@ describe('Purchase form tests', function(){
 		expect(win.setConfirmState).toHaveBeenCalledWith(true);
 	});
 
-	describe('getCardNumberVal', function(){
+	describe('getCardNumberVal', function () {
 		var parts = ['1234', '1234', '1234', '1234'],
 			input;
 
-		beforeEach(function(){
+		beforeEach(function () {
 			input = form.getEl().down('[name=number]');
 		});
 
-		it('handles space separators', function(){
+		it('handles space separators', function () {
 			input.value = parts.join(' ');
 			expect(form.getCardNumberVal(input)).toBe(parts.join(''));
 		});
 
-		it('handles - separators', function(){
+		it('handles - separators', function () {
 			input.value = parts.join('-');
 			expect(form.getCardNumberVal(input)).toBe(parts.join(''));
 		});
 
-		it('handles no separators', function(){
+		it('handles no separators', function () {
 			input.value = parts.join('');
 			expect(form.getCardNumberVal(input)).toBe(parts.join(''));
 		});
 	});
 
-	describe('value for input', function(){
+	describe('value for input', function () {
 
 		var input;
-		beforeEach(function(){
+		beforeEach(function () {
 			input = document.createElement('input');
 		});
 
-		it('Supperts data-getter mapping to jquery.payment', function(){
+		it('Supperts data-getter mapping to jquery.payment', function () {
 			var result;
 
 			input.setAttribute('data-getter', 'cardExpiryVal');
@@ -76,7 +76,7 @@ describe('Purchase form tests', function(){
 			expect(result.year).toBe(2015);
 		});
 
-		it('Support data-getter mapping to this', function(){
+		it('Support data-getter mapping to this', function () {
 			var result;
 
 			input.setAttribute('data-getter', 'getCardNumberVal');
@@ -89,7 +89,7 @@ describe('Purchase form tests', function(){
 			expect(form.getCardNumberVal).toHaveBeenCalledWith(input);
 		});
 
-		it('Defaults to value', function(){
+		it('Defaults to value', function () {
 			var result;
 			input.value = '123';
 
@@ -98,10 +98,10 @@ describe('Purchase form tests', function(){
 		});
 	});
 
-	describe('validate required', function(){
+	describe('validate required', function () {
 
 		var required, notRequired;
-		beforeEach(function(){
+		beforeEach(function () {
 			required = document.createElement('input');
 			required.setAttribute('data-required', 'true');
 			required.value = 'required';
@@ -110,50 +110,50 @@ describe('Purchase form tests', function(){
 			notRequired.value = 'notRequired';
 		});
 
-		it('Excepts truthy if not required', function(){
+		it('Excepts truthy if not required', function () {
 			expect(form.validateForRequired(notRequired, notRequired.value)).toBeTruthy();
 		});
 
-		it('Excepts falsy if not required', function(){
+		it('Excepts falsy if not required', function () {
 			notRequired.value = '';
 			expect(form.validateForRequired(notRequired, notRequired.value)).toBeTruthy();
 		});
 
-		it('Excepts truthy if required', function(){
+		it('Excepts truthy if required', function () {
 			expect(form.validateForRequired(required, required.value)).toBeTruthy();
 		});
 
-		it('Rejects falsy if not required', function(){
+		it('Rejects falsy if not required', function () {
 			required.value = '';
 			expect(form.validateForRequired(required, required.value)).toBeFalsy();
 		});
 	});
 
-	describe('custom validator', function(){
+	describe('custom validator', function () {
 
 		var input;
-		beforeEach(function(){
+		beforeEach(function () {
 			input = document.createElement('input');
 		});
 
-		it('no validator passes', function(){
+		it('no validator passes', function () {
 			input.value = '12345';
 			expect(form.validateWithValidator(input, input.value)).toBeTruthy();
 		});
 
-		describe('validator calls jquery.payment validator', function(){
-			beforeEach(function(){
+		describe('validator calls jquery.payment validator', function () {
+			beforeEach(function () {
 				input.setAttribute('data-validator', 'validateCardCVC');
 				spyOn(jQuery.payment, 'validateCardCVC').andCallThrough();
 			});
 
-			it('marks failing values invalid', function(){
+			it('marks failing values invalid', function () {
 				input.value = '12345';
 				expect(form.validateWithValidator(input, input.value)).toBeFalsy();
 				expect(jQuery.payment.validateCardCVC).toHaveBeenCalledWith(input.value);
 			});
 
-			it('leaves passing values alone', function(){
+			it('leaves passing values alone', function () {
 				input.value = '456';
 				expect(form.validateWithValidator(input, input.value)).toBeTruthy();
 				expect(jQuery.payment.validateCardCVC).toHaveBeenCalledWith(input.value);
@@ -161,14 +161,14 @@ describe('Purchase form tests', function(){
 		});
 	});
 
-	describe('validate input', function(){
+	describe('validate input', function () {
 
 		var input;
-		beforeEach(function(){
+		beforeEach(function () {
 			input = document.createElement('input');
 		});
 
-		it('Checks required and validator', function(){
+		it('Checks required and validator', function () {
 			spyOn(form, 'validateForRequired').andReturn(true);
 			spyOn(form, 'validateWithValidator').andReturn(true);
 
@@ -180,7 +180,7 @@ describe('Purchase form tests', function(){
 
 		});
 
-		it('Results in invalid if either fail', function(){
+		it('Results in invalid if either fail', function () {
 			spyOn(form, 'validateForRequired').andCallThrough();
 			spyOn(form, 'validateWithValidator').andReturn(true);
 
@@ -190,7 +190,7 @@ describe('Purchase form tests', function(){
 			expect(form.validateInput(input)).toBeNull();
 		});
 
-		it('Remove invalid if input validates', function(){
+		it('Remove invalid if input validates', function () {
 			Ext.fly(input).addCls('invalid');
 
 			spyOn(form, 'validateForRequired').andReturn(true);
@@ -203,14 +203,14 @@ describe('Purchase form tests', function(){
 		});
 	});
 
-	describe('collectVal', function(){
+	describe('collectVal', function () {
 
 		var data = {}, input;
-		beforeEach(function(){
+		beforeEach(function () {
 			input = document.createElement('input');
 		});
 
-		it('Adds a property by name', function(){
+		it('Adds a property by name', function () {
 			input.setAttribute('name', 'foo');
 			input.val = 'bar';
 
@@ -219,7 +219,7 @@ describe('Purchase form tests', function(){
 			expect(data.foo).toBe('bar');
 		});
 
-		it('Unwraps objects', function(){
+		it('Unwraps objects', function () {
 			input.setAttribute('name', 'foo_');
 			input.val = 'bar/baz';
 
@@ -229,5 +229,48 @@ describe('Purchase form tests', function(){
 			expect(data['foo_2']).toBe('baz');
 		});
 
+	});
+
+	describe('error handling', function () {
+
+		var ccNumber, win;
+
+		beforeEach(function () {
+			ccNumber = form.getEl().down('input[name=number]');
+
+			win = jasmine.createSpyObj('win', ['showError']);
+			spyOn(form, 'up').andCallFake(function (sel) {
+				if (sel === 'window') {
+					return win;
+				}
+				return null;
+			});
+		});
+
+		it('Marks valid field invalid', function () {
+			ccNumber.addCls('valid');
+			form.handleError({param: 'number'});
+			expect(ccNumber.hasCls('invalid')).toBeTruthy();
+			expect(ccNumber.hasCls('valid')).toBeFalsy();
+			expect(win.showError).toHaveBeenCalled();
+		});
+
+		it('Takes stripe handshake response', function () {
+			form.handleError({param: 'number', message: 'bad error'});
+			expect(win.showError).toHaveBeenCalledWith('bad error');
+			expect(ccNumber.hasCls('invalid')).toBeTruthy();
+			expect(ccNumber.hasCls('valid')).toBeFalsy();
+		});
+
+		it('Takes stripe error object', function () {
+			var error = NextThought.model.store.StripePurchaseError.create({
+				Param: 'number',
+				Message: 'bad error'
+			});
+			form.handleError(error);
+			expect(win.showError).toHaveBeenCalledWith('bad error');
+			expect(ccNumber.hasCls('invalid')).toBeTruthy();
+			expect(ccNumber.hasCls('valid')).toBeFalsy();
+		});
 	});
 });

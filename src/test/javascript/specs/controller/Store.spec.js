@@ -379,6 +379,64 @@ describe('Store controller', function () {
 		});
 	});
 
+	describe('Purchase creation', function () {
+
+		var form, win;
+
+		function mockCreateToken() {
+			var fakeStripe = {args: arguments};
+			spyOn(Stripe, 'createToken').andCallFake(function (cardInfo, handler) {
+				fakeStripe.createToken = function () {
+					Ext.callback(handler, null, fakeStripe.args);
+				}
+			});
+
+			return fakeStripe;
+		}
+
+		beforeEach(function () {
+			var connect = NextThought.model.store.StripeConnectKey.create({
+				PublicKey: 'pkey'
+			});
+			rec.set('StripeConnectKey', connect);
+			win = NextThought.view.store.purchase.Window.create({record: rec});
+			spyOn(controller, 'getPurchaseWindow').andReturn(win);
+
+			controller.showPurchaseForm(null, rec);
+			form = win.down('purchase-form');
+
+			spyOn(Stripe, 'setPublishableKey');
+		});
+
+		afterEach(function () {
+			closeImmediately(win);
+			win.destroy();
+		});
+
+		describe('tokenResponseHandler', function () {
+			it('unmasks on token error', function () {
+				var s = mockCreateToken(200, {error: {message: 'bad error'}});
+				controller.createPurchase(form, {Purchasable: rec}, {});
+				expect(win.getEl().isMasked()).toBeTruthy();
+				s.createToken();
+				expect(win.getEl().isMasked()).toBeFalsy();
+			});
+
+			it('shows error in form', function () {
+				var resp = {error: {message: 'bad error'}},
+					stripe = mockCreateToken(200, resp);
+
+				spyOn(form, 'handleError');
+
+				controller.createPurchase(form, {Purchasable: rec}, {});
+				expect(win.getEl().isMasked()).toBeTruthy();
+				stripe.createToken();
+				expect(win.getEl().isMasked()).toBeFalsy();
+				expect(form.handleError).toHaveBeenCalledWith(resp.error);
+			});
+		});
+	});
+
 	describe('Navigate to a purchasable NTIID', function () {
 		var mockObjects, navController, oldViewPort;
 

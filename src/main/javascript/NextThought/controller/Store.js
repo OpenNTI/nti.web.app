@@ -427,7 +427,8 @@ Ext.define('NextThought.controller.Store', {
 
 			if (status !== 200 || response.error) {
 				console.error('An error occured during token generation for purchasable', purchasable, response);
-				cmp.handleError(response);
+				cmp.handleError(response.error);
+				done();
 			}
 			else {
 				console.log('Stripe token response handler', arguments);
