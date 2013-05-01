@@ -391,6 +391,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	showEditor: function(){
+		this.clearSearchHit();
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
