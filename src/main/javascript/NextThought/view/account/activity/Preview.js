@@ -280,7 +280,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		else {
 			this.replyEl.remove();
 			//FIXME figure out what needs to happen to just remove respondEl
-			this.respondEl.setVisibilityMode(DISPLAY).hide(); //Note we just hide this one, since it looks referenced in a lot of places
+			this.respondEl.hide(); //Note we just hide this one, since it looks referenced in a lot of places
 		}
 
 		this.mon(this.editor, {
