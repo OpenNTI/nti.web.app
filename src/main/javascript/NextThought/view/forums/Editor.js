@@ -105,6 +105,7 @@ Ext.define('NextThought.view.forums.Editor',{
 			e.editBody(h.get('body'));
 			e.setTitle(h.get('title'));
 			e.setTags(h.get('tags'));
+			e.setPublished(r.isPublished());
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
