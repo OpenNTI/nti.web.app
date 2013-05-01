@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.account.activity.Preview',{
+Ext.define('NextThought.view.account.activity.Preview', {
 	extend: 'Ext.container.Container',
 
 	requires: [
-        'NextThought.cache.LocationMeta',
+		'NextThought.cache.LocationMeta',
 		'NextThought.editor.Editor',
 		'NextThought.mixins.ProfileLinks',
 		'NextThought.layout.component.Natural'
@@ -14,9 +14,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
-		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
+		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
 
 		//allow a toolbar template to be defined
@@ -24,14 +24,14 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		//merge in subclass's templates
 		var tpl = this.prototype.renderTpl
-				.replace('{toolbar}',data.toolbarTpl||'');
+			.replace('{toolbar}', data.toolbarTpl || '');
 
-		if(!data.renderTpl){
+		if (!data.renderTpl) {
 			data.renderTpl = tpl;
 		}
 		//Allow the subclass to redefine the template and include the super's template
 		else {
-			data.renderTpl = data.renderTpl.replace('{super}',tpl);
+			data.renderTpl = data.renderTpl.replace('{super}', tpl);
 		}
 	},
 
@@ -44,7 +44,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	componentLayout: 'natural',
 	layout: 'auto',
 	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
+	getTargetEl: function () {
+		return this.body;
+	},
 
 	cls: 'activity-preview',
 
@@ -68,10 +70,10 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: '{type} activity-preview-body',
-			cn:[
+			cn: [
 				'{toolbar}',
-				{ cls:'item', cn:[
-					{ cls: 'avatar', style:{backgroundImage:'url({avatarURL})'} },
+				{ cls: 'item', cn: [
+					{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite' },
 						{ cls: 'like' }
@@ -80,7 +82,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 						{ cls: 'subject {[values.title? "":"no-subject"]}', html: '{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: 'By {name}'},
-							{tag: 'span', cls: 'time', html:'{relativeTime}'}
+							{tag: 'span', cls: 'time', html: '{relativeTime}'}
 						]}
 					]},
 					{ cls: 'body' }
@@ -93,11 +95,13 @@ Ext.define('NextThought.view.account.activity.Preview',{
 					]
 				}
 			]
-		},{
+		},
+		{
 			id: '{id}-body',
 			cls: 'replies',
-			cn:['{%this.renderContainer(out,values)%}']
-		},{
+			cn: ['{%this.renderContainer(out,values)%}']
+		},
+		{
 			cls: 'respond', cn: {
 			cn: [
 				{
@@ -111,68 +115,75 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	]),
 
 
+	moreTpl: Ext.DomHelper.createTemplate({tag: 'a', cls: 'more', cn: [
+		{},
+		{},
+		{}
+	]}),
 
-	moreTpl: Ext.DomHelper.createTemplate({tag:'a', cls:'more',cn:[{},{},{}]}),
 
-
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.enableBubble(['resize', 'realign']);
 	},
 
 
-	setBody: function(body){
-		if(!this.rendered){
-			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
+	setBody: function (body) {
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.setBody, this, arguments), this);
 			return;
 		}
 
-		if(this.record.placeholder){ return; }
+		if (this.record.placeholder) {
+			return;
+		}
 
-		var snip = ContentUtils.getHTMLSnippet(body,300), me = this;
-		this.messageBodyEl.update(snip||body);
+		var snip = ContentUtils.getHTMLSnippet(body, 300), me = this;
+		this.messageBodyEl.update(snip || body);
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
 
-		this.messageBodyEl.select('img').on('load', function(){ me.fireEvent('realign'); });
+		this.messageBodyEl.select('img').on('load', function () {
+			me.fireEvent('realign');
+		});
 		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
 		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
 
 		//Allow dom to reflect style changes
-		Ext.defer(this.setupReplyScrollZone,1,this);
-		Ext.defer(this.maybeShowMoreLink,1,this);
+		Ext.defer(this.setupReplyScrollZone, 1, this);
+		Ext.defer(this.maybeShowMoreLink, 1, this);
 	},
 
 
-	maybeShowMoreLink: function(){
+	maybeShowMoreLink: function () {
 		var el = this.messageBodyEl;
-		if(el.dom.scrollHeight <= el.getHeight()){
+		if (el.dom.scrollHeight <= el.getHeight()) {
 			return;
 		}
 
-		this.moreTpl.insertAfter(el,null,true);
+		this.moreTpl.insertAfter(el, null, true);
 		this.mon(this.el.down('a.more'), 'click', this.navigateToItem, this);
 	},
 
 
-	setupReplyScrollZone: function(){
+	setupReplyScrollZone: function () {
 		var rH = this.respondEl.getHeight(),
 			tH = this.topEl.getHeight(),
 			max = Ext.dom.Element.getViewportHeight()
 				- tH
 				- rH;
 
-		console.log(rH,tH,max,this.body);
-		this.body.setStyle({maxHeight: max+'px'});
+		console.log(rH, tH, max, this.body);
+		this.body.setStyle({maxHeight: max + 'px'});
 	},
 
 
-	navigateToItem: function(){
+	navigateToItem: function () {
 		console.warn('Should be overridden by its children');
 	},
 
 
-	showReplies: function(){
+	showReplies: function () {
 		this.setupReplyScrollZone();
 	},
 
@@ -183,7 +194,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	 * @param record
 	 * @returns Number
 	 */
-	getCommentCount: function(record){
+	getCommentCount: function (record) {
 		throw 'Do not use the base class directly. Subclass and implement this';
 	},
 
@@ -194,7 +205,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	 * @param record
 	 * @returns Object
 	 */
-	getDerivedData: function(record){
+	getDerivedData: function (record) {
 		return {
 			relativeTime: record.getRelativeTimeString()
 		};
@@ -202,21 +213,21 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 
 	/** @private */
-	prepareRenderData: function(record){
+	prepareRenderData: function (record) {
 		var me = this,
 			o = record.getData();
 		o.type = o.Class.toLowerCase();
 		o.CommentCount = this.getCommentCount(record);
-		Ext.apply(o,this.getDerivedData(record));
+		Ext.apply(o, this.getDerivedData(record));
 
 		me.ownerCt.addCls(o.type);
 
-		UserRepository.getUser(o.Creator,function(u){
+		UserRepository.getUser(o.Creator, function (u) {
 			o.avatarURL = u.get('avatarURL');
 			o.name = Ext.String.ellipsis(u.getName(), 20);
-			if(me.rendered){
-				me.avatar.setStyle({backgroundImage: 'url('+ o.avatarURL + ');'});
-				me.name.update(me.name.getHTML()+o.name);
+			if (me.rendered) {
+				me.avatar.setStyle({backgroundImage: 'url(' + o.avatarURL + ');'});
+				me.name.update(me.name.getHTML() + o.name);
 			}
 
 			// This allows navigating to the profile of the creator.
@@ -224,27 +235,27 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			this.user = u;
 		});
 
-		return Ext.apply(this.renderData||{}, o);
+		return Ext.apply(this.renderData || {}, o);
 	},
 
 
-	getRefItems: function(){
-		var ret = this.callParent(arguments)||[];
-		if( this.editor ){
+	getRefItems: function () {
+		var ret = this.callParent(arguments) || [];
+		if (this.editor) {
 			ret.push(this.editor);
 		}
 		return ret;
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.renderData = this.prepareRenderData(this.record);
 	},
 
 
-	saveCallback: function(editor, cmp, replyRecord){
+	saveCallback: function (editor, cmp, replyRecord) {
 		editor.deactivate();
 		editor.setValue('');
 		editor.reset();
@@ -252,28 +263,37 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var DISPLAY = Ext.dom.Element.DISPLAY,
 			box = this.replyBoxEl;
-		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.respondEl, 'saveCallback': this.saveCallback});
-		this.mon(this.replyEl, 'click', this.showEditor, this);
+		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.respondEl, 'saveCallback': this.saveCallback});
+
 		box.setVisibilityMode(DISPLAY);
 
 		this.respondEl.setVisibilityMode(DISPLAY);
 
-		this.mon(this.editor,{
+		if ($AppConfig.service.canShare()) {
+			this.mon(this.replyEl, 'click', this.showEditor, this);
+		}
+		else {
+			this.replyEl.remove();
+			//FIXME figure out what needs to happen to just remove respondEl
+			this.respondEl.setVisibilityMode(DISPLAY).hide(); //Note we just hide this one, since it looks referenced in a lot of places
+		}
+
+		this.mon(this.editor, {
 			scope: this.editor,
-			'activated-editor':Ext.bind(box.hide,box,[false]),
-			'deactivated-editor':Ext.bind(box.show,box,[false]),
-			'no-body-content': function(editor,bodyEl){
-				editor.markError(bodyEl,'You need to type something');
+			'activated-editor': Ext.bind(box.hide, box, [false]),
+			'deactivated-editor': Ext.bind(box.show, box, [false]),
+			'no-body-content': function (editor, bodyEl) {
+				editor.markError(bodyEl, 'You need to type something');
 				return false;
 			}
 		});
 
-		this.mon(this.editor,'deactivated-editor',this.setupReplyScrollZone,this,{delay:1});
+		this.mon(this.editor, 'deactivated-editor', this.setupReplyScrollZone, this, {delay: 1});
 
 		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
 		this.mon(this.messageBodyEl, 'click', this.navigateToItem, this);
@@ -283,16 +303,18 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	handleBeforeDeactivate: function(){
-		if((this.editor && this.editor.isActive())){
+	handleBeforeDeactivate: function () {
+		if ((this.editor && this.editor.isActive())) {
 			return false;
 		}
-		return	Ext.Array.every(this.items.items, function(item){ return item.fireEvent('beforedeactivate'); });
+		return    Ext.Array.every(this.items.items, function (item) {
+			return item.fireEvent('beforedeactivate');
+		});
 	},
 
 
-	showEditor: function(){
-		Ext.defer(this.setupReplyScrollZone,1,this);
+	showEditor: function () {
+		Ext.defer(this.setupReplyScrollZone, 1, this);
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
@@ -300,7 +322,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	getPointerStyle: function(x,y){
+	getPointerStyle: function (x, y) {
 		return y >= this.footEl.getY() ? 'grey' : '';
 	}
 
