@@ -1,7 +1,7 @@
-Ext.define('NextThought.view.forums.Comment',{
+Ext.define('NextThought.view.forums.Comment', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-topic-comment',
-	require:[
+	require: [
 		'NextThought.editor.Editor'
 	],
 
@@ -15,21 +15,24 @@ Ext.define('NextThought.view.forums.Comment',{
 	ui: 'forum-comment',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'controls', cn:[{cls:'favorite-spacer'},{cls:'like'}]},
+		{ cls: 'controls', cn: [
+			{cls: 'favorite-spacer'},
+			{cls: 'like'}
+		]},
 		{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'}},
-		{ cls: 'wrap', 'data-commentid':'{ID}', cn:[
+		{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
 			{ cls: 'meta', cn: [
 				{ tag: 'span', html: '{displayName}', cls: 'name link'},
-				{ tag:'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
+				{ tag: 'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
 			]},
 			{ cls: 'body' },
-			{ cls: 'foot', cn:[
-				{ tag: 'tpl', 'if':'isModifiable', cn:[
-					{ tag:'span', cls: 'edit link', html: 'Edit'},
-					{ tag:'span', cls: 'delete link', html: 'Delete'}
+			{ cls: 'foot', cn: [
+				{ tag: 'tpl', 'if': 'isModifiable', cn: [
+					{ tag: 'span', cls: 'edit link', html: 'Edit'},
+					{ tag: 'span', cls: 'delete link', html: 'Delete'}
 				]},
-				{ tag: 'tpl', 'if':'!isModifiable', cn:[
-					{ tag:'span', cls: 'flag link', html: 'Report'}
+				{ tag: 'tpl', 'if': '!isModifiable', cn: [
+					{ tag: 'span', cls: 'flag link', html: 'Report'}
 				]}
 			]},
 			{ cls: 'editor-box' }
@@ -45,14 +48,14 @@ Ext.define('NextThought.view.forums.Comment',{
 		liked: '.controls .like',
 		editEl: '.foot .edit',
 		deleteEl: '.foot .delete',
-		flagEl:'.foot .flag',
+		flagEl: '.foot .flag',
 		editorBoxEl: '.editor-box',
 		metaEl: '.meta',
 		footEl: '.foot'
 	},
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
@@ -62,44 +65,44 @@ Ext.define('NextThought.view.forums.Comment',{
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		var me = this, r = me.record, rd;
 		me.callParent(arguments);
-		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
+		rd = me.renderData = Ext.apply(me.renderData || {}, r.getData());
 		rd.LastModified = rd['Last Modified'];
 
 		me.loadUser(r.get('Creator'));
 
-		if(isMe(r.get('Creator'))){
+		if (isMe(r.get('Creator'))) {
 			this.addCls('me');
 		}
 
-		if(this.record.get('Deleted')){
+		if (this.record.get('Deleted')) {
 			this.addCls('deleted');
 		}
 	},
 
-	loadUser: function(creator){
+	loadUser: function (creator) {
 		var me = this;
-		UserRepository.getUser(creator,me.addUser,me);
+		UserRepository.getUser(creator, me.addUser, me);
 	},
 
-	addUser: function(u){
+	addUser: function (u) {
 		var me = this, r = me.record,
-		rd = Ext.apply(me.renderData || {}, r.getData());
+			rd = Ext.apply(me.renderData || {}, r.getData());
 		rd.lastModified = rd['Last Modified'];
 		me.userObject = u;
 		Ext.applyIf(rd, u.getData());
 		me.renderData = rd;
-		if(me.rendered){
+		if (me.rendered) {
 			console.warn('Rendered late');
 			me.nameEl.update(u.get('displayName'));
-			me.avatarEl.setStyle('backgroundImage','url('+u.get('avatarURL')+')');
+			me.avatarEl.setStyle('backgroundImage', 'url(' + u.get('avatarURL') + ')');
 		}
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
@@ -112,16 +115,16 @@ Ext.define('NextThought.view.forums.Comment',{
 		this.updateContent();
 		bodyEl.selectable();
 
-		if( this.deleteEl ){
-			this.mon(this.deleteEl,'click',this.onDeletePost,this);
+		if (this.deleteEl) {
+			this.mon(this.deleteEl, 'click', this.onDeletePost, this);
 		}
 
-		if( this.editEl ){
-			this.mon(this.editEl,'click',this.onEditPost,this);
+		if (this.editEl) {
+			this.mon(this.editEl, 'click', this.onEditPost, this);
 		}
 
-		if(this.record){
-			this.enableProfileClicks(this.nameEl,this.avatarEl);
+		if (this.record) {
+			this.enableProfileClicks(this.nameEl, this.avatarEl);
 		}
 
 		this.reflectLikeAndFavorite(this.record);
@@ -129,7 +132,7 @@ Ext.define('NextThought.view.forums.Comment',{
 		this.reflectFlagged(this.record);
 		this.listenForFlagChanges(this.record);
 
-		if(this.record.get('Deleted')){
+		if (this.record.get('Deleted')) {
 			this.tearDownFlagging();
 		}
 
@@ -138,24 +141,34 @@ Ext.define('NextThought.view.forums.Comment',{
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		footEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		hide = function(){bodyEl.hide();ctrlEl.hide();metaEl.hide();footEl.hide();};
-		show = function(){bodyEl.show();ctrlEl.show();metaEl.show();footEl.show();};
+		hide = function () {
+			bodyEl.hide();
+			ctrlEl.hide();
+			metaEl.hide();
+			footEl.hide();
+		};
+		show = function () {
+			bodyEl.show();
+			ctrlEl.show();
+			metaEl.show();
+			footEl.show();
+		};
 
-		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl});
-		this.mon(this.editor,{
+		this.editor = Ext.widget('nti-editor', {record: this.record, ownerCt: this, renderTo: this.editorBoxEl});
+		this.mon(this.editor, {
 			scope: this,
-			'activated-editor':hide,
-			'deactivated-editor':show,
-			'no-body-content': function(editor,el){
-				editor.markError(el,'You need to type something');
+			'activated-editor': hide,
+			'deactivated-editor': show,
+			'no-body-content': function (editor, el) {
+				editor.markError(el, 'You need to type something');
 				return false;
 			}
 		});
 	},
 
 
-	onDestroy: function(){
-		if( this.editor ) {
+	onDestroy: function () {
+		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
 			delete this.editor;
@@ -164,30 +177,34 @@ Ext.define('NextThought.view.forums.Comment',{
 	},
 
 
-	getRefItems: function(){ return this.editor ? [this.editor] : []; },
+	getRefItems: function () {
+		return this.editor ? [this.editor] : [];
+	},
 
 
-	getRecord: function(){
+	getRecord: function () {
 		return this.record;
 	},
 
 
-	updateContent: function(){
+	updateContent: function () {
 		this.record.compileBodyContent(this.setContent, this);
 	},
 
 
-	setContent: function(html){
+	setContent: function (html) {
 		var el = this.bodyEl, me = this;
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
-		el.select('img.whiteboard-thumbnail').each(function(el){
+		el.select('img.whiteboard-thumbnail').each(function (el) {
 			el.replace(el.up('.body-divider'));
 		});
 
-		el.select('img').each(function(img){
-			img.on('load', function(){ me.up('[record]').fireEvent('sync-height'); });
+		el.select('img').each(function (img) {
+			img.on('load', function () {
+				me.up('[record]').fireEvent('sync-height');
+			});
 		});
 	},
 
@@ -207,15 +224,15 @@ Ext.define('NextThought.view.forums.Comment',{
 	 * FIXME I don't really like this way of handling this.  I really want to use the placeholder logic but sill have
 	 * the ability for destroy and our store removal logic to kick in.
 	 */
-	onRecordDestroyed: function(){
+	onRecordDestroyed: function () {
 		//First remove the delete and edit link listeners followed by the els
-		if( this.deleteEl ){
-			this.mun(this.deleteEl,'click',this.onDeletePost,this);
+		if (this.deleteEl) {
+			this.mun(this.deleteEl, 'click', this.onDeletePost, this);
 			this.deleteEl.remove();
 		}
 
-		if( this.editEl ){
-			this.mun(this.editEl,'click',this.onEditPost,this);
+		if (this.editEl) {
+			this.mun(this.editEl, 'click', this.onEditPost, this);
 			this.editEl.remove();
 		}
 
@@ -227,12 +244,12 @@ Ext.define('NextThought.view.forums.Comment',{
 		this.record.removeObserverForField(this, 'body', this.updateContent, this);
 
 		//Now update the body to the same text the server uses.
-		this.bodyEl.update('This object has been removed.');
+		this.bodyEl.update('This item has been deleted.');
 		this.addCls('deleted');
 	},
 
 
-	onDeletePost: function(e){
+	onDeletePost: function (e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -243,8 +260,8 @@ Ext.define('NextThought.view.forums.Comment',{
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function(str){
-				if(str === 'ok'){
+			fn: function (str) {
+				if (str === 'ok') {
 					me.fireDeleteEvent();
 				}
 			}
@@ -252,15 +269,15 @@ Ext.define('NextThought.view.forums.Comment',{
 	},
 
 
-	fireDeleteEvent: function(){
+	fireDeleteEvent: function () {
 		this.fireEvent('delete-topic-comment', this.record, this);
 	},
 
 
-	onEditPost: function(e){
+	onEditPost: function (e) {
 		e.stopEvent();
 		var parentCmp = this.up('forums-topic');
-		if(parentCmp && parentCmp.clearSearchHit){
+		if (parentCmp && parentCmp.clearSearchHit) {
 			parentCmp.clearSearchHit();
 		}
 		this.editor.editBody(this.record.get('body'));
