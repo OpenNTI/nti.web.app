@@ -283,7 +283,7 @@ Ext.define('NextThought.controller.Search', {
 			hit = result.hit,
 			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
 			qStr = this.getHitStore().queryString,
-			commentId;
+			commentId, me = this;
 
 		if(isComment){
 			commentId = hit.get('ID');
@@ -297,7 +297,9 @@ Ext.define('NextThought.controller.Search', {
 			onReady.timeoutTimer = setInterval(clearCallback, 3000);
 		}
 
-		this.gotoBlog(u, postId, commentId, {queryString: qStr});
+		UserRepository.getUser(r.get('Creator'), function(u){
+			me.gotoBlog(u, postId, commentId, {queryString: qStr});
+		});
 	},
 
 	searchResultClicked: function(result, fragIdx){
