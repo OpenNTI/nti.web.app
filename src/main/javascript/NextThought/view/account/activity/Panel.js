@@ -110,7 +110,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 
     fetchMore: function(){
-        var s = this.store;
+        var s = this.store,
+        	centerButton = this.el.down('.center-button');
 
         if (!s.hasOwnProperty('data')) {
             return;
@@ -123,7 +124,9 @@ Ext.define('NextThought.view.account.activity.Panel',{
             s.nextPage();
         }
 		else{
-			this.el.down('.center-button').remove();
+			if(centerButton){
+				this.el.down('.center-button').remove();
+			}
 			this.el.parent().unmask();
 		}
     },
