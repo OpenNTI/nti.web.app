@@ -199,7 +199,9 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('IllegalArgument');
 		}
 
-		r.setStartBefore(d.firstChild);
+		if(d.firstChild){
+			r.setStartBefore(d.firstChild);
+		}
 		texts = AnnotationUtils.getTextNodes(d);
 
 		Ext.each(texts, function (t) {
