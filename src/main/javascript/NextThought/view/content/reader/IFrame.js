@@ -277,9 +277,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	checkFrame: function(){
-		var doc = this.getDocumentElement();
+		var doc = this.getDocumentElement(), html;
 		if (doc) {
-			this.syncFrame(doc.getElementsByTagName('html')[0]);
+			html = doc.getElementsByTagName('html');
+			if(!Ext.isEmpty(html)){
+				this.syncFrame(html[0]);
+			}
 			if(Ext.Date.now()-this.lastSyncFrame > 1000){
 				clearInterval(this.syncInterval);
 				this.syncInterval = setInterval(this.checkFrame,
