@@ -28,6 +28,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 
 	loadContext: function (fin) {
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.loadContext, this, [fin]), this, {single:true});
+			return;
+		}
+
 		var me = this,
 			r = me.record,
 			cid = r.get('ContainerId'),
