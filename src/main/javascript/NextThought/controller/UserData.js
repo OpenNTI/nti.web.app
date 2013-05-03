@@ -199,7 +199,10 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingChange: function withMeta(change, meta, reCalled) {
 		//fancy callback that calls this function back with addtional arguments
-		function reCall(meta){ withMeta.call(me,change,meta,true); }
+		function reCall(meta){ 
+			var c = ParseUtils.parseItems([change.raw])[0];
+			withMeta.call(me,c,meta,true); 
+		}
 
 		//we require at least a change object
 		if(!change){
