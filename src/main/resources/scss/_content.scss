@@ -364,7 +364,7 @@
 
 .x-reader-pane {
 
-	&, iframe {
+	&, iframe[name$="content"] {
 		//@include hardware-accelerate();
 	}
 
@@ -373,12 +373,20 @@
 		* { text-align: left; }
 	}
 
-	iframe {
-		margin: 0 auto 0 auto;
+	iframe[name$="content"] {
+		margin: 0 0 0 auto;
 	}
 
 	.x-panel-body-reader {
 		@include scrollbar(#ffffff, $tertiary-grey, 45px 0);
+	}
+}
+
+.component-overlay {
+	.videos {
+		iframe {
+			margin: 0 auto;
+		}
 	}
 }
 
