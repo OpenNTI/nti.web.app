@@ -53,8 +53,8 @@ describe('Chat Controller Tests', function(){
 
 	it('Listens for several socket events', function(){
 		var expectedEvents = ['disconnect', 'serverkill', 'chat_enteredRoom', 'chat_exitedRoom',
-							  'chat_roomMembershipChanged', 'chat_presenceOfUserChangedTo', 'chat_recvMessage',
-							  'chat_recvMessageForShadow'];
+							  'chat_roomMembershipChanged', 'chat_presenceOfUserChangedTo', 'chat_setPresenceOfUsersTo',
+							  'chat_recvMessage', 'chat_recvMessageForShadow'];
 
 		Ext.each(expectedEvents, function(e){
 			expect(Ext.isFunction(socket.control[e])).toBeTruthy();
@@ -223,6 +223,64 @@ describe('Chat Controller Tests', function(){
 
 			expect(result).toBe('!hash');
 		});
-	})
+	});
+
+	describe('setPresence tests',function(){
+		var userNames, presenceObjects;
+		beforeEach(function(){
+			var i;
+			userNames = ['firstName','secondName','thirdName'];
+			presenceObjects = {};
+
+			for(i = 0; i < userNames.length; i++){
+				presenceObjects[userNames[i]] = {
+					'Class' : 'PresenceInfo',
+					'Username' : userNames[i],
+					'type' : 'available',
+					'show' : 'chat',
+					'status' : ''
+				};
+			}
+		});
+
+		describe('Adding new PresenceInfos', function(){
+			it('Passing a presence model',function(){
+				var presence, model,
+					store = controller.getPresenceInfoStore();
+
+				model = Ext.create('NextThought.model.PresenceInfo', presenceObjects[userNames[0]]);
+
+				controller.setPresence(model);
+
+				presence = store.getPresenceOf(userNames[0]);
+				expect(presence.get('Username')).toBe(userNames[0]);
+				expect(presence.get('type')).toBe('available');
+			});
+
+			it('Passing a single json',function(){
+				var presence,
+					store = controller.getPresenceInfoStore();
+
+				controller.setPresence(presenceObjects[userNames[0]]);
+
+				presence = store.getPresenceOf(userNames[0]);
+				expect(presence.get('Username')).toBe(userNames[0]);
+				expect(presence.get('type')).toBe('available');
+			});
+
+			it('Passing key value json',function(){
+				var i, presence,
+					store = controller.getPresenceInfoStore();
+
+				controller.setPresence(presenceObjects);
+
+				for(i = 0; i < userNames.length; i++){
+					presence = store.getPresenceOf(userNames[i])
+					expect(presence.get('Username')).toBe(userNames[i]);
+					expect(presence.get('type')).toBe('available');
+				}
+			});
+		});
+	});
 });
 

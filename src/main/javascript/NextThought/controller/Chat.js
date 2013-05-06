@@ -10,6 +10,10 @@ Ext.define('NextThought.controller.Chat', {
 	],
 
 
+	stores: [
+		'PresenceInfo'
+	],
+
 	models: [
 		'FriendsList',
 		'MessageInfo',
@@ -43,6 +47,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat_roomMembershipChanged' : function(){me.onMembershipOrModerationChanged.apply(me, arguments);},
 //			'chat_roomModerationChanged' : function(){me.onModerationChange.apply(me, arguments);},
 			'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository.presenceChanged(user, presence);},
+			'chat_setPresenceOfUsersTo': function(){me.setPresence.apply(me,arguments);},
 			'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
 //			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
 //			'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
@@ -176,6 +181,16 @@ Ext.define('NextThought.controller.Chat', {
 				}, this);
 
 		});
+
+		//Change presence to available
+		/*console.log("Make user avialable");
+		this.socket.emit("chat_setPresence", {
+			'Class' : 'PresenceInfo',
+			'MimeType' : "application/vnd.nextthought.presenceinfo",
+			'username' : $AppConfig.userObject.get('Username'),
+			'type' : 'available',
+			'status' : 'chat'
+		});*/
 
 	},
 
@@ -871,6 +886,29 @@ Ext.define('NextThought.controller.Chat', {
 //		}
 //	},
 
+
+	setPresence: function(msg){
+		var store = this.getPresenceInfoStore(), items;
+			//items = (Ext.isString(msg))? JSON.decode(msg) : msg;
+
+		if(msg.isPresenceInfo){
+			//passed a presence model
+			store.setPresenceOf(msg.get('username'),msg);
+		}else if(msg.Class === 'PresenceInfo'){
+			//passed a single presence json
+			items = ParseUtils.parseItems([msg])[0];
+
+			store.setPresenceOf(msg.username,items);
+		}else{
+			items = (Ext.isString(msg))? Ext.JSON.decode(msg) : msg;
+			Ext.Object.each(items,function(key,value,object){
+				var presence = ParseUtils.parseItems([value])[0];
+
+				store.setPresenceOf(key,presence);
+			});
+		}
+
+	},
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
