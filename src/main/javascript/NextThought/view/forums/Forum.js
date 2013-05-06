@@ -46,7 +46,7 @@ Ext.define('NextThought.view.forums.Forum',{
 				]},
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{PostCount} {parent.kind:plurality(values.PostCount)}' },
+					{ tag: 'span', cls:'count', html: '{PostCount:plural(parent.kind)}' },
 					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
 							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},

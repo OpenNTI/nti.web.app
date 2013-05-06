@@ -16,16 +16,9 @@ Ext.define('NextThought.util.Format', {
 			end = info.end || !info.sign;
 
 		return Ext.util.Format.currency(value, sign, decimals, end);
-	},
-
-
-	plurality: function(value, count){
-		return value + (count===1? '':'s');
 	}
-
 
 },function(){
 	window.NTIFormat = this;
 	Ext.util.Format.ntiCurrency = Ext.bind( NTIFormat.currency, NTIFormat);
-	Ext.util.Format.plurality = NTIFormat.plurality;
 });

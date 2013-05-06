@@ -25,7 +25,7 @@ Ext.define('NextThought.view.forums.Root',{
 				{ cls: 'title', html: '{Creator}' },
 				{ tag: 'tpl', 'if':'description', cn: { cls: 'description', html: '{description}'} },
 				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{ForumCount} {parent.kind:plurality(values.PostCount)}' }
+					{ tag: 'span', cls:'count', html: '{ForumCount:plural(parent.kind)}' }
 				]}
 			]}
 		]
