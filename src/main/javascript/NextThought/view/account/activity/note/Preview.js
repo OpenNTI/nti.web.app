@@ -71,7 +71,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				me.purchasable = p;
 				el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
 				me.needsPurchaseTpl.overwrite(el, p.getData(), true);
-				el.on('click', me.navigateToItem, me);
+				me.clearManagedListeners();
+				me.mon(el,'click', me.navigateToItem, me);
 
 				Ext.DomHelper.append(me.getEl(), {
 					cls: 'purchasable-mask',
