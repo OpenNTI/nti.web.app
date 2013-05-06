@@ -133,6 +133,11 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			d.addCls(cls);
 			i++;
 		});
+
+		Ext.defer(function(){
+			me.updateLayout();
+			me.syncElementHeight();
+		}, 1);
 	},
 
 
