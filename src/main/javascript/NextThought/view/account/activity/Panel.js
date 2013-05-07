@@ -450,16 +450,19 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			rec = (item||{}).record,
 			popout = NextThought.view.account.activity.Popout;
 
+		e.stopEvent();
+
 		if(rec && rec.getClassForModel) {
 			popout = rec.getClassForModel('widget.activity-popout-',NextThought.view.account.activity.Popout);
 		}
 
-		if(!rec){return;}
+		if(!rec || me.activeTarget === target){return;}
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			popout.popup(rec, target, me);
+			me.activeTarget = target;
 		},500);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
