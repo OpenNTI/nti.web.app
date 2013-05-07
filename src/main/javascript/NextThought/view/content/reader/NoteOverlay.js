@@ -10,13 +10,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	openWhiteboards: {},
 
-	constructor: function(){
+	constructor: function () {
 		var data = this.noteOverlayData;
 
 		this.on({
 			scope: this,
-			'content-updated': function(){
-			    this.noteOverlayClearRestrictedRanges();
+			'content-updated': function () {
+				this.noteOverlayClearRestrictedRanges();
 			},
 			'afterRender': this.insertNoteOverlay,
 
@@ -24,8 +24,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		});
 
 
-        //make sure we clear ranges when filter is changed
-        FilterManager.registerFilterListener(this, this.noteOverlayClearRestrictedRanges, this);
+		//make sure we clear ranges when filter is changed
+		FilterManager.registerFilterListener(this, this.noteOverlayClearRestrictedRanges, this);
 
 		return this;
 	},
@@ -42,88 +42,102 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	/**
-	* This is invoked by an event in the context of the mixed in class... so this function exists in this helper
-	* object but it's "this" will be of the owner object.
-	* @private
-	*/
-	insertNoteOverlay: function(){
+	 * This is invoked by an event in the context of the mixed in class... so this function exists in this helper
+	 * object but it's "this" will be of the owner object.
+	 * @private
+	 */
+	insertNoteOverlay: function () {
 		var me = this,
 			data = me.noteOverlayData,
 			box, txt,
 			container = {
-			cls:'note-gutter',
-			style: {
-				height: me.getHeight()
-			},
-			cn: [{
-				cls: 'note-here-control-box',
-				cn: [{
-					cls: 'entry',
-					cn: [{
-						cls: 'clear', html: '&nbsp;'
-					},{
-						cls: 'advanced', html: '&nbsp;', 'data-qtip': 'Advanced'
-					},{
-						tag: 'textarea',
-						cls: 'note-input'
-					},{
-						cls: 'shadow-text',html: 'Write a note...', unselectable: 'on'
-					}]
-				},{
-					cls: 'bottom-border',
-					html: '&nbsp;'
+				cls: 'note-gutter',
+				style: {
+					height: me.getHeight()
 				},
-					TemplatesForNotes.getEditorTpl()
+				cn: [
+					{
+						cls: 'note-here-control-box',
+						cn: [
+							{
+								cls: 'entry',
+								cn: [
+									{
+										cls: 'clear', html: '&nbsp;'
+									},
+									{
+										cls: 'advanced', html: '&nbsp;', 'data-qtip': 'Advanced'
+									},
+									{
+										tag: 'textarea',
+										cls: 'note-input'
+									},
+									{
+										cls: 'shadow-text', html: 'Write a note...', unselectable: 'on'
+									}
+								]
+							},
+							{
+								cls: 'bottom-border',
+								html: '&nbsp;'
+							},
+							TemplatesForNotes.getEditorTpl()
+						]
+					}
 				]
-			}]
-		};
+			};
 
-		container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),container,true);
+		container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(), container, true);
 		data.box = box = container.down('.note-here-control-box');
 		data.textarea = txt = box.down('textarea');
 		data.lineEntry = box.down('.entry');
 		data.editor = box.down('.editor');
-        data.main = box.down('.main');
-        data.footer = box.down('.footer');
+		data.main = box.down('.main');
+		data.footer = box.down('.footer');
 		box.down('.shadow-text').unselectable();
 
-        //Firefox likes to allow you to edit the toolbar, fix that
-        if (data.main){
-            data.main.unselectable();
-        }
-        if (data.footer){
-            data.footer.unselectable();
-        }
+		//Firefox likes to allow you to edit the toolbar, fix that
+		if (data.main) {
+			data.main.unselectable();
+		}
+		if (data.footer) {
+			data.footer.unselectable();
+		}
 
 		box.hide();
 
-		(new Ext.CompositeElement( box.query('.action.save'))).on('click', me.noteOverlayEditorSave, me);
-		(new Ext.CompositeElement( box.query('.entry .advanced'))).on('click', me.noteOverlayActivateRichEditor, me);
-		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
+		(new Ext.CompositeElement(box.query('.action.save'))).on('click', me.noteOverlayEditorSave, me);
+		(new Ext.CompositeElement(box.query('.entry .advanced'))).on('click', me.noteOverlayActivateRichEditor, me);
+		(new Ext.CompositeElement(box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-		function onContentUpdate(){
-            //when content is updated, we need to remove the editor because it will contain a bad range.
-            this.noteOverlayDeactivateEditor();
-        }
+		function onContentUpdate() {
+			//when content is updated, we need to remove the editor because it will contain a bad range.
+			this.noteOverlayDeactivateEditor();
+		}
 
-        function onResize(){}
+		function onResize() {
+		}
 
 		me.on({
 			scope: me,
-			destroy: function(){ container.remove(); },
+			destroy: function () {
+				container.remove();
+			},
 			resize: onResize,
-			'sync-height': function(h){ container.setHeight(h); },
+			'sync-height': function (h) {
+				container.setHeight(h);
+			},
 			'content-updated': onContentUpdate
 		});
 
-		me.mon(data.editor.down('.content'),{
+		me.mon(data.editor.down('.content'), {
 			scope: me,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
 			keyup: me.noteOverlayEditorKeyUp
 		});
 
-		me.mon(txt,{
+		me.mon(txt, {
 			scope: me,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
@@ -131,18 +145,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			blur: me.noteOverlayDeactivedOnBlur
 		});
 
-		me.registerScrollHandler( function(e, dom){
+		me.registerScrollHandler(function (e, dom) {
 			var me = this,
 				t = data.box.dom.getBoundingClientRect().top;
 
-			if( t < 0 || t > me.getHeight()){
+			if (t < 0 || t > me.getHeight()) {
 				me.noteOverlayDeactivedOnBlur(e, dom);
 			}
 
 			data.editorActions.shareMenu.hide();
 		}, me);
 
-		me.mon(container,{
+		me.mon(container, {
 			scope: me,
 			mousemove: me.noteOverlayMouseOver,
 			mouseover: me.noteOverlayMouseOver,
@@ -156,43 +170,44 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-
-	noteOverlayXYAllowed: function(x,y){
+	noteOverlayXYAllowed: function (x, y) {
 		var o = this.noteOverlayData, z = Math.round(y),
-		r = o.restrictedRanges, v = z + this.getAnnotationOffsets().scrollTop;
+			r = o.restrictedRanges, v = z + this.getAnnotationOffsets().scrollTop;
 
 		//test to see if line is occupied'
-		return !(r && r[v]===true) && v > 120;
+		return !(r && r[v] === true) && v > 120;
 	},
 
 
-	noteOverlayClearRestrictedRanges: function(){
+	noteOverlayClearRestrictedRanges: function () {
 		delete this.noteOverlayData.restrictedRanges;
 	},
 
 
-	noteOverlayAddRestrictedRange: function(rect){
-		if(!rect){return;}
+	noteOverlayAddRestrictedRange: function (rect) {
+		if (!rect) {
+			return;
+		}
 
 		var o = this.noteOverlayData,
-			y = rect? Math.round(rect.bottom) + 10  :0,
-			l = rect? Math.round(rect.top) - 10 : 0;
+			y = rect ? Math.round(rect.bottom) + 10 : 0,
+			l = rect ? Math.round(rect.top) - 10 : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
-		for(y; y>=l && y>=0; y--){
+		for (y; y >= l && y >= 0; y--) {
 			o.restrictedRanges[y] = true;
 		}
 	},
 
 
-	contentDefinedAnnotationAction: function(dom,action){
+	contentDefinedAnnotationAction: function (dom, action) {
 		var o = this.noteOverlayData,
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-			id = d? d.id : null,
+			id = d ? d.id : null,
 			img = d && d.is('img') ? d.dom : null,
 			doc = dom ? dom.ownerDocument : null,
 			range, offsets;
 
-		if(/mark/i.test(action)){
+		if (/mark/i.test(action)) {
 			range = doc.createRange();
 			range.selectNode(img);
 			offsets = this.getAnnotationOffsets();
@@ -200,7 +215,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
-			WBUtils.createFromImage(img,function(data){
+			WBUtils.createFromImage(img, function (data) {
 				o.editorActions.reset();
 				o.editorActions.setValue('');
 				o.editorActions.addWhiteboard(data);
@@ -210,19 +225,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayRegisterAddNoteNib: function(applicableRange, nib, containerId){
-		nib.on('click',this.noteOverlayAddNoteNibClicked,this, {applicableRange: applicableRange, containerId: containerId});
+	noteOverlayRegisterAddNoteNib: function (applicableRange, nib, containerId) {
+		nib.on('click', this.noteOverlayAddNoteNibClicked, this, {applicableRange: applicableRange, containerId: containerId});
 		//should keep track of this and cleanup if its detected to not be in the dom any more.
 	},
 
 
-	noteOverlayAddNoteNibClicked: function(e, dom, options){
+	noteOverlayAddNoteNibClicked: function (e, dom, options) {
 		var o = this.noteOverlayData,
-			w = e.getTarget('.widgetContainer',null,true),
+			w = e.getTarget('.widgetContainer', null, true),
 			r = options.applicableRange,
 			c = options.containerId,
 			offsets;
-		if(w){
+		if (w) {
 			e.stopEvent();
 //			w.hide();
 
@@ -241,7 +256,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	copyClientRect: function(rect){
+	copyClientRect: function (rect) {
 		var mutatedRect = {
 			top: rect.top,
 			bottom: rect.bottom,
@@ -255,7 +270,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	adjustContentRectForTop: function(rect, top){
+	adjustContentRectForTop: function (rect, top) {
 		var adjusted = this.copyClientRect(rect);
 		adjusted.top += top;
 		adjusted.bottom += top;
@@ -263,27 +278,27 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	lineInfoForRangeAndRect: function(range, rect, offsets){
+	lineInfoForRangeAndRect: function (range, rect, offsets) {
 		return {range: range, rect: offsets ? this.adjustContentRectForTop(rect, offsets.top) : rect};
 	},
 
 
-	lineInfoForY: function(y){
+	lineInfoForY: function (y) {
 		var overlay = this.overlayedPanelAtY(y),
 			result = null, offsets, mutatedRect;
 		//If there is an overlay at that position it gets
 		//the decision as to if there is a line there.  After
-		if(overlay){
-			if( overlay.findLine ){
+		if (overlay) {
+			if (overlay.findLine) {
 				//TODO normalize y into overlay space and send it along
 				result = overlay.findLine();
 			}
 			return result;
 		}
-		result = LineUtils.findLine(y,this.getDocumentElement());
+		result = LineUtils.findLine(y, this.getDocumentElement());
 
 		//Ok this was from the iframe so we need to adjust it slightly
-		if(result && result.rect){
+		if (result && result.rect) {
 			offsets = this.getAnnotationOffsets();
 			mutatedRect = this.adjustContentRectForTop(result.rect, offsets.top);
 			result.rect = mutatedRect;
@@ -292,13 +307,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	openNoteEditorForRange: function(range, rect, style){
+	openNoteEditorForRange: function (range, rect, style) {
 		var offsets = this.getAnnotationOffsets(),
 			lastLine = this.lineInfoForRangeAndRect(range, rect, offsets);
 
 		lastLine.style = style;
 
-		Ext.apply(this.noteOverlayData,{
+		Ext.apply(this.noteOverlayData, {
 			lastLine: lastLine,
 			suspendMoveEvents: true
 		});
@@ -309,7 +324,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayTrackLineAtEvent:function(e){
+	noteOverlayTrackLineAtEvent: function (e) {
 		var o = this.noteOverlayData,
 			offsets = this.getAnnotationOffsets(),
 			y = e.getY() - offsets.top, lineInfo,
@@ -319,18 +334,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			clearTimeout(o.mouseLeaveTimeout);
 			lineInfo = this.lineInfoForY(y);
 
-            if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50){
-                lineInfo = o.lastLine;
-                delete o.lastLine;
-            }
+			if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50) {
+				lineInfo = o.lastLine;
+				delete o.lastLine;
+			}
 
 
-			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
+			if (lineInfo && (lineInfo !== o.lastLine || !o.lastLine)) {
 				o.lastLine = lineInfo;
 				e.stopEvent();
 
 				// We need to check if the new line doesn't overlap with a current lineInfo (which contains notes)
-				if(!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top])){
+				if (!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top])) {
 					box.hide();
 					this.noteOverlayMouseOut();
 					return;
@@ -339,26 +354,26 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				this.noteOverlayPositionInputBox();
 				return true;
 			}
-		} catch(er){
+		} catch (er) {
 			console.warn(Globals.getError(er));
 		}
 	},
 
 
-	noteOverlayPositionInputBox: function(){
+	noteOverlayPositionInputBox: function () {
 		var o = this.noteOverlayData,
 			box = Ext.get(o.box),
 			oldY = box.getY(),
 			newY = 0;
 
-		if (o.lastLine && o.lastLine.rect){
+		if (o.lastLine && o.lastLine.rect) {
 			newY = Math.round(o.lastLine.rect.top);
 		}
 
 		//if(newY < 110){ newY = 110; }
 
 		//check for minute scroll changes to prevent jitter:
-		if(Math.abs(oldY - newY) > 4){
+		if (Math.abs(oldY - newY) > 4) {
 			box.setY(newY);
 		}
 		//show thew box:
@@ -366,14 +381,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayMouseOver: function(evt){
+	noteOverlayMouseOver: function (evt) {
 		var o = this.noteOverlayData, xy = evt.getXY().slice();
 
-		if(o.suspendMoveEvents){
+		if (o.suspendMoveEvents) {
 			return;
 		}
 
-		if(!this.noteOverlayXYAllowed.apply(this,xy)){
+		if (!this.noteOverlayXYAllowed.apply(this, xy)) {
 			Ext.get(o.box).hide();
 			return;
 		}
@@ -382,26 +397,30 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayMouseOut: function(){
+	noteOverlayMouseOut: function () {
 		var o = this.noteOverlayData,
 			sel = this.getDocumentElement().parentWindow.getSelection();
-		if(o.suspendMoveEvents){
+		if (o.suspendMoveEvents) {
 			return;
 		}
-		if (sel) { sel.removeAllRanges(); }
+		if (sel) {
+			sel.removeAllRanges();
+		}
 		clearTimeout(o.mouseLeaveTimeout);
-		o.mouseLeaveTimeout = setTimeout(function(){
+		o.mouseLeaveTimeout = setTimeout(function () {
 			delete o.lastLine;
 			o.box.hide();
-		},100);
+		}, 100);
 	},
 
 
-	noteOverlayScrollEditorIntoView: function(){
+	noteOverlayScrollEditorIntoView: function () {
 		var o = this.noteOverlayData, e = o.textarea;
-		if(!o.suspendMoveEvents){ return; }
+		if (!o.suspendMoveEvents) {
+			return;
+		}
 
-		if(o.richEditorActive){
+		if (o.richEditorActive) {
 			e = o.editor;
 		}
 
@@ -409,10 +428,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayActivateRichEditor: function(evt){
-		if(evt){
+	noteOverlayActivateRichEditor: function (evt) {
+		if (evt) {
 			evt.stopEvent();
-			if(!this.noteOverlayMouseOver(evt)){
+			if (!this.noteOverlayMouseOver(evt)) {
 				return;
 			}
 		}
@@ -421,18 +440,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			t = o.textarea.dom;
 
 		o.suspendMoveEvents = true;
-		if(o.richEditorActive){
+		if (o.richEditorActive) {
 			return;
 		}
 
 		o.richEditorActive = true;
 		o.editorActions.updatePrefs();
 		o.editorActions.activate();
-		o.editorActions.setValue( t.value, true, true );
+		o.editorActions.setValue(t.value, true, true);
 		t.value = '';
+		setTimeout(function () {
+			o.editorActions.focus();
+		}, 250);
 
 
-		if(!o.editor.isVisible()){
+		if (!o.editor.isVisible()) {
 			this.noteOverlayDeactivateEditor();
 			return;
 		}
@@ -441,13 +463,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayActivateEditor: function(evt){
+	noteOverlayActivateEditor: function (evt) {
 		evt.stopEvent();
-		if(!this.noteOverlayMouseOver(evt)){
+		if (!this.noteOverlayMouseOver(evt)) {
 			return;
 		}
 		var o = this.noteOverlayData;
-		if(o.suspendMoveEvents){
+		if (o.suspendMoveEvents) {
 			return;
 		}
 		if (!o.lastLine || !o.lastLine.range || o.lastLine.range.collapsed) {
@@ -462,7 +484,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayDeactivateEditor: function(){
+	noteOverlayDeactivateEditor: function () {
 		var o = this.noteOverlayData;
 		delete o.suspendMoveEvents;
 		delete o.richEditorActive;
@@ -474,21 +496,23 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayDeactivedOnBlur: function(e, el){
+	noteOverlayDeactivedOnBlur: function (e, el) {
 		e.stopEvent();
-		var me  = this;
-		if(!this.noteOverlayData.suspendMoveEvents){ return; }
+		var me = this;
+		if (!this.noteOverlayData.suspendMoveEvents) {
+			return;
+		}
 
 		clearTimeout(me.blurTimer);
-		me.blurTimer = setTimeout(function() {
-			if(!me.noteOverlayData.richEditorActive){
+		me.blurTimer = setTimeout(function () {
+			if (!me.noteOverlayData.richEditorActive) {
 				me.noteOverlayDeactivateEditor();
 			}
 		}, 150);
 	},
 
 
-	noteOverlayEditorCancel: function(e){
+	noteOverlayEditorCancel: function (e) {
 		e.stopEvent();
 		this.noteOverlayDeactivateEditor();
 		return false;
@@ -502,12 +526,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	//Right now we identify created from the gutter by a style of surpressed,
 	//and we determine it is in an assessment if the ranges ancestor is or is contained in an
 	//assessment object tag
-	rangeForLastLineInfo: function(lastLine, style){
+	rangeForLastLineInfo: function (lastLine, style) {
 		var ancestor = lastLine.range.commonAncestorContainer ? Ext.fly(lastLine.range.commonAncestorContainer) : null,
-		questionSelector = 'object[type="application/vnd.nextthought.naquestion"]',
-		question, c;
+			questionSelector = 'object[type="application/vnd.nextthought.naquestion"]',
+			question, c;
 
-		if(style !== 'suppressed'){
+		if (style !== 'suppressed') {
 			return {range: lastLine.range, container: null};
 		}
 
@@ -515,18 +539,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//OK we are style suppressed
 		question = ancestor.is(questionSelector) ? ancestor : ancestor.up(questionSelector);
 		c = question ? question.getAttribute('data-ntiid') : null;
-		if(question && c){
+		if (question && c) {
 			return {range: null, container: c};
 		}
 		return {range: lastLine.range, container: null};
 	},
 
-	noteOverlayEditorSave: function(e){
+	noteOverlayEditorSave: function (e) {
 		e.stopEvent();
 
-		function callback(success, record){
+		function callback(success, record) {
 			o.editor.unmask();
-			if(success){
+			if (success) {
 				me.noteOverlayDeactivateEditor();
 			}
 		}
@@ -540,40 +564,40 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			v, sharing = p.sharedWith || [], re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			rangeInfo;
 
-		if (o.richEditorActive){
+		if (o.richEditorActive) {
 			v = o.editorActions.getValue();
 			note = v.body;
 			sharing = v.shareWith;
 		}
 
 		//Avoid saving empty notes or just returns.
-		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
+		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
 			this.noteOverlayDeactivateEditor();
 			return false;
 		}
 
 		o.editor.mask('Saving...');
-        try {
+		try {
 			rangeInfo = this.rangeForLastLineInfo(o.lastLine, style);
-		    me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
-        }
-        catch (error) {
-            console.error('Error saving note - ' + Globals.getError(error));
-            alert('There was an error saving your note.');
-            o.editor.unmask();
-            //lets not remove, at least give user change to recover their text
-            //me.noteOverlayDeactivateEditor();
-        }
+			me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
+		}
+		catch (error) {
+			console.error('Error saving note - ' + Globals.getError(error));
+			alert('There was an error saving your note.');
+			o.editor.unmask();
+			//lets not remove, at least give user change to recover their text
+			//me.noteOverlayDeactivateEditor();
+		}
 		return false;
 	},
 
 
-	noteOverlayEditorKeyDown: function(event){
+	noteOverlayEditorKeyDown: function (event) {
 		var k = event.getKey();
-		if(k === event.ESC){
+		if (k === event.ESC) {
 			this.noteOverlayDeactivateEditor();
 		}
-		else if(k === event.ENTER && !this.noteOverlayData.richEditorActive){
+		else if (k === event.ENTER && !this.noteOverlayData.richEditorActive) {
 			event.stopEvent();
 			this.noteOverlayEditorSave(event);
 		}
@@ -581,7 +605,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayEditorKeyPressed: function(event){
+	noteOverlayEditorKeyPressed: function (event) {
 		event.stopPropagation();
 		//control+enter & command+enter submit?
 
@@ -590,20 +614,20 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		var o = this.noteOverlayData;
 		delete o.editorActions.lastRange;
-		if(o.richEditorActive){
+		if (o.richEditorActive) {
 			//o.editor.repaint();
 			this.noteOverlayScrollEditorIntoView();
 		}
 	},
 
 
-	noteOverlayEditorKeyUp: function(){
+	noteOverlayEditorKeyUp: function () {
 		var o = this.noteOverlayData,
-				t = o.textarea,
-				h = t.dom.scrollHeight;
+			t = o.textarea,
+			h = t.dom.scrollHeight;
 
 		//TODO: Use a better way to detect the note has gotten 'complex' and or too long for the line-box.
-		if(h > t.getHeight()) {
+		if (h > t.getHeight()) {
 			//transition to rich editor
 			this.noteOverlayActivateRichEditor();
 		}
