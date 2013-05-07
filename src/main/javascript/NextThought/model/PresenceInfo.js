@@ -5,7 +5,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 		{ name: 'Username', type: 'string'},
 		{ name: 'type', type: 'string'},
 		{ name: 'show', type: 'string'},
-		{ name: 'status', type: 'string'},
+		{ name: 'status', type: 'string'}
 	],
 
 	isPresenceInfo: true
