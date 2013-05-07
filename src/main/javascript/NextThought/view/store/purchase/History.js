@@ -13,7 +13,7 @@ Ext.define('NextThought.view.store.purchase.History', {
 		cn: [
 			{
 				tag: 'thead', cn: { tag: 'tr', cn: [
-				{tag: 'th', cls: 'key', cn: {tag: 'span', html: 'Licence or Activation Key'}},
+				{tag: 'th', cls: 'key', cn: {tag: 'span', html: 'License or Activation Key'}},
 				{tag: 'th', cls: 'qty', cn: {tag: 'span', html: 'Usage / Qty'}},
 				{tag: 'th', cls: 'tot', cn: {tag: 'span', html: 'Total'}}
 			]}

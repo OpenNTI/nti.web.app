@@ -505,7 +505,7 @@ Ext.define('NextThought.controller.Store', {
 			return false;
 		}
 		win.lockPurchaseAction = true;
-		this.safelyMaskWindow(win, 'Your purchase is being finalized.  This may take several moments');
+		this.safelyMaskWindow(win, 'Your purchase is being finalized.  This may take several moments.');
 
 		function done() {
 			delete me.paymentProcessor;
