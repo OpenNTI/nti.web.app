@@ -313,6 +313,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.activateImageRoll();
 		me.activateAnnotatableItems();
 
+		me.fireEvent('set-content',me);
+
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
 
 		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
@@ -409,9 +411,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 		body.setStyle(bodyStylesObj);
 	},
 
+
 	navigateToFragment: function(frag){
 		this.scrollToTarget(frag);
 	},
+
 
 	onClick: function(e, el){
 		e.stopEvent();

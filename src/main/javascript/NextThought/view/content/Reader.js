@@ -14,7 +14,8 @@ Ext.define('NextThought.view.content.Reader', {
 		content: 'NextThought.view.content.reader.Content',
 		iframe: 'NextThought.view.content.reader.IFrame',
 		scroll: 'NextThought.view.content.reader.Scroll',
-		noteOverlay: 'NextThought.view.content.reader.NoteOverlay'
+		noteOverlay: 'NextThought.view.content.reader.NoteOverlay',
+		resourceManagement: 'NextThought.view.content.reader.ResourceManagement'
 	},
 	cls: 'x-reader-pane',
 
@@ -35,6 +36,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mixins.componentOverlay.constructor.apply(this,arguments);
 		this.mixins.noteOverlay.constructor.apply(this,arguments);
 		this.mixins.assessments.constructor.apply(this,arguments);
+		this.mixins.resourceManagement.constructor.apply(this,arguments);
 	},
 
 
