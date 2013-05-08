@@ -168,6 +168,7 @@ Ext.application({
 			'javascript/specs/model/FriendsList.spec.js',
 			'javascript/specs/model/User.spec.js',
 			'javascript/specs/model/Service.spec.js',
+			'javascript/specs/model/PresenceInfo.spec.js',
 			'javascript/specs/model/anchorables/ContentRangeDescription.spec.js',
 			'javascript/specs/model/anchorables/DomContentRangeDescription.spec.js',
 			'javascript/specs/model/converters/GroupByTime.spec.js',

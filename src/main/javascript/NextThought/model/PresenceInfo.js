@@ -8,5 +8,24 @@ Ext.define('NextThought.model.PresenceInfo',{
 		{ name: 'status', type: 'string'}
 	],
 
-	isPresenceInfo: true
+	statics: {
+		createFromPresenceString: function(presence,username){
+			return Ext.create("NextThought.model.PresenceInfo",{
+				'Username': username,
+				'type': (presence === 'online')? 'available' : 'unavailable'
+			});
+		}
+	},
+
+	isPresenceInfo: true,
+
+	isOnline: function(){
+		return this.get('type') !== 'unavailable';
+	},
+
+	toString: function(){
+		return (this.isOnline()) ? 'online' : 'offline';
+	},
+
+
 });
