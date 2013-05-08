@@ -93,7 +93,7 @@ Ext.define('NextThought.view.store.purchase.History', {
 	failedToLoadHistoy: function () {
 		console.error(arguments);
 		this.errorTpl.overwrite(this.el);
-		this.up('[showError]').showError('Could not load purchase history. Please try again later.')
+		this.up('[showError]').showError('Could not load purchase history. Please try again later.');
 	}
 
 

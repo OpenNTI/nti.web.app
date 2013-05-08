@@ -276,7 +276,7 @@ Ext.define('NextThought.controller.State', {
 			domain = parts[1];
 			parts = parts.slice(2);
 
-			if(domain === 'ntiid' && parts.length == 1 && ParseUtils.parseNtiid(parts[0])){
+			if(domain === 'ntiid' && parts.length === 1 && ParseUtils.parseNtiid(parts[0])){
 				Ext.defer(this.fireEvent,1,this,['show-ntiid', parts[0]]);
 			}
 		}

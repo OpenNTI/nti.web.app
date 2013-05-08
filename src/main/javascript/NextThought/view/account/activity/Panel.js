@@ -18,7 +18,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	overflowY: 'hidden',
 	overflowX: 'hidden',
-    cls: 'activity-panel',
+	cls: 'activity-panel',
 
 	layout: {
 		type: 'vbox',
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		//contacts
 		this.mon(Ext.getStore('FriendsList'), {scope: this, 'contacts-refreshed': this.maybeReload});
 
-        this.on('activate', this.onActivate, this);
+		this.on('activate', this.onActivate, this);
 	},
 
 
@@ -109,34 +109,34 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 
-    fetchMore: function(){
-        var s = this.store,
-        	centerButton = this.el.down('.center-button');
+	fetchMore: function(){
+		var s = this.store,
+			centerButton = this.el.down('.center-button');
 
-        if (!s.hasOwnProperty('data')) {
-            return;
-        }
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
 
 		this.currentCount = s.getCount();
-        if(s.hasAdditionalPagesToLoad()){
-            this.el.parent().mask('Loading...','loading');
-            s.clearOnPageLoad = false;
-            s.nextPage();
-        }
+		if(s.hasAdditionalPagesToLoad()){
+			this.el.parent().mask('Loading...','loading');
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
 		else{
 			if(centerButton){
 				this.el.down('.center-button').remove();
 			}
 			this.el.parent().unmask();
 		}
-    },
+	},
 
 
-    maybeReload: function(){
-        if (this.isVisible() && this.rendered){
-            this.reloadActivity();
-        }
-    },
+	maybeReload: function(){
+		if (this.isVisible() && this.rendered){
+			this.reloadActivity();
+		}
+	},
 
 
 	reloadActivity: function(store){
@@ -205,9 +205,9 @@ Ext.define('NextThought.view.account.activity.Panel',{
 				items.push({ label: label });
 			}
 
-            function extend(){
-                totalExpected++;
-            }
+			function extend(){
+				totalExpected++;
+			}
 
 			//We use a similar strategy to the one that Notifications uses
 
@@ -299,23 +299,23 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		//TODO: XXX: FIX this to be better... if/ifelse/else branches are ugly.
 
-        function getName(type){
+		function getName(type){
 
-            function resolve(meta){
+			function resolve(meta){
 
-                stream[guid].verb = 'Shared a '+type;
-	            stream[guid].message = Ext.String.ellipsis(' in &ldquo'+((meta||{}).label||''),50,true)+'&rdquo;';
+				stream[guid].verb = 'Shared a '+type;
+				stream[guid].message = Ext.String.ellipsis(' in &ldquo'+((meta||{}).label||''),50,true)+'&rdquo;';
 
-                Ext.callback(maybeFinish);
-            }
+				Ext.callback(maybeFinish);
+			}
 
-            Ext.callback(extend);
-            if(cid){
-                LocationMeta.getMeta(cid,resolve);
-                return;
-            }
-            resolve(null);
-        }
+			Ext.callback(extend);
+			if(cid){
+				LocationMeta.getMeta(cid,resolve);
+				return;
+			}
+			resolve(null);
+		}
 
 
 		if (!item){
@@ -437,9 +437,9 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 
-    cancelPopupTimeout: function(){
-        clearTimeout(this.hoverTimeout);
-    },
+	cancelPopupTimeout: function(){
+		clearTimeout(this.hoverTimeout);
+	},
 
 
 	itemHover: function(e){
@@ -476,7 +476,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		var belongs = false,
 			username = $AppConfig.username,
 			item = change.get('Item'),
-            sharedWith = item.get('sharedWith') || [],
+			sharedWith = item.get('sharedWith') || [],
 			creator = item.get('Creator');
 
 		if(/circled/i.test(change.get('ChangeType'))){
@@ -500,14 +500,14 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	//it goes in the community tag
 	belongsInCommunity: function(change, flStore, communities, noVerify){
 		var item = change.get('Item'),
-            sharedWith = item.get('sharedWith') || [],
-            foundInCommunities = false;
+			sharedWith = item.get('sharedWith') || [],
+			foundInCommunities = false;
 
-        Ext.Array.each(sharedWith, function(u){
+		Ext.Array.each(sharedWith, function(u){
 			if (Ext.Array.contains(communities, u)){
 				foundInCommunities = true;
 				return false;
-            }
+			}
 			return true;
 		});
 
@@ -562,16 +562,16 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}
 
 		return me.belongsInMyContacts(change, flStore, communityNames);
-    },
+	},
 
 
-    onActivate: function(){
+	onActivate: function(){
 		//Suspend events and let the last sort take care of it
 		this.store.suspendEvents();
-        this.store.clearFilter(true);
-        this.store.filterBy(this.filterStore, this);
+		this.store.clearFilter(true);
+		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
-        this.store.sort();
-        //Now the listeners on the store will take care of rendering.
-    }
+		this.store.sort();
+		//Now the listeners on the store will take care of rendering.
+	}
 });

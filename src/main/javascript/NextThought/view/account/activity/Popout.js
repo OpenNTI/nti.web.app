@@ -159,9 +159,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					}
 				});
 
-                if(viewRef) {
+				if(viewRef) {
 					if(viewRef.cancelPopupTimeout){
-                    	pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
+						pop.mon( pop, 'mouseover', viewRef.cancelPopupTimeout, viewRef );
 					}
 
 					sidebar = (viewRef.up && viewRef.up('main-sidebar')) ||
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					if(sidebar){
 						pop.mon(sidebar, 'move', align);
 					}
-                }
+				}
 				align();
 			},this);
 		}

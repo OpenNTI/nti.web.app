@@ -1,30 +1,30 @@
 Ext.define('NextThought.cache.LocationMeta', {
-    alias: 'LocationMeta',
-    singleton: true,
-    requires: [
-        'NextThought.providers.Location'
-    ],
+	alias: 'LocationMeta',
+	singleton: true,
+	requires: [
+		'NextThought.providers.Location'
+	],
 
-    meta: {},
-    ids: {},
-
-
-    getValue: function(id){
-        return this.meta[this.ids[id]];
-    },
+	meta: {},
+	ids: {},
 
 
-    getMeta: function(ntiid, callback, scope){
-        var maybe = this.getValue(ntiid);
-        if (maybe || !ntiid){
+	getValue: function(id){
+		return this.meta[this.ids[id]];
+	},
+
+
+	getMeta: function(ntiid, callback, scope){
+		var maybe = this.getValue(ntiid);
+		if (maybe || !ntiid){
 			Ext.callback(callback, scope, [maybe]);
 			return;
 		}
 
-        this.loadMeta(ntiid, function(meta){
-            return  Ext.callback(callback, scope, [meta]);
-        });
-    },
+		this.loadMeta(ntiid, function(meta){
+			return  Ext.callback(callback, scope, [meta]);
+		});
+	},
 
 
 	attachContentRootToMeta: function(meta, pi){
@@ -59,8 +59,8 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 	createAndCacheMeta: function(ntiid, pi, ignoreCache){
 		var assessmentItems = pi.get('AssessmentItems') || [],
-			theId = pi.getId(),
-			meta = LocationProvider.getLocation(theId);
+				theId = pi.getId(),
+				meta = LocationProvider.getLocation(theId);
 
 		if(!meta){
 			return null;
@@ -100,34 +100,34 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 * @param ntiid the ntiid we want content metadata for
 	 * @param cb completion callback.  If meta can be determined it will be the first arg
 	 */
-    loadMeta: function(ntiid, cb, ignoreCache) {
+	loadMeta: function(ntiid, cb, ignoreCache) {
 		var me = this;
 
-        function pageIdLoaded(pi){
+		function pageIdLoaded(pi){
 			var meta = this.createAndCacheMeta(ntiid, pi, ignoreCache);
 			if(!meta){
 				fail.call(this);
 			}
-            Ext.callback(cb, this, [meta]);
-        }
+			Ext.callback(cb, this, [meta]);
+		}
 
-        function fail(req, resp){
+		function fail(req, resp){
 			if(resp && resp.status === 403){
 				console.log('Unauthorized when requesting page info', ntiid);
 				this.handleUnauthorized(ntiid, cb);
 			}
 			else{
-            	console.error('fail', arguments);
-            	Ext.callback(cb, this);
+				console.error('fail', arguments);
+				Ext.callback(cb, this);
 			}
-        }
-        $AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, this);
-    },
+		}
+		$AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, this);
+	},
 
 
 	handleUnauthorized: function(ntiid, cb){
 		var meta = LocationProvider.getLocation(ntiid),
-			bookPrefix;
+				bookPrefix;
 
 		if(meta){
 			$AppConfig.service.getPageInfo(meta.ContentNTIID, function(pageInfo){
@@ -167,5 +167,5 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 },
 function(){
-    window.LocationMeta = this;
+	window.LocationMeta = this;
 });

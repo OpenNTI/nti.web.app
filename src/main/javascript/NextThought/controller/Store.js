@@ -441,7 +441,7 @@ Ext.define('NextThought.controller.Store', {
 					function () {
 						console.error('An error occurred doing final pricing of', desc);
 						if (win && win.showError) {
-							win.showError('Unable to price your purchase.  Please try again later')
+							win.showError('Unable to price your purchase.  Please try again later');
 						}
 						done();
 					});

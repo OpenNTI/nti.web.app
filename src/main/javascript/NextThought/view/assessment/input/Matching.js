@@ -330,9 +330,9 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			onNodeEnter: function(target, dd, e, data){
 				var p = target.up('.match');
 
-			 	if(p){
-				    Ext.fly(p).addCls('target-hover');
-			    }
+				if(p){
+					Ext.fly(p).addCls('target-hover');
+				}
 			},
 			onNodeOut: function(target, dd, e, data){
 				var p = target.up('.match');

@@ -17,7 +17,7 @@ Ext.define('NextThought.controller.Session', {
 		'Window',
 		'account.coppa.Window',
 		'account.recovery.Window',
-        'menus.Settings',
+		'menus.Settings',
 		'NextThought.ux.WelcomeGuide',
 		'NextThought.ux.UpdatedTos'
 	],
@@ -78,34 +78,34 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-    maybeShowCoppaWindow: function(){
-        var user = $AppConfig.userObject,
-            showWindow = user.getLink('account.profile.needs.updated'),
-            url = user.getLink('account.profile');
+	maybeShowCoppaWindow: function(){
+		var user = $AppConfig.userObject,
+			showWindow = user.getLink('account.profile.needs.updated'),
+			url = user.getLink('account.profile');
 
-        if (!showWindow){return;}
+		if (!showWindow){return;}
 
-        Ext.Ajax.request({
-            url: getURL(url),
-            timeout: 20000,
-            scope: this,
-            callback: function(q,success,r){
-                if(!success){
-                    console.log('Could not get acct rel schema for coppa window. Window will not show');
-                    return;
-                }
-                try{
-                    var o = Ext.decode(r.responseText);
-                    Ext.widget('coppa-window', {schema:o.ProfileSchema}).show();
-                }
-                catch(e){
-                    console.error(Globals.getError(e));
-                }
-            }
-        });
+		Ext.Ajax.request({
+			url: getURL(url),
+			timeout: 20000,
+			scope: this,
+			callback: function(q,success,r){
+				if(!success){
+					console.log('Could not get acct rel schema for coppa window. Window will not show');
+					return;
+				}
+				try{
+					var o = Ext.decode(r.responseText);
+					Ext.widget('coppa-window', {schema:o.ProfileSchema}).show();
+				}
+				catch(e){
+					console.error(Globals.getError(e));
+				}
+			}
+		});
 
-        console.log('get data from ' + url + ' and show coppa window...');
-    },
+		console.log('get data from ' + url + ' and show coppa window...');
+	},
 
 
 	showWelcomePage: function() {
@@ -132,38 +132,38 @@ Ext.define('NextThought.controller.Session', {
 
 	maybeTakeImmediateAction: function(r){
 		var m = this;
-        if (m.getLink(r, 'account.profile.needs.updated')){
-            m.coppaWindow = true;
-        }
-        else if (m.getLink(r, 'state-bounced-contact-email')){
-            m.bouncedContact = true;
-        }
-        else if (m.getLink(r, 'state-bounced-email')){
-            m.bouncedEmail = true;
-        }
-    },
+		if (m.getLink(r, 'account.profile.needs.updated')){
+			m.coppaWindow = true;
+		}
+		else if (m.getLink(r, 'state-bounced-contact-email')){
+			m.bouncedContact = true;
+		}
+		else if (m.getLink(r, 'state-bounced-email')){
+			m.bouncedEmail = true;
+		}
+	},
 
 
-    showEmailRecoveryWindow: function(fieldName, linkName){
-        Ext.widget('recovery-email-window', {fieldName:fieldName, linkName: linkName}).show();
-    },
+	showEmailRecoveryWindow: function(fieldName, linkName){
+		Ext.widget('recovery-email-window', {fieldName:fieldName, linkName: linkName}).show();
+	},
 
 
-    immediateAction: function(){
-        if (this.coppaWindow){
-            this.maybeShowCoppaWindow();
-        }
-        else if (this.bouncedContact){
-            this.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
-        }
-        else if (this.bouncedEmail){
-            this.showEmailRecoveryWindow('email', 'state-bounced-email');
-        }
+	immediateAction: function(){
+		if (this.coppaWindow){
+			this.maybeShowCoppaWindow();
+		}
+		else if (this.bouncedContact){
+			this.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
+		}
+		else if (this.bouncedEmail){
+			this.showEmailRecoveryWindow('email', 'state-bounced-email');
+		}
 
-        // what is the exactly relationships between these windows?
-        // currently above and below are piling on top of one another
+		// what is the exactly relationships between these windows?
+		// currently above and below are piling on top of one another
 
-        if (this.shouldShowContentFor('content.initial_tos_page')) {
+		if (this.shouldShowContentFor('content.initial_tos_page')) {
 			var u = $AppConfig.userObject,
 				link = u.getLink('content.initial_tos_page'),
 				created = u.get('CreatedTime'),
@@ -172,7 +172,7 @@ Ext.define('NextThought.controller.Session', {
 			//Users accepts terms at account creation.  Heres a hueristic to detect
 			//new accounts and delete the tos link automatically (they just accepted it)
 			if((new Date()).getTime() >  created.getTime() + timeThreshold){
-        		this.showNewTermsOfService();
+				this.showNewTermsOfService();
 			}
 			else if(link){
 				Ext.Ajax.request({
@@ -186,97 +186,97 @@ Ext.define('NextThought.controller.Session', {
 					}
 				});
 			}
-        }
-        if (this.shouldShowContentFor('content.initial_welcome_page')) {
+		}
+		if (this.shouldShowContentFor('content.initial_welcome_page')) {
 			this.showWelcomePage();
 		}
-    },
+	},
 
 
-    login: function(app){
-        function success(){
+	login: function(app){
+		function success(){
 			Ext.util.Cookies.set(me.sessionTrackerCookie,me.sessionId);
 			me.sessionTracker.start();
-            app.fireEvent('session-ready');
-            app.on('finished-loading', me.immediateAction, me);
+			app.fireEvent('session-ready');
+			app.on('finished-loading', me.immediateAction, me);
 
-            app.getController('Application').openViewport();
-        }
+			app.getController('Application').openViewport();
+		}
 
-        function showLogin(timedout){
-            var url = Ext.String.urlAppend(
-                    Ext.String.urlAppend(
-                        $AppConfig.server.login,
-                        "return="+encodeURIComponent(location.toString())),
-                    "host=" + encodeURIComponent(getURL()));
+		function showLogin(timedout){
+			var url = Ext.String.urlAppend(
+					Ext.String.urlAppend(
+						$AppConfig.server.login,
+						"return="+encodeURIComponent(location.toString())),
+					"host=" + encodeURIComponent(getURL()));
 
-            if(timedout){
-                alert('a request timed out');
-                return;
-            }
-            location.replace( url );
-        }
+			if(timedout){
+				alert('a request timed out');
+				return;
+			}
+			location.replace( url );
+		}
 
 		var me = this;
-        me.attemptLogin(success,showLogin);
-    },
+		me.attemptLogin(success,showLogin);
+	},
 
 
 	getLink: function getLink(o, relName){
-        o = o || {};
-        o = o.responseText || o;
-        if(typeof o === 'string') {
-            try {
-                o = Ext.decode(o);
-            }
-            catch(e){
-                console.error('could not decode', o);
-                o = {};
-            }
-        }
-        var l = o.Links || [], i = l.length-1;
-        for(i;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
-        return null;
-    },
+		o = o || {};
+		o = o.responseText || o;
+		if(typeof o === 'string') {
+			try {
+				o = Ext.decode(o);
+			}
+			catch(e){
+				console.error('could not decode', o);
+				o = {};
+			}
+		}
+		var l = o.Links || [], i = l.length-1;
+		for(i;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
+		return null;
+	},
 
 
-    attemptLogin: function(successCallback, failureCallback){
-        var m = this,
-            s = $AppConfig.server,
-            d = s.data, ping = 'logon.ping';
+	attemptLogin: function(successCallback, failureCallback){
+		var m = this,
+			s = $AppConfig.server,
+			d = s.data, ping = 'logon.ping';
 
-        try{
+		try{
 
-            Ext.Ajax.request({
-                timeout: 60000,
-                url: getURL(d + ping),
-                callback: function(q,s,r){
-                    var l = m.getLink(r,'logon.handshake');
-                    if(!s || !l){
-                        if(r.timedout){
-                            console.log('Request timed out: ', r.request.options.url);
-                        }
-                        return Ext.callback(failureCallback,m,[r.timedout]);
-                    }
+			Ext.Ajax.request({
+				timeout: 60000,
+				url: getURL(d + ping),
+				callback: function(q,s,r){
+					var l = m.getLink(r,'logon.handshake');
+					if(!s || !l){
+						if(r.timedout){
+							console.log('Request timed out: ', r.request.options.url);
+						}
+						return Ext.callback(failureCallback,m,[r.timedout]);
+					}
 
-	                return m.performHandshake(l,successCallback,failureCallback);
-                }
-            });
-        }
-        catch(err){
-            alert('Could not request handshake from Server.\n'+err.message);
-        }
-    },
+					return m.performHandshake(l,successCallback,failureCallback);
+				}
+			});
+		}
+		catch(err){
+			alert('Could not request handshake from Server.\n'+err.message);
+		}
+	},
 
 
 
 	performHandshake: function(link,successCallback,failureCallback){
 		var m = this,
 			u  = decodeURIComponent( Ext.util.Cookies.get('username')),
-            handshakeTimer = setTimeout(m.handshakeRecovery, 30000);
+			handshakeTimer = setTimeout(m.handshakeRecovery, 30000);
 
-        //NOTE: handshakeTimer will retry if it doesn't return before 30 seconds because it's been reported that
-        //you can get into a bad state duringn handshake, so we want to interrupt that and try again.
+		//NOTE: handshakeTimer will retry if it doesn't return before 30 seconds because it's been reported that
+		//you can get into a bad state duringn handshake, so we want to interrupt that and try again.
 		Ext.Ajax.request({
 			method: 'POST',
 			timeout: 60000,
@@ -285,7 +285,7 @@ Ext.define('NextThought.controller.Session', {
 				username: u
 			},
 			callback: function(q,s,r){
-                clearTimeout(handshakeTimer);
+				clearTimeout(handshakeTimer);
 				var l = m.getLink(r,'logon.continue');
 				if(!s || !l){
 					return failureCallback.call(m);
@@ -298,10 +298,10 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-    handshakeRecovery: function(){
-        Ext.util.Cookies.clear('username');
-        location.reload();
-    },
+	handshakeRecovery: function(){
+		Ext.util.Cookies.clear('username');
+		location.reload();
+	},
 
 
 	findResolveSelfWorkspace: function(s){
@@ -322,27 +322,27 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-    resolveService: function(successFn, failureFn){
-        var m = this,
-            s = $AppConfig.server;
+	resolveService: function(successFn, failureFn){
+		var m = this,
+			s = $AppConfig.server;
 
-        try{
-            Ext.Ajax.request({
-                url: getURL(s.data),
-                timeout: 20000,
-                headers:{
-                    'Accept': 'application/vnd.nextthought.workspace+json'
-                },
-                scope: this,
-                callback: function(q,success,r){
-                    if(!success){
-                        alert('Oh No! Could not talk to the server!');
-                        m.handleLogout();
-                        console.log('Could not resolve service document\nrequest:',q,'\n\nresponse:',r,'\n\n');
-                        return;
-                    }
-                    try{
-                        var sDoc = Ext.decode(r.responseText);
+		try{
+			Ext.Ajax.request({
+				url: getURL(s.data),
+				timeout: 20000,
+				headers:{
+					'Accept': 'application/vnd.nextthought.workspace+json'
+				},
+				scope: this,
+				callback: function(q,success,r){
+					if(!success){
+						alert('Oh No! Could not talk to the server!');
+						m.handleLogout();
+						console.log('Could not resolve service document\nrequest:',q,'\n\nresponse:',r,'\n\n');
+						return;
+					}
+					try{
+						var sDoc = Ext.decode(r.responseText);
 						sDoc = NextThought.model.Service.create(sDoc);
 
 
@@ -351,25 +351,25 @@ Ext.define('NextThought.controller.Session', {
 							Ext.Error.raise('bad service doc');
 						}
 
-                        $AppConfig.service = sDoc;
-                        m.attemptLoginCallback($AppConfig.service, successFn);
-                    }
-                    catch(e){
-                        console.error(Globals.getError(e));
+						$AppConfig.service = sDoc;
+						m.attemptLoginCallback($AppConfig.service, successFn);
+					}
+					catch(e){
+						console.error(Globals.getError(e));
 						failureFn.call(m);
-                    }
-                }
-            });
-        }
-        catch(e){
-            console.error('AttemptLogin Exception: ', Globals.getError(e));
-        }
-    },
+					}
+				}
+			});
+		}
+		catch(e){
+			console.error('AttemptLogin Exception: ', Globals.getError(e));
+		}
+	},
 
 
-    attemptLoginCallback: function(service, successCallback, failureCallback){
-        var me = this, href, workspace;
-        Socket.setup();
+	attemptLoginCallback: function(service, successCallback, failureCallback){
+		var me = this, href, workspace;
+		Socket.setup();
 
 		function onFailure(){
 			console.log('could not resolve app user', arguments);
@@ -423,5 +423,5 @@ Ext.define('NextThought.controller.Session', {
 				}
 			}
 		});
-    }
+	}
 });

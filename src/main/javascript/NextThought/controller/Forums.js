@@ -638,7 +638,7 @@ Ext.define('NextThought.controller.Forums', {
 					comment: undefined
 				});
 			}		
-			delete me.loadingRoot
+			delete me.loadingRoot;
 			me.fireEvent('root-loaded');
 		}
 	},
