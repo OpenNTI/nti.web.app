@@ -42,10 +42,15 @@ Ext.define('NextThought.view.content.Reader', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash initial"></div>',true);
+		var DH = Ext.DomHelper,
+			el = this.getTargetEl();
+
+		this.splash = DH.doInsert(el,{cls:'no-content-splash initial'},true,'beforeEnd');
+		this.scrollShadow = DH.doInsert(this.getEl(),{cls:'scroll-shadow'},true,'beforeEnd');
+
+		this.mon(el,'scroll', 'scrollShadowMonitor', this);
+
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		this.scrollShadow = this.getEl().insertHtml('beforeEnd','<div class="scroll-shadow"></div>',true);
-		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
 
 		this.notFoundCmp = NextThought.view.ResourceNotFound.create({renderTo: this.splash, hideLibrary: true});
 	},

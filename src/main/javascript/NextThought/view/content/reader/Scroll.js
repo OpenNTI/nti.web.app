@@ -4,8 +4,9 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 	constructor: function(){
 		this.on('afterrender',function(){
+			this.scrollingEl = this.getTargetEl();
 
-			this.body.on('scroll',function(){
+			this.scrollingEl.on('scroll',function(){
 				Ext.menu.Manager.hideAll();
 				Ext.tip.QuickTipManager.getQuickTip().hide();
 			},this);
@@ -15,12 +16,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 
 	registerScrollHandler: function(fn, scope){
-		this.mon(this.body,'scroll', fn, scope);
+		this.mon(this.scrollingEl,'scroll', fn, scope);
 	},
 
 
 	unRegisterScrollHandler: function(fn, scope){
-		this.mun(this.body,'scroll', fn, scope);
+		this.mun(this.scrollingEl,'scroll', fn, scope);
 	},
 
 
@@ -29,7 +30,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			m,
 			offset = this.getPosition(),
 			cPos,
-			sTop = this.body.getScroll().top;
+			sTop = this.scrollingEl.getScroll().top;
 
 
 		if(n) {
@@ -71,7 +72,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 		if (!e && c) {
 			try{
-					this.scrollTo(c.getScrollPosition(this.body.getTop() - topMargin));
+					this.scrollTo(c.getScrollPosition(this.scrollingEl.getTop() - topMargin));
 			}
 			catch(excp) {
 				console.log("Could not scroll to ",c);
@@ -116,10 +117,10 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			n = n.parentNode;
 		}
 
-		var offsets = this.body.getXY(),
+		var offsets = this.scrollingEl.getXY(),
 			o = Ext.fly(n).getTop() - offsets[1],
-			st = this.body.getScroll().top,
-			h = this.body.getHeight(),
+			st = this.scrollingEl.getScroll().top,
+			h = this.scrollingEl.getHeight(),
 			b = st + h - (bottomThreshold || 0);
 
 		//logic to halt scrolling if conditions mentioned in function docs are met.
@@ -132,7 +133,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 
 	scrollTo: function(top, animate) {
-		this.body.scrollTo('top', top, animate!==false);
+		this.scrollingEl.scrollTo('top', top, animate!==false);
 	},
 
 	scrollToSearchHit: function(result, fragment) {
