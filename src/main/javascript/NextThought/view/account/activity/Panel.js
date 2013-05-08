@@ -86,19 +86,29 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		//so if contacts get loaded or refreshed do an update if we are rendered.  Note
 		//we don't listen to contacts-updated b/c we don't want to do a lot of work when people add/remove
 		//contacts
-		this.mon(Ext.getStore('FriendsList'), {scope: this, 'contacts-refreshed': this.maybeReload});
+		this.mon(Ext.getStore('FriendsList'), {
+			scope: this,
+			'contacts-refreshed': 'maybeReload'
+		});
 
-		this.on('activate', this.onActivate, this);
+		this.on({
+			scope: this,
+			activate:'onActivate',
+			'scroll-stopped': 'onScrollStopped'
+		});
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+
 		this.mon(this.el,{
 			scope: this,
-			'click':this.itemClick,
-			'mouseover': this.itemHover
+			'click':'itemClick',
+			'mouseover': 'itemHover'
 		});
+
+		this.mon(this.down('box').getEl(),'scroll', 'viewScrollHandler', this);
 
 		this.itemClickMap = {
 			'personalblogentry': this.blogEntryClicked,
@@ -442,7 +452,17 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 
+	onScrollStopped: function(){
+		Ext.callback(this.performAfterScrollAction,this);
+		delete this.performAfterScrollAction;
+	},
+
+
 	itemHover: function(e){
+		if(this.isScrolling){
+			this.performAfterScrollAction = Ext.bind(this.itemHover,this, arguments);
+			return;
+		}
 		var me = this,
 			target = e.getTarget('div.activity',null,true),
 			guid = (target||{}).id,
@@ -450,22 +470,33 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			rec = (item||{}).record,
 			popout = NextThought.view.account.activity.Popout;
 
-		e.stopEvent();
 
 		if(rec && rec.getClassForModel) {
 			popout = rec.getClassForModel('widget.activity-popout-',NextThought.view.account.activity.Popout);
 		}
 
-		if(!rec || me.activeTarget === target){return;}
+		if(!rec || me.activeTargetDom === Ext.getDom(target)){return;}
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			popout.popup(rec, target, me);
-			me.activeTarget = target;
+			me.activeTargetDom = Ext.getDom(target);
 		},500);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
+	},
+
+
+	viewScrollHandler: function(e){
+		//NOTE: we want to avoid trying to display the popup while the user is scrolling.
+		var me = this;
+		clearTimeout(me.scrollingTimer);
+		me.isScrolling = true;
+		me.scrollingTimer = Ext.defer(function(){
+			me.isScrolling = false;
+			me.fireEvent('scroll-stopped');
+		}, 500);
 	},
 
 
