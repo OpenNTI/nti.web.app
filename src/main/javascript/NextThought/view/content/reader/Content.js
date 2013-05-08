@@ -1,63 +1,5 @@
 Ext.define('NextThought.view.content.reader.Content',{
 
-	requires: [
-		'NextThought.ux.ImageZoomView',
-		'NextThought.ux.SlideDeck',
-		'NextThought.view.video.OverlayedPanel',
-		'NextThought.view.image.OverlayedPanel'
-	],
-
-
-	IMAGE_TEMPLATE: new Ext.XTemplate( Ext.DomHelper.markup([{
-		cls: 'wrapper',
-		cn:[{
-			tag: 'a',
-			href:'#zoom',
-			'data-qtip':'Enlarge',
-			cls: 'zoom disabled',
-			html: ' ',
-			'data-non-anchorable': true
-		}]
-	},{
-		tag: 'span',
-		cls: 'bar',
-		'data-non-anchorable': true,
-		'data-no-anchors-within': true,
-		unselectable: true,
-		cn: [{
-			tag: 'a',
-			href:'#slide',
-			'data-qtip':'Open Slides',
-			cls: 'bar-cell slide',
-			html: ' '
-		},{
-			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
-			cn: [{
-				tag: 'tpl',
-				'if': 'title',
-				cn:{
-					tag: 'span',
-					cls: 'image-title',
-					html: '{title}'
-				}
-			},{
-				tag: 'tpl',
-				'if': 'caption',
-				cn:{
-					tag: 'span',
-					cls: 'image-caption',
-					html: '{caption}'
-				}
-			},{
-				tag: 'a',
-				href:'#mark',
-				'data-qtip':'Comment on this',
-				cls: 'mark',
-				html: 'Comment'
-			}]
-		}]
-	}])),
-
 	constructor: function(){
 		this.loadedResources = {};
 		this.meta = {};
@@ -140,6 +82,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+//TODO: move this to a better place.
 	pauseAllVideos: function(){
 		var d = this.getDocumentElement(),
 			frames = d.querySelectorAll('iframe');
@@ -181,112 +124,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	activateVideoRoll: function(){
-		var me = this,
-			d = me.getDocumentElement(),
-			els = d.querySelectorAll('object[type$=videoroll]');
-
-		Ext.each(els,function(el){
-
-			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget('overlay-video-roll',{
-				reader: me,
-				renderTo: me.componentOverlayEl,
-				tabIndexTracker: this.overlayedPanelTabIndexer,
-				contentElement: el
-			}));
-		});
-	},
-
-
-	activateImageRoll: function(){
-		var me = this,
-			d = me.getDocumentElement(),
-			els = d.querySelectorAll('object[type$=image-collection]');
-
-//		els = [d.getElementById('a0000000001')];
-
-		Ext.each(els,function(el){
-
-			me.registerOverlayedPanel(el.getAttribute('data-ntiid')/*||'a0000000001'*/, Ext.widget('overlay-image-roll',{
-				reader: me,
-				renderTo: me.componentOverlayEl,
-				tabIndexTracker: this.overlayedPanelTabIndexer,
-				contentElement: el
-			}));
-		});
-	},
-
-
-	activateAnnotatableItems: function(){
-		var d = this.getDocumentElement(),
-			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
-			tpl = this.IMAGE_TEMPLATE,
-			activators = {
-				'nti-data-resizeable': Ext.bind(this.activateZoomBox,this)
-			};
-
-		function get(el,attr){ return el? el.getAttribute(attr) : null; }
-
-		function getStyle(el){
-			var s = (get(el,'style')||'').replace(/\s+/ig,'').split(';'), r = {};
-			Ext.each(s,function(v){v = (v||'').split(':');r[v[0].toLowerCase()] = v[1];});
-			return r;
-		}
-
-		Ext.each(els,function(el){
-			var p = (el.getAttribute('itemprop')||'').split(' '),
-				target = Ext.fly(el).down('img,iframe',true),
-				title = get(target,'data-title'),
-				caption = get(target,'data-caption'),
-				width,
-				bar = tpl.append(el,{
-					title: title,
-					caption: caption
-				},false);
-
-			if(!title && !caption){
-				Ext.fly(el).addCls('no-details');
-			}
-			Ext.fly(bar).unselectable();
-
-			//move the targeted element into a wrapper
-			if(Ext.fly(target).is('iframe') || !Ext.Array.contains(p,'nti-data-resizeable')){
-				Ext.fly(el.querySelector('.wrapper a')).remove();
-			}
-			el.querySelector('.wrapper').appendChild(target);
-
-			width = (parseInt(getStyle(target).width||get(target,'width'),10)||Ext.fly(target).getWidth())
-				+ Ext.get(el).getBorderWidth('lr');
-
-			Ext.get(el).setWidth(width);
-
-
-			Ext.each(p,function(feature){
-				(activators[feature]||Ext.emptyFn)(el,bar);
-			});
-		});
-	},
-
-
-	activateZoomBox: function(containerEl, toolbarEl){
-		try{
-			Ext.fly(containerEl.querySelector('a.zoom')).removeCls('disabled');
-			var img = containerEl.querySelector('img[id]:not([id^=ext])'),
-				current = img.getAttribute('data-nti-image-size'),
-				base = this.basePath;
-
-			//TODO: precache the most likely-to-be-used image, for now, we're just grabbing them all.
-			Ext.each(['full','half','quarter'],function(size){
-				if(size === current){return;}
-				new Image().src = base+img.getAttribute('data-nti-image-'+size);
-			});
-		}
-		catch(e){
-			console.warn('Could not precache larger image',containerEl);
-		}
-	},
-
-
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
 			c = me.parseHTML(resp),
@@ -299,21 +136,16 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.scrollTo(0, false);
 
 
-
 		//apply any styles that may be on the content's body, to the NTIContent div:
 		this.applyBodyStyles(
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-		me.injectAssessments(assessmentItems);
-
 		subContainers = me.resolveContainers();
 
-		me.activateVideoRoll();
-		me.activateImageRoll();
-		me.activateAnnotatableItems();
+		me.fireEvent('set-content', me, me.getDocumentElement(),
+				LocationProvider.currentNTIID, subContainers, assessmentItems);
 
-		me.fireEvent('set-content',me);
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
 

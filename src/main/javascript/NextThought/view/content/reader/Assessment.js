@@ -10,7 +10,9 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		'NextThought.view.content.reader.ComponentOverlay'
 	],
 
-	constructor: function(){},
+	constructor: function(){
+		this.on('set-content','injectAssessments',this);
+	},
 
 	makeAssessmentQuestion: function(q,set){
 		var contentElement = this.getContentElement('object','data-ntiid', q.getId());
@@ -52,7 +54,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
-	injectAssessments: function(items){
+	injectAssessments: function(reader, doc, NTIID, subContainers, items){
 		var me = this,
 			slice = Array.prototype.slice,
 			questionObjs;
