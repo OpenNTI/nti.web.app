@@ -25,7 +25,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 
 	toString: function(){
 		return (this.isOnline()) ? 'online' : 'offline';
-	},
+	}
 
 
 });
