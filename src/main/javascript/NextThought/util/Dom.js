@@ -3,17 +3,21 @@ Ext.define('NextThought.util.Dom',{
 
 
 	parseDomObject: function(objectDomEl){
-		var obj = {};
+		var obj = {},
+			id = Ext.get(objectDomEl).id,
+			driectChildNodes = function(t){ return objectDomEl.querySelectorAll('#'+id+' > '+t); },
+			addValue = function(o,n,v){ var c = o[n]; o[n] = c? (Ext.isArray(c)? c : [c]).concat(v) : v; };
 
-		Ext.each(objectDomEl,function(p){
-			obj['attribute-'+p.name] = p.value;
+		Ext.each(objectDomEl.attributes, function(p){
+			addValue(obj,'attribute-'+p.name, p.value);
 		});
 
-		Ext.each(objectDomEl.querySelectorAll('param'), function(p){
-			obj[p.name] = p.value;
+		Ext.each(driectChildNodes('param'), function(p){
+			addValue(obj, p.name, p.value);
 		});
 
-		console.debug(obj);
+		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
+
 		return obj;
 	},
 
