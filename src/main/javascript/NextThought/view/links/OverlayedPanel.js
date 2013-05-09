@@ -3,7 +3,8 @@ Ext.define('NextThought.view.links.OverlayedPanel',{
 	alias: 'widget.overlay-link',
 
 	requires:[
-		'NextThought.util.Dom'
+		'NextThought.util.Dom',
+		'NextThought.view.links.Link'
 	],
 
 	ui: 'object-link',
@@ -17,7 +18,7 @@ Ext.define('NextThought.view.links.OverlayedPanel',{
 		Ext.apply(config,{
 			layout:'fit',
 			items:[{
-				xtype: '',
+				xtype: 'external-link',
 				data: DomUtils.parseDomObject(config.contentElement)
 			}]
 		});
