@@ -9,8 +9,8 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 			if( me.liked ){  me.mon(me.liked, 'click', me.likeClicked, me); }
 			if( me.favorites ){ me.mon(me.favorites,'click', me.favoriteClicked, me); }
 
-			me.reflectLikeAndFavorite(this.record);
-			me.listenForLikeAndFavoriteChanges(this.record);
+			me.reflectLikeAndFavorite(this.getRecord());
+			me.listenForLikeAndFavoriteChanges(this.getRecord());
 		}
 
 		this.on('afterrender',onAfterRender,this,{single:true});
