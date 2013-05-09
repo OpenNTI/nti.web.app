@@ -25,6 +25,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	requires: [
 		'NextThought.ux.ImageZoomView',
 		'NextThought.ux.SlideDeck',
+		'NextThought.view.links.OverlayedPanel',
 		'NextThought.view.video.OverlayedPanel',
 		'NextThought.view.image.OverlayedPanel'
 	],
@@ -95,6 +96,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 
 	manage: function(reader){
+		this.activateObjectLinks.apply(this,arguments);
 		this.activateVideoRoll.apply(this,arguments);
 		this.activateImageRoll.apply(this,arguments);
 		this.activateAnnotatableItems.apply(this,arguments);
@@ -119,28 +121,27 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
+	activateObjectLinks: function(reader, doc, NTIID, subContainers, assessmentItems){
+		this.activateOverlayedPanel(reader,doc,'object[type$=external-link]','overlay-link');
+	},
+
+
 	activateVideoRoll: function(reader, doc, NTIID, subContainers, assessmentItems){
-		var me = reader,
-			els = doc.querySelectorAll('object[type$=videoroll]');
-
-		Ext.each(els,function(el){
-
-			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget('overlay-video-roll',{
-				reader: me,
-				renderTo: me.componentOverlayEl,
-				tabIndexTracker: reader.overlayedPanelTabIndexer,
-				contentElement: el
-			}));
-		});
+		this.activateOverlayedPanel(reader,doc,'object[type$=videoroll]','overlay-video-roll');
 	},
 
 
 	activateImageRoll: function(reader, doc, NTIID, subContainers, assessmentItems){
+		this.activateOverlayedPanel(reader,doc,'object[type$=image-collection]','overlay-image-roll');
+	},
+
+
+	activateOverlayedPanel: function(reader,doc, query, widgetXType){
 		var me = reader,
-			els = doc.querySelectorAll('object[type$=image-collection]');
+			els = doc.querySelectorAll(query);
 
 		Ext.each(els,function(el){
-			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget('overlay-image-roll',{
+			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType,{
 				reader: me,
 				renderTo: me.componentOverlayEl,
 				tabIndexTracker: reader.overlayedPanelTabIndexer,

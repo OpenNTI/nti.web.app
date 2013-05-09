@@ -1,15 +1,31 @@
 Ext.define('NextThought.util.Dom',{
 	singleton: true,
 
-	getVideosFromDom: function getVideosFromDom(contentElement) {
-		var videoObjects = [];
-		Ext.each(contentElement.querySelectorAll('object .naqvideo'),function(v){
-			var videoObj = {};
-			Ext.each(v.querySelectorAll('param'), function(p){
-				videoObj[p.name] = p.value;
-			});
-			videoObjects.push(videoObj);
+
+	parseDomObject: function(objectDomEl){
+		var obj = {};
+
+		Ext.each(objectDomEl,function(p){
+			obj['attribute-'+p.name] = p.value;
 		});
+
+		Ext.each(objectDomEl.querySelectorAll('param'), function(p){
+			obj[p.name] = p.value;
+		});
+
+		console.debug(obj);
+		return obj;
+	},
+
+
+	getVideosFromDom: function getVideosFromDom(contentElement) {
+		var me = this,
+			videoObjects = [];
+
+		Ext.each(contentElement.querySelectorAll('object .naqvideo'),function(v){
+			videoObjects.push(me.parseDomObject(v));
+		});
+
 		return videoObjects;
 	},
 
@@ -35,6 +51,7 @@ Ext.define('NextThought.util.Dom',{
 		});
 		return imageObjects;
 	},
+
 
 	/*
 	 * A terribly named function that adjust links displayed to the user.  Note this
