@@ -131,11 +131,13 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		});
 
 
-		this.players.youtube = new YT.Player(this.playerIds.youtube, {
-			events: {
-				'onReady': Ext.bind(this.youtubePlayerReady,this)
-			}
-		});
+		if(window.YT){
+			this.players.youtube = new YT.Player(this.playerIds.youtube, {
+				events: {
+					'onReady': Ext.bind(this.youtubePlayerReady,this)
+				}
+			});
+		}
 
 		this.maybeSwitchPlayers(null);
 
@@ -259,7 +261,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	youtubePlayerReady: function(){
-		this.players.youtube.isReady = true;
+		(this.players.youtube||{}).isReady = true;
 		var q = this.commandQueue.youtube;
 		while(q.length>0){
 			Ext.callback(this.issueCommand,this, q.shift());
@@ -295,7 +297,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	issueCommand: function(target, command, args){
 		var t = this.players[target];
-		if(!t.isReady){
+		if(!t || !t.isReady){
 			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
