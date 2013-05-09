@@ -121,17 +121,17 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
-	activateObjectLinks: function(reader, doc, NTIID, subContainers, assessmentItems){
+	activateObjectLinks: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
 		this.activateOverlayedPanel(reader,doc,'object[type$=external-link]','overlay-link');
 	},
 
 
-	activateVideoRoll: function(reader, doc, NTIID, subContainers, assessmentItems){
+	activateVideoRoll: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
 		this.activateOverlayedPanel(reader,doc,'object[type$=videoroll]','overlay-video-roll');
 	},
 
 
-	activateImageRoll: function(reader, doc, NTIID, subContainers, assessmentItems){
+	activateImageRoll: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
 		this.activateOverlayedPanel(reader,doc,'object[type$=image-collection]','overlay-image-roll');
 	},
 
