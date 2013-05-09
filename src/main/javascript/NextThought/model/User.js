@@ -100,8 +100,9 @@ Ext.define(	'NextThought.model.User', {
 				Username: username,
 				avatarURL: 'resources/images/icons/unresolved-user.png',
 				affiliation: 'Unknown',
-				status: 'Unresolved',
-				Presence: 'Offline'
+				status: '',
+				Presence: 'Offline',
+				Unresolved: true
 			},username);
 		},
 
