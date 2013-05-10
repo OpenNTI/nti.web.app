@@ -192,7 +192,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInShare: function(sharedWith){
-		var val, names = [], others;
+		var val, names = [], others,
+			tpl = Ext.DomHelper.createTemplate({tag:'name', 'data-profile-idx':'{1}', html:'{0}'});
+
 
 		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
 
@@ -200,6 +202,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			names.push(u.getName());
 			return names.join(',').length <= 150;
 		});
+
+		names = Ext.Array.map(names,function(){ return tpl.apply(arguments); });
 
 		others = sharedWith.length - names.length;
 		if(others){
@@ -209,10 +213,22 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			names.push(' and '+names.pop());
 		}
 
+
 		val = names.length? ('Shared with '+names.join(', ')) : 'Private';
 
 		this.sharedTo.update(val);
 		this.sharedTo.set({'data-qtip':val});
+
+		this.sharedTo.select('name[data-profile-idx]').on('click',function(e){
+			var a = e.getTarget('name'),
+				i = a && a.getAttribute('data-profile-idx'),
+				u = a && sharedWith[i];
+
+			e.stopEvent();
+			if(a && !Ext.isEmpty(i) && u && u.getProfileUrl){
+				this.fireEvent('change-hash', u.getProfileUrl());
+			}
+		},this);
 	},
 
 
