@@ -52,4 +52,20 @@ describe("User Tests", function() {
 		expect(user.home_page).toBeFalsy();
 		expect(user.home_page).not.toBe('');
 	});
+
+	it('Presence tests', function(){
+		var online = Ext.create('NextThought.model.User',{
+			Username: 'online',
+			Presence: 'online'
+		}), offline = Ext.create('NextThought.model.User',{
+			Username: 'offline',
+			Presence: 'offline'
+		}), onlinePresence = online.get('Presence'),
+			offlinePresence = offline.get('Presence');
+
+		expect(onlinePresence.get('Username')).toBe('online');
+		expect(onlinePresence.isOnline()).toBeTruthy();
+		expect(offlinePresence.get('Username')).toBe('offline');
+		expect(offlinePresence.isOnline()).toBeFalsy();
+	})
 });

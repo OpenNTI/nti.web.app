@@ -15,11 +15,11 @@ describe("User Repository/Store/Cache Behavior", function(){
 			'Username': username
 		});
 
-		return new NextThought.model.User(cfg);
+		return NextThought.model.User.create(cfg);
 	}
 
 	function createList(username){
-		return new NextThought.model.FriendsList({Username: username, NTIID: 'ntiid'+username});
+		return NextThought.model.FriendsList.create({Username: username, NTIID: 'ntiid'+username});
 	}
 
 
@@ -56,14 +56,14 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 			expect(hans.fireEvent).toHaveBeenCalledWith('changed', hans);
 
-			expect(hans.get('Presence')).toBe('Online');
+			expect(hans.get('Presence').isOnline()).toBeTruthy();
 		});
 
 		it('Survives missing user', function(){
 			TUR.presenceChanged('bruce', 'away');
 
 			expect(hans.fireEvent).not.toHaveBeenCalled();
-			expect(hans.get('Presence')).toBe('Offline');
+			expect(hans.get('Presence').isOnline()).toBeFalsy();
 		})
 	});
 
@@ -265,7 +265,6 @@ describe("User Repository/Store/Cache Behavior", function(){
 					expect(this).toBe(scope);
 					expect(users).toBeTruthy(hans);
 					expect(users.get('Username')).toEqual('Igor');
-					expect(users.get('status')).toEqual('Unresolved');
 				}, scope);
 
 				expect(TUR.makeRequest).toHaveBeenCalled();
@@ -283,7 +282,6 @@ describe("User Repository/Store/Cache Behavior", function(){
 					expect(users[0]).toBe(hans);
 					expect(users[1].summaryObject).toBeFalsy();
 					expect(users[1]).toBe(holly);
-					expect(users[2].get('status')).toEqual('Unresolved');
 					expect(users[2].get('Username')).toEqual('Igor');
 				}, scope);
 
@@ -358,8 +356,13 @@ describe("User Repository/Store/Cache Behavior", function(){
 					var r = {};
 					r.options = {callback: cfg.callback, scope: cfg.scope};
 					r.finish = function(object){
-						var cb = this.options.callback,
-							resp = {};
+						var i, cb = this.options.callback,
+							resp = {},
+							respObject = { Items: []};
+
+						for( i in object.Items){
+							//respObject.Items[i] = object.Items[i];
+						}
 
 						resp.responseText = JSON.stringify(object);
 						Ext.callback(cb, this.options.scope, [{}, true, resp]);
@@ -401,7 +404,11 @@ describe("User Repository/Store/Cache Behavior", function(){
 			}
 
 			items = Ext.Array.map(items, function(i){
-				return i.data || i;
+				var i = i.data || i;
+
+				i.Presence = (i.Presence && i.Presence.data) || i.Presence;
+
+				return i;
 			});
 
 			return {Items: items};

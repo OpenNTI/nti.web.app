@@ -377,7 +377,7 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		function onSuccess(user){
-			user.data.Presence = 'Online';
+			user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
 			user.summaryObject = false;
 			UserRepository.cacheUser(user, true);
 			$AppConfig.userObject = user;

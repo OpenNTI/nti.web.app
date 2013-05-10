@@ -12,7 +12,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 		createFromPresenceString: function(presence,username){
 			return Ext.create("NextThought.model.PresenceInfo",{
 				'Username': username,
-				'type': (presence === 'online')? 'available' : 'unavailable'
+				'type': (presence.toLowerCase() !== 'online')? 'unavailable' : 'available'
 			});
 		}
 	},
@@ -24,7 +24,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 	},
 
 	toString: function(){
-		return (this.isOnline()) ? 'online' : 'offline';
+		return (this.isOnline()) ? 'Online' : 'Offline';
 	}
 
 

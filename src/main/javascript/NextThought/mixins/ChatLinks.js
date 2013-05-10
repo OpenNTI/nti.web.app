@@ -15,7 +15,7 @@ Ext.define('NextThought.mixins.ChatLinks', {
 		}
 
 		//Note obviously this doesn't update live when users come and go.
-		return this.userObject.get('Presence') === 'Online';
+		return this.userObject.get('Presence').isOnline();
 	},
 
 	maybeShowChat: function(el){

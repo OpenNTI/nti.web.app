@@ -39,7 +39,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: this.user.get('status'),
+			status: '',//eventaully this will get the status off the presence model
 			from: this.group ? 'this Group' : 'my contacts'
 		});
 
@@ -62,11 +62,11 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	},
 
 	isOnline: function(val){
-		return (val || this.user.get('Presence')) === 'Online';
+		return (val || this.user.get('Presence').toString()) === 'Online';
 	},
 
 	updatePresenceState: function(value){
-		if(this.isOnline(value)){
+		if(this.isOnline(value.toString())){
 			this.removeCls('offline');
 		}
 		else{

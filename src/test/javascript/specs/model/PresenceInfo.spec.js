@@ -19,7 +19,7 @@ describe("PresenceInfo Model",function(){
 	});
 
 	it("toString tests", function(){
-		expect(online.toString()).toBe("online");
-		expect(offline.toString()).toBe("offline");
+		expect(online.toString()).toBe("Online");
+		expect(offline.toString()).toBe("Offline");
 	});
 });

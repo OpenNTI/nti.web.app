@@ -1,12 +1,13 @@
 Ext.define('NextThought.model.User', {
 	extend: 'NextThought.model.Base',
+	requires: ['NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 	resolveUsers: true,
 	fields: [
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
-		{ name: 'Presence', type: 'string' },
+		{ name: 'Presence', type: 'PresenceInfo', persist: false },
 		{ name: 'alias', type: 'string' },
 		{ name: 'email', type: 'string' },
 		{ name: 'realname', type: 'string' },
@@ -93,7 +94,7 @@ Ext.define('NextThought.model.User', {
 	},
 
 	isUnresolved: function () {
-		return this.Unresolved;
+		return this.Unresolved === true;
 	},
 
 
@@ -105,7 +106,7 @@ Ext.define('NextThought.model.User', {
 				avatarURL: 'resources/images/icons/unresolved-user.png',
 				affiliation: 'Unknown',
 				status: '',
-				Presence: 'Offline'
+				Presence: NextThought.model.PresenceInfo.createFromPresenceString("Offline")
 			}, username);
 			u.Unresolved = true;
 			return u;
