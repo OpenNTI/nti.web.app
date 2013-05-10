@@ -1,4 +1,4 @@
-Ext.define(	'NextThought.model.User', {
+Ext.define('NextThought.model.User', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'Username',
 	resolveUsers: true,
@@ -15,10 +15,12 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'string' },
-        { name: 'opt_in_email_communication', type: 'boolean' },
+		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
-		{ name: 'displayName', convert: function(v,r){return r.getName();}},
+		{ name: 'displayName', convert: function (v, r) {
+			return r.getName();
+		}},
 		{ name: 'affiliation', type: 'string'},
 		{ name: 'role', type: 'string'},
 		{ name: 'location', type: 'string'},
@@ -27,25 +29,27 @@ Ext.define(	'NextThought.model.User', {
 
 	summaryObject: true,
 
-	getCommunities: function(){
+	getCommunities: function () {
 		var r = [], u;
 
-		Ext.each(this.get('Communities'),function(c){
+		Ext.each(this.get('Communities'), function (c) {
 			var field = 'Username';
 
-			if(/^everyone$/i.test(c)){ return; }
+			if (/^everyone$/i.test(c)) {
+				return;
+			}
 
 			//DFLs come back in communities but there usernames are ntiids.
-			if(ParseUtils.parseNtiid(c)){
+			if (ParseUtils.parseNtiid(c)) {
 				field = 'NTIID';
 			}
 
-			u = UserRepository.store.findRecord(field,c,0,false,true,true);
-			if(u){
+			u = UserRepository.store.findRecord(field, c, 0, false, true, true);
+			if (u) {
 				r.push(u);
 			}
-			else{
-				console.warn('Dropping unresolvable community: '+Ext.encode(c));
+			else {
+				console.warn('Dropping unresolvable community: ' + Ext.encode(c));
 			}
 
 		});
@@ -53,70 +57,71 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
-	toString: function(){
+	toString: function () {
 		return this.getName();
 	},
 
 
-	getName: function(){
+	getName: function () {
 		return this.get('alias') || this.get('realname') || this.get('Username');
 	},
 
 
-	getProfileUrl: function(subPage){
-		var u = encodeURIComponent( this.get('Username')),
-			subPages = subPage||[];
+	getProfileUrl: function (subPage) {
+		var u = encodeURIComponent(this.get('Username')),
+			subPages = subPage || [];
 
-		if(!Ext.isArray(subPages) && arguments.length>0){
+		if (!Ext.isArray(subPages) && arguments.length > 0) {
 			subPages = Ext.Array.clone(arguments);
 		}
-		subPages = Ext.isEmpty(subPages,false) ? '' :'/'+Ext.Array.map(subPages,encodeURIComponent).join('/');
-		return ['#!profile/',u,subPages].join('') ;
+		subPages = Ext.isEmpty(subPages, false) ? '' : '/' + Ext.Array.map(subPages, encodeURIComponent).join('/');
+		return ['#!profile/', u, subPages].join('');
 	},
 
 
-	hasBlog: function(){
+	hasBlog: function () {
 		return Boolean(this.getLink('Blog'));
 	},
 
 
-    save: function(ops){
-        Ext.Ajax.request(Ext.apply({
-            url: this.getLink('edit'),
-            method: 'PUT',
-            jsonData: this.getData()
-        },ops));
-    },
+	save: function (ops) {
+		Ext.Ajax.request(Ext.apply({
+			url: this.getLink('edit'),
+			method: 'PUT',
+			jsonData: this.getData()
+		}, ops));
+	},
 
-	isUnresolved: function(){
-		return this.get('status') === 'Unresolved';
+	isUnresolved: function () {
+		return this.Unresolved;
 	},
 
 
 	statics: {
 
-		getUnresolved: function(username){
-			return new NextThought.model.User({
+		getUnresolved: function (username) {
+			var u = new NextThought.model.User({
 				Username: username,
 				avatarURL: 'resources/images/icons/unresolved-user.png',
 				affiliation: 'Unknown',
 				status: '',
-				Presence: 'Offline',
-				Unresolved: true
-			},username);
+				Presence: 'Offline'
+			}, username);
+			u.Unresolved = true;
+			return u;
 		},
 
 
-		getProfileStateFromFragment: function(fragment){
+		getProfileStateFromFragment: function (fragment) {
 			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
 			return o ? {
-					username: decodeURIComponent(o[1]),
-					activeTab: o[2]
-				} : null;
+				username: decodeURIComponent(o[1]),
+				activeTab: o[2]
+			} : null;
 		}
 
 	}
 
-},function(){
+}, function () {
 	window.User = this;
 });
