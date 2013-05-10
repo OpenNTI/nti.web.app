@@ -77,7 +77,7 @@ Ext.define('NextThought.view.definition.Window', {
 		me.queryDefinition(function(dom){
 			me.getXSLTProcessor(function(processor){
 				var o, domtree, outputtree, doc;
-				if (!Ext.isIE9) {
+				if (window.XMLSerializer && window.DOMParser) {
 					domtree = new DOMParser().parseFromString(dom,"text/xml");
 					outputtree = processor.transformToDocument(domtree);
 					o = new XMLSerializer().serializeToString(outputtree);
@@ -123,12 +123,12 @@ Ext.define('NextThought.view.definition.Window', {
 
 
 	queryDefinition: function(cb, scope){
-        var u = LocationProvider.currentPageInfo.getLink('Glossary');
+        var u = LocationProvider.currentPageInfo.getLink('Glossary'), req;
 
         if (!u){u=this.fallbackURL;}
         else{u+='/';}
 
-		Ext.Ajax.request({
+		req = {
 			url: getURL(u + encodeURIComponent(this.term)),
 			async: true,
 			scope: this,
@@ -136,24 +136,26 @@ Ext.define('NextThought.view.definition.Window', {
 				var dom = r.responseText;
 				Ext.callback(cb, scope||this, [dom]);
 			}
-		});
+		};
+
+		Ext.Ajax.request(req);
 	},
 
 
 	getXSLTProcessor: function(cb, scope){
-		var me = this;
+		var me = this, req;
 		if(me.self.xsltProcessor){
 			Ext.callback(cb, scope || me, [me.self.xsltProcessor ] );
 			return;
 		}
 
-		Ext.Ajax.request({
+		req = {
 			url: getURL(me.xslUrl),
 			async: true,
 			scope: me,
 			callback: function(q,s,r){
 				var xsldoc, xslt, dom, p;
-				if (Ext.isIE9) {
+				if (!window.XSLTProcessor) {
 					xsldoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
 					xsldoc.loadXML(r.responseText);
 					xslt = new ActiveXObject("Msxml2.XSLTemplate");
@@ -167,6 +169,9 @@ Ext.define('NextThought.view.definition.Window', {
 				}
 				me.self.xsltProcessor = p;
 				Ext.callback(cb, scope || me, [ p ]);
-			}});
+			}
+		};
+
+		Ext.Ajax.request(req);
 	}
 });
