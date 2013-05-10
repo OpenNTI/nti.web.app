@@ -41,6 +41,9 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 	updateLikeAndFavoriteFromRecord: function(){
 		var rec = this.getRecord(),
 			me = this;
+
+		if(!rec){return;}
+
 		if( rec.parent ){
 			if( me.favorites ){
 				me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -84,12 +87,14 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 
 	listenForLikeAndFavoriteChanges: function(record){
+		if(!record){return;}
 		record.addObserverForField(this, 'favorited', this.markAsFavorited, this);
 		record.addObserverForField(this, 'liked', this.markAsLiked, this);
 		record.addObserverForField(this, 'LikeCount', this.updateLikeCount, this);
 	},
 
 	stopListeningForLikeAndFavoriteChanges: function(record){
+		if(!record){return;}
 		record.removeObserverForField(this, 'favorited', this.markAsFavorited, this);
 		record.removeObserverForField(this, 'liked', this.markAsLiked, this);
 		record.removeObserverForField(this, 'LikeCount', this.updateLikeCount, this);
@@ -99,11 +104,11 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 	reflectLikeAndFavorite: function(record){
 		if (this.liked){
 			this.updateLikeCount(record);
-            this.markAsLiked(record.isLiked());
+            this.markAsLiked(record && record.isLiked());
         }
 
         if(this.favorites){
-			this.markAsFavorited(record.isFavorited());
+			this.markAsFavorited(record && record.isFavorited());
         }
 	},
 
@@ -111,7 +116,9 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 	updateLikeCount: function(record){
 		if(this.liked){
 			record = record&&record.isModel? record : this.getRecord();
-			this.liked.update(record.getFriendlyLikeCount());
+			if(record){
+				this.liked.update(record.getFriendlyLikeCount());
+			}
 		}
 	},
 
