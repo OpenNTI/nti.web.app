@@ -871,9 +871,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(t && this.wbData[guid]){
 			t = e.getTarget('.reply:not(.profile-activity-reply-item)',null,true);
 			if(t){
-				t.up('.toolbar').down('.include').addCls('checked');
-				this.activateReplyEditor();
-				this.editorActions.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
+				if( this.activateReplyEditor() ){
+					t.up('.toolbar').down('.include').addCls('checked');
+					this.editorActions.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
+				}
 			}
 			else {
 				t = e.getTarget('.include',null,true);

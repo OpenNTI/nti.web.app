@@ -302,10 +302,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	commentOnAnnototableImage: function(dom, action){
 		var me = this;
-		me.activateReplyEditor();
-		WBUtils.createFromImage(dom,function(data){
-			Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
-		});
+		if( me.activateReplyEditor() ){
+			WBUtils.createFromImage(dom,function(data){
+				Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
+			});
+		}
 	},
 
 
