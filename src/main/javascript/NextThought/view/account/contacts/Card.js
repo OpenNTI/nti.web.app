@@ -62,11 +62,11 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	},
 
 	isOnline: function(val){
-		return (val || this.user.get('Presence').toString()) === 'Online';
+		return (val || this.user.getPresence().toString()) === 'Online';
 	},
 
 	updatePresenceState: function(value){
-		if(this.isOnline(value.toString())){
+		if(this.isOnline((value.toString)? value.toString() : value)){
 			this.removeCls('offline');
 		}
 		else{

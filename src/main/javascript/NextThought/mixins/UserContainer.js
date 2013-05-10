@@ -258,8 +258,8 @@ Ext.define('NextThought.mixins.UserContainer', {
 	//Sort the users first by presense (online, offline) then
 	//alphabetically withing that
 	userSorterFunction: function(a, b){
-		var aPresence = a.get('Presence').toString() || '',
-			bPresence = b.get('Presence').toString() || '',
+		var aPresence = a.getPresence().toString() || '',
+			bPresence = b.getPresence().toString() || '',
 			aName = a.get('displayName') || '',
 			bName = b.get('displayName') || '',
 			presenceResult, nameResult;

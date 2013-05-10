@@ -79,6 +79,11 @@ Ext.define('NextThought.model.User', {
 		return ['#!profile/', u, subPages].join('');
 	},
 
+	getPresence: function(){
+		var presence = this.get('Presence');
+
+		return (presence)? presence :  NextThought.model.PresenceInfo.createFromPresenceString('Offline');
+	},
 
 	hasBlog: function () {
 		return Boolean(this.getLink('Blog'));

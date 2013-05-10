@@ -142,7 +142,7 @@ Ext.define('NextThought.controller.Groups', {
 			var friends = {Online: {}, Offline: {}, all:[]},
 				all = {};
 			Ext.each(users,function(user){
-				var p = user.get('Presence').toString(),
+				var p = user.getPresence().toString(),
 					n = user.get('Username');
 
 				if(p){ friends[p][n] = user; }
@@ -407,7 +407,7 @@ Ext.define('NextThought.controller.Groups', {
 				});
 
 				Ext.Array.each(users, function(user){
-					var presence = user.get('Presence').toString(),
+					var presence = user.getPresence().toString(),
 						panel = map[presence.toLowerCase()];
 					contactsTab.addUser(user);
 					panel.addUser(user);
@@ -462,7 +462,7 @@ Ext.define('NextThought.controller.Groups', {
 			offline = contacts.down('[offline]'),
 			online = contacts.down('[online]'),
 			map = { offline: offline, online: online },
-			presence = cmp.getUserObject().get('Presence').toString(),
+			presence = cmp.getUserObject().getPresence().toString(),
 			panel = map[presence.toLowerCase()];
 
 		if(panel){
