@@ -8,7 +8,7 @@ Ext.define('NextThought.view.links.OverlayedPanel',{
 	],
 
 	ui: 'object-link',
-	cls: 'object-link',
+	cls: 'object-link-container',
 
 	constructor: function(config){
 		if(!config || !config.contentElement){
