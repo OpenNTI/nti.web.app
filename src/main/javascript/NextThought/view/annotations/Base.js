@@ -390,9 +390,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
             menu.showAt.apply(menu,xy);
             menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
         }
-
-		e.stopEvent();
-		return false;//IE :(
 	},
 
 
