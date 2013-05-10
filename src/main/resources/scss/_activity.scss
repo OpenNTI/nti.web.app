@@ -428,10 +428,8 @@
 						display: none;
 						cursor: pointer;
 
-						&.flag{
-							color: $primary-red;
-						}
 						&.flag.on{
+							color: $primary-red;
 							display: block;
 						}
                   	}
