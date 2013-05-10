@@ -78,6 +78,12 @@ body.x-body {margin:0;}
 		vertical-align: sub;
 	}
 
+	a:link {
+		img {
+			border: 0;
+		}
+	}
+
 	.nobreak {
 		white-space: nowrap;
 	}
