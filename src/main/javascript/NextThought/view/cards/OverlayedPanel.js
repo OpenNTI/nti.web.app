@@ -17,14 +17,20 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 
 		var dom = config.contentElement,
 			el = Ext.get(dom),
+			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
 			thumbnail = el.down('img');
 
+		//the data-href has the adjusted href.
+		data.href = data['attribute-data-href'];
+
 		Ext.applyIf(data,{
+			basePath: reader && reader.basePath,
 			description: (description && description.getHTML()) || '',
-			thumbnail: (thumbnail && thumbnail.src) || ''
+			thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
 		});
+
 
 		Ext.apply(config,{
 			layout:'fit',

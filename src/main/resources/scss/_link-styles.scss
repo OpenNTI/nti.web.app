@@ -24,6 +24,10 @@ a{
 
 		$thumbWidth: 80px;
 
+		a, a:link, a:visited, a:active {
+			text-decoration: none;
+		}
+
 		.controls {
 			position: absolute;
 			top: 0;

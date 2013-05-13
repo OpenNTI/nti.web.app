@@ -11,7 +11,7 @@ Ext.define('NextThought.view.cards.Card',{
 	cls: 'content-card',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail});'} },
+		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail})'} },
 //		{ cls: 'controls', cn: [
 //			{ cls: 'favorite' },
 //			{ cls: 'like' }
@@ -30,10 +30,20 @@ Ext.define('NextThought.view.cards.Card',{
 	},
 
 
-	constructor: function(){
+	constructor: function(config){
+		if(this.shouldOpenInNewWindow(config.data.href)){
+			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:config.data.href, html:this.renderTpl});
+		}
+
 		this.callParent(arguments);
 //		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		return this;
+	},
+
+
+	shouldOpenInNewWindow: function(url){
+		console.debug(url);
+		return true;
 	},
 
 
