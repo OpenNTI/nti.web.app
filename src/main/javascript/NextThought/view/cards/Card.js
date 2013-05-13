@@ -1,25 +1,25 @@
-Ext.define('NextThought.view.links.Link',{
+Ext.define('NextThought.view.cards.Card',{
 	extend: 'Ext.Component',
-	alias: 'widget.external-link',
+	alias: 'widget.content-card',
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
-		//profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
+//		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+//		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
 
-	ui: 'object-link',
-	cls: 'object-link',
+	ui: 'content-card',
+	cls: 'content-card',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail});'} },
-		{ cls: 'controls', cn: [
-			{ cls: 'favorite' },
-			{ cls: 'like' }
-		]},
+//		{ cls: 'controls', cn: [
+//			{ cls: 'favorite' },
+//			{ cls: 'like' }
+//		]},
 		{ cls: 'meta', cn: [
 			{ cls:'title', html:'{title}' },
-			{ cls:'byline', html:'By {author}' },
-			{ cls:'description', html:'{preview}' }
+			{ cls:'byline', html:'By {creator}' },
+			{ cls:'description', html:'{description}' }
 		]}
 	]),
 
@@ -32,14 +32,14 @@ Ext.define('NextThought.view.links.Link',{
 
 	constructor: function(){
 		this.callParent(arguments);
-		this.mixins.likeAndFavoriteActions.constructor.call(this);
+//		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		return this;
 	},
 
 
-	getRecord: function(){
+//	getRecord: function(){
 		//TODO: we need a record to like/favorite.
-	},
+//	},
 
 
 	beforeRender: function(){

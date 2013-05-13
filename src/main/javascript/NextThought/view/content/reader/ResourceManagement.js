@@ -25,7 +25,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	requires: [
 		'NextThought.ux.ImageZoomView',
 		'NextThought.ux.SlideDeck',
-		'NextThought.view.links.OverlayedPanel',
+		'NextThought.view.cards.OverlayedPanel',
 		'NextThought.view.video.OverlayedPanel',
 		'NextThought.view.image.OverlayedPanel'
 	],
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 
 	manage: function(reader){
-		this.activateObjectLinks.apply(this,arguments);
+		this.activateCards.apply(this,arguments);
 		this.activateVideoRoll.apply(this,arguments);
 		this.activateImageRoll.apply(this,arguments);
 		this.activateAnnotatableItems.apply(this,arguments);
@@ -121,8 +121,8 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
-	activateObjectLinks: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
-		this.activateOverlayedPanel(reader,doc,'object[type$=external-link]','overlay-link');
+	activateCards: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
+		this.activateOverlayedPanel(reader,doc,'object[type$=nticard]','overlay-card');
 	},
 
 
