@@ -110,12 +110,44 @@ div.nt-token-wrapper{
 		color: $secondary-grey;
 		vertical-align: middle;
 
+		&.person, &.public, &.group, &.list{
+			&::after{
+				content: '';
+				position: absolute;
+				top: 3px; left:6px;
+				background: $icons no-repeat;
+				vertical-align: middle;
+			}
+		}
+
+		&.person { &::after{display: none;}}
+		&.public {
+			padding-left: 22px !important;
+			&::after{
+				@include sprite($icons,'light-globe-13x13',$dimensions: true);
+			}
+		}
+		&.group {
+			padding-left: 22px !important;
+
+			&::after{
+				top: 5px; left: 5px;
+				@include sprite($icons,'light-groups-12x9',$dimensions: true);
+			}
+		}
+		&.list {
+			padding-left: 22px !important;
+
+			&::after{
+				top: 5px; left: 5px;
+				@include sprite($icons,'lists-white_hover',$dimensions: true);
+			}
+		}
+
 		.value,.x{
 			position: relative;
 			display: inline-block;
 			vertical-align: middle;
-		}
-		.value{
 		}
 
 		&:hover {
@@ -199,6 +231,28 @@ div.nt-token-wrapper{
 			white-space: normal;
 			padding: 0 0.2em;
 			min-width: 50px;
+		}
+	}
+
+	&.sharing-token-field{
+		.token{
+			font: normal 700 10px/18px $font;
+			text-transform: none;
+			color: #fff;
+			border-color: #39a1dd;
+			background: #3fb3f6;
+			position: relative;
+			z-index: 2;
+
+			&:hover{
+				z-index: 10;
+			}
+		}
+
+		.token-input-sizer{
+			font: 14px $font;
+			font-style: italic;
+			text-transform: none;
 		}
 	}
 }

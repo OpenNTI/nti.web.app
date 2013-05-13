@@ -713,6 +713,18 @@
 					padding-right: 13px;
 					border: 1px solid #dcdcdc;
 					border-bottom-width: 0;
+
+					.content{
+						padding: 6px 0 0 0;
+					}
+				}
+
+				&.basic{
+					margin-top: 10px;
+					.footer{
+						background-color: transparent;
+						&::after{ display: none; }
+					}
 				}
 			}
 		}
