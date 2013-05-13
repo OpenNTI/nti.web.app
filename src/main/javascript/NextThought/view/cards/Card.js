@@ -31,8 +31,9 @@ Ext.define('NextThought.view.cards.Card',{
 
 
 	constructor: function(config){
-		if(this.shouldOpenInNewWindow(config.data.href)){
-			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:config.data.href, html:this.renderTpl});
+		var d = (config && config.data) || {};
+		if(!this.shouldOpenInApp(d.href, d.basePath)){
+			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl});
 		}
 
 		this.callParent(arguments);
@@ -41,9 +42,12 @@ Ext.define('NextThought.view.cards.Card',{
 	},
 
 
-	shouldOpenInNewWindow: function(url){
-		console.debug(url);
-		return true;
+	shouldOpenInApp: function(url, basePath){
+		var isNTIID = ParseUtils.parseNtiid(url) !== null,
+			isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
+			pdf = (/\.pdf$/i).test(url.split('?')[0]);
+
+		return isNTIID || (pdf && isLocal);
 	},
 
 
