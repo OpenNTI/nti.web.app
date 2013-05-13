@@ -4,32 +4,36 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	cls: 'search-result search-result-post',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag:'tpl', 'if':'isPost', cn:[
-			{cls:'title', cn: [
-				{tag:'span', html:"{title}"},
-				{tag:'tpl', 'if':'name',cn:[{cls:'by',html:'By {name}'}]},
-				{tag:'tpl', 'if':'tags', cn:[{cls:'tags', html:'{tags}'}]}
+		{tag: 'tpl', 'if': 'isPost', cn: [
+			{cls: 'title', cn: [
+				{tag: 'span', html: "{title}"},
+				{tag: 'tpl', 'if': 'name', cn: [
+					{cls: 'by', html: 'By {name}'}
+				]},
+				{tag: 'tpl', 'if': 'tags', cn: [
+					{cls: 'tags', html: '{tags}'}
+				]}
 			]},
 			{
-				cls:'wrap',
-				cn:[
+				cls: 'wrap',
+				cn: [
 					{cls: 'fragments', cn: [
-						{tag:'tpl', 'for':'fragments', cn:[
+						{tag: 'tpl', 'for': 'fragments', cn: [
 							{cls: 'fragment', ordinal: '{#}', html: '{.}'}
 						]}
 					]}
 				]
 			}
 		]},
-		{tag:'tpl', 'if':'isComment', cn:[
-			{cls:'title', cn: [
-				{cls:'commenter', html:"{name} commented on:"},
-				{tag:'span', html:"{title}"}
+		{tag: 'tpl', 'if': 'isComment', cn: [
+			{cls: 'title', cn: [
+				{cls: 'commenter', html: "{name} commented on:"},
+				{tag: 'span', html: "{title}"}
 			]},
-			{cls:'wrap', cn:[
-				{cls:'fragments', cn: [
-					{tag:'tpl', 'for':'fragments', cn:[
-						{cls:'fragment', ordinal:'{#}', html: '{.}'}
+			{cls: 'wrap', cn: [
+				{cls: 'fragments', cn: [
+					{tag: 'tpl', 'for': 'fragments', cn: [
+						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
 					]}
 				]}
 			]}
@@ -37,12 +41,12 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	]),
 
 
-	isComment: function(hit){
+	isComment: function (hit) {
 		return (/.*?personalblogcomment$/).test(hit.get('MimeType'));
 	},
 
 
-	fillInData: function(){
+	fillInData: function () {
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId'),
@@ -50,7 +54,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			comment = this.isComment(hit);
 		me.comment = comment;
 
-		me.renderData = Ext.apply(me.renderData || {},{
+		me.renderData = Ext.apply(me.renderData || {}, {
 			title: 'Resolving...',
 			name: name,
 			isComment: comment,
@@ -58,51 +62,50 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
-		function finish(r){
+		function finish(r) {
 			var tags = r.get('headline').get('tags'), tagMsg;
 			me.renderData = Ext.apply(me.renderData, r.getData());
 
 			//check how many tags there are and display accordingly
-			if(Ext.isEmpty(tags)){
+			if (Ext.isEmpty(tags)) {
 				//no tags display nothing
 				tagMsg = false;
-			}else{
+			} else {
 				//comma seperate the tags
-				tagMsg = ((tags.length > 2)? "Tags" : "Tag") + ": "+tags.join(", ");
+				tagMsg = ((tags.length > 2) ? "Tags" : "Tag") + ": " + tags.join(", ");
 			}
 
 			me.renderData.tags = tagMsg;
 
 			me.record = r;
-			if(isMe(name)){
-				me.renderData.name = (comment)? 'I' : 'me' ;
+			if (isMe(name)) {
+				me.renderData.name = (comment) ? 'I' : 'me';
 				me.user = $AppConfig.userObject;
 			}
-			if(!isMe(name) && name){
-				UserRepository.getUser(name,function(user){
+			if (!isMe(name) && name) {
+				UserRepository.getUser(name, function (user) {
 					var n = user.getName();
 					me.user = user;
 
-					if(!me.rendered){
-						me.renderData.name = n;
-						return;
+					me.renderData.name = n;
+					if (me.rendered) {
+						me.renderTpl.overwrite(me.el, me.renderData);
 					}
-					me.renderTpl.overwrite(me.el, me.renderData);
 				});
 			}
-			else if (me.rendered){
+			else if (me.rendered) {
 				me.renderTpl.overwrite(me.el, me.renderData);
 			}
 		}
 
-		function fail(){
+		function fail() {
 			console.log('there was an error retrieving the object.', arguments);
 		}
 
 		$AppConfig.service.getObject(containerId, finish, fail, me);
 	},
 
-	doClicked: function(fragIdx){
+	doClicked: function (fragIdx) {
 		this.fireEvent('click-blog-result', this, fragIdx, this.comment);
 	}
 });
