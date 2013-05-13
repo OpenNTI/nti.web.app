@@ -104,7 +104,7 @@ Ext.define('NextThought.view.forums.Forum',{
 			var desc = r.get('NewestDescendant'),
 				creator = desc ? desc.get('Creator') : undefined;
 
-			if(creator){
+			if(creator && !creator.isModel){
 				if(Ext.isArray(map[creator])){
 					map[creator].push(r);
 				}
@@ -117,9 +117,19 @@ Ext.define('NextThought.view.forums.Forum',{
 		function apply(resolvedUser, i){
 			var recs = map[resolvedUser.get('Username')] || [];
 			Ext.Array.each(recs, function(rec){
-				var desc = rec.get('NewestDescendant');
+				var desc = rec.get('NewestDescendant'),
+					recIdx = -1;
 				if(desc){
 					desc.set('Creator', resolvedUser);
+					//When a field is another model object and one of it's properties change,
+					//the containing object won't see the change right now.  One would think
+					//you could set back the same field, but since they are equivalent nothing
+					//happens.  So, until we have a framework in place for this force this particular
+					//node to update.  We wouldn't get here if it wasn't changing anyway
+					recIdx = me.store.indexOf(rec);
+					if(recIdx >- 0){
+						me.refreshNode(recIdx);
+					}
 				}
 			});
 		}
@@ -133,12 +143,16 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	itemUpdate: function(record, index, node){
 		//this.fillInNewestDescendant();
-		var creator = record.get('NewestDescendant').get('Creator');
+		var newestDescendant = record.get('NewestDescendant'),
+			creator = newestDescendant && newestDescendant.get('Creator'), me = this;
 
 		function resolve(user){
-			record.get('NewestDescendant').set('Creator',user);
+			record.get('NewestDescendant').set('Creator', user);
+			if(index >= 0){
+				me.refreshNode(index);
+			}
 		}
-		if(!creator.isModel){
+		if(creator && !creator.isModel){
 			//not an object resolve user
 			UserRepository.getUser(creator,resolve);
 		}
