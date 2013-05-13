@@ -123,11 +123,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		if( $AppConfig.service.canShare() ){
 			me.mon(me.replyButton,'click', me.activateReplyEditor, me);
-			me.mon(me.shareButton,'click', me.onShare, me);
+			if(me.shareButton){ me.mon(me.shareButton,'click', me.onShare, me); }
 		}
 		else{
 			me.replyButton.remove();
-			me.shareButton.remove();
+		 	if(me.shareButton){ me.shareButton.remove(); }
 		}
 
 		me.mon(me.editor.down('.cancel'), 'click', me.deactivateReplyEditor, me);

@@ -2,7 +2,9 @@ Ext.define('NextThought.editor.Actions', {
 	requires: [
 		'NextThought.util.Ranges',
 		'NextThought.view.menus.Share',
-		'NextThought.view.form.fields.TagField'
+		'NextThought.view.form.fields.TagField',
+		'NextThought.view.form.fields.UserListField',
+		'NextThought.view.form.fields.UserTokenField'
 	],
 
 	mixins: {
@@ -100,6 +102,11 @@ Ext.define('NextThought.editor.Actions', {
 			});
 		}
 
+		me.sharedListEl = editorEl.down('.recipients');
+		if(me.sharedListEl){
+			me.sharedList = Ext.widget('user-sharing-tokens', {renderTo: me.sharedListEl, tabIndex:3});
+		}
+
 		me.publishEl = editorEl.down('.action.publish');
 		if( me.publishEl ){
 			cmp.mon(me.publishEl, 'click', function togglePublish(e){
@@ -110,10 +117,18 @@ Ext.define('NextThought.editor.Actions', {
 
 		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: -1});
 
-
+		me.styleControlsEl = editorEl.down('.action.text-controls');
+		if(me.styleControlsEl){
+			cmp.mon(me.styleControlsEl, 'click', this.showStylePopover, this);
+		}
 		cmp.mon(new Ce(editorEl.query('.left .action')), {
 			scope: me,
 			click: me.editorContentAction
+		});
+
+		cmp.mon(new Ce(editorEl.query('.text-controls .control')), {
+			scope: me,
+			click: me.fontStyleAction
 		});
 
 		cmp.mon(editorEl, {
@@ -419,6 +434,8 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	syncTypingAttributeButtons: function(){
+		if(Ext.isEmpty(this.typingAttributes)){ return; }
+
 		var me = this,
 			buttonsName = ['bold', 'italic', 'underline'];
 
@@ -461,14 +478,27 @@ Ext.define('NextThought.editor.Actions', {
 
 	editorContentAction: function(e){
 		var t = e.getTarget('.action', undefined, true), action;
+		if (t && t.is('.whiteboard')) {
+			this.addWhiteboard();
+		}
+	},
+
+
+	fontStyleAction: function(e){
+		var t = e.getTarget('.control', undefined, true), action;
 		if (t) {
-			if (t.is('.whiteboard')) {
-				this.addWhiteboard();
-			}
-			else{
-				action = (t.getAttribute('class')||'').split(' ')[1];
-				this.toggleTypingAttribute(action);
-			}
+			action = (t.getAttribute('class')||'').split(' ')[1];
+			this.toggleTypingAttribute(action);
+		}
+	},
+
+
+	showStylePopover: function(e){
+		var t = e.getTarget('.action.text-controls', undefined, true),
+			action = t && t.hasCls('selected') ? 'removeCls' : 'addCls';
+
+		if(t && !e.getTarget('.control')){
+			t[action]('selected');
 		}
 	},
 
@@ -906,7 +936,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		return {
 			body : this.getBody(out),
-			shareWith: this.shareMenu ? this.shareMenu.getValue() : undefined,
+			shareWith: this.getSharedWithList(),
 			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
 			tags: this.tags ? this.tags.getValue() : undefined,
@@ -915,8 +945,32 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
+	getSharedWithList: function(){
+
+		/** FIXME: the shareMenu will eventually go away. But for now since some editors might be using it, if it's set, return it.
+		 * Otherwise, return a union of a sharedList (exclusive entities specified by the user)
+		 * plus all communities if it's set to be public.
+		 */
+		if(this.shareMenu){ return this.shareMenu.getValue();}
+
+		var s = this.sharedList ? this.sharedList.getValue() : [],
+			isPublic = Boolean(this.getPublished()),
+			list = [];
+
+		if(isPublic && this.sharedList){
+			Ext.each($AppConfig.userObject.getCommunities(), function(c){
+				list.push(c.get('Username'));
+			});
+		}
+
+		return Ext.Array.union(list, s);
+	},
+
+
 	getPublished: function(){
-		return this.cmp.publishEl ? this.cmp.publishEl.is('.on') : undefined;
+		var el = this.cmp.publishEl || this.publishEl;
+
+		return el ? el.is('.on') : undefined;
 	},
 
 
@@ -991,6 +1045,11 @@ Ext.define('NextThought.editor.Actions', {
 	updatePrefs: function (v) {
 		if( this.shareMenu ){
 			this.shareMenu.reload(v);
+		}
+
+		//TODO: For now, since the default sharing isn't hooked up, just clear all tokens.
+		if(this.sharedList){
+			this.sharedList.clearTokens();
 		}
 	}
 

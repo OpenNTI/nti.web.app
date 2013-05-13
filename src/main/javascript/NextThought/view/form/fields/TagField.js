@@ -58,13 +58,18 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			focus: this.updateSize
 		});
 
+		this.addInputListeners();
+		this.renderPlaceholder(this.inputEl);
+	},
+
+
+	addInputListeners: function(){
 		this.mon(this.inputEl,{
 			scope: this,
 			keydown: this.onKeyDown,
-			blur: this.onBlur,
+			blur: this.handleBlur,
 			paste: this.onPaste
 		});
-		this.renderPlaceholder(this.inputEl);
 	},
 
 
@@ -156,27 +161,30 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-	onBlur: function(){
+	addTag: function(val, type){
+		var me = this, el = me.inputEl;
+
+		el.dom.value = '';
+		if(!Ext.Array.contains(me.getValue(),val)){
+			me.tokenTpl.insertBefore(me.wrapEl,[val, type]);
+			me.fireEvent('new-tag',val);
+		}
+	},
+
+
+	handleBlur: function(){
 		var me = this,
 			el = me.inputEl,
 			val = (el.getValue()||'').toLowerCase();
 
-		function addTag(val){
-			el.dom.value = '';
-			if(!Ext.Array.contains(me.getValue(),val)){
-				me.tokenTpl.insertBefore(me.wrapEl,[val]);
-				me.fireEvent('new-tag',val);
-			}
-		}
-
 		if (!me.working) {
 			me.working = true;
 			if (me.isToken(val)) {
-				addTag(val);
+				me.addTag(val);
 			} else if(me.isMultipleTokens(val)){
 				val = val.split(me.delimiterRe);
 				val = Ext.Array.clean(val);
-				Ext.each(val,addTag,me);
+				Ext.each(val,me.addTag,me);
 			}
 
 			delete this.working;
@@ -187,7 +195,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	onPaste: function(e){
 		//wait for paste data to actually populate tne input
-		Ext.defer(this.onBlur,100,this);
+		Ext.defer(this.handleBlur,100,this);
 	},
 
 

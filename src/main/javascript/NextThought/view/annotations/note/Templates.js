@@ -1,42 +1,53 @@
 Ext.define('NextThought.view.annotations.note.Templates',{
 	singleton: true,
 
-	getEditorTpl: function(){
+	getEditorTpl: function(enableTitle, enableSharing){
 		return {
-			cls: 'editor',
+			cls: 'editor basic',
 			cn:[{
 				cls: 'main',
-				cn:[{
-					cls: 'toolbar',
+					cn:[
+						{tag: 'tpl', 'if':'enableSharing', cn:
+							{cls: 'aux', cn:[
+								{cls: 'action publish', 'data-qtip': 'Publish State'},
+								{cls: 'recipients'}
+							]}
+						},{
+							tag: 'tpl', 'if':'enableTitle', cn:
+							{cls: 'title',cn:[
+								{tag:'input', type:'text', placeholder: 'Title...'}
+							]}
+						},{
+							cls: 'content',
+							contentEditable: true,
+							tabIndex: 1,
+							unselectable: 'off',
+							cn: [{ //inner div for IE
+								html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
+							}]
+						}
+					]
+				},{
+					cls: 'footer',
 					cn: [{
 						cls: 'left',
-						cn: [{cls: 'action bold', 'data-qtip': 'Bold'},
-							{cls:'action italic', 'data-qtip': 'Italic'},
-							{cls:'action underline', 'data-qtip': 'Underline'}]
+						cn: [{
+							cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
+						},{
+							cls: 'action text-controls', 'data-qtip': 'Text Controls', cn:[
+								{cls:'popover controls', cn:[
+									{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
+									{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
+									{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+								]}
+							]
+						}]
 					},{
 						cls: 'right',
-						cn: [{cls: 'action share', html: 'Only Me', 'data-qtip': 'Shared with'}]
-					}]
-				},{
-					cls: 'content',
-					contentEditable: true,
-					tabIndex: 1,
-					unselectable: 'off',
-					cn: [{ //inner div for IE
-						html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
+						cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
 					}]
 				}]
-			},{
-				cls: 'footer',
-				cn: [{
-					cls: 'left',
-					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'}]
-				},{
-					cls: 'right',
-					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
-				}]
-			}]
-		};
+			};
 	},
 
 
