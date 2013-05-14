@@ -17,16 +17,16 @@ Ext.define('NextThought.controller.State', {
 
 	hasPushState: Boolean(history.pushState),
 
-	constructor: function(){
+	constructor: function () {
 		var m = this.callParent(arguments);
 
 		this.addEvents('restore');
-		this.on('restore',this.restoreState,this);
+		this.on('restore', this.restoreState, this);
 
 		this.fragmentInterpreterMap = {
-			'#!profile': Ext.bind(this.interpretProfileFragment,this),
-			'#!forums': Ext.bind(this.interpretForumsFragment,this),
-			'#!object': Ext.bind(this.interpretObjectFragment,this)
+			'#!profile': Ext.bind(this.interpretProfileFragment, this),
+			'#!forums': Ext.bind(this.interpretForumsFragment, this),
+			'#!object': Ext.bind(this.interpretObjectFragment, this)
 		};
 
 		this.generateFragmentMap = {
@@ -36,7 +36,7 @@ Ext.define('NextThought.controller.State', {
 		return m;
 	},
 
-	init: function() {
+	init: function () {
 		var me = this;
 
 		this.application.on('session-ready', this.onSessionReady, this);
@@ -46,7 +46,7 @@ Ext.define('NextThought.controller.State', {
 		me.isHangout = this.getController('Google').isHangout();
 
 		me.listen({
-			component:{
+			component: {
 				'main-views': {
 					'activate-view': me.track
 				},
@@ -55,21 +55,23 @@ Ext.define('NextThought.controller.State', {
 				}
 			}
 		});
-		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
+		ContentAPIRegistry.register('NTIPreviousPage', this.navigatePreviousPage, this);
 	},
 
 
-	onSessionReady: function(){
+	onSessionReady: function () {
 		var me = this,
 			history = window.history,
-			push = history.pushState || function(){},
-			replace = history.replaceState || function(){},
+			push = history.pushState || function () {
+			},
+			replace = history.replaceState || function () {
+			},
 			SEVEN_DAYS = 604800000,
-			p = me.getStateKey()+'non-history-state-',
+			p = me.getStateKey() + 'non-history-state-',
 			provider = window.localStorage
-					? new Ext.state.LocalStorageProvider({prefix:p})
-					: new Ext.state.CookieProvider({prefix:p,
-						expires: new Date(new Date().getTime()+SEVEN_DAYS) });
+				? new Ext.state.LocalStorageProvider({prefix: p})
+				: new Ext.state.CookieProvider({prefix: p,
+				expires: new Date(new Date().getTime() + SEVEN_DAYS) });
 
 		Ext.state.Manager.setProvider(provider);
 
@@ -81,18 +83,18 @@ Ext.define('NextThought.controller.State', {
 		 *                      and leaving keys it does not have alone.
 		 * @return {Boolean} Returns true if the state was changed, false otherwise.
 		 */
-		history.updateState = function(s){
-			function isDiff(a,b){
+		history.updateState = function (s) {
+			function isDiff(a, b) {
 				var ret = false;
 
-				Ext.Object.each(b,function objItr(key,val){
-					if(!Ext.isObject(val)){
+				Ext.Object.each(b, function objItr(key, val) {
+					if (!Ext.isObject(val)) {
 						//Not an object do identity comparison
-						if(!a || a[key] !== val){
+						if (!a || a[key] !== val) {
 							ret = true;
 						}
 					}
-					else if(isDiff(a[key], val)){ //Ok so val is an object do a deep equals
+					else if (isDiff(a[key], val)) { //Ok so val is an object do a deep equals
 						ret = true;
 					}
 
@@ -102,16 +104,16 @@ Ext.define('NextThought.controller.State', {
 			}
 
 			var current = me.currentState,
-				diff = isDiff(current,s);
+				diff = isDiff(current, s);
 			console.debug('update state', arguments);
-			Ext.applyIf(s,{active: current.active});
+			Ext.applyIf(s, {active: current.active});
 
 			console.debug('Will state change?', diff);
 
 			//The only thing listening to this event is the Google Hangout controller.
-			if(diff && me.fireEvent('stateChange',s)){
+			if (diff && me.fireEvent('stateChange', s)) {
 				Ext.Object.merge(current, s);
-				window.localStorage.setItem(me.getStateKey(),JSON.stringify(current));
+				window.localStorage.setItem(me.getStateKey(), JSON.stringify(current));
 				return true;
 			}
 
@@ -119,28 +121,28 @@ Ext.define('NextThought.controller.State', {
 		};
 
 
-		history.pushState = function(s,title,url){
-			console.debug('push state',s);
+		history.pushState = function (s, title, url) {
+			console.debug('push state', s);
 
-			if (this.updateState(s) && !me.isPoppingHistory){
+			if (this.updateState(s) && !me.isPoppingHistory) {
 
-				if(!url){
+				if (!url) {
 					url = me.generateFragment(me.currentState);
 				}
 
-				if(!s || !url){
+				if (!s || !url) {
 					console.warn('Should provide both state and a url', arguments);
 				}
 
 				//updateState already updated current if it returned true
-				push.apply(history, [me.currentState,title,url]);
+				push.apply(history, [me.currentState, title, url]);
 
 
 				//me = State controller. (this = window.history) And, we only want to change the fragment if we do not
 				// support history.pushState natively.
-				if(!me.hasPushState && url) {
+				if (!me.hasPushState && url) {
 					//The intention is we only get here for IE9 so lets make sure that is the case
-					if(!Ext.isIE9){
+					if (!Ext.isIE9) {
 						console.error('Why are we getting here?');
 						console.trace();
 					}
@@ -149,11 +151,11 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
-		history.replaceState = function(s,title,url){
-			console.debug('replace state',s);
+		history.replaceState = function (s, title, url) {
+			console.debug('replace state', s);
 //			console.trace();
 
-			if (this.updateState(s)){
+			if (this.updateState(s)) {
 
 				replace.apply(history, [
 					me.currentState,
@@ -163,7 +165,7 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
-		window.onpopstate = function(e){
+		window.onpopstate = function (e) {
 			console.debug('Browser is popping state', e.state);
 
 			me.isPoppingHistory = true;
@@ -171,35 +173,37 @@ Ext.define('NextThought.controller.State', {
 			me.isPoppingHistory = false;
 		};
 
-		window.onhashchange = function(e) {
+		window.onhashchange = function (e) {
 			//Hash changes are their own entry in the history... so we do not need to push history, we just need to
 			// handle the change.
 			console.debug('Hash change');
 			var newState = me.interpretFragment(location.hash);
-			if(history.updateState(newState)){
+			if (history.updateState(newState)) {
 				console.debug('restoring state from hash change', newState);
 				me.restoreState(newState);
-				history.replaceState(me.getState(),document.title,location.toString());
+				history.replaceState(me.getState(), document.title, location.toString());
 			}
 		};
 	},
 
 
-	parseQueryString: function(qStr){
-		if(Ext.isEmpty(qStr)){return null;}
+	parseQueryString: function (qStr) {
+		if (Ext.isEmpty(qStr)) {
+			return null;
+		}
 		var r = {};
 
-		Ext.each(qStr.split('&'),function(kv){
+		Ext.each(qStr.split('&'), function (kv) {
 			kv = kv.split('=');
-			r[kv[0]]=kv[1];
+			r[kv[0]] = kv[1];
 		});
 
 		return r;
 	},
 
 
-	interpretForumsFragment: function(fragment, query){
-		var parts = (fragment||'').split('/').slice(0),
+	interpretForumsFragment: function (fragment, query) {
+		var parts = (fragment || '').split('/').slice(0),
 			result = {}, forums = {};
 
 		parts = Ext.Array.clean(parts);
@@ -211,12 +215,12 @@ Ext.define('NextThought.controller.State', {
 		//Right now the 'u' signifies what follows is the community
 		//name that onse the board (or really any user like object probably suffices.
 
-		if((parts[0] || '').toLowerCase() === '#!forums'){
+		if ((parts[0] || '').toLowerCase() === '#!forums') {
 			result.active = 'forums';
 			parts = parts.slice(1);
 
 			//We expect at least two parts ('u', and '{community}')
-			if(parts.length >= 2 && parts[0] === 'u'){
+			if (parts.length >= 2 && parts[0] === 'u') {
 				forums.board = {community: parts[1], isUser: true};
 				forums.forum = parts[2];
 				forums.topic = parts[3];
@@ -228,22 +232,22 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	generateForumsFragment: function(state){
+	generateForumsFragment: function (state) {
 		var resultParts = [], result,
 			board = state && state.board;
 
-		if(board && board.isUser && board.community){
+		if (board && board.isUser && board.community) {
 			resultParts.push('u');
 			resultParts.push(board.community);
 
-			Ext.Array.each(['forum', 'topic', 'comment'], function(prop){
-				if(state.hasOwnProperty(prop) && state[prop]){
+			Ext.Array.each(['forum', 'topic', 'comment'], function (prop) {
+				if (state.hasOwnProperty(prop) && state[prop]) {
 					resultParts.push(state[prop]);
 				}
 			});
 		}
 
-		if(!Ext.isEmpty(resultParts)){
+		if (!Ext.isEmpty(resultParts)) {
 			result = resultParts.join('/');
 		}
 
@@ -251,10 +255,10 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretProfileFragment: function(fragment,query){
+	interpretProfileFragment: function (fragment, query) {
 		var result = {},
 			user = this.getUserModel().getProfileStateFromFragment(fragment);
-		if(user){
+		if (user) {
 			result = {
 				active: 'profile',
 				profile: user
@@ -265,37 +269,37 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretObjectFragment: function(fragment, query){
+	interpretObjectFragment: function (fragment, query) {
 		var domain,
-			parts = (fragment||'').split('/').slice(0);
+			parts = (fragment || '').split('/').slice(0);
 
 		parts = Ext.Array.clean(parts);
 		console.debug('Fragment:', fragment, 'Query: ', query, 'Parts', parts);
 
-		if((parts[0] || '').toLowerCase() === '#!object'){
+		if ((parts[0] || '').toLowerCase() === '#!object') {
 			domain = parts[1];
 			parts = parts.slice(2);
 
-			if(domain === 'ntiid' && parts.length === 1 && ParseUtils.parseNtiid(parts[0])){
-				Ext.defer(this.fireEvent,1,this,['show-ntiid', parts[0]]);
+			if (domain === 'ntiid' && parts.length === 1 && ParseUtils.parseNtiid(parts[0])) {
+				Ext.defer(this.fireEvent, 1, this, ['show-ntiid', parts[0]]);
 			}
 		}
 		return {};
 	},
 
 
-	generateFragment: function(state){
+	generateFragment: function (state) {
 		var root = (state.active || '').toLowerCase(),
 			fragment, generated;
 
-		if(root){
-			fragment = '#!'+root;
+		if (root) {
+			fragment = '#!' + root;
 		}
 
-		if(this.generateFragmentMap[root]){
+		if (this.generateFragmentMap[root]) {
 			//We pass it the state for that particular tab
 			generated = this.generateFragmentMap[root](state[root] || {});
-			if(generated){
+			if (generated) {
 				fragment = [fragment, generated].join('/');
 			}
 		}
@@ -304,53 +308,57 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretFragment: function(fragmentStr){
+	interpretFragment: function (fragmentStr) {
 		fragmentStr = fragmentStr.split('?');
 		var query = this.parseQueryString(fragmentStr[1]),
-			fragment = fragmentStr[0]||'',
-			root = (fragment.substr(0, fragment.indexOf('/'))||fragment).toLowerCase(),
+			fragment = fragmentStr[0] || '',
+			root = (fragment.substr(0, fragment.indexOf('/')) || fragment).toLowerCase(),
 			ntiid = ParseUtils.parseNtiFragment(fragment),
 			result = {};
 
 
-		if(this.fragmentInterpreterMap.hasOwnProperty(root)){
-			result = this.fragmentInterpreterMap[root](fragment,query);
+		if (this.fragmentInterpreterMap.hasOwnProperty(root)) {
+			result = this.fragmentInterpreterMap[root](fragment, query);
 		}
-		else if(ntiid){
+		else if (ntiid) {
 			result = {active: 'library', location: ntiid};
 		}
 
-		console.debug('Fragment interpreted:',result);
+		console.debug('Fragment interpreted:', result);
 		return result;
 	},
 
 
-	getState: function(){
+	getState: function () {
 		return Ext.clone(this.currentState);
 	},
 
 
-	onPopState: function(e) {
-		if(!NextThought.isInitialized || this.isHangout){
+	onPopState: function (e) {
+		if (!NextThought.isInitialized || this.isHangout) {
 			return;
 		}
-		var s = e?e.state:null;
+		var s = e ? e.state : null;
 		if (s) {
 			this.fireEvent('restore', s);
 		}
 	},
 
 
-	track: function(viewId){
-		var fragment, state = {active:viewId},
+	track: function (viewId) {
+		var fragment, state = {active: viewId},
 			path = location.pathname;
-		if(this.currentState.active !== viewId && NextThought.isInitialized){
+		if (this.currentState.active !== viewId && NextThought.isInitialized) {
 
-			try{ fragment = Ext.getCmp(viewId).getFragment(); }
-			catch(e){ console.error(Globals.getError(e)); }
+			try {
+				fragment = Ext.getCmp(viewId).getFragment();
+			}
+			catch (e) {
+				console.error(Globals.getError(e));
+			}
 
-			location.hash = fragment||'';
-			if(fragment){
+			location.hash = fragment || '';
+			if (fragment) {
 				path = location.toString();
 			}
 
@@ -359,8 +367,8 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	restoreState: function(stateObject){
-		if(this.restoringState){
+	restoreState: function (stateObject) {
+		if (this.restoringState) {
 			console.warn('Restoring state while one is already restoring...');
 			return;
 		}
@@ -369,16 +377,16 @@ Ext.define('NextThought.controller.State', {
 			history = window.history,
 			replaceState = false, c, key, stateScoped, me = this, presentation;
 
-		function fin(key,stateFrag){
+		function fin(key, stateFrag) {
 			var token = {};
 			token[key] = stateFrag;
 			app.registerInitializeTask(token);
-			return function(a){
+			return function (a) {
 				app.finishInitializeTask(token);
 			};
 		}
 
-		if(stateObject === PREVIOUS_STATE){
+		if (stateObject === PREVIOUS_STATE) {
 			replaceState = true;
 			stateObject = this.loadState();
 			if (history.updateState) {
@@ -389,7 +397,7 @@ Ext.define('NextThought.controller.State', {
 		c = this.getController('Navigation').setView(stateObject.active);
 		// c equals false means that we got cancelled in beforedeactivate event.
 		// i.e we can get cancelled if the activeView has blog editor open.
-		if(c === false){
+		if (c === false) {
 			history.back();
 			this.restoringState = false;
 			return;
@@ -397,17 +405,17 @@ Ext.define('NextThought.controller.State', {
 
 		this.currentState.active = stateObject.active;
 
-		for(key in stateObject){
-			if(stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {
+		for (key in stateObject) {
+			if (stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {
 				c = Ext.getCmp(key);
-				if(c && c.restore){
-					try{
+				if (c && c.restore) {
+					try {
 						stateScoped = {};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
-						c.on('finished-restore',fin(key,stateScoped),this,{ single: true });
+						c.on('finished-restore', fin(key, stateScoped), this, { single: true });
 						c.restore(stateScoped);
 					}
-					catch(e){
+					catch (e) {
 						console.error('Setting state: ', e, e.message, e.stack);
 					}
 				}
@@ -417,12 +425,20 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		if(typeof stateObject.location !== 'undefined'){
+		if (typeof stateObject.location !== 'undefined') {
+			//Quick and dirty close the slide view if it exists.
+			//Integrate this with state better so back and forward can
+			//do more of what you would expdect.
+			presentation = Ext.ComponentQuery.query('slidedeck-view');
+			if (!Ext.isEmpty(presentation)) {
+				presentation = presentation.first();
+				presentation.destroy();
+			}
 			LocationProvider.setLocation(stateObject.location, fin(), true);
 		}
 
-		if(replaceState) {
-			history.replaceState(this.currentState,'Title');
+		if (replaceState) {
+			history.replaceState(this.currentState, 'Title');
 		}
 
 		this.restoringState = false;
@@ -431,17 +447,17 @@ Ext.define('NextThought.controller.State', {
 	//Current default state is to load the library on either the nti.landing_page or the first page in the
 	//library. And to put the profile on the app user.  The library will be the active view if the location came
 	//from the ds, otherwise we will show the company
-	buildDefaultState: function(){
+	buildDefaultState: function () {
 		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
 		return {
 			active: dsLandingPage ? 'library' : 'profile',
-			location : dsLandingPage || Library.getFirstPage() || undefined,
+			location: dsLandingPage || Library.getFirstPage() || undefined,
 			profile: { username: $AppConfig.username }
 		};
 	},
 
-	loadState: function(){
-		if(this.isHangout){
+	loadState: function () {
+		if (this.isHangout) {
 			console.info('Setting up state for Hangout...');
 			return {};
 		}
@@ -456,16 +472,16 @@ Ext.define('NextThought.controller.State', {
 		try {
 			previousState = window.localStorage.getItem(this.getStateKey());
 			console.log('local state found', previousState);
-			lastLocation = Ext.decode( previousState );
+			lastLocation = Ext.decode(previousState);
 
 			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
-			if(location.hash){
+			if (location.hash) {
 				console.debug('fragment trumps state', location.hash);
-				Ext.apply(result,this.interpretFragment(location.hash));
+				Ext.apply(result, this.interpretFragment(location.hash));
 			}
 			return result;
 		}
-		catch(e){
+		catch (e) {
 			console.error('failed to decode local state, use default.', Globals.getError(e), window.localStorage);
 			window.localStorage.removeItem(this.getStateKey());
 			return defaultState;
@@ -473,22 +489,22 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	getStateKey: function(){
+	getStateKey: function () {
 		var username = $AppConfig.username;
-		if (!username){
+		if (!username) {
 			console.error('unknown username for state mgmt.');
 		}
 		return Base64.encode('state-' + username);
 	},
 
 
-	navigatePreviousPage: function(){
+	navigatePreviousPage: function () {
 		history.back();
 		return true;
 	},
 
-	changeHash: function(hash){
-		if(!hash ||  hash.indexOf('#') !== 0 || window.location.hash === hash){
+	changeHash: function (hash) {
+		if (!hash || hash.indexOf('#') !== 0 || window.location.hash === hash) {
 			return;
 		}
 		console.debug('Modifying window.location.hash', hash);
