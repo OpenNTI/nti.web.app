@@ -34,6 +34,7 @@ Ext.define('NextThought.view.cards.Card',{
 		var d = (config && config.data) || {};
 		if(!this.shouldOpenInApp(d.href, d.basePath)){
 			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl});
+			this.bypassEvent = true;
 		}
 
 		this.callParent(arguments);
@@ -59,5 +60,30 @@ Ext.define('NextThought.view.cards.Card',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},this.data);
+		this.target = this.data.href;
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.el,'click','onCardClicked',this);
+	},
+
+
+	onCardClicked: function(e){
+		var status;
+		//We cannot "stop" the event, or our anchor will not receive it, so bypassing simply prevents us from acting on it.
+		if(this.bypassEvent){
+			return undefined;
+		}
+
+		if(ParseUtils.parseNtiid(this.target) !== null){
+			status = this.fireEvent('navigate-to-href',this,this.target);
+		}
+		else {
+			status = this.fireEvent('show-target',this.data);
+		}
+
+		return status;
 	}
 });
