@@ -21,37 +21,37 @@ Ext.define('NextThought.controller.Navigation', {
 		this.listen({
 			component:{
 				'library-collection': {
-					'itemclick': this.selectLibraryEntry
+					'itemclick': 'selectLibraryEntry'
 				},
 				'activity-panel': {
-					'navigation-selected': this.navigate,
-					'navigate-to-blog': this.gotoBlog
+					'navigation-selected': 'navigate',
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview': {
-					'navigation-selected': this.navigate,
-					'navigate-to-blog': this.gotoBlog
+					'navigation-selected': 'navigate',
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview-blog':{
-					'navigate-to-blog': this.gotoBlog
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview-blog-reply':{
-					'navigate-to-blog': this.gotoBlog
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview-personalblogentry':{
-					'navigate-to-blog': this.gotoBlog
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview-note': {
-					'navigation-selected': this.navigate
+					'navigation-selected': 'navigate'
 				},
 				'activity-preview-note-reply': {
-					'navigation-selected': this.navigate
+					'navigation-selected': 'navigate'
 				},
 	            'user-data-panel': {
-	                'navigation-selected': this.navigate,
-		            'navigate-to-blog': this.gotoBlog
+	                'navigation-selected': 'navigate',
+		            'navigate-to-blog': 'gotoBlog'
 	            },
 				'main-views': {
-					'activate-view': this.track,
+					'activate-view': 'track',
 					/** @private handler */
 					'activate-main-view': function(id){
 						//viewport is set by Application controller
@@ -59,26 +59,26 @@ Ext.define('NextThought.controller.Navigation', {
 					}
 				},
 				'view-select button': {
-					'view-selected': this.switchViews
+					'view-selected': 'switchViews'
 				},
 				'slidedeck-view': {
-					exited: this.slideViewExited
+					exited: 'slideViewExited'
 				},
 				'profile-activity *':{
-					'navigation-selected': this.navigate
+					'navigation-selected': 'navigate'
 				},
 				'*': {
-					'before-show-topic': this.beforeTopicShow,
-					'navigate-to-href': this.navigateToHref
+					'before-show-topic': 'beforeTopicShow',
+					'navigate-to-href': 'navigateToHref'
 				},
 				'notfound':{
-					'go-to-library': this.goToLibrary
+					'go-to-library': 'goToLibrary'
 				},
 				'welcome-guide':{
-					'go-to-help': this.goToHelp
+					'go-to-help': 'goToHelp'
 				},
 				'view-select menu':{
-					'hide': this.syncButton
+					'hide': 'syncButton'
 				},
 				'library-view-container' : {
 					'navigation-failed': 'readerNavigationFailed'
@@ -466,17 +466,16 @@ Ext.define('NextThought.controller.Navigation', {
 					state.changeHash('#'+newFragment);
 					return true;
 				}
-				else if(Ext.isFunction(sender.navigateToFragment)){
+
+				if(Ext.isFunction(sender.navigateToFragment)){
 					sender.navigateToFragment(newFragment);
 					return true;
 				}
 			}
 			return false;
 		}
-		else{
-			console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
-		}
 
+		console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
 		return false;
 	},
 
