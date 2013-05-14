@@ -257,6 +257,16 @@ Ext.define('NextThought.view.content.Reader', {
 			me.onNavigationAborted();
 		}
 		else {
+			//hack:
+			if(!Ext.isEmpty(pageInfo.get('content'))){
+				console.debug(pageInfo.get('content'));
+				success.call(this,{
+					responseText: pageInfo.get('content'),
+					request:{options:{url:''}}
+				});
+				return;
+			}
+
 			proxy.request({
 				ntiid: pageInfo.getId(),
 				jsonpUrl: pageInfo.getLink('jsonp_content'),

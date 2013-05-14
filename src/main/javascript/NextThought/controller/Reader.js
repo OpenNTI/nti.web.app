@@ -42,8 +42,33 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	showCardTarget: function(card, data){
-		var reader = card.up('reader-panel');
-
+		var ntiid = data.target_ntiid || data.ntiid,
+			s = encodeURIComponent('Pages('+ntiid+')'),
+			u = encodeURIComponent($AppConfig.username),
+		//Hack...
+			pi = this.getPageInfoModel().create({
+				ID: ntiid,
+				NTIID: ntiid,
+				content: Ext.DomHelper.markup({tag:'body',cn:{
+					cls:'page-contents no-padding',
+					cn:{
+						tag: 'object',
+						cls: 'nticard-target',
+						type: 'application/vnd.nextthought.nticard-target',
+						'data-ntiid': ntiid,
+						html: 'Target'
+					}
+				}}),
+				Links:[
+					{
+						Class: 'Link',
+						href: '/dataserver2/users/'+u+'/'+s+'/UserGeneratedData',
+						rel: 'UserGeneratedData'
+					}
+				]
+			});
+		pi.blankURL = true;
+		LocationProvider.setLocation(pi);
 	}
 
 });

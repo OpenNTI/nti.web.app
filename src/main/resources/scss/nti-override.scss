@@ -274,6 +274,10 @@ body.x-body {margin:0;}
 		position: relative;
 		line-height: 2.2em;
 
+		&.no-padding {
+			margin-top:0;
+		}
+
 		.chapter.title,
 		.title {
 			position: relative;

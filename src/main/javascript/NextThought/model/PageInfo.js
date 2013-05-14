@@ -9,7 +9,9 @@ Ext.define('NextThought.model.PageInfo', {
 	fields: [
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },
-		{ name: 'dataFilterPreference', type: 'auto' }
+		{ name: 'dataFilterPreference', type: 'auto' },
+		//Placeholder for client-side generated page content :} *facepalm*
+		{ name: 'content', type: 'string', persist:false }
 	],
 
 	isPageInfo: true,
