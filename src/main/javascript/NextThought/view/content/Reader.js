@@ -7,16 +7,24 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.util.Base64',
 		'NextThought.view.ResourceNotFound'
 	],
+
 	mixins:{
+		//TODO: make annotations a sub-component, See the resource management mixin for a pattern.
 		annotations: 'NextThought.view.content.reader.Annotations',
-		assessments: 'NextThought.view.content.reader.Assessment',
+		//TODO: make the overlay manager a sub-component, See the resource management mixin for a pattern.
 		componentOverlay: 'NextThought.view.content.reader.ComponentOverlay',
+		//TODO: make the assessment stuff sub-component, See the resource management mixin for a pattern.
+		assessments: 'NextThought.view.content.reader.Assessment',
+		//TODO: make the note-overlay a sub-component, See the resource management mixin for a pattern.
+		noteOverlay: 'NextThought.view.content.reader.NoteOverlay',
+
+
 		content: 'NextThought.view.content.reader.Content',
 		iframe: 'NextThought.view.content.reader.IFrame',
 		scroll: 'NextThought.view.content.reader.Scroll',
-		noteOverlay: 'NextThought.view.content.reader.NoteOverlay',
 		resourceManagement: 'NextThought.view.content.reader.ResourceManagement'
 	},
+
 	cls: 'x-reader-pane',
 
 	ui: 'reader',

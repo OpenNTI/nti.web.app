@@ -116,6 +116,7 @@ Ext.application({
 		'Groups',
 		'Navigation',
 		'Profile',
+		'Reader',
 		'Search',
 		'Session',
 		'SlideDeck',

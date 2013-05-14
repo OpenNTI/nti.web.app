@@ -81,7 +81,7 @@ Ext.define('NextThought.view.cards.Card',{
 			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {
-			status = this.fireEvent('show-target',this.data);
+			status = this.fireEvent('show-target',this,this.data);
 		}
 
 		return status;

@@ -64,7 +64,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 		if(!Ext.isString(key) || !(Ext.isObject(panel) && panel.isComponent) ){
 			Ext.Error.raise('Bad values');
 		}
-
+		panel.floatParent = this;
 		this.activeOverlayedPanels[key] = panel;
 	},
 
@@ -80,6 +80,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 		this.overlayedPanelTabIndexer.reset(10);
 
 		Ext.Object.each(active,function(k, v){
+			delete v.floatParent;
 			v.destroy();
 			delete active[k];
 		});
