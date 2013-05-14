@@ -516,6 +516,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return false;
 	},
 
+
 	//This function is full of assumptions.  For now
 	//we want to optimize notes on assessment questions by anchoring
 	//them to the container and a null range.  We only want to do this
@@ -542,6 +543,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		return {range: lastLine.range, container: null};
 	},
+
 
 	noteOverlayEditorSave: function (e) {
 		e.stopEvent();
