@@ -42,7 +42,8 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	showCardTarget: function(card, data){
-		var ntiid = data.target_ntiid || data.ntiid,
+		var reader = card.up('reader-panel'),
+			ntiid = data.target_ntiid || data.ntiid,
 			s = encodeURIComponent('Pages('+ntiid+')'),
 			u = encodeURIComponent($AppConfig.username),
 		//Hack...
@@ -67,8 +68,8 @@ Ext.define('NextThought.controller.Reader', {
 					}
 				]
 			});
-		pi.blankURL = true;
-		LocationProvider.setLocation(pi);
+
+		reader.onNavigateComplete(pi);
 	}
 
 });
