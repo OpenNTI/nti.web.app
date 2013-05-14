@@ -1,23 +1,25 @@
 Ext.define('NextThought.view.annotations.note.Templates',{
 	singleton: true,
 
-	getEditorTpl: function(enableTitle, enableSharing){
+	getEditorTpl: function(enableSharing, enableTitle){
+		/**FIXME: Nasty templating. We are temporarily checking this conditions the hard way since all this function returns is an object not a template.
+		 * It's a short time solution, but eventually this template will go away once we reunite all 'editors'.
+		 */
+
 		return {
 			cls: 'editor basic',
 			cn:[{
 				cls: 'main',
 					cn:[
-						{tag: 'tpl', 'if':'enableSharing', cn:
+						(!enableSharing ? '':
 							{cls: 'aux', cn:[
-								{cls: 'action publish', 'data-qtip': 'Publish State'},
 								{cls: 'recipients'}
 							]}
-						},{
-							tag: 'tpl', 'if':'enableTitle', cn:
+						),(!enableTitle ? '':
 							{cls: 'title',cn:[
 								{tag:'input', type:'text', placeholder: 'Title...'}
 							]}
-						},{
+						),{
 							cls: 'content',
 							contentEditable: true,
 							tabIndex: 1,

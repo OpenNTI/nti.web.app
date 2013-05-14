@@ -81,7 +81,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 								cls: 'bottom-border',
 								html: '&nbsp;'
 							},
-							TemplatesForNotes.getEditorTpl()
+							TemplatesForNotes.getEditorTpl(true, false)
 						]
 					}
 				]
