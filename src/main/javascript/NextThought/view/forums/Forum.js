@@ -47,13 +47,13 @@ Ext.define('NextThought.view.forums.Forum',{
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'meta', cn:[
 					{ tag: 'span', cls:'count', html: '{PostCount:plural(parent.kind)}' },
-					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\']', cn: [
+					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
 							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
 							' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
 						]}
 					]},
-					{ tag: 'tpl', 'if':'values[\'NewestDescendant\']', cn: [
+					{ tag: 'tpl', 'if':'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
 							'Commented on by ',{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
 							' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
