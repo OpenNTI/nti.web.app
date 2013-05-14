@@ -15,9 +15,9 @@
  * the first page and successive pages (as the user scrolls back in time) is enough.
  */
 
-Ext.define('NextThought.store.Stream',{
+Ext.define('NextThought.store.Stream', {
 	extend: 'Ext.data.Store',
-	requires:[
+	requires: [
 		'NextThought.proxy.reader.Json'
 	],
 
@@ -41,13 +41,13 @@ Ext.define('NextThought.store.Stream',{
 		},
 		model: 'NextThought.model.Change',
 
-		getParams: function(){
+		getParams: function () {
 			//Better way? (we basically want callparent but we are replacing instead of
 			//overriding
 			var p = this.self.prototype.getParams.apply(this, arguments);
 
-			Ext.Object.each(p, function(k, v, o){
-				if(v === undefined || v === null){
+			Ext.Object.each(p, function (k, v, o) {
+				if (v === undefined || v === null) {
 					delete o[k];
 				}
 			});
@@ -62,7 +62,7 @@ Ext.define('NextThought.store.Stream',{
 	//that we get when we request things on the ds
 	sorters: [
 		{
-			property : 'Last Modified',
+			property: 'Last Modified',
 			direction: 'DESC'
 		}
 	],
@@ -70,26 +70,28 @@ Ext.define('NextThought.store.Stream',{
 	/**
 	 * Like last but doesn't include any filtering
 	 */
-	unfilteredLast: function(){
-		if(this.snapshot){
-			return this.snapshot.last();
+	unfilteredLast: function () {
+		if (this.snapshot) {
+			//Note snapshot is both unfiltered and unsorted.
+			//TODO more efficient way to do this? sorting the mixed collection doesn't seem to work
+			return Ext.Array.sort(this.snapshot.items, Globals.SortModelsBy('Last Modified', 'ASC')).last();
 		}
 		return this.last();
 	},
 
 
-	hasAdditionalPagesToLoad: function(){
+	hasAdditionalPagesToLoad: function () {
 		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
 	},
 
 
-	previousPage: function(){
+	previousPage: function () {
 		Ext.Error.raise('previousPage not supported for stream store');
 	},
 
 
-	loadPage: function(page, options){
-		if(page !== 1 && page !== this.currentPage + 1){
+	loadPage: function (page, options) {
+		if (page !== 1 && page !== this.currentPage + 1) {
 			Ext.Error.raise('loadPage can only be called for page 1 or n + 1 where n is currentPage');
 		}
 
@@ -98,9 +100,9 @@ Ext.define('NextThought.store.Stream',{
 		//For the first page before is 0 (that means now).
 		//The value of before for page n+1 is the last items
 		//lastMod time
-		if(page !== 1){
+		if (page !== 1) {
 			last = this.unfilteredLast();
-			if(last && last.get('Last Modified')){
+			if (last && last.get('Last Modified')) {
 				before = last.get('Last Modified') / 1000;
 			}
 		}
@@ -112,17 +114,17 @@ Ext.define('NextThought.store.Stream',{
 		this.callParent([page, options]);
 	},
 
-	load: function(options){
+	load: function (options) {
 		options = Ext.applyIf(options || {}, {start: null});
 
-		function isMoreDetector(records, operation, success){
+		function isMoreDetector(records, operation, success) {
 			//Set some state that indicates if we may have more
 
 			//If we fail with a 404 we treat that as no more
-			if(!success && operation.response && operation.response.status === 404){
+			if (!success && operation.response && operation.response.status === 404) {
 				this.mayHaveAdditionalPages = false;
 			}
-			else{
+			else {
 				this.mayHaveAdditionalPages = (!success || operation.limit === undefined || records.length === operation.limit);
 			}
 
