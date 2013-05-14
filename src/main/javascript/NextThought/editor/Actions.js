@@ -4,7 +4,8 @@ Ext.define('NextThought.editor.Actions', {
 		'NextThought.view.menus.Share',
 		'NextThought.view.form.fields.TagField',
 		'NextThought.view.form.fields.UserListField',
-		'NextThought.view.form.fields.UserTokenField'
+		'NextThought.view.form.fields.UserTokenField',
+		'NextThought.util.Sharing'
 	],
 
 	mixins: {
@@ -104,7 +105,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
-			me.sharedList = Ext.widget('user-sharing-tokens', {renderTo: me.sharedListEl, tabIndex:3});
+			me.sharedList = Ext.widget('user-sharing-list', {renderTo: me.sharedListEl, tabIndex:3});
 		}
 
 		me.publishEl = editorEl.down('.action.publish');
@@ -936,41 +937,12 @@ Ext.define('NextThought.editor.Actions', {
 
 		return {
 			body : this.getBody(out),
-			shareWith: this.getSharedWithList(),
+			shareWith: this.sharedList ? this.sharedList.getValue() : null,
 			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
 			tags: this.tags ? this.tags.getValue() : undefined,
 			published: this.getPublished()
 		};
-	},
-
-
-	getSharedWithList: function(){
-
-		/** FIXME: the shareMenu will eventually go away. But for now since some editors might be using it, if it's set, return it.
-		 * Otherwise, return a union of a sharedList (exclusive entities specified by the user)
-		 * plus all communities if it's set to be public.
-		 */
-		if(this.shareMenu){ return this.shareMenu.getValue();}
-
-		var s = this.sharedList ? this.sharedList.getValue() : [],
-			isPublic = Boolean(this.getPublished()),
-			list = [];
-
-		if(isPublic && this.sharedList){
-			Ext.each($AppConfig.userObject.getCommunities(), function(c){
-				list.push(c.get('Username'));
-			});
-		}
-
-		return Ext.Array.union(list, s);
-	},
-
-
-	getPublished: function(){
-		var el = this.cmp.publishEl || this.publishEl;
-
-		return el ? el.is('.on') : undefined;
 	},
 
 
@@ -994,6 +966,12 @@ Ext.define('NextThought.editor.Actions', {
 		if(this.cmp.publishEl){
 			this.cmp.publishEl[action]('on');
 		}
+	},
+
+
+	getPublished: function(){
+		var el = this.cmp.publishEl || this.publishEl;
+		return el ? el.is('.on') : undefined;
 	},
 
 
@@ -1043,13 +1021,8 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	updatePrefs: function (v) {
-		if( this.shareMenu ){
-			this.shareMenu.reload(v);
-		}
-
-		//TODO: For now, since the default sharing isn't hooked up, just clear all tokens.
 		if(this.sharedList){
-			this.sharedList.clearTokens();
+			this.sharedList.setValue(SharingUtils.resolveValue());
 		}
 	}
 

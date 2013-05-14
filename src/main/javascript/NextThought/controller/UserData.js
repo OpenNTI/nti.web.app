@@ -488,7 +488,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onShareSettingsSaveClick: function(btn){
 		var win = btn.up('window'),
-			shbx= win.down('user-list'),
+			shbx= win.down('user-sharing-list'),
 			cb = win.down('checkbox'),
 			saveAsDefault = cb ? cb.checked : false,
 			v = shbx.getValue(),
@@ -505,7 +505,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
-			shbx= win.down('user-list'),
+			shbx= win.down('user-sharing-list'),
 			v = shbx.getValue(),
 			rec = win.record, b;
 

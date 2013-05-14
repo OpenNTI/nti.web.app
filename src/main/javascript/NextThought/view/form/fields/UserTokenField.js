@@ -1,23 +1,29 @@
 Ext.define('NextThought.view.form.fields.UserTokenField', {
 	extend: 'NextThought.view.form.fields.TagField',
-	alias: ['widget.user-sharing-tokens'],
+	alias: ['widget.user-sharing-list'],
 	requires: [
 		'NextThought.view.sharing.ShareSearchList',
 		'NextThought.util.Search'
 	],
 
+	mixins: {
+		'sharingUtils': 'NextThought.mixins.SharingPreferences'
+	},
+
 	cls:'sharing-token-field',
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'control publish', 'data-qtip': 'Publish State'},
+		{cls:'tokens',cn:
 		{tag:'span', cls:'token-input-wrap', cn:[
 			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
 			{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
-		]}
+		]}}
 	]),
 
 
 	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token {1}', cn:[
-		{tag:'span', cls:'value', html:'{0}'},
+		{tag:'span', cls:'value', html:'{0}', 'data-value':'{0}'},
 		{tag:'span', cls:'x'}
 	]}),
 
@@ -26,12 +32,19 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		wrapEl: '.token-input-wrap',
 		sizerEl: '.token-input-sizer',
 		inputEl: 'input[type="text"]',
-		valueEl: 'input[type="hidden"]'
+		valueEl: 'input[type="hidden"]',
+		publishEl: '.control.publish'
 	},
 
 
 	getType: function(modelData){
 		return NextThought.model.UserSearch.getType(modelData);
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.selections = [];
 	},
 
 
@@ -43,7 +56,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.shareListView = Ext.widget('share-search', {store:me.store, renderTo: me.el.parent()});
 		this.mon(this.shareListView, 'select', this.searchItemSelected, this);
 		this.mon(this.shareListView, 'select', this.updateSize, this);
-		this.selections = [];
+		this.mon(me.publishEl, 'click', function togglePublish(e){
+			var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
+			me.publishEl[action]('on');
+		});
+
+		this.on('destroy','destroy',this.shareListView);
 	},
 
 
@@ -117,13 +135,41 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		Ext.each(m.selections, function(u){
 			r.push(u.get('Username'));
 		});
-		return r;
+		return this.computeSharedWithList(r);
 	},
 
 
 	setValue: function(value){
-		this.clearTokens();
-		this.callParent(arguments);
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.setValue, this, arguments), this, {single:true});
+			return;
+		}
+
+		var me = this, explicitEntities;
+		if(Ext.isEmpty(value)){ return; }
+		if(!Ext.isArray(value)){ value = [value]; }
+		console.debug('Init user token field with: ', value);
+
+		me.clearTokens();
+		explicitEntities = this.resolveExplicitShareTarget(value);
+		UserRepository.getUser(explicitEntities, function(users){
+			me.addSelection(users);
+		});
+
+		this.setPublished(this.isPublic(value));
+	},
+
+
+	setPublished: function(value){
+		var action = value ? 'addCls' : 'removeCls';
+		if(this.publishEl){
+			this.publishEl[action]('on');
+		}
+	},
+
+
+	getPublished: function(){
+		return this.publishEl ? this.publishEl.is('.on') : undefined;
 	},
 
 
@@ -143,10 +189,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	clearTokens: function(){
-		Ext.each(this.el.query('.token'), function(t){
-			t.remove();
-		}, this);
-
+		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
 	}
 });

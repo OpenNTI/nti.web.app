@@ -2,7 +2,8 @@ Ext.define( 'NextThought.view.sharing.Window', {
 	extend: 'NextThought.view.Window',
 	requires: [
 		'NextThought.view.form.fields.UserListField',
-		'NextThought.util.Annotations'
+		'NextThought.util.Annotations',
+		'NextThought.view.form.fields.UserTokenField'
 	],
 	alias : 'widget.share-window',
 
@@ -28,7 +29,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		{
 			xtype: 'container',
 			autoEl: {tag: 'div', cls: 'field' },
-			items: { xtype: 'user-list' }
+			items: { xtype: 'user-sharing-list'}
 		},
 		{
 			xtype: 'container',
@@ -121,7 +122,6 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		}
 
 		this.on('close', function(){
-			this.down('usersearchinput').setValue('');
 			this.dragMaskOff();
 		});
 	},
@@ -139,10 +139,10 @@ Ext.define( 'NextThought.view.sharing.Window', {
 	},
 
 	getValue: function(){
-		return this.down('user-list').getValue();
+		return this.down('user-sharing-list').getValue();
 	},
 
 	setValue: function(v) {
-		this.down('user-list').setValue(v);
+		this.down('user-sharing-list').setValue(v);
 	}
 });
