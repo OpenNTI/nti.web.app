@@ -305,7 +305,7 @@
 					word-break: normal;
 					word-break: break-word; // safari
 					// if long words/links still a problem in ie, uncomment:
-					//-ms-word-break: break-all;
+					-ms-word-break: break-all;
 					@include hyphens(auto);
 				}
 			}
