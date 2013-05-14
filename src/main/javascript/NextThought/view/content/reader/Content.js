@@ -217,8 +217,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	applyBodyStyles: function(bodyTag, basePath){
-		var styleMatches = bodyTag[1] ? bodyTag[1].match(/style="([^"]+)"/i) : null,
-			bodyStyles = styleMatches ? styleMatches[1]: null,
+		var styleMatches = bodyTag && bodyTag[1] && bodyTag[1].match(/style="([^"]+)"/i),
+			bodyStyles = styleMatches && styleMatches[1],
 			body = Ext.get(this.getDocumentElement().getElementById('NTIContent')),
 			bodyStylesObj = {};
 
