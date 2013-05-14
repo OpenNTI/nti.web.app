@@ -42,5 +42,14 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 
 		this.callParent([config]);
 		this.setupContentElement();
+	},
+
+
+	findLine: function(){
+		var doc = this.contentElement.ownerDocument,
+			range = doc.createRange();
+
+		range.selectNodeContents(this.contentElement);
+		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	}
 });
