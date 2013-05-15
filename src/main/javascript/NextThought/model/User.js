@@ -30,7 +30,7 @@ Ext.define('NextThought.model.User', {
 
 	summaryObject: true,
 
-	getCommunities: function () {
+	getCommunities: function (excludeDFLs) {
 		var r = [], u;
 
 		Ext.each(this.get('Communities'), function (c) {
@@ -54,6 +54,10 @@ Ext.define('NextThought.model.User', {
 			}
 
 		});
+
+		if(excludeDFLs){
+			return Ext.Array.filter(r, function(i){ return i.isCommunity; });
+		}
 		return r;
 	},
 

@@ -16,7 +16,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 			list = [];
 
 		if(isPublic){
-			Ext.each($AppConfig.userObject.getCommunities(), function(c){
+			Ext.each($AppConfig.userObject.getCommunities(true), function(c){
 				list.push(c.get('Username'));
 			});
 		}
@@ -31,7 +31,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 
 		if(Ext.isEmpty(sharedWith)){ return false; }
 		var communities = [];
-		Ext.each($AppConfig.userObject.getCommunities(), function(rec){
+		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
 			communities.push(rec.get('displayName'));
 		});
 
@@ -45,7 +45,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 			communities =[],
 			list = [];
 
-		Ext.each($AppConfig.userObject.getCommunities(), function(rec){
+		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
 			communities.push(rec.get('displayName'));
 		});
 
