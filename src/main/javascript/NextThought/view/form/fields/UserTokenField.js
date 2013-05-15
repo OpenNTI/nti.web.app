@@ -191,5 +191,29 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	clearTokens: function(){
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
+	},
+
+
+	removeToken: function(tokenName, tokenEl){
+		var	s = [];
+
+		// Remove the element and remove it from the list of selections.
+		if(tokenEl){ tokenEl.remove(); }
+		Ext.each(this.selections, function(o){
+			if(o.get('displayName')!== tokenName) { s.push(o); }
+		});
+
+		this.selections = s;
+	},
+
+
+	onClick: function(e){
+		e.stopEvent();
+		var t = e.getTarget('.x',null,true),
+			p = t && t.up('.token'),
+			v = p && p.down('.value').getAttribute('data-value');
+
+		if( v ){ this.removeToken(v, p); }
+		this.inputEl.focus();
 	}
 });
