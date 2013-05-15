@@ -51,17 +51,22 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			editorEl = this.el.up('.editor');
+
 		this.store = Ext.getStore('UserSearch');
 		this.shareListView = Ext.widget('share-search', {store:me.store, renderTo: me.el.parent()});
 		this.mon(this.shareListView, 'select', this.searchItemSelected, this);
-		this.mon(this.shareListView, 'select', this.updateSize, this);
-		this.mon(me.publishEl, 'click', function togglePublish(e){
-			var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
-			me.publishEl[action]('on');
-		});
-
 		this.on('destroy','destroy',this.shareListView);
+		this.mon(me.publishEl, 'click', this.togglePublish, this);
+		if(editorEl){
+			this.mon(editorEl,{
+				scope: this,
+				'click': this.maybeHideSearchListMenu,
+				'mouseover': this.maybeHideSearchListMenu
+			});
+		}
+
 	},
 
 
@@ -71,6 +76,24 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			'keydown': this.search,
 			'mousedown': this.updatePlaceholderLabel
 		});
+	},
+
+
+	togglePublish: function(e){
+		var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
+		this.publishEl[action]('on');
+	},
+
+
+	maybeHideSearchListMenu: function(e){
+		var me = this;
+		if(e.getTarget('.x-menu') || e.getTarget('.sharing-token-field')){
+			clearTimeout(this.hideTimer);
+		}
+		else{
+			clearTimeout(this.hideTimer);
+			this.hideTimer = Ext.defer( function(){ me.shareListView.hide();}, 500);
+		}
 	},
 
 
@@ -121,6 +144,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		this.addSelection(record);
 		Ext.defer(el.focus,10,el);
+		Ext.defer(this.updateSize, 1, this);
 		return true;
 	},
 
@@ -177,8 +201,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	search: Ext.Function.createBuffered(function(e){
 		var value = this.inputEl.getValue();
 
-		console.log('Should be searching for: ', value);
-		if(!value || value.replace(SearchUtils.trimRe,'').length < 2 ){
+		if(!value || value.replace(SearchUtils.trimRe,'').length < 1 ){
 			this.clearResults();
 		}
 		else {
@@ -191,6 +214,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	clearTokens: function(){
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
+		this.inputEl.dom.value = '';
 	},
 
 

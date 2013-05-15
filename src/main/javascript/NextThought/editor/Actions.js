@@ -936,10 +936,9 @@ Ext.define('NextThought.editor.Actions', {
 		return {
 			body : this.getBody(out),
 			shareWith: this.sharedList ? this.sharedList.getValue() : null,
-			publish: this.getPublished(),
+			publish: this.sharedList ?  this.sharedList.getPublished() : this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
-			tags: this.tags ? this.tags.getValue() : undefined,
-			published: this.getPublished()
+			tags: this.tags ? this.tags.getValue() : undefined
 		};
 	},
 
@@ -998,7 +997,12 @@ Ext.define('NextThought.editor.Actions', {
 		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
 		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
 		this.cleanOpenWindows();
+		if(this.sharedList){
+			this.sharedList.clearTokens();
+		}
+
 		try {
+			this.styleControlsEl.removeCls('selected');
 			// Deselect btns.
 			Ext.each(buttonsName, function(bn){
 				var b = me.editor.down('.'+bn);
