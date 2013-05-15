@@ -215,6 +215,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
+		this.publishEl.removeCls('on'); // Default is private state.
 	},
 
 
