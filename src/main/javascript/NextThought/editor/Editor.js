@@ -17,7 +17,7 @@ Ext.define('NextThought.editor.Editor',{
 	cancelButtonLabel: 'Cancel',
 
 	ui: 'editor',
-	cls: 'editor',
+	cls: 'editor basic',
 
 	renderTpl: Ext.DomHelper.markup([
 		{
@@ -25,24 +25,6 @@ Ext.define('NextThought.editor.Editor',{
 			cn:[{tag:'tpl', 'if':'enableTitle', cn:{
 				cls: 'title',
 				cn:[{tag:'input', tabIndex:-1, type:'text', placeholder: 'Title...'}]
-			}},{tag:'tpl', 'if':'enablePublishControls || enableTags', cn:{
-				cls: 'aux',
-				cn:[
-					{tag:'tpl', 'if':'enablePublishControls', cn:
-					{cls: 'action publish', tabIndex:-1, 'data-qtip': 'Publish State'}},
-					{tag:'tpl', 'if':'enableTags', cn:{cls: 'tags'}}
-				]
-			}},{tag:'tpl', 'if':'enableTextControls || enableShareControls', cn:{
-				cls: 'toolbar',
-				cn: [{tag:'tpl', 'if':'enableTextControls', cn:{
-					cls: 'left',
-					cn: [{cls: 'action bold', tabIndex:-1, 'data-qtip': 'Bold'},
-						{cls:'action italic', tabIndex:-1, 'data-qtip': 'Italic'},
-						{cls:'action underline', tabIndex:-1, 'data-qtip': 'Underline'}]
-				}},{tag:'tpl', 'if':'enableShareControls', cn:{
-					cls: 'right',
-					cn: [{cls: 'action share', html: 'Only Me', tabIndex:-1, 'data-qtip': 'Shared with'}]
-				}}]
 			}},{
 				cls: 'content',
 				contentEditable: true,
@@ -55,18 +37,24 @@ Ext.define('NextThought.editor.Editor',{
 			}]
 		},{
 			cls: 'footer',
-			cn: [{tag:'tpl', 'if':'enableWhiteboards', cn:{
+			cn: [{
 				cls: 'left',
-				cn: [{cls: 'action whiteboard', tabIndex:-1, 'data-qtip': 'Create a whiteboard'}]
-			}},{
+				cn: [{
+					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
+				},{
+					cls: 'action text-controls', 'data-qtip': 'Text Controls', cn:[
+						{cls:'popover', cn:[
+							{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
+							{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
+							{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+						]}
+					]
+				}]
+			},{
 				cls: 'right',
-				cn: [
-					{cls:'action save', tabIndex:-1, html: '{saveLabel}'},
-					{tag:'tpl', 'if':'cancelLabel', cn:{cls:'action cancel', tabIndex:-1, html: '{cancelLabel}'}}
-				]
+				cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
 			}]
 		}
-
 	]),
 
 

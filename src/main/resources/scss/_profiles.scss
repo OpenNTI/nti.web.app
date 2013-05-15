@@ -411,6 +411,14 @@
 					padding: 0 10px;
 					.editor {
 						margin-bottom: 10px;
+
+						&.basic{
+							margin-top: 10px;
+							.footer{
+								background-color: transparent;
+								&::after{ display: none; }
+							}
+						}
 					}
 				}
 			}
@@ -778,6 +786,14 @@
 					.main{
 						padding-left: 13px;
 						padding-right: 13px;
+					}
+
+					&.basic{
+						margin-top: 10px;
+						.footer{
+							background-color: transparent;
+							&::after{ display: none; }
+						}
 					}
 				}
 			}

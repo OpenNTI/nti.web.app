@@ -435,8 +435,6 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	syncTypingAttributeButtons: function(){
-		if(Ext.isEmpty(this.typingAttributes)){ return; }
-
 		var me = this,
 			buttonsName = ['bold', 'italic', 'underline'];
 
