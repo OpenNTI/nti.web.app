@@ -982,6 +982,13 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
+	setSharedWith: function(value){
+		if(this.sharedList){
+			this.sharedList.setValue(value);
+		}
+	},
+
+
 	/** @private */
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
@@ -1008,7 +1015,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
 		this.cleanOpenWindows();
 		if(this.sharedList){
-			this.sharedList.clearTokens();
+			this.sharedList.reset();
 		}
 
 		try {

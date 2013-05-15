@@ -14,11 +14,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'control publish', 'data-qtip': 'Publish State'},
-		{cls:'tokens',cn:
-		{tag:'span', cls:'token-input-wrap', cn:[
-			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
-			{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
-		]}}
+		{cls:'tokens',cn:[
+			{tag:'span', cls:'plus'},
+			{tag:'span', cls:'token-input-wrap', cn:[
+				{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
+				{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
+			]}
+		]}
 	]),
 
 
@@ -33,7 +35,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		sizerEl: '.token-input-sizer',
 		inputEl: 'input[type="text"]',
 		valueEl: 'input[type="hidden"]',
-		publishEl: '.control.publish'
+		publishEl: '.control.publish',
+		plusEl: '.plus'
 	},
 
 
@@ -74,9 +77,14 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	addInputListeners: function(){
 		this.mon(this.inputEl, {
 			scope: this,
-			'keydown': this.search,
-			'mousedown': this.updatePlaceholderLabel
+			'keydown': this.search
 		});
+	},
+
+
+	updateSize: function(){
+		this.callParent(arguments);
+		this.updatePlaceholderLabel();
 	},
 
 
@@ -116,6 +124,17 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
+	resetPlaceholderLabel: function(){
+		this.inputEl.set({'placeholder':'Add people to the discussion'});
+		this.sizerEl.update('Add people to the discussion##');
+	},
+
+
+	getInsertionPoint: function(){
+		return this.plusEl;
+	},
+
+
 	addSelection: function(users){
 		var m = this;
 
@@ -137,6 +156,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		var id = model.getId(), c;
 		c = Ext.Array.filter(this.selections, function(o, i){ return o.getId()===id; });
 		return c.length > 0;
+	},
+
+
+	getNameSnippet: function(value){
+		//Truncate long names.
+		return Ext.String.ellipsis(value, 30);
 	},
 
 
@@ -188,7 +213,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		if(!Ext.isArray(value)){ value = [value]; }
 		console.debug('Init user token field with: ', value);
 
-		me.clearTokens();
+		me.reset();
 		explicitEntities = this.resolveExplicitShareTarget(value);
 		UserRepository.getUser(explicitEntities, function(users){
 			me.addSelection(users);
@@ -225,11 +250,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	}, 250),
 
 
-	clearTokens: function(){
+	reset: function(){
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
 		this.publishEl.removeCls('on'); // Default is private state.
+		this.resetPlaceholderLabel();
 	},
 
 

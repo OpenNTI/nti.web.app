@@ -161,12 +161,22 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
+	getInsertionPoint: function(){
+		return this.wrapEl;
+	},
+
+
+	getNameSnippet: function(value){
+		return value; //In some cases we may want to truncate the value if it's too long.
+	},
+
+
 	addTag: function(val, type){
 		var me = this, el = me.inputEl;
 
 		el.dom.value = '';
 		if(!Ext.Array.contains(me.getValue(),val)){
-			me.tokenTpl.insertBefore(me.wrapEl,[val, type]);
+			me.tokenTpl.insertBefore(me.getInsertionPoint(),[me.getNameSnippet(val), type]);
 			me.fireEvent('new-tag',val);
 		}
 	},
