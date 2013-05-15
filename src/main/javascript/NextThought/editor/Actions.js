@@ -406,6 +406,7 @@ Ext.define('NextThought.editor.Actions', {
 			}
 		}
 
+		this.hideStylePopover();
 		return true;
 	},
 
@@ -492,6 +493,7 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
+	// better named toggle!
 	showStylePopover: function(e){
 		var t = e.getTarget('.action.text-controls', undefined, true),
 			action = t && t.hasCls('selected') ? 'removeCls' : 'addCls';
@@ -499,6 +501,14 @@ Ext.define('NextThought.editor.Actions', {
 		if(t && !e.getTarget('.control')){
 			t[action]('selected');
 		}
+	},
+
+
+	hideStylePopover: function() {
+		var t = this.editor.down('.action.text-controls', undefined, true);
+		if(t){
+			t['removeCls']('selected');
+		} 
 	},
 
 
