@@ -22,7 +22,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			count: this.count || 0
+			count: Ext.util.Format.plural(this.count || 0, 'Comment', 'Comments')
 		});
 	},
 
@@ -56,7 +56,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			return;
 		}
 		this.comment[c > 0 ? 'addCls' : 'removeCls']('has-count');
-		this.count.update(c);
+		this.count.update(Ext.util.Format.plural(c, 'Comment', 'Comments'));
 	},
 
 
@@ -170,8 +170,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			cn: [{
 				cls: 'count',
 				cn:[
-					{tag: 'span',  html:'{count}'},
-					' Comments'
+					{tag: 'span',  html:'{count}'}
 				]
 			},{
 				cls: 'input',
