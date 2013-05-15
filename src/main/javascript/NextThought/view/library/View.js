@@ -14,7 +14,9 @@ Ext.define( 'NextThought.view.library.View', {
 	margin: '0 140px 0 0',
 
 	items: [
-		{	xtype: 'content-toolbar', margin: '0 0 0 40px', hidden: true},
+		{	xtype: 'content-toolbar', margin: '0 0 0 40px', hidden: true, delegate:[
+				'library-view-container content-tabs reader-panel'
+		]},
 		{
 			xtype: 'content-tabs',
 			items: [

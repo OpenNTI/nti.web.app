@@ -40,14 +40,12 @@ Ext.define('NextThought.view.content.Navigation',{
 	afterRender: function(){
 		var me = this;
 		this.callParent(arguments);
-		me.locationChanged();
-		LocationProvider.on('navigateComplete','locationChanged',me);
+		me.hide();
 	},
 
 
-	locationChanged: function(pageInfo){
+	updateLocation: function(ntiid){
 		var me = this,
-			ntiid = pageInfo && pageInfo.getId(),
 			lp = LocationProvider,
 			c,
 			loc = lp.getLocation(ntiid),
@@ -105,8 +103,13 @@ Ext.define('NextThought.view.content.Navigation',{
 		me.breadcrumb.first().addCls('no-hover');
 
 		me.title.clearListeners();
-		me.title.update(me.getContentNumericalAddress(lineage,loc)+loc.label);
+		me.title.update(me.getTitle(lineage,loc));
 	},
+
+
+	getTitle: DelegateFactory.getDelegated(function(lineage,loc){
+		return this.getContentNumericalAddress(lineage,loc)+loc.label;
+	}),
 
 
 	getContentNumericalAddress: function(lineage,loc){

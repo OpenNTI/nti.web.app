@@ -20,19 +20,29 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	views: [
-		'content.Reader',
+		'cards.Card',
+		'content.Navigation',
 		'content.PageWidgets',
-		'cards.Card'
+		'content.Pager',
+		'content.Reader',
+		'content.TabPanel',
+		'content.Toolbar'
 	],
 
 
-	refs: [],
+	refs: [
+		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
+		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
+		{ref: 'libraryPageWigets', selector: 'library-view-container content-tabs content-page-widgets'}
+	],
 
 
 	init: function() {
 		this.listen({
 			component:{
-				'reader-panel':{},
+				'library-view-container content-tabs reader-panel':{
+					'set-content':'updateLibraryControls'
+				},
 				'content-card':{
 					'show-target':'showCardTarget'
 				}
@@ -70,6 +80,13 @@ Ext.define('NextThought.controller.Reader', {
 			});
 
 		reader.onNavigateComplete(pi);
+	},
+
+
+	updateLibraryControls: function(){
+		this.getLibraryPageWigets().clearBookmark();
+		this.getLibraryNavigation().updateLocation();
+		this.getLibraryPager().updateState();
 	}
 
 });

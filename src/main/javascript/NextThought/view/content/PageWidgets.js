@@ -30,10 +30,9 @@ Ext.define('NextThought.view.content.PageWidgets',{
 		like: '.meta .controls .like'
 	},
 
+
 	initComponent: function(){
 		this.callParent(arguments);
-
-		LocationProvider.on('navigateComplete','clearBookmark', this);
         NextThought.model.events.Bus.on('bookmark-loaded', 'onBookmark', this);
 	},
 
@@ -66,6 +65,7 @@ Ext.define('NextThought.view.content.PageWidgets',{
         //we need to move the bookmark/favorite widget to the left a bit to handle scrollbars:
         this.meta.setStyle('right', (Ext.getScrollbarSize().width+3)+'px');
 	},
+
 
     onFavoriteClick: function(){
         var favStore = Ext.getStore('favoriteStore'), found;

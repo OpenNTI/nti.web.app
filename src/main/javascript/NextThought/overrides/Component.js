@@ -1,5 +1,6 @@
 Ext.define('NextThought.overrides.Component', {
 	override: 'Ext.Component',
+	requires:['NextThought.mixins.Delegation'],
 
 	afterRender: function(){
 		var me = this;
@@ -10,6 +11,7 @@ Ext.define('NextThought.overrides.Component', {
 		}
 	},
 
+
 	setNTTooltip: function(tooltip) {
 		var me = this;
 		if ( !Ext.isObject(tooltip) ) {
@@ -18,5 +20,14 @@ Ext.define('NextThought.overrides.Component', {
 				text: tooltip
 			});
 		}
+	},
+
+	constructor: function(){
+		this.callParent(arguments);
+		this.mixins.delegation.constructor.call(this);
+		return this;
 	}
+
+},function(){
+	Ext.Component.mixin('delegation',NextThought.mixins.Delegation);
 });

@@ -433,7 +433,8 @@ Ext.define('NextThought.providers.Location', {
 
 
 	getNavigationInfo: function(ntiid) {
-		var loc = this.find(ntiid),
+		if(!ntiid){console.warn('Defaulting ntiid');}
+		var loc = this.find(ntiid||this.currentNTIID),
 			info = {},
 			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
