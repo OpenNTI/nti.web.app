@@ -517,28 +517,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	//This function is full of assumptions.  For now
-	//we want to optimize notes on assessment questions by anchoring
-	//them to the container and a null range.  We only want to do this
-	//if they were created from the gutter since in theory eventually
-	//we allow selecting text and highlighting/noteing on parts of the question.
-	//Right now we identify created from the gutter by a style of surpressed,
-	//and we determine it is in an assessment if the ranges ancestor is or is contained in an
-	//assessment object tag
 	rangeForLastLineInfo: function (lastLine, style) {
 		var ancestor = lastLine.range.commonAncestorContainer ? Ext.fly(lastLine.range.commonAncestorContainer) : null,
-			questionSelector = 'object[type="application/vnd.nextthought.naquestion"]',
-			question, c;
+			containerSelector = 'object[data-nti-container]',
+			container, c;
 
 		if (style !== 'suppressed') {
 			return {range: lastLine.range, container: null};
 		}
 
-
 		//OK we are style suppressed
-		question = ancestor.is(questionSelector) ? ancestor : ancestor.up(questionSelector);
-		c = question ? question.getAttribute('data-ntiid') : null;
-		if (question && c) {
+		container = ancestor.is(containerSelector) ? ancestor : ancestor.up(containerSelector);
+		c = container ? container.getAttribute('data-ntiid') : null;
+		if (container && c) {
 			return {range: null, container: c};
 		}
 		return {range: lastLine.range, container: null};

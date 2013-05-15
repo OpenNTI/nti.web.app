@@ -7,6 +7,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 		'NextThought.view.cards.Card'
 	],
 
+	representsUserDataContainer:true,
 	ui: 'content-card',
 	cls: 'content-card-container',
 

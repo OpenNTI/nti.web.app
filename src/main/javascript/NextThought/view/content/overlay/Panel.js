@@ -11,10 +11,12 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			Ext.each(Ext.ComponentQuery.query('overlayed-panel'),function(q){ q.syncTop(); }); },10)
 	},
 
+	representsUserDataContainer: false,
 	appendPlaceholder: false,
 	plain: true,
 	autoRender: true,
 	ui: 'overlayed',
+
 
 
 	initComponent: function(){
@@ -96,6 +98,10 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			opacity: 0,
 			'white-space': 'nowrap'
 		});
+
+		if(this.representsUserDataContainer){
+			Ext.fly(this.contentElement).set({ 'data-nti-container':true });
+		}
 
 		this.removeContent('.hidden,INPUT,object,param');
 	},

@@ -7,6 +7,9 @@ Ext.define('NextThought.view.assessment.Question',{
 		'NextThought.view.assessment.Parts'
 	],
 
+
+	representsUserDataContainer:true,
+
 	cls: 'question',
 	ui: 'assessment',
 
