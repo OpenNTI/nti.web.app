@@ -63,7 +63,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.mon(editorEl,{
 				scope: this,
 				'click': this.maybeHideSearchListMenu,
-				'mouseover': this.maybeHideSearchListMenu
+				'mouseover': this.maybeHideSearchListMenu,
+				'keyup': this.didChangeText
 			});
 		}
 
@@ -93,6 +94,19 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		else{
 			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer( function(){ me.shareListView.hide();}, 500);
+		}
+	},
+
+
+	didChangeText: function(e) {
+		var input = e.getTarget('input', undefined, true);
+		if (input && input.getValue().length == 0) {
+			var me = this;
+			clearTimeout(this.hideTimer);
+			this.hideTimer = Ext.defer( function(){ 
+				me.shareListView.hide();
+				input.focus(500);
+			}, 500);
 		}
 	},
 
