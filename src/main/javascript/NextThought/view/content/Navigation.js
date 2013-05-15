@@ -41,7 +41,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		var me = this;
 		this.callParent(arguments);
 		me.locationChanged();
-		LocationProvider.on('navigateComplete',me.locationChanged,me);
+		LocationProvider.on('navigateComplete','locationChanged',me);
 	},
 
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		me.cleanupMenus();
 
 		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
-		else if(me.isHidden()){ me.show(); }
+		if(me.isHidden()){ me.show(); }
 
 		iconPath = book.icon;
 		if(iconPath.substr(0,book.root.length) !== book.root ){
@@ -134,6 +134,9 @@ Ext.define('NextThought.view.content.Navigation',{
 		var m = this.menuMap;
 		delete this.menuMap;
 
+		Ext.Object.each(m,function(k,v){
+			return (v && v.destroy && v.destroy()) || true;
+		});
 		//TODO: clean them out
 	},
 
@@ -141,7 +144,7 @@ Ext.define('NextThought.view.content.Navigation',{
 	buildMenu: function(pathPartEl,locationInfo,parent){
 		var me = this, m,
 			menus = me.menuMap || {},
-			cfg = { xtype:'jump-menu', ownerButton: me, items: [] },
+			cfg = { ownerButton: me, items: [] },
 			key = locationInfo? locationInfo.ntiid : null,
 			currentNode = locationInfo ? locationInfo.location: null;
 
@@ -154,12 +157,12 @@ Ext.define('NextThought.view.content.Navigation',{
 			this.enumerateTopicSiblings(currentNode,cfg.items,parent);
 		}
 
-		m = menus[key] = Ext.widget(Ext.apply({},cfg));
+		m = menus[key] = Ext.widget('jump-menu',Ext.apply({},cfg));
 
 		//evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
 		m.mon(pathPartEl, {
 			scope: m,
-			'mouseleave':m.startHide,
+			'mouseleave':'startHide',
 			'mouseenter':function(){
 				m.stopHide();
 				m.showBy(pathPartEl,'tl-bl?', [-10,0]);
@@ -193,28 +196,17 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 	enumerateTopicSiblings: function(node,items,parent){
-		var pres,current = node, num = 1, text,
-			type = '1', separate = '. ', suppress = false;
+		var current = node, num = 1, text,
+			type = '1', separate = '. ', suppress = false,
+			p, n = 'numbering', sep = 'separator', sup = 'suppressed';
 
 		if(parent){
-			pres = Library.getTitle(parent).get('PresentationProperties');
-
-			if( pres && pres.numbering){
-				if(pres.numbering.start > 0 ){
-					num = pres.numbering.start;
-				}
-
-				if(pres.numbering.type){
-					type = pres.numbering.type;
-				}
-
-				if(pres.numbering.separator){
-					separate = pres.numbering.separator;
-				}
-
-				if(pres.numbering.suppressed){
-					suppress = pres.numbering.suppressed;
-				}
+			p = Library.getTitle(parent).get('PresentationProperties');
+			if( p && p[n]){
+				num = p[n] && p[n].start;
+				type = p[n] && p[n].type;
+				separate = p[n] && p[n][sep];
+				suppress = p[n] && p[n][sup];
 			}
 		}
 
@@ -232,7 +224,7 @@ Ext.define('NextThought.view.content.Navigation',{
 
 			//FIXME Can this be condensed?  It's all the same except for the
 			//text property -CMU
-			text = (suppress)? node.getAttribute('label') : (this.styleList(num,type) + separate + node.getAttribute('label'));
+			text = suppress? node.getAttribute('label') : (this.styleList(num,type) + separate + node.getAttribute('label'));
 			
 			items.push({
 				text	: text,
@@ -258,25 +250,27 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		if(Ext.isFunction(formatters[style])){
 			return formatters[style].apply(me,[num]);
-		}else{
-			return num;
 		}
+		return num;
 	},
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
 	toRomanNumeral: function(num){
-		var digits, key, roman, i;
+		var digits, key, roman, i,m = [];
 
-		digits = String(+num).split("");
-		key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
-		       "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
-		       "","I","II","III","IV","V","VI","VII","VIII","IX"];
-		roman = "";
+		digits = String(+num).split('');
+		key = ['','C','CC','CCC','CD','D','DC','DCC','DCCC','CM',
+		       '','X','XX','XXX','XL','L','LX','LXX','LXXX','XC',
+		       '','I','II','III','IV','V','VI','VII','VIII','IX'];
+		roman = '';
 		i = 3;
 		while (i--){
-			roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+			roman = (key[+digits.pop() + (i * 10)] || '') + roman;
 		}
-		return new Array(+digits.join("") + 1).join("M") + roman;
+
+		m.length = +digits.join('') + 1;
+
+		return m.join('M') + roman;
 	},
 
 	toBase26SansNumbers: function(num){
@@ -285,9 +279,8 @@ Ext.define('NextThought.view.content.Navigation',{
 			num2 = Math.floor((num-1)/26);
 		if(num2 > 0){
 			return this.toBase26SansNumbers(num2) + letter;
-		}else{
-			return letter;
 		}
+		return letter;
 	},
 
 	hasChildren: function(n){
@@ -298,7 +291,7 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		if (!node) { return false; }
 
-		for(;node.nextSibling; node = node.nextSibling){
+		for(node; node&&node.nextSibling; node=node.nextSibling){
 			if(!/topic/i.test(node.tagName) || parseInt(node.getAttribute('levelnum'), 10) > 2){ continue; }
 			num++;
 		}

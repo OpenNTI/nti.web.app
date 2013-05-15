@@ -2,6 +2,7 @@ Ext.define('NextThought.view.content.Pager',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.content-pager',
 	ui: 'content-pager',
+//TODO: refactor this into a simple component. A custom container w/ two buttons is overkill.
 
 	requires: [
 		'NextThought.providers.Location'

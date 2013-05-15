@@ -33,8 +33,8 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		LocationProvider.on('navigateComplete',this.clearBookmark, this);
-        NextThought.model.events.Bus.on('bookmark-loaded', this.onBookmark, this);
+		LocationProvider.on('navigateComplete','clearBookmark', this);
+        NextThought.model.events.Bus.on('bookmark-loaded', 'onBookmark', this);
 	},
 
 

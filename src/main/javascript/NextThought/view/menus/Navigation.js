@@ -22,13 +22,13 @@ Ext.define('NextThought.view.menus.Navigation',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.setHeight(Ext.Element.getViewportHeight());
-		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
+		Ext.EventManager.onWindowResize('viewportMonitor',this);
 
 		//set up other handlers for closing:
 		this.mon(this, {
 			scope: this,
-			mouseleave: this.startHide,
-			mouseenter: this.cancelDeferHide
+			mouseleave: 'startHide',
+			mouseenter: 'cancelDeferHide'
 		});
 	},
 
@@ -46,6 +46,7 @@ Ext.define('NextThought.view.menus.Navigation',{
 	cancelDeferHide: function(){ clearTimeout(this.leaveTimer); },
 
 	destroy: function(){
+		this.callParent(arguments);
 		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
 	},
 
