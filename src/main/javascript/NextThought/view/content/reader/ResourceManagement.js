@@ -91,7 +91,8 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 	constructor: function(reader){
 		this.reader = reader;
-		reader.on('set-content','manage',this,{delay:1});
+		reader.on('set-content','manage',this);//We can't defer this handler, otherwise the fireEvent completes before
+												// we update the dom with container flags
 	},
 
 

@@ -54,7 +54,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
-	injectAssessments: function(reader, doc, NTIID, subContainers, items){
+	injectAssessments: function(reader, doc, NTIID, items){
 		var me = this,
 			slice = Array.prototype.slice,
 			questionObjs;

@@ -34,6 +34,10 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			this.contentElement = this.placementHolderTpl[insert](el);
 		}
 
+		if(this.representsUserDataContainer){
+			Ext.fly(this.contentElement).set({ 'data-nti-container':true });
+		}
+
 		this.callParent(arguments);
 	},
 
@@ -82,14 +86,10 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 
 	removeContent: function(selector){
 		var el = Ext.get(this.contentElement);
-		el.select(selector).remove();
+		el.select(selector).remove();//Maybe set style display:none?
 	},
 
 
-	//It's not clear stripping contents of the object
-	//tag is the proper thing to do here.  Once they get stripped
-	//they are gone and we have no record of what the content looked like.
-	//It's not even clear why we do this in the first place.
 	setupContentElement: function(){
 		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
@@ -98,10 +98,6 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			opacity: 0,
 			'white-space': 'nowrap'
 		});
-
-		if(this.representsUserDataContainer){
-			Ext.fly(this.contentElement).set({ 'data-nti-container':true });
-		}
 
 		this.removeContent('.hidden,INPUT,object,param');
 	},

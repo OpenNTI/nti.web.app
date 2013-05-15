@@ -115,7 +115,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		Ext.each(els,function(el){
 			var id = el.getAttribute('data-ntiid') || el.getAttribute('ntiid');
-			if(!/tag:/i.test(id) || !/naquestion$/i.test(el.getAttribute('type'))){return;}
+			//Depends on overlayed panels being constructed and setting the attribute...
+			if(!el.hasAttribute('data-nti-container')){return;}
 			containers.push(id);
 		});
 
@@ -126,8 +127,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
-			c = me.parseHTML(resp),
-			subContainers;
+			c = me.parseHTML(resp);
 
 		me.clearAnnotations();
 
@@ -141,13 +141,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-		subContainers = me.resolveContainers();
 
 		me.fireEvent('set-content', me, me.getDocumentElement(),
-				LocationProvider.currentNTIID, subContainers, assessmentItems);
+				LocationProvider.currentNTIID, assessmentItems);
 
-
-		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
+		me.loadContentAnnotations(LocationProvider.currentNTIID, me.resolveContainers());
 
 		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
 		Ext.defer(Ext.callback,500,Ext,[finish,null,[me]]);
