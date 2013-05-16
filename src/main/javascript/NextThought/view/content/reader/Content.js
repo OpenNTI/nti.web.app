@@ -5,8 +5,16 @@ Ext.define('NextThought.view.content.reader.Content',{
 		this.meta = {};
 		this.css = {};
 
-		this.addEvents('markupenabled-action');
+		this.addEvents('markupenabled-action','set-content');
+
+		this.registerDelegationTarget('getTitle','getCurrentTitle');
+
 		return this;
+	},
+
+
+	getCurrentTitle: function(){
+		return (this.meta || {}).title;
 	},
 
 
@@ -207,7 +215,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.basePath = basePath;
 
 		this.meta = metaObj( head.match(/<meta[^>]*>/gi) || [] );
-//		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) || []);
+		this.meta.title = ((/<title[^>]*>(.*)<\/title>/gi).exec(head)||[])[1];
 		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) || []);
 
 		return ContentUtils.fixReferences(body, basePath);
