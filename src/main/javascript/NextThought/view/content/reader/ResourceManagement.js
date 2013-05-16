@@ -90,6 +90,14 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	}])),
 
 
+	OVERLAY_DOM_QUERY_XTYPE_MAP: {
+		'object[type$=nticard]':'overlay-card',
+		'object[type$=nticard-target]':'overlay-card',
+		'object[type$=ntislidedeck]':'overlay-slidedeck',
+		'object[type$=videoroll]':'overlay-video-roll',
+		'object[type$=image-collection]':'overlay-image-roll'
+	},
+
 	constructor: function(reader){
 		this.reader = reader;
 		reader.on('set-content','manage',this);//We can't defer this handler, otherwise the fireEvent completes before
@@ -98,10 +106,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 
 	manage: function(reader){
-		this.activateCards.apply(this,arguments);
-		this.activateSlideDeck.apply(this,arguments);
-		this.activateVideoRoll.apply(this,arguments);
-		this.activateImageRoll.apply(this,arguments);
+		this.activateOverlays.apply(this,arguments);
 		this.activateAnnotatableItems.apply(this,arguments);
 		this.manageYouTubeVideos();
 	},
@@ -124,23 +129,11 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
-	activateCards: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
-		this.activateOverlayedPanel(reader,doc,'object[type$=nticard]','overlay-card');
-	},
-
-
-	activateSlideDeck: function(reader, doc){
-		this.activateOverlayedPanel(reader,doc,'object[type$=ntislidedeck]','overlay-slidedeck');
-	},
-
-
-	activateVideoRoll: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
-		this.activateOverlayedPanel(reader,doc,'object[type$=videoroll]','overlay-video-roll');
-	},
-
-
-	activateImageRoll: function(reader, doc /*, NTIID, subContainers, assessmentItems */){
-		this.activateOverlayedPanel(reader,doc,'object[type$=image-collection]','overlay-image-roll');
+	activateOverlays: function(reader, doc){
+		var me = this;
+		Ext.Object.each(me.OVERLAY_DOM_QUERY_XTYPE_MAP,function(query,xtype){
+			me.activateOverlayedPanel(reader,doc,query,xtype);
+		});
 	},
 
 
@@ -159,7 +152,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
-	activateAnnotatableItems: function(reader, doc, NTIID, subContainers, assessmentItems){
+	activateAnnotatableItems: function(reader, doc /*, NTIID, assessmentItems */){
 		var els = doc.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
