@@ -53,7 +53,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	showCardTarget: function(card, data){
 		var reader = card.up('reader-panel'),
-			ntiid = data.target_ntiid || data.ntiid,
+			ntiid = data.ntiid,
 			s = encodeURIComponent('Pages('+ntiid+')'),
 			u = encodeURIComponent($AppConfig.username),
 		//Hack...
