@@ -311,6 +311,10 @@ Ext.define('NextThought.editor.Actions', {
 				this.lastRange = s.getRangeAt(0);
 			}
 		}
+
+		if (!e.getTarget('.content') && !e.getTarget('.action')) { 
+			this.hideStylePopover(); 
+		}
 	},
 
 
