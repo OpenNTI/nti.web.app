@@ -38,7 +38,6 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 		});
 
 		this.callParent([config]);
-		this.setupContentElement();
 	},
 
 

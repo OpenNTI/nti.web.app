@@ -25,7 +25,6 @@ Ext.define('NextThought.view.image.OverlayedPanel',{
 		}];
 
 		this.callParent([config]);
-		this.setupContentElement();
 	},
 
 

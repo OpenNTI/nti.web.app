@@ -18,6 +18,12 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 	ui: 'overlayed',
 
 
+	constructor: function(){
+		this.callParent(arguments);
+		this.setupContentElement();
+		return this;
+	},
+
 
 	initComponent: function(){
 		var d, el, insert = 'insertBefore', ix = 0;

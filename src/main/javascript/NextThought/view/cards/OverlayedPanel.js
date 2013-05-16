@@ -42,7 +42,6 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 		});
 
 		this.callParent([config]);
-		this.setupContentElement();
 	},
 
 

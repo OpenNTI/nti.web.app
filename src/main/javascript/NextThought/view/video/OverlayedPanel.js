@@ -25,7 +25,6 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 		}];
 
 		this.callParent([config]);
-		this.setupContentElement();
 	},
 
 
