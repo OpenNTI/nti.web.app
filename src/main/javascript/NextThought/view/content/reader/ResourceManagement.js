@@ -25,6 +25,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	requires: [
 		'NextThought.ux.ImageZoomView',
 		'NextThought.ux.SlideDeck',
+		'NextThought.view.cards.CardTarget',
 		'NextThought.view.cards.OverlayedPanel',
 		'NextThought.view.slidedeck.OverlayedPanel',
 		'NextThought.view.video.OverlayedPanel',
@@ -92,7 +93,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 	OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]':'overlay-card',
-		'object[type$=nticard-target]':'overlay-card',
+		'object[type$=nticard-target]':'overlay-card-target',
 		'object[type$=ntislidedeck]':'overlay-slidedeck',
 		'object[type$=videoroll]':'overlay-video-roll',
 		'object[type$=image-collection]':'overlay-image-roll'
