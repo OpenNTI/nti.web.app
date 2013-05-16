@@ -153,7 +153,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 	},
 
 
-	activateAnnotatableItems: function(reader, doc /*, NTIID, assessmentItems */){
+	activateAnnotatableItems: function(reader, doc){
 		var els = doc.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {

@@ -89,5 +89,9 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	clearBookmark: function(){
         this.favorite.removeCls('on');
         delete this.bookmarkModel;
-	}
+	},
+
+
+	hideControls: function(){ this.meta.hide(); },
+	showControls: function(){ this.meta.show(); }
 });

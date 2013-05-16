@@ -158,8 +158,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				this.buildPath(resp.request.options.url));
 
 
-		me.fireEvent('set-content', me, me.getDocumentElement(),
-				LocationProvider.currentNTIID, assessmentItems);
+		me.fireEvent('set-content', me, me.getDocumentElement(), assessmentItems, resp.request.options.pageInfo);
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, me.resolveContainers());
 

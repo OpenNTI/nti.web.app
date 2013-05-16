@@ -14,10 +14,17 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	setupContentElement: function(){
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
-			margin: '10px 0 0 0'
+			margin: '40px 0 0 0'
 		});
 	},
 
+
+	syncTop: function(){
+		if(!this.contentElement){return;}
+		var ctTop = this.el.up('.x-reader-pane').getY(),
+			top = (10 + ctTop);
+		this.el.setY(top);
+	},
 
 	constructor: function(config){
 		if(!config || !config.contentElement){
@@ -43,10 +50,10 @@ Ext.define('NextThought.view.cards.CardTarget',{
 				tag: 'iframe',
 				src: data.href,
 				border:0,
-				frameborder:0,
-                scrolling: 'no',
-				allowTransparency:true,
-				seamless:true
+				frameborder:0
+                //scrolling: 'no',
+				//allowTransparency:true,
+				//seamless:true
 			}
 		});
 	},

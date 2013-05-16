@@ -261,12 +261,13 @@ Ext.define('NextThought.view.content.Reader', {
 			if(!Ext.isEmpty(pageInfo.get('content'))){
 				success.call(this,{
 					responseText: pageInfo.get('content'),
-					request:{options:{url:''}}
+					request:{options:{pageInfo:pageInfo,url:''}}
 				});
 				return;
 			}
 
 			proxy.request({
+				pageInfo: pageInfo,
 				ntiid: pageInfo.getId(),
 				jsonpUrl: pageInfo.getLink('jsonp_content'),
 				url: pageInfo.getLink('content'),

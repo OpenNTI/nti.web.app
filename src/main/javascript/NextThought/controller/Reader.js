@@ -89,16 +89,24 @@ Ext.define('NextThought.controller.Reader', {
 				]
 			});
 
-
+		pi.hideControls = true;
 
 		reader.onNavigateComplete(pi);
 	},
 
 
-	updateLibraryControls: function(){
-		this.getLibraryPageWigets().clearBookmark();
+	updateLibraryControls: function(reader, doc, assesments, pageInfo){
+		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
+			pg = this.getLibraryPager(),
+			pw = this.getLibraryPageWigets();
+
+		pg[fn]();
+		pw[fn]();
+
+		pw.clearBookmark();
+		pg.updateState();
+
 		this.getLibraryNavigation().updateLocation();
-		this.getLibraryPager().updateState();
 	}
 
 });

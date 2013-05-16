@@ -26,6 +26,9 @@ Ext.define('NextThought.view.content.Pager',{
 		{ cls: 'next' }
 	],
 
+	hideControls: function(){ this.el.hide(); },
+	showControls: function(){ this.el.show(); },
+
 	initComponent: function(){
 		this.callParent(arguments);
 	},
