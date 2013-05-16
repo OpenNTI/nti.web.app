@@ -13,8 +13,14 @@ a{
 	}
 }
 
+.content-card-target {
+	border: 1px solid $border-grey;
+	border-radius: 1px;
+	box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.3);
+}
 
 .component-overlay {
+
 	.content-slidedeck,
 	.content-card {
 		position: relative;

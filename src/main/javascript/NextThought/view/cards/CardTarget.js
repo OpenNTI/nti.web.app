@@ -8,7 +8,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 
 	representsUserDataContainer:true,
 	ui: 'content-card',
-	cls: 'content-card-container',
+	cls: 'content-card-target-container',
 
 
 	setupContentElement: function(){
@@ -29,27 +29,28 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		//the data-href has the adjusted href.
 		data.href = data['attribute-data-href'];
 
-		Ext.apply(config,{
-			layout:'fit',
-			items:[{
-				xtype: 'box',
-				autoEl: {
-					tag: 'iframe',
-					src: data.href,
-					border:0,
-					frameborder:0,
-                    scrolling: 'no',
-					allowTransparency:true,
-					seamless:true
-				}
-			}]
-		});
-
 		this.viewportMonitor = Ext.Function.createBuffered(this.viewportMonitor,100,this,null);
 
 		this.callParent([config]);
 		this.reader.lockScroll();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
+
+		this.iframe = this.add({
+			floating: true,
+			renderTo: Ext.getBody(),
+			xtype: 'box',
+			cls: 'content-card-target',
+
+			autoEl: {
+				tag: 'iframe',
+				src: data.href,
+				border:0,
+				frameborder:0,
+                scrolling: 'no',
+				allowTransparency:true,
+				seamless:true
+			}
+		});
 	},
 
 
@@ -64,10 +65,14 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		try {
 
 			var margin = 15,
+				frame = this.iframe,
 				y = this.getY(),
 				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
 
 			this.setHeight(h);
+
+			frame.alignTo(this.el,'tl-tl');
+			frame.setSize(this.getWidth(),h);
 		}
 		catch( e ) {
 			console.warn(e.message);
