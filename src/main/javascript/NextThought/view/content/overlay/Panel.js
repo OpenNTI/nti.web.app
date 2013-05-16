@@ -86,7 +86,8 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 
 	removeContent: function(selector){
 		var el = Ext.get(this.contentElement);
-		el.select(selector).remove();//Maybe set style display:none?
+//		el.select(selector).remove();//Maybe set style display:none?
+		el.select(selector).setStyle({display: 'none'});
 	},
 
 

@@ -15,6 +15,7 @@ a{
 
 
 .component-overlay {
+	.content-slidedeck,
 	.content-card {
 		position: relative;
 		overflow: hidden;
@@ -41,6 +42,8 @@ a{
 		.thumbnail {
 			background:{
 				size: cover;
+				repeat: no-repeat;
+				position: center;
 			}
 			border-right: 1px solid #f8f8f8;
 			box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
@@ -66,6 +69,43 @@ a{
 				margin-top: 5px;
 				font: normal normal 12px/normal $font;
 				color: $primary-grey;
+			}
+		}
+	}
+
+	.content-slidedeck-container {
+		margin: 0;
+	}
+
+	.content-slidedeck {
+		$thumbWidth: 150px;
+
+		.thumbnail {
+			width: $thumbWidth;
+			height: $thumbWidth;
+		}
+
+		.meta {
+			margin-left: $thumbWidth+15px;
+			.presentation-button {
+				margin: 5px 0px;
+				padding: 0px 10px 0px 40px;
+				background-color: $primary-blue;
+				border: 1px solid $border-blue;
+				font: italic 500 14px/30px $font;
+				border-radius: 3px;
+				color: white;
+				position: relative;
+				display: inline-block;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 6px;
+					left: 10px;
+					background: $icons no-repeat;
+					@include sprite($icons,'presentation-view',$dimensions: true);
+				}
 			}
 		}
 	}
