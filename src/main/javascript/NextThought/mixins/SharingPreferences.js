@@ -67,30 +67,26 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 		return sharedWith.slice();
 	},
 
-	getShortSharingDisplayText: function(shareWith){
+	getShortSharingDisplayText: function(shareWith, callback, scope){
 		var isPublic = this.isPublic(shareWith),
-			explicitEntities = this.resolveExplicitShareTarget(shareWith);
+			explicitEntities = this.resolveExplicitShareTarget(shareWith), str;
 
 		// FIXME: These ifs look nasty, needs refactoring later.
-		if(isPublic && Ext.isEmpty(explicitEntities)){
-			return 'Public';
+
+		if(Ext.isEmpty(explicitEntities)){
+			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
 		}
-		if(isPublic && !Ext.isEmpty(explicitEntities)){
-			if(explicitEntities.length === 1){
-				return 'Public and '+ explicitEntities[0];
-			}
-			return 'Public and '+ explicitEntities.length + ' others';
+		else if(explicitEntities.length > 1){
+			str = Ext.String.format('{0} {1} others', isPublic ? 'Public and' : 'Shared with', explicitEntities.length);
+			Ext.callback(callback, scope, [str]);
 		}
-		if(!isPublic && Ext.isEmpty(explicitEntities)){
-			return 'Only me';
+		else{
+			//Exactly one, resolve the user then callback
+			UserRepository.getUser(explicitEntities.first(), function(resolved){
+				str = Ext.String.format('{0} {1}', isPublic ? 'Public and' : 'Shared with', resolved.getName());
+				Ext.callback(callback, scope, [str])
+			});
 		}
-		if(!isPublic && !Ext.isEmpty(explicitEntities)){
-			if(explicitEntities.length === 1){
-				return 'Shared with '+ explicitEntities[0];
-			}
-			return 'Shared with '+ explicitEntities.length + ' others';
-		}
-		return '';
 	}
 
 });

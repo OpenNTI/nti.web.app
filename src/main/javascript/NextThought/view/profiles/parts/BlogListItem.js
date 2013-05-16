@@ -167,14 +167,15 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(isPublished){
 			this.publishStateEl.update('Public');
 		}else{
-			this.publishStateEl.update(this.getShortSharingDisplayText(sharedWith));
-			this.publishStateEl[this.isPublic(sharedWith) ? 'removeCls':'addCls']('private');
+			this.updateSharedWith('sharedWith', sharedWith);
 		}
 	},
 
 
 	updateSharedWith: function(field, value){
-		this.publishStateEl.update(this.getShortSharingDisplayText(value));
+		this.getShortSharingDisplayText(value, function(str){
+			this.publishStateEl.update(str);
+		}, this);
 		this.publishStateEl[this.isPublic(value) ? 'removeCls':'addCls']('private');
 	},
 
