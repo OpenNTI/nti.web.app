@@ -161,7 +161,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	getNameSnippet: function(value){
 		//Truncate long names.
-		return Ext.String.ellipsis(value, 30);
+		return Ext.String.ellipsis(value, 20);
 	},
 
 
@@ -238,12 +238,17 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	//We buffer this slightly to avoid unecessary searches
 	search: Ext.Function.createBuffered(function(e){
-		var value = this.inputEl.getValue();
+		var value = this.inputEl.getValue(),
+			t = this.el.down('.tokens'),
+			w = t && t.getWidth();
 
 		if(!value || value.replace(SearchUtils.trimRe,'').length < 1 ){
 			this.clearResults();
 		}
 		else {
+			if(!Ext.isEmpty(w)){
+				this.shareListView.setWidth(w);
+			}
 			this.shareListView.showBy(this.el, 'tl-bl',[0,0]);
 			this.store.search(value);
 		}
