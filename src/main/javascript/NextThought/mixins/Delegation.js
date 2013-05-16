@@ -21,6 +21,10 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		var result = null,
 			found = false;
 
+		function getAgent(o,fn){
+			return (o.deletgationAgent||{})[fn] || o[fn];
+		}
+
 		if(cmp.delegate==='inherit'){
 			cmp.delegate = getInheritedDelegates(cmp);
 		}
@@ -30,14 +34,18 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		}
 
 		Ext.each(cmp.delegate,function(v,i,a){
+			var f;
 			if(Ext.isString(v)){
 				v = Ext.ComponentQuery.query(v)[0] || v;
 			}
 
 			if(!v || !v.isComponent){
 				console.debug('No component:', cmp.id, a[i], i, a);
+				return;
 			}
-			else if(!Ext.isFunction(v[fn])){
+
+			f = getAgent(v,fn);
+			if(!Ext.isFunction(f)){
 				console.warn('The delegate', v.id, 'does not implement', fn);
 			}
 			else {
@@ -45,7 +53,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 					console.error('Multiple delegated functions: ', fn, v.id);
 				}
 				found = true;
-				result = v[fn].apply(v,args);
+				result = f.apply(v,args);
 			}
 		});
 
@@ -81,6 +89,19 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		constructor: function(){
 			if(!this.delegate){ return; }
 			setupDelegates(this);
+		},
+
+
+		registerDelegationTarget: function(delegate,targetFn){
+			var o = {};
+			if(Ext.isString(delegate)){
+				o[delegate] = Ext.isString(targetFn) ? this[targetFn] : Ext.isFunction(targetFn) ? targetFn : null;
+			}
+			else if(Ext.isObject(delegate)){
+				Ext.apply(o,delegate);
+			}
+
+			this.deletgationAgent = Ext.apply(this.deletgationAgent||{},o);
 		}
 	};
 });
