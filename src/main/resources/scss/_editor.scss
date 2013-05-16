@@ -198,6 +198,10 @@ span.tab{
 				min-height: 50px;
 				max-height: 200px;
 				outline: 0;
+
+				display: table;
+				table-layout: fixed;
+				width: 100%;
 			}
 		}
 
