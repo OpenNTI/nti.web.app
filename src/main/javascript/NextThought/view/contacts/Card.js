@@ -79,7 +79,7 @@ Ext.define('NextThought.view.contacts.Card',{
 		if(!this.cardEl){
 			return;
 		}
-		if(this.isOnline((value.toString)? value.toString() : value)){
+		if(this.isOnline((value && value.toString)? value.toString() : value)){
 			this.cardEl.removeCls('Offline');
 		}
 		else{

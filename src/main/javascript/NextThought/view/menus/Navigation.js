@@ -22,7 +22,7 @@ Ext.define('NextThought.view.menus.Navigation',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.setHeight(Ext.Element.getViewportHeight());
-		Ext.EventManager.onWindowResize('viewportMonitor',this);
+		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
 		//set up other handlers for closing:
 		this.mon(this, {

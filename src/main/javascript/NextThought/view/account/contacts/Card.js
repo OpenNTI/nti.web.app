@@ -66,7 +66,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	},
 
 	updatePresenceState: function(value){
-		if(this.isOnline((value.toString)? value.toString() : value)){
+		if(this.isOnline((value && value.toString)? value.toString() : value)){
 			this.removeCls('offline');
 		}
 		else{
