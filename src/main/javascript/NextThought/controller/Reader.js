@@ -54,13 +54,14 @@ Ext.define('NextThought.controller.Reader', {
 	showCardTarget: function(card, data){
 		var reader = card.up('reader-panel'),
 			ntiid = data.ntiid,
+			DH = Ext.DomHelper,
 			s = encodeURIComponent('Pages('+ntiid+')'),
 			u = encodeURIComponent($AppConfig.username),
 		//Hack...
 			pi = this.getPageInfoModel().create({
 				ID: ntiid,
 				NTIID: ntiid,
-				content: Ext.DomHelper.markup([
+				content: DH.markup([
 					{tag:'head',cn:[
 						{tag:'title', html: data.title}
 					]},
@@ -71,7 +72,10 @@ Ext.define('NextThought.controller.Reader', {
 							cls: 'nticard-target',
 							type: 'application/vnd.nextthought.nticard-target',
 							'data-ntiid': ntiid,
-							html: 'Target'
+							html: DH.markup([
+								{tag:'img', src:data.thumbnail},
+								{tag:'span', cls:'description', html: data.description}
+							])
 						},data.asDomSpec())
 					}}
 				]),
