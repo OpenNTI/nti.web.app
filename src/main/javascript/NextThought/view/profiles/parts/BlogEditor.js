@@ -8,7 +8,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'editor active',
+			cls: 'editor active basic',
 			cn:[{
 				cls: 'main',
 				cn:[{
@@ -17,17 +17,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				},{
 					cls: 'aux',
 					cn:[
-						{cls: 'action publish on', 'data-qtip': 'Publish State'},
+						{ cls:'recipients'},
 						{cls: 'tags'}
 					]
-				},{
-					cls: 'toolbar',
-					cn: [{
-						cls: 'left',
-						cn: [{cls: 'action bold', 'data-qtip': 'Bold'},
-							{cls:'action italic', 'data-qtip': 'Italic'},
-							{cls:'action underline', 'data-qtip': 'Underline'}]
-					}]
 				},{
 					cls: 'content',
 					contentEditable: true,
@@ -40,7 +32,17 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 				cls: 'footer',
 				cn: [{
 					cls: 'left',
-					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'}]
+					cn: [{
+						cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
+					},{
+						cls: 'action text-controls', 'data-qtip': 'Text Controls', cn:[
+							{cls:'popover controls', cn:[
+								{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
+								{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
+								{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+							]}
+						]
+					}]
 				},{
 					cls: 'right',
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
@@ -85,6 +87,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			e.editBody(h.get('body'));
 			e.setTitle(h.get('title'));
 			e.setTags(h.get('tags'));
+			e.setSharedWith(r.get('sharedWith'));
 			e.setPublished(r.isPublished());
 		}
 
@@ -165,7 +168,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
-		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.publish);
+		// NOTE: For now, as a matter of simplicit, we are ignoring the 'publish' field.
+		// We will derive it from the sharedWith value. ~PM.
+		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, undefined, v.shareWith);
 	},
 
 

@@ -65,6 +65,32 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 		}
 
 		return sharedWith.slice();
+	},
+
+	getShortSharingDisplayText: function(shareWith){
+		var isPublic = this.isPublic(shareWith),
+			explicitEntities = this.resolveExplicitShareTarget(shareWith);
+
+		// FIXME: These ifs look nasty, needs refactoring later.
+		if(isPublic && Ext.isEmpty(explicitEntities)){
+			return 'Public';
+		}
+		if(isPublic && !Ext.isEmpty(explicitEntities)){
+			if(explicitEntities.length === 1){
+				return 'Public and '+ explicitEntities[0];
+			}
+			return 'Public and '+ explicitEntities.length + ' others';
+		}
+		if(!isPublic && Ext.isEmpty(explicitEntities)){
+			return 'Only me';
+		}
+		if(!isPublic && !Ext.isEmpty(explicitEntities)){
+			if(explicitEntities.length === 1){
+				return 'Shared with '+ explicitEntities[0];
+			}
+			return 'Shared with '+ explicitEntities.length + ' others';
+		}
+		return '';
 	}
 
 });

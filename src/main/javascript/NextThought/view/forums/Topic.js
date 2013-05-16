@@ -214,12 +214,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
-		if(this.publishStateEl){
-			this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
-			this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-			this.record.addObserverForField(this, 'published', this.markAsPublished, this);
-		}
-
+		this.setPublishAndSharingState();
 		this.reflectFlagged(this.record);
 		this.listenForFlagChanges(this.record);
 
@@ -239,6 +234,14 @@ Ext.define('NextThought.view.forums.Topic',{
 				return false;
 			}
 		});
+	},
+
+
+	setPublishAndSharingState: function(){
+		if(!this.publishStateEl){ return;}
+		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
+		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
+		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
 	},
 
 

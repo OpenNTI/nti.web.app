@@ -209,7 +209,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish){
+	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish, shareWith){
 
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
@@ -279,6 +279,10 @@ Ext.define('NextThought.controller.Profile', {
 							return;
 						}
 					}
+					if(!Ext.isEmpty(shareWith)){
+						this.updateSharedWith(blogEntry, shareWith, finish, editorCmp);
+						return;
+					}
 
 					unmask();
 					finish(blogEntry);
@@ -293,6 +297,23 @@ Ext.define('NextThought.controller.Profile', {
 		catch(e){
 			console.error('An error occurred saving blog', Globals.getError(e));
 			unmask();
+		}
+	},
+
+
+	updateSharedWith: function(blogEntry, sharedWithValue, cb, cmp){
+		if(!blogEntry || Ext.isEmpty(sharedWithValue)){ return;}
+
+		if(!blogEntry.isPublished()){
+			blogEntry.saveField('sharedWith', sharedWithValue, function(){ Ext.callback(cb,undefined, [blogEntry]); });
+		}else{
+			/**
+			 * We cannot have a blog in a state where it's published and shared with some entities.
+			 * Thus we are going to unpublish it and then set it's sharedWith target.
+			 */
+			blogEntry.publish(cmp, function(){
+				blogEntry.saveField('sharedWith', sharedWithValue, function(){ Ext.callback(cb,undefined, [blogEntry]); });
+			},this);
 		}
 	},
 

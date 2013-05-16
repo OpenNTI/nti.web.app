@@ -3,7 +3,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	alias: 'widget.profile-blog-list-item',
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		sharingActions: 'NextThought.mixins.SharingPreferences'
 	},
 
 	requires:[
@@ -18,7 +19,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
-				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
+				{ tag:'span', cls: 'state link', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}//flag?
@@ -96,6 +97,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
+		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
 		this.mon(this.titleEl,'click', this.goToPost,this);
 		this.mon(this.commentsEl,'click', this.goToPostComments,this);
 		this.updateContent();
@@ -108,7 +110,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			this.mon(this.editEl,'click',this.onEditPost,this);
 		}
 
-		if( this.publishStateEl ){ this.setPublishState(); }
+		if(this.publishStateEl){
+			this.setPublishAndSharingState();
+		}
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
@@ -120,12 +124,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
 	},
 
-
-	setPublishState: function(){
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
-		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
-	},
 
 
 	updateField: function(key, value){
@@ -152,6 +150,32 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		if(el){
 			el.update(Ext.String.format('{0} Comment{1}', v, v === 1 ? '' : 's'));
 		}
+	},
+
+
+	setPublishAndSharingState: function(){
+		/**
+		 * NOTE: Initially we may run into a case where a blog is published but doesn't have have the sharedWith field set.
+		 * This is will be a common case for old blog entries.
+		 * In this function we check both to better reflect what the sharing is.
+		 */
+		var sharedWith = this.record.get('sharedWith'),
+			isPublished = this.record.isPublished();
+
+		// NOTE: Being in a 'published' state is mutually exclusive
+		// with being shared with some private or explicit sharing.
+		if(isPublished){
+			this.publishStateEl.update('Public');
+		}else{
+			this.publishStateEl.update(this.getShortSharingDisplayText(sharedWith));
+			this.publishStateEl[this.isPublic(sharedWith) ? 'removeCls':'addCls']('private');
+		}
+	},
+
+
+	updateSharedWith: function(field, value){
+		this.publishStateEl.update(this.getShortSharingDisplayText(value));
+		this.publishStateEl[this.isPublic(value) ? 'removeCls':'addCls']('private');
 	},
 
 
