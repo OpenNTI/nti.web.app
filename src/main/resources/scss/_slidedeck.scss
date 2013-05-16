@@ -105,6 +105,14 @@ $experimental-support-for-svg: true;
 			  }
 			}
 		  }
+
+		  .token{
+			border-bottom-color: #3a9bd3;
+			border-top-color: #3a9bd3;
+			border-right-color: #3a9bd3;
+			border-left-color: #3a9bd3;
+			background: #3a9bd3;
+		  }
 		}
 
 		.token-input-wrap span.token-input-sizer{
