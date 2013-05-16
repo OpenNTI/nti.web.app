@@ -446,25 +446,29 @@
 
 	.editor {
 		.main {
-			.title { padding: 0 15px; }
-
-			.recipients {
-				border: 0 solid #f2f2f2;
-				border-bottom-width: 1px;
-
-				.sharing-token-field{
-					.tokens{
-						padding-left: 5px;
-
-						.token-input-wrap{
-							position: relative;
-						}
-					}
+			.title {
+				padding: 0 15px;
+				input{
+					font: normal 300 25px/40px $font;
 				}
 			}
 
 			.aux {
 				position: relative;
+				.recipients {
+					border: 0 solid #f2f2f2;
+					border-bottom-width: 1px;
+
+					.sharing-token-field{
+						.tokens{
+							padding-left: 5px;
+
+							.token-input-wrap{
+								position: relative;
+							}
+						}
+					}
+				}
 				.tags{
 					margin-left: 15px;
 				}
