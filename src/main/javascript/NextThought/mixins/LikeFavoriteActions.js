@@ -38,8 +38,8 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 	},
 
 
-	updateLikeAndFavoriteFromRecord: function(){
-		var rec = this.getRecord(),
+	updateLikeAndFavoriteFromRecord: function(record){
+		var rec = record || this.getRecord(),
 			me = this;
 
 		if(!rec){return;}
@@ -54,11 +54,13 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 			}
 		}
 
-		if( me.liked && !rec.isLikeable() ){
-			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		if( me.liked ){
+			var fnName = rec.isLikeable() ? 'show' :  'hide';
+			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
 		}
-		if( me.favorites && !rec.isFavoritable() ){
-			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		if( me.favorites ){
+			var fnName = rec.isFavoritable() ? 'show' :  'hide';
+			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
 		}
 
 	},
@@ -102,6 +104,7 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 
 	reflectLikeAndFavorite: function(record){
+		this.updateLikeAndFavoriteFromRecord(record);
 		if (this.liked){
 			this.updateLikeCount(record);
             this.markAsLiked(record && record.isLiked());
