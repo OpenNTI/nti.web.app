@@ -130,7 +130,8 @@ Ext.define('NextThought.view.form.fields.TagField',{
 			t;
 
 		if (key === e.ENTER || key === e.TAB || this.isDelimiter(key)) {
-			el.blur();
+			this.updateTags();
+			// is the following if/else statement necessary now?
 			if (this.isDelimiter(key) && key !== e.TAB){
 				Ext.defer(el.focus,1,el);
 			} else {
@@ -182,7 +183,13 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-	handleBlur: function(){
+	handleBlur: function() {
+		this.updateTags();
+		return true;
+	},
+
+
+	updateTags: function(){
 		var me = this,
 			el = me.inputEl,
 			val = (el.getValue()||'').toLowerCase();
@@ -205,7 +212,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	onPaste: function(e){
 		//wait for paste data to actually populate tne input
-		Ext.defer(this.handleBlur,100,this);
+		Ext.defer(this.updateTags,100,this);
 	},
 
 
