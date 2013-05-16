@@ -63,7 +63,8 @@ Ext.define('NextThought.controller.Reader', {
 				NTIID: ntiid,
 				content: DH.markup([
 					{tag:'head',cn:[
-						{tag:'title', html: data.title}
+						{tag:'title', html: data.title},
+						{tag:'meta', name:'icon', content:data.thumbnail}
 					]},
 					{tag:'body',cn:{
 						cls:'page-contents no-padding',

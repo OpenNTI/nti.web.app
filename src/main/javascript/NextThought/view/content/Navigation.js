@@ -82,7 +82,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		}
 
 		this.bookcover.setStyle({
-			backgroundImage: Ext.String.format('url({0})',iconPath)
+			backgroundImage: Ext.String.format('url({0})',me.getIcon(iconPath))
 		});
 
 		c = lp.getLocation(lineage.shift());
@@ -105,6 +105,11 @@ Ext.define('NextThought.view.content.Navigation',{
 		me.title.clearListeners();
 		me.title.update(me.getTitle(lineage,loc));
 	},
+
+
+	getIcon: DelegateFactory.getDelegated(function(icon){
+		return icon;
+	}),
 
 
 	getTitle: DelegateFactory.getDelegated(function(lineage,loc){

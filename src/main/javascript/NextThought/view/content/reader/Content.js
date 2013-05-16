@@ -7,9 +7,17 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		this.addEvents('markupenabled-action','set-content');
 
-		this.registerDelegationTarget('getTitle','getCurrentTitle');
+		this.registerDelegationTarget({
+			getIcon:'getCurrentIcon',
+			getTitle: 'getCurrentTitle'
+		});
 
 		return this;
+	},
+
+
+	getCurrentIcon: function(){
+		return (this.meta || {}).icon;
 	},
 
 
