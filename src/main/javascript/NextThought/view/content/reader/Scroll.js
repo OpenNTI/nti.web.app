@@ -25,6 +25,17 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	},
 
 
+	lockScroll: function(){
+		this.scrollingEl.scrollTo('top', 0, false);
+		this.scrollingEl.setStyle({overflowY:'hidden'});
+	},
+
+
+	unlockScroll: function(){
+		this.scrollingEl.setStyle({overflowY:'auto'});
+	},
+
+
 	scrollToId: function(id) {
 		var n = Ext.getCmp(id),
 			m,
