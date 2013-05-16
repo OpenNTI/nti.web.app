@@ -50,7 +50,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 
-		range.selectNodeContents(this.contentElement);
+		range.selectNode(this.contentElement);
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	}
 });
