@@ -504,6 +504,9 @@ Ext.define('NextThought.editor.Actions', {
 
 		if(t && !e.getTarget('.control')){
 			t[action]('selected');
+
+			this.editor.down('.content').focus();
+			this.editorFocus();
 		}
 	},
 
