@@ -32,7 +32,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 		if(Ext.isEmpty(sharedWith)){ return false; }
 		var communities = [];
 		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
-			communities.push(rec.get('displayName'));
+			communities.push(rec.getId());
 		});
 
 		return Ext.Array.every(communities, function(i){
@@ -46,7 +46,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 			list = [];
 
 		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
-			communities.push(rec.get('displayName'));
+			communities.push(rec.getId());
 		});
 
 		if(Ext.isEmpty(sharedWith)){ return []; }
