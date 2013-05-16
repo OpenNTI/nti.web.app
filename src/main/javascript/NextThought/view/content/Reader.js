@@ -259,7 +259,6 @@ Ext.define('NextThought.view.content.Reader', {
 		else {
 			//hack:
 			if(!Ext.isEmpty(pageInfo.get('content'))){
-				console.debug(pageInfo.get('content'));
 				success.call(this,{
 					responseText: pageInfo.get('content'),
 					request:{options:{url:''}}
