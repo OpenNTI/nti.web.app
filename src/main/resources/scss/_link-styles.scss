@@ -13,13 +13,15 @@ a{
 	}
 }
 
-.content-card-target {
-	border: 1px solid $border-grey;
-	border-radius: 1px;
-	box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.3);
-}
 
 .component-overlay {
+
+	.content-card-target-container {
+		margin: 0 5px 0 0;
+		border: 1px solid $border-grey;
+		border-radius: 1px;
+		box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
+	}
 
 	.content-slidedeck,
 	.content-card {

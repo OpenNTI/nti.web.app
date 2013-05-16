@@ -14,7 +14,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	setupContentElement: function(){
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
-			margin: '15px 0'
+			margin: '10px 0 0 0'
 		});
 	},
 
@@ -31,16 +31,14 @@ Ext.define('NextThought.view.cards.CardTarget',{
 
 		this.viewportMonitor = Ext.Function.createBuffered(this.viewportMonitor,100,this,null);
 
+		config.layout = 'fit';
+
 		this.callParent([config]);
 		this.reader.lockScroll();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
 		this.iframe = this.add({
-			floating: true,
-			renderTo: Ext.getBody(),
 			xtype: 'box',
-			cls: 'content-card-target',
-
 			autoEl: {
 				tag: 'iframe',
 				src: data.href,
@@ -65,14 +63,12 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		try {
 
 			var margin = 15,
-				frame = this.iframe,
 				y = this.getY(),
 				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
 
 			this.setHeight(h);
 
-			frame.alignTo(this.el,'tl-tl');
-			frame.setSize(this.getWidth(),h);
+//			this.iframe.alignTo(this.el,'tl-tl').setSize(this.getWidth(),h);
 		}
 		catch( e ) {
 			console.warn(e.message);
