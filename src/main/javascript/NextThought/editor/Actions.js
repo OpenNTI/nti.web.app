@@ -51,7 +51,7 @@ Ext.define('NextThought.editor.Actions', {
 	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
 
 
-	constructor: function (cmp, editorEl) {
+	constructor: function (cmp, editorEl, scrollParentEl) {
 		var me = this,
 			Ce = Ext.CompositeElement;
 
@@ -105,7 +105,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
-			me.sharedList = Ext.widget('user-sharing-list', {renderTo: me.sharedListEl, tabIndex:3});
+			me.sharedList = Ext.widget('user-sharing-list', {renderTo: me.sharedListEl, scrollParentEl:scrollParentEl, tabIndex:3});
 		}
 
 		me.publishEl = editorEl.down('.action.publish');

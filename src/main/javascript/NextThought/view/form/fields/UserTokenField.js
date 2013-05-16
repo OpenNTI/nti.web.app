@@ -58,7 +58,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			editorEl = this.el.up('.editor');
 
 		this.store = Ext.getStore('UserSearch');
-		this.shareListView = Ext.widget('share-search', {store:me.store, renderTo: me.el.parent()});
+		this.shareListView = Ext.widget('share-search', {store:me.store, renderTo: this.scrollParentEl || Ext.getBody()});
 		this.mon(this.shareListView, 'select', this.searchItemSelected, this);
 		this.on('destroy','destroy',this.shareListView);
 		this.mon(me.publishEl, 'click', this.togglePublish, this);
@@ -89,6 +89,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	togglePublish: function(e){
+		if(e.getTarget('.readOnly')){
+			e.stopEvent();
+			return;
+		}
 		var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
 		this.publishEl[action]('on');
 	},
@@ -278,6 +282,11 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	onClick: function(e){
+		if(e.getTarget('.readOnly')){
+			e.stopEvent();
+			return;
+		}
+
 		e.stopEvent();
 		var t = e.getTarget('.x',null,true),
 			p = t && t.up('.token'),

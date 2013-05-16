@@ -30,8 +30,12 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			xtype: 'container',
 			autoEl: {tag: 'div', cls: 'field' },
 			items: { xtype: 'user-sharing-list'}
-		},
+		}
+	],
+
+	dockedItems:[
 		{
+			dock: 'bottom',
 			xtype: 'container',
 			cls: 'buttons',
 			layout:{ type: 'hbox', pack: 'end' },
@@ -73,7 +77,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		//if it is readonly, don't let people select more people they can't share with.
 		if (readOnly){
 			this.items[1].items.readOnly = true;
-			buttons = this.items.last();
+			buttons = this.dockedItems.last();
 			buttons.items.shift();
 			buttons.items.shift();
 			Ext.apply(buttons.items[0],{
@@ -124,6 +128,19 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.on('close', function(){
 			this.dragMaskOff();
 		});
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var me = this;
+		this.mon(this.down('user-sharing-list'), 'new-tag', function(){
+			Ext.defer(me.updateLayout, 1, me);
+			console.log('new tag added -- sharing window');
+		}, this);
+
+		Ext.defer(me.updateLayout, 1, me);
 	},
 
 	isReadOnly: function(){

@@ -115,7 +115,7 @@ Ext.define('NextThought.view.Window',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.fixScroll();
+		if(!this.dialog){this.fixScroll();}
 		this.mon(this.el,{
 			contextmenu: function(e){e.stopEvent();return false;}
 		});

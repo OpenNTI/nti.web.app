@@ -302,5 +302,25 @@ div.nt-token-wrapper{
 				@include sprite($elements,'btn_toggle_public',$dimensions: true);
 			}
 		}
+
+		&.readOnly{
+			.tokens{
+				.token{
+					&:hover{
+						padding: 0 10px 0 10px;
+						margin: 3px 3px 3px 0;
+						.x{ display: none;}
+					}
+				}
+
+				.plus{
+					display: none;
+				}
+				.token-input-wrap{
+					display: none;
+				}
+			}
+
+		}
 	}
 }
