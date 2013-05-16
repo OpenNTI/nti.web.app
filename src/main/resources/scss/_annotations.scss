@@ -94,6 +94,8 @@
 			&.slide {
 				display: none;
 				width: 54px;
+				background: $primary-blue;
+				border-color: $border-blue;
 
 				position: absolute;
 				top: 0;
@@ -109,12 +111,12 @@
 
 					left: 17px;
 					background: $icons no-repeat;
-					@include sprite($icons,'presentation-view-02',$dimensions:true);
+					@include sprite($icons,'presentation-view',$dimensions:true);
 				}
 
 				&:hover {
 					&::after{
-						@include sprite($icons,'presentation-view-02_hover',$dimensions:true);
+						@include sprite($icons,'presentation-view',$dimensions:true);
 					}
 				}
 			}
