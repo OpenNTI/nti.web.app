@@ -60,16 +60,21 @@ Ext.define('NextThought.controller.Reader', {
 			pi = this.getPageInfoModel().create({
 				ID: ntiid,
 				NTIID: ntiid,
-				content: Ext.DomHelper.markup({tag:'body',cn:{
-					cls:'page-contents no-padding',
-					cn:{
-						tag: 'object',
-						cls: 'nticard-target',
-						type: 'application/vnd.nextthought.nticard-target',
-						'data-ntiid': ntiid,
-						html: 'Target'
-					}
-				}}),
+				content: Ext.DomHelper.markup([
+					{tag:'head',cn:[
+						{tag:'title', html: data.title}
+					]},
+					{tag:'body',cn:{
+						cls:'page-contents no-padding',
+						cn:{
+							tag: 'object',
+							cls: 'nticard-target',
+							type: 'application/vnd.nextthought.nticard-target',
+							'data-ntiid': ntiid,
+							html: 'Target'
+						}
+					}}
+				]),
 				Links:[
 					{
 						Class: 'Link',
