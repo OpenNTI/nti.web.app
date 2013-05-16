@@ -177,6 +177,6 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 				html: 'Write a comment'
 			}]
 		},
-		TemplatesForNotes.getEditorTpl()
+		TemplatesForNotes.getEditorTpl(true)
 	]);
 });

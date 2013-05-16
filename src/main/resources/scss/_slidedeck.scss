@@ -88,6 +88,35 @@ $experimental-support-for-svg: true;
 		  }
 		}
     }
+	&.basic{
+	  .main{
+		.aux{
+		  border-color: #323232;
+		  background: #161616;
+		  .action{
+			&.publish{
+			  background-color: #161616;
+			  &::after{
+				@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
+			  }
+
+			  &.on::after{
+				@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
+			  }
+			}
+		  }
+		}
+
+		.token-input-wrap span.token-input-sizer{
+		  color: #b8b8b8;
+		}
+
+		input{
+		  color: #b8b8b8;
+		  background-color: #161616;
+		}
+	  }
+	}
   }
 }
 
