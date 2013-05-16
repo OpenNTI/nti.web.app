@@ -15,10 +15,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'control publish', 'data-qtip': 'Publish State'},
 		{cls:'tokens',cn:[
-			{tag:'span', cls:'plus'},
-			{tag:'span', cls:'token-input-wrap', cn:[
-				{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
-				{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
+			{tag:'span', cls:'inputArea', cn:[
+				{tag:'span', cls:'plus'},
+				{tag:'span', cls:'token-input-wrap', cn:[
+					{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
+					{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
+				]}
 			]}
 		]}
 	]),
@@ -135,7 +137,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	getInsertionPoint: function(){
-		return this.plusEl;
+		return this.el.down('.inputArea');
 	},
 
 

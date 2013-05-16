@@ -240,21 +240,39 @@ div.nt-token-wrapper{
 			position: relative;
 			margin-right: 85px !important;
 
-			.plus{
-				position: relative;
+			.inputArea{
+				white-space: nowrap;
 				display: inline-block;
-				margin: 0 4px 0 10px;
-				width: 8px;
 
-				&::after{
-					content: '';
-					position: absolute;
-					left: 0; top: -7px;
-					outline: 0;
-					background: $icons no-repeat;
-					@include sprite($icons, 'ico_plus', $dimensions:true);
+				.plus{
+					position: relative;
+					display: inline-block;
+					margin: 0 4px 0 10px;
+					width: 8px;
+
+					&::after{
+						content: '';
+						position: absolute;
+						left: 0; top: -7px;
+						outline: 0;
+						background: $icons no-repeat;
+						@include sprite($icons, 'ico_plus', $dimensions:true);
+					}
+				}
+
+				.token-input-wrap{
+					position: relative;
+					.token-input-sizer{
+						position: relative;
+						margin-left: 10px;
+						font: 14px $font;
+						font-style: italic;
+						text-transform: none;
+					}
 				}
 			}
+
+
 
 			.token{
 				font: normal 700 10px/18px $font;
@@ -269,18 +287,6 @@ div.nt-token-wrapper{
 					z-index: 10;
 				}
 			}
-
-			.token-input-wrap{
-				position: relative;
-				.token-input-sizer{
-					position: relative;
-					margin-left: 10px;
-					font: 14px $font;
-					font-style: italic;
-					text-transform: none;
-				}
-			}
-
 		}
 
 		.control.publish{
