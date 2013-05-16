@@ -176,7 +176,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 		el.dom.value = '';
 		if(!Ext.Array.contains(me.getValue(),val)){
-			me.tokenTpl.insertBefore(me.getInsertionPoint(),[me.getNameSnippet(val), type]);
+			me.tokenTpl.insertBefore(me.getInsertionPoint(),[me.getNameSnippet(val), type, val]);
 			me.fireEvent('new-tag',val);
 		}
 	},

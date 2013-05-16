@@ -25,7 +25,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token {1}', cn:[
-		{tag:'span', cls:'value', html:'{0}', 'data-value':'{0}'},
+		{tag:'span', cls:'value', html:'{0}', 'data-value':'{2}'},
 		{tag:'span', cls:'x'}
 	]}),
 
