@@ -98,7 +98,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 				o[delegate] = Ext.isString(targetFn) ? this[targetFn] : Ext.isFunction(targetFn) ? targetFn : null;
 			}
 			else if(Ext.isObject(delegate)){
-				Ext.apply(o,delegate);
+				Ext.Object.each(delegate,this.registerDelegationTarget,this);
 			}
 
 			this.deletgationAgent = Ext.apply(this.deletgationAgent||{},o);
