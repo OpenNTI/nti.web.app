@@ -18,6 +18,28 @@ Ext.define('NextThought.util.Dom',{
 
 		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
 
+		obj.asDomSpec = function(){
+			var r = /^attribute\-(.*)$/,
+				o = {
+						tag: 'object',
+						cn:[]
+					};
+
+
+			Ext.Object.each(this,function(k,v){
+				if(Ext.isFunction(v) || Ext.isEmpty(v)){return;}
+
+				var n = (r.exec(k)||[])[1];
+				if(!Ext.isEmpty(n)){
+					o[n] = v;
+				}
+				else {
+					o.cn.push({tag:'param', name:k, value:v});
+				}
+			});
+			return o;
+		};
+
 		return obj;
 	},
 

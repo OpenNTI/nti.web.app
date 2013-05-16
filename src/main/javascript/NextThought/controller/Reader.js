@@ -66,13 +66,13 @@ Ext.define('NextThought.controller.Reader', {
 					]},
 					{tag:'body',cn:{
 						cls:'page-contents no-padding',
-						cn:{
+						cn:Ext.applyIf({
 							tag: 'object',
 							cls: 'nticard-target',
 							type: 'application/vnd.nextthought.nticard-target',
 							'data-ntiid': ntiid,
 							html: 'Target'
-						}
+						},data.asDomSpec())
 					}}
 				]),
 				Links:[
@@ -83,6 +83,8 @@ Ext.define('NextThought.controller.Reader', {
 					}
 				]
 			});
+
+
 
 		reader.onNavigateComplete(pi);
 	},
