@@ -11,6 +11,14 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	cls: 'content-card-container',
 
 
+	setupContentElement: function(){
+		this.callParent(arguments);
+		Ext.fly(this.contentElement).setStyle({
+			margin: '15px 0'
+		});
+	},
+
+
 	constructor: function(config){
 		if(!config || !config.contentElement){
 			throw 'you must supply a contentElement';
