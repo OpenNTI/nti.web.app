@@ -12,54 +12,57 @@ Ext.define( 'NextThought.view.sharing.Window', {
 	modal: true,
 	dialog: true,
 
-	items: [
-		{
-			xtype: 'component',
-			renderTpl: [
-				'<div class="{model:lowercase}">',
-				'<div class="share-with-data">',
-					'<div class="title"><img id="{id}-avatar" src="{avatarURL}"> {title}</div>',
-					'<div class="description">{model:capitalize} by <span id="{id}-name" class="username">{name}</span></div>',
-					'<div class="snippet">{content:ellipsis(150)}</div>',
-				'</div>',
-				'</div>'
-			],
-			childEls: ['name','avatar']
-		},
-		{
-			xtype: 'container',
-			autoEl: {tag: 'div', cls: 'field' },
-			items: { xtype: 'user-sharing-list'}
-		}
-	],
+	constructor: function(){
+		this.items = [
+			{
+				xtype: 'component',
+				renderTpl: [
+					'<div class="{model:lowercase}">',
+						'<div class="share-with-data">',
+							'<div class="title"><img id="{id}-avatar" src="{avatarURL}"> {title}</div>',
+							'<div class="description">{model:capitalize} by <span id="{id}-name" class="username">{name}</span></div>',
+							'<div class="snippet">{content:ellipsis(150)}</div>',
+						'</div>',
+					'</div>'
+				],
+				childEls: ['name','avatar']
+			},
+			{
+				xtype: 'container',
+				autoEl: {tag: 'div', cls: 'field' },
+				items: { xtype: 'user-sharing-list'}
+			}
+		];
 
-	dockedItems:[
-		{
-			dock: 'bottom',
-			xtype: 'container',
-			cls: 'buttons',
-			layout:{ type: 'hbox', pack: 'end' },
-			defaults: {ui: 'primary', scale: 'medium'},
-			items: [
-				{
-					xtype: 'container',
-					flex: 1,
-					items: [
-						{xtype: 'checkbox', boxLabel: 'make sharing default', name: 'default'}
-					]
-				},
-				{xtype: 'button', text: 'Save', action: 'save'},
-				{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn,e){
-					btn.up('window').close();
-					e.stopEvent();
-				}}
-			]
-		}
-	],
+		this.dockedItems = [
+			{
+				dock: 'bottom',
+				xtype: 'container',
+				cls: 'buttons',
+				layout:{ type: 'hbox', pack: 'end' },
+				defaults: {ui: 'primary', scale: 'medium'},
+				items: [
+					{
+						xtype: 'container',
+						flex: 1,
+						items: [
+							{xtype: 'checkbox', boxLabel: 'make sharing default', name: 'default'}
+						]
+					},
+					{xtype: 'button', text: 'Save', action: 'save'},
+					{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn,e){
+						btn.up('window').close();
+						e.stopEvent();
+					}}
+				]
+			}
+		];
+
+		return this.callParent(arguments);
+	},
 
 
 	initComponent: function(){
-		this.items = Ext.clone(this.items);
 		var readOnly = this.isReadOnly(),
 			title = this.titleLabel || (readOnly ? 'Item Info' : 'Share this...'),
 			content = 'This item does not have text',
