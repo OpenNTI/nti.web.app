@@ -138,10 +138,11 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.callParent(arguments);
 
 		var me = this;
-		this.mon(this.down('user-sharing-list'), 'new-tag', function(){
-			Ext.defer(me.updateLayout, 1, me);
-			console.log('new tag added -- sharing window');
-		}, this);
+		this.mon(this.down('user-sharing-list'), {
+			scope: me,
+			'new-tag': function(){ Ext.defer(me.updateLayout, 1, me); },
+			'sync-height': function(){ Ext.defer(me.updateLayout, 1, me); }
+		});
 
 		Ext.defer(me.updateLayout, 1, me);
 	},

@@ -5,8 +5,8 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 	allowBlank: true,
 	displayField: 'displayName',
 	valueField: 'Username',
-	maxHeight: 120,
 	floating:true,
+	singleSelect: true,
 
 	constrainTo: Ext.getBody(),
 	loadingHeight: 40,

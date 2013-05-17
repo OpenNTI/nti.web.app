@@ -60,24 +60,62 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			editorEl = this.el.up('.editor');
 
 		this.store = Ext.getStore('UserSearch');
-		this.shareListView = Ext.widget('share-search', {
+		this.pickerView = Ext.widget('share-search', {
 			ownerCls: this.ownerCls,
 			store:me.store,
 			renderTo: this.scrollParentEl || Ext.getBody()
 		});
-		this.shareListView.addCls(this.ownerCls);
-		this.mon(this.shareListView, 'select', this.searchItemSelected, this);
-		this.on('destroy','destroy',this.shareListView);
+		this.pickerView.addCls(this.ownerCls);
+		this.mon(this.pickerView, 'select', this.searchItemSelected, this);
+		this.on('destroy','destroy',this.pickerView);
 		this.mon(me.publishEl, 'click', this.togglePublish, this);
 		if(editorEl){
 			this.mon(editorEl,{
 				scope: this,
 				'click': this.maybeHideSearchListMenu,
-				'mouseover': this.maybeHideSearchListMenu,
-				'keyup': this.didChangeText
+				'mouseover': this.maybeHideSearchListMenu //,
+//				'keyup': this.didChangeText
 			});
 		}
 
+		this.setupKeyMap();
+	},
+
+
+	setupKeyMap: function(){
+		var me = this,
+			selectOnTab = true,
+			picker = me.getPicker(),
+			keyNav = me.listKeyNav;
+
+		// Handle BoundList navigation from the input field. Insert a tab listener specially to enable selectOnTab.
+		if (keyNav) {
+			keyNav.enable();
+		} else {
+			me.listKeyNav = new Ext.view.BoundListKeyNav(this.inputEl, {
+				boundList: picker,
+				forceKeyDown: true,
+				tab: function(e) {
+					if (selectOnTab) {
+						this.selectHighlighted(e);
+					}
+					// Tab key event is allowed to propagate to field
+					return true;
+				},
+				enter: function(e){
+					var selModel = picker.getSelectionModel(),
+						count = selModel.getCount();
+
+					this.selectHighlighted(e);
+
+					// Handle the case where the highlighted item is already selected
+					// In this case, the change event won't fire, so just collapse
+					if (!me.multiSelect && count === selModel.getCount()) {
+						me.collapse();
+					}
+				}
+			});
+		}
 	},
 
 
@@ -112,7 +150,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 		else{
 			clearTimeout(this.hideTimer);
-			this.hideTimer = Ext.defer( function(){ me.shareListView.hide();}, 500);
+			this.hideTimer = Ext.defer( function(){ me.pickerView.hide();}, 500);
 		}
 	},
 
@@ -123,7 +161,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			var me = this;
 			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer( function(){ 
-				me.shareListView.hide();
+				me.pickerView.hide();
 				input.focus(500);
 			}, 500);
 		}
@@ -228,8 +266,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		var me = this, explicitEntities;
 		if(Ext.isEmpty(value)){ return; }
 		if(!Ext.isArray(value)){ value = [value]; }
-		console.debug('Init user token field with: ', value);
-
 		me.reset();
 		explicitEntities = this.resolveExplicitShareTarget(value);
 		UserRepository.getUser(explicitEntities, function(users){
@@ -253,24 +289,68 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
+	handledSpecialKey: function(key, e){
+		if(key === e.BACKSPACE){
+			if(this.inputEl.getValue() === ''){
+				this.removeLastToken();
+			}
+			return true;
+		}
+		return key === e.DOWN || key === e.UP || key === e.RIGHT  || key === e.LEFT || key === e.TAB || this.isDelimiter(key);
+	},
+
+
 	//We buffer this slightly to avoid unecessary searches
 	search: Ext.Function.createBuffered(function(e){
 		var value = this.inputEl.getValue(),
 			t = this.el.down('.tokens'),
-			w = t && t.getWidth();
+			w = t && t.getWidth(),
+			key = e.getKey();
 
-		if(!value || value.replace(SearchUtils.trimRe,'').length < 1 ){
+		if(this.handledSpecialKey(key, e)){ return;}
+
+		if(!value || value.replace(SearchUtils.trimRe,'').length < 1){
 			this.clearResults();
 		}
 		else {
 			if(!Ext.isEmpty(w)){
-				this.shareListView.setWidth(w);
+				this.pickerView.setWidth(w);
 			}
-			this.shareListView.showBy(this.el, 'tl-bl',[0,0]);
 			this.store.search(value);
+			this.pickerView.showBy(this.el, 'tl-bl',[0,0]);
+			Ext.defer(this.alignPicker, 1, this);
+			this.inputEl.focus(100);
 		}
 	}, 250),
 
+
+	getPicker: function(){
+		return this.pickerView;
+	},
+
+
+	alignPicker: function(){
+		var me = this,
+			picker = me.getPicker(),
+			heightAbove = me.getPosition()[1] - Ext.getBody().getScroll().top,
+			heightBelow = Ext.Element.getViewHeight() - heightAbove - me.getHeight(),
+			space = Math.max(heightAbove, heightBelow),
+			anchor = 'tl-bl', x, y;
+
+		if(picker.getHeight() > (space-5)){
+			picker.setHeight(space-5);
+
+			if(heightAbove > heightBelow){
+				anchor = 'bl-tl';
+				x = picker.getAlignToXY(this.el, anchor, [0,0]);
+				y = picker.getAlignToXY(this.inputEl, anchor, [0,0]);
+			}else{
+				x = picker.getAlignToXY(this.el, anchor, [0,0]);
+				y = picker.getAlignToXY(this.el, anchor, [0,0]);
+			}
+			picker.setPagePosition(x[0], y[1], false);
+		}
+	},
 
 	reset: function(){
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
@@ -289,8 +369,21 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		Ext.each(this.selections, function(o){
 			if(o.get('displayName')!== tokenName) { s.push(o); }
 		});
-
+		
 		this.selections = s;
+		this.fireEvent('sync-height', this);
+	},
+
+
+	removeLastToken: function(){
+		var lastSelection, tkEl, tkName;
+		if (this.selections.length > 0) {
+			lastSelection = this.selections.last();
+			tkName = lastSelection.get('displayName');
+			tkEl = this.el.down('[data-value='+tkName+']');
+			tkEl = tkEl && tkEl.up('.token');
+			this.removeToken(tkName, tkEl);
+		}
 	},
 
 
