@@ -302,6 +302,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	//We buffer this slightly to avoid unecessary searches
 	search: Ext.Function.createBuffered(function(e){
+		if(!this.inputEl){
+			return;
+		}
+
 		var value = this.inputEl.getValue(),
 			t = this.el.down('.tokens'),
 			w = t && t.getWidth(),

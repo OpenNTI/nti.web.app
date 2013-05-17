@@ -53,7 +53,8 @@ Ext.define('NextThought.editor.Actions', {
 
 	constructor: function (cmp, editorEl, scrollParentEl) {
 		var me = this,
-			Ce = Ext.CompositeElement;
+			Ce = Ext.CompositeElement,
+			tabTracker = new NextThought.util.TabIndexTracker();
 
 		me.mixins.observable.constructor.call(me);
 		me.mixins.placeholderFix.constructor.call(me);
@@ -83,7 +84,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.titleEl = editorEl.down('.title input');
 		if( me.titleEl ){
-			me.titleEl.set({tabIndex:1});
+			me.titleEl.set({tabIndex: tabTracker.next()});
 			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl,{
 				'click':function(e){e.stopPropagation();},
@@ -95,25 +96,26 @@ Ext.define('NextThought.editor.Actions', {
 			});
 		}
 
-		me.tagsEl = editorEl.down('.tags');
-		if( me.tagsEl ){
-			me.tags = Ext.widget('tags',{renderTo: me.tagsEl, tabIndex:2});
-			cmp.on('destroy', 'destroy', me.tags);
-			me.mon(me.tags,'blur',function(){
-				var el = editorEl.down('.content');
-				Ext.defer(el.focus,10,el);
-			});
-		}
-
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
 			me.sharedList = Ext.widget('user-sharing-list', {
 				renderTo: me.sharedListEl,
 				scrollParentEl:scrollParentEl,
-				tabIndex:3,
+				tabIndex: tabTracker.next(),
 				ownerCls: cmp.xtype
 			});
 			cmp.on('destroy', 'destroy', me.sharedList);
+		}
+
+
+		me.tagsEl = editorEl.down('.tags');
+		if( me.tagsEl ){
+			me.tags = Ext.widget('tags',{renderTo: me.tagsEl, tabIndex:tabTracker.next()});
+			cmp.on('destroy', 'destroy', me.tags);
+			me.mon(me.tags,'blur',function(){
+				var el = editorEl.down('.content');
+				Ext.defer(el.focus,10,el);
+			});
 		}
 
 		me.publishEl = editorEl.down('.action.publish');
@@ -124,7 +126,7 @@ Ext.define('NextThought.editor.Actions', {
 			});
 		}
 
-		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: -1});
+		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: tabTracker.next()});
 
 		me.styleControlsEl = editorEl.down('.action.text-controls');
 		if(me.styleControlsEl){

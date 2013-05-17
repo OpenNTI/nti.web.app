@@ -1,6 +1,6 @@
 Ext.define('NextThought.util.TabIndexTracker',{
 
-	current: 0,
+	current: 1,
 
 
 	getNext: function(skip){
@@ -12,4 +12,6 @@ Ext.define('NextThought.util.TabIndexTracker',{
 	reset: function(seed){
 		this.current = (seed||0);
 	}
+}, function(){
+	this.prototype.next = this.prototype.getNext;
 });
