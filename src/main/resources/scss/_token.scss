@@ -189,6 +189,8 @@ div.nt-token-wrapper{
 		display: inline-block;
 
 		input{
+			padding-left: -3px;
+			text-indent: 3px;
 			font: normal 700 10px/20px $font;
 			position: absolute;
 			background: #fff;
