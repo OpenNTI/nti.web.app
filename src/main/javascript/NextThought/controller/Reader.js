@@ -99,7 +99,8 @@ Ext.define('NextThought.controller.Reader', {
 	updateLibraryControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
-			pw = this.getLibraryPageWigets();
+			pw = this.getLibraryPageWigets(),
+			origin = pageInfo.contentOrig;
 
 		pg[fn]();
 		pw[fn]();
@@ -107,7 +108,10 @@ Ext.define('NextThought.controller.Reader', {
 		pw.clearBookmark();
 		pg.updateState();
 
-		this.getLibraryNavigation().updateLocation(pageInfo.contentOrig);//it does the right thing when that is undefiend.
+		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
+		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
+		// not resolve from our library... its a card)
+		this.getLibraryNavigation().updateLocation(origin||false);
 	}
 
 });
