@@ -84,7 +84,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		if(e){e.stopEvent();}
 		if(this.getRoot().editorActive()){
 			this.editorActions.deactivate();
-			this.editorActions.setValue('');
+			this.editorActions.reset();
 			this.comment.show();
 			this.getRoot().setEditorActive(null);
 		}
