@@ -120,12 +120,10 @@ Ext.define( 'NextThought.view.sharing.Window', {
 
 		//any down calls below this:
 		if (this.record){
-			if (this.record.get('sharedWith').length > 0) {
-				this.setValue(this.record.get('sharedWith'));
-			}
+			this.setValue( SharingUtils.sharedWithToSharedInfo(this.record.get('sharedWith') || []));
 		}
 		else if (this.value) {
-			this.setValue(this.value);
+			this.setValue( SharingUtils.sharedWithForSharingInfo(this.value));
 		}
 
 		this.on('close', function(){

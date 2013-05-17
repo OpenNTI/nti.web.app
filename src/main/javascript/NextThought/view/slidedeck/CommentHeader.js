@@ -114,12 +114,14 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			style = 'suppressed',
 			v = me.editorActions.getValue(),
 			note = v.body,
-			sharing = v.shareWith || p.sharedWith || [],
+			sharing = p.sharedWith || [],
 			range,
 			container = me.slide.get('ContainerId'),
 			dom = me.slide.get('dom-clone'), img;
 
-
+		if(v.sharingInfo){
+			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
+		}
 
 		//Avoid saving empty notes or just returns.
 		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){

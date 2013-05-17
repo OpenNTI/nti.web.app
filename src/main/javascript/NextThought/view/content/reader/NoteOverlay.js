@@ -558,7 +558,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (o.richEditorActive) {
 			v = o.editorActions.getValue();
 			note = v.body;
-			sharing = v.shareWith;
+			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
 		}
 
 		//Avoid saving empty notes or just returns.

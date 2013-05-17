@@ -962,7 +962,8 @@ Ext.define('NextThought.editor.Actions', {
 
 		return {
 			body : this.getBody(out),
-			shareWith: this.sharedList ? this.sharedList.getValue() : null,
+			shareWith: this.sharedList ? this.sharedList.getValue() : null, //FIXME: We think this is not unused anymore.
+			sharingInfo:  this.sharedList ? this.sharedList.getValue(): null,
 			publish: this.sharedList ?  this.sharedList.getPublished() : this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
 			tags: this.tags ? this.tags.getValue() : undefined
@@ -999,10 +1000,9 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	setSharedWith: function(entities, isPublic){
+	setSharedWith: function(sharingInfo){
 		if(this.sharedList){
-			this.sharedList.setValue(entities);
-			this.sharedList.setPublished(isPublic);
+			this.sharedList.setValue(sharingInfo);
 		}
 	},
 
@@ -1059,7 +1059,7 @@ Ext.define('NextThought.editor.Actions', {
 
 	updatePrefs: function (v) {
 		if(this.sharedList){
-			this.sharedList.setValue(SharingUtils.resolveValue());
+			this.sharedList.setValue(SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue()));
 		}
 	}
 

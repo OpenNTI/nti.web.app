@@ -498,7 +498,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(v, function(){});
+			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v), function(){});
 		}
 	},
 
@@ -527,7 +527,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		rec.set('body', b);
 
-		SharingUtils.setSharedWith(rec,v,function(newRec,op){
+		SharingUtils.setSharedWith(rec, SharingUtils.sharedWithForSharingInfo(v),function(newRec,op){
 			if(op.success){
 				rec.fireEvent('updated',newRec);
 				win.close();

@@ -87,7 +87,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			e.editBody(h.get('body'));
 			e.setTitle(h.get('title'));
 			e.setTags(h.get('tags'));
-			e.setSharedWith(r.get('sharedWith'), r.isPublished());
+			e.setSharedWith(r.getSharingInfo());
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		//If new there will not be a record on this, it will be undefined
 		// NOTE: For now, as a matter of simplicit, we are ignoring the 'publish' field.
 		// We will derive it from the sharedWith value. ~PM.
-		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, undefined, v.shareWith);
+		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.sharingInfo);
 	},
 
 

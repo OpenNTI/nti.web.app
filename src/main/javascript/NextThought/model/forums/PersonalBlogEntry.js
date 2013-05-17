@@ -29,9 +29,24 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 
 	isExplicit: function(){
 		return Boolean(this.getLink('publish')) && !Ext.isEmpty(this.get('sharedWith'));
+	},
+
+	getSharingInfo: function(){
+		var sharingInfo = {};
+		if(this.isExplicit()){
+			sharingInfo = SharingUtils.sharedWithToSharedInfo(this.get('sharedWith'));
+		}
+		else if(this.isPublished()){
+			sharingInfo = {publicToggleOn:true, entities: []};
+		}else if(this.isUnPublished()){
+			sharingInfo = {publicToggleOn:false, entities: []};
+		}
+		else{
+			console.error('Record is not Published, Unpublished or Explicit ***DANGER, record: ', this);
+		}
+
+		return sharingInfo;
 	}
-
-
 
 });
 

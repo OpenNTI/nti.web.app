@@ -3,8 +3,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	alias: 'widget.profile-blog-list-item',
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		sharingActions: 'NextThought.mixins.SharingPreferences'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
 	requires:[
@@ -154,36 +153,22 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	setPublishAndSharingState: function(){
-		/**
-		 * NOTE: Initially we may run into a case where a blog is published but doesn't have have the sharedWith field set.
-		 * This is will be a common case for old blog entries.
-		 * In this function we check both to better reflect what the sharing is.
-		 */
-		var sharedWith = this.record.get('sharedWith'),
-			isPublished = this.record.isPublished();
-
-		// NOTE: Being in a 'published' state is mutually exclusive
-		// with being shared with some private or explicit sharing.
-		if(isPublished){
-			this.publishStateEl.update('Public');
-		}else{
-			this.updateSharedWith('sharedWith', sharedWith);
-		}
+		this.updateSharedWith('sharedWith', this.record.get('sharedWith'));
 	},
 
 
 	updateSharedWith: function(field, value){
-		this.getShortSharingDisplayText(value, function(str){
+		SharingUtils.getShortSharingDisplayText(value, function(str){
 			if(this.publishStateEl){
 				this.publishStateEl.update(str);
 			}
 		}, this);
-		this.getLongSharingDisplayText(value, function(str){
+		SharingUtils.getLongSharingDisplayText(value, function(str){
 			if(this.publishStateEl){
 				this.publishStateEl.set({'data-qtip': str});
 			}
 		}, this);
-		this.publishStateEl[this.isPublic(value) ? 'removeCls':'addCls']('private');
+		this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls':'addCls']('private');
 	},
 
 

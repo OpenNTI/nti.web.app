@@ -12,8 +12,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions: 'NextThought.mixins.FlagActions',
-		sharingPreferences: 'NextThought.mixins.SharingPreferences'
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	ui: 'nt',
@@ -199,7 +198,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
 
-		this.getLongSharingDisplayText(sharedWith, function(str){
+		SharingUtils.getLongSharingDisplayText(sharedWith, function(str){
 			this.sharedTo.update(str);
 			this.sharedTo.set({'data-qtip': str});
 

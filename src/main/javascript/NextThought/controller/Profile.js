@@ -209,7 +209,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogPost: function(editorCmp, record, title, tags, body, autoPublish, shareWith){
+	saveBlogPost: function(editorCmp, record, title, tags, body, sharingInfo){
 
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
@@ -231,7 +231,7 @@ Ext.define('NextThought.controller.Profile', {
 			record.set({'title': title});
 		}
 
-		function finish(entry){
+		function finish(entry, editorCmp){
 			var blogCmp = editorCmp.up('profile-blog');
 			if(!isEdit){
 				try {
@@ -272,20 +272,8 @@ Ext.define('NextThought.controller.Profile', {
 					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 
 					var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
-
-					if(autoPublish !== undefined){
-						if(autoPublish !== blogEntry.isPublished()){
-							blogEntry.publish(editorCmp,finish,this);
-							return;
-						}
-					}
-					if(!Ext.isEmpty(shareWith)){
-						this.updateSharedWith(blogEntry, shareWith, finish, editorCmp);
-						return;
-					}
-
+					this.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
 					unmask();
-					finish(blogEntry);
 				},
 				failure: function(){
 					console.debug('failure',arguments);
@@ -301,19 +289,55 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	updateSharedWith: function(blogEntry, sharedWithValue, cb, cmp){
-		if(!blogEntry || Ext.isEmpty(sharedWithValue)){ return;}
+	handleShareAndPublishState: function(blogEntry, sharingInfo, cb, cmp){
+		function didShareWithChange(a, b){
+			return !(Ext.isEmpty(Ext.Array.difference(a, b)) && Ext.isEmpty(Ext.Array.difference(b, a)));
+		}
 
-		if(!blogEntry.isPublished()){
-			blogEntry.saveField('sharedWith', sharedWithValue, function(){ Ext.callback(cb,undefined, [blogEntry]); });
-		}else{
-			/**
-			 * We cannot have a blog in a state where it's published and shared with some entities.
-			 * Thus we are going to unpublish it and then set it's sharedWith target.
-			 */
-			blogEntry.publish(cmp, function(){
-				blogEntry.saveField('sharedWith', sharedWithValue, function(){ Ext.callback(cb,undefined, [blogEntry]); });
-			},this);
+		function fin(){
+			Ext.callback(cb, undefined, [blogEntry, cmp]);
+		}
+
+		function explicitShare(){
+			blogEntry.saveField('sharedWith', SharingUtils.sharedWithForSharingInfo(sharingInfo), fin);
+		}
+
+		if(!blogEntry){ return;}
+
+		if(!sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)){
+			//Move to unpublished
+			if(blogEntry.isPublished()){
+				blogEntry.publish(cmp, fin,this); //Because we're already published, this will un-publish us.
+			}
+			else if(blogEntry.isExplicit()){
+				explicitShare();
+			}
+			else{
+				fin();
+			}
+		}
+		else if(sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)){
+			//Move to published
+			if(!blogEntry.isPublished()){
+				blogEntry.publish(cmp, fin,this); //Because we're  un-published, this will publish us.
+			}
+			else{
+				fin();
+			}
+		}
+		else{
+			//Move to explicit
+			if(!didShareWithChange(blogEntry.get('sharedWith'), SharingUtils.sharedWithForSharingInfo(sharingInfo))){
+				fin();
+			}
+			else{
+				if(blogEntry.isPublished()){
+					blogEntry.publish(cmp, explicitShare,this);
+				}
+				else{
+					explicitShare();
+				}
+			}
 		}
 	},
 

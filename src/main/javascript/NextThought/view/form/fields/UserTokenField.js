@@ -6,10 +6,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		'NextThought.util.Search'
 	],
 
-	mixins: {
-		'sharingUtils': 'NextThought.mixins.SharingPreferences'
-	},
-
 	cls:'sharing-token-field',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -247,26 +243,28 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		Ext.each(m.selections, function(u){
 			r.push(u.get('Username'));
 		});
-		return this.computeSharedWithList(r);
+
+		return {
+			entities: r,
+			publicToggleOn: this.getPublished()
+		};
 	},
 
 
-	setValue: function(value){
+	setValue: function(sharingInfo){
 		if(!this.rendered){
 			this.on('afterrender', Ext.bind(this.setValue, this, arguments), this, {single:true});
 			return;
 		}
 
 		var me = this, explicitEntities;
-		if(Ext.isEmpty(value)){ return; }
-		if(!Ext.isArray(value)){ value = [value]; }
 		me.reset();
-		explicitEntities = this.resolveExplicitShareTarget(value);
+		explicitEntities = sharingInfo.entities || [];
 		UserRepository.getUser(explicitEntities, function(users){
 			me.addSelection(users);
 		});
 
-		this.setPublished(this.isPublic(value));
+		this.setPublished(sharingInfo.publicToggleOn);
 	},
 
 
