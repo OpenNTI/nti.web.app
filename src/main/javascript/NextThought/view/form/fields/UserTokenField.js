@@ -43,9 +43,28 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
+	TIP: {
+		'public': {
+			title: 'Public Discussion',
+			html: 'Use a public discussion you want to reach the largest possible audience. Add people to notify them of your discussion and encourage participation'
+		},
+		'private':{
+			title:'Private Discussion',
+			html:'Private discussions are limited to the people and groups you specify. Once a discussion has started the audience cannot be expanded.'
+		}
+	},
+
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.selections = [];
+
+		this.tip = Ext.widget('nt-tooltip',Ext.apply({
+			autoHide: false,
+			anchor:'bottom'
+
+		},this.TIP.private));
+		this.on('destroy','destroy',this.tip);
 	},
 
 
@@ -74,6 +93,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 				'mouseover': this.maybeHideSearchListMenu
 			});
 		}
+
+		this.tip.setTarget(this.el);
+		this.mon(this.inputEl,'focus','onTargetOver',this.tip);
 
 		this.setupKeyMap();
 	},
@@ -135,8 +157,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			e.stopEvent();
 			return;
 		}
-		var action = e.getTarget('.on') ? 'removeCls' : 'addCls';
-		this.publishEl[action]('on');
+
+		this.setPublished(!this.getPublished());
 	},
 
 
@@ -269,10 +291,20 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	setPublished: function(value){
-		var action = value ? 'addCls' : 'removeCls';
+		var action = value ? 'addCls' : 'removeCls',
+			state = value ? 'public' : 'private',
+			tip = this.TIP[state];
+
 		if(this.publishEl){
 			this.publishEl[action]('on');
 		}
+
+
+		this.tip.suspendLayouts();
+		this.tip.setTitle(tip.title);
+		this.tip.update(tip.html);
+		this.tip.setWidth(this.getWidth());
+		this.tip.resumeLayouts(true);
 	},
 
 
@@ -387,7 +419,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
-		this.publishEl.removeCls('on'); // Default is private state.
+		this.setPublished(false);
 		this.resetPlaceholderLabel();
 	},
 

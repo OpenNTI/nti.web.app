@@ -153,3 +153,37 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
         }
     }
 });
+
+
+Ext.define('NextThought.view.tip.Tooltip',{
+	extend: 'Ext.tip.ToolTip',
+	alias: 'widget.nt-tooltip',
+
+	cls:'spec',
+
+	//center the tip pointer
+	//We prefer to align to the center posisitions instead of the corner positions.
+	syncAnchor: function() {
+        var me = this, pos;
+		me.callParent(arguments);
+        switch (me.tipAnchor.charAt(0)) {
+        case 't': pos = 'b-t'; break;
+        case 'r': pos = 'l-r'; break;
+        case 'b': pos = 't-b'; break;
+        default:  pos = 'r-l'; break;
+        }
+        me.anchorEl.alignTo(me.el, pos);
+    },
+
+
+	//We prefer to align to the center posisitions instead of the corner positions.
+	getAnchorAlign: function() {
+        switch (this.anchor) {
+        case 'top': return 't-b';
+        case 'left': return 'l-r';
+        case 'right': return 'r-l';
+        default: return 'b-t';
+        }
+    }
+
+});

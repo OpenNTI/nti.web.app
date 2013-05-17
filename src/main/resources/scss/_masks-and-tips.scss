@@ -129,11 +129,25 @@
 	border-radius: 0 !important;
 	box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
 
+
+	.x-tip-header-text {
+		font-size: 11px;
+		font-weight: 600;
+		color: #ffffff;
+		text-transform: uppercase;
+	}
+
 	.x-tip-body{
 		text-transform: uppercase;
 		color: #ffffff !important;
 		font-size: 11px;
 		font-weight: 600;
+	}
+
+	&.spec {
+		.x-tip-body {
+			text-transform: none;
+		}
 	}
 
 	.x-tip-anchor {
