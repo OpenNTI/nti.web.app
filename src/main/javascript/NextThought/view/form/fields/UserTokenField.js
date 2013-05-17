@@ -13,7 +13,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	cls:'sharing-token-field',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'control publish', 'data-qtip': 'Publish State'},
+		{cls: 'control publish on', 'data-qtip': 'Publish State'},
 		{cls:'tokens',cn:[
 			{tag:'span', cls:'inputArea', cn:[
 				{tag:'span', cls:'plus'},
