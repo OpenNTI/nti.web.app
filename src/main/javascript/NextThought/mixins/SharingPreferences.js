@@ -97,7 +97,7 @@ Ext.define('NextThought.mixins.SharingPreferences', {
 
 				others = resolvedUsers.length - names.length;
 				if(others){
-					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others.length, 'other')));
+					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others, 'other')));
 				}
 				else if(names.length > 1){
 					names.push(' and '+names.pop());
