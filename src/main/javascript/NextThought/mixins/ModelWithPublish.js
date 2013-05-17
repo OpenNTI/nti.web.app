@@ -29,11 +29,5 @@ Ext.define('NextThought.mixins.ModelWithPublish', {
 			}
 		});
 
-	},
-
-	valuesAffectedByLinks: function(){
-		var result = this.callParent(arguments);
-		(result || []).push('published');
-		return result;
 	}
 });

@@ -203,7 +203,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	valuesAffectedByLinks: function(){
-		return ['flagged', 'favorited', 'liked'];
+		return ['flagged', 'favorited', 'liked', 'published'];
 	},
 
 
