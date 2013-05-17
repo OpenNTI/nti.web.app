@@ -138,7 +138,7 @@ Ext.define('NextThought.model.Service', {
 					}
 				}
 			}
-			return !Boolean(collection);
+			return !collection;
 		});
 
 		return Ext.clone(collection);
@@ -266,17 +266,21 @@ Ext.define('NextThought.model.Service', {
 		try{
 
 			function onSuccess(resp){
-				pageInfos = ParseUtils.parseItems(resp.responseText);
+				var pageInfos = ParseUtils.parseItems(resp.responseText),
+					//We claim success but the damn browsers like to give the wrong object
+					//type from cache.  They don't seem to listen to Vary: Accept or any
+					//of the other myriad of caching headers supplied by the server
+					pageInfo = pageInfos.first();
 
-				//We claim success but the damn browsers like to give the wrong object
-				//type from cache.  They don't seem to listen to Vary: Accept or any
-				//of the other myriad of caching headers supplied by the server
-				pageInfo = pageInfos.first();
 				if(pageInfo && pageInfo.get('MimeType') !== mime){
 					console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
 					Ext.callback(failure, scope, [{}, resp]);
 					return;
 				}
+
+				Ext.each(pageInfos,function(p){
+					(p||{}).originalNTIIDRequested = ntiid;
+				});
 				Ext.callback(success, scope, pageInfos);
 			}
 
