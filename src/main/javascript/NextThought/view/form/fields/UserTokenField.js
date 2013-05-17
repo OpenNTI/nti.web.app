@@ -65,6 +65,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			store:me.store,
 			renderTo: this.scrollParentEl || Ext.getBody()
 		});
+		this.mon(this.store,'load','alignPicker',this);
+
 		this.pickerView.addCls(this.ownerCls);
 		this.mon(this.pickerView, 'select', this.searchItemSelected, this);
 		this.on('destroy','destroy',this.pickerView);
@@ -230,7 +232,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	collapse: function(){
-		this.getPicker().hide();
+		this.getPicker().hide().setHeight(null);
 	},
 
 
@@ -301,6 +303,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		if(key === e.ESC){
 			this.collapse();
 			e.stopEvent();
+			this.inputEl.dom.value = '';
 			this.inputEl.focus(100);
 			return true;
 		}
@@ -339,8 +342,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 				this.pickerView.setWidth(w);
 			}
 			this.store.search(value);
-			this.pickerView.showBy(this.el, 'tl-bl',[0,0]);
-			Ext.defer(this.alignPicker, 1, this);
+			this.alignPicker();
 			this.inputEl.focus(100);
 		}
 	},
@@ -352,26 +354,35 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	alignPicker: function(){
-		var me = this,
+		this.getPicker().setHeight(null);
+		var me = this, x, y,
+			padding = 5,
+			above = false,
+			align = 't-b',
 			picker = me.getPicker(),
-			heightAbove = me.getPosition()[1] - Ext.getBody().getScroll().top,
-			heightBelow = Ext.Element.getViewHeight() - heightAbove - me.getHeight(),
-			space = Math.max(heightAbove, heightBelow),
-			anchor = 'tl-bl', x, y;
+			spaceAbove = me.inputEl.getY(),
+			spaceBelow = Ext.Element.getViewHeight() - (me.getY() + me.getHeight()),
+			pickerHeight = picker.getHeight(),
+			firstNode = picker.getNode(0),
+			minListHeight = (firstNode && (Ext.fly(firstNode).getHeight()*3)) || 150;//some safe number if we can't resolve the height of 3 items.
 
-		if(picker.getHeight() > (space-5)){
-			picker.setHeight(space-5);
-
-			if(heightAbove > heightBelow){
-				anchor = 'bl-tl';
-				x = picker.getAlignToXY(this.el, anchor, [0,0]);
-				y = picker.getAlignToXY(this.inputEl, anchor, [0,0]);
-			}else{
-				x = picker.getAlignToXY(this.el, anchor, [0,0]);
-				y = picker.getAlignToXY(this.el, anchor, [0,0]);
+		function adjHeight(n){
+			if(pickerHeight > n){
+				picker.setHeight(n-padding);
 			}
-			picker.setPagePosition(x[0], y[1], false);
 		}
+
+		if(spaceBelow < minListHeight){
+			align = 'b-t';
+			above = true;
+		}
+
+		adjHeight(above? spaceAbove : spaceBelow);
+
+		x = picker.getAlignToXY(this.el, 'l-l')[0];
+		y = picker.getAlignToXY(this.inputEl, align)[1];
+
+		picker.showAt(x,y);
 	},
 
 	reset: function(){
@@ -423,6 +434,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		if( v ){ this.removeToken(v, p); }
 		this.inputEl.focus();
 	},
+
 
 	destroy: function(){
 		this.callParent(arguments);

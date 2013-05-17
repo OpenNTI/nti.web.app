@@ -15,7 +15,6 @@ Ext.define('NextThought.mixins.GroupLike',{
 	//of the ntiid would be 'Unknown'
 	isSystem: function(){
 		var c = this.get('Creator').toLowerCase();
-		console.trace('This is for legacy data that we shouldnt need to take into consideration again. None of it should be in prod');
 		return this.SYSTEM_CREATOR === c || this.OLD_SYSTEM_CREATOR === c;
 	},
 
@@ -23,7 +22,6 @@ Ext.define('NextThought.mixins.GroupLike',{
 	//A method that can be used to detect if this is the old system created 'Everyone' group.
 	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
 	isEveryone: function(){
-		console.trace('This is for legacy data that we shouldnt need to take into consideration again. None of it should be in prod');
 		return (!this.get('Creator') || this.isSystem()) && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
 	},
 
