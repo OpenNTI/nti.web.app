@@ -68,9 +68,7 @@ Ext.define('NextThought.util.Sharing',{
 
 	//TODO need to check published status for the case of blogs NO?
 	isPublic: function(sharedWith){
-		/**
-		 * 	NOTE: An object is public, if it's shared with all communities that the user belong to.
-		 */
+		//NOTE: An object is public, if it's shared with all communities that the user belong to.
 
 		if(Ext.isEmpty(sharedWith)){ return false; }
 		var communities = [], sharedWithIds;
@@ -103,7 +101,6 @@ Ext.define('NextThought.util.Sharing',{
 
 	sharedWithToSharedInfo: function(sharedWith){
 		var isPublic = this.isPublic(sharedWith),
-			sharedWithIds,
 			communities =[],
 			list = [],
 			shareInfo = {publicToggleOn: isPublic};
@@ -167,7 +164,7 @@ Ext.define('NextThought.util.Sharing',{
 				}
 
 				str = Ext.String.format('{0} {1}', prefix, names.join(', '));
-				Ext.callback(callback, scope, [str])
+				Ext.callback(callback, scope, [str]);
 			});
 		}
 
@@ -176,7 +173,8 @@ Ext.define('NextThought.util.Sharing',{
 	getShortSharingDisplayText: function(shareWith, callback, scope){
 		var shareInfo = this.sharedWithToSharedInfo(shareWith),
 			explicitEntities = shareInfo.entities,
-			isPublic = shareInfo.publicToggleOn;
+			isPublic = shareInfo.publicToggleOn,
+			str;
 
 		if(Ext.isEmpty(explicitEntities)){
 			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
@@ -188,8 +186,8 @@ Ext.define('NextThought.util.Sharing',{
 		else{
 			//Exactly one, resolve the user then callback
 			UserRepository.getUser(explicitEntities.first(), function(resolved){
-				str = Ext.String.format('{0} {1}', isPublic ? 'Public and' : 'Shared with', resolved.getName());
-				Ext.callback(callback, scope, [str])
+				var str = Ext.String.format('{0} {1}', isPublic ? 'Public and' : 'Shared with', resolved.getName());
+				Ext.callback(callback, scope, [str]);
 			});
 		}
 	}

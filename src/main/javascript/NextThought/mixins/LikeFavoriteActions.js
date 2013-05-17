@@ -39,7 +39,7 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 
 	updateLikeAndFavoriteFromRecord: function(record){
-		var rec = record || this.getRecord(),
+		var rec = record || this.getRecord(), fnName,
 			me = this;
 
 		if(!rec){return;}
@@ -55,11 +55,12 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 		}
 
 		if( me.liked ){
-			var fnName = rec.isLikeable() ? 'show' :  'hide';
+			fnName = rec.isLikeable() ? 'show' :  'hide';
 			me.liked.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
 		}
+
 		if( me.favorites ){
-			var fnName = rec.isFavoritable() ? 'show' :  'hide';
+			fnName = rec.isFavoritable() ? 'show' :  'hide';
 			me.favorites.setVisibilityMode(Ext.dom.Element.DISPLAY)[fnName]();
 		}
 

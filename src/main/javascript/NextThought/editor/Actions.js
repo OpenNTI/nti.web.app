@@ -524,7 +524,7 @@ Ext.define('NextThought.editor.Actions', {
 	hideStylePopover: function() {
 		var t = this.editor.down('.action.text-controls', undefined, true);
 		if(t){
-			t['removeCls']('selected');
+			t.removeCls('selected');
 		} 
 	},
 

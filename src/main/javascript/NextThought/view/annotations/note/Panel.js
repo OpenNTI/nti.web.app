@@ -108,7 +108,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		me.setRecord(me.record);
 
 		if (me.record.placeholder) {
-            //me.setPlaceholderContent();
+			//me.setPlaceholderContent();
 			//just return, setPlaceholderContent is called from updateFromRecord, which is called by setRecord
 			return;
 		}
@@ -127,7 +127,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 		else{
 			me.replyButton.remove();
-		 	if(me.shareButton){ me.shareButton.remove(); }
+			if(me.shareButton){ me.shareButton.remove(); }
 		}
 
 		me.mon(me.editor.down('.cancel'), 'click', me.deactivateReplyEditor, me);
@@ -149,9 +149,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	disable: function(){
 		var me = this,
-			e = me.editor || {down:Ext.emptyFn},
-			cancel = e.down('.cancel'),
-			save = e.down('.save');
+				e = me.editor || {down:Ext.emptyFn},
+				cancel = e.down('.cancel'),
+				save = e.down('.save');
 
 		me.replyOptions.remove();
 
@@ -193,7 +193,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	fillInShare: function(sharedWith){
 		var val, names = [], others,
-			tpl = Ext.DomHelper.createTemplate({tag:'name', 'data-profile-idx':'{1}', html:'{0}'});
+				tpl = Ext.DomHelper.createTemplate({tag:'name', 'data-profile-idx':'{1}', html:'{0}'});
 
 
 		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
@@ -204,8 +204,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 			this.sharedTo.select('name[data-profile-idx]').on('click',function(e){
 				var a = e.getTarget('name'),
-					i = a && a.getAttribute('data-profile-idx'),
-					u = a && sharedWith[i];
+						i = a && a.getAttribute('data-profile-idx'),
+						u = a && sharedWith[i];
 
 				e.stopEvent();
 				if(a && !Ext.isEmpty(i) && u && u.getProfileUrl){
@@ -217,12 +217,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	scrollIntoView: function(){
-        var scroller = this.el.up('.note-content-container.scrollbody');
-        if( this.noteBody ){
-            this.noteBody.addCls('hover');
-        }
-        this.responseBox.scrollIntoView(scroller);
-    },
+		var scroller = this.el.up('.note-content-container.scrollbody');
+		if( this.noteBody ){
+			this.noteBody.addCls('hover');
+		}
+		this.responseBox.scrollIntoView(scroller);
+	},
 
 
 	droppedWhiteboard: function(guid){
@@ -238,8 +238,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
-			me = this,
-			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+				me = this,
+				r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record){
 			if(me.isDestroyed){ return; }
@@ -249,7 +249,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				if (me.recordUpdated) {
 					me.recordUpdated(r);
 				}
-                AnnotationUtils.updateHistory(record);
+				AnnotationUtils.updateHistory(record);
 			}
 		}
 
@@ -264,7 +264,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 				r.save({callback: function(record, request){
 					var success = request.success,
-						rec = success ? request.records[0]: null;
+							rec = success ? request.records[0]: null;
 					if(success){
 						r.fireEvent('updated', rec);
 						me.setRecord(rec);
@@ -324,20 +324,20 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var r = newRecord || this.record;
 
 		try {
-            UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
+			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 
 			if(this.sharedTo){
 				UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
 			}
 
-            this.time.update(r.getRelativeTimeString());
+			this.time.update(r.getRelativeTimeString());
 			this.noteBody.removeCls("deleted-reply");
 
 			if(r.placeholder){
 				this.setPlaceholderContent();
 			}
 
-            this.reflectLikeAndFavorite(r);
+			this.reflectLikeAndFavorite(r);
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
@@ -372,8 +372,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.mun(this.record, 'child-added', this.addNewChild, this);
 			this.mun(this.record, 'child-removed', this.removedChild, this);
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
-            this.mun(this.record, 'changed', this.recordChanged, this);
-            this.mun(this.record, 'updated', this.recordUpdated, this);
+			this.mun(this.record, 'changed', this.recordChanged, this);
+			this.mun(this.record, 'updated', this.recordUpdated, this);
 			this.record.removeObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 			this.stopListeningForLikeAndFavoriteChanges(this.record);
 			this.stopListeningForFlagChanges(this.record);
@@ -389,8 +389,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//used by a controller in a component query
 		this.recordIdHash = IdCache.getIdentifier(r.getId());
 
-        try{
-            this.updateFromRecord();
+		try{
+			this.updateFromRecord();
 		}
 		catch(e){
 			console.error(Globals.getError(e));
@@ -412,13 +412,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			'child-removed': this.removedChild,
 			scope: this
 		});
-        this.mon(r, {
-	        single:true,
-	        scope: this,
-	        'changed': function(){ this.recordChanged(); },
-            'updated': this.recordUpdated,
-	        'destroy': this.wasDeleted
-        });
+		this.mon(r, {
+			single:true,
+			scope: this,
+			'changed': function(){ this.recordChanged(); },
+			'updated': this.recordUpdated,
+			'destroy': this.wasDeleted
+		});
 
 		this.record.addObserverForField(this, 'AdjustedReferenceCount', this.updateCount, this);
 		this.addAdditionalRecordListeners(r);
@@ -505,21 +505,21 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(!this.getRoot()){ return; }
 
 		var cmp, prefix = this.getRoot().replyIdPrefix();
-        if(this.replyToId){
-            cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, prefix));
-            if(cmp){
-                cmp.activateReplyEditor();
-                delete this.replyToId;
-            }
-        }
-        else if(this.scrollToId) {
-            cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, prefix));
-            if(cmp){
-                cmp.scrollIntoView();
-                delete this.scrollToId;
-            }
-        }
-    },
+		if(this.replyToId){
+			cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, prefix));
+			if(cmp){
+				cmp.activateReplyEditor();
+				delete this.replyToId;
+			}
+		}
+		else if(this.scrollToId) {
+			cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, prefix));
+			if(cmp){
+				cmp.scrollIntoView();
+				delete this.scrollToId;
+			}
+		}
+	},
 
 
 	setContent: function(text){
@@ -537,12 +537,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		Ext.each(this.text.query('.whiteboard-container'),
 				function(wb){
-						Ext.fly(wb).on('click', this.click, this);
+					Ext.fly(wb).on('click', this.click, this);
 
-						if(!$AppConfig.service.canShare()){
-							Ext.fly(wb).select('.overlay').setStyle({bottom:0});
-							Ext.fly(wb).select('.toolbar').remove();
-						}
+					if(!$AppConfig.service.canShare()){
+						Ext.fly(wb).select('.overlay').setStyle({bottom:0});
+						Ext.fly(wb).select('.toolbar').remove();
+					}
 				},
 				this);
 
@@ -558,7 +558,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 			if(newContext){
 				newContext = this.fixUpCopiedContext(newContext);
-                this.context.appendChild(newContext);
+				this.context.appendChild(newContext);
 			}
 
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
@@ -595,7 +595,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	//Sets cmp as the component that contains the active editor
 	setEditorActive: function(cmp){
 		var active = Boolean(cmp),
-			root = this.getRoot();
+				root = this.getRoot();
 		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
 		if(root.editorActive() === active){
 			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?', cmp);
@@ -742,7 +742,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		recordCollection.each(function(record){
 
 			var guid = IdCache.getComponentId(record, null, prefix),
-				add = true;
+					add = true;
 
 			if (record.getModelName() !== 'Note') {
 				console.warn('can not add item, it is not a note and I am not prepared to handle that.');
@@ -770,8 +770,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	adjustRootsReferenceCount: function(r, added){
-        var root = r.parent,
-	    rootCmp = this.rootToCountComponentsFrom();
+		var root = r.parent,
+				rootCmp = this.rootToCountComponentsFrom();
 
 		while(root && root.parent){root = root.parent;}
 
@@ -793,16 +793,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//direct children count:
 		var c = this.items.getCount(),
 		//panels below this panel:
-			children = this.query('note-panel')||[],
-			pluck = Ext.Array.pluck,
-			contains = Ext.Array.contains,
+				children = this.query('note-panel')||[],
+				pluck = Ext.Array.pluck,
+				contains = Ext.Array.contains,
 		//do any have the deleting flag?
-			anyDeleting = contains(pluck(children,'deleting'), true),
+				anyDeleting = contains(pluck(children,'deleting'), true),
 		//are any of the remaining panels not placeholders? If so, then we can not safely remove this panel.
 		//safeToCleanMe means all the panels below this one are only placeholder panels.
-			safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children,'record'),'placeholder'),Boolean),false),
+				safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children,'record'),'placeholder'),Boolean),false),
 		//if the component that was removed from this panel was deleting, or any panel below this was deleting.
-			deleting = cmp.deleting || anyDeleting;
+				deleting = cmp.deleting || anyDeleting;
 
 		console.debug('removed child, it was deleting: ',cmp.deleting,
 				', or any child below me is deleting: ', anyDeleting,

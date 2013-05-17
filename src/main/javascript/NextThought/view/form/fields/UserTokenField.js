@@ -63,7 +63,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			autoHide: false,
 			anchor:'bottom'
 
-		},this.TIP.private));
+		},this.TIP['private']));
 		this.on('destroy','destroy',this.tip);
 	},
 
