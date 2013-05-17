@@ -23,6 +23,7 @@ a{
 		box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
 	}
 
+	.content-slidevideo,
 	.content-slidedeck,
 	.content-card {
 		position: relative;
@@ -81,10 +82,12 @@ a{
 		}
 	}
 
+	.content-slidevideo-container,
 	.content-slidedeck-container {
 		margin: 0;
 	}
 
+	.content-slidevideo,
 	.content-slidedeck {
 		$thumbWidth: 150px;
 
