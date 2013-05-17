@@ -11,33 +11,37 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 	ui: 'content-card',
 	cls: 'content-card-container',
 
+
+	statics: {
+		getData: function(dom, reader){
+			var el = Ext.get(dom),
+				data = DomUtils.parseDomObject(dom),
+				description = el.down('span.description'),
+				thumbnail = el.down('img');
+
+			//the data-href has the adjusted href.
+			data.href = data['attribute-data-href'];
+
+			Ext.applyIf(data,{
+				basePath: reader && reader.basePath,
+				description: (description && description.getHTML()) || '',
+				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
+			});
+			return data;
+		}
+	},
+
+
 	constructor: function(config){
 		if(!config || !config.contentElement){
 			throw 'you must supply a contentElement';
 		}
 
-		var dom = config.contentElement,
-			el = Ext.get(dom),
-			reader = config.reader,
-			data = DomUtils.parseDomObject(dom),
-			description = el.down('span.description'),
-			thumbnail = el.down('img');
-
-		//the data-href has the adjusted href.
-		data.href = data['attribute-data-href'];
-
-		Ext.applyIf(data,{
-			basePath: reader && reader.basePath,
-			description: (description && description.getHTML()) || '',
-			thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
-		});
-
-
 		Ext.apply(config,{
 			layout:'fit',
 			items:[{
 				xtype: 'content-card',
-				data: data
+				data: this.self.getData(config.contentElement,config.reader)
 			}]
 		});
 

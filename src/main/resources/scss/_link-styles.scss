@@ -1,4 +1,59 @@
+@mixin content-card-def {
+	position: relative;
+	overflow: hidden;
+	background: #fafdff;
+	border: 1px solid #e3f2fc;
+	cursor: pointer;
 
+	$thumbWidth: 80px;
+
+	a, a:link, a:visited, a:active {
+		text-decoration: none;
+	}
+
+	.controls {
+		position: absolute;
+		top: 0;
+		right: 0;
+		@include like-and-favorite;
+		//.like:not(.on){
+		//	display: none;
+		//}
+	}
+
+	.thumbnail {
+		background:{
+			size: cover;
+			repeat: no-repeat;
+			position: center;
+		}
+		border-right: 1px solid #f8f8f8;
+		box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+		float: left;
+		width: $thumbWidth;
+		height: 100px;
+	}
+
+	.meta {
+		padding: 10px 45px 10px 0;
+		margin-left: $thumbWidth+15px;
+
+		.title {
+			font: normal 600 15px/20px $font;
+			color: $primary-grey;
+		}
+		.byline {
+			font: normal 600 10px/10px $font;
+			text-transform: uppercase;
+			color: $primary-blue;
+		}
+		.description {
+			margin-top: 5px;
+			font: normal normal 12px/normal $font;
+			color: $primary-grey;
+		}
+	}
+}
 
 a{
     &.internal-link {
@@ -14,6 +69,13 @@ a{
 }
 
 
+.content-slidevideo,
+.content-slidedeck,
+.content-card,
+.note-window .note.main-view .content-card{
+	@include content-card-def;
+}
+
 .component-overlay {
 
 	.content-card-target-container {
@@ -21,65 +83,6 @@ a{
 		border: 1px solid $border-grey;
 		border-radius: 1px;
 		box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
-	}
-
-	.content-slidevideo,
-	.content-slidedeck,
-	.content-card {
-		position: relative;
-		overflow: hidden;
-		background: #fafdff;
-		border: 1px solid #e3f2fc;
-		cursor: pointer;
-
-		$thumbWidth: 80px;
-
-		a, a:link, a:visited, a:active {
-			text-decoration: none;
-		}
-
-		.controls {
-			position: absolute;
-			top: 0;
-			right: 0;
-			@include like-and-favorite;
-			//.like:not(.on){
-			//	display: none;
-			//}
-		}
-
-		.thumbnail {
-			background:{
-				size: cover;
-				repeat: no-repeat;
-				position: center;
-			}
-			border-right: 1px solid #f8f8f8;
-			box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
-			float: left;
-			width: $thumbWidth;
-			height: 100px;
-		}
-
-		.meta {
-			padding: 10px 45px 10px 0;
-			margin-left: $thumbWidth+15px;
-
-			.title {
-				font: normal 600 15px/20px $font;
-				color: $primary-grey;
-			}
-			.byline {
-				font: normal 600 10px/10px $font;
-				text-transform: uppercase;
-				color: $primary-blue;
-			}
-			.description {
-				margin-top: 5px;
-				font: normal normal 12px/normal $font;
-				color: $primary-grey;
-			}
-		}
 	}
 
 	.content-slidevideo-container,

@@ -153,7 +153,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	fixUpCopiedContext: function(n){
-		var node = Ext.get(n),
+		var node = Ext.get(n), cardTpl,
 			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 			// when queried at this point.
 
@@ -200,6 +200,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
                 Ext.fly(h).addCls('highlight-mouse-over');
             }
         }, this);
+
+		cardTpl = Ext.DomHelper.createTemplate({cls:'content-card', html:NextThought.view.cards.Card.prototype.renderTpl.html});
+		Ext.each(node.query('object[type*=nticard]'), function(c){
+			var d = NextThought.view.cards.OverlayedPanel.getData(c);
+			cardTpl.insertAfter(c,d);
+			Ext.fly(c).remove();
+		});
 
 		return node.dom;
 	},
