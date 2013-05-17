@@ -17,7 +17,7 @@ Ext.define('NextThought.view.forums.Editor',{
 			]}
 		},
 		{ cls: 'forums-topic-editor', cn: {
-			cls: 'editor active',
+			cls: 'editor active basic',
 			cn:[{
 				cls: 'main',
 				cn:[{
@@ -30,14 +30,6 @@ Ext.define('NextThought.view.forums.Editor',{
 						{cls: 'tags'}
 					]
 				},{
-					cls: 'toolbar',
-					cn: [{
-						cls: 'left',
-						cn: [{cls: 'action bold', 'data-qtip': 'Bold'},
-							{cls:'action italic', 'data-qtip': 'Italic'},
-							{cls:'action underline', 'data-qtip': 'Underline'}]
-					}]
-				},{
 					cls: 'content',
 					contentEditable: true,
 					unselectable: 'off',
@@ -49,7 +41,16 @@ Ext.define('NextThought.view.forums.Editor',{
 				cls: 'footer',
 				cn: [{
 					cls: 'left',
-					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'}]
+					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'},
+						{
+							cls: 'action text-controls', 'data-qtip': 'Text Controls', cn:[
+							{cls:'popover controls', cn:[
+								{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
+								{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
+								{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+							]}
+						]
+						}]
 				},{
 					cls: 'right',
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
