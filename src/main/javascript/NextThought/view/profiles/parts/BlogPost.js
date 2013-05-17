@@ -15,7 +15,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.renderData = Ext.apply(this.renderData||{},{
 			showName: false,
 			headerCls: 'blog-post',
-			path:'Thoughts'
+			path:'Thoughts',
+			showPermissions: true
 		});
 	},
 

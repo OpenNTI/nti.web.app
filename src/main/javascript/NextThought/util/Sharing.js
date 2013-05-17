@@ -151,7 +151,7 @@ Ext.define('NextThought.util.Sharing',{
 					var dn = isMe(u) ? 'me' : u.getName();
 					names.push(dn);
 					names.join(',');
-					return maxLength <= 0 || names.length <= maxLength;
+					return !maxLength || names.length <= maxLength;
 				});
 
 				if(tpl){

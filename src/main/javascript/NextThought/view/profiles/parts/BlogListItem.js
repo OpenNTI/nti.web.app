@@ -17,8 +17,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 		{ cls: 'title', html:'{title}' },
 		{ cls: 'meta', cn: [
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
+			{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
-				{ tag:'span', cls: 'state link', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}//flag?

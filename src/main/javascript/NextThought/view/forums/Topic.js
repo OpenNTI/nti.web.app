@@ -40,8 +40,10 @@ Ext.define('NextThought.view.forums.Topic',{
 			{ tag: 'tpl', 'if':'showName', cn:
 				{ tag:'span', cls: 'name link', html: '{headline.Creator}'}},
 			{ tag:'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
+			{ tag: 'tpl', 'if':'headline.isModifiable || showPermissions', cn:[
+				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
+			]},
 			{ tag: 'tpl', 'if':'headline.isModifiable', cn:[
-				{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
 				{ tag:'span', cls: 'edit link', html: 'Edit'},
 				{ tag:'span', cls: 'delete link', html: 'Delete'}
 			]}
