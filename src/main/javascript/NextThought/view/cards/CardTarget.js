@@ -14,7 +14,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	setupContentElement: function(){
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
-			margin: '40px 0 0 0'
+			margin: '60px 0 0 0'
 		});
 	},
 
@@ -74,8 +74,6 @@ Ext.define('NextThought.view.cards.CardTarget',{
 				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
 
 			this.setHeight(h);
-
-//			this.iframe.alignTo(this.el,'tl-tl').setSize(this.getWidth(),h);
 		}
 		catch( e ) {
 			console.warn(e.message);
@@ -93,7 +91,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 
-		range.selectNode(this.contentElement);
+		range.selectNodeContents(this.contentElement);
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	}
 });
