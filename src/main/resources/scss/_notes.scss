@@ -221,9 +221,6 @@
 
 		.editor {
 			.main{
-				padding-left: 13px;
-				padding-right: 13px;
-
 				.toolbar{
 					.action.share{
 						text-overflow: ellipsis;
@@ -232,6 +229,9 @@
 						overflow: hidden;
 						padding: 0px 18px 0 18px;
 					}
+				}
+				.content{
+					margin: 0 13px;
 				}
 			}
 			//instance specific style

@@ -130,14 +130,19 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
-	updatePlaceholderLabel:function(e){
-		this.inputEl.set({'placeholder':'Add'});
+	setPlaceholderText: function(text){
+		this.inputEl.set({'placeholder': text});
+		this.sizerEl.update(text+'##');
+	},
+
+
+	updatePlaceholderLabel: function(e){
+		this.setPlaceholderText('Add');
 	},
 
 
 	resetPlaceholderLabel: function(){
-		this.inputEl.set({'placeholder':'Add people to the discussion'});
-		this.sizerEl.update('Add people to the discussion##');
+		this.setPlaceholderText('Add people to the discussion');
 	},
 
 
@@ -182,6 +187,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		if(this.isToken(value)){
 			this.addTag(value, type);
+			this.updatePlaceholderLabel();
 		}
 	},
 
@@ -301,5 +307,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		if( v ){ this.removeToken(v, p); }
 		this.inputEl.focus();
+	},
+
+	destroy: function(){
+		this.callParent(arguments);
+		console.warn('token field destoryed.');
 	}
 });

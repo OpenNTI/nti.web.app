@@ -79,7 +79,11 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 
 	onSelect: function(){
 		this.hide();
-	}
+	},
 
+	destroy: function(){
+		this.callParent(arguments);
+		console.warn('destorying list view...', arguments);
+	}
 
 });

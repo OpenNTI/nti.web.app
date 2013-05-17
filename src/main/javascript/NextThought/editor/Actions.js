@@ -67,6 +67,7 @@ Ext.define('NextThought.editor.Actions', {
 		me.shareEl = this.editor.down('.action.share');
 		if( me.shareEl ){
 			me.shareMenu = Ext.widget('share-menu');
+			cmp.on('destroy', 'destroy', me.shareMenu);
 			if (!$AppConfig.service.canShare()) {
 				me.shareEl.hide();
 			}
@@ -97,6 +98,7 @@ Ext.define('NextThought.editor.Actions', {
 		me.tagsEl = editorEl.down('.tags');
 		if( me.tagsEl ){
 			me.tags = Ext.widget('tags',{renderTo: me.tagsEl, tabIndex:2});
+			cmp.on('destroy', 'destroy', me.tags);
 			me.mon(me.tags,'blur',function(){
 				var el = editorEl.down('.content');
 				Ext.defer(el.focus,10,el);
@@ -111,6 +113,7 @@ Ext.define('NextThought.editor.Actions', {
 				tabIndex:3,
 				ownerCls: cmp.xtype
 			});
+			cmp.on('destroy', 'destroy', me.sharedList);
 		}
 
 		me.publishEl = editorEl.down('.action.publish');
