@@ -696,3 +696,11 @@ $experimental-support-for-svg: true;
 		}
 	}
 }
+
+.share-search-mask{
+	background: #343434;
+	color: $tertiary-grey;
+	.x-mask-msg-text{
+		background-image: url(../images/elements/ajax-loader-dark.gif);
+	}
+}

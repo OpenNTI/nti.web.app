@@ -10,8 +10,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 
 	constrainTo: Ext.getBody(),
 	loadingHeight: 40,
-	loadingText: 'Searching...',
-	loadingCls: 'search',
+
 	plain: true,
 	ui:'nt',
 	baseCls: 'x-menu',
@@ -56,6 +55,16 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 		select:'onSelect'
 	},
 
+	constructor: function(cfg){
+		var ownerCls = cfg.ownerCls || '';
+		this.loadMask = {
+			msg: 'Searching...',
+			maskCls: 'share-search-mask '+ownerCls,
+			cls: 'share-search-mask '+ownerCls,
+			msgCls: 'share-search-mask '+ownerCls
+		};
+		return this.callParent([cfg]);
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
