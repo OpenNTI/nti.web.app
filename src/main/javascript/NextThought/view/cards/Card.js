@@ -45,10 +45,10 @@ Ext.define('NextThought.view.cards.Card',{
 
 	shouldOpenInApp: function(url, basePath){
 		var isNTIID = ParseUtils.parseNtiid(url) !== null,
-			isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
+			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
 			pdf = (/\.pdf$/i).test((url||'').split('?')[0]);
 
-		return isNTIID || (pdf && isLocal);
+		return isNTIID || pdf;
 	},
 
 
