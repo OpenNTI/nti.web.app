@@ -999,9 +999,10 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	setSharedWith: function(value){
+	setSharedWith: function(entities, isPublic){
 		if(this.sharedList){
-			this.sharedList.setValue(value);
+			this.sharedList.setValue(entities);
+			this.sharedList.setPublished(isPublic);
 		}
 	},
 

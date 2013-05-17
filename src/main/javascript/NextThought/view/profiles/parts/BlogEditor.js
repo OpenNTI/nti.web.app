@@ -87,8 +87,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			e.editBody(h.get('body'));
 			e.setTitle(h.get('title'));
 			e.setTags(h.get('tags'));
-			e.setSharedWith(r.get('sharedWith'));
-			e.setPublished(r.isPublished());
+			e.setSharedWith(r.get('sharedWith'), r.isPublished());
 		}
 
 		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
