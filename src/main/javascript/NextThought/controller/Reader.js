@@ -100,7 +100,7 @@ Ext.define('NextThought.controller.Reader', {
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
 			pw = this.getLibraryPageWigets(),
-			origin = pageInfo.contentOrig;
+			origin = pageInfo && pageInfo.contentOrig;
 
 		pg[fn]();
 		pw[fn]();
