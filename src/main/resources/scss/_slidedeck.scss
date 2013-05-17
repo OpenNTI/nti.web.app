@@ -9,678 +9,690 @@ $slidedeck-selected-background: rgba(41, 41, 41, 0.5);
 $experimental-support-for-svg: true;
 
 @mixin slide-button {
-  padding: 5px 16px;
-  border-radius: 3px;
-  border: 1px solid black;
-  color: $tertiary-grey;
-  @include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-top 0%, $slidedeck-exit-button-gradient-bottom 100%));
+	padding: 5px 16px;
+	border-radius: 3px;
+	border: 1px solid black;
+	color: $tertiary-grey;
+	@include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-top 0%, $slidedeck-exit-button-gradient-bottom 100%));
 
-  box-shadow: inset 0 1px 0px 0px rgba(255, 255, 255, 0.13), 0 1px 0px 0px rgba(255, 255, 255, 0.12);
+	box-shadow: inset 0 1px 0px 0px rgba(255, 255, 255, 0.13), 0 1px 0px 0px rgba(255, 255, 255, 0.12);
 
-  &:focus,
-  &:hover,
-  &:target {
-  }
+	&:focus,
+	&:hover,
+	&:target {
+	}
 
-  &:active:not(.disabled) {
-    @include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-bottom 0%, $slidedeck-exit-button-gradient-top 100%));
-  }
+	&:active:not(.disabled) {
+		@include background-image(linear-gradient(top, $slidedeck-exit-button-gradient-bottom 0%, $slidedeck-exit-button-gradient-top 100%));
+	}
 }
 
 @mixin slide-comment-editor {
-  .editor {
-    background: #222222;
-    margin: 10px;
-    .main {
-      padding-left: 13px;
-      padding-right: 13px;
-      background-color: $slidedeck-controls-background;
-      border: 1px solid #323232;
-    }
-    .toolbar {
-      background-color: $slidedeck-controls-background;
-      border-bottom: 1px solid #2b2b2b;
-    }
-    .content, .x-mask, .x-mask-message {
-      background-color: $slidedeck-controls-background;
-      color: #999999
-    }
-    .footer {
-      background: rgba(44, 44, 44, 0.98);
-      border-top: 1px solid #323232;
+	.editor {
+		background: #222222;
+		margin: 10px;
+		.main {
+			padding-left: 13px;
+			padding-right: 13px;
+			background-color: $slidedeck-controls-background;
+			border: 1px solid #323232;
+		}
+		.toolbar {
+			background-color: $slidedeck-controls-background;
+			border-bottom: 1px solid #2b2b2b;
+		}
+		.content, .x-mask, .x-mask-message {
+			background-color: $slidedeck-controls-background;
+			color: #999999
+		}
+		.footer {
+			background: rgba(44, 44, 44, 0.98);
+			border-top: 1px solid #323232;
 
-	  .left{
-		.action.text-controls{
-			border: 0px solid #1f1f1f;
+			.left{
+				.action.text-controls{
+					border: 0px solid #1f1f1f;
 
-			&.selected{
-			  margin: 5px 0 0 4px;
-			  border-width: 1px;
-			  background-color: #393939;
+					&.selected{
+						margin: 5px 0 0 4px;
+						border-width: 1px;
+						background-color: #393939;
 
-			  &::after{ @include sprite($icons,'font_styles_default',$dimensions: true); }
-			}
-			.popover{
-			  background-color: #2b2b2b;
-			  box-shadow: 0 1px 3px rgba(0,0,0,.34);
-			  border: 1px solid #141414;
+						&::after{ @include sprite($icons,'font_styles_default',$dimensions: true); }
+					}
+					.popover{
+						background-color: #2b2b2b;
+						box-shadow: 0 1px 3px rgba(0,0,0,.34);
+						border: 1px solid #141414;
 
-			  &::after{
-				@include sprite($icons,'font_style_pointer_dark',$dimensions: true);
-			  }
+						&::after{
+							@include sprite($icons,'font_style_pointer_dark',$dimensions: true);
+						}
 
-			  .control{
+						.control{
 
-				&.bold {
-				  &::after{ @include sprite($icons,'bold-dark',$dimensions: true); }
-				  &.selected::after{ @include sprite($icons,'bold-dark_active',$dimensions: true); }
+							&.bold {
+								&::after{ @include sprite($icons,'bold-dark',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'bold-dark_active',$dimensions: true); }
+							}
+							&.italic {
+								&::after{ @include sprite($icons,'italic-dark',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'italic-dark_active',$dimensions: true); }
+							}
+							&.underline {
+								&::after{ @include sprite($icons,'underline-dark',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'underline-dark_active',$dimensions: true); }
+							}
+						}
+					}
 				}
-				&.italic {
-				  &::after{ @include sprite($icons,'italic-dark',$dimensions: true); }
-				  &.selected::after{ @include sprite($icons,'italic-dark_active',$dimensions: true); }
-				}
-				&.underline {
-				  &::after{ @include sprite($icons,'underline-dark',$dimensions: true); }
-				  &.selected::after{ @include sprite($icons,'underline-dark_active',$dimensions: true); }
-				}
-			  }
 			}
-		  }
 		}
-    }
-	&.basic{
-	  .main{
-		.aux{
-		  border-color: #323232;
-		  background: #161616;
-		  .action{
-			&.publish{
-			  background-color: #161616;
-			  &::after{
-				@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
-			  }
+		&.basic{
+			.main{
+				.aux{
+					border-color: #323232;
+					background: #161616;
+					.publish{
+						background-color: #161616;
+						&::after{
+							@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
+						}
 
-			  &.on::after{
-				@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
-			  }
+						&.on::after{
+							@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
+						}
+					}
+
+					.token{
+						border-bottom-color: #3a9bd3;
+						border-top-color: #3a9bd3;
+						border-right-color: #3a9bd3;
+						border-left-color: #3a9bd3;
+						background: #3a9bd3;
+					}
+				}
+
+				.token-input-wrap span.token-input-sizer{
+					color: #b8b8b8;
+				}
+
+				input{
+					color: #b8b8b8;
+					background-color: #161616;
+				}
 			}
-		  }
-
-		  .token{
-			border-bottom-color: #3a9bd3;
-			border-top-color: #3a9bd3;
-			border-right-color: #3a9bd3;
-			border-left-color: #3a9bd3;
-			background: #3a9bd3;
-		  }
 		}
-
-		.token-input-wrap span.token-input-sizer{
-		  color: #b8b8b8;
-		}
-
-		input{
-		  color: #b8b8b8;
-		  background-color: #161616;
-		}
-	  }
 	}
-  }
 }
 
 .x-container-slidedeck {
 
-  .x-container-slidedeck-controls {
+	.x-container-slidedeck-controls {
 
-    box-shadow: 0 0 10px 0 black;
-    background: $slidedeck-controls-background;
+		box-shadow: 0 0 10px 0 black;
+		background: $slidedeck-controls-background;
 
-    &::after {
-      content: ' ';
-      position: absolute;
-      width: 1px;
-      height: 100%;
-      top: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.04);
-      z-index: 9999999;
-    }
+		&::after {
+			content: ' ';
+			position: absolute;
+			width: 1px;
+			height: 100%;
+			top: 0;
+			right: 0;
+			background: rgba(255, 255, 255, 0.04);
+			z-index: 9999999;
+		}
 
-    .video-wrapper {
-      background: $video-background;
-      position: relative;
-      overflow: hidden;
-      margin: 0 0 2px 0;
+		.video-wrapper {
+			background: $video-background;
+			position: relative;
+			overflow: hidden;
+			margin: 0 0 2px 0;
 
-      .video {
-        //position: absolute;
-        margin: 6px 4px 5px 4px;
-        background: rgba(255, 255, 255, 0.04);
-        width: 392px;
-        height: 221px;
-      }
-    }
+			.video {
+				//position: absolute;
+				margin: 6px 4px 5px 4px;
+				background: rgba(255, 255, 255, 0.04);
+				width: 392px;
+				height: 221px;
+			}
+		}
 
-    .controls {
-      background: $video-background;
-      position: relative;
-      overflow: hidden;
-      height: 50px;
+		.controls {
+			background: $video-background;
+			position: relative;
+			overflow: hidden;
+			height: 50px;
 
-      .buttons {
-        float: right;
-        width: 145px;
-        height: 50px;
-        position: relative;
-        overflow: hidden;
-        padding: 7px 10px 0 0;
+			.buttons {
+				float: right;
+				width: 145px;
+				height: 50px;
+				position: relative;
+				overflow: hidden;
+				padding: 7px 10px 0 0;
 
-        .prev, .next {
-          width: 38px;
-          height: 34px;
-          float: right;
-          position: relative;
-          @include slide-button;
-          &::after {
-            content: ' ';
-            overflow: hidden;
-            position: absolute;
-            top: 6px;
-            left: 12px;
-            background: transparent $icons no-repeat;
-            @include sprite($icons, 'arrow-previous', $dimensions: true);
+				.prev, .next {
+					width: 38px;
+					height: 34px;
+					float: right;
+					position: relative;
+					@include slide-button;
+					&::after {
+						content: ' ';
+						overflow: hidden;
+						position: absolute;
+						top: 6px;
+						left: 12px;
+						background: transparent $icons no-repeat;
+						@include sprite($icons, 'arrow-previous', $dimensions: true);
 
-          }
-          &::before {
-            content: ' ';
-            overflow: hidden;
-            position: absolute;
-            top: 0;
-            left: 36px;
-            z-index: 3;
-            background: transparent $elements no-repeat;
-            @include sprite($elements, 'dark-button-divider', $dimensions: true);
-          }
-        }
-        .prev {
-          border-radius: 3px 0 0 3px;
-          border-right-width: 0;
-          &::after {
-            @include sprite($icons, 'arrow-previous', $dimensions: true);
-          }
-          &:hover::after {
-            @include sprite($icons, 'arrow-previous_hover', $dimensions: true);
-          }
-          &.disabled {
-            &, &:hover {
-              &::after {
-                @include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
-              }
-            }
-          }
-        }
-        .next {
-          border-radius: 0 3px 3px 0;
-          border-left-width: 0;
-          &::after {
-            @include sprite($icons, 'arrow-next', $dimensions: true);
-          }
-          &:hover::after {
-            @include sprite($icons, 'arrow-next_hover', $dimensions: true);
-          }
-          &.disabled {
-            &, &:hover {
-              &::after {
-                @include sprite($icons, 'arrow-next_disabled', $dimensions: true);
-              }
-            }
-          }
-        }
-      }
-    }
+					}
+					&::before {
+						content: ' ';
+						overflow: hidden;
+						position: absolute;
+						top: 0;
+						left: 36px;
+						z-index: 3;
+						background: transparent $elements no-repeat;
+						@include sprite($elements, 'dark-button-divider', $dimensions: true);
+					}
+				}
+				.prev {
+					border-radius: 3px 0 0 3px;
+					border-right-width: 0;
+					&::after {
+						@include sprite($icons, 'arrow-previous', $dimensions: true);
+					}
+					&:hover::after {
+						@include sprite($icons, 'arrow-previous_hover', $dimensions: true);
+					}
+					&.disabled {
+						&, &:hover {
+							&::after {
+								@include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
+							}
+						}
+					}
+				}
+				.next {
+					border-radius: 0 3px 3px 0;
+					border-left-width: 0;
+					&::after {
+						@include sprite($icons, 'arrow-next', $dimensions: true);
+					}
+					&:hover::after {
+						@include sprite($icons, 'arrow-next_hover', $dimensions: true);
+					}
+					&.disabled {
+						&, &:hover {
+							&::after {
+								@include sprite($icons, 'arrow-next_disabled', $dimensions: true);
+							}
+						}
+					}
+				}
+			}
+		}
 
-    .video-checkbox {
-      cursor: pointer;
-      line-height: 20px;
-      padding: 15px 0 15px 45px;
-      margin-right: 150px;
-      position: relative;
-      color: $secondary-grey;
-      font: {
-        family: $font;
-        size: 14px;
-        weight: normal;
-      }
+		.video-checkbox {
+			cursor: pointer;
+			line-height: 20px;
+			padding: 15px 0 15px 45px;
+			margin-right: 150px;
+			position: relative;
+			color: $secondary-grey;
+			font: {
+				family: $font;
+				size: 14px;
+				weight: normal;
+			}
 
-      &::after {
-        content: ' ';
-        overflow: hidden;
-        position: absolute;
-        top: 15px;
-        left: 20px;
-        background: transparent $icons no-repeat;
-        @include sprite($icons, 'checkbox-dark', $dimensions: true);
-      }
+			&::after {
+				content: ' ';
+				overflow: hidden;
+				position: absolute;
+				top: 15px;
+				left: 20px;
+				background: transparent $icons no-repeat;
+				@include sprite($icons, 'checkbox-dark', $dimensions: true);
+			}
 
-      &:focus {
-      }
+			&:focus {
+			}
 
-      &:active,
-      &:target,
-      &:hover {
-        &::after {
-          @include sprite($icons, 'checkbox-dark_hover', $dimensions: true);
-        }
-      }
+			&:active,
+			&:target,
+			&:hover {
+				&::after {
+					@include sprite($icons, 'checkbox-dark_hover', $dimensions: true);
+				}
+			}
 
-      &.checked {
-        &::after {
-          @include sprite($icons, 'checkbox-dark-checked', $dimensions: true);
-        }
-        &:hover::after {
-          @include sprite($icons, 'checkbox-dark-checked_hover', $dimensions: true);
-        }
-      }
-    }
+			&.checked {
+				&::after {
+					@include sprite($icons, 'checkbox-dark-checked', $dimensions: true);
+				}
+				&:hover::after {
+					@include sprite($icons, 'checkbox-dark-checked_hover', $dimensions: true);
+				}
+			}
+		}
 
-    .slidedeck-queue {
-      @include hardware-accelerate();
-      @include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
-      @include fixIEScrollbarGulf();
-      overflow-x: hidden;
-      overflow-y: scroll;
-      padding: 14px 0;
+		.slidedeck-queue {
+			@include hardware-accelerate();
+			@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
+			@include fixIEScrollbarGulf();
+			overflow-x: hidden;
+			overflow-y: scroll;
+			padding: 14px 0;
 
-      .item-wrap {
-        cursor: pointer;
-        margin: 8px 8px 0 0;
-        position: relative;
-        opacity: 0.4;
-        color: $slidedeck-primary-text-color;
-        font-size: 14px;
-        font-weight: 600;
+			.item-wrap {
+				cursor: pointer;
+				margin: 8px 8px 0 0;
+				position: relative;
+				opacity: 0.4;
+				color: $slidedeck-primary-text-color;
+				font-size: 14px;
+				font-weight: 600;
 
-        .content-wrap {
-          position: relative;
-          overflow: hidden;
-          img {
-            float: left;
-            width: 128px;
-            min-height: 65px;
-            max-height: 96px;
-            border: 3px solid $slidedeck-primary-text-color;
-          }
-          .title {
-            margin: 0 0 0 135px;
-            font-size: 12px;
-            font-weight: 400;
-            h3 {
-              font-size: 14px;
-              font-weight: 600;
-            }
-          }
-        }
+				.content-wrap {
+					position: relative;
+					overflow: hidden;
+					img {
+						float: left;
+						width: 128px;
+						min-height: 65px;
+						max-height: 96px;
+						border: 3px solid $slidedeck-primary-text-color;
+					}
+					.title {
+						margin: 0 0 0 135px;
+						font-size: 12px;
+						font-weight: 400;
+						h3 {
+							font-size: 14px;
+							font-weight: 600;
+						}
+					}
+				}
 
-        .ordinal {
-          float: left;
-          display: block;
-          width: 25px;
-          text-align: right;
-          padding-right: 5px;
-        }
+				.ordinal {
+					float: left;
+					display: block;
+					width: 25px;
+					text-align: right;
+					padding-right: 5px;
+				}
 
-        &.over {
-          opacity: 1;
-        }
-        &.x-item-selected {
-          opacity: 1;
-          .content-wrap {
-            background: $slidedeck-selected-background;
-          }
-        }
-      }
-    }
-  }
+				&.over {
+					opacity: 1;
+				}
+				&.x-item-selected {
+					opacity: 1;
+					.content-wrap {
+						background: $slidedeck-selected-background;
+					}
+				}
+			}
+		}
+	}
 
-  .x-container-slide {
-    @include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
-    @include fixIEScrollbarGulf();
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 95px 95px 0 95px;
+	.x-container-slide {
+		@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
+		@include fixIEScrollbarGulf();
+		overflow-x: hidden;
+		overflow-y: auto;
+		padding: 95px 95px 0 95px;
 
-    .image-wrap {
-      position: relative;
-      //overflow: hidden;
+		.image-wrap {
+			position: relative;
+			//overflow: hidden;
 
-      img {
-        border-width: 0;
-        background: $video-background;
-        width: 100%;
-        box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
-      }
+			img {
+				border-width: 0;
+				background: $video-background;
+				width: 100%;
+				box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
+			}
 
-      .left, .right {
-        position: absolute;
-        overflow: hidden;
-        top: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0);
-      }
-      .left {
-        left: 0;
-        right: 50%;
-      }
-      .right {
-        left: 50%;
-        right: 0;
-      }
+			.left, .right {
+				position: absolute;
+				overflow: hidden;
+				top: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0);
+			}
+			.left {
+				left: 0;
+				right: 50%;
+			}
+			.right {
+				left: 50%;
+				right: 0;
+			}
 
-      .next, .prev {
-        cursor: pointer;
-        display: none;
-        position: absolute;
-        background: rgba(36, 36, 36, 0.8);
-        width: 35px;
-        height: 70px;
-        top: 46%;
-        @include experimental-value(top, calc(50% - 45px));
+			.next, .prev {
+				cursor: pointer;
+				display: none;
+				position: absolute;
+				background: rgba(36, 36, 36, 0.8);
+				width: 35px;
+				height: 70px;
+				top: 46%;
+				@include experimental-value(top, calc(50% - 45px));
 
-        &::after {
-          content: ' ';
-          position: absolute;
-          overflow: hidden;
-          top: 25px;
-          background: $icons no-repeat;
-        }
-      }
+				&::after {
+					content: ' ';
+					position: absolute;
+					overflow: hidden;
+					top: 25px;
+					background: $icons no-repeat;
+				}
+			}
 
-      .next {
-        @include animate(fadeInRight, 0.5s);
-        box-shadow: inset -1px 0px 1px 0px rgba(255, 255, 255, 0.03);
+			.next {
+				@include animate(fadeInRight, 0.5s);
+				box-shadow: inset -1px 0px 1px 0px rgba(255, 255, 255, 0.03);
 
-        right: 0;
-        border-radius: 90px 0 0 90px;
-        &::after {
-          right: 7px;
-          @include sprite($icons, 'arrow-next', $dimensions: true);
-        }
-        &:hover::after {
-          @include sprite($icons, 'arrow-next_hover', $dimensions: true);
-        }
-        &.disabled {
-          &, &:hover {
-            cursor: default;
-            &::after {
-              @include sprite($icons, 'arrow-next_disabled', $dimensions: true);
-            }
-          }
-        }
-      }
-      .prev {
-        @include animate(fadeInLeft, 0.5s);
-        box-shadow: inset 1px 0px 1px 0px rgba(255, 255, 255, 0.03);
+				right: 0;
+				border-radius: 90px 0 0 90px;
+				&::after {
+					right: 7px;
+					@include sprite($icons, 'arrow-next', $dimensions: true);
+				}
+				&:hover::after {
+					@include sprite($icons, 'arrow-next_hover', $dimensions: true);
+				}
+				&.disabled {
+					&, &:hover {
+						cursor: default;
+						&::after {
+							@include sprite($icons, 'arrow-next_disabled', $dimensions: true);
+						}
+					}
+				}
+			}
+			.prev {
+				@include animate(fadeInLeft, 0.5s);
+				box-shadow: inset 1px 0px 1px 0px rgba(255, 255, 255, 0.03);
 
-        left: 0;
-        border-radius: 0 90px 90px 0;
-        &::after {
-          left: 7px;
-          @include sprite($icons, 'arrow-previous', $dimensions: true);
-        }
-        &:hover::after {
-          @include sprite($icons, 'arrow-previous_hover', $dimensions: true);
-        }
-        &.disabled {
-          &, &:hover {
-            cursor: default;
-            &::after {
-              @include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
-            }
-          }
-        }
-      }
+				left: 0;
+				border-radius: 0 90px 90px 0;
+				&::after {
+					left: 7px;
+					@include sprite($icons, 'arrow-previous', $dimensions: true);
+				}
+				&:hover::after {
+					@include sprite($icons, 'arrow-previous_hover', $dimensions: true);
+				}
+				&.disabled {
+					&, &:hover {
+						cursor: default;
+						&::after {
+							@include sprite($icons, 'arrow-previous_disabled', $dimensions: true);
+						}
+					}
+				}
+			}
 
-      .left, .right {
-        &:hover {
-          .next, .prev {
-            display: block;
-          }
-        }
-      }
-    }
+			.left, .right {
+				&:hover {
+					.next, .prev {
+						display: block;
+					}
+				}
+			}
+		}
 
-    .slide-notes {
-      position: relative;
-      z-index: 2;
-      margin: 20px 0 0;
-      overflow: hidden;
-      border-radius: 5px 5px 0 0;
-      box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
-    }
+		.slide-notes {
+			position: relative;
+			z-index: 2;
+			margin: 20px 0 0;
+			overflow: hidden;
+			border-radius: 5px 5px 0 0;
+			box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
+		}
 
-    .note-footer {
-      position: relative;
-      height: 60px;
-      text-align: center;
-      padding: 20px;
-      border: 0 solid #121212;
-      box-shadow: inset 0 1px 0 0 #3a3a3a;
-      background: rgba(44, 44, 44, 0.9);
-      color: #656556;
+		.note-footer {
+			position: relative;
+			height: 60px;
+			text-align: center;
+			padding: 20px;
+			border: 0 solid #121212;
+			box-shadow: inset 0 1px 0 0 #3a3a3a;
+			background: rgba(44, 44, 44, 0.9);
+			color: #656556;
 
-      &::after {
-        content: 'End';
-      }
-    }
+			&::after {
+				content: 'End';
+			}
+		}
 
-    .comment-header {
-      background: #2c2c2c;
-      padding: 10px;
+		.comment-header {
+			background: #2c2c2c;
+			padding: 10px;
 
-      @include slide-comment-editor;
+			@include slide-comment-editor;
 
-      .comment {
-        position: relative;
-        overflow: hidden;
+			.comment {
+				position: relative;
+				overflow: hidden;
 
-        .input {
-          cursor: text;
-          font: 600 italic 16px/36px $font;
-          padding: 0 10px;
-          color: $primary-grey;
-          background: $slidedeck-controls-background;
-          border: 1px solid #323232;
+				.input {
+					cursor: text;
+					font: 600 italic 16px/36px $font;
+					padding: 0 10px;
+					color: $primary-grey;
+					background: $slidedeck-controls-background;
+					border: 1px solid #323232;
 
-          $value: margin-right 0.5s;
-          @include experimental(transition, $value);
-        }
-        .count {
-          padding-right: 48px;
-          float: right;
-          color: #656565;
-          font: 600 italic 14px/38px $font;
-          opacity: 0;
-          visibility: hidden;
-          $value: opacity 0.5s;
-          @include experimental(transition, $value);
-          @include experimental(transition-delay, 0.3s);
-        }
+					$value: margin-right 0.5s;
+					@include experimental(transition, $value);
+				}
+				.count {
+					padding-right: 48px;
+					float: right;
+					color: #656565;
+					font: 600 italic 14px/38px $font;
+					opacity: 0;
+					visibility: hidden;
+					$value: opacity 0.5s;
+					@include experimental(transition, $value);
+					@include experimental(transition-delay, 0.3s);
+				}
 
-        &.has-count {
-          .count {
-            visibility: visible;
-            opacity: 1;
-            & + .input {
-              margin-right: 200px;
-            }
-          }
-        }
-      }
-    }
+				&.has-count {
+					.count {
+						visibility: visible;
+						opacity: 1;
+						& + .input {
+							margin-right: 200px;
+						}
+					}
+				}
+			}
+		}
 
-    .note-container.slide {
-      @extend .note-container;
+		.note-container.slide {
+			@extend .note-container;
 
-      margin-top: 10px;
+			margin-top: 10px;
 
-      &:nth-child(2) {
-        margin-top: 0;
-      }
+			&:nth-child(2) {
+				margin-top: 0;
+			}
 
-      .comment-link {
-        display: none;
-        color: #949494;
-        color: #3a9bd3;
-        font: 600 italic 14px/38px $font;
-        cursor: pointer;
-      }
+			.comment-link {
+				display: none;
+				color: #949494;
+				color: #3a9bd3;
+				font: 600 italic 14px/38px $font;
+				cursor: pointer;
+			}
 
-      &.collapsed {
-        .note, .note.hover {
-          border-color: #121212;
-          box-shadow: inset 0 1px 0 0 #3a3a3a;
-        }
+			&.collapsed {
+				.note, .note.hover {
+					border-color: #121212;
+					box-shadow: inset 0 1px 0 0 #3a3a3a;
+				}
 
-        .note.root {
-          border-bottom-width: 1px;
-        }
+				.note.root {
+					border-bottom-width: 1px;
+				}
 
-        &.hasChildren {
-          .comment-link {
-            display: inline;
-          }
-          .reply-options {
-            display: none;
-          }
-        }
-      }
+				&.hasChildren {
+					.comment-link {
+						display: inline;
+					}
+					.reply-options {
+						display: none;
+					}
+				}
+			}
 
-      &:not(.collapsed) + .note-container {
-        .note, .note.hover {
-          border-color: #1a1a1a;
-        }
-      }
+			&:not(.collapsed) + .note-container {
+				.note, .note.hover {
+					border-color: #1a1a1a;
+				}
+			}
 
-      .note {
+			.note {
 
-        &, &.hover, &.editor-active {
-          border-color: #1a1a1a;
-          box-shadow: inset 0 1px 0 0 #3a3a3a;
-        }
-        background: #222222;
+				&, &.hover, &.editor-active {
+					border-color: #1a1a1a;
+					box-shadow: inset 0 1px 0 0 #3a3a3a;
+				}
+				background: #222222;
 
-        &::after {
-          opacity: 0.2;
-        }
+				&::after {
+					opacity: 0.2;
+				}
 
-        .meta {
-          .name {
-            color: #3a9bd3;
-            font: normal 14px $font;
-          }
-          .controls {
-            .like, .favorite {
-              opacity: 0.2;
-              &:hover, &.on {
-                opacity: 1;
-              }
-            }
-          }
-          .shared-to {
-            color: #656565;
-            font: normal 12px/25px $font;
-          }
-        }
+				.meta {
+					.name {
+						color: #3a9bd3;
+						font: normal 14px $font;
+					}
+					.controls {
+						.like, .favorite {
+							opacity: 0.2;
+							&:hover, &.on {
+								opacity: 1;
+							}
+						}
+					}
+					.shared-to {
+						color: #656565;
+						font: normal 12px/25px $font;
+					}
+				}
 
-        .body {
-          color: #949494;
-          font: normal 14px $font;
+				.body {
+					color: #949494;
+					font: normal 14px $font;
 
-          a {
-            color: #3a9bd3;
-          }
-        }
+					a {
+						color: #3a9bd3;
+					}
+				}
 
-        .respond {
-          .time {
-            color: #6b6b6b;
-            font: italic 12px/25px $font;
-          }
+				.respond {
+					.time {
+						color: #6b6b6b;
+						font: italic 12px/25px $font;
+					}
 
-          @include slide-comment-editor;
-        }
+					@include slide-comment-editor;
+				}
 
-        &.root {
-          border-bottom-width: 0;
-          padding-left: 15px;
-          background: rgba(44, 44, 44, 0.98);
+				&.root {
+					border-bottom-width: 0;
+					padding-left: 15px;
+					background: rgba(44, 44, 44, 0.98);
 
-          .avatar {
-            img {
-              width: 60px;
-              height: 60px;
-              border-radius: 5px;
-            }
-          }
+					.avatar {
+						img {
+							width: 60px;
+							height: 60px;
+							border-radius: 5px;
+						}
+					}
 
-          .meta {
-            margin-left: 70px;
-            margin-top: 0;
+					.meta {
+						margin-left: 70px;
+						margin-top: 0;
 
-            .name {
-              font-size: 24px;
-            }
-            .controls {
-              top: 1px;
-              .favorite-spacer {
-                display: none;
-              }
-            }
-          }
+						.name {
+							font-size: 24px;
+						}
+						.controls {
+							top: 1px;
+							.favorite-spacer {
+								display: none;
+							}
+						}
+					}
 
-          .body {
-            margin: 0;
-            padding: 10px 0;
-          }
-          .respond {
-            .time {
-              color: #9c9c9c;
-            }
-          }
+					.body {
+						margin: 0;
+						padding: 10px 0;
+					}
+					.respond {
+						.time {
+							color: #9c9c9c;
+						}
+					}
 
-          & + .note-replies {
-            &:empty {
-              border: 0 solid #121212;
-              border-bottom-width: 1px;
-            }
+					& + .note-replies {
+						&:empty {
+							border: 0 solid #121212;
+							border-bottom-width: 1px;
+						}
 
-            & > .note-container > .first {
-              box-shadow: inset 0 1px 0 0 #1a1a1a;
-              .first {
-                box-shadow: inset 0 1px 0 0 #3a3a3a;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+						& > .note-container > .first {
+							box-shadow: inset 0 1px 0 0 #1a1a1a;
+							.first {
+								box-shadow: inset 0 1px 0 0 #3a3a3a;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
-  &.overlay {
-    background: rgba(0, 0, 0, 0.85);
-  }
+	&.overlay {
+		background: rgba(0, 0, 0, 0.85);
+	}
 
-  &.view {
-    .exit-button {
-      cursor: pointer;
-      position: absolute;
-      top: 10px;
-      right: 10px;
+	&.view {
+		.exit-button {
+			cursor: pointer;
+			position: absolute;
+			top: 10px;
+			right: 10px;
 
-      font-family: $font;
-      font-size: 14px;
-      font-weight: 500;
-      @include slide-button;
-    }
-  }
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 500;
+			@include slide-button;
+		}
+	}
+}
+
+.x-menu.share-search.slide-comment-header{
+	.x-menu-list-ct{
+		border-color: #3d3d3d !important;
+	}
+	.x-menu-item{
+		&.contact-card, &.no-results{
+			background: #343434;
+			&.x-menu-item-over{
+				background: #3d3d3d;
+			}
+		}
+	}
 }

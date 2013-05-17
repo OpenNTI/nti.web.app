@@ -105,7 +105,12 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
-			me.sharedList = Ext.widget('user-sharing-list', {renderTo: me.sharedListEl, scrollParentEl:scrollParentEl, tabIndex:3});
+			me.sharedList = Ext.widget('user-sharing-list', {
+				renderTo: me.sharedListEl,
+				scrollParentEl:scrollParentEl,
+				tabIndex:3,
+				ownerCls: cmp.xtype
+			});
 		}
 
 		me.publishEl = editorEl.down('.action.publish');

@@ -61,6 +61,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		this.store = Ext.getStore('UserSearch');
 		this.shareListView = Ext.widget('share-search', {store:me.store, renderTo: this.scrollParentEl || Ext.getBody()});
+		this.shareListView.addCls(this.ownerCls);
 		this.mon(this.shareListView, 'select', this.searchItemSelected, this);
 		this.on('destroy','destroy',this.shareListView);
 		this.mon(me.publishEl, 'click', this.togglePublish, this);

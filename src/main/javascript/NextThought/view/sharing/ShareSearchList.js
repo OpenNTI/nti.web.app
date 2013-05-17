@@ -17,7 +17,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 	baseCls: 'x-menu',
 	itemCls: 'x-menu-item contact-card',
 	itemSelector:'x-menu-item',
-	emptyText: '<div class="x-menu-item">No results found.</div>',
+	emptyText: '<div class="x-menu-item no-results">No results found.</div>',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag:'tpl', 'for':'.',
 		cn:[{
