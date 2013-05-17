@@ -339,9 +339,11 @@ Ext.define('NextThought.controller.State', {
 			return;
 		}
 		var s = e ? e.state : null;
-		if (s) {
-			this.fireEvent('restore', s);
+		if (!s) {
+			console.warn('there is no state to restore??',e);
+			return;
 		}
+		this.fireEvent('restore', s);
 	},
 
 

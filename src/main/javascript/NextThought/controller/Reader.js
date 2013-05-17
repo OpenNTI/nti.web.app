@@ -89,13 +89,10 @@ Ext.define('NextThought.controller.Reader', {
 				]
 			});
 
+		pi.contentOrig = LocationProvider.currentNTIID;
 		pi.hideControls = true;
 
-		if(silent){
-			reader.onNavigateComplete(pi);
-			return;
-		}
-		LocationProvider.setLocation(pi);
+		LocationProvider.setLocation(pi, null, !!silent);
 	},
 
 
@@ -110,7 +107,7 @@ Ext.define('NextThought.controller.Reader', {
 		pw.clearBookmark();
 		pg.updateState();
 
-		this.getLibraryNavigation().updateLocation();
+		this.getLibraryNavigation().updateLocation(pageInfo.contentOrig);//it does the right thing when that is undefiend.
 	}
 
 });
