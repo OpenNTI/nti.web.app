@@ -33,7 +33,7 @@ Ext.define('NextThought.view.cards.Card',{
 	constructor: function(config){
 		var d = (config && config.data) || {};
 		if(!this.shouldOpenInApp(d.href, d.basePath)){
-			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl});
+			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl.html || this.renderTpl});
 			this.bypassEvent = true;
 		}
 
@@ -67,6 +67,10 @@ Ext.define('NextThought.view.cards.Card',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el,'click','onCardClicked',this);
+
+		if(LocationProvider.currentPageInfo.originalNTIIDRequested===this.data.ntiid){
+			Ext.defer(this.onCardClicked,1,this);
+		}
 	},
 
 
@@ -81,7 +85,7 @@ Ext.define('NextThought.view.cards.Card',{
 			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {
-			status = this.fireEvent('show-target',this,this.data);
+			status = this.fireEvent('show-target',this,this.data, !e);
 		}
 
 		return status;

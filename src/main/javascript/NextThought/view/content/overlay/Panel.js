@@ -25,6 +25,11 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 	},
 
 
+	getRefOwner: function(){
+		return this.reader;
+	},
+
+
 	initComponent: function(){
 		var d, el, insert = 'insertBefore', ix = 0;
 		if(!this.contentElement){
@@ -112,11 +117,17 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 
 	syncTop: function(){
 		if(!this.contentElement){return;}
-		var o = this.reader.getAnnotationOffsets(),
-			myTop = Ext.fly(this.contentElement).getY(),
-			ctTop = this.el.up('.x-reader-pane').getY(),
-			top = (myTop + ctTop) - o.scrollTop;
-		this.el.setY(top);
+		try {
+			var o = this.reader.getAnnotationOffsets(),
+				myTop = Ext.fly(this.contentElement).getY(),
+				ctTop = this.el.up('.x-reader-pane').getY(),
+				top = (myTop + ctTop) - o.scrollTop;
+			this.el.setY(top);
+		}
+		catch(e){
+			console.debug(e.message);
+			clearInterval(this.interval);
+		}
 	},
 
 

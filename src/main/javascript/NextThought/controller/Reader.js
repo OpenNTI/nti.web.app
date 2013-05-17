@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	showCardTarget: function(card, data){
+	showCardTarget: function(card, data, silent){
 		var reader = card.up('reader-panel'),
 			ntiid = data.ntiid,
 			DH = Ext.DomHelper,
@@ -91,7 +91,11 @@ Ext.define('NextThought.controller.Reader', {
 
 		pi.hideControls = true;
 
-		reader.onNavigateComplete(pi);
+		if(silent){
+			reader.onNavigateComplete(pi);
+			return;
+		}
+		LocationProvider.setLocation(pi);
 	},
 
 
