@@ -12,7 +12,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions: 'NextThought.mixins.FlagActions'
+		flagActions: 'NextThought.mixins.FlagActions',
+		sharingPreferences: 'NextThought.mixins.SharingPreferences'
 	},
 
 	ui: 'nt',
@@ -198,37 +199,21 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
 
-		Ext.each(sharedWith,function(u){
-			names.push(u.getName());
-			return names.join(',').length <= 150;
-		});
+		this.getLongSharingDisplayText(sharedWith, function(str){
+			this.sharedTo.update(str);
+			this.sharedTo.set({'data-qtip': str});
 
-		names = Ext.Array.map(names,function(){ return tpl.apply(arguments); });
+			this.sharedTo.select('name[data-profile-idx]').on('click',function(e){
+				var a = e.getTarget('name'),
+					i = a && a.getAttribute('data-profile-idx'),
+					u = a && sharedWith[i];
 
-		others = sharedWith.length - names.length;
-		if(others){
-			names.push(Ext.String.format('and {0} others.',others));
-		}
-		else if(names.length > 1){
-			names.push(' and '+names.pop());
-		}
-
-
-		val = names.length? ('Shared with '+names.join(', ')) : 'Private';
-
-		this.sharedTo.update(val);
-		this.sharedTo.set({'data-qtip':val});
-
-		this.sharedTo.select('name[data-profile-idx]').on('click',function(e){
-			var a = e.getTarget('name'),
-				i = a && a.getAttribute('data-profile-idx'),
-				u = a && sharedWith[i];
-
-			e.stopEvent();
-			if(a && !Ext.isEmpty(i) && u && u.getProfileUrl){
-				this.fireEvent('change-hash', u.getProfileUrl());
-			}
-		},this);
+				e.stopEvent();
+				if(a && !Ext.isEmpty(i) && u && u.getProfileUrl){
+					this.fireEvent('change-hash', u.getProfileUrl());
+				}
+			},this);
+		}, this, tpl, 150);
 	},
 
 

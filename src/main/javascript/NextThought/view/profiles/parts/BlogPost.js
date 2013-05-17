@@ -157,7 +157,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 	updateSharedWith: function(field, value){
 		this.getShortSharingDisplayText(value, function(str){
-			this.publishStateEl.update(str);
+			if(this.publishStateEl){
+				this.publishStateEl.update(str);
+			}
+		}, this);
+		this.getLongSharingDisplayText(value, function(str){
+			if(this.publishStateEl){
+				this.publishStateEl.set({'data-qtip': str});
+			}
 		}, this);
 		this.publishStateEl[this.isPublic(value) ? 'removeCls':'addCls']('private');
 	},
