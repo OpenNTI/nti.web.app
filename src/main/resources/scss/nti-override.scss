@@ -320,26 +320,21 @@ body.x-body {margin:0;}
 				margin-bottom: 0.5em;
 			}
 		}
-		.subsubsection,
+
 		.paragraph,
 		.subparagraph,
 		.subsubparagraph {
 			&.title {
 				font-weight: bold;
-				margin-top: 2em;
-				margin-bottom: 0.5em;
 			}
 		}
 		.subsubsection.title {
-			font-size: 1.1em;
-			margin-top: 2em;
-			margin-bottom: 0.5em;
+			font-size: 1.8em;
 		}
 		.paragraph.title,
                 .subparagraph.title,
 		.subsubparagraph.title {
 			font-size: 14px;
-			margin-bottom: 0.5em;
 		}
 		.bibitem > p.par {
 			 display: inline;
