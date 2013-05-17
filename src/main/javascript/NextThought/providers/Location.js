@@ -192,7 +192,8 @@ Ext.define('NextThought.providers.Location', {
 			}
 
 			//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-			Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
+			//Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
+			Ext.callback(callback,null,args);
 
 			if(fromHistory!==true){
 				history.pushState({location: ntiid}, me.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
