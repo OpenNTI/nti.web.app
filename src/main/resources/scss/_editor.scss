@@ -199,9 +199,10 @@ span.tab{
 				max-height: 200px;
 				outline: 0;
 
-				display: table;
-				table-layout: fixed;
-				width: 100%;
+				//These dork with the intended scroll behaviour in the editors.
+				//display: table;
+				//table-layout: fixed;
+				//width: 100%;
 			}
 		}
 
