@@ -6,12 +6,12 @@
 @import "animate";
 
 .x-gecko li {
-            margin-top: 0.5em;
-            margin-bottom: 0.5em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .x-gecko li > p.par {
-            display: inline;
+	display: inline;
 }
 
 .x-ie10, .x-ie{
@@ -208,41 +208,43 @@ body.x-body {margin:0;}
 		margin: 0.75em auto 2em;
 	}
 
-    div.section-problems,
-    div.challenge-problems,
-    div.review-problems,
-    div.exercises{
-        &::before{
-            background: none;
-        }
-        & > span.headingtext {
-          position: static;
-          top: initial;
-          left: initial;
-      }
-    }
-    ol.section-problems,
-    ol.challenge-problems,
-    ol.review-problems {
-        margin: 0;
-        padding: 0;
-    }
+	div.section-problems,
+	div.challenge-problems,
+	div.review-problems,
+	div.exercises{
+		&::before{
+			background: none;
+		}
 
-   div.picdefns,
-   .xtra,
-   div.defn,
-   div.defns,
-   .bogus,
-   .importantdef,
-   .important,
-   .concept,
-   .warning,
-   .game,
-   .sidebar{
+		& > span.headingtext {
+			position: static;
+			top: initial;
+			left: initial;
+		}
+	}
+
+	ol.section-problems,
+	ol.challenge-problems,
+	ol.review-problems {
+		margin: 0;
+		padding: 0;
+	}
+
+	div.picdefns,
+	.xtra,
+	div.defn,
+	div.defns,
+	.bogus,
+	.importantdef,
+	.important,
+	.concept,
+	.warning,
+	.game,
+	.sidebar{
 		padding: 1em;
 		background-image: none;
 		background-color: rgba(235, 235, 235, 0.3);
-   }
+	}
 
 	div {
 		&.mathjax{
@@ -257,9 +259,11 @@ body.x-body {margin:0;}
 
 	.result {
 		padding:  1.2em;
+
 		&.correct {
 			background-color: #77BB4E;
 		}
+
 		&.incorrect {
 			background-color: #DD8888;
 		}
@@ -287,6 +291,7 @@ body.x-body {margin:0;}
 			border: none;
 			margin-top: 2em;
 			margin-bottom: 0.5em;
+
 			span.ref{
 				display: block;
 				width: 65px;
@@ -294,6 +299,7 @@ body.x-body {margin:0;}
 				float: left;
 				padding: 0;
 			}
+
 			span.label {
 				font-size: inherit;
 				margin-left: 80px;
@@ -328,17 +334,21 @@ body.x-body {margin:0;}
 				font-weight: bold;
 			}
 		}
+
 		.subsubsection.title {
 			font-size: 1.8em;
 		}
+
 		.paragraph.title,
-                .subparagraph.title,
+		.subparagraph.title,
 		.subsubparagraph.title {
 			font-size: 14px;
 		}
+
 		.bibitem > p.par {
 			 display: inline;
 		}
+
 		.placeholder {display: none;}
 	}
 
@@ -401,9 +411,9 @@ body.x-body {margin:0;}
 	.lower20 {margin-bottom: -20px;}
 
 	.subfloat {
-		  display: inline-table;
-		  padding: 1em 3em 1em 3em;
-		  text-align: center
+		display: inline-table;
+		padding: 1em 3em 1em 3em;
+		text-align: center
 	}
 
 	.rightpic, .leftpic {margin: 1.5em;}
@@ -414,40 +424,40 @@ body.x-body {margin:0;}
 	.align-bottom {vertical-align:top;}
 
 	.bigskip {
-		 margin: 0;
-		 padding: 0;
-		 margin-bottom: 24pt;
+		margin: 0;
+		padding: 0;
+		margin-bottom: 24pt;
 	}
 	.medskip {
-		 margin: 0;
-		 padding: 0;
-		 margin-bottom: 12pt;
+		margin: 0;
+		padding: 0;
+		margin-bottom: 12pt;
 	}
 	.smallskip {
-		 margin: 0;
-		 padding: 0;
-		 margin-bottom: 6pt;
+		margin: 0;
+		padding: 0;
+		margin-bottom: 6pt;
 	}
 
 	#footnotes {
-		 color: $primary-grey;
-		 margin-top: 2em;
-		 margin-left: 80px;
-		 font-size: small;
-		 font-weight: normal;
-		 position: relative;
+		color: $primary-grey;
+		margin-top: 2em;
+		margin-left: 80px;
+		font-size: small;
+		font-weight: normal;
+		position: relative;
 
-		 ol {
+		ol {
 			padding-left: 20px;
-		 }
+		}
 
-		 li {
+		li {
 			padding-bottom: 1em;
-		 }
+		}
 
-		 .label {
+		.label {
 			font-size: 1rem;
-		 }
+		}
 	}
 
 }
