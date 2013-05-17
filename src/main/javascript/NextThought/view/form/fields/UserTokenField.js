@@ -59,7 +59,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		var me = this,
 			editorEl = this.el.up('.editor');
 
-		this.store = Ext.getStore('UserSearch');
+		this.store = new NextThought.store.UserSearch();
 		this.pickerView = Ext.widget('share-search', {
 			ownerCls: this.ownerCls,
 			store:me.store,
