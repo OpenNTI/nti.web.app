@@ -22,7 +22,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 		cn:[{
 			cls: 'x-menu-item contact-card',
 			cn: [
-				{cls:'avatar {[this.getType(values)]}', style:'background-image: url({[this.getIcon(values)]})'},
+				{cls:'avatar {[this.getType(values)]}', style:'{[this.getIcon(values)]}'},
 				{cls:'card-body {[this.getType(values)]}', cn:[
 					{cls:'name', html:'{displayName}'},
 					{cls:'status', html:'{[this.getDisplayTypeValue(values)]}'}
@@ -32,7 +32,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 	}), {
 		getIcon: function(model){
 			var t = this.getType(model);
-			return t==='person'? model.avatarURL : 'inherit';
+			return t==='person'? ('background-image: url('+model.avatarURL+')') : '';
 		},
 
 		getType: function(modelData){
