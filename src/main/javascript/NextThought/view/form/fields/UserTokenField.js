@@ -73,8 +73,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.mon(editorEl,{
 				scope: this,
 				'click': this.maybeHideSearchListMenu,
-				'mouseover': this.maybeHideSearchListMenu //,
-//				'keyup': this.didChangeText
+				'mouseover': this.maybeHideSearchListMenu
 			});
 		}
 
@@ -122,7 +121,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	addInputListeners: function(){
 		this.mon(this.inputEl, {
 			scope: this,
-			'keydown': this.search
+			'keydown': this.onKeyDown
 		});
 	},
 
@@ -151,19 +150,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		else{
 			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer( function(){ me.pickerView.hide();}, 500);
-		}
-	},
-
-
-	didChangeText: function(e) {
-		var input = e.getTarget('input', undefined, true);
-		if (input && input.getValue().length == 0) {
-			var me = this;
-			clearTimeout(this.hideTimer);
-			this.hideTimer = Ext.defer( function(){ 
-				me.pickerView.hide();
-				input.focus(500);
-			}, 500);
 		}
 	},
 
@@ -243,8 +229,14 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
+	collapse: function(){
+		this.getPicker().hide();
+	},
+
+
 	clearResults: function(){
 		this.store.removeAll();
+		this.collapse();
 	},
 
 
@@ -289,29 +281,55 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
-	handledSpecialKey: function(key, e){
+	handledSpecialKey: function(e){
+		var key = e.getKey(),
+			val = this.inputEl.getValue();
+
 		if(key === e.BACKSPACE){
-			if(this.inputEl.getValue() === ''){
+			if(val === ''){
 				this.removeLastToken();
+				e.stopEvent();
+				return true;
 			}
+
+			if(val && val.length===1){
+				this.clearResults();
+				return true;
+			}
+		}
+
+		if(key === e.ESC){
+			this.collapse();
+			e.stopEvent();
+			this.inputEl.focus(100);
 			return true;
 		}
+
+		if(key === e.DOWN && !this.getPicker().isVisible()){
+			this.search();
+		}
+
 		return key === e.DOWN || key === e.UP || key === e.RIGHT  || key === e.LEFT || key === e.TAB || this.isDelimiter(key);
 	},
 
 
-	//We buffer this slightly to avoid unecessary searches
-	search: Ext.Function.createBuffered(function(e){
+	onKeyDown: function(e){
+		clearTimeout(this.searchTimeout);
+
+		if(this.handledSpecialKey(e)){ return; }
+
+		this.searchTimeout = Ext.defer(this.search,250,this);
+	},
+
+
+	search: function(){
 		if(!this.inputEl){
 			return;
 		}
 
 		var value = this.inputEl.getValue(),
 			t = this.el.down('.tokens'),
-			w = t && t.getWidth(),
-			key = e.getKey();
-
-		if(this.handledSpecialKey(key, e)){ return;}
+			w = t && t.getWidth();
 
 		if(!value || value.replace(SearchUtils.trimRe,'').length < 1){
 			this.clearResults();
@@ -325,7 +343,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			Ext.defer(this.alignPicker, 1, this);
 			this.inputEl.focus(100);
 		}
-	}, 250),
+	},
 
 
 	getPicker: function(){
