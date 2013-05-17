@@ -247,6 +247,7 @@ Ext.define('NextThought.controller.Profile', {
 				}
 			}
 
+			unmask();
 			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
 		}
 
@@ -273,7 +274,6 @@ Ext.define('NextThought.controller.Profile', {
 
 					var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
 					this.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
-					unmask();
 				},
 				failure: function(){
 					console.debug('failure',arguments);
