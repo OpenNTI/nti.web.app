@@ -35,11 +35,11 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
             }
 		},
 		items: [
-			{ option: 'line shape', sides: 1, pressed: true },
-			{ option: 'square shape', sides: 4},
-			{ option: 'circle shape' },
-			{ option: 'triangle shape', sides: 3 },
-			{ option: 'poly shape', options: [5,6,7,8,9,10,11,12] }
+			{ option: 'line shape', tipText: 'line', sides: 1, pressed: true },
+			{ option: 'square shape', tipText: 'square', sides: 4},
+			{ option: 'circle shape', tipText: 'circle' },
+			{ option: 'triangle shape', tipText: 'triangle', sides: 3 },
+			{ option: 'poly shape', tipText: 'polygon', options: [5,6,7,8,9,10,11,12] }
 		]
 	},{
 		xtype: 'toolbar',
