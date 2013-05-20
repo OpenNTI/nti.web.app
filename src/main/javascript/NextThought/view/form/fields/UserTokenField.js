@@ -342,6 +342,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			if(Ext.isEmpty(val)){
 				this.tip.onTargetOut({within:Ext.emptyFn});
 				this.tip.hide();
+				this.inputEl.blur();
 				this.fireEvent('cancel-indicated');
 				return true;
 			}
