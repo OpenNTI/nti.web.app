@@ -86,7 +86,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 	/** @private */
-	externalUriRegex: /^([a-z][a-z0-9\+\-\.]*):/i,
+	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
 	isExternalUri: function (r) {
 		return this.externalUriRegex.test(r);
