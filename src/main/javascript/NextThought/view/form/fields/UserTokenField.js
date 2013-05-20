@@ -72,13 +72,14 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.callParent(arguments);
 
 		var me = this,
+			spEl = this.scrollParentEl,
 			editorEl = this.el.up('.editor');
 
 		this.store = new NextThought.store.UserSearch();
 		this.pickerView = Ext.widget('share-search', {
 			ownerCls: this.ownerCls,
 			store:me.store,
-			renderTo: this.scrollParentEl || Ext.getBody()
+			renderTo: spEl || Ext.getBody()
 		});
 		this.mon(this.store,'load','alignPicker',this);
 
@@ -98,6 +99,11 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.mon(this.inputEl,'focus','onTargetOver',this.tip);
 
 		this.setupKeyMap();
+
+		if(spEl){
+			this.mon(spEl,'scroll','hide',this.tip);
+			this.mon(spEl,'scroll','alignPicker',this,{buffer:300});
+		}
 	},
 
 
@@ -331,8 +337,16 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 
 		if(key === e.ESC){
-			this.collapse();
 			e.stopEvent();
+
+			if(Ext.isEmpty(val)){
+				this.tip.onTargetOut({within:Ext.emptyFn});
+				this.tip.hide();
+				this.fireEvent('cancel-indicated');
+				return true;
+			}
+
+			this.collapse();
 			this.inputEl.dom.value = '';
 			this.inputEl.focus(100);
 			return true;
@@ -386,6 +400,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	alignPicker: function(){
 		this.getPicker().setHeight(null);
 		var me = this, x, y,
+			spEl = this.scrollParentEl,
+			scrollOffset = (spEl && spEl.getScroll().top) || 0,
+			cordinateRootX = (spEl && spEl.getX()) || 0,
+			cordinateRootY = (spEl && spEl.getY()) || 0,
 			padding = 5,
 			above = false,
 			align = 't-b',
@@ -409,10 +427,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		adjHeight(above? spaceAbove : spaceBelow);
 
-		x = picker.getAlignToXY(this.el, 'l-l')[0];
-		y = picker.getAlignToXY(this.inputEl, align)[1];
+		x = picker.getAlignToXY(this.el, 'l-l')[0] - cordinateRootX;
+		y = picker.getAlignToXY(this.inputEl, align)[1] - cordinateRootY;
 
-		picker.showAt(x,y);
+		picker.showAt(x,y + scrollOffset);
 	},
 
 	reset: function(){

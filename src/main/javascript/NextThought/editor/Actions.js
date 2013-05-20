@@ -105,6 +105,7 @@ Ext.define('NextThought.editor.Actions', {
 				ownerCls: cmp.xtype
 			});
 			cmp.on('destroy', 'destroy', me.sharedList);
+			cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
 		}
 
 

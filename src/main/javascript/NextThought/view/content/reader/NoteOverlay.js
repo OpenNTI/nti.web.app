@@ -165,6 +165,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		});
 
 		data.editorActions = new EditorActions(me, data.editor, me.getInsertionPoint());
+		data.editorActions.on('cancel','noteOverlayEditorCancel',me);
 	},
 
 
@@ -511,7 +512,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayEditorCancel: function (e) {
-		e.stopEvent();
+		if(e){e.stopEvent();}
 		this.noteOverlayDeactivateEditor();
 		return false;
 	},
