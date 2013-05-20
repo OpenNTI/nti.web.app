@@ -416,7 +416,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 	reset: function(){
-		Ext.each(this.el.query('.token'), function(t){ t.remove(); }, this);
+		Ext.each(this.el.query('.token'), function(t){ Ext.fly(t).remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
 		this.setPublished(false);
