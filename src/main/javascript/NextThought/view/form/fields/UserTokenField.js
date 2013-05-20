@@ -384,7 +384,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			t = this.el.down('.tokens'),
 			w = t && t.getWidth();
 
-		if(!value || value.replace(SearchUtils.trimRe,'').length < 1){
+		value = (value || '').replace(SearchUtils.trimRe,'');
+		if(Ext.isEmpty(value)){
 			this.clearResults();
 		}
 		else {

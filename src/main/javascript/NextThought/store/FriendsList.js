@@ -94,6 +94,27 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
+	search: function(query){
+		var fieldsToMatch = ['alias'],
+			regex = new RegExp(query, 'i'),
+			matches;
+		matches = this.queryBy(function(rec){
+			var matched = false;
+
+			Ext.Array.each(fieldsToMatch, function(field){
+				var v = rec.get(field);
+				if(v && regex.test(v)){
+					matched = true;
+				}
+				return !matched;
+			});
+
+			return matched;
+		});
+		return matches;
+	},
+
+
 	//TODO make this a smart reload that requests new data with a proper last modified.
 	//If we receive more data we should merge it in appropriately.  Updating any existing objects
 	//whose last modified times are more recent, adding any new records and removing any records that

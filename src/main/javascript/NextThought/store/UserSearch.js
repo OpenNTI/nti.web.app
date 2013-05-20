@@ -31,11 +31,39 @@ Ext.define('NextThought.store.UserSearch',{
 		{property: 'displayName',direction: 'DESC'}
 	],
 
-	search: function(query){
-		this.load({
-			params: {
-				query: encodeURIComponent(query)
+	minRemoteSearchLength: 3,
+
+	search: function(q){
+		var query = q || '',
+			flStore = Ext.getStore('FriendsList');
+		if(query.length < this.minRemoteSearchLength){
+			var entities = UserRepository.searchUser(query);
+			if(flStore){
+				flStore.search(query).each(function(fl){
+					if(!entities.get(fl.getId())){
+						entities.add(fl.getId(), fl);
+					}
+				});
 			}
-		});
+
+			//User repository gives us back actual entities here
+			//not the UserSearch models we want so we convert this to raw json
+			//and call loadRawData
+			entities = Ext.Array.map(entities.items, function(ent){
+				if(ent && ent.raw){
+					return ent.raw;
+				}
+				return null;
+			});
+			entities = Ext.Array.clean(entities);
+			this.loadRawData({Items: entities});
+		}
+		else{
+			this.load({
+				params: {
+					query: encodeURIComponent(query)
+				}
+			});
+		}
 	}
 });

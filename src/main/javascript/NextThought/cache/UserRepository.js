@@ -64,6 +64,27 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
+		searchUser: function(query){
+			var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
+				regex = new RegExp(query),
+				matches;
+			matches = this.getStore().queryBy(function(rec){
+				var matched = false;
+
+				Ext.Array.each(fieldsToMatch, function(field){
+					var v = rec.get(field);
+					if(v && regex.test(v)){
+						matched = true;
+					}
+					return !matched;
+				});
+
+				return matched;
+			});
+			return matches;
+		},
+
+
 		mergeUser: function (fromStore, newUser) {
 			//Do an in place update so things holding references to us
 			//don't lose their listeners
