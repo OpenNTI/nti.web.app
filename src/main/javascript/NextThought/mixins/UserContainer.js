@@ -197,7 +197,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 		var me = this,
 			friends;
 
-		function test(f){ return f.get('Presence') === 'Online'; }
+		function test(f){ return f.getPresence() && f.getPresence().isOnline(); }
 
 		//Update group chat state.
 		//TODO listen for change events instead of rechecking each time
