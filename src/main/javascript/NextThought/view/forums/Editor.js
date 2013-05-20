@@ -26,7 +26,7 @@ Ext.define('NextThought.view.forums.Editor',{
 				},{
 					cls: 'aux',
 					cn:[
-						{cls: 'action publish on', 'data-qtip': 'Publish State'},
+						{cls: 'action publish on', 'data-qtip': 'Privacy Setting'},
 						{cls: 'tags'}
 					]
 				},{
