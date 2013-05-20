@@ -46,11 +46,11 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	TIP: {
 		'public': {
 			title: 'Public Discussion',
-			html: 'Use a public discussion you want to reach the largest possible audience. Add people to notify them of your discussion and encourage participation'
+			html: 'Use a public discussion when you want to reach the largest possible audience. Add contacts to notify them of your discussion and to encourage participation.'
 		},
 		'private':{
 			title:'Private Discussion',
-			html:'Private discussions are limited to the people and groups you specify. Once a discussion has started the audience cannot be expanded.'
+			html:'Private discussions are limited to the contacts, lists, and groups you specify. Once a discussion has started the audience cannot be expanded.'
 		}
 	},
 
