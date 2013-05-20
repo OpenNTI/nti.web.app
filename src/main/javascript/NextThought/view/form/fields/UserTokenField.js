@@ -61,9 +61,14 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		this.tip = Ext.widget('nt-tooltip',Ext.apply({
 			autoHide: false,
-			anchor:'bottom'
+			anchor:'bottom',
+			minWidth: 250
 
 		},this.TIP['private']));
+
+		if(this.readOnly){
+			this.tip.disable();
+		}
 		this.on('destroy','destroy',this.tip);
 	},
 
