@@ -402,7 +402,9 @@ Ext.define('NextThought.editor.Actions', {
 			}
 			else if(e.shiftKey){
 				//tab back
-				this.tags.focus();
+				if( this.tags ){//may not be needed
+					this.tags.focus();
+				}
 			}
 			else {
 				e.stopEvent();
