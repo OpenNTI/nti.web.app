@@ -38,7 +38,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 
 
 	beforeRestore: function(){
-		return !Boolean(this.el.down('.blog-editor'));
+		return !!(this.el.down('.blog-editor'));
 	},
 
 
