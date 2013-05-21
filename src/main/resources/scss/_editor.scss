@@ -346,6 +346,7 @@ span.tab{
 								z-index: 16;
 								padding: 0 5px;
 								display: none;
+								white-space: nowrap;
 
 								&::after{
 									content: '';
@@ -360,7 +361,7 @@ span.tab{
 									height: 32px;
 									line-height: 32px;
 									position: relative;
-									float: left;
+									display: inline-block;
 
 									&.bold, &.italic, &.underline {
 										margin-right: 5px;
