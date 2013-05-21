@@ -723,8 +723,19 @@
 			& > .wrap {
 				padding-top: 30px;
 				position: relative;
+
+				.meta,
+				.foot {
+					.state{
+						cursor: default;
+					}
+
+					.link{
+						cursor: pointer !important;
+					}
+				}
 			}
-			
+
 			@include post-view;
 
 			.searchHit-overlay{
