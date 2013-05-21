@@ -24,6 +24,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 			html: 'WWWWWWWWW',//provide a default so the initial isn't so small.
 			xhooks: {
 				getTargetXY: function(){
+					try {
 					var me = this,
 						o = me.readerOffsets,
 						r = me.callParent(arguments);
@@ -32,8 +33,12 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 						r[0] += o.left;
 						r[1] += o.top;
 					}
-
 					return r;
+					}
+					catch(e){
+						Ext.defer(this.hide,10,this);
+						return [0,0];
+					}
 				}
 			}
 		});
@@ -125,6 +130,27 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 			//NOTE: if for some reasons, getTargetXY() returns null, return the default xy that was passed in.
 			Ext.defer(this.showAt,1,this,[this.getTargetXY() || xy]);
 		}
+	},
+
+
+	show: function(){
+		var ini = this.initialConfig.html;
+
+		function detectCrash(){
+			if(!this.html || this.html === ini){
+				console.warn('detected tool tip crash');
+				this.hide();
+				this.crashCount = (this.crashCount||0) + 1;
+				if(this.crashCount > 10){
+					console.error('Too many top failures, removing them.');
+					Ext.tip.QuickTipManager.destroy();
+				}
+			}
+		}
+
+		Ext.defer(detectCrash,10,this);
+
+		return this.callParent(arguments);
 	},
 
 
