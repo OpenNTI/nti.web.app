@@ -59,9 +59,13 @@ Ext.define('NextThought.overrides.Ext',{
 			var el = get.apply(this,arguments);
 
 			function testFrame(frame){
-				var win = frame.contentWindow || window.frames[frame.name];
+				var win = frame.contentWindow || window.frames[frame.name],
+					src;
 				try{
-					el = win.document.getElementById(id) || false;
+					src = Globals.HOST_PREFIX_PATTERN.exec(frame.getAttribute('src'));
+					if(src[3] === document.domain || src[1]==='javascript'){
+						el = win.document.getElementById(id) || false;
+					}
 				//for iframes where we cannot access its content(Cross Origin Content) ignore.
 				} catch(e){ swallow(e); }
 				return !el;
