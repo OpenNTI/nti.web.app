@@ -507,7 +507,7 @@ Ext.define('NextThought.controller.UserData', {
 		var win = btn.up('window'),
 			shbx= win.down('user-sharing-list'),
 			v = shbx.getValue(),
-			rec = win.record, b;
+			rec = win.record, b, newSharedWith;
 
 		//extra check here for a close...
 		if (btn.text === 'Close'){
@@ -527,7 +527,13 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		rec.set('body', b);
 
-		SharingUtils.setSharedWith(rec, SharingUtils.sharedWithForSharingInfo(v),function(newRec,op){
+		newSharedWith = SharingUtils.sharedWithForSharingInfo(v);
+		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
+			console.log('Sharing not mutated.  Not showing changes', rec.get('SharedWith'), newSharedWith);
+			win.close();
+			return;
+		}
+		SharingUtils.setSharedWith(rec, newSharedWith, function(newRec,op){
 			if(op.success){
 				rec.fireEvent('updated',newRec);
 				win.close();
