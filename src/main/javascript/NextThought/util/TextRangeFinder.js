@@ -208,12 +208,12 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		}
 		which = Ext.Array.sort(which);
 
-		function allButQuestions(child){
-			return !Ext.fly(child).parent('.naquestion', true);
+		function allButObjects(child){
+			return !Ext.fly(child).parent('object', true);
 		}
 
 		//Index all the text beneath node
-		indexedText = textIndex || this.indexText(node, allButQuestions);
+		indexedText = textIndex || this.indexText(node, allButObjects);
 		if(!indexedText){
 			return ranges;
 		}
