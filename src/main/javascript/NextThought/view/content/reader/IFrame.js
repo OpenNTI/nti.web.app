@@ -168,9 +168,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		on(doc,'mouseup',function(e){
 
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
-				t = me.body.getScroll().top;
+				t = me.body.getScroll().top,
+				s = me.getIframe().win.getSelection();
 
-			if(!fakeEvent.getTarget('a')){
+			if(!fakeEvent.getTarget('a') || !s.isCollapsed){
 				me.onContextMenuHandler({
 					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 					preventDefault: function(){ fakeEvent.preventDefault(); },
