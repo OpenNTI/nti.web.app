@@ -381,8 +381,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 
 		var value = this.inputEl.getValue(),
-			t = this.el.down('.tokens'),
-			w = t && t.getWidth();
+			w = this.getWidth();
 
 		value = (value || '').replace(SearchUtils.trimRe,'');
 		if(Ext.isEmpty(value)){
@@ -435,7 +434,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		adjHeight(above? spaceAbove : spaceBelow);
 
 		x = picker.getAlignToXY(this.el, 'l-l')[0] - cordinateRootX;
-		y = picker.getAlignToXY(this.inputEl, align)[1] - cordinateRootY;
+		y = picker.getAlignToXY(this.inputEl, align,[0,padding])[1] - cordinateRootY;
 
 		picker.showAt(x,y + scrollOffset);
 	},
