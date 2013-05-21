@@ -171,7 +171,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				t = me.body.getScroll().top,
 				s = me.getIframe().win.getSelection();
 
-			if(!fakeEvent.getTarget('a') || !s.isCollapsed){
+			if(!fakeEvent.getTarget('a')){ //Removed second half of condition || !s.isCollapsed b/c it screws up deleting fresh highlights.
 				me.onContextMenuHandler({
 					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 					preventDefault: function(){ fakeEvent.preventDefault(); },
