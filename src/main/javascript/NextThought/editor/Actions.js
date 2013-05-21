@@ -98,14 +98,18 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
-			me.sharedList = Ext.widget('user-sharing-list', {
-				renderTo: me.sharedListEl,
-				scrollParentEl:scrollParentEl,
-				tabIndex: tabTracker.next(),
-				ownerCls: cmp.xtype
-			});
-			cmp.on('destroy', 'destroy', me.sharedList);
-			cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
+			if($AppConfig.service.canShare()){
+				me.sharedList = Ext.widget('user-sharing-list', {
+					renderTo: me.sharedListEl,
+					scrollParentEl:scrollParentEl,
+					tabIndex: tabTracker.next(),
+					ownerCls: cmp.xtype
+				});
+				cmp.on('destroy', 'destroy', me.sharedList);
+				cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
+			}else{
+				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
+			}
 		}
 
 

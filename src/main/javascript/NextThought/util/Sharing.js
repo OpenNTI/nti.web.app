@@ -87,6 +87,7 @@ Ext.define('NextThought.util.Sharing',{
 
 
 	sharedWithForSharingInfo: function(sharingInfo){
+		if(Ext.isEmpty(sharingInfo)){ return []; }
 		var isPublic = sharingInfo.publicToggleOn,
 			entities = sharingInfo.entities || [];
 
