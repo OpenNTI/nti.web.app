@@ -261,12 +261,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	collapse: function(){
+		this.store.removeAll();
 		this.getPicker().hide().setHeight(null);
 	},
 
 
 	clearResults: function(){
-		this.store.removeAll();
 		this.collapse();
 	},
 
@@ -349,6 +349,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 				this.tip.onTargetOut({within:Ext.emptyFn});
 				this.tip.hide();
 				this.inputEl.blur();
+				this.clearResults();
 				this.fireEvent('cancel-indicated');
 				return true;
 			}
@@ -405,6 +406,10 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	alignPicker: function(){
+		if(!this.getEl().isVisible(true)){
+			return;
+		}
+
 		this.getPicker().setHeight(null);
 		var me = this, x, y,
 			spEl = this.scrollParentEl,
