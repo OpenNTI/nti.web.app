@@ -36,7 +36,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 						cn: [{
 							cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
 						},{
-							cls: 'action text-controls', 'data-qtip': 'Text Controls', cn:[
+							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
 								{cls:'popover controls', cn:[
 									{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
 									{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
