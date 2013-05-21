@@ -155,9 +155,6 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		var i = this.inputEl,
 			v = i.getValue();
 		this.sizerEl.update(v+'####');
-		if( Ext.isIE ){
-			i.setWidth(this.sizerEl.getWidth()+50);
-		}
 		i[v?'removeCls':'addCls']('empty');
 	},
 
