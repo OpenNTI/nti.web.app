@@ -235,14 +235,22 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			w = e.getTarget('.widgetContainer', null, true),
 			r = options.applicableRange,
 			c = options.containerId,
-			offsets;
+			rect;
+			//offsets;
 		if (w) {
 			e.stopEvent();
 //			w.hide();
-
+			
 			r = Anchors.toDomRange(r, this.getDocumentElement(), ReaderPanel.get().getCleanContent(), c);
-			offsets = this.getAnnotationOffsets();
-			o.lastLine = this.lineInfoForRangeAndRect(r, r.getBoundingClientRect(), offsets);
+			//offsets = this.getAnnotationOffsets();
+			if(w.dom){
+				rect = w.dom.getBoundingClientRect();
+				//The line is aligned at the bottom of the nib so fake it out here
+				rect.top = rect.bottom;
+
+			}
+			//Note we don't pass offsets here
+			o.lastLine = this.lineInfoForRangeAndRect(r, rect);
 
 			Ext.get(o.box).setY(0);
 
