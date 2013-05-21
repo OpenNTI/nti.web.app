@@ -14,7 +14,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	setupContentElement: function(){
 		this.callParent(arguments);
 		Ext.fly(this.contentElement).setStyle({
-			margin: '60px 0 0 0'
+			margin: '45px 0 0 0'
 		});
 	},
 
@@ -92,6 +92,6 @@ Ext.define('NextThought.view.cards.CardTarget',{
 			range = doc.createRange();
 
 		range.selectNodeContents(this.contentElement);
-		return {range: range, rect: this.el.dom.getBoundingClientRect()};
+		return {range: range, rect: {top: 121}};
 	}
 });
