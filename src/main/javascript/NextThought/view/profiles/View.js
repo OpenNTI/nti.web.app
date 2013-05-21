@@ -31,7 +31,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 		console.debug('Setting user in profile:',user);
 		me.setUser(state,function(panel){
 			console.debug('fire finish');
-			me.setTitle('Profile: '+user);
+			me.setTitle('Profile: '+((panel && panel.displayName)||user));
 			me.fireEvent('finished-restore');
 		});
 	},
@@ -79,7 +79,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 				}
 				else{
 					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
-					toAdd = Ext.applyIf({username: username},state);
+					toAdd = Ext.applyIf({username: username, displayName: user.getName()},state);
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: { loaded:fin, scope:this, single: true, delay:1 }
