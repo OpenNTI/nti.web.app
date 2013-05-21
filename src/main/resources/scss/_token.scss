@@ -266,6 +266,7 @@ div.nt-token-wrapper{
 					position: relative;
 					input {
 						font: normal italic 14px/30px $font !important;
+						text-transform: none;
 					}
 					.token-input-sizer{
 						position: relative;
