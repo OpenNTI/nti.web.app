@@ -370,7 +370,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Save Highlight',
 			handler:function(){
-				me.createAnnotationWidget('highlight',record, range, function(w){ w.savePhantom(); });
+				me.fireEvent('save-phantom',record,false);
 				me.clearSelection();
 			}
 		});
@@ -387,15 +387,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		function redaction(block){
 			return function(){
 				me.clearSelection();
-				var r = NextThought.model.Redaction.createFromHighlight(record,block),
-					cb = function(w){
-						w.cleanup();
-						if(w.tempId){
-							me.removeAnnotation(w.tempId);
-						}
-					};
+				var r = NextThought.model.Redaction.createFromHighlight(record,block);
 				try{
-					me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom(cb);});
+					me.fireEvent('save-phantom',r,true);
 				}
 				catch(e){
 					alert('Could not save redaction');

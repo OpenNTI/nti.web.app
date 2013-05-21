@@ -437,7 +437,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			style = this.record.get('style') || 'plain',
             s,
             rangeString = range.toString(),
-			sc = range.startContainer;
+			sc = range.startContainer,
 			selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
 
 		//This drops entire empty ranges, anything that wraps no text is thrown out.

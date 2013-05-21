@@ -60,14 +60,6 @@ Ext.define('NextThought.controller.UserData', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.listen({
-			annotation:{
-				'base':{
-					'save-phantom': this.savePhantomAnnotation
-				}
-			},
-			model:{
-
-			},
 			component:{
 				'reader-panel':{
 					'annotations-load': this.onAnnotationsLoad,
@@ -77,6 +69,7 @@ Ext.define('NextThought.controller.UserData', {
 					'define'		: this.define,
 					'redact'		: this.redact,
 					'save-new-note' : this.saveNewNote,
+					'save-phantom': this.savePhantomAnnotation,
 					'display-popover': this.onDisplayPopover,
 					'dismiss-popover': this.onDismissPopover
 				},
@@ -795,14 +788,20 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	savePhantomAnnotation: function(record, successFn, failureFn){
-
+	savePhantomAnnotation: function(record, applySharing, successFn, failureFn){
 		function callback(success,rec){
 			Ext.callback(success?successFn:failureFn,null,[record,rec]);
 		}
 
-		record.save({ scope: this, callback:this.getSaveCallback(callback) });
+		var p = null;
 
+		if(applySharing){
+			p = LocationProvider.getPreferences();
+			p = p ? p.sharing : null;
+		}
+		record.set('SharedWidth',p);
+
+		record.save({ scope: this, callback:this.getSaveCallback(callback) });
 	},
 
 
