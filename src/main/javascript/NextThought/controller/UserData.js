@@ -477,12 +477,6 @@ Ext.define('NextThought.controller.UserData', {
 			term: term,
 			pointTo: boundingScreenBox
 		}).show();
-
-		setTimeout(function(){
-			var head = document.querySelector('iframe.definition');
-			head.style.overflowX = 'hidden';
-			head.style.overflowY = 'scroll';
-		},250);
 	},
 
 

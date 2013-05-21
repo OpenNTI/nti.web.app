@@ -23,7 +23,10 @@ Ext.define('NextThought.view.definition.Window', {
 			seamless: true,
 			transparent: true,
 			allowTransparency: true,
-			style: 'overflow: hidden'
+			style: {
+				overflowX: 'hidden',
+				overflowY: 'scroll'
+			}
 		}
 	},
 
@@ -76,6 +79,12 @@ Ext.define('NextThought.view.definition.Window', {
 
 		me.queryDefinition(function(dom){
 			me.getXSLTProcessor(function(processor){
+				if(!processor){
+					me.close();
+					alert('You do not have a dictionary installed');
+					return;
+				}
+
 				var o, domtree, outputtree, doc;
 				if (window.XMLSerializer && window.DOMParser) {
 					domtree = new DOMParser().parseFromString(dom,"text/xml");
@@ -155,12 +164,16 @@ Ext.define('NextThought.view.definition.Window', {
 			scope: me,
 			callback: function(q,s,r){
 				var xsldoc, xslt, dom, p;
-				if (!window.XSLTProcessor) {
+				if (!window.hasOwnProperty('XSLTProcessor')) {
+					try {
 					xsldoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
 					xsldoc.loadXML(r.responseText);
 					xslt = new ActiveXObject("Msxml2.XSLTemplate");
 					xslt.stylesheet = xsldoc;
 					p = xslt.createProcessor();
+					} catch( e ){
+						console.error('Dictionary may not be installed, or not configured properly.', e.message);
+					}
 				}
 				else {
 					dom = new DOMParser().parseFromString(r.responseText,"text/xml");
