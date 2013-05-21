@@ -337,6 +337,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 			if(val && val.length===1){
 				this.clearResults();
+				this.inputEl.focus(100);
 				return true;
 			}
 		}
