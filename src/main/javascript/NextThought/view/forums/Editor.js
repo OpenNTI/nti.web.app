@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Editor',{
 				{ cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
 			]}
 		},
-		{ cls: 'forums-topic-editor', cn: { cls: 'editor active basic', html:'{super}' } }
+		{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html:'{super}' } }
 	]),
 
 

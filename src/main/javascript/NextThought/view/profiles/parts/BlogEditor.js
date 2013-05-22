@@ -8,7 +8,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	cls: 'blog-editor',
 
-	renderTpl: Ext.DomHelper.markup({ cls: 'editor active basic', html:'{super}' }),
+	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html:'{super}' }),
 
 	renderSelectors: {
 		cancelEl: '.action.cancel',

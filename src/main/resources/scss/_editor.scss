@@ -85,13 +85,22 @@ span.tab{
 				background: #fff;
 				@include experimental(transition, all 0.5s);
 				position: relative;
+				border: 0 solid #f2f2f2;
+				border-bottom-width: 1px;
+
+				input{
+					font: normal italic 14px/30px $font;
+					font-style: italic;
+					text-transform: none;
+				}
+
 				.tags{
 					margin: 0 105px 0 0;
 				}
 				.action{
 					float: right;
 					&.publish{
-						width: 105px;
+						width: 82px;
 						height: 30px;
 						position: relative;
 
@@ -213,12 +222,25 @@ span.tab{
 			left: 0; right: 0;
 			height: 45px;
 			white-space: nowrap;
-
+			background-color: #efefef;
 			border-top: 1px solid #dcdcdc;
+
+			&::after{
+				content: '';
+				position: absolute;
+				top: -8px;
+				left: 0;
+				right: 0;
+				height: 8px;
+				box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
+				border-radius: 90px;
+			}
+
 			.left .action {float: left;}
 			.right .action {float: right;}
 
 			.action {
+				position: relative;
 				height: 45px;
 				width: 45px;
 				line-height: 45px;
@@ -236,6 +258,93 @@ span.tab{
 						top: 12px; left: 9px;
 						background: $icons no-repeat;
 						@include sprite($icons,'whiteboard',$dimensions: true);
+					}
+				}
+
+				&.text-controls{
+					width: 34px;
+					height: 34px;
+					margin: 6px 0 0 5px;
+					border-radius: 3px;
+					border: 0px solid #dcdcdc;
+
+					&::after{
+						content: '';
+						position: absolute;
+						top: 9px; left: 5px;
+						outline: none;
+						background: $icons no-repeat;
+						@include sprite($icons,'font_styles_default',$dimensions: true);
+					}
+
+					&.selected{
+						margin: 5px 0 0 4px;
+						border-width: 1px;
+						background-color: #ffffff;
+
+						&::after{ @include sprite($icons,'font_styles_active',$dimensions: true); }
+						.popover{
+							display: block;
+						}
+					}
+
+
+					.popover{
+						position: absolute;
+						top: -38px;
+						left: -22px;
+						height: 34px;
+						background-color: #fff;
+						box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
+						border: 1px solid #f8f8f8;
+						z-index: 16;
+						padding: 0 5px;
+						display: none;
+						white-space: nowrap;
+
+						&::after{
+							content: '';
+							position: absolute;
+							top:32px; left: 30px;
+							background: $icons no-repeat;
+							@include sprite($icons,'font_style_pointer',$dimensions: true);
+						}
+
+						.control{
+							width: 20px;
+							height: 32px;
+							line-height: 32px;
+							position: relative;
+							display: inline-block;
+
+							&.bold, &.italic, &.underline {
+								margin-right: 5px;
+								margin-top: 4px;
+								height: 28px;
+
+								&:last-of-type{ margin-right: 0; }
+
+								&::after{
+									content: '';
+									position: absolute;
+									top: 5px; left: 2px;
+									background: $icons no-repeat;
+								}
+							}
+
+							&.bold {
+								&::after{ @include sprite($icons,'bold',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'bold_active',$dimensions: true); }
+							}
+							&.italic {
+								&::after{ @include sprite($icons,'italic',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'italic_active',$dimensions: true); }
+							}
+							&.underline {
+								&::after{ @include sprite($icons,'underline',$dimensions: true); }
+								&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
+							}
+						}
 					}
 				}
 
@@ -272,131 +381,6 @@ span.tab{
 			}
 		}
 
-		&.basic{
-			.main{
-				.aux{
-					border: 0 solid #f2f2f2;
-					border-bottom-width: 1px;
-					.action.publish{
-						width: 82px;
-					}
-				}
-
-				input{
-					font: 14px $font;
-					font-style: italic;
-					text-transform: none;
-				}
-			}
-
-			.footer{
-				background-color: #efefef;
-
-				&::after{
-					content: '';
-					position: absolute;
-					top: -8px;
-					left: 0;
-					right: 0;
-					height: 8px;
-					box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
-					border-radius: 90px;
-				}
-
-				.left{
-					.action{
-						position: relative;
-
-						&.text-controls{
-							width: 34px;
-							height: 34px;
-							margin: 6px 0 0 5px;
-							border-radius: 3px;
-							border: 0px solid #dcdcdc;
-
-							&::after{
-								content: '';
-								position: absolute;
-								top: 9px; left: 5px;
-								outline: none;
-								background: $icons no-repeat;
-								@include sprite($icons,'font_styles_default',$dimensions: true);
-							}
-
-							&.selected{
-								margin: 5px 0 0 4px;
-								border-width: 1px;
-								background-color: #ffffff;
-
-								&::after{ @include sprite($icons,'font_styles_active',$dimensions: true); }
-								.popover{
-									display: block;
-								}
-							}
-
-
-							.popover{
-								position: absolute;
-								top: -38px;
-								left: -22px;
-								height: 34px;
-								background-color: #fff;
-								box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
-								border: 1px solid #f8f8f8;
-								z-index: 16;
-								padding: 0 5px;
-								display: none;
-								white-space: nowrap;
-
-								&::after{
-									content: '';
-									position: absolute;
-									top:32px; left: 30px;
-									background: $icons no-repeat;
-									@include sprite($icons,'font_style_pointer',$dimensions: true);
-								}
-
-								.control{
-									width: 20px;
-									height: 32px;
-									line-height: 32px;
-									position: relative;
-									display: inline-block;
-
-									&.bold, &.italic, &.underline {
-										margin-right: 5px;
-										margin-top: 4px;
-										height: 28px;
-
-										&:last-of-type{ margin-right: 0; }
-
-										&::after{
-											content: '';
-											position: absolute;
-											top: 5px; left: 2px;
-											background: $icons no-repeat;
-										}
-									}
-
-									&.bold {
-										&::after{ @include sprite($icons,'bold',$dimensions: true); }
-										&.selected::after{ @include sprite($icons,'bold_active',$dimensions: true); }
-									}
-									&.italic {
-										&::after{ @include sprite($icons,'italic',$dimensions: true); }
-										&.selected::after{ @include sprite($icons,'italic_active',$dimensions: true); }
-									}
-									&.underline {
-										&::after{ @include sprite($icons,'underline',$dimensions: true); }
-										&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 
 		&.disabled {
 			.main {

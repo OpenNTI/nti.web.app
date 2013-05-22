@@ -410,14 +410,10 @@
 					font: italic 400 14px/37px $font;
 					padding: 0 10px;
 					.editor {
-						margin-bottom: 10px;
-
-						&.basic{
-							margin-top: 10px;
-							.footer{
-								background-color: transparent;
-								&::after{ display: none; }
-							}
+						margin: 10px 0;
+						.footer{
+							background-color: transparent;
+							&::after{ display: none; }
 						}
 					}
 				}
@@ -784,17 +780,16 @@
 
 				.editor {
 					border: 1px solid #dcdcdc;
+					margin-top: 10px;
+
 					.main{
 						padding-left: 13px;
 						padding-right: 13px;
 					}
 
-					&.basic{
-						margin-top: 10px;
-						.footer{
-							background-color: transparent;
-							&::after{ display: none; }
-						}
+					.footer{
+						background-color: transparent;
+						&::after{ display: none; }
 					}
 				}
 			}

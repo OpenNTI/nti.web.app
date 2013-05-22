@@ -36,6 +36,38 @@ $experimental-support-for-svg: true;
 			padding-right: 13px;
 			background-color: $slidedeck-controls-background;
 			border: 1px solid #323232;
+
+			.aux{
+				border-color: #323232;
+				background: #161616;
+				.publish{
+					background-color: #161616;
+					&::after{
+						@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
+					}
+
+					&.on::after{
+						@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
+					}
+				}
+
+				.token{
+					border-bottom-color: #3a9bd3;
+					border-top-color: #3a9bd3;
+					border-right-color: #3a9bd3;
+					border-left-color: #3a9bd3;
+					background: #3a9bd3;
+				}
+			}
+
+			.token-input-wrap span.token-input-sizer{
+				color: #b8b8b8;
+			}
+
+			input{
+				color: #b8b8b8;
+				background-color: #161616;
+			}
 		}
 		.toolbar {
 			background-color: $slidedeck-controls-background;
@@ -85,41 +117,6 @@ $experimental-support-for-svg: true;
 							}
 						}
 					}
-				}
-			}
-		}
-		&.basic{
-			.main{
-				.aux{
-					border-color: #323232;
-					background: #161616;
-					.publish{
-						background-color: #161616;
-						&::after{
-							@include sprite($elements,'btn_toggle_private_dark',$dimensions: true);
-						}
-
-						&.on::after{
-							@include sprite($elements,'btn_toggle_public_dark',$dimensions: true);
-						}
-					}
-
-					.token{
-						border-bottom-color: #3a9bd3;
-						border-top-color: #3a9bd3;
-						border-right-color: #3a9bd3;
-						border-left-color: #3a9bd3;
-						background: #3a9bd3;
-					}
-				}
-
-				.token-input-wrap span.token-input-sizer{
-					color: #b8b8b8;
-				}
-
-				input{
-					color: #b8b8b8;
-					background-color: #161616;
 				}
 			}
 		}

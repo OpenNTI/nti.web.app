@@ -17,7 +17,7 @@ Ext.define('NextThought.editor.Editor',{
 	cancelButtonLabel: 'Cancel',
 
 	ui: 'editor',
-	cls: 'editor basic',
+	cls: 'editor',
 
 	renderTpl: Ext.DomHelper.markup([
 		'{header}',
