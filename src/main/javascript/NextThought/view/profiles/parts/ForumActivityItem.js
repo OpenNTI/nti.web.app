@@ -103,7 +103,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		deleteEl: '.foot .delete',
 		replyEl: '.reply',
 		replyBoxEl: '.respond > div',
-		respondEl: '.respond'
+		respondEl: '.respond',
+		replyOptions: '.respond .reply-options'
 	},
 
 
@@ -240,10 +241,10 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var box = this.replyBoxEl;
+		var box = this.replyOptions;
 
 
-		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.respondEl});
+		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.replyBoxEl});
 
 		this.mon(this.replyEl,'click',this.showEditor,this);
 
