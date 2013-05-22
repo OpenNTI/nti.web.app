@@ -1,11 +1,13 @@
 Ext.define('NextThought.view.forums.Editor',{
-	extend: 'Ext.Component',
+	extend: 'NextThought.editor.Editor',
 	alias: 'widget.forums-topic-editor',
-
-	requires:['NextThought.editor.Actions'],
 
 	cls: 'forums-topic-editor-box',
 	border: 1,
+
+	enableTags: true,
+	enableTitle: true,
+	enablePublishControls: true,
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn:
@@ -16,47 +18,7 @@ Ext.define('NextThought.view.forums.Editor',{
 				{ cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
 			]}
 		},
-		{ cls: 'forums-topic-editor', cn: {
-			cls: 'editor active basic',
-			cn:[{
-				cls: 'main',
-				cn:[{
-					cls: 'title',
-					cn:[{tag:'input', type:'text', placeholder: 'Title...'}]
-				},{
-					cls: 'aux',
-					cn:[
-						{cls: 'action publish on', 'data-qtip': 'Privacy Setting'},
-						{cls: 'tags'}
-					]
-				},{
-					cls: 'content',
-					contentEditable: true,
-					unselectable: 'off',
-					cn: [{ //inner div for IE
-						html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
-					}]
-				}]
-			},{
-				cls: 'footer',
-				cn: [{
-					cls: 'left',
-					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'},
-						{
-							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
-							{cls:'popover controls', cn:[
-								{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
-								{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
-								{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
-							]}
-						]
-						}]
-				},{
-					cls: 'right',
-					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
-				}]
-			}]
-		}}
+		{ cls: 'forums-topic-editor', cn: { cls: 'editor active basic', html:'{super}' } }
 	]),
 
 
@@ -91,31 +53,27 @@ Ext.define('NextThought.view.forums.Editor',{
 		this.callParent(arguments);
 		var r = this.record,
 			h,
-			title = this.titleEl.down('input'),
-			e = this.editorActions = new EditorActions(this,this.editor),
 			parentCtEl = Ext.get('forums'),
 			hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
 
-		this.mon(e.tags,'new-tag', this.syncHeight,this);
-		this.mon(this.saveEl,'click', this.onSave, this);
-		this.mon(this.cancelEl,'click', this.onCancel, this);
+		this.mon(this.tags,'new-tag', this.syncHeight,this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 
 		if( r ){
 			h = r.get('headline');
-			e.editBody(h.get('body'));
-			e.setTitle(h.get('title'));
-			e.setTags(h.get('tags'));
-			e.setPublished(r.isPublished());
+			this.editBody(h.get('body'));
+			this.setTitle(h.get('title'));
+			this.setTags(h.get('tags'));
+			this.setPublished(r.isPublished());
 		}
 
-		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
+		this.mon(this.titleEl,'keyup',function(){ this.clearError(this.titleEl); },this);
 		parentCtEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
-		title.focus();
-		this.moveCursorToEnd(title);
+		this.titleEl.focus();
+		this.moveCursorToEnd(this.titleEl);
 	},
 
 
@@ -189,7 +147,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	onSave: function(e){
 		e.stopEvent();
-		var v = this.editorActions.getValue(),
+		var v = this.getValue(),
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){

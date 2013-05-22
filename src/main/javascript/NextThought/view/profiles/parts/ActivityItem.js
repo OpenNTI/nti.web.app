@@ -32,7 +32,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		commentsEl: '.comments',
 		flagEl: '.foot .flag',
 		deleteEl: '.foot .delete',
-		contextWrapEl: '.content-callout'
+		contextWrapEl: '.content-callout',
+		responseBox: '.respond > div'
 	},
 
 
@@ -358,8 +359,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					cn: [
 						{ cls: 'reply', html: 'Add a comment' }
 					]
-				},
-				TemplatesForNotes.getEditorTpl()
+				}
 			]}
 		}
 	]);
@@ -449,8 +449,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply',{
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
 						]
-					},
-					TemplatesForNotes.getEditorTpl()
+					}
 				]
 			}
 		]

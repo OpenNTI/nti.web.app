@@ -2,10 +2,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	requires: [
 		'NextThought.util.Line',
-		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.view.whiteboard.Window',
-		'NextThought.view.whiteboard.Utils'
+		'NextThought.view.whiteboard.Utils',
+		'NextThought.editor.Editor'
 	],
 
 	openWhiteboards: {},
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 								cls: 'bottom-border',
 								html: '&nbsp;'
 							},
-							TemplatesForNotes.getEditorTpl(true, false)
+							{ cls:'editorBox'}
 						]
 					}
 				]
@@ -91,9 +91,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		data.box = box = container.down('.note-here-control-box');
 		data.textarea = txt = box.down('textarea');
 		data.lineEntry = box.down('.entry');
-		data.editor = box.down('.editor');
 		data.main = box.down('.main');
 		data.footer = box.down('.footer');
+		data.editorBox = box.down('.editorBox');
 		box.down('.shadow-text').unselectable();
 
 		//Firefox likes to allow you to edit the toolbar, fix that
@@ -102,6 +102,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		if (data.footer) {
 			data.footer.unselectable();
+		}
+		if(data.editorBox){
+			data.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: data.editorBox, enableShareControls: true});
 		}
 
 		box.hide();
@@ -130,7 +133,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'content-updated': onContentUpdate
 		});
 
-		me.mon(data.editor.down('.content'), {
+		me.mon(data.editor.el.down('.content'), {
 			scope: me,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
@@ -164,8 +167,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			click: me.noteOverlayActivateRichEditor
 		});
 
-		data.editorActions = new EditorActions(me, data.editor, me.getInsertionPoint());
-		data.editorActions.on('cancel','noteOverlayEditorCancel',me);
+		data.editor.on('cancel','noteOverlayEditorCancel',me);
 	},
 
 
@@ -215,10 +217,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
 			WBUtils.createFromImage(img, function (data) {
-				o.editorActions.reset();
-				o.editorActions.setValue('');
-				o.editorActions.addWhiteboard(data);
-				o.editorActions.focus(true);
+				o.editor.reset();
+				o.editor.setValue('');
+				o.editor.addWhiteboard(data);
+				o.editor.focus(true);
 			});
 		}
 	},
@@ -428,7 +430,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		if (o.richEditorActive) {
-			e = o.editor;
+			e = o.editor.el;
 		}
 
 		e.scrollIntoView(this.body);
@@ -452,12 +454,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		o.richEditorActive = true;
-		o.editorActions.updatePrefs();
-		o.editorActions.activate();
-		o.editorActions.setValue(t.value, true, true);
+		o.editor.updatePrefs();
+		o.editor.activate();
+		o.editor.setValue(t.value, true, true);
 		t.value = '';
 		setTimeout(function () {
-			o.editorActions.focus();
+			o.editor.focus();
 		}, 250);
 
 
@@ -497,8 +499,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		delete o.richEditorActive;
 		o.textarea.dom.value = "";
 		o.lineEntry.removeCls('active');
-		o.editorActions.deactivate();
-		o.editorActions.reset();
+		o.editor.deactivate();
+		o.editor.reset();
 		this.noteOverlayMouseOut();
 	},
 
@@ -565,7 +567,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			rangeInfo;
 
 		if (o.richEditorActive) {
-			v = o.editorActions.getValue();
+			v = o.editor.getValue();
 			note = v.body;
 			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
 		}
@@ -613,7 +615,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 		var o = this.noteOverlayData;
-		delete o.editorActions.lastRange;
+		delete o.editor.lastRange;
 		if (o.richEditorActive) {
 			//o.editor.repaint();
 			this.noteOverlayScrollEditorIntoView();

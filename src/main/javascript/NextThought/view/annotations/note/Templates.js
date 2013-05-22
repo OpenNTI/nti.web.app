@@ -1,58 +1,6 @@
 Ext.define('NextThought.view.annotations.note.Templates',{
 	singleton: true,
 
-	getEditorTpl: function(enableSharing, enableTitle){
-		/**FIXME: Nasty templating. We are temporarily checking this conditions the hard way since all this function returns is an object not a template.
-		 * It's a short time solution, but eventually this template will go away once we reunite all 'editors'.
-		 */
-
-		return {
-			cls: 'editor basic',
-			cn:[{
-				cls: 'main',
-					cn:[
-						(!enableSharing ? '':
-							{cls: 'aux', cn:[
-								{cls: 'recipients'}
-							]}
-						),(!enableTitle ? '':
-							{cls: 'title',cn:[
-								{tag:'input', type:'text', placeholder: 'Title...'}
-							]}
-						),{
-							cls: 'content',
-							contentEditable: true,
-							tabIndex: 1,
-							unselectable: 'off',
-							cn: [{ //inner div for IE
-								html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
-							}]
-						}
-					]
-				},{
-					cls: 'footer',
-					cn: [{
-						cls: 'left',
-						cn: [{
-							cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
-						},{
-							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
-								{cls:'popover controls', cn:[
-									{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
-									{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
-									{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
-								]}
-							]
-						}]
-					},{
-						cls: 'right',
-						cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
-					}]
-				}]
-			};
-	},
-
-
 	getReplyOptions: function(){
 		return {
 			cls: 'reply-options',

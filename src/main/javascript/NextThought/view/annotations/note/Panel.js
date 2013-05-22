@@ -39,7 +39,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		context: '.context .text',
 		sharedTo: '.shared-to',
 		responseBox: '.respond',
-		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
 		shareButton: '.respond .share',
@@ -83,7 +82,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onBeforeDestroyCheck: function(){
-		if(this.editorActions && this.editorActions.isActive()){
+		if(this.editor && this.editor.isActive()){
 			this.setPlaceholderContent();
 			return false;//stop the destroy
 		}
@@ -98,12 +97,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.first){ me.noteBody.addCls('first'); }
 		if(this.root){ me.noteBody.addCls('root'); }
 
-		me.editorActions = new EditorActions(me,me.editor);
+		me.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox});
+		me.editorEl = me.editor.getEl();
 
 		this.noteBody.hover(this.onMouseOver,this.onMouseOut,this);
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		me.mon(me.editorActions,'droped-whiteboard',me.droppedWhiteboard,me);
+		me.mon(me.editor,'droped-whiteboard',me.droppedWhiteboard,me);
 
 		me.setRecord(me.record);
 
@@ -130,10 +130,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			if(me.shareButton){ me.shareButton.remove(); }
 		}
 
-		me.mon(me.editor.down('.cancel'), 'click', me.deactivateReplyEditor, me);
-		me.mon(me.editor.down('.save'), 'click', me.editorSaved, me);
+		me.mon(me.editorEl.down('.cancel'), 'click', me.deactivateReplyEditor, me);
+		me.mon(me.editorEl.down('.save'), 'click', me.editorSaved, me);
 
-		me.mon(me.editor.down('.content'),{
+		me.mon(me.editorEl.down('.content'),{
 			scope: me,
 			keypress: me.editorKeyPressed,
 			keydown: me.editorKeyDown
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	disable: function(){
 		var me = this,
-				e = me.editor || {down:Ext.emptyFn},
+				e = me.editorEl || {down:Ext.emptyFn},
 				cancel = e.down('.cancel'),
 				save = e.down('.save');
 
@@ -157,8 +157,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		console.debug('disabling '+me.record.getId()+', Body: '+me.text.getHTML());
 
-		if(me.editorActions && me.editorActions.isActive()){
-			me.editorActions.disable();
+		if(me.editor && me.editor.isActive()){
+			me.editor.disable();
 
 			me.mun(save, 'click', me.editorSaved, me);
 			me.mon(cancel,'click', function(){
@@ -237,7 +237,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	editorSaved: function(){
-		var v = this.editorActions.getValue(),
+		var v = this.editor.getValue(),
 				me = this,
 				r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
@@ -280,7 +280,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			catch(e){
 				console.error(Globals.getError(e));
 				//me.el.unmask();
-				me.editor.unmask();
+				me.editorEl.unmask();
 			}
 		}
 
@@ -289,7 +289,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			me.deactivateReplyEditor();
 			return;
 		}
-		me.editor.mask('Saving...');
+		me.editorEl.mask('Saving...');
 		me.updateLayout();
 		Ext.defer(save, 1);
 	},
@@ -634,9 +634,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.noteBody && me.checkAndMarkAsActive(this)){
 			me.replyToId = null;
 			me.noteBody.addCls('editor-active');
-			me.editorActions.activate();
+			me.editor.activate();
 			me.scrollIntoView();
-			setTimeout(function(){me.editorActions.focus(true);}, 300);
+			setTimeout(function(){me.editor.focus(true);}, 300);
 			return true;
 		}
 		return false;
@@ -652,8 +652,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(this.noteBody){
 			this.noteBody.removeCls('editor-active');
 			this.el.select('.whiteboard-container .checkbox').removeCls('checked');
-			this.editorActions.deactivate();
-			this.editorActions.setValue('');
+			this.editor.deactivate();
+			this.editor.setValue('');
 		}
 		if(this.editMode){
 			this.text.show();
@@ -784,7 +784,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	onEdit: function(){
 		this.text.hide();
 		this.editMode = true;
-		this.editorActions.editBody(this.record.get('body'));
+		this.editor.editBody(this.record.get('body'));
 		this.activateReplyEditor();
 	},
 
@@ -857,7 +857,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			if(t){
 				if( this.activateReplyEditor() ){
 					t.up('.toolbar').down('.include').addCls('checked');
-					this.editorActions.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
+					this.editor.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
 				}
 			}
 			else {
@@ -865,10 +865,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				if(t){
 					t[t.hasCls('checked') ?'removeCls':'addCls']('checked');
 					if(t.hasCls('checked')){
-						this.editorActions.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
+						this.editor.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
 					}
 					else {
-						this.editorActions.removeWhiteboard(guid+'-reply');
+						this.editor.removeWhiteboard(guid+'-reply');
 					}
 				}
 				else {
@@ -911,8 +911,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				cls: 'respond',
 				cn: [
 					TemplatesForNotes.getReplyOptions(),
-					{ tag: 'span', cls: 'time' },
-					TemplatesForNotes.getEditorTpl()
+					{ tag: 'span', cls: 'time' }
 				]
 			}]
 	},{

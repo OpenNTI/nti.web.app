@@ -20,12 +20,25 @@ Ext.define('NextThought.editor.Editor',{
 	cls: 'editor basic',
 
 	renderTpl: Ext.DomHelper.markup([
+		'{header}',
 		{
 			cls: 'main',
 			cn:[{tag:'tpl', 'if':'enableTitle', cn:{
 				cls: 'title',
 				cn:[{tag:'input', tabIndex:-1, type:'text', placeholder: 'Title...'}]
 			}},{
+				cls: 'aux', cn:[
+					{tag:'tpl', 'if': 'enableShareControls', cn:{
+						cls: 'recipients'
+					}},
+					{tag:'tpl', 'if':'enablePublishControls', cn:{
+						cls: 'action publish on', 'data-qtip': 'Privacy Setting'
+					}},
+					{tag:'tpl', 'if': 'enableTags', cn:{
+						cls:'tags'
+					}}
+				]
+			},{
 				cls: 'content',
 				contentEditable: true,
 				unselectable: 'off',
@@ -58,6 +71,28 @@ Ext.define('NextThought.editor.Editor',{
 	]),
 
 
+	onClassExtended: function (cls, data) {
+		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
+		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+
+
+		//allow a header template to be defined
+		data.headerTpl = data.headerTpl || cls.superclass.headerTpl || false;
+
+		//merge in subclass's templates
+		var tpl = this.prototype.renderTpl
+			.replace('{header}', data.headerTpl || '');
+
+		if (!data.renderTpl) {
+			data.renderTpl = tpl;
+		}
+		//Allow the subclass to redefine the template and include the super's template
+		else {
+			data.renderTpl = data.renderTpl.replace('{super}', tpl);
+		}
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
@@ -74,10 +109,17 @@ Ext.define('NextThought.editor.Editor',{
 
 
 	afterRender: function(){
+		var aux;
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el);
 		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
 		this.mon(this.el.down('.action.save'),'click',this.onSave,this);
+
+		//Hide it, if it's empty.
+		aux = this.el.down('.aux');
+		if(aux && !aux.dom.hasChildNodes()){
+			aux.remove();
+		}
 	},
 
 

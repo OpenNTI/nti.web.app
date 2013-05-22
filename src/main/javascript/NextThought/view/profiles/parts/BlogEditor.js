@@ -1,59 +1,16 @@
 Ext.define('NextThought.view.profiles.parts.BlogEditor',{
-	extend: 'Ext.Component',
+	extend: 'NextThought.editor.Editor',
 	alias: 'widget.profile-blog-editor',
 
-	requires:['NextThought.editor.Actions'],
+	enableTags: true,
+	enableTitle: true,
+	enableShareControls: true,
 
 	cls: 'blog-editor',
 
-	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'editor active basic',
-			cn:[{
-				cls: 'main',
-				cn:[{
-					cls: 'title',
-					cn:[{tag:'input', type:'text', placeholder: 'Title...'}]
-				},{
-					cls: 'aux',
-					cn:[
-						{ cls:'recipients'},
-						{cls: 'tags'}
-					]
-				},{
-					cls: 'content',
-					contentEditable: true,
-					unselectable: 'off',
-					cn: [{ //inner div for IE
-						html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
-					}]
-				}]
-			},{
-				cls: 'footer',
-				cn: [{
-					cls: 'left',
-					cn: [{
-						cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
-					},{
-						cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
-							{cls:'popover controls', cn:[
-								{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
-								{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
-								{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
-							]}
-						]
-					}]
-				},{
-					cls: 'right',
-					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
-				}]
-			}]
-		}
-	]),
-
+	renderTpl: Ext.DomHelper.markup({ cls: 'editor active basic', html:'{super}' }),
 
 	renderSelectors: {
-		editor: '.editor',
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
 		publishEl: '.action.publish',
@@ -73,30 +30,26 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		this.callParent(arguments);
 		var r = this.record,
 			h,
-			title = this.titleEl.down('input'),
-			e = this.editorActions = new EditorActions(this,this.editor),
 			profileEl = Ext.get('profile'),
 			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
-		this.mon(e.tags,'new-tag', this.syncHeight,this);
-		this.mon(this.saveEl,'click', this.onSave, this);
-		this.mon(this.cancelEl,'click', this.onCancel, this);
+		this.mon(this.tags,'new-tag', this.syncHeight,this);
 
 		if( r ){
 			h = r.get('headline');
-			e.editBody(h.get('body'));
-			e.setTitle(h.get('title'));
-			e.setTags(h.get('tags'));
-			e.setSharedWith(r.getSharingInfo());
+			this.editBody(h.get('body'));
+			this.setTitle(h.get('title'));
+			this.setTags(h.get('tags'));
+			this.setSharedWith(r.getSharingInfo());
 		}
 
-		this.mon(this.titleEl.down('input'),'keyup',function(){ this.clearError(this.titleEl); },this);
+		this.mon(this.titleEl,'keyup',function(){ this.clearError(this.titleEl); },this);
 		profileEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
-		title.focus();
-		this.moveCursorToEnd(title);
+		this.titleEl.focus();
+		this.moveCursorToEnd(this.titleEl);
 	},
 
 
@@ -149,7 +102,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	onSave: function(e){
 		e.stopEvent();
-		var v = this.editorActions.getValue(),
+		var v = this.getValue(),
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){

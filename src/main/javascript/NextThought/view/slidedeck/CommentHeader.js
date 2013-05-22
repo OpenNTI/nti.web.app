@@ -6,15 +6,14 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	cls: 'comment-header',
 
 	requires: [
-		'NextThought.editor.Actions',
-		'NextThought.view.annotations.note.Templates'
+		'NextThought.editor.Editor'
 	],
 
 
 	renderSelectors: {
-		editor: '.editor',
 		comment: '.comment',
-		count: '.comment .count span'
+		count: '.comment .count span',
+		respondBox: '.respondBox'
 	},
 
 
@@ -31,14 +30,16 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		var me = this;
 		me.callParent(arguments);
 
+		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls:true, renderTo:me.respondBox });
+		me.editorEl = me.editor.getEl();
 		me.comment.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		me.mon(me.comment,'click',me.activateEditor,me);
-		me.editorActions = new EditorActions(me,me.editor);
+		me.editorActions = me.editor;
 
-		me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateEditor });
-		me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
+		me.mon(me.editorEl.down('.cancel'),{ scope: me, click: me.deactivateEditor });
+		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
 
-		me.mon(me.editor.down('.content'),{
+		me.mon(me.editorEl.down('.content'),{
 			scope: me,
 			keypress: me.editorKeyPressed,
 			keydown: me.editorKeyDown
@@ -96,7 +97,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		e.stopEvent();
 
 		function callback(success, record){
-			me.editor.unmask();
+			me.editorEl.unmask();
 			if(success){
 				me.deactivateEditor();
 			}
@@ -105,7 +106,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		function onError(error){
 			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
             alert('There was an error saving your note.');
-            me.editor.unmask();
+            me.editorEl.unmask();
 		}
 
 		var me = this,
@@ -139,7 +140,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		range = dom.ownerDocument.createRange();
 		range.selectNode(img);
 
-		me.editor.mask('Saving...');
+		me.editorEl.mask('Saving...');
         try {
 		    me.fireEvent('save-new-note', note, range, container, sharing, style, callback);
         }
@@ -179,6 +180,6 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 				html: 'Write a comment'
 			}]
 		},
-		TemplatesForNotes.getEditorTpl(true)
+		{cls:'respondBox'}
 	]);
 });
