@@ -344,14 +344,9 @@ Ext.define('NextThought.controller.Navigation', {
 		var btn = this.viewSelectButton(id), altBtn;
 		try {
 			if(btn.alternateId){
-				altBtn = this.viewSelectButton(btn.alternateId);
-				altBtn.shouldNotFireViewSelected = true;
-				altBtn.toggle(true);
-				delete altBtn.shouldNotFireViewSelected;
+				btn = this.viewSelectButton(btn.alternateId);
 			}
-			else{
-				btn.toggle(true);
-			}
+			btn.toggle(true,true);
 		}
 		catch(e){
 			console.error('Looks like the "'+id+'" button was not included or was typo\'ed', e.stack);
@@ -360,10 +355,12 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	syncButton: function(){
-		console.log('Need to sync button');
 		var mainViews = this.viewport.views,
 			activeItem = mainViews.getActive(),
-			activeId = activeItem ? activeItem.id : null;
+			activeId = activeItem ? activeItem.id : null,
+			btns = Ext.ComponentQuery.query('view-select-button');
+
+		Ext.each(btns,function(b){b.toggle(false,true);});
 
 		this.track(activeId);
 	},
@@ -398,7 +395,9 @@ Ext.define('NextThought.controller.Navigation', {
 				this.track(id);//always switch the menus even if the view is already active
 				//search doesn't have a "view"...just a menu
 				if(button.switchView !== false){
-					this.setView(id);
+					if(!this.setView(id)){
+						this.syncButton();
+					}
 				}
 			}
 			catch(e){

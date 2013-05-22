@@ -2,20 +2,24 @@ Ext.define('NextThought.view.ViewSelectButton', {
 	extend: 'Ext.button.Button',
 	alias: 'widget.view-select-button',
 
-	afterRender: function(){
-		this.callParent(arguments);
-		this.on('toggle', this.toggleHandler, this);
-		this.on('click', this.clickHandler, this);
+	listeners: {
+		toggle: 'toggleHandler',
+		click: 'clickHandler'
 	},
 
+	
 	fireViewSelected: function(state){
 		if(this.shouldNotFireViewSelected !== true){
 			this.fireEvent('view-selected', this, state);
 		}
 	},
 
-	toggleHandler: function(btn, state){ this.fireViewSelected(state); },
+	
+	toggleHandler: function(btn, state){
+		this.fireViewSelected(state); 
+	},
 
+	
 	clickHandler: function(e){
 		if(this.pressed && this.allowNavigationClick){
 			this.fireViewSelected(true);
