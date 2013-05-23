@@ -731,8 +731,9 @@ Ext.define('NextThought.model.Base', {
 				else if(x && Ext.isArray(x)) {
 					x = x.slice();
 					Ext.each(x, function(o, i){
-						x[i] = o.asJSON ? o.asJSON() : o;
+						x[i] = o && o.asJSON ? o.asJSON() : o;
 					});
+					x = Ext.Array.clean(x);
 				}
 
 				data[f.name] = Ext.clone(x);
