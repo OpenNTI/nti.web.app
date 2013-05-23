@@ -47,11 +47,16 @@ Ext.define('NextThought.chart.series.Score',{
 		    });
 		}
 
+		try {
 		label.setAttributes({
 			text: val+(val>=100?'':'\u008C%'),
 			x: this.centerX + (val>=100? 0:2)
 		});
 		label.show(true);
+		}
+		catch(er){
+			console.error(er.message);
+		}
 	},
 
 
@@ -60,10 +65,10 @@ Ext.define('NextThought.chart.series.Score',{
 			r,
 			abs,
 			sign,
-			key = 'angles adjusted to start at -PI/2',
+			//key = 'angles adjusted to start at -PI/2',
 			delta = this.correctionOffset;
 
-		if(typeof delta === 'undefined'){
+		if(delta === undefined){
 			desiredAngle = Math.PI/2;
 			r = opt.endAngle * this.rad;
 			abs = Math.abs(r);

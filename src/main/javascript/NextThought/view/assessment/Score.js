@@ -30,7 +30,8 @@ Ext.define('NextThought.view.assessment.Score',{
 
 	setValue: function(value){
 		var data = [{p:value},{p:(100-value)}],
-			s = this.down('chart').series.first();
+			s = this.down('chart').series.first(),
+			store = this.store;
 
 		if( s.setValue ){
 			s.setValue(value);
@@ -45,6 +46,8 @@ Ext.define('NextThought.view.assessment.Score',{
 			data.shift();
 		}
 
-		this.store.loadRawData(data,false);
+		Ext.defer(function(){
+			store.loadRawData(data,false);
+		},1);
 	}
 });

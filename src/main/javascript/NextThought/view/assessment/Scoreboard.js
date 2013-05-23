@@ -58,7 +58,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 
 		this.down('assessment-tally').setTally(correct,total);
-		this.down('assessment-score').setValue(Math.floor(100*correct/total));
+		this.down('assessment-score').setValue(Math.floor(100*correct/total)||0);
 
 		this.show();
 		this.reader.scrollTo(0);

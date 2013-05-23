@@ -59,12 +59,12 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		}
 
 		var incorrect = Math.max(total-correct,0),
-			percent = Math.ceil(100*correct/total),
+			percent = Math.ceil(100*correct/total) || 0,
 			//clamp the bucket id to be an integer between 0-10 inclusive.
 			bucketId = Math.min(
 					10,
 					Math.max( Math.ceil(percent/10),0 ) ),
-			messageBucket = this.messages[bucketId],
+			messageBucket = this.messages[bucketId||0],
 			messageId = 0,
 			msg = '';
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 			console.error('Error getting message: '+ e.message, Globals.getError(e));
 		}
 
-		this.correctCount.update(correct);
+		this.correctCount.update(correct||0);
 		this.incorrectCount.update(incorrect);
 
 		this.correctBox[correct === 0?'hide':'show']();
