@@ -118,5 +118,5 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 		this.editor.editBody(this.record.get('body'));
 		this.editor.setTitle(this.record.get('title'));
 		this.activateReplyEditor();
-	},
+	}
 });
