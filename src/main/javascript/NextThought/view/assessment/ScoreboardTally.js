@@ -13,10 +13,10 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		4:[" Keep trying. You&rsquo;ll get there!", "Keep studying, and you&rsquo;ll be well on your way!", "Keep trying!", "You can do it! Try again?"],
 		5:["Almost there! Keep it up!", "A little more practice, and you&rsquo;re on your way!", "Almost!", " Good try!"],
 		6:["Almost there! Keep it up!", "A little more practice, and you&rsquo;re on your way!", "Almost!", " Good try!"],
-		7:["Good job!", ":)", "So close!!", "Good work! Almost there!", "You&rsquo;ve almost got it!"],
-		8:["Good job!", ":)", "So close!!", "Good work! Almost there!", "You&rsquo;ve almost got it!"],
-		9:["Great work!", ":)", "Wow!", "Great job!", "Brilliant!", "Nice Work!"],
-		10:["Excellent! Perfect score!", "Above and beyond! Great job!", ":D", "Quite impressive.", "Genius.", "You&rsquo;re a math ninja!", "Eureka!"]
+		7:["Good job!", "So close!!", "Good work! Almost there!", "You&rsquo;ve almost got it!"],
+		8:["Good job!", "So close!!", "Good work! Almost there!", "You&rsquo;ve almost got it!"],
+		9:["Great work!", "Wow!", "Great job!", "Brilliant!", "Nice Work!"],
+		10:["Excellent! Perfect score!", "Above and beyond! Great job!", "Quite impressive.", "Genius.", "Eureka!"]
 	},
 
 
