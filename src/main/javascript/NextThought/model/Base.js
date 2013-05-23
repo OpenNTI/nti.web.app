@@ -733,7 +733,6 @@ Ext.define('NextThought.model.Base', {
 					Ext.each(x, function(o, i){
 						x[i] = o && o.asJSON ? o.asJSON() : o;
 					});
-					x = Ext.Array.clean(x);
 				}
 
 				data[f.name] = Ext.clone(x);
