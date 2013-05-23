@@ -112,16 +112,20 @@ Ext.define('NextThought.view.assessment.Question',{
 	gatherQuestionResponse: function(questionSet,collection){
 		var id =  this.question.getId(), values = [];
 		Ext.each(this.query('abstract-question-input'),function(p){
+			var v = p.getValue();
 			p.setSubmitted();
-			values[p.getOrdinal()] = p.getValue();
+			if(v !== undefined){
+				values[p.getOrdinal()] = v;
+			}
 		});
 
 		if(collection.hasOwnProperty(id)){
 			console.error('duplicate id in submission!',id);
 			return false;
 		}
-
-		collection[id] = values;
+		if(values.length > 0){
+			collection[id] = values;
+		}
 	},
 
 
