@@ -1,4 +1,4 @@
-\Ext.define('NextThought.view.definition.Window', {
+Ext.define('NextThought.view.definition.Window', {
 	extend: 'NextThought.view.Window',
 	alias: 'widget.definition-window',
 
