@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.definition.Window', {
+\Ext.define('NextThought.view.definition.Window', {
 	extend: 'NextThought.view.Window',
 	alias: 'widget.definition-window',
 
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.definition.Window', {
 				}
 
 				var o, domtree, outputtree, doc;
-				if (window.XMLSerializer && window.DOMParser) {
+				if (window.hasOwnProperty('XSLTProcessor') && window.XMLSerializer && window.DOMParser) {
 					domtree = new DOMParser().parseFromString(dom,"text/xml");
 					outputtree = processor.transformToDocument(domtree);
 					o = new XMLSerializer().serializeToString(outputtree);
