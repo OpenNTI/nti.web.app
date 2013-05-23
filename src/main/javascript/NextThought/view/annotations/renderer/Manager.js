@@ -127,6 +127,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		};
 	},
 
+
 	clearBuckets: function(prefix){
 		function clear(d){
 			while(d && d.firstChild){
@@ -143,6 +144,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			this.buckets[prefix].free();
 		}
 		this.buckets[prefix] = new this.Bucket();
+		this.getReader(prefix).noteOverlayClearRestrictedRanges();
 	},
 
 
@@ -337,7 +339,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		});
 
 		if(cloned && cloned.length > 0 && doc){
-			cleanContent = ReaderPanel.get().getCleanContent();
+			cleanContent = me.getReader(prefix).getCleanContent();
 			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
 			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
 			Ext.each(cloned, function(o){
