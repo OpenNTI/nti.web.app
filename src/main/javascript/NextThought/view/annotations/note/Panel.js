@@ -46,9 +46,21 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-	onClassExtended: function(cls, data) {
+	onClassExtended: function(cls, data, hooks) {
+		var onBeforeClassCreated = hooks.onBeforeCreated;
+
 		//merge with subclass's render selectors
 		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
+		if(data.cls){
+			data.cls = [cls.superclass.cls,data.cls].join(' ');
+		}
+
+		hooks.onBeforeCreated = function(cls, data) {
+			if(data.cls){
+				data.cls = [cls.superclass.cls,data.cls].join(' ');
+			}
+			onBeforeClassCreated.call(this, cls, data, hooks);
+		};
 	},
 
 

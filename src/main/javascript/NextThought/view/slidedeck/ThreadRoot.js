@@ -3,8 +3,14 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	alias: 'widget.slidedeck-slide-note',
 
 	root: true,
+	cls: 'dark',
 	rootQuery: 'slidedeck-slide',
 	collapsedCls: 'collapsed',
+
+	defaults: {
+		cls: 'dark',
+		defaults: { cls: 'dark' }
+	},
 
 	initComponent: function(){
 		this.addCls('slide');

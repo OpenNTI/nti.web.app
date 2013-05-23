@@ -19,17 +19,15 @@
 					}
 					&.flag-for-moderation {
 						display: none;
-						opacity: 0.6;
 						margin-right: 5px;
-						width: 17px;
-						background: url(../images/old_sprites/spr_options_menu.png) no-repeat -20px -162px;
+						background: $icons no-repeat;
+						@include sprite($icons,'flag-chat-13',$dimensions: true);
 						&:hover{
-							opacity: 1;
+							@include sprite($icons,'flag-chat-13_hover',$dimensions: true);
 						}
 						&.moderating {
 							&,&:hover{
-								background-position: -1px -179px;
-								opacity: 1.0;
+								@include sprite($icons,'flag-chat-13_active',$dimensions: true);
 							}
 						}
 					}

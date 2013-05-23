@@ -50,7 +50,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 	replyOptionsClicked: function(e, t, opts){
 		e.stopEvent();
 
-		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
+		var more = e.getTarget('.more', undefined, true),
+			container = e.getTarget('.note-container',0,true),
+			theme = (container && container.hasCls('dark')) ? 'dark':'',
+			editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
 			options = opts.options, menuTimer, involved, shared, hideDelete = false;
 
 		if (!more || !more.dom){return false;}
@@ -59,7 +62,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			e.stopEvent();
 			var menuCls = 'on' + item.itemId;
 			if (this[menuCls]){
-				this[menuCls].call(this);
+				this[menuCls]();
 			}
 			else {
 				console.warn('unimplemented method', item.itemId, 'on component', this.$className);
@@ -73,7 +76,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			TemplatesForNotes.areYouSure('Reporting this item cannot be undone', function(btn){
 				if(btn !== 'ok'){ return; }
 				if (me[menuCls]){
-					me[menuCls].call(me);
+					me[menuCls]();
 				}
 			});
 		}
@@ -168,7 +171,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		menu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
-			cls: 'reply-options-menu',
+			cls: 'reply-options-menu '+theme,
 			showSeparator: false,
 			shadow: false,
 			frame: false,

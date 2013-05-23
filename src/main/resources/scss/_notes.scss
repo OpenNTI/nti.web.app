@@ -144,6 +144,33 @@
 }
 
 .reply-options-menu{
+
+	&.dark {
+		box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.8) !important;
+		.x-menu-body{
+			border: 1px solid #343434 !important;
+			background: #343434 !important;
+
+			.x-menu-item {
+				color: $secondary-grey !important;
+
+				&.edit::after{ @include sprite($icons,'edit-dark',$dimensions: true); }
+				&.flag::after{ @include sprite($icons,'flag-dark',$dimensions: true); }
+				&.delete::after{ @include sprite($icons,'trash-can-dark',$dimensions: true); }
+
+				&.x-menu-item-active {
+					color: $tertiary-grey !important;
+					background: #3d3d3d !important;
+
+					&.edit::after{ @include sprite($icons,'edit-dark_hover',$dimensions: true); }
+					&.flag::after{ @include sprite($icons,'flag-dark_hover',$dimensions: true); }
+					&.delete::after{ @include sprite($icons,'trash-can-dark_hover',$dimensions: true); }
+				}
+
+			}
+		}
+	}
+
 	.x-menu-item {
 		&.reply-option{
 			padding: 1px 10px 2px 37px !important;
@@ -155,23 +182,33 @@
 
 
 			&::after{
-				content: ' ';
-				width: 18px;
-				height: 18px;
-				background: url(../images/old_sprites/spr_options_menu.png) 0 0 no-repeat;
+				content: '';
+				overflow: hidden;
+				background: $icons no-repeat;
 				position: absolute;
-				top: 5px;
-				left: 10px;
+				top: 8px;
+				left: 13px;
 			}
 
-			&.edit::after{ background-position: 0 -90px; }
-			&.flag::after{ background-position: 0 -18px; }
-			&.add-contact::after{ background-position: 0 -36px; }
-			&.chat::after { background-position: 0 -144px; }
-			&.follow::after{ background-position: 0 -54px; }
-			&.block::after{ background-position: 0 -72px; }
-			&.mute::after{ background-position: 0 -126px; }
-			&.delete::after{ background-position: 0 -108px; }
+			&.edit::after{ @include sprite($icons,'edit-15',$dimensions: true); }
+			&.flag::after{ @include sprite($icons,'flag-13x15',$dimensions: true); }
+			&.add-contact::after{ @include sprite($icons,'add-contact-14x14',$dimensions: true); }
+			&.chat::after { @include sprite($icons,'chat-18x12',$dimensions: true); }
+			&.follow::after{ @include sprite($icons,'follow',$dimensions: true); }
+			&.block::after{ @include sprite($icons,'block',$dimensions: true); }
+			&.mute::after{ @include sprite($icons,'mute-14x13',$dimensions: true); }
+			&.delete::after{ @include sprite($icons,'trash-can-11x14',$dimensions: true); }
+
+			&.x-menu-item-active {
+				&.edit::after{ @include sprite($icons,'edit-15_hover',$dimensions: true); }
+				&.flag::after{ @include sprite($icons,'flag-13x15_hover',$dimensions: true); }
+				&.add-contact::after{ @include sprite($icons,'add-contact-14x14_hover',$dimensions: true); }
+				&.chat::after { @include sprite($icons,'chat-18x12_hover',$dimensions: true); }
+				&.follow::after{ @include sprite($icons,'follow_hover',$dimensions: true); }
+				&.block::after{ @include sprite($icons,'block_hover',$dimensions: true); }
+				&.mute::after{ @include sprite($icons,'mute-14x13_hover',$dimensions: true); }
+				&.delete::after{ @include sprite($icons,'trash-can-11x14_hover',$dimensions: true); }
+			}
 		}
 	}
 }
