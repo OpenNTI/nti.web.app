@@ -109,7 +109,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.first){ me.noteBody.addCls('first'); }
 		if(this.root){ me.noteBody.addCls('root'); }
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox});
+		this.createEditor();
 		me.editorEl = me.editor.getEl();
 
 		this.noteBody.hover(this.onMouseOver,this.onMouseOut,this);
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		if( $AppConfig.service.canShare() ){
-			me.mon(me.replyButton,'click', me.activateReplyEditor, me);
+			me.mon(me.replyButton,'click', me.onReply, me);
 			if(me.shareButton){ me.mon(me.shareButton,'click', me.onShare, me); }
 		}
 		else{
@@ -156,6 +156,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
 		}
+	},
+
+
+	createEditor: function(){
+		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox});
 	},
 
 
@@ -888,6 +893,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				}
 			}
 		}
+	},
+
+	onReply: function(){
+		this.activateReplyEditor();
 	},
 
 

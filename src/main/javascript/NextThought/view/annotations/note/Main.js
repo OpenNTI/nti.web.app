@@ -23,6 +23,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		me.callParent(arguments);
 
+		this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		try {
 			me.contactsMaybeChanged();
 
@@ -39,6 +41,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		catch(e){
 			console.error(Globals.getError(e));
+		}
+	},
+
+	createEditor: function(){
+		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox, enableTitle: true});
+		if(this.editor.el.down('.title')){
+			this.editor.el.down('.title').addCls('small');
 		}
 	},
 
@@ -247,6 +256,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.callParent(arguments);
 		this.hideImageCommentLink();
 	},
+
+	onReply: function(){
+		this.editorEl.down('.title').hide();
+		this.activateReplyEditor();
+	},
+
+
+	onEdit: function(){
+		this.text.hide();
+		this.editMode = true;
+		this.editorEl.down('.title').show();
+		this.editor.editBody(this.record.get('body'));
+		this.editor.setTitle(this.record.get('title'));
+		this.activateReplyEditor();
+	},
+
 
 	hideImageCommentLink: function(){
 		var aLink =  this.context ? this.context.down('a[href=#mark]') : null;

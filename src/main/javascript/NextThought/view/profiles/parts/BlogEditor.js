@@ -7,7 +7,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	enableShareControls: true,
 
 	cls: 'blog-editor',
-
+	headerTplOrder: '{title}{toolbar}',
+	//TODO: update CSS to not require this nesting.
 	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html:'{super}' }),
 
 	renderSelectors: {

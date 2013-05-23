@@ -87,6 +87,7 @@ span.tab{
 				position: relative;
 				border: 0 solid #f2f2f2;
 				border-bottom-width: 1px;
+				padding: 0px 5px;
 
 				input{
 					font: normal italic 14px/30px $font;
@@ -117,6 +118,15 @@ span.tab{
 							@include sprite($elements,'btn_toggle_public',$dimensions: true);
 						}
 					}
+				}
+
+
+			}
+
+			.aux+.title, .title.small{
+				input{
+					font: italic 14px/30px $font;
+					margin: 0 0 0 5px;
 				}
 			}
 

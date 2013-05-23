@@ -29,7 +29,17 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 		this.updateHasChildren();
 		this.noteBody.on('click',this.toggleCollapse,this);
 		this.collapse();
+		this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
 	},
+
+
+	createEditor: function(){
+		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox, enableTitle: true});
+		if(this.editor.el.down('.title')){
+			this.editor.el.down('.title').addCls('small');
+		}
+	},
+
 
 	addAdditionalRecordListeners: function(record){
 		this.mon(record, 'count-updated', this.updateHasChildren, this);
@@ -93,5 +103,20 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 			this.removeCls(this.collapsedCls);
 			this.updateLayout();
 		}
-	}
+	},
+
+	onReply: function(){
+		this.editorEl.down('.title').hide();
+		this.activateReplyEditor();
+	},
+
+
+	onEdit: function(){
+		this.text.hide();
+		this.editMode = true;
+		this.editorEl.down('.title').show();
+		this.editor.editBody(this.record.get('body'));
+		this.editor.setTitle(this.record.get('title'));
+		this.activateReplyEditor();
+	},
 });

@@ -1,6 +1,5 @@
-Ext.define('NextThought.editor.Editor',{
+Ext.define('NextThought.editor.AbstractEditor',{
 	extend: 'Ext.Component',
-	alias: 'widget.nti-editor',
 
 	mixins: {
 		editorActions: 'NextThought.editor.Actions'
@@ -19,36 +18,50 @@ Ext.define('NextThought.editor.Editor',{
 	ui: 'editor',
 	cls: 'editor',
 
+	headerTplOrder: '{toolbar}{title}',
+
+	titleTpl: Ext.DomHelper.markup([
+		{tag:'tpl', 'if':'enableTitle', cn:{
+			cls: 'title',
+			cn:[{tag:'input', tabIndex:-1, type:'text', placeholder: 'Title...'}]
+		}}
+	]),
+
+
+	toolbarTpl: Ext.DomHelper.markup([{
+		cls: 'aux', cn:[
+			{tag:'tpl', 'if': 'enableShareControls', cn:{
+				cls: 'recipients'
+			}},
+			{tag:'tpl', 'if':'enablePublishControls', cn:{
+				cls: 'action publish on', 'data-qtip': 'Privacy Setting'
+			}},
+			{tag:'tpl', 'if': 'enableTags', cn:{
+				cls:'tags'
+			}}
+		]
+	}]),
+
+
 	renderTpl: Ext.DomHelper.markup([
 		'{header}',
 		{
 			cls: 'main',
-			cn:[{tag:'tpl', 'if':'enableTitle', cn:{
-				cls: 'title',
-				cn:[{tag:'input', tabIndex:-1, type:'text', placeholder: 'Title...'}]
-			}},{
-				cls: 'aux', cn:[
-					{tag:'tpl', 'if': 'enableShareControls', cn:{
-						cls: 'recipients'
-					}},
-					{tag:'tpl', 'if':'enablePublishControls', cn:{
-						cls: 'action publish on', 'data-qtip': 'Privacy Setting'
-					}},
-					{tag:'tpl', 'if': 'enableTags', cn:{
-						cls:'tags'
-					}}
-				]
-			},{
-				cls: 'content',
-				contentEditable: true,
-				unselectable: 'off',
-				tabIndex:-1,
-				cn: [{ //inner div for IE
-					//default value (allow the cursor in to this placeholder div, but don't take any space)
-					html: '&#8203;'
-				}]
-			}]
-		},{
+			cn:[
+				'{extra}',
+				{
+					cls: 'content',
+					contentEditable: true,
+					unselectable: 'off',
+					tabIndex:-1,
+					cn: [{ //inner div for IE
+						//default value (allow the cursor in to this placeholder div, but don't take any space)
+						html: '&#8203;'
+					}]
+				}
+			]
+		}
+		,{
 			cls: 'footer',
 			cn: [{
 				cls: 'left',
@@ -75,13 +88,19 @@ Ext.define('NextThought.editor.Editor',{
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
-
 		//allow a header template to be defined
 		data.headerTpl = data.headerTpl || cls.superclass.headerTpl || false;
+		data.titleTpl = data.titleTpl || cls.superclass.titleTpl || false;
+		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		//merge in subclass's templates
-		var tpl = this.prototype.renderTpl
-			.replace('{header}', data.headerTpl || '');
+		var tpl = this.prototype.renderTpl.replace('{header}', data.headerTpl || ''),
+			o = data.headerTplOrder || this.prototype.headerTplOrder || '',
+			topTpl = o.replace('{title}', data.titleTpl || '')
+					  .replace('{toolbar}', data.toolbarTpl || '');
+
+		tpl = tpl.replace('{extra}', topTpl || '');
+
 
 		if (!data.renderTpl) {
 			data.renderTpl = tpl;
@@ -167,4 +186,13 @@ Ext.define('NextThought.editor.Editor',{
 		return this.mixins.editorActions.onKeyDown.apply(this,arguments); },
 	reset: function(){ return this.mixins.editorActions.reset.apply(this,arguments);},
 	onMouseUp:function(){ return this.mixins.editorActions.onMouseUp.apply(this,arguments); }
+
+
+}, function(){
+
+	Ext.define('NextThought.editor.Editor',{
+		extend: 'NextThought.editor.AbstractEditor',
+		alias: 'widget.nti-editor'
+	});
+
 });

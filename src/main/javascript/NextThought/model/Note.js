@@ -41,6 +41,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'body', type: 'auto' },
+		{ name: 'title', type: 'auto' },
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },

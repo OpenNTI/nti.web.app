@@ -30,11 +30,10 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		var me = this;
 		me.callParent(arguments);
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls:true, renderTo:me.respondBox });
+		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls:true, renderTo:me.respondBox, enableTitle: true });
 		me.editorEl = me.editor.getEl();
 		me.comment.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		me.mon(me.comment,'click',me.activateEditor,me);
-		me.editorActions = me.editor;
 
 		me.mon(me.editorEl.down('.cancel'),{ scope: me, click: me.deactivateEditor });
 		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
@@ -72,9 +71,9 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		var me = this;
 		if(me.getRoot().checkAndMarkAsActive(this)){
 			me.comment.hide();
-			me.editorActions.activate();
+			me.editor.activate();
 			setTimeout(function(){
-				me.editorActions.focus(true);
+				me.editor.focus(true);
 				me.el.scrollIntoView(me.el.up('.x-container-slide'));
 			}, 300);
 		}
@@ -84,8 +83,8 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	deactivateEditor: function(e){
 		if(e){e.stopEvent();}
 		if(this.getRoot().editorActive()){
-			this.editorActions.deactivate();
-			this.editorActions.reset();
+			this.editor.deactivate();
+			this.editor.reset();
 			this.comment.show();
 			this.getRoot().setEditorActive(null);
 		}
@@ -113,8 +112,9 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			p = (LocationProvider.getPreferences() || {}).sharing || {},
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			style = 'suppressed',
-			v = me.editorActions.getValue(),
+			v = me.editor.getValue(),
 			note = v.body,
+			title = v.title,
 			sharing = p.sharedWith || [],
 			range,
 			container = me.slide.get('ContainerId'),
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 		me.editorEl.mask('Saving...');
         try {
-		    me.fireEvent('save-new-note', note, range, container, sharing, style, callback);
+		    me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
         }
         catch (error) {
             onError(error);

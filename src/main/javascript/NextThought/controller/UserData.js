@@ -655,7 +655,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewNote: function(body, range, c, shareWith, style, callback){
+	saveNewNote: function(title, body, range, c, shareWith, style, callback){
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1)){
 			console.error('Note creating a note missing content');
@@ -691,6 +691,7 @@ Ext.define('NextThought.controller.UserData', {
 		noteRecord = this.getNoteModel().create({
 			applicableRange: rangeDescription.description,
 			body: body,
+			title:title,
 			selectedText: range ? range.toString() : '',
 			sharedWith: shareWith,
 			style: style,

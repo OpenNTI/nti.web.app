@@ -9,6 +9,8 @@ Ext.define('NextThought.view.forums.Editor',{
 	enableTitle: true,
 	enablePublishControls: true,
 
+	headerTplOrder: '{title}{toolbar}',
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn:
 			{ cls: 'header', cn:[

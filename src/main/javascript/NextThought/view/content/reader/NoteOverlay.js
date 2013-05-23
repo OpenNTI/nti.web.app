@@ -104,7 +104,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			data.footer.unselectable();
 		}
 		if(data.editorBox){
-			data.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: data.editorBox, enableShareControls: true});
+			data.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: data.editorBox, enableShareControls: true, enableTitle: true });
 		}
 
 		box.hide();
@@ -564,11 +564,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			note = o.textarea.dom.value,
 			style = o.lastLine.style || 'suppressed',
 			v, sharing = p.sharedWith || [], re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			rangeInfo;
+			rangeInfo,
+			title = '';
 
 		if (o.richEditorActive) {
 			v = o.editor.getValue();
 			note = v.body;
+			title = v.title;
 			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
 		}
 
@@ -581,7 +583,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.mask('Saving...');
 		try {
 			rangeInfo = this.rangeForLastLineInfo(o.lastLine, style);
-			me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
+			me.fireEvent('save-new-note', title, note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
 		}
 		catch (error) {
 			console.error('Error saving note - ' + Globals.getError(error));
