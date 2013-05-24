@@ -179,6 +179,34 @@ Ext.define('NextThought.model.Note', {
 		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
 	},
 
+	isWhiteboardOnly: function(body){
+		return Ext.Array.every(body, function(i){
+			return typeof i !== 'string';
+		});
+	},
+
+	resolveNoteTitle: function(){
+		var t = this.get('title'),
+			body = this.get('body'),
+			snip, max = 36;
+
+		// NOTE: If there is a title return it.
+		// If the note has no title and the body is Whiteboard only, return 'Whiteboard',
+		// If the note has no title, return a snippet of the body.
+		if(!Ext.isEmpty(t)){
+			return Ext.String.ellipsis(t, max, false);
+		}
+		if(this.isWhiteboardOnly(body)){
+			return 'Whiteboard';
+		}
+
+		t = this.get('body').join('');
+		snip = Ext.String.ellipsis(this.getBodyText(true), max, false);
+		if(snip !== t){ t = snip +'...'; }
+		return t;
+	},
+
+
 	countChildren: function(){
 		function allDescendants (rec) {
 			var i, child;

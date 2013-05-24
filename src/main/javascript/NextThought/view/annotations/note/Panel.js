@@ -201,14 +201,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInTitle: function(){
-		var t = this.record.get('title'),
-			snip;
-		if(Ext.isEmpty(t)){
-			t = this.record.get('body').join('');
-			snip = Ext.String.ellipsis(this.record.getBodyText(true), 36, false);
-			if(snip !== t){ t = snip +'...'; }
-		}
-		this.title.update(t);
+		this.title.update(this.record.resolveNoteTitle());
 	},
 
 
