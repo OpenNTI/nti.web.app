@@ -132,9 +132,8 @@
 			.title, .author, .price {
 				color: $primary-grey;
 				font: normal bold 12px/18px $font;
-				text-overflow: ellipsis;
+				@include ellipse;
 				overflow: hidden;
-				white-space: nowrap;
 			}
 
 			.author {

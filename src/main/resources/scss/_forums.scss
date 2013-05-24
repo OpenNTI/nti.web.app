@@ -17,9 +17,8 @@
 		cursor: pointer;
 		padding: 0 4px 0 34px;
 		margin: 0 80px 0 0;
-		white-space: nowrap;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		@include ellipse;
 		color: $tertiary-grey;
 		font: italic 500 18px/50px $font;
 		text-transform: uppercase;
@@ -119,8 +118,7 @@
 			color: $primary-grey;
 			font: normal 300 28px/40px $font;
 			padding-bottom: 5px;
-			white-space: nowrap;
-			text-overflow: ellipsis;
+			@include ellipse;
 			overflow: hidden;
 		}
 		.description {
@@ -181,8 +179,7 @@
 			color: $primary-grey;
 			font: normal 400 26px/40px $font;
 			padding-bottom: 5px;
-			white-space: nowrap;
-			text-overflow: ellipsis;
+			@include ellipse;
 			overflow: hidden;
 		}
 		.meta {
@@ -273,8 +270,7 @@
 		color: $primary-grey;
 		font: normal 300 28px/40px $font;
 		padding-bottom: 5px;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		@include ellipse;
 		overflow: hidden;
 		cursor: pointer;
 	}

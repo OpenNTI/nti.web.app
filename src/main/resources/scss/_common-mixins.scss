@@ -12,6 +12,16 @@
 	}
 }
 
+@mixin ellipse{
+	white-space: nowrap;
+	-moz-text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis;
+	-khtml-text-overflow: ellipsis;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+}
+
 @mixin no-select {
 	-moz-user-select: none;
 	-webkit-user-select: none;
@@ -294,6 +304,7 @@
 		padding: 0 0 0 20px;
 		white-space: nowrap;
 		text-overflow: clip;
+		-ms-text-overflow: clip;
 		height: 16px;
 		min-width: 30px;
 		line-height: 16px;
@@ -330,8 +341,7 @@
 	font-weight: 600;
 	overflow: hidden;
 	text-transform: uppercase;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	@include ellipse;
 }
 
 
@@ -424,13 +434,12 @@
 		margin-right: 0;
 		padding: 5px;
 		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		@include ellipse;
 
 		span {
 			display: block;
 			overflow: hidden;
-			text-overflow: ellipsis;
+			@include ellipse;
 			text-align: center;
 			width: 86px; // for ie to ensure that the text is centered
 		}

@@ -103,8 +103,7 @@
 					font: italic 300 30px/36px $font;
 					color: $primary-blue;
 					margin-bottom: 5px;
-					white-space: nowrap;
-					text-overflow: ellipsis;
+					@include ellipse;
 					&.readonly{
 						display: inline-block;
 					}
@@ -487,8 +486,7 @@
 					font: normal 600 10px/20px $font;
 					color: $tertiary-grey !important;
 					overflow: hidden;
-					white-space: nowrap;
-					text-overflow: ellipsis;
+					@include ellipse;
 				}
 
 				.context{
@@ -529,9 +527,8 @@
 				padding: 0 20px;
 				font: normal 700 10px/40px $font;
 				min-height: 40px;
-				white-space: nowrap;
 				overflow: hidden;
-				text-overflow: ellipsis;
+				@include ellipse;
 
 				span.path-part {
 					&::after{
@@ -883,9 +880,8 @@
 						}
 
 						.label {
-							white-space: nowrap;
 							overflow: hidden;
-							text-overflow: ellipsis;
+							@include ellipse;
 							color: $tertiary-grey;
 							font: normal 600 10px/30px $font;
 							text-transform: uppercase;

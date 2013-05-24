@@ -74,7 +74,7 @@
 				font-weight: 800;
 				color: $primary-blue;
 				text-transform: uppercase;
-				text-overflow: ellipsis;
+				@include ellipse;
 				overflow: hidden;
 			}
 			.message {
@@ -82,7 +82,7 @@
 				line-height: normal;
 				font-size: 11px;
 				font-weight: 300;
-				text-overflow: ellipsis;
+				@include ellipse;
 				overflow: hidden;
 			}
 		}

@@ -159,9 +159,8 @@
     .title, .byline {
       color: $primary-grey;
       font: normal 600 14px/20px $font;
-      text-overflow: ellipsis;
       overflow: hidden;
-      //white-space: nowrap;
+      //@include ellipse;
     }
 
     .byline {
@@ -633,8 +632,7 @@
 
     td, th {
       span {
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        @include ellipse;
         overflow: hidden;
         display: block;
       }

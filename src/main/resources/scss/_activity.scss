@@ -190,8 +190,7 @@
 				color: $tertiary-grey !important;
 				height: 20px;
 				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
+				@include ellipse;
 			}
 
 			.context{
@@ -229,9 +228,8 @@
 			padding: 0 20px;
 			font: normal 700 10px/40px $font;
 			height: 40px;
-			white-space: nowrap;
 			overflow: hidden;
-			text-overflow: ellipsis;
+			@include ellipse;
 
 			&:empty { display: none; }
 
@@ -301,8 +299,7 @@
 				color: $primary-grey;
 				overflow: hidden;
 				padding-bottom: 3px;
-				text-overflow: ellipsis;
-				white-space: nowrap;
+				@include ellipse;
 				font: normal 300 28px/30px "Open Sans Condensed", $font;
 				cursor: pointer;
 				&::after{

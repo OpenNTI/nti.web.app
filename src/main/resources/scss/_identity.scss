@@ -38,14 +38,12 @@
 			font: { size: 14px; weight: 500; }
 			padding-right: 35px;
 			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
+			@include ellipse;
 			cursor: pointer;
 		}
 		.status {
-			text-overflow: ellipsis;
+			@include ellipse;
 			max-width: 190px;
-			white-space: nowrap;
 			overflow: hidden;
 			color: $secondary-grey;
 			font: { size: 12px; weight: 500; }

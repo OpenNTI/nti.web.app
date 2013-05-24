@@ -280,9 +280,8 @@
 		display: block;
 		margin-left: 40px;
 		font-weight: bold;
-		white-space: nowrap;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		@include ellipse;
 	}
 }
 
@@ -333,7 +332,7 @@
 				.displayname {
 					max-width: 326px;
 					overflow: hidden;
-					text-overflow: ellipsis;
+					@include ellipse;
 					display: inline-block;
 				}
 			}

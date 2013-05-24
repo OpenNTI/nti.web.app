@@ -72,10 +72,9 @@
 		font-weight: 800;
 		font-style: normal;
 		font-family: $font;
-		white-space: nowrap;
 		overflow: hidden;
 		text-transform: uppercase;
-		text-overflow: ellipsis;
+		@include ellipse;
 	}
 	.menu {
 		max-width: 450px;
@@ -85,9 +84,8 @@
 		font-style: normal;
 		font-family: $font;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		@include ellipse;
 		margin-bottom: 6px;
-		white-space: nowrap;
 		span {
 			padding-right: 15px !important;
 			background: url(../images/elements/menu-arrow-down-default.png) no-repeat 100% 50%;
@@ -95,7 +93,7 @@
 			.x-ie10 &,
 			.x-ie & {
 				display: block;
-				text-overflow: ellipsis;
+				@include ellipse;
 				overflow: hidden;
 			}
 		}
@@ -182,7 +180,7 @@
 			margin: 0 !important;
 			cursor: pointer;
 			overflow: hidden;
-			text-overflow: ellipsis;
+			@include ellipse;
 
 			&.label{
 				@include menu-label-text-treatment;

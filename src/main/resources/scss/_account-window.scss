@@ -117,9 +117,8 @@
 			}
 
 			.identities{
-				white-space: nowrap;
 				overflow: hidden;
-				text-overflow: ellipsis;
+				@include ellipse;
 			}
 
 			.username, .email {
@@ -127,8 +126,7 @@
 				display: inline-block;
 				position: relative;
 				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
+				@include ellipse;
 				padding-left: 20px;
 
 				&:empty{ display: none; }
