@@ -132,6 +132,10 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		return record.getReplyCount();
 	},
 
+	setRenderedTitle: function(record){
+		return  record.resolveNoteTitle();
+	},
+
 
 	beforeRender: function () {
 		this.callParent(arguments);

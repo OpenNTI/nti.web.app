@@ -212,12 +212,18 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
+	setRenderedTitle: function(record){
+		return record.title;
+	},
+
+
 	/** @private */
 	prepareRenderData: function (record) {
 		var me = this,
 			o = record.getData();
 		o.type = o.Class.toLowerCase();
 		o.CommentCount = this.getCommentCount(record);
+		o.title = this.setRenderedTitle(record);
 		Ext.apply(o, this.getDerivedData(record));
 
 		me.ownerCt.addCls(o.type);

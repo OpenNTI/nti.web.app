@@ -155,6 +155,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	isExpanded: function(){ return !this.commentsEl; },
 
+	getRecordTitle: function(){
+		return this.record.resolveNoteTitle();
+	},
+
 
 	maybeFillIn: function(){
 		var me = this,
@@ -169,7 +173,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.getItemReplies();
 
-		subject = me.record.get('subject');
+		subject = this.getRecordTitle();
 		me.subjectEl.update(subject||'Subject');
 		if(!subject){
 			me.subjectEl.addCls('no-subject');
