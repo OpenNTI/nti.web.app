@@ -116,6 +116,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			if(v===undefined || v===null){
 				console.warn('Question has not been answered yet');
 				v = '';
+			}
 			p.setSubmitted();
 			values[p.getOrdinal()] = v;
 		});
