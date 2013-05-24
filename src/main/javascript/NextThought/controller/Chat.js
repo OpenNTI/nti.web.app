@@ -924,17 +924,15 @@ Ext.define('NextThought.controller.Chat', {
 //	},
 
 	handleSetPresence: function (msg) {
-		var items, me = this,
+		var me = this,
 			store = this.getPresenceInfoStore(),
 			current = $AppConfig.userObject;
 
-		items = (Ext.isString(msg)) ? Ext.JSON.decode(msg) : msg;
-
-		Ext.Object.each(items, function (key, value, object) {
+		Ext.Object.each(msg, function (key, value, object) {
 			var presence = ParseUtils.parseItems([value])[0];
 
 			//if its the current user set the flag accordingly
-			if(key === current.get('Username')){
+			if(isMe(key)){
 				me.availableForChat = (presence.isOnline())? true : false; 
 			}
 
