@@ -84,6 +84,11 @@ Ext.define('NextThought.view.cards.CardTarget',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.viewportMonitor();
+		this.mon(Ext.get(Ext.DomHelper.append(this.el,{cls:'back-button'})),{
+			click: function(){
+				history.back();
+			}
+		});
 	},
 
 
