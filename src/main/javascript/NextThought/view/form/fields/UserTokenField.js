@@ -175,7 +175,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	maybeHideSearchListMenu: function(e){
 		var me = this;
-		if(e.getTarget('.x-menu') || e.getTarget('.sharing-token-field')){
+		if(e.type === 'mouseover' || e.getTarget('.x-menu') || e.getTarget('.sharing-token-field')){
 			clearTimeout(this.hideTimer);
 		}
 		else{
