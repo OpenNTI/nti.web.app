@@ -92,6 +92,7 @@ Ext.define('NextThought.editor.Actions', {
 				'keydown':function(e){
 					var t = e.getTarget();
 					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
+					e.stopPropagation();
 				}
 			});
 		}
