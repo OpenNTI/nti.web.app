@@ -1,6 +1,6 @@
 Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
-	getBodyText: function() {
+	getBodyText: function(hasNoPlaceholderForImage) {
 
 		var o = this.get('body'), text = [];
 
@@ -8,7 +8,9 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			if(typeof(c) === 'string'){
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g,' '));
 			} else {
-				text.push('[image]');
+				if(!hasNoPlaceholderForImage){
+					text.push('[image]');
+				}
 			}
 		});
 

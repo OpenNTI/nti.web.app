@@ -201,16 +201,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInTitle: function(){
-		var t = this.record && this.record.get('title'),
+		var t = this.record.get('title'),
 			snip;
 		if(Ext.isEmpty(t)){
 			t = this.record.get('body').join('');
-			snip = ContentUtils.getHTMLSnippet(t, 36);
-			if(t !== snip){
-				t = snip + '...';
-			}
+			snip = Ext.String.ellipsis(this.record.getBodyText(true), 36, false);
+			if(snip !== t){ t = snip +'...'; }
 		}
-
 		this.title.update(t);
 	},
 
@@ -364,9 +361,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
 			}
 
-			if(this.title){
-				this.fillInTitle();
-			}
 
 			this.time.update(r.getRelativeTimeString());
 			this.noteBody.removeCls("deleted-reply");
@@ -572,6 +566,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.text.update(text);
 		DomUtils.adjustLinks(this.text, window.location.href);
 
+		if(this.title){
+			this.fillInTitle(this.record.get('title'), text);
+		}
 
 		Ext.each(this.text.query('.whiteboard-container'),
 				function(wb){
