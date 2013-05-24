@@ -53,7 +53,7 @@ describe('Chat Controller Tests', function(){
 
 	it('Listens for several socket events', function(){
 		var expectedEvents = ['disconnect', 'serverkill', 'chat_enteredRoom', 'chat_exitedRoom',
-							  'chat_roomMembershipChanged', 'chat_presenceOfUserChangedTo', 'chat_setPresenceOfUsersTo',
+							  'chat_roomMembershipChanged', 'chat_setPresenceOfUsersTo',
 							  'chat_recvMessage', 'chat_recvMessageForShadow'];
 
 		Ext.each(expectedEvents, function(e){
@@ -235,12 +235,58 @@ describe('Chat Controller Tests', function(){
 			for(i = 0; i < userNames.length; i++){
 				presenceObjects[userNames[i]] = {
 					'Class' : 'PresenceInfo',
-					'Username' : userNames[i],
+					'username' : userNames[i],
 					'type' : 'available',
 					'show' : 'chat',
 					'status' : ''
 				};
 			}
+
+			spyOn(socket,'emit');
+		});
+
+		it("chat_setPresence is emitted in onSessionReady", function(){
+			controller.onSessionReady();
+
+			expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object));
+		});
+
+		describe('test maybeHandleChatEvents', function(){
+
+			beforeEach(function(){
+				controller.mockChatEventHandler = Ext.emptyFn;
+
+				spyOn(controller,'mockChatEventHandler');
+			});
+
+			afterEach(function(){
+				delete controller.mockChatEventHandler;
+				controller.availableForChat = false;
+			});
+
+			it('availableForChat is false',function(){
+				var fn;
+
+				controller.availableForChat = false;
+
+				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler,'mock event');
+
+				fn.apply(controller);
+
+				expect(controller.mockChatEventHandler).not.toHaveBeenCalled();
+			});
+
+			it('availableForChat is true',function(){
+				var fn;
+
+				controller.availableForChat = true;
+
+				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler,'mock event');
+
+				fn.apply(controller);
+
+				expect(controller.mockChatEventHandler).toHaveBeenCalled();
+			});
 		});
 
 		describe('Adding new PresenceInfos', function(){
@@ -248,12 +294,12 @@ describe('Chat Controller Tests', function(){
 				var presence, model,
 					store = controller.getPresenceInfoStore();
 
-				model = Ext.create('NextThought.model.PresenceInfo', presenceObjects[userNames[0]]);
+				model = NextThought.model.PresenceInfo.createFromPresenceString('online',userNames[0]);
 
 				controller.setPresence(model);
 
 				presence = store.getPresenceOf(userNames[0]);
-				expect(presence.get('Username')).toBe(userNames[0]);
+				expect(presence.get('username')).toBe(userNames[0]);
 				expect(presence.get('type')).toBe('available');
 			});
 
@@ -264,11 +310,11 @@ describe('Chat Controller Tests', function(){
 				controller.setPresence(presenceObjects[userNames[0]]);
 
 				presence = store.getPresenceOf(userNames[0]);
-				expect(presence.get('Username')).toBe(userNames[0]);
+				expect(presence.get('username')).toBe(userNames[0]);
 				expect(presence.get('type')).toBe('available');
 			});
 
-			it('Passing key value json',function(){
+			function checkSetPresence(){
 				var i, presence,
 					store = controller.getPresenceInfoStore();
 
@@ -276,9 +322,74 @@ describe('Chat Controller Tests', function(){
 
 				for(i = 0; i < userNames.length; i++){
 					presence = store.getPresenceOf(userNames[i])
-					expect(presence.get('Username')).toBe(userNames[i]);
+					expect(presence.get('username')).toBe(userNames[i]);
 					expect(presence.get('type')).toBe('available');
 				}
+			}
+
+			it('Passing key value json without the current user',checkSetPresence);
+
+			it('Passing key value json with the current user',function(){
+				var current = $AppConfig.userObject
+
+				presenceObjects[current.get('Username')] = {
+					'Class' : 'PresenceInfo',
+					'username' : current.get('username'),
+					'type' : 'available',
+					'show' : 'chat',
+					'status' : ''
+				}
+
+				checkSetPresence();
+				expect(controller.availableForChat).toBeTruthy();
+				controller.availableForChat = false;
+
+				delete presenceObjects[current.get('Username')];
+			});
+		});
+
+		describe("changePresence Tests",function(){
+			var current
+
+			beforeEach(function(){
+				current = $AppConfig.userObject;
+			});
+
+			it("Passing the current user as a presenceModel", function(){
+				var model = NextThought.model.PresenceInfo.createFromPresenceString("online",current.get('Username'));
+
+				controller.changePresence(model);
+
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.toSocketObject());
+			});
+
+			it("Passing not the current user", function(){
+				var model = NextThought.model.PresenceInfo.createFromPresenceString("online","Bobby");
+
+				controller.changePresence(model);
+
+				expect(socket.emit).not.toHaveBeenCalled();
+			});
+
+			it("Passing the current user as json",function(){
+				var json = {
+						'Class': 'PresenceInfo',
+						'username': current.get('Username'),
+						'type': 'available',
+						'show': 'chat',
+						'status': ''
+					},
+					model = ParseUtils.parseItems([json])[0];
+
+				controller.changePresence(json);
+
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.toSocketObject());
+			});
+
+			it("Passing 'online'", function(){
+				controller.changePresence("online");
+
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object));
 			});
 		});
 	});

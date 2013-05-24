@@ -10,7 +10,7 @@ describe('Presence store',function(){
 		for(i = 0; i < userNames.length; i++){
 			userObjects[i] = Ext.create('NextThought.model.User',{ 'Username': userNames[i]});
 			presenceObjects[i] = Ext.create('NextThought.model.PresenceInfo',{
-				'Username' : userNames[i],
+				'username' : userNames[i],
 				'type' : 'available',
 				'show' : 'chat',
 				'status' : ''
@@ -42,49 +42,43 @@ describe('Presence store',function(){
 	});
 
 	describe('setPresenceOf',function(){
-		describe('User alread exists',function(){
-			it('Passing userNames',function(){
-				var obj = {
+		
+		beforeEach(function(){
+			spyOn(presenceStore,"fireEvent");
+		});
+
+		it('User alread exists',function(){
+			var obj = {
 					'Class' : 'PresenceInfo',
 					'Username' :  userNames[0],
 					'type' : 'unavailable',
 					'show' : 'chat',
 					'status' : ''
-				};
+				},
+				model = ParseUtils.parseItems([obj])[0];
 
 
-				presenceStore.setPresenceOf(userNames[0],ParseUtils.parseItems([obj])[0]);
-				expect(presenceObjects[0].get('type')).toEqual('unavailable');
-			});
-			
-			it('Passing user objects',function(){
-				var obj = {
-					'Class' : 'PresenceInfo',
-					'Username' :  userNames[0],
-					'type' : 'unavailable',
-					'show' : 'chat',
-					'status' : ''
-				};
-
-				presenceStore.setPresenceOf(userObjects[0],ParseUtils.parseItems([obj])[0]);
-				expect(presenceObjects[0].get('type')).toEqual('unavailable');
-			});
+			presenceStore.setPresenceOf(userNames[0],model);
+			expect(presenceObjects[0].get('type')).toEqual('unavailable');
+			expect(presenceStore.fireEvent).toHaveBeenCalledWith('presence-changed',userNames[0],model)
 		});
 
 		it('User doesnt exist',function(){
 			var result, obj = {
-				'Class' : 'PresenceInfo',
-				'Username' : 'newName',
-				'type' : 'available',
-				'show' : 'chat',
-				'status' : ''
-			};
+					'Class' : 'PresenceInfo',
+					'username' : 'newName',
+					'type' : 'available',
+					'show' : 'chat',
+					'status' : ''
+				}, 
+				model = ParseUtils.parseItems([obj])[0];
 
-			presenceStore.setPresenceOf(obj.Username,ParseUtils.parseItems([obj])[0]);
-			result = presenceStore.getPresenceOf(obj.Username);
+			presenceStore.setPresenceOf(obj.username,model);
+			result = presenceStore.getPresenceOf(obj.username);
 
-			expect(result.get('Username')).toBe(obj.Username);
+			expect(result.get('username')).toBe(obj.username);
 			expect(result.get('type')).toBe(obj.type);
+			expect(presenceStore.fireEvent).toHaveBeenCalledWith('presence-changed',obj.username,model);
 		});
 	});
 });

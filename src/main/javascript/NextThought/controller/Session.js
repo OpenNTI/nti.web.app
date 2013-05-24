@@ -72,6 +72,7 @@ Ext.define('NextThought.controller.Session', {
 
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
+		this.application.fireEvent('will-logout');
 		Socket.tearDownSocket();
 		this.application.fireEvent('session-closed');
 		location.replace(url);

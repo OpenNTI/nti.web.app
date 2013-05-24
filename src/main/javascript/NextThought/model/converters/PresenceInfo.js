@@ -6,9 +6,11 @@ Ext.define('NextThought.model.converters.PresenceInfo',{
 		type: 'PresenceInfo',
 		sortType: 'none',
 		convert: function(v,record){
-			if(Ext.isString(v)){
-				return NextThought.model.PresenceInfo.createFromPresenceString(v,record.get('Username'));
+			
+			if(!v.isPresenceInfo){
+				return NextThought.model.PresenceInfo.createFromPresenceString('offline',record.get('Username'));
 			}
+
 			return v;
 		}
 	}

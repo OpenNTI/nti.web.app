@@ -31,46 +31,42 @@ Ext.define('NextThought.controller.Chat', {
 		{ ref: 'classroomMode', selector: 'classroom-view-container'}
 	],
 
+	debug: true,
+
+	availableForChat: false,
 
 	init: function () {
-		var me = this;
+		var me = this,
+			store = me.getPresenceInfoStore();
+		
 		this.setChannelMap();
+
+		//set up a listener in UserRepository for the presence-changed event
+
+		UserRepository.setPresenceChangeListener(store);
+
 
 		//A reference to the socket to use for live messages
 		this.socket = this.socket || Socket;
 
 		this.socket.register({
-			'disconnect': function () {
-				me.onSocketDisconnect.apply(me, arguments);
-			},
-			'serverkill': function () {
-				me.onSocketDisconnect.apply(me, arguments);
-			},
-			'chat_enteredRoom': function () {
-				me.onEnteredRoom.apply(me, arguments);
-			},
-			'chat_exitedRoom': function () {
-				me.onExitedRoom.apply(me, arguments);
-			},
-			'chat_roomMembershipChanged': function () {
-				me.onMembershipOrModerationChanged.apply(me, arguments);
-			},
-//			'chat_roomModerationChanged' : function(){me.onModerationChange.apply(me, arguments);},
-			'chat_presenceOfUserChangedTo': function (user, presence) {
+			'disconnect': me.createHandlerForChatEvents(me.onSocketDisconnect, 'disconnect'),
+			'serverkill': me.createHandlerForChatEvents(me.onSocketDisconnect, 'serverkill'),
+			'chat_enteredRoom': me.createHandlerForChatEvents(me.onEnteredRoom, 'chat_enteredRoom'),
+			'chat_exitedRoom': me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
+			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
+//			'chat_roomModerationChanged' : me.createHandlerForChatEvents(me.onModerationChange, 'chat_roomMOderationChanged'),
+			/*'chat_presenceOfUserChangedTo': function (user, presesence){
 				UserRepository.presenceChanged(user, presence);
-			},
+			},*/
 			'chat_setPresenceOfUsersTo': function () {
 				me.setPresence.apply(me, arguments);
 			},
-			'chat_recvMessage': function () {
-				me.onMessage.apply(me, arguments);
-			},
-//			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
-//			'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
-			'chat_recvMessageForShadow': function () {
-				me.onMessage.apply(me, arguments);
-			}
-//			'chat_failedToEnterRoom' : function(){me.onFailedToEnterRoom.apply(me, arguments);}
+			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
+//			'chat_recvMessageForAttention' : me.createHandlerForChatEvents(me.onMessageForAttention, 'chat_recvMessageForAttention'),
+//			'chat_recvMessageForModeration' : me.createHandlerForChatEvents(me.onModeratedMessage, 'chat_recvMessageForModeration'),
+			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow')
+//			'chat_failedToEnterRoom' : me.createHandlerForChatEvents(me.onFailedToEnterRoom, 'chat_failedToEnterRoom')
 		});
 
 		this.listen({
@@ -154,9 +150,22 @@ Ext.define('NextThought.controller.Chat', {
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.
 		this.application.on('session-ready', this.onSessionReady, this);
-		this.application.on('session-closed', function () {
-			this.removeSessionObject();
-		}, this);
+		this.application.on('session-closed', this.removeSessionObject, this);
+		this.application.on('will-logout',function(){
+			this.changePresence("offline");
+		},this);
+	},
+
+	createHandlerForChatEvents: function(fn,eventName){
+		var me = this;
+
+		return function(){
+			if(me.availableForChat){
+				fn.apply(me,arguments);
+			}else if(me.debug){
+				console.log("Dropped "+eventName+" handling");
+			}
+		}
 	},
 
 	setChannelMap: function () {
@@ -203,14 +212,14 @@ Ext.define('NextThought.controller.Chat', {
 		});
 
 		//Change presence to available
-		/*console.log("Make user avialable");
+		console.log("Make user avialable");
 		 this.socket.emit("chat_setPresence", {
 		 'Class' : 'PresenceInfo',
 		 'MimeType' : "application/vnd.nextthought.presenceinfo",
 		 'username' : $AppConfig.userObject.get('Username'),
 		 'type' : 'available',
 		 'status' : 'chat'
-		 });*/
+		 });
 
 	},
 
@@ -920,14 +929,14 @@ Ext.define('NextThought.controller.Chat', {
 //		}
 //	},
 
-
 	setPresence: function (msg) {
-		var store = this.getPresenceInfoStore(), items;
-		//items = (Ext.isString(msg))? JSON.decode(msg) : msg;
+		var items, me = this,
+			store = this.getPresenceInfoStore(),
+			current = $AppConfig.userObject;
 
 		if (msg.isPresenceInfo) {
 			//passed a presence model
-			store.setPresenceOf(msg.get('username'), msg);
+			store.setPresenceOf(msg.get('Username'), msg);
 		} else if (msg.Class === 'PresenceInfo') {
 			//passed a single presence json
 			items = ParseUtils.parseItems([msg])[0];
@@ -935,13 +944,39 @@ Ext.define('NextThought.controller.Chat', {
 			store.setPresenceOf(msg.username, items);
 		} else {
 			items = (Ext.isString(msg)) ? Ext.JSON.decode(msg) : msg;
+
 			Ext.Object.each(items, function (key, value, object) {
 				var presence = ParseUtils.parseItems([value])[0];
+
+				//if its the current user set the flag accordingly
+				if(key === current.get('Username')){
+					me.availableForChat = (presence.isOnline())? true : false; 
+				}
 
 				store.setPresenceOf(key, presence);
 			});
 		}
 
+	},
+
+	//changes the presence of the current user
+	changePresence: function(presence){
+		var username = $AppConfig.userObject.get('Username'),
+			store = this.getPresenceInfoStore();
+
+		if(presence.Class === 'PresenceInfo'){
+			//passed a single presence json
+			presence = ParseUtils.parseItems([presence])[0];
+		}else if(Ext.isString(presence)){
+			presence = NextThought.model.PresenceInfo.createFromPresenceString(presence, username); 
+		}
+
+		if(presence.isPresenceInfo && presence.get('username') === username){
+			//update the store
+			store.setPresenceOf(username,presence);
+			//let the server know
+			this.socket.emit("chat_setPresence",presence.toSocketObject());
+		}
 	},
 
 	onMembershipOrModerationChanged: function (msg) {

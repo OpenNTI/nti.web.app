@@ -7,9 +7,9 @@ describe("PresenceInfo Model",function(){
 	});
 
 	it("createFromPresenceString tests",function(){
-		expect(online.get("Username")).toBe("user1");
+		expect(online.get("username")).toBe("user1");
 		expect(online.get("type")).toBe("available");
-		expect(offline.get("Username")).toBe("user2");
+		expect(offline.get("username")).toBe("user2");
 		expect(offline.get("type")).toBe("unavailable");
 	});
 

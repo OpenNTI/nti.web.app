@@ -21,6 +21,11 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
+		setPresenceChangeListener: function(store){
+			store.on('presence-changed',this.presenceChanged,this);
+		},
+
+
 		precacheUser: function (refreshedUser) {
 			var s = this.getStore(), uid, u;
 
@@ -292,9 +297,10 @@ Ext.define('NextThought.cache.UserRepository', {
 		presenceChanged: function (username, presence) {
 			var u = this.getStore().getById(username);
 			console.log('User repository recieved a presence change for ', username, arguments);
+			presence = (presence && presence.isPresenceInfo)? presence : NextThought.model.PresenceInfo.createFromPresenceString(presence,username);
 			if (u) {
 				console.debug('updating presence for found user', u);
-				u.set('Presence', NextThought.model.PresenceInfo.createFromPresenceString(presence,username));
+				u.set('Presence', presence);
 				u.fireEvent('changed', u);
 			}
 			else {

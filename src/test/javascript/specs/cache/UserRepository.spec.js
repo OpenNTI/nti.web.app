@@ -45,6 +45,8 @@ describe("User Repository/Store/Cache Behavior", function(){
 			spyOn(hans, 'fireEvent');
 
 			TUR.cacheUser(hans);
+
+			spyOn(TUR,'presenceChanged').andCallThrough();
 		});
 
 		afterEach(function(){
@@ -64,7 +66,18 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 			expect(hans.fireEvent).not.toHaveBeenCalled();
 			expect(hans.get('Presence').isOnline()).toBeFalsy();
-		})
+		});
+
+		it('presence-changed which gets handled by TUR',function(){
+			var store = Ext.getStore('PresenceInfo'),
+				online = NextThought.model.PresenceInfo.createFromPresenceString('online','hans');
+
+			TUR.setPresenceChangeListener(store);
+			store.setPresenceOf('hans',online);
+
+			expect(TUR.presenceChanged).toHaveBeenCalledWith('hans',online);
+			expect(hans.get('Presence').isOnline()).toBeTruthy();
+		});
 	});
 
 	describe('resolveFromStore', function(){

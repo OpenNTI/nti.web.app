@@ -1,8 +1,8 @@
 Ext.define('NextThought.model.PresenceInfo',{
 	extend: 'NextThought.model.Base',
-	idProperty: 'Username',
+	idProperty: 'username',
 	fields: [
-		{ name: 'Username', type: 'string'},
+		{ name: 'username', type: 'string'},
 		{ name: 'type', type: 'string'},
 		{ name: 'show', type: 'string'},
 		{ name: 'status', type: 'string'}
@@ -11,7 +11,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 	statics: {
 		createFromPresenceString: function(presence,username){
 			return Ext.create("NextThought.model.PresenceInfo",{
-				'Username': username,
+				'username': username,
 				'type': (presence.toLowerCase() !== 'online')? 'unavailable' : 'available'
 			});
 		}
@@ -25,6 +25,25 @@ Ext.define('NextThought.model.PresenceInfo',{
 
 	toString: function(){
 		return (this.isOnline()) ? 'Online' : 'Offline';
+	},
+
+	toSocketObject: function(){
+		var obj = {
+			'Class': 'PresenceInfo',
+			'MimeType': 'application/vnd.nextthought.presenceinfo',
+			'username': this.get('username'),
+			'type': this.get('type')
+		};
+
+		if(this.get('show')){
+			obj['show'] = this.get('show');
+		}
+
+		if(this.get('status')){
+			obj['status'] = this.get('status');
+		}
+
+		return obj;
 	}
 
 
