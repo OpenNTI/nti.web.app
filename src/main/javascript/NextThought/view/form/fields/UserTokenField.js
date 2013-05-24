@@ -410,7 +410,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			return;
 		}
 
-		this.getPicker().setHeight(null);
+		this.getPicker().setHeight(50);
 		var me = this, x, y,
 			spEl = this.scrollParentEl,
 			scrollOffset = (spEl && spEl.getScroll().top) || 0,
@@ -422,7 +422,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			picker = me.getPicker(),
 			spaceAbove = me.inputEl.getY(),
 			spaceBelow = Ext.Element.getViewHeight() - (me.getY() + me.getHeight()),
-			pickerHeight = picker.getHeight(),
+			pickerHeight = picker.getEl().first().dom.scrollHeight,
 			firstNode = picker.getNode(0),
 			minListHeight = (firstNode && (Ext.fly(firstNode).getHeight()*3)) || 150;//some safe number if we can't resolve the height of 3 items.
 
