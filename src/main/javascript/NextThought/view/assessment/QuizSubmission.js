@@ -189,6 +189,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		var q = this.questionSet,
 			submission = {};
 
+		if(!this.submitBtn || this.submitBtn.hasCls('disabled')){
+			e.stopEvent();
+			return false;
+		}
+
 		if(this.isSubmitted()){
 			return this.resetBasedOnButtonClick(e);
 		}
