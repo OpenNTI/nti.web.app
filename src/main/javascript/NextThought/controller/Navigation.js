@@ -341,12 +341,13 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	track: function(id){
-		var btn = this.viewSelectButton(id), altBtn;
+		var btn = this.viewSelectButton(id),silent=false;
 		try {
 			if(btn.alternateId){
 				btn = this.viewSelectButton(btn.alternateId);
+				silent = true;
 			}
-			btn.toggle(true,true);
+			btn.toggle(true,silent);
 		}
 		catch(e){
 			console.error('Looks like the "'+id+'" button was not included or was typo\'ed', e.stack);
