@@ -112,8 +112,12 @@ Ext.define('NextThought.view.assessment.Question',{
 	gatherQuestionResponse: function(questionSet,collection){
 		var id =  this.question.getId(), values = [];
 		Ext.each(this.query('abstract-question-input'),function(p){
+			var v = p.getValue();
+			if(v===undefined || v===null){
+				console.warn('Question has not been answered yet');
+				v = '';
 			p.setSubmitted();
-			values[p.getOrdinal()] = p.getValue() || '';
+			values[p.getOrdinal()] = v;
 		});
 
 		if(collection.hasOwnProperty(id)){
