@@ -8,7 +8,7 @@ Ext.define('NextThought.model.converters.PresenceInfo',{
 		convert: function(v,record){
 			
 			if(!v.isPresenceInfo){
-				return NextThought.model.PresenceInfo.createFromPresenceString('offline',record.get('Username'));
+				return NextThought.model.PresenceInfo.createPresenceInfo(record.get('username'),'unavailable');
 			}
 
 			return v;

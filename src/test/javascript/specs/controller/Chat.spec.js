@@ -289,36 +289,13 @@ describe('Chat Controller Tests', function(){
 			});
 		});
 
-		describe('Adding new PresenceInfos', function(){
-			it('Passing a presence model',function(){
-				var presence, model,
-					store = controller.getPresenceInfoStore();
-
-				model = NextThought.model.PresenceInfo.createFromPresenceString('online',userNames[0]);
-
-				controller.setPresence(model);
-
-				presence = store.getPresenceOf(userNames[0]);
-				expect(presence.get('username')).toBe(userNames[0]);
-				expect(presence.get('type')).toBe('available');
-			});
-
-			it('Passing a single json',function(){
-				var presence,
-					store = controller.getPresenceInfoStore();
-
-				controller.setPresence(presenceObjects[userNames[0]]);
-
-				presence = store.getPresenceOf(userNames[0]);
-				expect(presence.get('username')).toBe(userNames[0]);
-				expect(presence.get('type')).toBe('available');
-			});
+		describe('handleSetPresence', function(){
 
 			function checkSetPresence(){
 				var i, presence,
 					store = controller.getPresenceInfoStore();
 
-				controller.setPresence(presenceObjects);
+				controller.handleSetPresence(presenceObjects);
 
 				for(i = 0; i < userNames.length; i++){
 					presence = store.getPresenceOf(userNames[i])
@@ -349,48 +326,15 @@ describe('Chat Controller Tests', function(){
 		});
 
 		describe("changePresence Tests",function(){
-			var current
 
-			beforeEach(function(){
-				current = $AppConfig.userObject;
+			it("Passing just a type", function(){
+				var model = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable');
+
+				controller.changePresence('unavailable');
+
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.asJSON());
 			});
 
-			it("Passing the current user as a presenceModel", function(){
-				var model = NextThought.model.PresenceInfo.createFromPresenceString("online",current.get('Username'));
-
-				controller.changePresence(model);
-
-				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.toSocketObject());
-			});
-
-			it("Passing not the current user", function(){
-				var model = NextThought.model.PresenceInfo.createFromPresenceString("online","Bobby");
-
-				controller.changePresence(model);
-
-				expect(socket.emit).not.toHaveBeenCalled();
-			});
-
-			it("Passing the current user as json",function(){
-				var json = {
-						'Class': 'PresenceInfo',
-						'username': current.get('Username'),
-						'type': 'available',
-						'show': 'chat',
-						'status': ''
-					},
-					model = ParseUtils.parseItems([json])[0];
-
-				controller.changePresence(json);
-
-				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.toSocketObject());
-			});
-
-			it("Passing 'online'", function(){
-				controller.changePresence("online");
-
-				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object));
-			});
 		});
 	});
 });

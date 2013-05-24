@@ -60,7 +60,7 @@ Ext.define('NextThought.controller.Chat', {
 				UserRepository.presenceChanged(user, presence);
 			},*/
 			'chat_setPresenceOfUsersTo': function () {
-				me.setPresence.apply(me, arguments);
+				me.handleSetPresence.apply(me, arguments);
 			},
 			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
 //			'chat_recvMessageForAttention' : me.createHandlerForChatEvents(me.onMessageForAttention, 'chat_recvMessageForAttention'),
@@ -152,7 +152,7 @@ Ext.define('NextThought.controller.Chat', {
 		this.application.on('session-ready', this.onSessionReady, this);
 		this.application.on('session-closed', this.removeSessionObject, this);
 		this.application.on('will-logout',function(){
-			this.changePresence("offline");
+			this.changePresence('unavailable');
 		},this);
 	},
 
@@ -213,13 +213,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		//Change presence to available
 		console.log("Make user avialable");
-		 this.socket.emit("chat_setPresence", {
-		 'Class' : 'PresenceInfo',
-		 'MimeType' : "application/vnd.nextthought.presenceinfo",
-		 'username' : $AppConfig.userObject.get('Username'),
-		 'type' : 'available',
-		 'status' : 'chat'
-		 });
+		this.changePresence("available");
 
 	},
 
@@ -929,54 +923,38 @@ Ext.define('NextThought.controller.Chat', {
 //		}
 //	},
 
-	setPresence: function (msg) {
+	handleSetPresence: function (msg) {
 		var items, me = this,
 			store = this.getPresenceInfoStore(),
 			current = $AppConfig.userObject;
 
-		if (msg.isPresenceInfo) {
-			//passed a presence model
-			store.setPresenceOf(msg.get('Username'), msg);
-		} else if (msg.Class === 'PresenceInfo') {
-			//passed a single presence json
-			items = ParseUtils.parseItems([msg])[0];
+		items = (Ext.isString(msg)) ? Ext.JSON.decode(msg) : msg;
 
-			store.setPresenceOf(msg.username, items);
-		} else {
-			items = (Ext.isString(msg)) ? Ext.JSON.decode(msg) : msg;
+		Ext.Object.each(items, function (key, value, object) {
+			var presence = ParseUtils.parseItems([value])[0];
 
-			Ext.Object.each(items, function (key, value, object) {
-				var presence = ParseUtils.parseItems([value])[0];
+			//if its the current user set the flag accordingly
+			if(key === current.get('Username')){
+				me.availableForChat = (presence.isOnline())? true : false; 
+			}
 
-				//if its the current user set the flag accordingly
-				if(key === current.get('Username')){
-					me.availableForChat = (presence.isOnline())? true : false; 
-				}
-
-				store.setPresenceOf(key, presence);
-			});
-		}
-
+			store.setPresenceOf(key, presence);
+		});
 	},
 
-	//changes the presence of the current user
-	changePresence: function(presence){
-		var username = $AppConfig.userObject.get('Username'),
-			store = this.getPresenceInfoStore();
+	/*
+	* Tells the server to change the presence of the current user
+	*
+	* @param type - the users availability 'available' or 'unavailable'
+	* @param [show] - show the user as 'chat','away','dnd', or'xa'
+	* @param [status] - message to show if the user is available
+	*/
+	changePresence: function(type,show,status){
+		var username = $AppConfig.username,
+			presence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status);
 
-		if(presence.Class === 'PresenceInfo'){
-			//passed a single presence json
-			presence = ParseUtils.parseItems([presence])[0];
-		}else if(Ext.isString(presence)){
-			presence = NextThought.model.PresenceInfo.createFromPresenceString(presence, username); 
-		}
+		this.socket.emit("chat_setPresence", presence.asJSON());
 
-		if(presence.isPresenceInfo && presence.get('username') === username){
-			//update the store
-			store.setPresenceOf(username,presence);
-			//let the server know
-			this.socket.emit("chat_setPresence",presence.toSocketObject());
-		}
 	},
 
 	onMembershipOrModerationChanged: function (msg) {

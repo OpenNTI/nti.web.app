@@ -1,25 +1,31 @@
 describe("PresenceInfo Model",function(){
-	var online, offline;
+	
+	it('createPresence only username and type', function(){
+		var model = NextThought.model.PresenceInfo.createPresenceInfo('username','available');
 
-	beforeEach(function(){
-		online = NextThought.model.PresenceInfo.createFromPresenceString("online","user1");
-		offline = NextThought.model.PresenceInfo.createFromPresenceString("offline","user2");
+		expect(model.get('username')).toBe('username');
+		expect(model.get('type')).toBe('available');
+		expect(model.get('show')).toBe('chat');
+		expect(model.get('status')).toBeNull();
 	});
 
-	it("createFromPresenceString tests",function(){
-		expect(online.get("username")).toBe("user1");
-		expect(online.get("type")).toBe("available");
-		expect(offline.get("username")).toBe("user2");
-		expect(offline.get("type")).toBe("unavailable");
+	it('createPresence passing everything', function(){
+		var model = NextThought.model.PresenceInfo.createPresenceInfo('username','available','show','status');
+
+		expect(model.get('username')).toBe('username');
+		expect(model.get('type')).toBe('available');
+		expect(model.get('show')).toBe('show');
+		expect(model.get('status')).toBe('status');
 	});
 
-	it("isOnline tests",function(){
+	it('isOnline and toString',function(){
+		var online = NextThought.model.PresenceInfo.createPresenceInfo('online','available'),
+			offline = NextThought.model.PresenceInfo.createPresenceInfo('offline','unavailable');
+
 		expect(online.isOnline()).toBeTruthy();
-		expect(offline.isOnline()).toBeFalsy();
-	});
+		expect(online.toString()).toBe('Online');
 
-	it("toString tests", function(){
-		expect(online.toString()).toBe("Online");
-		expect(offline.toString()).toBe("Offline");
+		expect(offline.isOnline()).toBeFalsy();
+		expect(offline.toString()).toBe('Offline');
 	});
 });

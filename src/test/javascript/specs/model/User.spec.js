@@ -56,10 +56,10 @@ describe("User Tests", function() {
 	it('Presence tests', function(){
 		var online = Ext.create('NextThought.model.User',{
 			Username: 'online',
-			Presence: NextThought.model.PresenceInfo.createFromPresenceString('online','online')
+			Presence: NextThought.model.PresenceInfo.createPresenceInfo('online','available')
 		}), offline = Ext.create('NextThought.model.User',{
 			Username: 'offline',
-			Presence: 'offline'
+			Presence: NextThought.model.PresenceInfo.createPresenceInfo('offline','unavailable')
 		}), onlinePresence = online.getPresence(),
 			offlinePresence = offline.getPresence();
 
