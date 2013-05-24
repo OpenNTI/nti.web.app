@@ -1044,7 +1044,7 @@ Ext.define('NextThought.editor.Actions', {
 			this.sharedList.reset();
 		}
 		if(this.titleEl){
-			this.setTitle('');
+			this.titleEl.dom.value = "";
 		}
 
 		try {
