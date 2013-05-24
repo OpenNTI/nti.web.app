@@ -70,9 +70,10 @@ a{
 
 .content-slidevideo,
 .content-slidedeck,
-.content-card,
-.note-window .note.main-view .content-card{
-	@include content-card-def;
+.content-card{
+	&, .note-window .note.main-view &{
+		@include content-card-def;
+	}
 }
 
 .component-overlay {
