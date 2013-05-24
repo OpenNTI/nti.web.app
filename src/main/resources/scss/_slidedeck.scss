@@ -622,8 +622,12 @@ $experimental-support-for-svg: true;
 						margin-left: 70px;
 						margin-top: 0;
 
-						.name {
+						.title{
 							font-size: 24px;
+							color: $primary-blue;
+						}
+						.name{
+							color: $secondary-grey;
 						}
 						.controls {
 							top: 1px;

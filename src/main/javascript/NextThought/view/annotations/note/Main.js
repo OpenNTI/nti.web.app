@@ -73,6 +73,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this, r = this.record;
 		if(me.addToContacts){
 			me.mun(me.addToContacts, 'click');
+			me.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		}
 		if(r.placeholder || !me.shouldShowAddContact(r.get('Creator'))){
 			me.addToContacts.hide();
@@ -379,8 +380,11 @@ function(){
 		    cls: 'meta',
 		    cn: [
 			    { cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
-			    { tag: 'span', cls: 'name' },
-			    { cls: 'add-to-contacts', html: 'ADD'},
+			    { cls: 'title'},
+			    { cls: 'name-wrap', cn:[
+				    { tag: 'span', cls: 'name' },
+				    { tag: 'span', cls: 'add-to-contacts', html: 'ADD'}
+			    ]},
 			    { cls: 'shared-to' }
 		    ]
 	    },{ cls: 'clear' },{

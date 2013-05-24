@@ -1042,6 +1042,9 @@ Ext.define('NextThought.editor.Actions', {
 		if(this.sharedList){
 			this.sharedList.reset();
 		}
+		if(this.titleEl){
+			this.setTitle('');
+		}
 
 		try {
 			this.styleControlsEl.removeCls('selected');

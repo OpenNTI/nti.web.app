@@ -32,6 +32,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
 		favoritesSpacer: '.meta .controls .favorite-spacer',
+		title: '.meta .title',
 		name: '.meta .name',
 		time: '.time',
 		text: '.body',
@@ -199,6 +200,21 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	fillInTitle: function(){
+		var t = this.record && this.record.get('title'),
+			snip;
+		if(Ext.isEmpty(t)){
+			t = this.record.get('body').join('');
+			snip = ContentUtils.getHTMLSnippet(t, 36);
+			if(t !== snip){
+				t = snip + '...';
+			}
+		}
+
+		this.title.update(t);
+	},
+
+
 	fillInUser: function(user){
 		this.userObject = user;
 		this.name.update(user.getName());
@@ -274,6 +290,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			//var currentShare = r.get('sharedWith')||[];
 			if(me.editMode){
 				r.set('body',v.body);
+				r.set('title', v.title);
 				//TODO: only do this if the user changed it. (figure out why the editor did not return the current value)
 				//if(Ext.Array.intersect(currentShare, v.shareWith||[]).length !== currentShare.length){
 				//	r.set('sharedWith',v.shareWith);
@@ -345,6 +362,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 			if(this.sharedTo){
 				UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+			}
+
+			if(this.title){
+				this.fillInTitle();
 			}
 
 			this.time.update(r.getRelativeTimeString());
@@ -924,9 +945,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 						{ cls: 'favorite' },
 						{ cls: 'like' }
 					]
-				},{
-					tag: 'span',
-					cls: 'name'
+				},{ cls:'title'
+				},{ tag: 'span', cls: 'name'
 				},{ cls: 'shared-to' }]
 			},{ cls: 'body' },{
 				cls: 'respond',

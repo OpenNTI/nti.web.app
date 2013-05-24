@@ -192,7 +192,7 @@ Ext.define('NextThought.util.Content', {
 		if (Ext.isString(html)) {
 			d.innerHTML = html;
 		}
-		else if (Ext.isDomNode(html)) {
+		else if (html && html.cloneNode) {
 			d.appendChild(html.cloneNode(true));
 		}
 		else {
@@ -204,7 +204,7 @@ Ext.define('NextThought.util.Content', {
 		}
 		texts = AnnotationUtils.getTextNodes(d);
 
-		Ext.each(texts, function (t) {
+		Ext.each(texts, function (t, index, array) {
 			var o = c + t.length,
 				v = t.nodeValue,
 				offset;
@@ -218,8 +218,14 @@ Ext.define('NextThought.util.Content', {
 				offset = max - c;
 				v = v.substr(offset);
 				v = i.exec(v);
-				offset += (v && v.length > 0 ? v[0].length : 0);
+				offset += (v && v.length > 0 && (offset + v.length) < max ? v[0].length : 0);
 				r.setEnd(t, offset);
+				return false;
+			}
+
+			//If it's the last part and we haven't reached the max, just end the range
+			if (o < max && index === (array.length -1)){
+				r.setEnd(t, o);
 				return false;
 			}
 
