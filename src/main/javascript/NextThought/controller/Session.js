@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Session', {
 
 
 	handleLogout: function(keepTracker) {
-		var url = getURL(Ext.String.urlAppend(
+		var me = this, url = getURL(Ext.String.urlAppend(
 					this.logoutURL,
 					'success='+encodeURIComponent(location.href)));
 
@@ -70,12 +70,17 @@ Ext.define('NextThought.controller.Session', {
 			Ext.util.Cookies.clear(this.sessionTrackerCookie);
 		}
 
+		function finishLoggingOut(){
+			Socket.tearDownSocket();
+			me.application.fireEvent('session-closed');
+			location.replace(url);
+		}
+
+		Ext.getBody().mask('Signing Out');
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
-		this.application.fireEvent('will-logout');
-		Socket.tearDownSocket();
-		this.application.fireEvent('session-closed');
-		location.replace(url);
+		this.application.fireEvent('will-logout',finishLoggingOut);
+		Ext.defer(finishLoggingOut, 6000);
 	},
 
 

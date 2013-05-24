@@ -151,8 +151,8 @@ Ext.define('NextThought.controller.Chat', {
 		//handle some events on session, open existing chat rooms and clear the session on logout.
 		this.application.on('session-ready', this.onSessionReady, this);
 		this.application.on('session-closed', this.removeSessionObject, this);
-		this.application.on('will-logout',function(){
-			this.changePresence('unavailable');
+		this.application.on('will-logout',function(callback){
+			this.changePresence('unavailable',null,null,callback);
 		},this);
 	},
 
@@ -946,12 +946,14 @@ Ext.define('NextThought.controller.Chat', {
 	* @param type - the users availability 'available' or 'unavailable'
 	* @param [show] - show the user as 'chat','away','dnd', or'xa'
 	* @param [status] - message to show if the user is available
+	* @param [callback] - function to call when the socket is done
 	*/
-	changePresence: function(type,show,status){
+	changePresence: function(type,show,status,callback){
 		var username = $AppConfig.username,
-			presence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status);
+			presence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
+			callback = (Ext.isFunction(callback))? callback : Ext.emptyFn;
 
-		this.socket.emit("chat_setPresence", presence.asJSON());
+		this.socket.emit("chat_setPresence", presence.asJSON(), callback);
 
 	},
 
