@@ -169,13 +169,15 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-	addTag: function(val, type){
-		var me = this, el = me.inputEl;
+	addTag: function(val, type, callback){
+		var me = this, el = me.inputEl, snip;
 
 		el.dom.value = '';
 		if(!Ext.Array.contains(me.getValue(),val)){
-			me.tokenTpl.insertBefore(me.getInsertionPoint(),[me.getNameSnippet(val), type, val]);
+			snip = me.getNameSnippet(val);
+			me.tokenTpl.insertBefore(me.getInsertionPoint(),[snip, type, val]);
 			me.fireEvent('new-tag',val);
+			Ext.callback(callback, me,[val, snip]);
 		}
 	},
 

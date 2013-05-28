@@ -241,8 +241,18 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			type = this.getType(record.getData());
 
 		if(this.isToken(value)){
-			this.addTag(value, type);
+			this.addTag(value, type, this.shouldAddTipToToken);
 			this.updatePlaceholderLabel();
+		}
+	},
+
+
+	shouldAddTipToToken: function(val, snip){
+		if(val === snip){ return; }
+
+		var tokenEl = this.el.down('[data-value='+val+']');
+		if(!Ext.isEmpty(tokenEl)){
+			tokenEl.set({'data-qtip': val});
 		}
 	},
 
