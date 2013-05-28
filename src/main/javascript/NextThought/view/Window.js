@@ -4,8 +4,7 @@ Ext.define('NextThought.view.Window',{
 
 	requires: [
 		'NextThought.util.Ranges',
-		'NextThought.view.WindowHeader',
-		'NextThought.view.WindowManager'
+		'NextThought.view.WindowHeader'
 	],
 
 	cls: 'nti-window',
@@ -25,7 +24,6 @@ Ext.define('NextThought.view.Window',{
 
 	dialog: false,
 	modal: false,
-	managed: true,
 
 	layout: { type: 'vbox', align: 'stretch' },
 	items: [
@@ -68,8 +66,6 @@ Ext.define('NextThought.view.Window',{
 	},
 
 	constructor: function(config){
-		this.manager = NextThought.view.WindowManager;
-
 		if(!this.dialog && !config.dialog){
 
 			Ext.copyTo(this.items.last(),config,['items','layout']);
@@ -107,9 +103,6 @@ Ext.define('NextThought.view.Window',{
 		}
 
 		this.titleBar = this.down('nti-window-header');
-		if(this.managed && !this.modal && !this.dialog){
-			this.manager.register(this);
-		}
 	},
 
 
@@ -334,9 +327,5 @@ Ext.define('NextThought.view.Window',{
 			Ext.getBody().unmask();
 		}
 		delete this.wasMasked;
-	},
-
-
-	//stub for interface, WindowManager will implement
-	notify: Ext.emptyFn
+	}
 });

@@ -14,7 +14,6 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	minHeight:200,
 	height:400,
 	width:400,
-	managed: false,
 	modal: true,
 
 	layout: 'auto', autoScroll: true,

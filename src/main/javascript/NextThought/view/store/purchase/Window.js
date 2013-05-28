@@ -20,7 +20,6 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	draggable: false,
 	modal: true,
 	dialog: true,
-	managed: false,
 
 	childEls: ['body'],
 	getTargetEl: function () {

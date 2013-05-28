@@ -21,10 +21,6 @@ Ext.define('NextThought.view.SideBar',{
 	frame: false,
 	plain: true,
 	shadow: false,
-	/*
-		http://docs.sencha.com/extjs/4.2.0/source/ZIndexManager.html#Ext-ZIndexManager-method-bringToFront
-		The bringToFront method checks if this property is true before moving it to the front
-	*/
 	preventBringToFront: true,
 	ui: 'sidebar',
 	cls: 'sidebar',
@@ -35,16 +31,15 @@ Ext.define('NextThought.view.SideBar',{
             {tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' },
 			{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
         ]}},
-		{ xtype: 'identity'},
 		{ xtype: 'sidebar-tabpanel',
 			flex: 1,
 			stateId: 'sidebar',
 			items: [
-				{xtype: 'contacts-view'},
-				{xtype: 'activity-view'},
-				{xtype: 'history-view' }
-				//{ iconCls: 'inbox', title: 'inbox' }
-			]}
+				{ xtype: 'contacts-view' },
+				{ xtype: 'activity-view' },
+				{ iconCls: 'inbox', title: 'inbox' }
+			]
+		}
 	],
 
 
@@ -72,17 +67,13 @@ Ext.define('NextThought.view.SideBar',{
 			this.host.hide();
 			this.gripper.show();
 			this.addCls(cls);
-			//this.tool.removeCls('maximize');
-			NextThought.view.WindowManager.setNarrow(true);
 		}
 		else{
             this.stopAnimation();
 			this.setPopState(undefined);
 			this.gripper.hide();
-			//this.tool.addCls('maximize');
 			this.host.show();
 			this.removeCls(cls);
-			NextThought.view.WindowManager.setNarrow(false);
 		}
         Ext.defer(this.syncUp, 1, this);
 	},
