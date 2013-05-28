@@ -422,7 +422,10 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 
 	showPost: function(record,action,query){
-		var s = this.store, r;
+		var s = this.store,
+			me = this,
+			r, xtype = 'profile-blog-post', cfg;
+
 		this.swapViews('post');
 
 		this.cleanPreviousPost();
@@ -439,8 +442,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 			}
 		}
 
-		var xtype = 'profile-blog-post',
-			cfg = {
+		cfg = {
 			ownerCt: this,
 			renderTo:this.postViewEl,
 			record: record,
@@ -465,8 +467,8 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 		else {
 			clearTimeout(this.animateTabsStart);
 			cfg.listeners.destroy = function(){
-				this.closePost();
-				this.animateTabsStart = Ext.defer(this.animateTabs,10,this,[true]);
+				me.closePost();
+				me.animateTabsStart = Ext.defer(me.animateTabs,10,me,[true]);
 			};
 			this.animateTabs();
 		}
