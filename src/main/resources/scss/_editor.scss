@@ -77,7 +77,9 @@ span.tab{
 						}
 					}
 
-
+					.x-ie10 &, .x-ie &{
+						height: 33px !important;
+					}
 				}
 			}
 
