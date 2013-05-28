@@ -64,7 +64,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			anchor:'bottom',
 			minWidth: 250
 
-		},this.TIP['private']));
+		},this.TIP['public']));
 
 		if(this.readOnly){
 			this.tip.disable();
