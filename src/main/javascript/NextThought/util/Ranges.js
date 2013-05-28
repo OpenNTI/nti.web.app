@@ -1,9 +1,11 @@
+/*jslint */
+/*global Anchors, Globals, Node, NodeFilter*/
 Ext.define('NextThought.util.Ranges',{
 	singleton: true,
 
-    nonContextWorthySelectors: [
-        'object'
-    ],
+	nonContextWorthySelectors: [
+		'object'
+	],
 
 	saveRange: function(r){
 		if(!r){ return null; }
@@ -12,21 +14,21 @@ Ext.define('NextThought.util.Ranges',{
 			startOffset: r.startOffset,
 			endContainer: r.endContainer,
 			endOffset: r.endOffset,
-            collapsed:r.collapsed
+			collapsed:r.collapsed
 		};
 	},
 
 
-    saveInputSelection: function(s){
-        if (!s || !s.focusNode || !s.focusNode.firstChild || s.focusNode.firstChild.tagName !== 'INPUT'){return null;}
-        var i = s.focusNode.firstChild;
+	saveInputSelection: function(s){
+		if (!s || !s.focusNode || !s.focusNode.firstChild || s.focusNode.firstChild.tagName !== 'INPUT'){return null;}
+		var i = s.focusNode.firstChild;
 
-        return {
-           selectionStart: i.selectionStart,
-           selectionEnd: i.selectionEnd,
-           input: i
-        };
-    },
+		return {
+			selectionStart: i.selectionStart,
+			selectionEnd: i.selectionEnd,
+			input: i
+		};
+	},
 
 
 	restoreSavedRange: function(o){
@@ -94,7 +96,7 @@ Ext.define('NextThought.util.Ranges',{
 	//How about a registry that maps the mimetype of the object
 	//to a handler that knows how to give contents
 	contentsForObjectTag: function(object){
-		var contents = null;
+		var contents;
 
 		//For questions we look for the contained div with class naquestion
 		//Why do we do this instead of cloning the object?
@@ -112,7 +114,8 @@ Ext.define('NextThought.util.Ranges',{
 		}
 
 		var container = start ? range.startContainer : range.endContainer,
-			offset = start ? range.startOffset : range.endOffset;
+			offset = start ? range.startOffset : range.endOffset,
+			cont;
 
 		//If the container is a textNode look no further, that node is the edge
 		if(Ext.isTextNode(container)){
@@ -123,43 +126,38 @@ Ext.define('NextThought.util.Ranges',{
 			//If we are at the front of the range
 			//the first full node in the range is the containers ith child
 			//where i is the offset
-			var cont = container.childNodes.item(offset);
+			cont = container.childNodes.item(offset);
 			if(!cont) {
 				return container;
 			}
-			else if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
+			if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
 				return container;
 			}
-			else {
-				return container.childNodes.item(offset);
-			}
+			return container.childNodes.item(offset);
 		}
-		else{
-			//At the end the first fully contained node is
-			//at offset-1
-			if(offset < 1){
-				if(container.previousSibling){
-					return container.previousSibling;
-				}
-				while(!container.previousSibling && container.parentNode && offset !== 0){
-					container = container.parentNode;
-				}
 
-				if (!container.previousSibling){
-					//Ext.Error.raise('No possible node');
-					return container;
-				}
-				else {
-					return container.previousSibling;
-				}
+		//At the end the first fully contained node is
+		//at offset-1
+		if(offset < 1){
+			if(container.previousSibling){
+				return container.previousSibling;
 			}
-			return container.childNodes.item(offset - 1);
+			while(!container.previousSibling && container.parentNode && offset !== 0){
+				container = container.parentNode;
+			}
+
+			if (!container.previousSibling){
+				//Ext.Error.raise('No possible node');
+				return container;
+			}
+			return container.previousSibling;
 		}
+		return container.childNodes.item(offset - 1);
 	},
 
 	coverAll: function(rangeA) {
 		var range = rangeA ? rangeA.cloneRange() : null,
-			start, end;
+			start, end, newStart, newEnd;
 
 		function test(c){
 			return c.nodeType === Node.TEXT_NODE
@@ -245,59 +243,59 @@ Ext.define('NextThought.util.Ranges',{
 	},
 
 
-    expandRangeGetString: function(range, doc){
-        var tempDiv, str;
+	expandRangeGetString: function(range, doc){
+		var tempDiv, str;
 		tempDiv = this.expandRangeGetNode(range, doc, true);
-        str = tempDiv.innerHTML;
+		str = tempDiv.innerHTML;
 
-        //cleanup:
-        Ext.fly(tempDiv).destroy();
+		//cleanup:
+		Ext.fly(tempDiv).destroy();
 
-        //return string clean of ids:
-        return str.replace(/\wid=".*?"/ig, '');
-    },
-
-
-    /**
-     * Removes any nodes we don't want to show up in the context, for now that is assessment objects nodes, which have
-     * a size but no display, so it looks like a bunch of emopty space in the note window.
-     *
-     * @param dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
-     */
-    clearNonContextualGarbage: function(dom){
-        Ext.each(this.nonContextWorthySelectors, function(sel){
-            Ext.each(Ext.fly(dom).query(sel), function(remove){
-                Ext.fly(remove).remove();
-            });
-        });
-        return dom;
-    },
+		//return string clean of ids:
+		return str.replace(/\wid=".*?"/ig, '');
+	},
 
 
-    /**
-     * Takes a range or a rangy range and returns the bounding rect
-     * @param r - either a browser range or a rangy range
-     */
-    getBoundingClientRect: function(r) {
-        if (r.nativeRange) {
-            return r.nativeRange.getBoundingClientRect();
-        }
-        return r.getBoundingClientRect();
-    },
+	/**
+	 * Removes any nodes we don't want to show up in the context, for now that is assessment objects nodes, which have
+	 * a size but no display, so it looks like a bunch of emopty space in the note window.
+	 *
+	 * @param dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
+	 */
+	clearNonContextualGarbage: function(dom){
+		Ext.each(this.nonContextWorthySelectors, function(sel){
+			Ext.each(Ext.fly(dom).query(sel), function(remove){
+				Ext.fly(remove).remove();
+			});
+		});
+		return dom;
+	},
 
 
-    getSelectedNodes: function(range, doc){
-        var walker,
-            sc = range.startContainer, ec = range.endContainer,
-            so = range.startOffset, eo = range.endOffset,
-            nodes = [],
-            startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
-            endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
+	/**
+	 * Takes a range or a rangy range and returns the bounding rect
+	 * @param r - either a browser range or a rangy range
+	 */
+	getBoundingClientRect: function(r) {
+		if (r.nativeRange) {
+			return r.nativeRange.getBoundingClientRect();
+		}
+		return r.getBoundingClientRect();
+	},
+
+
+	getSelectedNodes: function(range, doc){
+		var walker,
+			sc = range.startContainer, ec = range.endContainer,
+			so = range.startOffset, eo = range.endOffset,
+			nodes = [],
+			startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
+			endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
 			node;
 
 		doc = doc || document;
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
-
+		/*jslint bitwise: true*/
 		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);
 
 		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.
@@ -308,20 +306,20 @@ Ext.define('NextThought.util.Ranges',{
 		else{
 			node = walker.nextNode();
 		}
-        while( node ){
+		while( node ){
 
-            if (node === endAt){
-                break;
-            }
+			if (node === endAt){
+				break;
+			}
 			if (node === startAt || startAt === true){
-                if (!Ext.isTextNode(walker.currentNode)){nodes.push(node);}
-                startAt = true;
-            }
+				if (!Ext.isTextNode(walker.currentNode)){nodes.push(node);}
+				startAt = true;
+			}
 			node = walker.nextNode();
-        }
-      // console.log('nodes from getSelectedNdoes', nodes);
-        return nodes;
-    },
+		}
+		// console.log('nodes from getSelectedNdoes', nodes);
+		return nodes;
+	},
 
 
 	/**
