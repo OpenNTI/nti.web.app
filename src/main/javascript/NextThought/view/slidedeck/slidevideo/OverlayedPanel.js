@@ -10,6 +10,21 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 	ui: 'content-slidevideo',
 	cls: 'content-slidevideo-container',
 
+	statics: {
+		getData: function(dom, reader){
+			var el = Ext.get(dom),
+				data = DomUtils.parseDomObject(dom),
+				description = el.down('span.description'),
+				thumbnail = el.down('img');
+
+			Ext.applyIf(data,{
+				description: (description && description.getHTML()) || '',
+				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
+			});
+			return data;
+		}
+	},
+
 	constructor: function(config){
 		if(!config || !config.contentElement){
 			throw 'you must supply a contentElement';

@@ -68,11 +68,48 @@ a{
 }
 
 
-.content-slidevideo,
-.content-slidedeck,
 .content-card{
 	&, .note-window .note.main-view &{
 		@include content-card-def;
+	}
+}
+
+.content-slidevideo,
+.content-slidedeck{
+	&, .note-window .note.main-view &{
+		@include content-card-def;
+
+		$thumbWidth: 150px;
+
+		.thumbnail {
+			width: $thumbWidth;
+			height: $thumbWidth;
+		}
+
+		.meta {
+			margin-left: $thumbWidth+15px;
+			.presentation-button {
+				margin: 5px 0px;
+				padding: 0px 10px 0px 40px;
+				background-color: $primary-blue;
+				border: 1px solid $border-blue;
+				font: italic 500 14px/30px $font;
+				border-radius: 3px;
+				color: white;
+				position: relative;
+				display: inline-block;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 6px;
+					left: 10px;
+					background: $icons no-repeat;
+					@include sprite($icons,'presentation-view',$dimensions: true);
+				}
+			}
+		}
+
 	}
 }
 
@@ -111,39 +148,5 @@ a{
 	.content-slidedeck,
 	.content-card {
 		cursor: pointer;
-	}
-
-	.content-slidevideo,
-	.content-slidedeck {
-		$thumbWidth: 150px;
-
-		.thumbnail {
-			width: $thumbWidth;
-			height: $thumbWidth;
-		}
-
-		.meta {
-			margin-left: $thumbWidth+15px;
-			.presentation-button {
-				margin: 5px 0px;
-				padding: 0px 10px 0px 40px;
-				background-color: $primary-blue;
-				border: 1px solid $border-blue;
-				font: italic 500 14px/30px $font;
-				border-radius: 3px;
-				color: white;
-				position: relative;
-				display: inline-block;
-
-				&::after {
-					content: '';
-					position: absolute;
-					top: 6px;
-					left: 10px;
-					background: $icons no-repeat;
-					@include sprite($icons,'presentation-view',$dimensions: true);
-				}
-			}
-		}
 	}
 }

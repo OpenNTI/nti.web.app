@@ -163,7 +163,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	fixUpCopiedContext: function(n){
-		var node = Ext.get(n), cardTpl,
+		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
 			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 			// when queried at this point.
 
@@ -215,6 +215,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		Ext.each(node.query('object[type*=nticard]'), function(c){
 			var d = NextThought.view.cards.OverlayedPanel.getData(c);
 			cardTpl.insertAfter(c,d);
+			Ext.fly(c).remove();
+		});
+
+		slideDeckTpl = Ext.DomHelper.createTemplate({cls:'content-slidedeck', html:NextThought.view.slidedeck.SlideDeck.prototype.renderTpl.html});
+		Ext.each(node.query('object[type*=ntislidedeck]'), function(c){
+			var d = NextThought.view.slidedeck.OverlayedPanel.getData(c);
+			slideDeckTpl.insertAfter(c,d);
+			Ext.fly(c).remove();
+		});
+
+		slideVideoTpl = Ext.DomHelper.createTemplate({cls:'content-slidevideo', html:NextThought.view.slidedeck.slidevideo.SlideVideo.prototype.renderTpl.html});
+		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c){
+			var d = NextThought.view.slidedeck.slidevideo.OverlayedPanel.getData(c);
+			slideVideoTpl.insertAfter(c,d);
 			Ext.fly(c).remove();
 		});
 
