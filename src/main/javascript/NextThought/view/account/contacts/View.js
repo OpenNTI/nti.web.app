@@ -2,12 +2,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-view',
 	requires: [
-		'NextThought.view.SecondaryTabPanel',
-		'NextThought.view.contacts.Search',
-		'NextThought.view.account.contacts.Card',
-		'NextThought.view.account.contacts.Panel',
-        'NextThought.view.account.contacts.GroupButtons',
-		'NextThought.view.account.contacts.ListButtons'
 	],
 
 	title: 'Chat',
@@ -42,35 +36,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 			},
 			items: [
 				{
-					xtype: 'secondary-tabpanel',
-					stateId: 'contacts-side-view',
-					items: [
-						{ id: 'contact-list',
-						  title: 'All Contacts',
-						  autoScroll: true
-						  //reactToChildPresenceChanged: false,
-						  //reactToModelChanges: false},
-						},
-                        { title: 'Lists',
-						  layout: 'anchor',
-						  defaults: {anchor: '100%'},
-                          items:[
-                            { xtype: 'container', id: 'my-lists', defaultType: 'contacts-panel',
-	                            layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
-							{ xtype: 'list-buttons', height: '50px'}
-                        ]},
-						{ title: 'Groups',
-						  layout: 'anchor',
-						  defaults: {anchor: '100%'},
-                          items:[
-                            { xtype: 'container', id: 'my-groups', defaultType: 'contacts-panel',
-	                            layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
-                            { xtype: 'group-buttons', height: '50px'}
-                        ]}
-					]
-				},
 
-				{
+				},{
 					xtype: 'container',
 					autoScroll: false,
 					overflowX: 'hidden',
@@ -95,9 +62,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 						xtype: 'group-buttons',
 						height: '50px'
 					}]
-				},
 
-				{
+				},{
 					cls: "disabled-contacts-view",
 					xtype: 'box',
 					autoEl: { cn: [

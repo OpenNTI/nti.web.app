@@ -1,6 +1,7 @@
 Ext.define('NextThought.controller.Groups', {
 	extend: 'Ext.app.Controller',
 
+
 	models: [
 		'Community',
 		'FriendsList',
@@ -8,9 +9,11 @@ Ext.define('NextThought.controller.Groups', {
 		'UserSearch'
 	],
 
+
 	stores: [
 		'FriendsList'
 	],
+
 
 	views: [
 		'account.coderetrieval.Window',
@@ -25,134 +28,76 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 
-	refs: [
-		{ ref: 'contactsTab', selector: 'contacts-tabs-panel[source="contacts"]'},
-		{ ref: 'followingTab', selector: 'contacts-tabs-panel[source="following"]'},
-		{ ref: 'listsTab', selector: 'contacts-tabs-panel[source="lists"]'},
-		{ ref: 'groupsTab', selector: 'contacts-tabs-panel[source="groups"]'},
-		{ ref: 'accountListsTab', selector: '#my-lists'},
-		{ ref: 'accountGroupsTab', selector: '#my-groups'}
-	],
-
-
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
 
 
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
+		this.contactStore = new Ext.data.Store({
+			model: 'NextThought.model.User',
+			id:'contacts-store'
+		});
+
 		this.listen({
 			component:{
-
-				'contact-popout':{
-					'add-contact': this.addContact,
-					'delete-contact': this.deleteContact
-				},
-
-				'contacts-panel':{
-					'delete-group': this.deleteGroup,
-					'get-group-code': this.getGroupCode,
-					'leave-group': this.leaveGroup,
-					'remove-contact': this.removeContact
-				},
-
-				'contacts-tabs-grouping':{
-					'delete-group': this.deleteGroup,
-					'get-group-code': this.getGroupCode,
-					'leave-group': this.leaveGroup,
-					'remove-contact': this.removeContact
-				},
-
-				'management-group-list': {
-					'add-group': this.addGroup,
-					'delete-group': this.deleteGroup,
-					'add-contact': this.addContact,
-					'remove-contact': this.removeContact
-				},
-
-				'add-group' : {
-					'add-group': this.addGroup
-				},
-
-				'codecreation-main-view button[name=submit]': {
-					'click': this.createGroupAndCode
-				},
-
-				'createlist-main-view button[name=submit]' : {
-					'click': this.addList
-				},
-
-				'#contact-list contact-card': {
-					'presence-changed': this.presenceOfContactChanged
+				'*':{
+					'add-contact': 'addContact',
+					'add-group': 'addGroup',
+					'delete-group': 'deleteGroup',
+					'delete-contact': 'deleteContact',
+					'leave-group': 'leaveGroup',
+					'remove-contact': 'removeContact',
+					'get-group-code': 'getGroupCode',
+					'create-group-code': 'createGroupAndCode',
+					'create-list': 'addList'
 				}
-
 			}
 		});
 	},
 
 
 	onSessionReady: function(){
-		var app = this.application,
-			store = this.getFriendsListStore(),
+		var store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
-			coll = $AppConfig.service.getCollectionFor(mime,'FriendsLists'),
-			token = {};
+			coll = $AppConfig.service.getCollectionFor(mime,'FriendsLists');
 
 		if(!coll || !coll.href){return;}
 
-		app.registerInitializeTask(token);
-		store.on('load', function(){ app.finishInitializeTask(token); }, this, {single: true});
-		store.on('load', this.ensureContactsGroup, this);
 		store.on({
 			scope: this,
-			'contacts-refreshed': this.publishContacts,
-			'contacts-added': this.contactsAdded,
-			'contacts-removed': this.contactsRemoved,
-			refresh: this.friendsListsRefreshed,
-			add: this.friendsListsAdded,
-			remove: this.friendsListRemoved //We really want bulkremove here, but that doesn't look implemented in the version of ext we have
+			load: 'friendsListsLoaded'
 		});
+
 		store.proxy.url = getURL(coll.href);
+
 		store.load();
 	},
 
 
-	getGroupContainers: function(){
-		return [this.getGroupsTab(), this.getAccountGroupsTab()];
-	},
+	getListStore: function(id){
+		var prefix = 'FriendsListStore:',
+			pid = prefix + id;
 
+		if(!this.friendsListStores){
+			this.friendsListStores = {};
+		}
 
-	getListContainers: function(){
-		return [this.getListsTab(), this.getAccountListsTab()];
+		if(!this.friendsListStores[pid]){
+			this.friendsListStores[pid] = new Ext.data.Store({model: 'NextThought.model.User',id:pid});
+		}
+
+		return this.friendsListStores[pid];
 	},
 
 
 	getResolvedContacts: function(callback){
-		var names = this.getFriendsListStore().getContacts(),
-			following = this.getFollowingTab();
-
-		names = Ext.Array.sort(Ext.Array.unique(names));
-
-//		UserRepository.getUser($AppConfig.userObject.get('following'),function(users){
-//			following.removeAll(true);
-//			following.add( Ext.Array.map(users,function(i){return {record: i};}) );
-//		});
-
+		var me = this,
+			names = this.getFriendsListStore().getContacts();
 		UserRepository.getUser(names,function(users){
-			var friends = {Online: {}, Offline: {}, all:[]},
-				all = {};
-			Ext.each(users,function(user){
-				var p = user.getPresence().toString(),
-					n = user.get('Username');
-
-				if(p){ friends[p][n] = user; }
-
-				all[n] = user;
-			});
-
-			Ext.Object.each(all,function(n,u){ friends.all.push(u); });
-
-			Ext.callback(callback,null,[friends]);
+			Ext.callback(callback,null,[users]);
+			me.contactStore.loadData(users);
+			me.contactStore.fireEvent('load',me.contactStore,users,true);
 		});
 	},
 
@@ -173,307 +118,38 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		if(!store.findRecord('Username',id,0,false,true,true)){
-			this.createGroupUnguarded('My Contacts', id, store.getContacts());
-		}
-	},
-
-
-	maybePublishContacts: function(contactList){
-		if(this.publishingContacts){
-			console.log('Defering contacts publication');
-			this.contactsNeedRepublished = true;
-			return false;
-		}
-
-		this.publishingContacts = true;
-		this.contactsNeedRepublished = false;
-		console.log('publishing contacts');
-		this.doPublishContacts(contactList, function(){
-			console.log('contact publication complete');
-			this.publishingContacts = false;
-			if(this.contactsNeedRepublished){
-				console.log('Will republish contacts');
-				this.maybePublishContacts(contactList);
-			}
-		});
-		return true;
-	},
-
-
-	doPublishContacts: function(contactList, onComplete){
-		var me = this;
-		this.getResolvedContacts(function(friends){
-
-			try{
-				me.getContactsTab().setUsers(friends.all);
-			}
-			catch(e){
-				console.error(Globals.getError(e));
-			}
-
-			console.log('Removing all sub components for contactlist');
-			contactList.removeAll(true);
-
-			console.log('Adding online group to people');
-			contactList.add({ xtype: 'contacts-panel',
-							  title: 'Online', online :true,
-							  reactToChildPresenceChanged: false,
-							  reactToModelChanges: false}).setUsers(friends.Online);
-			console.log('Adding offling group to people');
-			contactList.add({ xtype: 'contacts-panel',
-							  title: 'Offline',
-							  offline: true,
-							  reactToChildPresenceChanged: false,
-							  reactToModelChanges: false}).setUsers(friends.Offline);
-			Ext.callback(onComplete, me);
-		});
-	},
-
-
-	isPresentableFriendsList: function(fl){
-		var list, id;
-
-		//Don't show our internal My Contacts group
-		if(fl.get('Username') === this.getMyContactsId()){
-			return false;
-		}
-
-		return true;
-	},
-
-
-	cmpConfigForRecord: function(rec){
-		return {title: rec.getName(), associatedGroup: rec};
-	},
-
-
-	friendsListsAdded: function(store, records){
-		var me = this;
-
-		this.ensureActiveItem();
-
-		console.log('FLs added', arguments);
-
-		Ext.Array.each(records, function(rec){
-			var containers, idx, i=0;
-			if(!this.isPresentableFriendsList(rec)){
-				return; //keep going
-			}
-
-			containers = rec.isDFL ? this.getGroupContainers() : this.getListContainers();
-
-			Ext.Array.each(containers, function(container){
-				var displayedRecords = Ext.Array.pluck(container.query('[associatedGroup]'), 'associatedGroup'),
-					collection = new Ext.util.MixedCollection(),
-					idx = 0;
-				//We create a mixed collection of the cmps records
-				//and find the insertion location using the stores
-				//comparator
-				collection.addAll(displayedRecords);
-				idx = collection.findInsertionIndex(rec, store.generateComparator());
-
-				container.insert(idx, me.cmpConfigForRecord(rec));
+		rec = store.findRecord('Username',id,0,false,true,true);
+		if(!rec){
+			this.createGroupUnguarded('My Contacts', id, store.getContacts(),function(success,rec){
+				rec.hidden = true;
 			});
+			return;
+		}
 
-		}, this);
+		rec.hidden = true;
 	},
 
 
-	friendsListRemoved: function(store, record){
-		var containers = record.isDFL ? this.getGroupContainers() : this.getListContainers();
-		console.log('FL removed', arguments);
+	friendsListsLoaded: function(store,records){
+		var me = this, cid = me.getMyContactsId();
 
-		this.ensureActiveItem();
+		Ext.each(records,function(r){
+			if(r.get('Username')===cid){
+				r.hidden = true;
+				return;
+			}
+			var store = me.getListStore(r.get('Username'));
 
-		Ext.Array.each(containers, function(container){
-			Ext.Array.each(container.query('[associatedGroup]'), function(c){
-				if(c.associatedGroup === record){
-					c.destroy();
-				}
+			r.storeId = store.storeId;
+
+			UserRepository.getUser(r.get('friends'),function(friends){
+				store.loadData(friends);
+				store.fireEvent('load',store,friends,true);
 			});
 		});
-	},
 
-
-	friendsListsRefreshed: function(store){
-		var groupsToAdd = [], listsToAdd = [], me = this;
-
-		this.ensureActiveItem();
-
-		console.log('FLs refreshed', arguments);
-
-		store.each(function(rec){
-			var target;
-
-			if(!this.isPresentableFriendsList(rec)){
-				return; //keep going
-			}
-
-			target = rec.isDFL ? groupsToAdd : listsToAdd;
-			target.push(rec);
-		}, this);
-
-
-		function addRecordsToContainers(containers, records){
-			Ext.Array.each(containers, function(container){
-				Ext.batchLayouts(function(){
-					container.removeAll(true);
-					container.add(Ext.Array.map(records, function(r){
-						return me.cmpConfigForRecord(r);
-					}));
-				});
-			});
-		}
-
-		//OK now create cmps and add them to the containers that care about them
-		addRecordsToContainers(this.getGroupContainers(), groupsToAdd);
-		addRecordsToContainers(this.getListContainers(), listsToAdd);
-	},
-
-
-	//Ensures we show the proper card which may be our normal
-	//contacts management, the empty helper, or the coppa panel.
-	//returns true if the standard contact managements
-	//views are showing, false otherwise
-	ensureActiveItem: function(){
-		var store = this.getFriendsListStore(),
-			ct = Ext.getCmp('contacts-view-panel');
-
-		//If there are no contacts or no friendslists other than omnipresent mycontacts group
-		//hence < 2. Show the coppa or empty view
-		if(store.getContacts().length === 0 && store.getCount() < 2){
-			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1: 2 );
-			return false;
-		}
-
-		ct.getLayout().setActiveItem(0);
-		return true;
-	},
-
-
-	//It is unfortunate we have to synchonize this...
-	publishContacts: function(){
-		var me = this,
-			people = Ext.getCmp('contact-list');
-
-		//TODO figure out how to use an event here and get rid of the
-		//bloody setTimout
-		if(!people){
-			setTimeout(function(){ me.publishContacts(); },10);
-			return;
-		}
-
-		this.ensureActiveItem();
-		this.maybePublishContacts(people);
-	},
-
-
-	ensureContactsPublished: function(){
-		var people = Ext.getCmp('contact-list') || {down:Ext.emptyFn};
-		if(!people.down('[offline]') || !people.down('[online]')){
-			this.maybePublishContacts(people);
-			return false;
-		}
-		return true;
-	},
-
-
-	contactsAdded: function(newContacts){
-		var me = this;
-		//TODO this needs to go away. We end up doing extra work when
-		//we get into this condition (its rare and timing related...)
-		if(this.publishingContacts){
-			this.maybePublishContacts();
-			return;
-		}
-
-		if(!this.ensureContactsPublished()){
-			return;
-		}
-
-		this.ensureActiveItem();
-
-		UserRepository.getUser(newContacts, function(users){
-			var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
-				offline = contacts.down('[offline]'),
-				online = contacts.down('[online]'),
-				map = { offline: offline, online: online },
-				contactsTab = me.getContactsTab(),
-				containers = [offline, online, contactsTab];
-
-				Ext.Array.each(containers, function(c){
-					c.suspendLayouts();
-				});
-
-				Ext.Array.each(users, function(user){
-					var presence = user.getPresence().toString(),
-						panel = map[presence.toLowerCase()];
-					contactsTab.addUser(user);
-					panel.addUser(user);
-				});
-
-				Ext.Array.each(containers, function(c){
-					c.resumeLayouts(true);
-				});
-		});
-	},
-
-
-	contactsRemoved: function(oldContacts){
-		//TODO this needs to go away. We end up doing extra work when
-		//we get into this condition (its rare and timing related...)
-		if(this.publishingContacts){
-			this.maybePublishContacts();
-			return;
-		}
-
-		if(!this.ensureContactsPublished()){
-			return;
-		}
-
-		this.ensureActiveItem();
-
-		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
-			offline = contacts.down('[offline]'),
-			online = contacts.down('[online]'),
-			containers = [offline, online, this.getContactsTab()];
-
-		Ext.Array.each(containers, function(c){
-			c.suspendLayouts();
-
-			Ext.Array.each(oldContacts, function(contact){
-				try{
-					c.removeUser(contact);
-				}
-				catch(e){
-					console.log('An error occured removing contact from container', contact, c, Globals.getError(e));
-				}
-			});
-
-			c.resumeLayouts(true);
-		});
-
-	},
-
-
-	presenceOfContactChanged: function(cmp){
-		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
-			offline = contacts.down('[offline]'),
-			online = contacts.down('[online]'),
-			map = { offline: offline, online: online },
-			presence = cmp.getUserObject().getPresence().toString(),
-			panel = map[presence.toLowerCase()];
-
-		if(panel){
-			if(panel !== cmp.ownerCt){
-				cmp.ownerCt.remove(cmp, false);
-				panel.addCmpInSortedPosition(cmp);
-			}
-		}
-		else {
-			console.log('No panel for presence: ',presence);
-		}
+		this.ensureContactsGroup();
+		this.getResolvedContacts();
 	},
 
 
@@ -534,10 +210,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	deleteGroup: function(record){
-		var store = this.getFriendsListStore(),
-            name = record.get('Username');
-
-		if(name !== this.getMyContactsId()){
+		if(record.get('Username') !== this.getMyContactsId()){
 			record.destroy();
 		}
 	},

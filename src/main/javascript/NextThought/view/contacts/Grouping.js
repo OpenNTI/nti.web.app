@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.contacts.Grouping',{
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.view.BoundPanel',
 	alias: 'widget.contacts-tabs-grouping',
 	requires: [
 		'NextThought.layout.component.Natural',
@@ -64,9 +64,22 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		countEl: '.grouping-header .count'
 	},
 
+
+	maybeDestroy: function(store,record){
+		if(record === this.record){
+			this.destroy();
+		}
+	},
+
+
 	initComponent: function(){
-		var chatTool;
+		this.storeId = this.record.storeId;
+		this.mon(this.record.store,'remove','maybeDestroy',this);
+
 		this.callParent(arguments);
+
+		this.associatedGroup = this.associatedGroup || this.record;
+
 		this.setTitle(this.title);
 		this.setupActions(this.associatedGroup);
 
