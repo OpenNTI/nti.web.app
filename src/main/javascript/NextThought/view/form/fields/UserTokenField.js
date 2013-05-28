@@ -451,6 +451,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.inputEl.dom.value = '';
 		this.setPublished(false);
 		this.resetPlaceholderLabel();
+		this.pickerView.hide();
 	},
 
 
