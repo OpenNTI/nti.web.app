@@ -588,6 +588,9 @@
 
 				.stamp {
 					margin-top: 5px;
+					text-overflow: ellipsis;
+					overflow: hidden;
+
 					.name {font: inherit;}
 
 					span{
