@@ -1,3 +1,5 @@
+/*jslint */
+/*globals LocationProvider, SlideDeck */
 Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidevideo',

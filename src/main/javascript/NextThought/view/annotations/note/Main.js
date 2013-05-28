@@ -1,3 +1,5 @@
+/*jslint */
+/*global $AppConfig, Globals, ImageZoomView, LocationProvider, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
 Ext.define('NextThought.view.annotations.note.Main',{
 	extend: 'NextThought.view.annotations.note.Panel',
 	alias: 'widget.note-main-view',
@@ -323,7 +325,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		else if(/^slide$/.test(action)){
 			if(this.editorActive()){
-				/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+				/*jslint bitwise: true */ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
 					msg: "This will discard the contents of your current message",
 					scope: me,

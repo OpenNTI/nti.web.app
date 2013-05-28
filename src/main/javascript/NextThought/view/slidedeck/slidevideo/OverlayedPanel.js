@@ -1,3 +1,5 @@
+/*jslint */
+/*global DomUtils */
 Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-slidevideo',
