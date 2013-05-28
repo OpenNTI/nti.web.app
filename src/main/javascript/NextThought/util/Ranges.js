@@ -4,7 +4,7 @@ Ext.define('NextThought.util.Ranges',{
 	singleton: true,
 
 	nonContextWorthySelectors: [
-		'object'
+		'object:not([type*=nti])'
 	],
 
 	saveRange: function(r){
