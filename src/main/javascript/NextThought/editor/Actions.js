@@ -453,6 +453,13 @@ Ext.define('NextThought.editor.Actions', {
 
 		if (h !== p) {
 			this.cmp.updateLayout();
+
+			// TODO: In Safari 6, the editor resize but it doesn't paint properly upon
+			// updateLayout( which makes the editor look like it's cut off). Thus, we force it to repaint itself.
+			// It seems to be a browser-related bug. This can get a little expensive, thus we do it for Safari only.
+			if(Ext.isSafari){
+				this.cmp.el.repaint();
+			}
 		}
 	},
 
