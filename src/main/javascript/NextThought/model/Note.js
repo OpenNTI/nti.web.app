@@ -180,6 +180,7 @@ Ext.define('NextThought.model.Note', {
 	},
 
 	isWhiteboardOnly: function(body){
+		if(Ext.isEmpty(body)){ return false;}
 		return Ext.Array.every(body, function(i){
 			return typeof i !== 'string';
 		});
@@ -200,9 +201,9 @@ Ext.define('NextThought.model.Note', {
 			return 'Whiteboard';
 		}
 
-		t = this.get('body').join('');
+		t = body && body.join('');
 		snip = Ext.String.ellipsis(this.getBodyText(true), max, false);
-		if(snip !== t){ t = snip +'...'; }
+		if(t && (snip !== t)){ t = snip +'...'; }
 		return t;
 	},
 
