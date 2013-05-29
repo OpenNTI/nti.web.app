@@ -9,6 +9,11 @@
  */
 Ext.define('NextThought.mixins.UserContainer', {
 
+	requires: [
+		'Ext.Action'
+	],
+
+
 	//Should be called from initComponent
 	constructor: function(){
 		this.on('presence-changed', this.presenceOfComponentChanged, this);

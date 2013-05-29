@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.contacts.View',{
-	extend: 'Ext.container.Container',
+	extend: 'Ext.view.View',
 	alias: 'widget.contacts-view',
 	requires: [
 	],
@@ -12,79 +12,38 @@ Ext.define('NextThought.view.account.contacts.View',{
 	iconCls: 'contacts',
 	ui: 'contacts',
 	cls: 'contacts-view',
-	plain: true,
 
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
 
-	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: '',cn:[{cls: 'search', 'data-qtip': 'Search for contacts'}]}},
-		{
-			xtype: 'container',
-			layout: 'card',
-			flex: 1,
-			id: 'contacts-view-panel',
-			defaults :{
-				xtype: 'container',
-				defaults: {
-					layout: 'anchor',
-					anchor: '100%',
-					defaults: {anchor: '100%'}
-				}
-			},
-			items: [
-				{
+	emptyText: Ext.DomHelper.markup({
+		cls: "populate-contacts",
+		cn: [{
+				cls: 'title',
+				html: 'Welcome to NextThought!'
+		},{
+			html:'Search for friends to add to your contact list.'
+//		},{
+//			cls: 'group-button-label',
+//			html:'Create a group or join a group.'
+		}]
 
-				},{
-					xtype: 'container',
-					autoScroll: false,
-					overflowX: 'hidden',
-					overflowY: 'hidden',
-					layout: {type: 'vbox', align: 'stretch', reserveScrollbar: false},
-					items: [{
-						xtype: 'box',
-						flex: 1,
-						cls: "populate-contacts",
-						autoEl: {
-							cn: [{
-									cls: 'title',
-									html: 'Welcome to NextThought!'
-							},{
-								html:'Search for friends to add to your contact list.'
-							},{
-								html:'Create a group or join a group.',
-								cls: 'group-button-label'
-							}]
-						}
-					},{
-						xtype: 'group-buttons',
-						height: '50px'
-					}]
-
-				},{
-					cls: "disabled-contacts-view",
-					xtype: 'box',
-					autoEl: { cn: [
-						{ cls:'disabled-message-div',cn: [
-							{ cls:'disabled-title', html:'Social Features Disabled...'},
-							'We need your parent\'s permission to give you more features.  ',
-                            {tag: 'span', cls: 'resend-consent', html:'Resend Consent Form', handler: this.resendClicked}
-						]}
-					]}
-				}
-			]
+		/*
+		if(!$AppConfig.service.canCreateDynamicGroups()){
+			this.el.down('.populate-contacts').addCls('left');
+			this.el.down('.group-button-label').update('If you have a Group Code, enter it below to join a group.');
 		}
-	],
+		 */
+	}),
+
+	itemSelector:'.list-item',
+	tpl: Ext.DomHelper.markup({
+		tag: 'tpl', 'for':'.', cn: [
+			{ cls: 'list-item', cn: []}
+		]
+	}),
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-		if(!$AppConfig.service.canFriend()){
-			this.down('box[cls=view-title]').autoEl = null;
-			Ext.getCmp('contacts-view-panel').getLayout().setActiveItem(2);
-		}
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
 		this.mon(this.contactSearch,{
 			scope: this,
@@ -101,14 +60,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
-    resendClicked: function(){
-        this.fireEvent('resendConsent');
-    },
-
 	resyncSearch: function(){
 		if(!this.needsSyncUp){return;}
 		delete this.needsSyncUp;
-		Ext.defer(function(){this.contactSearch.show();},100,this);
+		Ext.defer(this.contactSearch.show,100,this.contactSearch);
 	},
 
 
@@ -132,26 +87,12 @@ Ext.define('NextThought.view.account.contacts.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		if(!$AppConfig.service.canCreateDynamicGroups()){
-			this.el.down('.populate-contacts').addCls('left');
-			this.el.down('.group-button-label').update('If you have a Group Code, enter it below to join a group.');
-		}
-
 		this.mon(this.up('main-sidebar'),{
 			scope: this,
 			beforemove: this.hideSearch,
 			move: this.resyncSearch
 
 		});
-
-		var el = this.el.down('.view-title');
-		this.searchBtn = el.down('.search');
-		this.activeView = 0;
-		if(el){
-			this.mon(el,'click',this.toggleSearch,this);
-		}
-
-        this.mon(this.el.down('.resend-consent'), 'click', this.resendClicked, this);
 	},
 
 

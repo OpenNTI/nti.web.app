@@ -18,15 +18,14 @@ Ext.define('NextThought.controller.Account', {
 		'account.Window',
 		'form.AccountForm',
         'form.PasswordResetForm',
-		'account.contacts.Card',
         'menus.Settings',
         'account.coppa.Main',
         'account.code.Main',
         'account.recovery.Email',
         'account.contact.Window',
-        'account.contacts.View',
 		'account.codecreation.Window',
 		'account.contacts.createlist.Window',
+		'account.contacts.View',
 		'account.code.Window',
 		'profiles.Panel'
 	],
@@ -37,75 +36,75 @@ Ext.define('NextThought.controller.Account', {
 		this.listen({
 			component: {
 				'contact-card':{
-					'click': this.contactCardClicked
+					'click': 'contactCardClicked'
 				},
 
 				'settings-menu [href]' : {
-					'click': this.openHref
+					'click': 'openHref'
 				},
 
 				'settings-menu [action=privacy]' : {
-					'click': this.showPrivacy
+					'click': 'showPrivacy'
 				},
 
 				'settings-menu [action=childrens-privacy]' : {
-					'click': this.showChildrensPrivacy
+					'click': 'showChildrensPrivacy'
 				},
 
 				'settings-menu [action=help]' : {
-					'click': this.openHelp
+					'click': 'openHelp'
 				},
 
 				'settings-menu [action=terms]' : {
-					'click': this.showTerms
+					'click': 'showTerms'
 				},
 
 				'profile-panel':{
-					'edit': this.showAccount
+					'edit': 'showAccount'
 				},
 
 				'settings-menu [action=account]' : {
-					'click': this.showAccount
+					'click': 'showAccount'
 				},
 
 				'settings-menu [action=welcome]' : {
-					'click': this.showPermanantWelcome
+					'click': 'showPermanantWelcome'
 				},
 
 				'settings-menu [action=contact]' : {
-					'click': this.showContactUs
+					'click': 'showContactUs'
 				},
 
 				'password-reset-form button[save]' : {
-					'click': this.changePassword
+					'click': 'changePassword'
 				},
 
 				'coppa-main-view button[name=submit]' : {
-					'click': this.submitCoppaInfo
+					'click': 'submitCoppaInfo'
 				},
 
 				'recovery-email-view button[name=submit]': {
-					'click': this.fixEmail
+					'click': 'fixEmail'
 				},
 
 				'contact-main-view button[name=submit]': {
-					'click': this.contactFormSubmit
+					'click': 'contactFormSubmit'
 				},
 
 				'code-main-view button[name=submit]': {
-					'click': this.groupCodeSubmit
+					'click': 'groupCodeSubmit'
 				},
 
-				'contacts-view': {
-					'resendConsent': this.resendConsent
+				'*': {
+					'resend-consent': 'resendConsent'
 				},
 
 				'contacts-view group-buttons' : {
-					'click': this.groupButtonClicked
+					'click': 'groupButtonClicked'
 				},
 
 				'contacts-view list-buttons' : {
-					'click': this.groupButtonClicked
+					'click': 'groupButtonClicked'
 				}
 
 			}

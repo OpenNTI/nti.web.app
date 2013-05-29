@@ -5,8 +5,8 @@ Ext.define('NextThought.view.SideBar',{
 	requires: [
 		'NextThought.view.SideBarTabPanel',
         'NextThought.view.account.activity.View',
+		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
-		'NextThought.view.account.history.View',
 		'NextThought.view.account.Identity'
 	],
 
@@ -25,22 +25,30 @@ Ext.define('NextThought.view.SideBar',{
 	ui: 'sidebar',
 	cls: 'sidebar',
 
+	constructor: function(){
+		var contactsType = 'disabled-contacts-view';
 
-	items: [
-		{ xtype: 'box', cls: 'gripper', autoEl: { html: 'My Account&nbsp;', cn:[
-            {tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' },
-			{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
-        ]}},
-		{ xtype: 'sidebar-tabpanel',
-			flex: 1,
-			stateId: 'sidebar',
-			items: [
-				{ xtype: 'contacts-view' },
-				{ xtype: 'activity-view' },
-				{ iconCls: 'inbox', title: 'inbox' }
-			]
+		if($AppConfig.service.canFriend()){
+			contactsType = 'contacts-view';
 		}
-	],
+
+		this.items = [
+			{ xtype: 'box', cls: 'gripper', autoEl: { html: 'My Account&nbsp;', cn:[
+		            {tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' },
+					{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
+		        ]}},
+				{ xtype: 'sidebar-tabpanel',
+					flex: 1,
+					stateId: 'sidebar',
+					items: [
+						{ xtype: contactsType },
+						{ xtype: 'activity-view' },
+						{ iconCls: 'inbox', title: 'inbox' }
+					]
+				}];
+
+		return this.callParent(arguments);
+	},
 
 
 	initComponent: function(){
