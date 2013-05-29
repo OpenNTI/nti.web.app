@@ -7,7 +7,6 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	enableTags: true,
 	enableTitle: true,
-	enablePublishControls: true,
 
 	headerTplOrder: '{title}{toolbar}',
 

@@ -920,6 +920,9 @@ Ext.define('NextThought.controller.Forums', {
 			forumRecord = cmp && cmp.record,
 			me = this;
 
+		// NOTE: Forums entries are PUBLIC only.
+		autoPublish = true;
+
 		post.set({
 			'title': title,
 			'body': body,

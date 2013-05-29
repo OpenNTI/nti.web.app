@@ -20,6 +20,10 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		});
 	},
 
+	renderSelectors:{
+		publishStateEl: '.meta .state'
+	},
+
 
 	setPath: function(){
 		var me = this, tpl, title;

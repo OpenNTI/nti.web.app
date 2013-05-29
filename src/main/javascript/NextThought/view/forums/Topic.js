@@ -17,6 +17,10 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.layout.component.Natural'
 	],
 
+	onClassExtended: function(cls, data){
+		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+	},
+
 	cls: 'topic-post',
 	defaultType: 'forums-topic-comment',
 	layout: 'auto',
@@ -84,8 +88,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		navigationBarCtrEl: '.header-container',
 		navigationBarEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
-		prevPostEl: '.navigation-bar .prev',
-		publishStateEl: '.meta .state'
+		prevPostEl: '.navigation-bar .prev'
 	},
 
 
@@ -152,7 +155,6 @@ Ext.define('NextThought.view.forums.Topic',{
 		s = r.getPublishState();
 		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
 		Ext.apply(r, {
-			'publish-state': s,
 			path: this.path,
 			showName: true,
 			headerCls: 'forum-topic'
@@ -239,12 +241,7 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
-	setPublishAndSharingState: function(){
-		if(!this.publishStateEl){ return;}
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
-		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
-	},
+	setPublishAndSharingState: function(){},
 
 
 	scrollCommentIntoView: function(commentId){
