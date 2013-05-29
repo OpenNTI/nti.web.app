@@ -50,8 +50,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 		{
 			cls: 'button-row',
 			cn: [
-				{cls: 'search' },
-				{cls: 'group-chat'}
+				{cls: 'search', html: 'Search' },
+				{cls: 'group-chat', html: 'Group Chat' }
 			]
 		}
 	]),
@@ -70,10 +70,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
 		this.mon(this.contactSearch,{
 			scope: this,
-			show: this.onSearchShow,
-			hide: this.onSearchHide
+			show: 'onSearchShow',
+			hide: 'onSearchHide'
 		});
-		this.mon(this,'deactivate',this.contactSearch.hide,this.contactSearch);
+		this.mon(this,'deactivate','hide',this.contactSearch);
 	},
 
 
@@ -90,19 +90,28 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
+	getSearchButton: function(){
+		var el = this.el;
+		return el && el.down('.button-row .search');
+	},
+
+
 	onSearchShow: function(cmp){
-		var b = this.searchBtn;
+		var b = this.getSearchButton(),
+			text;
 		if( !b ){ return; }
 		b.addCls('active');
 
 		cmp.alignTo(b,'tr-br',[0,0]);
-		Ext.defer(function(){ cmp.down('simpletext').focus(); },10);
+		text = cmp.down('simpletext');
+		Ext.defer(text.focus,10,text);
 	},
 
 
 	onSearchHide: function(){
-		if( this.searchBtn ){
-			this.searchBtn.removeCls('active');
+		var b = this.getSearchButton();
+		if( b ){
+			b.removeCls('active');
 		}
 	},
 
@@ -112,8 +121,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		this.mon(this.up('main-sidebar'),{
 			scope: this,
-			beforemove: this.hideSearch,
-			move: this.resyncSearch
+			beforemove: 'hideSearch',
+			move: 'resyncSearch'
 		});
 	},
 

@@ -12,6 +12,20 @@
 	}
 }
 
+@mixin icon($name,$top:0,$left:0){
+	position: relative;
+
+	&::after {
+		content: '';
+		overflow: hidden;
+		position: absolute;
+		top: $top;
+		left: $left;
+		background: $icons no-repeat;
+		@include sprite($icons,$name,$dimensions: true);
+	}
+}
+
 @mixin ellipse{
 	white-space: nowrap;
 	-moz-text-overflow: ellipsis;

@@ -353,8 +353,39 @@ $over-color: #f4f3f3;
 	}
 
 	.button-row {
+		display: table;
+		border-collapse: collapse;
+		table-layout: fixed;
 		height: 40px;
-		background: red;
+		width: 100%;
+
+
+		div {
+			border: 1px solid #ebebeb;
+			border-bottom-width: 0;
+			border-left-width: 0;
+			display: table-cell;
+			width: 50%;
+			padding-left: 40px;
+
+			font: italic 400 14px/40px $font;
+			color: $tertiary-grey;
+			background: #fafafa;
+			overflow: hidden;
+
+			&:last-of-type {
+				border-right-width: 0;
+			}
+
+			&.search {
+				@include icon('search',$top:11px,$left:13px);
+				&::after{ opacity: 0.6; }
+			}
+
+			&.group-chat {
+				@include icon('add-contact-14x14',$top:10px,$left:10px);
+			}
+		}
 	}
 }
 
@@ -441,13 +472,7 @@ div.contact-buttons {
 	}
 
 	div.join-group {
-		&::after {
-			content: ' ';
-			position: absolute;
-			top: 0; left: 0;
-			background: transparent $icons no-repeat;
-			@include sprite($icons,'add-contact-14x14',$dimensions: true);
-		}
+		@include icon('add-contact-14x14');
 		&:hover::after{
 			@include sprite($icons,'add-contact-14x14_hover',$dimensions: true);
 		}
