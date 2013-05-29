@@ -66,6 +66,10 @@ Ext.define('NextThought.util.Sharing',{
 		return result;
 	},
 
+	getAppUserCommunities: function(){
+		return 	$AppConfig.userObject.getCommunities(true);
+	},
+
 	//TODO need to check published status for the case of blogs NO?
 	isPublic: function(sharedWith){
 		//NOTE: An object is public, if it's shared with all communities that the user belong to.
@@ -77,7 +81,7 @@ Ext.define('NextThought.util.Sharing',{
 			return u.getId ? u.getId() : u;
 		});
 
-		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
+		Ext.each(this.getAppUserCommunities(), function(rec){
 			communities.push(rec.getId());
 		});
 
@@ -92,7 +96,7 @@ Ext.define('NextThought.util.Sharing',{
 			entities = sharingInfo.entities || [];
 
 		if(isPublic){
-			Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
+			Ext.each(this.getAppUserCommunities(), function(rec){
 				entities.push(rec.getId());
 			});
 		}
@@ -112,7 +116,7 @@ Ext.define('NextThought.util.Sharing',{
 		}
 		if(!Ext.isArray(sharedWith)){ sharedWith = [sharedWith]; }
 
-		Ext.each($AppConfig.userObject.getCommunities(true), function(rec){
+		Ext.each(this.getAppUserCommunities(), function(rec){
 			communities.push(rec.getId());
 		});
 

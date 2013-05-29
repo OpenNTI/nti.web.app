@@ -157,6 +157,7 @@ Ext.application({
 			'javascript/specs/util/anchorables/ChangingDomAnchors.spec.js',
 			'javascript/specs/util/anchorables/Utils.spec.js',
 			'javascript/specs/util/Search.spec.js',
+			'javascript/specs/util/Sharing.spec.js',
 			'javascript/specs/util/Time.spec.js',
 			'javascript/specs/util/UserDataThreader.spec.js',
 			'javascript/specs/util/Content.spec.js',
