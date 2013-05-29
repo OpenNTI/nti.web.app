@@ -325,6 +325,10 @@ $over-color: #f4f3f3;
 			height: 7px;
 			border-radius: 90px;
 			background: $primary-red;
+
+			&.Online {
+				background: $primary-green;
+			}
 		}
 
 		.wrap {
