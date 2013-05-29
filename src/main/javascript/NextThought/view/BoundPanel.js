@@ -5,7 +5,11 @@ Ext.define('NextThought.view.BoundPanel',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		this.store = this.store || Ext.getStore(this.storeId);
+		this.store = this.store || Ext.getStore(this.storeId||'');
+		if(!this.store){
+			console.warn('No Store!');
+			return;
+		}
 
 		this.mon(this.store,{
 			scope: this,
