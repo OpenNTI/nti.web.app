@@ -170,8 +170,9 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope){
-		var rec = this.getFriendsListModel().create(),
-			store = this.getFriendsListStore();
+		var me = this,
+			rec = me.getFriendsListModel().create(),
+			store = me.getFriendsListStore();
 
 		rec.set('Username',username);
 		//We used to set realname here, but we really want alias
@@ -182,9 +183,10 @@ Ext.define('NextThought.controller.Groups', {
 		rec.set('friends', friends||[]);
 		rec.set('IsDynamicSharing', !!dynamic);
 		rec.save({
-			scope: this,
+			scope: me,
 			success: function(record, operation){
 				Ext.callback(callback,scope, [true, record, operation]);
+				me.getListStore(username);
 				Ext.defer(function(){store.add(record);}, 500);
 			},
 			failed: function(record, operation, response){
