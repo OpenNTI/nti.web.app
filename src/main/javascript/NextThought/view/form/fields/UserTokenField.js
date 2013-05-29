@@ -158,8 +158,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	updateSize: function(){
-		this.callParent(arguments);
-		this.updatePlaceholderLabel();
+		var i = this.inputEl,
+			v = i.getValue();
+		i[v?'removeCls':'addCls']('empty');
 	},
 
 
@@ -461,7 +462,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.inputEl.dom.value = '';
 		this.setPublished(false);
 		this.resetPlaceholderLabel();
-		this.pickerView.hide();
+		this.clearResults();
 	},
 
 
@@ -475,6 +476,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		});
 		
 		this.selections = s;
+		if(Ext.isEmpty(this.selections)){
+			this.resetPlaceholderLabel();
+		}
 		this.fireEvent('sync-height', this);
 	},
 
