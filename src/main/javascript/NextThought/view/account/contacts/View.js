@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	overCls:'over',
 	itemSelector:'.contact-row',
 	tpl: Ext.DomHelper.markup([
-		{ tag: 'tpl', 'for':'.', cn: [
+		{ cls: 'contact-list',cn: { tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'contact-row', cn: [
 				{ cls: 'presence {Presence}' },
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
@@ -46,13 +46,25 @@ Ext.define('NextThought.view.account.contacts.View',{
 					{ cls: 'status', html:'{status}' }
 				]}
 			]}
-		] }
-
+		]}},
+		{
+			cls: 'button-row',
+			cn: [
+				{cls: 'search' },
+				{cls: 'group-chat'}
+			]
+		}
 	]),
 
 
+	listeners: {
+		resize: 'syncParts',
+		refresh: 'setScrollRegion'
+	},
+
+
 	initComponent: function(){
-		this.store = Ext.getStore('contacts-store');
+		this.store = 'contacts-store';
 		this.callParent(arguments);
 
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
@@ -102,14 +114,24 @@ Ext.define('NextThought.view.account.contacts.View',{
 			scope: this,
 			beforemove: this.hideSearch,
 			move: this.resyncSearch
-
 		});
 	},
 
 
-	afterLayout: function(){
-		this.callParent(arguments);
+	setScrollRegion: function(){
+		var el = this.el,
+			bEl = el && this.el.down('.button-row'),
+			h = bEl && (this.getHeight() - bEl.getHeight()),
+			scrollArea = el && el.down('.contact-list');
+		if(bEl && scrollArea){
+			scrollArea.setHeight(h);
+		}
+	},
+
+
+	syncParts: function(){
 		this.contactSearch.setWidth(this.getWidth());
+		this.setScrollRegion();
 	},
 
 

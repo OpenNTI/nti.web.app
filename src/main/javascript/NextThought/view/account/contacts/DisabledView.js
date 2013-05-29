@@ -9,8 +9,6 @@ Ext.define('NextThought.view.account.contacts.DisabledView',{
 
 	iconCls: 'contacts',
 	ui: 'contacts',
-	cls: 'contacts-view',
-	plain: true,
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: "disabled-contacts-view",

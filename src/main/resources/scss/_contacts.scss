@@ -296,6 +296,7 @@ $over-color: #f4f3f3;
 
 
 .contacts-view {
+	overflow: hidden;
 
 	.contact-row{
 		height: 50px;
@@ -344,41 +345,48 @@ $over-color: #f4f3f3;
 		}
 	}
 
+	.contact-list {
+		overflow: {
+			x: hidden;
+			y: scroll;
+		}
+	}
+
+	.button-row {
+		height: 40px;
+		background: red;
+	}
+}
 
 
+.disabled-contacts-view{
+	padding-top: 0px;
+	color: $secondary-grey;
 
-	.disabled-contacts-view{
-		//	padding: 10px;
-		padding-top: 0px;
-		color: $secondary-grey;
+	.disabled-message-div{
+		background-color: #f1f1f1;
+		padding: 15px;
 
-		.disabled-message-div{
-			background-color: #f1f1f1;
-			padding: 15px;
-
-			.disabled-title{
-				color: $primary-grey;
-				padding-bottom: 3px;
-				font-size: 16px;
-				font-style: italic;
-				&:active,&.active {
-					background-position: -56px 0;
-					&:hover{
-						background-position: -84px 0;
-					}
-				}
-
-				&:hover {
-					background-position: -28px 0;
+		.disabled-title{
+			color: $primary-grey;
+			padding-bottom: 3px;
+			font-size: 16px;
+			font-style: italic;
+			&:active,&.active {
+				background-position: -56px 0;
+				&:hover{
+					background-position: -84px 0;
 				}
 			}
-			.resend-consent {
-				cursor: pointer;
-				color: $primary-blue;
+
+			&:hover {
+				background-position: -28px 0;
 			}
 		}
-
-
+		.resend-consent {
+			cursor: pointer;
+			color: $primary-blue;
+		}
 	}
 }
 
