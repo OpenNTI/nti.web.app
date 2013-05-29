@@ -80,7 +80,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 		this.associatedGroup = this.associatedGroup || this.record;
 
-		this.setTitle(this.title);
+		this.setTitle(this.associatedGroup.getName());
 		this.setupActions(this.associatedGroup);
 
 		this.tools = Ext.Array.map(this.tools, function(t){
@@ -105,8 +105,12 @@ Ext.define('NextThought.view.contacts.Grouping',{
 
 		this.on('destroy',this.cleanupActions,this);
 
-		this.on('add',this.updateStuff,this,{buffer:100});
-		this.on('remove',this.updateStuff,this,{buffer:100});
+		this.on({
+			scope: this,
+			add:'updateStuff',
+			remove: 'updateStuff',
+			buffer:100
+		});
 		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
@@ -127,11 +131,12 @@ Ext.define('NextThought.view.contacts.Grouping',{
 	setTitle: function(newTitle){
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setTitle,this,[newTitle]));
-		} else {
-			this.initialConfig.title = newTitle || this.initialConfig.title;
-			this.nameEl.update(newTitle||this.initialConfig.title);
-			this.countEl.update(Ext.String.format('{0}', this.items.getCount()));
+			return;
 		}
+
+		this.initialConfig.title = newTitle || this.initialConfig.title;
+		this.nameEl.update(newTitle||this.initialConfig.title);
+		this.countEl.update(Ext.String.format('{0}', this.items.getCount()));
 	},
 
 
