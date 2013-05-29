@@ -13,6 +13,25 @@ Ext.define('NextThought.view.account.contacts.View',{
 	ui: 'contacts',
 	cls: 'contacts-view',
 
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'contact-list'},
+		{ cls: 'button-row', cn: [
+			{cls: 'search', html: 'Search', cn:{tag:'input', type:'text'/*, placeholder:'Search'*/} },
+			{cls: 'group-chat', html: 'Group Chat' }
+		]
+	}]),
+
+	renderSelectors: {
+		buttonRow: '.button-row',
+		searchButton: '.button-row .search',
+		searchField: '.button-row .search input',
+		frameBodyEl: '.contact-list'
+	},
+
+
+	getTargetEl: function(){
+		return this.frameBodyEl;
+	},
 
 	emptyText: Ext.DomHelper.markup({
 		cls: "populate-contacts",
@@ -36,8 +55,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	overCls:'over',
 	itemSelector:'.contact-row',
-	tpl: Ext.DomHelper.markup([
-		{ cls: 'contact-list',cn: { tag: 'tpl', 'for':'.', cn: [
+	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 			{ cls: 'contact-row', cn: [
 				{ cls: 'presence {Presence}' },
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
@@ -46,15 +64,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 					{ cls: 'status', html:'{status}' }
 				]}
 			]}
-		]}},
-		{
-			cls: 'button-row',
-			cn: [
-				{cls: 'search', html: 'Search' },
-				{cls: 'group-chat', html: 'Group Chat' }
-			]
-		}
-	]),
+		]}),
 
 
 	listeners: {
@@ -90,34 +100,51 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
-	getSearchButton: function(){
-		var el = this.el;
-		return el && el.down('.button-row .search');
+
+	onSearchClick: function(e){
+		this.buttonRow.addCls('search');
+		this.searchField.focus();
+//		this.contactSearch.show();
 	},
 
 
-	onSearchShow: function(cmp){
-		var b = this.getSearchButton(),
-			text;
-		if( !b ){ return; }
-		b.addCls('active');
+	onSearchBlur: function(e){
+		this.buttonRow.removeCls('search');
+	},
 
-		cmp.alignTo(b,'tr-br',[0,0]);
+	onSearchShow: function(cmp){
+		var b = this.buttonRow, text;
+		if( !b ){ return; }
+		b.addCls('search');
+
+		cmp.alignTo(b,'br-tr',[0,0]);
 		text = cmp.down('simpletext');
 		Ext.defer(text.focus,10,text);
 	},
 
 
 	onSearchHide: function(){
-		var b = this.getSearchButton();
+		var b = this.buttonRow;
 		if( b ){
-			b.removeCls('active');
+			b.removeCls('search');
 		}
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.mon(this.searchButton,{
+			scope: this,
+			click: 'onSearchClick'
+		});
+
+		this.mon(this.searchField,{
+			scope: this,
+			blur: 'onSearchBlur'
+		});
+
+
 
 		this.mon(this.up('main-sidebar'),{
 			scope: this,

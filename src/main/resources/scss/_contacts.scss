@@ -324,10 +324,14 @@ $over-color: #f4f3f3;
 			width: 7px;
 			height: 7px;
 			border-radius: 90px;
-			background: $primary-red;
+			background: $tertiary-grey;
 
 			&.Online {
 				background: $primary-green;
+			}
+			&.idle {}
+			&.DnD {
+				background: $primary-red;
 			}
 		}
 
@@ -362,14 +366,26 @@ $over-color: #f4f3f3;
 		table-layout: fixed;
 		height: 40px;
 		width: 100%;
+		cursor: pointer;
 
+		&.search {
+			.search{
+				input{
+					visibility: visible;
+					opacity: 1;
+				}
+			}
+			.group-chat {
+				width: 40px;
+			}
+		}
 
 		div {
+			@include experimental(transition, all 0.5s);
 			border: 1px solid #ebebeb;
 			border-bottom-width: 0;
 			border-left-width: 0;
 			display: table-cell;
-			width: 50%;
 			padding-left: 40px;
 
 			font: italic 400 14px/40px $font;
@@ -384,9 +400,24 @@ $over-color: #f4f3f3;
 			&.search {
 				@include icon('search',$top:11px,$left:13px);
 				&::after{ opacity: 0.6; }
+
+				input {
+					@include experimental(transition, opacity 0.5s);
+					visibility: hidden;
+					position: absolute;
+					border: 0;
+					background: #fafafa;
+
+					font: normal 400 14px/25px $font;
+					color: $primary-grey;
+					height: 40px;
+					top: 0; left: 35px; right: 0;
+					opacity: 0;
+				}
 			}
 
 			&.group-chat {
+				width: 50%;
 				@include icon('add-contact-14x14',$top:10px,$left:10px);
 			}
 		}
@@ -756,7 +787,7 @@ div.contact-buttons {
 
 				&.Offline {
 					.meta {
-						&::before{ background: #f55631; }
+						&::before{ background: $tertiary-grey; }
 					}
 				}
 
