@@ -37,13 +37,19 @@ Ext.define('NextThought.view.account.contacts.View',{
 	itemSelector:'.list-item',
 	tpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for':'.', cn: [
-			{ cls: 'list-item', cn: []}
+			{ cls: 'list-item', cn: [
+				{html:'{displayName}'},
+				{html:'{status}'},
+				{html:'{Presence}'}
+			]}
 		]
 	}),
 
 
 	initComponent: function(){
+		this.store = Ext.getStore('contacts-store');
 		this.callParent(arguments);
+
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
 		this.mon(this.contactSearch,{
 			scope: this,
