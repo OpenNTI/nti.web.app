@@ -169,7 +169,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	updateContentHeight: function () {
 		var el = this.getTargetEl(),
-			h = this.footerEl.getY() - el.getY();
+			footer = this.footerEl,
+			h;
+
+		if(!footer || !el || !footer.getY || !el.getY){
+			return;
+		}
+
+		h = footer.getY() - el.getY();
 		el.setHeight(h);
 		this.getEl().repaint();
 	},
@@ -186,6 +193,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			errorEl = this.errorEl;
 
 		function syncHeight() {
+			if(!errorEl || !errorEl.getY || !el || !el.getY){
+				return;
+			}
 			var h = errorEl.getY() - el.getY();
 			el.setHeight(h);
 		}
