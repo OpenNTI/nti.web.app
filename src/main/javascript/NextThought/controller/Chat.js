@@ -76,6 +76,12 @@ Ext.define('NextThought.controller.Chat', {
 //			    'chat-log-view button[action]':{'click': this.toolClicked},
 //			    'chat-log-view tool[action]':{'click': this.toolClicked},
 
+				'*': {
+					'set-chat-status': this.changeStatus,
+					'set-chat-show': this.changeShow,
+					'set-chat-type': this.changeType
+				},
+
 				'chat-view chat-entry': {
 					//'classroom': this.classroom,
 					'send': this.send,
@@ -145,6 +151,14 @@ Ext.define('NextThought.controller.Chat', {
 				'contacts-tabs-card': {
 					'chat': this.enterRoom
 				}
+			},
+
+			controller:{
+				'*':{
+					'set-chat-status': this.changeStatus,
+					'set-chat-show': this.changeShow,
+					'set-chat-type': this.changeType
+				}
 			}
 		});
 
@@ -165,7 +179,7 @@ Ext.define('NextThought.controller.Chat', {
 			}else if(me.debug){
 				console.log("Dropped "+eventName+" handling");
 			}
-		}
+		};
 	},
 
 	setChannelMap: function () {
@@ -946,15 +960,44 @@ Ext.define('NextThought.controller.Chat', {
 	* @param type - the users availability 'available' or 'unavailable'
 	* @param [show] - show the user as 'chat','away','dnd', or'xa'
 	* @param [status] - message to show if the user is available
-	* @param [callback] - function to call when the socket is done
+	* @param [c] - function to call when the socket is done
 	*/
-	changePresence: function(type,show,status,callback){
+	changePresence: function(type,show,status,c){
 		var username = $AppConfig.username,
-			presence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
-			callback = (Ext.isFunction(callback))? callback : Ext.emptyFn;
+			//currentPresence = $AppConfig.userObject.get('Presence'),
+			//type = type,
+			//show = show,
+			//status = status,
+			newPresence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
+			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
 
-		this.socket.emit("chat_setPresence", presence.asJSON(), callback);
+		this.socket.emit("chat_setPresence", newPresence.asJSON(), callback);
 
+	},
+
+	changeType: function(type){
+		var presence = $AppConfig.userObject.get('Presence'),
+			show = presence.get('show');
+			status = presence.get('status');
+		if(type === 'unavailable'){
+			this.availableForChat = false;
+		}else{
+			this.availableForChat = true;
+		}
+		this.changePresence(type,show,status);
+	},
+
+	changeShow: function(show){
+		var status = $AppConfig.userObject.get('Presence').get('status');
+		//if the user changes show, also set them to available
+		this.changePresence('available',show,status);
+	},
+
+	changeStatus: function(status){
+		var presence = $AppConfig.userObject.get('Presence'),
+			show = presence.get('show');
+			type = presence.get('type');
+		this.changePresence(type,show,status);
 	},
 
 	onMembershipOrModerationChanged: function (msg) {

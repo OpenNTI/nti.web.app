@@ -187,7 +187,6 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.tabBarEl = this.tabs.getTabBar().getEl();
 		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
-
 	},
 
 
@@ -472,6 +471,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 	},
 
+	presenceChanged: function(value){
+		this.maybeShowChat(this.chatEl);
+	},
+
 
 	homePageChanged: function(value, placeholderText){
 		var a;
@@ -522,6 +525,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		me.user = user;
 		me.user.addObserverForField(this, 'avatarURL', this.avatarChanged, this);
+		me.user.addObserverForField(this, 'Presence', this.presenceChanged, this);
 
 		function onProfileLoaded(u, profile){
 			me.updateProfile(u, profile);

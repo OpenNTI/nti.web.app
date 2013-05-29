@@ -19,7 +19,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 		createPresenceInfo: function(username,type,show,status){
 			return Ext.create("NextThought.model.PresenceInfo",{
 				'username': username,
-				'type': type,
+				'type': (type)? type : 'unavailable',
 				'show': show,
 				'status': status
 			});
@@ -34,6 +34,19 @@ Ext.define('NextThought.model.PresenceInfo',{
 
 	toString: function(){
 		return (this.isOnline()) ? 'Online' : 'Offline';
+	},
+
+	getDisplayText: function(){
+		if(!this.isOnline()){
+			return '';
+		}else if(this.get('status') !== null && this.get('status') !== 'null'){
+			return this.get('status');
+		}else{
+			if(this.get('show') === 'chat'){
+				return 'available';
+			}
+			return this.get('show');
+		}
 	}
 
 });

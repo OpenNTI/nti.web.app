@@ -85,6 +85,8 @@ Ext.define('NextThought.view.contacts.Card',{
 		else{
 			this.cardEl.addCls('Offline');
 		}
+
+		this.maybeShowChat(this.chatEl);
 	},
 
 	presenceChanged: function(key, value){

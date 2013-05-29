@@ -225,7 +225,7 @@ describe('Chat Controller Tests', function(){
 		});
 	});
 
-	describe('setPresence tests',function(){
+	describe('PresenceInfo tests',function(){
 		var userNames, presenceObjects;
 		beforeEach(function(){
 			var i;
@@ -248,7 +248,7 @@ describe('Chat Controller Tests', function(){
 		it("chat_setPresence is emitted in onSessionReady", function(){
 			controller.onSessionReady();
 
-			expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object));
+			expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object),jasmine.any(Function));
 		});
 
 		describe('test maybeHandleChatEvents', function(){
@@ -332,10 +332,47 @@ describe('Chat Controller Tests', function(){
 
 				controller.changePresence('unavailable');
 
-				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.asJSON());
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.asJSON(), jasmine.any(Function));
 			});
 
 		});
+
+		describe("change presence event handler tests", function(){
+			beforeEach(function(){
+				spyOn(controller,'changePresence').andCallThrough();
+			});
+
+			it("set-chat-type test", function(){
+				var show = $AppConfig.userObject.get('Presence').get('show'),
+					status = $AppConfig.userObject.get('Presence').get('status'),
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable',show,status);
+
+				controller.changeType("unavailable");
+				expect(controller.changePresence).toHaveBeenCalledWith('unavailable', show, status);//the default values for show and status
+				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+			});
+
+			it("set-chat-show test", function(){
+				var status = $AppConfig.userObject.get('Presence').get('status'),
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available','chat',status);
+
+				controller.changeShow("chat");
+				expect(controller.changePresence).toHaveBeenCalledWith("available","chat",status);
+				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+			});
+
+			it("set-chat-status test", function(){
+				var show = $AppConfig.userObject.get('Presence').get('show'),
+					type = $AppConfig.userObject.get('Presence').get('type'),
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,type,show,"New Status");
+
+				controller.changeStatus("New Status");
+				expect(controller.changePresence).toHaveBeenCalledWith('unavailable', show, status);//the default values for show and status
+				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+			});
+		});
 	});
+
+	
 });
 
