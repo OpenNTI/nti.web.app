@@ -58,34 +58,6 @@ $over-color: #f4f3f3;
 }
 
 
-#my-lists, #my-groups{
-	.contacts-panel{
-		.x-panel-header{
-
-			.x-panel-header-text{
-				padding-left: 18px;
-			}
-			&::before {
-				content: ' ';
-				position: absolute;
-				top: 5px; left: 20;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'create-list_hover',$dimensions: true);
-			}
-		}
-	}
-}
-
-
-#my-groups{
-	.contacts-panel{
-		.x-panel-header::before{
-			@include sprite($icons,'create-group-14x10_hover',$dimensions: true);
-		}
-	}
-}
-
-
 .contact-card {
 	margin: 7px 0 0 10px;
 	overflow: hidden;
@@ -324,61 +296,51 @@ $over-color: #f4f3f3;
 
 
 .contacts-view {
-	@include side-panel-view-title;
-	.view-title {
-		.search {
-			position: absolute;
-			width: 39px;
-			height: 32px;
-			top: 0;
-			right: 0;
-		  	cursor: pointer;
 
-			&::after{
-				content: ' ';
-				position: absolute;
-				top: 8px; left: 11px;
-				background: transparent $icons no-repeat;
-				@include sprite($icons,'search',$dimensions: true);
-			}
+	.contact-row{
+		height: 50px;
+		position: relative;
 
-			&:active,
-			&.active {
-				background-position: 10px 7px;
-				border: 1px solid #ededed;
-				border-right-width: 0;
-				border-bottom-width: 0;
-				background-color: #ffffff;
-
-				&:hover{
-				}
-			}
-
-			&:hover {
-			}
+		&.x-item-selected, &.over {
+			background-color: #f0f0f0;
 		}
-	}
 
+		.avatar {
+			position: absolute;
+			top: 0; left: 0;
+			width: 50px;
+			height: 50px;
+			background: {
+				size: cover;
+				repeat: no-repeat;
+				position: center;
+			};
+		}
 
-	.nti-secondary-tabbar {
-		div.x-tab{
-			text-align: center;
+		.presence {
+			position: absolute;
+			top: 23px; right: 15px;
+			width: 7px;
+			height: 7px;
+			border-radius: 90px;
+			background: $primary-red;
+		}
 
-			a {
-				.x-strict .x-ie9 &, & {
-					overflow: hidden;
-					height: 29px;
-				}
+		.wrap {
+			margin: 0 30px 0 60px;
+			padding-top: 10px;
+			.name {
+				@include ellipse();
+				overflow: hidden;
+				font: normal 600 12px/15px $font;
+				color: $primary-grey;
 			}
-
-			.x-tab-inner{
-				&, &:first-of-type, &:last-of-type {
-					text-align: center;
-					padding: 7px auto 8px auto !important;
-
-				}
+			.status {
+				@include ellipse();
+				overflow: hidden;
+				font: italic 400 12px/20px $font;
+				color: $tertiary-grey;
 			}
-
 		}
 	}
 

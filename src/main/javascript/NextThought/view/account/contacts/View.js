@@ -34,16 +34,21 @@ Ext.define('NextThought.view.account.contacts.View',{
 		 */
 	}),
 
-	itemSelector:'.list-item',
-	tpl: Ext.DomHelper.markup({
-		tag: 'tpl', 'for':'.', cn: [
-			{ cls: 'list-item', cn: [
-				{html:'{displayName}'},
-				{html:'{status}'},
-				{html:'{Presence}'}
+	overCls:'over',
+	itemSelector:'.contact-row',
+	tpl: Ext.DomHelper.markup([
+		{ tag: 'tpl', 'for':'.', cn: [
+			{ cls: 'contact-row', cn: [
+				{ cls: 'presence {Presence}' },
+				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
+				{ cls: 'wrap', cn: [
+					{ cls: 'name', html:'{displayName}' },
+					{ cls: 'status', html:'{status}' }
+				]}
 			]}
-		]
-	}),
+		] }
+
+	]),
 
 
 	initComponent: function(){
