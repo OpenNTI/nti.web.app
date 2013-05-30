@@ -29,6 +29,7 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 		this.callParent(arguments);
 		this.mon(this.down('[name=name]'), 'changed', this.changed, this);
 		this.mon(this.down('[name=name]'), 'click', this.clearError, this);
+        this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
 
 	getListName: function(){
@@ -59,6 +60,10 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 		box.show();
 	},
 
+    submitClicked: function() {
+        this.clearError();
+        this.fireEvent("create-list", this.down('[name=submit]'));
+    },
 
 	clearError: function(){
 		var box = this.down('[name=error]');

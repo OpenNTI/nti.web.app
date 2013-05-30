@@ -78,7 +78,7 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 
 
 	submitClicked: function(){
-		this.clearError;
+		this.clearError();
 		this.fireEvent("create-group-code",this.down('[name=submit]'));
 	},
 

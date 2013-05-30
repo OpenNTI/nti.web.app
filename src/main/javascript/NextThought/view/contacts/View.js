@@ -5,7 +5,8 @@ Ext.define( 'NextThought.view.contacts.View', {
 		'NextThought.view.BoundPanel',
 		'NextThought.view.contacts.Grouping',
 		'NextThought.view.contacts.TabPanel',
-		'NextThought.view.contacts.GroupButtons'
+		'NextThought.view.contacts.GroupButtons',
+        'NextThought.view.contacts.ListButtons'
 	],
 
 	cls: 'contacts-view',
@@ -18,7 +19,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 		items: [
 			{xtype:'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'contacts-store' },
 			{xtype:'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
-				filter: function(group){return !group.isDFL;} },
+				filter: function(group){return !group.isDFL;},  dockedItems:[ {xtype: 'list-buttons', dock:'top'} ]},
 			{xtype:'data-bound-panel', title: 'Groups', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
 				filter: function(group){return group.isDFL;}, dockedItems:[ {xtype: 'group-buttons', dock:'top'} ] }
 		]
