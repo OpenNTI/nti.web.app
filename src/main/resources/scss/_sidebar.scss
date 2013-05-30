@@ -117,8 +117,9 @@
 
 		&.contacts { left: 7px; @include sprite($icons, 'rhp-contacts', $dimensions: true); }
 		&.activity { left: 9px; @include sprite($icons, 'rhp-activity', $dimensions: true); }
-		&.history { left: 12px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
 		&.inbox { left: 11px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
+
+		&.history { top: 15px; left: 12px; @include sprite($icons, 'tab-history', $dimensions: true); }
 	}
 
 
@@ -128,8 +129,9 @@
 		span.x-tab-icon-el{
 			&.contacts { @include sprite($icons, 'rhp-contacts_active', $dimensions: true); }
 			&.activity { @include sprite($icons, 'rhp-activity_active', $dimensions: true); }
-			&.history { @include sprite($icons, 'tab-history_active', $dimensions: true); }
 			&.inbox { @include sprite($icons, 'rhp-inbox_active', $dimensions: true); }
+
+			&.history { @include sprite($icons, 'tab-history_active', $dimensions: true); }
 		}
 	}
 }
