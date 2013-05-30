@@ -186,25 +186,28 @@ Ext.define('NextThought.model.Note', {
 		});
 	},
 
-	resolveNoteTitle: function(){
+	resolveNoteTitle: function(cb, max){
 		var t = this.get('title'),
 			body = this.get('body'),
-			snip, max = 36;
+			snip;
 
-		// NOTE: If there is a title return it.
-		// If the note has no title and the body is Whiteboard only, return 'Whiteboard',
-		// If the note has no title, return a snippet of the body.
+		max = max || 36;
+		// NOTE: If there is a title set it.
+		// If the note has no title and the body is Whiteboard only, set it to 'Whiteboard',
+		// If the note has no title, set a snippet of the body.
 		if(!Ext.isEmpty(t)){
-			return Ext.String.ellipsis(t, max, false);
+			snip = Ext.String.ellipsis(t, max, false);
 		}
-		if(this.isWhiteboardOnly(body)){
-			return 'Whiteboard';
+		else if(this.isWhiteboardOnly(body)){
+			snip = 'Whiteboard';
+		}
+		else{
+			t = body && body.join('');
+			snip = Ext.String.ellipsis(this.getBodyText(true), max, false);
+			if(t && (snip !== t)){ t = snip +'...'; }
 		}
 
-		t = body && body.join('');
-		snip = Ext.String.ellipsis(this.getBodyText(true), max, false);
-		if(t && (snip !== t)){ t = snip +'...'; }
-		return t;
+		Ext.callback(cb, null, [snip, t]);
 	},
 
 

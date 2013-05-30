@@ -155,9 +155,22 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	isExpanded: function(){ return !this.commentsEl; },
 
-	getRecordTitle: function(){
-		return this.record.resolveNoteTitle();
+	setRecordTitle: function(){
+		function callback(snip, value){
+			if(snip && snip !== value){
+				me.subjectEl.set({'data-qtip':value});
+			}
+			me.subjectEl.update(snip || 'Subject');
+			if(!snip){
+				me.subjectEl.addCls('no-subject');
+				me.name.addCls('no-subject');
+			}
+		}
+
+		var me  = this;
+		me.record.resolveNoteTitle(callback);
 	},
+
 
 
 	maybeFillIn: function(){
@@ -172,13 +185,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		me.loaded = true;
 
 		me.getItemReplies();
-
-		subject = this.getRecordTitle();
-		me.subjectEl.update(subject||'Subject');
-		if(!subject){
-			me.subjectEl.addCls('no-subject');
-			me.name.addCls('no-subject');
-		}
+		this.setRecordTitle();
 
 		me.flagEl.setVisibilityMode(D);
 		me.deleteEl.setVisibilityMode(D);

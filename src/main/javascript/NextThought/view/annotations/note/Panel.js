@@ -201,7 +201,15 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInTitle: function(){
-		this.title.update(this.record.resolveNoteTitle());
+		var me  = this;
+		function callback(snip, value){
+			if(snip && snip !== value){
+				me.title.set({'data-qtip':value});
+			}
+			me.title.update(snip);
+		}
+
+		this.record.resolveNoteTitle(callback, 46);
 	},
 
 
