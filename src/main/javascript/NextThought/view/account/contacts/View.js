@@ -35,26 +35,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 		return this.frameBodyEl;
 	},
 
-	emptyText: Ext.DomHelper.markup({
-		cls: "populate-contacts",
-		cn: [{
-				cls: 'title',
-				html: 'Welcome to NextThought!'
-		},{
-			html:'Search for friends to add to your contact list.'
-//		},{
-//			cls: 'group-button-label',
-//			html:'Create a group or join a group.'
-		}]
-
-		/*
-		if(!$AppConfig.service.canCreateDynamicGroups()){
-			this.el.down('.populate-contacts').addCls('left');
-			this.el.down('.group-button-label').update('If you have a Group Code, enter it below to join a group.');
-		}
-		 */
-	}),
-
 	overCls:'over',
 	itemSelector:'.contact-row',
 	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
@@ -72,6 +52,30 @@ Ext.define('NextThought.view.account.contacts.View',{
 	listeners: {
 		resize: 'syncParts',
 		refresh: 'setScrollRegion'
+	},
+
+
+	constructor: function(){
+		var cls = '', message = 'Create a group or join a group.';
+		if(!$AppConfig.service.canCreateDynamicGroups()){
+			cls = 'left';
+			message = 'If you have a Group Code, enter it below to join a group.';
+		}
+
+		this.emptyText = Ext.DomHelper.markup({
+			cls: "populate-contacts "+cls,
+			cn: [{
+					cls: 'title',
+					html: 'Welcome to NextThought!'
+			},{
+				html:'Search for friends to add to your contact list.'
+			},{
+				cls: 'group-button-label',
+				html: message
+			}]
+		});
+
+		return this.callParent(arguments);
 	},
 
 

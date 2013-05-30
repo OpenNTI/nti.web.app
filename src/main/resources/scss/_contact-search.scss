@@ -74,7 +74,6 @@
 .populate-contacts {
 	@include sprite($elements,'populate_contacts_bubble',$dimensions: true);
 	overflow: hidden;
-	position: relative;
 	padding: 30px 20px 20px 20px;
 	font-size: 14px;
 	font-weight: regular;
