@@ -43,6 +43,11 @@ Ext.define('NextThought.controller.Groups', {
 			listeners: {
 				update: 'refilter'
 			},
+			sorters:[{
+				property: 'displayName',
+				direction: 'ASC'
+			}],
+			filters:[onlineFilter],
 			refilter: function refilter(){
 				if(refilter.reEntry){return;}
 				refilter.reEntry = true;
