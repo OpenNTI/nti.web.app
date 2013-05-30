@@ -325,18 +325,7 @@ $over-color: #f4f3f3;
 		.presence {
 			position: absolute;
 			top: 23px; right: 15px;
-			width: 7px;
-			height: 7px;
-			border-radius: 90px;
-			background: $tertiary-grey;
-
-			&.Online {
-				background: $primary-green;
-			}
-			&.idle {}
-			&.DnD {
-				background: $primary-red;
-			}
+			@include presence-style;
 		}
 
 		.wrap {

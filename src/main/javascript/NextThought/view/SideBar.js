@@ -37,17 +37,18 @@ Ext.define('NextThought.view.SideBar',{
 			{ xtype: 'box', cls: 'gripper', autoEl: { html: 'My Account&nbsp;', cn:[
 		            {tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' },
 					{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
-		        ]}},
-				{ xtype: 'sidebar-tabpanel',
-					flex: 1,
-					stateId: 'sidebar',
-					items: [
-						{ xtype: contactsType },
-						{ xtype: 'activity-view' },
-						{ xtype: 'history-view' }
+		        ]}
+			},
+			{ xtype: 'sidebar-tabpanel',
+				flex: 1,
+				stateId: 'sidebar',
+				items: [
+					{ xtype: contactsType },
+					{ xtype: 'activity-view' },
+					{ xtype: 'history-view' }
 //						{ iconCls: 'inbox', title: 'inbox' }
-					]
-				}];
+				]
+			}];
 
 		return this.callParent(arguments);
 	},
@@ -91,6 +92,8 @@ Ext.define('NextThought.view.SideBar',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.identity = Ext.widget('identity',{renderTo:this.el});
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 

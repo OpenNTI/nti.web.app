@@ -12,6 +12,22 @@
 	}
 }
 
+
+@mixin presence-style{
+	width: 7px;
+	height: 7px;
+	border-radius: 90px;
+	background: $tertiary-grey;
+
+	&.Online {
+		background: $primary-green;
+	}
+	&.idle {}
+	&.DnD {
+		background: $primary-red;
+	}
+}
+
 @mixin icon($name,$top:0,$left:0){
 	position: relative;
 
