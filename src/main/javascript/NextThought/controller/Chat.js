@@ -243,7 +243,7 @@ Ext.define('NextThought.controller.Chat', {
 			return null;
 		}
 
-		var rIsString = (typeof(r) === 'string'),
+		var rIsString = (typeof r === 'string'),
 			id = IdCache.getIdentifier(rIsString ? r : r.getId()),
 			w = Ext.ComponentQuery.query('chat-window[roomInfoHash=' + id + ']')[0],
 			allRooms = Ext.ComponentQuery.query('chat-window'),
@@ -549,10 +549,10 @@ Ext.define('NextThought.controller.Chat', {
 		if (target) {
 			window.location.hash = target;
 			return false;
-		} else {
-			openHref(href, '_blank');
-			return false;
 		}
+
+		openHref(href, '_blank');
+		return false;
 	},
 
 	zoomWhiteboard: function (cmp, id) {
@@ -977,13 +977,10 @@ Ext.define('NextThought.controller.Chat', {
 
 	changeType: function(type){
 		var presence = $AppConfig.userObject.get('Presence'),
-			show = presence.get('show');
+			show = presence.get('show'),
 			status = presence.get('status');
-		if(type === 'unavailable'){
-			this.availableForChat = false;
-		}else{
-			this.availableForChat = true;
-		}
+
+		this.availableForChat = (type !== 'unavailable');
 		this.changePresence(type,show,status);
 	},
 
@@ -995,7 +992,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	changeStatus: function(status){
 		var presence = $AppConfig.userObject.get('Presence'),
-			show = presence.get('show');
+			show = presence.get('show'),
 			type = presence.get('type');
 		this.changePresence(type,show,status);
 	},
@@ -1227,9 +1224,8 @@ Ext.define('NextThought.controller.Chat', {
 			if (!wasPreviouslyInactive) {
 				return;
 			}
-			else {
-				state = 'active';
-			}
+
+			state = 'active';
 		}
 
 		win.updateDisplayState(sender, state, isGroupChat);
