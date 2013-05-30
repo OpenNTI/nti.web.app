@@ -34,14 +34,23 @@ Ext.define('NextThought.controller.Groups', {
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
+		function onlineFilter(item){ return item.get('Presence').isOnline(); }
+
 		this.contactStore = new Ext.data.Store({
 			model: 'NextThought.model.User',
 			id:'contacts-store',
-			filters: [
-				function(item){
-					return item.get('Presence').isOnline();
-				}
-			]
+			proxy: 'memory',
+			listeners: {
+				update: 'refilter'
+			},
+			refilter: function refilter(){
+				if(refilter.reEntry){return;}
+				refilter.reEntry = true;
+
+				this.filter(onlineFilter);
+
+				delete refilter.reEntry;
+			}
 		});
 
 		this.listen({
