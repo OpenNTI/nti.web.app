@@ -160,6 +160,14 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
+	onDestroy: function(){
+		if(this.editor){
+			this.editor.destroy();
+		}
+		this.callParent(arguments);
+	},
+
+
 	editorKeyPressed: function(event){
 		event.stopPropagation();
 	}

@@ -856,6 +856,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.record.destroy();
 	},
 
+	onDestroy: function(){
+		if(this.editor){
+			this.editor.destroy();
+		}
+		this.callParent(arguments);
+	},
+
 
 	wasDeleted: function(){
 		console.log('Deleting panel from record destroy, marking deleteing=true');
