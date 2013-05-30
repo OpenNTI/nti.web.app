@@ -6,30 +6,26 @@ Ext.define('NextThought.view.account.Identity',{
     requires: [
         'NextThought.view.menus.Settings'
     ],
-//	mixins: {
-//		enableProfiles: 'NextThought.mixins.ProfileLinks'
-//	},
+	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
+	},
 
 	cls: 'identity',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'img', src: '{avatarURL}', cls: 'avatar'},
+		{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip':'{displayName}'},
 		{ cls: 'presence' }
 	]),
 
 	renderSelectors: {
-		avatar: 'img.avatar'
+		avatar: 'img.avatar',
+		presence: '.presence'
 	},
 
 	initComponent: function(){
-		var me = this;
-
-		me.callParent(arguments);
-
-		me.renderData = Ext.apply(me.renderData||{}, $AppConfig.userObject.data);
-
+		this.callParent(arguments);
+		this.renderData = Ext.apply(this.renderData||{}, $AppConfig.userObject.data);
 		this.menu = Ext.widget('settings-menu');
-
 		this.monitorUser($AppConfig.userObject);
 	},
 
@@ -38,30 +34,35 @@ Ext.define('NextThought.view.account.Identity',{
 		var me = this, m = {
 			scope: this,
 			'changed': function(r){
-				this.name.update(r.getName());
-				this.status.update(r.get('status'));
-				this.avatar.set({src:r.get('avatarURL')});
+				me.avatar.set({
+					src:r.get('avatarURL'),
+					'data-qtip': r.getName()
+				});
+
+				me.presence.set({cls:'presence '+ r.getPresence()});
+
 				if(r !== u){
 					me.monitorUser(r);
 				}
 			}
 		};
 
-		this.mun(this.user,m);
-		this.mon(u,m);
-		this.user = u;
+		me.mun(me.user,m);
+		me.mon(u,m);
+		me.user = u;
 	},
 
 
     afterRender: function(){
-//		var me = this;
-        this.callParent(arguments);
-//        me.mon(me.menuBtn, 'click', function(e){
-//            me.menu.showBy(me.menuBtn);
-//	        e.stopEvent();
-//	        return false;
-//        });
-//
-//	    me.enableProfileClicks(me.avatar,me.name);
+		var me = this,
+			el = me.el;
+
+	    me.callParent(arguments);
+
+        me.mon(el, 'mouseover', function(){
+            me.menu.showBy(el);
+        });
+
+	    me.enableProfileClicks(me.avatar);
     }
 });
