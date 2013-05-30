@@ -965,6 +965,7 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		try{
+			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single:true});
 			post.save({
 				url: isEdit ? undefined : forumRecord && forumRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
@@ -992,7 +993,6 @@ Ext.define('NextThought.controller.Forums', {
 				failure: function(){
 					console.debug('failure',arguments);
 					unmask();
-					Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
 				}
 			});
 		}

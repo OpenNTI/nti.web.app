@@ -262,6 +262,7 @@ Ext.define('NextThought.controller.Profile', {
 		}
 
 		try{
+			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single:true});
 			post.save({
 				url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
 				scope: this,
@@ -278,7 +279,6 @@ Ext.define('NextThought.controller.Profile', {
 				failure: function(){
 					console.debug('failure',arguments);
 					unmask();
-					Ext.callback(editorCmp.onSaveFailure,editorCmp,arguments);
 				}
 			});
 		}

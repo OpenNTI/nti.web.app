@@ -175,12 +175,17 @@ Ext.define('NextThought.view.forums.Editor',{
 	},
 
 
-	onSaveFailure: function(rec, operation, response){
-		var msg = 'An unknown error occurred saving your Thought.';
+	onSaveFailure: function(proxy, response, operation){
+		var msg = 'An unknown error occurred saving your Discussion.', error;
 
-		//FIXME look at response code and give better errors.  Right
-		//now we seem to just get 500s
+		if(response && response.responseText){
+			error = JSON.parse(response.responseText) || {};
+			if(error.code === "TooLong"){
+				msg = "Could not save your Discussion. The title is too long. It can only be 140 characters or less";
+			}
+		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});
+		console.debug(arguments);
 	},
 
 

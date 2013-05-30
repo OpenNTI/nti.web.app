@@ -705,10 +705,12 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 	handleException: function(proxy, response, operation){
-		var error = JSON.parse(response.responseText) || {};
+		var error = JSON.parse(response.responseText) || {},
+			msg = "An unknown error occurred saving your note.";
 		if(error.code === "TooLong"){
-			alert('Could not save your note. The title is too long. It should be 140 characters or less.');
+			msg = 'Could not save your note. The title is too long. It should be 140 characters or less.'
 		}
+		alert({title: 'Error', msg: msg, icon: 'warning-red'});
 		console.warn('Exception Message: ', response.responseText);
 	},
 
