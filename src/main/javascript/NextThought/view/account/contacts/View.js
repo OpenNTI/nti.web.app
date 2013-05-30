@@ -56,7 +56,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	constructor: function(){
 		this.emptyText = Ext.DomHelper.markup({
-			cls: 'populate-contacts',
 			cn: ['no one here']
 		});
 
