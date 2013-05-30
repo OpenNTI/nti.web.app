@@ -298,6 +298,8 @@ $over-color: #f4f3f3;
 .contacts-view {
 	position: relative;
 	overflow: hidden;
+	box-shadow: inset -1px 0 0 0 #fff,
+				inset 1px 0 0 0 #fff;
 
 	.contact-row{
 		height: 50px;
@@ -305,6 +307,7 @@ $over-color: #f4f3f3;
 
 		&.x-item-selected, &.over {
 			background-color: #f0f0f0;
+			box-shadow: inset -1px 0 0 0 #f4f4f4;
 		}
 
 		.avatar {

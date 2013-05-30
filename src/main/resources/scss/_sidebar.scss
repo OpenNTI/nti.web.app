@@ -55,14 +55,31 @@
 
 
 .sidebar-tab-bar-sidebar {
-	$experimental-support-for-svg: true;
-	@include background-image(linear-gradient(top, #575757 0%,#424242 100%));
+	background: #f3f3f3;
+	padding: 0 0 0 10px;
+	border: 1px solid #dddddd;
+	border-left-width: 0;
+	border-right-width: 0;
+	border-bottom-width: 1px !important;
+	box-shadow: inset 0 -1px 0 0 #f7f7f7;
 
-	padding: 0 0 0 15px;
+	&::after {
+	    content: '';
+	    display: block;
+	    position: absolute;
+
+	    bottom: -1px;
+	    left: 0;
+	    right: 0;
+	    height: 10px;
+	    overflow: hidden;
+
+	    box-shadow: 0 3px 3px -3px rgba(0,0,0,0.2);
+	}
 
 	div.x-tab {
 		margin: 0 9px 0 0;
-		width: 50px;
+		width: 40px;
 		height: 55px;
 
 		.x-tab-wrap {
@@ -90,29 +107,18 @@
 
 			&:active { left: 0; top: 0; }
 
-
-			.x-tab-inner {
-				text-transform: uppercase;
-				font: normal 700 10px/10px $font;
-				color: #868686;
-				z-index: 1;
-				padding:0;
-				display: block;
-				position: absolute;
-				bottom: 6px; left: 0; right: 0;
-				text-align: center;
-			}
+			.x-tab-inner { display: none; }
 		}
 	}
 
 	span.x-tab-icon-el {
-		top: 10px;
+		top: 18px;
 		background: $icons no-repeat;
 
-		&.contacts { left: 7px; @include sprite($icons, 'tab-chat', $dimensions: true); }
-		&.activity { left: 9px; @include sprite($icons, 'tab-activity', $dimensions: true); }
-		&.history { left: 12px; @include sprite($icons, 'tab-history', $dimensions: true); }
-		&.inbox { left: 11px; @include sprite($icons, 'tab-inbox', $dimensions: true); }
+		&.contacts { left: 7px; @include sprite($icons, 'rhp-contacts', $dimensions: true); }
+		&.activity { left: 9px; @include sprite($icons, 'rhp-activity', $dimensions: true); }
+		&.history { left: 12px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
+		&.inbox { left: 11px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
 	}
 
 
@@ -120,10 +126,10 @@
 		background: none;
 		button span.x-tab-inner{ color: #b1b1b1; }
 		span.x-tab-icon-el{
-			&.contacts { @include sprite($icons, 'tab-chat_active', $dimensions: true); }
-			&.activity { @include sprite($icons, 'tab-activity_active', $dimensions: true); }
+			&.contacts { @include sprite($icons, 'rhp-contacts_active', $dimensions: true); }
+			&.activity { @include sprite($icons, 'rhp-activity_active', $dimensions: true); }
 			&.history { @include sprite($icons, 'tab-history_active', $dimensions: true); }
-			&.inbox { @include sprite($icons, 'tab-inbox_active', $dimensions: true); }
+			&.inbox { @include sprite($icons, 'rhp-inbox_active', $dimensions: true); }
 		}
 	}
 }
