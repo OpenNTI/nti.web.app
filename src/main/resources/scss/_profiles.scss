@@ -673,6 +673,10 @@
 						content: '';
 						display: none;
 					}
+
+					&.flag.on{
+						color: $primary-red !important;
+					}
 				}
 			}
 		}
