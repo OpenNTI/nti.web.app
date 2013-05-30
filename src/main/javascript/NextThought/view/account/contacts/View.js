@@ -9,6 +9,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 		tooltip: 'Chat'
 	},
 
+	store: 'contacts-store',
+
 	iconCls: 'contacts',
 	ui: 'contacts',
 	cls: 'contacts-view',
@@ -74,7 +76,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	initComponent: function(){
-		this.store = 'contacts-store';
 		this.callParent(arguments);
 
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
