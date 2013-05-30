@@ -36,7 +36,12 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.contactStore = new Ext.data.Store({
 			model: 'NextThought.model.User',
-			id:'contacts-store'
+			id:'contacts-store',
+			filters: [
+				function(item){
+					return item.get('Presence').isOnline();
+				}
+			]
 		});
 
 		this.listen({
