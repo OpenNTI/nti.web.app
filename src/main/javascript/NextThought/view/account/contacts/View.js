@@ -31,6 +31,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 		frameBodyEl: '.contact-list'
 	},
 
+	listeners: {
+		itemclick: 'rowClicked'
+	},
 
 	getTargetEl: function(){
 		return this.frameBodyEl;
@@ -41,6 +44,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'contact-row', cn: [
 			{ cls: 'presence {Presence}' },
+			{ cls: 'add' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 			{ cls: 'wrap', cn: [
 				{ cls: 'name', html:'{displayName}' },
@@ -51,23 +55,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	constructor: function(){
-		var cls = '', message = 'Create a group or join a group.';
-		if(!$AppConfig.service.canCreateDynamicGroups()){
-			cls = 'left';
-			message = 'If you have a Group Code, enter it below to join a group.';
-		}
-
 		this.emptyText = Ext.DomHelper.markup({
-			cls: "populate-contacts "+cls,
-			cn: [{
-					cls: 'title',
-					html: 'Welcome to NextThought!'
-			},{
-				html:'Search for friends to add to your contact list.'
-			},{
-				cls: 'group-button-label',
-				html: message
-			}]
+			cls: 'populate-contacts',
+			cn: ['no one here']
 		});
 
 		this.doSearch = Ext.Function.createBuffered(this.doSearch,250,this,null);
@@ -77,6 +67,12 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+	},
+
+
+	rowClicked: function(view,record,item){
+		var add = Ext.fly(item).down('.add');
+		NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10, -18]);
 	},
 
 
@@ -125,7 +121,12 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.searchStore = new NextThought.store.UserSearch();
+		this.searchStore = new NextThought.store.UserSearch({
+			filters:[
+				function(rec){ return !rec.isCommunity; },
+				function(rec){ return !isMe(rec); }
+			]
+		});
 
 		this.contactSearch = Ext.widget('dataview',{
 			preserveScrollOnRefresh: true,
@@ -135,7 +136,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 			tpl: this.tpl,
 			emptyText: 'Not Found',
 			renderTo: this.el,
-			cls: 'contact-search'
+			cls: 'contact-search',
+			listeners:{
+				scope: this,
+				itemclick: 'rowClicked'
+			}
 		});
 
 		this.mon(this.searchButton,{
@@ -145,10 +150,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		this.mon(this.searchField,{
 			scope: this,
-			blur: 'onSearchBlur',
+//			blur: 'onSearchBlur',
 			keyup: 'onSearchKeyPressed',
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
-
 	}
 });
