@@ -23,6 +23,10 @@ Ext.define('NextThought.view.menus.search.Result',{
 		}
 	]),
 
+	renderSelectors: {
+		'name': '.name'
+	},
+
 	initComponent: function(){
 		var hit = this.hit,
 			name = this.hit.get('Creator');
@@ -71,17 +75,17 @@ Ext.define('NextThought.view.menus.search.Result',{
 			if(isMe(name)){
 				me.renderData.name = 'me';
 			}
+
 			if(!isMe(name) && name){
 				UserRepository.getUser(name,function(user){
-					var n = user.getName();
-					if(!me.rendered){
-						me.renderData.name = n;
-						return;
+					me.renderData.name = user.getName();
+					if (me.rendered){
+						me.name.update(user.getName());
 					}
-					me.renderTpl.overwrite(me.el, me.renderData);
 				});
 			}
-			else if (me.rendered){
+
+			if (me.rendered){
 				me.renderTpl.overwrite(me.el, me.renderData);
 			}
 		}, me);
