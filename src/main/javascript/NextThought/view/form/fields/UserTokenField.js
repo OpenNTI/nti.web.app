@@ -433,13 +433,19 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			picker = me.getPicker(),
 			spaceAbove = me.inputEl.getY(),
 			spaceBelow = Ext.Element.getViewHeight() - (me.getY() + me.getHeight()),
-			pickerHeight = picker.getEl().first().dom.scrollHeight,
+			pickerScrollHeight = picker.getEl().first().dom.scrollHeight,
+			pickerHeight = picker.getHeight(),
 			firstNode = picker.getNode(0),
 			minListHeight = (firstNode && (Ext.fly(firstNode).getHeight()*3)) || 150;//some safe number if we can't resolve the height of 3 items.
 
 		function adjHeight(n){
-			if(pickerHeight > n){
+			if(pickerScrollHeight > n){
 				picker.setHeight(n-padding);
+			}
+
+			//NOTE: expand to full picker's scrollHeight, if it doesn't fill the available space.
+			if( pickerScrollHeight <= n && pickerScrollHeight > pickerHeight){
+				picker.setHeight(pickerScrollHeight);
 			}
 		}
 
