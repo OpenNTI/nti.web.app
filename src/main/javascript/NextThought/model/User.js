@@ -16,7 +16,6 @@ Ext.define('NextThought.model.User', {
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'Synthetic', fn: function(record){
-			console.log('called');
 			return record.get('Presence').getDisplayText();
 		}},
 		{ name: 'opt_in_email_communication', type: 'boolean' },

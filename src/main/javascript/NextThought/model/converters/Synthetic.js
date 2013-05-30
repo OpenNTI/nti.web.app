@@ -14,8 +14,6 @@ Ext.define('NextThought.model.converters.Synthetic',{
 				config = {},
 				fn = this.fn;
 
-console.log('convert', this);
-
 			config[this.name] = {
 				getter: function(){ return fn.call(record, record);},
 				setter: function(){ }
