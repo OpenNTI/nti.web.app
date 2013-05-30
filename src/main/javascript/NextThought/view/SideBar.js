@@ -7,6 +7,7 @@ Ext.define('NextThought.view.SideBar',{
         'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
+        'NextThought.view.account.history.View',
 		'NextThought.view.account.Identity'
 	],
 
@@ -43,7 +44,8 @@ Ext.define('NextThought.view.SideBar',{
 					items: [
 						{ xtype: contactsType },
 						{ xtype: 'activity-view' },
-						{ iconCls: 'inbox', title: 'inbox' }
+						{ xtype: 'history-view' }
+//						{ iconCls: 'inbox', title: 'inbox' }
 					]
 				}];
 
