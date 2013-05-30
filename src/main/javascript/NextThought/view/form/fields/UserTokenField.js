@@ -380,6 +380,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	onKeyDown: function(e){
+		e.stopPropagation();
 		clearTimeout(this.searchTimeout);
 
 		if(this.handledSpecialKey(e)){ return; }
