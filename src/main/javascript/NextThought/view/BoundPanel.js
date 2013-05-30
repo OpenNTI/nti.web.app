@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.BoundPanel',{
-	extend: 'Ext.container.Container',
+	extend: 'Ext.panel.Panel',
 	alias: 'widget.data-bound-panel',
 
 	overflowX: 'hidden',

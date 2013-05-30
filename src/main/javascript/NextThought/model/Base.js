@@ -5,6 +5,7 @@ Ext.define('NextThought.model.Base', {
 		'NextThought.model.converters.Links',
 		'NextThought.model.converters.Items',
 		'NextThought.model.converters.Users',
+		'NextThought.model.converters.Synthetic',
 		'NextThought.util.Time',
 		'NextThought.util.Parsing',
 		'NextThought.proxy.Rest',

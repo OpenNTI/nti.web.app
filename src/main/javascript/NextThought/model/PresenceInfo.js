@@ -39,11 +39,13 @@ Ext.define('NextThought.model.PresenceInfo',{
 	getDisplayText: function(){
 		if(!this.isOnline()){
 			return '';
-		}else if(this.get('status') !== null && this.get('status') !== 'null'){
+		}else if(this.get('status') !== null && this.get('status') !== 'null' && this.get('status') !== ''){
 			return this.get('status');
 		}else{
 			if(this.get('show') === 'chat'){
 				return 'available';
+			}else if(this.get('show') === 'dnd'){
+				return 'Do not disturb';
 			}
 			return this.get('show');
 		}

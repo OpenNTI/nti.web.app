@@ -15,7 +15,10 @@ Ext.define('NextThought.model.User', {
 		{ name: 'AvatarURLChoices', type: 'AvatarURLList' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
-		{ name: 'status', type: 'string' },
+		{ name: 'status', type: 'Synthetic', fn: function(record){
+			console.log('called');
+			return record.get('Presence').getDisplayText();
+		}},
 		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
