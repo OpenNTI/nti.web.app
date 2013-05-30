@@ -296,6 +296,7 @@ $over-color: #f4f3f3;
 
 
 .contacts-view {
+	position: relative;
 	overflow: hidden;
 
 	.contact-row{
@@ -353,15 +354,31 @@ $over-color: #f4f3f3;
 		}
 	}
 
+	.contact-search,
 	.contact-list {
-		position: relative;
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 40px;
+
 		overflow: {
 			x: hidden;
 			y: scroll;
 		}
 	}
 
+	.contact-search {
+		display: none;
+	}
+
+	&.searching {
+		.contact-search {
+			display:block;
+		}
+	}
+
 	.button-row {
+		position: absolute;
+		bottom: 0; left: 0; right: 0;
+
 		display: table;
 		border-collapse: collapse;
 		table-layout: fixed;
@@ -388,6 +405,7 @@ $over-color: #f4f3f3;
 			border-left-width: 0;
 			display: table-cell;
 			padding-left: 40px;
+			white-space: nowrap;
 
 			font: italic 400 14px/40px $font;
 			color: $tertiary-grey;

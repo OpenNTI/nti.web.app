@@ -14,6 +14,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	iconCls: 'contacts',
 	ui: 'contacts',
 	cls: 'contacts-view',
+	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'contact-list'},
@@ -38,21 +39,15 @@ Ext.define('NextThought.view.account.contacts.View',{
 	overCls:'over',
 	itemSelector:'.contact-row',
 	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
-			{ cls: 'contact-row', cn: [
-				{ cls: 'presence {Presence}' },
-				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
-				{ cls: 'wrap', cn: [
-					{ cls: 'name', html:'{displayName}' },
-					{ cls: 'status', html:'{status}' }
-				]}
+		{ cls: 'contact-row', cn: [
+			{ cls: 'presence {Presence}' },
+			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
+			{ cls: 'wrap', cn: [
+				{ cls: 'name', html:'{displayName}' },
+				{ cls: 'status', html:'{status}' }
 			]}
-		]}),
-
-
-	listeners: {
-		resize: 'syncParts',
-		refresh: 'setScrollRegion'
-	},
+		]}
+	]}),
 
 
 	constructor: function(){
@@ -75,69 +70,68 @@ Ext.define('NextThought.view.account.contacts.View',{
 			}]
 		});
 
+		this.doSearch = Ext.Function.createBuffered(this.doSearch,250,this,null);
 		return this.callParent(arguments);
 	},
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-
-		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
-		this.mon(this.contactSearch,{
-			scope: this,
-			show: 'onSearchShow',
-			hide: 'onSearchHide'
-		});
-		this.mon(this,'deactivate','hide',this.contactSearch);
 	},
-
-
-	hideSearch: function(willAnimate){
-		this.needsSyncUp = this.needsSyncUp || (!willAnimate && this.contactSearch.isVisible());
-		this.contactSearch.hide();
-	},
-
-
-	resyncSearch: function(){
-		if(!this.needsSyncUp){return;}
-		delete this.needsSyncUp;
-		Ext.defer(this.contactSearch.show,100,this.contactSearch);
-	},
-
 
 
 	onSearchClick: function(e){
 		this.buttonRow.addCls('search');
 		this.searchField.focus();
-//		this.contactSearch.show();
 	},
 
 
 	onSearchBlur: function(e){
+		this.removeCls('searching');
 		this.buttonRow.removeCls('search');
 	},
 
-	onSearchShow: function(cmp){
-		var b = this.buttonRow, text;
-		if( !b ){ return; }
-		b.addCls('search');
 
-		cmp.alignTo(b,'br-tr',[0,0]);
-		text = cmp.down('simpletext');
-		Ext.defer(text.focus,10,text);
+	onSearchKeyPressed: function(){
+		var v = this.searchField.getValue();
+
+		if( this.lastSearchValue !== v ){
+			this.lastSearchValue = v;
+			this.doSearch(v);
+		}
 	},
 
 
-	onSearchHide: function(){
-		var b = this.buttonRow;
-		if( b ){
-			b.removeCls('search');
+	doSearch: function(v){
+		var fn = 'removeAll',
+			action = 'removeCls',
+			param = false;
+
+		if(!Ext.isEmpty(v)){
+			action = 'addCls';
+			fn = 'search';
+			param = v;
 		}
+
+		this[action]('searching');
+		this.searchStore[fn](param);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.searchStore = new NextThought.store.UserSearch();
+
+		this.contactSearch = Ext.widget('dataview',{
+			preserveScrollOnRefresh: true,
+			store: this.searchStore,
+			overCls: this.overCls,
+			itemSelector: this.itemSelector,
+			tpl: this.tpl,
+			emptyText: 'Not Found',
+			renderTo: this.el,
+			cls: 'contact-search'
+		});
 
 		this.mon(this.searchButton,{
 			scope: this,
@@ -146,43 +140,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		this.mon(this.searchField,{
 			scope: this,
-			blur: 'onSearchBlur'
+			blur: 'onSearchBlur',
+			keyup: 'onSearchKeyPressed',
+			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
 
-
-
-		this.mon(this.up('main-sidebar'),{
-			scope: this,
-			beforemove: 'hideSearch',
-			move: 'resyncSearch'
-		});
-	},
-
-
-	setScrollRegion: function(){
-		var el = this.el,
-			bEl = el && this.el.down('.button-row'),
-			h = bEl && (this.getHeight() - bEl.getHeight()),
-			scrollArea = el && el.down('.contact-list');
-		if(bEl && scrollArea){
-			scrollArea.setHeight(h);
-		}
-	},
-
-
-	syncParts: function(){
-		this.contactSearch.setWidth(this.getWidth());
-		this.setScrollRegion();
-	},
-
-
-	toggleSearch: function(e){
-		var p = this.contactSearch;
-		if(e.getTarget('.search')){
-			p[p.isVisible()?'hide':'show']();
-		}
-		else {
-			p.hide();
-		}
 	}
 });
