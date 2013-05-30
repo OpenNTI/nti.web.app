@@ -699,8 +699,17 @@ Ext.define('NextThought.controller.UserData', {
 		});
 
 		console.log('Saving new record', noteRecord);
+		noteRecord.getProxy().on('exception', this.handleException, this, {single:true});
 		//now save this:
 		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
+	},
+
+	handleException: function(proxy, response, operation){
+		var error = JSON.parse(response.responseText) || {};
+		if(error.code === "TooLong"){
+			alert('Could not save your note. The title is too long. It should be 140 characters or less.');
+		}
+		console.warn('Exception Message: ', response.responseText);
 	},
 
 
