@@ -4,7 +4,8 @@ Ext.define( 'NextThought.view.contacts.View', {
 	requires: [
 		'NextThought.view.BoundPanel',
 		'NextThought.view.contacts.Grouping',
-		'NextThought.view.contacts.TabPanel'
+		'NextThought.view.contacts.TabPanel',
+		'NextThought.view.contacts.GroupButtons'
 	],
 
 	cls: 'contacts-view',
@@ -19,7 +20,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 			{xtype:'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
 				filter: function(group){return !group.isDFL;} },
 			{xtype:'data-bound-panel', title: 'Groups', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
-				filter: function(group){return group.isDFL;} }
+				filter: function(group){return group.isDFL;}, dockedItems:[ {xtype: 'group-buttons', dock:'top'} ] }
 		]
 	}],
 
@@ -27,6 +28,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 
 	initComponent: function(){
 		var me = this;
+
 		me.callParent(arguments);
 		me.tabs = me.down('contacts-tabs');
 		me.mon(me.tabs,'tabchange',me.monitorTabs,me);

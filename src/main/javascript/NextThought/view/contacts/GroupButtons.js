@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.contacts.GroupButtons',{
+Ext.define('NextThought.view.contacts.GroupButtons',{
     extend: 'Ext.Component',
     alias: 'widget.group-buttons',
     requires: [

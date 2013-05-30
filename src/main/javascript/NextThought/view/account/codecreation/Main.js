@@ -34,7 +34,7 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.down('[name=groupname]'), 'changed', this.changed, this);
-		this.mon(this.down('[name=submit]'), 'click', this.clearError, this);
+		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
 
 	changed: function(value, t){
@@ -76,6 +76,11 @@ Ext.define('NextThought.view.account.codecreation.Main',{
         box.show();
 	},
 
+
+	submitClicked: function(){
+		this.clearError;
+		this.fireEvent("create-group-code",this.down('[name=submit]'));
+	},
 
 	clearError: function(){
 		var box = this.down('[name=error]');

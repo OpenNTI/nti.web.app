@@ -99,11 +99,11 @@ Ext.define('NextThought.controller.Account', {
 					'resend-consent': 'resendConsent'
 				},
 
-				'contacts-view group-buttons' : {
+				'group-buttons' : {
 					'click': 'groupButtonClicked'
 				},
 
-				'contacts-view list-buttons' : {
+				'list-buttons' : {
 					'click': 'groupButtonClicked'
 				}
 

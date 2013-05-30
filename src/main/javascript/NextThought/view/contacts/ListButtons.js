@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.contacts.ListButtons',{
+Ext.define('NextThought.view.contacts.ListButtons',{
     extend: 'Ext.Component',
     alias: 'widget.list-buttons',
     requires: [
