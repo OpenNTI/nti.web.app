@@ -398,7 +398,8 @@ $over-color: #f4f3f3;
 			}
 
 			&.search {
-				@include icon('search',$top:11px,$left:13px);
+				padding-left: 35px;
+				@include icon('rhp-search',$top:11px,$left:9px);
 				&::after{ opacity: 0.6; }
 
 				input {
@@ -411,14 +412,17 @@ $over-color: #f4f3f3;
 					font: normal 400 14px/25px $font;
 					color: $primary-grey;
 					height: 40px;
-					top: 0; left: 35px; right: 0;
+					top: 0; left: 30px; right: 0;
 					opacity: 0;
 				}
 			}
 
 			&.group-chat {
 				width: 50%;
-				@include icon('add-contact-14x14',$top:10px,$left:10px);
+				@include icon('rhp-group-chat',$top:11px,$left:7px);
+				&:hover::after {
+					@include sprite($icons,'rhp-group-chat_hover');
+				}
 			}
 		}
 	}
