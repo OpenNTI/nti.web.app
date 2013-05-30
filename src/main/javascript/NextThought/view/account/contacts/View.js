@@ -92,8 +92,13 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
-	onSearchKeyPressed: function(){
+	onSearchKeyPressed: function(e){
 		var v = this.searchField.getValue();
+
+		if(e.ESC === e.getKey()){
+			v = '';
+			this.onSearchBlur(e);
+		}
 
 		if( this.lastSearchValue !== v ){
 			this.lastSearchValue = v;
