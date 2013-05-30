@@ -142,6 +142,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			'sync-height': function(){ Ext.defer(me.updateLayout, 1, me); }
 		});
 
+		this.el.setZIndex(99999999);//something ridiculous
 		Ext.defer(me.updateLayout, 1, me);
 	},
 
