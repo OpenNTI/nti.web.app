@@ -19,9 +19,11 @@ Ext.define( 'NextThought.view.contacts.View', {
 		items: [
 			{xtype:'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'contacts-store' },
 			{xtype:'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
-				filter: function(group){return !group.isDFL;},  dockedItems:[ {xtype: 'list-buttons', dock:'top'} ]},
+				filter: function(group){return !group.isDFL;},
+				items:[ {xtype: 'list-buttons'} ]},
 			{xtype:'data-bound-panel', title: 'Groups', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
-				filter: function(group){return group.isDFL;}, dockedItems:[ {xtype: 'group-buttons', dock:'top'} ] }
+				filter: function(group){return group.isDFL;},
+				items:[ {xtype: 'group-buttons'} ] }
 		]
 	}],
 

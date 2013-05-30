@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.BoundPanel',{
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.data-bound-panel',
 
 	overflowX: 'hidden',
@@ -34,6 +34,9 @@ Ext.define('NextThought.view.BoundPanel',{
 
 	onBoundStoreLoad: function(store,records){
 		this.removeAll(true);
+		if(this.initialConfig.items){
+			this.add(this.initialConfig.items);
+		}
 		this.onBoundStoreAdd(store,records);
 	},
 
