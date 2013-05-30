@@ -16,7 +16,7 @@ Ext.define('NextThought.model.converters.Synthetic',{
 
 			config[this.name] = {
 				getter: function(){ return fn.call(record, record);},
-				setter: function(){ }
+				configurable: true
 			};
 
 			delete data[this.name];
