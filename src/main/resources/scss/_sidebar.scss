@@ -119,11 +119,7 @@
 		&.activity { left: 9px; @include sprite($icons, 'rhp-activity', $dimensions: true); }
 		&.inbox { left: 11px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
 
-		&.history {
-			top: 15px; left: 12px;
-			@include sprite($icons, 'tab-history', $dimensions: true);
-			opacity: 0.4;
-		}
+		&.history { left: 10px; @include sprite($icons, 'rhp-history', $dimensions: true); }
 	}
 
 
@@ -135,7 +131,7 @@
 			&.activity { @include sprite($icons, 'rhp-activity_active', $dimensions: true); }
 			&.inbox { @include sprite($icons, 'rhp-inbox_active', $dimensions: true); }
 
-			&.history { opacity: 1; }
+			&.history { @include sprite($icons, 'rhp-history_active', $dimensions: true); }
 		}
 	}
 }
