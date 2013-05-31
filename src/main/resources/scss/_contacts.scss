@@ -442,8 +442,19 @@ $over-color: #f4f3f3;
 					font: normal 400 14px/25px $font;
 					color: $primary-grey;
 					height: 40px;
-					top: 0; left: 30px; right: 0;
+					top: 0; left: 30px; right: 26px;
 					opacity: 0;
+				}
+				.clear {
+					display: none;
+					@include icon('clear_line');
+					position: absolute;
+					right: 5px;
+					left: auto;
+					margin: 0;
+					width: 16px;
+					height: 16px;
+					padding: 0;
 				}
 			}
 

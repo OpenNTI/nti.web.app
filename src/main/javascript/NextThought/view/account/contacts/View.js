@@ -19,7 +19,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'contact-list'},
 		{ cls: 'button-row', cn: [
-			{cls: 'search', html: 'Search', cn:{tag:'input', type:'text'/*, placeholder:'Search'*/} },
+			{cls: 'search', html: 'Search', cn:[
+				{tag:'input', type:'text'/*, placeholder:'Search'*/},
+				{cls:'clear'}
+			] },
 			{cls: 'group-chat', html: 'Group Chat' }
 		]
 	}]),
@@ -27,6 +30,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	renderSelectors: {
 		buttonRow: '.button-row',
 		searchButton: '.button-row .search',
+		clearNib: '.button-row .search .clear',
 		searchField: '.button-row .search input',
 		frameBodyEl: '.contact-list'
 	},
@@ -80,25 +84,37 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
-	onSearchClick: function(e){
+	onSearchClick: function(){
 		this.buttonRow.addCls('search');
 		this.searchField.focus();
 	},
 
 
-	onSearchBlur: function(e){
-		this.removeCls('searching');
-		this.buttonRow.removeCls('search');
+	onSearchBlur: function(){
+		var v = this.searchField.getValue();
+		if(Ext.isEmpty(v)){
+			this.removeCls('searching');
+			this.buttonRow.removeCls('search');
+			this.clearNib.hide();
+		}
 	},
 
+	clearClicked: function(e){
+		if(e){e.stopEvent();}
+
+		this.searchField.dom.value = '';
+		this.onSearchBlur();
+
+		return false;
+	},
 
 	onSearchKeyPressed: function(e){
-		var v = this.searchField.getValue();
-
 		if(e.ESC === e.getKey()){
-			v = '';
-			this.onSearchBlur(e);
+			this.clearClicked();
 		}
+
+		var v = this.searchField.getValue();
+		this.clearNib[Ext.isEmpty(v)?'hide':'show']();
 
 		if( this.lastSearchValue !== v ){
 			this.lastSearchValue = v;
@@ -150,6 +166,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 			}]
 		});
 
+		this.clearNib.setVisibilityMode(Ext.Element.DISPLAY);
+		this.mon(this.clearNib,'click','clearClicked',this);
+
 		this.contactSearch = Ext.widget('dataview',{
 			preserveScrollOnRefresh: true,
 			store: this.searchStore,
@@ -173,7 +192,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		this.mon(this.searchField,{
 			scope: this,
-//			blur: 'onSearchBlur',
+			blur: 'onSearchBlur',
 			keyup: 'onSearchKeyPressed',
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
