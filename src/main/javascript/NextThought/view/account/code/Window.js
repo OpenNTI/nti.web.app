@@ -25,12 +25,22 @@ Ext.define('NextThought.view.account.code.Window',{
     },
 
     items: [
-        {
-            xtype: 'account-header-view',
-            noIcon: true,
-            title: 'Enter a Group Code...',
-            detail: 'Please enter your code to join a specific group or class.'
-        },
+        {xtype: 'container', layout: {type: 'absolute'}, items: [
+            {
+                anchor: '100% 100%',
+                xtype: 'account-header-view',
+                noIcon: true,
+                title: 'Enter a Group Code...',
+                detail: 'Please enter your code to join a specific group or class.'
+            },
+            {xtype: 'box', cls: 'close', width: 10, height: 10}
+        ]},
         {xtype: 'code-main-view'}
-    ]
+    ],
+
+    afterRender: function() {
+        this.callParent(arguments);
+        this.mon( this.el.down('.close'), 'click', this.close, this);
+        this.el.down('input').focus(200);
+    }
 });

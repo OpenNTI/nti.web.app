@@ -41,7 +41,8 @@ Ext.define('NextThought.view.account.contacts.createlist.Window',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon( this.el.down('.close'), 'click', this.close, this);
-	},
+	    this.el.down('input').focus(200);
+    },
 
 	getListName: function(){
 		return this.query('createlist-main-view')[0].getListName();

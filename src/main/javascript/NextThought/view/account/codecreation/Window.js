@@ -44,6 +44,7 @@ Ext.define('NextThought.view.account.codecreation.Window',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon( this.el.down('.close'), 'click', this.close, this);
+        this.el.down('input').focus(200);
 	},
 
 	showCreatedGroupCode: function(code){
