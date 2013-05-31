@@ -399,7 +399,9 @@ $over-color: #f4f3f3;
 
 		&.search {
 			.search{
+				background-color: #ffffff;
 				input{
+					background: #ffffff;
 					visibility: visible;
 					opacity: 1;
 				}
@@ -422,6 +424,10 @@ $over-color: #f4f3f3;
 			color: $tertiary-grey;
 			background: #fafafa;
 			overflow: hidden;
+
+			&:hover {
+				background-color: #ffffff;
+			}
 
 			&:last-of-type {
 				border-right-width: 0;
