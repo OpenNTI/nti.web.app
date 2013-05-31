@@ -74,8 +74,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	rowClicked: function(view,record,item){
-		var add = Ext.fly(item).down('.add');
-		NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10, -18]);
+		var el = Ext.fly(item).down('.avatar');
+		NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-10, -18]);
 	},
 
 
