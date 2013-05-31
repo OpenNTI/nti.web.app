@@ -254,7 +254,7 @@ Ext.define('NextThought.util.Globals', {
 
 
 	getAsynchronousTaskQueueForList: function(s){
-		var list = [], i = (s.length||s)-1;
+		var list = [], i = (s && (s.length||s)-1) || 0;
 		for(i; i > 0; i--){ list.push({}); }
 		return list;
 	},

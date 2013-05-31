@@ -191,7 +191,7 @@ $over-color: #f4f3f3;
 }
 
 
-.contact-popout .person-card .group-selection-list {
+.contact-popout .group-selection-list, .x-menu .group-selection-list{
 	background: #ffffff;
 
 	.selection-list-ct {
@@ -206,7 +206,7 @@ $over-color: #f4f3f3;
 
 		background: none;
 		ul {
-			padding-bottom: 10px;
+			//padding-bottom: 10px;
 
 			&.disallowSelection{
 				li.selection-list-item {

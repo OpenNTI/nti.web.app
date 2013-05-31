@@ -198,7 +198,7 @@ Ext.define('NextThought.controller.Groups', {
 			});
 		});
 
-		this.ensureContactsGroup();
+		this.ensureContactsGroup.apply(this, arguments);
 		this.getResolvedContacts();
 	},
 

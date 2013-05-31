@@ -105,7 +105,10 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	maybeHidePopout: function(){
 		// NOTE: This allows for children, especially the preview to cancel hiding the Popout
 		// i.e when the editor is active.
-		if(this.fireEvent('beforedeactivate') && this.preview.fireEvent('beforedeactivate')){
+		if(this.fireEvent('beforedeactivate')){
+			if(this.preview && !this.preview.fireEvent('beforedeactivate')){
+				return false;
+			}
 			this.destroy();
 			return true;
 		}

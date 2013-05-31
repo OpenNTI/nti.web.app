@@ -6,13 +6,13 @@
 	margin: 10px;
 
 	img {
-		width: 32px;
-		height: 32px;
+		width: 100px;
+		height: 100px;
 		float: left;
 	}
 
 	.text-wrap {
-		margin: 0 33px 0 46px;
+		margin: 0 20px 0 100px;
 
 		.name {
 			@include menu-label-text-treatment;
@@ -190,17 +190,18 @@
 	border: 1px solid #cecece;
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
 
-	.person-card {
+	.person-card, .header {
 
 		.contact-card{
 			@include contact-card;
-			padding: 10px 0 10px 10px;
 			margin: 0 0 0 0;
+			padding: 0;
 
 			border-bottom: 1px solid #e6e6e6;
 
 			.text-wrap {
-				margin: 10px 0 0 52px;
+				margin: 10px 0 0 100px;
+				padding-left: 15px;
 				.name, .affiliation {
 					font-size: 11px;
 					font-weight: 600;
@@ -209,8 +210,9 @@
 			}
 
 			img {
-				width: 42px; height: 42px;
-				border-radius: 2px;
+				width: 100px; height: 100px;
+				margin: 0;
+				padding: 0;
 			}
 		}
 
@@ -218,6 +220,96 @@
 			max-height: 300px;
 			overflow-x: hidden;
 			overflow-y: scroll;
+		}
+	}
+
+	.footer{
+		position: relative;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 45px;
+
+		border: 0 solid #dcdcdc;
+		border-top-width: 1px;
+		text-align: right;
+		border-radius: 0 0 3px 3px;
+
+		& > div{
+			display: inline-block;
+		}
+
+		.lists{
+			position: relative;
+			color: $secondary-grey;
+			font: italic 500 14px/42px $font;
+			padding-left: 25px;
+			float: left;
+
+			&.plus{
+				&::after{
+					content: '';
+					position: absolute;
+					left: 11px; top: 16px;
+					outline: 0;
+					background: $icons no-repeat;
+					@include sprite($icons, 'ico_plus', $dimensions:true);
+				}
+			}
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -8px;
+			left: 0;
+			right: 0;
+			height: 8px;
+			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
+			border-radius: 90px;
+		}
+
+
+		a.button {
+			&.add-contact{
+				cursor: pointer;
+				display: inline-block;
+				height: 44px;
+				width: 105px;
+				line-height: 45px;
+				font: italic 500 14px/42px $font;
+				text-align: center;
+				color: #ffffff;
+				outline: 1px solid #69a92b;
+				background: #75bc30;
+			}
+
+			&.remove-contact{
+				cursor: pointer;
+				position: relative;
+				border-left: 1px solid $tertiary-grey;
+				height: 44px;
+				width: 45px;
+				display: inline-block;
+
+				&::after{
+					content:'';
+					position:absolute;
+					top: 14px; left: 14px;
+					background: $icons no-repeat;
+					@include sprite($icons, 'rhp-delete-contact', $dimensions:true);
+				}
+
+				&:hover{
+					margin-top: -1px;
+					height: 45px;
+					background-color: $primary-red;
+					&::after{
+						@include sprite($icons, 'rhp-delete-contact_hover', $dimensions:true);
+					}
+				}
+			}
+
 		}
 	}
 
