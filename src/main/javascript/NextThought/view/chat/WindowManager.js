@@ -6,13 +6,14 @@ Ext.define('NextThought.view.chat.WindowManager',{
 
 	constructor: function(){
 		var me = this;
-		console.log('Chat Window Manager inited');
+
+		function initDockPointer(){
+			Ext.defer(me.getDock,1,me);
+		}
 
 		//Ensure we have a reference to the dock
 		if(!me.getDock()){
-			Ext.ComponentManager.onAvailable('chat-dock',function(){
-				Ext.defer(me.getDock,1,me);
-			});
+			Ext.ComponentManager.onAvailable('chat-dock',initDockPointer,me);
 		}
 
 		return this.callParent(arguments);
