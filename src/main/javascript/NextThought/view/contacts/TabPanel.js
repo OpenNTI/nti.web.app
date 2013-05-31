@@ -33,6 +33,11 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 	},
 
 
+	listeners: {
+		tabchange: 'hideSearch'
+	},
+
+
 	initComponent: function(){
 		var me = this;
 		me.callParent(arguments);
@@ -53,8 +58,18 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 	},
 
 
+
+	hideSearch: function(){
+		var p = this.contactSearch;
+		if( p ){
+			p.hide();
+		}
+	},
+
+
 	toggleSearch: function(e){
 		var p = this.contactSearch;
+
 		if(e.getTarget('.search')){
 			p[p.isVisible()?'hide':'show']();
 		}
@@ -64,9 +79,15 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 	},
 
 	onSearchShow: function(cmp){
-		var b = this.searchBtn;
+		var b = this.searchBtn,
+			tab = this.tabBar.activeTab;
+
 		if( !b ){ return; }
 		b.addCls('active');
+
+		if(tab && tab.hasCls('x-tab-active')){
+			tab.removeCls('x-tab-active');
+		}
 
 		cmp.alignTo(b,'tr-br',[0,-10]);
 		Ext.defer(function(){ cmp.down('simpletext').focus(); },10);
@@ -74,8 +95,13 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 
 
 	onSearchHide: function(){
+		var tab = this.tabBar.activeTab;
 		if( this.searchBtn ){
 			this.searchBtn.removeCls('active');
+		}
+
+		if(tab && !tab.hasCls('x-tab-active')){
+			tab.addCls('x-tab-active');
 		}
 	}
 });
