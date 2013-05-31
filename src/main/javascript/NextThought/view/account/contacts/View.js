@@ -84,6 +84,28 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
+	rowHover: function(view, record, item){
+		var popout = NextThought.view.account.contacts.management.Popout,
+			el = Ext.fly(item).down('.avatar'), me = this;
+
+		if(!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))){return;}
+
+		me.cancelPopupTimeout();
+		me.hoverTimeout = Ext.defer(function(){
+			Ext.fly(item).un('mouseout',me.cancelPopupTimeout,me,{single:true});
+			popout.popup(record,el,item,[-10, -18]);
+			me.activeTargetDom = Ext.getDom(Ext.fly(item));
+		},500);
+
+		Ext.fly(item).on('mouseout',me.cancelPopupTimeout,me,{single:true});
+	},
+
+
+	cancelPopupTimeout: function(){
+		clearTimeout(this.hoverTimeout);
+	},
+
+
 	onSearchClick: function(){
 		this.buttonRow.addCls('search');
 		this.searchField.focus();
@@ -181,6 +203,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			listeners:{
 				scope: this,
 				itemclick: 'rowClicked',
+				itemmouseenter: 'rowHover',
 				select: function(s,record){ s.deselect(record); }
 			}
 		});

@@ -102,10 +102,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
 		if(this.addContactEl){
-			this.mon(this.addContactEl, 'click', this.actOnContact, this);
+			this.mon(this.addContactEl, 'click', this.onAddContact, this);
 		}
 		if(this.deleteContactEl){
-			this.mon(this.deleteContactEl, 'click', this.actOnContact, this);
+			this.mon(this.deleteContactEl, 'click', this.onDeleteContact, this);
 		}
 
 		if(this.isContact){
@@ -139,19 +139,30 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	actOnContact: function(e){
-		var t = e.getTarget('.add-contact'),
-			buttonEvent = 'add-contact',
-			me = this, data = this.getSelected(),
+	onAddContact: function(e){
+		var me = this, data = this.getSelected(),
 			fin = function(){ me.destroy(); };
 
-		if(e.getTarget('.remove-contact')){
-			t = e.getTarget('.remove-contact');
-			buttonEvent = 'delete-contact';
-		}
+		this.fireEvent('add-contact', this.user, data.groups, fin);
+	},
 
-		if(Ext.isEmpty(t)){ return; }
-		this.fireEvent(buttonEvent, this.user, data.groups, fin);
+	onDeleteContact: function(){
+		var me = this, data = this.getSelected(),
+			fin = function(){ me.destroy(); };
+
+		Ext.Msg.show({
+			msg: 'The following action will remove this contact.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					me.fireEvent('delete-contact', me.user, data.groups, fin);
+				}
+			}
+		});
 	},
 
 
