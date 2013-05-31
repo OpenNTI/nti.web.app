@@ -6,12 +6,13 @@ Ext.define('NextThought.view.SideBar',{
 		'NextThought.view.SideBarTabPanel',
         'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.DisabledView',
-		'NextThought.view.account.contacts.View',
+		'NextThought.view.account.contacts.ViewContainer',
         'NextThought.view.account.history.View',
 		'NextThought.view.account.Identity'
 	],
 
 	width: 260,
+	height: 100,
 	layout: {
 		type:'vbox',
 		align: 'stretch'
@@ -30,7 +31,7 @@ Ext.define('NextThought.view.SideBar',{
 		var contactsType = 'disabled-contacts-view';
 
 		if($AppConfig.service.canFriend()){
-			contactsType = 'contacts-view';
+			contactsType = 'contacts-tab-view-container';
 		}
 
 		this.items = [
