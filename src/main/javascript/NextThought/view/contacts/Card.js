@@ -36,7 +36,7 @@ Ext.define('NextThought.view.contacts.Card',{
 
 				{ cls: 'actions', cn: [
 					{ cls: 'chat', html: 'Chat'}
-				]},
+				]}
 			]
 		},{
 			cls:'nib', 'data-qtip':'Options'

@@ -10,7 +10,7 @@ Ext.define('NextThought.model.converters.Synthetic',{
 
 		convert: function(v, record){
 			var dataName = record.persistenceProperty,
-				data = 	record[dataName],
+				data = record[dataName],
 				config = {},
 				fn = this.fn;
 
