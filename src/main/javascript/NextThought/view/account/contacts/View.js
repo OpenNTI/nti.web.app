@@ -185,6 +185,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 			}
 		});
 
+		this.mon(this.store,{
+			scope: this.contactSearch,
+			datachanged: 'refresh'
+		});
+
 		this.mon(this.searchButton,{
 			scope: this,
 			click: 'onSearchClick'
