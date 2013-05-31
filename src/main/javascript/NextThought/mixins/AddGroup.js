@@ -105,14 +105,22 @@ Ext.define('NextThought.mixins.AddGroup', {
 	},
 
 	addGroupClicked: function(e){
-		var a = Ext.get(e.getTarget('a',undefined,true));
+		var a = Ext.get(e.getTarget('a',undefined,true)),
+            wrap = a.next('.input-wrap'),
+            input = wrap.down('input');
 
-
-		a.next('.input-wrap').setStyle('display','').down('input').focus();
+		wrap.setStyle('display','');
 		a.remove();
 
 		e.preventDefault();
 		e.stopPropagation();
+
+        // Make sure nothing steals focus while the input is visible
+        input.un('blur').on('blur', function() {
+            if (input.isVisible())
+                input.focus();
+        }).focus();
+
 		return false;
 	}
 });
