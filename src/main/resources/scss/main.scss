@@ -59,8 +59,8 @@
 
 @import "static-resources";
 
-
-body.x-border-layout-ct { background: white; }
+.x-panel-default,
+.x-border-layout-ct { background: inherit; }
 
 //Firefox: make sure we do not outline focusable elements
 .x-gecko [tabindex] { outline: 0; }
