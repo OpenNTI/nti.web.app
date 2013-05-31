@@ -81,6 +81,8 @@ Ext.define('NextThought.controller.Groups', {
 			mime = (new store.model()).mimeType,
 			coll = $AppConfig.service.getCollectionFor(mime,'FriendsLists');
 
+		$AppConfig.contactsGroupName = this.getMyContactsId();
+
 		if(!coll || !coll.href){return;}
 
 		store.on({

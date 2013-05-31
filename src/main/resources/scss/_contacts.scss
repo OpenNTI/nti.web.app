@@ -328,7 +328,7 @@ $over-color: #f4f3f3;
 			@include presence-style;
 		}
 
-		.add {
+		.nib {
 			display: none;
 			@include icon('add-contact');
 			cursor: pointer;
@@ -342,7 +342,7 @@ $over-color: #f4f3f3;
 
 		&.not-contact {
 			.presence { display: none; }
-			.add {
+			.nib {
 				display: block;
 			}
 		}

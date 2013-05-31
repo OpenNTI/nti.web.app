@@ -32,7 +32,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 	listeners: {
-		itemclick: 'rowClicked'
+		itemclick: 'rowClicked',
+		select: function(s,record){ s.deselect(record); }
 	},
 
 	getTargetEl: function(){
@@ -44,7 +45,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'contact-row {[this.isContact(values.Username)]}', cn: [
 			{ cls: 'presence {Presence}' },
-			{ cls: 'add' },
+			{ cls: 'nib' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 			{ cls: 'wrap', cn: [
 				{ cls: 'name', html:'{displayName}' },
@@ -127,7 +128,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.callParent(arguments);
 		this.searchStore = new NextThought.store.UserSearch({
 			filters:[
-					//filter out communities and yourself.
+				//filter out communities and yourself.
+				function(rec){ return rec.getId() !== $AppConfig.contactsGroupName; },
 				function(rec){ return !rec.isCommunity; },
 				function(rec){ return !isMe(rec); }
 			],
@@ -159,7 +161,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 			cls: 'contact-search',
 			listeners:{
 				scope: this,
-				itemclick: 'rowClicked'
+				itemclick: 'rowClicked',
+				select: function(s,record){ s.deselect(record); }
 			}
 		});
 
