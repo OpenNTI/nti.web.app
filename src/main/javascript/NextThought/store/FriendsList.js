@@ -23,64 +23,16 @@ Ext.define('NextThought.store.FriendsList',{
 		model: 'NextThought.model.FriendsList'
 	},
 
-	//We were filtering out the old system created 'Everyone' group.
-	//This shouldn't exist except for very old accounts (non of which would be prod accounts).
-	//as of 2/28/2013 we remove this filtering.
-/*	filters: {
-		fn: function(rec){
-			if(rec.isSystem && rec.isSystem()){
-				return false;
-			}
-
-			if(rec.isEveryone && rec.isEveryone()){
-				return false;
-			}
-
-			return true;
-		}
-	}, */
-
 	sorters: [
 		{
-			//Sort into three groups everything else, then my contacts, the offline
-			sorterFn: function(a,b){
-				//This is a pretty fragile way to be doing this.  This is a quick
-				//sort fix though...
-
-				var aIsMyContacts = (/mycontacts-*/).test(a.get('Username'));
-					bIsMyContacts = (/mycontacts-*/).test(b.get('Username'));
-
-				if(aIsMyContacts === bIsMyContacts){
-					return 0;
-				}
-
-				return aIsMyContacts ? 1 : -1;
-
-			}
-		},
-		{
 			property : 'displayName',
-			direction: 'ACE',
-			transform: function(value) {
-                    return value.toLowerCase();
-            }
+			direction: 'ASC',
+			transform: function(value) { return value.toLowerCase(); }
 		}
 	],
 
 	constructor: function(){
-		var r = this.callParent(arguments),
-			me = this;
-
-		/*this.proxy.afterRequest = function(request, operation){
-			//We end up parsing the reponse again here.  Can
-			//we hook in somewhere else and avoid the double parse
-			var result = this.reader.jsonData;
-
-			if(result && result['Last Modified']){
-				me.lastModified = new Date(result['Last Modified'] * 1000);
-				console.log('FriendsList last modified set to', me.lastModified);
-			}
-		}*/
+		var r = this.callParent(arguments);
 
 		this.on({
 			scope: this,
@@ -139,14 +91,14 @@ Ext.define('NextThought.store.FriendsList',{
 	loadRecords: function(records, options){
 		console.log('load records called with', arguments);
 		if(options && options.merge){
-			this.mergeRecords(records, options);
+			this.mergeRecords(records);
 		}
 		else{
 			this.callParent(arguments);
 		}
 	},
 
-	mergeRecords: function(newRecords, options){
+	mergeRecords: function(newRecords){
 		console.log('need to merge records', newRecords);
 		var oldRecordIds = Ext.Array.map(this.data.items, function(i){return i.getId();}),
 			toAdd = [];
@@ -200,17 +152,22 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	//TODO The following functions handling sending
-	//contacts-added and contacts-removed events probably
-	//need to be optimized at some point
-	maybeFireContactsAdded: function(newFriends, /*private*/noUpdatedEvent){
+	/**
+	 * TODO: The following functions handling sending contacts-added and contacts-removed events probably need to be
+	 * optimized at some point
+	 *
+	 * @param {Array} newFriends
+	 * @param {boolean} [noUpdatedEvent] @private
+	 * @returns {boolean}
+	 */
+	maybeFireContactsAdded: function(newFriends, noUpdatedEvent){
 		var contactsWithDups, newContacts = [];
 
 		//console.log('Maybe added contacts', arguments);
 
 		//If we aren't adding a new friends there is no way we added any new contacts
 		if(Ext.isEmpty(newFriends)){
-			return;
+			return false;
 		}
 
 		contactsWithDups = this.getContacts(true);
@@ -250,12 +207,12 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	maybeFireContactsRemoved: function(possiblyRemoved, /*private*/noUpdatedEvent){
+	maybeFireContactsRemoved: function(possiblyRemoved, /*boolean private*/noUpdatedEvent){
 		var contacts, contactsRemoved = [];
 		//console.log('Maybe removed contacts', arguments);
 
 		if(Ext.isEmpty(possiblyRemoved)){
-			return;
+			return false;
 		}
 
 		contacts = this.getContacts();
@@ -313,7 +270,12 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	getContacts: function(/*private*/leaveDuplicates){
+	/**
+	 *
+	 * @param {Boolean} [leaveDuplicates] @private
+	 * @returns {Array}
+	 */
+	getContacts: function(leaveDuplicates){
 		var names = [];
 		this.each(function(g){
 			//Only people in your lists are your contacts.
