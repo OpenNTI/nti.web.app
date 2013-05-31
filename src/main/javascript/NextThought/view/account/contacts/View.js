@@ -21,7 +21,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		{ cls: 'button-row', cn: [
 			{cls: 'search', html: 'Search', cn:[
 				{tag:'input', type:'text'/*, placeholder:'Search'*/},
-				{cls:'clear'}
+				{cls:'clear', style: {display:'none'}}
 			] },
 			{cls: 'group-chat', html: 'Group Chat' }
 		]
