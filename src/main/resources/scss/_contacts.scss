@@ -662,7 +662,8 @@ div.contact-buttons {
 			@include icon ('options_active',$top: auto, $left: auto);
 			position: absolute;
 			margin-top: 10px;
-			border: none !important;
+			width: 20px;
+			height: 20px;
 		}
 
 		.meta {
