@@ -43,7 +43,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	overCls:'over',
 	itemSelector:'.contact-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
-		{ cls: 'contact-row {[this.isContact(values.Username)]}', cn: [
+		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
 			{ cls: 'presence {Presence}' },
 			{ cls: 'nib' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
@@ -53,8 +53,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 			]}
 		]}
 	]}),{
-		isContact: function(username){
-			return Ext.getStore('contacts-store').findExact('Username',username) >= 0 ? 'contact':'not-contact';
+		isContact: function(values){
+			return (values.Class !=='User' || Ext.getStore('contacts-store').contains(values.Username)) ? 'contact':'not-contact';
 		}
 	}),
 
@@ -136,8 +136,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 			sorters:[{
 				//Put contacts first
 				sorterFn: function(a,b){
-					var c = store.findExact('Username', a.get('Username')) >= 0,
-						d = store.findExact('Username', b.get('Username')) >= 0;
+					var c = store.contains(a.get('Username')),
+						d = store.contains(b.get('Username'));
 					return c === d
 							? 0
 							: c ? -1 : 1;

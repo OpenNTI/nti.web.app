@@ -55,6 +55,12 @@ Ext.define('NextThought.controller.Groups', {
 				this.filter(onlineFilter);
 
 				delete refilter.reEntry;
+			},
+			contains: function(id){
+				return 0 <= this.snapshot.findIndexBy(function(rec) {
+		            return rec.isEqual(rec.get('Username'), id);
+		        },
+		        this, 0);
 			}
 		});
 
