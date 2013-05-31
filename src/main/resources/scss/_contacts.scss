@@ -409,15 +409,13 @@ $over-color: #f4f3f3;
 		position: absolute;
 		bottom: 0; left: 0; right: 0;
 
-		display: table;
-		border-collapse: collapse;
-		table-layout: fixed;
 		height: 40px;
 		width: 100%;
 		cursor: pointer;
 
 		&.search {
 			.search{
+				width: 220px !important;
 				background-color: #ffffff;
 				input{
 					background: #ffffff;
@@ -426,23 +424,25 @@ $over-color: #f4f3f3;
 				}
 			}
 			.group-chat {
-				width: 40px;
+				width: 40px !important;
 			}
 		}
 
-		div {
+		& > div {
 			@include experimental(transition, all 0.5s);
 			border: 1px solid #ebebeb;
 			border-bottom-width: 0;
 			border-left-width: 0;
-			display: table-cell;
 			padding-left: 40px;
 			white-space: nowrap;
 
+			position: absolute !important;
 			font: italic 400 14px/40px $font;
 			color: $tertiary-grey;
 			background: #fafafa;
 			overflow: hidden;
+			width: 130px;
+			top: 0;
 
 			&:hover {
 				background-color: #ffffff;
@@ -453,6 +453,7 @@ $over-color: #f4f3f3;
 			}
 
 			&.search {
+				left: 0;
 				padding-left: 35px;
 				@include icon('rhp-search',$top:11px,$left:9px);
 				&::after{ opacity: 0.6; }
@@ -486,7 +487,7 @@ $over-color: #f4f3f3;
 			}
 
 			&.group-chat {
-				width: 50%;
+				right: 0;
 				@include icon('rhp-group-chat',$top:11px,$left:7px);
 				&:hover::after {
 					@include sprite($icons,'rhp-group-chat_hover');
