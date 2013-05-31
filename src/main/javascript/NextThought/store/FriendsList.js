@@ -27,7 +27,9 @@ Ext.define('NextThought.store.FriendsList',{
 		{
 			property : 'displayName',
 			direction: 'ASC',
-			transform: function(value) { return value.toLowerCase(); }
+			transform: function(value) {
+				console.log(value);
+				return value.toLowerCase(); }
 		}
 	],
 

@@ -43,9 +43,14 @@ Ext.define('NextThought.controller.Groups', {
 			listeners: {
 				update: 'refilter'
 			},
+			remoteSort: false,
+			remoteFilter: false,
+			remoteGroup: false,
+			sortOnFilter: true,
 			sorters:[{
 				property: 'displayName',
-				direction: 'ASC'
+				direction: 'ASC',
+				transform: function(value) { return value.toLowerCase(); }
 			}],
 			filters:[onlineFilter],
 			refilter: function refilter(){
@@ -204,11 +209,9 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	generateUsername: function(newGroupName){
-		var username = newGroupName
+		return newGroupName
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
 				+'-'+ $AppConfig.username+'_'+guidGenerator();
-
-		return username;
 	},
 
 
