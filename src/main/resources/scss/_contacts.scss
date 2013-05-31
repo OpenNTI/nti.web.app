@@ -328,6 +328,25 @@ $over-color: #f4f3f3;
 			@include presence-style;
 		}
 
+		.add {
+			display: none;
+			@include icon('add-contact');
+			cursor: pointer;
+			position: absolute;
+			right: 8px;
+			top: 17px;
+			width: 18px;
+			height: 17px;
+			&:hover::after { @include sprite($icons,'add-contact_active'); }
+		}
+
+		&.not-contact {
+			.presence { display: none; }
+			.add {
+				display: block;
+			}
+		}
+
 		.wrap {
 			margin: 0 30px 0 60px;
 			padding-top: 10px;

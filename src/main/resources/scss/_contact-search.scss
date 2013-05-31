@@ -71,57 +71,6 @@
 }
 
 
-.populate-contacts {
-	@include sprite($elements,'populate_contacts_bubble',$dimensions: true);
-	overflow: hidden;
-	padding: 30px 20px 20px 20px;
-	font-size: 14px;
-	font-weight: regular;
-	color: $secondary-grey;
-
-	&::after {
-		content: ' '; overflow: hidden;
-		position: absolute;
-		bottom: 5px; left: 0;
-		background: $elements no-repeat;
-		@include sprite($elements,'bubble_create_join_group',$dimensions: true);
-		z-index: 0;
-	}
-
-	&.left{
-		&::after{
-			@include sprite($elements,'bubble_create_join_group_left',$dimensions: true);
-		}
-	}
-
-	&::before {
-		content: ' '; overflow: hidden;
-		position: absolute;
-		top: 0; left: 0;
-		background: $elements no-repeat;
-		@include sprite($elements,'populate_contacts_bubble',$dimensions: true);
-		z-index: 0;
-	}
-
-	* {
-		position: relative;
-		z-index: 2;
-	}
-	.title {
-		font-size: 18px;
-		font-style: italic;
-		color: #7dbe35;
-		margin: 0 0 5px 0;
-	}
-	.group-button-label{
-		position: absolute;
-		bottom: 36px;
-		left: 20px;
-		right: 20px;
-	}
-
-}
-
 
 .contact-search {
 	box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
@@ -165,7 +114,7 @@
 				box-shadow: 0 0 0 4px #f1f1f1;
 				background-color: #f1f1f1;
 
-				img.add {
+				.add {
 					@include sprite($icons,'add-contact_active');
 				}
 			}
@@ -174,7 +123,7 @@
 		.item {
 			@include contact-card;
 
-			img.add {
+			.add {
 				margin-top: 7px;
 				float: right;
 				cursor: pointer;
@@ -190,7 +139,7 @@
 			}
 
 			&.my-contact {
-				img.add {
+				.add {
 					margin-top: 5px;
 					background: $icons no-repeat;
 					@include sprite($icons,'options',$dimensions: true);

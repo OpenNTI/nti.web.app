@@ -41,8 +41,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	overCls:'over',
 	itemSelector:'.contact-row',
-	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
-		{ cls: 'contact-row', cn: [
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
+		{ cls: 'contact-row {[this.isContact(values.Username)]}', cn: [
 			{ cls: 'presence {Presence}' },
 			{ cls: 'add' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
@@ -51,7 +51,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 				{ cls: 'status', html:'{status}' }
 			]}
 		]}
-	]}),
+	]}),{
+		isContact: function(username){
+			return Ext.getStore('contacts-store').findExact('Username',username) >= 0 ? 'contact':'not-contact';
+		}
+	}),
 
 
 	constructor: function(){
@@ -119,12 +123,29 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	afterRender: function(){
+		var store = this.store;
 		this.callParent(arguments);
 		this.searchStore = new NextThought.store.UserSearch({
 			filters:[
+					//filter out communities and yourself.
 				function(rec){ return !rec.isCommunity; },
 				function(rec){ return !isMe(rec); }
-			]
+			],
+			sorters:[{
+				//Put contacts first
+				sorterFn: function(a,b){
+					var c = store.findExact('Username', a.get('Username')) >= 0,
+						d = store.findExact('Username', b.get('Username')) >= 0;
+					return c === d
+							? 0
+							: c ? -1 : 1;
+				},
+				direction: 'ASC'
+			},{
+				//Sort, next, by displayName
+				property: 'displayName',
+				direction: 'ASC'
+			}]
 		});
 
 		this.contactSearch = Ext.widget('dataview',{
