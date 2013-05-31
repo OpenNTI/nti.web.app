@@ -28,7 +28,7 @@ Ext.define('NextThought.view.BoundPanel',{
 			return null;
 		}
 
-		return {record: rec};
+		return {record: rec, recordId: rec.getId()};
 	},
 
 
@@ -42,14 +42,34 @@ Ext.define('NextThought.view.BoundPanel',{
 
 
 	onBoundStoreAdd: function(store,records){
-		this.add(
-			Ext.Array.clean(
-				Ext.Array.map(records,this.getComponentConfigForRecord,this))
-		);
+		var insertionPoint = this.defaultInsertPoint || 0,
+			toAdd = Ext.Array.clean(Ext.Array.map(records,this.getComponentConfigForRecord,this));
+
+		/*if(toAdd.length===1){
+			//Figure out at what point to insert
+			debugger;
+		}*/
+
+		this.insert(insertionPoint,toAdd);
 	},
 
 
-	onBoundStoreRemove: function(){
+	onBoundStoreRemove: function(store,record){
 		console.debug('remove',arguments);
+
+		var cmp;
+		this.items.each(function(i){
+
+			if(i.recordId === record.getId()){
+				cmp = i;
+			}
+
+			return !cmp;
+		});
+
+		console.debug('should remove ',cmp);
+		if(cmp){
+			this.remove(cmp);
+		}
 	}
 });

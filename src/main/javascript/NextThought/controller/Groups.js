@@ -61,6 +61,29 @@ Ext.define('NextThought.controller.Groups', {
 		            return rec.isEqual(rec.get('Username'), id);
 		        },
 		        this, 0);
+			},
+
+
+			removeContact: function(id){
+				var rec, idx = this.snapshot.findIndexBy(function(rec) {
+		            return rec.isEqual(rec.get('Username'), id);
+		        },
+		        this, 0);
+
+		        if(idx<0){return;}
+
+				rec = this.snapshot.getAt(idx);
+		        this.remove(rec);
+		        this.fireEvent('remove',this,rec,idx);
+			},
+			
+
+			addContact: function(id){
+				var me = this;
+				if(this.contains(id)){return;}
+				UserRepository.getUser(id,function(user){
+					me.add(user);
+				});
 			}
 		});
 
@@ -248,6 +271,7 @@ Ext.define('NextThought.controller.Groups', {
 	addContact: function(username, groupList, callback){
 		var store = this.getFriendsListStore(),
 			contactsId = this.getMyContactsId(),
+			contactStore = this.contactStore,
 			contacts = store.findRecord('Username',contactsId,0,false,true,true),
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
 			oldContacts;
@@ -259,6 +283,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		function finish(){
 			if(!tracker.pop()){
+				contactStore.addContact(username);
 				Ext.callback(callback);
 			}
 		}
@@ -302,11 +327,13 @@ Ext.define('NextThought.controller.Groups', {
 
 	removeContact: function(record, contact, callback){
 		var store = this.getFriendsListStore(),
+			contactStore = this.contactStore,
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
-		count = Globals.getAsynchronousTaskQueueForList(store.getCount()); //Again with the funky task queue
+			count = Globals.getAsynchronousTaskQueueForList(store.getCount()); //Again with the funky task queue
 
 		function finish(){
 			if(!count.pop()){
+				contactStore.removeContact(userId);
 				Ext.callback(callback);
 			}
 		}
