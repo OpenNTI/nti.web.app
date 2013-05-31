@@ -36,8 +36,10 @@ Ext.define('NextThought.view.contacts.Card',{
 
 				{ cls: 'actions', cn: [
 					{ cls: 'chat', html: 'Chat'}
-				]}
+				]},
 			]
+		},{
+			cls:'nib', 'data-qtip':'Options'
 		}]
 	}),
 
@@ -68,8 +70,52 @@ Ext.define('NextThought.view.contacts.Card',{
 		this.maybeShowChat(this.chatEl);
 		this.updateLayout();
 
+		this.mon(this.el,'click', this.clicked, this);
+
 		this.updatePresenceState();
 	},
+
+
+	clicked: function(e){
+		var nib = e.getTarget('.nib');
+		try{
+			if(nib){
+				this.addToContactsClicked(e);
+			}
+			else {
+				this.startChat();
+			}
+		}
+		catch(er){
+			this.fireEvent('blocked-click', this, this.userObject.getId());
+		}
+	},
+
+	addToContactsClicked: function(e){
+        var me = this;
+        console.log('Should add to contacts');
+        var pop,
+            el = e.target,
+            alignmentEl = e.target,
+            alignment = 'tl-tr?',
+            //play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
+            id = me.userObject.getId(),
+            open = false,
+            offsets = [10, -18];
+
+            Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
+                if(o.record.getId()!==id || me.userObject.modelName !== o.record.modelName){ o.destroy(); }
+                else { open = true;  o.toFront();}
+            });
+
+        if(open){return;}
+
+        pop = NextThought.view.account.contacts.management.Popout.create({record: me.userObject, refEl: Ext.get(el)});
+
+        pop.show();
+        pop.alignTo(alignmentEl,alignment,offsets);
+
+    },
 
 	isOnline: function(val){
 		return (val || this.userObject.getPresence().toString()) === 'Online';
