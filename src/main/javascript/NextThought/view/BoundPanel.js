@@ -33,11 +33,15 @@ Ext.define('NextThought.view.BoundPanel',{
 
 
 	onBoundStoreLoad: function(store,records){
+		var items;
+
 		this.removeAll(true);
 		if(this.initialConfig.items){
 			this.add(this.initialConfig.items);
 		}
-		this.onBoundStoreAdd(store,records);
+
+		items = store.snapshot ? store.snapshot.items : store.data.items;
+		this.onBoundStoreAdd(store,items);
 	},
 
 
