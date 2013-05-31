@@ -254,8 +254,16 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 
 				Ext.each(list, function (u) {
+					var presence;
 					if (u.get('Username') === username) {
 						result = u;
+
+						//check if we already have a presence info for them
+						presence = Ext.getStore('PresenceInfo').getPresenceOf(result.get('Username'));
+						if(presence){
+							result.set('Presence',presence);
+						}
+
 						result.summaryObject = false;
 						return false;
 					}
