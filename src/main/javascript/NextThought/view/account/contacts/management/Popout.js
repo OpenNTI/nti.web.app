@@ -41,16 +41,16 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		cls: 'footer',
 		cn: [
 			{tag:'tpl', 'if': 'isContact', cn:[
-				{cls: 'lists', html:'Manage lists ({groupCount})'},
-				{cls: 'action', cn:[
-					{tag: 'a', cls:'button remove-contact', html:''}
-				]}
+				{cls: 'action remove-contact', cn:[
+					{tag: 'a', cls:'button', html:''}
+				]},
+				{cls: 'lists', html:'Manage lists ({groupCount})'}
 			]},
 			{tag:'tpl', 'if': '!isContact', cn:[
-				{cls: 'lists plus', html:'Add to lists'},
-				{cls: 'action', cn:[
-					{tag: 'a',  cls:'button add-contact', html:'Add Contact'}
-				]}
+				{cls: 'action  add-contact', cn:[
+					{tag: 'a',  cls:'button', html:'Add Contact'}
+				]},
+				{cls: 'lists add-list', html:'Add to lists'}
 			]}
 		]
 	}]),
@@ -58,8 +58,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	renderSelectors:{
 		name: '.name',
 		avatar:'.contact-card img',
-		addContactEl: '.add-contact',
-		deleteContactEl: '.remove-contact',
+		addContactEl: '.add-contact a',
+		deleteContactEl: '.remove-contact a',
 		listEl: '.lists'
 	},
 
@@ -71,25 +71,24 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			ui: 'nt',
 			plain: true,
 			width: 250,
-			items: [{xtype:'management-group-list', allowSelect: true, renderTo: Ext.getBody()}]
+			items: [{xtype:'management-group-list', allowSelect: true}]
 		});
 
 
 		this.isContact = Ext.getStore('FriendsList').isContact(this.record);
 		this.groupsList = this.groupsListMenu.down('management-group-list');
-//		if(this.isContact && this.groupsList){
-//			this.groupsList.setUser(this.record);
-//		}
+		if(this.isContact && this.groupsList){
+			this.groupsList.setUser(this.record);
+		}
 	},
 
 	beforeRender: function(){
 		this.callParent(arguments);
-		var groupCount = this.groupsList.store.getCount() || 0;
 		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {
 			isContact: this.isContact,
 			blank: Ext.BLANK_IMAGE_URL,
-			groupCount: groupCount,
+			groupCount: this.getListCount(),
 			avatarURL: this.record.get('avatarURL'),
 			name: this.record.getName(),
 			affiliation: this.record.get('affiliation')
@@ -108,7 +107,28 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		if(this.deleteContactEl){
 			this.mon(this.deleteContactEl, 'click', this.actOnContact, this);
 		}
+
+		if(this.isContact){
+			this.mon(this.groupsList,{
+				scope: this,
+				'add-contact': this.incrementCount,
+				'remove-contact': this.decreaseCount
+			});
+		}
 	},
+
+
+	getListCount: function(){
+		var u = this.record.get('Username'),
+			s = this.groupsList.store,
+			k = s.queryBy(function(a){ return a.hasFriend(u); }),
+			c = k.getCount();
+
+		// NOTE: remove my contact list because it's a hidden group that will always be there.
+		if(c > 0){ c--; }
+		return c;
+	},
+
 
 	getPointerStyle: function(x,y){
 		var el = this.getTargetEl(),
@@ -136,7 +156,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	showUserList: function(){
-		console.log("Should display user list: ", arguments);
 		if(this.groupsListMenu.isVisible()){
 			this.groupsListMenu.hide();
 		}
@@ -150,6 +169,24 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			user: this.user.getId(),
 			groups: l? l.getSelected() : []
 		};
+	},
+
+
+	updateCount: function(count){
+		this.listEl.update('Manage lists ('+count+')');
+	},
+
+
+	incrementCount: function(){
+		var count = this.getListCount();
+		count++;
+		this.updateCount(count);
+	},
+
+	decreaseCount: function(){
+		var count = this.getListCount();
+		count--;
+		this.updateCount(count);
 	},
 
 

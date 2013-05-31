@@ -194,6 +194,25 @@ $over-color: #f4f3f3;
 .contact-popout .group-selection-list, .x-menu .group-selection-list{
 	background: #ffffff;
 
+	.close {
+		cursor: pointer;
+		position: absolute;
+		width: 30px;
+		height: 30px;
+		top: 0;
+		right: 5px;
+
+
+		&::after{
+			position: absolute;
+			top: 10px; left: 10px;
+			content: '';
+
+			background: $icons no-repeat;
+			@include sprite($icons, 'rhp-close-lists', $dimensions:true);
+		}
+	}
+
 	.selection-list-ct {
 		&::before{
 			color: #8a8989;

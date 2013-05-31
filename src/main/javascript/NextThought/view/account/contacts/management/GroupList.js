@@ -57,6 +57,18 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
     },
 
 
+	afterRender: function(){
+		this.close = Ext.DomHelper.append(this.el, {cls:'close close-list-picker', html:''}, true);
+		this.callParent(arguments);
+
+		this.mon(this.close, 'click', this.hideMenu, this);
+	},
+
+	hideMenu: function(){
+		this.el.up('.x-menu').hide();
+	},
+
+
 	refresh: function(){
 		var el = this.getEl(),
 			ul,

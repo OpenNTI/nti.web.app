@@ -235,18 +235,22 @@
 		text-align: right;
 		border-radius: 0 0 3px 3px;
 
-		& > div{
-			display: inline-block;
-		}
 
 		.lists{
 			position: relative;
 			color: $secondary-grey;
 			font: italic 500 14px/42px $font;
 			padding-left: 25px;
-			float: left;
+			position: relative;
+			color: #757474;
+			font: italic 500 14px/42px "Open Sans", sans-serif;
+			padding-left: 25px;
+			margin-right: 45px;
+			text-align: left;
 
-			&.plus{
+			&.add-list{
+				margin-right: 105px;
+
 				&::after{
 					content: '';
 					position: absolute;
@@ -270,46 +274,54 @@
 		}
 
 
-		a.button {
+		.action{
+			position: relative;
+			float: right;
+			width: 45px;
+
 			&.add-contact{
-				cursor: pointer;
-				display: inline-block;
-				height: 44px;
 				width: 105px;
-				line-height: 45px;
-				font: italic 500 14px/42px $font;
-				text-align: center;
-				color: #ffffff;
-				outline: 1px solid #69a92b;
-				background: #75bc30;
+				a.button {
+					cursor: pointer;
+					display: block;
+					height: 44px;
+					width: 105px;
+					line-height: 45px;
+					font: italic 500 14px/42px $font;
+					text-align: center;
+					color: #ffffff;
+					outline: 1px solid #69a92b;
+					background: #75bc30;
+				}
 			}
 
 			&.remove-contact{
-				cursor: pointer;
-				position: relative;
-				border-left: 1px solid $tertiary-grey;
-				height: 44px;
-				width: 45px;
-				display: inline-block;
-
-				&::after{
-					content:'';
-					position:absolute;
-					top: 14px; left: 14px;
-					background: $icons no-repeat;
-					@include sprite($icons, 'rhp-delete-contact', $dimensions:true);
-				}
-
-				&:hover{
-					margin-top: -1px;
+				a.button{
+					cursor: pointer;
+					position: relative;
+					border-left: 1px solid $tertiary-grey;
 					height: 45px;
-					background-color: $primary-red;
+					width: 45px;
+					display: block;
+
 					&::after{
-						@include sprite($icons, 'rhp-delete-contact_hover', $dimensions:true);
+						content:'';
+						position:absolute;
+						top: 14px; left: 14px;
+						background: $icons no-repeat;
+						@include sprite($icons, 'rhp-delete-contact', $dimensions:true);
+					}
+
+					&:hover{
+						margin-top: -1px;
+						height: 45px;
+						background-color: $primary-red;
+						&::after{
+							@include sprite($icons, 'rhp-delete-contact_hover', $dimensions:true);
+						}
 					}
 				}
 			}
-
 		}
 	}
 
