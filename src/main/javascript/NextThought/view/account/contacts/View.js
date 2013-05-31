@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		return this.frameBodyEl;
 	},
 
-	overCls:'over',
+	overItemCls:'over',
 	itemSelector:'.contact-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
@@ -172,7 +172,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.contactSearch = Ext.widget('dataview',{
 			preserveScrollOnRefresh: true,
 			store: this.searchStore,
-			overCls: this.overCls,
+			overItemCls: this.overCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
 			emptyText: 'Not Found',
