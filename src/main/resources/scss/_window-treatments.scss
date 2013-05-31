@@ -173,6 +173,7 @@
 					overflow: hidden;
 					@include ellipse;
 					display: inline-block;
+					vertical-align: text-bottom;
 				}
 			}
 		}
