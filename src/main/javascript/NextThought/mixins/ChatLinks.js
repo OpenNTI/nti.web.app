@@ -10,12 +10,20 @@ Ext.define('NextThought.mixins.ChatLinks', {
 		//1)We can chat and we have a user object
 		//2)The profile we are looking at is not us
 		//3)The user is online
+		if(this.user){
+			this.userObject = this.user;
+		}
+
 		if(!this.userObject || isMe(this.userObject) || !$AppConfig.service.canChat()){
 			return false;
 		}
 
 		//Note obviously this doesn't update live when users come and go.
-		return this.userObject.getPresence().isOnline();
+		//FIXME: we are getting Community entities in here? are they expected? for now just check if the have getPresence method
+		if(this.userObject.getPresence){
+			return this.userObject.getPresence().isOnline();
+		}
+		return false;
 	},
 
 	maybeShowChat: function(el){
@@ -36,12 +44,12 @@ Ext.define('NextThought.mixins.ChatLinks', {
 
 	onChatWith: function(e){
 		e.stopEvent();
-		if(!this.userObject){
+		if(!this.userObject && !this.user){
 			console.warn('No userobject to chat with');
 			return false;
 		}
 		console.debug('Clicked Chat');
-		this.fireEvent('chat', this.userObject);
+		this.fireEvent('chat', this.userObject || this.user);
 		return false;
 	}
 

@@ -34,7 +34,7 @@ Ext.define('NextThought.controller.Groups', {
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		function onlineFilter(item){ return item.get('Presence').isOnline(); }
+		function onlineFilter(item){ return item.get('Presence') && item.get('Presence').isOnline(); }
 
 		this.contactStore = new Ext.data.Store({
 			model: 'NextThought.model.User',
