@@ -20,8 +20,8 @@ Ext.define('NextThought.mixins.UserContainer', {
 		this.on('beforeRender', this.onCmpRendered, this);
 	},
 
-	setupActions: function(group){
-		var listOrGroup = group && Ext.String.capitalize(group.readableType),
+	setupActions: function(group, ignoreChatOption){
+		var items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
 				ui: 'nt',
 				plain: true,
@@ -84,13 +84,23 @@ Ext.define('NextThought.mixins.UserContainer', {
 			]
 		},menuCfg));
 
-		this.menu = Ext.widget('menu',Ext.apply({
-			items: [
+		if(ignoreChatOption){
+			items = [
+				this.leaveGroupAction,
+				this.deleteGroupAction,
+				this.getGroupCodeAction
+			];
+		}else{
+			items = [
 				this.leaveGroupAction,
 				this.deleteGroupAction,
 				this.groupChatAction,
 				this.getGroupCodeAction
-			]
+			];
+		}
+
+		this.menu = Ext.widget('menu',Ext.apply({
+			items: items
 		},menuCfg));
 
 		this.mon(this.menu, this.getMenuHideHandlers(this.menu));

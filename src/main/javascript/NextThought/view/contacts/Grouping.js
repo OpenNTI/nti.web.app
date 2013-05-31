@@ -81,7 +81,7 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		this.associatedGroup = this.associatedGroup || this.record;
 
 		this.setTitle(this.associatedGroup.getName());
-		this.setupActions(this.associatedGroup);
+		this.setupActions(this.associatedGroup, true);
 
 		this.tools = Ext.Array.map(this.tools, function(t){
 			return Ext.widget(t);
