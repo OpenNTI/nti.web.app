@@ -43,9 +43,9 @@ Ext.define('NextThought.model.PresenceInfo',{
 			return this.get('status');
 		}else{
 			if(this.get('show') === 'chat'){
-				return 'available';
+				return 'Available';
 			}else if(this.get('show') === 'dnd'){
-				return 'Do not disturb';
+				return 'Do not Disturb';
 			}
 			return this.get('show');
 		}

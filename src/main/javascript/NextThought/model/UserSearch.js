@@ -26,13 +26,23 @@ Ext.define(	'NextThought.model.UserSearch', {
 	}},
 
 	idProperty: 'Username',
+	homogenous: true,
 	fields: [
 		{ name: 'Username', type: 'string' },
+		{ name: 'Presence', convert: function(v,record){
+			var presence = Ext.getStore('PresenceInfo').getPresenceOf(record.get('Username'));
+			console.log(presence, presence&&presence.toString());
+
+			return presence;
+		}},
 		{ name: 'affiliation', type: 'string', persist:false },
 		{ name: 'alias', type: 'string' },
+		{ name: 'status', convert: function(v, record){
+			var presence = record.get('Presence');
+			return  (presence && presence.getDisplayText())||'';
+		}},
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'status', type: 'string' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}},
 		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
