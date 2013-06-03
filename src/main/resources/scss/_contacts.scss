@@ -262,6 +262,11 @@ $over-color: #f4f3f3;
 					}
 				}
 
+				.name{
+					overflow: hidden;
+					@include ellipse;
+				}
+
 				a {
 					&:active, &:visited, &:link{
 						border: 0 dotted $secondary-grey;
