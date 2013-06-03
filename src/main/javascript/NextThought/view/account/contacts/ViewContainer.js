@@ -17,7 +17,7 @@ Ext.define('NextThought.view.account.contacts.ViewContainer',{
 	layout: 'border',
 	items: [
 		{ xtype: 'contacts-view', region: 'center' },
-		{ xtype: 'chat-dock', region: 'south', collapsed: true}
+		{ xtype: 'chat-dock', region: 'south'}
 	]
 
 });

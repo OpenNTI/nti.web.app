@@ -474,3 +474,88 @@
 
 
 }
+
+
+.chat-dock-item{
+	position: relative;
+	overflow: hidden;
+	min-height: 50px;
+
+	.avatars{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50px;
+		height: 50px;
+
+		.avatar{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+			background-position: center;
+
+			&.img2,&.img3,&.img4{
+				display: none;
+			}
+		}
+
+		&.quad{
+			.avatar{
+				width: 50%;
+				height: 50%;
+
+				&.img2,&.img4{
+					left: 50%;
+				}
+
+				&.img3,&.img4{
+					top: 50%;
+				}
+
+				&.img2,&.img3,&.img4{
+					display: block;
+				}
+			}
+		}
+	}
+
+	.count,.close{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		width: 50px;
+	}
+
+	.close{
+		display: none;
+		@include icon('rhp-close-chat',$top:19px,$left:19px);
+
+		position: absolute;
+	}
+
+	.wrap{
+		margin: 0 40px 0 60px;
+
+		.names{
+			@include ellipse;
+			overflow: hidden;
+
+			&.overflown::before{
+				content: "(" attr(data-count) ")";
+				display: block;
+				float: right;
+			}
+		}
+
+	}
+
+	&:hover{
+		.close{
+			display: block;
+		}
+	}
+}
