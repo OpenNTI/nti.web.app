@@ -29,6 +29,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 		'NextThought.view.cards.OverlayedPanel',
 		'NextThought.view.slidedeck.OverlayedPanel',
 		'NextThought.view.slidedeck.slidevideo.OverlayedPanel',
+		'NextThought.view.video.OverlayedPanel',
 		'NextThought.view.video.roll.OverlayedPanel',
 		'NextThought.view.image.OverlayedPanel'
 	],
@@ -97,6 +98,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 		'object[type$=nticard-target]':'overlay-card-target',
 		'object[type$=ntislidedeck]':'overlay-slidedeck',
 		'object[type$=ntislidevideo][itemprop$=card]':'overlay-slidevideo',
+		'object[type$=ntivideo]':'overlay-video',
 		'object[type$=videoroll]':'overlay-video-roll',
 		'object[type$=image-collection]':'overlay-image-roll'
 	},
