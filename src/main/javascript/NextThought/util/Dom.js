@@ -16,7 +16,8 @@ Ext.define('NextThought.util.Dom',{
 			addValue(obj, p.name, p.value);
 		});
 
-		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
+//		SAJ: Does not work as intent and just wastes CPU cycles.
+//		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
 
 		obj.asDomSpec = function(){
 			var r = /^attribute\-(.*)$/,
