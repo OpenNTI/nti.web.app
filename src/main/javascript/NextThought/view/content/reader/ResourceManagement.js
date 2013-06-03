@@ -29,7 +29,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 		'NextThought.view.cards.OverlayedPanel',
 		'NextThought.view.slidedeck.OverlayedPanel',
 		'NextThought.view.slidedeck.slidevideo.OverlayedPanel',
-		'NextThought.view.video.OverlayedPanel',
+		'NextThought.view.video.roll.OverlayedPanel',
 		'NextThought.view.image.OverlayedPanel'
 	],
 

@@ -1,10 +1,10 @@
-Ext.define('NextThought.view.video.OverlayedPanel',{
+Ext.define('NextThought.view.video.roll.OverlayedPanel',{
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-video-roll',
 
 	requires:[
 		'NextThought.util.Dom',
-		'NextThought.view.video.Roll'
+		'NextThought.view.video.roll.Roll'
 	],
 
 	ui: 'video-roll',
