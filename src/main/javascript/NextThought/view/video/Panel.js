@@ -31,7 +31,7 @@ Ext.define('NextThought.view.video.Panel', {
 	videoRender: function() {
 		var fallback = '',
 			size = this.getSize(),
-			cfg, i;
+			cfg, i, len;
 
 		if (this.fallbackHTML) {
 			fallback = this.fallbackHTML;
