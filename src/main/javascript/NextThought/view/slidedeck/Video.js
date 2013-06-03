@@ -1,18 +1,9 @@
 Ext.define('NextThought.view.slidedeck.Video',{
-	extend: 'Ext.Component',
+	extend: 'NextThought.view.video.Video',
 	alias: 'widget.slidedeck-video',
 
 	plain: true,
 	ui: 'slidedeck-video',
-
-	states: {
-		UNSTARTED: -1,
-		ENDED: 0,
-		PLAYING: 1,
-		PAUSED: 2,
-		BUFFERING: 3,
-		CUED: 5
-	},
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
@@ -62,30 +53,9 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			this.linkWithSlides = true;
 		}
 
-		this.commandQueue = {
-			'youtube': [],
-			'vimeo': [],
-			'html5': []
-		};
-
-		this.playerIds = {
-			'youtube': this.id+'-youtube-video',
-			'vimeo': this.id+'-vimeo-video',
-			'html5': this.id+'-native-video',
-			'none': this.id+'-curtain'
-		};
-
-		this.players = {};
-
 		//build playlist
 
-		this.playlist = [];
 		this.store.each(function(s){ this.playlist.push(this.getVideoInfoFromSlide(s)); },this);
-		this.playlist.getIds = function(s){
-			var i = []; Ext.each(this,function(o){
-				if(!s || s=== o.service){i.push(o.id);}
-			}); return i;
-		};
 
 		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
 			params = [
@@ -129,15 +99,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			click:this.checkboxClicked,
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
-
-
-		if(window.YT){
-			this.players.youtube = new YT.Player(this.playerIds.youtube, {
-				events: {
-					'onReady': Ext.bind(this.youtubePlayerReady,this)
-				}
-			});
-		}
 
 		this.maybeSwitchPlayers(null);
 
@@ -260,142 +221,24 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	youtubePlayerReady: function(){
-		(this.players.youtube||{}).isReady = true;
-		var q = this.commandQueue.youtube;
-		while(q.length>0){
-			Ext.callback(this.issueCommand,this, q.shift());
-		}
-	},
-
-
-	isPlaying: function(){
-		var status = this.queryPlayer(),
-			state;
-		if(!status) { return null; }
-
-		state = status.state;
-
-		return state === 1 || state === 3;
-	},
-
-
-	queryPlayer: function(){
-		var target = this.activeVideoService,
-			t = this.players[target];
-		if(!t || !t.isReady){return null;}
-
-
-		return {
-			service: target,
-			video: this.currentVideoId,
-			time: this.issueCommand(target,'getCurrentTime'),
-			state: this.issueCommand(target,'getPlayerState')
-		};
-	},
-
-
-	issueCommand: function(target, command, args){
-		var t = this.players[target];
-		if(!t || !t.isReady){
-			this.commandQueue[target].push([target,command,args]);
-			return null;
-		}
-
-		function call(fn,o,args){
-			if(!o || !Ext.isFunction(fn)){return null;}
-			return fn.apply(o,args);
-		}
-
-		return call(t[command],t,args);
-	},
-
-
-	stopPlayback: function(){
-		this.currentVideoId = null;
-		this.issueCommand('youtube','clearVideo');
-		//this.issueCommand('vimeo','stop');
-		//this.issueCommand('html5','stop');
-	},
-
-
-	pausePlayback: function(){
-		if(this.isPlaying()){
-			this.issueCommand('youtube','pauseVideo');
-			return true;
-		}
-		return false;
-	},
-
-	resumePlayback: function(){
-		if(!this.isPlaying()){
-			this.issueCommand('youtube','playVideo');
-			return true;
-		}
-		return false;
-	},
-
-	setVideoAndPosition: function(videoId,startAt){
-		var pause = (this.isPlaying() === false && !this.linkWithSlides);
-
-		if(this.videoTriggeredTransition){
-			delete this.videoTriggeredTransition;
-			pause = false;
-			if(this.currentVideoId === videoId){
-				return;
-			}
-		}
-
-		if(this.currentVideoId ===videoId){
-			this.issueCommand('youtube','seekTo',[startAt,true]);
-		}
-		else {
-			this.currentVideoId = videoId;
-			if(videoId){
-				this.issueCommand('youtube','loadVideoById',[videoId, startAt, "medium"]);
-			}
-			else {
-				console.log('stopping');
-				this.stopPlayback();
-			}
-		}
-
-
-		if(pause || !videoId){ console.log('pausing'); this.issueCommand('youtube','pauseVideo'); }
-	},
-
-
-	maybeSwitchPlayers: function(service){
-		var me = this;
-
-		me.activeVideoService = service;
-
-		service = service || 'none';
-
-		Ext.Object.each(me.playerIds,function(k,id){
-			var v = Ext.get(id);
-			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
-
-			if(v.isVisible()){
-				if(k!==service){ v.hide(); }
-				//else leave it visible
-			}
-			//not visible
-			else if(k===service){
-				v.show();
-				me.stopPlayback();
-			}
-
-		});
-
-	},
-
-
 	getVideoInfoFromSlide: function(slide){
 		return {
 			slideId: slide.getId(),
-			id: slide.get('video') || null,
-			service: slide.get('video-type') || null,
+			sources: [
+				{
+					service: slide.get('video-type') || null,
+					source: slide.get('video') || null
+				}
+			],
+			currentSource: 0,
+			getSources: function(service){
+				var i = [];
+				Ext.each(this,function(o){
+					if(!service || (o && service === o.service)){
+						i.push(o.source);
+					}
+				});
+			},
 			start: slide.get('video-start') || 0,
 			end: slide.get('video-end') || -1
 		};
@@ -426,8 +269,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		video = this.getVideoInfoFromSlide(slide);
 
-		this.maybeSwitchPlayers(video.service);
-		this.setVideoAndPosition(video.id,video.start);
+		this.maybeSwitchPlayers(video.sources[video.currentSource].service);
+		this.setVideoAndPosition(video.sources[video.currentSource].source,video.start);
 
 		this.playlistIndex = this.getVideoInfoIndex(video);
 
