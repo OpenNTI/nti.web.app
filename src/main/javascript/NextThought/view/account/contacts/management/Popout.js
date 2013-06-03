@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				{cls: 'action remove-contact', cn:[
 					{tag: 'a', cls:'button', html:''}
 				]},
-				{cls: 'lists', html:'Manage lists ({groupCount})'}
+				{cls: 'lists', html:'Manage lists ({groupCount})', 'data-value':'{groupCount}'}
 			]},
 			{tag:'tpl', 'if': '!isContact', cn:[
 				{cls: 'action  add-contact', cn:[
@@ -101,6 +101,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.user = this.record;    //EnableProfileClicks mixin expects us to have a this.user object.
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
+		this.mon(this.groupsList, 'hide-menu', this.showUserList, this);
 		if(this.addContactEl){
 			this.mon(this.addContactEl, 'click', this.onAddContact, this);
 		}
@@ -166,10 +167,32 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	showUserList: function(){
-		if(this.groupsListMenu.isVisible()){
-			this.groupsListMenu.hide();
+	handleToggleListText: function(showMenu){
+		var c = this.listEl.getAttribute('data-value');
+
+		if(showMenu){
+			this.listEl.update("Close lists");
 		}
+		else{
+			if(c){
+				this.listEl.update('Manage lists ('+c+')');
+			}
+			else{
+				this.listEl.update('Add lists');
+			}
+		}
+	},
+
+
+	showUserList: function(){
+		if(this.showingMenu){
+			this.handleToggleListText(false);
+			this.groupsListMenu.hide();
+			delete this.showingMenu;
+			return;
+		}
+		this.handleToggleListText(true);
+		this.showingMenu = true;
 		this.groupsListMenu.showBy(this.avatar,'tl-tr',[0,0]);
 	},
 
@@ -184,7 +207,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	updateCount: function(count){
-		this.listEl.update('Manage lists ('+count+')');
+		this.listEl.set({'data-value': count});
 	},
 
 

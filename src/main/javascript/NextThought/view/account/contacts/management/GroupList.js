@@ -64,9 +64,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.mon(this.close, 'click', this.hideMenu, this);
 	},
 
-	hideMenu: function(){
-		this.el.up('.x-menu').hide();
-	},
+	hideMenu: function(){ this.fireEvent('hide-menu'); },
 
 
 	refresh: function(){
