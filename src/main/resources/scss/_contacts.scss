@@ -710,6 +710,7 @@ div.contact-buttons {
 			.separator{ color: $tertiary-grey; }
 
 			.name {
+				display: block;
 				padding-left: 10px;
 				margin-left: -10px;//these two left margin/paddings allow overflow:hidden and still to get the decenders
 				margin-bottom: 5px;
