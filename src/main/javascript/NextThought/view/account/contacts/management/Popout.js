@@ -119,9 +119,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 	afterRender: function(){
+		var pi;
+
 		this.callParent(arguments);
 		this.enableProfileClicks(this.avatar,this.name);
 		this.user = this.record;    //EnableProfileClicks mixin expects us to have a this.user object.
+		pi = this.user.get('Presence') || {};
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
 		this.mon(this.actionButtonEl, 'click', this.actOnContactOrChat, this);
@@ -140,6 +143,11 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			'remove-contact-selected': this.onDeleteContact,
 			'hide-menu': this.showOptionMenu
 		});
+
+		if(!pi.isOnline || !pi.isOnline()){
+			this.actionEl.addCls('disabled');
+		}
+
 	},
 
 
@@ -166,6 +174,11 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	actOnContactOrChat: function(e){
 		e.stopEvent();
+
+		if(e.getTarget('.disabled')){
+			return;
+		}
+
 		if(e.getTarget('.add-contact')){
 			this.onAddContact();
 		}else{

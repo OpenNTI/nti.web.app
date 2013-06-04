@@ -30,6 +30,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	renderSelectors: {
 		buttonRow: '.button-row',
 		searchButton: '.button-row .search',
+		groupChatButton: '.button-row .group-chat',
 		clearNib: '.button-row .search .clear',
 		searchField: '.button-row .search input',
 		frameBodyEl: '.contact-list'
@@ -199,7 +200,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			overItemCls: this.overCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
-			emptyText: 'Not Found',
+			emptyText: Ext.DomHelper.markup({cls: 'empty', html: 'No users found.'}),
 			renderTo: this.el,
 			cls: 'contact-search',
 			listeners:{
@@ -226,5 +227,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 			keyup: 'onSearchKeyPressed',
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
+
+		if(this.groupChatButton){
+			this.groupChatButton.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		}
 	}
 });

@@ -101,6 +101,12 @@
 		}
 	}
 
+	.empty{
+		padding: 20px 0;
+		font: italic 300 14px/28px "Open Sans", sans-serif;
+		text-align: center;
+		color: $tertiary-grey;
+	}
 
 	.search-results {
 		box-shadow: inset 0 0 0 -1px #ffffff;
@@ -344,6 +350,12 @@
 					width: 90px;
 					outline: 1px solid $border-blue;
 					background: $primary-blue;
+				}
+				&.disabled a.button{
+					cursor: default;
+					outline: 1px solid #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					color: rgba(255,255,255,0.7);
 				}
 			}
 		}
