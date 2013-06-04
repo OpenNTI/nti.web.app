@@ -37,7 +37,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		'countEl': '.count',
 		'closeEl': '.close',
 		'namesEl': '.wrap .names',
-		'statusEl': '.wrap .staus',
+		'statusEl': '.wrap .status',
 		'avatarsEl': '.avatars',
 		'img1': '.avatars .img1',
 		'img2': '.avatars .img2',
@@ -49,6 +49,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.callParent(arguments);
 
 		this.mon(this.el,'click','onClick',this);
+		this.mon(this.associatedWindow.roomInfo,'update', this.fillInInformation, this)
 
 		this.fillInInformation(this.associatedWindow.roomInfo);		
 	},
@@ -94,7 +95,30 @@ Ext.define('NextThought.view.chat.DockItem',{
 			}
 			console.log(usernames);
 		});	
+		me.updateLastActive();
 	},
+
+	updateLastActive: function(el){
+		var display, roominfo = this.associatedWindow.roomInfo,
+			lastActive = roominfo.get('lastActive'),
+			currentTime = new Date(),
+			difference = new Date(currentTime - lastActive);
+
+		console.log(difference);
+
+		if(!lastActive){
+			console.log("No last Active yet");
+		}
+
+		display = difference.getMinutes()+"m "+difference.getSeconds()+"s";
+
+		if(difference.getMinutes() < 10){
+			this.statusEl.update("In Progress... "+display);
+		}else{
+			this.statusEl.update("Last message "+display+" ago");
+		}
+
+	}
 
 
 });

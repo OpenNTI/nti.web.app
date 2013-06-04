@@ -1109,6 +1109,7 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
+		this.updateRoomInfoLastActivity(w,m);
 		this.channelMap[channel].call(this, m, opts || {});
 
 		if (channel !== 'STATE') {
@@ -1123,6 +1124,13 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+	updateRoomInfoLastActivity: function(w, m){
+		if(!w){
+			return;
+		}
+
+		w.roomInfo.set({'lastActive': m.get('Last Modified')});
+	},
 
 //	setChatNotification: function(on) {
 //		var cls = 'attention';
