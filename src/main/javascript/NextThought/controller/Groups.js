@@ -32,19 +32,21 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	init: function() {
+		var flStore = this.getFriendsListStore(),
+			piStore = Ext.StoreManager.get('PresenceInfo'),//reduce this coupling
+			me = this;
+
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		function onlineFilter(item){ return item.get('Presence') && item.get('Presence').isOnline(); }
 
-		this.contactStore = new Ext.data.Store({
+		//The flStore already has tons of logic in it to fire contact changes
+		//at appropriate times.  So turn our onlineContactStore into a store
+		//that is driven off of those notifications further filtering things appropriately
+		this.onlineContactStore = new Ext.data.Store({
 			model: 'NextThought.model.User',
-			id:'contacts-store',
+			id: 'online-contacts-store',
 			proxy: 'memory',
-			//I think this refiltering is what is the root cause of the whole view redrawing, it triggers
-			//a datachange (i think) which I believe we are refreshing the view on.
-			listeners: {
-				update: 'refilter'
-			},
 			remoteSort: false,
 			remoteFilter: false,
 			remoteGroup: false,
@@ -54,45 +56,64 @@ Ext.define('NextThought.controller.Groups', {
 				direction: 'ASC',
 				transform: function(value) { return value.toLowerCase(); }
 			}],
-			filters:[onlineFilter],
-			refilter: function refilter(){
-				if(refilter.reEntry){return;}
-				refilter.reEntry = true;
 
-				this.filter(onlineFilter);
-
-				delete refilter.reEntry;
-			},
 			contains: function(id){
-				return 0 <= this.snapshot.findIndexBy(function(rec) {
-		            return rec.isEqual(rec.get('Username'), id);
-		        },
-		        this, 0);
+				return 0 <= this.indexOfId(id);
 			},
 
-
-			removeContact: function(id){
-				var rec, idx = this.snapshot.findIndexBy(function(rec) {
-		            return rec.isEqual(rec.get('Username'), id);
-		        },
-		        this, 0);
-
-		        if(idx<0){return;}
-
-				rec = this.snapshot.getAt(idx);
-		        this.remove(rec);
-		        this.fireEvent('remove',this,rec,idx);
+			indexOfId: function(id){
+				return (this.snapshot || this.data).findIndexBy(function(rec){
+						return rec.isEqual(rec.get('Username'), id);
+				}, this, 0);
 			},
-			
 
-			addContact: function(id){
-				var me = this;
-				if(this.contains(id)){return;}
-				UserRepository.getUser(id,function(user){
-					me.add(user);
-					me.refilter();
+			addContacts: function(contacts){
+				var toAdd = [], me = this;
+				UserRepository.getUser(contacts, function(users){
+					Ext.Array.each(users, function(user){
+						if(!isMe(user) && onlineFilter(user) && !me.contains(user.getId())){
+							toAdd.push(user);
+						}
+					});
+					if(!Ext.isEmpty(toAdd)){
+						me.add(toAdd);
+					}
 				});
+			},
+
+			removeContacts: function(contacts){
+				var toRemove = [], me = this;
+				Ext.Array.each(contacts, function(contact){
+					var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
+					if(idx >= 0){
+						toRemove.push((me.snapshot||me.data).getAt(idx));
+					}
+				});
+				if(!Ext.isEmpty(toRemove)){
+					me.remove(toRemove);
+				}
+			},
+
+			refreshContacts: function(listStore){
+				//TODO smarter merge here
+				this.removeAll();
+				this.addContacts(listStore.getContacts());
 			}
+		});
+
+		flStore.on({
+			scope: this.onlineContactStore,
+			'contacts-added': 'addContacts',
+			'contacts-removed': 'removeContacts',
+			'contacts-refreshed': 'refreshContacts'
+		});
+
+		piStore.on('presence-changed', function(username, rec){
+			if(!rec.isPresenceInfo){
+				return;
+			}
+			var fn = rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
+			me.onlineContactStore[fn]([rec]);
 		});
 
 		this.listen({
@@ -149,17 +170,6 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	getResolvedContacts: function(callback){
-		var me = this,
-			names = this.getFriendsListStore().getContacts();
-		UserRepository.getUser(names,function(users){
-			Ext.callback(callback,null,[users]);
-			me.contactStore.loadData(users);
-			me.contactStore.fireEvent('load',me.contactStore,users,true);
-		});
-	},
-
-
 	getMyContactsId: function(){
 		if(!this.myContactsId){
 			this.myContactsId = Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN,$AppConfig.username);
@@ -207,7 +217,6 @@ Ext.define('NextThought.controller.Groups', {
 		});
 
 		this.ensureContactsGroup.apply(this, arguments);
-		this.getResolvedContacts();
 	},
 
 
@@ -277,7 +286,6 @@ Ext.define('NextThought.controller.Groups', {
 	addContact: function(username, groupList, callback){
 		var store = this.getFriendsListStore(),
 			contactsId = this.getMyContactsId(),
-			contactStore = this.contactStore,
 			contacts = store.findRecord('Username',contactsId,0,false,true,true),
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
 			oldContacts;
@@ -289,7 +297,6 @@ Ext.define('NextThought.controller.Groups', {
 
 		function finish(){
 			if(!tracker.pop()){
-				contactStore.addContact(username);
 				Ext.callback(callback);
 			}
 		}
@@ -333,13 +340,11 @@ Ext.define('NextThought.controller.Groups', {
 
 	removeContact: function(record, contact, callback){
 		var store = this.getFriendsListStore(),
-			contactStore = this.contactStore,
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
 			count = Globals.getAsynchronousTaskQueueForList(store.getCount()); //Again with the funky task queue
 
 		function finish(){
 			if(!count.pop()){
-				contactStore.removeContact(userId);
 				Ext.callback(callback);
 			}
 		}

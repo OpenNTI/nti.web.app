@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		tooltip: 'Chat'
 	},
 
-	store: 'contacts-store',
+	store: 'online-contacts-store',
 
 	iconCls: 'contacts',
 	ui: 'contacts',
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		]}
 	]}),{
 		isContact: function(values){
-			return (values.Class !=='User' || Ext.getStore('contacts-store').contains(values.Username)) ? 'contact':'not-contact';
+			return (values.Class !=='User' || Ext.getStore('online-contacts-store').contains(values.Username)) ? 'contact':'not-contact';
 		}
 	}),
 

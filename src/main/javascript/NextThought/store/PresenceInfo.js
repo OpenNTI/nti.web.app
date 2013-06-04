@@ -23,6 +23,6 @@ Ext.define('NextThought.store.PresenceInfo', {
 			this.add(values);
 		}
 
-		this.fireEvent('presence-changed',username,values);
+		this.fireEvent('presence-changed', username, values);
 	}
 });
