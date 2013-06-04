@@ -40,6 +40,8 @@ Ext.define('NextThought.controller.Groups', {
 			model: 'NextThought.model.User',
 			id:'contacts-store',
 			proxy: 'memory',
+			//I think this refiltering is what is the root cause of the whole view redrawing, it triggers
+			//a datachange (i think) which I believe we are refreshing the view on.
 			listeners: {
 				update: 'refilter'
 			},
@@ -88,6 +90,7 @@ Ext.define('NextThought.controller.Groups', {
 				if(this.contains(id)){return;}
 				UserRepository.getUser(id,function(user){
 					me.add(user);
+					me.refilter();
 				});
 			}
 		});
