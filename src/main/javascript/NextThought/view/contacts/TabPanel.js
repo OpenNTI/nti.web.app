@@ -20,7 +20,7 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 			afterRender: function(){
 				this.callParent(arguments);
 				var owner = this.up('contacts-tabs'),
-					searchButtonEl = Ext.DomHelper.append(this.el,{cls: 'search'},true);
+					searchButtonEl = Ext.DomHelper.append(this.el,{cls: 'search', html: 'Search for contacts'},true);
 				owner.mon(searchButtonEl,'click',owner.toggleSearch,owner);
 				owner.searchBtn = searchButtonEl;
 
