@@ -150,6 +150,10 @@ Ext.define('NextThought.controller.Chat', {
 
 				'contacts-tabs-card': {
 					'chat': this.enterRoom
+				},
+
+				'contact-popout': {
+					'chat': this.enterRoom
 				}
 			},
 

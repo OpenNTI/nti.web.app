@@ -153,7 +153,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		if(e.getTarget('.add-contact')){
 			this.onAddContact();
 		}else{
-			console.warn('Need to hook up chat');
+			this.fireEvent('chat', this.record);
 		}
 	},
 
