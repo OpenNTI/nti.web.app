@@ -6,7 +6,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	title: 'Chats',
 	//collapsible: true,
 
-//	ui: 'chat-dock',
+	ui: 'chat-dock',
 	cls: 'chat-dock',
 	defaultType: 'chat-dock-item'
 

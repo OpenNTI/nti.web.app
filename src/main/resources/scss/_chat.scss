@@ -475,11 +475,30 @@
 
 }
 
+#chat-dock {
+	.x-panel-header{
+		//min-height: 38px;
+		background-color: #3fb3f6;
+		box-shadow: 0 -1px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.4);
+
+		$experimental-support-for-svg: true;
+		@include background-image(linear-gradient(bottom, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%));
+
+		color: #ffffff;
+		font: italic 500 14px/36px $font;
+
+		.x-header-text-container {
+			padding: 0 60px 0 20px;
+		}
+	}
+}
 
 .chat-dock-item{
 	position: relative;
 	overflow: hidden;
 	min-height: 50px;
+
+	background: #3fb3f6;
 
 	.avatars{
 		position: absolute;
@@ -524,13 +543,23 @@
 
 	.count,.close{
 		position: absolute;
+	}
+
+	.count {
+		top: 18px; right: 5px;
+		text-align: center;
+		min-width: 24px;
+		border-radius: 8px;
+		background: #299bdc;
+		font: normal 600 12px/16px $font;
+		color: #ffffff;
+	}
+
+	.close{
 		top: 0;
 		bottom: 0;
 		right: 0;
 		width: 50px;
-	}
-
-	.close{
 		display: none;
 		@include icon('rhp-close-chat',$top:19px,$left:19px);
 
@@ -539,10 +568,18 @@
 
 	.wrap{
 		margin: 0 40px 0 60px;
+		padding-top: 10px;
+
+		.status {
+			font: italic normal 12px/16px $font;
+			color: #aee1fe;
+		}
 
 		.names{
 			@include ellipse;
 			overflow: hidden;
+			font: normal 600 12px/16px $font;
+			color: #fff;
 
 			&.overflown::before{
 				content: "(" attr(data-count) ")";
@@ -554,7 +591,18 @@
 	}
 
 	&:hover{
+		background: #5fc2fb;
+		box-shadow: 0 0 2px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.1);
+
+		.meta {
+			.status {
+				color: #258fcc;
+			}
+		}
+
+		.count { display: none; }
 		.close{
+			background: #68c7f3;
 			display: block;
 		}
 	}
