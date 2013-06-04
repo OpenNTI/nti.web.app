@@ -15,7 +15,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
 		publishEl: '.action.publish',
-		titleEl: '.title',
+		titleWrapEl: '.title',
 		footerEl: '.footer',
 		editorBodyEl: '.content'
 	},
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			this.setSharedWith(r.getSharingInfo());
 		}
 
-		this.mon(this.titleEl,'keyup',function(){ this.clearError(this.titleEl); },this);
+		this.mon(this.titleWrapEl,'keyup',function(){ this.clearError(this.titleWrapEl); },this);
 		profileEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
@@ -104,7 +104,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	onSave: function(e){
 		e.stopEvent();
 		var v = this.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t;
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
 			console.error('bad blog post');
@@ -114,8 +114,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		if(Ext.isEmpty(v.title)){
 			console.error('You need a title');
-			this.markError(this.titleEl,'You need a title');
-			this.titleEl.addCls('error-on-bottom');
+			this.markError(this.titleWrapEl,'You need a title');
+			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 

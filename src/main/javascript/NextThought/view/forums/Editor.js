@@ -27,7 +27,7 @@ Ext.define('NextThought.view.forums.Editor',{
 		editor: '.editor',
 		cancelEl: '.action.cancel',
 		saveEl: '.action.save',
-		titleEl: '.title',
+		titleWrapEl: '.title',
 		footerEl: '.footer',
 		editorBodyEl: '.content',
 		publishEl: '.action.publish'
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.forums.Editor',{
 			this.setPublished(r.isPublished());
 		}
 
-		this.mon(this.titleEl,'keyup',function(){ this.clearError(this.titleEl); },this);
+		this.mon(this.titleWrapEl,'keyup',function(){ this.clearError(this.titleWrapEl); },this);
 		parentCtEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
@@ -159,8 +159,8 @@ Ext.define('NextThought.view.forums.Editor',{
 
 		if(Ext.isEmpty(v.title)){
 			console.error('You need a title');
-			this.markError(this.titleEl,'You need a title');
-			this.titleEl.addCls('error-on-bottom');
+			this.markError(this.titleWrapEl,'You need a title');
+			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
