@@ -65,7 +65,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	constructor: function(){
 		this.emptyText = Ext.DomHelper.markup({
-			cn: ['no one here']
+			cls:'empty',
+			html: 'None of your contacts are online.'
 		});
 
 		this.doSearch = Ext.Function.createBuffered(this.doSearch,250,this,null);

@@ -476,6 +476,13 @@ $over-color: #f4f3f3;
 			x: hidden;
 			y: scroll;
 		}
+
+		.empty {
+			padding: 20px 0;
+			font: italic 300 14px/28px "Open Sans", sans-serif;
+			text-align: center;
+			color: $tertiary-grey;
+		}
 	}
 
 	.contact-search {
@@ -770,7 +777,7 @@ div.contact-buttons {
 			float: none;
 			display: none;
 
-			@include icon ('options_active',$top: auto, $left: auto);
+			@include icon('options_active',$top: auto, $left: auto);
 			position: absolute;
 			margin-top: 10px;
 			width: 20px;
