@@ -576,7 +576,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//Avoid saving empty notes or just returns.
 		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
-			this.noteOverlayDeactivateEditor();
+			console.warn("Note's body is required");
+			this.markError(o.editor.el.down('.content'), 'Please enter text below');
 			return false;
 		}
 
@@ -594,6 +595,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		return false;
 	},
+
+
+	markError: function(el,message){ el.addCls('error-tip').set({'data-error-tip':message}); },
 
 
 	noteOverlayEditorKeyDown: function (event) {
