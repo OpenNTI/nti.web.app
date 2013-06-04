@@ -12,7 +12,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		Ext.DomHelper.append(
+		this.countEl = Ext.DomHelper.append(
 			this.down('header').getEl(), {cls:'count', html: '0'}, true);
 	}
 
