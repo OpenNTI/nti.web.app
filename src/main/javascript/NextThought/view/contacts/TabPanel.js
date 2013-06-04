@@ -10,6 +10,7 @@ Ext.define('NextThought.view.contacts.TabPanel',{
 	plain: true,
 	ui: 'contacts',
 	minWidth: 550,
+	deferredRender: false,
 
 	tabBar: {
 		plain: true,
