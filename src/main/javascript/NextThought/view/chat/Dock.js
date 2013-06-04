@@ -89,7 +89,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 				}
 				console.log(me);
 			});
-			me.namesEl.update(usernames.join(',')).set({'data-count':usernames.length});
+			me.namesEl.update(usernames.join(', ')).set({'data-count':usernames.length});
 			if(usernames.length > 1){
 				me.namesEl.addCls('overflown')
 			}
