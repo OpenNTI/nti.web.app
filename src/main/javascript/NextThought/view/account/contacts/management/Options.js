@@ -16,8 +16,8 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 	},
 	items: [
 		{ text:'Settings', cls:'label', allowUncheck: false, header: true},
-		{ text: 'Mute', allowSelect:true},
-		{ text: 'Block', allowSelect:true},
+//		{ text: 'Mute', allowSelect:true},
+//		{ text: 'Block', allowSelect:true},
 		{ text: 'Remove from contacts', cls:'no-checkbox', removeContact: true, allowSelect:true}
 	],
 
