@@ -28,7 +28,20 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 							cls: 'text-wrap',
 							cn: [
 								{cls: 'name', html: '{name}'},
-								{cls: 'affiliation', html: '{affiliation-dontshowthis}'}
+								{cls: 'meta-role', cn:[
+									{tag:'tpl', 'if':'role', cn:[
+										{tag:'span', cls:'role', html:'{role}'}
+									]},
+									{tag:'tpl', 'if':'role && affiliation', cn:[
+										{ tag:'span', html:' at '}
+									]},
+									{tag:'tpl', 'if':'affiliation', cn:[
+										{tag:'span', cls: 'affiliation', html: '{affiliation}'}
+									]}
+								]},
+								{tag:'tpl', 'if': 'location', cn:[
+									{cls: 'location', html:'{location}'}
+								]}
 							]
 						}
 					]
@@ -82,12 +95,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			items: [{xtype:'management-group-list', allowSelect: true}]
 		});
 
-		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user });
-
 		this.isContact = Ext.getStore('FriendsList').isContact(this.record);
+
 		this.groupsList = this.groupsListMenu.down('management-group-list');
 		this.groupsList.setUser(this.record);
 		this.groupsList.isContact = this.isContact;
+		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user, isContact: this.isContact });
 	},
 
 	beforeRender: function(){
@@ -99,7 +112,9 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			groupCount: this.getListCount(),
 			avatarURL: this.record.get('avatarURL'),
 			name: this.record.getName(),
-			affiliation: this.record.get('affiliation')
+			affiliation: this.record.get('affiliation'),
+			role:this.record.get('role'),
+			location:this.record.get('location')
 		});
 	},
 
@@ -109,7 +124,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.user = this.record;    //EnableProfileClicks mixin expects us to have a this.user object.
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
-		this.mon(this.groupsList, 'hide-menu', this.showUserList, this);
 		this.mon(this.actionButtonEl, 'click', this.actOnContactOrChat, this);
 		this.mon(this.optionsEl, 'click', this.showOptionMenu, this);
 
@@ -117,12 +131,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			scope: this,
 			'add-contact': this.incrementCount,
 			'remove-contact': this.decreaseCount,
-			'added-contact': this.makeItContact
+			'added-contact': this.makeItContact,
+			'hide-menu': this.showUserList
 		});
 
 		this.mon(this.optionsMenu, {
 			scope:this,
-			'remove-contact-selected': this.onDeleteContact
+			'remove-contact-selected': this.onDeleteContact,
+			'hide-menu': this.showOptionMenu
 		});
 	},
 
@@ -186,19 +202,37 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	showUserList: function(){
-		if(this.showingMenu){
+		if(this.showingListMenu){
 			this.groupsListMenu.hide();
-			delete this.showingMenu;
+			this.fireEvent('adjust-height');
+			delete this.showingListMenu;
 			return;
 		}
-		this.showingMenu = true;
-		this.groupsListMenu.showBy(this.avatar,'tl-bl',[0,0]);
+		this.showingListMenu = true;
+		this.groupsListMenu.showBy(this.avatar,'tl-bl',[-1,0]);
+		this.syncMenuHeight(this.groupsListMenu);
 	},
 
 
 	showOptionMenu: function(){
-		if(this.optionsMenu){
-			this.optionsMenu.showBy(this.avatar, 'tl-bl', [0,0]);
+		if(this.showingOptionsMenu){
+			this.fireEvent('adjust-height');
+			this.optionsMenu.hide();
+			delete this.showingOptionsMenu;
+			return;
+		}
+		this.showingOptionsMenu = true;
+		this.optionsMenu.showBy(this.avatar, 'tl-bl', [-1,0]);
+		this.syncMenuHeight(this.optionsMenu);
+	},
+
+	syncMenuHeight: function(menu){
+		var topMenu = menu.getY(),
+			avatarTop = this.avatar.getY(),
+			avatarHeight = this.avatar.getHeight();
+
+		if(topMenu < (avatarTop + avatarHeight)){
+			this.setY(topMenu - avatarHeight, true);
 		}
 	},
 

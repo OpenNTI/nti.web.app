@@ -23,12 +23,13 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 
 	handleClick: function(item){
 		if(item.removeContact){
+			if(!this.isContact){ return; }
 			this.fireEvent('remove-contact-selected', this, this.user);
 		}
 
 		//TODO: right now, we will use the header as a toggle option for showing and hiding the menu
 		if(item.header){
-			this.el.hide();
+			this.fireEvent('hide-menu');
 		}
 	}
 });

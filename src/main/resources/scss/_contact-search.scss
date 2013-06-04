@@ -202,9 +202,28 @@
 			.text-wrap {
 				margin: 10px 0 0 100px;
 				padding-left: 15px;
-				.name, .affiliation {
-					font-size: 11px;
-					font-weight: 600;
+
+				.name {
+					font: normal 300 22px/26px "Open Sans Condensed", "Open Sans", sans-serif !important;
+					text-transform: none;
+					line-height: 30px !important;
+				}
+				.affiliation {
+					color:$primary-grey !important;
+					font: { size: 12px; weight: 400; }
+					margin-left: 2px;
+				}
+				.meta-role{
+					color:$primary-grey;
+					font-size: 12px;
+					font-weight: 400;
+					overflow: hidden;
+					@include ellipse;
+				}
+				.location{
+					color:$primary-grey;
+					font-size: 12px;
+					font-weight: 400;
 				}
 
 			}

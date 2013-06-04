@@ -172,6 +172,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					if(sidebar){
 						pop.mon(sidebar, 'move', align);
 					}
+					pop.on('adjust-height', align);
 				}
 				align();
 			},this);
