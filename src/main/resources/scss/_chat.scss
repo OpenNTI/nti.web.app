@@ -496,6 +496,7 @@
 		.count {
 			position: absolute;
 			top: 9px; right: 10px;
+			padding: 0 4px;
 			text-align: center;
 			min-width: 29px;
 			border-radius: 8px;
@@ -562,6 +563,7 @@
 	}
 
 	.count {
+		padding: 0 4px;
 		top: 17px; right: 10px;
 		text-align: center;
 		min-width: 24px;
