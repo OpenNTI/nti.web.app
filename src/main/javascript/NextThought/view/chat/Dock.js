@@ -152,7 +152,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 	},
 
 	handleWindowNotify: function(msg){
-		if(msg && msg.Creator && !isMe(msg.Creator)){
+		if( !this.associatedWindow.isVisible() && msg && msg.Creator && !isMe(msg.Creator)){
 			this.unread++;
 			this.updateCount();
 		}
