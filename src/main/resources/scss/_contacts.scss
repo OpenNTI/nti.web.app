@@ -479,7 +479,7 @@ $over-color: #f4f3f3;
 
 		.empty {
 			padding: 20px 0;
-			font: italic 300 14px/28px "Open Sans", sans-serif;
+			font: italic 300 14px/28px $font;
 			text-align: center;
 			color: $tertiary-grey;
 		}

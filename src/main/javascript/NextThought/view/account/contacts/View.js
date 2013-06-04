@@ -38,6 +38,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	listeners: {
 		itemclick: 'rowClicked',
+		itemmouseenter: 'rowHover',
 		select: function(s,record){ s.deselect(record); }
 	},
 
@@ -87,6 +88,15 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	rowHover: function(view, record, item){
+		function fin(pop){
+			// If the popout is destroyed, clear the activeTargetDom,
+			// that way we will be able to show the popout again.
+			if(!pop){ return; }
+			pop.on('destroy', function(){
+				delete me.activeTargetDom;
+			});
+		}
+
 		var popout = NextThought.view.account.contacts.management.Popout,
 			el = Ext.fly(item).down('.avatar'), me = this;
 
@@ -95,7 +105,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			Ext.fly(item).un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			popout.popup(record,el,item,[-10, -18]);
+			popout.popup(record,el,item,[-10, -18], fin);
 			me.activeTargetDom = Ext.getDom(Ext.fly(item));
 		},500);
 

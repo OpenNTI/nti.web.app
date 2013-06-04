@@ -135,7 +135,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			return canShow && !el.hasCls('deleted');
 		},
 
-		popup: function(record, el, viewRef){
+		popup: function(record, el, viewRef, anchor, cb){
 			if(!this.beforeShowPopup(record, el)){
 				return;
 			}
@@ -145,7 +145,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 				function align(){
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
-					pop.alignTo(el,'tr-tl?',[-10,0]);
+					pop.alignTo(el,'tr-tl?', anchor || [-10,0]);
 					pop.show();
 					pop.pointer.point();
 				}
@@ -175,6 +175,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					pop.on('adjust-height', align);
 				}
 				align();
+
+				Ext.callback(cb, null, [pop]);
 			},this);
 		}
 
