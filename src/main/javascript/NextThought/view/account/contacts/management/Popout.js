@@ -144,7 +144,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			'hide-menu': this.showOptionMenu
 		});
 
-		if(!pi.isOnline || !pi.isOnline()){
+		if(this.isContact && (!pi.isOnline || !pi.isOnline())){
 			this.actionEl.addCls('disabled');
 		}
 
