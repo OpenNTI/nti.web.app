@@ -61,12 +61,17 @@ Ext.define('NextThought.view.chat.WindowManager',{
 
 
 	register: function(win){
+		var coord = this.getNextCoordinate();
+
 		if(!win || !win.id){
 			return;
 		}
 
 		this.registry[win.id] = win;
 
+		win.x = coord[0] - win.width;
+		win.y = coord[1];
+		//win.setPagePosition(coord[0] - win.width,coord[1]);
 		this.addToDock(win.id,win);
 
 		win.on('destroy','unregister',this);
@@ -99,6 +104,25 @@ Ext.define('NextThought.view.chat.WindowManager',{
 		else if(!dock){
 			console.warn('WARN: this should not happen');
 		}
+	},
+
+	getNextCoordinate: function(){
+		var y = Ext.Element.getViewportHeight(),
+			x = Ext.Element.getViewportWidth() - 280;//width of sidebar
+
+		Ext.Object.each(this.registry, function(key, win){
+			if(!win.rendered || !win.isVisible()){
+				return;
+			}
+			var coord = win.getXY(),
+				winHeight = win.getHeight(),
+				winWidth = win.getWidth();
+			if((y - (coord[1] + winHeight)) < 10){
+				x = Math.min(x,coord[0]);
+			}
+		});
+
+		return [x,y];
 	}
 
 
