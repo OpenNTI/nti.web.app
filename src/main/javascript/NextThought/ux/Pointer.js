@@ -36,7 +36,7 @@ Ext.define('NextThought.ux.Pointer',{
 
 
 	point: function(){
-		if(!this.rendered){
+		if(!this.rendered || this.disabled){
 			return;
 		}
 

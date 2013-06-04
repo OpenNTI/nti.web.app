@@ -101,6 +101,9 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.groupsList.setUser(this.record);
 		this.groupsList.isContact = this.isContact;
 		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user, isContact: this.isContact });
+
+		// NOTE: We don't want a pointer for the person card. So disabled it.
+		this.pointer.disable();
 	},
 
 	beforeRender: function(){

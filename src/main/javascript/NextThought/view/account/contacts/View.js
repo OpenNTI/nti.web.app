@@ -83,7 +83,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	rowClicked: function(view,record,item){
 		var el = Ext.fly(item).down('.avatar');
-		NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-10, -18]);
+		NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 	},
 
 
@@ -105,7 +105,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			Ext.fly(item).un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			popout.popup(record,el,item,[-10, -18], fin);
+			popout.popup(record,el,item,[-1, 0], fin);
 			me.activeTargetDom = Ext.getDom(Ext.fly(item));
 		},500);
 
