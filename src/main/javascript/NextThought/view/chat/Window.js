@@ -221,6 +221,9 @@ Ext.define('NextThought.view.chat.Window', function(){
 		},
 
 
+		notify: Ext.emptyFn,
+
+
 		setChatStatesMap: function(){
 			this.chatUserStatesMap = { 'composing': 'typing', 'inactive' : 'idle', 'gone' : 'away', 'active': 'active' };
 		},
