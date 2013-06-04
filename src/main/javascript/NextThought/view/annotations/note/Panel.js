@@ -317,8 +317,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		}
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
-			console.log('Dropping empty note body', v.body);
-			me.deactivateReplyEditor();
+			console.warn("Note's body is required");
+			me.editor.markError(me.editorEl.down('.content'), 'Please enter text before you save');
 			return;
 		}
 		me.editorEl.mask('Saving...');

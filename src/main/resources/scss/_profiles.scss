@@ -414,6 +414,11 @@
 							background-color: transparent;
 							&::after{ display: none; }
 						}
+						.main{
+							.error-tip[data-error-tip]::before{
+								top: 32px !important;
+							}
+						}
 					}
 				}
 			}
@@ -739,6 +744,12 @@
 				.editor {
 					display: block;
 					.action.share {display: none !important;}
+
+					.main{
+						.error-tip[data-error-tip]::before{
+							top: 32px !important;
+						}
+					}
 				}
 			}
 
@@ -789,6 +800,10 @@
 					.main{
 						padding-left: 13px;
 						padding-right: 13px;
+
+						.error-tip[data-error-tip]::before{
+							top: 32px !important;
+						}
 					}
 
 					.footer{

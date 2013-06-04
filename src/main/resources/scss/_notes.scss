@@ -761,6 +761,10 @@
 					.content{
 						padding: 6px 0 0 0;
 					}
+
+					.error-tip[data-error-tip]::before{
+						top: 32px !important;
+					}
 				}
 
 				.footer{
