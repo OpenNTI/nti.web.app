@@ -492,6 +492,20 @@
 		.x-header-text-container {
 			padding: 0 60px 0 20px;
 		}
+
+		.count {
+			position: absolute;
+			top: 9px; right: 10px;
+			text-align: center;
+			min-width: 29px;
+			border-radius: 8px;
+			background: #299bdc;
+			font: normal 600 12px/17px $font;
+			color: #ffffff;
+			box-shadow: 0 1px rgba(255,255,255,0.3),
+					inset 0 1px rgba(0,0,0,0.15),
+					inset 0 0 1px rgba(0,0,0,0.15);
+		}
 	}
 }
 
@@ -548,12 +562,12 @@
 	}
 
 	.count {
-		top: 18px; right: 5px;
+		top: 17px; right: 10px;
 		text-align: center;
 		min-width: 24px;
 		border-radius: 8px;
 		background: #299bdc;
-		font: normal 600 12px/16px $font;
+		font: normal 600 12px/17px $font;
 		color: #ffffff;
 	}
 

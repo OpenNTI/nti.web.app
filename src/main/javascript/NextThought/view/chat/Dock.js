@@ -4,11 +4,17 @@ Ext.define('NextThought.view.chat.Dock',{
 	id: 'chat-dock',//there should be ONLY ONE instance of this.
 
 	title: 'Chats',
-	//collapsible: true,
 
 	ui: 'chat-dock',
 	cls: 'chat-dock',
-	defaultType: 'chat-dock-item'
+	defaultType: 'chat-dock-item',
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		Ext.DomHelper.append(
+			this.down('header').getEl(), {cls:'count', html: '0'}, true);
+	}
 
 });
 
@@ -49,7 +55,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.callParent(arguments);
 
 		this.mon(this.el,'click','onClick',this);
-		this.mon(this.associatedWindow.roomInfo,'update', this.fillInInformation, this)
+		this.mon(this.associatedWindow.roomInfo,'update', this.fillInInformation, this);
 
 		this.fillInInformation(this.associatedWindow.roomInfo);		
 	},
@@ -91,7 +97,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			});
 			me.namesEl.update(usernames.join(', ')).set({'data-count':usernames.length});
 			if(usernames.length > 1){
-				me.namesEl.addCls('overflown')
+				me.namesEl.addCls('overflown');
 			}
 			console.log(usernames);
 		});	
