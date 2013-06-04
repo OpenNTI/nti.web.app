@@ -21,7 +21,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 			{xtype:'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
 				filter: function(group){return !group.isDFL;},
 				defaultInsertPoint: 1,
-				items:[ /*{xtype: 'list-buttons'}*/ ]},
+				items:[{xtype: 'list-buttons'}]},
 			{xtype:'data-bound-panel', title: 'Groups', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
 				filter: function(group){return group.isDFL;},
 				defaultInsertPoint: 1,
