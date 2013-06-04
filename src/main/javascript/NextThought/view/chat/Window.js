@@ -24,14 +24,17 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 		title:'chat',
 
+
 		layout:{
 			type:'hbox',
 			align:'stretch'
 		},
 
+
 		items:[
 			{xtype:'chat-view', flex:1}
 		],
+
 
 		dockedItems:[
 			{xtype:'chat-gutter', dock:'left', hidden:true}
@@ -221,7 +224,8 @@ Ext.define('NextThought.view.chat.Window', function(){
 		},
 
 
-		notify: Ext.emptyFn,
+		notify: function(){ console.debug('Chat Winidow Manager should replace: notify()'); },
+		minimize: function(){ console.debug('Chat Winidow Manager should replace: minimize()'); },
 
 
 		setChatStatesMap: function(){
