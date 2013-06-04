@@ -118,7 +118,7 @@ Ext.define('NextThought.mixins.AddGroup', {
         // Make sure nothing steals focus while the input is visible
         input.un('blur').on('blur', function() {
             if (input.isVisible())
-                input.focus();
+                input.focus(200);
         }).focus();
 
 		return false;
