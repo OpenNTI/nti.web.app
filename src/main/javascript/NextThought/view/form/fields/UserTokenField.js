@@ -86,7 +86,11 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			store:me.store,
 			renderTo: spEl || Ext.getBody()
 		});
-		this.mon(this.store,'load','alignPicker',this);
+		this.mon(this.store, {
+			scope: this,
+			load:'alignPicker',
+			refresh:'alignPicker'
+		});
 
 		this.pickerView.addCls(this.ownerCls);
 		this.mon(this.pickerView, 'select', this.searchItemSelected, this);
@@ -398,17 +402,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			w = this.getWidth();
 
 		value = (value || '').replace(SearchUtils.trimRe,'');
-		if(Ext.isEmpty(value)){
-			this.clearResults();
-		}
-		else {
-			if(!Ext.isEmpty(w)){
-				this.pickerView.setWidth(w);
-			}
-			this.store.search(value);
-			this.alignPicker();
-			this.inputEl.focus(100);
-		}
+		this.clearResults();
+		if(!Ext.isEmpty(w)){ this.pickerView.setWidth(w); }
+
+		//Clear results right before making a search.
+		this.clearResults();
+		this.store.search(value);
+
 	},
 
 
@@ -422,7 +422,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			return;
 		}
 
-		this.getPicker().setHeight(50);
 		var me = this, x, y,
 			spEl = this.scrollParentEl,
 			scrollOffset = (spEl && spEl.getScroll().top) || 0,
@@ -460,7 +459,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		x = picker.getAlignToXY(this.el, 'l-l')[0] - cordinateRootX;
 		y = picker.getAlignToXY(this.inputEl, align,[0,padding])[1] - cordinateRootY;
 
+		if(pickerScrollHeight === 0){
+			Ext.defer(this.alignPicker, 1, this);
+		}
+
 		picker.showAt(x,y + scrollOffset);
+		//Focus the input now
+		this.inputEl.focus(10);
 	},
 
 	reset: function(){
