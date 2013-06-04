@@ -70,12 +70,14 @@ Ext.define('NextThought.view.contacts.Search',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.store = new NextThought.store.UserSearch();
-		this.store.filter([
-			{ fn: function(rec){ return !rec.isGroup; } },
-			{ fn: function(rec){ return !rec.isCommunity; }},
-			{ fn: function(rec){ return !isMe(rec); }}
-		]);
+		this.store = new NextThought.store.UserSearch({
+			filters:[
+				//filter out communities, lists, groups and yourself. Just return users.
+				function(rec){ return rec.getId() !== $AppConfig.contactsGroupName; },
+				function(rec){ return !rec.isCommunity; },
+				function(rec){ return !isMe(rec); },
+				function(rec){ return rec.get('ContainerId') === 'Users'; }
+		]});
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
