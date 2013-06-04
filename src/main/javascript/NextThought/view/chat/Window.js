@@ -224,7 +224,10 @@ Ext.define('NextThought.view.chat.Window', function(){
 		},
 
 
-		notify: function(){ console.debug('Chat Winidow Manager should replace: notify()'); },
+		notify: function(msg){ 
+			console.debug('Chat Winidow Manager should replace: notify()'); 
+			this.fireEvent('notify',msg);
+		},
 		minimize: function(){ console.debug('Chat Winidow Manager should replace: minimize()'); },
 
 

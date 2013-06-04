@@ -427,6 +427,7 @@ Ext.define('NextThought.controller.Chat', {
 			this.onEnteredRoom(ri);
 			w = this.getChatWindow(ri);
 			if (w) {
+				w.notify();
 				w.show();
 				setTimeout(function () {
 					w.down('chat-entry').focus();
@@ -1021,6 +1022,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (toast && toast.length === 1) {
 				toast[0].close();
 			}
+			this.removeSessionObject(oldRoomInfo.getId());
 		}
 
 
@@ -1113,27 +1115,19 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-		this.updateRoomInfoLastActivity(w,m);
 		this.channelMap[channel].call(this, m, opts || {});
 
 		if (channel !== 'STATE') {
 			// NOTE: We don't want state channel notifications to trigger showing the window initially or adding
 			// notification counts, only when an actual message is sent should we do this.
-			if (!w.minimized && !w.isVisible() && w.hasBeenAccepted()) {
+			w.notify(msg);
+			/*if (!w.minimized && !w.isVisible() && w.hasBeenAccepted()) {
 				w.show();
 			}
 			else {
 				w.notify();
-			}
+			}*/
 		}
-	},
-
-	updateRoomInfoLastActivity: function(w, m){
-		if(!w){
-			return;
-		}
-
-		w.roomInfo.set({'lastActive': m.get('Last Modified')});
 	},
 
 //	setChatNotification: function(on) {

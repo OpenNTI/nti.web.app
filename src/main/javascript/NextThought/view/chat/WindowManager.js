@@ -40,7 +40,8 @@ Ext.define('NextThought.view.chat.WindowManager',{
 
 
 	addToDock: function(windowId, window){
-		var dock = this.getDock(),
+		var hide,
+			dock = this.getDock(),
 			dockedItem;
 		if(!dock) { return; }
 
@@ -49,7 +50,10 @@ Ext.define('NextThought.view.chat.WindowManager',{
 			return;
 		}
 
-		dockedItem = dock.add({ associatedWindowId: windowId, associatedWindow: window });
+		hide = !isMe(window.roomInfo.get('Creator'));
+
+
+		dockedItem = dock.add({ associatedWindowId: windowId, associatedWindow: window, hidden: hide });
 		if(dockedItem){
 			window.dockedItemRef = dockedItem;
 		}

@@ -8,12 +8,50 @@ Ext.define('NextThought.view.chat.Dock',{
 	ui: 'chat-dock',
 	cls: 'chat-dock',
 	defaultType: 'chat-dock-item',
+	listeners: {
+		remove: 'updateCount'
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);
 
 		this.countEl = Ext.DomHelper.append(
 			this.down('header').getEl(), {cls:'count', html: '0'}, true);
+	},
+
+	add: function(){
+		var result = this.callParent(arguments);
+		
+		if(result){
+			if(Ext.isArray(result)){
+				Ext.each(result,this.monitorDockItem,this);
+			}else{
+				this.monitorDockItem(result);
+			}
+		}
+		return result;
+	},
+
+	monitorDockItem: function(cmp){
+		this.mon(cmp,{
+			scope: this,
+			'count-updated': 'updateCount',
+			destroy: 'updateCount',
+			buffer: 1
+		});
+	},
+
+	updateCount: function(){
+		var total = 0;
+		
+		this.items.each(function(i){
+			if(i && (i.isDestroying || i.destroyed)){
+				return;
+			}
+			total += ((i && i.unread) || 0);
+		});
+
+		this.countEl.update(total || '0');
 	}
 
 });
@@ -23,6 +61,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 	alias: 'widget.chat-dock-item',
 	cls: 'chat-dock-item',
 	ui: 'chat-dock-item',
+
+	hidden: true, //start out as hidden
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'avatars', cn: [
@@ -55,7 +95,10 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.callParent(arguments);
 
 		this.mon(this.el,'click','onClick',this);
-		this.mon(this.associatedWindow.roomInfo,'update', this.fillInInformation, this);
+		this.mon(this.associatedWindow.roomInfo,'update', 'fillInInformation', this);
+		this.mon(this.associatedWindow,'notify','handleWindowNotify',this);
+		this.lastUpdated = new Date();
+		this.unread = 0;
 
 		this.fillInInformation(this.associatedWindow.roomInfo);		
 	},
@@ -63,6 +106,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 	onClick: function(e){
 		e.stopEvent();
 		if(e.getTarget(".close")){
+			this.unread = 0;
+			this.updateCount();
 			this.associatedWindow.close();
 			return;
 		}
@@ -70,6 +115,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 		if(this.associatedWindow.isVisible()){
 			this.associatedWindow.hide();
 		}else{
+			this.unread = 0;
+			this.updateCount();
 			this.associatedWindow.show();
 		}
 	},
@@ -104,9 +151,19 @@ Ext.define('NextThought.view.chat.DockItem',{
 		me.updateLastActive();
 	},
 
+	handleWindowNotify: function(msg){
+		if(msg && msg.Creator && !isMe(msg.Creator)){
+			this.unread++;
+			this.updateCount();
+		}
+		this.lastUpdated = new Date();
+		this.updateLastActive();
+		this.setVisible(true);
+	},
+
 	updateLastActive: function(el){
 		var display, roominfo = this.associatedWindow.roomInfo,
-			lastActive = roominfo.get('lastActive'),
+			lastActive = this.lastUpdated,
 			currentTime = new Date(),
 			difference = new Date(currentTime - lastActive);
 
@@ -124,6 +181,11 @@ Ext.define('NextThought.view.chat.DockItem',{
 			this.statusEl.update("Last message "+display+" ago");
 		}
 
+	},
+
+	updateCount: function(){
+		this.countEl.update(this.unread || '');
+		this.fireEvent('count-updated');
 	}
 
 
