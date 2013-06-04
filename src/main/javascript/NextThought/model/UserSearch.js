@@ -36,6 +36,8 @@ Ext.define(	'NextThought.model.UserSearch', {
 			return presence;
 		}},
 		{ name: 'affiliation', type: 'string', persist:false },
+		{ name: 'role', type:'string', persist: false },
+		{ name: 'location', type:'string', persist: false },
 		{ name: 'alias', type: 'string' },
 		{ name: 'status', convert: function(v, record){
 			var presence = record.get('Presence');
