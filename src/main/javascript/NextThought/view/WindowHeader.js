@@ -92,10 +92,11 @@ Ext.define('NextThought.view.WindowHeader', {
 	applyToolHandlers: function(){
 		var me = this;
 		Ext.Object.each(me.tools,function(tool,info){
-			var t = me[tool];
+			var t = me[tool],
+				sc = info && (info.scope||me.ownerCt),
+				fn = info && info.handler;
+
 			if(t && !t.toolAttached){
-				var sc = info.scope||me.ownerCt,
-					fn = info.handler;
 				fn = typeof fn === 'string' ? sc[fn] : fn;
 				t.on('click',fn,sc);
 				t.addClsOnOver('tool-over');
