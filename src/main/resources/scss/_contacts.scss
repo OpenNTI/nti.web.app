@@ -512,6 +512,10 @@ $over-color: #f4f3f3;
 					visibility: visible;
 					opacity: 1;
 				}
+
+				&.no-group-chat{
+					width: 260px !important;
+				}
 			}
 			.group-chat {
 				width: 40px !important;

@@ -241,5 +241,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 		if(this.groupChatButton){
 			this.groupChatButton.setVisibilityMode(Ext.Element.DISPLAY).hide();
 		}
+		this.searchButton.addCls('no-group-chat');
 	}
 });
