@@ -229,39 +229,11 @@
 		left: 0;
 		right: 0;
 		height: 45px;
-
+		background-color: #f3f3f3;
 		border: 0 solid #dcdcdc;
 		border-top-width: 1px;
 		text-align: right;
 		border-radius: 0 0 3px 3px;
-
-
-		.lists{
-			cursor: pointer;
-			position: relative;
-			color: $secondary-grey;
-			font: italic 500 14px/42px $font;
-			padding-left: 25px;
-			position: relative;
-			color: #757474;
-			font: italic 500 14px/42px "Open Sans", sans-serif;
-			padding-left: 25px;
-			margin-right: 45px;
-			text-align: left;
-
-			&.add-list{
-				margin-right: 105px;
-
-				&::after{
-					content: '';
-					position: absolute;
-					left: 11px; top: 16px;
-					outline: 0;
-					background: $icons no-repeat;
-					@include sprite($icons, 'ico_plus', $dimensions:true);
-				}
-			}
-		}
 
 		&::after {
 			content: '';
@@ -274,53 +246,85 @@
 			border-radius: 90px;
 		}
 
-
-		.action{
+		.left{
 			position: relative;
+			margin-right: 105px;
+			display: block;
+			text-align: left;
+
+			.control{
+				position: relative;
+				width: 50px;
+				height: 44px;
+				display: inline-block;
+				border-right: 1px solid $tertiary-grey;
+
+				&::after{
+					content: '';
+					position: absolute;
+					left: 19px; top: 14px;
+					outline: 0;
+					background: $icons no-repeat;
+				}
+
+				&.lists{
+					&::after{
+						@include sprite($icons, 'create-list', $dimensions:true);
+					}
+
+					&:hover{
+						background-color: #fff;
+						&::after{
+							@include sprite($icons, 'create-list_hover', $dimensions:true);
+						}
+					}
+				}
+
+				&.options{
+					&::after{
+						@include sprite($icons, 'library-gear', $dimensions:true);
+					}
+
+					&:hover{
+						background-color: #fff;
+						&::after{
+							@include sprite($icons, 'library-gear_hover', $dimensions:true);
+						}
+					}
+				}
+			}
+		}
+
+		.right{
+			position: relative;
+			width: 105px;
 			float: right;
-			width: 45px;
+			display: block;
+
+			a.button {
+				cursor: pointer;
+				display: block;
+				height: 44px;
+				line-height: 45px;
+				font: italic 500 14px/42px $font;
+				text-align: center;
+				color: #ffffff;
+				width: 105px;
+			}
 
 			&.add-contact{
-				width: 105px;
-				a.button {
-					cursor: pointer;
-					display: block;
-					height: 44px;
-					width: 105px;
-					line-height: 45px;
-					font: italic 500 14px/42px $font;
-					text-align: center;
-					color: #ffffff;
+				a.button{
 					outline: 1px solid #69a92b;
 					background: #75bc30;
 				}
 			}
 
-			&.remove-contact{
+			&.chat{
+				width: 90px;
 				a.button{
-					cursor: pointer;
-					position: relative;
-					border-left: 1px solid $tertiary-grey;
-					height: 45px;
-					width: 45px;
-					display: block;
-
-					&::after{
-						content:'';
-						position:absolute;
-						top: 14px; left: 14px;
-						background: $icons no-repeat;
-						@include sprite($icons, 'rhp-delete-contact', $dimensions:true);
-					}
-
-					&:hover{
-						margin-top: -1px;
-						height: 45px;
-						background-color: $primary-red;
-						&::after{
-							@include sprite($icons, 'rhp-delete-contact_hover', $dimensions:true);
-						}
-					}
+					width: 90px;
+					outline: 1px solid $border-blue;
+					background: $primary-blue;
 				}
 			}
 		}

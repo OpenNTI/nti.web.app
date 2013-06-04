@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	alias: ['widget.contact-popout', 'widget.activity-popout-user'],
 
 	requires: [
-		'NextThought.view.account.contacts.management.GroupList'
+		'NextThought.view.account.contacts.management.GroupList',
+		'NextThought.view.account.contacts.management.Options'
 	],
 
 	mixins: {
@@ -40,17 +41,22 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		{
 		cls: 'footer',
 		cn: [
-			{tag:'tpl', 'if': 'isContact', cn:[
-				{cls: 'action remove-contact', cn:[
-					{tag: 'a', cls:'button', html:''}
+			{cls:'controls', cn:[
+				{tag:'tpl', 'if': 'isContact', cn:[
+					{cls:'right chat', cn:[
+						{tag: 'a', cls:'button', html:'Chat'}
+					]}
 				]},
-				{cls: 'lists', html:'Manage lists ({groupCount})', 'data-value':'{groupCount}'}
-			]},
-			{tag:'tpl', 'if': '!isContact', cn:[
-				{cls: 'action  add-contact', cn:[
-					{tag: 'a',  cls:'button', html:'Add Contact'}
+				{tag:'tpl', 'if': '!isContact', cn:[
+					{cls:'right add-contact', cn:[
+						{tag: 'a',  cls:'button', html:'Add Contact'}
+					]}
 				]},
-				{cls: 'lists add-list', html:'Add to lists'}
+				{cls:'left', cn:[
+					{cls: 'control lists', 'data-qtip':'Distribution lists'},
+					{cls: 'control options', 'data-qtip':'Options'}
+				]}
+
 			]}
 		]
 	}]),
@@ -58,21 +64,25 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	renderSelectors:{
 		name: '.name',
 		avatar:'.contact-card img',
-		actionEl: '.action',
-		actionButtonEl: '.action a',
-		listEl: '.lists'
+		actionEl: '.right',
+		actionButtonEl: '.right a',
+		listEl: '.lists',
+		optionsEl: '.options'
 	},
 
 	setupItems: Ext.emptyFn,
 
 	initComponent: function(){
 		this.callParent(arguments);
+		var me = this;
 		this.groupsListMenu = Ext.widget('menu', {
 			ui: 'nt',
 			plain: true,
-			width: 250,
+			width: 350,
 			items: [{xtype:'management-group-list', allowSelect: true}]
 		});
+
+		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user });
 
 		this.isContact = Ext.getStore('FriendsList').isContact(this.record);
 		this.groupsList = this.groupsListMenu.down('management-group-list');
@@ -100,13 +110,19 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
 		this.mon(this.groupsList, 'hide-menu', this.showUserList, this);
-		this.mon(this.actionButtonEl, 'click', this.actOnContact, this);
+		this.mon(this.actionButtonEl, 'click', this.actOnContactOrChat, this);
+		this.mon(this.optionsEl, 'click', this.showOptionMenu, this);
 
 		this.mon(this.groupsList,{
 			scope: this,
 			'add-contact': this.incrementCount,
 			'remove-contact': this.decreaseCount,
 			'added-contact': this.makeItContact
+		});
+
+		this.mon(this.optionsMenu, {
+			scope:this,
+			'remove-contact-selected': this.onDeleteContact
 		});
 	},
 
@@ -132,12 +148,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	actOnContact: function(e){
+	actOnContactOrChat: function(e){
 		e.stopEvent();
 		if(e.getTarget('.add-contact')){
 			this.onAddContact();
 		}else{
-			this.onDeleteContact();
+			console.warn('Need to hook up chat');
 		}
 	},
 
@@ -169,33 +185,21 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	handleToggleListText: function(showMenu){
-		var c = this.listEl.getAttribute('data-value');
-
-		if(showMenu){
-			this.listEl.update("Close lists");
-		}
-		else{
-			if(c){
-				this.listEl.update('Manage lists ('+c+')');
-			}
-			else{
-				this.listEl.update('Add lists');
-			}
-		}
-	},
-
-
 	showUserList: function(){
 		if(this.showingMenu){
-			this.handleToggleListText(false);
 			this.groupsListMenu.hide();
 			delete this.showingMenu;
 			return;
 		}
-		this.handleToggleListText(true);
 		this.showingMenu = true;
-		this.groupsListMenu.showBy(this.avatar,'tl-tr',[0,0]);
+		this.groupsListMenu.showBy(this.avatar,'tl-bl',[0,0]);
+	},
+
+
+	showOptionMenu: function(){
+		if(this.optionsMenu){
+			this.optionsMenu.showBy(this.avatar, 'tl-bl', [0,0]);
+		}
 	},
 
 
@@ -209,9 +213,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	makeItContact: function(){
-		this.actionEl.removeCls('add-contact').addCls('remove-contact');
-		this.actionButtonEl.update('');
-		this.listEl.removeCls('add-list');
+		this.actionEl.removeCls('add-contact').addCls('chat');
+		this.actionButtonEl.update('Chat');
 		this.isContact = true;
 	},
 
@@ -236,6 +239,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	onDestroy: function(){
 		this.groupsListMenu.destroy();
+		this.optionsMenu.destroy();
 		this.callParent(arguments);
 	}
 
