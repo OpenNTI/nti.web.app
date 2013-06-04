@@ -587,6 +587,10 @@ $over-color: #f4f3f3;
 					@include sprite($icons,'rhp-group-chat_hover');
 				}
 			}
+
+			&.no-group-chat{
+				width: 260px;
+			}
 		}
 	}
 }
