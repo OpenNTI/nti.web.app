@@ -11,6 +11,9 @@ Ext.define('NextThought.view.chat.Dock',{
 	collapseMode: 'header',
 	collapsible: true,
 	collapsed: true,
+	maxHeight: 300,
+	overflowX: 'hidden',
+	overflowY: 'auto',
 	animCollapse: false,
 	listeners: {
 		remove: 'updateAll',
