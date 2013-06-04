@@ -853,7 +853,7 @@ Ext.define('NextThought.model.Base', {
 			var recById = s.getById(rec.getId());
 
 			//Ok we found one and it isn't the same object
-			if(recById && rec !== recById){
+			if(recById && rec !== recById && rec.get('MimeType') === recById.get('MimeType')){
 				recById[fname].apply(recById, args);
 			}
 		});

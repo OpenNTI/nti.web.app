@@ -30,6 +30,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'home_page', type: 'string'}
 	],
 
+	isUser: true,
 	summaryObject: true,
 
 	getCommunities: function (excludeDFLs) {
