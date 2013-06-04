@@ -475,39 +475,43 @@
 
 }
 
-#chat-dock {
-	.x-panel-header{
-		//min-height: 38px;
-		background-color: #3fb3f6;
-		box-shadow: 0 -1px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.4);
+#chat-dock-placeholder,
+#chat-dock .x-panel-header{
+	overflow-y: auto;
+	background-color: #3fb3f6;
+	box-shadow: 0 -1px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.4);
 
-		$experimental-support-for-svg: true;
-		@include background-image(linear-gradient(bottom, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%));
+	$experimental-support-for-svg: true;
+	@include background-image(linear-gradient(bottom, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%));
 
-		color: #ffffff;
-		font: italic 500 14px/36px $font;
-		border-bottom: 1px solid #3398db;
-		border-bottom-width: 1px !important;
+	color: #ffffff;
+	font: italic 500 14px/36px $font;
+	border-bottom: 1px solid #3398db;
+	border-bottom-width: 1px !important;
 
-		.x-header-text-container {
-			padding: 0 60px 0 20px;
-		}
-
-		.count {
-			position: absolute;
-			top: 9px; right: 10px;
-			padding: 0 4px;
-			text-align: center;
-			min-width: 29px;
-			border-radius: 8px;
-			background: #299bdc;
-			font: normal 600 12px/17px $font;
-			color: #ffffff;
-			box-shadow: 0 1px rgba(255,255,255,0.3),
-					inset 0 1px rgba(0,0,0,0.15),
-					inset 0 0 1px rgba(0,0,0,0.15);
-		}
+	.x-header-text-container {
+		padding: 0 60px 0 20px;
 	}
+
+	.x-tool {
+		display: none;
+	}
+
+	.count {
+		position: absolute;
+		top: 9px; right: 10px;
+		padding: 0 4px;
+		text-align: center;
+		min-width: 29px;
+		border-radius: 8px;
+		background: #299bdc;
+		font: normal 600 12px/17px $font;
+		color: #ffffff;
+		box-shadow: 0 1px rgba(255,255,255,0.3),
+				inset 0 1px rgba(0,0,0,0.15),
+				inset 0 0 1px rgba(0,0,0,0.15);
+	}
+	
 }
 
 .chat-dock-item{

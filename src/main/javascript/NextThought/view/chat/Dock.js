@@ -8,15 +8,60 @@ Ext.define('NextThought.view.chat.Dock',{
 	ui: 'chat-dock',
 	cls: 'chat-dock',
 	defaultType: 'chat-dock-item',
+	collapseMode: 'header',
+	collapsible: true,
+	collapsed: true,
+	animCollapse: false,
 	listeners: {
-		remove: 'updateCount'
+		remove: 'updateAll',
+		add: 'updateAll'
+	},
+
+	constructor: function(){
+		this.floatCollapsedPanel = this.toggle;
+		this.callParent(arguments);
 	},
 
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.countEl = Ext.DomHelper.append(
-			this.down('header').getEl(), {cls:'count', html: '0'}, true);
+		this.mon(this.down('header'),'click','toggle',this);
+		this.mon(this.el,{
+			scope: this,
+			mouseout: 'startClose',
+			mousein: 'stopClose',
+			mouseover: 'stopClose',
+			click: 'startClose'
+		});
+
+		this.countEl = new Ext.dom.CompositeElement([
+			Ext.DomHelper.append( this.placeholder.getEl(), {cls:'count', html: '0'}),
+			Ext.DomHelper.append( this.down('header').getEl(), {cls:'count', html: '0'})
+			]);
+	},
+
+	toggle: function(){
+		if(this.collapsed && this.items.length > 0){
+			this.toggleCollapse();
+		}
+	},
+
+	startClose: function(){
+		this.stopClose();
+		this.closeTimer = setTimeout(Ext.bind(this.collapse,this), 500);
+	},
+
+	stopClose: function(){
+		clearTimeout(this.closeTimer);		
+	},
+
+	updateAll: function(){
+		this.updateTitle();
+		this.updateCount();
+	},
+
+	updateTitle: function(){
+		this.setTitle((this.items.length === 0)? "Chats" : "Chats ("+this.items.length+")");
 	},
 
 	add: function(){
@@ -29,6 +74,7 @@ Ext.define('NextThought.view.chat.Dock',{
 				this.monitorDockItem(result);
 			}
 		}
+
 		return result;
 	},
 
@@ -91,17 +137,31 @@ Ext.define('NextThought.view.chat.DockItem',{
 		'img4': '.avatars .img4'
 	},
 
-	afterRender: function(){
+	constructor: function(){
 		this.callParent(arguments);
 
-		this.mon(this.el,'click','onClick',this);
 		this.mon(this.associatedWindow.roomInfo,'update', 'fillInInformation', this);
 		this.mon(this.associatedWindow,'notify','handleWindowNotify',this);
 		this.lastUpdated = new Date();
 		this.unread = 0;
 
-		this.fillInInformation(this.associatedWindow.roomInfo);		
+
+		return this;
 	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.fillInInformation(this.associatedWindow.roomInfo);
+		this.mon(this.el,'click','onClick',this);
+	},
+
+
+	onAdded: function(ownerCt){
+		this.callParent(arguments);
+		this.mon(ownerCt,'expand','updateCount',this);
+		this.mon(ownerCt,'expand','updateStatus',this);
+	},
+
 
 	onClick: function(e){
 		e.stopEvent();
@@ -124,6 +184,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 	fillInInformation: function(roomInfo){
 		var me = this,
 			usernames = [];
+
+		if(!this.rendered){ return; }
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
 			var userCount = 1;
@@ -148,7 +210,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			}
 			console.log(usernames);
 		});	
-		me.updateLastActive();
+		me.updateStatus();
 	},
 
 	handleWindowNotify: function(msg){
@@ -157,34 +219,36 @@ Ext.define('NextThought.view.chat.DockItem',{
 			this.updateCount();
 		}
 		this.lastUpdated = new Date();
-		this.updateLastActive();
+		this.updateStatus();
 		this.setVisible(true);
 	},
 
-	updateLastActive: function(el){
+	updateStatus: function(el){
 		var display, roominfo = this.associatedWindow.roomInfo,
-			lastActive = this.lastUpdated,
+			Status = this.lastUpdated,
 			currentTime = new Date(),
-			difference = new Date(currentTime - lastActive);
+			difference = new Date(currentTime - Status);
 
 		console.log(difference);
 
-		if(!lastActive){
+		if(!Status){
 			console.log("No last Active yet");
 		}
 
 		display = difference.getMinutes()+"m "+difference.getSeconds()+"s";
 
 		if(difference.getMinutes() < 10){
-			this.statusEl.update("In Progress... "+display);
+			display = "In Progress... "+display;
 		}else{
-			this.statusEl.update("Last message "+display+" ago");
+			display = "Last message "+display+" ago";
 		}
+
+		if(this.statusEl){ this.statusEl.update(display);}
 
 	},
 
 	updateCount: function(){
-		this.countEl.update(this.unread || '');
+		if(this.countEl){ this.countEl.update(this.unread || ''); }
 		this.fireEvent('count-updated');
 	}
 
