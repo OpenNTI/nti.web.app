@@ -67,7 +67,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	constructor: function(){
 		this.emptyText = Ext.DomHelper.markup({
-			cls:'empty',
+			cls:'empty-list',
 			html: 'None of your contacts are online.'
 		});
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			overItemCls: this.overCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty', html: 'No users found.'}),
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
 			renderTo: this.el,
 			cls: 'contact-search',
 			listeners:{
