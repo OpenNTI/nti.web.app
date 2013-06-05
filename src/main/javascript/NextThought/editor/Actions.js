@@ -87,7 +87,6 @@ Ext.define('NextThought.editor.Actions', {
 		// funky
 
 		if (editorEl.up('.blog')) {
-			console.log("****** got the blog editor *****")
 			me.setupTitleEl(me, tabTracker);
 			me.setupSharedListEl(me, tabTracker, scrollParentEl);
 		} else {
