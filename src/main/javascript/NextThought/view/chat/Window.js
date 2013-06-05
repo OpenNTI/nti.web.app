@@ -145,16 +145,10 @@ Ext.define('NextThought.view.chat.Window', function(){
 		presenceChanged: function(username, value){
 			var me = this;
 
-			if(value.isOnline()){ return; }//ignore people coming back online for now
+			if(value.isOnline() || !Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }//ignore people coming back online and people who aren't in the occupants list for now
 
 			if(Ext.Array.contains(me.onlineOccupants,username)){
-				if(!value.isOnline()){
-					Ext.Array.remove(me.onlineOccupants, username);
-				}
-			}else if(value.isOnline()){
-				if(Ext.Array.contains(me.roomInfo.get('Occupants'),username)){
-					me.onlineOccupants.push(username);
-				}
+				Ext.Array.remove(me.onlineOccupants, username);
 			}
 
 			UserRepository.getUser(username, function(user){
