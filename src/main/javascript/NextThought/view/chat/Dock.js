@@ -185,11 +185,16 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 	fillInInformation: function(roomInfo){
 		var me = this,
+			occ = roomInfo.get('Occupants'),
 			usernames = [];
 
 		this.mon(roomInfo, 'changed', 'fillInInformation', this, {single:true});
 
 		if(!this.rendered){ return; }
+
+		if(occ.length===1 && isMe(occ[0])){
+			return;
+		}
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
 			var userCount = 1;
