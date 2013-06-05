@@ -47,7 +47,7 @@ Ext.define('NextThought.store.Contacts',{
 	},
 
 	onPresenceChange: function(username, rec){
-		if(!rec.isPresenceInfo){
+		if(!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))){
 			return;
 		}
 		var fn = rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
