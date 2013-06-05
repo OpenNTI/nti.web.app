@@ -82,21 +82,6 @@ Ext.define('NextThought.editor.Actions', {
 			updateLabel();
 		}
 
-		me.titleEl = editorEl.down('.title input');
-		if( me.titleEl ){
-			me.titleEl.set({tabIndex: tabTracker.next()});
-			me.renderPlaceholder(me.titleEl);
-			me.mon(me.titleEl,{
-				'click':function(e){e.stopPropagation();},
-				'mousedown':function(e){e.stopPropagation();},
-				'keydown':function(e){
-					var t = e.getTarget();
-					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
-					e.stopPropagation();
-				}
-			});
-		}
-
 		me.sharedListEl = editorEl.down('.recipients');
 		if(me.sharedListEl){
 			if($AppConfig.service.canShare()){
@@ -111,6 +96,21 @@ Ext.define('NextThought.editor.Actions', {
 			}else{
 				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
 			}
+		}
+
+		me.titleEl = editorEl.down('.title input');
+		if( me.titleEl ){
+			me.titleEl.set({tabIndex: tabTracker.next()});
+			me.renderPlaceholder(me.titleEl);
+			me.mon(me.titleEl,{
+				'click':function(e){e.stopPropagation();},
+				'mousedown':function(e){e.stopPropagation();},
+				'keydown':function(e){
+					var t = e.getTarget();
+					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
+					e.stopPropagation();
+				}
+			});
 		}
 
 
