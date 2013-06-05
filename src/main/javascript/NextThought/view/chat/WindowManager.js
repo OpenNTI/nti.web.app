@@ -53,7 +53,7 @@ Ext.define('NextThought.view.chat.WindowManager',{
 		hide = !isMe(window.roomInfo.get('Creator'));
 
 
-		dockedItem = dock.add({ associatedWindowId: windowId, associatedWindow: window, hidden: hide });
+		dockedItem = dock.add({ associatedWindowId: windowId, associatedWindow: window, hidden: hide, isPresented: !hide });
 		if(dockedItem){
 			window.dockedItemRef = dockedItem;
 		}

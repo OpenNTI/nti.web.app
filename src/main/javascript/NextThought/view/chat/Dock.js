@@ -74,7 +74,7 @@ Ext.define('NextThought.view.chat.Dock',{
 
 		var total = 0;
 		this.items.each(function(o){
-			if(o && o.isVisible()){
+			if(o && o.isPresented){
 				total++;
 			}
 		});
@@ -100,6 +100,7 @@ Ext.define('NextThought.view.chat.Dock',{
 		this.mon(cmp,{
 			scope: this,
 			'count-updated': 'updateCount',
+			'made-visible': 'updateTitle', 
 			destroy: 'updateCount',
 			buffer: 1
 		});
@@ -269,13 +270,19 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 
 	handleWindowNotify: function(msg){
+		var reSetTitle = !this.isPresented;
 		if( !this.associatedWindow.isVisible() && msg && msg.Creator && !isMe(msg.Creator)){
 			this.unread++;
 			this.updateCount();
 		}
+
 		this.lastUpdated = new Date();
 		this.updateStatus();
 		this.setVisible(true);
+		this.isPresented = true
+		if(reSetTitle){
+			this.fireEvent('made-visible');
+		}
 	},
 
 
