@@ -21,7 +21,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	},
 
 	constructor: function(){
-		this.floatCollapsedPanel = this.toggle;
+		this.floatCollapsedPanel = this.toggleCollapse;
 		this.callParent(arguments);
 	},
 
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.mon(this.down('header'),'click','toggle',this);
+		this.mon(this.down('header'),'click','toggleCollapse',this);
 		this.mon(this.el,{
 			scope: this,
 			mouseout: 'startClose',
@@ -44,17 +44,22 @@ Ext.define('NextThought.view.chat.Dock',{
 		});
 
 		this.placeholder.focus = Ext.emptyFn;
+
+		this.mon(this.placeholder.getEl(),'mouseover','expand',this);
+
 		this.countEl = new Ext.dom.CompositeElement([
 			Ext.DomHelper.append( this.placeholder.getEl(), {cls:'count', html: '0'}),
 			Ext.DomHelper.append( this.down('header').getEl(), {cls:'count', html: '0'})
 			]);
 	},
 
-	toggle: function(){
-		if(this.collapsed && this.items.length > 0){
-			this.toggleCollapse();
+
+	expand: function(){
+		if(this.items.length > 0){
+			this.callParent();
 		}
 	},
+
 
 	startClose: function(){
 		this.stopClose();
