@@ -202,7 +202,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 
-	selectNewGroup: function(groupName, pendingSelections){
+	selectNewGroup: function(groupName){
 		var record,s = this.getSelectionModel();
 		if(!this.allowSelect){
 			return;
@@ -220,16 +220,12 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 	afterGroupAdd: function(groupName){
-		var me = this, pendingSelections;
-		//Only adds to pendingList if the user is not in my contacts.
-		if(!this.username){
-			pendingSelections = me.getSelectionModel().getSelection().slice();
-			console.log('Groups selected: ', pendingSelections);
-		}
+		var me = this;
 
 		me.store.on('datachanged',function(){
-			me.selectNewGroup(groupName, pendingSelections);
+			me.selectNewGroup(groupName);
 			me.reset();
+			me.fireEvent('sync-menu-height', me.el.up('.x-menu'));
 		},me,{single:true});
 	}
 

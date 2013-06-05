@@ -138,7 +138,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			'add-contact': this.incrementCount,
 			'remove-contact': this.decreaseCount,
 			'added-contact': this.makeItContact,
-			'hide-menu': this.showUserList
+			'hide-menu': this.showUserList,
+			'sync-menu-height': this.syncMenuHeight
 		});
 
 		this.mon(this.optionsMenu, {
