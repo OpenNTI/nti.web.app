@@ -478,14 +478,14 @@
 #chat-dock-placeholder,
 #chat-dock .x-panel-header{
 	background-color: #3fb3f6;
-	box-shadow: 0 -1px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.4);
+	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
 
 	$experimental-support-for-svg: true;
-	@include background-image(linear-gradient(bottom, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.25) 100%));
+	@include background-image(linear-gradient(bottom, #30a1f4 0%, #4ec6f8 100%));
 
 	color: #ffffff;
 	font: italic 500 14px/36px $font;
-	border-bottom: 1px solid #3398db;
+	border-bottom: 1px solid #30a1f4;
 	border-bottom-width: 1px !important;
 
 	.x-header-text-container {
@@ -581,15 +581,31 @@
 		bottom: 0;
 		right: 0;
 		width: 50px;
+		background: #68c7fe;
 		display: none;
 		@include icon('rhp-close-chat',$top:19px,$left:19px);
 
 		position: absolute;
+
+		&::before {
+			content: '';
+			top: 1px;
+			left: -1px;
+			overflow: hidden;
+			position: absolute;
+			z-index: 2;
+			background: $elements no-repeat;
+			@include sprite($elements,'rhp-chat-v-div',$dimensions: true);
+		}
+
+		&:hover {
+			background: #7ccefe;
+		}
 	}
 
 	.wrap{
-		margin: 0 40px 0 60px;
-		padding-top: 10px;
+		padding: 10px 40px 0 60px;
+		height: 50px;
 
 		.status {
 			font: italic normal 12px/16px $font;
@@ -613,19 +629,26 @@
 	}
 
 	&:hover{
-		background: #5fc2fb;
+		background: #68c7fe;
 		box-shadow: 0 0 2px rgba(0,0,0,0.15), inset 0 1px rgba(255,255,255,0.1);
 
-		.meta {
+		.wrap {
+			&:hover {
+				background: #7ccefe;
+			}
+
 			.status {
 				color: #258fcc;
 			}
 		}
 
 		.count { display: none; }
-		.close{
-			background: #68c7f3;
+		.close {
 			display: block;
+
+			&:not(:hover){
+				background: #68c7fe;
+			}
 		}
 	}
 }
