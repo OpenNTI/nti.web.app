@@ -278,7 +278,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.lastUpdated = new Date();
 		this.updateStatus();
 		this.setVisible(true);
-		this.isPresented = true
+		this.isPresented = true;
 		if(reSetTitle){
 			this.fireEvent('made-visible');
 		}
