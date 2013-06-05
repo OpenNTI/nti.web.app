@@ -194,7 +194,8 @@
 
 	background: #f8f8f8;
 	border: 1px solid #cecece;
-	box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
+	//box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
+	box-shadow: 0 2px 4px 1px rgba(0,0,0,0.14);
 
 	.person-card, .header {
 
@@ -254,11 +255,12 @@
 		left: 0;
 		right: 0;
 		height: 45px;
-		background-color: #f3f3f3;
-		border: 0 solid #dcdcdc;
+		background-color: #f9f9f9;
+		border: 0 solid #cecece;
 		border-top-width: 1px;
 		text-align: right;
 		border-radius: 0 0 3px 3px;
+		margin-top: -1px;
 
 		&::after {
 			content: '';
@@ -267,8 +269,7 @@
 			left: 0;
 			right: 0;
 			height: 8px;
-			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
-			border-radius: 90px;
+			box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14);
 		}
 
 		.left{
@@ -282,38 +283,39 @@
 				width: 50px;
 				height: 44px;
 				display: inline-block;
-				border-right: 1px solid $tertiary-grey;
+				border-right: 1px solid #e6e6e6;
 
 				&::after{
 					content: '';
 					position: absolute;
-					left: 19px; top: 14px;
+					left: 17px; top: 13px;
 					outline: 0;
 					background: $icons no-repeat;
 				}
 
 				&.lists{
 					&::after{
-						@include sprite($icons, 'create-list', $dimensions:true);
+						left:15px;
+						@include sprite($icons, 'rhp-contact-flyout-lists', $dimensions:true);
 					}
 
 					&:hover{
 						background-color: #fff;
 						&::after{
-							@include sprite($icons, 'create-list_hover', $dimensions:true);
+							@include sprite($icons, 'rhp-contact-flyout-lists_hover', $dimensions:true);
 						}
 					}
 				}
 
 				&.options{
 					&::after{
-						@include sprite($icons, 'library-gear', $dimensions:true);
+						@include sprite($icons, 'rhp-contact-flyout-settings', $dimensions:true);
 					}
 
 					&:hover{
 						background-color: #fff;
 						&::after{
-							@include sprite($icons, 'library-gear_hover', $dimensions:true);
+							@include sprite($icons, 'rhp-contact-flyout-settings_hover', $dimensions:true);
 						}
 					}
 				}
