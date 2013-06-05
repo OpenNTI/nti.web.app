@@ -17,7 +17,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 		xtype: 'contacts-tabs',
 		width: 725,
 		items: [
-			{xtype:'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'online-contacts-store' },
+			{xtype:'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'all-contacts-store'},
 			{xtype:'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
 				filter: function(group){return !group.isDFL;},
 				defaultInsertPoint: 1,

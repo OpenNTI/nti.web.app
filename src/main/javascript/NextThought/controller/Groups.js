@@ -1,6 +1,7 @@
 Ext.define('NextThought.controller.Groups', {
 	extend: 'Ext.app.Controller',
 
+	requires: ['NextThought.store.Contacts'],
 
 	models: [
 		'Community',
@@ -43,78 +44,16 @@ Ext.define('NextThought.controller.Groups', {
 		//The flStore already has tons of logic in it to fire contact changes
 		//at appropriate times.  So turn our onlineContactStore into a store
 		//that is driven off of those notifications further filtering things appropriately
-		this.onlineContactStore = new Ext.data.Store({
-			model: 'NextThought.model.User',
+		this.onlineContactStore = new NextThought.store.Contacts({
 			id: 'online-contacts-store',
-			proxy: 'memory',
-			remoteSort: false,
-			remoteFilter: false,
-			remoteGroup: false,
-			sortOnFilter: true,
-			sorters:[{
-				property: 'displayName',
-				direction: 'ASC',
-				transform: function(value) { return value.toLowerCase(); }
-			}],
-
-			contains: function(id){
-				return 0 <= this.indexOfId(id);
-			},
-
-			indexOfId: function(id){
-				return (this.snapshot || this.data).findIndexBy(function(rec){
-						return rec.isEqual(rec.get('Username'), id);
-				}, this, 0);
-			},
-
-			addContacts: function(contacts){
-				var toAdd = [], me = this;
-				UserRepository.getUser(contacts, function(users){
-					Ext.Array.each(users, function(user){
-						if(!isMe(user) && onlineFilter(user) && !me.contains(user.getId())){
-							toAdd.push(user);
-						}
-					});
-					if(!Ext.isEmpty(toAdd)){
-						me.add(toAdd);
-					}
-				});
-			},
-
-			removeContacts: function(contacts){
-				var toRemove = [], me = this;
-				Ext.Array.each(contacts, function(contact){
-					var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
-					if(idx >= 0){
-						toRemove.push((me.snapshot||me.data).getAt(idx));
-					}
-				});
-				if(!Ext.isEmpty(toRemove)){
-					me.remove(toRemove);
-				}
-			},
-
-			refreshContacts: function(listStore){
-				//TODO smarter merge here
-				this.removeAll();
-				this.addContacts(listStore.getContacts());
-			}
+			filters: [onlineFilter]
 		});
+		this.onlineContactStore.bindFriendsListAndPresence(flStore, piStore);
 
-		flStore.on({
-			scope: this.onlineContactStore,
-			'contacts-added': 'addContacts',
-			'contacts-removed': 'removeContacts',
-			'contacts-refreshed': 'refreshContacts'
+		this.allContactsStore = new NextThought.store.Contacts({
+			id: 'all-contacts-store'
 		});
-
-		piStore.on('presence-changed', function(username, rec){
-			if(!rec.isPresenceInfo){
-				return;
-			}
-			var fn = rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
-			me.onlineContactStore[fn]([rec]);
-		});
+		this.allContactsStore.bindFriendsListAndPresence(flStore);
 
 		this.listen({
 			component:{
