@@ -617,7 +617,11 @@ Ext.define('NextThought.editor.Actions', {
 			el = Ext.get(guid);
 
 		if(el){ el.parent('.whiteboard-divider').remove();}
+		if(w){
+			this.openWhiteboards[guid] = null;
+		}
 
+		// FIXME: is this comment still valid?
 		//Note we don't remove the whiteboard from openWhiteboards here.
 		//if the author does an undo and the dom elements get added back
 		//we need to retain the model or we are in an inconsistent state
