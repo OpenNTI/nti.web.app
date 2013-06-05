@@ -60,7 +60,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.selections = [];
 
 		this.tip = Ext.widget('nt-tooltip',Ext.apply({
-			autoHide: false,
+			autoHide: true,
 			anchor:'bottom',
 			minWidth: 250
 
