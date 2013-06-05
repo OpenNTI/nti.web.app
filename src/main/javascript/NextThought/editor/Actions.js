@@ -82,37 +82,18 @@ Ext.define('NextThought.editor.Actions', {
 			updateLabel();
 		}
 
-		me.sharedListEl = editorEl.down('.recipients');
-		if(me.sharedListEl){
-			if($AppConfig.service.canShare()){
-				me.sharedList = Ext.widget('user-sharing-list', {
-					renderTo: me.sharedListEl,
-					scrollParentEl:scrollParentEl,
-					tabIndex: tabTracker.next(),
-					ownerCls: cmp.xtype
-				});
-				cmp.on('destroy', 'destroy', me.sharedList);
-				cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
-			}else{
-				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
-			}
-		}
+		// tab tracking is different depending on whether we're editing a blog or
+		// editing an annotation. the field layout changes. maybe it should be the same?
+		// funky
 
-		me.titleEl = editorEl.down('.title input');
-		if( me.titleEl ){
-			me.titleEl.set({tabIndex: tabTracker.next()});
-			me.renderPlaceholder(me.titleEl);
-			me.mon(me.titleEl,{
-				'click':function(e){e.stopPropagation();},
-				'mousedown':function(e){e.stopPropagation();},
-				'keydown':function(e){
-					var t = e.getTarget();
-					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
-					e.stopPropagation();
-				}
-			});
+		if (editorEl.up('.blog')) {
+			console.log("****** got the blog editor *****")
+			me.setupTitleEl(me, tabTracker);
+			me.setupSharedListEl(me, tabTracker, scrollParentEl);
+		} else {
+			me.setupSharedListEl(me, tabTracker, scrollParentEl);
+			me.setupTitleEl(me, tabTracker);
 		}
-
 
 		me.tagsEl = editorEl.down('.tags');
 		if( me.tagsEl ){
@@ -180,6 +161,40 @@ Ext.define('NextThought.editor.Actions', {
 		this.typingAttributes = [];
 	},
 
+	setupSharedListEl: function(me, tabTracker, scrollParentEl) {
+		me.sharedListEl = me.editor.down('.recipients');
+		if(me.sharedListEl){
+			if($AppConfig.service.canShare()){
+				me.sharedList = Ext.widget('user-sharing-list', {
+					renderTo: me.sharedListEl,
+					scrollParentEl:scrollParentEl,
+					tabIndex: tabTracker.next(),
+					ownerCls: me.cmp.xtype
+				});
+				me.cmp.on('destroy', 'destroy', me.sharedList);
+				me.cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
+			}else{
+				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
+			}
+		}
+	},
+
+	setupTitleEl: function(me, tabTracker) {
+		me.titleEl = me.editor.down('.title input');
+		if( me.titleEl ){
+			me.titleEl.set({tabIndex: tabTracker.next()});
+			me.renderPlaceholder(me.titleEl);
+			me.mon(me.titleEl,{
+				'click':function(e){e.stopPropagation();},
+				'mousedown':function(e){e.stopPropagation();},
+				'keydown':function(e){
+					var t = e.getTarget();
+					Ext.callback((t||{}).setAttribute, t, ['value',t.value]);
+					e.stopPropagation();
+				}
+			});
+		}
+	},
 
 	activate: function () {
 		this.updatePrefs();
