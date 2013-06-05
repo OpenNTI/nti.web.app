@@ -100,7 +100,9 @@ Ext.define('NextThought.view.toast.Manager',{
 	/** @private */
 	popToast: function(toast){
 
-		var top = Ext.dom.Element.getViewSize().height,
+		var vp = Ext.dom.Element.getViewSize(),
+			left = vp.width - (toast.width+10),
+			top = vp.height,
 			idx;
 		if(this.stack.length > 0){
 			idx = Ext.Array.indexOf(this.stack,toast);
@@ -111,7 +113,7 @@ Ext.define('NextThought.view.toast.Manager',{
 
 		toast.animate({
 			duration: 400,
-			to:{ top: top }
+			to:{ top: top, left: left }
 		});
 	}
 
