@@ -16,6 +16,8 @@ Ext.define('NextThought.view.chat.WindowManager',{
 			Ext.ComponentManager.onAvailable('chat-dock',initDockPointer,me);
 		}
 
+		Ext.EventManager.onWindowResize(this.onViewportResized,this);
+
 		return this.callParent(arguments);
 	},
 
@@ -60,21 +62,30 @@ Ext.define('NextThought.view.chat.WindowManager',{
 	},
 
 
-	register: function(win){
-		var coord = this.getNextCoordinate();
+	getWindows: function(){
+		var wins = [];
+		Ext.Object.each(this.registry,function(k,v){wins.push(v);});
+		Ext.Array.sort(wins,function(a,b){ return b.x - a.x; });//keep the list descending n->0
+		return wins;
+	},
 
+
+	register: function(win){
 		if(!win || !win.id){
 			return;
 		}
 
+		win.x = win.y = NaN;//flagging for un-positioned
+
 		this.registry[win.id] = win;
-
-		win.x = coord[0] - win.width;
-		win.y = coord[1];
-		//win.setPagePosition(coord[0] - win.width,coord[1]);
 		this.addToDock(win.id,win);
+		win.on({
+			scope: this,
+			destroy:'unregister',
+			show: 'realignWindow'
+		});
 
-		win.on('destroy','unregister',this);
+
 	},
 
 
@@ -106,24 +117,46 @@ Ext.define('NextThought.view.chat.WindowManager',{
 		}
 	},
 
-	getNextCoordinate: function(){
+	getNextCoordinate: function(winToMove){
 		var y = Ext.Element.getViewportHeight(),
-			x = Ext.Element.getViewportWidth() - 280;//width of sidebar
+			x = Ext.Element.getViewportWidth() - 270,//width of sidebar
+			w = winToMove.getWidth() + 10,
+			wins = this.getWindows();
 
-		Ext.Object.each(this.registry, function(key, win){
-			if(!win.rendered || !win.isVisible()){
-				return;
+
+		Ext.each(wins,function(win){
+			if(winToMove === win || !win.rendered || !win.isVisible()){
+				return true;
 			}
-			var coord = win.getXY(),
+
+			var xy = win.getXY(),
 				winHeight = win.getHeight(),
 				winWidth = win.getWidth();
-			if((y - (coord[1] + winHeight)) < 10){
-				x = Math.min(x,coord[0]);
+
+			if(isNaN(xy[0])){
+				return true;
 			}
+
+			if((y - (xy[1] + winHeight)) < 10){//the window is low
+				if((x-w) > (xy[0]+winWidth) ){//found a gap...fill it.
+					return false;
+				}
+				x = Math.min(x,xy[0]);
+			}
+
+			return true;
 		});
 
-		return [x,y];
+		return [x-w,y];
+	},
+
+
+	realignWindow: function(win){
+		win.setPagePosition(this.getNextCoordinate(win));
+	},
+
+
+	onViewportResized: function(){
+		//TODO: reorganize the windows? maybe? We don't have the concept of "docked" or "snapped" anymore...so, this may be a moot point.
 	}
-
-
 });
