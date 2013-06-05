@@ -65,7 +65,15 @@ Ext.define('NextThought.view.chat.Dock',{
 	},
 
 	updateTitle: function(){
-		this.setTitle((this.items.length === 0)? "Chats" : "Chats ("+this.items.length+")");
+
+		var total = 0;
+		this.items.each(function(o){
+			if(o && o.isVisible()){
+				total++;
+			}
+		});
+
+		this.setTitle((total === 0)? "Chats" : "Chats ("+total+")");
 	},
 
 	add: function(){
