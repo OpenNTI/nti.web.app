@@ -228,7 +228,6 @@ Ext.define('NextThought.view.chat.Window', function(){
 			this.fireEvent('notify',msg);
 		},
 		minimize: function(){
-			this.minimized = true;
 			this.hide();
 		},
 
