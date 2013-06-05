@@ -5,6 +5,9 @@
 	border: 1px solid #cacaca;
 	border-bottom-width: 0;
 
+	.x-tab-button {
+		cursor: pointer !important;
+	}
 
 	&.undocked {
 		border-radius: 5px 5px 0 0;
