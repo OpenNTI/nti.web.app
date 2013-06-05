@@ -167,6 +167,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 
 	onClick: function(e){
+		var me = this;
 		e.stopEvent();
 		if(e.getTarget(".close")){
 			this.unread = 0;
@@ -180,9 +181,14 @@ Ext.define('NextThought.view.chat.DockItem',{
 			this.unread = 0;
 			this.updateCount();
 			this.associatedWindow.show();
-		}
+			Ext.defer(function(){
+				me.associatedWindow.focus();
+			}, 500);
 
-		this.associatedWindow.focus();
+		}
+		else{
+			this.associatedWindow.hide();
+		}
 	},
 
 	fillInInformation: function(roomInfo){
