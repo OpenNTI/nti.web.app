@@ -67,6 +67,7 @@
 			}
 			.wrapper {
 				margin: 6px 0 10px 53px;
+				width: 115px;
 
 				.name {
 					@include menu-label-text-treatment;
