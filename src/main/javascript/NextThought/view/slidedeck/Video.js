@@ -168,7 +168,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 			if(newIx === ix){return;}
 
-			if(s.time >= o.end || (newIx === -1 && Math.abs(s.time - o.end) < 1)){
+			if(s.time >= o.get('end') || (newIx === -1 && Math.abs(s.time - o.get('end')) < 1)){
 				newIx = ix+1;
 				console.log('[End of Video]');
 			}
