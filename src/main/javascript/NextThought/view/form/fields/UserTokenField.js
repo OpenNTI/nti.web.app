@@ -9,7 +9,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	cls:'sharing-token-field',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'control publish on', 'data-qtip': 'Privacy Setting'},
+		{cls: 'control publish on'},
 		{cls:'tokens',cn:[
 			{tag:'span', cls:'inputArea', cn:[
 				{tag:'span', cls:'plus'},
@@ -104,7 +104,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			});
 		}
 
-		this.tip.setTarget(this.el);
+		this.tip.setTarget(this.publishEl);
 		this.mon(this.inputEl,'focus','onTargetOver',this.tip);
 
 		this.setupKeyMap();

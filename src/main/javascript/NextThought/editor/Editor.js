@@ -34,7 +34,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 				cls: 'recipients'
 			}},
 			{tag:'tpl', 'if':'enablePublishControls', cn:{
-				cls: 'action publish on', 'data-qtip': 'Privacy Setting'
+				cls: 'action publish on'
 			}},
 			{tag:'tpl', 'if': 'enableTags', cn:{
 				cls:'tags'
