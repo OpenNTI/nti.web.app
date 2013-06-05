@@ -341,7 +341,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	track: function(id){
-		var btn = this.viewSelectButton(id),silent=false;
+		var btn = this.viewSelectButton(id),silent=true; //calling toggle with silent=false recursively calls toggle crashing the browser.
 		try {
 			if(btn.alternateId){
 				btn = this.viewSelectButton(btn.alternateId);
