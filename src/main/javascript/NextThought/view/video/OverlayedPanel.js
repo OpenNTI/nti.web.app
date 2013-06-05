@@ -1,11 +1,12 @@
 /*jslint */
-/*global DomUtils */
+/*global DomUtils, NextThought */
 Ext.define('NextThought.view.video.OverlayedPanel',{
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-video',
 
 	requires:[
 		'NextThought.util.Dom',
+		'NextThought.model.PlaylistItem',
 		'NextThought.view.video.Video'
 	],
 
@@ -35,42 +36,9 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
-			i,
-			sources = el.query('object[type$=videosource]'),
-			playlist = [],
-			sourcesMap = {},
-			sourceComparator;
+			playlist = [];
 
-		sourceComparator = function(a, b) {
-			var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];
-
-			if($a !== $b){
-				c = $a < $b? -1 : 1;
-			}
-
-			return c;
-		};
-
-		for (i=0; i<sources.length; i++){
-			sources[i] = (DomUtils.parseDomObject(sources[i]));
-			sourcesMap[sources[i].type] = sources[i];
-		}
-		Ext.Array.sort(sources, sourceComparator);
-
-		playlist.push(
-			{
-				sources: sources,
-				currentSource: 0,
-				getSources: function(service){
-					var i = [];
-					Ext.each(this,function(o){
-						if(!service || (o && service === o.service)){
-							i.push(o.source);
-						}
-					});
-				}
-			}
-		);
+		playlist.push(NextThought.model.PlaylistItem.fromDom(dom));
 
 		Ext.applyIf(data,{
 			basePath: reader && reader.basePath,

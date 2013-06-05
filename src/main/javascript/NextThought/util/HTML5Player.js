@@ -32,13 +32,13 @@ Ext.define('NextThought.util.HTML5Player',{
 		// Remove any sources that may be there
 		this.el.innerHTML = '';
 
-		sourceTpl.append(this.el, {src: source[0], type: 'video/mp4'});
-		sourceTpl.append(this.el, {src: source[1], type: 'video/webm'});
+		sourceTpl.append(this.el, {src: location.protocol+source[0], type: 'video/mp4'});
+		sourceTpl.append(this.el, {src: location.protocol+source[1], type: 'video/webm'});
 
 		this.el.load();
 
-		if (offset < 0.0){
-			this.seek(offset);
+		if (offset > 0.0){
+			this.el.addEventListener('loadedmetadata',function(){this.currentTime = offset;});
 		}
 	},
 

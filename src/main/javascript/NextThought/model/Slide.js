@@ -1,13 +1,17 @@
+/*jslint */
+/*globals LocationProvider, NextThought, ParseUtils */
 Ext.define('NextThought.model.Slide', {
 	extend: 'NextThought.model.Base',
 
 	requires: [
+		'NextThought.model.PlaylistItem'
 	],
 
 	fields: [
 		{ name: 'title', type: 'string' },
 		{ name: 'image', type: 'string' },
 		{ name: 'image-thumbnail', type: 'string' },
+		{ name: 'media', type: 'auto' },
 		{ name: 'video', type: 'string' },
 		{ name: 'video-type', type: 'string' },
 		{ name: 'video-id', type: 'string' },
@@ -44,25 +48,48 @@ Ext.define('NextThought.model.Slide', {
 			}
 
 			var DQ = Ext.DomQuery,
+				el = Ext.get(dom),
 				frag = (dom.ownerDocument||document).createDocumentFragment(),
 				root = LocationProvider.getContentRoot(containerId),
+				nodes,
 				o = {
-				'Class': 'Slide',
-				'ContainerId': containerId,
-				'NTIID': dom.getAttribute('data-ntiid'),
-				'slidedeck-id': getParam('slidedeckid') || 'default',
-				'title': getParam('slidetitle'),
-				'image': root + getParam('slideimage'),
-				'image-thumbnail': root + getImage(),
-				'video': getParam('slidevideo'),
-				'video-type': getParam('slidevideotype'),
-				'video-id': getParam('slidevideoid'),
-				'video-thumbnail': getParam('slidevideothumbnail'),
-				'video-start': getParam('slidevideostart'),
-				'video-end': getParam('slidevideoend'),
-				'ordinal': getParam('slidenumber'),
-				'dom-clone': frag
-			};
+					'Class': 'Slide',
+					'ContainerId': containerId,
+					'NTIID': dom.getAttribute('data-ntiid'),
+					'slidedeck-id': getParam('slidedeckid') || 'default',
+					'title': getParam('slidetitle'),
+					'image': root + getParam('slideimage'),
+					'image-thumbnail': root + getImage(),
+					'video': getParam('slidevideo'),
+					'video-type': getParam('slidevideotype'),
+					'video-id': getParam('slidevideoid'),
+					'video-thumbnail': getParam('slidevideothumbnail'),
+					'video-start': getParam('slidevideostart'),
+					'video-end': getParam('slidevideoend'),
+					'ordinal': getParam('slidenumber'),
+					'dom-clone': frag
+				};
+
+			nodes = el.query('object[type$=ntivideo]');
+			if (nodes.length > 0){
+				o.media = NextThought.model.PlaylistItem.fromDom(nodes[0]);
+				o.media.set('mediaId', o.ordinal);
+				o.media.set('start', o['video-start'] || 0.0);
+				o.media.set('end', o['video-end'] || -1.0);
+			}
+			else {
+				o.media = new NextThought.model.PlaylistItem({
+					mediaId: o.ordinal,
+					sources: [
+						{
+							service: o['video-type'] || null,
+							source: o.video || null
+						}
+					],
+					start: o['video-start'] || 0,
+					end: o['video-end'] || -1
+				});
+			}
 
 			frag.appendChild(dom.cloneNode(true));
 

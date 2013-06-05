@@ -4,6 +4,10 @@ Ext.define('NextThought.view.video.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
 
+	requires: [
+		'NextThought.model.PlaylistItem'
+	],
+
 	ui: 'content-video',
 	cls: 'content-video',
 
@@ -137,9 +141,9 @@ Ext.define('NextThought.view.video.Video',{
 			el: Ext.get(this.playerIds.html5)
 		});
 
-		this.activeVideoService = this.playlist[this.playlistIndex].sources[0].service;
+		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
 		this.maybeSwitchPlayers(this.activeVideoService);
-		this.setVideoAndPosition(this.playlist[this.playlistIndex].sources[0].source);
+		this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
 		this.html5PlayerReady();
 	},
 
@@ -148,7 +152,6 @@ Ext.define('NextThought.view.video.Video',{
 		(this.players.youtube||{}).isReady = true;
 		var q = this.commandQueue.youtube;
 		while(q.length>0){
-			console.log(q[0]);
 			Ext.callback(this.issueCommand,this, q.shift());
 		}
 	},
@@ -156,16 +159,16 @@ Ext.define('NextThought.view.video.Video',{
 	youtubePlayerError: function(){
 		var currentItem = this.playlist[this.playlistIndex];
 
-		currentItem.currentSource += 1;
-		if (currentItem.currentSource < currentItem.sources.length){
-			this.activeVideoService = currentItem.sources[currentItem.currentSource].service;
+		currentItem.set('sourceIndex', currentItem.get('sourceIndex') + 1 );
+		if (currentItem.get('sourceIndex') < currentItem.get('sources').length){
+			this.activeVideoService = currentItem.activeSource().service;
 		}
 		else{
 			this.activeVideoService = 'none';
 		}
 
 		this.maybeSwitchPlayers(this.activeVideoService);
-		this.setVideoAndPosition(currentItem.sources[currentItem.currentSource].source);
+		this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
 	},
 
 
@@ -173,7 +176,6 @@ Ext.define('NextThought.view.video.Video',{
 		(this.players.html5||{}).isReady = true;
 		var q = this.commandQueue.html5;
 		while(q.length>0){
-			console.log(q[0]);
 			Ext.callback(this.issueCommand,this, q.shift());
 		}
 	},
@@ -249,6 +251,9 @@ Ext.define('NextThought.view.video.Video',{
 
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false);
+
+		// Save our the startAt value in case of failover
+		this.currentStartAt = (startAt || 0);
 
 		if(this.videoTriggeredTransition){
 			delete this.videoTriggeredTransition;

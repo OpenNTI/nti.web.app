@@ -1,3 +1,5 @@
+/*jslint */
+/*globals NextThought */
 Ext.define('NextThought.view.slidedeck.Video',{
 	extend: 'NextThought.view.video.Video',
 	alias: 'widget.slidedeck-video',
@@ -14,7 +16,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
 			frameBorder: 0, scrolling: 'no', seamless: true
 		},{
-			tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video'
+			tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video', 'controls': ''
 		},{
 			cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 		}]
@@ -184,12 +186,12 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		Ext.each(this.playlist,function(o,i){
 			/* slideId, id, service, start, end */
-			var dE = Math.abs(time - o.end),
-				dS = Math.abs(o.start - time);
+			var dE = Math.abs(time - o.get('end')),
+				dS = Math.abs(o.get('start') - time);
 
-			if(o.service === service && o.id === id){
+			if(o.activeSource().service === service && o.activeSource().source === id){
 				//console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
-				if((o.start <= time || dS < 1) && (time < o.end && dE > 1)){
+				if((o.get('start') <= time || dS < 1) && (time < o.get('end') && dE > 1)){
 					matching.push(i);
 				}
 			}
@@ -222,33 +224,14 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	getVideoInfoFromSlide: function(slide){
-		return {
-			slideId: slide.getId(),
-			sources: [
-				{
-					service: slide.get('video-type') || null,
-					source: slide.get('video') || null
-				}
-			],
-			currentSource: 0,
-			getSources: function(service){
-				var i = [];
-				Ext.each(this,function(o){
-					if(!service || (o && service === o.service)){
-						i.push(o.source);
-					}
-				});
-			},
-			start: slide.get('video-start') || 0,
-			end: slide.get('video-end') || -1
-		};
+		return slide.get('media');
 	},
 
 
 	getVideoInfoIndex: function(videoInfo){
-		var index = -1, id = videoInfo.slideId;
+		var index = -1, id = videoInfo.get('mediaId');
 		Ext.each(this.playlist,function(i,ix){
-			if(i.slideId===id){index=ix;}
+			if(i.get('mediaId')===id){index=ix;}
 			return index < 0;//stop once found
 		});
 		return index;
@@ -269,8 +252,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		video = this.getVideoInfoFromSlide(slide);
 
-		this.maybeSwitchPlayers(video.sources[video.currentSource].service);
-		this.setVideoAndPosition(video.sources[video.currentSource].source,video.start);
+		this.maybeSwitchPlayers(video.activeSource().service);
+		this.setVideoAndPosition(video.activeSource().source,video.get('start'));
 
 		this.playlistIndex = this.getVideoInfoIndex(video);
 
