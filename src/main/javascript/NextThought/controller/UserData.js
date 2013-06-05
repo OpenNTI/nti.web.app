@@ -112,10 +112,6 @@ Ext.define('NextThought.controller.UserData', {
 					'click': this.onShareWithSaveClick
 				},
 
-				'share-window button[action=save]':{
-					'click': this.onShareSettingsSaveClick
-				},
-
 				'chat-log-view': {
 					'load-transcript': this.onLoadTranscript
 				},
@@ -472,29 +468,14 @@ Ext.define('NextThought.controller.UserData', {
 		}).show();
 	},
 
-
-	onShareSettingsSaveClick: function(btn){
-		var win = btn.up('window'),
-			shbx= win.down('user-sharing-list'),
-			cb = win.down('checkbox'),
-			saveAsDefault = cb ? cb.checked : false,
-			v = shbx.getValue(),
-			me = this;
-
-		cb.setValue(false);
-
-		if (saveAsDefault){
-			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v), function(){});
-		}
-	},
-
-
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
 			shbx= win.down('user-sharing-list'),
 			v = shbx.getValue(),
-			rec = win.record, b, newSharedWith;
+			rec = win.record, b, newSharedWith,
+			cb = win.down('checkbox'),
+			saveAsDefault = cb ? cb.checked : false,
+			me = this;
 
 		//extra check here for a close...
 		if (btn.text === 'Close'){
@@ -515,6 +496,15 @@ Ext.define('NextThought.controller.UserData', {
 		rec.set('body', b);
 
 		newSharedWith = SharingUtils.sharedWithForSharingInfo(v);
+
+		if(cb){
+			cb.setValue(false);
+		}
+		if (saveAsDefault){
+			//update default sharing setting if we have a shareWith:
+			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v), function(){});
+		}
+
 		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
 			console.log('Sharing not mutated.  Not showing changes', rec.get('SharedWith'), newSharedWith);
 			win.close();
