@@ -85,6 +85,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		if(this.getRoot().editorActive()){
 			this.editor.deactivate();
 			this.editor.reset();
+			this.editor.setValue('');
 			this.comment.show();
 			this.getRoot().setEditorActive(null);
 		}
@@ -126,7 +127,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 		//Avoid saving empty notes or just returns.
 		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
-			me.deactivateEditor();
+			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
 			return false;
 		}
 
