@@ -6,9 +6,10 @@ Ext.define('NextThought.view.SideBar',{
 		'NextThought.view.SideBarTabPanel',
         'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.DisabledView',
-		'NextThought.view.account.contacts.ViewContainer',
+		'NextThought.view.account.contacts.View',
         'NextThought.view.account.history.View',
-		'NextThought.view.account.Identity'
+		'NextThought.view.account.Identity',
+		'NextThought.view.chat.Dock'
 	],
 
 	width: 260,
@@ -31,7 +32,7 @@ Ext.define('NextThought.view.SideBar',{
 		var contactsType = 'disabled-contacts-view';
 
 		if($AppConfig.service.canFriend()){
-			contactsType = 'contacts-tab-view-container';
+			contactsType = 'contacts-view';
 		}
 
 		this.items = [
@@ -40,16 +41,25 @@ Ext.define('NextThought.view.SideBar',{
 					{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
 		        ]}
 			},
-			{ xtype: 'sidebar-tabpanel',
+			{
+				xtype: 'container',
+				layout: 'border',
 				flex: 1,
-				stateId: 'sidebar',
 				items: [
-					{ xtype: contactsType },
-					{ xtype: 'activity-view' },
-					{ xtype: 'history-view' }
-//						{ iconCls: 'inbox', title: 'inbox' }
+					{ xtype: 'sidebar-tabpanel',
+						region: 'center',
+						stateId: 'sidebar',
+						items: [
+							{ xtype: contactsType },
+							{ xtype: 'activity-view' },
+							{ xtype: 'history-view' }
+							//{ iconCls: 'inbox', title: 'inbox' }
+						]
+					},
+					{ xtype: 'chat-dock', region: 'south'}
 				]
-			}];
+			}
+		];
 
 		return this.callParent(arguments);
 	},

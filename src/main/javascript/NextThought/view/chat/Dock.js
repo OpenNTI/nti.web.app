@@ -25,11 +25,6 @@ Ext.define('NextThought.view.chat.Dock',{
 		this.callParent(arguments);
 	},
 
-	initComponent: function(){
-		this.callParent(arguments);
-
-		this.enableBubble('update-chat-badge');
-	},
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -121,7 +116,6 @@ Ext.define('NextThought.view.chat.Dock',{
 			total += ((i && i.unread) || 0);
 		});
 
-		this.fireEvent("update-chat-badge",total);
 		this.countEl.update(total || '0');
 	}
 
