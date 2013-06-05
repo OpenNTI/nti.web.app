@@ -143,7 +143,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 	constructor: function(){
 		this.callParent(arguments);
 
-		this.mon(this.associatedWindow.roomInfo,'update', 'fillInInformation', this);
+		this.mon(this.associatedWindow.roomInfo,'changed', 'fillInInformation', this,{single:true});
 		this.mon(this.associatedWindow,'notify','handleWindowNotify',this);
 		this.lastUpdated = new Date();
 		this.unread = 0;
@@ -154,7 +154,6 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.fillInInformation(this.associatedWindow.roomInfo);
 		this.mon(this.el,'click','onClick',this);
 	},
 
@@ -188,12 +187,13 @@ Ext.define('NextThought.view.chat.DockItem',{
 		var me = this,
 			usernames = [];
 
+		this.mon(roomInfo, 'changed', 'fillInInformation', this, {single:true});
+
 		if(!this.rendered){ return; }
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
 			var userCount = 1;
 
-			console.log(users);
 			Ext.each(users,function(u){
 				if(!isMe(u)){
 					if(userCount <= 4){
@@ -205,15 +205,20 @@ Ext.define('NextThought.view.chat.DockItem',{
 					}
 					usernames.push(u.getName());
 				}
-				console.log(me);
+
 			});
+
+			//blank out the rest
+			for(userCount; userCount <= 4; userCount++){
+				me['img'+userCount].setStyle({backgroundImage: undefined});
+			}
+
 			me.namesEl.update(usernames.join(', ')).set({'data-count':usernames.length});
 			if(usernames.length > 1){
 				me.namesEl.addCls('overflown');
 			}
-			console.log(usernames);
+
 		});	
-		me.updateStatus();
 	},
 
 	handleWindowNotify: function(msg){
@@ -226,13 +231,12 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.setVisible(true);
 	},
 
-	updateStatus: function(el){
+	updateStatus: function(){
 		var display, roominfo = this.associatedWindow.roomInfo,
 			Status = this.lastUpdated,
 			currentTime = new Date(),
 			difference = new Date(currentTime - Status);
 
-		console.log(difference);
 
 		if(!Status){
 			console.log("No last Active yet");
@@ -246,7 +250,10 @@ Ext.define('NextThought.view.chat.DockItem',{
 			display = "Last message "+display+" ago";
 		}
 
-		if(this.statusEl){ this.statusEl.update(display);}
+		if(this.statusEl){
+			this.fillInInformation(roominfo);
+			this.statusEl.update(display);
+		}
 
 	},
 
