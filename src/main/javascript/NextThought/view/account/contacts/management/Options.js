@@ -31,5 +31,13 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 		if(item.header){
 			this.fireEvent('hide-menu');
 		}
+	},
+
+	afterRender: function(){
+		this.closeEl = Ext.DomHelper.append(this.el, {cls:'close', html:''}, true);
+		this.callParent(arguments);
+		this.closeEl.on('click', function(){
+			this.fireEvent('hide-menu');
+		}, this);
 	}
 });

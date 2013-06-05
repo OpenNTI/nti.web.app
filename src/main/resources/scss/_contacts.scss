@@ -193,16 +193,6 @@ $over-color: #f4f3f3;
 
 .person-options-menu{
 
-	&::after{
-		cursor: pointer;
-		position: absolute;
-		top: 6px; right: 14px;
-		content: '';
-
-		background: $icons no-repeat;
-		@include sprite($icons, 'rhp-close-lists', $dimensions:true);
-	}
-
 	.x-menu-item{
 		&.x-menu-item-unchecked{
 			&::after{
@@ -236,6 +226,24 @@ $over-color: #f4f3f3;
 			&::after{
 				background: none !important;
 			}
+		}
+
+	}
+
+	.close{
+		position: absolute;
+		cursor: pointer;
+		top: 0px;
+		right: 0px;
+		width: 20px;
+		height: 20px;
+		&::after{
+			cursor: pointer;
+			position: absolute;
+			top: 10px; right: 10px;
+			content: '';
+			background: $icons no-repeat;
+			@include sprite($icons, 'rhp-close-lists', $dimensions:true);
 		}
 	}
 }
