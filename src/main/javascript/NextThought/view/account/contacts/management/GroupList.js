@@ -68,6 +68,26 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	hideMenu: function(){ this.fireEvent('hide-menu'); },
 
 
+	collectData: function(records){
+		var otherArgs = records.slice(1),
+			blocked = this.blocked,
+			filter = Ext.Array.filter(records, function(rec){
+				if(Ext.Array.contains(blocked||[], rec.get('Username'))){
+					return false;
+				}
+
+				if(!rec.isModifiable() || rec.isDFL){
+					return false;
+				}
+				return true;
+
+			});
+		otherArgs = Ext.Array.push([filter], otherArgs);
+		return this.callParent(otherArgs);
+	},
+
+
+
 	refresh: function(){
 		var el = this.getEl(),
 			ul,
@@ -87,18 +107,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		Ext.each(ul.query('li'), function(li){
 			var r = this.getRecord(li);
-			if(Ext.Array.contains(blocked||[], r.get('Username'))){
-				Ext.fly(li).setStyle({display: 'none'});
-			}
-			//We don't allow dfls in this list.  Right now
-			//You can only be added to a dfl by inputting a code and joining
-			//yourself. period!  Obviously we also don't let you modify things you
-			//can't modify
-			if (!r.isModifiable() || r.isDFL){
-				//Ext.fly(li).down('img.delete-group').remove();
-				Ext.fly(li).setStyle({display:'none'});
-			}
-
 			if(this.username && r.hasFriend(this.username)){
 				selection.select([r],true,true);
 			}
@@ -106,6 +114,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		if(this.allowSelect){
 			this.attachAddGroupControl( ul, 'li' );
+			Ext.defer(this.updateLayout, 1, this);
 		}
 	},
 
