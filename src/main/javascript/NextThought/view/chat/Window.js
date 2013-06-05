@@ -161,7 +161,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 					//more than one left online
 					me.down('chat-log-view').addStatusNotification(user.getName()+" went offline");
 					me.updateDisplayState(username, 'unavailable', true);
-				}else{
+				//}else{
 					//a user came back
 					//this.down('chat-entry').enable();
 					//this.down('chat-log-view').addStatusNotification(username+" is back online.");
