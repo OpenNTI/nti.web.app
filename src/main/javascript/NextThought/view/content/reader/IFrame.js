@@ -161,9 +161,17 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			return false;
 		});
 		on(doc,'click',function(e){
-			var evt = Ext.EventObject.setEvent(e||event), target = evt.getTarget();
-			while(target && target.tagName !== 'A'){ target = target.parentNode; }
-			if(target){ me.onClick(evt, target); }
+			var evt = Ext.EventObject.setEvent(e||event),
+				target = evt.getTarget(),
+				highlight = evt.target.classList.contains('application-highlight');
+
+			//while the target is not an anchor that is not in a highlight
+			while(target && (target.tagName !== 'A' || target.parentNode.classList.contains('application-highlight'))) { 
+				target = target.parentNode; 
+			}
+
+			//if we are not in a hightlight
+			if(target && !highlight){ me.onClick(evt, target); }
 		});
 		on(doc,'mouseup',function(e){
 
@@ -171,7 +179,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				t = me.body.getScroll().top,
 				s = me.getIframe().win.getSelection();
 
-			if(!fakeEvent.getTarget('a')){ //Removed second half of condition || !s.isCollapsed b/c it screws up deleting fresh highlights.
+			if(!fakeEvent.getTarget('a') || !s.isCollapsed){ 
 				me.onContextMenuHandler({
 					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 					preventDefault: function(){ fakeEvent.preventDefault(); },

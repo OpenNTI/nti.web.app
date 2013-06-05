@@ -298,8 +298,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 
-	getMenu: function(isLeaf){
-		var m = this.buildMenu([]);
+	getMenu: function(isLeaf, item){
+		var m = this.buildMenu((item)? [item] : []);
 
         if (m) {
 		    m.on('hide', function(){
@@ -339,16 +339,29 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			return true;
 		}
 
-		var menu,
+		var menu, a,
 			xy = e.getXY().slice(),
-			offsets = this.ownerCmp.getAnnotationOffsets();
+			offsets = this.ownerCmp.getAnnotationOffsets(),
+			item = null,
+			me = this;
 
 		//adjust points
 		xy[0] += offsets.left;
 		xy[1] += offsets.top;
 
+		//the event is an anchor
+		a = e.getTarget('a');
+		if(a){
+			item = {
+				text: 'Follow Link',
+				handler: function(){
+					me.ownerCmp.fireEvent('navigate-to-href',me.ownerCmp,a.href);
+				}
+			};
+		}
+
 		//single annotation
-		menu = this.getMenu();
+		menu = this.getMenu(false,item);
         if (menu){
             if(this.isSingleAction){
                 menu.items.first().handler.call(menu);

@@ -422,9 +422,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onClick: function(e){
-		if(e.getTarget('a[href]') && e.button === 0){
-			return null;
-		}
 		e.stopEvent();
 		var p = this.callParent(arguments);
 		this.ownerCmp.clearSelection();
