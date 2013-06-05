@@ -37,6 +37,7 @@ Ext.define('NextThought.view.chat.Dock',{
 			click: 'startClose'
 		});
 
+		this.placeholder.focus = Ext.emptyFn;
 		this.countEl = new Ext.dom.CompositeElement([
 			Ext.DomHelper.append( this.placeholder.getEl(), {cls:'count', html: '0'}),
 			Ext.DomHelper.append( this.down('header').getEl(), {cls:'count', html: '0'})
@@ -174,13 +175,14 @@ Ext.define('NextThought.view.chat.DockItem',{
 			return;
 		}
 
-		if(this.associatedWindow.isVisible()){
-			this.associatedWindow.hide();
-		}else{
+
+		if(!this.associatedWindow.isVisible()){
 			this.unread = 0;
 			this.updateCount();
 			this.associatedWindow.show();
 		}
+
+		this.associatedWindow.focus();
 	},
 
 	fillInInformation: function(roomInfo){
