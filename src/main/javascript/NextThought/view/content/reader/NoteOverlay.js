@@ -501,6 +501,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.lineEntry.removeCls('active');
 		o.editor.deactivate();
 		o.editor.reset();
+		o.editor.clearError();
 		this.noteOverlayMouseOut();
 	},
 

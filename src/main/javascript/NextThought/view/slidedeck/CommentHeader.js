@@ -88,6 +88,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			this.editor.setValue('');
 			this.comment.show();
 			this.getRoot().setEditorActive(null);
+			this.editor.clearError();
 		}
 		return false;
 	},

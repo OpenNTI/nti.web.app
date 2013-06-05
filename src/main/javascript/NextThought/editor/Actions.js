@@ -208,6 +208,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.editor.removeCls('active');
 		this.lastRange = null;
 		this.cleanOpenWindows();
+		this.clearError();
 		this.fireEvent('deactivated-editor',this);
 	},
 

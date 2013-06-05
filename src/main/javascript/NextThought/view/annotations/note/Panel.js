@@ -694,6 +694,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(this.editMode){
 			this.text.show();
 		}
+		this.editor.clearError();
 		delete this.editMode;
 		root.setEditorActive(null);
 	},

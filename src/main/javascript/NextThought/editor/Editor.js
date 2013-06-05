@@ -142,7 +142,13 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	},
 
 
-	clearError:function(el){ el.removeCls('error-top').set({'data-error-tip':undefined}); },
+	clearError:function(el){
+		if(!el){
+			el = this.el.down('.content');
+		}
+		if(!el){ return; }
+		el.removeCls('error-top').set({'data-error-tip':undefined});
+	},
 
 
 	markError: function(el,message){ el.addCls('error-tip').set({'data-error-tip':message}); },
