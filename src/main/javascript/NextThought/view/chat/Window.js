@@ -78,6 +78,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 			this.setChatStatesMap();
 			this.roomInfoChanged(this.roomInfo);
+			this.mon(Ext.getStore('PresenceInfo'),'presence-changed', 'presenceChanged', this);
 
 			this.getManager().register(this);
 		},
@@ -103,7 +104,21 @@ Ext.define('NextThought.view.chat.Window', function(){
 			this.roomInfo.on('changed', this.roomInfoChanged, this);
 			this.roomInfoHash = IdCache.getIdentifier(roomInfo.getId());
 
-			if(newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])){
+			//Update the presence of the users
+			me.onlineOccupants = me.onlineOccupants || [];
+
+			Ext.Array.each(newOccupants,function(u){
+				var presence = Ext.getStore('PresenceInfo').getPresenceOf(u);
+
+				if(presence && presence.isOnline() && !Ext.Array.contains(me.onlineOccupants,u)){
+					me.onlineOccupants.push(u);
+				}else{
+					delete me.onlineOccupants[u];
+				}
+			});
+
+
+			if((newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])) || (me.onlineOccupants && me.onlineOccupants === 1)){
 				this.down('chat-entry').disable();
 				this.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
 			} else{
@@ -125,6 +140,39 @@ Ext.define('NextThought.view.chat.Window', function(){
 					me.updateDisplayState(aUser, 'GONE', isGroupChat);
 				});
 			}
+		},
+
+		presenceChanged: function(username, value){
+			var me = this;
+
+			if(value.isOnline()){ return; }//ignore people coming back online for now
+
+			if(Ext.Array.contains(me.onlineOccupants,username)){
+				if(!value.isOnline()){
+					Ext.Array.remove(me.onlineOccupants, username);
+				}
+			}else if(value.isOnline()){
+				if(Ext.Array.contains(me.roomInfo.get('Occupants'),username)){
+					me.onlineOccupants.push(username);
+				}
+			}
+
+			UserRepository.getUser(username, function(user){
+				if(me.onlineOccupants && me.onlineOccupants.length === 1){
+					//only one left
+					me.down('chat-entry').disable();
+					me.down('chat-log-view').addStatusNotification(user.getName()+" went offline. Your messages will not be sent.");
+					me.updateDisplayState(username, 'unavailable', (me.roomInfo.get('Occupants').length > 2));
+				}else if(me.onlineOccupants && me.onlineOccupants.length > 1){
+					//more than one left online
+					me.down('chat-log-view').addStatusNotification(user.getName()+" went offline");
+					me.updateDisplayState(username, 'unavailable', true);
+				}else{
+					//a user came back
+					//this.down('chat-entry').enable();
+					//this.down('chat-log-view').addStatusNotification(username+" is back online.");
+				}
+			});
 		},
 
 
