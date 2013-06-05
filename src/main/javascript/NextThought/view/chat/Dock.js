@@ -123,16 +123,16 @@ Ext.define('NextThought.view.chat.DockItem',{
 	hidden: true, //start out as hidden
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'avatars', cn: [
-			{cls: 'img1 avatar'},
-			{cls: 'img2 avatar'},
-			{cls: 'img3 avatar'},
-			{cls: 'img4 avatar'}
+		{cls: 'avatars {avatarCls}', cn: [
+			{cls: 'img1 avatar', style:{backgroundImage: '{img1}'} },
+			{cls: 'img2 avatar', style:{backgroundImage: '{img2}'} },
+			{cls: 'img3 avatar', style:{backgroundImage: '{img3}'} },
+			{cls: 'img4 avatar', style:{backgroundImage: '{img4}'} }
 		]},
 		{cls: 'count'},
 		{cls: 'close'},
 		{cls: 'wrap', cn: [
-			{cls: 'names'},
+			{cls: 'names {namesCls}', html:'{names}', 'data-count':'{count}'},
 			{cls: 'status'}
 		]}
 	]),
@@ -152,7 +152,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 	constructor: function(){
 		this.callParent(arguments);
 
-		this.mon(this.associatedWindow.roomInfo,'changed', 'fillInInformation', this,{single:true});
+		this.fillInInformation(this.associatedWindow.roomInfo);
 		this.mon(this.associatedWindow,'notify','handleWindowNotify',this);
 		this.lastUpdated = new Date();
 		this.unread = 0;
@@ -199,6 +199,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		}
 	},
 
+
 	fillInInformation: function(roomInfo){
 		var me = this,
 			occ = roomInfo.get('Occupants'),
@@ -206,22 +207,27 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 		this.mon(roomInfo, 'changed', 'fillInInformation', this, {single:true});
 
-		if(!this.rendered){ return; }
-
 		if(occ.length===1 && isMe(occ[0])){
 			return;
 		}
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
-			var userCount = 1;
+			var userCount = 1, data = {};
 
 			Ext.each(users,function(u){
 				if(!isMe(u)){
 					if(userCount <= 4){
 						if(userCount > 1){
-							me.avatarsEl.addCls('quad');
+							data.avatarCls = 'quad';
+							if( me.rendered ){
+								me.avatarsEl.addCls(data.avatarCls);
+							}
 						}
-						me['img'+userCount].setStyle({backgroundImage: 'url('+u.get('avatarURL')+')'});
+
+						data['img'+userCount] = 'url('+u.get('avatarURL')+')';
+						if( me.rendered ){
+							me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
+						}
 						userCount++;
 					}
 					usernames.push(u.getName());
@@ -231,16 +237,29 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 			//blank out the rest
 			for(userCount; userCount <= 4; userCount++){
-				me['img'+userCount].setStyle({backgroundImage: undefined});
+				delete data['img'+userCount];
+				if( me.rendered ){
+					me['img'+userCount].setStyle({backgroundImage: undefined});
+				}
 			}
 
-			me.namesEl.update(usernames.join(', ')).set({'data-count':usernames.length});
+			Ext.apply(data,{
+				names: usernames.join(', '),
+				count: usernames.length
+			});
+
+			if(!me.rendered){
+				me.renderData = Ext.apply(me.renderData||{},data);
+				return;
+			}
+
+			me.namesEl.update(data.names).set({'data-count':data.count});
 			if(usernames.length > 1){
 				me.namesEl.addCls('overflown');
 			}
-
-		});	
+		});
 	},
+
 
 	handleWindowNotify: function(msg){
 		if( !this.associatedWindow.isVisible() && msg && msg.Creator && !isMe(msg.Creator)){
@@ -252,8 +271,10 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.setVisible(true);
 	},
 
+
 	updateStatus: function(){
-		var display, roominfo = this.associatedWindow.roomInfo,
+		var display, roomInfo = this.associatedWindow.roomInfo,
+			occ = roomInfo.get('Occupants'),
 			Status = this.lastUpdated,
 			currentTime = new Date(),
 			difference = new Date(currentTime - Status);
@@ -265,18 +286,22 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 		display = difference.getMinutes()+"m "+difference.getSeconds()+"s";
 
-		if(difference.getMinutes() < 10){
+
+		if(occ.length===1 && isMe(occ[0])){
+			display = 'Ended';
+		}
+		else if(difference.getMinutes() < 10){
 			display = "In Progress... "+display;
 		}else{
 			display = "Last message "+display+" ago";
 		}
 
 		if(this.statusEl){
-			this.fillInInformation(roominfo);
 			this.statusEl.update(display);
 		}
 
 	},
+
 
 	updateCount: function(){
 		if(this.countEl){ this.countEl.update(this.unread || ''); }
