@@ -658,7 +658,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.cmp.mon(wbWin, {
 			save  : function (win, wb) {
 				data = wb.getValue();
-				me.insertWhiteboardThumbnail(content, guid, wb, append);
+				me.insertWhiteboardThumbnail(content, guid, wb, append, true);
 				if (Ext.query('.nav-helper')[0]) {
 					Ext.fly(Ext.query('.nav-helper')[0]).show();
 				}
@@ -743,7 +743,7 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	insertWhiteboardThumbnail: function (content, guid, wb, append) {
+	insertWhiteboardThumbnail: function (content, guid, wb, append, scrollIntoView) {
 		var me = this,
 			el = Ext.get(guid), placeholder, test, html,
 			htmlCfg, handled = false, range, isSelectionInContent, focusNode;
@@ -811,8 +811,14 @@ Ext.define('NextThought.editor.Actions', {
 			});
 			wbt.unselectable();
 			Ext.fly(p).remove();
-
 			me.fireEvent('size-changed');
+
+			//For newly created whiteboard, scroll them into view
+			if(scrollIntoView){
+				Ext.defer(function(){
+					wbt.scrollIntoView(me.editor.down('.content'), false, true);
+				}, 100);
+			}
 			me.focus(true);
 		});
 	},
