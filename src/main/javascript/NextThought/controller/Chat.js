@@ -79,7 +79,9 @@ Ext.define('NextThought.controller.Chat', {
 				'*': {
 					'set-chat-status': this.changeStatus,
 					'set-chat-show': this.changeShow,
-					'set-chat-type': this.changeType
+					'set-chat-type': this.changeType,
+					'group-chat': this.enterRoom,
+					'chat': this.enterRoom
 				},
 
 				'chat-view chat-entry': {
@@ -109,14 +111,6 @@ Ext.define('NextThought.controller.Chat', {
 					'show-whiteboard': this.zoomWhiteboard
 				},
 
-				'contacts-tabs-grouping': {
-					'group-chat': this.enterRoom
-				},
-
-				'contacts-panel': {
-					'group-chat': this.enterRoom
-				},
-
 				'chat-window': {
 					'beforedestroy': function (cmp) {
 						if (!cmp.disableExitRoom) {
@@ -138,22 +132,6 @@ Ext.define('NextThought.controller.Chat', {
 
 				'script-entry': {
 					'script-to-chat': this.send
-				},
-
-				'profile-panel': {
-					'chat': this.enterRoom
-				},
-
-				'no-thought': {
-					'chat': this.enterRoom
-				},
-
-				'contacts-tabs-card': {
-					'chat': this.enterRoom
-				},
-
-				'contact-popout': {
-					'chat': this.enterRoom
 				}
 			},
 

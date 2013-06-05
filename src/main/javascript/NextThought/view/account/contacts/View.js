@@ -83,7 +83,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	rowClicked: function(view,record,item){
 		var el = Ext.fly(item).down('.avatar');
-		NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
+		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
+		this.fireEvent('chat', record);
 	},
 
 
