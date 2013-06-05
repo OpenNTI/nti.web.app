@@ -1,12 +1,13 @@
 
 
 .sidebar{
+	box-shadow: inset 0 1px 0 1px white,0 2px 2px rgba(0, 0, 0, 0.45);
+	border: 1px solid #cacaca;
+	border-bottom-width: 0;
+
 
 	&.undocked {
 		border-radius: 5px 5px 0 0;
-		box-shadow: inset 0 1px 0 1px white,0 2px 2px rgba(0, 0, 0, 0.45);
-		border: 1px solid #cacaca;
-		border-bottom-width: 0;
 		.x-panel-body-sidebar{
 			border-radius: 5px 5px 0 0;
 		}
