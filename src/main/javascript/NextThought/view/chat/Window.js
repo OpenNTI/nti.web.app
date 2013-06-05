@@ -19,8 +19,8 @@ Ext.define('NextThought.view.chat.Window', function(){
 	    width:280,
 	    minWidth:250,
 
-	    height:300,
-	    minHeight:250,
+	    height:325,
+	    minHeight:325,
 
 		title:'chat',
 

@@ -154,6 +154,7 @@ Ext.define('NextThought.view.chat.View', {
             toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
 
         layout.setActiveItem(toggledId);
+	    this.updateLayout();
     },
 
 
