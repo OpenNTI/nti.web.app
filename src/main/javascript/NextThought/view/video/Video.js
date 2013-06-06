@@ -213,7 +213,7 @@ Ext.define('NextThought.view.video.Video',{
 	issueCommand: function(target, command, args){
 		var t = this.players[target];
 		if(!t || !t.isReady){
-			this.commandQueue[target].push([target,command[target],args]);
+			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
 
