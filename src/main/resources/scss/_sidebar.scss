@@ -96,11 +96,13 @@
 
 		.badge {
 			position: absolute;
-			top: 2px;
-			right: -5px;
-			font: italic 500 12px $font;
-			color: $tertiary-grey;
+			top: 8px;
+			right: -2px;
+			font: italic 600 10px $font;
+			color: $primary-blue;
 			z-index: 10;
+			text-align: right;
+			width: 15px;
 		}
 
 		a {
