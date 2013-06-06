@@ -383,7 +383,8 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		function onSuccess(user){
-			user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
+			//we set the user's presence in the chat session-ready controller so we don't need to do it here.
+			//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
 			user.summaryObject = false;
 			UserRepository.cacheUser(user, true);
 			$AppConfig.userObject = user;
