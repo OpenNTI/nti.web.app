@@ -20,7 +20,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		//CUTZ override getVideos to pull things from the dom for now.
 		//The model expects the videos in the assessment json which doesn't
 		//sound like its going to happen anytime soon.
-		q.getVideos = Ext.bind(DomUtils.getVideosFromDom,q,[contentElement]);
+		q.getVideos = Ext.bind(DomUtils.getVideosFromDom,DomUtils,[contentElement]);
 
 		this.registerOverlayedPanel(q.getId(), Ext.widget('assessment-question',{
 			reader: this,
