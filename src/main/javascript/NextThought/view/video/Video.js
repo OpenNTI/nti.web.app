@@ -153,9 +153,9 @@ Ext.define('NextThought.view.video.Video',{
 //		SAJ: We really should not be doing this type of thing here. This will make much
 // 		more sense when the event loop is moved here.
 //
-		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
-		this.maybeSwitchPlayers(this.activeVideoService);
-		this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
+//		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+//		this.maybeSwitchPlayers(this.activeVideoService);
+//		this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
 	},
 
 
