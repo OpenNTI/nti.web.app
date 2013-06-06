@@ -152,6 +152,8 @@ Ext.define('NextThought.view.chat.Window', function(){
 				var isGroup = me.roomInfo.get('Occupants').length > 2,
 					displayName = user.getName();
 
+				if(isMe(user)){ return; }//ignore the presence changes from yourself
+
 				if(!value.isOnline()){
 					Ext.Array.remove(me.onlineOccupants, username);
 
