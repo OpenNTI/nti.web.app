@@ -180,7 +180,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	findPlaylistIndexFor: function(service,id,time){
-		var matching = [], len;
+		var matching = [], len,
+			compareSources = NextThought.model.PlaylistItem.compareSources;
 
 //		time = Math.round(time);
 
@@ -189,7 +190,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			var dE = Math.abs(time - o.get('end')),
 				dS = Math.abs(o.get('start') - time);
 
-			if(o.activeSource().service === service && o.activeSource().source === id){
+			if(o.activeSource().service === service && compareSources(o.activeSource().source, id)){
 				//console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
 				if((o.get('start') <= time || dS < 1) && (time < o.get('end') && dE > 1)){
 					matching.push(i);
