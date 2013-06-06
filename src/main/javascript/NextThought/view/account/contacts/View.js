@@ -84,11 +84,17 @@ Ext.define('NextThought.view.account.contacts.View',{
 	rowClicked: function(view,record,item){
 		var el = Ext.fly(item).down('.avatar');
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
+		this.cancelPopupTimeout();
 		this.fireEvent('chat', record);
+		this.startPopupTimeout(view,record,item,2000);
 	},
 
 
-	rowHover: function(view, record, item){
+	rowHover: function(view, record, item, wait){
+		this.startPopupTimeout(view, record, item, 500);
+	},
+
+	startPopupTimeout: function(view, record, item, wait){
 		function fin(pop){
 			// If the popout is destroyed, clear the activeTargetDom,
 			// that way we will be able to show the popout again.
@@ -103,12 +109,14 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		if(!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))){return;}
 
+		console.log(wait);
+
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			Ext.fly(item).un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			popout.popup(record,el,item,[-1, 0], fin);
 			me.activeTargetDom = Ext.getDom(Ext.fly(item));
-		},500);
+		}, wait);
 
 		Ext.fly(item).on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	},
