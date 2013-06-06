@@ -4,6 +4,9 @@ Ext.define('NextThought.util.HTML5Player',{
 		this.el = arguments[0].el.dom;
 	},
 
+//	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
+	isReady: true,
+
 	getCurrentTime: function(){
 		return this.el.currentTime;
 	},
