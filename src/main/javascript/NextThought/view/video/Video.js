@@ -11,6 +11,10 @@ Ext.define('NextThought.view.video.Video',{
 	ui: 'content-video',
 	cls: 'content-video',
 
+	listeners: {
+		destroy: 'cleanup'
+	},
+
 	states: {
 		UNSTARTED: -1,
 		ENDED: 0,
@@ -21,6 +25,10 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 	commands: {
+		'cleanup': {
+			'youtube': 'clearVideo',
+			'html5': 'cleanup'
+		},
 		'getCurrentTime': {
 			'youtube' : 'getCurrentTime',
 			'html5': 'getCurrentTime'
@@ -305,5 +313,10 @@ Ext.define('NextThought.view.video.Video',{
 
 		});
 
+	},
+
+	cleanup: function(){
+		this.issueCommand('html5',this.commands.cleanup);
+		this.issueCommand('youtube',this.commands.cleanup);
 	}
 });
