@@ -52,6 +52,25 @@ Ext.define( 'NextThought.view.forums.View', {
 
 
 	getFragment: function(){
-		return '!forums';
+		// desired url format: !profile/u/:boardName/:ForumName/:topicName
+		var items = this.getStackChildren(), path = [], base = '!forums';
+
+		if(items.length >= 4){
+			path.push(items[3].record && items[3].record.get('ID'));
+		}
+		if(items.length >= 3){
+			path.push(items[2].record && items[2].record.get('ID'));
+		}
+		if(items.length >= 2){
+			path.push(items[1].record && items[1].record.get('Creator'));
+		}
+		if(items.length > 1){
+			path.push('u');
+		}
+
+		path = path.reverse();
+		path.unshift(base);
+		console.log('Forum path: ', path);
+		return path.join('/');
 	}
 });

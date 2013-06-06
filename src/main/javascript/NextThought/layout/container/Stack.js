@@ -70,6 +70,12 @@ Ext.define('NextThought.layout.container.Stack',{
 				return this.items.getAt(this.items.getCount() - 1);
 			};
 		}
+
+		if(!owner.getStackChildren){
+			owner.getStackChildren = function(){
+				return this.items.getCount() >=1 ? Ext.clone(this.items.items) : [];
+			};
+		}
 	},
 
 
