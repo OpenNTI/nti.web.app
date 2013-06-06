@@ -606,9 +606,8 @@
 
 			& ~ .wrap {
 				background: #feeeee;
-				.names, .status {
-					color: $primary-red;
-				}
+				.names{ color: #df9b9b; }
+				.status { color: #f4c3c3; }
 			}
 		}
 	}
