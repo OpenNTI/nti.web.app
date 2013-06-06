@@ -68,8 +68,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	hideMenu: function(){ this.fireEvent('hide-menu'); },
 
 
-	collectData: function(records){
-		var otherArgs = records.slice(1),
+	collectData: function(records, startIndex){
+		var otherArgs = Ext.Array.slice(arguments, 1),
 			blocked = this.blocked,
 			filter = Ext.Array.filter(records, function(rec){
 				if(Ext.Array.contains(blocked||[], rec.get('Username'))){
