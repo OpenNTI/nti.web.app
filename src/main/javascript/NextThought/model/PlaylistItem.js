@@ -14,6 +14,7 @@ Ext.define('NextThought.model.PlaylistItem', {
 
 	statics: {
 		fromDom: function(dom){
+			dom = Ext.getDom(dom);
 			var i,
 				frag = (dom.ownerDocument||document).createDocumentFragment(),
 				el = Ext.get(dom),
