@@ -486,12 +486,15 @@
 	@include background-image(linear-gradient(bottom, #30a1f4 0%, #4ec6f8 100%));
 
 	color: #ffffff;
-	font: italic 500 14px/36px $font;
+	text-shadow: 0 -1px #33a4f4;
+	font: italic 600 14px/36px $font;
 	border-bottom: 1px solid #30a1f4;
 	border-bottom-width: 1px !important;
 
 	.x-header-text-container {
 		padding: 0 60px 0 20px;
+
+		@include icon('rhp-arrow-opened', $top: 14px, $left:8px);
 	}
 
 	.x-tool {
@@ -515,12 +518,28 @@
 	
 }
 
+#chat-dock-placeholder {
+	background-color: $panel-background;
+	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
+	border-bottom-color: #dfdfdf;
+	color: $secondary-grey;
+	text-shadow: 0 1px rgba(255,255,255,0.7);
+	font-weight: 700;
+
+	$experimental-support-for-svg: true;
+	@include background-image(linear-gradient(bottom, #d3d3d3 0%, #f3f3f3 100%));
+
+	.x-header-text-container {
+		@include icon('rhp-arrow-closed-dark', $top: 14px, $left:8px);
+	}
+}
+
 .chat-dock-item{
 	position: relative;
 	overflow: hidden;
 	min-height: 50px;
 
-	background: transparent;
+	background: #ffffff;
 
 	.avatars{
 		position: absolute;
@@ -602,6 +621,7 @@
 		&:hover {
 			background: $primary-red;
 
+			&::after{ @include sprite($icons,'rhp-close-chat_hover',$dimensions: true); }
 			&::before {display: none;}
 
 			& ~ .wrap {
