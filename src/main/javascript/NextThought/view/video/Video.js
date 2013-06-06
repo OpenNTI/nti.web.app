@@ -149,10 +149,12 @@ Ext.define('NextThought.view.video.Video',{
 			el: Ext.get(this.playerIds.html5)
 		});
 
+//		SAJ: We really should not be doing this type of thing here. This will make much
+// 		more sense when the event loop is moved here.
+//
 		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
 		this.maybeSwitchPlayers(this.activeVideoService);
 		this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
-		this.html5PlayerReady();
 	},
 
 
@@ -177,15 +179,6 @@ Ext.define('NextThought.view.video.Video',{
 
 		this.maybeSwitchPlayers(this.activeVideoService);
 		this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
-	},
-
-
-	html5PlayerReady: function(){
-		(this.players.html5||{}).isReady = true;
-		var q = this.commandQueue.html5;
-		while(q.length>0){
-			Ext.callback(this.issueCommand,this, q.shift());
-		}
 	},
 
 
