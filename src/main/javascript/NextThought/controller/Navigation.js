@@ -347,6 +347,7 @@ Ext.define('NextThought.controller.Navigation', {
 				btn = this.viewSelectButton(btn.alternateId);
 				silent = true;
 			}
+			this.unCheckAllButtons();
 			btn.toggle(true,silent);
 		}
 		catch(e){
@@ -355,13 +356,16 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
+	unCheckAllButtons: function(){
+		var btns = Ext.ComponentQuery.query('view-select-button');
+		Ext.each(btns,function(b){b.toggle(false,true);});
+	},
+
+
 	syncButton: function(){
 		var mainViews = this.viewport.views,
 			activeItem = mainViews.getActive(),
-			activeId = activeItem ? activeItem.id : null,
-			btns = Ext.ComponentQuery.query('view-select-button');
-
-		Ext.each(btns,function(b){b.toggle(false,true);});
+			activeId = activeItem ? activeItem.id : null;
 
 		this.track(activeId);
 	},
