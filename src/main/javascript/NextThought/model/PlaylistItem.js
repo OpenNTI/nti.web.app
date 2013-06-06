@@ -13,6 +13,27 @@ Ext.define('NextThought.model.PlaylistItem', {
 	],
 
 	statics: {
+		compareSources: function(a, b){
+			var i;
+			if (Ext.isArray(a) && Ext.isArray(b)){
+				if (a.length !== b.length){
+					return false;
+				}
+				for (i = a.length-1; i >= 0; i--){
+					if( a[i] !== b[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+
+			if (!Ext.isArray(a) && !Ext.isArray(b)){
+				return a === b;
+			}
+
+			return false;
+		},
+
 		fromDom: function(dom){
 			dom = Ext.getDom(dom);
 			var i,
