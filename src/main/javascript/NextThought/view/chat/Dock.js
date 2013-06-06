@@ -40,12 +40,27 @@ Ext.define('NextThought.view.chat.Dock',{
 
 		this.placeholder.focus = Ext.emptyFn;
 
-		this.mon(this.placeholder.getEl(),'mouseover','expand',this);
+		this.mon(this.placeholder.getEl(),{
+			scope: this,
+			mouseover:'maybeExpand',
+			mouseout: 'stopExpand'
+		});
 
 		this.countEl = new Ext.dom.CompositeElement([
 			Ext.DomHelper.append( this.placeholder.getEl(), {cls:'count', html: '0'}),
 			Ext.DomHelper.append( this.down('header').getEl(), {cls:'count', html: '0'})
 			]);
+	},
+
+
+	maybeExpand: function(){
+		this.stopExpand();
+		this.expanDelayTimer = Ext.defer(this.expand,750,this);
+	},
+
+
+	stopExpand: function(){
+		clearTimeout(this.expanDelayTimer);
 	},
 
 

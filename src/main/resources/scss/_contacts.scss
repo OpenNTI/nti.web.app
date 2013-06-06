@@ -416,6 +416,7 @@ $over-color: #f4f3f3;
 	.contact-row{
 		height: 50px;
 		position: relative;
+		cursor: pointer;
 
 		&.x-item-selected, &.over {
 			background-color: #f0f0f0;
