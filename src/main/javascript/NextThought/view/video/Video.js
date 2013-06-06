@@ -128,6 +128,7 @@ Ext.define('NextThought.view.video.Video',{
 		});
 
 		this.activeVideoService = 'none';
+		this.currentVideoId = null;
 	},
 
 	afterRender: function(){
