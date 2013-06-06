@@ -71,6 +71,14 @@ Ext.define('NextThought.view.SideBar',{
 		this.mon(this.host,'afterlayout', this.syncUp, this);
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
 
+		var contactsView = this.down('contacts-view'),
+			relayer;
+
+		if(contactsView){
+			relayer = contactsView.relayEvents(this.down('chat-dock'),['update-count'],'chat-dock-');
+			contactsView.on('destroy','destroy',relayer);
+		}
+
 		this.on('activate',function(){
 			Ext.WindowManager.sendToBack(this);
 		},this);

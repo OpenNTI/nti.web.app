@@ -36,11 +36,14 @@ Ext.define('NextThought.view.account.contacts.View',{
 		frameBodyEl: '.contact-list'
 	},
 
+
 	listeners: {
 		itemclick: 'rowClicked',
 		itemmouseenter: 'rowHover',
-		select: function(s,record){ s.deselect(record); }
+		select: function(s,record){ s.deselect(record); },
+		'chat-dock-update-count': 'updateBadge'
 	},
+
 
 	getTargetEl: function(){
 		return this.frameBodyEl;
@@ -76,8 +79,38 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
+	addBadge: function(){
+		var tab = this.tab;
+
+		if(!tab.rendered){
+			if(!tab.isListening('afterrender',this.addBadge,this)){
+				tab.on('afterrender',this.addBadge,this);
+			}
+			return;
+		}
+		this.badge = Ext.DomHelper.append( tab.getEl(),{cls:'badge', html:tab.badge},true);
+		delete tab.badge;
+	},
+
+
+	getBadge: function(){
+		if(!this.badge){
+			this.addBadge();
+		}
+		return this.badge;
+	},
+
+
+	updateBadge: function(count){
+		var b = this.getBadge(),
+			v = count || '';
+
+		if(!b){
+			this.tab.badge = v;
+		}
+		else {
+			b.update(v);
+		}
 	},
 
 
@@ -93,6 +126,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	rowHover: function(view, record, item, wait){
 		this.startPopupTimeout(view, record, item, 500);
 	},
+
 
 	startPopupTimeout: function(view, record, item, wait){
 		function fin(pop){
@@ -142,6 +176,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		}
 	},
 
+
 	clearClicked: function(e){
 		if(e){e.stopEvent();}
 
@@ -150,6 +185,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		return false;
 	},
+
 
 	onSearchKeyPressed: function(e){
 		if(e.ESC === e.getKey()){

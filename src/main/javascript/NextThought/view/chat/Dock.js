@@ -132,6 +132,7 @@ Ext.define('NextThought.view.chat.Dock',{
 		});
 
 		this.countEl.update(total || '0');
+		this.fireEvent('update-count',total);
 	}
 
 });
