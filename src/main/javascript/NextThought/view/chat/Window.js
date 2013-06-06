@@ -145,26 +145,31 @@ Ext.define('NextThought.view.chat.Window', function(){
 		presenceChanged: function(username, value){
 			var me = this;
 
-			if(value.isOnline() || !Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }//ignore people coming back online and people who aren't in the occupants list for now
+			if(!Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }//ignore people who aren't in the occupants list
 
-			if(Ext.Array.contains(me.onlineOccupants,username)){
-				Ext.Array.remove(me.onlineOccupants, username);
-			}
 
 			UserRepository.getUser(username, function(user){
-				if(me.onlineOccupants && me.onlineOccupants.length === 1){
-					//only one left
-					me.down('chat-entry').disable();
-					me.down('chat-log-view').addStatusNotification(user.getName()+" went offline. Your messages will not be sent.");
-					me.updateDisplayState(username, 'unavailable', (me.roomInfo.get('Occupants').length > 2));
-				}else if(me.onlineOccupants && me.onlineOccupants.length > 1){
-					//more than one left online
-					me.down('chat-log-view').addStatusNotification(user.getName()+" went offline");
-					me.updateDisplayState(username, 'unavailable', true);
-				//}else{
-					//a user came back
-					//this.down('chat-entry').enable();
-					//this.down('chat-log-view').addStatusNotification(username+" is back online.");
+				var isGroup = me.roomInfo.get('Occupants').length > 2,
+					displayName = user.getName();
+
+				if(!value.isOnline()){
+					Ext.Array.remove(me.onlineOccupants, username);
+
+					me.down('chat-log-view').addStatusNotification(displayName+" is unavailable.");
+					me.updateDisplayState(user.getName(),'unavailable', isGroup);
+					
+					if(me.onlineOccupants.length <= 1){
+						me.down('chat-entry').disable();
+						me.down('chat-log-view').addStatusNotification("You are the only one available in the chat. Your messages will not be sent.");
+					}	
+				}else{
+					if(!Ext.Array.contains(me.onlineOccupants,username)){
+						Ext.Array.push(me.onlineOccupants, username);
+						me.down('chat-entry').enable();
+						me.updateDisplayState(user.getName(), 'available', isGroup);
+						me.down('chat-log-view').clearChatStatusNotifications();
+						me.down('chat-log-view').addStatusNotification(displayName+" is available.");
+					}
 				}
 			});
 		},
