@@ -70,9 +70,9 @@ Ext.define('NextThought.model.Slide', {
 					'dom-clone': frag
 				};
 
-			nodes = el.query('object[type$=ntivideo]');
-			if (nodes.length > 0){
-				o.media = NextThought.model.PlaylistItem.fromDom(nodes[0]);
+			nodes = el.select('object[type$=ntivideo]');
+			if (nodes.first()){
+				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first());
 				o.media.set('mediaId', o.ordinal);
 				o.media.set('start', o['video-start'] || 0.0);
 				o.media.set('end', o['video-end'] || -1.0);
