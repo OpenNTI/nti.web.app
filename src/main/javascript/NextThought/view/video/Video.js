@@ -202,8 +202,8 @@ Ext.define('NextThought.view.video.Video',{
 		return {
 			service: target,
 			video: this.currentVideoId,
-			time: this.issueCommand(target,'getCurrentTime'),
-			state: this.issueCommand(target,'getPlayerState')
+			time: this.issueCommand(target,this.commands.getCurrentTime),
+			state: this.issueCommand(target,this.commands.getPlayerState)
 		};
 	},
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.video.Video',{
 	issueCommand: function(target, command, args){
 		var t = this.players[target];
 		if(!t || !t.isReady){
-			this.commandQueue[target].push([target,command,args]);
+			this.commandQueue[target].push([target,command[target],args]);
 			return null;
 		}
 
@@ -220,7 +220,7 @@ Ext.define('NextThought.view.video.Video',{
 			return fn.apply(o,args);
 		}
 
-		return call(t[command],t,args);
+		return call(t[command[target]],t,args);
 	},
 
 
@@ -228,14 +228,14 @@ Ext.define('NextThought.view.video.Video',{
 		this.currentVideoId = null;
 
 		if(this.activeVideoService){
-			this.issueCommand(this.activeVideoService,this.commands.stop[this.activeVideoService]);
+			this.issueCommand(this.activeVideoService,this.commands.stop);
 		}
 	},
 
 
 	pausePlayback: function(){
 		if(this.activeVideoService && this.isPlaying()){
-			this.issueCommand(this.activeVideoService,this.commands.pause[this.activeVideoService]);
+			this.issueCommand(this.activeVideoService,this.commands.pause);
 			return true;
 		}
 		return false;
@@ -243,14 +243,15 @@ Ext.define('NextThought.view.video.Video',{
 
 	resumePlayback: function(){
 		if(this.activeVideoService && !this.isPlaying()){
-			this.issueCommand(this.activeVideoService,this.commands.play[this.activeVideoService]);
+			this.issueCommand(this.activeVideoService,this.commands.play);
 			return true;
 		}
 		return false;
 	},
 
 	setVideoAndPosition: function(videoId,startAt){
-		var pause = (this.isPlaying() === false);
+		var pause = (this.isPlaying() === false),
+			compareSources = NextThought.model.PlaylistItem.compareSources;
 
 		// Save our the startAt value in case of failover
 		this.currentStartAt = (startAt || 0);
@@ -258,18 +259,18 @@ Ext.define('NextThought.view.video.Video',{
 		if(this.videoTriggeredTransition){
 			delete this.videoTriggeredTransition;
 			pause = false;
-			if(this.currentVideoId === videoId){
+			if(compareSources(this.currentVideoId, videoId)){
 				return;
 			}
 		}
 
-		if(this.currentVideoId ===videoId){
-			this.issueCommand(this.activeVideoService,this.commands.seek[this.activeVideoService], [startAt,true]);
+		if(compareSources(this.currentVideoId, videoId)){
+			this.issueCommand(this.activeVideoService,this.commands.seek, [startAt,true]);
 		}
 		else {
 			this.currentVideoId = videoId;
 			if(videoId){
-				this.issueCommand(this.activeVideoService,this.commands.load[this.activeVideoService], [videoId, startAt, "medium"]);
+				this.issueCommand(this.activeVideoService,this.commands.load, [videoId, startAt, "medium"]);
 			}
 			else {
 				console.log('stopping');
@@ -277,7 +278,7 @@ Ext.define('NextThought.view.video.Video',{
 			}
 		}
 
-		if(pause || !videoId){ console.log('pausing'); this.issueCommand(this.activeVideoService,this.commands.pause[this.activeVideoService]); }
+		if(pause || !videoId){ console.log('pausing'); this.issueCommand(this.activeVideoService,this.commands.pause); }
 	},
 
 
