@@ -189,7 +189,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	onKeyDown:function(){ return this.mixins.editorActions.onKeyDown.apply(this,arguments); },
 	onKeyUp:function(){
 		this.clearError(this.contentEl);
-		return this.mixins.editorActions.onKeyDown.apply(this,arguments); },
+		return this.mixins.editorActions.onKeyUp.apply(this,arguments); },
 	reset: function(){ return this.mixins.editorActions.reset.apply(this,arguments);},
 	onMouseUp:function(){ return this.mixins.editorActions.onMouseUp.apply(this,arguments); }
 

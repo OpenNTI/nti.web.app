@@ -452,7 +452,10 @@ Ext.define('NextThought.editor.Actions', {
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
 		this.checkWhiteboards();
-		Ext.callback(this.cmp.onKeyUp,this.cmp,[e]);
+		//when this is mixed in to the editor its no longer a seperate instance
+		if(this.cmp !== this){
+			Ext.callback(this.cmp.onKeyUp,this.cmp,[e]);
+		}
 	},
 
 	onMouseUp: function(e){
