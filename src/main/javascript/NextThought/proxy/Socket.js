@@ -136,6 +136,7 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		this.socket = socket;
+		this.fireEvent('socket-available');
 	},
 
 	emit: function() {
