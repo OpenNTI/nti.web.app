@@ -108,17 +108,20 @@ Ext.define('NextThought.view.chat.Window', function(){
 			me.onlineOccupants = me.onlineOccupants || [];
 			
 			UserRepository.getUser(roomInfo.get('Occupants'), function(users){
+				var onlineUsers = [];
+
 				Ext.Array.each(users,function(u){
 					var name = u.getId(),
 						presence = Ext.getStore('PresenceInfo').getPresenceOf(name);
 
 					if(presence && presence.isOnline()){
 						Ext.Array.include(me.onlineOccupants, name);
+						Ext.Array.include(onlineUsers, u);
 					}else{
 
 						Ext.Array.remove(me.onlineOccupants, u.getId());
 
-						if(!isMe(name)){
+						if(!isMe(name) && !isGroupChat){
 							me.updateDisplayState(u.getName(), 'unavailable', isGroupChat);
 							if(me.down('chat-log-view').addStatusNotifcation){
 								me.down('chat-log-view').addStatusNotification(u.getName()+" is unavailable");
@@ -146,7 +149,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 				if(newOccupants.length > 1){
 					me.setTitleInfo(users);
-					list.updateList(users);
+					list.updateList(onlineUsers);
 				} else{
 					console.log('Users who left the chat: ', whoLeft);
 					Ext.Array.each(whoLeft, function(aUser){
