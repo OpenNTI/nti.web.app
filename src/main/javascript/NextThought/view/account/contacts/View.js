@@ -63,7 +63,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		]}
 	]}),{
 		isContact: function(values){
-			return (values.Class !=='User' || Ext.getStore('online-contacts-store').contains(values.Username)) ? 'contact':'not-contact';
+			return (values.Class !=='User' || Ext.getStore('all-contacts-store').contains(values.Username)) ? 'contact':'not-contact';
 		}
 	}),
 
