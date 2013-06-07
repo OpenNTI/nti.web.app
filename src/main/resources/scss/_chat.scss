@@ -552,7 +552,8 @@
 	min-height: 50px;
 
 	div {
-		@include experimental(transition, all 0.5s);
+		$val: opacity 0.5s, color 0.5s, background 0.5s;
+		@include experimental(transition, $val);
 	}
 
 	background: #ffffff;
