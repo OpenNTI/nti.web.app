@@ -147,6 +147,12 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 			els = doc.querySelectorAll(query);
 
 		Ext.each(els,function(el){
+//			Don't register overlayed panels for nested objects.
+			if(Ext.fly(el).is('object object[type$=ntivideo]')){
+				console.warn('object ' + el.tagName);
+				console.warn(el);
+				return;
+			}
 			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType,{
 				reader: me,
 				renderTo: me.componentOverlayEl,
