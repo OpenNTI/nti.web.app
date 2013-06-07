@@ -1208,10 +1208,14 @@ Ext.define('NextThought.controller.Chat', {
 		room.setRoomState(sender, state);
 		console.log('Update chat state: set to ', state, ' for ', sender);
 
-		log.clearChatStatusNotifications();
+		if(log){
+			log.clearChatStatusNotifications();
+		}
 		inputStates = room.getInputTypeStates();
 		if (inputStates.length > 0) {
-			log.showInputStateNotifications(inputStates);
+			if(log){
+				log.showInputStateNotifications(inputStates);
+			}
 			// NOTE: if the user is typing that means he is active.
 			if (!wasPreviouslyInactive) {
 				return;
