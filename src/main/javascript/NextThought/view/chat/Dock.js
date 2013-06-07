@@ -21,42 +21,35 @@ Ext.define('NextThought.view.chat.Dock',{
 		add: 'updateAll'
 	},
 
-	constructor: function(){
-		this.floatCollapsedPanel = this.toggleCollapse;
-		this.callParent(arguments);
-	},
-
-
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.mon(this.down('header'),'click','toggleCollapse',this);
-		this.mon(this.el,{
-			scope: this,
-			mouseout: 'startClose',
-			mousein: 'stopClose',
-			mouseover: 'stopClose',
-			click: 'startClose'
-		});
-
+		this.mon(this.down('header'),'click','slideOutFloatedPanel',this);
 		this.placeholder.focus = Ext.emptyFn;
 
+		//remove the default click handler
+		this.placeholder.getEl().un('click',this.floatCollapsedPanel,this);
+
+		//add hover instead
 		this.mon(this.placeholder.getEl(),{
 			scope: this,
 			mouseover:'maybeExpand',
 			mouseout: 'stopExpand'
 		});
 
+
 		this.countEl = new Ext.dom.CompositeElement([
 			Ext.DomHelper.append( this.placeholder.getEl(), {cls:'count', html: '0'}),
 			Ext.DomHelper.append( this.down('header').getEl(), {cls:'count', html: '0'})
 			]);
+
+		this.placeholder.getSize = function(){return {height:1};};
 	},
 
 
 	maybeExpand: function(){
 		this.stopExpand();
-		this.expanDelayTimer = Ext.defer(this.expand,750,this);
+		this.expanDelayTimer = Ext.defer(this.floatCollapsedPanel,750,this);
 	},
 
 
@@ -65,21 +58,40 @@ Ext.define('NextThought.view.chat.Dock',{
 	},
 
 
-	expand: function(){
+	floatCollapsedPanel: function(){
+		this.addCls('open');
 		if(this.items.length > 0){
 			this.callParent();
 		}
 	},
 
 
-	startClose: function(){
-		this.stopClose();
-		this.closeTimer = setTimeout(Ext.bind(this.collapse,this), 500);
+	slideOutFloatedPanel: function(){
+		this.removeCls('open');
+		return this.callParent();
 	},
 
-	stopClose: function(){
-		clearTimeout(this.closeTimer);		
+
+	onRemove: function(){
+		var me = this,
+			ret = me.callParent(arguments),
+			oldHeight = me.getHeight();
+
+		function syncHeight(){
+			var h = oldHeight - me.getHeight();
+			if(h){
+				me.setY(me.getY()+h);
+			}
+		}
+
+		Ext.defer(syncHeight,1,this);
+
+		if(me.items.length === 0){
+			me.slideOutTask.delay(10);
+		}
+		return ret;
 	},
+
 
 	updateAll: function(){
 		this.updateTitle();
