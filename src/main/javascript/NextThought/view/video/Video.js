@@ -127,28 +127,25 @@ Ext.define('NextThought.view.video.Video',{
 			'html5-height': 360
 		});
 
+		Ext.applyIf(this.storedRenderData, this.renderData);
+
 		this.activeVideoService = 'none';
 		this.currentVideoId = null;
 	},
 
+
+	initRenderData: function(){
+		var ret;
+		ret = this.callParent(arguments);
+		this.storedRenderData = Ext.apply({}, ret);
+		return ret;
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
-		if(window.YT){
-			this.players.youtube = new YT.Player(this.playerIds.youtube, {
-				events: {
-					'onReady': Ext.bind(this.youtubePlayerReady,this),
-					'onError': Ext.bind(this.youtubePlayerError, this)
-				}
-			});
-		}
-		else{
-			this.youtubePlayerError();
-		}
-
-		this.players.html5 = new NextThought.util.HTML5Player({
-			el: Ext.get(this.playerIds.html5)
-		});
+		this.playerSetup();
 
 //		SAJ: We really should not be doing this type of thing here. This will make much
 // 		more sense when the event loop is moved here.
@@ -159,6 +156,31 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	playerSetup: function(){
+		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(',');
+		console.log('Initializing the players.');
+		if(window.YT){
+			this.players.youtube = new YT.Player(this.playerIds.youtube, {
+				html5: '1',
+				enablejsapi: '1',
+				autohide: '1',
+				modestbranding: '1',
+				rel: '0',
+				showinfo: '0',
+				list: pl,
+				origin: location.protocol+'//'+location.host,
+				events: {
+					'onReady': Ext.bind(this.youtubePlayerReady,this),
+					'onError': Ext.bind(this.youtubePlayerError, this)
+				}
+			});
+		}
+
+		this.players.html5 = new NextThought.util.HTML5Player({
+			el: Ext.get(this.playerIds.html5)
+		});
+	},
+
 	youtubePlayerReady: function(){
 		(this.players.youtube||{}).isReady = true;
 		var q = this.commandQueue.youtube;
@@ -167,19 +189,25 @@ Ext.define('NextThought.view.video.Video',{
 		}
 	},
 
-	youtubePlayerError: function(){
+	youtubePlayerError: function(error){
 		var currentItem = this.playlist[this.playlistIndex];
+		console.warn('YouTube player died with error: ' + error.data);
+
+		this.cleanup();
+		this.renderTpl.overwrite(this.el, this.storedRenderData);
+		this.playerSetup();
 
 		currentItem.set('sourceIndex', currentItem.get('sourceIndex') + 1 );
 		if (currentItem.get('sourceIndex') < currentItem.get('sources').length){
 			this.activeVideoService = currentItem.activeSource().service;
+			this.maybeSwitchPlayers(this.activeVideoService);
+			this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
 		}
 		else{
 			this.activeVideoService = 'none';
+			this.currentVideoId = null;
+			this.maybeSwitchPlayers(this.activeVideoService);
 		}
-
-		this.maybeSwitchPlayers(this.activeVideoService);
-		this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
 	},
 
 
@@ -310,6 +338,8 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 	cleanup: function(){
+		this.issueCommand('html5',this.commands.pause);
+		this.issueCommand('youtube',this.commands.pause);
 		this.issueCommand('html5',this.commands.cleanup);
 		this.issueCommand('youtube',this.commands.cleanup);
 	}
