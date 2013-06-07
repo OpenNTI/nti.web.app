@@ -148,7 +148,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 				}
 
 				if(newOccupants.length > 1){
-					me.setTitleInfo(users);
+					me.setTitleInfo(onlineUsers);
 					list.updateList(onlineUsers);
 				} else{
 					console.log('Users who left the chat: ', whoLeft);
