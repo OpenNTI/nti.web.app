@@ -17,8 +17,9 @@ Ext.define('NextThought.view.chat.Dock',{
 	animCollapse: false,
 	listeners: {
 		afterRender: 'updateAll',
-		remove: 'updateAll',
-		add: 'updateAll'
+		add: 'updateAll',
+		beforeadd:'synchronizeHeight',
+		remove: 'updateAll'
 	},
 
 	afterRender: function(){
@@ -47,6 +48,9 @@ Ext.define('NextThought.view.chat.Dock',{
 	},
 
 
+	convertCollapseDir:function(){ return 'b'; },
+
+
 	maybeExpand: function(){
 		this.stopExpand();
 		this.expanDelayTimer = Ext.defer(this.floatCollapsedPanel,750,this);
@@ -72,24 +76,30 @@ Ext.define('NextThought.view.chat.Dock',{
 	},
 
 
-	onRemove: function(){
-		var me = this,
-			ret = me.callParent(arguments),
-			oldHeight = me.getHeight();
+	synchronizeHeight: function(){
+		if( !this.floated && !this.isSliding ) { return; }
 
-		function syncHeight(){
-			var h = oldHeight - me.getHeight();
-			if(h){
+		var me = this,
+			oldHeight = me.el.getHeight();
+
+		function doSyncHeight(){
+			var h = oldHeight - me.el.getHeight();
+			if( h!==0 ){
 				me.setY(me.getY()+h);
 			}
 		}
 
-		Ext.defer(syncHeight,1,this);
+		this.on('afterlayout',doSyncHeight,this,{single:true});
+	},
 
-		if(me.items.length === 0){
-			me.slideOutTask.delay(10);
+
+	onRemove: function(){
+		this.synchronizeHeight();
+
+		if(this.items.length === 0){
+			this.slideOutTask.delay(10);
 		}
-		return ret;
+		return this.callParent(arguments);
 	},
 
 
