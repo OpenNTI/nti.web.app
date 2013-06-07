@@ -39,5 +39,30 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 		this.closeEl.on('click', function(){
 			this.fireEvent('hide-menu');
 		}, this);
+
+
+		this.mon(this.el,'mouseover', function(e){
+			this.stopHideTimeout();
+			this.doDismiss = false;
+		}, this);
+
+		this.mon(this.el, 'mouseout', function(e){
+			this.startHideTimeOut();
+			this.doDismiss = true;
+		}, this);
+
+		this.on('beforedeactivcate', function(e){
+			return this.doDismiss;
+		}, this);
+	},
+
+	startHideTimeOut: function(){
+		this.hideTimeout = Ext.defer(function(){
+			this.fireEvent('hide-menu');
+		}, 1000, this);
+	},
+
+	stopHideTimeout: function(){
+		clearTimeout(this.hideTimeout);
 	}
 });

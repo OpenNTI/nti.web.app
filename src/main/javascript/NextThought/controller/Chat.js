@@ -178,6 +178,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	onSessionReady: function () {
 		//open any rooms we were currently involved in
+		console.log("Chat onSessionReady");//card 1768
 		var me = this,
 			roomInfos = me.getAllRoomInfosFromSession(),
 			w;
@@ -951,13 +952,11 @@ Ext.define('NextThought.controller.Chat', {
 	* @param [c] - function to call when the socket is done
 	*/
 	changePresence: function(type,show,status,c){
+		console.log("chat changePresence");//card 1768
 		var username = $AppConfig.username,
-			//currentPresence = $AppConfig.userObject.get('Presence'),
-			//type = type,
-			//show = show,
-			//status = status,
 			newPresence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
 			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
+
 
 		this.socket.emit("chat_setPresence", newPresence.asJSON(), callback);
 

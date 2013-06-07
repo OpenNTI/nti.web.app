@@ -78,6 +78,33 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.callParent(arguments);
 
 		this.mon(this.close, 'click', this.hideMenu, this);
+
+		this.mon(this.el,'mouseover', function(e){
+			console.log("Mouse in"+ this.doDismiss);
+			this.stopHideTimeout();
+			this.doDismiss = false;
+		}, this);
+
+		this.mon(this.el,'mouseout', function(e){
+			console.log("Mouse out "+this.doDismiss);
+			this.startHideTimeout();
+			this.doDismiss = true;
+		}, this);
+
+		this.on('beforedeactivate', function(e){
+			console.log("Bd"+this.doDismiss);
+			return this.doDismiss;
+		}, this);
+	},
+
+	startHideTimeout: function(){
+		this.hideTimeout = Ext.defer(function(){
+			this.hideMenu();
+		}, 1000, this);
+	},
+
+	stopHideTimeout: function(){
+		clearTimeout(this.hideTimeout);
 	},
 
 

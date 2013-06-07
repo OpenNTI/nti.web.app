@@ -150,7 +150,11 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		if(this.isContact && (!pi.isOnline || !pi.isOnline())){
 			this.actionEl.addCls('disabled');
-		}
+		};
+
+		this.on('beforedeactivate', function(e){
+			return this.groupsList.fireEvent('beforedeactivate') && this.optionsMenu.fireEvent('beforedeactivate');
+		}, this);
 
 	},
 
@@ -289,8 +293,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	onDestroy: function(){
-		this.groupsListMenu.destroy();
-		this.optionsMenu.destroy();
+		//debugger;
+		if(this.groupsListMenu.el){
+			this.groupsListMenu.el.remove();
+		}
+
+		if(this.optionsMenu.el){
+			this.optionsMenu.el.remove();
+		}
 		this.callParent(arguments);
 	}
 

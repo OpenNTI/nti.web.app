@@ -203,6 +203,7 @@ Ext.define('NextThought.controller.Session', {
 		function success(){
 			Ext.util.Cookies.set(me.sessionTrackerCookie,me.sessionId);
 			me.sessionTracker.start();
+			console.log('fireing session-ready');//card 1768
 			app.fireEvent('session-ready');
 			app.on('finished-loading', me.immediateAction, me);
 
