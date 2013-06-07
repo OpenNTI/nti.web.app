@@ -263,8 +263,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	setPresenceButton: function(){
-		var pi = this.user.get('Presence') || {},
-			isOnline = pi.isOnline() || this.isUserOnline();
+		var pi = this.user.get('Presence'),
+			isOnline = (pi && pi.isOnline && pi.isOnline()) || this.isUserOnline();
 		if(this.isContact && !isOnline){
 			this.actionEl.addCls('disabled');
 		}
