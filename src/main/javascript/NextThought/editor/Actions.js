@@ -406,13 +406,22 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	onKeyDown: function(e){
-		var s = window.getSelection(),
+
+        var s = window.getSelection(),
+            a = s && s.anchorNode,
 			n = s && s.focusNode,
 			o = s && s.focusOffset,
+            ao = s && s.anchorOffset,
 			v = n && n.nodeValue,
-			modKey = e.altKey || e.ctrlKey;
+			modKey = e.altKey || e.ctrlKey,
+            badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
 		this.detectAndFixDanglingNodes();
+        if(badRange){
+            console.warn('Entire content editable area selected');
+            n = AnnotationUtils.getTextNodes(n)[0];
+            v = n && n.nodeValue;
+        }
 
 
 		if(e.getKey() === e.TAB && n){
@@ -433,8 +442,10 @@ Ext.define('NextThought.editor.Actions', {
 					v = v.substr(0,o)+'\t'+v.substr(o);
 					n.nodeValue = v;
 				}
-				else {
-					n = this.tabTpl.overwrite(n).firstChild;
+				else if (!badRange) {
+                    console.warn('Replacing n from'+n);
+                    var temp = this.tabTpl.overwrite(n);
+                    n = temp.firstChild;
 					o = 0;
 				}
 
