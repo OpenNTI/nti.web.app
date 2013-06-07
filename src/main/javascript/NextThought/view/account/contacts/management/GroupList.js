@@ -68,24 +68,23 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	hideMenu: function(){ this.fireEvent('hide-menu'); },
 
 
-	collectData: function(records, startIndex){
-		var otherArgs = Ext.Array.slice(arguments, 1),
-			blocked = this.blocked,
-			filter = Ext.Array.filter(records, function(rec){
-				if(Ext.Array.contains(blocked||[], rec.get('Username'))){
-					return false;
-				}
+	getViewRange: function(){
+		var records = this.callParent(arguments),
+			blocked = this.blocked;
 
-				if(!rec.isModifiable() || rec.isDFL){
-					return false;
-				}
-				return true;
+		function filterRecords(rec){
+			if(Ext.Array.contains(blocked||[], rec.get('Username'))){
+				return false;
+			}
 
-			});
-		otherArgs = Ext.Array.push([filter], otherArgs);
-		return this.callParent(otherArgs);
+			if(!rec.isModifiable() || rec.isDFL){
+				return false;
+			}
+			return true;
+		}
+
+		return Ext.Array.filter(records, filterRecords);
 	},
-
 
 
 	refresh: function(){
