@@ -122,12 +122,9 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 	afterRender: function(){
-		var pi;
-
 		this.callParent(arguments);
 		this.enableProfileClicks(this.avatar,this.name);
 		this.user = this.record;    //EnableProfileClicks mixin expects us to have a this.user object.
-		pi = this.user.get('Presence') || {};
 
 		this.mon(this.listEl, 'click', this.showUserList, this);
 		this.mon(this.actionButtonEl, 'click', this.actOnContactOrChat, this);
@@ -148,9 +145,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			'hide-menu': this.showOptionMenu
 		});
 
-		if(this.isContact && (!pi.isOnline || !pi.isOnline())){
-			this.actionEl.addCls('disabled');
-		};
+		this.setPresenceButton();
 
 		this.on('beforedeactivate', function(e){
 			return this.groupsList.fireEvent('beforedeactivate') && this.optionsMenu.fireEvent('beforedeactivate');
@@ -267,10 +262,26 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
+	setPresenceButton: function(){
+		var pi = this.user.get('Presence') || {},
+			isOnline = pi.isOnline() || this.isUserOnline();
+		if(this.isContact && !isOnline){
+			this.actionEl.addCls('disabled');
+		}
+	},
+
+
+	isUserOnline: function(){
+		var o = Ext.getStore('online-contacts-store');
+		return Boolean(o.findRecord('Username', this.user.get('Username')));
+	},
+
+
 	makeItContact: function(){
 		this.actionEl.removeCls('add-contact').addCls('chat');
 		this.actionButtonEl.update('Chat');
 		this.isContact = true;
+		this.setPresenceButton();
 	},
 
 
