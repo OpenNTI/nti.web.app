@@ -218,6 +218,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.callParent(arguments);
 		this.mon(this.el,'click','onClick',this);
 		this.fillInInformation(this.associatedWindow.roomInfo);
+		this.updateStatus();
 	},
 
 
@@ -260,7 +261,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 	fillInInformation: function(roomInfo){
 		var me = this,
 			occ = roomInfo.get('Occupants'),
-			usernames = [];
+			usernames = [],
+			isGroup = occ.length > 2;
 
 		this.mon(roomInfo, 'changed', 'fillInInformation', this, {single:true});
 
@@ -282,7 +284,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 							}
 						}
 
-						if(presence && presence.isOnline()){
+						//don't show the images if the occupant isn't online, unless its not a group chat
+						if((presence && presence.isOnline()) || !isGroup){
 							data['img'+userCount] = 'url('+u.get('avatarURL')+')';
 							if( me.rendered ){
 								me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
@@ -290,7 +293,8 @@ Ext.define('NextThought.view.chat.DockItem',{
 							userCount++;
 						}
 					}
-					if(presence && presence.isOnline()){
+					//don't show the users name if the occupant isn't online, unliess its not a group chat
+					if((presence && presence.isOnline()) || !isGroup){
 						usernames.push(u.getName());
 					}
 				}
