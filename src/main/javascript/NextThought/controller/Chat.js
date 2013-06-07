@@ -145,7 +145,11 @@ Ext.define('NextThought.controller.Chat', {
 		});
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.
-		this.application.on('session-ready', this.onSessionReady, this);
+
+
+		this.application.on('session-ready', function(){
+			Socket.onSocketAvailable(this.onSessionReady,this);
+		}, this);
 		this.application.on('session-closed', this.removeSessionObject, this);
 		this.application.on('will-logout',function(callback){
 			this.changePresence('unavailable',null,null,callback);

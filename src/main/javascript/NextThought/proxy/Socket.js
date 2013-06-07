@@ -139,6 +139,16 @@ Ext.define('NextThought.proxy.Socket', {
 		this.fireEvent('socket-available');
 	},
 
+
+	onSocketAvailable: function(fn,scope){
+		if(this.socket){
+			Ext.callback(fn,scope);
+			return;
+		}
+		this.on('socket-available',fn,scope,{single:true})
+	},
+
+
 	emit: function() {
 		if (this.socket) {
 			this.socket.emit.apply(this.socket, arguments);
