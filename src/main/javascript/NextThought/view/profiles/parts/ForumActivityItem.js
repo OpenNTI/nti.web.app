@@ -7,7 +7,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 	requires: [
 		'NextThought.editor.Editor',
-		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.layout.component.Natural'
 	],
 
@@ -44,10 +43,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						{ cls: 'subject link', html: '{title}' },
 						{ cls: 'stamp', cn: [
 							{tag: 'span', cls: 'name link', html: '{Creator}'},
-							{tag: 'span', cls: 'time', html:'{date}'},
-							{tag: 'tpl', 'if':'isModifiable', cn:[
-								{ tag:'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}' }
-							]}
+							{tag: 'span', cls: 'time', html:'{date}'}
 						]}
 					]},
 					{ cls: 'body', html: '{body}' },
@@ -95,8 +91,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		itemEl: '.item',
 		messageBodyEl: '.body',
 
-		publishStateEl: '.meta .state',
-
 		commentsEl: '.foot .comments',
 
 		flagEl: '.foot .flag',
@@ -123,7 +117,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		rd = me.renderData = Ext.apply(me.renderData||{},r.getData());
 
 		Ext.apply(rd, {
-			'publish-state': r.getPublishState(),
 			'isModifiable': isMe(username),
 			headline: h.getData(),
 			date: Ext.Date.format(h.get('CreatedTime'),'F j, Y')
@@ -262,8 +255,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		this.mon(this.subjectEl, 'click', this.forumClickHandler, this);
 		this.mon(this.messageBodyEl,'click',this.bodyClickHandler,this);
 
-		if( this.publishStateEl ){ this.setPublishState(); }
-
 		this.reflectFlagged(this.record);
 		this.listenForFlagChanges(this.record);
 
@@ -317,30 +308,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 	},
 
 
-	markAsPublished: function(key, value){
-		var val = value ? 'public' : 'only me',
-			removeCls = value ? 'only me' : 'public';
-		this.publishStateEl.addCls(val);
-		this.publishStateEl.update(Ext.Array.map(val.split(' '),Ext.String.capitalize).join(' '));
-		this.publishStateEl.removeCls(removeCls);
-	},
-
-
-	showPublishMenu: function(){
-		this.publishMenu.updateFromRecord(this.record);
-		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
-	},
-
-
-	setPublishState: function(){
-		if(!isMe(this.record.get('Creator'))){
-			return;
-		}
-		this.publishMenu = Ext.widget('blog-toggle-publish', {record: this.record, owner: this});
-		this.mon(this.publishStateEl, 'click', this.showPublishMenu, this);
-		this.record.addObserverForField(this, 'published', this.markAsPublished, this);
-	},
-	click: function(e){
+	click: function(){
 		alert("Clicked");
 		return false;
 	}
