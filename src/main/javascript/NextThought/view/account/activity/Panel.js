@@ -459,6 +459,14 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 
 	itemHover: function(e){
+		function fn(pop){
+			if(pop){
+				pop.on('destroy', function(){
+					delete me.activeTargetDom;
+					console.log('Should have cleared the active target..', me);
+				}, pop);
+			}
+		}
 		if(this.isScrolling){
 			this.performAfterScrollAction = Ext.bind(this.itemHover,this, arguments);
 			return;
@@ -480,7 +488,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			popout.popup(rec, target, me);
+			popout.popup(rec, target, me, undefined, fn);
 			me.activeTargetDom = Ext.getDom(target);
 		},500);
 
