@@ -549,6 +549,10 @@
 	overflow: hidden;
 	min-height: 50px;
 
+	div {
+		@include experimental(transition, all 0.5s);
+	}
+
 	background: #ffffff;
 
 	.avatars{
@@ -612,8 +616,9 @@
 		bottom: 0;
 		right: 0;
 		width: 50px;
-		background: #68c7fe;
-		display: none;
+		background: #f6f6f6;
+		opacity: 0;
+		visibility: hidden;
 		@include icon('rhp-close-chat',$top:19px,$left:19px);
 
 		position: absolute;
@@ -634,6 +639,7 @@
 			&::after{ @include sprite($icons,'rhp-close-chat_hover',$dimensions: true); }
 			&::before {display: none;}
 
+			& ~ .avatars { opacity: 0.25; }
 			& ~ .wrap {
 				background: #feeeee;
 				.names{ color: #df9b9b; }
@@ -677,13 +683,10 @@
 			}
 		}
 
-		.count { display: none; }
+		.count { opacity: 0; }
 		.close {
-			display: block;
-
-			&:not(:hover){
-				background: #f6f6f6;
-			}
+			opacity: 1;
+			visibility: visible;
 		}
 	}
 }

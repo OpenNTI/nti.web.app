@@ -153,6 +153,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 	hidden: true, //start out as hidden
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'close','data-qtip':'Exit Chat'},
 		{cls: 'avatars {avatarCls}', cn: [
 			{cls: 'img1 avatar', style:{backgroundImage: '{img1}'} },
 			{cls: 'img2 avatar', style:{backgroundImage: '{img2}'} },
@@ -160,7 +161,6 @@ Ext.define('NextThought.view.chat.DockItem',{
 			{cls: 'img4 avatar', style:{backgroundImage: '{img4}'} }
 		]},
 		{cls: 'count'},
-		{cls: 'close','data-qtip':'Exit Chat'},
 		{cls: 'wrap', cn: [
 			{cls: 'names {namesCls}', html:'{names}', 'data-count':'{count}'},
 			{cls: 'status'}
