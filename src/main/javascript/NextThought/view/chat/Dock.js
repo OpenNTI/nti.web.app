@@ -267,6 +267,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			var userCount = 1, data = {};
 
 			Ext.each(users,function(u){
+				var presence = Ext.getStore('PresenceInfo').getPresenceOf(u.getId());
 				if(!isMe(u)){
 					if(userCount <= 4){
 						if(userCount > 1){
@@ -276,13 +277,17 @@ Ext.define('NextThought.view.chat.DockItem',{
 							}
 						}
 
-						data['img'+userCount] = 'url('+u.get('avatarURL')+')';
-						if( me.rendered ){
-							me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
+						if(presence.isOnline()){
+							data['img'+userCount] = 'url('+u.get('avatarURL')+')';
+							if( me.rendered ){
+								me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
+							}
+							userCount++;
 						}
-						userCount++;
 					}
-					usernames.push(u.getName());
+					if(presence.isOnline()){
+						usernames.push(u.getName());
+					}
 				}
 
 			});
