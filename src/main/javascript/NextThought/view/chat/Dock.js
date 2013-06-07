@@ -63,8 +63,9 @@ Ext.define('NextThought.view.chat.Dock',{
 
 
 	floatCollapsedPanel: function(){
-		this.addCls('open');
 		if(this.items.length > 0){
+			this.addCls('open');
+			this.fireEvent('peek');
 			this.callParent();
 		}
 	},
@@ -216,13 +217,17 @@ Ext.define('NextThought.view.chat.DockItem',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el,'click','onClick',this);
+		this.fillInInformation(this.associatedWindow.roomInfo);
 	},
 
 
 	onAdded: function(ownerCt){
 		this.callParent(arguments);
-		this.mon(ownerCt,'expand','updateCount',this);
-		this.mon(ownerCt,'expand','updateStatus',this);
+		this.mon(ownerCt,'peek','updateCount',this);
+		this.mon(ownerCt,'peek','updateStatus',this);
+		this.mon(ownerCt,'peek',function(){
+			this.fillInInformation(this.associatedWindow.roomInfo);
+		},this);
 	},
 
 
@@ -277,7 +282,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 							}
 						}
 
-						if(presence.isOnline()){
+						if(presence && presence.isOnline()){
 							data['img'+userCount] = 'url('+u.get('avatarURL')+')';
 							if( me.rendered ){
 								me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
@@ -285,7 +290,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 							userCount++;
 						}
 					}
-					if(presence.isOnline()){
+					if(presence && presence.isOnline()){
 						usernames.push(u.getName());
 					}
 				}

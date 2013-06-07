@@ -148,8 +148,8 @@ Ext.define('NextThought.view.chat.Window', function(){
 				}
 
 				if(newOccupants.length > 1){
-					me.setTitleInfo(onlineUsers);
-					list.updateList(onlineUsers);
+					me.setTitleInfo((onlineUsers.length > 0)? onlineUsers : users);
+					list.updateList((onlineUsers.length >0)? onlineUsers : users);
 				} else{
 					console.log('Users who left the chat: ', whoLeft);
 					Ext.Array.each(whoLeft, function(aUser){
@@ -204,7 +204,12 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 			if(!Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }//ignore people who aren't in the occupants list
 
-
+			if(me.onlineOccupants.length === 0){
+				//the presence store didn't have info for the occupants
+				me.roomInfo.fireEvent('changed', me.roomInfo);
+				return;
+			}
+			
 			UserRepository.getUser(username, function(user){
 				var isGroup = me.roomInfo.get('Occupants').length > 2,
 					displayName = user.getName();
