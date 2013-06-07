@@ -94,7 +94,12 @@ Ext.define('NextThought.view.chat.Window', function(){
 				newOccupants = roomInfo.get('Occupants'),
 				oldOccupants = this.roomInfo.get('Occupants'),
 				whoLeft = Ext.Array.difference(oldOccupants, newOccupants),
-				isGroupChat = this.roomInfo.get('Occupants').length > 2;
+				isGroupChat = this.roomInfo.get('Occupants').length > 2,
+				logView = me.down('chat-log-view'),
+				chatView = me.down('chat-entry');
+
+			//don't assume we have the chat-log-view or chat-entry
+			if(!logView || !chatView){ return; }
 
 			//Even though the occupants list changes, the original occupants stays the same.
 			roomInfo.setOriginalOccupants(this.roomInfo.getOriginalOccupants());
@@ -123,28 +128,28 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 						if(!isMe(name) && !isGroupChat){
 							me.updateDisplayState(u.getName(), 'unavailable', isGroupChat);
-							if(me.down('chat-log-view').addStatusNotifcation){
-								me.down('chat-log-view').addStatusNotification(u.getName()+" is unavailable");
+							if(logView.addStatusNotifcation){
+								logView.addStatusNotification(u.getName()+" is unavailable");
 							}
 						}
 					}
 				});
 
 				if(newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])){
-					me.down('chat-entry').disable();
-					if(me.down('chat-log-view').addStatusNotification){
-						me.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
+					chatView.disable();
+					if(losView.addStatusNotification){
+						logView.addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
 					}
 				}else if(me.onlineOccupants && me.onlineOccupants.length <= 1){
-					me.down('chat-entry').disable();
-					if(me.down('chat-log-view').addSatusNotification){
-						me.down('chat-log-view').addSatusNotification("You are the only one available in the chat. Your messages will not be sent.");
+					chatView.disable();
+					if(logView.addSatusNotification){
+						logView.addSatusNotification("You are the only one available in the chat. Your messages will not be sent.");
 					}
 				}else{
 					if(Ext.isEmpty(me.query('chat-log-entry'))){
 						Ext.each(me.query('chat-notification-entry'), function(el){ el.destroy(); });
 					}
-					me.down('chat-entry').enable();
+					chatView.enable();
 				}
 
 				if(newOccupants.length > 1){
