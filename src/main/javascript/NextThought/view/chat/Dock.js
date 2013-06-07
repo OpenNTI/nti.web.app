@@ -160,7 +160,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			{cls: 'img4 avatar', style:{backgroundImage: '{img4}'} }
 		]},
 		{cls: 'count'},
-		{cls: 'close'},
+		{cls: 'close','data-qtip':'Exit Chat'},
 		{cls: 'wrap', cn: [
 			{cls: 'names {namesCls}', html:'{names}', 'data-count':'{count}'},
 			{cls: 'status'}
