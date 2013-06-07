@@ -36,6 +36,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 		var w = this.addGroupDom.down('.input-wrap');
 		w.addCls('empty');
 		w.down('input').dom.value = '';
+		delete this.newListInputBoxActive;
 		this.reset();
 	},
 
@@ -102,6 +103,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 			me.afterGroupAdd(groupName);
 
 		});
+		delete this.newListInputBoxActive;
 	},
 
 	addGroupClicked: function(e){
@@ -114,6 +116,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 		e.preventDefault();
 		e.stopPropagation();
+		this.newListInputBoxActive = true;
 
         // Make sure nothing steals focus while the input is visible
         input.un('blur').on('blur', function() {
