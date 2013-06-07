@@ -4,6 +4,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	mixins: {
 		addgroup:'NextThought.mixins.AddGroup'
 	},
+
+	requires:[
+		'NextThought.store.FriendsList'
+	],
+
 	ui: 'nt',
 	plain: true,
 	shadow: false,
@@ -18,11 +23,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	selModel: { mode: 'SIMPLE' },
 
 	initComponent: function(){
-		this.store = Ext.getStore('FriendsList');
+		this.buildGroupListStore();
 		this.callParent(arguments);
 		this.itemSelector = '.selection-list-item';
-
-		this.block('mycontacts-'+$AppConfig.username);
 
 		this.allowSelect = this.allowSelect || false;
 
@@ -33,6 +36,33 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			select: this.onSelect,
 			scope: this
 		});
+	},
+
+
+	buildGroupListStore: function(){
+		function filterList(rec){
+			if(Ext.Array.contains(blocked||[], rec.get('Username'))){ return false; }
+			return rec.isModifiable() && !rec.isDFL;
+		}
+
+		var fstore = Ext.getStore('FriendsList'),
+			blocked = this.blocked,
+			mycontact = 'mycontacts-'+$AppConfig.username, me = this;
+
+		this.store = new NextThought.store.FriendsList({
+			id: 'group-list-store',
+			proxy: 'memory',
+			filters: [
+				function(item){ return item.get('Username') !== mycontact; },
+				filterList
+			]
+		});
+
+		this.store.loadData(fstore.getRange());
+
+		this.store.mon(fstore, 'add', function(store, record, i){
+			me.store.add(record);
+		});
 
 	},
 
@@ -40,21 +70,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	getSelected: function(){
 		return this.getSelectionModel().getSelection();
 	},
-
-
-    onUpdate: function(ds, record){
-        if(Ext.Array.contains(this.blocked, record.get('Username'))){
-            console.log('username blocked', record);
-            return;
-        }
-
-		//See comment about adding to dfls in fn: refresh
-		if(record.isDFL){
-			return;
-		}
-
-        this.callParent(arguments);
-    },
 
 
 	afterRender: function(){
@@ -65,26 +80,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.mon(this.close, 'click', this.hideMenu, this);
 	},
 
+
 	hideMenu: function(){ this.fireEvent('hide-menu'); },
-
-
-	getViewRange: function(){
-		var records = this.callParent(arguments),
-			blocked = this.blocked;
-
-		function filterRecords(rec){
-			if(Ext.Array.contains(blocked||[], rec.get('Username'))){
-				return false;
-			}
-
-			if(!rec.isModifiable() || rec.isDFL){
-				return false;
-			}
-			return true;
-		}
-
-		return Ext.Array.filter(records, filterRecords);
-	},
 
 
 	refresh: function(){

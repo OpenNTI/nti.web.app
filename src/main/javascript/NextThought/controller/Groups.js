@@ -190,7 +190,8 @@ Ext.define('NextThought.controller.Groups', {
 			scope: me,
 			success: function(record, operation){
 				Ext.callback(callback,scope, [true, record, operation]);
-				me.getListStore(username);
+				var newStore = me.getListStore(username);
+				record.storeId = newStore.storeId;
 				Ext.defer(function(){store.add(record);}, 500);
 			},
 			failed: function(record, operation, response){
