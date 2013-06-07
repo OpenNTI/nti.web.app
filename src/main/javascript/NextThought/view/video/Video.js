@@ -192,17 +192,34 @@ Ext.define('NextThought.view.video.Video',{
 
 	youtubePlayerError: function(error){
 		var currentItem = this.playlist[this.playlistIndex],
+			youtubeTpl = Ext.DomHelper.createTemplate({
+				tag: 'iframe', cls:'video', name: 'video', id: '{id}-youtube-video',
+				frameBorder: 0, scrolling: 'no', seamless: true, width: '640', height: '360',
+				src: 'https://www.youtube.com/embed/?{youtube-params}'
+			}),
+			pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
+			params = [
+				'html5=1',
+				'enablejsapi=1',
+				'autohide=1',
+				'modestbranding=1',
+				'rel=0',
+				'showinfo=0',
+				'list='+encodeURIComponent(pl),
+				'origin='+encodeURIComponent(location.protocol+'//'+location.host)
+			],
 			oldVideoId;
 		console.warn('YouTube player died with error: ' + error.data);
 
-//		SAJ: If we recieve error 5 from YouTube that is mostly likely due to a bad
+//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
 //		interaction with the browsers built-in HTML5 player, so lets try, try again.
 //		SAJ: We should probably also give up after X tries and just go to the next source
 //		or playlist entry.
 		if (error.data === 5){
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
 			this.cleanup();
-			this.renderTpl.overwrite(this.el, this.storedRenderData);
+			Ext.destroy(Ext.get(this.id + '-youtube-video'));
+			youtubeTpl.append(this.el.down('.video-wrapper'), {id: this.id, 'youtube-params': params});
 			this.playerSetup();
 			oldVideoId = this.currentVideoId;
 			this.currentVideoId = '';
