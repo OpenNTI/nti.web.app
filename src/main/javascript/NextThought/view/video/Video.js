@@ -174,6 +174,7 @@ Ext.define('NextThought.view.video.Video',{
 					'onError': Ext.bind(this.youtubePlayerError, this)
 				}
 			});
+			this.players.youtube.isReady = false;
 		}
 
 		this.players.html5 = new NextThought.util.HTML5Player({
@@ -190,23 +191,50 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 	youtubePlayerError: function(error){
-		var currentItem = this.playlist[this.playlistIndex];
+		var currentItem = this.playlist[this.playlistIndex],
+			oldVideoId;
 		console.warn('YouTube player died with error: ' + error.data);
 
-		this.cleanup();
-		this.renderTpl.overwrite(this.el, this.storedRenderData);
-		this.playerSetup();
-
-		currentItem.set('sourceIndex', currentItem.get('sourceIndex') + 1 );
-		if (currentItem.get('sourceIndex') < currentItem.get('sources').length){
-			this.activeVideoService = currentItem.activeSource().service;
-			this.maybeSwitchPlayers(this.activeVideoService);
-			this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
+//		SAJ: If we recieve error 5 from YouTube that is mostly likely due to a bad
+//		interaction with the browsers built-in HTML5 player, so lets try, try again.
+//		SAJ: We should probably also give up after X tries and just go to the next source
+//		or playlist entry.
+		if (error.data === 5){
+			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
+			this.cleanup();
+			this.renderTpl.overwrite(this.el, this.storedRenderData);
+			this.playerSetup();
+			oldVideoId = this.currentVideoId;
+			this.currentVideoId = '';
+			this.setVideoAndPosition(oldVideoId, this.currentStartAt);
+			this.resumePlayback();
 		}
-		else{
-			this.activeVideoService = 'none';
-			this.currentVideoId = null;
-			this.maybeSwitchPlayers(this.activeVideoService);
+		else if (error.data === 2){
+			console.warn('YouTube had trouble loading video: ' + this.currentVideoId);
+			oldVideoId = this.currentVideoId;
+			this.currentVideoId = '';
+			this.setVideoAndPosition(oldVideoId, this.currentStartAt);
+			this.resumePlayback();
+		}
+		else {
+			currentItem.set('sourceIndex', currentItem.get('sourceIndex') + 1 );
+			if (currentItem.get('sourceIndex') < currentItem.get('sources').length){
+				this.activeVideoService = currentItem.activeSource().service;
+				this.maybeSwitchPlayers(this.activeVideoService);
+				this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
+			}
+			else if ((this.playlistIndex + 1) < this.playlist.length){
+				this.playlistIndex += 1;
+				currentItem = this.playlist[this.playlistIndex];
+				this.activeVideoService = currentItem.activeSource().service;
+				this.maybeSwitchPlayers(this.activeVideoService);
+				this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
+			}
+			else{
+				this.activeVideoService = 'none';
+				this.currentVideoId = null;
+				this.maybeSwitchPlayers(this.activeVideoService);
+			}
 		}
 	},
 
