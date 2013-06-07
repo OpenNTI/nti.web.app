@@ -131,7 +131,7 @@ Ext.define('NextThought.view.chat.Dock',{
 			total += ((i && i.unread) || 0);
 		});
 
-		this.countEl.update(total || '0');
+		this.countEl.update(total || '');
 		this.fireEvent('update-count',total);
 	}
 
