@@ -201,10 +201,11 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 		presenceChanged: function(username, value){
 			var me = this,
-				view = me.down('chat-log-view');
+				logView = me.down('chat-log-view'),
+				entryView = me.down('chat-entry');
 
-			//ignore people who aren't in the occupants list
-			if(!view || !Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }
+			//ignore people who aren't in the occupants list, return if we don't have the chat-log-view or chat-entry
+			if( !entryView || !logView || !Ext.Array.contains(me.roomInfo.get('Occupants'),username)){ return; }
 
 			if(me.onlineOccupants.length === 0){
 				//the presence store didn't have info for the occupants
@@ -220,21 +221,21 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 				if(!value.isOnline()){
 					Ext.Array.remove(me.onlineOccupants, username);
-					view.clearChatStatusNotifications();
-					view.addStatusNotification(displayName+" is unavailable.");
+					logView.clearChatStatusNotifications();
+					logView.addStatusNotification(displayName+" is unavailable.");
 					me.updateDisplayState(user.getName(),'unavailable', isGroup);
 					
 					if(me.onlineOccupants.length <= 1){
-						me.down('chat-entry').disable();
-						view.addStatusNotification("You are the only one available in the chat. Your messages will not be sent.");
+						entryView.disable();
+						logView.addStatusNotification("You are the only one available in the chat. Your messages will not be sent.");
 					}	
 				}else{
 					if(!Ext.Array.contains(me.onlineOccupants,username)){
 						Ext.Array.push(me.onlineOccupants, username);
-						me.down('chat-entry').enable();
+						entryView.enable();
 						me.updateDisplayState(user.getName(), 'available', isGroup);
-						view.clearChatStatusNotifications();
-						view.addStatusNotification(displayName+" is available.");
+						logView.clearChatStatusNotifications();
+						logView.addStatusNotification(displayName+" is available.");
 					}
 				}
 			});
