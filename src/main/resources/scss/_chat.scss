@@ -537,6 +537,7 @@
 
 #chat-dock-placeholder.hide-arrow,
 #chat-dock.hide-arrow .x-panel-header{
+	cursor: default;
 	.x-header-text-container {
 		&::after {
 			display: none !important;
