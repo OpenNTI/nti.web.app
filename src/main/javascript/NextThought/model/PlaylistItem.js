@@ -62,11 +62,12 @@ Ext.define('NextThought.model.PlaylistItem', {
 
 	getSources: function(service){
 		var i = [];
-		Ext.each(this,function(o){
+		Ext.each(this.get('sources'),function(o){
 			if(!service || (o && service === o.service)){
 				i.push(o.source);
 			}
 		});
+		return i;
 	},
 
 	activeSource: function(){
