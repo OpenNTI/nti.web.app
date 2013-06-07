@@ -61,8 +61,12 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 			key = guidGenerator();
 		}
 
-		if(!Ext.isString(key) || !(Ext.isObject(panel) && panel.isComponent) ){
-			Ext.Error.raise('Bad values');
+		if(!Ext.isString(key)){
+			Ext.Error.raise('Bad key');
+		}
+		if(!(Ext.isObject(panel) && panel.isComponent)){
+			console.warn('Bad panel');
+			return;
 		}
 		panel.floatParent = this;
 		this.activeOverlayedPanels[key] = panel;
