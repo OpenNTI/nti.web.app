@@ -535,6 +535,15 @@
 	}
 }
 
+#chat-dock-placeholder.hide-arrow,
+#chat-dock.hide-arrow .x-panel-header{
+	.x-header-text-container {
+		&::after {
+			display: none !important;
+		}
+	}
+}
+
 .chat-dock-item{
 	position: relative;
 	overflow: hidden;

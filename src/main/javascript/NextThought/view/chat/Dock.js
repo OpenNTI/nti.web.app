@@ -16,6 +16,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	overflowY: 'auto',
 	animCollapse: false,
 	listeners: {
+		afterRender: 'updateAll',
 		remove: 'updateAll',
 		add: 'updateAll'
 	},
@@ -93,6 +94,9 @@ Ext.define('NextThought.view.chat.Dock',{
 				total++;
 			}
 		});
+
+		this[total===0?'addCls':'removeCls']('hide-arrow');
+		this.placeholder[total===0?'addCls':'removeCls']('hide-arrow');
 
 		this.setTitle((total === 0)? "Chats" : "Chats ("+total+")");
 	},
