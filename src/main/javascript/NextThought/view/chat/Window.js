@@ -113,20 +113,20 @@ Ext.define('NextThought.view.chat.Window', function(){
 			me.onlineOccupants = me.onlineOccupants || [];
 			
 			UserRepository.getUser(roomInfo.get('Occupants'), function(users){
-				var onlineUsers = [];
 
 				Ext.Array.each(users,function(u){
 					var name = u.getId(),
 						presence = Ext.getStore('PresenceInfo').getPresenceOf(name);
 
-					if(presence && presence.isOnline()){
+					if(!presence){ return; }
+					
+					if(presence.isOnline()){
 						Ext.Array.include(me.onlineOccupants, name);
-						Ext.Array.include(onlineUsers, u);
 					}else{
 
 						Ext.Array.remove(me.onlineOccupants, u.getId());
 
-						if(!isMe(name) && !isGroupChat){
+						if(!isMe(name)){
 							me.updateDisplayState(u.getName(), 'unavailable', isGroupChat);
 							if(logView.addStatusNotifcation){
 								logView.addStatusNotification(u.getName()+" is unavailable");
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 
 				if(newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])){
 					chatView.disable();
-					if(losView.addStatusNotification){
+					if(logView.addStatusNotification){
 						logView.addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
 					}
 				}else if(me.onlineOccupants && me.onlineOccupants.length <= 1){
@@ -153,8 +153,8 @@ Ext.define('NextThought.view.chat.Window', function(){
 				}
 
 				if(newOccupants.length > 1){
-					me.setTitleInfo((onlineUsers.length > 0)? onlineUsers : users);
-					list.updateList((onlineUsers.length >0)? onlineUsers : users);
+					me.setTitleInfo(users);
+					list.updateList(users);
 				} else{
 					console.log('Users who left the chat: ', whoLeft);
 					Ext.Array.each(whoLeft, function(aUser){
