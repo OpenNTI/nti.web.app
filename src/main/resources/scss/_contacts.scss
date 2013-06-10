@@ -473,7 +473,6 @@ $over-color: #f4f3f3;
 			@include experimental(transition, all 0.5s);
 			border: 1px solid #ebebeb;
 			border-bottom-width: 0;
-			border-left-width: 0;
 			padding-left: 40px;
 			white-space: nowrap;
 
@@ -495,6 +494,7 @@ $over-color: #f4f3f3;
 
 			&.search {
 				left: 0;
+				border-left-width: 0;
 				padding-left: 35px;
 				@include icon('rhp-search',$top:11px,$left:9px);
 				&::after{ opacity: 0.6; }
