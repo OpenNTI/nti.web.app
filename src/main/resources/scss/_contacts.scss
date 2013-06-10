@@ -459,10 +459,6 @@ $over-color: #f4f3f3;
 					visibility: visible;
 					opacity: 1;
 				}
-
-				&.no-group-chat{
-					width: 260px !important;
-				}
 			}
 			.group-chat {
 				width: 40px !important;
@@ -534,10 +530,12 @@ $over-color: #f4f3f3;
 					@include sprite($icons,'rhp-group-chat_hover');
 				}
 			}
+		}
 
-			&.no-group-chat{
-				width: 260px;
-			}
+		&.no-group-chat{
+			&.search .search,
+			.search { width: 260px !important; }
+			.group-chat { display: none; }
 		}
 	}
 }

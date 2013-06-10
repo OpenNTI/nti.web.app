@@ -285,9 +285,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
 
-		if(this.groupChatButton){
-			this.groupChatButton.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		if(!isFeature('rhp-groupchat')){
+			this.buttonRow.addCls('no-group-chat');
+			return;
 		}
-		this.searchButton.addCls('no-group-chat');
+
+		this.groupChatView = null;//placeholder
 	}
 });
