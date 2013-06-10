@@ -226,11 +226,13 @@
 					font-weight: 400;
 					overflow: hidden;
 					@include ellipse;
+					padding-right: 10px;
 				}
 				.location{
 					color:$primary-grey;
 					font-size: 12px;
 					font-weight: 400;
+					padding-right: 10px;
 				}
 
 			}
