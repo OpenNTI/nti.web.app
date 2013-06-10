@@ -77,7 +77,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.close = Ext.DomHelper.append(this.el, tpl, true);
 		this.callParent(arguments);
 
-		this.mon(this.close, 'click', this.hideMenu, this);
+		this.mon(this.close, 'click', function(){
+			this.isClosing = true;
+			this.doDismiss = true;
+			this.fireEvent('hide-menu');
+		}, this);
 
 		this.mon(this.el,'mouseover', function(e){
 			this.stopHideTimeout();
@@ -85,7 +89,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		}, this);
 
 		this.mon(this.el,'mouseout', function(e){
-			this.startHideTimeout();
+			if(!this.isClosing){
+				this.startHideTimeout();
+			}
+			this.isClosing = false;
 			this.doDismiss = true;
 		}, this);
 
@@ -97,7 +104,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	startHideTimeout: function(){
 		this.hideTimeout = Ext.defer(function(){
 			if(!this.newListInputBoxActive){
-				this.hideMenu();
+				this.fireEvent('hide-menu');
 			}
 		}, 1000, this);
 	},
@@ -105,10 +112,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	stopHideTimeout: function(){
 		clearTimeout(this.hideTimeout);
 	},
-
-
-	hideMenu: function(){ this.fireEvent('hide-menu'); },
-
 
 	refresh: function(){
 		var el = this.getEl(),

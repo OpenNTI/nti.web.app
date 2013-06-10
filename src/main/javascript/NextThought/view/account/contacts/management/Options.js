@@ -37,6 +37,9 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 		this.closeEl = Ext.DomHelper.append(this.el, {cls:'close', html:''}, true);
 		this.callParent(arguments);
 		this.closeEl.on('click', function(){
+			this.stopHideTimeout();
+			this.doDismiss = true;
+			this.isClosing = true;
 			this.fireEvent('hide-menu');
 		}, this);
 
@@ -47,7 +50,10 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 		}, this);
 
 		this.mon(this.el, 'mouseout', function(e){
-			this.startHideTimeOut();
+			if(!this.isClosing){
+				this.startHideTimeOut();
+			}
+			this.isClosing = false;
 			this.doDismiss = true;
 		}, this);
 
