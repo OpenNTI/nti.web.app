@@ -14,6 +14,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 	saveButtonLabel: 'Save',
 	cancelButtonLabel: 'Cancel',
+	placeholderText:'Type a message...',
 
 	ui: 'editor',
 	cls: 'editor',
@@ -27,6 +28,9 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		}}
 	]),
 
+	renderSelectors:{
+		saveButtonEl: '.action.save'
+	},
 
 	toolbarTpl: Ext.DomHelper.markup([{
 		cls: 'aux', cn:[
@@ -50,7 +54,8 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			cn:[
 				'{extra}',
 				{
-					cls: 'content',
+					cls: 'content show-placeholder',
+					'data-placeholder':'{placeholderText}',
 					contentEditable: true,
 					unselectable: 'off',
 					tabIndex:-1,
@@ -122,7 +127,8 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			enableTextControls: Boolean(this.enableTextControls),
 			enableTags: Boolean(this.enableTags),
 			enableTitle: Boolean(this.enableTitle),
-			enableWhiteboards: Boolean(this.enableWhiteboards)
+			enableWhiteboards: Boolean(this.enableWhiteboards),
+			placeholderText: this.placeholderText
 		});
 	},
 
@@ -132,13 +138,18 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el);
 		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
-		this.mon(this.el.down('.action.save'),'click',this.onSave,this);
+		this.mon(this.saveButtonEl,'click', function(e){
+			if(e.getTarget('.disabled')){ e.stopEvent(); return; }
+			this.onSave(e);
+		},this);
 
 		//Hide it, if it's empty.
 		aux = this.el.down('.aux');
 		if(aux && !aux.dom.hasChildNodes()){
 			aux.remove();
 		}
+
+		this.maybeEnableSave();
 	},
 
 

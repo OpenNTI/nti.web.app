@@ -77,6 +77,13 @@ $experimental-support-for-svg: true;
 			background-color: $slidedeck-controls-background;
 			color: #999999
 		}
+		.content{
+			&.show-placeholder[data-placeholder]::after{
+				top: 67px;
+				left: 15px;
+				font-style: italic !important;
+			}
+		}
 		.footer {
 			background: rgba(44, 44, 44, 0.98);
 			border-top: 1px solid #323232;
@@ -603,6 +610,18 @@ $experimental-support-for-svg: true;
 					}
 
 					@include slide-comment-editor;
+
+					.editor{
+						.main{
+							.content{
+								&.show-placeholder[data-placeholder]::after{
+									top: 5px;
+									left: 13px;
+									font-style: italic !important;
+								}
+							}
+						}
+					}
 				}
 
 				&.root {

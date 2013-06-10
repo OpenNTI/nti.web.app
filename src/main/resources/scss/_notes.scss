@@ -268,8 +268,14 @@
 					}
 				}
 				.content{
-					margin-left: 13px;
+					margin-left: 7px;
 					padding-right: 13px;
+
+					&.show-placeholder[data-placeholder]::after{
+						top: 65px;
+						left: 7px;
+						font-style: italic !important;
+					}
 				}
 			}
 			//instance specific style
@@ -761,6 +767,11 @@
 
 					.content{
 						padding: 6px 0 0 0;
+
+						&.show-placeholder[data-placeholder]::after{
+							top: 6px;
+							left: 12px;
+						}
 					}
 
 					.error-tip[data-error-tip]::before{

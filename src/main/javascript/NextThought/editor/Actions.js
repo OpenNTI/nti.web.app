@@ -197,6 +197,7 @@ Ext.define('NextThought.editor.Actions', {
 
 	activate: function () {
 		this.updatePrefs();
+		this.maybeEnableSave();
 		this.editor.addCls('active');
 		this.fireEvent('activated-editor',this);
 	},
@@ -453,6 +454,9 @@ Ext.define('NextThought.editor.Actions', {
 				return false;
 			}
 		}
+//		else if(e.getKey()!== e.DELETE && e.getKey() !== e.BACKSPACE && e.getKey() !== e.SPACE){
+//			this.contentEl.removeCls('show-placeholder');
+//		}
 
 		this.hideStylePopover();
 		return true;
@@ -463,6 +467,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
 		this.checkWhiteboards();
+		this.maybeEnableSave();
 		//when this is mixed in to the editor its no longer a seperate instance
 		if(this.cmp !== this){
 			Ext.callback(this.cmp.onKeyUp,this.cmp,[e]);
@@ -831,6 +836,9 @@ Ext.define('NextThought.editor.Actions', {
 			Ext.fly(p).remove();
 			me.fireEvent('size-changed');
 
+			//Make sure save is enabled
+			me.saveButtonEl.removeCls('disabled');
+
 			//For newly created whiteboard, scroll them into view
 			if(scrollIntoView){
 				Ext.defer(function(){
@@ -961,6 +969,32 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
+	maybeEnableSave: function(){
+		function isNoteBodyEmpty(){
+			var d = me.editor.down('.content').dom,
+				html = d && d.innerHTML;
+
+			html = html.replace(/<br\/?>/g, '');
+			html = html.replace(/\u200B/g,'').replace(/<div>/, '').replace(/<\/div>/, '');
+			!Ext.isEmpty(html.trim());
+
+			return !Ext.isEmpty(html);
+		}
+
+		var me = this, enabled = isNoteBodyEmpty(),
+			cls = 'disabled';
+
+		if(enabled && this.saveButtonEl.hasCls(cls)){
+			this.contentEl.removeCls('show-placeholder');
+			this.saveButtonEl.removeCls(cls);
+		}
+		else if(!enabled && !this.saveButtonEl.hasCls(cls)){
+			this.contentEl.addCls('show-placeholder');
+			this.saveButtonEl.addCls(cls);
+		}
+	},
+
+
 	editBody: function (body) {
 		var me = this,
 			c = this.editor.down('.content').dom;
@@ -978,11 +1012,13 @@ Ext.define('NextThought.editor.Actions', {
 				me.addWhiteboard(part, undefined, true);
 			}
 		});
+
+		this.maybeEnableSave();
 		return me;
 	},
 
 
-	getValue: function () {
+	getBodyValue: function(){
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out =[],
@@ -1014,8 +1050,13 @@ Ext.define('NextThought.editor.Actions', {
 			}
 		});
 
+		return out;
+	},
+
+
+	getValue: function () {
 		return {
-			body : this.getBody(out),
+			body : this.getBody(this.getBodyValue()),
 			shareWith: this.sharedList ? this.sharedList.getValue() : null, //FIXME: We think this is not unused anymore.
 			sharingInfo:  this.sharedList ? this.sharedList.getValue(): null,
 			publish: this.sharedList ?  this.sharedList.getPublished() : this.getPublished(),

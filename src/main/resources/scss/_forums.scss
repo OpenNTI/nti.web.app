@@ -375,6 +375,11 @@
 					max-height: none;
 					height: 200px;
 					padding: 5px 13px;
+
+					&.show-placeholder[data-placeholder]::after{
+						top: 102px;
+						left: 15px;
+					}
 				}
 			}
 
@@ -466,7 +471,7 @@
 					}
 				}
 				.tags{
-					margin-left: 15px;
+					margin-left: 10px;
 				}
 			}
 
@@ -483,6 +488,11 @@
 				font-family: $font;
 				font-size: 12px;
 				line-height: 2em;
+
+				&.show-placeholder[data-placeholder]::after{
+					top: 102px;
+					left: 15px;
+				}
 			}
 		}
 	}
@@ -538,6 +548,17 @@
 
 		.post-view .blog-editor{
 			@include forum-post-editor;
+
+			.editor{
+				.main{
+					.content{
+						&.show-placeholder[data-placeholder]::after{
+							top: 135px;
+							left: 16px;
+						}
+					}
+				}
+			}
 		}
 
 

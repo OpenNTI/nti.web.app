@@ -202,7 +202,6 @@ span.tab{
 						}
 					}
 				}
-
 			}
 
 
@@ -220,10 +219,14 @@ span.tab{
 				max-height: 200px;
 				outline: 0;
 
-				//These dork with the intended scroll behaviour in the editors.
-				//display: table;
-				//table-layout: fixed;
-				//width: 100%;
+				&.show-placeholder[data-placeholder]::after{
+					display: block;
+					position: absolute;
+					content: attr(data-placeholder);
+					@include placeholder-style();
+					top: 0;
+					left: 0;
+				}
 			}
 		}
 
@@ -383,7 +386,17 @@ span.tab{
 						top: 8px; left: 15px;
 						background: $icons no-repeat;
 						@include sprite($icons,'comment_white',$dimensions: true);
+						outline: 0;
 					}
+
+					&.disabled{
+						cursor: default;
+						border: 1px solid #d0d0d0;
+						background: rgba(184,184,184,0.5);
+						color: rgba(255,255,255,0.7);
+						margin: -1px;
+					}
+
 				}
 			}
 
