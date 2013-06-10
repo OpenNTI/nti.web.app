@@ -97,7 +97,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	onRemove: function(){
 		this.synchronizeHeight();
 
-		if(this.items.length === 0){
+		if(this.items.length === 0 && this.slideOutTask){
 			this.slideOutTask.delay(10);
 		}
 		return this.callParent(arguments);
