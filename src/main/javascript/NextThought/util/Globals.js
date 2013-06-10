@@ -429,6 +429,12 @@ Ext.define('NextThought.util.Globals', {
 			v.href = href;
 			console.debug(v.getAttribute('href'));
 		}
+	},
+
+
+	isFeature: function(name){
+		var f = $AppConfig.features || {};
+		return Boolean(f[name]);
 	}
 
 },
@@ -441,6 +447,7 @@ function(){
 	window.swallow = function(e){};
 	window.getResourceURL = this.getResourceURL;
 	window.reloadCSS = Ext.bind(this.reloadCSS,this);
+	window.isFeature = this.isFeature;
 
 	this.stopBackspace(document);
 
