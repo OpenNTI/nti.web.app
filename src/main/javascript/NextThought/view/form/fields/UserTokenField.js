@@ -338,7 +338,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	handledSpecialKey: function(e){
 		var key = e.getKey(),
-			val = this.inputEl.getValue();
+			val = this.inputEl.getValue(),
+            sel = window.getSelection().toString();
 
 		if(key === e.BACKSPACE){
 			if(val === ''){
@@ -347,7 +348,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 				return true;
 			}
 
-			if(val && val.length===1){
+			if(val && (val.length===1 || val === sel)){
 				this.clearResults();
 				this.inputEl.focus(100);
 				return true;
