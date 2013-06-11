@@ -108,6 +108,7 @@ Ext.define('NextThought.view.video.Video',{
 		};
 
 		this.players = {};
+		this.playerBlacklist = [];
 
 		Ext.applyIf(this, {playlist: []});
 
@@ -390,6 +391,38 @@ Ext.define('NextThought.view.video.Video',{
 
 		});
 
+	},
+
+
+	playlistSeek: function(newIndex){
+		var source;
+		if ((newIndex >= 0) && (newIndex < this.playlist.length) ){
+			this.playlistIndex = newIndex;
+			this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+			while( Ext.Array.contains(this.playerBlacklist, this.activeVideoService) ){
+				if(!this.playlist[this.playlistIndex].useNextSource()){
+					this.activeVideoService = 'none';
+					this.currentVideoId = null;
+					this.maybeSwitchPlayers(this.activeVideoService);
+					return;
+				}
+				this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+			}
+			source = this.playlist[this.playlistIndex].activeSource().source;
+			this.maybeSwitchPlayers(this.activeVideoService);
+			this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
+			this.resumePlayback();
+		}
+	},
+
+
+	playlistNext: function(){
+		this.playlistSeek(this.playlistIndex + 1);
+	},
+
+
+	playlistPrevious: function(){
+		this.playlistSeek(this.playlistIndex - 1);
 	},
 
 	cleanup: function(){
