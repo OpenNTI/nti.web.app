@@ -162,6 +162,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			store: this.searchStore,
 			overItemCls: this.searchOverItemCls,
 			itemSelector: this.searchItemSelector,
+			selectedItemCls: 'checked',
 			tpl: this.searchTpl,
 			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
 			renderTo: this.listEl,

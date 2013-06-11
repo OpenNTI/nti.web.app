@@ -366,6 +366,26 @@ $over-color: #f4f3f3;
 			text-align: center;
 			color: $tertiary-grey;
 		}
+
+		.contact-row{
+			.presence { display: none; }
+
+			.nib {
+				display: block;
+				top: 10px; right: 10px;
+				width: 20px;
+				height: 20px;
+				&::after{ @include sprite($icons,'checkbox-light-unchecked',$dimensions: true);}
+				&:hover::after { @include sprite($icons,'checkbox-light-unchecked_hover'); }
+			}
+
+			&.checked {
+				.nib {
+					&::after{ @include sprite($icons,'checkbox-light-checked',$dimensions: true);}
+					&:hover::after { @include sprite($icons,'checkbox-light-checked_hover'); }
+				}
+			}
+		}
 	}
 
 	div[id$=tokens], div[id$=buttons]{
