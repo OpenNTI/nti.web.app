@@ -188,6 +188,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	setPlaceholderText: function(text){
+		this.placeholder = text;
 		this.inputEl.set({'placeholder': text});
 		this.sizerEl.update(text+'##');
 	},

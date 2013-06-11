@@ -169,10 +169,16 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
+	setPlaceholderText: function(text){
+		this.placeholder = text;
+		this.inputEl.set({'placeholder': text});
+	},
+
+
 	updateSize: function(){
 		var i = this.inputEl,
-			v = i.getValue();
-		this.sizerEl.update(v+'####');
+			v = i.getValue() || this.placeholder;
+		this.sizerEl.update(v+'###');
 		i[v?'removeCls':'addCls']('empty');
 	},
 
