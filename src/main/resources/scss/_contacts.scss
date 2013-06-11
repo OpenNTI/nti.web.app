@@ -392,6 +392,7 @@ $over-color: #f4f3f3;
 			font: normal normal 14px/45px $font;
 			text-align: center;
 			color: $secondary-grey;
+			cursor: pointer;
 			@include experimental(transition, all 0.5s);
 
 			&.cancel {
