@@ -58,26 +58,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		if(typeof(this.linkWithSlides) !== 'boolean'){
 			this.linkWithSlides = true;
 		}
-
-		//build playlist
-
-		this.store.each(function(s){ this.playlist.push(this.getVideoInfoFromSlide(s)); },this);
-
-		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
-			params = [
-			'html5=1',
-			'enablejsapi=1',
-			'autohide=1',
-			'modestbranding=1',
-			'rel=0',
-			'showinfo=0',
-			'list='+encodeURIComponent(pl),
-			'origin='+encodeURIComponent(location.protocol+'//'+location.host)
-		];
-
-		this.renderData = Ext.apply(this.renderData||{},{
-			'youtube-params':params.join('&')
-		});
 	},
 
 

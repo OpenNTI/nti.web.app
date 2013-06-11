@@ -82,13 +82,25 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	initComponent: function(){
-		var youtubeParams = [
+		Ext.applyIf(this, {playlist: []});
+
+		this.playlist.getIds = function(s){
+			var i = [];
+			Ext.each(this,function(o){
+				i.push.apply(i, o.getSources(s));
+			});
+			return i;
+		};
+
+		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
+			youtubeParams = [
 			'html5=1',
 			'enablejsapi=1',
 			'autohide=1',
 			'modestbranding=1',
 			'rel=0',
 			'showinfo=0',
+			'list='+encodeURIComponent(pl),
 			'origin='+encodeURIComponent(location.protocol+'//'+location.host)
 		];
 
@@ -110,15 +122,6 @@ Ext.define('NextThought.view.video.Video',{
 		this.players = {};
 		this.playerBlacklist = [];
 
-		Ext.applyIf(this, {playlist: []});
-
-		this.playlist.getIds = function(s){
-			var i = [];
-			Ext.each(this,function(o){
-				i.push.apply(i, o.getSources(s));
-			});
-			return i;
-		};
 		this.playlistIndex = 0;
 
 		this.renderData = Ext.apply(this.renderData||{},this.data);

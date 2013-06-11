@@ -40,13 +40,14 @@ Ext.define('NextThought.view.slidedeck.View',{
 			start = this.startOn,
 			ctrls = this.items.getAt(0),
 			slide = this.getSlide(),
-			v,q;
+			v, q,vPlaylist = [];
 
 		//clear the reference, pass it along...
 		delete this.store;
 		delete this.startOn;
 
-		v = this.video = ctrls.add({ xtype: 'slidedeck-video', store: store});
+		store.each(function(s){ vPlaylist.push(s.get('media')); },this);
+		v = this.video = ctrls.add({ xtype: 'slidedeck-video', playlist: vPlaylist});
 		//Ths queue is the primary control. Selection causes video and slide to change.
 		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, flex: 1 });
 
