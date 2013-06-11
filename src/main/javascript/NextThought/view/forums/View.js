@@ -53,7 +53,7 @@ Ext.define( 'NextThought.view.forums.View', {
 
 	getFragment: function(){
 		// desired url format: !profile/u/:boardName/:ForumName/:topicName
-		var items = this.getStackChildren(), path = [], base = '!forums';
+		var items = this.getStackChildren(), path = [], base = '!forums', t;
 
 		if(items.length >= 4){
 			path.push(items[3].record && items[3].record.get('ID'));
@@ -62,7 +62,9 @@ Ext.define( 'NextThought.view.forums.View', {
 			path.push(items[2].record && items[2].record.get('ID'));
 		}
 		if(items.length >= 2){
-			path.push(items[1].record && items[1].record.get('Creator'));
+			t = items[1].record && items[1].record.get('Creator');
+			if(t.isModel){ t = t.get('Username');}
+			path.push(t);
 		}
 		if(items.length > 1){
 			path.push('u');
