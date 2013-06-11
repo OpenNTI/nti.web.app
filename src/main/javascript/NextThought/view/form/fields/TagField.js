@@ -12,10 +12,12 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	delimiterRe: /[\t\r\n\s,]/i,
 	regex: /^[^\t\r\n\s,]+$/,
 
+	placeholder: 'Tags',
+
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'span', cls:'token-input-wrap', cn:[
-			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Tags'},
-			{tag:'span', cls:'token-input-sizer', html:'####'}
+			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
+			{tag:'span', cls:'token-input-sizer', html:'{placeholder}##'}
 		]}
 	]),
 
@@ -27,9 +29,24 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	renderSelectors: {
 		wrapEl: '.token-input-wrap',
 		sizerEl: '.token-input-sizer',
-		inputEl: 'input[type="text"]',
-		valueEl: 'input[type="hidden"]'
+		inputEl: 'input[type="text"]'
 	},
+
+	onClassExtended: function (cls, data) {
+		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
+		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+
+		var tpl = this.prototype.renderTpl;
+
+		if (!data.renderTpl) {
+			data.renderTpl = tpl;
+		}
+		//Allow the subclass to redefine the template and include the super's template
+		else {
+			data.renderTpl = data.renderTpl.replace('{super}', tpl);
+		}
+	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -37,6 +54,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.initField();
 		this.setReadOnly(!!this.readOnly);
 		this.renderData = Ext.apply(this.renderData||{},{
+			placeholder: this.placeholder,
 			tabIndex: typeof this.tabIndex === 'number' ? this.tabIndex : -1
 		});
 	},

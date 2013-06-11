@@ -7,6 +7,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	],
 
 	cls:'sharing-token-field',
+	placeholder: 'Add people to the discussion',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'control publish on'},
@@ -14,8 +15,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			{tag:'span', cls:'inputArea', cn:[
 				{tag:'span', cls:'plus'},
 				{tag:'span', cls:'token-input-wrap', cn:[
-					{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: 'Add people to the discussion'},
-					{tag:'span', cls:'token-input-sizer', html:'Add people to the discussion##'}
+					{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
+					{tag:'span', cls:'token-input-sizer', html:'{placeholder}##'}
 				]}
 			]}
 		]}
@@ -29,10 +30,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	renderSelectors: {
-		wrapEl: '.token-input-wrap',
-		sizerEl: '.token-input-sizer',
-		inputEl: 'input[type="text"]',
-		valueEl: 'input[type="hidden"]',
 		publishEl: '.control.publish',
 		plusEl: '.plus'
 	},
