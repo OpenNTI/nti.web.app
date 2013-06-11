@@ -14,6 +14,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 	placeholder: 'Tags',
 
+
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'span', cls:'token-input-wrap', cn:[
 			{tag:'input', type:'text', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
@@ -21,16 +22,19 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		]}
 	]),
 
+
 	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token', cn:[
 		{tag:'span', cls:'value', html:'{0}'},
 		{tag:'span', cls:'x'}
 	]}),
+
 
 	renderSelectors: {
 		wrapEl: '.token-input-wrap',
 		sizerEl: '.token-input-sizer',
 		inputEl: 'input[type="text"]'
 	},
+
 
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
@@ -102,7 +106,6 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-
 	to_ascii: {
         '188': 44,
         '109': 45,
@@ -118,6 +121,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
         '186': 59,
         '189': 45
     },
+
 
 	isDelimiter: function(ch){
 
