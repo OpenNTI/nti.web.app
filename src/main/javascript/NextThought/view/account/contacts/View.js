@@ -301,5 +301,13 @@ Ext.define('NextThought.view.account.contacts.View',{
 			searchOverItemCls: this.overItemCls,
 			searchItemSelector: this.itemSelector
 		});
+
+		this.groupChat.hide();
+		this.mon(this.groupChatButton,'click','show',this.groupChat);
+		this.mon(this.groupChat,{
+			scope: this.groupChat,
+			cancel: 'hide',
+			'group-chat': 'hide'
+		});
 	}
 });

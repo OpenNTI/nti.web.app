@@ -359,6 +359,13 @@ $over-color: #f4f3f3;
 			x: hidden;
 			y: auto;
 		}
+
+		.empty-list {
+			padding: 20px 0;
+			font: italic 300 14px/28px $font;
+			text-align: center;
+			color: $tertiary-grey;
+		}
 	}
 
 	div[id$=tokens], div[id$=buttons]{
