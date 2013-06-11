@@ -23,8 +23,8 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	]),
 
 
-	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token', cn:[
-		{tag:'span', cls:'value', html:'{0}'},
+	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token {type}', cn:[
+		{tag:'span', cls:'value', html:'{text}', 'data-value':'{value}'},
 		{tag:'span', cls:'x'}
 	]}),
 
@@ -192,21 +192,26 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-	getNameSnippet: function(value){
+	getSnippet: function(value){
 		return value; //In some cases we may want to truncate the value if it's too long.
 	},
 
 
-	addTag: function(val, type, callback){
-		var me = this, el = me.inputEl, snip;
+	addTag: function(val, type, extraData){
+		var me = this, el = me.inputEl, snip, t;
 
 		el.dom.value = '';
 		if(!Ext.Array.contains(me.getValue(),val)){
-			snip = me.getNameSnippet(val);
-			me.tokenTpl.insertBefore(me.getInsertionPoint(),[snip, type, val]);
+			snip = me.getSnippet(val);
+			t = me.tokenTpl.insertBefore(me.getInsertionPoint(),Ext.apply({text:snip, type:type, value:val},extraData));
+			if(val !== snip){
+				t.set({'data-qtip': val});
+			}
+
 			me.fireEvent('new-tag',val);
-			Ext.callback(callback, me,[val, snip]);
 		}
+
+		return t;
 	},
 
 

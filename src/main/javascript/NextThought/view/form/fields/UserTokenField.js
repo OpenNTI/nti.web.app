@@ -23,12 +23,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	]),
 
 
-	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token {1}', cn:[
-		{tag:'span', cls:'value', html:'{0}', 'data-value':'{2}'},
-		{tag:'span', cls:'x'}
-	]}),
-
-
 	renderSelectors: {
 		publishEl: '.control.publish',
 		plusEl: '.plus'
@@ -233,7 +227,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	},
 
 
-	getNameSnippet: function(value){
+	getSnippet: function(value){
 		//Truncate long names.
 		return Ext.String.ellipsis(value, 20);
 	},
@@ -244,18 +238,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			type = this.getType(record.getData());
 
 		if(this.isToken(value)){
-			this.addTag(value, type, this.shouldAddTipToToken);
+			this.addTag(value, type);
 			this.updatePlaceholderLabel();
-		}
-	},
-
-
-	shouldAddTipToToken: function(val, snip){
-		if(val === snip){ return; }
-
-		var tokenEl = this.el.down('[data-value='+val+']');
-		if(!Ext.isEmpty(tokenEl)){
-			tokenEl.set({'data-qtip': val});
 		}
 	},
 
