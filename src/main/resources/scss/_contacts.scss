@@ -352,6 +352,9 @@ $over-color: #f4f3f3;
 	background: #fafafa;
 
 	div[id$=list]{
+		position: absolute;
+		bottom: 125px; top: 0;
+		left: 0; right: 0;
 		overflow: {
 			x: hidden;
 			y: auto;

@@ -90,6 +90,30 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	},
 
 
+	onBeforeRemoveToken: function(token){
+		var id = token && token.getAttribute('data-username');
+		if(!Ext.isEmpty(id)){
+			this.deselectId(id);
+		}
+	},
+
+
+	deselectId: function(id){
+		var recs = this.contactSearch.getSelectionModel().getSelection(),
+			rec;
+
+		Ext.each(recs,function(r){
+			if(r.getId() === id){
+				rec = r;
+			}
+		});
+
+		if(rec){
+			this.contactSearch.getSelectionModel().deselect(rec);
+		}
+	},
+
+
 	getSnippet: function(value){
 		//Truncate long names.
 		return Ext.String.ellipsis(value, 15);
@@ -99,16 +123,9 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	isToken: function(text) { return !Ext.isEmpty(text); },
 
 
-	syncListHeight: function(callCount){
-		var h = this.el.getHeight() - (this.tokensEl.getHeight() + this.buttonsEl.getHeight());
-		this.listEl.setHeight(h);
-		if(h < 0){
-			if(callCount > 2){
-				console.warn('Running away?');
-				return;
-			}
-			Ext.defer(this.syncListHeight,100,this,[(callCount||1)+1]);
-		}
+	syncListHeight: function(){
+		var h = this.tokensEl.getHeight() + this.buttonsEl.getHeight();
+		this.listEl.setStyle({bottom:h});
 	},
 
 
@@ -173,14 +190,18 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	onKeyDown: function(e){
 		var key = e.getKey(),
 			val = this.inputEl.getValue(),
-			t;
+			t, id;
 
 		e.stopPropagation();
 		clearTimeout(this.searchTimeout);
 
 		if(key === e.BACKSPACE && !val) {
 			t = this.el.query('.token').last();
-			if(t){ Ext.fly(t).remove(); }
+			if(t){
+				id = t.getAttribute('data-username');
+				Ext.fly(t).remove();
+				this.deselectId(id);
+			}
 			e.stopEvent();
 			return false;
 		}
@@ -194,9 +215,46 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	},
 
 
-	reset: function(){
+	onClick: function(e){
+		var inButtons = Boolean(e.getTarget('div[id$=buttons]'));
+
+		if(!inButtons){
+			return this.callParent(arguments);
+		}
+
+		if(e.getTarget('.cancel')){
+			this.reset(true);
+			this.fireEvent('cancel');
+		}
+		else if(e.getTarget('.start') && !this.startEl.hasCls('disabled')){
+			this.fireEvent('group-chat', this.getOccupantsList());
+			this.reset(true);
+		}
+
+		e.stopEvent();
+		return false;
+	},
+
+
+	getOccupantsList: function(){
+		var list = [];
+		this.el.select('.token').each(function(e){
+			list.push(e.getAttribute('data-username'));
+		});
+		console.log(list.join(', '));
+		return list;
+	},
+
+
+	reset: function(destructive){
 		this.inputEl.dom.value = '';
-		this.updatePlaceholderLabel();
+		if(destructive){
+			this.el.select('.token').remove();
+			this.listEl.setScrollTop(0);
+			this.contactSearch.getSelectionModel().deselectAll(true);
+		}
+
+		this.updateState();
 	},
 
 
@@ -216,7 +274,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	updateState: function(){
 		var has = this.hasTokens();
 
-		this.setPlaceholderText(has ? 'Add' : this.initialConfig.placeholder);
+		this.setPlaceholderText(has ? 'Add' : this.self.prototype.placeholder);
 		this.startEl[has?'removeCls':'addCls']('disabled');
 	}
 });
