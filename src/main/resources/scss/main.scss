@@ -71,6 +71,8 @@
 	font-family: $font !important;
 }
 
+input::-ms-clear { display: none; }
+
 .placeholder { @include placeholder-style(); }
 :-webkit-input-placeholder { @include placeholder-style(); }
 :-moz-placeholder { @include placeholder-style(); }
