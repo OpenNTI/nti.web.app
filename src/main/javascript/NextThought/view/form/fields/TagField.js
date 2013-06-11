@@ -203,7 +203,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		el.dom.value = '';
 		if(!Ext.Array.contains(me.getValue(),val)){
 			snip = me.getSnippet(val);
-			t = me.tokenTpl.insertBefore(me.getInsertionPoint(),Ext.apply({text:snip, type:type, value:val},extraData));
+			t = me.tokenTpl.insertBefore(me.getInsertionPoint(),Ext.apply({text:snip, type:type, value:val},extraData),true);
 			if(val !== snip){
 				t.set({'data-qtip': val});
 			}
