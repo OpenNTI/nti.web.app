@@ -25,6 +25,12 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 		]}
 	]),
 
+
+	tokenTpl: Ext.DomHelper.createTemplate({tag: 'span', cls:'token {type}', 'data-username':'{username}', cn:[
+		{tag:'span', cls:'value', html:'{text}', 'data-value':'{value}'},
+		{tag:'span', cls:'x'}
+	]}),
+
 	renderSelectors: {
 		listEl: 'div[id$=list]',
 		tokensEl: 'div[id$=tokens]',
@@ -33,7 +39,51 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	},
 
 
+	updatePlaceholderLabel: function(){
+		var useShort = this.el.query('.token').length > 0;
+		this.setPlaceholderText(useShort ? 'Add' : this.initialConfig.placeholder);
+	},
+
+
+	handleBlur: function(){
+
+	},
+
+
+	getType: function(modelData){ return NextThought.model.UserSearch.getType(modelData); },
+
+
 	getInsertionPoint: function(){ return this.tokenInsertPoint; },
+
+
+	addToken: function(record){
+		var value = record && record.get('displayName'),
+			type = this.getType(record.getData());
+
+		if(this.isToken(value)){
+			this.addTag(value, type,{username:record.getId()});
+			this.updatePlaceholderLabel();
+		}
+	},
+
+
+	removeToken: function(record){
+		var el = this.el.down('span[data-username="'+record.getId()+'"]');
+		if(el){
+			el.remove();
+		}
+
+		return Boolean(el);
+	},
+
+
+	getNameSnippet: function(value){
+		//Truncate long names.
+		return Ext.String.ellipsis(value, 15);
+	},
+
+
+	isToken: function(text) { return !Ext.isEmpty(text); },
 
 
 	syncListHeight: function(callCount){
@@ -79,16 +129,74 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 
 		this.contactSearch = Ext.widget('dataview',{
 			preserveScrollOnRefresh: true,
+			simpleSelect: true,
 			store: this.searchStore,
 			overItemCls: this.searchOverItemCls,
 			itemSelector: this.searchItemSelector,
 			tpl: this.searchTpl,
 			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
 			renderTo: this.listEl,
-			cls: 'contact-search-group-chat'
+			cls: 'contact-search-group-chat',
+			listeners: {
+				scope: this,
+				deselect: 'itemDeselect',
+				select: 'itemSelect'
+			}
 		});
 
 		this.syncListHeight();
-		Ext.defer(this.searchStore.search, 1000, this.searchStore,['com']);
+	},
+
+
+	itemDeselect: function(v,rec){
+		this.removeToken(rec);
+	},
+
+
+	itemSelect: function(v,rec){
+		this.addToken(rec);
+	},
+
+
+	onKeyDown: function(e){
+		var key = e.getKey(),
+			val = this.inputEl.getValue(),
+			t;
+
+		e.stopPropagation();
+		clearTimeout(this.searchTimeout);
+
+		if(key === e.BACKSPACE && !val) {
+			t = this.el.query('.token').last();
+			if(t){ Ext.fly(t).remove(); }
+			e.stopEvent();
+			return false;
+		}
+
+		if(key === e.ESC){
+			this.reset();
+		}
+
+		this.searchTimeout = Ext.defer(this.search,250,this);
+		return true;
+	},
+
+
+	reset: function(){
+		this.inputEl.dom.value = '';
+		this.updatePlaceholderLabel();
+	},
+
+
+	search: function(){
+		if(!this.inputEl){
+			return;
+		}
+
+		var value = (this.inputEl.getValue() || '').replace(SearchUtils.trimRe,'');
+		if(value !== this.lastSearchValue){
+			this.lastSearchValue = value;
+			this.searchStore.search(value);
+		}
 	}
 });
