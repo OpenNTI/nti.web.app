@@ -11,7 +11,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	collapseMode: 'header',
 	collapsible: true,
 	collapsed: true,
-	maxHeight: 300,
+	maxHeight: Math.min(300,Ext.Element.getViewportHeight()*0.6),
 	overflowX: 'hidden',
 	overflowY: 'auto',
 	animCollapse: false,
@@ -37,6 +37,10 @@ Ext.define('NextThought.view.chat.Dock',{
 			mouseover:'maybeExpand',
 			mouseout: 'stopExpand'
 		});
+
+		Ext.EventManager.onWindowResize(function(){
+			this.maxHeight = Math.min(300, Ext.Element.getViewportHeight()*0.6);
+		}, this, null);
 
 
 		this.countEl = new Ext.dom.CompositeElement([
