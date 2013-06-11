@@ -343,6 +343,83 @@ $over-color: #f4f3f3;
 }
 
 
+.group-chat-initiator{
+	background: #fafafa;
+	overflow: hidden;
+	position: absolute;
+	bottom: 0; top: 0;
+	left: 0; right: 0;
+	background: #fafafa;
+
+	div[id$=list]{
+		overflow: {
+			x: hidden;
+			y: auto;
+		}
+	}
+
+	div[id$=tokens], div[id$=buttons]{
+		border-top: 1px solid #dcdcdc;
+	}
+
+	div[id$=tokens]{
+		background: #fff;
+		position: absolute;
+		overflow: {x:hidden; y: auto;}
+		bottom: 45px;
+		left: 0; right: 0;
+		min-height: 80px;
+		max-height: 180px;
+
+
+		.tokens {
+			margin-right: 0 !important;
+		}
+	}
+
+	div[id$=buttons]{
+		position: absolute;
+		overflow: hidden;
+		bottom: 0;
+		left: 0; right: 0;
+		height: 45px;
+
+		div {
+			position: absolute;
+			height: 45px;
+			bottom: 0;
+			right: 0;
+			font: normal normal 14px/45px $font;
+			text-align: center;
+			color: $secondary-grey;
+			@include experimental(transition, all 0.5s);
+
+			&.cancel {
+				width: 85px;
+				right: 95px;
+			}
+
+			&.start {
+				width: 95px;
+				font: italic bold 14px/44px $font;
+				color: #ffffff;
+				border: 1px solid $border-blue;
+				background: $primary-blue;
+
+				&.disabled{
+					cursor: default;
+					border: 1px solid #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					color: rgba(255,255,255,0.7);
+				}
+			}
+		}
+	}
+
+
+}
+
+
 .contacts-view {
 	position: relative;
 	overflow: hidden;

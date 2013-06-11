@@ -2,6 +2,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	extend: 'Ext.view.View',
 	alias: 'widget.contacts-view',
 	requires: [
+		'NextThought.view.account.contacts.GroupChat'
 	],
 
 	title: 'Chat',
@@ -24,8 +25,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 				{cls:'clear', style: {display:'none'}}
 			] },
 			{cls: 'group-chat', html: 'Group Chat' }
-		]
-	}]),
+		]}
+	]),
 
 	renderSelectors: {
 		buttonRow: '.button-row',
@@ -254,7 +255,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.contactSearch = Ext.widget('dataview',{
 			preserveScrollOnRefresh: true,
 			store: this.searchStore,
-			overItemCls: this.overCls,
+			overItemCls: this.overItemCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
 			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
@@ -285,11 +286,20 @@ Ext.define('NextThought.view.account.contacts.View',{
 			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
 
-		if(!isFeature('rhp-groupchat')){
+		if(isFeature('rhp-groupchat')){
+			this.activateGroupChatFeature();
+		} else {
 			this.buttonRow.addCls('no-group-chat');
-			return;
 		}
+	},
 
-		this.groupChatView = null;//placeholder
+
+	activateGroupChatFeature: function(){
+		this.groupChat = Ext.widget('contacts-group-chat-initiator',{
+			renderTo: this.el,
+			searchTpl: this.tpl,
+			searchOverItemCls: this.overItemCls,
+			searchItemSelector: this.itemSelector
+		});
 	}
 });
