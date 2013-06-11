@@ -35,9 +35,11 @@ Ext.define('NextThought.store.UserSearch',{
 
 	search: function(q){
 		var query = q || '',
+			entities,
 			flStore = Ext.getStore('FriendsList');
+
 		if(query.length < this.minRemoteSearchLength){
-			var entities = UserRepository.searchUser(query);
+			entities = UserRepository.searchUser(query);
 			if(flStore){
 				flStore.search(query).each(function(fl){
 					if(!entities.get(fl.getId())){
