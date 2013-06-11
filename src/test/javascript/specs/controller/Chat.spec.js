@@ -44,6 +44,9 @@ describe('Chat Controller Tests', function(){
 		repo.cacheUser($AppConfig.userObject);
 		repo.cacheUser(userForName('user2'));
 		repo.cacheUser(userForName('user1'));
+		//set users to online
+		Ext.getStore('PresenceInfo').setPresenceOf($AppConfig.username, NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'available'));
+		Ext.getStore('PresenceInfo').setPresenceOf('user2', NextThought.model.PresenceInfo.createPresenceInfo('user2','available'));
 	};
 
 	it('Is not using the global UserRepo for tests', function(){
@@ -367,7 +370,7 @@ describe('Chat Controller Tests', function(){
 					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,type,show,"New Status");
 
 				controller.changeStatus("New Status");
-				expect(controller.changePresence).toHaveBeenCalledWith('unavailable', show, status);//the default values for show and status
+				expect(controller.changePresence).toHaveBeenCalledWith(type, show, "New Status");
 				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
 			});
 		});

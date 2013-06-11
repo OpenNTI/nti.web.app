@@ -9,12 +9,7 @@ describe('Presence store',function(){
 
 		for(i = 0; i < userNames.length; i++){
 			userObjects[i] = Ext.create('NextThought.model.User',{ 'Username': userNames[i]});
-			presenceObjects[i] = Ext.create('NextThought.model.PresenceInfo',{
-				'username' : userNames[i],
-				'type' : 'available',
-				'show' : 'chat',
-				'status' : ''
-			});
+			presenceObjects[i] =  NextThought.model.PresenceInfo.createPresenceInfo(userNames[i],'available');
 			presenceStore.add(presenceObjects[i]);
 		}
 	});
@@ -48,14 +43,7 @@ describe('Presence store',function(){
 		});
 
 		it('User alread exists',function(){
-			var obj = {
-					'Class' : 'PresenceInfo',
-					'Username' :  userNames[0],
-					'type' : 'unavailable',
-					'show' : 'chat',
-					'status' : ''
-				},
-				model = ParseUtils.parseItems([obj])[0];
+			var model = NextThought.model.PresenceInfo.createPresenceInfo(userNames[0],'unavailable');
 
 
 			presenceStore.setPresenceOf(userNames[0],model);
@@ -64,21 +52,14 @@ describe('Presence store',function(){
 		});
 
 		it('User doesnt exist',function(){
-			var result, obj = {
-					'Class' : 'PresenceInfo',
-					'username' : 'newName',
-					'type' : 'available',
-					'show' : 'chat',
-					'status' : ''
-				}, 
-				model = ParseUtils.parseItems([obj])[0];
+			var result, model = NextThought.model.PresenceInfo.createPresenceInfo('newName','available');
 
-			presenceStore.setPresenceOf(obj.username,model);
-			result = presenceStore.getPresenceOf(obj.username);
+			presenceStore.setPresenceOf('newName',model);
+			result = presenceStore.getPresenceOf('newName');
 
-			expect(result.get('username')).toBe(obj.username);
-			expect(result.get('type')).toBe(obj.type);
-			expect(presenceStore.fireEvent).toHaveBeenCalledWith('presence-changed',obj.username,model);
+			expect(result.get('username')).toBe('newName');
+			expect(result.get('type')).toBe('available');
+			expect(presenceStore.fireEvent).toHaveBeenCalledWith('presence-changed','newName',model);
 		});
 	});
 });

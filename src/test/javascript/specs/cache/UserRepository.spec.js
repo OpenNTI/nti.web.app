@@ -70,12 +70,14 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 		it('presence-changed which gets handled by TUR',function(){
 			var store = Ext.getStore('PresenceInfo'),
-				online = NextThought.model.PresenceInfo.createFromPresenceString('online','hans');
+				online = NextThought.model.PresenceInfo.createPresenceInfo('hans','available');
 
 			TUR.setPresenceChangeListener(store);
 			store.setPresenceOf('hans',online);
 
-			expect(TUR.presenceChanged).toHaveBeenCalledWith('hans',online);
+			expect(TUR.presenceChanged).toHaveBeenCalled();
+			expect(TUR.presenceChanged.mostRecentCall.args[0]).toBe('hans');
+			expect(TUR.presenceChanged.mostRecentCall.args[1]).toBe(online);
 			expect(hans.get('Presence').isOnline()).toBeTruthy();
 		});
 	});

@@ -16,7 +16,12 @@ Ext.define('NextThought.model.User', {
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'Synthetic', fn: function(record){
-			return record.get('Presence').getDisplayText();
+			//The presence isn't always a PresenceInfo in testing
+			if(record.get('Presence') && record.get('Presence').getDisplayText){
+				return record.get('Presence').getDisplayText();
+			}else{
+				return null;
+			}
 		}},
 		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
