@@ -131,6 +131,16 @@ Ext.define('NextThought.view.video.Video',{
 
 		this.activeVideoService = 'none';
 		this.currentVideoId = null;
+
+		this.taskMediaHeartBeat = {
+			interval: 1000,
+			scope: this,
+			run: function(){this.fireEvent('media-heart-beat');},
+			onError: function(){console.error(arguments);}
+		};
+
+		Ext.TaskManager.start(this.taskMediaHeartBeat);
+		this.on('destroy',function cleanUpTask(){Ext.TaskManager.stop(this.taskMediaHeartBeat);});
 	},
 
 

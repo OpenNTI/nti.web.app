@@ -7,6 +7,10 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	plain: true,
 	ui: 'slidedeck-video',
 
+	listeners: {
+		'media-heart-beat': 'videoQueryTask'
+	},
+
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
 			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-youtube-video',
@@ -103,16 +107,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		});
 
 		this.maybeSwitchPlayers(null);
-
-		this.taskVideoQuery = {
-			interval: 1000,
-			scope: this,
-			run: this.videoQueryTask,
-			onError: function(){console.error(arguments);}
-		};
-
-		Ext.TaskManager.start(this.taskVideoQuery);
-		this.on('destroy',function cleanUpTask(){Ext.TaskManager.stop(this.taskVideoQuery);});
 	},
 
 
