@@ -62,7 +62,7 @@ Ext.define('NextThought.model.PlaylistItem', {
 
 	getSources: function(service){
 		var i = [];
-		Ext.each(this.get('sources'),function(o){
+		Ext.each(this.data.sources,function(o){
 			if(!service || (o && service === o.service)){
 				i.push(o.source);
 			}
@@ -71,7 +71,15 @@ Ext.define('NextThought.model.PlaylistItem', {
 	},
 
 	activeSource: function(){
-		return this.get('sources')[this.get('sourceIndex')];
+		return this.data.sources[this.data.sourceIndex];
+	},
+
+	useNextSource: function(){
+		if (this.data.sourceIndex + 1 < this.data.sources.length){
+			this.data.sourceIndex += 1;
+			return true;
+		}
+		return false;
 	},
 
 	nextSource: function(){}
