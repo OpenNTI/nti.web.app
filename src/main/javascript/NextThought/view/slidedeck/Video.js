@@ -245,12 +245,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		if(!this.linkWithSlides){return;}
 
-		video = this.getVideoInfoFromSlide(slide);
-
-		this.maybeSwitchPlayers(video.activeSource().service);
-		this.setVideoAndPosition(video.activeSource().source,video.get('start'));
-
-		this.playlistIndex = this.getVideoInfoIndex(video);
+		video = slide.get('media');
+		this.playlistSeek(this.getVideoInfoIndex(video));
 
 		//Hide player?
 		/*
