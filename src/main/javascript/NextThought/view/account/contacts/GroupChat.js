@@ -128,7 +128,6 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 		});
 
 		this.contactSearch = Ext.widget('dataview',{
-			preserveScrollOnRefresh: true,
 			simpleSelect: true,
 			store: this.searchStore,
 			overItemCls: this.searchOverItemCls,
