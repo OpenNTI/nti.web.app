@@ -6,7 +6,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		'NextThought.util.Search'
 	],
 
-	cls:'sharing-token-field',
+	cls:'user-token-field',
 	placeholder: 'Add people to the discussion',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -177,7 +177,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	maybeHideSearchListMenu: function(e){
 		var me = this;
-		if(e.type === 'mouseover' || e.getTarget('.x-menu') || e.getTarget('.sharing-token-field')){
+		if(e.type === 'mouseover' || e.getTarget('.x-menu') || e.getTarget('.user-token-field')){
 			clearTimeout(this.hideTimer);
 		}
 		else{
