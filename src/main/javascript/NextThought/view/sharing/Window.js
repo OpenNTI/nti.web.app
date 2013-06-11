@@ -142,8 +142,9 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			'sync-height': function(){ Ext.defer(me.updateLayout, 1, me); }
 		});
 
-		this.el.setZIndex(99999999);//something ridiculous
-		Ext.defer(me.updateLayout, 1, me);
+        // Update the window's ordering so that the modal mask is
+        // properly placed behind it.
+        this.toBack();
 	},
 
 	isReadOnly: function(){
