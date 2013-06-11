@@ -136,7 +136,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	afterRender: function(){
 		var aux;
 		this.callParent(arguments);
-		this.mixins.editorActions.constructor.call(this,this,this.el);
+		this.mixins.editorActions.constructor.call(this,this,this.el,this.el.parent());
 		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
 		this.mon(this.saveButtonEl,'click', function(e){
 			if(e.getTarget('.disabled')){ e.stopEvent(); return; }

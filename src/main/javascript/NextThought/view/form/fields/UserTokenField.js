@@ -447,6 +447,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 
 		picker.showAt(x,y + scrollOffset);
+
 		//Focus the input now
 		this.inputEl.focus(10);
 	},
