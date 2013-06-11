@@ -132,22 +132,31 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var contacts = Ext.getStore('all-contacts-store');
+		var data, query = '',
+			online = Ext.getStore('online-contacts-store'),
+			listsAndGroups = Ext.getStore('FriendsList');
 
-		this.searchStore = new NextThought.store.UserSearch({
-			filters:[
-				function(rec){ return rec.getId() !== $AppConfig.contactsGroupName; },
-				function(rec){ return !rec.isCommunity; },
-				function(rec){ return !isMe(rec); }
+		this.searchStore = new Ext.data.Store({
+			proxy: 'memory',
+			filters: [
+				function(rec){ return rec.get('Username') !== $AppConfig.contactsGroupName; },
+				function(rec){ return !isMe(rec); },
+				function(rec){ return !rec.hasOnline || rec.hasOnline(); },
+					//This will have to do for now.
+				function(rec){
+					var data = [rec.get('Username'), rec.get('alias'), rec.get('realname'), rec.get('email')].join();
+					//TODO: resolve group memberships and search them for hits
+					return Ext.isEmpty(query) || new RegExp(query,'i').test(data);
+				}
 			],
 			sorters:[{
-				//Put contacts first
+				//Put users first
 				sorterFn: function(a,b){
-					var c = contacts.contains(a.get('Username')),
-						d = contacts.contains(b.get('Username'));
+					var c = a.isGroup,
+						d = b.isGroup;
 					return c === d
 							? 0
-							: c ? -1 : 1;
+							: c ? 1 : -1;
 				},
 				direction: 'ASC'
 			},{
@@ -156,6 +165,25 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 				direction: 'ASC'
 			}]
 		});
+
+		this.searchStore.search = function(s){ query = s; this.filter(); };
+
+		data = online.getRange();
+		data.push.apply(data,listsAndGroups.getRange());
+
+		this.searchStore.loadData(data);
+		this.searchStore.mon(online,{
+			scope:this.searchStore,
+			add: function(s,r){this.add(r);this.filter();},
+			remove: function(s,r){this.remove(r);}
+		});
+		this.searchStore.mon(listsAndGroups,{
+			scope:this.searchStore,
+			load: function(s,r){this.add(r);this.filter();},
+			add: function(s,r){this.add(r);this.filter();},
+			remove: function(s,r){this.remove(r);}
+		});
+
 
 		this.contactSearch = Ext.widget('dataview',{
 			simpleSelect: true,

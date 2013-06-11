@@ -63,5 +63,25 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 	hasFriend: function(username){
 		return Ext.Array.contains(this.get('friends'),username);
+	},
+
+
+
+	hasOnline: function(){
+		var l = this.get('friends') || [],
+			s = Ext.getStore('PresenceInfo'),
+			ret = false;
+
+		if(!s){
+			return undefined;
+		}
+
+		Ext.each(l,function(id){
+			ret = s.findExact('username',id) > -1;
+			return !ret;
+		});
+
+		return ret;
 	}
+
 });
