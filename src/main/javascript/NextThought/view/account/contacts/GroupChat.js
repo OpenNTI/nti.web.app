@@ -77,7 +77,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 	},
 
 
-	getNameSnippet: function(value){
+	getSnippet: function(value){
 		//Truncate long names.
 		return Ext.String.ellipsis(value, 15);
 	},
