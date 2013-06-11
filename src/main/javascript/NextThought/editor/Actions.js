@@ -837,7 +837,7 @@ Ext.define('NextThought.editor.Actions', {
 			me.fireEvent('size-changed');
 
 			//Make sure save is enabled
-			me.saveButtonEl.removeCls('disabled');
+			me.maybeEnableSave();
 
 			//For newly created whiteboard, scroll them into view
 			if(scrollIntoView){
