@@ -334,7 +334,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			this.updateCount();
 		}
 
-		this.lastUpdated = new Date();
+		this.lastUpdated = new Date().getTime();
 		this.updateStatus();
 		this.setVisible(true);
 		this.isPresented = true;
@@ -348,21 +348,34 @@ Ext.define('NextThought.view.chat.DockItem',{
 		var display, roomInfo = this.associatedWindow.roomInfo,
 			occ = roomInfo.get('Occupants'),
 			Status = this.lastUpdated,
-			currentTime = new Date(),
-			difference = new Date(currentTime - Status);
+			currentTime = new Date().getTime(),
+			milli = currentTime - Status,
+			seconds = milli / 1000,
+			minutes = seconds / 60,
+			hours = minutes / 60,
+			days = hours / 24;
+
+		seconds = seconds%60;
+		minutes = minutes%60;
+		hours = hours%24;
 
 
 		if(!Status){
 			console.log("No last Active yet");
 		}
 
-		display = difference.getMinutes()+"m "+difference.getSeconds()+"s";
-
+		if(days >= 1){
+			display = Math.floor(days)+"d "+Math.ceil(hours)+"h"; 
+		}else if(hours >= 1){
+			display = Math.floor(hours)+"h "+Math.ceil(minutes)+"m";
+		}else{
+			display = Math.floor(minutes)+"m "+Math.ceil(seconds)+"s";
+		}
 
 		if(occ.length===1 && isMe(occ[0])){
 			display = 'Ended';
 		}
-		else if(difference.getMinutes() < 10){
+		else if(minutes < 10){
 			display = "In Progress... "+display;
 		}else{
 			display = "Last message "+display+" ago";
