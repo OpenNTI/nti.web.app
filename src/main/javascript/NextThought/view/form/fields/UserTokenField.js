@@ -166,8 +166,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	togglePublish: function(e){
+		e.stopEvent();
 		if(e.getTarget('.readOnly')){
-			e.stopEvent();
 			return;
 		}
 
