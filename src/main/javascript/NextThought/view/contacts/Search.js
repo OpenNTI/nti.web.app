@@ -73,7 +73,7 @@ Ext.define('NextThought.view.contacts.Search',{
 		this.store = new NextThought.store.UserSearch({
 			filters:[
 				//filter out communities, lists, groups and yourself. Just return users.
-				function(rec){ return rec.getId() !== $AppConfig.contactsGroupName; },
+				function(rec){ return rec.get('Username') !== $AppConfig.contactsGroupName; },
 				function(rec){ return !rec.isCommunity; },
 				function(rec){ return !isMe(rec); },
 				function(rec){ return rec.get('ContainerId') === 'Users'; }

@@ -227,7 +227,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.searchStore = new NextThought.store.UserSearch({
 			filters:[
 				//filter out communities, lists, groups and yourself. Just return users.
-				function(rec){ return rec.getId() !== $AppConfig.contactsGroupName; },
+				function(rec){ return rec.get('Username') !== $AppConfig.contactsGroupName; },
 				function(rec){ return !rec.isCommunity; },
 				function(rec){ return !isMe(rec); },
 				function(rec){ return rec.get('ContainerId') === 'Users'; }
