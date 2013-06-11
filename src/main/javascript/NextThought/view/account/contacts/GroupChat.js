@@ -31,17 +31,28 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 		{tag:'span', cls:'x'}
 	]}),
 
+
 	renderSelectors: {
 		listEl: 'div[id$=list]',
 		tokensEl: 'div[id$=tokens]',
 		buttonsEl: 'div[id$=buttons]',
-		tokenInsertPoint: 'div[id$=tokens] .tokens .inputArea'
+		tokenInsertPoint: 'div[id$=tokens] .tokens .inputArea',
+		startEl: 'div[id$=buttons] .start'
 	},
 
 
-	updatePlaceholderLabel: function(){
-		var useShort = this.el.query('.token').length > 0;
-		this.setPlaceholderText(useShort ? 'Add' : this.initialConfig.placeholder);
+	initComponent: function(){
+		this.callParent(arguments);
+		this.on({
+			scope: this,
+			'token-added': 'updateState',
+			'token-removed': 'updateState'
+		});
+	},
+
+
+	hasTokens: function(){
+		return this.el.query('.token').length > 0;
 	},
 
 
@@ -61,8 +72,9 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			type = this.getType(record.getData());
 
 		if(this.isToken(value)){
-			this.addTag(value, type,{username:record.getId()});
-			this.updatePlaceholderLabel();
+			if(this.addTag(value, type,{username:record.getId()})){
+				this.fireEvent('token-added',record.getId());
+			}
 		}
 	},
 
@@ -71,6 +83,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 		var el = this.el.down('span[data-username="'+record.getId()+'"]');
 		if(el){
 			el.remove();
+			this.fireEvent('token-removed',record.getId());
 		}
 
 		return Boolean(el);
@@ -197,5 +210,13 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			this.lastSearchValue = value;
 			this.searchStore.search(value);
 		}
+	},
+
+
+	updateState: function(){
+		var has = this.hasTokens();
+
+		this.setPlaceholderText(has ? 'Add' : this.initialConfig.placeholder);
+		this.startEl[has?'removeCls':'addCls']('disabled');
 	}
 });
