@@ -95,11 +95,15 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
+	onBeforeRemoveToken: function(token){},
+
+
 	onClick: function(e){
 		e.stopEvent();
 		var t = e.getTarget('.x',null,true),
 			p = t ? t.up('.token') : null;
 		if( t && p ){
+			this.onBeforeRemoveToken(p);
 			p.remove();
 		}
 		this.inputEl.focus();
@@ -176,6 +180,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	setPlaceholderText: function(text){
 		this.placeholder = text;
 		this.inputEl.set({'placeholder': text});
+		this.updateSize();
 	},
 
 
