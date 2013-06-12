@@ -280,6 +280,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 		if(destructive){
 			this.el.select('.token').remove();
 			this.listEl.setScrollTop(0);
+			this.searchStore.search();
 			this.contactSearch.getSelectionModel().deselectAll(true);
 		}
 
