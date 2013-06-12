@@ -141,7 +141,12 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			filters: [
 				function(rec){ return rec.get('Username') !== $AppConfig.contactsGroupName; },
 				function(rec){ return !isMe(rec); },
-				function(rec){ return !rec.hasOnline || rec.hasOnline(); },
+				function(rec){
+					if(Ext.isEmpty(query)){
+						return !rec.isGroup;
+					}
+
+					return !rec.hasOnline || rec.hasOnline(); },
 					//This will have to do for now.
 				function(rec){
 					var data = [rec.get('Username'), rec.get('alias'), rec.get('realname'), rec.get('email')].join();
