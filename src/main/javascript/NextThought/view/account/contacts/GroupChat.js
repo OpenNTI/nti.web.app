@@ -149,7 +149,8 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 					return !rec.hasOnline || rec.hasOnline(); },
 					//This will have to do for now.
 				function(rec){
-					var data = [rec.get('Username'), rec.get('alias'), rec.get('realname'), rec.get('email')].join();
+					//HACK:
+					var data = [rec.get('Username'), rec.get('alias'), rec.get('realname'), rec.get('email'), (rec.get('friends')||[].join())].join();
 					//TODO: resolve group memberships and search them for hits
 					return Ext.isEmpty(query) || new RegExp(query,'i').test(data);
 				}
