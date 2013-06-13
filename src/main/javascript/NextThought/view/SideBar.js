@@ -24,7 +24,6 @@ Ext.define('NextThought.view.SideBar',{
 	frame: false,
 	plain: true,
 	shadow: false,
-	preventBringToFront: true,
 	ui: 'sidebar',
 	cls: 'sidebar',
 
@@ -78,10 +77,6 @@ Ext.define('NextThought.view.SideBar',{
 			relayer = contactsView.relayEvents(this.down('chat-dock'),['update-count'],'chat-dock-');
 			contactsView.on('destroy','destroy',relayer);
 		}
-
-		this.on('activate',function(){
-			Ext.WindowManager.sendToBack(this);
-		},this);
 	},
 
 

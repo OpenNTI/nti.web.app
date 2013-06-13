@@ -7,6 +7,8 @@ Ext.define('NextThought.view.contacts.Search',{
 		'NextThought.view.account.contacts.management.Popout'
 	],
 	floating: true,
+	shadow: false,
+	preventBringToFront: true,
 
 	cls: 'contact-search',
 
