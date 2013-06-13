@@ -38,6 +38,7 @@
 		.status{
 			height: 30px;
 			position: relative;
+			cursor: pointer;
 
 			.label{
 				float: left;
@@ -47,7 +48,6 @@
 				text-overflow: ellipsis;
 				font: normal 400 14px/30px $font;
 				color: #b8b8b8;
-				cursor: pointer;
 			}
 
 			.presence{
