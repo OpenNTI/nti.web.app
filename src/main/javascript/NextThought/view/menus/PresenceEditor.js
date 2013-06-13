@@ -2,7 +2,6 @@ Ext.define('NextThought.view.menus.PresenceEditor',{
 	extend: 'Ext.Editor',
 	alias: 'widget.presence-editor',
 
-	updateEl: false,
 	allowBlur: false,
 	cancelOnBlur: true, //Only valid if allowBlur is true this has no effect.  If allowBlur is false this will trigger a blur to cancel edit
 

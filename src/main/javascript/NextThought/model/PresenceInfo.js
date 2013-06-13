@@ -86,7 +86,7 @@ Ext.define('NextThought.model.PresenceInfo',{
 			return 'invisible';
 		}
 
-		return show
+		return show;
 	}
 
 });

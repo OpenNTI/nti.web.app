@@ -983,11 +983,6 @@ Ext.define('NextThought.controller.Chat', {
 						console.log("Set offline in another session");
 						me.setMyselfOffline = false;
 
-						function makeOnline(){
-							presence.set({type: 'available'});
-							me.changePresence(presence);
-						}
-
 						Toaster.makeToast({
 							message: "You've been set unavailable by another session",
 							buttons:[
@@ -995,8 +990,11 @@ Ext.define('NextThought.controller.Chat', {
 									label: 'alright'
 								},
 								{
-									label: 'Set avaliable',
-									callback: makeOnline,
+									label: 'Revert',
+									callback: function(){
+										presence.set({type: 'available'});
+										me.changePresence(presence);
+									},
 									scope: me
 								}
 							]

@@ -41,7 +41,7 @@ Ext.define('NextThought.view.menus.Presence',{
 				//{state: 'invisible', label: 'Invisible'},
 				{state: 'offline', label: 'Offline'}
 			]
-		})
+		});
 	},
 
     afterRender: function(){
@@ -123,10 +123,10 @@ Ext.define('NextThought.view.menus.Presence',{
 		}else if(e.getTarget('.dnd')){
 			return 'dnd';
 		}else if(e.getTarget('.offline')){
-			return 'unavailable'
-		}else{
-			return null;
+			return 'unavailable';
 		}
+
+		return null;
 	},
 
 	clicked: function(e){
@@ -156,7 +156,7 @@ Ext.define('NextThought.view.menus.Presence',{
 	isStatus: function(value){
 		var v = value && value.toLowerCase();
 
-		return v && v != 'available' && v != 'away' && v != 'do not disturb';
+		return v && v !== 'available' && v !== 'away' && v !== 'do not disturb';
 	},
 
 	saveEditor: function(e){
