@@ -3,6 +3,10 @@ Ext.define('NextThought.view.chat.Dock',{
 	alias: 'widget.chat-dock',
 	id: 'chat-dock',//there should be ONLY ONE instance of this.
 
+	requires: [
+		'NextThought.view.chat.History'
+	],
+
 	title: 'Chats',
 
 	ui: 'chat-dock',
@@ -21,6 +25,15 @@ Ext.define('NextThought.view.chat.Dock',{
 		beforeadd:'synchronizeHeight',
 		remove: 'updateAll'
 	},
+
+
+	constructor: function(){
+		if(isFeature('chat-history')){
+			this.items = [{xtype:'chat-history'}];
+		}
+		return this.callParent(arguments);
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -109,9 +122,11 @@ Ext.define('NextThought.view.chat.Dock',{
 
 
 	updateAll: function(){
+		if(!this.rendered){ return; }
 		this.updateTitle();
 		this.updateCount();
 	},
+
 
 	updateTitle: function(){
 
@@ -128,9 +143,10 @@ Ext.define('NextThought.view.chat.Dock',{
 		this.setTitle((total === 0)? "Chats" : "Chats ("+total+")");
 	},
 
+
 	add: function(){
 		var result = this.callParent(arguments);
-		
+
 		if(result){
 			if(Ext.isArray(result)){
 				Ext.each(result,this.monitorDockItem,this);
@@ -142,6 +158,7 @@ Ext.define('NextThought.view.chat.Dock',{
 		return result;
 	},
 
+
 	monitorDockItem: function(cmp){
 		this.mon(cmp,{
 			scope: this,
@@ -151,6 +168,7 @@ Ext.define('NextThought.view.chat.Dock',{
 			buffer: 1
 		});
 	},
+
 
 	updateCount: function(){
 		var total = 0;

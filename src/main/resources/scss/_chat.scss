@@ -479,7 +479,7 @@
 #chat-dock-placeholder { cursor: pointer; }
 
 #chat-dock-placeholder,
-#chat-dock .x-panel-header{
+#chat-dock > .x-panel-header{
 	background-color: $panel-background;
 	box-shadow: 0 -1px #dbdbdb, inset 0 1px #fcfcfc;
 	border-bottom: 1px solid #dfdfdf;
@@ -518,8 +518,8 @@
 }
 
 #chat-dock-placeholder.notice-me,
-#chat-dock.open .x-panel-header,
-#chat-dock.notice-me .x-panel-header
+#chat-dock.open > .x-panel-header,
+#chat-dock.notice-me > .x-panel-header
 {
 	background-color: #3fb3f6;
 	box-shadow: 0 -1px #d9d9d9, inset 0 1px #95ddfb;
@@ -690,6 +690,20 @@
 		.close {
 			opacity: 1;
 			visibility: visible;
+		}
+	}
+}
+
+
+#chat-history {
+	.x-panel-header{
+		background: #f1f1f1;
+		color: $primary-grey;
+		text-transform: uppercase;
+		font: normal 700 10px/30px $font;
+
+		.x-header-text-container {
+			padding: 0 0 0 10px;
 		}
 	}
 }

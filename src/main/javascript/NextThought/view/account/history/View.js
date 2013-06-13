@@ -42,6 +42,18 @@ Ext.define('NextThought.view.account.history.View',{
 		}
 	],
 
+
+	constructor: function(){
+		var i;
+		if(isFeature('chat-history')){
+			i = this.items[1].items[0].items;
+			delete i[2];
+		}
+
+		return this.callParent(arguments);
+	},
+
+
     afterRender: function(){
         this.callParent(arguments);
 

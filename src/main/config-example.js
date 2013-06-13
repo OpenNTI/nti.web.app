@@ -1,6 +1,7 @@
 var $AppConfig = {
 	"features":{
-		"rhp-groupchat": false
+		"rhp-groupchat": false,
+		"chat-history": false
 	},
 	"server" : {
         "host": "http://api.dev",
