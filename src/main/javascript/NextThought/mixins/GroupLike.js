@@ -35,7 +35,11 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 
 	getFriends: function(){
-		return this.get('friends') || [];
+		var f = (this.get('friends') || []).slice();
+		if(this.isDFL){
+			f.push(this.get('Creator'));
+		}
+		return f;
 	},
 
 

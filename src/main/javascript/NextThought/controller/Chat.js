@@ -350,8 +350,13 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		var flStore = Ext.getStore('FriendsList'),
+			pStore = Ext.getStore('PresenceInfo'),
 			flattened = [],
 			push = Array.prototype.push;
+
+		function online(v){
+			return !isMe(v) && pStore.findExact('username',v) > -1;
+		}
 
 		Ext.each(occupants,function(o){
 			var list = flStore.findExact('Username',o);
@@ -361,10 +366,10 @@ Ext.define('NextThought.controller.Chat', {
 			}
 
 			list = flStore.getAt(list);
-			push.apply(flattened, list.get('friends'));
+			push.apply(flattened, list.getFriends());
 		});
 
-		flattened = Ext.Array.unique(flattened);
+		flattened = Ext.Array.filter(Ext.Array.unique(flattened),online);
 
 		return this.enterRoom(flattened,options);
 	},
