@@ -218,6 +218,7 @@ span.tab{
 				min-height: 50px;
 				max-height: 200px;
 				outline: 0;
+				position: relative;
 
 				&.show-placeholder[data-placeholder]::after{
 					display: block;

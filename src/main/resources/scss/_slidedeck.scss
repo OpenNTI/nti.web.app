@@ -79,8 +79,7 @@ $experimental-support-for-svg: true;
 		}
 		.content{
 			&.show-placeholder[data-placeholder]::after{
-				top: 67px;
-				left: 15px;
+				left: 1px;
 				font-style: italic !important;
 			}
 		}
@@ -616,7 +615,7 @@ $experimental-support-for-svg: true;
 							.content{
 								&.show-placeholder[data-placeholder]::after{
 									top: 5px;
-									left: 13px;
+									left: 0;
 									font-style: italic !important;
 								}
 							}

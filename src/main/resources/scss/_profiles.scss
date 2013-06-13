@@ -415,6 +415,14 @@
 							&::after{ display: none; }
 						}
 						.main{
+							.content{
+								&.show-placeholder[data-placeholder]::after{
+									left: 0;
+									top: 2px;
+									font-style: italic !important;
+								}
+							}
+
 							.error-tip[data-error-tip]::before{
 								top: 32px !important;
 							}

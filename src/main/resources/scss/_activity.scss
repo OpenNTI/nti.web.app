@@ -165,10 +165,6 @@
 					min-height: 0;
 					max-height: auto;
 					height: 100px;
-
-					&.show-placeholder[data-placeholder]::after{
-						left: 11px;
-					}
 				}
 				.error-tip[data-error-tip]::before{
 					top: 32px !important;

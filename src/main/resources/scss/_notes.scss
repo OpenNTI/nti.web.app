@@ -272,8 +272,6 @@
 					padding-right: 13px;
 
 					&.show-placeholder[data-placeholder]::after{
-						top: 65px;
-						left: 7px;
 						font-style: italic !important;
 					}
 				}
@@ -769,8 +767,7 @@
 						padding: 6px 0 0 0;
 
 						&.show-placeholder[data-placeholder]::after{
-							top: 6px;
-							left: 12px;
+							top: 5px;
 						}
 					}
 
