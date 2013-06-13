@@ -307,7 +307,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.mon(this.groupChat,{
 			scope: this.groupChat,
 			cancel: 'hide',
-			'group-chat': 'hide'
+			'adhock-chat': 'hide'
 		});
 	}
 });

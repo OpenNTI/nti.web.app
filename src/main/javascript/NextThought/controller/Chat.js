@@ -77,38 +77,39 @@ Ext.define('NextThought.controller.Chat', {
 //			    'chat-log-view tool[action]':{'click': this.toolClicked},
 
 				'*': {
-					'set-chat-status': this.changeStatus,
-					'set-chat-show': this.changeShow,
-					'set-chat-type': this.changeType,
-					'group-chat': this.enterRoom,
-					'chat': this.enterRoom
+					'set-chat-status': 'changeStatus',
+					'set-chat-show': 'changeShow',
+					'set-chat-type': 'changeType',
+					'group-chat': 'enterRoom',
+					'chat': 'enterRoom',
+					'adhock-chat':'flattenOccupantsAndEnterRoom'
 				},
 
 				'chat-view chat-entry': {
 					//'classroom': this.classroom,
-					'send': this.send,
-					'send-whiteboard': this.sendWhiteboard
+					'send': 'send',
+					'send-whiteboard': 'sendWhiteboard'
 				},
 
 				'chat-view chat-log-entry': {
-					'reply-to-whiteboard': this.replyToWhiteboard
+					'reply-to-whiteboard': 'replyToWhiteboard'
 				},
 
 				'chat-view': {
-					'flag-messages': this.flagMessages,
-					'publish-chat-status': this.publishChatStatus
+					'flag-messages': 'flagMessages',
+					'publish-chat-status': 'publishChatStatus'
 				},
 				'chat-log-entry': {
-					'link-clicked': this.linkClicked,
-					'show-whiteboard': this.zoomWhiteboard
+					'link-clicked': 'linkClicked',
+					'show-whiteboard': 'zoomWhiteboard'
 				},
 				'chat-transcript-window': {
-					'flag-messages': this.flagTranscriptMessages
+					'flag-messages': 'flagTranscriptMessages'
 				},
 
 				'chat-transcript': {
-					'link-clicked': this.linkClicked,
-					'show-whiteboard': this.zoomWhiteboard
+					'link-clicked': 'linkClicked',
+					'show-whiteboard': 'zoomWhiteboard'
 				},
 
 				'chat-window': {
@@ -131,15 +132,15 @@ Ext.define('NextThought.controller.Chat', {
 				},
 
 				'script-entry': {
-					'script-to-chat': this.send
+					'script-to-chat': 'send'
 				}
 			},
 
 			controller:{
 				'*':{
-					'set-chat-status': this.changeStatus,
-					'set-chat-show': this.changeShow,
-					'set-chat-type': this.changeType
+					'set-chat-status': 'changeStatus',
+					'set-chat-show': 'changeShow',
+					'set-chat-type': 'changeType'
 				}
 			}
 		});
@@ -340,6 +341,35 @@ Ext.define('NextThought.controller.Chat', {
 	approveMessages: function (messageIds) {
 		this.socket.emit('chat_approveMessages', messageIds);
 	},
+
+
+	flattenOccupantsAndEnterRoom: function(occupants,options){
+		if (!$AppConfig.service.canChat()) {
+			console.log('User not permissioned to chat.');
+			return;
+		}
+
+		var flStore = Ext.getStore('FriendsList'),
+			flattened = [],
+			push = Array.prototype.push;
+
+		Ext.each(occupants,function(o){
+			var list = flStore.findExact('Username',o);
+			if(list < 0){
+				push.call(flattened, o);
+				return;
+			}
+
+			list = flStore.getAt(list);
+			push.apply(flattened, list.get('friendss'));
+		});
+
+		flattened = Ext.Array.unique(flattened);
+
+		return this.enterRoom(flattened,options);
+	},
+
+
 
 	/*
 	 * Creates a room to enter from the given user, list of user, or friends list / dfl.

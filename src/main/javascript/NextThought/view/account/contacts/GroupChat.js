@@ -262,7 +262,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			this.fireEvent('cancel');
 		}
 		else if(e.getTarget('.start') && !this.startEl.hasCls('disabled')){
-			this.fireEvent('group-chat', this.getOccupantsList());
+			this.fireEvent('adhock-chat', this.getOccupantsList());
 			this.reset(true);
 		}
 
