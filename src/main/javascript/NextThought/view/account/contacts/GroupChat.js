@@ -48,6 +48,15 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			'token-added': 'updateState',
 			'token-removed': 'updateState'
 		});
+
+	},
+
+
+	show: function(){
+		this.callParent(arguments);
+		var el = this.getFocusEl();
+		Ext.defer(el.focus,200,el);
+		return this;
 	},
 
 
