@@ -99,6 +99,7 @@ Ext.define('NextThought.view.video.Video',{
 			'autohide=1',
 			'modestbranding=1',
 			'rel=0',
+			'wmode=transparent',
 			'showinfo=0',
 			'list='+encodeURIComponent(pl),
 			'origin='+encodeURIComponent(location.protocol+'//'+location.host)
@@ -179,6 +180,7 @@ Ext.define('NextThought.view.video.Video',{
 				enablejsapi: '1',
 				autohide: '1',
 				modestbranding: '1',
+				wmode:'transparent',
 				rel: '0',
 				showinfo: '0',
 				list: pl,
@@ -217,6 +219,7 @@ Ext.define('NextThought.view.video.Video',{
 				'enablejsapi=1',
 				'autohide=1',
 				'modestbranding=1',
+				'wmode=transparent',
 				'rel=0',
 				'showinfo=0',
 				'list='+encodeURIComponent(pl),
