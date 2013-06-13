@@ -62,6 +62,22 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
+		function fillInName(){
+			if (isMe(name)) {
+				me.renderData.name = (comment) ? 'I' : 'me';
+				me.user = $AppConfig.userObject;
+			}
+			if (!isMe(name) && name) {
+				UserRepository.getUser(name, function (user) {
+					me.user = user;
+					me.renderData.name = user.getName();
+					if (me.rendered) {
+						me.renderTpl.overwrite(me.el, me.renderData);
+					}
+				});
+			}
+		}
+
 		function finish(r) {
 			var tags = r.get('headline').get('tags'), tagMsg;
 			me.renderData = Ext.apply(me.renderData, r.getData());
@@ -78,28 +94,21 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			me.renderData.tags = tagMsg;
 
 			me.record = r;
-			if (isMe(name)) {
-				me.renderData.name = (comment) ? 'I' : 'me';
-				me.user = $AppConfig.userObject;
-			}
-			if (!isMe(name) && name) {
-				UserRepository.getUser(name, function (user) {
-					var n = user.getName();
-					me.user = user;
-
-					me.renderData.name = n;
-					if (me.rendered) {
-						me.renderTpl.overwrite(me.el, me.renderData);
-					}
-				});
-			}
-			else if (me.rendered) {
+			fillInName();
+			if (me.rendered) {
 				me.renderTpl.overwrite(me.el, me.renderData);
 			}
 		}
 
-		function fail() {
+		function fail(req, resp) {
 			console.log('there was an error retrieving the object.', arguments);
+			if(resp.status === 404){
+				me.deleted = true;
+			}
+			fillInName();
+			if (me.rendered) {
+				me.renderTpl.overwrite(me.el, me.renderData);
+			}
 		}
 
 		$AppConfig.service.getObject(containerId, finish, fail, me);
@@ -107,5 +116,16 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 	doClicked: function (fragIdx) {
 		this.fireEvent('click-blog-result', this, fragIdx, this.comment);
+	},
+
+	displayNavigationError: function(){
+		var objDisplayType = 'object',
+			msgCfg = { msg: 'An unexpected error occurred loading the '+ objDisplayType };
+
+		if(this.deleted ){
+			msgCfg.title = 'Not Found!';
+			msgCfg.msg = 'The '+objDisplayType+' you are looking for no longer exists.';
+		}
+		alert(msgCfg);
 	}
 });
