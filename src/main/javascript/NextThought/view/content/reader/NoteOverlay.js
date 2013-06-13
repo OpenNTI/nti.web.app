@@ -550,6 +550,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayEditorSave: function (e) {
 		e.stopEvent();
+		if(e.getTarget('.disabled')){ return; }
 
 		function callback(success, record) {
 			o.editor.unmask();
