@@ -152,10 +152,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			keydown: me.editorKeyDown
 		});
 
-
+		if(this.editorEl.down('.title')){
+			this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
+		}
 
 		if(me.replyToId === me.record.getId()){
-			me.activateReplyEditor();
+			me.onReply();
 		}
 	},
 
@@ -899,10 +901,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(t && this.wbData[guid]){
 			t = e.getTarget('.reply:not(.profile-activity-reply-item)',null,true);
 			if(t){
-				if( this.activateReplyEditor() ){
-					t.up('.toolbar').down('.include').addCls('checked');
-					this.editor.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
-				}
+				this.onReply();
+				t.up('.toolbar').down('.include').addCls('checked');
+				this.editor.addWhiteboard(Ext.clone(this.wbData[guid]),guid+'-reply');
 			}
 			else {
 				t = e.getTarget('.include',null,true);

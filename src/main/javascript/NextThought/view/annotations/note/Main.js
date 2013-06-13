@@ -25,8 +25,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		me.callParent(arguments);
 
-		this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
-
 		try {
 			me.contactsMaybeChanged();
 
