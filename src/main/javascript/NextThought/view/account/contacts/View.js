@@ -54,7 +54,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	itemSelector:'.contact-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
-			{ cls: 'presence {Presence}' },
+			{ cls: 'presence {Presence.name}' },
 			{ cls: 'nib' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 			{ cls: 'wrap', cn: [

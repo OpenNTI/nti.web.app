@@ -47,24 +47,48 @@ Ext.define('NextThought.view.menus.Presence',{
     afterRender: function(){
 		this.callParent(arguments);
 
-		var presence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username),
-			show = presence && presence.get('show'),
-			name = presence && presence.getName();
+		var presence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
+			
+		this.setPresence($AppConfig.username, presence);
 
-		if( presence && presence.isOnline() && name){
+		this.setUpEditor();
+		this.mon(this.el,'click','clicked',this);
+
+		this.mon(Ext.getStore('PresenceInfo'),'presence-changed','setPresence', this);	
+	},
+
+	setPresence: function(username, presence){
+		if(!isMe(username) || !presence){ return; }
+
+		var current = this.el.down('.selected'),
+			show = presence.get('show'),
+			name = presence.getName();
+
+		if(current){
+			current.removeCls('selected');
+
+			if(current.hasCls('available')){
+				current.down('.label').update('Available');
+			}else if(current.hasCls('away')){
+				current.down('.label').update('Away');
+			}else if(current.hasCls('dnd')){
+				current.down('.label').update('Do not disturb');
+			}
+		}
+
+		if(presence.isOnline() && name){
 			name = this.el.down('.'+name);
 			if(!name){
-				console.log('Something went horribly wrong');
+				console.log('Element didnt exist');
 			}else{
 				name.addCls('selected');
+				console.log(presence.getDisplayText());
 				name.down('.label').update(presence.getDisplayText());
 			}
 		}else{
 			this.offlineEl.addCls('selected');
 		}
 
-		this.setUpEditor();
-		this.mon(this.el,'click','clicked',this);	
 	},
 
 	setUpEditor: function(){
@@ -77,7 +101,8 @@ Ext.define('NextThought.view.menus.Presence',{
 				emptyText: '',
 				enforceMaxLength: true,
 				maxLength: 140,
-				allowEmpty: true
+				allowEmpty: true,
+				enableKeyEvents: true
 			},
 			xhooks:{
 				cancelEdit:function(){
@@ -135,15 +160,17 @@ Ext.define('NextThought.view.menus.Presence',{
 	},
 
 	saveEditor: function(e){
-		var target = this.getTarget(e),
+		var target = this.editor.activeTarget,
 			value = this.editor.field.value,
 			newPresence,
 			currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username),
 			type = (target === 'unavailable')? 'unavailable' : 'available',
-			show = (target === 'Avaliable')? 'chat' : target,
+			show = (target === 'available')? 'chat' : target,
 			status = (this.isStatus(value))? value : '' ;
 
 		newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
+
+		this.editor.activeRow.removeCls('active');
 
 		if(newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status')){
 			//somethings different update the presence

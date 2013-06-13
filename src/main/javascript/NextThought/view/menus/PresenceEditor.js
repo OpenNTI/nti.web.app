@@ -24,19 +24,14 @@ Ext.define('NextThought.view.menus.PresenceEditor',{
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
 		this.mon(this.el.down('.save'), 'click', this.completeEdit, this);
 		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
-		//this.on('beforestatesave','saveEdit',this);
+		this.mon(this.field,'keypress','handleKeyPress', this);
+		this.mon(this.field,'keyup','handleKeyPress', this);
+		this.mon(this.field,'keydown','handleKeyPress', this);
 	},
 
-	/*completeEdit: function(){
-		var newPresence,
-			currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username),
-			value = this.field.value;
-
-		if(this.activeTarget === 'offline' && currentPresence.isOnline()){
-			newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'')
-		}
-		console.log("Completing Edit");
-	},*/
+	handleKeyPress: function(el,e){
+		e.stopPropagation();
+	},
 
 	startEdit: function(t,v){
 

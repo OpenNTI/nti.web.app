@@ -26,10 +26,24 @@ Ext.define('NextThought.model.PresenceInfo',{
 		}
 	},
 
+
+	constructor: function(){
+		this.callParent(arguments);
+
+		ObjectUtils.defineAttributes(this,{
+			name:{
+				getter: this.getName
+			}
+		});
+		return this;
+	},
+
+
 	isPresenceInfo: true,
 
 	nameToDisplay: {
 		'dnd': 'Do not disturb',
+		'away': 'Away',
 		'available': 'Available',
 		'unavailable': '',
 		'invisible': 'Invisible'

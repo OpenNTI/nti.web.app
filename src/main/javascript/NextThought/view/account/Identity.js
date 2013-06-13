@@ -39,7 +39,7 @@ Ext.define('NextThought.view.account.Identity',{
 					'data-qtip': r.getName()
 				});
 
-				me.presence.set({cls:'presence '+ r.getPresence()});
+				me.presence.set({cls:'presence '+ r.getPresence().getName()});
 
 				if(r !== u){
 					me.monitorUser(r);
