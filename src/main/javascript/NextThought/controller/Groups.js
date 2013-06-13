@@ -481,12 +481,7 @@ Ext.define('NextThought.controller.Groups', {
 		//onSuccess instead of reloading the whole store
 		//lets try and just remove the one thing we need
 		function success(record){
-			var store = this.getFriendsListStore(),
-				idx = store.indexOfId(record.getId());
-
-			if(idx >= 0){
-				store.removeAt(idx);
-			}
+			this.getFriendsListStore().remove(record);
 		}
 
 		function onError(errorText){
