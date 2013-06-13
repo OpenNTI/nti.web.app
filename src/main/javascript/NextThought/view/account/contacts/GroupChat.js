@@ -81,18 +81,18 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			type = this.getType(record.getData());
 
 		if(this.isToken(value)){
-			if(this.addTag(value, type,{username:record.getId()})){
-				this.fireEvent('token-added',record.getId());
+			if(this.addTag(value, type,{username:record.get('Username')})){
+				this.fireEvent('token-added',record.get('Username'));
 			}
 		}
 	},
 
 
 	removeToken: function(record){
-		var el = this.el.down('span[data-username="'+record.getId()+'"]');
+		var el = this.el.down('span[data-username="'+record.get('Username')+'"]');
 		if(el){
 			el.remove();
-			this.fireEvent('token-removed',record.getId());
+			this.fireEvent('token-removed',record.get('Username'));
 		}
 
 		return Boolean(el);
@@ -112,7 +112,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			rec;
 
 		Ext.each(recs,function(r){
-			if(r.getId() === id){
+			if(r.get('Username') === id){
 				rec = r;
 			}
 		});
