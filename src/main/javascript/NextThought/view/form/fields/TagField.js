@@ -263,14 +263,13 @@ Ext.define('NextThought.view.form.fields.TagField',{
 		this.inputEl[readOnly?'hide':'show']();
 	},
 
-
+//This MUST be reimplemented if the subclass redfines the value format
 	setValue: function(value){
 		if(!this.rendered){
 			Ext.Error.raise('Should only be called after rendering');
 		}
 
-		Ext.each(value||[],function(v){
-			this.tokenTpl.insertBefore(this.wrapEl,[v]); },this);
+		Ext.each(value||[],function(v){ this.addTag(v); },this);
 
 		return this;
 	},
