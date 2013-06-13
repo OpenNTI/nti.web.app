@@ -446,8 +446,15 @@ Ext.define('NextThought.controller.Forums', {
 						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
 					}
 					catch(e){
+						var msgCfg = {};
+
 						pair[1] = null;
 						console.error('Could not load record',Globals.getError(e));
+						if(resp.status === 404){
+							msgCfg.title = 'Not Found!';
+							msgCfg.msg = 'The object you are looking for no longer exists.';
+							alert(msgCfg);
+						}
 					}
 					maybeFinish();
 				}
