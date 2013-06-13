@@ -60,8 +60,10 @@ Ext.define('NextThought.view.account.Identity',{
 	    me.callParent(arguments);
 
         me.mon(el, 'mouseover', function(){
-            me.menu.showBy(el);
+            me.menu.showBy(el, 'tr-br', [0,0]);
         });
+
+        me.menu.setWidth(me.el.up('.sidebar').getWidth());
 
 	    me.enableProfileClicks(me.avatar);
     }

@@ -19,19 +19,22 @@
 	border-radius: 90px;
 	background: $tertiary-grey;
 
-	&.Online {
+	&.Online,&.available {
 		background: $primary-green;
 	}
 	&.idle {}
-	&.DnD {
+	&.away{
+		background: #e5d01c;
+	}
+	&.DnD,&.dnd {
 		background: $primary-red;
 	}
 }
 
-@mixin icon($name,$top:0,$left:0){
+@mixin icon($name,$top:0,$left:0,$side:'after'){
 	position: relative;
 
-	&::after {
+	&::#{$side} {
 		content: '';
 		overflow: hidden;
 		position: absolute;

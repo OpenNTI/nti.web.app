@@ -80,6 +80,7 @@ Ext.define('NextThought.controller.Chat', {
 					'set-chat-status': 'changeStatus',
 					'set-chat-show': 'changeShow',
 					'set-chat-type': 'changeType',
+					'set-chat-presence': 'changePresence',
 					'group-chat': 'enterRoom',
 					'chat': 'enterRoom',
 					'adhock-chat':'flattenOccupantsAndEnterRoom'
@@ -985,15 +986,14 @@ Ext.define('NextThought.controller.Chat', {
 	/*
 	* Tells the server to change the presence of the current user
 	*
-	* @param type - the users availability 'available' or 'unavailable'
+	* @param type - the users availability 'available' or 'unavailable' or a PresenceInfo model
 	* @param [show] - show the user as 'chat','away','dnd', or'xa'
 	* @param [status] - message to show if the user is available
 	* @param [c] - function to call when the socket is done
 	*/
 	changePresence: function(type,show,status,c){
-		console.log("chat changePresence");//card 1768
 		var username = $AppConfig.username,
-			newPresence = NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
+			newPresence = (type.isPresenceInfo)? type : NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
 			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
 
 

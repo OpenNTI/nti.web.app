@@ -25,3 +25,98 @@
 		@include presence-style;
 	}
 }
+
+.presence-menu{
+	.list{
+
+		.status{
+			height: 30px;
+			position: relative;
+
+			.label{
+				float: left;
+				padding-right: 64px;
+				padding-left: 30px;
+				overflow: hidden;
+				text-overflow: hidden;
+			}
+
+			.presence{
+				@include presence-style;
+				position: absolute;
+				right: 13px;
+				top: 11px;
+
+			}
+
+			.edit{
+				@include icon('rhp-status-edit',$top:9px,$left:8px);
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 30px;
+				width: 30px;
+				display: none;
+
+				&:hover{
+					@include icon('rhp-status-edit_hover', $top:9px, $left:8px);
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					right: 30px;
+					width: 30px;
+					background-color: #dddddd;
+				}
+			}
+
+			&.selected{
+				@include icon('rhp-status-checkmark', $top:8px, $left:15px, $side:'before');
+			}
+
+			&.active{
+				.edit{
+					display: none;
+				}
+				.presence{
+					display: none;
+				}
+			}
+
+			&:hover,&.active{
+				background-color: #efefef;
+
+				.edit{
+					border-left: 1px solid #ffffff;
+					border-right: 1px solid #ffffff;
+					display: block;					
+				}
+			}
+		}
+	}
+}
+
+.presence-editor{
+	height: 30px;
+	width: 232px;
+	padding-top: 3px;
+	border: none;
+
+	input{
+		background: none;
+		width: 165px;
+		float: right;
+		border: none;
+	}
+
+	.controls{
+		right: 0;
+		top: 3px;
+		overflow: visible;
+		.cancel{
+			@include icon('clear_line',$top:7px,$left:-7px);
+			overflow: visible;
+			z-index: 2;
+			border: none;
+		}
+	}
+}

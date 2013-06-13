@@ -28,6 +28,13 @@ Ext.define('NextThought.model.PresenceInfo',{
 
 	isPresenceInfo: true,
 
+	nameToDisplay: {
+		'dnd': 'Do not disturb',
+		'available': 'Available',
+		'unavailable': '',
+		'invisible': 'Invisible'
+	},
+
 	isOnline: function(){
 		return this.get('type') !== 'unavailable';
 	},
@@ -37,18 +44,35 @@ Ext.define('NextThought.model.PresenceInfo',{
 	},
 
 	getDisplayText: function(){
+		var status = this.get('status');
+
 		if(!this.isOnline()){
 			return '';
-		}else if(this.get('status') !== null && this.get('status') !== 'null' && this.get('status') !== ''){
-			return this.get('status');
-		}else{
-			if(this.get('show') === 'chat'){
-				return 'Available';
-			}else if(this.get('show') === 'dnd'){
-				return 'Do not Disturb';
-			}
-			return this.get('show');
 		}
+
+		if(!Ext.isEmpty(status) && status !== 'null'){
+			return this.get('status');
+		}
+
+		return this.nameToDisplay[this.getName()];
+	},
+
+	getName: function(){
+		var show = this.get('show');
+		
+		if(!this.isOnline()){
+			return 'unavailable';
+		}
+
+		if(show === 'chat'){
+			return 'available';
+		}
+
+		if(show === 'xa'){
+			return 'invisible';
+		}
+
+		return show
 	}
 
 });
