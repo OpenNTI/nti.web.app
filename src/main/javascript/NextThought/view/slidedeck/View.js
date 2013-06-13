@@ -40,8 +40,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 			start = this.startOn,
 			ctrls = this.items.getAt(0),
 			slide = this.getSlide(),
-			v, q,vPlaylist = [],
-			me = this;
+			v, q,vPlaylist = [];
 
 		//clear the reference, pass it along...
 		delete this.store;
@@ -76,16 +75,13 @@ Ext.define('NextThought.view.slidedeck.View',{
 		// pause and reply video when share overlay opens and closes
 
 		this.mon(NextThought.getApplication(),'showshare', function(evt, target) {
-			me.wasPlaying = me.video.isPlaying();
-			if (me.wasPlaying) {
-				me.video.pausePlayback();
-			}
-		});
+			this.pausedForSharing = v.pausePlayback();
+		}, this);
 		this.mon(NextThought.getApplication(),'hideshare', function(evt, target) {
-			if (me.wasPlaying) {
-				me.video.resumePlayback();
+			if (this.pausedForSharing) {
+				v.resumePlayback();
 			}
-		});
+		}, this);
 	},
 
 
