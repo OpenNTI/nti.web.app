@@ -305,7 +305,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 	chatWithGroup: function(group){
 		if(group.getFriendCount() > 0){
-			this.fireEvent('group-chat', group);
+			this.fireEvent('group-chat', group, {persistent:false});
 		}
 	},
 
