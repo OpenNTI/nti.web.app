@@ -361,7 +361,7 @@ Ext.define('NextThought.controller.Chat', {
 			}
 
 			list = flStore.getAt(list);
-			push.apply(flattened, list.get('friendss'));
+			push.apply(flattened, list.get('friends'));
 		});
 
 		flattened = Ext.Array.unique(flattened);
