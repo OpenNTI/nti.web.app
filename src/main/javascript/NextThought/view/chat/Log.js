@@ -179,7 +179,8 @@ Ext.define('NextThought.view.chat.Log', {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
-			mStat = msg.get('Status'), o;
+			mStat = msg.get('Status'),
+            me = this, o, img;
 		if (!id){console.warn('This message has no NTIID, cannot be targeted!', msg);}
 
 		this.clearChatStatusNotifications();
@@ -210,16 +211,25 @@ Ext.define('NextThought.view.chat.Log', {
 
 		this.shouldAddTimestampBeforeMessage(msg);
 
-		//we are going to add then scroll to
 		o = m.add({
 			xtype: this.entryType,
 			message: msg,
 			messageId: IdCache.getIdentifier(msg.getId())
 		});
 
-		if(o.el && this.el && this.shouldAllowScrollingOnAdd){
-			o.el.scrollIntoView(this.el);
-		}
+        // Scroll the chat log down after adding the element
+        // and after any images load
+        function scrollChatLog() {
+            if(o.el && me.el && me.shouldAllowScrollingOnAdd){
+                me.el.scroll('down', Infinity);
+            }
+        }
+
+        if (o.el) {
+            img = o.el.select('.body-text img');
+            img.on('load', scrollChatLog);
+        }
+        scrollChatLog();
 	},
 
 
