@@ -155,6 +155,10 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 						return !rec.isGroup;
 					}
 
+					if(rec.isDFL && !isMe(rec.get('Creator'))){
+						return false;
+					}
+
 					return !rec.hasOnline || rec.hasOnline(); },
 					//This will have to do for now.
 				function(rec){
