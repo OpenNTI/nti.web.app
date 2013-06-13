@@ -2,7 +2,7 @@ Ext.define('NextThought.view.menus.Settings',{
     extend: 'Ext.menu.Menu',
     alias: 'widget.settings-menu',
     requires: [
-
+        'NextThought.view.menus.Presence'
     ],
     ui: 'nt',
     plain: true,
@@ -27,6 +27,9 @@ Ext.define('NextThought.view.menus.Settings',{
 			links = $AppConfig.userObject.get('Links') || {},
 			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null,
             childsLink = links.getLinksForRel ? links.getLinksForRel('childrens-privacy') : null;
+
+        items.push({ xtype: 'presence-menu'});
+        items.push({ xtype: 'menuseparator'});
 
         items.push({ action: 'account', text: 'My Account'});
 
