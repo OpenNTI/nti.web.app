@@ -131,6 +131,15 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		});
 	},
 
+	show: function() {
+		NextThought.getApplication().fireEvent('showshare', this);
+		this.callParent(arguments);
+	},
+
+	hide: function() {
+		NextThought.getApplication().fireEvent('hideshare', this);
+		this.callParent(arguments);
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);
