@@ -976,7 +976,35 @@ Ext.define('NextThought.controller.Chat', {
 
 			//if its the current user set the flag accordingly
 			if(isMe(key)){
-				me.availableForChat = (presence.isOnline())? true : false; 
+				if(presence.isOnline()){
+					me.availableForChat = true;
+				}else{
+					if(!me.setMyselfOffline){
+						console.log("Set offline in another session");
+						me.setMyselfOffline = false;
+
+						function makeOnline(){
+							presence.set({type: 'available'});
+							me.changePresence(presence);
+						}
+
+						Toaster.makeToast({
+							message: "You've been set unavailable by another session",
+							buttons:[
+								{
+									label: 'alright'
+								},
+								{
+									label: 'Set avaliable',
+									callback: makeOnline,
+									scope: me
+								}
+							]
+						});
+					}
+
+					me.availableForChat = false; 
+				}
 			}
 
 			store.setPresenceOf(key, presence);
@@ -997,8 +1025,14 @@ Ext.define('NextThought.controller.Chat', {
 			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
 
 
-		this.socket.emit("chat_setPresence", newPresence.asJSON(), callback);
+		if(!newPresence.isOnline()){
+			this.setMyselfOffline = true;
+			Ext.defer(function(){
+				this.setMyselfOffline = false;
+			}, 5*1000, this);
+		}
 
+		this.socket.emit("chat_setPresence", newPresence.asJSON(), callback);
 	},
 
 	changeType: function(type){
