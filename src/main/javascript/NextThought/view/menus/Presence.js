@@ -38,8 +38,8 @@ Ext.define('NextThought.view.menus.Presence',{
 				{state: 'available', label: 'Available', editable: true},
 				{state: 'away', label: 'Away', editable: true},
 				{state: 'dnd', label: 'Do not disturb', editable: true},
-				{state: 'invisible', label: 'Invisible'},
-				{state: 'offline', label: 'Offline'},
+				//{state: 'invisible', label: 'Invisible'},
+				{state: 'offline', label: 'Offline'}
 			]
 		})
 	},
