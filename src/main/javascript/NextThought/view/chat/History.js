@@ -47,7 +47,7 @@ Ext.define('NextThought.view.chat.History',{
 		}
 
 
-		var s = NextThought.store.PageItem.create({ filters:[ mergeChatsFilter ] });
+		var s = NextThought.store.PageItem.create({ filters:[ mergeChatsFilter ], pageSize: 5 });
 			
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
@@ -84,24 +84,46 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	prefetchNext: function() {
-		var s = this.getStore(), max;
+		var s = this.getStore(), links = s && s.batchLinks;
 
-		if (!s.hasOwnProperty('data')) {
+		if (!links) {
 			return;
 		}
 
-		max = s.getPageFromRecordIndex(s.getTotalCount());
-		if(s.currentPage < max && !s.isLoading()){
+
+		if(links && links['batch-next'] && !s.isLoading()){
 			s.clearOnPageLoad = false;
+			s.getProxy().buildUrl = function(){return links['batch-next'];};
 			s.nextPage();
 		}
 	},
 
 
 	storeLoaded: function(s){
+		this.removeAll(true);
 		this.add(Ext.Array.map(s.getRange(),function(a){
 			return {record: a, store: s};
 		}));
+
+		if( this.items.length< 3 ){
+			this.prefetchNext();
+		}
+		else {
+			this.add({
+				xtype:'box',
+				autoEl: {
+					cls: 'more',
+					html: 'Load More'
+				},
+				listeners: {
+					click: {
+						scope: this,
+						fn: 'prefetchNext',
+						element: 'el'
+					}
+				}
+			});
+		}
 	}
 
 });
