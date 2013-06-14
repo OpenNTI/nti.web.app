@@ -74,7 +74,7 @@ Ext.define('NextThought.view.chat.View', {
     afterRender: function(){
         this.callParent(arguments);
         this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
-	    this.mon(this, 'add', this.maybeShowFlagIcon, this);
+	    this.mon(this.down('chat-log-view'), 'add', this.maybeShowFlagIcon, this);
 	    this.on('resize',this.reanchorLog,this);
 	    this.on('status-change', this.trackChatState, this);
         this.maybeShowFlagIcon();
