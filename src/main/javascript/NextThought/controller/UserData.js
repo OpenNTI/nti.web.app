@@ -61,6 +61,10 @@ Ext.define('NextThought.controller.UserData', {
 
 		this.listen({
 			component:{
+				'*': {
+					'open-chat-transcript': this.openChatTranscript
+				},
+
 				'reader-panel':{
 					'annotations-load': this.onAnnotationsLoad,
 					'filter-annotations': this.onAnnotationsFilter,
@@ -74,11 +78,9 @@ Ext.define('NextThought.controller.UserData', {
 					'dismiss-popover': this.onDismissPopover
 				},
 
-
 				'slide-comment-header': {
 					'save-new-note': this.saveNewNote
 				},
-
 
 				'activity-preview': {
 					'share': this.shareWith,
@@ -88,6 +90,7 @@ Ext.define('NextThought.controller.UserData', {
 				'activity-preview-note > nti-editor':{
 					'save': this.savePreviewNoteReply
 				},
+
 				'activity-preview-note > activity-preview-note-reply > nti-editor':{
 					'save': this.savePreviewNoteReply
 				},
@@ -115,15 +118,7 @@ Ext.define('NextThought.controller.UserData', {
 				'chat-log-view': {
 					'load-transcript': this.onLoadTranscript
 				},
-				'user-data-panel': {
-					'open-chat-transcript': this.openChatTranscript
-				},
-				'search-result-messageinfo':{
-					'open-chat-transcript': this.openChatTranscript
-				},
-				'profile-activity-transcriptsummary-item':{
-					'open-chat-transcript': this.openChatTranscript
-				},
+
 				'content-page-widgets': {
 					'save-new-bookmark': this.saveNewBookmark
 				}

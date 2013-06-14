@@ -100,8 +100,9 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	storeLoaded: function(s,recs){
+		var store = this.store;
 		this.add(Ext.Array.map(recs,function(a){
-			return {record: a};
+			return {record: a, store: store};
 		}));
 	}
 
@@ -160,9 +161,33 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 
 
 	onClick: function(e){
-		var me = this;
 		e.stopEvent();
-		console.log(this.record);
+		this.getTranscriptsForOccupants();
+	},
+
+
+	getTranscriptsForOccupants: function(){
+		var records = [],
+			store = this.store,
+			occupants = (this.record.get('Contributors')||[]).slice(),
+			length = occupants.length;
+
+
+		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
+		// paging them in is not really in the cards for now.)
+		store.snapshot.each(function(obj){
+			var list = (obj.get('Contributors')||[]),
+					len = list.length;
+
+			if(length === len){
+				if(Ext.Array.intersect(occupants,list).length === length){
+					records.push(obj);
+				}
+			}
+		});
+
+
+		this.fireEvent('open-chat-transcript', records, this.namesEl.getHTML());
 	},
 
 
