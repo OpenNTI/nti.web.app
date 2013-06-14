@@ -27,8 +27,11 @@ Ext.define('NextThought.view.menus.Settings',{
 			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null,
             childsLink = links.getLinksForRel ? links.getLinksForRel('childrens-privacy') : null;
 
-        items.push({ xtype: 'presence-menu'});
-        items.push({ xtype: 'menuseparator'});
+      
+        if($AppConfig.service.canChat()){
+            items.push({ xtype: 'presence-menu'});
+            items.push({ xtype: 'menuseparator'});
+        }
 
         items.push({ action: 'account', text: 'My Account'});
 
