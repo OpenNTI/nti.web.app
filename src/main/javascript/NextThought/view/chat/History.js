@@ -31,19 +31,18 @@ Ext.define('NextThought.view.chat.History',{
 
 
 		function mergeChatsFilter(item) {
-			var fn = mergeChatsFilter,
-				o = (item.get('Contributors')||[]).slice(),
-				caller = fn.caller || {},
-				seenOccupants = caller.seenOccupants || [];
+			var o = (item.get('Contributors')||[]).slice(),
+				caller = mergeChatsFilter.caller || {},
+				seen = caller.seenOccupants || [];
 
-			caller.seenOccupants = seenOccupants;
+			caller.seenOccupants = seen;
 
 			o.sort();
 			o = o.join('|');
-			if(Ext.Array.contains(seenOccupants,o)){
+			if(Ext.Array.contains(seen,o)){
 				return false;
 			}
-			seenOccupants.push(o);
+			seen.push(o);
 			return true;
 		}
 
@@ -99,10 +98,9 @@ Ext.define('NextThought.view.chat.History',{
 	},
 
 
-	storeLoaded: function(s,recs){
-		var store = this.store;
-		this.add(Ext.Array.map(recs,function(a){
-			return {record: a, store: store};
+	storeLoaded: function(s){
+		this.add(Ext.Array.map(s.getRange(),function(a){
+			return {record: a, store: s};
 		}));
 	}
 
