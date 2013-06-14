@@ -57,6 +57,19 @@ Ext.define('NextThought.view.menus.Presence',{
 		this.mon(Ext.getStore('PresenceInfo'),'presence-changed','setPresence', this);	
 	},
 
+
+	onDestroy: function() {
+	    this.cancelDeferHide();
+		clearTimeout(this.deferHideParentMenusTimer);
+		this.callParent(arguments);
+	},
+
+
+	deferHideParentMenus: function() {
+		Ext.menu.Manager.hideAll();
+	},
+
+
 	setPresence: function(username, presence){
 		if(!isMe(username) || !presence){ return; }
 
@@ -158,6 +171,7 @@ Ext.define('NextThought.view.menus.Presence',{
 			this.fireEvent('set-chat-presence', presence);
 		}
 
+		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
 	},
 
 	isNewPresence: function(newPresence){
