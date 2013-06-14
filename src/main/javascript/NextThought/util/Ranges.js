@@ -294,8 +294,10 @@ Ext.define('NextThought.util.Ranges',{
 			node;
 
 		doc = doc || document;
+
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
-		/*jslint bitwise: true*/
+
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);
 
 		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.

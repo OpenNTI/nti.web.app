@@ -145,7 +145,7 @@ Ext.define('NextThought.proxy.Socket', {
 			Ext.callback(fn,scope);
 			return;
 		}
-		this.on('socket-available',fn,scope,{single:true})
+		this.on('socket-available',fn,scope,{single:true});
 	},
 
 

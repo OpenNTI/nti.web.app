@@ -145,7 +145,7 @@ Ext.define('NextThought.view.video.Video',{
 		this.maybeSwitchPlayers('none');
 
 //		SAJ: We really should not be doing this type of thing here. This will make much
-// 		more sense when the event loop is moved here.
+//		more sense when the event loop is moved here.
 //
 //		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
 //		this.maybeSwitchPlayers(this.activeVideoService);
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.video.Video',{
 				'origin='+encodeURIComponent(location.protocol+'//'+location.host)
 			];
 
-// 		Inject Youtube HTML
+//		Inject Youtube HTML
 		youtubeTpl.append(this.el.down('.video-wrapper'), {id: this.id, 'youtube-params': params});
 
 //		Add the YouTube element id to the list

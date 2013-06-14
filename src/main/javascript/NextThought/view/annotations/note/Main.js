@@ -214,21 +214,21 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		cardTpl = Ext.DomHelper.createTemplate({cls:'content-card', html:NextThought.view.cards.Card.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=nticard]'), function(c){
 			var d = NextThought.view.cards.OverlayedPanel.getData(c);
-			cardTpl.insertAfter(c,d);
+			cardTpl.insertAfter(c,d,false);
 			Ext.fly(c).remove();
 		});
 
 		slideDeckTpl = Ext.DomHelper.createTemplate({cls:'content-slidedeck', html:NextThought.view.slidedeck.SlideDeck.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function(c){
 			var d = NextThought.view.slidedeck.OverlayedPanel.getData(c);
-			slideDeckTpl.insertAfter(c,d);
+			slideDeckTpl.insertAfter(c,d,false);
 			Ext.fly(c).remove();
 		});
 
 		slideVideoTpl = Ext.DomHelper.createTemplate({cls:'content-slidevideo', html:NextThought.view.slidedeck.slidevideo.SlideVideo.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c){
 			var d = NextThought.view.slidedeck.slidevideo.OverlayedPanel.getData(c);
-			slideVideoTpl.insertAfter(c,d);
+			slideVideoTpl.insertAfter(c,d,false);
 			Ext.fly(c).remove();
 		});
 
@@ -257,6 +257,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				reader.getDocumentElement(),
 				reader.getCleanContent());
 	},
+
 
 
 	onRemove: function(cmp){
@@ -316,14 +317,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 		if(/^mark$/i.test(action)){
-			this.commentOnAnnototableImage(img, action);
+			this.commentOnAnnototableImage(img/*, action*/);
 		}
 		else if(/^zoom$/i.test(action)){
 			ImageZoomView.zoomImage(dom, null, this);
 		}
 		else if(/^slide$/.test(action)){
 			if(this.editorActive()){
-				/*jslint bitwise: true */ //Tell JSLint to ignore bitwise opperations
+
+				/*jslint bitwise: false */ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
 					msg: "This will discard the contents of your current message",
 					scope: me,
@@ -347,7 +349,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	commentOnAnnototableImage: function(dom, action){
+	commentOnAnnototableImage: function(dom /*action*/){
 		var me = this;
 		if( me.activateReplyEditor() ){
 			WBUtils.createFromImage(dom,function(data){

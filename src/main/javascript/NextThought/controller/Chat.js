@@ -986,7 +986,7 @@ Ext.define('NextThought.controller.Chat', {
 				if(presence.isOnline()){
 					me.availableForChat = true;
 					if(prevToast){
-						prevToast.destroy()
+						prevToast.destroy();
 					}
 
 				}else{

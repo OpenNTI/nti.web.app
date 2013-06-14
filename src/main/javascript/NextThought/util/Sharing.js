@@ -67,7 +67,7 @@ Ext.define('NextThought.util.Sharing',{
 	},
 
 	getAppUserCommunities: function(){
-		return 	$AppConfig.userObject.getCommunities(true);
+		return $AppConfig.userObject.getCommunities(true);
 	},
 
 	//TODO need to check published status for the case of blogs NO?

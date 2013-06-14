@@ -147,7 +147,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		this.setPresenceButton();
 
-		this.on('beforedeactivate', function(e){
+		this.on('beforedeactivate', function(){
 			return this.groupsList.fireEvent('beforedeactivate') && this.optionsMenu.fireEvent('beforedeactivate');
 		}, this);
 
@@ -168,8 +168,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	getPointerStyle: function(x,y){
 		var el = this.getTargetEl(),
-			t = el.getTop(),
-			b = el.getBottom();
+			t = el.getY(),
+			b = t+el.getHeight();
 
 		return (t <= y && y <= b) ? '' : 'contact';
 	},
@@ -201,6 +201,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		var me = this, data = this.getSelected(),
 			fin = function(){ me.destroy(); };
 
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'The following action will remove this contact.',
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
@@ -214,6 +215,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				}
 			}
 		});
+
 	},
 
 
@@ -266,7 +268,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		var pi = this.user.get('Presence'),
 			current = $AppConfig.userObject.get('Presence'),
 			isOnline = (pi && pi.isOnline && pi.isOnline()) || this.isUserOnline();
-		if(this.isContact && !isOnline || (current && !current.isOnline())){
+		if((this.isContact && !isOnline) || (current && !current.isOnline())){
 			this.actionEl.addCls('disabled');
 		}
 	},

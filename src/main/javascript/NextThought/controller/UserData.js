@@ -703,7 +703,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		if(error.code === "TooLong"){
-			msg = 'Could not save your note. The title is too long. It should be 140 characters or less.'
+			msg = 'Could not save your note. The title is too long. It should be 140 characters or less.';
 		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});
 		console.warn('Exception Message: ', response.responseText);

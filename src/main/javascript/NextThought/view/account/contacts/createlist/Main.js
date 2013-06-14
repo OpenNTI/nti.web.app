@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.contacts.createlist.Main',{
+	Ext.define('NextThought.view.account.contacts.createlist.Main',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.createlist-main-view',
 	requires: [
@@ -45,8 +45,9 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
         var val = el.lastValue,
             empty = Ext.isEmpty(val);
 
-        if (event.getKey() === event.RETURN && !empty)
+        if (event.getKey() === event.RETURN && !empty) {
             this.submitClicked();
+        }
     },
 
 	changed: function(value, t){
