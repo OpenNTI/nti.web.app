@@ -30,6 +30,7 @@ Ext.define('NextThought.view.chat.Dock',{
 	constructor: function(){
 		if(isFeature('chat-history')){
 			this.items = [{xtype:'chat-history'}];
+			this.insertBeforeLast = true;
 		}
 		return this.callParent(arguments);
 	},
@@ -145,7 +146,15 @@ Ext.define('NextThought.view.chat.Dock',{
 
 
 	add: function(){
-		var result = this.callParent(arguments);
+		var result,
+			args = Ext.Array.slice(arguments);
+
+		if(this.insertBeforeLast && typeof args[0] !== 'number' ){
+			args.unshift(this.items.length-1);
+		}
+
+
+		result = this.callParent(args);
 
 		if(result){
 			if(Ext.isArray(result)){
