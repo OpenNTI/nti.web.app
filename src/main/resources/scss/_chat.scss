@@ -536,6 +536,12 @@
 	}
 }
 
+#chat-dock-placeholder.notice-me{
+	.x-header-text-container {
+		@include icon('rhp-arrow-closed', $top: 14px, $left:8px);
+	}
+}
+
 #chat-dock-placeholder.hide-arrow,
 #chat-dock.hide-arrow .x-panel-header{
 	cursor: default;
