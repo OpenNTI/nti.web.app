@@ -390,6 +390,7 @@ Ext.define('NextThought.controller.Chat', {
 	 * behaviour.
 	 */
 	enterRoom: function (usersOrList, options) {
+		if(!this.availableForChat){ return; }
 		if (!$AppConfig.service.canChat()) {
 			console.log('User not permissioned to chat.');
 			return;

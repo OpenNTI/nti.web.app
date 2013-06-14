@@ -269,6 +269,12 @@ Ext.define('NextThought.view.account.contacts.View',{
 			}
 		});
 
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence){
+			if(isMe(username)){
+				this[presence.isOnline()? 'removeCls' : 'addCls']('offline');
+			}
+		}, this);
+
 		this.mon(this.store,{
 			scope: this.contactSearch,
 			datachanged: 'refresh'
