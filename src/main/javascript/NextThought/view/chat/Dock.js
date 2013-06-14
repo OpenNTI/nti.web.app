@@ -363,7 +363,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 
 
 	handleWindowNotify: function(msg){
-		var reSetTitle = !this.isPresented;
+
 		if( !this.associatedWindow.isVisible() && msg && msg.Creator && !isMe(msg.Creator)){
 			this.unread++;
 			this.updateCount();
@@ -372,9 +372,18 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.lastUpdated = new Date().getTime();
 		this.updateStatus();
 		this.setVisible(true);
-		this.isPresented = true;
-		if(reSetTitle){
-			this.fireEvent('made-visible');
+	},
+
+
+	setVisible: function(show){
+		var reSetTitle = !this.isPresented;
+		this.callParent(arguments);
+
+		if(show) {
+			this.isPresented = true;
+			if(reSetTitle) {
+				this.fireEvent('made-visible');
+			}
 		}
 	},
 

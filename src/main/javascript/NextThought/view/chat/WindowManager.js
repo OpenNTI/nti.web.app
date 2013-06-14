@@ -58,6 +58,9 @@ Ext.define('NextThought.view.chat.WindowManager',{
 		dockedItem = dock.add({ associatedWindowId: windowId, associatedWindow: window, hidden: hide, isPresented: !hide });
 		if(dockedItem){
 			window.dockedItemRef = dockedItem;
+			window.on('show', function() {
+				dockedItem.setVisible(true);
+			});
 		}
 	},
 
