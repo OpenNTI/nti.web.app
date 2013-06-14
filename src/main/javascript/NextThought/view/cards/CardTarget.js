@@ -44,11 +44,17 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		this.reader.lockScroll();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
+//		if(!Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'),'application/pdf')){
+//			alert('Your browser does not indicate that it supports viewing PDFs');
+//		}
+
 		this.iframe = this.add({
 			xtype: 'box',
 			autoEl: {
-				tag: 'iframe',
+				tag: (Ext.isIE||Ext.isIE10) ? 'object' : 'iframe',
 				src: data.href,
+				data: data.href,
+				type: 'application/pdf',//TODO: figure out mimeType
 				border:0,
 				frameborder:0
                 //scrolling: 'no',
