@@ -34,6 +34,32 @@ Ext.define('NextThought.util.Time', {
 			result = result.replace('s ago', ' ago');
 		}
 		return result;
+	},
+
+
+
+	getDurationText: function(started, ended){
+		var milli = ended - started,
+			seconds = milli / 1000,
+			minutes = seconds / 60,
+			hours = minutes / 60,
+			days = hours / 24,
+			str = '';
+
+		seconds = seconds%60;
+		minutes = minutes%60;
+		hours = hours%24;
+
+
+		if(days >= 1){
+			str = Math.floor(days)+"d "+Math.ceil(hours)+"h";
+		}else if(hours >= 1){
+			str = Math.floor(hours)+"h "+Math.ceil(minutes)+"m";
+		}else{
+			str = Math.floor(minutes)+"m "+Math.ceil(seconds)+"s";
+		}
+
+		return str;
 	}
 
 },

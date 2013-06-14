@@ -124,7 +124,7 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 		]},
 		{cls: 'wrap', cn: [
 			{cls: 'names {namesCls}', html:'{names}', 'data-count':'{count}'},
-			{cls: 'status', html: '{status}'}
+			{cls: 'status', html: '{date:date("n/j/Y")} &middot; {duration}'}
 		]}
 	]),
 
@@ -141,20 +141,13 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
-		this.fillInInformation(this.record.get('RoomInfo'));
+		this.fillInInformation();
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el,'click','onClick',this);
-//		this.fillInInformation(roomInfo);
-	},
-
-
-	onAdded: function(ownerCt){
-		this.callParent(arguments);
-		this.mon(ownerCt,'peek','updateStatus',this);
 	},
 
 
@@ -189,12 +182,20 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 	},
 
 
-	fillInInformation: function(roomInfo){
+	fillInInformation: function(){
 		var me = this,
+			record = me.record,
+			roomInfo = record.get('RoomInfo'),
 			occ = roomInfo.get('Occupants'),
+			started = roomInfo.get('CreatedTime'),
+			ended = record.get('Last Modified'),
 			usernames = [],
 			data = {},
 			isGroup = occ.length > 2;
+
+
+		data.duration = TimeUtils.getDurationText(started,ended);
+		data.date = started;
 
 		function fill(users) {
 			var userCount = 1;
@@ -202,7 +203,6 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 			if(Ext.isEmpty(users)){
 				console.error('This room info did not have any occupants',roomInfo);
 				usernames.push('Empty');
-				data.status = 'DoA';
 			}
 
 			Ext.each(users,function(u){
@@ -257,9 +257,5 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 
 
 		UserRepository.getUser(occ,fill);
-	},
-
-
-	updateStatus: function(){
 	}
 });
