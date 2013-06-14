@@ -192,6 +192,10 @@ Ext.define('NextThought.view.chat.Dock',{
 Ext.define('NextThought.view.chat.DockItem',{
 	extend: 'Ext.Component',
 	alias: 'widget.chat-dock-item',
+	requires:[
+		'NextThought.util.Time'
+	],
+
 	cls: 'chat-dock-item',
 	ui: 'chat-dock-item',
 
@@ -369,35 +373,23 @@ Ext.define('NextThought.view.chat.DockItem',{
 	updateStatus: function(){
 		var display, roomInfo = this.associatedWindow.roomInfo,
 			occ = roomInfo.get('Occupants'),
-			Status = this.lastUpdated,
-			currentTime = new Date().getTime(),
-			milli = currentTime - Status,
-			seconds = milli / 1000,
-			minutes = seconds / 60,
-			hours = minutes / 60,
-			days = hours / 24;
+			status = this.lastUpdated,
+			cur = new Date().getTime(),
+			tenMinutesAgo = new Date();
 
-		seconds = seconds%60;
-		minutes = minutes%60;
-		hours = hours%24;
+		tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes()-10);
 
 
-		if(!Status){
+		if(!status){
 			console.log("No last Active yet");
 		}
 
-		if(days >= 1){
-			display = Math.floor(days)+"d "+Math.ceil(hours)+"h"; 
-		}else if(hours >= 1){
-			display = Math.floor(hours)+"h "+Math.ceil(minutes)+"m";
-		}else{
-			display = Math.floor(minutes)+"m "+Math.ceil(seconds)+"s";
-		}
+		display = TimeUtils.getDurationText(cur,status);
 
 		if(occ.length===1 && isMe(occ[0])){
 			display = 'Ended';
 		}
-		else if(minutes < 10){
+		else if(status > tenMinutesAgo){
 			display = "In Progress... "+display;
 		}else{
 			display = "Last message "+display+" ago";
