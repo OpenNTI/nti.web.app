@@ -53,6 +53,7 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		this.setUpEditor();
 		this.mon(this.el,'click','clicked',this);
+	    this.mon(this.editor.el.down('input'), 'keydown', this.handleKeyDown, this);
 
 		this.mon(Ext.getStore('PresenceInfo'),'presence-changed','setPresence', this);	
 	},
@@ -127,6 +128,16 @@ Ext.define('NextThought.view.menus.Presence',{
 		}
 
 		return null;
+	},
+
+
+	handleKeyDown: function(e){
+		var key = e.getKey();
+
+		if(key === e.ENTER){
+			e.stopEvent();
+			this.saveEditor(e);
+		}
 	},
 
 	clicked: function(e){
