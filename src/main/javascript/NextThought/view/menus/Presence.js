@@ -66,14 +66,6 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		if(current && name){
 			current.removeCls('selected');
-
-			/*if(current.hasCls('available') && name !== 'available'){
-				current.down('.label').update('Available');
-			}else if(current.hasCls('away') && name !== 'away'){
-				current.down('.label').update('Away');
-			}else if(current.hasCls('dnd') && name !== 'dnd'){
-				current.down('.label').update('Do not disturb');
-			}*/
 		}
 
 		if(presence.isOnline() && name){
@@ -105,7 +97,7 @@ Ext.define('NextThought.view.menus.Presence',{
 				enforceMaxLength: true,
 				maxLength: 140,
 				allowEmpty: true,
-				enableKeyEvents: true
+				selectOnFocus: true
 			},
 			listeners:{
 				canceledit: 'cancelEdit',
@@ -118,11 +110,14 @@ Ext.define('NextThought.view.menus.Presence',{
 	getTarget: function(row){
 		if(row.is('.available')){
 			return 'available';
-		}else if(row.is('.away')){
+		}
+		if(row.is('.away')){
 			return 'away';
-		}else if(row.is('.dnd')){
+		}
+		if(row.is('.dnd')){
 			return 'dnd';
-		}else if(row.is('.offline')){
+		}
+		if(row.is('.offline')){
 			return 'unavailable';
 		}
 
