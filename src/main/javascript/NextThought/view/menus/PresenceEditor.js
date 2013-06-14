@@ -22,13 +22,22 @@ Ext.define('NextThought.view.menus.PresenceEditor',{
 		this.callParent(arguments);
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
 		this.mon(this.el.down('.save'), 'click', 'completeEdit', this);
-		this.mon(this.el.down('.cancel'), 'click', 'cancelEdit', this);
+		this.mon(this.el.down('.cancel'), 'click', 'handleCancel', this);
 		
 		this.mon(this.el,{
 			keydown:function(e){ e.stopPropagation(); },
 			keypress:function(e){ e.stopPropagation(); },
 			keyup:function(e){ e.stopPropagation(); }
 		});
+	},
+
+	handleCancel: function(){
+		if(Ext.isEmpty(this.field.getValue())){
+			this.cancelEdit();
+			return;
+		}
+		this.field.setValue('');
+		this.field.focus();
 	},
 
 	completeEdit: function(e){

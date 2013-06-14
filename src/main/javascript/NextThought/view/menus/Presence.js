@@ -205,6 +205,7 @@ Ext.define('NextThought.view.menus.Presence',{
 			console.log(newPresence);
 			this.fireEvent('set-chat-presence', newPresence);
 		}else{
+			this.setPresence($AppConfig.username, newPresence);
 			console.log("No presence change");
 		}
 	},
