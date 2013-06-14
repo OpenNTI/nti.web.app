@@ -53,7 +53,6 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		this.setUpEditor();
 		this.mon(this.el,'click','clicked',this);
-	    this.mon(this.editor.el.down('input'), 'keydown', this.handleKeyDown, this);
 
 		this.mon(Ext.getStore('PresenceInfo'),'presence-changed','setPresence', this);	
 	},
@@ -61,30 +60,33 @@ Ext.define('NextThought.view.menus.Presence',{
 	setPresence: function(username, presence){
 		if(!isMe(username) || !presence){ return; }
 
-		var current = this.el.down('.selected'),
+		var label, current = this.el.down('.selected'),
 			show = presence.get('show'),
 			name = presence.getName();
 
-		if(current){
+		if(current && name){
 			current.removeCls('selected');
 
-			if(current.hasCls('available')){
+			/*if(current.hasCls('available') && name !== 'available'){
 				current.down('.label').update('Available');
-			}else if(current.hasCls('away')){
+			}else if(current.hasCls('away') && name !== 'away'){
 				current.down('.label').update('Away');
-			}else if(current.hasCls('dnd')){
+			}else if(current.hasCls('dnd') && name !== 'dnd'){
 				current.down('.label').update('Do not disturb');
-			}
+			}*/
 		}
 
 		if(presence.isOnline() && name){
 			name = this.el.down('.'+name);
+			label = name.down('.label');
 			if(!name){
 				console.log('Element didnt exist');
 			}else{
 				name.addCls('selected');
 				console.log(presence.getDisplayText());
-				name.down('.label').update(presence.getDisplayText());
+				if(Ext.isEmpty(label.dom.innerHTML)){
+					label.update(presence.getDisplayText());
+				}
 			}
 		}else{
 			this.offlineEl.addCls('selected');
@@ -105,63 +107,68 @@ Ext.define('NextThought.view.menus.Presence',{
 				allowEmpty: true,
 				enableKeyEvents: true
 			},
-			xhooks:{
-				cancelEdit:function(){
-					this.callParent(arguments);
-					if(this.activeRow){
-						this.activeRow.removeCls('active');
-					}
-				}
+			listeners:{
+				canceledit: 'cancelEdit',
+				complete: 'saveEditor',
+				scope: this
 			}
 		});
 	},
 
-	getTarget: function(e){
-		if(e.getTarget('.available')){
+	getTarget: function(row){
+		if(row.is('.available')){
 			return 'available';
-		}else if(e.getTarget('.away')){
+		}else if(row.is('.away')){
 			return 'away';
-		}else if(e.getTarget('.dnd')){
+		}else if(row.is('.dnd')){
 			return 'dnd';
-		}else if(e.getTarget('.offline')){
+		}else if(row.is('.offline')){
 			return 'unavailable';
 		}
 
 		return null;
 	},
 
-
-	handleKeyDown: function(e){
-		var key = e.getKey();
-
-		if(key === e.ENTER){
-			e.stopEvent();
-			this.saveEditor(e);
-		}
-	},
-
 	clicked: function(e){
+		var show, status, type, presence;
+
 		if(e.getTarget('.edit')){
 			this.startEditor(e);
 			return;
 		}
 
-		if(e.getTarget('.save')){
-			this.saveEditor(e);
+		if(e.getTarget('.available')){
+			status = e.getTarget('.available',10,true).down('.label').dom.innerHTML;
+			show = 'chat';
+			type= 'available';
+		}else if(e.getTarget('.away')){
+			status = e.getTarget('.away',10,true).down('.label').dom.innerHTML;
+			show = 'away';
+			type= 'available';
+		}else if(e.getTarget('.dnd')){
+			status = e.getTarget('.dnd',10,true).down('.label').dom.innerHTML;
+			show = 'dnd';
+			type= 'available';
+		}else if(e.getTarget('.offline')){
+			show = 'chat';
+			type= 'unavailable';
+		}else{
+			console.log("unhandled click");
 			return;
 		}
 
-		if(e.getTarget('.available')){
-			this.fireEvent('set-chat-show', 'chat');
-		}else if(e.getTarget('.away')){
-			this.fireEvent('set-chat-show', 'away');
-		}else if(e.getTarget('.dnd')){
-			this.fireEvent('set-chat-show', 'dnd');
-		}else if(e.getTarget('.offline')){
-			this.fireEvent('set-chat-type', 'unavailable');
-		}else{
-			console.log("unhandled click");
+		presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
+
+		if(this.isNewPresence(presence)){
+			this.fireEvent('set-chat-presence', presence);
 		}
+
+	},
+
+	isNewPresence: function(newPresence){
+		var currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
+
+		return newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status');
 	},
 
 	isStatus: function(value){
@@ -170,20 +177,21 @@ Ext.define('NextThought.view.menus.Presence',{
 		return v && v !== 'available' && v !== 'away' && v !== 'do not disturb';
 	},
 
-	saveEditor: function(e){
-		var target = this.editor.activeTarget,
-			value = this.editor.field.value,
+	saveEditor: function(cmp, value, oldValue){
+		var row = cmp.boundEl.up('.status'),
+			target = this.getTarget(row),
 			newPresence,
-			currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username),
 			type = (target === 'unavailable')? 'unavailable' : 'available',
 			show = (target === 'available')? 'chat' : target,
 			status = (this.isStatus(value))? value : '' ;
 
+
+
 		newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
 
-		this.editor.activeRow.removeCls('active');
+		row.removeCls('active');
 
-		if(newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status')){
+		if(this.isNewPresence(newPresence)){
 			//somethings different update the presence
 			console.log(newPresence);
 			this.fireEvent('set-chat-presence', newPresence);
@@ -193,11 +201,10 @@ Ext.define('NextThought.view.menus.Presence',{
 	},
 
 	startEditor: function(e){
-		var row = e.getTarget('.status',null,true),
+		var me = this,
+			row = e.getTarget('.status',null,true),
 			edit = row && row.down('.edit');
-		if(edit){
-			this.editor.activeRow = row;
-			this.editor.activeTarget = this.getTarget(e);
+		if(edit){			
 			row.addCls('active');
 			this.editor.field.emptyText = edit.getAttribute('data-placeholder');
 			this.editor.startEdit(row.down('.label'));
@@ -207,9 +214,11 @@ Ext.define('NextThought.view.menus.Presence',{
 		}
 	},
 
-	cancelEdit: function(){
-		if(this.activeRow){
-			this.activeRow.removeCls('active');
+
+	cancelEdit:function(cmp, value, startValue){
+		var activeRow = cmp.boundEl.up('.status.active');
+		if( activeRow ){
+			activeRow.removeCls('active');
 		}
 	}
 });
