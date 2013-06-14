@@ -1,8 +1,11 @@
+/*JSLint */
+/*globals ContentUtils, Library, LocationProvider, NextThought */
 Ext.define('NextThought.ux.SlideDeck',{
 	singleton: true,
 
 	requires: [
 		'NextThought.util.Content',
+		'NextThought.model.PlaylistItem',
 		'NextThought.model.Slide',
 		'NextThought.view.slidedeck.Overlay'
 	],
@@ -12,8 +15,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 			root = LocationProvider.getLineage(startingNTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
-			selector = 'object[data-ntiid]',
-			obj = Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
+			selector = 'object[type$=nextthought.slide]',
+			obj =  Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
 			startingSlide = (!obj ? null : obj.getAttribute('data-ntiid')) || undefined,
 			startingVideo,
 			slidedeckId,
@@ -28,8 +31,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 		//In that case our starting slide is the earliest slide in the video.
 		//This hueristic may be changed
 		if(!startingSlide){
-			obj = Ext.fly(el).findParentNode('object[type$=slidevideo]');
-			startingVideo = getParam('ntiid');
+			obj = el;
+			startingVideo = NextThought.model.PlaylistItem.fromDom(Ext.fly(el).down('object[type$=ntivideo]'));
 		}
 
 		slidedeckId = getParam('slidedeckid') || 'default';
@@ -42,6 +45,24 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 		Ext.getBody().mask('Loading Slides...','navigation');
 
+		function findRecordWithSource(store, sources){
+			var i, j, currentItem, currentSources,
+				items = store.data.items;
+
+			for (i=0; i < items.length; i++){
+				currentItem = items[i];
+				currentSources = currentItem.get('media').get('sources');
+				if(currentSources.length === sources.length){
+					for (j=0; j < sources.length; j++){
+						if(NextThought.model.PlaylistItem.compareSources(currentSources[j].source, sources[j].source)){
+							return currentItem;
+						}
+					}
+				}
+			}
+			return null;
+		}
+
 		function finish(){
 			var earliestSlide;
 			store.sort('ordinal', 'ASC');
@@ -49,7 +70,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if(!startingSlide && startingVideo){
-				earliestSlide = store.findRecord('video-id',startingVideo,0,false,true,true);
+				earliestSlide = findRecordWithSource(store, startingVideo.get('sources'));
 				//The store is sorted by slide, so the first find is the earliest
 				if( earliestSlide ){
 					startingSlide = earliestSlide.getId();
