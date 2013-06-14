@@ -33,9 +33,23 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.down('[name=groupname]'), 'changed', this.changed, this);
+		this.mon(this.down('[name=groupname]'), {
+            scope: this,
+            changed: this.changed,
+            specialkey: this.specialkey
+        });
 		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
+
+    specialkey: function(el, event) {
+        var val = el.lastValue,
+            empty = Ext.isEmpty(val);
+
+        if (event.getKey() === event.RETURN && !empty){
+            el.blur();
+            this.submitClicked();
+        }
+    },
 
 	changed: function(value, t){
 		var val = value.trim(),

@@ -27,8 +27,12 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.down('[name=name]'), 'changed', this.changed, this);
-		this.mon(this.down('[name=name]'), 'click', this.clearError, this);
+		this.mon(this.down('[name=name]'), {
+            scope: this,
+            changed: this.changed,
+            click: this.clearError,
+            specialkey: this.specialkey
+        });
         this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
 
@@ -36,6 +40,14 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 		var name = this.down('[name=name]').getValue();
 		return name ? name.trim() : name;
 	},
+
+    specialkey: function(el, event) {
+        var val = el.lastValue,
+            empty = Ext.isEmpty(val);
+
+        if (event.getKey() === event.RETURN && !empty)
+            this.submitClicked();
+    },
 
 	changed: function(value, t){
 		var val = value.trim(),
