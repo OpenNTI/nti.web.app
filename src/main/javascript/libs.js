@@ -1,6 +1,5 @@
 loadExternalLibraries([
 	{"Stripe":"https://js.stripe.com/v1/"},
-	{"YouTube API":"https://www.youtube.com/iframe_api"},
 	{"Flash API":"resources/lib/swfobject.js"},
 	{"Zoom Detection":"resources/lib/detect-zoom.js"},
 	{"jQuery":"resources/lib/jQuery-1.8.0min.js"},

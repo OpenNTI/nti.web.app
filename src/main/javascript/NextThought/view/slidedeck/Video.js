@@ -12,18 +12,18 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 	renderTpl: Ext.DomHelper.markup([{
-		cls: 'video-wrapper', cn: [{
-			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-youtube-video',
-			frameBorder: 0, scrolling: 'no', seamless: true,
-			src: 'https://www.youtube.com/embed/?{youtube-params}'
-		},{
-			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
-			frameBorder: 0, scrolling: 'no', seamless: true
-		},{
-			tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video', 'controls': ''
-		},{
-			cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
-		}]
+		cls: 'video-wrapper', cn: [
+			{
+				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
+				frameBorder: 0, scrolling: 'no', seamless: true
+			},
+			{
+				tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video', 'controls': ''
+			},
+			{
+				cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
+			}
+		]
 	},{
 		cls: 'controls',
 		cn: [{
@@ -85,8 +85,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			click:this.checkboxClicked,
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
-
-		this.maybeSwitchPlayers(null);
 	},
 
 

@@ -1,5 +1,5 @@
 /*jslint */
-/*globals LocationProvider, NextThought, YT */
+/*globals Globals, LocationProvider, NextThought, YT */
 Ext.define('NextThought.view.video.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
@@ -66,10 +66,6 @@ Ext.define('NextThought.view.video.Video',{
 //			{ cls:'description', html:'{description}' }
 //		]},
 		{ cls: 'video-wrapper', cn: [
-			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-youtube-video',
-				frameBorder: 0, scrolling: 'no', seamless: true, width: '640', height: '360',
-				src: 'https://www.youtube.com/embed/?{youtube-params}'
-			},
 			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
 				frameBorder: 0, scrolling: 'no', seamless: true
 			},
@@ -92,45 +88,27 @@ Ext.define('NextThought.view.video.Video',{
 			return i;
 		};
 
-		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
-			youtubeParams = [
-			'html5=1',
-			'enablejsapi=1',
-			'autohide=1',
-			'modestbranding=1',
-			'rel=0',
-			'wmode=transparent',
-			'showinfo=0',
-			'list='+encodeURIComponent(pl),
-			'origin='+encodeURIComponent(location.protocol+'//'+location.host)
-		];
-
 		this.callParent(arguments);
 
 		this.commandQueue = {
 			'youtube': [],
 			'vimeo': [],
-			'html5': []
+			'html5': [],
+			'none': []
 		};
 
 		this.playerIds = {
-			'youtube': this.id+'-youtube-video',
 			'vimeo': this.id+'-vimeo-video',
 			'html5': this.id+'-native-video',
 			'none': this.id+'-curtain'
 		};
 
 		this.players = {};
-		this.playerBlacklist = [];
+		Ext.applyIf(this.self, {playerBlacklist: []});
 
 		this.playlistIndex = 0;
 
 		this.renderData = Ext.apply(this.renderData||{},this.data);
-		this.renderData = Ext.apply(this.renderData,{
-			'youtube-params':youtubeParams.join('&'),
-			'html5-width': 640,
-			'html5-height': 360
-		});
 
 		Ext.applyIf(this.storedRenderData, this.renderData);
 
@@ -162,6 +140,10 @@ Ext.define('NextThought.view.video.Video',{
 
 		this.playerSetup();
 
+		console.log('Players initialized.');
+//		Set the curtain as the active player while we figure out which other one to use.
+		this.maybeSwitchPlayers('none');
+
 //		SAJ: We really should not be doing this type of thing here. This will make much
 // 		more sense when the event loop is moved here.
 //
@@ -172,31 +154,64 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	playerSetup: function(){
-		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(',');
 		console.log('Initializing the players.');
 		if(window.YT){
-			this.players.youtube = new YT.Player(this.playerIds.youtube, {
-				html5: '1',
-				enablejsapi: '1',
-				autohide: '1',
-				modestbranding: '1',
-				wmode:'transparent',
-				rel: '0',
-				showinfo: '0',
-				list: pl,
-				origin: location.protocol+'//'+location.host,
-				events: {
-					'onReady': Ext.bind(this.youtubePlayerReady,this),
-					'onError': Ext.bind(this.youtubePlayerError, this)
-				}
-			});
-			this.players.youtube.isReady = false;
+			this.youtubePlayerSetup();
+		}
+		else if (!Ext.Array.contains(this.self.playerBlacklist, 'youtube')){
+			this.self.playerBlacklist.push('youtube');
 		}
 
 		this.players.html5 = new NextThought.util.HTML5Player({
 			el: Ext.get(this.playerIds.html5)
 		});
+
+		this.players.none = {};
+		this.players.none.isReady = false;
 	},
+
+
+	youtubePlayerSetup: function(){
+		var youtubeTpl = Ext.DomHelper.createTemplate({
+				tag: 'iframe', cls:'video', name: 'video', id: '{id}-youtube-video',
+				frameBorder: 0, scrolling: 'no', seamless: true, width: '640', height: '360',
+				src: location.protocol+'//www.youtube.com/embed/?{youtube-params}'
+			}),
+			pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
+			params = [
+				'html5=1',
+				'enablejsapi=1',
+				'autohide=1',
+				'modestbranding=1',
+				'rel=0',
+				'showinfo=0',
+				'list='+encodeURIComponent(pl),
+				'origin='+encodeURIComponent(location.protocol+'//'+location.host)
+			];
+
+// 		Inject Youtube HTML
+		youtubeTpl.append(this.el.down('.video-wrapper'), {id: this.id, 'youtube-params': params});
+
+//		Add the YouTube element id to the list
+		this.playerIds.youtube = this.id+'-youtube-video';
+
+		this.players.youtube = new YT.Player(this.playerIds.youtube, {
+			html5: '1',
+			enablejsapi: '1',
+			autohide: '1',
+			modestbranding: '1',
+			rel: '0',
+			showinfo: '0',
+			list: pl,
+			origin: location.protocol+'//'+location.host,
+			events: {
+				'onReady': Ext.bind(this.youtubePlayerReady,this),
+				'onError': Ext.bind(this.youtubePlayerError, this)
+			}
+		});
+		this.players.youtube.isReady = false;
+	},
+
 
 	youtubePlayerReady: function(){
 		(this.players.youtube||{}).isReady = true;
@@ -206,26 +221,9 @@ Ext.define('NextThought.view.video.Video',{
 		}
 	},
 
+
 	youtubePlayerError: function(error){
-		var currentItem = this.playlist[this.playlistIndex],
-			youtubeTpl = Ext.DomHelper.createTemplate({
-				tag: 'iframe', cls:'video', name: 'video', id: '{id}-youtube-video',
-				frameBorder: 0, scrolling: 'no', seamless: true, width: '640', height: '360',
-				src: 'https://www.youtube.com/embed/?{youtube-params}'
-			}),
-			pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
-			params = [
-				'html5=1',
-				'enablejsapi=1',
-				'autohide=1',
-				'modestbranding=1',
-				'wmode=transparent',
-				'rel=0',
-				'showinfo=0',
-				'list='+encodeURIComponent(pl),
-				'origin='+encodeURIComponent(location.protocol+'//'+location.host)
-			],
-			oldVideoId;
+		var oldVideoId;
 		console.warn('YouTube player died with error: ' + error.data);
 
 //		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
@@ -235,40 +233,16 @@ Ext.define('NextThought.view.video.Video',{
 		if (error.data === 5){
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
 			this.cleanup();
-			Ext.destroy(Ext.get(this.id + '-youtube-video'));
-			youtubeTpl.append(this.el.down('.video-wrapper'), {id: this.id, 'youtube-params': params});
-			this.playerSetup();
+			Ext.destroy(Ext.get(this.playerIds.youtube));
+			this.youtubePlayerSetup();
 			oldVideoId = this.currentVideoId;
-			this.currentVideoId = '';
-			this.setVideoAndPosition(oldVideoId, this.currentStartAt);
-			this.resumePlayback();
-		}
-		else if (error.data === 2){
-			console.warn('YouTube had trouble loading video: ' + this.currentVideoId);
-			oldVideoId = this.currentVideoId;
-			this.currentVideoId = '';
+			this.currentVideoId = null;
 			this.setVideoAndPosition(oldVideoId, this.currentStartAt);
 			this.resumePlayback();
 		}
 		else {
-			currentItem.set('sourceIndex', currentItem.get('sourceIndex') + 1 );
-			if (currentItem.get('sourceIndex') < currentItem.get('sources').length){
-				this.activeVideoService = currentItem.activeSource().service;
-				this.maybeSwitchPlayers(this.activeVideoService);
-				this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
-			}
-			else if ((this.playlistIndex + 1) < this.playlist.length){
-				this.playlistIndex += 1;
-				currentItem = this.playlist[this.playlistIndex];
-				this.activeVideoService = currentItem.activeSource().service;
-				this.maybeSwitchPlayers(this.activeVideoService);
-				this.setVideoAndPosition(currentItem.activeSource().source, (this.currentStartAt || 0));
-			}
-			else{
-				this.activeVideoService = 'none';
-				this.currentVideoId = null;
-				this.maybeSwitchPlayers(this.activeVideoService);
-			}
+			this.self.playerBlacklist.push('youtube');
+			this.playlistSeek(this.playlistIndex);
 		}
 	},
 
@@ -377,9 +351,12 @@ Ext.define('NextThought.view.video.Video',{
 	maybeSwitchPlayers: function(service){
 		var me = this;
 
-		me.activeVideoService = service;
-
 		service = service || 'none';
+		if(!this.playerIds[service]){
+			console.warn('Attempting to switch to non-existent player ' + service);
+			service = 'none';
+		}
+		me.activeVideoService = service;
 
 		Ext.Object.each(me.playerIds,function(k,id){
 			var v = Ext.get(id);
@@ -405,7 +382,7 @@ Ext.define('NextThought.view.video.Video',{
 		if ((newIndex >= 0) && (newIndex < this.playlist.length) ){
 			this.playlistIndex = newIndex;
 			this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
-			while( Ext.Array.contains(this.playerBlacklist, this.activeVideoService) ){
+			while( Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
 				if(!this.playlist[this.playlistIndex].useNextSource()){
 					this.activeVideoService = 'none';
 					this.currentVideoId = null;
@@ -437,4 +414,6 @@ Ext.define('NextThought.view.video.Video',{
 		this.issueCommand('html5',this.commands.cleanup);
 		this.issueCommand('youtube',this.commands.cleanup);
 	}
+}, function(){
+	Globals.loadScript(location.protocol+"//www.youtube.com/iframe_api");
 });
