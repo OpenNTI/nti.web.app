@@ -977,7 +977,8 @@ Ext.define('NextThought.controller.Chat', {
 			current = $AppConfig.userObject;
 
 		Ext.Object.each(msg, function (key, value, object) {
-			var presence = ParseUtils.parseItems([value])[0];
+			var presence = ParseUtils.parseItems([value])[0],
+				prevToast;
 
 			//if its the current user set the flag accordingly
 			if(isMe(key)){
@@ -988,7 +989,13 @@ Ext.define('NextThought.controller.Chat', {
 						console.log("Set offline in another session");
 						me.setMyselfOffline = false;
 
+						prevToast = Ext.getCmp('revertToast');
+
+						if(prevToast){
+							prevToast.destroy();
+						}
 						Toaster.makeToast({
+							id: 'revertToast',
 							message: "You are currently unvailable because you went offline in another session.",
 							buttons:[
 								{
