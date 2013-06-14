@@ -979,7 +979,7 @@ Ext.define('NextThought.controller.Chat', {
 				if(presence.isOnline()){
 					me.availableForChat = true;
 				}else{
-					if(!me.setMyselfOffline){
+					if(!me.setMyselfOffline && store.getPresenceOf(key).isOnline()){
 						console.log("Set offline in another session");
 						me.setMyselfOffline = false;
 
