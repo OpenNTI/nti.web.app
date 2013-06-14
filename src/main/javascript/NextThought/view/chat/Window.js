@@ -113,14 +113,13 @@ Ext.define('NextThought.view.chat.Window', function(){
 			me.onlineOccupants = me.onlineOccupants || [];
 			
 			UserRepository.getUser(roomInfo.get('Occupants'), function(users){
-
+				
 				Ext.Array.each(users,function(u){
 					var name = u.getId(),
 						presence = Ext.getStore('PresenceInfo').getPresenceOf(name);
-
-					if(!presence){ return; }
 					
-					if(presence.isOnline()){
+					//if we don't have a presence for them or they are online add them to onlineOccupants
+					if( !presence || presence.isOnline()){
 						Ext.Array.include(me.onlineOccupants, name);
 					}else{
 
