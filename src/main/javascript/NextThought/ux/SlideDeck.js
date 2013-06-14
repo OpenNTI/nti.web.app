@@ -18,7 +18,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 			dom,
 			selector = 'object[type$=nextthought.slide]',
 			obj =  Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
-			startingSlide = (!obj ? null : obj.getAttribute('data-ntiid')) || undefined,
+			startingSlide = (obj && obj.getAttribute('data-ntiid')) || undefined,
 			startingVideo,
 			slidedeckId,
 			store = new Ext.data.Store({proxy:'memory'});
