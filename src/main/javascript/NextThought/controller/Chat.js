@@ -223,6 +223,11 @@ Ext.define('NextThought.controller.Chat', {
 		console.log("Make user avialable");
 		this.changePresence("available");
 
+		Socket.on('socket-new-sessionid', function(){
+			console.log("New Socket Id, rebroadcasting presence");
+			this.changePresence(this.getPresenceInfoStore().getPresenceOf($AppConfig.username));
+		}, this);
+
 	},
 
 
