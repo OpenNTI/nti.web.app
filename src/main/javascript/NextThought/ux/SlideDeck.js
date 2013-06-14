@@ -15,6 +15,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 			root = LocationProvider.getLineage(startingNTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
+			dom,
 			selector = 'object[type$=nextthought.slide]',
 			obj =  Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
 			startingSlide = (!obj ? null : obj.getAttribute('data-ntiid')) || undefined,
@@ -32,7 +33,10 @@ Ext.define('NextThought.ux.SlideDeck',{
 		//This hueristic may be changed
 		if(!startingSlide){
 			obj = el;
-			startingVideo = NextThought.model.PlaylistItem.fromDom(Ext.fly(el).down('object[type$=ntivideo]'));
+			dom = Ext.fly(el).down('object[type$=ntivideo]');
+			if(dom){
+				startingVideo = NextThought.model.PlaylistItem.fromDom(dom);
+			}
 		}
 
 		slidedeckId = getParam('slidedeckid') || 'default';
