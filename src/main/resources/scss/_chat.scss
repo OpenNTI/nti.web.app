@@ -493,8 +493,7 @@
 
 	.x-header-text-container {
 		padding: 0 60px 0 20px;
-		//when we have the asset, this needs to change to the "open" version
-		@include icon('rhp-arrow-closed-dark', $top: 14px, $left:8px);
+		@include icon('rhp-arrow-open-dark', $top: 14px, $left:8px);
 	}
 
 	.x-tool {
