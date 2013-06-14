@@ -21,7 +21,7 @@ Ext.define('NextThought.view.account.code.Main',{
             {xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
                 b.up('window').close();
             }},
-            {xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text:'Submit'}
+            {xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text:'Submit', disabled: true}
         ]}
     ],
 

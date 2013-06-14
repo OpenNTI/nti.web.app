@@ -94,6 +94,10 @@ Ext.define('NextThought.controller.Account', {
 				'code-main-view button[name=submit]': {
 					'click': 'groupCodeSubmit'
 				},
+                'code-main-view simpletext[name=code]': {
+                    'changed': 'groupCodeChanged',
+                    'specialkey': 'groupCodeSpecialKey'
+                },
 
 				'*': {
 					'resend-consent': 'resendConsent'
@@ -170,6 +174,28 @@ Ext.define('NextThought.controller.Account', {
 
 		u.set(form.getValues());
         u.save({callback: callback});
+    },
+
+    groupCodeSpecialKey: function(el, event) {
+        var val = el.lastValue,
+            empty = Ext.isEmpty(val);
+        if (event.getKey() === event.RETURN && !empty) {
+            this.groupCodeSubmit(el);
+        }
+    },
+
+    groupCodeChanged: function(value, t) {
+        var val = value.trim(),
+            empty = Ext.isEmpty(val),
+            view = t.up('.code-main-view'),
+            btn = view.down('button[name=submit]');
+        btn.setDisabled(empty);
+        if(empty){
+            t.getEl().down('input').addCls('empty');
+        }
+        else{
+            t.getEl().down('input').removeCls('empty');
+        }
     },
 
     groupCodeSubmit: function(btn){
