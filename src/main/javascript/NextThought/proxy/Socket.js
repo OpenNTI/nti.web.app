@@ -203,8 +203,22 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 	onConnected: function(){
+		var socket = this.socket.socket;
+
+		if(this.sid !== socket.sessionid){
+			console.log("New Socket Session Id: "+socket.sessionid);
+			if(this.sid){
+				this.fireEvent('socket-new-sessionid', this.sid);
+			}
+
+			this.sid = socket.sessionid;
+		
+		}else{
+			console.log("Same Socket Session Id: "+this.sid);
+		}
+
 		if(this.isDebug){
-			console.log('Connected with transport', this.socket.socket.transport.name);
+			console.log('Connected with transport', socket.transport.name);
 		}
 	},
 
