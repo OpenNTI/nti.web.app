@@ -31,6 +31,37 @@
 	}
 }
 
+@mixin presence-style-sudo($x:0,$y:0, $xSide:'left', $ySide:'top', $side:'after'){
+	&::#{$side}{
+		width: 7px;
+		height: 7px;
+		border-radius: 90px;
+		background: $tertiary-grey;
+		content: '';
+		position: absolute;
+		display: block;
+		#{$xSide}: $x;
+		#{$ySide}: $y;
+	}
+
+	&.Online,&.available {
+		&::#{$side}{
+			background: $primary-green;
+		}
+	}
+	&.idle {}
+	&.away{
+		&::#{$side}{
+			background: #ebcd25;
+		}
+	}
+	&.DnD,&.dnd {
+		&::#{$side}{
+			background: $primary-red;
+		}
+	}
+}
+
 @mixin icon($name,$top:0,$left:0,$side:'after'){
 	position: relative;
 
