@@ -185,6 +185,10 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 	openPresentation: function(e){
 		this.close();
+		var w = this.ownerCmp && this.ownerCmp.up('window');
+		if( w ){
+			w.close();
+		}
 		SlideDeck.open(this.refEl, LocationProvider.currentNTIID);
 		e.stopEvent();
 		return false;
