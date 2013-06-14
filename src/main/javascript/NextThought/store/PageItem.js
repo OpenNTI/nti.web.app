@@ -67,7 +67,6 @@ Ext.define('NextThought.store.PageItem',function(){
 			delete this.batchLinks;
 			if( resultSet && resultSet.links ){
 				this.batchLinks = resultSet.links;
-				console.log(this.batchLinks);
 			}
 
 			return this.callParent(arguments);
