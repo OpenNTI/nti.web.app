@@ -49,7 +49,13 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{ name: 'FavoriteGroupingField', defaultValue:'Note', persist: false}
+		{ name: 'FavoriteGroupingField', defaultValue:'Note', persist: false},
+
+
+		//We use these fields in the user-data panel
+		{ name: 'path', type:'string', persist: false},
+		{ name: 'location', type:'string', persist: false},
+		{ name: 'textBodyContent', type:'auto', persist:false}
 	],
 
 	/*

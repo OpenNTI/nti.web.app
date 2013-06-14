@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.activity.View',{
     alias: 'widget.activity-view',
     requires: [
         'NextThought.view.SecondaryTabPanel',
-        'NextThought.view.account.activity.Panel'
+        'NextThought.view.account.activity.Panel',
+	    'NextThought.view.account.history.View'
     ],
 
     iconCls: 'activity',
@@ -45,6 +46,12 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
     initComponent: function(){
+		var i;
+	    if(isFeature('remove-history-tab')){
+		    i = this.items[1].items[0].items;
+		    i.unshift({ xtype: 'history-view' });
+	    }
+
         this.callParent(arguments);
         this.store = Ext.getStore('Stream');
         this.mon(this.store,{

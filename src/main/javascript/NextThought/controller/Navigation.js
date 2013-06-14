@@ -14,7 +14,8 @@ Ext.define('NextThought.controller.Navigation', {
         'UserDataPanel',
 		'menus.Navigation',
 		'menus.navigation.Collection',
-		'library.menus.Collection'
+		'library.menus.Collection',
+		'account.history.Panel'
 	],
 
 	init: function() {
@@ -26,6 +27,9 @@ Ext.define('NextThought.controller.Navigation', {
 				'activity-panel': {
 					'navigation-selected': 'navigate',
 					'navigate-to-blog': 'gotoBlog'
+				},
+				'user-panel': {
+					'navigation-selected': 'navigate'
 				},
 				'activity-preview': {
 					'navigation-selected': 'navigate',

@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.history.View',{
 	alias: 'widget.history-view',
 	requires: [
 		'NextThought.view.SecondaryTabPanel',
-		'NextThought.view.UserDataPanel'
+		'NextThought.view.UserDataPanel',
+		'NextThought.view.account.history.Panel'
 	],
 
 	title: 'History',
@@ -44,10 +45,15 @@ Ext.define('NextThought.view.account.history.View',{
 
 
 	constructor: function(){
-		var i;
+		var i, t;
 		if(isFeature('chat-history')){
 			i = this.items[1].items[0].items;
 			delete i[2];
+		}
+
+		if(isFeature('remove-history-tab')){
+			this.title = "Me";
+			this.items[1].items[0].items[0].xtype = 'user-panel';
 		}
 
 		return this.callParent(arguments);
