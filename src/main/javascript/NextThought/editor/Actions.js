@@ -972,26 +972,28 @@ Ext.define('NextThought.editor.Actions', {
 	maybeEnableSave: function(){
 		function isNoteBodyEmpty(){
 			var d = me.editor.down('.content').dom,
-				html = d && d.innerHTML;
+				html = d && d.innerHTML, v;
 
+			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '');
 			html = html.replace(/<br\/?>/g, '');
-			html = html.replace(/\u200B/g,'').replace(/<div>/, '').replace(/<\/div>/, '');
-			!Ext.isEmpty(html.trim());
-
-			return !Ext.isEmpty(html);
+			return {
+				clearPlaceholder: !Ext.isEmpty(v),
+				enableSave: !Ext.isEmpty(html.trim())
+			};
 		}
 
-		var me = this, enabled = isNoteBodyEmpty(),
+		var me = this, r = isNoteBodyEmpty(),
 			cls = 'disabled';
 
-		if(enabled && this.saveButtonEl.hasCls(cls)){
-			this.contentEl.removeCls('show-placeholder');
+		if(r.enableSave && this.saveButtonEl.hasCls(cls)){
 			this.saveButtonEl.removeCls(cls);
 		}
-		else if(!enabled && !this.saveButtonEl.hasCls(cls)){
-			this.contentEl.addCls('show-placeholder');
+
+		if(!r.enableSave && !this.saveButtonEl.hasCls(cls)){
 			this.saveButtonEl.addCls(cls);
 		}
+
+		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
 	},
 
 
