@@ -44,9 +44,8 @@
 				float: left;
 				display: block;
 				padding-left: 30px;
-				white-space: nowrap;
 				overflow: hidden;
-				text-overflow: ellipsis;
+				@include ellipse;
 				font: normal 400 14px/30px $font;
 				width: 200px;
 				color: #b8b8b8;
