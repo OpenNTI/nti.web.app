@@ -29,7 +29,16 @@ Ext.define('NextThought.view.chat.Dock',{
 
 	constructor: function(){
 		if(isFeature('chat-history')){
-			this.items = [{xtype:'chat-history'}];
+			this.items = [
+				{
+					xtype:'chat-history',
+					listeners: {
+						scope: this,
+						buffer: 100,
+						afterlayout: 'syncHistoryHeight'
+					}
+				}
+			];
 			this.insertBeforeLast = true;
 		}
 		return this.callParent(arguments);
@@ -104,11 +113,31 @@ Ext.define('NextThought.view.chat.Dock',{
 		function doSyncHeight(){
 			var h = oldHeight - me.el.getHeight();
 			if( h!==0 ){
-				me.setY(me.getY()+h);
+				me.el.animate({y:(me.getY()+h)});
 			}
 		}
 
 		this.on('afterlayout',doSyncHeight,this,{single:true});
+	},
+
+
+	syncHistoryHeight: function(){
+		if( !this.floated && !this.isSliding ) { return; }
+
+		var h = this.getHeight(),
+			d = this.lastKnownHeight;
+		if(h !== d && Ext.isNumber(d)){
+			d -= h;
+			if( d && isFinite(d) ){
+				this.animate({
+					to:{
+						y: this.getY() + d
+					}
+				});
+			}
+		}
+
+		this.lastKnownHeight = h;
 	},
 
 
