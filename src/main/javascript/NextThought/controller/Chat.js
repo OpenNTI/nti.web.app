@@ -984,13 +984,13 @@ Ext.define('NextThought.controller.Chat', {
 						me.setMyselfOffline = false;
 
 						Toaster.makeToast({
-							message: "You've been set unavailable by another session",
+							message: "You are currently unvailable because you went offline in another session.",
 							buttons:[
 								{
-									label: 'alright'
+									label: 'Okay'
 								},
 								{
-									label: 'Revert',
+									label: 'Set to available',
 									callback: function(){
 										presence.set({type: 'available'});
 										me.changePresence(presence);
