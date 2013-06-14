@@ -997,7 +997,7 @@ Ext.define('NextThought.controller.Chat', {
 								{
 									label: 'Set to available',
 									callback: function(){
-										presence.set({type: 'available'});
+										presence.set({type: 'available', show: 'chat'});
 										me.changePresence(presence);
 									},
 									scope: me
