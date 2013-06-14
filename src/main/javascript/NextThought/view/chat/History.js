@@ -47,7 +47,7 @@ Ext.define('NextThought.view.chat.History',{
 		}
 
 
-		var s = NextThought.store.PageItem.create({ filters:[ mergeChatsFilter ], pageSize: 5 });
+		var s = NextThought.store.PageItem.create({ filters:[ mergeChatsFilter ], pageSize: 100 });
 			
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
@@ -100,12 +100,13 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	storeLoaded: function(s){
+		var l = s.batchLinks;
 		this.removeAll(true);
 		this.add(Ext.Array.map(s.getRange(),function(a){
 			return {record: a, store: s};
 		}));
 
-		if( this.items.length< 3 ){
+		if( this.items.length< 1 || !(l && l['batch-next'])){
 			this.prefetchNext();
 		}
 		else {
