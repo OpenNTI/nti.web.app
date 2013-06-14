@@ -62,6 +62,17 @@ Ext.define('NextThought.store.PageItem',function(){
 			}
 		},
 
+		onProxyLoad: function(operation) {
+            var resultSet = operation.getResultSet();
+			delete this.batchLinks;
+			if( resultSet && resultSet.links ){
+				this.batchLinks = resultSet.links;
+				console.log(this.batchLinks);
+			}
+
+			return this.callParent(arguments);
+		},
+
 		constructor: function(){
 			var r = this.callParent(arguments);
 

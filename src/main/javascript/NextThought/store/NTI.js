@@ -37,6 +37,18 @@ Ext.define('NextThought.store.NTI',{
 	},
 
 
+	onProxyLoad: function(operation) {
+        var resultSet = operation.getResultSet();
+		delete this.batchLinks;
+		if( resultSet && resultSet.links){
+			this.batchLinks = resultSet.links;
+			console.log(this.batchLinks);
+		}
+
+		return this.callParent(arguments);
+	},
+
+
 	remove: function(records){
 		this.callParent(arguments);
 

@@ -7,6 +7,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 		var records = [], key,
 			items = data.Items, item,
 			mimeType = data.MimeType,
+			links = data.Links,
 			result, i, record, modelName;
 
 		if(data.request) {
@@ -43,6 +44,10 @@ Ext.define('NextThought.proxy.reader.Json', {
 		try {
 
 			result = this.callParent([data]);
+			if(links && Ext.isArray(links)){
+				result.links = {};
+				Ext.each(links,function(l){result.links[l.rel] = l.href;});
+			}
 
 			i = result.records.length-1;
 			for(i; i>=0; i--){
