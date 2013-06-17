@@ -471,6 +471,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 	},
 
+
 	presenceChanged: function(value){
 		this.maybeShowChat(this.chatEl);
 	},
@@ -564,6 +565,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		if(e.getTarget('a[href]') || this.savingField){
 			return;
+		}
+
+		if(this.nameEditor.editing){
+			this.nameEditor.cancelEdit();
 		}
 
 		if(ed.editing){
@@ -713,7 +718,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 			return;
 		}
 
-		if(this.nameEditor.editing){
+		if( this.metaEditor.editing ){
+			this.metaEditor.cancelEdit();
+		}
+
+		if( this.nameEditor.editing ){
 			this.nameEditor.cancelEdit();
 		}
 
