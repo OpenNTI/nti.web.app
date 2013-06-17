@@ -164,6 +164,20 @@ Ext.define('NextThought.view.forums.Editor',{
 			return;
 		}
 
+		if(/^[^a-z0-9]+$/i.test(v.title)){
+			console.error('Title cant be all special chars');
+			this.markError(this.titleWrapEl,"Title can't be all specail characters.");
+			this.titleWrapEl.addCls('error-on-bottom');
+			return;
+		}
+
+		if(/^@{1,}/.test(v.title)){
+			console.error('Title cant start with @');
+			this.markError(this.titleWrapEl,"Title can't start with @");
+			this.titleWrapEl.addCls('error-on-bottom');
+			return;
+		}
+
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
 		this.fireEvent('save-post',this, this.record, v.title, v.tags, v.body, v.publish);
