@@ -30,9 +30,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		});
 
 		this.on({
-			destroy: this.pointer.destroy,
-			show: this.pointer.show,
-			hide: this.pointer.hide,
+			destroy: 'destroy',
+			show: 'show',
+			hide: 'hide',
 			scope: this.pointer,
 			resize: function(){ me.fireEvent('realign'); }
 		});

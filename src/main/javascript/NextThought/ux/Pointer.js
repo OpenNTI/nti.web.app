@@ -35,6 +35,20 @@ Ext.define('NextThought.ux.Pointer',{
 	},
 
 
+	disable: function(){
+		this.hide();
+		return this.callParent();
+	},
+
+
+	show: function(){
+		if(!this.disabled){
+			this.callParent(arguments);
+		}
+		return this;
+	},
+
+
 	point: function(){
 		if(!this.rendered || this.disabled){
 			return;

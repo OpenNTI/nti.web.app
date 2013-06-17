@@ -11,8 +11,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
-	floating: true,
-
 	width: 350,
 	cls: 'contact-popout',
 
