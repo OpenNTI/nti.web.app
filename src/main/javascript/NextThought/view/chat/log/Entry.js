@@ -102,10 +102,17 @@ Ext.define('NextThought.view.chat.log.Entry', {
 //			this.initializeDragZone(this);
 //		}
 		this.el.on('click', this.click, this);
+		this.mon(this.ownerCt, 'afterlayout', 'setNameMaxWidth', this);
         this.mon(this.getEl().select('.control'),{
             scope: this,
             click: this.onControlClick
         });
+	},
+
+	setNameMaxWidth: function(){
+		var width = this.ownerCt.getWidth() - 40;
+		
+		this.name.setStyle('max-width', width+"px");
 	},
 
     onControlClick: function(){

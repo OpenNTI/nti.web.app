@@ -292,6 +292,9 @@
 					font-size: 10px;
 					margin-bottom: 3px;
 					text-transform: uppercase;
+					@include ellipse;
+					overflow: hidden;
+					max-width: 210px;
 				}
 				.body-text {
 					font-size: 10pt;
