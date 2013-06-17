@@ -4,6 +4,7 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 	ui: 'nt',
 	cls:'person-options-menu',
 	plain: true,
+	shadow: false,
 	width: 350,
 	defaults: {
 		ui: 'nt-menuitem',

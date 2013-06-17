@@ -90,6 +90,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			ui: 'nt',
 			plain: true,
 			width: 350,
+			shadow: false,
 			items: [{xtype:'management-group-list', allowSelect: true}]
 		});
 
@@ -99,6 +100,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.groupsList.setUser(this.record);
 		this.groupsList.isContact = this.isContact;
 		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user, isContact: this.isContact });
+
+
+		this.on('destroy','destroy',this.optionsMenu);
+		this.on('destroy','destroy',this.groupsListMenu);
 
 		// NOTE: We don't want a pointer for the person card. So disabled it.
 		this.pointer.disable();
