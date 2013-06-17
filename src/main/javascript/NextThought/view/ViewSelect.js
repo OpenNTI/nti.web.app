@@ -38,7 +38,7 @@ Ext.define('NextThought.view.ViewSelect', {
 
 	cls: 'view-switcher',
 	layout: {
-		type: 'vbox',
+		type: 'hbox',
 		pack: 'start'
 	},
 

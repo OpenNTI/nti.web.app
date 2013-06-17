@@ -23,7 +23,7 @@ Ext.define('NextThought.view.Main', {
 	minWidth: 1024,
 
 	items:[
-		{xtype: 'main-navigation', region: 'west'},
+		{xtype: 'main-navigation', region: 'north'},
 		{xtype: 'main-views', id: 'view-ctr', region: 'center'},
 		{xtype: 'container', region: 'east', weight: 30, minWidth:260}
 	],
