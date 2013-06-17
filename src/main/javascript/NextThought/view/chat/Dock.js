@@ -431,7 +431,7 @@ Ext.define('NextThought.view.chat.DockItem',{
 			console.log("No last Active yet");
 		}
 
-		display = TimeUtils.getDurationText(cur,status);
+		display = TimeUtils.getDurationText(status, cur);
 
 		if(occ.length===1 && isMe(occ[0])){
 			display = 'Ended';
