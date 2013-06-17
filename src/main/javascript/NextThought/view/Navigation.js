@@ -6,7 +6,11 @@ Ext.define('NextThought.view.Navigation',{
 	],
 
 	cls: 'main-navigation',
-	layout: 'auto',
+	layout: {
+		type: 'vbox',
+		pack: 'start'
+	},
+	width: 69,
 
 	items: [
 		{ xtype: 'view-select' }

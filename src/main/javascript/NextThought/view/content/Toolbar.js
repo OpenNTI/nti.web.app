@@ -18,9 +18,9 @@ Ext.define('NextThought.view.content.Toolbar',{
 	},
 
 	items: [
-		{ xtype: 'content-navigation', delegate: 'inherit' },
-		{ xtype: 'content-pager', delegate: 'inherit', width: 80},
+		{ xtype: 'content-filter', flex: 1 },
 		{ width: 80 },
-		{ xtype: 'content-filter', flex: 1 }
+		{ xtype: 'content-navigation', delegate: 'inherit' },
+		{ xtype: 'content-pager', delegate: 'inherit', width: 80}
 	]
 });

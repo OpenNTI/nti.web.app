@@ -218,8 +218,9 @@
 
 	position: absolute;
 	top: 0;
-	right: 0 !important;
-	left: 700px;
+	left: 0;
+	right: 700px !important;
+	width: auto;
 	//border-right: 1px solid #eee;
 
 	.note-here-control-box {
