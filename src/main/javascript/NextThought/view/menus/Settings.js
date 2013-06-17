@@ -18,6 +18,11 @@ Ext.define('NextThought.view.menus.Settings',{
         plain: true
     },
 
+    listeners:{
+        'mouseenter': 'cancelHide',
+        'mouseleave': 'startHide'
+    },
+
     initComponent: function(){
         this.callParent(arguments);
 
@@ -58,5 +63,16 @@ Ext.define('NextThought.view.menus.Settings',{
 
         //add!
         this.add(items);
+    },
+
+    startHide: function(){
+        this.cancelHide();
+
+        this.hideTimeout = Ext.defer(this.hide, 500, this);
+    },
+
+    cancelHide: function(){
+        clearTimeout(this.hideTimeout);
     }
+
 });
