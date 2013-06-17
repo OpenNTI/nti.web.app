@@ -83,7 +83,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			refresh:'alignPicker'
 		});
 
-		this.pickerView.addCls(this.ownerCls);
+		this.pickerView.addCls(this.ownerCls).show().hide();
 		this.mon(this.pickerView, 'select', this.searchItemSelected, this);
 		this.on('destroy','destroy',this.pickerView);
 		this.mon(me.publishEl, 'click', this.togglePublish, this);
