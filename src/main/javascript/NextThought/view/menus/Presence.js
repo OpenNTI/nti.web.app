@@ -143,6 +143,7 @@ Ext.define('NextThought.view.menus.Presence',{
 		var show, status, type, presence;
 
 		if(e.getTarget('.edit')){
+			e.stopEvent();
 			this.startEditor(e);
 			return;
 		}
@@ -203,6 +204,10 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		row.removeCls('active');
 
+		if(value===oldValue){
+			return;
+		}
+
 		if(this.isNewPresence(newPresence)){
 			//somethings different update the presence
 			console.log(newPresence);
@@ -214,9 +219,9 @@ Ext.define('NextThought.view.menus.Presence',{
 	},
 
 	startEditor: function(e){
-		var me = this,
-			row = e.getTarget('.status',null,true),
+		var row = e.getTarget('.status',null,true),
 			edit = row && row.down('.edit');
+
 		if(edit && isFeature('custom-status')){			
 			row.addCls('active');
 			this.editor.field.emptyText = edit.getAttribute('data-placeholder');
