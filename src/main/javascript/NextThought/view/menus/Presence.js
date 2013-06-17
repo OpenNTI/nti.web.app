@@ -31,13 +31,15 @@ Ext.define('NextThought.view.menus.Presence',{
 	},
 
 	beforeRender: function(){
+		var edit = isFeature('custom-status');
+
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {},{
 			states: [
-				{state: 'available', label: 'Available', editable: true},
-				{state: 'away', label: 'Away', editable: true},
-				{state: 'dnd', label: 'Do not disturb', editable: true},
+				{state: 'available', label: 'Available', editable: edit},
+				{state: 'away', label: 'Away', editable: edit},
+				{state: 'dnd', label: 'Do not disturb', editable: edit},
 				//{state: 'invisible', label: 'Invisible'},
 				{state: 'offline', label: 'Offline'}
 			]
@@ -194,6 +196,7 @@ Ext.define('NextThought.view.menus.Presence',{
 			show = (target === 'available')? 'chat' : target,
 			status = (this.isStatus(value))? value : '' ;
 
+		status = (isFeature('custom-status'))? status :  '';
 
 
 		newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
@@ -214,13 +217,10 @@ Ext.define('NextThought.view.menus.Presence',{
 		var me = this,
 			row = e.getTarget('.status',null,true),
 			edit = row && row.down('.edit');
-		if(edit){			
+		if(edit && isFeature('custom-status')){			
 			row.addCls('active');
 			this.editor.field.emptyText = edit.getAttribute('data-placeholder');
 			this.editor.startEdit(row.down('.label'));
-		}
-		else{
-			console.log("unhandled click");
 		}
 	},
 
