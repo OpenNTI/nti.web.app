@@ -855,6 +855,25 @@ Ext.define('NextThought.controller.Chat', {
 		if (!room) {
 			return;
 		}
+
+		var id = ViewUtils.convertToTranscriptId(room.getId(),room.get('Creator'));
+		
+		function success(obj){
+			var cmp = Ext.getCmp('chat-history'),
+				store = cmp && cmp.getStore();
+
+			if(store){
+				store.add(obj);	
+			}
+			
+		}
+
+		function failure(){
+			console.log("Failure");
+		}
+
+		$AppConfig.service.getObject(id,success, failure, this);
+
 		this.deleteRoomIdStatusAccepted(room.getId());
 
 		if (this.isModerator(room)) {
@@ -1106,6 +1125,21 @@ Ext.define('NextThought.controller.Chat', {
 
 	onExitedRoom: function (room) {
 		this.removeSessionObject(room.ID);
+
+
+		ViewUtils.getTranscript(room.ID,
+			function(obj){
+				var cmp = Ext.getCmp('chat-history'),
+					store = cmp && cmp.getStore();
+
+				if(store){
+					store.add(obj);
+				}
+			},
+			function(){
+				console.log("Error fetching, chat transcript");
+			}
+		);
 	},
 
 

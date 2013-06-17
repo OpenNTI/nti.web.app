@@ -720,4 +720,20 @@
 			padding: 0 0 0 10px;
 		}
 	}
+
+	#chat-history-body{
+		.more{
+			background-color: white;
+			text-align: center;
+			font-size: 14px;
+			padding: 5px 0px 5px 0px;
+			color: #3fb3f6;
+			cursor: pointer;
+
+			&::after{
+				content: '...';
+			}
+		}
+
+	}
 }

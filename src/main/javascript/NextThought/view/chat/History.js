@@ -60,7 +60,8 @@ Ext.define('NextThought.view.chat.History',{
 
 		this.mon(s,{
 			scope: this,
-			load: 'storeLoaded'
+			load: 'storeLoaded',
+			add: 'storeLoaded'
 		});
 
 		this.store = s;
