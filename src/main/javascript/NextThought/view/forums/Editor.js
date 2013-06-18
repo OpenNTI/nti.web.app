@@ -166,7 +166,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 		if(/^[^a-z0-9]+$/i.test(v.title)){
 			console.error('Title cant be all special chars');
-			this.markError(this.titleWrapEl,"Title can't be all specail characters.");
+			this.markError(this.titleWrapEl,"Title can't be all special characters.");
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
