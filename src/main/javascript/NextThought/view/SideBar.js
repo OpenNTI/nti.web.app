@@ -139,6 +139,10 @@ Ext.define('NextThought.view.SideBar',{
 		};
 
 		this.mon(this.gripper.el,'click',this.togglePopup,this);
+
+		if(!$AppConfig.service.canChat()){
+			this.down('chat-dock').destroy();
+		}
 	},
 
 
