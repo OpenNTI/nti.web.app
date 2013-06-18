@@ -5,6 +5,7 @@ Ext.define('NextThought.view.video.Video',{
 	alias: 'widget.content-video',
 
 	requires: [
+		'NextThought.util.Globals',
 		'NextThought.model.PlaylistItem'
 	],
 
