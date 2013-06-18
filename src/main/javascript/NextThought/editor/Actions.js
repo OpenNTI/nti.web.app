@@ -972,7 +972,7 @@ Ext.define('NextThought.editor.Actions', {
 	maybeEnableSave: function(){
 		function isNoteBodyEmpty(){
 			var d = me.editor.down('.content').dom,
-				html = d && d.innerHTML, v;
+				html = d && d.innerHTML, v, body;
 
 			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '');
 			html = html.replace(/<br\/?>/g, '');
@@ -991,6 +991,12 @@ Ext.define('NextThought.editor.Actions', {
 
 		if(!r.enableSave && !this.saveButtonEl.hasCls(cls)){
 			this.saveButtonEl.addCls(cls);
+			body = me.getBodyValue();
+			
+			if(body.length <= 1 && Ext.isEmpty(body[0])){
+				me.setValue('',true);
+			}
+
 		}
 
 		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
