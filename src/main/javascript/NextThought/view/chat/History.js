@@ -85,9 +85,21 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	prefetchNext: function() {
-		var s = this.getStore(), links = s && s.batchLinks;
+		var s = this.getStore(), links = s && s.batchLinks,
+			more = this.el.down('.more');
+
+		if(more){
+			if(this.loadingMore){
+				this.loadingMore = false;
+				more.unmask();
+			}else{
+				more.mask('Loading');
+				this.loadingMore = true;
+			}
+		}
 
 		if (!links) {
+			more && more.unmask();
 			return;
 		}
 
@@ -96,12 +108,14 @@ Ext.define('NextThought.view.chat.History',{
 			s.clearOnPageLoad = false;
 			s.getProxy().buildUrl = function(){return links['batch-next'];};
 			s.nextPage();
+		}else{
+			more && more.unmask();
 		}
 	},
 
 
 	storeLoaded: function(s){
-		var l = s.batchLinks;
+		var body, l = s.batchLinks;
 		this.removeAll(true);
 		this.add(Ext.Array.map(s.getRange(),function(a){
 			return {record: a, store: s};
@@ -110,22 +124,28 @@ Ext.define('NextThought.view.chat.History',{
 		if( this.items.length< 1 || !(l && l['batch-next'])){
 			this.prefetchNext();
 		}
-		else {
-			this.add({
-				xtype:'box',
-				autoEl: {
-					cls: 'more',
-					html: 'Load More'
-				},
-				listeners: {
-					click: {
-						scope: this,
-						fn: 'prefetchNext',
-						element: 'el'
-					}
+		//else {
+		this.add({
+			xtype:'box',
+			autoEl: {
+				cls: 'more',
+				html: 'Load More'
+			},
+			listeners: {
+				click: {
+					scope: this,
+					fn: 'prefetchNext',
+					element: 'el'
 				}
-			});
+			}
+		});
+
+		if(this.loadingMore){
+			body = this.ownerCt.el.down('#chat-dock-body');
+			body && body.scroll('down',Infinity);
+			this.loadingMore = false;
 		}
+		//}
 	}
 
 });
