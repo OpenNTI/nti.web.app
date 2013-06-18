@@ -1,12 +1,16 @@
 Ext.define('NextThought.view.account.history.Panel', {
 	extend: 'Ext.view.View',
-	alias: ['widget.user-panel-note', 'widget.user-panel'],
+	alias: ['widget.user-history-panel'],
 
 	requires: [
 		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
-		'NextThought.model.converters.GroupByTime'
+		'NextThought.model.converters.GroupByTime',
+		'NextThought.view.account.history.mixins.Note',
+		'NextThought.view.account.history.mixins.ForumTopic',
+		'NextThought.view.account.history.mixins.BlogEntry'
+
 	],
 
 
@@ -27,27 +31,60 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag:'tpl', 'for':'.', cn:[
-			{
-				cls: 'history {FavoriteGroupingField:lowercase}',
-				cn:[
-					{cls: 'path', html:'{path}'},
-					{cls: 'location', html:'{location}'},
-					{cls: 'body', cn:[
-						{tag: 'span', html: '{textBodyContent}'}
-					]}
-				]
-			}]
+			'{%this.insertGroupTitle(values,out)%}',
+			'{%this.getTemplateFor(values,out)%}']
 		}
-		//			{tag:'tpl', 'if':'label', cn:[{
-		//				cls: 'divider', cn:[{tag:'span', html:'{label}'}]
-		//			}]}
-	])),
+	]),{
+		getTemplateFor: function(values,out){
+			if(!this.subTemplates || !this.subTemplates[values.MimeType]){
+				return console.log('No tpl for...', values);
+			}
+			return this.subTemplates[values.MimeType].applyOut(values, out);
+		},
+
+		insertGroupTitle: function(values, out){
+			var g = values.GroupingField;
+			g = g.split(' ');
+			g.shift();
+			g = g.join(' ');
+
+			// Detect if the grouping type change from the previous else and make we insert the new group title.
+			if(!Ext.isEmpty(g) && (!this.previousGrouping || this.previousGrouping !== g)){
+				this.previousGrouping = g;
+				return Ext.DomHelper.createTemplate({ cls:'divider', cn:[{tag:'span', html:g}] }).applyOut({}, out);
+			}
+			return '';
+		}
+	}),
+
+
+	registerSubType: function(key, itemTpl){
+		if(!this.tpl.subTemplates){ this.tpl.subTemplates = {}; }
+		this.tpl.subTemplates[key] = itemTpl;
+	},
+
+
+	registerFillData: function(key, fn){
+		if(!this.fillData){ this.fillData = {}; }
+		this.fillData[key] = fn;
+	},
+
+
+	registerClickHandler: function(key, fn){
+		if(!this.clickHandlers){ this.clickHandlers = {}; }
+		this.clickHandlers[key] = fn;
+	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
+
+		this.noteItem = new NextThought.view.account.history.mixins.Note({panel: this});
+		this.forumTopicItem = new NextThought.view.account.history.mixins.ForumTopic({panel: this});
+		this.blogEntryItem = new NextThought.view.account.history.mixins.BlogEntry({panel: this});
+
 		this.buildStore();
 	},
-
 
 	getMimeTypes: function(){
 		this.mimeTypes = [];
@@ -89,34 +126,19 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	recordsAdded: function(store, records){
 		console.debug(' UserDataPanel Store added records:', arguments);
-		Ext.each(records, this.fillInData);
+		Ext.each(records, this.fillInData, this);
 	},
 
 
 	storeLoaded: function(store, records){
-		//		console.debug('*** UserDataPanel Store loaded: ', arguments);
-		Ext.each(records, this.fillInData);
+		Ext.each(records, this.fillInData, this);
 	},
 
 
 	fillInData: function(rec){
-		LocationMeta.getMeta(rec.get('ContainerId'),function(meta){
-			var lineage = [],
-				location = '';
-
-			if(!meta){
-				console.warn('No meta for '+rec.get('ContainerId'));
-			}
-			else {
-				lineage = LocationProvider.getLineage(meta.NTIID,true);
-				location = lineage.shift();
-				lineage.reverse();
-			}
-
-			rec.set({'location': Ext.String.ellipsis(location, 150, false)});
-			rec.set({'path': lineage.join(' / ')});
-			rec.set({'textBodyContent': rec.getBodyText()});
-		});
+		if(Ext.isFunction( this.fillData && this.fillData[rec.get('MimeType')])){
+			this.fillData[rec.get('MimeType')](rec);
+		}
 	},
 
 
@@ -128,12 +150,18 @@ Ext.define('NextThought.view.account.history.Panel', {
 			'itemclick': 'rowClicked',
 			itemmouseenter: 'rowHover'
 		});
+
+		this.mon(this.el,{
+			scope: this,
+			scroll: this.onScroll
+		});
 	},
 
 
 	rowClicked: function(view, rec, item){
-		var cid = rec.get('ContainerId');
-		this.fireEvent('navigation-selected', cid, rec);
+		if(Ext.isFunction( this.clickHandlers && this.clickHandlers[rec.get('MimeType')])){
+			this.clickHandlers[rec.get('MimeType')](view, rec);
+		}
 	},
 
 
@@ -166,5 +194,32 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	cancelPopupTimeout: function(){
 		clearTimeout(this.hoverTimeout);
+	},
+
+	prefetchNext: function(){
+		var s = this.getStore(), max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount());
+		if(s.currentPage < max && !s.isLoading()){
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
+	},
+
+
+	onScroll: function(e,dom){
+		var el = dom.lastChild,
+			offsets = Ext.fly(el).getOffsetsTo(dom),
+			top = offsets[1] + dom.scrollTop,
+			ctBottom = dom.scrollTop + dom.clientHeight;
+
+		if(ctBottom > top){
+			this.prefetchNext();
+		}
+
 	}
 });

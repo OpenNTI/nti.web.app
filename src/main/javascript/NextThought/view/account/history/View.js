@@ -5,7 +5,8 @@ Ext.define('NextThought.view.account.history.View',{
 	requires: [
 		'NextThought.view.SecondaryTabPanel',
 		'NextThought.view.UserDataPanel',
-		'NextThought.view.account.history.Panel'
+		'NextThought.view.account.history.Panel',
+		'NextThought.view.account.history.FavoritePanel'
 	],
 
 	title: 'History',
@@ -53,7 +54,8 @@ Ext.define('NextThought.view.account.history.View',{
 
 		if(isFeature('remove-history-tab')){
 			this.title = "Me";
-			this.items[1].items[0].items[0].xtype = 'user-panel';
+			this.items[1].items[0].items[0].xtype = 'user-history-panel';
+			this.items[1].items[0].items[1].xtype = 'user-history-favorite-panel';
 		}
 
 		return this.callParent(arguments);

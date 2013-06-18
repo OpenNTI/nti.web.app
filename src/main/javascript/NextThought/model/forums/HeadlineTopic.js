@@ -3,7 +3,8 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 
 	fields: [
 		{ name: 'headline', type: 'singleItem' },
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
+		{ name: 'creatorName', persist: false, type: 'string'}
 	],
 
 

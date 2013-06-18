@@ -28,8 +28,9 @@ Ext.define('NextThought.controller.Navigation', {
 					'navigation-selected': 'navigate',
 					'navigate-to-blog': 'gotoBlog'
 				},
-				'user-panel': {
-					'navigation-selected': 'navigate'
+				'user-history-panel': {
+					'navigation-selected': 'navigate',
+					'navigate-to-blog': 'gotoBlog'
 				},
 				'activity-preview': {
 					'navigation-selected': 'navigate',
