@@ -210,6 +210,7 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 		var me = this,
 			record = me.record,
 			roomInfo = record.get('RoomInfo'),
+			contributors = record.get('Contributors'),
 			occ = roomInfo.get('Occupants'),
 			started = roomInfo.get('CreatedTime'),
 			ended = record.get('Last Modified'),
@@ -239,18 +240,18 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 							}
 						}
 
-						if(!isGroup){
-							data['img'+userCount] = 'url('+u.get('avatarURL')+')';
-							if( me.rendered ){
-								me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
-							}
-							userCount++;
+						//if(!isGroup){
+						data['img'+userCount] = 'url('+u.get('avatarURL')+')';
+						if( me.rendered ){
+							me['img'+userCount].setStyle({backgroundImage: data['img'+userCount]});
 						}
+						userCount++;
+						//}
 					}
 
-					if(!isGroup){
-						usernames.push(u.getName());
-					}
+					//if(!isGroup){
+					usernames.push(u.getName());
+					//}
 				}
 
 			});
@@ -280,6 +281,6 @@ Ext.define('NextThought.view.chat.HistoryItem',{
 		}
 
 
-		UserRepository.getUser(occ,fill);
+		UserRepository.getUser(Ext.Array.merge(occ, contributors),fill);
 	}
 });
