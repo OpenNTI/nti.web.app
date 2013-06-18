@@ -1052,7 +1052,7 @@ Ext.define('NextThought.controller.Chat', {
 	* @param [c] - function to call when the socket is done
 	*/
 	changePresence: function(type,show,status,c){
-		if(isFeature('custom-status')){
+		if(!isFeature('custom-status')){
 			status = '';
 			if(type && type.isPresenceInfo){
 				type.set({'status': ''});
