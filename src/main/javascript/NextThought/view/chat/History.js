@@ -86,7 +86,8 @@ Ext.define('NextThought.view.chat.History',{
 
 	prefetchNext: function() {
 		var s = this.getStore(), links = s && s.batchLinks,
-			more = this.el.down('.more');
+			more = this.el.down('.more'),
+			body = this.ownerCt.el && this.ownerCt.el.down('#chat-dock-body');
 
 		if(more){
 			if(this.loadingMore){
@@ -95,6 +96,7 @@ Ext.define('NextThought.view.chat.History',{
 			}else{
 				more.mask('Loading');
 				this.loadingMore = true;
+				this.lastScroll = (body)? body.getScroll().top : Infinity;
 			}
 		}
 
@@ -142,7 +144,7 @@ Ext.define('NextThought.view.chat.History',{
 
 		if(this.loadingMore){
 			body = this.ownerCt.el.down('#chat-dock-body');
-			body && body.scroll('down',Infinity);
+			body && body.scrollTo('top',this.lastScroll);
 			this.loadingMore = false;
 		}
 		//}
