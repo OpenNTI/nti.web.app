@@ -43,15 +43,12 @@ Ext.define('NextThought.view.account.history.Panel', {
 		},
 
 		insertGroupTitle: function(values, out){
-			var g = values.GroupingField;
-			g = g.split(' ');
-			g.shift();
-			g = g.join(' ');
+			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
 
 			// Detect if the grouping type change from the previous else and make we insert the new group title.
-			if(!Ext.isEmpty(g) && (!this.previousGrouping || this.previousGrouping !== g)){
-				this.previousGrouping = g;
-				return Ext.DomHelper.createTemplate({ cls:'divider', cn:[{tag:'span', html:g}] }).applyOut({}, out);
+			if(!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label)){
+				this.previousGrouping = label;
+				return Ext.DomHelper.createTemplate({ cls:'divider', cn:[{tag:'span', html: label}] }).applyOut({}, out);
 			}
 			return '';
 		}
@@ -171,24 +168,24 @@ Ext.define('NextThought.view.account.history.Panel', {
 			// that way we will be able to show the popout again.
 			if(!pop){ return; }
 			pop.on('destroy', function(){
-				delete me.activeTargetDom;
+				me.activeTargetDom = null;
 			}, pop);
 		}
 
 		var popout = NextThought.view.account.activity.Popout,
-			target = Ext.fly(item),
+			target = Ext.get(item),
 			me = this;
 
-		if(!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))){return;}
+		if(!record || me.activeTargetDom === item){return;}
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			popout.popup(record, target, me, undefined, fin);
-			me.activeTargetDom = Ext.getDom(target);
+			me.activeTargetDom = item;
 		}, 500);
 
-		Ext.fly(item).on('mouseout',me.cancelPopupTimeout,me,{single:true});
+		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	},
 
 
