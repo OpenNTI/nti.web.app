@@ -9,7 +9,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 		'NextThought.model.converters.GroupByTime',
 		'NextThought.view.account.history.mixins.Note',
 		'NextThought.view.account.history.mixins.ForumTopic',
-		'NextThought.view.account.history.mixins.BlogEntry'
+		'NextThought.view.account.history.mixins.BlogEntry',
+		'NextThought.view.account.history.mixins.Highlight',
+		'NextThought.view.account.history.mixins.Bookmark'
 
 	],
 
@@ -77,8 +79,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.callParent(arguments);
 
 		this.noteItem = new NextThought.view.account.history.mixins.Note({panel: this});
+		this.highlightItem = new NextThought.view.account.history.mixins.Highlight({panel: this});
 		this.forumTopicItem = new NextThought.view.account.history.mixins.ForumTopic({panel: this});
 		this.blogEntryItem = new NextThought.view.account.history.mixins.BlogEntry({panel: this});
+		this.bookmarkItem = new NextThought.view.account.history.mixins.Bookmark({panel: this});
 
 		this.buildStore();
 	},
@@ -174,9 +178,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		var popout = NextThought.view.account.activity.Popout,
 			target = Ext.get(item),
-			me = this;
+			me = this,
+			cls = record.get('Class');
 
-		if(!record || me.activeTargetDom === item){return;}
+		if(!record || me.activeTargetDom === item || cls === 'Highlight' || cls === 'Bookmark'){return;}
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
