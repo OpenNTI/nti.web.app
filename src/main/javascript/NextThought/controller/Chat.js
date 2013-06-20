@@ -1125,21 +1125,6 @@ Ext.define('NextThought.controller.Chat', {
 
 	onExitedRoom: function (room) {
 		this.removeSessionObject(room.ID);
-
-
-		ViewUtils.getTranscript(room.ID,
-			function(obj){
-				var cmp = Ext.getCmp('chat-history'),
-					store = cmp && cmp.getStore();
-
-				if(store){
-					store.add(obj);
-				}
-			},
-			function(){
-				console.log("Error fetching, chat transcript");
-			}
-		);
 	},
 
 
