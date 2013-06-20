@@ -16,6 +16,7 @@ Ext.define('NextThought.controller.Session', {
 	views: [
 		'Window',
 		'account.coppa.Window',
+		'account.coppa.upgraded.Window',
 		'account.recovery.Window',
 		'menus.Settings',
 		'NextThought.ux.WelcomeGuide',
@@ -120,6 +121,12 @@ Ext.define('NextThought.controller.Session', {
 		this.guideWin.show();
 	},
 
+	showCoppaConfirmWindow: function(){
+		var link = this.linkElementForRel('coppa.upgraded.rollbacked');
+		this.coppaConfirmWin = Ext.widget('coppa-confirm-window', {link: link, deleteOnDestroy: true});
+		this.coppaConfirmWin.show();
+	},
+
 	showNewTermsOfService: function() {
 		var link = this.linkElementForRel('content.initial_tos_page');
 		this.guideWin = Ext.widget('updated-tos', {link: link, deleteOnDestroy: true});
@@ -147,6 +154,9 @@ Ext.define('NextThought.controller.Session', {
 		else if (m.getLink(r, 'state-bounced-email')){
 			m.bouncedEmail = true;
 		}
+		else if(m.getLink(r, 'coppa.upgraded.rollbacked')){
+			m.confirmBirthdayCoppa = true;
+		}
 	},
 
 
@@ -164,6 +174,10 @@ Ext.define('NextThought.controller.Session', {
 		}
 		else if (this.bouncedEmail){
 			this.showEmailRecoveryWindow('email', 'state-bounced-email');
+		}
+
+		if(this.confirmBirthdayCoppa){
+			this.showCoppaConfirmWindow();
 		}
 
 		// what is the exactly relationships between these windows?

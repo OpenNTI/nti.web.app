@@ -69,6 +69,103 @@
 		}
 	}
 
+	.coppa-form{
+		margin: 0 20px 20px 20px;
+
+		.legend{
+			font: normal 400 14px/22px $font;
+			margin-bottom: 5px;
+		}
+		.fields{
+
+			input, .selectbox{
+				vertical-align: bottom;
+				color: #757474;
+				font: italic 500 14px/25px $font;
+				border: 1px solid #dcdcdc;
+				background: #ffffff;
+				padding: 6px 10px;
+				margin: 0;
+				min-height: 39px;
+
+				&[size='3']{
+					width: 75px;
+				}
+				&[size='2']{
+					width: 60px;
+				}
+				&[size='4']{
+					width: 137px;
+				}
+				&[size='5']{
+					width: 285px;
+				}
+			}
+
+			.selectbox{
+				cursor: pointer;
+				display: inline-block;
+				width: 150px;
+				padding: 6px 0 6px 20px;
+				border-left-width: 0;
+				box-shadow: inset 5px 0 0 0 #a0a0a0;
+				position: relative;
+
+				&::after{
+					content: '';
+					position: absolute;
+					top: 15px; right: 15px;
+					background: $icons transparent no-repeat;
+					@include sprite($icons,'collapse', $dimensions: true);
+				}
+			}
+		}
+
+		.continue, .save{
+			display: inline-block;
+			cursor: pointer;
+			vertical-align: bottom;
+			height: 39px;
+			line-height: 39px;
+			padding: 0 20px;
+			margin-left: 5px;
+			white-space: nowrap;
+			color: #ffffff;
+			background: #37b2f9;
+			border: 1px solid #31a0e0;
+			font-size: 14px;
+			font-style: italic;
+			font-weight: bold;
+
+			&.submitted{
+				background: none;
+				border: none;
+				color: $primary-green;
+			}
+		}
+
+		.account-info{
+			margin-top: 15px;
+
+			input{
+				&[data-required=true]{
+					display: inline-block;
+					margin-bottom: 10px;
+					border-left-width: 0;
+					box-shadow: inset 5px 0 0 0 #a0a0a0;
+				}
+				&[name=last]{
+					margin-bottom: 10px;
+					margin-left: 10px;
+				}
+
+				&.hidden{
+					display: none;
+				}
+			}
+		}
+	}
+
 	.code-main-view,
 	.createlist-main-view,
 	.codecreation-main-view,
@@ -264,6 +361,14 @@
 		}
 	}
 
+}
+
+.x-menu{
+	&.month-picker-list{
+		.x-menu-item{
+			border-bottom-width: 0 !important;
+		}
+	}
 }
 
 .codecreation-window,
