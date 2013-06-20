@@ -65,8 +65,9 @@ Ext.define('NextThought.view.account.history.View',{
     afterRender: function(){
         this.callParent(arguments);
 
-        if (!$AppConfig.service.canChat()){
-            this.down('[title=Chats]').destroy();
+	    var chatTab = this.down('[title=Chats]');
+        if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)){
+	        chatTab.destroy();
         }
     }
 
