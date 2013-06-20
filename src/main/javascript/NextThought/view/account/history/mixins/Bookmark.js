@@ -10,7 +10,7 @@ Ext.define('NextThought.view.account.history.mixins.Bookmark',{
 				{cls: 'path', html:'{path}'},
 				{cls: 'location', html:'{location}'}
 			]
-		},
+		}
 	])),
 
 	constructor: function(config){
