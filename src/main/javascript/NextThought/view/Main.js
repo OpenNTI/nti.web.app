@@ -67,6 +67,10 @@ Ext.define('NextThought.view.Main', {
 		this.sidebar = Ext.widget('main-sidebar', {
 			host: this.down('[region=east]'), hidden: this.hidden
 		});
+
+        Ext.getDoc().on('touchmove', function(e) {
+            e.preventDefault();
+        });
 	},
 
 
