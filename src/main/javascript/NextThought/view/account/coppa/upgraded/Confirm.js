@@ -21,10 +21,19 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		cls:'account-info', cn:[
 			{cls:'legend', html: 'Account Information'},
 			{cls:'fields', cn:[
-				{tag:'input', type: 'text', cls:'hidden', 'data-required': true, placeholder: 'First Name', name: 'first', size:'4'},
-				{tag:'input', type: 'text', cls:'hidden', placeholder: 'Last Name', name: 'last', size:'4'},
-				{tag:'input', type: 'text', cls:'hidden', 'data-required': true, placeholder: 'Your Email', name: 'email', size:'5'},
-				{tag:'input', type: 'text', cls:'hidden', 'data-required': true, placeholder: 'Parent\'s Email', name: 'contact_email', size:'5'}
+				{cls: 'realname hidden', cn:[
+					{tag:'input', type: 'text', 'data-required': true, placeholder: 'First Name', name: 'first', size:'4'},
+					{tag:'input', type: 'text', placeholder: 'Last Name', name: 'last', size:'4'},
+					{tag:'span', cls:'validation-message', html:'Please enter your first and last name.'}
+				]},
+				{cls:'email hidden', cn:[
+					{tag:'input', type: 'text','data-required': true, placeholder: 'Your Email', name: 'email', size:'5'},
+					{tag:'span', cls:'validation-message', html:'What\'s your email address?'}
+				]},
+				{cls:'contact_email hidden', cn:[
+					{tag:'input', type: 'text', 'data-required': true, placeholder: 'Parent\'s Email', name: 'contact_email', size:'5'},
+					{tag:'span', cls:'validation-message long', html:'We need your parent\'s permission to activate social features on your account.'}
+				]}
 			]},
 			{cls:'save', html:'Save Changes'}
 		]}
@@ -60,9 +69,10 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	},
 
 
-	save: function(){
-		var params = {}, i, me = this, url, req, v, canSave = true, p;
-
+	getFormValues: function(){
+		var me = this, i, v,
+			canSave = true,
+			params = {};
 		for(i in me.schema){
 			if(me.schema.hasOwnProperty(i)){
 				v = me.fieldsChannel[i].call(me);
@@ -76,7 +86,28 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			}
 		}
 
-		if(!canSave){ return; }
+		return canSave ? params : null;
+	},
+
+
+	markInvalidated: function(param){
+		if(param.field === 'contact_email'){
+
+		}
+	},
+
+
+	save: function(){
+		function fail(res, req){
+			var r = Ext.decode(res.responseText);
+			me.markInvalidated(r);
+			console.log('FAIL: ', r);
+		}
+
+		var params = this.getFormValues(),
+			me = this, url, req, p;
+
+		if(Ext.isEmpty(params)){ return; }
 
 		url = this.getLink('upgrade_coppa_user');
 		req = {
@@ -92,7 +123,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				Ext.defer(p.destroy, 1, me);
 
 			},
-			failure: function(){ console.log('FAIL: ', arguments)}
+			failure: fail
 		};
 
 		Ext.Ajax.request(req);
@@ -111,8 +142,18 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		if(Ext.isEmpty(bd)){ return;}
 
 		this.preflight({'birthdate':bd}, this.showSchemaFields);
+
+	},
+
+
+	lockBirthday: function(){
 		this.continueEl.update('Thanks!');
 		this.continueEl.addCls('submitted');
+
+		this.monthEl.removeCls('invalid').addCls('valid');
+		this.monthEl.set({'disabled':'disabled'});
+		this.el.down('[name=day]').set({'disabled':'disabled'});
+		this.el.down('[name=year]').set({'disabled':'disabled'});
 	},
 
 
@@ -122,6 +163,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		}
 		function invalidate(){
 			me.el.down('.birthday').removeCls('valid').addCls('invalid');
+			me.monthEl.removeCls('valid').addCls('invalid');
 			console.warn('Invalid birthday...');
 		}
 
@@ -176,11 +218,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		var i, me = this, t, shouldAskAccountInfo = false;
 		for(i in schema){
 			if(schema.hasOwnProperty(i)){
-				t = me.el.down('[name='+i+']');
-				if(i === 'realname'){
-					me.el.down('[name=last]').removeCls('hidden');
-					me.el.down('[name=first]').removeCls('hidden');
-				}
+				t = me.el.down('.'+i);
 				if(!Ext.isEmpty(t)){
 					t.removeCls('hidden');
 					shouldAskAccountInfo = true;
@@ -189,6 +227,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		}
 
 		if(shouldAskAccountInfo){
+			me.lockBirthday();
 			me.accountInfoEl.show();
 			Ext.defer(me.updateLayout, 1, me);
 		}

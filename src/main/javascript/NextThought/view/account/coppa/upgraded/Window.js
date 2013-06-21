@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Window', {
 	resizable: false,
 	dialog: true,
 
-	width: 480,
+	width: 600,
 
 	layout: {
 		type: 'vbox',
