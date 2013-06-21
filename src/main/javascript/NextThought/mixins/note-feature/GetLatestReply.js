@@ -28,7 +28,7 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 
 			//Set the latest direct reply
 			store.each(function (r) {
-				if (!rec || ( (rec.get('CreatedTime') < r.get('CreatedTime')) && (r.get('inReplyTo') === me.record.getId()))) {
+				if ((!rec || ( (rec.get('CreatedTime')) < r.get('CreatedTime'))) && (r.get('inReplyTo') === me.record.getId())) {
 					rec = r;
 				}
 			});
