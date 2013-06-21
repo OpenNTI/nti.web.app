@@ -49,5 +49,10 @@ Ext.define('NextThought.view.account.history.mixins.Note',{
 			rec.set({'path': lineage.join(' / ')});
 			rec.set({'textBodyContent': rec.getBodyText && rec.getBodyText()});
 		});
+
+		rec.on("convertedToPlaceholder", function(){
+			console.log("Item removed");
+			this.destroy();
+		});
 	}
 });

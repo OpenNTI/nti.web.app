@@ -315,6 +315,7 @@ Ext.define('NextThought.model.Base', {
 		me.fireEvent('convertedToPlaceholder');
 		me.fireEvent('updated', me);
 		me.fireEvent('changed');
+		me.maybeCallOnAllObjects('convertToPlaceholder', me, arguments);
 	},
 
 
@@ -853,7 +854,7 @@ Ext.define('NextThought.model.Base', {
 			var recById = s.getById(rec.getId());
 
 			//Ok we found one and it isn't the same object
-			if(recById && rec !== recById && rec.get('MimeType') === recById.get('MimeType')){
+			if(recById && rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isFunction(recById[fname])){
 				recById[fname].apply(recById, args);
 			}
 		});
