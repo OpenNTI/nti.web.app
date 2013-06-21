@@ -302,7 +302,6 @@ Ext.define('NextThought.view.forums.Forum',{
 		return true;
 	},
 
-
 	onBeforeItemClick: function(record, item, idx, event, opts){
 		var t = event && event.getTarget && event.getTarget(),
 			d = record.get && record.get('NewestDescendant'),

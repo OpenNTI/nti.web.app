@@ -45,6 +45,7 @@ Ext.define('NextThought.view.account.history.FavoritePanel', {
 	},
 
 	removeBookmark: function(store,record){
-		Ext.data.Store.prototype.remove.call(store,record);
+		//Ext.data.Store.prototype.remove.call(store,record);
+		store.remove(record);
 	}
 });
