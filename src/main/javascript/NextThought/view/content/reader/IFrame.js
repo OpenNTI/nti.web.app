@@ -163,10 +163,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		on(doc,'click',function(e){
 			var evt = Ext.EventObject.setEvent(e||event),
 				target = evt.getTarget(),
-				highlight = evt.target.classList.contains('application-highlight');
+				highlight = evt.target.classList && evt.target.classList.contains('application-highlight');
 
 			//while the target is not an anchor that is not in a highlight
-			while(target && (target.tagName !== 'A' || target.parentNode.classList.contains('application-highlight'))) { 
+			while(target && (target.tagName !== 'A' || (target.parentNode.classList && target.parentNode.classList.contains('application-highlight')))) {
 				target = target.parentNode; 
 			}
 
