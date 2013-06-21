@@ -31,7 +31,8 @@ Ext.define('NextThought.util.Annotations',{
 		}
 
 		//this placeholder "happened in the past" so take the existing time and move it back
-		ct.setMinutes(ct.getMinutes()-1);
+		//ct.setMinutes(ct.getMinutes()-1);
+		ct.setSeconds(ct.getSeconds() - 1);
 		lm = new Date(ct.getTime());
 
 		holder.beginEdit();
