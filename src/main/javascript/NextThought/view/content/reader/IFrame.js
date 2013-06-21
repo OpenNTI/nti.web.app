@@ -162,16 +162,16 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		});
 		on(doc,'click',function(e){
 			var evt = Ext.EventObject.setEvent(e||event),
-				target = evt.getTarget(),
-				highlight = evt.target.classList && evt.target.classList.contains('application-highlight');
+				target = evt.getTarget(null, null, true),
+				highlight = evt.getTarget('.application-highlight');
 
 			//while the target is not an anchor that is not in a highlight
-			while(target && (target.tagName !== 'A' || (target.parentNode.classList && target.parentNode.classList.contains('application-highlight')))) {
-				target = target.parentNode; 
+			while(target && (!target.is('a') || target.up('.application-highlight'))){
+				target = target.parent();
 			}
 
 			//if we are not in a hightlight
-			if(target && !highlight){ me.onClick(evt, target); }
+			if(target && !highlight){ me.onClick(evt, Ext.getDom(target)); }
 		});
 		on(doc,'mouseup',function(e){
 
