@@ -111,20 +111,40 @@
 				box-shadow: inset 5px 0 0 0 #a0a0a0;
 				position: relative;
 
-				&.valid{
-					box-shadow: inset 5px 0 0 0 $primary-green;
-				}
-
-				&.invalid{
-					box-shadow: inset 5px 0 0 0 $primary-red;
-				}
-
 				&::after{
 					content: '';
 					position: absolute;
 					top: 15px; right: 15px;
 					background: $icons transparent no-repeat;
 					@include sprite($icons,'collapse', $dimensions: true);
+				}
+			}
+
+			& > div{
+				span, .validation-message{
+					padding-left: 20px;
+					display: inline-block;
+					vertical-align: top;
+					position: relative;
+					padding-top: 10px;
+					font-style: italic;
+					color: #757474;
+
+					&.long{
+						width: 260px;
+						padding-top: 0;
+					}
+				}
+
+				&.invalid{
+					input[data-required=true], .selectbox{
+						box-shadow: inset 5px 0 0 0 $primary-red !important;
+					}
+				}
+				&.valid{
+					input[data-required=true], .selectbox{
+						box-shadow: inset 5px 0 0 0 $primary-green !important;
+					}
 				}
 			}
 		}
@@ -155,34 +175,23 @@
 		.account-info{
 			margin-top: 15px;
 
-			.hidden{ display: none; }
-			input{
-				&[data-required=true]{
-					display: inline-block;
-					margin-bottom: 10px;
-					border-left-width: 0;
-					box-shadow: inset 5px 0 0 0 #a0a0a0;
+			.fields{
+				& > div{
+					&.hidden{ display: none; }
 
-					&.valid{ box-shadow: inset 5px 0 0 0 $primary-green;}
-					&.invalid{ box-shadow: inset 5px 0 0 0 $primary-red;}
-				}
-				&[name=last]{
-					margin-bottom: 10px;
-					margin-left: 10px;
-				}
-			}
-			span{
-				padding-left: 20px;
-				display: inline-block;
-				vertical-align: top;
-				position: relative;
-				padding-top: 10px;
-				font-style: italic;
-				color: #757474;
+					input{
+						&[data-required=true]{
+							display: inline-block;
+							margin-bottom: 10px;
+							border-left-width: 0;
+							box-shadow: inset 5px 0 0 0 #a0a0a0;
+						}
+						&[name=last]{
+							margin-bottom: 10px;
+							margin-left: 10px;
+						}
+					}
 
-				.long{
-					width: 260px;
-					padding-top: 0;
 				}
 			}
 		}

@@ -9,13 +9,16 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	cls: 'coppa-form',
 
 	renderTpl: Ext.DomHelper.markup([{
-		cls:'birthday', cn: [
+		cls:'birthday-info', cn: [
 			{cls:'legend', html:'When is your birthday?'},
 			{cls:'fields', cn:[
-				{cls:'month selectbox', 'data-required': true, value:'', html:'Month'},
-				{tag:'input', type: 'text', 'data-required': true, placeholder: 'Day', name: 'day', size:'2'},
-				{tag:'input', type: 'text', 'data-required': true, placeholder: 'Year', name: 'year', size:'3'},
-				{cls:'continue', html:'Continue'}
+				{cls:'birthdate', cn:[
+					{cls:'month selectbox', 'data-required': true, value:'', html:'Month'},
+					{tag:'input', type: 'text', placeholder: 'Day', name: 'day', size:'2'},
+					{tag:'input', type: 'text', placeholder: 'Year', name: 'year', size:'3'},
+					{cls:'continue', html:'Continue'},
+					{cls:'validation-message'}
+				]}
 			]}
 		]},{
 		cls:'account-info', cn:[
@@ -91,8 +94,16 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 
 
 	markInvalidated: function(param){
-		if(param.field === 'contact_email'){
-
+		var el;
+		try{
+			el = this.el.down('.'+param.field);
+			el.removeCls('valid').addCls('invalid');
+			if(el.down('.validation-message')){
+				el.down('.validation-message').update(param.message);
+			}
+		}
+		catch(e){
+			console.error('Error: ', e);
 		}
 	},
 
@@ -150,7 +161,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		this.continueEl.update('Thanks!');
 		this.continueEl.addCls('submitted');
 
-		this.monthEl.removeCls('invalid').addCls('valid');
+		this.el.down('.birthdate').removeCls('invalid').addCls('valid');
+		this.el.down('.birthdate > .validation-message').update('');
 		this.monthEl.set({'disabled':'disabled'});
 		this.el.down('[name=day]').set({'disabled':'disabled'});
 		this.el.down('[name=year]').set({'disabled':'disabled'});
@@ -162,9 +174,14 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
 		}
 		function invalidate(){
-			me.el.down('.birthday').removeCls('valid').addCls('invalid');
-			me.monthEl.removeCls('valid').addCls('invalid');
+			var b = me.el.down('.birthdate'),
+				err = b && b.down('.validation-message');
+
 			console.warn('Invalid birthday...');
+			b.removeCls('valid').addCls('invalid');
+			if(err){
+				err.update('Please enter a valid date');
+			}
 		}
 
 
