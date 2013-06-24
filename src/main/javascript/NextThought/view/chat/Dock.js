@@ -28,19 +28,17 @@ Ext.define('NextThought.view.chat.Dock',{
 
 
 	constructor: function(){
-		if(isFeature('chat-history')){
-			this.items = [
-				{
-					xtype:'chat-history',
-					listeners: {
-						scope: this,
-						buffer: 100,
-						afterlayout: 'syncHistoryHeight'
-					}
+		this.items = [
+			{
+				xtype:'chat-history',
+				listeners: {
+					scope: this,
+					buffer: 100,
+					afterlayout: 'syncHistoryHeight'
 				}
-			];
-			this.insertBeforeLast = true;
-		}
+			}
+		];
+		this.insertBeforeLast = true;
 		return this.callParent(arguments);
 	},
 

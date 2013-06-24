@@ -5,6 +5,7 @@ Ext.define('NextThought.view.SideBar',{
 	requires: [
 		'NextThought.view.SideBarTabPanel',
         'NextThought.view.account.activity.View',
+        'NextThought.view.account.activity.ViewNew',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
         'NextThought.view.account.history.View',
@@ -63,6 +64,8 @@ Ext.define('NextThought.view.SideBar',{
 		if(isFeature('remove-history-tab')){
 			t = this.items[1].items[0].items;
 			delete t[2];
+
+			this.items[1].items[0].items[1] = { xtype: 'activity-view-new'};
 		}
 
 		return this.callParent(arguments);

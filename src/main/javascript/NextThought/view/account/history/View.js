@@ -36,8 +36,7 @@ Ext.define('NextThought.view.account.history.View',{
 					defaults: {xtype:'user-data-panel'},
 					items: [
 						{ title: 'Notes', mimeType: ['note','highlight'] },
-						{ title: 'Bookmarks', mimeType: ['favorite'] },
-						{ title: 'Chats', mimeType: ['transcriptsummary'] }
+						{ title: 'Bookmarks', mimeType: ['favorite'] }
 					]
 				}
 			]
@@ -47,10 +46,6 @@ Ext.define('NextThought.view.account.history.View',{
 
 	constructor: function(){
 		var i, t;
-		if(isFeature('chat-history')){
-			i = this.items[1].items[0].items;
-			delete i[2];
-		}
 
 		if(isFeature('remove-history-tab')){
 			this.title = "Me";

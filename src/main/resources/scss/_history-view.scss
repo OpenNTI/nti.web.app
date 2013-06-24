@@ -2,3 +2,126 @@
 .history-view {
 	@include side-panel-view-title;
 }
+
+.activity-view{
+	overflow: scroll;
+
+	.filters-container{
+		position: absolute;
+		overflow: visible;
+		bottom: 0;
+		height: 0 !important;
+		
+		.activity-filters{
+
+			.tabs{
+				position: absolute;
+				bottom: 0;;
+				width: 258px;
+				height: 40px !important;
+
+				.tab{
+				
+					&.from{
+						@include icon('arrow-course-dropdown', $top: 16px, $left: 195px, $side:'after');
+
+						width: 218px;
+						height: 40px;
+						color: #b8b8b8;
+						font-size: 14px;
+						padding-top: 11px;
+						padding-left: 30px;
+						float: left;
+						border-right: 1px solid $tertiary-grey-alt;
+
+					}
+
+					&.types{
+						@include icon('rhp-contact-flyout-settings_hover', $top: 10px, $left: 12px, $side:'after');
+
+						width: 40px;
+						height: 40px;
+						float: right;
+					}
+
+					background-color: #f8f8f8;
+					border-top: 1px solid $tertiary-grey-alt;
+					cursor: pointer;
+
+					&::after{
+						opacity: 0.5;
+					}
+					&.selected{
+						background-color: white;
+						color: black;
+
+						&:after{
+							opacity: 1;
+						}
+					}
+
+				}
+			}			
+
+		}
+	}
+}
+
+.from-menu,
+.types-menu{
+	width: 258px !important;
+	height: 130px !important;
+	background-color: white;
+	box-shadow: none !important;
+
+	
+	.x-header-text-container{
+		background-color: white;
+		border-top: 1px solid gainsboro !important;
+		padding-top: 6px;
+		.x-header-text{							
+			color: #B8B8B8;
+			font: normal 600 10px/20px $font;
+			margin: 10px 0 0 15px;
+		}
+	}
+
+	.x-menu-body{
+		border: none !important;
+	}
+
+	.option{
+		height: 30px !important;
+		display: block;
+		padding-left: 30px;
+		overflow: hidden;
+		@include ellipse;
+		font: normal 400 14px/30px $font !important;
+		width: 100% !important;
+		color: #b8b8b8 !important;
+
+		img{
+			display: none;
+		}
+
+		&.active{
+			@include icon('rhp-status-checkmark', $top:8px, $left:15px, $side:'before');
+		}
+
+		&:hover,&.active{
+			background-color: #efefef;
+			font: normal 600 14px/30px $font;
+			color: #494949;					
+
+			.edit{
+				border-left: 1px solid #ffffff;
+				border-right: 1px solid #ffffff;
+				display: block;					
+			}
+		}
+	}
+}
+
+.types-menu{
+	height: 220px !important;
+}

@@ -20,11 +20,11 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	overflowX: 'hidden',
 	cls: 'activity-panel',
 
-	layout: {
+	/*layout: {
 		type: 'vbox',
 		align: 'stretch',
 		reserveScrollbar: false
-	},
+	},*/
 
 	items: [
 		{
