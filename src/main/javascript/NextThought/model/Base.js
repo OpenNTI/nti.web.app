@@ -79,6 +79,22 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	getData: function(){
+		var k, v, f = this.callParent(arguments);
+
+		for( k in f){
+			if(f.hasOwnProperty(k)){
+				v = f[k];
+				if( v && v.isModel){
+					f[k] = v.getData.apply(v, arguments);
+				}
+			}
+		}
+
+		return f;
+	},
+
+
 	getClassForModel: function(aliasPrefix,fallback){
 		var c = this,
 			cls = null,
