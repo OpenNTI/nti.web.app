@@ -425,6 +425,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
 		this.nameEl.update(user.getName());
+		this.nameEl.dom.setAttribute('data-qtip', user.getName());
 
 		//If the name is editable it is guarenteed (right now) to be
 		//us.  Given that it is also guarenteed that we won't have the add to contacts
@@ -661,6 +662,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 		}
 		else{
 			el.update(v || placeholderText);
+		}
+
+		if(n === 'alias'){
+			el.dom.setAttribute('data-qtip', v);
 		}
 	},
 

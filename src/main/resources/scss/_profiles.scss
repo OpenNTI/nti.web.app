@@ -103,10 +103,14 @@
 					font: italic 300 30px/36px $font;
 					color: $primary-blue;
 					margin-bottom: 5px;
+					width: auto;
+					max-width: 100%;
+					display: inline-block;
+					overflow-y: hidden;
+					padding-right: 27px;
 					@include ellipse;
-					&.readonly{
-						display: inline-block;
-					}
+
+					
 				}
 
 				.actions {
@@ -186,6 +190,10 @@
 					background: $icons no-repeat;
 					top: 3px; right: -24px;
 					@include sprite($icons,'edit-15_hover',$dimensions: true);
+				}
+
+				&.name::after{
+					right: 5px;
 				}
 			}
 		}
