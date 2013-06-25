@@ -20,6 +20,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	filter: 'MeOnly',
 	grouping: 'GroupingField',
 
+	ui: 'history',
 	cls: 'user-data-panel',
 	autoScroll: true,
 
@@ -223,5 +224,34 @@ Ext.define('NextThought.view.account.history.Panel', {
 			this.prefetchNext();
 		}
 
+	},
+
+	applyFilters: function(filter){
+		if(Ext.isEmpty(filter)){
+			return;
+		}
+
+		var s = this.getStore(),
+			selectedMimeTypes = [];
+
+		s.removeAll();
+		s.clearFilter();
+		if(filter){
+			Ext.each( filter.value, function(item){
+				var mt = item.value;
+				if(mt){
+					selectedMimeTypes.push(mt);
+				}
+			});
+			s.filter([{filterFn: function(item) {
+				return filter.test(item); }} ]);
+		}
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'relevance',
+			sortOrder: 'descending',
+			accept: selectedMimeTypes.join(',')
+		});
+
+		s.load();
 	}
 });

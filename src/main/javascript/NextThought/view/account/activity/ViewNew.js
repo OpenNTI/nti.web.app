@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             flex: 1,
             id: 'activity-tab-view',
             items: [  
-                {xtype: 'history-view', cls: 'activity-panel history-panel', filter:'onlyMe'},
+                {xtype: 'user-history-panel', cls: 'activity-panel history-panel user-data-panel', filter:'onlyMe'},
                 {xtype: 'activity-panel', cls: 'activity-panel contacts-panel', filter: 'notInCommunity'},
                 {xtype: 'activity-panel', cls: 'activity-panel community-panel', filter: 'inCommunity'}
             ]
@@ -152,6 +152,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
                 this.el.down('.filters-container .activity-filters .tabs .types').removeCls('selected');
             }
         });
+
+        this.applyFilters(['all']);
 
 	    //FIXME: Have a better way of setting/getting the initial selected panel.
 	    this.selectedPanel = this.down('[filter=onlyMe]');
