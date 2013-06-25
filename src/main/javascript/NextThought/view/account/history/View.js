@@ -64,6 +64,40 @@ Ext.define('NextThought.view.account.history.View',{
         if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)){
 	        chatTab.destroy();
         }
-    }
+    },
+
+	getActiveView: function(){
+		return this.down("[title=Notes]").isVisible() ? this.down("[title=Notes]") : this.down("[title=Bookmarks]");
+	},
+
+	applyFilters: function(filter){
+		if(Ext.isEmpty(filter)){
+			return;
+		}
+
+		var v = this.getActiveView(),
+			s = v  && v.getStore(),
+			selectedMimeTypes = [];
+
+		s.removeAll();
+		s.clearFilter();
+		if(filter){
+			Ext.each( filter.value, function(item){
+				var mt = item.value;
+				if(mt){
+					selectedMimeTypes.push(mt);
+				}
+			});
+			s.filter([{filterFn: function(item) {
+				return filter.test(item); }} ]);
+		}
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'relevance',
+			sortOrder: 'descending',
+			accept: selectedMimeTypes.join(',')
+		});
+
+		s.load();
+	}
 
 });

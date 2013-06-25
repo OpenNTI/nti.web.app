@@ -19,8 +19,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     plain: true,
     mimeTypesMap: {
         'all': ['all'],
-        'discussions': ['discussions','Thoughts'],
-        'highlights': ['highlights'],
+        'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
+        'notes': ['highlight', 'note'],
         'bookmarks': ['bookmarks'],
         'likes': ['likes'],
         'contact': ['contact']
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             flex: 1,
             id: 'activity-tab-view',
             items: [  
-                {xtype: 'history-view', cls: 'activity-panel history-panel'}, 
+                {xtype: 'history-view', cls: 'activity-panel history-panel', filter:'onlyMe'},
                 {xtype: 'activity-panel', cls: 'activity-panel contacts-panel', filter: 'notInCommunity'},
                 {xtype: 'activity-panel', cls: 'activity-panel community-panel', filter: 'inCommunity'}
             ]
@@ -83,9 +83,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
                 }
             },
             items: [
-                {cls: 'option', text: 'Only Me', checked: true, isMe: true},
-                {cls: 'option', text: 'My Contacts', checked: false, isContacts: true},
-                {cls: 'option', text: 'Community', checked: false, isCommunity: true}
+                {cls: 'option', text: 'Only Me', checked: true, isMe: true, tabFilter:'onlyMe'},
+                {cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
+                {cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'notInCommunity'}
             ]
         });
 
@@ -110,16 +110,15 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             },
             items: [
                 {cls: 'option', text: 'Show All', checked: true, isAll: true, filter: 'all'},
-                {cls: 'option', text: 'Discussions & Thoughts', checked: false, isDiscussions: true, filter: 'discussions'},
-                {cls: 'option', text: 'Highlights', checked: false, isHighlights: true, filter: 'highlights'},
-                {cls: 'option', text: 'Bookmarks', checked: false, isBookmarks: true, filter: 'bookmarks'},
-                {cls: 'option', text: 'Likes', checked: false, isLikes: true, filter: 'likes'},
-                {cls: 'option', text: 'Contact Requests', checked: false, isContact: true, filter: 'contact'}
+                {cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
+                {cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
+                {cls: 'option', text: 'Bookmarks', filter: 'bookmarks'},
+                {cls: 'option', text: 'Likes', filter: 'likes'},
+                {cls: 'option', text: 'Contact Requests', filter: 'contact'}
             ]
         });
 
         this.filters = ['all'];
-        this.activePanel = 'history';
         this.monitoredInstance = $AppConfig.userObject;
         this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
     },
@@ -154,30 +153,30 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             }
         });
 
-        this.fromMenu.show().hide();
+	    //FIXME: Have a better way of setting/getting the initial selected panel.
+	    this.selectedPanel = this.down('[filter=onlyMe]');
+	    this.fromMenu.show().hide();
     },
 
     switchPanel: function(item){
-        var tab = this.el.down('.filters-container .activity-filters .tabs .from');
-        console.log('Swithing panels');
-        this.el.down('.history-panel').hide();
-        this.el.down('.contacts-panel').hide();
-        this.el.down('.community-panel').hide();
+	    var activePanel = this.selectedPanel,
+		    newPanel = this.getActivePanel(),
+		    newTab = this.fromMenu.down('menuitem[checked]'),
+		    tab = this.el.down('.filters-container .activity-filters .tabs .from');
 
-        if(item.isMe){
-            this.el.down('.history-panel').show();
-            this.activePanel = 'history';
-            tab.update('Only Me');
-        }else if(item.isContacts){
-            this.el.down('.contacts-panel').show();
-            this.activePanel = 'contacts';
-            tab.update('My Contacts');
-        }else if(item.isCommunity){
-            this.el.down('.community-panel').show();
-            this.activePanel = 'community';
-            tab.update('Community');
-        }
+	    if(activePanel === newPanel){ return;}
+	    if(activePanel){ activePanel.el.hide();}
+
+	    this.selectedPanel = newPanel;
+	    tab.update(newTab.text);
+	    newPanel.el.show();
     },
+
+	getActivePanel: function(){
+		var selectedTab = this.fromMenu.down('menuitem[checked]'),
+			v = selectedTab && selectedTab.tabFilter;
+		return v ? this.down('[filter='+v+']') : null;
+	},
 
     changeFilter: function(item){
         this.filters = this.filters || [];
@@ -192,20 +191,25 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     },
 
     applyFilters: function(filter){
-        var filters = [], filterGroup;
+	    var menu = this.typesMenu,
+		    allItems = menu.query('menuitem'),
+		    Filter = NextThought.Filter,
+		    everything = menu.down('[isAll]').checked, me = this,
+		    activePanel = this.getActivePanel();
 
-        Ext.Array.each(filter || this.filters, function(item){
-            filters.push(new NextThought.Filter('MimeType', NextThought.Filter.OPERATION_INCLUDE, this.mimeTypesMap[item]));
-        }, this);
+	    this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
 
-        filterGroup = new NextThought.FilterGroup(this.id, NextThought.FilterGroup.OPERATION_UNION, filters);
+	    Ext.each(allItems, function(item){
+		    var models = me.mimeTypesMap[item.filter];
+		    if ((everything || item.checked) && models) {
+			    Ext.Array.each(Ext.Array.from(models), function(m){
+				    this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.'+m));
+			    }, this);
+		    }
+	    }, this);
 
-        if(this.activePanel === 'history'){
-            this.down('history-view')
-        }else if(this.activePanel === 'contacts'){
-            this.down('activity-panel[filter=notInCommunity]')
-        }else{
-            this.down('activity-panel[filter=inCommunity]')
+		if(activePanel && activePanel.applyFilters){
+	       activePanel.applyFilters(this.modelFilter);
         }
     },
 

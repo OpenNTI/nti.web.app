@@ -612,5 +612,46 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		this.store.resumeEvents();
 		this.store.sort();
 		//Now the listeners on the store will take care of rendering.
+	},
+
+
+	getStore: function(){
+		return this.store;
+	},
+
+
+	getActiveView: function(){
+		return this;
+	},
+
+	applyFilters: function(filter){
+		if(Ext.isEmpty(filter)){
+			return;
+		}
+
+		var v = this.getActiveView(),
+			s = v  && v.getStore(),
+			selectedMimeTypes = [];
+
+		s.removeAll();
+		s.clearFilter();
+		if(filter){
+			Ext.each( filter.value, function(item){
+				var mt = item.value;
+				if(mt){
+					selectedMimeTypes.push(mt);
+				}
+			});
+			s.filter([{filterFn: function(item) {
+				return filter.test(item); }} ]);
+		}
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'relevance',
+			sortOrder: 'descending',
+			accept: selectedMimeTypes.join(',')
+		});
+
+		s.load();
 	}
+
 });
