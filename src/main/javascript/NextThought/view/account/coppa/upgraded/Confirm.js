@@ -131,7 +131,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				//Now we can delete this window.
 				p = me.up('coppa-confirm-window');
 
-				Ext.defer(p.destroy, 1, me);
+				Ext.defer(p.destroy, 1, p);
 
 			},
 			failure: fail
