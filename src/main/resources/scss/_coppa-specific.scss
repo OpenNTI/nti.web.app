@@ -137,11 +137,13 @@
 				}
 
 				&.invalid{
+					span, .validation-message{ color: $primary-red; }
 					input[data-required=true], .selectbox{
 						box-shadow: inset 5px 0 0 0 $primary-red !important;
 					}
 				}
 				&.valid{
+					span, .validation-message{ color: $primary-green; }
 					input[data-required=true], .selectbox{
 						box-shadow: inset 5px 0 0 0 $primary-green !important;
 					}
@@ -170,6 +172,11 @@
 				border: none;
 				color: $primary-green;
 			}
+
+			&.disabled{
+				background: $tertiary-grey;
+				border: 1px solid $tertiary-grey;
+			}
 		}
 
 		.account-info{
@@ -191,7 +198,6 @@
 							margin-left: 10px;
 						}
 					}
-
 				}
 			}
 		}

@@ -69,13 +69,14 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		};
 
 		this.monthPickerView.show().hide();
+		this.validated = {};
 	},
 
 
 	getFormValues: function(){
 		var me = this, i, v,
 			canSave = true,
-			params = {};
+			params = {}, msg;
 		for(i in me.schema){
 			if(me.schema.hasOwnProperty(i)){
 				v = me.fieldsChannel[i].call(me);
@@ -84,22 +85,43 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				if(Ext.isEmpty(v)){
 					console.warn('required field ', i, 'is empty!');
 					canSave = false;
+					msg = i +' is a required field';
+					me.markInvalidated({field:i, message:msg});
 				}
 				params[i] = v;
 			}
 		}
 
+		this.validated = params;
 		return canSave ? params : null;
 	},
 
 
 	markInvalidated: function(param){
-		var el;
+		var el, e;
 		try{
 			el = this.el.down('.'+param.field);
 			el.removeCls('valid').addCls('invalid');
-			if(el.down('.validation-message')){
-				el.down('.validation-message').update(param.message);
+			e = el.down('.validation-message');
+			if(e){
+				e.update(param.message);
+				e.addCls('error');
+			}
+		}
+		catch(e){
+			console.error('Error: ', e);
+		}
+	},
+
+	markValidated: function(param){
+		var el, e;
+		try{
+			el = this.el.down('.'+param.field);
+			el.removeCls('invalid').addCls('valid');
+			e = el.down('.validation-message');
+			if(e){
+				e.update(param.message);
+				e.removeCls('error');
 			}
 		}
 		catch(e){
@@ -108,9 +130,20 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	},
 
 
+	markFields: function(){
+		var key, schema = this.schema, me = this;
+		for(key in schema) {
+			if(schema.hasOwnProperty(key) && me.validated.hasOwnProperty(key) && key !== 'birthdate'){
+				me.markValidated({field:key, message:'Got it'});
+			}
+		}
+	},
+
+
 	save: function(){
 		function fail(res, req){
 			var r = Ext.decode(res.responseText);
+			me.markFields();
 			me.markInvalidated(r);
 			console.log('FAIL: ', r);
 		}
@@ -173,17 +206,6 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		function isValidBirthday(){
 			return (bd && !isNaN(bd.getTime()) && bd.getFullYear() === y && bd.getMonth() === m && bd.getDate() === d);
 		}
-		function invalidate(){
-			var b = me.el.down('.birthdate'),
-				err = b && b.down('.validation-message');
-
-			console.warn('Invalid birthday...');
-			b.removeCls('valid').addCls('invalid');
-			if(err){
-				err.update('Please enter a valid date');
-			}
-		}
-
 
 		var m = this.monthEl.getAttribute('data-value'),
 			d = this.el.down('[name=day]').getValue(),
@@ -199,7 +221,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			return bd;
 		}
 
-		invalidate();
+		me.markInvalidated({field:'birthdate', message:'Please enter a valid date'});
 		return null;
 	},
 
@@ -207,12 +229,13 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	preflight: function(params, successCallBack, failCallBack){
 		function fail(){
 			console.error('Preflight failed, ', arguments);
+			Ext.callback(failCallBack, me, arguments);
 		}
 
 		function success(r, opts){
-			console.log('Preflight success', arguments);
-
 			var o = Ext.decode(r.responseText);
+
+			console.log('Preflight success', arguments);
 			console.log("Profile Schema is: ", o.ProfileSchema);
 			Ext.callback(successCallBack, me, [o.ProfileSchema]);
 		}
