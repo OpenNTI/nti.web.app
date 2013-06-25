@@ -85,7 +85,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             items: [
                 {cls: 'option', text: 'Only Me', checked: true, isMe: true, tabFilter:'onlyMe'},
                 {cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
-                {cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'notInCommunity'}
+                {cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
             ]
         });
 
@@ -105,11 +105,12 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
                 plain: true,
                 listeners:{
                     scope: this,
+                    'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
                     'checkchange': 'changeFilter'
                 }
             },
             items: [
-                {cls: 'option', text: 'Show All', checked: true, isAll: true, filter: 'all'},
+                {cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
                 {cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
                 {cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
                 {cls: 'option', text: 'Bookmarks', filter: 'bookmarks'},
@@ -181,15 +182,46 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	},
 
     changeFilter: function(item){
-        this.filters = this.filters || [];
+        var allChecked = true, allUnchecked = true,
+            allItems = this.typesMenu.query('menuitem');
 
-        if(Ext.Array.contains(this.filters, item.filter)){
-            Ext.Array.remove(this.filters, item.filter);
-        }else{
-            this.filters.push(item.filter);
+        function uncheck(items){
+            Ext.Array.each(items, function(i){
+                if(!i.isAll){
+                    i.setChecked(false, true);
+                }
+            })
         }
 
-        this.applyFilters(this.filters);
+        if(item.checked){
+            if(item.isAll){
+                uncheck(allItems);
+            }else{
+                /*Ext.Array.each(allItems, function(i){
+                    if(!i.isAll){
+                        allChecked = allChecked && i.checked;
+                    }
+                });
+
+                if(allChecked){
+                    uncheck(allItems);
+                    this.typesMenu.query('[isAll]')[0].setChecked(true,true);
+                }else{
+                    this.typesMenu.query('[isAll]')[0].setChecked(false,true);
+                }*/
+                this.typesMenu.query('[isAll]')[0].setChecked(false, true);
+            }
+        }else{
+            Ext.Array.each(allItems, function(i){
+                allUnchecked = allUnchecked && !i.checked;
+            });
+
+            if(allUnchecked){
+                item.setChecked(true,true);
+            }
+        }
+
+        this.applyFilters()
     },
 
     applyFilters: function(filter){
