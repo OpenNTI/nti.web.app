@@ -17,6 +17,7 @@ Ext.define('NextThought.controller.Session', {
 		'Window',
 		'account.coppa.Window',
 		'account.coppa.upgraded.Window',
+		'account.coppa.upgraded.Confirm',
 		'account.recovery.Window',
 		'menus.Settings',
 		'NextThought.ux.WelcomeGuide',
@@ -33,6 +34,10 @@ Ext.define('NextThought.controller.Session', {
 			component:{
 				'settings-menu [action=logout]' : {
 					'click': me.handleLogout
+				},
+
+				'coppa-birthday-form':{
+					'refresh-service-doc': me.resolveService
 				}
 			}
 		});
@@ -373,6 +378,11 @@ Ext.define('NextThought.controller.Session', {
 						}
 
 						$AppConfig.service = sDoc;
+						//If we're already logged in, then just call the success callback.
+						if(!Ext.isEmpty($AppConfig.userObject)){
+							Ext.callback(successFn, null, arguments);
+							return;
+						}
 						m.attemptLoginCallback($AppConfig.service, successFn);
 					}
 					catch(e){

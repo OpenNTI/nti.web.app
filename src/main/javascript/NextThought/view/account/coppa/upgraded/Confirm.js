@@ -161,11 +161,28 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			success: function(r, opts){
 				console.log('SUCCESS Account Upgraded: ', arguments);
 
-				//Now we can delete this window.
+				function s(){
+					console.log('Success update to service doc:', arguments);
+					if($AppConfig.service.canFriend()){
+						p.destroy();
+						// NOTE: We would for the sidebar to now reflect the fact that this user
+						// can now have social features. Since we set that early when the app starts,
+						// we don't have a way of updating the sidebar. Thus we require a full reload.
+						// this is not the best solution. Ideally we wouldn't want a full reload.
+						location.reload();
+					}
+					else{
+						Ext.defer(p.destroy, 1, p);
+					}
+				}
+				function f(){
+					console.log('failure update:', arguments);
+					Ext.defer(p.destroy, 1, p);
+				}
+
 				p = me.up('coppa-confirm-window');
-
-				Ext.defer(p.destroy, 1, p);
-
+				// Fire event to trigger the service doc to update.
+				me.fireEvent('refresh-service-doc', s, f);
 			},
 			failure: fail
 		};
