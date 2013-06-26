@@ -22,7 +22,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	ui: 'history',
 	cls: 'user-data-panel',
-	autoScroll: true,
+	preserveScrollOnRefresh: true,
 
 	emptyText: Ext.DomHelper.markup([{
 		cls:"history nothing",

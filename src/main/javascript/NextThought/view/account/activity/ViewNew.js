@@ -3,7 +3,6 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     extend: 'Ext.container.Container',
     alias: 'widget.activity-view-new',
     requires: [
-        'NextThought.view.SecondaryTabPanel',
         'NextThought.view.account.activity.Panel',
         'NextThought.view.account.history.View'
     ],
@@ -17,6 +16,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     ui: 'activity',
     cls: 'activity-view',
     plain: true,
+
+
     mimeTypesMap: {
         'all': ['all'],
         'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
@@ -26,30 +27,28 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
         'contact': ['contact']
     },
 
-    filtersTpl: Ext.DomHelper.markup([{
-            xtype: 'container',
-            cls: 'activity-filters',
-            cn: [
+    filtersTpl: Ext.DomHelper.createTemplate(
+	    { cls: 'filters-container', cn:{
+            cls: 'activity-filters', cn: [
                 {cls: 'tabs', cn:[
                     {cls: 'tab from', html: 'Only Me'},
                     {cls: 'tab types'}
                 ]}
-            ]
-    }]),
+            ]}
+	    }
+    ),
 
+
+	layout: {
+		type:'card',
+		deferredRender: true
+	},
+    id: 'activity-tab-view',
+    activeItem: 0,
     items: [
-        {
-            xtype: 'container',
-            layout: 'fit',//change to card
-            flex: 1,
-            id: 'activity-tab-view',
-            items: [  
-                {xtype: 'user-history-panel', cls: 'activity-panel history-panel user-data-panel', filter:'onlyMe'},
-                {xtype: 'activity-panel', cls: 'activity-panel contacts-panel', filter: 'notInCommunity'},
-                {xtype: 'activity-panel', cls: 'activity-panel community-panel', filter: 'inCommunity'}
-            ]
-        },
-        {cls: 'filters-container'}
+        {xtype: 'user-history-panel', filter:'onlyMe'},
+        {xtype: 'activity-panel', filter: 'notInCommunity'},
+        {xtype: 'activity-panel', filter: 'inCommunity'}
     ],
 
 
@@ -133,9 +132,10 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             'deactivate': 'resetNotificationCount'
         });
 
-        this.el.down('.filters-container').dom.innerHTML = this.filtersTpl;
+	    var filterEl = this.filtersTpl.append(this.el,null,true);
+
         //this.switchPanel('history');
-        this.mon(this.el.down('.filters-container'),{
+        this.mon(filterEl,{
             scope: this,
             'click': 'handleClick'
         });
@@ -143,21 +143,19 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
         this.mon(this.fromMenu, {
             scope: this,
             'hide': function(){
-                this.el.down('.filters-container .activity-filters .tabs .from').removeCls('selected');
+                filterEl.down('.activity-filters .tabs .from').removeCls('selected');
             }
         });
 
         this.mon(this.typesMenu, {
             scope: this,
             'hide': function(){
-                this.el.down('.filters-container .activity-filters .tabs .types').removeCls('selected');
+                filterEl.down('.activity-filters .tabs .types').removeCls('selected');
             }
         });
 
         this.applyFilters(['all']);
 
-	    //FIXME: Have a better way of setting/getting the initial selected panel.
-	    this.selectedPanel = this.down('[filter=onlyMe]');
 	    this.fromMenu.show().hide();
     },
 
@@ -172,7 +170,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 	    this.selectedPanel = newPanel;
 	    tab.update(newTab.text);
-	    newPanel.el.show();
+	    this.getLayout().setActiveItem(newPanel);
     },
 
 	getActivePanel: function(){
@@ -255,9 +253,6 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
         if(e.getTarget('.types')){
             this.showTypesMenu();
         }
-        
-        this.hidingFrom && delete this.hidingFrom;
-        this.hidingTypes && delete this.hidingTypes;
     },
 
     showTypesMenu: function(){
@@ -270,7 +265,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
         
         this.el.down(tabSelector+' .types').addCls('selected');
-        this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, -40]);
+        this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
         this.showingTypeMenu = true;
     },
 
@@ -283,8 +278,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
        }
 
         this.el.down(tabSelector).addCls('selected');
-        this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, -39]);
-        this.showingFromMenu = true;
+        this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
     },
 
     updateNotificationCountFromStore: function(store, records){

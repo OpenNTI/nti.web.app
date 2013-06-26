@@ -16,23 +16,15 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		'NextThought.model.forums.HeadlineTopic'
 	],
 
-	overflowY: 'hidden',
+	overflowY: 'auto',
 	overflowX: 'hidden',
 	cls: 'activity-panel',
 
-	/*layout: {
-		type: 'vbox',
-		align: 'stretch',
-		reserveScrollbar: false
-	},*/
 
 	items: [
 		{
 			activitiesHolder: 1,
 			xtype: 'box',
-			flex: 1,
-			overflowX: 'hidden',
-			overflowY: 'auto',
 			autoEl:{
 				cn:[{
 					cls:"activity loading",

@@ -4,20 +4,18 @@
 }
 
 .activity-view{
-	overflow: scroll;
+	margin-bottom: 40px;
 
 	.filters-container{
 		position: absolute;
-		overflow: visible;
 		bottom: 0;
-		height: 0 !important;
-		
-		.activity-filters{
+		right: 0;
+		left: 0;
 
+		.activity-filters{
 			.tabs{
-				position: absolute;
-				bottom: 0;;
-				width: 258px;
+				position: relative;
+				overflow: hidden;
 				height: 40px !important;
 
 				.tab{
