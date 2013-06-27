@@ -38,7 +38,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 					{tag:'span', cls:'validation-message long', html:'We need your parent\'s permission to activate social features on your account.'}
 				]}
 			]},
-			{cls:'save', html:'Save Changes'}
+			{cls:'save', html:'Save Changes'},
+			{cls:'policy-link hidden', html: 'Child\'s Privacy Policy'}
 		]}
 	]),
 
@@ -46,7 +47,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		monthEl:'.month',
 		accountInfoEl:'.account-info',
 		continueEl: '.continue',
-		saveEl: '.save'
+		saveEl: '.save',
+		policyEl: '.policy-link'
 	},
 
 	afterRender: function(){
@@ -60,6 +62,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		this.mon(this.monthPickerView, 'select', this.onSelectedItem, this);
 		this.mon(this.continueEl, 'click', this.submitBirthday, this);
 		this.mon(this.saveEl, 'click', this.save, this);
+		this.mon(this.policyEl, 'click', this.openPolicy, this);
 
 		this.fieldsChannel = {
 			'birthdate': this.getBirthdayValue,
@@ -190,6 +193,36 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		Ext.Ajax.request(req);
 	},
 
+	openPolicy: function(e){
+		e.stopEvent();
+
+		var w = Ext.widget('nti-window',{
+			title: 'Children\'s Privacy Policy',
+			closeAction: 'hide',
+			width: '60%',
+			height: '75%',
+			layout: 'fit',
+			modal: true,
+			items: {
+				xtype: 'component',
+				cls: 'padded',
+				autoEl: {
+					tag: 'iframe',
+					src: 'https://docs.google.com/document/pub?id=1kNo6hwwKwWdhq7jzczAysUWhnsP9RfckIet11pWPW6k',
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0,
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow-x: hidden; overflow-y:auto'
+				}
+			}
+		});
+
+		w.show();
+	},
+
 
 	getRealName: function(){
 		var f = this.el.down('[name=first]').getValue(),
@@ -286,6 +319,9 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		if(shouldAskAccountInfo){
 			me.lockBirthday();
 			me.accountInfoEl.show();
+			if(schema.contact_email){
+				me.el.down('.policy-link').removeCls('hidden');
+			}
 			Ext.defer(me.updateLayout, 1, me);
 		}
 

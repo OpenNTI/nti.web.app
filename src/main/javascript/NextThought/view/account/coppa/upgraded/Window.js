@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Window', {
 	},
 
 	items: [
-		{xtype: 'account-header-view', title:'Children\'s Privacy Changed!', detail:'Please fill the following information before you proceed'},
+		{xtype: 'account-header-view', title:'It\'s a new school year!', detail:'Please answer the following questions, so we can update our records.'},
 		{xtype: 'coppa-birthday-form'}
 	]
 

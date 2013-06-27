@@ -151,7 +151,7 @@
 			}
 		}
 
-		.continue, .save{
+		.continue, .save, .policy-link{
 			display: inline-block;
 			cursor: pointer;
 			vertical-align: bottom;
@@ -177,6 +177,8 @@
 				background: $tertiary-grey;
 				border: 1px solid $tertiary-grey;
 			}
+
+			&.hidden{ display: none;}
 		}
 
 		.account-info{
