@@ -475,7 +475,7 @@ Ext.define('NextThought.controller.Account', {
 	showTerms: function(item){
 		if (!this.termsWin) {
 			this.termsWin = this.createWin('Terms of Service',
-					'https://docs.google.com/document/pub?id=1rM40we-bbPNvq8xivEKhkoLE7wmIETmO4kerCYmtISM&embedded=true');
+					$AppConfig.links.terms_of_service);
 		}
 		this.termsWin.show();
 	},

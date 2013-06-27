@@ -188,7 +188,7 @@ Ext.define('NextThought.view.account.coppa.Main',{
 				cls: 'padded',
 				autoEl: {
 					tag: 'iframe',
-					src: 'https://docs.google.com/document/pub?id=1kNo6hwwKwWdhq7jzczAysUWhnsP9RfckIet11pWPW6k',
+					src: $AppConfig.links.childs_privacy,
 					frameBorder: 0,
 					marginWidth: 0,
 					marginHeight: 0,

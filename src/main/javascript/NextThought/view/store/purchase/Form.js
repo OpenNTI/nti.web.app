@@ -443,7 +443,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	onCheckboxLinkClicked: function () {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
-		window.open('https://docs.google.com/document/pub?id=1rM40we-bbPNvq8xivEKhkoLE7wmIETmO4kerCYmtISM&embedded=true', '_blank');
+		window.open($AppConfig.links.terms_of_service, '_blank');
 	},
 
 
