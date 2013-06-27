@@ -130,7 +130,6 @@ Ext.define('NextThought.view.account.coppa.Main',{
 
         if (fn){this.down('[name=firstname]').update(fn);}
         if (ln){this.down('[name=lastname]').update(ln);}
-        if (email){this.down('[name=email]').update(email);}
         if (aff){this.down('[name=affiliation]').setValue(aff);}
         this.down('[name=opt_in_email_communication]').setValue(u.get('opt_in_email_communication'));
 	    this.getEl().down('.privacyLink').on('click', this.openChildPrivacyWindow, this);
