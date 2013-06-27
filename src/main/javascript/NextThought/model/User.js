@@ -69,6 +69,22 @@ Ext.define('NextThought.model.User', {
 		return r;
 	},
 
+	
+	getData: function(){
+		var k, v, f = this.callParent(arguments);
+
+		for( k in f){
+			if(f.hasOwnProperty(k)){
+				v = f[k];
+				if( v && v.isModel){
+					f[k] = v.getData.apply(v, arguments);
+				}
+			}
+		}
+
+		return f;
+	},
+
 
 	toString: function () {
 		return this.getName();
