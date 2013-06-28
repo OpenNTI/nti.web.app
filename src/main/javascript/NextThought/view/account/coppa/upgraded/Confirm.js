@@ -48,7 +48,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
         	]},
         	{ cls: 'submit', cn: [
 					{cls:'save', html:'Save Changes'},
-					{cls:'policy-link hidden', html: 'Child\'s Privacy Policy'}
+					{cls:'policy-link hidden', html: 'View Child\'s Privacy Policy'}
 			]}
 		]}
 	]),
