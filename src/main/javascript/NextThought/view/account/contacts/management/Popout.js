@@ -26,6 +26,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 							cls: 'text-wrap',
 							cn: [
 								{cls: 'name', html: '{name}'},
+								{tag:'tpl', 'if':'!disableProfiles', cn:[
 								{cls: 'meta-role', cn:[
 									{tag:'tpl', 'if':'role', cn:[
 										{tag:'span', cls:'role', html:'{role}'}
@@ -39,6 +40,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 								]},
 								{tag:'tpl', 'if': 'location', cn:[
 									{cls: 'location', html:'{location}'}
+								]}
 								]}
 							]
 						}
@@ -113,6 +115,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {
+			disableProfiles: !!$AppConfig.disableProfiles,
 			isContact: this.isContact,
 			blank: Ext.BLANK_IMAGE_URL,
 			groupCount: this.getListCount(),
