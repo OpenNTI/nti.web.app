@@ -101,7 +101,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 
 	warnBeforeDismissingEditor: function(){
-		var msg = "You are currently editing or creating a discussion topic, please save or cancel it first.";
+		var msg = "You are currently editing or creating a discussion topic. Please save or cancel it first.";
 		Ext.defer(function(){ alert({msg: msg}); }, 1);
 	},
 
