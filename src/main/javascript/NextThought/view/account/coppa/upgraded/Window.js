@@ -16,12 +16,9 @@ Ext.define('NextThought.view.account.coppa.upgraded.Window', {
 	resizable: false,
 	dialog: true,
 
-	width: 600,
+	width: 670,
 
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
+	layout: 'auto',
 
 	items: [
 		{xtype: 'account-header-view', title:'It\'s a new school year!', detail:'Please answer the following questions, so we can update our records.'},

@@ -20,8 +20,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 					{cls:'validation-message'}
 				]}
 			]}
-		]},{
-		cls:'account-info', cn:[
+		]},{cls:'coppa-main-view account-info', cn:[
 			{cls:'legend', html: 'Account Information'},
 			{cls:'fields', cn:[
 				{cls: 'realname hidden', cn:[
@@ -36,10 +35,21 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				{cls:'contact_email hidden', cn:[
 					{tag:'input', type: 'text', 'data-required': true, placeholder: 'Parent\'s Email', name: 'contact_email', size:'5'},
 					{tag:'span', cls:'validation-message long', html:'We need your parent\'s permission to activate social features on your account.'}
-				]}
-			]},
-			{cls:'save', html:'Save Changes'},
-			{cls:'policy-link hidden', html: 'Child\'s Privacy Policy'}
+				]},
+
+
+
+				{tag:'h3', html:'Optional Information'},
+
+            	{tag:'label', cn:[{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html:'Send me updates about NextThought.'}]},
+
+            	{ cls:'what-school', html:'What school do you attend?' },
+            	{ cls: 'affiliation-container' }
+        	]},
+        	{ cls: 'submit', cn: [
+					{cls:'save', html:'Save Changes'},
+					{cls:'policy-link hidden', html: 'Child\'s Privacy Policy'}
+			]}
 		]}
 	]),
 
@@ -50,6 +60,79 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		saveEl: '.save',
 		policyEl: '.policy-link'
 	},
+
+
+
+	buildAffiliationBox: function(){
+
+		if(!Ext.getStore('schoolStore')){
+			new Ext.data.ArrayStore({
+	            storeId: 'schoolStore',
+	            autoLoad: true,
+	            fields:[{
+	                mapping: 0,
+	                name:'school',
+	                type:'string'
+	            }],
+	            proxy: {
+	                type: 'ajax',
+	                url: './resources/misc/school-data.json',
+	                reader: 'array'
+	            }
+	        });
+		}
+
+		this.affiliction = Ext.widget({
+			renderTo: this.el.down('.affiliation-container'),
+			store: 'schoolStore',
+	        xtype: 'combobox',
+            name: 'affiliation',
+            typeAhead: true,
+            forceAll: true,
+            valueField: 'school',
+            displayField: 'school',
+            multiSelect: false,
+            enableKeyEvents: true,
+            queryMode: 'remote',
+            cls: 'combo-box',
+            width: 285,
+            hideTrigger: true,
+            listConfig: {
+                ui: 'nt',
+                plain: true,
+                showSeparator: false,
+                shadow: false,
+                frame: false,
+                border: false,
+                cls: 'x-menu',
+                baseCls: 'x-menu',
+                itemCls: 'x-menu-item no-border',
+                emptyText: '<div class="x-menu-item">No results</div>',
+                xhooks: {
+                    initComponent: function(){
+                        this.callParent(arguments);
+                        this.itemSelector = '.x-menu-item';
+                    }
+                }
+            },
+            listeners: {
+                change: function() {
+                    var store = this.store;
+                    store.suspendEvents();
+                    store.clearFilter();
+                    store.resumeEvents();
+                    store.filter({
+                        property: 'school',
+                        anyMatch: true,
+                        value   : this.getValue()
+                    });
+                    this.expand();
+                }
+            }
+        });
+
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -72,6 +155,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		};
 
 		this.monthPickerView.show().hide();
+		this.buildAffiliationBox();
 		this.validated = {};
 	},
 
@@ -306,7 +390,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 
 
 	showSchemaFields: function(schema){
-		var i, me = this, t, shouldAskAccountInfo = false;
+		var i, me = this, t, shouldAskAccountInfo = false, win = this.up('window');
 		for(i in schema){
 			if(schema.hasOwnProperty(i)){
 				t = me.el.down('.'+i);
@@ -321,9 +405,10 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			me.lockBirthday();
 			me.accountInfoEl.show();
 			if(schema.contact_email){
-				me.el.down('.policy-link').removeCls('hidden');
+				me.policyEl.removeCls('hidden');
 			}
 			Ext.defer(me.updateLayout, 1, me);
+			Ext.defer(win.center, 1, win);
 		}
 
 		this.schema = schema;

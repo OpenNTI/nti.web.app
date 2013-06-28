@@ -70,13 +70,17 @@
 	}
 
 	.coppa-form{
-		margin: 0 20px 20px 20px;
+		margin: 0 10px 20px 100px;
 
 		.legend{
 			font: normal 400 14px/22px $font;
 			margin-bottom: 5px;
 		}
 		.fields{
+
+			.birthday input{
+				border-left-width: 0 !important;
+			}
 
 			input, .selectbox{
 				vertical-align: bottom;
@@ -151,7 +155,7 @@
 			}
 		}
 
-		.continue, .save, .policy-link{
+		.continue, .save {
 			display: inline-block;
 			cursor: pointer;
 			vertical-align: bottom;
@@ -177,13 +181,65 @@
 				background: $tertiary-grey;
 				border: 1px solid $tertiary-grey;
 			}
-
-			&.hidden{ display: none;}
 		}
 
 		.account-info{
 			margin-top: 15px;
 
+			.submit {
+				position: relative;
+				margin: 10px -10px -20px -100px;
+
+				.save {
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					height: auto;
+					line-height: 3em;
+					color: #ffffff;
+			        outline: 1px solid #69a92b;
+			        border: none;
+			        background: #75bc30;
+				}
+			}
+
+			label {
+				position: relative;
+				font: normal normal 11px/45px $font;
+
+				input[type=checkbox] {
+	        		position: absolute;
+	        		clip: rect(0, 0, 0, 0);
+	        		clip: rect(0 0 0 0);
+
+	        		& + div {
+		          		position: relative;
+		          		padding-left: 35px;
+
+		          		&::before {
+		            		position: absolute;
+		            		content: '';
+		            		background: $icons no-repeat;
+		            		top: 16px;
+		            		left: 15px;
+		            		@include sprite($icons, 'checkbox-14', $dimensions: true);
+		          		}
+
+		          		&:hover::before {
+		            		@include sprite($icons, 'checkbox-14_hover', $dimensions: true);
+		          		}
+	        		}
+
+	        		&:checked + div {
+	          			&, &:hover {
+	            			&::before {
+	              				@include sprite($icons, 'checkbox-14_active', $dimensions: true);
+	            			}
+	          			}
+	        		}
+	        	}
+			}
 			.fields{
 				& > div{
 					&.hidden{ display: none; }
@@ -235,6 +291,8 @@
 		.input-box {
 			position: relative;
 		}
+
+		.hidden {display: none;}
 
 		.input-box, .combo-box {
 			margin: 5px 0;
@@ -363,11 +421,12 @@
 			background-color: #f3f3f3;
 			padding: 15px 10px;
 
-			.privacyLink{
+			.privacyLink, .policy-link{
 				text-decoration: none;
 				color: #3FB3F6;
 				font-size: 12px;
 				top:5px !important;
+				cursor: pointer;
 			}
 		}
 	}
