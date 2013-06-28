@@ -38,13 +38,14 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				]},
 
 
+				{cls: 'optionalContainer hidden', cn:[
+					{tag:'h3', html:'Optional Information'},
 
-				{tag:'h3', html:'Optional Information'},
+		        	{tag:'label', cn:[{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html:'Send me updates about NextThought.'}]},
 
-            	{tag:'label', cn:[{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html:'Send me updates about NextThought.'}]},
-
-            	{ cls:'what-school', html:'What school do you attend?' },
-            	{ cls: 'affiliation-container' }
+		        	{ cls:'what-school', html:'What school do you attend?' },
+		        	{ cls: 'affiliation-container' }
+            	]}
         	]},
         	{ cls: 'submit', cn: [
 					{cls:'save', html:'Save Changes'},
@@ -58,7 +59,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		accountInfoEl:'.account-info',
 		continueEl: '.continue',
 		saveEl: '.save',
-		policyEl: '.policy-link'
+		policyEl: '.policy-link',
+		optionalEl: '.optionalContainer'
 	},
 
 
@@ -411,6 +413,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			me.accountInfoEl.show();
 			if(schema.contact_email){
 				me.policyEl.removeCls('hidden');
+			}else{
+				me.optionalEl.removeCls('hidden');
 			}
 			Ext.defer(me.updateLayout, 1, me);
 			Ext.defer(win.center, 1, win);
