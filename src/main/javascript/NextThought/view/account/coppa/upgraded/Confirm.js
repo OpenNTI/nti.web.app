@@ -173,7 +173,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				v = me.fieldsChannel[i].call(me);
 
 				//Need to do a better validation job.
-				if(Ext.isEmpty(v)){
+				if(Ext.isEmpty(v) && me.schema[i].required){
 					console.warn('required field ', i, 'is empty!');
 					canSave = false;
 					msg = i +' is a required field';
