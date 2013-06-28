@@ -41,7 +41,7 @@ Ext.define('NextThought.view.menus.Settings',{
         items.push({ action: 'account', text: 'My Account'});
 
 		if(!Ext.isEmpty(welcomeLink)){
-			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink.first()});
+			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink});
 		}
 
         items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
