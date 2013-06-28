@@ -22,7 +22,7 @@ Ext.define('NextThought.controller.Application', {
 			//may be a deterent.  Rather do it when we actually need flash (show it when a content page has a video,
 			//when the slide view is launched, etc..  Still this is better than
 			//the hard gate we were imposing...
-			if(!swfobject.hasFlashPlayerVersion("9.0.18")){
+			if(!swfobject.hasFlashPlayerVersion("9.0.18") && !Ext.is.iPad){
 				Ext.widget('message-bar', {
 					renderTo: Ext.getBody(),
 					messageType: 'flash-required',
