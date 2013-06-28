@@ -54,7 +54,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			container = e.getTarget('.note-container',0,true),
 			theme = (container && container.hasCls('dark')) ? 'dark':'',
 			editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
-			options = opts.options, menuTimer, involved, shared, hideDelete = false;
+			options = opts.options, menuTimer, involved, shared, hideDelete = false, canEdit;
 
 		if (!more || !more.dom){return false;}
 
@@ -101,14 +101,14 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			handler: moreMenuClick
 		});
 
-//		chatItem = new Ext.Action({
-//			text: 'Start a chat',
-//			cls: 'reply-option chat',
-//			itemId: 'Chat',
-//			scope: this,
-//			ui: 'nt-menuitem', plain: true,
-//			handler: moreMenuClick
-//		});
+		//		chatItem = new Ext.Action({
+		//			text: 'Start a chat',
+		//			cls: 'reply-option chat',
+		//			itemId: 'Chat',
+		//			scope: this,
+		//			ui: 'nt-menuitem', plain: true,
+		//			handler: moreMenuClick
+		//		});
 
 		flagItem = new Ext.Action({
 			text: 'Report',
@@ -133,30 +133,37 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			console.log("Error: user is null. The note/reply  owner is undefined, opts:", options);
 		}
 
-		if(mine){
+
+		/* For a user who doesn't have the sharing capability, they can only edit their note, if it's private. Otherwise, they can't.
+		 * We run into this cases, for COPPA account that were downgraded and updgraded again.
+		 * For the general case, it should work as usual, since the user will have the sharing capability.
+		 */
+		shared = !Ext.isEmpty(this.record.get('sharedWith'));
+		canEdit = (mine && $AppConfig.service.canShare()) || (mine && !$AppConfig.service.canShare() && !shared);
+		if(canEdit){
 			items.push(editItem);
 		}
 
 		if(options.record){
-//			involved = (options.record.get('sharedWith') || []).slice();
-//			shared = involved.length > 0;
+			//			involved = (options.record.get('sharedWith') || []).slice();
+			//			shared = involved.length > 0;
 
 			/* NOTE: We are hiding the 'start chat' feature from a note window,
-				because right now, the note window is displayed in a modal view and
-				we would want the chat window to be on top of note window. Since we can't have more than one modal view,
-				the chat window gets hidden behind the window. As per Aaron, we will revisit this when needed.
+			 because right now, the note window is displayed in a modal view and
+			 we would want the chat window to be on top of note window. Since we can't have more than one modal view,
+			 the chat window gets hidden behind the window. As per Aaron, we will revisit this when needed.
 			 */
 
-//			if(options.user){involved.push(options.user);}
-//			if(	$AppConfig.service.canChat()
-//				&& shared
-//				&& hasUser(involved, $AppConfig.username) ){
-//				items.push(chatItem);
-//			}
+			//			if(options.user){involved.push(options.user);}
+			//			if(	$AppConfig.service.canChat()
+			//				&& shared
+			//				&& hasUser(involved, $AppConfig.username) ){
+			//				items.push(chatItem);
+			//			}
 
-            if(!options.record.isModifiable() || (this.canDelete && !this.canDelete())){
-                hideDelete = true;
-            }
+			if(!options.record.isModifiable() || (this.canDelete && !this.canDelete())){
+				hideDelete = true;
+			}
 
 			if( options.record.isFlagged && options.record.isFlagged() ){
 				flagItem.setText('Reported');
