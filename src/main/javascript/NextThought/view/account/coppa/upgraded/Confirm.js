@@ -159,7 +159,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		url = this.getLink('upgrade_coppa_user');
 		req = {
 			url: url,
-			params: JSON.stringify(params),
+			params: Ext.encode(params),
 			method: 'POST',
 			success: function(r, opts){
 				console.log('SUCCESS Account Upgraded: ', arguments);
@@ -334,6 +334,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 		var href = $AppConfig.userObject.get('href'),
 			host = location.protocol + '//' + location.host;
 
+		href = href.split('?')[0];
 		return  host + href + '/@@' + link;
 	},
 
