@@ -78,7 +78,7 @@
 		}
 		.fields{
 
-			.birthday input{
+			.birthdate input{
 				border-left-width: 0 !important;
 			}
 
@@ -188,6 +188,7 @@
 
 			.submit {
 				position: relative;
+				min-height: 48px;
 				margin: 10px -10px -20px -100px;
 
 				.save {

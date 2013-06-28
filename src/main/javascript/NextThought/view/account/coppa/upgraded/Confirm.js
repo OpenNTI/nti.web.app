@@ -82,7 +82,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	        });
 		}
 
-		this.affiliction = Ext.widget({
+		this.affiliation = Ext.widget({
 			renderTo: this.el.down('.affiliation-container'),
 			store: 'schoolStore',
 	        xtype: 'combobox',
@@ -178,6 +178,11 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				params[i] = v;
 			}
 		}
+
+		Ext.apply(params,{
+			'opt_in_email_communication': me.el.down('input[name=opt_in_email_communication]').is(':checked'),
+            'affiliation': me.affiliation.getValue()
+		});
 
 		this.validated = params;
 		return canSave ? params : null;
