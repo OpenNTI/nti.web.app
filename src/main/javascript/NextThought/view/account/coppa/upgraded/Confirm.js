@@ -153,7 +153,9 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			'birthdate': this.getBirthdayValue,
 			'realname': this.getRealName,
 			'contact_email': function(){ return me.el.down('[name=contact_email]').getValue(); },
-			'email': function(){ return me.el.down('[name=email]').getValue(); }
+			'email': function(){ return me.el.down('[name=email]').getValue(); },
+			'opt_in_email_communication': function(){ return me.el.down('input[name=opt_in_email_communication]').is(':checked')},
+			'affiliation': function(){ return me.affiliation.getValue();}
 		};
 
 		this.monthPickerView.show().hide();
@@ -180,11 +182,6 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				params[i] = v;
 			}
 		}
-
-		Ext.apply(params,{
-			'opt_in_email_communication': me.el.down('input[name=opt_in_email_communication]').is(':checked'),
-            'affiliation': me.affiliation.getValue()
-		});
 
 		this.validated = params;
 		return canSave ? params : null;
