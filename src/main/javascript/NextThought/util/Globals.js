@@ -21,6 +21,22 @@ Ext.define('NextThought.util.Globals', {
 
 	CANVAS_GOLDEN_RATIO: 1.6180,    //http://en.wikipedia.org/wiki/Golden_ratio
 
+	SAD_FACE: Ext.DomHelper.markup({ 
+		style:{
+			color: '#bbb',
+			font: 'normal 400 10em \'Helvetica Neue\', Helvetica, Arial, sans-serif',
+			'-webkit-transform': 'rotate(90deg)',
+			'-moz-transform': 'rotate(90deg)',
+			'-ms-transform': 'rotate(90deg)',
+			'-o-transform': 'rotate(90deg)',
+			transform: 'rotate(90deg)',
+			display: 'inline-block',
+			position: 'absolute',
+			left: '50%',
+			'letter-spacing': '0.1em;'
+		},
+		html: ':('
+	}),
 
 	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
 	EMPTY_WRITABLE_IFRAME_SRC : ('javascript' + (function(){return ':';}())),

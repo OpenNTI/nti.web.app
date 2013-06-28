@@ -28,9 +28,9 @@ Ext.define('NextThought.view.menus.Settings',{
 
         //setup fields:
         var items = [],
-			links = $AppConfig.userObject.get('Links') || {},
-			welcomeLink = links.getLinksForRel ? links.getLinksForRel('content.permanent_welcome_page'): null,
-            childsLink = links.getLinksForRel ? links.getLinksForRel('childrens-privacy') : null;
+			u = $AppConfig.userObject,
+			welcomeLink = u.getLink('content.permanent_welcome_page'),
+            childsLink = u.getLink('childrens-privacy');
 
       
         if( isFeature('presence-menu') && $AppConfig.service.canChat()){

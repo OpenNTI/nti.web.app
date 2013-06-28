@@ -60,6 +60,8 @@ Ext.application({
 		console.debug('launching');
 
 		function start() {
+			Ext.applyIf($AppConfig,{links:{}});
+			
 			me.getController('Session').login(me);
 			NextThought.isReady = true;
 		}
