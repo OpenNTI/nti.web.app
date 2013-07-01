@@ -35,8 +35,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	    { cls: 'filters-container', cn:{
             cls: 'activity-filters', cn: [
                 {cls: 'tabs', cn:[
-                    {cls: 'tab from', html: 'Only Me'},
-                    {cls: 'tab types'}
+                    {cls: 'tab from x-menu', html: 'Only Me'},
+                    {cls: 'tab types x-menu'}
                 ]}
             ]}
 	    }
@@ -73,8 +73,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             frame: false,
             border: false,
             hideMode: 'display',
-            title: 'SHOW ACTIVITY FROM',
+            title: 'Show Activity From',
             cls: 'menu from-menu',
+            width: 258,
             defaults: {
                 ui: 'nt-menuitem',
                 xtype: 'menucheckitem',
@@ -100,8 +101,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             frame: false,
             border: false,
             hideMode: 'display',
-            title: 'ACTIVITY TYPES',
+            title: 'Activity Type',
             cls: 'menu types-menu',
+            width: 258,
             defaults: {
                 ui: 'nt-menuitem',
                 xtype: 'menucheckitem',
@@ -267,28 +269,23 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     },
 
     showTypesMenu: function(){
-        var tabSelector = '.filters-container .activity-filters .tabs';
-        
-        if(this.showingTypeMenu){
-            delete this.showingTypeMenu; 
+        if(this.typesMenu.isVisible()){
+            this.typesMenu.hide();
             return;
         }
 
         
-        this.el.down(tabSelector+' .types').addCls('selected');
+        this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
         this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
-        this.showingTypeMenu = true;
     },
 
     showFromMenu: function(){
-        var tabSelector = '.filters-container .activity-filters .tabs .from';
-                
        if(this.fromMenu.isVisible()){
             this.fromMenu.hide();
             return;
        }
 
-        this.el.down(tabSelector).addCls('selected');
+        this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
         this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
     },
 
