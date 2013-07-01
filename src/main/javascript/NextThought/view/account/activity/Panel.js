@@ -616,31 +616,26 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		return this;
 	},
 
-	applyFilters: function(filter){
-		if(Ext.isEmpty(filter)){
+	applyFilters: function(mimeTypes, filterTypes){
+		if(Ext.isEmpty(mimeTypes) && Ext.isEmtpy(filterTypes)){
 			return;
 		}
 
+		if(Ext.isEmpty(filterTypes)){
+			filterTypes.push(this.filter);
+		}
+
 		var v = this.getActiveView(),
-			s = v  && v.getStore(),
-			selectedMimeTypes = [];
+			s = v  && v.getStore();
 
 		s.removeAll();
-		s.clearFilter();
-		if(filter){
-			Ext.each( filter.value, function(item){
-				var mt = item.value;
-				if(mt){
-					selectedMimeTypes.push(mt);
-				}
-			});
-			s.filter([{filterFn: function(item) {
-				return filter.test(item); }} ]);
-		}
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'relevance',
 			sortOrder: 'descending',
-			accept: selectedMimeTypes.join(',')
+			filters: filterTypes.join(','),
+			filterOperator: (filterTypes.length > 1)? '0' : '1',
+			accept: mimeTypes.join(',')
 		});
 
 		s.load();

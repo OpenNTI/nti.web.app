@@ -40,9 +40,11 @@ Ext.define('NextThought.view.account.history.mixins.Bookmark',{
 				location = lineage.shift();
 				lineage.reverse();
 			}
-
-			rec.set({'location': Ext.String.ellipsis(location, 150, false)});
-			rec.set({'path': lineage.join(' / ')});
+			
+			rec.set({
+				'location': Ext.String.ellipsis(location, 150, false),
+				'path': lineage.join(' / ')
+			});
 		});
 	}
 

@@ -22,9 +22,13 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
         'all': ['all'],
         'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
         'notes': ['highlight', 'note'],
-        'bookmarks': ['bookmarks'],
-        'likes': ['likes'],
-        'contact': ['contact']
+        'contact': ['user']
+    },
+
+    filtersMap: {
+        'bookmarks': 'Bookmarks',
+        'inCommunity': 'inCommunity',
+        'notInCommunity': 'notInCommunity'
     },
 
     filtersTpl: Ext.DomHelper.createTemplate(
@@ -47,8 +51,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     activeItem: 0,
     items: [
         {xtype: 'user-history-panel', filter:'onlyMe'},
-        {xtype: 'activity-panel', filter: 'notInCommunity'},
-        {xtype: 'activity-panel', filter: 'inCommunity'}
+        {xtype: 'activity-panel'},
+        //{xtype: 'activity-panel', filter: 'inCommunity'}
     ],
 
 
@@ -112,9 +116,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
                 {cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
                 {cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
                 {cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
-                {cls: 'option', text: 'Bookmarks', filter: 'bookmarks'},
-                {cls: 'option', text: 'Likes', filter: 'likes'},
-                {cls: 'option', text: 'Contact Requests', filter: 'contact'}
+                {cls: 'option bookmarks', text: 'Bookmarks', filter: 'bookmarks'},
+                //{cls: 'option', text: 'Likes', filter: 'likes'},
+                {cls: 'option contact', text: 'Contact Requests', filter: 'contact'}
             ]
         });
 
@@ -157,26 +161,38 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
         this.applyFilters(['all']);
 
 	    this.fromMenu.show().hide();
+        this.typesMenu.show().hide();
+        this.typesMenu.el.down('.contact').hide();
     },
 
     switchPanel: function(item){
-	    var activePanel = this.selectedPanel,
-		    newPanel = this.getActivePanel(),
+	    var newPanel = this.getActivePanel(),
 		    newTab = this.fromMenu.down('menuitem[checked]'),
 		    tab = this.el.down('.filters-container .activity-filters .tabs .from');
 
-	    if(activePanel === newPanel){ return;}
-	    if(activePanel){ activePanel.el.hide();}
-
-	    this.selectedPanel = newPanel;
 	    tab.update(newTab.text);
 	    this.getLayout().setActiveItem(newPanel);
+
+        this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
+        this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
+        
+        if(newTab.isContacts){
+            this.applyFilters('notInCommunity');
+            newPanel.filter = 'notInCommunity';
+        }else if(newTab.isCommunity){
+            this.applyFilters('inCommunity');
+            newPanel.filter = 'inCommunity';
+        }
     },
 
 	getActivePanel: function(){
 		var selectedTab = this.fromMenu.down('menuitem[checked]'),
-			v = selectedTab && selectedTab.tabFilter;
-		return v ? this.down('[filter='+v+']') : null;
+            v = selectedTab && selectedTab.tabFilter;
+
+        if(v === 'notInCommunity' || v === 'inCommunity'){
+            return this.down('activity-panel')
+        }
+        return this.down('user-history-panel');
 	},
 
     changeFilter: function(item){
@@ -195,18 +211,6 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
             if(item.isAll){
                 uncheck(allItems);
             }else{
-                /*Ext.Array.each(allItems, function(i){
-                    if(!i.isAll){
-                        allChecked = allChecked && i.checked;
-                    }
-                });
-
-                if(allChecked){
-                    uncheck(allItems);
-                    this.typesMenu.query('[isAll]')[0].setChecked(true,true);
-                }else{
-                    this.typesMenu.query('[isAll]')[0].setChecked(false,true);
-                }*/
                 this.typesMenu.query('[isAll]')[0].setChecked(false, true);
             }
         }else{
@@ -225,23 +229,30 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
     applyFilters: function(filter){
 	    var menu = this.typesMenu,
 		    allItems = menu.query('menuitem'),
-		    Filter = NextThought.Filter,
 		    everything = menu.down('[isAll]').checked, me = this,
-		    activePanel = this.getActivePanel();
-
-	    this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
+		    activePanel = this.getActivePanel(),
+            mimeTypes = [],
+            filterTypes = filter? [filter] : [];
 
 	    Ext.each(allItems, function(item){
-		    var models = me.mimeTypesMap[item.filter];
-		    if ((everything || item.checked) && models) {
-			    Ext.Array.each(Ext.Array.from(models), function(m){
-				    this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.'+m));
-			    }, this);
+		    var mt = this.mimeTypesMap[item.filter],
+                ft = this.filtersMap[item.filter];
+
+		    if ((everything || item.checked)) {
+                if(mt){
+    			    Ext.Array.each(Ext.Array.from(mt), function(m){
+    				    mimeTypes.push('application/vnd.nextthought.'+m);
+    			    }, this);
+                }
+
+                if(ft){
+                    filterTypes.push(ft);
+                }
 		    }
 	    }, this);
 
 		if(activePanel && activePanel.applyFilters){
-	       activePanel.applyFilters(this.modelFilter);
+	       activePanel.applyFilters(mimeTypes, filterTypes);
         }
     },
 

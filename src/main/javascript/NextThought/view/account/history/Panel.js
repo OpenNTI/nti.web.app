@@ -18,6 +18,20 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	storeId: 'noteHighlightStore',
 	filter: 'MeOnly',
+	filterMap: {
+		'application/vnd.nextthought.bookmarks': 'Bookmarks'
+	},
+
+	mimeType: [
+		'note',
+		'highlight',
+		'contact',
+		'forums.personalblogcomment',
+		'forums.personalblogentrypost',
+		'forums.communityheadlinepost',
+		'forums.generalforumcomment'
+	],
+
 	grouping: 'GroupingField',
 
 	ui: 'history',
@@ -226,30 +240,25 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	},
 
-	applyFilters: function(filter){
-		if(Ext.isEmpty(filter)){
+	applyFilters: function(mimeTypes,filterTypes){
+		if(Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)){
 			return;
 		}
 
+		Ext.Array.include(filterTypes, 'onlyMe');
+
 		var s = this.getStore(),
-			selectedMimeTypes = [];
+			selectedMimeTypes = [],
+			selectedFilters = [this.filter];
 
 		s.removeAll();
-		s.clearFilter();
-		if(filter){
-			Ext.each( filter.value, function(item){
-				var mt = item.value;
-				if(mt){
-					selectedMimeTypes.push(mt);
-				}
-			});
-			s.filter([{filterFn: function(item) {
-				return filter.test(item); }} ]);
-		}
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'relevance',
 			sortOrder: 'descending',
-			accept: selectedMimeTypes.join(',')
+			filter: filterTypes.join(','),
+			filterOperator: (filterTypes.length > 1)? '0' : '1',
+			accept: mimeTypes.join(',')
 		});
 
 		s.load();

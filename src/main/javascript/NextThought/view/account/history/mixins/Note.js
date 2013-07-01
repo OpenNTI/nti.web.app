@@ -45,9 +45,11 @@ Ext.define('NextThought.view.account.history.mixins.Note',{
 				lineage.reverse();
 			}
 
-			rec.set({'location': Ext.String.ellipsis(location, 150, false)});
-			rec.set({'path': lineage.join(' / ')});
-			rec.set({'textBodyContent': rec.getBodyText && rec.getBodyText()});
+			rec.set({
+				'location': Ext.String.ellipsis(location, 150, false),
+				'path': lineage.join(' / '),
+				'textBodyContent': rec.getBodyText && rec.getBodyText()
+			});
 		});
 
 		rec.on("convertedToPlaceholder", function(){
