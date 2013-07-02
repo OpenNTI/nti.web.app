@@ -1,4 +1,4 @@
-ßExt.define('NextThought.view.account.history.mixins.Highlight',{
+Ext.define('NextThought.view.account.history.mixins.Highlight',{
 	extend: 'NextThought.view.account.history.mixins.Note',
 	keyVal: 'application/vnd.nextthought.highlight',
 	alias: 'widget.history-item-highlight',
