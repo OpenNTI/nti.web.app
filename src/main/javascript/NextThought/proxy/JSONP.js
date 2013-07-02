@@ -13,15 +13,11 @@ Ext.define('NextThought.proxy.JSONP',{
 	 */
 	request: function(options){
 		console.log("JSONP.request", arguments);
-		var me = this, opts = options || {};
+		var me = this, opts = Ext.apply({},options);
 		function jsonp(script){
 			var resp = {
 				responseText: me.getContent(opts.ntiid,opts.expectedContentType),
-				request: {
-					options: {
-						url: opts.url
-					}
-				}
+				request: { options: opts }
 			};
 
 			opts.callback.call(opts.scope||window,opts,true,resp);

@@ -15,6 +15,7 @@ Ext.define('NextThought.view.content.Pager',{
 
 
 	listeners: {
+		afterrender:'hideControls',
 		click: {
 			element: 'el',
 			fn: 'click'
@@ -76,8 +77,12 @@ Ext.define('NextThought.view.content.Pager',{
 	},
 
 
-	enableButton: function(el){},
+	enableButton: function(el){
+		el.removeCls('disabled');
+	},
 
 
-	disableButton: function(el){}
+	disableButton: function(el){
+		el.addCls('disabled');
+	}
 });
