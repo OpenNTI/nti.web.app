@@ -62,8 +62,8 @@
 	}
 }
 
-@mixin icon($name,$top:0,$left:0,$side:'after'){
-	position: relative;
+@mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative){
+	position: $position;
 
 	&::#{$side} {
 		content: '';
@@ -71,8 +71,9 @@
 		position: absolute;
 		top: $top;
 		left: $left;
-		background: $icons no-repeat;
-		@include sprite($icons,$name,$dimensions: true);
+		right: $right;
+		background: $sprite no-repeat;
+		@include sprite($sprite,$name,$dimensions: true);
 	}
 }
 

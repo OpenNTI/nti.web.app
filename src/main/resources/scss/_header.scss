@@ -1,5 +1,3 @@
-
-
 @mixin view-button-def {
 	background: none;
 	width: 69px !important;
@@ -18,73 +16,117 @@
 }
 
 .main-navigation {
-	background: #efefef;
+	background: #ebebec;
+	padding-left: 100px;
+	height: 57px;
 
-	.x-panel-body-default{
-		background: none;
-		border-width: 0;
+	& > div:not(.branding) {
+		height: 57px;
+		cursor: pointer;
+		float: left;
 	}
 
-	.view-switcher {
-		margin-top: 33px;
-		.view-button {
+	&::after {
+		content: '';
+		display: block;
+		position: absolute;
 
-			.x-btn-arrow{
-				&, &.x-btn-arrow-left, .x-btn-arrow-right{
-				padding: 0;
-				display: inline;
-				background: none;
-				}
+		bottom: -1px;
+		left: 0;
+		right: 0;
+		height: 10px;
+		overflow: hidden;
+
+		box-shadow: 0 3px 3px -3px rgba(0,0,0,0.2);
+	}
+
+	.branding {
+		@include icon('top-nav-logo',$sprite:$elements);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 100px;
+	}
+
+	.library {
+		max-width: 400px;
+		position: relative;
+		margin-right: 15px;
+		padding-right: 40px;
+
+		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
+
+		//etch
+		&::before {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 7px;
+			width: 1px;
+			height: 43px;
+			background: #f6f6f6;
+			box-shadow: -1px 0 0 0 #e2e2e2;
+		}
+
+		.image {
+			position: absolute;
+			top: 0; bottom: 0; left: 0;
+			width: 60px;
+			background-size: cover;
+			background-position: center;
+		}
+
+		.wrap {
+			margin-left: 70px;
+			padding-top: 10px;
+
+			.provider {
+				text-transform: uppercase;
+				font: normal bold 10px/12px $font;
+				color: $secondary-grey;
+				overflow: hidden;
+				@include ellipse();
 			}
 
-			a { @include view-button-def; overflow: visible; }
-			@include view-button-def;
-			.x-btn-inner{display: none;}
-			.x-btn-icon-el{
-				display: block;
-				position: relative;
-				top: 5px;
-				left: 0;
-				width: 70px;
-				height: 72px;
-
-				&::after {
-					content: ' ';
-					overflow: hidden;
-					position: absolute;
-					background: $icons no-repeat;
-					top: 10px;
-				}
-
-				&.home::after {
-					left: 17px;
-					@include sprite($icons,'main-nav-home',$dimensions: true); }
-
-				&.library::after {
-					left: 11px;
-					@include sprite($icons,'main-nav-library',$dimensions: true); }
-
-				&.forums::after {
-					left: 10px;
-					@include sprite($icons,'main-nav-forums',$dimensions: true); }
-
-				&.contacts::after {
-					left: 5px;
-					@include sprite($icons,'main-nav-contacts',$dimensions: true); }
-
-				&.search::after {
-					left: 12px;
-					@include sprite($icons,'main-nav-search',$dimensions: true); }
+			.title {
+				margin-top: -4px;
+				font: normal 300 26px/35px 'Open Sans Condensed', $font;
+				color: $primary-grey;
+				overflow: hidden;
+				@include ellipse();
 			}
+		}
+	}
 
-			&.x-pressed{
-				background: #f7f7f7;
-				.home::after { @include sprite($icons,'main-nav-home_active',$dimensions: true); }
-				.library::after { @include sprite($icons,'main-nav-library_active',$dimensions: true); }
-				.forums::after { @include sprite($icons,'main-nav-forums_active',$dimensions: true); }
-				.contacts::after { @include sprite($icons,'main-nav-contacts_active',$dimensions: true); }
-				.search::after { @include sprite($icons,'main-nav-search_active',$dimensions: true); }
-			}
+
+	.forums {
+		@include icon('main-nav-forums',$top: 13px, $left: 7px);
+		width: 60px;
+
+		&::after{height: 40px;}
+
+		&:hover::after{
+			@include sprite($icons,'main-nav-forums_active');
+		}
+	}
+
+
+	.contacts {
+		@include icon('course-nav-contacts',$top: 16px, $left: 12px);
+		width: 60px;
+
+		&:hover::after{
+			@include sprite($icons,'course-nav-contacts_hover');
+		}
+	}
+
+	.search {
+		@include icon('course-nav-search',$top: 15px, $left: 17px);
+		width: 60px;
+
+		&:hover::after{
+			@include sprite($icons,'course-nav-search_hover');
 		}
 	}
 }

@@ -3,7 +3,6 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	alias: 'widget.slidedeck-slide',
 	requires: [
 		'NextThought.layout.component.Natural',
-		'NextThought.providers.Location',
 		'NextThought.view.slidedeck.CommentHeader',
 		'NextThought.view.slidedeck.ThreadRoot',
 		'NextThought.util.Anchors'
@@ -34,6 +33,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 
 	initComponent: function(){
+		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
 		this.addEvents('editorActivated','editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
@@ -90,15 +90,15 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		function success(pi){
 			var id = getCacheKey(pi.get('NTIID')), store;
-			if(LocationProvider.hasStore(id)){
-				store = LocationProvider.getStore(id);
+			if(me.hasPageStore(id)){
+				store = me.getPageStore(id);
 			}
 			else {
 				store = NextThought.store.PageItem.make(
 						pi.getLink(Globals.USER_GENERATED_DATA),
 						containerId,true);
 
-				// See LocationProvider's addStore for why we set this flag.
+				/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
 				store.doesNotShareEventsImplicitly = true;
 
 				Ext.apply(store.proxy.extraParams,{
@@ -107,7 +107,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 				});
 
 				//for caching
-				LocationProvider.addStore(cahceKey,store);
+				me.addPageStore(cahceKey,store);
 			}
 
 			finish(store);
@@ -117,9 +117,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			console.error('Could not resolve pageinfo for: '+containerId);
 		}
 
-		if(LocationProvider.hasStore(cahceKey)){
+		if(this.hasPageStore(cahceKey)){
 			console.debug('Using existing page store...',cahceKey);
-			finish(LocationProvider.getStore(cahceKey));
+			finish(this.getPageStore(cahceKey));
 		}
 		else{
 			$AppConfig.service.getPageInfo(containerId,success, failure, this);

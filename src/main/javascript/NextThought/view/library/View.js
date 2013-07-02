@@ -4,29 +4,49 @@ Ext.define( 'NextThought.view.library.View', {
 	requires: [
 		'NextThought.view.content.Reader',
 		'NextThought.view.content.Toolbar',
-		'NextThought.view.content.TabPanel'
+		'NextThought.view.annotations.View'
 	],
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
-	minWidth: 950,
-	margin: '0 140px 0 0',
 
-	items: [
-		{	xtype: 'content-toolbar', margin: '0 0 0 40px', hidden: true, delegate:[
-				'library-view-container content-tabs reader-panel'
-		]},
-		{
-			xtype: 'content-tabs',
-			items: [
-				{ title: 'Book Content', xtype: 'reader-panel', id: 'readerPanel' }//,
-//				{ title: 'Discussion', disabled: true},
-//				{ title: 'Common Themes', disabled: true },
-//				{ title: 'Key Words', disabled: true }
-			]
-		}
-	],
+	minWidth: 1024,
+	maxWidth: 1165,
+
+	layout:'border',
+	defaults: {
+		border: false,
+		plain: true
+	},
+
+	items:[{
+		region: 'west',
+		layout: {
+			type: 'vbox',
+			align: 'stretch'
+		},
+		items: [
+			{ xtype: 'content-toolbar', hidden: true, delegate:[ 'library-view-container reader-panel' ]},
+			{ xtype: 'reader-panel', id: 'readerPanel', flex: 1 }
+		]
+	},{
+		region: 'center',
+		xtype: 'tabpanel',
+		ui: 'notes-and-discussion',
+		tabBar: {
+			plain: true,
+			baseCls: 'nti',
+			ui: 'notes-and-discussion-tabbar',
+			cls: 'notes-and-discussion-tabs',
+			defaults: { plain: true, ui: 'notes-and-discussion-tab' }
+		},
+		defaults: {
+			border: false,
+			plain: true
+		},
+		activeTab: 1,
+		items:[
+			{ title: 'Notepad', iconCls: 'notepad' },
+			{ title: 'Discussion', iconCls: 'discus', xtype: 'annotation-view' }
+		]
+	}],
 
 
 
@@ -37,16 +57,7 @@ Ext.define( 'NextThought.view.library.View', {
 		this.mon(this, 'beforeactivate', this.beforeactivate, this);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 
-		LocationProvider.on({
-			scope: this.reader,
-			//beforeNavigate: 'onBeforeNavigate',
-			beginNavigate: 'onBeginNavigate',
-            navigateAbort: 'onNavigationAborted',
-			navigateComplete: 'onNavigateComplete'
-		});
-
-
-		LocationProvider.on({
+		this.reader.on({
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
 			'navigateAbort': 'onNavigationAborted',
@@ -88,7 +99,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 	onBeforeNavigate: function(ntiid, fromHistory){
 		if(!fromHistory){
-			if(this.up('main-views').fireEvent('activate-main-view', 'library') === false){
+			if(this.activate(true) === false){
 				return false;
 			}
 		}
@@ -105,13 +116,18 @@ Ext.define( 'NextThought.view.library.View', {
 	onNavigateComplete: function(pageInfo){
 		if(!pageInfo || !pageInfo.isModel){return;}
 		this.down('content-toolbar').show();
-		this.down('content-page-widgets').show();
-		this.setTitle(LocationProvider.findTitle(pageInfo.getId(),'NextThought'));
+		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
 	},
 
 
 	restore: function(state){
-		this.reader.restore(state);
+		var ntiid = state.library.location;
+		this.reader.setLocation(ntiid,null,true);
+		if(this.reader.ntiidOnFrameReady){
+			this.up('master-view').down('library-collection').updateSelection(ntiid);
+		}
+
+		this.fireEvent('finished-restore');
 	},
 
 
@@ -125,7 +141,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	getFragment: function(){
-		var o = ParseUtils.parseNtiid(LocationProvider.currentNTIID);
+		var o = ParseUtils.parseNtiid(this.reader.getLocation().NTIID);
 		return o? o.toURLSuffix() : null;
 	}
 });

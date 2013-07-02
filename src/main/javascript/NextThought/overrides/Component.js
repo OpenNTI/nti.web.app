@@ -23,9 +23,16 @@ Ext.define('NextThought.overrides.Component', {
 	},
 
 	constructor: function(){
+		this.shadow = false;
 		this.callParent(arguments);
 		this.mixins.delegation.constructor.call(this);
-		return this;
+	},
+
+
+	rtlSetLocalX: function(x){
+		var style = this.el.dom.style;
+        style.left = 'auto';
+        style.right = (x === null) ? 'auto' : x + 'px';
 	}
 
 },function(){

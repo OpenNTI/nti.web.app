@@ -1,12 +1,11 @@
 /*jslint */
-/*global $AppConfig, Globals, ImageZoomView, LocationProvider, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
+/*global $AppConfig, Globals, ImageZoomView, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
 Ext.define('NextThought.view.annotations.note.Main',{
 	extend: 'NextThought.view.annotations.note.Panel',
 	alias: 'widget.note-main-view',
 
 
 	requires: [
-		'NextThought.providers.Location',
 		'NextThought.ux.SlideDeck'
 	],
 
@@ -15,8 +14,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
 	renderSelectors:{
-		avatar: 'img.avatar',
-		addToContacts: '.meta .add-to-contacts'
+		avatar: 'img.avatar'
+	},
+
+
+	initComponent: function(){
+		if(!this.reader){
+			this.reader = ReaderPanel.get(this.prefix);
+		}
+		this.callParent(arguments);
 	},
 
 
@@ -26,7 +32,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.callParent(arguments);
 
 		try {
-			me.contactsMaybeChanged();
 
 			this.on('editorDeactivated', function(){
 				var bRecord = me.bufferedRecord;
@@ -36,8 +41,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					me.setRecord(bRecord);
 				}
 			});
-
-			me.mon(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
 		}
 		catch(e){
 			console.error(Globals.getError(e));
@@ -67,99 +70,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		//don't call the parent, its destructive. This panel is meant to be reused.
 		this.replyOptions.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
-
-
-	contactsMaybeChanged: function(){
-		var me = this, r = this.record;
-		if(me.addToContacts){
-			me.mun(me.addToContacts, 'click');
-			me.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		}
-		if(r.placeholder || !me.shouldShowAddContact(r.get('Creator'))){
-			me.addToContacts.hide();
-		}
-		else{
-			me.addToContacts.show();
-			me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
-		}
-	},
-
-
-	shouldShowAddContact: function(username){
-		if(!$AppConfig.service.canFriend()){
-			return false;
-		}
-		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
-	},
-
-
-	addToContactsClicked: function(e){
-		var me = this;
-		console.log('Should add to contacts');
-		UserRepository.getUser(this.record.get('Creator'), function(record){
-			var pop,
-				el = e.target,
-				alignmentEl = e.target,
-				alignment = 'tl-tr?',
-				//play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
-				id = record.getId(),
-				open = false,
-				offsets = [10, -18];
-
-				Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
-					if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
-					else { open = true;  o.toFront();}
-				});
-
-			if(open){return;}
-
-			pop = NextThought.view.account.contacts.management.Popout.create({record: record, refEl: Ext.get(el)});
-
-			me.mon(pop, {scope: me, 'destroy': me.showCarouselArrows, 'show': me.hideCarouselArrows});
-
-			pop.addCls('note-add-to-contacts-popout');
-			pop.show();
-			pop.alignTo(alignmentEl,alignment,offsets);
-
-		}, this);
-	},
-
-
-	showOrHideArrows: function(show){
-		var car = this.up('window').down('note-carousel'),
-			f = show ? 'show' : 'hide';
-		if(car){
-			if(car.navNext && Ext.isFunction(car.navNext[f])){
-				car.navNext[f]();
-			}
-			if(car.navPrev && Ext.isFunction(car.navPrev[f])){
-				car.navPrev[f]();
-			}
-		}
-	},
-
-
-	hideCarouselArrows: function(){
-		this.showOrHideArrows(false);
-	},
-
-
-	showCarouselArrows: function(){
-		this.showOrHideArrows(true);
-	},
-
-
-	onMouseOver: function(){
-		this.up('window').down('note-carousel').getEl().addCls('hover');
-		this.callParent(arguments);
-	},
-
-
-	onMouseOut: function(){
-		this.up('window').down('note-carousel').getEl().removeCls('hover');
-		this.callParent(arguments);
-	},
-
 
 
 	fixUpCopiedContext: function(n){
@@ -237,7 +147,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var reader = ReaderPanel.get(this.prefix);
+		var reader = this.reader;
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.editorActive()){
@@ -270,7 +180,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	onDelete: function(){
 		this.callParent(arguments);
-		this.hideImageCommentLink();
+		this.destroy();
 	},
 
 	onReply: function(){
@@ -311,8 +221,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me = this;
 
 		function openSlideDeck(){
-			me.up('window').close();
-			SlideDeck.open(dom, LocationProvider.currentNTIID);
+			me.up('note-window').close();
+			SlideDeck.open(dom, this.reader);
 		}
 
 
@@ -320,7 +230,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.commentOnAnnototableImage(img/*, action*/);
 		}
 		else if(/^zoom$/i.test(action)){
-			ImageZoomView.zoomImage(dom, null, this);
+			ImageZoomView.zoomImage(dom, this.reader, this);
 		}
 		else if(/^slide$/.test(action)){
 			if(this.editorActive()){
@@ -362,29 +272,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	resizeMathJax: function(/*node*/) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size','13px');
-	},
-
-
-	updateFromRecord:function(newRecord){
-		this.callParent(arguments);
-		this.contactsMaybeChanged();
-	},
-
-
-	activateReplyEditor: function(){
-		var r = this.callParent(arguments);
-		if(r){
-			this.up('window').down('note-carousel').addCls('editor-active');
-		}
-		return r;
-	},
-
-
-	deactivateReplyEditor: function(){
-		this.up('window').down('note-carousel').removeCls('editor-active');
-		this.callParent();
 	}
-
 },
 function(){
     this.prototype.renderTpl = Ext.DomHelper.markup([{
@@ -399,9 +287,9 @@ function(){
 			    { cls: 'title'},
 			    { cls: 'name-wrap', cn:[
 				    { tag: 'span', cls: 'name' },
-				    { tag: 'span', cls: 'add-to-contacts', html: 'ADD'}
-			    ]},
-			    { cls: 'shared-to' }
+				    { tag: 'span', cls: 'time'},
+				   	{ tag: 'span', cls: 'shared-to' } 
+			    ]}
 		    ]
 	    },{ cls: 'clear' },{
 		    cls: 'context', cn: [
@@ -410,8 +298,7 @@ function(){
 	    },{ cls: 'body' },{
 		    cls: 'respond',
 		    cn: [
-			    TemplatesForNotes.getReplyOptions(),
-			    { tag: 'span', cls: 'time' }
+			    TemplatesForNotes.getReplyOptions()
 		    ]
 	    }]
     },{

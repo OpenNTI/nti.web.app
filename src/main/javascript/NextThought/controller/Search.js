@@ -3,7 +3,6 @@ Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.providers.Location',
         'NextThought.cache.LocationMeta',
 		'NextThought.util.Views',
 		'NextThought.filter.FilterGroup',
@@ -85,7 +84,7 @@ Ext.define('NextThought.controller.Search', {
 
 	componentConfigForHit: function(hit){
 		var id = hit.get('ContainerId'),
-			sortIndexes = LocationProvider.getSortIndexes(id),
+			sortIndexes = ContentUtils.getSortIndexes(id),
 			type ='search-result',
 			xtype = this.mimeToXType(hit.get('MimeType'));
 
@@ -183,7 +182,7 @@ Ext.define('NextThought.controller.Search', {
 			filter = this.modelFilter,
 			partial = this.doPartialSearch,
 			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
-			loc = LocationProvider.currentNTIID || 'noNTIID',
+			loc = ReaderPanel.get().getLocation().NTIID || 'noNTIID',
 			url = [
 				rootUrl,
 				loc,

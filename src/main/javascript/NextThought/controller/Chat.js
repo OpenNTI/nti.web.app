@@ -405,7 +405,7 @@ Ext.define('NextThought.controller.Chat', {
 		delete options.persistent;
 
 		//chat rooms need a containerId, make sure we add these, let them get overridden later if it's a persistant room
-		options.ContainerId = options.ContainerId || LocationProvider.currentNTIID || Globals.CONTENT_ROOT;
+		options.ContainerId = options.ContainerId || Globals.CONTENT_ROOT;
 		if (!options.ContainerId) {
 			delete options.ContainerId;
 		}
@@ -750,8 +750,7 @@ Ext.define('NextThought.controller.Chat', {
 //
 //		if (!loc){return;}
 //
-//		Ext.getCmp('reader').activate();
-//		LocationProvider.setLocation(loc.NTIID);
+//		Ext.getCmp('reader').activate().setLocation(loc.NTIID);
 //	},
 
 

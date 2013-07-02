@@ -36,11 +36,6 @@ Ext.define('NextThought.view.SideBar',{
 		}
 
 		this.items = [
-			{ xtype: 'box', cls: 'gripper', autoEl: { html: 'My Account&nbsp;', cn:[
-		            {tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' },
-					{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }
-		        ]}
-			},
 			{
 				xtype: 'container',
 				layout: 'border',
@@ -68,13 +63,12 @@ Ext.define('NextThought.view.SideBar',{
 			this.items[1].items[0].items[1] = { xtype: 'activity-view-new'};
 		}
 
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.gripper = this.down('[cls=gripper]');
 		this.mon(this.host,'afterlayout', this.syncUp, this);
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
 
@@ -95,18 +89,12 @@ Ext.define('NextThought.view.SideBar',{
 
 
 	viewportMonitor: function(w){
-		var cls = 'undocked';
 		if (w < 1278) {
 			this.host.hide();
-			this.gripper.show();
-			this.addCls(cls);
 		}
 		else{
             this.stopAnimation();
-			this.setPopState(undefined);
-			this.gripper.hide();
 			this.host.show();
-			this.removeCls(cls);
 		}
         Ext.defer(this.syncUp, 1, this);
 	},
@@ -118,6 +106,11 @@ Ext.define('NextThought.view.SideBar',{
 		this.identity = Ext.widget('identity',{renderTo:this.el});
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
+
+		this.mon(this.el,{
+			mouseenter:'startShow',
+			mouseleave:'startHide'
+		});
 
 		/**
 		 * There floating point animation is causing some jitters as the side bar is animated up & down.
@@ -141,74 +134,56 @@ Ext.define('NextThought.view.SideBar',{
 			};
 		};
 
-		this.mon(this.gripper.el,'click',this.togglePopup,this);
-
 		if(!$AppConfig.service.canChat()){
 			this.down('chat-dock').destroy();
 		}
 	},
 
 
+
+	stopShowHide: function(){
+		clearTimeout(this.showTimeout);
+		clearTimeout(this.hideTimeout);
+	},
+
+
+	startHide: function(){
+		if(this.host.isVisible()){return;}
+
+		this.stopShowHide();
+		this.hideTimeout = Ext.defer(this.syncUp, 500, this);
+	},
+
+	startShow: function(){
+		if(this.host.isVisible()){return;}
+
+		this.stopShowHide();
+		this.showTimeout = Ext.defer(this.rollDown, 500, this);
+	},
+
+
+	rollDown: function(){
+		var d = this.down('chat-dock');
+		if(d){ d.show(); }
+		this.setHeight(Ext.Element.getViewportHeight()-10);
+	},
+
+
 	syncUp: function(){
+		var x = Ext.Element.getViewportWidth()-this.getWidth(),
+			d = this.down('chat-dock'),
+			size = this.host.getSize();
 
-		var h = Ext.Element.getViewportHeight(),
-			x = Ext.Element.getViewportWidth()-this.getWidth(),
-			y = 0,
-			size = this.host.getSize(),
-			animate = false,
-			up = 100,
-			down = h - this.gripper.getHeight();
-
-		clearTimeout(this.syncHeight);
 		if(!this.host.isVisible()){
-			animate = true;
-			size = {height: h-up};
-			y = (this.getPopState()? up:down)+1;
-			x -= 10;
-			if(!this.getPopState()){
-				this.syncHeight = Ext.defer(this.setHeight,1000,this,[27]);
-			}
+			if(d){ d.hide(); }
+			size = {height: 57};
+		}
+		else {
+			if(d){ d.show(); }
 		}
 
 		this.setHeight(size.height);
-		this.fireEvent('beforemove',animate);
-		this.setPagePosition(x,y,animate);
-	},
-
-
-	togglePopup: function(evt, dom){
-        var target = evt.getTarget(),
-            down = Ext.fly(target).hasCls('minimize') ? true : false,
-			pop = this.getPopState();
-
-        if ( (down && pop) || (!down && !pop) ) {
-            this.setPopState(!pop);
-            this.syncUp();
-        }
-	},
-
-
-
-	getPopState: function(){
-		var sidebar = Ext.JSON.decode(sessionStorage.getItem('sidebar')||'{}'),
-		    pop = sidebar.hasOwnProperty('popstate')? sidebar.popstate : true;
-
-		if(!this.hasOwnProperty('popstate')){
-			this.popstate = pop;
-		}
-
-		return this.popstate;
-	},
-
-
-	setPopState: function(state){
-		var sidebar = Ext.JSON.decode(sessionStorage.getItem('sidebar')||'{}');
-		if(typeof state !== 'boolean') {
-			delete this.popstate;
-			delete sidebar.popstate;
-		}
-		else { sidebar.popstate = this.popstate = state; }
-
-		sessionStorage.setItem('sidebar',Ext.JSON.encode(sidebar));
+		this.fireEvent('beforemove',false);
+		this.setPagePosition(x,0,false);
 	}
 });

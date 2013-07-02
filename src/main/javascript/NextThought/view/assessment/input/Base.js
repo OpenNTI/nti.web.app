@@ -69,7 +69,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	filterHTML: function(html){
-		var root = LocationProvider.getContentRoot();
+		var root = ContentUtils.getRoot();
 		function fixRef(original,attr,url) {
 			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
 					? original

@@ -106,3 +106,7 @@ Ext.application({
 	}
 });
 
+//lets not show our dirty lawndry... urls sould be pretty with no "files" in them.
+if( location.toString().indexOf('index.html')>0 ){
+	location.replace(location.toString().replace('index.html',''));
+}

@@ -242,6 +242,13 @@ div.nt-token-wrapper{
 			position: relative;
 			margin-right: 85px !important;
 			padding-left: 3px;
+
+			.token + .inputArea{
+				.plus {
+					margin-left: 5px;
+				}
+			}
+
 			.inputArea{
 				white-space: nowrap;
 				display: inline-block;
@@ -249,7 +256,7 @@ div.nt-token-wrapper{
 				.plus{
 					position: relative;
 					display: inline-block;
-					margin: 0 4px 0 10px;
+					margin: 0 2px 0 0;
 					width: 8px;
 
 					&::after{
@@ -265,8 +272,9 @@ div.nt-token-wrapper{
 				.token-input-wrap{
 					position: relative;
 					input {
-						font: italic normal 14px/30px $font !important;
+						font: italic normal 14px/20px $font !important;
 						text-transform: none;
+						padding: 5px 0;
 					}
 					.token-input-sizer{
 						position: relative;

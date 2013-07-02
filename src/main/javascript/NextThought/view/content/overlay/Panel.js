@@ -21,7 +21,6 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 	constructor: function(){
 		this.callParent(arguments);
 		this.setupContentElement();
-		return this;
 	},
 
 

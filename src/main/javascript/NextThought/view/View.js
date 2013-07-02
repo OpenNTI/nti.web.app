@@ -5,9 +5,10 @@ Ext.define( 'NextThought.view.View', {
 
 
 	initComponent: function(){
-		this.addEvents('activate-view');
+		this.enableBubble('before-activate-view','activate-view');
 		this.callParent(arguments);
-		this.mon(this, 'activate', this.activate, this);
+		this.addCls('main-view-container');
+		//this.mon(this, 'activate', this.activate, this);
 	},
 
 
@@ -32,17 +33,13 @@ Ext.define( 'NextThought.view.View', {
 	beforeRestore: function(){ return true; },
 
 
-	activate: function(){
-		if(!this.ownerCt){ console.error('No parent view(ownerCt) was provided. Failing to activate properly'); }
-
-		this.ownerCt.fireEvent('activate-view', this.getId());
-		this.setTitle();
-		return true;
-	},
-
-
-	deactivate: function(){
-		this.fireEvent('view-deactivated');
+	activate: function(silent){
+		if( this.fireEvent('before-activate-view', this.getId()) ){
+			this.fireEvent('activate-view', this.getId(), Boolean(silent));
+			this.setTitle();
+			return true;
+		}
+		return false;
 	},
 
 

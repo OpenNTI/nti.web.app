@@ -1,7 +1,6 @@
 Ext.define('NextThought.editor.Actions', {
 	requires: [
 		'NextThought.util.Ranges',
-		'NextThought.view.menus.Share',
 		'NextThought.view.form.fields.TagField',
 		'NextThought.view.form.fields.UserListField',
 		'NextThought.view.form.fields.UserTokenField',
@@ -19,6 +18,7 @@ Ext.define('NextThought.editor.Actions', {
 
 	//default value (allow the cursor into the placeholder div, but don't take any space)
 	defaultValue: '&#8203;',
+
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate({
 		contentEditable: false,
@@ -48,6 +48,7 @@ Ext.define('NextThought.editor.Actions', {
 		}]
 	}).compile(),
 
+
 	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
 
 
@@ -62,25 +63,6 @@ Ext.define('NextThought.editor.Actions', {
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
-
-		function updateLabel() { me.shareEl.update(me.shareMenu.getLabel()); }
-
-		me.shareEl = this.editor.down('.action.share');
-		if( me.shareEl ){
-			me.shareMenu = Ext.widget('share-menu');
-			cmp.on('destroy', 'destroy', me.shareMenu);
-			if (!$AppConfig.service.canShare()) {
-				me.shareEl.hide();
-			}
-			cmp.mon(me.shareEl, 'click', function (e) {
-				e.stopEvent();
-				me.shareMenu.showBy(me.shareEl, 't-b?');
-				return false;
-			});
-
-			cmp.mon(me.shareMenu, 'changed', updateLabel);
-			updateLabel();
-		}
 
 		// tab tracking is different depending on whether we're editing a blog or
 		// editing an annotation. the field layout changes. maybe it should be the same?
@@ -160,6 +142,7 @@ Ext.define('NextThought.editor.Actions', {
 		this.typingAttributes = [];
 	},
 
+
 	setupSharedListEl: function(me, tabTracker, scrollParentEl) {
 		me.sharedListEl = me.editor.down('.recipients');
 		if(me.sharedListEl){
@@ -178,6 +161,7 @@ Ext.define('NextThought.editor.Actions', {
 		}
 	},
 
+
 	setupTitleEl: function(me, tabTracker) {
 		me.titleEl = me.editor.down('.title input');
 		if( me.titleEl ){
@@ -194,6 +178,7 @@ Ext.define('NextThought.editor.Actions', {
 			});
 		}
 	},
+
 
 	activate: function () {
 		this.updatePrefs();
@@ -474,6 +459,7 @@ Ext.define('NextThought.editor.Actions', {
 		}
 	},
 
+
 	onMouseUp: function(e){
 		this.detectTypingAttributes();
 	},
@@ -487,7 +473,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		if (h !== p) {
 			this.cmp.updateLayout();
-
+			this.cmp.fireEvent(h < p ? 'shrank':'grew');
 			// TODO: In Safari 6, the editor resize but it doesn't paint properly upon
 			// updateLayout( which makes the editor look like it's cut off). Thus, we force it to repaint itself.
 			// It seems to be a browser-related bug. This can get a little expensive, thus we do it for Safari only.
@@ -1065,7 +1051,6 @@ Ext.define('NextThought.editor.Actions', {
 	getValue: function () {
 		return {
 			body : this.getBody(this.getBodyValue()),
-			shareWith: this.sharedList ? this.sharedList.getValue() : null, //FIXME: We think this is not unused anymore.
 			sharingInfo:  this.sharedList ? this.sharedList.getValue(): null,
 			publish: this.sharedList ?  this.sharedList.getPublished() : this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
@@ -1165,7 +1150,9 @@ Ext.define('NextThought.editor.Actions', {
 
 	updatePrefs: function (v) {
 		if(this.sharedList){
-			this.sharedList.setValue(SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue()));
+			this.sharedList.setValue(
+					SharingUtils.sharedWithToSharedInfo(
+							SharingUtils.resolveValue()));
 		}
 	}
 

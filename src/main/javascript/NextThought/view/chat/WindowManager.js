@@ -16,9 +16,9 @@ Ext.define('NextThought.view.chat.WindowManager',{
 			Ext.ComponentManager.onAvailable('chat-dock',initDockPointer,me);
 		}
 
-		Ext.EventManager.onWindowResize(this.onViewportResized,this);
+		Ext.EventManager.onWindowResize(me.onViewportResized,me);
 
-		return this.callParent(arguments);
+		me.callParent(arguments);
 	},
 
 

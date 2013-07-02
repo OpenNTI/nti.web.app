@@ -5,7 +5,7 @@ Ext.define('NextThought.ux.SearchHits', {
 
 	constructor: function(config){
 		var me = this;
-		me.mixins.observable.constructor.call(this);
+		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
 			hit: config.hit,
 			phraseSearch: (config.ps || false),
@@ -13,14 +13,13 @@ Ext.define('NextThought.ux.SearchHits', {
 			container: config.owner.getInsertionPoint('innerCt').dom
 		});
 
-		this.mon(this.ownerCmp, {
-			scope:this,
-			'navigateComplete':this.cleanup,
-			'sync-height' : this.reLayout
+		this.mon(me.ownerCmp, {
+			scope:me,
+			'navigateComplete':'cleanup',
+			'sync-height' : 'reLayout'
 		});
 
-		this.insertSearchHitsOverlay();
-		return me;
+		me.insertSearchHitsOverlay();
 	},
 
 	insertSearchHitsOverlay: function(){

@@ -29,7 +29,6 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
 		this.mixins.placeholderFix.constructor.call(this);
-		return this;
 	},
 
 

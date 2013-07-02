@@ -95,8 +95,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	is: function(selector){
-		console.debug('TODO: define this,',arguments);
-		return false;
+		return selector === '*';
 	},
 
 	//Override isEqual so we can test more complex equality and
@@ -169,8 +168,6 @@ Ext.define('NextThought.model.Base', {
 				});
 			}
 		});
-
-		return this;
 	},
 
 

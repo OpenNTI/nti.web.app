@@ -168,7 +168,9 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	onCancel: function(e){
 		e.stopEvent();
 		this.deactivate();
-		this.setValue('');
+		if(!this.isDestroyed){
+			this.setValue('');
+		}
 	},
 
 

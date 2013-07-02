@@ -199,7 +199,6 @@ Ext.application({
 			'javascript/specs/view/chat/transcript/Main.spec.js',
 			'javascript/specs/view/content/Navigation.spec.js',
 			'javascript/specs/view/forums/Comment.spec.js',
-			'javascript/specs/view/ViewSelect.spec.js',
 			'javascript/specs/view/store/purchase/Form.js',
 			'javascript/specs/controller/Chat.spec.js',
 			'javascript/specs/controller/Forums.spec.js',

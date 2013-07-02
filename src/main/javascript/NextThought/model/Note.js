@@ -7,14 +7,9 @@ Ext.define('NextThought.model.Note', {
 
 	statics: {
 		createFromHighlight: function(hl){
-
-			var p = LocationProvider.getPreferences();
-			p = p ? p.sharing : null;
-			p = p ? p.sharedWith || [] : null;
-
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
-				sharedWith: p || hl.get('sharedWith'),
+				sharedWith: [],
 				prohibitReSharing: hl.get('prohibitReSharing'),
 				tags: hl.get('tags'),
 				selectedText: hl.get('selectedText'),
@@ -50,6 +45,37 @@ Ext.define('NextThought.model.Note', {
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
 		{ name: 'FavoriteGroupingField', defaultValue:'Note', persist: false},
+
+		{ name: 'line', type:'int', defaultValue:0, persist: false},
+		{ name: 'ReplyCount', type:'Synthetic', persist: false,
+			fn: function(r){
+				if(r.placeholder){
+					return r.countChildren();
+				}
+
+				return r.get('ReferencedByCount');
+			}
+		},
+		{ name: 'preview', type:'Synthetic', persist: false,
+			affectedBy: ['body','title'],
+			fn: function(r){
+				if(r.placeholder){
+					return '[Placeholder]';
+				}
+
+				if(r.data.hasOwnProperty('$preview')){
+					return r.data.$preview;
+				}
+
+				r.resolveNoteTitle(function(s){
+					r.data.$preview = s;
+					r.afterEdit(['preview']);
+				},150);
+
+				return '';
+			},
+			fnSet: function(r){ delete r.data.$preview; }
+		},
 
 
 		//We use these fields in the user-data panel
@@ -204,13 +230,16 @@ Ext.define('NextThought.model.Note', {
 		if(!Ext.isEmpty(t)){
 			snip = Ext.String.ellipsis(t, max, false);
 		}
-		else if(this.isWhiteboardOnly(body)){
-			snip = 'Whiteboard';
-		}
 		else{
-			t = body && body.join('');
-			snip = Ext.String.ellipsis(this.getBodyText(true), max, false);
-			if(t && (snip !== t)){ t = snip +'...'; }
+			if(this.isWhiteboardOnly(body)){
+				t = 'Whiteboard';
+			}
+			this.compileBodyContent(function(html){
+				snip = ContentUtils.getHTMLSnippet(html,max);
+				Ext.callback(cb, null, [snip||html,t]);
+			});
+
+			return;
 		}
 
 		Ext.callback(cb, null, [snip, t]);

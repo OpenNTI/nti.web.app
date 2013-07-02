@@ -2,8 +2,7 @@ Ext.define('NextThought.view.menus.Filter',{
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.filter-menu',
 	requires: [
-		'NextThought.view.menus.LabeledSeparator',
-        'NextThought.providers.Location'
+		'NextThought.view.menus.LabeledSeparator'
 	],
 	ui: 'nt',
 	plain: true,
@@ -35,7 +34,8 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
 		this.reload();
-		LocationProvider.on('navigateComplete', this.maybeChangeVisibiltiy, this);
+		//Hack:
+		ReaderPanel.get().on('navigateComplete', 'maybeChangeVisibiltiy', this);
     },
 
 
@@ -49,7 +49,7 @@ Ext.define('NextThought.view.menus.Filter',{
 			cls: 'type-filter highlight',
 			text: 'Highlights',
 			model: 'NextThought.model.Highlight',
-			hidden: /mathcounts/i.test(LocationProvider.currentNTIID) //FIXME eww, hack to prohibit highlighting in mathcounts
+			hidden: /mathcounts/i.test(ReaderPanel.get().getLocation().NTIID) //FIXME eww, hack to prohibit highlighting in mathcounts
 		});
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
@@ -101,7 +101,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		//FIXME eww.  This looks like a hack to prevent highlight filter option
 		//in mathcounts b/c we also hack out filtering there
 		var i = this.down('[model=NextThought.model.Highlight]'),
-			show = /mathcounts/i.test(LocationProvider.currentNTIID);
+			show = /mathcounts/i.test(ReaderPanel.get().getLocation().NTIID);
 		if(!i){ return; }
 		i[show?'hide':'show']();
 		if(show && i.checked){

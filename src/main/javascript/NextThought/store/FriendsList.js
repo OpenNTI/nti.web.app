@@ -34,7 +34,7 @@ Ext.define('NextThought.store.FriendsList',{
 	],
 
 	constructor: function(){
-		var r = this.callParent(arguments);
+		this.callParent(arguments);
 
 		this.on({
 			scope: this,
@@ -43,8 +43,6 @@ Ext.define('NextThought.store.FriendsList',{
 			update: this.contactsMaybeChanged,
 			refresh: this.fireContactsRefreshed
 		});
-
-		return r;
 	},
 
 

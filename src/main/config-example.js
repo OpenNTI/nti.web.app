@@ -1,4 +1,8 @@
 var $AppConfig = {
+	"debug": false,
+	"debugSocket": false,
+	"debugSocketVerbosely": false,
+
 	"features":{
 		"rhp-groupchat": false,
 		"chat-history": false,

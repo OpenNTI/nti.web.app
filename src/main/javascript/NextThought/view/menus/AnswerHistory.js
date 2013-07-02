@@ -2,8 +2,7 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.answer-history-menu',
 	requires: [
-		'NextThought.view.menus.LabeledSeparator',
-		'NextThought.providers.Location'
+		'NextThought.view.menus.LabeledSeparator'
 	],
 	ui: 'nt',
 	plain: true,

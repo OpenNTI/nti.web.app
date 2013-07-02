@@ -1,55 +1,84 @@
 Ext.define('NextThought.view.content.reader.Scroll',{
-
+	alias: 'reader.scroll',
 	requires: ['NextThought.util.Search'],
 
-	constructor: function(){
-		this.on('afterrender',function(){
-			this.scrollingEl = this.getTargetEl();
 
-			this.scrollingEl.on('scroll',function(){
-				Ext.menu.Manager.hideAll();
-				Ext.tip.QuickTipManager.getQuickTip().hide();
-			},this);
+	constructor: function(config){
+		Ext.apply(this,config);
+		var me = this;
 
-		},this);
+		function afterReaderRenders(){
+			me.scrollingEl = me.reader.getTargetEl();
+			me.scrollingEl.on('scroll',me.menuHideOnScroll,me);
+		}
+
+		me.reader.on('afterrender',afterReaderRenders,me,{single: true});
 	},
 
 
-	registerScrollHandler: function(fn, scope){
-		this.mon(this.scrollingEl,'scroll', fn, scope);
+	menuHideOnScroll: function(){
+		Ext.menu.Manager.hideAll();
+		Ext.tip.QuickTipManager.getQuickTip().hide();
 	},
 
 
-	unRegisterScrollHandler: function(fn, scope){
-		this.mun(this.scrollingEl,'scroll', fn, scope);
+	registerHandler: function(fn, scope){
+		this.scrollingEl.on('scroll', fn, scope);
 	},
 
 
-	lockScroll: function(){
+	unRegisterHandler: function(fn, scope){
+		this.scrollingEl.un('scroll', fn, scope);
+	},
+
+
+	lock: function(){
 		this.scrollingEl.scrollTo('top', 0, false);
 		this.scrollingEl.setStyle({overflowY:'hidden'});
 	},
 
 
-	unlockScroll: function(){
+	unlock: function(){
 		this.scrollingEl.setStyle({overflowY:'auto'});
 	},
 
 
-	scrollToId: function(id) {
+	get: function(){
+		return this.scrollingEl.getScroll();
+	},
+
+
+	up: function(){
+		this.by(-50);
+	},
+
+
+	down: function(){
+		this.by(50);
+	},
+
+
+	by: function(delta){
+		var s = this.scrollingEl,
+			t = s.getScrollTop();
+		s.setScrollTop(t+delta);
+	},
+
+
+	toId: function(id) {
 		var n = Ext.getCmp(id),
 			m,
-			offset = this.getPosition(),
+			offset = this.reader.getPosition(),
 			cPos,
-			sTop = this.scrollingEl.getScroll().top;
+			sTop = this.get().top;
 
 
 		if(n) {
 			cPos = n.getPosition();
 			console.log('cmp pos', cPos, 'offset', offset, 'scrollTop', sTop);
-			this.scrollTo(cPos[1]-offset[1] - 10 + sTop);
+			this.to(cPos[1]-offset[1] - 10 + sTop);
 
-			//this.scrollToNode(n.getEl().dom);
+			//this.toNode(n.getEl().dom);
 			if (n.getMenu) {
 				m = n.getMenu();
 				if (m && m.items.getCount() === 1) {
@@ -66,24 +95,24 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 	//Scrolls the reader to the first element matching the provided
 	//selector.
-	scrollToSelector: function(selector){
-		var de = this.getDocumentElement(),
+	toSelector: function(selector){
+		var de = this.reader.getDocumentElement(),
 			elem = de.querySelector(selector);
 		if(elem){
-			this.scrollToNode(elem, true, 0);
+			this.toNode(elem, true, 0);
 		}
 	},
 
 
-	scrollToTarget: function(target){
-		var de = this.getDocumentElement(),
+	toTarget: function(target){
+		var de = this.reader.getDocumentElement(),
 			c = Ext.getCmp(target),
 			e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0],
 			topMargin = 75;
 
 		if (!e && c) {
 			try{
-					this.scrollTo(c.getScrollPosition(this.scrollingEl.getTop() - topMargin));
+					this.to(c.getScrollPosition(this.scrollingEl.getY() - topMargin));
 			}
 			catch(excp) {
 				console.log("Could not scroll to ",c);
@@ -92,16 +121,16 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		}
 
 		if(!e) {
-			console.warn('scrollToTarget: no target found: ',target);
+			console.warn('toTarget: no target found: ',target);
 		}
 		else {
-			this.scrollToNode(e, null, null);
+			this.toNode(e, null, null);
 		}
 	},
 
 
-	scrollToContainer: function(containerId){
-		var de = this.getDocumentElement(),
+	toContainer: function(containerId){
+		var de = this.reader.getDocumentElement(),
 			e = de.getElementById(containerId) || de.getElementsByName(containerId)[0];
 
 		Ext.each(de.querySelectorAll('[data-ntiid],[ntiid]'), function(o){
@@ -111,7 +140,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		});
 
 		if(!e){ return; }
-		this.scrollToNode(e,true,0);
+		this.toNode(e,true,0);
 	},
 
 
@@ -123,13 +152,13 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	 *                           based on its visibility on screen
 	 * @param bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
 	 */
-	scrollToNode: function(n, onlyIfNotVisible, bottomThreshold) {
+	toNode: function(n, onlyIfNotVisible, bottomThreshold) {
 		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
 
 		var offsets = this.scrollingEl.getXY(),
-			o = Ext.fly(n).getTop() - offsets[1],
+			o = Ext.fly(n).getY() - offsets[1],
 			st = this.scrollingEl.getScroll().top,
 			h = this.scrollingEl.getHeight(),
 			b = st + h - (bottomThreshold || 0);
@@ -139,15 +168,15 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			return;
 		}
 
-		this.scrollTo(o - 10);
+		this.to(o - 10);
 	},
 
 
-	scrollTo: function(top, animate) {
+	to: function(top, animate) {
 		this.scrollingEl.scrollTo('top', top, animate!==false);
 	},
 
-	scrollToSearchHit: function(result, fragment) {
+	toSearchHit: function(result, fragment) {
 		var me = this, pos;
 
 		me.clearSearchHit();
@@ -164,10 +193,51 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 		if(pos >= 0){
 			try{
-				me.scrollTo(pos);
+				me.to(pos);
 			} catch(e){
-				console.log("Could not scrollTo: ", pos, e.message);
+				console.log("Could not scroll.to(): ", pos, e.message);
 			}
 		}
+	},
+
+
+	/** @private */
+	getFragmentLocation: function(fragment, phrase){
+		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
+			doc = this.reader.getDocumentElement(),
+			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
+			range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
+			olDom = Ext.getDom(this.reader.getComponentOverlay().componentOverlayEl);
+
+		if(Ext.isEmpty(ranges)){
+			//We are pretty tightly coupled here for assessment.  Each overlay needs to be
+			//asked to find the match
+			indexOverlayData = TextRangeFinderUtils.indexText(olDom,
+					function(node){ return Ext.fly(node).parent('.indexed-content'); });
+
+			ranges = TextRangeFinderUtils.findTextRanges( olDom, olDom.ownerDocument,
+					fragRegex.re, fragRegex.matchingGroups, indexOverlayData);
+			assessmentAdjustment = 150;
+		}
+
+		if(Ext.isEmpty(ranges)){
+			console.warn('Could not find location of fragment', fragment);
+			return -1;
+		}
+
+		if(ranges.length > 1){
+			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
+		}
+		range = ranges[0];
+
+		if(range && range.getClientRects().length > 0){
+			nodeTop = range.getClientRects()[0].top;
+			//Assessment items aren't in the iframe so they don't take into account scroll
+			scrollOffset = this.get().top;
+			scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
+			pos = nodeTop - assessmentAdjustment + scrollOffset;
+		}
+
+		return pos;
 	}
 });

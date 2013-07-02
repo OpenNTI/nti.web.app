@@ -59,5 +59,16 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		var data = {items: this.callParent(arguments)};
 		data.name = this.name;
 		return data;
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.on('select','handleSelect',this);
+	},
+
+
+	handleSelect: function(selModel, record){
+		selModel.deselect(record);
 	}
 });

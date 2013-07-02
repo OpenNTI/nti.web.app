@@ -3,10 +3,7 @@ Ext.define('NextThought.view.Main', {
 	alias: 'widget.master-view',
 
 	requires: [
-		'Ext.layout.container.Absolute',
 		'Ext.layout.container.Border',
-		'Ext.layout.container.HBox',
-		'Ext.layout.container.VBox',
 		'NextThought.view.MessageBox',
 		'NextThought.view.Navigation',
 		'NextThought.view.SideBar',
@@ -23,15 +20,14 @@ Ext.define('NextThought.view.Main', {
 	minWidth: 1024,
 
 	items:[
-		{xtype: 'main-navigation', region: 'west'},
-		{xtype: 'main-views', id: 'view-ctr', region: 'center'},
-		{xtype: 'container', region: 'east', weight: 30, minWidth:260}
+		{xtype: 'main-navigation', region: 'north'},
+		{xtype: 'main-views', id: 'view', region: 'center'},
+		{xtype: 'box', hostTo:'sidebar', region: 'east', weight: 30, minWidth:260}
 	],
 
 	constructor: function(){
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
-		return this;
 	},
 
 	afterRender: function(){
@@ -62,20 +58,14 @@ Ext.define('NextThought.view.Main', {
 
 		Ext.EventManager.onWindowResize(this.detectZoom,this);
 		this.detectZoom();
-		this.navbar = this.down('main-navigation');
 		this.views = this.down('main-views');
 		this.sidebar = Ext.widget('main-sidebar', {
-			host: this.down('[region=east]'), hidden: this.hidden
+			host: this.down('[region=east][hostTo=sidebar]'), hidden: this.hidden
 		});
 
         Ext.getDoc().on('touchmove', function(e) {
             e.preventDefault();
         });
-	},
-
-
-	activateView: function(id){
-		return this.views.fireEvent('activate-main-view', id);
 	},
 
 

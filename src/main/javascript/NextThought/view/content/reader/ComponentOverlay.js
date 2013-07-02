@@ -1,48 +1,52 @@
 Ext.define('NextThought.view.content.reader.ComponentOverlay', {
+	alias: 'reader.componentOverlay',
 
 	requires: [
 		'NextThought.util.Dom',
 		'NextThought.util.TabIndexTracker'
 	],
 
-	constructor: function(){
-		this.on({
+	constructor: function(config){
+		Ext.apply(this,config);
+
+		this.reader.on({
 			scope: this,
-			'content-updated': this.clearOverlayedPanels,
-			'image-loaded': this.adjustOverlayedPanels,
-			'afterRender': this.insertComponentOverlay,
+			'set-content': 'clearOverlayedPanels',
+			'content-updated': 'clearOverlayedPanels',
+			'image-loaded': 'adjustOverlayedPanels',
+			'afterRender': 'insertComponentOverlay',
 			'afterLayout': function(){
 				NextThought.view.content.overlay.Panel.syncPositioning();
 			}
 		});
 
-		this.overlayedPanelTabIndexer = new NextThought.util.TabIndexTracker();
+		this.tabIndexer = new NextThought.util.TabIndexTracker();
 		this.activeOverlayedPanels = {};
 	},
 
 
 	insertComponentOverlay: function(){
-		var container = Ext.DomHelper.append(this.getInsertionPoint('innerCt'), { cls:'component-overlay' }, true);
-		this.on('destroy' , function(){ container.remove(); });
+		var container = Ext.DomHelper.append(this.reader.getInsertionPoint('innerCt'), { cls:'component-overlay' }, true);
+		this.reader.on('destroy' , function(){ container.remove(); });
 		this.componentOverlayEl = container;
 	},
 
 
 	overlayedPanelAtY: function(y){
-		var panel,
-			offsets = this.getAnnotationOffsets();
+		var panel = null,
+			offsets = this.reader.getAnnotationOffsets();
 
 		y += offsets.top;
 
 		//This may need to be optimized
 		Ext.each(Ext.Object.getValues(this.activeOverlayedPanels), function(p){
-			var minY = p.el.getTop(),
+			var minY = p.el.getY(),
 				maxY = minY + p.el.getHeight();
 			if(y >= minY && y <= maxY){
 				panel = p;
-				return false;
 			}
-			return true;
+
+			return !panel;
 		});
 
 		return panel;
@@ -81,7 +85,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 		var active = this.activeOverlayedPanels;
 		this.activeOverlayedPanels = {};
 
-		this.overlayedPanelTabIndexer.reset(10);
+		this.tabIndexer.reset(10);
 
 		Ext.Object.each(active,function(k, v){
 			delete v.floatParent;
@@ -111,7 +115,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 
 	getContentElement: function(tagName, attribute, value){
 		try {
-		var doc = this.getDocumentElement(),
+		var doc = this.reader.getDocumentElement(),
 			tags = doc.getElementsByTagName(tagName),
 			i = tags.length - 1,
 			vRe = new RegExp( '^'+RegExp.escape( value )+'$', 'ig');

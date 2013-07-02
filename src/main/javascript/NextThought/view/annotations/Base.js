@@ -39,7 +39,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		a.push.apply(a, getType(Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]));
 	},
 
-	hasGutterWidgets: false,
 
 	constructor: function(config) {
 		var me = this,
@@ -70,7 +69,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me),
 
-			manager: c.getAnnotationManager()
+			manager: c.getAnnotations().getManager()
 		});
 
 		if(!me.manager){
@@ -196,7 +195,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		var me = this,
 			r = me.record,
 			id = r.getId(),
-			c = me.ownerCmp;
+			c = me.ownerCmp,
+			a = c && c.getAnnotations();
 
 		delete me.record;
 
@@ -210,8 +210,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		Ext.EventManager.removeResizeListener(me.requestRender, me);
 
-		if( c && c.annotationExists(r)){
-			c.removeAnnotation(id);
+		if( a && a.exists(r)){
+			a.remove(id);
 		}
 
 		this.clearListeners();
@@ -258,8 +258,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	buildMenu: function(items) {
 		var m = this,
-			r = m.getRecord(),
-			d = m.ownerCmp.getDefinitionMenuItem();
+			d = m.ownerCmp.getAnnotations().getDefinitionMenuItem();
 
 		items = items || [];
 
@@ -371,21 +370,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
             menu.showAt.apply(menu,xy);
             menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
         }
-	},
+	}
 
-
-	/**
-	 * Returns a Ext element control for the control gutter.  Many annotations may not have one.
-	 */
-	getControl: function(){},
-
-
-	/**
-	 * Returns the widget to be placed in the gutter for interaction with this annotation.  Override in
-	 * implementation class to return something.  Returns an Ext element.
-	 *
-	 * @param [numberOfSiblings] - number of siblings in case there is secondary widget renderings.
-	 *                             null implies you do not care or there is no alternate renderings.
-	 */
-	getGutterWidget: function(numberOfSiblings){}
 });

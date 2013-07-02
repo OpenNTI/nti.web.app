@@ -11,7 +11,6 @@ Ext.define('NextThought.model.anchorables.ContentPointer', {
 	constructor: function(o) {
 		this.initConfig(o);
 		this.Class = 'ContentPointer';
-		return this;
 	},
 
 	onClassExtended: function(cls, data, hooks) {

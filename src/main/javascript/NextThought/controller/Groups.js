@@ -34,8 +34,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	init: function() {
 		var flStore = this.getFriendsListStore(),
-			piStore = Ext.StoreManager.get('PresenceInfo'),//reduce this coupling
-			me = this;
+			piStore = Ext.StoreManager.get('PresenceInfo');//reduce this coupling
 
 		this.application.on('session-ready', this.onSessionReady, this);
 

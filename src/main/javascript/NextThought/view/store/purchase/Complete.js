@@ -99,7 +99,7 @@ Ext.define('NextThought.view.store.purchase.Complete',{
 
 		items = items.first();
 		if(items){
-			LocationProvider.setLocation(items);
+			this.fireEvent('set-location',items);
 			this.up('window').close();
 		}
 

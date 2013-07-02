@@ -42,7 +42,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 				}
 			}
 		});
-		return this.callParent([config]);
+		this.callParent([config]);
 	},
 
 	getDockingRefItems: function(deep,items){

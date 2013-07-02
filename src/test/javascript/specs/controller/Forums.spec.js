@@ -27,7 +27,7 @@ describe('Forums Controller Tests', function(){
 	});
 
 	describe('Test navigateToForumContent', function(){
-		it('Expects going to the Board \'communityBoard1\'', function(){
+		xit('Expects going to the Board \'communityBoard1\'', function(){
 			spyOn(controller, 'navigateToForumContent').andCallThrough();
 			spyOn(controller, 'presentTopic');
 			controller.navigateToForumContent(mockObjects['communityBoard1']);
@@ -35,7 +35,7 @@ describe('Forums Controller Tests', function(){
 			expect(controller.presentTopic).toHaveBeenCalledWith(mockObjects['communityBoard1']);
 		});
 
-		it('Expects going to the Topic \'communityTopic1\'', function(){
+		xit('Expects going to the Topic \'communityTopic1\'', function(){
 			spyOn(controller, 'navigateToForumContent').andCallThrough();
 			spyOn(controller, 'presentTopic');
 			controller.navigateToForumContent(mockObjects['communityTopic1']);
@@ -43,7 +43,7 @@ describe('Forums Controller Tests', function(){
 			expect(controller.presentTopic).toHaveBeenCalledWith(mockObjects['communityTopic1']);
 		});
 
-		it('Expects to not go to the content \'book1\'', function(){
+		xit('Expects to not go to the content \'book1\'', function(){
 			spyOn(controller, 'navigateToForumContent').andCallThrough();
 			spyOn(controller, 'presentTopic');
 			controller.navigateToForumContent(mockObjects['book1']);

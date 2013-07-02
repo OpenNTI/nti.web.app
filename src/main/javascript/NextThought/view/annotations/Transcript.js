@@ -5,8 +5,5 @@ Ext.define( 'NextThought.view.annotations.Transcript', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-
-
-		return this;
 	}
 });

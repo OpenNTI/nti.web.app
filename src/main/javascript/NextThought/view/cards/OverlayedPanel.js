@@ -41,6 +41,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 			layout:'fit',
 			items:[{
 				xtype: 'content-card',
+				reader: config.reader,
 				data: this.self.getData(config.contentElement,config.reader)
 			}]
 		});

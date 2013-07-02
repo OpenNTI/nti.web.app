@@ -3,7 +3,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 
 	constructor: function(){
 		this.calculatedAttributes = ['font-face'];
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 	draw: function(ctx,renderCallback){

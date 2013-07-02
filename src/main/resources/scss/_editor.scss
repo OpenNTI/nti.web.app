@@ -54,7 +54,7 @@ span.tab{
 				@include experimental(transition, all 0.5s);
 				position: relative;
 				border: 0 solid #f2f2f2;
-				border-width: 0 0 1px 0;
+				border-bottom-width: 1px;
 				.placeholder {
 					position: absolute;
 					top: 3px;
@@ -127,80 +127,8 @@ span.tab{
 
 			.aux+.title, .title.small{
 				input{
-					font: italic 14px/30px $font;
-					margin: 0 0 0 5px;
-				}
-			}
-
-			.toolbar {
-				@include experimental(transition, all 0.5s);
-				background: #fff;
-				clear:both;
-				position: relative;
-				overflow: hidden;
-				height: 32px;
-				border-bottom: 1px solid #dcdcdc;
-				.left .action {float: left;}
-				.right .action {float: right;}
-
-				.action {
-					width: 20px;
-					height: 32px;
-					line-height: 32px;
-					position: relative;
-
-					&.bold, &.italic, &.underline {
-						margin-right: 5px;
-						margin-top: 4px;
-						height: 28px;
-
-						&::after{
-							content: '';
-							position: absolute;
-							top: 5px; left: 2px;
-							background: $icons no-repeat;
-						}
-					}
-
-					&.bold {
-						&::after{ @include sprite($icons,'bold',$dimensions: true); }
-						&.selected::after{ @include sprite($icons,'bold_active',$dimensions: true); }
-					}
-					&.italic {
-						&::after{ @include sprite($icons,'italic',$dimensions: true); }
-						&.selected::after{ @include sprite($icons,'italic_active',$dimensions: true); }
-					}
-					&.underline {
-						&::after{ @include sprite($icons,'underline',$dimensions: true); }
-						&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
-					}
-					&.share {
-						position: relative;
-						width: auto;
-						white-space: nowrap;
-
-						text-align: center;
-						padding: 0 12px 0 25px;
-						margin: 0 5px 0 0;
-
-						&::after {
-							content: ' ';
-							overflow: hidden;
-							position: absolute;
-							top: 15px; right: 0;
-							background: $elements no-repeat;
-							@include sprite($elements,'share-drop-arrow',$dimensions: true);
-						}
-
-						&::before {
-							content: ' ';
-							overflow: hidden;
-							position: absolute;
-							top: 7px; left: 0px;
-							background: $icons no-repeat;
-							@include sprite($icons,'share',$dimensions: true);
-						}
-					}
+					font: italic 14px/20px $font;
+					padding-left: 5px;
 				}
 			}
 
@@ -210,7 +138,7 @@ span.tab{
 
 				@include experimental(transition, all 0.5s);
 				cursor: text;
-				padding: 2px 0 0 0;
+				padding: 2px 5px 0;
 				color: $secondary-grey;
 				font: 14px $font;
 				overflow-x: hidden;
@@ -225,8 +153,8 @@ span.tab{
 					position: absolute;
 					content: attr(data-placeholder);
 					@include placeholder-style();
-					top: 0;
-					left: 0;
+					top: 2px;
+					left: 5px;
 				}
 			}
 		}
@@ -443,4 +371,39 @@ span.tab{
 
 .x-component-editor {
 	@include editor(true);
+
+	&.in-gutter{
+		background: #ffffff;
+		border: 1px solid #cfcfcf;//#ededed
+
+		.main {
+			margin: 0 10px;
+
+			.aux {
+				padding: 0;
+				.x-component-tokens.user-token-field {
+					overflow: visible;
+					.control.publish{
+						left: 10px;
+					}
+					.tokens{
+						padding-left: 0;
+						margin-right: 70px !important;
+					}
+				}
+			}
+
+			.aux+.title,
+			.title.small{
+				input { padding-left: 0; }
+			}
+
+			.content {
+				padding: 2px 0 0;
+				&.show-placeholder[data-placeholder]::after{
+					left: 0;
+				}
+			}
+		}
+	}
 }

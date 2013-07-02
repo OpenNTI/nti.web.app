@@ -13,7 +13,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		var r = config && config.record;
 		if(r && r.phantom){
 			this.record = r;
-			return this;
+			return;
 		}
 
 		this.callParent(arguments);
@@ -23,8 +23,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if(!this.allowShare){
 			this.record.set('sharedWith',[]);
 		}
-
-		return this;
 	},
 
 

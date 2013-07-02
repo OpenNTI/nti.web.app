@@ -1,4 +1,5 @@
 Ext.define('NextThought.view.content.reader.Annotations', {
+	alias: 'reader.annotations',
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
@@ -18,34 +19,81 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.util.Search',
 		'NextThought.util.TextRangeFinder'
 	],
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
 
-	constructor: function(){
-		var me = this;
+
+	getBubbleTarget: function(){return this.reader; },
+
+
+	constructor: function(config){
+		Ext.apply(this,config);
+		var me = this,
+			reader = me.reader;
+
+		me.mixins.observable.constructor.apply(me);
+
+		reader.on('destroy','destroy',
+			reader.relayEvents(me,[
+				'filter-by-line',
+				'removed-from-line',
+				'annotations-load',
+				'filter-annotations',
+				'define',
+				'save-phantom',
+				'create-note',
+				'share-with',
+				'resize'
+			]));
+
 		Ext.apply(me,{
 			annotations: {},
 			filter: null,
 			searchAnnotations: null,
-			annotationManager: NextThought.view.annotations.renderer.Manager.create()
+			annotationManager: new NextThought.view.annotations.renderer.Manager()
 		});
 
-		me.addEvents('share-with','create-note','should-be-ready');
-
-		this.mon(LocationProvider.storeEvents,{
+		this.reader.fireEvent('listens-to-page-stores',this,{
 			scope: this,
-			add: this.storeEventsAdd,
-			remove: this.storeEventsRemove,
-			bulkremove: this.storeEventsBulkRemove
+			add: 'storeEventsAdd',
+			remove: 'storeEventsRemove',
+			bulkremove: 'storeEventsBulkRemove'
 		});
 
-		me.on({
+		me.mon(reader,{
 			scope: this,
-			added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
-			afterRender: me.insertAnnotationGutter
+			//added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
+			afterRender: 'insertAnnotationGutter',
+			'load-annotations':'loadAnnotations',
+			'clear-annotations': 'clearAnnotations'
 		});
 
 		me.mon(me.annotationManager.events,'finish',me.fireReady,me,{buffer: 500});
+	},
 
-		return this;
+
+
+	fireReady: function(){
+		this.fireEvent('rendered');
+	},
+
+
+	getDocumentElement: function(){
+		return this.reader.getDocumentElement();
+	},
+
+
+	onGutterClicked: function(e){
+		var t = e.getTarget('[data-line]', null, true),
+			toggle = t && t.hasCls('active'),
+			line = !toggle && t && parseInt(t.getAttribute('data-line'),10);
+
+		this.fireEvent('filter-by-line', line);
+		this.gutterEl.select('[data-line]').removeCls('active');
+		if( t && !toggle){
+			t.addCls('active');
+		}
 	},
 
 
@@ -65,65 +113,60 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	storeEventsBulkRemove: function(store,records){
 		Ext.each(records,function(record){
-			this.removeAnnotation(record.getId());
+			this.remove(record.getId());
 		},this);
 	},
 
 
 	storeEventsRemove: function(store,record){
-		this.removeAnnotation(record.getId());
+		this.remove(record.getId());
 	},
 
-
-	primeReadyEvent: function(){
-		this.readyEventPrimed = true;
-	},
-
-
-	needsWaitingOnReadyEvent: function(){
-		return Boolean(this.readyEventPrimed);
-	},
-
-	fireReady: function(){
-		if(this.navigating){
-			console.warn('fired ready while navigating');
-			return;
-		}
-
-		if(!this.readyEventPrimed){return;}
-
-		delete this.readyEventPrimed;
-		console.warn('should-be-ready fired');
-		this.fireEvent('should-be-ready',this);
-	},
 
 
 	insertAnnotationGutter: function(){
 		var me = this,
-				container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),
-						{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] },
-						true);
+			container = Ext.DomHelper.insertAfter(
+					me.reader.getInsertionPoint().first(),
+					{ cls:'annotation-gutter', cn:{cls:'column controls'} },
+					true);
 
-		me.on('destroy' , function(){
-			container.remove();
-		},me);
-
-		me.annotationManager.registerGutter(container, me);
+		me.gutterEl = container;
+		me.reader.on('destroy', 'remove', container);
+		me.reader.on('sync-height', 'setHeight', container);
+		me.mon(container,'click','onGutterClicked',me);
+		me.annotationManager.registerGutter(container, me.reader);
 	},
 
 
-	getAnnotationManager: function(){
+	getManager: function(){
 		return this.annotationManager;
 	},
 
 
-	loadContentAnnotations: function(containerId, subContainers){
-		this.clearAnnotations();
-		this.fireEvent('annotations-load', this, containerId, subContainers);
+	convertRectToScreen: function(r) {
+		var iframe = this.reader.getIframe().get(),
+			result;
+
+		result = {
+			top: r.top + iframe.getY(),
+			left: r.left + iframe.getX(),
+			right: r.right + iframe.getX(),
+			bottom: r.bottom + iframe.getY(),
+			height: r.height,
+			width: r.width
+		};
+		return result;
 	},
 
 
-	objectsLoaded: function(items, bins, containerId) {
+	loadAnnotations: function(containerId, subContainers){
+		this.clearAnnotations();
+		this.fireEvent('annotations-load', this.reader, containerId, subContainers);
+	},
+
+
+	objectsLoaded: function(items, bins/*, containerId*/) {
 		var me = this;
 
 		me.setAssessedQuestions((bins||{}).AssessedQuestionSet);
@@ -134,14 +177,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	applyFilter: function(newFilter){
 		this.filter = newFilter;
 		this.clearAnnotations();
-		this.fireEvent('filter-annotations',this);
+		this.fireEvent('filter-annotations',this.reader);
 	},
 
 
 	showSearchHit: function(hit) {
 		this.clearSearchHit();
 		if(hit.isContent()){
-			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
+			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this.reader});
 		}
 	},
 
@@ -152,8 +195,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
 	rangesForSearchHits: function(hit){
 		var phrase = hit.get('PhraseSearch'),
-			fragments = hit.get('Fragments'),
+			//fragments = hit.get('Fragments'),
 			regex, ranges,
+			o = this.reader.getComponentOverlay(),
 			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [];
 
 
@@ -163,19 +207,23 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		//and the overlays
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
 		ranges = TextRangeFinderUtils.findTextRanges(contentDoc, contentDoc, regex);
-		result.push({ranges: ranges.slice(),
-					 key: 'content'});
+		result.push({
+			ranges: ranges.slice(),
+			key: 'content'
+		});
 
 		//Now look in assessment overlays
-		indexedOverlayData = TextRangeFinderUtils.indexText(this.componentOverlayEl.dom, function(node){
+		indexedOverlayData = TextRangeFinderUtils.indexText(o.componentOverlayEl.dom, function(node){
 			return Ext.fly(node).parent('.indexed-content');
 		});
 
-		ranges = TextRangeFinderUtils.findTextRanges(this.componentOverlayEl.dom,
-													 this.componentOverlayEl.dom.ownerDocument,
+		ranges = TextRangeFinderUtils.findTextRanges(o.componentOverlayEl.dom,
+													 o.componentOverlayEl.dom.ownerDocument,
 												 regex, undefined, indexedOverlayData);
-		result.push({ranges: ranges.slice(),
-					 key: 'assessment'});
+		result.push({
+			ranges: ranges.slice(),
+			key: 'assessment'
+		});
 
 		return result;
 	},
@@ -191,50 +239,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		//For other overlays( i.e assessments )
-		annotationOffsets = this.getAnnotationOffsets();
+		annotationOffsets = this.reader.getAnnotationOffsets();
 		overlayYAdjustment = -annotationOffsets.top;
 		overlayXAdjustment = -annotationOffsets.left;
 		return {top: overlayYAdjustment, left: overlayXAdjustment };
-	},
-
-
-	getFragmentLocation: function(fragment, phrase){
-		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
-			doc = this.getDocumentElement(),
-			ranges = TextRangeFinderUtils.findTextRanges(doc, doc, fragRegex.re, fragRegex.matchingGroups),
-			range, pos = -2, nodeTop, scrollOffset, assessmentAdjustment = 0, indexOverlayData,
-			assessmentBodyClass = 'x-panel-body-assessment';
-
-		if(Ext.isEmpty(ranges)){
-			//We are pretty tightly coupled here for assessment.  Each overlay needs to be
-			//asked to find the match
-			indexOverlayData = TextRangeFinderUtils.indexText(this.componentOverlayEl.dom, function(node){
-				return Ext.fly(node).parent('.indexed-content');
-			});
-			ranges = TextRangeFinderUtils.findTextRanges(this.componentOverlayEl.dom, this.componentOverlayEl.dom.ownerDocument,
-										 fragRegex.re, fragRegex.matchingGroups, indexOverlayData);
-			assessmentAdjustment = 150;
-		}
-
-		if(Ext.isEmpty(ranges)){
-			console.warn('Could not find location of fragment', fragment);
-			return -1;
-		}
-
-		if(ranges.length > 1){
-			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
-		}
-		range = ranges[0];
-
-		if(range && range.getClientRects().length > 0){
-			nodeTop = range.getClientRects()[0].top;
-			//Assessment items aren't in the iframe so they don't take into account scroll
-			scrollOffset = this.body.getScroll().top;
-			scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
-			pos = nodeTop - assessmentAdjustment + scrollOffset;
-		}
-
-		return pos;
 	},
 
 
@@ -248,12 +256,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	removeAnnotation: function(oid) {
+	remove: function(oid) {
 		var v = this.annotations[oid];
 		if (v) {
 			this.annotations[oid] = undefined;
 			delete this.annotations[oid];
 			v.cleanup();
+			this.fireEvent('removed-from-line');
 		}
 	},
 
@@ -285,7 +294,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	annotationExists: function(record){
+	exists: function(record){
 		var oid = record.getId();
 		if(!oid){
 			return false;
@@ -299,6 +308,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		try {
 
 		range = range || this.getSelection();
+		if(!range){
+			console.error('No range!');
+			return null;
+		}
 		var me = this,
 			boundingBox = me.convertRectToScreen(range.getBoundingClientRect()),
 			text = range.toString().trim(),
@@ -322,6 +335,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		}
 		catch(e){
+			console.error(e.message, e.stack);
 			return null;
 		}
 	},
@@ -334,20 +348,20 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
-				rect2 = RectUtils.getFirstNonBoundingRect(range),
-				record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
-				menu,
-				define,
-				offset,
-				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
-				innerDocOffset;
+			rect2 = RectUtils.getFirstNonBoundingRect(range),
+			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
+			menu,
+			define,
+			offset,
+			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
+			innerDocOffset;
 
 		if(!record) {
 			return;
 		}
 
 		//Default container, this should be replaced with the local container.
-		record.set('ContainerId', LocationProvider.currentNTIID);
+		record.set('ContainerId', this.reader.getLocation().NTIID);
 
 		menu = Ext.widget('menu',{
 			ui: 'nt',
@@ -379,7 +393,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			text: 'Add Note',
 			handler: function(){
 				me.clearSelection();
-				me.openNoteEditorForRange(range, rect2, 'plain');
+				me.fireEvent('create-note', range, rect2, 'plain');
 			}
 		});
 
@@ -401,7 +415,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		//TODO - official way of redaction feature enablement:
 		//if($AppConfig.service.canRedact()){
 		//hack to allow redactions only in legal texts for now...
-		if (redactionRegex.test(LocationProvider.currentNTIID)) {
+		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
 				text: 'Redact Inline',
@@ -418,13 +432,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
         menu.on('hide', function(){menu.close();});
 
 
-		offset = me.el.getXY();
+		offset = me.reader.getEl().getXY();
 		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
 		xy[0] += offset[0] + innerDocOffset;
 		xy[1] += offset[1];
 
 
-		if (LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
+		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
 			menu.showAt(xy);
 		} else {
 			console.debug('hack alert; annotation context menu dilberately hidden in mathcounts content');
@@ -439,6 +453,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	 * @param record - annotation record (highlight, note, redaction, etc)
 	 * @param [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
 	 *                         from the record
+	 * @param [onCreated] - Function
 	 * @return {*}
 	 */
 	createAnnotationWidget: function(type, record, browserRange, onCreated){
@@ -450,14 +465,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return false;
 		}
 
-		if (this.annotationExists(record)) {
+		if (this.exists(record)) {
 			console.log('Updating existing annotation?');
 			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
 			return true;
 		}
 
 		try {
-			w = Ext.widget(type.toLowerCase(), {browserRange: browserRange, record: record, reader: this});
+			w = Ext.widget(type.toLowerCase(), {browserRange: browserRange, record: record, reader: this.reader});
 
 			if (!oid) {
 				oid = type.toUpperCase()+'-TEMP-OID-' + guidGenerator();
@@ -543,12 +558,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		var doc = this.getDocumentElement(),
-				win = doc.parentWindow,
-				range, selection, txt;
+			range, selection, txt;
 
 		Anchors.snapSelectionToWord(doc);
 
-		selection = win.getSelection();
+		selection = doc.parentWindow.getSelection();
 		txt = selection.toString();
 
 		if (selection.rangeCount > 0 && !(/^\s*$/).test(txt)) {
@@ -571,7 +585,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	clearSelection: function(){
 		var doc = this.getDocumentElement(),
-				win = doc.parentWindow;
+			win = doc.parentWindow;
 		try {
 			win.getSelection().removeAllRanges();
 		}

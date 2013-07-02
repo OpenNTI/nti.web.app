@@ -24,12 +24,17 @@ Ext.define( 'NextThought.view.profiles.View', {
 
 
 	restore: function(state){
-		state = ((state||{}).profile||{});
+		state = (state||{});
 		var user = state.username,
 			me = this;
 
+		if(!me.isActive() || (state.hasOwnProperty('active') && state.active!==this.id)){
+			me.fireEvent('finished-restore');
+			return;
+		}
+
 		console.debug('Setting user in profile:',user);
-		me.setUser(state,function(panel){
+		me.setUser(state.profile||{},function(panel){
 			console.debug('fire finish');
 			me.setTitle('Profile: '+((panel && panel.displayName)||user));
 			me.fireEvent('finished-restore');

@@ -6,11 +6,6 @@ Ext.define('NextThought.controller.Reader', {
 	extend: 'Ext.app.Controller',
 
 
-	requires: [
-		'NextThought.providers.Location'
-	],
-
-
 	models: [
 		'PageInfo'
 	],
@@ -22,32 +17,69 @@ Ext.define('NextThought.controller.Reader', {
 	views: [
 		'cards.Card',
 		'content.Navigation',
-		'content.PageWidgets',
 		'content.Pager',
 		'content.Reader',
-		'content.TabPanel',
 		'content.Toolbar'
 	],
 
 
 	refs: [
+		{ref: 'libraryMenu', selector: 'library-collection'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
-		{ref: 'libraryPageWigets', selector: 'library-view-container content-tabs content-page-widgets'}
+		{ref: 'libraryReader', selector: 'library-view-container reader-panel'}
 	],
 
 
 	init: function() {
 		this.listen({
+			controller:{
+				'*':{
+					'set-location':'setLocation',
+					'set-last-location-or-root':'setLastLocation'
+				}
+			},
 			component:{
-				'library-view-container content-tabs reader-panel':{
-					'set-content':'updateLibraryControls'
+				'*':{
+					'set-location':'setLocation',
+					'set-last-location-or-root':'setLastLocation'
+				},
+				'library-view-container reader-panel':{
+					'set-content':'updateLibraryControls',
+					'page-previous':'goPagePrevious',
+					'page-next':'goPageNext'
 				},
 				'content-card':{
 					'show-target':'showCardTarget'
 				}
 			}
 		});
+	},
+
+
+	setLocation: function(){
+		var r = this.getLibraryReader();
+		if(!r.ntiidOnFrameReady ){
+			r.setLocation.apply(r,arguments);
+		}
+	},
+
+
+	setLastLocation: function(){
+		var r = this.getLibraryReader();
+		if(!r.ntiidOnFrameReady ){
+			r.setLastLocationOrRoot.apply(r,arguments);
+		}
+	},
+
+
+	goPagePrevious: function(){
+		this.getLibraryPager().goPrev();
+	},
+
+
+	goPageNext: function(){
+		this.getLibraryPager().goNext();
 	},
 
 
@@ -89,29 +121,29 @@ Ext.define('NextThought.controller.Reader', {
 				]
 			});
 
-		pi.contentOrig = LocationProvider.currentNTIID;
+		pi.contentOrig = reader.getLocation().NTIID;
 		pi.hideControls = true;
 
-		LocationProvider.setLocation(pi, null, !!silent);
+		reader.setLocation(pi, null, !!silent);
 	},
 
 
 	updateLibraryControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
-			pw = this.getLibraryPageWigets(),
-			origin = pageInfo && pageInfo.contentOrig;
+			lm = this.getLibraryMenu(),
+			origin = pageInfo && pageInfo.contentOrig,
+			t = pageInfo && pageInfo.get('NTIID');
 
 		pg[fn]();
-		pw[fn]();
 
-		pw.clearBookmark();
-		pg.updateState();
+		pg.updateState(t);
+		lm.updateSelection(t);
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
-		this.getLibraryNavigation().updateLocation(origin||false);
+		this.getLibraryNavigation().updateLocation(origin||t);
 	}
 
 });

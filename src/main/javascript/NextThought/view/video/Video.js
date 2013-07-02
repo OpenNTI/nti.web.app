@@ -1,5 +1,5 @@
 /*jslint */
-/*globals Globals, LocationProvider, NextThought, YT */
+/*globals Globals, NextThought, YT */
 Ext.define('NextThought.view.video.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',

@@ -22,7 +22,7 @@ Ext.define('NextThought.store.NTI',{
 
 
 	constructor: function(){
-		var r = this.callParent(arguments);
+		this.callParent(arguments);
 		//Allow shortcutting the url setting.
 		if(this.url){
 			this.proxy.url = this.url;
@@ -33,7 +33,6 @@ Ext.define('NextThought.store.NTI',{
 			this.proxy.limitParam = undefined;
 			this.proxy.startParam = undefined;
 		}
-		return r;
 	},
 
 

@@ -1,28 +1,58 @@
 Ext.define('NextThought.view.content.reader.Content',{
+	alias: 'reader.content',
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
 
-	constructor: function(){
-		this.loadedResources = {};
-		this.meta = {};
-		this.css = {};
+	BODY_TEMPLATE: Ext.DomHelper.createTemplate({ id:'NTIContent', html:'{0}'}).compile(),
 
-		this.addEvents('markupenabled-action','set-content');
+	getBubbleTarget: function(){return this.reader; },
 
-		this.registerDelegationTarget({
-			getIcon:'getCurrentIcon',
-			getTitle: 'getCurrentTitle'
+	constructor: function(config){
+		Ext.apply(this,config);
+		var me = this,
+			reader = me.reader;
+
+		me.loadedResources = {};
+		me.meta = {};
+		me.css = {};
+
+		me.mixins.observable.constructor.apply(me);
+
+		reader.on('destroy','destroy',
+			reader.relayEvents(me,[
+				'navigate-to-href',
+				'markupenabled-action',
+				'set-content',
+				'image-loaded',
+				'clear-annotations',
+				'load-annotations'
+			]));
+
+		me.mon(reader,'content-updated-with','insertRelatedLinks',me);
+
+
+		ObjectUtils.defineAttributes(reader,{
+			basePath: {
+				getter: function(){return me.basePath;}
+			}
 		});
 
-		return this;
+		reader.getContentRoot = Ext.bind(this.getContentRoot,this);
 	},
 
 
-	getCurrentIcon: function(){
-		return (this.meta || {}).icon;
+	getDocumentElement: function(){
+		return this.reader.getDocumentElement();
 	},
 
 
-	getCurrentTitle: function(){
-		return (this.meta || {}).title;
+	getContentRoot: function(){
+		if(!this.contentRootElement){
+			this.contentRootElement = this.getDocumentElement().querySelector('#NTIContent > .page-contents');
+		}
+
+		return this.contentRootElement;
 	},
 
 
@@ -39,9 +69,10 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	insertRelatedLinks: function(position,doc){
-		var tpl = this.relatedTemplate, last = null,
-			related = LocationProvider.getRelated(),c = 0,
+	insertRelatedLinks: function(body,doc){
+		var position = body.query('#NTIContent .chapter.title')[0],
+			tpl = this.relatedTemplate, last = null,
+			related = this.reader.getRelated(),c = 0,
 			container = {
 				tag: 'div',
 				cls:'injected-related-items',
@@ -143,13 +174,17 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
-			c = me.parseHTML(resp);
+			c = me.parseHTML(resp),
+			doc = me.getDocumentElement(),
+			reader = me.reader,
+			ntiid;
 
-		me.clearAnnotations();
+		me.fireEvent('clear-annotations');
 
-		me.updateContent('<div id="NTIContent">'+c+'</div>');
+		reader.getIframe().update(this.BODY_TEMPLATE.apply([c]));
+
 		me.listenForImageLoads();
-		me.scrollTo(0, false);
+		reader.getScroll().to(0, false);
 
 
 		//apply any styles that may be on the content's body, to the NTIContent div:
@@ -157,10 +192,12 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
+		ntiid = reader.getLocation().NTIID;
 
-		me.fireEvent('set-content', me, me.getDocumentElement(), assessmentItems, resp.request.options.pageInfo);
+		doc.getElementById('NTIContent').setAttribute('data-ntiid', ntiid);
 
-		me.loadContentAnnotations(LocationProvider.currentNTIID, me.resolveContainers());
+		me.fireEvent('set-content', reader, doc, assessmentItems, resp.request.options.pageInfo);
+		me.fireEvent('load-annotations',ntiid, me.resolveContainers());
 
 		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
 		//Ext.defer(Ext.callback,500,Ext,[finish,null,[me]]);
@@ -259,7 +296,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	navigateToFragment: function(frag){
-		this.scrollToTarget(frag);
+		this.reader.getScroll().toTarget(frag);
 	},
 
 
@@ -282,16 +319,16 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		if(/^slide/i.test(target)){
 			this.pauseAllVideos();
-			SlideDeck.open(el, LocationProvider.currentNTIID);
+			SlideDeck.open(el, this.reader);
 			return false;
 		}
 
 		if(/^zoom$/i.test(target)){
 			Ext.defer(function(){
-				m.getIframe().win.blur();
+				m.reader.getIframe().get().win.blur();
 				window.focus();
 			},100);
-			ImageZoomView.zoomImage(el, this.getAnnotationOffsets());
+			ImageZoomView.zoomImage(el, this.reader);
 			return false;
 		}
 
@@ -301,7 +338,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 
-		if(m.fireEvent('navigate-to-href', m, r)){
+		if(m.fireEvent('navigate-to-href', m.reader, r)){
 			//Someone handled us so stop the event
 			return false;
 		}

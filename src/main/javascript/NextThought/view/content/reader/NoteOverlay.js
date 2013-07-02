@@ -1,207 +1,220 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
-
+	alias: 'reader.noteOverlay',
+	mixins: { observable: 'Ext.util.Observable' },
 	requires: [
 		'NextThought.util.Line',
-		'NextThought.view.annotations.note.Templates',
-		'NextThought.view.whiteboard.Window',
 		'NextThought.view.whiteboard.Utils',
 		'NextThought.editor.Editor'
 	],
 
-	openWhiteboards: {},
 
-	constructor: function () {
-		var data = this.noteOverlayData;
-
-		this.on({
+	constructor: function (config) {
+		Ext.apply(this,config);
+		this.mixins.observable.constructor.call(this);
+		this.mon(this.reader,{
 			scope: this,
-			'content-updated': function () {
-				this.noteOverlayClearRestrictedRanges();
-			},
-			'afterRender': this.insertNoteOverlay,
-
-			'markupenabled-action': this.contentDefinedAnnotationAction
+			destroy:'destroy',
+			afterRender: 'insertOverlay',
+			'content-updated': 'onContentUpdate',
+			'markupenabled-action': 'contentDefinedAnnotationAction',
+			'sync-height': 'syncHeight',
+			'create-note': 'noteHere'
 		});
 
 
-		//make sure we clear ranges when filter is changed
-		FilterManager.registerFilterListener(this, this.noteOverlayClearRestrictedRanges, this);
-
-		return this;
+		this.data = {
+			/** @private */
+			visibilityCls: 'note-overlay-hidden'
+		};
 	},
 
 
-	/**
-	 * This property block serves as a namespace shell so that functions needed by this mixin do not clobber other
-	 * mixin/subclass methods.
-	 */
-	noteOverlayData: {
-		/** @private */
-		visibilityCls: 'note-overlay-hidden'
-	},
+	insertOverlay: function () {
 
-
-	/**
-	 * This is invoked by an event in the context of the mixed in class... so this function exists in this helper
-	 * object but it's "this" will be of the owner object.
-	 * @private
-	 */
-	insertNoteOverlay: function () {
 		var me = this,
-			data = me.noteOverlayData,
-			box, txt,
+			box,
 			container = {
 				cls: 'note-gutter',
 				style: {
-					height: me.getHeight()
+					height: me.reader.getIframe().get().getHeight()
 				},
 				cn: [
-					{
-						cls: 'note-here-control-box',
-						cn: [
-							{
-								cls: 'entry',
-								cn: [
-									{
-										cls: 'clear', html: '&nbsp;'
-									},
-									{
-										cls: 'advanced', html: '&nbsp;', 'data-qtip': 'Advanced'
-									},
-									{
-										tag: 'textarea',
-										cls: 'note-input'
-									},
-									{
-										cls: 'shadow-text', html: 'Write a note...', unselectable: 'on'
-									}
-								]
-							},
-							{
-								cls: 'bottom-border',
-								html: '&nbsp;'
-							},
-							{ cls:'editorBox'}
-						]
-					}
+					{ cls: 'note-here-control-box' }
 				]
 			};
 
-		container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(), container, true);
-		data.box = box = container.down('.note-here-control-box');
-		data.textarea = txt = box.down('textarea');
-		data.lineEntry = box.down('.entry');
-		data.main = box.down('.main');
-		data.footer = box.down('.footer');
-		data.editorBox = box.down('.editorBox');
-		box.down('.shadow-text').unselectable();
+		me.container = container = Ext.DomHelper.insertAfter(me.reader.getInsertionPoint().first(), container, true);
 
-		//Firefox likes to allow you to edit the toolbar, fix that
-		if (data.main) {
-			data.main.unselectable();
-		}
-		if (data.footer) {
-			data.footer.unselectable();
-		}
-		if(data.editorBox){
-			data.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: data.editorBox, enableShareControls: true, enableTitle: true });
-		}
-
+		box = me.data.box = container.down('.note-here-control-box');
+		box.visibilityCls = this.data.visibilityCls;
+		box.setVisibilityMode(Ext.Element.ASCLASS);
 		box.hide();
 
-		(new Ext.CompositeElement(box.query('.action.save'))).on('click', me.noteOverlayEditorSave, me);
-		(new Ext.CompositeElement(box.query('.entry .advanced'))).on('click', me.noteOverlayActivateRichEditor, me);
-		(new Ext.CompositeElement(box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
+		me.mon(box,{
+			click: 'openEditor',
+			mouseover:'overNib',
+			mousemove:'overNib',
+			mouseout:'offNib',
+			scope:me
+		});
 
-		function onContentUpdate() {
-			//when content is updated, we need to remove the editor because it will contain a bad range.
-			this.noteOverlayDeactivateEditor();
+		me.reader.getScroll().registerHandler(me.onScroll, me);
+
+		me.reader.on('destroy','destroy',
+			me.mon(container.parent(), {
+				scope: me,
+				destroyable: true,
+				mousemove: 'mouseOver',
+				mouseover: 'mouseOver',
+				mouseout: 'mouseOut'
+			}));
+
+		me.reader.on({
+		//no buffer
+			'iframe-mouseout':'mouseOut',
+			'iframe-mousedown':'suspendResolver',
+			'iframe-mouseup':'resumeResolver',
+			scope:me
+		});
+		me.reader.on({
+			scope: me,
+			'iframe-mousemove':'mouseOver',
+			buffer: 400
+		});
+	},
+
+
+	getAnnotationOffsets: function(){
+		return this.reader.getAnnotationOffsets();
+	},
+
+
+	onScroll: function (e, dom) {},
+
+
+	onContentUpdate: function() {},
+
+
+	editorCleanup: function(){
+		delete this.suspendMoveEvents;
+		delete this.editor;
+	},
+
+
+	openEditor: function(){
+		var tabPanel, lineInfo = this.data.box.activeLineInfo;
+
+		if( this.editor && !this.editor.isDestroyed ){
+			return false;
 		}
 
-		function onResize() {
-		}
+		this.mouseOut();
+		this.suspendMoveEvents = true;
 
-		me.on({
-			scope: me,
-			destroy: function () {
-				container.remove();
-			},
-			resize: onResize,
-			'sync-height': function (h) {
-				container.setHeight(h);
-			},
-			'content-updated': onContentUpdate
-		});
-
-		me.mon(data.editor.el.down('.content'), {
-			scope: me,
-			keypress: me.noteOverlayEditorKeyPressed,
-			keydown: me.noteOverlayEditorKeyDown,
-			keyup: me.noteOverlayEditorKeyUp
-		});
-
-		me.mon(txt, {
-			scope: me,
-			keypress: me.noteOverlayEditorKeyPressed,
-			keydown: me.noteOverlayEditorKeyDown,
-			keyup: me.noteOverlayEditorKeyUp,
-			blur: me.noteOverlayDeactivedOnBlur
-		});
-
-		me.registerScrollHandler(function (e, dom) {
-			var me = this,
-				t = data.box.dom.getBoundingClientRect().top;
-
-			if (t < 0 || t > me.getHeight()) {
-				me.noteOverlayDeactivedOnBlur(e, dom);
+		this.editor = Ext.widget('nti-editor', {
+			lineInfo: lineInfo || {},
+			ownerCt: this.reader,
+			floating: true,
+			renderTo: Ext.get('library'),
+			enableShareControls: true,
+			enableTitle: true,
+			listeners:{
+				'deactivated-editor':'destroy',
+				grew: function(){
+					var h = this.getHeight(),
+						b = h + this.getY(),
+						v = Ext.Element.getViewportHeight();
+					if(b>v){
+						this.setY(v-h);
+					}
+				}
 			}
-		}, me);
+		}).addCls('active in-gutter');
 
-		me.mon(container, {
-			scope: me,
-			mousemove: me.noteOverlayMouseOver,
-			mouseover: me.noteOverlayMouseOver,
-			mouseout: me.noteOverlayMouseOut,
-			//removed for mathcounts rollout to avoid apparent confusion. for now.
-			//click: me.noteOverlayActivateEditor
-			click: me.noteOverlayActivateRichEditor
-		});
+		this.editor.alignTo(this.data.box,'t-t?');
+		this.editor.rtlSetLocalX(0);
 
-		data.editor.on('cancel','noteOverlayEditorCancel',me);
-	},
-
-
-	noteOverlayXYAllowed: function (x, y) {
-		var o = this.noteOverlayData, z = Math.round(y),
-			r = o.restrictedRanges, v = z + this.getAnnotationOffsets().scrollTop;
-
-		//test to see if line is occupied'
-		return !(r && r[v] === true) && v > 120;
-	},
-
-
-	noteOverlayClearRestrictedRanges: function () {
-		delete this.noteOverlayData.restrictedRanges;
-	},
-
-
-	noteOverlayAddRestrictedRange: function (rect) {
-		if (!rect) {
+		tabPanel = this.editor.getEl().prev('.x-panel-notes-and-discussion');
+		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
+		if(!tabPanel){
+			console.error('No tab panel!');
 			return;
 		}
 
-		var o = this.noteOverlayData,
-			y = rect ? Math.round(rect.bottom) + 10 : 0,
-			l = rect ? Math.round(rect.top) - 10 : 0;
-		o.restrictedRanges = o.restrictedRanges || [];
-		for (y; y >= l && y >= 0; y--) {
-			o.restrictedRanges[y] = true;
+		tabPanel.mask();
+
+		this.editor.on('destroy','unmask',tabPanel);
+		this.editor.on('save','saveNewNote',this);
+		this.editor.on('destroy','editorCleanup',this);
+		this.editor.mon(tabPanel,'resize','syncEditorWidth',this);
+
+		this.syncEditorWidth(tabPanel,tabPanel.getWidth());
+		return true;
+	},
+
+
+	syncEditorWidth: function(c,w){
+		var edEl = this.editor.getEl(),
+			minW,
+			nW = w + 65;
+		if(!edEl){return;}
+
+		minW = parseInt(edEl.getStyle('min-width'),10);
+		this.editor.setWidth( minW > nW ? minW : nW );
+		this.editor.fireEvent('grew');
+	},
+
+
+	syncHeight: function (h) {
+		var c = this.container;
+		if( c ){
+			c.setHeight(h);
+		}
+	},
+
+
+	saveNewNote: function(editor, r, v){
+		var me = this,
+			note = v.body,
+			title = v.title,
+			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo),
+			style = editor.lineInfo.style || 'suppressed',
+			rangeInfo;
+
+		function afterSave(success) {
+			editor.unmask();
+			if (success) {
+				editor.deactivate();
+			}
+		}
+
+		editor.mask('Saving...');
+		try {
+			rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
+			me.reader.fireEvent('save-new-note',
+					title, note, rangeInfo.range,
+					rangeInfo.container || me.reader.getLocation().NTIID,
+					sharing, style, afterSave);
+		}
+		catch (error) {
+			console.error('Error saving note - ' + Globals.getError(error));
+			alert('There was an error saving your note.');
+			editor.unmask();
+		}
+		return false;
+	},
+
+
+	noteHere: function(range, rect, style){
+		this.data.box.activeLineInfo = Ext.apply(this.lineInfoForRangeAndRect(range,rect),{style: style});
+		if(!this.openEditor()){
+			alert('You already have a note in progress.');
 		}
 	},
 
 
 	contentDefinedAnnotationAction: function (dom, action) {
-		var o = this.noteOverlayData,
+		var o = this.data,
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
 			id = d ? d.id : null,
 			img = d && d.is('img') ? d.dom : null,
@@ -214,59 +227,46 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offsets = this.getAnnotationOffsets();
 			o.lastLine = this.lineInfoForRangeAndRect(range, img.getBoundingClientRect(), offsets);
 
-			this.noteOverlayPositionInputBox();
-			this.noteOverlayActivateRichEditor();
-			WBUtils.createFromImage(img, function (data) {
-				o.editor.reset();
-				o.editor.setValue('');
-				o.editor.addWhiteboard(data);
-				o.editor.focus(true);
+			alert('TODO:\nFinish');
+
+//			WBUtils.createFromImage(img, function (data) {
+//				o.editor.reset();
+//				o.editor.setValue('');
+//				o.editor.addWhiteboard(data);
+//				o.editor.focus(true);
+//			});
+		}
+	},
+
+
+	getAnnotationGutter: function(){
+		if(!this.annotationGutter){
+			this.annotationGutter = this.reader.el.down('.annotation-gutter');
+		}
+
+		return this.annotationGutter;
+	},
+
+
+	isOccupied: function(y){
+		var g = this.getAnnotationGutter(),
+			r = g && g.select('[data-line]'),
+			o = false;
+
+		if(r){
+			r.each(function(e){
+				var i = parseInt(e.getAttribute('data-line'),10);
+				o = i===y || Math.abs(i-y) < 5;
+				return !o;
 			});
 		}
-	},
 
-
-	noteOverlayRegisterAddNoteNib: function (applicableRange, nib, containerId) {
-		nib.on('click', this.noteOverlayAddNoteNibClicked, this, {applicableRange: applicableRange, containerId: containerId});
-		//should keep track of this and cleanup if its detected to not be in the dom any more.
-	},
-
-
-	noteOverlayAddNoteNibClicked: function (e, dom, options) {
-		var o = this.noteOverlayData,
-			w = e.getTarget('.widgetContainer', null, true),
-			r = options.applicableRange,
-			c = options.containerId,
-			rect;
-			//offsets;
-		if (w) {
-			e.stopEvent();
-//			w.hide();
-			
-			r = Anchors.toDomRange(r, this.getDocumentElement(), ReaderPanel.get().getCleanContent(), c);
-			//offsets = this.getAnnotationOffsets();
-			if(w.dom){
-				rect = w.dom.getBoundingClientRect();
-				//The line is aligned at the bottom of the nib so fake it out here
-				rect.top = rect.bottom;
-
-			}
-			//Note we don't pass offsets here
-			o.lastLine = this.lineInfoForRangeAndRect(r, rect);
-
-			Ext.get(o.box).setY(0);
-
-			//this.noteOverlayTrackLineAtEvent(e);
-			this.noteOverlayPositionInputBox();
-			this.noteOverlayActivateRichEditor();
-			this.noteOverlayScrollEditorIntoView();
-			return false;
-		}
+		return o;
 	},
 
 
 	copyClientRect: function (rect) {
-		var mutatedRect = {
+		return {
 			top: rect.top,
 			bottom: rect.bottom,
 			height: rect.height,
@@ -274,8 +274,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			right: rect.right,
 			width: rect.width
 		};
-
-		return mutatedRect;
 	},
 
 
@@ -293,54 +291,45 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	lineInfoForY: function (y) {
-		var overlay = this.overlayedPanelAtY(y),
-			result = null, offsets, mutatedRect;
+		var overlay = this.reader.getComponentOverlay().overlayedPanelAtY(y),
+			result = null,
+			top;
+
 		//If there is an overlay at that position it gets
 		//the decision as to if there is a line there.  After
 		if (overlay) {
 			if (overlay.findLine) {
 				//TODO normalize y into overlay space and send it along
-				result = overlay.findLine();
+				result = overlay.findLine(y);
+
+				//Ok this was from the iframe so we need to adjust it slightly
+				if (result && result.rect) {
+					//use the negative of the top to adjust y coordinates for this overlayed panel. (its coordinate
+					// space the same as the gutter's so all our conversions need to be undone.)
+					top = -this.getAnnotationOffsets().top;
+					result.rect = this.adjustContentRectForTop(result.rect,top);
+				}
 			}
 			return result;
 		}
-		result = LineUtils.findLine(y, this.getDocumentElement());
+		result = LineUtils.findLine(y, this.reader.getDocumentElement());
 
 		//Ok this was from the iframe so we need to adjust it slightly
 		if (result && result.rect) {
-			offsets = this.getAnnotationOffsets();
-			mutatedRect = this.adjustContentRectForTop(result.rect, offsets.top);
-			result.rect = mutatedRect;
+			result.rect = this.copyClientRect(result.rect);
 		}
 		return result;
 	},
 
 
-	openNoteEditorForRange: function (range, rect, style) {
-		var offsets = this.getAnnotationOffsets(),
-			lastLine = this.lineInfoForRangeAndRect(range, rect, offsets);
-
-		lastLine.style = style;
-
-		Ext.apply(this.noteOverlayData, {
-			lastLine: lastLine,
-			suspendMoveEvents: true
-		});
-
-		this.noteOverlayPositionInputBox();
-		this.noteOverlayActivateRichEditor();
-		this.noteOverlayScrollEditorIntoView();
-	},
-
-
-	noteOverlayTrackLineAtEvent: function (e) {
-		var o = this.noteOverlayData,
+	trackLineAtEvent: function (e) {
+		var o = this.data,
 			offsets = this.getAnnotationOffsets(),
 			y = e.getY() - offsets.top, lineInfo,
 			box = Ext.get(o.box);
 
 		try {
-			clearTimeout(o.mouseLeaveTimeout);
+			clearTimeout(this.mouseLeaveTimeout);
 			lineInfo = this.lineInfoForY(y);
 
 			if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50) {
@@ -353,189 +342,110 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				o.lastLine = lineInfo;
 				e.stopEvent();
 
-				// We need to check if the new line doesn't overlap with a current lineInfo (which contains notes)
-				if (!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top])) {
+				if (!lineInfo.range) {
 					box.hide();
-					this.noteOverlayMouseOut();
-					return;
+					this.mouseOut();
+					return false;
 				}
-
-				this.noteOverlayPositionInputBox();
+				this.positionInputBox(lineInfo);
 				return true;
 			}
 		} catch (er) {
 			console.warn(Globals.getError(er));
 		}
+		return false;
 	},
 
 
-	noteOverlayPositionInputBox: function () {
-		var o = this.noteOverlayData,
+	positionInputBox: function (lineInfo) {
+		var o = this.data,
+			offset = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
-			oldY = box.getY(),
-			newY = 0;
+			oldY = box.getY() - offset.top,
+			newY = 0, occ,
+			activeY = oldY,
+			line = lineInfo || o.lastLine;
 
-		if (o.lastLine && o.lastLine.rect) {
-			newY = Math.round(o.lastLine.rect.top);
+		if (line && line.rect) {
+			newY = Math.round(line.rect.top);
 		}
-
-		//if(newY < 110){ newY = 110; }
 
 		//check for minute scroll changes to prevent jitter:
-		if (Math.abs(oldY - newY) > 4) {
-			box.setY(newY);
+		if (oldY < 0 || Math.abs(oldY - newY) > 4) {
+			box.setStyle({top:newY+'px'});
+			activeY = newY;
 		}
-		//show thew box:
-		box.hide().show();
+
+		occ = this.isOccupied(activeY);
+
+		box[occ? 'addCls':'removeCls']('occupied');
+		//show the box:
+
+		box.activeLineInfo = line;
+		box.show();
 	},
 
 
-	noteOverlayMouseOver: function (evt) {
-		var o = this.noteOverlayData, xy = evt.getXY().slice();
-
-		if (o.suspendMoveEvents) {
-			return;
-		}
-
-		if (!this.noteOverlayXYAllowed.apply(this, xy)) {
-			Ext.get(o.box).hide();
-			return;
-		}
-
-		return this.noteOverlayTrackLineAtEvent(evt);
+	offNib: function(e){
+		e.stopEvent();
+		this.mouseOut(e);
 	},
 
 
-	noteOverlayMouseOut: function () {
-		var o = this.noteOverlayData,
-			sel = this.getDocumentElement().parentWindow.getSelection();
-		if (o.suspendMoveEvents) {
+	overNib: function(e){
+		e.stopEvent();
+		clearTimeout(this.mouseLeaveTimeout);
+		return false;
+	},
+
+
+	suspendResolver: function(){
+		this.suspendMoveEvents = true;
+	},
+
+
+	resumeResolver: function(){
+		delete this.suspendMoveEvents;
+	},
+
+
+	mouseOver: function (evt) {
+		if (this.suspendMoveEvents) {
+			return false;
+		}
+
+		return this.trackLineAtEvent(evt);
+	},
+
+
+	mouseOut: function (e) {
+
+		if (this.suspendMoveEvents) {
 			return;
 		}
+
+		var o = this.data,
+			sel = this.reader.getDocumentElement().parentWindow.getSelection();
 		if (sel) {
 			sel.removeAllRanges();
 		}
-		clearTimeout(o.mouseLeaveTimeout);
-		o.mouseLeaveTimeout = setTimeout(function () {
+
+		clearTimeout(this.mouseLeaveTimeout);
+		this.mouseLeaveTimeout = setTimeout(function () {
 			delete o.lastLine;
+			delete o.box.activeLineInfo;
 			o.box.hide();
 		}, 100);
 	},
 
 
-	noteOverlayScrollEditorIntoView: function () {
-		var o = this.noteOverlayData, e = o.textarea;
-		if (!o.suspendMoveEvents) {
-			return;
-		}
-
-		if (o.richEditorActive) {
-			e = o.editor.el;
-		}
-
-		e.scrollIntoView(this.body);
-	},
-
-
-	noteOverlayActivateRichEditor: function (evt) {
-		if (evt) {
-			evt.stopEvent();
-			if (!this.noteOverlayMouseOver(evt)) {
-				return;
-			}
-		}
-
-		var o = this.noteOverlayData,
-			t = o.textarea.dom;
-
-		o.suspendMoveEvents = true;
-		if (o.richEditorActive) {
-			return;
-		}
-
-		o.richEditorActive = true;
-		o.editor.updatePrefs();
-		o.editor.activate();
-		o.editor.setValue(t.value, true, true);
-		t.value = '';
-		setTimeout(function () {
-			o.editor.focus();
-		}, 250);
-
-
-		if (!o.editor.isVisible()) {
-			this.noteOverlayDeactivateEditor();
-			return;
-		}
-
-		this.noteOverlayScrollEditorIntoView();
-	},
-
-
-	noteOverlayActivateEditor: function (evt) {
-		evt.stopEvent();
-		if (!this.noteOverlayMouseOver(evt)) {
-			return;
-		}
-		var o = this.noteOverlayData;
-		if (o.suspendMoveEvents) {
-			return;
-		}
-		if (!o.lastLine || !o.lastLine.range || o.lastLine.range.collapsed) {
-			return;
-		}
-
-		o.suspendMoveEvents = true;
-		o.lineEntry.addCls('active');
-		o.textarea.focus().dom.value = "";
-		this.noteOverlayScrollEditorIntoView();
-		return false;//stop the click in IE
-	},
-
-
-	noteOverlayDeactivateEditor: function () {
-		var o = this.noteOverlayData;
-		delete o.suspendMoveEvents;
-		delete o.richEditorActive;
-		o.textarea.dom.value = "";
-		o.lineEntry.removeCls('active');
-		o.editor.deactivate();
-		o.editor.reset();
-		o.editor.clearError();
-		this.noteOverlayMouseOut();
-	},
-
-
-	noteOverlayDeactivedOnBlur: function (e, el) {
-		e.stopEvent();
-		var me = this;
-		if (!this.noteOverlayData.suspendMoveEvents) {
-			return;
-		}
-
-		clearTimeout(me.blurTimer);
-		me.blurTimer = setTimeout(function () {
-			if (!me.noteOverlayData.richEditorActive) {
-				me.noteOverlayDeactivateEditor();
-			}
-		}, 150);
-	},
-
-
-	noteOverlayEditorCancel: function (e) {
-		if(e){e.stopEvent();}
-		this.noteOverlayDeactivateEditor();
-		return false;
-	},
-
-
-	rangeForLastLineInfo: function (lastLine, style) {
-		var ancestor = lastLine.range.commonAncestorContainer ? Ext.fly(lastLine.range.commonAncestorContainer) : null,
+	rangeForLineInfo: function (line, style) {
+		var ancestor = line.range.commonAncestorContainer ? Ext.fly(line.range.commonAncestorContainer) : null,
 			containerSelector = 'object[data-nti-container]',
 			container, c;
 
 		if (style !== 'suppressed') {
-			return {range: lastLine.range, container: null};
+			return {range: line.range, container: null};
 		}
 
 		//OK we are style suppressed
@@ -544,102 +454,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (container && c) {
 			return {range: null, container: c};
 		}
-		return {range: lastLine.range, container: null};
-	},
-
-
-	noteOverlayEditorSave: function (e) {
-		e.stopEvent();
-		if(e.getTarget('.disabled')){ return; }
-
-		function callback(success, record) {
-			o.editor.unmask();
-			if (success) {
-				me.noteOverlayDeactivateEditor();
-			}
-		}
-
-
-		var me = this,
-			p = (LocationProvider.getPreferences() || {}).sharing || {},
-			o = me.noteOverlayData,
-			note = o.textarea.dom.value,
-			style = o.lastLine.style || 'suppressed',
-			v, sharing = p.sharedWith || [], re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			rangeInfo,
-			title = '';
-
-		if (o.richEditorActive) {
-			v = o.editor.getValue();
-			note = v.body;
-			title = v.title;
-			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
-		}
-
-		//Avoid saving empty notes or just returns.
-		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
-			console.warn("Note's body is required");
-			this.markError(o.editor.el.down('.content'), 'Please enter text below');
-			return false;
-		}
-
-		o.editor.mask('Saving...');
-		try {
-			rangeInfo = this.rangeForLastLineInfo(o.lastLine, style);
-			me.fireEvent('save-new-note', title, note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
-		}
-		catch (error) {
-			console.error('Error saving note - ' + Globals.getError(error));
-			alert('There was an error saving your note.');
-			o.editor.unmask();
-			//lets not remove, at least give user change to recover their text
-			//me.noteOverlayDeactivateEditor();
-		}
-		return false;
-	},
-
-
-	markError: function(el,message){ el.addCls('error-tip').set({'data-error-tip':message}); },
-
-
-	noteOverlayEditorKeyDown: function (event) {
-		var k = event.getKey();
-		if (k === event.ESC) {
-			this.noteOverlayDeactivateEditor();
-		}
-		else if (k === event.ENTER && !this.noteOverlayData.richEditorActive) {
-			event.stopEvent();
-			this.noteOverlayEditorSave(event);
-		}
-		return this.noteOverlayEditorKeyPressed(event);
-	},
-
-
-	noteOverlayEditorKeyPressed: function (event) {
-		event.stopPropagation();
-		//control+enter & command+enter submit?
-
-		//document.queryCommandState('bold')
-
-
-		var o = this.noteOverlayData;
-		delete o.editor.lastRange;
-		if (o.richEditorActive) {
-			//o.editor.repaint();
-			this.noteOverlayScrollEditorIntoView();
-		}
-	},
-
-
-	noteOverlayEditorKeyUp: function () {
-		var o = this.noteOverlayData,
-			t = o.textarea,
-			h = t.dom.scrollHeight;
-
-		//TODO: Use a better way to detect the note has gotten 'complex' and or too long for the line-box.
-		if (h > t.getHeight()) {
-			//transition to rich editor
-			this.noteOverlayActivateRichEditor();
-		}
+		return {range: line.range, container: null};
 	}
+
 });

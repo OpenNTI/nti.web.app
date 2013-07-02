@@ -1,34 +1,3 @@
-
-@mixin meta-row {
-	.meta {
-		@include menu-label-text-treatment;
-		font-size: 12px;
-		font-weight: bold;
-		white-space: nowrap;
-		.name {
-			color: $primary-blue;
-			cursor: pointer;
-		}
-
-		.shared-to{
-			display: inline-block;
-			margin-left: 15px;
-			width: 350px;
-			overflow: hidden;
-			@include ellipse;
-		}
-
-		.controls {
-			position: absolute;
-			right: 0;
-			top: 0;
-			//background: blue;
-
-			@include like-and-favorite;
-		}
-	}
-}
-
 @mixin meta-row-window {
 	.meta {
 		color: $secondary-grey;
@@ -46,10 +15,6 @@
 			overflow: hidden;
 			@include ellipse;
 			width: 340px;
-		}
-
-		.shared-to{
-			font-weight: 400;
 		}
 
 		.controls {
@@ -218,405 +183,36 @@
 
 	position: absolute;
 	top: 0;
-	left: 0;
-	right: 700px !important;
-	width: auto;
+	right: 0 !important;
+	left: 735px;
 	//border-right: 1px solid #eee;
 
 	.note-here-control-box {
-		//$t: top 0s, opacity 0.1s;
-		//@include animate(fadeIn,0.1s);
-		//@include experimental(transition, $t);
+		@include animate(fadeIn,0.1s);
+		@include icon('add-note',$position: absolute, $top:-4px);
+		&:hover::after { @include sprite($icons,'add-note_active'); }
 
-	//	cursor: text;
-		position: absolute;
-		left: 0;
-		right: 45px !important;
-		height: 26px;
-		border: none;
-		margin: 0 5px 0 15px;
-		padding: 0;
 		display: block;
+		left: 0;
+		height: 26px;
+		width: 29px;
+		border: none;
+		padding: 0;
+		margin: 0;
+		z-index: 10;
+		cursor: pointer;
+
+		&.occupied {
+			left: -35px;
+		}
 
 		&.note-overlay-hidden{
 			display: none;
-			//opacity: 0;
-		}
-
-		.bottom-border {
-			overflow: hidden;
-			background: none;
-			border: 1px solid #e4e4e4;
-			border-top-width: 0;
-			margin: 0;
-			padding: 0;
-			height: 4px;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 33px;
-		}
-
-		.editor {
-			.main{
-				.toolbar{
-					.action.share{
-						@include ellipse;
-						max-width: 50%;
-						overflow: hidden;
-						padding: 0px 18px 0 18px;
-					}
-				}
-				.content{
-					margin-left: 7px;
-					padding-right: 13px;
-
-					&.show-placeholder[data-placeholder]::after{
-						font-style: italic !important;
-					}
-				}
-			}
-			//instance specific style
-			background: #ffffff;
-			border: 1px solid #dcdcdc;
-			position: absolute;
-			z-index: 999;
-
-			top: -30px;
-			left: -10px;
-			right: 0;
-			min-height: 210px;
-		}
-
-		.entry {
-			&.active {
-				//textarea,
-				.clear, .advanced {
-					display: block;
-				}
-				.shadow-text{
-					display: none;
-				}
-			}
-
-			textarea {
-				display: none;
-				font: 14px $font;
-				color: $secondary-grey;
-				border: none;
-				background: transparent;
-				padding: 0 0 0 4px;
-				margin: 0;
-				resize: none;
-				bottom: -2px;
-				right: 55px;
-				position: absolute;
-				left: 0;
-				height: 22px;
-
-				.x-ie9 & {
-					width: 80%;
-					overflow: hidden;
-				}
-			}
-
-			.clear {
-				display: none;
-				z-index: 10;
-				cursor: pointer;
-				position: absolute;
-				bottom: 4px; right: 38px;
-
-				background: $icons no-repeat;
-				@include sprite($icons,'clear_line',$dimensions: true);
-				opacity: 0.6;
-				&:hover{
-					opacity: 1;
-				}
-			}
-			.advanced {
-				display: none;
-				z-index: 10;
-				cursor: pointer;
-				position: absolute;
-				top: 0; right: 0;
-				background: $icons no-repeat;
-				@include sprite($icons,'comment_small_active',$dimensions: true);
-			}
-
-			.shadow-text {
-				pointer-events: none;
-				color: #c4c4c4;
-				position: absolute;
-				padding: 0 4px;
-				font: italic 14px $font;
-				margin: 0;
-				bottom: 4px;
-			}
 		}
 
 	}
 }
 
-
-
-.note-gutter-widget {
-
-	.reply-count {
-		position: relative;
-		float: right;
-		padding-left: 18px;
-		margin-left: 19px;
-		top: -7px;
-		right: -3px;
-		font-size: 11px;
-		font-weight: semibold;
-		font-style: italic;
-		color: #787878;
-
-		&::after{
-			content: ' ';
-			position: absolute;
-			top: 0; left: 0;
-			overflow: hidden;
-			background: $icons no-repeat;
-			@include sprite($icons,'comment_indicator',$dimensions: true);
-		}
-  	}
-
-	&.add-note {
-		height: 30px;
-		width: 34px;
-		position: relative;
-		opacity: 0.8;
-
-		&::after {
-			content: ' ';
-			position: absolute;
-			top: 2px; left: 3px;
-			background: $icons no-repeat;
-			@include sprite($icons,'add-note',$dimensions: true);
-		}
-
-		&:hover {
-			opacity: 1;
-		}
-		&:active::after,
-		&:focus::after {
-			@include sprite($icons,'add-note_active',$dimensions: true);
-		}
-
-		&.expanded{
-			z-index: 1;
-			float: right;
-			&:hover {
-				box-shadow: inset 0 0 0 1px #ECECEC;
-				background: #F6F6F6;
-				border-radius: 3px !important;
-			}
-		}
-		&.collapsed{
-			box-shadow: inset 0 0 0 1px #ececec;
-			background: #f6f6f6;
-			&:hover {
-				background: #fdfdfd;
-			}
-		}
-	}
-
-	&.multi {
-		background-size: cover;
-		overflow: visible;
-		position: relative;
-		height: 30px;
-		width: 30px;
-
-		&.show-under {
-			.bubble {
-				bottom: auto;
-				top: 46px;
-			}
-
-			&::after {
-				@include sprite($elements,'bubble-tip-top',$dimensions: true);
-				top: auto;
-				bottom: -18px;
-			}
-		}
-
-		.bubble {
-			display: none;
-			position: absolute;
-			overflow: hidden;
-			bottom: 46px;
-			left: -175px;
-			max-width: 430px;
-			min-width: 250px;
-			max-height: 250px;
-			padding: 15px 13px 20px 13px;
-			background: #ffffff;
-			border: 1px solid #dcdcdc;
-			border-radius: 3px;
-			box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
-
-			@include meta-row;
-			.meta {
-				font-size: 10px;
-			  	margin-right: 50px;
-			}
-
-			.text {
-				overflow: hidden;
-				@include ellipse;
-				text-align: left;
-
-				@include text-pre-wrap;
-
-				color: $secondary-grey;
-				font: normal 14px/22px $font;
-			}
-		}
-
-		&::after {
-			content: ' ';
-			overflow: hidden;
-			background: $elements;
-			@include sprite($elements,'bubble-tip',$dimensions: true);
-			display: none;
-			position: absolute;
-			top: -18px;
-			left: -14px;
-			z-index: 10000;
-		}
-
-
-		&:hover {
-			box-shadow:
-			  inset 0 0 0 2px #ffffff,
-			  0 2px 5px 2px rgba(0,0,0,.3);
-			z-index: 10;
-			.bubble {
-				display: block;
-			}
-			&::after {
-				display: block;
-			}
-		}
-	}
-
-	&.single {
-		position: absolute;
-		right: 30px;
-		left: 0;
-		text-align: left;
-		direction: ltr;
-
-		//default turn these off
-		.seperator, .shared-to, .time, .respond, .controls, .reply-count{
-			display: none;
-		}
-
-		.name {
-			@include menu-label-text-treatment;
-			color: $primary-blue;
-		}
-
-		.text {
-			&::before{
-				content: '\201C';
-			}
-			&::after{
-				content: '\201D';
-			}
-			font: italic 12px $font;
-			color: $primary-grey;
-			overflow: hidden;
-			white-space: nowrap;
-
-			.x-ie9 &{
-				min-height: 18px;
-			}
-		}
-		.mask {
-			@include fade-mask();
-		}
-
-		.respond .more ol {
-			z-index: 9999 !important;
-		}
-
-		&.menu-open,
-		&:hover {
-
-			.narrow-gutter &{
-				right: inherit;
-			}
-
-			border: 1px solid #dcdcdc;
-			box-shadow: inset 0 1px 0 0 #ffffff,
-				1px 1px 2px 0 rgba(0, 0, 0, 0.1);
-			background: #f8f8f8;
-			padding: 10px;
-			margin: -11px 0 0 -11px;
-			min-width: 280px;
-			max-heigt: 400px;
-			z-index: 999;
-
-		  	@include meta-row-window;
-			.mask {
-				display: none;
-			}
-
-		  	.controls, .reply-count {
-				display: block;
-			}
-
-			.text {
-				overflow: hidden;
-				@include ellipse;
-				font-style: normal;
-				@include text-pre-wrap;
-			}
-
-		  	.meta{
-
-				.name {
-					font-weight: 300;
-					font-size: 17px;
-				}
-
-				.time {
-		  		    display: inline;
-				  	font-size: 12px;
-				}
-
-			  }
-
-			@include meta-row;
-
-			.respond {
-				position: relative;
-				display: block;
-		  		//overflow: hidden;
-		  		margin: 12px 0 0 0;
-
-		  		@include reply-options;
-				.reply-options {
-					opacity: 1
-				};
-		  	}
-		}
-
-		&.deleted{
-			.time{display: none !important;}
-			.respond {
-				.reply-options{
-					display: none !important;
-				}
-			}
-		}
-	}
-}
 
 .note-container {
 	.note {
@@ -808,179 +404,30 @@
 }
 
 .note-window {
-	@extend .nti-window;
-	@include reset-window-border-radius(3px);
-	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
-				0 0 0 110px transparent;
+	background: #fff;
+	box-shadow: 3px 0px 9px -3px rgba(0,0,0,0.3);
 
-	&,.nti-window-header{
-		background-color: #ffffff;
-	}
+	.title-bar{
+		position: relative;
+		height: 44px;
+		border-bottom: 1px solid #ededed;
 
-	.nti-window-header{
-		cursor: default;
-		.header-body {
-			span {
+		.close-note-viewer{
+			@include icon('note-window-x', $side: after, $position: absolute);
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+			width: 24px;
+			height: 24px;
+
+			&:hover{
+				@include icon('note-window-x_hover', $side: after, $position: absolute);
 			}
 		}
 	}
 
 	.note {
 		box-shadow: inset 0 1px 0 0 #ffffff;
-	}
-
-	.filter-bar {
-		margin: 0 10px;
-	}
-
-	.x-btn-note-filter {
-		&, .x-btn-inner {
-			color: #9a9a9a;
-			font-size: 12px;
-			font-weight: bold;
-			text-transform: uppercase;
-			line-height: 25px;
-		}
-
-		border-radius: 90px;
-		border: 2px solid #ffffff;
-		border-width: 2px !important;
-		box-shadow: 0 2px 0 0 rgba(255,255,255,0.5);
-		padding: 0 16px;
-		margin: 0 5px;
-
-
-		&.x-pressed {
-			border-color: #85b746;
-			&, .x-btn-inner {
-				color: #85b746;
-			}
-		}
-	}
-
-
-	.carousel {
-		position: relative;//just in case ExtJS doesn't set this absolute... so that our inner coordinates are relative to here.
-		background: url(../images/elements/carousel.png) -365px 0px no-repeat;
-		border: 1px solid #c5c5c5;
-		border-bottom-width: 0;
-		border-left-width: 0;
-		border-right-width: 0;
-		//when the main/reply view is hovered/editor-active it should set the same classes onto the carousel
-
-		.carousel-body {
-			margin: 0 50px;
-			text-align: center;
-			overflow: hidden;
-			white-space: nowrap;
-
-		  	.no-search-found{
-				margin: 20px 15px;
-				color: #9A9A9A;
-				font-size: 16px;
-				font-family: inherit;
-			}
-		}
-
-		.carousel-item{
-			cursor: pointer;
-			display: inline-block;
-			position: relative;
-			text-align: center;
-
-			img {
-				display: block;
-				width: 32px; height: 32px;
-				background-size: cover;
-				margin: 11px 2px 4px 2px;
-			}
-			.count {
-				opacity: 0.5;
-				color: #646464;
-				font-size: 10px;
-				line-height: 12px;
-				font-style: italic;
-				font-weight: bold;
-
-				span:empty {
-					display: inline-block;
-					height: 10px;
-				}
-
-			}
-
-			&.selected {
-				top: -1px;
-				img {
-					width: 38px; height: 37px;
-					margin-top: 4px;
-					box-shadow: inset 0 0 0 2px white,
-								0 2px 1px 1px rgba(0,0,0,0.2);
-				}
-				.count {
-					opacity: 1; font-size: 12px;
-					span {
-						position: relative;
-						padding-left: 18px;
-						&:empty{
-							height: 12px;
-						}
-
-						&::after {
-							content: ' ';
-							overflow: hidden;
-							position: absolute;
-							top: 0; left: 0;
-							background: $icons no-repeat;
-							@include sprite($icons,'comment_indicator',$dimensions: true);
-						}
-					}
-
-				}
-			}
-		}
-
-		.slide-nav {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			width: 50px;
-
-			.slide {
-				background: $icons no-repeat;
-				position: absolute;
-				top: 22px;
-				left: 15px;
-				opacity: 0.4;
-				cursor: pointer;
-				&:hover {
-					opacity: 0.7;
-				}
-			}
-
-			.disabled {
-				&,&:hover{ opacity: 0.10; cursor: default; }
-			}
-
-			&.forward{
-				right: 0;
-			}
-			&.backward{
-				left: 0;
-			}
-
-			.forward{
-				@include sprite($icons,'next',$dimensions: true);
- 			}
-			.backward{
-				@include sprite($icons,'prev',$dimensions: true);
- 			}
-		}
-
-	}
-
-	.main-view {
-		background: #FBFBFB;
 	}
 
 	.note.main-view {
@@ -997,8 +444,9 @@
 			float: left;
 			width: 60px;
 			height: 60px;
-			border-radius: 5px;
+			border-radius: 6px;
 			background-size: cover;
+			margin-top: 10px;
 		}
 
 		.meta {
@@ -1012,51 +460,42 @@
 			}
 
 			.title{
-				font-size: 24px;
-				color: $primary-blue;
+				height: 50px;
+				font-size: 40px;
+				color: $primary-grey;
 				font-family: 'Open Sans Condensed', $font;
-			}
-
-			.name {
-				display: inline-block;
-				font-size: 14px;
 			}
 
 			.name-wrap{
 				position: relative;
+				font-size: 14px;
 
-				.add-to-contacts {
-					cursor: pointer;
-					vertical-align: top;
-					color: #757474;
-					line-height: 26px;
-					font-weight: 700;
-					display: inline-block;
-					width: auto;
-					white-space: nowrap;
-					text-align: center;
-					padding: 0 12px 0 26px;
-					margin-left: 10px;
-					margin-top: 4px;
-					border: 1px solid #D0D0D0;
-					border-radius: 4px;
-					opacity: .75;
-					position: relative;
-					top: -10px;
-					left: 0;
-
-					&:hover {
-						opacity: 1;
-					}
-					&::after{
-						background: transparent $icons no-repeat;
-						@include sprite($icons,'add-contact',$dimensions: true);
-						position: absolute;
-						content: ' ';
-						top: 5px;
-						left: 5px;
-					}
+				&::before{
+					content: 'Posted by ';
 				}
+
+				.name{
+					color: $primary-blue;
+					margin-right: 5px;
+					display: inline-block;
+					max-width: 200px;
+					overflow: hidden;
+					@include ellipse;
+				}
+
+				.shared-to{
+					color: $primary-blue;
+				}
+
+				.time{
+					&::after{
+						text-decoration: none !important;
+						position: static;
+						content: '\00B7';
+						padding: 0 0.5em;
+						background: none;
+					}
+				}				
 			}
 
 		}
@@ -1152,11 +591,14 @@
 
 	}
 
+
 	.note-container.child {background: #ffffff;}
 
+
 	.note-footer, .note-content-container.scrollbody {
-		background: #FBFBFB;
+		//background: #FBFBFB;
 	}
+
 	.note-footer {
 		position: relative;
 		height: 200px;
@@ -1171,41 +613,9 @@
 }
 
 
-.nav-helper {
-	position: absolute;
-	.circle {
-	  	z-index: 99999;
-		position: absolute;
-		background: $icons no-repeat;
-		width: 77px;
-		height: 77px;
-		margin-top: 125px;
-		opacity: 0.4;
-		cursor: pointer;
-		&:hover {
-			opacity: 0.63;
-		}
-		&.disabled {
-			&,&:hover{ opacity: 0.10; cursor: default; }
-		}
-
-		&.forward{
-			right: -100px;
-			margin-left: 75px;
-			@include sprite($icons,'circle-next',$dimensions: true);
-		}
-		&.backward{
-			left: 0;
-			margin-left: -100px;
-			@include sprite($icons,'circle-prev',$dimensions: true);
-		}
-	}
-}
-
-
-.contact-popout.note-add-to-contacts-popout::after{
-	background: $elements no-repeat;
-	@include sprite($elements,'add_contact_pointer_left',$dimensions: true);
-	top: 26px;
-	left: -12px;
-}
+//.contact-popout.note-add-to-contacts-popout::after{
+//	background: $elements no-repeat;
+//	@include sprite($elements,'add_contact_pointer_left',$dimensions: true);
+//	top: 26px;
+//	left: -12px;
+//}

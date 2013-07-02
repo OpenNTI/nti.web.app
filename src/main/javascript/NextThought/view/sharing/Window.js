@@ -58,7 +58,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			}
 		];
 
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 

@@ -1,77 +1,83 @@
 Ext.define('NextThought.view.content.Pager',{
-	extend: 'Ext.container.Container',
+	extend: 'Ext.Component',
 	alias: 'widget.content-pager',
 	ui: 'content-pager',
-//TODO: refactor this into a simple component. A custom container w/ two buttons is overkill.
 
-	requires: [
-		'NextThought.providers.Location'
-	],
-
-	layout: {
-		type: 'hbox',
-		pack: 'end'
-	},
-
-	defaults: {
-		xtype: 'button',
-		iconCls: 'page',
-		scale: 'large',
-		ui: 'content-button',
-		handler: function(btn){ if(btn && btn.ntiid){ LocationProvider.setLocation(btn.ntiid); } }
-	},
-
-	items: [
+	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'prev' },
 		{ cls: 'next' }
-	],
+	]),
+
+	renderSelectors: {
+		nextEl: '.next',
+		prevEl: '.prev'
+	},
+
+
+	listeners: {
+		click: {
+			element: 'el',
+			fn: 'click'
+		}
+	},
+
 
 	hideControls: function(){ this.el.hide(); },
 	showControls: function(){ this.el.show(); },
 
-	initComponent: function(){
-		this.callParent(arguments);
-	},
 
 	updateState: function(ntiid){
-		var info = LocationProvider.getNavigationInfo(ntiid),
-			nextBtn = this.down('[cls=next]'),
-			prevBtn = this.down('[cls=prev]'),
-			nextTitle = LocationProvider.findTitle(info.next, null),
-			prevTitle = LocationProvider.findTitle(info.previous, null);
+		var info = ntiid && ContentUtils.getNavigationInfo(ntiid),
+			next = this.nextEl,
+			prev = this.prevEl,
+			nextTitle = info && ContentUtils.findTitle(info.next, null),
+			prevTitle = info && ContentUtils.findTitle(info.previous, null);
 
 
-		if(nextTitle){
-			nextBtn.btnEl.dom.setAttribute('title', 'Go forward to "' + nextTitle +'"');
-		}
-		else{
-			nextBtn.btnEl.dom.removeAttribute('title');
-		}
+		next.set({title: nextTitle? ('Go forward to "' + nextTitle +'"'):undefined});
+		prev.set({title: prevTitle? ('Go back to "' + prevTitle + '"'): undefined});
 
-		if(prevTitle){
-			prevBtn.btnEl.dom.setAttribute('title', 'Go back to "' + prevTitle + '"' );
-		}
-		else{
-			prevBtn.btnEl.dom.removeAttribute('title');
-		}
-
-		if(info.next) {
-			nextBtn.enable();
-			nextBtn.ntiid = info.next;
-		}
-		else{
-			nextBtn.disable();
-			delete nextBtn.ntiid;
-		}
+		this[info && info.next?'enableButton':'disableButton'](next);
+		next.set({'data-ntiid': (info && info.next) || undefined});
 
 
-		if(info.previous){
-			prevBtn.enable();
-			prevBtn.ntiid = info.previous;
+		this[info && info.previous?'enableButton':'disableButton'](prev);
+		prev.set({'data-ntiid': (info && info.previous) || undefined});
+	},
+
+
+	goPrev: function(){
+		this.go('prev');
+	},
+
+	goNext: function(){
+		this.go('next');
+	},
+
+
+	go: function(name){
+		var e = this[name+'El'];
+		if(!e.is('[data-ntiid]')){e = null;}
+		this.click({getTarget:function(){return e;}});
+	},
+
+
+	click: function(e){
+
+		var btn = e.getTarget('[data-ntiid]'),
+			ntiid = btn && btn.getAttribute('data-ntiid');
+
+		if(ntiid){
+			this.fireEvent('set-location',ntiid);
 		}
-		else{
-			prevBtn.disable();
-			delete prevBtn.ntiid;
+		else {
+			console.debug('no ntiid');
 		}
-	}
+	},
+
+
+	enableButton: function(el){},
+
+
+	disableButton: function(el){}
 });

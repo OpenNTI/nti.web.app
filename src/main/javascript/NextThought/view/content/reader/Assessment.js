@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.content.reader.Assessment', {
-
+	alias: 'reader.assessment',
 	requires: [
 		'NextThought.view.assessment.Scoreboard',
 		'NextThought.view.assessment.Question',
@@ -10,24 +10,26 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		'NextThought.view.content.reader.ComponentOverlay'
 	],
 
-	constructor: function(){
-		this.on('set-content','injectAssessments',this);
+	constructor: function(config){
+		Ext.apply(this,config);
+		this.reader.on('set-content','injectAssessments',this);
 	},
 
 	makeAssessmentQuestion: function(q,set){
-		var contentElement = this.getContentElement('object','data-ntiid', q.getId());
+		var contentElement = this.getContentElement('object','data-ntiid', q.getId()),
+			o = this.reader.getComponentOverlay();
 
 		//CUTZ override getVideos to pull things from the dom for now.
 		//The model expects the videos in the assessment json which doesn't
 		//sound like its going to happen anytime soon.
 		q.getVideos = Ext.bind(DomUtils.getVideosFromDom,DomUtils,[contentElement]);
 
-		this.registerOverlayedPanel(q.getId(), Ext.widget('assessment-question',{
-			reader: this,
+		o.registerOverlayedPanel(q.getId(), Ext.widget('assessment-question',{
+			reader: this.reader,
 			question: q,
-			renderTo: this.componentOverlayEl,
+			renderTo: o.componentOverlayEl,
 			questionSet: set || null,
-			tabIndexTracker: this.overlayedPanelTabIndexer,
+			tabIndexTracker: o.tabIndexer,
 			contentElement: contentElement
 		}));
 	},
@@ -35,18 +37,20 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 	makeAssessmentQuiz: function(set){
 		var me = this,
-			c = me.componentOverlayEl,
+			o = me.reader.getComponentOverlay(),
+			c = o.componentOverlayEl,
+			r = me.reader,
 			guid = guidGenerator(),
 			questions = set.get('questions');
 
-		me.registerOverlayedPanel(guid+'scoreboard', Ext.widget('assessment-scoreboard',{
-			reader: me, renderTo: c, questionSet: set,
-			tabIndexTracker: this.overlayedPanelTabIndexer
+		o.registerOverlayedPanel(guid+'scoreboard', Ext.widget('assessment-scoreboard',{
+			reader: r, renderTo: c, questionSet: set,
+			tabIndexTracker: o.tabIndexer
 		}));
 
-		me.registerOverlayedPanel(guid+'submission', Ext.widget('assessment-quiz-submission',{
-			reader: me, renderTo: c, questionSet: set,
-			tabIndexTracker: this.overlayedPanelTabIndexer
+		o.registerOverlayedPanel(guid+'submission', Ext.widget('assessment-quiz-submission',{
+			reader: r, renderTo: c, questionSet: set,
+			tabIndexTracker: o.tabIndexer
 		}));
 
 		Ext.each(questions,function(q){me.makeAssessmentQuestion(q,set);});
@@ -59,17 +63,15 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			slice = Array.prototype.slice,
 			questionObjs;
 
-		me.clearOverlayedPanels();
-
 		//nothing to do.
 		if(!items || items.length < 1){
 			return;
 		}
 
 		new Ext.dom.CompositeElement(
-			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
+			doc.querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
-		questionObjs = slice.call(this.getDocumentElement().querySelectorAll('object[type$=naquestion][data-ntiid]'));
+		questionObjs = slice.call(doc.querySelectorAll('object[type$=naquestion][data-ntiid]'));
 
 		Ext.Array.sort(items, function(ar,br){
 			var a = questionObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), questionObjs)),
@@ -125,4 +127,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		return result;
 	}
 
+}, function(){
+	var c = NextThought.view.content.reader.ComponentOverlay.prototype;
+	Ext.copyTo(this.prototype,c,['getRelatedElement','getContentElement']);
 });

@@ -20,8 +20,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.highlightCls += ' shared-with-me';
 		}
 		this.allowShare = false;
-
-		return this;
 	},
 
 
@@ -178,7 +176,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
             boundingTop,
             boundingLeft,
             boundingHeight,
-            width = me.content ? me.content.getWidth() : 680,
+            width = me.content ? me.content.getWidth() : 700,
             topOffset = 10,
             leftOffset = 5,
             fakeRectRange,
@@ -424,7 +422,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	onClick: function(e){
 		e.stopEvent();
 		var p = this.callParent(arguments);
-		this.ownerCmp.clearSelection();
+		this.ownerCmp.getAnnotations().clearSelection();
 		return p;
 	},
 

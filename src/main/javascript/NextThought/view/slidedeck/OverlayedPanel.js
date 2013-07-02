@@ -50,7 +50,8 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 			items:[{
 				xtype: 'content-slidedeck',
 				data: data,
-				contentElement: dom
+				contentElement: dom,
+				reader: reader
 			}]
 		});
 

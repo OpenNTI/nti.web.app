@@ -44,7 +44,6 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		this.setEnd(end);
 		this.setAncestor(ancestor);
 		this.Class = 'DomContentRangeDescription';
-		return this;
 	},
 
 	isDomContentPointer: function(o) {

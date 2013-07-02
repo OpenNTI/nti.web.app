@@ -10,6 +10,8 @@ Ext.define('NextThought.view.account.Identity',{
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
+	profileLinkCard: false,
+
 	cls: 'identity',
 
 	renderTpl: Ext.DomHelper.markup([

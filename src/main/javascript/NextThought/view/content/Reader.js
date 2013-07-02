@@ -2,31 +2,24 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Base',
 	alias: 'widget.reader-panel',
 	requires: [
-		'NextThought.providers.Location',
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
-		'NextThought.view.ResourceNotFound'
+		'NextThought.view.ResourceNotFound',
+		'NextThought.view.content.reader.Content',
+		'NextThought.view.content.reader.IFrame',
+		'NextThought.view.content.reader.Location',
+		'NextThought.view.content.reader.Scroll',
+		'NextThought.view.content.reader.ResourceManagement',
+		'NextThought.view.content.reader.ComponentOverlay',
+		'NextThought.view.content.reader.Assessment',
+		'NextThought.view.content.reader.Annotations',
+		'NextThought.view.content.reader.NoteOverlay'
 	],
-
-	mixins:{
-		//TODO: make annotations a sub-component, See the resource management mixin for a pattern.
-		annotations: 'NextThought.view.content.reader.Annotations',
-		//TODO: make the overlay manager a sub-component, See the resource management mixin for a pattern.
-		componentOverlay: 'NextThought.view.content.reader.ComponentOverlay',
-		//TODO: make the assessment stuff sub-component, See the resource management mixin for a pattern.
-		assessments: 'NextThought.view.content.reader.Assessment',
-		//TODO: make the note-overlay a sub-component, See the resource management mixin for a pattern.
-		noteOverlay: 'NextThought.view.content.reader.NoteOverlay',
-
-
-		content: 'NextThought.view.content.reader.Content',
-		iframe: 'NextThought.view.content.reader.IFrame',
-		scroll: 'NextThought.view.content.reader.Scroll',
-		resourceManagement: 'NextThought.view.content.reader.ResourceManagement'
-	},
 
 	cls: 'x-reader-pane',
 
+	overflowX: 'hidden',
+	overflowY: 'scroll',
 	ui: 'reader',
 	layout: 'auto',
 	prefix: 'default',
@@ -34,17 +27,76 @@ Ext.define('NextThought.view.content.Reader', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.addEvents('finished-restore','content-updated');
-		this.enableBubble('finished-restore');
+		this.enableBubble(
+			'finished-restore'
+		);
 
-		this.mixins.content.constructor.apply(this,arguments);
-		this.mixins.iframe.constructor.apply(this,arguments);
-		this.mixins.scroll.constructor.apply(this,arguments);
-		this.mixins.annotations.constructor.apply(this,arguments);
-		this.mixins.componentOverlay.constructor.apply(this,arguments);
-		this.mixins.noteOverlay.constructor.apply(this,arguments);
-		this.mixins.assessments.constructor.apply(this,arguments);
-		this.mixins.resourceManagement.constructor.apply(this,arguments);
+		this.buildModule('annotations');
+		this.buildModule('locationProvider');
+		this.buildModule('iframe');
+		this.buildModule('scroll');
+		this.buildModule('content',{reader:this});
+		this.buildModule('componentOverlay');
+		this.buildModule('assessment');
+		this.buildModule('resourceManager');
+		this.buildModule('noteOverlay');
+
+		this.mon(this.getAnnotations(),'rendered','fireReady',this);
+		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
+
+		this.on({
+			scope: this,
+			//beforeNavigate: 'onBeforeNavigate',
+			beginNavigate: 'onBeginNavigate',
+            navigateAbort: 'onNavigationAborted',
+			navigateComplete: 'onNavigateComplete'
+		});
+	},
+
+
+	bootstrap: function(loc){
+		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
+		// reader is rendered.
+		var l = loc || this.getLocation().NTIID;
+		this.setLocation(l,null,true);
+	},
+
+
+	buildModule: function(name,config,relay){
+		var m = Ext.createByAlias('reader.'+name,Ext.apply({reader:this},config)),
+			getterName = 'get'+Ext.String.capitalize(name);
+
+		if(this[getterName]){
+			console.error('Module getter name taken: '+getterName);
+			return;
+		}
+
+
+		this[getterName] = function(){return m;};
+	},
+
+
+	primeReadyEvent: function(){
+		this.readyEventPrimed = true;
+	},
+
+
+	needsWaitingOnReadyEvent: function(){
+		return Boolean(this.readyEventPrimed);
+	},
+
+
+	fireReady: function(){
+		if(this.navigating){
+			console.warn('fired ready while navigating');
+			return;
+		}
+
+		if(!this.readyEventPrimed){return;}
+
+		delete this.readyEventPrimed;
+		console.warn('should-be-ready fired');
+		this.fireEvent('should-be-ready',this);
 	},
 
 
@@ -54,18 +106,9 @@ Ext.define('NextThought.view.content.Reader', {
 			el = this.getTargetEl();
 
 		this.splash = DH.doInsert(el,{cls:'no-content-splash initial'},true,'beforeEnd');
-		this.scrollShadow = DH.doInsert(this.getEl(),{cls:'scroll-shadow'},true,'beforeEnd');
-
-		this.mon(el,'scroll', 'scrollShadowMonitor', this);
-
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		this.notFoundCmp = NextThought.view.ResourceNotFound.create({renderTo: this.splash, hideLibrary: true});
-	},
-
-	scrollShadowMonitor: function(e,dom){
-		var el = this.scrollShadow;
-		el[dom.scrollTop?'addCls':'removeCls']('active');
 	},
 
 
@@ -75,74 +118,29 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	setSplash: function(){
-		this.scrollTo(0, false);
-		this.updateContent(false);
+		this.getScroll().to(0, false);
+		this.getIframe().update(false);
 		this.meta = {};
 		this.splash.dom.parentNode.appendChild(this.splash.dom);
 		this.splash.show();
 	},
 
 
-	convertRectToScreen: function(r) {
-		var iframe = this.getIframe(),
-			result;
-
-		result = {
-			top: r.top + iframe.getTop(),
-			left: r.left + iframe.getLeft(),
-			right: r.right + iframe.getLeft(),
-			bottom: r.bottom + iframe.getTop(),
-			height: r.height,
-			width: r.width
-		};
-		return result;
-	},
-
-
-	getContentRoot: function(){
-		if(!this.contentRootElement){
-			this.contentRootElement = this.getDocumentElement()
-					.querySelector('#NTIContent > .page-contents');
-		}
-
-		return this.contentRootElement;
-	},
-
-	//TODO Not all the things this object returns appear used.
-	//As a further optimization we can stop calculating them
-	//or create getters for the properties that handle lazy
-	//calculations.
 	calculateNecessaryAnnotationOffsets: function(){
 		var cache =  this.annotationOffsetsCache || {},
-			statics = cache.statics || {},
 			windowSizeStatics = cache.windowSizeStatics || {},
 			scrollStatics = cache.scrollStatics || {},
-			f = this.getIframe(),
 			currentWindowSize = Ext.dom.Element.getViewSize(),
-			locationStatics = cache.locationStatics || {},
-			defaultContentPadding = 0, e, l,
+			f = this.getIframe().get(),
 			scrollPosition = this.body.getScroll().top;
-
-		//Right now certain thins are static to the reader.
-		//currently those props are width
-		if(!statics.hasOwnProperty('width')){
-			statics.width = f.getWidth();
-		}
-		cache.statics = statics;
 
 		//Other things are based on the windowSize. left and height
 		if(   !windowSizeStatics.hasOwnProperty('windowSize')
 		   || !windowSizeStatics.windowSize.width
-		   || !windowSizeStatics.windowSize.height
-		   || windowSizeStatics.windowSize.width !== currentWindowSize.width
-		   || windowSizeStatics.windowSize.height !== currentWindowSize.height){
+		   || windowSizeStatics.windowSize.width !== currentWindowSize.width){
+
 			windowSizeStatics.windowSize = currentWindowSize;
 			windowSizeStatics.left = f.getX();
-			windowSizeStatics.height = f.getHeight();
-			if(!l){
-				l = windowSizeStatics.left - this.getEl().getX();
-			}
-			windowSizeStatics.gutter = l;
 		}
 
 		cache.windowSizeStatics = windowSizeStatics;
@@ -152,61 +150,37 @@ Ext.define('NextThought.view.content.Reader', {
 		   || !scrollStatics.top
 		   || scrollStatics.lastScroll !== scrollPosition){
 			scrollStatics.lastScroll = scrollPosition;
-			scrollStatics.top = f.getTop();
+			scrollStatics.top = f.getY();
 		}
 
 		cache.scrollStatics = scrollStatics;
-
-		//The last set is static based on location.  We handle
-		//purging this cache in onNavigate so we just need to set it
-		//here if it doesn't exist. contentLeftPadding
-		if(!locationStatics.hasOwnProperty('contentLeftPadding')){
-			try {
-				if(!e){
-					e = Ext.get(this.getContentRoot());
-				}
-				if(e){
-					locationStatics.contentLeftPadding = e.getMargin('l') + e.getPadding('l');
-				}
-			}
-			catch(er){
-				console.error(Globals.getError(er));
-			}
-		}
-		cache.locationStatics = locationStatics;
 
 		//Incase the cache object didn't exist before set it back
 		this.annotationOffsetsCache = cache;
 
 		return {
 			top: scrollStatics.top, //static by scroll position
-			left: windowSizeStatics.left, //static based on window size.  left < gutter
-			height: windowSizeStatics.height, //static based on window size.
-			width: statics.width,//static value
-			gutter: windowSizeStatics.gutter, //static based on window size
-			contentLeftPadding: locationStatics.contentLeftPadding || defaultContentPadding, //static based on page
+			left: windowSizeStatics.left, //static based on window size
 			scrollTop: scrollPosition //dynamic
 		};
 	},
 
+
 	getAnnotationOffsets: function(){
-		var r = this.calculateNecessaryAnnotationOffsets();
-	//	console.log(JSON.stringify(r));
-		return r;
+		return this.calculateNecessaryAnnotationOffsets();
 	},
 
 
 	onContextMenuHandler: function(){
-		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
+		var o = this.getAnnotations();
+		return o.onContextMenuHandler.apply(o,arguments);
 	},
+
 
 	onBeginNavigate: function(ntiid) {
 
 	},
 
-	restore: function(){
-		console.debug('Restring?',arguments);
-	},
 
     onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
@@ -223,7 +197,7 @@ Ext.define('NextThought.view.content.Reader', {
 			me.primeReadyEvent();
 			me.splash.hide();
 			me.splash.removeCls('initial');
-			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
+			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 
 		if(this.annotationOffsetsCache){
@@ -290,10 +264,11 @@ Ext.define('NextThought.view.content.Reader', {
 					Ext.String.format('reader-panel[prefix={0}]',prefix||'default'))[0];
 		}
 	}
+
 }, function(){
 	window.ReaderPanel = this;
 
-	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
+//	ContentAPIRegistry.register('NTIHintNavigation',this.setLocation,this);
 	ContentAPIRegistry.register('togglehint',function(e) {
 		e = Ext.EventObject.setEvent(e||event);
 		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");

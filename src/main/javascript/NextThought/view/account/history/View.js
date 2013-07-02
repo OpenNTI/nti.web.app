@@ -53,7 +53,7 @@ Ext.define('NextThought.view.account.history.View',{
 			this.items[1].items[0].items[1].xtype = 'user-history-favorite-panel';
 		}
 
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 

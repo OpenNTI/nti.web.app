@@ -1,6 +1,10 @@
 Ext.define('NextThought.util.Content', {
 	singleton: true,
 
+	requires:['NextThought.Library'],
+
+	timers: {},
+	cache: {},
 
 	spider: function (ids, finish, parse, pageFailure) {
 		if (!Ext.isArray(ids)) {
@@ -233,7 +237,243 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		return null;
+	},
+
+
+	findTitle: function(containerId, defaultTitle){
+		var l = this.find(containerId);
+		if(defaultTitle === undefined){
+			defaultTitle = "Not found";
+		}
+		return l ? l.location.getAttribute('label') : defaultTitle;
+	},
+
+
+	find: function(containerId) {
+		var result = null;
+		Library.each(function(o){
+			result = Library.resolve( Library.getToc( o ), o, containerId);
+			return !result;
+		});
+
+		return result;
+	},
+
+
+	getLineage: function(ntiid, justLabels){
+		var leaf = this.find(ntiid||this.currentNTIID) || {},
+			node = leaf.location,
+			lineage = [],
+			id;
+
+		while(node){
+
+			id = node.getAttribute? node.getAttribute(justLabels?'label':'ntiid') : null;
+			if( id ) {
+				lineage.push(id);
+			}
+			else if( node.nodeType !== Node.DOCUMENT_NODE ){
+				console.warn( node, 'no id');
+			}
+			node = node.parentNode;
+		}
+
+		return lineage;
+	},
+
+
+	getSortIndexes: function(ntiid){
+        function findByFunction(r){return r.get('NTIID') ===id;}
+
+		var noLeaf = {},
+			leaf = this.find(ntiid||this.currentNTIID) || noLeaf,
+			node = leaf.location,
+			indexes = [],
+			id, i, cn, j, t, levelnum;
+
+		if(leaf === noLeaf){ return [0, Infinity];}
+
+		while(node){
+			id = node.getAttribute? node.getAttribute('ntiid') : null;
+			levelnum = node.getAttribute ? node.getAttribute('levelnum') : null;
+			if( id ) {
+				if( levelnum === "0" ){
+					j = Library.getStore().findBy(findByFunction);
+					if(j < 0){ j = Infinity ;}
+				}
+				else if( node.parentNode ){
+					cn = node.parentNode.childNodes;
+					i=0; j=0;
+					while( i<cn.length){
+						t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
+						if(t===id){
+							break;
+						}
+						if(t){ j++; }
+						i++;
+					}
+				}
+				else{
+					console.log('Unable to find postion of ', id,' in parents children');
+					j = Infinity;
+				}
+
+				indexes.push(j);
+			}
+			node = node.parentNode;
+		}
+
+		return indexes;
+	},
+
+
+	getRoot: function(ntiid){
+		var bookId = this.getLineage(ntiid||this.currentNTIID).last(),
+			title = Library.getTitle( bookId );
+
+		return title? title.get('root') : null;
+	},
+
+
+	getLocation : function(id){
+		function getAttribute(elements, attr){
+			var i=0, v;
+			for (i; i < elements.length; i++) {
+				v = elements[i];
+				try{
+					v = v ? v.getAttribute(attr) : null;
+					if (v) {return v;}
+				}
+				catch(e){
+					console.warn('element did not have getAttribute');
+				}
+			}
+			return null;
+		}
+
+		var me = this, r, l, d, i = id;
+		if(!i){
+			return {};
+		}
+
+		r = me.cache[i];
+		if( !r ) {
+			r = me.find(i);
+
+			//If still not r, it's not locational content...
+			if (!r) {return null;}
+
+			d = r.toc.documentElement;
+			l = r.location;
+			r = Ext.apply({
+					NTIID: i,
+					icon: getAttribute([l,d],'icon'),
+					root: getAttribute([l,d],'base'),
+					title: getAttribute([l,d],'title'),
+					label: getAttribute([l,d],'label'),
+					thumbnail: getAttribute([l,d],'thumbnail'),
+					getIcon: function(fromBook){
+						var iconPath = fromBook? this.title.get('icon') : this.icon;
+						if(iconPath.substr(0,this.root.length) !== this.root ){
+							iconPath = this.root+this.icon;
+						}
+						return this.baseURI+iconPath;
+					},
+					getPathLabel: function(ntiid){
+						var lineage = me.getLineage(ntiid||this.NTIID,true),
+							sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
+							base = lineage.last(),
+							leaf = lineage.first();
+						return lineage.length === 1 ? base : base + sep + leaf;
+					}
+				},r);
+		}
+
+		me.cache[i] = r;
+
+		clearTimeout(me.timers[i]);
+		me.timers[i] = setTimeout(function(){delete me.cache[i];},15000);
+
+		return r;
+	},
+
+
+
+	getNavigationInfo: function(ntiid) {
+		if(!ntiid){
+			Ext.Error.raise('No NTIID');
+		}
+
+		var loc = this.find(ntiid),
+			info = {},
+			topicOrTocRegex = /topic|toc/i,
+			slice = Array.prototype.slice;
+
+		//This function returns true if the node submitted matches a regex looking for topic or toc
+		function isTopicOrToc(node){
+			if (!node){return false;}
+			var result = false,
+				topicOrToc = topicOrTocRegex.test(node.tagName),
+				href = (node.getAttribute) ? node.getAttribute('href') : null;
+
+			//decide if this is a navigate-able thing, it most be a topic or toc, it must
+			//have an href, and that href must NOT have a anchor
+			if (topicOrToc && href && href.lastIndexOf('#') === -1) {
+				result = true;
+			}
+
+			return result;
+		}
+
+		//returns the NTIID attribute of the node, or null if it's not there.
+		function getRef(node){
+			if(!node || !node.getAttribute){
+				return null;
+			}
+
+			return node.getAttribute('ntiid') || null;
+		}
+
+		function child(n,first){
+			var v,
+				topics = n && n.childNodes ? slice.call(n.childNodes) : [];
+
+			if(first){
+				topics.reverse();
+			}
+
+			while(topics.length && !isTopicOrToc(topics.peek())){topics.pop();}
+			if(n && topics.length){
+				v = topics.peek();
+				return first? v : child(v,first);
+			}
+			return first? null : n;
+		}
+
+		//returns either the previous or next actionable node (topic or toc), or null if
+		//we never find anything, meaning we are at one end or the other...
+		function sibling(node,previous){
+			if (!node){return null;}
+
+			var siblingMethod = previous ? 'previousSibling' : 'nextSibling', //figure direction
+				siblingNode = node[siblingMethod]; //execute directional sibling method
+
+			//If the sibling is TOC or topic, we are done here...
+			return (isTopicOrToc(siblingNode))
+					? siblingNode
+					//If not, recurse in the same direction
+					: sibling(node[siblingMethod],previous);
+		}
+
+		loc = loc ? loc.location : null;
+		if(loc) {
+			info.previous = getRef(child(sibling(loc,true)) || loc.parentNode);
+			info.next = getRef(child(loc,true) || sibling(loc,false) || sibling(loc.parentNode,false));
+		}
+
+		return info;
 	}
+
 }, function () {
 	window.ContentUtils = this;
 });

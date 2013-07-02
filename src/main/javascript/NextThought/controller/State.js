@@ -11,14 +11,13 @@ Ext.define('NextThought.controller.State', {
 	requires: [
 		'Ext.state.Manager',
 		'Ext.state.LocalStorageProvider',
-		'Ext.state.CookieProvider',
-		'NextThought.providers.Location'
+		'Ext.state.CookieProvider'
 	],
 
 	hasPushState: Boolean(history.pushState),
 
 	constructor: function () {
-		var m = this.callParent(arguments);
+		this.callParent(arguments);
 
 		this.addEvents('restore');
 		this.on('restore', this.restoreState, this);
@@ -32,26 +31,22 @@ Ext.define('NextThought.controller.State', {
 		this.generateFragmentMap = {
 			'forums': Ext.bind(this.generateForumsFragment, this)
 		};
-
-		return m;
 	},
 
 	init: function () {
-		var me = this;
-
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		me.currentState = {};
+		this.currentState = {};
 
-		me.isHangout = this.getController('Google').isHangout();
+		this.isHangout = this.getController('Google').isHangout();
 
-		me.listen({
+		this.listen({
 			component: {
-				'main-views': {
-					'activate-view': me.track
+				'main-views view-container': {
+					'activate-view': 'track'
 				},
 				'*': {
-					'change-hash': me.changeHash
+					'change-hash': 'changeHash'
 				}
 			}
 		});
@@ -321,7 +316,7 @@ Ext.define('NextThought.controller.State', {
 			result = this.fragmentInterpreterMap[root](fragment, query);
 		}
 		else if (ntiid) {
-			result = {active: 'library', location: ntiid};
+			result = {active: 'library', library:{location: ntiid}};
 		}
 
 		console.debug('Fragment interpreted:', result);
@@ -347,10 +342,11 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	track: function (viewId) {
+	track: function (viewId, silent) {
 		var fragment, state = {active: viewId},
 			path = location.pathname;
-		if (this.currentState.active !== viewId && NextThought.isInitialized) {
+
+		if (!silent && this.currentState.active !== viewId && NextThought.isInitialized) {
 
 			try {
 				fragment = Ext.getCmp(viewId).getFragment();
@@ -364,7 +360,7 @@ Ext.define('NextThought.controller.State', {
 				path = location.toString();
 			}
 
-			window.history.pushState(state, document.title, path);
+			history.pushState(state, document.title, path);
 		}
 	},
 
@@ -396,7 +392,7 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		c = this.getController('Navigation').setView(stateObject.active);
+		c = this.fireEvent('show-view',stateObject.active,true);
 		// c equals false means that we got cancelled in beforedeactivate event.
 		// i.e we can get cancelled if the activeView has blog editor open.
 		if (c === false) {
@@ -412,7 +408,7 @@ Ext.define('NextThought.controller.State', {
 				c = Ext.getCmp(key);
 				if (c && c.restore) {
 					try {
-						stateScoped = {};
+						stateScoped = {active:stateObject.active};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
 						c.on('finished-restore', fin(key, stateScoped), this, { single: true });
 						c.restore(stateScoped);
@@ -425,18 +421,6 @@ Ext.define('NextThought.controller.State', {
 					console.warn('The key', key, 'did not point to a component with a restore method:', c);
 				}
 			}
-		}
-
-		if (typeof stateObject.location !== 'undefined') {
-			//Quick and dirty close the slide view if it exists.
-			//Integrate this with state better so back and forward can
-			//do more of what you would expdect.
-			presentation = Ext.ComponentQuery.query('slidedeck-view');
-			if (!Ext.isEmpty(presentation)) {
-				presentation = presentation.first();
-				presentation.destroy();
-			}
-			LocationProvider.setLocation(stateObject.location, fin(), true);
 		}
 
 		if (replaceState) {
@@ -453,7 +437,7 @@ Ext.define('NextThought.controller.State', {
 		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
 		return {
 			active: dsLandingPage ? 'library' : 'profile',
-			location: dsLandingPage || Library.getFirstPage() || undefined,
+			library: { location: dsLandingPage || Library.getFirstPage() || undefined },
 			profile: { username: $AppConfig.username }
 		};
 	},
@@ -476,7 +460,13 @@ Ext.define('NextThought.controller.State', {
 			console.log('local state found', previousState);
 			lastLocation = Ext.decode(previousState);
 
-			result = lastLocation && lastLocation.location ? lastLocation : defaultState;
+			//migrate
+			if(lastLocation.location){
+				lastLocation.library = {location:lastLocation.location};
+				delete lastLocation.location;
+			}
+
+			result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;
 			if (location.hash) {
 				console.debug('fragment trumps state', location.hash);
 				Ext.apply(result, this.interpretFragment(location.hash));

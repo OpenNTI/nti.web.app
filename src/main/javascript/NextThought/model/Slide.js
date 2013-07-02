@@ -1,5 +1,5 @@
 /*jslint */
-/*globals LocationProvider, NextThought, ParseUtils */
+/*globals NextThought, ParseUtils */
 Ext.define('NextThought.model.Slide', {
 	extend: 'NextThought.model.Base',
 
@@ -50,7 +50,7 @@ Ext.define('NextThought.model.Slide', {
 			var DQ = Ext.DomQuery,
 				el = Ext.get(dom),
 				frag = (dom.ownerDocument||document).createDocumentFragment(),
-				root = LocationProvider.getContentRoot(containerId),
+				root = ContentUtils.getRoot(containerId),
 				nodes,
 				o = {
 					'Class': 'Slide',

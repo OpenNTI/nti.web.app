@@ -2,14 +2,13 @@ Ext.define('NextThought.controller.Navigation', {
 	extend: 'Ext.app.Controller',
 
 	require: [
-		'NextThought.providers.Location',
 		'NextThought.util.UserDataThreader',
 		'NextThought.ux.WelcomeGuide'
 	],
 
 	views: [
+		'Main',
 		'Navigation',
-		'ViewSelect',
 		'Views',
         'UserDataPanel',
 		'menus.Navigation',
@@ -18,75 +17,26 @@ Ext.define('NextThought.controller.Navigation', {
 		'account.history.Panel'
 	],
 
+	refs: [
+		{ref: 'viewport', selector: 'master-view'}
+	],
+
+
 	init: function() {
 		this.listen({
 			component:{
-				'library-collection': {
-					'itemclick': 'selectLibraryEntry'
-				},
-				'activity-panel': {
-					'navigation-selected': 'navigate',
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'user-history-panel': {
-					'navigation-selected': 'navigate',
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'activity-preview': {
-					'navigation-selected': 'navigate',
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'activity-preview-blog':{
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'activity-preview-blog-reply':{
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'activity-preview-personalblogentry':{
-					'navigate-to-blog': 'gotoBlog'
-				},
-				'activity-preview-note': {
-					'navigation-selected': 'navigate'
-				},
-				'activity-preview-note-reply': {
-					'navigation-selected': 'navigate'
-				},
-	            'user-data-panel': {
-	                'navigation-selected': 'navigate',
-		            'navigate-to-blog': 'gotoBlog'
-	            },
-				'main-views': {
-					'activate-view': 'track',
-					/** @private handler */
-					'activate-main-view': function(id){
-						//viewport is set by Application controller
-						return this.viewport.views.switchActiveViewTo(id);
-					}
-				},
-				'view-select button': {
-					'view-selected': 'switchViews'
-				},
 				'slidedeck-view': {
 					exited: 'slideViewExited'
 				},
-				'profile-activity *':{
-					'navigation-selected': 'navigate'
-				},
 				'*': {
 					'before-show-topic': 'beforeTopicShow',
-					'navigate-to-href': 'navigateToHref'
-				},
-				'notfound':{
-					'go-to-library': 'goToLibrary'
-				},
-				'welcome-guide':{
-					'go-to-help': 'goToHelp'
-				},
-				'view-select menu':{
-					'hide': 'syncButton'
-				},
-				'library-view-container' : {
-					'navigation-failed': 'readerNavigationFailed'
+					'go-to-library': 'goToLibrary',
+					'go-to-help': 'goToHelp',
+	                'navigation-selected': 'navigate',
+					'navigate-to-href': 'navigateToHref',
+					'navigate-to-blog': 'gotoBlog',
+					'navigation-failed': 'readerNavigationFailed',
+					'view-selected': 'setView'
 				}
 			},
 			controller:{
@@ -100,11 +50,48 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
+	setView: function(id, silent){
+		var cmp = id && (id.isComponent? id : Ext.getCmp(id));
+		if(!cmp){
+			console.warn('no view', arguments);
+			console.trace();
+			return false;
+		}
+
+		return cmp.activate(silent);
+	},
+
+
+	goToLibrary: function(){
+		this.setView('library');
+	},
+
 
 	scrollToObject: function(target, reply){
 		target = Ext.isArray(target)? target : [target];
 
 		var me = this;
+
+		function openWindow (rec, scrollToId, replyToId, isEdit){
+			if(Ext.isArray(replyToId)){
+				replyToId = replyToId.slice(-1);
+				replyToId = replyToId.length > 0 ? replyToId[0] :  null;
+			}
+
+			try{
+				me.lastNote = Ext.widget({
+					autoShow: true,
+					xtype: 'note-window',
+					record: rec,
+					scrollToId: scrollToId,
+					replyToId: replyToId && !isEdit ? replyToId : null,
+					isEdit: isEdit
+				});
+			}
+			catch(er){
+				console.warn('Could not open a new note view because:',er);
+			}
+		}
 
 
 		function findExisting(prefix) {
@@ -123,19 +110,30 @@ Ext.define('NextThought.controller.Navigation', {
 
 		function localCondition(id,reader){
 			var c = Ext.getCmp(id);
-			if(c){
-				c.fireEvent('open',target.last(), reply? target: undefined);
+			if(c && c.isNote){
+				openWindow(c.getRecord(), target.last(), reply? target: undefined);
+			}
+			else if(me.lastNote){
+				try {
+					me.lastNote.destroy();
+					delete me.lastNote;
+				}
+				catch(closeAbort){
+					console.warn('aborted close because:',closeAbort);
+					return;
+				}
 			}
 
-			if (reader.scrollToTarget){
-				reader.scrollToTarget(id);
+
+			if (reader && reader.getScroll && reader.getScroll().toTarget){
+				reader.getScroll().toTarget(id);
 			}
 		}
 
 
-		return function(reader, errorObject) {
-			reader = (reader||ReaderPanel.get());
-			var id = findExisting(reader.prefix),
+		return function(cmp, errorObject) {
+			var reader = (cmp||ReaderPanel.get()),
+				id = findExisting(reader.prefix),
 				service = $AppConfig.service;
 
 			function loaded(object){
@@ -146,7 +144,7 @@ Ext.define('NextThought.controller.Navigation', {
 
                 function afterLoadedAgain(object){
 	                if( (object.get('MimeType').split('.') || []).pop() === "note" ){
-		                Ext.widget('note-window', { scrollToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
+		                openWindow(object, scrollToReplyId); 
 	                }
 
 	                //Lets resolve the range and try to scroll to that.
@@ -158,10 +156,10 @@ Ext.define('NextThought.controller.Navigation', {
 
 	                if(range){
 		                console.log('Scrolling to range:',range);
-		                reader.scrollToNode(range.startContainer);
+		                reader.getScroll().toNode(range.startContainer);
 	                }
 	                else {
-                        reader.scrollToContainer(c);
+                        reader.getScroll().toContainer(c);
 	                }
                 }
 
@@ -249,14 +247,11 @@ Ext.define('NextThought.controller.Navigation', {
 					t = slide.get('MimeType'),
 					selector = 'object[type="'+t+'"][data-ntiid="'+i+'"] img';
 
-				(reader||ReaderPanel.get()).scrollToSelector(selector);
+				(reader||ReaderPanel.get()).getScroll().toSelector(selector);
 			});
 		}
 	},
 
-	selectLibraryEntry: function(view, rec){
-		LocationProvider.setLastLocationOrRoot(rec.get('NTIID'));
-	},
 
 	/*
 	 *	Navigates to the provided content, optionally targets the provided
@@ -282,10 +277,10 @@ Ext.define('NextThought.controller.Navigation', {
 		this.maybeLoadNewPage(ntiid, callback);
 	},
 
+
 	/**
 	 * Navigates to a profile blog or profile blog comment
 	 */
-
 	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
 			state = this.getController('State'),
@@ -320,70 +315,15 @@ Ext.define('NextThought.controller.Navigation', {
 
 	navigateAndScrollToSearchHit: function(ntiid, result, fragment){
 		function callback(reader){
-			(reader||ReaderPanel.get()).scrollToSearchHit(result, fragment);
+			(reader||ReaderPanel.get()).getScroll().toSearchHit(result, fragment);
 		}
 
-		LocationProvider.setLocation(ntiid, callback, this);
+		this.fireEvent('set-location', ntiid, callback, this);
 	},
 
 
 	maybeLoadNewPage: function(id, cb){
-		LocationProvider.setLocation(id, cb);
-	},
-
-
-	viewSelectButton: function(id){
-
-		if(!id){return null;}
-
-		var query = 'view-select button[title='+Ext.String.capitalize(id)+'], view-select button[viewId='+id+']',
-			btns = Ext.ComponentQuery.query(query);
-		if(!Ext.isEmpty(btns)){
-			return btns.first();
-		}
-		return null;
-	},
-
-
-	track: function(id){
-		var btn = this.viewSelectButton(id),silent=true; //calling toggle with silent=false recursively calls toggle crashing the browser.
-		try {
-			if(btn.alternateId){
-				btn = this.viewSelectButton(btn.alternateId);
-				silent = true;
-			}
-			this.unCheckAllButtons();
-			btn.toggle(true,silent);
-		}
-		catch(e){
-			console.error('Looks like the "'+id+'" button was not included or was typo\'ed', e.stack);
-		}
-	},
-
-
-	unCheckAllButtons: function(){
-		var btns = Ext.ComponentQuery.query('view-select-button');
-		Ext.each(btns,function(b){b.toggle(false,true);});
-	},
-
-
-	syncButton: function(){
-		var mainViews = this.viewport.views,
-			activeItem = mainViews.getActive(),
-			activeId = activeItem ? activeItem.id : null;
-
-		this.track(activeId);
-	},
-
-
-	setView: function(id){
-		//This smells funny...
-		return this.viewport.activateView(id);
-	},
-
-
-	goToLibrary: function(){
-		this.setView('library');
+		this.fireEvent('set-location', id, cb);
 	},
 
 
@@ -397,24 +337,6 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 	},
 
-
-	switchViews: function(button, state){
-		var id = button.viewId || button.title.toLowerCase();
-		if(state){
-			try {
-				this.track(id);//always switch the menus even if the view is already active
-				//search doesn't have a "view"...just a menu
-				if(button.switchView !== false){
-					if(!this.setView(id)){
-						this.syncButton();
-					}
-				}
-			}
-			catch(e){
-				console.debug('Oops, a view button was defined, but the related view was not added: '+id);
-			}
-		}
-	},
 
 	/**
 	 * The idea here is that navigation to an href (which may be an absolute external url,
@@ -432,7 +354,7 @@ Ext.define('NextThought.controller.Navigation', {
 	 * @return a boolean indicating whether navigation was handled
 	 *
 	 * TODO Work an error callback into here.  Right now we are at the mercy of many of the
-	 * same problems that plague error callbacks in the LocationProvider
+	 * same problems that plague error callbacks in the location provider
 	 */
 	navigateToHref: function(sender, href){
 		var parts = href.split('#'),
@@ -488,9 +410,10 @@ Ext.define('NextThought.controller.Navigation', {
 		return false;
 	},
 
+
 	navigateToNtiid: function(ntiid, fragment){
-		var object = ntiid.isModel ? ntiid : undefined;
-		var me = this;
+		var object = ntiid.isModel ? ntiid : undefined,
+			me = this;
 
 		function onSuccess(obj){
 			me.fireEvent('show-object', obj, fragment);
@@ -510,15 +433,16 @@ Ext.define('NextThought.controller.Navigation', {
 
 	},
 
+
 	navigateToContent: function(obj, fragment){
+		function scroll(content){
+			if(content && fragment) {
+				content.getScroll().toTarget(fragment);
+			}
+		}
+
 		if(obj.isPageInfo){
-			//FIXME Use the callback here for error handling once it supports
-			//an error callback.
-			LocationProvider.setLocation(obj, function(content){
-				if(content && fragment) {
-					content.scrollToTarget(fragment);
-				}
-			});
+			this.fireEvent('set-location', obj, scroll);
 			return false;
 		}
 		console.log('Dont know how to navigate to object', obj);

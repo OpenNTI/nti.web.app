@@ -8,7 +8,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ToolOptionsState', {
 			//Select previous choices
 			this.applyPrevioustoolState();
 		});
-		return this;
 	},
 
 	applyPrevioustoolState: function(){

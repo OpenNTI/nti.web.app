@@ -1,25 +1,4 @@
-Ext.define('NextThought.view.content.reader.ResourceManagement', function(){
-	var manager;
-
-	return {
-
-
-		constructor: function(){
-			var reader = this;
-			manager = Ext.createByAlias('reader.resourceManager',reader);
-		},
-
-
-		getResourceManager: function(){
-			return manager;
-		}
-
-
-	};
-});
-
-
-Ext.define('NextThought.view.content.reader.ResourceManager',{
+Ext.define('NextThought.view.content.reader.ResourceManagement',{
 	alias: 'reader.resourceManager',
 
 	requires: [
@@ -103,9 +82,10 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 		'object[type$=image-collection]':'overlay-image-roll'
 	},
 
-	constructor: function(reader){
-		this.reader = reader;
-		reader.on('set-content','manage',this);//We can't defer this handler, otherwise the fireEvent completes before
+	constructor: function(config){
+		Ext.apply(this,config);
+
+		this.reader.on('set-content','manage',this);//We can't defer this handler, otherwise the fireEvent completes before
 												// we update the dom with container flags
 	},
 
@@ -144,6 +124,7 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 
 	activateOverlayedPanel: function(reader,doc, query, widgetXType){
 		var me = reader,
+			o = me.getComponentOverlay(),
 			els = doc.querySelectorAll(query);
 
 		Ext.each(els,function(el){
@@ -153,10 +134,10 @@ Ext.define('NextThought.view.content.reader.ResourceManager',{
 				console.warn(el);
 				return;
 			}
-			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType,{
+			o.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType,{
 				reader: me,
-				renderTo: me.componentOverlayEl,
-				tabIndexTracker: reader.overlayedPanelTabIndexer,
+				renderTo: o.componentOverlayEl,
+				tabIndexTracker: o.tabIndexer,
 				contentElement: el
 			}));
 		});

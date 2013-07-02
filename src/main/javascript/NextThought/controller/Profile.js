@@ -1,10 +1,6 @@
 Ext.define('NextThought.controller.Profile', {
 	extend: 'Ext.app.Controller',
 
-	requires:[
-		'NextThought.providers.Location'
-	],
-
 	models: [
 		'forums.Post',
 		'forums.PersonalBlog',
@@ -94,7 +90,7 @@ Ext.define('NextThought.controller.Profile', {
 
 	applyBlogPostToStores: function(entry){
 		var recordForStore;
-		LocationProvider.applyToStoresThatWantItem(function(id,store){
+		this.getController('UserData').applyToStoresThatWantItem(function(id,store){
 			if(store){
 				console.log(store, entry);
 
@@ -343,7 +339,7 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	deleteBlogPost: function(record, cmp, successCallback){
-		var idToDestroy;
+		var idToDestroy, me = this;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
 		}
@@ -365,7 +361,7 @@ Ext.define('NextThought.controller.Profile', {
 
 		record.destroy({
 			success:function(){
-				LocationProvider.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+				me.getController('UserData').applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 				//Delete anything left that we know of
 				Ext.StoreManager.each(function(s){

@@ -20,9 +20,8 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 
 	constructor: function(o){
 		this.validateRole(o.role);
-		var r = this.callParent(arguments);
+		this.callParent(arguments);
 		this.Class = 'DomContentPointer';
-		return r;
 	},
 
 

@@ -17,6 +17,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 
 	initComponent: function(){
+		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
 		UserRepository.getUser(this.username,this.setUser, this, true);
 	},
@@ -85,11 +86,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			],makeMime).join(',')
 		});
 
-		if(!LocationProvider.hasStore(s.storeId)){
+		if(!this.hasPageStore(s.storeId)){
 			s.doesNotClear = true;
 			s.doesNotShareEventsImplicitly = true;
 			s.profileStoreFor = this.username;
-			LocationProvider.addStore(s.storeId,s);
+			this.addPageStore(s.storeId,s);
 		}
 
 		this.mon(s,{

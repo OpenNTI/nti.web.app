@@ -281,6 +281,7 @@ Ext.define('NextThought.model.Service', {
 				Ext.each(pageInfos,function(p){
 					(p||{}).originalNTIIDRequested = ntiid;
 				});
+				this.fireEvent('update-pageinfo-preferences',pageInfos);
 				Ext.callback(success, scope, pageInfos);
 			}
 

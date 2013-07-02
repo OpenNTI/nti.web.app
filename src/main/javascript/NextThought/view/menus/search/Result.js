@@ -51,14 +51,14 @@ Ext.define('NextThought.view.menus.search.Result',{
 			name = hit.get('Creator');
 
 		LocationMeta.getMeta(containerId, function(meta){
-			var lin = meta ? LocationProvider.getLineage(meta.NTIID) : [],
+			var lin = meta ? ContentUtils.getLineage(meta.NTIID) : [],
 				chap = [];
 
 			lin.pop(); //remove root, we will already have it after resolving "id"
 			lin.shift();//remove the first item as its identical as id.
 
 			Ext.each(lin,function(c){
-				var i = LocationProvider.getLocation(c);
+				var i = ContentUtils.getLocation(c);
 				if(!i){
 					console.warn(c+" could not be resolved");
 					return;

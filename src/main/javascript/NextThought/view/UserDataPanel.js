@@ -614,7 +614,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 				console.warn('No meta for '+rec.get('ContainerId'));
 			}
 			else {
-				lineage = LocationProvider.getLineage(meta.NTIID,true);
+				lineage = ContentUtils.getLineage(meta.NTIID,true);
 				location = lineage.shift();
 				lineage.reverse();
 

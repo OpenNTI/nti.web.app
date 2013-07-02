@@ -24,27 +24,26 @@ Ext.define('NextThought.ux.VideoPopout',{
 		Ext.EventManager.onWindowResize(me.syncSize,me,false);
 		this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
 
-		this.add({
+		me.add({
 			xtype: 'video-roll',
 			store: config.store,
 			data: config.data
 		});
 
-		this.task = {
-			scope: this,
+		me.task = {
+			scope: me,
 			interval: 300,
 			run: function(){
 				var m = Ext.getBody().down('.x-mask',true);
 				if (m) {
-					Ext.TaskManager.stop(this.task);
+					Ext.TaskManager.stop(me.task);
 					Ext.getBody().dom.removeChild(m);
 					Ext.getBody().appendChild(m);
 				}
 			}
 		};
 
-		Ext.TaskManager.start(this.task);
-		return this;
+		Ext.TaskManager.start(me.task);
 	},
 
 

@@ -1,5 +1,5 @@
 /*jslint */
-/*globals LocationProvider, SlideDeck */
+/*globals SlideDeck */
 Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidevideo',
@@ -32,6 +32,6 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 
 
 	onSlideVideoClicked: function(e){
-		 SlideDeck.open(this.contentElement, LocationProvider.currentNTIID);
+		 SlideDeck.open(this.contentElement, this.reader);
 	}
 });

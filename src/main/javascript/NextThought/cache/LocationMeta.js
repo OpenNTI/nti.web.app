@@ -1,9 +1,6 @@
 Ext.define('NextThought.cache.LocationMeta', {
 	alias: 'LocationMeta',
 	singleton: true,
-	requires: [
-		'NextThought.providers.Location'
-	],
 
 	meta: {},
 	ids: {},
@@ -60,7 +57,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 	createAndCacheMeta: function(ntiid, pi, ignoreCache){
 		var assessmentItems = pi.get('AssessmentItems') || [],
 				theId = pi.getId(),
-				meta = LocationProvider.getLocation(theId);
+				meta = ContentUtils.getLocation(theId);
 
 		if(!meta){
 			return null;
@@ -126,7 +123,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	handleUnauthorized: function(ntiid, cb){
-		var meta = LocationProvider.getLocation(ntiid),
+		var meta = ContentUtils.getLocation(ntiid),
 				bookPrefix;
 
 		if(meta){

@@ -74,7 +74,6 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		//{url: nextSizeUrl, refEl: img, offsets: offsets}
 
 		function get(el,attr){ return el? el.getAttribute(attr) : null; }
 
@@ -189,7 +188,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		if( w ){
 			w.close();
 		}
-		SlideDeck.open(this.refEl, LocationProvider.currentNTIID);
+		SlideDeck.open(this.refEl, this.reader);
 		e.stopEvent();
 		return false;
 	},
@@ -214,7 +213,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 
 	statics: {
-		zoomImage: function(el,offsets,ownerCmp){
+		zoomImage: function(el,reader,ownerCmp){
 			var img = Ext.fly(el)
 					.up('[itemprop~=nti-data-markupenabled]')
 					.down('img[id]').dom,
@@ -239,9 +238,9 @@ Ext.define('NextThought.ux.ImageZoomView',{
 			nextSizeUrl += img.getAttribute(nextSize);
 			// TODO: optimzise for bandwidth and screen size and choose the best one based on current and client screen size
 			// For now, i'm not going to grab the full.
-			console.log('zoom', img.width+'x'+img.height, rect, offsets, currentSize, nextSize, nextSizeUrl);
+			console.log('zoom', img.width+'x'+img.height, rect, currentSize, nextSize, nextSizeUrl);
 
-			Ext.widget('image-zoom-view',{url: nextSizeUrl, refEl: img, offsets: offsets, ownerCmp: ownerCmp}).show();
+			Ext.widget('image-zoom-view',{url: nextSizeUrl, refEl: img, reader:reader, ownerCmp: ownerCmp}).show();
 		}
 	}
 

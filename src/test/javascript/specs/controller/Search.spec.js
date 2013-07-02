@@ -82,7 +82,7 @@ describe('Search Controller Tests', function(){
 			//ViewSelect.  If I create  ViewSelect I can't get the
 			//menu to render without forcing it explicitly, but
 			//then add doesn't work
-			menu = Ext.ComponentManager.create({
+			menu = Ext.widget({
 				xtype: 'navigation-menu',
 
 				layout: {type: 'vbox', align: 'stretch'},

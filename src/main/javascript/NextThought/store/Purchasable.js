@@ -16,7 +16,7 @@ Ext.define('NextThought.store.Purchasable',{
 	 * @param ntiid A content ntiid or sub ntiid (question ntiid)
 	 */
 	purchasableForContentNTIID: function(ntiid){
-		var root = LocationProvider.getLineage(ntiid).last(),
+		var root = ContentUtils.getLineage(ntiid).last(),
 			purchasable;
 
 		//NOTE this again assumes 1-to-1 purchase to content root.

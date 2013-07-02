@@ -73,7 +73,7 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 		constructor: function(){
-			var r = this.callParent(arguments);
+			this.callParent(arguments);
 
 			this.mon(coordinator,{
 				delay: 1,//move this handler to the next event pump
@@ -81,7 +81,6 @@ Ext.define('NextThought.store.PageItem',function(){
 				'removed-item': this.removeByIdsFromEvent,
 				'added-item': this.addFromEvent
 			});
-			return r;
 		},
 
 		//By default PageItems want things that match the container

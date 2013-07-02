@@ -104,7 +104,7 @@ Ext.define('NextThought.view.account.Window',{
 				items: availablePanels
 			}];
 
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 

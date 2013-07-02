@@ -291,10 +291,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			if(me.editMode){
 				r.set('body',v.body);
 				r.set('title', v.title);
-				//TODO: only do this if the user changed it. (figure out why the editor did not return the current value)
-				//if(Ext.Array.intersect(currentShare, v.shareWith||[]).length !== currentShare.length){
-				//	r.set('sharedWith',v.shareWith);
-				//}
 
 				r.save({callback: function(record, request){
 					var success = request.success,
@@ -309,7 +305,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 
 			try {
-				me.fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
+				me.fireEvent('save-new-reply', r, v.body, [], callback);
 			}
 			catch(e){
 				console.error(Globals.getError(e));
@@ -861,6 +857,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	onDestroy: function(){
 		if(this.editor){
+			delete this.editor.ownerCt;
 			this.editor.destroy();
 		}
 		this.callParent(arguments);

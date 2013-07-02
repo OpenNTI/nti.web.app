@@ -62,7 +62,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	constructor: function(){
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 	initComponent: function(){

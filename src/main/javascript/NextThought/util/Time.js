@@ -3,6 +3,12 @@ Ext.define('NextThought.util.Time', {
 
 	//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
 	timeDifference: function(current, previous) {
+
+		if(!previous){
+			previous = current;
+			current = new Date();
+		}
+
 		var msPerMinute = 60 * 1000,
 			msPerHour = msPerMinute * 60,
 			msPerDay = msPerHour * 24,
@@ -65,4 +71,5 @@ Ext.define('NextThought.util.Time', {
 },
 function(){
 	window.TimeUtils = this;
+	Ext.util.Format.timeDifference = Ext.bind( this.timeDifference, this);
 });

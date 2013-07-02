@@ -39,7 +39,6 @@ Ext.define('NextThought.view.cards.Card',{
 
 		this.callParent(arguments);
 //		this.mixins.likeAndFavoriteActions.constructor.call(this);
-		return this;
 	},
 
 
@@ -68,8 +67,14 @@ Ext.define('NextThought.view.cards.Card',{
 		this.callParent(arguments);
 		this.mon(this.el,'click','onCardClicked',this);
 
-		if(LocationProvider.currentPageInfo.originalNTIIDRequested===this.data.ntiid){
-			Ext.defer(this.onCardClicked,1,this);
+		try{
+			if(this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
+				Ext.defer(this.onCardClicked,1,this);
+			}
+		}
+		catch(er){
+			debugger;
+			console.error(er.message);
 		}
 	},
 

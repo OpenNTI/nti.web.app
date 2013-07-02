@@ -1,10 +1,6 @@
 Ext.define('NextThought.controller.Assessment', {
 	extend: 'Ext.app.Controller',
 
-	requires: [
-		'NextThought.providers.Location'
-	],
-
 	models: [
 		'assessment.AssessedPart',
 		'assessment.AssessedQuestion',
@@ -65,7 +61,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 	checkAnswer: function(questionWidget,question,answerValues){
 
-		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : LocationProvider.currentNTIID,
+		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : questionWidget.reader.getLocation().NTIID,
 			submission = this.getAssessmentQuestionSubmissionModel().create({
 			ContainerId:  containerId,
 			questionId: question.getId(),
@@ -94,7 +90,7 @@ Ext.define('NextThought.controller.Assessment', {
 		var q = this.getAssessmentQuestionSubmissionModel(),
 			s = this.getAssessmentQuestionSetSubmissionModel(),
 			data = {
-				ContainerId: LocationProvider.currentNTIID,
+				ContainerId: submissionWidget.reader.getLocation().NTIID,
 				questionSetId: questionSet.getId(),
 				questions: []
 			};
@@ -103,7 +99,7 @@ Ext.define('NextThought.controller.Assessment', {
 			data.questions.push({
 				'Class':'QuestionSubmission',
 				MimeType:'application/vnd.nextthought.assessment.questionsubmission',
-				ContainerId: LocationProvider.currentNTIID,
+				ContainerId: data.ContainerId,
 				NTIID: k,
 				questionId: k,
 				parts: v

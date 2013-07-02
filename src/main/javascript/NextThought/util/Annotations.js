@@ -72,10 +72,6 @@ Ext.define('NextThought.util.Annotations',{
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
-//		var p = LocationProvider.getPreferences();
-//		p = p ? p.sharing : null;
-//		p = p ? p.sharedWith || [] : null;
-
 		var text = range.toString(),
 			contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, root);
 
@@ -107,7 +103,7 @@ Ext.define('NextThought.util.Annotations',{
 			if (n.tagName === 'A') {
 				return false;
 			}
-			else if (n.tagName === 'BODY') {
+			if (n.tagName === 'BODY') {
 				return true;
 			}
 		}
@@ -134,6 +130,7 @@ Ext.define('NextThought.util.Annotations',{
 
 		return this.isDisplayed(a.parentNode,root) && check(a);
 	},
+
 
 	getTextNodes: function (root) {
 		var textNodes = [];

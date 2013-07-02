@@ -1,5 +1,5 @@
 /*JSLint */
-/*globals ContentUtils, Library, LocationProvider, NextThought */
+/*globals ContentUtils, Library, NextThought */
 Ext.define('NextThought.ux.SlideDeck',{
 	singleton: true,
 
@@ -10,9 +10,10 @@ Ext.define('NextThought.ux.SlideDeck',{
 		'NextThought.view.slidedeck.Overlay'
 	],
 
-	open: function(el, startingNTIID){
+
+	open: function(el, reader){
 		var DQ = Ext.DomQuery,
-			root = LocationProvider.getLineage(startingNTIID).last(),
+			root = ContentUtils.getLineage(reader.getLocation().NTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
 			dom,
@@ -68,7 +69,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 		}
 
 		function finish(){
-			var earliestSlide;
+			var earliestSlide, p;
 			store.sort('ordinal', 'ASC');
 			store.filter('slidedeck-id',slidedeckId);
 
@@ -82,7 +83,9 @@ Ext.define('NextThought.ux.SlideDeck',{
 			}
 
 			Ext.getBody().unmask();
-			Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide}).show();
+			p = Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide});
+			p.show();
+			p.mon(reader,'navigateComplete','destroy',p);
 		}
 
 

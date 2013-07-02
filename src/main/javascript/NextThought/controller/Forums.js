@@ -897,7 +897,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	applyTopicToStores: function(topic){
 		var recordForStore;
-		LocationProvider.applyToStoresThatWantItem(function(id,store){
+		this.getController('UserData').applyToStoresThatWantItem(function(id,store){
 			if(store){
 				if(store.findRecord('NTIID',topic.get('NTIID'),0,false,true,true)){
 					console.warn('Store already has item with id: '+topic.get('NTIID'), topic);
@@ -1011,7 +1011,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	deleteObject: function(record, cmp, callback){
-		var idToDestroy;
+		var idToDestroy, me = this;
 		if(!record.get('href')){
 			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
 		}
@@ -1033,7 +1033,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		record.destroy({
 			success:function(){
-				LocationProvider.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+				me.getController('UserData').applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
 				//Delete anything left that we know of
 				Ext.StoreManager.each(function(s){
@@ -1103,7 +1103,7 @@ Ext.define('NextThought.controller.Forums', {
 		var me = this;
 
 		if(obj instanceof NextThought.model.forums.Base){
-			if(me.fireEvent('show-view', 'forums') !== false){
+			if( me.fireEvent('show-view', 'forums', true) ){
 				me.presentTopic(obj);
 				return false;
 			}

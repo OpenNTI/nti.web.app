@@ -11,9 +11,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	rendererSuspended: {},
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
-	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
-	stackTmpl: Ext.DomHelper.createTemplate( {cls:'thumb nib-stack'} ).compile(),
-	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', 'data-qtip':'Add Note'} ).compile(),
 
 	isDebug: false,
 
@@ -58,8 +55,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	registerGutter: function(el, reader){
-		//TODO all this junk about prefixes should go away once we aren't
-		//using a singleton here...
+		//TODO all this junk about prefixes should go away once we aren't using a singleton here...
 		var p = reader.prefix;
 		if(!p){ Ext.Error.raise('Prefix required'); }
 		if(this.gutter[p]){
@@ -67,8 +63,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		}
 		this.gutter[p] = el;
 
+		//el.addCls('debug');
+
 		el.controls = el.down('.controls');
-		el.widgets = el.down('.widgets');
 
 		this.render(p);//renders wait for the gutter to exist
 	},
@@ -110,11 +107,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	getDoc: function(prefix){
-		return this.getReader(prefix).getDocumentElement();
-	},
-
-
 	buildSorter: function(prefix){
 		//Default sort will sort by lastModified
 		return function(a, b){
@@ -138,29 +130,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		var g = this.gutter[prefix];
 
 		clear(g.controls.dom);
-		clear(g.widgets.dom);
 
 		if( this.buckets[prefix] ){
 			this.buckets[prefix].free();
 		}
 		this.buckets[prefix] = new this.Bucket();
-		this.getReader(prefix).noteOverlayClearRestrictedRanges();
 	},
 
 
 	getBucket: function(prefix, line){
-//		var lineInfo,
-//			originalLine = line;
-
-		//while(!lineInfo && (originalLine - line) <= 100){
-		//	lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
-		//	line-=5	;
-		//}
-
-//		if(!lineInfo){
-//			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
-//			return;
-//		}
+		console.debug('prefix:'+prefix, line);
 		if (line < 0){
 			//bad line, don't render:
 			if(this.isDebug){
@@ -171,7 +150,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		var c = this.buckets[prefix],
 			lineTolerance = 40,
-//			l = line.rect.top,//normalize lines
 			b = c? c.get(line) : null,
 			a = Math.round( line- (lineTolerance / 2)), z = Math.round( line + (lineTolerance / 2));
 
@@ -187,6 +165,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 			if (!b) {
 				b = new this.Bucket();
+				b.line = line;
 				c.put(b,line);
 			}
 		}
@@ -195,83 +174,27 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	layoutBuckets: function(prefix){
-		var addTpl = this.addNoteToOccupiedLineTmpl,
-			r = this.getReader(prefix),
-			g = this.gutter[prefix],
+		var g = this.gutter[prefix],
 			b = this.buckets[prefix],
-			cT = this.controlLineTmpl,
-			wT = this.widgetLineTmpl,
-			sT = this.stackTmpl,
-			annotationOffsets = r.getAnnotationOffsets(),
-			width = annotationOffsets.gutter + 80,
-			cls = (width <= 355)? 'narrow-gutter': '',
-			maxAnnotations = Math.floor(width / 34) - 3;
-
-		g.setWidth(width);
-		g.controls.setLeft(width-50);
-		g.widgets.setRight(50);
-
-		r.noteOverlayClearRestrictedRanges();
+			cT = this.controlLineTmpl;
 
 
 		b.each(function(line,y){
-
-			var widgets = [], siblings, block, rect, t, count=0;
+			var count = 0;
 
 			line.controls = line.controls || cT.append(g.controls,[],true);
-			line.widgets = line.widgets || wT.append(g.widgets,[],true);
+			line.controls.setStyle('top',y+'px');
+			line.controls.set({'data-line':y});
 
-			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
-
-			line.each(function(o){
-				r.noteOverlayAddRestrictedRange(o.getRestrictedRange(annotationOffsets));
-				var c = o.getControl();
-				if( c ){ c.appendTo( line.controls ); }
-				if( o.hasGutterWidgets ){ widgets.push( o ); }
-			});
-
-			siblings = widgets.length-1;
-			Ext.each(widgets,function(o){
-				var w;
-				if(count < maxAnnotations){
-					count++;
-					w = o.getGutterWidget(siblings);
-					if(w){
-						w.appendTo(line.widgets);
-						w.addCls(cls);
-					}
-					else {
-						console.warn('Annotation lied about having a gutter widget',o);
-					}
-				}
-				else {
-					sT.append(line.widgets);
-					return false;//stop
-				}
-				return true; //continue
-			});
-
-			if(!line.controls.first()){ line.controls.remove(); delete line.controls; }
-			if(!line.widgets.first()){ line.widgets.remove(); delete line.widgets; }
-			else{
-
-				r.noteOverlayRegisterAddNoteNib(
-					line.first().getRecord().get('applicableRange'),
-					addTpl.insertFirst(
-							line.widgets,[
-								siblings ? 'collapsed':'expanded'
-							],true), line.first().getRecord().get('ContainerId'));
+			line.each(function(o){ if(o.isNote){++count;} });
+			if(count > 0){
+				Ext.DomHelper.overwrite(line.controls,{cls:'count',html:count});
 			}
 
-			block = line.widgets || line.controls || null;
-			if(block){
-				t = block.dom.getBoundingClientRect();
-				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
-				rect.top = rect.top + annotationOffsets.scrollTop;
-				rect.bottom = rect.bottom + annotationOffsets.scrollTop;
-				r.noteOverlayAddRestrictedRange(rect);
+			if(!line.controls.first()){
+				line.controls.remove();
+				delete line.controls;
 			}
-
 		});
 	},
 
@@ -343,45 +266,26 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
 			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
 			Ext.each(cloned, function(o){
-				var containerNode, containerRect;
+				var y, b, c;
 				try {
 					if(!o.isVisible){
 						return;
 					}
 
-					var y, b,
 					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
 
-					if(o.hasGutterWidgets){
+					if(o.isNote){
 						c.push(o);
 					}
 
 					y = o.render();
-					if(y === NextThought.view.annotations.Base.HIDDEN){
-						return true; //continue
-					}
-
-					/*
-					if(y === NextThought.view.annotations.Base.NOT_FOUND){
-						//Code to stick things we can't resolve on teh container somewhere.  In general top looks better than bottom
-						//even though I think we would prefer jamming them at the bottom
-						console.log('Displaying annotations with unresolvable anchor information at bottom of container');
-						//Consider caching these outside this loop
-						containerNode = Anchors.scopedContainerNode(doc, o.getContainerId(), rootContainerId);
-						containerRect = containerNode ? containerNode.getBoundingClientRect() : null;
-						if(containerRect.top && containerRect.height){
-							y = containerRect.top;
+					if(y !== NextThought.view.annotations.Base.HIDDEN){
+						b = me.getBucket(prefix,Math.ceil(y));
+						if(b){
+							o.getRecord().set('line', b.line);
+							renderedCount++;
+							b.put(o);
 						}
-						if(y){
-							console.log('Positioned missing annotation at bottom of container', containerNode, y);
-						}
-					}
-				    */
-
-					b = me.getBucket(prefix,Math.ceil(y));
-					if(b){
-						renderedCount++;
-						b.put(o);
 					}
 				}
 				catch(e){

@@ -18,7 +18,6 @@ Ext.define('NextThought.Library', {
 
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
-		return this;
 	},
 
 
@@ -129,9 +128,14 @@ Ext.define('NextThought.Library', {
 
 
 	load: function(){
-		this.loaded = false;
-		this.getStore().on('load', this.onLoad, this );
-		this.getStore().load();
+		try{
+			this.loaded = false;
+			this.getStore().on('load', this.onLoad, this );
+			this.getStore().load();
+		}
+		catch(e2){
+			console.error('Loading Library: ', Globals.getError(e2));
+		}
 	},
 
 

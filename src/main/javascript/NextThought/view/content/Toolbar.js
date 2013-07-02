@@ -1,26 +1,22 @@
 Ext.define('NextThought.view.content.Toolbar',{
-	extend: 'Ext.toolbar.Toolbar',
+	extend: 'Ext.container.Container',
 	requires: [
-		'NextThought.view.content.Filter',
 		'NextThought.view.content.Navigation',
-		'NextThought.view.content.Pager',
-		'NextThought.view.content.Font',
-		'NextThought.view.content.Settings',
-		'Ext.toolbar.Spacer'
+		'NextThought.view.content.Pager'
 	],
 	alias: 'widget.content-toolbar',
 	ui: 'content',
+	cls: 'content-toolbar',
 
 
-	height: 75,
-	defaults: {
-		xtype: 'tbspacer'
+	height: 60,
+
+	layout: {
+		type: 'hbox'
 	},
 
 	items: [
-		{ xtype: 'content-filter', flex: 1 },
-		{ width: 80 },
 		{ xtype: 'content-navigation', delegate: 'inherit' },
-		{ xtype: 'content-pager', delegate: 'inherit', width: 80}
+		{ xtype: 'content-pager', delegate: 'inherit'}
 	]
 });

@@ -63,7 +63,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 			cls: 'share-search-mask '+ownerCls,
 			msgCls: 'share-search-mask '+ownerCls
 		};
-		return this.callParent([cfg]);
+		this.callParent([cfg]);
 	},
 
 	initComponent: function(){

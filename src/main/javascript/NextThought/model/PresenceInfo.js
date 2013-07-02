@@ -35,7 +35,6 @@ Ext.define('NextThought.model.PresenceInfo',{
 				getter: this.getName
 			}
 		});
-		return this;
 	},
 
 

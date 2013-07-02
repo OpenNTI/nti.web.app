@@ -28,9 +28,8 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
-		var r = this.callParent(arguments);
+		this.callParent(arguments);
 		this.Class = 'TextDomContentPointer';
-		return r;
 	},
 
 

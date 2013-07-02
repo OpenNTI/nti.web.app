@@ -54,8 +54,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 	itemSelector:'.contact-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
-			{ tag:'tpl', 'if':'Presence', cn:{ cls: 'presence {Presence.name}' }},
-			{ tag:'tpl', 'if':'!Presence', cn:{ cls: 'presence' }},
+			{ tag:'tpl', 'if':'values.Presence', cn:{ cls: 'presence {Presence.name}' }},
+			{ tag:'tpl', 'if':'!values.Presence', cn:{ cls: 'presence' }},
 			{ cls: 'nib' },
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 			{ cls: 'wrap', cn: [
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 		});
 
 		this.doSearch = Ext.Function.createBuffered(this.doSearch,250,this,null);
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 

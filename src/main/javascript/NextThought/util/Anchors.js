@@ -361,8 +361,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		ancestorNode = Anchors.referenceNodeForNode(ancestorNode);
 
-		//TODO instead of defaulting to LocationProvider.currentNTIID default to rootContainerIdFromDocument
-        result.container = this.getContainerNtiid(ancestorNode, LocationProvider.currentNTIID);
+        result.container = this.getContainerNtiid(ancestorNode, docElement);
 
 		var ancestorAnchor = NextThought.model.anchorables.ElementDomContentPointer.create({
 			node: ancestorNode,
@@ -453,6 +452,12 @@ Ext.define('NextThought.util.Anchors', {
         }
 
 		//ok its not in a subcontainer, return default
+	    if(def && !Ext.isString(def)){
+		    n = def.getElementById('NTIContent') || {};
+		    n = n.getAttribute && n.getAttribute('data-ntiid');
+		    if(n){ def = n; }
+	    }
+
 		return def;
     },
 

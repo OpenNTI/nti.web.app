@@ -24,8 +24,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			this.stroke = Color.parse(this.strokeRGBAColor).toString();
 			delete this.strokeRGBAColor;
 		}
-
-		return this;
 	},
 
 

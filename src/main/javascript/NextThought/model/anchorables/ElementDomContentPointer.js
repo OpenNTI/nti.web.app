@@ -28,9 +28,8 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 
 		this.validateTagName(o.elementTagName);
 		this.validateId(o.elementId);
-		var r = this.callParent([o]);
+		this.callParent([o]);
 		this.Class = 'ElementDomContentPointer';
-		return r;
 	},
 
 

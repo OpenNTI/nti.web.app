@@ -12,10 +12,12 @@ Ext.define('NextThought.model.converters.Synthetic',{
 			var dataName = record.persistenceProperty,
 				data = record[dataName],
 				config = {},
-				fn = this.fn;
+				fn = this.fn,
+				sn = this.fnSet;
 
 			config[this.name] = {
 				getter: function(){ return fn.call(record, record);},
+				setter: sn && function(v){ return sn.call(record, record,v);},
 				configurable: true
 			};
 

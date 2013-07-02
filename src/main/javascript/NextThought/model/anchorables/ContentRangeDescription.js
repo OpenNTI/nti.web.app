@@ -10,7 +10,6 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 	constructor: function(o) {
 		this.initConfig(o);
 		this.Class = 'ContentRangeDescription';
-		return this;
 	},
 
 	statics: {

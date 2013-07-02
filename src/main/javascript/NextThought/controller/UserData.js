@@ -7,7 +7,6 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.app.domain.Model',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
-		'NextThought.providers.Location',
 		'NextThought.proxy.Socket'
 	],
 
@@ -38,10 +37,9 @@ Ext.define('NextThought.controller.UserData', {
 		'annotations.Highlight',
 		'annotations.Note',
 		'annotations.note.Panel',
-		'annotations.note.Window',
+		'annotations.note.Viewer',
 		'chat.transcript.Window',
 		'content.Reader',
-		'content.PageWidgets',
 		'content.SimplePopoverWidget',
 		'definition.Window',
 		'sharing.Window',
@@ -60,67 +58,70 @@ Ext.define('NextThought.controller.UserData', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.listen({
+			model : {
+				'*':{
+					'update-pageinfo-preferences':'updatePreferences'
+				}
+			},
 			component:{
 				'*': {
-					'open-chat-transcript': this.openChatTranscript
+					'uses-page-preferences': 'setupPagePreferences',
+					'uses-page-stores': 'setupPageStoreDelegates',
+					'listens-to-page-stores': 'listenToPageStores',
+					'open-chat-transcript': 'openChatTranscript',
+					'load-transcript': 'onLoadTranscript',
+					'save-new-note' : 'saveNewNote'
 				},
 
 				'reader-panel':{
-					'annotations-load': this.onAnnotationsLoad,
-					'filter-annotations': this.onAnnotationsFilter,
+					'annotations-load': 'onAnnotationsLoad',
+					'filter-annotations': 'onAnnotationsFilter',
+					'filter-by-line': 'onAnnotationsLineFilter',
+					'removed-from-line': 'maybeRemoveLineFilter',
 
-					'share-with'	: this.shareWith,
-					'define'		: this.define,
-					'redact'		: this.redact,
-					'save-new-note' : this.saveNewNote,
-					'save-phantom': this.savePhantomAnnotation,
-					'display-popover': this.onDisplayPopover,
-					'dismiss-popover': this.onDismissPopover
+					'share-with'	: 'shareWith',
+					'define'		: 'define',
+					'redact'		: 'redact',
+					'save-phantom'  : 'savePhantomAnnotation',
+					'display-popover': 'onDisplayPopover',
+					'dismiss-popover': 'onDismissPopover'
 				},
 
-				'slide-comment-header': {
-					'save-new-note': this.saveNewNote
-				},
 
 				'activity-preview': {
-					'share': this.shareWith,
-					'chat': this.replyAsChat
+					'share': 'shareWith',
+					'chat': 'replyAsChat'
 				},
 
 				'activity-preview-note > nti-editor':{
-					'save': this.savePreviewNoteReply
+					'save': 'savePreviewNoteReply'
 				},
 
 				'activity-preview-note > activity-preview-note-reply > nti-editor':{
-					'save': this.savePreviewNoteReply
+					'save': 'savePreviewNoteReply'
 				},
 
 				'activity-preview-note-reply': {
-					'delete-reply': this.deleteNoteReply
-				},
-
-				'note-gutter-widget': {
-					'share': this.shareWith,
-					'chat': this.replyAsChat
+					'delete-reply': 'deleteNoteReply'
 				},
 
 				'note-panel': {
-					'save-new-reply' : this.saveNewReply,
-					'share': this.shareWith,
-					'chat': this.replyAsChat
+					'save-new-reply' : 'saveNewReply',
+					'share': 'shareWith',
+					'chat': 'replyAsChat'
 				},
 
 
 				'share-window[record] button[action=save]':{
-					'click': this.onShareWithSaveClick
-				},
-
-				'chat-log-view': {
-					'load-transcript': this.onLoadTranscript
+					'click': 'onShareWithSaveClick'
 				},
 
 				'content-page-widgets': {
-					'save-new-bookmark': this.saveNewBookmark
+					'save-new-bookmark': 'saveNewBookmark'
+				},
+
+				'annotation-view':{
+					'select': 'showNoteViewer'
 				}
 			}
 		});
@@ -136,6 +137,8 @@ Ext.define('NextThought.controller.UserData', {
 			shared: this.incomingSharedChange
 			// circled: //do nothing? Thats what we have been doing :P
 		});
+
+		this.initPageStores();
 	},
 
 
@@ -160,6 +163,35 @@ Ext.define('NextThought.controller.UserData', {
 
 		app.registerInitializeTask(token);
 		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT, pass, fail, this);
+	},
+
+
+	showNoteViewer: function(sel,rec){
+		var me = this,
+			block = sel.mon(sel,{
+			destroyable: true,
+			beforeselect: function(){this.deselectingToSelect=true;},
+			beforedeselect: function(s,r){
+				var w = me.activeNoteWindow,
+					allow = this.deselectingToSelect && (!w || w.close());
+
+				if( allow ){
+					delete this.deselectingToSelect;
+				}
+
+				return allow || (r!==rec); }
+		});
+
+		function deselect(){
+			block.destroy();
+			sel.deselect(rec);
+		}
+
+		me.activeNoteWindow = Ext.widget('note-window',{
+			autoShow: true,
+			record: rec,
+			listeners:{beforedestroy:deselect}
+		});
 	},
 
 
@@ -240,7 +272,7 @@ Ext.define('NextThought.controller.UserData', {
 			actedOn = false,
 			recordForStore = item;
 
-		LocationProvider.applyToStoresThatWantItem(function(id,store){
+		this.applyToStoresThatWantItem(function(id,store){
 			if(store){
 				actedOn = true;
 				console.log(store, cid);
@@ -273,7 +305,7 @@ Ext.define('NextThought.controller.UserData', {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
-		LocationProvider.applyToStoresThatWantItem(function(id,store){
+		this.applyToStoresThatWantItem(function(id,store){
 			var r;
 			if(store){
 				actedOn = true;
@@ -299,7 +331,7 @@ Ext.define('NextThought.controller.UserData', {
 		var cid = item.get('ContainerId'),
 			actedOn = false;
 
-		LocationProvider.applyToStoresThatWantItem(function(id,store){
+		this.applyToStoresThatWantItem(function(id,store){
 			var r;
 			if(store){
 				actedOn = true;
@@ -329,6 +361,246 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
+
+	listenToPageStores : function(monitor, listeners){
+		monitor.mon(this.pageStoreEvents,listeners);
+	},
+
+
+	setupPageStoreDelegates: function(cmp){
+		var delegate,
+			delegates = {
+			clearPageStore: Ext.bind(this.clearPageStore,this),
+			addPageStore: Ext.bind(this.addPageStore,this),
+			getPageStore: Ext.bind(this.getPageStore,this),
+			hasPageStore: Ext.bind(this.hasPageStore,this),
+			applyToStores: Ext.bind(this.applyToStores,this),
+			applyToStoresThatWantItem: Ext.bind(this.applyToStoresThatWantItem,this)
+		};
+
+		for( delegate in delegates){
+			if(delegates.hasOwnProperty(delegate)){
+				if(cmp[delegate]){
+					console.warn('[W] !!!Overwritting existing property: '+delegate+' on '+cmp.id,cmp);
+				}
+				cmp[delegate] = delegates[delegate];
+			}
+		}
+	},
+
+
+	initPageStores: function(){
+		//init the page store.
+        var currentPageStoresMap = {};
+		this.pageStoreEvents = new Ext.util.Observable();
+		ObjectUtils.defineAttributes(this,{
+			currentPageStores: {
+				getter: function(){return currentPageStoresMap;},
+				setter: function(s){
+					var key, o, m = currentPageStoresMap||{};
+					currentPageStoresMap = s;
+					for(key in m){
+						if(m.hasOwnProperty(key)){
+							o = m[key]; delete m[key];
+							if(o){
+								if(!o.doesNotClear){
+									o.fireEvent('cleanup');
+									o.clearListeners();
+									o.removeAll();
+								} else {
+									s[key] = o;
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+
+
+
+		this.flatPageStore = new Ext.data.Store({
+			model: 'NextThought.model.Base',
+			id: 'FlatPageStore',
+			proxy: 'memory',
+			remoteSort: false,
+			remoteFilter: false,
+			remoteGroup: false,
+			filterOnLoad: true,
+			sortOnFilter: true,
+			sorters:[
+				{
+					property : 'line',
+					direction: 'ASC'
+				},{
+					property : 'CreatedTime',
+					direction: 'ASC'
+				}
+			],
+			filters:[
+				{filterFn:function(r){
+					return !r.parent;}, id:'nochildren'}
+			],
+			bind: this.bindFlatStore
+		});
+
+	},
+
+
+	bindFlatStore: function(otherStore){
+		var me = this;
+		if(otherStore.$boundToFlat){ return; }
+
+		function remove(s,rec){if(rec){me.remove(rec);}}
+		function add(s,rec){
+			rec = s.getItems();
+			var filter = [];
+			Ext.each(rec||filter,function(r){
+				if(!r.parent && r instanceof NextThought.model.Note && me.findExact('NTIID', r.get('NTIID')) < 0){
+					filter.push(r);
+				}
+			});
+
+			if(filter){
+				me.add(filter);
+			}
+		}
+
+		otherStore.on('cleanup','destroy',
+				me.mon(otherStore,{
+					scope: me,
+					destroyable: true,
+					add: add,
+					load: add,
+					bulkremove: remove,
+					remove: remove
+				}));
+
+		otherStore.$boundToFlat = true;
+
+		add(otherStore,otherStore.getItems());
+	},
+
+
+	clearPageStore: function(){
+		this.flatPageStore.removeAll();
+		this.currentPageStores = {};//see above defineAttributes call
+	},
+
+
+	hasPageStore: function(id){
+		return !id ? false : (this.currentPageStores||{}).hasOwnProperty(id);
+	},
+
+
+	addPageStore: function(id,store){
+		var events = this.pageStoreEvents, monitors = events.managedListeners||[];
+		if(this.hasPageStore(id) && this.getPageStore(id) !== store){
+			console.warn('replacing an existing store??');
+		}
+
+		store.cacheMapId = store.cacheMapId || id;
+
+		this.currentPageStores[id] = store;
+
+		this.flatPageStore.bind(store);
+		store.on('load','fillInUsers',this);
+
+		/**
+		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
+		 * See the PageItem store's property documentation
+		 * {@see NextThought.store.PageItem}
+		 *
+		 * An example of when you would want to set this is if there are two stores that represent the same set of data
+		 * and they are currently active ...such as the "notes only" store in the slide deck, and the general purpose
+		 * store on the page...  adding to the slide's store would trigger a duplicate event (the page's store would be
+		 * added to as well)
+		 */
+		if(store.doesNotShareEventsImplicitly){
+			return;
+		}
+
+		//Because root is just an alias of the NTIID store that represents the page root, it was causing two monitors
+		// to be put on the store...so we will skip stores we are already monitoring
+		if(Ext.Array.contains(Ext.Array.pluck(monitors,'item'),store)){
+			//This prevents two invocations of event handlers for one event.
+			return;
+		}
+
+		store.on('cleanup','destroy',
+			events.relayEvents(store, ['add','bulkremove','remove']));
+	},
+
+
+	getPageStore: function(id){
+		var theStore, root;
+		if(!id){ Ext.Error.raise('ID required'); }
+
+		function bad(){ console.error('There is no store for id: '+id); }
+		theStore =  this.currentPageStores[id];
+		if(!theStore){
+			root = this.currentPageStores.root;
+			if(root && (id === root.containerId)){
+				theStore = root;
+			}
+		}
+		return theStore || { bad: true, add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad, getItems: bad, getCount: bad };
+	},
+
+
+	//Calls the provided fn on all the stores.  Optionally takes a predicate
+	//which skips stores that do not match the predicate
+	applyToStores: function(fn, predicate){
+		Ext.Object.each(this.currentPageStores,function(k){
+			if(k==='root'){return;}//root is an alisas of the ntiid
+			if(!Ext.isFunction(predicate) || predicate.apply(null, arguments)){
+				Ext.callback(fn,null,arguments);
+			}
+		});
+	},
+
+
+	applyToStoresThatWantItem: function(fn, item){
+		function predicate(id, store){
+			return store && store.wantsItem(item);
+		}
+		this.applyToStores(fn, predicate);
+	},
+
+
+
+	fillInUsers: function(store, records){
+		var users = Ext.Array.map(records||[],function(r){return r.get('Creator');});
+
+		function apply(r,i){
+			var u = users[i],
+				id = u.getId(),
+				c = r.get('Creator');
+
+			if(c !== id && !Ext.isString(c) && c && c.getId() !== id){
+				console.error('Bad mapping:', c, id, records, users, i);
+				return;
+			}
+
+			if(c && !c.isModel){
+				r.set('Creator',u);
+			}
+		}
+
+		UserRepository.getUser(users,function(u){
+			users = u;
+
+			store.suspendEvents(true);
+			Ext.each(records,apply);
+			store.resumeEvents();
+
+		});
+	},
+
+
+
+
+
 	openChatTranscript: function(records, clonedWidgetMarkup){
 		if(!Ext.isArray(records)){ records = [records]; }
 		var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
@@ -343,6 +615,29 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		Ext.each(records,loadTranscript, this);
 	},
+
+
+	onAnnotationsLineFilter: function(line){
+		var s = this.flatPageStore;
+
+		s.removeFilter('lineFilter');
+		if(line){
+			s.addFilter({
+				id: 'lineFilter',
+				filterFn: function(r){
+					return r.get('line') === line;
+				}
+			});
+		}
+	},
+
+
+	maybeRemoveLineFilter: Ext.Function.createBuffered(function(){
+		var s = this.flatPageStore;
+		if( s.getCount() === 0 ){
+			s.removeFilter('lineFilter');
+		}
+	},1),
 
 
 	onAnnotationsFilter: function(cmp){
@@ -360,14 +655,14 @@ Ext.define('NextThought.controller.UserData', {
 				return;
 			}
 
-			cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
+			cmp.getAnnotations().objectsLoaded(store.getItems(bins), bins, store.containerId);
 		}
 
 		function containerStorePredicate(k, s){
 			return s.hasOwnProperty('containerId');
 		}
 
-		LocationProvider.applyToStores(function(k,s){
+		this.applyToStores(function(k,s){
 			var params = s.proxy.extraParams || {};
 
 			params = Ext.apply(params, {
@@ -403,22 +698,22 @@ Ext.define('NextThought.controller.UserData', {
 	onAnnotationsLoad: function(cmp, containerId, containers) {
 		var Store = NextThought.store.PageItem,
 			rel = Globals.USER_GENERATED_DATA,
-			pi = LocationProvider.currentPageInfo,
+			pi = cmp.getLocation().pageInfo,
 			ps = Store.make(pi.getLink(rel),containerId,true),
-			lp = LocationProvider;
+			me = this;
 
 		containers = containers || [];
 
-		lp.clearStore();
+		this.clearPageStore();
 
-		lp.addStore('root',ps);//add alias of root store
+		this.addPageStore('root',ps);//add alias of root store
 
 		if(!Ext.Array.contains(containers, containerId)){
 			containers.push(containerId);
 		}
 
 		Ext.each(containers,function(id){
-			lp.addStore(id,(containerId === id)?//ensure we don't duplicate the root store
+			me.addPageStore(id,(containerId === id)?//ensure we don't duplicate the root store
 				ps : Store.make(pi.getSubContainerURL(rel,id),id));
 		});
 
@@ -426,17 +721,16 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveSharingPrefs: function(prefs, callback){
+	saveSharingPrefs: function(pageInfo, prefs, callback){
 		//TODO - check to see if it's actually different before save...
-		var pi = LocationProvider.currentPageInfo;
 
 		//get parent:
-		$AppConfig.service.getPageInfo(LocationProvider.getLineage(pi.getId()).last(),
+		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfo.getId()).last(),
 			function(topPi){
 				if (topPi){
 					topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo){
 						//always happens if success only:
-						LocationProvider.updatePreferences(refreshedPageInfo);
+						me.updatePreferences(refreshedPageInfo);
 						Ext.callback(callback, null, []);
 					});
 				}
@@ -450,7 +744,47 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	define: function(term, boundingScreenBox){
+	updatePreferences: function(pi) {
+		if(Ext.isArray(pi)){
+			Ext.each(pi,this.updatePreferences,this);
+			return;
+		}
+
+		var sharing = pi.get('sharingPreference'),
+            piId = pi.getId(),
+            rootId = ContentUtils.getLineage(piId).last();
+
+        if (!this.preferenceMap){this.preferenceMap = {};}
+
+        if (sharing && /inherited/i.test(sharing.State) && rootId === sharing.Provenance) {
+            //got a sharing value from the root id, add it to the map
+            piId = rootId;
+        }
+        else if(!sharing || (!/set/i.test(sharing.State) && piId !== rootId)){
+            console.debug('Not setting prefs', sharing, (sharing||{}).State);
+            return;
+        }		this.preferenceMap[piId] = {sharing: sharing};
+		console.debug('shareing prefs updated', this.preferenceMap[piId]);
+	},
+
+
+	setupPagePreferences: function(cmp){
+		cmp.getPagePreferences = Ext.bind(this.getPreferences,this);
+	},
+
+
+	getPreferences: function(ntiid) {
+		if (!this.preferenceMap || !ntiid) {
+			return null;
+		}
+
+        var lineage = ContentUtils.getLineage(ntiid), result=null;
+        Ext.each(lineage, function(l){result = this.preferenceMap[l]; return !result; }, this);
+        return result;
+	},
+
+
+	define: function(term, boundingScreenBox, reader){
 
 		if( this.definition ){
 			this.definition.close();
@@ -459,9 +793,11 @@ Ext.define('NextThought.controller.UserData', {
 		this.definition = Ext.widget(
 			'definition-window',{
 			term: term,
-			pointTo: boundingScreenBox
+			pointTo: boundingScreenBox,
+			reader: reader
 		}).show();
 	},
+
 
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
@@ -497,7 +833,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v), function(){});
+			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v));
 		}
 
 		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
@@ -526,6 +862,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 	},
 
+
 	onDisplayPopover: function(sender, id, html, node) {
 		var offsets = sender.getAnnotationOffsets(),
 			position = Ext.fly(node).getXY(),
@@ -549,7 +886,7 @@ Ext.define('NextThought.controller.UserData', {
 
 			//adjust position for left and right.  If we can be centered above it
 			//we allow that, otherwise we move the bubble left and right
-			if(position[0] + horizontalSpaceNeeded > offsets.width){
+			if(position[0] + horizontalSpaceNeeded > Ext.Element.getViewportWidth()){
 				//the bubble needs to shift left, marker on the right
 				position[0] = position[0] - (horizontalSpaceNeeded * 2) + 20;
 				me.popoverWidget.addCls('right');
@@ -563,7 +900,7 @@ Ext.define('NextThought.controller.UserData', {
 				//centered
 				position[0] = position[0] - (me.popoverWidget.width/2);
 			}
-			position[0] = position[0] + offsets.gutter + 80;
+			position[0] += 80;
 
 			return position;
 		}
@@ -598,10 +935,10 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewBookmark: function(){
+	saveNewBookmark: function(reader){
 		//create a bookmark model
 		var bm = this.getBookmarkModel().create({
-			ContainerId: LocationProvider.currentNTIID,
+			ContainerId: reader.getLocation().NTIID,
 			applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
 		});
 
@@ -671,6 +1008,10 @@ Ext.define('NextThought.controller.UserData', {
 		if (!$AppConfig.service.canShare()){
 			shareWith = [];
 		}
+		//apply default sharing
+		else if(Ext.isEmpty(shareWith)){
+			shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
+		}
 
 		//define our note object:
 		noteRecord = this.getNoteModel().create({
@@ -688,6 +1029,7 @@ Ext.define('NextThought.controller.UserData', {
 		//now save this:
 		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
 	},
+
 
 	handleException: function(proxy, response, operation){
 		var error,
@@ -803,8 +1145,7 @@ Ext.define('NextThought.controller.UserData', {
 		var p = null;
 
 		if(applySharing){
-			p = LocationProvider.getPreferences();
-			p = p ? p.sharing : null;
+			p = ((this.getPreferences(record.get('ContainerId'))||{}).sharing||{}).sharedWith || null;
 		}
 		record.set('SharedWidth',p);
 

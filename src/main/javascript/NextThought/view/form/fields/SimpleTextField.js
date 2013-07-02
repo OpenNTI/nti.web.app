@@ -24,7 +24,6 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		delete config.renderSelectors;
 		this.callParent(arguments);
 		this.mixins.placeholderFix.constructor.call(this);
-		return this;
 	},
 
 

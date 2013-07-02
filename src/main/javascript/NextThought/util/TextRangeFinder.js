@@ -176,7 +176,8 @@ Ext.define('NextThought.util.TextRangeFinder', {
 	 * @param node - the node to search for ranges beneath
 	 * @param doc - the document fragment node is a child of
 	 * @param searchFor - a string or a regex to search for
-	 * @param which - if provided the subexpression of the regex to be matched or an array of subexpression idexes
+	 * @param [which] - if provided the subexpression of the regex to be matched or an array of subexpression idexes
+	 * @param [textIndex]
 	 * Note cutz: for the which param to work it expects each part of your regex to be captured
 	 * IE if your goal is to have a capture in the middle of the regex you must also capture the first portion prior to it
 	 *

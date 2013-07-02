@@ -111,13 +111,12 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		}
 
 		var me = this,
-			p = (LocationProvider.getPreferences() || {}).sharing || {},
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			style = 'suppressed',
 			v = me.editor.getValue(),
 			note = v.body,
 			title = v.title,
-			sharing = p.sharedWith || [],
+			sharing = [],
 			range,
 			container = me.slide.get('ContainerId'),
 			dom = me.slide.get('dom-clone'), img;

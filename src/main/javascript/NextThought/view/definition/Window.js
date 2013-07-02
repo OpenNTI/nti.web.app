@@ -36,6 +36,10 @@ Ext.define('NextThought.view.definition.Window', {
 	initComponent: function(){
 		var me = this, p, nib = 20, top, y, x;
 
+		if(!me.pageInfo || !Ext.isFunction(me.pageInfo.getLink)){
+			Ext.Error.raise('Need a PageInfo');
+		}
+
 		if(!me.term){
 			Ext.Error.raise('definition term required');
 		}
@@ -132,7 +136,7 @@ Ext.define('NextThought.view.definition.Window', {
 
 
 	queryDefinition: function(cb, scope){
-        var u = LocationProvider.currentPageInfo.getLink('Glossary'), req;
+        var u = this.pageInfo.getLink('Glossary'), req;
 
         if (!u){u=this.fallbackURL;}
         else{u+='/';}

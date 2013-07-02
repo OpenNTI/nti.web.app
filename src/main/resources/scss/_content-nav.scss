@@ -1,54 +1,133 @@
 
 
-.x-component-content-navigation {
-	&.x-toolbar-item{
-		margin-top: 5px !important;
-		width: 620px;
-		.detected-scrollbars & {width: 635px;}
-	}
+.x-component-content-navigation.jumpto {
+	width: 620px;
+	.detected-scrollbars & {width: 635px;}
 
-	img.bookcover {
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center center;
-		float: left;
-		width: 54px;
-		height: 66px;
-		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
-	}
-
-	.wrapper {
-		margin: 1px 0 0 65px;
-		min-height: 66px;
+	.back {
+		@include icon('profile_back_arrow', $top: 23px, $left: 35px);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 60px;
 	}
 
 	.breadcrumb {
+		margin-left: 60px;
+
 		&, * {
 			color: $tertiary-grey;
-			font-size: 10px;
-			font-weight: bold;
+			font: normal normal 14px/60px $font;
 			overflow: hidden;
 			@include ellipse;
 			text-transform: uppercase;
 		}
-		span.part:not(.no-hover) {
+
+		span.part {
 			cursor: pointer;
-			&:hover{
+			&:hover,
+			&:last-of-type {
 				color: $primary-grey;
 			}
+		}
+	}
+}
 
+.x-component-content-pager {
+	height: 60px;
+	width: 120px;
+	position: relative;
+
+	.next,.prev {
+		cursor: pointer;
+		width: 60px;
+		height: 60px;
+		position: absolute !important;
+		top: 0;
+		opacity: 0.2;
+
+		&:hover {
+			opacity: 1;
 		}
 	}
 
-	.title {
-		color: $primary-grey;
-		font-size: 20px;
-		font-style: italic;
-		font-weight: normal;
-		line-height: 24px;
-		margin: 0 0 0 0;
-		overflow: hidden;
-		//@include ellipse;
-		height: 50px;
+	.next {
+		right: 0;
+		@include icon('next', $top: 20px, $left: 12px);
+	}
+
+	.prev {
+		left: 0;
+		@include icon('prev', $top: 20px, $left: 35px);
+	}
+}
+
+
+.x-panel-notes-and-discussion {
+	&,.x-panel-body-default{
+		background: #fbfbfb;
+	}
+	border-left: 1px solid #ededed;
+	border-left-width: 1px !important;
+}
+
+.nti-notes-and-discussion-tabbar,
+.content-toolbar  {
+	border-bottom: 1px solid #ededed;
+	border-bottom-width: 1px !important;
+}
+
+.nti-notes-and-discussion-tabbar{
+	.x-tab-notes-and-discussion-tab {
+
+		//.x-tab-wrap{
+		//	margin-left: 15px;
+		//}
+
+		text-transform: uppercase;
+		color: $tertiary-grey;
+		font: normal 600 12px/59px $font;
+
+		.x-tab-icon-el {
+			width: 21px;
+			height: 20px;
+
+			top: 20px;
+			left: 15px;
+
+			&.notepad {
+				@include icon('notepad',$position:absolute);
+			}
+
+			&.discus {
+				top: 22px;
+				@include icon('discussions',$position:absolute);
+			}
+		}
+
+		.x-tab-inner {
+			text-align: left;
+			margin-left: 43px;
+			margin-right: 21px;
+		}
+
+		&.x-active {
+			color: $secondary-grey;
+
+			&::after{
+				content: '';
+				position: absolute;
+				display: block;
+				bottom: 0;
+				left: 0; right: 0;
+				background: $secondary-grey;
+				height: 4px;
+			}
+
+			.x-tab-icon-el {
+				&.notepad::after { @include sprite($icons,'notepad_active'); }
+				&.discus::after { @include sprite($icons,'discussions_active'); }
+			}
+		}
 	}
 }

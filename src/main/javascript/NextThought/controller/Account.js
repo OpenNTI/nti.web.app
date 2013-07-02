@@ -442,7 +442,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	openHelp: function(){
-		LocationProvider.setLocation('tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.tableofcontents');
+		this.fireEvent('set-location','tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.tableofcontents');
 	},
 
 

@@ -7,7 +7,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 
 	constructor: function(){
 		this.calculatedAttributes = ['url'];
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 	draw: function(ctx, renderCallback){

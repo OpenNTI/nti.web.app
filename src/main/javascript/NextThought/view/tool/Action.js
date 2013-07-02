@@ -21,7 +21,6 @@ Ext.define('NextThought.view.tool.Action',{
 		}
 		this.callParent([config]);
 		this.assignExtAction(action);
-		return this;
 	},
 
 

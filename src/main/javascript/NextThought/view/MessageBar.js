@@ -26,7 +26,7 @@ Ext.define('NextThought.view.MessageBar', {
 		if(this.self.dontShow[messageType] || !Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))){
 			return null;
 		}
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 	initComponent: function(){

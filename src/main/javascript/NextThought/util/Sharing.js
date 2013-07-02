@@ -30,17 +30,7 @@ Ext.define('NextThought.util.Sharing',{
 
 
 	resolveValue: function(value){
-		var p, result = null;
-
-		// If value is set and is not an array, then try to resolve it first, if not,
-		// Pull it from location's preferences.
-		if (!Ext.isArray(value)){
-			p = value || LocationProvider.getPreferences();
-			//we may not have preferences.
-			p = p ? p.sharing : null;
-			//we may not have sharing preferences, guard from error.
-			result = p ? p.sharedWith : null;
-		}
+		var result = null;
 
 		//if there are no results yet, fall back to the given value (it may be blank as well)
 		result = result || value;
@@ -65,6 +55,7 @@ Ext.define('NextThought.util.Sharing',{
 
 		return result;
 	},
+
 
 	getAppUserCommunities: function(){
 		return $AppConfig.userObject.getCommunities(true);

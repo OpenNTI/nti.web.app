@@ -144,9 +144,16 @@
 
 .annotation-gutter {
 	position: absolute;
-	top: 0; left: 0;//fill the space
+	top: 0;
+	left: 735px;
+	right: 0;
 	overflow: visible;
 	z-index: 4;
+
+	&.debug {
+		bottom: 0;
+		background: rgba(255,0,0,0.3);
+	}
 
 	.column {
 		position: absolute;
@@ -156,47 +163,89 @@
 		bottom: 0;
 		overflow: visible;
 
-		&.widgets {
-			left: 20px;
-		}
-
-		.controlContainer,
-		.widgetContainer {
+		.controlContainer {
 			direction: rtl;
 			text-align: right;
+			position: absolute;
+			white-space: nowrap;
+			left: -5px;
+			border-radius: 5px;
+			cursor: pointer;
+
 			* {
 				text-align: initial;
 				direction: ltr;
 			}
-			position: absolute;
-			height: 30px;
-			width: 100%;
-			background: #ffffff;
-			white-space: nowrap;
-			left: 0; right: 0;
 
-			.thumb {
-				display: inline-block;
+			.count {
+				font: normal bold 9px/19px $font;
+				color: $primary-blue;
+				margin: 0 10px;
+			}
 
-				&.nib-stack{
-					background: url(../images/elements/margin_note_endcap.png) right center no-repeat;
-					width: 10px;
-					height: 30px;
-				}
-
-				&:first-of-type {
-					border: 0 solid black;
-					border-radius: 0 3px 3px 0;
-				}
-
-				&:last-of-type {
-					border: 0 solid black;
-					border-radius: 3px 0 0 3px;
+			&:hover,
+			&.active {
+				background: $primary-blue;
+				.count {
+					color: #fff;
 				}
 			}
 		}
-		.controlContainer{
-			bottom: transparent;
+	}
+}
+
+
+.x-component-annotation-view {
+	overflow: {
+		x: hidden;
+		y: scroll;
+	}
+	.row {
+		cursor: pointer;
+		margin: 0 1px;
+		padding: 10px 15px;
+		border-bottom: 1px solid #ededed;
+
+		&.x-item-selected,
+		&.over{
+			background: #fff;
+			border-bottom-color: #cfcfcf;
+			box-shadow: 0 -1px 0 0 #cfcfcf;
+		}
+
+		.name {
+			font: normal 600 10px/15px $font;
+			text-transform: uppercase;
+			color: $primary-blue;
+		}
+		.snipet {
+			min-height: 50px;
+			font: italic 400 16px/25px $font;
+			margin: 0 0 10px 0;
+			color: $primary-grey;
+
+			.body-divider .whiteboard-container {
+				.whiteboard-wrapper .overlay{bottom: 0;}
+				.toolbar {display: none;}
+			}
+		}
+		.footer {
+			font: normal 400 10px/15px $font;
+			color: $tertiary-grey;
+
+			span{
+				&::after{
+					text-decoration: none !important;
+					position: static;
+					content: '\00B7';
+					padding: 0 0.5em;
+					background: none;
+				}
+				&:last-of-type::after {
+					content: '';
+					display: none;
+				}
+			}
 		}
 	}
 }

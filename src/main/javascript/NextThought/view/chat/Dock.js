@@ -271,9 +271,6 @@ Ext.define('NextThought.view.chat.DockItem',{
 		this.mon(this.associatedWindow,'notify','handleWindowNotify',this);
 		this.lastUpdated = new Date();
 		this.unread = 0;
-
-
-		return this;
 	},
 
 	afterRender: function(){

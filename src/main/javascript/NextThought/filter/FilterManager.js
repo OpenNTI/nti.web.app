@@ -67,11 +67,11 @@ Ext.define('NextThought.filter.FilterManager',{
 			list = filter? filter.flatten() : [],
 			params = {};
 
-        list.push({
-            fieldName: '$className',
-            operation: 1,
-            value: 'NextThought.model.Bookmark'
-        });
+//        list.push({
+//            fieldName: '$className',
+//            operation: 1,
+//            value: 'NextThought.model.Bookmark'
+//        });
 
 		Ext.each(list,function(f){
 			var m;

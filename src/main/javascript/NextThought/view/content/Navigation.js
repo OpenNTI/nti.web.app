@@ -10,64 +10,43 @@ Ext.define('NextThought.view.content.Navigation',{
 	breadcrumbSepTpl: Ext.DomHelper.createTemplate({tag:'span',html:' / '}).compile(),
 	breadcrumbTpl: Ext.DomHelper.createTemplate({tag:'span',cls:'part',html:'{0}'}).compile(),
 
-	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'img', src: Ext.BLANK_IMAGE_URL, cls: 'bookcover' },
-		{
-			cls: 'wrapper',
-			cn: [{
-				cls: 'breadcrumb'
-			},{
-				cls: 'title'
-			}]
-		}
-	]),
+	renderTpl: Ext.DomHelper.markup([{cls: 'back'},{ cls: 'breadcrumb' }]),
 
-	levelLabels: {
-		1: 'Select a section'
-	},
+	levelLabels: { 1: 'Select a section' },
 
-	renderSelectors: {
-		bookcover: 'img.bookcover',
-		breadcrumb: '.breadcrumb',
-		title: '.title'
-	},
+	renderSelectors: { breadcrumb: '.breadcrumb' },
 
-	initComponent: function(){
-		this.callParent(arguments);
-	},
-
-
-	afterRender: function(){
-		var me = this;
-		this.callParent(arguments);
-		me.hide();
+	listeners: {
+		afterrender:'hide'
 	},
 
 
 	updateLocation: function(ntiid){
 		var me = this,
-			lp = LocationProvider,
-			c,
-			loc = lp.getLocation(ntiid),
-			lineage = lp.getLineage(ntiid),
+			C = ContentUtils,
+			loc = C.getLocation(ntiid),
+			lineage = C.getLineage(ntiid),
 			parent = lineage.last(),
-			book = lineage[0] ? lp.getLocation(lineage[0]) : null,
-			path = me.getBreadcrumbPath(),
-			iconPath;
+			book = lineage[0] ? C.getLocation(lineage[0]) : null,
+			path = me.getBreadcrumbPath();
 
-		function buildPathPart(i){
+		function buildPathPart(v,i,a){
 			var e,
-				l = lp.getLocation(i),
+				l = C.getLocation(v),
 				label = l.label,
 				level = parseInt(l.location.getAttribute('levelnum'), 10);
-			if (i === ntiid) {
+
+			if (v === ntiid) {
 				label = me.levelLabels[level] || label;
 			}
-			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
-			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 
-			me.buildMenu(e,c,parent);
-			c = l;
+			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
+
+			if(i < (a.length-1)){
+				path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
+			}
+
+			me.buildMenu(e,l,parent);
 			path.add(e);
 		}
 
@@ -76,45 +55,9 @@ Ext.define('NextThought.view.content.Navigation',{
 		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
 		if(me.isHidden()){ me.show(); }
 
-		iconPath = book.icon;
-		if(iconPath.substr(0,book.root.length) !== book.root ){
-			iconPath = book.root+book.icon;
-		}
 
-		this.bookcover.setStyle({
-			backgroundImage: Ext.String.format('url({0})',me.getIcon(iconPath))
-		});
-
-		c = lp.getLocation(lineage.shift());
-		if(this.hasChildren(c.location)) {
-			lineage.unshift(c.NTIID);
-			c = lp.getLocation(Ext.fly(c.location).first('topic', true).getAttribute('ntiid'));
-		}
-		Ext.each(lineage,buildPathPart, this);
-
-		path.add(me.buildMenu(
-				me.breadcrumbTpl.insertFirst(me.breadcrumb, ['All Books'], true),
-				c
-		));
-
-		path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
-		path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, ['Library']));
-
-		me.breadcrumb.first().addCls('no-hover');
-
-		me.title.clearListeners();
-		me.title.update(me.getTitle(lineage,loc));
+		Ext.each(lineage.slice(0,2),buildPathPart, this);
 	},
-
-
-	getIcon: DelegateFactory.getDelegated(function(icon){
-		return icon;
-	}),
-
-
-	getTitle: DelegateFactory.getDelegated(function(lineage,loc){
-		return this.getContentNumericalAddress(lineage,loc)+loc.label;
-	}),
 
 
 	getContentNumericalAddress: function(lineage,loc){
@@ -170,10 +113,9 @@ Ext.define('NextThought.view.content.Navigation',{
 		//evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
 		m.mon(pathPartEl, {
 			scope: m,
-			'mouseleave':'startHide',
+			'mouseleave':'stopShow',
 			'mouseenter':function(){
-				m.stopHide();
-				m.showBy(pathPartEl,'tl-bl?', [-10,0]);
+				m.startShow(pathPartEl,'tl-bl?', [-10,0]);
 			},
 			'click': function(){
 				if (!m.isVisible()){
@@ -187,6 +129,7 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		return pathPartEl;
 	},
+
 
 
 	enumerateBookSiblings: function(locInfo,items){

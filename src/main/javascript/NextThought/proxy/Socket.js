@@ -1,8 +1,7 @@
 Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
-	isDebug: true,
-	//Uncomment to log heartbeats and noop packets. I don't recommend doing this outside local testing
-	//isVerbose: true,
+	isDebug: $AppConfig.debugSocket,
+	isVerbose: $AppConfig.debugSocketVerbosely,
 	mixins: { observable: 'Ext.util.Observable' },
 
 	constructor: function() {

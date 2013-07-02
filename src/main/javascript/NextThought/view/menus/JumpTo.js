@@ -34,10 +34,10 @@ Ext.define('NextThought.view.menus.JumpTo',{
 		}
 
 		if (item.rememberLastLocation){
-			LocationProvider.setLastLocationOrRoot(item.ntiid);
+			this.fireEvent('set-last-location-or-root',item.ntiid);
 			return;
 		}
-		LocationProvider.setLocation(item.ntiid);
+		this.fireEvent('set-location',item.ntiid);
 	},
 
 
@@ -50,6 +50,16 @@ Ext.define('NextThought.view.menus.JumpTo',{
 		});
 	},
 
+	startShow: function(el, align, offset){
+		this.stopHide();
+
+		this.showTimeout = Ext.defer(this.showBy, 500, this, [el,  align, offset]);
+	},
+
+	stopShow: function(){
+		this.startHide();
+		this.showTimeout && clearTimeout(this.showTimeout);
+	},
 
 	startHide: function(){
 		var me = this;

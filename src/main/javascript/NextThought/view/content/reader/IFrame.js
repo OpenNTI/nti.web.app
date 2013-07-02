@@ -1,19 +1,47 @@
 Ext.define('NextThought.view.content.reader.IFrame',{
+	alias: 'reader.iframe',
 	requires: [
 		'NextThought.ContentAPIRegistry'
 	],
 
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
+	getBubbleTarget: function(){return this.reader; },
+
 	baseFrameCheckIntervalInMillis: 500,
 	frameCheckRateChangeFactor: 1.5,
 
-	constructor: function(){
-		this.checkFrame = Ext.bind(this.checkFrame,this);
-		if(this.add){
-			this.add(this.getIFrameConfig());
-		}
+	constructor: function(config){
+		Ext.apply(this,config);
 
-		this.on('resize',function(){delete this.lastHeight;},this);
-		return this;
+		var reader = this.reader;
+
+		this.mixins.observable.constructor.apply(this);
+
+		reader.on('destroy','destroy',
+			reader.relayEvents(this,[
+				'dismiss-popover',
+				'iframe-ready',
+				'sync-height',
+				'content-updated',
+				'content-updated-with',
+				'page-previous',
+				'page-next'
+			]));
+
+		Ext.apply(reader,{
+			getDocumentElement: Ext.bind(this.getDocumentElement,this),
+			getCleanContent: Ext.bind(this.getCleanContent,this)
+		});
+
+		this.checkFrame = Ext.bind(this.checkFrame,this);
+
+		this.iframe = this.reader.add(this.getConfig());
+
+
+		this.mon(this.reader, 'resize',function(){delete this.lastHeight;},this);
 	},
 
 
@@ -28,13 +56,13 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	},
 
 
-	getIFrameConfig: function(){
+	getConfig: function(){
 		var me = this;
 		return {
 			xtype: 'box',
-			width: 780,
+			width: 765,
 			autoEl: {
-				width: 780,
+				width: 765,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
@@ -44,16 +72,15 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
-				scope: this,
 				afterRender: function(){
-					this.resetFrame(function(){
-						var frame = this.getIframe();
-						if(frame){
+					me.resetFrame(function(){
+						var frame = me.get();
+						if( frame ){
 							frame.selectable();
 						}
-						me.iframeReady = true;
-						me.fireEvent('iframe-ready', me.ntiidOnFrameReady);
-						delete me.ntiidOnFrameReady;
+						me.reader.iframeReady = true;
+						me.fireEvent('iframe-ready', me.reader.ntiidOnFrameReady);
+						delete me.reader.ntiidOnFrameReady;
 					});
 				}
 			}
@@ -63,9 +90,15 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 	resetFrame: function(cb){
 		// must defer to wait for browser to be ready
-		var me = this,
+		var BLANK_DOC = '<!DOCTYPE html>'+Ext.DomHelper.markup(
+						{tag:'html', lang:'en', cn:[
+							{tag:'head',cn:
+								{tag:'title',html:'Content'}},
+							{tag:'body'}]
+						}),
+			me = this,
 			jsPrefix = 'javascript', //this in var to trick jslint
-			task = { interval : 100 },
+			task = { interval : 50 },
 			doc = me.getDocumentElement();
 
 		doc.open();
@@ -80,7 +113,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
 				doc.open();
-				doc.write('<!DOCTYPE html><head><title>Content</title></head><html lang="en"><head></head><body></body></html>');
+				doc.write(BLANK_DOC);
 				doc.close();
 				delete me.contentDocumentElement;
 				setTimeout(function(){
@@ -91,7 +124,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				},10);
 			}
 		};
-		setTimeout(function(){Ext.TaskManager.start(task);},200);
+
+		Ext.TaskManager.start(task);
 	},
 
 
@@ -114,7 +148,31 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			});
 		}
 
-		me.getIframe().win.onerror = function(){con.warn('iframe error: ',JSON.stringify(arguments));};
+		function forward(name){
+			on(doc,name,function(e){
+				e = Ext.EventObject.setEvent(e||event);
+				var o = me.reader.getAnnotationOffsets(),
+					xy = e.getXY().slice();
+
+				xy[0] += o.left;
+				xy[1] += o.top;
+
+				//console.debug(e.browserEvent,xy, o);
+				me.reader.fireEvent('iframe-'+ e.type,{
+					browserEvent: e.browserEvent,
+					type: e.type,
+					getY: function(){ return xy[1]; },
+					getX: function(){ return xy[0]; },
+					getXY: function(){ return xy; },
+					stopEvent: function(){
+						Ext.EventManager.stopPropagation(this.browserEvent);
+						Ext.EventManager.preventDefault(this.browserEvent);
+					}
+				});
+			});
+		}
+
+		me.get().win.onerror = function(){con.warn('iframe error: ',JSON.stringify(arguments));};
 
 		//Move classes down from main body to sub-iframe body for content rendering reference:
 		Ext.fly(doc.getElementsByTagName('body')[0]).addCls(this.getTopBodyStyles());
@@ -134,13 +192,25 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
-			if(e.getKey() === e.BACKSPACE || e.getKey() === e.ESC){
-				var t = e.getTarget();
-				e.stopPropagation();
+			var t = e.getTarget(),
+				k = e.getKey();
 
+			if(k === e.BACKSPACE || e.getKey() === e.ESC){
+				e.stopPropagation();
 				if(!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable'))){
 					e.stopEvent();
 					return false;
+				}
+			}
+			else if(t && t.tagName === 'BODY' ) {
+				if(k === e.UP){
+					me.reader.getScroll().up();
+				}
+				else if(k === e.DOWN){
+					me.reader.getScroll().down();
+				}
+				else if(k === e.LEFT || k === e.RIGHT){
+					me.fireEvent(k===e.LEFT? 'page-previous':'page-next');
 				}
 			}
 			return true;
@@ -152,7 +222,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             mouseout: tip.onTargetOut,
             mousemove: tip.onMouseMove,
             scope: tip,
-			reader: me
+			reader: me.reader
         });
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
@@ -162,25 +232,25 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		});
 		on(doc,'click',function(e){
 			var evt = Ext.EventObject.setEvent(e||event),
-				target = evt.getTarget(null, null, true),
-				highlight = evt.getTarget('.application-highlight');
+				target = evt.getTarget(),
+				highlight = evt.target.classList.contains('application-highlight');
 
 			//while the target is not an anchor that is not in a highlight
-			while(target && (!target.is('a') || target.up('.application-highlight'))){
-				target = target.parent();
+			while(target && (target.tagName !== 'A' || target.parentNode.classList.contains('application-highlight'))) { 
+				target = target.parentNode; 
 			}
 
 			//if we are not in a hightlight
-			if(target && !highlight){ me.onClick(evt, Ext.getDom(target)); }
+			if(target && !highlight){ me.reader.getContent().onClick(evt, target); }
 		});
 		on(doc,'mouseup',function(e){
 
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
-				t = me.body.getScroll().top,
-				s = me.getIframe().win.getSelection();
+				t = me.reader.getScroll().get().top,
+				s = me.get().win.getSelection();
 
 			if(!fakeEvent.getTarget('a') || !s.isCollapsed){ 
-				me.onContextMenuHandler({
+				me.reader.onContextMenuHandler({
 					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 					preventDefault: function(){ fakeEvent.preventDefault(); },
 					stopPropagation: function(){ fakeEvent.stopPropagation(); },
@@ -194,6 +264,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		});
 
 
+		forward(['mousedown','mouseup','mousemove','mouseout']);
+
+
         function shouldDismissPopover(){
 	        me.fireEvent('dismiss-popover');
         }
@@ -205,7 +278,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                    shouldDismissPopover();
                }
         });
-        me.registerScrollHandler(shouldDismissPopover);
+
+        me.reader.getScroll().registerHandler(shouldDismissPopover);
 
 
         on(doc, 'mouseover', function(e){
@@ -263,7 +337,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
-		me.setSplash();
+		me.reader.setSplash();
 		if(me.syncInterval){
 			clearInterval(me.syncInterval);
 		}
@@ -302,7 +376,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	syncFrame: function(content){
-		var i = this.getIframe(), h, contentHeight = 150, ii;
+		var i = this.get(), h, contentHeight = 150, ii;
 			//We need the buffer because otherwise the end of the doc would go offscreen
 
 		if(!i){
@@ -319,21 +393,21 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		else {
 			contentHeight = content.getBoundingClientRect().height;
 		}
-		h = Math.ceil(Math.max(this.getEl().getHeight(),contentHeight));
+		h = Math.ceil(Math.max(this.reader.getEl().getHeight(),contentHeight));
 
 		if(h === this.lastHeight){
 			return;
 		}
 		i.setHeight(h);
-		this.doLayout();
+		this.reader.updateLayout();
 		this.lastHeight = h;
 		this.lastSyncFrame = Ext.Date.now();
 		this.fireEvent('sync-height',h);
 	},
 
 
-	getIframe: function(){
-		var iframe, el = this.items.first().el;
+	get: function(){
+		var iframe, el = this.iframe.el;
 		if(!el){ return null; }
 		iframe = el.dom;
 		el.win = iframe.contentWindow || window.frames[iframe.name];
@@ -345,7 +419,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if(!doc){
-			iframe = this.getIframe();
+			iframe = this.get();
 
 			if(!iframe){
 				console.warn('The iframe is not rendered');
@@ -377,7 +451,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	},
 
 
-	updateContent: function(html) {
+	update: function(html) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0],
@@ -405,18 +479,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		doc.normalize();
 
 		if(html!==false){
-			this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
+			this.fireEvent('content-updated-with',body,doc);
             this.cleanContent = body.dom.cloneNode(true);
         }
 		this.fireEvent('content-updated');
-
-
-		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
-//		Ext.each(body.query('script'),function(s){
-//			s.parentNode.removeChild(s);
-//			var e = doc.createElement('script'); e.src = s.src;
-//			head.appendChild(e);
-//		});
 
 		clearInterval(this.syncInterval);
 		delete this.lastHeight;

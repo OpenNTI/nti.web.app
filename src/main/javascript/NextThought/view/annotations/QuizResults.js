@@ -6,10 +6,9 @@ Ext.define( 'NextThought.view.annotations.QuizResults', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-
-
-		return this;
 	},
+
+
 	render: function(){
 		return this;
 	}

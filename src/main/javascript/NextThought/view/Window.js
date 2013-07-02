@@ -81,7 +81,7 @@ Ext.define('NextThought.view.Window',{
 			}
 		}
 
-		return this.callParent([config]);
+		this.callParent([config]);
 	},
 
 
