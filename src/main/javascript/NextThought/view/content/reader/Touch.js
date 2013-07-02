@@ -5,6 +5,15 @@ Ext.define('NextThought.view.content.reader.Touch', {
     requires: ['NextThought.view.content.reader.IFrame',
                'NextThought.view.content.reader.Scroll'],
 
+    statics: {
+        SCROLL_TIME_STEP: 1,
+        SCROLL_FRICTION: 0.05,
+        SCROLL_MAX_SPEED: 200,
+        SCROLL_THRESHOLD_SPEED: 1,
+        TAP_TIME: 2,
+        TAP_HOLD_TIME: 1000
+    },
+
     /**
      * Implements the touch interactions for the reader if the current
      * platform is an iPad.
@@ -41,18 +50,29 @@ Ext.define('NextThought.view.content.reader.Touch', {
      * click and scroll
      */
     setupTouchHandlers: function() {
-        var reader = this.reader,
+        var s = this.statics(),
+            reader = this.reader,
             scroll = reader.getScroll(),
             dom = reader.getEl().dom,
+            anotherTouchStarted,
             startY,
             //current movement delta
             vel;
 
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
+            anotherTouchStarted = true;
 
-            // TODO: Check for the existence of elements above the touch
             startY = e.touches[0].pageY;
+            vel = 0;
+
+            setTimeout(function() {
+                // TODO: check for long press
+                var isLongPress = false;
+                if (isLongPress) {
+
+                }
+            }, s.TAP_HOLD_TIME);
         }, false);
 
         dom.addEventListener('touchmove', function(e) {
@@ -67,32 +87,33 @@ Ext.define('NextThought.view.content.reader.Touch', {
         dom.addEventListener('touchend', function(e){
             e.preventDefault();
 
-            var TIME_STEP = 1,
-                FRICTION = 0.05,
-                MAX_SPEED = 200,
-                THRESHOLD_SPEED = 1,
-                startLt0 = vel<0,
+            var startLt0 = vel<0,
                 lastUpdateTime = Date.now();
 
+            anotherTouchStarted = false;
+
             // Cap the ending velocity at the max speed
-            if (Math.abs(vel) > MAX_SPEED)
-                vel = startLt0? -MAX_SPEED : MAX_SPEED;
+            if (Math.abs(vel) > s.SCROLL_MAX_SPEED)
+                vel = startLt0? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
 
             function kineticScroll() {
                 var lt0 = vel< 0,
                     currentTime = Date.now(),
-                    deltaTime = currentTime-lastUpdateTime;
+                    deltaTime = currentTime-lastUpdateTime,
+                    aboveThreshold, sameDirection;
                 lastUpdateTime = currentTime;
-
-                // Apply friction in the opposite movement direction
-                // based on the time passed for smoother movement
-                vel+= (lt0 ? FRICTION : -FRICTION)*deltaTime;
 
                 // Continue scrolling if above the movement threshold
                 // and hasn't changed directions
-                if ((lt0 ? -vel : vel) > THRESHOLD_SPEED && startLt0===lt0){
+                aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
+                sameDirection = startLt0 === lt0;
+                if ( aboveThreshold && sameDirection && !anotherTouchStarted ){
+                    // Apply friction in the opposite movement direction
+                    // based on the time passed for smoother movement
+                    vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
+
                     scroll.by(vel);
-                    setTimeout(kineticScroll, TIME_STEP);
+                    setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
                 }
             }
             kineticScroll();
