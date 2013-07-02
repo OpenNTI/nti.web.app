@@ -301,7 +301,6 @@ div.no-content-splash {
 	bottom: 0;
 	z-index: 99;
 	background-color: white;
-    margin-right: -140px;
 
     &.initial{
         .x-component-resource-not-found{
@@ -311,7 +310,7 @@ div.no-content-splash {
 
     .x-component-resource-not-found{
         margin: 50px auto;
-        width: 70%;
+        width: 75%;
     }
 }
 
