@@ -26,10 +26,8 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 			pop,
 			user = this.userObject || this.user;
 
-		if( !canShow){
 		if(!user || this instanceof Popup || !Popup.beforeShowPopup(user, el)){ return; }
-		}
-
+		
 		pop = contactCardPopout;
 
 		if(!pop || pop.isDestroyed){
@@ -72,7 +70,6 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 					click: onUserNameClick
 				};
 
-			canShow = /^(g|k).+.{16}$/i.test($AppConfig.username);
 			
 			Ext.each(arguments,function(el){
 				el = Ext.get(el);
