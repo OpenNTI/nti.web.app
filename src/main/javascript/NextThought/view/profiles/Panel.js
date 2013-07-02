@@ -187,6 +187,20 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		this.tabBarEl = this.tabs.getTabBar().getEl();
 		this.mon(Ext.get('profile'),'scroll',this.handleScrollHeaderLock,this);
+
+		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
+		this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
+	},
+
+
+	handleWindowResize: function(){
+		var left, 
+			tabs = this.tabs.getEl(),
+			tabBarParent = Ext.getDom(this.tabBarEl).parentNode;
+		if(tabBarParent === Ext.getDom(tabs)){return;}
+
+		left = tabs.first().getX();
+		this.tabBarEl.setX(left).setStyle('top',undefined);
 	},
 
 
@@ -199,11 +213,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		if(tabBarParent === profileDomParent && profileScroll < cutoff){
 			delete this.headerLocked;
-			this.tabBarEl.removeCls(cls).insertBefore(this.tabs.getEl().first());
+			this.tabBarEl.setStyle({left:0,top:0}).removeCls(cls).insertBefore(this.tabs.getEl().first());
 		}
 		else if(tabBarParent !== profileDomParent && profileScroll >= cutoff){
 			this.headerLocked = true;
 			this.tabBarEl.addCls(cls).appendTo(profileDomParent);
+			this.handleWindowResize();
 		}
 		else if(tabBarParent !== profileDomParent) {
 			this.tabBarEl.removeCls(cls);
