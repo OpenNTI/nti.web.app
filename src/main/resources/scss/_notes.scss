@@ -464,6 +464,7 @@
 				font-size: 40px;
 				color: $primary-grey;
 				font-family: 'Open Sans Condensed', $font;
+				.whiteboard-container{display: none !important;}
 			}
 
 			.name-wrap{
