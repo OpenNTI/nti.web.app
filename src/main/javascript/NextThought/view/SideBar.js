@@ -49,7 +49,7 @@ Ext.define('NextThought.view.SideBar',{
 							{ xtype: contactsType },
 							{ xtype: 'activity-view' + (history? '':'-new') },
 							{ xtype: 'history-view' }
-						].slice(0, history?undfined:-1)
+						].slice(0, history?undefined:-1)
 					},
 					{ xtype: 'chat-dock', region: 'south'}
 				]
