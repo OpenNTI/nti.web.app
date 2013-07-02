@@ -124,6 +124,10 @@ Ext.define('NextThought.view.forums.Board',{
 			this.on('activate', this.onActivate, this);
 			this.on('beforeitemclick', this.onBeforeItemClick, this);
 			this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
+
+
+			Ext.EventManager.onWindowResize(this.handleWindowResize,this);
+			this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
 		}
 	},
 
@@ -150,8 +154,21 @@ Ext.define('NextThought.view.forums.Board',{
 		if(this.isVisible() && this.headerLocked && this.headerEl){
 			forumDom = this.el.up('.forums-view');
 			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
-			this.headerEl.appendTo(parentDom);
+			this.headerEl.setStyle({left: 0, top: 0}).removeCls('scroll-pos-right').appendTo(this.headerElContainer);
 		}
+	},
+
+	handleWindowResize: function(){
+		var left, 
+			forumDom = this.el,
+			header = this.headerEl,
+			domParent = forumDom && forumDom.dom.parentNode,
+			parent = header && Ext.getDom(header).parentNode;
+		
+		if(parent === domParent){return;}
+
+		left = forumDom.getX();
+		this.headerEl.setX(left).setStyle('top',undefined);
 	},
 
 	handleScrollHeaderLock: function(e,forumDom){
@@ -167,13 +184,14 @@ Ext.define('NextThought.view.forums.Board',{
 			return;
 		}
 
-		if(parent === domParent && (scroll <= cutoff || !this.isVisible())){
-			headerEl.removeCls(cls).appendTo(this.headerElContainer);
+		if(parent === domParent && (scroll < cutoff || !this.isVisible())){
 			delete this.headerLocked;
+			headerEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.headerElContainer);
 		}
-		else if(this.isVisible() && parent !== domParent && scroll > cutoff){
+		else if(this.isVisible() && parent !== domParent && scroll >= cutoff){
 			this.headerLocked = true;
 			headerEl.addCls(cls).appendTo(domParent);
+			this.handleWindowResize();
 		}
 	},
 

@@ -238,6 +238,9 @@ Ext.define('NextThought.view.forums.Topic',{
 				return false;
 			}
 		});
+
+		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
+		this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
 	},
 
 
@@ -339,12 +342,25 @@ Ext.define('NextThought.view.forums.Topic',{
 		if(this.isVisible() && this.headerLocked && this.navigationBarEl){
 			forumDom = this.el.up('.forums-view');
 			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
-			this.navigationBarEl.appendTo(parentDom);
+			this.navigationBarEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.navigationBarCtrEl);
 		}
 	},
 
 	getScrollHeaderCutoff: function(){
 		return 0;
+	},
+
+	handleWindowResize: function(){
+		var left, 
+			forumDom = this.el,
+			header = this.navigationBarEl,
+			domParent = forumDom && forumDom.dom.parentNode,
+			parent = header && Ext.getDom(header).parentNode;
+		
+		if(parent === domParent){return;}
+
+		left = this.el.getX();
+		this.navigationBarEl.setX(left).setStyle('top',undefined);
 	},
 
 	handleScrollHeaderLock: function(e,dom){
@@ -356,11 +372,12 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		if(navBarParent === domParent && scroll <= cutoff){
 			delete this.headerLocked;
-			this.navigationBarEl.removeCls(cls).appendTo(this.navigationBarCtrEl);
+			this.navigationBarEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.navigationBarCtrEl);
 		}
 		else if(navBarParent !== domParent && scroll > cutoff){
 			this.headerLocked = true;
 			this.navigationBarEl.addCls(cls).appendTo(domParent);
+			this.handleWindowResize();
 		}
 	},
 
