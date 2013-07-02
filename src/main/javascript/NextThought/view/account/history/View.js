@@ -20,28 +20,33 @@ Ext.define('NextThought.view.account.history.View',{
 		type: 'vbox',
 		align: 'stretch'
 	},
+	
+	
+	constructor: function(){
+		this.items = [
+			{xtype: 'box', cls: 'view-title', autoEl: {}},
+			{
+				xtype: 'container',
+				layout: 'fit',
+				flex: 1,
+				id: 'history-view-panel',
 
-	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {}},
-		{
-			xtype: 'container',
-			layout: 'fit',
-			flex: 1,
-			id: 'history-view-panel',
-
-			items: [
-				{
-					xtype: 'secondary-tabpanel',
-					stateId: 'history-side-view',
-					defaults: {xtype:'user-data-panel'},
-					items: [
-						{ title: 'Notes', mimeType: ['note','highlight'], xtype: isFeature('remove-history-tab')?'user-history-panel':'user-data-panel' },
-						{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab')?'user-history-favorite-panel':'user-data-panel' }
-					]
-				}
-			]
-		}
-	],
+				items: [
+					{
+						xtype: 'secondary-tabpanel',
+						stateId: 'history-side-view',
+						defaults: {xtype:'user-data-panel'},
+						items: [
+							{ title: 'Notes', mimeType: ['note','highlight'], xtype: isFeature('remove-history-tab')?'user-history-panel':'user-data-panel' },
+							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab')?'user-history-favorite-panel':'user-data-panel' }
+						]
+					}
+				]
+			}
+		];
+		
+		this.callParent(arguments);
+	},
 
 
 	afterRender: function(){
