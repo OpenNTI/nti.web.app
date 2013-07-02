@@ -36,7 +36,7 @@ Ext.define('NextThought.view.account.history.mixins.Bookmark',{
 				console.warn('No meta for '+rec.get('ContainerId'));
 			}
 			else {
-				lineage = LocationProvider.getLineage(meta.NTIID,true);
+				lineage = ContentUtils.getLineage(meta.NTIID,true);
 				location = lineage.shift();
 				lineage.reverse();
 			}
