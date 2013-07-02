@@ -9,6 +9,7 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.view.content.reader.IFrame',
 		'NextThought.view.content.reader.Location',
 		'NextThought.view.content.reader.Scroll',
+        'NextThought.view.content.reader.Touch',
 		'NextThought.view.content.reader.ResourceManagement',
 		'NextThought.view.content.reader.ComponentOverlay',
 		'NextThought.view.content.reader.Assessment',
@@ -40,6 +41,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.buildModule('assessment');
 		this.buildModule('resourceManager');
 		this.buildModule('noteOverlay');
+        this.buildModule('touch');
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});

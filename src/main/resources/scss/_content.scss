@@ -277,6 +277,12 @@
 	.x-panel-body-reader {
 		@include scrollbar(#ffffff, $tertiary-grey, 45px 0);
 	}
+
+    iframe[name$="content"] {
+        &.clickthrough {
+            pointer-events: none;
+        }
+    }
 }
 
 .component-overlay {
@@ -330,7 +336,7 @@ div.no-content-splash {
 	position: absolute;
 	overflow: visible;
 	height: 0;
-	left: 30px; //compensate for the fact that Ext is placing overlays 5px left because of thier 5px margins.
+	right: 0;
 	top: 0;
 	width: 700px;
 
