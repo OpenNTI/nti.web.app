@@ -35,26 +35,13 @@ Ext.define('NextThought.view.account.history.View',{
 					stateId: 'history-side-view',
 					defaults: {xtype:'user-data-panel'},
 					items: [
-						{ title: 'Notes', mimeType: ['note','highlight'] },
-						{ title: 'Bookmarks', mimeType: ['favorite'] }
+						{ title: 'Notes', mimeType: ['note','highlight'], xtype: isFeature('remove-history-tab')?'user-history-panel':'user-data-panel' },
+						{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab')?'user-history-favorite-panel':'user-data-panel' }
 					]
 				}
 			]
 		}
 	],
-
-
-	constructor: function(){
-		var i, t;
-
-		if(isFeature('remove-history-tab')){
-			this.title = "Me";
-			this.items[1].items[0].items[0].xtype = 'user-history-panel';
-			this.items[1].items[0].items[1].xtype = 'user-history-favorite-panel';
-		}
-
-		this.callParent(arguments);
-	},
 
 
     afterRender: function(){

@@ -39,7 +39,7 @@ Ext.define('NextThought.view.chat.Dock',{
 			}
 		];
 		this.insertBeforeLast = true;
-		return this.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 
