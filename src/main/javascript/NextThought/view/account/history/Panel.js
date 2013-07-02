@@ -181,16 +181,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	rowHover: function(view, record, item){
-		function fin(pop){
-			// If the popout is destroyed, clear the activeTargetDom,
-			// that way we will be able to show the popout again.
-			if(!pop){ return; }
-			pop.on('destroy', function(){
-				me.activeTargetDom = null;
-			}, pop);
-		}
-
+	rowHover: function(view, record, item, index, e){
 		var popout = NextThought.view.account.activity.Popout,
 			target = Ext.get(item),
 			me = this,
@@ -199,18 +190,52 @@ Ext.define('NextThought.view.account.history.Panel', {
 		if(!record || me.activeTargetDom === item || cls === 'Highlight' || cls === 'Bookmark'){return;}
 
 		me.cancelPopupTimeout();
-		me.hoverTimeout = Ext.defer(function(){
-			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			popout.popup(record, target, me, undefined, fin);
-			me.activeTargetDom = item;
-		}, 500);
+		
+		me.hoverTimeout = Ext.defer(this.showPopup, 500, me, [record,item]);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	},
 
 
+	showPopup: function(record, item){
+		var popout = NextThought.view.account.activity.Popout,
+			target = Ext.get(item),
+			me = this;
+
+		function fin(pop){
+			// If the popout is destroyed, clear the activeTargetDom,
+			// that way we will be able to show the popout again.
+			if(!pop){ return; }
+			pop.on('destroy', function(){
+				delete me.activeTargetDom;
+				delete me.activeTargetRecord;
+			}, pop);
+		}
+
+		me.cancelPopupTimeout();
+
+		target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
+		me.activeTargetDom = item;
+		me.activeTargetRecord = record;
+
+		popout.popup(record, target, me, undefined, fin);
+	},
+
+
 	cancelPopupTimeout: function(){
+		delete this.activeTargetDom;
+		delete this.activeTargetRecord;
 		clearTimeout(this.hoverTimeout);
+	},
+
+
+	onUpdate: function(store,record){
+		var item, r = this.callParent(arguments);
+		if(this.activeTargetRecord === record){
+			item = this.getNode(record);
+			this.showPopup(record,item);
+		}
+		return r;
 	},
 
 	prefetchNext: function(){
@@ -230,7 +255,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	onScroll: function(e,dom){
 		var el = dom.lastChild,
-			offsets = Ext.fly(el).getOffsetsTo(dom),
+			offsets = Ext.get(el).getOffsetsTo(dom),
 			top = offsets[1] + dom.scrollTop,
 			ctBottom = dom.scrollTop + dom.clientHeight;
 

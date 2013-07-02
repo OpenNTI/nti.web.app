@@ -145,7 +145,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 				function align(){
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
-					pop.alignTo(el,'tr-tl?', anchor || [-10,0]);
+					pop.alignTo(pop.refEl,'tr-tl?', anchor || [-10,0]);
 					pop.show();
 					pop.pointer.point();
 				}
