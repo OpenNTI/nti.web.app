@@ -115,11 +115,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
 		this.on('markupenabled-action', this.commentOnAnnototableImage);
 
-        Ext.each(node.query('.application-highlight'), function(h){
-            if(this.record.isModifiable()){
-                Ext.fly(h).addCls('highlight-mouse-over');
-            }
-        }, this);
+		Ext.each(node.query('.application-highlight'), function(h){
+			if(this.record.isModifiable()){
+				Ext.fly(h).addCls('highlight-mouse-over');
+			}
+		}, this);
 
 		cardTpl = Ext.DomHelper.createTemplate({cls:'content-card', html:NextThought.view.cards.Card.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=nticard]'), function(c){
@@ -200,7 +200,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	hideImageCommentLink: function(){
-		var aLink =  this.context ? this.context.down('a[href=#mark]') : null;
+		var aLink =	 this.context ? this.context.down('a[href=#mark]') : null;
 		if(aLink){
 			aLink.hide();
 		}
@@ -275,35 +275,35 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	}
 },
 function(){
-    this.prototype.renderTpl = Ext.DomHelper.markup([{
-	    cls: 'note main-view',
-	    cn:[{
-		    cls: 'avatar',
-		    tag: 'img', src: Ext.BLANK_IMAGE_URL
-	    },{
-		    cls: 'meta',
-		    cn: [
-			    { cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
-			    { cls: 'title'},
-			    { cls: 'name-wrap', cn:[
-				    { tag: 'span', cls: 'name' },
-				    { tag: 'span', cls: 'time'},
-				   	{ tag: 'span', cls: 'shared-to' } 
-			    ]}
-		    ]
-	    },{ cls: 'clear' },{
-		    cls: 'context', cn: [
-			    {tag: 'canvas'},
-			    {tag: 'span', cls: 'text'}]
-	    },{ cls: 'body' },{
-		    cls: 'respond',
-		    cn: [
-			    TemplatesForNotes.getReplyOptions()
-		    ]
-	    }]
-    },{
-	    id: '{id}-body',
-	    cls: 'note-replies',
-	    cn:['{%this.renderContainer(out,values)%}']
-    }]);
+	this.prototype.renderTpl = Ext.DomHelper.markup([{
+		cls: 'note main-view',
+		cn:[{
+			cls: 'avatar',
+			tag: 'img', src: Ext.BLANK_IMAGE_URL
+		},{
+			cls: 'meta',
+			cn: [
+				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
+				{ cls: 'title'},
+				{ cls: 'name-wrap', cn:[
+					{ tag: 'span', cls: 'name' },
+					{ tag: 'span', cls: 'time'},
+					{ tag: 'span', cls: 'shared-to' } 
+				]}
+			]
+		},{ cls: 'clear' },{
+			cls: 'context', cn: [
+				{tag: 'canvas'},
+				{tag: 'span', cls: 'text'}]
+		},{ cls: 'body' },{
+			cls: 'respond',
+			cn: [
+				TemplatesForNotes.getReplyOptions()
+			]
+		}]
+	},{
+		id: '{id}-body',
+		cls: 'note-replies',
+		cn:['{%this.renderContainer(out,values)%}']
+	}]);
 });

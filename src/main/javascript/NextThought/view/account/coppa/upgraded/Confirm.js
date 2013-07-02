@@ -41,13 +41,13 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				{cls: 'optionalContainer hidden', cn:[
 					{tag:'h3', html:'Optional Information'},
 
-		        	{tag:'label', cn:[{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html:'Send me updates about NextThought.'}]},
+					{tag:'label', cn:[{ tag: 'input', type: 'checkbox', name: 'opt_in_email_communication' },{html:'Send me updates about NextThought.'}]},
 
-		        	{ cls:'what-school', html:'What school do you attend?' },
-		        	{ cls: 'affiliation-container' }
-            	]}
-        	]},
-        	{ cls: 'submit', cn: [
+					{ cls:'what-school', html:'What school do you attend?' },
+					{ cls: 'affiliation-container' }
+				]}
+			]},
+			{ cls: 'submit', cn: [
 					{cls:'save', html:'Save Changes'},
 					{cls:'policy-link hidden', html: 'View Child\'s Privacy Policy'}
 			]}
@@ -68,70 +68,70 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 	buildAffiliationBox: function(){
 
 		if(!Ext.getStore('schoolStore')){
-			new Ext.data.ArrayStore({
-	            storeId: 'schoolStore',
-	            autoLoad: true,
-	            fields:[{
-	                mapping: 0,
-	                name:'school',
-	                type:'string'
-	            }],
-	            proxy: {
-	                type: 'ajax',
-	                url: './resources/misc/school-data.json',
-	                reader: 'array'
-	            }
-	        });
+			Ext.data.ArrayStore.create({
+				storeId: 'schoolStore',
+				autoLoad: true,
+				fields:[{
+					mapping: 0,
+					name:'school',
+					type:'string'
+				}],
+				proxy: {
+					type: 'ajax',
+					url: './resources/misc/school-data.json',
+					reader: 'array'
+				}
+			});
 		}
 
 		this.affiliation = Ext.widget({
 			renderTo: this.el.down('.affiliation-container'),
 			store: 'schoolStore',
-	        xtype: 'combobox',
-            name: 'affiliation',
-            typeAhead: true,
-            forceAll: true,
-            valueField: 'school',
-            displayField: 'school',
-            multiSelect: false,
-            enableKeyEvents: true,
-            queryMode: 'remote',
-            cls: 'combo-box',
-            width: 285,
-            hideTrigger: true,
-            listConfig: {
-                ui: 'nt',
-                plain: true,
-                showSeparator: false,
-                shadow: false,
-                frame: false,
-                border: false,
-                cls: 'x-menu',
-                baseCls: 'x-menu',
-                itemCls: 'x-menu-item no-border',
-                emptyText: '<div class="x-menu-item">No results</div>',
-                xhooks: {
-                    initComponent: function(){
-                        this.callParent(arguments);
-                        this.itemSelector = '.x-menu-item';
-                    }
-                }
-            },
-            listeners: {
-                change: function() {
-                    var store = this.store;
-                    store.suspendEvents();
-                    store.clearFilter();
-                    store.resumeEvents();
-                    store.filter({
-                        property: 'school',
-                        anyMatch: true,
-                        value   : this.getValue()
-                    });
-                    this.expand();
-                }
-            }
-        });
+			xtype: 'combobox',
+			name: 'affiliation',
+			typeAhead: true,
+			forceAll: true,
+			valueField: 'school',
+			displayField: 'school',
+			multiSelect: false,
+			enableKeyEvents: true,
+			queryMode: 'remote',
+			cls: 'combo-box',
+			width: 285,
+			hideTrigger: true,
+			listConfig: {
+				ui: 'nt',
+				plain: true,
+				showSeparator: false,
+				shadow: false,
+				frame: false,
+				border: false,
+				cls: 'x-menu',
+				baseCls: 'x-menu',
+				itemCls: 'x-menu-item no-border',
+				emptyText: '<div class="x-menu-item">No results</div>',
+				xhooks: {
+					initComponent: function(){
+						this.callParent(arguments);
+						this.itemSelector = '.x-menu-item';
+					}
+				}
+			},
+			listeners: {
+				change: function() {
+					var store = this.store;
+					store.suspendEvents();
+					store.clearFilter();
+					store.resumeEvents();
+					store.filter({
+						property: 'school',
+						anyMatch: true,
+						value	: this.getValue()
+					});
+					this.expand();
+				}
+			}
+		});
 
 	},
 
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			'realname': this.getRealName,
 			'contact_email': function(){ return me.el.down('[name=contact_email]').getValue(); },
 			'email': function(){ return me.el.down('[name=email]').getValue(); },
-			'opt_in_email_communication': function(){ return me.el.down('input[name=opt_in_email_communication]').is(':checked')},
+			'opt_in_email_communication': function(){ return me.el.down('input[name=opt_in_email_communication]').is(':checked'); },
 			'affiliation': function(){ return me.affiliation.getValue();}
 		};
 
@@ -199,8 +199,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				e.addCls('error');
 			}
 		}
-		catch(e){
-			console.error('Error: ', e);
+		catch(er){
+			console.error('Error: ', er);
 		}
 	},
 
@@ -215,8 +215,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 				e.removeCls('error');
 			}
 		}
-		catch(e){
-			console.error('Error: ', e);
+		catch(er){
+			console.error('Error: ', er);
 		}
 	},
 
@@ -351,9 +351,9 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			y = this.el.down('[name=year]').getValue(),
 			bd, me = this;
 
-		m = parseInt(m);
-		d = parseInt(d);
-		y = parseInt(y);
+		m = parseInt(m,10);
+		d = parseInt(d,10);
+		y = parseInt(y,10);
 
 		bd = new Date(y<1000?NaN:y, m, d);
 		if(isValidBirthday()){
@@ -426,7 +426,8 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 			host = location.protocol + '//' + location.host;
 
 		href = href.split('?')[0];
-		return  host + href + '/@@' + link;
+		
+		return (host + href + '/@@' + link);
 	},
 
 

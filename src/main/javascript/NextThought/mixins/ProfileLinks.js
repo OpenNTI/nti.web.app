@@ -52,7 +52,7 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 	}
 
 	function stopShowCard(){
-		clearTimeout(showCardTimer)
+		clearTimeout(showCardTimer);
 	}
 
 	return {
@@ -72,8 +72,8 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 					click: onUserNameClick
 				};
 
-		 	canShow = /^(g|k).+.{16}$/i.test($AppConfig.username);
-
+			canShow = /^(g|k).+.{16}$/i.test($AppConfig.username);
+			
 			Ext.each(arguments,function(el){
 				el = Ext.get(el);
 				if(!Ext.isEmpty(el)){
@@ -81,14 +81,14 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 					if(me.profileLinkCard !== false){
 						events.mouseover = function(e){
 							return startShowCard.call(me, e, el);
-						}
+						};
 
 						events.mouseout = function(e){
 							return stopShowCard.call(me, e, el);
-						}
+						};
 					}
 
-					me.mon(el,events)
+					me.mon(el,events);
 				}
 			});
 		}

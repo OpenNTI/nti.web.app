@@ -44,14 +44,14 @@ Ext.define('NextThought.view.account.history.View',{
 	],
 
 
-    afterRender: function(){
-        this.callParent(arguments);
+	afterRender: function(){
+		this.callParent(arguments);
 
-	    var chatTab = this.down('[title=Chats]');
-        if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)){
-	        chatTab.destroy();
-        }
-    },
+		var chatTab = this.down('[title=Chats]');
+		if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)){
+			chatTab.destroy();
+		}
+	},
 
 	getActiveView: function(){
 		return this.down("[title=Notes]").isVisible() ? this.down("[title=Notes]") : this.down("[title=Bookmarks]");

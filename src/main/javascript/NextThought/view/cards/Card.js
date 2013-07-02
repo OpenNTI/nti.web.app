@@ -73,7 +73,6 @@ Ext.define('NextThought.view.cards.Card',{
 			}
 		}
 		catch(er){
-			debugger;
 			console.error(er.message);
 		}
 	},

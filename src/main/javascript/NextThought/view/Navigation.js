@@ -54,12 +54,13 @@ Ext.define('NextThought.view.Navigation',{
 		cls: 'search-menu',
 		items:[
 			{ xtype: 'searchfield' },
-			{ xtype: 'container',
-			  overflowX: 'hidden',
-			  overflowY: 'scroll',
-			  id: 'search-results',
-			  hideMode: 'display',
-			  flex: 1 
+			{ 
+				xtype: 'container',
+				overflowX: 'hidden',
+				overflowY: 'scroll',
+				id: 'search-results',
+				hideMode: 'display',
+				flex: 1 
 			}
 		],
 		listeners:{
@@ -76,10 +77,10 @@ Ext.define('NextThought.view.Navigation',{
 			xtype: 'navigation-menu',
 			renderTo: Ext.getBody(),
 			items:[{
-			   xtype:'library-collection', name: 'All Books', 
-			   listeners:{
-			   		scope: this, 
-			   		select:'updateCurrent'
+				xtype:'library-collection', name: 'All Books', 
+				listeners:{
+					scope: this, 
+					select:'updateCurrent'
 			   }
 			}]
 		});

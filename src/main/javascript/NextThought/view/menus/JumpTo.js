@@ -58,7 +58,7 @@ Ext.define('NextThought.view.menus.JumpTo',{
 
 	stopShow: function(){
 		this.startHide();
-		this.showTimeout && clearTimeout(this.showTimeout);
+		clearTimeout(this.showTimeout);
 	},
 
 	startHide: function(){

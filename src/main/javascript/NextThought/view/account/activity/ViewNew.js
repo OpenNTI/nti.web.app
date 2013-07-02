@@ -1,369 +1,368 @@
 //Styles defined in _history-view.scss
 Ext.define('NextThought.view.account.activity.ViewNew',{
-    extend: 'Ext.container.Container',
-    alias: 'widget.activity-view-new',
-    requires: [
-        'NextThought.view.account.activity.Panel',
-        'NextThought.view.account.history.View'
-    ],
+	extend: 'Ext.container.Container',
+	alias: 'widget.activity-view-new',
+	requires: [
+		'NextThought.view.account.activity.Panel',
+		'NextThought.view.account.history.View'
+	],
 
-    iconCls: 'activity',
-    title: 'Activity',
-    tabConfig:{
-        tooltip: 'Recent Activity'
-    },
+	iconCls: 'activity',
+	title: 'Activity',
+	tabConfig:{
+		tooltip: 'Recent Activity'
+	},
 
-    ui: 'activity',
-    cls: 'activity-view',
-    plain: true,
+	ui: 'activity',
+	cls: 'activity-view',
+	plain: true,
 
 
-    mimeTypesMap: {
-        'all': ['all'],
-        'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
-        'notes': ['highlight', 'note'],
-        'contact': ['user']
-    },
+	mimeTypesMap: {
+		'all': ['all'],
+		'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
+		'notes': ['highlight', 'note'],
+		'contact': ['user']
+	},
 
-    filtersMap: {
-        'bookmarks': 'Bookmarks',
-        'inCommunity': 'inCommunity',
-        'notInCommunity': 'notInCommunity'
-    },
+	filtersMap: {
+		'bookmarks': 'Bookmarks',
+		'inCommunity': 'inCommunity',
+		'notInCommunity': 'notInCommunity'
+	},
 
-    filtersTpl: Ext.DomHelper.createTemplate(
-	    { cls: 'filters-container', cn:{
-            cls: 'activity-filters', cn: [
-                {cls: 'tabs', cn:[
-                    {cls: 'tab from x-menu', html: 'Only Me'},
-                    {cls: 'tab types x-menu'}
-                ]}
-            ]}
-	    }
-    ),
+	filtersTpl: Ext.DomHelper.createTemplate(
+		{ cls: 'filters-container', cn:{
+			cls: 'activity-filters', cn: [
+				{cls: 'tabs', cn:[
+					{cls: 'tab from x-menu', html: 'Only Me'},
+					{cls: 'tab types x-menu'}
+				]}
+			]}
+		}
+	),
 
 
 	layout: {
 		type:'card',
 		deferredRender: true
 	},
-    id: 'activity-tab-view',
-    activeItem: 0,
-    items: [
-        {xtype: 'user-history-panel', filter:'onlyMe'},
-        {xtype: 'activity-panel'},
-        //{xtype: 'activity-panel', filter: 'inCommunity'}
-    ],
+	id: 'activity-tab-view',
+	activeItem: 0,
+	items: [
+		{xtype: 'user-history-panel', filter:'onlyMe'},
+		{xtype: 'activity-panel'}
+	],
 
 
-    initComponent: function(){
-        var i;
+	initComponent: function(){
+		var i;
 
-        this.callParent(arguments);
-        this.store = Ext.getStore('Stream');
-        this.mon(this.store,{
-            add: this.updateNotificationCountFromStore
-        });
+		this.callParent(arguments);
+		this.store = Ext.getStore('Stream');
+		this.mon(this.store,{
+			add: this.updateNotificationCountFromStore
+		});
 
-        this.fromMenu = Ext.widget('menu',{
-            ui: 'nt',
-            plain: true,
-            showSeparator: false,
-            shadow: false,
-            frame: false,
-            border: false,
-            hideMode: 'display',
-            title: 'Show Activity From',
-            cls: 'menu from-menu',
-            width: 258,
-            defaults: {
-                ui: 'nt-menuitem',
-                xtype: 'menucheckitem',
-                group: 'from',
-                plain: true,
-                listeners: {
-                    scope: this,
-                    'checkchange': 'switchPanel'
-                }
-            },
-            items: [
-                {cls: 'option', text: 'Only Me', checked: true, isMe: true, tabFilter:'onlyMe'},
-                {cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
-                {cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
-            ]
-        });
+		this.fromMenu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			title: 'Show Activity From',
+			cls: 'menu from-menu',
+			width: 258,
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'from',
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'switchPanel'
+				}
+			},
+			items: [
+				{cls: 'option', text: 'Only Me', checked: true, isMe: true, tabFilter:'onlyMe'},
+				{cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
+				{cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
+			]
+		});
 
-        this.typesMenu = Ext.widget('menu',{
-            ui: 'nt',
-            plain: true,
-            showSeparator: false,
-            shadow: false,
-            frame: false,
-            border: false,
-            hideMode: 'display',
-            title: 'Activity Type',
-            cls: 'menu types-menu',
-            width: 258,
-            defaults: {
-                ui: 'nt-menuitem',
-                xtype: 'menucheckitem',
-                plain: true,
-                listeners:{
-                    scope: this,
-                    'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
-                    'checkchange': 'changeFilter'
-                }
-            },
-            items: [
-                {cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
-                {cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
-                {cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
-                {cls: 'option bookmarks', text: 'Bookmarks', filter: 'bookmarks'},
-                //{cls: 'option', text: 'Likes', filter: 'likes'},
-                {cls: 'option contact', text: 'Contact Requests', filter: 'contact'}
-            ]
-        });
+		this.typesMenu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			title: 'Activity Type',
+			cls: 'menu types-menu',
+			width: 258,
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				plain: true,
+				listeners:{
+					scope: this,
+					'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
+					'checkchange': 'changeFilter'
+				}
+			},
+			items: [
+				{cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
+				{cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
+				{cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
+				{cls: 'option bookmarks', text: 'Bookmarks', filter: 'bookmarks'},
+				//{cls: 'option', text: 'Likes', filter: 'likes'},
+				{cls: 'option contact', text: 'Contact Requests', filter: 'contact'}
+			]
+		});
 
-        this.filters = ['all'];
-        this.monitoredInstance = $AppConfig.userObject;
-        this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
-    },
+		this.filters = ['all'];
+		this.monitoredInstance = $AppConfig.userObject;
+		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
+	},
 
 
-    afterRender: function(){
-        this.callParent(arguments);
+	afterRender: function(){
+		this.callParent(arguments);
 
-        this.mon(this, {
-            scope: this,
-            'deactivate': 'resetNotificationCount'
-        });
+		this.mon(this, {
+			scope: this,
+			'deactivate': 'resetNotificationCount'
+		});
 
-	    var filterEl = this.filtersTpl.append(this.el,null,true);
+		var filterEl = this.filtersTpl.append(this.el,null,true);
 
-        //this.switchPanel('history');
-        this.mon(filterEl,{
-            scope: this,
-            'click': 'handleClick'
-        });
+		//this.switchPanel('history');
+		this.mon(filterEl,{
+			scope: this,
+			'click': 'handleClick'
+		});
 
-        this.mon(this.fromMenu, {
-            scope: this,
-            'hide': function(){
-                filterEl.down('.activity-filters .tabs .from').removeCls('selected');
-            }
-        });
+		this.mon(this.fromMenu, {
+			scope: this,
+			'hide': function(){
+				filterEl.down('.activity-filters .tabs .from').removeCls('selected');
+			}
+		});
 
-        this.mon(this.typesMenu, {
-            scope: this,
-            'hide': function(){
-                filterEl.down('.activity-filters .tabs .types').removeCls('selected');
-            }
-        });
+		this.mon(this.typesMenu, {
+			scope: this,
+			'hide': function(){
+				filterEl.down('.activity-filters .tabs .types').removeCls('selected');
+			}
+		});
 
-        this.applyFilters(['all']);
+		this.applyFilters(['all']);
 
-	    this.fromMenu.show().hide();
-        this.typesMenu.show().hide();
-        this.typesMenu.el.down('.contact').hide();
-    },
+		this.fromMenu.show().hide();
+		this.typesMenu.show().hide();
+		this.typesMenu.el.down('.contact').hide();
+	},
 
-    switchPanel: function(item){
-	    var newPanel = this.getActivePanel(),
-		    newTab = this.fromMenu.down('menuitem[checked]'),
-		    tab = this.el.down('.filters-container .activity-filters .tabs .from');
+	switchPanel: function(item){
+		var newPanel = this.getActivePanel(),
+			newTab = this.fromMenu.down('menuitem[checked]'),
+			tab = this.el.down('.filters-container .activity-filters .tabs .from');
 
-	    tab.update(newTab.text);
-	    this.getLayout().setActiveItem(newPanel);
+		tab.update(newTab.text);
+		this.getLayout().setActiveItem(newPanel);
 
-        this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
-        this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
-        
-        if(newTab.isContacts){
-            this.applyFilters('notInCommunity');
-            newPanel.filter = 'notInCommunity';
-        }else if(newTab.isCommunity){
-            this.applyFilters('inCommunity');
-            newPanel.filter = 'inCommunity';
-        }
-    },
+		this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
+		this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
+		
+		if(newTab.isContacts){
+			this.applyFilters('notInCommunity');
+			newPanel.filter = 'notInCommunity';
+		}else if(newTab.isCommunity){
+			this.applyFilters('inCommunity');
+			newPanel.filter = 'inCommunity';
+		}
+	},
 
 	getActivePanel: function(){
 		var selectedTab = this.fromMenu.down('menuitem[checked]'),
-            v = selectedTab && selectedTab.tabFilter;
+			v = selectedTab && selectedTab.tabFilter;
 
-        if(v === 'notInCommunity' || v === 'inCommunity'){
-            return this.down('activity-panel')
-        }
-        return this.down('user-history-panel');
+		if(v === 'notInCommunity' || v === 'inCommunity'){
+			return this.down('activity-panel');
+		}
+		return this.down('user-history-panel');
 	},
 
-    changeFilter: function(item){
-        var allChecked = true, allUnchecked = true,
-            allItems = this.typesMenu.query('menuitem');
+	changeFilter: function(item){
+		var allChecked = true, allUnchecked = true,
+			allItems = this.typesMenu.query('menuitem');
 
-        function uncheck(items){
-            Ext.Array.each(items, function(i){
-                if(!i.isAll){
-                    i.setChecked(false, true);
-                }
-            })
-        }
+		function uncheck(items){
+			Ext.Array.each(items, function(i){
+				if(!i.isAll){
+					i.setChecked(false, true);
+				}
+			});
+		}
 
-        if(item.checked){
-            if(item.isAll){
-                uncheck(allItems);
-            }else{
-                this.typesMenu.query('[isAll]')[0].setChecked(false, true);
-            }
-        }else{
-            Ext.Array.each(allItems, function(i){
-                allUnchecked = allUnchecked && !i.checked;
-            });
+		if(item.checked){
+			if(item.isAll){
+				uncheck(allItems);
+			}else{
+				this.typesMenu.query('[isAll]')[0].setChecked(false, true);
+			}
+		}else{
+			Ext.Array.each(allItems, function(i){
+				allUnchecked = allUnchecked && !i.checked;
+			});
 
-            if(allUnchecked){
-                item.setChecked(true,true);
-            }
-        }
+			if(allUnchecked){
+				item.setChecked(true,true);
+			}
+		}
 
-        this.applyFilters()
-    },
+		this.applyFilters();
+	},
 
-    applyFilters: function(filter){
-	    var menu = this.typesMenu,
-		    allItems = menu.query('menuitem'),
-		    everything = menu.down('[isAll]').checked, me = this,
-		    activePanel = this.getActivePanel(),
-            mimeTypes = [],
-            filterTypes = filter? [filter] : [];
+	applyFilters: function(filter){
+		var menu = this.typesMenu,
+			allItems = menu.query('menuitem'),
+			everything = menu.down('[isAll]').checked, me = this,
+			activePanel = this.getActivePanel(),
+			mimeTypes = [],
+			filterTypes = filter? [filter] : [];
 
-	    Ext.each(allItems, function(item){
-		    var mt = this.mimeTypesMap[item.filter],
-                ft = this.filtersMap[item.filter];
+			Ext.each(allItems, function(item){
+			var mt = this.mimeTypesMap[item.filter],
+				ft = this.filtersMap[item.filter];
 
-		    if ((everything || item.checked)) {
-                if(mt){
-    			    Ext.Array.each(Ext.Array.from(mt), function(m){
-    				    mimeTypes.push('application/vnd.nextthought.'+m);
-    			    }, this);
-                }
+			if ((everything || item.checked)) {
+				if(mt){
+					Ext.Array.each(Ext.Array.from(mt), function(m){
+						mimeTypes.push('application/vnd.nextthought.'+m);
+					}, this);
+				}
 
-                if(ft){
-                    filterTypes.push(ft);
-                }
-		    }
-	    }, this);
+				if(ft){
+					filterTypes.push(ft);
+				}
+			}
+		}, this);
 
 		if(activePanel && activePanel.applyFilters){
-	       activePanel.applyFilters(mimeTypes, filterTypes);
-        }
-    },
+		   activePanel.applyFilters(mimeTypes, filterTypes);
+		}
+	},
 
-    handleClick: function(e){
-        if(e.getTarget('.from')){
-            this.showFromMenu();
-        }
+	handleClick: function(e){
+		if(e.getTarget('.from')){
+			this.showFromMenu();
+		}
 
-        if(e.getTarget('.types')){
-            this.showTypesMenu();
-        }
-    },
+		if(e.getTarget('.types')){
+			this.showTypesMenu();
+		}
+	},
 
-    showTypesMenu: function(){
-        if(this.typesMenu.isVisible()){
-            this.typesMenu.hide();
-            return;
-        }
+	showTypesMenu: function(){
+		if(this.typesMenu.isVisible()){
+			this.typesMenu.hide();
+			return;
+		}
 
-        
-        this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
-        this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
-    },
+		
+		this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
+		this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
+	},
 
-    showFromMenu: function(){
-       if(this.fromMenu.isVisible()){
-            this.fromMenu.hide();
-            return;
-       }
+	showFromMenu: function(){
+	   if(this.fromMenu.isVisible()){
+			this.fromMenu.hide();
+			return;
+	   }
 
-        this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
-        this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
-    },
+		this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
+		this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
+	},
 
-    updateNotificationCountFromStore: function(store, records){
-        var u = $AppConfig.userObject,
-            newCount = 0,
-            c = (u.get('NotificationCount') || 0);
-
-
-        Ext.each(records, function(record){
-            if(!/deleted/i.test(record.get('ChangeType'))){
-                newCount++;
-            }
-        });
-
-        c += newCount;
-
-        //Update current notification of the userobject.
-        u.set('NotificationCount', c);
-        u.fireEvent('changed',u);
-    },
+	updateNotificationCountFromStore: function(store, records){
+		var u = $AppConfig.userObject,
+			newCount = 0,
+			c = (u.get('NotificationCount') || 0);
 
 
-    onAdded: function(){
-        this.callParent(arguments);
-        //sigh
-        Ext.defer(function(){
-            this.setNotificationCountValue(
-                this.monitoredInstance.get('NotificationCount'));
-        }, 1, this);
-    },
+		Ext.each(records, function(record){
+			if(!/deleted/i.test(record.get('ChangeType'))){
+				newCount++;
+			}
+		});
+
+		c += newCount;
+
+		//Update current notification of the userobject.
+		u.set('NotificationCount', c);
+		u.fireEvent('changed',u);
+	},
 
 
-    updateNotificationCount: function(u) {
-        if(u !== this.monitoredInstance && u === $AppConfig.userObject){
-            this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-            this.monitoredInstance = u;
-            this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-        }
-        this.setNotificationCountValue(u.get('NotificationCount'));
-    },
+	onAdded: function(){
+		this.callParent(arguments);
+		//sigh
+		Ext.defer(function(){
+			this.setNotificationCountValue(
+				this.monitoredInstance.get('NotificationCount'));
+		}, 1, this);
+	},
 
 
-    resetNotificationCount: function(){
-        try {
-            $AppConfig.userObject.saveField('NotificationCount', 0);
-        }
-        catch(e){
-            console.warn('Problem saving NotificationCount on active user account', $AppConfig.userObject);
-        }
-        this.setNotificationCountValue(0);
-    },
+	updateNotificationCount: function(u) {
+		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
+			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+			this.monitoredInstance = u;
+			this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+		}
+		this.setNotificationCountValue(u.get('NotificationCount'));
+	},
 
 
-    addBadge: function(){
-        var tab = this.tab;
-
-        if(!tab.rendered){
-            if(!tab.isListening('afterrender',this.addBadge,this)){
-                tab.on('afterrender',this.addBadge,this);
-            }
-            return;
-        }
-        this.badge = Ext.DomHelper.append( tab.getEl(),{cls:'badge', html:tab.badge},true);
-        delete tab.badge;
-    },
+	resetNotificationCount: function(){
+		try {
+			$AppConfig.userObject.saveField('NotificationCount', 0);
+		}
+		catch(e){
+			console.warn('Problem saving NotificationCount on active user account', $AppConfig.userObject);
+		}
+		this.setNotificationCountValue(0);
+	},
 
 
-    setNotificationCountValue: function(count){
-        var v = count || '&nbsp;',
-            tab = this.tab;
+	addBadge: function(){
+		var tab = this.tab;
 
-        if(!this.badge){
-            tab.badge = v;
-            this.addBadge();
-            return;
-        }
+		if(!tab.rendered){
+			if(!tab.isListening('afterrender',this.addBadge,this)){
+				tab.on('afterrender',this.addBadge,this);
+			}
+			return;
+		}
+		this.badge = Ext.DomHelper.append( tab.getEl(),{cls:'badge', html:tab.badge},true);
+		delete tab.badge;
+	},
 
-        this.badge.update(v);
-    }
+
+	setNotificationCountValue: function(count){
+		var v = count || '&nbsp;',
+			tab = this.tab;
+
+		if(!this.badge){
+			tab.badge = v;
+			this.addBadge();
+			return;
+		}
+
+		this.badge.update(v);
+	}
 });

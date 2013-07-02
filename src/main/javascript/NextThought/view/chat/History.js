@@ -101,7 +101,7 @@ Ext.define('NextThought.view.chat.History',{
 		}
 
 		if (!links) {
-			more && more.unmask();
+			if(more){more.unmask();}
 			return;
 		}
 
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.chat.History',{
 			s.getProxy().buildUrl = function(){return links['batch-next'];};
 			s.nextPage();
 		}else{
-			more && more.unmask();
+			if(more){ more.unmask(); }
 		}
 	},
 
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.chat.History',{
 		if( this.items.length< 1 || !(l && l['batch-next'])){
 			this.prefetchNext();
 		}
-		//else {
+
 		this.add({
 			xtype:'box',
 			autoEl: {
@@ -144,10 +144,9 @@ Ext.define('NextThought.view.chat.History',{
 
 		if(this.loadingMore){
 			body = this.ownerCt.el.down('#chat-dock-body');
-			body && body.scrollTo('top',this.lastScroll);
+			if(body){ body.scrollTo('top',this.lastScroll); }
 			this.loadingMore = false;
 		}
-		//}
 	}
 
 });
