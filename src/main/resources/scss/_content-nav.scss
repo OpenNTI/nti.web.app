@@ -21,6 +21,7 @@
 			overflow: hidden;
 			@include ellipse;
 			text-transform: uppercase;
+			max-width: 40%;
 		}
 
 		span.part {
