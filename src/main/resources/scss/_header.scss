@@ -75,6 +75,11 @@
 			width: 60px;
 			background-size: cover;
 			background-position: center;
+
+			&.is-book{
+				background-size: contain;
+				background-repeat: no-repeat;
+			}
 		}
 
 		.wrap {

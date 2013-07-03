@@ -45,6 +45,11 @@ Ext.define('NextThought.view.Navigation',{
 		{ cls: 'search', 'data-qtip':'Search','data-view': 'search' }
 	]),
 
+	renderSelectors:{
+		imgEl: '.library .image',
+		providerEl: '.library .wrap .provider',
+		titleEl: '.library .wrap .title'
+	},
 
 	searchMenu: {
 		xtype: 'navigation-menu',
@@ -111,13 +116,19 @@ Ext.define('NextThought.view.Navigation',{
 
 
 	updateCurrent: function(s, rec){
+		var cls = 'is-book';
+
 		if(!rec){ console.error("No record attached"); return; }
 
+		this.imgEl.removeCls(cls);
 
+		if(rec instanceof NextThought.model.Title){
+			this.imgEl.addCls(cls);
+		}
 
-		this.el.down('.image').setStyle('background-image', 'url('+rec.get('icon')+')');
-		this.el.down('.wrap .provider').update(rec.get('Creator'));
-		this.el.down('.wrap .title').update(rec.get('title'));
+		this.imgEl.setStyle('background-image', 'url('+rec.get('icon')+')');
+		this.providerEl.update(rec.get('Creator'));
+		this.titleEl.update(rec.get('title'));
 	},
 
 	setActive: function(el){
