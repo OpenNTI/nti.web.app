@@ -1,6 +1,8 @@
 Ext.define('NextThought.util.Content', {
 	singleton: true,
 
+	NO_LOCATION: {},
+
 	requires:['NextThought.Library'],
 
 	timers: {},
@@ -351,9 +353,13 @@ Ext.define('NextThought.util.Content', {
 			return null;
 		}
 
+		if(id && id.getAttribute){
+			id = id.getAttribute('ntiid');
+		}
+
 		var me = this, r, l, d, i = id;
 		if(!i){
-			return {};
+			return this.NO_LOCATION;
 		}
 
 		r = me.cache[i];

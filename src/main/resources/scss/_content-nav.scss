@@ -29,12 +29,51 @@
 			cursor: pointer;
 
 			&:hover,
-			&:last-of-type {
+			&:last-of-type:not(.no-children) {
 				color: $primary-grey;
 			}
 
-			&:last-of-type{
+			&.no-children,
+			&:last-of-type {
 				max-width: none;
+			}
+
+			&.no-children:last-of-type{
+				position: relative;
+				overflow: visible;
+				cursor: default;
+				margin-left: 0.4em;
+				&:hover {
+					color: inherit;
+
+					&::after{
+						display: block;
+						position: absolute;
+						top: 0;
+						left: -30px;
+
+						color: #ffffff;
+						background: #333333;
+						border-width: 0;
+						padding: 3px 5px;
+						border-radius: 0;
+						box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
+
+						font: normal 600 11px/12px $font;
+						text-transform: uppercase;
+
+						content: 'No sections in chapter';
+					}
+
+					&::before{
+						position: absolute;
+						top: 18px;
+						left: -4px;
+						content: '';
+						background: $elements;
+						@include sprite($elements,'tooltip-pointer-black-bottom',$dimensions: true);
+					}
+				}
 			}
 		}
 	}

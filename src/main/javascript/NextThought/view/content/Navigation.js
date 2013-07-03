@@ -12,33 +12,51 @@ Ext.define('NextThought.view.content.Navigation',{
 
 	renderTpl: Ext.DomHelper.markup([{cls: 'back'},{ cls: 'breadcrumb' }]),
 
-	levelLabels: { 1: 'Select a section' },
+	levelLabels: {
+		NaN:'&sect;',
+		0: 'Select a chapter',
+		1: 'Select a section'
+	},
 
-	renderSelectors: { breadcrumb: '.breadcrumb' },
+	renderSelectors: { backEl: '.back', breadcrumb: '.breadcrumb' },
 
 	listeners: {
-		afterrender:'hide'
+		afterrender:'hide',
+		click:{
+			element:'backEl',
+			fn: 'onBack'
+		}
+	},
+
+
+	onBack: function(e){
+		e.stopEvent();
+
+		//pop up one level.
+		var lineage = ContentUtils.getLineage(this.currentNtiid);
+		this.fireEvent('set-location',lineage[1]);
 	},
 
 
 	updateLocation: function(ntiid){
+		this.currentNtiid = ntiid;
 		var me = this,
 			C = ContentUtils,
 			loc = C.getLocation(ntiid),
 			lineage = C.getLineage(ntiid),
 			parent = lineage.last(),
-			book = lineage[0] ? C.getLocation(lineage[0]) : null,
-			path = me.getBreadcrumbPath();
+			page = lineage[0] ? C.getLocation(lineage[0]) : null,
+			path = me.getBreadcrumbPath(), i = 0;
+
+
+		lineage.pop();//don't let the book show
+		//first was the 2nd item in the array...which is where the 'back' arrow will take you
+		this.backEl[(!lineage.first())?'hide':'show']();
 
 		function buildPathPart(v,i,a){
 			var e,
 				l = C.getLocation(v),
-				label = l.label,
-				level = parseInt(l.location.getAttribute('levelnum'), 10);
-
-			if (v === ntiid) {
-				label = me.levelLabels[level] || label;
-			}
+				label = l.label;
 
 			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
 
@@ -46,17 +64,38 @@ Ext.define('NextThought.view.content.Navigation',{
 				path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 			}
 
+
 			me.buildMenu(e,l,parent);
+
 			path.add(e);
 		}
 
 		me.cleanupMenus();
 
-		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
+		if(!loc || !loc.NTIID || !page){ me.hide(); return; }
 		if(me.isHidden()){ me.show(); }
 
 
-		Ext.each(lineage.slice(0,2),buildPathPart, this);
+		if(lineage.length <= 1){
+			if( me.hasChildren(loc.location) ){
+				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[lineage.length]], true));
+				me.buildMenu(path.last(), C.getLocation(me.getFirstTopic(loc.location)), parent);
+
+				if( lineage.length===1 ){
+					path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
+				}
+			}
+			else {
+				path.add = Ext.Function.createSequence(path.add,function(e){e.addCls('no-children');},me);
+				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[NaN]], true));
+			}
+
+
+		}
+
+		for(i; i<2 && i<lineage.length; i++){
+			buildPathPart.call(this,lineage[i],i,lineage);
+		}
 	},
 
 
@@ -102,11 +141,12 @@ Ext.define('NextThought.view.content.Navigation',{
 		if(!currentNode){ return pathPartEl; }
 
 		if(currentNode.tagName === 'toc'){
-			this.enumerateBookSiblings(locationInfo,cfg.items);
+			return pathPartEl;
+			//this.enumerateBookSiblings(locationInfo,cfg.items);
 		}
-		else {
+//		else {
 			this.enumerateTopicSiblings(currentNode,cfg.items,parent);
-		}
+//		}
 
 		m = menus[key] = Ext.widget('jump-menu',Ext.apply({},cfg));
 
@@ -132,17 +172,17 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 
-	enumerateBookSiblings: function(locInfo,items){
-		Library.each(function(o){
-			var id = o.get('NTIID');
-			items.push({
-				rememberLastLocation: true,
-				text	: o.get('title'),
-				ntiid	: id,
-				cls		: id===locInfo.ntiid?'current':''
-			});
-		});
-	},
+//	enumerateBookSiblings: function(locInfo,items){
+//		Library.each(function(o){
+//			var id = o.get('NTIID');
+//			items.push({
+//				rememberLastLocation: true,
+//				text	: o.get('title'),
+//				ntiid	: id,
+//				cls		: id===locInfo.ntiid?'current':''
+//			});
+//		});
+//	},
 
 
 
@@ -173,10 +213,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		for(node;node.nextSibling; node = node.nextSibling){
 			if(!/topic/i.test(node.tagName)){ continue; }
 
-			//FIXME Can this be condensed?  It's all the same except for the
-			//text property -CMU
 			text = suppress? node.getAttribute('label') : (this.styleList(num,type) + separate + node.getAttribute('label'));
-			
 			items.push({
 				text	: text,
 				ntiid	: node.getAttribute('ntiid'),
@@ -185,6 +222,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			num++;
 		}
 	},
+
 
 	//num - the number in the list; style - type of numbering '1','a','A','i','I'
 	styleList: function(num,style){
@@ -205,6 +243,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		return num;
 	},
 
+
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
 	toRomanNumeral: function(num){
 		var digits, key, roman, i,m = [];
@@ -224,6 +263,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		return m.join('M') + roman;
 	},
 
+
 	toBase26SansNumbers: function(num){
 		var val = (num -1) % 26,
 			letter = String.fromCharCode(97 + val),
@@ -234,13 +274,11 @@ Ext.define('NextThought.view.content.Navigation',{
 		return letter;
 	},
 
+
 	hasChildren: function(n){
-		var num = 0,
-			node = n;
+		var num = 0, node;
 
-		node = Ext.fly(node).first('topic', true);
-
-		if (!node) { return false; }
+		node = this.getFirstTopic(n);
 
 		for(node; node&&node.nextSibling; node=node.nextSibling){
 			if(!/topic/i.test(node.tagName) || parseInt(node.getAttribute('levelnum'), 10) > 2){ continue; }
@@ -249,6 +287,9 @@ Ext.define('NextThought.view.content.Navigation',{
 		return (num > 0);
 	},
 
-	clicked: function(me,dom){}
+
+	getFirstTopic: function(n){
+		return Ext.fly(n).first('topic', true);
+	}
 });
 
