@@ -104,7 +104,10 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.setActiveTab(this.activeTab);
 		}
 		//this is intentionally added after we "restore" the tab
-		this.mon(this.tabs,'tabchange', this.trackTabs, this);
+		this.mon(this.tabs,{
+			tabchange: 'trackTabs',
+			afterlayout: 'handleWindowResize'
+		});
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
