@@ -100,6 +100,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.bookmarkItem = new NextThought.view.account.history.mixins.Bookmark({panel: this});
 
 		this.buildStore();
+
+		this.on('resize','manageMaskSize');
 	},
 
 	getMimeTypes: function(){
@@ -109,6 +111,19 @@ Ext.define('NextThought.view.account.history.Panel', {
 		}, this);
 
 		return this.mimeTypes.join(',');
+	},
+
+
+	onMaskBeforeShow: function(mask){
+		if(this.getHeight() === 0){
+			mask.setHeight(0);
+		}
+		return this.callParent(arguments);
+	},
+
+
+	manageMaskSize: function(width, height){
+		this.loadMask.setHeight(height);
 	},
 
 
