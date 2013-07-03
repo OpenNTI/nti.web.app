@@ -181,7 +181,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			}
 		});
 
-		this.applyFilters(['all']);
+		this.applyFilters();
 
 		this.fromMenu.show().hide();
 		this.typesMenu.show().hide();

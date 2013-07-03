@@ -293,11 +293,18 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		s.removeAll();
 
+		if(filterTypes.length > 1){
+			debugger;
+			s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
+				filterOperator: '0'
+			});
+		}
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'relevance',
 			sortOrder: 'descending',
 			filter: filterTypes.join(','),
-			filterOperator: (filterTypes.length > 1)? '0' : '1',
+			//filterOperator: (filterTypes.length > 1)? '0' : '1',
 			accept: mimeTypes.join(',')
 		});
 
