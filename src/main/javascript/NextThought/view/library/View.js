@@ -44,7 +44,7 @@ Ext.define( 'NextThought.view.library.View', {
 		activeTab: 1,
 		items:[
 			{ title: 'Notepad', iconCls: 'notepad' },
-			{ title: 'Discussion', iconCls: 'discus', xtype: 'annotation-view' }
+			{ title: 'Discussion', iconCls: 'discus', xtype: 'annotation-view', discussion:true }
 		]
 	}],
 
@@ -61,8 +61,15 @@ Ext.define( 'NextThought.view.library.View', {
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
 			'navigateAbort': 'onNavigationAborted',
+			'filter-by-line': 'selectDiscussion',
 			scope:this
 		});
+	},
+
+
+	selectDiscussion: function(){
+		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(
+			this.down('annotation-view[discussion]'));
 	},
 
 
