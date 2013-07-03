@@ -41,7 +41,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		config.layout = 'fit';
 
 		this.callParent([config]);
-		this.reader.lockScroll();
+		this.reader.getScroll().lock();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
 //		if(!Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'),'application/pdf')){
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 
 
 	onDestroy: function(){
-		this.reader.unlockScroll();
+		this.reader.getScroll().unlock();
 		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
 		this.callParent(arguments);
 	},
