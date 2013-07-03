@@ -147,15 +147,37 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		this.mon(this.fromMenu, {
 			scope: this,
+			'show': function(){
+				this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
+			},
 			'hide': function(){
 				filterEl.down('.activity-filters .tabs .from').removeCls('selected');
+			},
+			'mouseenter': function(){
+				clearTimeout(this.fromHideTimeout);
+			},
+			'mouseleave': function(){
+				this.fromHideTimeout = Ext.defer(function(){
+						this.fromMenu.hide();
+					}, 500, this);
 			}
 		});
 
 		this.mon(this.typesMenu, {
 			scope: this,
+			'show': function(){
+				this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
+			},
 			'hide': function(){
 				filterEl.down('.activity-filters .tabs .types').removeCls('selected');
+			},
+			'mouseenter': function(){
+				clearTimeout(this.typesHideTimeout);
+			},
+			'mouseleave': function(){
+				this.typesHideTimeout = Ext.defer(function(){
+						this.typesMenu.hide();
+					}, 500, this);
 			}
 		});
 
@@ -276,7 +298,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		}
 
 		
-		this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
+		//this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
 		this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
 	},
 
@@ -286,7 +308,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			return;
 	   }
 
-		this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
+		//this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
 		this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
 	},
 
