@@ -21,14 +21,20 @@
 			overflow: hidden;
 			@include ellipse;
 			text-transform: uppercase;
-			max-width: 40%;
 		}
 
 		span.part {
+			display: inline-block;
+			max-width: 35%;
 			cursor: pointer;
+
 			&:hover,
 			&:last-of-type {
 				color: $primary-grey;
+			}
+
+			&:last-of-type{
+				max-width: none;
 			}
 		}
 	}
