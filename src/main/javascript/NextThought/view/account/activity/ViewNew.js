@@ -20,7 +20,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 	mimeTypesMap: {
 		'all': ['all'],
-		'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment'],
+		'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment','forums.communityheadlinetopic'],
 		'notes': ['highlight', 'note'],
 		'contact': ['user']
 	},
@@ -115,7 +115,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			},
 			items: [
 				{cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
-				{cls: 'option', text: 'Discussions & Thoughts', filter: 'discussions'},
+				{cls: 'option discussions', text: 'Discussions & Thoughts', filter: 'discussions'},
 				{cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
 				{cls: 'option bookmarks', text: 'Bookmarks', filter: 'bookmarks'},
 				//{cls: 'option', text: 'Likes', filter: 'likes'},
@@ -164,6 +164,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.fromMenu.show().hide();
 		this.typesMenu.show().hide();
 		this.typesMenu.el.down('.contact').hide();
+		this.typesMenu.el.down('.discussions').hide();
 	},
 
 	switchPanel: function(item){
@@ -176,6 +177,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
 		this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
+		this.typesMenu.el.down('.discussions')[(newTab.isMe)? 'hide' : 'show']();
 		
 		if(newTab.isContacts){
 			this.applyFilters('notInCommunity');
