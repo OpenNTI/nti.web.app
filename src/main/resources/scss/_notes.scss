@@ -460,10 +460,15 @@
 			}
 
 			.title{
-				height: 50px;
+				height: 55px;
+				max-width: 600px;
 				font-size: 40px;
 				color: $primary-grey;
 				font-family: 'Open Sans Condensed', $font;
+				word-wrap: nowrap;
+				overflow: hidden;
+				@include ellipsis;
+
 				.whiteboard-container{display: none !important;}
 			}
 
