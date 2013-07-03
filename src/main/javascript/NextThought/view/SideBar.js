@@ -105,6 +105,11 @@ Ext.define('NextThought.view.SideBar',{
 			mouseleave:'startHide'
 		});
 
+		this.mon(Ext.getBody(),{
+			mouseover: 'maybeCancelHide'
+		});
+
+
 		/**
 		 * There floating point animation is causing some jitters as the side bar is animated up & down.
 		 * This replacement implementation works by making function return what is passed, (whole integers) so no
@@ -133,25 +138,47 @@ Ext.define('NextThought.view.SideBar',{
 	},
 
 
+	maybeCancelHide: function(e){
+		var l = e.getTarget('.x-layer');
+		if(l){
+			console.log(l.id);
+			this.stopHide();
+			return;
+		}
 
-	stopShowHide: function(){
+		this.startHide()
+
+	},
+
+
+	stopShow: function(){
 		clearTimeout(this.showTimeout);
+		delete this.showTimeout;
+	},
+
+
+	stopHide: function(){
 		clearTimeout(this.hideTimeout);
+		delete this.hideTimeout;
 	},
 
 
-	startHide: function(){
+	startHide: function(force){
 		if(this.host.isVisible()){return;}
 
-		this.stopShowHide();
-		this.hideTimeout = Ext.defer(this.syncUp, 500, this);
+		if(!this.hideTimeout || force){
+			this.stopShow();
+			this.hideTimeout = Ext.defer(this.syncUp, 500, this);
+		}
 	},
 
-	startShow: function(){
+	startShow: function(force){
 		if(this.host.isVisible()){return;}
 
-		this.stopShowHide();
-		this.showTimeout = Ext.defer(this.rollDown, 500, this);
+		if(!this.showTimeout || force){
+			this.stopHide();
+			this.showTimeout = Ext.defer(this.rollDown, 500, this);
+		}
 	},
 
 
@@ -159,6 +186,9 @@ Ext.define('NextThought.view.SideBar',{
 		var d = this.down('chat-dock');
 		if(d){ d.show(); }
 		this.setHeight(Ext.Element.getViewportHeight()-10);
+
+		this.stopShow();
+		this.stopHide();
 	},
 
 
@@ -178,5 +208,7 @@ Ext.define('NextThought.view.SideBar',{
 		this.setHeight(size.height);
 		this.fireEvent('beforemove',false);
 		this.setPagePosition(x,0,false);
+
+		this.stopHide();
 	}
 });
