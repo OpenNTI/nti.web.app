@@ -21,9 +21,39 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 
 			Ext.applyIf(data,{
 				description: (description && description.getHTML()) || '',
-				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
+				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || '',
+				transcript: this.getTranscriptData(el, reader)
 			});
 			return data;
+		},
+
+		getTranscriptData: function(el, reader){
+			var transcript = {}, me = this;
+			if(el.is('object object[type*=ntislidevideo][itemprop$=card]')){
+				//Check if we have any transcript with the video
+				Ext.each(el.query('object[type*=mediatranscript]'), function(t){
+					var src =  Ext.fly(t).down('param[name=src]').getAttribute('value'),
+						type = Ext.fly(t).down('param[name=type]').getAttribute('value'),
+						altSource = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
+
+					console.log('found transcript: ', t);
+					transcript = {url:src, type:type, jsonUrl:altSource, basePath: reader.basePath, contentElement: me.getVideoTranscriptElement(t, el)};
+				});
+			}
+
+			return transcript;
+		},
+
+		getVideoTranscriptElement: function(transcriptEl, domEl){
+			// NOTE: we remove the transcript el from being underneath other objects tags
+			//       to being a first child, so we can have it referenced by an overlay.
+			Ext.fly(transcriptEl).remove();
+			var p =  Ext.get(transcriptEl).insertAfter(domEl);
+			if(p){
+				p.setVisibilityMode(Ext.dom.Element.DISPLAY);
+				p.hide();
+			}
+			return p;
 		}
 	},
 
@@ -32,26 +62,13 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 			throw 'you must supply a contentElement';
 		}
 
-		var dom = config.contentElement,
-			el = Ext.get(dom),
-			reader = config.reader,
-			data = DomUtils.parseDomObject(dom),
-			description = el.down('span.description'),
-			thumbnail = el.down('img');
-
-		Ext.applyIf(data,{
-			basePath: reader && reader.basePath,
-			description: (description && description.getHTML()) || '',
-			thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
-		});
-
 		Ext.apply(config,{
 			layout:'fit',
 			items:[{
 				xtype: 'content-slidevideo',
-				data: data,
-				contentElement: dom,
-				reader: reader
+				data: this.self.getData(config.contentElement,config.reader),
+				contentElement: config.contentElement,
+				reader: config.reader
 			}]
 		});
 

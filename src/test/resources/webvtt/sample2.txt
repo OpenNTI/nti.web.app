@@ -1,0 +1,26 @@
+[
+    {
+    "identifier": "",
+    "text": "<span class='first loud' title='Esme'>It's a blue apple tree!</span>",
+    "startTime": 0,
+    "endTime": 2
+    },
+    {
+    "identifier": "",
+    "text": "<span title='Mary'>No way!</span>",
+    "startTime": 2,
+    "endTime": 4
+    },
+    {
+    "identifier": "",
+    "text": "<span title='Esme'>Hee!</span> <i>laughter</i>",
+    "startTime": 4,
+    "endTime": 6
+    },
+    {
+    "identifier": "",
+    "text": "<span class='loud' title='Mary'>That's awesome!</span>",
+    "startTime": 6,
+    "endTime": 8
+    }
+]

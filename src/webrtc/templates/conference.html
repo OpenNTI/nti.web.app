@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>WebRTC Reference App</title>
+  
+  <meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+  <link href="/static/css/conference.css" type="text/css" rel="stylesheet"/>
+  <script src="/static/js/socket.io.js"></script>
+  <script src="/static/js/webrtc.js"></script>
+
+  <!-- <link rel="canonical" href="{{ room_link }}"/> -->
+</head>
+<body>
+<div id="container" ondblclick="enterFullScreen()"> 
+  <div id="card">
+    <div id="local">
+      <video width="100%" height="100%" id="localVideo" autoplay="autoplay" muted="true"/>
+    </div>
+    <div id="remote">
+      <video width="100%" height="100%" id="remoteVideo" autoplay="autoplay">
+      </video>
+      <div id="mini">
+        <video width="100%" height="100%" id="miniVideo" autoplay="autoplay" muted="true"/>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+  // global web rtc variable / class absracts all p2p communication
+  var webrtc = new WebRTC();
+
+  // legitimate global variables
+  var socket;
+
+  // server side settings, these must be established in python and made available
+  // to the client-side code. token is unused but would identify the "room"
+
+  webrtc.mediaConstraints = {{ media_constraints|safe }};
+  webrtc.offerConstraints = {{ offer_constraints|safe }};
+  webrtc.pcConstraints = {{ pc_constraints|safe }};
+  webrtc.pcConfig = {{ pc_config|safe }};
+  
+  var initiator = {{ initiator }};
+  var token = '{{ token }}';
+    var user = '{{ user }}';
+    var room = '{{ room }}';
+
+  // dom interface: use selectors
+  var card = document.getElementById("card");
+  var localVideo = document.getElementById("localVideo");
+  var miniVideo = document.getElementById("miniVideo");
+  var remoteVideo = document.getElementById("remoteVideo");
+  
+  // ah, state 
+  var isVideoMuted = false;
+  var isAudioMuted = false;
+
+  // the goods
+
+  function initialize() {
+    if (initiator) console.log("I am the initiator");
+    console.log("Initializing; room={{ room_key }}.");
+
+    resetStatus(); // interface
+
+    if (!WebRTC.isAvailable) {
+      alert("p2p or user media is not available");
+      return;
+    }
+
+    // steps:
+
+    // 1. open signaling channel: socket.io
+    // 2. if successful, connect to audio and video 
+    // 3. if successful, initialize the peer connection object 
+    //    and show the local video feed inside the browser
+    // 4. if i am the initiator(caller), start the peer connection
+    //  ...
+    // 5. if successful, grab the remote feed and show it
+
+    // it requires us to set up a sequence of asynchronous callbacks
+    // we want promises!
+
+    // set up custom peer connection event callbacks
+
+    webrtc.onIceCandidate = onIceCandidate;
+    webrtc.onRemoteStreamAdded = onRemoteStreamAdded;
+    webrtc.onRemoteStreamRemoved = onRemoteStreamRemoved;
+    webrtc.onSessionEvent = onSessionEvent;
+
+    console.log("Connecting to server");
+
+    openChannel(token, function() {
+      //alert("Socket.io connection to server successful.");
+      console.log("Socket.io connection to server successful.");
+      webrtc.openAVConnection({ 
+        success: function(stream) {
+          console.log("User has granted access to local media.");
+          
+          webrtc.attachMediaStream(localVideo, stream);
+          localVideo.style.opacity = 1;
+         
+          webrtc.initializePeerConnection();
+          
+          // Connect to the SocketIO room, and wait for confirmation before 
+          // initiating peer connection
+          sendMessage({type: 'connectroom', room: room}, function(data) {
+            if (initiator) {
+              webrtc.callPeer();
+            }
+          });
+        },
+        error: function(error) {
+          console.log("Failed to get access to local media: " + error.code); 
+        }
+      });
+    });
+  }
+
+  function openChannel(channelToken, onSuccess) {
+    
+    socket = io.connect('', {'host': 'localhost', 'port': 9999});
+      //socket = io.connect('/conf');
+
+    // standard socket.io
+    // note custom actions on connect
+
+    socket.on('connect', function() {
+      console.log("socket.io connected");
+      if (onSuccess) onSuccess();
+    });
+    socket.on('disconnect', function() {
+      console.log("socket.io disconnected");
+    });
+    socket.on('error', function() {
+      console.log("socket.io error");
+    });
+
+    // our specific messages
+
+    // socket.io manages the signaling, which involves the browsers negotiating
+    // connection conditions and addresses prior to making the connection via a
+    // NAT/STUN server
+
+    // as we acquire webrtc info from the user, we pass it to the server for this
+    // initial negotiation, and as we receive info from the server about the client
+    // we pass it to webrtc for handling
+
+    socket.on('offer', onOffer);
+    socket.on('answer', onAnswer);
+    socket.on('candidate', onCandidate);
+    socket.on('bye', onBye);
+  }
+
+  // socket.io emit
+
+  function sendMessage(message, callback) {
+    //alert('C->S: ' + message.type);
+    console.log('C->S: ' + message.type);
+    console.log('C->S: ' + message);
+    message.user = user;
+    message.room = room;
+    socket.emit(message.type, message, function(data) {
+      if (callback) {
+        callback(data);
+      }
+    });
+  }
+
+  // socket.io handlers, see corresponding python code
+
+  // note that as we receive information from our peer via the server, we pass
+  // it onto webrtc
+
+  function onOffer(data) {
+    console.log("received offer", data);
+    webrtc.setRemoteDescription(data);
+    webrtc.answerPeer();
+  }
+
+  function onAnswer(data) {
+    console.log("received answer", data);
+    if (webrtc.peerConnection) {
+      webrtc.setRemoteDescription(data);
+    }
+  }
+
+  function onCandidate(data) {
+    console.log("received candidate", data);
+    if (webrtc.peerConnection) {
+      var candidate = new WebRTC.IceCandidate({
+        sdpMLineIndex:data.label,
+        candidate:data.candidate
+      });
+      webrtc.addIceCandidate(candidate);
+    }
+  }
+
+  function onBye(data) {
+    console.log("received bye", data);
+    if (webrtc.isConnected()) {
+      onRemoteHangup();
+    }
+  }
+
+  // webrtc callbacks
+
+  // note that as we receive information from web rtc, we pass it to the server
+  // via socket.io, who sends it to the peer
+
+  // callPeer / answerPeer callback (webrtc)
+
+  function onSessionEvent(sessionDescription) {
+      //alert(sessionDescription);
+    sendMessage(sessionDescription);
+  }
+
+  // webrtc stream callbacks
+
+  function onIceCandidate(event) {
+    if (event.candidate) {
+      //alert(event.candidate.sdpMid);
+      sendMessage({
+        type: 'candidate',
+        label: event.candidate.sdpMLineIndex,
+        id: event.candidate.sdpMid,
+        candidate: event.candidate.candidate
+      });
+    } else {
+      console.log("End of candidates.");
+    }
+  }
+
+  function onRemoteStreamAdded(event) {
+    console.log("Remote stream added."); 
+    webrtc.reattachMediaStream(miniVideo, localVideo);
+    webrtc.attachMediaStream(remoteVideo, event.stream);
+    waitForRemoteVideo();  
+  }
+
+  function onRemoteStreamRemoved(event) {
+    console.log("Remote stream removed.");
+  }
+
+  
+  // might see about refactoring the following four functions into webrtc?
+  // onHangup: when we hang up
+  // onRemoteHangUp: when they hang up
+
+  function localBye() {
+    if (webrtc.isConnected()) {
+      localHangup();
+    }
+  }
+
+  function localHangup() {
+    console.log("Hanging up.");
+    transitionToDone();
+    webrtc.terminatePeerConnection();
+    webrtc.closeAVConnection();
+    socket.emit("bye",{});
+    //socket.disconnect();
+  }
+   
+  function onRemoteHangup() {
+    console.log('Remote hung up.');
+    transitionToWaiting();
+    webrtc.terminatePeerConnection();
+    webrtc.closeAVConnection();
+    //socket.disconnect();
+    initiator = 0;
+  }
+
+  function waitForRemoteVideo() {
+    videoTracks = webrtc.remoteStream.getVideoTracks();
+    if (videoTracks.length === 0 || remoteVideo.currentTime > 0) {
+      transitionToActive();
+    } else {
+      setTimeout(waitForRemoteVideo, 100);
+    }
+  }
+
+  // interface specific
+
+  function resetStatus() {
+    if (!initiator) {
+      setStatus("Waiting for someone to join: <a href=\"{{ room_link }}\">{{ room_link }}</a>");
+    } else {
+      setStatus("Initializing...");
+    }
+  }
+
+  function setStatus(state) {
+    footer.innerHTML = state;
+  }
+
+  function transitionToActive() {
+    remoteVideo.style.opacity = 1;
+    card.style.webkitTransform = "rotateY(180deg)";
+    setTimeout(function() { localVideo.src = ""; }, 500);
+    setTimeout(function() { miniVideo.style.opacity = 1; }, 1000);
+    setStatus("<input type=\"button\" id=\"hangup\" value=\"Hang up\" onclick=\"localBye()\" />");
+  }
+
+  function transitionToWaiting() {
+    card.style.webkitTransform = "rotateY(0deg)";
+    setTimeout(function() {
+                 localVideo.src = miniVideo.src;
+                 miniVideo.src = "";
+                 remoteVideo.src = "" }, 500);
+    miniVideo.style.opacity = 0;
+    remoteVideo.style.opacity = 0;
+    resetStatus();
+  }
+
+  function transitionToDone() {
+    localVideo.style.opacity = 0;
+    remoteVideo.style.opacity = 0;
+    miniVideo.style.opacity = 0;
+    setStatus("You have left the call. <a href=\"{{ room_link }}\">Click here</a> to rejoin.");
+  }
+
+  function enterFullScreen() {
+    container.webkitRequestFullScreen();
+  }
+
+  // Send BYE on refreshing(or leaving) a demo page
+  // to ensure the room is cleaned for next session.
+  window.onbeforeunload = function() {
+    localHangup();
+  }
+
+  // get her going
+
+  setTimeout(initialize, 1);
+
+</script>
+
+</body>
+</html>

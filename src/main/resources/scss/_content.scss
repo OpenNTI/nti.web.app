@@ -1,3 +1,33 @@
+// transcript testing
+
+.timed-text {
+	margin-left: 60px;
+}
+
+.timestamp {
+	position: absolute !important;
+	left: -60px;
+	width: 50px;
+	margin: 0 5px;
+	text-align: center;
+	color: #bbb !important;
+	border-radius: 3px;
+	user-select: none;
+
+	&:hover {
+		color: #494949 !important;
+		background-color: #ebf7fd;
+	}
+}
+
+.timestamp-container {
+	position: relative;
+
+	&:last-child .timestamp {
+		display: none;
+	}
+}
+
 .simple-popover-widget {
 	position: absolute;
 	background-color: #ffffff;
