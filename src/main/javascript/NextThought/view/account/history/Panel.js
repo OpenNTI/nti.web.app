@@ -294,7 +294,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 		s.removeAll();
 
 		if(filterTypes.length > 1){
-			debugger;
 			s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 				filterOperator: '0'
 			});
