@@ -483,8 +483,9 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	clearPageStore: function(){
-		this.flatPageStore.removeAll();
 		this.currentPageStores = {};//see above defineAttributes call
+		this.flatPageStore.removeFilter('lineFilter');
+		this.flatPageStore.removeAll();
 	},
 
 
