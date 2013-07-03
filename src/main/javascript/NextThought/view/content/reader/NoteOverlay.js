@@ -133,12 +133,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		this.editor.alignTo(this.data.box,'t-t?');
 		this.editor.rtlSetLocalX(0);
+		if(this.editor.getLocalY()<59){
+			this.editor.setLocalY(59);
+		}
 
 		tabPanel = this.editor.getEl().prev('.x-panel-notes-and-discussion');
 		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
 		if(!tabPanel){
 			console.error('No tab panel!');
-			return;
+			return false;
 		}
 
 		tabPanel.mask();
@@ -206,35 +209,35 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteHere: function(range, rect, style){
-		this.data.box.activeLineInfo = Ext.apply(this.lineInfoForRangeAndRect(range,rect),{style: style});
+		this.positionInputBox( Ext.apply(this.lineInfoForRangeAndRect(range,rect),{style: style}) );
 		if(!this.openEditor()){
 			alert('You already have a note in progress.');
+			return false;
 		}
+		return true;
 	},
 
 
 	contentDefinedAnnotationAction: function (dom, action) {
-		var o = this.data,
-			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-			id = d ? d.id : null,
+		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
+			id = d ? d.id : null, me = this,
 			img = d && d.is('img') ? d.dom : null,
 			doc = dom ? dom.ownerDocument : null,
-			range, offsets;
+			range, offsets, rect;
 
 		if (/mark/i.test(action)) {
 			range = doc.createRange();
 			range.selectNode(img);
-			offsets = this.getAnnotationOffsets();
-			o.lastLine = this.lineInfoForRangeAndRect(range, img.getBoundingClientRect(), offsets);
+			rect = img.getBoundingClientRect();
 
-			alert('TODO:\nFinish');
-
-//			WBUtils.createFromImage(img, function (data) {
-//				o.editor.reset();
-//				o.editor.setValue('');
-//				o.editor.addWhiteboard(data);
-//				o.editor.focus(true);
-//			});
+			if(this.noteHere(range, rect)){
+				WBUtils.createFromImage(img, function (data) {
+					me.editor.reset();
+					me.editor.setValue('');
+					me.editor.addWhiteboard(data);
+					me.editor.focus(true);
+				});
+			}
 		}
 	},
 
