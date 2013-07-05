@@ -36,21 +36,9 @@ Ext.define('NextThought.view.content.reader.Touch', {
         var reader = this.reader;
 
         reader.on('afterrender', function() {
-            this.addIFrameClickthrough();
+            reader.getIframe().setClickthrough(true);
             this.setupTouchHandlers();
         }, this);
-    },
-
-    /**
-     * Makes pointer events go through the iframe so that all the
-     * interactions can be handled manually.
-     */
-    addIFrameClickthrough: function() {
-        var reader = this.reader,
-            iFrameMod = reader.getIframe(),
-            iFrameEle = iFrameMod.get();
-        if (iFrameEle)
-            iFrameEle.addCls('clickthrough');
     },
 
     /**
@@ -63,6 +51,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
             scroll = reader.getScroll(),
             dom = reader.getEl().dom,
             state = s.STATE.NONE,
+            iFrame = reader.getIframe(),
+
+            previouslyPickedElement = null,
+            previouslyPickedElementStyle = '',
+            pickedElement = null,
             initialTime,
             initialY,
             lastY,
@@ -73,6 +66,20 @@ Ext.define('NextThought.view.content.reader.Touch', {
             return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
         }
 
+        function pickElementInIframe(e) {
+            var element = iFrame.elementAt(e.pageX, e.pageY);
+            return element;
+        }
+
+        function elementIsSelectable(ele) {
+            // TODO:
+            return false;
+        }
+        function elementIsDraggable(ele) {
+            // TODO:
+            return false;
+        }
+
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
 
@@ -80,6 +87,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
             if (state !== s.STATE.NONE)
                 return;
             state = s.STATE.DOWN;
+            pickedElement = pickElementInIframe(e);
 
             initialTime = Date.now();
             initialY = e.touches[0].pageY;
@@ -88,21 +96,24 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
             console.log('touchStart');
 
-            // Or just assume single
             setTimeout(function() {
                 if (state === s.STATE.DOWN) {
-                    // TODO: check element at position for text (selecting) or drag/drop question (dragging)
                     console.log('long press');
+                    if (elementIsSelectable(pickedElement)) {
+                        state = s.STATE.SELECTING;
+                    }
+                    else if (elementIsDraggable(pickedElement)) {
+                        state = s.STATE.DRAGGING;
+                    }
                     vel=0;
                 }
-
             }, s.TAP_HOLD_TIME);
         }, false);
 
         dom.addEventListener('touchmove', function(e) {
             e.preventDefault();
 
-            console.log('touchMove '+(lastY-initialY));
+            console.log('touchMove');
 
             if (state === s.STATE.DOWN) {
                 scrollMove();
@@ -141,7 +152,16 @@ Ext.define('NextThought.view.content.reader.Touch', {
             console.log('touchEnd');
 
             if (tempState === s.STATE.DOWN) {
-                // TODO: Send tap event
+                // Send click event to clicked element
+                pickedElement.click();
+
+                // DEBUG testing code that highlights the selected element
+                if (previouslyPickedElement){
+                    previouslyPickedElement.style.backgroundColor = previouslyPickedElementStyle;
+                }
+                previouslyPickedElement = pickedElement;
+                previouslyPickedElementStyle = previouslyPickedElement.style.backgroundColor
+                pickedElement.style.backgroundColor = 'red';
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
@@ -180,8 +200,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
                 }
             }
-        });
+        }); // eo touchEnd
 
-    }
+    } // eo setupTouchHandlers
 
 });

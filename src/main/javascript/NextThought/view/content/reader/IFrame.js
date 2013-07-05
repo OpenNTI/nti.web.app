@@ -492,5 +492,48 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
     getCleanContent: function(){
         return this.cleanContent;
+    },
+
+    /**
+     * Makes pointer events go through the iframe so that all the
+     * interactions can be handled manually.
+     * @param should
+     */
+    setClickthrough: function(should) {
+        var el = this.get();
+        if (!el)
+            return;
+
+        if(should)
+            el.addCls('clickthrough');
+        else
+            el.removeCls('clickthrough');
+    },
+
+    hasClickthrough: function() {
+        return this.get().hasCls('clickthrough');
+    },
+
+    /**
+     * @param x relative to the window's top left corner
+     * @param y relative to the window's top left corner
+     */
+    elementAt: function(x, y) {
+        var reader = this.reader,
+            doc = this.getDocumentElement(),
+            hasClickthrough = this.hasClickthrough(),
+            framePos = reader.getPosition(),
+            scrolledY = reader.getScroll().top(),
+            pickedElement;
+
+        // Disable pointer-events:none so that hit detection works
+        // properly in element picking
+        this.setClickthrough(false);
+        pickedElement = doc.elementFromPoint(x-framePos[0], y-framePos[1]+scrolledY);
+        console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
+
+        this.setClickthrough(hasClickthrough);
+
+        return pickedElement;
     }
 });
