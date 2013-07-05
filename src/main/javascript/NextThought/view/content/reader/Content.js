@@ -200,8 +200,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.fireEvent('load-annotations',ntiid, me.resolveContainers());
 
 		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-		//Ext.defer(Ext.callback,500,Ext,[finish,null,[me]]);
-		Ext.callback(finish,null,[me]);
+		//Ext.defer(Ext.callback,500,Ext,[finish,null,[reader]]);
+		Ext.callback(finish,null,[reader]);
 	},
 
 
