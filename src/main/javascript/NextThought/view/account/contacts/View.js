@@ -147,8 +147,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 		if(!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))){return;}
 
-		console.log(wait);
-
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			Ext.fly(item).un('mouseout',me.cancelPopupTimeout,me,{single:true});
