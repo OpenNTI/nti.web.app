@@ -40,7 +40,7 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 		}
 
 		pop.show();
-		pop.alignTo(el, 'tl-bl', [0,0]);
+		pop.alignTo(el, 'tl-bl?', [0,0]);
 
 		contactCardPopout = canShow? null: pop;
 	}
