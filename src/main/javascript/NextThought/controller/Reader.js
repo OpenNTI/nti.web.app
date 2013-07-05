@@ -45,6 +45,7 @@ Ext.define('NextThought.controller.Reader', {
 					'set-last-location-or-root':'setLastLocation'
 				},
 				'library-view-container reader-panel':{
+					'beforeNavigate':'beforeSetLocation',
 					'set-content':'updateLibraryControls',
 					'page-previous':'goPagePrevious',
 					'page-next':'goPageNext'
@@ -54,6 +55,21 @@ Ext.define('NextThought.controller.Reader', {
 				}
 			}
 		});
+	},
+
+
+	beforeSetLocation: function(){
+		var canNav = true,
+			n = Ext.ComponentQuery.query('note-window')||[];
+
+		try{
+			Ext.each(n,function(note){ note.closeOrDie(); });
+		}
+		catch(e){
+			canNav = false;
+		}
+
+		return canNav;
 	},
 
 
