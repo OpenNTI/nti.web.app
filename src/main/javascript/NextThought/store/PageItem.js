@@ -197,7 +197,7 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
-		remove: function(){
+		remove: function(r, isMove, silent){
 			var toActuallyRemove = [],
 				idsToBoradcast = [],
 				args = Array.prototype.slice.call(arguments),
@@ -256,7 +256,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 			//FWIW: we may want to suspend (and queue) this event.  When records(instances of Model) are "destroyed" they
 			// call this method in a tight loop over all stores that the record was associated.
-			coordinator.fireEvent('removed-item', idsToBoradcast);
+			coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 		},
 
 		addFromEvent: function(records){
@@ -292,7 +292,7 @@ Ext.define('NextThought.store.PageItem',function(){
 			coordinator.resumeEvents();
 		},
 
-		removeByIdsFromEvent: function(ids){
+		removeByIdsFromEvent: function(ids, isMove, silent){
 			coordinator.suspendEvents();
 			var me = this;
 
@@ -300,7 +300,7 @@ Ext.define('NextThought.store.PageItem',function(){
 				Ext.each(ids,function(id){
 					var r = me.getById(id);
 					if(r){
-						me.remove(r);
+						me.remove(r,isMove, silent);
 					}
 				});
 			}

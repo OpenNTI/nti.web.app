@@ -175,13 +175,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		console.log('removed child, it was deleting: ',cmp.deleting);
 		if(cmp.deleting && c === 0 && (!this.record || this.record.placeholder)){
 			this.record.destroy();
+			this.destroy();
 		}
 	},
 
+
 	onDelete: function(){
+		var c = this.items.getCount();
+		
 		this.callParent(arguments);
-		this.destroy();
+		if(c === 0){
+			this.destroy();
+		}
 	},
+
 
 	onReply: function(){
 		this.editorEl.down('.title').hide();

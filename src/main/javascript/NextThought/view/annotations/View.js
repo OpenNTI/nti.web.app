@@ -2,7 +2,7 @@ Ext.define('NextThought.view.annotations.View',{
 	extend: 'Ext.view.View',
 	alias: 'widget.annotation-view',
 
-	store: 'FlatPageStore',
+	store: 'FlatPage',
 	ui: 'annotation-view',
 	cls: 'annotation-view',
 

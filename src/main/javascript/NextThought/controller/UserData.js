@@ -28,7 +28,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	stores: [
-		'PageItem'
+		'PageItem',
+		'FlatPage'
 	],
 
 
@@ -419,66 +420,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-		this.flatPageStore = new Ext.data.Store({
-			model: 'NextThought.model.Base',
-			id: 'FlatPageStore',
-			proxy: 'memory',
-			remoteSort: false,
-			remoteFilter: false,
-			remoteGroup: false,
-			filterOnLoad: true,
-			sortOnFilter: true,
-			sorters:[
-				{
-					property : 'line',
-					direction: 'ASC'
-				},{
-					property : 'CreatedTime',
-					direction: 'ASC'
-				}
-			],
-			filters:[
-				{filterFn:function(r){
-					return !r.parent;}, id:'nochildren'}
-			],
-			bind: this.bindFlatStore
-		});
+		this.flatPageStore = this.getFlatPageStore();
 
-	},
-
-
-	bindFlatStore: function(otherStore){
-		var me = this;
-		if(otherStore.$boundToFlat){ return; }
-
-		function remove(s,rec){if(rec){me.remove(rec);}}
-		function add(s,rec){
-			rec = s.getItems();
-			var filter = [];
-			Ext.each(rec||filter,function(r){
-				if(!r.parent && r instanceof NextThought.model.Note && me.findExact('NTIID', r.get('NTIID')) < 0){
-					filter.push(r);
-				}
-			});
-
-			if(filter){
-				me.add(filter);
-			}
-		}
-
-		otherStore.on('cleanup','destroy',
-				me.mon(otherStore,{
-					scope: me,
-					destroyable: true,
-					add: add,
-					load: add,
-					bulkremove: remove,
-					remove: remove
-				}));
-
-		otherStore.$boundToFlat = true;
-
-		add(otherStore,otherStore.getItems());
 	},
 
 
