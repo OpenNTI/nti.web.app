@@ -43,6 +43,9 @@
 				overflow: visible;
 				cursor: default;
 				margin-left: 0.4em;
+				.x-gecko & {
+					top: -25px;
+				}
 				&:hover {
 					color: inherit;
 
