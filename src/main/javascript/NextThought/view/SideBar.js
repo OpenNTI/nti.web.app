@@ -141,7 +141,6 @@ Ext.define('NextThought.view.SideBar',{
 	maybeCancelHide: function(e){
 		var l = e.getTarget('.x-layer');
 		if(l){
-			console.log(l.id);
 			this.stopHide();
 			return;
 		}
