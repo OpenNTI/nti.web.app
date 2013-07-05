@@ -61,7 +61,8 @@ Ext.define('NextThought.controller.UserData', {
 		this.listen({
 			model : {
 				'*':{
-					'update-pageinfo-preferences':'updatePreferences'
+					'update-pageinfo-preferences':'updatePreferences',
+					'deleted': 'onRecordDestroyed'
 				}
 			},
 			component:{
@@ -361,6 +362,14 @@ Ext.define('NextThought.controller.UserData', {
 		this.incomingCreatedChange.apply(this,arguments);
 	},
 
+
+	onRecordDestroyed: function(record){
+		if(!Ext.isEmpty(record.stores)){return;}
+
+		this.applyToStoresThatWantItem(function(key,store){
+			store.removeByIdsFromEvent(record.getId(),true);
+		},record);
+	},
 
 
 	listenToPageStores : function(monitor, listeners){

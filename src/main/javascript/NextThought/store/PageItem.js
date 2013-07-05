@@ -293,7 +293,7 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 		removeByIdsFromEvent: function(ids, isMove, silent){
-			coordinator.suspendEvents();
+			coordinator.suspendEvents(true);
 			var me = this;
 
 			try{

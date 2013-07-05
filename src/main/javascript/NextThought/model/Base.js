@@ -339,8 +339,13 @@ Ext.define('NextThought.model.Base', {
 			delete me.destroyDoesNotClearListeners;
 		}
 
+		function announce(){
+			me.fireEvent('deleted', me);
+		}
+
 		options = Ext.apply(options||{},{
-			success: Ext.Function.createSequence(clearFlag, successCallback, null),
+			success: Ext.Function.createSequence(clearFlag,
+					Ext.Function.createSequence(announce, successCallback, null), null),
 			failure: Ext.Function.createSequence(clearFlag, failureCallback, null)
 		});
 
