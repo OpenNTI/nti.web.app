@@ -261,6 +261,9 @@ Ext.define('NextThought.controller.Navigation', {
 		var callback = Ext.emptyFn(),
 			reply, targets;
 
+		if(!this.fireEvent('show-view','library',true)){
+			return;
+		}
 
 		if (rec) {
 			reply = (options || {}).reply;

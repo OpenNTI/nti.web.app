@@ -59,8 +59,17 @@ Ext.define('NextThought.view.content.Reader', {
 	bootstrap: function(loc){
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.
-		var l = loc || this.getLocation().NTIID;
-		this.setLocation(l,null,true);
+		var l = loc || this.getLocation().NTIID,
+			cb = null,
+			silent = true;
+
+		if(!Ext.isString(l)){
+			silent = l[2];
+			cb = Ext.isFunction(l[1])? l[1] : null;
+			l = l[0];
+		}
+
+		this.setLocation(l,cb,silent);
 	},
 
 

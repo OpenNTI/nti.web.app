@@ -62,6 +62,9 @@ Ext.define('NextThought.controller.Reader', {
 		if(!r.ntiidOnFrameReady ){
 			r.setLocation.apply(r,arguments);
 		}
+		else {
+			r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
+		}
 	},
 
 
