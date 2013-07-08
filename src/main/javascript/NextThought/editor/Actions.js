@@ -832,6 +832,7 @@ Ext.define('NextThought.editor.Actions', {
 				}, 100);
 			}
 			me.focus(true);
+			Ext.defer(me.maybeResizeContentBox, 1, me);
 		});
 	},
 
