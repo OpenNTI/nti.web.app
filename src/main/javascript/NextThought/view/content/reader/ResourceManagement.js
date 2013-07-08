@@ -76,8 +76,8 @@ Ext.define('NextThought.view.content.reader.ResourceManagement',{
 		'object[type$=nticard]':'overlay-card',
 		'object[type$=nticard-target]':'overlay-card-target',
 		'object[type$=ntislidedeck]':'overlay-slidedeck',
-		'object[type$=ntislidevideo][itemprop$=card]':'overlay-slidevideo',
-		'object[type$=ntivideo]':'overlay-video',
+		'object[type$=ntislidevideo][itemprop=presentation-card]':'overlay-slidevideo',
+		'object[type$=ntivideo][itemprop=presentation-video]':'overlay-video',
 		'object[type$=videoroll]':'overlay-video-roll',
 		'object[type$=image-collection]':'overlay-image-roll'
 	},
@@ -128,12 +128,6 @@ Ext.define('NextThought.view.content.reader.ResourceManagement',{
 			els = doc.querySelectorAll(query);
 
 		Ext.each(els,function(el){
-//			Don't register overlayed panels for nested objects.
-			if(Ext.fly(el).is('object object[type$=ntivideo]')){
-				console.warn('object ' + el.tagName);
-				console.warn(el);
-				return;
-			}
 			o.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType,{
 				reader: me,
 				renderTo: o.componentOverlayEl,
