@@ -84,4 +84,4 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 			this.lockHeader();
 		}
 	}
-})
+});

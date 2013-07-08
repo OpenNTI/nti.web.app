@@ -145,7 +145,7 @@ Ext.define('NextThought.view.SideBar',{
 			return;
 		}
 
-		this.startHide()
+		this.startHide();
 
 	},
 
