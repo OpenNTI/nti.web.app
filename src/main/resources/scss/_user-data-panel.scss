@@ -73,6 +73,10 @@
 		border-top: none !important;
 	}
 
+	div.history:first-of-type{ margin-top: 10px; }
+
+	.divider + div.history:first-of-type{ margin-top: 0; }
+
 	.history{
 		&.nothing{
 			color: $tertiary-grey;
