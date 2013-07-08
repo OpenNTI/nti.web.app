@@ -1,4 +1,5 @@
 //Styles defined in _history-view.scss
+//TODO: Once we permanently enable this view, rename to View.js
 Ext.define('NextThought.view.account.activity.ViewNew',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.activity-view-new',
