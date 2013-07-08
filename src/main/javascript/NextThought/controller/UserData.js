@@ -890,17 +890,19 @@ Ext.define('NextThought.controller.UserData', {
 
 	saveNewBookmark: function(reader){
 		//create a bookmark model
-		var bm = this.getBookmarkModel().create({
+		var me = this,
+			bm = me.getBookmarkModel().create({
 			ContainerId: reader.getLocation().NTIID,
 			applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
 		});
 
 		//now save this:
 		bm.save({
-			scope: this,
 			callback:function(record, operation){
 				try{
-					if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
+					if (operation.success){
+						me.fireEvent('bookmark-loaded', record);
+					}
 				}
 				catch(err){
 					console.error('Something went teribly wrong... ', Globals.getError(err));

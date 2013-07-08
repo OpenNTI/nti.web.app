@@ -351,3 +351,17 @@ div.no-content-splash {
 		//}
 	}
 }
+
+
+.content-page-widgets{
+	position: absolute;
+	top: 0;
+	right: 10px;
+	z-index: 10;
+
+	.meta {
+		position: relative;
+		overflow: hidden;
+		@include like-and-favorite;
+	}
+}

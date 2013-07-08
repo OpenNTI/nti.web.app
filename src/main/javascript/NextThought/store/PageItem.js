@@ -122,7 +122,7 @@ Ext.define('NextThought.store.PageItem',function(){
 				if (bms.length !== 1) {
 					console.error('Oops, more than 1 bookmark on this page??', bms);
 				}
-				NextThought.model.events.Bus.fireEvent('bookmark-loaded',bms[0]);
+				this.fireEvent('bookmark-loaded',bms[0]);
 				delete bins.Bookmark;
 			}
 

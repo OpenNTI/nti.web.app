@@ -18,6 +18,7 @@ Ext.define('NextThought.controller.Reader', {
 		'cards.Card',
 		'content.Navigation',
 		'content.Pager',
+		'content.PageWidgets',
 		'content.Reader',
 		'content.Toolbar'
 	],
@@ -27,6 +28,7 @@ Ext.define('NextThought.controller.Reader', {
 		{ref: 'libraryMenu', selector: 'library-collection'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
+		{ref: 'libraryPageWidgets', selector: 'library-view-container content-page-widgets'},
 		{ref: 'libraryReader', selector: 'library-view-container reader-panel'}
 	],
 
@@ -36,7 +38,13 @@ Ext.define('NextThought.controller.Reader', {
 			controller:{
 				'*':{
 					'set-location':'setLocation',
-					'set-last-location-or-root':'setLastLocation'
+					'set-last-location-or-root':'setLastLocation',
+					'bookmark-loaded': 'onBookmark'
+				}
+			},
+			store: {
+				'*':{
+					'bookmark-loaded': 'onBookmark'
 				}
 			},
 			component:{
@@ -147,15 +155,28 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+	onBookmark: function(rec){
+		try{
+			this.getLibraryPageWidgets().onBookmark(rec);
+		}
+		catch(e){
+			console.error(e.stack||e.message);
+		}
+	},
+
+
 	updateLibraryControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
 			lm = this.getLibraryMenu(),
+			pw = this.getLibraryPageWidgets(),
 			origin = pageInfo && pageInfo.contentOrig,
 			t = pageInfo && pageInfo.get('NTIID');
 
 		pg[fn]();
+		pw[fn]();
 
+		pw.clearBookmark();
 		pg.updateState(t);
 		lm.updateSelection(t);
 

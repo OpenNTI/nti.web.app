@@ -5,6 +5,7 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
 		'NextThought.view.ResourceNotFound',
+		'NextThought.view.content.PageWidgets',
 		'NextThought.view.content.reader.Content',
 		'NextThought.view.content.reader.IFrame',
 		'NextThought.view.content.reader.Location',
@@ -116,10 +117,15 @@ Ext.define('NextThought.view.content.Reader', {
 		var DH = Ext.DomHelper,
 			el = this.getTargetEl();
 
+
 		this.splash = DH.doInsert(el,{cls:'no-content-splash initial'},true,'beforeEnd');
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		this.notFoundCmp = NextThought.view.ResourceNotFound.create({renderTo: this.splash, hideLibrary: true});
+		this.floatingItems.add(
+				Ext.widget({xtype:'content-page-widgets', renderTo: this.el, reader: this}));
+
+		this.floatingItems.add(
+				Ext.widget({xtype:'notfound', renderTo:this.splash, hideLibrary:true}));
 	},
 
 
