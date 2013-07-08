@@ -131,7 +131,7 @@ Ext.define( 'NextThought.view.library.View', {
 		var ntiid = state.library.location;
 		this.reader.setLocation(ntiid,null,true);
 		if(this.reader.ntiidOnFrameReady){
-			this.up('master-view').down('library-collection').updateSelection(ntiid);
+			this.up('master-view').down('library-collection').updateSelection(ntiid,true);
 		}
 
 		this.fireEvent('finished-restore');

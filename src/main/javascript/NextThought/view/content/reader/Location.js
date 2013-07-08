@@ -27,30 +27,11 @@ Ext.define('NextThought.view.content.reader.Location', {
 		Ext.apply(reader,{
 			getLocation: Ext.bind(this.getLocation,this),
 			getRelated: Ext.bind(this.getRelated,this),
-			setLocation: Ext.bind(this.setLocation,this),
-			setLastLocationOrRoot: Ext.bind(this.setLastLocationOrRoot,this)
+			setLocation: Ext.bind(this.setLocation,this)
 		});
 
 		this.callParent(arguments);
 	},
-
-
-	setLastLocationOrRoot: function(ntiid) {
-		var lastNtiid = localStorage[ntiid] || ntiid;
-		if(!ParseUtils.parseNtiid(lastNtiid)){
-			lastNtiid = ntiid;
-		}
-
-		function callback(a, errorDetails){
-			var error = (errorDetails||{}).error;
-			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
-				delete localStorage[ntiid];
-			}
-		}
-
-		this.setLocation(lastNtiid, callback);
-	},
-
 
 
 	/**

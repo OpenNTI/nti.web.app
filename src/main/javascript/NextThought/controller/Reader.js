@@ -83,6 +83,11 @@ Ext.define('NextThought.controller.Reader', {
 
 	setLocation: function(){
 		var r = this.getLibraryReader();
+
+		if(this.fireEvent('show-view','library',true)===false){
+			return;
+		}
+
 		if(!r.ntiidOnFrameReady ){
 			r.setLocation.apply(r,arguments);
 		}
@@ -92,11 +97,20 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	setLastLocation: function(){
-		var r = this.getLibraryReader();
-		if(!r.ntiidOnFrameReady ){
-			r.setLastLocationOrRoot.apply(r,arguments);
+	setLastLocation: function(ntiid){
+		var lastNtiid = localStorage[ntiid] || ntiid;
+		if(!ParseUtils.parseNtiid(lastNtiid)){
+			lastNtiid = ntiid;
 		}
+
+		function callback(a, errorDetails){
+			var error = (errorDetails||{}).error;
+			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+				delete localStorage[ntiid];
+			}
+		}
+
+		this.setLocation(lastNtiid, callback);
 	},
 
 
