@@ -37,6 +37,11 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			resize: function(){ me.fireEvent('realign'); }
 		});
 
+		this.mon(this.viewRef,{
+			refresh: 'itemRefreshed',
+			itemupdate: 'itemUpdated'
+		});
+
 		this.setupItems();
 	},
 
@@ -65,6 +70,22 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		return p.getPointerStyle ? p.getPointerStyle(x,y) : '';
 	},
 
+	itemRefreshed: function(view){
+		var el = view.getNodeByRecord(this.record);
+		
+		if(el){
+			this.updateRefEl(el);
+		}else{
+			console.error("RefEl no longer exists");
+			this.destroy();
+		}
+	},
+
+	itemUpdated: function(rec,index,node){
+		if(this.record === rec){
+			this.updateRefEl(node);
+		}
+	},
 
 	updateRefEl: function(el){
 		this.refEl = el;
@@ -157,6 +178,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					user: user,
 					refEl: Ext.get(el),
 					hidden: true,
+					viewRef: viewRef,
 					listeners:{
 						realign: align
 					}
