@@ -1,11 +1,13 @@
 /*jslint */
-/*globals Globals, NextThought, YT */
+/*globals Globals, NextThought, ObjectUtils, YT */
 Ext.define('NextThought.view.video.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
 
 	requires: [
 		'NextThought.util.Globals',
+		'NextThought.util.media.HTML5Player',
+		'NextThought.util.media.YouTubePlayer',
 		'NextThought.model.PlaylistItem'
 	],
 
@@ -13,7 +15,9 @@ Ext.define('NextThought.view.video.Video',{
 	cls: 'content-video',
 
 	listeners: {
-		destroy: 'cleanup'
+		destroy: 'cleanup',
+		'player-ready': 'playerReady',
+		'player-error': 'playerError'
 	},
 
 	states: {
@@ -25,39 +29,10 @@ Ext.define('NextThought.view.video.Video',{
 		CUED: 5
 	},
 
-	commands: {
-		'cleanup': {
-			'youtube': 'clearVideo',
-			'html5': 'cleanup'
-		},
-		'getCurrentTime': {
-			'youtube' : 'getCurrentTime',
-			'html5': 'getCurrentTime'
-		},
-		'getPlayerState': {
-			'youtube' : 'getPlayerState',
-			'html5': 'getPlayerState'
-		},
-		load: {
-			'youtube' : 'loadVideoById',
-			'html5': 'load'
-		},
-		play: {
-			'youtube' : 'playVideo',
-			'html5': 'play'
-		},
-		pause: {
-			'youtube' : 'pauseVideo',
-			'html5': 'pause'
-		},
-		seek: {
-			'youtube' : 'seekTo',
-			'html5': 'seek'
-		},
-		stop: {
-			'youtube' : 'clearVideo',
-			'html5': 'stop'
-		}
+	loadFirstEntry: true,
+	playerWidth: 640,
+	playerHeight: function(){
+		return Math.round(this.playerWidth * 0.5625);
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -70,12 +45,28 @@ Ext.define('NextThought.view.video.Video',{
 			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
 				frameBorder: 0, scrolling: 'no', seamless: true
 			},
-			{ tag: 'video', cls: 'video', name: 'video', id: '{id}-native-video',
-				'controls': '', 'width': '{html5-width}', 'height': '{html5-height}'
-			},
 			{ cls: 'video placeholder', name: 'video', id: '{id}-curtain'}
 		]}
 	]),
+
+
+	onClassExtended: function(cls, data, hooks) {
+		var onBeforeClassCreated = hooks.onBeforeCreated;
+
+		//merge with subclass's render selectors
+		data.listeners = Ext.applyIf(data.listeners||{},cls.superclass.listeners);
+		if(data.cls){
+			data.cls = [cls.superclass.cls,data.cls].join(' ');
+		}
+
+		hooks.onBeforeCreated = function(cls, data) {
+			if(data.cls){
+				data.cls = [cls.superclass.cls,data.cls].join(' ');
+			}
+			data.listeners = Ext.applyIf(data.listeners||{},cls.superclass.listeners);
+			onBeforeClassCreated.call(this, cls, data, hooks);
+		};
+	},
 
 
 	initComponent: function(){
@@ -100,7 +91,6 @@ Ext.define('NextThought.view.video.Video',{
 
 		this.playerIds = {
 			'vimeo': this.id+'-vimeo-video',
-			'html5': this.id+'-native-video',
 			'none': this.id+'-curtain'
 		};
 
@@ -140,112 +130,62 @@ Ext.define('NextThought.view.video.Video',{
 		this.callParent(arguments);
 
 		this.playerSetup();
+		Ext.defer(this.updateLayout, 1, this);
 
 		console.log('Players initialized.');
-//		Set the curtain as the active player while we figure out which other one to use.
-		this.maybeSwitchPlayers('none');
 
-//		SAJ: We really should not be doing this type of thing here. This will make much
-//		more sense when the event loop is moved here.
-//
-//		this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
-//		this.maybeSwitchPlayers(this.activeVideoService);
-//		this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
+//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
+		if(this.loadFirstEntry){
+			this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+			this.maybeSwitchPlayers(this.activeVideoService);
+			this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
+		}
+		else{
+//			Set the curtain as the active player while we figure out which other one to use.
+			this.maybeSwitchPlayers('none');
+		}
 	},
 
 
 	playerSetup: function(){
 		console.log('Initializing the players.');
 		if(window.YT){
-			this.youtubePlayerSetup();
+			this.players.youtube = new NextThought.util.media.YouTubePlayer({
+				el: Ext.get(this.el.down('.video-wrapper')),
+				parentId: this.id,
+				width: this.playerWidth,
+				height: this.playerHeight,
+				parentComponent: this
+			});
+			this.playerIds.youtube = this.id+'-youtube-video';
 		}
 		else if (!Ext.Array.contains(this.self.playerBlacklist, 'youtube')){
 			this.self.playerBlacklist.push('youtube');
 		}
 
-		this.players.html5 = new NextThought.util.HTML5Player({
-			el: Ext.get(this.playerIds.html5)
+		this.players.html5 = new NextThought.util.media.HTML5Player({
+			el: Ext.get(this.el.down('.video-wrapper')),
+			parentId: this.id,
+			width: this.playerWidth,
+			height: this.playerHeight
 		});
+		this.playerIds.html5 = this.id+'-native-video';
 
 		this.players.none = {};
 		this.players.none.isReady = false;
 	},
 
 
-	youtubePlayerSetup: function(){
-		var youtubeTpl = Ext.DomHelper.createTemplate({
-				tag: 'iframe', cls:'video', name: 'video', id: '{id}-youtube-video',
-				frameBorder: 0, scrolling: 'no', seamless: true, width: '640', height: '360',
-				src: location.protocol+'//www.youtube.com/embed/?{youtube-params}'
-			}),
-			pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
-			params = [
-				'html5=1',
-				'enablejsapi=1',
-				'autohide=1',
-				'modestbranding=1',
-				'wmode=transparent',
-				'rel=0',
-				'showinfo=0',
-				'list='+encodeURIComponent(pl),
-				'origin='+encodeURIComponent(location.protocol+'//'+location.host)
-			];
-
-//		Inject Youtube HTML
-		youtubeTpl.append(this.el.down('.video-wrapper'), {id: this.id, 'youtube-params': params});
-
-//		Add the YouTube element id to the list
-		this.playerIds.youtube = this.id+'-youtube-video';
-
-		this.players.youtube = new YT.Player(this.playerIds.youtube, {
-			html5: '1',
-			enablejsapi: '1',
-			autohide: '1',
-			modestbranding: '1',
-			wmode: 'transparent',
-			rel: '0',
-			showinfo: '0',
-			list: pl,
-			origin: location.protocol+'//'+location.host,
-			events: {
-				'onReady': Ext.bind(this.youtubePlayerReady,this),
-				'onError': Ext.bind(this.youtubePlayerError, this)
-			}
-		});
-		this.players.youtube.isReady = false;
+	playerError: function(player){
+		this.self.playerBlacklist.push(player);
+		this.playlistSeek(this.playlistIndex);
 	},
 
 
-	youtubePlayerReady: function(){
-		(this.players.youtube||{}).isReady = true;
-		var q = this.commandQueue.youtube;
+	playerReady: function(player){
+		var q = this.commandQueue[player];
 		while(q.length>0){
 			Ext.callback(this.issueCommand,this, q.shift());
-		}
-	},
-
-
-	youtubePlayerError: function(error){
-		var oldVideoId;
-		console.warn('YouTube player died with error: ' + error.data);
-
-//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
-//		interaction with the browsers built-in HTML5 player, so lets try, try again.
-//		SAJ: We should probably also give up after X tries and just go to the next source
-//		or playlist entry.
-		if (error.data === 5){
-			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
-			this.cleanup();
-			Ext.destroy(Ext.get(this.playerIds.youtube));
-			this.youtubePlayerSetup();
-			oldVideoId = this.currentVideoId;
-			this.currentVideoId = null;
-			this.setVideoAndPosition(oldVideoId, this.currentStartAt);
-			this.resumePlayback();
-		}
-		else {
-			this.self.playerBlacklist.push('youtube');
-			this.playlistSeek(this.playlistIndex);
 		}
 	},
 
@@ -253,7 +193,7 @@ Ext.define('NextThought.view.video.Video',{
 	isPlaying: function(){
 		var status = this.queryPlayer(),
 			state;
-		if(!status) { return null; }
+		if(!status) { return false; }
 
 		state = status.state;
 
@@ -271,8 +211,8 @@ Ext.define('NextThought.view.video.Video',{
 		return {
 			service: target,
 			video: this.currentVideoId,
-			time: this.issueCommand(target,this.commands.getCurrentTime),
-			state: this.issueCommand(target,this.commands.getPlayerState)
+			time: this.issueCommand(target,'getCurrentTime'),
+			state: this.issueCommand(target,'getPlayerState')
 		};
 	},
 
@@ -289,7 +229,7 @@ Ext.define('NextThought.view.video.Video',{
 			return fn.apply(o,args);
 		}
 
-		return call(t[command[target]],t,args);
+		return call(t[command],t,args);
 	},
 
 
@@ -297,14 +237,14 @@ Ext.define('NextThought.view.video.Video',{
 		this.currentVideoId = null;
 
 		if(this.activeVideoService){
-			this.issueCommand(this.activeVideoService,this.commands.stop);
+			this.issueCommand(this.activeVideoService,'stop');
 		}
 	},
 
 
 	pausePlayback: function(){
 		if(this.activeVideoService && this.isPlaying()){
-			this.issueCommand(this.activeVideoService,this.commands.pause);
+			this.issueCommand(this.activeVideoService,'pause');
 			return true;
 		}
 		return false;
@@ -312,7 +252,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	resumePlayback: function(){
 		if(this.activeVideoService && !this.isPlaying()){
-			this.issueCommand(this.activeVideoService,this.commands.play);
+			this.issueCommand(this.activeVideoService,'play');
 			return true;
 		}
 		return false;
@@ -334,12 +274,12 @@ Ext.define('NextThought.view.video.Video',{
 		}
 
 		if(compareSources(this.currentVideoId, videoId)){
-			this.issueCommand(this.activeVideoService,this.commands.seek, [startAt,true]);
+			this.issueCommand(this.activeVideoService,'seek', [startAt,true]);
 		}
 		else {
 			this.currentVideoId = videoId;
 			if(videoId){
-				this.issueCommand(this.activeVideoService,this.commands.load, [videoId, startAt, "medium"]);
+				this.issueCommand(this.activeVideoService,'load', [videoId, startAt, "medium"]);
 			}
 			else {
 				console.log('stopping');
@@ -347,7 +287,8 @@ Ext.define('NextThought.view.video.Video',{
 			}
 		}
 
-		if(pause || !videoId){ console.log('pausing'); this.issueCommand(this.activeVideoService,this.commands.pause); }
+		if(pause || !videoId){ console.log('pausing'); this.issueCommand(this.activeVideoService,'pause'); }
+		else{ this.issueCommand(this.activeVideoService,'play'); }
 	},
 
 
@@ -412,11 +353,14 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 	cleanup: function(){
-		this.issueCommand('html5',this.commands.pause);
-		this.issueCommand('youtube',this.commands.pause);
-		this.issueCommand('html5',this.commands.cleanup);
-		this.issueCommand('youtube',this.commands.cleanup);
+		this.issueCommand('html5','pause');
+		this.issueCommand('youtube','pause');
+		this.issueCommand('html5','cleanup');
+		this.issueCommand('youtube','cleanup');
 	}
-}, function(){
-	Globals.loadScript(location.protocol+"//www.youtube.com/iframe_api");
-});
+},
+	function(){
+		ObjectUtils.defineAttributes(this.prototype, {
+			playerHeight: {getter: this.prototype.playerHeight}});
+	}
+);
