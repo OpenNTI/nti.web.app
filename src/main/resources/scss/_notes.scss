@@ -12,6 +12,7 @@
 
 
 		.shared-to{
+			display: inline-block;
 			overflow: hidden;
 			@include ellipse;
 			width: 340px;
