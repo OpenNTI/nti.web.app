@@ -62,8 +62,24 @@ Ext.define('NextThought.view.account.history.Panel', {
 		insertGroupTitle: function(values, out){
 			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
 
+			if(label === 'Today'){
+				this.todayCount = (this.todayCount !== undefined)? this.todayCount + 1 : 0;
+			}
+
+			if(this.todayCount < 2 && this.itemAdded){
+				this.itemAdded = false;
+			}
+
+			if(this.todayCount === 2 && (this.itemAdded || this.itemAdded !== undefined)){
+				this.itemAdded = true;
+			}
+
+			if(this.todayCount > 2){
+				delete this.itemAdded; 
+			}
+
 			// Detect if the grouping type change from the previous else and make we insert the new group title.
-			if(!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label)){
+			if(!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label || this.alreadyLoaded || (this.itemAdded && label === 'Today'))){
 				this.previousGrouping = label;
 				return Ext.DomHelper.createTemplate({ cls:'divider', cn:[{tag:'span', html: label}] }).applyOut({}, out);
 			}
@@ -157,6 +173,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	recordsAdded: function(store, records){
 		console.debug(' UserDataPanel Store added records:', arguments);
+		delete this.tpl.todayCount;
+		this.tpl.itemAdded = true;
 		Ext.each(records, this.fillInData, this);
 	},
 
