@@ -457,7 +457,11 @@ Ext.define('NextThought.controller.UserData', {
 		this.currentPageStores[id] = store;
 
 		this.flatPageStore.bind(store);
-		store.on('load','fillInUsers',this);
+		store.on({
+			scope: this,
+			load:'fillInUsers',
+			add: 'fillInUsers'
+		});
 
 		/**
 		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
