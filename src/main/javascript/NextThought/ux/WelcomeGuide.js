@@ -1,5 +1,5 @@
 Ext.define('NextThought.ux.WelcomeGuide', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.welcome-guide',
 
 	cls:'guide-window',

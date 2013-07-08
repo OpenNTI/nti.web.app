@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.video.Window', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.video-window',
 	requires: [ 'NextThought.view.video.Panel' ],
 	/*

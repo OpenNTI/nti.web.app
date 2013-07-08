@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.recovery.Window',{
-    extend: 'NextThought.view.Window',
+    extend: 'NextThought.view.window.Window',
     alias: 'widget.recovery-email-window',
 
     requires: [

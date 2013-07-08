@@ -14,7 +14,6 @@ Ext.define('NextThought.controller.Session', {
 	],
 
 	views: [
-		'Window',
 		'account.coppa.Window',
 		'account.coppa.upgraded.Window',
 		'account.coppa.upgraded.Confirm',

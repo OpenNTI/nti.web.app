@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.contacts.createlist.Window',{
-    extend: 'NextThought.view.Window',
+    extend: 'NextThought.view.window.Window',
     alias: 'widget.createlist-window',
 
     requires: [

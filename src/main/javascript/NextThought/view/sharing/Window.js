@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.sharing.Window', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	requires: [
 		'NextThought.view.form.fields.UserListField',
 		'NextThought.util.Annotations',

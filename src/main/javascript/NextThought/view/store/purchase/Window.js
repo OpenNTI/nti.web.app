@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.store.purchase.Window', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.purchase-window',
 
 	mixins: {

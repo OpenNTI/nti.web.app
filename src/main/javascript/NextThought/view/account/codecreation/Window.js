@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.codecreation.Window',{
-    extend: 'NextThought.view.Window',
+    extend: 'NextThought.view.window.Window',
     alias: 'widget.codecreation-window',
 
     requires: [

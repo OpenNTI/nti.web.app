@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.definition.Window', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.definition-window',
 
 	cls: 'dictionary-window',
