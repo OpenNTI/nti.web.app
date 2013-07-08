@@ -81,15 +81,12 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	onDeactivated: function(){
-		var presentation = Ext.ComponentQuery.query('slidedeck-view'),
-			noteWindow = Ext.ComponentQuery.query('note-window');
+		var CQ = Ext.ComponentQuery,
+			needsClosing = []
+					.concat(CQ.query('slidedeck-view'))
+					.concat(CQ.query('note-window'));
 
-		if(!Ext.isEmpty(presentation)){
-			presentation.first().destroy();
-		}
-		if(!Ext.isEmpty(noteWindow)){
-			noteWindow.first().destroy();
-		}
+		Ext.Array.map(needsClosing,function(c){c.destroy();});
 	},
 
 
