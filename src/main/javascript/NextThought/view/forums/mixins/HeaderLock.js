@@ -83,5 +83,5 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 		else if(parent !== domParent && scroll > cutoff && this.isVisible()) {
 			this.lockHeader();
 		}
-	},
+	}
 })
