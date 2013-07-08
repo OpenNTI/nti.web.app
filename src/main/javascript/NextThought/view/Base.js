@@ -1,4 +1,4 @@
-Ext.define( 'NextThought.view.View', {
+Ext.define( 'NextThought.view.Base', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.view-container',
 	layout: 'fit',
@@ -7,8 +7,7 @@ Ext.define( 'NextThought.view.View', {
 	initComponent: function(){
 		this.enableBubble('before-activate-view','activate-view');
 		this.callParent(arguments);
-		this.addCls('main-view-container');
-		//this.mon(this, 'activate', this.activate, this);
+		this.addCls('main-view-container make-white');
 	},
 
 
