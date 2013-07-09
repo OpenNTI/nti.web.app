@@ -10,8 +10,49 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	],
 
 	root: true,
+	enableTitle: true,
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
+
+	renderTpl: Ext.DomHelper.markup([{
+		cls: 'note main-view',
+		cn:[{
+			cls: 'avatar',
+			tag: 'img', src: Ext.BLANK_IMAGE_URL
+		},{
+			cls: 'meta',
+			cn: [
+				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
+				{ cls: 'title'},
+				{ cls: 'name-wrap', cn:[
+					{ tag: 'span', cls: 'name' },
+					{ tag: 'span', cls: 'time'},
+					{ tag: 'span', cls: 'shared-to' }
+				]}
+			]
+		},{ cls: 'clear' },{
+			cls: 'context', cn: [
+				{tag: 'canvas'},
+				{tag: 'span', cls: 'text'}]
+		},{ cls: 'body' },{
+			cls: 'respond',
+			cn: [
+				{
+					cls: 'reply-options',
+					cn: [
+						{ cls: 'reply', html: 'Reply' },
+						{ cls: 'share', html: 'Share' },
+						{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
+					]
+				}
+			]
+		}]
+	},{
+		id: '{id}-body',
+		cls: 'note-replies',
+		cn:['{%this.renderContainer(out,values)%}']
+	}]),
+
 
 	renderSelectors:{
 		avatar: 'img.avatar'
@@ -34,6 +75,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 
 			this.on('editorDeactivated', function(){
+				me.editorEl.down('.title').hide();
 				var bRecord = me.bufferedRecord;
 				if(bRecord){
 					console.log('Setting buffered record');
@@ -48,10 +90,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	createEditor: function(){
-		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox, enableTitle: true});
-		if(this.editor.el.down('.title')){
-			this.editor.el.down('.title').addCls('small');
-		}
+		this.callParent();
+		this.editor.el.down('.title')
+				.setVisibilityMode(Ext.Element.DISPLAY)
+				.addCls('small')
+				.hide();
 	},
 
 	fillInReplies: function(){
@@ -190,19 +233,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	onReply: function(){
-		this.editorEl.down('.title').hide();
-		this.activateReplyEditor();
-	},
-
-
 	onEdit: function(){
 		this.text.hide();
 		this.editMode = true;
-		this.editorEl.down('.title').show();
 		this.editor.editBody(this.record.get('body'));
 		this.editor.setTitle(this.record.get('title'));
 		this.activateReplyEditor();
+		this.editorEl.down('.title').show();
 	},
 
 
@@ -270,7 +307,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		if( me.activateReplyEditor() ){
 			WBUtils.createFromImage(dom,function(data){
-				Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
+				Ext.defer(me.editor.addWhiteboard,400,me.editor,[data]);
 			});
 		}
 	},
@@ -280,37 +317,4 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size','13px');
 	}
-},
-function(){
-	this.prototype.renderTpl = Ext.DomHelper.markup([{
-		cls: 'note main-view',
-		cn:[{
-			cls: 'avatar',
-			tag: 'img', src: Ext.BLANK_IMAGE_URL
-		},{
-			cls: 'meta',
-			cn: [
-				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
-				{ cls: 'title'},
-				{ cls: 'name-wrap', cn:[
-					{ tag: 'span', cls: 'name' },
-					{ tag: 'span', cls: 'time'},
-					{ tag: 'span', cls: 'shared-to' } 
-				]}
-			]
-		},{ cls: 'clear' },{
-			cls: 'context', cn: [
-				{tag: 'canvas'},
-				{tag: 'span', cls: 'text'}]
-		},{ cls: 'body' },{
-			cls: 'respond',
-			cn: [
-				TemplatesForNotes.getReplyOptions()
-			]
-		}]
-	},{
-		id: '{id}-body',
-		cls: 'note-replies',
-		cn:['{%this.renderContainer(out,values)%}']
-	}]);
 });

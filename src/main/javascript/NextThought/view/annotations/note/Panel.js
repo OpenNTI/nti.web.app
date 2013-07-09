@@ -4,7 +4,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	requires: [
 		'NextThought.cache.UserRepository',
-		'NextThought.editor.Actions',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.layout.component.Natural'
 	],
@@ -14,6 +13,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
+
+	enableTitle: false,
 
 	ui: 'nt',
 	cls: 'note-container',
@@ -25,6 +26,46 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	autoFillInReplies: true,
 
 	rootQuery: 'note-panel[root]',
+
+
+	renderTpl: Ext.DomHelper.markup([{
+		//cls: 'note-reply',
+		cls: 'note',
+		cn: [{
+			cls: 'avatar',
+			cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
+		},
+			{
+				cls: 'meta',
+				cn: [{
+					cls: 'controls',
+					cn: [
+						{ cls: 'favorite-spacer' },
+						{ cls: 'favorite' },
+						{ cls: 'like' }
+					]
+				},{ cls:'title'
+				},{ tag: 'span', cls: 'name'
+				},{ cls: 'shared-to' }]
+			},{ cls: 'body' },{
+				cls: 'respond',
+				cn: [
+					{
+						cls: 'reply-options',
+						cn: [
+							{ cls: 'reply', html: 'Reply' },
+							{ cls: 'share', html: 'Share' },
+							{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
+						]
+					},
+					{ tag: 'span', cls: 'time' }
+				]
+			}]
+	},{
+		id: '{id}-body',
+		cls: 'note-replies',
+		cn:['{%this.renderContainer(out,values)%}']
+	}]),
 
 	renderSelectors: {
 		avatar: '.avatar img',
@@ -163,7 +204,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	createEditor: function(){
-		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox});
+		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
+		this.editor = Ext.widget({xtype: 'nti-editor', ownerCt: this, renderTo: this.responseBox, enableTitle: this.enableTitle});
 	},
 
 
@@ -725,8 +767,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	editorKeyPressed: function(event){
 		event.stopPropagation();
-		//control+enter & command+enter submit?
-		//document.queryCommandState('bold')
 	},
 
 
@@ -946,38 +986,4 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	}
 
 
-},function(){
-	var proto = this.prototype;
-
-	proto.renderTpl = Ext.DomHelper.markup([{
-		//cls: 'note-reply',
-		cls: 'note',
-		cn: [{
-			cls: 'avatar',
-			cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
-		},
-			{
-				cls: 'meta',
-				cn: [{
-					cls: 'controls',
-					cn: [
-						{ cls: 'favorite-spacer' },
-						{ cls: 'favorite' },
-						{ cls: 'like' }
-					]
-				},{ cls:'title'
-				},{ tag: 'span', cls: 'name'
-				},{ cls: 'shared-to' }]
-			},{ cls: 'body' },{
-				cls: 'respond',
-				cn: [
-					TemplatesForNotes.getReplyOptions(),
-					{ tag: 'span', cls: 'time' }
-				]
-			}]
-	},{
-		id: '{id}-body',
-		cls: 'note-replies',
-		cn:['{%this.renderContainer(out,values)%}']
-	}]);
 });
