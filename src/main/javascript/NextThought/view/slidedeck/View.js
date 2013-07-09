@@ -4,7 +4,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 	requires: [
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
-		'NextThought.view.slidedeck.Video'
+		'NextThought.view.slidedeck.Video',
+		'NextThought.view.slidedeck.Transcript'
 	],
 
 	cls: 'view',
@@ -23,16 +24,29 @@ Ext.define('NextThought.view.slidedeck.View',{
 		exitEl: '.exit-button'
 	},
 
-	items: [{
-		xtype: 'container',
-		width: 400,
-		plain: true,
-		ui: 'slidedeck-controls',
-		layout: { type: 'vbox', align: 'stretch' }
-	},{
-		flex: 1,
-		xtype: 'slidedeck-slide'
-	}],
+	constructor: function(config){
+		var t;
+
+		config.items = [{
+				xtype: 'container',
+				width: 400,
+				plain: true,
+				ui: 'slidedeck-controls',
+				layout: { type: 'vbox', align: 'stretch' }
+			},{
+				flex: 1,
+				xtype: 'slidedeck-slide'
+			}];
+
+		t = config.items[1];
+
+		if(isFeature('transcript-presentation')){
+			t.xtype = 'slidedeck-transcript';
+			t.data = config.transcript;
+		}
+
+		return this.callParent([config]);
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -93,7 +107,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 	doSelect: function(){
 		var s = this.getSlide();
 		this.video.updateVideoFromSelection.apply(this.video, arguments);
-		s.updateSlide.apply(s, arguments);
+		if(s.updateSlide){
+			s.updateSlide.apply(s, arguments);
+		}
 	},
 
 
@@ -103,7 +119,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 	//if the click cancel we leave things in a paused state and the editor open
 	maybeSelect: function(v, slide){
 		var slideView = this.getSlide(),
-			destructiveSelection = slideView.editorActive(),
+			destructiveSelection = slideView.editorActive && slideView.editorActive(),
 			wasPlaying,
 			me = this;
 

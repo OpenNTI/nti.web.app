@@ -683,6 +683,62 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+	.x-container-transcript{
+		background: #fafdff;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		.content-video-transcript{
+			position: relative;
+			overflow: hidden;
+			margin: 100px 20px 20px 100px;
+			width: 720px;
+
+			.text-content{
+				color: $primary-grey;
+				font-size: 14px;
+				font-weight: normal;
+				position: relative;
+				line-height: 2.2em;
+
+				.section{
+					margin-bottom: 15px;
+					position: relative;
+
+					.text {
+						margin-left: 80px;
+						position: relative;
+						display: inline-block;
+					}
+
+					.timestamp-container {
+						position: absolute;
+						display: inline-block;
+						width: 70px;
+						.timestamp {
+							padding: 5px 10px;
+							text-align: center;
+							color: #bbb !important;
+							border-radius: 3px;
+
+							&:hover {
+								color: #494949 !important;
+								background-color: #ebf7fd;
+							}
+						}
+
+						&:last-child .timestamp {
+							display: none;
+						}
+					}
+				}
+
+
+
+			}
+		}
+	}
+
 	&.overlay {
 		background: rgba(0, 0, 0, 0.85);
 	}

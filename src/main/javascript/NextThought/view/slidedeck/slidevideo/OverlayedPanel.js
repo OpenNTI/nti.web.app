@@ -37,7 +37,7 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 						altSource = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
 
 					console.log('found transcript: ', t);
-					transcript = {url:src, type:type, jsonUrl:altSource, basePath: reader.basePath, contentElement: me.getVideoTranscriptElement(t, el)};
+					transcript = {url:src, type:type, jsonUrl:altSource, basePath: reader.basePath, contentElement: t}; // me.getVideoTranscriptElement(t, el)};
 				});
 			}
 
