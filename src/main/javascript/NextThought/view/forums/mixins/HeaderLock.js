@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 
-	LOCKED_HEADER_CLS: 'scroll-pos-right',
+	LOCKED_HEADER_CLS: 'locked',
 
 	constructor: function(){
 		this.callParent(arguments);
