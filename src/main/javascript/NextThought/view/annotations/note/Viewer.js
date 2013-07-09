@@ -11,7 +11,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	width: 780,
 	floating: true,
 	shadow: false,
-
+	preventBringToFront:true,
 	layout: {
 		type: 'vbox',
 		align: 'stretch'
