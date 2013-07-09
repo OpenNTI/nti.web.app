@@ -16,6 +16,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		reader.on('destroy','destroy',
 			reader.relayEvents(this,[
 				'beforeNavigate',
+				'beginNavigate',
 				'navigate',
 	            'navigateAbort',
 				'navigateComplete',

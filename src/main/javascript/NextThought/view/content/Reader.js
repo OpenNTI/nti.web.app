@@ -195,7 +195,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onBeginNavigate: function(ntiid) {
-
+		this.navigating = true;
 	},
 
 

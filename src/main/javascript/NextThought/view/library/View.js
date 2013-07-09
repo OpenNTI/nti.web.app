@@ -108,7 +108,6 @@ Ext.define( 'NextThought.view.library.View', {
 			}
 		}
 		if(this.reader.iframeReady){
-			this.reader.navigating = true;
 			return true;
 		}
 
