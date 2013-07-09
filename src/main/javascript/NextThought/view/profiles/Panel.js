@@ -212,7 +212,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			profileScroll = Ext.fly(profileDom).getScroll().top,
 			tabBarParent = Ext.getDom(this.tabBarEl).parentNode,
 			cutoff = 268,
-			cls = 'scroll-pos-right';
+			cls = 'locked';
 
 		if(tabBarParent === profileDomParent && profileScroll < cutoff){
 			delete this.headerLocked;
