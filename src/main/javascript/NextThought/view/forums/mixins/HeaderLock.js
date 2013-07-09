@@ -8,6 +8,11 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 	},
 
 
+	disable: function(){
+		this.headerLockPostRenderInit = Ext.emptyFn;
+	},
+
+
 	headerLockPostRenderInit: function(){
 		this.on({
 			'beforedeactivate':'onBeforeListDeactivateLockHeader',

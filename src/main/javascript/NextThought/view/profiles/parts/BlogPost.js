@@ -9,6 +9,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
 
+	constructor: function(){
+		this.mixins.HeaderLock.disable.call(this);
+		this.callParent(arguments);
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 
@@ -31,7 +37,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			if(me.rendered){
 				tpl = new Ext.XTemplate(me.pathTpl);
 				title = me.record.get('title');
-				tpl.insertFirst(me.navigationBarEl, {path:'Thoughts', title: title}, true);
+				tpl.insertFirst(me.headerEl, {path:'Thoughts', title: title}, true);
 			}
 		}, 1);
 	},
@@ -80,7 +86,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.closedPost = true;
 
 		//All of this belongs somewhere else... its animation code (css implements the keyframes)
-//		var bar = this.navigationBarEl;
+//		var bar = this.headerEl;
 //		if( bar ) {
 //			bar.removeCls('animateIn animateOut').addCls('animateOut');
 //		}
