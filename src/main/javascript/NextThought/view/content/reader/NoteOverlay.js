@@ -413,7 +413,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	mouseOver: function (evt) {
-		if (this.suspendMoveEvents) {
+		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return false;
 		}
 
@@ -423,7 +423,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	mouseOut: function (e) {
 
-		if (this.suspendMoveEvents) {
+		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return;
 		}
 

@@ -363,6 +363,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		//Default container, this should be replaced with the local container.
 		record.set('ContainerId', this.reader.getLocation().NTIID);
 
+		//set a flag to prevent NoteOverlay from resolving the line
+		this.reader.creatingAnnotation = true;
+
 		menu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
@@ -429,7 +432,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
         //on close make sure it get's destroyed.
-        menu.on('hide', function(){menu.close();});
+        menu.on('hide', function(){
+        	menu.close();
+	        delete this.reader.creatingAnnotation;
+        }, this);
 
 
 		offset = me.reader.getEl().getXY();
