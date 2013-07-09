@@ -20,7 +20,7 @@ Ext.define('NextThought.store.FlatPage',{
 		//	direction: 'ASC'
 		//},{
 			property : 'CreatedTime',
-			direction: 'ASC'
+			direction: 'DESC'
 		}
 	],
 	filters:[
@@ -30,21 +30,22 @@ Ext.define('NextThought.store.FlatPage',{
 
 
 	remove: function(record,isMove,silent){
-		var args = Array.prototype.slice.call(arguments);
+		var r = record || [],
+			args = Array.prototype.slice.call(arguments);
 
-		if(!Ext.isArray(record)){
-			record = [record];
+		if(!Ext.isArray(r)){
+			r = [r];
 		}
 
 		if(isMove){
-			Ext.each(record,function(r,i,a){
+			Ext.each(r,function(r,i,a){
 				if(r.placeholder){ a.splice(i,1); }
 			}, this, true);
 		}
 
-		if(record.length>0){
+		if(r.length>0){
 			args.shift();
-			args.unshift(record);
+			args.unshift(r);
 			this.callParent(args);	
 		}
 	},
@@ -59,7 +60,6 @@ Ext.define('NextThought.store.FlatPage',{
 			var f;
 			if(rec){
 				f = me.filters.getRange();
-				console.debug('filters',f);
 				me.clearFilter(true);
 				me.remove(rec, true);
 				me.filter(f);
@@ -76,16 +76,18 @@ Ext.define('NextThought.store.FlatPage',{
 
 		function add(s,rec){
 			rec = s.getItems();
-			var filter = [];
-			Ext.each(rec||filter,function(r){
-				if(!r.parent && r instanceof NextThought.model.Note && me.findExact('NTIID', r.get('NTIID')) < 0){
-					filter.push(r);
+			Ext.each(rec||[],function(r){
+				var i = me.findExact('NTIID', r.get('NTIID'));
+				if(!r || !(r instanceof NextThought.model.Note)){ return; }
+
+				if(i !== -1 && r !== me.getAt(i)){
+					console.warn('DUPLICATE NTIID', r.getData(), me.getAt(i).getData());
+				}
+
+				if(!r.parent){
+					me.add(r);//add one at a time to get insertion sort.
 				}
 			});
-
-			if(filter){
-				me.add(filter);
-			}
 		}
 
 		otherStore.on('cleanup','destroy',
