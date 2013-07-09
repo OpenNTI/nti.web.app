@@ -23,6 +23,13 @@
 			text-transform: uppercase;
 		}
 
+		span:not(.part){
+			.x-gecko & {
+				top: -25px;
+				position: relative;
+			}
+		}
+
 		span.part {
 			display: inline-block;
 			max-width: 35%;
