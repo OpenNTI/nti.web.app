@@ -917,7 +917,7 @@ Ext.define('NextThought.controller.UserData', {
 					}
 				}
 				catch(err){
-					console.error('Something went teribly wrong... ', Globals.getError(err));
+					console.error('Something went teribly wrong... ', err.stack||err.message);
 				}
 			}
 		});
@@ -937,7 +937,7 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			}
 			catch(err){
-				console.error('Something went teribly wrong... ',err);
+				console.error('Something went teribly wrong... ',err.stack||err.message);
 			}
 			Ext.callback(callback, this, [success, rec]);
 		};
