@@ -263,7 +263,11 @@ Ext.define('NextThought.util.Content', {
 
 
 	getLineage: function(ntiid, justLabels){
-		var leaf = this.find(ntiid||this.currentNTIID) || {},
+		if(!ntiid){
+			Ext.Error.raise('No ntiid given');
+		}
+
+		var leaf = this.find(ntiid) || {},
 			node = leaf.location,
 			lineage = [],
 			id;
@@ -285,10 +289,14 @@ Ext.define('NextThought.util.Content', {
 
 
 	getSortIndexes: function(ntiid){
+		if(!ntiid){
+			Ext.Error.raise('No ntiid given');
+		}
+
         function findByFunction(r){return r.get('NTIID') ===id;}
 
 		var noLeaf = {},
-			leaf = this.find(ntiid||this.currentNTIID) || noLeaf,
+			leaf = this.find(ntiid) || noLeaf,
 			node = leaf.location,
 			indexes = [],
 			id, i, cn, j, t, levelnum;
@@ -330,7 +338,10 @@ Ext.define('NextThought.util.Content', {
 
 
 	getRoot: function(ntiid){
-		var bookId = this.getLineage(ntiid||this.currentNTIID).last(),
+		if(!ntiid){
+			Ext.Error.raise('No ntiid given');
+		}
+		var bookId = this.getLineage(ntiid).last(),
 			title = Library.getTitle( bookId );
 
 		return title? title.get('root') : null;
