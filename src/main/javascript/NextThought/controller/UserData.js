@@ -413,9 +413,11 @@ Ext.define('NextThought.controller.UserData', {
 						if(m.hasOwnProperty(key)){
 							o = m[key]; delete m[key];
 							if(o){
+								console.debug("Seting currentPageStores:",o.storeId,"Does not clear:", o.doesNotClear);
 								if(!o.doesNotClear){
-									o.fireEvent('cleanup');
+									o.fireEvent('cleanup',o);
 									o.clearListeners();
+									o.clearFilter(true);
 									o.removeAll();
 								} else {
 									s[key] = o;
@@ -435,9 +437,13 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	clearPageStore: function(){
+		var fp = this.flatPageStore;
 		this.currentPageStores = {};//see above defineAttributes call
-		this.flatPageStore.removeFilter('lineFilter');
-		this.flatPageStore.removeAll();
+		fp.clearFilter();
+		fp.removeAll();
+		if(fp.getRange().length !== 0){
+			console.error('Flat Page store not empty!!');
+		}
 	},
 
 
@@ -586,6 +592,8 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			});
 		}
+
+		s.sort();
 	},
 
 

@@ -2,16 +2,23 @@ Ext.define('NextThought.store.FlatPage',{
 	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Base',
 	proxy: 'memory',
+
+	buffered: false,
+	clearOnPageLoad: true, 
+	clearRemovedOnLoad: true,
+	sortOnLoad: true,
+	statefulFilters: false,
 	remoteSort: false,
 	remoteFilter: false,
 	remoteGroup: false,
 	filterOnLoad: true,
 	sortOnFilter: true,
+
 	sorters:[
 		{
-			property : 'line',
-			direction: 'ASC'
-		},{
+		//	property : 'line',
+		//	direction: 'ASC'
+		//},{
 			property : 'CreatedTime',
 			direction: 'ASC'
 		}
@@ -49,7 +56,21 @@ Ext.define('NextThought.store.FlatPage',{
 
 		
 		function remove(s,rec){
-			if(rec){me.remove(rec, true);}
+			var f;
+			if(rec){
+				f = me.filters.getRange();
+				console.debug('filters',f);
+				me.clearFilter(true);
+				me.remove(rec, true);
+				me.filter(f);
+			}
+
+
+		}
+
+		function cleanUp(o) {
+			o.clearFilter(true);
+			remove(o,o.getRange());
 		}
 
 
@@ -74,7 +95,8 @@ Ext.define('NextThought.store.FlatPage',{
 					add: add,
 					load: add,
 					bulkremove: remove,
-					remove: remove
+					remove: remove,
+					cleanup: cleanUp
 				}));
 
 		otherStore.$boundToFlat = true;
