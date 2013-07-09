@@ -58,6 +58,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 		try {
 			this.add({
+				reader: this.up('[reader]').reader,
 				xtype: type,
 				question: question,
 				part: part,
@@ -84,6 +85,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 			items.push({xtype: 'part-content', part: part, ordinal:i});
 			items.push({
 				xtype: type,
+				reader: this.up('[reader]').reader,
 				question: question,
 				part: part,
 				ordinal: i,
