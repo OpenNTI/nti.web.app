@@ -192,7 +192,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		pw.clearBookmark();
 		pg.updateState(t);
-		lm.updateSelection(t);
+		lm.updateSelection(t,true);
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
