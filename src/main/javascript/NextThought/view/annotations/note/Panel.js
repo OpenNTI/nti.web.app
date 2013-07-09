@@ -216,14 +216,24 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInUser: function(user){
-		var avatarURL = 'url('+user.get('avatarURL')+')',
-			currentURL = this.avatar.getStyle('background-image');
+		var HOST = Globals.HOST_PREFIX_PATTERN,
+			avatarURL = user.get('avatarURL'),
+			currentURL = this.avatar.getStyle('background-image').slice(4,-1),
+			a = HOST.exec(avatarURL),
+			b = HOST.exec(currentURL),
+			d = HOST.exec(location)[0];//default host
+
+		a = (a && a[0]) || d;
+		b = (b && b[0]) || d;
+
+		avatarURL = avatarURL.replace(HOST,'');
+		currentURL = currentURL.replace(HOST,'');
 
 		this.userObject = user;
 		this.name.update(user.getName());
 
-		if(currentURL !== avatarURL){
-			this.avatar.setStyle({backgroundImage: avatarURL});
+		if(currentURL !== avatarURL || a !== b){
+			this.avatar.setStyle({backgroundImage: 'url('+avatarURL+')'});
 		}
 		//NOTE: this is probably not the best place where to set the more options menu.
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record);
