@@ -268,13 +268,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		a = (a && a[0]) || d;
 		b = (b && b[0]) || d;
 
-		avatarURL = avatarURL.replace(HOST,'');
-		currentURL = currentURL.replace(HOST,'');
+		currentURL = currentURL.replace(HOST,'') === avatarURL.replace(HOST,'');
 
 		this.userObject = user;
 		this.name.update(user.getName());
 
-		if(currentURL !== avatarURL || a !== b){
+		if(!currentURL || a !== b){
 			this.avatar.setStyle({backgroundImage: 'url('+avatarURL+')'});
 		}
 		//NOTE: this is probably not the best place where to set the more options menu.
