@@ -118,6 +118,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			renderTo: Ext.get('library'),
 			enableShareControls: true,
 			enableTitle: true,
+			preventBringToFront:true,
 			listeners:{
 				'deactivated-editor':'destroy',
 				grew: function(){

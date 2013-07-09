@@ -146,8 +146,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	addInputListeners: function(){
 		this.mon(this.inputEl, {
-			scope: this,
-			'keydown': this.onKeyDown
+			'keydown': 'onKeyDown'
 		});
 	},
 
