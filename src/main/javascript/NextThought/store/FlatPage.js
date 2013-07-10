@@ -75,9 +75,10 @@ Ext.define('NextThought.store.FlatPage',{
 
 
 		function add(s,rec){
-			s.getItems();//make sure new records are threaded
+			var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
+				records = (Ext.isArray(rec)?rec:[rec]).concat(placeholders);
 
-			Ext.each(rec,function(r){
+			Ext.each(records,function(r){
 				var i = me.findExact('NTIID', r.get('NTIID'));
 				if(!r || !(r instanceof NextThought.model.Note)){ return; }
 
