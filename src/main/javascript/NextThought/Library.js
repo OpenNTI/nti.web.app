@@ -18,6 +18,7 @@ Ext.define('NextThought.Library', {
 
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
+		this.getStore();// pre-init store so we can reference it by id early on
 	},
 
 
@@ -33,10 +34,9 @@ Ext.define('NextThought.Library', {
 
 
 	getStore: function(){
-		if(!this.store){
-			var service = $AppConfig.service;
-
-			this.store = new Ext.data.Store({
+		var s = this.store;
+		if(!s){
+			s = this.store = new Ext.data.Store({
 				id: 'library',
 				model: 'NextThought.model.Title',
 				proxy: {
@@ -45,7 +45,7 @@ Ext.define('NextThought.Library', {
 						'Accept': 'application/vnd.nextthought.collection+json',
 						'Content-Type': 'application/json'
 					},
-					url : getURL(service.getMainLibrary().href),
+					url : 'tbd',
 					reader: {
 						type: 'json',
 						root: 'titles'
@@ -61,12 +61,24 @@ Ext.define('NextThought.Library', {
 					return 0;
 				}},
 					{property: 'title', direction: 'asc'}
-				]
+				],
+				listeners: {
+					scope: this,
+					load: 'purgeTocs',
+					beforeload: function(){
+						var url = 'tbd';
+						try{
+							url = getURL($AppConfig.service.getMainLibrary().href);
+						}
+						catch(e){
+							console.error(e.message, e.stack || e.stacktrace || e);
+						}
+						s.proxy.url = url;
+					}
+				}
 			});
-
-			this.store.on('load',this.purgeTocs,this);
 		}
-		return this.store;
+		return s;
 	},
 
 

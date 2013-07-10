@@ -2,11 +2,7 @@ Ext.define('NextThought.view.library.menus.Collection',{
 	extend: 'NextThought.view.menus.navigation.Collection',
 	alias: 'widget.library-collection',
 
-	initComponent: function(){
-		this.store = Library.getStore();
-		this.callParent(arguments);
-	},
-
+	store: 'library',
 
 	handleSelect: function(selModel, record){
 		if(!this.suppressSetLocation){
