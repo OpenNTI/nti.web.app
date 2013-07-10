@@ -22,6 +22,16 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	},
 
 
+	attachRecord: function(record){
+		this.mon(record,'convertedToPlaceholder','requestRender');
+		var r = this.getRecord();
+		if( r ){
+			this.mun(r,'convertedToPlaceholder','requestRender');
+		}
+		this.callParent(arguments);
+	},
+
+
 	render: function(){
 		if(this.hasSpecificRange){
 			return this.callParent(arguments);
