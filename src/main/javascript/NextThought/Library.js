@@ -164,6 +164,7 @@ Ext.define('NextThought.Library', {
 		});
 
 		if(stack.length===0){
+			console.error('Oh no\'s!\n\n\n\n\n!! No content in Library !!\n\n\n\n\n');
 			callback.call(this);
 			return;
 		}

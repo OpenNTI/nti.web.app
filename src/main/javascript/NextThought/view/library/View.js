@@ -125,12 +125,23 @@ Ext.define( 'NextThought.view.library.View', {
 
 	restore: function(state){
 		var ntiid = state.library.location;
-		this.reader.setLocation(ntiid,null,true);
-		if(this.reader.ntiidOnFrameReady){
-			this.up('master-view').down('library-collection').updateSelection(ntiid,true);
-		}
 
-		this.fireEvent('finished-restore');
+		try{
+			if(!ntiid){
+				console.warn('There was no ntiid to restore!');
+				return;
+			}
+			this.reader.setLocation(ntiid,null,true);
+			if(this.reader.ntiidOnFrameReady){
+				this.up('master-view').down('library-collection').updateSelection(ntiid,true);
+			}
+		}
+		catch(e){
+			console.error(e.message,'\n\n',e.stack|| e.stacktrace || e,'\n\n');
+		}
+		finally{
+			this.fireEvent('finished-restore');
+		}
 	},
 
 
