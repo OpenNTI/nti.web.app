@@ -185,8 +185,7 @@
 				}
 
 				background: none;
-				&::after{
-					content: ' ';
+				&::before, &::after{
 					display: none;
 				}
 			}
