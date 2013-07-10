@@ -20,10 +20,7 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 			{ cls:'title', html:'{title}' },
 			{ cls:'byline', html:'By {creator}' },
 			{ cls:'description', html:'{description}' },
-			{ cls:'presentation-button', html:'View Presentation' },
-			{ tag:'tpl', 'if':'hasTranscript', cn:[
-				{ cls:'video-transcript-button', html: 'View Transcript', 'data-source':'{transcript.url}'}
-			]}
+			{ cls:'presentation-button', html:'View Presentation' }
 		]}
 	]),
 
@@ -32,10 +29,6 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},this.data);
 		this.target = this.data.href;
-		this.transcript = this.data.transcript;
-		this.renderData = Ext.apply(this.renderData, {
-			hasTranscript: !Ext.isEmpty(this.transcript)
-		});
 	},
 
 
