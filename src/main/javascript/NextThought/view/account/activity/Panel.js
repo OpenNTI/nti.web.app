@@ -25,12 +25,12 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		{
 			activitiesHolder: 1,
 			xtype: 'box',
-			autoEl:{
+			/*autoEl:{
 				cn:[{
 					cls:"activity loading",
 					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
 				}]
-			}
+			}*/
 		}
 	],
 
