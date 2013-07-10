@@ -90,6 +90,13 @@ Ext.define('NextThought.controller.Store', {
 	//TODO a way to have this collection show up only if there are purchasable
 	//items that have not yet been purchased?
 	maybeAddPurchasables: function () {
+		//TODO Ok they want to identify the sample content
+		//so do a nasty hack here that probably breaks
+		//with the next client using the store.  We make an assumption
+		//that if a purchasable item has not been activated, and we find
+		//entries in the library that match the purchasables items list,
+		//those things are samples. Set a sample property as such
+		this.getPurchasableStore().each(this.updateLibraryWithPurchasable, this);
 
 		if (!this.getPurchasableStore().getCount()) {
 			return;
@@ -100,28 +107,22 @@ Ext.define('NextThought.controller.Store', {
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'
 		});
-
-		//TODO Ok they want to identify the sample content
-		//so do a nasty hack here that probably breaks
-		//with the next client using the store.  We make an assumption
-		//that if a purchasable item has not been activated, and we find
-		//entries in the library that match the purchasables items list,
-		//those things are samples. Set a sample property as such
-		this.getPurchasableStore().each(this.updateLibraryWithPurchasable, this);
 	},
 
 
 	//For marking sample state
 	updateLibraryWithPurchasable: function (p) {
+		var s = this.getPurchasableStore();
 		Ext.Array.each(p.get('Items') || [], function (itemId) {
 			var title = Library.getTitle(itemId);
 			if (title) {
 				title.set('sample', !p.get('Activated'));
 			}
 			else {
-				console.warn('This purchasable item is not in the library:', itemId);
+				s.remove(p);//Do we want to block non-sample-able purchasables?
+				console.warn('Hiding purchasable item, as it is not in the library:', itemId);
 			}
-		}, this);
+		}, this, false);
 	},
 
 
