@@ -76,7 +76,7 @@ Ext.define('NextThought.store.FlatPage',{
 
 		function add(s,rec){
 			var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
-				records = (Ext.isArray(rec)?rec:[rec]).concat(placeholders);
+				records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders);
 
 			Ext.each(records,function(r){
 				var i = me.findExact('NTIID', r.get('NTIID'));
