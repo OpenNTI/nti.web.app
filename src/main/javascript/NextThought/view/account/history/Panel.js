@@ -40,7 +40,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	emptyText: Ext.DomHelper.markup([{
 		cls:"history nothing rhp-empty-list",
-		html: 'No Items'
+		html: 'No Activity Yet'
 	}]),
 
 
