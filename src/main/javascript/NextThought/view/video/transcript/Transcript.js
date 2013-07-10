@@ -59,7 +59,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	sectionTpl: new Ext.XTemplate( Ext.DomHelper.markup([{
 		cls:'section', cn:[
 			{ cls: 'timestamp-container', cn:[
-				{tag:'a', cls:'timestamp', html:'{startTime}'}
+				{tag:'a', cls:'timestamp', html:'{startTime}', 'data-time':'{startTime}'}
 			]},
 			{ cls:'text', cn: {
 				tag:'tpl', 'for':'group', cn:[
@@ -70,10 +70,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	])),
 
 
-	constructor: function(config){
-		var r = this.callParent(arguments);
+	initComponent: function(){
+		this.callParent(arguments);
 		this.loadTranscript();
-		return r;
+
+		this.addEvents('jump-video-to');
+		this.enableBubble(['jump-video-to']);
 	},
 
 
@@ -106,8 +108,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			}
 			else{
 				me.contentEl.update(html);
-				Ext.defer(me.updateLayout, 1, me);
 			}
+			me.fireEvent('transcript-ready');
+			Ext.defer(me.updateLayout, 1, me);
 		}
 
 		var me = this,
@@ -149,6 +152,29 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		this.renderData = Ext.apply(this.renderData || {}, {
 			content: this.content
 		});
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var me = this;
+		this.on('transcript-ready', function(){
+			me.transcriptReady = true;
+			me.mon(me.el.select('.timestamp-container'),{
+				scope: me,
+				'click': me.timePointerClicked
+			});
+		});
+	},
+
+
+	timePointerClicked: function(e){
+		var t  = e.getTarget(),
+			b = parseFloat(Ext.fly(t).getAttribute('data-time'));
+
+		console.log('Jump to video to: ', b);
+		this.fireEvent('jump-video-to', b, this);
 	}
 
 });

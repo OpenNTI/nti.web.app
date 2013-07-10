@@ -85,6 +85,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			click:this.checkboxClicked,
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
+
+		this.on('jump-to-location', this.jumpToVideoLocation, this);
 	},
 
 
@@ -183,6 +185,11 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	updateCheckbox: function(){
 		this.checkboxEl[this.linkWithSlides?'addCls':'removeCls']('checked');
+	},
+
+
+	jumpToVideoLocation: function(startAt){
+		this.setVideoAndPosition(this.currentVideoId, startAt);
 	},
 
 

@@ -18,7 +18,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 	renderTpl: Ext.DomHelper.markup([
 		'{%this.renderContainer(out,values)%}',
-		{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]),
+		{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]
+	),
 
 	renderSelectors: {
 		exitEl: '.exit-button'
@@ -28,21 +29,22 @@ Ext.define('NextThought.view.slidedeck.View',{
 		var t;
 
 		config.items = [{
-				xtype: 'container',
-				width: 400,
-				plain: true,
-				ui: 'slidedeck-controls',
-				layout: { type: 'vbox', align: 'stretch' }
-			},{
-				flex: 1,
-				xtype: 'slidedeck-slide'
-			}];
+			xtype: 'container',
+			width: 400,
+			plain: true,
+			ui: 'slidedeck-controls',
+			layout: { type: 'vbox', align: 'stretch' }
+		},{
+			flex: 1,
+			xtype: 'slidedeck-slide'
+		}];
 
 		t = config.items[1];
 
 		if(isFeature('transcript-presentation')){
 			t.xtype = 'slidedeck-transcript';
 			t.data = config.transcript;
+			this.hasTranscript = true;
 		}
 
 		return this.callParent([config]);
@@ -96,6 +98,15 @@ Ext.define('NextThought.view.slidedeck.View',{
 				v.resumePlayback();
 			}
 		}, this);
+
+		if(this.hasTranscript){
+			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', this.jumpVideoToLocation, this);
+		}
+	},
+
+
+	jumpVideoToLocation: function(time){
+		this.video.fireEvent('jump-to-location', time);
 	},
 
 
