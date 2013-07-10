@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	items: [
 		{
 			activitiesHolder: 1,
-			xtype: 'box',
+			xtype: 'box'//,
 			/*autoEl:{
 				cn:[{
 					cls:"activity loading",
