@@ -454,7 +454,7 @@ Ext.define('NextThought.util.Anchors', {
 		//ok its not in a subcontainer, return default
 	    if(def && !Ext.isString(def)){
 		    n = def.getElementById('NTIContent') || {};
-		    n = n.getAttribute && n.getAttribute('data-ntiid');
+		    n = n.getAttribute && n.getAttribute('data-page-ntiid');
 		    if(n){ def = n; }
 	    }
 

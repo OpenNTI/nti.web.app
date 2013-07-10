@@ -194,7 +194,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		ntiid = reader.getLocation().NTIID;
 
-		doc.getElementById('NTIContent').setAttribute('data-ntiid', ntiid);
+		doc.getElementById('NTIContent').setAttribute('data-page-ntiid', ntiid);
 
 		me.fireEvent('set-content', reader, doc, assessmentItems, resp.request.options.pageInfo);
 		me.fireEvent('load-annotations',ntiid, me.resolveContainers());
