@@ -75,13 +75,15 @@ Ext.define('NextThought.store.FlatPage',{
 
 
 		function add(s,rec){
-			rec = s.getItems();
-			Ext.each(rec||[],function(r){
+			s.getItems();//make sure new records are threaded
+
+			Ext.each(rec,function(r){
 				var i = me.findExact('NTIID', r.get('NTIID'));
 				if(!r || !(r instanceof NextThought.model.Note)){ return; }
 
 				if(i !== -1 && r !== me.getAt(i)){
 					console.warn('DUPLICATE NTIID', r.getData(), me.getAt(i).getData());
+					return;
 				}
 
 				if(!r.parent){
@@ -103,7 +105,7 @@ Ext.define('NextThought.store.FlatPage',{
 
 		otherStore.$boundToFlat = true;
 
-		add(otherStore,otherStore.getItems());
+		add(otherStore,otherStore.getRange());
 	}
 	
 });
