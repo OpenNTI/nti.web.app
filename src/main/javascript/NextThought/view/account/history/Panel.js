@@ -38,6 +38,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 	cls: 'user-data-panel',
 	preserveScrollOnRefresh: true,
 
+	deferEmptyText: true,
+
 	emptyText: Ext.DomHelper.markup([{
 		cls:"history nothing rhp-empty-list",
 		html: 'No Activity Yet'
