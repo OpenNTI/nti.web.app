@@ -306,7 +306,7 @@ Ext.define('NextThought.util.Line',{
 				var newTop = reader.getAnnotationOffsets().scrollTop;
 				if(newTop !== readerScrollTop){
 					console.log('Fixing jumpy content', readerScrollTop, newTop);
-					reader.scrollTo(readerScrollTop, false);
+					reader.getScroll().to(readerScrollTop, false);
 				}
 			}
 
