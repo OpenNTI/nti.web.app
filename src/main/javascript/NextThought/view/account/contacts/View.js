@@ -74,7 +74,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	constructor: function(){
 		this.emptyText = Ext.DomHelper.markup({
-			cls:'empty-list',
+			cls:'empty-list rhp-empty-list',
 			html: 'None of your contacts are online.'
 		});
 

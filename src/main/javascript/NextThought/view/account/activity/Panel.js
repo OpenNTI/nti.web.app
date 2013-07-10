@@ -37,8 +37,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'length==0', cn:[{
-			cls:"activity nothing",
-			cn: [' No Activity yet']
+			cls:"activity nothing rhp-empty-list",
+			cn: [' No Activity Yet']
 		}]},
 		{tag:'tpl', 'for':'.', cn:[
 			{tag:'tpl', 'if':'activity', cn:[{
@@ -242,8 +242,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
 			if(!maybeAddMoreButton()){
 				Ext.DomHelper.overwrite(container.getEl(), {
-					cls:"activity nothing",
-					cn: [' No Activity yet']
+					cls:"activity nothing rhp-empty-list",
+					cn: [' No Activity Yet']
 				});
 			}
 			container.updateLayout();

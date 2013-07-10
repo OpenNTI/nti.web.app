@@ -1,4 +1,9 @@
-
+.rhp-empty-list {
+	padding: 20px 0 !important;
+	font: italic 300 14px/28px $font !important;
+	text-align: center !important;
+	color: $tertiary-grey !important;
+}
 
 .sidebar{
 	box-shadow: inset 0 1px 0 1px white,0 2px 2px rgba(0, 0, 0, 0.45);

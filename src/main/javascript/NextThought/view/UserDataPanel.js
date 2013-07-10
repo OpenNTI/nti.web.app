@@ -16,7 +16,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'length==0', cn:[{
-			cls:"history nothing",
+			cls:"history nothing rhp-empty-list",
 			cn: ['No Items']
 		}]},
 		{tag:'tpl', 'for':'.', cn:[

@@ -39,7 +39,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	preserveScrollOnRefresh: true,
 
 	emptyText: Ext.DomHelper.markup([{
-		cls:"history nothing",
+		cls:"history nothing rhp-empty-list",
 		html: 'No Items'
 	}]),
 
