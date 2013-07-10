@@ -139,7 +139,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	getBucket: function(prefix, line){
-		console.debug('prefix:'+prefix, line);
+		//console.debug('prefix:'+prefix, line);
 		if (line < 0){
 			//bad line, don't render:
 			if(this.isDebug){
