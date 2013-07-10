@@ -68,6 +68,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			scope: this,
 			datachanged: this.maybeReload,
 			//load: this.maybeReload,
+			load: function(){ this.removeMask(); },
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
@@ -108,8 +109,23 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			'communityheadlinetopic': this.forumTopicClicked,
 			'generalforumcomment': this.forumCommentClicked
 		};
+
+		this.addMask();
+
+		this.on('resize', function(){
+			if(this.el.isMasked()){
+				this.addMask();
+			}
+		}, this);
 	},
 
+	addMask: function(width, height){
+		this.el.mask('Loading...');
+	},
+
+	removeMask: function(width, height){
+		this.el.unmask();
+	},
 
 	fetchMore: function(){
 		var s = this.store,
@@ -121,7 +137,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		this.currentCount = s.getCount();
 		if(s.hasAdditionalPagesToLoad()){
-			this.el.parent().mask('Loading...','loading');
+			this.el.mask('Loading...','loading');
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
@@ -129,7 +145,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			if(centerButton){
 				this.el.down('.center-button').remove();
 			}
-			this.el.parent().unmask();
+			//this.el.unmask();
 		}
 	},
 
@@ -251,7 +267,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		Ext.each(store.getGroups(),doGroup,this);
 
-		this.el.parent().unmask();
+		//this.el.unmask();
 
 	},
 
