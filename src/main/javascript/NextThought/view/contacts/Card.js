@@ -101,7 +101,7 @@ Ext.define('NextThought.view.contacts.Card',{
             //play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getY(),
             id = me.userObject.getId(),
             open = false,
-            offsets = [10, -18];
+            offsets = [10, -18], refEl;
 
             Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
                 if(o.record.getId()!==id || me.userObject.modelName !== o.record.modelName){ o.destroy(); }
@@ -110,7 +110,15 @@ Ext.define('NextThought.view.contacts.Card',{
 
         if(open){return;}
 
-        pop = NextThought.view.account.contacts.management.Popout.create({record: me.userObject, refEl: Ext.get(el)});
+		refEl = Ext.get(el);
+		if(refEl){
+			refEl.up('.contact-card').addCls('active');
+		}
+        pop = NextThought.view.account.contacts.management.Popout.create({record: me.userObject, refEl: refEl, anchor:'tl-tr?', offsets:offsets});
+
+		pop.on('destroy', function(){
+			refEl.up('.contact-card').removeCls('active');
+		});
 
         pop.show();
         pop.alignTo(alignmentEl,alignment,offsets);

@@ -37,10 +37,12 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			resize: function(){ me.fireEvent('realign'); }
 		});
 
-		this.mon(this.viewRef,{
-			refresh: 'itemRefreshed',
-			itemupdate: 'itemUpdated'
-		});
+		if(this.viewRef && this.viewRef.on){
+			this.mon(this.viewRef,{
+				refresh: 'itemRefreshed',
+				itemupdate: 'itemUpdated'
+			});
+		}
 
 		this.setupItems();
 	},

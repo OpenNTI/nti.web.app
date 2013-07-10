@@ -938,7 +938,7 @@ div.contact-buttons {
 			}
 		}
 
-		&:hover{
+		&:hover, &.active{
 			.nib{
 				display: block;
 			}
