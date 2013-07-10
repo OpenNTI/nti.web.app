@@ -92,6 +92,8 @@ Ext.define('NextThought.view.Navigation',{
 
 		this.searchMenu = Ext.widget(this.searchMenu);
 
+		Library.on('show-courses','insertCoursesCollection',this);
+
 		this.floatingItems = {};
 		this.items = {items: [
 			this.libraryMenu,
@@ -108,6 +110,18 @@ Ext.define('NextThought.view.Navigation',{
 			scope: this.searchMenu,
 			mouseleave: this.startHide,
 			mouseenter: this.startShow
+		});
+	},
+
+
+	insertCoursesCollection: function(){
+		this.libraryMenu.insert(0,{
+			xtype:'library-collection', name: 'Courses',
+			store: 'courses',
+			listeners:{
+				scope: this,
+				select:'updateCurrent'
+		   }
 		});
 	},
 

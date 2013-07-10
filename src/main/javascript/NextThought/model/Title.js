@@ -10,6 +10,7 @@ Ext.define('NextThought.model.Title', {
 		{ name: 'index', type: 'string' },
 		{ name: 'index_jsonp', type: 'string' },
 		{ name: 'installable', type: 'bool' },
+		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
 		{ name: 'root', type: 'string' },
 		{ name: 'title', type: 'string' },
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping:'DCCreator', defaultValue: ['Author Name Here']},

@@ -2,8 +2,7 @@ Ext.define('NextThought.Library', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
 	requires:[
-		'Ext.data.Store',
-		'NextThought.model.Title',
+		'NextThought.store.Library',
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64'
 	],
@@ -19,6 +18,7 @@ Ext.define('NextThought.Library', {
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
 		this.getStore();// pre-init store so we can reference it by id early on
+		this.getCourseStore();
 	},
 
 
@@ -34,51 +34,33 @@ Ext.define('NextThought.Library', {
 
 
 	getStore: function(){
-		var s = this.store;
-		if(!s){
-			s = this.store = new Ext.data.Store({
+		if(!this.store){
+			this.store = new NextThought.store.Library({
 				id: 'library',
-				model: 'NextThought.model.Title',
-				proxy: {
-					type: 'ajax',
-					headers: {
-						'Accept': 'application/vnd.nextthought.collection+json',
-						'Content-Type': 'application/json'
-					},
-					url : 'tbd',
-					reader: {
-						type: 'json',
-						root: 'titles'
-					}
-				},
-				sorters: [{sorterFn: function(a, b){
-					if(/nextthought/i.test(a.get('author'))){
-						return 1;
-					}
-					if(/nextthought/i.test(b.get('author'))){
-						return -1;
-					}
-					return 0;
-				}},
-					{property: 'title', direction: 'asc'}
-				],
+				filterOnLoad:false,
 				listeners: {
 					scope: this,
-					load: 'purgeTocs',
-					beforeload: function(){
-						var url = 'tbd';
-						try{
-							url = getURL($AppConfig.service.getMainLibrary().href);
-						}
-						catch(e){
-							console.error(e.message, e.stack || e.stacktrace || e);
-						}
-						s.proxy.url = url;
+					load: 'onLoad'
+				},
+				filters:[
+					{
+						fn: function(r){return !r.get('isCourse'); }
 					}
-				}
+				]
 			});
 		}
-		return s;
+		return this.store;
+	},
+
+
+	getCourseStore: function(){
+		if(!this.courseStore){
+			this.courseStore = new NextThought.store.Library({
+				id: 'courses',
+				proxy: 'memory'
+			});
+		}
+		return this.courseStore;
 	},
 
 
@@ -142,7 +124,6 @@ Ext.define('NextThought.Library', {
 	load: function(){
 		try{
 			this.loaded = false;
-			this.getStore().on('load', this.onLoad, this );
 			this.getStore().load();
 		}
 		catch(e2){
@@ -153,61 +134,81 @@ Ext.define('NextThought.Library', {
 
 	onLoad: function(store, records, success) {
 		function go(){
-			this.loaded = true;
-			this.fireEvent('loaded',this);
+			me.loaded = true;
+			me.fireEvent('loaded',me);
+			
+			if( me.getCourseStore().getCount()){
+				me.fireEvent('show-courses');
+			}
 		}
+		
+		var me = this;
+		
+		me.purgeTocs();
+		me.getCourseStore().removeAll();
 
 		if(success){
-			this.libraryLoaded(Ext.bind(go,this));
+			me.libraryLoaded(Ext.bind(go,me));
 		}
 		else {
 			console.error('FAILED: load library');
-			Ext.callback(go,this);
+			Ext.callback(go,me);
 		}
 	},
 
 
 	libraryLoaded: function(callback){
-		var me = this, stack = [], store = this.getStore(), url, toRemove = [];
-		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
-		this.each(function(o){
-			if(!o.get||!o.get('index')){ return; }
-			stack.push(o.get('index'));
-		});
+		var me = this,
+			store = this.getStore(),
+			cources = this.getCourseStore(),
+			count = this.getStore().getCount(),
+			toRemove = [];
 
-		if(stack.length===0){
+
+		if(count===0){
 			console.error('Oh no\'s!\n\n\n\n\n!! No content in Library !!\n\n\n\n\n');
 			callback.call(this);
 			return;
 		}
 
-		//Iteration 2 loads TOC async, so once the last one loads, callback if available
+		function setupToc(o,toc){
+			var d;
+			count--;
+
+			if(!toc){
+				console.log('Could not load "'+ o.get('index')+'"... removing form library view');
+				store.remove(o);
+			}
+			else {
+				d = toc.documentElement;
+				o.set('NTIID',d.getAttribute('ntiid'));
+				d.setAttribute('base', o.get('root'));
+				d.setAttribute('icon', o.get('icon'));
+				d.setAttribute('title', o.get('title'));
+
+				if(d.getAttribute('isCourse')==='true'){
+					o.set('isCourse',true);
+					cources.add(o);
+				}
+			}
+
+			if(count<=0 && callback){
+				store.filter();
+				callback.call(me);
+			}
+		}
+
+		//Loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){
 				toRemove.push(o);
-				stack.pop(); return;
+				count--;
+				return;
 			}
-			url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
-			me.loadToc(o.get('index'), url, o.get('NTIID'), function(toc){
-				var d;
-				stack.pop();
 
-				if(!toc){
-					console.log('Could not load "'+ o.get('index')+'"... removing form library view');
-					store.remove(o);
-				}
-				else {
-					d = toc.documentElement;
-					o.set('NTIID',d.getAttribute('ntiid'));
-					d.setAttribute('base', o.get('root'));
-					d.setAttribute('icon', o.get('icon'));
-					d.setAttribute('title', o.get('title'));
-				}
+			var url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
 
-				if(stack.length===0 && callback){
-					callback.call(this);
-				}
-			});
+			me.loadToc(o, url, o.get('NTIID'), setupToc);
 		});
 
 		this.getStore().remove(toRemove);
@@ -215,20 +216,25 @@ Ext.define('NextThought.Library', {
 
 
 	loadToc: function(index, url, ntiid, callback){
-		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+		var me = this,
+			record = index && index.isModel ? index : null,
+			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
 
-		function fn(q,s,r){
+		index = (record && record.get('index')) || index;
+
+		function tocLoaded(q,s,r){
 			var xml;
 
 			function strip(e){ Ext.fly(e).remove(); }
 
-			delete this.tocs[index];
+			delete me.tocs[index];
 
 			if(s){
-				xml = this.tocs[index] = this.parseXML(r.responseText);
+				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if(xml){
 					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', xml), strip);
 				}
@@ -240,11 +246,8 @@ Ext.define('NextThought.Library', {
 				console.error('There was an error loading part of the library: '+url, arguments);
 			}
 
-			Ext.callback(callback,this,[xml]);
+			Ext.callback(callback,me,[record,xml]);
 		}
-
-
-
 
 		try{
 			url = getURL(url);
@@ -255,8 +258,8 @@ Ext.define('NextThought.Library', {
 				url: url,
 				expectedContentType: 'text/xml',
 				async: !!callback,
-				scope: this,
-				callback: fn
+				scope: me,
+				callback: tocLoaded
 			});
 		}
 		catch(e){
