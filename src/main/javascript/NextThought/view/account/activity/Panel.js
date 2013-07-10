@@ -98,7 +98,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		this.mon(this.el,{
 			scope: this,
 			'click':'itemClick',
-			'mouseover': 'itemHover'
+			'mouseover': 'itemHover',
+			'scroll': 'onScroll'
 		});
 
 		this.mon(this.down('box').getEl(),'scroll', 'viewScrollHandler', this);
@@ -119,12 +120,28 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}, this);
 	},
 
+	onScroll: function(e,dom){
+		var el = dom.lastChild,
+			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
+			top = offset - dom.scrollTop;
+
+		//if the difference in el and doms height and dom scroll top is zero then we are at the bottom
+		if(top <= 0){
+			this.fetchMore();
+		}
+	},
+
 	addMask: function(width, height){
-		this.el.mask('Loading...');
+		var el = Ext.get(this.el.dom.firstChild),
+			mask = this.el.mask('Loading...');
+
+		if(el.getHeight() > 0){
+			mask.setHeight(el.getHeight());
+		}
 	},
 
 	removeMask: function(width, height){
-		this.el.unmask();
+		if(this.el){ this.el.unmask(); }
 	},
 
 	fetchMore: function(){
@@ -137,7 +154,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		this.currentCount = s.getCount();
 		if(s.hasAdditionalPagesToLoad()){
-			this.el.mask('Loading...','loading');
+			this.addMask();
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
@@ -145,7 +162,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			if(centerButton){
 				this.el.down('.center-button').remove();
 			}
-			//this.el.unmask();
+			this.removeMask();
 		}
 	},
 
@@ -202,7 +219,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		function maybeAddMoreButton(){
 			var s=me.store, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
 			if(s.hasAdditionalPagesToLoad()){
-				Ext.widget('button', {
+				/*Ext.widget('button', {
 					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
 					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
 					scale: 'medium',
@@ -210,7 +227,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 					cls: 'more-button',
 					handler: function(){
 						me.fetchMore();
-					}});
+					}});*/
 				return true;
 			}
 			return false;
@@ -233,7 +250,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 				totalExpected--;
 				if(totalExpected === 0){
 					me.feedTpl.overwrite(container.getEl(),items);
-					maybeAddMoreButton();
+					//maybeAddMoreButton();
 					container.updateLayout();
 				}
 			}
@@ -267,8 +284,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		Ext.each(store.getGroups(),doGroup,this);
 
-		//this.el.unmask();
-
+		this.removeMask();
 	},
 
 
