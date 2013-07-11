@@ -709,6 +709,17 @@ $experimental-support-for-svg: true;
 						margin-left: 80px;
 						position: relative;
 						display: inline-block;
+
+						span{
+							padding: 3px;
+							&:first-child{
+								padding-left: 0;
+							}
+							&.active{
+								background-color: #e3f2fc;
+								border-radius: 3px;
+							}
+						}
 					}
 
 					.timestamp-container {

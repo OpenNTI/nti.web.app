@@ -14,34 +14,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	statics: {
 		processTranscripts: function(c) {
-			// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
-			function groupByTimeInterval(cueList, timeInterval){
-				var groups= [], tempGroup= [],
-					currentTime = cueList && cueList[0].getStartTime();
-
-				Ext.each(cueList, function(t){
-					var endTime = t.getEndTime();
-					if(endTime < currentTime + timeInterval){
-						tempGroup.push(t);
-					}
-					else{
-						groups.push(tempGroup);
-						tempGroup = [];
-						currentTime += timeInterval;
-					}
-				});
-
-				return groups;
-			}
-
-
 			var parser = new NextThought.webvtt.Transcript({
 					input: c,
 					ignoreLFs: true
-				}),
-				cueList = parser.parseWebVTT();
+				});
 
-			return groupByTimeInterval(cueList, 30);
+			return parser.parseWebVTT();
 		}
 	},
 
@@ -96,7 +74,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	loadTranscript: function(){
 		function transcriptLoadFinish(text){
-			var cueGroups = NextThought.view.video.transcript.Transcript.processTranscripts(text),
+			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text),
+				cueGroups = me.groupByTimeInterval(cueList, 30),
 				html = me.appendCues(cueGroups);
 
 			html = html.join('');
@@ -109,6 +88,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			else{
 				me.contentEl.update(html);
 			}
+
+			me.cueList = cueList;
 			me.fireEvent('transcript-ready');
 			Ext.defer(me.updateLayout, 1, me);
 		}
@@ -134,6 +115,27 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				console.log('FAILURE Loading Transcripts: ', arguments);
 			}
 		});
+	},
+
+
+	groupByTimeInterval: function(cueList, timeInterval){
+		// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
+		var groups= [], tempGroup= [],
+			currentTime = cueList && cueList[0].getStartTime();
+
+		Ext.each(cueList, function(t){
+			var endTime = t.getEndTime();
+			if(endTime < currentTime + timeInterval){
+				tempGroup.push(t);
+			}
+			else{
+				groups.push(tempGroup);
+				tempGroup = [];
+				currentTime += timeInterval;
+			}
+		});
+
+		return groups;
 	},
 
 
@@ -175,6 +177,39 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 		console.log('Jump to video to: ', b);
 		this.fireEvent('jump-video-to', b, this);
+	},
+
+
+	syncTranscriptWithVideo: function(videoState){
+		if(Ext.isEmpty(videoState)){ return; }
+
+		var currentTime = (videoState || {}).time, currentCue, s;
+
+		s = Ext.Array.filter(this.cueList, function(cue){
+			return (currentTime >= cue.startTime  && currentTime < cue.endTime);
+		});
+
+		//console.log(s);
+		currentCue = s && s[0];
+		this.selectNewCue(currentCue);
+	},
+
+
+	selectNewCue: function(newCue){
+		if(newCue === this.currentCue || Ext.isEmpty(newCue)){ return; }
+
+		var c = this.currentCue,
+			prevCueEl = c && this.el.down('[cue-start='+c.startTime+'][cue-end='+c.endTime+']'),
+			newCueEl = this.el.down('[cue-start='+newCue.startTime+'][cue-end='+newCue.endTime+']');
+
+		if(prevCueEl){
+			prevCueEl.removeCls('active');
+		}
+		if(newCueEl){
+			newCueEl.addCls('active');
+		}
+
+		this.currentCue = newCue;
 	}
 
 });

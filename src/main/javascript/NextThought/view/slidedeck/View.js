@@ -101,12 +101,22 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		if(this.hasTranscript){
 			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', this.jumpVideoToLocation, this);
+			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
 		}
 	},
 
 
 	jumpVideoToLocation: function(time){
 		this.video.fireEvent('jump-to-location', time);
+	},
+
+
+	actOnMediaHeartBeat: function(){
+		var s = this.video.getState();
+
+		if(this.hasTranscript){
+			this.down('slidedeck-transcript').syncWithVideo(s);
+		}
 	},
 
 

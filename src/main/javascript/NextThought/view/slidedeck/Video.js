@@ -90,6 +90,11 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
+	getState:function(){
+		return this.queryPlayer();
+	},
+
+
 	videoQueryTask: function videoQueryTask(){
 		var s = this.queryPlayer(),
 			pl= this.playlist,

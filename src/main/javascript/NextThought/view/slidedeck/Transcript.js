@@ -36,6 +36,17 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		//Cleanup, since we're just passing the transcript data.
 		delete this.data;
 		this.callParent(arguments);
+	},
+
+
+	getTranscriptView: function(){
+		return this.items.getAt(0);
+	},
+
+
+	syncWithVideo: function(videoState){
+		var t = this.getTranscriptView();
+		t.syncTranscriptWithVideo(videoState);
 	}
 
 });
