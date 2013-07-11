@@ -532,9 +532,25 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         this.setClickthrough(false);
         pickedElement = iframeDoc.elementFromPoint(localX, localY);
 
-        // If it picked an object element, we really need the html
-        // overlay outside the iFrame
-        if (pickedElement.tagName === 'OBJECT') {
+        function hasOverlay(element) {
+            var types = [ 'application/vnd.nextthought.ntislidedeck',
+                          'application/vnd.nextthought.naquestion',
+                          'application/vnd.nextthought.ntivideo' ],
+                hasObjectTag = element.tagName === 'OBJECT',
+                type;
+
+            if (!hasObjectTag)
+                element = Ext.get(element).up('object');
+            if (!element)
+                return;
+
+            type = element.dom? element.dom.type : element.type;
+            return Ext.Array.contains(types, type);
+        }
+
+        // If it picked an object element or an object element child
+        // and has an overlay outside the iFrame, use that.
+        if (hasOverlay(pickedElement)) {
             pickedElement = outerDoc.elementFromPoint(x, y);
         }
         console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
