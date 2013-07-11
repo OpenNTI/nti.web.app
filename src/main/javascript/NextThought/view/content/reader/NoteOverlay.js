@@ -18,7 +18,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'content-updated': 'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
 			'sync-height': 'syncHeight',
-			'create-note': 'noteHere'
+			'create-note': 'noteHere',
+			'beforenavigate': 'onNavigation'
 		});
 
 
@@ -91,6 +92,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return this.reader.getAnnotationOffsets();
 	},
 
+	onNavigation: function(){
+		if(this.editor && this.editor.isActive()){
+			var msg = "You are currently creating a note. Please save or cancel it first.";
+			Ext.defer(function(){ alert({msg: msg}); }, 1);
+
+			return false;
+		}
+
+		return true;
+	},
 
 	onScroll: function (e, dom) {},
 
