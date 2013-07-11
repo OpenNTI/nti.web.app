@@ -9,8 +9,6 @@ Ext.define('NextThought.view.library.menus.Collection',{
 			this.fireEvent('set-last-location-or-root',record.get('NTIID'));
 		}
 		delete this.suppressSetLocation;
-		Ext.menu.Manager.hideAll();
-
 		this.callParent(arguments);
 	},
 

@@ -29,6 +29,12 @@ Ext.define('NextThought.view.menus.Navigation',{
 		});
 	},
 
+	hide: function(){
+		this.cancelDeferHide();
+		return this.callParent(arguments);
+	},
+
+
 	startHide: function(menu, event){
 		this.cancelDeferHide();
 		this.leaveTimer = Ext.defer(this.hide,500,this);
