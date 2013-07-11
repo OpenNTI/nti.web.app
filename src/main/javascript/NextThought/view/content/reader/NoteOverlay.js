@@ -124,7 +124,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			ownerCmp: this.reader,
 			sharingValue: shareInfo,
 			floating: true,
-			renderTo: Ext.get('library'),
+			renderTo: this.reader.getEl().up('.x-container-reader.reader-container'),
 			enableShareControls: true,
 			enableTitle: true,
 			preventBringToFront:true,

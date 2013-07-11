@@ -7,6 +7,8 @@ Ext.define('NextThought.view.reader.Panel',{
 		'NextThought.view.annotations.View'
 	],
 
+	ui: 'reader',
+	cls: 'reader-container',
 	layout:'border',
 	defaults: {
 		border: false,
