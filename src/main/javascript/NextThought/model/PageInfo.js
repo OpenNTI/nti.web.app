@@ -26,12 +26,13 @@ Ext.define('NextThought.model.PageInfo', {
 
 
 	isPartOfCourse: function(){
-		var maybe = this.get('isCourse');
+		var maybe = this.isCourse;
 
-		if(!maybe){
+		if(!Ext.isDefined(maybe)){
 			maybe = ContentUtils.getLocation(this.getId());
 			if(maybe){
-				return maybe.isCourse || false;//false instead of undefined
+				maybe = maybe.isCourse || false; //false instead of undefined
+				this.isCourse = maybe;
 			}
 		}
 
