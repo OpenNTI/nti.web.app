@@ -520,7 +520,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
      */
     elementAt: function(x, y) {
         var reader = this.reader,
-            iframeDoc = this.getDocumentElement(),
+            iFrameDoc = this.getDocumentElement(),
             outerDoc = Ext.getDoc().dom,
             hasClickthrough = this.hasClickthrough(),
             framePos = reader.getPosition(),
@@ -530,9 +530,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             localY = y-framePos[1]+scrolledY;
 
         this.setClickthrough(false);
-        pickedElement = iframeDoc.elementFromPoint(localX, localY);
+        pickedElement = iFrameDoc.elementFromPoint(localX, localY);
 
         function hasOverlay(element) {
+            if (!element || !element.tagName)
+                return;
+
             var types = [ 'application/vnd.nextthought.ntislidedeck',
                           'application/vnd.nextthought.naquestion',
                           'application/vnd.nextthought.ntivideo' ],
@@ -542,7 +545,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             if (!hasObjectTag)
                 element = Ext.get(element).up('object');
             if (!element)
-                return;
+                return false;
 
             type = element.dom? element.dom.type : element.type;
             return Ext.Array.contains(types, type);

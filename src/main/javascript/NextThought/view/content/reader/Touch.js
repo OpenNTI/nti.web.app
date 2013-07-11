@@ -70,11 +70,6 @@ Ext.define('NextThought.view.content.reader.Touch', {
             return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
         }
 
-        function pickElementInIframe(e) {
-            var element = iFrame.elementAt(e.pageX, e.pageY);
-            return element;
-        }
-
         function elementIsSelectable(ele) {
             // TODO:
             return false;
@@ -91,7 +86,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
             if (state !== s.STATE.NONE)
                 return;
             state = s.STATE.DOWN;
-            pickedElement = pickElementInIframe(e);
+            pickedElement = iFrame.elementAt(e.pageX, e.pageY);
 
             initialTime = Date.now();
             initialY = e.touches[0].pageY;
@@ -145,6 +140,10 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
         }, false);
 
+        function shouldSelectAllOnTap() {
+            return pickedElement.tagName === 'INPUT';
+        }
+
         dom.addEventListener('touchend', function(e){
             e.preventDefault();
 
@@ -156,8 +155,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
             console.log('touchEnd');
 
             if (tempState === s.STATE.DOWN) {
-                // Send click event to clicked element
-                pickedElement.click();
+                // Send click/select event to the tapped element
+                if (shouldSelectAllOnTap())
+                    pickedElement.setSelectionRange(0,1000);
+                else
+                    pickedElement.click();
 
                 // DEBUG testing code that highlights the selected element
                 if (previouslyPickedElement){
