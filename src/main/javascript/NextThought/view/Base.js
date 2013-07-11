@@ -7,7 +7,7 @@ Ext.define( 'NextThought.view.Base', {
 	initComponent: function(){
 		this.enableBubble('before-activate-view','activate-view');
 		this.callParent(arguments);
-		this.addCls('main-view-container');
+		this.addCls('main-view-container make-white');
 	},
 
 
