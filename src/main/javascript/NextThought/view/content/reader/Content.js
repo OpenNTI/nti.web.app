@@ -306,7 +306,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 			r = el.href,
 			hash = r.split('#'),
 			target = hash[1],
-			whref = window.location.href.split('#')[0];
+			whref = window.location.href.split('#')[0],
+			doc = this.reader.getDocumentElement(),
+			element = doc.getElementById(target) || doc.getElementsByName(target)[0] || null;
 
 		//Is this a special internal link that we need to handle
 		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
@@ -334,6 +336,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		if(/^mark$/i.test(target)){
 			m.fireEvent('markupenabled-action',el,target);
+			return false;
+		}
+
+		if(element){
+			this.reader.getScroll().toNode(element);
 			return false;
 		}
 
