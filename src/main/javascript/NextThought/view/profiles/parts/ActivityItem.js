@@ -26,6 +26,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		favoritesSpacer: '.controls .favorite-spacer',
 		locationEl: '.location',
 		contextEl: '.context',
+		title: '.subject',
 		subjectEl: '.subject',
 		locationIcon: '.icon',
 		itemEl: '.item',

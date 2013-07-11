@@ -193,6 +193,17 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			keydown: me.editorKeyDown
 		});
 
+		if(me.title){
+			me.mon(me.title,'click', function(e){
+				var a = e.getTarget('a[href]');
+
+				if(a){
+					e.stopEvent();
+					me.fireEvent('navigate-to-href', me, a.href);
+				}
+			}, this);
+		}
+
 		if(this.editorEl.down('.title')){
 			this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
 		}
