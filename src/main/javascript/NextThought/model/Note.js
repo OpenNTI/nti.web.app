@@ -60,7 +60,7 @@ Ext.define('NextThought.model.Note', {
 			affectedBy: ['body','title'],
 			fn: function(r){
 				if(r.placeholder){
-					return '[Placeholder]';
+					return '[Deleted]';
 				}
 
 				if(r.data.hasOwnProperty('$preview')){
