@@ -287,13 +287,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 
 		var me = this, explicitEntities;
-		me.reset();
-		explicitEntities = sharingInfo.entities || [];
+		this.clear();
+		explicitEntities = (sharingInfo && sharingInfo.entities) || [];
 		UserRepository.getUser(explicitEntities, function(users){
 			me.addSelection(users);
 		});
 
-		this.setPublished(sharingInfo.publicToggleOn);
+		this.setPublished(sharingInfo && sharingInfo.publicToggleOn);
 	},
 
 
@@ -451,7 +451,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.inputEl.focus(10);
 	},
 
-	reset: function(){
+	clear: function(){
 		Ext.each(this.el.query('.token'), function(t){ Ext.fly(t).remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
@@ -460,6 +460,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.clearResults();
 	},
 
+	reset: function(){
+		this.setValue(this.initialConfig.value);
+	},
 
 	removeToken: function(tokenName, tokenEl){
 		var	s = [];

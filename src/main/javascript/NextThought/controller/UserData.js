@@ -978,9 +978,10 @@ Ext.define('NextThought.controller.UserData', {
 			shareWith = [];
 		}
 		//apply default sharing
-		else if(Ext.isEmpty(shareWith)){
+		//handled in the UI
+		/*else if(Ext.isEmpty(shareWith)){
 			shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
-		}
+		}*/
 
 		//define our note object:
 		noteRecord = this.getNoteModel().create({

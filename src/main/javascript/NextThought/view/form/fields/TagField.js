@@ -275,7 +275,7 @@ Ext.define('NextThought.view.form.fields.TagField',{
 	},
 
 
-	initValue: Ext.emptyFn,
+	//initValue: Ext.emptyFn,
 
 
 	isValid: function() { return true; },

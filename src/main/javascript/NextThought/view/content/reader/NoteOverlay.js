@@ -26,6 +26,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			/** @private */
 			visibilityCls: 'note-overlay-hidden'
 		};
+
+
+		this.reader.fireEvent('uses-page-preferences', this);
 	},
 
 
@@ -102,7 +105,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	openEditor: function(){
-		var tabPanel, lineInfo = this.data.box.activeLineInfo;
+		var tabPanel, lineInfo = this.data.box.activeLineInfo,
+			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
+			sharing = prefs && prefs.sharing,
+			sharedWith = sharing && sharing.sharedWith,
+			shareInfo =  SharingUtils.sharedWithToSharedInfo(
+							SharingUtils.resolveValue(sharedWith));
 
 		if( this.editor && !this.editor.isDestroyed ){
 			return false;
@@ -113,7 +121,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		this.editor = Ext.widget('nti-editor', {
 			lineInfo: lineInfo || {},
-			ownerCt: this.reader,
+			ownerCmp: this.reader,
+			sharingValue: shareInfo,
 			floating: true,
 			renderTo: Ext.get('library'),
 			enableShareControls: true,
