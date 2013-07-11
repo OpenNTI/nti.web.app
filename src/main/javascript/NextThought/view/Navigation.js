@@ -143,9 +143,7 @@ Ext.define('NextThought.view.Navigation',{
 
 		this.imgEl.removeCls(cls);
 
-		if(rec instanceof NextThought.model.Title){
-			this.imgEl.addCls(cls);
-		}
+		this.imgEl[rec.get('isCourse')?'removeCls':'addCls'](cls);
 
 		this.imgEl.setStyle('background-image', 'url('+rec.get('icon')+')');
 		this.providerEl.update(rec.get('Creator'));
