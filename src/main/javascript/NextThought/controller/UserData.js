@@ -1068,6 +1068,14 @@ Ext.define('NextThought.controller.UserData', {
 		replyRecord.set('body', replyBody);
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
+		if(!recordRepliedTo.store){
+			callback = Ext.Function.createInterceptor(callback,function(s,n){
+				if(s){
+					recordRepliedTo.fireEvent('child-added',n);
+				}
+			});
+		}
+
 		//now save this:
 		replyRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
 	},
