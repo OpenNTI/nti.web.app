@@ -107,7 +107,7 @@ Ext.define('NextThought.view.content.Reader', {
 		if(!this.readyEventPrimed){return;}
 
 		delete this.readyEventPrimed;
-		console.warn('should-be-ready fired');
+		//console.warn('should-be-ready fired');
 		this.fireEvent('should-be-ready',this);
 	},
 
