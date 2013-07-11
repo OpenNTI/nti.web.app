@@ -189,13 +189,21 @@ Ext.define('NextThought.controller.UserData', {
 			sel.deselect(rec);
 		}
 
-		me.activeNoteWindow = Ext.widget({
-			xtype: 'note-window',
-			autoShow: true,
-			record: rec,
-			reader: sel.view.up('reader').down('reader-content'),
-			listeners:{beforedestroy:deselect}
-		});
+		try {
+			me.activeNoteWindow = Ext.widget({
+				xtype: 'note-window',
+				autoShow: true,
+				record: rec,
+				reader: sel.view.up('reader').down('reader-content'),
+				listeners:{beforedestroy:deselect}
+			});
+		}
+		catch(e){
+			if(e.sourceMethod!=='closeOrDie'){
+				console.error(e.toString(),e);
+			}
+			deselect();
+		}
 	},
 
 
