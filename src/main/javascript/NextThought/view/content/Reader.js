@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Base',
-	alias: 'widget.reader-panel',
+	alias: 'widget.reader-content',
 	requires: [
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
@@ -278,7 +278,7 @@ Ext.define('NextThought.view.content.Reader', {
 	statics : {
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
-					Ext.String.format('reader-panel[prefix={0}]',prefix||'default'))[0];
+					Ext.String.format('reader-content[prefix={0}]',prefix||'default'))[0];
 		}
 	}
 

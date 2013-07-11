@@ -82,17 +82,31 @@ Ext.define('NextThought.view.Navigation',{
 			xtype: 'navigation-menu',
 			renderTo: Ext.getBody(),
 			items:[{
+				courseList:true,
+				xtype:'library-collection', name: 'Courses',
+				store: 'courses',
+				hidden: true,
+				listeners:{
+					scope: this,
+					select:'updateCurrent'
+				   }
+				},{
 				xtype:'library-collection', name: 'All Books', 
 				listeners:{
 					scope: this, 
 					select:'updateCurrent'
 			   }
-			}]
+			}],
+			listeners:{
+				scope: null, //execute from the context of the widget
+				hide: this.stopShowHide,
+				show: this.stopShowHide
+			}
 		});
 
 		this.searchMenu = Ext.widget(this.searchMenu);
 
-		Library.on('show-courses','insertCoursesCollection',this);
+		Library.on('show-courses','showCoursesCollection',this);
 
 		this.floatingItems = {};
 		this.items = {items: [
@@ -114,15 +128,8 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
-	insertCoursesCollection: function(){
-		this.libraryMenu.insert(0,{
-			xtype:'library-collection', name: 'Courses',
-			store: 'courses',
-			listeners:{
-				scope: this,
-				select:'updateCurrent'
-		   }
-		});
+	showCoursesCollection: function(){
+		this.libraryMenu.child('[courseList]').show();
 	},
 
 

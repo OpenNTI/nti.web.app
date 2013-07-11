@@ -94,8 +94,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	getReader: function(prefix){
-		var cache = this.readerPanels, c;
-		if(!cache ){ cache = this.readerPanels = {}; }
+		var cache = this.readers, c;
+		if(!cache ){ cache = this.readers = {}; }
 
 		c = cache[prefix];
 		if(!c){

@@ -49,5 +49,59 @@ Ext.define('NextThought.store.Library',{
 				console.error(e.message, e.stack || e.stacktrace || e);
 			}
 		}
+	},
+
+
+	each: function(fn, scope, ignoreFilter){
+		var filtered = null;
+		if(this.isFiltered() && ignoreFilter){
+			filtered = this.data;
+			this.data = this.snapshot;
+		}
+
+		try {
+			return this.callParent([fn,scope]);
+		}
+		finally{
+			if(filtered){
+				this.data = filtered;
+			}
+		}
+	},
+
+
+	findRecord: function(property, value, start, anyMatch, caseSensitive, exactMatch, ignoreFilter){
+		var filtered = null;
+		if(this.isFiltered() && ignoreFilter){
+			filtered = this.data;
+			this.data = this.snapshot;
+		}
+
+		try {
+			return this.callParent([property, value, start, anyMatch, caseSensitive, exactMatch]);
+		}
+		finally{
+			if(filtered){
+				this.data = filtered;
+			}
+		}
+	},
+
+
+	first: function(grouped, ignoreFilter){
+		var filtered = null;
+		if(this.isFiltered() && ignoreFilter){
+			filtered = this.data;
+			this.data = this.snapshot;
+		}
+
+		try {
+			return this.callParent([grouped]);
+		}
+		finally{
+			if(filtered){
+				this.data = filtered;
+			}
+		}
 	}
 });

@@ -267,11 +267,35 @@
 	.make-white {
 		background: white;
 	}
+
+	#view-tabs {
+		position: absolute;
+		height: 105px;
+		top: 0;
+		min-width: 100px;
+		white-space: nowrap;
+
+		.main-view-tab {
+			display: inline-block;
+			font: normal 300 16px/30px $font;
+			color: $tertiary-grey;
+			padding: 0 20px;
+			margin: 42px 15px 0;
+			border-radius: 90px;
+
+			&:not(.disabled){
+				cursor: pointer;
+			}
+
+			&.selected:not(.disabled),
+			&:not(.disabled):hover {
+				background: rgba(255,255,255,0.1);
+				color: #fff;
+			}
+		}
+	}
 }
 
-#library {
-	background: #fff;
-}
 
 .x-reader-pane {
 	.x-panel-body-reader {

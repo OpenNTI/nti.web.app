@@ -63,6 +63,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		this.callParent(arguments);
 
 		m = this.down('note-main-view');
+		m.reader = this.reader;
 	
 		if(this.isEdit){
 			m.editMode = this.isEdit;
@@ -87,7 +88,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	resizeView: function(){
 		var position, height, width,
 			viewportHeight = Ext.Element.getViewportHeight(),
-			reader = Ext.getCmp('readerPanel');
+			reader = this.reader;
 
 		if(reader){
 			position = reader.getPosition();

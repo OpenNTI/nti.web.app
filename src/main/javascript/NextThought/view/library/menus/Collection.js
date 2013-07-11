@@ -17,6 +17,7 @@ Ext.define('NextThought.view.library.menus.Collection',{
 		var ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
 			last = ContentUtils.getLineage(ntiid).last(),
 			r = this.store.findRecord('NTIID',last,0,false,true,true);
+
 		if(r){
 			this.suppressSetLocation = Boolean(silent);
 			this.getSelectionModel().select(r);

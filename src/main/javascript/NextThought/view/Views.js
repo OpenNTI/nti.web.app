@@ -8,6 +8,8 @@ Ext.define( 'NextThought.view.Views', {
 		'NextThought.view.library.View',
 		'NextThought.view.profiles.View'
 	],
+
+
 	
 	plain: true,
 	border: false, 
@@ -17,12 +19,28 @@ Ext.define( 'NextThought.view.Views', {
 		deferredRender: true
 	},
 	activeItem: 0,
+	defaults: {
+		minWidth: 1024,
+		maxWidth: 1165
+	},
 	items:[
 		{id: 'profile', xtype: 'profile-view-container'},
 		{id: 'library', xtype: 'library-view-container'},
 		{id: 'forums', xtype: 'forums-view-container'},
 		{id: 'contacts', xtype: 'contacts-view-container'}
 	],
+
+	childEls: ['tabs'],
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'main-view-tabs tabs', id: '{id}-tabs' },
+		'{%this.renderContainer(out,values)%}'
+	]),
+
+	tabTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+		{ tag: 'tpl', 'for':'.', cn:[
+			{ cls:'main-view-tab {[values.selected?\'selected\':\'\']}', html: '{label}', 'data-view-id':'{viewId}'}
+		]}
+	)),
 
 
 	afterRender: function(){
@@ -32,6 +50,8 @@ Ext.define( 'NextThought.view.Views', {
 			right = this.el.getPadding('r'),
 			rightScale = right/left;
 
+		this.tabs.setVisibilityMode(Ext.Element.DISPLAY);
+
 		this.initialPadding = {
 			left: left,
 			right: right,
@@ -39,11 +59,19 @@ Ext.define( 'NextThought.view.Views', {
 		};
 
 		this.on({
-			resize:'adjustPadding',
+			'resize':'adjustPadding',
 			'activate-view': 'onActivateView',
-			'before-activate-view':'onBeforeActivateView',
-			scope:this
+			'before-activate-view':'onBeforeActivateView'
 		});
+
+		this.mon(this.tabs,'click','onTabClicked');
+
+		this.items.each(function(p){
+			this.mon(p,{
+				'update-tabs':'onViewChanged',
+				'activate':'onViewChanged'
+			});
+		},this);
 	},
 
 
@@ -79,8 +107,61 @@ Ext.define( 'NextThought.view.Views', {
 			}
 		}
 
+		//if the tabs don't align correctly in other browsers, uncomment the line below. (it will force it)
+		//this.tabs.setLocalX(parseInt(lp,10));
 		this.el.setStyle({paddingLeft:lp, paddingRight: rp});
 		this.updateLayout();
+	},
+
+
+	clearTabs: function(){
+		this.tabs.update('');
+		this.tabs.hide();
+	},
+
+
+	updateTabs: function(tabSpecs){
+		this.clearTabs();
+
+		if(!tabSpecs){ return; }
+
+		this.tabTpl.overwrite(this.tabs,tabSpecs);
+		this.tabs.show();
+	},
+
+
+	onTabClicked: function(e){
+		var cmp = this.getActive(),
+			t = e.getTarget('.main-view-tab',null,true),
+			tab = {},
+			vId = t && t.getAttribute('data-view-id');
+
+		if(!cmp){
+			console.error('We should not ever be here! no active view???');
+			console.trace();
+			return;
+		}
+
+		if(!t){
+			return;
+		}
+
+		tab.viewId = vId;
+		tab.label = t.getHTML();
+
+
+		if(cmp.onTabClicked(tab) && !t.hasCls('.selected')){
+			this.tabs.select('.main-view-tab').removeCls('selected');
+			t.addCls('selected');
+		}
+	},
+
+
+	onViewChanged: function(to, from){
+		function getName(v){ return (v && v.id)||'null'; }
+		console.debug('view changed to: '+getName(to)+', from: '+getName(from));
+
+		this.updateTabs(to && to.getTabs && to.getTabs(),to);
 	},
 
 	

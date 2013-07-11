@@ -72,7 +72,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 		var me = this;
 
-		function openWindow (rec, scrollToId, replyToId, isEdit){
+		function openWindow (reader, rec, scrollToId, replyToId, isEdit){
 			if(Ext.isArray(replyToId)){
 				replyToId = replyToId.slice(-1);
 				replyToId = replyToId.length > 0 ? replyToId[0] :  null;
@@ -83,6 +83,7 @@ Ext.define('NextThought.controller.Navigation', {
 					autoShow: true,
 					xtype: 'note-window',
 					record: rec,
+					reader: reader,
 					scrollToId: scrollToId,
 					replyToId: replyToId && !isEdit ? replyToId : null,
 					isEdit: isEdit
@@ -111,7 +112,7 @@ Ext.define('NextThought.controller.Navigation', {
 		function localCondition(id,reader){
 			var c = Ext.getCmp(id);
 			if(c && c.isNote){
-				openWindow(c.getRecord(), target.last(), reply? target: undefined);
+				openWindow(reader,c.getRecord(), target.last(), reply? target: undefined);
 			}
 			else if(me.lastNote){
 				try {
@@ -144,7 +145,7 @@ Ext.define('NextThought.controller.Navigation', {
 
                 function afterLoadedAgain(object){
 	                if( (object.get('MimeType').split('.') || []).pop() === "note" ){
-		                openWindow(object, scrollToReplyId); 
+		                openWindow(reader,object, scrollToReplyId);
 	                }
 
 	                //Lets resolve the range and try to scroll to that.

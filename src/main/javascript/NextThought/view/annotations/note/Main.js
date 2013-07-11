@@ -59,14 +59,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	initComponent: function(){
-		if(!this.reader){
-			this.reader = ReaderPanel.get(this.prefix);
-		}
-		this.callParent(arguments);
-	},
-
-
 	afterRender: function(){
 
 		var me = this;

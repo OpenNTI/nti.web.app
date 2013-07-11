@@ -22,5 +22,24 @@ Ext.define('NextThought.model.PageInfo', {
 			enId = encodeURIComponent(id);
 
 		return url.replace(enCi,enId);
+	},
+
+
+	isPartOfCourse: function(){
+		var maybe = this.get('isCourse');
+
+		if(!maybe){
+			maybe = ContentUtils.getLocation(this.getId());
+			if(maybe){
+				return maybe.isCourse || false;//false instead of undefined
+			}
+		}
+
+		return maybe;
+	},
+
+
+	isPartOfCourseNav: function(){
+		return this.isPartOfCourse();
 	}
 });

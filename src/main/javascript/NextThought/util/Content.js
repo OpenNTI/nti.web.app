@@ -251,10 +251,10 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	find: function(containerId) {
+	find: function(containerId, reportMiss) {
 		var result = null;
 		Library.each(function(o){
-			result = Library.resolve( Library.getToc( o ), o, containerId);
+			result = Library.resolve( Library.getToc( o ), o, containerId, reportMiss);
 			return !result;
 		});
 
@@ -378,13 +378,17 @@ Ext.define('NextThought.util.Content', {
 			r = me.find(i);
 
 			//If still not r, it's not locational content...
-			if (!r) {return null;}
+			if (!r) {
+				me.find(i,true);
+				return null;
+			}
 
 			d = r.toc.documentElement;
 			l = r.location;
 			r = Ext.apply({
 					NTIID: i,
 					icon: getAttribute([l,d],'icon'),
+					isCourse: getAttribute([l,d],'isCourse'),
 					root: getAttribute([l,d],'base'),
 					title: getAttribute([l,d],'title'),
 					label: getAttribute([l,d],'label'),

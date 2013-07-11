@@ -75,7 +75,7 @@ Ext.define('NextThought.controller.UserData', {
 					'save-new-note' : 'saveNewNote'
 				},
 
-				'reader-panel':{
+				'reader-content':{
 					'annotations-load': 'onAnnotationsLoad',
 					'filter-annotations': 'onAnnotationsFilter',
 					'filter-by-line': 'onAnnotationsLineFilter',
@@ -189,9 +189,11 @@ Ext.define('NextThought.controller.UserData', {
 			sel.deselect(rec);
 		}
 
-		me.activeNoteWindow = Ext.widget('note-window',{
+		me.activeNoteWindow = Ext.widget({
+			xtype: 'note-window',
 			autoShow: true,
 			record: rec,
+			reader: sel.view.up('reader').down('reader-content'),
 			listeners:{beforedestroy:deselect}
 		});
 	},

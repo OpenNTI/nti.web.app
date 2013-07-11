@@ -25,11 +25,10 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	refs: [
-		{ref: 'libraryMenu', selector: 'library-collection'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
 		{ref: 'libraryPageWidgets', selector: 'library-view-container content-page-widgets'},
-		{ref: 'libraryReader', selector: 'library-view-container reader-panel'}
+		{ref: 'libraryReader', selector: 'library-view-container reader-content'}
 	],
 
 
@@ -52,7 +51,7 @@ Ext.define('NextThought.controller.Reader', {
 					'set-location':'setLocation',
 					'set-last-location-or-root':'setLastLocation'
 				},
-				'library-view-container reader-panel':{
+				'library-view-container reader-content':{
 					'beforeNavigate':'beforeSetLocation',
 					'set-content':'updateLibraryControls',
 					'page-previous':'goPagePrevious',
@@ -125,7 +124,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	showCardTarget: function(card, data, silent){
-		var reader = card.up('reader-panel'),
+		var reader = card.up('reader-content'),
 			ntiid = data.ntiid,
 			DH = Ext.DomHelper,
 			s = encodeURIComponent('Pages('+ntiid+')'),
@@ -182,7 +181,7 @@ Ext.define('NextThought.controller.Reader', {
 	updateLibraryControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
-			lm = this.getLibraryMenu(),
+			lm = Ext.ComponentQuery.query('library-collection'),
 			pw = this.getLibraryPageWidgets(),
 			origin = pageInfo && pageInfo.contentOrig,
 			t = pageInfo && pageInfo.get('NTIID');
@@ -192,7 +191,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		pw.clearBookmark();
 		pg.updateState(t);
-		lm.updateSelection(t,true);
+		Ext.each(lm,function(m){ m.updateSelection(t,true); });
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will

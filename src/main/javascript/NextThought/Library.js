@@ -22,17 +22,6 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	getFirstPage: function(){
-		var first = this.getStore().getAt(0);
-
-		if(first){
-			return first.get('NTIID');
-		}
-
-		return null;
-	},
-
-
 	getStore: function(){
 		if(!this.store){
 			this.store = new NextThought.store.Library({
@@ -64,8 +53,14 @@ Ext.define('NextThought.Library', {
 	},
 
 
+	getFirstPage: function(){
+		var first = this.getStore().first(false,true);
+		return (first && first.get('NTIID')) || null;
+	},
+
+
 	each: function(callback, scope){
-		this.getStore().each(callback,scope||this);
+		this.getStore().each(callback,scope||this,true);
 	},
 
 
@@ -79,7 +74,7 @@ Ext.define('NextThought.Library', {
 			field = 'NTIID';
 		}
 
-		return this.getStore().findRecord(field, index, 0, false, true, true);
+		return this.getStore().findRecord(field, index, 0, false, true, true, true);
 	},
 
 
@@ -280,32 +275,38 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	resolve: function(toc, title, containerId) {
+	resolve: function(toc, title, containerId, report) {
+		var elts, ix, topic;
+
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
-			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId, title: title};
-		}
-		return this.recursiveResolve( containerId, toc, title);
-	},
-
-
-	recursiveResolve: function recurse( containerId, elt, title ) {
-		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
-		for( ix = 0; ix < elts.length; ix++ ) {
-			child = elts.item(ix);
-			if( !child ) { continue; }
-			if( child.getAttribute( 'ntiid' ) === containerId ) {
 				return {
-					toc: child.ownerDocument,
-					location: child,
+				toc:toc,
+				location:toc.documentElement,
+				NTIID: containerId,
+				ContentNTIID: containerId,
+				title: title
+			};
+		}
+
+		elts = toc.getElementsByTagName( 'topic' );//returns a flat list of ALL topic tags. No need to recurse
+
+		for( ix=elts.length-1; ix >= 0; ix-- ) {
+			topic = elts[ix];
+			if( topic && topic.getAttribute( 'ntiid' ) === containerId ) {
+				return {
+					toc: topic.ownerDocument,
+					location: topic,
 					NTIID: containerId,
 					title: title,
-					ContentNTIID: child.ownerDocument.documentElement.getAttribute('ntiid')
+					ContentNTIID: topic.ownerDocument.documentElement.getAttribute('ntiid')
 				};
 			}
+		}
 
-			cr = recurse( containerId, child, title );
-			if( cr ) {
-				return cr;
+		if(report){
+			console.debug('Not Found: Top:\n', toc.documentElement.getAttribute( 'ntiid' ),'\n',containerId);
+			for( ix=elts.length-1; ix >= 0; ix-- ) {
+				console.debug('Not Found: Topic:\n', elts[ix].getAttribute( 'ntiid' ),'\n',containerId);
 			}
 		}
 		return null;
