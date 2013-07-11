@@ -325,7 +325,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			result = {
 				text: 'Define...',
 				handler:function(){
-					me.fireEvent('define', text, boundingBox );
+					me.fireEvent('define', text, boundingBox, me.reader );
 					me.clearSelection();
 				}
 			};

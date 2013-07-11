@@ -36,6 +36,8 @@ Ext.define('NextThought.view.definition.Window', {
 	initComponent: function(){
 		var me = this, p, nib = 20, top, y, x;
 
+		me.pageInfo = me.pageInfo || me.reader.getLocation().pageInfo;
+
 		if(!me.pageInfo || !Ext.isFunction(me.pageInfo.getLink)){
 			Ext.Error.raise('Need a PageInfo');
 		}
