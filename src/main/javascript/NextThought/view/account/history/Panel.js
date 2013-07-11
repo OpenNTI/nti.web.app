@@ -17,7 +17,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	storeId: 'noteHighlightStore',
-	filter: 'MeOnly',
+	filter: 'onlyMe',
+	filterOperator: undefined,
 	filterMap: {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
 	},
@@ -128,7 +129,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			this.mimeTypes.push('application/vnd.nextthought.' + RegExp.escape(t));
 		}, this);
 
-		return this.mimeTypes.join(',');
+		return this.mimeTypes;
 	},
 
 
@@ -155,12 +156,12 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			filter: this.filter,
-			accept: this.getMimeTypes()
+			sortOrder: 'descending'
 		});
 
 		this.store = s;
+
+		this.applyFilterParams();
 
 		this.mon(this.store,{
 			scope: this,
@@ -172,6 +173,15 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.bindStore(this.store);
 	},
 
+	applyFilterParams: function(){
+		if(this.store){
+			Ext.apply(this.store.proxy.extraParams,{
+				filterOperator: this.filterOperator,
+				filter: this.filter,
+				accept: this.getMimeTypes().join(',')
+			});
+		}
+	},
 
 	recordsAdded: function(store, records){
 		console.debug(' UserDataPanel Store added records:', arguments);
@@ -305,27 +315,26 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
-		Ext.Array.include(filterTypes, 'onlyMe');
-
 		var s = this.getStore(),
-			selectedMimeTypes = [],
-			selectedFilters = [this.filter];
+			fo = (filterTypes.length > 1)? '0' : '1';
+
+		if(Ext.isEmpty(filterTypes)){
+			filterTypes = ['onlyMe','Bookmarks'];
+			fo = '0';
+		}
+
+		this.filter = filterTypes.join(',');
+		this.filterOperator = (filterTypes.length > 1)? fo : undefined;
+		this.getMimeTypes = function(){ return mimeTypes; };
+
+		if(!s || s.storeId === 'ext-empty-store'){
+			return;			
+		}
+
 
 		s.removeAll();
 
-		if(filterTypes.length > 1){
-			s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-				filterOperator: '0'
-			});
-		}
-
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'relevance',
-			sortOrder: 'descending',
-			filter: filterTypes.join(','),
-			//filterOperator: (filterTypes.length > 1)? '0' : '1',
-			accept: mimeTypes.join(',')
-		});
+		this.applyFilterParams();
 
 		s.load();
 	}

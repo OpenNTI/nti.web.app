@@ -657,8 +657,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			filterTypes.push(this.filter);
 		}
 
-		var v = this.getActiveView(),
-			s = v  && v.getStore();
+		var s = this.getStore();
 
 		s.removeAll();
 

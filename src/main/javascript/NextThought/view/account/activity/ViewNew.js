@@ -261,21 +261,25 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			filterTypes = filter? [filter] : [];
 
 			Ext.each(allItems, function(item){
-			var mt = this.mimeTypesMap[item.filter],
-				ft = this.filtersMap[item.filter];
+				var mt = this.mimeTypesMap[item.filter],
+					ft = this.filtersMap[item.filter];
 
-			if ((everything || item.checked)) {
-				if(mt){
-					Ext.Array.each(Ext.Array.from(mt), function(m){
-						mimeTypes.push('application/vnd.nextthought.'+m);
-					}, this);
-				}
+				if ((everything || item.checked)) {
+					if(mt){
+						Ext.Array.each(Ext.Array.from(mt), function(m){
+							mimeTypes.push('application/vnd.nextthought.'+m);
+						}, this);
+					}
 
-				if(ft){
-					filterTypes.push(ft);
+					if(ft){
+						filterTypes.push(ft);
+					}
+
+					if((item.filter === 'all' || item.filter === 'notes') && activePanel.$className === "NextThought.view.account.history.Panel"){
+						Ext.Array.include(filterTypes,'onlyMe');
+					}
 				}
-			}
-		}, this);
+			}, this);
 
 		if(activePanel && activePanel.applyFilters){
 		   activePanel.applyFilters(mimeTypes, filterTypes);
