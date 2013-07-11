@@ -13,6 +13,10 @@ Ext.define('NextThought.view.content.reader.Touch', {
         TAP_TIME: 2,
         TAP_THRESHOLD: 15,
         TAP_HOLD_TIME: 1000,
+        /**
+         * Various states for a fsm to determine possible
+         * touch interactions.
+         */
         STATE: {
             NONE: 0,
             DOWN: 1,
@@ -160,7 +164,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     previouslyPickedElement.style.backgroundColor = previouslyPickedElementStyle;
                 }
                 previouslyPickedElement = pickedElement;
-                previouslyPickedElementStyle = previouslyPickedElement.style.backgroundColor
+                previouslyPickedElementStyle = previouslyPickedElement.style.backgroundColor;
                 pickedElement.style.backgroundColor = 'red';
             }
             else if (tempState === s.STATE.SCROLLING) {

@@ -520,16 +520,23 @@ Ext.define('NextThought.view.content.reader.IFrame',{
      */
     elementAt: function(x, y) {
         var reader = this.reader,
-            doc = this.getDocumentElement(),
+            iframeDoc = this.getDocumentElement(),
+            outerDoc = Ext.getDoc().dom,
             hasClickthrough = this.hasClickthrough(),
             framePos = reader.getPosition(),
             scrolledY = reader.getScroll().top(),
-            pickedElement;
+            pickedElement,
+            localX = x-framePos[0],
+            localY = y-framePos[1]+scrolledY;
 
-        // Disable pointer-events:none so that hit detection works
-        // properly in element picking
         this.setClickthrough(false);
-        pickedElement = doc.elementFromPoint(x-framePos[0], y-framePos[1]+scrolledY);
+        pickedElement = iframeDoc.elementFromPoint(localX, localY);
+
+        // If it picked an object element, we really need the html
+        // overlay outside the iFrame
+        if (pickedElement.tagName === 'OBJECT') {
+            pickedElement = outerDoc.elementFromPoint(x, y);
+        }
         console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
 
         this.setClickthrough(hasClickthrough);
