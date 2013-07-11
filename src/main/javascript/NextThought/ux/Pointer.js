@@ -28,7 +28,7 @@ Ext.define('NextThought.ux.Pointer',{
 			move: this.point
 		});
 
-		this.mon(this.pointToEl.getScrollingEl(),{
+		this.mon(Ext.get(this.pointToEl).getScrollingEl(),{
 			scroll: this.point,
 			scope: this
 		});
