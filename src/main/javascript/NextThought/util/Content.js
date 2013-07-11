@@ -388,7 +388,7 @@ Ext.define('NextThought.util.Content', {
 			r = Ext.apply({
 					NTIID: i,
 					icon: getAttribute([l,d],'icon'),
-					isCourse: getAttribute([l,d],'isCourse'),
+					isCourse: (getAttribute([l,d],'isCourse')||'').toLowerCase()==='true',
 					root: getAttribute([l,d],'base'),
 					title: getAttribute([l,d],'title'),
 					label: getAttribute([l,d],'label'),
