@@ -49,11 +49,18 @@ Ext.define( 'NextThought.view.library.View', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.reader = this.down('reader-content');
-		this.courseBook = this.child('#course-book');
+		this.courseBook = this.down('#course-book');
+		this.courseNav = this.down('course');
+
+		this.removeCls('make-white');
 
 		this.on({
 			'beforeactivate':'onBeforeActivation',
 			'deactivate':'onDeactivated'
+		});
+
+		this.courseNav.mon(this.reader,{
+			'navigateComplete': 'onNavigateComplete'
 		});
 
 		this.mon(this.reader,{

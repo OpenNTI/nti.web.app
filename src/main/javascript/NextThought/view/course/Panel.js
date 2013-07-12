@@ -1,15 +1,25 @@
 Ext.define('NextThought.view.course.Panel',{
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.course',
 
-	layout: 'border',
-	defaults: {
-		xtype: 'container',
-		border: false,
-		plain: true
-	},
-	items: [
-		{ region: 'west', width: 255, margin: '0 5 5 0', cls:'make-white' },
-		{ region: 'center', cls:'make-white' }
-	]
+	requires: [
+		'NextThought.view.course.Outline',
+		'NextThought.view.course.Overview'
+	],
+
+
+	navigation: 'course-outline',
+	body: 'course-overview',
+
+
+	onNavigateComplete: function(pageInfo){
+		if(!pageInfo || !pageInfo.isPartOfCourse()){
+			this.navigation.clear();
+			this.body.clear();
+			return;
+		}
+
+
+	}
+
 });
