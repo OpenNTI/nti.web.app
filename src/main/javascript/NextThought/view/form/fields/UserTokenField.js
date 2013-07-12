@@ -240,6 +240,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.addTag(value, type);
 			this.updatePlaceholderLabel();
 		}
+
+		this.fireEvent('sync-height', this);
 	},
 
 

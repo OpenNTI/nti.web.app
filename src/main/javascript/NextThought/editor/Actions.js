@@ -156,6 +156,7 @@ Ext.define('NextThought.editor.Actions', {
 				});
 				me.cmp.on('destroy', 'destroy', me.sharedList);
 				me.cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
+				me.cmp.mon(me.sharedList,'sync-height', function(){this.maybeResizeContentBox();}, me);
 			}else{
 				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
 			}
