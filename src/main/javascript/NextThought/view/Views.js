@@ -46,6 +46,7 @@ Ext.define( 'NextThought.view.Views', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		this.nav = Ext.get('nav');
 		var left = this.el.getPadding('l'),
 			right = this.el.getPadding('r'),
 			rightScale = right/left;
@@ -110,6 +111,7 @@ Ext.define( 'NextThought.view.Views', {
 		//if the tabs don't align correctly in other browsers, uncomment the line below. (it will force it)
 		//this.tabs.setLocalX(parseInt(lp,10));
 		this.el.setStyle({paddingLeft:lp, paddingRight: rp});
+		this.nav.setStyle({paddingLeft:lp});
 		this.updateLayout();
 	},
 
