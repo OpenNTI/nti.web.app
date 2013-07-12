@@ -14,6 +14,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 
+		var me = this;
 		this.mon(this.reader, {
 			scope: this,
 			destroy: 'destroy',
@@ -32,6 +33,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			enableShareControls: true,
 			enableTitle: true,
 			listeners:{
+				'deactivated-editor': function(){ me.reader.suspendMoveEvents = false; },
+				'activated-editor': function(){ me.reader.suspendMoveEvents = true; },
 				grew: function(){
 					var h = this.getHeight(),
 						b = h + this.getY(),

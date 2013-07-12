@@ -174,7 +174,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			me.mon(me.el.select('.cue'), {
 				scope: me,
 				'mouseover':'mouseOver',
-//				'mousemove':'mouseOver',
+				'mousemove':'mouseOver',
 				'mouseout':'mouseOut'
 			});
 
@@ -206,6 +206,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		if(target){
 			box = target.down('.add-note-here');
 
+			if(this.lastTarget && (this.lastTarget.dom === target.dom)){
+				return;
+			}
+
+			this.lastTarget = target;
 			//clearTimeout(this.mouseLeaveTimeout);
 			this.mouseLeaveTimeout = setTimeout(function () {
 				//Deselect previous cue
