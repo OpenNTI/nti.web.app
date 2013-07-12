@@ -51,7 +51,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			annotations: {},
 			filter: null,
 			searchAnnotations: null,
-			annotationManager: new NextThought.view.annotations.renderer.Manager()
+			annotationManager: new NextThought.view.annotations.renderer.Manager(reader)
 		});
 
 		this.reader.fireEvent('listens-to-page-stores',this,{
