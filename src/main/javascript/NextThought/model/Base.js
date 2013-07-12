@@ -818,7 +818,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	afterEdit: function(fnames){
-		this.callParent(fnames);
+		this.callParent(arguments);
 		Ext.Array.each(fnames || [], this.onFieldChanged, this);
 	},
 
