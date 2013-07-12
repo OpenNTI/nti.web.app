@@ -735,13 +735,13 @@ $experimental-support-for-svg: true;
 							width: 60px;
 							height: 28px;
 
-							&.hidden{
-								display: none;
-							}
-
 							@include note-control-box;
 							.note-here-control-box{
 								left: 16px;
+
+								&.hidden{
+									display: none;
+								}
 							}
 						}
 					}

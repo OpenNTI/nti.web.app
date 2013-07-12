@@ -43,7 +43,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				tag:'tpl', 'for':'group', cn:[
 					{tag:'span', cls:'cue', 'cue-start':'{startTime}', 'cue-end':'{endTime}', cn:[
 						{tag:'span', html:'{text}'},
-						{tag: 'span', cls:'add-note-here hidden', cn:{cls:'note-here-control-box', tag:'span'}}
+						{tag: 'span', cls:'add-note-here', cn:{cls:'note-here-control-box hidden', tag:'span'}}
 					]}
 				]
 			}}
@@ -215,10 +215,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			this.mouseLeaveTimeout = setTimeout(function () {
 				//Deselect previous cue
 				if(me.activeCueEl){
-					me.activeCueEl.down('.add-note-here').addCls('hidden');
+					me.activeCueEl.down('.note-here-control-box').addCls('hidden');
 				}
 
-				box.removeCls('hidden');
+				box.down('.note-here-control-box').removeCls('hidden');
 				me.activeCueEl = target;
 			}, 50);
 			console.log('should show the add note nib:', target);
