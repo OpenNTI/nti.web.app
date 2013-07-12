@@ -366,6 +366,8 @@ Ext.define('NextThought.util.Content', {
 
 		if(id && id.getAttribute){
 			id = id.getAttribute('ntiid');
+		} else if (id && id.isModel){
+			id = id.get('containerId') || id.get('NTIID');
 		}
 
 		var me = this, r, l, d, i = id;
