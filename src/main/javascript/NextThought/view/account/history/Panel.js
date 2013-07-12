@@ -152,12 +152,30 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
-		var s = NextThought.store.PageItem.create({id:this.storeId, groupField: this.grouping, groupDir: 'ASC'});
+		var s = NextThought.store.PageItem.create({
+			id:this.storeId,
+			groupField: this.grouping,
+			groupDir: 'ASC',
+			sortOnLoad: true,
+			statefulFilters: false,
+			remoteSort: false,
+			remoteFilter: false,
+			remoteGroup: false,
+			filterOnLoad: true,
+			sortOnFilter: true,
+		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		});
+
+		s.filter([function(rec){
+			if(isMe(rec.get('Creator'))){
+				return true;
+			}
+			return rec.isFavorited();
+		}]);
 
 		this.store = s;
 
@@ -315,7 +333,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
-		var s = this.getStore(),
+		var me = this,
+			s = me.getStore(),
 			fo = (filterTypes.length > 1)? '0' : '1';
 
 		if(Ext.isEmpty(filterTypes)){
@@ -323,8 +342,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 			fo = '0';
 		}
 
-		this.filter = filterTypes.join(',');
-		this.filterOperator = (filterTypes.length > 1)? fo : undefined;
+		me.filter = filterTypes.join(',');
+		me.filterOperator = (filterTypes.length > 1)? fo : undefined;
 		this.getMimeTypes = function(){ return mimeTypes; };
 
 		if(!s || s.storeId === 'ext-empty-store'){
@@ -334,8 +353,20 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		s.removeAll();
 
-		this.applyFilterParams();
+		me.applyFilterParams();
 
+		s.clearFilter(true);
+		s.addFilter([function(rec){
+			if(isMe(rec.get('Creator'))){ return true; }
+
+			if(Ext.Array.contains(filterTypes, 'Bookmarks')){
+				return rec.isFavorited();
+			}
+
+			return false;
+		}], false);
+
+		s.currentPage = 1;
 		s.load();
 	}
 });
