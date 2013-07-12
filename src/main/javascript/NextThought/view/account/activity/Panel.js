@@ -122,14 +122,21 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	onScroll: function(e,dom){
 		var el = dom.lastChild,
+			direction = (this.lastScrollTop||0) - dom.scrollTop,
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
 			top = offset - dom.scrollTop;
 
+		this.lastScrollTop = dom.scrollTop;
+
 		//if the difference in el and doms height and dom scroll top is zero then we are at the bottom
-		if(top <= 20){
-			this.fetchMore();
+		if(top <= 20 && direction < 0){
+			this.onScrolledToBottom();
 		}
 	},
+
+	onScrolledToBottom: Ext.Function.createBuffered(function(){
+		this.fetchMore();
+	}, 20),
 
 	addMask: function(width, height){
 		var el = Ext.get(this.el.dom.firstChild),
@@ -148,7 +155,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		var s = this.store,
 			centerButton = this.el.down('.center-button');
 
-		if (!s.hasOwnProperty('data')) {
+		if (!s.hasOwnProperty('data') || s.loading) {
 			return;
 		}
 
