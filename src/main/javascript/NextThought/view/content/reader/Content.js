@@ -26,6 +26,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				'set-content',
 				'image-loaded',
 				'clear-annotations',
+				'load-annotations-skipped',
 				'load-annotations'
 			]));
 
@@ -174,10 +175,13 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
+			req = resp.request,
+			o = req.options,
 			c = me.parseHTML(resp),
 			doc = me.getDocumentElement(),
 			reader = me.reader,
-			ntiid;
+			ntiid,
+			pageInfo = o.pageInfo;
 
 		me.fireEvent('clear-annotations');
 
@@ -196,11 +200,15 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		doc.getElementById('NTIContent').setAttribute('data-page-ntiid', ntiid);
 
-		me.fireEvent('set-content', reader, doc, assessmentItems, resp.request.options.pageInfo);
-		me.fireEvent('load-annotations',ntiid, me.resolveContainers());
+		me.fireEvent('set-content', reader, doc, assessmentItems, pageInfo);
 
-		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-		//Ext.defer(Ext.callback,500,Ext,[finish,null,[reader]]);
+		//Do not attempt to load annotations from these locations
+		if(!pageInfo.isPartOfCourseNav()){
+			me.fireEvent('load-annotations',ntiid, me.resolveContainers());
+		} else {
+			me.fireEvent('load-annotations-skipped');
+		}
+
 		Ext.callback(finish,null,[reader]);
 	},
 

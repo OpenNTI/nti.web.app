@@ -52,7 +52,8 @@ Ext.define('NextThought.view.content.Reader', {
 			//beforeNavigate: 'onBeforeNavigate',
 			beginNavigate: 'onBeginNavigate',
             navigateAbort: 'onNavigationAborted',
-			navigateComplete: 'onNavigateComplete'
+			navigateComplete: 'onNavigateComplete',
+			'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 		});
 	},
 
@@ -109,6 +110,11 @@ Ext.define('NextThought.view.content.Reader', {
 		delete this.readyEventPrimed;
 		//console.warn('should-be-ready fired');
 		this.fireEvent('should-be-ready',this);
+	},
+
+
+	skipAnnotationsFireReadyOnFinish: function(){
+		this.skippedAnnotations = true;
 	},
 
 
@@ -215,11 +221,12 @@ Ext.define('NextThought.view.content.Reader', {
 			me.splash.hide();
 			me.splash.removeCls('initial');
 			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
+			if(me.skippedAnnotations){
+				delete me.skippedAnnotations;
+				me.fireReady();
+			}
 		}
 
-		if(this.annotationOffsetsCache){
-			delete this.annotationOffsetsCache.locationStatics;
-		}
 
 		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
 		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
@@ -248,13 +255,8 @@ Ext.define('NextThought.view.content.Reader', {
 			me.onNavigationAborted();
 		}
 		else {
-			//hack:
-			if(!Ext.isEmpty(pageInfo.get('content'))){
-				success.call(this,{
-					responseText: pageInfo.get('content'),
-					request:{options:{pageInfo:pageInfo,url:''}}
-				});
-				return;
+			if(!Ext.isEmpty(pageInfo.get('content')) || pageInfo.isPartOfCourseNav()){
+				proxy = this.self.MOCK_PAGE_PROXY;
 			}
 
 			proxy.request({
@@ -279,6 +281,26 @@ Ext.define('NextThought.view.content.Reader', {
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
 					Ext.String.format('reader-content[prefix={0}]',prefix||'default'))[0];
+		},
+
+
+		MOCK_PAGE_PROXY: {
+			request: function(req){
+				var pageInfo = req.pageInfo,
+					resp = {
+						getAllResponseHeaders: Ext.emptyFn,
+						getResponseHeader: Ext.emptyFn,
+						requestId: NaN,
+						responseXML: null,
+						status: 200,
+						statusText: 'OK',
+						request:{options:Ext.apply({url:''},req)},
+									//hack: ---v (getting dynamic content from the pageInfo)
+						responseText: pageInfo.get('content') || ''
+					};
+
+				Ext.callback(req.success, req.scope,[resp]);
+			}
 		}
 	}
 
