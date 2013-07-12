@@ -365,6 +365,14 @@
 
         .note-container {
             position: relative;
+
+            .meta{
+            	.subject{
+            		.whiteboard-container{
+            			display: none !important;
+            		}
+            	}
+            }
         }
 
 
