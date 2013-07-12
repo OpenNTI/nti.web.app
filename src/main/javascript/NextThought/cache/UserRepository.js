@@ -277,7 +277,11 @@ Ext.define('NextThought.cache.UserRepository', {
 					if (callbacks && callbacks.failure) {
 						callbacks.failure.call(callbacks.scope || this);
 					}
-					console.warn('result is null', username, list, url, json);
+					if(!r.loggedWarn || !r.loggedWarn[username]){
+						if(!r.loggedWarn){ r.loggedWarn = {}; }
+						r.loggedWarn[username] = true;
+						console.warn('{requestID:'+r.requestId+'} result is null', url, r.responseText);
+					}
 				}
 			}
 
