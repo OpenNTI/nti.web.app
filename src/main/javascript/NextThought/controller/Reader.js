@@ -7,11 +7,14 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	models: [
-		'PageInfo'
+		'PageInfo',
+		'course.navigation.Node'
 	],
 
 
-	stores: [],
+	stores: [
+		'course.Navigation'
+	],
 
 
 	views: [
