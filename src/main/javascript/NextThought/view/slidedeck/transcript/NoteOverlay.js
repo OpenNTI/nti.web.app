@@ -44,7 +44,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 					}
 				}
 			}
-		}).addCls('active in-gutter');
+		}).addCls('in-gutter');
 
 		this.editor.el.setVisibilityMode(Ext.dom.Element.DISPLAY);
 	},
