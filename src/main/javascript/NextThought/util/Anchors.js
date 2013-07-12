@@ -188,7 +188,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	findElementsWithTagName: function(root, name){
-		if(Ext.isFunction(root.getElementsByTagName)){
+		if(root.getElementsByTagName){
 			return root.getElementsByTagName(name);
 		}
 		return root.querySelectorAll(name);
@@ -404,7 +404,7 @@ Ext.define('NextThought.util.Anchors', {
             });
         }
         else{
-			if(Ext.isFunction(root.getElementById)){
+			if(root.getElementById){
 				potentials.push(root.getElementById(containerId));
 			}
 			else{
