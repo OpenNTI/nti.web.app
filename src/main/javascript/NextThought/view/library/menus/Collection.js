@@ -13,17 +13,25 @@ Ext.define('NextThought.view.library.menus.Collection',{
 	},
 
 
-	updateSelection: function(pageInfo,silent){
-		var ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
+	updateSelection: function(pageInfo, silent, suppressEvent){
+		var me = this,
+			ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
 			last = ContentUtils.getLineage(ntiid).last(),
-			r = this.store.findRecord('NTIID',last,0,false,true,true);
+			r = me.store.findRecord('NTIID',last,0,false,true,true);
 
+		if(!suppressEvent){
+			Ext.each(Ext.ComponentQuery.query('library-collection'), function(cmp){
+				if(cmp !== me){
+					cmp.updateSelection(pageInfo,silent,true);
+				}
+			});
+		}
 		if(r){
-			this.suppressSetLocation = Boolean(silent);
-			this.getSelectionModel().select(r);
+			me.suppressSetLocation = Boolean(silent);
+			me.getSelectionModel().select(r);
 		}
 		else{
-			this.getSelectionModel().deselectAll();
+			me.getSelectionModel().deselectAll();
 		}
 	}
 });
