@@ -1,3 +1,5 @@
+@import "notes";
+
 $video-background: #242424;
 $slidedeck-controls-background: #161616;
 $slidedeck-exit-button-gradient-top: #464646;
@@ -683,16 +685,21 @@ $experimental-support-for-svg: true;
 		}
 	}
 
-	.x-container-transcript{
+	.x-container-transcript, .x-panel-transcript{
 		background: #fafdff;
 		overflow-y: auto;
 		overflow-x: hidden;
+
+		//.note-gutter{
+		//	left: 820px;
+		//	width: 60px;
+		//}
 
 		.content-video-transcript{
 			position: relative;
 			overflow: hidden;
 			margin: 100px 20px 20px 100px;
-			width: 720px;
+			width: 760px;
 
 			.text-content{
 				color: $primary-grey;
@@ -707,6 +714,7 @@ $experimental-support-for-svg: true;
 
 					.text {
 						margin-left: 80px;
+						padding-right: 60px;
 						position: relative;
 						display: inline-block;
 
@@ -718,6 +726,22 @@ $experimental-support-for-svg: true;
 							&.active{
 								background-color: #e3f2fc;
 								border-radius: 3px;
+							}
+						}
+
+						.add-note-here{
+							position: absolute;
+							right: 0 !important;
+							width: 60px;
+							height: 28px;
+
+							&.hidden{
+								display: none;
+							}
+
+							@include note-control-box;
+							.note-here-control-box{
+								left: 16px;
 							}
 						}
 					}

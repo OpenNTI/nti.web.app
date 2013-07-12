@@ -41,7 +41,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			]},
 			{ cls:'text', cn: {
 				tag:'tpl', 'for':'group', cn:[
-					{tag:'span', 'cue-start':'{startTime}', 'cue-end':'{endTime}', html:'{text}'}
+					{tag:'span', cls:'cue', 'cue-start':'{startTime}', 'cue-end':'{endTime}', cn:[
+						{tag:'span', html:'{text}'},
+						{tag: 'span', cls:'add-note-here hidden', cn:{cls:'note-here-control-box', tag:'span'}}
+					]}
 				]
 			}}
 		]}
@@ -52,8 +55,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		this.callParent(arguments);
 		this.loadTranscript();
 
-		this.addEvents('jump-video-to');
-		this.enableBubble(['jump-video-to']);
+		this.addEvents('jump-video-to', 'transcript-ready');
+		this.enableBubble(['jump-video-to', 'transcript-ready']);
 	},
 
 
@@ -167,7 +170,66 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				scope: me,
 				'click': me.timePointerClicked
 			});
+
+			me.mon(me.el.select('.cue'), {
+				scope: me,
+				'mouseover':'mouseOver',
+//				'mousemove':'mouseOver',
+				'mouseout':'mouseOut'
+			});
+
+			me.mon(me.el.select('.cue .add-note-here'), {
+				scope: me,
+				'click': 'openEditor'
+			});
 		});
+	},
+
+
+	openEditor: function(e){
+		console.log('show editor at: ', e.getTarget('.cue'));
+		var cueEl = e.getTarget('.cue', null, true),
+			cueStart = cueEl && cueEl.getAttribute('cue-start'),
+			cueEnd = cueEl && cueEl.getAttribute('cue-end'),
+			cueBox = cueEl.dom.getBoundingClientRect();
+
+		this.fireEvent('show-editor', cueStart, cueEnd, cueEl.down('.add-note-here'));
+	},
+
+
+	mouseOver: function(e){
+		if (this.suspendMoveEvents) {
+			return;
+		}
+
+		var target = e.getTarget('.cue', null, true), me = this, box;
+		if(target){
+			box = target.down('.add-note-here');
+
+			//clearTimeout(this.mouseLeaveTimeout);
+			this.mouseLeaveTimeout = setTimeout(function () {
+				//Deselect previous cue
+				if(me.activeCueEl){
+					me.activeCueEl.down('.add-note-here').addCls('hidden');
+				}
+
+				box.removeCls('hidden');
+				me.activeCueEl = target;
+			}, 50);
+			console.log('should show the add note nib:', target);
+		}
+	},
+
+
+	mouseOut: function(e){
+		if (this.suspendMoveEvents) {
+			return;
+		}
+
+		var target = e.getTarget('.cue'), me = this,
+			box = Ext.fly(target).down('.add-note-here');
+
+		clearTimeout(this.mouseLeaveTimeout);
 	},
 
 
