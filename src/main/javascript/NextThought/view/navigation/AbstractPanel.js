@@ -9,7 +9,7 @@ Ext.define('NextThought.view.navigation.AbstractPanel',{
 		plain: true
 	},
 	items: [
-		{ region: 'west', width: 255, margin: '0 5 5 0' },
+		{ region: 'west', width: 255, margin: '0 3 3 0' },
 		{ region: 'center' }
 	],
 
