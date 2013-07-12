@@ -126,7 +126,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			top = offset - dom.scrollTop;
 
 		//if the difference in el and doms height and dom scroll top is zero then we are at the bottom
-		if(top <= 0){
+		if(top <= 20){
 			this.fetchMore();
 		}
 	},
