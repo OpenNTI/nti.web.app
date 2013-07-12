@@ -4,7 +4,9 @@ Ext.define('NextThought.model.Change', {
 		'NextThought.model.converters.GroupByTime'
 	],
 
+	idProperty: 'ID',
 	fields: [
+		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
 		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'}
