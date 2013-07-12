@@ -5,6 +5,11 @@ Ext.define('NextThought.view.course.Outline',{
 
 
 	clear: function(){
+	},
+
+
+	onNavigation: function(pageInfo){
+		this.clear();
 
 	}
 });

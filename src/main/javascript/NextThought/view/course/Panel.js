@@ -19,7 +19,8 @@ Ext.define('NextThought.view.course.Panel',{
 			return;
 		}
 
-
+		this.navigation.onNavigation(pageInfo);
+		this.body.onNavigation(pageInfo);
 	}
 
 });

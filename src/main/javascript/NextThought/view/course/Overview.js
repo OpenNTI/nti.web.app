@@ -6,5 +6,8 @@ Ext.define('NextThought.view.course.Overview',{
 
 	clear: function(){
 
-	}
+	},
+
+
+	onNavigation: function(pageInfo){}
 });
