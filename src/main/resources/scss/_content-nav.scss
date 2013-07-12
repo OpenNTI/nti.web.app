@@ -24,6 +24,8 @@
 		}
 
 		span:not(.part){
+			.x-ie &,
+			.x-ie10 &,
 			.x-gecko & {
 				top: -25px;
 				position: relative;
@@ -50,6 +52,8 @@
 				overflow: visible;
 				cursor: default;
 				margin-left: 0.4em;
+				.x-ie &,
+				.x-ie10 &,
 				.x-gecko & {
 					top: -25px;
 				}
