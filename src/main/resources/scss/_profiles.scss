@@ -835,10 +835,10 @@
 			}
 		}
 
-		.note-container.has-active-editor ~ .note-container{
+		/*.note-container.has-active-editor ~ .note-container{
 			position: relative;
 			z-index: -1;
-		}
+		}*/
 
 		.note-container.child {
 			& > .reply.first{
