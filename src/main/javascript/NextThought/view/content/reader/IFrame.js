@@ -23,6 +23,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		reader.on('destroy','destroy',
 			reader.relayEvents(this,[
 				'dismiss-popover',
+				'display-popover',
 				'iframe-ready',
 				'sync-height',
 				'content-updated',
