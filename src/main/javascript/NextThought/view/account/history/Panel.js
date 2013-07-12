@@ -209,8 +209,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	storeLoaded: function(store, records){
-		Ext.each(records, this.fillInData, this);
+	storeLoaded: function(store){
+		Ext.each(store.getRange(), this.fillInData, this);
 	},
 
 
