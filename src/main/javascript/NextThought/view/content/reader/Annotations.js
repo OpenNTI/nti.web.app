@@ -69,13 +69,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			'clear-annotations': 'clearAnnotations'
 		});
 
-		me.mon(me.annotationManager.events,'finish',me.fireReady,me,{buffer: 500});
-	},
-
-
-
-	fireReady: function(){
-		this.fireEvent('rendered');
+		me.mon(me.annotationManager.events,'finish',function(c){ me.fireEvent('rendered',c); },me,{buffer: 500});
 	},
 
 

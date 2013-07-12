@@ -210,13 +210,13 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		if(!me.gutter){
 			console.error('no gutter');
 			me.events.fireEvent('rendering');
-			me.events.fireEvent('finish');
+			me.events.fireEvent('finish',0);
 			return;
 		}
 
 		if(!me.registry){
 			me.events.fireEvent('rendering');
-			me.events.fireEvent('finish');
+			me.events.fireEvent('finish',0);
 			return;//nothing to do
 		}
 
@@ -283,7 +283,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		me.rendering = false;
 		Ext.resumeLayouts(true);
-		me.events.fireEvent('finish');
+		me.events.fireEvent('finish',renderedCount);
 		if(console.timeEnd){
 			console.timeEnd('Annotation render loop');
 		}
