@@ -75,8 +75,10 @@ Ext.define('NextThought.view.content.reader.Touch', {
             return false;
         }
         function elementIsDraggable(ele) {
-            // TODO:
-            return false;
+            if (!ele)
+                return false;
+            var obj = Ext.get(ele);
+            return obj.hasCls('draggable-area') || obj.up('.draggable-area');
         }
 
         dom.addEventListener('touchstart', function(e) {
@@ -96,15 +98,18 @@ Ext.define('NextThought.view.content.reader.Touch', {
             console.log('touchStart');
 
             setTimeout(function() {
-                if (state === s.STATE.DOWN) {
-                    console.log('long press');
-                    if (elementIsSelectable(pickedElement)) {
-                        state = s.STATE.SELECTING;
-                    }
-                    else if (elementIsDraggable(pickedElement)) {
-                        state = s.STATE.DRAGGING;
-                    }
-                    vel=0;
+                if (state !== s.STATE.DOWN)
+                    return;
+
+                console.log('long press');
+                vel=0;
+                if (elementIsSelectable(pickedElement)) {
+                    state = s.STATE.SELECTING;
+                    console.log('start selecting');
+                }
+                else if (elementIsDraggable(pickedElement)) {
+                    state = s.STATE.DRAGGING;
+                    console.log('start dragging');
                 }
             }, s.TAP_HOLD_TIME);
         }, false);
@@ -177,9 +182,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
             }
             else if (tempState === s.STATE.SELECTING) {
                 // TODO: Update Selection
+                console.log('stop selection');
             }
             else if (tempState === s.STATE.DRAGGING) {
                 // TODO: Update Dragged element
+                console.log('stop dragging');
             }
             else
                 console.warn('Unknown touch state on touchEnd!');

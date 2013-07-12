@@ -534,7 +534,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
         function hasOverlay(element) {
             if (!element || !element.tagName)
-                return;
+                return false;
 
             var types = [ 'application/vnd.nextthought.ntislidedeck',
                           'application/vnd.nextthought.naquestion',
