@@ -221,7 +221,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				box.down('.note-here-control-box').removeCls('hidden');
 				me.activeCueEl = target;
 			}, 50);
-			console.log('should show the add note nib:', target);
 		}
 	},
 
