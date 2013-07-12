@@ -223,6 +223,7 @@
 			font: italic 400 16px/25px $font;
 			margin: 0 0 10px 0;
 			color: $primary-grey;
+			word-break: break-word;
 
 			.body-divider .whiteboard-container {
 				.whiteboard-wrapper .overlay{bottom: 0;}
