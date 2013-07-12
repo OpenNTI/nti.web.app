@@ -562,5 +562,39 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         this.setClickthrough(hasClickthrough);
 
         return pickedElement;
+    },
+
+    /**
+     * Positions relative to the window
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    makeSelectionFrom: function(x1, y1, x2, y2) {
+        var iFrameDoc = this.getDocumentElement(),
+            startRange = rangeAtPoint(x1, y1),
+            endRange = rangeAtPoint(x2, y2),
+            range = iFrameDoc.createRange(),
+            sel = iFrameDoc.getSelection();
+        range.setStart(startRange.startContainer, startRange.offset);
+        range.setEnd(endRange.startContainer, endRange.offset);
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        function rangeAtPoint(x,y) {
+            var reader = this.reader,
+                hasClickthrough = this.hasClickthrough(),
+                framePos = reader.getPosition(),
+                scrolledY = reader.getScroll().top(),
+                localX = x-framePos[0],
+                localY = y-framePos[1]+scrolledY,
+                range;
+
+            this.setClickthrough(false);
+            range = iFrameDoc.caretRangeFromPoint(localX, localY);
+            this.setClickthrough(hasClickthrough);
+            return range;
+        }
     }
 });

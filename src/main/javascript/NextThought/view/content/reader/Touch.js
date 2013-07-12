@@ -62,6 +62,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
             pickedElement = null,
             initialTime,
             initialY,
+            initialX,
             lastY,
             //current movement delta
             vel;
@@ -71,12 +72,13 @@ Ext.define('NextThought.view.content.reader.Touch', {
         }
 
         function elementIsSelectable(ele) {
-            // TODO:
-            return false;
+            if (!ele) return false;
+            var tag = ele.tagName,
+                tags = ['P', 'A', 'SPAN'];
+            return Ext.Array.contains(tags, tag);
         }
         function elementIsDraggable(ele) {
-            if (!ele)
-                return false;
+            if (!ele) return false;
             var obj = Ext.get(ele);
             return obj.hasCls('draggable-area') || obj.up('.draggable-area');
         }
@@ -92,6 +94,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
             initialTime = Date.now();
             initialY = e.touches[0].pageY;
+            initialX = e.touches[0].pageX;
             lastY = initialY;
             vel = 0;
 
@@ -103,19 +106,21 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
                 console.log('long press');
                 vel=0;
-                if (elementIsSelectable(pickedElement)) {
-                    state = s.STATE.SELECTING;
-                    console.log('start selecting');
-                }
-                else if (elementIsDraggable(pickedElement)) {
+                if (elementIsDraggable(pickedElement)) {
                     state = s.STATE.DRAGGING;
                     console.log('start dragging');
+                }
+                else if (elementIsSelectable(pickedElement)) {
+                    state = s.STATE.SELECTING;
+                    console.log('start selecting');
                 }
             }, s.TAP_HOLD_TIME);
         }, false);
 
         dom.addEventListener('touchmove', function(e) {
             e.preventDefault();
+
+            var touch = e.touches[0];
 
             console.log('touchMove');
 
@@ -128,7 +133,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
                 scrollMove();
             }
             else if (state === s.STATE.SELECTING) {
-                // TODO: Update Selection
+                selectMove();
             }
             else if (state === s.STATE.DRAGGING) {
                 // TODO: Update Dragged element
@@ -137,10 +142,14 @@ Ext.define('NextThought.view.content.reader.Touch', {
                 console.warn('Unknown touch state on touchMove!');
 
             function scrollMove() {
-                var touch = e.touches[0];
                 vel = lastY - touch.pageY;
                 lastY = touch.pageY;
                 scroll.by(vel);
+            }
+
+            function selectMove() {
+                iFrame.makeSelectionFrom(initialX, initialY,
+                                         touch.pageX, touch.pageY);
             }
 
         }, false);
