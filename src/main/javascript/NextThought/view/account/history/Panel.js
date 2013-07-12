@@ -162,7 +162,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			remoteFilter: false,
 			remoteGroup: false,
 			filterOnLoad: true,
-			sortOnFilter: true,
+			sortOnFilter: true
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
