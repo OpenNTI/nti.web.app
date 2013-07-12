@@ -87,9 +87,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Only Me', checked: true, isMe: true, tabFilter:'onlyMe'},
+				{cls: 'option', text: 'Only Me', checked: false, isMe: true, tabFilter:'onlyMe'},
 				{cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
-				{cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
+				{cls: 'option', text: 'Community', checked: true, isCommunity: true, tabFilter: 'inCommunity'}
 			]
 		});
 
@@ -127,6 +127,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.filters = ['all'];
 		this.monitoredInstance = $AppConfig.userObject;
 		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
+		//this.setActiveItem
 	},
 
 
@@ -188,6 +189,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.typesMenu.show().hide();
 		this.typesMenu.el.down('.contact').hide();
 		this.typesMenu.el.down('.discussions').hide();
+		this.switchPanel(this.fromMenu.down('menuitem[text=Community]'));
 	},
 
 	switchPanel: function(item){
