@@ -10,6 +10,19 @@
 .x-component-course.course-outline{
 	background: #ffffff;
 
+	.lesson-list {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 50px;
+
+		overflow: {
+			x: visible;
+			y: auto;
+		}
+	}
+
 	.header {
 		background: #ffffff;
 		padding: 0 42px;
@@ -60,8 +73,27 @@
 
 		&.x-item-selected,&.over {
 			.date{
+				@include hardware-accelerate();
 				display: block;
+				position: fixed;
 			}
+
+			.x-gecko &{
+
+				.date {
+					top: auto !important;
+					left: auto;
+					margin: -32px 0px 0px -60px;
+				}
+
+				&.unit {
+					.date {
+						margin-top: -22px;
+					}
+				}
+			}
+
+
 
 
 			color: #ffffff;
