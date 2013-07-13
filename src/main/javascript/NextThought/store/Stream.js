@@ -115,6 +115,11 @@ Ext.define('NextThought.store.Stream', {
 	},
 
 	load: function (options) {
+		if(!this.proxy.url){
+			return;
+		}
+
+
 		options = Ext.applyIf(options || {}, {start: null});
 
 		function isMoreDetector(records, operation, success) {
