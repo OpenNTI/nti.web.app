@@ -8,6 +8,7 @@ Ext.define('NextThought.Library', {
 	],
 
 	bufferedToc: {},
+	activeLoad: {},
 
 	constructor: function(config) {
 		this.tocs = {};
@@ -216,13 +217,14 @@ Ext.define('NextThought.Library', {
 			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		if(!this.loaded && !callback){
-			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
+			Ext.log.warn('The library has not loaded yet');
 		}
 
 		index = (record && record.get('index')) || index;
 
 		function tocLoaded(q,s,r){
-			var xml;
+			var xml,
+				cb = me.activeLoad[index];
 
 			function strip(e){ Ext.fly(e).remove(); }
 
@@ -241,18 +243,25 @@ Ext.define('NextThought.Library', {
 				console.error('There was an error loading part of the library: '+url, arguments);
 			}
 
-			Ext.callback(callback,me,[record,xml]);
+			delete me.activeLoad[index];
+			Ext.callback(cb,me,[record,xml]);
 		}
 
 		try{
 			url = getURL(url);
 
+			if(me.activeLoad[index]){
+				me.activeLoad[index] = Ext.Function.createSequence(me.activeLoad[index],callback||Ext.emptyFn,null);
+				return;
+			}
+
+
+			me.activeLoad[index] = callback;
 			proxy.request({
 				ntiid: ntiid,
 				jsonpUrl: url,
 				url: url,
 				expectedContentType: 'text/xml',
-				async: !!callback,
 				scope: me,
 				callback: tocLoaded
 			});

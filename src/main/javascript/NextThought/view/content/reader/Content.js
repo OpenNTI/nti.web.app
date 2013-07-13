@@ -214,8 +214,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	buildPath: function(s){
-		var p = s.split('/'); p.splice(-1,1,'');
-		return p.join('/');
+		var p = (s||'').split('/'); p.splice(-1,1,'');
+		return (s && p.join('/')) || '';
 	},
 
 
