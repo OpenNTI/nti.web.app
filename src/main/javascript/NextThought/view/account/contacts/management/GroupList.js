@@ -16,6 +16,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	border: false,
 	preserveScrollOnRefresh: true,
 
+
 	cls: 'group-selection-list',
 	baseCls: 'selection',
 	itemCls: 'selection-list-item multiselect',
@@ -28,6 +29,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.itemSelector = '.selection-list-item';
 
 		this.allowSelect = this.allowSelect || false;
+
+		this.maxHeight = Ext.getBody().getHeight() - 12;
 
 		this.mon(this.getSelectionModel(), {
 			beforeselect: this.onBeforeSelect,
@@ -90,7 +93,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		this.mon(this.el,'mouseout', function(e){
 			if(!this.isClosing){
-				this.startHideTimeout();
+				//this.startHideTimeout();
 			}
 			this.isClosing = false;
 			this.doDismiss = true;
