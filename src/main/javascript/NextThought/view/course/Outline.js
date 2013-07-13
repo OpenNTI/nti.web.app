@@ -40,7 +40,7 @@ Ext.define('NextThought.view.course.Outline',{
 
 	listeners: {
 		select: function(s,r){
-			console.log(r.data);
+			console.log(r.data, r.getChildren());
 		}
 	},
 

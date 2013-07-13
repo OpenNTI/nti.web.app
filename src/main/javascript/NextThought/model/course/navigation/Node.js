@@ -48,14 +48,44 @@ Ext.define('NextThought.model.course.navigation.Node',{
 		},
 
 			//string displayed in the UI
-		{ name:'label', type:'string', mapping:'@label' },
+		{ name:'label', type:'string', mapping:'@label',
+			convert:function(v,m){
+				return v || Ext.DomQuery.selectValue(this.mapping,m.getAssociatedNode());
+			}
+		},
 
 			 //unit, lesson
 		{ name:'type', type:'string', mapping:'@nodeName', convert: function(v){return v && v.toLowerCase(); } },
 
 			//due date
-		{ name:'date', type:'date', mapping:'@date', dateFormat:'Y-m-d\\TH:iP', exampleValue:'2013-10-16T00:00-06:00' }
-	]
+		{ name:'date', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00Z' }
+	],
 
 
+	getAssociatedNode: function(){
+		var n = this.raw;
+		if(!this.associatedNode){
+			this.associatedNode = Ext.DomQuery.selectNode(
+					'topic[ntiid="'+n.getAttribute('topic-ntiid')
+							.replace(/:/g,'\\3a ') //no colons
+							.replace(/,/g,'\\2c ') //no commas
+							+'"]',
+					n.ownerDocument);
+		}
+		return this.associatedNode;
+	},
+
+
+	getChildren: function(){
+		var n = this.get('tocNode'),
+			c = n && n.children;
+
+		n = (c && c.length) ? n : this.getAssociatedNode();
+
+		if(!n){
+			return null;
+		}
+
+		return Ext.Array.clone(n.children);
+	}
 });
