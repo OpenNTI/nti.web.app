@@ -73,7 +73,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			Ext.callback(callback,null,args);
 
 			if(fromHistory!==true){
-				history.pushState({library:{location: ntiid}}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
+				history.pushState({library:{location: ntiid}, active:'library'}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 			}
 			if(error){
 				delete me.currentNTIID;
