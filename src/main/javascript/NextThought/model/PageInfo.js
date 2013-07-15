@@ -53,6 +53,7 @@ Ext.define('NextThought.model.PageInfo', {
 		if(!l || !toc){return false;}
 
 		return this.isPartOfCourse() && Boolean(
+				/^toc$/i.test(l.location.nodeName) ||
 				toc.querySelector('unit'+ntiid) ||
 				toc.querySelector('lesson'+ntiid.replace(/^\[/,'[topic-')));
 	}
