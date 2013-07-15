@@ -52,11 +52,17 @@ Ext.define('NextThought.controller.Stream', {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
-		var item = change.get('Item');
+		var item = change.get('Item'),
+			store = this.getStreamStore();
 
 		//add it to the root stream store, why the heck not?
 		if(!item || item.mimeType.indexOf('redaction') < 0){
-			this.getStreamStore().add(change);
+			store.add(change);
+
+			//reapply the stores filters
+			if(store.isFiltered()){
+				store.filter();
+			}
 		}
 	}
 });
