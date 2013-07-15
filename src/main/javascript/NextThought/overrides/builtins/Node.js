@@ -20,8 +20,9 @@ Ext.define('NextThought.overrides.builtins.Node',{});
 			var EA = Ext.Array;
 			return EA.filter(
 					EA.toArray(this.childNodes, 0, this.childNodes.length),
-						function(i){return i && i.nodeType!==this.TEXT_NODE;
-					});
+						function(i){
+							return i && i.nodeType!==Node.TEXT_NODE;
+						});
 		}
 	});
 }());
