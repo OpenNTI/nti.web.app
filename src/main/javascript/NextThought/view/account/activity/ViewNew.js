@@ -51,7 +51,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	id: 'activity-tab-view',
 	activeItem: 0,
 	items: [
-		{xtype: 'user-history-panel', filter:'onlyMe'},
+		{xtype: 'user-history-panel'},
 		{xtype: 'activity-panel'}
 	],
 

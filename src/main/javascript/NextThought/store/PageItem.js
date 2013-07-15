@@ -28,6 +28,7 @@ Ext.define('NextThought.store.PageItem',function(){
 			type: 'rest',
 			limitParam: 'batchSize',
 			pageParam: undefined,
+			filterParam: undefined,
 			startParam: 'batchStart',
 			reader: {
 				type: 'nti',

@@ -17,8 +17,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	storeId: 'noteHighlightStore',
-	filter: 'onlyMe',
-	filterOperator: undefined,
+	filter: 'onlyMe,Bookmarks',
+	filterOperator: '0',
 	filterMap: {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
 	},
@@ -170,13 +170,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 			sortOrder: 'descending'
 		});
 
-		s.filter([function(rec){
-			if(isMe(rec.get('Creator'))){
-				return true;
-			}
-			return rec.isFavorited();
-		}]);
-
 		this.store = s;
 
 		this.applyFilterParams();
@@ -186,6 +179,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 			add: 'recordsAdded',
 			load: 'storeLoaded'
 		});
+
+		s.filter([function(rec){
+			if(isMe(rec.get('Creator'))){
+				return true;
+			}
+			return rec.isFavorited() || rec.isBookmark;
+		}]);
 
 		this.store.load();
 		this.bindStore(this.store);
@@ -365,10 +365,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 				if(isMe(rec.get('Creator'))){ return true; }
 
 				if(Ext.Array.contains(filterTypes, 'Bookmarks')){
-					return rec.isFavorited();
+					return rec.isFavorited() || rec.isBookmark;
 				}
 			}else if(Ext.Array.contains(filterTypes, 'Bookmarks')){
-				return rec.isFavorited();
+				return rec.isFavorited() || rec.isBookmark;
 			}
 
 			return false;
