@@ -261,9 +261,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	showPopup: function(record, item){
-		var popout = NextThought.view.account.activity.Popout,
+		var popout,
 			target = Ext.get(item),
 			me = this;
+
+		if(record && record.getClassForModel) {
+			popout = record.getClassForModel('widget.activity-popout-',NextThought.view.account.activity.Popout);
+		}
 
 		function fin(pop){
 			// If the popout is destroyed, clear the activeTargetDom,
