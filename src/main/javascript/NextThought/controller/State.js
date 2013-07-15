@@ -457,8 +457,12 @@ Ext.define('NextThought.controller.State', {
 
 		try {
 			previousState = window.localStorage.getItem(this.getStateKey());
-			console.log('local state found', previousState);
-			lastLocation = Ext.decode(previousState);
+			console.log('local state found?', previousState);
+			lastLocation = previousState ? Ext.decode(previousState): null;
+
+			if(!lastLocation){
+				return defaultState;
+			}
 
 			//migrate
 			if(lastLocation.location){
@@ -474,7 +478,7 @@ Ext.define('NextThought.controller.State', {
 			return result;
 		}
 		catch (e) {
-			console.error('failed to decode local state, use default.', Globals.getError(e), window.localStorage);
+			console.error('failed to decode local state, use default.', Globals.getError(e));
 			window.localStorage.removeItem(this.getStateKey());
 			return defaultState;
 		}
