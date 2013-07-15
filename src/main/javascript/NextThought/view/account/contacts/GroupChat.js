@@ -146,6 +146,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat',{
 			listsAndGroups = Ext.getStore('FriendsList');
 
 		this.searchStore = new Ext.data.Store({
+			model: 'NextThought.model.FriendsList',
 			proxy: 'memory',
 			filters: [
 				function(rec){ return rec.get('Username') !== $AppConfig.contactsGroupName; },
