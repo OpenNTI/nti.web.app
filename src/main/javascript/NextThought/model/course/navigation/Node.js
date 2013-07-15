@@ -65,7 +65,7 @@ Ext.define('NextThought.model.course.navigation.Node',{
 	getAssociatedNode: function(){
 		var n = this.raw;
 		if(!this.associatedNode){
-			this.associatedNode = Ext.DomQuery.selectNode(
+			this.associatedNode = /topic/i.test(n.nodeName)? n : Ext.DomQuery.selectNode(
 					'topic[ntiid="'+n.getAttribute('topic-ntiid')
 							.replace(/:/g,'\\3a ') //no colons
 							.replace(/,/g,'\\2c ') //no commas
