@@ -39,8 +39,12 @@ Ext.define('NextThought.view.course.Outline',{
 
 
 	listeners: {
-		select: function(s,r){
-			console.log(r.data, r.getChildren());
+		itemclick: function() { this.fromClick = true; },
+		select: function(s,r) {
+			if( this.fromClick ) {
+				this.fireEvent('set-location', r.getId());
+			}
+			delete this.fromClick;
 		}
 	},
 
@@ -52,21 +56,25 @@ Ext.define('NextThought.view.course.Outline',{
 
 
 	onNavigation: function(pageInfo){
-		var s,
-			l = ContentUtils.getLocation(pageInfo),
-			t = l && l.title,
-			course = t && t.getId();
+		var s = this.getCourseStore(pageInfo),
+			r;
 
-		if(this.currentCourse === course){
-			return;
+		if(this.store !== s){
+			this.clear();
+			if( s ){
+				this.bindStore(s);
+			}
 		}
 
-		this.currentCourse = course;
-		this.clear();
+		r = s.findRecord('NTIID', pageInfo.getId(), false, true, true);
+		if(!r){
+			console.warn('No record',pageInfo);
+			return;
+		}
+		console.debug('Hey');
+		this.getSelectionModel().select(r);
+	},
 
-		s = new NextThought.store.course.Navigation();
-		this.bindStore(s);
 
-		s.loadRawData(l.toc);
-	}
+	getCourseStore: DelegateFactory.getDelegated()
 });
