@@ -56,17 +56,45 @@ Ext.define('NextThought.view.account.Identity',{
 
 
     afterRender: function(){
-		var me = this,
-			el = me.el;
+	    this.callParent(arguments);
 
-	    me.callParent(arguments);
-
-        me.mon(el, 'mouseover', function(){
-            me.menu.showBy(el, 'tr-br', [0,0]);
+        this.mon(this.el, {
+	        'mouseover':'startToShowMenu',
+	        'mouseout':'startToHideMenu'
         });
 
-        me.menu.setWidth(me.el.up('.sidebar').getWidth());
+	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
 
-	    me.enableProfileClicks(me.avatar);
+        this.menu.setWidth(this.el.up('.sidebar').getWidth());
+
+	    this.enableProfileClicks(this.avatar);
+    },
+
+
+	cancelHideShowEvents: function(){
+		clearTimeout(this.showTimout);
+		clearTimeout(this.hideTimout);
+	},
+
+
+	startToShowMenu: function(){
+		var me = this;
+
+		this.cancelHideShowEvents();
+
+		this.showTimout = setTimeout(function(){
+	        me.menu.showBy(me.el, 'tr-br', [0,0]);
+		},500);
+    },
+
+
+	startToHideMenu: function(){
+		var me = this;
+
+		this.cancelHideShowEvents();
+
+		this.hideTimout = setTimeout(function(){
+	        me.menu.hide();
+		},500);
     }
 });
