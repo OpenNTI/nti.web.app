@@ -8,6 +8,14 @@ Ext.define('NextThought.util.Annotations',{
 	singleton: true,
 
 
+	// Recursively go up to the root of the a note.
+	getNoteRoot: function(rec){
+		var root = rec.parent || rec;
+		while(root.parent){
+			root = root.parent;
+		}
+		return root;
+	},
 //needs testing? where did the test go?
 	/**
 	 * From a reply, build its absent parent

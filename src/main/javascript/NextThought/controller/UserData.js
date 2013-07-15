@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.app.domain.Model',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
+		'NextThought.util.Annotations',
 		'NextThought.proxy.Socket'
 	],
 
@@ -1072,11 +1073,13 @@ Ext.define('NextThought.controller.UserData', {
 		if (!Ext.isArray(replyBody)){ replyBody = [replyBody];}
 
 		//define our note object:
-		var replyRecord = recordRepliedTo.makeReply();
+		var replyRecord = recordRepliedTo.makeReply(),
+			root = AnnotationUtils.getNoteRoot(recordRepliedTo);
+
 		replyRecord.set('body', replyBody);
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
-		if(!recordRepliedTo.store){
+		if(!root.store ){
 			callback = Ext.Function.createInterceptor(callback,function(s,n){
 				if(s){
 					recordRepliedTo.fireEvent('child-added',n);
