@@ -202,7 +202,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
 		this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
-		this.typesMenu.el.down('.discussions')[(newTab.isMe)? 'hide' : 'show']();
+		this.typesMenu.el.down('.discussions')[(newTab.isContacts)? 'show' : 'hide']();
 		
 		if(newTab.isContacts){
 			this.applyFilters('notInCommunity');
