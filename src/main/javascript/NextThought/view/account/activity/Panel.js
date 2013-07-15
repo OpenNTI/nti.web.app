@@ -141,10 +141,10 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	}, 20),
 
 	addMask: function(width, height){
-		var el = Ext.get(this.el.dom.firstChild),
-			mask = this.el.mask('Loading...');
+		var el =  this.el && Ext.get(this.el.dom.firstChild),
+			mask = this.el && this.el.mask('Loading...');
 
-		if(el.getHeight() > 0){
+		if( el && el.getHeight() > 0){
 			mask.setHeight(el.getHeight());
 		}
 	},
@@ -687,6 +687,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			filterOperator: (filterTypes.length > 1)? '0' : '1',
 			accept: mimeTypes.join(',')
 		});
+
+		this.addMask();
 
 		s.load();
 	}
