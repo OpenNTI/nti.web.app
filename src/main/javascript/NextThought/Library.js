@@ -285,7 +285,7 @@ Ext.define('NextThought.Library', {
 
 
 	resolve: function(toc, title, containerId, report) {
-		var elts, ix, topic;
+		var elts, ix, topic, EA = Ext.Array;
 
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 				return {
@@ -297,7 +297,10 @@ Ext.define('NextThought.Library', {
 			};
 		}
 
-		elts = toc.getElementsByTagName( 'topic' );//returns a flat list of ALL topic tags. No need to recurse
+		//returns a flat list of ALL topic tags. No need to recurse
+		elts = EA.toArray(toc.getElementsByTagName( 'topic' ));
+		// add units to this list
+		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'unit' )));
 
 		for( ix=elts.length-1; ix >= 0; ix-- ) {
 			topic = elts[ix];
