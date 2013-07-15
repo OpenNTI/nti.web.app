@@ -652,6 +652,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	setContext: function(doc,cleanRoot){
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.setContext,this,arguments),this,{single:true});
+			return;
+		}
 		var r = this.record, newContext;
 		try {
 			this.context.setHTML('');

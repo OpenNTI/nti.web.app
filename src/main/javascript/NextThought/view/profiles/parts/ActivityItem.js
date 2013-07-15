@@ -204,7 +204,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			me.contextEl.show();
 			me.contextEl.mask('Loading...');
 			me.loadContext(function(){
-				me.contextEl.unmask();
+				if( me.contextEl ){
+					me.contextEl.unmask();
+				}
 			});
 		}
 	},
@@ -224,7 +226,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 	setContext: function(){
 		this.callParent(arguments);
-		this.context.select('iframe').remove();
+		if( this.context ){
+			this.context.select('iframe').remove();
+		}
 	},
 
 
