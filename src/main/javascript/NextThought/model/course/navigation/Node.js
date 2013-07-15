@@ -30,7 +30,7 @@ Ext.define('NextThought.model.course.navigation.Node',{
 				function toPostionString(n){
 					var p = n && n.parentNode;
 					if(!p){return 0;}
-					return [toPostionString(p), Ext.Array.indexOf(p.children||p.childNodes,n)].join(',');
+					return [toPostionString(p), Ext.Array.indexOf(p.getChildren(),n)].join(',');
 				}
 				return toPostionString(m.raw);
 			}
@@ -78,7 +78,7 @@ Ext.define('NextThought.model.course.navigation.Node',{
 
 	getChildren: function(){
 		var n = this.get('tocNode'),
-			c = n && n.children;
+			c = n && n.getChildren();
 
 		n = (c && c.length) ? n : this.getAssociatedNode();
 
@@ -86,6 +86,6 @@ Ext.define('NextThought.model.course.navigation.Node',{
 			return null;
 		}
 
-		return Ext.Array.clone(n.children);
+		return Ext.Array.clone(n.getChildren());
 	}
 });
