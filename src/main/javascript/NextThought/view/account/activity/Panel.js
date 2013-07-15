@@ -21,6 +21,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	cls: 'activity-panel',
 
 
+	filter: 'inCommunity',
+
 	items: [
 		{
 			activitiesHolder: 1,
@@ -286,6 +288,14 @@ Ext.define('NextThought.view.account.activity.Panel',{
 					cn: [' No Activity Yet']
 				});
 			}
+			container.updateLayout();
+		}
+
+		if(store.getCount() === 0){
+			Ext.DomHelper.overwrite(container.getEl(),{
+				cls:"activity nothing rhp-empty-list",
+				cn: ['No Activity Yet']
+			});
 			container.updateLayout();
 		}
 
@@ -660,9 +670,11 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			return;
 		}
 
-		if(Ext.isEmpty(filterTypes)){
+		if(!Ext.Array.contains(filterTypes,'notInCommunity') && !Ext.Array.contains(filterTypes, 'inCommunity')){
 			filterTypes.push(this.filter);
 		}
+
+		this.filter = (Ext.Array.contains(filterTypes,'notInCommunity'))? 'notInCommunity' : 'inCommunity';
 
 		var s = this.getStore();
 
