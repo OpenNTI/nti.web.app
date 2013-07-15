@@ -138,6 +138,10 @@ Ext.define('NextThought.store.PageItem',function(){
 			//get added to the store:
 			this.callParent(arguments);
 
+			if(this.isFiltered()){
+				Ext.defer(this.filter,1,this);
+			}
+
 			function adoptChild(parent, child){
 				//found our parent:
 				child.parent = parent;

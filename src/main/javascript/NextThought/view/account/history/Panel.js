@@ -357,9 +357,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		s.clearFilter(true);
 		s.addFilter([function(rec){
-			if(isMe(rec.get('Creator'))){ return true; }
+			if(Ext.Array.contains(filterTypes, 'onlyMe')){
+				if(isMe(rec.get('Creator'))){ return true; }
 
-			if(Ext.Array.contains(filterTypes, 'Bookmarks')){
+				if(Ext.Array.contains(filterTypes, 'Bookmarks')){
+					return rec.isFavorited();
+				}
+			}else if(Ext.Array.contains(filterTypes, 'Bookmarks')){
 				return rec.isFavorited();
 			}
 
