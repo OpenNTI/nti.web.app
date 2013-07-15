@@ -4,6 +4,18 @@ Ext.define('NextThought.store.Library',{
 		'NextThought.model.Title'
 	],
 	model: 'NextThought.model.Title',
+
+	buffered: false,
+	clearOnPageLoad: true,
+	clearRemovedOnLoad: true,
+	sortOnLoad: true,
+	statefulFilters: false,
+	remoteSort: false,
+	remoteFilter: false,
+	remoteGroup: false,
+	filterOnLoad: true,
+	sortOnFilter: true,
+
 	proxy: {
 		type: 'ajax',
 		headers: {
@@ -14,7 +26,19 @@ Ext.define('NextThought.store.Library',{
 		reader: {
 			type: 'json',
 			root: 'titles'
-		}
+		},
+
+		//Don't send any params with this store load.
+	    groupParam:             undefined,
+	    groupDirectionParam:    undefined,
+	    sortParam:              undefined,
+	    filterParam:            undefined,
+	    directionParam:         undefined,
+	    idParam:                undefined,
+		//When we start paging the library, we will define these
+		pageParam:              undefined,
+	    startParam:             undefined,
+	    limitParam:             undefined
 	},
 	sorters: [
 		{
