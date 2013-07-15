@@ -152,6 +152,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			}
 		}).addCls('active in-gutter');
 
+		this.editor.focus();
+
 		this.editor.alignTo(this.data.box,'t-t?');
 		this.editor.rtlSetLocalX(0);
 		if(this.editor.getLocalY()<59){
