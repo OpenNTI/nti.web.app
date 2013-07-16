@@ -465,7 +465,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		if(metaData){
 			Ext.each(metaNames, function(tag){
 				var meta;
-				if(me.reader.getContent().hasOwnProperty(tag)){
+				if(metaData.hasOwnProperty(tag)){
 					meta = doc.createElement('meta');
 					meta.setAttribute('name',tag);
 					meta.setAttribute('content', metaData[tag]);
