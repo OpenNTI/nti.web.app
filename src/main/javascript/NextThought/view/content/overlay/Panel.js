@@ -7,8 +7,11 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 	placementHolderTpl: Ext.DomHelper.createTemplate({type:'application/vnd.nextthought.placeholder'}),
 
 	inheritableStatics: {
+		relayout: Ext.Function.createBuffered(function(){
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'),function(p){p.updateLayout();}); },10),
+
 		syncPositioning : Ext.Function.createBuffered(function(){
-			Ext.each(Ext.ComponentQuery.query('overlayed-panel'),function(q){ q.syncTop(); }); },10)
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'),function(p){ p.syncTop(); }); },10)
 	},
 
 	representsUserDataContainer: false,
@@ -122,7 +125,6 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 				ctTop = this.el.up('.x-reader-pane').getY(),
 				top = (myTop + ctTop) - o.scrollTop;
 			this.el.setY(top);
-			this.updateLayout({isRoot:true});
 		}
 		catch(e){
 			console.debug(e.message);

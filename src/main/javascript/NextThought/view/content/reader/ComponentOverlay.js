@@ -16,7 +16,9 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 			'image-loaded': 'adjustOverlayedPanels',
 			'afterRender': 'insertComponentOverlay',
 			'afterLayout': function(){
-				NextThought.view.content.overlay.Panel.syncPositioning();
+				var p = NextThought.view.content.overlay.Panel;
+				p.relayout();
+				p.syncPositioning();
 			}
 		});
 
