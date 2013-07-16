@@ -106,13 +106,11 @@
 
 
 	.forums {
-		@include icon('main-nav-forums',$top: 13px, $left: 7px);
+		@include icon('course-nav-forum',$top: 14px, $left: 15px);
 		width: 60px;
 
-		&::after{height: 40px;}
-
 		&:hover::after{
-			@include sprite($icons,'main-nav-forums_active');
+			@include sprite($icons,'course-nav-forum_active');
 		}
 	}
 
