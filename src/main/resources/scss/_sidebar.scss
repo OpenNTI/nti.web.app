@@ -5,7 +5,7 @@
 	color: $tertiary-grey !important;
 }
 
-.sidebar{
+.x-panel-sidebar{
 	&::before {
 		content: '';
 		position: absolute;
@@ -44,7 +44,7 @@
 
 
 .sidebar-tab-bar-sidebar {
-	.sidebar.down & {
+	.x-panel-sidebar.down & {
 		background: #f3f3f3;
 	}
 	background: #ebebec;
