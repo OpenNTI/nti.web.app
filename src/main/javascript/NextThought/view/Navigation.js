@@ -83,6 +83,10 @@ Ext.define('NextThought.view.Navigation',{
 		if(!$AppConfig.service.canHaveForum()){
 			this.el.down('.forums').remove();
 		}
+
+		if(!$AppConfig.service.canShare()){
+			this.el.down('.contacts').remove();
+		}
 	},
 
 
