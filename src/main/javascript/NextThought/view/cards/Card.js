@@ -68,7 +68,7 @@ Ext.define('NextThought.view.cards.Card',{
 		this.mon(this.el,'click','onCardClicked',this);
 
 		try{
-			if(this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
+			if(this.reader && this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
 				Ext.defer(this.onCardClicked,1,this);
 			}
 		}
