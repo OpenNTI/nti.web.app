@@ -28,7 +28,7 @@ Ext.define('NextThought.view.Navigation',{
 		{
 			'data-view': 'library',
 			'data-qtip':'Library',
-			cls: 'library',
+			cls: 'library x-menu',
 			cn:[
 				{ cls: 'image' },
 				{
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.Navigation',{
 		},
 		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums' },
 		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts' },
-		{ cls: 'search', 'data-qtip':'Search','data-view': 'search' }
+		{ cls: 'search x-menu', 'data-qtip':'Search','data-view': 'search' }
 	]),
 
 	renderSelectors:{
@@ -167,18 +167,22 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 	setActive: function(el){
-
+		this.el.select('[data-view]').removeCls('active');
+		Ext.get(el).addCls('active');
 	},
 
 
 	onClick: function(e){
-		var t = e.getTarget('[data-view]'),
+		var t = e.getTarget('[data-view]',null,true),
 			viewId = t && t.getAttribute('data-view');
 
 		
 		if(!Ext.isEmpty(viewId)){
 			if(viewId === 'library'){
 				this.stopShowHide.call(this.libraryMenu);
+				if(t.hasCls('active')){
+					this.libraryMenu[this.libraryMenu.isVisible()?'hide':'show']();
+				}
 			}
 
 			if(viewId === 'search'){
