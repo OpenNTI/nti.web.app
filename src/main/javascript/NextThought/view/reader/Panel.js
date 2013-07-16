@@ -16,7 +16,7 @@ Ext.define('NextThought.view.reader.Panel',{
 	},
 
 	items:[{
-		region: 'west',
+		region: 'center',
 		layout: {
 			type: 'vbox',
 			align: 'stretch'
@@ -26,7 +26,8 @@ Ext.define('NextThought.view.reader.Panel',{
 			{ xtype: 'reader-content', flex: 1 }
 		]
 	},{
-		region: 'center',
+		width: 258,
+		region: 'east',
 		xtype: 'tabpanel',
 		ui: 'notes-and-discussion',
 		tabBar: {

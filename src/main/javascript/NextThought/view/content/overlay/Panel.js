@@ -122,6 +122,7 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 				ctTop = this.el.up('.x-reader-pane').getY(),
 				top = (myTop + ctTop) - o.scrollTop;
 			this.el.setY(top);
+			this.updateLayout({isRoot:true});
 		}
 		catch(e){
 			console.debug(e.message);

@@ -185,7 +185,7 @@
 	position: absolute;
 	top: 0;
 	right: 0 !important;
-	left: 725px;
+	width: 60px;
 	//border-right: 1px solid #eee;
 
 	.note-here-control-box {
@@ -204,7 +204,7 @@
 		cursor: pointer;
 
 		&.occupied {
-			left: -35px;
+			left: 30px;
 		}
 
 		&.note-overlay-hidden{
