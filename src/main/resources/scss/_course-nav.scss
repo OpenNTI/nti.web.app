@@ -182,7 +182,25 @@
 .x-container-course {
 	&.course-overview{
 		background: #ffffff;
-
 		padding: 25px 30px;
+	}
+
+	&.overview-section{
+		h2 {
+			margin: 50px 0 5px 0;
+			font: normal 300 24px/45px $font;
+			color: $primary-grey;
+		}
+
+		.content-card {
+			.thumbnail{
+				width: 100px;
+				height: 125px;
+			}
+			.meta {
+				padding-top: 30px;
+				margin-left: 120px;
+			}
+		}
 	}
 }

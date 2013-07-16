@@ -6,6 +6,7 @@ Ext.define('NextThought.view.course.Overview',{
 
 	requires:[
 		'NextThought.view.course.overview.Header',
+		'NextThought.view.course.overview.Section',
 		'NextThought.view.course.overview.Topic',
 		'NextThought.view.course.overview.ContentLink'
 	],
@@ -34,7 +35,8 @@ Ext.define('NextThought.view.course.Overview',{
 	onNodeSelected: function(s,r){
 		var me = this,
 			locInfo,
-			items = [{xtype: 'course-overview-header', record:r}];
+			items = [],
+			kinds = {};
 		//console.debug('Select???',arguments);
 
 		if(!r || r.getId() === me.currentPage){
@@ -48,20 +50,39 @@ Ext.define('NextThought.view.course.Overview',{
 		me.currentPage = r.getId();
 
 		Ext.each(r.getChildren(),function(i){
+			var c, t;
 			i = me.getComponentForNode(i,locInfo);
-			if( i ){
-				items.push(i);
+			t = i && i.xtype;
+			if( t ){
+				c = kinds[t];
+				if(t !== 'course-overview-topic'){
+					if(!c){
+						c = kinds[t] = {
+							xtype: 'course-overview-section',
+							title: 'Section '+t,
+							items: []
+						};
+						items.push(c);
+					}
+					c.items.push(i);
+				}
+				else {
+					items.push(i);
+				}
+
 			}
 		});
 
-		me.add(items);
+
+
+		me.add([{xtype: 'course-overview-header', record:r}].concat(items));
 	},
 
 
 	getComponentForNode: function(node,info){
 		var type = node && node.nodeName;
 
-		if(/^content:related$/i.test(type)){
+		if(/^content:related$/i.test(type) || /^object$/i.test(type)){
 			type = node.getAttribute('type');
 			type = type && type.replace(/^application\/vnd\.nextthought\./,'');
 		}
