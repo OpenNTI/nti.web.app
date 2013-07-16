@@ -378,6 +378,11 @@ div.no-content-splash {
 	top: 0;
 	right: 10px;
 	z-index: 10;
+	//prevent note controls from being visible behind.
+	background: white;
+	overflow: hidden;
+	padding-bottom: 12px;
+	padding-left: 10px;
 
 	.meta {
 		position: relative;
