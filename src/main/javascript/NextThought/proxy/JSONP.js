@@ -12,21 +12,25 @@ Ext.define('NextThought.proxy.JSONP',{
 	 *   scope
 	 */
 	request: function(options){
-		console.log("JSONP.request", arguments);
-		var me = this, opts = Ext.apply({},options);
+		var me = this,
+			opts = Ext.apply({},options),
+			script,
+			t;
+
 		function jsonp(script){
+			clearTimeout(t);
 			var resp = {
 				responseText: me.getContent(opts.ntiid,opts.expectedContentType),
 				request: { options: opts }
 			};
-
+			console.log("JSONP.request completed", resp.responseText.length);
 			opts.callback.call(opts.scope||window,opts,true,resp);
 			opts.success.call(opts.scope||window,resp);
 			Ext.fly(script).remove();
-
 		}
 
 		function onError(script){
+			clearTimeout(t);
 			Ext.fly(script).remove();
 			console.error('PROBLEMS!', opts);
 
@@ -45,7 +49,12 @@ Ext.define('NextThought.proxy.JSONP',{
 		opts.failure = opts.failure || function emptyFailure(){};
 		opts.callback = opts.callback || function emptyCallback(){};
 
-		Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
+		t = setTimeout(function(){
+			console.warn('Timed out: '+opts.jsonpUrl);
+			onError(script);
+		},60000);
+
+		script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
 	},
 
 	getContent: function(ntiid,type){
