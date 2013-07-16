@@ -211,6 +211,17 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	storeLoaded: function(store){
 		Ext.each(store.getRange(), this.fillInData, this);
+
+		this.maybeShowMoreItems();
+	},
+
+	maybeShowMoreItems: function(){
+		var viewportHeight = Ext.Element.getViewportHeight(),
+			min = viewportHeight / 100;
+
+		if(this.store.count() < min){
+			this.prefetchNext();
+		}
 	},
 
 
