@@ -12,6 +12,11 @@ Ext.define('NextThought.view.course.Overview',{
 	],
 
 
+	SECTION_TITLE_MAP: {
+		'course-overview-content': 'Supplemental Reading'
+	},
+
+
 	getCourseStore: DelegateFactory.getDelegated(),
 	getSelectionModel: DelegateFactory.getDelegated(),
 
@@ -34,6 +39,7 @@ Ext.define('NextThought.view.course.Overview',{
 
 	onNodeSelected: function(s,r){
 		var me = this,
+			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			locInfo,
 			items = [],
 			kinds = {};
@@ -59,7 +65,7 @@ Ext.define('NextThought.view.course.Overview',{
 					if(!c){
 						c = kinds[t] = {
 							xtype: 'course-overview-section',
-							title: 'Section '+t,
+							title: SECTION_TITLE_MAP[t] || 'Section '+t,
 							items: []
 						};
 						items.push(c);
