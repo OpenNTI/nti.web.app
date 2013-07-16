@@ -26,6 +26,13 @@ Ext.define('NextThought.view.SideBar',{
 	ui: 'sidebar',
 	cls: 'sidebar',
 
+	preventBringToFront:true,
+	listeners: {
+		activate: function(){
+			Ext.WindowManager.sendToBack(this);
+		}
+	},
+
 	constructor: function(){
 		var contactsType = 'disabled-contacts-view',
 			history = !isFeature('remove-history-tab');
