@@ -50,7 +50,6 @@ Ext.define('NextThought.view.course.Outline',{
 
 
 	clear: function(){
-		this.store.removeAll();
 		this.bindStore('ext-empty-store');
 	},
 
