@@ -40,6 +40,9 @@ Ext.define('NextThought.view.course.Outline',{
 
 	listeners: {
 		itemclick: function() { this.fromClick = true; },
+		beforeselect: function(s,r){
+			return r.get('type') !== 'unit';
+		},
 		select: function(s,r) {
 			if( this.fromClick ) {
 				this.fireEvent('set-location', r.getId());

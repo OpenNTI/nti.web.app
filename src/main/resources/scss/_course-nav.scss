@@ -112,7 +112,7 @@
 				.date {
 					top: -3px;
 				}
-
+				cursor: default;
 				text-transform: uppercase;
 				background: #fafafa;
 				color: $tertiary-grey;
@@ -120,17 +120,17 @@
 				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
 				z-index: 1;
 
-				&.x-item-selected {
-					color: #ffffff;
-					font-weight: 600;
-					background: $primary-blue;
-					box-shadow: inset 2px 0 0 1px #107eed;
-				}
-
-				&.over {
-					background: #f0f0f0;
-					box-shadow: inset 2px 0 0 1px #cfcfcf;
-				}
+				//&.x-item-selected {
+				//	color: #ffffff;
+				//	font-weight: 600;
+				//	background: $primary-blue;
+				//	box-shadow: inset 2px 0 0 1px #107eed;
+				//}
+				//
+				//&.over {
+				//	background: #f0f0f0;
+				//	box-shadow: inset 2px 0 0 1px #cfcfcf;
+				//}
 			}
 		}
 	}
