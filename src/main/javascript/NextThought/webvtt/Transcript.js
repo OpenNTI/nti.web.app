@@ -4,11 +4,13 @@
  * @author Bryan Hoke
  */
 
-Ext.define('NextThought.webvtt.Transcript', function() {
+Ext.define('NextThought.webvtt.Transcript', {
+	requires:['NextThought.model.transcript.Cue'],
+
 	/*@private
 	 * RegExps which are used throughout the program.
 	 */
-	var regexp = {
+	regexp: {
 		// Matches everything except a line break
 		reNotLF: /[^\u000a]*/,
 		// Matches a sequence of line breaks
@@ -39,11 +41,11 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		reSignedNumbersNoTail: /-?(\d)*/,
 		// Matches sequences which contain characters other than percents and digits
 		rePerDigits: /.*[^\u0025\d].*/
-	};
+	},
 	/*@private
 	 * Used to store variables used for scratchwork and which are no longer needed after the Transcript is created
 	 */
-	var scratch = {
+	scratch: {
 		// 2. Pointer into fileContent
 		position: 0,
 		// 3. Used to buffer lines
@@ -62,29 +64,29 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		fileContent: '',
 		// Whether line feeds in cue text should be ignored
 		ignoreLFs: false
-	};
+	},
 
 
 	/*@private
 	 * Used to signal that the parser is finished
 	 */
-	function signalHalt() {
+	signalHalt: function() {
 		//        console.debug('End');
-		scratch.halt = true;
+		this.scratch.halt = true;
 		return false;
-	}
+	},
 
 
 	/*@private
 	 * Used to signal that an error has occurred
 	 */
-	function signalError(msg) {
+	signalError: function(msg){
 		console.error(msg);
 		Ext.Error.raise({
 			message: msg,
-			lineNumber: scratch.lineNo
+			lineNumber: this.scratch.lineNo
 		});
-	}
+	},
 
 
 	/*@private
@@ -93,8 +95,10 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param re The RegExp to match
 	 * @param canBeEmpty If this is false, throw an error if there is no match. Otherwise sets line to the empty string.
 	 */
-	function scan(re, canBeEmpty) {
-		var match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+	scan: function(re, canBeEmpty){
+		var scratch= this.scratch,
+			match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+
 		if (match !== null) {
 			scratch.line = match;
 			scratch.position += scratch.line.length;
@@ -102,10 +106,10 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 			if (canBeEmpty) {
 				scratch.line = '';
 			} else {
-				signalError('Expected '+re+' at line '+scratch.lineNo);
+				this.signalError('Expected '+re+' at line '+scratch.lineNo);
 			}
 		}
-	}
+	},
 
 
 	/*@private
@@ -114,14 +118,16 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param canBeEmpty If this is false, throw an error if there is no match
 	 * @param re The RegExp to match
 	 */
-	function skip(re, canBeEmpty) {
-		var match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+	skip: function(re, canBeEmpty){
+		var scratch = this.scratch,
+			match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+
 		if (match !== null) {
 			scratch.position += match.length;
 		} else if (!canBeEmpty) {
-			signalError('Expected '+re+' at line '+scratch.lineNo);
+			this.signalError('Expected '+re+' at line '+scratch.lineNo);
 		}
-	}
+	},
 
 
 	/*@private
@@ -132,7 +138,7 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param input The contents of the WebVTT file
 	 * @return The pre-processed contents of the WebVTT file
 	 */
-	function preProcess(input) {
+	preProcess: function(input){
 		var output = input; // Unnecessary?
 		var reNull = /\u0000/g;
 		var reCRLF = /\u000d\u000a/g;
@@ -143,52 +149,58 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		output = output.replace(reCR, '\u000a');
 
 		return output;
-	}
+	},
 
 
 	/*@private
 	 * Verifies that the WebVTT file has a proper file signature.<br>
 	 * Throws an error if it does not.
 	 */
-	function verifySignature() {
-		var errMsg = 'Improper file signature: must be "WEBVTT"';
+	verifySignature: function(){
+		var regexp = this.regexp,
+			scratch = this.scratch,
+			errMsg = 'Improper file signature: must be "WEBVTT"';
+
 		// 4. Collect sequence of characters that are not line feeds
-		scan(regexp.reNotLF);
+		this.scan(regexp.reNotLF);
 		// 5. If too short
 		if (scratch.line.length < 6) {
-			signalError(errMsg);
+			this.signalError(errMsg);
 		}
 		// 6. If wrong string
 		else if (scratch.line.length === 6) {
 			if (scratch.line !== 'WEBVTT') {
-				signalError(errMsg);
+				this.signalError(errMsg);
 			}
 			// 7. If not WEBVTT followed by a space/tab
 			else if (scratch.line.length > 6) {
 				if (scratch.line.substr(0, 6) !== 'WEBVTT') {
-					signalError(errMsg);
+					this.signalError(errMsg);
 				}
 				// 7th char must be a space or a tab
 				if (scratch.line.charCodeAt(6) !== 32 || scratch.line.charCodeAt(6) !== 9) {
-					signalError(errMsg);
+					this.signalError(errMsg);
 				}
 			}
 		}
-	}
+	},
 
 
 	/*@private
 	 * Collects header string(s)
 	 * @return True if this should repeat, false if not
 	 */
-	function header() {
+	getHeader: function(){
+		var regexp = this.regexp,
+			scratch = this.scratch;
+
 		// 10. Collect header string
-		scan(regexp.reNotLF, true);
+		this.scan(regexp.reNotLF, true);
 		// 11. Halt if we're at the end of the file content
 		if (scratch.position > scratch.fileContent.length) {
 			this.headers.push(scratch.line);
 			//            console.debug('Header collected: '+scratch.line);
-			return signalHalt();
+			return this.signalHalt();
 		}
 		// 12. Advance past current line feed
 		scratch.position++;
@@ -205,23 +217,26 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// Otherwise repeat this phase
 		this.headers.push(scratch.line);
 		return true;
-	}
+	},
 
 
 	/*@private
 	 * Collects all of the cues in the file
 	 * @return Whether cueLoop should be repeated
 	 */
-	function cueLoop() {
+	cueLoop: function(){
+		var scratch = this.scratch,
+			regexp = this.regexp;
+
 		// Collect a line if not already collected
 		if (!scratch.alreadyCollectedLine) {
 			// 16. Skip line feeds
-			skip(regexp.reLF, true);
+			this.skip(regexp.reLF, true);
 			// 17. Get next sequence delineated by a line feed
-			scan(regexp.reNotLF, true);
+			this.scan(regexp.reNotLF, true);
 			// 18. Halt if at end of file
 			if (scratch.line === '') {
-				return signalHalt();
+				return this.signalHalt();
 			}
 		}
 		// 19. Cue creation
@@ -229,7 +244,7 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// If line isn't a timing (doesn't contain "-->") then it should be a cue identifier
 		if (!regexp.reArrow.test(scratch.line)) {
 			// Attempt to collect the cue identifier
-			if (!collectIdentifier.call(this)) {
+			if (!this.collectIdentifier()) {
 				if (scratch.halt) {
 					return false;
 				} // else
@@ -239,41 +254,44 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// 35. Timings
 		scratch.alreadyCollectedLine = false;
 		// 36. Collect timings and settings for cue and line
-		if (scratch.cue = collectTimingsAndSettings.call(this, scratch.cue, scratch.line)) { // Else, bad cue
+		if (scratch.cue = this.collectTimingsAndSettings(scratch.cue, scratch.line)) { // Else, bad cue
 			// 37. Prepare to collect cue text
 			scratch.cueText = '';
 			// 38. Cue text loop
-			while (cueTextLoop.call(this));
+			while (this.cueTextLoop.call(this));
 			// Repeat cueLoop
 			return true;
 		} else { // 49. Bad cue -- cue is discarded
 			// 50. Bad cue loop
-			while (badCueLoop.call(this));
-			return (!scratch.halt);
+			while (this.badCueLoop.call(this));
+			return !scratch.halt;
 		}
-	}
+	},
 
 
 	/*@private
 	 * Collects a cue identifier or signals parsing to halt
 	 * @return Whether a cue identifier was collected successfully
 	 */
-	function collectIdentifier() {
+	 collectIdentifier: function(){
+		var scratch = this.scratch,
+			regexp = this.regexp;
+
 		// 30. Set the cue's identifier
-		scratch.cue.setIdentifier(scratch.line);
+		scratch.cue.identifier = scratch.line;
 		// 31. Halt if at end of file
 		if (scratch.position >= scratch.fileContent.length) {
-			return signalHalt();
+			return this.signalHalt();
 		}
 		// 32. Skip line feed if at one
 		if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
 			scratch.position++;
 		}
 		// 33. Read until the next LF
-		scan(regexp.reNotLF, true);
+		this.scan(regexp.reNotLF, true);
 		// 34. Discard and read another cue if we read an empty string
 		return (scratch.line !== '');
-	}
+	},
 
 
 	/*@private
@@ -282,17 +300,20 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param input A sequence containing cue timing and setting information.
 	 * @return The cue with timings/settings added, or false if there was an error
 	 */
-	function collectTimingsAndSettings(cue, input) {
+	collectTimingsAndSettings: function(cue, input){
 		// 1. input // 2. position
-		var pos = 0;
-		var remainder;
-		var collected;
+		var pos = 0,
+			remainder,
+			collected,
+			regexp = this.regexp,
+			scratch = this.scratch;
+
 		// 3. Skip whitespace
 		pos += regexp.reWS.exec(input)[0].length;
 		// 4. Collect starting timestamp
-		collected = collectTimestamp.call(this, input, pos);
+		collected = this.collectTimestamp(input, pos);
 		if (collected) {
-			cue.setStartTime(collected['timestamp']);
+			cue.startTime = collected['timestamp'];
 			pos += collected['position'];
 		} else {
 			return false;
@@ -323,9 +344,9 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// 9. Skip whitespace
 		pos += regexp.reWS.exec(input.substr(pos))[0].length;
 		// 10. Collect ending timestamp
-		collected = collectTimestamp.call(this, input, pos);
+		collected = this.collectTimestamp(input, pos);
 		if (collected) {
-			cue.setEndTime(collected['timestamp']);
+			cue.endTime = collected['timestamp'];
 			pos += collected['position'];
 		} else {
 			return false;
@@ -333,10 +354,9 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// 11. TODO: Make this trail the endtime position if it doesn't?
 		remainder = input.substr(pos);
 		// 12. Parse settings given by remainder for cue
-		parseSettings.call(this, cue, remainder);
-
+		this.parseSettings(cue, remainder);
 		return cue;
-	}
+	},
 
 
 	/*@private
@@ -345,12 +365,14 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param pos 1. The current position in input.
 	 * @return The timestamp value in seconds and the updated position, or false if the operation failed.
 	 */
-	function collectTimestamp(input, pos) {
+	collectTimestamp: function(input, pos){
 		// 2. By default assume minutes are the most significant units of time
-		var mostSigUnits = 'minutes';
-		var string;
-		var value1, value2, value3, value4;
-		var result;
+		var mostSigUnits = 'minutes',
+			string, value1, value2, value3, value4,
+			result,
+			regexp = this.regexp,
+			scratch = this.scratch;
+
 		// 3. Out-of-bounds error
 		if (pos >= input.length) {
 			// return error
@@ -446,20 +468,19 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 			timestamp: result,
 			position: pos
 		};
-	}
+	},
 
 
 	/*@private
 	 * Parses the settings for a given cue and a settings string
 	 */
-	function parseSettings(cue, input) {
+	parseSettings: function(cue, input){
 		// 1.
-		var settings = input.split(' ');
-		var i;
-		var setting;
-		var name;
-		var value;
-		var number;
+		var settings = input.split(' '),
+			i, setting, name, value, number,
+			regexp = this.regexp,
+			alignValues = ['left', 'middle', 'right', 'start', 'end'];
+
 		// 2.
 		for (i = 0; i < settings.length; i++) {
 			// 1.
@@ -495,8 +516,8 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 				if (regexp.rePercentLast.test(value) && (number < 0 || number > 100)) {// 7.
 					continue;
 				}
-				cue.setLinePosition(number); // 8.
-				cue.setSnapToLines(!(regexp.rePercentLast.test(value))); // 9.
+				cue.linePosition = number; // 8.
+				cue.snapToLines = !(regexp.rePercentLast.test(value)); // 9.
 			} else if (name === 'position') {
 				if (regexp.rePerDigits.test(value)) {// 1.
 					continue;
@@ -516,27 +537,23 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 				}
 				cue.setSize(number);
 			} else if (name === 'align') {
-				if (value === 'start') {// 1.
-					cue.setAlignment('start');
-				} else if (value === 'middle') {// 2.
-					cue.setAlignment('middle');
-				} else if (value === 'end') {// 3.
-					cue.setAlignment('end');
-				} else if (value === 'left') {// 4.
-					cue.setAlignment('left');
-				} else if (value === 'right') {// 5.
-					cue.setAlignment('right');
+				//Do We even need to check if the value is in the array. Can't we just assign it?
+				if(alignValues.contains(value)){
+					cue.alignment = value;
 				}
 			}
 		}
-	}
+	},
 
 
 	/*@private
 	 * Collects the text (payload) for the current cue
 	 * @return Whether this should be repeated
 	 */
-	function cueTextLoop() {
+	cueTextLoop: function(){
+		var scratch = this.scratch,
+			regexp = this.regexp;
+
 		// Skip to processing if we've reached the end of file
 		if (scratch.position < scratch.fileContent.length) {
 			// 39. Skip over LF if we're at one
@@ -545,7 +562,7 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 				scratch.lineNo++;
 			}
 			// 40. Scan until the next LF
-			scan(regexp.reNotLF, true);
+			this.scan(regexp.reNotLF, true);
 			// 41. Jump to cue text processing if we read an empty string
 			if (scratch.line !== '') {
 				// 42. If line contains "-->", it's already been collected and we skip to cue text processing
@@ -563,13 +580,13 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 			}
 		}
 		// 46. Cue text processing
-		scratch.cue.setText(processCueText(scratch.cueText));
+		scratch.cue.text = this.processCueText(scratch.cueText);
 		// 47. Add the cue to the list of cues
 		this.cueList.push(scratch.cue);
 		//        console.debug('Cue added: '+scratch.cue.getText());
 		// 48. Move on to the next cue by repeating cueLoop
 		return false;
-	}
+	},
 
 
 	/*@private
@@ -580,7 +597,7 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param input The cue text to be processed
 	 * @return The processed cue text
 	 */
-	function processCueText (input) {
+	processCueText: function(input){
 		// The return string
 		var output = input;
 		// Pointer into input (the cue text)
@@ -594,7 +611,9 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		// RegExp for matching </v> tags
 		var reEndV = /<\/(v)>/i;
 		// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
-		var reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i;
+		var reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
+			scratch = this.scratch,
+			regexp = this.regexp;
 
 		/*
 		 * Callback for replace which replaces <v> tags with <span> tags, returning a resulting replacement string
@@ -685,17 +704,20 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		//        console.debug('Replaced ' + input + ' with ' + output);
 		// Return the processed cue text
 		return output;
-	}
+	},
 
 
 	/*@private
 	 * Skips over malformed cues
 	 * @return Whether badCueLoop should be repeated
 	 */
-	function badCueLoop() {
+	badCueLoop: function(){
+		var scratch = this.scratch,
+			regexp = this.regexp;
+
 		// Halt if at end of file
 		if (scratch.position >= scratch.fileContent.length) {
-			return signalHalt();
+			return this.signalHalt();
 		}
 		// 51. Skip over LF if we're at one
 		if (scratch.fileContent.charCodeAt(scratch.position) === 10) {
@@ -703,7 +725,7 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 			scratch.lineNo++;
 		}
 		// 52. Scan until the next LF
-		scan(regexp.reNotLF, true);
+		this.scan(regexp.reNotLF, true);
 		// 53. If we're reading a timing, go to that part of cueLoop
 		if (regexp.reArrow.test(scratch.line)) {
 			scratch.alreadyCollectedLine = true;
@@ -711,15 +733,14 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 		}
 		// 54. Repeat cueLoop if line is the empty string 55. Otherwise, repeat badCueLoop
 		return (scratch.line !== '');
-	}
+	},
 
 
 	/*@private
 	 * Extracts the indices of section-title cues from the "sections" header, if specified
 	 */
-	function findSections() {
-		var i, j;
-		var hdr;
+	findSections: function(){
+		var i, j, hdr;
 		this.sections = [];
 		for (i = 0; i < this.headers.length; i++) {
 			if (this.headers[i].match(/^sections/i)) {
@@ -729,19 +750,19 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 				}
 			}
 		}
-	}
+	},
 
 
 	/*@private
 	 * Constructs a tree of nested cues in cueTree, if cues are nested
 	 */
-	function buildCueTree() {
+	buildCueTree: function() {
 		var i, path;
 		this.cueTree = [];
 		for (i = 0; i < this.cueList.length; i++) {
-			cueTreeInsert(this.cueList[i], this.cueTree);
+			this.cueTreeInsert(this.cueList[i], this.cueTree);
 		}
-	}
+	},
 
 
 	/*@private
@@ -749,112 +770,83 @@ Ext.define('NextThought.webvtt.Transcript', function() {
 	 * @param cue The cue which is being inserted
 	 * @param tree The cueTree into which cue is currently fitting
 	 */
-	function cueTreeInsert(cue, tree) {
+	cueTreeInsert: function(cue, tree){
 		var i, tmpCue;
 		for (i = 0; i < tree.length; i++) {
 			tmpCue = cue.cueTree[i];
 			if (cue.startTime >= tmpCue.startTime && cue.endTime <= tmpCue.endTime) {
-				cueTreeInsert(cue, tmpCue.cueTree);
+				this.cueTreeInsert(cue, tmpCue.cueTree);
 				return;
 			}
 		}
-		cue.cueTree.push()
-	}
+		cue.cueTree.push();
+	},
+
+	/*
+	 * Transcript constructor
+	 */
+	constructor: function(config) {
+		var r = this.callParent(config);
+
+		Ext.apply(this, config);
+
+		this.headers = [];
+		this.cueList = [];
+		this.sections = [];
+		this.cueTree = [];
+		return r;
+	},
 
 
-	return {
-		config: {
-			// Header text lines
-			headers: [],
-			// List of cues
-			cueList: [],
-			// List of cue section indices (if applicable)
-			sections: [],
-			// Tree-structures of nested cues
-			cueTree: []
-		},
 
-
-		/*
-		 * Transcript constructor
-		 */
-		constructor: function(config) {
-
-			this.headers = [];
-			this.cueList = [];
-			this.sections = [];
-			this.cueTree = [];
-
-			var cfg = {
-				// Header text lines
-				headers: [],
-				// List of cues
-				cueList: [],
-				// List of cue section indices (if applicable)
-				sections: [],
-				// Tree-structures of nested cues
-				cueTree: []
-			};
-
-
-			this.input = config.input;
-			cfg.input = config.input;
-			this.ignoreLFs = config.ignoreLFs || false;
-			cfg.ignoreLFs = config.ignoreLFs || false;
-
-			this.initConfig(cfg);
-		},
-
-
-		/*
-		 * Parses the WebVTT file contents<br>
-		 * Based on the algorithm described at http://dev.w3.org/html5/webvtt/#parsing<br>
-		 * Numbered comments refer to steps of that algorithm
-		 * @param input The contents of the WebVTT file being parsed
-		 * @param ignoreLFs Whether line feeds in cue text should be ignored rather than converted to <br> tags
-		 */
-		parseWebVTT: function() {
-			var s;
-			// Make sure scratchwork is clear
-			for (s in scratch) {
-				scratch[s] = 0;
-			}
-
-			scratch.ignoreLFs = this.ignoreLFs;
-
-			// 1. Pre-process file content
-			scratch.fileContent = preProcess(this.input);
-
-			// Verify signature
-			verifySignature.call(this);
-
-			// 8. Error if there's nothing else in the file
-			if (scratch.position >= scratch.fileContent.length) {
-				signalError('File contains no useful data');
-			}
-
-			// 9. Advance past line feed we scanned to
-			scratch.position++;
-
-			// Collect headers
-			while (header.call(this));
-			if (scratch.halt) {
-				return null;
-			}
-
-			// Collect and process cues
-			while (cueLoop.call(this));
-
-			findSections.call(this);
-
-			buildCueTree.call(this);
-
-			// Clear off scratchwork
-			for (s in scratch) {
-				scratch[s] = 0;
-			}
-
-			return this.getCueList();
+	/*
+	 * Parses the WebVTT file contents<br>
+	 * Based on the algorithm described at http://dev.w3.org/html5/webvtt/#parsing<br>
+	 * Numbered comments refer to steps of that algorithm
+	 * @param input The contents of the WebVTT file being parsed
+	 * @param ignoreLFs Whether line feeds in cue text should be ignored rather than converted to <br> tags
+	 */
+	parseWebVTT: function(){
+		var s, scratch = this.scratch;
+		// Make sure scratchwork is clear
+		for (s in scratch) {
+			scratch[s] = 0;
 		}
-	};
+
+		scratch.ignoreLFs = this.ignoreLFs;
+
+		// 1. Pre-process file content
+		scratch.fileContent = this.preProcess(this.input);
+
+		// Verify signature
+		this.verifySignature();
+
+		// 8. Error if there's nothing else in the file
+		if (scratch.position >= scratch.fileContent.length) {
+			this.signalError('File contains no useful data');
+		}
+
+		// 9. Advance past line feed we scanned to
+		scratch.position++;
+
+		// Collect headers
+		this.getHeader.call(this);
+		if (scratch.halt) {
+			return null;
+		}
+
+		// Collect and process cues
+		while(this.cueLoop());
+
+		this.findSections();
+
+		this.buildCueTree();
+
+		// Clear off scratchwork
+		for (s in scratch) {
+			scratch[s] = 0;
+		}
+
+		return this.cueList;
+	}
 });
