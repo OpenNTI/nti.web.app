@@ -572,7 +572,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
      * @param y2
      */
     makeSelectionFrom: function(x1, y1, x2, y2) {
-        var iFrameDoc = this.getDocumentElement(),
+        var me = this,
+            iFrameDoc = this.getDocumentElement(),
             startRange = rangeAtPoint(x1, y1),
             endRange = rangeAtPoint(x2, y2),
             range = iFrameDoc.createRange(),
@@ -583,17 +584,17 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         sel.addRange(range);
 
         function rangeAtPoint(x,y) {
-            var reader = this.reader,
-                hasClickthrough = this.hasClickthrough(),
+            var reader = me.reader,
+                hasClickthrough = me.hasClickthrough(),
                 framePos = reader.getPosition(),
                 scrolledY = reader.getScroll().top(),
                 localX = x-framePos[0],
                 localY = y-framePos[1]+scrolledY,
                 range;
 
-            this.setClickthrough(false);
+            me.setClickthrough(false);
             range = iFrameDoc.caretRangeFromPoint(localX, localY);
-            this.setClickthrough(hasClickthrough);
+            me.setClickthrough(hasClickthrough);
             return range;
         }
     }
