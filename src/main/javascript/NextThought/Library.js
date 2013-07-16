@@ -108,9 +108,9 @@ Ext.define('NextThought.Library', {
 		if(index instanceof Ext.data.Model){
 			index = index.getId();
 		}
+
 		if(index && !this.tocs[index]){
-			console.error('we should never be here...');
-			this.loadToc(index);
+			return;
 		}
 
 		return this.tocs[index];

@@ -726,6 +726,11 @@ Ext.define('NextThought.controller.UserData', {
 			return;
 		}
 
+		if(!Library.loaded){
+			Library.on('loaded',Ext.bind(this.updatePreferences,this,arguments),this,{single:true});
+			return;
+		}
+
 		var sharing = pi.get('sharingPreference'),
             piId = pi.getId(),
             rootId = ContentUtils.getLineage(piId).last();
