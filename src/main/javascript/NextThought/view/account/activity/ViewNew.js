@@ -8,6 +8,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		'NextThought.view.account.history.View'
 	],
 
+	stateful: true,
+	stateId: 'rhp-state',
+
 	iconCls: 'activity',
 	title: 'Activity',
 	tabConfig:{
@@ -192,12 +195,56 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.switchPanel(this.fromMenu.down('menuitem[text=Community]'));
 	},
 
+	applyState: function(state){
+		var me = this,
+			fromItems = this.fromMenu.query('menuitem'),
+			filterItems = this.typesMenu.query('menuitem');
+		if(state.from){
+			Ext.each(fromItems, function(item){
+				var checked = item.text === state.from;
+				if(me.rendered){
+					item.setChecked(checked);
+				}else{
+					me.on('afterrender', function(){
+						item.setChecked(checked);
+					}, this, {single: true});
+				}
+			});
+		}
+
+		if(state.filter){
+			Ext.each(filterItems, function(item){
+				var checked = Ext.Array.contains(state.filter, item.text)
+				
+				if(me.rendered){
+					item.setChecked(checked);
+				}else{
+					me.on('afterrender', function(){
+						item.setChecked(checked);
+					});
+				}
+			});
+		}
+	},
+
+	getState: function(){
+		var fromMenuItem = this.fromMenu.down('menuitem[checked]'),
+			filterMenuItems = this.typesMenu.query('menuitem[checked]'),
+			from = fromMenuItem.text, filter = [];
+
+		Ext.each(filterMenuItems, function(item){
+			filter.push(item.text);
+		});
+
+		return {from: from, filter: filter};
+	},
+
 	switchPanel: function(item){
 		var newPanel = this.getActivePanel(),
 			newTab = this.fromMenu.down('menuitem[checked]'),
 			tab = this.el.down('.filters-container .activity-filters .tabs .from');
 
-		tab.update(newTab.text);
+		tab.update(newTab.text || item.text);
 		this.getLayout().setActiveItem(newPanel);
 
 		this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
@@ -211,6 +258,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			this.applyFilters('inCommunity');
 			newPanel.filter = 'inCommunity';
 		}
+
+		this.saveState();
 	},
 
 	getActivePanel: function(){
@@ -251,7 +300,12 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			}
 		}
 
+		if(this.typesMenu.query('menuitem[checked]').length === 0){
+			this.typesMenu.query('[isAll]')[0].setChecked(true, true);
+		}
+
 		this.applyFilters();
+		this.saveState();
 	},
 
 	applyFilters: function(filter){
