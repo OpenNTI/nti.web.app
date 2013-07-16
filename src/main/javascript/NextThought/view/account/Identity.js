@@ -65,8 +65,6 @@ Ext.define('NextThought.view.account.Identity',{
 
 	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
 
-        this.menu.setWidth(this.el.up('.sidebar').getWidth());
-
 	    this.enableProfileClicks(this.avatar);
     },
 

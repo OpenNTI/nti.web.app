@@ -8,7 +8,6 @@ Ext.define('NextThought.view.SideBar',{
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
         'NextThought.view.account.history.View',
-		'NextThought.view.account.Identity',
 		'NextThought.view.chat.Dock'
 	],
 
@@ -94,8 +93,6 @@ Ext.define('NextThought.view.SideBar',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-
-		this.identity = Ext.widget('identity',{renderTo:this.el});
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 
