@@ -185,7 +185,7 @@ Ext.define('NextThought.view.SideBar',{
 		var d = this.down('chat-dock');
 		if(d){ d.show(); }
 		this.setHeight(Ext.Element.getViewportHeight()-10);
-
+		this.addCls('down');
 		this.stopShow();
 		this.stopHide();
 	},
@@ -198,9 +198,11 @@ Ext.define('NextThought.view.SideBar',{
 
 		if(!this.host.isVisible()){
 			if(d){ d.hide(); }
+			this.removeCls('down');
 			size = {height: 57};
 		}
 		else {
+			this.addCls('down');
 			if(d){ d.show(); }
 		}
 
