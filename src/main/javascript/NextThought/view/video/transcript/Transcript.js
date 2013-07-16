@@ -4,7 +4,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	requires:[
 		'NextThought.webvtt.Transcript',
-		'NextThought.webvtt.Cue'
+		'NextThought.webvtt.Cue',
+		'NextThought.model.transcript.Cue'
 	],
 
 
@@ -20,6 +21,18 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				});
 
 			return parser.parseWebVTT();
+		},
+
+		buildStore: function(cueList){
+			var cues = [], s;
+			Ext.each(cueList, function(c){
+				var m = NextThought.model.Cue.fromParserCue(c);
+				cues.push(m);
+			});
+
+			s = new Ext.data.Store({proxy:'memory'});
+			s.add(cues);
+			return s;
 		}
 	},
 
