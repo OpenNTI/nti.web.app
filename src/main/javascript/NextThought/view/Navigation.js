@@ -76,6 +76,18 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		if(!$AppConfig.service.canHaveForum()){
+			this.el.down('.forums').remove();
+		}
+	},
+
+
+
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.libraryMenu = Ext.widget({
