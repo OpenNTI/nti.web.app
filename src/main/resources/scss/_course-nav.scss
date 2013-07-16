@@ -97,7 +97,11 @@
 
 
 
+				background: #f0f0f0;
+				box-shadow: inset 3px 0 0 0 #cfcfcf;
+			}
 
+			&.x-item-selected {
 				color: #ffffff;
 				font-weight: 600;
 				background: $primary-blue;
@@ -116,11 +120,16 @@
 				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
 				z-index: 1;
 
-				&.x-item-selected,&.over {
+				&.x-item-selected {
 					color: #ffffff;
 					font-weight: 600;
 					background: $primary-blue;
 					box-shadow: inset 2px 0 0 1px #107eed;
+				}
+
+				&.over {
+					background: #f0f0f0;
+					box-shadow: inset 2px 0 0 1px #cfcfcf;
 				}
 			}
 		}
@@ -154,15 +163,14 @@
 
 		&:hover {
 			z-index: 2;
-			color: #ffffff;
-			font-weight: 600;
-			background: $primary-blue;
-			border-top-color: #107eed;
+			color: $primary-grey;
+			background: #f0f0f0;
+			border-top-color: #cfcfcf;
 			border-bottom-color: transparent;
-			box-shadow:	-26px 1px 0 0px #3fb3f6,
-						 29px 1px 0 0px #3fb3f6,
-						-29px 1px 0 1px #107eed,
-						 29px 1px 0 1px #107eed;
+			box-shadow:	-26px 1px 0 0px #f0f0f0,
+						 29px 1px 0 0px #f0f0f0,
+						-29px 1px 0 1px #cfcfcf,
+						 29px 1px 0 1px #cfcfcf;
 		}
 
 		&:last-of-type {
