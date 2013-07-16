@@ -287,6 +287,10 @@ Ext.define('NextThought.Library', {
 	resolve: function(toc, title, containerId, report) {
 		var elts, ix, topic, EA = Ext.Array;
 
+		if(!toc){
+			return null;
+		}
+
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 				return {
 				toc:toc,
