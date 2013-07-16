@@ -5,10 +5,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		addgroup:'NextThought.mixins.AddGroup'
 	},
 
-	requires:[
-		'NextThought.store.FriendsList'
-	],
-
 	ui: 'nt',
 	plain: true,
 	shadow: false,
@@ -52,7 +48,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			blocked = this.blocked,
 			mycontact = 'mycontacts-'+$AppConfig.username, me = this;
 
-		this.store = new NextThought.store.FriendsList({
+		this.store = new Ext.data.Store({
+			model: 'NextThought.model.FriendsList',
 			id: 'group-list-store',
 			proxy: 'memory',
 			filters: [
