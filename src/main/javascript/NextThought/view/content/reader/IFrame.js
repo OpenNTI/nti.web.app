@@ -452,7 +452,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	},
 
 
-	update: function(html) {
+	update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0],
@@ -462,14 +462,14 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		Ext.select('meta[nti-injected="true"]', false, head).remove();
 
 		//Append some tags to the head
-		if(me.meta){
+		if(metaData){
 			Ext.each(metaNames, function(tag){
 				var meta;
-				if(me.meta.hasOwnProperty(tag)){
+				if(me.reader.getContent().hasOwnProperty(tag)){
 					meta = doc.createElement('meta');
 					meta.setAttribute('name',tag);
-					meta.setAttribute('content', me.meta[tag]);
-					meta.setAttribute('nti-injected', true);
+					meta.setAttribute('content', metaData[tag]);
+					meta.setAttribute('nti-injected', 'true');
 					head.appendChild(meta);
 				}
 			});

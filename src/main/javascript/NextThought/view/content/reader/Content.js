@@ -185,7 +185,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		me.fireEvent('clear-annotations');
 
-		reader.getIframe().update(this.BODY_TEMPLATE.apply([c]));
+		reader.getIframe().update(this.BODY_TEMPLATE.apply([c]), this.meta);
 
 		me.listenForImageLoads();
 		reader.getScroll().to(0, false);
