@@ -2,8 +2,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
     alias: 'reader.touch',
 
-    requires: ['NextThought.view.content.reader.IFrame',
-               'NextThought.view.content.reader.Scroll'],
+    requires: [
+        'NextThought.view.content.reader.IFrame',
+        'NextThought.view.content.reader.Scroll',
+        'NextThought.view.content.reader.TouchHighlight'
+    ],
 
     statics: {
         SCROLL_TIME_STEP: 1,
@@ -53,6 +56,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
         var s = this.statics(),
             reader = this.reader,
             scroll = reader.getScroll(),
+            highlight = reader.getTouchHighlight(),
             dom = reader.getEl().dom,
             state = s.STATE.NONE,
             iFrame = reader.getIframe(),
@@ -113,6 +117,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
                 else if (elementIsSelectable(pickedElement)) {
                     state = s.STATE.SELECTING;
                     console.log('start selecting');
+                    highlight.show(initialX, initialY);
                 }
             }, s.TAP_HOLD_TIME);
         }, false);
@@ -148,8 +153,9 @@ Ext.define('NextThought.view.content.reader.Touch', {
             }
 
             function selectMove() {
-                iFrame.makeSelectionFrom(initialX, initialY,
-                                         touch.pageX, touch.pageY);
+                //iFrame.makeSelectionFrom(initialX, initialY,
+                //                         touch.pageX, touch.pageY);
+                highlight.show(touch.pageX, touch.pageY);
             }
 
         }, false);
