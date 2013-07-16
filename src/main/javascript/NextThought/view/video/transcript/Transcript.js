@@ -124,7 +124,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	groupByTimeInterval: function(cueList, timeInterval){
 		// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
 		var groups= [], tempGroup= [],
-			currentTime = cueList && cueList[0].getStartTime();
+			currentTime = 0;
 
 		Ext.each(cueList, function(t){
 			var endTime = t.getEndTime();
@@ -132,8 +132,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				tempGroup.push(t);
 			}
 			else{
+				//Close group and start  a new one.
 				groups.push(tempGroup);
 				tempGroup = [];
+				//Push the current t as the first argument.
+				tempGroup.push(t);
 				currentTime += timeInterval;
 			}
 		});
@@ -164,6 +167,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		this.callParent(arguments);
 
 		var me = this;
+		//Allow text selections
+		this.el.selectable();
+
 		this.on('transcript-ready', function(){
 			me.transcriptReady = true;
 			me.mon(me.el.select('.timestamp-container'),{
@@ -182,6 +188,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				scope: me,
 				'click': 'openEditor'
 			});
+
+			me.mon(me.el, {
+				scope: me,
+				'mouseup':'showContextMenu'
+			})
 		});
 	},
 
@@ -191,9 +202,92 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		var cueEl = e.getTarget('.cue', null, true),
 			cueStart = cueEl && cueEl.getAttribute('cue-start'),
 			cueEnd = cueEl && cueEl.getAttribute('cue-end'),
-			cueBox = cueEl.dom.getBoundingClientRect();
+			cueBox = cueEl.dom.getBoundingClientRect(),
+			data = {startTime: cueStart, endTime: cueEnd, range:null};
 
-		this.fireEvent('show-editor', cueStart, cueEnd, cueEl.down('.add-note-here'));
+
+		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'));
+	},
+
+
+	openEditorInline: function(){
+		this.contextMenu.hide();
+		this.fireEvent('show-editor-inline', this.contextMenu.cueData, this.contextMenu.position);
+	},
+
+
+	buildContextMenu: function(){
+		var me = this,
+			menu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			closeAction: 'destroy',
+			minWidth: 150,
+			defaults: {ui: 'nt-annotaion', plain: true }
+		});
+
+		menu.add({
+			text: 'Save Highlight',
+			handler:function(){
+				console.warn('No support for highlights yet');
+			},
+			disabled: true
+		});
+
+		menu.add({
+			text: 'Add Note',
+			handler: function(){
+				me.openEditorInline();
+			}
+		});
+		this.contextMenu = menu;
+	},
+
+
+	showContextMenu: function(e){
+		console.log('Should show context menu');
+		e.stopEvent();
+
+		if(!this.contextMenu){
+			this.buildContextMenu();
+		}
+
+		var xy = e.getXY(),
+			sel = window.getSelection(),
+			range = sel.getRangeAt(0).cloneRange(), cueData = {},
+			viewBox = this.getBox(), pos;
+
+		// If no selection, return.
+		if(sel.isCollapsed){ return; }
+
+		Ext.apply(cueData, this.getCueInfoFromRange(range) || {});
+		this.contextMenu.position = [ viewBox.width - 60, xy[1] - viewBox.y - 20];
+		console.log(' Desired editor position: ', this.contextMenu.position);
+		this.contextMenu.cueData = cueData;
+
+		// Show menu
+		this.contextMenu.showAt(xy);
+		Ext.defer(function(){ sel.addRange(range); }, 10, this);
+	},
+
+
+	getCueInfoFromRange: function(range){
+		if(!range || range.isCollapsed){ return null; }
+
+		var d = range.cloneContents(),
+			cues = d.querySelectorAll('.cue'),
+			startCue = cues && cues[0],
+			endCue = cues &&  Ext.Array.slice(cues, -1).first(), startTime, endTime;
+
+		startTime = startCue && startCue.getAttribute('cue-start');
+		endTime = endCue && endCue.getAttribute('cue-end');
+
+		return {startTime: startTime, endTime:endTime, range:range};
 	},
 
 

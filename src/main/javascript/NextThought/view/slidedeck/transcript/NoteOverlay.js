@@ -21,7 +21,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 //			'reader-view-ready': 'insertOverlay',
 			'create-note': 'noteHere',
 			'sync-height': 'syncHeight',
-			'show-editor': 'activateEditor'
+			'show-editor': 'showEditorByEl',
+			'show-editor-inline':'showEditorAtPosition'
 		});
 
 		this.data = {};
@@ -94,13 +95,24 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	activateEditor: function(cueStart, cueEnd, el){
+	activateEditor: function(cueInfo){
 		if(this.editor){
-			this.data.cueInfo = Ext.apply(this.cueInfo || {}, {startTime:cueStart, endTime:cueEnd});
+			this.data.cueInfo = Ext.apply(this.cueInfo || {}, cueInfo);
 			this.editor.reset();
 			this.editor.activate();
-			this.editor.alignTo( el,'tl-tr?');
 		}
+	},
+
+
+	showEditorByEl: function(cueInfo, el){
+		this.activateEditor(cueInfo);
+		this.editor.alignTo( el,'tl-tr?');
+	},
+
+
+	showEditorAtPosition: function(cueInfo, xy){
+		this.activateEditor(cueInfo);
+		this.editor.showAt(xy);
 	}
 
 });
