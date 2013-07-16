@@ -274,21 +274,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	isOccupied: function(y){
-		var g = this.getAnnotationGutter(),
-			r = g && g.select('[data-line]'),
-			o = false;
-
-		if(r){
-			r.each(function(e){
-				var i = parseInt(e.getAttribute('data-line'),10);
-				o = i===y || Math.abs(i-y) < 5;
-				return !o;
-			});
-		}
-
-		return o;
-	},
+//	isOccupied: function(y){
+//		var g = this.getAnnotationGutter(),
+//			r = g && g.select('[data-line]'),
+//			o = false;
+//
+//		if(r){
+//			r.each(function(e){
+//				var i = parseInt(e.getAttribute('data-line'),10);
+//				o = i===y || Math.abs(i-y) < 5;
+//				return !o;
+//			});
+//		}
+//
+//		return o;
+//	},
 
 
 	copyClientRect: function (rect) {
@@ -388,8 +388,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offset = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
 			oldY = box.getY() - offset.top,
-			newY = 0, occ,
-			activeY = oldY,
+			newY = 0,
+			// occ,
+			//activeY = oldY,
 			line = lineInfo || o.lastLine;
 
 		if (line && line.rect) {
@@ -399,12 +400,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//check for minute scroll changes to prevent jitter:
 		if (oldY < 0 || Math.abs(oldY - newY) > 4) {
 			box.setStyle({top:newY+'px'});
-			activeY = newY;
+			//activeY = newY;
 		}
 
-		occ = this.isOccupied(activeY);
-
-		box[occ? 'addCls':'removeCls']('occupied');
+		//occ = this.isOccupied(activeY);
+		//box[occ? 'addCls':'removeCls']('occupied');
 		//show the box:
 
 		box.activeLineInfo = line;
