@@ -41,14 +41,37 @@ Ext.define('NextThought.view.course.Outline',{
 	listeners: {
 		itemclick: function() { this.fromClick = true; },
 		beforeselect: function(s,r){
-			return r.get('type') !== 'unit';
+			var pass = r.get('type') !== 'unit',
+				store= s.getStore(),
+				last = s.lastSelected, next = 0;
+
+			if(this.fromKey && !pass){
+				if(last){
+					last = store.indexOf(last);
+					next = store.indexOf(r);
+					next += (next - last);
+				}
+
+				//do the in the next event pump
+				Ext.defer(s.select,1,s,[next]);
+			}
+			return pass;
+
 		},
 		select: function(s,r) {
-			if( this.fromClick ) {
+			if( this.fromClick || this.fromKey ) {
 				this.fireEvent('set-location', r.getId());
 			}
 			delete this.fromClick;
+			delete this.fromKey;
 		}
+	},
+
+
+	beforeRender: function(){
+		this.callParent();
+		var me = this, s = this.getSelectionModel();
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey,function(){me.fromKey=true;});
 	},
 
 
@@ -73,7 +96,7 @@ Ext.define('NextThought.view.course.Outline',{
 			console.warn('No record',pageInfo);
 			return;
 		}
-		console.debug('Hey');
+
 		this.getSelectionModel().select(r);
 	},
 
