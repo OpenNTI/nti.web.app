@@ -10,6 +10,13 @@
 		top: 0;
 		bottom: 0;
 		width: 60px;
+		cursor: pointer;
+
+		&:hover {
+			&::after {
+				@include sprite($icons,'profile_back_arrow_active');
+			}
+		}
 	}
 
 	.breadcrumb {
