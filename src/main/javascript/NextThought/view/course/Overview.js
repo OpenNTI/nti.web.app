@@ -8,7 +8,8 @@ Ext.define('NextThought.view.course.Overview',{
 		'NextThought.view.course.overview.Header',
 		'NextThought.view.course.overview.Section',
 		'NextThought.view.course.overview.Topic',
-		'NextThought.view.course.overview.ContentLink'
+		'NextThought.view.course.overview.ContentLink',
+		'NextThought.view.course.overview.Discussion'
 	],
 
 	autoScroll: true,
@@ -22,6 +23,7 @@ Ext.define('NextThought.view.course.Overview',{
 
 	SECTION_TYPE_MAP: {
 		'course-overview-content': 'additional',
+		'course-overview-discussion': 'discussions',
 		'course-overview-externallink': 'additional'
 	},
 

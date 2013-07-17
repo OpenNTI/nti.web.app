@@ -26,5 +26,9 @@ Ext.define('NextThought.view.course.overview.Section',{
 			title: this.title || 'Untitled',
 			type: this.type || ''
 		});
+
+		if( this.type ){
+			this.addCls(this.type);
+		}
 	}
 });
