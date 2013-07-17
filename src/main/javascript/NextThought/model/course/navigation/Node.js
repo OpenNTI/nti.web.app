@@ -50,7 +50,8 @@ Ext.define('NextThought.model.course.navigation.Node',{
 			//string displayed in the UI
 		{ name:'label', type:'string', mapping:'@label',
 			convert:function(v,m){
-				return v || Ext.DomQuery.selectValue(this.mapping,m.getAssociatedNode());
+				var n = m.getAssociatedNode();
+				return v || (n && Ext.DomQuery.selectValue(this.mapping,n)) || 'Failed';
 			}
 		},
 
@@ -63,14 +64,19 @@ Ext.define('NextThought.model.course.navigation.Node',{
 
 
 	getAssociatedNode: function(){
-		var n = this.raw;
+		var n = this.raw,
+			ntiid;
 		if(!this.associatedNode){
+			ntiid = n.getAttribute('topic-ntiid') || '';
 			this.associatedNode = /topic/i.test(n.nodeName)? n : Ext.DomQuery.selectNode(
-					'topic[ntiid="'+n.getAttribute('topic-ntiid')
+					'topic[ntiid="'+ntiid
 							.replace(/:/g,'\\3a ') //no colons
 							.replace(/,/g,'\\2c ') //no commas
 							+'"]',
 					n.ownerDocument);
+			if(!this.associatedNode){
+				console.warn('Could not find associated topic', n);
+			}
 		}
 		return this.associatedNode;
 	},
