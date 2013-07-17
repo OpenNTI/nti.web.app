@@ -55,6 +55,7 @@ Ext.define( 'NextThought.view.library.View', {
 		this.removeCls('make-white');
 
 		this.on({
+			'switch-to-reader':'switchViewToReader',
 			'beforeactivate':'onBeforeActivation',
 			'deactivate':'onDeactivated'
 		});
@@ -153,6 +154,11 @@ Ext.define( 'NextThought.view.library.View', {
 
 		this.down('content-toolbar').show();
 		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
+	},
+
+
+	switchViewToReader: function(){
+		this.courseBook.layout.setActiveItem('main-reader-view');
 	},
 
 

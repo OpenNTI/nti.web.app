@@ -10,6 +10,12 @@ Ext.define('NextThought.view.course.overview.Topic',{
 	]),
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble(['switch-to-reader']);
+	},
+
+
 	beforeRender: function(){
 		this.callParent(arguments);
 
@@ -26,8 +32,16 @@ Ext.define('NextThought.view.course.overview.Topic',{
 
 
 	onClick: function(e){
+		var me = this;
 		e.stopEvent();
 
-		this.fireEvent('set-location',this.record.get('NTIID'));
+		function cb(){
+			if(arguments.length === 0 ){
+				//setlocation aborted (probably because we are already here)
+				me.fireEvent('switch-to-reader');
+			}
+		}
+
+		me.fireEvent('set-location',me.record.get('NTIID'),cb);
 	}
 });
