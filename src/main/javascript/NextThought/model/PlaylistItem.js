@@ -82,7 +82,15 @@ Ext.define('NextThought.model.PlaylistItem', {
 		return false;
 	},
 
-	nextSource: function(){}
+	nextSource: function(){},
+
+
+	getAssociatedVideoId: function(){
+		var frag = this.get('dom-clone'),
+			video = frag.querySelector('object[type$=ntivideo]');
+
+		return video && video.getAttribute('data-ntiid');
+	}
 
 
 });

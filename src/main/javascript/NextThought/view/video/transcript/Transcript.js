@@ -121,7 +121,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		proxy.request({
 			jsonpUrl: this.getTranscriptJsonUrl(),
 			url: this.getTranscriptUrl(),
-			expectedContentType: this.data.type,
+			expectedContentType: this.data.get('mimeType'),
 			scope:this,
 			success: function(res, req){
 				console.log('SUCCESS Loading Transcripts: ', arguments);
@@ -159,12 +159,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	getTranscriptJsonUrl: function(){
-		return this.data.basePath + this.data.jsonUrl;
+		return this.data.get('basePath') + this.data.get('jsonUrl');
 	},
 
 
 	getTranscriptUrl: function(){
-		return this.data.basePath + this.data.url;
+		return this.data.get('basePath') + this.data.get('url');
 	},
 
 

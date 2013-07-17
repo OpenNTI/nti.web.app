@@ -772,6 +772,22 @@ $experimental-support-for-svg: true;
 
 			}
 		}
+
+		.x-component-slide{
+			width: 860px;
+			padding: 50px 10px 0 110px;
+
+			.image-wrap{
+				position: relative;
+
+				img{
+					border-width: 0;
+					background: #242424;
+					width: 100%;
+					box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
+				}
+			}
+		}
 	}
 
 	&.overlay {

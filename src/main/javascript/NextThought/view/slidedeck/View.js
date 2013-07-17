@@ -5,7 +5,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
 		'NextThought.view.slidedeck.Video',
-		'NextThought.view.slidedeck.Transcript'
+		'NextThought.view.slidedeck.Transcript',
+		'NextThought.model.transcript.TranscriptItem'
 	],
 
 	cls: 'view',
@@ -26,7 +27,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},
 
 	constructor: function(config){
-		var t;
+		var t, vPlaylist;
 
 		config.items = [{
 			xtype: 'container',
@@ -45,6 +46,12 @@ Ext.define('NextThought.view.slidedeck.View',{
 			t.xtype = 'slidedeck-transcript';
 			t.data = config.transcript;
 			this.hasTranscript = true;
+			vPlaylist = this.getVideoPlayList(config.store);
+			t.transcriptStore = this.buildTranscriptStore(vPlaylist);
+			// NOTE: Slides are a time-series and currently that's what drives the presentation.
+			// We get this store passed to be the one contain a sequence of slides with their associated data.
+			t.slideStore = config.store;
+			t.startOn = config.startOn;
 		}
 
 		return this.callParent([config]);
@@ -56,13 +63,13 @@ Ext.define('NextThought.view.slidedeck.View',{
 			start = this.startOn,
 			ctrls = this.items.getAt(0),
 			slide = this.getSlide(),
-			v, q,vPlaylist = [];
+			vPlaylist = this.getVideoPlayList(store),
+			v, q;
 
 		//clear the reference, pass it along...
 		delete this.store;
 		delete this.startOn;
 
-		store.each(function(s){ vPlaylist.push(s.get('media')); },this);
 		v = this.video = ctrls.add({ xtype: 'slidedeck-video', playlist: vPlaylist});
 		//Ths queue is the primary control. Selection causes video and slide to change.
 		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, flex: 1 });
@@ -105,9 +112,53 @@ Ext.define('NextThought.view.slidedeck.View',{
 		}
 	},
 
+	getVideoPlayList: function(store){
+		var playList = [];
+		store.each(function(s){ playList.push(s.get('media')); },this);
+		return playList;
+	},
+
 
 	jumpVideoToLocation: function(time){
 		this.video.fireEvent('jump-to-location', time);
+	},
+
+
+	buildTranscriptStore: function(playList){
+		var s = new Ext.data.Store({proxy:'memory'}),
+			transcripts = [],
+			reader = Ext.ComponentQuery.query('reader-panel')[0].getContent(),
+			videoObjects = this.getUniqueVideoObjects(playList);
+
+		Ext.each(videoObjects, function(v){
+			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader);
+			transcripts.push(m);
+		});
+
+		s.add(transcripts);
+		return s;
+	},
+
+
+	getUniqueVideoObjects: function(playList){
+		var vObjects = [], uniqueIds=[];
+
+		Ext.each(playList, function(v){
+			var frag = v.get('dom-clone'),
+				video = frag.querySelector('object[type$=ntivideo]');
+
+			vObjects.push(video);
+		});
+
+		vObjects = Ext.Array.filter(vObjects, function(i){
+			var id = Ext.fly(i).getAttribute('data-ntiid'),
+				ret = !Ext.Array.contains(uniqueIds, id);
+
+			uniqueIds.push(id);
+			return ret;
+		});
+
+		return vObjects;
 	},
 
 
