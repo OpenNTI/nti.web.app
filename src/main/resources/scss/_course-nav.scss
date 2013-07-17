@@ -41,8 +41,13 @@
 			background: #ffffff;
 			color: $secondary-grey;
 			font: normal 400 14px/40px $font;
-			padding: 0 0 0 20px;
+			padding: 0 5px 0 20px;
 			cursor: pointer;
+
+			.label{
+				overflow: hidden;
+				@include ellipse;
+			}
 
 			.date {
 				pointer-events: none;
