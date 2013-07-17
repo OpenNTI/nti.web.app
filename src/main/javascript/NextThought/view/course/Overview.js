@@ -101,17 +101,17 @@ Ext.define('NextThought.view.course.Overview',{
 			section = (node && node.getAttribute('section')) || null;
 
 		if(/^content:related$/i.test(type) || /^object$/i.test(type)){
-			type = node.getAttribute('type');
+			type = node.getAttribute('type') || node.getAttribute('mimeType');
 			type = type && type.replace(/^application\/vnd\.nextthought\./,'');
 		}
 
-		type = 'course-overview-'+type.toLowerCase();
+		type = type && ('course-overview-'+type.toLowerCase());
 
-		if(Ext.ClassManager.getByAlias('widget.'+type)){
+		if(type && Ext.ClassManager.getByAlias('widget.'+type)){
 			return {xtype: type, node:node, locationInfo: info, sectionOverride: section};
 		}
 
-		console.warn('Unknown overview type,', node);
+		console.warn('Unknown overview type:', type, node);
 		return null;
 	}
 
