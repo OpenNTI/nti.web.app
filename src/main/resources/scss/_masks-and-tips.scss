@@ -58,12 +58,18 @@
 		color: #555;
 		font-family: $font;
 		border: none;
+
+		$c: rgba(255,255,255,0.7);
 		background: {
 			repeat: no-repeat;
 			image: $loading-indicator;
-			color: transparent;
+			//color: transparent;
+			color: $c;
 			position: left center;
 		};
+
+		box-shadow: 0em 0 20px 20px $c;
+		border-radius: 10em;
 	}
 
 	&.loading {
@@ -78,9 +84,14 @@
 	&.navigation{
 		.x-mask-msg-text {
 			border: none;
-			padding: 1em 0 1.5em 1em;
+			padding: 1em 1em 1.5em 1em;
 			font-size: 18px;
 			background-position: center bottom;
+
+			$c: rgba(255,255,255,0.7);
+			background-color: $c;
+			box-shadow: 0em 0 20px 20px $c;
+			border-radius: 100%;
 		}
 	}
 
