@@ -160,7 +160,7 @@
 		border:{
 			style: solid;
 			color: #ededed;
-			width: 1px 0 0 0;
+			width: 0 0 1px 0;
 		};
 
 		&:hover {
@@ -175,8 +175,9 @@
 						 29px 1px 0 1px #cfcfcf;
 		}
 
-		&:last-of-type {
-			border-bottom-width: 1px;
+		.overview-header + &,
+		&:first-of-type {
+			border-top-width: 1px;
 		}
 	}
 }
@@ -189,12 +190,42 @@
 
 	&.overview-section{
 		h2 {
-			margin: 50px 0 5px 0;
-			font: normal 300 24px/45px $font;
-			color: $primary-grey;
+			margin: 50px 0 0 -30px;
+			font: normal 600 10px/20px $font;
+			color: #fff;
+			text-transform: uppercase;
+
+			span {
+				position: relative;
+				display: inline-block;
+				background: #f9824e;//additional/default
+				padding: 0 10px 0 40px;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					width: 30px;
+					background: #fff;
+					opacity: 0.4;
+				}
+			}
+
+			&.video span{
+				background: #81c8dc //video
+			}
+			&.discussion span{
+				background: #f5d420 //discussion
+			}
+			&.required span{
+				background: #a5c959;//required
+			}
 		}
 
 		.content-card {
+			margin: 10px 0;
 			.thumbnail{
 				width: 100px;
 				height: 125px;

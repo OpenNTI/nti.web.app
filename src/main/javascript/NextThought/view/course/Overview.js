@@ -11,9 +11,18 @@ Ext.define('NextThought.view.course.Overview',{
 		'NextThought.view.course.overview.ContentLink'
 	],
 
+	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
-		'course-overview-content': 'Supplemental Reading'
+		'videos': 'Videos',
+		'discussions': 'Discussions',
+		'additional': 'Additional Reading',
+		'required': 'Required Reading'
+	},
+
+	SECTION_TYPE_MAP: {
+		'course-overview-content': 'additional',
+		'course-overview-externallink': 'additional'
 	},
 
 
@@ -39,10 +48,11 @@ Ext.define('NextThought.view.course.Overview',{
 
 	onNodeSelected: function(s,r){
 		var me = this,
+			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
 			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			locInfo,
 			items = [],
-			kinds = {};
+			sections = {};
 		//console.debug('Select???',arguments);
 
 		if(!r || r.getId() === me.currentPage){
@@ -58,13 +68,14 @@ Ext.define('NextThought.view.course.Overview',{
 		Ext.each(r.getChildren(),function(i){
 			var c, t;
 			i = me.getComponentForNode(i,locInfo);
-			t = i && i.xtype;
+			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 			if( t ){
-				c = kinds[t];
-				if(t !== 'course-overview-topic'){
+				if(i.xtype !== 'course-overview-topic'){
+					c = sections[t];
 					if(!c){
-						c = kinds[t] = {
+						c = sections[t] = {
 							xtype: 'course-overview-section',
+							type: t,
 							title: SECTION_TITLE_MAP[t] || 'Section '+t,
 							items: []
 						};
@@ -86,7 +97,8 @@ Ext.define('NextThought.view.course.Overview',{
 
 
 	getComponentForNode: function(node,info){
-		var type = node && node.nodeName;
+		var type = node && node.nodeName,
+			section = (node && node.getAttribute('section')) || null;
 
 		if(/^content:related$/i.test(type) || /^object$/i.test(type)){
 			type = node.getAttribute('type');
@@ -96,7 +108,7 @@ Ext.define('NextThought.view.course.Overview',{
 		type = 'course-overview-'+type.toLowerCase();
 
 		if(Ext.ClassManager.getByAlias('widget.'+type)){
-			return {xtype: type, node:node, locationInfo: info};
+			return {xtype: type, node:node, locationInfo: info, sectionOverride: section};
 		}
 
 		console.warn('Unknown overview type,', node);

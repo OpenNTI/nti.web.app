@@ -12,7 +12,7 @@ Ext.define('NextThought.view.course.overview.Section',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			tag: 'h2', html: '{title}'
+			tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}]
 		},{
 			id: '{id}-body',
 			cn:['{%this.renderContainer(out,values)%}']
@@ -23,7 +23,8 @@ Ext.define('NextThought.view.course.overview.Section',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
-			title: this.title || 'Untitled'
+			title: this.title || 'Untitled',
+			type: this.type || ''
 		});
 	}
 });

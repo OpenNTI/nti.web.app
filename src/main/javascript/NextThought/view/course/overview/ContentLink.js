@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.course.overview.ContentLink',{
 	extend: 'NextThought.view.cards.Card',
-	alias: 'widget.course-overview-content',
+	alias: [
+		'widget.course-overview-content',
+		'widget.course-overview-externallink'
+	],
 
 	constructor: function(config){
 		var n = config.node,
