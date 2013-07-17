@@ -233,7 +233,7 @@ Ext.define('NextThought.Library', {
 			if(s){
 				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if(xml){
-					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', xml), strip);
+					Ext.each(Ext.DomQuery.select('topic:not([ntiid])', xml), strip);
 				}
 				else {
 					console.warn('no data for index: '+url);
