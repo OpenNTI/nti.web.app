@@ -127,7 +127,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	showCardTarget: function(card, data, silent){
-		var reader = card.up('reader-content'),
+		var reader = card.up('reader-content')||ReaderPanel.get(),//for now, lets just get the default reader.
 			ntiid = data.ntiid,
 			DH = Ext.DomHelper,
 			s = encodeURIComponent('Pages('+ntiid+')'),

@@ -14,7 +14,9 @@ Ext.define('NextThought.view.course.overview.ContentLink',{
 			description: n.getAttribute('desc'),
 			href: n.getAttribute('href'),
 			thumbnail: getURL(i.root+n.getAttribute('icon')),
-			title: n.getAttribute('label')
+			ntiid: n.getAttribute('ntiid'),
+			title: n.getAttribute('label'),
+			asDomSpec: DomUtils.asDomSpec
 		};
 
 		this.callParent([config]);
