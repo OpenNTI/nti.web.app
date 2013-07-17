@@ -13,6 +13,7 @@ Ext.define('NextThought.view.account.Identity',{
 	profileLinkCard: false,
 
 	cls: 'identity',
+	floating: true,
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip':'{displayName}'},
@@ -66,6 +67,8 @@ Ext.define('NextThought.view.account.Identity',{
 	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
 
 	    this.enableProfileClicks(this.avatar);
+
+	  	this.zIndexManager.bringToFront(this)
     },
 
 
