@@ -305,6 +305,13 @@
 	}
 
     iframe[name$="content"] {
+		margin: 0;
+		width: 100%;
+
+		.detected-scrollbars &{
+			margin-right: 10px;
+		}
+
         &.clickthrough {
             pointer-events: none;
         }

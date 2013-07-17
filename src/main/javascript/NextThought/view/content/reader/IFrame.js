@@ -61,9 +61,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var me = this;
 		return {
 			xtype: 'box',
-			width: 765,
 			autoEl: {
-				width: 765,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
