@@ -118,12 +118,13 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
-				{cls: 'option discussions', text: 'Discussions & Thoughts', filter: 'discussions'},
-				{cls: 'option', text: 'Highlights & Notes', filter: 'notes'},
-				{cls: 'option bookmarks', text: 'Bookmarks', filter: 'bookmarks'},
+				{cls: 'option', me: true, contacts: true, community: true, text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
+				{cls: 'option discussions', contacts: true, text: 'Discussions & Thoughts', filter: 'discussions'},
+				{cls: 'option', me: true, text: 'Highlights & Notes', filter: 'notes'},
+				{cls: 'option', contacts: true, community: true, text: 'Notes', filter: 'notes'},
+				{cls: 'option bookmarks', me: true, text: 'Bookmarks', filter: 'bookmarks'},
 				//{cls: 'option', text: 'Likes', filter: 'likes'},
-				{cls: 'option contact', text: 'Contact Requests', filter: 'contact'}
+				{cls: 'option contact', contacts: true, community: true, text: 'Contact Requests', filter: 'contact'}
 			]
 		});
 
@@ -241,15 +242,23 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 	switchPanel: function(item){
 		var newPanel = this.getActivePanel(),
+			allItems = this.typesMenu.query('menuitem'),
 			newTab = this.fromMenu.down('menuitem[checked]'),
 			tab = this.el.down('.filters-container .activity-filters .tabs .from');
 
 		tab.update(newTab.text || item.text);
 		this.getLayout().setActiveItem(newPanel);
 
-		this.typesMenu.el.down('.bookmarks')[(newTab.isMe)? 'show': 'hide']();
-		this.typesMenu.el.down('.contact')[(newTab.isMe)? 'hide': 'show']();
-		this.typesMenu.el.down('.discussions')[(newTab.isContacts)? 'show' : 'hide']();
+		Ext.each(allItems, function(item){
+			if(newTab.isMe){
+				item[item.me? 'show': 'hide']();
+			}else if(newTab.isContacts){
+				item[item.contacts? 'show': 'hide']();
+			}else if(newTab.isCommunity){
+				item[item.community? 'show': 'hide']();
+			}
+		});
+
 		
 		if(newTab.isContacts){
 			this.applyFilters('notInCommunity');
