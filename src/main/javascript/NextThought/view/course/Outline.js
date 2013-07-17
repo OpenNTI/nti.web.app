@@ -43,14 +43,12 @@ Ext.define('NextThought.view.course.Outline',{
 		beforeselect: function(s,r){
 			var pass = r.get('type') !== 'unit',
 				store= s.getStore(),
-				last = s.lastSelected, next = 0;
+				last = s.lastSelected || store.first(), next;
 
 			if(this.fromKey && !pass){
-				if(last){
-					last = store.indexOf(last);
-					next = store.indexOf(r);
-					next += (next - last);
-				}
+				last = store.indexOf(last);
+				next = store.indexOf(r);
+				next += ((next - last) || 1);
 
 				//do the in the next event pump
 				Ext.defer(s.select,1,s,[next]);
@@ -93,8 +91,8 @@ Ext.define('NextThought.view.course.Outline',{
 
 		r = s.findRecord('NTIID', pageInfo.getId(), false, true, true);
 		if(!r){
-			console.warn('No record',pageInfo);
-			return;
+			console.debug('No record selected, defaulting to first lesson',pageInfo);
+			r = s.findRecord('type','lesson',0,false,false,true);
 		}
 
 		this.getSelectionModel().select(r);
