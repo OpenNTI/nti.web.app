@@ -666,7 +666,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 	applyFilters: function(mimeTypes, filterTypes){
-		if(Ext.isEmpty(mimeTypes) && Ext.isEmtpy(filterTypes)){
+		if(Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)){
 			return;
 		}
 
