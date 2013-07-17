@@ -88,7 +88,7 @@ Ext.define( 'NextThought.view.library.View', {
 		if(needsChanging){
 			l.setActiveItem(vId);
 		} else if(reset) {
-			active.layout.setActiveItem(0);
+			active.layout.setActiveItem(0);//should build in some smarts about allowing this to toggle through if the views are 'ready'
 		}
 
 		return true;
