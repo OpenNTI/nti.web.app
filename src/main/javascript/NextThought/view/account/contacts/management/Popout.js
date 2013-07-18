@@ -157,6 +157,15 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			return this.groupsList.fireEvent('beforedeactivate') && this.optionsMenu.fireEvent('beforedeactivate');
 		}, this);
 
+		if(!$AppConfig.service.canChat()){
+			this.actionEl.destroy();
+		}
+
+		if(!$AppConfig.service.canFriend()){
+			this.listEl.destroy();
+			this.optionsEl.destroy();
+		}
+
 	},
 
 
