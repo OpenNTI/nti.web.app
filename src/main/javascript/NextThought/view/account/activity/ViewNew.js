@@ -219,7 +219,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		if(state.filter){
 			Ext.each(filterItems, function(item){
-				var checked = Ext.Array.contains(state.filter, item.text)
+				var checked = Ext.Array.contains(state.filter, item.text);
 				
 				if(me.rendered){
 					item.setChecked(checked);

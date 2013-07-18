@@ -68,7 +68,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 	    this.enableProfileClicks(this.avatar);
 
-	  	this.zIndexManager.bringToFront(this)
+		this.zIndexManager.bringToFront(this);
     },
 
 
