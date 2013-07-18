@@ -100,6 +100,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.enableBubble(['delete-post','show-post']);
 		this.on('ready',this.onReady,this);
 		this.mon(this.record, 'destroy', this.destroy, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
+		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.buildStore();
 	},
 
@@ -513,6 +515,32 @@ Ext.define('NextThought.view.forums.Topic',{
 				}
 			}
 		});
+	},
+
+
+	onBeforeDeactivate: function(){
+		if(this.bodyEl){
+			this.bodyEl.select('video').each(function(v){
+				v.dom.innerHTML = null;
+				v.dom.load();
+			});
+		}
+	},
+
+
+	onBeforeActivate: function(){
+		var href;
+		if(this.bodyEl){
+			this.bodyEl.select('video').each(function(v){
+				if(Ext.isEmpty((v.getHTML() || '').trim())){
+					href = v.dom.getAttribute('href');
+					Ext.DomHelper.overwrite(v, {
+						tag: 'source',
+						src: href
+					});
+				}
+			});
+		}
 	},
 
 
