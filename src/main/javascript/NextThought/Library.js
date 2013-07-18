@@ -398,7 +398,7 @@ Ext.define('NextThought.Library', {
 			}
 		}
 
-		if(report){
+		if(this.isDebug && report){
 			console.debug('Not Found: Top:\n', toc.documentElement.getAttribute( 'ntiid' ),'\n',containerId);
 			for( ix=elts.length-1; ix >= 0; ix-- ) {
 				console.debug('Not Found: Topic:\n', elts[ix].getAttribute( 'ntiid' ),'\n',containerId);
