@@ -107,12 +107,21 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		Ext.defer(function(){
 			me.mon(me.el.up('body'),{
 				scope: me,
-				'click':me.detectBlur,
-				'mouseover':me.detectBlur
+				'click':'detectBlurClick',
+				'mouseover':'detectBlur'
 			});
 		},1);
 	},
 
+	detectBlurClick: function(e){
+		if(!e.getTarget('.'+this.cls)){
+			clearTimeout(this.hideTimer);
+			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
+			this.maybeHidePopout();
+		}else{
+			clearTimout(this.hideTimer);
+		}
+	},
 
 	detectBlur: function(e){
 		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+ this.refEl && this.refEl.id) && !e.getTarget('.x-menu')){
