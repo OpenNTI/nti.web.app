@@ -50,7 +50,7 @@ Ext.define('NextThought.model.course.navigation.Node',{
 			//string displayed in the UI
 		{ name:'label', type:'string', mapping:'@label',
 			convert:function(v,m){
-				var n = m.getAssociatedNode();
+				var n = !v && m.getAssociatedNode();
 				return v || (n && Ext.DomQuery.selectValue(this.mapping,n)) || 'Failed';
 			}
 		},
