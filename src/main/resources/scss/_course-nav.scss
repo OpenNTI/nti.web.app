@@ -233,6 +233,91 @@
 			}
 		}
 	}
+
+	&.overview-videos {
+		@extend .overview-section;
+
+		.body {
+			position: relative;
+			overflow: hidden;
+			height: 288px;
+			margin: 0 -30px;
+
+			.curtain {
+				position: absolute;
+				left: 0; top: 0; bottom: 0;
+				width: 512px;
+
+				background: url(http://interfacelift.com/wallpaper/D47cd523/03313_monumentvalley_800x480.jpg) center;
+				background-size: cover;
+
+				&::before {
+					position: absolute;
+					content: '';
+					-webkit-filter: blur(2px);
+					filter: url(#blur-effect);
+					border-radius: 5em;
+					height: 45px;
+					width: 100px;
+					top: 120px;
+					left: 50%;
+					background: rgba(0,0,0,0.68);
+					margin-left: -5%;
+				}
+			}
+
+			.video-list{
+				position: absolute;
+				left: 512px;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				overflow: auto;
+				background: #04232c;
+
+				.video-row {
+					cursor: pointer;
+					color: #ebebeb;
+					padding: 8px 10px;
+					font: normal 400 18px 'Open Sans Condensed', $font;
+					border:{
+						color: #0f2d35;
+						style: solid;
+						width: 0 0 1px 0;
+					}
+					@include ellipse();
+
+					.comments {
+						font: normal 700 10px/12px $font;
+						color: $secondary-grey;
+						text-transform: uppercase;
+					}
+
+					&.over{
+						$c: #113b46;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+
+						.comments{
+							color: #aaeafc;
+						}
+					}
+
+					&.x-item-selected{
+						$c: #4699b0;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+
+						.comments{
+							color: #aaeafc;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 .x-container-course {
@@ -240,53 +325,54 @@
 		background: #ffffff;
 		padding: 25px 30px;
 	}
+}
 
-	&.overview-section{
-		h2 {
-			margin: 50px 0 0 -30px;
-			font: normal 600 10px/20px $font;
-			color: #fff;
-			text-transform: uppercase;
 
-			span {
-				position: relative;
-				display: inline-block;
-				background: #f9824e;//additional/default
-				padding: 0 10px 0 40px;
+.overview-section{
+	h2 {
+		margin: 50px 0 0 -30px;
+		font: normal 600 10px/20px $font;
+		color: #fff;
+		text-transform: uppercase;
 
-				&::after {
-					content: '';
-					position: absolute;
-					top: 0;
-					left: 0;
-					bottom: 0;
-					width: 30px;
-					background: #fff;
-					opacity: 0.4;
-				}
-			}
+		span {
+			position: relative;
+			display: inline-block;
+			background: #f9824e;//additional/default
+			padding: 0 10px 0 40px;
 
-			&.video span{
-				background: #81c8dc //video
-			}
-			&.discussions span{
-				background: #f5d420 //discussion
-			}
-			&.required span{
-				background: #a5c959;//required
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 30px;
+				background: #fff;
+				opacity: 0.4;
 			}
 		}
 
-		.content-card {
-			margin: 10px 0;
-			.thumbnail{
-				width: 100px;
-				height: 125px;
-			}
-			.meta {
-				padding-top: 30px;
-				margin-left: 120px;
-			}
+		&.video span{
+			background: #81c8dc //video
+		}
+		&.discussions span{
+			background: #f5d420 //discussion
+		}
+		&.required span{
+			background: #a5c959;//required
+		}
+	}
+
+	.content-card {
+		margin: 10px 0;
+		.thumbnail{
+			width: 100px;
+			height: 125px;
+		}
+		.meta {
+			padding-top: 30px;
+			margin-left: 120px;
 		}
 	}
 }

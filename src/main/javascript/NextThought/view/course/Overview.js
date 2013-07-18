@@ -9,22 +9,32 @@ Ext.define('NextThought.view.course.Overview',{
 		'NextThought.view.course.overview.Section',
 		'NextThought.view.course.overview.Topic',
 		'NextThought.view.course.overview.ContentLink',
-		'NextThought.view.course.overview.Discussion'
+		'NextThought.view.course.overview.Discussion',
+		'NextThought.view.course.overview.Videos'
 	],
 
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
-		'videos': 'Videos',
+		'video': 'Videos',
 		'discussions': 'Discussions',
 		'additional': 'Additional Reading',
 		'required': 'Required Reading'
 	},
 
 	SECTION_TYPE_MAP: {
+		'course-overview-video': 'video',
 		'course-overview-content': 'additional',
 		'course-overview-discussion': 'discussions',
 		'course-overview-externallink': 'additional'
+	},
+
+
+	SECTION_CONTAINER_MAP: {
+		'video': 'course-overview-video-section',
+		'discussions': 'course-overview-section',
+		'additional': 'course-overview-section',
+		'required': 'course-overview-section'
 	},
 
 
@@ -50,6 +60,7 @@ Ext.define('NextThought.view.course.Overview',{
 
 	onNodeSelected: function(s,r){
 		var me = this,
+			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
 			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			locInfo,
@@ -76,7 +87,7 @@ Ext.define('NextThought.view.course.Overview',{
 					c = sections[t];
 					if(!c){
 						c = sections[t] = {
-							xtype: 'course-overview-section',
+							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
 							type: t,
 							title: SECTION_TITLE_MAP[t] || 'Section '+t,
 							items: []
