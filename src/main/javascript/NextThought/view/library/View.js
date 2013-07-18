@@ -90,7 +90,18 @@ Ext.define( 'NextThought.view.library.View', {
 		} else if(reset) {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
-			if( active.layout.setActiveItem(0) ){
+			active = active.layout.setActiveItem(0);
+			if( active ){
+				//hack 2 for demo
+				try{
+					active = active.down('course-outline').getSelectionModel().getSelection()[0];
+					if(active){
+						this.fireEvent('set-location', active.getId());
+					}
+				}
+				catch(e){
+					console.error('error',e);
+				}
 			}
 		}
 
