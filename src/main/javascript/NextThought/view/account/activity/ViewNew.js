@@ -194,6 +194,10 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.typesMenu.el.down('.contact').hide();
 		this.typesMenu.el.down('.discussions').hide();
 		this.switchPanel(this.fromMenu.down('menuitem[text=Community]'));
+
+		if(!$AppConfig.service.canFriend()){
+			this.fromMenu.down('menuitem[text=My Contacts]').destroy();
+		}
 	},
 
 	applyState: function(state){
