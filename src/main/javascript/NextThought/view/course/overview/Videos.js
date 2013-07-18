@@ -6,7 +6,7 @@ Ext.define('NextThought.view.course.overview.Videos',{
 
 	requires: [
 		'NextThought.model.PlaylistItem',
-		'NextThought.view.Video',
+		'NextThought.view.video.Video',
 		'Ext.data.reader.Json'
 	],
 
