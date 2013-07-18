@@ -66,6 +66,6 @@ Ext.define('NextThought.view.course.overview.Discussion',{
 
 
 	onClick: function(){
-		console.debug('hello');
+		this.fireEvent('navigate-to-href',this,this.data.ntiid);
 	}
 });
