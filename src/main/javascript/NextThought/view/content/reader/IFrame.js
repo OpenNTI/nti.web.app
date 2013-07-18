@@ -569,17 +569,15 @@ Ext.define('NextThought.view.content.reader.IFrame',{
      * @param x2
      * @param y2
      */
-    makeSelectionFrom: function(x1, y1, x2, y2) {
+    makeRangeFrom: function(x1, y1, x2, y2) {
         var me = this,
             iFrameDoc = this.getDocumentElement(),
             startRange = rangeAtPoint(x1, y1),
             endRange = rangeAtPoint(x2, y2),
-            range = iFrameDoc.createRange(),
-            sel = iFrameDoc.getSelection();
-        range.setStart(startRange.startContainer, startRange.offset);
-        range.setEnd(endRange.startContainer, endRange.offset);
-        sel.removeAllRanges();
-        sel.addRange(range);
+            range = iFrameDoc.createRange();
+        range.setStart(startRange.startContainer, startRange.startOffset);
+        range.setEnd(endRange.startContainer, endRange.endOffset);
+        return range;
 
         function rangeAtPoint(x,y) {
             var reader = me.reader,

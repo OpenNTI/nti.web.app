@@ -5,7 +5,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
     requires: [
         'NextThought.view.content.reader.IFrame',
         'NextThought.view.content.reader.Scroll',
-        'NextThought.view.content.reader.TouchHighlight'
+        'NextThought.view.content.reader.TouchHighlight',
+        'NextThought.view.content.reader.Annotations'
     ],
 
     statics: {
@@ -57,6 +58,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
             reader = this.reader,
             scroll = reader.getScroll(),
             highlight = reader.getTouchHighlight(),
+            annotations = reader.getAnnotations(),
             dom = reader.getEl().dom,
             state = s.STATE.NONE,
             iFrame = reader.getIframe(),
@@ -65,9 +67,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
             previouslyPickedElementStyle = '',
             pickedElement = null,
             initialTime,
-            initialY,
-            initialX,
-            lastY,
+            initialX, initialY,
+            lastX, lastY,
             //current movement delta
             vel;
 
@@ -149,12 +150,14 @@ Ext.define('NextThought.view.content.reader.Touch', {
             function scrollMove() {
                 vel = lastY - touch.pageY;
                 lastY = touch.pageY;
+                lastX = touch.pageX;
                 scroll.by(vel);
             }
 
             function selectMove() {
-                //iFrame.makeSelectionFrom(initialX, initialY,
-                //                         touch.pageX, touch.pageY);
+                // TODO:
+                var range = iFrame.makeRangeFrom(initialX, initialY,
+                                                 touch.pageX, touch.pageY);
                 highlight.show(touch.pageX, touch.pageY);
             }
 
@@ -198,6 +201,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
             else if (tempState === s.STATE.SELECTING) {
                 // TODO: Update Selection
                 console.log('stop selection');
+                var range = iFrame.makeRangeFrom(initialX, initialY,
+                        lastX, lastY),
+                    xy = [lastX, lastY];
+
+                annotations.addAnnotation(range, xy);
             }
             else if (tempState === s.STATE.DRAGGING) {
                 // TODO: Update Dragged element
