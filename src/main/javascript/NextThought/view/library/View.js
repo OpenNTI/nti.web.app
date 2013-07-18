@@ -91,8 +91,6 @@ Ext.define( 'NextThought.view.library.View', {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
 			if( active.layout.setActiveItem(0) ){
-				//Hack for demo
-				this.down('content-navigation').onBack({stopEvent:Ext.emptyFn});
 			}
 		}
 
