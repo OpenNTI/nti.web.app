@@ -167,22 +167,18 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 	setActive: function(el){
-		this.el.select('[data-view]').removeCls('active');
-		Ext.get(el).addCls('active');
+
 	},
 
 
 	onClick: function(e){
-		var t = e.getTarget('[data-view]',null,true),
+		var t = e.getTarget('[data-view]'),
 			viewId = t && t.getAttribute('data-view');
 
 		
 		if(!Ext.isEmpty(viewId)){
 			if(viewId === 'library'){
 				this.stopShowHide.call(this.libraryMenu);
-				if(t.hasCls('active')){
-					this.libraryMenu[this.libraryMenu.isVisible()?'hide':'show']();
-				}
 			}
 
 			if(viewId === 'search'){
