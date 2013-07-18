@@ -138,7 +138,7 @@ Ext.define('NextThought.util.Globals', {
 			};
 		}
 
-		if(typeof url === 'object'){
+		if(url && typeof url === 'object'){
 			doc = url.document;
 			url = url.url;
 		}
