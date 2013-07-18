@@ -23,6 +23,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 			data.href = data['attribute-data-href'];
 
 			Ext.applyIf(data,{
+				ntiid: reader.getLocation().NTIID,
 				basePath: reader && reader.basePath,
 				description: (description && description.getHTML()) || '',
 				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
