@@ -248,13 +248,13 @@
 				left: 0; top: 0; bottom: 0;
 				width: 512px;
 
-				background: url(http://interfacelift.com/wallpaper/D47cd523/03313_monumentvalley_800x480.jpg) center;
+				background: url(../images/chalkboard_bg.png) center;
 				background-size: cover;
 
 				&::before {
 					position: absolute;
 					content: '';
-					-webkit-filter: blur(2px);
+					-webkit-filter: blur(8px);
 					filter: url(#blur-effect);
 					border-radius: 5em;
 					height: 45px;
@@ -262,7 +262,7 @@
 					top: 120px;
 					left: 50%;
 					background: rgba(0,0,0,0.68);
-					margin-left: -5%;
+					margin-left: -5%;//this needs to be calculated
 				}
 			}
 
@@ -280,12 +280,17 @@
 					color: #ebebeb;
 					padding: 8px 10px;
 					font: normal 400 18px 'Open Sans Condensed', $font;
+					min-height: 53px;
 					border:{
 						color: #0f2d35;
 						style: solid;
 						width: 0 0 1px 0;
 					}
-					@include ellipse();
+
+					.comments,.label{
+						@include ellipse();
+						overflow:hidden;
+					}
 
 					.comments {
 						font: normal 700 10px/12px $font;

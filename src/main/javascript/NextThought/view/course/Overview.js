@@ -23,7 +23,7 @@ Ext.define('NextThought.view.course.Overview',{
 	},
 
 	SECTION_TYPE_MAP: {
-		'course-overview-video': 'video',
+		'course-overview-ntivideo': 'video',
 		'course-overview-content': 'additional',
 		'course-overview-discussion': 'discussions',
 		'course-overview-externallink': 'additional'

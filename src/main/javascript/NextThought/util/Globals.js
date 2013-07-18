@@ -402,9 +402,13 @@ Ext.define('NextThought.util.Globals', {
 		};
 	},
 
-	getURL: function(u) {
+	getURL: function(u,root) {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
+			if(!Ext.isEmpty(root)){
+				console.warn('root was not empty',root);
+				u = root + u;
+			}
 			return $AppConfig.server.host + u;
 		}
 		return u;
