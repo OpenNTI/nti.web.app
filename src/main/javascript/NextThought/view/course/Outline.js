@@ -72,6 +72,24 @@ Ext.define('NextThought.view.course.Outline',{
 		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey,function(){me.fromKey=true;});
 	},
 
+	
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.frameBodyEl,'scroll','handleScrolling');
+	},
+
+
+	handleScrolling: function(){
+		var selected = this.getSelectedNodes()[0],
+			selectedEl = Ext.get(selected);
+
+		if(selectedEl.getY() < this.frameBodyEl.getY()){
+			selectedEl.addCls('out-of-view');
+		}else{
+			selectedEl.removeCls('out-of-view');
+		}
+	},
+
 
 	clear: function(){
 		this.bindStore('ext-empty-store');

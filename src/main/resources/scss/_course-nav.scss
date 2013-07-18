@@ -78,6 +78,12 @@
 				}
 			}
 
+			&.out-of-view{
+				.date{
+					display: none !important;
+				}
+			}
+
 			&.x-item-selected,&.over {
 				.date{
 					@include hardware-accelerate();
