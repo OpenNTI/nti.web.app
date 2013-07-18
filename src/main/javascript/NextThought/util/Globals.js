@@ -406,8 +406,8 @@ Ext.define('NextThought.util.Globals', {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
 			if(!Ext.isEmpty(root)){
-				console.warn('root was not empty',root);
 				u = root + u;
+				return getURL(u);
 			}
 			return $AppConfig.server.host + u;
 		}
