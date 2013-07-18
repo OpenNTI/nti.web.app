@@ -192,7 +192,7 @@ Ext.define('NextThought.Library', {
 			return;
 		}
 
-		Ext.callback(callback,null,[me.videoIndex[index]]);
+		Ext.callback(callback,scope,[me.videoIndex[index]]);
 	},
 
 
