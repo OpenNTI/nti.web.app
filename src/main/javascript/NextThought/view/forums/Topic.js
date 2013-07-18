@@ -457,7 +457,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 				return Ext.apply({
 					tag: 'iframe',
-					class: 'youtube-player',
+					cls: 'youtube-player',
 					href: href,
 					src: adjustedHref
 				}, opts);
