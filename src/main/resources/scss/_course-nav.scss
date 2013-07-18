@@ -253,9 +253,19 @@
 				position: absolute;
 				left: 0; top: 0; bottom: 0;
 				width: 512px;
-
+				cursor: pointer;
 				background: url(../images/chalkboard_bg.png) center;
 				background-size: cover;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 120px;
+					left: 50%;
+					background: $icons no-repeat;
+					margin-left: -22px;
+					@include sprite($icons,'play',$dimensions:true);
+				}
 
 				&::before {
 					position: absolute;
@@ -264,11 +274,12 @@
 					filter: url(#blur-effect);
 					border-radius: 5em;
 					height: 45px;
-					width: 100px;
+					width: 45px;
 					top: 120px;
 					left: 50%;
 					background: rgba(0,0,0,0.68);
-					margin-left: -5%;//this needs to be calculated
+					margin-left: -22px;
+					//margin-left: -5%;//this needs to be calculated
 				}
 			}
 
