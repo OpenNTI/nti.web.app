@@ -6,6 +6,8 @@ Ext.define('NextThought.view.contacts.Card',{
 		chatLink: 'NextThought.mixins.ChatLinks'
 	},
 
+	profileLinkCard: false,
+
 	ui: 'contacts-tabs-card',
 	cls: 'contact-card-container',
 
