@@ -814,7 +814,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v));
+			me.saveSharingPrefs(rec,SharingUtils.sharedWithForSharingInfo(v));
 		}
 
 		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
