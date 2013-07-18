@@ -37,12 +37,12 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	tabSpecs: [
-//		{label: 'Dashboard', viewId: 'dashboard-view'},
-		{label: 'Course Book', viewId: 'course-book?', selected:true}//,
+		{label: 'Dashboard', viewId: 'dashboard-view'},
+		{label: 'Lessons', viewId: 'course-book?', selected:true},
 //		{label: 'Assignments', viewId: ''},
-//		{label: 'Discussions', viewId: ''},
+		{label: 'Discussions', viewId: ''},
 //		{label: 'Notebook', viewId: ''},
-//		{label: 'Course Info', viewId: ''}
+		{label: 'Course Info', viewId: ''}
 	],
 
 
