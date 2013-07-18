@@ -371,6 +371,14 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	onDestroy: function(){
+
+		this.bodyEl.select('video').each(function(vid){
+			try{
+				vid.dom.innerHTML = null;
+				vid.dom.load();
+			}catch(e){}
+		});
+
 		delete this.editor.ownerCt;
 		this.editor.destroy();
 		var h = this.record.get('headline');
