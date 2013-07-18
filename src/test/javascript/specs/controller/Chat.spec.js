@@ -331,7 +331,7 @@ describe('Chat Controller Tests', function(){
 		describe("changePresence Tests",function(){
 
 			it("Passing just a type", function(){
-				var model = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable');
+				var model = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable', 'chat','');
 
 				controller.changePresence('unavailable');
 
@@ -348,7 +348,7 @@ describe('Chat Controller Tests', function(){
 			it("set-chat-type test", function(){
 				var show = $AppConfig.userObject.get('Presence').get('show'),
 					status = $AppConfig.userObject.get('Presence').get('status'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable',show,status);
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable',show,status || '');
 
 				controller.changeType("unavailable");
 				expect(controller.changePresence).toHaveBeenCalledWith('unavailable', show, status);//the default values for show and status
@@ -357,7 +357,7 @@ describe('Chat Controller Tests', function(){
 
 			it("set-chat-show test", function(){
 				var status = $AppConfig.userObject.get('Presence').get('status'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available','chat',status);
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available','chat',status || '');
 
 				controller.changeShow("chat");
 				expect(controller.changePresence).toHaveBeenCalledWith("available","chat",status);
@@ -367,7 +367,8 @@ describe('Chat Controller Tests', function(){
 			it("set-chat-status test", function(){
 				var show = $AppConfig.userObject.get('Presence').get('show'),
 					type = $AppConfig.userObject.get('Presence').get('type'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,type,show,"New Status");
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,type,show,'');
+				//the state is set to '' because isFeature(custom-status) is false causing the status to be set to ''
 
 				controller.changeStatus("New Status");
 				expect(controller.changePresence).toHaveBeenCalledWith(type, show, "New Status");

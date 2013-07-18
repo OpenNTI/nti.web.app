@@ -126,6 +126,7 @@ describe("Stream Store Tests", function() {
 
 		beforeEach(function(){
 			spyOn(store.proxy, 'read');
+			store.proxy.url = 'www.google.com';
 		});
 
 		it('provided start makes it through', function(){

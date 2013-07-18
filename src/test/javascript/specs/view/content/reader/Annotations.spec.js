@@ -28,7 +28,7 @@ describe('Annotation detection tests', function() {
                 expect(result).toBeTruthy();
 
                 result.handler();
-                expect(annotations.fireEvent).toHaveBeenCalledWith('define', resultingText, jasmine.any(Object));
+                expect(annotations.fireEvent).toHaveBeenCalledWith('define', resultingText, jasmine.any(Object), jasmine.any(Object));
             } else {
                 expect(result).toBeNull();
             }
@@ -36,6 +36,7 @@ describe('Annotation detection tests', function() {
 
         beforeEach(function() {
             annotations = new MockClassForAnnotationsMixin();
+            annotations.reader = {};
             spyOn(annotations, 'fireEvent');
 
             newElement = document.createElement('div');

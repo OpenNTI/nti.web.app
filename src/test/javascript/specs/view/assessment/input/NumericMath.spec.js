@@ -12,7 +12,7 @@ describe('NumericMath input Tests', function(){
 		var part = Ext.create('NextThought.model.assessment.NumericMathPart', {
 				solutions: [Ext.create('NextThought.model.assessment.NumericMathSolution',{
 					value: 1.2
-				})]
+				})],
 			}),
 			solutionContent,
 			nmInput = Ext.create('NextThought.view.assessment.input.NumericMath', {
@@ -20,7 +20,8 @@ describe('NumericMath input Tests', function(){
 				tabIndexTracker: {getNext: noop},
 				reset: noop,
 				disableSolution: noop,
-				part: part
+				part: part,
+				filterHTML: Ext.emptyFn();
 			});
 
 		solutionContent = nmInput.getSolutionContent(part);
