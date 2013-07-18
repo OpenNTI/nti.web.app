@@ -372,7 +372,7 @@
 		span {
 			position: relative;
 			display: inline-block;
-			background: #f9824e;//additional/default
+			background: #ce78e0;//additional/default
 			padding: 0 10px 0 40px;
 
 			&::after {
@@ -387,14 +387,17 @@
 			}
 		}
 
+		&.assessment span{
+			background: #a5c959;
+		}
 		&.video span{
-			background: #81c8dc //video
+			background: #81c8dc; //video
 		}
 		&.discussions span{
-			background: #f5d420 //discussion
+			background: #f5d420; //discussion
 		}
 		&.required span{
-			background: #a5c959;//required
+			background: #f9824e;//required
 		}
 	}
 
