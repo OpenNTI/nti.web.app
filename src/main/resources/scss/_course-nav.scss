@@ -272,6 +272,13 @@
 				}
 			}
 
+			.screen {
+				position: absolute;
+				left: 0; top: 0; bottom: 0;
+				width: 512px;
+				overflow: hidden;
+			}
+
 			.video-list{
 				position: absolute;
 				left: 512px;

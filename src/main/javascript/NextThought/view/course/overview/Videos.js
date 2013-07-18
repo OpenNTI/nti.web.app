@@ -1,7 +1,14 @@
+/*jslint */
+/*globals $AppConfig, Library, getURL, NextThought  */
 Ext.define('NextThought.view.course.overview.Videos',{
 	extend: 'Ext.view.View',
 	alias: ['widget.course-overview-video-section','widget.course-overview-ntivideo'],
 
+	requires: [
+		'NextThought.model.PlaylistItem',
+		'NextThought.view.Video',
+		'Ext.data.reader.Json'
+	],
 
 	ui: 'course',
 	cls: 'overview-videos',
@@ -37,7 +44,8 @@ Ext.define('NextThought.view.course.overview.Videos',{
 
 
 	listeners: {
-		select: 'onSelectChange'
+		select: 'onSelectChange',
+		click: {element: 'curtainEl', fn: 'onCurtainClicked'}
 	},
 
 
@@ -61,6 +69,8 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		delete config.items;
 		this.callParent([config]);
 
+		this.playlist = [];
+
 		if(i){
 			Library.getVideoIndex(i.title,this.applyVideoData,this);
 		}
@@ -69,6 +79,16 @@ Ext.define('NextThought.view.course.overview.Videos',{
 
 	applyVideoData: function(videoIndex){
 		console.debug(videoIndex);
+		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
+			me = this;
+		this.getStore().each(function(r){
+			me.playlist.push(reader.read({
+				'mediaId': videoIndex[r.getId()].title,
+				'sources': videoIndex[r.getId()].sources
+			}).records[0]);
+		});
+
+		this.maybeCreatePlayer();
 	},
 
 
@@ -121,6 +141,24 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	},
 
 
+	maybeCreatePlayer: function(){
+		if (!this.rendered){
+			this.on({afterRender: Ext.bind(this.maybeCreatePlayer, this, arguments), single: true});
+			return;
+		}
+
+		this.player = Ext.widget({
+			xtype: 'content-video',
+			playlist: this.playlist,
+			renderTo: this.screenEl,
+			playerWidth: 512,
+			width: 512,
+			height: 288
+		});
+
+	},
+
+
 	resetCommentCount: function(a,r){
 		var req = r && r.request;
 		console.warn('resetting count to 0\n',r && r.responseText);
@@ -140,10 +178,32 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	},
 
 
+	showCurtain: function(){
+		if(this.curtainEl){
+			this.curtainEl.setVisibilityMode(Ext.Element.DISPLAY).show();
+		}
+	},
+
+
+	hideCurtain: function(){
+		if(this.curtainEl){
+			this.curtainEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		}
+	},
+
+
 	onSelectChange: function(s,rec){
-		var p = rec.get('poster') || null;
+		var p = rec.get('poster') || null,
+			store = this.getStore(),
+			index = store.indexOf(rec);
+
 		if(p){
 			p = 'url('+p+')';
+		}
+
+		if(this.player){
+			this.player.stopPlayback();
+			this.showCurtain();
 		}
 
 		if( this.curtainEl ){
@@ -152,6 +212,20 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		else {
 			console.warn('noes!');
 		}
-	}
+	},
 
+
+	onCurtainClicked: function(e){
+		e.stopEvent();
+		var t = this.getSelectionModel().getSelection()[0];
+		if (!t || !this.player){
+			return;
+		}
+
+		t = this.getStore().indexOf(t);
+
+		this.player.playlistSeek(t);
+		this.player.resumePlayback();
+		this.hideCurtain();
+	}
 });
