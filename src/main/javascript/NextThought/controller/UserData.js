@@ -697,11 +697,11 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveSharingPrefs: function(pageInfo, prefs, callback){
+	saveSharingPrefs: function(pageInfoId, prefs, callback){
 		//TODO - check to see if it's actually different before save...
-
+		var me = this;
 		//get parent:
-		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfo.getId()).last(),
+		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfoId).last(),
 			function(topPi){
 				if (topPi){
 					topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo){
@@ -814,7 +814,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(rec,SharingUtils.sharedWithForSharingInfo(v));
+			me.saveSharingPrefs(rec.get('ContainerId'),SharingUtils.sharedWithForSharingInfo(v));
 		}
 
 		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
