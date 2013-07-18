@@ -10,7 +10,8 @@ Ext.define('NextThought.view.course.Overview',{
 		'NextThought.view.course.overview.Topic',
 		'NextThought.view.course.overview.ContentLink',
 		'NextThought.view.course.overview.Discussion',
-		'NextThought.view.course.overview.Videos'
+		'NextThought.view.course.overview.Videos',
+		'NextThought.view.course.overview.QuestionSet'
 	],
 
 	autoScroll: true,
@@ -19,14 +20,16 @@ Ext.define('NextThought.view.course.Overview',{
 		'video': 'Videos',
 		'discussions': 'Discussions',
 		'additional': 'Additional Reading',
-		'required': 'Required Reading'
+		'required': 'Required Reading',
+		'assessments': 'Assessments'
 	},
 
 	SECTION_TYPE_MAP: {
 		'course-overview-ntivideo': 'video',
 		'course-overview-content': 'additional',
 		'course-overview-discussion': 'discussions',
-		'course-overview-externallink': 'additional'
+		'course-overview-externallink': 'additional',
+		'course-overview-naquestionset': 'assessments'
 	},
 
 
@@ -34,7 +37,8 @@ Ext.define('NextThought.view.course.Overview',{
 		'video': 'course-overview-video-section',
 		'discussions': 'course-overview-section',
 		'additional': 'course-overview-section',
-		'required': 'course-overview-section'
+		'required': 'course-overview-section',
+		'assessments': 'course-overview-section'
 	},
 
 

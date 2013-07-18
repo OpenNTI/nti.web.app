@@ -50,7 +50,8 @@ Ext.define('NextThought.chart.series.Score',{
 		try {
 		label.setAttributes({
 			text: val+(val>=100?'':'\u008C%'),
-			x: this.centerX + (val>=100? 0:2)
+			x: this.centerX + (val>=100? 0:2),
+			y: this.centerY + 1
 		});
 		label.show(true);
 		}
