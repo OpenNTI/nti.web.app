@@ -9,6 +9,7 @@ Ext.define('NextThought.Library', {
 
 	bufferedToc: {},
 	activeLoad: {},
+	activeVideoLoad: {},
 
 	constructor: function(config) {
 		this.tocs = {};
@@ -114,6 +115,84 @@ Ext.define('NextThought.Library', {
 		}
 
 		return this.tocs[index];
+	},
+
+
+	getVideoIndex: function(index, callback, scope){
+		if(index instanceof Ext.data.Model){
+			index = index.getId();
+		}
+
+		var me = this,
+			title = me.getTitle(index),
+			proxy = $AppConfig.server.jsonp? JSONP : Ext.Ajax,
+			t = me.getToc(index),
+			url;
+
+		function parse(q,s,resp){
+			if(!s){
+				failure(resp);
+				return;
+			}
+
+			var cb = me.activeVideoLoad[index],
+				r = resp.responseText;
+
+			if(Ext.isString(r)){
+				try{
+					r = Ext.JSON.decode(r);
+				}catch(e){
+					failure(e);
+					return;
+				}
+			}
+
+			me.videoIndex[index] = r;
+			delete me.activeVideoLoad[index];
+			Ext.callback(cb,me,[r]);
+		}
+
+
+		function failure(){
+			console.error(arguments);
+		}
+
+
+		if(!t){
+			console.warn('No toc yet for', index);
+			return;
+		}
+
+		if(!me.videoIndex){
+			me.videoIndex = {};
+		}
+
+		if(!me.videoIndex[index]){
+			t = t.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
+			if(!t){
+				console.warn('No video index defined', index);
+				return;
+			}
+			url = getURL(t.getAttribute('href'),title.get('root'));
+
+			if( me.activeVideoLoad[index] ){
+				me.activeVideoLoad[index] = Ext.Function.createSequence(me.activeVideoLoad[index],callback||Ext.emptyFn,scope);
+				return;
+			}
+
+			me.activeVideoLoad[index] = scope? Ext.bind(callback,scope) : callback;
+			proxy.request({
+				ntiid: title.get('NTIID'),
+				url: url,
+				jsonpUrl: url+'p', //todo: make smarter
+				contentType:'text/json',
+				expectedContentType:'application/json',
+				callback: parse
+			});
+			return;
+		}
+
+		Ext.callback(callback,null,[me.videoIndex[index]]);
 	},
 
 

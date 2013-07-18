@@ -44,7 +44,8 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	constructor: function(config){
 
 
-		var store = config.store = new Ext.data.Store({
+		var i = config.items[0],
+			store = config.store = new Ext.data.Store({
 			fields: [
 				{name:'id', type:'string', mapping: 'ntiid'},
 				{name:'label', type:'string'},
@@ -55,9 +56,19 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		});
 
 		//store.each(this.loadPageInfo,this);
+		i = i && i.locationInfo;
 
 		delete config.items;
 		this.callParent([config]);
+
+		if(i){
+			Library.getVideoIndex(i.title,this.applyVideoData,this);
+		}
+	},
+
+
+	applyVideoData: function(videoIndex){
+		console.debug(videoIndex);
 	},
 
 
