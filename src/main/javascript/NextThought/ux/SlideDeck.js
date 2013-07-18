@@ -45,6 +45,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 		console.debug('opening slidedesk id: '+slidedeckId);
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
+			if((o.getAttribute('href')||'').indexOf('#')>=0){return;}
 			ids.push(o.getAttribute('ntiid'));
 		});
 
