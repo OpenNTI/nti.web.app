@@ -2,6 +2,14 @@ Ext.define('NextThought.view.content.reader.TouchHighlight',{
 
     alias: 'reader.touchHighlight',
 
+    requires: [
+        'NextThought.view.content.reader.Annotations'
+    ],
+
+    /**
+     * Handles highlighting selected text
+     * @param config
+     */
     constructor: function(config){
         // Only support touch on iPad devices
         if (!Ext.is.iPad)
@@ -10,35 +18,42 @@ Ext.define('NextThought.view.content.reader.TouchHighlight',{
         Ext.apply(this, config);
 
         this.reader.on('afterrender',function(){
-            this.highlightCanvas = Ext.get(document.createElement('div'))
+            var canvas = document.createElement('canvas');
+            this.highlightCanvas = Ext.get(canvas)
                 .addCls('phantomHighlight')
                 .setStyle('position', 'absolute')
-                .setStyle('width', '200px')
-                .setStyle('height', '200px')
-                .setStyle('background-color', 'red')
-                .setStyle('z-index', '999999')
                 .setStyle('pointer-events', 'none');
+            this.hide();
+            this.highlightCanvas.appendTo(this.reader.el);
         },this);
     },
 
-    /**
-     *
-     * @param x Screen coordinates
-     * @param y Screen coordinates
-     */
-    show: function(x, y) {
-        var readerPos = this.reader.getPosition(),
-            canvas = this.highlightCanvas;
-        x-=readerPos[0];
-        y-=readerPos[1];
-        canvas.setStyle('left', x+'px');
-        canvas.setStyle('top', y+'px');
+    show: function(range) {
 
-        canvas.appendTo(this.reader.el);
+        var canvas = this.highlightCanvas,
+            scrollY = this.reader.getScroll().top(),
+            bounds = range.getBoundingClientRect(),
+            top = Math.ceil(bounds.top)-scrollY,
+            left = Math.ceil(bounds.left),
+            width = Math.ceil(bounds.width),
+            height = Math.ceil(bounds.height);
+
+        //console.log('l:'+bounds.left+' t:'+bounds.top+' r:'+bounds.right+' b:'+bounds.bottom+' w:'+bounds.width+' h:'+bounds.height);
+
+        canvas.setStyle('left', left+'px');
+        canvas.setStyle('top', top+'px');
+        canvas.setStyle('width', width+'px');
+        canvas.setStyle('height', height+'px');
+
+        canvas.dom.setAttribute('width', width);
+        canvas.dom.setAttribute('height', height);
+
+        AnnotationUtils.drawCanvas(canvas.dom, null, range, 'rgba(212,212,212,0.8)', [0,0]);
+        canvas.show();
     },
 
     hide: function() {
-        this.highlightCanvas.remove();
+        this.highlightCanvas.hide();
     }
 
 });

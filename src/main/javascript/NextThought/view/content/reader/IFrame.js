@@ -555,7 +555,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         if (hasOverlay(pickedElement)) {
             pickedElement = outerDoc.elementFromPoint(x, y);
         }
-        console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
+
+        if (pickedElement)
+            console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
 
         this.setClickthrough(hasClickthrough);
 

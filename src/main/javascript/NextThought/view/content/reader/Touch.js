@@ -102,6 +102,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
             initialX = e.touches[0].pageX;
             lastY = initialY;
             vel = 0;
+            highlight.hide();
 
             console.log('touchStart');
 
@@ -118,7 +119,7 @@ Ext.define('NextThought.view.content.reader.Touch', {
                 else if (elementIsSelectable(pickedElement)) {
                     state = s.STATE.SELECTING;
                     console.log('start selecting');
-                    highlight.show(initialX, initialY);
+                    // TODO: Some animation to show user selecting has started?
                 }
             }, s.TAP_HOLD_TIME);
         }, false);
@@ -149,16 +150,20 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
             function scrollMove() {
                 vel = lastY - touch.pageY;
-                lastY = touch.pageY;
-                lastX = touch.pageX;
+                updatePos();
                 scroll.by(vel);
             }
 
             function selectMove() {
-                // TODO:
+                updatePos();
                 var range = iFrame.makeRangeFrom(initialX, initialY,
                                                  touch.pageX, touch.pageY);
-                highlight.show(touch.pageX, touch.pageY);
+                highlight.show(range);
+            }
+
+            function updatePos() {
+                lastY = touch.pageY;
+                lastX = touch.pageX;
             }
 
         }, false);
@@ -185,12 +190,14 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     pickedElement.click();
 
                 // DEBUG testing code that highlights the selected element
+                /*
                 if (previouslyPickedElement){
                     previouslyPickedElement.style.backgroundColor = previouslyPickedElementStyle;
                 }
                 previouslyPickedElement = pickedElement;
                 previouslyPickedElementStyle = previouslyPickedElement.style.backgroundColor;
                 pickedElement.style.backgroundColor = 'red';
+                */
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
