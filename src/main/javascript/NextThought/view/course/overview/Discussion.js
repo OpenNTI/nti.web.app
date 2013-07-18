@@ -53,7 +53,10 @@ Ext.define('NextThought.view.course.overview.Discussion',{
 
 
 	onBoardResolved: function(topic){
-		this.data.comments = topic.get('PostCount');
+		if(!/topic$/i.test(topic.get('Class'))){
+			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
+		}
+		this.data.comments = topic.get('PostCount')||0;
 		if(this.rendered){
 			this.renderTpl.overwrite(this.el,this.data);
 		}
