@@ -48,7 +48,7 @@ Ext.define('NextThought.view.cards.Card',{
 			pdf = (/\.pdf$/i).test((url||'').split('?')[0]);
 
 		//if there is no NTIID, it cannot open in the app.
-		return ntiid && (isNTIID || pdf);
+		return isNTIID || (ntiid && pdf);
 	},
 
 
