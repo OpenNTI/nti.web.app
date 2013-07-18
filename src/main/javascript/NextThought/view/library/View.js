@@ -154,6 +154,17 @@ Ext.define( 'NextThought.view.library.View', {
 
 		this.down('content-toolbar').show();
 		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
+
+		var l = ContentUtils.getLocation(pageInfo),
+			toc;
+
+		if( l && l !== ContentUtils.NO_LOCATION ){
+			toc = l.toc.querySelector('toc');
+			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
+			if(this.isActive()){
+				this.updateBackground();
+			}
+		}
 	},
 
 

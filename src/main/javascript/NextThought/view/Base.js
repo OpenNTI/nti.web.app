@@ -5,7 +5,7 @@ Ext.define( 'NextThought.view.Base', {
 
 
 	initComponent: function(){
-		this.enableBubble('before-activate-view','activate-view');
+		this.enableBubble('before-activate-view','activate-view','new-background');
 		this.callParent(arguments);
 		this.addCls('main-view-container make-white');
 	},
@@ -36,6 +36,7 @@ Ext.define( 'NextThought.view.Base', {
 		if( this.fireEvent('before-activate-view', this.getId()) ){
 			this.fireEvent('activate-view', this.getId(), Boolean(silent));
 			this.setTitle();
+			this.updateBackground();
 			return true;
 		}
 		return false;
@@ -44,5 +45,12 @@ Ext.define( 'NextThought.view.Base', {
 
 	relayout: function(){
 		this.updateLayout();
+	},
+
+
+	updateBackground: function(){
+		if(!Ext.isEmpty(this.backgroundUrl)){
+			this.fireEvent('new-background',this.backgroundUrl);
+		}
 	}
 });

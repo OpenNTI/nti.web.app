@@ -43,6 +43,31 @@ Ext.define( 'NextThought.view.Views', {
 	)),
 
 
+	listeners: {
+		'new-background': 'updateBackground'
+	},
+
+	updateBackground: function(newUrl){
+		if(!this.el){return;}
+
+		var HOST = Globals.HOST_PREFIX_PATTERN,
+			currentURL = this.el.getStyle('background-image').slice(4,-1),
+			a = HOST.exec(newUrl),
+			b = HOST.exec(currentURL),
+			d = HOST.exec(location)[0];//default host
+
+		a = (a && a[0]) || d;
+		b = (b && b[0]) || d;
+
+		currentURL = currentURL.replace(HOST,'') === newUrl.replace(HOST,'');
+
+		if(!currentURL || a !== b){
+			newUrl = (!Ext.isEmpty(newUrl) && 'url('+newUrl+')') || null;
+			this.el.setStyle({backgroundImage:newUrl});
+		}
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
