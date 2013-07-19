@@ -14,8 +14,13 @@ Ext.define('NextThought.view.content.reader.Touch', {
         SCROLL_FRICTION: 0.05,
         SCROLL_MAX_SPEED: 200,
         SCROLL_THRESHOLD_SPEED: 1,
-        TAP_TIME: 2,
+        /**
+         * Pixel distance a touch can move to still be considered a tap
+         */
         TAP_THRESHOLD: 15,
+        /**
+         * Time required for a long press
+         */
         TAP_HOLD_TIME: 1000,
         /**
          * Various states for a fsm to determine possible
@@ -63,8 +68,6 @@ Ext.define('NextThought.view.content.reader.Touch', {
             state = s.STATE.NONE,
             iFrame = reader.getIframe(),
 
-            previouslyPickedElement = null,
-            previouslyPickedElementStyle = '',
             pickedElement = null,
             initialTime,
             initialX, initialY,
@@ -188,16 +191,6 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     pickedElement.setSelectionRange(0,1000);
                 else
                     pickedElement.click();
-
-                // DEBUG testing code that highlights the selected element
-                /*
-                if (previouslyPickedElement){
-                    previouslyPickedElement.style.backgroundColor = previouslyPickedElementStyle;
-                }
-                previouslyPickedElement = pickedElement;
-                previouslyPickedElementStyle = previouslyPickedElement.style.backgroundColor;
-                pickedElement.style.backgroundColor = 'red';
-                */
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed

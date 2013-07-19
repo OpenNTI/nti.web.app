@@ -26,6 +26,14 @@ Ext.define('NextThought.view.content.reader.TouchHighlight',{
             this.hide();
             this.highlightCanvas.appendTo(this.reader.el);
         },this);
+
+        this.reader.on('save-phantom', function() {
+            this.hide();
+        }, this);
+
+        this.reader.on('create-note', function() {
+            this.hide();
+        }, this);
     },
 
     show: function(range) {
@@ -48,7 +56,7 @@ Ext.define('NextThought.view.content.reader.TouchHighlight',{
         canvas.dom.setAttribute('width', width);
         canvas.dom.setAttribute('height', height);
 
-        AnnotationUtils.drawCanvas(canvas.dom, null, range, 'rgba(212,212,212,0.8)', [0,0]);
+        AnnotationUtils.drawCanvas(canvas.dom, null, range, 'rgba(212,212,212,0.6)', [0,0]);
         canvas.show();
     },
 
