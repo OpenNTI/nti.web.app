@@ -190,9 +190,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		if(this.rendered){
 			this.store.load();
 		}else{
-			this.on('afterrender', function(){
-				this.store.load();
-			}, this);
+			this.on('afterrender','load',this.store);
 		}
 		this.bindStore(this.store);
 	},
@@ -222,12 +220,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 	maybeShowMoreItems: function(){
-		var lastItem = this.el.dom.lastChild,
-			lastEl = Ext.get(lastItem),
-			height = this.el.getHeight();
-
 		//if we can't scroll
-		if( height >= (lastEl.getY() + lastEl.getHeight()) ){
+		if( this.el.getHeight() >= this.el.dom.scrollHeight ){
 			this.prefetchNext();
 		}
 	},
