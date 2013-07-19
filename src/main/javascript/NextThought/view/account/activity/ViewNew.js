@@ -92,7 +92,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			items: [
 				{cls: 'option', text: 'Only Me', checked: false, isMe: true, tabFilter:'onlyMe'},
 				{cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
-				{cls: 'option', text: 'Community', checked: true, isCommunity: true, tabFilter: 'inCommunity'}
+				{cls: 'option', text: 'Community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
 			]
 		});
 
@@ -191,9 +191,10 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		this.fromMenu.show().hide();
 		this.typesMenu.show().hide();
-		this.typesMenu.el.down('.contact').hide();
-		this.typesMenu.el.down('.discussions').hide();
-		this.switchPanel(this.fromMenu.down('menuitem[text=Community]'));
+
+		if(!this.stateApplied){
+			this.applyState({from: 'Community', filter: ['Show All']});
+		}
 
 		if(!$AppConfig.service.canFriend()){
 			this.fromMenu.down('menuitem[text=My Contacts]').destroy();
@@ -230,6 +231,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 				}
 			});
 		}
+
+		this.stateApplied = true;
 	},
 
 	getState: function(){
