@@ -3,6 +3,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	alias: 'widget.note-window',
 
 	requires: [
+		'Ext.util.KeyMap',
 		'NextThought.view.annotations.note.Main'
 	],
 
@@ -83,7 +84,24 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	afterRender: function(){
 		this.callParent();
 		this.resizeView();
+		var keyMap = this.keyMap = new Ext.util.KeyMap({
+            target: this.el,
+			binding: [{
+				key: Ext.EventObject.ESC,
+				fn: this.onEsc,
+				scope: this
+			}]
+        });
+
+		this.on('destroy','destroy',keyMap);
 	},
+
+
+	onEsc: function(k, e) {
+        e.stopEvent();
+        this.close();
+    },
+
 
 	resizeView: function(){
 		var position, height, width,

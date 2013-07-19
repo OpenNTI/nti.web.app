@@ -775,6 +775,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var k = event.getKey();
 		if(k === event.ESC){
 			this.deactivateReplyEditor();
+			this.focus();
 		}
 	},
 
