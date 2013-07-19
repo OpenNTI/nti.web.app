@@ -16,7 +16,7 @@ Ext.define('NextThought.view.content.Toolbar',{
 	},
 
 	items: [
-		{ xtype: 'content-navigation', delegate: 'inherit' },
+		{ xtype: 'content-navigation', delegate: 'inherit', flex:1 },
 		{ xtype: 'content-pager', delegate: 'inherit'}
 	]
 });
