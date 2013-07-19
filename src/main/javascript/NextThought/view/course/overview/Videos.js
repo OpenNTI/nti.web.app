@@ -23,7 +23,9 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		{ tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}] },
 		{ cls: 'body', cn:[
 			{ cls: 'screen' },
-			{ cls: 'curtain' },
+			{ cls: 'curtain', cn:[
+				{ cls:'ctr', cn:[ { cls: 'play', cn:[ {cls:'blur-clip',cn:{cls:'blur'}}, { cls: 'label' } ] } ] }
+			]},
 			{ cls: 'video-list'}
 		]}
 	]),
@@ -31,6 +33,8 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	renderSelectors: {
 		bodyEl: '.body',
 		curtainEl: '.body .curtain',
+		playLabelEl: '.body .curtain .play .label',
+		playBlurEl: '.body .curtain .play .blur',
 		screenEl: '.body .screen',
 		frameBodyEl: '.video-list'
 	},
@@ -223,6 +227,8 @@ Ext.define('NextThought.view.course.overview.Videos',{
 
 		if( this.curtainEl ){
 			this.curtainEl.setStyle({backgroundImage:p});
+			this.playBlurEl.setStyle({backgroundImage:p});
+			this.playLabelEl.update(rec.get('label'));
 		}
 		else {
 			console.warn('noes!');
