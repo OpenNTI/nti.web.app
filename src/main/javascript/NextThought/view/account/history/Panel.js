@@ -187,7 +187,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return rec.isFavorited() || rec.isBookmark;
 		}]);
 
-		this.store.load();
+		if(this.rendered){
+			this.store.load();
+		}else{
+			this.on('afterrender', function(){
+				this.store.load();
+			}, this);
+		}
 		this.bindStore(this.store);
 	},
 
@@ -216,10 +222,12 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 	maybeShowMoreItems: function(){
-		var viewportHeight = Ext.Element.getViewportHeight(),
-			min = viewportHeight / 100;
+		var lastItem = this.el.dom.lastChild,
+			lastEl = Ext.get(lastItem),
+			height = this.el.getHeight();
 
-		if(this.store.count() < min){
+		//if we can't scroll
+		if( height >= (lastEl.getY() + lastEl.getHeight()) ){
 			this.prefetchNext();
 		}
 	},
