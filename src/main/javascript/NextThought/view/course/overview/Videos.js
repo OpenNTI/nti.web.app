@@ -14,6 +14,11 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	cls: 'overview-videos',
 	preserveScrollOnRefresh: true,
 
+	selModel: {
+		allowDeselect: false,
+		deselectOnContainerClick: false
+	},
+
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}] },
 		{ cls: 'body', cn:[
