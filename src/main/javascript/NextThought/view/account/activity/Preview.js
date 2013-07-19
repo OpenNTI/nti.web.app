@@ -289,14 +289,27 @@ Ext.define('NextThought.view.account.activity.Preview', {
 			this.respondEl.hide(); //Note we just hide this one, since it looks referenced in a lot of places
 		}
 
+		hide = function(){
+			//Ext.bind(box.hide, box, [false]);
+			this.replyBoxEl.hide();
+			this.constrainPopout();
+		};
+
+		show = function(){
+			//Ext.bind(box.show, box, [false]);
+			this.replyBoxEl.show();
+			this.constrainPopout();
+		};
+
 		this.mon(this.editor, {
-			scope: this.editor,
-			'activated-editor': Ext.bind(box.hide, box, [false]),
-			'deactivated-editor': Ext.bind(box.show, box, [false]),
+			scope: this,
+			'activated-editor': hide,
+			'deactivated-editor': show,
 			'no-body-content': function (editor, bodyEl) {
 				editor.markError(bodyEl, 'You need to type something');
 				return false;
-			}
+			},
+			'grew': 'constrainPopout'
 		});
 
 		this.mon(this.editor, 'deactivated-editor', this.setupReplyScrollZone, this, {delay: 1});
@@ -306,6 +319,12 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.mon(this.subjectEl, 'click', this.navigateToItem, this);
 		this.mon(this.commentsEl, 'click', this.showReplies, this);
 		this.enableProfileClicks(this.name, this.avatar);
+	},
+
+	constrainPopout: function(){
+		var pop = this.up('.activity-popout');
+
+		Ext.defer(pop.doConstrain,1,pop);
 	},
 
 

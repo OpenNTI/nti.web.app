@@ -176,10 +176,17 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				var pop, sidebar;
 
 				function align(){
+					
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
-					pop.alignTo(pop.refEl,'tr-tl?', anchor || [-10,0]);
+					if(Ext.getBody().contains(pop.refEl)){
+						pop.alignTo(pop.refEl,'tr-tl?', anchor || [-10,0]);
+					}
 					pop.show();
 					pop.pointer.point();
+
+					if(this.preview && this.preview.setupReplyScrollZone){
+						this.preview.setupReplyScrollZone();
+					}
 				}
 
 
