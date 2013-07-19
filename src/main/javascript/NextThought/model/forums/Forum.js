@@ -8,5 +8,16 @@ Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'title', type: 'string' },
 		{ name: 'TopicCount', type: 'int', persist: false },
 		{ name: 'NewestDescendant', type: 'singleitem'}
-	]
+	],
+
+	buildContentsStore: function(cfg, extraParams){
+		return this.callParent([Ext.apply({stateKey:'forum'},cfg),
+			Ext.apply({
+				sorters: [{
+					property: 'NewestDescendantCreatedTime',
+					direction: 'DESC'
+				}]
+			},extraParams
+		)]);
+	}
 });

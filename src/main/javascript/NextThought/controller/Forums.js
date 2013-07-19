@@ -575,26 +575,12 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showLevel: function(level, record, cfg, storeCfg, extraParams){
-		var c = this.getForumViewContainer(),
-			url = record.getLink('contents'),
-			store, cmpCfg;
+	showLevel: function(level, record, cfg, storeCfg, extraParams, viewContainer){
+		var c = viewContainer || this.getForumViewContainer(),
+			store, cmpCfg, storeId = record.getContentsStoreId();
 
 
-		store = NextThought.store.NTI.create(Ext.apply({
-			storeId: record.get('Class')+'-'+record.get('NTIID'),
-			url: url,
-			sorters: [{
-				property: 'CreatedTime',
-				direction: 'DESC'
-			}]
-		}, storeCfg || {}));
-		extraParams = Ext.apply({
-			sortOn: 'CreatedTime',
-			sortOrder: 'descending'
-		}, extraParams || {});
-		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, extraParams);
-
+		store = Ext.getStore(storeId) || record.buildContentsStore(storeCfg, extraParams);
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
 		// Creator string with the user model and presto!
@@ -711,17 +697,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('topic', record, {stateKey: 'forum'},
-			{
-				sorters: [{
-					property: 'NewestDescendantCreatedTime',
-					direction: 'DESC'
-				}]
-			},
-			{
-				sortOn: 'NewestDescendantCreatedTime'
-			}
-		);
+		this.showLevel('topic', record, {stateKey: 'forum'});
 		if(silent !== true){
 			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 		}
