@@ -26,9 +26,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	initComponent: function(){
 		this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
-
 		this.callParent(arguments);
-		this.on('transcript-ready', this.setupNoteOverlay, this);
 	},
 
 
@@ -82,11 +80,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	setupNoteOverlay: function(){
-		if(!this.rendered){
-			console.warn('the transcript was ready before, the view rendered.');
-			return;
-		}
-
 		var me = this;
 		this.noteOverlay = Ext.widget('transcript-note-overlay', {reader: this, readerHeight: this.getHeight()});
 		Ext.each(this.query('video-transcript'), function(vt){
@@ -94,6 +87,49 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		this.fireEvent('reader-view-ready');
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.setupNoteOverlay();
+		this.selectInitialSlide();
+	},
+
+
+	selectInitialSlide: function(){
+		var startOn = this.startOn,
+			s = this.query('slide-component'),
+			slideCmp, images = [], me = this,
+			targetImageEl;
+
+		Ext.each(s, function(i){
+			var id = i.slide.get('NTIID');
+			if(id === startOn){
+				targetImageEl = i.el.down('img.slide');
+			}
+			images.push(i.el.down('img.slide'));
+		});
+
+		this.el.mask('Loading....', 'loading');
+
+		Ext.each(images, function(i){
+			me.mon(i, {
+				scope: me,
+				'load': function(){
+					Ext.Array.remove(images, i);
+					if(images.length === 0){
+						me.el.unmask();
+						if(targetImageEl){
+							console.log('should scroll into view: ', targetImageEl.dom);
+							Ext.defer(function(){
+								targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+							}, 10, me);
+						}
+					}
+				}
+			});
+		});
 	},
 
 
