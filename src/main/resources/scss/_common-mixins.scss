@@ -203,7 +203,7 @@
 	.x-ie & { margin-right: -15px !important; }
 }
 
-@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:5px 0){
+@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:0){
 	.detected-scrollbars &::-webkit-scrollbar,
 	.detected-scrollbars &::-webkit-scrollbar-track {
 		width: 8px; height: 8px;

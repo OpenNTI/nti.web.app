@@ -58,6 +58,7 @@
 }
 
 .user-data-panel {
+	@include scrollbar(#ffffff, $tertiary-grey);
 
 	@include divider;
 

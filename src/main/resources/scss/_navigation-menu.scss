@@ -6,7 +6,7 @@
 	background: none;
 	
 	.x-panel-body-navigation-menu {
-		@include scrollbar(#ffffff, $tertiary-grey, 5px 0);
+		@include scrollbar(#ffffff, $tertiary-grey);
 		width: 100% !important;
 		height: 100% !important;
 		padding: 0 50px;

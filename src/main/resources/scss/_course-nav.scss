@@ -23,6 +23,7 @@
 				x: visible;
 				y: auto;
 			}
+			@include scrollbar(#ffffff, $tertiary-grey);
 		}
 
 		.header {
@@ -291,6 +292,7 @@
 			}
 
 			.video-list{
+				@include scrollbar(#04232c, #0f2d35);
 				position: absolute;
 				left: 512px;
 				top: 0;
@@ -353,6 +355,7 @@
 	&.course-overview{
 		background: #ffffff;
 		padding: 25px 30px;
+		@include scrollbar(#ffffff, $tertiary-grey);
 	}
 
 	.overview-naquestionset{

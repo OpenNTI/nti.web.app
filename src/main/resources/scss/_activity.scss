@@ -34,6 +34,8 @@
 .activity-view{
 	@include side-panel-view-title;
 	.activity-panel {
+		@include scrollbar(#ffffff, $tertiary-grey);
+
 		.activity {
 			cursor: pointer;
 			position: relative;
