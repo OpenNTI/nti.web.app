@@ -23,43 +23,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	items:[],
 
-//	items:[
-//		{
-//			xtype:'video-transcript',
-//			flex:1,
-//			layout:{
-//				type:'vbox',
-//				align: 'stretch'
-//			}
-//		}
-//	],
 
 	initComponent: function(){
 		this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
 
 		this.callParent(arguments);
-//		this.transcriptView = this.items.getAt(0);
 		this.on('transcript-ready', this.setupNoteOverlay, this);
 	},
 
 
 	buildPresentationTimeLine: function(slideStore, transcriptStore){
-		var me = this, items = [];
+		var items = [];
 
 		slideStore.each(function(slide){
 			var m = slide.get('media'),
 				vid = m && m.getAssociatedVideoId(),
-				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true);
+				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
+				start = slide.get('video-start'),
+				end = slide.get('video-end');
 
-			items.push({
-				xtype:'video-transcript',
-				flex:1,
-				data: t,
-				layout:{
-					type:'vbox',
-					align: 'stretch'
-				}
-			});
+			console.log('slide starts: ', start, ' slide ends: ', end, ' transcript url: ', t.get('associatedVideoId'));
 
 			items.push({
 				xtype:'slide-component',
@@ -69,6 +52,24 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 					align: 'stretch'
 				}
 			});
+
+			if(t){
+				// NOTE: make a copy of the transcript record,
+				// since many slide can have the same transcript but different start and end time.
+				t = t.copy();
+				t.set('desired-time-start', start);
+				t.set('desired-time-end', end);
+
+				items.push({
+					xtype:'video-transcript',
+					flex:1,
+					transcript: t,
+					layout:{
+						type:'vbox',
+						align: 'stretch'
+					}
+				});
+			}
 		});
 
 		this.items = items;
@@ -76,7 +77,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	getTranscriptForVideo: function(id, transcriptStore){
-		var s = transcriptStore.find('associatedVideoId', id);
+		var s = transcriptStore.findRecord('associatedVideoId', id);
 	},
 
 
@@ -86,13 +87,17 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return;
 		}
 
-		//this.noteOverlay = Ext.widget('transcript-note-overlay', {reader: this.transcriptView, readerHeight: this.transcriptView.getHeight()});
+		var me = this;
+		this.noteOverlay = Ext.widget('transcript-note-overlay', {reader: this, readerHeight: this.getHeight()});
+		Ext.each(this.query('video-transcript'), function(vt){
+			me.noteOverlay.registerReaderView(vt);
+		});
+
 		this.fireEvent('reader-view-ready');
 	},
 
 
 	syncWithVideo: function(videoState){
-
 //		this.transcriptView.syncTranscriptWithVideo(videoState);
 	}
 

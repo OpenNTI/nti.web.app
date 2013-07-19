@@ -1,10 +1,11 @@
 Ext.define('NextThought.model.transcript.Cue',{
-	extend: 'NextThought.model.Base',
+	extend: 'Ext.data.Model',
 
 	fields:[
 		{name:'startTime', type:'number'},
 		{name:'endTime', type:'number'},
 		{name:'text', type:'string'},
+		{name:'type', type:'string'},
 
 		//TODO: Do we need all these other attributes?
 		{name:'identifier', type:'string'},
@@ -28,7 +29,8 @@ Ext.define('NextThought.model.transcript.Cue',{
 				'linePosition': cue.linePosition,
 				cueTree: cue.cueTree,
 				snapToLines: cue.snapToLines,
-				textPosition:cue.textPosition
+				textPosition:cue.textPosition,
+				type:cue.type
 			});
 		}
 	}

@@ -193,8 +193,18 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	jumpToVideoLocation: function(startAt){
-		this.setVideoAndPosition(this.currentVideoId, startAt);
+	jumpToVideoLocation: function(videoInfo, startAt){
+		var r = Ext.Array.findBy(this.playlist, function(item){
+				return (item.get('NTIID') === videoInfo.ntiid) && (item.get('start') === videoInfo.start);
+			}),
+			id = r && r.activeSource().source;
+
+		if(id){
+			this.setVideoAndPosition(id, startAt);
+		}
+		else{
+			console.error('Could not find the video requested: ', videoInfo);
+		}
 	},
 
 

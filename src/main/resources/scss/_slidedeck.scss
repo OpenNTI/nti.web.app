@@ -697,79 +697,62 @@ $experimental-support-for-svg: true;
 
 		.content-video-transcript{
 			position: relative;
-			overflow: hidden;
-			margin: 100px 20px 20px 100px;
+			margin: 50px 20px 20px 100px;
 			width: 760px;
+			color: $primary-grey;
+			font-size: 14px;
+			font-weight: normal;
+			line-height: 2.2em;
+			padding-right: 60px;
 
-			.text-content{
-				color: $primary-grey;
-				font-size: 14px;
-				font-weight: normal;
-				position: relative;
-				line-height: 2.2em;
+			.cue{
+				padding: 3px;
+				&:first-child{
+					padding-left: 0;
+				}
+				&.active{
+					background-color: #e3f2fc;
+					border-radius: 3px;
+				}
+			}
 
-				.section{
-					margin-bottom: 15px;
-					position: relative;
+			.add-note-here{
+				position: absolute;
+				right: 0 !important;
+				width: 60px;
+				height: 28px;
 
-					.text {
-						margin-left: 80px;
-						padding-right: 60px;
-						position: relative;
-						display: inline-block;
+				@include note-control-box;
+				.note-here-control-box{
+					left: 16px;
 
-						span{
-							padding: 3px;
-							&:first-child{
-								padding-left: 0;
-							}
-							&.active{
-								background-color: #e3f2fc;
-								border-radius: 3px;
-							}
-						}
-
-						.add-note-here{
-							position: absolute;
-							right: 0 !important;
-							width: 60px;
-							height: 28px;
-
-							@include note-control-box;
-							.note-here-control-box{
-								left: 16px;
-
-								&.hidden{
-									display: none;
-								}
-							}
-						}
+					&.hidden{
+						display: none;
 					}
+				}
+			}
 
-					.timestamp-container {
-						position: absolute;
-						display: inline-block;
-						width: 70px;
-						.timestamp {
-							padding: 5px 10px;
-							text-align: center;
-							color: #bbb !important;
-							border-radius: 3px;
+			.timestamp-container {
+				width: 70px;
 
-							&:hover {
-								color: #494949 !important;
-								background-color: #ebf7fd;
-							}
-						}
+				.timestamp {
+					padding: 5px 10px;
+					text-align: center;
+					color: #bbb !important;
+					border-radius: 3px;
+					position: relative;
+					left: -70px;
+					top: 30px;
 
-						&:last-child .timestamp {
-							display: none;
-						}
+					&:hover {
+						color: #494949 !important;
+						background-color: #ebf7fd;
 					}
 				}
 
-
-
+				&:last-child .timestamp {
+					display: none;
+				}
 			}
 		}
 

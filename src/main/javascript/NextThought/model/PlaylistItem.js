@@ -9,7 +9,8 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'end', type: 'float', defaultValue: -1.0},
 		{name: 'sourceIndex', type: 'int', defaultValue: 0},
 		{name: 'sources', type: 'auto'},
-		{name: 'dom-clone', type: 'auto'}
+		{name: 'dom-clone', type: 'auto'},
+		{name: 'NTIID', type:'string'}
 	],
 
 	statics: {
@@ -41,7 +42,8 @@ Ext.define('NextThought.model.PlaylistItem', {
 				el = Ext.get(dom),
 				o = {
 					'sources': el.query('object[type$=videosource]'),
-					'dom-clone': frag
+					'dom-clone': frag,
+					'NTIID': dom.getAttribute('data-ntiid')
 				},
 				sourceComparator = function(a, b) {
 					var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];

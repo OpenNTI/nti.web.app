@@ -119,8 +119,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},
 
 
-	jumpVideoToLocation: function(time){
-		this.video.fireEvent('jump-to-location', time);
+	jumpVideoToLocation: function(videoNTIID, time){
+		this.video.fireEvent('jump-to-location', videoNTIID, time);
 	},
 
 

@@ -15,6 +15,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		this.mixins.observable.constructor.call(this);
 
 		var me = this;
+
+		if(!me.noteOverlayManager){
+			//TODO: we will something more robust to manage different reader views that get added.
+			// But for now, use just an array.
+			me.noteOverlayManager = [];
+		}
 		this.mon(this.reader, {
 			scope: this,
 			destroy: 'destroy',
@@ -48,6 +54,22 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}).addCls('in-gutter');
 
 		this.editor.el.setVisibilityMode(Ext.dom.Element.DISPLAY);
+	},
+
+
+
+
+	registerReaderView: function(view){
+		this.noteOverlayManager.push(view);
+		this.mon(view, {
+			scope: this,
+			destroy: 'destroy',
+//			'reader-view-ready': 'insertOverlay',
+			'create-note': 'noteHere',
+			'sync-height': 'syncHeight',
+			'show-editor': 'showEditorByEl',
+			'show-editor-inline':'showEditorAtPosition'
+		});
 	},
 
 

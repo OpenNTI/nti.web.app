@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.video.transcript.Transcript',{
-	extend:'Ext.Component',
+	extend:'Ext.view.View',
 	alias:'widget.video-transcript',
 
 	requires:[
@@ -21,18 +21,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				});
 
 			return parser.parseWebVTT();
-		},
-
-		buildStore: function(cueList){
-			var cues = [], s;
-			Ext.each(cueList, function(c){
-				var m = NextThought.model.Cue.fromParserCue(c);
-				cues.push(m);
-			});
-
-			s = new Ext.data.Store({proxy:'memory'});
-			s.add(cues);
-			return s;
 		}
 	},
 
@@ -46,21 +34,20 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		contentEl: '.text-content'
 	},
 
-
-	sectionTpl: new Ext.XTemplate( Ext.DomHelper.markup([{
-		cls:'section', cn:[
-			{ cls: 'timestamp-container', cn:[
-				{tag:'a', cls:'timestamp', html:'{startTime}', 'data-time':'{startTime}'}
-			]},
-			{ cls:'text', cn: {
-				tag:'tpl', 'for':'group', cn:[
-					{tag:'span', cls:'cue', 'cue-start':'{startTime}', 'cue-end':'{endTime}', cn:[
-						{tag:'span', html:'{text}'},
-						{tag: 'span', cls:'add-note-here', cn:{cls:'note-here-control-box hidden', tag:'span'}}
-					]}
-				]
-			}}
-		]}
+	itemSelector: 'row-item',
+	tpl: new Ext.XTemplate( Ext.DomHelper.markup([
+		{tag:'tpl', for:'.', cn:[{
+			tag:'tpl', if:'!type', cn:{
+				tag:'span', cls:'cue row-item', 'cue-start':'{startTime}', 'cue-end':'{endTime}', cn:[
+					{tag:'span', html:'{text}'},
+					{tag: 'span', cls:'add-note-here', cn:{cls:'note-here-control-box hidden', tag:'span'}}
+			]}
+		},{
+			tag:'tpl', if:'type', cn:
+				{cls:'row-item timestamp-container {type}', cn:
+					{tag:'a', cls:'timestamp', html:'{startTime}', 'data-time':'{startTime}'}
+				}
+		}]}
 	])),
 
 
@@ -73,55 +60,87 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	appendCues: function(cueGroup){
-		var html = [],
-			sectionTpl= this.sectionTpl;
-
-		Ext.each(cueGroup, function(group){
-			html.push( sectionTpl.apply({
-				startTime:group[0].startTime,
-				group:group
-			}));
+	buildStore: function(cueList, filter){
+		var cues = [], s;
+		Ext.each(cueList, function(c){
+			var m = NextThought.model.transcript.Cue.fromParserCue(c);
+			cues.push(m);
 		});
 
-		return html;
+		s = new Ext.data.Store({
+			proxy:'memory',
+			sorters: [{
+				property: 'startTime',
+				direction: 'ASC'
+			}]
+		});
+
+		s.loadData(cues);
+		s.filter([{filterFn: filter}]);
+
+//		console.log('transcript  expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
+//		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
+		return s;
+	},
+
+
+	getTimeRangeFilter: function(){
+		function fn(item){
+			if(item.get('type') === 'section'){
+				// NOTE: For section cue, we may not have an endTime set. So just make sure that
+				// it's start time is within the range of time we care about.
+				return (item.get('startTime') >= start) && (item.get('startTime') <= end);
+			}
+
+			return (item.get('startTime') >= start) && (item.get('endTime') <= end);
+		}
+
+		var start = this.transcript.get('desired-time-start'),
+			end = this.transcript.get('desired-time-end');
+
+		return (start >= 0 && end >= 0) ? fn : Ext.emptyFn;
 	},
 
 
 	loadTranscript: function(){
 		function transcriptLoadFinish(text){
-			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text),
-				cueGroups = me.groupByTimeInterval(cueList, 30),
-				html = me.appendCues(cueGroups);
+			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text);
 
-			html = html.join('');
 
-			if(!me.rendered){
-				me.renderData = Ext.apply(me.renderData || {}, {
-					'content': html
-				});
-			}
-			else{
-				me.contentEl.update(html);
+			cueList = me.groupByTimeInterval(cueList, 30);
+			me.store = me.buildStore(cueList, me.getTimeRangeFilter());
+			me.bindStore(me.store);
+			Ext.defer(function(){
+				me.fireEvent('transcript-ready');
+			}, 1, me);
+
+			// Save the content and hopefully we won't have to load it again.
+			if(Ext.isEmpty(me.transcript.get('content'))){
+				me.transcript.set('content', text);
 			}
 
 			me.cueList = cueList;
-			me.fireEvent('transcript-ready');
-			Ext.defer(me.updateLayout, 1, me);
 		}
 
 		var me = this,
-			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax,
+			content = this.transcript && this.transcript.get('content');
 
-		if(!this.data){
+		if(!this.transcript){
 			console.warn('No transcript data available..');
 			return;
+		}
+
+		//Avoid loading the content if we already have it.
+		if(!Ext.isEmpty(content)){
+			transcriptLoadFinish(content);
+			return
 		}
 
 		proxy.request({
 			jsonpUrl: this.getTranscriptJsonUrl(),
 			url: this.getTranscriptUrl(),
-			expectedContentType: this.data.get('mimeType'),
+			expectedContentType: this.transcript.get('contentType'),
 			scope:this,
 			success: function(res, req){
 				console.log('SUCCESS Loading Transcripts: ', arguments);
@@ -136,35 +155,34 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	groupByTimeInterval: function(cueList, timeInterval){
 		// TODO: Group by Sections defined in the parser. Right now we're only grouping by time Interval.
-		var groups= [], tempGroup= [],
-			currentTime = 0;
+		var list = [],
+			currentTime = this.transcript.get('desired-time-start') || cueList[0].startTime;
 
+		list.push({type: 'section', startTime: currentTime, endTime:-1});
 		Ext.each(cueList, function(t){
-			var endTime = t.getEndTime();
+			var endTime = t.endTime;
 			if(endTime < currentTime + timeInterval){
-				tempGroup.push(t);
+				list.push(t);
 			}
 			else{
-				//Close group and start  a new one.
-				groups.push(tempGroup);
-				tempGroup = [];
-				//Push the current t as the first argument.
-				tempGroup.push(t);
+				//insert a new section entry.
+				list.push({type: 'section', startTime: t.startTime, endTime:-1});
+				list.push(t);
 				currentTime += timeInterval;
 			}
 		});
 
-		return groups;
+		return list;
 	},
 
 
 	getTranscriptJsonUrl: function(){
-		return this.data.get('basePath') + this.data.get('jsonUrl');
+		return this.transcript.get('basePath') + this.transcript.get('jsonUrl');
 	},
 
 
 	getTranscriptUrl: function(){
-		return this.data.get('basePath') + this.data.get('url');
+		return this.transcript.get('basePath') + this.transcript.get('url');
 	},
 
 
@@ -179,33 +197,36 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var me = this;
 		//Allow text selections
 		this.el.selectable();
+		this.on('transcript-ready', this.onViewReady, this);
+	},
 
-		this.on('transcript-ready', function(){
-			me.transcriptReady = true;
-			me.mon(me.el.select('.timestamp-container'),{
-				scope: me,
-				'click': me.timePointerClicked
-			});
 
-			me.mon(me.el.select('.cue'), {
-				scope: me,
-				'mouseover':'mouseOver',
-				'mousemove':'mouseOver',
-				'mouseout':'mouseOut'
-			});
+	onViewReady: function(){
+		var me = this;
+		me.transcriptReady = true;
 
-			me.mon(me.el.select('.cue .add-note-here'), {
-				scope: me,
-				'click': 'openEditor'
-			});
+		me.mon(me.el.select('.timestamp-container'),{
+			scope: me,
+			'click': me.timePointerClicked
+		});
 
-			me.mon(me.el, {
-				scope: me,
-				'mouseup':'showContextMenu'
-			})
+		me.mon(me.el.select('.cue'), {
+			scope: me,
+			'mouseover':'mouseOver',
+			'mousemove':'mouseOver',
+			'mouseout':'mouseOut'
+		});
+
+		me.mon(me.el.select('.cue .add-note-here'), {
+			scope: me,
+			'click': 'openEditor'
+		});
+
+		me.mon(me.el, {
+			scope: me,
+			'mouseup':'showContextMenu'
 		});
 	},
 
@@ -279,7 +300,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		if(sel.isCollapsed){ return; }
 
 		Ext.apply(cueData, this.getCueInfoFromRange(range) || {});
-		this.contextMenu.position = [ viewBox.width - 60, xy[1] - viewBox.y - 20];
+		this.contextMenu.position = [viewBox.width + 50, xy[1] - 10];
 		console.log(' Desired editor position: ', this.contextMenu.position);
 		this.contextMenu.cueData = cueData;
 
@@ -346,10 +367,15 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	timePointerClicked: function(e){
 		var t  = e.getTarget(),
-			b = parseFloat(Ext.fly(t).getAttribute('data-time'));
+			b = parseFloat(Ext.fly(t).getAttribute('data-time')),
+			videoInfo = {
+				ntiid: this.transcript.get('associatedVideoId'),
+				start:this.transcript.get('desired-time-start') || 0,
+				end:this.transcript.get('desired-time-end')
+			};
 
-		console.log('Jump to video to: ', b);
-		this.fireEvent('jump-video-to', b, this);
+		console.log('Jump to video ', videoInfo,' to : ', b);
+		this.fireEvent('jump-video-to', videoInfo, b);
 	},
 
 
