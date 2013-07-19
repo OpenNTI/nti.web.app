@@ -135,7 +135,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		var me = this, m,
 			menus = me.menuMap || {},
 			cfg = { ownerButton: me, items: [] },
-			key = locationInfo? locationInfo.ntiid : null,
+			key = locationInfo? locationInfo.NTIID : null,
 			currentNode = locationInfo ? locationInfo.location: null;
 
 		if(!currentNode){ return pathPartEl; }
@@ -155,13 +155,13 @@ Ext.define('NextThought.view.content.Navigation',{
 			scope: m,
 			'mouseleave':'stopShow',
 			'mouseenter':function(){
-				m.startShow(pathPartEl,'tl-bl?', [-10,0]);
+				m.maxHeight = Ext.Element.getViewportHeight()-(pathPartEl.getX()+(pathPartEl.getHeight()-30));
+				m.startShow(pathPartEl,'tl-bl', [-10,-20]);
 			},
 			'click': function(){
-				if (!m.isVisible()){
-					m.stopHide();
-					m.showBy(pathPartEl,'tl-bl?', [-10,0]);
-				}
+				m.stopHide();
+				m.stopShow();
+				me.fireEvent('set-location',key);
 			}
 		});
 
