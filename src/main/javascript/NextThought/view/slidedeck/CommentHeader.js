@@ -9,6 +9,21 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		'NextThought.editor.Editor'
 	],
 
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: 'comment',
+			cn: [{
+				cls: 'count',
+				cn:[
+					{tag: 'span',  html:'{count}'}
+				]
+			},{
+				cls: 'input',
+				html: 'Write a comment'
+			}]
+		},
+		{cls:'respondBox'}
+	]),
 
 	renderSelectors: {
 		comment: '.comment',
@@ -31,6 +46,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		me.callParent(arguments);
 
 		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls:true, renderTo:me.respondBox, enableTitle: true });
+		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
 		me.editorEl = me.editor.getEl();
 		me.comment.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		me.mon(me.comment,'click',me.activateEditor,me);
@@ -173,22 +189,4 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		event.stopPropagation();
 	}
 
-},function(){
-	var proto = this.prototype;
-
-	proto.renderTpl = Ext.DomHelper.markup([
-		{
-			cls: 'comment',
-			cn: [{
-				cls: 'count',
-				cn:[
-					{tag: 'span',  html:'{count}'}
-				]
-			},{
-				cls: 'input',
-				html: 'Write a comment'
-			}]
-		},
-		{cls:'respondBox'}
-	]);
 });

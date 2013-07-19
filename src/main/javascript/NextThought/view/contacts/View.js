@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.contacts.View', {
-	extend: 'NextThought.view.View',
+	extend: 'NextThought.view.Base',
 	alias:	'widget.contacts-view-container',
 	requires: [
 		'NextThought.view.BoundPanel',

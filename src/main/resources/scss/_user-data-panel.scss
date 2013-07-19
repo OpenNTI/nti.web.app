@@ -58,6 +58,7 @@
 }
 
 .user-data-panel {
+	@include scrollbar(#ffffff, $tertiary-grey);
 
 	@include divider;
 
@@ -72,6 +73,10 @@
 		box-shadow: none !important;
 		border-top: none !important;
 	}
+
+	div.history:first-of-type{ margin-top: 10px; }
+
+	.divider + div.history:first-of-type{ margin-top: 0; }
 
 	.history{
 		&.nothing{
@@ -181,8 +186,7 @@
 				}
 
 				background: none;
-				&::after{
-					content: ' ';
+				&::before, &::after{
 					display: none;
 				}
 			}

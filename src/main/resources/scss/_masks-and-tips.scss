@@ -6,7 +6,7 @@
 	top: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 999999;
+	z-index: 9999999;
 	background-color: white;
 }
 #loading {
@@ -14,7 +14,7 @@
 	left: 0;
 	top: 0;
 	padding: 2px;
-	z-index: 999993;
+	z-index: 99999993;
 	height: auto;
 	margin: 0;
 	div{
@@ -58,12 +58,18 @@
 		color: #555;
 		font-family: $font;
 		border: none;
+
+		$c: rgba(255,255,255,0.7);
 		background: {
 			repeat: no-repeat;
 			image: $loading-indicator;
-			color: transparent;
+			//color: transparent;
+			color: $c;
 			position: left center;
 		};
+
+		box-shadow: 0em 0 20px 20px $c;
+		border-radius: 10em;
 	}
 
 	&.loading {
@@ -78,9 +84,14 @@
 	&.navigation{
 		.x-mask-msg-text {
 			border: none;
-			padding: 1em 0 1.5em 1em;
+			padding: 1em 1em 1.5em 1em;
 			font-size: 18px;
 			background-position: center bottom;
+
+			$c: rgba(255,255,255,0.7);
+			background-color: $c;
+			box-shadow: 0em 0 20px 20px $c;
+			border-radius: 100%;
 		}
 	}
 

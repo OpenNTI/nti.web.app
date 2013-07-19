@@ -11,6 +11,7 @@ Ext.define('NextThought.view.menus.Settings',{
     frame: false,
     border: false,
     hideMode: 'display',
+	width: 260,
 
     defaults: {
         ui: 'nt-menuitem',

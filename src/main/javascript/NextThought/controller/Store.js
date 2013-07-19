@@ -113,7 +113,7 @@ Ext.define('NextThought.controller.Store', {
 
 	//For marking sample state
 	updateLibraryWithPurchasable: function (p) {
-		Ext.Array.each(p.get('Items') || [], function (itemId) {
+		Ext.each(p.get('Items') || [], function (itemId) {
 			var title = Library.getTitle(itemId);
 			if (title) {
 				title.set('sample', !p.get('Activated'));

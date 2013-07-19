@@ -119,7 +119,7 @@ Ext.define('NextThought.mixins.Delegation.Factory',{
 	/**
 	 * Makes a delegated function with a default of the passed function.
 	 *
-	 * @param {Function} fn The default behavior if there is no delegate or if the delegate does not return
+	 * @param {Function} [fn] The default behavior if there is no delegate or if the delegate does not return
 	 *                      {@link #PREVENT_DEFAULT}
 	 * @returns {Function} The delegated function.
 	 */
@@ -128,4 +128,4 @@ Ext.define('NextThought.mixins.Delegation.Factory',{
 		fn.delegated = true;
 		return fn;
 	}
-});
+},function(){window.DelegateFactory=this;});

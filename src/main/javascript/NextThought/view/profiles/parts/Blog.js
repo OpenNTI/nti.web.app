@@ -130,12 +130,30 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 				console.error('Bad Error. Better be in a test. We expect the profile View to exist always.');
 			}
 		}
+
+		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
+		this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
+	},
+
+	handleWindowResize: function(){
+		var wrapperEl, profileEl,
+			btnEl = this.btnNewEntryEl,
+			profileDom = Ext.get('profile');
+
+		if(btnEl.hasCls('locked')){
+			wrapperEl = Ext.get(this.wrapper);
+			profileEl = Ext.get(profileDom);
+
+			wrapperEl.setY(profileEl.getY() + 10);
+			wrapperEl.setX(profileEl.getX() + ((profileEl.getWidth() - 700)/2 - 8));
+		}
 	},
 
 
 	handleScrollNewEntryBtnLock: function(e,profileDom){
 		//This is only called on scroll for when the btnNewEntryEl is present.
-		var btnEl = this.btnNewEntryEl,
+		var wrapperEl, profileEl,
+			btnEl = this.btnNewEntryEl,
 			profileDomParent = profileDom && profileDom.parentNode,
 			profileScroll = Ext.fly(profileDom).getScroll().top,
 			parent = btnEl && Ext.getDom(btnEl).parentNode,
@@ -154,13 +172,22 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		if(parent === profileDomParent && (profileScroll < cutoff || !this.isVisible())){
 			btnEl.insertBefore(this.getEl().first());
+			btnEl.removeCls('locked');
 			if(wrapper){
 				Ext.fly(wrapper).remove();
 			}
 		}
 		else if(this.isVisible() && parent !== profileDomParent && profileScroll >= cutoff){
-			wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post scroll-pos-right'});
-			btnEl.appendTo(wrapper);
+			this.wrapper = Ext.DomHelper.append(profileDomParent,{cls:'new-blog-post'});
+
+			wrapperEl = Ext.get(this.wrapper);
+			profileEl = Ext.get(profileDom);
+
+			wrapperEl.setY(profileEl.getY() + 10);
+			wrapperEl.setX(profileEl.getX() + ((profileEl.getWidth() - 700)/2 - 8));
+
+			btnEl.appendTo(this.wrapper);
+			btnEl.addCls('locked');
 		}
 	},
 

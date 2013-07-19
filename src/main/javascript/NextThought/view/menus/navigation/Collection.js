@@ -70,5 +70,8 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 
 	handleSelect: function(selModel, record){
 		selModel.deselect(record);
+
+		Ext.menu.Manager.hideAll();
+		this.up('menu').hide();
 	}
 });

@@ -37,6 +37,13 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			resize: function(){ me.fireEvent('realign'); }
 		});
 
+		if(this.viewRef && this.viewRef.on){
+			this.mon(this.viewRef,{
+				refresh: 'itemRefreshed',
+				itemupdate: 'itemUpdated'
+			});
+		}
+
 		this.setupItems();
 	},
 
@@ -65,6 +72,22 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		return p.getPointerStyle ? p.getPointerStyle(x,y) : '';
 	},
 
+	itemRefreshed: function(view){
+		var el = view.getNodeByRecord(this.record);
+		
+		if(el){
+			this.updateRefEl(el);
+		}else{
+			console.error("RefEl no longer exists");
+			this.destroy();
+		}
+	},
+
+	itemUpdated: function(rec,index,node){
+		if(this.record === rec){
+			this.updateRefEl(node);
+		}
+	},
 
 	updateRefEl: function(el){
 		this.refEl = el;
@@ -84,12 +107,21 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		Ext.defer(function(){
 			me.mon(me.el.up('body'),{
 				scope: me,
-				'click':me.detectBlur,
-				'mouseover':me.detectBlur
+				'click':'detectBlurClick',
+				'mouseover':'detectBlur'
 			});
 		},1);
 	},
 
+	detectBlurClick: function(e){
+		if(!e.getTarget('.'+this.cls)){
+			clearTimeout(this.hideTimer);
+			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
+			this.maybeHidePopout();
+		}else{
+			clearTimout(this.hideTimer);
+		}
+	},
 
 	detectBlur: function(e){
 		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+ this.refEl && this.refEl.id) && !e.getTarget('.x-menu')){
@@ -144,10 +176,17 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				var pop, sidebar;
 
 				function align(){
+					
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
-					pop.alignTo(pop.refEl,'tr-tl?', anchor || [-10,0]);
+					if(Ext.getBody().contains(pop.refEl)){
+						pop.alignTo(pop.refEl,'tr-tl?', anchor || [-10,0]);
+					}
 					pop.show();
 					pop.pointer.point();
+
+					if(this.preview && this.preview.setupReplyScrollZone){
+						this.preview.setupReplyScrollZone();
+					}
 				}
 
 
@@ -157,6 +196,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					user: user,
 					refEl: Ext.get(el),
 					hidden: true,
+					viewRef: viewRef,
 					listeners:{
 						realign: align
 					}

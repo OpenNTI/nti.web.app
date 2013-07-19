@@ -28,7 +28,7 @@ Ext.define('NextThought.view.Navigation',{
 		{
 			'data-view': 'library',
 			'data-qtip':'Library',
-			cls: 'library',
+			cls: 'library x-menu',
 			cn:[
 				{ cls: 'image' },
 				{
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.Navigation',{
 		},
 		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums' },
 		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts' },
-		{ cls: 'search', 'data-qtip':'Search','data-view': 'search' }
+		{ cls: 'search x-menu', 'data-qtip':'Search','data-view': 'search' }
 	]),
 
 	renderSelectors:{
@@ -76,21 +76,53 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		if(!$AppConfig.service.canHaveForum()){
+			this.el.down('.forums').remove();
+		}
+
+		if(!$AppConfig.service.canShare()){
+			this.el.down('.contacts').remove();
+		}
+	},
+
+
+
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.libraryMenu = Ext.widget({
 			xtype: 'navigation-menu',
 			renderTo: Ext.getBody(),
 			items:[{
+				courseList:true,
+				xtype:'library-collection', name: 'Courses',
+				store: 'courses',
+				hidden: true,
+				listeners:{
+					scope: this,
+					select:'updateCurrent'
+				   }
+				},{
 				xtype:'library-collection', name: 'All Books', 
 				listeners:{
 					scope: this, 
 					select:'updateCurrent'
 			   }
-			}]
+			}],
+			listeners:{
+				scope: null, //execute from the context of the widget
+				hide: this.stopShowHide,
+				show: this.stopShowHide
+			}
 		});
 
 		this.searchMenu = Ext.widget(this.searchMenu);
+
+		Library.on('show-courses','showCoursesCollection',this);
 
 		this.floatingItems = {};
 		this.items = {items: [
@@ -112,6 +144,11 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
+	showCoursesCollection: function(){
+		this.libraryMenu.child('[courseList]').show();
+	},
+
+
 	getRefItems: Ext.container.Container.prototype.getRefItems,
 
 
@@ -122,9 +159,7 @@ Ext.define('NextThought.view.Navigation',{
 
 		this.imgEl.removeCls(cls);
 
-		if(rec instanceof NextThought.model.Title){
-			this.imgEl.addCls(cls);
-		}
+		this.imgEl[rec.get('isCourse')?'removeCls':'addCls'](cls);
 
 		this.imgEl.setStyle('background-image', 'url('+rec.get('icon')+')');
 		this.providerEl.update(rec.get('Creator'));

@@ -90,7 +90,7 @@
 				.separator{
 					vertical-align: inherit;
 					position:relative;
-					z-index: -2;
+					//z-index: -2;
 				}
 
 				[data-field=role], [data-field=affiliation] {
@@ -105,7 +105,7 @@
 					width: auto;
 					max-width: 100%;
 					display: inline-block;
-					overflow-y: hidden;
+					overflow: hidden;
 					padding-right: 27px;
 					@include ellipse;
 
@@ -365,6 +365,14 @@
 
         .note-container {
             position: relative;
+
+            .meta{
+            	.subject{
+            		.whiteboard-container{
+            			display: none !important;
+            		}
+            	}
+            }
         }
 
 
@@ -835,10 +843,10 @@
 			}
 		}
 
-		.note-container.has-active-editor ~ .note-container{
+		/*.note-container.has-active-editor ~ .note-container{
 			position: relative;
 			z-index: -1;
-		}
+		}*/
 
 		.note-container.child {
 			& > .reply.first{

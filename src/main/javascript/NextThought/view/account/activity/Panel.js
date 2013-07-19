@@ -21,24 +21,26 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	cls: 'activity-panel',
 
 
+	filter: 'inCommunity',
+
 	items: [
 		{
 			activitiesHolder: 1,
-			xtype: 'box',
-			autoEl:{
+			xtype: 'box'//,
+			/*autoEl:{
 				cn:[{
 					cls:"activity loading",
 					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
 				}]
-			}
+			}*/
 		}
 	],
 
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'length==0', cn:[{
-			cls:"activity nothing",
-			cn: [' No Activity yet']
+			cls:"activity nothing rhp-empty-list",
+			cn: [' No Activity Yet']
 		}]},
 		{tag:'tpl', 'for':'.', cn:[
 			{tag:'tpl', 'if':'activity', cn:[{
@@ -68,6 +70,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			scope: this,
 			datachanged: this.maybeReload,
 			//load: this.maybeReload,
+			load: function(){ this.removeMask(); },
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
@@ -97,7 +100,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		this.mon(this.el,{
 			scope: this,
 			'click':'itemClick',
-			'mouseover': 'itemHover'
+			'mouseover': 'itemHover',
+			'scroll': 'onScroll'
 		});
 
 		this.mon(this.down('box').getEl(),'scroll', 'viewScrollHandler', this);
@@ -108,20 +112,58 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			'communityheadlinetopic': this.forumTopicClicked,
 			'generalforumcomment': this.forumCommentClicked
 		};
+
+		this.addMask();
+
+		this.on('resize', function(){
+			if(this.el.isMasked()){
+				this.addMask();
+			}
+		}, this);
 	},
 
+	onScroll: function(e,dom){
+		var el = dom.lastChild,
+			direction = (this.lastScrollTop||0) - dom.scrollTop,
+			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
+			top = offset - dom.scrollTop;
+
+		this.lastScrollTop = dom.scrollTop;
+
+		//if the difference in el and doms height and dom scroll top is zero then we are at the bottom
+		if(top <= 20 && direction < 0){
+			this.onScrolledToBottom();
+		}
+	},
+
+	onScrolledToBottom: Ext.Function.createBuffered(function(){
+		this.fetchMore();
+	}, 20),
+
+	addMask: function(width, height){
+		var el =  this.el && Ext.get(this.el.dom.firstChild),
+			mask = this.el && this.el.mask('Loading...');
+
+		if( el && el.getHeight() > 0){
+			mask.setHeight(el.getHeight());
+		}
+	},
+
+	removeMask: function(width, height){
+		if(this.el){ this.el.unmask(); }
+	},
 
 	fetchMore: function(){
 		var s = this.store,
 			centerButton = this.el.down('.center-button');
 
-		if (!s.hasOwnProperty('data')) {
+		if (!s.hasOwnProperty('data') || s.loading) {
 			return;
 		}
 
 		this.currentCount = s.getCount();
 		if(s.hasAdditionalPagesToLoad()){
-			this.el.parent().mask('Loading...','loading');
+			this.addMask();
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
@@ -129,7 +171,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			if(centerButton){
 				this.el.down('.center-button').remove();
 			}
-			this.el.parent().unmask();
+			this.removeMask();
 		}
 	},
 
@@ -186,7 +228,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		function maybeAddMoreButton(){
 			var s=me.store, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
 			if(s.hasAdditionalPagesToLoad()){
-				Ext.widget('button', {
+				/*Ext.widget('button', {
 					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
 					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
 					scale: 'medium',
@@ -194,7 +236,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 					cls: 'more-button',
 					handler: function(){
 						me.fetchMore();
-					}});
+					}});*/
 				return true;
 			}
 			return false;
@@ -217,7 +259,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 				totalExpected--;
 				if(totalExpected === 0){
 					me.feedTpl.overwrite(container.getEl(),items);
-					maybeAddMoreButton();
+					//maybeAddMoreButton();
 					container.updateLayout();
 				}
 			}
@@ -242,17 +284,24 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
 			if(!maybeAddMoreButton()){
 				Ext.DomHelper.overwrite(container.getEl(), {
-					cls:"activity nothing",
-					cn: [' No Activity yet']
+					cls:"activity nothing rhp-empty-list",
+					cn: [' No Activity Yet']
 				});
 			}
 			container.updateLayout();
 		}
 
+		if(store.getCount() === 0){
+			Ext.DomHelper.overwrite(container.getEl(),{
+				cls:"activity nothing rhp-empty-list",
+				cn: ['No Activity Yet']
+			});
+			container.updateLayout();
+		}
+
 		Ext.each(store.getGroups(),doGroup,this);
 
-		this.el.parent().unmask();
-
+		this.removeMask();
 	},
 
 
@@ -617,16 +666,17 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 	applyFilters: function(mimeTypes, filterTypes){
-		if(Ext.isEmpty(mimeTypes) && Ext.isEmtpy(filterTypes)){
+		if(Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)){
 			return;
 		}
 
-		if(Ext.isEmpty(filterTypes)){
+		if(!Ext.Array.contains(filterTypes,'notInCommunity') && !Ext.Array.contains(filterTypes, 'inCommunity')){
 			filterTypes.push(this.filter);
 		}
 
-		var v = this.getActiveView(),
-			s = v  && v.getStore();
+		this.filter = (Ext.Array.contains(filterTypes,'notInCommunity'))? 'notInCommunity' : 'inCommunity';
+
+		var s = this.getStore();
 
 		s.removeAll();
 
@@ -637,6 +687,8 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			filterOperator: (filterTypes.length > 1)? '0' : '1',
 			accept: mimeTypes.join(',')
 		});
+
+		this.addMask();
 
 		s.load();
 	}

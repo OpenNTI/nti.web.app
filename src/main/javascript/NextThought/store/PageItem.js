@@ -28,6 +28,7 @@ Ext.define('NextThought.store.PageItem',function(){
 			type: 'rest',
 			limitParam: 'batchSize',
 			pageParam: undefined,
+			filterParam: undefined,
 			startParam: 'batchStart',
 			reader: {
 				type: 'nti',
@@ -122,7 +123,7 @@ Ext.define('NextThought.store.PageItem',function(){
 				if (bms.length !== 1) {
 					console.error('Oops, more than 1 bookmark on this page??', bms);
 				}
-				NextThought.model.events.Bus.fireEvent('bookmark-loaded',bms[0]);
+				this.fireEvent('bookmark-loaded',bms[0]);
 				delete bins.Bookmark;
 			}
 
@@ -137,6 +138,10 @@ Ext.define('NextThought.store.PageItem',function(){
 			console.log('Adding record to store', record, this);
 			//get added to the store:
 			this.callParent(arguments);
+
+			if(this.isFiltered()){
+				Ext.defer(this.filter,1,this);
+			}
 
 			function adoptChild(parent, child){
 				//found our parent:
@@ -197,7 +202,7 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
-		remove: function(){
+		remove: function(r, isMove, silent){
 			var toActuallyRemove = [],
 				idsToBoradcast = [],
 				args = Array.prototype.slice.call(arguments),
@@ -256,7 +261,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 			//FWIW: we may want to suspend (and queue) this event.  When records(instances of Model) are "destroyed" they
 			// call this method in a tight loop over all stores that the record was associated.
-			coordinator.fireEvent('removed-item', idsToBoradcast);
+			coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 		},
 
 		addFromEvent: function(records){
@@ -292,15 +297,15 @@ Ext.define('NextThought.store.PageItem',function(){
 			coordinator.resumeEvents();
 		},
 
-		removeByIdsFromEvent: function(ids){
-			coordinator.suspendEvents();
+		removeByIdsFromEvent: function(ids, isMove, silent){
+			coordinator.suspendEvents(true);
 			var me = this;
 
 			try{
 				Ext.each(ids,function(id){
 					var r = me.getById(id);
 					if(r){
-						me.remove(r);
+						me.remove(r,isMove, silent);
 					}
 				});
 			}

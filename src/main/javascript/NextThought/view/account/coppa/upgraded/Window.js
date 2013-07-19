@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.coppa.upgraded.Window', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.coppa-confirm-window',
 
 	requires:[

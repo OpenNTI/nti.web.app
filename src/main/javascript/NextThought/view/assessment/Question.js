@@ -146,7 +146,7 @@ Ext.define('NextThought.view.assessment.Question',{
 
 
 	setQuestionContent: function(part){
-		var root = ContentUtils.getRoot(), c, p;
+		var root = ContentUtils.getRoot(this.reader.getLocation().NTIID), c, p;
 
 		c = this.question.get('content') || '';
 		p = part ? part.get('content'): '';

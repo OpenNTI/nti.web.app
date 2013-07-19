@@ -4,11 +4,12 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	],
 
 	events: new Ext.util.Observable(),
-	registry: {},
-	sorter: {},
-	gutter: {},
-	buckets: {},
-	rendererSuspended: {},
+	registry: [],
+
+	constructor: function(reader){
+		this.callParent();
+		this.reader = reader;
+	},
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
 
@@ -56,54 +57,38 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	registerGutter: function(el, reader){
 		//TODO all this junk about prefixes should go away once we aren't using a singleton here...
-		var p = reader.prefix;
-		if(!p){ Ext.Error.raise('Prefix required'); }
-		if(this.gutter[p]){
-			console.warn('replacing exisiting gutter?', this.gutter[p]);
+		if(this.gutter){
+			console.warn('replacing exisiting gutter?', this.gutter);
 		}
-		this.gutter[p] = el;
+		this.gutter = el;
 
 		//el.addCls('debug');
 
 		el.controls = el.down('.controls');
 
-		this.render(p);//renders wait for the gutter to exist
+		this.render();//renders wait for the gutter to exist
 	},
 
 
 	register: function(o){
-		var p = o.prefix;
-		if(!this.registry[p]){
-			this.registry[p] = [];
-		}
-		this.registry[p].push(o);
+		this.registry.push(o);
 		o.requestRender();
 	},
 
 
 	unregister: function(o){
-		var p = o.prefix, r;
-		r = this.registry[p];
+		var r = this.registry;
 		if(r){
-			this.registry[p] = Ext.Array.remove(r,o);
-			if(this.registry[p].legend===0){
-				this.sorter[p] = null;
+			this.registry = Ext.Array.remove(r,o);
+			if(this.registry.length===0){
+				this.sorter = null;
 			}
 		}
 	},
 
 
-	getReader: function(prefix){
-		var cache = this.readerPanels, c;
-		if(!cache ){ cache = this.readerPanels = {}; }
-
-		c = cache[prefix];
-		if(!c){
-			c = cache[prefix] = ReaderPanel.get(prefix);
-			c.on('destroy',function(){ delete cache[prefix]; });
-		}
-
-		return c;
+	getReader: function(){
+		return this.reader;
 	},
 
 
@@ -120,26 +105,26 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	clearBuckets: function(prefix){
+	clearBuckets: function(){
 		function clear(d){
 			while(d && d.firstChild){
 				d.removeChild(d.firstChild);
 			}
 		}
 
-		var g = this.gutter[prefix];
+		var g = this.gutter;
 
 		clear(g.controls.dom);
 
-		if( this.buckets[prefix] ){
-			this.buckets[prefix].free();
+		if( this.buckets ){
+			this.buckets.free();
 		}
-		this.buckets[prefix] = new this.Bucket();
+		this.buckets = new this.Bucket();
 	},
 
 
-	getBucket: function(prefix, line){
-		console.debug('prefix:'+prefix, line);
+	getBucket: function(line){
+		//console.debug('prefix:'+prefix, line);
 		if (line < 0){
 			//bad line, don't render:
 			if(this.isDebug){
@@ -148,7 +133,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			return null;
 		}
 
-		var c = this.buckets[prefix],
+		var c = this.buckets,
 			lineTolerance = 40,
 			b = c? c.get(line) : null,
 			a = Math.round( line- (lineTolerance / 2)), z = Math.round( line + (lineTolerance / 2));
@@ -173,9 +158,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	layoutBuckets: function(prefix){
-		var g = this.gutter[prefix],
-			b = this.buckets[prefix],
+	layoutBuckets: function(){
+		var g = this.gutter,
+			b = this.buckets,
 			cT = this.controlLineTmpl;
 
 
@@ -199,17 +184,17 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	suspend: function(prefix) {
-		this.rendererSuspended[prefix] = true;
+	suspend: function() {
+		this.rendererSuspended = true;
 	},
 
 
-	resume: function(prefix) {
-		delete this.rendererSuspended[prefix];
+	resume: function() {
+		delete this.rendererSuspended;
 	},
 
 
-	render: function(prefix){
+	render: function(){
 		var me = this, containers = {}, renderedCount = 0,
 			cleanContent, rootContainerId,
 			cloned, descs = [], cids = [], doc = null;
@@ -219,40 +204,40 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			me.events.on('finish',Ext.bind(me.render,me,arguments),me,{single:true});
 			return;
 		}
-		if (this.rendererSuspended[prefix]) {
+		if (this.rendererSuspended) {
 			return;
 		}
-		if(!me.gutter[prefix]){
+		if(!me.gutter){
 			console.error('no gutter');
 			me.events.fireEvent('rendering');
-			me.events.fireEvent('finish');
+			me.events.fireEvent('finish',0);
 			return;
 		}
 
-		if(!me.registry[prefix]){
+		if(!me.registry){
 			me.events.fireEvent('rendering');
-			me.events.fireEvent('finish');
+			me.events.fireEvent('finish',0);
 			return;//nothing to do
 		}
 
 		me.rendering = true;
 		me.events.fireEvent('rendering');
-		console.log('Rendering annotations '+ prefix);
+		console.log('Rendering annotations');
 		if(console.time){
-			console.time('Annotation render loop '+prefix);
+			console.time('Annotation render loop');
 		}
 		Ext.suspendLayouts();
 
-		me.registry[prefix] = Ext.Array.unique(me.registry[prefix]);
+		me.registry = Ext.Array.unique(me.registry);
 
-		me.sorter[prefix] = me.sorter[prefix] || me.buildSorter(prefix);
-		if(me.sorter[prefix]){
-			Ext.Array.sort(me.registry[prefix], me.sorter[prefix]);
+		me.sorter = me.sorter || me.buildSorter();
+		if( me.sorter ){
+			Ext.Array.sort(me.registry, me.sorter);
 		}
 
-		me.clearBuckets(prefix);
+		me.clearBuckets();
 
-		cloned = Ext.Array.clone(me.registry[prefix]);
+		cloned = Ext.Array.clone(me.registry);
 		Ext.each(cloned, function(o){
 			var desc = o.getRecordField ? o.getRecordField('applicableRange') : null,
 				cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
@@ -262,7 +247,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		});
 
 		if(cloned && cloned.length > 0 && doc){
-			cleanContent = me.getReader(prefix).getCleanContent();
+			cleanContent = me.getReader().getCleanContent();
 			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
 			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
 			Ext.each(cloned, function(o){
@@ -280,7 +265,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 					y = o.render();
 					if(y !== NextThought.view.annotations.Base.HIDDEN){
-						b = me.getBucket(prefix,Math.ceil(y));
+						b = me.getBucket(Math.ceil(y));
 						if(b){
 							o.getRecord().set('line', b.line);
 							renderedCount++;
@@ -293,27 +278,27 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				}
 			});
 			console[renderedCount === cloned.length ? 'log' : 'warn']('Rendered '+renderedCount+'/'+cloned.length+' annotations');
-			me.layoutBuckets(prefix);
+			me.layoutBuckets();
 		}
 
 		me.rendering = false;
 		Ext.resumeLayouts(true);
-		me.events.fireEvent('finish');
+		me.events.fireEvent('finish',renderedCount);
 		if(console.timeEnd){
-			console.timeEnd('Annotation render loop '+prefix);
+			console.timeEnd('Annotation render loop');
 		}
 	}
 
 }, function(){
 	var me = this,
 		fn = this.prototype.render,
-		timerId = {};
+		timerId;
 
-	me.prototype.render = function(prefix) {
+	me.prototype.render = function() {
 		var callerScope = this;
-		if (timerId[prefix]) {
-			clearTimeout(timerId[prefix]);
+		if (timerId) {
+			clearTimeout(timerId);
 		}
-		timerId[prefix] = setTimeout(function(){ fn.call(callerScope, prefix); }, 100);
+		timerId = setTimeout(function(){ fn.call(callerScope); }, 100);
 	};
 });

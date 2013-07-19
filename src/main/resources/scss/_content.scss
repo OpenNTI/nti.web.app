@@ -265,21 +265,54 @@
 	background: #2c2c2c url(../images/chalkboard_bg.png) center no-repeat;
 	background-size: cover;
 
-	& > div.main-view-container {
+	.make-white {
 		background: white;
+	}
+
+	#view-tabs {
+		position: absolute;
+		height: 105px;
+		top: 0;
+		min-width: 100px;
+		white-space: nowrap;
+
+		.main-view-tab {
+			display: inline-block;
+			font: normal 300 16px/30px $font;
+			color: $tertiary-grey;
+			padding: 0 20px;
+			margin: 42px 15px 0;
+			border-radius: 90px;
+
+			&:not(.disabled){
+				cursor: pointer;
+			}
+
+			&.selected:not(.disabled),
+			&:not(.disabled):hover {
+				//box-shadow: 0 0 1px 1px rgba(0,0,0,0.05);
+				//text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+				background: rgba(255,255,255,0.1);
+				color: #fff;
+			}
+		}
 	}
 }
 
-#library {
-	background: #fff;
-}
 
 .x-reader-pane {
 	.x-panel-body-reader {
-		@include scrollbar(#ffffff, $tertiary-grey, 45px 0);
+		@include scrollbar(#ffffff, $tertiary-grey);
 	}
 
     iframe[name$="content"] {
+		margin: 0;
+		width: 100%;
+
+		.detected-scrollbars &{
+			margin-right: 10px;
+		}
+
         &.clickthrough {
             pointer-events: none;
         }
@@ -336,19 +369,32 @@ div.no-content-splash {
 	position: absolute;
 	overflow: visible;
 	height: 0;
-	left: 30px; //compensate for the fact that Ext is placing overlays 5px left because of thier 5px margins.
+	left: 30px;
 	top: 0;
-	width: 700px;
+	right: 60px;
 
 	& > .x-panel {
 		z-index: 3;
-		margin: 0 5px;
 		position: absolute;
-		width: 690px;
+		width: 99%;
+	}
+}
 
-		.x-gecko & { margin: 0 10px; }
-		//.detected-scrollbars & {
-		//	width: 680px;
-		//}
+
+.content-page-widgets{
+	position: absolute;
+	top: 0;
+	right: 10px;
+	z-index: 10;
+	//prevent note controls from being visible behind.
+	background: white;
+	overflow: hidden;
+	padding-bottom: 12px;
+	padding-left: 10px;
+
+	.meta {
+		position: relative;
+		overflow: hidden;
+		@include like-and-favorite;
 	}
 }

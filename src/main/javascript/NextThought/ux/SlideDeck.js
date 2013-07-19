@@ -48,6 +48,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 		console.debug('opening slidedesk id: '+slidedeckId);
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
+			if((o.getAttribute('href')||'').indexOf('#')>=0){return;}
 			ids.push(o.getAttribute('ntiid'));
 		});
 
@@ -107,7 +108,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 	},
 
 	getTranscriptData: function(el){
-		var reader = Ext.ComponentQuery.query('reader-panel')[0].getContent(),
+		var reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
 			t  = Ext.fly(el).down('object[type*=mediatranscript]'),
 			url, type, jsonUrl;
 

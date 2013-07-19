@@ -339,8 +339,13 @@ Ext.define('NextThought.model.Base', {
 			delete me.destroyDoesNotClearListeners;
 		}
 
+		function announce(){
+			me.fireEvent('deleted', me);
+		}
+
 		options = Ext.apply(options||{},{
-			success: Ext.Function.createSequence(clearFlag, successCallback, null),
+			success: Ext.Function.createSequence(clearFlag,
+					Ext.Function.createSequence(announce, successCallback, null), null),
 			failure: Ext.Function.createSequence(clearFlag, failureCallback, null)
 		});
 
@@ -813,7 +818,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	afterEdit: function(fnames){
-		this.callParent(fnames);
+		this.callParent(arguments);
 		Ext.Array.each(fnames || [], this.onFieldChanged, this);
 	},
 
@@ -849,11 +854,26 @@ Ext.define('NextThought.model.Base', {
 		//that has the same id.  If it isn't the exact record call the function
 		//fname on it with the provided args
 		Ext.data.StoreManager.each(function(s){
-			var recById = s.getById(rec.getId());
+			var recById = s.getById(rec.getId()), fnHook = function(){return false;};
+
+			//This record has been filtered out and may potentially throw an error if we attempt to call store group
+			// functions. So, we let this record update and the store think its ungroupped while it updates.
+			if(recById && !s.data.contains(recById) && s.isGrouped()) {
+				s.isGrouped = fnHook;
+			}
 
 			//Ok we found one and it isn't the same object
 			if(recById && rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isFunction(recById[fname])){
-				recById[fname].apply(recById, args);
+				try{
+					recById[fname].apply(recById, args);
+				}
+				catch(e){
+					console.warn(e.message);
+				}
+			}
+
+			if(s.isGrouped === fnHook){
+				delete s.isGrouped;//restore the default
 			}
 		});
 

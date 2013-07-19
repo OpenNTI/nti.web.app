@@ -154,7 +154,7 @@
 }
 
 #search-results {
-	@include scrollbar(#ffffff, $tertiary-grey, 5px 0);
+	@include scrollbar(#ffffff, $tertiary-grey);
 	@include fixIEScrollbarGulf();
 
 	min-height: 40px;

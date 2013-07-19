@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.app.domain.Model',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
+		'NextThought.util.Annotations',
 		'NextThought.proxy.Socket'
 	],
 
@@ -28,7 +29,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	stores: [
-		'PageItem'
+		'PageItem',
+		'FlatPage'
 	],
 
 
@@ -60,7 +62,8 @@ Ext.define('NextThought.controller.UserData', {
 		this.listen({
 			model : {
 				'*':{
-					'update-pageinfo-preferences':'updatePreferences'
+					'update-pageinfo-preferences':'updatePreferences',
+					'deleted': 'onRecordDestroyed'
 				}
 			},
 			component:{
@@ -73,7 +76,7 @@ Ext.define('NextThought.controller.UserData', {
 					'save-new-note' : 'saveNewNote'
 				},
 
-				'reader-panel':{
+				'reader-content':{
 					'annotations-load': 'onAnnotationsLoad',
 					'filter-annotations': 'onAnnotationsFilter',
 					'filter-by-line': 'onAnnotationsLineFilter',
@@ -187,11 +190,21 @@ Ext.define('NextThought.controller.UserData', {
 			sel.deselect(rec);
 		}
 
-		me.activeNoteWindow = Ext.widget('note-window',{
-			autoShow: true,
-			record: rec,
-			listeners:{beforedestroy:deselect}
-		});
+		try {
+			me.activeNoteWindow = Ext.widget({
+				xtype: 'note-window',
+				autoShow: true,
+				record: rec,
+				reader: sel.view.up('reader').down('reader-content'),
+				listeners:{beforedestroy:deselect}
+			});
+		}
+		catch(e){
+			if(e.sourceMethod!=='closeOrDie'){
+				console.error(e.toString(),e);
+			}
+			deselect();
+		}
 	},
 
 
@@ -361,6 +374,14 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
+	onRecordDestroyed: function(record){
+		if(!Ext.isEmpty(record.stores)){return;}
+
+		this.applyToStoresThatWantItem(function(key,store){
+			store.removeByIdsFromEvent(record.getId(),true);
+		},record);
+	},
+
 
 	listenToPageStores : function(monitor, listeners){
 		monitor.mon(this.pageStoreEvents,listeners);
@@ -403,9 +424,11 @@ Ext.define('NextThought.controller.UserData', {
 						if(m.hasOwnProperty(key)){
 							o = m[key]; delete m[key];
 							if(o){
+								console.debug("Seting currentPageStores:",o.storeId,"Does not clear:", o.doesNotClear);
 								if(!o.doesNotClear){
-									o.fireEvent('cleanup');
+									o.fireEvent('cleanup',o);
 									o.clearListeners();
+									o.clearFilter(true);
 									o.removeAll();
 								} else {
 									s[key] = o;
@@ -419,73 +442,19 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-		this.flatPageStore = new Ext.data.Store({
-			model: 'NextThought.model.Base',
-			id: 'FlatPageStore',
-			proxy: 'memory',
-			remoteSort: false,
-			remoteFilter: false,
-			remoteGroup: false,
-			filterOnLoad: true,
-			sortOnFilter: true,
-			sorters:[
-				{
-					property : 'line',
-					direction: 'ASC'
-				},{
-					property : 'CreatedTime',
-					direction: 'ASC'
-				}
-			],
-			filters:[
-				{filterFn:function(r){
-					return !r.parent;}, id:'nochildren'}
-			],
-			bind: this.bindFlatStore
-		});
+		this.flatPageStore = this.getFlatPageStore();
 
-	},
-
-
-	bindFlatStore: function(otherStore){
-		var me = this;
-		if(otherStore.$boundToFlat){ return; }
-
-		function remove(s,rec){if(rec){me.remove(rec);}}
-		function add(s,rec){
-			rec = s.getItems();
-			var filter = [];
-			Ext.each(rec||filter,function(r){
-				if(!r.parent && r instanceof NextThought.model.Note && me.findExact('NTIID', r.get('NTIID')) < 0){
-					filter.push(r);
-				}
-			});
-
-			if(filter){
-				me.add(filter);
-			}
-		}
-
-		otherStore.on('cleanup','destroy',
-				me.mon(otherStore,{
-					scope: me,
-					destroyable: true,
-					add: add,
-					load: add,
-					bulkremove: remove,
-					remove: remove
-				}));
-
-		otherStore.$boundToFlat = true;
-
-		add(otherStore,otherStore.getItems());
 	},
 
 
 	clearPageStore: function(){
+		var fp = this.flatPageStore;
 		this.currentPageStores = {};//see above defineAttributes call
-		this.flatPageStore.removeFilter('lineFilter');
-		this.flatPageStore.removeAll();
+		fp.clearFilter();
+		fp.removeAll();
+		if(fp.getRange().length !== 0){
+			console.error('Flat Page store not empty!!');
+		}
 	},
 
 
@@ -505,7 +474,11 @@ Ext.define('NextThought.controller.UserData', {
 		this.currentPageStores[id] = store;
 
 		this.flatPageStore.bind(store);
-		store.on('load','fillInUsers',this);
+		store.on({
+			scope: this,
+			load:'fillInUsers',
+			add: 'fillInUsers'
+		});
 
 		/**
 		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
@@ -630,6 +603,8 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			});
 		}
+
+		s.sort();
 	},
 
 
@@ -722,11 +697,11 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveSharingPrefs: function(pageInfo, prefs, callback){
+	saveSharingPrefs: function(pageInfoId, prefs, callback){
 		//TODO - check to see if it's actually different before save...
-
+		var me = this;
 		//get parent:
-		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfo.getId()).last(),
+		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfoId).last(),
 			function(topPi){
 				if (topPi){
 					topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo){
@@ -748,6 +723,11 @@ Ext.define('NextThought.controller.UserData', {
 	updatePreferences: function(pi) {
 		if(Ext.isArray(pi)){
 			Ext.each(pi,this.updatePreferences,this);
+			return;
+		}
+
+		if(!Library.loaded){
+			Library.on('loaded',Ext.bind(this.updatePreferences,this,arguments),this,{single:true});
 			return;
 		}
 
@@ -834,7 +814,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.saveSharingPrefs(SharingUtils.sharedWithForSharingInfo(v));
+			me.saveSharingPrefs(rec.get('ContainerId'),SharingUtils.sharedWithForSharingInfo(v));
 		}
 
 		if(Globals.arrayEquals(rec.get('sharedWith') || [], newSharedWith || [])){
@@ -865,7 +845,7 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onDisplayPopover: function(sender, id, html, node) {
-		var offsets = sender.getAnnotationOffsets(),
+		var offsets = sender.reader.getAnnotationOffsets(),
 			position = Ext.fly(node).getXY(),
 			me=this;
 
@@ -938,20 +918,22 @@ Ext.define('NextThought.controller.UserData', {
 
 	saveNewBookmark: function(reader){
 		//create a bookmark model
-		var bm = this.getBookmarkModel().create({
+		var me = this,
+			bm = me.getBookmarkModel().create({
 			ContainerId: reader.getLocation().NTIID,
 			applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
 		});
 
 		//now save this:
 		bm.save({
-			scope: this,
 			callback:function(record, operation){
 				try{
-					if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
+					if (operation.success){
+						me.fireEvent('bookmark-loaded', record);
+					}
 				}
 				catch(err){
-					console.error('Something went teribly wrong... ', Globals.getError(err));
+					console.error('Something went teribly wrong... ', err.stack||err.message);
 				}
 			}
 		});
@@ -971,7 +953,7 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			}
 			catch(err){
-				console.error('Something went teribly wrong... ',err);
+				console.error('Something went teribly wrong... ',err.stack||err.message);
 			}
 			Ext.callback(callback, this, [success, rec]);
 		};
@@ -1010,9 +992,10 @@ Ext.define('NextThought.controller.UserData', {
 			shareWith = [];
 		}
 		//apply default sharing
-		else if(Ext.isEmpty(shareWith)){
+		//handled in the UI
+		/*else if(Ext.isEmpty(shareWith)){
 			shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
-		}
+		}*/
 
 		//define our note object:
 		noteRecord = this.getNoteModel().create({
@@ -1095,9 +1078,19 @@ Ext.define('NextThought.controller.UserData', {
 		if (!Ext.isArray(replyBody)){ replyBody = [replyBody];}
 
 		//define our note object:
-		var replyRecord = recordRepliedTo.makeReply();
+		var replyRecord = recordRepliedTo.makeReply(),
+			root = AnnotationUtils.getNoteRoot(recordRepliedTo);
+
 		replyRecord.set('body', replyBody);
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
+
+		if(!root.store ){
+			callback = Ext.Function.createInterceptor(callback,function(s,n){
+				if(s){
+					recordRepliedTo.fireEvent('child-added',n);
+				}
+			});
+		}
 
 		//now save this:
 		replyRecord.save({ scope: this, callback:this.getSaveCallback(callback)});

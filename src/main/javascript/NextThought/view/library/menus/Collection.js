@@ -2,27 +2,36 @@ Ext.define('NextThought.view.library.menus.Collection',{
 	extend: 'NextThought.view.menus.navigation.Collection',
 	alias: 'widget.library-collection',
 
-	initComponent: function(){
-		this.store = Library.getStore();
+	store: 'library',
+
+	handleSelect: function(selModel, record){
+		if(!this.suppressSetLocation){
+			this.fireEvent('set-last-location-or-root',record.get('NTIID'));
+		}
+		delete this.suppressSetLocation;
 		this.callParent(arguments);
 	},
 
 
-	handleSelect: function(selModel, record){
-		this.fireEvent('set-last-location-or-root',record.get('NTIID'));
-		Ext.menu.Manager.hideAll();
-	},
-
-
-	updateSelection: function(pageInfo){
-		var ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
+	updateSelection: function(pageInfo, silent, suppressEvent){
+		var me = this,
+			ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
 			last = ContentUtils.getLineage(ntiid).last(),
-			r = this.store.findRecord('NTIID',last,0,false,true,true);
+			r = me.store.findRecord('NTIID',last,0,false,true,true);
+
+		if(!suppressEvent){
+			Ext.each(Ext.ComponentQuery.query('library-collection'), function(cmp){
+				if(cmp !== me){
+					cmp.updateSelection(pageInfo,silent,true);
+				}
+			});
+		}
 		if(r){
-			this.getSelectionModel().select(r);
+			me.suppressSetLocation = Boolean(silent);
+			me.getSelectionModel().select(r);
 		}
 		else{
-			this.getSelectionModel().deselectAll();
+			me.getSelectionModel().deselectAll();
 		}
 	}
 });

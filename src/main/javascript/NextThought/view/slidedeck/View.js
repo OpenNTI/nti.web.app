@@ -127,7 +127,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 	buildTranscriptStore: function(playList){
 		var s = new Ext.data.Store({proxy:'memory'}),
 			transcripts = [],
-			reader = Ext.ComponentQuery.query('reader-panel')[0].getContent(),
+			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
 			videoObjects = this.getUniqueVideoObjects(playList);
 
 		Ext.each(videoObjects, function(v){

@@ -32,7 +32,7 @@ Ext.define('NextThought.view.cards.Card',{
 
 	constructor: function(config){
 		var d = (config && config.data) || {};
-		if(!this.shouldOpenInApp(d.href, d.basePath)){
+		if(!this.shouldOpenInApp(d.ntiid, d.href, d.basePath)){
 			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl.html || this.renderTpl});
 			this.bypassEvent = true;
 		}
@@ -42,12 +42,13 @@ Ext.define('NextThought.view.cards.Card',{
 	},
 
 
-	shouldOpenInApp: function(url, basePath){
+	shouldOpenInApp: function(ntiid, url, basePath){
 		var isNTIID = ParseUtils.parseNtiid(url) !== null,
 			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
 			pdf = (/\.pdf$/i).test((url||'').split('?')[0]);
 
-		return isNTIID || pdf;
+		//if there is no NTIID, it cannot open in the app.
+		return isNTIID || (ntiid && pdf);
 	},
 
 
@@ -68,7 +69,7 @@ Ext.define('NextThought.view.cards.Card',{
 		this.mon(this.el,'click','onCardClicked',this);
 
 		try{
-			if(this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
+			if(this.reader && this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
 				Ext.defer(this.onCardClicked,1,this);
 			}
 		}

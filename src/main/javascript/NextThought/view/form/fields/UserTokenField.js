@@ -146,8 +146,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	addInputListeners: function(){
 		this.mon(this.inputEl, {
-			scope: this,
-			'keydown': this.onKeyDown
+			'keydown': 'onKeyDown'
 		});
 	},
 
@@ -241,6 +240,8 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.addTag(value, type);
 			this.updatePlaceholderLabel();
 		}
+
+		this.fireEvent('sync-height', this);
 	},
 
 
@@ -288,13 +289,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		}
 
 		var me = this, explicitEntities;
-		me.reset();
-		explicitEntities = sharingInfo.entities || [];
+		this.clear();
+		explicitEntities = (sharingInfo && sharingInfo.entities) || [];
 		UserRepository.getUser(explicitEntities, function(users){
 			me.addSelection(users);
 		});
 
-		this.setPublished(sharingInfo.publicToggleOn);
+		this.setPublished(sharingInfo && sharingInfo.publicToggleOn);
 	},
 
 
@@ -452,7 +453,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.inputEl.focus(10);
 	},
 
-	reset: function(){
+	clear: function(){
 		Ext.each(this.el.query('.token'), function(t){ Ext.fly(t).remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
@@ -461,6 +462,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.clearResults();
 	},
 
+	reset: function(){
+		this.setValue(this.initialConfig.value);
+	},
 
 	removeToken: function(tokenName, tokenEl){
 		var	s = [];

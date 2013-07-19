@@ -2,13 +2,14 @@ Ext.define('NextThought.Library', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
 	requires:[
-		'Ext.data.Store',
-		'NextThought.model.Title',
+		'NextThought.store.Library',
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64'
 	],
 
 	bufferedToc: {},
+	activeLoad: {},
+	activeVideoLoad: {},
 
 	constructor: function(config) {
 		this.tocs = {};
@@ -18,60 +19,50 @@ Ext.define('NextThought.Library', {
 
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
-	},
-
-
-	getFirstPage: function(){
-		var first = this.getStore().getAt(0);
-
-		if(first){
-			return first.get('NTIID');
-		}
-
-		return null;
+		this.getStore();// pre-init store so we can reference it by id early on
+		this.getCourseStore();
 	},
 
 
 	getStore: function(){
 		if(!this.store){
-			var service = $AppConfig.service;
-
-			this.store = new Ext.data.Store({
+			this.store = new NextThought.store.Library({
 				id: 'library',
-				model: 'NextThought.model.Title',
-				proxy: {
-					type: 'ajax',
-					headers: {
-						'Accept': 'application/vnd.nextthought.collection+json',
-						'Content-Type': 'application/json'
-					},
-					url : getURL(service.getMainLibrary().href),
-					reader: {
-						type: 'json',
-						root: 'titles'
-					}
+				filterOnLoad:false,
+				listeners: {
+					scope: this,
+					load: 'onLoad'
 				},
-				sorters: [{sorterFn: function(a, b){
-					if(/nextthought/i.test(a.get('author'))){
-						return 1;
+				filters:[
+					{
+						fn: function(r){return !r.get('isCourse'); }
 					}
-					if(/nextthought/i.test(b.get('author'))){
-						return -1;
-					}
-					return 0;
-				}},
-					{property: 'title', direction: 'asc'}
 				]
 			});
-
-			this.store.on('load',this.purgeTocs,this);
 		}
 		return this.store;
 	},
 
 
+	getCourseStore: function(){
+		if(!this.courseStore){
+			this.courseStore = new NextThought.store.Library({
+				id: 'courses',
+				proxy: 'memory'
+			});
+		}
+		return this.courseStore;
+	},
+
+
+	getFirstPage: function(){
+		var first = this.getStore().first(false,true);
+		return (first && first.get('NTIID')) || null;
+	},
+
+
 	each: function(callback, scope){
-		this.getStore().each(callback,scope||this);
+		this.getStore().each(callback,scope||this,true);
 	},
 
 
@@ -85,7 +76,7 @@ Ext.define('NextThought.Library', {
 			field = 'NTIID';
 		}
 
-		return this.getStore().findRecord(field, index, 0, false, true, true);
+		return this.getStore().findRecord(field, index, 0, false, true, true, true);
 	},
 
 
@@ -118,19 +109,96 @@ Ext.define('NextThought.Library', {
 		if(index instanceof Ext.data.Model){
 			index = index.getId();
 		}
+
 		if(index && !this.tocs[index]){
-			console.error('we should never be here...');
-			this.loadToc(index);
+			return;
 		}
 
 		return this.tocs[index];
 	},
 
 
+	getVideoIndex: function(index, callback, scope){
+		if(index instanceof Ext.data.Model){
+			index = index.getId();
+		}
+
+		var me = this,
+			title = me.getTitle(index),
+			proxy = $AppConfig.server.jsonp? JSONP : Ext.Ajax,
+			t = me.getToc(index),
+			url;
+
+		function parse(q,s,resp){
+			if(!s){
+				failure(resp);
+				return;
+			}
+
+			var cb = me.activeVideoLoad[index],
+				r = resp.responseText;
+
+			if(Ext.isString(r)){
+				try{
+					r = Ext.JSON.decode(r);
+				}catch(e){
+					failure(e);
+					return;
+				}
+			}
+
+			me.videoIndex[index] = r;
+			delete me.activeVideoLoad[index];
+			Ext.callback(cb,me,[r]);
+		}
+
+
+		function failure(){
+			console.error(arguments);
+		}
+
+
+		if(!t){
+			console.warn('No toc yet for', index);
+			return;
+		}
+
+		if(!me.videoIndex){
+			me.videoIndex = {};
+		}
+
+		if(!me.videoIndex[index]){
+			t = t.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
+			if(!t){
+				console.warn('No video index defined', index);
+				return;
+			}
+			url = getURL(t.getAttribute('href'),title.get('root'));
+
+			if( me.activeVideoLoad[index] ){
+				me.activeVideoLoad[index] = Ext.Function.createSequence(me.activeVideoLoad[index],callback||Ext.emptyFn,scope);
+				return;
+			}
+
+			me.activeVideoLoad[index] = scope? Ext.bind(callback,scope) : callback;
+			proxy.request({
+				ntiid: title.get('NTIID'),
+				url: url,
+				jsonpUrl: url+'p', //todo: make smarter
+				contentType:'text/json',
+				expectedContentType:'application/json',
+				callback: parse
+			});
+			return;
+		}
+
+		Ext.callback(callback,scope,[me.videoIndex[index]]);
+	},
+
+
 	load: function(){
 		try{
 			this.loaded = false;
-			this.getStore().on('load', this.onLoad, this );
 			this.getStore().load();
 		}
 		catch(e2){
@@ -141,60 +209,81 @@ Ext.define('NextThought.Library', {
 
 	onLoad: function(store, records, success) {
 		function go(){
-			this.loaded = true;
-			this.fireEvent('loaded',this);
+			me.loaded = true;
+			me.fireEvent('loaded',me);
+			
+			if( me.getCourseStore().getCount()){
+				me.fireEvent('show-courses');
+			}
 		}
+		
+		var me = this;
+		
+		me.purgeTocs();
+		me.getCourseStore().removeAll();
 
 		if(success){
-			this.libraryLoaded(Ext.bind(go,this));
+			me.libraryLoaded(Ext.bind(go,me));
 		}
 		else {
 			console.error('FAILED: load library');
-			Ext.callback(go,this);
+			Ext.callback(go,me);
 		}
 	},
 
 
 	libraryLoaded: function(callback){
-		var me = this, stack = [], store = this.getStore(), url, toRemove = [];
-		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
-		this.each(function(o){
-			if(!o.get||!o.get('index')){ return; }
-			stack.push(o.get('index'));
-		});
+		var me = this,
+			store = this.getStore(),
+			cources = this.getCourseStore(),
+			count = this.getStore().getCount(),
+			toRemove = [];
 
-		if(stack.length===0){
+
+		if(count===0){
+			console.error('Oh no\'s!\n\n\n\n\n!! No content in Library !!\n\n\n\n\n');
 			callback.call(this);
 			return;
 		}
 
-		//Iteration 2 loads TOC async, so once the last one loads, callback if available
+		function setupToc(o,toc){
+			var d;
+			count--;
+
+			if(!toc){
+				console.log('Could not load "'+ o.get('index')+'"... removing form library view');
+				store.remove(o);
+			}
+			else {
+				d = toc.documentElement;
+				o.set('NTIID',d.getAttribute('ntiid'));
+				d.setAttribute('base', o.get('root'));
+				d.setAttribute('icon', o.get('icon'));
+				d.setAttribute('title', o.get('title'));
+
+				if(d.getAttribute('isCourse')==='true'){
+					o.set('isCourse',true);
+					cources.add(o);
+				}
+			}
+
+			if(count<=0 && callback){
+				store.filter();
+				callback.call(me);
+			}
+		}
+
+		//Loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){
 				toRemove.push(o);
-				stack.pop(); return;
+				count--;
+				return;
 			}
-			url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
-			me.loadToc(o.get('index'), url, o.get('NTIID'), function(toc){
-				var d;
-				stack.pop();
 
-				if(!toc){
-					console.log('Could not load "'+ o.get('index')+'"... removing form library view');
-					store.remove(o);
-				}
-				else {
-					d = toc.documentElement;
-					o.set('NTIID',d.getAttribute('ntiid'));
-					d.setAttribute('base', o.get('root'));
-					d.setAttribute('icon', o.get('icon'));
-					d.setAttribute('title', o.get('title'));
-				}
+			var url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
 
-				if(stack.length===0 && callback){
-					callback.call(this);
-				}
-			});
+			me.loadToc(o, url, o.get('NTIID'), setupToc);
 		});
 
 		this.getStore().remove(toRemove);
@@ -202,22 +291,28 @@ Ext.define('NextThought.Library', {
 
 
 	loadToc: function(index, url, ntiid, callback){
-		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+		var me = this,
+			record = index && index.isModel ? index : null,
+			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+
 		if(!this.loaded && !callback){
-			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
+			Ext.log.warn('The library has not loaded yet');
 		}
 
-		function fn(q,s,r){
-			var xml;
+		index = (record && record.get('index')) || index;
+
+		function tocLoaded(q,s,r){
+			var xml,
+				cb = me.activeLoad[index];
 
 			function strip(e){ Ext.fly(e).remove(); }
 
-			delete this.tocs[index];
+			delete me.tocs[index];
 
 			if(s){
-				xml = this.tocs[index] = this.parseXML(r.responseText);
+				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if(xml){
-					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', xml), strip);
+					Ext.each(Ext.DomQuery.select('topic:not([ntiid])', xml), strip);
 				}
 				else {
 					console.warn('no data for index: '+url);
@@ -227,23 +322,27 @@ Ext.define('NextThought.Library', {
 				console.error('There was an error loading part of the library: '+url, arguments);
 			}
 
-			Ext.callback(callback,this,[xml]);
+			delete me.activeLoad[index];
+			Ext.callback(cb,me,[record,xml]);
 		}
-
-
-
 
 		try{
 			url = getURL(url);
 
+			if(me.activeLoad[index]){
+				me.activeLoad[index] = Ext.Function.createSequence(me.activeLoad[index],callback||Ext.emptyFn,null);
+				return;
+			}
+
+
+			me.activeLoad[index] = callback;
 			proxy.request({
 				ntiid: ntiid,
 				jsonpUrl: url,
 				url: url,
 				expectedContentType: 'text/xml',
-				async: !!callback,
-				scope: this,
-				callback: fn
+				scope: me,
+				callback: tocLoaded
 			});
 		}
 		catch(e){
@@ -264,32 +363,45 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	resolve: function(toc, title, containerId) {
-		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
-			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId, title: title};
+	resolve: function(toc, title, containerId, report) {
+		var elts, ix, topic, EA = Ext.Array;
+
+		if(!toc){
+			return null;
 		}
-		return this.recursiveResolve( containerId, toc, title);
-	},
 
-
-	recursiveResolve: function recurse( containerId, elt, title ) {
-		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
-		for( ix = 0; ix < elts.length; ix++ ) {
-			child = elts.item(ix);
-			if( !child ) { continue; }
-			if( child.getAttribute( 'ntiid' ) === containerId ) {
+		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 				return {
-					toc: child.ownerDocument,
-					location: child,
+				toc:toc,
+				location:toc.documentElement,
+				NTIID: containerId,
+				ContentNTIID: containerId,
+				title: title
+			};
+		}
+
+		//returns a flat list of ALL topic tags. No need to recurse
+		elts = EA.toArray(toc.getElementsByTagName( 'topic' ));
+		// add units to this list
+		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'unit' )));
+
+		for( ix=elts.length-1; ix >= 0; ix-- ) {
+			topic = elts[ix];
+			if( topic && topic.getAttribute( 'ntiid' ) === containerId ) {
+				return {
+					toc: topic.ownerDocument,
+					location: topic,
 					NTIID: containerId,
 					title: title,
-					ContentNTIID: child.ownerDocument.documentElement.getAttribute('ntiid')
+					ContentNTIID: topic.ownerDocument.documentElement.getAttribute('ntiid')
 				};
 			}
+		}
 
-			cr = recurse( containerId, child, title );
-			if( cr ) {
-				return cr;
+		if(this.isDebug && report){
+			console.debug('Not Found: Top:\n', toc.documentElement.getAttribute( 'ntiid' ),'\n',containerId);
+			for( ix=elts.length-1; ix >= 0; ix-- ) {
+				console.debug('Not Found: Topic:\n', elts[ix].getAttribute( 'ntiid' ),'\n',containerId);
 			}
 		}
 		return null;

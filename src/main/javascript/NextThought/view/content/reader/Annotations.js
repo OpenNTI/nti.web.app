@@ -51,7 +51,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			annotations: {},
 			filter: null,
 			searchAnnotations: null,
-			annotationManager: new NextThought.view.annotations.renderer.Manager()
+			annotationManager: new NextThought.view.annotations.renderer.Manager(reader)
 		});
 
 		this.reader.fireEvent('listens-to-page-stores',this,{
@@ -69,13 +69,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			'clear-annotations': 'clearAnnotations'
 		});
 
-		me.mon(me.annotationManager.events,'finish',me.fireReady,me,{buffer: 500});
-	},
-
-
-
-	fireReady: function(){
-		this.fireEvent('rendered');
+		me.mon(me.annotationManager.events,'finish',function(c){ me.fireEvent('rendered',c); },me,{buffer: 500});
 	},
 
 
@@ -325,7 +319,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			result = {
 				text: 'Define...',
 				handler:function(){
-					me.fireEvent('define', text, boundingBox );
+					me.fireEvent('define', text, boundingBox, me.reader );
 					me.clearSelection();
 				}
 			};
@@ -362,6 +356,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		//Default container, this should be replaced with the local container.
 		record.set('ContainerId', this.reader.getLocation().NTIID);
+
+		//set a flag to prevent NoteOverlay from resolving the line
+		this.reader.creatingAnnotation = true;
 
 		menu = Ext.widget('menu',{
 			ui: 'nt',
@@ -429,7 +426,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
         //on close make sure it get's destroyed.
-        menu.on('hide', function(){menu.close();});
+        menu.on('hide', function(){
+        	menu.close();
+	        delete this.reader.creatingAnnotation;
+        }, this);
 
 
 		offset = me.reader.getEl().getXY();

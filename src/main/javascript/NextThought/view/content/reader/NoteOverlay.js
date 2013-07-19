@@ -18,7 +18,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'content-updated': 'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
 			'sync-height': 'syncHeight',
-			'create-note': 'noteHere'
+			'create-note': 'noteHere',
+			'beforenavigate': 'onNavigation'
 		});
 
 
@@ -26,6 +27,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			/** @private */
 			visibilityCls: 'note-overlay-hidden'
 		};
+
+
+		this.reader.fireEvent('uses-page-preferences', this);
 	},
 
 
@@ -88,6 +92,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return this.reader.getAnnotationOffsets();
 	},
 
+	onNavigation: function(){
+		if(this.editor && this.editor.isActive()){
+			var msg = "You are currently creating a note. Please save or cancel it first.";
+			Ext.defer(function(){ alert({msg: msg}); }, 1);
+
+			return false;
+		}
+
+		return true;
+	},
 
 	onScroll: function (e, dom) {},
 
@@ -102,7 +116,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	openEditor: function(){
-		var tabPanel, lineInfo = this.data.box.activeLineInfo;
+		var tabPanel, lineInfo = this.data.box.activeLineInfo,
+			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
+			sharing = prefs && prefs.sharing,
+			sharedWith = sharing && sharing.sharedWith,
+			shareInfo =  SharingUtils.sharedWithToSharedInfo(
+							SharingUtils.resolveValue(sharedWith));
 
 		if( this.editor && !this.editor.isDestroyed ){
 			return false;
@@ -113,11 +132,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		this.editor = Ext.widget('nti-editor', {
 			lineInfo: lineInfo || {},
-			ownerCt: this.reader,
+			ownerCmp: this.reader,
+			sharingValue: shareInfo,
 			floating: true,
-			renderTo: Ext.get('library'),
+			renderTo: this.reader.getEl().up('.x-container-reader.reader-container'),
 			enableShareControls: true,
 			enableTitle: true,
+			preventBringToFront:true,
 			listeners:{
 				'deactivated-editor':'destroy',
 				grew: function(){
@@ -130,6 +151,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				}
 			}
 		}).addCls('active in-gutter');
+
+		this.editor.focus();
 
 		this.editor.alignTo(this.data.box,'t-t?');
 		this.editor.rtlSetLocalX(0);
@@ -251,21 +274,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	isOccupied: function(y){
-		var g = this.getAnnotationGutter(),
-			r = g && g.select('[data-line]'),
-			o = false;
-
-		if(r){
-			r.each(function(e){
-				var i = parseInt(e.getAttribute('data-line'),10);
-				o = i===y || Math.abs(i-y) < 5;
-				return !o;
-			});
-		}
-
-		return o;
-	},
+//	isOccupied: function(y){
+//		var g = this.getAnnotationGutter(),
+//			r = g && g.select('[data-line]'),
+//			o = false;
+//
+//		if(r){
+//			r.each(function(e){
+//				var i = parseInt(e.getAttribute('data-line'),10);
+//				o = i===y || Math.abs(i-y) < 5;
+//				return !o;
+//			});
+//		}
+//
+//		return o;
+//	},
 
 
 	copyClientRect: function (rect) {
@@ -365,8 +388,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offset = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
 			oldY = box.getY() - offset.top,
-			newY = 0, occ,
-			activeY = oldY,
+			newY = 0,
+			// occ,
+			//activeY = oldY,
 			line = lineInfo || o.lastLine;
 
 		if (line && line.rect) {
@@ -376,12 +400,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//check for minute scroll changes to prevent jitter:
 		if (oldY < 0 || Math.abs(oldY - newY) > 4) {
 			box.setStyle({top:newY+'px'});
-			activeY = newY;
+			//activeY = newY;
 		}
 
-		occ = this.isOccupied(activeY);
-
-		box[occ? 'addCls':'removeCls']('occupied');
+		//occ = this.isOccupied(activeY);
+		//box[occ? 'addCls':'removeCls']('occupied');
 		//show the box:
 
 		box.activeLineInfo = line;
@@ -413,7 +436,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	mouseOver: function (evt) {
-		if (this.suspendMoveEvents) {
+		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return false;
 		}
 
@@ -423,7 +446,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	mouseOut: function (e) {
 
-		if (this.suspendMoveEvents) {
+		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return;
 		}
 

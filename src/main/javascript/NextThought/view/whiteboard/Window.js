@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.whiteboard.Window',{
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.wb-window',
 	requires: [
 		'NextThought.view.whiteboard.Editor'

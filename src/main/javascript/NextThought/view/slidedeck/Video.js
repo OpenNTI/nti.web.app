@@ -18,9 +18,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 				frameBorder: 0, scrolling: 'no', seamless: true
 			},
 			{
-				tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video', 'controls': ''
-			},
-			{
 				cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 			}
 		]
@@ -58,6 +55,9 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		if(typeof(this.linkWithSlides) !== 'boolean'){
 			this.linkWithSlides = true;
 		}
+
+		this.loadFirstEntry = false;
+		this.playerWidth = 400;
 	},
 
 

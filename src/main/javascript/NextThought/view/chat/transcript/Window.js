@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.chat.transcript.Window',{
-	extend:'NextThought.view.Window',
+	extend:'NextThought.view.window.Window',
 	alias: 'widget.chat-transcript-window',
 
 	requires: [

@@ -195,6 +195,7 @@ $over-color: #f4f3f3;
 		width: 350px;
 		height: 30px;
 		left: 0;
+		background-color: white;
 
 		.title{
 			position: relative;
@@ -358,13 +359,6 @@ $over-color: #f4f3f3;
 		overflow: {
 			x: hidden;
 			y: auto;
-		}
-
-		.empty-list {
-			padding: 20px 0;
-			font: italic 300 14px/28px $font;
-			text-align: center;
-			color: $tertiary-grey;
 		}
 
 		.contact-row{
@@ -938,7 +932,7 @@ div.contact-buttons {
 			}
 		}
 
-		&:hover{
+		&:hover, &.active{
 			.nib{
 				display: block;
 			}

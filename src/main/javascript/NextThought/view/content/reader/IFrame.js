@@ -23,6 +23,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		reader.on('destroy','destroy',
 			reader.relayEvents(this,[
 				'dismiss-popover',
+				'display-popover',
 				'iframe-ready',
 				'sync-height',
 				'content-updated',
@@ -60,9 +61,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var me = this;
 		return {
 			xtype: 'box',
-			width: 765,
 			autoEl: {
-				width: 765,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
@@ -451,7 +450,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	},
 
 
-	update: function(html) {
+	update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0],
@@ -461,14 +460,14 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		Ext.select('meta[nti-injected="true"]', false, head).remove();
 
 		//Append some tags to the head
-		if(me.meta){
+		if(metaData){
 			Ext.each(metaNames, function(tag){
 				var meta;
-				if(me.meta.hasOwnProperty(tag)){
+				if(metaData.hasOwnProperty(tag)){
 					meta = doc.createElement('meta');
 					meta.setAttribute('name',tag);
-					meta.setAttribute('content', me.meta[tag]);
-					meta.setAttribute('nti-injected', true);
+					meta.setAttribute('content', metaData[tag]);
+					meta.setAttribute('nti-injected', 'true');
 					head.appendChild(meta);
 				}
 			});
@@ -492,5 +491,109 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
     getCleanContent: function(){
         return this.cleanContent;
+    },
+
+    /**
+     * Makes pointer events go through the iframe so that all the
+     * interactions can be handled manually.
+     * @param should
+     */
+    setClickthrough: function(should) {
+        var el = this.get();
+        if (!el)
+            return;
+
+        if(should)
+            el.addCls('clickthrough');
+        else
+            el.removeCls('clickthrough');
+    },
+
+    hasClickthrough: function() {
+        return this.get().hasCls('clickthrough');
+    },
+
+    /**
+     * @param x relative to the window's top left corner
+     * @param y relative to the window's top left corner
+     */
+    elementAt: function(x, y) {
+        var reader = this.reader,
+            iFrameDoc = this.getDocumentElement(),
+            outerDoc = Ext.getDoc().dom,
+            hasClickthrough = this.hasClickthrough(),
+            framePos = reader.getPosition(),
+            scrolledY = reader.getScroll().top(),
+            pickedElement,
+            localX = x-framePos[0],
+            localY = y-framePos[1]+scrolledY;
+
+        this.setClickthrough(false);
+        pickedElement = iFrameDoc.elementFromPoint(localX, localY);
+
+        function hasOverlay(element) {
+            if (!element || !element.tagName)
+                return false;
+
+            var types = [ 'application/vnd.nextthought.ntislidedeck',
+                          'application/vnd.nextthought.naquestion',
+                          'application/vnd.nextthought.ntivideo' ],
+                hasObjectTag = element.tagName === 'OBJECT',
+                type;
+
+            if (!hasObjectTag)
+                element = Ext.get(element).up('object');
+            if (!element)
+                return false;
+
+            type = element.dom? element.dom.type : element.type;
+            return Ext.Array.contains(types, type);
+        }
+
+        // If it picked an object element or an object element child
+        // and has an overlay outside the iFrame, use that.
+        if (hasOverlay(pickedElement)) {
+            pickedElement = outerDoc.elementFromPoint(x, y);
+        }
+
+        if (pickedElement)
+            console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
+
+        this.setClickthrough(hasClickthrough);
+
+        return pickedElement;
+    },
+
+    /**
+     * Positions relative to the window
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    makeRangeFrom: function(x1, y1, x2, y2) {
+        var me = this,
+            iFrameDoc = this.getDocumentElement(),
+            startRange = rangeAtPoint(x1, y1),
+            endRange = rangeAtPoint(x2, y2),
+            range = iFrameDoc.createRange();
+        range.setStart(startRange.startContainer, startRange.startOffset);
+        range.setEnd(endRange.startContainer, endRange.endOffset);
+        return range;
+
+        function rangeAtPoint(x,y) {
+            var reader = me.reader,
+                hasClickthrough = me.hasClickthrough(),
+                framePos = reader.getPosition(),
+                scrolledY = reader.getScroll().top(),
+                localX = x-framePos[0],
+                localY = y-framePos[1]+scrolledY,
+                range;
+
+            me.setClickthrough(false);
+            range = iFrameDoc.caretRangeFromPoint(localX, localY);
+            me.setClickthrough(hasClickthrough);
+            return range;
+        }
     }
 });

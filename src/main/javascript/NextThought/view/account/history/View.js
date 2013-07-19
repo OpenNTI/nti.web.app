@@ -1,4 +1,5 @@
 //Styles defined in _history-view.scss
+//TODO: Delete this once we permanently enable the new 'activity'/history view.
 Ext.define('NextThought.view.account.history.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.history-view',

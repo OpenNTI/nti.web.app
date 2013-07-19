@@ -77,9 +77,9 @@ span.tab{
 						}
 					}
 
-					.x-ie10 &, .x-ie &{
+					/*.x-ie10 &, .x-ie &{
 						height: 33px !important;
-					}
+					}*/
 				}
 			}
 
@@ -134,6 +134,7 @@ span.tab{
 
 
 			.content {
+				@include scrollbar(#ffffff, $tertiary-grey);
 				@include text-content;
 
 				@include experimental(transition, all 0.5s);
@@ -385,6 +386,7 @@ span.tab{
 					overflow: visible;
 					.control.publish{
 						left: 10px;
+						margin-left: -10px;
 					}
 					.tokens{
 						padding-left: 0;
@@ -399,6 +401,10 @@ span.tab{
 			}
 
 			.content {
+				.detected-scrollbars & {
+					margin-right: -10px;
+				}
+
 				padding: 2px 0 0;
 				&.show-placeholder[data-placeholder]::after{
 					left: 0;

@@ -151,10 +151,12 @@ Ext.define('NextThought.editor.Actions', {
 					renderTo: me.sharedListEl,
 					scrollParentEl:scrollParentEl,
 					tabIndex: tabTracker.next(),
-					ownerCls: me.cmp.xtype
+					ownerCls: me.cmp.xtype,
+					value: me.sharingValue
 				});
 				me.cmp.on('destroy', 'destroy', me.sharedList);
 				me.cmp.mon(me.sharedList,'cancel-indicated', function(){this.fireEvent('cancel');}, me);
+				me.cmp.mon(me.sharedList,'sync-height', function(){this.maybeResizeContentBox();}, me);
 			}else{
 				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
 			}
@@ -181,7 +183,6 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	activate: function () {
-		this.updatePrefs();
 		this.maybeEnableSave();
 		this.editor.addCls('active');
 		this.fireEvent('activated-editor',this);
@@ -832,6 +833,7 @@ Ext.define('NextThought.editor.Actions', {
 				}, 100);
 			}
 			me.focus(true);
+			Ext.defer(me.maybeResizeContentBox, 1, me);
 		});
 	},
 
@@ -1098,7 +1100,6 @@ Ext.define('NextThought.editor.Actions', {
 	/** @private */
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
-		this.updatePrefs();
 		if (focus || putCursorAtEnd) {
 			this.focus(putCursorAtEnd);
 		}
@@ -1145,16 +1146,16 @@ Ext.define('NextThought.editor.Actions', {
 		catch (e) {
 			console.log('Removing all ranges from selection failed: ', e.message);
 		}
-	},
+	}//,
 
 
-	updatePrefs: function (v) {
+	/*updatePrefs: function (v) {
 		if(this.sharedList){
 			this.sharedList.setValue(
 					SharingUtils.sharedWithToSharedInfo(
 							SharingUtils.resolveValue()));
 		}
-	}
+	}*/
 
 
 }, function () {

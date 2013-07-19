@@ -2,16 +2,37 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
     alias: 'reader.touch',
 
-    requires: ['NextThought.view.content.reader.IFrame',
-               'NextThought.view.content.reader.Scroll'],
+    requires: [
+        'NextThought.view.content.reader.IFrame',
+        'NextThought.view.content.reader.Scroll',
+        'NextThought.view.content.reader.TouchHighlight',
+        'NextThought.view.content.reader.Annotations'
+    ],
 
     statics: {
         SCROLL_TIME_STEP: 1,
         SCROLL_FRICTION: 0.05,
         SCROLL_MAX_SPEED: 200,
         SCROLL_THRESHOLD_SPEED: 1,
-        TAP_TIME: 2,
-        TAP_HOLD_TIME: 1000
+        /**
+         * Pixel distance a touch can move to still be considered a tap
+         */
+        TAP_THRESHOLD: 15,
+        /**
+         * Time required for a long press
+         */
+        TAP_HOLD_TIME: 1000,
+        /**
+         * Various states for a fsm to determine possible
+         * touch interactions.
+         */
+        STATE: {
+            NONE: 0,
+            DOWN: 1,
+            SCROLLING: 2,
+            SELECTING: 3,
+            DRAGGING: 4
+        }
     },
 
     /**
@@ -28,21 +49,9 @@ Ext.define('NextThought.view.content.reader.Touch', {
         var reader = this.reader;
 
         reader.on('afterrender', function() {
-            this.addIFrameClickthrough();
+            reader.getIframe().setClickthrough(true);
             this.setupTouchHandlers();
         }, this);
-    },
-
-    /**
-     * Makes pointer events go through the iframe so that all the
-     * interactions can be handled manually.
-     */
-    addIFrameClickthrough: function() {
-        var reader = this.reader,
-            iFrameMod = reader.getIframe(),
-            iFrameEle = iFrameMod.get();
-        if (iFrameEle)
-            iFrameEle.addCls('clickthrough');
     },
 
     /**
@@ -53,24 +62,67 @@ Ext.define('NextThought.view.content.reader.Touch', {
         var s = this.statics(),
             reader = this.reader,
             scroll = reader.getScroll(),
+            highlight = reader.getTouchHighlight(),
+            annotations = reader.getAnnotations(),
             dom = reader.getEl().dom,
-            anotherTouchStarted,
-            startY,
+            state = s.STATE.NONE,
+            iFrame = reader.getIframe(),
+
+            pickedElement = null,
+            initialTime,
+            initialX, initialY,
+            lastX, lastY,
             //current movement delta
             vel;
 
+        function withinTapThreshold() {
+            return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
+        }
+
+        function elementIsSelectable(ele) {
+            if (!ele) return false;
+            var tag = ele.tagName,
+                tags = ['P', 'A', 'SPAN'];
+            return Ext.Array.contains(tags, tag);
+        }
+        function elementIsDraggable(ele) {
+            if (!ele) return false;
+            var obj = Ext.get(ele);
+            return obj.hasCls('draggable-area') || obj.up('.draggable-area');
+        }
+
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            anotherTouchStarted = true;
 
-            startY = e.touches[0].pageY;
+            // Only start a new touch if all touches are off
+            if (state !== s.STATE.NONE)
+                return;
+            state = s.STATE.DOWN;
+            pickedElement = iFrame.elementAt(e.pageX, e.pageY);
+
+            initialTime = Date.now();
+            initialY = e.touches[0].pageY;
+            initialX = e.touches[0].pageX;
+            lastY = initialY;
             vel = 0;
+            highlight.hide();
+
+            console.log('touchStart');
 
             setTimeout(function() {
-                // TODO: check for long press
-                var isLongPress = false;
-                if (isLongPress) {
+                if (state !== s.STATE.DOWN)
+                    return;
 
+                console.log('long press');
+                vel=0;
+                if (elementIsDraggable(pickedElement)) {
+                    state = s.STATE.DRAGGING;
+                    console.log('start dragging');
+                }
+                else if (elementIsSelectable(pickedElement)) {
+                    state = s.STATE.SELECTING;
+                    console.log('start selecting');
+                    // TODO: Some animation to show user selecting has started?
                 }
             }, s.TAP_HOLD_TIME);
         }, false);
@@ -79,22 +131,89 @@ Ext.define('NextThought.view.content.reader.Touch', {
             e.preventDefault();
 
             var touch = e.touches[0];
-            vel = startY - touch.pageY;
-            startY = touch.pageY;
-            scroll.by(vel);
+
+            console.log('touchMove');
+
+            if (state === s.STATE.DOWN) {
+                scrollMove();
+                if (!withinTapThreshold())
+                    state = s.STATE.SCROLLING;
+            }
+            else if (state === s.STATE.SCROLLING) {
+                scrollMove();
+            }
+            else if (state === s.STATE.SELECTING) {
+                selectMove();
+            }
+            else if (state === s.STATE.DRAGGING) {
+                // TODO: Update Dragged element
+            }
+            else
+                console.warn('Unknown touch state on touchMove!');
+
+            function scrollMove() {
+                vel = lastY - touch.pageY;
+                updatePos();
+                scroll.by(vel);
+            }
+
+            function selectMove() {
+                updatePos();
+                var range = iFrame.makeRangeFrom(initialX, initialY,
+                                                 touch.pageX, touch.pageY);
+                highlight.show(range);
+            }
+
+            function updatePos() {
+                lastY = touch.pageY;
+                lastX = touch.pageX;
+            }
+
         }, false);
+
+        function shouldSelectAllOnTap() {
+            return pickedElement.tagName === 'INPUT';
+        }
 
         dom.addEventListener('touchend', function(e){
             e.preventDefault();
 
             var startLt0 = vel<0,
-                lastUpdateTime = Date.now();
+                lastUpdateTime = Date.now(),
+                tempState = state;
+            state = s.STATE.NONE;
 
-            anotherTouchStarted = false;
+            console.log('touchEnd');
 
-            // Cap the ending velocity at the max speed
-            if (Math.abs(vel) > s.SCROLL_MAX_SPEED)
-                vel = startLt0? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+            if (tempState === s.STATE.DOWN) {
+                // Send click/select event to the tapped element
+                if (shouldSelectAllOnTap())
+                    pickedElement.setSelectionRange(0,1000);
+                else
+                    pickedElement.click();
+            }
+            else if (tempState === s.STATE.SCROLLING) {
+                // Cap the ending velocity at the max speed
+                if (Math.abs(vel) > s.SCROLL_MAX_SPEED)
+                    vel = startLt0? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+                kineticScroll();
+            }
+            else if (tempState === s.STATE.SELECTING) {
+                // TODO: Update Selection
+                console.log('stop selection');
+                var range = iFrame.makeRangeFrom(initialX, initialY,
+                        lastX, lastY),
+                    xy = [lastX, lastY];
+
+                annotations.addAnnotation(range, xy);
+            }
+            else if (tempState === s.STATE.DRAGGING) {
+                // TODO: Update Dragged element
+                console.log('stop dragging');
+            }
+            else
+                console.warn('Unknown touch state on touchEnd!');
+
 
             function kineticScroll() {
                 var lt0 = vel< 0,
@@ -107,7 +226,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
                 // and hasn't changed directions
                 aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
                 sameDirection = startLt0 === lt0;
-                if ( aboveThreshold && sameDirection && !anotherTouchStarted ){
+
+                if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
                     // Apply friction in the opposite movement direction
                     // based on the time passed for smoother movement
                     vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
@@ -116,7 +236,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
                 }
             }
-            kineticScroll();
-        });
-    }
+        }); // eo touchEnd
+
+    } // eo setupTouchHandlers
+
 });

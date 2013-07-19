@@ -145,7 +145,7 @@
 .annotation-gutter {
 	position: absolute;
 	top: 0;
-	left: 735px;
+	width: 60px;
 	right: 0;
 	overflow: visible;
 	z-index: 4;
@@ -196,6 +196,7 @@
 
 
 .x-component-annotation-view {
+	@include scrollbar(#fbfbfb, $tertiary-grey);
 	overflow: {
 		x: hidden;
 		y: scroll;
@@ -223,6 +224,7 @@
 			font: italic 400 16px/25px $font;
 			margin: 0 0 10px 0;
 			color: $primary-grey;
+			word-break: break-word;
 
 			.body-divider .whiteboard-container {
 				.whiteboard-wrapper .overlay{bottom: 0;}

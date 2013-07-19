@@ -87,838 +87,838 @@
 	.tabable:focus {
 
 	}
+}
 
-	.assessment-content {
-		font: {
-			size: 14px;
-			style: normal;
-			weight: normal;
+.assessment-content {
+	font: {
+		size: 14px;
+		style: normal;
+		weight: normal;
+	}
+	line-height: 2em;
+
+	.math {
+		line-height: normal;
+	}
+
+	img {
+		margin: 1em 0 0 0;
+	}
+
+	sup {
+		vertical-align: super;
+	}
+
+	sub {
+		vertical-align: sub;
+	}
+
+	.nobreak {
+		white-space: nowrap;
+	}
+
+	.vfrac {
+		white-space: nowrap;
+
+		.divider {
+			font-size: 140%;
+			vertical-align: -4%;
 		}
-		line-height: 2em;
+	}
 
-		.math {
-			line-height: normal;
+	.underline {
+		text-decoration: underline;
+	}
+
+	.overline {
+		text-decoration: overline;
+	}
+
+	em,
+	.mathname {
+		font-style: italic;
+	}
+
+	.tabular {
+		td {
+			padding-left: 1em;
+			padding-right: 1em;
 		}
+	}
+}
 
-		img {
-			margin: 1em 0 0 0;
-		}
+.x-panel-assessment {
 
-		sup {
-			vertical-align: super;
-		}
+	&.question { //main frame of the question
+		background: $panel-background;
+		border: 1px solid #e2e2e2;
+		border-radius: 3px;
+		box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
 
-		sub {
-			vertical-align: sub;
-		}
+		& > .x-panel-body-assessment {
+			@extend .assessment-content;
+			padding: 17px 40px 15px 40px;
+			background: #ffffff;
+			color: $primary-grey;
 
-		.nobreak {
-			white-space: nowrap;
-		}
-
-		.vfrac {
-			white-space: nowrap;
-
-			.divider {
-				 font-size: 140%;
-				 vertical-align: -4%;
-			}
-		}
-
-		.underline {
-			text-decoration: underline;
-		}
-
-		.overline {
-			text-decoration: overline;
-		}
-
-		em,
-		.mathname {
-			font-style: italic;
-		}
-
-		.tabular {
-			td {
-				padding-left: 1em;
-				padding-right: 1em;
+			.labels{
+				padding: 10px 15px 0 0;
+				@include draggable-span;
 			}
 		}
 	}
 
-	.x-panel-assessment {
+	&.submission-panel {
+		border: 0 solid #ebebeb;
+		border-top-width: 1px;
 
-		&.question { //main frame of the question
-			background: $panel-background;
-			border: 1px solid #e2e2e2;
-			border-radius: 3px;
-			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
-
-			& > .x-panel-body-assessment {
-				@extend .assessment-content;
-				padding: 17px 40px 15px 40px;
-				background: #ffffff;
-				color: $primary-grey;
-
-				.labels{
-					padding: 10px 15px 0 0;
-					@include draggable-span;
-				}
-			}
+		.reset,.submit,.status {
+			display: inline-block;
+			padding: 15px 20px;
+			text-decoration: none;
+			color: $secondary-grey;
 		}
 
-		&.submission-panel {
-			border: 0 solid #ebebeb;
-			border-top-width: 1px;
-
-			.reset,.submit,.status {
-				display: inline-block;
-				padding: 15px 20px;
-				text-decoration: none;
-				color: $secondary-grey;
+		.status {
+			color: #f35252;
+			padding-left: 0;
+			font: {
+				size: 14px;
+				style: italic;
+				weight: normal;
 			}
-
-			.status {
-				color: #f35252;
-				padding-left: 0;
-				font: {
-					size: 14px;
-					style: italic;
-					weight: normal;
-				}
-				&.ready { color: #8eb737; }
-			}
-
-			.buttons {
-				float: right;
-				white-space: nowrap;
-				font: {
-					size: 14px;
-					style: normal;
-					weight: normal;
-				}
-
-				.reset,.submit {
-					border: 1px solid rgba(0,0,0,0);
-					cursor: pointer;
-
-					&.tabable:active,
-					&.tabable:focus {
-						border: 1px dashed rgba(0,0,0,0.5);
-					}
-				}
-
-				.submit{
-					background: $primary-blue;
-					border: 1px solid $border-blue;
-					color: #ffffff;
-					font:{
-						weight: bold;
-						style: italic;
-					}
-
-				    &.disabled {
-					    cursor: default;
-					    border-color: #d0d0d0;
-					    background: rgba(184,184,184,0.5);
-					    color: rgba(255,255,255,0.7);
-				    }
-				}
-			}
+			&.ready { color: #8eb737; }
 		}
 
-		&.scoreboard {
-			& > .x-panel-body-assessment{ padding: 0 15px 0 10px; }
-			.x-btn-secondary-large .x-btn-inner { font-weight: bold; }
-			& > .score-header {
-				border: 0px solid #efefef;
-				border-bottom-width: 1px !important;
-				border-radius: 3px 3px 0 0;
-				box-shadow: 0 1px 0 0 #ffffff;
-				padding: 6px 10px;
-				font: {
-					family: $font;
+		.buttons {
+			float: right;
+			white-space: nowrap;
+			font: {
+				size: 14px;
+				style: normal;
+				weight: normal;
+			}
+
+			.reset,.submit {
+				border: 1px solid rgba(0,0,0,0);
+				cursor: pointer;
+
+				&.tabable:active,
+				&.tabable:focus {
+					border: 1px dashed rgba(0,0,0,0.5);
+				}
+			}
+
+			.submit{
+				background: $primary-blue;
+				border: 1px solid $border-blue;
+				color: #ffffff;
+				font:{
 					weight: bold;
-					size: 10px;
-					style: normal;
-				}
-
-				.title {
-					display: inline;
-					color: #ababab;
-					text-transform: uppercase;
-				}
-
-				.time {
-					cursor: pointer;
-					position: relative;
-					float: right;
-					color: $secondary-grey;
-					font:{
-						family: $font;
-						size: 11px;
-						style: normal;
-						weight: 700;
-					}
-
-					padding: 0 15px 0 0;
-					margin: 0 5px 0 0;
-
-					.arrow {
-						@include arrow(top,7px,4px,#a2a2a2);
-						position: absolute;
-						right: 2px; top: 6px;
-					}
-				}
-			}
-
-			.tally-box {
-				padding: 0 10px;
-				font: {
-					family: $font;
-					weight: normal;
 					style: italic;
 				}
+
+				&.disabled {
+					cursor: default;
+					border-color: #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					color: rgba(255,255,255,0.7);
+				}
+			}
+		}
+	}
+
+	&.scoreboard {
+		& > .x-panel-body-assessment{ padding: 0 15px 0 10px; }
+		.x-btn-secondary-large .x-btn-inner { font-weight: bold; }
+		& > .score-header {
+			border: 0px solid #efefef;
+			border-bottom-width: 1px !important;
+			border-radius: 3px 3px 0 0;
+			box-shadow: 0 1px 0 0 #ffffff;
+			padding: 6px 10px;
+			font: {
+				family: $font;
+				weight: bold;
+				size: 10px;
+				style: normal;
 			}
 
-			.message {
-				color: $primary-grey;
+			.title {
+				display: inline;
+				color: #ababab;
+				text-transform: uppercase;
+			}
+
+			.time {
+				cursor: pointer;
+				position: relative;
+				float: right;
+				color: $secondary-grey;
+				font:{
+					family: $font;
+					size: 11px;
+					style: normal;
+					weight: 700;
+				}
+
+				padding: 0 15px 0 0;
+				margin: 0 5px 0 0;
+
+				.arrow {
+					@include arrow(top,7px,4px,#a2a2a2);
+					position: absolute;
+					right: 2px; top: 6px;
+				}
+			}
+		}
+
+		.tally-box {
+			padding: 0 10px;
+			font: {
+				family: $font;
+				weight: normal;
+				style: italic;
+			}
+		}
+
+		.message {
+			color: $primary-grey;
+			font: {
+				weight: normal;
+				size: 18px;
+			}
+		}
+
+		.tally {
+			.stat {
+				display: inline-block;
+				position: relative;
+				padding: 0 0 0 15px;
+				margin-right: 20px;
 				font: {
-					weight: normal;
-					size: 18px;
+					weight: 600;
+					size: 12px;
+				}
+
+				&.correct { color: #94b61a; }
+				&.incorrect { color: #e95a57; }
+
+				&::after{
+					position: absolute;
+					left: 0px; top: 3px;
+					content: ' ';
+					width: 10px;
+					height: 10px;
+					background: url(../images/old_sprites/spr_quiz.png) 0 0 no-repeat;
+				}
+
+				&.correct::after { background-position: -120px -121px; }
+				&.incorrect::after { background-position: -170px -121px; }
+			}
+		}
+
+		background: #fcfcfc;
+		border: 1px solid #e2e2e2;
+		border-radius: 5px;
+		box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
+	}
+
+	& > .parts {
+		margin: 0;
+		border-radius: 0 0 3px 3px;
+		border: 0px solid #e2e2e2;
+		border-top-width: 1px !important;
+
+		&.multipart > .x-panel-body-assessment,
+		&.part-of-set > .x-panel-body-assessment {
+			padding-bottom: 0;
+			.footer .action.check { display: none; }
+			.multipart-submission .footer .action.check {
+				display: block;
+				border-radius: 0 0 3px 0;
+			}
+		}
+		&.correct.multipart > .x-panel-body-assessment,
+		&.correct.part-of-set > .x-panel-body-assessment {
+			padding-bottom: 20px;
+		}
+
+		&.multipart > .x-panel-body-assessment{
+			padding: 0px;
+
+			.part-container {
+				padding: 30px 60px;
+				border-bottom: 1px solid #e4e4e4;
+
+				.part-content {
+					position: relative;
+					margin: 0 0 30px 0;
+					font-size: 14px;
+
+					.ordinal {
+						position: absolute;
+						display: block;
+						left: -20px;
+						font-weight: 600;
+						color: $primary-grey;
+					}
+					.content {
+						font-weight: normal;
+						color: $secondary-grey;
+					}
 				}
 			}
 
-			.tally {
-				.stat {
-					display: inline-block;
-					position: relative;
-					padding: 0 0 0 15px;
-					margin-right: 20px;
-					font: {
-						weight: 600;
-						size: 12px;
+		}
+
+		& > .x-panel-body-assessment {
+			padding: 20px;
+			.response-container {
+				position: relative;
+				min-height: 38px;
+				background: #ffffff;
+				border: 1px solid $tertiary-grey;
+
+				.inputbox {
+					color: $primary-grey;
+					min-height: 38px;
+					&::after{
+						content: ' ';
+						width: 18px;
+						height: 18px;
+						position: absolute;
+						top: 10px; left: 10px;
+						display: none;
+						background: url(../images/old_sprites/spr_quiz.png) -116px -16px no-repeat;
 					}
 
-					&.correct { color: #94b61a; }
-					&.incorrect { color: #e95a57; }
+					.mathquill-editable,
+					.mathquill-rendered-math {
+						font: {
+							family: $font;
+							weight: normal;
+							size: 14px;
+							style: normal;
+						}
+
+						border: none;
+						min-height: 38px;
+						min-width: 100%;
+						padding: 12px 8px 5px 8px !important;
+
+						&[data-label]::after{
+							@include placeholder-style();
+							content: attr(data-label);
+							margin: 0.3em;
+						}
+					}
+
+					& > .label {
+						position: absolute;
+						display: inline-block;
+						white-space: nowrap;
+						@include placeholder-style();
+						padding: 0 0.3em;
+						line-height: 38px;
+						top: 0;
+					}
+
+					&.correct, &.incorrect{
+						&, input.answer-field {
+							color: #f35252;
+							font-weight: 600;
+						}
+						padding-left: 28px;
+						input.answer-field {
+							left: 28px;
+						}
+						&::after {
+							display: block;
+						}
+					}
+					&.correct{
+						&, input.answer-field {
+							color: #8eb737;
+							font-weight: normal;
+						}
+
+						&::after {
+							background-position: -116px -66px;
+						}
+					}
+
+					input.answer-field {
+						@extend .assessment-content;
+						color: $primary-grey;
+						margin: 5px 10px 4px;
+						border: none;
+						padding: 0;
+						position: absolute;
+						left: 0; right: 0;
+						min-height: 28px; // mainly a fix for IE
+						min-width: 85%;	// mainly a fix for IE
+					}
+				}
+
+				.historyMenu{
+					display: block;
+					position: absolute;
+					top: 9px;
+					right: 5px;
+					width: 32px;
+					height: 20px;
 
 					&::after{
-						position: absolute;
-						left: 0px; top: 3px;
 						content: ' ';
-						width: 10px;
-						height: 10px;
-						background: url(../images/old_sprites/spr_quiz.png) 0 0 no-repeat;
+						background: $icons no-repeat;
+						@include sprite($icons,'answer-history',$dimensions: true);
+						position: absolute;
+						top: 0;
+						left: 0;
 					}
 
-					&.correct::after { background-position: -120px -121px; }
-					&.incorrect::after { background-position: -170px -121px; }
-				}
-			}
-
-			background: #fcfcfc;
-			border: 1px solid #e2e2e2;
-			border-radius: 5px;
-			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
-		}
-
-		& > .parts {
-			margin: 0;
-			border-radius: 0 0 3px 3px;
-			border: 0px solid #e2e2e2;
-			border-top-width: 1px !important;
-
-			&.multipart > .x-panel-body-assessment,
-			&.part-of-set > .x-panel-body-assessment {
-				padding-bottom: 0;
-				.footer .action.check { display: none; }
-			  	.multipart-submission .footer .action.check {
-					display: block;
-					border-radius: 0 0 3px 0;
-				}
-			}
-            &.correct.multipart > .x-panel-body-assessment,
-			&.correct.part-of-set > .x-panel-body-assessment {
-				padding-bottom: 20px;
-			}
-
-            &.multipart > .x-panel-body-assessment{
-				padding: 0px;
-
-			  	.part-container {
-					padding: 30px 60px;
-					border-bottom: 1px solid #e4e4e4;
-
-					.part-content {
-					  	position: relative;
-						margin: 0 0 30px 0;
-					 	font-size: 14px;
-
-					  	.ordinal {
-							position: absolute;
-							display: block;
-							left: -20px;
-							font-weight: 600;
-							color: $primary-grey;
-						}
-					  	.content {
-							font-weight: normal;
-							color: $secondary-grey;
+					&:hover{
+						&::after{
+							@include sprite($icons,'answer-history_active',$dimensions: true);
 						}
 					}
 				}
 
-            }
-
-			& > .x-panel-body-assessment {
-				padding: 20px;
-				.response-container {
+				.choice {
+					@extend .assessment-content;
+					cursor: pointer;
 					position: relative;
+					color: $primary-grey;
+					vertical-align: middle;
 					min-height: 38px;
 					background: #ffffff;
-					border: 1px solid $tertiary-grey;
+					border: 0px solid $tertiary-grey;
+					border-bottom-width: 1px;
+					&:last-of-type { border-bottom-width: 0px; }
+					padding-left: 54px;
 
-					.inputbox {
-						color: $primary-grey;
-						min-height: 38px;
-						&::after{
-							content: ' ';
-							width: 18px;
-							height: 18px;
-							position: absolute;
-							top: 10px; left: 10px;
-							display: none;
-							background: url(../images/old_sprites/spr_quiz.png) -116px -16px no-repeat;
-						}
-
-						.mathquill-editable,
-						.mathquill-rendered-math {
-							font: {
-								family: $font;
-								weight: normal;
-								size: 14px;
-								style: normal;
-							}
-
-							border: none;
-							min-height: 38px;
-							min-width: 100%;
-							padding: 12px 8px 5px 8px !important;
-
-							&[data-label]::after{
-								@include placeholder-style();
-								content: attr(data-label);
-								margin: 0.3em;
-							}
-						}
-
-						& > .label {
-							position: absolute;
-							display: inline-block;
-							white-space: nowrap;
-							@include placeholder-style();
-							padding: 0 0.3em;
-							line-height: 38px;
-							top: 0;
-						}
-
-						&.correct, &.incorrect{
-							&, input.answer-field {
-								color: #f35252;
-								font-weight: 600;
-							}
-							padding-left: 28px;
-							input.answer-field {
-								left: 28px;
-							}
-							&::after {
-								display: block;
-							}
-						}
-						&.correct{
-							&, input.answer-field {
-								color: #8eb737;
-								font-weight: normal;
-							}
-
-							&::after {
-								background-position: -116px -66px;
-							}
-						}
-
-						input.answer-field {
-							@extend .assessment-content;
-							color: $primary-grey;
-							margin: 5px 10px 4px;
-							border: none;
-							padding: 0;
-							position: absolute;
-							left: 0; right: 0;
-							min-height: 28px; // mainly a fix for IE
-							min-width: 85%;	// mainly a fix for IE
-						}
+					span {
+						line-height: 38px;
 					}
 
-					.historyMenu{
-						display: block;
+					.label {
+						height: 38px;
+						font-weight: bold;
+						margin-right: 10px;
+					}
+					.control {
 						position: absolute;
-						top: 9px;
-						right: 5px;
-						width: 32px;
-						height: 20px;
-
-						&::after{
-							content: ' ';
-							background: $icons no-repeat;
-							@include sprite($icons,'answer-history',$dimensions: true);
-							position: absolute;
-							top: 0;
-							left: 0;
-						}
-
-						&:hover{
-							&::after{
-								@include sprite($icons,'answer-history_active',$dimensions: true);
-							}
+						top: 0; left: 0;
+						display: inline-block;
+						width: 54px;
+						height: 38px;
+						border: none;
+						border-left: 6px solid white;
+						background: url(../images/old_sprites/spr_quiz.png) -1000px -1000px no-repeat;
+						&.checked {
+							border-color: $primary-blue;
 						}
 					}
 
-					.choice {
+					&.correct .control {
+						&,&.checked{
+							border-color: #9ac73c;
+							background-position: -105px -55px !important;
+						}
+					}
+
+					&.incorrect .control{
+						&,&.checked{
+							border-color: #f35252;
+							background-position: -105px -5px !important;
+						}
+					}
+				}
+
+				.multi .choice {
+					&:hover .control,
+					.control {
+						background-position: -55px -55px;
+						&.checked { background-position: -55px -105px; }
+					}
+
+					.control { background-position: -55px -5px; }
+				}
+
+				.single .choice {
+					&:hover .control{ background-position: -5px -55px; }
+					.control {
+						background-position: -5px -5px;
+						&.checked { background-position: -5px -105px; }
+					}
+				}
+
+				.matching-dd-zone{
+					display: table;
+					table-layout: fixed;
+
+					.match{
 						@extend .assessment-content;
-						cursor: pointer;
 						position: relative;
+						display: table-row;
 						color: $primary-grey;
 						vertical-align: middle;
-						min-height: 38px;
 						background: #ffffff;
-						border: 0px solid $tertiary-grey;
+						border: 0 solid $tertiary-grey;
 						border-bottom-width: 1px;
-						&:last-of-type { border-bottom-width: 0px; }
-						padding-left: 54px;
+						&:last-of-type {
+							border-bottom-width: 0px;
+							.draggable-area{ border-bottom-width: 0px;}
+							.label{ border-bottom-width: 0px;}
+						}
 
-						span {
-							line-height: 38px;
+						&.selected{
+							opacity: 0.3;
+						}
+
+						.text{
+							line-height: 26px;
+							min-width: 54px;
 						}
 
 						.label {
-							height: 38px;
+							display: table-cell;
+							min-width: 54px;
+							padding-left: 20px;
+							padding-right: 20px;
 							font-weight: bold;
-							margin-right: 10px;
-						}
-						.control {
-							position: absolute;
-							top: 0; left: 0;
-							display: inline-block;
-							width: 54px;
-							height: 38px;
-							border: none;
-							border-left: 6px solid white;
-							background: url(../images/old_sprites/spr_quiz.png) -1000px -1000px no-repeat;
-							&.checked {
-								border-color: $primary-blue;
-							}
-						}
-
-						&.correct .control {
-							&,&.checked{
-								border-color: #9ac73c;
-								background-position: -105px -55px !important;
-							}
-						}
-
-						&.incorrect .control{
-							&,&.checked{
-								border-color: #f35252;
-								background-position: -105px -5px !important;
-							}
-						}
-					}
-
-					.multi .choice {
-						&:hover .control,
-						.control {
-							background-position: -55px -55px;
-							&.checked { background-position: -55px -105px; }
-						}
-
-						.control { background-position: -55px -5px; }
-					}
-
-					.single .choice {
-						&:hover .control{ background-position: -5px -55px; }
-						.control {
-							background-position: -5px -5px;
-							&.checked { background-position: -5px -105px; }
-						}
-					}
-
-					.matching-dd-zone{
-						display: table;
-						table-layout: fixed;
-
-						.match{
-							@extend .assessment-content;
-							position: relative;
-							display: table-row;
-							color: $primary-grey;
-							vertical-align: middle;
-							background: #ffffff;
-							border: 0 solid $tertiary-grey;
+							background-color: rgba(209,209,209, 0.6);
+							border: 0 solid $tertiary-grey-alt;
 							border-bottom-width: 1px;
-							&:last-of-type {
-								border-bottom-width: 0px;
-								.draggable-area{ border-bottom-width: 0px;}
-								.label{ border-bottom-width: 0px;}
-							}
+							border-right-width: 1px;
+						}
 
-							&.selected{
-								opacity: 0.3;
-							}
-
-							.text{
-								line-height: 26px;
-								min-width: 54px;
-							}
-
-							.label {
-								display: table-cell;
-								min-width: 54px;
-								padding-left: 20px;
-								padding-right: 20px;
-								font-weight: bold;
-								background-color: rgba(209,209,209, 0.6);
-								border: 0 solid $tertiary-grey-alt;
-								border-bottom-width: 1px;
-								border-right-width: 1px;
-							}
-
-							&.target-hover{
-								.label{
-									background-color: $panel-background;
-								}
-							}
-
-							@include draggable-zone;
-
-							.draggable-area{
-
-								.controls{
-									.control {
-										position: absolute;
-										top: 7px; left: 0;
-										width: 20px;
-										height: 38px;
-										border: none;
-										display: none;
-
-										&::after{
-											position: absolute;
-											left: 0px; top: 12px;
-											content: ' ';
-											background: $icons no-repeat;
-											@include sprite($icons,'circle-check-green-18',$dimensions: true);
-										}
-									}
-								}
-
-								&.correct, &.incorrect{
-									.controls .control{
-										display: inline-block;
-									}
-
-									.text{
-										margin-left: 38px;
-									}
-								}
-
-								&.incorrect .controls .control{
-									&::after{
-										@include sprite($icons,'circle-x-red-18',$dimensions: true);
-									}
-								}
+						&.target-hover{
+							.label{
+								background-color: $panel-background;
 							}
 						}
-					}
 
-					.dd-matching{
-						.match{
-							@extend .assessment-content;
-							position: relative;
-							display: block;
-							color: $primary-grey;
-							vertical-align: middle;
-							background: #ffffff;
-							border: 0 solid $tertiary-grey;
-							border-bottom-width: 1px;
-							&:last-of-type {
-								border-bottom-width: 0px;
-							}
+						@include draggable-zone;
 
-							.value-part{
-								padding-left: 40px;
-								padding-bottom: 10px;
-								line-height: 20px;
-								color: $primary-grey;
-							}
+						.draggable-area{
 
-							.label-part{
-								padding: 15px 0 0 40px;
-								color: $tertiary-grey;
-
-								@include draggable-span;
-								.dd-label-token:hover{
-									.x{
-										display: inline-block;
-									}
-								}
-
-								.placeholder{
-									display: inline-block;
-									font-style: normal !important;
-								}
-
-								&.matched{
-									.placeholder{
-										display: none;
-									}
-								}
-							}
-
-							&.target-hover{
-								display: block;
-								outline: 1px solid $primary-blue;
-								border-bottom-color: $primary-blue;
-								@include box-shadow(0 0 5px rgba(63,179,246,.23));
-							}
-
-							.control{
-								position: absolute;
-								top: 10px; left: 10px;
-								width: 20px;
-								height: 38px;
-								border: none;
-								display: none;
-
-								&::after{
+							.controls{
+								.control {
 									position: absolute;
-									left: 0px; top: 12px;
-									content: ' ';
-									background: $icons no-repeat;
-									@include sprite($icons,'circle-check-green-18',$dimensions: true);
+									top: 7px; left: 0;
+									width: 20px;
+									height: 38px;
+									border: none;
+									display: none;
+
+									&::after{
+										position: absolute;
+										left: 0px; top: 12px;
+										content: ' ';
+										background: $icons no-repeat;
+										@include sprite($icons,'circle-check-green-18',$dimensions: true);
+									}
 								}
 							}
 
 							&.correct, &.incorrect{
-								.control{
+								.controls .control{
 									display: inline-block;
 								}
-							}
 
-							&.correct{
-								.dd-label-token{
-									background: $primary-green;
-									border-color: $primary-green;
-									color: #fff;
-
-									&:hover{
-										background: $primary-green;
-										color: #fff;
-										.x{ display: none; }
-									}
+								.text{
+									margin-left: 38px;
 								}
 							}
 
-							&.incorrect{
-								.dd-label-token{
-									background-color: $primary-red;
-									border-color: #d84343;
-									color: #fff;
-
-									&:hover{
-										background: $primary-red;
-										color: #fff;
-										.x{ display: none; }
-									}
-								}
-							}
-
-							&.incorrect .control{
+							&.incorrect .controls .control{
 								&::after{
 									@include sprite($icons,'circle-x-red-18',$dimensions: true);
 								}
 							}
 						}
 					}
+				}
 
-					.solution {
+				.dd-matching{
+					.match{
 						@extend .assessment-content;
-						padding: 10px 20px 15px 20px;
-						.close {
-							opacity: 0.8;
-							cursor: pointer;
-							position: absolute;
-							right: 17px; top: 16px;
-							background: $icons no-repeat;
-							@include sprite($icons,'window-control-close',$dimensions: true);
-							&:hover{
-								opacity: 1;
-							}
+						position: relative;
+						display: block;
+						color: $primary-grey;
+						vertical-align: middle;
+						background: #ffffff;
+						border: 0 solid $tertiary-grey;
+						border-bottom-width: 1px;
+						&:last-of-type {
+							border-bottom-width: 0px;
 						}
 
-						.answer {
-							font-weight: 600;
-							color: #8eb737;
+						.value-part{
+							padding-left: 40px;
+							padding-bottom: 10px;
+							line-height: 20px;
+							color: $primary-grey;
+						}
 
-							.solution-choice-text {
-								font-weight: normal;
-								margin-left: 10px;
+						.label-part{
+							padding: 15px 0 0 40px;
+							color: $tertiary-grey;
+
+							@include draggable-span;
+							.dd-label-token:hover{
+								.x{
+									display: inline-block;
+								}
 							}
 
-							.matching-solution{
-								span{
-									display: inline-block;
-									padding-right: 20px;
-									vertical-align: middle;
-									color: $primary-grey;
+							.placeholder{
+								display: inline-block;
+								font-style: normal !important;
+							}
 
-									&.solution-matching-text{
-										color: $primary-green;
-									}
+							&.matched{
+								.placeholder{
+									display: none;
 								}
 							}
 						}
-						.explanation {
-							color: $secondary-grey;
-						}
-					}
-				}
-				.footer {
-					position: relative;
-					overflow: hidden;
 
-					.left {
-						float: left;
-						.action { float: left; }
-					}
-					.right {
-						float: right;
-						.action { float: right; }
-					}
-
-
-					.mathsymbol {
-						opacity: 0.6;
-						&:hover{ opacity: 1; }
-						margin-top: 4px;
-						cursor: pointer;
-						width: 36px;
-						height: 36px;
-						background: url(../images/old_sprites/spr_math_symbols.png) 0 0 no-repeat;
-						float: left;
-
-						&.sqrt { background-position: -2px -2px; }
-						&.square { background-position: -42px -2px; }
-						&.parens { background-position: -82px -2px; }
-						&.approx { background-position: -122px -2px; }
-						&.pi { background-position: -162px -2px; }
-					}
-
-					.action {
-						color: $secondary-grey;
-						cursor: pointer;
-						padding: 12px 20px;
-						font: {
-							size: 14px;
-							style: normal;
-							weight: normal;
+						&.target-hover{
+							display: block;
+							outline: 1px solid $primary-blue;
+							border-bottom-color: $primary-blue;
+							@include box-shadow(0 0 5px rgba(63,179,246,.23));
 						}
 
-						&.check {
-							background: $primary-blue;
-							border: 1px solid $border-blue;
-							color: #ffffff;
-							font: {
-								style: italic;
-								weight: 700;
+						.control{
+							position: absolute;
+							top: 10px; left: 10px;
+							width: 20px;
+							height: 38px;
+							border: none;
+							display: none;
+
+							&::after{
+								position: absolute;
+								left: 0px; top: 12px;
+								content: ' ';
+								background: $icons no-repeat;
+								@include sprite($icons,'circle-check-green-18',$dimensions: true);
 							}
+						}
 
-							&.wrong {
-								background: #F35252;
+						&.correct, &.incorrect{
+							.control{
+								display: inline-block;
+							}
+						}
+
+						&.correct{
+							.dd-label-token{
+								background: $primary-green;
+								border-color: $primary-green;
+								color: #fff;
+
+								&:hover{
+									background: $primary-green;
+									color: #fff;
+									.x{ display: none; }
+								}
+							}
+						}
+
+						&.incorrect{
+							.dd-label-token{
+								background-color: $primary-red;
 								border-color: #d84343;
-							}
+								color: #fff;
 
-							&.disabled {
-								cursor: default;
-								border-color: #d0d0d0;
-								background: rgba(184,184,184,0.5);
-								color: rgba(255,255,255,0.7);
+								&:hover{
+									background: $primary-red;
+									color: #fff;
+									.x{ display: none; }
+								}
 							}
 						}
 
+						&.incorrect .control{
+							&::after{
+								@include sprite($icons,'circle-x-red-18',$dimensions: true);
+							}
+						}
 					}
 				}
 
+				.solution {
+					@extend .assessment-content;
+					padding: 10px 20px 15px 20px;
+					.close {
+						opacity: 0.8;
+						cursor: pointer;
+						position: absolute;
+						right: 17px; top: 16px;
+						background: $icons no-repeat;
+						@include sprite($icons,'window-control-close',$dimensions: true);
+						&:hover{
+							opacity: 1;
+						}
+					}
+
+					.answer {
+						font-weight: 600;
+						color: #8eb737;
+
+						.solution-choice-text {
+							font-weight: normal;
+							margin-left: 10px;
+						}
+
+						.matching-solution{
+							span{
+								display: inline-block;
+								padding-right: 20px;
+								vertical-align: middle;
+								color: $primary-grey;
+
+								&.solution-matching-text{
+									color: $primary-green;
+								}
+							}
+						}
+					}
+					.explanation {
+						color: $secondary-grey;
+					}
+				}
+			}
+			.footer {
+				position: relative;
+				overflow: hidden;
+
+				.left {
+					float: left;
+					.action { float: left; }
+				}
+				.right {
+					float: right;
+					.action { float: right; }
+				}
+
+
+				.mathsymbol {
+					opacity: 0.6;
+					&:hover{ opacity: 1; }
+					margin-top: 4px;
+					cursor: pointer;
+					width: 36px;
+					height: 36px;
+					background: url(../images/old_sprites/spr_math_symbols.png) 0 0 no-repeat;
+					float: left;
+
+					&.sqrt { background-position: -2px -2px; }
+					&.square { background-position: -42px -2px; }
+					&.parens { background-position: -82px -2px; }
+					&.approx { background-position: -122px -2px; }
+					&.pi { background-position: -162px -2px; }
+				}
+
+				.action {
+					color: $secondary-grey;
+					cursor: pointer;
+					padding: 12px 20px;
+					font: {
+						size: 14px;
+						style: normal;
+						weight: normal;
+					}
+
+					&.check {
+						background: $primary-blue;
+						border: 1px solid $border-blue;
+						color: #ffffff;
+						font: {
+							style: italic;
+							weight: 700;
+						}
+
+						&.wrong {
+							background: #F35252;
+							border-color: #d84343;
+						}
+
+						&.disabled {
+							cursor: default;
+							border-color: #d0d0d0;
+							background: rgba(184,184,184,0.5);
+							color: rgba(255,255,255,0.7);
+						}
+					}
+
+				}
+			}
+
+		}
+	}
+
+	& > .header {
+		color: #737373;
+		border-radius: 3px 3px 0 0;
+		font: {
+			family: $font;
+			weight: bold;
+			size: 14px;
+			style: normal;
+		}
+		border: 0px solid #e2e2e2;
+		border-bottom-width: 1px !important;
+		padding: 11px 10px 6px 10px;
+
+		&.correct{ font-style: italic; color: #8eb737; }
+		&.incorrect{ font-style: italic; color: #f35252; }
+
+		.title, .status {
+			display: inline;
+		}
+
+		.controls {
+			@include like-and-favorite;
+			position: absolute;
+			right: 0;
+			top: 0;
+
+
+			.video {
+				opacity: 0.8;
+				position: relative;
+				margin: 9px 10px 0 0;
+				padding: 0 0 0 26px;
+				cursor: pointer;
+				color: $primary-grey;
+				float: right;
+				font-size: 14px;
+				font-weight: normal;
+				white-space: nowrap;
+
+				&:hover { opacity: 1; }
+
+				&::after {
+					position: absolute;
+					left: 3px;
+					top: 2px;
+
+					content: ' ';
+					background: $icons no-repeat;
+					@include sprite($icons,'video',$dimensions: true);
+				}
 			}
 		}
 
-		& > .header {
-			color: #737373;
-			border-radius: 3px 3px 0 0;
-			font: {
-				family: $font;
-				weight: bold;
-				size: 14px;
-				style: normal;
-			}
-			border: 0px solid #e2e2e2;
-			border-bottom-width: 1px !important;
-			padding: 11px 10px 6px 10px;
-
-			&.correct{ font-style: italic; color: #8eb737; }
-			&.incorrect{ font-style: italic; color: #f35252; }
-
-			.title, .status {
-				display: inline;
-			}
-
-			.controls {
-				@include like-and-favorite;
-				position: absolute;
-				right: 0;
-				top: 0;
-
-
-				.video {
-					opacity: 0.8;
-					position: relative;
-					margin: 9px 10px 0 0;
-					padding: 0 0 0 26px;
-					cursor: pointer;
-					color: $primary-grey;
-					float: right;
-					font-size: 14px;
-					font-weight: normal;
-					white-space: nowrap;
-
-					&:hover { opacity: 1; }
-
-					&::after {
-						position: absolute;
-						left: 3px;
-						top: 2px;
-
-						content: ' ';
-						background: $icons no-repeat;
-						@include sprite($icons,'video',$dimensions: true);
-					}
-				}
-			}
-
-			.status {
-				text-transform: uppercase;
-				padding-left: 5px;
-			}
+		.status {
+			text-transform: uppercase;
+			padding-left: 5px;
 		}
 	}
 }

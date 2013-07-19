@@ -226,7 +226,7 @@ Ext.define('NextThought.store.FriendsList',{
 		});
 
 		if(!Ext.isEmpty(contactsRemoved)){
-			console.log('Firing contacts removed', contactsRemoved);
+			console.debug('Firing contacts removed', contactsRemoved);
 			this.fireEvent('contacts-removed', contactsRemoved);
 			if(!noUpdatedEvent){
 				this.fireEvent('contacts-updated');
@@ -244,9 +244,10 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
-	contactsMaybeChanged: function(store, record, operation, field){
-		var newValue, oldValue, possibleAdds, possibleRemoves, fireUpdated;
-		//console.log('Maybe updated contacts', arguments);
+	contactsMaybeChanged: function(store, record, operation, fields){
+		var field = (fields && fields[0]) || fields,
+			newValue, oldValue, possibleAdds, possibleRemoves, fireUpdated;
+		console.debug('Maybe updated contacts', arguments);
 
 		if(operation !== Ext.data.Model.EDIT || field !== 'friends'){
 			return;

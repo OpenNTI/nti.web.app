@@ -1,8 +1,21 @@
+.rhp-empty-list {
+	padding: 20px 0 !important;
+	font: italic 300 14px/28px $font !important;
+	text-align: center !important;
+	color: $tertiary-grey !important;
+}
 
+.x-panel-sidebar{
+	&::before {
+		content: '';
+		position: absolute;
+		top: 57px; bottom: 0; left: 0; right: 0;
+		box-shadow: 0 2px 2px rgba(0, 0, 0, 0.45);
+	}
 
-.sidebar{
-	box-shadow: inset 0 1px 0 1px white,0 2px 2px rgba(0, 0, 0, 0.45);
-	border: 1px solid #cacaca;
+	overflow: visible;
+	box-shadow: inset 0 1px 0 1px white;
+	//border: 1px solid #cacaca;
 	border-bottom-width: 0;
 
 	.x-tab-button {
@@ -31,7 +44,10 @@
 
 
 .sidebar-tab-bar-sidebar {
-	background: #f3f3f3;
+	.x-panel-sidebar.down & {
+		background: #f3f3f3;
+	}
+	background: #ebebec;
 	padding: 0 0 0 10px;
 	border: 1px solid #dddddd;
 	border-left-width: 0;

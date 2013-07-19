@@ -19,29 +19,36 @@ Ext.define('NextThought.util.Dom',{
 //		SAJ: Does not work as intent and just wastes CPU cycles.
 //		Ext.each(driectChildNodes('object'), this.parseDomObject, this);
 
-		obj.asDomSpec = function(){
-			var r = /^attribute\-(.*)$/,
-				o = {
-						tag: 'object',
-						cn:[]
-					};
-
-
-			Ext.Object.each(this,function(k,v){
-				if(Ext.isFunction(v) || Ext.isEmpty(v)){return;}
-
-				var n = (r.exec(k)||[])[1];
-				if(!Ext.isEmpty(n)){
-					o[n] = v;
-				}
-				else {
-					o.cn.push({tag:'param', name:k, value:v});
-				}
-			});
-			return o;
-		};
+		obj.asDomSpec = this.asDomSpec;
 
 		return obj;
+	},
+
+
+	asDomSpec: function(){
+		if(this instanceof Ext.Base){
+			Ext.Error.raise('Apply this to a simple object not a ext class');
+		}
+
+		var r = /^attribute\-(.*)$/,
+			o = {
+					tag: 'object',
+					cn:[]
+				};
+
+
+		Ext.Object.each(this,function(k,v){
+			if(Ext.isFunction(v) || Ext.isEmpty(v)){return;}
+
+			var n = (r.exec(k)||[])[1];
+			if(!Ext.isEmpty(n)){
+				o[n] = v;
+			}
+			else {
+				o.cn.push({tag:'param', name:k, value:v});
+			}
+		});
+		return o;
 	},
 
 

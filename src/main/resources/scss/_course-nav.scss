@@ -1,0 +1,449 @@
+
+#course-nav {
+	overflow: visible;
+	& > div {
+		box-shadow: 0 0 1px 1px rgba(0,0,0,0.2);
+
+	}
+}
+
+.x-component-course{
+
+	&.course-outline{
+		background: #ffffff;
+
+		.lesson-list {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 50px;
+
+			overflow: {
+				x: visible;
+				y: auto;
+			}
+			@include scrollbar(#ffffff, $tertiary-grey);
+		}
+
+		.header {
+			background: #ffffff;
+			padding: 0 42px;
+			font: normal 500 14px/50px $font;
+			color: #a1a1a1;
+			box-shadow: inset 0 -1px 0 0 #eaeaea;
+			z-index: 2;
+
+			@include icon('topic', $top:15px, $left: 18px);
+		}
+
+		.course-row {
+			position: relative;
+			background: #ffffff;
+			color: $secondary-grey;
+			font: normal 400 14px/40px $font;
+			padding: 0 5px 0 20px;
+			cursor: pointer;
+
+			.label{
+				overflow: hidden;
+				@include ellipse;
+			}
+
+			.date {
+				pointer-events: none;
+				cursor: default;
+				display: none;
+				opacity: 0.3;
+				min-width: 25px;
+				position: absolute;
+				left: -40px;
+				top: 7px;
+				text-transform: uppercase;
+				border-radius: 2px;
+				box-shadow: 0 0 0 1px white, inset 0 0 0 1px white;
+				text-align: center;
+
+				div:first-child {
+					background: white;
+					color: black;
+					border-radius: 0;
+					padding-bottom: 1px;
+					font: normal 700 10px/11px $font;
+				}
+
+				div:last-child {
+					color: white;
+					font: normal 500 12px/14px $font;
+					border-radius: 0;
+				}
+			}
+
+			&.out-of-view{
+				.date{
+					display: none !important;
+				}
+			}
+
+			&.x-item-selected,&.over {
+				.date{
+					@include hardware-accelerate();
+					display: block;
+					position: fixed;
+				}
+
+				.x-ie &,
+				.x-ie10 &,
+				.x-gecko &{
+
+					.date {
+						top: auto !important;
+						left: auto;
+						margin: -32px 0px 0px -60px;
+					}
+
+					&.unit {
+						.date {
+							margin-top: -22px;
+						}
+					}
+				}
+
+
+
+				background: #f0f0f0;
+				box-shadow: inset 3px 0 0 0 #cfcfcf;
+			}
+
+			&.x-item-selected {
+				color: #ffffff;
+				font-weight: 600;
+				background: $primary-blue;
+				box-shadow: inset 3px 0 0 0 #107eed;
+			}
+
+			&.unit {
+				.date {
+					top: -3px;
+				}
+				cursor: default;
+				text-transform: uppercase;
+				background: #fafafa;
+				color: $tertiary-grey;
+				font: normal 400 10px/20px $font;
+				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
+				z-index: 1;
+
+				//&.x-item-selected {
+				//	color: #ffffff;
+				//	font-weight: 600;
+				//	background: $primary-blue;
+				//	box-shadow: inset 2px 0 0 1px #107eed;
+				//}
+				//
+				//&.over {
+				//	background: #f0f0f0;
+				//	box-shadow: inset 2px 0 0 1px #cfcfcf;
+				//}
+			}
+		}
+	}
+
+	&.overview-header{
+		margin: 0 0 15px 0;
+		
+		.date {
+			color: $tertiary-grey;
+			font: normal 700 10px/11px $font;
+			text-transform: uppercase;
+		}
+		.title {
+			color: $primary-grey;
+			font: normal 300 36px/40px $font;
+		}
+
+	}
+
+	&.overview-topic{
+		position: relative;
+		cursor: pointer;
+		color: $primary-blue;
+		font: normal 400 16px/50px $font;
+		border:{
+			style: solid;
+			color: #ededed;
+			width: 0 0 1px 0;
+		};
+
+		&:hover {
+			z-index: 2;
+			color: $primary-grey;
+			background: #f0f0f0;
+			border-top-color: #cfcfcf;
+			border-bottom-color: transparent;
+			box-shadow:	-26px 1px 0 0px #f0f0f0,
+						 29px 1px 0 0px #f0f0f0,
+						-29px 1px 0 1px #cfcfcf,
+						 29px 1px 0 1px #cfcfcf;
+		}
+
+		.overview-header + &,
+		&:first-of-type {
+			border-top-width: 1px;
+		}
+	}
+
+	&.overview-discussion {
+		cursor: pointer;
+		background: #f5f5f5;
+		width: 230px;
+		height: 230px;
+		float: left;
+		margin: 5px 5px 0 0;
+		position: relative;
+		
+		.image {
+			height: 50%;
+			background:{
+				position: center;
+				size: cover;
+				repeat: no-repeat;
+			}
+		}
+
+		.meta {
+			position: absolute;
+			padding: 8px 10px;
+			left: 0; right: 0; bottom: 0;
+			height: 50%;
+
+			.label {
+				font: normal 600 10px/15px $font;
+				color: $secondary-grey;
+				text-transform: uppercase;
+				overflow: hidden;
+				@include ellipse();
+			}
+
+			.title {
+				color: $primary-grey;
+				font: normal 300 26px/30px 'Open Sans Condensed', $font;
+				overflow: hidden;
+				//@include ellipse();
+				height: 64px;
+				margin-bottom: 6px;
+			}
+
+			.comments{
+				font: normal 600 10px/15px $font;
+				color: $tertiary-grey;
+			}
+		}
+	}
+
+	&.overview-videos {
+		@extend .overview-section;
+
+		.body {
+			position: relative;
+			overflow: hidden;
+			height: 288px;
+			margin: 0 -30px;
+
+			.curtain {
+				position: absolute;
+				left: 0; top: 0; bottom: 0;
+				width: 512px;
+				cursor: pointer;
+				background: {
+					color: #ebebeb;
+					position: center center;
+					size: 512px auto;
+				}
+
+				.ctr {
+					position: absolute;
+					overflow: visible;
+					left: 50%;
+					top: 50%;
+					.play {
+						position: relative;
+						top: -24px;//we're fixed to be 48px tall;
+						left: -50%;
+					}
+				}
+
+				.play {
+					position: relative;
+					border-radius: 5em;
+					font: normal 400 18px/48px 'Open Sans Condensed', $font;
+					min-height: 48px;
+					min-width: 45px;
+					color: #fff;
+
+					.blur-clip,.blur {
+						border-radius: 5em;
+						position: absolute;
+						top: 0; left: 0;
+						bottom: 0; right: 0;
+						overflow: hidden;
+					}
+
+					.blur {
+						background: {
+							position: center center;
+							size: 512px auto;
+							repeat: no-repeat;
+						}
+						-webkit-filter: blur(8px);
+						filter: url(#blur-effect);
+					}
+
+					.label {
+						background-color: rgba(0,0,0,0.68);
+						box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),//stroke
+									0 0 3px 0 black;//shadow
+						border-radius: 5em;
+						overflow: hidden;
+						padding: 0 10px 0 50px;
+						max-width: 400px;
+						@include ellipse();
+						@include icon('play',$top:3px,$left:3px);
+						&::before {content:'';}
+					}
+				}
+
+			}
+
+			.screen {
+				position: absolute;
+				left: 0; top: 0; bottom: 0;
+				width: 512px;
+				overflow: hidden;
+			}
+
+			.video-list{
+				@include scrollbar(#04232c, #0f2d35);
+				position: absolute;
+				left: 512px;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				overflow: auto;
+				background: #04232c;
+
+				.video-row {
+					cursor: pointer;
+					color: #ebebeb;
+					padding: 8px 10px;
+					font: normal 400 18px 'Open Sans Condensed', $font;
+					min-height: 53px;
+					border:{
+						color: #0f2d35;
+						style: solid;
+						width: 0 0 1px 0;
+					}
+
+					.comments,.label{
+						@include ellipse();
+						overflow:hidden;
+					}
+
+					.comments {
+						font: normal 700 10px/12px $font;
+						color: $secondary-grey;
+						text-transform: uppercase;
+					}
+
+					&.over{
+						$c: #113b46;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+
+						.comments{
+							color: #aaeafc;
+						}
+					}
+
+					&.x-item-selected{
+						$c: #4699b0;
+						background: $c;
+						border-color: $c;
+						color: #ffffff;
+
+						.comments{
+							color: #aaeafc;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.x-container-course {
+	&.course-overview{
+		background: #ffffff;
+		padding: 25px 30px;
+		@include scrollbar(#ffffff, $tertiary-grey);
+	}
+
+	.overview-naquestionset{
+		margin-top: 5px;
+	}
+
+}
+
+
+.overview-section{
+	h2 {
+		margin: 50px 0 0 -30px;
+		font: normal 600 10px/20px $font;
+		color: #fff;
+		text-transform: uppercase;
+
+		span {
+			position: relative;
+			display: inline-block;
+			background: #ce78e0;//additional/default
+			padding: 0 10px 0 40px;
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 30px;
+				background: #fff;
+				opacity: 0.4;
+			}
+		}
+
+		&.assessments span{
+			background: #a5c959;
+		}
+		&.video span{
+			background: #81c8dc; //video
+		}
+		&.discussions span{
+			background: #f5d420; //discussion
+		}
+		&.required span{
+			background: #f9824e;//required
+		}
+	}
+
+	.content-card {
+		margin: 10px 0;
+		.thumbnail{
+			width: 100px;
+			height: 125px;
+		}
+		.meta {
+			padding-top: 30px;
+			margin-left: 120px;
+		}
+	}
+}

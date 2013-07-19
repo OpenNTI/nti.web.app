@@ -64,6 +64,10 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		s.setScrollTop(t+delta);
 	},
 
+    top: function() {
+        var s = this.scrollingEl;
+        return s.getScrollTop();
+    },
 
 	toId: function(id) {
 		var n = Ext.getCmp(id),

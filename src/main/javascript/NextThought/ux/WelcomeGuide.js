@@ -1,5 +1,5 @@
 Ext.define('NextThought.ux.WelcomeGuide', {
-	extend: 'NextThought.view.Window',
+	extend: 'NextThought.view.window.Window',
 	alias: 'widget.welcome-guide',
 
 	cls:'guide-window',
@@ -51,7 +51,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.down('component[cls=help-iframe]').autoEl.src = this.link.href;
+		this.down('component[cls=help-iframe]').autoEl.src = (this.link && this.link.href) || this.link;
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
 		if(this.deleteOnDestroy){

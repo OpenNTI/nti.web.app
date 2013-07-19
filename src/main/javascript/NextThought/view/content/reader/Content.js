@@ -26,6 +26,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				'set-content',
 				'image-loaded',
 				'clear-annotations',
+				'load-annotations-skipped',
 				'load-annotations'
 			]));
 
@@ -174,14 +175,17 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
+			req = resp.request,
+			o = req.options,
 			c = me.parseHTML(resp),
 			doc = me.getDocumentElement(),
 			reader = me.reader,
-			ntiid;
+			ntiid,
+			pageInfo = o.pageInfo;
 
 		me.fireEvent('clear-annotations');
 
-		reader.getIframe().update(this.BODY_TEMPLATE.apply([c]));
+		reader.getIframe().update(this.BODY_TEMPLATE.apply([c]), this.meta);
 
 		me.listenForImageLoads();
 		reader.getScroll().to(0, false);
@@ -194,20 +198,24 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		ntiid = reader.getLocation().NTIID;
 
-		doc.getElementById('NTIContent').setAttribute('data-ntiid', ntiid);
+		doc.getElementById('NTIContent').setAttribute('data-page-ntiid', ntiid);
 
-		me.fireEvent('set-content', reader, doc, assessmentItems, resp.request.options.pageInfo);
-		me.fireEvent('load-annotations',ntiid, me.resolveContainers());
+		me.fireEvent('set-content', reader, doc, assessmentItems, pageInfo);
 
-		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-		//Ext.defer(Ext.callback,500,Ext,[finish,null,[me]]);
-		Ext.callback(finish,null,[me]);
+		//Do not attempt to load annotations from these locations
+		if(!pageInfo.isPartOfCourseNav()){
+			me.fireEvent('load-annotations',ntiid, me.resolveContainers());
+		} else {
+			me.fireEvent('load-annotations-skipped');
+		}
+
+		Ext.callback(finish,null,[reader]);
 	},
 
 
 	buildPath: function(s){
-		var p = s.split('/'); p.splice(-1,1,'');
-		return p.join('/');
+		var p = (s||'').split('/'); p.splice(-1,1,'');
+		return (s && p.join('/')) || '';
 	},
 
 
@@ -306,7 +314,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 			r = el.href,
 			hash = r.split('#'),
 			target = hash[1],
-			whref = window.location.href.split('#')[0];
+			whref = window.location.href.split('#')[0],
+			doc = this.reader.getDocumentElement(),
+			element = doc.getElementById(target) || doc.getElementsByName(target)[0] || null;
 
 		//Is this a special internal link that we need to handle
 		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
@@ -334,6 +344,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		if(/^mark$/i.test(target)){
 			m.fireEvent('markupenabled-action',el,target);
+			return false;
+		}
+
+		if(element){
+			this.reader.getScroll().toNode(element);
 			return false;
 		}
 

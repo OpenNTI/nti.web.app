@@ -592,6 +592,13 @@ $experimental-support-for-svg: true;
 					.shared-to {
 						color: #656565;
 						font: normal 12px/25px $font;
+						margin-left: 5px;
+					}
+
+					.title{
+						.whiteboard-container{
+							display: none !important;
+						}
 					}
 				}
 
@@ -781,8 +788,11 @@ $experimental-support-for-svg: true;
 		.exit-button {
 			cursor: pointer;
 			position: absolute;
-			top: 10px;
-			right: 10px;
+			//top: 10px;
+			//right: 10px;
+			//move this to the left to let the profile icon not overlap it.
+			top: 15px;
+			right: 80px;
 
 			font-family: $font;
 			font-size: 14px;

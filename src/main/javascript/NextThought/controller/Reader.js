@@ -7,27 +7,31 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	models: [
-		'PageInfo'
+		'PageInfo',
+		'course.navigation.Node'
 	],
 
 
-	stores: [],
+	stores: [
+		'course.Navigation'
+	],
 
 
 	views: [
 		'cards.Card',
 		'content.Navigation',
 		'content.Pager',
+		'content.PageWidgets',
 		'content.Reader',
 		'content.Toolbar'
 	],
 
 
 	refs: [
-		{ref: 'libraryMenu', selector: 'library-collection'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
-		{ref: 'libraryReader', selector: 'library-view-container reader-panel'}
+		{ref: 'libraryPageWidgets', selector: 'library-view-container content-page-widgets'},
+		{ref: 'libraryReader', selector: 'library-view-container reader-content'}
 	],
 
 
@@ -36,7 +40,13 @@ Ext.define('NextThought.controller.Reader', {
 			controller:{
 				'*':{
 					'set-location':'setLocation',
-					'set-last-location-or-root':'setLastLocation'
+					'set-last-location-or-root':'setLastLocation',
+					'bookmark-loaded': 'onBookmark'
+				}
+			},
+			store: {
+				'*':{
+					'bookmark-loaded': 'onBookmark'
 				}
 			},
 			component:{
@@ -44,7 +54,8 @@ Ext.define('NextThought.controller.Reader', {
 					'set-location':'setLocation',
 					'set-last-location-or-root':'setLastLocation'
 				},
-				'library-view-container reader-panel':{
+				'library-view-container reader-content':{
+					'beforeNavigate':'beforeSetLocation',
 					'set-content':'updateLibraryControls',
 					'page-previous':'goPagePrevious',
 					'page-next':'goPageNext'
@@ -57,19 +68,51 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+	beforeSetLocation: function(){
+		var canNav = true,
+			n = Ext.ComponentQuery.query('note-window')||[];
+
+		try{
+			Ext.each(n,function(note){ note.closeOrDie(); });
+		}
+		catch(e){
+			canNav = false;
+		}
+
+		return canNav;
+	},
+
+
 	setLocation: function(){
 		var r = this.getLibraryReader();
+
+		if(this.fireEvent('show-view','library',true)===false){
+			return;
+		}
+
 		if(!r.ntiidOnFrameReady ){
 			r.setLocation.apply(r,arguments);
+		}
+		else {
+			r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
 		}
 	},
 
 
-	setLastLocation: function(){
-		var r = this.getLibraryReader();
-		if(!r.ntiidOnFrameReady ){
-			r.setLastLocationOrRoot.apply(r,arguments);
+	setLastLocation: function(ntiid){
+		var lastNtiid = localStorage[ntiid] || ntiid;
+		if(!ParseUtils.parseNtiid(lastNtiid)){
+			lastNtiid = ntiid;
 		}
+
+		function callback(a, errorDetails){
+			var error = (errorDetails||{}).error;
+			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+				delete localStorage[ntiid];
+			}
+		}
+
+		this.setLocation(lastNtiid, callback);
 	},
 
 
@@ -84,7 +127,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	showCardTarget: function(card, data, silent){
-		var reader = card.up('reader-panel'),
+		var reader = card.up('reader-content')||ReaderPanel.get(),//for now, lets just get the default reader.
 			ntiid = data.ntiid,
 			DH = Ext.DomHelper,
 			s = encodeURIComponent('Pages('+ntiid+')'),
@@ -128,17 +171,30 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+	onBookmark: function(rec){
+		try{
+			this.getLibraryPageWidgets().onBookmark(rec);
+		}
+		catch(e){
+			console.error(e.stack||e.message);
+		}
+	},
+
+
 	updateLibraryControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
 			pg = this.getLibraryPager(),
-			lm = this.getLibraryMenu(),
+			lm = Ext.ComponentQuery.query('library-collection'),
+			pw = this.getLibraryPageWidgets(),
 			origin = pageInfo && pageInfo.contentOrig,
 			t = pageInfo && pageInfo.get('NTIID');
 
 		pg[fn]();
+		pw[fn]();
 
+		pw.clearBookmark();
 		pg.updateState(t);
-		lm.updateSelection(t);
+		Ext.each(lm,function(m){ m.updateSelection(t,true, true); });
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will

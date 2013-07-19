@@ -12,21 +12,25 @@ Ext.define('NextThought.proxy.JSONP',{
 	 *   scope
 	 */
 	request: function(options){
-		console.log("JSONP.request", arguments);
-		var me = this, opts = Ext.apply({},options);
+		var me = this,
+			opts = Ext.apply({},options),
+			script,
+			t;
+
 		function jsonp(script){
+			clearTimeout(t);
 			var resp = {
 				responseText: me.getContent(opts.ntiid,opts.expectedContentType),
 				request: { options: opts }
 			};
-
+			console.log("JSONP.request completed", resp.responseText.length);
 			opts.callback.call(opts.scope||window,opts,true,resp);
 			opts.success.call(opts.scope||window,resp);
 			Ext.fly(script).remove();
-
 		}
 
 		function onError(script){
+			clearTimeout(t);
 			Ext.fly(script).remove();
 			console.error('PROBLEMS!', opts);
 
@@ -45,7 +49,12 @@ Ext.define('NextThought.proxy.JSONP',{
 		opts.failure = opts.failure || function emptyFailure(){};
 		opts.callback = opts.callback || function emptyCallback(){};
 
-		Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
+		t = setTimeout(function(){
+			console.warn('Timed out: '+opts.jsonpUrl);
+			onError(script);
+		},60000);
+
+		script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
 	},
 
 	getContent: function(ntiid,type){
@@ -65,15 +74,21 @@ Ext.define('NextThought.proxy.JSONP',{
 
 	receiveContent: function(content){
 		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
-		var type = content['Content-Type'];
+		var type = content && content['Content-Type'],
+			enc = content && content['Content-Encoding'];
 		if(type==='application/xml'){
 			type = 'text/xml';
 			console.warn('Forcing content type to text/xml from application/xml', content.ntiid);
 		}
 
 		//1) decode content
-		if(/base64/i.test(content['Content-Encoding'])) {
+		if(/base64/i.test(enc)) {
 			content.content = Base64.decode(content.content);
+		}
+		else if(/json/i.test(enc)){
+			if(Ext.isString(content.content)){
+				content.content = Ext.JSON.decode(content.content);
+			}
 		}
 		else {
 			Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
@@ -94,6 +109,9 @@ Ext.define('NextThought.proxy.JSONP',{
 	}
 
 	window.JSONP = new this();
+	window.jsonpReceiveContent = Ext.bind(JSONP.receiveContent, JSONP);
+	/** @deprecated */
 	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
+	/** @deprecated */
 	window.jsonpToc     = Ext.bind(JSONP.receiveContent, JSONP);
 });

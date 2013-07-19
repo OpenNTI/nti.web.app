@@ -101,24 +101,24 @@ Ext.define('NextThought.cache.LocationMeta', {
 		var me = this;
 
 		function pageIdLoaded(pi){
-			var meta = this.createAndCacheMeta(ntiid, pi, ignoreCache);
+			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
 			if(!meta){
-				fail.call(this);
+				fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
 			}
-			Ext.callback(cb, this, [meta]);
+			Ext.callback(cb, me, [meta]);
 		}
 
 		function fail(req, resp){
 			if(resp && resp.status === 403){
 				console.log('Unauthorized when requesting page info', ntiid);
-				this.handleUnauthorized(ntiid, cb);
+				me.handleUnauthorized(ntiid, cb);
 			}
 			else{
 				console.error('fail', arguments);
-				Ext.callback(cb, this);
+				Ext.callback(cb, me);
 			}
 		}
-		$AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, this);
+		$AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, me);
 	},
 
 

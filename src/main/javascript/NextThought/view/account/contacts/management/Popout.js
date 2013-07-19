@@ -103,7 +103,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.groupsList.isContact = this.isContact;
 		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user, isContact: this.isContact });
 
-
+		this.on('adjust-height', this.align);
 		this.on('destroy','destroy',this.optionsMenu);
 		this.on('destroy','destroy',this.groupsListMenu);
 
@@ -156,6 +156,15 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.on('beforedeactivate', function(){
 			return this.groupsList.fireEvent('beforedeactivate') && this.optionsMenu.fireEvent('beforedeactivate');
 		}, this);
+
+		if(!$AppConfig.service.canChat()){
+			this.actionEl.destroy();
+		}
+
+		if(!$AppConfig.service.canFriend()){
+			this.listEl.destroy();
+			this.optionsEl.destroy();
+		}
 
 	},
 
@@ -240,8 +249,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	showOptionMenu: function(){
 		if(this.showingOptionsMenu){
-			this.fireEvent('adjust-height');
 			this.optionsMenu.hide();
+			this.fireEvent('adjust-height');
 			delete this.showingOptionsMenu;
 			return;
 		}
@@ -258,6 +267,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		if(topMenu < (avatarTop + avatarHeight)){
 			this.setY(topMenu - avatarHeight, true);
 		}
+	},
+
+
+	align: function (){
+		this.maxHeight = Ext.dom.Element.getViewportHeight();
+		this.alignTo(this.refEl, this.anchor || 'tr-tl?', this.offsets || [-10,0]);
+		this.pointer && this.pointer.point();
+		this.updateLayout();
 	},
 
 

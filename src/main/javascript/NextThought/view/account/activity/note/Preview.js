@@ -87,6 +87,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			metaInfo = meta;
 
 			function upLoc() {
+				if(!me.locationEl){ return; }
+
 				if (metaInfo) {
 					me.locationEl.update(metaInfo.getPathLabel());
 					return;
@@ -102,7 +104,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	setContext: function (doc) {
 		var r = this.record, newContext;
 		try {
-			this.context.setHTML('');
+			this.context && this.context.setHTML('');
 			newContext = RangeUtils.getContextAroundRange(
 				r.get('applicableRange'), doc, doc, r.get('ContainerId'));
 

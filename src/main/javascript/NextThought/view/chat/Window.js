@@ -2,7 +2,7 @@ Ext.define('NextThought.view.chat.Window', function(){
 	var manager;
 
 	return {
-		extend:'NextThought.view.Window',
+		extend:'NextThought.view.window.Window',
 		alias:'widget.chat-window',
 
 		requires:[

@@ -1,79 +1,120 @@
 Ext.define( 'NextThought.view.library.View', {
-	extend: 'NextThought.view.View',
+	extend: 'NextThought.view.Base',
 	alias: 'widget.library-view-container',
 	requires: [
-		'NextThought.view.content.Reader',
-		'NextThought.view.content.Toolbar',
-		'NextThought.view.annotations.View'
+		'NextThought.view.course.Panel',
+		'NextThought.view.reader.Panel'
 	],
 
-	minWidth: 1024,
-	maxWidth: 1165,
-
-	layout:'border',
-	defaults: {
-		border: false,
-		plain: true
+	layout: {
+		type: 'card',
+		deferredRender: true
 	},
+	defaultType: 'box',
+	activeItem: 'course-book',
 
-	items:[{
-		region: 'west',
-		layout: {
-			type: 'vbox',
-			align: 'stretch'
-		},
-		items: [
-			{ xtype: 'content-toolbar', hidden: true, delegate:[ 'library-view-container reader-panel' ]},
-			{ xtype: 'reader-panel', id: 'readerPanel', flex: 1 }
-		]
-	},{
-		region: 'center',
-		xtype: 'tabpanel',
-		ui: 'notes-and-discussion',
-		tabBar: {
-			plain: true,
-			baseCls: 'nti',
-			ui: 'notes-and-discussion-tabbar',
-			cls: 'notes-and-discussion-tabs',
-			defaults: { plain: true, ui: 'notes-and-discussion-tab' }
-		},
-		defaults: {
-			border: false,
-			plain: true
-		},
-		activeTab: 1,
-		items:[
-			{ title: 'Notepad', iconCls: 'notepad' },
-			{ title: 'Discussion', iconCls: 'discus', xtype: 'annotation-view', discussion:true }
-		]
-	}],
+	items:[
+		{
+			id:'dashboard-view'
+		},{
+			id:'course-book',
+			xtype: 'container',
+			layout: {
+				type: 'card',
+				deferredRender: true
+			},
+			activeItem: 'main-reader-view',
+			items:[{
+				xtype: 'course',
+				id: 'course-nav'
 
+			},{
+				id: 'main-reader-view',
+				xtype: 'reader'
+			}]
+		}
+	],
+
+
+	tabSpecs: [
+		{label: 'Dashboard', viewId: 'dashboard-view'},
+		{label: 'Lessons', viewId: 'course-book?', selected:true},
+//		{label: 'Assignments', viewId: ''},
+		{label: 'Discussions', viewId: ''},
+//		{label: 'Notebook', viewId: ''},
+		{label: 'Course Info', viewId: ''}
+	],
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.reader = Ext.getCmp('readerPanel');
+		this.reader = this.down('reader-content');
+		this.courseBook = this.down('#course-book');
+		this.courseNav = this.down('course');
 
-		this.mon(this, 'beforeactivate', this.beforeactivate, this);
-		this.mon(this, 'deactivate', this.onDeactivated, this);
+		this.removeCls('make-white');
 
-		this.reader.on({
+		this.on({
+			'switch-to-reader':'switchViewToReader',
+			'beforeactivate':'onBeforeActivation',
+			'deactivate':'onDeactivated'
+		});
+
+		this.courseNav.mon(this.reader,{
+			'navigateComplete': 'onNavigateComplete'
+		});
+
+		this.mon(this.reader,{
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
-			'navigateAbort': 'onNavigationAborted',
-			'filter-by-line': 'selectDiscussion',
-			scope:this
+			'navigateAbort': 'onNavigationAborted'
 		});
 	},
 
 
-	selectDiscussion: function(){
-		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(
-			this.down('annotation-view[discussion]'));
+	onTabClicked: function(tabSpec){
+		var l = this.layout,
+			active = l.getActiveItem(),
+			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
+			vId = targetView[1],
+			needsChanging = vId!==active.id,
+			//only reset the view if we are already there and the spec flagged that it can be reset.
+			reset = !!targetView[2] && !needsChanging;
+
+		if(Ext.isEmpty(vId)){
+			return false;
+		}
+
+		if(needsChanging){
+			l.setActiveItem(vId);
+		} else if(reset) {
+
+			//should build in some smarts about allowing this to toggle through if the views are 'ready'
+			active = active.layout.setActiveItem(0);
+			if( active ){
+				//hack 2 for demo
+				try{
+					active = active.down('course-outline').getSelectionModel().getSelection()[0];
+					if(active){
+						this.fireEvent('set-location', active.getId());
+					}
+				}
+				catch(e){
+					console.error('error',e);
+				}
+			}
+		}
+
+		return true;
 	},
 
 
-	beforeactivate: function(){
+	getTabs: function(){
+		return this.tabs? this.tabSpecs : [];
+	},
+
+
+	onBeforeActivation: function(){
 		if(this.reader.activating){
 			this.reader.activating();
 		}
@@ -81,20 +122,18 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	onDeactivated: function(){
-		var presentation = Ext.ComponentQuery.query('slidedeck-view'),
-			noteWindow = Ext.ComponentQuery.query('note-window');
+		var CQ = Ext.ComponentQuery,
+			needsClosing = []
+					.concat(CQ.query('slidedeck-view'))
+					.concat(CQ.query('note-window'));
 
-		if(!Ext.isEmpty(presentation)){
-			presentation.first().destroy();
-		}
-		if(!Ext.isEmpty(noteWindow)){
-			noteWindow.first().destroy();
-		}
+		Ext.Array.map(needsClosing,function(c){c.destroy();});
 	},
 
 
 	onNavigationAborted: function(resp, ntiid) {
 		if(this.fireEvent('navigation-failed', this, ntiid, resp) !== false){
+			this.courseBook.layout.setActiveItem('main-reader-view');
 			this.reader.setSplash();
 			this.reader.relayout();
 			this.down('content-toolbar').hide();
@@ -103,15 +142,14 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
-
 	onBeforeNavigate: function(ntiid, fromHistory){
+		this.tabs = false;
 		if(!fromHistory){
 			if(this.activate(true) === false){
 				return false;
 			}
 		}
 		if(this.reader.iframeReady){
-			this.reader.navigating = true;
 			return true;
 		}
 
@@ -122,19 +160,52 @@ Ext.define( 'NextThought.view.library.View', {
 
 	onNavigateComplete: function(pageInfo){
 		if(!pageInfo || !pageInfo.isModel){return;}
+
+		this.tabs = pageInfo.isPartOfCourse();
+		this.fireEvent('update-tabs',this);
+
+		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
+
 		this.down('content-toolbar').show();
 		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
+
+		var l = ContentUtils.getLocation(pageInfo),
+			toc;
+
+		if( l && l !== ContentUtils.NO_LOCATION ){
+			toc = l.toc.querySelector('toc');
+			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
+			if(this.isActive()){
+				this.updateBackground();
+			}
+		}
+	},
+
+
+	switchViewToReader: function(){
+		this.courseBook.layout.setActiveItem('main-reader-view');
 	},
 
 
 	restore: function(state){
 		var ntiid = state.library.location;
-		this.reader.setLocation(ntiid,null,true);
-		if(this.reader.ntiidOnFrameReady){
-			this.up('master-view').down('library-collection').updateSelection(ntiid);
-		}
 
-		this.fireEvent('finished-restore');
+		try{
+			if(!ntiid){
+				console.warn('There was no ntiid to restore!');
+				return;
+			}
+			this.reader.setLocation(ntiid,null,true);
+			if(this.reader.ntiidOnFrameReady){
+				this.up('master-view').down('library-collection').updateSelection(ntiid,true);
+			}
+		}
+		catch(e){
+			console.error(e.message,'\n\n',e.stack|| e.stacktrace || e,'\n\n');
+		}
+		finally{
+			this.fireEvent('finished-restore');
+		}
 	},
 
 

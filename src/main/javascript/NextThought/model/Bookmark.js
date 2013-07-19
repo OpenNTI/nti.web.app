@@ -1,6 +1,8 @@
 Ext.define('NextThought.model.Bookmark', {
     extend: 'NextThought.model.Base',
 
+    isBookmark: true,
+
     requires: [
         'NextThought.model.anchorables.DomContentRangeDescription',
         'NextThought.model.converters.ContentRangeDescription'

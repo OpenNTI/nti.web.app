@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.coderetrieval.Window',{
-    extend: 'NextThought.view.Window',
+    extend: 'NextThought.view.window.Window',
     alias: 'widget.coderetrieval-window',
 
     requires: [

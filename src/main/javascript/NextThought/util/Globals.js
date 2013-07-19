@@ -138,7 +138,7 @@ Ext.define('NextThought.util.Globals', {
 			};
 		}
 
-		if(typeof url === 'object'){
+		if(url && typeof url === 'object'){
 			doc = url.document;
 			url = url.url;
 		}
@@ -402,9 +402,13 @@ Ext.define('NextThought.util.Globals', {
 		};
 	},
 
-	getURL: function(u) {
+	getURL: function(u,root) {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
+			if(!Ext.isEmpty(root)){
+				u = root + u;
+				return getURL(u);
+			}
 			return $AppConfig.server.host + u;
 		}
 		return u;

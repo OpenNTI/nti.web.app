@@ -118,9 +118,14 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			this.tearDownFlagging();
 		}
 
-		hide = function(){bodyEl.hide(); metaEl.hide(); footEl.hide(); ctrEl.hide(); avatarEl.hide();};
-		show = function(){bodyEl.show(); metaEl.show(); footEl.show(); ctrEl.show(); avatarEl.show();};
-
+		hide = function(){
+			bodyEl.hide(); metaEl.hide(); footEl.hide(); ctrEl.hide(); avatarEl.hide();
+			this.constrainPopout();
+		};
+		show = function(){
+			bodyEl.show(); metaEl.show(); footEl.show(); ctrEl.show(); avatarEl.show();
+			this.constrainPopout();
+		};
 		this.editor = Ext.widget('nti-editor',{record: this.record, ownerCt:this, renderTo:this.editorBoxEl, 'saveCallback': this.saveCallback});
 		this.mon(this.editor,{
 			scope: this,
@@ -129,10 +134,22 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 			'no-body-content': function(editor,el){
 				editor.markError(el,'You need to type something');
 				return false;
-			}
+			},
+			'grew': function(){
+				var pop = this.up('.activity-popout');
+
+				Ext.defer(pop.doConstrain,1,pop);
+			},
+			'save': 'constrainPopout'
 		});
 
 		Ext.defer(this.maybeShowMoreLink, 1, this);
+	},
+
+	constrainPopout: function(){
+		var pop = this.up('.activity-popout');
+
+		Ext.defer(pop.doConstrain, 1, pop);
 	},
 
 

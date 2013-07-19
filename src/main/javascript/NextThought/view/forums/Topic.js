@@ -6,7 +6,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		profileLink: 'NextThought.mixins.ProfileLinks',
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting',
+		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
 	},
 
 	requires:[
@@ -21,7 +22,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 	},
 
-	cls: 'topic-post',
+	cls: 'topic-post list',
 	defaultType: 'forums-topic-comment',
 	layout: 'auto',
 	componentLayout: 'natural',
@@ -85,19 +86,22 @@ Ext.define('NextThought.view.forums.Topic',{
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
 		commentEditorBox: '.comment-box .editor-box',
-		navigationBarCtrEl: '.header-container',
-		navigationBarEl: '.navigation-bar',
+		headerElContainer: '.header-container',
+		headerEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
 		prevPostEl: '.navigation-bar .prev'
 	},
 
 
 	initComponent: function(){
+		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 		this.addEvents(['delete-post','show-post','ready', 'commentReady']);
 		this.enableBubble(['delete-post','show-post']);
 		this.on('ready',this.onReady,this);
 		this.mon(this.record, 'destroy', this.destroy, this);
+		this.on('beforedeactivate', this.onBeforeDeactivate, this);
+		this.on('beforeactivate', this.onBeforeActivate, this);
 		this.buildStore();
 	},
 
@@ -128,7 +132,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 			if(me.rendered){
 				tpl = new Ext.XTemplate(me.pathTpl);
-				tpl.insertFirst(me.navigationBarEl, {path:forumTitle, title: topicTitle}, true);
+				tpl.insertFirst(me.headerEl, {path:forumTitle, title: topicTitle}, true);
 			}
 		}
 
@@ -191,17 +195,12 @@ Ext.define('NextThought.view.forums.Topic',{
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 
-		this.mon(this.navigationBarEl,'click',this.closeView,this);
+		this.mon(this.headerEl,'click',this.closeView,this);
 
 		this.mon(this.nextPostEl,'click',this.navigationClick,this);
 		this.mon(this.prevPostEl,'click',this.navigationClick,this);
 
 		this.updateRecord(this.record);
-
-		this.on('beforeactivate', this.onBeforeActivate, this);
-		this.on('beforedeactivate', this.onBeforeDeactivate, this);
-		this.mon(this.getMainView(),'scroll',this.handleScrollHeaderLock,this);
-
 
 		if(this.nameEl){
 			this.enableProfileClicks(this.nameEl);
@@ -238,9 +237,6 @@ Ext.define('NextThought.view.forums.Topic',{
 				return false;
 			}
 		});
-
-		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
-		this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
 	},
 
 
@@ -284,12 +280,6 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
-	showPublishMenu: function(){
-		this.publishMenu.updateFromRecord(this.record);
-		this.publishMenu.showBy(this.publishStateEl,'tl-bl',[0,0]);
-	},
-
-
 	markAsPublished: function(key, value){
 		var val = value ? 'public' : 'only me',
 			removeCls = value ? 'only me' : 'public';
@@ -325,59 +315,6 @@ Ext.define('NextThought.view.forums.Topic',{
 		}else{
 			console.log('update next and prev...with store', record.store);
 			reflectPrevAndNext(this, record.store);
-		}
-	},
-
-
-	onBeforeDeactivate: function(){
-		if(this.isVisible() && this.headerLocked){
-			this.navigationBarEl.insertBefore(this.el.first());
-		}
-		return true;
-	},
-
-
-	onBeforeActivate: function(){
-		var parentDom, forumDom;
-		if(this.isVisible() && this.headerLocked && this.navigationBarEl){
-			forumDom = this.el.up('.forums-view');
-			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
-			this.navigationBarEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.navigationBarCtrEl);
-		}
-	},
-
-	getScrollHeaderCutoff: function(){
-		return 0;
-	},
-
-	handleWindowResize: function(){
-		var left, 
-			forumDom = this.el,
-			header = this.navigationBarEl,
-			domParent = forumDom && forumDom.dom.parentNode,
-			parent = header && Ext.getDom(header).parentNode;
-		
-		if(parent === domParent){return;}
-
-		left = this.el.getX();
-		this.navigationBarEl.setX(left).setStyle('top',undefined);
-	},
-
-	handleScrollHeaderLock: function(e,dom){
-		var domParent = dom && dom.parentNode,
-			scroll = Ext.fly(dom).getScroll().top,
-			navBarParent = Ext.getDom(this.navigationBarEl).parentNode,
-			cutoff = this.getScrollHeaderCutoff(),
-			cls = 'scroll-pos-right';
-
-		if(navBarParent === domParent && scroll <= cutoff){
-			delete this.headerLocked;
-			this.navigationBarEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.navigationBarCtrEl);
-		}
-		else if(navBarParent !== domParent && scroll > cutoff){
-			this.headerLocked = true;
-			this.navigationBarEl.addCls(cls).appendTo(domParent);
-			this.handleWindowResize();
 		}
 	},
 
@@ -436,7 +373,13 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	onDestroy: function(){
-		this.navigationBarEl.remove();
+
+		this.bodyEl.select('video').each(function(vid){
+			try{
+				vid.dom.innerHTML = null;
+				vid.dom.load();
+			}catch(e){}
+		});
 
 		delete this.editor.ownerCt;
 		this.editor.destroy();
@@ -496,6 +439,110 @@ Ext.define('NextThought.view.forums.Topic',{
 		return this.record;
 	},
 
+	//For the demo process our body looking for things that appear to be links
+	//to videos.  If we understand them inline the video.  This is for the demo and pretty
+	//nasty.  Long term we need markup language for this.
+	processForVideos: function(){
+
+		function youtubeMarkupForHref(href){
+			var adjustedHref,
+				opts = {
+					frameborder: "0",
+					marginwidth: "0",
+					marginheight: "0",
+					rel: "0",
+					seamless: "1",
+					transparent: "1",
+					allowfullscreen:"1",
+					allowtransparency: "1",
+					modestbranding: "1",
+					height: "360",
+					width: "640"
+				}, tag, params = [];
+			if(href){
+				Ext.Object.each(opts, function(k, v){
+					params.push(k+'='+v);
+				});
+				adjustedHref = [href, params.join('&')].join(href.indexOf("?") < 0 ? "?" : "&");
+
+				return Ext.apply({
+					tag: 'iframe',
+					cls: 'youtube-player',
+					href: href,
+					src: adjustedHref
+				}, opts);
+			}
+			return null;
+		}
+
+		function html5videoForHref(href){
+			if(!href){
+				return null;
+			}
+			return {
+				tag: 'video',
+				href: href,
+				controls: '',
+				style: {width: '640px', height: '360px'},
+				name: 'media',
+				cn: {
+					tag: 'source',
+					src: href
+				}
+			}
+		}
+
+		this.bodyEl.select('a[href]').each(function(anchor){
+			var re = /\/\/.*\?.*inlinevid.*/,
+				href = anchor.getAttribute('href'), markup;
+
+			//Note the last condition. Stupid dataserver will duplicate links if you edit
+			//and save a note with an 'a' in it. Luckily when it does this it screws up
+			//the innerHTML.  That allows us to kind of detect it and not show a butt ton
+			//of videos
+			if(href && re.test(href) && anchor.dom.innerHTML === href){
+
+				if(/youtube/.test(href)){
+					markup = youtubeMarkupForHref(href);
+				}
+				else{
+					markup = html5videoForHref(href);
+				}
+
+				if(markup){
+					Ext.DomHelper.insertBefore(anchor, markup);
+					anchor.remove();
+				}
+			}
+		});
+	},
+
+
+	onBeforeDeactivate: function(){
+		if(this.bodyEl){
+			this.bodyEl.select('video').each(function(v){
+				v.dom.innerHTML = null;
+				v.dom.load();
+			});
+		}
+	},
+
+
+	onBeforeActivate: function(){
+		var href;
+		if(this.bodyEl){
+			this.bodyEl.select('video').each(function(v){
+				if(Ext.isEmpty((v.getHTML() || '').trim())){
+					href = v.dom.getAttribute('href');
+					Ext.DomHelper.overwrite(v, {
+						tag: 'source',
+						src: href
+					});
+				}
+			});
+		}
+	},
+
 
 	setContent: function(html){
 		var me = this;
@@ -506,6 +553,8 @@ Ext.define('NextThought.view.forums.Topic',{
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
+
+		this.processForVideos();
 
 		this.bodyEl.select('img').each(function(img){
 			img.on('load', function(){ me.fireEvent('sync-height'); });
@@ -556,6 +605,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			this.scrollCommentIntoView(null);
 		}
 	},
+
 
 	getSearchHitConfig: function(){
 		return {

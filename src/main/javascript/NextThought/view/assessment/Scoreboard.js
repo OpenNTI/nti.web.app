@@ -56,12 +56,16 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 			if(q.isCorrect()){ correct ++; }
 		});
 
-
-		this.down('assessment-tally').setTally(correct,total);
-		this.down('assessment-score').setValue(Math.floor(100*correct/total)||0);
+		this.updateWithScore(correct, total);
 
 		this.show();
-		this.reader.scrollTo(0);
+		this.reader.getScroll().to(0);
+	},
+
+
+	updateWithScore: function(correct, total){
+		this.down('assessment-tally').setTally(correct,total);
+		this.down('assessment-score').setValue(Math.floor(100*correct/total)||0);
 	},
 
 

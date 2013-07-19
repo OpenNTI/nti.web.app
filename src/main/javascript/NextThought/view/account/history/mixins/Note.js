@@ -52,9 +52,9 @@ Ext.define('NextThought.view.account.history.mixins.Note',{
 			});
 		});
 
-		rec.on("convertedToPlaceholder", function(){
-			console.log("Item removed");
-			this.destroy();
-		});
+		// rec.on("convertedToPlaceholder", function(){
+		//	console.log("Item removed");
+		//	this.destroy();
+		// });
 	}
 });

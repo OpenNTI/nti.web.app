@@ -1,10 +1,10 @@
-Ext.define('NextThought.view.Window',{
+Ext.define('NextThought.view.window.Window',{
 	extend: 'Ext.window.Window',
 	alias: 'widget.nti-window',
 
 	requires: [
 		'NextThought.util.Ranges',
-		'NextThought.view.WindowHeader'
+		'NextThought.view.window.Header'
 	],
 
 	cls: 'nti-window',

@@ -12,6 +12,7 @@
 
 
 		.shared-to{
+			display: inline-block;
 			overflow: hidden;
 			@include ellipse;
 			width: 340px;
@@ -48,9 +49,9 @@
 		z-index: 10;
 		cursor: pointer;
 
-		&.occupied {
-			left: -35px;
-		}
+		//&.occupied {
+		//	left: -35px;
+		//}
 
 		&.note-overlay-hidden{
 			display: none;
@@ -211,7 +212,7 @@
 	position: absolute;
 	top: 0;
 	right: 0 !important;
-	left: 735px;
+	width: 60px;
 	//border-right: 1px solid #eee;
 
 	@include note-control-box;
@@ -606,6 +607,7 @@
 
 
 	.note-footer, .note-content-container.scrollbody {
+		@include scrollbar(#ffffff, $tertiary-grey);
 		//background: #FBFBFB;
 	}
 

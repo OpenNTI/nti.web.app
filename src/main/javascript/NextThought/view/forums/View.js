@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.forums.View', {
-	extend: 'NextThought.view.View',
+	extend: 'NextThought.view.Base',
 	alias:	'widget.forums-view-container',
 	requires: [
 		'NextThought.layout.container.Stack',

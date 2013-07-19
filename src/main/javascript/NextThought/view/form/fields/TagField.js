@@ -265,17 +265,23 @@ Ext.define('NextThought.view.form.fields.TagField',{
 
 //This MUST be reimplemented if the subclass redfines the value format
 	setValue: function(value){
-		if(!this.rendered){
-			Ext.Error.raise('Should only be called after rendering');
+		if(value && !Ext.isArray(value)){
+			value = [value];
 		}
 
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.setValue,this,[value]),this,{single:true});
+			return this;
+		}
+
+		this.el.select('.token').remove();
 		Ext.each(value||[],function(v){ this.addTag(v); },this);
 
 		return this;
 	},
 
 
-	initValue: Ext.emptyFn,
+	//initValue: Ext.emptyFn,
 
 
 	isValid: function() { return true; },

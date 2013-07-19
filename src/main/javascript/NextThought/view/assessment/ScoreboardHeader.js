@@ -46,7 +46,7 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 
 	setPriorResults: function(sortedAssessmentSets) {
 		this.menu.setResults(sortedAssessmentSets);
-		this.menuItemClicked(this.menu);
+		//this.menuItemClicked(this.menu);
 		this.maybeHideTime();
 	},
 

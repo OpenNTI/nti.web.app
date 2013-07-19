@@ -36,23 +36,29 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 	},
 
 	afterRender: function(cmp){
+		function getCreator(r){
+			var c = r.get('Creator');
+			return c && c.isModel? c.get('Username'): c;
+		}
+
 		var page, me = this, 
 			r = me.record,
 			date = new Date(r.get('CreatedTime')),
 			RoomInfo = r.get('RoomInfo'),
-			involved = Ext.Array.merge(r.get('Contributors'),[r.get('Creator')],[RoomInfo.get('Creator')]),
-			OwnerIndex = Ext.Array.indexOf(involved, RoomInfo.get('Creator')),
+			involved = Ext.Array.unique(Ext.Array.merge(r.get('Contributors'),[getCreator(r)],[getCreator(RoomInfo)])),
+			OwnerIndex = Ext.Array.indexOf(involved, getCreator(RoomInfo)),
 			started = RoomInfo.get('CreatedTime'),
 			ended = r.get('Last Modified'),
 			duration = TimeUtils.timeDifference(ended,started).replace(/ ago/i,''),
 			messageCount = RoomInfo.get('MessageCount');
+
 
 		//mask the element until its loaded
 		me.el.mask('loading');
 		me.callParent(arguments);
 
 		//add the render data that shows up in every case
-		me.renderData =Ext.apply(me.rednerData || {},{
+		me.renderData =Ext.apply(me.renderData || {},{
 				date: Ext.Date.format(date, 'F j, Y'),
 				duration: duration,
 				messages: (messageCount === 1)? '1 message' : messageCount+" messages"
@@ -66,13 +72,13 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 		
 
 		function showRecepients(u){
-			var width, less = 0,
+			var width, less,
 				m = new Ext.util.TextMetrics(),
 				occupantsString,
-				owner = (OwnerIndex >= 0)? u[OwnerIndex].getId() : RoomInfo.get('Creator');
+				owner = (OwnerIndex >= 0)? u[OwnerIndex].get('Username') : getCreator(RoomInfo);
 			m.bind(me.el.down('.title'));
 
-			owner = (isMe(owner))? 'You' : u[OwnerIndex].get('displayName');
+			owner = (isMe(owner))? 'You' : u[OwnerIndex].toString();
 
 			//remove the owner
 			u = Ext.Array.remove(u,u[OwnerIndex]);
@@ -82,12 +88,12 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				if(isMe(item.get('ID'))){
 					u[index] = 'you';
 				}else{
-					u[index] = item.get('alias');
+					u[index] = item.toString();
 				}
 			}, me);
 
 			if(u.length <= 0){
-				ne.renderData = Ext.apply(me.renderData || {},{
+				me.renderData = Ext.apply(me.renderData || {},{
 					owner: owner,
 					lonely: true,
 					recepient: ""
@@ -106,8 +112,8 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				if(me.rendered){
 					//oops...we resolved later than the render...re-render
 					me.renderTpl.overwrite(me.el,me.renderData);
-				}else{
-					me.renderTpl.overwrite(me.renderData);
+//				}else{
+					//me.renderTpl.overwrite(me.el,me.renderData);
 				}
 
 				if(u.length > 1){
@@ -122,6 +128,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 				}
 			}
 			unMask();
+			m.destroy();
 		}
 
 		function success(obj){
@@ -129,18 +136,18 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 			if(obj && obj.isGroup){
 				if(obj.isDynamicSharing()){
 					//is group
-					UserRepository.getUser(RoomInfo.get('Creator'),function(u){
+					UserRepository.getUser(getCreator(RoomInfo),function(u){
 						me.renderData = Ext.apply(me.renderData || {},{
-							owner: (isMe(u))? 'You': u.get('alias'),
+							owner: (isMe(u))? 'You': u.getName(),
 							group: true,
-							recepient: obj.get('alias')
+							recepient: obj.getName()
 						});
 
 						if(me.rendered){
 							//oops...we resolved later than the render...re-render
 							me.renderTpl.overwrite(me.el,me.renderData);
-						}else{
-							me.renderTpl.overwrite(me.renderData);
+//						}else{
+//							me.renderTpl.overwrite(me.el,me.renderData);
 						}
 					});
 					unMask();
@@ -153,7 +160,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem',{
 
 		function failure(obj){
 			
-			console.log("Faild to load page info");
+			console.warn("Faild to load page info");
 			UserRepository.getUser(involved,showRecepients);
 		}
 

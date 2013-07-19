@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.contact.Window',{
-    extend: 'NextThought.view.Window',
+    extend: 'NextThought.view.window.Window',
     alias: 'widget.contact-us-window',
 
     requires: [

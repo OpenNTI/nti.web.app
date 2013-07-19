@@ -1,16 +1,7 @@
 Ext.define('NextThought.view.annotations.note.Templates',{
 	singleton: true,
 
-	getReplyOptions: function(){
-		return {
-			cls: 'reply-options',
-			cn: [
-				{ cls: 'reply', html: 'Reply' },
-				{ cls: 'share', html: 'Share' },
-				{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
-			]
-		};
-	},
+	//Merge these functions into note.Panel
 
 	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, record){
 		if(!optionsEl){return;}

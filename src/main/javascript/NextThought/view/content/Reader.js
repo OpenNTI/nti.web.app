@@ -1,15 +1,17 @@
 Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Base',
-	alias: 'widget.reader-panel',
+	alias: 'widget.reader-content',
 	requires: [
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
 		'NextThought.view.ResourceNotFound',
+		'NextThought.view.content.PageWidgets',
 		'NextThought.view.content.reader.Content',
 		'NextThought.view.content.reader.IFrame',
 		'NextThought.view.content.reader.Location',
 		'NextThought.view.content.reader.Scroll',
         'NextThought.view.content.reader.Touch',
+        'NextThought.view.content.reader.TouchHighlight',
 		'NextThought.view.content.reader.ResourceManagement',
 		'NextThought.view.content.reader.ComponentOverlay',
 		'NextThought.view.content.reader.Assessment',
@@ -42,6 +44,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.buildModule('resourceManager');
 		this.buildModule('noteOverlay');
         this.buildModule('touch');
+        this.buildModule('touchHighlight');
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
@@ -51,7 +54,8 @@ Ext.define('NextThought.view.content.Reader', {
 			//beforeNavigate: 'onBeforeNavigate',
 			beginNavigate: 'onBeginNavigate',
             navigateAbort: 'onNavigationAborted',
-			navigateComplete: 'onNavigateComplete'
+			navigateComplete: 'onNavigateComplete',
+			'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 		});
 	},
 
@@ -59,8 +63,17 @@ Ext.define('NextThought.view.content.Reader', {
 	bootstrap: function(loc){
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.
-		var l = loc || this.getLocation().NTIID;
-		this.setLocation(l,null,true);
+		var l = loc || this.getLocation().NTIID,
+			cb = null,
+			silent = true;
+
+		if(!Ext.isString(l)){
+			silent = l[2];
+			cb = Ext.isFunction(l[1])? l[1] : null;
+			l = l[0];
+		}
+
+		this.setLocation(l,cb,silent);
 	},
 
 
@@ -97,8 +110,13 @@ Ext.define('NextThought.view.content.Reader', {
 		if(!this.readyEventPrimed){return;}
 
 		delete this.readyEventPrimed;
-		console.warn('should-be-ready fired');
+		//console.warn('should-be-ready fired');
 		this.fireEvent('should-be-ready',this);
+	},
+
+
+	skipAnnotationsFireReadyOnFinish: function(){
+		this.skippedAnnotations = true;
 	},
 
 
@@ -107,10 +125,15 @@ Ext.define('NextThought.view.content.Reader', {
 		var DH = Ext.DomHelper,
 			el = this.getTargetEl();
 
+
 		this.splash = DH.doInsert(el,{cls:'no-content-splash initial'},true,'beforeEnd');
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		this.notFoundCmp = NextThought.view.ResourceNotFound.create({renderTo: this.splash, hideLibrary: true});
+		this.floatingItems.add(
+				Ext.widget({xtype:'content-page-widgets', renderTo: this.el, reader: this}));
+
+		this.floatingItems.add(
+				Ext.widget({xtype:'notfound', renderTo:this.splash, hideLibrary:true}));
 	},
 
 
@@ -180,7 +203,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onBeginNavigate: function(ntiid) {
-
+		this.navigating = true;
 	},
 
 
@@ -200,11 +223,12 @@ Ext.define('NextThought.view.content.Reader', {
 			me.splash.hide();
 			me.splash.removeCls('initial');
 			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
+			if(me.skippedAnnotations){
+				delete me.skippedAnnotations;
+				me.fireReady();
+			}
 		}
 
-		if(this.annotationOffsetsCache){
-			delete this.annotationOffsetsCache.locationStatics;
-		}
 
 		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
 		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
@@ -233,13 +257,8 @@ Ext.define('NextThought.view.content.Reader', {
 			me.onNavigationAborted();
 		}
 		else {
-			//hack:
-			if(!Ext.isEmpty(pageInfo.get('content'))){
-				success.call(this,{
-					responseText: pageInfo.get('content'),
-					request:{options:{pageInfo:pageInfo,url:''}}
-				});
-				return;
+			if(!Ext.isEmpty(pageInfo.get('content')) || pageInfo.isPartOfCourseNav()){
+				proxy = this.self.MOCK_PAGE_PROXY;
 			}
 
 			proxy.request({
@@ -263,7 +282,27 @@ Ext.define('NextThought.view.content.Reader', {
 	statics : {
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
-					Ext.String.format('reader-panel[prefix={0}]',prefix||'default'))[0];
+					Ext.String.format('reader-content[prefix={0}]',prefix||'default'))[0];
+		},
+
+
+		MOCK_PAGE_PROXY: {
+			request: function(req){
+				var pageInfo = req.pageInfo,
+					resp = {
+						getAllResponseHeaders: Ext.emptyFn,
+						getResponseHeader: Ext.emptyFn,
+						requestId: NaN,
+						responseXML: null,
+						status: 200,
+						statusText: 'OK',
+						request:{options:Ext.apply({url:''},req)},
+									//hack: ---v (getting dynamic content from the pageInfo)
+						responseText: pageInfo.get('content') || ''
+					};
+
+				Ext.callback(req.success, req.scope,[resp]);
+			}
 		}
 	}
 

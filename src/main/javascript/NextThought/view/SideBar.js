@@ -3,13 +3,11 @@ Ext.define('NextThought.view.SideBar',{
 	alias: 'widget.main-sidebar',
 
 	requires: [
-		'NextThought.view.SideBarTabPanel',
-        'NextThought.view.account.activity.View',
-        'NextThought.view.account.activity.ViewNew',
+		'NextThought.view.account.activity.View',
+		'NextThought.view.account.activity.ViewNew',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
-        'NextThought.view.account.history.View',
-		'NextThought.view.account.Identity',
+		'NextThought.view.account.history.View',
 		'NextThought.view.chat.Dock'
 	],
 
@@ -27,6 +25,13 @@ Ext.define('NextThought.view.SideBar',{
 	shadow: false,
 	ui: 'sidebar',
 	cls: 'sidebar',
+
+	preventBringToFront:true,
+	listeners: {
+		activate: function(){
+			Ext.WindowManager.sendToBack(this);
+		}
+	},
 
 	constructor: function(){
 		var contactsType = 'disabled-contacts-view',
@@ -86,17 +91,15 @@ Ext.define('NextThought.view.SideBar',{
 			this.host.hide();
 		}
 		else{
-            this.stopAnimation();
+			this.stopAnimation();
 			this.host.show();
 		}
-        Ext.defer(this.syncUp, 1, this);
+		Ext.defer(this.syncUp, 1, this);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
-		this.identity = Ext.widget('identity',{renderTo:this.el});
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 
@@ -139,14 +142,14 @@ Ext.define('NextThought.view.SideBar',{
 
 
 	maybeCancelHide: function(e){
-		var l = e.getTarget('.x-layer');
-		if(l){
-			console.log(l.id);
+		var l = e.getTarget('.x-layer'),
+			m = e.getTarget('.x-mask');
+		if(l || m){
 			this.stopHide();
 			return;
 		}
 
-		this.startHide()
+		this.startHide();
 
 	},
 
@@ -186,7 +189,7 @@ Ext.define('NextThought.view.SideBar',{
 		var d = this.down('chat-dock');
 		if(d){ d.show(); }
 		this.setHeight(Ext.Element.getViewportHeight()-10);
-
+		this.addCls('down');
 		this.stopShow();
 		this.stopHide();
 	},
@@ -199,9 +202,11 @@ Ext.define('NextThought.view.SideBar',{
 
 		if(!this.host.isVisible()){
 			if(d){ d.hide(); }
+			this.removeCls('down');
 			size = {height: 57};
 		}
 		else {
+			this.addCls('down');
 			if(d){ d.show(); }
 		}
 
@@ -210,5 +215,62 @@ Ext.define('NextThought.view.SideBar',{
 		this.setPagePosition(x,0,false);
 
 		this.stopHide();
+	}
+});
+
+
+
+Ext.define('NextThought.view.SideBarTab',{
+	extend: 'Ext.tab.Tab',
+	alias: 'widget.sidebar-tab',
+	mixins: {
+		isListening: 'NextThought.mixins.IsListening'
+	},
+	plain: true,
+	ui: 'sidebar'
+});
+
+
+Ext.define('NextThought.view.SideBarTabPanel',{
+	extend: 'Ext.tab.Panel',
+	requires: [
+		'NextThought.mixins.IsListening',
+		'Ext.layout.container.boxOverflow.None'
+	],
+	alias: 'widget.sidebar-tabpanel',
+	ui: 'sidebar',
+	plain: true,
+	cls: 'sidebar-panel-container',
+	stateful: true,
+	stateEvents:['tabchange'],
+	tabBar: {
+		baseCls: 'sidebar-tab-bar',
+		plain: true,
+		ui: 'sidebar',
+		xhooks: {
+			initComponent: function(){
+				this.callParent(arguments);
+				this.layout.overflowHandler =
+					new Ext.layout.container.boxOverflow.None(this.layout,{});
+				this.layout.overflowHandler.scrollToItem = Ext.emptyFn;
+			}
+		}
+	},
+
+	onAdd: function(item, index){
+		item.tabConfig = Ext.applyIf(item.tabConfig||{},{
+			xtype: 'sidebar-tab'
+		});
+		return this.callParent([item,index]);
+	},
+
+	applyState: function(state){
+		var t = (state||{}).t||0;
+
+		this.setActiveTab(t);
+	},
+
+	getState: function(){
+		return {t:this.items.indexOf(this.getActiveTab())};
 	}
 });

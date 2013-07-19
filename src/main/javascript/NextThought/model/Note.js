@@ -60,14 +60,14 @@ Ext.define('NextThought.model.Note', {
 			affectedBy: ['body','title'],
 			fn: function(r){
 				if(r.placeholder){
-					return '[Placeholder]';
+					return '[Deleted]';
 				}
 
 				if(r.data.hasOwnProperty('$preview')){
 					return r.data.$preview;
 				}
 
-				r.resolveNoteTitle(function(s){
+				r.resolveNotePreview(function(s){
 					r.data.$preview = s;
 					r.afterEdit(['preview']);
 				},150);
@@ -219,6 +219,21 @@ Ext.define('NextThought.model.Note', {
 	},
 
 	resolveNoteTitle: function(cb, max){
+		var t = this.get('title'),
+			snip;
+
+		max = max || 36;
+
+		if(!Ext.isEmpty(t)){
+			snip = Ext.String.ellipsis(t, max, false);
+		}else{
+			snip = "Untitled";
+		}
+
+		Ext.callback(cb, null, [snip, t]);
+	},
+
+	resolveNotePreview: function(cb, max){
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip;

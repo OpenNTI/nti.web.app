@@ -85,6 +85,10 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	prefetchNext: function() {
+		if(!this.rendered){
+			Ext.log.warn('Not rendered yet');
+			return;
+		}
 		var s = this.getStore(), links = s && s.batchLinks,
 			more = this.el.down('.more'),
 			body = this.ownerCt.el && this.ownerCt.el.down('#chat-dock-body');
@@ -117,6 +121,12 @@ Ext.define('NextThought.view.chat.History',{
 
 
 	storeLoaded: function(s){
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.storeLoaded,this,arguments),this,{single:true});
+			return;
+		}
+
+
 		var body, l = s.batchLinks;
 		this.removeAll(true);
 		this.add(Ext.Array.map(s.getRange(),function(a){

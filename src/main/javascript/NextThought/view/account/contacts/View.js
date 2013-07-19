@@ -74,7 +74,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 	constructor: function(){
 		this.emptyText = Ext.DomHelper.markup({
-			cls:'empty-list',
+			cls:'empty-list rhp-empty-list',
 			html: 'None of your contacts are online.'
 		});
 
@@ -146,8 +146,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 			el = Ext.fly(item).down('.avatar'), me = this;
 
 		if(!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))){return;}
-
-		console.log(wait);
 
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){

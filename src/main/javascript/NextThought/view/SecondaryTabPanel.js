@@ -1,3 +1,5 @@
+//TODO: Delete this once we permanently enable the new 'activity'/history view.
+
 Ext.define('NextThought.view.SecondaryTabPanel',{
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.secondary-tabpanel',

@@ -4,6 +4,7 @@ Ext.define('NextThought.view.Main', {
 
 	requires: [
 		'Ext.layout.container.Border',
+		'NextThought.view.account.Identity',
 		'NextThought.view.MessageBox',
 		'NextThought.view.Navigation',
 		'NextThought.view.SideBar',
@@ -20,7 +21,7 @@ Ext.define('NextThought.view.Main', {
 	minWidth: 1024,
 
 	items:[
-		{xtype: 'main-navigation', region: 'north'},
+		{xtype: 'main-navigation', id: 'nav', region: 'north'},
 		{xtype: 'main-views', id: 'view', region: 'center'},
 		{xtype: 'box', hostTo:'sidebar', region: 'east', weight: 30, minWidth:260}
 	],
@@ -59,6 +60,8 @@ Ext.define('NextThought.view.Main', {
 		Ext.EventManager.onWindowResize(this.detectZoom,this);
 		this.detectZoom();
 		this.views = this.down('main-views');
+
+		this.identity = Ext.widget('identity',{renderTo:Ext.getBody()});
 		this.sidebar = Ext.widget('main-sidebar', {
 			host: this.down('[region=east][hostTo=sidebar]'), hidden: this.hidden
 		});

@@ -103,6 +103,6 @@ Ext.define('NextThought.view.cards.CardTarget',{
 			range = doc.createRange();
 
 		range.selectNodeContents(this.contentElement);
-		return {range: range, rect: {top: 121}};
+		return {range: range, rect: {top: 237}};
 	}
 });

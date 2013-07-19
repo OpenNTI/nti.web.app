@@ -51,5 +51,16 @@ Ext.define(	'NextThought.model.UserSearch', {
 
 	getName: function(){
 		return this.get('alias') || this.get('realname') || this.get('Username');
+	},
+
+	getProfileUrl: function (subPage) {
+		var u = encodeURIComponent(this.get('Username')),
+			subPages = subPage || [];
+
+		if (!Ext.isArray(subPages) && arguments.length > 0) {
+			subPages = Ext.Array.clone(arguments);
+		}
+		subPages = Ext.isEmpty(subPages, false) ? '' : '/' + Ext.Array.map(subPages, encodeURIComponent).join('/');
+		return ['#!profile/', u, subPages].join('');
 	}
 });

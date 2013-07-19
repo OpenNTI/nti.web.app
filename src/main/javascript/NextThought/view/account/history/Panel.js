@@ -17,7 +17,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	storeId: 'noteHighlightStore',
-	filter: 'MeOnly',
+	filter: 'onlyMe,Bookmarks',
+	filterOperator: '0',
 	filterMap: {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
 	},
@@ -38,9 +39,11 @@ Ext.define('NextThought.view.account.history.Panel', {
 	cls: 'user-data-panel',
 	preserveScrollOnRefresh: true,
 
+	deferEmptyText: true,
+
 	emptyText: Ext.DomHelper.markup([{
-		cls:"history nothing",
-		html: 'No Items'
+		cls:"history nothing rhp-empty-list",
+		html: 'No Activity Yet'
 	}]),
 
 
@@ -62,8 +65,24 @@ Ext.define('NextThought.view.account.history.Panel', {
 		insertGroupTitle: function(values, out){
 			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
 
+			if(label === 'Today'){
+				this.todayCount = (this.todayCount !== undefined)? this.todayCount + 1 : 0;
+			}
+
+			if(this.todayCount < 2 && this.itemAdded){
+				this.itemAdded = false;
+			}
+
+			if(this.todayCount === 2 && (this.itemAdded || this.itemAdded !== undefined)){
+				this.itemAdded = true;
+			}
+
+			if(this.todayCount > 2){
+				delete this.itemAdded; 
+			}
+
 			// Detect if the grouping type change from the previous else and make we insert the new group title.
-			if(!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label)){
+			if(!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label || this.alreadyLoaded || (this.itemAdded && label === 'Today'))){
 				this.previousGrouping = label;
 				return Ext.DomHelper.createTemplate({ cls:'divider', cn:[{tag:'span', html: label}] }).applyOut({}, out);
 			}
@@ -110,7 +129,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			this.mimeTypes.push('application/vnd.nextthought.' + RegExp.escape(t));
 		}, this);
 
-		return this.mimeTypes.join(',');
+		return this.mimeTypes;
 	},
 
 
@@ -133,16 +152,27 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
-		var s = NextThought.store.PageItem.create({id:this.storeId, groupField: this.grouping, groupDir: 'ASC'});
+		var s = NextThought.store.PageItem.create({
+			id:this.storeId,
+			groupField: this.grouping,
+			groupDir: 'ASC',
+			sortOnLoad: true,
+			statefulFilters: false,
+			remoteSort: false,
+			remoteFilter: false,
+			remoteGroup: false,
+			filterOnLoad: true,
+			sortOnFilter: true
+		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			filter: this.filter,
-			accept: this.getMimeTypes()
+			sortOrder: 'descending'
 		});
 
 		this.store = s;
+
+		this.applyFilterParams();
 
 		this.mon(this.store,{
 			scope: this,
@@ -150,19 +180,50 @@ Ext.define('NextThought.view.account.history.Panel', {
 			load: 'storeLoaded'
 		});
 
-		this.store.load();
+		s.filter([function(rec){
+			if(isMe(rec.get('Creator'))){
+				return true;
+			}
+			return rec.isFavorited() || rec.isBookmark;
+		}]);
+
+		if(this.rendered){
+			this.store.load();
+		}else{
+			this.on('afterrender','load',this.store);
+		}
 		this.bindStore(this.store);
 	},
 
+	applyFilterParams: function(){
+		if(this.store){
+			Ext.apply(this.store.proxy.extraParams,{
+				filterOperator: this.filterOperator,
+				filter: this.filter,
+				accept: this.getMimeTypes().join(',')
+			});
+		}
+	},
 
 	recordsAdded: function(store, records){
 		console.debug(' UserDataPanel Store added records:', arguments);
+		delete this.tpl.todayCount;
+		this.tpl.itemAdded = true;
 		Ext.each(records, this.fillInData, this);
 	},
 
 
-	storeLoaded: function(store, records){
-		Ext.each(records, this.fillInData, this);
+	storeLoaded: function(store){
+		Ext.each(store.getRange(), this.fillInData, this);
+
+		this.maybeShowMoreItems();
+	},
+
+	maybeShowMoreItems: function(){
+		//if we can't scroll
+		if( this.el.getHeight() >= this.el.dom.scrollHeight ){
+			this.prefetchNext();
+		}
 	},
 
 
@@ -213,9 +274,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	showPopup: function(record, item){
-		var popout = NextThought.view.account.activity.Popout,
+		var popout,
 			target = Ext.get(item),
 			me = this;
+
+		if(record && record.getClassForModel) {
+			popout = record.getClassForModel('widget.activity-popout-',NextThought.view.account.activity.Popout);
+		}
 
 		function fin(pop){
 			// If the popout is destroyed, clear the activeTargetDom,
@@ -285,22 +350,44 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
-		Ext.Array.include(filterTypes, 'onlyMe');
+		var me = this,
+			s = me.getStore(),
+			fo = (filterTypes.length > 1)? '0' : '1';
 
-		var s = this.getStore(),
-			selectedMimeTypes = [],
-			selectedFilters = [this.filter];
+		if(Ext.isEmpty(filterTypes)){
+			filterTypes = ['onlyMe','Bookmarks'];
+			fo = '0';
+		}
+
+		me.filter = filterTypes.join(',');
+		me.filterOperator = (filterTypes.length > 1)? fo : undefined;
+		this.getMimeTypes = function(){ return mimeTypes; };
+
+		if(!s || s.storeId === 'ext-empty-store'){
+			return;			
+		}
+
 
 		s.removeAll();
 
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'relevance',
-			sortOrder: 'descending',
-			filter: filterTypes.join(','),
-			filterOperator: (filterTypes.length > 1)? '0' : '1',
-			accept: mimeTypes.join(',')
-		});
+		me.applyFilterParams();
 
+		s.clearFilter(true);
+		s.addFilter([function(rec){
+			if(Ext.Array.contains(filterTypes, 'onlyMe')){
+				if(isMe(rec.get('Creator'))){ return true; }
+
+				if(Ext.Array.contains(filterTypes, 'Bookmarks')){
+					return rec.isFavorited() || rec.isBookmark;
+				}
+			}else if(Ext.Array.contains(filterTypes, 'Bookmarks')){
+				return rec.isFavorited() || rec.isBookmark;
+			}
+
+			return false;
+		}], false);
+
+		s.currentPage = 1;
 		s.load();
 	}
 });

@@ -5,16 +5,13 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		addgroup:'NextThought.mixins.AddGroup'
 	},
 
-	requires:[
-		'NextThought.store.FriendsList'
-	],
-
 	ui: 'nt',
 	plain: true,
 	shadow: false,
 	frame: false,
 	border: false,
 	preserveScrollOnRefresh: true,
+
 
 	cls: 'group-selection-list',
 	baseCls: 'selection',
@@ -28,6 +25,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.itemSelector = '.selection-list-item';
 
 		this.allowSelect = this.allowSelect || false;
+
+		this.maxHeight = Ext.getBody().getHeight() - 12;
 
 		this.mon(this.getSelectionModel(), {
 			beforeselect: this.onBeforeSelect,
@@ -49,7 +48,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			blocked = this.blocked,
 			mycontact = 'mycontacts-'+$AppConfig.username, me = this;
 
-		this.store = new NextThought.store.FriendsList({
+		this.store = new Ext.data.Store({
+			model: 'NextThought.model.FriendsList',
 			id: 'group-list-store',
 			proxy: 'memory',
 			filters: [
@@ -90,7 +90,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		this.mon(this.el,'mouseout', function(e){
 			if(!this.isClosing){
-				this.startHideTimeout();
+				//this.startHideTimeout();
 			}
 			this.isClosing = false;
 			this.doDismiss = true;

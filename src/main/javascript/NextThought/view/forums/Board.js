@@ -10,10 +10,12 @@
 Ext.define('NextThought.view.forums.Board',{
 	extend: 'Ext.view.View',
 	alias: ['widget.forums-board','widget.forums-forum-list'],
-
+	mixins: {
+		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
+	},
 	requires: [ 'NextThought.util.Time' ],
 
-	cls: 'forum-list',
+	cls: 'forum-list list',
 	itemSelector: '.forum-list-item',
 
 	listeners: {
@@ -107,6 +109,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 
 	initComponent: function(){
+		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 		this.on('refresh', this.fillInNewestDescendant, this);
 	},
@@ -119,26 +122,11 @@ Ext.define('NextThought.view.forums.Board',{
 			this.headerElContainer = this.headerTpl.append(this.el,{ path: this.record.get('Creator'), title: this.record.get('title') },true);
 			this.headerEl = this.headerElContainer.down('.header');
 			this.mon(this.headerEl,'click',this.onHeaderClick,this);
-			this.on('beforedeactivate', this.onBeforeDeactivate, this);
-			this.on('beforeactivate', this.onBeforeActivate, this);
-			this.on('activate', this.onActivate, this);
-			this.on('beforeitemclick', this.onBeforeItemClick, this);
-			this.mon(Ext.get('forums'),'scroll', this.handleScrollHeaderLock, this);
 
-
-			Ext.EventManager.onWindowResize(this.handleWindowResize,this);
-			this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
-		}
-	},
-
-	onDestroy: function(){
-		this.headerEl.remove();
-		return this.callParent(arguments);
-	},
-
-	onBeforeDeactivate: function(){
-		if(this.isVisible() && this.headerLocked){
-			this.headerEl.appendTo(this.headerElContainer);
+			this.on({
+				'activate':'onActivate',
+				'beforeitemclick':'onBeforeItemClick'
+			});
 		}
 	},
 
@@ -146,53 +134,6 @@ Ext.define('NextThought.view.forums.Board',{
 	onActivate: function(){
 		//console.log('The board view is activated');
 		this.store.load();
-	},
-
-
-	onBeforeActivate: function(){
-		var parentDom, forumDom;
-		if(this.isVisible() && this.headerLocked && this.headerEl){
-			forumDom = this.el.up('.forums-view');
-			parentDom = forumDom ? forumDom.dom.parentNode : forumDom.dom;
-			this.headerEl.setStyle({left: 0, top: 0}).removeCls('scroll-pos-right').appendTo(this.headerElContainer);
-		}
-	},
-
-	handleWindowResize: function(){
-		var left, 
-			forumDom = this.el,
-			header = this.headerEl,
-			domParent = forumDom && forumDom.dom.parentNode,
-			parent = header && Ext.getDom(header).parentNode;
-		
-		if(parent === domParent){return;}
-
-		left = forumDom.getX();
-		this.headerEl.setX(left).setStyle('top',undefined);
-	},
-
-	handleScrollHeaderLock: function(e,forumDom){
-		var headerEl = this.headerEl,
-			domParent = forumDom && forumDom.parentNode,
-			scroll = Ext.fly(forumDom).getScroll().top,
-			parent = headerEl && Ext.getDom(headerEl).parentNode,
-			cutoff = 0,
-			cls = 'scroll-pos-right';
-
-		if(this.isVisible() && (!headerEl || !parent)){
-			console.error('Nothing to handle, el is falsey');
-			return;
-		}
-
-		if(parent === domParent && (scroll < cutoff || !this.isVisible())){
-			delete this.headerLocked;
-			headerEl.setStyle({left: 0, top: 0}).removeCls(cls).appendTo(this.headerElContainer);
-		}
-		else if(this.isVisible() && parent !== domParent && scroll >= cutoff){
-			this.headerLocked = true;
-			headerEl.addCls(cls).appendTo(domParent);
-			this.handleWindowResize();
-		}
 	},
 
 

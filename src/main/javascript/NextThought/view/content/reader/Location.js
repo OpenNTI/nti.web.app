@@ -16,6 +16,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		reader.on('destroy','destroy',
 			reader.relayEvents(this,[
 				'beforeNavigate',
+				'beginNavigate',
 				'navigate',
 	            'navigateAbort',
 				'navigateComplete',
@@ -27,30 +28,11 @@ Ext.define('NextThought.view.content.reader.Location', {
 		Ext.apply(reader,{
 			getLocation: Ext.bind(this.getLocation,this),
 			getRelated: Ext.bind(this.getRelated,this),
-			setLocation: Ext.bind(this.setLocation,this),
-			setLastLocationOrRoot: Ext.bind(this.setLastLocationOrRoot,this)
+			setLocation: Ext.bind(this.setLocation,this)
 		});
 
 		this.callParent(arguments);
 	},
-
-
-	setLastLocationOrRoot: function(ntiid) {
-		var lastNtiid = localStorage[ntiid] || ntiid;
-		if(!ParseUtils.parseNtiid(lastNtiid)){
-			lastNtiid = ntiid;
-		}
-
-		function callback(a, errorDetails){
-			var error = (errorDetails||{}).error;
-			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
-				delete localStorage[ntiid];
-			}
-		}
-
-		this.setLocation(lastNtiid, callback);
-	},
-
 
 
 	/**
@@ -91,7 +73,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			Ext.callback(callback,null,args);
 
 			if(fromHistory!==true){
-				history.pushState({library:{location: ntiid}}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
+				history.pushState({library:{location: ntiid}, active:'library'}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 			}
 			if(error){
 				delete me.currentNTIID;
