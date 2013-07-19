@@ -134,6 +134,7 @@ span.tab{
 
 
 			.content {
+				@include scrollbar(#ffffff, $tertiary-grey);
 				@include text-content;
 
 				@include experimental(transition, all 0.5s);
@@ -400,6 +401,10 @@ span.tab{
 			}
 
 			.content {
+				.detected-scrollbars & {
+					margin-right: -10px;
+				}
+
 				padding: 2px 0 0;
 				&.show-placeholder[data-placeholder]::after{
 					left: 0;

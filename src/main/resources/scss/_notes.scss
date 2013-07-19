@@ -603,6 +603,7 @@
 
 
 	.note-footer, .note-content-container.scrollbody {
+		@include scrollbar(#ffffff, $tertiary-grey);
 		//background: #FBFBFB;
 	}
 
