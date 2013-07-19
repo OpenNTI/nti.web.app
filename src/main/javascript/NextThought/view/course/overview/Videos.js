@@ -162,6 +162,12 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		});
 	},
 
+	//allow querying using selector PATH (eg: "parent-xtype-container course-overview-ntivideo")
+	getRefItems: function(){
+		var p = this.player;
+		return (p && [p]) || [];
+	},
+
 
 	resetCommentCount: function(a,r){
 		var req = r && r.request;
