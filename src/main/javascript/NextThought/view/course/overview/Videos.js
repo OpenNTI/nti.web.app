@@ -147,7 +147,7 @@ Ext.define('NextThought.view.course.overview.Videos',{
 			return;
 		}
 
-		this.player = Ext.widget({
+		var p = this.player = Ext.widget({
 			xtype: 'content-video',
 			playlist: this.playlist,
 			renderTo: this.screenEl,
@@ -156,6 +156,10 @@ Ext.define('NextThought.view.course.overview.Videos',{
 			height: 288
 		});
 
+		this.on({
+			scope: p,
+			destroy: 'destroy'
+		});
 	},
 
 
