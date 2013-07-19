@@ -197,7 +197,8 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		}
 
 		if(!$AppConfig.service.canFriend()){
-			this.fromMenu.down('menuitem[text=My Contacts]').destroy();
+			this.fromMenu.down('menuitem[isContacts]').destroy();
+			this.typesMenu.down('menuitem[filter=contact]').destroy();
 		}
 	},
 
