@@ -765,10 +765,25 @@ $experimental-support-for-svg: true;
 
 		.x-component-slide{
 			width: 860px;
-			padding: 50px 10px 0 110px;
+			padding: 50px 60px 0 110px;
 
 			.image-wrap{
 				position: relative;
+
+				.add-note-here{
+					position: absolute;
+					width: 60px;
+					height: 28px;
+
+					@include note-control-box;
+					.note-here-control-box{
+						left: 16px;
+
+						&.hidden{
+							display: none;
+						}
+					}
+				}
 
 				img{
 					border-width: 0;
