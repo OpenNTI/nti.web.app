@@ -22,7 +22,6 @@ Ext.define('NextThought.ux.SlideDeck',{
 			startingSlide = (obj && obj.getAttribute('data-ntiid')) || undefined,
 			startingVideo,
 			slidedeckId,
-			transcript,
 			store = new Ext.data.Store({proxy:'memory'});
 
 		function getParam(name){
@@ -40,8 +39,6 @@ Ext.define('NextThought.ux.SlideDeck',{
 				startingVideo = NextThought.model.PlaylistItem.fromDom(dom);
 			}
 		}
-
-		transcript = this.getTranscriptData(el);
 
 		slidedeckId = getParam('slidedeckid') || 'default';
 
@@ -87,7 +84,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 			}
 
 			Ext.getBody().unmask();
-			p = Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide, transcript: transcript});
+			p = Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide});
 			p.show();
 			p.mon(reader,'navigateComplete','destroy',p);
 		}
@@ -105,30 +102,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 		}
 
 		ContentUtils.spider(ids, finish, parse);
-	},
-
-	getTranscriptData: function(el){
-		var reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
-			t  = Ext.fly(el).down('object[type*=mediatranscript]'),
-			url, type, jsonUrl;
-
-		if(!t){
-			return null;
-		}
-
-		url =  Ext.fly(t).down('param[name=src]').getAttribute('value');
-		type = Ext.fly(t).down('param[name=type]').getAttribute('value');
-		jsonUrl = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
-
-		return {
-			url:url,
-			type:type,
-			jsonUrl:jsonUrl,
-			basePath: reader && reader.basePath,
-			contentElement: t
-		};
 	}
-
 
 },function(){
 	window.SlideDeck = this;
