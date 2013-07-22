@@ -57,6 +57,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.reader.fireEvent('listens-to-page-stores',this,{
 			scope: this,
 			add: 'storeEventsAdd',
+			'paged-in': 'storeEventsAdd',
 			remove: 'storeEventsRemove',
 			bulkremove: 'storeEventsBulkRemove'
 		});

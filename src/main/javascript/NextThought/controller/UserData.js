@@ -80,7 +80,7 @@ Ext.define('NextThought.controller.UserData', {
 					'annotations-load': 'onAnnotationsLoad',
 					'filter-annotations': 'onAnnotationsFilter',
 					'filter-by-line': 'onAnnotationsLineFilter',
-					'removed-from-line': 'maybeRemoveLineFilter',
+					'removed-from-line': { fn:'maybeRemoveLineFilter', buffer: 1 },
 
 					'share-with'	: 'shareWith',
 					'define'		: 'define',
@@ -88,6 +88,13 @@ Ext.define('NextThought.controller.UserData', {
 					'save-phantom'  : 'savePhantomAnnotation',
 					'display-popover': 'onDisplayPopover',
 					'dismiss-popover': 'onDismissPopover'
+				},
+
+
+				'reader annotation-view':{
+					'refresh':'onAnnotationViewRefreshed',
+					'viewready':'onAnnotationViewReady',
+					'scrolled-to-end':{ fn:'onAnnotationViewMayNeedPaging', buffer: 500 }
 				},
 
 
@@ -522,6 +529,44 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
+	getStoreForLine: function(line){
+		var stores = this.currentPageStores,
+			root = stores.root,
+			key, s, potentials = [];
+
+
+		function testStore(s){
+			var lines = testStore.lines = testStore.lines || {},
+				l;
+
+			if( s.each ){
+				s.each(testStore);
+				delete testStore.lines;
+				return lines;
+			}
+
+			l = s.get('line');
+			lines[l] = lines[l]+1 || 1;
+			return l;
+		}
+
+
+		for(key in stores){
+			if(stores.hasOwnProperty(key)){
+				if( key !== root.containerId && testStore(stores[key])[line]){
+					potentials.push(stores[key]);
+				}
+			}
+		}
+
+		if(potentials.length > 1){
+			Ext.log.warn('We found more than one store!');
+		}
+
+		return potentials[0];
+	},
+
+
 	//Calls the provided fn on all the stores.  Optionally takes a predicate
 	//which skips stores that do not match the predicate
 	applyToStores: function(fn, predicate){
@@ -575,19 +620,61 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-	openChatTranscript: function(records, clonedWidgetMarkup){
-		if(!Ext.isArray(records)){ records = [records]; }
-		var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
-		function loadTranscript(r){
-			if(r.isTranscript){
-				//its a transcript so load it straight to the window
-				w.insertTranscript(r);
-			}else{
-				//its a summary so get the transcript first
-				this.onLoadTranscript(r,w);
+
+	onAnnotationViewReady:function(view){
+		var bufferZone = 2; //two rows
+
+		view.mon(view.el,{
+			scope: view,
+			scroll: function onScroll(e,dom){
+				var lastItem = dom.lastChild,
+					direction = (onScroll.lastScrollTop||0) - dom.scrollTop,
+					buffer =  dom.scrollHeight - (Ext.fly(lastItem).getHeight()*bufferZone) - Ext.fly(dom).getHeight(),
+					top =  buffer - dom.scrollTop;
+
+				onScroll.lastScrollTop = dom.scrollTop;
+
+				if(top <= 20 && direction < 0){
+					view.fireEvent('scrolled-to-end',view);
+				}
+			}
+		});
+	},
+
+
+	onAnnotationViewRefreshed: function(view){
+		//scrollHeight is === to height until its overflown. "<=" just feels safer :P
+		if(this.flatPageStore.filteredLine && view.getEl().dom.scrollHeight <= view.getHeight()){
+			this.onAnnotationViewMayNeedPaging(view);
+		}
+	},
+
+
+	onAnnotationViewMayNeedPaging: function(view){
+		var me = this,
+			s = view.getStore();
+
+		function maybeFirePagedIn(store,records){
+			if(records.length){
+				me.pageStoreEvents.fireEvent('paged-in',store,records);
 			}
 		}
-		Ext.each(records,loadTranscript, this);
+
+		if(s !== this.flatPageStore){
+			Ext.log.warn('skipping paging logic...not what we expected');
+			return;
+		}
+
+		if(!s.filteredLine){
+			Ext.log.info('Not filtering on a line. Pass.');
+			return;
+		}
+
+		s = this.getStoreForLine(s.filteredLine);
+		if(s){
+			s.on('load',maybeFirePagedIn,s,{single:true});
+			s.nextPage();
+		}
 	},
 
 
@@ -596,6 +683,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		s.removeFilter('lineFilter');
 		if(line){
+			s.filteredLine = line;
 			s.addFilter({
 				id: 'lineFilter',
 				filterFn: function(r){
@@ -608,12 +696,13 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	maybeRemoveLineFilter: Ext.Function.createBuffered(function(){
+	maybeRemoveLineFilter: function(){
 		var s = this.flatPageStore;
 		if( s.getCount() === 0 ){
+			delete s.filteredLine;
 			s.removeFilter('lineFilter');
 		}
-	},1),
+	},
 
 
 	onAnnotationsFilter: function(cmp){
@@ -695,6 +784,9 @@ Ext.define('NextThought.controller.UserData', {
 
 		this.onAnnotationsFilter(cmp);
 	},
+
+
+
 
 
 	saveSharingPrefs: function(pageInfoId, prefs, callback){
@@ -1171,6 +1263,21 @@ Ext.define('NextThought.controller.UserData', {
 			return;
 		}
 		this.self.events.fireEvent('new-redaction',record);
-	}
+	},
 
+
+	openChatTranscript: function(records, clonedWidgetMarkup){
+		if(!Ext.isArray(records)){ records = [records]; }
+		var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
+		function loadTranscript(r){
+			if(r.isTranscript){
+				//its a transcript so load it straight to the window
+				w.insertTranscript(r);
+			}else{
+				//its a summary so get the transcript first
+				this.onLoadTranscript(r,w);
+			}
+		}
+		Ext.each(records,loadTranscript, this);
+	}
 });
