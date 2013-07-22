@@ -20,14 +20,12 @@ Ext.define('NextThought.view.annotations.View',{
 
 	]})),
 
-	afterRender: function(){
-		this.callParent(arguments);
 
-		this.el.on('click', function(e){
-			if(e.getTarget('a[href]')){
-				e.preventDefault();
-			}
-		});
+	handleEvent: function(e){
+		if(e.getTarget('a[href]')){
+			e.preventDefault();
+		}
+		return this.callParent(arguments);
 	}
 
 });
