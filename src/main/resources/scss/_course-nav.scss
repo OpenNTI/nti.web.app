@@ -447,3 +447,44 @@
 		}
 	}
 }
+
+.course-dashboard-container{
+	@include scrollbar(transparent, $tertiary-grey);
+	overflow: auto;
+}
+
+.course-dashboard {
+	position: relative;
+	overflow: hidden;
+	//1024 - 1165 width (200 - 233)
+
+	.grid-item {
+		position: relative;
+		float: left;
+		margin: 0 4px 4px 0;
+		background: rgba(255,0,0,0.6);
+
+
+		&.col-1 {
+			width: 196px;
+			@include experimental-value(width, calc(20% - 4px));
+		}
+		&.col-2 {
+			width: 396px;
+			@include experimental-value(width, calc(40% - 4px));
+		}
+		&.col-3 {
+			width: 596px;
+			@include experimental-value(width, calc(60% - 4px));
+		}
+		&.col-4 {
+			width: 796px;
+			@include experimental-value(width, calc(80% - 4px));
+		}
+
+		&.row-1 { height: 196px; }
+		&.row-2 { height: 396px; }
+		&.row-3 { height: 596px; }
+		&.row-4 { height: 796px; }
+	}
+}

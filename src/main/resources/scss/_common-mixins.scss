@@ -213,7 +213,7 @@
 	}
 	.detected-scrollbars &::-webkit-scrollbar-thumb {
 		background: $nib;
-		border: 1px solid opacify($track,1);
+		border: 1px solid $track;
 		border-radius: 10px;
 
 	}
@@ -224,8 +224,8 @@
 	scrollbar-darkshadow-color: opacify($nib,1);
 	scrollbar-shadow-color: opacify($nib,1);
 
-	scrollbar-arrow-color: opacify($track,1);
-	scrollbar-track-color: opacify($track,1);
+	scrollbar-arrow-color: $track;
+	scrollbar-track-color: $track;
 
 	//::-webkit-scrollbar
 	//::-webkit-scrollbar-button
