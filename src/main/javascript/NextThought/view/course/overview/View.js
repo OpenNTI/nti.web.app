@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.Overview',{
+Ext.define('NextThought.view.course.overview.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview',
 	ui: 'course',

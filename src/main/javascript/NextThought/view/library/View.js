@@ -2,9 +2,10 @@ Ext.define( 'NextThought.view.library.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.library-view-container',
 	requires: [
-		'NextThought.view.course.Panel',
 		'NextThought.view.reader.Panel',
-		'NextThought.view.course.Forum'
+		'NextThought.view.course.View',
+		'NextThought.view.course.dashboard.View',
+		'NextThought.view.course.forum.View'
 	],
 
 	layout: {
@@ -16,7 +17,8 @@ Ext.define( 'NextThought.view.library.View', {
 
 	items:[
 		{
-			id:'dashboard-view'
+			id:'course-dashboard',
+			xtype: 'course-dashboard'
 		},{
 			id:'course-book',
 			xtype: 'container',
@@ -41,7 +43,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	tabSpecs: [
-		{label: 'Dashboard', viewId: 'dashboard-view'},
+		{label: 'Dashboard', viewId: 'course-dashboard'},
 		{label: 'Lessons', viewId: 'course-book?', selected:true},
 //		{label: 'Assignments', viewId: ''},
 		{label: 'Discussions', viewId: 'course-forum'},

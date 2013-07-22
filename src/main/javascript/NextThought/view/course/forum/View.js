@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.Forum',{
+Ext.define('NextThought.view.course.forum.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-forum',
 	requires: [
@@ -14,7 +14,9 @@ Ext.define('NextThought.view.course.Forum',{
 	},
 
 	onActivate: function(){
-		this.store.load();
+		if(this.store){
+			this.store.load();
+		}
 	},
 	
 	setForum: function(ntiid){

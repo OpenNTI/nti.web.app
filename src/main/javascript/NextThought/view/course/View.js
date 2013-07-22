@@ -1,10 +1,10 @@
-Ext.define('NextThought.view.course.Panel',{
+Ext.define('NextThought.view.course.View',{
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.course',
 	ui: 'course',
 	requires: [
-		'NextThought.view.course.Outline',
-		'NextThought.view.course.Overview'
+		'NextThought.view.course.outline.View',
+		'NextThought.view.course.overview.View'
 	],
 
 
