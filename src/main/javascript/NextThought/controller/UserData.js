@@ -834,9 +834,10 @@ Ext.define('NextThought.controller.UserData', {
             piId = rootId;
         }
         else if(!sharing || (!/set/i.test(sharing.State) && piId !== rootId)){
-            console.debug('Not setting prefs', sharing, (sharing||{}).State);
+            //console.debug('Not setting prefs', sharing, (sharing||{}).State);
             return;
-        }		this.preferenceMap[piId] = {sharing: sharing};
+        }
+		this.preferenceMap[piId] = {sharing: sharing};
 		console.debug('shareing prefs updated', this.preferenceMap[piId]);
 	},
 
