@@ -32,13 +32,27 @@ Ext.define('NextThought.view.course.forum.View',{
 
 		function failure(){}
 
-		if(ntiid && this.currentNttid !== ntiid){
+		if(ntiid && this.currentNtiid !== ntiid){
 			this.currentNtiid = ntiid;
 			$AppConfig.service.getObject(ntiid,success,failure);
 
 		}else if(!ntiid){
 			this.removeAll(true);
 		}
+	},
+
+
+	onNavigateComplete: function(pageInfo){
+		var l = ContentUtils.getLocation(pageInfo),
+			toc, course;
+
+
+		if( l && l !== ContentUtils.NO_LOCATION ){
+			toc = l.toc.querySelector('toc');
+			course = toc && toc.querySelector('course');
+		}
+
+		//this.setForum(pageInfo.isPartOfCourse() && course && course.getAttribute('forum'));
 	}
 });
 

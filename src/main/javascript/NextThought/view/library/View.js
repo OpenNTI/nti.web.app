@@ -56,7 +56,8 @@ Ext.define( 'NextThought.view.library.View', {
 		this.callParent(arguments);
 		this.reader = this.down('reader-content');
 		this.courseBook = this.down('#course-book');
-		this.courseForum = this.down('#course-forum');
+		this.courseDashboard = this.down('course-dashboard');
+		this.courseForum = this.down('course-forum');
 		this.courseNav = this.down('course');
 
 		this.removeCls('make-white');
@@ -65,6 +66,15 @@ Ext.define( 'NextThought.view.library.View', {
 			'switch-to-reader':'switchViewToReader',
 			'beforeactivate':'onBeforeActivation',
 			'deactivate':'onDeactivated'
+		});
+
+
+		this.courseDashboard.mon(this.reader,{
+			'navigateComplete': 'onNavigateComplete'
+		});
+
+		this.courseForum.mon(this.reader,{
+			'navigateComplete': 'onNavigateComplete'
 		});
 
 		this.courseNav.mon(this.reader,{
@@ -171,22 +181,22 @@ Ext.define( 'NextThought.view.library.View', {
 		this.tabs = pageInfo.isPartOfCourse();
 		this.fireEvent('update-tabs',this);
 
+		if($AppConfig.showDashboard){
+			this.layout.setActiveItem(0);
+		}
+
  		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
 		this.down('content-toolbar').show();
 		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
 
 		var l = ContentUtils.getLocation(pageInfo),
-			toc, course;
+			toc;
 
 
 		if( l && l !== ContentUtils.NO_LOCATION ){
 			toc = l.toc.querySelector('toc');
-			course = toc.querySelector('course')
 		}
-
-
-		//this.courseForum.setForum(this.tabs && course && course.getAttribute('forum'));
 
 		if(toc){
 			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
