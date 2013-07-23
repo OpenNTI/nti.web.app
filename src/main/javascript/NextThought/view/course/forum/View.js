@@ -70,5 +70,5 @@ Ext.define('NextThought.view.course.ForumList',{
 	constructor: function(){
 		this.mixins.HeaderLock.disable.call(this);
 		this.callParent(arguments);
-	},
+	}
 });
