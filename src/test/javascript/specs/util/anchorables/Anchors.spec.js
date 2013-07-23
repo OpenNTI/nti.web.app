@@ -326,6 +326,90 @@ describe("Anchor Utils", function() {
 				expect(e.message).toEqual('Invalid contents');
 			}
 		});
-	})
+	});
+
+	it('Good TimeRangeDescription Creation', function(){
+		function createTimePointer(role, time){
+			return Ext.create('NextThought.model.anchorables.TimeContentPointer', {
+				role:role,
+				seconds:time
+			});
+		}
+
+		var tp = Ext.create('NextThought.model.anchorables.TimeRangeDescription', {
+				seriesId:'myseries',
+				start: createTimePointer('start', 12)
+			}),
+			tp2 =  Ext.create('NextThought.model.anchorables.TimeRangeDescription', {
+				seriesId:'myseries',
+				start: createTimePointer('start', 11),
+				end: createTimePointer('end', 45)
+			});
+
+		expect(tp.getStart()).toBeTruthy();
+		expect(tp.getEnd()).toBeFalsy();
+		expect(tp2.getStart()).toBeTruthy();
+		expect(tp2.getEnd()).toBeTruthy();
+		expect(tp2.getStart().role).toEqual('start');
+		expect(tp2.getStart().seconds).toEqual(11);
+		expect(tp2.getSeriesId()).toEqual('myseries');
+	});
+
+	it('Bad TimeRangeDescription Creation', function(){
+		function createTimePointer(role, time){
+			return Ext.create('NextThought.model.anchorables.TimeContentPointer', {
+				role:role,
+				seconds:time
+			});
+		}
+
+		var end = createTimePointer('end', 12), tp;
+		try{
+			tp = Ext.create('NextThought.model.anchorables.TimeRangeDescription', {
+				seriesId:'myseries',
+				end: end
+			});
+			expect(tp).toBeFalsy();
+		}catch(e){
+			expect(e.message).toEqual('Invalid contents');
+		}
+	});
+
+	it('Good TranscriptRangeDescription Creation', function(){
+		function createTranscriptPointer(role, domRangePointer, time, cueid){
+			return Ext.create('NextThought.model.anchorables.TranscriptContentPointer', {
+				role: role,
+				seconds:time,
+				pointer:domRangePointer,
+				cueid: cueid
+			});
+		}
+		var cfg = {
+				ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					role: 'ancestor'
+				}),
+				role: 'start',
+				edgeOffset: 5,
+				contexts: [
+					Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+					Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1})
+				]
+			},
+			x = Ext.create('NextThought.model.anchorables.TextDomContentPointer', cfg),
+			trd = Ext.create('NextThought.model.anchorables.TranscriptRangeDescription', {
+				start: createTranscriptPointer('start', x, 7, '1'),
+				end: createTranscriptPointer('end', x, 15, '2'),
+				seriesId:'myseries1'
+			});
+
+		expect(trd).toBeTruthy();
+		expect(trd.getStart().seconds).toEqual(7);
+		expect(trd.getStart().pointer).toEqual(x);
+		expect(trd.getSeriesId()).toEqual('myseries1');
+	});
+
+
 });
 

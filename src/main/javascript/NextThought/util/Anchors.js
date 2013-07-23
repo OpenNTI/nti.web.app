@@ -4,6 +4,9 @@ Ext.define('NextThought.util.Anchors', {
 		'NextThought.model.anchorables.ElementDomContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
 		'NextThought.model.anchorables.ContentRangeDescription',
+		'NextThought.model.anchorables.TranscriptRangeDescription',
+		'NextThought.model.anchorables.TranscriptContentPointer',
+		'NextThought.model.anchorables.TimeContentPointer',
 		'NextThought.util.Ranges'
 	],
 
@@ -565,6 +568,49 @@ Ext.define('NextThought.util.Anchors', {
 			ancestor: ancestor
 		});
     },
+
+
+	createTranscriptRangeDescription: function(range, docElement, cueInfo){
+		if(!range){
+			console.log('Returning empty ContentRangeDescription for null range');
+			return {description: NextThought.model.anchorables.ContentRangeDescription.create({})};
+		}
+
+		Anchors.cleanRangeFromBadStartAndEndContainers(range);
+		range = Anchors.makeRangeAnchorable(range, docElement);
+		if(!range || range.collapsed){
+			console.error('Anchorable range for provided range could not be found', range);
+			Ext.Error.raise('Anchorable range for range could not be found');
+		}
+
+		var pureRange = Anchors.purifyRange(range, docElement),
+			startDomPointer = Anchors.createPointer(pureRange, 'start'),
+			endDomPointer = Anchors.createPointer(pureRange, 'end'), s, e;
+
+		return {description: NextThought.model.anchorables.TranscriptRangeDescription.create({
+			start: Anchors.createTranscriptPointer(startDomPointer, 'start', cueInfo.startCueId, cueInfo.startTime),
+			end: Anchors.createTranscriptPointer(endDomPointer, 'end', cueInfo.endCueId, cueInfo.endTime)
+		})};
+	},
+
+
+	createTranscriptPointer: function(rangePointer, role, cueId, time){
+		return NextThought.model.anchorables.TranscriptContentPointer.create({
+			pointer: rangePointer,
+			cueid: cueId,
+			seconds: time,
+			role: role
+		});
+	},
+
+
+
+	createTimePointer: function(role, time){
+		return NextThought.models.anchorables.TimeContentPointer.create({
+			seconds:time,
+			role:role
+		});
+	},
 
 
 	/* tested */
