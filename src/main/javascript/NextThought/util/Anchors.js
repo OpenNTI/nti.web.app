@@ -589,7 +589,8 @@ Ext.define('NextThought.util.Anchors', {
 
 		return {description: NextThought.model.anchorables.TranscriptRangeDescription.create({
 			start: Anchors.createTranscriptPointer(startDomPointer, 'start', cueInfo.startCueId, cueInfo.startTime),
-			end: Anchors.createTranscriptPointer(endDomPointer, 'end', cueInfo.endCueId, cueInfo.endTime)
+			end: Anchors.createTranscriptPointer(endDomPointer, 'end', cueInfo.endCueId, cueInfo.endTime),
+			seriesId: cueInfo.containerId
 		})};
 	},
 
