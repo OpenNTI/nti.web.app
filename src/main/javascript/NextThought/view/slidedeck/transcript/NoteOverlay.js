@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
-	alias:'widget.transcript-note-overlay',
+	alias:'widget.presentation-note-overlay',
 
 	requires:[
 		'NextThought.util.Line',
@@ -53,7 +53,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			}
 		}).addCls('in-gutter');
 
-		this.editor.el.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		me.editorEl = me.editor.el;
+
+		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
+		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		me.reader.relayEvents(me,['save-new-note', 'save-new-series-note']);
 	},
 
 
@@ -102,6 +107,53 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 //	},
 
 
+	editorSaved: function(e){
+		if(e) { e.stopEvent(); }
+
+		function callback(success, record){
+			me.editorEl.unmask();
+			if(success){
+				me.deactivateEditor();
+			}
+		}
+
+		function onError(error){
+			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
+			alert('There was an error saving your note.');
+			me.editorEl.unmask();
+		}
+
+		var me = this,
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
+			style = 'suppressed',
+			v = me.editor.getValue(),
+			note = v.body,
+			title = v.title,
+			sharing = [],
+			range = me.data.range,
+			container = me.data.containerId;
+
+		if(v.sharingInfo){
+			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
+		}
+
+		//Avoid saving empty notes or just returns.
+		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
+			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
+			return false;
+		}
+
+		me.editorEl.mask('Saving...');
+		try {
+			me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
+		}
+		catch (error) {
+			onError(error);
+		}
+		return false;
+	},
+
+
 	noteHere: function(){
 		console.log('To Be Implemented');
 	},
@@ -117,12 +169,16 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	activateEditor: function(cueInfo){
+	activateEditor: function(info){
 		if(this.editor){
-			this.data.cueInfo = Ext.apply(this.cueInfo || {}, cueInfo);
+			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
 			this.editor.activate();
 		}
+	},
+
+	deactivateEditor: function(){
+		this.editor.deactivate();
 	},
 
 

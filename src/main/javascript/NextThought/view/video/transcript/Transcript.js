@@ -316,12 +316,16 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		var d = range.cloneContents(),
 			cues = d.querySelectorAll('.cue'),
 			startCue = cues && cues[0],
-			endCue = cues &&  Ext.Array.slice(cues, -1).first(), startTime, endTime;
+			endCue = cues &&  Ext.Array.slice(cues, -1).first(),
+			startTime, endTime, sid, eid, cid;
 
 		startTime = startCue && startCue.getAttribute('cue-start');
 		endTime = endCue && endCue.getAttribute('cue-end');
+		sid = startCue && startCue.getAttribute('cue-id');
+		eid = endCue && endCue.getAttribute('cue-id');
+		cid = this.transcript.get('associatedVideoId');
 
-		return {startTime: startTime, endTime:endTime, range:range};
+		return { startTime:startTime, endTime:endTime, range:range, startCueId:sid, endCueId:eid, containerId: cid };
 	},
 
 

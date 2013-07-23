@@ -39,11 +39,26 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 				scope:this,
 				'click': 'openNoteEditor'
 			});
+
 		}
 	},
 
 	openNoteEditor: function(e){
-		var data = {startTime: this.slide.get('startTime'), endTime: this.slide.get('endTime'), range:{}};
+		var data = {startTime: this.slide.get('video-start'), endTime: this.slide.get('video-end')},
+			dom = this.slide.get('dom-clone'),
+			img = dom.querySelector('img'), range;
+
+		if(!img){
+//			onError();
+			console.error('Missing img for the slide.');
+			return false;
+		}
+
+		range = dom.ownerDocument.createRange();
+		range.selectNode(img);
+
+		data.range = range;
+		data.containerId = this.slide.get('ContainerId');
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
 	},
 

@@ -73,7 +73,8 @@ Ext.define('NextThought.controller.UserData', {
 					'listens-to-page-stores': 'listenToPageStores',
 					'open-chat-transcript': 'openChatTranscript',
 					'load-transcript': 'onLoadTranscript',
-					'save-new-note' : 'saveNewNote'
+					'save-new-note' : 'saveNewNote',
+					'save-new-series-note':'saveNewSeriesNote'
 				},
 
 				'reader-content':{
@@ -977,7 +978,7 @@ Ext.define('NextThought.controller.UserData', {
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = c;
+			container = c, selectedText;
 
 		if(!container){
 			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
@@ -997,21 +998,42 @@ Ext.define('NextThought.controller.UserData', {
 			shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
 		}*/
 
+		selectedText = range ? range.toString() : '';
+		this.saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
+	},
+
+
+	saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback){
 		//define our note object:
-		noteRecord = this.getNoteModel().create({
-			applicableRange: rangeDescription.description,
+		var noteRecord = this.getNoteModel().create({
+			applicableRange: applicableRange,
 			body: body,
 			title:title,
-			selectedText: range ? range.toString() : '',
+			selectedText: selectedText,
 			sharedWith: shareWith,
 			style: style,
-			ContainerId: container
+			ContainerId: ContainerId
 		});
 
 		console.log('Saving new record', noteRecord);
 		noteRecord.getProxy().on('exception', this.handleException, this, {single:true});
 		//now save this:
 		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
+	},
+
+
+	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback){
+		if(!range){
+			console.error('No range supplied. Handling time-series notes  with no range is not yet implemented.');
+		}
+
+		console.log(cueInfo);
+
+		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
+			rangeDescription = Anchors.createTranscriptRangeDescription(range, doc, cueInfo),
+			selectedText = range ? range.toString() : '';
+
+		this.saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
 

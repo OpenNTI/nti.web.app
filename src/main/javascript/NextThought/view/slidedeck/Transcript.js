@@ -81,7 +81,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	setupNoteOverlay: function(){
 		var me = this;
-		this.noteOverlay = Ext.widget('transcript-note-overlay', {reader: this, readerHeight: this.getHeight()});
+		this.noteOverlay = Ext.widget('presentation-note-overlay', {reader: this, readerHeight: this.getHeight()});
 		Ext.each(this.items.items, function(vt){
 			me.noteOverlay.registerReaderView(vt);
 		});
