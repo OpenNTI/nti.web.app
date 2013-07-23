@@ -10,13 +10,13 @@ Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
 
 	statics:{
 		createFromObject: function(o){
-			var cp = NextThought.model.anchorables.DomContentPointer;
+			var cp = NextThought.model.anchorables[o.pointer.Class];
 
 			return NextThought.model.anchorables.TranscriptContentPointer.create({
 				pointer: cp.createFromObject(o.pointer),
 				cueid: o.cueid,
 				role: o.role,
-				seconds: o.seconds
+				seconds: parseInt(o.seconds)
 			});
 		}
 	},

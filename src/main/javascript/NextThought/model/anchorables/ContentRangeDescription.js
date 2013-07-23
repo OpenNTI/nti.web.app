@@ -10,6 +10,13 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 	constructor: function(o) {
 		this.initConfig(o);
 		this.Class = 'ContentRangeDescription';
+		this.MimeType = this.mimeType;
+	},
+
+	onClassExtended: function(data, cls){
+		var mime = {mimeType: 'application/vnd.nextthought.contentrange.'+data.$className.split('.').pop().toLowerCase()};
+		Ext.applyIf(cls,mime);//Allow overriding
+		Ext.applyIf(data,mime);//Allow overriding
 	},
 
 	statics: {

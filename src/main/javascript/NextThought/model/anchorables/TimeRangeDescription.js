@@ -27,7 +27,7 @@ Ext.define('NextThought.model.anchorables.TimeRangeDescription',{
 			Ext.Error.raise('Invalid contents');
 		}
 
-		this.initConfig(o);
+		this.callParent(arguments);
 		this.Class = 'TimeRangeDescription';
 	},
 
