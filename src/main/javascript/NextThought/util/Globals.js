@@ -403,7 +403,7 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 	getURL: function(u,root) {
-		if (!u){u = '';}
+		if (!u){return '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
 			if(!Ext.isEmpty(root)){
 				u = root + u;

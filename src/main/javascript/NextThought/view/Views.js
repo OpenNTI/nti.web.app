@@ -59,7 +59,7 @@ Ext.define( 'NextThought.view.Views', {
 		a = (a && a[0]) || d;
 		b = (b && b[0]) || d;
 
-		currentURL = currentURL.replace(HOST,'') === newUrl.replace(HOST,'');
+		currentURL = currentURL.replace(HOST,'') === (newUrl||'').replace(HOST,'');
 
 		if(!currentURL || a !== b){
 			newUrl = (!Ext.isEmpty(newUrl) && 'url('+newUrl+')') || null;

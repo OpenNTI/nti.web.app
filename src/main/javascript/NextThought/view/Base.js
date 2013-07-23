@@ -49,8 +49,6 @@ Ext.define( 'NextThought.view.Base', {
 
 
 	updateBackground: function(){
-		if(!Ext.isEmpty(this.backgroundUrl)){
-			this.fireEvent('new-background',this.backgroundUrl);
-		}
+		this.fireEvent('new-background',this.backgroundUrl);
 	}
 });
