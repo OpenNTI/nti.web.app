@@ -24,3 +24,25 @@ Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 		this.callParent(arguments);
 	}
 });
+
+
+/*
+	# Tiles Needed:
+
+	 - Up Next
+	 - Top Forum Topics (Top Discussions)
+	 - Latest Topic (from teacher's forum)
+	 - Sprinkles:
+		- Most Commented Discussions(forums? or notes?... if the former, isn't that the same as the second one?)
+		- Most Liked
+		- Comments on ??my?? blogs?
+	 - Most Recent Notes
+
+	# From Design:
+	 - Videos
+	 - Labs (Question Sets)
+	 - 9 Most Active Users
+	 - Poll
+	 - Question?
+	 - Supplemental Material
+ */
