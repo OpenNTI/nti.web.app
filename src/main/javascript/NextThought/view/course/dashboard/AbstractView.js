@@ -20,6 +20,13 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 		items:[]
 	},
 
+	constructor: function(config){
+		delete config.items;//don't replace our inner item
+		this.callParent(arguments);
+		this.tileContainer = this.items.first();
+	},
+
+
 /* Debug code */
 /*				//Used to test sorting
 				shuffle: function shuffle(array) {
@@ -43,8 +50,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 						d.setSeconds(d.getSeconds()-x);
 
 						//adapt to the packer
-						i.w = i.cols;
-						i.h = i.rows;
+						i.cols = i.cols;
+						i.rows = i.rows;
 					});
 					return array;
 				},
@@ -100,15 +107,15 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 		function fillMatrix(i,j,a){
 			var p = m.position, x,y,
-				xx = p[0] + i.w,
-				yy = p[1] + i.h;
+				xx = p[0] + i.cols,
+				yy = p[1] + i.rows;
 			console.groupCollapsed('Tile '+j);
 			//current block will extend past last column, it must wrap
 			if(xx>columns){
-				p[1] += a[j-1].h;
+				p[1] += a[j-1].rows;
 				p[0] = m[p[1]].lastIndexOf(true)+1;//if the row already has stuff bump
-				xx = p[0] + i.w;
-				yy = p[1] + i.h;
+				xx = p[0] + i.cols;
+				yy = p[1] + i.rows;
 			}
 
 			i.pos = {x:p[0],y:p[1]};
@@ -116,19 +123,19 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 			for(y=p[1];y<yy;y++){
 				for(x=p[0];x<xx;x++){
 					if(m[y][x]){
-						console.error('p:', p, 'xy:',[x,y], 'sz:', [i.w, i.h], 'overlap!');
+						console.error('p:', p, 'xy:',[x,y], 'sz:', [i.cols, i.rows], 'overlap!');
 					} else {
-						console.log('p:', p, 'xy:',[x,y], 'sz:', [i.w, i.h]);
+						console.log('p:', p, 'xy:',[x,y], 'sz:', [i.cols, i.rows]);
 						m[y][x] = true;
 					}
 				}
 			}
 
 			console.groupEnd();
-			p[0] += i.w;
+			p[0] += i.cols;
 			//We've filled the row...begin a new one
 			if(p[0]>=columns){
-				p[1] += i.h;
+				p[1] += i.rows;
 				p[0] = m[p[1]].lastIndexOf(true)+1;//if the row already has stuff bump
 			}
 		}
@@ -176,6 +183,18 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 			rows = this.countRows(items,cols),
 			p = new NextThought.util.MasonryPacker(cols,rows);
 
+		function adaptColsRowsToWidthHeight(items){
+			Ext.each(items,function(i){
+				Ext.apply(i,{w:i.cols,h:i.rows});
+			});
+		}
+
+		function cleanAdaptionOfColsRowsToWidthHeight(items){
+			Ext.each(items,function(i){
+				delete i.w; delete i.h;
+			});
+		}
+
 		try{
 			//Sort the items by modified & weight
 			Ext.Array.sort(items,function(a,b){
@@ -189,7 +208,9 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 				return;
 			}
 
+			adaptColsRowsToWidthHeight(items);
 			p.fit(items);
+			cleanAdaptionOfColsRowsToWidthHeight(items);
 
 			Ext.Array.sort(items,function(a,b){
 
@@ -229,7 +250,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 
 	addTiles: function(items){
-		this.removeAll(true);
+		this.tileContainer.removeAll(true);
 
 		if(Ext.isEmpty(items)){
 			return;
@@ -242,6 +263,6 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 		this.sortTiles(items);
 
-		this.container.add(items);
+		this.tileContainer.add(items);
 	}
 });

@@ -7,21 +7,24 @@ Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 		 * Example implementation of getTileFor.  Do not use "inheritableStatics" for this function. It needs to be
 		 * CLASS specific.
 		 */
-		getTileFor: function(date, courseNode, locationInfo){}
+		getTileFor: function(date, courseNode, locationInfo, currentCourseNode, nextCourseNode){}
 	},
 
+	config: {
+		cols:1,
+		rows:1,
+		weight: 1
+	},
 
-	cols:1,
-	rows:1,
-	weight: 1,
+	ui: 'course-dashboard',
 
 	initComponent: function(){
+		this.callParent(arguments);
 		this.addCls([
 			'grid-item',
-			'rows-'+this.rows,
-			'cols-'+this.cols
+			'row-'+this.getRows(),
+			'col-'+this.getCols()
 		]);
-		this.callParent(arguments);
 	}
 });
 
