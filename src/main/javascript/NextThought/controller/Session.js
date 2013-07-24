@@ -233,7 +233,7 @@ Ext.define('NextThought.controller.Session', {
 					Ext.String.urlAppend(
 						$AppConfig.server.login,
 						"return="+encodeURIComponent(location.toString())),
-					"host=" + encodeURIComponent(getURL()));
+					"host=" + encodeURIComponent($AppConfig.server.host));
 
 			if(timedout){
 				alert('a request timed out');
