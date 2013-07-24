@@ -9,27 +9,9 @@ Ext.define('NextThought.view.course.dashboard.View',{
 	GRID_WIDTH: 5,
 
 	constructor: function(config){
-
-		var items = config.items ||
-				[
-					{ cls:'grid-item col-4 row-2', cols:4, rows:2, weight: 10 },
-					{ cls:'grid-item col-1 row-2', cols:1, rows:2, weight: 10 },
-					{ cls:'grid-item col-2 row-1', cols:2, rows:1 },
-					{ cls:'grid-item col-2 row-1', cols:2, rows:1 },
-					{ cls:'grid-item col-1 row-1', cols:1, rows:1 },
-					{ cls:'grid-item col-1 row-1', cols:1, rows:1 },
-					{ cls:'grid-item col-2 row-2', cols:2, rows:2 },
-					{ cls:'grid-item col-1 row-1', cols:1, rows:1 },
-					{ cls:'grid-item col-1 row-1', cols:1, rows:1 },
-					{ cls:'grid-item col-1 row-1', cols:1, rows:1 }
-				];
-
 		delete config.items;//don't replace our inner item
 		this.callParent(arguments);
 		this.container = this.items.first();
-
-
-		this.addTiles(items);
 	},
 
 
@@ -47,5 +29,33 @@ Ext.define('NextThought.view.course.dashboard.View',{
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 		}
+
+		this.addTiles(this.queryTiles(date,course,l));
+	},
+
+
+	/**
+	 * Return a set of tile configs for the given arguments.
+	 *
+	 * This will ask each implementation if it has something to show, if it does it will return a config
+	 *
+	 * @param {Date} date
+	 * @param {Node} course
+	 * @param {Object} location
+	 * @returns {Array}
+	 */
+	queryTiles: function(date, course, location){
+		var NS = NextThought.view.course.dashboard.tiles,
+			tiles = [];
+
+		Ext.Object.each(NS,function(clsName,cls){
+			var fn = cls.getTileFor,
+				o = fn && fn.call(cls, date, course, location);
+			if( o ){
+				tiles.push(o);
+			}
+		});
+
+		return tiles;
 	}
 });

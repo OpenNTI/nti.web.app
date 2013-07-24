@@ -21,7 +21,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	},
 
 /* Debug code */
-				//Used to test sorting
+/*				//Used to test sorting
 				shuffle: function shuffle(array) {
 					var m = array.length, t, i;
 
@@ -48,6 +48,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 					});
 					return array;
 				},
+*/
 /* Debug code End */
 
 
@@ -228,8 +229,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 
 	addTiles: function(items){
+		this.removeAll(true);
+
+		if(Ext.isEmpty(items)){
+			return;
+		}
+
 		//debug
-		this.shuffle(items);
+		//this.shuffle(items);
 
 		this.adjustWeights(items);
 
