@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.overview.Discussion',{
+Ext.define('NextThought.view.course.overview.parts.Discussion',{
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-discussion',
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.overview.ContentLink',{
+Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 	extend: 'NextThought.view.cards.Card',
 	alias: [
 		'widget.course-overview-content',

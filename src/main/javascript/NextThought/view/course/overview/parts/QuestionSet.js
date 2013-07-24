@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.overview.QuestionSet',{
+Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 	extend: 'Ext.Panel',
 	alias: [
 		'widget.course-overview-naquestionset'

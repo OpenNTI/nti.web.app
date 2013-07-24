@@ -1,6 +1,6 @@
 /*jslint */
 /*globals $AppConfig, Library, getURL, NextThought  */
-Ext.define('NextThought.view.course.overview.Videos',{
+Ext.define('NextThought.view.course.overview.parts.Videos',{
 	extend: 'Ext.view.View',
 	alias: ['widget.course-overview-video-section','widget.course-overview-ntivideo'],
 

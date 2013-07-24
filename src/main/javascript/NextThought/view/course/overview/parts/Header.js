@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.overview.Header',{
+Ext.define('NextThought.view.course.overview.parts.Header',{
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-header',
 	ui:'course',
