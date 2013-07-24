@@ -38,9 +38,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	tpl: new Ext.XTemplate( Ext.DomHelper.markup([
 		{tag:'tpl', for:'.', cn:[{
 			tag:'tpl', if:'!type', cn:{
-				tag:'span', cls:'cue row-item', 'cue-start':'{startTime}', 'cue-end':'{endTime}', cn:[
+				tag:'span', cls:'cue row-item', 'cue-start':'{startTime}', 'cue-end':'{endTime}', 'cue-id':'{identifier}', cn:[
 					{tag:'span', html:'{text}'},
-					{tag: 'span', cls:'add-note-here', cn:{cls:'note-here-control-box hidden', tag:'span'}}
+
+					{tag: 'span', cls:'control-container', cn:{
+						cls:'note-here-control-box add-note-here hidden', tag:'span'
+					}}
 			]}
 		},{
 			tag:'tpl', if:'type', cn:
@@ -50,8 +53,13 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		}]}
 	])),
 
+	controlTpl: new Ext.XTemplate( Ext.DomHelper.markup([
+			{tag:'span', cls:'count', 'data-count':'{count}', html:'{count}'}
+	])),
+
 
 	initComponent: function(){
+		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
 		this.loadTranscript();
 
@@ -81,6 +89,95 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 //		console.log('transcript  expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
 //		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
 		return s;
+	},
+
+
+	buildUserDataStore: function(){
+		var containerId = this.transcript.get('associatedVideoId'),
+			filter = this.getUserDataTimeFilter(),
+			me = this;
+
+		function finish(store){
+			// Apply filter to know which user data belong belong within the timing of this transcript.
+			if(!store){ return; }
+			store.filter([{filterFn:filter}]);
+			console.log('userdata store: ', store);
+			// Now we will start to bucket notes.
+			console.log('should start to show and bucket items');
+			me.bucketUserData(store);
+		}
+
+		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+			store = NextThought.store.PageItem.make(url, containerId,true);
+
+		/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
+		store.doesNotShareEventsImplicitly = true;
+		Ext.apply(store.proxy.extraParams,{
+			accept: NextThought.model.Note.mimeType,
+			filter: 'TopLevel'
+		});
+
+		me.mon(store, 'load', finish, me);
+		store.load();
+	},
+
+
+	bucketUserData: function(store){
+		var records = store.getRange(),
+			tpl = this.controlTpl, destinationEl,
+			me = this;
+
+		Ext.each(records, function(rec){
+			var count;
+			destinationEl = me.getLocationForNoteRecord(rec);
+			if(!Ext.isEmpty(destinationEl)){
+				console.log(destinationEl);
+				count = destinationEl.down('.count') ? destinationEl.down('.count').getAttribute('data-count') : '0';
+				count = parseInt(count);
+				count++;
+				tpl.insertBefore(destinationEl.down('.add-note-here'), {count: count}, true);
+			}
+		});
+	},
+
+
+	getLocationForNoteRecord: function(rec){
+		function fn(item){
+			return (item.get('startTime') <= anchorStart) && (anchorStart <= item.get('endTime'));
+		}
+
+		var range = rec.get('applicableRange'),
+			anchorStart = range.start.seconds,
+			cueid = range.start.cueid,
+			el, cue, res;
+
+		if(cueid){
+			el = this.el.down('.cue[identifier='+cueid+']');
+			if(el){return el;}
+		}
+
+		res = this.store.queryBy(fn, this);
+		if(res.getCount() > 0){
+			cue = res.getAt(0);
+			el = this.el.down('.cue[cue-start='+cue.get('startTime')+']');
+		}
+		return el;
+	},
+
+
+	getUserDataTimeFilter: function(){
+		function fn(item){
+			var range = item.get('applicableRange'),
+				startAnchorTime = range.start && range.start.seconds,
+				endAnchorTime = range.end && range.end.seconds;
+
+			return (startAnchorTime >= start) && (endAnchorTime <= end);
+		}
+
+		var start = this.transcript.get('desired-time-start'),
+			end = this.transcript.get('desired-time-end');
+
+		return fn;
 	},
 
 
@@ -228,18 +325,22 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			scope: me,
 			'mouseup':'showContextMenu'
 		});
+
+		me.buildUserDataStore();
 	},
 
 
 	openEditor: function(e){
-		console.log('show editor at: ', e.getTarget('.cue'));
+//		console.log('show editor at: ', e.getTarget('.cue'));
 		var cueEl = e.getTarget('.cue', null, true),
 			cueStart = cueEl && cueEl.getAttribute('cue-start'),
 			cueEnd = cueEl && cueEl.getAttribute('cue-end'),
-			cueBox = cueEl.dom.getBoundingClientRect(),
-			data = {startTime: cueStart, endTime: cueEnd, range:null};
+			range = document.createRange(),
+			sid = cueEl && cueEl.getAttribute('cue-id'),
+			cid = this.transcript.get('associatedVideoId'), data;
 
-
+		range.selectNodeContents(cueEl.dom);
+		data = { startTime:cueStart, endTime:cueEnd, range:range, startCueId:sid, endCueId:sid, containerId: cid };
 		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'));
 	},
 
@@ -347,10 +448,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			this.mouseLeaveTimeout = setTimeout(function () {
 				//Deselect previous cue
 				if(me.activeCueEl){
-					me.activeCueEl.down('.note-here-control-box').addCls('hidden');
+					me.activeCueEl.down('.add-note-here').addCls('hidden');
 				}
 
-				box.down('.note-here-control-box').removeCls('hidden');
+				box.removeCls('hidden');
 				me.activeCueEl = target;
 			}, 50);
 		}

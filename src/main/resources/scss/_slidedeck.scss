@@ -723,7 +723,7 @@ $experimental-support-for-svg: true;
 				}
 			}
 
-			.add-note-here{
+			.control-container{
 				position: absolute;
 				right: 0 !important;
 				width: 60px;
@@ -731,10 +731,27 @@ $experimental-support-for-svg: true;
 
 				@include note-control-box;
 				.note-here-control-box{
-					left: 16px;
+					left: 20px;
 
 					&.hidden{
 						display: none;
+					}
+				}
+
+				.count{
+					position: absolute;
+					left: 0;
+					font: normal bold 9px/19px $font;
+					color: $primary-blue;
+					padding: 0 10px 0 7px;
+					margin: 0;
+					width: 20px;
+					border-radius: 5px;
+
+					&:hover,
+					&.active {
+						background: $primary-blue;
+						color: #fff;
 					}
 				}
 			}
