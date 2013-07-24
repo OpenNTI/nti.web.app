@@ -96,26 +96,22 @@ Ext.define('NextThought.view.course.outline.View',{
 	},
 
 
-	onNavigation: function(pageInfo){
-		var s = this.getCourseStore(pageInfo),
-			r;
+	maybeChangeStoreOrSelection: function(pageInfo, store){
+		var r;
 
-		if(this.store !== s){
+		if(this.store !== store){
 			this.clear();
-			if( s ){
-				this.bindStore(s);
+			if( store ){
+				this.bindStore(store);
 			}
 		}
 
-		r = s.findRecord('NTIID', pageInfo.getId(), false, true, true);
+		r = store.findRecord('NTIID', pageInfo.getId(), false, true, true);
 		if(!r){
 			console.debug('No record selected, defaulting to first lesson',pageInfo);
-			r = s.findRecord('type','lesson',0,false,false,true);
+			r = store.findRecord('type','lesson',0,false,false,true);
 		}
 
 		this.getSelectionModel().select(r);
-	},
-
-
-	getCourseStore: DelegateFactory.getDelegated()
+	}
 });

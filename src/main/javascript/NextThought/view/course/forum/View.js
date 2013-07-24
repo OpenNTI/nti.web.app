@@ -42,7 +42,7 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	onNavigateComplete: function(pageInfo){
+	onCourseChanged: function(pageInfo){
 		var l = ContentUtils.getLocation(pageInfo),
 			toc, course;
 

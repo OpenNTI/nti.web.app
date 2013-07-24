@@ -8,8 +8,8 @@ Ext.define('NextThought.view.course.View',{
 	],
 
 
-	navigation: {xtype: 'course-outline', delegate:['course']},
-	body: {xtype: 'course-overview', delegate:['course','course course-outline']},
+	navigation: {xtype: 'course-outline'},
+	body: {xtype: 'course-overview', delegate:['course course-outline']},
 
 
 	onNavigateComplete: function(pageInfo){
@@ -19,25 +19,22 @@ Ext.define('NextThought.view.course.View',{
 			return;
 		}
 
-		this.navigation.onNavigation(pageInfo);
-	},
-
-
-	getCourseStore: function(pageInfo){
-		var s = this.store,
-			l = pageInfo && ContentUtils.getLocation(pageInfo),
+		var l = pageInfo && ContentUtils.getLocation(pageInfo),
 			t = l && l.title,
 			course = t && t.getId();
 
-		if(course && this.currentCourse !== course) {
+		if( this.currentCourse !== course ) {
+			this.fireEvent('courseChanged',pageInfo,course);
 			this.currentCourse = course;
-			this.store = s = new NextThought.store.course.Navigation({data: l.toc});
-
-		} else if(!s){
-			console.warn('No store');
+			this.store = course ? new NextThought.store.course.Navigation({data: l.toc}) : undefined;
 		}
 
-		return s;
+		this.navigation.maybeChangeStoreOrSelection(pageInfo,this.store);
+	},
+
+
+	makeListenForCourseChange: function(monitors){
+		Ext.each(monitors,function(m){m.mon(this,'courseChanged','onCourseChanged');},this);
 	}
 
 });

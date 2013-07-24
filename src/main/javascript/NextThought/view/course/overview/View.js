@@ -42,7 +42,6 @@ Ext.define('NextThought.view.course.overview.View',{
 	},
 
 
-	getCourseStore: DelegateFactory.getDelegated(),
 	getSelectionModel: DelegateFactory.getDelegated(),
 
 

@@ -33,9 +33,9 @@ Ext.define('NextThought.view.course.dashboard.View',{
 	},
 
 
-	onNavigateComplete: function(pageInfo){
+	onCourseChanged: function(pageInfo){
 		if(!pageInfo.isPartOfCourse()){
-			this.removeAll(true);
+			this.container.removeAll(true);
 			return;
 		}
 

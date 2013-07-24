@@ -62,29 +62,23 @@ Ext.define( 'NextThought.view.library.View', {
 
 		this.removeCls('make-white');
 
-		this.on({
-			'switch-to-reader':'switchViewToReader',
-			'beforeactivate':'onBeforeActivation',
-			'deactivate':'onDeactivated'
-		});
+		this.courseNav.makeListenForCourseChange([
+			this.courseDashboard,
+			this.courseForum
+		]);
 
-
-		this.courseDashboard.mon(this.reader,{
-			'navigateComplete': 'onNavigateComplete'
-		});
-
-		this.courseForum.mon(this.reader,{
-			'navigateComplete': 'onNavigateComplete'
-		});
-
-		this.courseNav.mon(this.reader,{
-			'navigateComplete': 'onNavigateComplete'
-		});
+		this.courseNav.mon(this.reader,{'navigateComplete': 'onNavigateComplete'});
 
 		this.mon(this.reader,{
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
 			'navigateAbort': 'onNavigationAborted'
+		});
+
+		this.on({
+			'switch-to-reader':'switchViewToReader',
+			'beforeactivate':'onBeforeActivation',
+			'deactivate':'onDeactivated'
 		});
 	},
 
