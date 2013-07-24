@@ -179,6 +179,14 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getContainerUrl: function(ntiid, type){
+		var pid = 'Pages('+ntiid+')',
+			u = $AppConfig.userObject.get('href');
+
+		return getURL(Ext.String.format("{0}/{1}/{2}", u, encodeURIComponent(pid || ''), type || ''));
+	},
+
+
 	urlWithQueryParams: function(base, obj){
 		if(!Ext.isObject(obj)){
 			return base;
