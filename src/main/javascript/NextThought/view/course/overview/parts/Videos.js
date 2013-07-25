@@ -14,6 +14,11 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	cls: 'overview-videos',
 	preserveScrollOnRefresh: true,
 
+	config: {
+		playerWidth: 512,
+		leaveCurtain: false
+	},
+
 	selModel: {
 		allowDeselect: false,
 		deselectOnContainerClick: false
@@ -22,7 +27,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}] },
 		{ cls: 'body', cn:[
-			{ cls: 'screen' },
+			{ cls: 'video-container', cn:[{ cls: 'screen' }]},
 			{ cls: 'curtain', cn:[
 				{ cls:'ctr', cn:[ { cls: 'play', cn:[ {cls:'blur-clip',cn:{cls:'blur'}}, { cls: 'label' } ] } ] }
 			]},
@@ -44,12 +49,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 	overItemCls:'over',
 	itemSelector:'.video-row',
-	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
-		{ cls: 'video-row', cn: [
+	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
+		cls: 'video-row',
+		cn: [
 			{ cls:'label', html: '{label}', 'data-qtip':'{label}' }//,
 			//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
-		]}
-	]}),
+		]
+	}]}),
 
 
 	listeners: {
@@ -65,6 +71,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			store = config.store = new Ext.data.Store({
 			fields: [
 				{name:'id', type:'string', mapping: 'ntiid'},
+				{name:'date', type:'date' },
 				{name:'label', type:'string'},
 				{name:'poster', type:'string'},
 				{name:'comments', type:'auto'}
@@ -106,13 +113,15 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		Ext.each(items,function(item) {
 			var n = item.node,
-				i = item.locationInfo;
+				i = item.locationInfo,
+				r = item.courseRecord;
 
 			out.push({
 				poster: getURL(n.getAttribute('poster'),i.root),
 				ntiid: n.getAttribute('ntiid'),
 				label: n.getAttribute('label'),
-				comments: 'Loading... '
+				comments: 'Loading... ',
+				date: r && r.get('date')
 			});
 		});
 
@@ -160,9 +169,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			xtype: 'content-video',
 			playlist: this.playlist,
 			renderTo: this.screenEl,
-			playerWidth: 512,
-			width: 512,
-			height: 288
+			playerWidth: this.getPlayerWidth()
 		});
 
 		this.on({
@@ -198,23 +205,29 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 	showCurtain: function(){
-		if(this.curtainEl){
-			this.curtainEl.setVisibilityMode(Ext.Element.DISPLAY).show();
+		var c = this.getLeaveCurtain(),
+			a = c? 'hide':'show',
+			el = this[(c ? 'screen':'curtain')+'El'];
+
+		if(el){
+			el.setVisibilityMode(Ext.Element.DISPLAY)[a]();
 		}
 	},
 
 
 	hideCurtain: function(){
-		if(this.curtainEl){
-			this.curtainEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		var c = this.getLeaveCurtain(),
+			a = c? 'show':'hide',
+			el = this[(c ? 'screen':'curtain')+'El'];
+
+		if(el){
+			el.setVisibilityMode(Ext.Element.DISPLAY)[a]();
 		}
 	},
 
 
 	onSelectChange: function(s,rec){
-		var p = rec.get('poster') || null,
-			store = this.getStore(),
-			index = store.indexOf(rec);
+		var p = rec.get('poster') || null;
 
 		if(p){
 			p = 'url('+p+')';
@@ -222,8 +235,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		if(this.player){
 			this.player.stopPlayback();
-			this.showCurtain();
 		}
+		this.showCurtain();
 
 		if( this.curtainEl ){
 			this.curtainEl.setStyle({backgroundImage:p});
