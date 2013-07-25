@@ -162,7 +162,7 @@ Ext.define('NextThought.controller.UserData', {
 			finish();
 		}
 		function pass(pageInfo){
-			console.log('loaded in UserData Controller');
+			//console.log('loaded in UserData Controller');
 			NextThought.store.PageItem.prototype.proxy.url
 					= pageInfo.getLink(Globals.RECURSIVE_STREAM).replace(
 						Globals.RECURSIVE_STREAM,
