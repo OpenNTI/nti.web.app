@@ -87,7 +87,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 	applyVideoData: function(videoIndex){
-		console.debug(videoIndex);
+		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			me = this;
 		this.getStore().each(function(r){
