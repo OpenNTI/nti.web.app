@@ -3,7 +3,7 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
     alias: 'reader.touchHandler',
 
     requires: [
-        'NextThought.view.content.reader.TouchSender',
+        'NextThought.modules.TouchSender',
         'NextThought.view.content.reader.IFrame',
         'NextThought.view.content.reader.Scroll',
         'NextThought.view.content.reader.TouchHighlight',

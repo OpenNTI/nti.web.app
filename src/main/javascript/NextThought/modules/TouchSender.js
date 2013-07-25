@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.content.reader.TouchSender', {
+Ext.define('NextThought.modules.TouchSender', {
 
     alias: 'reader.touchSender',
 
