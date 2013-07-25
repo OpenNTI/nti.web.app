@@ -1,13 +1,6 @@
-Ext.define('NextThought.view.content.reader.Touch', {
+Ext.define('NextThought.view.content.reader.TouchSender', {
 
-    alias: 'reader.touch',
-
-    requires: [
-        'NextThought.view.content.reader.IFrame',
-        'NextThought.view.content.reader.Scroll',
-        'NextThought.view.content.reader.TouchHighlight',
-        'NextThought.view.content.reader.Annotations'
-    ],
+    alias: 'reader.touchSender',
 
     statics: {
         SCROLL_TIME_STEP: 1,
@@ -46,10 +39,9 @@ Ext.define('NextThought.view.content.reader.Touch', {
             return;
 
         Ext.apply(this, config);
-        var reader = this.reader;
+        this.registeredHandler = null;
 
-        reader.on('afterrender', function() {
-            reader.getIframe().setClickthrough(true);
+        this.container.on('afterrender', function() {
             this.setupTouchHandlers();
         }, this);
     },
@@ -59,14 +51,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
      * click and scroll
      */
     setupTouchHandlers: function() {
-        var s = this.statics(),
-            reader = this.reader,
-            scroll = reader.getScroll(),
-            highlight = reader.getTouchHighlight(),
-            annotations = reader.getAnnotations(),
-            dom = reader.getEl().dom,
+        var me = this,
+            s = me.statics(),
+            container = me.container,
+            dom = container.getEl().dom,
             state = s.STATE.NONE,
-            iFrame = reader.getIframe(),
 
             pickedElement = null,
             initialTime,
@@ -79,33 +68,22 @@ Ext.define('NextThought.view.content.reader.Touch', {
             return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
         }
 
-        function elementIsSelectable(ele) {
-            if (!ele) return false;
-            var tag = ele.tagName,
-                tags = ['P', 'A', 'SPAN'];
-            return Ext.Array.contains(tags, tag);
-        }
-        function elementIsDraggable(ele) {
-            if (!ele) return false;
-            var obj = Ext.get(ele);
-            return obj.hasCls('draggable-area') || obj.up('.draggable-area');
-        }
-
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
+            var handler = me.registeredHandler;
+            handler.touchStart();
 
             // Only start a new touch if all touches are off
             if (state !== s.STATE.NONE)
                 return;
             state = s.STATE.DOWN;
-            pickedElement = iFrame.elementAt(e.pageX, e.pageY);
+            pickedElement = handler.elementAt(e.pageX, e.pageY);
 
             initialTime = Date.now();
             initialY = e.touches[0].pageY;
             initialX = e.touches[0].pageX;
             lastY = initialY;
             vel = 0;
-            highlight.hide();
 
             console.log('touchStart');
 
@@ -115,11 +93,11 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
                 console.log('long press');
                 vel=0;
-                if (elementIsDraggable(pickedElement)) {
+                if (handler.elementIsDraggable(pickedElement)) {
                     state = s.STATE.DRAGGING;
                     console.log('start dragging');
                 }
-                else if (elementIsSelectable(pickedElement)) {
+                else if (handler.elementIsSelectable(pickedElement)) {
                     state = s.STATE.SELECTING;
                     console.log('start selecting');
                     // TODO: Some animation to show user selecting has started?
@@ -130,7 +108,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
         dom.addEventListener('touchmove', function(e) {
             e.preventDefault();
 
-            var touch = e.touches[0];
+            var touch = e.touches[0],
+                handler = me.registeredHandler;
 
             console.log('touchMove');
 
@@ -154,14 +133,13 @@ Ext.define('NextThought.view.content.reader.Touch', {
             function scrollMove() {
                 vel = lastY - touch.pageY;
                 updatePos();
-                scroll.by(vel);
+                handler.scroll(pickedElement, vel);
             }
 
             function selectMove() {
                 updatePos();
-                var range = iFrame.makeRangeFrom(initialX, initialY,
-                                                 touch.pageX, touch.pageY);
-                highlight.show(range);
+                handler.highlight(initialX, initialY,
+                                  touch.pageX, touch.pageY);
             }
 
             function updatePos() {
@@ -180,7 +158,8 @@ Ext.define('NextThought.view.content.reader.Touch', {
 
             var startLt0 = vel<0,
                 lastUpdateTime = Date.now(),
-                tempState = state;
+                tempState = state,
+                handler = me.registeredHandler;
             state = s.STATE.NONE;
 
             console.log('touchEnd');
@@ -201,11 +180,10 @@ Ext.define('NextThought.view.content.reader.Touch', {
             else if (tempState === s.STATE.SELECTING) {
                 // TODO: Update Selection
                 console.log('stop selection');
-                var range = iFrame.makeRangeFrom(initialX, initialY,
+                var range = handler.makeRangeFrom(initialX, initialY,
                         lastX, lastY),
                     xy = [lastX, lastY];
-
-                annotations.addAnnotation(range, xy);
+                handler.addAnnotation(range, xy);
             }
             else if (tempState === s.STATE.DRAGGING) {
                 // TODO: Update Dragged element
@@ -232,12 +210,16 @@ Ext.define('NextThought.view.content.reader.Touch', {
                     // based on the time passed for smoother movement
                     vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
 
-                    scroll.by(vel);
+                    handler.scroll(pickedElement, vel);
                     setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
                 }
             }
         }); // eo touchEnd
 
-    } // eo setupTouchHandlers
+    }, // eo setupTouchHandlers
+
+    registerHandler: function(touchHandler) {
+        this.registeredHandler = touchHandler;
+    }
 
 });

@@ -10,7 +10,8 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.view.content.reader.IFrame',
 		'NextThought.view.content.reader.Location',
 		'NextThought.view.content.reader.Scroll',
-        'NextThought.view.content.reader.Touch',
+        'NextThought.view.content.reader.TouchSender',
+        'NextThought.view.content.reader.TouchHandler',
         'NextThought.view.content.reader.TouchHighlight',
 		'NextThought.view.content.reader.ResourceManagement',
 		'NextThought.view.content.reader.ComponentOverlay',
@@ -43,7 +44,8 @@ Ext.define('NextThought.view.content.Reader', {
 		this.buildModule('assessment');
 		this.buildModule('resourceManager');
 		this.buildModule('noteOverlay');
-        this.buildModule('touch');
+        this.buildModule('touchSender',{container:this});
+        this.buildModule('touchHandler');
         this.buildModule('touchHighlight');
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
