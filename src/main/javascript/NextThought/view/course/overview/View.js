@@ -77,7 +77,7 @@ Ext.define('NextThought.view.course.overview.View',{
 
 		Ext.each(r.getChildren(),function(i){
 			var c, t;
-			i = me.getComponentForNode(i,locInfo);
+			i = me.getComponentForNode(i,locInfo, r);
 			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 			if( t ){
 				if(i.xtype !== 'course-overview-topic'){
@@ -106,7 +106,7 @@ Ext.define('NextThought.view.course.overview.View',{
 	},
 
 
-	getComponentForNode: function(node,info){
+	getComponentForNode: function(node, info, rec){
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null;
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.course.overview.View',{
 		type = type && ('course-overview-'+type.toLowerCase());
 
 		if(type && Ext.ClassManager.getByAlias('widget.'+type)){
-			return {xtype: type, node:node, locationInfo: info, sectionOverride: section};
+			return {xtype: type, node:node, locationInfo: info, courseRecord:rec, sectionOverride: section};
 		}
 
 		console.warn('Unknown overview type:', type, node);
