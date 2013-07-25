@@ -47,6 +47,7 @@ Ext.define( 'NextThought.view.Views', {
 		'new-background': 'updateBackground'
 	},
 
+
 	updateBackground: function(newUrl){
 		if(!this.el){return;}
 
@@ -142,18 +143,45 @@ Ext.define( 'NextThought.view.Views', {
 
 
 	clearTabs: function(){
+		Ext.destroy(this.tabMonitors||[]);
+		delete this.tabMonitors;
 		this.tabs.update('');
 		this.tabs.hide();
 	},
 
 
 	updateTabs: function(tabSpecs){
-		this.clearTabs();
+		var me = this, idRe = /^([^?]*)\??$/;
 
+		me.clearTabs();
 		if(!tabSpecs){ return; }
 
-		this.tabTpl.overwrite(this.tabs,tabSpecs);
-		this.tabs.show();
+		me.tabTpl.overwrite(me.tabs,tabSpecs);
+		me.tabs.show();
+
+		me.tabMonitors = [];
+		Ext.each(tabSpecs,function(s){
+			var id = (idRe.exec(s.viewId)||[])[1],
+				cmp = id && Ext.getCmp(id);
+			if( cmp ){
+				me.tabMonitors.push(me.mon(cmp,{
+					activate:'onTabActivated',
+					destroyable: true
+				}));
+			} else if(id){
+				console.warn('No component found for:',id);
+			}
+		});
+	},
+
+
+	onTabActivated: function(tabView){
+		var id = tabView.id,
+			t = this.tabs,
+			s = '.main-view-tab[data-view-id="{0}"]',
+			tab = t.down(Ext.String.format(s,id)) || t.down(Ext.String.format(s,id+'?'));
+		this.tabs.select('.main-view-tab').removeCls('selected');
+		tab.addCls('selected');
 	},
 
 
@@ -176,11 +204,7 @@ Ext.define( 'NextThought.view.Views', {
 		tab.viewId = vId;
 		tab.label = t.getHTML();
 
-
-		if(cmp.onTabClicked(tab) && !t.hasCls('.selected')){
-			this.tabs.select('.main-view-tab').removeCls('selected');
-			t.addCls('selected');
-		}
+		cmp.onTabClicked(tab);
 	},
 
 
@@ -195,6 +219,7 @@ Ext.define( 'NextThought.view.Views', {
 	getActive: function() {
 		return this.getLayout().getActiveItem();
 	},
+
 
 	/**
 	 *
