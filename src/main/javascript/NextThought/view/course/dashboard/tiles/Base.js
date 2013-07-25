@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 	extend: 'Ext.container.Container',
 
+	requires: [
+		'NextThought.layout.component.Natural'
+	],
 
 	statics: {
 		/**
@@ -17,6 +20,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 	},
 
 	ui: 'course-dashboard',
+	layout: 'auto',
+	componentLayout: 'natural',
 
 	initComponent: function(){
 		this.callParent(arguments);
