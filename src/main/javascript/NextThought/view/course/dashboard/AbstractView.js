@@ -24,6 +24,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 		delete config.items;//don't replace our inner item
 		this.callParent(arguments);
 		this.tileContainer = this.items.first();
+
+		this.sorter = this.buildSorter();
 	},
 
 
@@ -57,6 +59,18 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 				},
 */
 /* Debug code End */
+
+
+	buildSorter: function(){
+		function get(r){
+			return r.weight * (r.lastModified||new Date()).getTime();
+		}
+
+		return function(a,b){
+			var wA = get(a), wB = get(b);
+			return wA > wB ? -1 : wA === wB ? 0 : 1;
+		};
+	},
 
 
 	adjustWeights: function(items){
@@ -197,11 +211,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 		try{
 			//Sort the items by modified & weight
-			Ext.Array.sort(items,function(a,b){
-				var wA = a.weight * a.lastModified.getTime(),
-					wB = b.weight * b.lastModified.getTime();
-				return wA > wB ? -1 : wA === wB ? 0 : 1;
-			});
+			Ext.Array.sort(items,this.sorter);
 
 			if(!this.needsFitting(items,rows,cols)){
 				console.log('Nothing to do :)');
@@ -248,8 +258,13 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	},
 
 
-
-	addTiles: function(items){
+	/**
+	 * Changes the view by clearing the existing tiles and adding the new ones.
+	 *
+	 * @param {NextThought.view.course.dashboard.tiles.Tile[]} items
+	 * @public
+	 */
+	setTiles: function(items){
 		this.tileContainer.removeAll(true);
 
 		if(Ext.isEmpty(items)){

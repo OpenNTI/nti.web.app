@@ -26,7 +26,7 @@ Ext.define('NextThought.view.course.dashboard.View',{
 			courseNavStore = new NextThought.store.course.Navigation({data: toc});
 		}
 
-		this.addTiles(this.queryTiles(
+		this.setTiles(this.queryTiles(
 				date,course,l,
 				courseNavStore.getCurrentBy(date),
 				courseNavStore.getNextBy(date)
