@@ -31,28 +31,45 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
             highlight = reader.getTouchHighlight(),
             iFrame = reader.getIframe(),
             annotations = reader.getAnnotations();
-        reader.on('touchStart', function() {
+
+        reader.on('touchStart', function(pageX, pageY) {
             highlight.hide();
         });
-
+        reader.on('touchMove', function(startX, startY, endX, endY) {
+            // move specific logic
+        });
+        reader.on('touchEnd', function(pageX, pageY) {
+           // end specific logic
+        });
+        reader.on('touchLongPress', function(ele, pageX, pageY) {
+            // Long press specific logic
+        });
         reader.on('touchTap', function(ele) {
             // Tap specific logic
-            // TODO: add fire event
         });
 
-        reader.on('touchLongPress', function(ele) {
-            // Long press specific logic
-            // TODO: add fire event
+        reader.on('touchDrag', function(ele, pageX, pageY) {
+            // Drag specific logic
+        });
+        reader.on('touchDrop', function(ele, pageX, pageY) {
+           // Drop specific logic
         });
 
-        reader.on('touchMove', function(startPos, deltaPos) {
-            // move specific logic
-            // TODO: add fire event
+        reader.on('touchScroll', function(ele, deltaY) {
+            scroll.by(deltaY);
         });
 
-        // TODO: setup drag(ele, startPos, deltaPos)
+        reader.on('touchHighlight', function(x1, y1, x2, y2) {
+            var range = makeRangeFrom(x1, y1, x2, y2);
+            highlight.show(range);
+        });
 
-        // @note Only have one of the following listeners per sender
+        reader.on('touchAddAnnotation', function(range, xy) {
+            annotations.addAnnotation(range, xy);
+        });
+
+        // @note Only have one of the following listeners
+        // per sender use the callback
 
         reader.on('touchElementAt', function(x,y, callback) {
             // move specific logic
@@ -74,21 +91,7 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
         });
 
         reader.on('touchElementIsScrollable', function(ele, callback) {
-            // TODO: add fire event
             callback(true);
-        });
-
-        reader.on('touchScroll', function(ele, deltaY) {
-            scroll.by(deltaY);
-        });
-
-        reader.on('touchHighlight', function(x1, y1, x2, y2) {
-            var range = makeRangeFrom(x1, y1, x2, y2);
-            highlight.show(range);
-        });
-
-        reader.on('touchAddAnnotation', function(range, xy) {
-            annotations.addAnnotation(range, xy);
         });
 
         reader.on('touchMakeRangeFrom', function(x1, y1, x2, y2, callback) {

@@ -69,7 +69,10 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
 
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            container.fireEvent('touchStart', {});
+
+            var touch = e.touches[0];
+
+            container.fireEvent('touchStart', touch.pageX, touch.pageY);
 
             // Only start a new touch if all touches are off
             if (state !== s.STATE.NONE)
@@ -77,8 +80,8 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             state = s.STATE.DOWN;
 
             initialTime = Date.now();
-            initialY = e.touches[0].pageY;
-            initialX = e.touches[0].pageX;
+            initialY = touch.pageY;
+            initialX = touch.pageX;
             lastY = initialY;
             vel = 0;
 
@@ -91,6 +94,7 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                 setTimeout(function() {
 
                     console.log('long press');
+                    container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
 
                     container.fireEvent('touchElementIsDraggable', ele, function(is){
                         if(!is || state !== s.STATE.DOWN) return;
@@ -115,12 +119,18 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
 
             var touch = e.touches[0];
 
+            container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
+
             console.log('touchMove');
 
             if (state === s.STATE.DOWN) {
                 scrollMove();
                 if (!withinTapThreshold())
-                    state = s.STATE.SCROLLING;
+                {
+                    container.fireEvent('touchElementIsScrollable', pickedElement, function(is) {
+                        if (is) state = s.STATE.SCROLLING;
+                    });
+                }
             }
             else if (state === s.STATE.SCROLLING) {
                 scrollMove();
@@ -129,7 +139,7 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                 selectMove();
             }
             else if (state === s.STATE.DRAGGING) {
-                // TODO: Update Dragged element
+                dragMove();
             }
             else
                 console.warn('Unknown touch state on touchMove!');
@@ -146,6 +156,11 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                                                       touch.pageX, touch.pageY);
             }
 
+            function dragMove() {
+                updatePos();
+                container.fireEvent('touchDrag', pickedElement, touch.pageX, touch.pageY);
+            }
+
             function updatePos() {
                 lastY = touch.pageY;
                 lastX = touch.pageX;
@@ -160,6 +175,8 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
         dom.addEventListener('touchend', function(e){
             e.preventDefault();
 
+            container.fireEvent('touchEnd', lastX, lastY);
+
             var startLt0 = vel<0,
                 lastUpdateTime = Date.now(),
                 tempState = state;
@@ -168,6 +185,7 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             console.log('touchEnd');
 
             if (tempState === s.STATE.DOWN) {
+                container.fireEvent('touchTap', pickedElement);
                 // Send click/select event to the tapped element
                 if (shouldSelectAllOnTap())
                     pickedElement.setSelectionRange(0,1000);
@@ -181,7 +199,6 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                 kineticScroll();
             }
             else if (tempState === s.STATE.SELECTING) {
-                // TODO: Update Selection
                 console.log('stop selection');
 
                 container.fireEvent('touchMakeRangeFrom', initialX, initialY, lastX, lastY,
@@ -192,12 +209,11 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                 );
             }
             else if (tempState === s.STATE.DRAGGING) {
-                // TODO: Update Dragged element
                 console.log('stop dragging');
+                container.fireEvent('touchDrop', pickedElement, lastX, lastY);
             }
             else
                 console.warn('Unknown touch state on touchEnd!');
-
 
             function kineticScroll() {
                 var lt0 = vel< 0,
