@@ -21,7 +21,6 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
 
         reader.on('afterrender', function() {
             reader.getIframe().setClickthrough(true);
-            reader.getTouchSender().registerHandler(this);
             this.setupHandlers();
         }, this);
     },
@@ -32,75 +31,73 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
             highlight = reader.getTouchHighlight(),
             iFrame = reader.getIframe(),
             annotations = reader.getAnnotations();
+        reader.on('touchStart', function() {
+            highlight.hide();
+        });
 
-    },
+        reader.on('touchTap', function(ele) {
+            // Tap specific logic
+            // TODO: add fire event
+        });
 
-    touchStart: function() {
-        this.reader.getTouchHighlight().hide();
-    },
+        reader.on('touchLongPress', function(ele) {
+            // Long press specific logic
+            // TODO: add fire event
+        });
 
-    // TODO: Setup tap(ele)
+        reader.on('touchMove', function(startPos, deltaPos) {
+            // move specific logic
+            // TODO: add fire event
+        });
 
-    tap: function(ele) {
+        // TODO: setup drag(ele, startPos, deltaPos)
 
-    },
+        // @note Only have one of the following listeners per sender
 
-    // TODO: setup longPress(ele)
+        reader.on('touchElementAt', function(x,y, callback) {
+            // move specific logic
+            // TODO: add fire event
+            callback(iFrame.elementAt(x,y));
+        });
 
-    // TODO: setup move(startPos, deltaPos)
+        reader.on('touchElementIsDraggable', function(ele, callback) {
+            if (!ele) callback(false);
+            var obj = Ext.get(ele);
+            callback(obj.hasCls('draggable-area') || obj.up('.draggable-area'));
+        });
 
-    // TODO: setup scroll(ele, deltaY)
+        reader.on('touchElementIsSelectable', function(ele, callback) {
+            if (!ele) callback(false);
+            var tag = ele.tagName,
+                tags = ['P', 'A', 'SPAN'];
+            callback(Ext.Array.contains(tags, tag));
+        });
 
-    scroll: function(ele, deltaY) {
-        var reader = this.reader,
-            scroll = reader.getScroll();
-        scroll.by(deltaY);
-    },
+        reader.on('touchElementIsScrollable', function(ele, callback) {
+            // TODO: add fire event
+            callback(true);
+        });
 
-    // TODO: setup select(range)
+        reader.on('touchScroll', function(ele, deltaY) {
+            scroll.by(deltaY);
+        });
 
-    // TODO: setup drag(ele, startPos, deltaPos)
+        reader.on('touchHighlight', function(x1, y1, x2, y2) {
+            var range = makeRangeFrom(x1, y1, x2, y2);
+            highlight.show(range);
+        });
 
+        reader.on('touchAddAnnotation', function(range, xy) {
+            annotations.addAnnotation(range, xy);
+        });
 
-    elementIsSelectable: function(ele) {
-        if (!ele) return false;
-        var tag = ele.tagName,
-            tags = ['P', 'A', 'SPAN'];
-        return Ext.Array.contains(tags, tag);
-    },
+        reader.on('touchMakeRangeFrom', function(x1, y1, x2, y2, callback) {
+            callback(makeRangeFrom(x1,y1,x2,y2));
+        });
 
-    elementIsDraggable: function(ele) {
-        if (!ele) return false;
-        var obj = Ext.get(ele);
-        return obj.hasCls('draggable-area') || obj.up('.draggable-area');
-    },
-
-    elementIsScrollable: function(ele) {
-        // TODO:
-        return true;
-    },
-
-    elementAt: function(x, y) {
-        return this.reader.getIframe().elementAt(x,y);
-    },
-    highlight: function(x1,y1,x2,y2) {
-        var reader = this.reader,
-            highlight = reader.getTouchHighlight(),
-            range= this.makeRangeFrom(x1, y1, x2, y2);
-        highlight.show(range);
-    },
-
-    makeRangeFrom: function(x1, y1, x2, y2) {
-        var reader = this.reader,
-            iFrame = reader.getIframe();
-        return iFrame.makeRangeFrom(x1, y1, x2, y2);
-    },
-
-    addAnnotation: function(range, xy) {
-        var reader = this.reader,
-            annotations = reader.getAnnotations();
-        annotations.addAnnotation(range, xy);
+        function makeRangeFrom(x1, y1, x2, y2) {
+            return iFrame.makeRangeFrom(x1, y1, x2, y2);
+        }
     }
-
 
 });

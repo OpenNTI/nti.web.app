@@ -39,7 +39,6 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             return;
 
         Ext.apply(this, config);
-        this.registeredHandler = null;
 
         this.container.on('afterrender', function() {
             this.setupTouchHandlers();
@@ -70,14 +69,12 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
 
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            var handler = me.registeredHandler;
-            handler.touchStart();
+            container.fireEvent('touchStart', {});
 
             // Only start a new touch if all touches are off
             if (state !== s.STATE.NONE)
                 return;
             state = s.STATE.DOWN;
-            pickedElement = handler.elementAt(e.pageX, e.pageY);
 
             initialTime = Date.now();
             initialY = e.touches[0].pageY;
@@ -85,31 +82,38 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             lastY = initialY;
             vel = 0;
 
-            console.log('touchStart');
+            container.fireEvent('touchElementAt', e.pageX, e.pageY, function(ele) {
 
-            setTimeout(function() {
-                if (state !== s.STATE.DOWN)
-                    return;
+                pickedElement = ele;
 
-                console.log('long press');
-                vel=0;
-                if (handler.elementIsDraggable(pickedElement)) {
-                    state = s.STATE.DRAGGING;
-                    console.log('start dragging');
-                }
-                else if (handler.elementIsSelectable(pickedElement)) {
-                    state = s.STATE.SELECTING;
-                    console.log('start selecting');
-                    // TODO: Some animation to show user selecting has started?
-                }
-            }, s.TAP_HOLD_TIME);
+                console.log('touchStart');
+
+                setTimeout(function() {
+
+                    console.log('long press');
+
+                    container.fireEvent('touchElementIsDraggable', ele, function(is){
+                        if(!is || state !== s.STATE.DOWN) return;
+                        state = s.STATE.DRAGGING;
+                        console.log('start dragging');
+                    });
+                    container.fireEvent('touchElementIsSelectable', ele, function(is) {
+                        if(!is || state !== s.STATE.DOWN) return;
+                        state = s.STATE.SELECTING;
+                        console.log('start selecting');
+                        // TODO: Some animation to show user selecting has started?
+                    });
+
+                }, s.TAP_HOLD_TIME);
+
+            });
+
         }, false);
 
         dom.addEventListener('touchmove', function(e) {
             e.preventDefault();
 
-            var touch = e.touches[0],
-                handler = me.registeredHandler;
+            var touch = e.touches[0];
 
             console.log('touchMove');
 
@@ -133,13 +137,13 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             function scrollMove() {
                 vel = lastY - touch.pageY;
                 updatePos();
-                handler.scroll(pickedElement, vel);
+                container.fireEvent('touchScroll', pickedElement, vel);
             }
 
             function selectMove() {
                 updatePos();
-                handler.highlight(initialX, initialY,
-                                  touch.pageX, touch.pageY);
+                container.fireEvent('touchHighlight', initialX, initialY,
+                                                      touch.pageX, touch.pageY);
             }
 
             function updatePos() {
@@ -158,8 +162,7 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
 
             var startLt0 = vel<0,
                 lastUpdateTime = Date.now(),
-                tempState = state,
-                handler = me.registeredHandler;
+                tempState = state;
             state = s.STATE.NONE;
 
             console.log('touchEnd');
@@ -180,10 +183,13 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
             else if (tempState === s.STATE.SELECTING) {
                 // TODO: Update Selection
                 console.log('stop selection');
-                var range = handler.makeRangeFrom(initialX, initialY,
-                        lastX, lastY),
-                    xy = [lastX, lastY];
-                handler.addAnnotation(range, xy);
+
+                container.fireEvent('touchMakeRangeFrom', initialX, initialY, lastX, lastY,
+                    function(range) {
+                        var xy = [lastX, lastY];
+                        container.fireEvent('touchAddAnnotation', range, xy);
+                    }
+                );
             }
             else if (tempState === s.STATE.DRAGGING) {
                 // TODO: Update Dragged element
@@ -210,16 +216,12 @@ Ext.define('NextThought.view.content.reader.TouchSender', {
                     // based on the time passed for smoother movement
                     vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
 
-                    handler.scroll(pickedElement, vel);
+                    container.fireEvent('touchScroll', pickedElement, vel);
                     setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
                 }
             }
         }); // eo touchEnd
 
-    }, // eo setupTouchHandlers
-
-    registerHandler: function(touchHandler) {
-        this.registeredHandler = touchHandler;
-    }
+    } // eo setupTouchHandlers
 
 });
