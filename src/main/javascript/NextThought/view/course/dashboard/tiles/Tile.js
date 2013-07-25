@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.dashboard.tiles.Base',{
+Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 	extend: 'Ext.container.Container',
 
 	requires: [
@@ -16,7 +16,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 	config: {
 		cols:1,
 		rows:1,
-		weight: 1
+		weight: 1,
+		lastModified: new Date(0)
 	},
 
 	ui: 'course-dashboard',
@@ -47,7 +48,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.Base',{
 	 - Most Recent Notes
 
 	# From Design:
-	 - Videos
 	 - Labs (Question Sets)
 	 - 9 Most Active Users
 	 - Poll

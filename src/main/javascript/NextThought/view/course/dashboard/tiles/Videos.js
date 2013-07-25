@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
-	extend: 'NextThought.view.course.dashboard.tiles.Base',
+	extend: 'NextThought.view.course.dashboard.tiles.Tile',
 	alias: 'widget.course-dashboard-videos',
 
 	statics: {
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			}
 
 			//We have videos
-			return this.create({sources: videos, locationInfo: locationInfo});
+			return this.create({lastModified: date, sources: videos, locationInfo: locationInfo});
 		}
 
 	},
