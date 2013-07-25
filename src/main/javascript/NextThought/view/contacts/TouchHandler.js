@@ -25,15 +25,15 @@ Ext.define('NextThought.view.contacts.TouchHandler', {
 
         container.on('touchScroll', function(ele, deltaY) {
 
-            var container = getEL(),
-                currentY = container.getY(),
+            var tab = getEL(),
+                currentY = tab.getY(),
                 newY = currentY - deltaY,
-                containerHeight = container.getHeight(),
-                parentHeight = container.parent().getHeight(),
+                containerHeight = tab.getHeight(),
+                parentHeight = tab.parent().getHeight(),
                 minY;
 
             if (containerHeight <= parentHeight) {
-                container.setY(initialY, false);
+                tab.setY(initialY, false);
                 return;
             }
 
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.contacts.TouchHandler', {
             else if (newY > initialY)
                 newY = initialY;
 
-            container.setY(newY, false);
+            tab.setY(newY, false);
         });
 
         container.on('touchElementIsScrollable', function(ele, callback) {
@@ -62,9 +62,8 @@ Ext.define('NextThought.view.contacts.TouchHandler', {
 
         function getEL() {
             return container.getEl()
-                            .down('.contact-card-container')
-                            .parent()
-                            .parent();
+                            .down('.x-tabpanel-child{display!=none}')
+                            .child(':first');
         }
     }
 });
