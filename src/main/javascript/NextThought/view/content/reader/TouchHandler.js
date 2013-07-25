@@ -72,8 +72,6 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
         // per sender use the callback
 
         reader.on('touchElementAt', function(x,y, callback) {
-            // move specific logic
-            // TODO: add fire event
             callback(iFrame.elementAt(x,y));
         });
 

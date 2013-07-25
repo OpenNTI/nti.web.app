@@ -35,18 +35,18 @@ Ext.define('NextThought.view.content.Reader', {
 			'finished-restore'
 		);
 
-		this.buildModule('annotations');
-		this.buildModule('locationProvider');
-		this.buildModule('iframe');
-		this.buildModule('scroll');
-		this.buildModule('content',{reader:this});
-		this.buildModule('componentOverlay');
-		this.buildModule('assessment');
-		this.buildModule('resourceManager');
-		this.buildModule('noteOverlay');
-        this.buildModule('touchSender',{container:this});
-        this.buildModule('touchHandler');
-        this.buildModule('touchHighlight');
+		this.buildModule('reader','annotations');
+		this.buildModule('reader','locationProvider');
+		this.buildModule('reader','iframe');
+		this.buildModule('reader','scroll');
+		this.buildModule('reader','content',{reader:this});
+		this.buildModule('reader','componentOverlay');
+		this.buildModule('reader','assessment');
+		this.buildModule('reader','resourceManager');
+		this.buildModule('reader','noteOverlay');
+        this.buildModule('modules','touchSender',{container:this});
+        this.buildModule('reader','touchHandler');
+        this.buildModule('reader','touchHighlight');
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
@@ -79,15 +79,14 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	buildModule: function(name,config,relay){
-		var m = Ext.createByAlias('reader.'+name,Ext.apply({reader:this},config)),
+	buildModule: function(ns, name,config,relay){
+		var m = Ext.createByAlias(ns+'.'+name,Ext.apply({reader:this},config)),
 			getterName = 'get'+Ext.String.capitalize(name);
 
 		if(this[getterName]){
 			console.error('Module getter name taken: '+getterName);
 			return;
 		}
-
 
 		this[getterName] = function(){return m;};
 	},

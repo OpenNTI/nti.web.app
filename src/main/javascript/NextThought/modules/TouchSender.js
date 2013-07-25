@@ -1,6 +1,6 @@
 Ext.define('NextThought.modules.TouchSender', {
 
-    alias: 'reader.touchSender',
+    alias: 'modules.touchSender',
 
     statics: {
         SCROLL_TIME_STEP: 1,

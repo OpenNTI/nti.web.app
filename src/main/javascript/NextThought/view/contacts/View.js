@@ -2,11 +2,13 @@ Ext.define( 'NextThought.view.contacts.View', {
 	extend: 'NextThought.view.Base',
 	alias:	'widget.contacts-view-container',
 	requires: [
+        'NextThought.modules.TouchSender',
 		'NextThought.view.BoundPanel',
 		'NextThought.view.contacts.Grouping',
 		'NextThought.view.contacts.TabPanel',
 		'NextThought.view.contacts.GroupButtons',
-        'NextThought.view.contacts.ListButtons'
+        'NextThought.view.contacts.ListButtons',
+        'NextThought.view.contacts.TouchHandler'
 	],
 
 	cls: 'contacts-view',
@@ -30,7 +32,6 @@ Ext.define( 'NextThought.view.contacts.View', {
 	}],
 
 
-
 	initComponent: function(){
 		var me = this;
 
@@ -40,7 +41,22 @@ Ext.define( 'NextThought.view.contacts.View', {
 		me.on('resize',function(){
 			me.tabs.setHeight(me.getHeight());
 		});
+
+        me.buildModule('modules', 'touchSender');
+        me.buildModule('contacts', 'touchHandler');
 	},
+
+    buildModule: function(ns, name,config,relay){
+        var m = Ext.createByAlias(ns+'.'+name,Ext.apply({container:this},config)),
+            getterName = 'get'+Ext.String.capitalize(name);
+
+        if(this[getterName]){
+            console.error('Module getter name taken: '+getterName);
+            return;
+        }
+
+        this[getterName] = function(){return m;};
+    },
 
 	monitorTabs: function(panel,newTab,oldTab){
 		if(this.restoring){return;}
