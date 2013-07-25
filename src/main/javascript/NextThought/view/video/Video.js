@@ -69,6 +69,16 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	constructor: function(config){
+		this.playerWidth = config.width || config.playerWidth || this.playerWidth;
+		Ext.apply(config,{
+			width: this.playerWidth,
+			height: this.playerHeight
+		});
+		this.callParent([config]);
+	},
+
+
 	initComponent: function(){
 		Ext.applyIf(this, {playlist: []});
 
