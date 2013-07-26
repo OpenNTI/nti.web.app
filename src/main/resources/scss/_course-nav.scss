@@ -464,35 +464,27 @@
 .course-dashboard {
 	position: relative;
 	//1024 - 1165 width (200 - 233)
+	$gridSpacing: 6px;
 
 	.grid-item {
 		position: relative;
 		float: left;
-		margin: 0 4px 4px 0;
+		margin: 0 $gridSpacing $gridSpacing 0;
+		//to see WIP cells.
 		background: rgba(255,0,0,0.6);
 
+		@for $i from 1 through 4 {
+			$s: (200px * $i) - $gridSpacing;
 
-		&.col-1 {
-			width: 196px;
-			@include experimental-value(width, calc(20% - 4px));
-		}
-		&.col-2 {
-			width: 396px;
-			@include experimental-value(width, calc(40% - 4px));
-		}
-		&.col-3 {
-			width: 596px;
-			@include experimental-value(width, calc(60% - 4px));
-		}
-		&.col-4 {
-			width: 796px;
-			@include experimental-value(width, calc(80% - 4px));
+			&.col-#{$i} {
+				width: $s;
+				@include experimental-value(width, calc(#{(20% * $i)} - #{$gridSpacing}));
+			}
+			&.row-#{$i} { height: $s; }
 		}
 
-		&.row-1 { height: 196px; }
-		&.row-2 { height: 396px; }
-		&.row-3 { height: 596px; }
-		&.row-4 { height: 796px; }
+
+
 	}
 }
 
@@ -500,12 +492,15 @@
 .dashboard-videos {
 	@include tile-shadow();
 
+	&,.body{
+		position: absolute;
+		top: 0; bottom: 0; left: 0; right: 0;
+	}
+
 	h2{display: none;}
 
 	.body {
-		position: relative;
 		overflow: hidden;
-		height: 396px;
 
 		.video-container {
 			position: relative;
@@ -594,10 +589,9 @@
 			@include scrollbar(#04232c, #0f2d35);
 			position: absolute;
 			left: 0;
-			top: auto;
+			top: 300px;
 			right: 0;
 			bottom: 0;
-			height: 96px;
 			overflow: {
 				x: auto;
 				y: hidden;
