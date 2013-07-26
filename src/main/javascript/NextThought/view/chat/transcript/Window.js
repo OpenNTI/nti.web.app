@@ -3,9 +3,15 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	alias: 'widget.chat-transcript-window',
 
 	requires: [
-		'NextThought.view.chat.transcript.Main',
-		'NextThought.view.chat.Gutter'
+		'NextThought.modules.TouchSender',
+        'NextThought.view.chat.transcript.Main',
+		'NextThought.view.chat.Gutter',
+        'NextThought.view.chat.transcript.TouchHandler'
 	],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	cls:'chat-window no-gutter chat-transcript-window',
 	ui:'chat-window',
@@ -73,6 +79,9 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 		if(btn){
 			btn.show();
 		}
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('chat.transcript', 'touchHandler');
     },
 
 
