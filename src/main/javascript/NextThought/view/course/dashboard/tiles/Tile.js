@@ -49,7 +49,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 
 	# From Design:
 	 - Labs (Question Sets)
-	 - Supplemental Material
 
 	# Later:
 	 - Poll
