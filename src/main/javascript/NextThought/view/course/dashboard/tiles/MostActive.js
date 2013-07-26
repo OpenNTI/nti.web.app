@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
-			return this.create({locationInfo: locationInfo});
+			return this.create({lastModified: courseNodeRecord.get('date'),locationInfo: locationInfo});
 		}
 
 	},
@@ -13,7 +13,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	config: {
 		cols: 1,
 		rows: 2,
-		weight: 10,
+		weight: 9,
 		locationInfo: null
 	}
 

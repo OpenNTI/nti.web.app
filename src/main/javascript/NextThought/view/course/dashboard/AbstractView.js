@@ -63,7 +63,9 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 	buildSorter: function(){
 		function get(r){
-			return r.weight * (r.lastModified||new Date()).getTime();
+			var d = (r.getLastModified && r.getLastModified()) || r.lastModified,
+				w = (r.getWeight && r.getWeight()) || r.weight || 1;
+			return w * (d ? d.getTime() : 1);
 		}
 
 		return function(a,b){

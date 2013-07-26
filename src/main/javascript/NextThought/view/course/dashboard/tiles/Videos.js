@@ -34,7 +34,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			}
 
 			//We have videos
-			return this.create({lastModified: effectiveDate, sources: videos, locationInfo: locationInfo});
+			return this.create({lastModified: courseNodeRecord.get('date'), sources: videos, locationInfo: locationInfo});
 		}
 
 	},
