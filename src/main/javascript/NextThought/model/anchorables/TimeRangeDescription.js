@@ -8,6 +8,7 @@ Ext.define('NextThought.model.anchorables.TimeRangeDescription',{
 		end:null  //Optional
 	},
 
+	isTimeRange: true,
 
 	statics:{
 		createFromObject: function(o){

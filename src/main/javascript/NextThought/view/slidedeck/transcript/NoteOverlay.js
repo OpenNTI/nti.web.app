@@ -10,12 +10,19 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		'observable': 'Ext.util.Observable'
 	},
 
+	annotationManager: new Ext.util.MixedCollection(),
+
+	controlTpl: new Ext.XTemplate( Ext.DomHelper.markup([
+		{tag:'span', cls:'count', 'data-line':'{line}', 'data-count':'{count}', html:'{count}'}
+	])),
+
 	constructor: function(config){
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 
 		var me = this;
 
+		this.insertOverlay();
 		if(!me.noteOverlayManager){
 			//TODO: we will something more robust to manage different reader views that get added.
 			// But for now, use just an array.
@@ -24,11 +31,15 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		this.mon(this.reader, {
 			scope: this,
 			destroy: 'destroy',
-//			'reader-view-ready': 'insertOverlay',
 			'create-note': 'noteHere',
 			'sync-height': 'syncHeight',
 			'show-editor': 'showEditorByEl',
-			'show-editor-inline':'showEditorAtPosition'
+			'show-editor-inline':'showEditorAtPosition',
+			'register-records': 'registerGutterRecords'
+		});
+
+		this.mon(this.annotationManager, {
+			'add': 'onAnnotationAdded'
 		});
 
 		this.data = {};
@@ -69,7 +80,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		this.mon(view, {
 			scope: this,
 			destroy: 'destroy',
-//			'reader-view-ready': 'insertOverlay',
 			'create-note': 'noteHere',
 			'sync-height': 'syncHeight',
 			'show-editor': 'showEditorByEl',
@@ -78,33 +88,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-//	insertOverlay: function(){
-//		var me = this,
-//			box,
-//			container = {
-//				cls: 'note-gutter',
-//				style: {
-//					height: me.getFrameHeight()
-//				},
-//				cn: [
-//					{ cls: 'note-here-control-box' }
-//				]
-//			};
-//
-//		me.container = Ext.DomHelper.insertAfter(me.reader.getInsertionPoint().first(), container, true);
-//
-//		box = me.data.box = me.container.down('.note-here-control-box');
-//		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
-//		box.hide();
-//
-//		me.mon(box,{
-//			click: 'openEditor',
-////			mouseover:'overNib',
-////			mousemove:'overNib',
-////			mouseout:'offNib',
-//			scope:me
-//		});
-//	},
+	insertOverlay: function(){
+		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
+	},
 
 
 	editorSaved: function(e){
@@ -191,6 +177,80 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	showEditorAtPosition: function(cueInfo, xy){
 		this.activateEditor(cueInfo);
 		this.editor.showAt(xy);
-	}
+	},
 
+
+	registerGutterRecords: function(noteStore, view){
+		if(Ext.isEmpty(noteStore)){ return;}
+
+		var me = this,
+			notes = noteStore.getRange();
+
+		Ext.each(notes, function(n){
+			me.registerNoteRecord(n, view, noteStore);
+		});
+	},
+
+
+	registerNoteRecord: function(rec, cmp, recStore){
+		var anchorResolver =  cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
+			cueStore = cmp.getCueStore && cmp.getCueStore(),
+			domRange, rect, line;
+
+		if(!anchorResolver){
+			anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver;
+		}
+
+		domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
+		console.log('domrange for record: ', rec, domRange);
+
+		rect = domRange.getBoundingClientRect();
+		line = Math.round(rect.top);
+		rec.set('line', line);
+
+		this.annotationManager.add({
+			id:rec.getId(),
+			rect: rect,
+			range: domRange,
+			record: rec,
+			store: recStore,
+			line: line
+		});
+	},
+
+
+	onAnnotationAdded: function(i, o){
+		var count = this.getAnnotationsAtLine(o.line).getCount(),
+			tpl = this.controlTpl,
+			line = o.line,
+			el;
+
+		console.log('adding note at: ', line);
+		el = this.annotationOverlay.down('.count[data-line='+line+']');
+		if(!el){
+			el = tpl.append(this.annotationOverlay, {line:line, count:count}, true);
+			this.mon(el, 'click', 'showAnnotationsAtLine', this);
+		} else{
+			el.update(count);
+		}
+		el.setStyle('top', line+'px');
+	},
+
+
+	showAnnotationsAtLine: function(e){
+		var t = e.getTarget('.count', null, true),
+			line = t.getAttribute('data-line'), annotations;
+
+		if(!line){ return;}
+		line = parseInt(line);
+		annotations = this.getAnnotationsAtLine(line);
+		this.reader.showAnnotations(annotations, line);
+	},
+
+
+	getAnnotationsAtLine: function(line){
+		return this.annotationManager.filterBy(function(item){
+			return item.line === line;
+		});
+	}
 });

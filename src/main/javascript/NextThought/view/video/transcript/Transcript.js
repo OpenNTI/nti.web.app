@@ -53,18 +53,14 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		}]}
 	])),
 
-	controlTpl: new Ext.XTemplate( Ext.DomHelper.markup([
-			{tag:'span', cls:'count', 'data-count':'{count}', html:'{count}'}
-	])),
-
 
 	initComponent: function(){
 		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
 		this.loadTranscript();
 
-		this.addEvents('jump-video-to', 'transcript-ready');
-		this.enableBubble(['jump-video-to', 'transcript-ready']);
+		this.addEvents('jump-video-to', 'transcript-ready', 'register-records');
+		this.enableBubble(['jump-video-to', 'transcript-ready', 'register-records']);
 	},
 
 
@@ -104,7 +100,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			console.log('userdata store: ', store);
 			// Now we will start to bucket notes.
 			console.log('should start to show and bucket items');
-			me.bucketUserData(store);
+			if(store.getCount() > 0){
+				me.fireEvent('register-records', store, me);
+			}
 		}
 
 		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
@@ -119,49 +117,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 		me.mon(store, 'load', finish, me);
 		store.load();
-	},
-
-
-	bucketUserData: function(store){
-		var records = store.getRange(),
-			tpl = this.controlTpl, destinationEl,
-			me = this;
-
-		Ext.each(records, function(rec){
-			var count;
-			destinationEl = me.getLocationForNoteRecord(rec);
-			if(!Ext.isEmpty(destinationEl)){
-				console.log(destinationEl);
-				count = destinationEl.down('.count') ? destinationEl.down('.count').getAttribute('data-count') : '0';
-				count = parseInt(count);
-				count++;
-				tpl.insertBefore(destinationEl.down('.add-note-here'), {count: count}, true);
-			}
-		});
-	},
-
-
-	getLocationForNoteRecord: function(rec){
-		function fn(item){
-			return (item.get('startTime') <= anchorStart) && (anchorStart <= item.get('endTime'));
-		}
-
-		var range = rec.get('applicableRange'),
-			anchorStart = range.start.seconds,
-			cueid = range.start.cueid,
-			el, cue, res;
-
-		if(cueid){
-			el = this.el.down('.cue[identifier='+cueid+']');
-			if(el){return el;}
-		}
-
-		res = this.store.queryBy(fn, this);
-		if(res.getCount() > 0){
-			cue = res.getAt(0);
-			el = this.el.down('.cue[cue-start='+cue.get('startTime')+']');
-		}
-		return el;
 	},
 
 
@@ -301,8 +256,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	onViewReady: function(){
-		var me = this;
+		var me = this, desc;
 		me.transcriptReady = true;
+
+		me.buildUserDataStore();
 
 		me.mon(me.el.select('.timestamp-container'),{
 			scope: me,
@@ -326,22 +283,36 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			'mouseup':'showContextMenu'
 		});
 
-		me.buildUserDataStore();
+
+		// FIXME: since we need to be able to resolve a dom range given a timeRange a
+		// nd sometimes we don't have access to the cueStore,
+		// we're going to set an attribute made of the containerId on the transcript dom.
+		// This will help us locate a time range given its containerID and cue start and end time.
+		// This could be done several other ways but this is a quick solution for now.
+		desc = this.transcript.get('associatedVideoId') + '-cues';
+		me.el.set({'data-desc': desc});
 	},
 
 
 	openEditor: function(e){
-//		console.log('show editor at: ', e.getTarget('.cue'));
 		var cueEl = e.getTarget('.cue', null, true),
 			cueStart = cueEl && cueEl.getAttribute('cue-start'),
 			cueEnd = cueEl && cueEl.getAttribute('cue-end'),
-			range = document.createRange(),
 			sid = cueEl && cueEl.getAttribute('cue-id'),
 			cid = this.transcript.get('associatedVideoId'), data;
 
-		range.selectNodeContents(cueEl.dom);
-		data = { startTime:cueStart, endTime:cueEnd, range:range, startCueId:sid, endCueId:sid, containerId: cid };
+		data = { startTime:cueStart, endTime:cueEnd, startCueId:sid, endCueId:sid, containerId: cid };
 		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'));
+	},
+
+
+	getAnchorResolver: function(){
+		return NextThought.view.slidedeck.transcript.AnchorResolver;
+	},
+
+
+	getCueStore: function(){
+		return this.store;
 	},
 
 

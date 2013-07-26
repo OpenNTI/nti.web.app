@@ -8,7 +8,8 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
 		'NextThought.util.Annotations',
-		'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket',
+		'NextThought.view.slidedeck.transcript.AnchorResolver'
 	],
 
 
@@ -75,6 +76,9 @@ Ext.define('NextThought.controller.UserData', {
 					'load-transcript': 'onLoadTranscript',
 					'save-new-note' : 'saveNewNote',
 					'save-new-series-note':'saveNewSeriesNote'
+				},
+				'slidedeck-view': {
+					exited: 'slideViewExited'
 				},
 
 				'reader-content':{
@@ -172,6 +176,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	showNoteViewer: function(sel,rec){
 		var me = this,
+			anchorCmp = sel.view.anchorComponent;
 			block = sel.mon(sel,{
 			destroyable: true,
 			beforeselect: function(){this.deselectingToSelect=true;},
@@ -196,8 +201,9 @@ Ext.define('NextThought.controller.UserData', {
 				xtype: 'note-window',
 				autoShow: true,
 				record: rec,
-				reader: sel.view.up('reader').down('reader-content'),
-				listeners:{beforedestroy:deselect}
+				reader: anchorCmp,
+				listeners:{beforedestroy:deselect},
+				xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
 			});
 		}
 		catch(e){
@@ -205,6 +211,13 @@ Ext.define('NextThought.controller.UserData', {
 				console.error(e.toString(),e);
 			}
 			deselect();
+		}
+	},
+
+
+	slideViewExited: function(){
+		if(this.activeNoteWindow){
+			this.activeNoteWindow.destroy();
 		}
 	},
 
@@ -1023,14 +1036,10 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback){
-		if(!range){
-			console.error('No range supplied. Handling time-series notes  with no range is not yet implemented.');
-		}
-
 		console.log(cueInfo);
-
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-			rangeDescription = Anchors.createTranscriptRangeDescription(range, doc, cueInfo),
+			AnchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver,
+			rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
 			selectedText = range ? range.toString() : '';
 
 		this.saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);

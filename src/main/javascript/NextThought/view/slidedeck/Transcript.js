@@ -1,26 +1,18 @@
 Ext.define('NextThought.view.slidedeck.Transcript', {
-	extend: 'NextThought.view.content.Base', //'Ext.container.Container',
+	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-transcript',
 	requires:[
 		'NextThought.layout.component.Natural',
 		'NextThought.view.video.transcript.Transcript',
 		'NextThought.view.content.reader.NoteOverlay',
 		'NextThought.view.slidedeck.transcript.NoteOverlay',
-		'NextThought.view.slidedeck.transcript.Slide'
+		'NextThought.view.slidedeck.transcript.Slide',
+		'NextThought.view.annotations.renderer.Manager',
+		'NextThought.view.annotations.View'
 	],
 
 	ui:'transcript',
 	cls:'transcript-view',
-
-	layout: 'auto',
-//	componentLayout: 'natural',
-	childEls: ['body'],
-
-	getTargetEl: function () { return this.body; },
-	renderTpl: Ext.DomHelper.markup([
-		{id: '{id}-body', cls:'transcript-wrap', cn:['{%this.renderContainer(out,values)%}']}
-	]),
-
 	items:[],
 
 
@@ -85,8 +77,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		Ext.each(this.items.items, function(vt){
 			me.noteOverlay.registerReaderView(vt);
 		});
-
-		this.fireEvent('reader-view-ready');
 	},
 
 
@@ -135,6 +125,81 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	syncWithVideo: function(videoState){
 //		this.transcriptView.syncTranscriptWithVideo(videoState);
+	},
+
+
+	showAnnotations: function(annotations, line){
+		if(!annotations || annotations.getCount()=== 0){
+			return;
+		}
+
+		// NOTE: annotations that we get may not share the same store
+		// since right now we mix transcript with slides and slides have a different store.
+		// However, we're making an assumptions that records on the same line WILL share the same store.
+		var s = annotations.getAt(0).store;
+
+		s.removeFilter('lineFilter');
+		if(line){
+			s.addFilter({
+				id: 'lineFilter',
+				filterFn: function(r){
+					return r.get('line') === line;
+				}
+			});
+		}
+		s.sort();
+
+		this.showAnnotationView(s);
+	},
+
+
+	showAnnotationView: function(store){
+		this.annotationView = Ext.widget('annotation-view',{
+			floating:true,
+			border:false,
+			width:400,
+			shadow:false,
+			constrain:true,
+			renderTo: Ext.getBody(),
+			cls:'presentation-note-slider annotation-view',
+			title: 'Discussion',
+			iconCls: 'discus',
+			discussion:true,
+			store:store,
+			anchorComponent: this,
+			anchorComponentHooks: this.getViewerHooks()
+		});
+
+		this.annotationView.show();
+		this.on('destroy', 'destroy',this.annotationView);
+	},
+
+	getDocumentElement: function(){
+		console.log('should return doc element');
+		return this.el.dom.ownerDocument;
+	},
+
+	getCleanContent: function(){
+		return this.el.dom;
+	},
+
+	getViewerHooks: function(){
+		return {
+			'resizeView': function(){
+				var reader = this.reader,
+					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
+					h = reader.getHeight(),
+					pos = reader.getPosition();
+
+				pos[0] += 10;
+				pos[1] += 10;
+
+				this.setPosition(pos);
+				this.setWidth(w);
+				this.setHeight(h);
+				Ext.defer(this.el.setStyle, 10, this.el, ['z-index','200000']);
+			}
+		}
 	}
 
 });
