@@ -240,7 +240,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	slideViewExited: function(slideview, slide){
-		var goTo = slide.get('ContainerId');
+		var goTo =  slide && slide.get('ContainerId');
 
 		if(goTo){
 			this.maybeLoadNewPage(goTo, function(reader){
