@@ -8,7 +8,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		'NextThought.view.profiles.TabPanel',
 		'NextThought.view.profiles.ProfileFieldEditor',
 		'NextThought.view.account.contacts.management.Popout',
-		'NextThought.layout.component.Natural'
+		'NextThought.layout.component.Natural',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
 
 	mixins:{
@@ -111,8 +113,22 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('modules', 'touchHandler');
 	},
 
+    buildModule: function(ns, name,config,relay){
+        var m = Ext.createByAlias(ns+'.'+name,Ext.apply({container:this},config)),
+            getterName = 'get'+Ext.String.capitalize(name);
+
+        if(this[getterName]){
+            console.error('Module getter name taken: '+getterName);
+            return;
+        }
+
+        this[getterName] = function(){return m;};
+    },
 
 	trackTabs: function(tabPanel, newTab){
 		if(!this.user || this.settingTab){
