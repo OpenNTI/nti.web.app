@@ -1,0 +1,332 @@
+@mixin tile-shadow {
+	box-shadow: 0 0 3px 0px rgba(0,0,0,0.5);
+}
+
+
+.course-dashboard-container{
+	padding: 5px 0 0 5px;
+	margin: -5px 0 0 -5px;
+
+	@include scrollbar(transparent, $tertiary-grey);
+	overflow: auto;
+}
+
+
+.course-dashboard {
+	position: relative;
+	//1024 - 1165 width (200 - 233)
+	$gridSpacing: 6px;
+
+	.grid-item {
+		position: relative;
+		float: left;
+		margin: 0 $gridSpacing $gridSpacing 0;
+		//to see WIP cells.
+		background: rgba(255,0,0,0.6);
+
+		@for $i from 1 through 4 {
+			$s: (200px * $i) - $gridSpacing;
+
+			&.col-#{$i} {
+				width: $s;
+				@include experimental-value(width, calc(#{(20% * $i)} - #{$gridSpacing}));
+			}
+			&.row-#{$i} { height: $s; }
+		}
+	}
+
+	.content-link-list{
+		@include tile-shadow;
+	}
+}
+
+
+.dashboard-videos {
+	@include tile-shadow();
+
+	&,.body{
+		position: absolute;
+		top: 0; bottom: 0; left: 0; right: 0;
+	}
+
+	h2{display: none;}
+
+	.body {
+		overflow: hidden;
+
+		.video-container {
+			position: relative;
+			margin: 0 auto;
+			width: 533px;
+			height: 300px;
+		}
+
+		.curtain {
+			$playY: 43%;
+			$backSize: 932px;
+			position: absolute;
+			right: 0; left: 0;
+			top: 0; bottom: 0;
+			cursor: pointer;
+			background: {
+				color: #ebebeb;
+				position: center center;
+				size: $backSize auto;
+				repeat: no-repeat;
+			}
+
+			.ctr {
+				position: absolute;
+				overflow: visible;
+				left: 50%;
+				top: $playY;
+				.play {
+					position: relative;
+					top: -24px;//we're fixed to be 48px tall;
+					left: -50%;
+				}
+			}
+
+			.play {
+				position: relative;
+				border-radius: 5em;
+				font: normal 400 18px/48px 'Open Sans Condensed', $font;
+				min-height: 48px;
+				min-width: 45px;
+				color: #fff;
+
+				.blur-clip,.blur {
+					border-radius: 5em;
+					position: absolute;
+					top: 0; left: 0;
+					bottom: 0; right: 0;
+					overflow: hidden;
+				}
+
+				.blur {
+					background: {
+						position: center $playY;
+						size: $backSize auto;
+						repeat: no-repeat;
+					}
+					-webkit-filter: blur(8px);
+					filter: url(#blur-effect);
+				}
+
+				.label {
+					background-color: rgba(0,0,0,0.68);
+					box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),//stroke
+								0 0 3px 0 black;//shadow
+					border-radius: 5em;
+					overflow: hidden;
+					padding: 0 15px 0 50px;
+					max-width: 400px;
+					@include ellipse();
+					@include icon('play',$top:3px,$left:3px);
+					&::before {content:'';}
+				}
+			}
+
+		}
+
+		.screen {
+			position: absolute;
+			left: 0; top: 0; bottom: 0;
+			width: 533px;
+			overflow: hidden;
+			z-index: 2;
+		}
+
+		.video-list{
+			@include scrollbar(#04232c, #0f2d35);
+			position: absolute;
+			left: 0;
+			top: 300px;
+			right: 0;
+			bottom: 0;
+			overflow: {
+				x: auto;
+				y: hidden;
+			}
+			white-space: nowrap;
+			background: rgba(0,0,0,0.6);
+			box-shadow: 0 -3px 2px -2px rgba(0,0,0,1),
+						inset 0 1px 0 0 rgba(255,255,255,0.2);
+
+			.video-row {
+				display: inline-block;
+				position: relative;
+				cursor: pointer;
+				color: #ebebeb;
+				font: italic 500 14px $font;
+				height: 96px;
+				width: 33%;
+				@include experimental-value(width, calc(100% / 3) );
+				overflow: hidden;
+				border:{
+					color: #000;
+					style: solid;
+					width: 0 1px 0 0;
+				}
+
+				.date {
+					line-height: 20px !important;
+				}
+
+				.poster {
+					position: absolute;
+					top: 0; left: 0;
+					width: 90px;
+					height: 96px;
+					box-shadow: inset -1px 1px 0 0 rgba(255, 255, 255, 0.2),
+								inset -3px 0px 3px -2px rgba(0, 0, 0, 0.4);
+					background:{
+						size: cover;
+						position: center center;
+					}
+				}
+
+				.meta {
+					margin: 1px 0 0 90px;
+					padding: 18px 10px;
+					overflow: hidden;
+					height: 100%;
+					@include experimental-value(height, calc(100% - 1px));
+				}
+
+				.comments,.label{
+					@include ellipse();
+					overflow:hidden;
+				}
+
+				.date,.comments {
+					font: normal 700 10px/12px $font;
+					color: $secondary-grey;
+					text-transform: uppercase;
+				}
+
+				&.over{
+					$c: rgba(17,59,70,0.6);
+					background-color: $c;
+					border-color: $c;
+					color: #ffffff;
+
+					.comments{
+						color: #aaeafc;
+					}
+				}
+
+				&.x-item-selected{
+					$c: #323232;
+					background-color: $c;
+					border-color: $c;
+					color: #ffffff;
+
+					box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2),
+								inset 0 0 0 5px #8b8d8d;
+
+					.poster {
+						box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2),
+									inset 0 5px 0 0 #8b8d8d,
+									inset 5px 0 0 0 #8b8d8d,
+									inset 0 -5px 0 0 #8b8d8d;
+					}
+
+					.meta {
+						box-shadow: inset 0 4px 0 0 #8b8d8d,
+									inset 0 -5px 0 0 #8b8d8d,
+									inset 1px 0 0 0 rgba(0, 0, 0, 0.7);
+					}
+
+					.comments{
+						color: #aaeafc;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+.x-container-course-dashboard-tile {
+	position: relative;
+	.scrollbody{
+		background: #fff;
+		top: 0px;
+		bottom: 0;
+
+		left: 0;
+		right: 0;
+
+		position: absolute;
+		overflow:{x: hidden; y: auto;}
+	}
+
+	.tile-header ~ .scrollbody {
+		top: 38px;
+	}
+}
+
+
+.x-component-tile.content-link {
+	cursor: pointer;
+	position: relative;
+	min-height: 80px;
+	box-shadow: inset 0 -1px 0 0 #f2f2f2;
+
+	.thumbnail {
+		position: absolute;
+		width: 60px;
+		top: 0; bottom: 0; left: 0;
+		box-shadow: 0 0 4px 0 rgba(0,0,0,0.4);
+		background:{
+			size: cover;
+			position: center center;
+			repeat: no-repeat;
+		}
+	}
+
+	.meta {
+		padding: 15px;
+		margin: 0 0 0 60px;
+
+		.title {
+			color: $secondary-grey;
+			font: italic 500 14px $font;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.byline{
+			color: $primary-blue;
+			text-transform: uppercase;
+			font: normal 700 10px $font;
+		}
+	}
+}
+
+.tile-header{
+	background: #f2f2f2;
+	border: none;
+	box-shadow: inset 0 -1px 0 0 #eaeaea;
+	color: $primary-grey;
+	padding: 10px;
+	position: absolute;
+	top: 0; left: 0; right: 0;
+
+	.heading {
+		color: $secondary-grey;
+		font: normal 700 10px/18px $font;
+		text-transform: uppercase;
+
+		&.with-label{
+			line-height: normal;
+			color: $tertiary-grey;
+		}
+	}
+
+	.label {
+		font: normal 500 18px $font;
+		color: $primary-grey;
+	}
+}
