@@ -20,6 +20,10 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.view.content.reader.NoteOverlay'
 	],
 
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
+
 	cls: 'x-reader-pane',
 
 	overflowX: 'hidden',
@@ -35,18 +39,18 @@ Ext.define('NextThought.view.content.Reader', {
 			'finished-restore'
 		);
 
-		this.buildModule('reader','annotations');
-		this.buildModule('reader','locationProvider');
-		this.buildModule('reader','iframe');
-		this.buildModule('reader','scroll');
+		this.buildModule('reader','annotations',{reader:this});
+		this.buildModule('reader','locationProvider',{reader:this});
+		this.buildModule('reader','iframe',{reader:this});
+		this.buildModule('reader','scroll',{reader:this});
 		this.buildModule('reader','content',{reader:this});
-		this.buildModule('reader','componentOverlay');
-		this.buildModule('reader','assessment');
-		this.buildModule('reader','resourceManager');
-		this.buildModule('reader','noteOverlay');
-        this.buildModule('modules','touchSender',{container:this});
-        this.buildModule('reader','touchHandler');
-        this.buildModule('reader','touchHighlight');
+		this.buildModule('reader','componentOverlay',{reader:this});
+		this.buildModule('reader','assessment',{reader:this});
+		this.buildModule('reader','resourceManager',{reader:this});
+		this.buildModule('reader','noteOverlay',{reader:this});
+        this.buildModule('modules','touchSender');
+        this.buildModule('reader','touchHandler',{reader:this});
+        this.buildModule('reader','touchHighlight',{reader:this});
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
@@ -77,20 +81,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.setLocation(l,cb,silent);
 	},
-
-
-	buildModule: function(ns, name,config,relay){
-		var m = Ext.createByAlias(ns+'.'+name,Ext.apply({reader:this},config)),
-			getterName = 'get'+Ext.String.capitalize(name);
-
-		if(this[getterName]){
-			console.error('Module getter name taken: '+getterName);
-			return;
-		}
-
-		this[getterName] = function(){return m;};
-	},
-
 
 	primeReadyEvent: function(){
 		this.readyEventPrimed = true;

@@ -11,6 +11,10 @@ Ext.define( 'NextThought.view.contacts.View', {
         'NextThought.view.contacts.TouchHandler'
 	],
 
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
+
 	cls: 'contacts-view',
 	layout: 'auto',
 	title: 'NextThought: Contacts',
@@ -45,18 +49,6 @@ Ext.define( 'NextThought.view.contacts.View', {
         me.buildModule('modules', 'touchSender');
         me.buildModule('contacts', 'touchHandler');
 	},
-
-    buildModule: function(ns, name,config,relay){
-        var m = Ext.createByAlias(ns+'.'+name,Ext.apply({container:this},config)),
-            getterName = 'get'+Ext.String.capitalize(name);
-
-        if(this[getterName]){
-            console.error('Module getter name taken: '+getterName);
-            return;
-        }
-
-        this[getterName] = function(){return m;};
-    },
 
 	monitorTabs: function(panel,newTab,oldTab){
 		if(this.restoring){return;}

@@ -23,7 +23,6 @@ Ext.define('NextThought.modules.TouchHandler', {
             initialY = false;
 
         container.on('touchScroll', function(ele, deltaY) {
-            console.log('SCROLLING!');
 
             var panel = this.getPanel(),
                 currentY = panel.getY(),
