@@ -49,8 +49,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 
 	# From Design:
 	 - Labs (Question Sets)
-	 - 9 Most Active Users
+	 - Supplemental Material
+
+	# Later:
 	 - Poll
 	 - Question?
-	 - Supplemental Material
  */
