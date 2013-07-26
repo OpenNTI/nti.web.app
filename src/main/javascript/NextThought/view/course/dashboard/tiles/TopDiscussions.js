@@ -28,7 +28,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 				k = k.toString();
 
 				if(!m[k]){
-					m[k] = this.create({locationInfo: locationInfo, topicNtiid: id});
+					m[k] = this.create({locationInfo: locationInfo, topicNtiid: id, lastModified: courseNodeRecord.get('Date')});
 				}
 
 				}
@@ -40,42 +40,86 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	},
 
 	cls: 'course-dashboard-discussion-item-list',
-//	defaultType: 'course-dashboard-discussion-item',
 
 	config: {
-		cols: 2,
-		rows: 1,
 		locationInfo: null,
-		topicNtiid: ''
+		topicNtiid: '',
+		weight:1.01
 	},
 
 	constructor: function(config){
 
 		config.items = [
-			{xtype: 'tile-title', heading:'Top Discussions' },
-			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody' }
+			{xtype: 'tile-title', heading:'Top Discussions' }
 		];
 
 		this.callParent([config]);
 
+		this.view = this.add({
+			xtype: 'dataview',
+			cls:'scrollbody topics-list',
+			ui: 'tile',
+
+			preserveScrollOnRefresh: true,
+			selModel: {
+				allowDeselect: false,
+				deselectOnContainerClick: false
+			},
+			itemSelector:'.row',
+			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
+				cls: 'row',
+				cn: [
+					{ cls: 'title', html: '{title}' },
+					{ tag: 'span', cls: 'byline', cn: [
+						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'}
+					]}
+				]
+			}]})
+		});
+
 		$AppConfig.service.getObject(this.getTopicNtiid(),
 				this.onTopicResolved,
-				this.onTopicResolveFailure,
+				this.onResolveFailure,
 				this,
 				true
 		);
 	},
 
-	onTopicResolved: function(topic){
-		if(!/topic$/i.test(topic.get('Class'))){
-			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
-		}
 
+	onForumResolved: function(forum){
+		var sId = 'dashboard-'+forum.getContentsStoreId(),
+			store = Ext.getStore(sId) || forum.buildContentsStore({storeId:sId});
+
+
+
+		this.view.bindStore(store);
+		if(!store.loaded){
+			store.load();
+		}
 	},
 
 
-	onTopicResolveFailure: function(){
-		console.warn('Could not load the topic object to show the comment count.');
+	onTopicResolved: function(topic){
+		if(!/topic$/i.test(topic.get('Class'))){
+			if(!/forum$/i.test(topic.get('Class'))){
+				console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
+				return;
+			}
+			this.onForumResolved(topic);
+			return;
+		}
+
+		$AppConfig.service.getObject(
+				topic.get('ContainerId'),
+				this.onForumResolved,
+				this.onResolveFailure,
+				this,
+				true );
+	},
+
+
+	onResolveFailure: function(){
+		console.warn('Could not load the object');
 	}
 
 });
