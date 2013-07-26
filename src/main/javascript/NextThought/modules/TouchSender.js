@@ -29,8 +29,12 @@ Ext.define('NextThought.modules.TouchSender', {
     },
 
     /**
-     * Implements the touch interactions for the reader if the current
-     * platform is an iPad.
+     * Fires various useful ExtJS events based on touch interactions for the attached container
+     * if the current platform is an iPad. This should be complemented by a TouchHandler that
+     * does the actual actions based on the events depending on the component.
+     * @note The callbacks in some fired events should only be called once (even if multiple
+     *       handlers listen to it)
+     * @note Built on a fsm that changes state based on the touch events and current state.
      * @param config
      */
     constructor: function(config) {
@@ -63,6 +67,11 @@ Ext.define('NextThought.modules.TouchSender', {
             //current movement delta
             vel;
 
+        /**
+         * Only count touches within the set threshold. Otherwise,
+         * it moves to another state (scroll,select,drag)
+         * @returns {boolean}
+         */
         function withinTapThreshold() {
             return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
         }
@@ -89,23 +98,17 @@ Ext.define('NextThought.modules.TouchSender', {
 
                 pickedElement = ele;
 
-                console.log('touchStart');
-
+                // Set a timer for a long press
                 setTimeout(function() {
-
-                    console.log('long press');
                     container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
 
                     container.fireEvent('touchElementIsDraggable', ele, function(is){
                         if(!is || state !== s.STATE.DOWN) return;
                         state = s.STATE.DRAGGING;
-                        console.log('start dragging');
                     });
                     container.fireEvent('touchElementIsSelectable', ele, function(is) {
                         if(!is || state !== s.STATE.DOWN) return;
                         state = s.STATE.SELECTING;
-                        console.log('start selecting');
-                        // TODO: Some animation to show user selecting has started?
                     });
 
                 }, s.TAP_HOLD_TIME);
@@ -121,12 +124,9 @@ Ext.define('NextThought.modules.TouchSender', {
 
             container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
 
-            console.log('touchMove');
-
             if (state === s.STATE.DOWN) {
                 scrollMove();
-                if (!withinTapThreshold())
-                {
+                if (!withinTapThreshold()) {
                     container.fireEvent('touchElementIsScrollable', pickedElement, function(is) {
                         if (is) state = s.STATE.SCROLLING;
                     });
@@ -182,11 +182,11 @@ Ext.define('NextThought.modules.TouchSender', {
                 tempState = state;
             state = s.STATE.NONE;
 
-            console.log('touchEnd');
-
             if (tempState === s.STATE.DOWN) {
                 container.fireEvent('touchTap', pickedElement);
                 // Send click/select event to the tapped element
+                // Some input elements need a workaround to select
+                // the entire thing.
                 if (shouldSelectAllOnTap())
                     pickedElement.setSelectionRange(0,1000);
                 else
@@ -199,8 +199,6 @@ Ext.define('NextThought.modules.TouchSender', {
                 kineticScroll();
             }
             else if (tempState === s.STATE.SELECTING) {
-                console.log('stop selection');
-
                 container.fireEvent('touchMakeRangeFrom', initialX, initialY, lastX, lastY,
                     function(range) {
                         var xy = [lastX, lastY];
@@ -209,7 +207,6 @@ Ext.define('NextThought.modules.TouchSender', {
                 );
             }
             else if (tempState === s.STATE.DRAGGING) {
-                console.log('stop dragging');
                 container.fireEvent('touchDrop', pickedElement, lastX, lastY);
             }
             else
@@ -239,5 +236,4 @@ Ext.define('NextThought.modules.TouchSender', {
         }); // eo touchEnd
 
     } // eo setupTouchHandlers
-
 });
