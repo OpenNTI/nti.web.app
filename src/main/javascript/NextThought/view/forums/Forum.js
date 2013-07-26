@@ -185,10 +185,9 @@ Ext.define('NextThought.view.forums.Forum',{
 			'activate':'onActivate',
 			'itemupdate':'itemUpdate'
 		});
-        //this.mixins.ModuleContainer.buildModule('modules', 'touchSender');
-        //this.mixins.ModuleContainer.buildModule('forums', 'touchHandler');
+
         this.buildModule('modules', 'touchSender');
-        this.buildModule('forums', 'touchHandler');
+        this.buildModule('forums', 'touchHandler', {topics:true});
 	},
 
 

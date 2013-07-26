@@ -4,6 +4,8 @@ Ext.define('NextThought.view.forums.TouchHandler', {
     alias: 'forums.touchHandler',
 
     getPanel: function() {
-        return this.container.getEl();
+            return this.container.getEl();
     }
+
+
 });

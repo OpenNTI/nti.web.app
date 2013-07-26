@@ -7,7 +7,8 @@ Ext.define('NextThought.view.forums.Topic',{
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		profileLink: 'NextThought.mixins.ProfileLinks',
 		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting',
-		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
+		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock',
+        ModuleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
 	requires:[
@@ -15,7 +16,9 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.view.forums.Comment',
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.ux.SearchHits',
-		'NextThought.layout.component.Natural'
+		'NextThought.layout.component.Natural',
+        'NextThought.modules.TouchSender',
+        'NextThought.view.forums.TouchHandler'
 	],
 
 	onClassExtended: function(cls, data){
@@ -237,6 +240,10 @@ Ext.define('NextThought.view.forums.Topic',{
 				return false;
 			}
 		});
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('forums', 'touchHandler', {topics:false});
+
 	},
 
 
