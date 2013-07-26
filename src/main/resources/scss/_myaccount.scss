@@ -65,7 +65,7 @@
 			}
 
 			&.loading {
-				background: $loading-indicator 100px center no-repeat;
+				@include loadingSpinner($top:40%, $left: 100px);
 			}
 
 			.name {

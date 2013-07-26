@@ -1,5 +1,3 @@
-
-
 #loading-mask {
 	position: absolute;
 	left: 0;
@@ -9,24 +7,25 @@
 	z-index: 9999999;
 	background-color: white;
 }
+
 #loading {
 	position: absolute;
-	left: 0;
-	top: 0;
+	left: 50%;
+	top: 50%;
 	padding: 2px;
 	z-index: 99999993;
 	height: auto;
 	margin: 0;
 	div{
+		width: 117px;
+		height: 42px;
+		margin: -50% 0 0 -50%;
 		border: none;
-	    padding: 1em 1em 1em 1.3em;
-        margin: 1em;
-		font-size: 18px;
-		background: {
+	    background: {
+			image: url(../images/elements/folding_logo.gif);
 			repeat: no-repeat;
-			image: $loading-indicator !important;
 			color: transparent;
-			position: left center;
+			position: center center;
 		};
 	}
 }
@@ -36,7 +35,6 @@
     border: none !important;
 	background: transparent;
 	color: #555;
-	//z-index: 999992;
 
 	&.body-mask,
 	&.drag-mask {
@@ -55,21 +53,19 @@
 	}
 
 	.x-mask-msg-text {
+		padding: 10px 10px 10px 30px;
 		color: #555;
 		font-family: $font;
 		border: none;
+		background: none !important;
 
-		$c: rgba(255,255,255,0.7);
-		background: {
-			repeat: no-repeat;
-			image: $loading-indicator;
-			//color: transparent;
-			color: $c;
-			position: left center;
-		};
+		&::after {
+			@include loadingSpinner();
+		}
 
-		box-shadow: 0em 0 20px 20px $c;
-		border-radius: 10em;
+
+		border-radius: 2em;
+		//box-shadow: 0 0 6px 0 rgba(255,255,255,0.6);
 	}
 
 	&.loading {
@@ -86,12 +82,11 @@
 			border: none;
 			padding: 1em 1em 1.5em 1em;
 			font-size: 18px;
-			background-position: center bottom;
-
-			$c: rgba(255,255,255,0.7);
-			background-color: $c;
-			box-shadow: 0em 0 20px 20px $c;
-			border-radius: 100%;
+			&::after {
+				top: auto;
+				bottom: 0;
+				left: 36%;
+			}
 		}
 	}
 
@@ -119,7 +114,7 @@
 .nt-mask,
 .x-mask {
 	opacity: 1;
-	background: rgba(255,255,255,0.6);
+	background: rgba(255,255,255,0.75);
 //	z-index: 999991;
 
 	&.nti-clear {
@@ -180,41 +175,6 @@
 		@include sprite($elements,'tooltip-pointer-black-left',$dimensions: true);
 	}
 }
-
-//#NTIContent *[data-qtip]:hover{
-//	position: relative;
-//	overflow: visible;
-//
-//	&::after {
-//		content: url(../images/elements/tooltip-pointer-black-bottom.png) !important;
-//		position: absolute !important;
-//		overflow: hidden !important;
-//		background: none !important;
-//		top: -7px !important;
-//		left: 50% !important;
-//	}
-//
-//	&::before{
-//		content: attr(data-qtip);
-//		display: block;
-//		position: absolute;
-//		overflow: hidden;
-//		pointer-events: none;
-//		background-color: #404040;
-//		border-width: 0;
-//		padding: 3px 5px;
-//		border-radius: 0;
-//		box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
-//		text-transform: uppercase;
-//		color: #ffffff;
-//		font-size: 11px;
-//		font-weight: 600;
-//		top: -30px;
-//		white-space: nowrap;
-//		line-height: 20px;
-//		z-index: 9999;
-//	}
-//}
 
 .dark .x-mask {
 	background: rgba(0,0,0,0.9) !important;

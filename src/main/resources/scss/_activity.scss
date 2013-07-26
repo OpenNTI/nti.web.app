@@ -72,9 +72,7 @@
 			}
 
 			&.loading::after {
-				background: $loading-indicator 0 0 no-repeat;
-				width: 16px; height: 16px;
-				top: 12px;
+				@include loadingSpinner();
 			}
 
 			//&.user::after{ @include sprite($icons, 'add-contact-14x14', $dimensions: true); }

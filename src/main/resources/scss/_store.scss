@@ -601,10 +601,7 @@
       margin: 20px auto;
       padding: 2px 2px 2px 24px;
       &::after {
-        content: url(../images/elements/ajax-loader.gif);
-        position: absolute;
-        top: 5px;
-        left: 0;
+		  @include loadingSpinner($top: 5px,$left: 0);
       }
     }
 

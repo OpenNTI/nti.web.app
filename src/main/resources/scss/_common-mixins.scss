@@ -13,6 +13,24 @@
 }
 
 
+@mixin loadingSpinner($top:8px, $left: 10px){
+	display: block;
+	content: ' ';
+	background: {
+		image: $loading-indicator;
+		size: cover;
+		position: center center;
+		repeat: no-repeat;
+	}
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	top: $top;
+	left: $left;
+
+	@include animate($name: rotate, $duration: 2s, $delay: 0s, $function: linear, $iteration:infinite);
+}
+
 @mixin presence-style{
 	width: 7px;
 	height: 7px;
