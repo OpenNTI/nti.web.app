@@ -1,35 +1,3 @@
-#loading-mask {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 9999999;
-	background-color: white;
-}
-
-#loading {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	padding: 2px;
-	z-index: 99999993;
-	height: auto;
-	margin: 0;
-	div{
-		width: 117px;
-		height: 42px;
-		margin: -50% 0 0 -50%;
-		border: none;
-	    background: {
-			image: url(../images/elements/folding_logo.gif);
-			repeat: no-repeat;
-			color: transparent;
-			position: center center;
-		};
-	}
-}
-
 .nt-mask-msg,
 .x-mask-msg{
     border: none !important;
