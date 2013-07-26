@@ -169,7 +169,7 @@ Ext.define('NextThought.modules.TouchSender', {
         }, false);
 
         function shouldSelectAllOnTap() {
-            return pickedElement.tagName === 'INPUT';
+            return pickedElement && pickedElement.tagName === 'INPUT';
         }
 
         dom.addEventListener('touchend', function(e){

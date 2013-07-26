@@ -3,8 +3,14 @@ Ext.define('NextThought.view.chat.View', {
     alias: 'widget.chat-view',
 
     requires: [
+        'NextThought.modules.TouchSender',
         'NextThought.view.chat.Log',
-        'NextThought.view.chat.Entry'
+        'NextThought.view.chat.Entry',
+        'NextThought.view.chat.TouchHandler'
+    ],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
     ],
 
 	header: false,
@@ -78,6 +84,9 @@ Ext.define('NextThought.view.chat.View', {
 	    this.on('resize',this.reanchorLog,this);
 	    this.on('status-change', this.trackChatState, this);
         this.maybeShowFlagIcon();
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('chat', 'touchHandler');
     },
 
 

@@ -39,18 +39,19 @@ Ext.define('NextThought.view.content.Reader', {
 			'finished-restore'
 		);
 
-		this.buildModule('reader','annotations',{reader:this});
-		this.buildModule('reader','locationProvider',{reader:this});
-		this.buildModule('reader','iframe',{reader:this});
-		this.buildModule('reader','scroll',{reader:this});
-		this.buildModule('reader','content',{reader:this});
-		this.buildModule('reader','componentOverlay',{reader:this});
-		this.buildModule('reader','assessment',{reader:this});
-		this.buildModule('reader','resourceManager',{reader:this});
-		this.buildModule('reader','noteOverlay',{reader:this});
+        var rRef = {reader:this};
+		this.buildModule('reader','annotations',rRef);
+		this.buildModule('reader','locationProvider',rRef);
+		this.buildModule('reader','iframe',rRef);
+		this.buildModule('reader','scroll',rRef);
+		this.buildModule('reader','content',rRef);
+		this.buildModule('reader','componentOverlay',rRef);
+		this.buildModule('reader','assessment',rRef);
+		this.buildModule('reader','resourceManager',rRef);
+		this.buildModule('reader','noteOverlay',rRef);
         this.buildModule('modules','touchSender');
-        this.buildModule('reader','touchHandler',{reader:this});
-        this.buildModule('reader','touchHighlight',{reader:this});
+        this.buildModule('reader','touchHandler',rRef);
+        this.buildModule('reader','touchHighlight',rRef);
 
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});

@@ -5,7 +5,6 @@ Ext.define('NextThought.view.contacts.TouchHandler', {
 
     getPanel: function() {
         return this.container.getEl()
-            .down('.x-tabpanel-child{display!=none}')
-            .child(':first');
+            .down('.x-tabpanel-child{display!=none} > :first');
     }
 });
