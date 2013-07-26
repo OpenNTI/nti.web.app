@@ -581,10 +581,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 		store = Ext.getStore(storeId) || record.buildContentsStore(storeCfg, extraParams);
-		//Because the View is tied to the store and its events, any change to
-		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
-		// Creator string with the user model and presto!
-		store.on('load',this.fillInUsers,this);
+
 		cmpCfg = Ext.applyIf({xtype: 'forums-'+level+'-list', record: record, store: store}, cfg || {});
 		c.add(cmpCfg);
 	},
@@ -701,35 +698,6 @@ Ext.define('NextThought.controller.Forums', {
 		if(silent !== true){
 			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 		}
-	},
-
-
-	fillInUsers: function(store, records){
-		var users = Ext.Array.map(records,function(r){return r.get('Creator');});
-
-		function apply(r,i){
-			var u = users[i],
-				id = u.getId(),
-				c = r.get('Creator');
-
-			if(c !== id && !Ext.isString(c) && c && c.getId() !== id){
-				console.error('Bad mapping:', c, id, records, users, i);
-				return;
-			}
-
-			if(c && !c.isModel){
-				r.set('Creator',u);
-			}
-		}
-
-		UserRepository.getUser(users,function(u){
-			users = u;
-
-			store.suspendEvents(true);
-			Ext.each(records,apply);
-			store.resumeEvents();
-
-		});
 	},
 
 
