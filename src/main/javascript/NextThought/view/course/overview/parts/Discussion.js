@@ -44,15 +44,15 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 		this.renderData = Ext.apply(this.renderData||{},this.data);
 
 		$AppConfig.service.getObject(this.data.ntiid,
-				this.onBoardResolved,
-				this.onBoardResolveFailure,
+				this.onTopicResolved,
+				this.onTopicResolveFailure,
 				this,
 				true
 		);
 	},
 
 
-	onBoardResolved: function(topic){
+	onTopicResolved: function(topic){
 		if(!/topic$/i.test(topic.get('Class'))){
 			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
 		}
@@ -63,7 +63,7 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 	},
 
 
-	onBoardResolveFailure: function(){
+	onTopicResolveFailure: function(){
 		console.warn('Could not load the topic object to show the comment count.');
 	},
 

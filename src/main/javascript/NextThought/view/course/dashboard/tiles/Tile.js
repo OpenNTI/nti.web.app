@@ -5,12 +5,38 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		'NextThought.layout.component.Natural'
 	],
 
+	inheritableStatics: {
+
+		/**
+		 * @param {NextThought.model.course.navigation.Node} r
+		 * @returns {Node[]}
+		 */
+		getChildrenNodes: function(r){
+			return r && r.getChildren && r.getChildren();
+		},
+
+		/**
+		 * @param {NextThought.model.course.navigation.Node} r
+		 * @returns {NextThought.store.course.Navigation}
+		 */
+		getCourseNavStore: function(r){
+			return r && r.store;
+		}
+	},
+
 	statics: {
 		/**
 		 * Example implementation of getTileFor.  Do not use "inheritableStatics" for this function. It needs to be
 		 * CLASS specific.
+		 *
+		 * @param {Date} effectiveDate
+		 * @param {Node} course The node from the ToC document describing this course. aka the <course> tag.
+		 * @param {Object} locationInfo the results of {@link NextThought.util.Content#getLocation()} The location information of the navigation that triggered a onCourseChanged.
+		 * @param {NextThought.model.course.navigation.Node} courseNodeRecord The record in the course nav store that represents the current point in the course - on or after the effectiveDate.
+		 *
+		 * @returns {NextThought.view.course.dashboard.tiles.Tile|NextThought.view.course.dashboard.tiles.Tile[]}
 		 */
-		getTileFor: function(date, courseNode, locationInfo, currentCourseNode, nextCourseNode){}
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){ return null; }
 	},
 
 	config: {
@@ -20,7 +46,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		lastModified: new Date(0)
 	},
 
-	ui: 'course-dashboard',
+	ui: 'course-dashboard-tile',
 	layout: 'auto',
 	componentLayout: 'natural',
 
@@ -39,7 +65,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 	# Tiles Needed:
 
 	 - Up Next
-	 - Top Forum Topics (Top Discussions)
 	 - Latest Topic (from teacher's forum)
 	 - Sprinkles:
 		- Most Commented Discussions(forums? or notes?... if the former, isn't that the same as the second one?)

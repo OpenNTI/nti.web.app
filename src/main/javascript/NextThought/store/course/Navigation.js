@@ -30,15 +30,5 @@ Ext.define('NextThought.store.course.Navigation',{
 	 */
 	getCurrentBy: function(date){
 		return this.getAt(this.findByDate(date));
-	},
-
-
-	/**
-	 *
-	 * @param {Date} date
-	 * @returns {NextThought.model.course.navigation.Node}
-	 */
-	getNextBy: function(date){
-		return this.getAt(this.findByDate(date)+1);
 	}
 });

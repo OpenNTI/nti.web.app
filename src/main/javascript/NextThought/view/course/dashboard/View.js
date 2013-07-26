@@ -28,33 +28,34 @@ Ext.define('NextThought.view.course.dashboard.View',{
 
 		this.setTiles(this.queryTiles(
 				date,course,l,
-				courseNavStore.getCurrentBy(date),
-				courseNavStore.getNextBy(date)
+				courseNavStore.getCurrentBy(date)
 		));
 	},
 
 
 	/**
-	 * Return a set of tile configs for the given arguments.
+	 * Return a set of tile configs/instances for the given arguments.
 	 *
 	 * This will ask each implementation if it has something to show, if it does it will return a config
+	 *
+	 * @see NextThought.view.course.dashboard.tiles.Tile#getTileFor
 	 *
 	 * @param {Date} date
 	 * @param {Node} course
 	 * @param {Object} location
-	 * @param {NextThought.model.course.navigation.Node} currentCourseNode
-	 * @param {NextThought.model.course.navigation.Node} nextCourseNode
-	 * @returns {Array}
+	 * @param {NextThought.model.course.navigation.Node} courseNode
+	 * @returns {Ext.Component[]|Object[]}
 	 */
-	queryTiles: function(date, course, location, currentCourseNode, nextCourseNode){
+	queryTiles: function(date, course, location, courseNode){
 		var NS = NextThought.view.course.dashboard.tiles,
-			tiles = [];
+			tiles = [],
+			push = tiles.push;
 
 		Ext.Object.each(NS,function(clsName,cls){
 			var fn = cls.getTileFor,
-				o = fn && fn.call(cls, date, course, location, currentCourseNode, nextCourseNode);
+				o = fn && fn.call(cls, date, course, location, courseNode);
 			if( o ){
-				tiles.push(o);
+				push[Ext.isArray(o)?'apply':'call'](tiles,o);
 			}
 		});
 

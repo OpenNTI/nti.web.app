@@ -4,9 +4,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 
 	statics: {
 
-		getTileFor: function(date, courseTocNode, locationInfo, courseRecord){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
 			var DQ = Ext.DomQuery,
-				items = courseRecord && courseRecord.getChildren(),
+				items = this.getChildrenNodes(courseNodeRecord),
 				refs = [];
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )

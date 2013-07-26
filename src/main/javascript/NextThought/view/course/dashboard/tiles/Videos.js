@@ -4,11 +4,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 
 	statics: {
 
-		getTileFor: function(date, courseTocNode, locationInfo, courseRecord /*, ...don't care about the rest of the args*/){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
 			var f = 'object[mimeType$=ntivideo]',
 				DQ = Ext.DomQuery,
 				videos = [],
-				store = courseRecord && courseRecord.store, r, i, len;
+				store = this.getCourseNavStore(courseNodeRecord), r, i, len;
 
 			function addDate(r){
 				return function(n){
@@ -21,7 +21,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			}
 
 			if(store){
-				i = store.indexOf(courseRecord);
+				i = store.indexOf(courseNodeRecord);
 				len = store.getCount();
 				for(i; i<len; i++){
 					r = store.getAt(i);
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			}
 
 			//We have videos
-			return this.create({lastModified: date, sources: videos, locationInfo: locationInfo});
+			return this.create({lastModified: effectiveDate, sources: videos, locationInfo: locationInfo});
 		}
 
 	},
