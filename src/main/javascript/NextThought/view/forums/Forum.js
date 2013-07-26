@@ -11,10 +11,15 @@ Ext.define('NextThought.view.forums.Forum',{
 	alias: ['widget.forums-forum','widget.forums-topic-list'],
 
 	mixins: {
-		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
+		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock',
+        ModuleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
-	requires: [ 'NextThought.util.Time' ],
+	requires: [
+        'NextThought.util.Time',
+        'NextThought.modules.TouchSender',
+        'NextThought.view.forums.TouchHandler'
+    ],
 
 	cls: 'topic-list list',
 	itemSelector: '.topic-list-item',
@@ -180,6 +185,10 @@ Ext.define('NextThought.view.forums.Forum',{
 			'activate':'onActivate',
 			'itemupdate':'itemUpdate'
 		});
+        //this.mixins.ModuleContainer.buildModule('modules', 'touchSender');
+        //this.mixins.ModuleContainer.buildModule('forums', 'touchHandler');
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('forums', 'touchHandler');
 	},
 
 
