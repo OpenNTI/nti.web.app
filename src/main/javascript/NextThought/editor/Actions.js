@@ -694,7 +694,7 @@ Ext.define('NextThought.editor.Actions', {
 		var v = {
 			Class: 'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
-			href: '//www.youtube.com/embed/AqojIuOdJ3k',
+			embedURL: '//www.youtube.com/embed/AqojIuOdJ3k',
 			type: 'youtube'
 		};
 		return v;
@@ -949,7 +949,7 @@ Ext.define('NextThought.editor.Actions', {
 		var me = this;
 		var el = Ext.get(guid);
 		if(el){
-			el.set({'data-href': obj.href, 'data-type': obj.type});
+			el.set({'data-href': obj.embedURL, 'data-type': obj.type});
 		}
 
 	},
@@ -987,8 +987,8 @@ Ext.define('NextThought.editor.Actions', {
 	videoPart: function(vp){
 		var hrefRegex = /.*?data-href="(.*?)".*?/,
 			typeRegex = /.*?data-type="(.*?)".*?/,
-			href = hrefRegex.exec(vp)[1],
-			type = typeRegex.exec(vp)[1];
+			href = hrefRegex && hrefRegex.exec(vp)[1],
+			type = typeRegex && typeRegex.exec(vp)[1];
 
 
 		if(!href || !type){

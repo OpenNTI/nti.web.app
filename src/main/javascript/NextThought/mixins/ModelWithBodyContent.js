@@ -5,6 +5,11 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		'application/vnd.nextthought.embeddedvideo': '[video]'
 	},
 
+	rendererForPart: {
+		'application/vnd.nextthought.canvas': 'whiteboardRenderer',
+		'application/vnd.nextthought.embeddedvideo': 'embeddedVideoRenderer'
+	},
+
 	getBodyText: function(hasNoPlaceholderForImage) {
 
 		var o = this.get('body'), text = [];
@@ -53,17 +58,89 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		}]
 	}).compile(),
 
+	whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope){
+		var id = guidGenerator(),
+			me = this,
+			Canvas = NextThought.view.whiteboard.Canvas;
+		Canvas.getThumbnail(o, function(thumbnail){
+			var t = me.WHITEBOARD_THUMBNAIL_TPL.apply([
+						id,
+						thumbnail,
+						clickHandlerMaker.call(scope,id,o)||'',
+						size||''
+					]);
+			Ext.callback(callback, scope, [t]);
+		});
+	},
+
+	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope){
+		var width = (size || 225), height = width / (4.0/3.0);
+
+		function youtubeMarkupForHref(href){
+			var adjustedHref,
+				opts = {
+					frameborder: "0",
+					marginwidth: "0",
+					marginheight: "0",
+					rel: "0",
+					seamless: "1",
+					transparent: "1",
+					allowfullscreen:"1",
+					allowtransparency: "1",
+					modestbranding: "1",
+					height: height,
+					width: width,
+				}, tag, params = [];
+			if(href){
+				Ext.Object.each(opts, function(k, v){
+					params.push(k+'='+v);
+				});
+				adjustedHref = [href, params.join('&')].join(href.indexOf("?") < 0 ? "?" : "&");
+
+				return Ext.apply({
+					tag: 'iframe',
+					cls: 'youtube-player',
+					href: href,
+					src: adjustedHref
+				}, opts);
+			}
+			return null;
+		}
+
+		function html5videoForHref(href){
+			if(!href){
+				return null;
+			}
+			return {
+				tag: 'video',
+				href: href,
+				controls: '',
+				style: {width: width+'px', height: height+'px'},
+				name: 'media',
+				cn: {
+					tag: 'source',
+					src: href
+				}
+			}
+		}
+
+		var types = {youtube: youtubeMarkupForHref},
+			fn = types[o.type] || html5videoForHref,
+			cfg = fn(o.embedURL);
+
+		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
+	},
+
 	compileBodyContent: function(result,scope,clickHandlerMaker,size){
 
 		var me = this,
-			Canvas = NextThought.view.whiteboard.Canvas,
 			body = (me.get('body')||[]).slice().reverse(),
 			text = [];
 
 		clickHandlerMaker = clickHandlerMaker || function(){return '';};
 
 		function render(i){
-			var o = body[i], id;
+			var o = body[i], id, fn;
 
 			if(i<0){
 				result.call(scope,text.join(''));
@@ -75,23 +152,16 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			else {
 				//TODO need to add support for the other potential part types now.  I.E. EmbeddedVideo,
 				//and for things we don't support some kind of placeholder?
-				if(o.MimeType != 'application/vnd.nextthought.canvas'){
-					console.error('Not rendering part we don\'t understand', o);
-					render(i-1);
+				fn = me[me.rendererForPart[o.MimeType] || ''];
+				if(Ext.isFunction(fn)){
+					fn.call(me, o, clickHandlerMaker, size, function(t){
+						text.push(t);
+						render(i-1);
+					}, me);
 				}
 				else{
-					id = guidGenerator();
-					Canvas.getThumbnail(o, function(thumbnail){
-						text.push(
-							me.WHITEBOARD_THUMBNAIL_TPL.apply([
-								id,
-								thumbnail,
-								clickHandlerMaker.call(scope,id,o)||'',
-								size||''
-							])
-						);
-						render(i-1);
-					});
+					console.error('Not rendering part we don\'t understand', o);
+					render(i-1);
 				}
 			}
 		}

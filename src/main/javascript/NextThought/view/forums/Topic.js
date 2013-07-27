@@ -446,84 +446,6 @@ Ext.define('NextThought.view.forums.Topic',{
 		return this.record;
 	},
 
-	//For the demo process our body looking for things that appear to be links
-	//to videos.  If we understand them inline the video.  This is for the demo and pretty
-	//nasty.  Long term we need markup language for this.
-	processForVideos: function(){
-
-		function youtubeMarkupForHref(href){
-			var adjustedHref,
-				opts = {
-					frameborder: "0",
-					marginwidth: "0",
-					marginheight: "0",
-					rel: "0",
-					seamless: "1",
-					transparent: "1",
-					allowfullscreen:"1",
-					allowtransparency: "1",
-					modestbranding: "1",
-					height: "360",
-					width: "640"
-				}, tag, params = [];
-			if(href){
-				Ext.Object.each(opts, function(k, v){
-					params.push(k+'='+v);
-				});
-				adjustedHref = [href, params.join('&')].join(href.indexOf("?") < 0 ? "?" : "&");
-
-				return Ext.apply({
-					tag: 'iframe',
-					cls: 'youtube-player',
-					href: href,
-					src: adjustedHref
-				}, opts);
-			}
-			return null;
-		}
-
-		function html5videoForHref(href){
-			if(!href){
-				return null;
-			}
-			return {
-				tag: 'video',
-				href: href,
-				controls: '',
-				style: {width: '640px', height: '360px'},
-				name: 'media',
-				cn: {
-					tag: 'source',
-					src: href
-				}
-			}
-		}
-
-		this.bodyEl.select('a[href]').each(function(anchor){
-			var re = /\/\/.*\?.*inlinevid.*/,
-				href = anchor.getAttribute('href'), markup;
-
-			//Note the last condition. Stupid dataserver will duplicate links if you edit
-			//and save a note with an 'a' in it. Luckily when it does this it screws up
-			//the innerHTML.  That allows us to kind of detect it and not show a butt ton
-			//of videos
-			if(href && re.test(href) && anchor.dom.innerHTML === href){
-
-				if(/youtube/.test(href)){
-					markup = youtubeMarkupForHref(href);
-				}
-				else{
-					markup = html5videoForHref(href);
-				}
-
-				if(markup){
-					Ext.DomHelper.insertBefore(anchor, markup);
-					anchor.remove();
-				}
-			}
-		});
-	},
-
 
 	onBeforeDeactivate: function(){
 		if(this.bodyEl){
@@ -560,8 +482,6 @@ Ext.define('NextThought.view.forums.Topic',{
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
-
-		this.processForVideos();
 
 		this.bodyEl.select('img').each(function(img){
 			img.on('load', function(){ me.fireEvent('sync-height'); });
