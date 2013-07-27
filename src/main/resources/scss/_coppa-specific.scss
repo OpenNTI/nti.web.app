@@ -7,6 +7,7 @@
 .createlist-window,
 .coderetrieval-window,
 .recovery-email-window,
+.embedvideo-window,
 .coppa-window {
 	@extend .nti-window;
 
@@ -272,6 +273,7 @@
 	.coderetrieval-main-view,
 	.recovery-email-view,
 	.contact-main-view,
+	.embedvideo-main-view,
 	.coppa-main-view {
 		color: $secondary-grey;
 
@@ -308,7 +310,7 @@
 			}
 
 			&.error {
-				input, input:focus {
+				textarea, input, input:focus {
 					box-shadow: -4px 0 0 0 $primary-red;
 				}
 			}
@@ -441,6 +443,7 @@
 	.codecreation-main-view,
 	.coderetrieval-main-view,
 	.createlist-main-view,
+	.embedvideo-main-view,
 	.contact-main-view {
 		.input-wrapper {
 			margin-left: 34px;
@@ -459,7 +462,8 @@
 		}
 	}
 
-	.contact-main-view{
+	.contact-main-view,
+	.embedvideo-main-view{
 		.input-box{
 			width: 99%;
 		}

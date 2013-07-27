@@ -4,7 +4,8 @@ Ext.define('NextThought.editor.Actions', {
 		'NextThought.view.form.fields.TagField',
 		'NextThought.view.form.fields.UserListField',
 		'NextThought.view.form.fields.UserTokenField',
-		'NextThought.util.Sharing'
+		'NextThought.util.Sharing',
+		'NextThought.editor.embedvideo.Window'
 	],
 
 	mixins: {
@@ -694,8 +695,8 @@ Ext.define('NextThought.editor.Actions', {
 		var v = {
 			Class: 'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
-			embedURL: '//www.youtube.com/embed/AqojIuOdJ3k',
-			type: 'youtube'
+			embedURL: url,
+			type: type
 		};
 		return v;
 	},
@@ -710,15 +711,13 @@ Ext.define('NextThought.editor.Actions', {
 		}
 
 		if(!data){
-			Ext.Msg.show({
-				msg: 'Just give us an embed link and we\'ll do the rest.',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				buttonText: {'ok': 'Insert'},
-				title: 'Embed video...',
-				fn: function(){
-					me.insertObjectThumbnail(me.editor.down('.content'), guid, me.createVideoPart(), data, append, true);
+			Ext.widget('embedvideo-window', {
+				onEmbed: function(data){
+					var part = me.createVideoPart(data.embedURL, data.type);
+					me.insertObjectThumbnail(me.editor.down('.content'), guid, part, data, append, true);
+
 				}
-			});
+			}).show();
 		}
 		else{
 			this.insertObjectThumbnail(me.editor.down('.content'), guid, data, append);
