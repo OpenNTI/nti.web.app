@@ -4,6 +4,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 	enableTags: true,
 	enableTitle: true,
+	enableVideo: true,
 	enableShareControls: true,
 
 	cls: 'blog-editor',

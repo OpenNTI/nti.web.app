@@ -72,11 +72,11 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			cn: [{
 				cls: 'left',
 				cn: [{
+					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
+				},{
 					tag: 'tpl', if: 'enableVideo', cn: {
 						cls: 'action video', 'data-qtip': 'Embed a video'
 					}
-				},{
-					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
 				},{
 					cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
 						{cls:'popover', cn:[
@@ -121,7 +121,6 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		}
 	},
 
-
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
@@ -133,7 +132,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			enableTags: Boolean(this.enableTags),
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
-			enableVideo: Boolean(this.enableVideo),
+			enableVideo: $AppConfig.service.canCanvasURL() && Boolean(this.enableVideo), //Need to get our own capability for this
 			placeholderText: this.placeholderText
 		});
 	},

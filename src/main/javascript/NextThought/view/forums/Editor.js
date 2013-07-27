@@ -7,6 +7,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	enableTags: true,
 	enableTitle: true,
+	enableVideo: true,
 
 	headerTplOrder: '{title}{toolbar}',
 
