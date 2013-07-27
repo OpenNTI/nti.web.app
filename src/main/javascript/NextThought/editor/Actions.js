@@ -48,6 +48,13 @@ Ext.define('NextThought.editor.Actions', {
 		}]
 	}).compile(),
 
+	objectThumbnailTemplates: {
+		'application/vnd.nextthought.canvas': 'wbThumbnailTpm'
+	},
+
+	onThumbnailInsertedMap: {
+		'application/vnd.nextthought.canvas': 'onWhiteboardThumbnailInserted'
+	},
 
 	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
 
@@ -528,8 +535,15 @@ Ext.define('NextThought.editor.Actions', {
 
 	editorContentAction: function(e){
 		var t = e.getTarget('.action', undefined, true), action;
-		if (t && t.is('.whiteboard')) {
+		if(!t){
+			return;
+		}
+
+		if (t.is('.whiteboard')) {
 			this.addWhiteboard();
+		}
+		else if(t.is('.video')){
+			this.addVideo();
 		}
 	},
 
@@ -634,6 +648,48 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
+	//This needs to go somewhere else
+	videoBodyPartWithURL: function(url){
+		var v = {
+			Class: 'VideoSource',
+			MimeType: 'application/vnd.nextthought.videosource',
+			href: '//www.youtube.com/embed/AqojIuOdJ3k',
+			type: 'youtube'
+		};
+		return v;
+	},
+
+	addVideo: function(data, guid, append){
+		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
+
+		var me = this;
+
+		if(typeof guid !== 'string'){
+			guid = guidGenerator();
+		}
+
+		if(!data){
+			Ext.Msg.show({
+				msg: 'Just give us an embed link and we\'ll do the rest.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				buttonText: {'ok': 'Insert'},
+				title: 'Embed video...',
+				fn: function(){
+					me.insertVideoThubmnail(me.editor.down('content'), me.videoBodyPartWithURL(), data, append, true);
+				}
+			});
+		}
+		else{
+			this.insertVideoThubmnail(me.editor.down('content', guid, data, append));
+		}
+	},
+
+
+	insertVideoThubmnail: function(content, guid, video, append, scrollIntoView){
+		console.log('Insert video thumbnail with args', arguments);
+	},
+
+
 	addWhiteboard: function (data, guid, append) {
 		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
 
@@ -648,7 +704,6 @@ Ext.define('NextThought.editor.Actions', {
 
 		//pop open a whiteboard:
 		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide' });
-
 		content = me.editor.down('.content');
 		//remember the whiteboard window:
 		wbWin.guid = guid;
@@ -661,14 +716,14 @@ Ext.define('NextThought.editor.Actions', {
 
 
 		if (data) {
-			me.insertWhiteboardThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
+			me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
 		}
 
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
 			save  : function (win, wb) {
 				data = wb.getValue();
-				me.insertWhiteboardThumbnail(content, guid, wb, append, true);
+				me.insertObjectThumbnail(content, guid, wb, append, true);
 				if (Ext.query('.nav-helper')[0]) {
 					Ext.fly(Ext.query('.nav-helper')[0]).show();
 				}
@@ -752,13 +807,14 @@ Ext.define('NextThought.editor.Actions', {
 		return true;
 	},
 
-
-	insertWhiteboardThumbnail: function (content, guid, wb, append, scrollIntoView) {
+	insertObjectThumbnail: function(content, guid, obj, append, scrollIntoView) {
 		var me = this,
-			el = Ext.get(guid), placeholder, test, html,
-			htmlCfg, handled = false, range, isSelectionInContent, focusNode;
+			el = Ext.get(guid),
+			mime = (obj || obj.data).MimeType,
+			placeholder, test, html,
+			htmlCfg, handled = false, range, isSelectionInContent, focusNode, thumbTpl, onInsertedFn;
 
-		//We need empty divs to allow to insert text before or after a WB.
+		//We need empty divs to allow to insert text before or after an object.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
 
 		if (!el) {
@@ -774,7 +830,8 @@ Ext.define('NextThought.editor.Actions', {
 			this.editor.down('.content').focus();
 			this.editorFocus();
 
-			htmlCfg = [{html: me.defaultValue}, me.wbThumbnailTpm.apply(['', guid]) ,{html: me.defaultValue}];
+			thumbTpl = me[me.objectThumbnailTemplates[mime] || ''];
+			htmlCfg = [{html: me.defaultValue}, thumbTpl.apply(['', guid]) ,{html: me.defaultValue}];
 
 			//Need to see if we have a selection and it is in our content element
 			if(document && document.getSelection){
@@ -788,16 +845,16 @@ Ext.define('NextThought.editor.Actions', {
 				handled = this.insertPartAtSelection(Ext.DomHelper.markup(htmlCfg));
 
 				if(!handled){
-					console.log('Falling back to old style appending of whiteboards');
+					console.log('Falling back to old style appending of thumbnail');
 					Ext.DomHelper.append(content, htmlCfg);
 				}
 				else{
-					console.log('Inserted whiteboard at selection');
+					console.log('Inserted thumbnail at selection');
 				}
 
 			}
 			else{
-				console.log('Appending whiteboard');
+				console.log('Appending thumbnail');
 				Ext.DomHelper.append(content, htmlCfg);
 			}
 
@@ -807,9 +864,36 @@ Ext.define('NextThought.editor.Actions', {
 			}
 		}
 
+		function callback(node){
+			me.fireEvent('size-changed');
 
-		wb.getThumbnail(function (data) {
-			el = Ext.get(guid).up('.whiteboard-divider');
+			//Make sure save is enabled
+			me.maybeEnableSave();
+
+			//scroll them into view
+			if(scrollIntoView && node){
+				Ext.defer(function(){
+					node.scrollIntoView(me.editor.down('.content'), false, true);
+				}, 100);
+			}
+			me.focus(true);
+			Ext.defer(me.maybeResizeContentBox, 1, me);
+		}
+
+		onInsertedFn = me.onThumbnailInsertedMap[mime];
+		if(onInsertedFn && Ext.isFunction(me[onInsertedFn])){
+			me[onInsertedFn].call(me, obj, guid, placeholder, callback);
+		}
+		else{
+			callback.call(me, Ext.get(guid));
+		}
+	},
+
+
+	onWhiteboardThumbnailInserted: function(obj, guid, placeholder, callback){
+		var me = this;
+		obj.getThumbnail(function (data) {
+			var el = Ext.get(guid).up('.whiteboard-divider');
 			var p = placeholder.insertBefore(el),
 				wbt;
 			el.remove();
@@ -821,20 +905,9 @@ Ext.define('NextThought.editor.Actions', {
 			});
 			wbt.unselectable();
 			Ext.fly(p).remove();
-			me.fireEvent('size-changed');
-
-			//Make sure save is enabled
-			me.maybeEnableSave();
-
-			//For newly created whiteboard, scroll them into view
-			if(scrollIntoView){
-				Ext.defer(function(){
-					wbt.scrollIntoView(me.editor.down('.content'), false, true);
-				}, 100);
-			}
-			me.focus(true);
-			Ext.defer(me.maybeResizeContentBox, 1, me);
+			callback(wbt);
 		});
+
 	},
 
 

@@ -10,6 +10,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		toolState: 'NextThought.view.whiteboard.editor.mixins.ToolOptionsState'
 	},
 
+	MimeType: 'application/vnd.nextthought.canvas',
+
 	autoScroll: true,
 	border: false,
 	ui: 'whiteboard-editor',

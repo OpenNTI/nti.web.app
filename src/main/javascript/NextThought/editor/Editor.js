@@ -11,6 +11,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	enableTags:false,
 	enableTitle:false,
 	enableWhiteboards:true,
+	enableVideo:false,
 
 	saveButtonLabel: 'Save',
 	cancelButtonLabel: 'Cancel',
@@ -71,6 +72,10 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			cn: [{
 				cls: 'left',
 				cn: [{
+					tag: 'tpl', if: 'enableVideo', cn: {
+						cls: 'action video', 'data-qtip': 'Embed a video'
+					}
+				},{
 					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
 				},{
 					cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
@@ -128,6 +133,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			enableTags: Boolean(this.enableTags),
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
+			enableVideo: Boolean(this.enableVideo),
 			placeholderText: this.placeholderText
 		});
 	},
