@@ -68,18 +68,26 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 				render(i-1);
 			}
 			else {
-				id = guidGenerator();
-				Canvas.getThumbnail(o, function(thumbnail){
-					text.push(
+				//TODO need to add support for the other potential part types now.  I.E. EmbeddedVideo,
+				//and for things we don't support some kind of placeholder?
+				if(o.MimeType != 'application/vnd.nextthought.canvas'){
+					console.error('Not rendering part we don\'t understand', o);
+					render(i-1);
+				}
+				else{
+					id = guidGenerator();
+					Canvas.getThumbnail(o, function(thumbnail){
+						text.push(
 							me.WHITEBOARD_THUMBNAIL_TPL.apply([
 								id,
 								thumbnail,
 								clickHandlerMaker.call(scope,id,o)||'',
 								size||''
 							])
-					);
-					render(i-1);
-				});
+						);
+						render(i-1);
+					});
+				}
 			}
 		}
 		render(body.length-1);

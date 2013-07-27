@@ -30,7 +30,7 @@ Ext.define('NextThought.editor.Actions', {
 				tag   : 'img',
 				src   : '{0}',
 				id    : '{1}',
-				cls   : 'wb-thumbnail',
+				cls   : 'wb-thumbnail object-part',
 				alt   : 'Whiteboard Thumbnail',
 				unselectable: 'on',
 				border: 0
@@ -48,12 +48,53 @@ Ext.define('NextThought.editor.Actions', {
 		}]
 	}).compile(),
 
+	//FIXME copied from above but we probalby don't need all this
+	videoThumbnailTpm: Ext.DomHelper.createTemplate({
+		contentEditable: false,
+		cls: 'whiteboard-divider video-divider',
+		unselectable: 'on',
+		cn:[{
+			cls: 'whiteboard-divider video-wrapper',
+			cn:[{
+				id    : '{1}',
+				cls   : 'video-thumbnail object-part',
+				alt   : 'Embedded Video Thumbnail',
+				unselectable: 'on',
+				border: 0
+			},{
+				cls: 'fill', unselectable: 'on'
+			},{
+				cls:'centerer',
+				unselectable: 'on',
+				cn: [{
+					unselectable: 'on',
+					cls:'edit',
+					html:'Edit'
+				}]
+			}]
+		}]
+	}).compile(),
+
+	//TODO all this part related stuff should end up in mixins or objects or something.
+	//this doesn't seem particularily scalable.
 	objectThumbnailTemplates: {
-		'application/vnd.nextthought.canvas': 'wbThumbnailTpm'
+		'application/vnd.nextthought.canvas': 'wbThumbnailTpm',
+		'application/vnd.nextthought.embeddedvideo': 'videoThumbnailTpm'
 	},
 
 	onThumbnailInsertedMap: {
-		'application/vnd.nextthought.canvas': 'onWhiteboardThumbnailInserted'
+		'application/vnd.nextthought.canvas':'onWhiteboardThumbnailInserted',
+		'application/vnd.nextthought.embeddedvideo': 'onVideoThumbnailInserted'
+	},
+
+	partConverters: {
+		'<img.+wb-thumbnail.+?>': 'whiteboardPart',
+		'.+?video-thumbnail.+?>': 'videoPart'
+	},
+
+	partRenderer: {
+		'application/vnd.nextthought.canvas':'addWhiteboard',
+		'application/vnd.nextthought.embeddedvideo': 'addVideo'
 	},
 
 	tabTpl: Ext.DomHelper.createTemplate({html:'\t'}).compile(),
@@ -649,10 +690,10 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	//This needs to go somewhere else
-	videoBodyPartWithURL: function(url){
+	createVideoPart: function(url, type){
 		var v = {
-			Class: 'VideoSource',
-			MimeType: 'application/vnd.nextthought.videosource',
+			Class: 'EmbeddedVideo',
+			MimeType: 'application/vnd.nextthought.embeddedvideo',
 			href: '//www.youtube.com/embed/AqojIuOdJ3k',
 			type: 'youtube'
 		};
@@ -675,20 +716,14 @@ Ext.define('NextThought.editor.Actions', {
 				buttonText: {'ok': 'Insert'},
 				title: 'Embed video...',
 				fn: function(){
-					me.insertVideoThubmnail(me.editor.down('content'), me.videoBodyPartWithURL(), data, append, true);
+					me.insertObjectThumbnail(me.editor.down('.content'), guid, me.createVideoPart(), data, append, true);
 				}
 			});
 		}
 		else{
-			this.insertVideoThubmnail(me.editor.down('content', guid, data, append));
+			this.insertObjectThumbnail(me.editor.down('.content'), guid, data, append);
 		}
 	},
-
-
-	insertVideoThubmnail: function(content, guid, video, append, scrollIntoView){
-		console.log('Insert video thumbnail with args', arguments);
-	},
-
 
 	addWhiteboard: function (data, guid, append) {
 		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
@@ -910,6 +945,15 @@ Ext.define('NextThought.editor.Actions', {
 
 	},
 
+	onVideoThumbnailInserted: function(obj, guid, placeholder, callback){
+		var me = this;
+		var el = Ext.get(guid);
+		if(el){
+			el.set({'data-href': obj.href, 'data-type': obj.type});
+		}
+
+	},
+
 
 	cleanOpenWindows: function (guids) {
 		var me = this;
@@ -931,18 +975,32 @@ Ext.define('NextThought.editor.Actions', {
 		});
 	},
 
+	whiteboardPart: function(wp){
+		var me = this,
+			m = wp.match(/id="(.*?)"/),
+			id = m && m[1],
+			wb = id && me.openWhiteboards[id],
+			ed = wb && wb.getEditor();
+		return ed && ed.getValue();
+	},
+
+	videoPart: function(vp){
+		var hrefRegex = /.*?data-href="(.*?)".*?/,
+			typeRegex = /.*?data-type="(.*?)".*?/,
+			href = hrefRegex.exec(vp)[1],
+			type = typeRegex.exec(vp)[1];
+
+
+		if(!href || !type){
+			return null;
+		}
+		return this.createVideoPart(href, type);
+	},
 
 	getBody: function (parts) {
 		var r = [],
-			regex = /<img.*?>/i, i, p, part, me = this;
-
-		function whiteboardFromPart(wp){
-			var m = wp.match(/id="(.*?)"/),
-			    id = m && m[1],
-				wb = id && me.openWhiteboards[id],
-				ed = wb && wb.getEditor();
-			return ed && ed.getValue();
-		}
+			objectPartRegex = /class=".*object-part.*"/i,
+			i, p, part, me = this;
 
 
 		function stripTrailingBreak(text){
@@ -955,8 +1013,13 @@ Ext.define('NextThought.editor.Actions', {
 			p = null;//reset after each iteration.
 			part = parts[i];
 			//if its a whiteboard do our thing
-			if(regex.test(part)){
-				p = whiteboardFromPart(part);
+			if(objectPartRegex.test(part)){
+				Ext.Object.each(this.partConverters, function(regex, fn){
+					if(new RegExp(regex, 'i').test(part) && Ext.isFunction(this[fn])){
+						p = this[fn].call(this, part);
+					}
+					return !p; //Stop iterating (return false) if we found something
+				}, this);
 				if(p){
 					r.push(p);
 				}
@@ -1072,13 +1135,29 @@ Ext.define('NextThought.editor.Actions', {
 			c.innerHTML = '';
 		}
 		Ext.each(body, function (part) {
-			var d = document.createElement('div');
+			var d = document.createElement('div'),
+				partFn, mime, fnName;
 			if (typeof part === 'string') {
 				d.innerHTML += part.replace(/\u200B/g,'');
 				c.appendChild(d);
 			}
-			else {
-				me.addWhiteboard(part, undefined, true);
+			else{
+				//Ok its some part.  Look it up in our registry
+				mime = (part.data || part).MimeType;
+				fnName = mime ? me.partRenderer[mime] || '' : undefined;
+				if(fnName &&  Ext.isFunction(me[fnName])){
+					me[fnName].call(me, part, undefined, true);
+				}
+				else{
+					//TODO Shoot a part we don't understand.  We need to be graceful
+					//to this, but all we can do here is drop it.  Problem with that is
+					//when we save we gather the parts out of content and dropping it here
+					//means dropping for good.  How should we prevent this.  One idea
+					//is we keep an array of parts we don't understand.  Render them as a ?
+					//or something and then on save we can index into the array and make sure
+					//we don't drop misunderstood parts.  What do you think J?
+					console.error('***DANGER*** Dropping unknown part ', part, 'This is really bad as saving the note will dropt the part for good');
+				}
 			}
 		});
 
@@ -1101,12 +1180,19 @@ Ext.define('NextThought.editor.Actions', {
 				div = Ext.fly(dom,'__editer-flyweight');
 				html = div.getHTML() || '';
 
-				if(div.is('.whiteboard-divider') || div.is('.whiteboard-wrapper')){
+				if(div.is('.object-part')){
 					html = '';
-					dom = Ext.getDom(div.down('img'));
+					dom = Ext.getDom(div);
+				}
+				else{
+					div = div.down('.object-part');
+					if(div){
+						html = '';
+						dom = Ext.getDom(div);
+					}
 				}
 
-				if(!html && dom.tagName === 'IMG'){
+				if(!html && Ext.fly(dom).hasCls('object-part')){
 					tmp = document.createElement("div");
 					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
