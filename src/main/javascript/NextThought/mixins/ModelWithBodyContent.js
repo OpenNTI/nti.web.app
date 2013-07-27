@@ -1,5 +1,10 @@
 Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
+	textDescriptionForPartType: {
+		'application/vnd.nextthought.canvas': '[image]',
+		'application/vnd.nextthought.embeddedvideo': '[video]'
+	},
+
 	getBodyText: function(hasNoPlaceholderForImage) {
 
 		var o = this.get('body'), text = [];
@@ -9,10 +14,10 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g,' '));
 			} else {
 				if(!hasNoPlaceholderForImage){
-					text.push('[image]');
+					text.push(this.textDescriptionForPartType[(c.data || c).MimeType] || '[unknown]');
 				}
 			}
-		});
+		}, this);
 
 		return Ext.String.trim( text.join('') );
 	},
