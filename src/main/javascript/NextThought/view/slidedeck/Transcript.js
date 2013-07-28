@@ -17,8 +17,32 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	initComponent: function(){
-		this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
+		//TODO: this needs to be more centralized.
+		if(this.slideStore){
+			this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
+			this.hasSlides = true;
+		}
+		if(this.transcript){
+			this.setupSingleTranscript(this.transcript);
+			this.hasSlides = false;
+		}
 		this.callParent(arguments);
+	},
+
+
+	setupSingleTranscript: function(transcript){
+		var items = [];
+		items.push({
+			xtype:'video-transcript',
+			flex:1,
+			transcript: transcript,
+			layout:{
+				type:'vbox',
+				align: 'stretch'
+			}
+		});
+
+		this.items = items;
 	},
 
 
@@ -83,7 +107,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	afterRender: function(){
 		this.callParent(arguments);
 		this.setupNoteOverlay();
-		this.selectInitialSlide();
+		if(this.hasSlides){
+			this.selectInitialSlide();
+		}
 	},
 
 
@@ -189,11 +215,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				var reader = this.reader,
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
 					h = reader.getHeight(),
-					pos = reader.getPosition();
+					pos = reader.getPosition(),
+					minWidth = 475;
 
 				pos[0] += 10;
 				pos[1] += 10;
 
+				w = w > minWidth ? w : minWidth;
 				this.setPosition(pos);
 				this.setWidth(w);
 				this.setHeight(h);
