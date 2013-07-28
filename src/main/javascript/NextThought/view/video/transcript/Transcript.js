@@ -25,11 +25,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'text-content', html:'{content}'}
-	]),
-
-
 	renderSelectors:{
 		contentEl: '.text-content'
 	},
@@ -80,7 +75,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		});
 
 		s.loadData(cues);
-		s.filter([{filterFn: filter}]);
+		if(!Ext.isEmpty(filter) && Ext.isFunction(filter)){
+			s.filter([{filterFn: filter}]);
+		}
 
 //		console.log('transcript  expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
 //		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
@@ -95,9 +92,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 		function finish(store){
 			// Apply filter to know which user data belong belong within the timing of this transcript.
+			console.log('transcript userdata store: ', store);
 			if(!store){ return; }
-			store.filter([{filterFn:filter}]);
-			console.log('userdata store: ', store);
+			if(!Ext.isEmpty(filter) && Ext.isFunction(filter)){
+				store.filter([{filterFn:filter}]);
+			}
 			// Now we will start to bucket notes.
 			console.log('should start to show and bucket items');
 			if(store.getCount() > 0){
@@ -132,7 +131,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		var start = this.transcript.get('desired-time-start'),
 			end = this.transcript.get('desired-time-end');
 
-		return fn;
+		//TODO: some transcript/video don't have a endTime or it's set to 0. Need to adjust for this.
+		return (start >= 0 && end > start) ? fn : null;
 	},
 
 
@@ -150,7 +150,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		var start = this.transcript.get('desired-time-start'),
 			end = this.transcript.get('desired-time-end');
 
-		return (start >= 0 && end >= 0) ? fn : Ext.emptyFn;
+		return (start >= 0 && end > start) ? fn : null;
 	},
 
 

@@ -6,7 +6,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 		'NextThought.view.slidedeck.Queue',
 		'NextThought.view.slidedeck.Video',
 		'NextThought.view.slidedeck.Transcript',
-		'NextThought.model.transcript.TranscriptItem'
+		'NextThought.model.transcript.TranscriptItem',
+		'NextThought.view.slidedeck.media.Viewer'
 	],
 
 	cls: 'view',
@@ -132,7 +133,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		Ext.each(videoObjects, function(v){
 			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader);
-			transcripts.push(m);
+			if(m){
+				transcripts.push(m);
+			}
 		});
 
 		s.add(transcripts);
