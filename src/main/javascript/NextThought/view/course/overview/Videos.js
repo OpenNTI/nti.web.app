@@ -24,7 +24,13 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		{ cls: 'body', cn:[
 			{ cls: 'screen' },
 			{ cls: 'curtain', cn:[
-				{ cls:'ctr', cn:[ { cls: 'play', cn:[ {cls:'blur-clip',cn:{cls:'blur'}}, { cls: 'label' } ] } ] }
+				{ cls:'ctr', cn:[ { cls: 'play', cn:[ {cls:'blur-clip',cn:{cls:'blur'}}, { cls: 'label' } ] } ] },
+				{ cls:'ctr', cn:[
+					{ cls: 'play', cn:[
+						{cls:'blur-clip',cn:{cls:'blur'}},
+						{ cls: 'label' },{cls:'launch-player'}
+					] }
+				] }
 			]},
 			{ cls: 'video-list'}
 		]}
@@ -33,6 +39,7 @@ Ext.define('NextThought.view.course.overview.Videos',{
 	renderSelectors: {
 		bodyEl: '.body',
 		curtainEl: '.body .curtain',
+		playBtnEl: '.body .curtain .play',
 		playLabelEl: '.body .curtain .play .label',
 		playBlurEl: '.body .curtain .play .blur',
 		screenEl: '.body .screen',
@@ -67,7 +74,9 @@ Ext.define('NextThought.view.course.overview.Videos',{
 				{name:'id', type:'string', mapping: 'ntiid'},
 				{name:'label', type:'string'},
 				{name:'poster', type:'string'},
-				{name:'comments', type:'auto'}
+				{name:'comments', type:'auto'},
+				{name:'comments', type:'auto'},
+				{name:'hasTransripts', type:'boolean'}
 			],
 			data: this.convertItems(config.items || [])
 		});
@@ -90,10 +99,16 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			me = this;
+
+		//save for later
+		me.videoIndex = videoIndex;
+
 		this.getStore().each(function(r){
+			var v = videoIndex[r.getId()];
+			r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
 			me.playlist.push(reader.read({
-				'mediaId': videoIndex[r.getId()].title,
-				'sources': videoIndex[r.getId()].sources
+				'mediaId': v.title,
+				'sources': v.sources
 			}).records[0]);
 		});
 
@@ -229,6 +244,7 @@ Ext.define('NextThought.view.course.overview.Videos',{
 			this.curtainEl.setStyle({backgroundImage:p});
 			this.playBlurEl.setStyle({backgroundImage:p});
 			this.playLabelEl.update(rec.get('label'));
+			this.playBtnEl[rec.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
 		}
 		else {
 			console.warn('noes!');
@@ -244,6 +260,11 @@ Ext.define('NextThought.view.course.overview.Videos',{
 		}
 
 		t = this.getStore().indexOf(t);
+
+		if(e.getTarget('.launch-player')){
+			this.fireEvent('start-media-player', t.getId(), this.videoIndex[t.getId()]);
+			return;
+		}
 
 		this.player.playlistSeek(t);
 		this.player.resumePlayback();

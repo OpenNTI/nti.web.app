@@ -1,4 +1,3 @@
-
 #course-nav {
 	overflow: visible;
 	& > div {
@@ -6,6 +5,7 @@
 
 	}
 }
+
 
 .x-component-course{
 
@@ -151,7 +151,7 @@
 
 	&.overview-header{
 		margin: 0 0 15px 0;
-		
+
 		.date {
 			color: $tertiary-grey;
 			font: normal 700 10px/11px $font;
@@ -182,9 +182,9 @@
 			border-top-color: #cfcfcf;
 			border-bottom-color: transparent;
 			box-shadow:	-26px 1px 0 0px #f0f0f0,
-						 29px 1px 0 0px #f0f0f0,
-						-29px 1px 0 1px #cfcfcf,
-						 29px 1px 0 1px #cfcfcf;
+			29px 1px 0 0px #f0f0f0,
+				-29px 1px 0 1px #cfcfcf,
+			29px 1px 0 1px #cfcfcf;
 		}
 
 		.overview-header + &,
@@ -201,7 +201,7 @@
 		float: left;
 		margin: 5px 5px 0 0;
 		position: relative;
-		
+
 		.image {
 			height: 50%;
 			background:{
@@ -259,6 +259,7 @@
 					color: #ebebeb;
 					position: center center;
 					size: 512px auto;
+					repeat: no-repeat;
 				}
 
 				.ctr {
@@ -299,17 +300,39 @@
 						filter: url(#blur-effect);
 					}
 
+					.launch-player {
+						display: none;
+					}
+
 					.label {
 						background-color: rgba(0,0,0,0.68);
 						box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),//stroke
-									0 0 3px 0 black;//shadow
+						0 0 3px 0 black;//shadow
 						border-radius: 5em;
 						overflow: hidden;
-						padding: 0 10px 0 50px;
+						padding: 0 15px 0 50px;
 						max-width: 400px;
 						@include ellipse();
 						@include icon('play',$top:3px,$left:3px);
 						&::before {content:'';}
+					}
+
+					&.transcripts {
+
+						.launch-player{
+							display: block;
+							position: absolute;
+							top: 0;
+							right: 0;
+							bottom: 0;
+							width: 50px;
+							border-radius: 50px;
+							background: rgba(255,0,0,0.5);
+						}
+
+						.label{
+							padding-right: 60px;
+						}
 					}
 				}
 
@@ -343,6 +366,7 @@
 						style: solid;
 						width: 0 0 1px 0;
 					}
+					background-image: none !important;//prevent the inline-style from applying
 
 					.comments,.label{
 						@include ellipse();
@@ -381,6 +405,7 @@
 		}
 	}
 }
+
 
 .x-container-course {
 	&.course-overview{
