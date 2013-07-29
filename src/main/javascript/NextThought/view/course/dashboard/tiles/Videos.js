@@ -43,8 +43,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 		cols: 4,
 		rows: 2,
 		weight: 10,
-		sources: [],
-		locationInfo: null
+		sources: []
 	},
 
 

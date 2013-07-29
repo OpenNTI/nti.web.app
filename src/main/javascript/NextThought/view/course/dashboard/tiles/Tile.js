@@ -43,7 +43,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		cols:1,
 		rows:1,
 		weight: 1,
-		lastModified: new Date(0)
+		lastModified: new Date(0),
+		locationInfo: null
 	},
 
 	ui: 'course-dashboard-tile',

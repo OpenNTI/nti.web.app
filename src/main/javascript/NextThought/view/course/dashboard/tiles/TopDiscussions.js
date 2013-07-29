@@ -42,7 +42,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	cls: 'course-dashboard-discussion-item-list',
 
 	config: {
-		locationInfo: null,
 		topicNtiid: '',
 		weight:1.01
 	},

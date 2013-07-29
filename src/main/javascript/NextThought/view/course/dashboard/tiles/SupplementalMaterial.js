@@ -27,7 +27,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 	config: {
 		cols: 2,
 		rows: 1,
-		locationInfo: null,
 		itemNodes: []
 	},
 	

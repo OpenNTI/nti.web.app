@@ -13,8 +13,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	config: {
 		cols: 1,
 		rows: 2,
-		weight: 9,
-		locationInfo: null
+		weight: 9
 	}
 
 
