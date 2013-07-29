@@ -6,6 +6,11 @@ Ext.define('NextThought.view.course.outline.View',{
 	cls: 'course-outline',
 	preserveScrollOnRefresh: true,
 
+    requires: [
+        'NextThought.modules.TouchSender',
+        'NextThought.view.course.outline.TouchHandler'
+    ],
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'Outline'
@@ -76,8 +81,25 @@ Ext.define('NextThought.view.course.outline.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl,'scroll','handleScrolling');
+        console.log("After render outline");
+        this.buildModule('modules', 'touchSender', {container:this.up().down('.course-overview')});
+        this.buildModule('modules', 'touchSender', {container:this.up().down('.course-outline')});
+        this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-outline'), left:true});
+        this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-overview'), left:false});
+
 	},
 
+    buildModule: function(ns, name,config){
+        var m = Ext.createByAlias(ns+'.'+name,Ext.apply(/*{container:this},*/config)),
+            getterName = 'get'+Ext.String.capitalize(name);
+
+        if(this[getterName]){
+            console.error('Module getter name taken: '+getterName);
+            return;
+        }
+
+        this[getterName] = function(){return m;};
+    },
 
 	handleScrolling: function(){
 		var selected = this.getSelectedNodes()[0],
@@ -94,7 +116,6 @@ Ext.define('NextThought.view.course.outline.View',{
 	clear: function(){
 		this.bindStore('ext-empty-store');
 	},
-
 
 	maybeChangeStoreOrSelection: function(pageInfo, store){
 		var r;

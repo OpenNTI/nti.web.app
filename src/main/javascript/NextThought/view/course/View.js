@@ -32,7 +32,6 @@ Ext.define('NextThought.view.course.View',{
 		this.navigation.maybeChangeStoreOrSelection(pageInfo,this.store);
 	},
 
-
 	makeListenForCourseChange: function(monitors){
 		Ext.each(monitors,function(m){m.mon(this,'courseChanged','onCourseChanged');},this);
 	}
