@@ -68,28 +68,6 @@ Ext.define('NextThought.modules.TouchSender', {
             //current movement delta
             vel;
 
-        function kineticScroll() {
-            var lt0 = vel< 0,
-                currentTime = Date.now(),
-                deltaTime = currentTime-lastUpdateTime,
-                aboveThreshold, sameDirection;
-            lastUpdateTime = currentTime;
-
-            // Continue scrolling if above the movement threshold
-            // and hasn't changed directions
-            aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
-            sameDirection = startLt0 === lt0;
-
-            if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
-                // Apply friction in the opposite movement direction
-                // based on the time passed for smoother movement
-                vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
-
-                container.fireEvent('touchScroll', pickedElement, vel);
-                setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
-            }
-        }
-
         /**
          * Only count touches within the set threshold. Otherwise,
          * it moves to another state (scroll,select,drag)
@@ -198,6 +176,28 @@ Ext.define('NextThought.modules.TouchSender', {
         }
 
         dom.addEventListener('touchend', function(e){
+            function kineticScroll() {
+                var lt0 = vel< 0,
+                    currentTime = Date.now(),
+                    deltaTime = currentTime-lastUpdateTime,
+                    aboveThreshold, sameDirection;
+                lastUpdateTime = currentTime;
+
+                // Continue scrolling if above the movement threshold
+                // and hasn't changed directions
+                aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
+                sameDirection = startLt0 === lt0;
+
+                if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
+                    // Apply friction in the opposite movement direction
+                    // based on the time passed for smoother movement
+                    vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
+
+                    container.fireEvent('touchScroll', pickedElement, vel);
+                    setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
+                }
+            }
+
             e.preventDefault();
 
             container.fireEvent('touchEnd', lastX, lastY);
