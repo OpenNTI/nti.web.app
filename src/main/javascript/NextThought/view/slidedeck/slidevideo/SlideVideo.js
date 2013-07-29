@@ -4,6 +4,11 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidevideo',
 
+	requires:[
+		'NextThought.webvtt.Transcript',
+		'NextThought.webvtt.Cue'
+	],
+
 	ui: 'content-slidevideo',
 	cls: 'content-slidevideo',
 
@@ -32,6 +37,6 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
 
 
 	onSlideVideoClicked: function(e){
-		 SlideDeck.open(this.contentElement, this.reader);
+		SlideDeck.open(this.contentElement, this.reader);
 	}
 });

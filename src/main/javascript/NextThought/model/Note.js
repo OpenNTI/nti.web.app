@@ -20,6 +20,7 @@ Ext.define('NextThought.model.Note', {
 
 	requires: [
 		'NextThought.model.anchorables.DomContentRangeDescription',
+		'NextThought.model.anchorables.TranscriptRangeDescription',
 		'NextThought.model.converters.ContentRangeDescription',
 		'NextThought.model.converters.GroupByTime'
 	],

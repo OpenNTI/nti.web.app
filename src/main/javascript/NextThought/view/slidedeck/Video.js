@@ -85,6 +85,13 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			click:this.checkboxClicked,
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
+
+		this.on('jump-to-location', this.jumpToVideoLocation, this);
+	},
+
+
+	getState:function(){
+		return this.queryPlayer();
 	},
 
 
@@ -183,6 +190,21 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	updateCheckbox: function(){
 		this.checkboxEl[this.linkWithSlides?'addCls':'removeCls']('checked');
+	},
+
+
+	jumpToVideoLocation: function(videoInfo, startAt){
+		var r = Ext.Array.findBy(this.playlist, function(item){
+				return (item.get('NTIID') === videoInfo.ntiid) && (item.get('start') === videoInfo.start);
+			}),
+			id = r && r.activeSource().source;
+
+		if(id){
+			this.setVideoAndPosition(id, startAt);
+		}
+		else{
+			console.error('Could not find the video requested: ', videoInfo);
+		}
 	},
 
 

@@ -88,7 +88,7 @@ a{
 
 		.meta {
 			margin-left: $thumbWidth+15px;
-			.presentation-button {
+			.presentation-button, .video-transcript-button{
 				margin: 5px 0px;
 				padding: 0px 10px 0px 40px;
 				background-color: $primary-blue;
@@ -106,6 +106,15 @@ a{
 					left: 10px;
 					background: $icons no-repeat;
 					@include sprite($icons,'presentation-view',$dimensions: true);
+				}
+
+				&.video-transcript-button{
+					margin-left: 40px;
+					padding-left: 10px;
+
+					&::after{
+						content: none;
+					}
 				}
 			}
 		}

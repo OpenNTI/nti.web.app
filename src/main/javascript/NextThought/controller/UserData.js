@@ -8,7 +8,8 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
 		'NextThought.util.Annotations',
-		'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket',
+		'NextThought.view.slidedeck.transcript.AnchorResolver'
 	],
 
 
@@ -73,7 +74,14 @@ Ext.define('NextThought.controller.UserData', {
 					'listens-to-page-stores': 'listenToPageStores',
 					'open-chat-transcript': 'openChatTranscript',
 					'load-transcript': 'onLoadTranscript',
-					'save-new-note' : 'saveNewNote'
+					'save-new-note' : 'saveNewNote',
+					'save-new-series-note':'saveNewSeriesNote'
+				},
+				'slidedeck-view': {
+					exited: 'presentationExited'
+				},
+				'media-viewer':{
+					exited: 'presentationExited'
 				},
 
 				'reader-content':{
@@ -178,6 +186,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	showNoteViewer: function(sel,rec){
 		var me = this,
+			anchorCmp = sel.view.anchorComponent;
 			block = sel.mon(sel,{
 			destroyable: true,
 			beforeselect: function(){this.deselectingToSelect=true;},
@@ -202,8 +211,9 @@ Ext.define('NextThought.controller.UserData', {
 				xtype: 'note-window',
 				autoShow: true,
 				record: rec,
-				reader: sel.view.up('reader').down('reader-content'),
-				listeners:{beforedestroy:deselect}
+				reader: anchorCmp,
+				listeners:{beforedestroy:deselect},
+				xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
 			});
 		}
 		catch(e){
@@ -211,6 +221,13 @@ Ext.define('NextThought.controller.UserData', {
 				console.error(e.toString(),e);
 			}
 			deselect();
+		}
+	},
+
+
+	presentationExited: function(){
+		if(this.activeNoteWindow){
+			this.activeNoteWindow.destroy();
 		}
 	},
 
@@ -1070,7 +1087,7 @@ Ext.define('NextThought.controller.UserData', {
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = c;
+			container = c, selectedText;
 
 		if(!container){
 			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
@@ -1090,21 +1107,38 @@ Ext.define('NextThought.controller.UserData', {
 			shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
 		}*/
 
+		selectedText = range ? range.toString() : '';
+		this.saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
+	},
+
+
+	saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback){
 		//define our note object:
-		noteRecord = this.getNoteModel().create({
-			applicableRange: rangeDescription.description,
+		var noteRecord = this.getNoteModel().create({
+			applicableRange: applicableRange,
 			body: body,
 			title:title,
-			selectedText: range ? range.toString() : '',
+			selectedText: selectedText,
 			sharedWith: shareWith,
 			style: style,
-			ContainerId: container
+			ContainerId: ContainerId
 		});
 
 		console.log('Saving new record', noteRecord);
 		noteRecord.getProxy().on('exception', this.handleException, this, {single:true});
 		//now save this:
 		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
+	},
+
+
+	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback){
+		console.log(cueInfo);
+		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
+			AnchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver,
+			rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
+			selectedText = range ? range.toString() : '';
+
+		this.saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
 

@@ -1345,6 +1345,9 @@ Ext.define('NextThought.editor.Actions', {
 				selection = window.getSelection();
 				selection.removeAllRanges();
 			}
+
+			//Make sure the body is also reset
+			this.setValue('');
 		}
 		catch (e) {
 			console.log('Removing all ranges from selection failed: ', e.message);

@@ -54,6 +54,7 @@ Ext.define('NextThought.view.reader.Panel',{
 		this.mon(this.down('reader-content'),{
 			'filter-by-line': 'selectDiscussion'
 		});
+		this.down('annotation-view').anchorComponent = this.down('reader-content');
 	},
 
 

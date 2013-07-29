@@ -33,6 +33,33 @@
 	}
 }
 
+@mixin note-control-box{
+	.note-here-control-box {
+		@include animate(fadeIn,0.1s);
+		@include icon('add-note',$position: absolute, $top:-4px);
+		&:hover::after { @include sprite($icons,'add-note_active'); }
+
+		display: block;
+		left: 0;
+		height: 26px;
+		width: 29px;
+		border: none;
+		padding: 0;
+		margin: 0;
+		z-index: 10;
+		cursor: pointer;
+
+		//&.occupied {
+		//	left: -35px;
+		//}
+
+		&.note-overlay-hidden{
+			display: none;
+		}
+
+	}
+}
+
 
 
 @mixin reply-options {
@@ -188,30 +215,7 @@
 	width: 60px;
 	//border-right: 1px solid #eee;
 
-	.note-here-control-box {
-		@include animate(fadeIn,0.1s);
-		@include icon('add-note',$position: absolute, $top:-4px);
-		&:hover::after { @include sprite($icons,'add-note_active'); }
-
-		display: block;
-		left: 20px;
-		height: 26px;
-		width: 29px;
-		border: none;
-		padding: 0;
-		margin: 0;
-		z-index: 10;
-		cursor: pointer;
-
-		//&.occupied {
-		//
-		//}
-
-		&.note-overlay-hidden{
-			display: none;
-		}
-
-	}
+	@include note-control-box;
 }
 
 

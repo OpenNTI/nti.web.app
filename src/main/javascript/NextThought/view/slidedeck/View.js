@@ -4,7 +4,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 	requires: [
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
-		'NextThought.view.slidedeck.Video'
+		'NextThought.view.slidedeck.Video',
+		'NextThought.view.slidedeck.Transcript',
+		'NextThought.model.transcript.TranscriptItem',
+		'NextThought.view.slidedeck.media.Viewer'
 	],
 
 	cls: 'view',
@@ -17,22 +20,43 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 	renderTpl: Ext.DomHelper.markup([
 		'{%this.renderContainer(out,values)%}',
-		{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]),
+		{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]
+	),
 
 	renderSelectors: {
 		exitEl: '.exit-button'
 	},
 
-	items: [{
-		xtype: 'container',
-		width: 400,
-		plain: true,
-		ui: 'slidedeck-controls',
-		layout: { type: 'vbox', align: 'stretch' }
-	},{
-		flex: 1,
-		xtype: 'slidedeck-slide'
-	}],
+	constructor: function(config){
+		var t, vPlaylist;
+
+		config.items = [{
+			xtype: 'container',
+			width: 400,
+			plain: true,
+			ui: 'slidedeck-controls',
+			layout: { type: 'vbox', align: 'stretch' }
+		},{
+			flex: 1,
+			xtype: 'slidedeck-slide'
+		}];
+
+		t = config.items[1];
+
+		if(isFeature('transcript-presentation')){
+			t.xtype = 'slidedeck-transcript';
+			t.data = config.transcript;
+			this.hasTranscript = true;
+			vPlaylist = this.getVideoPlayList(config.store);
+			t.transcriptStore = this.buildTranscriptStore(vPlaylist);
+			// NOTE: Slides are a time-series and currently that's what drives the presentation.
+			// We get this store passed to be the one contain a sequence of slides with their associated data.
+			t.slideStore = config.store;
+			t.startOn = config.startOn;
+		}
+
+		return this.callParent([config]);
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -40,13 +64,13 @@ Ext.define('NextThought.view.slidedeck.View',{
 			start = this.startOn,
 			ctrls = this.items.getAt(0),
 			slide = this.getSlide(),
-			v, q,vPlaylist = [];
+			vPlaylist = this.getVideoPlayList(store),
+			v, q;
 
 		//clear the reference, pass it along...
 		delete this.store;
 		delete this.startOn;
 
-		store.each(function(s){ vPlaylist.push(s.get('media')); },this);
 		v = this.video = ctrls.add({ xtype: 'slidedeck-video', playlist: vPlaylist});
 		//Ths queue is the primary control. Selection causes video and slide to change.
 		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, flex: 1 });
@@ -82,6 +106,71 @@ Ext.define('NextThought.view.slidedeck.View',{
 				v.resumePlayback();
 			}
 		}, this);
+
+		if(this.hasTranscript){
+			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', this.jumpVideoToLocation, this);
+			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
+		}
+	},
+
+	getVideoPlayList: function(store){
+		var playList = [];
+		store.each(function(s){ playList.push(s.get('media')); },this);
+		return playList;
+	},
+
+
+	jumpVideoToLocation: function(videoNTIID, time){
+		this.video.fireEvent('jump-to-location', videoNTIID, time);
+	},
+
+
+	buildTranscriptStore: function(playList){
+		var s = new Ext.data.Store({proxy:'memory'}),
+			transcripts = [],
+			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
+			videoObjects = this.getUniqueVideoObjects(playList);
+
+		Ext.each(videoObjects, function(v){
+			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader);
+			if(m){
+				transcripts.push(m);
+			}
+		});
+
+		s.add(transcripts);
+		return s;
+	},
+
+
+	getUniqueVideoObjects: function(playList){
+		var vObjects = [], uniqueIds=[];
+
+		Ext.each(playList, function(v){
+			var frag = v.get('dom-clone'),
+				video = frag.querySelector('object[type$=ntivideo]');
+
+			vObjects.push(video);
+		});
+
+		vObjects = Ext.Array.filter(vObjects, function(i){
+			var id = Ext.fly(i).getAttribute('data-ntiid'),
+				ret = !Ext.Array.contains(uniqueIds, id);
+
+			uniqueIds.push(id);
+			return ret;
+		});
+
+		return vObjects;
+	},
+
+
+	actOnMediaHeartBeat: function(){
+		var s = this.video.getState();
+
+		if(this.hasTranscript){
+			this.down('slidedeck-transcript').syncWithVideo(s);
+		}
 	},
 
 
@@ -93,7 +182,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 	doSelect: function(){
 		var s = this.getSlide();
 		this.video.updateVideoFromSelection.apply(this.video, arguments);
-		s.updateSlide.apply(s, arguments);
+		if(s.updateSlide){
+			s.updateSlide.apply(s, arguments);
+		}
 	},
 
 
@@ -103,7 +194,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 	//if the click cancel we leave things in a paused state and the editor open
 	maybeSelect: function(v, slide){
 		var slideView = this.getSlide(),
-			destructiveSelection = slideView.editorActive(),
+			destructiveSelection = slideView.editorActive && slideView.editorActive(),
 			wasPlaying,
 			me = this;
 
