@@ -184,24 +184,25 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	showAnnotationView: function(store){
-		// TODO: Ideally, we wound like to unbind the previous store and
-		// attach a new store rather than creating a new cmp each time.
-		this.annotationView = Ext.widget('annotation-view',{
-			floating:true,
-			border:false,
-			width:400,
-			shadow:false,
-			constrain:true,
-			renderTo: Ext.getBody(),
-			cls:'presentation-note-slider annotation-view',
-			title: 'Discussion',
-			iconCls: 'discus',
-			discussion:true,
-			store:store,
-			anchorComponent: this,
-			anchorComponentHooks: this.getViewerHooks()
-		});
+		if(!this.annotationView){
+			this.annotationView = Ext.widget('annotation-view',{
+				floating:true,
+				border:false,
+				width:400,
+				shadow:false,
+				constrain:true,
+				renderTo: Ext.getBody(),
+				cls:'presentation-note-slider annotation-view',
+				title: 'Discussion',
+				iconCls: 'discus',
+				discussion:true,
+				store: 'ext-empty-store',
+				anchorComponent: this,
+				anchorComponentHooks: this.getViewerHooks()
+			});
+		}
 
+		this.annotationView.bindStore(store);
 		this.annotationView.show();
 		this.on('destroy', 'destroy',this.annotationView);
 	},
@@ -212,8 +213,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return true;
 		}
 		if(!e.getTarget('.annotation-view') && this.annotationView.isVisible()){
-			// TODO: We destroy it, since we create a new one each time.
-			this.annotationView.destroy();
+			this.annotationView.hide();
 		}
 		return true;
 	},
