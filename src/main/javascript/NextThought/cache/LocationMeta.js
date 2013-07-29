@@ -114,7 +114,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 				me.handleUnauthorized(ntiid, cb);
 			}
 			else{
-				console.error('fail', arguments);
+				//console.error('fail', arguments);
 				Ext.callback(cb, me);
 			}
 		}
