@@ -56,6 +56,6 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 
 	reviewClicked: function(){
 		console.log('navigate to', this.data.gotoNtiid);
-		this.fireEvent('navigate-to-href', this, this.data.gotoNtiid)
+		this.fireEvent('navigate-to-href', this, this.data.gotoNtiid);
 	}
 });

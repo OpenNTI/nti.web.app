@@ -16,7 +16,7 @@ Ext.define('NextThought.model.anchorables.TimeContentPointer', {
 		createFromObject: function(o){
 			return NextThought.model.anchorables.TimeContentPointer.create({
 				role: o.role,
-				seconds: parseInt(o.seconds, 10)
+				seconds: parseInt(o.seconds,10)
 			});
 		}
 	},

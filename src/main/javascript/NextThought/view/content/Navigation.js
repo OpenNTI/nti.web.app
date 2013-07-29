@@ -14,8 +14,8 @@ Ext.define('NextThought.view.content.Navigation',{
 
 	levelLabels: {
 		'NaN':'&sect;',
-		0: 'Select a chapter',
-		1: 'Select a section'
+		'0': 'Select a chapter',
+		'1': 'Select a section'
 	},
 
 	renderSelectors: { backEl: '.back', breadcrumb: '.breadcrumb' },

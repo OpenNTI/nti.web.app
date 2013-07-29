@@ -1068,6 +1068,13 @@ Ext.define('NextThought.editor.Actions', {
 			return text.replace(/<br\/?>$/, '');
 		}
 
+		function convert(regex, fn){
+			if(new RegExp(regex, 'i').test(part) && Ext.isFunction(this[fn])){
+				p = this[fn].call(this, part);
+			}
+			return !p; //Stop iterating (return false) if we found something
+		}
+
 		parts = parts || [];
 
 		for(i = 0; i<parts.length; i++){
@@ -1075,12 +1082,7 @@ Ext.define('NextThought.editor.Actions', {
 			part = parts[i];
 			//if its a whiteboard do our thing
 			if(objectPartRegex.test(part)){
-				Ext.Object.each(this.partConverters, function(regex, fn){
-					if(new RegExp(regex, 'i').test(part) && Ext.isFunction(this[fn])){
-						p = this[fn].call(this, part);
-					}
-					return !p; //Stop iterating (return false) if we found something
-				}, this);
+				Ext.Object.each(this.partConverters, convert, this);
 				if(!p){
 					p = this.unknownPart(part);
 				}
