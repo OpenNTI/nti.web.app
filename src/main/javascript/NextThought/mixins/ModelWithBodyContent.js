@@ -66,7 +66,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			var t = me.WHITEBOARD_THUMBNAIL_TPL.apply([
 						id,
 						thumbnail,
-						clickHandlerMaker.call(scope,id,o)||'',
+						clickHandlerMaker(id,o)||'',
 						size||''
 					]);
 			Ext.callback(callback, scope, [t]);
@@ -152,7 +152,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			else {
 				fn = me[me.rendererForPart[o.MimeType] || ''];
 				if(Ext.isFunction(fn)){
-					fn.call(me, o, clickHandlerMaker, Ext.isObject(size) ? size[o.MimeType] : size, function(t){
+					fn.call(me, o, Ext.Function.bind(clickHandlerMaker, scope), Ext.isObject(size) ? size[o.MimeType] : size, function(t){
 						text.push(t);
 						render(i-1);
 					}, me);

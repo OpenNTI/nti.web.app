@@ -681,7 +681,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	fixUpCopiedContext: function(n){ return n; },
 
 
-	generateClickHandler: function(id,data){ this.wbData[id] = data; },
+	generateClickHandler: function(id,data){
+		this.wbData[id] = data;
+	},
 
 
 	getRoot:function(){
