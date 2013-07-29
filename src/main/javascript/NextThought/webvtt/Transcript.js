@@ -254,16 +254,16 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 35. Timings
 		scratch.alreadyCollectedLine = false;
 		// 36. Collect timings and settings for cue and line
-		if (scratch.cue = this.collectTimingsAndSettings(scratch.cue, scratch.line)) { // Else, bad cue
+		if (scratch.cue === this.collectTimingsAndSettings(scratch.cue, scratch.line)) { // Else, bad cue
 			// 37. Prepare to collect cue text
 			scratch.cueText = '';
 			// 38. Cue text loop
-			while (this.cueTextLoop.call(this));
+			while (this.cueTextLoop.call(this)){}
 			// Repeat cueLoop
 			return true;
 		} else { // 49. Bad cue -- cue is discarded
 			// 50. Bad cue loop
-			while (this.badCueLoop.call(this));
+			while (this.badCueLoop.call(this)){}
 			return !scratch.halt;
 		}
 	},

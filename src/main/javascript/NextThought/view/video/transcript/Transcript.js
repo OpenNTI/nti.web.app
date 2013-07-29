@@ -31,8 +31,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	itemSelector: 'row-item',
 	tpl: new Ext.XTemplate( Ext.DomHelper.markup([
-		{tag:'tpl', for:'.', cn:[{
-			tag:'tpl', if:'!type', cn:{
+		{tag:'tpl', 'for':'.', cn:[{
+			tag:'tpl', 'if':'!type', cn:{
 				tag:'span', cls:'cue row-item', 'cue-start':'{startTime}', 'cue-end':'{endTime}', 'cue-id':'{identifier}', cn:[
 					{tag:'span', html:'{text}'},
 
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 					}}
 			]}
 		},{
-			tag:'tpl', if:'type', cn:
+			tag:'tpl', 'if':'type', cn:
 				{cls:'row-item timestamp-container {type}', cn:
 					{tag:'a', cls:'timestamp', html:'{startTime}', 'data-time':'{startTime}'}
 				}
@@ -191,7 +191,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		//Avoid loading the content if we already have it.
 		if(!Ext.isEmpty(content)){
 			transcriptLoadFinish(content);
-			return
+			return;
 		}
 
 		proxy.request({

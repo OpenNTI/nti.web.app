@@ -104,7 +104,9 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	setContext: function (doc) {
 		var r = this.record, newContext;
 		try {
-			this.context && this.context.setHTML('');
+			if(this.context){
+				this.context.setHTML('');
+			}
 			newContext = RangeUtils.getContextAroundRange(
 				r.get('applicableRange'), doc, doc, r.get('ContainerId'));
 

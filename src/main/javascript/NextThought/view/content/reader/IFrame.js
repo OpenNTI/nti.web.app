@@ -500,13 +500,13 @@ Ext.define('NextThought.view.content.reader.IFrame',{
      */
     setClickthrough: function(should) {
         var el = this.get();
-        if (!el)
-            return;
+        if (!el){ return; }
 
-        if(should)
+        if(should){
             el.addCls('clickthrough');
-        else
+        }else{
             el.removeCls('clickthrough');
+        }
     },
 
     hasClickthrough: function() {
@@ -532,8 +532,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         pickedElement = iFrameDoc.elementFromPoint(localX, localY);
 
         function hasOverlay(element) {
-            if (!element || !element.tagName)
+            if (!element || !element.tagName){
                 return false;
+            }
 
             var types = [ 'application/vnd.nextthought.ntislidedeck',
                           'application/vnd.nextthought.naquestion',
@@ -541,10 +542,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                 hasObjectTag = element.tagName === 'OBJECT',
                 type;
 
-            if (!hasObjectTag)
+            if (!hasObjectTag){
                 element = Ext.get(element).up('object');
-            if (!element)
+            }
+            if (!element){
                 return false;
+            }
 
             type = element.dom? element.dom.type : element.type;
             return Ext.Array.contains(types, type);
@@ -556,8 +559,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             pickedElement = outerDoc.elementFromPoint(x, y);
         }
 
-        if (pickedElement)
+        if (pickedElement){
             console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
+        }
 
         this.setClickthrough(hasClickthrough);
 

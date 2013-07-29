@@ -13,7 +13,7 @@ Ext.define('NextThought.view.content.Navigation',{
 	renderTpl: Ext.DomHelper.markup([{cls: 'back'},{ cls: 'breadcrumb' }]),
 
 	levelLabels: {
-		NaN:'&sect;',
+		'NaN':'&sect;',
 		0: 'Select a chapter',
 		1: 'Select a section'
 	},

@@ -89,9 +89,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		}, this);
 
 		this.mon(this.el,'mouseout', function(e){
-			if(!this.isClosing){
+//			if(!this.isClosing){
 				//this.startHideTimeout();
-			}
+//			}
 			this.isClosing = false;
 			this.doDismiss = true;
 		}, this);

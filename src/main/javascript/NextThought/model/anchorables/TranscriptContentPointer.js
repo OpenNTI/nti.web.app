@@ -16,7 +16,7 @@ Ext.define('NextThought.model.anchorables.TranscriptContentPointer', {
 				pointer: cp.createFromObject(o.pointer),
 				cueid: o.cueid,
 				role: o.role,
-				seconds: parseInt(o.seconds)
+				seconds: parseInt(o.seconds, 10)
 			});
 		}
 	},

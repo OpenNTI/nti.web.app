@@ -273,7 +273,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	align: function (){
 		this.maxHeight = Ext.dom.Element.getViewportHeight();
 		this.alignTo(this.refEl, this.anchor || 'tr-tl?', this.offsets || [-10,0]);
-		this.pointer && this.pointer.point();
+		if(this.pointer){ this.pointer.point(); }
 		this.updateLayout();
 	},
 

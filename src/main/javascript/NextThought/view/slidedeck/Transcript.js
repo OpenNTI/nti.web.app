@@ -248,7 +248,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				this.setHeight(h);
 				Ext.defer(this.el.setStyle, 10, this.el, ['z-index','20000']);
 			}
-		}
+		};
 	}
 
 });
