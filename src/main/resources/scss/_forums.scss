@@ -649,6 +649,30 @@
 
 .course-forum{
 	background-color: white;
+
+	.topic-list{
+		.header-container{
+			.path{
+				padding-left: 0px !important;
+				&::after{
+					display: none;
+				}
+			}
+		}
+	}
+	.forums-topic-editor-box{
+		.header-container{
+			.header{
+				.path{
+					padding-left: 0px !important;
+
+					&::after{
+						display: none;
+					}
+				}
+			}
+		}
+	}
 }
 
 #forums, 

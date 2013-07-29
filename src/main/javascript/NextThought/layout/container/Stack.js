@@ -49,6 +49,7 @@ Ext.define('NextThought.layout.container.Stack',{
 	onRemove: function(){ this.enforceStackActiveItem(); },
 
 	setOwner: function(owner){
+		owner.isStackContainer = true;
 		this.callParent(arguments);
 
 		if(!owner.popView){

@@ -52,6 +52,10 @@ Ext.define('NextThought.controller.Forums', {
 					'pop-view': this.popView
 				},
 
+				'course-forum > *':{
+					'pop-view': this.popView
+				},
+
 				'forums-root': {
 					'select': this.loadBoard
 				},
@@ -109,6 +113,19 @@ Ext.define('NextThought.controller.Forums', {
 				}
 			}
 		});
+	},
+
+
+	getStackContainer: function(ref){
+		var view;
+		//'[isStackContainer]'
+		if(!ref){
+			return this.getForumViewContainer();
+		}
+
+		view = ref.view || ref;
+
+		return view.up('[isStackContainer]');
 	},
 
 
@@ -575,8 +592,8 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showLevel: function(level, record, cfg, storeCfg, extraParams, viewContainer){
-		var c = viewContainer || this.getForumViewContainer(),
+	showLevel: function(selModel, level, record, cfg, storeCfg, extraParams, viewContainer){
+		var c = this.getStackContainer(selModel || viewContainer),
 			store, cmpCfg, storeId = record.getContentsStoreId();
 
 
@@ -679,7 +696,7 @@ Ext.define('NextThought.controller.Forums', {
 	loadBoard: function(selModel, record, silent, cfg){
 		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}));
+		this.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}));
 
 		community = record.get('Creator');
 		if(community.isModel){
@@ -694,7 +711,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel('topic', record, {stateKey: 'forum'});
+		this.showLevel(selModel, 'topic', record, {stateKey: 'forum'});
 		if(silent !== true){
 			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 		}
@@ -770,7 +787,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	showTopicEditor: function(cmp, topicRecord){
-		var c = this.getForumViewContainer(),
+		var c = this.getStackContainer(cmp),
 			o = c.items.last();
 
 		while(o && !o.getPath){
@@ -782,7 +799,7 @@ Ext.define('NextThought.controller.Forums', {
 			o = null;
 		}
 
-		this.getForumViewContainer().add({xtype:'forums-topic-editor', record: topicRecord, path: o && o.getPath()});
+		c.add({xtype:'forums-topic-editor', record: topicRecord, path: o && o.getPath()});
 	},
 
 
@@ -826,7 +843,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadTopic: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		var c = this.getForumViewContainer(),
+		var c = this.getStackContainer(selModel),
 			o = c.items.last();
 
 		if(o && !o.getPath) { o = null; }

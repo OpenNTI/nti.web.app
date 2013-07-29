@@ -51,7 +51,7 @@ Ext.define('NextThought.view.course.forum.View',{
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 		}
-
+		
 		//this.setForum(pageInfo.isPartOfCourse() && course && course.getAttribute('forum'));
 	}
 });
@@ -67,8 +67,11 @@ Ext.define('NextThought.view.course.ForumList',{
 		'NextThought.view.forums.Topic'
 	],
 
-	constructor: function(){
-		this.mixins.HeaderLock.disable.call(this);
-		this.callParent(arguments);
+	onHeaderClick: function(e){
+		if(e.getTarget('.path')){
+			return;
+		}else if(e.getTarget('.new-topic')){
+			this.fireEvent('new-topic', this);
+		}
 	}
 });

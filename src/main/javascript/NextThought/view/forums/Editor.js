@@ -55,7 +55,7 @@ Ext.define('NextThought.view.forums.Editor',{
 		this.callParent(arguments);
 		var r = this.record,
 			h,
-			parentCtEl = Ext.get('forums'),
+			parentCtEl = Ext.get('forums') || Ext.get('course-forum'),
 			hasScrollBar = Ext.getDom(parentCtEl).scrollHeight !== parentCtEl.getHeight();
 
 		this.mon(this.tags,'new-tag', this.syncHeight,this);
@@ -80,7 +80,8 @@ Ext.define('NextThought.view.forums.Editor',{
 
 
 	destroy: function(){
-		Ext.get('forums').removeCls('scroll-lock scroll-padding-right');
+		var container = Ext.get('forums') || Ext.get('course-forum');
+		container.removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
 		return this.callParent(arguments);
@@ -124,7 +125,7 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	syncHeight: function(){
 		var el = this.editorBodyEl,
-			p = document.getElementById('forums'),
+			p = document.getElementById('forums') || document.getElementsByClassName('course-forum')[0],
 			top;
 		if(!el){
 			return;
