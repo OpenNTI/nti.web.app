@@ -152,6 +152,11 @@ Ext.define('NextThought.editor.Actions', {
 
 		(new Ce(editorEl.query('.action:not([tabindex]),.content'))).set({tabIndex: tabTracker.next()});
 
+		me.objectControlsEl = editorEl.down('.action.object-controls');
+		if(me.objectControlsEl){
+			cmp.mon(me.objectControlsEl, 'click', this.toggleObjectsPopover, this);
+		}
+
 		me.styleControlsEl = editorEl.down('.action.text-controls');
 		if(me.styleControlsEl){
 			cmp.mon(me.styleControlsEl, 'click', this.showStylePopover, this);
@@ -390,8 +395,13 @@ Ext.define('NextThought.editor.Actions', {
 			}
 		}
 
-		if (!e.getTarget('.content') && !e.getTarget('.action')) { 
-			this.hideStylePopover(); 
+		if (!e.getTarget('.content')) {
+			if(e.getTarget('.action.object-controls')){
+				this.hideStylePopover();
+			}
+			if(e.getTarget('.action.text-controls')){
+				this.hideObjectsPopover();
+			}
 		}
 	},
 
@@ -505,6 +515,7 @@ Ext.define('NextThought.editor.Actions', {
 //		}
 
 		this.hideStylePopover();
+		this.hideObjectsPopover();
 		return true;
 	},
 
@@ -587,7 +598,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	editorContentAction: function(e){
-		var t = e.getTarget('.action', undefined, true), action;
+		var t = e.getTarget('.control', undefined, true), action;
 		if(!t){
 			return;
 		}
@@ -610,24 +621,49 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	// better named toggle!
-	showStylePopover: function(e){
-		var t = e.getTarget('.action.text-controls', undefined, true),
-			action = t && t.hasCls('selected') ? 'removeCls' : 'addCls';
+	togglePopover: function(el, e){
+		var action = el && el.hasCls('selected') ? 'removeCls' : 'addCls';
 
-		if(t && !e.getTarget('.control')){
-			t[action]('selected');
-
+		if(el && !e.getTarget('.control')){
+			el[action]('selected');
 			this.editor.down('.content').focus();
 			this.editorFocus();
 		}
 	},
 
 
+	hidePopover: function(el){
+		el.removeCls('selected');
+	},
+
+
+	toggleObjectsPopover: function(e){
+		var t = e.getTarget('.action.object-controls', undefined, true);
+
+		this.togglePopover(t, e);
+	},
+
+
+	hideObjectsPopover: function(){
+		var t = this.editor.down('.action.object-controls', undefined, true);
+		if(t){
+			this.hidePopover(t);
+		}
+	},
+
+
+	// better named toggle!
+	showStylePopover: function(e){
+		var t = e.getTarget('.action.text-controls', undefined, true);
+
+		this.togglePopover(t, e);
+	},
+
+
 	hideStylePopover: function() {
 		var t = this.editor.down('.action.text-controls', undefined, true);
 		if(t){
-			t.removeCls('selected');
+			this.hidePopover(t);
 		} 
 	},
 

@@ -90,7 +90,7 @@ $experimental-support-for-svg: true;
 			border-top: 1px solid #323232;
 
 			.left{
-				.action.text-controls{
+				.action.text-controls, &.object-controls{
 					border: 0px solid #1f1f1f;
 
 					&.selected{

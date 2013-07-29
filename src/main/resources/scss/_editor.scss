@@ -195,18 +195,8 @@ span.tab{
 				margin: -1px;
 				@include experimental(transition, all 0.5s);
 
-				&.whiteboard {
-					&::after{
-						content: '';
-						position: absolute;
-						outline: none;
-						top: 12px; left: 9px;
-						background: $icons no-repeat;
-						@include sprite($icons,'whiteboard',$dimensions: true);
-					}
-				}
 
-				&.text-controls{
+				&.text-controls, &.object-controls{
 					width: 34px;
 					height: 34px;
 					margin: 6px 0 0 5px;
@@ -237,7 +227,7 @@ span.tab{
 					.popover{
 						position: absolute;
 						top: -38px;
-						left: -22px;
+						left: 0px;
 						height: 34px;
 						background-color: #fff;
 						box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
@@ -250,7 +240,7 @@ span.tab{
 						&::after{
 							content: '';
 							position: absolute;
-							top:32px; left: 30px;
+							top:32px; left: 9px;
 							background: $icons no-repeat;
 							@include sprite($icons,'font_style_pointer',$dimensions: true);
 						}
@@ -262,7 +252,7 @@ span.tab{
 							position: relative;
 							display: inline-block;
 
-							&.bold, &.italic, &.underline {
+							&.bold, &.italic, &.underline, &.whiteboard, &.video {
 								margin-right: 5px;
 								margin-top: 4px;
 								height: 28px;
@@ -288,6 +278,70 @@ span.tab{
 							&.underline {
 								&::after{ @include sprite($icons,'underline',$dimensions: true); }
 								&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
+							}
+
+							&.whiteboard {
+								@include icon('editor-insert-image', $top:10px);
+								&:hover::after{
+									@include sprite($icons,'editor-insert-image_hover',$dimensions: true);
+								}
+							}
+
+							&.video {
+								@include icon('editor-insert-video', $top:9px);
+								&:hover::after{
+									@include sprite($icons,'editor-insert-video_hover',$dimensions: true);
+								}
+							}
+
+
+							&.whiteboard, &.video{
+								margin-right: 10px;
+								&::after{
+									top: 6px;
+								}
+							}
+
+							&.video{
+								&::after{
+									top: 5px;
+								}
+							}
+						}
+					}
+				}
+
+				&.text-controls::before{
+					content: ' ';
+					top: 4px;
+					right: -36px;
+					position: relative;
+					height: 26px;
+					display: block;
+					background-color: #b3b3b3;
+					width: 1px;
+				}
+
+				&.object-controls{
+					@include icon('editor-attach', $top:10px, $left:10px);
+					&.selected{
+						&::after{
+							@include sprite($icons,'editor-attach_active',$dimensions: true);
+						}
+					}
+
+					.popover{
+						left: -9px;
+						&::after{
+							left: 18px;
+						}
+					}
+
+					&.only-one{
+						.popover{
+							left: 0px;
+							&::after{
+								left: 9px;
 							}
 						}
 					}

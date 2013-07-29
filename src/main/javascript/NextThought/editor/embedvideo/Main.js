@@ -30,8 +30,8 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 
 	getValues: function(){
 		var raw = this.down('[name=embed]').getValue(),
-			stupidURLRegex = /^(http:\/\/||https:\/\/||\/\/).*/i,
-			youtubeEmbedURLRegex = /^(http:\/\/||https:\/\/||\/\/)\/\/www.youtube.com\/embed\/.+/i,
+			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
+			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)\/\/www.youtube.com\/embed\/.+/i,
 			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i, match;
 
 		raw = (raw || '').trim();

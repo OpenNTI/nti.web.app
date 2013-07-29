@@ -72,17 +72,23 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			cn: [{
 				cls: 'left',
 				cn: [{
-					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
-				},{
-					tag: 'tpl', 'if': 'enableVideo', cn: {
-						cls: 'action video', 'data-qtip': 'Embed a video'
-					}
-				},{
 					cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
 						{cls:'popover', cn:[
 							{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
 							{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
 							{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+						]}
+					]
+				},{
+					cls: 'action object-controls', 'data-qtip': 'Insert Object', cn:[
+						{cls:'popover', cn:[
+							{
+								cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard'
+							},{
+								tag: 'tpl', 'if': 'enableVideo', cn: {
+									cls: 'control video', 'data-qtip': 'Embed a video'
+								}
+							}
 						]}
 					]
 				}]
@@ -139,7 +145,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 
 	afterRender: function(){
-		var aux;
+		var aux, objectsControl;
 		this.callParent(arguments);
 		this.mixins.editorActions.constructor.call(this,this,this.el,this.el.parent());
 		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
@@ -147,6 +153,14 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			if(e.getTarget('.disabled')){ e.stopEvent(); return; }
 			this.onSave(e);
 		},this);
+
+		//Sigh
+		if(!this.renderData.enableVideo){
+			objectsControl = this.el.down('.object-controls');
+			if(objectsControl){
+				objectsControl.addCls('only-one');
+			}
+		}
 
 		//Hide it, if it's empty.
 		aux = this.el.down('.aux');
