@@ -56,6 +56,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.callParent(arguments);
 
 
+		var me = this, h,
+			targetEl = me.el.down('.body');
+
 		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl});
 		this.addVideoPlayer(this.BIGVIDEO.width, this.BIGVIDEO.height);
 
@@ -70,6 +73,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.destroy();
 			this.fireEvent('exited', this);
 		}, this);
+
+		h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
+		h = h + 'px';
+		Ext.defer(targetEl.setStyle, 10, targetEl, ['height',h]);
 	},
 
 	addVideoPlayer: function(width, height){

@@ -857,6 +857,8 @@ $experimental-support-for-svg: true;
 
 	.body{
 		margin: 10px 0 0 1000px;
+		overflow-y: auto;
+		overflow-x: hidden;
 
 		.x-container-transcript{
 			width: auto !important;
