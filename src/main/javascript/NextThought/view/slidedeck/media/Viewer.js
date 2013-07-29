@@ -65,7 +65,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			'switch-video-viewer': 'switchVideoViewer'
 		});
 
-//		this.add({ xtype:'asset-view', plain: true, border:false });
+		this.mon(this.toolbar, 'exit-viewer', function(){
+			console.log('about to exit the video viewer');
+			this.destroy();
+			this.fireEvent('exited', this);
+		}, this);
 	},
 
 	addVideoPlayer: function(width, height){

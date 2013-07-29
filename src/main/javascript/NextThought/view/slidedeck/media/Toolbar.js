@@ -28,13 +28,17 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			{cls:'video-picker', cn:[
 				{cls:'full-screen'},
 				{cls:'picker', html:'split transcript'}
-			]}
+			]},{
+				cls:'exit-button', html:'Exit Video Viewer', role: 'button'
+			}
 		]
 	}]),
 
 	renderSelectors:{
-		pickerEl: '.picker'
+		pickerEl: '.picker',
+		exitEl: '.exit-button'
 	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -45,13 +49,18 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			click: 'showVideoPlayerPicker'
 		});
 
-
+		this.mon(this.exitEl, {
+			scope: this,
+			click: function(){ this.fireEvent('exit-viewer'); }
+		});
 	},
+
 
 	showVideoPlayerPicker: function(){
 		console.log('clicked on show the video player picker..');
 		this.videoPicker.showBy(this.pickerEl, 'tl-bl', [70,15]);
 	},
+
 
 	createViewPlayerPicker: function(){
 		var me = this;
@@ -80,6 +89,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			]
 		});
 	},
+
 
 	handleClick: function(item, menu){
 		if(this.currentType !== item.action){

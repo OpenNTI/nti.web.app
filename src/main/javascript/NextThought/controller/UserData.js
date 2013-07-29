@@ -78,7 +78,10 @@ Ext.define('NextThought.controller.UserData', {
 					'save-new-series-note':'saveNewSeriesNote'
 				},
 				'slidedeck-view': {
-					exited: 'slideViewExited'
+					exited: 'presentationExited'
+				},
+				'media-viewer':{
+					exited: 'presentationExited'
 				},
 
 				'reader-content':{
@@ -215,7 +218,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	slideViewExited: function(){
+	presentationExited: function(){
 		if(this.activeNoteWindow){
 			this.activeNoteWindow.destroy();
 		}

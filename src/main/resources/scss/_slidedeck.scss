@@ -782,13 +782,13 @@ $experimental-support-for-svg: true;
 
 			.right{
 				position: absolute;
-				right: 250px;
+				right: 160px;
 				top: 0;
 				height: 72px;
 
 				.video-picker{
-					width: 300px;
 					position: relative;
+					float: left;
 
 					.full-screen{
 						position: absolute;
@@ -829,6 +829,19 @@ $experimental-support-for-svg: true;
 							}
 						}
 					}
+				}
+
+				.exit-button {
+					cursor: pointer;
+					position: relative;
+					float: left;
+					top: 20px;
+					left: 40px;
+
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 500;
+					@include slide-button;
 				}
 			}
 		}
