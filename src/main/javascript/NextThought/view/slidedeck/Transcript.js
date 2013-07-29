@@ -56,7 +56,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				start = slide.get('video-start'),
 				end = slide.get('video-end');
 
-			console.log('slide starts: ', start, ' slide ends: ', end, ' transcript url: ', t.get('associatedVideoId'));
+			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
 
 			items.push({
 				xtype:'slide-component',
