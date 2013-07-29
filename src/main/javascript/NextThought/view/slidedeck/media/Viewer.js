@@ -76,7 +76,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
 		h = h + 'px';
-		Ext.defer(targetEl.setStyle, 10, targetEl, ['height',h]);
+		Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
 	},
 
 	addVideoPlayer: function(width, height){
