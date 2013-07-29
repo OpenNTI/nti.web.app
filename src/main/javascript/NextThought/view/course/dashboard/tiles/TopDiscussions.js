@@ -74,7 +74,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'}
 					]}
 				]
-			}]})
+			}]}),
+			listeners: {
+				scope: this,
+				select: function(selModel,record){ selModel.deselect(record); },
+				itemclick: 'onItemClicked'
+			}
 		});
 
 		$AppConfig.service.getObject(this.getTopicNtiid(),
@@ -83,6 +88,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 				this,
 				true
 		);
+	},
+
+
+	onItemClicked: function(view, rec /*, dom, index, event, eOpts*/){
+		this.fireEvent('navigate-to-href',this,rec.getId());
 	},
 
 
