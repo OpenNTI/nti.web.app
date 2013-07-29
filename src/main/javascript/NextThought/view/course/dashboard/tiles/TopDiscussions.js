@@ -88,8 +88,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 	onForumResolved: function(forum){
 		var sId = 'dashboard-'+forum.getContentsStoreId(),
-			store = Ext.getStore(sId) || forum.buildContentsStore({storeId:sId});
-
+			store = Ext.getStore(sId) || forum.buildContentsStore({storeId:sId,pageSize: 4});
 
 
 		this.view.bindStore(store);
