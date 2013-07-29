@@ -76,6 +76,13 @@ Ext.define('NextThought.editor.Actions', {
 		}]
 	}).compile(),
 
+	unknownPartTemplate: Ext.DomHelper.createTemplate({
+		contentEditable: false,
+		id: '{1}',
+		cls: 'object-part unknown',
+		unselectable: 'on'
+	}).compile(),
+
 	//TODO all this part related stuff should end up in mixins or objects or something.
 	//this doesn't seem particularily scalable.
 	objectThumbnailTemplates: {
@@ -111,7 +118,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		me.editor = editorEl;
 		me.cmp = cmp;
-		me.openWhiteboards = {};
+		me.trackedParts = {};
 
 		// tab tracking is different depending on whether we're editing a blog or
 		// editing an annotation. the field layout changes. maybe it should be the same?
@@ -185,7 +192,11 @@ Ext.define('NextThought.editor.Actions', {
 
 
 		cmp.on('destroy',function(){
-			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();});
+			Ext.Object.each(me.trackedParts,function(k,v){
+				if(v && v.destroy){
+					v.destroy();
+				}
+			});
 		});
 
 		this.typingAttributes = [];
@@ -257,7 +268,7 @@ Ext.define('NextThought.editor.Actions', {
 	deactivate: function () {
 		this.editor.removeCls('active');
 		this.lastRange = null;
-		this.cleanOpenWindows();
+		this.cleanTrackedParts();
 		this.clearError();
 		this.fireEvent('deactivated-editor',this);
 	},
@@ -501,7 +512,7 @@ Ext.define('NextThought.editor.Actions', {
 	onKeyup: function(e){
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
-		this.checkWhiteboards();
+		this.checkTrackedParts();
 		this.maybeEnableSave();
 		//when this is mixed in to the editor its no longer a seperate instance
 		if(this.cmp !== this){
@@ -649,7 +660,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		if (t) {
 			guid = Ext.fly(t).down('img').getAttribute('id');
-			t = this.openWhiteboards[guid];
+			t = this.trackedParts[guid];
 			if( t && !t.isDestroyed ){
 				t.show();
 			}
@@ -663,28 +674,30 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	checkWhiteboards: function(){
+	checkTrackedParts: function(){
 		var me = this;
-		Ext.Object.each(this.openWhiteboards,function(guid){
+		Ext.Object.each(this.trackedParts,function(guid){
 			if(!Ext.get(guid)){
-				me.removeWhiteboard(guid);
-				me.fireEvent('droped-whiteboard',guid);
+				if((this.trackedParts[guid] || {}).isWhiteboardWindow){
+					me.removeWhiteboard(guid);
+					me.fireEvent('droped-whiteboard',guid);
+				}
 			}
 		});
 	},
 
 
 	removeWhiteboard: function(guid){
-		var w = this.openWhiteboards[guid],
+		var w = this.trackedParts[guid],
 			el = Ext.get(guid);
 
 		if(el){ el.parent('.whiteboard-divider').remove();}
 		if(w){
-			this.openWhiteboards[guid] = null;
+			this.trackedParts[guid] = null;
 		}
 
 		// FIXME: is this comment still valid?
-		//Note we don't remove the whiteboard from openWhiteboards here.
+		//Note we don't remove the whiteboard from trackedParts here.
 		//if the author does an undo and the dom elements get added back
 		//we need to retain the model or we are in an inconsistent state
 	},
@@ -732,7 +745,7 @@ Ext.define('NextThought.editor.Actions', {
 		if(typeof guid !== 'string'){
 			guid = guidGenerator();
 		}
-		if(this.openWhiteboards[guid]){
+		if(this.trackedParts[guid]){
 			return;
 		}
 
@@ -741,7 +754,7 @@ Ext.define('NextThought.editor.Actions', {
 		content = me.editor.down('.content');
 		//remember the whiteboard window:
 		wbWin.guid = guid;
-		this.openWhiteboards[guid] = wbWin;
+		this.trackedParts[guid] = wbWin;
 
 		//Hide note nav-helper - to avoid it from being on top of the WB
 		if (Ext.query('.nav-helper')[0]) {
@@ -766,7 +779,7 @@ Ext.define('NextThought.editor.Actions', {
 			cancel: function() {
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				if(!data){
-					me.cleanOpenWindows(guid);
+					me.cleanTrackedParts(guid);
 					wbWin.close();
 				}
 
@@ -865,6 +878,11 @@ Ext.define('NextThought.editor.Actions', {
 			this.editorFocus();
 
 			thumbTpl = me[me.objectThumbnailTemplates[mime] || ''];
+
+			if(!thumbTpl){
+				thumbTpl = this.unknownPartTemplate;
+			}
+
 			htmlCfg = [{html: me.defaultValue}, thumbTpl.apply(['', guid]) ,{html: me.defaultValue}];
 
 			//Need to see if we have a selection and it is in our content element
@@ -954,11 +972,11 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 
-	cleanOpenWindows: function (guids) {
+	cleanTrackedParts: function (guids) {
 		var me = this;
 
 		if(!guids){
-			guids = Ext.Object.getKeys(me.openWhiteboards);
+			guids = Ext.Object.getKeys(me.trackedParts);
 		}
 
 		if (!Ext.isArray(guids)) {
@@ -966,8 +984,8 @@ Ext.define('NextThought.editor.Actions', {
 		}
 
 		Ext.each(guids, function (g) {
-			var w = me.openWhiteboards[g];
-			delete me.openWhiteboards[g];
+			var w = me.trackedParts[g];
+			delete me.trackedParts[g];
 			if(w && w.destroy){
 				w.destroy();
 			}
@@ -978,7 +996,7 @@ Ext.define('NextThought.editor.Actions', {
 		var me = this,
 			m = wp.match(/id="(.*?)"/),
 			id = m && m[1],
-			wb = id && me.openWhiteboards[id],
+			wb = id && me.trackedParts[id],
 			ed = wb && wb.getEditor();
 		return ed && ed.getValue();
 	},
@@ -994,6 +1012,14 @@ Ext.define('NextThought.editor.Actions', {
 			return null;
 		}
 		return this.createVideoPart(href, type);
+	},
+
+	unknownPart: function(up){
+		var me = this,
+			m = up.match(/id="(.*?)"/),
+			id = m && m[1],
+			p = id && me.trackedParts[id];
+		return p;
 	},
 
 	getBody: function (parts) {
@@ -1019,6 +1045,10 @@ Ext.define('NextThought.editor.Actions', {
 					}
 					return !p; //Stop iterating (return false) if we found something
 				}, this);
+				if(!p){
+					p = this.unknownPart(part);
+				}
+
 				if(p){
 					r.push(p);
 				}
@@ -1155,13 +1185,28 @@ Ext.define('NextThought.editor.Actions', {
 					//is we keep an array of parts we don't understand.  Render them as a ?
 					//or something and then on save we can index into the array and make sure
 					//we don't drop misunderstood parts.  What do you think J?
-					console.error('***DANGER*** Dropping unknown part ', part, 'This is really bad as saving the note will dropt the part for good');
+					console.warn('Found a part we don\'t understand.  Inserting placeholder', part);
+					me.injectUnknownPart(part);
 				}
 			}
 		});
 
 		this.maybeEnableSave();
 		return me;
+	},
+
+
+	injectUnknownPart: function(part){
+		var me = this, guid = guidGenerator();
+
+		this.trackedParts[guid] = part;
+
+		//Hide note nav-helper - to avoid it from being on top of the WB
+		if (Ext.query('.nav-helper')[0]) {
+			Ext.fly(Ext.query('.nav-helper')[0]).hide();
+		}
+
+		me.insertObjectThumbnail(me.editor.down('.content'), guid, part, true);
 	},
 
 
@@ -1278,7 +1323,7 @@ Ext.define('NextThought.editor.Actions', {
 	reset: function () {
 		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
 		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
-		this.cleanOpenWindows();
+		this.cleanTrackedParts();
 		if(this.sharedList){
 			this.sharedList.reset();
 		}

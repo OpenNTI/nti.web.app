@@ -74,7 +74,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 				cn: [{
 					cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'
 				},{
-					tag: 'tpl', if: 'enableVideo', cn: {
+					tag: 'tpl', 'if': 'enableVideo', cn: {
 						cls: 'action video', 'data-qtip': 'Embed a video'
 					}
 				},{

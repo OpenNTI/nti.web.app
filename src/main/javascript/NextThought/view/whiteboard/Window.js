@@ -23,6 +23,8 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	layout: 'fit',
 	items: [{ xtype: 'whiteboard-editor' }],
 
+	isWhiteboardWindow: true,
+
 	dockedItems: [
 		{
 			xtype: 'container',
