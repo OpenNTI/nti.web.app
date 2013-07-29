@@ -356,13 +356,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	showContextMenu: function(e){
-		console.log('Should show context menu');
 		e.stopEvent();
 
 		if(!this.contextMenu){
 			this.buildContextMenu();
 		}
-
 		var xy = e.getXY(),
 			sel = window.getSelection(),
 			range = sel.getRangeAt(0).cloneRange(), cueData = {},
@@ -377,6 +375,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		this.contextMenu.cueData = cueData;
 
 		// Show menu
+		console.log('Should show context menu');
 		this.contextMenu.showAt(xy);
 		Ext.defer(function(){ sel.addRange(range); }, 10, this);
 	},

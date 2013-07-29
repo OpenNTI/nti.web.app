@@ -110,6 +110,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if(this.hasSlides){
 			this.selectInitialSlide();
 		}
+		this.mon(this.el, {
+			scope:this,
+			'mousedown': 'mayBeHideAnnotationView'
+		});
 	},
 
 
@@ -180,6 +184,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	showAnnotationView: function(store){
+		// TODO: Ideally, we wound like to unbind the previous store and
+		// attach a new store rather than creating a new cmp each time.
 		this.annotationView = Ext.widget('annotation-view',{
 			floating:true,
 			border:false,
@@ -200,32 +206,47 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.on('destroy', 'destroy',this.annotationView);
 	},
 
+
+	mayBeHideAnnotationView: function(e){
+		if(!this.annotationView || !this.annotationView.isVisible()){
+			return true;
+		}
+		if(!e.getTarget('.annotation-view') && this.annotationView.isVisible()){
+			// TODO: We destroy it, since we create a new one each time.
+			this.annotationView.destroy();
+		}
+		return true;
+	},
+
+
 	getDocumentElement: function(){
 		console.log('should return doc element');
 		return this.el.dom.ownerDocument;
 	},
 
+
 	getCleanContent: function(){
 		return this.el.dom;
 	},
+
 
 	getViewerHooks: function(){
 		return {
 			'resizeView': function(){
 				var reader = this.reader,
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
-					h = reader.getHeight(),
-					pos = reader.getPosition(),
-					minWidth = 475;
-
-				pos[0] += 10;
-				pos[1] += 10;
+					h = reader.annotationView.getHeight(),
+					pos = reader.annotationView.getPosition(),
+					minWidth = 575;
 
 				w = w > minWidth ? w : minWidth;
+				pos[0] = (pos[0] - w > 0) ? (pos[0] - w) : 0;
+				pos[0] += 10;
+				pos[1] += 10;
 				this.setPosition(pos);
 				this.setWidth(w);
 				this.setHeight(h);
-				Ext.defer(this.el.setStyle, 10, this.el, ['z-index','200000']);
+				Ext.defer(this.el.setStyle, 10, this.el, ['z-index','20000']);
 			}
 		}
 	}
