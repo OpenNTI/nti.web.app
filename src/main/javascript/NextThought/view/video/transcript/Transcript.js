@@ -123,7 +123,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		function fn(item){
 			var range = item.get('applicableRange'),
 				startAnchorTime = range.start && range.start.seconds,
-				endAnchorTime = range.end && range.end.seconds;
+				endAnchorTime = range.end && range.end.seconds,
+				utils = NextThought.view.slidedeck.transcript.AnchorResolver;
+
+			//Conversions
+			startAnchorTime = utils.fromMillSecondToSecond(startAnchorTime);
+			endAnchorTime = utils.fromMillSecondToSecond(endAnchorTime);
 
 			return (startAnchorTime >= start) && (endAnchorTime <= end);
 		}
