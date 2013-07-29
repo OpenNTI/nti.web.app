@@ -140,7 +140,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 	updateContent: function(){
 		var h = this.record.get('headline');
-		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData );
+		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, {'application/vnd.nextthought.embeddedvideo' : 640});
 	},
 
 

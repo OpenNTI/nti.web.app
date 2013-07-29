@@ -74,7 +74,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 	},
 
 	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope){
-		var width = (size || 225), height = width / (4.0/3.0), types, fn, cfg;
+		var width = (size || 360), height = width / (4.0/3.0), types, fn, cfg;
 
 		function youtubeMarkupForHref(href){
 			var adjustedHref,
@@ -150,11 +150,9 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 				render(i-1);
 			}
 			else {
-				//TODO need to add support for the other potential part types now.  I.E. EmbeddedVideo,
-				//and for things we don't support some kind of placeholder?
 				fn = me[me.rendererForPart[o.MimeType] || ''];
 				if(Ext.isFunction(fn)){
-					fn.call(me, o, clickHandlerMaker, size, function(t){
+					fn.call(me, o, clickHandlerMaker, Ext.isObject(size) ? size[o.MimeType] : size, function(t){
 						text.push(t);
 						render(i-1);
 					}, me);
