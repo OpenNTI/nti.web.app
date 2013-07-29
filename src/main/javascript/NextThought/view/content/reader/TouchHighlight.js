@@ -12,8 +12,9 @@ Ext.define('NextThought.view.content.reader.TouchHighlight',{
      */
     constructor: function(config){
         // Only support touch on iPad devices
-        if (!Ext.is.iPad)
+        if (!Ext.is.iPad){
             return;
+        }
 
         Ext.apply(this, config);
 

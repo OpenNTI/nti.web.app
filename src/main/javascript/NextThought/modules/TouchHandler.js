@@ -8,8 +8,9 @@ Ext.define('NextThought.modules.TouchHandler', {
 
     constructor: function(config) {
         // Only support touch on iPad devices
-        if (!Ext.is.iPad)
+        if (!Ext.is.iPad){
             return;
+        }
 
         Ext.apply(this, config);
 
@@ -36,17 +37,19 @@ Ext.define('NextThought.modules.TouchHandler', {
                 return;
             }
 
-            if (initialY === false)
+            if (initialY === false){
                 initialY = currentY;
+            }
 
-            minY  = initialY-(containerHeight-parentHeight)
+            minY  = initialY-(containerHeight-parentHeight);
 
             // Clamp scroll
-            if(newY < minY)
+            if(newY < minY){
                 newY = minY;
-            else if (newY > initialY)
+            }
+            else if (newY > initialY){
                 newY = initialY;
-
+            }
             panel.setY(newY, false);
 
         }, this);

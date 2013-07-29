@@ -13,8 +13,9 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
 
     constructor: function(config) {
         // Only support touch on iPad devices
-        if (!Ext.is.iPad)
+        if (!Ext.is.iPad){
             return;
+        }
 
         Ext.apply(this, config);
         var reader = this.reader;
@@ -76,13 +77,13 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
         });
 
         reader.on('touchElementIsDraggable', function(ele, callback) {
-            if (!ele) callback(false);
+            if (!ele) {callback(false);}
             var obj = Ext.get(ele);
             callback(obj.hasCls('draggable-area') || obj.up('.draggable-area'));
         });
 
         reader.on('touchElementIsSelectable', function(ele, callback) {
-            if (!ele) callback(false);
+            if (!ele) {callback(false);}
             var tag = ele.tagName,
                 tags = ['P', 'A', 'SPAN'];
             callback(Ext.Array.contains(tags, tag));

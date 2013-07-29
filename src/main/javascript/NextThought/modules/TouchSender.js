@@ -39,8 +39,9 @@ Ext.define('NextThought.modules.TouchSender', {
      */
     constructor: function(config) {
         // Only support touch on iPad devices
-        if (!Ext.is.iPad)
+        if (!Ext.is.iPad){
             return;
+        }
 
         Ext.apply(this, config);
 
@@ -67,6 +68,28 @@ Ext.define('NextThought.modules.TouchSender', {
             //current movement delta
             vel;
 
+        function kineticScroll() {
+            var lt0 = vel< 0,
+                currentTime = Date.now(),
+                deltaTime = currentTime-lastUpdateTime,
+                aboveThreshold, sameDirection;
+            lastUpdateTime = currentTime;
+
+            // Continue scrolling if above the movement threshold
+            // and hasn't changed directions
+            aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
+            sameDirection = startLt0 === lt0;
+
+            if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
+                // Apply friction in the opposite movement direction
+                // based on the time passed for smoother movement
+                vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
+
+                container.fireEvent('touchScroll', pickedElement, vel);
+                setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
+            }
+        }
+
         /**
          * Only count touches within the set threshold. Otherwise,
          * it moves to another state (scroll,select,drag)
@@ -84,8 +107,9 @@ Ext.define('NextThought.modules.TouchSender', {
             container.fireEvent('touchStart', touch.pageX, touch.pageY);
 
             // Only start a new touch if all touches are off
-            if (state !== s.STATE.NONE)
+            if (state !== s.STATE.NONE){
                 return;
+            }
             state = s.STATE.DOWN;
 
             initialTime = Date.now();
@@ -103,11 +127,11 @@ Ext.define('NextThought.modules.TouchSender', {
                     container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
 
                     container.fireEvent('touchElementIsDraggable', ele, function(is){
-                        if(!is || state !== s.STATE.DOWN) return;
+                        if(!is || state !== s.STATE.DOWN) {return;}
                         state = s.STATE.DRAGGING;
                     });
                     container.fireEvent('touchElementIsSelectable', ele, function(is) {
-                        if(!is || state !== s.STATE.DOWN) return;
+                        if(!is || state !== s.STATE.DOWN) {return;}
                         state = s.STATE.SELECTING;
                     });
 
@@ -122,13 +146,35 @@ Ext.define('NextThought.modules.TouchSender', {
 
             var touch = e.touches[0];
 
+            function scrollMove() {
+                vel = lastY - touch.pageY;
+                updatePos();
+                container.fireEvent('touchScroll', pickedElement, vel);
+            }
+
+            function selectMove() {
+                updatePos();
+                container.fireEvent('touchHighlight', initialX, initialY,
+                    touch.pageX, touch.pageY);
+            }
+
+            function dragMove() {
+                updatePos();
+                container.fireEvent('touchDrag', pickedElement, touch.pageX, touch.pageY);
+            }
+
+            function updatePos() {
+                lastY = touch.pageY;
+                lastX = touch.pageX;
+            }
+
             container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
 
             if (state === s.STATE.DOWN) {
                 scrollMove();
                 if (!withinTapThreshold()) {
                     container.fireEvent('touchElementIsScrollable', pickedElement, function(is) {
-                        if (is) state = s.STATE.SCROLLING;
+                        if (is) {state = s.STATE.SCROLLING;}
                     });
                 }
             }
@@ -141,29 +187,8 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (state === s.STATE.DRAGGING) {
                 dragMove();
             }
-            else
+            else{
                 console.warn('Unknown touch state on touchMove!');
-
-            function scrollMove() {
-                vel = lastY - touch.pageY;
-                updatePos();
-                container.fireEvent('touchScroll', pickedElement, vel);
-            }
-
-            function selectMove() {
-                updatePos();
-                container.fireEvent('touchHighlight', initialX, initialY,
-                                                      touch.pageX, touch.pageY);
-            }
-
-            function dragMove() {
-                updatePos();
-                container.fireEvent('touchDrag', pickedElement, touch.pageX, touch.pageY);
-            }
-
-            function updatePos() {
-                lastY = touch.pageY;
-                lastX = touch.pageX;
             }
 
         }, false);
@@ -187,15 +212,18 @@ Ext.define('NextThought.modules.TouchSender', {
                 // Send click/select event to the tapped element
                 // Some input elements need a workaround to select
                 // the entire thing.
-                if (shouldSelectAllOnTap())
+                if (shouldSelectAllOnTap()){
                     pickedElement.setSelectionRange(0,1000);
-                else
+                }
+                else{
                     pickedElement.click();
+                }
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
-                if (Math.abs(vel) > s.SCROLL_MAX_SPEED)
+                if (Math.abs(vel) > s.SCROLL_MAX_SPEED){
                     vel = startLt0? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+                }
                 kineticScroll();
             }
             else if (tempState === s.STATE.SELECTING) {
@@ -209,30 +237,10 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (tempState === s.STATE.DRAGGING) {
                 container.fireEvent('touchDrop', pickedElement, lastX, lastY);
             }
-            else
+            else{
                 console.warn('Unknown touch state on touchEnd!');
-
-            function kineticScroll() {
-                var lt0 = vel< 0,
-                    currentTime = Date.now(),
-                    deltaTime = currentTime-lastUpdateTime,
-                    aboveThreshold, sameDirection;
-                lastUpdateTime = currentTime;
-
-                // Continue scrolling if above the movement threshold
-                // and hasn't changed directions
-                aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
-                sameDirection = startLt0 === lt0;
-
-                if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
-                    // Apply friction in the opposite movement direction
-                    // based on the time passed for smoother movement
-                    vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
-
-                    container.fireEvent('touchScroll', pickedElement, vel);
-                    setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
-                }
             }
+
         }); // eo touchEnd
 
     } // eo setupTouchHandlers
