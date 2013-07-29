@@ -15,7 +15,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		var o = this.get('body'), text = [];
 
 		Ext.each(o,function(c){
-			if(typeof(c) === 'string'){
+			if(typeof c === 'string'){
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g,' '));
 			} else {
 				if(!hasNoPlaceholderForImage){
@@ -74,7 +74,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 	},
 
 	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope){
-		var width = (size || 225), height = width / (4.0/3.0);
+		var width = (size || 225), height = width / (4.0/3.0), types, fn, cfg;
 
 		function youtubeMarkupForHref(href){
 			var adjustedHref,
@@ -89,8 +89,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 					allowtransparency: "1",
 					modestbranding: "1",
 					height: height,
-					width: width,
-				}, tag, params = [];
+					width: width
+				}, params = [];
 			if(href){
 				Ext.Object.each(opts, function(k, v){
 					params.push(k+'='+v);
@@ -121,12 +121,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 					tag: 'source',
 					src: href
 				}
-			}
+			};
 		}
 
-		var types = {youtube: youtubeMarkupForHref},
-			fn = types[o.type] || html5videoForHref,
-			cfg = fn(o.embedURL);
+		types = {youtube: youtubeMarkupForHref};
+		fn = types[o.type] || html5videoForHref;
+		cfg = fn(o.embedURL);
 
 		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
 	},
@@ -140,12 +140,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		clickHandlerMaker = clickHandlerMaker || function(){return '';};
 
 		function render(i){
-			var o = body[i], id, fn;
+			var o = body[i], fn;
 
 			if(i<0){
 				result.call(scope,text.join(''));
 			}
-			else if(typeof(o) === 'string'){
+			else if(typeof o === 'string'){
 				text.push(o.replace(/\s*(style|class)=".*?"\s*/ig,' ').replace(/<span.*?>&nbsp;<\/span>/ig,'&nbsp;'));
 				render(i-1);
 			}
