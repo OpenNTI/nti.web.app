@@ -52,7 +52,7 @@ Ext.define('NextThought.view.course.forum.View',{
 			course = toc && toc.querySelector('course');
 		}
 		
-		//this.setForum(pageInfo.isPartOfCourse() && course && course.getAttribute('forum'));
+		this.setForum(pageInfo.isPartOfCourse() && course && course.getAttribute('forum'));
 	}
 });
 
