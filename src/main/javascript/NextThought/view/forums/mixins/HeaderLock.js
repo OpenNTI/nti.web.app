@@ -14,12 +14,14 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 
 
 	headerLockPostRenderInit: function(){
-		var container = Ext.get('forum') || Ext.get('course-forum');
+		var container = this.ownerCt.getEl();
 
 		this.on({
 			'beforedeactivate':'onBeforeListDeactivateLockHeader',
 			'destroy': 'headerLockCleanup'
 		});
+
+
 		this.mon(container,'scroll', 'handleScrollHeaderLock');
 
 		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
