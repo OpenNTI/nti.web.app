@@ -131,7 +131,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		me.editorEl.mask('Saving...');
 		try {
-			me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
+			// NOTE: For slide notes, for now we're keeping them domRange notes.
+			if(me.data.isDomRange){
+				me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
+			}
+			else{
+				me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
+			}
 		}
 		catch (error) {
 			onError(error);
@@ -196,17 +202,34 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	registerNoteRecord: function(rec, cmp, recStore){
 		var anchorResolver =  cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
-			domRange, rect, line;
+			domRange, rect, line, domFrag, b;
 
-		if(!anchorResolver){
-			anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver;
+		if(!anchorResolver){ anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver; }
+
+		if(cmp.slide){
+			domFrag = cmp.slide.get('dom-clone');
+
+			// NOTE: In order to be able to resolve a line in the presentation we need a dom range.
+			// the range we get from the dom range will be with reference to the raw content,
+			// since we're taking a portion of the content and slide are nothing but the image,
+			// we will create a dom range off the img element that we have in this cmp.
+			b = anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
+			if(b){
+				domRange = cmp.createDomRange();
+			}
 		}
-
-		domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
+		else{
+			domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
+		}
 		console.log('domrange for record: ', rec, domRange);
 
+		if(Ext.isEmpty(domRange)){
+			console.warn('Could not resolve dom range anchor for record: ', rec);
+			return;
+		}
+
 		rect = domRange.getBoundingClientRect();
-		line = Math.round(rect.top);
+		line = rect ? Math.round(rect.top): 0;
 		rec.set('line', line);
 
 		this.annotationManager.add({

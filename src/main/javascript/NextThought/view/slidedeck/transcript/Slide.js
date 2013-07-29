@@ -21,11 +21,20 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+
+		this.addEvents('register-records');
+		this.enableBubble(['register-records']);
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
 		var slide = this.slide;
 		if(slide){
+			this.buildUserDataStore();
 			this.mon(this.slideImage,'load', Ext.defer(this.updateLayout, 1, this),this);
 			this.slideImage.set({src: slide.get('image')});
 
@@ -59,6 +68,8 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		data.range = range;
 		data.containerId = this.slide.get('ContainerId');
+
+		data.isDomRange = true;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
 	},
 
@@ -85,5 +96,53 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 			box = target && target.down('.add-note-here');
 
 		clearTimeout(this.mouseLeaveTimeout);
+	},
+
+	buildUserDataStore: function(){
+		var containerId = this.slide.get('ContainerId'),
+			filter, // = this.getUserDataTimeFilter(),
+			me = this;
+
+		function finish(store){
+			// Apply filter to know which user data belong belong within the timing of this transcript.
+			console.log('slide userdata store: ', store);
+			if(!store){ return; }
+			if(!Ext.isEmpty(filter) && Ext.isFunction(filter)){
+				store.filter([{filterFn:filter}]);
+			}
+			// Now we will start to bucket notes.
+			console.log('should start to show and bucket items');
+			if(store.getCount() > 0){
+				me.fireEvent('register-records', store, me);
+			}
+		}
+
+		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+			store = NextThought.store.PageItem.make(url, containerId,true);
+
+		/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
+		store.doesNotShareEventsImplicitly = true;
+		Ext.apply(store.proxy.extraParams,{
+			accept: NextThought.model.Note.mimeType,
+			filter: 'TopLevel'
+		});
+
+		me.mon(store, 'load', finish, me);
+		store.load();
+	},
+
+
+	getAnchorResolver: function(){
+		return Anchors;
+	},
+
+
+	createDomRange:function(){
+		var range = document.createRange(),
+			el = this.el.down('img');
+
+		if(el){ range.selectNode(el.dom); }
+		return range;
 	}
+
 });
