@@ -187,6 +187,18 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			}
 		});
 
+		this.el.on('mouseleave', function(){
+			if(this.typesMenu.isVisible()){
+				this.typesHideTimeout = Ext.defer(function(){
+					this.typesMenu.hide();
+				}, 500, this);
+			}else if(this.fromMenu.isVisible()){
+				this.fromHideTimeout = Ext.defer(function(){
+					this.fromMenu.hide();
+				}, 500, this);
+			}
+		}, this);
+
 		this.applyFilters();
 
 		this.fromMenu.show().hide();
