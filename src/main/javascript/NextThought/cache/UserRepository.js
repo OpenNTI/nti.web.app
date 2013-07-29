@@ -239,7 +239,9 @@ Ext.define('NextThought.cache.UserRepository', {
 				delete me.activeRequests[username];
 
 				if (!success) {
-					console.warn('There was an error resolving user:', username, arguments);
+					if( this.debug ){
+						console.warn('There was an error resolving user:', username, arguments);
+					}
 					if (callbacks && callbacks.failure) {
 						callbacks.failure.call(callbacks.scope || this);
 					}
@@ -277,7 +279,9 @@ Ext.define('NextThought.cache.UserRepository', {
 					if (callbacks && callbacks.failure) {
 						callbacks.failure.call(callbacks.scope || this);
 					}
-					if(!r.loggedWarn || !r.loggedWarn[username]){
+
+
+					if(this.debug && (!r.loggedWarn || !r.loggedWarn[username])){
 						if(!r.loggedWarn){ r.loggedWarn = {}; }
 						r.loggedWarn[username] = true;
 						console.warn('{requestID:'+r.requestId+'} result is null', url, r.responseText);
@@ -308,17 +312,19 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		presenceChanged: function (username, presence) {
 			var u = this.getStore().getById(username),newPresence;
-			console.log('User repository recieved a presence change for ', username, arguments);
+			if(this.debug){console.log('User repository recieved a presence change for ', username, arguments);}
 			newPresence = (presence && presence.isPresenceInfo)
 					? presence
 					: NextThought.model.PresenceInfo.createFromPresenceString(presence,username);
 
 			if (u) {
-				console.debug('updating presence for found user', u);
+				if( this.debug ){
+					console.debug('updating presence for found user', u);
+				}
 				u.set('Presence', newPresence);
 				u.fireEvent('changed', u);
 			}
-			else {
+			else if(this.debug) {
 				console.debug('no user found to update presence');
 			}
 		}
