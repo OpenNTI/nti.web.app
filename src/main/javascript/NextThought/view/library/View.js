@@ -96,7 +96,7 @@ Ext.define( 'NextThought.view.library.View', {
 			return false;
 		}
 		
-		this.pushState({current_tab: vId});
+		this.pushState({activeTab: vId});
 		if(needsChanging){
 			l.setActiveItem(vId);
 		} else if(reset) {
@@ -138,9 +138,7 @@ Ext.define( 'NextThought.view.library.View', {
 		}
 
 		Ext.each(tabs,function(t){
-			if(t.viewId===active){
-				t.selected = true;
-			}
+			t.selected = (t.viewId.replace(/\?$/,'')===active);
 		});
 
 		return this.tabs? tabs : [];
@@ -191,13 +189,15 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
-	onNavigateComplete: function(pageInfo){
+	onNavigateComplete: function(pageInfo,cb,userInitiatedNav){
 		if(!pageInfo || !pageInfo.isModel){return;}
 
 		this.tabs = pageInfo.isPartOfCourse();
 		this.fireEvent('update-tabs',this);
 
-		//this.getLayout().setActiveItem(this.courseBook);
+		if(userInitiatedNav){
+			this.getLayout().setActiveItem(this.courseBook);
+		}
 
 		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
@@ -246,7 +246,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 	restore: function(state){
 		var ntiid = state.library.location,
-			tab = state.library.current_tab;
+			tab = state.library.activeTab;
 		try{
 			this.setActiveTab(tab);
 			if(!ntiid){
