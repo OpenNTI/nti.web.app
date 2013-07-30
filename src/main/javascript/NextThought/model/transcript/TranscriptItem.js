@@ -3,7 +3,7 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 
 	fields: [
 		{name:'url', type:'string'},
-		{name:'jsonUrl', type:'string'},
+		{name:'jsonpUrl', type:'string'},
 		{name:'contentType', type:'string'},
 		{name:'content', type:'auto'},
 		{name:'basePath', type:'string'},
@@ -17,7 +17,7 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 
 		fromDom: function(el, reader){
 			var t  = Ext.fly(el).down('object[type*=mediatranscript]'),
-				url, type, jsonUrl, assocVideoId, o;
+				url, type, jsonpUrl, assocVideoId, o;
 
 			if(!t){
 				return null;
@@ -25,16 +25,32 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 
 			url =  Ext.fly(t).down('param[name=src]').getAttribute('value');
 			type = Ext.fly(t).down('param[name=type]').getAttribute('value');
-			jsonUrl = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
+			jsonpUrl = Ext.fly(t).down('param[name=srcjsonp]').getAttribute('value');
 			assocVideoId = Ext.fly(el).is('object[type$=ntivideo]') && Ext.fly(el).getAttribute('data-ntiid');
 
 			return this.create({
 				url:url,
 				contentType:type,
-				jsonUrl:jsonUrl,
+				jsonpUrl:jsonpUrl,
 				basePath: reader && reader.basePath,
 				contentElement: t,
 				associatedVideoId: assocVideoId
+			});
+		},
+		
+		
+		fromVideo: function(v, reader){
+			var o = v.get('transcripts');
+
+			//For now, since we only assume there is one transcript per video, we can do this:
+			o = o && o[0];
+
+			return this.create({
+				url: o.src,
+				jsonpUrl: o.srcjsonp,
+				contentType: o.type,
+				basePath: reader && reader.basePath,
+				associatedVideoId: v.get('NTIID')
 			});
 		}
 	}

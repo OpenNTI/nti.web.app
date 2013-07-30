@@ -246,7 +246,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	getTranscriptJsonpUrl: function(){
-		return this.transcript.get('basePath') + this.transcript.get('jsonUrl');
+		return this.transcript.get('basePath') + this.transcript.get('jsonpUrl');
 	},
 
 

@@ -63,7 +63,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			targetEl = me.el.down('.body');
 
 		Ext.getBody().addCls('media-viewer-open');
-		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl});
+		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl, video: this.video});
 
 		this.addVideoPlayer(this.BIGVIDEO.width, this.BIGVIDEO.height);
 		this.activeVideoPlayerType = 'video-focus';

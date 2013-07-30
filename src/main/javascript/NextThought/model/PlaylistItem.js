@@ -10,7 +10,11 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'sourceIndex', type: 'int', defaultValue: 0},
 		{name: 'sources', type: 'auto'},
 		{name: 'dom-clone', type: 'auto'},
-		{name: 'NTIID', type:'string'}
+		{name: 'NTIID', type:'string'},
+		{name: 'transcripts', type:'auto'},
+		{name: 'title', type:'string'},
+		{name: 'description', type: 'string'},
+		{name: 'section', type:'string'}
 	],
 
 	statics: {
@@ -93,6 +97,9 @@ Ext.define('NextThought.model.PlaylistItem', {
 
 		return video && video.getAttribute('data-ntiid');
 	}
+
+
+
 
 
 });

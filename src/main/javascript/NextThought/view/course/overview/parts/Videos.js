@@ -265,7 +265,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 	onCurtainClicked: function(e){
 		e.stopEvent();
-		var t = this.getSelectionModel().getSelection()[0];
+		var m, t = m = this.getSelectionModel().getSelection()[0];
 		if (!t || !this.player){
 			return;
 		}
@@ -274,7 +274,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 		if(e.getTarget('.launch-player')){
-			this.fireEvent('start-media-player', t.getId(), this.videoIndex[t.getId()]);
+			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId());
 			return;
 		}
 

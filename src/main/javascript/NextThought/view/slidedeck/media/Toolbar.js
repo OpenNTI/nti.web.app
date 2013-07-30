@@ -12,14 +12,16 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls:'left', cn:[
-			{cls:'control back-button'},
+			{cls:'control back-button', 'data-qtip':'Exit'},
 			{cls:'navigation', cn:[
-				{ cls: 'section-number', html:'01' },
+				{tag:'tpl', 'if':'sectionNumber', cn:[
+					{ cls: 'section-number', html:'{sectionNumber}' }
+				]},
 				{
 					cls: 'wrap',
 					cn:[
-						{ cls: 'section-name', html:'Introduction to Geology'},
-						{ cls: 'title', html: 'origin of the earth'}
+						{ cls: 'section-name', html:'{description}'},
+						{ cls: 'title', html: '{title}'}
 					]
 				}
 			]}
@@ -46,8 +48,12 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 	beforeRender: function(){
 		this.callParent(arguments);
 
-		var t = this.currentType;
-		this.renderData = Ext.apply(this.renderData || {}, {type:t});
+		var t = this.currentType,
+			title  = this.video && this.video.get('title'),
+			description = this.video && this.video.get('description'),
+			sectionNumber = this.video && this.video.get('section');
+
+		this.renderData = Ext.apply(this.renderData || {}, { type:t, title:title, description:description, sectionNumber:sectionNumber });
 	},
 
 
