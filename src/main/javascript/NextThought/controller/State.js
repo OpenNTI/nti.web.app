@@ -182,21 +182,6 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	parseQueryString: function (qStr) {
-		if (Ext.isEmpty(qStr)) {
-			return null;
-		}
-		var r = {};
-
-		Ext.each(qStr.split('&'), function (kv) {
-			kv = kv.split('=');
-			r[kv[0]] = kv[1];
-		});
-
-		return r;
-	},
-
-
 	interpretForumsFragment: function (fragment, query) {
 		var parts = (fragment || '').split('/').slice(0),
 			result = {}, forums = {};
@@ -305,7 +290,7 @@ Ext.define('NextThought.controller.State', {
 
 	interpretFragment: function (fragmentStr) {
 		fragmentStr = fragmentStr.split('?');
-		var query = this.parseQueryString(fragmentStr[1]),
+		var query = ParseUtils.parseQueryString(fragmentStr[1]),
 			fragment = fragmentStr[0] || '',
 			root = (fragment.substr(0, fragment.indexOf('/')) || fragment).toLowerCase(),
 			ntiid = ParseUtils.parseNtiFragment(fragment),

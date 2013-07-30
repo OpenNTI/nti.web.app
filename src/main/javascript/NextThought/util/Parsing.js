@@ -218,6 +218,30 @@ Ext.define('NextThought.util.Parsing',{
 		}
 
 		return ['tag', authority, s.join('-')].join(':');
+	},
+
+
+	parseQueryString: function (qStr) {
+		if (Ext.isEmpty(qStr)) {
+			return null;
+		}
+		var r = {};
+
+		Ext.each(qStr.split('&'), function (kv) {
+			kv = kv.split('=');
+			r[kv[0]] = decodeURIComponent(kv[1]);
+		});
+
+		r.toString = function(){
+			var out = [], k;
+			for(k in this){
+				if(this.hasOwnProperty(k)){
+					out.push([k,encodeURIComponent(this[k])].join('='));
+				}
+			}
+			return out.join('&');
+		};
+		return r;
 	}
 
 },function(){
