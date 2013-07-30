@@ -800,10 +800,14 @@ $experimental-support-for-svg: true;
 					}
 
 					.wrap{
-						margin-left: 70px;
+						margin-left: 10px;
 						max-width: 600px;
 						overflow: hidden;
 						padding: 16px 10px 10px 0;
+
+						& ~ .section-number{
+							margin-left: 70px;
+						}
 
 						.section-name{
 							color: $secondary-grey;
@@ -814,6 +818,9 @@ $experimental-support-for-svg: true;
 							font: 200 normal 20px/24px $font;
 							color: $tertiary-grey-alt;
 							text-transform: uppercase;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
 						}
 					}
 				}
@@ -1179,17 +1186,6 @@ $experimental-support-for-svg: true;
 			&.selection-item-over,
 			&.x-menu-item-over,
 			&.x-menu-item-active {
-				border:{
-					radius: 0;
-					border-width: 0;
-					style: none;
-				}
-
-				outline:{
-					style: none;
-					color: none;
-					width: 0;
-				}
 				background-color: #3a3a3a;
 				color: white !important;
 			}
