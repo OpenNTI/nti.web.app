@@ -236,6 +236,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.annotationView.bindStore(store);
 		this.annotationView.show();
 		this.on('destroy', 'destroy',this.annotationView);
+		this.on('resize', 'show', this.annotationView);
 	},
 
 
