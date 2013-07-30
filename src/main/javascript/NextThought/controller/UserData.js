@@ -187,7 +187,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	showNoteViewer: function(sel,rec){
 		var me = this,
-			anchorCmp = sel.view.anchorComponent;
+			anchorCmp = sel.view.anchorComponent,
 			block = sel.mon(sel,{
 			destroyable: true,
 			beforeselect: function(){this.deselectingToSelect=true;},
