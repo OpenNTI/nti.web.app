@@ -30,6 +30,7 @@ Ext.define('NextThought.proxy.JSONP',{
 		}
 
 		function onError(script){
+			delete script.onload;
 			clearTimeout(t);
 			Ext.fly(script).remove();
 			console.error('PROBLEMS!', opts);
