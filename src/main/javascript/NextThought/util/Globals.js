@@ -112,7 +112,7 @@ Ext.define('NextThought.util.Globals', {
 */
 
 		if( $AppConfig.server.jsonp === undefined ){
-			$AppConfig.server.jsonp = !Ext.isIE10p;
+			$AppConfig.server.jsonp = Ext.isIE && !Ext.isIE10p;
 		}
 
 		return true;
