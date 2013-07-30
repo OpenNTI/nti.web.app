@@ -745,7 +745,6 @@ $experimental-support-for-svg: true;
 	bottom: 0;
 	right: 0;
 	left: 0;
-	z-index: 19010;
 	box-shadow: 0 0 10px 0 black;
 	background: $slidedeck-controls-background !important;
 
@@ -929,7 +928,6 @@ $experimental-support-for-svg: true;
 	&.presentation-note-slider{
 		border-width: 0px;
 		width: 400px;
-		z-index: 20000;
 		position: fixed !important;
 		top: 70px !important;
 		bottom: 0 !important;
@@ -937,6 +935,11 @@ $experimental-support-for-svg: true;
 		left: auto !important;
 		box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
 		background-color: $panel-background;
+
+		& ~ .note-window {
+			position: fixed !important;
+			z-index: 30000 !important;
+		}
 	}
 }
 
