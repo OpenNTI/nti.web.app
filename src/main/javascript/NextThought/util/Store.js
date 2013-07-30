@@ -1,7 +1,15 @@
 Ext.define('NextThought.util.Store',{
 	singleton: true,
 
-	fillInUsers: function(store, records){
+	fillInUsers: function fillIn(store, records){
+
+		if(store && arguments.length===1){
+			store.on({'load':fillIn});
+			return;
+		}
+
+
+
 		var users = Ext.Array.map(records||[],function(r){return r.get('Creator');});
 
 		function apply(r,i){
