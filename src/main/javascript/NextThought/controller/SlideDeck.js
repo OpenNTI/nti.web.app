@@ -42,8 +42,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.activeMediaPlayer = Ext.widget('media-viewer', {
 			video:video,
 			transcript:m,
-			autoShow: true,
-			renderTo: Ext.getBody()
+			autoShow: true
 		});
 	}
 });

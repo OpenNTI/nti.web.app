@@ -26,25 +26,34 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 		]},{
 		cls:'right', cn:[
 			{cls:'video-picker', cn:[
-				{cls:'full-screen'},
-				{cls:'picker', html:'split transcript'}
-			]},{
-				cls:'exit-button', html:'Exit Video Viewer', role: 'button'
-			}
+				{cls:'grid-view'},
+				{cls:'selected-mv-type video-focus', html:'split video'}
+			]}
 		]
 	}]),
 
 	renderSelectors:{
-		pickerEl: '.picker',
-		exitEl: '.exit-button'
+		pickerEl: '.selected-mv-type',
+		exitEl: '.back-button'
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.currentType = 'video-focus';
+	},
+
+
+	beforeRender: function(){
+		this.callParent(arguments);
+
+		var t = this.currentType;
+		this.renderData = Ext.apply(this.renderData || {}, {type:t});
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
-		this.createViewPlayerPicker();
-		this.mon(this.el.down('.picker'), {
+		this.mon(this.pickerEl, {
 			scope: this,
 			click: 'showVideoPlayerPicker'
 		});
@@ -58,20 +67,33 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 
 	showVideoPlayerPicker: function(){
 		console.log('clicked on show the video player picker..');
-		this.videoPicker.showBy(this.pickerEl, 'tl-bl', [70,15]);
+		this.createViewPlayerPicker();
+		this.videoPicker.showBy(this.pickerEl, 'tl-tl', [0, 0]);
 	},
 
 
 	createViewPlayerPicker: function(){
-		var me = this;
+		var me = this,
+			type = this.currentType,
+			items = [
+				{ text:'Split Video', cls:'label video-focus', action:'video-focus', checked: type === 'video-focus'},
+				{ text:'Split Transcript', cls:'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'}
+			];
+
+		//Make selected item is at the top of the list.
+		items = Ext.Array.sort(items, function(a, b){
+			return !a.checked && b.checked;
+		});
+
 		this.videoPicker = Ext.widget('menu',{
 			ui: 'nt',
 			cls:'video-player-options-menu',
 			plain: true,
 			shadow: false,
-			width: 160,
+			width: 215,
+			frame:false,
+			border: false,
 			ownerCmp: me,
-			multiSelect:false,
 			defaults: {
 				ui: 'nt-menuitem',
 				xtype: 'menucheckitem',
@@ -83,17 +105,17 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 					}
 				}
 			},
-			items: [
-				{ text:'Split Transcript', cls:'label', action: 'transcript-centric' },
-				{ text:'Split Video', cls:'label', action:'video-centric', checked:true}
-			]
+			items: items
 		});
 	},
 
 
 	handleClick: function(item, menu){
 		if(this.currentType !== item.action){
-			console.log('should switch to this view: ',item);
+			var previousType = this.currentType;
+
+			this.pickerEl.removeCls(previousType).addCls(item.action);
+			this.pickerEl.update(item.text);
 			this.currentType = item.action;
 
 			Ext.each(menu.query('menuitem[checked]'), function(i){
@@ -101,6 +123,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			});
 			item.setChecked(true, true);
 			this.fireEvent('switch-video-viewer', item.action);
+			menu.destroy();
 		}
 		return false;
 	}

@@ -740,13 +740,12 @@ $experimental-support-for-svg: true;
 }
 
 .x-container-media{
-	position: fixed;
+	position: absolute;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	left: 0;
-	box-shadow: 0 0 10px 0 black;
-	z-index: 19010 !important;
+	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
 
 	.header{
@@ -755,26 +754,45 @@ $experimental-support-for-svg: true;
 
 		.media-toolbar{
 			background-color: $video-background;
-			height: 72px;
+			//height: 75px;
 
 			.left{
 				position: relative;
 				.back-button{
+					position: relative;
+					float: left;
 					left: 0;
 					top: 0;
-					height: 72px;
-					float: left;
+					height: 75px;
 					width: 65px;
-					background-color: #3a3a3a;
+					background-color: #282828;
+					cursor: pointer;
+
+					&::after{
+						content: '';
+						overflow: hidden;
+						position: absolute;
+						top: 17px;
+						left: auto;
+						right: 23px;
+						background: $icons no-repeat;
+						@include sprite($icons, 'mv-back-arrow', $dimensions:true);
+					}
+
+					&:hover{
+						&::after{
+							@include sprite($icons, 'mv-back-arrow_hover', $dimensions:true);
+						}
+					}
 				}
 
 				.navigation{
 					margin: 0 0 0 65px;
-					height: 72px;
+					height: 75px;
 
 					.section-number{
 						width: 70px;
-						height: 72px;
+						//height: 72px;
 						float: left;
 						padding: 10px 15px;
 						font: 200 normal 44px/46px $font;
@@ -803,39 +821,53 @@ $experimental-support-for-svg: true;
 
 			.right{
 				position: absolute;
-				right: 160px;
+				right: 200px;
 				top: 0;
-				height: 72px;
+				height: 75px;
 
 				.video-picker{
 					position: relative;
-					float: left;
 
-					.full-screen{
-						position: absolute;
-						width: 50px;
-						height: 40px;
-						left: 0;
-						top: 16px;
-						background-color: $primary-grey;
-						cursor: pointer;
-					}
-
-					.picker{
+					.grid-view{
 						position: relative;
-						width: 230px;
-						padding-left: 70px;
-						font: 400 normal 14px $font;
-						color: #595959;
-						text-transform: uppercase;
-						padding-top: 20px;
+						float: left;
+						width: 67px;
+						height: 46px;
+						left: 0;
 						cursor: pointer;
+						top: 16px;
+						border: 0px solid #0e110e;
+						border-right-width: 1px;
 
 						&::after{
 							content: '';
 							overflow: hidden;
 							position: absolute;
-							top: 25px;
+							top: 10px;
+							left: auto;
+							right: 15px;
+							background: $icons no-repeat;
+							@include sprite($icons, 'mv-grid-view', $dimensions:true);
+						}
+					}
+
+					.selected-mv-type{
+						position: relative;
+						float: left;
+						width: 215px;
+						height: 75px;
+						font: 600 normal 12px $font;
+						cursor: pointer;
+						padding-left: 65px;
+						color: #595959;
+						text-transform: uppercase;
+						padding-top: 30px;
+
+						&::before{
+							content: '';
+							overflow: hidden;
+							position: absolute;
+							top: 35px;
 							left: auto;
 							right: 15px;
 							background: $icons no-repeat;
@@ -845,10 +877,45 @@ $experimental-support-for-svg: true;
 						&:active, &:hover{
 							color: #ababab;
 
-							&::after{
+							&::before{
 								@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
 							}
 						}
+
+						&::after{
+							content: '';
+							overflow: hidden;
+							position: absolute;
+							top: 26px;
+							left: 15px;
+							right: auto;
+							background: $icons no-repeat;
+						}
+
+						&.transcript-focus{
+							&::after{
+								@include sprite($icons,'mv-transcript-focus',$dimensions: true);
+							}
+
+							&:hover, &:active{
+								&::after{
+									@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+								}
+							}
+						}
+
+						&.video-focus{
+							&::after{
+								@include sprite($icons,'mv-video-focus',$dimensions: true);
+							}
+
+							&:hover, &:active{
+								&::after{
+									@include sprite($icons,'mv-video-focus_active',$dimensions: true);
+								}
+							}
+						}
+
 					}
 				}
 
@@ -1087,6 +1154,114 @@ $experimental-support-for-svg: true;
 				width: 100%;
 				box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
 			}
+		}
+	}
+}
+
+
+.x-menu{
+	&.video-player-options-menu{
+		.x-menu-body{
+			padding: 0 !important;
+			border-width: 0 !important;
+			background: none !important;
+		}
+
+		.x-menu-item{
+			padding: 30px 5px 15px 65px !important;
+			height: 75px !important;
+			background-color: #282828 !important;
+			outline: 0 !important;
+			border: 0 !important;
+			font: 600 normal 12px $font !important;
+
+
+			&.selection-item-over,
+			&.x-menu-item-over,
+			&.x-menu-item-active {
+				border:{
+					radius: 0;
+					border-width: 0;
+					style: none;
+				}
+
+				outline:{
+					style: none;
+					color: none;
+					width: 0;
+				}
+				background-color: #3a3a3a;
+				color: white !important;
+			}
+
+			&.x-menu-item-checked{
+				background: none !important;
+				background-color: #3a3a3a !important;
+
+				&::before{
+					content: '';
+					overflow: hidden;
+					position: absolute;
+					top: 35px;
+					left: auto;
+					right: 15px;
+					background: $icons no-repeat;
+					@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+				}
+
+				&:active, &:hover{
+					color: #ababab;
+
+					&::before{
+						@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
+					}
+				}
+			}
+
+			&::after{
+				content: '';
+				overflow: hidden;
+				position: absolute;
+				top: 26px;
+				left: 15px;
+				right: auto;
+				background: $icons no-repeat;
+			}
+
+			&.video-focus{
+				&::after{
+					@include sprite($icons,'mv-video-focus',$dimensions: true);
+				}
+
+				&:hover, &:active{
+					&::after{
+						@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+					}
+				}
+			}
+
+			&.transcript-focus{
+				&::after{
+					@include sprite($icons,'mv-transcript-focus',$dimensions: true);
+				}
+
+				&:hover, &:active{
+					&::after{
+						@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+//Make sure the identity el is on top of the mv.
+body{
+	&.media-viewer-open{
+		.x-component.identity{
+			z-index: 20000 !important;
+			top: 17px !important;
 		}
 	}
 }

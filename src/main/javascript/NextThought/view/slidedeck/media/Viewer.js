@@ -8,6 +8,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	],
 
 	ui: 'media',
+	floating: true,
 	border: false,
 	plain: true,
 	frame: false,
@@ -49,6 +50,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			xtype:'slidedeck-transcript',
 			transcript:this.transcript
 		});
+
+		this.on('destory', 'destroy', this);
 	},
 
 
@@ -59,10 +62,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		var me = this, h,
 			targetEl = me.el.down('.body');
 
+		Ext.getBody().addCls('media-viewer-open');
 		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl});
-		this.addVideoPlayer(this.BIGVIDEO.width, this.BIGVIDEO.height);
 
-		this.activeVideoPlayerType = 'video-centric';
+		this.addVideoPlayer(this.BIGVIDEO.width, this.BIGVIDEO.height);
+		this.activeVideoPlayerType = 'video-focus';
+
 		this.mon(this.toolbar, {
 			scope: this,
 			'switch-video-viewer': 'switchVideoViewer'
@@ -73,7 +78,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.destroy();
 			this.fireEvent('exited', this);
 		}, this);
-
 		h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
 		h = h + 'px';
 		Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
@@ -96,7 +100,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		console.log('switch to video viewer type: ', type);
 
 		var me = this,
-			isTranscriptCentric = type === 'transcript-centric',
+			isTranscriptCentric = type === 'transcript-focus',
 			clsAction = isTranscriptCentric ? 'addCls':'removeCls',
 			dim = isTranscriptCentric ? this.SMALLVIDEO : this.BIGVIDEO;
 
@@ -110,5 +114,13 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		Ext.defer(function(){
 			me.updateLayout();
 		}, 10, me);
+	},
+
+
+	destroy: function(){
+		this.toolbar.destroy();
+		this.videoplayer.destroy();
+		this.callParent(arguments);
+		Ext.getBody().removeCls('media-viewer-open');
 	}
 });
