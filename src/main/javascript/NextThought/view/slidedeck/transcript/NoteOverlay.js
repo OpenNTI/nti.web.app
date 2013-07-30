@@ -99,6 +99,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		function callback(success, record){
 			me.editorEl.unmask();
 			if(success){
+				if(me.data.userDataStore){
+					me.data.userDataStore.add(record);
+				}
 				me.deactivateEditor();
 			}
 		}
@@ -229,7 +232,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}
 
 		rect = domRange.getBoundingClientRect();
-		line = rect ? Math.round(rect.top): 0;
+		line = rect ? rect.top + this.reader.getTargetEl().dom.scrollTop : 0;
 		rec.set('line', line);
 
 		this.annotationManager.add({

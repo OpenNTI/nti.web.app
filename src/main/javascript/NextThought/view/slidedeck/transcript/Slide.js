@@ -77,6 +77,7 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		data.range = range;
 		data.containerId = this.slide.get('ContainerId');
+		data.userDataStore = this.userDataStore;
 
 		data.isDomRange = true;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
@@ -131,6 +132,7 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 			if(store.getCount() > 0){
 				me.fireEvent('register-records', store, me);
 			}
+			me.userDataStore = store;
 		}
 
 		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
@@ -144,7 +146,15 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		});
 
 		me.mon(store, 'load', finish, me);
+		me.mon(store, 'add', me.onAddedUserDataRecord, me);
 		store.load();
+	},
+
+
+	onAddedUserDataRecord:function(store, records){
+		debugger;
+		console.debug('Pres View: Child added: ', records);
+		this.fireEvent('register-records', store, this);
 	},
 
 
