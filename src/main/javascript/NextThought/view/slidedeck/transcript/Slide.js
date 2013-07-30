@@ -152,7 +152,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	onAddedUserDataRecord:function(store, records){
-		debugger;
 		console.debug('Pres View: Child added: ', records);
 		this.fireEvent('register-records', store, this);
 	},
