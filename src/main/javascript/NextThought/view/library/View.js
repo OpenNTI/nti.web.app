@@ -175,6 +175,8 @@ Ext.define( 'NextThought.view.library.View', {
 		this.tabs = pageInfo.isPartOfCourse();
 		this.fireEvent('update-tabs',this);
 
+		this.getLayout().setActiveItem(this.courseBook);
+
 		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
 		this.down('content-toolbar').show();
