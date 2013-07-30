@@ -309,7 +309,6 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	passesFilter: function(item){
 		if(!item){ return false; }
-		debugger;
 		return Ext.Array.contains(this.mimeTypes,item.get('MimeType'));
 	},
 
