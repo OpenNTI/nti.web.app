@@ -157,6 +157,16 @@ span.tab{
 					top: 2px;
 					left: 5px;
 				}
+
+				.video-thumbnail, .unknown{
+					height: 75px;
+					width: 55px;
+					@include icon('filetype-video', $top:20px, $left:10px);
+				}
+
+				.unknown{
+					@include icon('filetype-unknown', $top:20px, $left:10px);
+				}
 			}
 		}
 

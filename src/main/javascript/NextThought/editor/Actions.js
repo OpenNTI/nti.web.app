@@ -51,35 +51,17 @@ Ext.define('NextThought.editor.Actions', {
 
 	//FIXME copied from above but we probalby don't need all this
 	videoThumbnailTpm: Ext.DomHelper.createTemplate({
-		contentEditable: false,
-		cls: 'whiteboard-divider video-divider',
+		id    : '{1}',
+		cls   : 'video-thumbnail object-part body-divider',
+		alt   : 'Embedded Video Thumbnail',
 		unselectable: 'on',
-		cn:[{
-			cls: 'whiteboard-divider video-wrapper',
-			cn:[{
-				id    : '{1}',
-				cls   : 'video-thumbnail object-part',
-				alt   : 'Embedded Video Thumbnail',
-				unselectable: 'on',
-				border: 0
-			},{
-				cls: 'fill', unselectable: 'on'
-			},{
-				cls:'centerer',
-				unselectable: 'on',
-				cn: [{
-					unselectable: 'on',
-					cls:'edit',
-					html:'Edit'
-				}]
-			}]
-		}]
+		border: 0
 	}).compile(),
 
 	unknownPartTemplate: Ext.DomHelper.createTemplate({
 		contentEditable: false,
 		id: '{1}',
-		cls: 'object-part unknown',
+		cls: 'object-part unknown body-divider',
 		unselectable: 'on'
 	}).compile(),
 
