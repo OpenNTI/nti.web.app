@@ -33,12 +33,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 			cls:'scrollbody note-list',
 			ui: 'tile',
 
+			store: 'ext-empty-store',
 			preserveScrollOnRefresh: true,
-			selModel: {
-				allowDeselect: false,
-				deselectOnContainerClick: false
-			},
-
 			deferEmptyText: false,
 			emptyText: Ext.DomHelper.markup([{
 				cls:"history nothing rhp-empty-list",
@@ -54,42 +50,47 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'}
 					]}
 				]
-			}]}),
-			listeners: {
-				scope: this,
-				select: function(selModel,record){ selModel.deselect(record); },
-				itemclick: 'onItemClicked'
+			}]})
+		});
+
+		this.mon(this.view,{
+			select: function(selModel,record){ selModel.deselect(record); },
+			itemclick: 'onItemClicked'
+		});
+
+
+		this.on('afterRender','setupStore',this,{single:true});
+	},
+
+
+	onItemClicked: function(view, rec){
+		this.fireEvent('navigation-selected',rec.get('ContainerId'),rec);
+	},
+
+
+	setupStore: function(){
+		var rec = this.getCourseNodeRecord(),
+			pageInfo = rec.get('pageInfo'),
+			store;
+
+		if(!pageInfo){
+			rec.listenForFieldChange('pageInfo','setupStore',this,true);
+			return;
+		}
+
+		store = new NextThought.store.PageItem({
+			model: 'NextThought.model.Note',
+			url:getURL(pageInfo.getLink('RecursiveUserGeneratedData')),
+			pageSize: 10,
+			proxyOverride: {
+				extraParams: {
+					accept: NextThought.model.Note.mimeType
+				}
 			}
 		});
 
-		$AppConfig.service.getPageInfo(
-				this.getCourseNodeRecord().getId(),
-				this.onPageInfoResolved,
-				this.onResolveFailure,
-				this
-		);
-	},
-
-
-	onItemClicked: function(){
-
-	},
-
-
-	onPageInfoResolved: function(pageInfo){
-		var store = new NextThought.store.PageItem({
-			url:getURL(pageInfo.getLink('RecursiveUserGeneratedData')),
-			pageSize: 10
-		});
-
-		store.proxy.extraParams.accept = NextThought.model.Note.mimeType;
-
-		store.load();
+		StoreUtils.fillInUsers(store);
 		this.view.bindStore(store);
-	},
-
-
-	onResolveFailure: function(){
-		console.error('Could not resolve page');
+		store.load();
 	}
 });
