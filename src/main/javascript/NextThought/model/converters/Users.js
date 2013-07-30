@@ -42,8 +42,7 @@ Ext.define('NextThought.model.converters.Users', {
 		sortType: 'asUCString',
 		convert: function convert(v){
 			var re = convert.re = (convert.re || /https/i),
-				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL,
-				mm;
+				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL;
 
 			function secure(v,i,a){
 				v = v.replace('www.gravatar.com','secure.gravatar.com').replace('http:','https:');
@@ -51,20 +50,7 @@ Ext.define('NextThought.model.converters.Users', {
 				return v;
 			}
 
-			mm = encodeURIComponent(
-					getURL(location.pathname+NextThought.model.User.BLANK_AVATAR));
-
 			function o(v,i,a){
-				var url;
-				if($AppConfig.forceNTUnknownUserIcon && v.indexOf('gravatar.com')>=0){
-					url = v.split('?');
-					url[1] = ParseUtils.parseQueryString(url[1]);
-					if( url[1] ){
-						url[1].d = mm;
-						v = url.join('?');
-						if(a){a[i] = v;}
-					}
-				}
 
 				if(needsSecure){
 					v = secure(v,i,a);
