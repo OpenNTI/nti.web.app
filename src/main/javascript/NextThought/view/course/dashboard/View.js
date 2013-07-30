@@ -18,18 +18,21 @@ Ext.define('NextThought.view.course.dashboard.View',{
 		var l = ContentUtils.getLocation(pageInfo),
 			toc, course,
 			courseNavStore,
-			date = new Date();//now
+			date = new Date(),//now
+			tiles = [];
 
 		if( l && l !== ContentUtils.NO_LOCATION ){
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 			courseNavStore = new NextThought.store.course.Navigation({data: toc});
+
+			tiles = this.queryTiles(
+					date,course,l,
+					courseNavStore.getCurrentBy(date)
+			);
 		}
 
-		this.setTiles(this.queryTiles(
-				date,course,l,
-				courseNavStore.getCurrentBy(date)
-		));
+		this.setTiles(tiles);
 	},
 
 
