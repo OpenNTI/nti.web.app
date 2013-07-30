@@ -89,6 +89,8 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		if(this.suspendMoveEvents || !t || !box){ return; }
 
+		clearTimeout(this.mouseEnterTimeout);
+
 		this.mouseLeaveTimeout = setTimeout(function () {
 			box.down('.note-here-control-box').removeCls('hidden');
 			me.activeCueEl = t;
@@ -102,9 +104,14 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		}
 
 		var target = e.getTarget('.image-wrap', null, true),
-			box = target && target.down('.add-note-here');
+			box = target && target.down('.add-note-here'), me =  this;
 
 		clearTimeout(this.mouseLeaveTimeout);
+	
+		this.mouseEnterTimeout = setTimeout(function(){
+			box.down('.note-here-control-box').addCls('hidden');
+			delete me.activeCueEl;
+		}, 100);
 	},
 
 	buildUserDataStore: function(){
