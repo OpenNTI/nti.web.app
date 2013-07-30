@@ -221,7 +221,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	maybeShowMoreItems: function(){
 		//if we can't scroll
-		if( this.el.getHeight() >= this.el.dom.scrollHeight ){
+		if( this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight ){
 			this.prefetchNext();
 		}
 	},
@@ -240,7 +240,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.on({
 			scope:this,
 			'itemclick': 'rowClicked',
-			itemmouseenter: 'rowHover'
+			'itemmouseenter': 'rowHover',
+			'activate': 'maybeShowMoreItems'
 		});
 
 		this.mon(this.el,{
