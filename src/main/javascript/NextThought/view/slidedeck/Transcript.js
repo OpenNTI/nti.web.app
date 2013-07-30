@@ -3,6 +3,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	alias: 'widget.slidedeck-transcript',
 	requires:[
 		'NextThought.layout.component.Natural',
+		'NextThought.util.Store',
 		'NextThought.view.video.transcript.Transcript',
 		'NextThought.view.content.reader.NoteOverlay',
 		'NextThought.view.slidedeck.transcript.NoteOverlay',
@@ -167,6 +168,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		// since right now we mix transcript with slides and slides have a different store.
 		// However, we're making an assumptions that records on the same line WILL share the same store.
 		var s = annotations.getAt(0).store;
+
+		StoreUtils.fillInUsers(s,s.getRange());
 
 		s.removeFilter('lineFilter');
 		if(line){

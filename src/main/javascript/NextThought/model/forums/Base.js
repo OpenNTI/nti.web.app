@@ -1,6 +1,7 @@
 Ext.define('NextThought.model.forums.Base',{
 	extend: 'NextThought.model.Base',
 
+	requires: [ 'NextThought.util.Store'],
 
 	getContentsStoreId: function(){
 		return this.get('Class')+'-'+this.get('NTIID');
@@ -33,31 +34,7 @@ Ext.define('NextThought.model.forums.Base',{
 	},
 
 
-	fillInUsers: function(store, records){
-		var users = Ext.Array.map(records,function(r){return r.get('Creator');});
-
-		function apply(r,i){
-			var u = users[i],
-				id = u.getId(),
-				c = r.get('Creator');
-
-			if(c !== id && !Ext.isString(c) && c && c.getId() !== id){
-				console.error('Bad mapping:', c, id, records, users, i);
-				return;
-			}
-
-			if(c && !c.isModel){
-				r.set('Creator',u);
-			}
-		}
-
-		UserRepository.getUser(users,function(u){
-			users = u;
-			store.suspendEvents(true);
-			Ext.each(records,apply);
-			store.resumeEvents();
-		});
-	},
+	fillInUsers: StoreUtils.fillInUsers,
 
 
 	getParentHref: function(){

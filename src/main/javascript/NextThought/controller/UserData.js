@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.UserData', {
 		'NextThought.app.domain.Model',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
+		'NextThought.util.Store',
 		'NextThought.util.Annotations',
 		'NextThought.proxy.Socket',
 		'NextThought.view.slidedeck.transcript.AnchorResolver'
@@ -500,8 +501,8 @@ Ext.define('NextThought.controller.UserData', {
 		this.flatPageStore.bind(store);
 		store.on({
 			scope: this,
-			load:'fillInUsers',
-			add: 'fillInUsers'
+			load: StoreUtils.fillInUsers,
+			add: StoreUtils.fillInUsers
 		});
 
 		/**
@@ -602,40 +603,6 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		this.applyToStores(fn, predicate);
 	},
-
-
-
-	fillInUsers: function(store, records){
-		var users = Ext.Array.map(records||[],function(r){return r.get('Creator');});
-
-		function apply(r,i){
-			var u = users[i],
-				id = u.getId(),
-				c = r.get('Creator');
-
-			if(c !== id && !Ext.isString(c) && c && c.getId() !== id){
-				console.error('Bad mapping:', c, id, records, users, i);
-				return;
-			}
-
-			if(c && !c.isModel){
-				r.set('Creator',u);
-			}
-		}
-
-		UserRepository.getUser(users,function(u){
-			users = u;
-
-			store.suspendEvents(true);
-			Ext.each(records,apply);
-			store.resumeEvents();
-
-		});
-	},
-
-
-
-
 
 
 	onAnnotationViewReady:function(view){
