@@ -27,7 +27,7 @@ Ext.define('NextThought.util.Store',{
 			store.resumeEvents();
 
 		});
-	},
+	}
 }, function(){
 	window.StoreUtils = this;
 });
