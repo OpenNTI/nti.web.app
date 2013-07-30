@@ -110,7 +110,9 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		clearTimeout(this.mouseLeaveTimeout);
 	
 		this.mouseEnterTimeout = setTimeout(function(){
-			box.down('.note-here-control-box').addCls('hidden');
+			if(box){
+				box.down('.note-here-control-box').addCls('hidden');
+			}
 			delete me.activeCueEl;
 		}, 100);
 	},
