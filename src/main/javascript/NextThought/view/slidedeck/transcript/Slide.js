@@ -146,13 +146,16 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		});
 
 		me.mon(store, 'load', finish, me);
-		me.mon(store, 'add', me.onAddedUserDataRecord, me);
+		me.mon(store, {
+			scope:me,
+			'add': 'onUserDataUpdated',
+			'remove': 'onUserDataUpdated'
+		});
 		store.load();
 	},
 
 
-	onAddedUserDataRecord:function(store, records){
-		console.debug('Pres View: Child added: ', records);
+	onUserDataUpdated:function(store, records){
 		this.fireEvent('register-records', store, this);
 	},
 

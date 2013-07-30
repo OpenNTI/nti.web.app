@@ -102,6 +102,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			if(store.getCount() > 0){
 				me.fireEvent('register-records', store, me);
 			}
+			me.userDataStore = store;
 		}
 
 		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
@@ -115,7 +116,17 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		});
 
 		me.mon(store, 'load', finish, me);
+		me.mon(store, {
+			scope:me,
+			'add': 'onUserDataUpdated',
+			'remove': 'onUserDataUpdated'
+		});
 		store.load();
+	},
+
+
+	onUserDataUpdated:function(store, records){
+		this.fireEvent('register-records', store, this);
 	},
 
 
@@ -307,7 +318,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			sid = cueEl && cueEl.getAttribute('cue-id'),
 			cid = this.transcript.get('associatedVideoId'), data;
 
-		data = { startTime:cueStart, endTime:cueEnd, startCueId:sid, endCueId:sid, containerId: cid };
+		data = { startTime:cueStart, endTime:cueEnd, startCueId:sid, endCueId:sid, containerId: cid, userDataStore: this.userDataStore };
 		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'));
 	},
 
@@ -402,7 +413,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		eid = endCue && endCue.getAttribute('cue-id');
 		cid = this.transcript.get('associatedVideoId');
 
-		return { startTime:startTime, endTime:endTime, range:range, startCueId:sid, endCueId:eid, containerId: cid };
+		return { startTime:startTime, endTime:endTime, range:range, startCueId:sid, endCueId:eid, containerId: cid, userDataStore: me.userDataStore };
 	},
 
 
