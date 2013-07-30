@@ -80,12 +80,12 @@ Ext.define('NextThought.util.Globals', {
 			HOST_PATTERN_DOMAIN_MATCH_GROUP = 3,
 			HOST_PATTERN_PORT_MATCH_GROUP = 5;
 
-		if(typeof $AppConfig === 'undefined' || typeof $AppConfig.server === 'undefined'){
+		if(window.$AppConfig === undefined || $AppConfig.server === undefined){
 			alert("Bad or no configuation.");
 			return false;
 		}
 
-		if(typeof $AppConfig.server.login === 'undefined'){
+		if($AppConfig.server.login === undefined){
 			alert("Bad or no login configuation.");
 			return false;
 		}
@@ -110,6 +110,11 @@ Ext.define('NextThought.util.Globals', {
 			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
 		});
 */
+
+		if( $AppConfig.server.jsonp === undefined ){
+			$AppConfig.server.jsonp = !Ext.isIE10p;
+		}
+
 		return true;
 	},
 
