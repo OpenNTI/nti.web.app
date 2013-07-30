@@ -3,7 +3,7 @@ Ext.define('NextThought.util.Store',{
 
 	fillInUsers: function(store, records){
 		var users = Ext.Array.map(records||[],function(r){return r.get('Creator');});
-		debugger;
+
 		function apply(r,i){
 			var u = users[i],
 				id = u.getId(),
