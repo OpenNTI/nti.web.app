@@ -32,7 +32,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 				{ cls:'ctr', cn:[
 					{ cls: 'play', cn:[
 						{cls:'blur-clip',cn:{cls:'blur'}},
-						{ cls: 'label' },{cls:'launch-player'}
+						{ cls: 'label', 'data-qtip': 'Play' },{cls:'launch-player', 'data-qtip': 'Play with transcript'}
 					] }
 				] }
 			]},
