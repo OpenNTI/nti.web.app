@@ -75,7 +75,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 		constructor: function(config){
 			//Allow partial overriding the proxy.
-			if(config.proxyOverride){
+			if(config && config.proxyOverride){
 				this.proxy = Ext.merge(Ext.clone(this.proxy),this.config.proxyOverride);
 				delete config.proxyOverride;
 			}
