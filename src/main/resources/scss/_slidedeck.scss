@@ -1012,8 +1012,8 @@ $experimental-support-for-svg: true;
 		background-color: $panel-background;
 
 		& ~ .note-window {
-			position: fixed !important;
-			z-index: 30000 !important;
+			position: absolute !important;
+			z-index: 29001 !important;
 		}
 	}
 }

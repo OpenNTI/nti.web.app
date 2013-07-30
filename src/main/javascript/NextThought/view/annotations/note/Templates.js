@@ -197,7 +197,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
-		menuTimer = setTimeout(function(){ menu.close(); }, 1500);
+		menuTimer = setTimeout(function(){ menu.close(); }, 2000);
 		return false;
 	},
 
