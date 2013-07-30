@@ -939,6 +939,7 @@ Ext.define('NextThought.editor.Actions', {
 
 			//Make sure save is enabled
 			me.maybeEnableSave();
+			me.hideObjectsPopover();
 
 			//scroll them into view
 			if(scrollIntoView && node){
@@ -986,7 +987,7 @@ Ext.define('NextThought.editor.Actions', {
 		if(el){
 			el.set({'data-href': obj.embedURL, 'data-type': obj.type});
 		}
-
+		callback(el);
 	},
 
 
@@ -1145,13 +1146,13 @@ Ext.define('NextThought.editor.Actions', {
 	maybeEnableSave: function(){
 		function isNoteBodyEmpty(){
 			var d = me.editor.down('.content').dom,
-				html = d && d.innerHTML, v, body;
+				html = d && d.innerHTML, v, body, parts = d.querySelectorAll('.object-part');
 
 			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '');
 			html = html.replace(/<br\/?>/g, '');
 			return {
-				clearPlaceholder: !Ext.isEmpty(v),
-				enableSave: !Ext.isEmpty(html.trim())
+				clearPlaceholder: !Ext.isEmpty(parts) || !Ext.isEmpty(v),
+				enableSave: !Ext.isEmpty(parts) || !Ext.isEmpty(html.trim())
 			};
 		}
 
