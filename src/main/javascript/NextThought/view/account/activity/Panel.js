@@ -270,6 +270,9 @@ Ext.define('NextThought.view.account.activity.Panel',{
 				}
 
 				var item = this.changeToActivity(c, maybeFinish, extend);
+
+				if(!item){ return; }
+
 				items.push(item);
 				UserRepository.getUser(item.name, function(u){
 					item.name = u.getName();
@@ -304,6 +307,11 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		this.removeMask();
 	},
 
+	passesFilter: function(item){
+		if(!item){ return false; }
+		debugger;
+		return Ext.Array.contains(this.mimeTypes,item.get('MimeType'));
+	},
 
 	changeToActivity: function(c, maybeFinish, extend){
 		var item = c.get('Item'),
@@ -322,6 +330,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			return type;
 		}
 
+		if(!this.passesFilter(item)){ return; }
 		activity = this.stream[guid] = Ext.apply({
 			activity: true,
 			guid: guid,
@@ -675,6 +684,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}
 
 		this.filter = (Ext.Array.contains(filterTypes,'notInCommunity'))? 'notInCommunity' : 'inCommunity';
+		this.mimeTypes = mimeTypes;
 
 		var s = this.getStore();
 
