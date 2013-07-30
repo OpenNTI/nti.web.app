@@ -90,7 +90,7 @@ $experimental-support-for-svg: true;
 			border-top: 1px solid #323232;
 
 			.left{
-				.action.text-controls, &.object-controls{
+				.action.text-controls, .action.object-controls{
 					border: 0px solid #1f1f1f;
 
 					&.selected{
@@ -123,6 +123,27 @@ $experimental-support-for-svg: true;
 								&::after{ @include sprite($icons,'underline-dark',$dimensions: true); }
 								&.selected::after{ @include sprite($icons,'underline-dark_active',$dimensions: true); }
 							}
+							&.whiteboard {
+								@include icon('editor-insert-image_hover', $top:10px);
+								&:hover::after{
+									@include sprite($icons,'editor-insert-image',$dimensions: true);
+								}
+							}
+
+							&.video {
+								@include icon('editor-insert-video_hover', $top:9px);
+								&:hover::after{
+									@include sprite($icons,'editor-insert-video',$dimensions: true);
+								}
+							}
+						}
+					}
+				}
+				.action.object-controls{
+					@include icon('editor-attach', $top:10px, $left:10px);
+					&.selected{
+						&::after{
+							@include sprite($icons,'editor-attach',$dimensions: true);
 						}
 					}
 				}
