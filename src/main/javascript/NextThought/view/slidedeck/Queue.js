@@ -96,6 +96,15 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
     // when entering slidedeck, moves the active slide to the top
     setStartingSlide: function(slide){
+
+	    if(isFeature('transcript-presentation') && this.ownerCt.hasSlides && !this.ownerCt.slidesReady){
+		    this.mon(this.ownerCt,{
+			    'finished-loading-images':Ext.bind(this.setStartingSlide,this,arguments),
+			    single: true
+		    });
+		    return;
+	    }
+
 		var n = Ext.get(this.getNode(slide));
         if(n && n.needsScrollIntoView(this.el)){
             this.el.scroll('b', n.dom.offsetTop, true);

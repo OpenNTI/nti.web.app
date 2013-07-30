@@ -18,6 +18,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	initComponent: function(){
+		this.enableBubble('finished-loading-images');
+
 		//TODO: this needs to be more centralized.
 		if(this.slideStore){
 			this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
@@ -121,8 +123,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	selectInitialSlide: function(){
 		var startOn = this.startOn,
 			s = this.query('slide-component'),
-			slideCmp, images = [], me = this,
+			images = [], me = this,
 			targetImageEl;
+
+
+		me.ownerCt.hasSlides = true;
 
 		Ext.each(s, function(i){
 			var id = i.slide.get('NTIID');
@@ -132,6 +137,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			images.push(i.el.down('img.slide'));
 		});
 
+
 		this.el.mask('Loading....', 'loading');
 
 		Ext.each(images, function(i){
@@ -140,6 +146,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				'load': function(){
 					Ext.Array.remove(images, i);
 					if(images.length === 0){
+						me.ownerCt.slidesReady = true;
+						me.fireEvent('finished-loading-images');
 						me.el.unmask();
 						if(targetImageEl){
 							console.log('should scroll into view: ', targetImageEl.dom);
