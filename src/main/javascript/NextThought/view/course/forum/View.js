@@ -70,6 +70,10 @@ Ext.define('NextThought.view.course.ForumList',{
 		'NextThought.view.forums.Topic'
 	],
 
+	selModel: {
+		suppressPushState: true
+	},
+
 	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
 			return;

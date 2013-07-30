@@ -44,7 +44,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 	tabSpecs: [
 		{label: 'Dashboard', viewId: 'course-dashboard'},
-		{label: 'Lessons', viewId: 'course-book?', selected:true},
+		{label: 'Lessons', viewId: 'course-book?'},
 //		{label: 'Assignments', viewId: ''},
 		{label: 'Discussions', viewId: 'course-forum'},
 //		{label: 'Notebook', viewId: ''},
@@ -95,7 +95,8 @@ Ext.define( 'NextThought.view.library.View', {
 		if(Ext.isEmpty(vId)){
 			return false;
 		}
-
+		
+		this.pushState({current_tab: vId});
 		if(needsChanging){
 			l.setActiveItem(vId);
 		} else if(reset) {
@@ -119,16 +120,29 @@ Ext.define( 'NextThought.view.library.View', {
 		return true;
 	},
 
+	pushState: function(s){
+		history.pushState({library: s});
+	},
+
 
 	getTabs: function(){
-		var tabs = this.tabSpecs;
+		var tabs = this.tabSpecs,
+			active = this.layout.getActiveItem().id;
+
 		if(this.tabs){
 
 			if(!this.courseForum.hasForum){
 				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-forum';});
 			}
-			
+
 		}
+
+		Ext.each(tabs,function(t){
+			if(t.viewId===active){
+				t.selected = true;
+			}
+		});
+
 		return this.tabs? tabs : [];
 	},
 
@@ -183,7 +197,7 @@ Ext.define( 'NextThought.view.library.View', {
 		this.tabs = pageInfo.isPartOfCourse();
 		this.fireEvent('update-tabs',this);
 
-		this.getLayout().setActiveItem(this.courseBook);
+		//this.getLayout().setActiveItem(this.courseBook);
 
 		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
@@ -212,10 +226,29 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
-	restore: function(state){
-		var ntiid = state.library.location;
+	setActiveTab: function(tab){
+		var tabMap = {
+			'course-forum': this.courseForum,
+			'course-book': this.courseBook,
+			'course-dashboard': this.courseDashboard,
+			'course-nav': this.courseNav
+		}, active = tabMap[tab || 'course-book'];
 
+		if(this.rendered){
+			this.layout.setActiveItem(active);
+		}else{
+			this.on('afterrender', function(){
+				this.layout.setActiveItem(active);
+			}, this);
+		}
+	},
+
+
+	restore: function(state){
+		var ntiid = state.library.location,
+			tab = state.library.current_tab;
 		try{
+			this.setActiveTab(tab);
 			if(!ntiid){
 				console.warn('There was no ntiid to restore!');
 				return;
