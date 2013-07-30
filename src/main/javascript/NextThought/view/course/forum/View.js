@@ -10,7 +10,9 @@ Ext.define('NextThought.view.course.forum.View',{
 	layout: 'stack',
 
 	listeners: {
-		'activate': 'onActivate'
+		'activate': 'onActivate',
+		'add': 'onViewPushed',
+		'remove': 'onViewPopped'
 	},
 
 	onActivate: function(){
@@ -18,6 +20,17 @@ Ext.define('NextThought.view.course.forum.View',{
 			this.store.load();
 		}
 	},
+
+
+	onViewPushed: function(me,viewPushed){
+		console.log('pushed',arguments);
+	},
+
+
+	onViewPopped: function(me,viewPopped){
+		console.log('popped',arguments);
+	},
+
 	
 	setForum: function(ntiid){
 		var me = this;
@@ -77,7 +90,9 @@ Ext.define('NextThought.view.course.ForumList',{
 	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
 			return;
-		}else if(e.getTarget('.new-topic')){
+		}
+
+		if(e.getTarget('.new-topic')){
 			this.fireEvent('new-topic', this);
 		}
 	}
