@@ -59,7 +59,23 @@ Ext.define('NextThought.model.course.navigation.Node',{
 		{ name:'type', type:'string', mapping:'@nodeName', convert: function(v){return v && v.toLowerCase(); } },
 
 			//due date
-		{ name:'date', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00Z' }
+		{ name:'date', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00Z' },
+
+
+		{ name:'pageInfo', type:'Synthetic', persist: false,
+			fn: function(r){
+
+				if(r.data.hasOwnProperty('$pageInfo')){
+					return r.data.$pageInfo;
+				}
+
+				$AppConfig.service.getPageInfo(r.getId(),function(p){
+					r.data.$pageInfo = p;
+					r.afterEdit(['pageInfo']);
+				});
+				return null;
+			}
+		}
 	],
 
 
@@ -93,5 +109,36 @@ Ext.define('NextThought.model.course.navigation.Node',{
 		}
 
 		return Ext.Array.clone(n.getChildren());
+	},
+
+
+
+	listenForFieldChange: function(field,fn,scope, single){
+		var monitor = this.mon(this.store,{
+			destroyable: true,
+			update:function(store, record, type, modifiedFieldNames){
+				if(Ext.Array.contains(modifiedFieldNames,field)){
+					if(Ext.isString(fn)){
+
+						if((scope||record)[fn]){
+							fn = (scope||record)[fn];
+						}
+						else if(!fn && store[fn]){
+							fn = store[fn];
+							scope = store;
+						} else {
+							console.error('Could not find function "'+fn+'" in scope, record nor store.',{
+								scope:scope,record:record,store:store});
+							Ext.destroy(monitor);
+							return;
+						}
+					}
+					if(single){
+						Ext.destroy(monitor);
+					}
+					Ext.callback(fn,scope||record,[record,record.get(field)]);
+				}
+			}
+		});
 	}
 });
