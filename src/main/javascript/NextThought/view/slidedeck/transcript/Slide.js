@@ -34,8 +34,7 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		var slide = this.slide;
 		if(slide){
-			this.buildUserDataStore();
-			this.mon(this.slideImage,'load', Ext.defer(this.updateLayout, 1, this),this);
+			this.mon(this.slideImage,'load', this.finishedLoadingImage, this);
 			this.slideImage.set({src: slide.get('image')});
 
 			this.mon(this.el, {
@@ -50,6 +49,16 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 			});
 
 		}
+	},
+
+	finishedLoadingImage: function(){
+		var me = this;
+		Ext.defer(function(){
+			me.updateLayout();
+			if(me.slide){
+				me.buildUserDataStore();
+			}
+		},1, me);
 	},
 
 	openNoteEditor: function(e){
