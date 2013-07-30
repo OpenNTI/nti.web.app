@@ -40,7 +40,7 @@
 		&:hover::after { @include sprite($icons,'add-note_active'); }
 
 		display: block;
-		left: 0;
+		left: 20px;
 		height: 26px;
 		width: 29px;
 		border: none;
@@ -50,7 +50,7 @@
 		cursor: pointer;
 
 		//&.occupied {
-		//	left: -35px;
+		//
 		//}
 
 		&.note-overlay-hidden{
