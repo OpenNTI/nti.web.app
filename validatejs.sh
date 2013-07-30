@@ -34,7 +34,7 @@ unparam=true	vars=false		white=false		widget=false	window=false
 
 POSIBLE_FLAGS
 
-LINT_OPTS='continue'
+LINT_OPTS='continue closure'
 FILES=`find src/main/javascript -name \*.js | sort -u`
 ERRORS=false
 
@@ -48,7 +48,6 @@ if [ "$1" != "" ] ; then
 		PRINT_DOTS="false"
 	else
 		if [ -f $1 ] ; then
-			clear
 			echo "Checking $1..."
 			echo ""
 			FILES=$1
