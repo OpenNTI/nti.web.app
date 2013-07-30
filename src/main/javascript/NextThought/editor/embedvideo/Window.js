@@ -45,7 +45,7 @@ Ext.define('NextThought.editor.embedvideo.Window',{
 			this.close();
 		}
 		else{
-			main.setError({field: 'embed', message: 'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url'});
+			main.setError({field: 'embed', message: 'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url.'});
 		}
 	}
 });
