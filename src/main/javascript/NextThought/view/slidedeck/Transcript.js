@@ -216,7 +216,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	showAnnotationView: function(store){
 		if(!this.annotationView){
-			this.annotationView = Ext.widget('annotation-view',{
+			this.annotationView = this.add({
+				xtype: 'annotation-view',
 				floating:true,
 				border:false,
 				width:400,
@@ -236,7 +237,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.annotationView.bindStore(store);
 		this.annotationView.show();
 		this.on('destroy', 'destroy',this.annotationView);
-		this.on('resize', 'show', this.annotationView);
+		this.on('resize', function(){
+			if(this.isVisible()){
+				this.toFront();
+			}
+		}, this.annotationView);
 	},
 
 
