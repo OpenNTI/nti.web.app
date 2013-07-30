@@ -37,8 +37,11 @@ Ext.define('NextThought.view.course.forum.View',{
 			$AppConfig.service.getObject(ntiid,success,failure);
 
 		}else if(!ntiid){
+			delete this.currentNtiid;
 			this.removeAll(true);
 		}
+
+		this.hasForum = !!this.currentNtiid;
 	},
 
 

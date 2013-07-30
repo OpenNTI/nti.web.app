@@ -121,7 +121,15 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	getTabs: function(){
-		return this.tabs? this.tabSpecs : [];
+		var tabs = this.tabSpecs;
+		if(this.tabs){
+
+			if(!this.courseForum.hasForum){
+				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-forum';});
+			}
+			
+		}
+		return this.tabs? tabs : [];
 	},
 
 
