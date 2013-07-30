@@ -161,6 +161,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 	},
 
+	selectSlide: function(slide){
+		var s = this.query('slide-component'),
+			me = this,
+			targetImageEl;
+
+		Ext.each(s, function(i){
+			var id = i.slide.get('NTIID');
+
+			if(id === slide.getId()){
+				targetImageEl = i.el.down('img.slide');
+			}
+		});
+
+		if(!this.el.isMasked() && targetImageEl){
+			Ext.defer(function(){
+				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+			}, 10, me);
+		}
+	},
+
 
 	syncWithVideo: function(videoState){
 //		this.transcriptView.syncTranscriptWithVideo(videoState);
