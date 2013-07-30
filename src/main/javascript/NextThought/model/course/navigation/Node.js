@@ -140,5 +140,6 @@ Ext.define('NextThought.model.course.navigation.Node',{
 				}
 			}
 		});
+		return monitor;
 	}
 });
