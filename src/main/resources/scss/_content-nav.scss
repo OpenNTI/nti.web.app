@@ -166,7 +166,7 @@
 				@include icon('notepad',$position:absolute);
 			}
 
-			&.discus {
+			&.discuss {
 				top: 22px;
 				@include icon('discussions',$position:absolute);
 			}
@@ -193,7 +193,7 @@
 
 			.x-tab-icon-el {
 				&.notepad::after { @include sprite($icons,'notepad_active'); }
-				&.discus::after { @include sprite($icons,'discussions_active'); }
+				&.discuss::after { @include sprite($icons,'discussions_active'); }
 			}
 		}
 	}
