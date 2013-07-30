@@ -3,7 +3,6 @@
  * This class defines an array of headers and an array of cues which are parsed from a WebVTT file, as well as methods for parsing.
  * @author Bryan Hoke
  */
-
 Ext.define('NextThought.webvtt.Transcript', {
 	requires:['NextThought.model.transcript.Cue'],
 
@@ -139,10 +138,10 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @return The pre-processed contents of the WebVTT file
 	 */
 	preProcess: function(input){
-		var output = input; // Unnecessary?
-		var reNull = /\u0000/g;
-		var reCRLF = /\u000d\u000a/g;
-		var reCR = /\u000d/g;
+		var output = input, // Unnecessary?
+			reNull = /\u0000/g,
+			reCRLF = /\u000d\u000a/g,
+			reCR = /\u000d/g;
 
 		output = output.replace(reNull, '\ufffd');
 		output = output.replace(reCRLF, '\u000a');
@@ -226,7 +225,8 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 */
 	cueLoop: function(){
 		var scratch = this.scratch,
-			regexp = this.regexp;
+			regexp = this.regexp,
+			loop;
 
 		// Collect a line if not already collected
 		if (!scratch.alreadyCollectedLine) {
@@ -258,14 +258,19 @@ Ext.define('NextThought.webvtt.Transcript', {
 			// 37. Prepare to collect cue text
 			scratch.cueText = '';
 			// 38. Cue text loop
-			while (this.cueTextLoop.call(this)){}
+			do{
+				loop = this.cueTextLoop();
+			} while (loop);
 			// Repeat cueLoop
 			return true;
-		} else { // 49. Bad cue -- cue is discarded
-			// 50. Bad cue loop
-			while (this.badCueLoop.call(this)){}
-			return !scratch.halt;
 		}
+
+		// 49. Bad cue -- cue is discarded
+		// 50. Bad cue loop
+		do{
+			loop = this.badCueLoop();
+		}while (loop);
+		return !scratch.halt;
 	},
 
 
@@ -305,16 +310,15 @@ Ext.define('NextThought.webvtt.Transcript', {
 		var pos = 0,
 			remainder,
 			collected,
-			regexp = this.regexp,
-			scratch = this.scratch;
+			regexp = this.regexp;
 
 		// 3. Skip whitespace
 		pos += regexp.reWS.exec(input)[0].length;
 		// 4. Collect starting timestamp
 		collected = this.collectTimestamp(input, pos);
 		if (collected) {
-			cue.startTime = collected['timestamp'];
-			pos += collected['position'];
+			cue.startTime = collected.timestamp;
+			pos += collected.position;
 		} else {
 			return false;
 		}
@@ -346,8 +350,8 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 10. Collect ending timestamp
 		collected = this.collectTimestamp(input, pos);
 		if (collected) {
-			cue.endTime = collected['timestamp'];
-			pos += collected['position'];
+			cue.endTime = collected.timestamp;
+			pos += collected.position;
 		} else {
 			return false;
 		}
@@ -370,8 +374,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 		var mostSigUnits = 'minutes',
 			string, value1, value2, value3, value4,
 			result,
-			regexp = this.regexp,
-			scratch = this.scratch;
+			regexp = this.regexp;
 
 		// 3. Out-of-bounds error
 		if (pos >= input.length) {
@@ -392,8 +395,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 		value1 = parseInt(string, 10);
 		// 7. Determine whether we're reading the hours
 		// NOTE: But what if 0 <= hours <= 59 ?
-		if (string.length !== 2 || value1 > 59)
+		if (string.length !== 2 || value1 > 59) {
 			mostSigUnits = 'hours';
+		}
 		// 8. Abort if past input length or not at a colon
 		if (pos >= input.length || input.charCodeAt(pos) !== 58) {
 			// return error
@@ -599,21 +603,21 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 */
 	processCueText: function(input){
 		// The return string
-		var output = input;
+		var output = input,
 		// Pointer into input (the cue text)
-		var position = 0;
+			//position = 0,
 		// To remember how many span tags to close
-		var spanCount = 0;
+			spanCount = 0,
 		// TO remember how many misformed V tags were encountered
-		var badVCount = 0;
+			badVCount = 0,
 		// RegExp for matching <v> tags
-		var reV = /<v[^>]*>/gi;
+			reV = /<v[^>]*>/gi,
 		// RegExp for matching </v> tags
-		var reEndV = /<\/(v)>/i;
+			reEndV = /<\/(v)>/i,
 		// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
-		var reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
-			scratch = this.scratch,
-			regexp = this.regexp;
+			reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
+			scratch = this.scratch;
+			//regexp = this.regexp;
 
 		/*
 		 * Callback for replace which replaces <v> tags with <span> tags, returning a resulting replacement string
@@ -629,7 +633,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 			}
 			replacement = str;
 			// Perform the replacement on the tag contents
-			replacement = replacement.replace(reGoodV, replaceVParts)
+			replacement = replacement.replace(reGoodV, replaceVParts);
 			//            console.debug(str+' replaced with '+replacement);
 
 			return replacement;
@@ -638,35 +642,31 @@ Ext.define('NextThought.webvtt.Transcript', {
 
 		/*
 		 * Callback for replace used actually to replace parts of the tag as required.
-		 * @param arguments[0] = str
-		 * @param arguments[1] = ".<class name>"*
-		 * @param arguments[2] = "<the name of the speaker>"
-		 * @param arguments[3] = offset
-		 * @param arguments[4] = s
+		 * @param {String} str
+		 * @param {String} className eg ".<class name>"*
+		 * @param {String} speakerName eg "<the name of the speaker>"
 		 * @return The replacement string
 		 */
-		function replaceVParts() {
-			var replacement;
-			var reClasses;
-			var replacementClasses;
+		function replaceVParts(str,className,speakerName) {
+			var replacement,reClasses,replacementClasses;
 
 			// Initialize to the matched string
-			replacement = arguments[0];
+			replacement = str;
 			// Replace the beginning 'v' with 'span'
 			replacement = replacement.replace(/^<v/i, '<span');
 			// Replace the ".<classname>"* sequence with a class attribute with each instance of <classname> as a value
-			if (arguments[1]) {
-				reClasses = new RegExp(arguments[1]);
-				replacementClasses = arguments[1];
+			if (className) {
+				reClasses = new RegExp(className);
+				replacementClasses = className;
 				replacementClasses = replacementClasses.replace(/\u002e/g, ' ');
 				replacementClasses = replacementClasses.trim();
 				replacement = replacement.replace(reClasses, ' class=\''+replacementClasses+'\'');
 			}
-			// Adds a title attribute with speakername as its value
-			replacement = replacement.replace(new RegExp(arguments[arguments.length-3]+'(?=>)'),
-				'title=\'' + arguments[arguments.length-3] + '\'');
+			// Adds a title attribute with speakerName as its value
+			replacement = replacement.replace(new RegExp(speakerName+'(?=>)'),
+				'title=\'' + speakerName + '\'');
 			spanCount++;
-			//            console.debug(arguments[0]+' replaced with '+replacement);
+			//            console.debug(str+' replaced with '+replacement);
 
 			return replacement;
 		}
@@ -757,7 +757,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Constructs a tree of nested cues in cueTree, if cues are nested
 	 */
 	buildCueTree: function() {
-		var i, path;
+		var i;
 		this.cueTree = [];
 		for (i = 0; i < this.cueList.length; i++) {
 			this.cueTreeInsert(this.cueList[i], this.cueTree);
@@ -807,10 +807,12 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param ignoreLFs Whether line feeds in cue text should be ignored rather than converted to <br> tags
 	 */
 	parseWebVTT: function(){
-		var s, scratch = this.scratch;
+		var s, scratch = this.scratch, loop;
 		// Make sure scratchwork is clear
 		for (s in scratch) {
-			scratch[s] = 0;
+			if(scratch.hasOwnProperty(s)){
+				scratch[s] = 0;
+			}
 		}
 
 		scratch.ignoreLFs = this.ignoreLFs;
@@ -830,13 +832,15 @@ Ext.define('NextThought.webvtt.Transcript', {
 		scratch.position++;
 
 		// Collect headers
-		this.getHeader.call(this);
+		this.getHeader();
 		if (scratch.halt) {
 			return null;
 		}
 
 		// Collect and process cues
-		while(this.cueLoop());
+		do{
+			loop = this.cueLoop();
+		} while(loop);
 
 		this.findSections();
 
@@ -844,7 +848,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 
 		// Clear off scratchwork
 		for (s in scratch) {
-			scratch[s] = 0;
+			if(scratch.hasOwnProperty(s)){
+				scratch[s] = 0;
+			}
 		}
 
 		return this.cueList;
