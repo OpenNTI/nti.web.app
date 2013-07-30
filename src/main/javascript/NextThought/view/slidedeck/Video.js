@@ -11,6 +11,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		'media-heart-beat': 'videoQueryTask'
 	},
 
+	playerWidth: 400,
+
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [
 			{
@@ -50,6 +52,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	initComponent: function(){
+		this.height = (this.playerHeight + 65);
 		this.callParent(arguments);
 		//default the value
 		if(typeof(this.linkWithSlides) !== 'boolean'){
@@ -57,7 +60,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		}
 
 		this.loadFirstEntry = false;
-		this.playerWidth = 400;
 	},
 
 
