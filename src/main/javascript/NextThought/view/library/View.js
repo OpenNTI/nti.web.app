@@ -17,6 +17,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 	items:[
 		{
+			title: 'Dashboard',
 			id:'course-dashboard',
 			xtype: 'course-dashboard'
 		},{
@@ -36,6 +37,7 @@ Ext.define( 'NextThought.view.library.View', {
 				xtype: 'reader'
 			}]
 		},{
+			title: 'Discussion',
 			id:'course-forum',
 			xtype: 'course-forum'
 		}
@@ -84,8 +86,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	onTabClicked: function(tabSpec){
-		var l = this.layout,
-			active = l.getActiveItem(),
+		var active = this.layout.getActiveItem(),
 			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
 			vId = targetView[1],
 			needsChanging = vId!==active.id,
@@ -98,7 +99,7 @@ Ext.define( 'NextThought.view.library.View', {
 		
 		this.pushState({activeTab: vId});
 		if(needsChanging){
-			l.setActiveItem(vId);
+			this.setActiveTab(vId);
 		} else if(reset) {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
@@ -121,7 +122,7 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 	pushState: function(s){
-		history.pushState({library: s});
+		history.pushState({library: s}, this.title, this.getFragment());
 	},
 
 
@@ -201,11 +202,16 @@ Ext.define( 'NextThought.view.library.View', {
 
 		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
-		this.down('content-toolbar').show();
-		this.setTitle(ContentUtils.findTitle(pageInfo.getId(),'NextThought'));
-
 		var l = ContentUtils.getLocation(pageInfo),
 			toc;
+
+
+		this.down('content-toolbar').show();
+
+		this.locationTitle = ContentUtils.findTitle(pageInfo.getId(),'NextThought');
+		this.setTitle(this.getTitlePrefix()+this.locationTitle);
+
+
 
 
 		if( l && l !== ContentUtils.NO_LOCATION ){
@@ -221,6 +227,15 @@ Ext.define( 'NextThought.view.library.View', {
 	},
 
 
+	getTitlePrefix: function(){
+		var prefix = this.getLayout().getActiveItem().title || '';
+		if(!Ext.isEmpty(prefix)){
+			prefix += ' - ';
+		}
+		return prefix;
+	},
+
+
 	switchViewToReader: function(){
 		this.courseBook.layout.setActiveItem('main-reader-view');
 	},
@@ -232,10 +247,11 @@ Ext.define( 'NextThought.view.library.View', {
 			'course-book': this.courseBook,
 			'course-dashboard': this.courseDashboard,
 			'course-nav': this.courseNav
-		}, active = tabMap[tab || 'course-book'];
+		},  active = tabMap[tab || 'course-book'];
 
 		if(this.rendered){
 			this.layout.setActiveItem(active);
+			this.setTitle(this.getTitlePrefix()+this.locationTitle);
 		}else{
 			this.on('afterrender', function(){
 				this.layout.setActiveItem(active);
