@@ -18,6 +18,7 @@ Ext.define('NextThought.store.Library',{
 
 	proxy: {
 		type: 'ajax',
+		timeout: 3600000,//hour
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json',
 			'Content-Type': 'application/json'
