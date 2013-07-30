@@ -133,10 +133,12 @@ Ext.define('NextThought.model.User', {
 
 	statics: {
 
+		BLANK_AVATAR: 'resources/images/icons/unresolved-user.png',
+
 		getUnresolved: function (username) {
 			var u = new NextThought.model.User({
 				Username: username,
-				avatarURL: 'resources/images/icons/unresolved-user.png',
+				avatarURL: this.BLANK_AVATAR,
 				affiliation: 'Unknown',
 				status: '',
 				Presence: NextThought.model.PresenceInfo.createFromPresenceString("Offline")
