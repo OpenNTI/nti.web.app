@@ -746,6 +746,7 @@ $experimental-support-for-svg: true;
 	right: 0;
 	left: 0;
 	box-shadow: 0 0 10px 0 black;
+	z-index: 19010 !important;
 	background: $slidedeck-controls-background !important;
 
 	.header{
