@@ -62,7 +62,10 @@ Ext.define('NextThought.proxy.JSONP',{
 			Ext.Error.raise('Must specify the type you want');
 		}
 		try {
-			return this.bufferedContent[ntiid][type].content;
+			var content = this.bufferedContent[ntiid][type].content;
+			delete this.bufferedContent[ntiid][type].content;
+			delete this.bufferedContent[ntiid][type];
+			return content;
 		}
 		catch(err){
 			console.error('Oops...',type,ntiid,err.stack||err.message);
@@ -79,6 +82,10 @@ Ext.define('NextThought.proxy.JSONP',{
 		if(type==='application/xml'){
 			type = 'text/xml';
 			console.warn('Forcing content type to text/xml from application/xml', content.ntiid);
+		}
+
+		if(Ext.isEmpty(type)){
+			Ext.Error.raise({msg:'Empty content type!', data: content});
 		}
 
 		//1) decode content
@@ -101,7 +108,19 @@ Ext.define('NextThought.proxy.JSONP',{
 
 		//3) put it in the bucket
 		this.bufferedContent[content.ntiid][type] = content;
+	},
+
+
+	/**
+	 * @deprecated Workaround until content is rerendered.
+	 */
+	receiveContentVTT: function(content){
+		content['Content-Type'] = 'text/vtt';
+		content.ntiid = 'webvtt';
+		this.receiveContent(content);
 	}
+
+
 
 },function(){
 	if(window.JSONP){
@@ -114,4 +133,6 @@ Ext.define('NextThought.proxy.JSONP',{
 	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated */
 	window.jsonpToc     = Ext.bind(JSONP.receiveContent, JSONP);
+	/** @deprecated */
+	window.jsonpData     = Ext.bind(JSONP.receiveContentVTT, JSONP);
 });
