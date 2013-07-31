@@ -26,14 +26,14 @@
 		background: rgba(255,0,0,0.6);
 
 		@for $i from 1 through 8 {
-			$s: (125px * $i) - $gridSpacing;
+			$s: (128px * $i) - $gridSpacing;
 			$h: (100px * $i);
-			$m: (145px * $i) - $gridSpacing;
+			//$m: (145px * $i) - $gridSpacing;
 
 			&.col-#{$i} {
 				width: $s;
-				max-width: $m;
-				@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
+				//max-width: $m;
+				//@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
 			}
 			&.row-#{$i} { height: $h; }
 		}
@@ -43,8 +43,8 @@
 
 .dashboard-videos {
 	@include tile-shadow();
-	$videoWidth: 587px;
-	$videoHeight: 330px;
+	$videoWidth: 711px;
+	$videoHeight: 400px;
 	&,.body{
 		position: absolute;
 		top: 0; bottom: 0; left: 0; right: 0;
@@ -64,7 +64,7 @@
 
 		.curtain {
 			$playY: 43%;
-			$backSize: 860px;
+			$backSize: 760px;
 			position: absolute;
 			right: 0; left: 0;
 			top: 0; bottom: 0;
@@ -165,11 +165,12 @@
 
 		.video-list{
 			@include scrollbar(#04232c, #0f2d35);
+			@include experimental(transition, bottom 0.6s);
 			position: absolute;
 			left: 0;
-
 			right: 0;
 			bottom: 0;
+			z-index: 10;
 			overflow: {
 				x: auto;
 				y: hidden;
@@ -270,6 +271,21 @@
 			}
 		}
 	}
+
+	&.hide-list {
+		.curtain{
+			&::after{
+				content: '';
+				display: block;
+				position: absolute;
+				top: 0; left: 0; bottom: 0; right: 0;
+				background: rgba(0,0,0,0.5);
+			}
+		}
+		.video-list {
+			bottom: -80px;
+		}
+	}
 }
 
 
@@ -291,6 +307,14 @@
 	.tile-header ~ .scrollbody {
 		top: 38px;
 	}
+
+	.user-container-body {
+		background: #fff;
+		position: absolute;
+		padding-top: 75%;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+	}
 }
 
 
@@ -301,7 +325,7 @@
 	}
 
 	&.content-link .meta {
-		padding: 14px 15px 0;
+		padding: 15px 15px 16px;
 	}
 
 	&.note-list .row,
@@ -367,6 +391,8 @@
 	&.active-users {
 		position: relative;
 		overflow: hidden;
+		z-index: 1;
+
 		&::after {
 			.x-ie9n & {
 				display: none;
@@ -399,6 +425,11 @@
 				@include experimental(transition, $value);
 			}
 
+			//ensure we don't have a wapping problem
+			&:nth-of-type(0n+6){
+				clear: left;
+			}
+
 			&.x-item-over,
 			&.x-item-selected{
 				&::after{
@@ -413,6 +444,7 @@
 			&:first-of-type {
 				width: 50%;
 				padding-bottom: 50%;
+				@include experimental-value(padding-bottom, calc(50% - 0.1px) );
 			}
 		}
 
