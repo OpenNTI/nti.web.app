@@ -65,7 +65,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}).addCls('in-gutter');
 
 		me.editorEl = me.editor.el;
-
+		me.editor.setWidth(325);
 		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
 		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
