@@ -21,6 +21,14 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		editorBodyEl: '.content'
 	},
 
+    requires: [
+        'NextThought.modules.TouchSender',
+        'NextThought.view.chat.TouchHandler'
+    ],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -50,9 +58,100 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.defer(this.syncHeight,1,this);
 
+        if(Ext.is.iPad){
+            var navigation = Ext.Element.select('.main-navigation');
+
+            /*navigation.on('mouseover', function(e){
+             console.log("navigation mousehover called");
+             Ext.Element.select('.x-panel-navigation-menu').hide();
+             this.titleEl.focus();
+             }, this, {delay:550});*/
+
+            //Close navigation menu when clicking on title
+            //TODO find a way to keep it from popping up in the first place.
+            var titleInput = this.getEl().down('.title > :first');
+            titleInput.on('focus', function(){
+                console.log("titleInput focused");
+                Ext.Element.select('.x-panel-navigation-menu').hide();
+            }, this, {delay:1000});
+
+            this.titleEl.on('focus', function(){
+                console.log("title focused");
+                Ext.Element.select('.x-panel-navigation-menu').hide();
+            }, this, {delay:1000});
+        }
+
 		this.titleEl.focus();
 		this.moveCursorToEnd(this.titleEl);
+
+        if(Ext.is.iPad){
+            Ext.Element.select('.x-panel-navigation-menu').hide();
+            this.setUpTouch();
+        }
 	},
+
+    setUpTouch: function(){
+        var me = this;
+        me.buildModule('modules', 'touchSender');
+
+        var firstY = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent().getY();
+        console.log("firstY:" + firstY);
+
+        var cancelButton = this.getEl().down('.cancel');
+
+        cancelButton.dom.addEventListener('touchstart', function(e){
+            console.log("cancel pushed");
+            console.log("firstY:" + firstY);
+            me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
+        }, this, {delay:100});
+
+        var container = this,
+            initialY = false;
+
+        container.on('touchScroll', function(ele, deltaY) {
+
+            var panel = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent();
+
+            var currentY = panel.getY(),
+                newY = currentY - deltaY,
+                containerHeight = panel.getHeight(),
+                parentHeight = panel.parent().getHeight(),
+                minY;
+
+           // if (containerHeight <= parentHeight) {
+           //     panel.setY(initialY, false);
+           //     return;
+           // }
+
+            if (initialY === false){
+                initialY = currentY;
+            }
+
+            minY  = initialY-(containerHeight-parentHeight);
+
+            // Clamp scroll
+            /*if(newY < minY){
+                newY = minY;
+            }
+            else if (newY > initialY){
+                newY = initialY;
+            }  */
+            panel.setY(newY, false);
+
+        }, this);
+
+        container.on('touchElementIsScrollable', function(ele, callback) {
+            callback(true);
+        });
+
+        //TODO account for the keyboard up. elements at different place.
+        container.on('touchElementAt', function(x,y, callback) {
+            Ext.Element.select('.x-panel-navigation-menu').hide();
+            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            callback(element);
+        });
+
+    },
 
 
 	destroy: function(){
@@ -79,6 +178,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	syncHeight: function(){
+        console.log("syncHeight");
 		var el = this.editorBodyEl,
 			top;
 		if(!el){
@@ -162,6 +262,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	onCancel: function(e){
+        console.log("onCancel");
 		e.stopEvent();
 
 		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.

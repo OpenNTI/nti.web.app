@@ -68,8 +68,13 @@ Ext.define( 'NextThought.view.Views', {
 		}
 	},
 
-
 	afterRender: function(){
+        console.log("Rendered Views");
+        if(Ext.is.iPad){
+            console.log("IS IPAD!!!!!");
+            Ext.apply(this, {minHeight: 615});
+        }
+
 		this.callParent(arguments);
 
 		this.nav = Ext.get('nav');
