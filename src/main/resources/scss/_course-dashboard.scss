@@ -269,6 +269,7 @@
 .x-container-course-dashboard-tile {
 	position: relative;
 	.scrollbody{
+		@include scrollbar(transparent, $tertiary-grey);
 		background: #fff;
 		top: 0px;
 		bottom: 0;
