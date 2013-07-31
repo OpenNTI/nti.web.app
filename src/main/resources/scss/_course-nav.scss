@@ -321,13 +321,12 @@
 
 						.launch-player{
 							display: block;
-							position: absolute;
 							top: 0;
 							right: 0;
 							bottom: 0;
 							width: 50px;
 							border-radius: 50px;
-							background: rgba(255,0,0,0.5);
+							@include icon('play-transcript', $position:absolute, $top:2px, $left:5px);
 						}
 
 						.label{
