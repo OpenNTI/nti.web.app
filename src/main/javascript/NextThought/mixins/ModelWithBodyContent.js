@@ -10,6 +10,10 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		'application/vnd.nextthought.embeddedvideo': 'embeddedVideoRenderer'
 	},
 
+	componentRendererForPart:{
+		'application/vnd.nextthought.embeddedvideo': 'renderVideoComponent'
+	},
+
 	getBodyText: function(hasNoPlaceholderForImage) {
 
 		var o = this.get('body'), text = [];
@@ -74,62 +78,53 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 	},
 
 	embeddedVideoRenderer: function(o, clickHandlerMaker, size, callback, scope){
-		var width = (size || 360), height = width / (4.0/3.0), types, fn, cfg;
+		var width = (size || 360), height = width / (4.0/3.0),
+			cfg = {
+				cls: 'data-component-placeholder',
+				'data-mimetype': o.MimeType,
+				'data-type': o.type,
+				'data-url': o.embedURL,
+				'data-height': height,
+				'data-width' : width
+			};
+		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
+	},
 
-		function youtubeMarkupForHref(href){
-			var adjustedHref,
-				opts = {
-					frameborder: "0",
-					marginwidth: "0",
-					marginheight: "0",
-					rel: "0",
-					seamless: "1",
-					transparent: "1",
-					allowfullscreen:"1",
-					allowtransparency: "1",
-					modestbranding: "1",
-					height: height,
-					width: width
-				}, params = [];
-			if(href){
-				Ext.Object.each(opts, function(k, v){
-					params.push(k+'='+v);
-				});
-				adjustedHref = [href, params.join('&')].join(href.indexOf("?") < 0 ? "?" : "&");
 
-				return Ext.apply({
-					tag: 'iframe',
-					cls: 'youtube-player',
-					href: href,
-					src: adjustedHref
-				}, opts);
+	renderVideoComponent: function(node, owner){
+		var p, width = node.getAttribute('data-width'),
+			url = node.getAttribute('data-url'),
+			type = node.getAttribute('data-type'),
+			item = NextThought.model.PlaylistItem.create({mediaId: guidGenerator()}), source,
+			youtubeId = parseYoutubeIdOut(url);
+
+		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+		function parseYoutubeIdOut(url){
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/,
+				match = url.match(regExp);
+			if (match && match[2].length==11){
+				return match[2];
 			}
 			return null;
 		}
 
-		function html5videoForHref(href){
-			if(!href){
-				return null;
-			}
-			return {
-				tag: 'video',
-				href: href,
-				controls: '',
-				style: {width: width+'px', height: height+'px'},
-				name: 'media',
-				cn: {
-					tag: 'source',
-					src: href
-				}
-			};
+		source = {
+			service: youtubeId ? 'youtube' : 'html5',
+			source: youtubeId ? youtubeId : [url, url]
 		}
 
-		types = {youtube: youtubeMarkupForHref};
-		fn = types[o.type] || html5videoForHref;
-		cfg = fn(o.embedURL);
+		item.set('sources', [source]);
+		p = Ext.widget({
+			xtype: 'content-video',
+			playlist: [item],
+			renderTo: node,
+			playerWidth: width,
+			floatParent: owner
+		});
 
-		Ext.callback(callback, scope, [Ext.DomHelper.markup(cfg)]);
+		return p;
 	},
+
 
 	compileBodyContent: function(result,scope,clickHandlerMaker,size){
 
@@ -143,7 +138,20 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			var o = body[i], fn;
 
 			if(i<0){
-				result.call(scope,text.join(''));
+				Ext.callback(result, scope, [text.join(''), function(node, cmp){
+					var cmpPlaceholders = node.query('.data-component-placeholder'), added=[], cmpAdded;
+					Ext.Array.each(cmpPlaceholders, function(ph){
+						var mime = ph.getAttribute('data-mimetype'),
+							fn = me.componentRendererForPart[mime || ''];
+						if(Ext.isFunction(me[fn])){
+							cmpAdded = me[fn](ph, cmp);
+							if(cmpAdded){
+								added.push(cmpAdded);
+							}
+						}
+					});
+					return added;
+				}]);
 			}
 			else if(typeof o === 'string'){
 				text.push(o.replace(/\s*(style|class)=".*?"\s*/ig,' ').replace(/<span.*?>&nbsp;<\/span>/ig,'&nbsp;'));

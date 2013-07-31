@@ -473,8 +473,8 @@ Ext.define('NextThought.view.forums.Topic',{
 	},
 
 
-	setContent: function(html){
-		var me = this;
+	setContent: function(html, cb){
+		var me = this, cmps;
 		this.bodyEl.update(html);
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
 
@@ -486,6 +486,11 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.bodyEl.select('img').each(function(img){
 			img.on('load', function(){ me.fireEvent('sync-height'); });
 		});
+
+		if(Ext.isFunction(cb)){
+			cmps = cb(this.bodyEl, this);
+			Ext.Array.each(cmps, function(c){me.on('destroy', c.destroy, c);});
+		}
 	},
 
 

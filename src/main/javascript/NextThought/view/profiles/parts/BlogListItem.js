@@ -213,8 +213,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	},
 
 
-	setContent: function(html){
-		var snip = ContentUtils.getHTMLSnippet(html,300);
+	setContent: function(html, cb){
+		var snip = ContentUtils.getHTMLSnippet(html,300), cmps, me = this;
 
 		if(snip){
 			//add ellipsis if there is a snip AND there is a closing tag, otherwise just use the Read More
@@ -233,6 +233,11 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
+
+		if(Ext.isFunction(cb)){
+			cmps = cb(this.bodyEl, this);
+			Ext.Array.each(cmps, function(c){me.on('destroy', c.destroy, c);});
+		}
 	},
 
 
