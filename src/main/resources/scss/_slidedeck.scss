@@ -1003,7 +1003,7 @@ $experimental-support-for-svg: true;
 	&.presentation-note-slider{
 		border-width: 0px;
 		width: 400px;
-		position: fixed !important;
+		position: absolute !important;
 		top: 70px !important;
 		bottom: 0 !important;
 		right: 0 !important;
@@ -1013,7 +1013,7 @@ $experimental-support-for-svg: true;
 
 		& ~ .note-window {
 			position: absolute !important;
-			z-index: 29001 !important;
+			z-index: 39001 !important;
 		}
 	}
 }
