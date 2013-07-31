@@ -655,7 +655,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		s = this.getStoreForLine(s.filteredLine);
-		if(s){
+		if(s && s.getCount() > s.getTotalCount()){
 			s.on('load',maybeFirePagedIn,s,{single:true});
 			s.nextPage();
 		}
