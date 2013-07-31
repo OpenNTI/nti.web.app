@@ -143,6 +143,14 @@ Ext.define('NextThought.util.Rects',{
 			&& (refRect.left + a.left) <= testRect.left
 			&& (refRect.right + a.right)>= testRect.right;
 
+	},
+
+
+	isZeroRect: function(rect){
+		if(!rect){
+			return true;
+		}
+		return rect.top === 0 && rect.left === 0 && rect.height === 0 && rect.width === 0;
 	}
 
 },function(){

@@ -231,7 +231,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			return;
 		}
 
-		rect = domRange.getBoundingClientRect();
+		rect = RangeUtils.safeBoundingBoxForRange(domRange);
 		line = rect ? rect.top + this.reader.getTargetEl().dom.scrollTop : 0;
 		rec.set('line', line);
 

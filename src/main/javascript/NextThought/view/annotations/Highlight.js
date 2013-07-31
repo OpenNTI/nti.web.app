@@ -132,13 +132,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	resolveVerticalLocation: function(){
 		var r, rect, node;
 
-		function isCollapsedClientRect(rect){
-			if(!rect){
-				return true;
-			}
-			return rect.top === 0 && rect.left === 0 && rect.height === 0 && rect.width === 0;
-		}
-
 		if (this.rendered){
 			r = this.buildRange();
 		}
@@ -146,24 +139,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			r = this.getRange();
 		}
 
-		rect = r ? r.getBoundingClientRect() : null;
-
-		try {
-			if(rect && !r.collapsed && isCollapsedClientRect(rect) && r.toString() === '' && !Ext.isTextNode(r.startContainer)){
-				console.log('No rect information...attempting to get selected node rect instead');
-				node = r.startContainer.childNodes[r.startOffset];
-				rect = node.getBoundingClientRect();
-			}
-		}
-		catch(er){
-			console.error(er);
-		}
-
+		rect = RangeUtils.safeBoundingBoxForRange(r);
 		if(!rect){
 			return NextThought.view.annotations.Base.NOT_FOUND;
 		}
 
-		return !isCollapsedClientRect(rect) ? rect.top : NextThought.view.annotations.Base.HIDDEN;
+		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.view.annotations.Base.HIDDEN;
 	},
 
 

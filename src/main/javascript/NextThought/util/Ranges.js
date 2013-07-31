@@ -361,8 +361,28 @@ Ext.define('NextThought.util.Ranges',{
 		node.select('a[href^=tag]').set({href:undefined,target:undefined});
 
 		return node.dom;
-	}
+	},
 
+
+	/**
+	 * Gets the bounding rect of the provided range.  If the rect is zero
+	 * but the range is not collapsed we will attempt to get the bounding box
+	 * based on the ranges contents.  We do this because IE sucks.
+	 */
+	safeBoundingBoxForRange: function(r){
+		var rect = r ? r.getBoundingClientRect(r) : null, node;
+		try {
+			if(rect && !r.collapsed && RectUtils.isZeroRect(rect) && r.toString() === '' && !Ext.isTextNode(r.startContainer)){
+				console.log('No rect information...attempting to get selected node rect instead');
+				node = r.startContainer.childNodes[r.startOffset];
+				rect = node.getBoundingClientRect();
+			}
+		}
+		catch(er){
+			console.error(Globals.getError(er));
+		}
+		return rect;
+	},
 
 
 },function(){
