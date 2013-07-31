@@ -52,12 +52,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 			return;
 		}
 
-		image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;
+		if(image.src != Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src){
+			image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;
+		}
 	},
 
 	imageFailed: function(image,ctx,cb){
 		console.log('failed to load: '+this.url);
-		if(this.url !== Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src){
+		if(this.url !== Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src){
 			image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;
 			return;
 		}

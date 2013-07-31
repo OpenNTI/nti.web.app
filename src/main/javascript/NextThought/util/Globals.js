@@ -479,11 +479,11 @@ function(){
 	this.handleCache();
 
 
-
-	Ext.Object.each(this[proto],function(k,v,o){
-		if(/_IMAGE$/.test(k) && typeof v === 'string'){
-			o[k] = new Image();
-			o[k].src = getResourceURL(v);
-		}
-	});
+	function makeImage(prop){
+		var src = Globals[prop];
+		Globals[prop] = new Image();
+		Globals[prop].src = getResourceURL(src);
+	}
+	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
+	makeImage('CANVAS_BROKEN_IMAGE');
 });
