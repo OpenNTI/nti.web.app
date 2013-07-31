@@ -56,6 +56,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			minWidth: 250
 
 		},this.TIP['public']));
+		this.tip.blockLeftRightAlign();
 
 		if(this.readOnly){
 			this.tip.disable();

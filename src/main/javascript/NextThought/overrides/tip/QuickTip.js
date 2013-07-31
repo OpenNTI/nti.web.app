@@ -187,10 +187,28 @@ Ext.define('NextThought.view.tip.Tooltip',{
 
 	cls:'spec',
 
+
+	blockLeftRightAlign: function(){
+		var align = this.defaultAlign,
+			anchor = this.anchor;
+		ObjectUtils.defineAttributes(this,{
+			defaultAlign: {
+				setter: function(v){ align = v==='r-l'? 'tr-br' : v; },
+				getter: function(){ return align; }
+			},
+			anchor: {
+				setter: function(v){ anchor = v==='right'? 'bottom' : v; },
+				getter: function(){ return anchor; }
+			}
+		});
+
+	},
+
+
 	//center the tip pointer
 	//We prefer to align to the center posisitions instead of the corner positions.
 	syncAnchor: function() {
-        var me = this, pos;
+        var me = this, pos, off = [0,0];
 		me.callParent(arguments);
         switch (me.tipAnchor.charAt(0)) {
         case 't': pos = 'b-t'; break;
@@ -198,7 +216,12 @@ Ext.define('NextThought.view.tip.Tooltip',{
         case 'b': pos = 't-b'; break;
         default:  pos = 'r-l'; break;
         }
-        me.anchorEl.alignTo(me.el, pos);
+
+		if(this.defaultAlign==='tr-br'){
+			pos = 't-br';
+			off = [-50,0];
+		}
+        me.anchorEl.alignTo(me.el, pos, off);
     },
 
 
