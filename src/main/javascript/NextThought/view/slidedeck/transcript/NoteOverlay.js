@@ -35,11 +35,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			'sync-height': 'syncHeight',
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline':'showEditorAtPosition',
-			'register-records': 'registerGutterRecords'
+			'register-records': 'registerGutterRecords',
+			'unregister-records':'unRegisterGutterRecords'
 		});
 
 		this.mon(this.annotationManager, {
-			'add': 'onAnnotationAdded'
+			'add': 'onAnnotationAdded',
+			'remove': 'onAnnotationRemoved',
+			scope: this
 		});
 
 		this.data = {};
@@ -99,9 +102,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		function callback(success, record){
 			me.editorEl.unmask();
 			if(success){
-				if(me.data.userDataStore){
-					me.data.userDataStore.add(record);
-				}
 				me.deactivateEditor();
 			}
 		}
@@ -190,13 +190,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	registerGutterRecords: function(noteStore, view){
+	registerGutterRecords: function(noteStore, records, view){
 		if(Ext.isEmpty(noteStore)){ return;}
 
-		var me = this,
-			notes = noteStore.getRange();
+		var me = this;
 
-		Ext.each(notes, function(n){
+		Ext.each(records, function(n){
 			me.registerNoteRecord(n, view, noteStore);
 		});
 	},
@@ -205,7 +204,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	registerNoteRecord: function(rec, cmp, recStore){
 		var anchorResolver =  cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
-			domRange, rect, line, domFrag, b;
+			domRange, rect, line, domFrag, b, d;
+
+		if(this.isRecordAlreadyAdded(rec)){return;}
 
 		if(!anchorResolver){ anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver; }
 
@@ -224,15 +225,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		else{
 			domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
 		}
-		console.log('domrange for record: ', rec, domRange);
 
 		if(Ext.isEmpty(domRange)){
-			console.warn('Could not resolve dom range anchor for record: ', rec);
 			return;
 		}
 
 		rect = RangeUtils.safeBoundingBoxForRange(domRange);
-		line = rect ? rect.top + this.reader.getTargetEl().dom.scrollTop : 0;
+		d = this.reader.getTargetEl().dom;
+		line = rect ? rect.top + d.scrollTop - d.offsetTop : 0;
 		rec.set('line', line);
 
 		this.annotationManager.add({
@@ -246,21 +246,56 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	onAnnotationAdded: function(i, o){
-		var count = this.getAnnotationsAtLine(o.line).getCount(),
-			tpl = this.controlTpl,
-			line = o.line,
-			el;
+	unRegisterGutterRecords: function(store, records, view){
+		var me = this;
+		Ext.each(records, function(rec){
+			me.unRegisterNoteRecord(rec);
+		});
+	},
 
-		console.log('adding note at: ', line);
-		el = this.annotationOverlay.down('.count[data-line='+line+']');
-		if(!el){
+
+	unRegisterNoteRecord: function(rec){
+		var r = this.annotationManager.findBy(function(item){ return item.id === rec.getId()});
+		if(r){
+			this.annotationManager.remove(r);
+		}
+	},
+
+
+	isRecordAlreadyAdded: function(rec){
+		var b = this.annotationManager.filterBy(function(item){
+			return item.id === rec.getId();
+		});
+
+		return b.getCount() > 0;
+	},
+
+
+	updateAnnotationCountAtLine: function(line, count){
+		var tpl = this.controlTpl,
+			el = this.annotationOverlay.down('.count[data-line='+line+']');
+
+		if(Ext.isEmpty(el)){
 			el = tpl.append(this.annotationOverlay, {line:line, count:count}, true);
+			el.setStyle('top', line+'px');
 			this.mon(el, 'click', 'showAnnotationsAtLine', this);
 		} else{
 			el.update(count);
 		}
-		el.setStyle('top', line+'px');
+	},
+
+
+	onAnnotationAdded: function(i, o){
+		var count = this.getAnnotationsAtLine(o.line).getCount();
+		if(count > 0){
+			this.updateAnnotationCountAtLine(o.line, count);
+		}
+	},
+
+
+	onAnnotationRemoved: function(o){
+		var count = this.getAnnotationsAtLine(o.line).getCount();
+		this.updateAnnotationCountAtLine(o.line, count);
 	},
 
 

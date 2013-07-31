@@ -22,10 +22,9 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	initComponent: function(){
+		this.fireEvent('uses-page-stores', this);
 		this.callParent(arguments);
-
-		this.addEvents('register-records');
-		this.enableBubble(['register-records']);
+		this.enableBubble(['register-records', 'unregister-records']);
 	},
 
 
@@ -124,46 +123,50 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 	buildUserDataStore: function(){
 		var containerId = this.slide.get('ContainerId'),
-			filter, // = this.getUserDataTimeFilter(),
+			url, store,
 			me = this;
 
-		function finish(store){
-			// Apply filter to know which user data belong belong within the timing of this transcript.
-			console.log('slide userdata store: ', store);
+		function finish(store, records){
 			if(!store){ return; }
-			if(!Ext.isEmpty(filter) && Ext.isFunction(filter)){
-				store.filter([{filterFn:filter}]);
-			}
-			// Now we will start to bucket notes.
-			console.log('should start to show and bucket items');
+
 			if(store.getCount() > 0){
-				me.fireEvent('register-records', store, me);
+				me.fireEvent('register-records', store, records, me);
 			}
 			me.userDataStore = store;
+			me.fireEvent('listens-to-page-stores', me, {
+				scope: me,
+				add: 'onStoreEventsAdd',
+				remove: 'onStoreEventsRemove'
+			});
 		}
 
-		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+		if(this.hasPageStore(containerId)){
+			store = this.getPageStore(containerId);
+		}
+		else{
+			url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
 			store = NextThought.store.PageItem.make(url, containerId,true);
+			/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
+			store.doesNotShareEventsImplicitly = true;
+			Ext.apply(store.proxy.extraParams,{
+				accept: NextThought.model.Note.mimeType,
+				filter: 'TopLevel'
+			});
+			me.addPageStore(containerId, store);
+		}
 
-		/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
-		store.doesNotShareEventsImplicitly = true;
-		Ext.apply(store.proxy.extraParams,{
-			accept: NextThought.model.Note.mimeType,
-			filter: 'TopLevel'
-		});
-
-		me.mon(store, 'load', finish, me);
-		me.mon(store, {
-			scope:me,
-			'add': 'onUserDataUpdated',
-			'remove': 'onUserDataUpdated'
-		});
+		me.mon(store, 'load', finish, me, {single:true});
 		store.load();
 	},
 
 
-	onUserDataUpdated:function(store, records){
-		this.fireEvent('register-records', store, this);
+	onStoreEventsAdd:function(store, records){
+		this.fireEvent('register-records', store, records, this);
+	},
+
+
+	onStoreEventsRemove: function(store, records){
+		this.fireEvent('unregister-records', store, records, this);
 	},
 
 

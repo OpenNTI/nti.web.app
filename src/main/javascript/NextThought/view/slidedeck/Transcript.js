@@ -213,9 +213,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		s.removeFilter('lineFilter');
 		if(line){
+			console.log('filtering by line: ', line);
 			s.addFilter({
 				id: 'lineFilter',
 				filterFn: function(r){
+					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('line') === line;
 				}
 			});
@@ -246,14 +248,31 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			});
 		}
 
-		this.annotationView.bindStore(store);
+		if(this.annotationView.store !== store){
+			// NOTE: Make sure we remove lineFilter before this is unbound.
+			// otherwise, we end up in a funky state.
+			this.annotationView.store.removeFilter('lineFilter');
+			this.annotationView.bindStore(store);
+		}
+		else{
+			this.annotationView.refresh();
+		}
 		this.annotationView.show();
-		this.on('destroy', 'destroy',this.annotationView);
 		this.on('resize', function(){
 			if(this.isVisible()){
 				this.toFront();
 			}
 		}, this.annotationView);
+	},
+
+
+	destroy: function(){
+		this.callParent(arguments);
+		if(this.annotationView && this.annotationView.store){
+			//Make sure we clear the line filter, since this store could be bound to another view.
+			this.annotationView.store.removeFilter('lineFilter');
+			this.annotationView.destroy();
+		}
 	},
 
 
