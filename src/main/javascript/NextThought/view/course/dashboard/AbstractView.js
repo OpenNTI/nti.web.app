@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 		'NextThought.util.MasonryPacker'
 	],
 
-	GRID_WIDTH: 5,
+	GRID_WIDTH: 8,
 
 	ui: 'course',
 	cls: 'course-dashboard-container',

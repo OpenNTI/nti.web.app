@@ -27,7 +27,7 @@
 
 		@for $i from 1 through 8 {
 			$s: (125px * $i) - $gridSpacing;
-			$h: (100px * $i) - $gridSpacing;
+			$h: (100px * $i);
 			$m: (145px * $i) - $gridSpacing;
 
 			&.col-#{$i} {
@@ -43,8 +43,8 @@
 
 .dashboard-videos {
 	@include tile-shadow();
-	$videoWidth: 567px;
-	$videoHeight: 320px;
+	$videoWidth: 587px;
+	$videoHeight: 330px;
 	&,.body{
 		position: absolute;
 		top: 0; bottom: 0; left: 0; right: 0;
