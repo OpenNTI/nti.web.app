@@ -49,7 +49,6 @@ Ext.define('NextThought.util.media.HTML5Player',{
 
 
 	playerError: function(){
-		debugger;
 		this.fireEvent('player-error', 'html5');
 	},
 
