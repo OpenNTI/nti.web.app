@@ -131,35 +131,46 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		me.ownerCt.hasSlides = true;
 
 		Ext.each(s, function(i){
-			var id = i.slide.get('NTIID');
+			var id = i.slide.get('NTIID'), img;
 			if(id === startOn){
 				targetImageEl = i.el.down('img.slide');
 			}
-			images.push(i.el.down('img.slide'));
+			img = i.el.down('img.slide');
+			if(img && !Ext.getDom(img).done){
+				images.push(img);
+			}
 		});
 
 
 		this.el.mask('Loading....', 'loading');
 
-		Ext.each(images, function(i){
-			me.mon(i, {
-				scope: me,
-				'load': function(){
-					Ext.Array.remove(images, i);
-					if(images.length === 0){
-						me.ownerCt.slidesReady = true;
-						me.fireEvent('finished-loading-images');
-						me.el.unmask();
-						if(targetImageEl){
-							console.log('should scroll into view: ', targetImageEl.dom);
-							Ext.defer(function(){
-								targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
-							}, 10, me);
-						}
-					}
+		function maybeDoneLoad(){
+			console.log(images.length+' images left');
+			if(images.length === 0){
+				me.ownerCt.slidesReady = true;
+				me.fireEvent('finished-loading-images');
+				me.el.unmask();
+				if(targetImageEl){
+					console.log('should scroll into view: ', targetImageEl.dom);
+					Ext.defer(function(){
+						targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+					}, 10, me);
 				}
-			});
+			}
+		}
+
+		Ext.each(images, function(i){
+			i.dom.onload = function(){
+				Ext.Array.remove(images, i);
+				maybeDoneLoad();
+			};
+			i.dom.onerror = function(){
+				Ext.Array.remove(images, i);
+				maybeDoneLoad();
+			};
 		});
+		//Just in case no images for some reason
+		maybeDoneLoad();
 	},
 
 	selectSlide: function(slide){
