@@ -195,7 +195,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			xtype: 'content-video',
 			playlist: this.playlist,
 			renderTo: this.screenEl,
-			playerWidth: this.getPlayerWidth()
+			playerWidth: this.getPlayerWidth(),
+			floatParent: this
 		});
 
 		this.on({
