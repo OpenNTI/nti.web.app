@@ -43,6 +43,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			})
 		});
 
+		this.box = this.add({
+			xtype: 'container',
+			cls: 'user-container-body'
+		});
 
 		this.loadSummary();
 	},
