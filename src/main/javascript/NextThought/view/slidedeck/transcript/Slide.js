@@ -85,7 +85,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	onMouseOver: function(e){
-		debugger;
 		var t = e.getTarget('.x-component-slide', null, true),
 			box = t && t.down('.add-note-here'), me = this,
 			current = this.el.parent().down('.note-here-control-box:not(.hidden)');
@@ -95,7 +94,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		clearTimeout(this.mouseEnterTimeout);
 
 		this.mouseLeaveTimeout = setTimeout(function () {
-			debugger;
 			box.down('.note-here-control-box').removeCls('hidden');
 			if(current && current !== box.down('.note-here-control-box')){
 				current.addCls('hidden');
@@ -106,7 +104,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	},
 
 	onMouseOut: function(e){
-		debugger;
 		var target = e.getTarget(null, null, true),
 			t = target && target.is('.x-component-slide'),
 			box = t && target.down('.add-note-here'), me =  this;
@@ -117,7 +114,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	
 		if(!box.down('.note-here-control-box').hasCls('hidden')){
 			this.mouseEnterTimeout = setTimeout(function(){
-				debugger;
 				if(box && !box.down('.note-here-control-box').hasCls('hidden')){
 					box.down('.note-here-control-box').addCls('hidden');
 				}
