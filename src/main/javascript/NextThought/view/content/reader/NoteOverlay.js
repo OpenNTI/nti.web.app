@@ -120,6 +120,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
 			sharing = prefs && prefs.sharing,
 			sharedWith = sharing && sharing.sharedWith,
+			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			shareInfo =  SharingUtils.sharedWithToSharedInfo(
 							SharingUtils.resolveValue(sharedWith));
 
@@ -130,12 +131,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		this.mouseOut();
 		this.suspendMoveEvents = true;
 
+		tabPanel = targetEl.down('.x-panel-notes-and-discussion');
+		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
+		if(!tabPanel){
+			console.error('No tab panel!');
+			return false;
+		}
+
+		tabPanel.mask();
+
 		this.editor = Ext.widget('nti-editor', {
 			lineInfo: lineInfo || {},
 			ownerCmp: this.reader,
 			sharingValue: shareInfo,
 			floating: true,
-			renderTo: this.reader.getEl().up('.x-container-reader.reader-container'),
+			renderTo: targetEl,
 			enableShareControls: true,
 			enableTitle: true,
 			preventBringToFront:true,
@@ -151,7 +161,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				}
 			}
 		}).addCls('active in-gutter');
-
+		this.editor.toFront();
 		this.editor.focus();
 
 		this.editor.alignTo(this.data.box,'t-t?');
@@ -160,14 +170,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			this.editor.setLocalY(59);
 		}
 
-		tabPanel = this.editor.getEl().prev('.x-panel-notes-and-discussion');
-		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
-		if(!tabPanel){
-			console.error('No tab panel!');
-			return false;
-		}
-
-		tabPanel.mask();
 
 		this.editor.on('destroy','unmask',tabPanel);
 		this.editor.on('save','saveNewNote',this);
