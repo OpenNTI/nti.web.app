@@ -173,6 +173,10 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		if(el){ range.selectNode(el.dom); }
 		return range;
+	},
+
+	getContextDomNode: function(){
+		return Ext.clone(this.el.down('img').dom);
 	}
 
 });

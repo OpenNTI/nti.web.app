@@ -656,11 +656,14 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.on('afterrender',Ext.bind(this.setContext,this,arguments),this,{single:true});
 			return;
 		}
-		var r = this.record, newContext;
+		var r = this.record, newContext, reader = this.reader;
 		try {
 			this.context.setHTML('');
-			newContext = RangeUtils.getContextAroundRange(
-					r.get('applicableRange'), doc, cleanRoot, r.get('ContainerId'));
+			if(!reader){
+				reader = Ext.ComponentQuery.query('reader-content')[0];
+			}
+			// The reader should know about the things it contains, so ask it for the context node.
+			newContext = reader.getDomContextForRecord(r, doc, cleanRoot);
 
 			if(newContext){
 				newContext = this.fixUpCopiedContext(newContext);

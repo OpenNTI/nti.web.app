@@ -205,6 +205,18 @@ Ext.define('NextThought.view.content.Reader', {
     },
 
 
+	// NOTE: Now that we may have more than one reader, each reader should know how
+	// to resolve dom ranges/nodes of annotations inside it.
+	getDomContextForRecord: function(r, doc, cleanRoot){
+		var rangeDesc = r.get('applicableRange'),
+			cid = r.get('ContainerId');
+
+		doc = doc || this.getDocumentElement();
+		cleanRoot =  cleanRoot && this.getCleanContent();
+		return RangeUtils.getContextAroundRange( rangeDesc, doc, cleanRoot, cid);
+	},
+
+
 	onNavigateComplete: function(pageInfo, finish, hasCallback){
 		var me = this,
 			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;

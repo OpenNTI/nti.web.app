@@ -257,15 +257,33 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	getDocumentElement: function(){
-		console.log('should return doc element');
-		return this.el.dom.ownerDocument;
+	getDomContextForRecord: function(r){
+		//Find the cmp with our UGD store.
+		function fn(cmp){
+			var s = cmp.userDataStore;
+			return s && s.findRecord('NTIID', r.get('NTIID'));
+		}
+
+		var cmps = Ext.Array.filter(this.query('slide-component'), fn),
+			domFrag, slide, utils, b, node;
+
+		Ext.each(cmps, function(cmp){
+			domFrag = cmp.slide.get('dom-clone');
+			utils = cmp.getAnchorResolver();
+			b = utils.doesContentRangeDescriptionResolve(r.get('applicableRange'), domFrag);
+			if(b){
+				node = cmp.getContextDomNode();
+				return false;
+			}
+			return true;
+		});
+
+		return node;
 	},
 
-
-	getCleanContent: function(){
-		return this.el.dom;
-	},
+	//For compliance as a reader.
+	getDocumentElement: Ext.emptyFn,
+	getCleanContent: Ext.emptyFn,
 
 
 	getViewerHooks: function(){
