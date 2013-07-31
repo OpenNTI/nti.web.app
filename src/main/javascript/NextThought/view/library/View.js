@@ -77,11 +77,20 @@ Ext.define( 'NextThought.view.library.View', {
 			'navigateAbort': 'onNavigationAborted'
 		});
 
+		this.mon(this.courseForum,{
+			scope: this,
+			'set-active-topic': 'updateActiveTopic'
+		});
+
 		this.on({
 			'switch-to-reader':'switchViewToReader',
 			'beforeactivate':'onBeforeActivation',
 			'deactivate':'onDeactivated'
 		});
+	},
+
+	updateActiveTopic: function(ntiid){
+		this.pushState({currentTopic : ntiid});
 	},
 
 
@@ -97,9 +106,9 @@ Ext.define( 'NextThought.view.library.View', {
 			return false;
 		}
 		
-		this.pushState({activeTab: vId});
 		if(needsChanging){
 			this.setActiveTab(vId);
+			this.pushState({activeTab: vId});
 		} else if(reset) {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
@@ -262,12 +271,18 @@ Ext.define( 'NextThought.view.library.View', {
 
 	restore: function(state){
 		var ntiid = state.library.location,
-			tab = state.library.activeTab;
+			tab = state.library.activeTab,
+			topic = state.library.currentTopic;
+
 		try{
 			this.setActiveTab(tab);
 			if(!ntiid){
 				console.warn('There was no ntiid to restore!');
 				return;
+			}
+
+			if(topic){
+				this.courseForum.setTopic(topic);
 			}
 			this.reader.setLocation(ntiid,null,true);
 			if(this.reader.ntiidOnFrameReady){
@@ -293,7 +308,11 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	getFragment: function(){
-		var o = ParseUtils.parseNtiid(this.reader.getLocation().NTIID);
-		return o? o.toURLSuffix() : null;
+		var o;
+
+		if(this.layout.getActiveItem().id === 'course-book'){
+			o = ParseUtils.parseNtiid(this.reader.getLocation().NTIID);
+		}
+		return o? o.toURLSuffix() : location.pathname;
 	}
 });

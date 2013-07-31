@@ -23,12 +23,16 @@ Ext.define('NextThought.view.course.forum.View',{
 
 
 	onViewPushed: function(me,viewPushed){
-		console.log('pushed',arguments);
+		if(viewPushed.xtype === 'forums-topic' ){
+			this.fireEvent('set-active-topic', viewPushed.record.getId());
+		}
 	},
 
 
 	onViewPopped: function(me,viewPopped){
-		console.log('popped',arguments);
+		if(viewPopped.xtype === 'forums-topic'){
+			this.fireEvent('set-active-topic', undefined);
+		}
 	},
 
 	
@@ -41,6 +45,9 @@ Ext.define('NextThought.view.course.forum.View',{
 
 			me.store = store;
 			me.add({xtype: 'course-forum-list', record:o, store:store});
+			if(me.selectedTopic){
+				me.setTopic(me.selectedTopic);
+			}
 		}
 
 		function failure(){}
@@ -48,7 +55,6 @@ Ext.define('NextThought.view.course.forum.View',{
 		if(ntiid && this.currentNtiid !== ntiid){
 			this.currentNtiid = ntiid;
 			$AppConfig.service.getObject(ntiid,success,failure);
-
 		}else if(!ntiid){
 			delete this.currentNtiid;
 			this.removeAll(true);
@@ -57,6 +63,32 @@ Ext.define('NextThought.view.course.forum.View',{
 		this.hasForum = !!this.currentNtiid;
 	},
 
+	setTopic: function(ntiid){
+		var forumList;
+		if(!this.hasForum){
+			this.selectedTopic = ntiid;
+			return;
+		}
+
+		forumList = this.down('course-forum-list');
+
+		if(forumList){
+			if(forumList.store.loading){
+				this.storeMonitor = forumList.store.on({
+					destroyable: true,
+					single: true,
+					scope:  this,
+					'load': function(){
+						var r = forumList.store.getById(this.selectedTopic);
+
+						forumList.fireEvent('select', forumList.selModel, r);
+						Ext.destroy(this.storeMonitor);
+					}
+				});
+			}
+		}
+
+	},
 
 	onCourseChanged: function(pageInfo){
 		var l = ContentUtils.getLocation(pageInfo),
