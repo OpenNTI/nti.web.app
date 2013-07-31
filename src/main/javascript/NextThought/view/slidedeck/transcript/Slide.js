@@ -85,36 +85,45 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	onMouseOver: function(e){
-		var t = e.getTarget('.image-wrap', null, true),
-			box = t && t.down('.add-note-here'), me = this;
+		debugger;
+		var t = e.getTarget('.x-component-slide', null, true),
+			box = t && t.down('.add-note-here'), me = this,
+			current = this.el.parent().down('.note-here-control-box:not(.hidden)');
 
 		if(this.suspendMoveEvents || !t || !box){ return; }
 
 		clearTimeout(this.mouseEnterTimeout);
 
 		this.mouseLeaveTimeout = setTimeout(function () {
+			debugger;
 			box.down('.note-here-control-box').removeCls('hidden');
+			if(current && current !== box.down('.note-here-control-box')){
+				current.addCls('hidden');
+			}
 			me.activeCueEl = t;
 		}, 100);
 
 	},
 
 	onMouseOut: function(e){
-		if (this.suspendMoveEvents) {
-			return;
-		}
+		debugger;
+		var target = e.getTarget(null, null, true),
+			t = target && target.is('.x-component-slide'),
+			box = t && target.down('.add-note-here'), me =  this;
 
-		var target = e.getTarget('.image-wrap', null, true),
-			box = target && target.down('.add-note-here'), me =  this;
+		if(this.suspendMoveEvents || !target || !box){ return; }
 
-		clearTimeout(this.mouseLeaveTimeout);
+		//clearTimeout(this.mouseLeaveTimeout);
 	
-		this.mouseEnterTimeout = setTimeout(function(){
-			if(box){
-				box.down('.note-here-control-box').addCls('hidden');
-			}
-			delete me.activeCueEl;
-		}, 100);
+		if(!box.down('.note-here-control-box').hasCls('hidden')){
+			this.mouseEnterTimeout = setTimeout(function(){
+				debugger;
+				if(box && !box.down('.note-here-control-box').hasCls('hidden')){
+					box.down('.note-here-control-box').addCls('hidden');
+				}
+				delete me.activeCueEl;
+			}, 500);
+		}
 	},
 
 	buildUserDataStore: function(){
