@@ -266,8 +266,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		//Allow text selections
-		this.el.selectable();
+		this.el.unselectable();
 		this.on('transcript-ready', this.onViewReady, this);
 	},
 
@@ -413,7 +412,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		eid = endCue && endCue.getAttribute('cue-id');
 		cid = this.transcript.get('associatedVideoId');
 
-		return { startTime:startTime, endTime:endTime, range:range, startCueId:sid, endCueId:eid, containerId: cid, userDataStore: me.userDataStore };
+		return { startTime:startTime, endTime:endTime, range:range, startCueId:sid, endCueId:eid, containerId: cid, userDataStore: this.userDataStore };
 	},
 
 

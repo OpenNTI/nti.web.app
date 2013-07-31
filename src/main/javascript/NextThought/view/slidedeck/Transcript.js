@@ -110,6 +110,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	afterRender: function(){
 		this.callParent(arguments);
 		this.setupNoteOverlay();
+		this.el.unselectable();
 		if(this.hasSlides){
 			this.selectInitialSlide();
 		}
