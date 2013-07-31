@@ -191,6 +191,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			return;
 		}
 
+		this.showCurtain();
+
 		var p = this.player = Ext.widget({
 			xtype: 'content-video',
 			playlist: this.playlist,
@@ -203,6 +205,20 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			scope: p,
 			destroy: 'destroy'
 		});
+
+		this.mon(p,{
+			'player-command-play':'hideCurtain',
+			'player-command-stop':'showCurtain',
+			'player-command-pause':'showCurtain',
+			'player-error':'showCurtain'
+		});
+
+		this.relayEvents(p,[
+			'player-command-play',
+			'player-command-stop',
+			'player-command-pause',
+			'player-error'
+		]);
 	},
 
 	//allow querying using selector PATH (eg: "parent-xtype-container course-overview-ntivideo")
@@ -265,7 +281,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		if(this.player){
 			this.player.stopPlayback();
 		}
-		this.showCurtain();
 
 		if( this.curtainEl ){
 			this.curtainEl.setStyle({backgroundImage:p});
@@ -280,14 +295,14 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 	onCurtainClicked: function(e){
-		var m,t = m = this.getSelectionModel().getSelection()[0];
 		e.stopEvent();
-		if (!t || !this.player){
+
+		var m = this.getSelectionModel().getSelection()[0],
+			t = m && this.getStore().indexOf(m);
+
+		if (!m || t<0 || !this.player){
 			return;
 		}
-
-		t = this.getStore().indexOf(t);
-
 
 		if(e.getTarget('.launch-player')){
 			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId());
@@ -296,7 +311,5 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 		this.player.playlistSeek(t);
-		this.player.resumePlayback();
-		this.hideCurtain();
 	}
 });

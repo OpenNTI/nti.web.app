@@ -67,7 +67,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 		this.content = Ext.widget({
 			xtype: 'course-overview-video-section',
 			floatParent: this,
-			playerWidth: 587,
+			playerWidth: 711,
 			renderTo: this.el,
 			items: items,
 			cls: 'dashboard-videos',
@@ -83,5 +83,22 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 					]
 				}]})
 		});
+
+		this.mon(this.content,{
+			'player-command-play':'onPlayerPlay',
+			'player-command-stop':'onPlayerStop',
+			'player-command-pause':'onPlayerStop',
+			'player-error':'onPlayerStop'
+		});
+	},
+
+
+	onPlayerPlay: function(){
+		this.content.addCls('hide-list');
+	},
+
+
+	onPlayerStop: function(){
+		this.content.removeCls('hide-list');
 	}
 });

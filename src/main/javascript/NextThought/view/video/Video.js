@@ -167,7 +167,7 @@ Ext.define('NextThought.view.video.Video',{
 				height: this.playerHeight,
 				parentComponent: this
 			});
-			this.playerIds.youtube = this.id+'-youtube-video';
+			this.playerIds.youtube = this.players.youtube.id;
 		}
 		else if (!Ext.Array.contains(this.self.playerBlacklist, 'youtube')){
 			this.self.playerBlacklist.push('youtube');
@@ -177,9 +177,10 @@ Ext.define('NextThought.view.video.Video',{
 			el: Ext.get(this.el.down('.video-wrapper')),
 			parentId: this.id,
 			width: this.playerWidth,
-			height: this.playerHeight
+			height: this.playerHeight,
+			parentComponent: this
 		});
-		this.playerIds.html5 = this.id+'-native-video';
+		this.playerIds.html5 = this.players.html5.id;
 
 		this.players.none = {};
 		this.players.none.isReady = false;
@@ -238,7 +239,7 @@ Ext.define('NextThought.view.video.Video',{
 			if(!o || !Ext.isFunction(fn)){return null;}
 			return fn.apply(o,args);
 		}
-
+		this.fireEvent('player-command-'+command);
 		return call(t[command],t,args);
 	},
 
@@ -348,8 +349,9 @@ Ext.define('NextThought.view.video.Video',{
 			source = this.playlist[this.playlistIndex].activeSource().source;
 			this.maybeSwitchPlayers(this.activeVideoService);
 			this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
-			this.resumePlayback();
+			return this.resumePlayback();
 		}
+		return false;
 	},
 
 
