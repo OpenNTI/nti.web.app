@@ -119,14 +119,18 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
         var firstY = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent().getY();
         console.log("firstY:" + firstY);
 
-        var cancelButton = this.getEl().down('.cancel');
+        var cancelButton = this.getEl().down('.cancel'),
+            saveButton = this.getEl().down('.save');
 
         cancelButton.dom.addEventListener('touchstart', function(e){
-            console.log("cancel pushed");
-            console.log("firstY:" + firstY);
             me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
             cancelButton.dom.click();
-        }, this, {delay:100});
+        }, this);
+
+        saveButton.dom.addEventListener('touchstart', function(e){
+            me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
+            saveButton.dom.click();
+        }, this);
 
         var container = this,
             initialY = false;
@@ -160,6 +164,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             this.keyboardUp = false;
         }, this);
 
+        //TODO allow only scrolling as far as needed to see full editor.
         container.on('touchScroll', function(ele, deltaY) {
 
             var panel = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent();
