@@ -40,8 +40,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 	},
 
 	config: {
-		cols:1,
-		rows:1,
+		cols:2,
+		rows:2,
 		weight: 1,
 		lastModified: new Date(0),
 		locationInfo: null,

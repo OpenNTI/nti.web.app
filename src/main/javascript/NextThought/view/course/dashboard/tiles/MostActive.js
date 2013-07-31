@@ -15,8 +15,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 	config: {
-		cols: 1,
-		rows: 2,
+		cols: 2,
+		rows: 4,
 		weight: 9
 	},
 

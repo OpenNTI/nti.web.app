@@ -15,7 +15,7 @@
 .course-dashboard {
 	position: relative;
 	//1024 - 1165 width (200 - 233)
-	$gridSpacing: 6px;
+	$gridSpacing: 10px;
 
 	.grid-item {
 		@include tile-shadow;
@@ -25,14 +25,17 @@
 		//to see WIP cells.
 		background: rgba(255,0,0,0.6);
 
-		@for $i from 1 through 4 {
-			$s: (200px * $i) - $gridSpacing;
+		@for $i from 1 through 8 {
+			$s: (125px * $i) - $gridSpacing;
+			$h: (100px * $i) - $gridSpacing;
+			$m: (145px * $i) - $gridSpacing;
 
 			&.col-#{$i} {
 				width: $s;
-				@include experimental-value(width, calc(#{(20% * $i)} - #{$gridSpacing}));
+				max-width: $m;
+				@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
 			}
-			&.row-#{$i} { height: $s; }
+			&.row-#{$i} { height: $h; }
 		}
 	}
 }
@@ -40,7 +43,8 @@
 
 .dashboard-videos {
 	@include tile-shadow();
-
+	$videoWidth: 567px;
+	$videoHeight: 320px;
 	&,.body{
 		position: absolute;
 		top: 0; bottom: 0; left: 0; right: 0;
@@ -54,13 +58,13 @@
 		.video-container {
 			position: relative;
 			margin: 0 auto;
-			width: 533px;
-			height: 300px;
+			width: $videoWidth;
+			height: $videoHeight;
 		}
 
 		.curtain {
 			$playY: 43%;
-			$backSize: 932px;
+			$backSize: 860px;
 			position: absolute;
 			right: 0; left: 0;
 			top: 0; bottom: 0;
@@ -150,16 +154,20 @@
 		.screen {
 			position: absolute;
 			left: 0; top: 0; bottom: 0;
-			width: 533px;
+			width: $videoWidth;
 			overflow: hidden;
 			z-index: 2;
+
+			.video-wrapper {
+				background: $tertiary-grey;
+			}
 		}
 
 		.video-list{
 			@include scrollbar(#04232c, #0f2d35);
 			position: absolute;
 			left: 0;
-			top: 300px;
+
 			right: 0;
 			bottom: 0;
 			overflow: {
@@ -176,8 +184,8 @@
 				position: relative;
 				cursor: pointer;
 				color: #ebebeb;
-				font: italic 500 14px $font;
-				height: 96px;
+				font: italic 500 12px $font;
+				height: 70px;
 				width: 33%;
 				@include experimental-value(width, calc(100% / 3) );
 				overflow: hidden;
@@ -192,10 +200,9 @@
 				}
 
 				.poster {
+					width: 70px;
 					position: absolute;
-					top: 0; left: 0;
-					width: 90px;
-					height: 96px;
+					top: 0; left: 0; bottom: 0;
 					box-shadow: inset -1px 1px 0 0 rgba(255, 255, 255, 0.2),
 								inset -3px 0px 3px -2px rgba(0, 0, 0, 0.4);
 					background:{
@@ -205,8 +212,8 @@
 				}
 
 				.meta {
-					margin: 1px 0 0 90px;
-					padding: 18px 10px;
+					margin: 1px 0 0 70px;
+					padding: 10px;
 					overflow: hidden;
 					height: 100%;
 					@include experimental-value(height, calc(100% - 1px));
@@ -289,9 +296,12 @@
 
 .x-component-tile{
 	&.note-list .row,
-	&.topics-list .row,
+	&.topics-list .row {
+		padding: 15px;
+	}
+
 	&.content-link .meta {
-		padding: 14px 15px;
+		padding: 14px 15px 0;
 	}
 
 	&.note-list .row,
@@ -322,7 +332,7 @@
 	}
 
 	&.content-link {
-		min-height: 75px;
+		min-height: 76px;
 
 		a, a:link, a:visited, a:active {
 			outline: 0;

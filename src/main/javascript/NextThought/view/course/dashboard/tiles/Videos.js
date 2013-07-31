@@ -40,8 +40,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 	},
 
 	config: {
-		cols: 4,
-		rows: 2,
+		cols: 6,
+		rows: 4,
 		weight: 10,
 		sources: []
 	},
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 		this.content = Ext.widget({
 			xtype: 'course-overview-video-section',
 			floatParent: this,
-			playerWidth: 533,
+			playerWidth: 567,
 			renderTo: this.el,
 			items: items,
 			cls: 'dashboard-videos',
