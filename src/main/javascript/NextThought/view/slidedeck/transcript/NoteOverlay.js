@@ -90,6 +90,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		});
 	},
 
+	
+	destroy: function(){
+		this.callParent(arguments);
+		if(this.annotationManager.length > 0){
+			this.annotationManager.removeAll();
+		}
+	},
+
 
 	insertOverlay: function(){
 		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
