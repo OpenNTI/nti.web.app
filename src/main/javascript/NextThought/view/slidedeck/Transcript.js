@@ -218,7 +218,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				id: 'lineFilter',
 				filterFn: function(r){
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
-					return r.get('line') === line;
+					return r.get('pline')=== line;
 				}
 			});
 		}

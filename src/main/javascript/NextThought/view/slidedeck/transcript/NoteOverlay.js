@@ -206,6 +206,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
 			domRange, rect, line, domFrag, b, d;
 
+		rec = recStore.getById(rec.getId()) || rec;
+
 		if(this.isRecordAlreadyAdded(rec)){return;}
 
 		if(!anchorResolver){ anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver; }
@@ -233,7 +235,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		rect = RangeUtils.safeBoundingBoxForRange(domRange);
 		d = this.reader.getTargetEl().dom;
 		line = rect ? rect.top + d.scrollTop - d.offsetTop : 0;
-		rec.set('line', line);
+		rec.set('pline',line);
 
 		this.annotationManager.add({
 			id:rec.getId(),
@@ -312,6 +314,11 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	getAnnotationsAtLine: function(line){
 		return this.annotationManager.filterBy(function(item){
+			var rec = item.record,
+				s = item.store.getById(rec.getId());
+			if(s.get('pline') !== rec.get('pline')){
+				s.set('pline', rec.get('pline'));
+			}
 			return item.line === line;
 		});
 	}

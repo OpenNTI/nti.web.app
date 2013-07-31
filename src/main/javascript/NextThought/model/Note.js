@@ -48,6 +48,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'FavoriteGroupingField', defaultValue:'Note', persist: false},
 
 		{ name: 'line', type:'int', defaultValue:0, persist: false},
+		{ name: 'pline', type:'int', defaultValue:0, persist: false},
 		{ name: 'ReplyCount', type:'Synthetic', persist: false,
 			fn: function(r){
 				if(r.placeholder){
