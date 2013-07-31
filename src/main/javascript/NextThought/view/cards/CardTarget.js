@@ -44,14 +44,33 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		this.reader.getScroll().lock();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
-//		if(!Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'),'application/pdf')){
-//			alert('Your browser does not indicate that it supports viewing PDFs');
-//		}
+		if(Ext.isIE10m || !Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'),'application/pdf')){
+			this.add({
+				xtype:'box',
+				autoEl: {
+					tag: 'a',
+					href: data.href,
+					target: '_blank',
+					cls: 'no-support',
+					cn: [
+						{ html: 'Your browser does not support viewing this content with this application.' },
+						{ cn:[
+							{
+								tag: 'span', cls: 'link',
+								html: 'Click Here'
+							},
+							' to open it in another window'
+						]}
+					]
+				}
+			});
+			return;
+		}
 
-		this.iframe = this.add({
+		this.add({
 			xtype: 'box',
 			autoEl: {
-				tag: (Ext.isIE||Ext.isIE10) ? 'object' : 'iframe',
+				tag: Ext.isIE10m ? 'object' : 'iframe',
 				src: data.href,
 				data: data.href,
 				type: 'application/pdf',//TODO: figure out mimeType
@@ -103,6 +122,6 @@ Ext.define('NextThought.view.cards.CardTarget',{
 			range = doc.createRange();
 
 		range.selectNodeContents(this.contentElement);
-		return {range: range, rect: {top: 237}};
+		return {range: range, rect: {top: 267}};
 	}
 });

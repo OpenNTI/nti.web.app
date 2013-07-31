@@ -131,6 +131,27 @@ a{
 		box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
 		overflow: visible;
 
+		.no-support {
+			display: block;
+			position: absolute;
+			top:0; bottom: 0; left:0; right:0;
+
+			&, a { &, &:link, &:hover, &:visited{ text-decoration: none; } }
+
+			padding: 40% 2em;
+			text-align: center;
+			color: $secondary-grey;
+
+			span.link {
+				color: $primary-blue;
+			}
+
+			div:first-child {
+				color: $tertiary-grey;
+				font: normal 300 2em/4em "Open Sans Condensed", $font;
+			}
+		}
+
 		.x-ie &, .x-ie10 &{
 			z-index: -2;
 		}
