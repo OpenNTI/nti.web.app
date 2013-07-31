@@ -264,16 +264,22 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return s && s.findRecord('NTIID', r.get('NTIID'));
 		}
 
-		var cmps = Ext.Array.filter(this.query('slide-component'), fn),
+		var cmps = Ext.Array.filter(this.items.items, fn),
 			domFrag, slide, utils, b, node;
 
 		Ext.each(cmps, function(cmp){
-			domFrag = cmp.slide.get('dom-clone');
 			utils = cmp.getAnchorResolver();
-			b = utils.doesContentRangeDescriptionResolve(r.get('applicableRange'), domFrag);
-			if(b){
-				node = cmp.getContextDomNode();
-				return false;
+			if(cmp.slide){
+				domFrag = cmp.slide.get('dom-clone');
+				b = utils.doesContentRangeDescriptionResolve(r.get('applicableRange'), domFrag);
+				if(b){
+					node = cmp.getContextDomNode();
+					return false;
+				}
+			}
+			else{
+				node = RangeUtils.getContextAroundRange(r.get('applicableRange'), cmp.getDocumentElement(), cmp.getCleanContent(), r.get('ContainerId'));
+				if(node){ return false; }
 			}
 			return true;
 		});

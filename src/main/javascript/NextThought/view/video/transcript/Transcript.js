@@ -500,6 +500,16 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		}
 
 		this.currentCue = newCue;
+	},
+
+	getDocumentElement: function(){
+		console.log('should return doc element');
+		return this.el.dom.ownerDocument;
+	},
+
+
+	getCleanContent: function(){
+		return this.el.dom;
 	}
 
 });

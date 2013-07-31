@@ -36,9 +36,7 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	toDomRange: function(description, doc, cleanRoot, containerId){
 		var start = description.getStart() && description.getStart().seconds,
-			end = description.getEnd() && description.getEnd().seconds,
-			seriesId = description.getSeriesId(),
-			m = seriesId + '-cues', v, range, targetEl,
+			end = description.getEnd() && description.getEnd().seconds, range, targetEl,
 			utils = NextThought.view.slidedeck.transcript.AnchorResolver;
 
 		//Conversions.
@@ -46,18 +44,9 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 		end = utils.fromMillSecondToSecond(end);
 
 		if(cleanRoot){
-			v = Ext.fly(cleanRoot).select('.content-video-transcript[data-desc]');
-			v.each(function(e){
-				// NOTE: one transcript can be divided into many views, since we're dividing transcripts based on slides.
-				// So, find all subviews that have the same description 'm' as ours. Then, within a transcript view,
-				// we'll get the first cue that matches ours. We could do more and check if its endTime matches ours as well.
-				// To be refactored later; ~PM.
-				if(e.getAttribute('data-desc') === m && Ext.fly(e).down('.cue[cue-start='+start+']')){
-					targetEl = Ext.fly(e).down('.cue[cue-start='+start+']');
-					return false;
-				}
-			});
-
+			// Since we're anchoring to specific exact cue, we can find the node but checking the cue with the same start as ours.
+			// TODO: we should probably search within time range.
+			targetEl = Ext.fly(cleanRoot).down('.cue[cue-start='+start+']');
 			if(targetEl){
 				range = document.createRange();
 				range.selectNodeContents(targetEl.dom);
