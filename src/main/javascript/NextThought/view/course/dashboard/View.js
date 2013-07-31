@@ -6,8 +6,6 @@ Ext.define('NextThought.view.course.dashboard.View',{
 		'NextThought.view.course.dashboard.tiles.*'
 	],
 
-	GRID_WIDTH: 5,
-
 
 	onCourseChanged: function(pageInfo){
 		if(!pageInfo.isPartOfCourse()){
