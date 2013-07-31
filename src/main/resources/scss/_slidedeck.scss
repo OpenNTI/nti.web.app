@@ -1106,6 +1106,9 @@ $experimental-support-for-svg: true;
 				&.hidden{
 					display: none;
 				}
+
+				@include icon('comment-small-dark',$position: absolute, $top:-4px);
+				&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
 			}
 		}
 
@@ -1152,6 +1155,9 @@ $experimental-support-for-svg: true;
 					&.hidden{
 						display: none;
 					}
+
+					@include icon('comment-small-dark',$position: absolute, $top:-4px);
+					&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
 				}
 			}
 
