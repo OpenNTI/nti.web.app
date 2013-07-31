@@ -1,6 +1,8 @@
 Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	extend: 'Ext.container.Container',
 
+	debugging: false,
+
 	requires:[
 		'NextThought.util.MasonryPacker'
 	],
@@ -125,7 +127,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 			var p = m.position, x,y,
 				xx = p[0] + i.cols,
 				yy = p[1] + i.rows;
-			console.groupCollapsed('Tile '+j);
+			if(this.debugging){console.groupCollapsed('Tile '+j);}
 			//current block will extend past last column, it must wrap
 			if(xx>columns){
 				p[1] += a[j-1].rows;
@@ -141,13 +143,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 					if(m[y][x]){
 						console.error('p:', p, 'xy:',[x,y], 'sz:', [i.cols, i.rows], 'overlap!');
 					} else {
-						console.log('p:', p, 'xy:',[x,y], 'sz:', [i.cols, i.rows]);
+						if(this.debugging){console.log('p:', p, 'xy:',[x,y], 'sz:', [i.cols, i.rows]);}
 						m[y][x] = true;
 					}
 				}
 			}
 
-			console.groupEnd();
+			if(this.debugging){console.groupEnd();}
+
 			p[0] += i.cols;
 			//We've filled the row...begin a new one
 			if(p[0]>=columns){
@@ -156,15 +159,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 			}
 		}
 
-		console.groupCollapsed('Filling Matrix');
+		if(this.debugging){console.groupCollapsed('Filling Matrix');}
+		if(this.debugging){console.groupCollapsed('Iteration');}
 
-		console.groupCollapsed('Iteration');
-		Ext.each(items,fillMatrix);
-		console.groupEnd();
+		Ext.each(items,fillMatrix,this);
 
-		console.log(m.toString());
-
-		console.groupEnd();
+		if(this.debugging){console.groupEnd();}
+		if(this.debugging){console.log(m.toString());}
+		if(this.debugging){console.groupEnd();}
 
 		//See what's filled
 		function itr(row,i,a){
