@@ -158,6 +158,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+		var c = this.up('{isOwnerLayout("card")}');
+		if( c ){
+			c.on('deactivate','pausePlayback',this);
+		}else{
+			Ext.log.warn('No Card parent for '+this.id);
+		}
 		this.getSelectionModel().select(0);
 		//this.bodyEl.mask('Loading...');
 	},
@@ -169,6 +175,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			//load 1 item, filer by notes... read filteredTotal-something-or-other.
 //		}
 		//on failure call resetCommentCount
+	},
+
+
+	pausePlayback: function(){
+		if( this.player && this.player.isPlaying() ){
+			this.player.pausePlayback();
+		}
 	},
 
 
@@ -196,6 +209,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		var p = this.player;
 		return (p && [p]) || [];
 	},
+
+
 
 
 	resetCommentCount: function(a,r){
@@ -264,8 +279,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 	onCurtainClicked: function(e){
+		var m,t = m = this.getSelectionModel().getSelection()[0];
 		e.stopEvent();
-		var m, t = m = this.getSelectionModel().getSelection()[0];
 		if (!t || !this.player){
 			return;
 		}

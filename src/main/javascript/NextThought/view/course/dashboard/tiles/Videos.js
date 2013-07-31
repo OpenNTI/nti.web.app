@@ -66,6 +66,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 
 		this.content = Ext.widget({
 			xtype: 'course-overview-video-section',
+			floatParent: this,
 			playerWidth: 533,
 			renderTo: this.el,
 			items: items,

@@ -33,6 +33,13 @@ Ext.define('NextThought.overrides.Component', {
 		var style = this.el.dom.style;
         style.left = 'auto';
         style.right = (x === null) ? 'auto' : x + 'px';
+	},
+
+
+
+	isOwnerLayout: function(type){
+		var o = this.ownerLayout;
+		return o && o.type === type;
 	}
 
 },function(){
