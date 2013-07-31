@@ -181,7 +181,9 @@ Ext.define( 'NextThought.view.Views', {
 			s = '.main-view-tab[data-view-id="{0}"]',
 			tab = t.down(Ext.String.format(s,id)) || t.down(Ext.String.format(s,id+'?'));
 		this.tabs.select('.main-view-tab').removeCls('selected');
-		tab.addCls('selected');
+		if( tab ){
+			tab.addCls('selected');
+		}
 	},
 
 

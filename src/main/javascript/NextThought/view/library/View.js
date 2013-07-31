@@ -206,10 +206,14 @@ Ext.define( 'NextThought.view.library.View', {
 		this.fireEvent('update-tabs',this);
 
 		if(userInitiatedNav){
-			this.getLayout().setActiveItem(this.courseBook);
+			try {
+				this.getLayout().setActiveItem(this.courseBook);
+			}catch(e){
+				console.warn(e.stack || e.message);
+			}
 		}
 
-		this.courseBook.layout.setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
+		this.courseBook.getLayout().setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
 
 		var l = ContentUtils.getLocation(pageInfo),
 			toc;
