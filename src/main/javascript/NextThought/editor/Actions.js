@@ -462,6 +462,9 @@ Ext.define('NextThought.editor.Actions', {
             v = n && n.nodeValue;
         }
 
+        if(e.getKey() === e.SPACE){
+        	e.stopPropagation();
+        }
 
 		if(e.getKey() === e.TAB && n){
 			if(modKey){
