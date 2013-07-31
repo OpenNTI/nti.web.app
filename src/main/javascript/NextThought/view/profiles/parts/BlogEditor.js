@@ -6,6 +6,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	enableTitle: true,
 	enableVideo: true,
 	enableShareControls: true,
+    keyboardUp: false,
+    amountScrolled: 0,
 
 	cls: 'blog-editor',
 	headerTplOrder: '{title}{toolbar}',
@@ -67,9 +69,29 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
              this.titleEl.focus();
              }, this, {delay:550});*/
 
+            var titleInput = this.getEl().down('.title > :first');
+            titleInput.on('focus', function(){
+                this.keyboardUp = true;
+
+            }, this);
+
+            this.titleEl.on('focus', function(){
+                this.keyboardUp = true;
+            }, this);
+
+            titleInput.on('blur', function(){
+                this.keyboardUp = false;
+
+            }, this);
+
+            this.titleEl.on('blur', function(){
+                this.keyboardUp = false;
+            }, this);
+
+
             //Close navigation menu when clicking on title
             //TODO find a way to keep it from popping up in the first place.
-            var titleInput = this.getEl().down('.title > :first');
+            //var titleInput = this.getEl().down('.title > :first');
             titleInput.on('focus', function(){
                 console.log("titleInput focused");
                 Ext.Element.select('.x-panel-navigation-menu').hide();
@@ -103,10 +125,40 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             console.log("cancel pushed");
             console.log("firstY:" + firstY);
             me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
+            cancelButton.dom.click();
         }, this, {delay:100});
 
         var container = this,
             initialY = false;
+
+
+        var addPeopleField = Ext.get(Ext.query('.recipients')[0]).down('input'),
+            tagsField = Ext.get(Ext.query('.post-view')[0]).down('.tags').down('input'),
+            messageField = Ext.get(Ext.get(Ext.query('.content')[0]));
+
+        addPeopleField.on('focus', function(){
+            this.keyboardUp = true;
+        }, this);
+
+        tagsField.on('focus', function(){
+            this.keyboardUp = true;
+        }, this);
+
+        messageField.on('focus', function(){
+            this.keyboardUp = true;
+        }, this);
+
+        addPeopleField.on('blur', function(){
+            this.keyboardUp = false;
+        }, this);
+
+        tagsField.on('blur', function(){
+            this.keyboardUp = false;
+        }, this);
+
+        messageField.on('blur', function(){
+            this.keyboardUp = false;
+        }, this);
 
         container.on('touchScroll', function(ele, deltaY) {
 
@@ -138,18 +190,30 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             }  */
             panel.setY(newY, false);
 
+            this.amountScrolled += deltaY;
+
         }, this);
 
         container.on('touchElementIsScrollable', function(ele, callback) {
             callback(true);
         });
 
-        //TODO account for the keyboard up. elements at different place.
         container.on('touchElementAt', function(x,y, callback) {
             Ext.Element.select('.x-panel-navigation-menu').hide();
-            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            var element;
+            console.log("x:" + x + " y:" + y);
+            if(this.keyboardUp){
+                console.log("keyboard is up");
+                //debugger;
+                element = Ext.getDoc().dom.elementFromPoint(x, y-396);
+            }
+            else{
+                console.log("keyboard is down");
+                //debugger;
+                element = Ext.getDoc().dom.elementFromPoint(x, y);
+            }
             callback(element);
-        });
+        },this);
 
     },
 
