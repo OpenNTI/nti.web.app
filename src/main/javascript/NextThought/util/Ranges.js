@@ -382,7 +382,7 @@ Ext.define('NextThought.util.Ranges',{
 			console.error(Globals.getError(er));
 		}
 		return rect;
-	},
+	}
 
 
 },function(){
