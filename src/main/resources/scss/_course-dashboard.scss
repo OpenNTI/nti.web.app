@@ -392,13 +392,16 @@
 
 	&.active-users {
 		position: relative;
-		overflow: hidden;
+		//overflow: hidden;
 		z-index: 1;
 
 		&::before{
+			background: #000;
 			display: block;
 			content: '';
+			top: 0; left: 0; right: 0;
 			position: absolute;
+			padding-top: 75%;
 		}
 
 		&::after {
