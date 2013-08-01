@@ -20,8 +20,6 @@ Ext.define('NextThought.util.media.HTML5Player',{
 
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
-		this.enableBubble(['player-error']);
-		this.parent = config.parentComponent;
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId+'-native-video';
@@ -31,8 +29,6 @@ Ext.define('NextThought.util.media.HTML5Player',{
 
 		this.playerSetup();
 	},
-
-	getBubbleParent: function(){ return this.parent; },
 
 
 //	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
@@ -44,7 +40,35 @@ Ext.define('NextThought.util.media.HTML5Player',{
 		console.log(this.id);
 		this.el = Ext.get(this.id);
 		this.player = Ext.getDom(this.id);
-		this.el.on('error','playerError',this);
+		this.mon(this.el,{
+			'click':'togglePlayback',
+			'error':'playerError',
+
+//			'stalled':'',
+//			'waiting':'',
+//			'canplaythrough':'',
+//			'loadedmetadata':'',
+//			'loadeddata':'',
+//
+//			'timeupdate':'',
+//
+			'ended':'notify',
+			'pause':'notify',
+//			'playing':'',
+			'play':'notify'
+		});
+	},
+
+
+	togglePlayback: function(){
+		var p = this.player;
+		p[p.paused?'play':'pause']();
+	},
+
+
+	notify: function(e){
+		console.debug(this.id + ' - ' + e.type);
+		this.fireEvent('player-event-'+e.type,this.id,this);
 	},
 
 
