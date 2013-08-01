@@ -161,7 +161,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			}
 
 			me.cueList = cueList;
-			this.notifyReady();
+
+			//If we don't defer this the line tracking doens't work...
+			Ext.defer(me.notifyReady, 1, me);
 		}
 
 		var me = this,
@@ -245,7 +247,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			this.onViewReady();
 		}
 		else{
-			this.on('presentation-component-ready', this.onViewReady, this);
+			this.on('presentation-part-ready', this.onViewReady, this);
 		}
 	},
 
