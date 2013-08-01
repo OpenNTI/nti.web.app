@@ -74,6 +74,14 @@ Ext.define('NextThought.model.PlaylistItem', {
 		}
 	},
 
+
+	usesService: function(service){
+		return Ext.Array.contains(
+				Ext.Array.pluck(this.get('sources'),'service'),
+				service);
+	},
+
+
 	getSources: function(service){
 		var i = [];
 		Ext.each(this.data.sources,function(o){
