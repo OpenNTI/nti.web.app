@@ -115,7 +115,7 @@ Ext.define('NextThought.view.video.Video',{
 		this.players = {};
 		Ext.applyIf(this.self, {playerBlacklist: []});
 
-		this.playlistIndex = -1;
+		this.playlistIndex = 0;
 
 		this.renderData = Ext.apply(this.renderData||{},this.data);
 
@@ -355,7 +355,7 @@ Ext.define('NextThought.view.video.Video',{
 	playlistSeek: function(newIndex){
 		var source;
 		if ((newIndex >= 0) && (newIndex < this.playlist.length) ){
-			if(this.playlistIndex !== newIndex){
+			if(this.playlistIndex !== newIndex || this.activeVideoService === 'none'){
 				this.playlistIndex = newIndex;
 				this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
 				while( Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
