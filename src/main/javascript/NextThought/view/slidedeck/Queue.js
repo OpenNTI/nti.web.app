@@ -99,7 +99,15 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	    if(isFeature('transcript-presentation') && this.ownerCt.hasSlides && !this.ownerCt.slidesReady){
 		    this.mon(this.ownerCt,{
-			    'finished-loading-slides':Ext.bind(this.setStartingSlide,this,arguments),
+			    'presentation-parts-ready':function(sender, cmps, startOnId){
+					var start;
+					if(startOnId){
+						start = me.store.findRecord('NTIID', startOn, 0, false, true, true);
+						if(start){
+							me.setStartingSlide(start);
+						}
+					}
+				},
 			    single: true
 		    });
 		    return;

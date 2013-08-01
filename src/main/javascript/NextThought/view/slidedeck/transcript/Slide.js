@@ -13,6 +13,8 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 	ui: 'slide',
 
+	isPresentationPartReady: false,
+
 	renderSelectors: {
 		slideImage: 'img.slide',
 		createNoteEl: '.add-note-here'
@@ -27,13 +29,28 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		this.enableBubble(['register-records', 'unregister-records']);
 	},
 
+	notifyReady: function(){
+		if(this.isPresentationPartReady){
+			return;
+		}
+		this.isPresentationPartReady = true;
+		this.fireEvent('presentation-part-ready', this);
+	},
+
+
+	containerIdForData: function(){
+		return this.slide && this.slide.get('ContainerId');
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var slide = this.slide;
+		var slide = this.slide, i, me = this;
 		if(slide){
-			this.mon(this.slideImage,'load', this.finishedLoadingImage, this);
+			i = this.slideImage.dom;
+			i.onload = Ext.bind(me.finishedLoadingImage, me);
+			i.onerror = Ext.bind(me.finishedLoadingImage, me);
 			this.slideImage.set({src: slide.get('image')});
 
 			this.mon(this.el, {
@@ -51,10 +68,7 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	},
 
 	finishedLoadingImage: function(){
-		var me = this;
-		Ext.defer(function(){
-			me.updateLayout();
-		},1, me);
+		this.notifyReady();
 	},
 
 	openNoteEditor: function(e){

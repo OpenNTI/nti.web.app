@@ -20,7 +20,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	initComponent: function(){
-		this.enableBubble('finished-loading-slides');
+		this.enableBubble('presentation-parts-ready');
 
 		//TODO: this needs to be more centralized.
 		if(this.slideStore){
@@ -150,11 +150,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.ownerCt.hasSlides = this.hasSlides;
+
 		this.setupNoteOverlay();
 		this.el.unselectable();
-		if(this.hasSlides){
-			this.selectInitialSlide();
-		}
+		this.el.mask('Loading....', 'loading');
+		this.maybeLoadData();
 		this.mon(this.el, {
 			scope:this,
 			'mousedown': 'mayBeHideAnnotationView'
@@ -162,56 +164,79 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
+	getPartComponents: function(){
+		return Ext.Array.filter(this.items.items, function(p){return p!==undefined;});
+	},
+
+
+	maybeLoadData: function(){
+		var partCmps = this.getPartComponents(),
+			readyMap = {}, me = this;
+
+		function maybeDone(){
+			var done = true;
+			Ext.Object.each(readyMap, function(k, v){
+				if(v === false){
+					done = false;
+				}
+				return done;
+			});
+
+			if(done){
+				me.ownerCt.slidesReady = true;
+
+				if(me.hasSlides){
+					me.selectInitialSlide();
+				}
+
+				me.el.unmask();
+
+				me.fireEvent('presentation-parts-ready', me,  me.getPartComponents(), me.startOn);
+				me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
+			}
+		}
+
+		Ext.Array.each(partCmps, function(p){
+
+			//Just in case something we aren't expecting sneaks in.
+			if(p.isPresentationPartReady === undefined){
+				return;
+			}
+
+			if(!p.$presentationUUID){
+				p.$presentationUUID = guidGenerator();
+			}
+			readyMap[p.$presentationUUID] = p.isPresentationPartReady;
+			if(p.isPresentationPartReady === false){
+				this.mon(p, 'presentation-part-ready', function(sender){
+					readyMap[sender.$presentationUUID] = true;
+					maybeDone();
+				});
+			}
+		}, this);
+		maybeDone();
+	},
+
+
 	selectInitialSlide: function(){
 		var startOn = this.startOn,
-			s = this.query('slide-component'),
-			images = [], me = this,
+			s = this.query('slide-component'), me = this,
 			targetImageEl;
 
-
-		me.ownerCt.hasSlides = true;
 
 		Ext.each(s, function(i){
 			var id = i.slide.get('NTIID'), img;
 			if(id === startOn){
 				targetImageEl = i.el.down('img.slide');
 			}
-			img = i.el.down('img.slide');
-			if(img && !Ext.getDom(img).done){
-				images.push(img);
-			}
 		});
 
-
-		this.el.mask('Loading....', 'loading');
-
-		function maybeDoneLoad(){
-			console.log(images.length+' images left');
-			if(images.length === 0){
-				me.ownerCt.slidesReady = true;
-				me.fireEvent('finished-loading-slides', me, me.query('slide-component'));
-				me.el.unmask();
-				if(targetImageEl){
-					console.log('should scroll into view: ', targetImageEl.dom);
-					Ext.defer(function(){
-						targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
-					}, 10, me);
-				}
-			}
+		if(targetImageEl){
+			console.log('should scroll into view: ', targetImageEl.dom);
+			Ext.defer(function(){
+				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+			}, 10, me);
 		}
-
-		Ext.each(images, function(i){
-			i.dom.onload = function(){
-				Ext.Array.remove(images, i);
-				maybeDoneLoad();
-			};
-			i.dom.onerror = function(){
-				Ext.Array.remove(images, i);
-				maybeDoneLoad();
-			};
-		});
-		//Just in case no images for some reason
-		maybeDoneLoad();
 	},
 
 	selectSlide: function(slide){

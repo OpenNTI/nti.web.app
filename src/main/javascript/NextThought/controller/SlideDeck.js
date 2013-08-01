@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 					'start-media-player':'launchMediaPlayer'
 				},
 				'slidedeck-transcript': {
-					'finished-loading-slides': 'loadDataForSlides'
+					'load-presentation-userdata': 'loadDataForPresentation'
 				}
 			}
 		});
@@ -72,36 +72,48 @@ Ext.define('NextThought.controller.SlideDeck',{
 	},
 
 
-	loadDataForSlides: function(sender, slideCmps){
-		var containers = {};
-		Ext.Array.each(slideCmps, function(sCmp){
-			var slide = sCmp.slide;
-			if(slide){
-				var c = slide.get('ContainerId');
-				if(Ext.isArray(containers[c])){
-					containers[c].push(sCmp);
+	loadDataForPresentation: function(sender, cmps){
+		var containers = {}, containerSettingsMap = {};
+		Ext.Array.each(cmps, function(cmp){
+			var containerId = Ext.isFunction(cmp.containerIdForData) ? cmp.containerIdForData() : null;
+
+			if(Ext.isObject(containerId)){
+				var object = containerId, props = {};
+				containerId = object.containerId
+				Ext.Object.each(object, function(k,v){
+					if( k !== 'containerId'){
+						props[k] = v;
+					}
+				})
+				containerSettingsMap[containerId] = props;
+			}
+
+			if(containerId){
+				if(Ext.isArray(containers[containerId])){
+					containers[containerId].push(cmp);
 				}
 				else{
-					containers[c] = [sCmp];
+					containers[containerId] = [cmp];
 				}
 			}
 		});
 		console.log('Need to load data for containers', containers);
 
 		function finish(store, records, success){
-			var sCmps = containers[store.containerId];
+			var cmps = containers[store.containerId];
 			console.debug('Finished load for container', store.containerId);
-			console.log('Need to push records', success && records ? records.length : 0, 'to components', sCmps);
-			sender.bindStoreToComponents(store, sCmps);
+			console.log('Need to push records', success && records ? records.length : 0, 'to components', cmps);
+			sender.bindStoreToComponents(store, cmps);
 		}
 
 		Ext.Object.each(containers, function(cid){
-			var store;
+			var store, props;
 			if(sender.hasPageStore(cid)){
 				store = sender.getPageStore(cid);
 			}
 			else{
 				store = this.createStoreForContainer(cid);
+				Ext.apply(store, containerSettingsMap[cid] || {});
 				sender.addPageStore(cid, store);
 			}
 

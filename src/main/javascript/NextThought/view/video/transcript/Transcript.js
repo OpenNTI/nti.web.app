@@ -12,6 +12,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	//	ui: 'content-slidevideo',
 	cls: 'content-video-transcript',
 
+	isPresentationPartReady: false,
 
 	statics: {
 		processTranscripts: function(c) {
@@ -52,8 +53,26 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	initComponent: function(){
 		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
-		this.enableBubble(['jump-video-to', 'transcript-ready', 'register-records', 'unregister-records']);
+		this.enableBubble(['jump-video-to', 'presentation-part-ready', 'register-records', 'unregister-records']);
 		this.loadTranscript();
+	},
+
+
+	notifyReady: function(){
+		if(this.isPresentationPartReady){
+			return;
+		}
+		this.isPresentationPartReady = true;
+		this.fireEvent('presentation-part-ready', this);
+	},
+
+
+	containerIdForData: function(){
+		var cid = this.transcript && this.transcript.get('associatedVideoId');
+		if(!cid){
+			return null;
+		}
+		return {containerId: cid, doesNotParticipateWithFlattenedPage: true};
 	},
 
 
@@ -83,57 +102,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	buildUserDataStore: function(){
-		var containerId = this.transcript.get('associatedVideoId'),
-			filter = this.getUserDataTimeFilter(),
-			me = this, url, store;
-
-		function finish(store, records){
-			// Apply filter to know which user data belong belong within the timing of this transcript.
-			console.log('transcript userdata store: ', store);
-			if(!store){ return; }
-			if(!Ext.isEmpty(filter) && Ext.isFunction(filter)){
-				store.filter([{filterFn:filter}]);
-			}
-			if(store.getCount() > 0){
-				me.fireEvent('register-records', store, store.getRange(), me);
-			}
-			me.userDataStore = store;
-			me.fireEvent('listens-to-page-stores', me, {
-				scope: me,
-				add: 'onStoreEventsAdd',
-				remove: 'onStoreEventsRemove'
-			});
-		}
-
-		if(this.hasPageStore(containerId)){
-			store = this.getPageStore(containerId);
-		}
-		else{
-			url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
-			store = NextThought.store.PageItem.make(url, containerId,true);
-			/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
-			store.doesNotShareEventsImplicitly = false;
-			store.doesNotParticipateWithFlattenedPage = true;
-			Ext.apply(store.proxy.extraParams,{
-				accept: NextThought.model.Note.mimeType,
-				filter: 'TopLevel'
-			});
-			me.addPageStore(containerId, store);
-		}
-
-		me.mon(store, 'load', finish, me, {single:true});
-		store.load();
-	},
-
-
-	onStoreEventsAdd:function(store, records){
-		this.fireEvent('register-records', store, records, this);
-	},
-
-
-	onStoreEventsRemove: function(store, records){
-		this.fireEvent('unregister-records', store, records, this);
+	bindToStore: function(store){
+		this.userDataStore = store;
 	},
 
 
@@ -185,16 +155,13 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			cueList = me.groupByTimeInterval(cueList, 30);
 			me.store = me.buildStore(cueList, me.getTimeRangeFilter());
 			me.bindStore(me.store);
-			Ext.defer(function(){
-				me.fireEvent('transcript-ready');
-			}, 1, me);
-
 			// Save the content and hopefully we won't have to load it again.
 			if(Ext.isEmpty(me.transcript.get('content'))){
 				me.transcript.set('content', text);
 			}
 
 			me.cueList = cueList;
+			this.notifyReady();
 		}
 
 		var me = this,
@@ -272,17 +239,20 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-
 		this.el.unselectable();
-		this.on('transcript-ready', this.onViewReady, this);
+
+		if(this.isPresentationPartReady){
+			this.onViewReady();
+		}
+		else{
+			this.on('presentation-component-ready', this.onViewReady, this);
+		}
 	},
 
 
 	onViewReady: function(){
 		var me = this, desc;
 		me.transcriptReady = true;
-
-		me.buildUserDataStore();
 
 		me.mon(me.el.select('.timestamp-container'),{
 			scope: me,
