@@ -395,6 +395,12 @@
 		overflow: hidden;
 		z-index: 1;
 
+		&::before{
+			display: block;
+			content: '';
+			position: absolute;
+		}
+
 		&::after {
 			.x-ie9n & {
 				display: none;

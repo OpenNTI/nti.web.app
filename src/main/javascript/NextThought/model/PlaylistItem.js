@@ -3,12 +3,16 @@
 Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
 
+	requires: [
+		'NextThought.model.converters.VideoSources'
+	],
+
 	fields: [
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},
 		{name: 'end', type: 'float', defaultValue: -1.0},
 		{name: 'sourceIndex', type: 'int', defaultValue: 0},
-		{name: 'sources', type: 'auto'},
+		{name: 'sources', type: 'VideoSources'},
 		{name: 'dom-clone', type: 'auto'},
 		{name: 'NTIID', type:'string'},
 		{name: 'transcripts', type:'auto'},
@@ -25,7 +29,11 @@ Ext.define('NextThought.model.PlaylistItem', {
 					return false;
 				}
 				for (i = a.length-1; i >= 0; i--){
-					if( a[i] !== b[i]){
+					if(Ext.isObject(a)){
+						return Ext.Object.equal(a,b);
+					}
+
+					if( a[i] !== b[i] ){
 						return false;
 					}
 				}

@@ -79,19 +79,50 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 
 
 	onSummaryLoad: function(resp){
-		var json = Ext.decode(resp.responseText,true) || {},
-			users = [], me = this;
+		var items = (Ext.decode(resp.responseText,true) || {}).Items || [],
+			users = [],
+			resolvedUsers = [],
+			me = this;
 
-		function pluckUsers(i){ if(i){users.push(i.Username);} }
+		function pluckUsers(i){ if(i){users.push(i.user||i.Username);} }
 
-		Ext.each(json.Items||[],pluckUsers);
+		function byTotals(a,b){
+			var aN = a.UsersName || '',
+				bN = b.UsersName || '';
+			a = a.Total;
+			b = b.Total;
+			if(a!==b){
+				return a<b ? -1 : 1;
+			}
 
-		UserRepository.getUser(users,function(u){
+			return aN.localeCompare(bN);
+		}
+
+		Ext.each(items,pluckUsers);
+
+		UserRepository.getUser(users, function(u){
+			function apply(i,x){
+				if(!u[x] || i.Username !== u[x].getId()){
+					console.error('bad mapping');
+					return;
+				}
+				Ext.apply(i,{
+					user: u[x],
+					usersName: u[x].getName()
+				});
+			}
+
+			Ext.each(items,apply);
+			Ext.Array.sort(items,byTotals);
+			users = [];
+			Ext.each(items,pluckUsers);
+
 			me.store = Ext.data.Store({
 				model: 'NextThought.model.User',
 				proxy: 'memory',
-				data: u
+				data: users.slice(4)
 			});
+
 			me.view.bindStore(me.store);
 			me.view.getSelectionModel().select(0);
 		});

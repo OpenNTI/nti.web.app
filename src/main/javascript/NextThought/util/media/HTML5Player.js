@@ -70,15 +70,21 @@ Ext.define('NextThought.util.media.HTML5Player',{
 
 	load: function(source, offset){
 		var sourceTpl = Ext.DomHelper.createTemplate({tag: 'source', src: '{src}', type: '{type}'}),
-			player = this.player;
+			player = this.player,
+			i = 0,
+			len = (source && source.length) || 0, src;
+
 		// Remove any sources that may be there
 		if( player.innerHTML ){
 			player.innerHTML = '';
 			player.load();
 		}
 
-		sourceTpl.append(player, {src: location.protocol+source[0], type: 'video/mp4'});
-		sourceTpl.append(player, {src: location.protocol+source[1], type: 'video/webm'});
+		for(i=0; i<len; i++){
+			src = source[i].source;
+			src = /^\/\//i.test(src) ? (location.protocol+src) : src;
+			sourceTpl.append(player, {src: src, type: source[i].type}, false);
+		}
 
 		player.load();
 
