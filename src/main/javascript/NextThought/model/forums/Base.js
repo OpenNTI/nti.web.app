@@ -28,13 +28,10 @@ Ext.define('NextThought.model.forums.Base',{
 		//Because the View is tied to the store and its events, any change to
 		// records trigger a refresh. :)  So we don't have to impl. any special logic filling in. Just replace the
 		// Creator string with the user model and presto!
-		store.on('load',this.fillInUsers,this);
+		StoreUtils.fillInUsers(store);
 
 		return store;
 	},
-
-
-	fillInUsers: StoreUtils.fillInUsers,
 
 
 	getParentHref: function(){
