@@ -115,7 +115,7 @@ Ext.define('NextThought.view.video.Video',{
 		this.players = {};
 		Ext.applyIf(this.self, {playerBlacklist: []});
 
-		this.playlistIndex = 0;
+		this.playlistIndex = -1;
 
 		this.renderData = Ext.apply(this.renderData||{},this.data);
 
