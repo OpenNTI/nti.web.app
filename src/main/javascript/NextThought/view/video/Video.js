@@ -335,20 +335,22 @@ Ext.define('NextThought.view.video.Video',{
 	playlistSeek: function(newIndex){
 		var source;
 		if ((newIndex >= 0) && (newIndex < this.playlist.length) ){
-			this.playlistIndex = newIndex;
-			this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
-			while( Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
-				if(!this.playlist[this.playlistIndex].useNextSource()){
-					this.activeVideoService = 'none';
-					this.currentVideoId = null;
-					this.maybeSwitchPlayers(this.activeVideoService);
-					return;
-				}
+			if(this.playlistIndex !== newIndex){
+				this.playlistIndex = newIndex;
 				this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+				while( Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
+					if(!this.playlist[this.playlistIndex].useNextSource()){
+						this.activeVideoService = 'none';
+						this.currentVideoId = null;
+						this.maybeSwitchPlayers(this.activeVideoService);
+						return;
+					}
+					this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+				}
+				source = this.playlist[this.playlistIndex].activeSource().source;
+				this.maybeSwitchPlayers(this.activeVideoService);
+				this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
 			}
-			source = this.playlist[this.playlistIndex].activeSource().source;
-			this.maybeSwitchPlayers(this.activeVideoService);
-			this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
 			return this.resumePlayback();
 		}
 		return false;
