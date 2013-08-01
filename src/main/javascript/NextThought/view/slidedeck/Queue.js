@@ -99,7 +99,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	    if(isFeature('transcript-presentation') && this.ownerCt.hasSlides && !this.ownerCt.slidesReady){
 		    this.mon(this.ownerCt,{
-			    'finished-loading-images':Ext.bind(this.setStartingSlide,this,arguments),
+			    'finished-loading-slides':Ext.bind(this.setStartingSlide,this,arguments),
 			    single: true
 		    });
 		    return;

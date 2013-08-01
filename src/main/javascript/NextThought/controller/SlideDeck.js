@@ -18,6 +18,9 @@ Ext.define('NextThought.controller.SlideDeck',{
 			'component':{
 				'*':{
 					'start-media-player':'launchMediaPlayer'
+				},
+				'slidedeck-transcript': {
+					'finished-loading-slides': 'loadDataForSlides'
 				}
 			}
 		});
@@ -53,5 +56,58 @@ Ext.define('NextThought.controller.SlideDeck',{
 			transcript: transcript,
 			autoShow: true
 		});
+	},
+
+
+	createStoreForContainer: function(containerId){
+		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+			store = NextThought.store.PageItem.make(url, containerId, true);
+
+		Ext.apply(store.proxy.extraParams,{
+			accept: NextThought.model.Note.mimeType,
+			filter: 'TopLevel'
+		});
+
+		return store;
+	},
+
+
+	loadDataForSlides: function(sender, slideCmps){
+		var containers = {};
+		Ext.Array.each(slideCmps, function(sCmp){
+			var slide = sCmp.slide;
+			if(slide){
+				var c = slide.get('ContainerId');
+				if(Ext.isArray(containers[c])){
+					containers[c].push(sCmp);
+				}
+				else{
+					containers[c] = [sCmp];
+				}
+			}
+		});
+		console.log('Need to load data for containers', containers);
+
+		function finish(store, records, success){
+			var sCmps = containers[store.containerId];
+			console.debug('Finished load for container', store.containerId);
+			console.log('Need to push records', success && records ? records.length : 0, 'to components', sCmps);
+			sender.bindStoreToComponents(store, sCmps);
+		}
+
+		Ext.Object.each(containers, function(cid){
+			var store;
+			if(sender.hasPageStore(cid)){
+				store = sender.getPageStore(cid);
+			}
+			else{
+				store = this.createStoreForContainer(cid);
+				sender.addPageStore(cid, store);
+			}
+
+			store.on('load', finish, this, {single: true});
+			store.load();
+
+		}, this);
 	}
 });

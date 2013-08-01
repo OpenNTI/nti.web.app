@@ -16,9 +16,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	cls:'transcript-view',
 	items:[],
 
+	lineFilterId: 'plinefilter',
+
 
 	initComponent: function(){
-		this.enableBubble('finished-loading-images');
+		this.enableBubble('finished-loading-slides');
 
 		//TODO: this needs to be more centralized.
 		if(this.slideStore){
@@ -30,8 +32,47 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.hasSlides = false;
 		}
 		this.callParent(arguments);
+
+		this.cmpMap = {};
+
+		this.fireEvent('uses-page-stores', this);
+
+		this.fireEvent('listens-to-page-stores', this, {
+			scope: this,
+			add: 'onStoreEventsAdd',
+			remove: 'onStoreEventsRemove'
+		});
 	},
 
+
+	bindStoreToComponents: function(store, cmps){
+
+		this.cmpMap[store.containerId] = cmps;
+
+		Ext.Array.each(cmps, function(cmp){
+			this.fireEvent('register-records', store, store.getRange(), cmp);
+			cmp.bindToStore(store);
+		});
+	},
+
+	onStoreEventsAdd:function(store, records){
+		var cmps = this.cmpMap[store.containerId || ''];
+		if(cmps){
+			Ext.Array.each(cmps, function(c){
+				this.fireEvent('register-records', store, records, c);
+			});
+		}
+	},
+
+
+	onStoreEventsRemove: function(store, records){
+		var cmps = this.cmpMap[store.containerId || ''];
+		if(cmps){
+			Ext.Array.each(cmps, function(c){
+				this.fireEvent('register-records', store, records, c);
+			});
+		}
+	},
 
 	setupSingleTranscript: function(transcript){
 		var items = [];
@@ -148,7 +189,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			console.log(images.length+' images left');
 			if(images.length === 0){
 				me.ownerCt.slidesReady = true;
-				me.fireEvent('finished-loading-images');
+				me.fireEvent('finished-loading-slides', me, me.query('slide-component'));
 				me.el.unmask();
 				if(targetImageEl){
 					console.log('should scroll into view: ', targetImageEl.dom);
@@ -211,11 +252,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		StoreUtils.fillInUsers(s,s.getRange());
 
-		s.removeFilter('lineFilter');
+		s.removeFilter(this.lineFilterId);
 		if(line){
 			console.log('filtering by line: ', line);
 			s.addFilter({
-				id: 'lineFilter',
+				id: this.lineFilterId,
 				filterFn: function(r){
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('pline')=== line;
@@ -251,7 +292,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if(this.annotationView.store !== store){
 			// NOTE: Make sure we remove lineFilter before this is unbound.
 			// otherwise, we end up in a funky state.
-			this.annotationView.store.removeFilter('lineFilter');
+			this.annotationView.store.removeFilter(this.lineFilterId);
 			this.annotationView.bindStore(store);
 		}
 		else{
@@ -267,12 +308,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	destroy: function(){
-		this.callParent(arguments);
 		if(this.annotationView && this.annotationView.store){
 			//Make sure we clear the line filter, since this store could be bound to another view.
-			this.annotationView.store.removeFilter('lineFilter');
+			this.annotationView.store.removeFilter(this.lineFilterId);
 			this.annotationView.destroy();
 		}
+		this.callParent(arguments);
+
 	},
 
 

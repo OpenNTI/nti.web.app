@@ -83,7 +83,7 @@ Ext.define('NextThought.store.FlatPage',{
 				if(!r || !(r instanceof NextThought.model.Note)){ return; }
 
 				if(i !== -1 && r !== me.getAt(i)){
-					console.warn('DUPLICATE NTIID', r.getData(), me.getAt(i).getData());
+					console.warn('DUPLICATE NTIID', r, me.getAt(i));
 					return;
 				}
 

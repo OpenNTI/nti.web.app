@@ -54,9 +54,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		var me = this;
 		Ext.defer(function(){
 			me.updateLayout();
-			if(me.slide){
-				me.buildUserDataStore();
-			}
 		},1, me);
 	},
 
@@ -121,54 +118,9 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		}
 	},
 
-	buildUserDataStore: function(){
-		var containerId = this.slide.get('ContainerId'),
-			url, store,
-			me = this;
-
-		function finish(store, records){
-			if(!store){ return; }
-
-			if(store.getCount() > 0){
-				me.fireEvent('register-records', store, records, me);
-			}
-			me.userDataStore = store;
-			me.fireEvent('listens-to-page-stores', me, {
-				scope: me,
-				add: 'onStoreEventsAdd',
-				remove: 'onStoreEventsRemove'
-			});
-		}
-
-		if(this.hasPageStore(containerId)){
-			store = this.getPageStore(containerId);
-		}
-		else{
-			url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
-			store = NextThought.store.PageItem.make(url, containerId,true);
-			/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
-			store.doesNotShareEventsImplicitly = true;
-			Ext.apply(store.proxy.extraParams,{
-				accept: NextThought.model.Note.mimeType,
-				filter: 'TopLevel'
-			});
-			me.addPageStore(containerId, store);
-		}
-
-		me.mon(store, 'load', finish, me, {single:true});
-		store.load();
+	bindToStore: function(store){
+		this.userDataStore = store;
 	},
-
-
-	onStoreEventsAdd:function(store, records){
-		this.fireEvent('register-records', store, records, this);
-	},
-
-
-	onStoreEventsRemove: function(store, records){
-		this.fireEvent('unregister-records', store, records, this);
-	},
-
 
 	getAnchorResolver: function(){
 		return Anchors;
