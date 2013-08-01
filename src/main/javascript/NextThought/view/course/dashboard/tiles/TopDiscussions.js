@@ -28,7 +28,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 				k = k.toString();
 
 				if(!m[k]){
-					m[k] = this.create({locationInfo: locationInfo, topicNtiid: id, lastModified: courseNodeRecord.get('Date')});
+					m[k] = this.create({locationInfo: locationInfo, topicNtiid: id, lastModified: courseNodeRecord.get('date')});
 				}
 
 				}

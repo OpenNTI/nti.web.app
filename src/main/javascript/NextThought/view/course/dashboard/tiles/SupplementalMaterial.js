@@ -16,7 +16,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 				return null; 
 			}
 			
-			return this.create({locationInfo: locationInfo, itemNodes: refs});
+			return this.create({locationInfo: locationInfo, itemNodes: refs, lastModified: courseNodeRecord.get('date')});
 		}
 
 	},

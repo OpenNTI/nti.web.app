@@ -79,8 +79,16 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 	adjustWeights: function(items){
 		Ext.each(items,function(i){
-			i.weight = (i.weight||1);
-			if(i.rows>1){i.weight += 0.000001;}
+			var w = weight = ((i.getWeight()&&i.getWeight())||i.weight||1);
+			if(i.rows>2){w += (i.rows*0.005);}
+			if(i.cols>2){w += (i.cols*0.005);}
+
+			if(i.setWeight){
+				i.setWeight(w);
+			}
+			else {
+				i.weight = w;
+			}
 		});
 	},
 
