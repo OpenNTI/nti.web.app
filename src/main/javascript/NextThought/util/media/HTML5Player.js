@@ -1,5 +1,13 @@
 Ext.define('NextThought.util.media.HTML5Player',{
 
+	statics:{
+		kind:'video',
+		type: 'html5',
+		valid: function(){
+			return !!document.createElement('video').canPlayType;
+		}
+	},
+
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},

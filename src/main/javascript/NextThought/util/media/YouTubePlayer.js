@@ -2,6 +2,14 @@
 /*globals Globals, NextThought, YT */
 Ext.define('NextThought.util.media.YouTubePlayer',{
 
+	statics:{
+		kind:'video',
+		type: 'youtube',
+		valid: function(){
+			return Boolean(window.YT);
+		}
+	},
+
 	requires: [
 		'NextThought.util.Globals'
 	],

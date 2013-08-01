@@ -6,8 +6,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	requires: [
 		'NextThought.util.Globals',
-		'NextThought.util.media.HTML5Player',
-		'NextThought.util.media.YouTubePlayer',
+		'NextThought.util.media.*',
 		'NextThought.model.PlaylistItem'
 	],
 
@@ -82,22 +81,31 @@ Ext.define('NextThought.view.video.Video',{
 	initComponent: function(){
 		Ext.applyIf(this, {playlist: []});
 
-		this.playlist.getIds = function(s){
-			var i = [];
-			Ext.each(this,function(o){
-				i.push.apply(i, o.getSources(s));
-			});
-			return i;
-		};
+		Ext.apply(this.playlist,{
+			getIds: function(s){
+				var i = [], o, x, l = this.length;
+				for(x=0;x<l;x++){
+					o = this[x];
+					i.push.apply(i, o.getSources(s));
+				}
+				return i;
+			},
+
+			usesService: function(s){
+				var x = this.length-1;
+				for(x; x>=0; x--){
+					if(this[x].usesService(s)){
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
 
 		this.callParent(arguments);
 
-		this.commandQueue = {
-			'youtube': [],
-			'vimeo': [],
-			'html5': [],
-			'none': []
-		};
+		this.commandQueue = {};
 
 		this.playerIds = {
 			'vimeo': this.id+'-vimeo-video',
@@ -159,28 +167,29 @@ Ext.define('NextThought.view.video.Video',{
 
 	playerSetup: function(){
 		console.log('Initializing the players.');
-		if(window.YT){
-			this.players.youtube = new NextThought.util.media.YouTubePlayer({
-				el: Ext.get(this.el.down('.video-wrapper')),
-				parentId: this.id,
-				width: this.playerWidth,
-				height: this.playerHeight,
+		var me = this,
+			blacklist = this.self.playerBlacklist;
+
+		Ext.Object.each(NextThought.util.media,function(name,cls){
+			if(cls.kind!=='video'){return;}
+			if(!cls.valid() || !me.playlist.usesService(cls.type)){
+				if (!Ext.Array.contains(blacklist, cls.type)){
+					blacklist.push(cls.type);
+				}
+				return;
+			}
+
+			var p = me.players[cls.type] = cls.create({
+				el: Ext.get(me.el.down('.video-wrapper')),
+				parentId: me.id,
+				width: me.playerWidth,
+				height: me.playerHeight,
 				parentComponent: this
 			});
-			this.playerIds.youtube = this.players.youtube.id;
-		}
-		else if (!Ext.Array.contains(this.self.playerBlacklist, 'youtube')){
-			this.self.playerBlacklist.push('youtube');
-		}
 
-		this.players.html5 = new NextThought.util.media.HTML5Player({
-			el: Ext.get(this.el.down('.video-wrapper')),
-			parentId: this.id,
-			width: this.playerWidth,
-			height: this.playerHeight,
-			parentComponent: this
+			me.playerIds[cls.type] = p.id;
 		});
-		this.playerIds.html5 = this.players.html5.id;
+		this.initializedPlayers = Ext.Object.getKeys(this.players);
 
 		this.players.none = {};
 		this.players.none.isReady = false;
@@ -195,7 +204,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	playerReady: function(player){
 		var q = this.commandQueue[player];
-		while(q.length>0){
+		while(q && q.length>0){
 			Ext.callback(this.issueCommand,this, q.shift());
 		}
 	},
@@ -231,6 +240,9 @@ Ext.define('NextThought.view.video.Video',{
 	issueCommand: function(target, command, args){
 		var t = this.players[target];
 		if(!t || !t.isReady){
+			if(!this.commandQueue[target]){
+				this.commandQueue[target] = [];
+			}
 			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
@@ -367,10 +379,11 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 	cleanup: function(){
-		this.issueCommand('html5','pause');
-		this.issueCommand('youtube','pause');
-		this.issueCommand('html5','cleanup');
-		this.issueCommand('youtube','cleanup');
+		var me = this;
+		Ext.each(me.initializedPlayers,function(service){
+			me.issueCommand(service,'pause');
+			me.issueCommand(service,'cleanup');
+		});
 	}
 },
 	function(){
