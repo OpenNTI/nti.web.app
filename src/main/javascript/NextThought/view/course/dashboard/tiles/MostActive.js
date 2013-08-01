@@ -97,7 +97,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			return aN.localeCompare(bN);
 		}
 
-		Ext.each(items,pluckUsers);
+		function notMe(r){
+			return !isMe(r);
+		}
+
+		Ext.each(Ext.Array.filter(items,notMe),pluckUsers);
 
 		UserRepository.getUser(users, function(u){
 			function apply(i,x){
@@ -119,7 +123,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			me.store = Ext.data.Store({
 				model: 'NextThought.model.User',
 				proxy: 'memory',
-				data: users.slice(0,8)//limit 9
+				data: users.slice(0,9)//limit 9
 			});
 
 			me.view.bindStore(me.store);
