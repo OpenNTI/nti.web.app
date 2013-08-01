@@ -183,9 +183,17 @@ Ext.define('NextThought.view.video.Video',{
 				el: Ext.get(me.el.down('.video-wrapper')),
 				parentId: me.id,
 				width: me.playerWidth,
-				height: me.playerHeight,
-				parentComponent: this
+				height: me.playerHeight
 			});
+
+			me.on('destroy','destroy',
+				me.relayEvents(p,[
+					'player-ready',
+					'player-error',
+					'player-event-play',
+					'player-event-pause',
+					'player-event-ended'
+				]));
 
 			me.playerIds[cls.type] = p.id;
 		});

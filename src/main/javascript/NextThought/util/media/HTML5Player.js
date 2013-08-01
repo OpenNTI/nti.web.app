@@ -1,10 +1,10 @@
 Ext.define('NextThought.util.media.HTML5Player',{
 
 	statics:{
-		kind:'video',
+		kind:'audio',
 		type: 'html5',
 		valid: function(){
-			return !!document.createElement('video').canPlayType;
+			return !!document.createElement('audio').canPlayType;
 		}
 	},
 
@@ -13,8 +13,8 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	},
 
 	playerTpl: Ext.DomHelper.createTemplate({
-		tag: 'video', cls: 'video', name: 'video', id: '{id}',
-		controls: '', 'width': '{width}', 'height': '{height}'
+		tag: 'audio', cls: 'audio', name: 'audio', id: '{id}',
+		controls: ''
 	}),
 
 
@@ -22,7 +22,7 @@ Ext.define('NextThought.util.media.HTML5Player',{
 		this.mixins.observable.constructor.call(this);
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
-		this.id = config.parentId+'-native-video';
+		this.id = config.parentId+'-native-'+this.self.kind;
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;

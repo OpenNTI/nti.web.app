@@ -24,8 +24,6 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
-		this.enableBubble(['player-ready', 'player-error']);
-		this.parent = config.parentComponent;
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId+'-youtube-video';
 		this.player = null;
@@ -35,9 +33,6 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		this.playerSetup();
 	},
 
-	getBubbleParent: function(){
-		return this.parent;
-	},
 
 	playerSetup: function(){
 		this.isReady = false;
