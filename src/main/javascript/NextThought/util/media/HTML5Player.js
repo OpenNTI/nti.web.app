@@ -60,9 +60,11 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	},
 
 
-	togglePlayback: function(){
-		var p = this.player;
-		p[p.paused?'play':'pause']();
+	togglePlayback: function(e){
+		var p = this.player, y = e.getY(), rect = p.getBoundingClientRect();
+		if( (rect.bottom - y) > 40 ){
+			p[p.paused?'play':'pause']();
+		}
 	},
 
 
