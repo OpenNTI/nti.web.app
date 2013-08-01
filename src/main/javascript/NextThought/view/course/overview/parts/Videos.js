@@ -216,6 +216,9 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			'player-command-play':'hideCurtain',
 			'player-command-stop':'showCurtain',
 			'player-command-pause':'showCurtain',
+			'player-event-play':'hideCurtain',
+			'player-event-ended':'showCurtain',
+			'player-event-pause':'showCurtain',
 			'player-error':'showCurtain'
 		});
 
@@ -223,6 +226,9 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			'player-command-play',
 			'player-command-stop',
 			'player-command-pause',
+			'player-event-play',
+			'player-event-pause',
+			'player-event-ended',
 			'player-error'
 		]);
 	},

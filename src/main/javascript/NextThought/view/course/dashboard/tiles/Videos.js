@@ -88,6 +88,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			'player-command-play':'onPlayerPlay',
 			'player-command-stop':'onPlayerStop',
 			'player-command-pause':'onPlayerStop',
+			'player-event-play':'onPlayerPlay',
+			'player-event-pause':'onPlayerStop',
+			'player-event-ended':'onPlayerStop',
 			'player-error':'onPlayerStop'
 		});
 	},
