@@ -58,8 +58,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				}
 			}
 		});
-
-		this.on('destroy', 'destroy', this);
 	},
 
 
