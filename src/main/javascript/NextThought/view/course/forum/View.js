@@ -21,22 +21,39 @@ Ext.define('NextThought.view.course.forum.View',{
 		}
 	},
 
+	typePrefix: 'course-forum',
 
 	onViewPushed: function(me,viewPushed){
+		var type;
+
 		if(viewPushed.xtype === 'forums-topic' ){
-			this.fireEvent('set-active-topic', viewPushed.record.getId());
+			type = 'topic';
+		}else if(viewPushed.xtype === 'course-forum-topic-list'){
+			type = 'forum';
+		}
+
+		if(type){
+			this.fireEvent('set-active-state', type, viewPushed.record.getId());
 		}
 	},
 
 
 	onViewPopped: function(me,viewPopped){
-		if(viewPopped.xtype === 'forums-topic'){
-			this.fireEvent('set-active-topic', undefined);
+		var type;
+		
+		if(viewPopped.xtype === 'forums-topic' ){
+			type = 'topic';
+		}else if(viewPopped.xtype === 'course-forum-topic-list'){
+			type = 'forum';
+		}
+
+		if(type){
+			this.fireEvent('set-active-state', type, undefined);
 		}
 	},
 
 	
-	setForum: function(ntiid){
+	setBoard: function(ntiid){
 		var me = this;
 
 		function success(o){
@@ -44,9 +61,10 @@ Ext.define('NextThought.view.course.forum.View',{
 				store = Ext.getStore(id) || o.buildContentsStore();
 
 			me.store = store;
-			me.add({xtype: 'course-forum-list', record:o, store:store});
-			if(me.selectedTopic){
-				me.setTopic(me.selectedTopic);
+			me.add({xtype: 'course-forum-board', record:o, store:store});
+			debugger;
+			if(me.currentForum){
+				me.restoreState(me.currentForum, me.currentTopic);
 			}
 		}
 
@@ -60,34 +78,104 @@ Ext.define('NextThought.view.course.forum.View',{
 			this.removeAll(true);
 		}
 
-		this.hasForum = !!this.currentNtiid;
+		this.hasBoard = !!this.currentNtiid;
 	},
 
-	setTopic: function(ntiid){
-		var forumList;
-		if(!this.hasForum){
-			this.selectedTopic = ntiid;
+	restoreState: function(forum, topic){
+		//if there is a valid state to restore there has to be a forum
+		if(!forum){
+			return;
+		}
+		//wait until the board is loaded
+		if(!this.hasBoard){
+			this.currentForum = forum;
+			this.currentTopic = topic;
+			return;
+		}
+		var top = this.peek();
+
+		if(!top){
+			console.error("We don't even have a board loaded?!?!?!?!");
+		}
+		
+		if(top.xtype === 'course-forum-board'){
+			this.setForum(forum, topic);
 			return;
 		}
 
-		forumList = this.down('course-forum-list');
-
-		if(forumList){
-			if(forumList.store.loading){
-				this.storeMonitor = forumList.store.on({
-					destroyable: true,
-					single: true,
-					scope:  this,
-					'load': function(){
-						var r = forumList.store.getById(this.selectedTopic);
-
-						forumList.fireEvent('select', forumList.selModel, r);
-						Ext.destroy(this.storeMonitor);
-					}
-				});
+		if(top.xtype === 'course-forum-topic-list'){
+			if(top.record.getId() === forum){
+				console.log('Forum is already here?!?!?!?!?');
+				this.setForum(undefined, topic);
+				return;
 			}
 		}
 
+		if(top.xtype === 'forums-topic'){
+			if(top.record.getId() === topic){
+				console.log('Forum and topic are already here?!?!?');
+				return;
+			}
+		}
+
+		this.popView();
+		this.restoreState(forum, topic);
+	},
+
+	
+	setForum: function(forum, topic){
+		var me = this;
+		if(!forum){
+			this.setTopic(topic);
+			return;
+		}
+
+		$AppConfig.service.getObject(forum, function(record){
+			var storeId = record.getContentsStoreId(),
+				store = Ext.getStore(storeId) || record.buildContentsStore(),
+				cmp = Ext.widget('course-forum-topic-list',{
+					record: record,
+					store: store
+				});
+			me.add(cmp);
+			me.setTopic(topic);
+		}, function(){
+			console.log('Failed to load forum:',forum);
+		});
+	},
+
+	setTopic: function(topic){
+		var me = this;
+		if(!topic){
+			return;
+		}
+
+		$AppConfig.service.getObject(topic, function(record){
+			var storeId = record.getContentsStoreId(),
+				store = Ext.getStore(storeId) || record.buildContentsStore(),
+				top = me.peek(),
+				cmp = Ext.widget('forums-topic',{
+					record: record,
+					store: store
+				});
+
+			if(top.xtype === 'course-forum-topic-list'){
+				me.add(cmp);
+			}else{
+				me.topicMonitor = me.mon({
+					destroyable: true,
+					single: true,
+					scope: me,
+					'add': function(v, cmp){
+						if(cmp.xtype === 'course-forum-topic-list'){
+							Ext.destroy(me.topicMonitor);
+							me.add(cmp);
+						}
+					}
+				});
+			}
+
+		})
 	},
 
 	onCourseChanged: function(pageInfo){
@@ -100,16 +188,32 @@ Ext.define('NextThought.view.course.forum.View',{
 			course = toc && toc.querySelector('course');
 		}
 		
-		this.setForum(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
+		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
 	}
 });
 
+Ext.define('NextThought.view.course.forum.Board',{
+	extend: 'NextThought.view.forums.Board',
+	alias: 'widget.course-forum-board',
 
+	requires: [
+		'NextThought.view.forums.Forum'
+	],
 
+	selModel: {
+		suppressPushState: true
+	},
 
-Ext.define('NextThought.view.course.ForumList',{
+	onHeaderClick: function(e){
+		if(e.getTarget('.path')){
+			return;
+		}
+	}
+});
+
+Ext.define('NextThought.view.course.forum.ForumList',{
 	extend: 'NextThought.view.forums.Forum',
-	alias: 'widget.course-forum-list',
+	alias: 'widget.course-forum-topic-list',
 
 	requires: [
 		'NextThought.view.forums.Topic'
@@ -121,11 +225,10 @@ Ext.define('NextThought.view.course.ForumList',{
 
 	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
-			return;
+			this.fireEvent('pop-view', this);
 		}
-
-		if(e.getTarget('.new-topic')){
-			this.fireEvent('new-topic', this);
+		else if(e.getTarget('.new-topic')){
+			this.fireEvent('new-topic',this);
 		}
 	}
 });

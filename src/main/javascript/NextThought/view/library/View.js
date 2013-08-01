@@ -79,7 +79,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 		this.mon(this.courseForum,{
 			scope: this,
-			'set-active-topic': 'updateActiveTopic'
+			'set-active-state': 'updateActiveState'
 		});
 
 		this.on({
@@ -89,8 +89,10 @@ Ext.define( 'NextThought.view.library.View', {
 		});
 	},
 
-	updateActiveTopic: function(ntiid){
-		this.pushState({currentTopic : ntiid});
+	updateActiveState: function(type,ntiid){
+		var state = {};
+		state['current_'+type] = ntiid
+		this.pushState(state);
 	},
 
 
@@ -141,7 +143,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 		if(this.tabs){
 
-			if(!this.courseForum.hasForum){
+			if(!this.courseForum.hasBoard){
 				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-forum';});
 			}
 
@@ -276,8 +278,9 @@ Ext.define( 'NextThought.view.library.View', {
 	restore: function(state){
 		var ntiid = state.library.location,
 			tab = state.library.activeTab,
-			topic = state.library.currentTopic;
-
+			topic = state.library.current_topic,
+			forum = state.library.current_forum;
+			
 		try{
 			this.setActiveTab(tab);
 			if(!ntiid){
@@ -285,9 +288,8 @@ Ext.define( 'NextThought.view.library.View', {
 				return;
 			}
 
-			if(topic){
-				this.courseForum.setTopic(topic);
-			}
+			this.courseForum.restoreState(forum, topic);
+
 			this.reader.setLocation(ntiid,null,true);
 			if(this.reader.ntiidOnFrameReady){
 				this.up('master-view').down('library-collection').updateSelection(ntiid,true);

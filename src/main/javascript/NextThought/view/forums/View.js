@@ -15,6 +15,7 @@ Ext.define( 'NextThought.view.forums.View', {
 	cls: 'forums-view',
 	layout: 'stack',
 	title: 'NextThought: Forums',
+	typePrefix: 'forums',
 
 	initComponent: function(){
 		this.callParent(arguments);

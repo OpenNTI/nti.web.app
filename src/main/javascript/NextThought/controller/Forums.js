@@ -594,12 +594,12 @@ Ext.define('NextThought.controller.Forums', {
 
 	showLevel: function(selModel, level, record, cfg, storeCfg, extraParams, viewContainer){
 		var c = this.getStackContainer(selModel || viewContainer),
-			store, cmpCfg, storeId = record.getContentsStoreId();
-
+			store, cmpCfg, storeId = record.getContentsStoreId(),
+			prefix = c.typePrefix || 'forums';
 
 		store = Ext.getStore(storeId) || record.buildContentsStore(storeCfg, extraParams);
 
-		cmpCfg = Ext.applyIf({xtype: 'forums-'+level+'-list', record: record, store: store}, cfg || {});
+		cmpCfg = Ext.applyIf({xtype: prefix+'-'+level+'-list', record: record, store: store}, cfg || {});
 		c.add(cmpCfg);
 	},
 
