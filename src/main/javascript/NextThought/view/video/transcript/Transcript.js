@@ -68,7 +68,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	registerAnnotations: function(){
-		this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+		if(this.userDataStore){
+			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+		}
 	},
 
 

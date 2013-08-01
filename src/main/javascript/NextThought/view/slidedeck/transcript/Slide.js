@@ -39,7 +39,9 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	registerAnnotations: function(){
-		this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+		if(this.userDataStore){
+			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+		}
 	},
 
 
