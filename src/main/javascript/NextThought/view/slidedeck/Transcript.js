@@ -322,6 +322,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	getCleanContent: Ext.emptyFn,
 
 
+	getScrollTarget: function(){
+		return this.getTargetEl().dom || this.el.dom;
+	},
+
+
 	getViewerHooks: function(){
 		return {
 			'resizeView': function(){

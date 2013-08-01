@@ -498,7 +498,9 @@ Ext.define('NextThought.controller.UserData', {
 
 		this.currentPageStores[id] = store;
 
-		this.flatPageStore.bind(store);
+		if( !store.doesNotParticipateWithFlattenedPage ){
+			this.flatPageStore.bind(store);
+		}
 		store.on({
 			scope: this,
 			load: StoreUtils.fillInUsers,

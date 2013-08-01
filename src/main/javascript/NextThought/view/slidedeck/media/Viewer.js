@@ -36,6 +36,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	]),
 
 
+	componentLayout: 'natural',
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
+
 	renderSelectors: {
 		headerEl:'.header',
 		videoPlayerEl: '.video-player'
@@ -48,7 +52,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// Add the transcript.
 		this.add({
 			xtype:'slidedeck-transcript',
-			transcript:this.transcript
+			transcript:this.transcript,
+			xhooks: {
+				getScrollTarget: function(){
+					return this.ownerCt.getTargetEl().dom;
+				}
+			}
 		});
 
 		this.on('destory', 'destroy', this);

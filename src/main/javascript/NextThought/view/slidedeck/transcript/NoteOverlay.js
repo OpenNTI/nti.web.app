@@ -241,7 +241,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}
 
 		rect = RangeUtils.safeBoundingBoxForRange(domRange);
-		d = this.reader.getTargetEl().dom;
+
+		//Get the scroll target.
+		d = this.reader.getScrollTarget();
 		line = rect ? rect.top + d.scrollTop - d.offsetTop : 0;
 		rec.set('pline',line);
 
@@ -324,7 +326,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		return this.annotationManager.filterBy(function(item){
 			var rec = item.record,
 				s = item.store.getById(rec.getId());
-			if(s.get('pline') !== rec.get('pline')){
+			if(s && (s.get('pline') !== rec.get('pline'))){
 				s.set('pline', rec.get('pline'));
 			}
 			return item.line === line;

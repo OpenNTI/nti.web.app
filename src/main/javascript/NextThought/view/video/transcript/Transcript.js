@@ -52,10 +52,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	initComponent: function(){
 		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
+		this.enableBubble(['jump-video-to', 'transcript-ready', 'register-records', 'unregister-records']);
 		this.loadTranscript();
-
-		this.addEvents('jump-video-to', 'transcript-ready', 'register-records');
-		this.enableBubble(['jump-video-to', 'transcript-ready', 'register-records']);
 	},
 
 
@@ -115,7 +113,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
 			store = NextThought.store.PageItem.make(url, containerId,true);
 			/** {@see NextThought.controller.UserData#addPageStore} for why we set this flag. */
-			store.doesNotShareEventsImplicitly = true;
+			store.doesNotShareEventsImplicitly = false;
+			store.doesNotParticipateWithFlattenedPage = true;
 			Ext.apply(store.proxy.extraParams,{
 				accept: NextThought.model.Note.mimeType,
 				filter: 'TopLevel'
@@ -387,7 +386,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		}
 		var xy = e.getXY(),
 			sel = window.getSelection(),
-			range = sel.getRangeAt(0).cloneRange(), cueData = {},
+			range = (sel.rangeCount > 0) && (sel.getRangeAt(0).cloneRange()),
+			cueData = {},
 			viewBox = this.getBox(), pos;
 
 		// If no selection, return.
