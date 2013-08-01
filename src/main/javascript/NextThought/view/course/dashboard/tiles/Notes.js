@@ -84,6 +84,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 			pageSize: 10,
 			proxyOverride: {
 				extraParams: {
+					filter: 'TopLevel',
+					sortOn:'lastModified',
+					sortOrder:'descending',
 					accept: NextThought.model.Note.mimeType
 				}
 			}
