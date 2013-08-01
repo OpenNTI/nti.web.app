@@ -158,12 +158,18 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var c = this.up('{isOwnerLayout("card")}');
-		if( c ){
-			c.on('deactivate','pausePlayback',this);
-		}else{
-			Ext.log.warn('No Card parent for '+this.id);
+
+		function stopOnCardChange(cmp, me){
+			var c = cmp.up('{isOwnerLayout("card")}');
+			me = me||cmp;
+			if( c ){
+				me.mon(c,'deactivate','pausePlayback');
+				stopOnCardChange(c,me);
+			}
 		}
+
+		stopOnCardChange(this);
+
 		this.getSelectionModel().select(0);
 		//this.bodyEl.mask('Loading...');
 	},
