@@ -62,7 +62,6 @@ Ext.define('NextThought.view.course.forum.View',{
 
 			me.store = store;
 			me.add({xtype: 'course-forum-board', record:o, store:store});
-			debugger;
 			if(me.currentForum){
 				me.restoreState(me.currentForum, me.currentTopic);
 			}
