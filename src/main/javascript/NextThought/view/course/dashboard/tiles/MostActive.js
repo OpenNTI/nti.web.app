@@ -81,7 +81,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	onSummaryLoad: function(resp){
 		var items = (Ext.decode(resp.responseText,true) || {}).Items || [],
 			users = [],
-			resolvedUsers = [],
 			me = this;
 
 		function pluckUsers(i){ if(i){users.push(i.user||i.Username);} }
@@ -120,7 +119,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			me.store = Ext.data.Store({
 				model: 'NextThought.model.User',
 				proxy: 'memory',
-				data: users.slice(4)
+				data: users.slice(0,8)//limit 9
 			});
 
 			me.view.bindStore(me.store);
