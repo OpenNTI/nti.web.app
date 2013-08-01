@@ -41,9 +41,9 @@ Ext.define('NextThought.view.video.Video',{
 //			{ cls:'description', html:'{description}' }
 //		]},
 		{ cls: 'video-wrapper', cn: [
-			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
-				frameBorder: 0, scrolling: 'no', seamless: true
-			},
+//			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
+//				frameBorder: 0, scrolling: 'no', seamless: true
+//			},
 			{ cls: 'video placeholder', name: 'video', id: '{id}-curtain'}
 		]}
 	]),
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.video.Video',{
 		this.commandQueue = {};
 
 		this.playerIds = {
-			'vimeo': this.id+'-vimeo-video',
+//			'vimeo': this.id+'-vimeo-video',
 			'none': this.id+'-curtain'
 		};
 

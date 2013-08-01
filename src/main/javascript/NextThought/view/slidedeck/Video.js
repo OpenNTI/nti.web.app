@@ -15,10 +15,10 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [
-			{
-				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
-				frameBorder: 0, scrolling: 'no', seamless: true
-			},
+//			{
+//				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
+//				frameBorder: 0, scrolling: 'no', seamless: true
+//			},
 			{
 				cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 			}
