@@ -248,14 +248,18 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		// NOTE: annotations that we get may not share the same store
 		// since right now we mix transcript with slides and slides have a different store.
 		// However, we're making an assumptions that records on the same line WILL share the same store.
-		var s = annotations.getAt(0).store;
+		var flatPageStore = NextThought.store.FlatPage.create({
+			storeId: 'presentation-annotations-'+line
+		});
+		annotations.each(function(annotation){
+			//Note stores aren't unique here, but flatpage store won't let
+			//us bind the same store to it twice.  How convenient..
+			flatPageStore.bind(annotation.store);
+		});
 
-		StoreUtils.fillInUsers(s,s.getRange());
-
-		s.removeFilter(this.lineFilterId);
 		if(line){
 			console.log('filtering by line: ', line);
-			s.addFilter({
+			flatPageStore.addFilter({
 				id: this.lineFilterId,
 				filterFn: function(r){
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
@@ -263,9 +267,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				}
 			});
 		}
-		s.sort();
+		flatPageStore.sort();
 
-		this.showAnnotationView(s);
+		this.showAnnotationView(flatPageStore);
 	},
 
 
@@ -289,7 +293,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			});
 		}
 
-		if(this.annotationView.store !== store){
+		if(this.annotationView.store.storeId !== store.storeId){
 			// NOTE: Make sure we remove lineFilter before this is unbound.
 			// otherwise, we end up in a funky state.
 			this.annotationView.store.removeFilter(this.lineFilterId);

@@ -204,7 +204,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		var me = this;
 
 		Ext.each(records, function(n){
-			me.registerNoteRecord(n, view, noteStore);
+			if(n.isTopLevel && n.isTopLevel()){
+				me.registerNoteRecord(n, view, noteStore);
+			}
 		});
 	},
 

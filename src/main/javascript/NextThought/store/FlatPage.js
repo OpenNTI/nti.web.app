@@ -53,7 +53,7 @@ Ext.define('NextThought.store.FlatPage',{
 
 	bind: function(otherStore){
 		var me = this;
-		if(otherStore.$boundToFlat){ return; }
+		if(Ext.Array.contains(otherStore.$boundToFlat || [], this)){ return; }
 
 		
 		function remove(s,rec){
@@ -104,7 +104,12 @@ Ext.define('NextThought.store.FlatPage',{
 					cleanup: cleanUp
 				}));
 
-		otherStore.$boundToFlat = true;
+		if(Ext.isArray(otherStore.$boundToFlat)){
+			otherStore.$boundToFlat.push(this);
+		}
+		else{
+			otherStore.$boundToFlat = [this];
+		}
 
 		add(otherStore,otherStore.getRange());
 	}
