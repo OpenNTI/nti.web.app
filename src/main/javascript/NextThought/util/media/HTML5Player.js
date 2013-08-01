@@ -33,18 +33,10 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	playerSetup: function(){
 //		Inject HTML5 Player HTML
 		this.playerTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
-		//console.log(this.id);
+		console.log(this.id);
 		this.el = Ext.get(this.id);
 		this.player = Ext.getDom(this.id);
 		this.el.on('error','playerError',this);
-		Ext.defer(this.checkReadyState,1000,this);
-	},
-
-
-	checkReadyState: function(){
-		if(this.player.readyState === 0){
-			this.playerError();
-		}
 	},
 
 
@@ -96,10 +88,6 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	},
 
 	play: function(){
-		if(this.player.readyState === 0){
-			this.playerError();
-			return;
-		}
 		this.player.play();
 	},
 
