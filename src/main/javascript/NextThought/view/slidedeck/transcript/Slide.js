@@ -38,6 +38,11 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	},
 
 
+	registerAnnotations: function(){
+		this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
+	},
+
+
 	containerIdForData: function(){
 		return this.slide && this.slide.get('ContainerId');
 	},

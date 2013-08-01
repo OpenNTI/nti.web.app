@@ -49,7 +49,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	initComponent:function(){
 		this.callParent(arguments);
 
-		// Add the transcript.
 		this.add({
 			xtype:'slidedeck-transcript',
 			transcript:this.transcript,
@@ -60,7 +59,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			}
 		});
 
-		this.on('destory', 'destroy', this);
+		this.on('destroy', 'destroy', this);
 	},
 
 

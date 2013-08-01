@@ -163,7 +163,16 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	syncHeight: function(){
-		console.warn('Sync-height to be implemented');
+		this.annotationManager.removeAll();
+
+		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
+		//the overlay needs component specific data to render a note.
+		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
+		Ext.Array.each(cmps || [], function(cmp){
+			if(Ext.isFunction(cmp.registerAnnotations)){
+				cmp.registerAnnotations();
+			}
+		});
 	},
 
 

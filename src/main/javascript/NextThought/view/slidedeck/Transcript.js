@@ -42,6 +42,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			add: 'onStoreEventsAdd',
 			remove: 'onStoreEventsRemove'
 		});
+
+		Ext.EventManager.onWindowResize(function(){
+			this.fireEvent('sync-height');
+		},this,{buffer: 250});
+
+		this.on('resize', function(){
+			this.fireEvent('sync-height');
+		}, this);
 	},
 
 
@@ -270,9 +278,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return;
 		}
 
-		// NOTE: annotations that we get may not share the same store
-		// since right now we mix transcript with slides and slides have a different store.
-		// However, we're making an assumptions that records on the same line WILL share the same store.
 		var flatPageStore = NextThought.store.FlatPage.create({
 			storeId: 'presentation-annotations-'+line
 		});
