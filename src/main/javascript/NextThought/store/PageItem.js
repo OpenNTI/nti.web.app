@@ -79,14 +79,15 @@ Ext.define('NextThought.store.PageItem',function(){
 				this.proxy = Ext.merge(Ext.clone(this.proxy),this.config.proxyOverride);
 				delete config.proxyOverride;
 			}
+			
+			this.callParent(arguments);
 
 			//Allow shortcutting the url setting.
 			if(this.url){
 				this.proxy.url = this.url;
 				delete this.url;
 			}
-
-			this.callParent(arguments);
+			
 
 			this.mon(coordinator,{
 				delay: 1,//move this handler to the next event pump

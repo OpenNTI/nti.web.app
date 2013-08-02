@@ -21,8 +21,16 @@ Ext.define('NextThought.store.NTI',{
 	},
 
 
-	constructor: function(){
+	constructor: function(config){
+		//Allow partial overriding the proxy.
+		if(config && config.proxyOverride){
+			this.proxy = Ext.merge(Ext.clone(this.proxy),this.config.proxyOverride);
+			delete config.proxyOverride;
+		}
+
+
 		this.callParent(arguments);
+		
 		//Allow shortcutting the url setting.
 		if(this.url){
 			this.proxy.url = this.url;

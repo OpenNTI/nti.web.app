@@ -489,3 +489,49 @@
 		@include ellipse();
 	}
 }
+
+.instructor-forum-view {
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0;
+	background: #ffffff !important;
+	padding: 0 25px 25px 25px;
+
+	.tile-title{
+		margin-top: 15px;
+		font: normal 700 10px/15px $font;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+	}
+
+	.title{
+		font: normal 400 25px/30px 'Open Sans Condensed', $font;
+		overflow: hidden;
+		color: $primary-grey;
+	}
+
+	.meta{
+		font: normal 700 10px/15px $font;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+
+		.by{
+			color: $primary-blue;			
+			&::after{
+				content: ' ';
+			}
+		}
+	}
+
+	.snippet{
+		margin-top: 5px;
+		font-size: 15px;
+		color: $secondary-grey;	
+	}
+
+	.count{
+		position: absolute;
+		font: normal 600 11px/14px $font;
+		bottom: 5px;
+		color: $primary-blue;
+	}
+}
