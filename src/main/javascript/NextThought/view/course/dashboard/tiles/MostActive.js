@@ -99,7 +99,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			a = a.Total;
 			b = b.Total;
 			if(a!==b){
-				return a<b ? -1 : 1;
+				return a<b ? 1 : -1;
 			}
 
 			return aN.localeCompare(bN);
