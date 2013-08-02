@@ -996,6 +996,25 @@ $experimental-support-for-svg: true;
 			}
 		}
 	}
+
+    &.video-only{
+        right: 0 !important;
+
+        .video-player{
+            position: relative;
+            margin: 10px auto;
+            top: 70px;
+            left: 0;
+        }
+
+        .video-picker{
+            display: none;
+        }
+
+        .body{
+            display: none;
+        }
+    }
 }
 
 

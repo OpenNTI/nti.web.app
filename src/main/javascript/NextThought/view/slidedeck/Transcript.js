@@ -20,7 +20,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	initComponent: function(){
-		this.enableBubble('presentation-parts-ready');
+		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
 
 		//TODO: this needs to be more centralized.
 		if(this.slideStore){
@@ -35,6 +35,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		this.cmpMap = {};
 
+        if(!this.slideStore && !this.transcript){
+           this.hasNoPresentationParts = true;
+        }
 		this.fireEvent('uses-page-stores', this);
 
 		this.fireEvent('listens-to-page-stores', this, {
@@ -51,6 +54,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.fireEvent('sync-height');
 		}, this);
 	},
+
+
+    beforeRender: function(){
+        this.callParent(arguments);
+        if(this.hasNoPresentationParts){
+            this.fireEvent('no-presentation-parts', this);
+        }
+    },
 
 
 	bindStoreToComponents: function(store, cmps){

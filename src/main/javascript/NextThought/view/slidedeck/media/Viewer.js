@@ -47,6 +47,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	initComponent:function(){
+        this.on('no-presentation-parts', function(){this.videoOnly = true;}, this);
+
 		this.callParent(arguments);
 
 		this.add({
@@ -67,6 +69,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		var me = this, h,
 			targetEl = me.el.down('.body');
+
+        if(this.videoOnly){
+            this.el.addCls('video-only');
+        }
 
 		Ext.getBody().addCls('media-viewer-open');
 		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl, video: this.video});
