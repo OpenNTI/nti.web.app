@@ -85,7 +85,7 @@ Ext.define('NextThought.util.Anchors', {
 				return;
 			}
 
-			if(desc.isEmpty || desc.locator()){
+			if(desc.isEmpty || Anchors.cachedLocatorEnsuringDocument(desc, docElement)){
 				locatorsFound++;
 				return;
 			}
@@ -129,7 +129,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
-		var ancestorNode, resultRange, searchWithin;
+		var ancestorNode, resultRange, searchWithin, locator;
 
         docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
@@ -149,10 +149,9 @@ Ext.define('NextThought.util.Anchors', {
 			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
 			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
 			//preresolve the locator and now
-			if(contentRangeDescription.locator()){
-				return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
-															 contentRangeDescription.locator().end,
-															 contentRangeDescription.locator().doc);
+			locator = Anchors.cachedLocatorEnsuringDocument(contentRangeDescription, docElement);
+			if(locator){
+				return Anchors.convertContentRangeToDomRange(locator.start, locator.end, locator.doc);
 			}
 
 
@@ -223,7 +222,7 @@ Ext.define('NextThought.util.Anchors', {
 	//TODO lots of duplicated code here
 	locateContentRangeDescription: function(contentRangeDescription, cleanRoot, doc) {
 		var ancestorNode, resultRange, searchWithin, containerId, docElementContainerId,
-			docElement  = (cleanRoot ? cleanRoot.ownerDocument : null) || doc;
+			docElement  = (cleanRoot ? cleanRoot.ownerDocument : null) || doc, locator;
 
         docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
@@ -243,10 +242,9 @@ Ext.define('NextThought.util.Anchors', {
 			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
 			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
 			//preresolve the locator and now
-			if(contentRangeDescription.locator()){
-				return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
-															 contentRangeDescription.locator().end,
-															 contentRangeDescription.locator().doc);
+			locator = Anchors.cachedLocatorEnsuringDocument(contentRangeDescription, docElement)
+			if(locator){
+				return Anchors.convertContentRangeToDomRange(locator.start, locator.end, locator.doc);
 			}
 
 
@@ -292,6 +290,18 @@ Ext.define('NextThought.util.Anchors', {
 		resultRange.selectNodeContents(searchWithin);
 		return resultRange;
 	},
+
+
+	cachedLocatorEnsuringDocument: function(contentRangeDescription, document){
+		var loc = contentRangeDescription.locator();
+		if(loc && loc.doc !== document){
+			console.debug('Dumping locator because its from a different doc');
+			contentRangeDescription.attachLocator(null);
+			loc = null;
+		}
+		return loc;
+	},
+
 
 	/*tested*/
 	scopedContainerNode: function(fragOrNode, containerId, rootId){
@@ -659,7 +669,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	resolveCleanLocatorForDesc: function(rangeDesc, ancestor, docElement){
-		var confidenceCutoff = 0.4;
+		var confidenceCutoff = 0.4, loc;
 
 		if(!rangeDesc){
 			Ext.Error.raise('Must supply Description');
@@ -668,9 +678,10 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Must supply a docElement');
 		}
 
-		if(rangeDesc.locator()){
+		loc = Anchors.cachedLocatorEnsuringDocument(rangeDesc, docElement);
+		if(loc){
 			//console.debug('Using cached locator info');
-			return rangeDesc.locator();
+			return loc;
 		}
 
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);

@@ -52,7 +52,9 @@ Ext.define('NextThought.controller.Reader', {
 			component:{
 				'*':{
 					'set-location':'setLocation',
-					'set-last-location-or-root':'setLastLocation'
+					'set-last-location-or-root':'setLastLocation',
+					'suspend-annotation-manager': 'suspendManager',
+					'resume-annotation-manager': 'resumeManager'
 				},
 				'library-view-container reader-content':{
 					'beforeNavigate':'beforeSetLocation',
@@ -65,6 +67,18 @@ Ext.define('NextThought.controller.Reader', {
 				}
 			}
 		});
+	},
+
+
+	resumeManager: function(){
+		var reader = this.getLibraryReader();
+		reader.getAnnotations().getManager().resume();
+	},
+
+
+	suspendManager: function(){
+		var reader = this.getLibraryReader();
+		reader.getAnnotations().getManager().suspend();
 	},
 
 

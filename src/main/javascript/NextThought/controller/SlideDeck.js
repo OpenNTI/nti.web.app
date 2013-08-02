@@ -17,7 +17,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.listen({
 			'component':{
 				'*':{
-					'start-media-player':'launchMediaPlayer'
+					'start-media-player': 'launchMediaPlayer'
 				},
 				'slidedeck-transcript': {
 					'load-presentation-userdata': 'loadDataForPresentation'
@@ -35,7 +35,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 
 		//See if we have a transcript.
 		var reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
-			transcript, videoEl, frag;
+			transcript, videoEl, frag, me = this;
 
 		if(video && !video.isModel){
 			video.Class = video.Class || 'PlaylistItem';
@@ -51,10 +51,15 @@ Ext.define('NextThought.controller.SlideDeck',{
 
 		// NOTE: this is overly simplified in the future,
 		// instead of just passing the transcript, we will pass all the associated items.
+
 		this.activeMediaPlayer = Ext.widget('media-viewer', {
 			video: video,
 			transcript: transcript,
 			autoShow: true
+		});
+		this.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+		this.activeMediaPlayer.on('destroy', function(){
+			me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
 		});
 	},
 

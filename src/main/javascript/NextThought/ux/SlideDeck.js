@@ -85,7 +85,11 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 			Ext.getBody().unmask();
 			p = Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide});
+			p.fireEvent('suspend-annotation-manager', this);
 			p.show();
+			p.on('destroy', function(){
+				p.fireEvent('resume-annotation-manager', this);
+			});
 			p.mon(reader,'navigateComplete','destroy',p);
 		}
 

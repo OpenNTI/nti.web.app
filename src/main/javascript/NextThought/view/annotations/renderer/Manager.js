@@ -9,6 +9,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	constructor: function(reader){
 		this.callParent();
 		this.reader = reader;
+		this.rendererSuspended = 0;
 	},
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
@@ -185,12 +186,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	suspend: function() {
-		this.rendererSuspended = true;
+		this.rendererSuspended++;
 	},
 
 
 	resume: function() {
-		delete this.rendererSuspended;
+		this.rendererSuspended--;
+		if(this.rendererSuspended === 0 && this.renderOnResume){
+			delete this.renderOnResume;
+			this.render();
+		}
 	},
 
 
@@ -204,7 +209,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			me.events.on('finish',Ext.bind(me.render,me,arguments),me,{single:true});
 			return;
 		}
-		if (this.rendererSuspended) {
+		if (this.rendererSuspended > 0) {
+			this.renderOnResume = true;
 			return;
 		}
 		if(!me.gutter){
