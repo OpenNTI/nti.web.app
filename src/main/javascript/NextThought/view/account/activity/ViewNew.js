@@ -47,11 +47,11 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	),
 
 	typesFilterArray:[
-		{contacts: true, text: 'Discussions & Thoughts', filter: 'discussions'},
-		{me: true, text: 'Highlights & Notes', filter: 'notes'},
-		{contacts: true, community: true, text: 'Notes', filter: 'notes'},
-		{me: true, text: 'Bookmarks', filter: 'bookmarks'},
-		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact'}
+		{contacts: true, text: 'Discussions & Thoughts', filter: 'discussions', type: 'discusssions'},
+		{me: true, text: 'Highlights & Notes', filter: 'notes', type: 'menotes'},
+		{contacts: true, community: true, text: 'Notes', filter: 'notes', type: 'communitynotes' },
+		{me: true, text: 'Bookmarks', filter: 'bookmarks', type: 'bookmarks'},
+		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact', type: 'contactrequests'}
 	],
 
 	layout: {
@@ -101,23 +101,23 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Only Me', checked: false, isMe: true, tabFilter:'onlyMe'},
-				{cls: 'option', text: 'My Contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
-				{cls: 'option', text: 'Everyone', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
+				{cls: 'option', text: 'Only Me', type: 'onlyme', checked: false, isMe: true, tabFilter:'onlyMe'},
+				{cls: 'option', text: 'My Contacts', type: 'contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
+				{cls: 'option', text: 'Everyone', type: 'community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
 			]
 		});
 
 		Ext.Array.each(this.typesFilterArray, function(item){
 			if(item.me){
-				history.addFilterItem(item.text, item.filter);
+				history.addFilterItem(item.text, item.filter, item.type);
 			}
 
 			if(item.contacts){
-				contacts.addFilterItem(item.text, item.filter);
+				contacts.addFilterItem(item.text, item.filter, item.type);
 			}
 
 			if(item.community){
-				community.addFilterItem(item.text, item.filter);
+				community.addFilterItem(item.text, item.filter, item.type);
 			}
 		}, this);
 
@@ -172,7 +172,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		this.fromMenu.show().hide();
 
 		if(!this.stateApplied){
-			this.applyState({from: 'Community', filter: ['Show All']});
+			this.applyState({from: 'community', filter: ['Show All']});
 		}
 
 		if(!$AppConfig.service.canFriend()){
@@ -192,7 +192,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 	getState: function(){
 		var fromMenuItem = this.fromMenu.down('menuitem[checked]'),
-			from = fromMenuItem && fromMenuItem.text;
+			from = fromMenuItem && fromMenuItem.type;
 
 		return from && {from: from};
 	},

@@ -41,7 +41,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Show All', allowUncheck: false, isAll: true, filter: 'all'}
+				{cls: 'option', text: 'Show All', type: 'showall', allowUncheck: false, isAll: true, filter: 'all'}
 			]
 		});
 	},
@@ -49,7 +49,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 	afterRender: function(){
 		var state = {};
 		if(!this.stateApplied){
-			state['types-'+this.key] = ['Show All'];
+			state['types-'+this.key] = ['showall'];
 			this.applyState(state);
 		}
 	},
@@ -58,15 +58,16 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 		return this.typesMenu;
 	},
 
-	addFilterItem: function(text, filter){
+	addFilterItem: function(text, filter, type){
 		var item = {
 			cls: 'option',
 			text: text,
+			type: type,
 			filter: filter
 		};
-		if(this.checkedTypes && Ext.Array.contains(this.checkedTypes, item.text)){
+		if(this.checkedTypes && Ext.Array.contains(this.checkedTypes, item.type)){
 			item.checked = true;
-			Ext.Array.remove(this.checkedTypes, item.text);
+			Ext.Array.remove(this.checkedTypes, item.type);
 		}
 
 		this.typesMenu.add(item);
@@ -79,7 +80,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 			state = {};
 		Ext.each(items, function(item){
 			if(item.checked){
-				types.push(item.text);
+				types.push(item.type);
 			}
 		});
 		state['types-'+this.key] = types;
@@ -94,7 +95,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 		if(!Ext.isEmpty(types)){
 			me.typesMenu.down('[isAll]').setChecked(false);
 			Ext.each(items, function(item){
-				var checked = Ext.Array.contains(types, item.text);
+				var checked = Ext.Array.contains(types, item.type);
 				item.setChecked(checked);
 			});
 
