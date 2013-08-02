@@ -460,6 +460,11 @@ Ext.define('NextThought.util.Globals', {
 	isFeature: function(name){
 		var f = $AppConfig.features || {};
 		return Boolean(f[name]);
+	},
+
+
+	getExternalizedString: function(key, defaultValue){
+		return (NTIStrings || {})[key] || (defaultValue || key);
 	}
 
 },
@@ -486,4 +491,6 @@ function(){
 	}
 	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
 	makeImage('CANVAS_BROKEN_IMAGE');
+
+	window.NTIString = this.getExternalizedString;
 });
