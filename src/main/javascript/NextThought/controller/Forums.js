@@ -100,6 +100,11 @@ Ext.define('NextThought.controller.Forums', {
 				'#forums > forums-topic nti-editor': {
 					'save': this.saveTopicComment
 				},
+
+				'#library > course-forum nti-editor':{
+					'save': this.saveTopicComment
+				},
+
 				'search-result':{
 					'highlight-topic-hit': this.highlightSearchResult
 				},
@@ -719,7 +724,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	saveTopicComment: function(editor, record, valueObject, successCallback){
-
+		debugger;
 		var postCmp = editor.up('[record]'),
 			postRecord = postCmp && postCmp.record,
 			isEdit = Boolean(record),
@@ -881,7 +886,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	saveTopicPost: function(editorCmp, record, title, tags, body, autoPublish){
-
+		debugger;
 		var isEdit = Boolean(record),
 			cmp = editorCmp.prev(),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.CommunityHeadlinePost.create(),

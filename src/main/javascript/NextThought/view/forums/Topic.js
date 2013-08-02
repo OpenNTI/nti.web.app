@@ -349,7 +349,14 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	getMainView: function(){
-		return Ext.get('forums');
+		var forum = Ext.get('forums'),
+			course = Ext.get('course-forum');
+
+		if(forum && forum.isVisible()){
+			return forum;
+		}else if(course && course.isVisible()){
+			return course
+		}
 	},
 
 
