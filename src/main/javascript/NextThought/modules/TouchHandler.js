@@ -19,6 +19,14 @@ Ext.define('NextThought.modules.TouchHandler', {
         }, this);
     },
 
+    /**
+     * Adds default handlers to all of the events fired by
+     * TouchSender.
+     * @note Override this function for specific interactions
+     *       but be sure to implement handlers at least for
+     *       touchElementAt and touchTap. In many cases, it's
+     *       easier to just override one of the helper functions.
+     */
     setupHandlers: function() {
         var container = this.container,
             initialY = false;
@@ -52,9 +60,10 @@ Ext.define('NextThought.modules.TouchHandler', {
             // annotation specific logic
         });
 
-
-        // @note Only have one of the following listeners
-        // per sender use the callback
+        // @note Only have one handler of each the following listeners
+        // per sender use the callback since they are used as ways to get
+        // information. Having multiple callbacks will produce race conditions
+        // and, most likely, unwanted behavior.
 
         container.on('touchElementAt', this.elementAt);
         container.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);

@@ -22,9 +22,10 @@ Ext.define('NextThought.modules.TouchSender', {
         STATE: {
             NONE: 0,
             DOWN: 1,
-            SCROLLING: 2,
-            SELECTING: 3,
-            DRAGGING: 4
+            LONGPRESS: 2,
+            SCROLLING: 3,
+            SELECTING: 4,
+            DRAGGING: 5
         }
     },
 
@@ -102,14 +103,16 @@ Ext.define('NextThought.modules.TouchSender', {
 
                 // Set a timer for a long press
                 setTimeout(function() {
+                    if(state !== s.STATE.DOWN) {return;}
+                    state = s.STATE.LONGPRESS;
                     container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
 
                     container.fireEvent('touchElementIsDraggable', ele, function(is){
-                        if(!is || state !== s.STATE.DOWN) {return;}
+                        if(!is || state !== s.STATE.LONGPRESS) {return;}
                         state = s.STATE.DRAGGING;
                     });
                     container.fireEvent('touchElementIsSelectable', ele, function(is) {
-                        if(!is || state !== s.STATE.DOWN) {return;}
+                        if(!is || state !== s.STATE.LONGPRESS) {return;}
                         state = s.STATE.SELECTING;
                     });
 
@@ -148,7 +151,9 @@ Ext.define('NextThought.modules.TouchSender', {
 
             container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
 
-            if (state === s.STATE.DOWN) {
+            if (state === s.STATE.DOWN ||
+                state === s.STATE.LONGPRESS)
+            {
                 scrollMove();
                 if (!withinTapThreshold()) {
                     container.fireEvent('touchElementIsScrollable', pickedElement, function(is) {
@@ -205,6 +210,10 @@ Ext.define('NextThought.modules.TouchSender', {
 
             if (tempState === s.STATE.DOWN) {
                 container.fireEvent('touchTap', pickedElement);
+            }
+            else if (tempState === s.STATE.LONGPRESS) {
+                // Don't do anything since the interactions should have
+                // come from either the longpress itself, or scrolling/dragging
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
