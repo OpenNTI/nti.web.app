@@ -12,10 +12,33 @@ Ext.define('NextThought.view.course.forum.View',{
 	listeners: {
 		'activate': 'onActivate',
 		'add': 'onViewPushed',
-		'remove': 'onViewPopped'
+		'remove': 'onViewPopped',
+		'beforedeactivate': 'handleDeactivate'
+	},
+
+	handleDeactivate: function(){
+		var board = this.down('.course-forum-board'),
+			forum = this.down('.course-forum-topic-list'),
+			topic = this.down('.forums-topic');
+
+		board && board.unlockHeader && board.unlockHeader();
+		forum && forum.unlockHeader && forum.unlockHeader();
+		topic && topic.unlockHeader && topic.unlockHeader();
 	},
 
 	onActivate: function(){
+		var board = this.down('.course-forum-board'),
+			forum = this.down('.course-forum-topic-list'),
+			topic = this.down('.forums-topic');
+		
+		if(topic && topic.isVisible()){
+			topic.lockHeader && topic.lockHeader();
+		}else if(forum && forum.isVisible()){
+			forum.lockHeader && forum.lockHeader();
+		}else if(board && board.isVisible()){
+			board.lockHeader && board.lockHeader();
+		}
+
 		if(this.store){
 			this.store.load();
 		}
@@ -201,6 +224,16 @@ Ext.define('NextThought.view.course.forum.Board',{
 
 	selModel: {
 		suppressPushState: true
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		var header = this.el.down('.forum-forum-list');
+
+		if(header){
+			header.removeCls('forum-forum-list');
+			header.addCls('course-forum-list');
+		}
 	},
 
 	onHeaderClick: function(e){

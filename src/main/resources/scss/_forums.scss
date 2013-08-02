@@ -521,9 +521,19 @@
 	@include forum-scroll-locked-header;
 }
 
+.course-forum-list{
+	.path{
+		padding-left: 0 !important;
+		&::after{
+			display: none;	
+		}
+	}
+}
+
 #view > .forum-forum-list.header,
 #view > .forum-topic-list.header,
-#view > .forum-topic.navigation-bar {
+#view > .forum-topic.navigation-bar,
+#view > .course-forum-list {
 	@include forum-navigation;
 	@include forum-scroll-locked-header;
 }
@@ -654,6 +664,18 @@
 		.header-container{
 			.path{
 				padding-left: 0px !important;
+				&::after{
+					display: none;
+				}
+			}
+		}
+	}
+
+	.forums-topic-list{
+		.header{
+			.path{
+				padding-left: 0px !important;
+
 				&::after{
 					display: none;
 				}
