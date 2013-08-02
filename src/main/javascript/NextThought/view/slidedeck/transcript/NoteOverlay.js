@@ -338,13 +338,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	getAnnotationsAtLine: function(line){
+		var fudgeFactor = 2;
 		return this.annotationManager.filterBy(function(item){
 			var rec = item.record,
 				s = item.store.getById(rec.getId());
 			if(s && (s.get('pline') !== rec.get('pline'))){
 				s.set('pline', rec.get('pline'));
 			}
-			return item.line === line;
+			return Math.abs(item.line - line) < fudgeFactor;
 		});
 	}
 });
