@@ -321,6 +321,15 @@
 .x-component-tile{
 	&.note-list .row,
 	&.topics-list .row {
+		.controls{
+			@include like-and-favorite;
+			.like{
+				position: absolute;
+				float: none;
+				right: 0;
+				width: 40px;
+			}
+		}
 		padding: 15px;
 	}
 
@@ -513,6 +522,7 @@
 		overflow: hidden;
 		@include ellipse;
 		color: $primary-grey;
+		width: 100%;
 	}
 
 	.meta{

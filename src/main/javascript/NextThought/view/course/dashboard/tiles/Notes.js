@@ -45,6 +45,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
 				cls: 'row',
 				cn: [
+					{ cls: 'controls', cn: [{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }]},
 					{ cls: 'title', html: '{preview}' },
 					{ tag: 'span', cls: 'byline', cn: [
 						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'}
@@ -63,7 +64,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 	},
 
 
-	onItemClicked: function(view, rec){
+	onItemClicked: function(view, rec, dom, i, e){
+		if(e.getTarget('.like')){
+			e.stopEvent();
+			rec.like();
+			return;
+		}
 		this.fireEvent('navigation-selected',rec.get('ContainerId'),rec);
 	},
 
