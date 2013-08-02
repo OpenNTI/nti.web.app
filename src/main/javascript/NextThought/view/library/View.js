@@ -262,7 +262,7 @@ Ext.define( 'NextThought.view.library.View', {
 			'course-book': this.courseBook,
 			'course-dashboard': this.courseDashboard,
 			'course-nav': this.courseNav
-		},  active = tabMap[tab || 'course-book'];
+		},  active = (tab||{}).isComponent ? tab : tabMap[tab || 'course-book'];
 
 		if(this.rendered){
 			this.layout.setActiveItem(active);

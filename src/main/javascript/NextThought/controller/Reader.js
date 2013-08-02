@@ -28,6 +28,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	refs: [
+		{ref: 'libraryView', selector: 'library-view-container'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
 		{ref: 'libraryPageWidgets', selector: 'library-view-container content-page-widgets'},
@@ -64,6 +65,10 @@ Ext.define('NextThought.controller.Reader', {
 				},
 				'content-card':{
 					'show-target':'showCardTarget'
+				},
+
+				'note-window':{
+					'before-new-note-viewer':'maybeSwitchLibrarySubTabs'
 				}
 			}
 		});
@@ -219,6 +224,23 @@ Ext.define('NextThought.controller.Reader', {
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
 		this.getLibraryNavigation().updateLocation(origin||t);
+	},
+
+
+	maybeSwitchLibrarySubTabs: function(viwer, ownerCmp){
+		var view = this.getLibraryView(),
+			subView;
+		if(ownerCmp !== this.getLibraryReader()){
+			//this event doen't concern us.
+			return true;
+		}
+
+		if(this.fireEvent('show-view','library',true)===false){
+			return false;
+		}
+
+		subView = view.down('course-book');
+		view.setActiveTab(subView);
 	}
 
 });
