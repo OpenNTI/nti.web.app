@@ -210,12 +210,12 @@ Ext.define('NextThought.controller.UserData', {
 		try {
 			me.activeNoteWindow = Ext.widget({
 				xtype: 'note-window',
-				autoShow: true,
 				record: rec,
 				reader: anchorCmp,
 				listeners:{beforedestroy:deselect},
 				xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
 			});
+            me.activeNoteWindow.show();
 		}
 		catch(e){
 			if(e.sourceMethod!=='closeOrDie'){
