@@ -5,11 +5,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
+			return null;
+			/*
 			return this.create({
 				lastModified:       courseNodeRecord.get('date'),
 				locationInfo:       locationInfo,
 				courseNodeRecord:   courseNodeRecord
-			});
+			});*/
 		}
 
 	},
@@ -35,7 +37,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 
 			store: 'ext-empty-store',
 			preserveScrollOnRefresh: true,
-			deferEmptyText: false,
+			deferEmptyText: true,
 			emptyText: Ext.DomHelper.markup([{
 				cls:"history nothing rhp-empty-list",
 				html: 'No Activity Yet'
