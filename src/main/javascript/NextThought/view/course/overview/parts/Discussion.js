@@ -56,6 +56,7 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 		if(!/topic$/i.test(topic.get('Class'))){
 			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
 		}
+		this.topic = topic;
 		this.data.comments = topic.get('PostCount')||0;
 		if(this.rendered){
 			this.renderTpl.overwrite(this.el,this.data);
@@ -69,6 +70,11 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 
 
 	onClick: function(){
-		this.fireEvent('navigate-to-href',this,this.data.ntiid);
+		if(!this.topic){
+			alert('An error occurred showing this discussion.');
+		}
+		else{
+			this.fireEvent('navigate-to-course-discussion', this.locationInfo.title.get('NTIID'), this.topic.get('ContainerId'), this.topic.getId());
+		}
 	}
 });
