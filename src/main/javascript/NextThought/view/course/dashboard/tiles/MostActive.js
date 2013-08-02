@@ -29,6 +29,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			ui: 'tile',
 
 			store: 'ext-empty-store',
+			emptyText: Ext.DomHelper.markup([{
+				cls:"history nothing rhp-empty-list",
+				html: 'No Activity Yet'
+			}]),
 
 			overItemCls: 'x-item-over',
 			itemSelector:'.user',
@@ -107,6 +111,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 
 		Ext.each(Ext.Array.filter(items,notMe),pluckUsers);
 
+//		if(users.length === 0){
+			//
+//		}
+
 		UserRepository.getUser(users, function(u){
 			function apply(i,x){
 				if(!u[x] || i.Username !== u[x].getId()){
@@ -136,8 +144,82 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	onUserSelected: function(selModel, record){
-		this.box.removeAll(true);
-		this.box.add({xtype: 'tile-title', label:record.getName(), heading:'Thought Leader' });
-	}
+	onUserSelected: function(selModel, user){
+		var v,
+			me = this,
+			box = me.box, req, blog = user.hasBlog();
+
+		box.removeAll(true);
+		box.add({xtype: 'tile-title', label:user.getName(), heading:'Thought Leader' });
+		
+		v = {
+			xtype: 'dataview',
+			cls:'user-items',
+			ui: 'tile',
+
+			emptyText: Ext.DomHelper.markup([{
+				cls:"history nothing rhp-empty-list",
+				html: 'No Thoughts'
+			}]),
+			deferEmptyText: false,
+			overItemCls: 'x-item-over',
+			itemSelector:'.item',
+			tpl: Ext.DomHelper.markup({
+				tag: 'tpl', 'for':'.', cn: [{
+					cls: 'item',
+					cn:[
+						{ cls: 'controls', cn: [{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }]},
+						{ cls: 'title', html:'{title}'}
+					]
+				}]
+			})
+		};
+
+
+		function blogLoaded(s,rec){
+			if(rec.length>3){
+				s.remove(rec.slice(3));
+				box.add({xtype:'box', ui:'tile', cls:'more-posts', autoEl: {
+					cn: [{},{},{}]
+				}});
+			}
+		}
+
+		function loadContents(r){
+			var record = ParseUtils.parseItems( r.responseText ).first(), //Set the blog record.
+				store = NextThought.store.Blog.create({pageSize: 4});
+
+			store.proxy.url = record.getLink('contents');
+			Ext.apply(store.proxy.extraParams,{
+				sortOn:'lastModified',
+				sortOrder:'descending'
+			});
+
+			v.store = store;
+			box.add(v);
+			me.mon(store,'load',blogLoaded);
+			store.load();
+		}
+
+
+		if(!blog){
+			box.add(v);
+			return;
+		}
+
+		req = {
+			url: user.getLink('Blog'),
+			scope: this,
+			success: loadContents,
+			failure: this.fail
+		};
+
+		Ext.Ajax.request(req);
+	},
+
+
+	fail: function(){ console.error(':('); },
+
+
+
 });
