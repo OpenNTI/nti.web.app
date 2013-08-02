@@ -181,29 +181,20 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	},
 
 	applyState: function(state){
-		var me = this,
-			fromItems = this.fromMenu.query('menuitem');
 		if(state.from){
-			Ext.each(fromItems, function(item){
+			Ext.each(this.fromMenu.query('menuitem'), function(item){
 				var checked = item.text === state.from;
-				if(me.rendered){
-					item.setChecked(checked);
-				}else{
-					me.on('afterrender', function(){
-						item.setChecked(checked);
-					}, this, {single: true});
-				}
+				item.setChecked(checked);
 			});
+			this.stateApplied = true;
 		}
-
-		this.stateApplied = true;
 	},
 
 	getState: function(){
 		var fromMenuItem = this.fromMenu.down('menuitem[checked]'),
-			from = fromMenuItem.text;
+			from = fromMenuItem && fromMenuItem.text;
 
-		return {from: from};
+		return from && {from: from};
 	},
 
 	switchPanel: function(item){
