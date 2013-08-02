@@ -149,6 +149,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			me = this,
 			box = me.box, req, blog = user.hasBlog();
 
+		me.user = user;
+
 		box.removeAll(true);
 		box.add({xtype: 'tile-title', label:user.getName(), heading:'Thought Leader' });
 		
@@ -172,7 +174,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 						{ cls: 'title', html:'{title}'}
 					]
 				}]
-			})
+			}),
+			listeners: {
+				scope: me,
+				'itemclick':'onItemClicked'
+			}
 		};
 
 
@@ -221,5 +227,15 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	fail: function(){ console.error(':('); }
 
 
+
+	onItemClicked: function(view, rec, dom, i, e){
+		if(e.getTarget('.like')){
+			e.stopEvent();
+			rec.like();
+			return;
+		}
+		//debugger;
+		this.fireEvent('navigate-to-blog',this.user, rec.get('ID'));
+	}
 
 });
