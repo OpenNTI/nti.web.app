@@ -218,7 +218,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	fail: function(){ console.error(':('); },
+	fail: function(){ console.error(':('); }
 
 
 
