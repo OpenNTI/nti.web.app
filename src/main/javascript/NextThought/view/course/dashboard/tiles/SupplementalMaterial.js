@@ -10,7 +10,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 				refs = [];
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )
-						.concat( DQ.filter(items||[],'[type$=content]:not([section=required])') );
+						.concat( DQ.filter(items||[],'[type$=content]') );
 						
 			if(Ext.isEmpty(refs)){
 				return null; 
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 			items = [];
 			
 		config.items = [
-			{xtype: 'tile-title', heading:'Additional Reading' },
+			{xtype: 'tile-title', heading:'Reading' },
 			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody', items: items }
 		];
 		
