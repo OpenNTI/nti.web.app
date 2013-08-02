@@ -26,6 +26,11 @@ Ext.define('NextThought.model.converters.VideoSources', {
 						continue;
 					}
 
+					if(!types && sources && sources.length === 1){
+						o.source = [{source: sources[0]}];
+						continue;
+					}
+
 					if(!sources || !types || sources.length !== types.length){
 						console.error('Bad Video Source!',Ext.clone(v));
 						delete v[i];

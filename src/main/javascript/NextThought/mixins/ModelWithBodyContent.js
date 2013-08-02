@@ -110,8 +110,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
 		source = {
 			service: youtubeId ? 'youtube' : 'html5',
-			source: youtubeId ? youtubeId : [url, url]
-		}
+			source: [url]
+		};
 
 		item.set('sources', [source]);
 		p = Ext.widget({
