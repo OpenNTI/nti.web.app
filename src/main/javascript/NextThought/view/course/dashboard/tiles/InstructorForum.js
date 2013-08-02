@@ -103,6 +103,23 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 		if(this.rendered){
 			this.el.down('.snippet').update(body);
 		}
+		this.maybeEllipse();
+	},
+
+	maybeEllipse: function(){
+		if(!this.rendered){
+			this.needToMaybeEllipse = true;
+			return;
+		}
+		var snip = this.el.down('.snippet'),
+			content;
+
+		if(snip.getHeight() < snip.dom.scrollHeight){
+			content = ContentUtils.getHTMLSnippet(snip.getHTML(),150);
+			content = content + "<div class='ellipse'><div></div><div></div><div></div></div>";
+			snip.setHTML(content);
+			snip.addCls('overflowing');
+		}
 	},
 
 	beforeRender: function(){
@@ -117,6 +134,10 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 		this.callParent(arguments);
 
 		this.mon(this.el,'click','handleClick');
+
+		if(this.needToMaybeEllipse){
+			this.maybeEllipse();
+		}
 	},
 
 	handleClick: function(e){

@@ -548,6 +548,7 @@
 	background: #ffffff !important;
 	padding: 0 25px 25px 25px;
 	overflow: hidden;
+	cursor: pointer;
 
 	.controls{
 		@include like-and-favorite;
@@ -587,7 +588,27 @@
 		color: $secondary-grey;
 		overflow: hidden;
 		word-wrap: break-word;
-		max-height: 100px;	
+		max-height: 100px;
+
+		.ellipse{
+			display: none;
+			margin-left: 5px;
+
+			div{
+				display: inline-block;
+				width: 3px;
+				height: 3px;
+				border-radius: 3px;
+				background-color: $primary-blue;
+				margin: 0 3px 3px 0;
+			}
+		}
+
+		&.overflowing{
+			.ellipse{
+				display: inline-block;
+			}
+		}	
 	}
 
 	.count{
