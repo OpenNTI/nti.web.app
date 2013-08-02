@@ -81,7 +81,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 				{name:'label', type:'string'},
 				{name:'poster', type:'string'},
 				{name:'comments', type:'auto'},
-				{name:'hasTransripts', type:'boolean'}
+				{name:'hasTranscripts', type:'boolean'}
 			],
 			data: this.convertItems(config.items || [])
 		});
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	applyVideoData: function(videoIndex){
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			me = this;
+			me = this, selected = this.getSelectionModel().selected;
 
 		//save for later
 		me.videoIndex = videoIndex;
@@ -111,6 +111,11 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		this.getStore().each(function(r){
 			var v = videoIndex[r.getId()];
 			r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
+
+			if(me.curtainEl && selected.contains(r)){
+				me.playBtnEl[r.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
+			}
+
 			me.playlist.push(reader.read({
 				'mediaId': v.title,
 				'sources': v.sources
