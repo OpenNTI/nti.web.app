@@ -91,7 +91,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 
 	onItemClicked: function(view, rec /*, dom, index, event, eOpts*/){
-		this.fireEvent('navigate-to-href',this,rec.getId());
+		if(!this.topic){
+			alert('An error occurred showing this discussion.');
+		}
+		else{
+			this.fireEvent('navigate-to-course-discussion', this.locationInfo.ContentNTIID, this.topic.get('ContainerId'), this.topic.getId());
+		}
 	},
 
 
@@ -116,6 +121,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			this.onForumResolved(topic);
 			return;
 		}
+		this.topic = topic;
 
 		$AppConfig.service.getObject(
 				topic.get('ContainerId'),
