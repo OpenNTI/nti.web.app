@@ -53,7 +53,8 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		}
 	],
 
-	constructor: function(){
+	constructor: function(config){
+		this.fireEvent('before-new-note-viewer',this, config && (config.reader||config.ownerCmp||config.floatParent));
 		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.closeOrDie();});
 		this.callParent(arguments);
 	},
@@ -64,7 +65,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		this.callParent(arguments);
 
 		m = this.down('note-main-view');
-		m.reader = this.reader;
+		m.reader = this.reader||this.ownerCmp||this.floatParent;
 	
 		if(this.isEdit){
 			m.editMode = this.isEdit;
