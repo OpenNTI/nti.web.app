@@ -1,0 +1,1 @@
+window.NTIStrings = window.NTIStrings || {};
