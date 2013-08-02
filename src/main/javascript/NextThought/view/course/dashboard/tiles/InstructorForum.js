@@ -9,7 +9,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 			if(Ext.isEmpty(ntiid)){
 				return null;
 			}
-
 			return this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date')});
 		}
 	},
@@ -54,7 +53,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	addView: function(store, records){
 		this.view = this.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
-			record: records[0]
+			record: records[0],
+			contentNtiid: this.locationInfo.ContentNTIID
 		});
 	}
 });
@@ -63,11 +63,19 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 	extend: 'Ext.Component',
 	alias: 'widget.course-dashboard-tiles-instructor-forum-view',
 
+	mixins: {
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	},
+
 	cls: 'instructor-forum-view',
 	ui: 'tile',
 	
 	renderTpl: Ext.DomHelper.markup(
 		[
+			{ cls: 'controls', cn: [
+				{ cls: 'favorite {favoriteState}' },
+				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
+			]},
 			{cls: 'tile-title', html: 'Announcements'},
 			{cls: 'title', html: '{title}'},
 			{cls: 'meta', cn:[
@@ -78,6 +86,16 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 			{cls: 'count', html: '{PostCount:plural("Comment")}'}
 		]
 	),
+
+	renderSelectors:{
+		'liked': '.controls .like',
+		'favorites': '.controls .favorite'
+	},
+
+	constructor: function(){
+		this.callParent(arguments);
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
+	},
 
 	
 	setBody: function(body){
@@ -93,6 +111,19 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 		this.renderData = Ext.apply(this.renderData||{},this.record.getData());
 
 		h.compileBodyContent(this.setBody,this,null,100);
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.mon(this.el,'click','handleClick');
+	},
+
+	handleClick: function(e){
+		if(e.getTarget('.controls')){
+			return;
+		}
+		this.fireEvent('navigate-to-course-discussion', this.contentNtiid, this.record.get('ContainerId'), this.record.getId());
 	}
 });
 

@@ -495,6 +495,11 @@
 	top: 0; left: 0; bottom: 0; right: 0;
 	background: #ffffff !important;
 	padding: 0 25px 25px 25px;
+	overflow: hidden;
+
+	.controls{
+		@include like-and-favorite;
+	}
 
 	.tile-title{
 		margin-top: 15px;
@@ -506,6 +511,7 @@
 	.title{
 		font: normal 400 25px/30px 'Open Sans Condensed', $font;
 		overflow: hidden;
+		@include ellipse;
 		color: $primary-grey;
 	}
 
@@ -525,7 +531,10 @@
 	.snippet{
 		margin-top: 5px;
 		font-size: 15px;
-		color: $secondary-grey;	
+		color: $secondary-grey;
+		overflow: hidden;
+		word-wrap: break-word;
+		max-height: 100px;	
 	}
 
 	.count{

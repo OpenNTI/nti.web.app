@@ -113,20 +113,25 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	setLastLocation: function(ntiid){
+	setLastLocation: function(ntiid, callback, silent){
 		var lastNtiid = localStorage[ntiid] || ntiid;
 		if(!ParseUtils.parseNtiid(lastNtiid)){
 			lastNtiid = ntiid;
 		}
 
-		function callback(a, errorDetails){
+
+		function call(a, errorDetails){
 			var error = (errorDetails||{}).error;
 			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 				delete localStorage[ntiid];
 			}
+			
+			if( Ext.isFunction(callback) ){
+				Ext.callback(callback,null,[ntiid,a,error]);
+			}
 		}
 
-		this.setLocation(lastNtiid, callback);
+		this.setLocation(lastNtiid, call, silent===true);
 	},
 
 

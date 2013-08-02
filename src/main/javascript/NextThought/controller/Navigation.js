@@ -36,7 +36,8 @@ Ext.define('NextThought.controller.Navigation', {
 					'navigate-to-href': 'navigateToHref',
 					'navigate-to-blog': 'gotoBlog',
 					'navigation-failed': 'readerNavigationFailed',
-					'view-selected': 'setView'
+					'view-selected': 'setView',
+					'navigate-to-course-discussion': 'goToCourseForum'
 				}
 			},
 			controller:{
@@ -308,6 +309,30 @@ Ext.define('NextThought.controller.Navigation', {
 		if(state.changeHash){
 			state.changeHash(fragment);
 		}
+	},
+
+	/**
+	*Navigate to the course and push the forum and topic
+	*/
+	goToCourseForum: function(course, forum, topic){
+
+		function test(ntiid,reader,error){
+			console.log('test:',arguments);
+			if(error){return;}
+
+			var cmp = Ext.ComponentQuery.query('library-view-container')[0];
+			if(!course){
+				return;
+			}
+
+			if(cmp && cmp.isActive()){
+				cmp.setActiveTab('course-forum');
+				cmp.courseForum.restoreState(forum, topic);
+				history.pushState({library: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+			}
+		}
+
+		this.fireEvent('set-last-location-or-root', course, test, true);
 	},
 
 
