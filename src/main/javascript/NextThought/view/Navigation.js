@@ -124,11 +124,10 @@ Ext.define('NextThought.view.Navigation',{
 
 		Library.on('show-courses','showCoursesCollection',this);
 
-		this.floatingItems = {};
-		this.items = {items: [
+		this.items = [
 			this.libraryMenu,
 			this.searchMenu
-		]};
+		];
 
 		this.mon(this.libraryMenu,{
 			scope: this.libraryMenu,
@@ -149,7 +148,23 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
-	getRefItems: Ext.container.Container.prototype.getRefItems,
+	getRefItems: function(deep){
+		var items = this.items,
+	        len = items.length,
+	        i = 0,
+	        item,
+	        result = [];
+
+	    for (i; i < len; i++) {
+	        item = items[i];
+	        result.push(item);
+	        if (deep && item.getRefItems) {
+	            result.push.apply(result, item.getRefItems(true));
+	        }
+	    }
+
+		return result;
+	},
 
 
 	updateCurrent: function(s, rec){
