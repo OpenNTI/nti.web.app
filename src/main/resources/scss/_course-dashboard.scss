@@ -347,12 +347,20 @@
 		.title {
 			color: $secondary-grey;
 			font: normal 500 14px $font;
+			@include ellipse;
 		}
 
 		.byline {
 			color: $primary-blue;
 			text-transform: uppercase;
 			font: normal 700 10px $font;
+			overflow: hidden;
+			@include ellipse;
+		}
+
+		.description{
+			overflow: hidden;
+			@include ellipse;
 		}
 	}
 
