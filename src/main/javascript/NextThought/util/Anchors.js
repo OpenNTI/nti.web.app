@@ -210,7 +210,20 @@ Ext.define('NextThought.util.Anchors', {
 	doesContentRangeDescriptionResolve: function(contentRangeDescription, node, doc){
 		var result, range, theDoc = (node ? node.ownerDocument : null) || doc;
 
+		//Ok so this sucks.  There is a complicated reason why we can't let ourselves
+		//use our cached locator for this query.  Basically, the locator gets cached by the owner document
+		//that the original range is resolved from.  The problem is sometimes node is a docFragment that
+		//we really want the search scoped within, however the docFragment has an owner doc of the main
+		//document (one place this happens is presentation mode).  This means that this method could return
+		//yes if the contentRangeDescription resolves in nodes ownerdoc even if it is not technically
+		//resolved beneath node.  This is partly a result of this method being bolted on to an existing implementation
+		//as well as a caching strategy that was devised back when we only ever used the anchor methods on the content
+		//fragment.  Unfortunately the easiest, and safest, thing to do about this is prevent the locator from
+		//being used.  Double unfortunately, the only way to do that right now is to dump the cached information.
+		contentRangeDescription.attachLocator(null);
+
 		range = this.locateContentRangeDescription(contentRangeDescription, node, theDoc);
+
 
 		result = !!range;
 		if(range && range.detach){
