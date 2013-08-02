@@ -183,11 +183,19 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 
 
 		function blogLoaded(s,rec){
+			var c;
 			if(rec.length>3){
 				s.remove(rec.slice(3));
-				box.add({xtype:'box', ui:'tile', cls:'more-posts', autoEl: {
-					cn: [{},{},{}]
-				}});
+				c = box.add({
+					xtype:'box', ui:'tile', cls:'more-posts',
+					autoEl: { cn: [{},{},{}] },
+					listeners: {
+						click: {
+							element: 'el',
+							fn: function(){ c.fireEvent('navigate-to-blog',user); }
+						}
+					}
+				});
 			}
 		}
 
