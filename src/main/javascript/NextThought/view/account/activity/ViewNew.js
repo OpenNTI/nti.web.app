@@ -36,16 +36,23 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	},
 
 	filtersTpl: Ext.DomHelper.createTemplate(
-		{ cls: 'filters-container', cn:{
-			cls: 'activity-filters', cn: [
+		{ cls: 'filters-container', cn:[
+			{cls: 'activity-filters', cn: [
 				{cls: 'tabs', cn:[
 					{cls: 'tab from x-menu', html: 'Only Me'},
 					{cls: 'tab types x-menu'}
 				]}
 			]}
-		}
+		]}
 	),
 
+	typesFilterArray:[
+		{contacts: true, text: 'Discussions & Thoughts', filter: 'discussions'},
+		{me: true, text: 'Highlights & Notes', filter: 'notes'},
+		{contacts: true, community: true, text: 'Notes', filter: 'notes'},
+		{me: true, text: 'Bookmarks', filter: 'bookmarks'},
+		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact'}
+	],
 
 	layout: {
 		type:'card',
@@ -54,15 +61,19 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	id: 'activity-tab-view',
 	activeItem: 0,
 	items: [
-		{xtype: 'user-history-panel'},
-		{xtype: 'activity-panel'}
+		{xtype: 'user-history-panel', stateId: 'rhp-activity-history'},
+		{xtype: 'activity-panel', filter: 'inCommunity', stateId: 'rhp-activity-community'},
+		{xtype: 'activity-panel', filter: 'notInCommunity', stateId: 'rhp-activity-contacts'}
 	],
 
 
 	initComponent: function(){
-		var i;
-
 		this.callParent(arguments);
+		var i,
+			history = this.down('user-history-panel'),
+			contacts = this.down('activity-panel[filter=notInCommunity]'),
+			community = this.down('activity-panel[filter=inCommunity]');
+
 		this.store = Ext.getStore('Stream');
 		this.mon(this.store,{
 			add: this.updateNotificationCountFromStore
@@ -96,53 +107,28 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			]
 		});
 
-		this.typesMenu = Ext.widget('menu',{
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
-			title: 'Activity Type',
-			cls: 'menu types-menu',
-			width: 258,
-			defaults: {
-				ui: 'nt-menuitem',
-				xtype: 'menucheckitem',
-				plain: true,
-				listeners:{
-					scope: this,
-					'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
-					'checkchange': 'changeFilter'
-				}
-			},
-			items: [
-				{cls: 'option', me: true, contacts: true, community: true, text: 'Show All', checked: true, allowUncheck: false, isAll: true, filter: 'all'},
-				{cls: 'option discussions', contacts: true, text: 'Discussions & Thoughts', filter: 'discussions'},
-				{cls: 'option', me: true, text: 'Highlights & Notes', filter: 'notes'},
-				{cls: 'option', contacts: true, community: true, text: 'Notes', filter: 'notes'},
-				{cls: 'option bookmarks', me: true, text: 'Bookmarks', filter: 'bookmarks'},
-				//{cls: 'option', text: 'Likes', filter: 'likes'},
-				{cls: 'option contact', contacts: true, community: true, text: 'Contact Requests', filter: 'contact'}
-			]
-		});
+		Ext.Array.each(this.typesFilterArray, function(item){
+			if(item.me){
+				history.addFilterItem(item.text, item.filter);
+			}
+
+			if(item.contacts){
+				contacts.addFilterItem(item.text, item.filter);
+			}
+
+			if(item.community){
+				community.addFilterItem(item.text, item.filter);
+			}
+		}, this);
 
 		this.filters = ['all'];
 		this.monitoredInstance = $AppConfig.userObject;
 		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
-		//this.setActiveItem
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
-		this.mon(this, {
-			scope: this,
-			'deactivate': 'resetNotificationCount'
-		});
-
 		var filterEl = this.filtersTpl.append(this.el,null,true);
 
 		//this.switchPanel('history');
@@ -151,13 +137,18 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			'click': 'handleClick'
 		});
 
+		this.mon(this, {
+			scope: this,
+			'deactivate': 'resetNotificationCount'
+		});
+
 		this.mon(this.fromMenu, {
 			scope: this,
 			'show': function(){
-				this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
+				this.el.down('.filters-container .tabs .from').addCls('selected');
 			},
 			'hide': function(){
-				filterEl.down('.activity-filters .tabs .from').removeCls('selected');
+				filterEl.down('.tabs .from').removeCls('selected');
 			},
 			'mouseenter': function(){
 				clearTimeout(this.fromHideTimeout);
@@ -169,40 +160,16 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			}
 		});
 
-		this.mon(this.typesMenu, {
-			scope: this,
-			'show': function(){
-				this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
-			},
-			'hide': function(){
-				filterEl.down('.activity-filters .tabs .types').removeCls('selected');
-			},
-			'mouseenter': function(){
-				clearTimeout(this.typesHideTimeout);
-			},
-			'mouseleave': function(){
-				this.typesHideTimeout = Ext.defer(function(){
-						this.typesMenu.hide();
-					}, 500, this);
-			}
-		});
 
 		this.el.on('mouseleave', function(){
-			if(this.typesMenu.isVisible()){
-				this.typesHideTimeout = Ext.defer(function(){
-					this.typesMenu.hide();
-				}, 500, this);
-			}else if(this.fromMenu.isVisible()){
+			if(this.fromMenu.isVisible()){
 				this.fromHideTimeout = Ext.defer(function(){
 					this.fromMenu.hide();
 				}, 500, this);
 			}
 		}, this);
 
-		this.applyFilters();
-
 		this.fromMenu.show().hide();
-		this.typesMenu.show().hide();
 
 		if(!this.stateApplied){
 			this.applyState({from: 'Community', filter: ['Show All']});
@@ -210,14 +177,12 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		if(!$AppConfig.service.canFriend()){
 			this.fromMenu.down('menuitem[isContacts]').destroy();
-			this.typesMenu.down('menuitem[filter=contact]').destroy();
 		}
 	},
 
 	applyState: function(state){
 		var me = this,
-			fromItems = this.fromMenu.query('menuitem'),
-			filterItems = this.typesMenu.query('menuitem');
+			fromItems = this.fromMenu.query('menuitem');
 		if(state.from){
 			Ext.each(fromItems, function(item){
 				var checked = item.text === state.from;
@@ -231,62 +196,23 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			});
 		}
 
-		if(state.filter){
-			Ext.each(filterItems, function(item){
-				var checked = Ext.Array.contains(state.filter, item.text);
-				
-				if(me.rendered){
-					item.setChecked(checked);
-				}else{
-					me.on('afterrender', function(){
-						item.setChecked(checked);
-					});
-				}
-			});
-		}
-
 		this.stateApplied = true;
 	},
 
 	getState: function(){
 		var fromMenuItem = this.fromMenu.down('menuitem[checked]'),
-			filterMenuItems = this.typesMenu.query('menuitem[checked]'),
-			from = fromMenuItem.text, filter = [];
+			from = fromMenuItem.text;
 
-		Ext.each(filterMenuItems, function(item){
-			filter.push(item.text);
-		});
-
-		return {from: from, filter: filter};
+		return {from: from};
 	},
 
 	switchPanel: function(item){
 		var newPanel = this.getActivePanel(),
-			allItems = this.typesMenu.query('menuitem'),
 			newTab = this.fromMenu.down('menuitem[checked]'),
-			tab = this.el.down('.filters-container .activity-filters .tabs .from');
+			tab = this.el.down('.filters-container .tabs .from');
 
 		tab.update(newTab.text || item.text);
 		this.getLayout().setActiveItem(newPanel);
-
-		Ext.each(allItems, function(item){
-			if(newTab.isMe){
-				item[item.me? 'show': 'hide']();
-			}else if(newTab.isContacts){
-				item[item.contacts? 'show': 'hide']();
-			}else if(newTab.isCommunity){
-				item[item.community? 'show': 'hide']();
-			}
-		});
-
-		
-		if(newTab.isContacts){
-			this.applyFilters('notInCommunity');
-			newPanel.filter = 'notInCommunity';
-		}else if(newTab.isCommunity){
-			this.applyFilters('inCommunity');
-			newPanel.filter = 'inCommunity';
-		}
 
 		this.saveState();
 	},
@@ -295,80 +221,15 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		var selectedTab = this.fromMenu.down('menuitem[checked]'),
 			v = selectedTab && selectedTab.tabFilter;
 
-		if(v === 'notInCommunity' || v === 'inCommunity'){
-			return this.down('activity-panel');
+		if(v === 'notInCommunity'){
+			return this.down('activity-panel[filter=notInCommunity]');
 		}
+
+		if(v === 'inCommunity'){
+			return this.down('activity-panel[filter=inCommunity]');
+		}
+
 		return this.down('user-history-panel');
-	},
-
-	changeFilter: function(item){
-		var allChecked = true, allUnchecked = true,
-			allItems = this.typesMenu.query('menuitem');
-
-		function uncheck(items){
-			Ext.Array.each(items, function(i){
-				if(!i.isAll){
-					i.setChecked(false, true);
-				}
-			});
-		}
-
-		if(item.checked){
-			if(item.isAll){
-				uncheck(allItems);
-			}else{
-				this.typesMenu.query('[isAll]')[0].setChecked(false, true);
-			}
-		}else{
-			Ext.Array.each(allItems, function(i){
-				allUnchecked = allUnchecked && !i.checked;
-			});
-
-			if(allUnchecked){
-				item.setChecked(true,true);
-			}
-		}
-
-		if(this.typesMenu.query('menuitem[checked]').length === 0){
-			this.typesMenu.query('[isAll]')[0].setChecked(true, true);
-		}
-
-		this.applyFilters();
-		this.saveState();
-	},
-
-	applyFilters: function(filter){
-		var menu = this.typesMenu,
-			allItems = menu.query('menuitem'),
-			everything = menu.down('[isAll]').checked, me = this,
-			activePanel = this.getActivePanel(),
-			mimeTypes = [],
-			filterTypes = filter? [filter] : [];
-
-			Ext.each(allItems, function(item){
-				var mt = this.mimeTypesMap[item.filter],
-					ft = this.filtersMap[item.filter];
-
-				if ((everything || item.checked)) {
-					if(mt){
-						Ext.Array.each(Ext.Array.from(mt), function(m){
-							mimeTypes.push('application/vnd.nextthought.'+m);
-						}, this);
-					}
-
-					if(ft){
-						filterTypes.push(ft);
-					}
-
-					if((item.filter === 'all' || item.filter === 'notes') && activePanel.$className === "NextThought.view.account.history.Panel"){
-						Ext.Array.include(filterTypes,'onlyMe');
-					}
-				}
-			}, this);
-
-		if(activePanel && activePanel.applyFilters){
-		   activePanel.applyFilters(mimeTypes, filterTypes);
-		}
 	},
 
 	handleClick: function(e){
@@ -381,17 +242,6 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		}
 	},
 
-	showTypesMenu: function(){
-		if(this.typesMenu.isVisible()){
-			this.typesMenu.hide();
-			return;
-		}
-
-		
-		//this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
-		this.typesMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
-	},
-
 	showFromMenu: function(){
 	   if(this.fromMenu.isVisible()){
 			this.fromMenu.hide();
@@ -400,6 +250,38 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 
 		//this.el.down('.filters-container .activity-filters .tabs .from').addCls('selected');
 		this.fromMenu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
+	},
+
+	showTypesMenu: function(){
+		var active = this.getActivePanel(),
+			menu = active.getTypesMenu();
+
+		if(menu.isVisible()){
+			menu.hide();
+			return;
+		}
+
+		Ext.destroy(this.menuMonitor);
+
+		this.menuMonitor = this.mon(menu, {
+			scope: this,
+			'show': function(){
+				this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
+			},
+			'hide': function(){
+				this.el.down('.filters-container .activity-filters .tabs .types').removeCls('selected');
+			},
+			'mouseenter': function(){
+				clearTimeout(this.typesHideTimeout);
+			},
+			'mouseleave': function(){
+				this.typesHideTimeout = Ext.defer(function(){
+						menu.hide();
+					}, 500, this);
+			}
+		});
+
+		menu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
 	},
 
 	updateNotificationCountFromStore: function(store, records){

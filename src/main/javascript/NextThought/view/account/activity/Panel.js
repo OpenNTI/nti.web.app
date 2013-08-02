@@ -16,10 +16,16 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		'NextThought.model.forums.HeadlineTopic'
 	],
 
-	overflowY: 'auto',
-	overflowX: 'hidden',
+	mixins: {
+		'activityFilter': 'NextThought.mixins.ActivityFilters'
+	},
+
 	cls: 'activity-panel',
 
+	overflowX: 'hidden',
+	overflowY: 'auto',
+
+	stateful: true,
 
 	filter: 'inCommunity',
 
@@ -36,26 +42,28 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}
 	],
 
-
+	
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'length==0', cn:[{
 			cls:"activity nothing rhp-empty-list",
 			cn: [' No Activity Yet']
 		}]},
-		{tag:'tpl', 'for':'.', cn:[
-			{tag:'tpl', 'if':'activity', cn:[{
-				cls:'activity {type}',
-				id: '{guid}',
-				cn: [
-					{cls: 'name', tag: 'span', html: '{name}'},
-					{tag:'tpl', 'if':'verb', cn:[{tag:'span', cls:'verb', html:' {verb} '}]},
-					' {message} ',
-					{tag:'tpl', 'if':'with', cn:['with {with}']}]
-			}]},
-			{tag:'tpl', 'if':'label', cn:[{
-				cls: 'divider', html: '{label}'
-			}]}
-		]}
+		//{cls: 'activity-container', cn: [
+			{tag:'tpl', 'for':'.', cn:[
+				{tag:'tpl', 'if':'activity', cn:[{
+					cls:'activity {type}',
+					id: '{guid}',
+					cn: [
+						{cls: 'name', tag: 'span', html: '{name}'},
+						{tag:'tpl', 'if':'verb', cn:[{tag:'span', cls:'verb', html:' {verb} '}]},
+						' {message} ',
+						{tag:'tpl', 'if':'with', cn:['with {with}']}]
+				}]},
+				{tag:'tpl', 'if':'label', cn:[{
+					cls: 'divider', html: '{label}'
+				}]}
+			]}
+		//]}
 
 	])),
 
@@ -91,12 +99,14 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			activate:'onActivate',
 			'scroll-stopped': 'onScrollStopped'
 		});
+
+		this.mixins.activityFilter.setUpMenu.call(this, this.filter);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
+		
 		this.mon(this.el,{
 			scope: this,
 			'click':'itemClick',
@@ -115,12 +125,26 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		this.addMask();
 
+		this.getTypesMenu().show().hide();
+
 		this.on('resize', function(){
 			if(this.el.isMasked()){
 				this.addMask();
 			}
 		}, this);
+
+		this.mixins.activityFilter.afterRender.apply(this);
 	},
+
+	getState: function(){
+		return this.mixins.activityFilter.getState.apply(this, arguments);
+	},
+
+	
+	applyState: function(){
+		return this.mixins.activityFilter.applyState.apply(this, arguments);
+	},
+
 
 	onScroll: function(e,dom){
 		var el = dom.lastChild,

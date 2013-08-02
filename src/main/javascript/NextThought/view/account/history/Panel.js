@@ -15,6 +15,12 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	],
 
+	mixins: {
+		'activityFilter': 'NextThought.mixins.ActivityFilters'
+	},
+
+	stateful: true,
+
 
 	storeId: 'noteHighlightStore',
 	filter: 'onlyMe,Bookmarks',
@@ -121,6 +127,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.buildStore();
 
 		this.on('resize','manageMaskSize');
+
+		this.mixins.activityFilter.setUpMenu.call(this, 'history');
 	},
 
 	getMimeTypes: function(){
@@ -248,6 +256,19 @@ Ext.define('NextThought.view.account.history.Panel', {
 			scope: this,
 			scroll: this.onScroll
 		});
+
+		this.getTypesMenu().show().hide();
+		this.mixins.activityFilter.afterRender.apply(this);
+	},
+	
+
+	getState: function(){
+		return this.mixins.activityFilter.getState.apply(this, arguments);
+	},
+
+	
+	applyState: function(){
+		return this.mixins.activityFilter.applyState.apply(this, arguments);
 	},
 
 
