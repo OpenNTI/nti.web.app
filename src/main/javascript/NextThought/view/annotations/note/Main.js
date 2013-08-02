@@ -258,7 +258,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		function openSlideDeck(){
 			me.up('note-window').close();
-			SlideDeck.open(dom, this.reader);
+			SlideDeck.open(dom, me.reader);
 		}
 
 
