@@ -40,7 +40,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 						backgroundImage: 'url({avatarURL})'
 					}
 				}]
-			})
+			}),
+			listeners:{
+				scope: this,
+				'select': 'onUserSelected'
+			}
 		});
 
 		this.box = this.add({
@@ -129,5 +133,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			me.view.bindStore(me.store);
 			me.view.getSelectionModel().select(0);
 		});
+	},
+
+
+	onUserSelected: function(selModel, record){
+		this.box.removeAll(true);
+		this.box.add({xtype: 'tile-title', label:record.getName(), heading:'Thought Leader' });
 	}
 });

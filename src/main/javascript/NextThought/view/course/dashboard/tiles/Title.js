@@ -13,7 +13,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.Title',{
 		{ tag:'tpl', 'if':'heading', cn:{ cls: 'heading {withLabel}', html: '{heading}'} },
 		{ tag:'tpl', 'if':'label',   cn:{ cls: 'label', html: '{label}' } }
 	]),
-	
+
+	renderSelectors: {
+		labelEl: '.label'
+	},
+
 	config:{
 		heading: null,
 		label: ''
@@ -25,6 +29,18 @@ Ext.define('NextThought.view.course.dashboard.tiles.Title',{
 		
 		if(!Ext.isEmpty(rd.label)){
 			rd.withLabel = 'with-label';
+		}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var l = this.labelEl;
+		if(l){
+			if(l.dom.scrollWidth > l.getWidth()){
+				l.set({'data-qtip':this.initialConfig.label});
+			}
 		}
 	}
 });

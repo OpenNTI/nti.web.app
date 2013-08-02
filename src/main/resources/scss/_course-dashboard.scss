@@ -311,7 +311,7 @@
 	.user-container-body {
 		background: #fff;
 		position: absolute;
-		padding-top: 75%;
+		margin-top: 75%;
 		top: 0; bottom: 0;
 		left: 0; right: 0;
 	}
@@ -485,5 +485,7 @@
 	.label {
 		font: normal 500 18px $font;
 		color: $primary-grey;
+		overflow: hidden;
+		@include ellipse();
 	}
 }
