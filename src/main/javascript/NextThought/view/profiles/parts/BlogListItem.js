@@ -216,6 +216,8 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 	setContent: function(html, cb){
 		var snip = ContentUtils.getHTMLSnippet(html,300), cmps, me = this;
 
+		if(!this.bodyEl || this.isDestroyed){ return; }
+		
 		if(snip){
 			//add ellipsis if there is a snip AND there is a closing tag, otherwise just use the Read More
 			snip = snip.replace(/(<\/[^<>]+>)$/,this.ellipsis+'$1');
