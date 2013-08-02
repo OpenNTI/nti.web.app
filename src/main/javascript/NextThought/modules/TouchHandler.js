@@ -24,7 +24,7 @@ Ext.define('NextThought.modules.TouchHandler', {
             initialY = false;
 
         container.on('touchStart', function(pageX, pageY) {
-            // touchstart specific logic
+            // touch start specific logic
         });
         container.on('touchMove', function(startX, startY, endX, endY) {
             // move specific logic
@@ -85,7 +85,7 @@ Ext.define('NextThought.modules.TouchHandler', {
 
         if (containerHeight <= parentHeight) {
             panel.setY(initialY, false);
-            return;
+            return initialY;
         }
 
         if (initialY === false){
