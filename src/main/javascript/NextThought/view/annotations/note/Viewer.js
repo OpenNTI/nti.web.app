@@ -83,6 +83,21 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 
 	afterRender: function(){
 		this.callParent();
+
+		function closeOnCardChange(cmp, me){
+			var c = cmp.up('{isOwnerLayout("card")}');
+			me = me||cmp;
+			if( c ){
+				me.mon(c,{
+					'beforedeactivate':'close',//attempt to let this veto the deactivate
+					'deactivate':'destroy'//if deactivated, die
+				});
+				closeOnCardChange(c,me);
+			}
+		}
+
+		closeOnCardChange(this.reader,this);
+
 		this.resizeView();
 		var keyMap = this.keyMap = new Ext.util.KeyMap({
             target: this.el,
