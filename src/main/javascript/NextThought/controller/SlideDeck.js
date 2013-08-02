@@ -22,6 +22,11 @@ Ext.define('NextThought.controller.SlideDeck',{
 				'slidedeck-transcript': {
 					'load-presentation-userdata': 'loadDataForPresentation'
 				}
+			},
+			'controller': {
+				'*': {
+					'show-object': 'maybeShowMediaPlayer'
+				}
 			}
 		});
 	},
@@ -126,5 +131,13 @@ Ext.define('NextThought.controller.SlideDeck',{
 			store.load();
 
 		}, this);
+	},
+
+	maybeShowMediaPlayer: function(obj, fragment){
+		if(obj instanceof NextThought.model.PlaylistItem){
+			this.launchMediaPlayer(obj, obj.getId());
+			return false;
+		}
+		return true;
 	}
 });
