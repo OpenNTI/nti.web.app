@@ -2,8 +2,14 @@ Ext.define('NextThought.view.account.contacts.View',{
 	extend: 'Ext.view.View',
 	alias: 'widget.contacts-view',
 	requires: [
-		'NextThought.view.account.contacts.GroupChat'
+		'NextThought.view.account.contacts.GroupChat',
+        'NextThought.modules.TouchSender',
+        'NextThought.view.account.contacts.TouchHandler'
 	],
+
+    mixins: {
+        moduleContainer: 'NextThought.mixins.ModuleContainer'
+    },
 
 	title: 'Chat',
 	tabConfig: {
@@ -296,6 +302,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 		} else {
 			this.buttonRow.addCls('no-group-chat');
 		}
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('account.contacts', 'touchHandler');
 	},
 
 
