@@ -18,7 +18,6 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 	},	
 
 	setUpMenu: function(key){
-		debugger;
 		this.key = key;
 		this.typesMenu = Ext.widget('menu',{
 			ui: 'nt',
