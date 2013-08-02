@@ -124,6 +124,9 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
+		if(!this.record){
+			return;
+		}
 		var h = this.record.get('headline');
 		this.renderData = Ext.apply(this.renderData||{},this.record.getData());
 
