@@ -126,7 +126,7 @@ Ext.define('NextThought.Library', {
 		var me = this,
 			title = me.getTitle(index),
 			proxy = $AppConfig.server.jsonp? JSONP : Ext.Ajax,
-			t = me.getToc(index),
+			t = me.getToc(title),
 			url;
 
 		function parse(q,s,resp){
@@ -147,7 +147,7 @@ Ext.define('NextThought.Library', {
 				}
 			}
 
-			me.videoIndex[index] = r;
+			me.videoIndex[index] = (r && r.Items) || r;
 			delete me.activeVideoLoad[index];
 			Ext.callback(cb,me,[r]);
 		}
