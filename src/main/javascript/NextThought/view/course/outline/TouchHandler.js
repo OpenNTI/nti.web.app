@@ -25,24 +25,19 @@ Ext.define('NextThought.view.course.outline.TouchHandler', {
             panel.scrollBy(0, deltaY, false);
         }, this);
 
+        leftSide.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
+        leftSide.on('touchTap', this.clickElement);
+        leftSide.on('touchElementAt', this.elementAt);
+
        // rightSide.on('touchScroll', function(ele, deltaY) {
        //     console.log("deltaY:" + deltaY);
        //     console.log("this.getPanel:" + this.getPanel());
        //     this.getRightPanel().scrollBy(0, deltaY, false);
        // }, this);
 
-        leftSide.on('touchElementIsScrollable', function(ele, callback) {
-            callback(true);
-        });
-
        // rightSide.on('touchElementIsScrollable', function(ele, callback) {
         //    callback(true);
         //});
-
-        leftSide.on('touchElementAt', function(x,y, callback) {
-            var element = Ext.getDoc().dom.elementFromPoint(x, y);
-            callback(element);
-        });
 
         ///rightSide.on('touchElementAt', function(x,y, callback) {
         //    var element = Ext.getDoc().dom.elementFromPoint(x, y);

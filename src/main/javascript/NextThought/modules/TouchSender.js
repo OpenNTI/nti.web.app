@@ -171,10 +171,6 @@ Ext.define('NextThought.modules.TouchSender', {
 
         }, false);
 
-        function shouldSelectAllOnTap() {
-            return pickedElement && pickedElement.tagName === 'INPUT';
-        }
-
         dom.addEventListener('touchend', function(e){
             function kineticScroll() {
                 var lt0 = vel< 0,
@@ -209,15 +205,6 @@ Ext.define('NextThought.modules.TouchSender', {
 
             if (tempState === s.STATE.DOWN) {
                 container.fireEvent('touchTap', pickedElement);
-                // Send click/select event to the tapped element
-                // Some input elements need a workaround to select
-                // the entire thing.
-                if (shouldSelectAllOnTap()){
-                    pickedElement.setSelectionRange(0,1000);
-                }
-                else{
-                    pickedElement.click();
-                }
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed

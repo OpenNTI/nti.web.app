@@ -7,5 +7,4 @@ Ext.define('NextThought.view.forums.TouchHandler', {
             return this.container.getEl();
     }
 
-
 });

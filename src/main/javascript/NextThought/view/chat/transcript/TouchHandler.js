@@ -10,14 +10,9 @@ Ext.define('NextThought.view.chat.transcript.TouchHandler', {
             this.getPanel.scrollBy(0, deltaY, false);
         }, this);
 
-        container.on('touchElementIsScrollable', function(ele, callback) {
-            callback(true);
-        });
-
-        container.on('touchElementAt', function(x,y, callback) {
-            var element = Ext.getDoc().dom.elementFromPoint(x, y);
-            callback(element);
-        });
+        container.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
+        container.on('touchTap', this.clickElement);
+        container.on('touchElementAt', this.elementAt);
     },
 
     getPanel: function() {
