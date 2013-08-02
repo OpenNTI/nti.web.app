@@ -179,6 +179,10 @@ Ext.define('NextThought.view.forums.Forum',{
 		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: title },true);
 		this.headerEl = this.headerElContainer.down('.header');
 
+		if(Ext.isEmpty(this.record.getLink('add'))){
+			this.headerEl.down('.new-topic').remove();
+		}
+
 		this.mon(this.headerEl,'click','onHeaderClick');
 
 		this.on({
