@@ -287,7 +287,7 @@ Ext.define('NextThought.controller.UserData', {
 		//if there was a container id, but it didn't resolve, we're in trouble.
 		if(!meta && cid){
 			console.warn('No meta data for Container: '+cid);
-			return;
+			//return;
 		}
 
 		try{
