@@ -31,27 +31,27 @@ Ext.define('NextThought.controller.SlideDeck',{
 		});
 	},
 
-	launchMediaPlayer: function(video, videoId){
+	launchMediaPlayer: function(v, videoId, basePath){
 		console.log('Controller should media player for video: ', arguments);
-		if(Ext.isEmpty(video)){
+		if(Ext.isEmpty(v)){
 			console.error('Could not open the video: insufficient info', arguments);
 			return;
 		}
 
 		//See if we have a transcript.
-		var reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
-			transcript, videoEl, frag, me = this;
+		var transcript, video, videoEl, frag, me = this;
 
-		if(video && !video.isModel){
+		if(v && !v.isModel){
+			video = Ext.clone(v);
 			video.Class = video.Class || 'PlaylistItem';
 			video = ParseUtils.parseItems(video)[0];
 			video.set('NTIID', videoId);
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, reader);
+			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 		}
 		else{
-			frag = video && video.get('dom-clone');
+			frag = v && v.get('dom-clone');
 			videoEl = frag.querySelector('object[type$=ntivideo]');
-			transcript = videoEl && NextThought.model.transcript.TranscriptItem.fromDom(videoEl, reader);
+			transcript = videoEl && NextThought.model.transcript.TranscriptItem.fromDom(videoEl, basePath);
 		}
 
 		// NOTE: this is overly simplified in the future,
@@ -134,9 +134,17 @@ Ext.define('NextThought.controller.SlideDeck',{
 	},
 
 	maybeShowMediaPlayer: function(obj, fragment){
+		var mime;
 		if(obj instanceof NextThought.model.PlaylistItem){
 			this.launchMediaPlayer(obj, obj.getId());
 			return false;
+		}
+		else if(!obj.isModel){
+			mime = obj.mimeType || obj.MimeType;
+			if(/vnd.nextthought.ntivideo/.test(mime)){
+				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath);
+				return false;
+			}
 		}
 		return true;
 	}

@@ -15,7 +15,7 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 
 	statics:{
 
-		fromDom: function(el, reader){
+		fromDom: function(el, basePath){
 			var t  = Ext.fly(el).down('object[type*=mediatranscript]'),
 				url, type, jsonpUrl, assocVideoId, o;
 
@@ -32,14 +32,14 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 				url:url,
 				contentType:type,
 				jsonpUrl:jsonpUrl,
-				basePath: reader && reader.basePath,
+				basePath: basePath,
 				contentElement: t,
 				associatedVideoId: assocVideoId
 			});
 		},
 		
 		
-		fromVideo: function(v, reader){
+		fromVideo: function(v, basePath){
 			var o = v.get('transcripts');
 
 			//For now, since we only assume there is one transcript per video, we can do this:
@@ -49,7 +49,7 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 				url: o.src,
 				jsonpUrl: o.srcjsonp,
 				contentType: o.type,
-				basePath: reader && reader.basePath,
+				basePath: basePath,
 				associatedVideoId: v.get('NTIID')
 			});
 		}

@@ -440,6 +440,59 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
+	lookForObjectLocally: function(id, cb, scope){
+		//One place we know we can look is the video index.
+		//Still not sure the best way to wire this together.
+		//maybe we fire another event?
+		var ntiid = ParseUtils.parseNtiid(id), title, index;
+
+		ntiid.specific.type = 'HTML';
+		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+		ntiid = ntiid.toString();
+		title = ntiid ? this.findTitleWithPrefix(ntiid) : null;
+		if(!title){
+			Ext.callback(cb, scope);
+			return;
+		}
+
+		Library.getVideoIndex(title, function(index){
+			var vid;
+			if(!index){
+				Ext.callback(cb, scope);
+				return;
+			}
+
+			vid = (index)[id];
+
+			if(vid){
+				//We need the base path
+				LocationMeta.getMeta(title.get('NTIID'), function(meta){
+					if(meta){
+						vid.basePath = meta.absoluteContentRoot;
+						Ext.callback(cb, scope, [vid]);
+					}
+					else{
+						Ext.callback(cb, scope);
+					}
+				});
+			}
+			else{
+				Ext.callback(cb, scope, [vid]);
+			}
+
+		}, this);
+
+	},
+
+	findTitleWithPrefix: function(prefix){
+		return Library.findTitleWithPrefix(prefix);
+	},
+
+	bookPrefixIfQuestion: function(id){
+		return ParseUtils.bookPrefixIfQuestionNtiid(id);
+	},
+
+
 	navigateToNtiid: function(ntiid, fragment){
 		var object = ntiid.isModel ? ntiid : undefined,
 			me = this;
@@ -454,7 +507,16 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		if(!object){
-			$AppConfig.service.getObject(ntiid, onSuccess, onFailure, this);
+			//We have a fair amount of data locally that we can get at now.  so look for it first
+			//if we can't find anything then fetch it from remote
+			this.lookForObjectLocally(ntiid, function(object){
+				if(object){
+					onSuccess(object);
+				}
+				else{
+					$AppConfig.service.getObject(ntiid, onSuccess, onFailure, this);
+				}
+			}, this);
 		}
 		else{
 			onSuccess(object);

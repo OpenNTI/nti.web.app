@@ -78,7 +78,7 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 	openMediaViewer: function(){
 		var v = this.playlist[0];
 		console.log('should start media player for video: ', v.get('NTIID'));
-		this.fireEvent('start-media-player', v, v.get('NTIID'));
+		this.fireEvent('start-media-player', v, v.get('NTIID'), this.reader.basePath);
 	},
 
 

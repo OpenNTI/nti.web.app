@@ -149,7 +149,7 @@ Ext.define('NextThought.Library', {
 
 			me.videoIndex[index] = (r && r.Items) || r;
 			delete me.activeVideoLoad[index];
-			Ext.callback(cb,me,[r]);
+			Ext.callback(cb,me,[me.videoIndex[index]]);
 		}
 
 
