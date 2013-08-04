@@ -262,6 +262,58 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	//Returns the prefix of the content ntiid we think this ntiid
+	//would reside beneath
+	contentPrefix: function(id){
+		var ntiid = ParseUtils.parseNtiid(id), title, index;
+
+		ntiid.specific.type = 'HTML';
+		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+		return ntiid.toString();
+	},
+
+
+	/**
+	 *  Looks in content for the content object with the given id
+	 */
+	findContentObject: function(id, callback, scope){
+		var titleNtiidPrefix = this.contentPrefix(id),
+			title = titleNtiidPrefix ? this.findTitleWithPrefix(titleNtiidPrefix) : null;
+		if(!title){
+			Ext.callback(cb, scope);
+			return;
+		}
+
+		//One place we can check is the video index
+		Library.getVideoIndex(title, function(index){
+			var vid;
+			if(!index){
+				Ext.callback(cb, scope);
+				return;
+			}
+
+			vid = (index)[id];
+
+			if(vid){
+				//We need the base path
+				LocationMeta.getMeta(title.get('NTIID'), function(meta){
+					if(meta){
+						vid.basePath = meta.absoluteContentRoot;
+						Ext.callback(cb, scope, [vid]);
+					}
+					else{
+						Ext.callback(cb, scope);
+					}
+				});
+			}
+			else{
+				Ext.callback(cb, scope, [vid]);
+			}
+
+		}, this);
+	},
+
+
 	getLineage: function(ntiid, justLabels){
 		if(!ntiid){
 			Ext.Error.raise('No ntiid given');
