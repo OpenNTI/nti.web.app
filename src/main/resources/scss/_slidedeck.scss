@@ -1034,7 +1034,7 @@ $experimental-support-for-svg: true;
 
 		& ~ .note-window {
 			position: absolute !important;
-			z-index: 29001 !important;
+			z-index: 30000 !important;
 		}
 	}
 }
@@ -1284,7 +1284,7 @@ $experimental-support-for-svg: true;
 body{
 	&.media-viewer-open{
 		.x-component.identity{
-			z-index: 20000 !important;
+			z-index: 30000 !important;
 			top: 17px !important;
 		}
 	}
