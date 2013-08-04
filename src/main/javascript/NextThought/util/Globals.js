@@ -464,7 +464,7 @@ Ext.define('NextThought.util.Globals', {
 
 
 	getExternalizedString: function(key, defaultValue){
-		var v = (NTIStrings || {})[key] || defaultValue || key;
+		var v = (window.NTIStrings || {})[key] || defaultValue || key || '';
 
 		if(v instanceof Array){
 			v = v[ Math.floor(Math.random()*100) % v.length ];
