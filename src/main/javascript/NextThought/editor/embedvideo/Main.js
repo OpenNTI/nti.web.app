@@ -29,7 +29,7 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 
 
 	getValues: function(){
-		var raw = this.down('[name=embed]').getValue(),
+		var raw = this.down('[name=embed]').getValue(), id,
 			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
 			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
 			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i, match;
@@ -44,9 +44,9 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 
 		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 		function parseYoutubeIdOut(url){
-			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/,
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
 				match = url.match(regExp);
-			if (match && match[2].length==11){
+			if (match && match[2].length===11){
 				return match[2];
 			}
 			return null;
@@ -54,7 +54,7 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 
 		//Ok its not.  Is it a url?
 		if(stupidURLRegex.test(raw)){
-			var id = parseYoutubeIdOut(raw);
+			id = parseYoutubeIdOut(raw);
 
 			return {type: ( id ? 'youtube' : 'html5'), embedURL: raw};
 		}

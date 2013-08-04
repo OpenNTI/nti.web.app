@@ -153,13 +153,13 @@ Ext.define('NextThought.view.forums.Topic',{
 		this.mixins.flagActions.constructor.call(this);
 
 		var me = this,
-			r = this.record,s;
+			r = this.record;//,s;
 
 		if(!r || !r.getData){
 			Ext.defer(this.destroy,1,this);
 			return;
 		}
-		s = r.getPublishState();
+		//s = r.getPublishState();
 		r = this.renderData = Ext.apply(this.renderData||{}, r.getData());
 		Ext.apply(r, {
 			path: this.path,
@@ -252,7 +252,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 	scrollCommentIntoView: function(commentId){
 		function scrollIntoView() {
-			if ( typeof(commentId)==='boolean'){
+			if( Ext.isBoolean(commentId) ){
 				el = me.getTargetEl();
 			}
 			else {
@@ -354,9 +354,11 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		if(forum && forum.isVisible()){
 			return forum;
-		}else if(course && course.isVisible()){
-			return course
 		}
+		if(course && course.isVisible()){
+			return course;
+		}
+		return null;
 	},
 
 
@@ -496,7 +498,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 		if(Ext.isFunction(cb)){
 			cmps = cb(this.bodyEl, this);
-			Ext.Array.each(cmps, function(c){me.on('destroy', c.destroy, c);});
+			Ext.each(cmps, function(c){me.on('destroy', c.destroy, c);});
 		}
 	},
 

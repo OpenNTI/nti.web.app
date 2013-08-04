@@ -29,7 +29,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 			console.log("Failed to get forum: ",ntiid);
 		}
 
-		$AppConfig.service.getObject(ntiid, this.createView,failure,this)
+		$AppConfig.service.getObject(ntiid, this.createView,failure,this);
 	},
 
 	createView: function(record){

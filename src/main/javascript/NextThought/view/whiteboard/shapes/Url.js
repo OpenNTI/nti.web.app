@@ -52,7 +52,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 			return;
 		}
 
-		if(image.src != Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src){
+		if(image.src !== Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src){
 			image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;
 		}
 	},

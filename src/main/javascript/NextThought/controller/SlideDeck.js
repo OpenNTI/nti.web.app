@@ -28,7 +28,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 					'show-object': 'maybeShowMediaPlayer'
 				}
 			}
-		});
+		},this);
 	},
 
 	launchMediaPlayer: function(v, videoId, basePath){
@@ -84,17 +84,19 @@ Ext.define('NextThought.controller.SlideDeck',{
 
 	loadDataForPresentation: function(sender, cmps){
 		var containers = {}, containerSettingsMap = {};
-		Ext.Array.each(cmps, function(cmp){
-			var containerId = Ext.isFunction(cmp.containerIdForData) ? cmp.containerIdForData() : null;
+		Ext.each(cmps, function(cmp){
+			var object,
+				props = {},
+				containerId = Ext.isFunction(cmp.containerIdForData) ? cmp.containerIdForData() : null;
 
 			if(Ext.isObject(containerId)){
-				var object = containerId, props = {};
-				containerId = object.containerId
+				object = containerId;
+				containerId = object.containerId;
 				Ext.Object.each(object, function(k,v){
 					if( k !== 'containerId'){
 						props[k] = v;
 					}
-				})
+				});
 				containerSettingsMap[containerId] = props;
 			}
 
@@ -117,7 +119,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		}
 
 		Ext.Object.each(containers, function(cid){
-			var store, props;
+			var store;
 			if(sender.hasPageStore(cid)){
 				store = sender.getPageStore(cid);
 			}
@@ -133,13 +135,15 @@ Ext.define('NextThought.controller.SlideDeck',{
 		}, this);
 	},
 
-	maybeShowMediaPlayer: function(obj, fragment){
+	maybeShowMediaPlayer: function(obj/*, fragment*/){
 		var mime;
+
 		if(obj instanceof NextThought.model.PlaylistItem){
 			this.launchMediaPlayer(obj, obj.getId());
 			return false;
 		}
-		else if(!obj.isModel){
+
+		if(!obj.isModel){
 			mime = obj.mimeType || obj.MimeType;
 			if(/vnd.nextthought.ntivideo/.test(mime)){
 				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath);

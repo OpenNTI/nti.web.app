@@ -21,7 +21,9 @@ Ext.define('NextThought.view.account.contacts.TouchHandler', {
         }
 
         container.on('touchStart', function(pageX, pageY) {
-            if (popout) removePopup();
+            if (popout) {
+	            removePopup();
+            }
         });
 
         container.on('touchLongPress', function(ele, pageX, pageY) {
@@ -29,7 +31,7 @@ Ext.define('NextThought.view.account.contacts.TouchHandler', {
                 if(!pop){ return; }
                 popout = pop;
                 pop.on('destroy', function(){
-                    delete activeTargetDom;
+                    activeTargetDom = undefined;
                 });
             }
 
@@ -54,7 +56,7 @@ Ext.define('NextThought.view.account.contacts.TouchHandler', {
             // Only startup a chat on tap (the popup is only shown on longpress)
             var item = Ext.get(ele).up('.contact-row'),
                 record;
-            if (!item) return;
+            if (!item) { return; }
             record = this.container.getRecord(item);
             container.fireEvent('chat', record);
         }, this);

@@ -13,9 +13,7 @@ Ext.define('NextThought.editor.Actions', {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
 	},
 
-	statics: {
-		supportedTypingAttributes : ['bold', 'underline', 'italic']
-	},
+	supportedTypingAttributes : ['bold', 'underline', 'italic'],
 
 	//default value (allow the cursor into the placeholder div, but don't take any space)
 	defaultValue: '&#8203;',
@@ -446,25 +444,25 @@ Ext.define('NextThought.editor.Actions', {
 
 	onKeyDown: function(e){
 
-        var s = window.getSelection(),
-            a = s && s.anchorNode,
+		var s = window.getSelection(),
+			a = s && s.anchorNode,
 			n = s && s.focusNode,
 			o = s && s.focusOffset,
-            ao = s && s.anchorOffset,
+			ao = s && s.anchorOffset,
 			v = n && n.nodeValue,
 			modKey = e.altKey || e.ctrlKey,
-            badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
+			badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
 		this.detectAndFixDanglingNodes();
-        if(badRange){
-            console.warn('Entire content editable area selected');
-            n = AnnotationUtils.getTextNodes(n)[0];
-            v = n && n.nodeValue;
-        }
+		if(badRange){
+			console.warn('Entire content editable area selected');
+			n = AnnotationUtils.getTextNodes(n)[0];
+			v = n && n.nodeValue;
+		}
 
-        if(e.getKey() === e.SPACE){
-        	e.stopPropagation();
-        }
+		if(e.getKey() === e.SPACE){
+			e.stopPropagation();
+		}
 
 		if(e.getKey() === e.TAB && n){
 			if(modKey){
@@ -485,9 +483,8 @@ Ext.define('NextThought.editor.Actions', {
 					n.nodeValue = v;
 				}
 				else if (!badRange) {
-                    console.warn('Replacing n from'+n);
-                    var temp = this.tabTpl.overwrite(n);
-                    n = temp.firstChild;
+					console.warn('Replacing n from'+n);
+					n = this.tabTpl.overwrite(n).firstChild;
 					o = 0;
 				}
 
@@ -507,7 +504,7 @@ Ext.define('NextThought.editor.Actions', {
 
 	onKeyup: function(e){
 		this.maybeResizeContentBox();
-		this.detectTypingAttributes();
+		this.detectTypingAttributes(e);
 		this.checkTrackedParts();
 		this.maybeEnableSave();
 		//when this is mixed in to the editor its no longer a seperate instance
@@ -518,7 +515,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	onMouseUp: function(e){
-		this.detectTypingAttributes();
+		this.detectTypingAttributes(e);
 	},
 
 
@@ -583,7 +580,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	editorContentAction: function(e){
-		var t = e.getTarget('.control', undefined, true), action;
+		var t = e.getTarget('.control', undefined, true);
 		if(!t){
 			return;
 		}
@@ -666,7 +663,7 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	detectTypingAttributes: function(e){
-		var actions = NextThought.editor.Actions.supportedTypingAttributes, attrs = [];
+		var actions = this.supportedTypingAttributes, attrs = [];
 		Ext.each(actions, function(action){
 			if(document.queryCommandState(action)){
 				attrs.push(action);
@@ -699,7 +696,7 @@ Ext.define('NextThought.editor.Actions', {
 		var me = this;
 		Ext.Object.each(this.trackedParts,function(guid){
 			if(!Ext.get(guid)){
-				if((this.trackedParts[guid] || {}).isWhiteboardWindow){
+				if((me.trackedParts[guid] || {}).isWhiteboardWindow){
 					me.removeWhiteboard(guid);
 					me.fireEvent('droped-whiteboard',guid);
 				}
@@ -726,13 +723,12 @@ Ext.define('NextThought.editor.Actions', {
 
 	//This needs to go somewhere else
 	createVideoPart: function(url, type){
-		var v = {
+		return {
 			Class: 'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
 			embedURL: url,
 			type: type
 		};
-		return v;
 	},
 
 	addVideo: function(data, guid, append){
@@ -748,7 +744,7 @@ Ext.define('NextThought.editor.Actions', {
 			Ext.widget('embedvideo-window', {
 				onEmbed: function(data){
 					var part = me.createVideoPart(data.embedURL, data.type);
-					me.insertObjectThumbnail(me.editor.down('.content'), guid, part, data, append, true);
+					me.insertObjectThumbnail(me.editor.down('.content'), guid, part, data, append/*, true*/);
 
 				}
 			}).show();
@@ -814,9 +810,17 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	insertPartAtSelection: function(html) {
-		var sel, selectionRange, beforeRange, afterRange,
-			beforeContent, afterContent, el, frag, node, lastNode,
-		content = this.editor.down('.content', true);
+		var sel,
+			range,
+			beforeRange,
+			afterRange,
+			beforeContent,
+			afterContent,
+			el,
+			frag,
+			node,
+			lastNode,
+			content = this.editor.down('.content', true);
 
 		if (window.getSelection) {
 			// IE9 and non-IE
@@ -879,8 +883,13 @@ Ext.define('NextThought.editor.Actions', {
 		var me = this,
 			el = Ext.get(guid),
 			mime = (obj || obj.data).MimeType,
-			placeholder, test, html,
-			htmlCfg, handled = false, range, isSelectionInContent, focusNode, thumbTpl, onInsertedFn;
+			placeholder,
+			htmlCfg,
+			handled = false,
+			isSelectionInContent,
+			focusNode,
+			thumbTpl,
+			onInsertedFn;
 
 		//We need empty divs to allow to insert text before or after an object.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
@@ -956,7 +965,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		onInsertedFn = me.onThumbnailInsertedMap[mime];
 		if(onInsertedFn && Ext.isFunction(me[onInsertedFn])){
-			me[onInsertedFn].call(me, obj, guid, placeholder, callback);
+			me[onInsertedFn](obj, guid, placeholder, callback);
 		}
 		else{
 			callback.call(me, Ext.get(guid));
@@ -967,9 +976,10 @@ Ext.define('NextThought.editor.Actions', {
 	onWhiteboardThumbnailInserted: function(obj, guid, placeholder, callback){
 		var me = this;
 		obj.getThumbnail(function (data) {
-			var el = Ext.get(guid).up('.whiteboard-divider');
-			var p = placeholder.insertBefore(el),
+			var el = Ext.get(guid).up('.whiteboard-divider'),
+				p = placeholder.insertBefore(el),
 				wbt;
+
 			el.remove();
 			//recreate image with data
 			wbt = me.wbThumbnailTpm.insertBefore(p, [data, guid], true);
@@ -985,9 +995,8 @@ Ext.define('NextThought.editor.Actions', {
 	},
 
 	onVideoThumbnailInserted: function(obj, guid, placeholder, callback){
-		var me = this;
 		var el = Ext.get(guid);
-		if(el){
+		if( el ){
 			el.set({'data-href': obj.embedURL, 'data-type': obj.type});
 		}
 		callback(el);
@@ -1039,9 +1048,8 @@ Ext.define('NextThought.editor.Actions', {
 	unknownPart: function(up){
 		var me = this,
 			m = up.match(/id="(.*?)"/),
-			id = m && m[1],
-			p = id && me.trackedParts[id];
-		return p;
+			id = m && m[1];
+		return id && me.trackedParts[id];
 	},
 
 	getBody: function (parts) {
@@ -1056,7 +1064,7 @@ Ext.define('NextThought.editor.Actions', {
 
 		function convert(regex, fn){
 			if(new RegExp(regex, 'i').test(part) && Ext.isFunction(this[fn])){
-				p = this[fn].call(this, part);
+				p = me[fn](part);
 			}
 			return !p; //Stop iterating (return false) if we found something
 		}
@@ -1119,8 +1127,10 @@ Ext.define('NextThought.editor.Actions', {
 
 
 	collapseToEnd: function(){
-		var s, me = this, content, c = me.editor.down('.content').dom, r;
-		if (c.innerHTML) {
+		var s, me = this,
+			c = Ext.getDom(me.editor.down('.content')), r,
+			content = c && c.innerHTML;
+		if (content) {
 			try {
 				s = window.getSelection();
 				r = document.createRange();
@@ -1148,8 +1158,8 @@ Ext.define('NextThought.editor.Actions', {
 
 	maybeEnableSave: function(){
 		function isNoteBodyEmpty(){
-			var d = me.editor.down('.content').dom,
-				html = d && d.innerHTML, v, body, parts = d.querySelectorAll('.object-part');
+			var d = Ext.getDom(me.editor.down('.content')),
+				html = d && d.innerHTML, v, parts = d.querySelectorAll('.object-part');
 
 			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '');
 			html = html.replace(/<br\/?>/g, '');
@@ -1159,7 +1169,8 @@ Ext.define('NextThought.editor.Actions', {
 			};
 		}
 
-		var me = this, r = isNoteBodyEmpty(),
+		var me = this, body,
+			r = isNoteBodyEmpty(),
 			cls = 'disabled';
 
 		if(r.enableSave && this.saveButtonEl.hasCls(cls)){
@@ -1169,7 +1180,7 @@ Ext.define('NextThought.editor.Actions', {
 		if(!r.enableSave && !this.saveButtonEl.hasCls(cls)){
 			this.saveButtonEl.addCls(cls);
 			body = me.getBodyValue();
-			
+
 			if(body.length <= 1 && Ext.isEmpty(body[0])){
 				me.setValue('',true);
 			}
@@ -1182,14 +1193,14 @@ Ext.define('NextThought.editor.Actions', {
 
 	editBody: function (body) {
 		var me = this,
-			c = this.editor.down('.content').dom;
+			c = Ext.getDom(this.editor.down('.content'));
 
 		if(body && body.length > 0){
 			c.innerHTML = '';
 		}
 		Ext.each(body, function (part) {
 			var d = document.createElement('div'),
-				partFn, mime, fnName;
+				mime, fnName;
 			if (typeof part === 'string') {
 				d.innerHTML += part.replace(/\u200B/g,'');
 				c.appendChild(d);
@@ -1199,7 +1210,7 @@ Ext.define('NextThought.editor.Actions', {
 				mime = (part.data || part).MimeType;
 				fnName = mime ? me.partRenderer[mime] || '' : undefined;
 				if(fnName &&  Ext.isFunction(me[fnName])){
-					me[fnName].call(me, part, undefined, true);
+					me[fnName](part, undefined, true);
 				}
 				else{
 					//TODO Shoot a part we don't understand.  We need to be graceful

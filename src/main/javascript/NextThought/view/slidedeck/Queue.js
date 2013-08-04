@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.slidedeck.Queue',{
 	extend: 'Ext.view.View',
 	alias: 'widget.slidedeck-queue',
-    selModel: {enableKeyNav: false},
+	selModel: {enableKeyNav: false},
 	singleSelect: true,
 	allowDeselect: false,
 	overItemCls: 'over',
@@ -49,7 +49,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 		this.on('destroy',function(){keyMap.destroy(false);});
 		this.on('viewready',this.onViewReady,this,{single: true, defer: 100});
-        this.on('selectionchange', this.onSelectionChange, this);
+		this.on('selectionchange', this.onSelectionChange, this);
 	},
 
 	onViewReady: function(){
@@ -88,18 +88,18 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	markLastSelectedTime: function(){
 		this.lastChanged = new Date().getTime();
-    },
+	},
 
 	justChanged: function(){
 		return Boolean((new Date().getTime() - this.lastChanged) < 1000);
 	},
 
-    // when entering slidedeck, moves the active slide to the top
-    setStartingSlide: function(slide){
+	// when entering slidedeck, moves the active slide to the top
+	setStartingSlide: function(slide){
 
-	    if(isFeature('transcript-presentation') && this.ownerCt.hasSlides && !this.ownerCt.slidesReady){
-		    this.mon(this.ownerCt,{
-			    'presentation-parts-ready':function(sender, cmps, startOnId){
+		if(isFeature('transcript-presentation') && this.ownerCt.hasSlides && !this.ownerCt.slidesReady){
+			this.mon(this.ownerCt,{
+				'presentation-parts-ready':function(sender, cmps, startOnId){
 					var start;
 					if(startOnId){
 						start = me.store.findRecord('NTIID', startOn, 0, false, true, true);
@@ -108,30 +108,30 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 						}
 					}
 				},
-			    single: true
-		    });
-		    return;
-	    }
+				single: true
+			});
+			return;
+		}
 
 		var n = Ext.get(this.getNode(slide));
-        if(n && n.needsScrollIntoView(this.el)){
-            this.el.scroll('b', n.dom.offsetTop, true);
+		if(n && n.needsScrollIntoView(this.el)){
+			this.el.scroll('b', n.dom.offsetTop, true);
 		}
 		this.getSelectionModel().select(slide);
 	},
 
-    selectSlide: function(slide){
-        var n = Ext.get(this.getNode(slide));
-        if(n && n.needsScrollIntoView(this.el)){
+	selectSlide: function(slide){
+		var n = Ext.get(this.getNode(slide));
+		if(n && n.needsScrollIntoView(this.el)){
 			n.scrollIntoView(this.el);
 
-        }
-        this.getSelectionModel().select(slide);
-        this.fireEvent('slide-selected',slide);
-    },
+		}
+		this.getSelectionModel().select(slide);
+		this.fireEvent('slide-selected',slide);
+	},
 
-    // moves the active slide into view when navigating or
-    // watching the clip
+	// moves the active slide into view when navigating or
+	// watching the clip
 	changeSlide: function(direction){
 		var sel = this.getSelectionModel().getLastSelected();
 
@@ -152,14 +152,14 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		console.log('updateSlideFromVideo',arguments);
 	},
 
-    onSelectionChange: function(sm, records){
-        if(Ext.isEmpty(records)){
-            var lastSelected = sm.getLastSelected();
-            if (lastSelected) {
-                sm.select(sm.getLastSelected());
-            }
-        }else{
-        	this.selectSlide(records[0]);
-        }
+	onSelectionChange: function(sm, records){
+		if(Ext.isEmpty(records)){
+			var lastSelected = sm.getLastSelected();
+			if (lastSelected) {
+				sm.select(sm.getLastSelected());
+			}
+		}else{
+			this.selectSlide(records[0]);
+		}
 	}
 });

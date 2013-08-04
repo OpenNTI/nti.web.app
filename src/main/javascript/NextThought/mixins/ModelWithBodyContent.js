@@ -92,21 +92,22 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
 
 	renderVideoComponent: function(node, owner){
+		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+		function parseYoutubeIdOut(url){
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
+				match = url.match(regExp);
+			if (match && match[2].length===11){
+				return match[2];
+			}
+			return null;
+		}
+
 		var p, width = node.getAttribute('data-width'),
 			url = node.getAttribute('data-url'),
 			type = node.getAttribute('data-type'),
 			item = NextThought.model.PlaylistItem.create({mediaId: guidGenerator()}), source,
 			youtubeId = parseYoutubeIdOut(url);
 
-		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-		function parseYoutubeIdOut(url){
-			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/,
-				match = url.match(regExp);
-			if (match && match[2].length==11){
-				return match[2];
-			}
-			return null;
-		}
 
 		source = {
 			service: youtubeId ? 'youtube' : 'html5',
@@ -140,7 +141,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			if(i<0){
 				Ext.callback(result, scope, [text.join(''), function(node, cmp){
 					var cmpPlaceholders = node.query('.data-component-placeholder'), added=[], cmpAdded;
-					Ext.Array.each(cmpPlaceholders, function(ph){
+					Ext.each(cmpPlaceholders, function(ph){
 						var mime = ph.getAttribute('data-mimetype'),
 							fn = me.componentRendererForPart[mime || ''];
 						if(Ext.isFunction(me[fn])){
@@ -160,7 +161,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			else {
 				fn = me[me.rendererForPart[o.MimeType] || ''];
 				if(Ext.isFunction(fn)){
-					fn.call(me, o, Ext.Function.bind(clickHandlerMaker, scope), Ext.isObject(size) ? size[o.MimeType] : size, function(t){
+					fn.call(me, o, Ext.bind(clickHandlerMaker, scope), Ext.isObject(size) ? size[o.MimeType] : size, function(t){
 						text.push(t);
 						render(i-1);
 					}, me);

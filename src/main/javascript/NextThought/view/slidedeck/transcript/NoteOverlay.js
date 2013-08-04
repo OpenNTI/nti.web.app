@@ -282,7 +282,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	unRegisterNoteRecord: function(rec){
-		var r = this.annotationManager.findBy(function(item){ return item.id === rec.getId()});
+		var r = this.annotationManager.findBy(function(item){ return item.id === rec.getId();});
 		if(r){
 			this.annotationManager.remove(r);
 		}

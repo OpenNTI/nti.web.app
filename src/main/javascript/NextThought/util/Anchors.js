@@ -255,7 +255,7 @@ Ext.define('NextThought.util.Anchors', {
 			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
 			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
 			//preresolve the locator and now
-			locator = Anchors.cachedLocatorEnsuringDocument(contentRangeDescription, docElement)
+			locator = Anchors.cachedLocatorEnsuringDocument(contentRangeDescription, docElement);
 			if(locator){
 				return Anchors.convertContentRangeToDomRange(locator.start, locator.end, locator.doc);
 			}

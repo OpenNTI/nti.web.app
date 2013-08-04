@@ -214,6 +214,7 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (tempState === s.STATE.LONGPRESS) {
                 // Don't do anything since the interactions should have
                 // come from either the longpress itself, or scrolling/dragging
+	            Ext.emptyFn();//lint doesn't like empty blocks...perhaps re-write to not need one?
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed

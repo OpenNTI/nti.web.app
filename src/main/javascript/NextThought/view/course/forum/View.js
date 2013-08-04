@@ -17,26 +17,16 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 	handleDeactivate: function(){
-		var board = this.down('.course-forum-board'),
-			forum = this.down('.course-forum-topic-list'),
-			topic = this.down('.forums-topic');
-
-		board && board.unlockHeader && board.unlockHeader();
-		forum && forum.unlockHeader && forum.unlockHeader();
-		topic && topic.unlockHeader && topic.unlockHeader();
+		var c = this.peek();
+		if(c && c.unlockHeader){
+			c.unlockHeader();
+		}
 	},
 
 	onActivate: function(){
-		var board = this.down('.course-forum-board'),
-			forum = this.down('.course-forum-topic-list'),
-			topic = this.down('.forums-topic');
-		
-		if(topic && topic.isVisible()){
-			topic.lockHeader && topic.lockHeader();
-		}else if(forum && forum.isVisible()){
-			forum.lockHeader && forum.lockHeader();
-		}else if(board && board.isVisible()){
-			board.lockHeader && board.lockHeader();
+		var c = this.peek();
+		if(c && c.lockHeader && c.isVisible()){
+			c.lockHeader();//maybe this is already handled by this, but maybe we should check if we should lock?
 		}
 
 		if(this.store){
@@ -197,7 +187,7 @@ Ext.define('NextThought.view.course.forum.View',{
 				});
 			}
 
-		})
+		});
 	},
 
 	onCourseChanged: function(pageInfo){
@@ -236,11 +226,7 @@ Ext.define('NextThought.view.course.forum.Board',{
 		}
 	},
 
-	onHeaderClick: function(e){
-		if(e.getTarget('.path')){
-			return;
-		}
-	}
+	onHeaderClick: function(e){}
 });
 
 Ext.define('NextThought.view.course.forum.ForumList',{

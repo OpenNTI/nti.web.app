@@ -91,7 +91,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 	updateActiveState: function(type,ntiid){
 		var state = {};
-		state['current_'+type] = ntiid
+		state['current_'+type] = ntiid;
 		this.pushState(state);
 	},
 

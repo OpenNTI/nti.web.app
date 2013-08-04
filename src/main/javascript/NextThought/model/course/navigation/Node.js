@@ -114,31 +114,35 @@ Ext.define('NextThought.model.course.navigation.Node',{
 
 
 	listenForFieldChange: function(field,fn,scope, single){
-		var monitor = this.mon(this.store,{
-			destroyable: true,
-			update:function(store, record, type, modifiedFieldNames){
-				if(Ext.Array.contains(modifiedFieldNames,field)){
-					if(Ext.isString(fn)){
+		var monitor;
 
-						if((scope||record)[fn]){
-							fn = (scope||record)[fn];
-						}
-						else if(!fn && store[fn]){
-							fn = store[fn];
-							scope = store;
-						} else {
-							console.error('Could not find function "'+fn+'" in scope, record nor store.',{
-								scope:scope,record:record,store:store});
-							Ext.destroy(monitor);
-							return;
-						}
+		function update(store, record, type, modifiedFieldNames){
+			if(Ext.Array.contains(modifiedFieldNames,field)){
+				if(Ext.isString(fn)){
+
+					if((scope||record)[fn]){
+						fn = (scope||record)[fn];
 					}
-					if(single){
+					else if(!fn && store[fn]){
+						fn = store[fn];
+						scope = store;
+					} else {
+						console.error('Could not find function "'+fn+'" in scope, record nor store.',{
+							scope:scope,record:record,store:store});
 						Ext.destroy(monitor);
+						return;
 					}
-					Ext.callback(fn,scope||record,[record,record.get(field)]);
 				}
+				if(single){
+					Ext.destroy(monitor);
+				}
+				Ext.callback(fn,scope||record,[record,record.get(field)]);
 			}
+		}
+
+		monitor = this.mon(this.store,{
+			destroyable: true,
+			update:update
 		});
 		return monitor;
 	}
