@@ -315,7 +315,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		var annotations = this.annotationOverlay.query('.count[data-line]'),
 			result = this.annotationOverlay.down('.count[data-line='+line+']');
 
-		if(result || !annotations){ return result; }
+		if(result || Ext.isEmpty(annotations)){ return result; }
 
 		Ext.each(annotations, function(item){
 			var nLine = item.getAttribute('data-line');
