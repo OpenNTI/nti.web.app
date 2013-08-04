@@ -300,7 +300,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	updateAnnotationCountAtLine: function(line, count){
 		var tpl = this.controlTpl,
-			el = this.annotationOverlay.down('.count[data-line='+line+']');
+			el = this.getAnnotationEl(line);
 
 		if(Ext.isEmpty(el)){
 			el = tpl.append(this.annotationOverlay, {line:line, count:count}, true);
@@ -309,6 +309,23 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		} else{
 			el.update(count);
 		}
+	},
+
+	getAnnotationEl: function(line){
+		var annotations = this.annotationOverlay.query('.count[data-line]'),
+			result = this.annotationOverlay.down('.count[data-line='+line+']');
+
+		if(result || !annotations){ return result; }
+
+		Ext.each(annotations, function(item){
+			var nLine = item.getAttribute('data-line');
+
+			if(nLine && Math.abs(nLine - line) < 2){
+				result = item;
+			}
+		});
+
+		return result;
 	},
 
 
