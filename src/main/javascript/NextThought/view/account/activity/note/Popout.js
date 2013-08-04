@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 
 	statics: {
 
-		popupAfterResolvingParent: function(record, el, viewRef){
+		popupAfterResolvingParent: function(record, el, viewRef, anchor, cb){
 
 			var service = $AppConfig.service,
 				me = this,
@@ -19,7 +19,7 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 				if(resolvedRecord !== record){
 					resolvedRecord.focusRecord = record;
 				}
-				me.popupNow(resolvedRecord, el, viewRef);
+				me.popupNow(resolvedRecord, el, viewRef, anchor, cb);
 			}
 
 			if(!this.beforeShowPopup(record, el)){

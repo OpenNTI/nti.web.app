@@ -48,22 +48,20 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			cls:"activity nothing rhp-empty-list",
 			cn: [' No Activity Yet']
 		}]},
-		//{cls: 'activity-container', cn: [
-			{tag:'tpl', 'for':'.', cn:[
-				{tag:'tpl', 'if':'activity', cn:[{
-					cls:'activity {type}',
-					id: '{guid}',
-					cn: [
-						{cls: 'name', tag: 'span', html: '{name}'},
-						{tag:'tpl', 'if':'verb', cn:[{tag:'span', cls:'verb', html:' {verb} '}]},
-						' {message} ',
-						{tag:'tpl', 'if':'with', cn:['with {with}']}]
-				}]},
-				{tag:'tpl', 'if':'label', cn:[{
-					cls: 'divider', html: '{label}'
-				}]}
-			]}
-		//]}
+		{tag:'tpl', 'for':'.', cn:[
+			{tag:'tpl', 'if':'activity', cn:[{
+				cls:'activity {type}',
+				id: '{guid}',
+				cn: [
+					{cls: 'name', tag: 'span', html: '{name}'},
+					{tag:'tpl', 'if':'verb', cn:[{tag:'span', cls:'verb', html:' {verb} '}]},
+					' {message} ',
+					{tag:'tpl', 'if':'with', cn:['with {with}']}]
+			}]},
+			{tag:'tpl', 'if':'label', cn:[{
+				cls: 'divider', html: '{label}'
+			}]}
+		]}
 
 	])),
 
