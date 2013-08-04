@@ -441,7 +441,7 @@ Ext.define('NextThought.util.Globals', {
 			nodes = doc.querySelectorAll('link[rel=stylesheet]'),
 			href, i = nodes.length-1, v;
 
-		for(i; i>0; i--) {Globals
+		for(i; i>0; i--) {
 			v = nodes[i];
 			href = v.getAttribute('href');
 			if(href.indexOf(cb) < 0){

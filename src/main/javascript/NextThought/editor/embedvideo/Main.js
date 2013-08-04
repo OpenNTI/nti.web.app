@@ -42,9 +42,21 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 			return {type: 'youtube' , embedURL: match[1]};
 		}
 
+		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+		function parseYoutubeIdOut(url){
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/,
+				match = url.match(regExp);
+			if (match && match[2].length==11){
+				return match[2];
+			}
+			return null;
+		}
+
 		//Ok its not.  Is it a url?
 		if(stupidURLRegex.test(raw)){
-			return {type: (youtubeEmbedURLRegex.test(raw) ? 'youtube' : 'html5'), embedURL: raw};
+			var id = parseYoutubeIdOut(raw);
+
+			return {type: ( id ? 'youtube' : 'html5'), embedURL: raw};
 		}
 
 
