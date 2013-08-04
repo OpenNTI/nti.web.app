@@ -37,7 +37,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			r = me.record,
 			cid = r.get('ContainerId'),
 			metaInfo,
-			C = ContentUtils;
+			C = ContentUtils,
+			metaHandled = true;
 
 		if (r.focusRecord) {
 			this.on('add', function (container, newChild, idx) {
@@ -80,7 +81,44 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				});
 				return;
 			}
-			el.remove();
+
+			metaHandled = false;
+
+			ContentUtils.findContentObject(cid, function(obj, meta){
+				//TOOD need a generic framework for various objects here
+				if(obj && /ntivideo/.test(obj.mimeType || obj.MimeType)){
+					var src, sources, contextEl;
+					console.log('Need to set context being video', obj);
+					if(meta){
+						me.locationEl.update(meta.getPathLabel());
+						if(me.context){
+							contextEl = me.context.up('.context');
+							if(contextEl){
+								contextEl.addCls('video-context');
+							}
+							me.context.setHTML('');
+						}
+
+						sources = obj.sources;
+
+						if(!Ext.isEmpty(sources)){
+							src = sources.first().thumbnail;
+						}
+
+						Ext.DomHelper.append(me.context, [
+							{html: obj.title},
+							{
+								tag: 'img',
+								cls: 'video-thumbnail',
+								src: src
+							}]);
+					}
+				}
+				else{
+					el.remove();
+				}
+				Ext.callback(fin);
+			});
 		}
 
 		LocationMeta.getMeta(cid, function (meta) {
@@ -93,10 +131,13 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 					me.locationEl.update(metaInfo.getPathLabel());
 					return;
 				}
-				me.locationEl.remove();
+				if(metaHandled){
+					me.locationEl.remove();
+					Ext.callback(fin);
+				}
 			}
 
-			C.spider(cid, Ext.Function.createSequence(upLoc, fin, me), parse, error);
+			C.spider(cid, upLoc, parse, error);
 		}, me);
 	},
 

@@ -276,9 +276,9 @@ Ext.define('NextThought.util.Content', {
 	/**
 	 *  Looks in content for the content object with the given id
 	 */
-	findContentObject: function(id, callback, scope){
+	findContentObject: function(id, cb, scope){
 		var titleNtiidPrefix = this.contentPrefix(id),
-			title = titleNtiidPrefix ? this.findTitleWithPrefix(titleNtiidPrefix) : null;
+			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null;
 		if(!title){
 			Ext.callback(cb, scope);
 			return;
@@ -299,7 +299,7 @@ Ext.define('NextThought.util.Content', {
 				LocationMeta.getMeta(title.get('NTIID'), function(meta){
 					if(meta){
 						vid.basePath = meta.absoluteContentRoot;
-						Ext.callback(cb, scope, [vid]);
+						Ext.callback(cb, scope, [vid, meta]);
 					}
 					else{
 						Ext.callback(cb, scope);

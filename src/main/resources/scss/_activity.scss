@@ -216,6 +216,14 @@
 					p { margin: 0; }
 				}
 
+				&.video-context{
+					height: 135px;
+
+					& > .text{
+						height: 120px;
+					}
+				}
+
 				&::after {
 					content: ' ';
 					position: absolute;
