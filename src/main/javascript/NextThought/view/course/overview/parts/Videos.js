@@ -315,14 +315,15 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		e.stopEvent();
 
 		var m = this.getSelectionModel().getSelection()[0],
-			t = m && this.getStore().indexOf(m);
+			t = m && this.getStore().indexOf(m), reader;
 
 		if (!m || t<0 || !this.player){
 			return;
 		}
 
 		if(e.getTarget('.launch-player')){
-			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId());
+            reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
+			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), reader.basePath);
 			return;
 		}
 
