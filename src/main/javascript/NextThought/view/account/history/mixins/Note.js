@@ -36,8 +36,8 @@ Ext.define('NextThought.view.account.history.mixins.Note',{
 			var lineage = [],
 				location = '';
 
-			if(meta){
-				lineage = ContentUtils.getLineage(meta.NTIID,true);
+			lineage = ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'),true);
+			if(!Ext.isEmpty(lineage)){
 				location = lineage.shift();
 				lineage.reverse();
 			}
