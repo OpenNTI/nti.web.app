@@ -68,6 +68,12 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		var oldSource;
 		console.warn('YouTube player died with error: ' + error.data);
 
+		if(error.data === 2){
+			console.log('Data Dump: ',this.currentSource,error);
+			this.cleanup();
+			return;
+		}
+
 //		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
 //		interaction with the browsers built-in HTML5 player, so lets try, try again.
 //		SAJ: We should probably also give up after X tries and just go to the next source
@@ -98,7 +104,11 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	load: function(source, offset){
 		this.currentSource = source;
 		this.currentStartAt = offset;
-		this.player.cueVideoById(source, offset, "medium");
+		this.player.cueVideoById({
+			videoId:source,
+			startSeconds:offset,
+			suggestedQuality:"medium"
+		});
 	},
 
 	play: function(){
