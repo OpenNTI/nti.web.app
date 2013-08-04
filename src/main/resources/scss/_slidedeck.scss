@@ -743,7 +743,7 @@ $experimental-support-for-svg: true;
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	right: 0;
+	right: 0 !important;
 	left: 0;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
@@ -987,6 +987,8 @@ $experimental-support-for-svg: true;
 			margin-left: 560px !important;
 			.x-container-transcript{
 				.content-video-transcript{
+                    padding-left: 70px !important;
+
 					.row-item{
 						.timestamp{
 							visibility: visible;
@@ -1142,6 +1144,7 @@ $experimental-support-for-svg: true;
 				position: relative;
 				left: -70px;
 				top: 30px;
+                cursor: pointer;
 
 				&:hover {
 					color: #494949 !important;
