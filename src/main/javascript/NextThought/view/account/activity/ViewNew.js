@@ -181,10 +181,18 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	},
 
 	applyState: function(state){
+		var me = this;
 		if(state.from){
 			Ext.each(this.fromMenu.query('menuitem'), function(item){
-				var checked = item.text === state.from;
-				item.setChecked(checked);
+				var checked = item.type === state.from;
+				
+				if(me.rendered){
+					item.setChecked(checked);
+				}else{
+					me.on('afterrender', function(){
+						item.setChecked(checked);
+					}, me);
+				}
 			});
 			this.stateApplied = true;
 		}

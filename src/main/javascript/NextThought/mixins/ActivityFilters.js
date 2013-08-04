@@ -96,7 +96,14 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 			me.typesMenu.down('[isAll]').setChecked(false);
 			Ext.each(items, function(item){
 				var checked = Ext.Array.contains(types, item.type);
-				item.setChecked(checked);
+				
+				if(me.rendered){
+					item.setChecked(checked);
+				}else{
+					me.on('afterrender',function(){
+						item.setChecked(checked);
+					}, me)
+				}
 			});
 
 			if(!Ext.isEmpty(types)){
