@@ -384,7 +384,7 @@ Ext.define('NextThought.Library', {
 		elts = EA.toArray(toc.getElementsByTagName( 'topic' ));
 		// add units to this list
 		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'unit' )));
-
+		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'object' )));
 		for( ix=elts.length-1; ix >= 0; ix-- ) {
 			topic = elts[ix];
 			if( topic && topic.getAttribute( 'ntiid' ) === containerId ) {

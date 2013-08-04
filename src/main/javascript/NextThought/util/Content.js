@@ -286,7 +286,7 @@ Ext.define('NextThought.util.Content', {
 
 		//One place we can check is the video index
 		Library.getVideoIndex(title, function(index){
-			var vid;
+			var vid, container;
 			if(!index){
 				Ext.callback(cb, scope);
 				return;
@@ -295,8 +295,15 @@ Ext.define('NextThought.util.Content', {
 			vid = (index)[id];
 
 			if(vid){
+				container = this.getLineage(id);
+				if(!Ext.isEmpty(container) && container.length > 1){
+					container = container[1];
+				}
+				else{
+					container = title.get('NTIID');
+				}
 				//We need the base path
-				LocationMeta.getMeta(title.get('NTIID'), function(meta){
+				LocationMeta.getMeta(container, function(meta){
 					if(meta){
 						vid.basePath = meta.absoluteContentRoot;
 						Ext.callback(cb, scope, [vid, meta]);
