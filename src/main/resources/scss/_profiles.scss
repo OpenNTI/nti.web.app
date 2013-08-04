@@ -539,6 +539,13 @@
 						p{ margin: 0; }
 					}
 
+					&.video-context{
+						height: 186px;
+						& > .text{
+							height: 170px;
+						}
+					}
+
 					&::after {
 						content: ' ';
 						position: absolute;

@@ -237,7 +237,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			r = me.record,
 			cid = r.get('ContainerId'),
 			metaInfo,
-			C = ContentUtils;
+			C = ContentUtils,
+			metaHandled = true;
 
 		function parse(content){
 			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
@@ -262,13 +263,58 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 				});
 				return;
 			}
-			el.remove();
+
+			metaHandled = false;
+
+			ContentUtils.findContentObject(cid, function(obj, meta){
+				//TOOD need a generic framework for various objects here
+				if(obj && /ntivideo/.test(obj.mimeType || obj.MimeType)){
+					var src, sources, contextEl;
+					console.log('Need to set context being video', obj);
+					if(meta){
+						me.setLocation(meta);
+						//me.locationEl.update(meta.getPathLabel());
+						if(me.context){
+							contextEl = me.context.up('.context');
+							if(contextEl){
+								contextEl.addCls('video-context');
+							}
+							me.context.setHTML('');
+						}
+
+						sources = obj.sources;
+
+						if(!Ext.isEmpty(sources)){
+							src = sources.first().thumbnail;
+						}
+
+						Ext.DomHelper.append(me.context, [
+							{html: obj.title},
+							{
+								tag: 'img',
+								cls: 'video-thumbnail',
+								src: src
+							}]);
+					}
+				}
+				else{
+					el.remove();
+				}
+				Ext.callback(fin);
+			});
 		}
 
 
 		LocationMeta.getMeta(cid, function(meta){
 			metaInfo = meta;
-			C.spider(cid,fin,parse,error);
+
+			function maybeFin(){
+				if(metaHandled){
+					Ext.callback(fin);
+				}
+			}
+
+			C.spider(cid,maybeFin,parse,error);
 		}, me);
 	},
 
