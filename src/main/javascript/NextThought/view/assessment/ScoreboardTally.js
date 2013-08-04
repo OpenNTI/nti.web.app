@@ -49,12 +49,10 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 					10,
 					Math.max( Math.ceil(percent/10),0 ) ),
 			messageBucket = bucketId || 0,
-			messageId = 0,
 			msg = '';
 
 		try {
-			messageId = Math.floor(Math.random()*100)%5;
-			msg = NTIString('question_set_scoreboard_'+messageBucket+'_'+messageId, NTIString('default_scoreboard_message'));
+			msg = NTIString('question_set_scoreboard_'+messageBucket, NTIString('default_scoreboard_message'));
 		}
 		catch(e){
 			console.error('Error getting message: '+ e.message, Globals.getError(e));

@@ -441,7 +441,7 @@ Ext.define('NextThought.util.Globals', {
 			nodes = doc.querySelectorAll('link[rel=stylesheet]'),
 			href, i = nodes.length-1, v;
 
-		for(i; i>0; i--) {
+		for(i; i>0; i--) {Globals
 			v = nodes[i];
 			href = v.getAttribute('href');
 			if(href.indexOf(cb) < 0){
@@ -464,7 +464,13 @@ Ext.define('NextThought.util.Globals', {
 
 
 	getExternalizedString: function(key, defaultValue){
-		return (NTIStrings || {})[key] || (defaultValue || key);
+		var v = (NTIStrings || {})[key] || defaultValue || key;
+
+		if(v instanceof Array){
+			v = v[ Math.floor(Math.random()*100) % v.length ];
+		}
+
+		return v;
 	}
 
 },
