@@ -148,6 +148,11 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	},
 
 
+	getStore: function(){
+		return this.userDataStore;
+	},
+
+
 	createDomRange:function(){
 		var range = document.createRange(),
 			el = this.el.down('img');

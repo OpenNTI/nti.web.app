@@ -115,6 +115,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
+	getStore: function(){
+		return this.userDataStore;
+	},
+
+
 	getUserDataTimeFilter: function(){
 		function fn(item){
 			var range = item.get('applicableRange'),

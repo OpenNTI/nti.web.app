@@ -53,7 +53,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.add({
 			xtype:'slidedeck-transcript',
-			transcript:this.transcript,
+			transcript: this.transcript,
+			record: this.record,
 			xhooks: {
 				getScrollTarget: function(){
 					return this.ownerCt.getTargetEl().dom;
@@ -103,6 +104,16 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			height: height
 		});
+
+		if(this.record){
+			var range = this.record.get('applicableRange') || {},
+				pointer = range.start || {},
+				t = pointer.seconds / 1000; //They are actually millis not seconds
+
+			if(t > 0){
+				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, t);
+			}
+		}
 	},
 
 	switchVideoViewer: function(type){

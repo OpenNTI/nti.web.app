@@ -31,7 +31,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		},this);
 	},
 
-	launchMediaPlayer: function(v, videoId, basePath){
+	launchMediaPlayer: function(v, videoId, basePath, rec){
 		console.log('Controller should media player for video: ', arguments);
 		if(Ext.isEmpty(v)){
 			console.error('Could not open the video: insufficient info', arguments);
@@ -60,7 +60,8 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.activeMediaPlayer = Ext.widget('media-viewer', {
 			video: video,
 			transcript: transcript,
-			autoShow: true
+			autoShow: true,
+			record: rec
 		});
 		this.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
 		this.activeMediaPlayer.on('destroy', function(){
@@ -135,7 +136,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		}, this);
 	},
 
-	maybeShowMediaPlayer: function(obj/*, fragment*/){
+	maybeShowMediaPlayer: function(obj, fragment, rec, options){
 		var mime;
 
 		if(obj instanceof NextThought.model.PlaylistItem){
@@ -146,7 +147,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		if(!obj.isModel){
 			mime = obj.mimeType || obj.MimeType;
 			if(/vnd.nextthought.ntivideo/.test(mime)){
-				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath);
+				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath, rec, options);
 				return false;
 			}
 		}

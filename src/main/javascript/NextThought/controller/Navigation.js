@@ -464,7 +464,7 @@ Ext.define('NextThought.controller.Navigation', {
 			me = this;
 
 		function onSuccess(obj){
-			me.fireEvent('show-object', obj, fragment);
+			me.fireEvent('show-object', obj, fragment, rec, options);
 		}
 
 		function onFailure(){

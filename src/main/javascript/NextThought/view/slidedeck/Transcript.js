@@ -72,6 +72,23 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.fireEvent('register-records', store, store.getRange(), cmp);
 			cmp.bindToStore(store);
 		});
+
+		if(this.record){
+			var r;
+			//Loop the components looking for something that knows where
+			//this.record is
+			Ext.Array.each(cmps, function(cmp){
+				r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
+				return r !== null;
+			}, this);
+
+			if(r){
+				console.log('Need to scroll to range', r);
+				this.el.getScrollingEl().scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top);
+				delete this.record;
+			}
+
+		}
 	},
 
 	onStoreEventsAdd:function(store, records){

@@ -220,14 +220,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	registerNoteRecord: function(rec, cmp, recStore){
+	rangeForDescription: function(rec, cmp, recStore){
 		var anchorResolver =  cmp && cmp.getAnchorResolver && cmp.getAnchorResolver(),
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
 			domRange, rect, line, domFrag, b, d;
 
 		rec = recStore.getById(rec.getId()) || rec;
-
-		if(this.isRecordAlreadyAdded(rec)){return;}
 
 		if(!anchorResolver){ anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver; }
 
@@ -250,6 +248,17 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		else{
 			domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
 		}
+
+		return domRange;
+	},
+
+
+	registerNoteRecord: function(rec, cmp, recStore){
+
+		if(this.isRecordAlreadyAdded(rec)){return;}
+
+		var domRange = this.rangeForDescription(rec, cmp, recStore),
+			rect, line, d;
 
 		if(Ext.isEmpty(domRange)){
 			return;
