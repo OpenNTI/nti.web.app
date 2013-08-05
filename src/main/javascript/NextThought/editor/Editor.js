@@ -667,7 +667,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			n = s && s.focusNode,
 			o = s && s.focusOffset,
 			ao = s && s.anchorOffset,
-			v = n && n.nodeValue,
+			v = n && n.nodeValue, r,
 			modKey = e.altKey || e.ctrlKey,
 			badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
@@ -710,9 +710,15 @@ Ext.define('NextThought.editor.AbstractEditor',{
 				return false;
 			}
 		}
-//		else if(e.getKey()!== e.DELETE && e.getKey() !== e.BACKSPACE && e.getKey() !== e.SPACE){
-//			this.contentEl.removeCls('show-placeholder');
-//		}
+		else if(e.getKey()=== e.DELETE || e.getKey() === e.BACKSPACE){
+
+			if(Ext.isIE && a === n && a.childNodes[ao] === undefined && a.childNodes[ao-1]){
+				s.removeAllRanges();
+				r = document.createRange();
+				r.selectNode(a.childNodes[ao-1]);
+				s.addRange(r);
+			}
+		}
 
 		this.hideStylePopover();
 		this.hideObjectsPopover();
