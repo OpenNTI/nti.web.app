@@ -1102,15 +1102,16 @@ $experimental-support-for-svg: true;
 
 		.cue{
 			padding: 3px;
-			color: #757474;
+			color: $secondary-grey;
 			font: 14px normal $font;
 
 			&:first-child{
 				padding-left: 0;
 			}
-			&.active{
-				background-color: #e3f2fc;
+			&:active, &:hover{
+				background: #313233;
 				border-radius: 3px;
+                color: $tertiary-grey;
 			}
 		}
 

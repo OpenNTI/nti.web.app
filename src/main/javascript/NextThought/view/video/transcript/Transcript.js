@@ -291,6 +291,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			'mouseup':'showContextMenu'
 		});
 
+        Ext.defer( this.positionAnnotationNibs, 1, this);
 
 		// FIXME: since we need to be able to resolve a dom range given a timeRange a
 		// nd sometimes we don't have access to the cueStore,
@@ -300,6 +301,22 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		desc = this.transcript.get('associatedVideoId') + '-cues';
 		me.el.set({'data-desc': desc});
 	},
+
+
+    positionAnnotationNibs: function(){
+        var me = this;
+        // Set the top position of note widget nibs.
+        Ext.each(this.el.query('.cue .add-note-here'), function(nib){
+            var cueEl = Ext.fly(nib).up('.cue'),
+            // NOTE: this should be coming from the config or ownerCt, hard code it for now.
+                parentCmpTopOffset = 75,
+                innerOffset = 10,
+                y = cueEl.getY() - parentCmpTopOffset - innerOffset;
+
+            y = y + 'px';
+            Ext.fly(nib).up('.control-container').setStyle({'top':y});
+        });
+    },
 
 
 	openEditor: function(e){
@@ -496,7 +513,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 	getDocumentElement: function(){
-		console.log('should return doc element');
 		return this.el.dom.ownerDocument;
 	},
 

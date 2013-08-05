@@ -172,6 +172,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			if(Ext.isFunction(cmp.registerAnnotations)){
 				cmp.registerAnnotations();
 			}
+            if(Ext.isFunction(cmp.positionAnnotationNibs)){
+                cmp.positionAnnotationNibs();
+            }
 		});
 	},
 
