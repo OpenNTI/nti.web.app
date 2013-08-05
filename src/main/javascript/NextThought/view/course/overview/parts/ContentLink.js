@@ -20,5 +20,12 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		};
 
 		this.callParent([config]);
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		Ext.DomHelper.append(this.meta,{cls:'comment', cn:[{html:'0 Comments'},{html:'Make Comment'}]});
 	}
 });

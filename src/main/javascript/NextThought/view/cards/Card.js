@@ -25,6 +25,7 @@ Ext.define('NextThought.view.cards.Card',{
 
 
 	renderSelectors: {
+		meta: '.meta',
 		liked: '.controls .like',
 		favorites: '.controls .favorite'
 	},
