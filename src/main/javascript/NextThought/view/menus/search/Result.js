@@ -50,45 +50,64 @@ Ext.define('NextThought.view.menus.search.Result',{
 			containerId = hit.get('ContainerId'),
 			name = hit.get('Creator');
 
-		LocationMeta.getMeta(containerId, function(meta){
-			var lin = meta ? ContentUtils.getLineage(meta.NTIID) : [],
-				chap = [];
-
-			lin.pop(); //remove root, we will already have it after resolving "id"
-			lin.shift();//remove the first item as its identical as id.
-
-			Ext.each(lin,function(c){
-				var i = ContentUtils.getLocation(c);
-				if(!i){
-					console.warn(c+" could not be resolved");
-					return;
+		if(isMe(name)){
+			me.renderData.name = 'me';
+		}
+		else if(name){
+			UserRepository.getUser(name,function(user){
+				me.renderData.name = user.getName();
+				if (me.rendered){
+					me.name.update(user.getName());
 				}
-				chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
 			});
+		}
 
-			me.renderData = Ext.apply(me.renderData || {}, {
-				title: meta ? meta.title.get('title') : 'Untitled',
-				chapter: chap.join(' / '),
-				section: meta ? meta.label : 'Unlabeled'
-			});
+		LocationMeta.getMeta(containerId, function(meta){
+			if(meta){
+				me.fillInContentMeta(meta);
 
-			if(isMe(name)){
-				me.renderData.name = 'me';
+				if (me.rendered){
+					me.renderTpl.overwrite(me.el, me.renderData);
+				}
 			}
-
-			if(!isMe(name) && name){
-				UserRepository.getUser(name,function(user){
-					me.renderData.name = user.getName();
-					if (me.rendered){
-						me.name.update(user.getName());
+			else{
+				console.log('Container maybe a content object?');
+				ContentUtils.findContentObject(containerId, function(obj, meta){
+					if(obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)){
+						me.fillInContentMeta(meta, true);
+						me.renderData.section = obj.title;
+						if (me.rendered){
+							me.renderTpl.overwrite(me.el, me.renderData);
+						}
 					}
 				});
 			}
-
-			if (me.rendered){
-				me.renderTpl.overwrite(me.el, me.renderData);
-			}
 		}, me);
+	},
+
+	fillInContentMeta: function(meta, dontScrewWithLineage){
+		var lin = ContentUtils.getLineage(meta.NTIID),
+			chap = [];
+
+			lin.pop(); //remove root, we will already have it after resolving "id"
+		if(!dontScrewWithLineage){
+			lin.shift();//remove the first item as its identical as id.
+		}
+
+		Ext.each(lin,function(c){
+			var i = ContentUtils.getLocation(c);
+			if(!i){
+				console.warn(c+" could not be resolved");
+				return;
+			}
+			chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
+		});
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			title: meta ? meta.title.get('title') : 'Untitled',
+			chapter: chap.join(' / '),
+			section: meta ? meta.label : 'Unlabeled'
+		});
 	},
 
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
