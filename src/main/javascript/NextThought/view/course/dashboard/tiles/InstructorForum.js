@@ -4,12 +4,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 
 	statics: {
 		getTileFor: function(effictiveDate, course, locationInfo, courseNodeRecord, finish){
-			var ntiid = course && course.getAttribute('instructorForum'), c;
+			var ntiid = course && course.getAttribute('instructorForum');
 
 			if(!Ext.isEmpty(ntiid)){
-				c = this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date'), finishCallBack: finish});
+				this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date'), finishCallBack: finish});
 			}else{
-				Ext.callback(finish, null);
+				Ext.callback(finish);
 			}
 		}
 	},
@@ -18,7 +18,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 
 	config:{
 		cols: 3,
-		ntiid: ''
+		ntiid: '',
+		finishCallBack: Ext.emptyFn
 	},
 
 	constructor: function(config){
@@ -52,17 +53,18 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 
 
 	addView: function(store, records){
+		var tile = this;
 		if(Ext.isEmpty(records)){
-			this.destroy();
-			Ext.callback(this.finishCallBack, null);
-		}else{
-			Ext.callback(this.finishCallBack, null, [this]);
+			Ext.destroy(tile);
+			tile = undefined;
 		}
 
-		this.view = this.add({
+		Ext.callback(this.getFinishCallBack(), null, [tile]);
+
+		this.view = tile && tile.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
 			record: records[0],
-			contentNtiid: this.locationInfo.ContentNTIID
+			contentNtiid: this.getLocationInfo().ContentNTIID
 		});
 	}
 });
