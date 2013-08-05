@@ -724,12 +724,16 @@ $experimental-support-for-svg: true;
 			//right: 10px;
 			//move this to the left to let the profile icon not overlap it.
 			top: 15px;
-			right: 80px;
+			right: 85px;
 
 			font-family: $font;
 			font-size: 14px;
 			font-weight: 500;
 			@include slide-button;
+		}
+
+		.identity{
+			right: 5px !important;
 		}
 	}
 

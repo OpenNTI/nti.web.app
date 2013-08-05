@@ -257,5 +257,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 			click: close,
 			keydown: Ext.Function.createInterceptor(close,enterFilter,null,null)
 		});
+		
+		this.identity = Ext.widget({xtype:'identity',renderTo: this.getEl(), floatParent: this});
+		this.on('destroy','destroy',this.identity);
+		this.mon(this.identity,'profile-link-clicked','destroy');
+
 	}
 });
