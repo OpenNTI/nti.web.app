@@ -130,7 +130,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			}
 		}
 
-		this.videoplayer.el.setStyle('margin','0 auto');
+        this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
+        this.videoplayer.el.setStyle('margin','0 auto');
 	},
 
 	switchVideoViewer: function(type){

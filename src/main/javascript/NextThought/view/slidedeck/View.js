@@ -111,7 +111,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 		}, this);
 
 		if(this.hasTranscript){
-			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', this.jumpVideoToLocation, this);
+			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', Ext.bind(this.video.jumpVideoToLocation, this.video), this);
 			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
 		}
 	},
@@ -120,11 +120,6 @@ Ext.define('NextThought.view.slidedeck.View',{
 		var playList = [];
 		store.each(function(s){ playList.push(s.get('media')); },this);
 		return playList;
-	},
-
-
-	jumpVideoToLocation: function(videoNTIID, time){
-		this.video.fireEvent('jump-to-location', videoNTIID, time);
 	},
 
 

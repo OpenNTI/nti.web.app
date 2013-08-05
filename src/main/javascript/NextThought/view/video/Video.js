@@ -325,6 +325,21 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+    jumpToVideoLocation: function(videoId, startAt){
+        var r = Ext.Array.findBy(this.playlist, function(item){
+                return item.get('NTIID') === videoId;
+            }),
+            id = r && r.activeSource().source;
+
+        if(id){
+            this.setVideoAndPosition(id, startAt);
+        }
+        else{
+            console.warn('Could not find video with id: ', videoId, ' in the playlist ', this.playlist);
+        }
+    },
+
+
 	maybeSwitchPlayers: function(service){
 		var me = this;
 

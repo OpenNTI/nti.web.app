@@ -467,14 +467,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	timePointerClicked: function(e){
 		var t  = e.getTarget(),
 			b = parseFloat(Ext.fly(t).getAttribute('data-time')),
-			videoInfo = {
-				ntiid: this.transcript.get('associatedVideoId'),
-				start:this.transcript.get('desired-time-start') || 0,
-				end:this.transcript.get('desired-time-end')
-			};
+			videoId = this.transcript.get('associatedVideoId');
 
-		console.log('Jump to video ', videoInfo,' to : ', b);
-		this.fireEvent('jump-video-to', videoInfo, b);
+		console.log('Jump to video ', videoId,' to : ', b);
+		this.fireEvent('jump-video-to', videoId, b);
 	},
 
 
