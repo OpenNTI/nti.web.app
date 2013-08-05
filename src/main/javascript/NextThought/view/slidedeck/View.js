@@ -130,7 +130,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 			videoObjects = this.getUniqueVideoObjects(playList);
 
 		Ext.each(videoObjects, function(v){
-			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader);
+			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader.basePath);
 			if(m){
 				transcripts.push(m);
 			}
