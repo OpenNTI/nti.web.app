@@ -241,8 +241,8 @@
 	scrollbar-3dlight-color: opacify($nib,1);
 	scrollbar-darkshadow-color: opacify($nib,1);
 	scrollbar-shadow-color: opacify($nib,1);
+	scrollbar-arrow-color: opacify($nib,1);
 
-	scrollbar-arrow-color: $track;
 	scrollbar-track-color: $track;
 
 	//::-webkit-scrollbar
