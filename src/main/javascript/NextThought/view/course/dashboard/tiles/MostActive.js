@@ -34,6 +34,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 				html: 'No Activity Yet'
 			}]),
 
+			renderTpl: Ext.DomHelper.markup({tag: 'svg', cls:'fancy-border'}),
+
 			overItemCls: 'x-item-over',
 			itemSelector:'.user',
 			tpl: Ext.DomHelper.markup({

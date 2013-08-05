@@ -427,15 +427,15 @@
 			z-index: -1;
 		}
 
-		&::after {
-			.x-ie9n & {
-				display: none;
-			}
-			pointer-events: none;
-			content: '';
+		svg.fancy-border {
 			position: absolute;
-			top: 0; left: 0; right: 0;
-			height:185px;
+			top: 0;
+			left: 0;
+			right: 0;
+			display: block;
+			z-index: 1;
+			padding-top: 75%;
+			pointer-events: none; //Pointer-Events is no longer in the CSS3 spec. Its ONLY officially supported on SVG elements. TODO: find and wrap all pointer-events none elements w/ SVG.
 			box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
 		}
 
