@@ -6,7 +6,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 
 	mimeTypesMap: {
 		'all': ['all'],
-		'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment','forums.communityheadlinetopic'],
+		'discussions': ['forums.personalblogentry','forums.personalblogcomment', 'forums.personalblogentrypost','forums.communityheadlinepost', 'forums.generalforumcomment','forums.communityheadlinetopic'],
 		'notes': ['highlight', 'note'],
 		'contact': ['user']
 	},
