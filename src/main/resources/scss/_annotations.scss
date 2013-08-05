@@ -199,7 +199,7 @@
 	@include scrollbar(#fbfbfb, $tertiary-grey);
 	overflow: {
 		x: hidden;
-		y: scroll;
+		y: auto;
 	}
 	.row {
 		cursor: pointer;

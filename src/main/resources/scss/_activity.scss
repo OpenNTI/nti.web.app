@@ -396,7 +396,7 @@
 		}
 
 		.replies {
-			overflow: {x: hidden; y: scroll;}
+			overflow: {x: hidden; y: auto;}
 
 			.x-component-reply {
 				position: relative;

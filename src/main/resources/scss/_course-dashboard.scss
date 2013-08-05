@@ -10,7 +10,7 @@
 	@include scrollbar(transparent, $tertiary-grey);
 	overflow: {
 		x: hidden;
-		y: scroll;
+		y: auto;
 	}
 }
 

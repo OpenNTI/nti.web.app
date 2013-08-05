@@ -246,8 +246,7 @@
 
 		.person-card-body ul{
 			max-height: 300px;
-			overflow-x: hidden;
-			overflow-y: scroll;
+			overflow:{x: hidden; y: auto;}
 		}
 	}
 
