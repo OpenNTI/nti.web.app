@@ -277,7 +277,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		me.mon(me.el.select('.cue'), {
 			scope: me,
 			'mouseover':'mouseOver',
-			'mousemove':'mouseOver',
 			'mouseout':'mouseOut'
 		});
 
@@ -427,42 +426,41 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	mouseOver: function(e){
-		if (this.suspendMoveEvents) {
-			return;
-		}
 
-		var target = e.getTarget('.cue', null, true), me = this, box;
-		if(target){
-			box = target.down('.add-note-here');
 
-			if(this.lastTarget && (this.lastTarget.dom === target.dom)){
-				return;
-			}
+        var t = e.getTarget('.cue', null, true),
+            box = t && t.down('.add-note-here'),
+            currentDivs = this.el.query('.add-note-here:not(.hidden)');
 
-			this.lastTarget = target;
-			//clearTimeout(this.mouseLeaveTimeout);
-			this.mouseLeaveTimeout = setTimeout(function () {
-				//Deselect previous cue
-				if(me.activeCueEl){
-					me.activeCueEl.down('.add-note-here').addCls('hidden');
-				}
+        if(this.suspendMoveEvents || !t || !box){ return; }
 
-				box.removeCls('hidden');
-				me.activeCueEl = target;
-			}, 50);
-		}
+        clearTimeout(this.mouseEnterTimeout);
+
+        this.mouseLeaveTimeout = setTimeout(function () {
+            box.removeCls('hidden');
+
+            Ext.each(currentDivs, function(cur){
+                if(cur !== box.dom){
+                    Ext.fly(cur).addCls('hidden');
+                }
+            });
+        }, 100);
 	},
 
 
 	mouseOut: function(e){
-		if (this.suspendMoveEvents) {
-			return;
-		}
+        var target = e.getTarget('.cue', null, true),
+            box = target && target.down('.add-note-here');
 
-		var target = e.getTarget('.cue'), me = this,
-			box = Ext.fly(target).down('.add-note-here');
+        if(this.suspendMoveEvents || !target || !box){ return; }
 
-		clearTimeout(this.mouseLeaveTimeout);
+        if(!box.hasCls('hidden')){
+            this.mouseEnterTimeout = setTimeout(function(){
+                if(box && !box.hasCls('hidden')){
+                    box.addCls('hidden');
+                }
+            }, 500);
+        }
 	},
 
 
