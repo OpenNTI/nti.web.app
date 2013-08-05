@@ -179,12 +179,21 @@
 			z-index: 2;
 			color: $primary-grey;
 			background: #f0f0f0;
-			border-top-color: #cfcfcf;
-			border-bottom-color: transparent;
-			box-shadow:	-26px 1px 0 0px #f0f0f0,
-						 29px 1px 0 0px #f0f0f0,
-						-29px 1px 0 1px #cfcfcf,
-						 29px 1px 0 1px #cfcfcf;
+			border-top-color: none;
+			border-bottom-color: none;
+			//box-shadow:	-26px 1px 0 0px #f0f0f0,
+			//			 29px 1px 0 0px #f0f0f0,
+			//			-29px 1px 0 1px #cfcfcf,
+			//			 29px 1px 0 1px #cfcfcf;
+
+			box-shadow: -26px 0px 0 0px #f0f0f0,
+						-26px 1px 0 0px #f0f0f0,
+						 30px 1px 0 0px #f0f0f0,
+						 30px 0px 0 0px #f0f0f0,
+						-30px 0px 0 1px #cfcfcf,
+						-30px 1px 0 1px #cfcfcf,
+						 30px 0px 0 1px #cfcfcf,
+						 30px 1px 0 1px #cfcfcf;
 		}
 
 		.overview-header + &,
