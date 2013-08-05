@@ -81,25 +81,24 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			cn: [{
 				cls: 'left',
 				cn: [{
-					cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn:[
-						{cls:'popover', cn:[
-							{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
-							{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
-							{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
-						]}
-					]
+					cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
+						cls: 'popctr', cn: {
+							cls:'popover', cn: [
+								{cls:'control bold', tabIndex:-1, 'data-qtip': 'Bold'},
+								{cls:'control italic', tabIndex:-1, 'data-qtip': 'Italic'},
+								{cls:'control underline', tabIndex:-1, 'data-qtip': 'Underline'}
+							]
+						}
+					}
 				},{
-					cls: 'action object-controls', 'data-qtip': 'Insert Object', cn:[
-						{cls:'popover', cn:[
-							{
-								cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard'
-							},{
-								tag: 'tpl', 'if': 'enableVideo', cn: {
-									cls: 'control video', 'data-qtip': 'Embed a video'
-								}
-							}
-						]}
-					]
+					cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
+						cls: 'popctr', cn: {
+							cls:'popover', cn: [
+								{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
+								{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
+							]
+						}
+					}
 				}]
 			},{
 				cls: 'right',
@@ -222,6 +221,9 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 	beforeRender: function(){
 		this.callParent(arguments);
+
+		this.enableVideo = this.enableVideo && $AppConfig.service.canCanvasURL(); //Need to get our own capability for this
+
 		this.renderData = Ext.apply(this.renderData||{},{
 			cancelLabel: this.cancelButtonLabel,
 			saveLabel: this.saveButtonLabel,
@@ -231,7 +233,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			enableTags: Boolean(this.enableTags),
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
-			enableVideo: $AppConfig.service.canCanvasURL() && Boolean(this.enableVideo), //Need to get our own capability for this
+			enableVideo: Boolean(this.enableVideo),
 			placeholderText: this.placeholderText
 		});
 	},
@@ -242,25 +244,21 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		this.callParent(arguments);
 		this.mixins.placeholderFix.constructor.call(this);
 		this.setupEditor();
+
 		this.mon(this.el.down('.action.cancel'),'click',this.onCancel,this);
 		this.mon(this.saveButtonEl,'click', function(e){
 			if(e.getTarget('.disabled')){ e.stopEvent(); return; }
 			this.onSave(e);
 		},this);
 
-		//Sigh
-		if(!this.renderData.enableVideo){
-			objectsControl = this.el.down('.object-controls');
-			if(objectsControl){
-				objectsControl.addCls('only-one');
-			}
-		}
 
 		//Hide it, if it's empty.
 		aux = this.el.down('.aux');
 		if(aux && !aux.dom.hasChildNodes()){
 			aux.remove();
 		}
+
+		this.mon(Ext.getBody(),'click','hidePopovers');
 
 		this.maybeEnableSave();
 	},
@@ -352,11 +350,13 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 		me.objectControlsEl = el.down('.action.object-controls');
 		if(me.objectControlsEl){
+			me.objectControlsEl.set({'data-tiptext':me.objectControlsEl.getAttribute('data-qtip')});
 			me.mon(me.objectControlsEl, 'click', me.toggleObjectsPopover, me);
 		}
 
 		me.styleControlsEl = el.down('.action.text-controls');
 		if(me.styleControlsEl){
+			me.styleControlsEl.set({'data-tiptext':me.styleControlsEl.getAttribute('data-qtip')});
 			me.mon(me.styleControlsEl, 'click', me.showStylePopover, me);
 		}
 		me.mon(new Ce(el.query('.left .action')), {
@@ -826,10 +826,18 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 
 	togglePopover: function(el, e){
-		var action = el && el.hasCls('selected') ? 'removeCls' : 'addCls';
+		if( e ){
+			e.stopPropagation();
+		}
+		var state = el && el.hasCls('selected'),
+			action = state ? 'removeCls':'addCls',
+			tip = state ? el.getAttribute('data-tiptext') : undefined;
+
 
 		if(el && !e.getTarget('.control')){
 			el[action]('selected');
+			el.set({'data-qtip':tip});
+//			Ext.QuickTipManager.getQuickTip().hide();
 			this.el.down('.content').focus();
 			this.editorFocus();
 		}
@@ -838,6 +846,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 	hidePopover: function(el){
 		el.removeCls('selected');
+		el.set({'data-qtip': el.getAttribute('data-tiptext')});
 	},
 
 
@@ -869,6 +878,12 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		if(t){
 			this.hidePopover(t);
 		}
+	},
+
+
+	hidePopovers: function(){
+		this.hideStylePopover();
+		this.hideObjectsPopover();
 	},
 
 
