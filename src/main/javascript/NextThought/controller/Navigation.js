@@ -256,6 +256,8 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	navigate: function(cid, rec, options){
+		var me = this;
+
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
@@ -264,7 +266,9 @@ Ext.define('NextThought.controller.Navigation', {
 				this.doContentNavigation(cid, rec, options);
 			}
 			else{
-				this.navigateToNtiid(cid, null, rec, options);
+				this.navigateToNtiid(cid, null, rec, options, function(){
+					me.doContentNavigation(cid, rec, options);
+				});
 			}
 		}, this);
 	},
@@ -455,7 +459,7 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigateToNtiid: function(ntiid, fragment){
+	navigateToNtiid: function(ntiid, fragment, rec, options, failure){
 		var object = ntiid.isModel ? ntiid : undefined,
 			me = this;
 
@@ -466,6 +470,7 @@ Ext.define('NextThought.controller.Navigation', {
 		function onFailure(){
 			//TODO failure callback here
 			console.error('An error occurred resolving ntiid as object for navigation', ntiid, arguments);
+			Ext.callback(failure);
 		}
 
 		if(!object){
