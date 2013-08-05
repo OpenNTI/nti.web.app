@@ -32,6 +32,13 @@ Ext.define('NextThought.controller.SlideDeck',{
 	},
 
 	launchMediaPlayer: function(v, videoId, basePath, rec){
+		//Only allow one media player at a time
+		console.debug('Launching media viewer');
+		if(!Ext.isEmpty(Ext.ComponentQuery.query('media-viewer'))){
+			console.warn('Cancelling media player launch because one is already active');
+			return;
+		}
+
 		console.log('Controller should media player for video: ', arguments);
 		if(Ext.isEmpty(v)){
 			console.error('Could not open the video: insufficient info', arguments);
@@ -66,6 +73,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
 		this.activeMediaPlayer.on('destroy', function(){
 			me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+			me.activeMediaPlayer = null;
 		});
 	},
 

@@ -316,7 +316,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			el.setStyle('top', line+'px');
 			this.mon(el, 'click', 'showAnnotationsAtLine', this);
 		} else{
-			el.update(count);
+			Ext.fly(el).update(count);
 		}
 	},
 
