@@ -74,7 +74,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		if(this.record){
-			var r;
+			var r, sEl;
 			//Loop the components looking for something that knows where
 			//this.record is
 			Ext.Array.each(cmps, function(cmp){
@@ -84,7 +84,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 			if(r){
 				console.log('Need to scroll to range', r);
-				this.el.getScrollingEl().scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top);
+				sEl = this.el.getScrollingEl();
+				if(sEl){
+					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
+				}
 				delete this.record;
 			}
 
