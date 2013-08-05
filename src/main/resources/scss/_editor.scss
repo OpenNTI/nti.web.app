@@ -161,10 +161,12 @@ span.tab{
 				.video-thumbnail, .unknown{
 					height: 75px;
 					width: 55px;
+					cursor: pointer;
 					@include icon('filetype-video', $top:20px, $left:10px);
 				}
 
 				.unknown{
+					cursor: default;
 					@include icon('filetype-unknown', $top:20px, $left:10px);
 				}
 			}
