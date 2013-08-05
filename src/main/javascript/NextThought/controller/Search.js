@@ -50,7 +50,8 @@ Ext.define('NextThought.controller.Search', {
 				},
 				'search-result' : {
 					'click': this.searchResultClicked,
-					'click-blog-result': this.searchBlogResultClicked
+					'click-blog-result': this.searchBlogResultClicked,
+					'click-transcript-result': this.searchTranscriptResultClicked
 				},
 				'search-more' : {
 					//'click': this.showAllForCategoryClicked
@@ -260,6 +261,22 @@ Ext.define('NextThought.controller.Search', {
 			args = Array.prototype.slice.call(arguments);
 
 		navController.gotoBlog.apply(navController, args);
+	},
+
+	searchTranscriptResultClicked: function(result, fragIdx){
+		var videoObject = result.videoObject;
+		if(videoObject){
+			function callback(mediaViewer){
+				//TODO highlight fragment here.
+			}
+			this.fireEvent('show-object', videoObject, null, null, {
+				startAtMillis: result.hit.get('StartMilliSecs'),
+				callback: callback
+			});
+		}
+		else{
+			alert('The video you are searching for can\'t be found.');
+		}
 	},
 
 	searchBlogResultClicked: function(result, fragIdx, isComment){

@@ -28,6 +28,7 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 		{ cls: 'label', xtype: 'menuitem', text: 'Search for', ui: 'nt', plain: true, canActivate: false, focusable: false, hideOnClick: false},
 		{ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck: false, isEverything: true},
 		{ cls: 'type-filter books', text: 'Books', model: 'bookcontent' },
+		{ cls: 'type-filter video', text: 'Videos', model: 'videotranscript' },
 		{ cls: 'type-filter highlight', text: 'Highlights', model: 'highlight' },
 		{ cls: 'type-filter note', text: 'Notes', model: 'note' },
 		{ cls: 'type-filter post', text: 'Thoughts', model: ['forums.personalblogcomment', 'forums.personalblogentrypost']},
