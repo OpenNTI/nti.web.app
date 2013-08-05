@@ -896,16 +896,29 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 
 	handleClick: function (e) {
-		var guid, t = e.getTarget('.whiteboard-wrapper');
+		var guid, p, fnName, mime,
+			t = e.getTarget('.object-part');
 
 		if (t) {
-			guid = Ext.fly(t).down('img').getAttribute('id');
-			t = this.trackedParts[guid];
-			if( t && !t.isDestroyed ){
-				t.show();
+			guid = t.getAttribute('id') || Ext.fly(t).down('img').getAttribute('id');
+			p = this.trackedParts[guid];
+			if( p ){
+				if( !p.isDestroyed && p.show ){
+					p.show();
+				}
+				return;
 			}
-			else {
-				alert('No whiteboard');
+
+
+			p = this.getPart(Ext.getDom(guid).outerHTML);
+			if(!p){
+				return;
+			}
+
+			mime = (p.data || p).MimeType;
+			fnName = mime ? this.partRenderer[mime] || '' : undefined;
+			if(fnName &&  Ext.isFunction(this[fnName])){
+				this[fnName](p, guid, true, e);
 			}
 		}
 		else{
@@ -954,7 +967,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	},
 
 
-	addVideo: function(data, guid, append){
+	addVideo: function(data, guid, append, e){
 		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
 
 		var me = this;
@@ -963,8 +976,9 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			guid = guidGenerator();
 		}
 
-		if(!data){
+		if(!data || e){
 			Ext.widget('embedvideo-window', {
+				url: (data||{}).embedURL,
 				onEmbed: function(data){
 					var part = me.createVideoPart(data.embedURL, data.type);
 					me.insertObjectThumbnail(me.el.down('.content'), guid, part, data, append/*, true*/);
@@ -1282,6 +1296,21 @@ Ext.define('NextThought.editor.AbstractEditor',{
 	},
 
 
+	getPart: function(part){
+		var me = this, p;
+
+		function convert(regex, fn){
+			if(new RegExp(regex, 'i').test(part) && me[fn]){
+				p = me[fn](part);
+			}
+			return !p; //Stop iterating (return false) if we found something
+		}
+
+		Ext.Object.each(me.partConverters, convert);
+		return p;
+	},
+
+
 	getBody: function (parts) {
 		var r = [],
 			objectPartRegex = /class=".*object-part.*"/i,
@@ -1292,13 +1321,6 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			return text.replace(/<br\/?>$/, '');
 		}
 
-		function convert(regex, fn){
-			if(new RegExp(regex, 'i').test(part) && Ext.isFunction(this[fn])){
-				p = me[fn](part);
-			}
-			return !p; //Stop iterating (return false) if we found something
-		}
-
 		parts = parts || [];
 
 		for(i = 0; i<parts.length; i++){
@@ -1306,7 +1328,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 			part = parts[i];
 			//if its a whiteboard do our thing
 			if(objectPartRegex.test(part)){
-				Ext.Object.each(this.partConverters, convert, this);
+				p = this.getPart(part);
 				if(!p){
 					p = this.unknownPart(part);
 				}

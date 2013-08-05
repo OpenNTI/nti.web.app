@@ -28,6 +28,15 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 	],
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		var url = this.up('window').getUrl();
+		if( url ){
+			this.down('textarea[name=embed]').setValue(url);
+		}
+	},
+
+
 	getValues: function(){
 		var raw = this.down('[name=embed]').getValue(), id,
 			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,

@@ -24,6 +24,10 @@ Ext.define('NextThought.editor.embedvideo.Window',{
 		align: 'stretch'
 	},
 
+	config: {
+		url: ''
+	},
+
 	items: [
 		{
 			xtype: 'account-header-view',
