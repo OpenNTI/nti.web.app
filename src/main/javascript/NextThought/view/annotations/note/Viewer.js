@@ -64,6 +64,8 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		var m;
 		this.callParent(arguments);
 
+		this.on('profile-link-clicked','destroy',this);
+
 		m = this.down('note-main-view');
 		m.reader = this.reader||this.ownerCmp||this.floatParent;
 	

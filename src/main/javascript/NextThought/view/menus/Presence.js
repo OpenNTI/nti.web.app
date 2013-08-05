@@ -61,7 +61,7 @@ Ext.define('NextThought.view.menus.Presence',{
 
 
 	onDestroy: function() {
-	    this.cancelDeferHide();
+	    //this.cancelDeferHide();
 		clearTimeout(this.deferHideParentMenusTimer);
 		this.callParent(arguments);
 	},

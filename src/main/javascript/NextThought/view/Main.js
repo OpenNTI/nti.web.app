@@ -61,10 +61,13 @@ Ext.define('NextThought.view.Main', {
 		this.detectZoom();
 		this.views = this.down('main-views');
 
-		this.identity = Ext.widget('identity',{renderTo:Ext.getBody()});
-		this.sidebar = Ext.widget('main-sidebar', {
-			host: this.down('[region=east][hostTo=sidebar]'), hidden: this.hidden
+		this.sidebar = this.add({
+			xtype:'main-sidebar',
+			host: this.down('[region=east][hostTo=sidebar]'),
+			hidden: this.hidden
 		});
+
+		this.identity = this.sidebar.add({xtype:'identity'});
 
         Ext.getDoc().on('touchmove', function(e) {
             e.preventDefault();

@@ -1281,11 +1281,12 @@ $experimental-support-for-svg: true;
 
 
 //Make sure the identity el is on top of the mv.
-body{
-	&.media-viewer-open{
-		.x-component.identity{
-			z-index: 30000 !important;
-			top: 17px !important;
-		}
+.media-viewer-open{
+	.x-component.identity {display: none;}
+
+	.media-toolbar .x-component.identity{
+		display: block;
+		top: 17px !important;
 	}
 }
+

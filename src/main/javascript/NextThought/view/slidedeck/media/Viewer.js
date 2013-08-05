@@ -25,8 +25,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	BIGVIDEO:{
 		width: function(el){
-			var screenWidth = Ext.Element.getViewportWidth(),
-				screenHeight = Ext.Element.getViewportHeight(),
+			var screenHeight = Ext.Element.getViewportHeight(),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
 				defaultWidth = 960,
 				defaultHeight = Math.round(defaultWidth * ratio),
@@ -92,7 +91,13 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         }
 
 		Ext.getBody().addCls('media-viewer-open');
-		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl, video: this.video});
+		this.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:this.headerEl, video: this.video, floatParent:this});
+		this.identity = Ext.widget({xtype:'identity',renderTo: this.toolbar.getEl(), floatParent: this.toolbar});
+
+		this.on('destroy','destroy',this.toolbar);
+		this.on('destroy','destroy',this.identity);
+
+		this.mon(this.identity,'profile-link-clicked','destroy');
 
 		this.addVideoPlayer(this.BIGVIDEO.width(this.videoPlayerEl));
 		this.activeVideoPlayerType = 'video-focus';

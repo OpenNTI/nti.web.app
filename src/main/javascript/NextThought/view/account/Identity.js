@@ -13,6 +13,7 @@ Ext.define('NextThought.view.account.Identity',{
 	profileLinkCard: false,
 
 	cls: 'identity',
+	autoShow: true,
 	floating: true,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -28,7 +29,8 @@ Ext.define('NextThought.view.account.Identity',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{}, $AppConfig.userObject.data);
-		this.menu = Ext.widget('settings-menu');
+		this.menu = Ext.widget({xtype:'settings-menu'});
+		this.on('destroy','destroy',this.menu);
 		this.monitorUser($AppConfig.userObject);
 	},
 
@@ -42,23 +44,25 @@ Ext.define('NextThought.view.account.Identity',{
 					'data-qtip': r.getName()
 				});
 
-				me.presence.set({cls:'presence '+ r.getPresence().getName()});
-
-				if(r !== u){
-					me.monitorUser(r);
-				}
+				me.monitorUser((r !== u) ? r : null);
 			}
 		};
 
-		me.mun(me.user,m);
-		me.mon(u,m);
-		me.user = u;
+		if( u ){
+			me.mun(me.user,m);
+			me.mon(u,m);
+			me.user = u;
+		}
+
+		if( me.presence && me.user ){
+			me.presence.set({cls:'presence '+ me.user.getPresence().getName()});
+		}
 	},
 
 
     afterRender: function(){
 	    this.callParent(arguments);
-
+	    this.monitorUser(this.user);
         this.mon(this.el, {
 	        'mouseover':'startToShowMenu',
 	        'mouseout':'startToHideMenu'
@@ -67,8 +71,6 @@ Ext.define('NextThought.view.account.Identity',{
 	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
 
 	    this.enableProfileClicks(this.avatar);
-
-		this.zIndexManager.bringToFront(this);
     },
 
 

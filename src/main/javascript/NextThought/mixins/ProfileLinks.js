@@ -5,11 +5,10 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 	function onUserNameClick(e){
 		if(e){e.stopEvent();}
 		var u = this.userObject || this.user,
-			t = e.getTarget('.note-window');
+			event = 'profile-link-clicked';
 
-		//FIXME this doesn't belong here.
-		//Dismiss the note-window before we navigate to the profile.
-		if(t){ this.up('note-window').destroy(); }
+		this.enableBubble(event);
+		this.fireEvent(event,u);
 
 		if(u && Ext.isFunction(u.getProfileUrl)){
 			this.fireEvent('change-hash', u.getProfileUrl());
