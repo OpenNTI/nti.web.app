@@ -167,7 +167,7 @@ $experimental-support-for-svg: true;
 			top: 0;
 			right: 0;
 			background: rgba(255, 255, 255, 0.04);
-			z-index: 9999999;
+			//z-index: 9999999;
 		}
 
 		.video-wrapper {
@@ -1033,7 +1033,7 @@ $experimental-support-for-svg: true;
 
 		& ~ .note-window {
 			position: absolute !important;
-			z-index: 30000 !important;
+			//z-index: 30000 !important;
 		}
 	}
 }
