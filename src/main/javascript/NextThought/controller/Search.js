@@ -246,7 +246,7 @@ Ext.define('NextThought.controller.Search', {
 
 
 	fragmentWithIndex: function(hit, fragIdx){
-		fragments = hit.get('Fragments');
+		var fragments = hit.get('Fragments');
 		if(fragIdx >= 0 && fragIdx < fragments.length){
 			return fragments[fragIdx];
 		}
