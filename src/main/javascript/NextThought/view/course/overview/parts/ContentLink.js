@@ -23,9 +23,17 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 	},
 
 
+	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		cls:'comment', cn:[
+			{ cls:'', html:'{count:plural("Comment")}'},
+			{ cls:'', html:'Add a Comment'}
+		]
+	})),
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
-		Ext.DomHelper.append(this.meta,{cls:'comment', cn:[{html:'0 Comments'},{html:'Make Comment'}]});
+		this.commentTpl.append(this.meta,{count:10});
 	}
 });
