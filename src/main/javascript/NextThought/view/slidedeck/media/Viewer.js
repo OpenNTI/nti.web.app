@@ -62,7 +62,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	initComponent:function(){
-        this.on('no-presentation-parts', function(){this.videoOnly = true;}, this);
+		var me = this;
+        this.on('no-presentation-parts', function(){
+			this.videoOnly = true;
+			me.fireEvent('media-viewer-ready', me);
+		}, this);
 
 		this.callParent(arguments);
 
@@ -74,6 +78,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				getScrollTarget: function(){
 					return this.ownerCt.getTargetEl().dom;
 				}
+			},
+			listeners: {
+				'presentation-parts-ready': function(){me.fireEvent('media-viewer-ready', me);}
 			}
 		});
 	},
@@ -118,6 +125,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 	addVideoPlayer: function(width){
+		var startTimeSeconds = (this.startAtMillis || 0) / 1000;
 		this.videoplayer = Ext.widget('content-video',{
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
@@ -127,12 +135,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		if(this.record){
 			var range = this.record.get('applicableRange') || {},
-				pointer = range.start || {},
-				t = pointer.seconds / 1000; //They are actually millis not seconds
+				pointer = range.start || {};
 
-			if(t > 0){
-				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, t);
-			}
+			startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
+		}
+		if(startTimeSeconds > 0){
+			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
 		}
 
         this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);

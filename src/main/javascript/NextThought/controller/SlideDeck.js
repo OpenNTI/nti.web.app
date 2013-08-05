@@ -31,7 +31,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		},this);
 	},
 
-	launchMediaPlayer: function(v, videoId, basePath, rec){
+	launchMediaPlayer: function(v, videoId, basePath, rec, options){
 		//Only allow one media player at a time
 		console.debug('Launching media viewer');
 		if(!Ext.isEmpty(Ext.ComponentQuery.query('media-viewer'))){
@@ -68,12 +68,23 @@ Ext.define('NextThought.controller.SlideDeck',{
 			video: video,
 			transcript: transcript,
 			autoShow: true,
-			record: rec
+			record: rec,
+			startAtMillis: options && options.startAtMillis
 		});
 		this.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
 		this.activeMediaPlayer.on('destroy', function(){
 			me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
 			me.activeMediaPlayer = null;
+		});
+		this.activeMediaPlayer.on('media-viewer-ready', function(viewer){
+			var fn = options && options.callback,
+				scope = this;
+			if(Ext.isObject(fn)){
+				fn = fn.fn;
+				scope = fn.scope;
+			}
+
+			Ext.callback(fn, scope, [viewer]);
 		});
 	},
 
