@@ -204,7 +204,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		this.setupNoteOverlay();
 		this.el.unselectable();
-		this.el.mask('Loading....', 'loading');
+		this.el.mask('Loading....');
 		this.maybeLoadData();
 		this.mon(this.el, {
 			scope:this,
