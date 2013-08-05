@@ -485,6 +485,10 @@
 					content: 'Posted by ';
 				}
 
+				* {
+					vertical-align: middle;
+				}
+
 				.name{
 					color: $primary-blue;
 					margin-right: 5px;
