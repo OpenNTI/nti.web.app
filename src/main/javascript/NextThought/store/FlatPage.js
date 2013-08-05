@@ -53,6 +53,11 @@ Ext.define('NextThought.store.FlatPage',{
 
 	bind: function(otherStore){
 		var me = this;
+
+		if(!otherStore){
+			return;
+		}
+
 		if(Ext.Array.contains(otherStore.$boundToFlat || [], this)){ return; }
 
 		

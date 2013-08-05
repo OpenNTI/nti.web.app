@@ -74,7 +74,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		if(this.record){
-			var r, sEl;
+			var r, sEl, memoryStore;
 			//Loop the components looking for something that knows where
 			//this.record is
 			Ext.Array.each(cmps, function(cmp){
@@ -88,6 +88,16 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				if(sEl){
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
+				memoryStore  = NextThought.store.FlatPage.create();
+				memoryStore.add(this.record);
+				this.showAnnotations(memoryStore.data, undefined, memoryStore);
+				Ext.widget({
+					xtype: 'note-window',
+					record: this.record,
+					reader: this,
+					xhooks: this.getViewerHooks(),
+					autoShow: true
+				});
 				delete this.record;
 			}
 
@@ -304,23 +314,25 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	showAnnotations: function(annotations, line){
+	showAnnotations: function(annotations, line, s){
 		if(!annotations || annotations.getCount()=== 0){
 			return;
 		}
 
-		var flatPageStore = NextThought.store.FlatPage.create({
-			storeId: 'presentation-annotations-'+line
-		});
-		annotations.each(function(annotation){
-			//Note stores aren't unique here, but flatpage store won't let
-			//us bind the same store to it twice.  How convenient..
-			flatPageStore.bind(annotation.store);
-		});
+		if(!s){
+			s = NextThought.store.FlatPage.create({
+				storeId: 'presentation-annotations-'+line
+			});
+			annotations.each(function(annotation){
+				//Note stores aren't unique here, but flatpage store won't let
+				//us bind the same store to it twice.  How convenient..
+				s.bind(annotation.store);
+			});
+		}
 
 		if(line){
 			console.log('filtering by line: ', line);
-			flatPageStore.addFilter({
+			s.addFilter({
 				id: this.lineFilterId,
 				filterFn: function(r){
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
@@ -328,9 +340,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				}
 			});
 		}
-		flatPageStore.sort();
+		s.sort();
 
-		this.showAnnotationView(flatPageStore);
+		this.showAnnotationView(s);
 	},
 
 
