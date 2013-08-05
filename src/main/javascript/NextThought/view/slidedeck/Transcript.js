@@ -91,13 +91,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				memoryStore  = NextThought.store.FlatPage.create();
 				memoryStore.add(this.record);
 				this.showAnnotations(memoryStore.data, undefined, memoryStore);
-				Ext.widget({
-					xtype: 'note-window',
-					record: this.record,
-					reader: this,
-					xhooks: this.getViewerHooks(),
-					autoShow: true
-				});
+                //Select record to open the note viewer.
+                this.annotationView.select(this.record, undefined, false);
 				delete this.record;
 			}
 
