@@ -255,11 +255,26 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
+	navigate: function(cid, rec, options){
+		//We don't want to do a content navigation until we are pretty sure
+		//thats what we want.  On failure it shows a page not found and
+		//if we handle this navigation in some other way we don't want that happening.
+		LocationMeta.getMeta(cid, function(meta){
+			if(meta){
+				this.doContentNavigation(cid, rec, options);
+			}
+			else{
+				this.navigateToNtiid(cid, null, rec, options);
+			}
+		}, this);
+	},
+
+
 	/*
 	 *	Navigates to the provided content, optionally targets the provided
 	 *  rec using a set of optional options
 	 */
-	navigate: function(ntiid, rec, options) {
+	doContentNavigation: function(ntiid, rec, options) {
 		var callback = Ext.emptyFn(),
 			reply, targets;
 
@@ -437,14 +452,6 @@ Ext.define('NextThought.controller.Navigation', {
 
 		console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
 		return false;
-	},
-
-	findTitleWithPrefix: function(prefix){
-		return Library.findTitleWithPrefix(prefix);
-	},
-
-	bookPrefixIfQuestion: function(id){
-		return ParseUtils.bookPrefixIfQuestionNtiid(id);
 	},
 
 
