@@ -35,6 +35,10 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	toDomRange: function(description, doc, cleanRoot, containerId){
+		if(!description){
+			return null;
+		}
+
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds, range, targetEl,
 			utils = NextThought.view.slidedeck.transcript.AnchorResolver;
@@ -60,6 +64,9 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	fromTimeRangeToDomRange: function(description, cueStore, container, docElement){
+		if(!description){
+			return;
+		}
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds,
 		    cues,
