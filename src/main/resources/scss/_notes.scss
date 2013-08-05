@@ -15,7 +15,7 @@
 			display: inline-block;
 			overflow: hidden;
 			@include ellipse;
-			width: 340px;
+			max-width: 340px;
 		}
 
 		.controls {
