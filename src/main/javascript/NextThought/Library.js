@@ -155,11 +155,13 @@ Ext.define('NextThought.Library', {
 
 		function failure(){
 			console.error(arguments);
+			Ext.callback(callback, scope);
 		}
 
 
 		if(!t){
 			console.warn('No toc yet for', index);
+			failure();
 			return;
 		}
 
@@ -171,6 +173,7 @@ Ext.define('NextThought.Library', {
 			t = t.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
 			if(!t){
 				console.warn('No video index defined', index);
+				failure();
 				return;
 			}
 			url = getURL(t.getAttribute('href'),title.get('root'));
