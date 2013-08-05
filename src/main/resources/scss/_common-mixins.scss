@@ -243,6 +243,9 @@
 	scrollbar-shadow-color: opacify($nib,1);
 	scrollbar-arrow-color: opacify($nib,1);
 
+	@if $track == transparent {
+		$track: #fff;
+	}
 	scrollbar-track-color: $track;
 
 	//::-webkit-scrollbar
