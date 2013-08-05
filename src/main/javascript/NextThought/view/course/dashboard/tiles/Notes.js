@@ -4,14 +4,14 @@ Ext.define('NextThought.view.course.dashboard.tiles.Notes',{
 
 	statics: {
 
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
-			return null;
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord,finish){
+			Ext.callback(finish);
 			/*
-			return this.create({
+			Ext.callback(finish,null, [this.create({
 				lastModified:       courseNodeRecord.get('date'),
 				locationInfo:       locationInfo,
 				courseNodeRecord:   courseNodeRecord
-			});*/
+			})]);*/
 		}
 
 	},

@@ -14,23 +14,31 @@ Ext.define('NextThought.view.course.dashboard.View',{
 		}
 
 		var l = ContentUtils.getLocation(pageInfo),
+			me = this,
 			toc, course,
 			courseNavStore,
-			date = new Date(),//now
-			tiles = [];
+			date = new Date();//now
 
 		if( l && l !== ContentUtils.NO_LOCATION ){
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 			courseNavStore = new NextThought.store.course.Navigation({data: toc});
 
-			tiles = this.queryTiles(
-					date,course,l,
-					courseNavStore.getCurrentBy(date)
+			if( me.el ){
+				me.el.mask('Loading...');
+			}
+
+			this.queryTiles(
+				date,course,l,
+				courseNavStore.getCurrentBy(date),
+				function(tiles){
+					me.setTiles(tiles);
+					if( me.el ){
+						me.el.unmask();
+					}
+				}
 			);
 		}
-
-		this.setTiles(tiles);
 	},
 
 
@@ -45,21 +53,37 @@ Ext.define('NextThought.view.course.dashboard.View',{
 	 * @param {Node} course
 	 * @param {Object} location
 	 * @param {NextThought.model.course.navigation.Node} courseNode
-	 * @returns {Ext.Component[]|Object[]}
+	 * @param {Function} callback
+	 * @param {Array} callback.tiles
 	 */
-	queryTiles: function(date, course, location, courseNode){
+	queryTiles: function(date, course, location, courseNode, callback){
 		var NS = NextThought.view.course.dashboard.tiles,
 			tiles = [],
+			queue = [],
+			me = this,
 			push = tiles.push;
 
 		Ext.Object.each(NS,function(clsName,cls){
-			var fn = cls.getTileFor,
-				o = fn && fn.call(cls, date, course, location, courseNode);
-			if( o ){
-				push[Ext.isArray(o)?'apply':'call'](tiles,o);
+			var fn = cls.getTileFor;
+			if(fn){
+				queue.push(Ext.bind(fn,cls));
 			}
 		});
 
-		return tiles;
+		Ext.each(queue.slice(),function(fn){
+			fn(date, course, location, courseNode, function finish(o){
+				queue.pop();
+				if( o ){
+					push[Ext.isArray(o)?'apply':'call'](tiles,o);
+				}
+
+				if(queue.length===0){
+					Ext.callback(callback,me,[tiles]);
+				}
+			});
+		});
 	}
 });
+
+
+

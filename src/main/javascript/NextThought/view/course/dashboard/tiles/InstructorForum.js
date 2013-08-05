@@ -3,13 +3,14 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	alias: 'widget.course-dashboard-tiles-instructor-forum',
 
 	statics: {
-		getTileFor: function(effictiveDate, course, locationInfo, courseNodeRecord){
-			var ntiid = course && course.getAttribute('instructorForum');
+		getTileFor: function(effictiveDate, course, locationInfo, courseNodeRecord, finish){
+			var ntiid = course && course.getAttribute('instructorForum'), c;
 
-			if(Ext.isEmpty(ntiid)){
-				return null;
+			if(!Ext.isEmpty(ntiid)){
+				c = this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date')});
 			}
-			return this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date')});
+
+			Ext.callback(finish, null, [c]);
 		}
 	},
 

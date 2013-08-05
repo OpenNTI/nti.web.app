@@ -4,14 +4,15 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 	statics: {
 
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var DQ = Ext.DomQuery,
 				items = this.getChildrenNodes(courseNodeRecord),
 				refs = DQ.filter(items||[],'[mimeType$=discussion]'),
 				i, id, k, m = {};
 
 			if(Ext.isEmpty(refs)){
-				return null;
+				Ext.callback(finish);
+				return;
 			}
 
 			//lets figure out how many forums we have...
@@ -23,7 +24,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 				//normalize the fake-parent id so we can bin. (this key is not a real id!)
 				k = ParseUtils.parseNtiid(id);
-				if(!k){return;}
+				if(!k){continue;}
 				k.specific.typeSpecific = k.specific.typeSpecific.split('.')[0];
 				k = k.toString();
 
@@ -34,7 +35,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 				}
 			}
 
-			return Ext.Object.getValues(m);
+			Ext.callback(finish,null,[ Ext.Object.getValues(m) ]);
 		}
 
 	},

@@ -4,19 +4,19 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 
 	statics: {
 
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var DQ = Ext.DomQuery,
 				items = this.getChildrenNodes(courseNodeRecord),
-				refs = [];
+				refs = [], c;
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )
 						.concat( DQ.filter(items||[],'[type$=content]') );
 						
-			if(Ext.isEmpty(refs)){
-				return null; 
+			if(!Ext.isEmpty(refs)){
+				c = this.create({locationInfo: locationInfo, itemNodes: refs, lastModified: courseNodeRecord.get('date')});
 			}
-			
-			return this.create({locationInfo: locationInfo, itemNodes: refs, lastModified: courseNodeRecord.get('date')});
+
+			Ext.callback(finish,null,[c]);
 		}
 
 	},

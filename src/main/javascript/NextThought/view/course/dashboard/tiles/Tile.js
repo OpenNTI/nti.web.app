@@ -33,10 +33,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		 * @param {Node} course The node from the ToC document describing this course. aka the <course> tag.
 		 * @param {Object} locationInfo the results of {@link NextThought.util.Content#getLocation()} The location information of the navigation that triggered a onCourseChanged.
 		 * @param {NextThought.model.course.navigation.Node} courseNodeRecord The record in the course nav store that represents the current point in the course - on or after the effectiveDate.
-		 *
-		 * @returns {NextThought.view.course.dashboard.tiles.Tile|NextThought.view.course.dashboard.tiles.Tile[]}
+		 * @param {Function} finish The callback function that hands you the resolved tile(s)
+		 * @param {NextThought.view.course.dashboard.tiles.Tile|NextThought.view.course.dashboard.tiles.Tile[]} finish.tiles
 		 */
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord){ return null; }
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){ Ext.callback(finish); }
 	},
 
 	config: {
