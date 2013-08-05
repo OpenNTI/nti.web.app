@@ -391,6 +391,10 @@ div.no-content-splash {
 	padding-bottom: 12px;
 	padding-left: 10px;
 
+	.detected-scrollbars & {
+		right: 17px;
+	}
+
 	.meta {
 		position: relative;
 		overflow: hidden;
