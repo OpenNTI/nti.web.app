@@ -7,10 +7,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 			var ntiid = course && course.getAttribute('instructorForum'), c;
 
 			if(!Ext.isEmpty(ntiid)){
-				c = this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date')});
+				c = this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date'), finishCallBack: finish});
+			}else{
+				Ext.callback(finish, null);
 			}
-
-			Ext.callback(finish, null, [c]);
 		}
 	},
 
@@ -52,6 +52,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 
 
 	addView: function(store, records){
+		if(Ext.isEmpty(records)){
+			this.destroy();
+			Ext.callback(this.finishCallBack, null);
+		}else{
+			Ext.callback(this.finishCallBack, null, [this]);
+		}
+
 		this.view = this.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
 			record: records[0],
