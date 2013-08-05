@@ -125,9 +125,9 @@ Ext.define('NextThought.view.forums.Editor',{
 
 	syncHeight: function(){
 		var el = this.editorBodyEl,
-			p = Ext.getDom(this.ownerCt.getEl()),
+			p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
 			top;
-		if(!el){
+		if(!el || !p){
 			return;
 		}
 		top = el.getTop() + p.scrollTop;
