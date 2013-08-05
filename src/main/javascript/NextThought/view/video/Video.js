@@ -19,6 +19,8 @@ Ext.define('NextThought.view.video.Video',{
 		'player-error': 'playerError'
 	},
 
+	ASPECT_RATIO: 0.5625,
+
 	states: {
 		UNSTARTED: -1,
 		ENDED: 0,
@@ -31,7 +33,7 @@ Ext.define('NextThought.view.video.Video',{
 	loadFirstEntry: true,
 	playerWidth: 640,
 	playerHeight: function(){
-		return Math.round(this.playerWidth * 0.5625);
+		return Math.round(this.playerWidth * this.ASPECT_RATIO);
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -395,6 +397,8 @@ Ext.define('NextThought.view.video.Video',{
 	}
 },
 	function(){
+		this.ASPECT_RATIO = this.prototype.ASPECT_RATIO;
+
 		ObjectUtils.defineAttributes(this.prototype, {
 			playerHeight: {getter: this.prototype.playerHeight}});
 	}

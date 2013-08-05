@@ -20,13 +20,29 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 	SMALLVIDEO:{
-		width: 512,
-		height: 288
+		width: function(){return 512;}
 	},
 
 	BIGVIDEO:{
-		width: 960,
-		height: 540
+		width: function(el){
+			var screenWidth = Ext.Element.getViewportWidth(),
+				screenHeight = Ext.Element.getViewportHeight(),
+				ratio = NextThought.view.video.Video.ASPECT_RATIO,
+				defaultWidth = 960,
+				defaultHeight = Math.round(defaultWidth * ratio),
+				y = (el && el.getY()) || 0,
+				diff = screenHeight - (y+defaultHeight),
+				newWidth;
+
+
+			if(diff >= 0){
+				return defaultWidth;
+			}
+
+			newWidth = Math.round((1-(Math.abs(diff)/(screenHeight)))*defaultWidth);
+
+			return Math.max(newWidth, 512);
+		}
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -78,7 +94,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		Ext.getBody().addCls('media-viewer-open');
 		this.toolbar = Ext.widget('media-toolbar', {renderTo:this.headerEl, video: this.video});
 
-		this.addVideoPlayer(this.BIGVIDEO.width, this.BIGVIDEO.height);
+		this.addVideoPlayer(this.BIGVIDEO.width(this.videoPlayerEl));
 		this.activeVideoPlayerType = 'video-focus';
 
 		this.mon(this.toolbar, {
@@ -96,13 +112,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
 	},
 
-	addVideoPlayer: function(width, height){
+	addVideoPlayer: function(width){
 		this.videoplayer = Ext.widget('content-video',{
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
-			width: width,
-			height: height
+			width: width
 		});
 
 		if(this.record){
@@ -114,6 +129,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, t);
 			}
 		}
+
+		this.videoplayer.el.setStyle('margin','0 auto');
 	},
 
 	switchVideoViewer: function(type){
@@ -132,7 +149,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// TODO: We may also need to pass about the video in case it was currently playing.
 		this.videoplayer.destroy();
 		this.activeVideoPlayerType = type;
-		this.addVideoPlayer(dim.width, dim.height);
+		this.addVideoPlayer(dim.width(this.videoPlayerEl));
 		this.el[clsAction]('small-video-player');
 		Ext.defer(function(){
 			me.updateLayout();
