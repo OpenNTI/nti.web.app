@@ -13,14 +13,6 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 	ui: 'content-video',
 	cls: 'content-video-container',
 
-//	childEls: ['body'],
-//	getTargetEl: function(){return this.bodyEl; },
-	componentLayout: 'natural',
-
-	renderTpl: Ext.DomHelper.markup([
-		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']},
-		{tag:'a', cls:'media-transcript', html:'Play with Transcript'}
-	]),
 
 	renderSelectors: {
 		openMediaViewerEl:'.media-transcript'
@@ -80,21 +72,6 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 		console.log('should start media player for video: ', v.get('NTIID'));
 		this.fireEvent('start-media-player', v, v.get('NTIID'), this.reader.basePath);
 	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-
-		// FIXME: This is a debug hack in order to be able to launch the video viewer from the content I have.
-		// IT NEEDS TO BE TAKEN OUT, ASAP.
-		if(this.openMediaViewerEl){
-			this.mon( this.openMediaViewerEl, {
-				scope:this,
-				'click':'openMediaViewer'
-			});
-		}
-	},
-
 
 
 	findLine: function(){
