@@ -123,9 +123,13 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.destroy();
 			this.fireEvent('exited', this);
 		}, this);
-		h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
-		h = h + 'px';
-		Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
+        h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
+        h = h + 'px';
+        Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
+
+        // NOTE: By calling updateLayout, we avoid running into a case where the toolbar is offscreen,
+        // because we sometimes do things like scrolling, a little too early.
+        Ext.defer(this.updateLayout, 1, this);
 	},
 
 	addVideoPlayer: function(width){
@@ -148,7 +152,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 
         this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
-        this.videoplayer.el.setStyle('margin','0 auto');
 	},
 
 
