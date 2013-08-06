@@ -5,7 +5,8 @@ Ext.define( 'NextThought.view.library.View', {
 		'NextThought.view.reader.Panel',
 		'NextThought.view.course.View',
 		'NextThought.view.course.dashboard.View',
-		'NextThought.view.course.forum.View'
+		'NextThought.view.course.forum.View',
+		'NextThought.view.course.info.View'
 	],
 
 	layout: {
@@ -40,6 +41,11 @@ Ext.define( 'NextThought.view.library.View', {
 			title: 'Discussion',
 			id:'course-forum',
 			xtype: 'course-forum'
+		},
+		{
+			title: 'Course Info',
+			id: 'course-info',
+			xtype: 'course-info'
 		}
 	],
 
@@ -50,7 +56,7 @@ Ext.define( 'NextThought.view.library.View', {
 //		{label: 'Assignments', viewId: ''},
 		{label: 'Discussions', viewId: 'course-forum'},
 //		{label: 'Notebook', viewId: ''},
-		{label: 'Course Info', viewId: ''}
+		{label: 'Course Info', viewId: 'course-info'}
 	],
 
 
@@ -61,12 +67,14 @@ Ext.define( 'NextThought.view.library.View', {
 		this.courseDashboard = this.down('course-dashboard');
 		this.courseForum = this.down('course-forum');
 		this.courseNav = this.down('course');
+		this.courseInfo = this.down('course-info');
 
 		this.removeCls('make-white');
 
 		this.courseNav.makeListenForCourseChange([
 			this.courseDashboard,
-			this.courseForum
+			this.courseForum,
+			this.courseInfo
 		]);
 
 		this.courseNav.mon(this.reader,{'navigateComplete': 'onNavigateComplete'});
@@ -145,6 +153,10 @@ Ext.define( 'NextThought.view.library.View', {
 
 			if(!this.courseForum.hasBoard){
 				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-forum';});
+			}
+
+			if(!this.courseInfo.hasInfo){
+				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-info';});
 			}
 
 		}
@@ -257,17 +269,10 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	setActiveTab: function(tab){
-		var tabMap = {
-			'course-forum': this.courseForum,
-			'course-book': this.courseBook,
-			'course-dashboard': this.courseDashboard,
-			'course-nav': this.courseNav
-		},  active = (tab||{}).isComponent ? tab : tabMap[tab || 'course-book'];
-
-		if(this.rendered){
-			this.layout.setActiveItem(active);
+		if(this.rendered) {
+			this.layout.setActiveItem(tab||'course-book');
 			this.setTitle(this.getTitlePrefix()+this.locationTitle);
-		}else{
+		} else {
 			this.on('afterrender', function(){
 				this.layout.setActiveItem(active);
 			}, this);

@@ -462,3 +462,8 @@ body.x-body {margin:0;}
 	}
 
 }
+
+
+#course-info {
+	@extend #NTIContent;
+}

@@ -6,6 +6,10 @@
 	}
 }
 
+#course-info {
+	@extend #NTIContent;
+	overflow: auto;
+}
 
 .x-component-course{
 
