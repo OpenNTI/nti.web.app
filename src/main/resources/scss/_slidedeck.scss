@@ -962,6 +962,7 @@ $experimental-support-for-svg: true;
 		.x-container-transcript{
 			width: auto !important;
 			position: relative;
+            overflow-y: hidden !important;
 
 			.note-gutter{
 				left: auto !important;
@@ -1064,8 +1065,8 @@ $experimental-support-for-svg: true;
 }
 
 .x-container-transcript, .x-panel-transcript{
-	//overflow-y: auto;
-	//overflow-x: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
 	width: 920px;
 
 	.note-gutter{
