@@ -303,6 +303,7 @@
 
 				&.correct { color: #94b61a; }
 				&.incorrect { color: #e95a57; }
+				&.questions{ padding: 0; color: $tertiary-grey; font-weight: 400; }
 
 				&::after{
 					position: absolute;

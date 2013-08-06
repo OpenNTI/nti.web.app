@@ -40,7 +40,7 @@ Ext.define('NextThought.chart.series.Score',{
 		        type: 'text',
 		        text: '',
 		        fill: '#7fab22',
-		        font: '18px Verdana',
+		        font: 'normal 400 14px "Open Sans", Verdana',
 				'text-anchor': 'middle',
 				x: this.centerX + 2,
 				y: this.centerY + 1
@@ -48,12 +48,14 @@ Ext.define('NextThought.chart.series.Score',{
 		}
 
 		try {
-		label.setAttributes({
-			text: val+(val>=100?'':'\u008C%'),
-			x: this.centerX + (val>=100? 0:2),
-			y: this.centerY + 1
-		});
-		label.show(true);
+			label.setAttributes({
+				text: val+(val>=100?'':'\u008C%'),
+				fill: val===0?'#d9d9d9':'#7fab22',
+				x: this.centerX + (val>=100? 0:2),
+				y: this.centerY + 1
+			});
+
+			label.show(true);
 		}
 		catch(er){
 			console.error(er.message);
@@ -76,6 +78,10 @@ Ext.define('NextThought.chart.series.Score',{
 			sign = r/abs;
 			delta = (sign*(abs - desiredAngle)/this.rad) || desiredAngle;
 			this.correctionOffset = delta;
+		}
+
+		if(this.scoreValue===0 && this.chart.getChartStore().getCount()>1){
+			delta += 1500;
 		}
 
 //		if(delta && !opt.hasOwnProperty(key)){

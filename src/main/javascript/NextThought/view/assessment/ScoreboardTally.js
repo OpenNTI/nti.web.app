@@ -8,7 +8,8 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		{ cls: 'message' },
 		{ cls: 'tally', cn: [
 			{cls: 'stat correct', cn:[{tag: 'span', cls:'count'},' correct'] },
-			{cls: 'stat incorrect', cn:[{tag: 'span', cls:'count'},' incorrect'] }
+			{cls: 'stat incorrect', cn:[{tag: 'span', cls:'count'},' incorrect'] },
+			{cls: 'stat questions', cn:[{tag: 'span', cls:'count'},' questions'] }
 		]}
 	]),
 
@@ -18,7 +19,9 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		correctBox: '.tally .correct',
 		correctCount: '.tally .correct .count',
 		incorrectBox: '.tally .incorrect',
-		incorrectCount: '.tally .incorrect .count'
+		incorrectCount: '.tally .incorrect .count',
+		questionsBox: '.tally .questions',
+		questionsCount: '.tally .questions .count'
 	},
 
 
@@ -29,11 +32,12 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 
 		this.correctBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.questionsBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
 
 
-	setTally: function(correct,total){
+	setTally: function(correct,total, noScore){
 		//force Integers or NaN
 		correct = parseInt(correct,10);
 		total = parseInt(total,10);
@@ -60,9 +64,11 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 
 		this.correctCount.update(correct||0);
 		this.incorrectCount.update(incorrect);
+		this.questionsCount.update(total);
 
 		this.correctBox[correct === 0?'hide':'show']();
-		this.incorrectBox[incorrect === 0?'hide':'show']();
+		this.incorrectBox[noScore||incorrect === 0?'hide':'show']();
+		this.questionsBox[noScore?'show':'hide']();
 
 		this.message.update( msg );
 
