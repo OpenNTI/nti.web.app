@@ -274,7 +274,7 @@ Ext.define( 'NextThought.view.library.View', {
 			this.setTitle(this.getTitlePrefix()+this.locationTitle);
 		} else {
 			this.on('afterrender', function(){
-				this.layout.setActiveItem(active);
+				this.layout.setActiveItem(tab);
 			}, this);
 		}
 	},
