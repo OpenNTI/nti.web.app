@@ -274,6 +274,10 @@
 	.description {
 		margin: 10px;
 		font-size: 14px;
+		display: inline-block;
+		overflow: hidden;
+		@include ellipse;
+		max-width: 80%;
 	}
 
 	.snippet {
