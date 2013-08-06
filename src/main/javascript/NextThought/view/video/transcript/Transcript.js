@@ -44,10 +44,19 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		},{
 			tag:'tpl', 'if':'type', cn:
 				{cls:'row-item timestamp-container {type}', cn:
-					{tag:'a', cls:'timestamp', html:'{startTime}', 'data-time':'{startTime}'}
+					{tag:'a', cls:'timestamp', html:'{%this.toTimeFormat(values,out)%}', 'data-time':'{startTime}'}
 				}
 		}]}
-	])),
+	]), {
+        toTimeFormat: function(values, out){
+            var min = Math.round((values.startTime || 0)/60),
+                sec = Math.round((values.startTime || 0)%60);
+
+            if(sec < 10){ sec = '0'+sec; }
+            out.push(min+':'+sec);
+            return out;
+        }
+    }),
 
 
 	initComponent: function(){
