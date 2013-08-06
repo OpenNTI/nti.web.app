@@ -25,13 +25,15 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	constructor: function(config){
 		this.callParent(arguments);
 
-		var ntiid = this.getNtiid();
+		var me = this,
+			ntiid = me.getNtiid();
 
 		function failure(){
-			console.log("Failed to get forum: ",ntiid);
+			console.error("Failed to get forum: ",ntiid);
+			Ext.callback(me.getFinishCallBack());
 		}
 
-		$AppConfig.service.getObject(ntiid, this.createView,failure,this);
+		$AppConfig.service.getObject(ntiid, me.createView,failure,me);
 	},
 
 	createView: function(record){
