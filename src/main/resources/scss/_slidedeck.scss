@@ -1064,8 +1064,8 @@ $experimental-support-for-svg: true;
 }
 
 .x-container-transcript, .x-panel-transcript{
-	overflow-y: auto;
-	overflow-x: hidden;
+	//overflow-y: auto;
+	//overflow-x: hidden;
 	width: 920px;
 
 	.note-gutter{
