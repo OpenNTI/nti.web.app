@@ -25,7 +25,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 
 	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls:'comment', cn:[
-			{ cls:'', html:'{count:plural("Comment")}'},
+			{tag:'tpl', 'if':'count',cn:{ cls:'', html:'{count:plural("Comment")}'}},
 			{ cls:'', html:'Add a Comment'}
 		]
 	})),
@@ -44,33 +44,33 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		}
 
 		req = {
-			url: $AppConfig.service.getContainerUrl(ntiid,Globals.RECURSIVE_USER_GENERATED_DATA),
+			url: $AppConfig.service.getContainerUrl(ntiid,Globals.USER_GENERATED_DATA),
 			scope: this,
+			method: 'GET',
 			params: {
 				accept: NextThought.model.Note.mimeType,
 				batchStart:0,
 				batchSize:1,
-				sortOn:'lastModified',
-				sortOrder:'descending',
 				filter:'TopLevel'
 			},
-			success: this.containerLoaded,
-			failure: this.containerFailed
+			callback: this.containerLoaded
 		};
 
 		Ext.Ajax.request(req);
 
 		console.log('Loading:',ntiid);
 
-		//this.commentTpl.append(this.meta,{count:10});
 	},
 
 
-	containerLoaded: function(){
-		debugger;
-	},
+	containerLoaded: function(q,s,r){
+		var total = 0,
+			json = Ext.decode(r && r.responseText,true);
+		if(s && json){
+			total = json.FilteredTotalItemCount || 0;
+		}
 
-
-	containerFailed: function(){
+		this.commentTpl.append(this.meta,{count:total});
 	}
+
 });

@@ -161,7 +161,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		function stopOnCardChange(cmp, me){

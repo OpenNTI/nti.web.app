@@ -485,3 +485,40 @@
 		}
 	}
 }
+
+.content-link,
+.content-card {
+	.meta {
+		.comment {
+			position: absolute;
+			bottom: 5px;
+			left: 120px;
+
+			div {
+				display: inline-block;
+				font: normal 700 10px/15px $font;
+				text-transform: uppercase;
+				color: $primary-blue;
+				cursor: pointer;
+
+				&::after {
+					color: $tertiary-grey;
+					font: normal 500 12px/20px $font;
+					text-decoration: none !important;
+					position: static;
+					content: '\00B7';
+					vertical-align: middle;
+					display: inline;
+					padding: 0 0.5em;
+					background: none;
+				}
+
+				&:last-of-type {
+					&::after {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
