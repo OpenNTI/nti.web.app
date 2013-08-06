@@ -39,7 +39,7 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 
 	constructor: function(config){
 		var n = config.node,
-			ntiid = n.getAttribute('ntiid'),
+			ntiid = n.getAttribute('target-ntiid'),
 			containerId = ContentUtils.getLineage(ntiid)[1],
 			req;
 
