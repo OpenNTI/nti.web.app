@@ -163,18 +163,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 	afterRender: function() {
 		this.callParent(arguments);
-
-		function stopOnCardChange(cmp, me){
-			var c = cmp.up('{isOwnerLayout("card")}');
-			me = me||cmp;
-			if( c ){
-				me.mon(c,'deactivate','pausePlayback');
-				stopOnCardChange(c,me);
-			}
-		}
-
-		stopOnCardChange(this);
-
 		this.getSelectionModel().select(0);
 		//this.bodyEl.mask('Loading...');
 	},
@@ -202,7 +190,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			return;
 		}
 
-		this.showCurtain();
+		this.hideCurtain();
 
 		var p = this.player = Ext.widget({
 			xtype: 'content-video',
@@ -217,6 +205,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			destroy: 'destroy'
 		});
 
+		return;
 		this.mon(p,{
 			'player-command-play':'hideCurtain',
 			'player-command-stop':'showCurtain',
