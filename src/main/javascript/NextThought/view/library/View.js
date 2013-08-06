@@ -319,7 +319,6 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	activate: function(){
-        debugger;
 		var res = this.callParent(arguments);
 		if(res){
 			this.reader.relayout();
