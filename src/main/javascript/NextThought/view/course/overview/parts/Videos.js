@@ -190,7 +190,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			return;
 		}
 
-		this.hideCurtain();
+		this.showCurtain();
 
 		var p = this.player = Ext.widget({
 			xtype: 'content-video',
@@ -205,7 +205,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			destroy: 'destroy'
 		});
 
-		return;
 		this.mon(p,{
 			'player-command-play':'hideCurtain',
 			'player-command-stop':'showCurtain',
