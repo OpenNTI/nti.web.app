@@ -95,13 +95,14 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 		var me = this, h,
-			targetEl = me.el.down('.body');
+			targetEl = me.getTargetEl();
 
         if(this.videoOnly){
             this.el.addCls('video-only');
         }
 
 		Ext.getBody().addCls('media-viewer-open');
+
 		this.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:this.headerEl, video: this.video, floatParent:this});
 		this.identity = Ext.widget({xtype:'identity',renderTo: this.toolbar.getEl(), floatParent: this.toolbar});
 
@@ -125,11 +126,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}, this);
         h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
         h = h + 'px';
-        Ext.defer(targetEl.setStyle, 1, targetEl, ['height',h]);
-
+        targetEl.setStyle('height', h);
+        
         // NOTE: By calling updateLayout, we avoid running into a case where the toolbar is offscreen,
         // because we sometimes do things like scrolling, a little too early.
-        Ext.defer(this.updateLayout, 1, this);
+        //Ext.defer(this.updateLayout, 1, this);
 	},
 
 	addVideoPlayer: function(width){
