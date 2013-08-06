@@ -73,11 +73,23 @@ Ext.define('NextThought.view.course.forum.View',{
 			var id = o.getContentsStoreId(),
 				store = Ext.getStore(id) || o.buildContentsStore();
 
-			me.store = store;
-			me.add({xtype: 'course-forum-board', record:o, store:store});
-			if(me.currentForum){
-				me.restoreState(me.currentForum, me.currentTopic);
+			function finish(){
+				me.store = store;
+				me.add({xtype: 'course-forum-board', record:o, store:store});
+				if(me.currentForum){
+					me.restoreState(me.currentForum, me.currentTopic);
+				}
 			}
+
+			if((o.get('Creator')||{}).isModel){
+				finish();
+				return;
+			}
+
+			UserRepository.getUser(o.get('Creator'),function(u){
+				o.set('Creator',u);
+				finish();
+			});
 		}
 
 		function failure(){}
