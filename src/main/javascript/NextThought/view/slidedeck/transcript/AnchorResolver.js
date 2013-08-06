@@ -97,7 +97,7 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 
 	getCuesWithinRange: function(store, start, end){
 		function fn(item){
-			return (start <= item.get('startTime')) && ( item.get('endTime') <= end);
+			return (item.get('endTime') > 0) && (start <= item.get('startTime')) && ( item.get('endTime') <= end);
 		}
 		return store ? store.queryBy(fn, this) : null;
 	},
