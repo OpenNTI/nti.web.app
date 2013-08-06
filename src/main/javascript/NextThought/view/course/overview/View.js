@@ -77,6 +77,10 @@ Ext.define('NextThought.view.course.overview.View',{
 
 		Ext.each(r.getChildren(),function(i){
 			var c, t;
+			if(i.getAttribute('suppressed')==="true"){
+				return;
+			}
+
 			i = me.getComponentForNode(i,locInfo, r);
 			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 			if( t ){
