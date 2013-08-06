@@ -81,16 +81,18 @@ Ext.define('NextThought.view.course.outline.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl,'scroll','handleScrolling');
-        console.log("After render outline");
-        this.buildModule('modules', 'touchSender', {container:this.up().down('.course-overview')});
-        this.buildModule('modules', 'touchSender', {container:this.up().down('.course-outline')});
-        this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-outline'), left:true});
-        this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-overview'), left:false});
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender', {container:this.up().down('.course-overview')});
+            this.buildModule('modules', 'touchSender', {container:this.up().down('.course-outline')});
+            //this.buildModule('modules', 'touchSender', {containers:[this.up().down('.course-overview'), this.up().down('.course-overview')]});
 
+            this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-outline'), left:true});
+            this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-overview'), left:false});
+        }
 	},
 
     buildModule: function(ns, name,config){
-        var m = Ext.createByAlias(ns+'.'+name,Ext.apply(/*{container:this},*/config)),
+        var m = Ext.createByAlias(ns+'.'+name,Ext.apply(config)),
             getterName = 'get'+Ext.String.capitalize(name);
 
         if(this[getterName]){

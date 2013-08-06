@@ -116,19 +116,19 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
         var me = this;
         me.buildModule('modules', 'touchSender');
 
-        var firstY = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent().getY();
+        var firstY =  me.getEl().parent('.x-container-profile').dom.getY();
         console.log("firstY:" + firstY);
 
         var cancelButton = this.getEl().down('.cancel'),
             saveButton = this.getEl().down('.save');
 
         cancelButton.dom.addEventListener('touchstart', function(e){
-            me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
+            me.getEl().parent('.x-container-profile').setY(firstY);
             cancelButton.dom.click();
         }, this);
 
         saveButton.dom.addEventListener('touchstart', function(e){
-            me.getEl().parent().parent().parent().parent().parent().parent().parent().parent().setY(firstY);
+            me.getEl().parent('.x-container-profile').setY(firstY);
             saveButton.dom.click();
         }, this);
 
