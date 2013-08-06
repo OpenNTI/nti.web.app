@@ -282,7 +282,7 @@ Ext.define( 'NextThought.view.library.View', {
 			forum = state.library.current_forum;
 			
 		try{
-			this.setActiveTab(tab);
+			this.setActiveTab((tab === 'null')? null : tab);
 			if(!ntiid){
 				console.warn('There was no ntiid to restore!');
 				return;
