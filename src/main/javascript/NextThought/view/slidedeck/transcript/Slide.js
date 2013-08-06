@@ -163,6 +163,18 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 	getContextDomNode: function(){
 		return Ext.clone(this.el.down('img').dom);
-	}
+	},
+
+    isTimeWithinTimeRange: function(time){
+        var start = this.slide.get('video-start'),
+            end = this.slide.get('video-end');
+
+        return start <= time && time <= end;
+    },
+
+
+    getElementAtTime: function(time){
+        return this.slideImage;
+    }
 
 });

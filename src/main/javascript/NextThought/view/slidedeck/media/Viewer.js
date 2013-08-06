@@ -83,6 +83,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				'presentation-parts-ready': function(){me.fireEvent('media-viewer-ready', me);}
 			}
 		});
+
+        if(!Ext.isEmpty(this.startAtMillis)){
+            this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
+        }
 	},
 
 
@@ -146,6 +150,22 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
         this.videoplayer.el.setStyle('margin','0 auto');
 	},
+
+
+    startAtSpecificTime: function(time, isSeconds){
+        var startTimeSeconds = !isSeconds ? (time || 0)/1000 : time,
+            transcriptCmp =  this.down('slidedeck-transcript');
+
+        console.debug('Should scroll cmps to time: ', startTimeSeconds);
+        if(this.videoplayer){
+            this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+        }
+
+        if(transcriptCmp){
+            transcriptCmp.scrollToStartingTime(startTimeSeconds);
+        }
+    },
+
 
 	switchVideoViewer: function(type){
 		if(!type || this.activeVideoPlayerType === type){

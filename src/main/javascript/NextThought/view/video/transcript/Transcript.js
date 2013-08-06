@@ -489,6 +489,41 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
+    isTimeWithinTimeRange: function(time){
+        var tRange = this.getTimeRange();
+        return tRange.start <= time && time <= tRange.end;
+    },
+
+
+
+    getElementAtTime: function(seconds){
+        var cueStore = this.getCueStore(),
+            cues = cueStore && cueStore.queryBy(function(rec){
+                return rec.get('startTime') <= seconds && seconds <= rec.get('endTime');
+            }), sEl, cue;
+
+        if(!cues || cues.getCount() === 0){
+            return null;
+        }
+        cue = cues.getAt(0);
+        sEl = this.el.down('.cue[cue-start='+cue.get('startTime')+']');
+        return sEl;
+    },
+
+
+    getTimeRange: function(){
+        var t = this.transcript,
+            start = t.get('desired-time-start'),
+            end = t.get('desired-time-end');
+
+        // if the end is not set, set it to be the endTime of the last cue. CueStore should be sorted.
+        if(Ext.isEmpty(end) || end <= 0){
+            end = this.getCueStore().last().get('endTime');
+        }
+        return {start:start, end:end};
+    },
+
+
 	selectNewCue: function(newCue){
 		if(newCue === this.currentCue || Ext.isEmpty(newCue)){ return; }
 

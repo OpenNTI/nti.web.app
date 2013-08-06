@@ -283,6 +283,29 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 	},
 
+
+    scrollToStartingTime: function(seconds){
+        var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
+
+        // scroll the component that contains the given time into view.
+        Ext.each(cmps, function(part){
+            if(part.isTimeWithinTimeRange && part.isTimeWithinTimeRange(seconds)){
+                tEl = part.getElementAtTime(seconds);
+                scrollingEl = this.el.getScrollingEl();
+
+                if(tEl && scrollingEl){
+                    console.log('scrolling into view: ', tEl);
+                    scrollingEl.scrollTo('top', tEl.getBox().top - scrollingEl.getY());
+                    return false;
+                }
+            }
+        });
+
+        //return target element.
+        return tEl;
+    },
+
+
 	selectSlide: function(slide){
 		var s = this.query('slide-component'),
 			me = this,
