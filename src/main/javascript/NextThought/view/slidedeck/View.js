@@ -81,7 +81,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 		//wire up
 		this.mon(q,'select', this.maybeSelect, this);
 		this.mon(q,'slide-selected', function(slide){
-			this.down('slidedeck-transcript').selectSlide(slide);
+            if(this.down('slidedeck-transcript')){
+                this.down('slidedeck-transcript').selectSlide(slide);
+            }
 		}, this);
 		this.mon(q, 'beforeselect', function(dvm){
 			this.wasSelected = dvm.getSelection();

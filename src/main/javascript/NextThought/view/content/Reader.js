@@ -74,6 +74,9 @@ Ext.define('NextThought.view.content.Reader', {
 			cb = null,
 			silent = true;
 
+        if(Ext.isEmpty(l)){
+            return;
+        }
 		if(!Ext.isString(l)){
 			silent = l[2];
 			cb = Ext.isFunction(l[1])? l[1] : null;
