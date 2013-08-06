@@ -82,7 +82,7 @@ Ext.define('NextThought.util.Anchors', {
 			if(!containerId){
 				console.warn('No container id provided will assume root without validating container');
 			}
-			if(!desc){
+			if(!desc || !desc.isDomContentRangeDescription){
 				console.warn('nothing to parse?');
 				return;
 			}
@@ -133,13 +133,14 @@ Ext.define('NextThought.util.Anchors', {
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
 		var ancestorNode, resultRange, searchWithin, locator;
 
+		if(!contentRangeDescription || !contentRangeDescription.isDomContentRangeDescription){
+			console.warn('nothing to parse?');
+			return null;
+		}
+
         docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
         try{
-			if(!contentRangeDescription){
-				console.warn('nothing to parse?');
-				return null;
-			}
 
 			if(!containerId){
 				console.log('No container id provided will use root without validating container ids');
@@ -239,13 +240,14 @@ Ext.define('NextThought.util.Anchors', {
 		var ancestorNode, resultRange, searchWithin, containerId, docElementContainerId,
 			docElement  = (cleanRoot ? cleanRoot.ownerDocument : null) || doc, locator;
 
+		if(!contentRangeDescription || !contentRangeDescription.isDomContentRangeDescription){
+			console.warn('nothing to parse?');
+			return null;
+		}
+
         docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
         try{
-			if(!contentRangeDescription){
-				console.warn('nothing to parse?');
-				return null;
-			}
 
 			if(!containerId){
 				console.log('No container id provided will use root without validating container ids');
