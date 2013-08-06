@@ -912,10 +912,12 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 	handleClick: function (e) {
 		var guid, p, fnName, mime,
-			t = e.getTarget('.object-part');
+			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
 
 		if (t) {
-			guid = t.getAttribute('id') || Ext.fly(t).down('img').getAttribute('id');
+			guid = t.getAttribute('id');
+			if(!guid || guid.indexOf('ext-') === 0){ guid = Ext.fly(t).down('img').getAttribute('id'); }
+			
 			p = this.trackedParts[guid];
 			if( p ){
 				if( !p.isDestroyed && p.show ){
@@ -1020,7 +1022,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		}
 
 		//pop open a whiteboard:
-		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide' });
+		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
 		content = me.el.down('.content');
 		//remember the whiteboard window:
 		wbWin.guid = guid;
