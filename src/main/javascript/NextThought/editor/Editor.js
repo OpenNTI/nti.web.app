@@ -1427,12 +1427,12 @@ Ext.define('NextThought.editor.AbstractEditor',{
 		function isNoteBodyEmpty(){
 			var d = Ext.getDom(me.el.down('.content')),
 				html = d && d.innerHTML, v, parts = d.querySelectorAll('.object-part');
-
-			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '');
+				
+			html = v = html.replace(/\u200B/g,'').replace(/<div>/g, '').replace(/<\/div>/g, '').replace(/&nbsp;/g, ' ');
 			html = html.replace(/<br\/?>/g, '');
 			return {
 				clearPlaceholder: !Ext.isEmpty(parts) || !Ext.isEmpty(v),
-				enableSave: !Ext.isEmpty(parts) || !Ext.isEmpty(html.trim())
+				enableSave: !Ext.isEmpty(Ext.Object.getKeys(parts)) || !Ext.isEmpty(html.trim())
 			};
 		}
 
