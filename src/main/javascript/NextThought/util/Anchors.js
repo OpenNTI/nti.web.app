@@ -7,6 +7,8 @@ Ext.define('NextThought.util.Anchors', {
 		'NextThought.util.Ranges'
 	],
 
+	containerSelectors: ['object[type$=naquestion][data-ntiid]', 'object[type$=ntivideo][data-ntiid]'],
+
 	singleton: true,
 
 	//To control some logging
@@ -410,9 +412,7 @@ Ext.define('NextThought.util.Anchors', {
 	 *  we warn and return the node anyway
 	 */
 	getContainerNode: function(containerId, root, defaultNode){
-		var ntiidAttr = 'data-ntiid',
-			questionSel = 'object[type$=naquestion]['+ntiidAttr+']',
-			result;
+		var result, isContainerNode = false;
 		if(!containerId){
 			return null;
 		}
@@ -445,7 +445,12 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		result = Ext.fly(potentials[0]);
 
-		if(!result.is(questionSel)){
+		Ext.Array.each(Anchors.containerSelectors, function(sel){
+			isContainerNode = Ext.fly(result).is(sel);
+			return !isContainerNode;
+		});
+
+		if(!isContainerNode){
 			console.warn('Found container we think is an invalid container node', result);
 		}
 
@@ -463,15 +468,34 @@ Ext.define('NextThought.util.Anchors', {
     getContainerNtiid: function(node, def){
         var n = Ext.get(node),
 			ntiidAttr = 'data-ntiid',
-			questionSel = 'object[type$=naquestion]['+ntiidAttr+']',
-			up;
+			up, containerNode;
 
-        if (n && n.is(questionSel)){
-            return n.getAttribute(ntiidAttr);
-        }
-		up = n ?  n.up(questionSel) : null;
-		if (up) {
-            return up.getAttribute(ntiidAttr);
+		function ancestorOrSelfMatchingSelector(node, sel){
+			if(!node){
+				return false;
+			}
+			return Ext.fly(node).is(sel) ? node : Ext.fly(node).parent(sel, true);
+		}
+
+		function nodeIfObject(n){
+			var node = null;
+
+			if(!n){
+				return null;
+			}
+
+			Ext.Array.each(Anchors.containerSelectors, function(sel){
+				node = ancestorOrSelfMatchingSelector(n, sel);
+				return node === null;
+			}, this);
+
+			return node;
+		}
+
+		containerNode = nodeIfObject(node);
+
+		if (containerNode) {
+            return containerNode.getAttribute(ntiidAttr);
         }
 
 		//ok its not in a subcontainer, return default

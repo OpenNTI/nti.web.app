@@ -13,6 +13,7 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 	ui: 'content-video',
 	cls: 'content-video-container',
 
+	representsUserDataContainer:true,
 
 	renderSelectors: {
 		openMediaViewerEl:'.media-transcript'

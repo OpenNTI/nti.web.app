@@ -1,6 +1,8 @@
 Ext.define('NextThought.util.Line',{
 	singleton: true,
 
+	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],
+
 	getStyle: function(node,prop){
 		if(!node){return '';}
 		var view = node.ownerDocument.defaultView;
@@ -22,7 +24,7 @@ Ext.define('NextThought.util.Line',{
 		y = Math.round(y);
 		doc = doc || document;
 
-		var range, objectSelector = 'object[type$=naquestion]',
+		var range,
 			ancestor, questionObject;
 
 		//The "IE" search is actually more accurate for assessment pages
@@ -38,6 +40,24 @@ Ext.define('NextThought.util.Line',{
 			range = this.rangeForLineBySelection(y, doc);
 		}
 
+		function ancestorOrSelfMatchingSelector(node, sel){
+			if(!node){
+				return null;
+			}
+			return Ext.fly(node).is(sel) ? node : Ext.fly(node).parent(sel, true);
+		}
+
+		function nodeIfObject(n){
+			var node = null;
+
+			Ext.Array.each(this.containerMimeSelectors, function(sel){
+				node = ancestorOrSelfMatchingSelector(n, sel);
+				return node === null;
+			}, this);
+
+			return node;
+		}
+
 		//If we are in a question we do something special
 		if(range){
 			//If we are in a question do some magic to make sure we only return one line.
@@ -45,7 +65,7 @@ Ext.define('NextThought.util.Line',{
 			//to determine notability
 			ancestor = range.commonAncestorContainer;
 			if(ancestor){
-				questionObject = Ext.fly(ancestor).is(objectSelector) ? ancestor : Ext.fly(ancestor).parent(objectSelector, true);
+				questionObject = nodeIfObject(ancestor);
 			}
 			if(questionObject){
 				range = doc.createRange();
@@ -311,6 +331,7 @@ Ext.define('NextThought.util.Line',{
 				}
 			}
 
+			//TODO needed still?
 			//we have an element, it's an object but not a video (an assessment probably)
             if (Ext.fly(elem).is('object[type$=naquestion]') || Ext.fly(elem).parent('object[type$=naquestion]')) {
 				elem = Ext.fly(elem).parent('object') || elem;
