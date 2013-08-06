@@ -33,6 +33,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 				c = this.create({lastModified: courseNodeRecord.get('date'), sources: videos, locationInfo: locationInfo});
 			}
 
+			console.debug('Giving dashboard:',c);
 			Ext.callback(finish,null,[c]);
 		}
 
@@ -63,6 +64,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			items.push({node:s, locationInfo: l, courseRecord: rec});
 		});
 
+		console.debug('Rendering Video Container');
 		this.content = Ext.widget({
 			xtype: 'course-overview-video-section',
 			floatParent: this,
