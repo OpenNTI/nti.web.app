@@ -32,9 +32,16 @@ Ext.define('NextThought.view.course.dashboard.View',{
 				date,course,l,
 				courseNavStore.getCurrentBy(date),
 				function(tiles){
-					me.setTiles(tiles);
-					if( me.el ){
-						me.el.unmask();
+					try{
+						me.setTiles(tiles);
+					}
+					catch(e){
+						console.error(e.stack|| e.message || e);
+					}
+					finally{
+						if( me.el ){
+							me.el.unmask();
+						}
 					}
 				}
 			);
