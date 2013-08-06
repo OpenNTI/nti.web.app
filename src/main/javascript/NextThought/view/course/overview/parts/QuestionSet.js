@@ -40,7 +40,7 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 	constructor: function(config){
 		var n = config.node,
 			ntiid = n.getAttribute('ntiid'),
-			containerId = "tag:nextthought.com,2011-10:mathcounts-HTML-MATHCOUNTS_Chapter_Competition2012.sprint_round",//ContentUtils.getLineage(ntiid)[1],
+			containerId = ContentUtils.getLineage(ntiid)[1],
 			req;
 
 		config = {
