@@ -978,6 +978,13 @@ div.contact-buttons {
 				}
 			}
 
+			.name{
+				overflow: hidden;
+				@include ellipse;
+				max-width: 480px;
+				display: inline-block;
+			}
+
 			span{
 				white-space: nowrap;
 				font: normal 500 18px/25px $font;

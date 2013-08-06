@@ -191,6 +191,10 @@
 			font-size: 12px;
 			font-style: italic;
 			font-weight: 600;
+
+			.message{
+				word-wrap: break-word;
+			}
 		}
 
 		.log-entry-wrapper {

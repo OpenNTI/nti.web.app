@@ -218,6 +218,8 @@
 			font: normal 600 10px/15px $font;
 			text-transform: uppercase;
 			color: $primary-blue;
+			overflow: hidden;
+			@include ellipse;
 		}
 		.snipet {
 			min-height: 50px;
