@@ -134,8 +134,11 @@ Ext.define('NextThought.view.contacts.Grouping',{
 			return;
 		}
 
-		this.initialConfig.title = newTitle || this.initialConfig.title;
-		this.nameEl.update(newTitle||this.initialConfig.title);
+		var t = newTitle || this.initialConfig.title;
+
+		this.initialConfig.title = t;
+		this.nameEl.update(t);
+		this.nameEl.set({'data-qtip': t});
 		this.countEl.update(Ext.String.format('{0}', this.items.getCount()));
 	},
 
