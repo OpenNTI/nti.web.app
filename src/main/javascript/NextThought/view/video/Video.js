@@ -149,6 +149,8 @@ Ext.define('NextThought.view.video.Video',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		var me = this;
+
 		this.playerSetup();
 		Ext.defer(this.updateLayout, 1, this);
 
@@ -164,6 +166,17 @@ Ext.define('NextThought.view.video.Video',{
 //			Set the curtain as the active player while we figure out which other one to use.
 			this.maybeSwitchPlayers('none');
 		}
+
+		function stopOnCardChange(cmp, me){
+			var c = cmp.up('{isOwnerLayout("card")}')
+			me = me || cmp;
+			if(c){
+				me.mon(c,'deactivate','pausePlayback',me);
+				stopOnCardChange(c, me)
+			}
+		}
+
+		stopOnCardChange(this);
 	},
 
 

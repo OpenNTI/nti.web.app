@@ -502,7 +502,7 @@ Ext.define('NextThought.view.profiles.parts.Blog',{
 
 		Ext.get('profile').scrollTo('top',0,true);
 		this.activePost = Ext.widget(xtype,cfg);
-
+		this.fireEvent('deactivate');
 		this.updateLayout();
 	},
 
