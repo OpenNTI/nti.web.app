@@ -19,7 +19,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'markupenabled-action': 'contentDefinedAnnotationAction',
 			'sync-height': 'syncHeight',
 			'create-note': 'noteHere',
-			'beforenavigate': 'onNavigation'
+			'beforenavigate': 'onNavigation',
+            'beforedeactivate': 'onNavigation'
 		});
 
 

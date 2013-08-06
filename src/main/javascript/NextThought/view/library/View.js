@@ -93,6 +93,7 @@ Ext.define( 'NextThought.view.library.View', {
 		this.on({
 			'switch-to-reader':'switchViewToReader',
 			'beforeactivate':'onBeforeActivation',
+            'beforedeactivate': 'onBeforeDeActivation',
 			'deactivate':'onDeactivated'
 		});
 	},
@@ -195,6 +196,14 @@ Ext.define( 'NextThought.view.library.View', {
 			this.down('content-page-widgets').hide();
 		}
 	},
+
+
+    onBeforeDeActivation: function(){
+        // NOTE: we should probably fire this event for all the children of this view,
+        // since one could have the editor active (in which case we would want to display appropriate warning).
+        // For now, it seems like the reader should be notified and we will add others if we find it necessary.
+        return this.reader.fireEvent('beforedeactivate', this);
+    },
 
 
 	onBeforeNavigate: function(ntiid, fromHistory){
@@ -310,6 +319,7 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	activate: function(){
+        debugger;
 		var res = this.callParent(arguments);
 		if(res){
 			this.reader.relayout();
