@@ -149,8 +149,6 @@ Ext.define('NextThought.view.video.Video',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var me = this;
-
 		this.playerSetup();
 		Ext.defer(this.updateLayout, 1, this);
 
@@ -168,11 +166,11 @@ Ext.define('NextThought.view.video.Video',{
 		}
 
 		function stopOnCardChange(cmp, me){
-			var c = cmp.up('{isOwnerLayout("card")}')
+			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if(c){
 				me.mon(c,'deactivate','pausePlayback',me);
-				stopOnCardChange(c, me)
+				stopOnCardChange(c, me);
 			}
 		}
 
