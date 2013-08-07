@@ -700,7 +700,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		if(Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)){
 			return;
 		}
-
+		Ext.Array.remove(filterTypes,'onlyMe');
 		if(!Ext.Array.contains(filterTypes,'notInCommunity') && !Ext.Array.contains(filterTypes, 'inCommunity')){
 			filterTypes.push(this.filter);
 		}
