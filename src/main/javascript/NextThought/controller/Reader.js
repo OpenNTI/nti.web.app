@@ -153,6 +153,7 @@ Ext.define('NextThought.controller.Reader', {
 	showCardTarget: function(card, data, silent){
 		var reader = card.up('reader-content')||ReaderPanel.get(),//for now, lets just get the default reader.
 			ntiid = data.ntiid,
+			postfix = data.notTarget ? '' : '-target',
 			DH = Ext.DomHelper,
 			s = encodeURIComponent('Pages('+ntiid+')'),
 			u = encodeURIComponent($AppConfig.username),
@@ -169,8 +170,8 @@ Ext.define('NextThought.controller.Reader', {
 						cls:'page-contents no-padding',
 						cn:Ext.applyIf({
 							tag: 'object',
-							cls: 'nticard-target',
-							type: 'application/vnd.nextthought.nticard-target',
+							cls: 'nticard'+postfix,
+							type: 'application/vnd.nextthought.nticard'+postfix,
 							'data-ntiid': ntiid,
 							html: DH.markup([
 								{tag:'img', src:data.thumbnail},

@@ -80,6 +80,6 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	},
 
 
-	hideControls: function(){ this.meta.hide(); },
-	showControls: function(){ this.meta.show(); }
+	hideControls: function(){ this.hide(); },
+	showControls: function(){ this.show(); }
 });

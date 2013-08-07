@@ -21,10 +21,16 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 			thumbnail: getURL(i.root+n.getAttribute('icon')),
 			ntiid: n.getAttribute('ntiid'),
 			title: n.getAttribute('label'),
+			notTarget: true,
 			asDomSpec: DomUtils.asDomSpec
 		};
 
 		this.callParent([config]);
+	},
+
+
+	shouldOpenInApp: function(ntiid, url, basePath){
+		return true;
 	},
 
 
