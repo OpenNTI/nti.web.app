@@ -32,7 +32,9 @@ Ext.define('NextThought.view.forums.Topic',{
 	getTargetEl: function(){return this.body;},
 	childEls: ['body'],
 
-	pathTpl: Ext.DomHelper.markup([
+    showPermissions: false,
+
+    pathTpl: Ext.DomHelper.markup([
 		{cls:'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
 	]),
 

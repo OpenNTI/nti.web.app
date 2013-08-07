@@ -551,7 +551,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	getStoreForLine: function(line){
 		var stores = this.currentPageStores,
-			root = stores.root,
+			root = stores.root || {},
 			key, s, potentials = [];
 
 

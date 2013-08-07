@@ -868,7 +868,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
 
-		if(silent !== true && selModel.suppressPushState !== true){
+		if(silent !== true && (selModel || {}).suppressPushState !== true){
 			this.pushState({'topic': record.get('ID'), comment: undefined});
 		}
 	},
