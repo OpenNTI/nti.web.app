@@ -227,7 +227,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 
 
 	afterRender: function(){
-		var store = this.store;
+		var store = this.store,
+			flStore = Ext.getStore('FriendsList');
+
 		this.callParent(arguments);
 		this.searchStore = new NextThought.store.UserSearch({
 			filters:[
@@ -279,10 +281,15 @@ Ext.define('NextThought.view.account.contacts.View',{
 				this[presence.isOnline()? 'removeCls' : 'addCls']('offline');
 			}
 		}, this);
-
+		
 		this.mon(this.store,{
 			scope: this.contactSearch,
 			datachanged: 'refresh'
+		});
+
+		this.mon(flStore,{
+			scope: this.contactSearch,
+			'update': 'refresh'
 		});
 
 		this.mon(this.searchButton,{
