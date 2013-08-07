@@ -173,6 +173,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		function transcriptLoadFinish(text){
 			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text);
 
+			if(!me.rendered){
+				me.on('afterrender',function(){
+					transcriptLoadFinish(text);
+				}, me);
+				return;
+			}
 
 			cueList = me.groupByTimeInterval(cueList, 30);
 			me.store = me.buildStore(cueList, me.getTimeRangeFilter());
