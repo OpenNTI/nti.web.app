@@ -98,8 +98,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 		function byTotals(a,b){
 			var aN = a.UsersName || '',
 				bN = b.UsersName || '';
-			a = a.Total;
-			b = b.Total;
+			a = a.Score || 0;
+			b = b.Score || 0 ;
 			if(a!==b){
 				return a<b ? 1 : -1;
 			}
