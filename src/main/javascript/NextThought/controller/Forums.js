@@ -699,18 +699,32 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	loadBoard: function(selModel, record, silent, cfg){
-		var community;
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}));
 
-		community = record.get('Creator');
-		if(community.isModel){
+		var me = this,
+			community = record.get('Creator');
+
+		function finish(){
+			me.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}));
+
+			if(silent !== true){
+				//The communities board we are viewing
+				me.pushState({board:{community: community,isUser: true}, forum: undefined, topic: undefined, comment: undefined});
+			}
+		}
+
+		if( community.isModel ){
 			community = community.get('Username');
 		}
-		if(silent !== true){
-			//The communities board we are viewing
-			this.pushState({board:{community: community,isUser: true}, forum: undefined, topic: undefined, comment: undefined});
+		else {
+			UserRepository.getUser(community,function(c){
+				record.set('Creator',c);
+				finish();
+			});
+			return;
 		}
+
+		finish();
 	},
 
 
