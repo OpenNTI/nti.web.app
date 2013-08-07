@@ -8,7 +8,8 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 	constructor: function(config){
 		var n = config.node,
 			i = config.locationInfo,
-			href = n.getAttribute('href');
+			href = n.getAttribute('href'),
+			ntiid = n.getAttribute('ntiid');
 
 		if(!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)){
 			href = getURL(i.root + href);
@@ -19,9 +20,9 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 			creator: n.getAttribute('creator'),
 			description: n.getAttribute('desc'),
 			thumbnail: getURL(i.root+n.getAttribute('icon')),
-			ntiid: n.getAttribute('ntiid'),
+			ntiid: ntiid,
 			title: n.getAttribute('label'),
-			notTarget: true,
+			notTarget: !NextThought.view.cards.Card.prototype.shouldOpenInApp.call(this,ntiid,href),
 			asDomSpec: DomUtils.asDomSpec
 		};
 
@@ -47,7 +48,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		var ntiid = this.data.href,
 			req;
 
-		if(!ParseUtils.parseNtiid(ntiid)){
+		if(!ParseUtils.isNTIID(ntiid)){
 			ntiid = this.data.ntiid;
 			if(!ntiid){
 				return;
