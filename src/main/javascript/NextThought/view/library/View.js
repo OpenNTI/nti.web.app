@@ -207,7 +207,6 @@ Ext.define( 'NextThought.view.library.View', {
 
 
 	onBeforeNavigate: function(ntiid, fromHistory){
-		this.tabs = false;
 		if(!fromHistory){
 			if(this.activate(true) === false){
 				return false;
