@@ -1198,8 +1198,24 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+
 	.x-component-video-title{
-		margin-top: 20px;
+		& > div{
+			position: relative;
+		}
+		padding-left: 108px;
+		width: 860px;
+		color: $secondary-grey;
+		font: 14px normal $font;
+
+		.control-container{
+			right: -20px !important;
+		}
+	}
+
+
+	.x-component-video-title{
+		margin-top: 40px;
 		color: $secondary-grey;
 		font: 14px normal $font;
 

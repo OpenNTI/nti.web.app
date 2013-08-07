@@ -52,7 +52,10 @@ Ext.define('NextThought.model.PlaylistItem', {
 			var i,
 				frag = (dom.ownerDocument||document).createDocumentFragment(),
 				el = Ext.get(dom),
+				titleParam = el.down('param[name=title]'),
+				title = titleParam && titleParam.getAttribute('value'),
 				o = {
+					'title': title,
 					'sources': el.query('object[type$=videosource]'),
 					'dom-clone': frag,
 					'NTIID': dom.getAttribute('data-ntiid')

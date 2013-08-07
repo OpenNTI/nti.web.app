@@ -140,16 +140,44 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	buildPresentationTimeLine: function(slideStore, transcriptStore){
-		var items = [];
+		var items = [], lastVideoId;
+
+		function itemWithId(list, id){
+			var item = null;
+
+			if(Ext.isEmpty(list) || !id){
+				return null;
+			}
+
+			Ext.Array.each(list, function(i){
+				if(i.get('NTIID') === id){
+					item = i;
+				}
+				return !item;
+			});
+
+			return item;
+		}
 
 		slideStore.each(function(slide){
 			var m = slide.get('media'),
 				vid = m && m.getAssociatedVideoId(),
 				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
 				start = slide.get('video-start'),
-				end = slide.get('video-end');
+				end = slide.get('video-end'), videoObj;
 
 			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
+
+			if(!lastVideoId || lastVideoId !== vid){
+				lastVideoId = vid;
+				videoObj = itemWithId(this.videoPlaylist, lastVideoId);
+				if(videoObj){
+					items.push({
+						xtype: 'video-title-component',
+						video: videoObj
+					});
+				}
+			}
 
 			items.push({
 				xtype:'slide-component',
@@ -177,7 +205,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 					}
 				});
 			}
-		});
+		}, this);
 
 		this.items = items;
 	},

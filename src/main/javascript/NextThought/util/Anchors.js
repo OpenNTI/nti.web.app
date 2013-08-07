@@ -233,7 +233,9 @@ Ext.define('NextThought.util.Anchors', {
 		//as well as a caching strategy that was devised back when we only ever used the anchor methods on the content
 		//fragment.  Unfortunately the easiest, and safest, thing to do about this is prevent the locator from
 		//being used.  Double unfortunately, the only way to do that right now is to dump the cached information.
-		contentRangeDescription.attachLocator(null);
+		if(contentRangeDescription){
+			contentRangeDescription.attachLocator(null);
+		}
 
 		range = this.locateContentRangeDescription(contentRangeDescription, node, theDoc);
 
