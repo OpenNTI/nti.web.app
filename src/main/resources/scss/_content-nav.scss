@@ -25,19 +25,20 @@
 		&, * {
 			color: $tertiary-grey;
 			font: normal normal 14px/60px $font;
+			vertical-align: top;
 			overflow: hidden;
 			@include ellipse;
 			text-transform: uppercase;
 		}
 
-		span:not(.part){
-			.x-ie &,
-			.x-ie10 &,
-			.x-gecko & {
-				top: -25px;
-				position: relative;
-			}
-		}
+		//span:not(.part){
+			//.x-ie &,
+			//.x-ie10 &,
+			//.x-gecko & {
+			//	top: -25px;
+			//	position: relative;
+			//}
+		//}
 
 		span.part {
 			display: inline-block;
