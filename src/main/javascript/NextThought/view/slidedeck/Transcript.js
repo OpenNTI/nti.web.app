@@ -113,7 +113,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		var cmps = this.cmpMap[store.containerId || ''];
 		if(cmps){
 			Ext.Array.each(cmps, function(c){
-				this.fireEvent('register-records', store, records, c);
+				this.fireEvent('unregister-records', store, records, c);
 			});
 		}
 	},
