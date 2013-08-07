@@ -208,7 +208,9 @@ Ext.define('NextThought.view.account.activity.note.Reply',{
 
 
 	deleteComment: function(){
-		this.fireEvent('delete-reply', this.record, this);
+		this.fireEvent('delete-reply', this.record, this, function(cmp){
+			cmp.destroy();
+		});
 	},
 
 
