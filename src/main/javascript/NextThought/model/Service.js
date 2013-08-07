@@ -181,7 +181,7 @@ Ext.define('NextThought.model.Service', {
 
 	getContainerUrl: function(ntiid, type){
 		var pid = 'Pages('+ntiid+')',
-			u = $AppConfig.userObject.get('href');
+			u = $AppConfig.userObject.get('href').split('?')[0];
 
 		return getURL(Ext.String.format("{0}/{1}/{2}", u, encodeURIComponent(pid || ''), type || ''));
 	},
