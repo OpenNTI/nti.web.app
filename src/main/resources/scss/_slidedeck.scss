@@ -756,6 +756,15 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+    .x-mask{
+        background: rgba(0,0,0,0.65) !important;
+    }
+
+    .x-mask-msg{
+        .x-mask-msg-text{
+            color: white !important;
+        }
+    }
 }
 
 .x-container-media{
@@ -1036,6 +1045,16 @@ $experimental-support-for-svg: true;
 
         .body{
             display: none;
+        }
+    }
+
+    .x-mask{
+        background: rgba(0,0,0,0.65) !important;
+    }
+
+    .x-mask-msg{
+        .x-mask-msg-text{
+            color: white !important;
         }
     }
 }

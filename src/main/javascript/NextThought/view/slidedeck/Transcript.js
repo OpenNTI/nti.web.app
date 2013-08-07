@@ -232,7 +232,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		this.setupNoteOverlay();
 		this.el.unselectable();
-		this.el.mask('Loading....');
+		this.addMask();
 		this.maybeLoadData();
 		this.mon(this.el, {
 			scope:this,
@@ -244,6 +244,28 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	getPartComponents: function(){
 		return Ext.Array.filter(this.items.items, function(p){return p!==undefined;});
 	},
+
+
+    getMaskTarget: function(){
+        var  root = this;
+        while(root.ownerCt){
+            root = root.ownerCt;
+        }
+
+        return root.el;
+    },
+
+
+    addMask: function(){
+        this.getMaskTarget().mask('Loading...');
+        this.isMasked = true;
+    },
+
+
+    removeMask: function(){
+        this.getMaskTarget().unmask();
+        this.isMasked = false;
+    },
 
 
 	maybeLoadData: function(){
@@ -266,7 +288,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 					me.selectInitialSlide();
 				}
 
-				me.el.unmask();
+				me.removeMask();
 
 				me.fireEvent('presentation-parts-ready', me,  me.getPartComponents(), me.startOn);
 				me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
@@ -352,7 +374,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			}
 		});
 
-		if(!this.el.isMasked() && targetImageEl){
+		if(!this.isMasked && targetImageEl){
 			Ext.defer(function(){
 				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
 			}, 10, me);
