@@ -253,7 +253,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			scope: this,
 			'itemmouseenter': 'mouseOver',
 			'itemmouseleave': 'mouseOut',
-			'itemclick': 'openEditor'
+			'itemclick': 'openEditor',
+            'beforeitemclick': function(sel, rec){
+                return rec.get('type') !== 'section';
+            }
 		});
 	},
 
