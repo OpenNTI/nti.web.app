@@ -307,7 +307,6 @@ Ext.define('NextThought.controller.Navigation', {
 	 */
 	gotoBlog: function(user, postId, commentId, params){
 		var title = 'Thoughts',
-			state = this.getController('State'),
 			fragment,
 			args = [title];
 
@@ -325,9 +324,7 @@ Ext.define('NextThought.controller.Navigation', {
 			fragment = fragment + '?' + Ext.Object.toQueryString(params);
 		}
 
-		if(state.changeHash){
-			state.changeHash(fragment);
-		}
+		this.fireEvent('change-hash',fragment);
 	},
 
 	/**

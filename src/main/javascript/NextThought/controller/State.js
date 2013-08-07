@@ -48,6 +48,11 @@ Ext.define('NextThought.controller.State', {
 				'*': {
 					'change-hash': 'changeHash'
 				}
+			},
+			controller: {
+				'*': {
+					'change-hash': 'changeHash'
+				}
 			}
 		});
 		ContentAPIRegistry.register('NTIPreviousPage', this.navigatePreviousPage, this);
