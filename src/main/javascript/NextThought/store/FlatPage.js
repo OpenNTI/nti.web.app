@@ -98,12 +98,30 @@ Ext.define('NextThought.store.FlatPage',{
 			});
 		}
 
+		function load(s,rec){
+            var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
+                records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders), me = this;
+
+            Ext.each(records,function(r){
+                var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);
+                if(!r || !(r instanceof NextThought.model.Note)){ return; }
+
+                if(i !== -1 && r !== me.getAt(i)){
+                    me.removeAt(i);
+                }
+
+                if(!r.parent){
+                    me.add(r);//add one at a time to get insertion sort.
+                }
+            });
+        }
+
 		otherStore.on('cleanup','destroy',
 				me.mon(otherStore,{
 					scope: me,
 					destroyable: true,
 					add: add,
-					load: add,
+					load: load,
 					bulkremove: remove,
 					remove: remove,
 					cleanup: cleanUp
