@@ -84,7 +84,7 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 
 
 	deleteComment: function () {
-		this.fireEvent('delete-blog-comment', this.record, this);
+		this.fireEvent('delete-blog-comment', this.record, this, Ext.bind(this.onDelete, this));
 	},
 
 	navigateToComment: function () {
