@@ -93,6 +93,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
 			store = NextThought.store.PageItem.make(url, containerId, true);
 
+		store.doesNotParticipateWithFlattenedPage = true;
 		Ext.apply(store.proxy.extraParams,{
 			accept: NextThought.model.Note.mimeType,
 			filter: 'TopLevel'
