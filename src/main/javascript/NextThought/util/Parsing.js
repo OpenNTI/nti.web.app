@@ -89,6 +89,10 @@ Ext.define('NextThought.util.Parsing',{
 
 	},
 
+	isNTIID: function(id){
+		return Boolean(this.parseNTIID(id));
+	},
+
 	/**
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
@@ -96,7 +100,7 @@ Ext.define('NextThought.util.Parsing',{
 	 * @param id
 	 * @returns {Object} an object containing the components of the id
 	 */
-	parseNtiid: function(id) {
+	parseNTIID: function(id) {
 		var parts = (typeof id !== 'string' ? (id||'').toString() : id ).split(':'),
 			authority, specific,
 			result = {};
@@ -179,6 +183,12 @@ Ext.define('NextThought.util.Parsing',{
 		};
 
 		return result;
+	},
+
+
+	/** @deprecated */
+	parseNtiid: function(id){
+		return this.parseNTIID(id);
 	},
 
 

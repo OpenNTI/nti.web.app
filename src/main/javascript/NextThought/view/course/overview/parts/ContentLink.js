@@ -7,12 +7,17 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 
 	constructor: function(config){
 		var n = config.node,
-			i = config.locationInfo;
+			i = config.locationInfo,
+			href = n.getAttribute('href');
+
+		if(!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)){
+			href = getURL(i.root + href);
+		}
 
 		config.data = {
+			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('creator'),
 			description: n.getAttribute('desc'),
-			href: n.getAttribute('href'),
 			thumbnail: getURL(i.root+n.getAttribute('icon')),
 			ntiid: n.getAttribute('ntiid'),
 			title: n.getAttribute('label'),
