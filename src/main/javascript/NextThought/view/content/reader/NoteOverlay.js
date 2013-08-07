@@ -439,7 +439,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	mouseOver: function (evt) {
-		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
+		if (Ext.dd.DragDropManager.dragCurrent || this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return false;
 		}
 
