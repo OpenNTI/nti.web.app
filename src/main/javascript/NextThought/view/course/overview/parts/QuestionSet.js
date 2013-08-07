@@ -76,7 +76,7 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 			json = Ext.decode(r.responseText,true) || {};
 
 		json = (json.Items || [])[0];
-		console.debug('Loaded:', r.status, r.responseText);
+//		console.debug('Loaded:', r.status, r.responseText);
 
 		if(!json){
 			b = this.down('button');
