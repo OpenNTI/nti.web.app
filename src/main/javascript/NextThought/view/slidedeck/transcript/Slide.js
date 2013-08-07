@@ -2,6 +2,10 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 	extend: 'Ext.Component',
 	alias: 'widget.slide-component',
 
+	mixins: {
+		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+	},
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn:[
 			{tag: 'img', cls: 'slide'},
@@ -13,8 +17,6 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 	ui: 'slide',
 
-	isPresentationPartReady: false,
-
 	renderSelectors: {
 		slideImage: 'img.slide',
 		createNoteEl: '.add-note-here'
@@ -24,26 +26,12 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 
 	initComponent: function(){
-		this.fireEvent('uses-page-stores', this);
 		this.callParent(arguments);
+
+		this.mixins.transcriptItem.constructor.apply(this, arguments);
+
 		this.enableBubble(['register-records', 'unregister-records']);
 	},
-
-	notifyReady: function(){
-		if(this.isPresentationPartReady){
-			return;
-		}
-		this.isPresentationPartReady = true;
-		this.fireEvent('presentation-part-ready', this);
-	},
-
-
-	registerAnnotations: function(){
-		if(this.userDataStore){
-			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
-		}
-	},
-
 
 	containerIdForData: function(){
 		return this.slide && this.slide.get('ContainerId');
@@ -139,19 +127,11 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 		}
 	},
 
-	bindToStore: function(store){
-		this.userDataStore = store;
-	},
+
 
 	getAnchorResolver: function(){
 		return Anchors;
 	},
-
-
-	getStore: function(){
-		return this.userDataStore;
-	},
-
 
 	createDomRange:function(){
 		var range = document.createRange(),

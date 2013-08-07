@@ -121,13 +121,20 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	setupSingleTranscript: function(transcript){
 		var items = [];
 		items.push({
-			xtype:'video-transcript',
-			flex:1,
-			transcript: transcript,
-			layout:{
-				type:'vbox',
-				align: 'stretch'
-			}
+			xtype: 'box',
+			cls: 'video-title',
+			renderTpl: Ext.DomHelper.markup({html: '{t}'}),
+			renderData: {t: this.videoPlaylist[0].get('title')}
+		});
+		items.push(
+			{
+				xtype:'video-transcript',
+				flex:1,
+				transcript: transcript,
+				layout:{
+					type:'vbox',
+					align: 'stretch'
+				}
 		});
 
 		this.items = items;

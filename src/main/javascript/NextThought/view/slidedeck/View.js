@@ -48,6 +48,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 			t.data = config.transcript;
 			this.hasTranscript = true;
 			vPlaylist = this.getVideoPlayList(config.store);
+			t.videoPlaylist = vPlaylist;
 			t.transcriptStore = this.buildTranscriptStore(vPlaylist);
 			// NOTE: Slides are a time-series and currently that's what drives the presentation.
 			// We get this store passed to be the one contain a sequence of slides with their associated data.

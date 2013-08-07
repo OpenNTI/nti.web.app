@@ -7,6 +7,11 @@ Ext.define('NextThought.util.Ranges',{
 		'object:not([type*=nti])'
 	],
 
+	customContextGathers: {
+		'object[type$=naquestion]': 'gatherQuestionContext',
+		'object[type$=ntivideo]': 'gatherVideoContext'
+	},
+
 	saveRange: function(r){
 		if(!r){ return null; }
 		return{
@@ -93,19 +98,54 @@ Ext.define('NextThought.util.Ranges',{
 	},
 
 
-	//How about a registry that maps the mimetype of the object
-	//to a handler that knows how to give contents
-	contentsForObjectTag: function(object){
-		var contents;
-
-		//For questions we look for the contained div with class naquestion
-		//Why do we do this instead of cloning the object?
-		contents = object.down('.naquestion');
+	gatherQuestionContext: function(node){
+		var contents = node.down('.naquestion');
 		if(contents){
 			return contents.dom.cloneNode(true);
 		}
+		return null;
+	},
 
-		return object.dom.cloneNode(true);
+
+	gatherVideoContext: function(node){
+		var title, src, titleNode, sourceNode;
+
+		titleNode = Ext.fly(node).down('param[name=title]');
+		if(titleNode){
+			title = titleNode.getAttribute('value');
+		}
+
+		sourceNode = Ext.fly(node).down('object[type$=videoSource]');
+		if(sourceNode){
+			sourceNode = sourceNode.down('param[name=thumbnail]');
+			if(sourceNode){
+				src = sourceNode.getAttribute('value');
+			}
+		}
+
+		return Ext.DomHelper.createDom({ cn:[
+			{html: title},
+			{
+				tag: 'img',
+				cls: 'video-thumbnail',
+				src: src
+			}]});
+	},
+
+
+	//How about a registry that maps the mimetype of the object
+	//to a handler that knows how to give contents
+	contentsForObjectTag: function(object){
+		var node = null;
+
+		Ext.Object.each(this.customContextGathers, function(sel, fn){
+			if(object.is(sel)){
+				node = this[fn](object);
+			}
+			return !node;
+		}, this);
+
+		return node || object.dom.cloneNode(true);
 	},
 
 	nodeThatIsEdgeOfRange: function(range, start){
@@ -211,6 +251,14 @@ Ext.define('NextThought.util.Ranges',{
 		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer)
 				|| this.nodeIfObjectOrInObject(range.startContainer),
 			r;
+
+		if(!object){
+			if(range.startContainer == range.endContainer
+				&& range.startContainer.nodeType !== Node.TEXT_NODE
+				&& range.startOffset + 1 === range.endOffset){
+				object = this.nodeIfObjectOrInObject(range.startContainer.childNodes[range.startOffset]);
+			}
+		}
 
 		if(object) {
 			return this.contentsForObjectTag(object);

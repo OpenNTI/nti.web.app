@@ -8,11 +8,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		'NextThought.model.transcript.Cue'
 	],
 
+	mixins: {
+		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+	},
 
 	//	ui: 'content-slidevideo',
 	cls: 'content-video-transcript',
-
-	isPresentationPartReady: false,
 
 	statics: {
 		processTranscripts: function(c) {
@@ -60,28 +61,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	initComponent: function(){
-		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
+		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['jump-video-to', 'presentation-part-ready', 'register-records', 'unregister-records']);
 		this.loadTranscript();
 	},
-
-
-	notifyReady: function(){
-		if(this.isPresentationPartReady){
-			return;
-		}
-		this.isPresentationPartReady = true;
-		this.fireEvent('presentation-part-ready', this);
-	},
-
-
-	registerAnnotations: function(){
-		if(this.userDataStore){
-			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
-		}
-	},
-
 
 
 	containerIdForData: function(){
@@ -116,16 +100,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 //		console.log('transcript  expected starts to ', this.transcript.get('desired-time-start'), ', end at: ', this.transcript.get('desired-time-end'));
 //		console.log('first cue starts at ', s.data.items[0].get('startTime'), ', and last cue ends at: ', s.data.items[s.data.items.length-1].get('endTime'));
 		return s;
-	},
-
-
-	bindToStore: function(store){
-		this.userDataStore = store;
-	},
-
-
-	getStore: function(){
-		return this.userDataStore;
 	},
 
 
