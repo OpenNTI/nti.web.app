@@ -14,6 +14,10 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	//	ui: 'content-slidevideo',
 	cls: 'content-video-transcript',
+	
+	trackOver: true,
+	overItemCls: 'over',
+	isPresentationPartReady: false,
 
 	statics: {
 		processTranscripts: function(c) {
@@ -31,7 +35,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		contentEl: '.text-content'
 	},
 
-	itemSelector: 'row-item',
+	itemSelector: '.row-item',
 	tpl: new Ext.XTemplate( Ext.DomHelper.markup([
 		{tag:'tpl', 'for':'.', cn:[{
 			tag:'tpl', 'if':'!type', cn:{
@@ -147,13 +151,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		function transcriptLoadFinish(text){
 			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text);
 
-			if(!me.rendered){
-				me.on('afterrender',function(){
-					transcriptLoadFinish(text);
-				}, me);
-				return;
-			}
-
 			cueList = me.groupByTimeInterval(cueList, 30);
 			me.store = me.buildStore(cueList, me.getTimeRangeFilter());
 			me.bindStore(me.store);
@@ -251,6 +248,13 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		else{
 			this.on('presentation-part-ready', this.onViewReady, this);
 		}
+
+		this.on({
+			scope: this,
+			'itemmouseenter': 'mouseOver',
+			'itemmouseleave': 'mouseOut',
+			'itemclick': 'openEditor'
+		});
 	},
 
 
@@ -261,17 +265,6 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		me.mon(me.el.select('.timestamp-container'),{
 			scope: me,
 			'click': me.timePointerClicked
-		});
-
-		me.mon(me.el.select('.cue'), {
-			scope: me,
-			'mouseover':'mouseOver',
-			'mouseout':'mouseOut'
-		});
-
-		me.mon(me.el.select('.cue .add-note-here'), {
-			scope: me,
-			'click': 'openEditor'
 		});
 
 		me.mon(me.el, {
@@ -307,11 +300,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
     },
 
 
-	openEditor: function(e){
-		var cueEl = e.getTarget('.cue', null, true),
-			cueStart = cueEl && cueEl.getAttribute('cue-start'),
-			cueEnd = cueEl && cueEl.getAttribute('cue-end'),
-			sid = cueEl && cueEl.getAttribute('cue-id'),
+	openEditor: function(view, record, item, index, e){
+		if(!record){ return; }
+		var cueEl = Ext.get(item),
+			cueStart = record.get('startTime'),
+			cueEnd = record.get('endTime'),
+			sid = record.get('identifier'),
 			cid = this.transcript.get('associatedVideoId'), data;
 
 		data = { startTime:cueStart, endTime:cueEnd, startCueId:sid, endCueId:sid, containerId: cid, userDataStore: this.userDataStore };
@@ -414,22 +408,20 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	mouseOver: function(e){
-
-
-        var t = e.getTarget('.cue', null, true),
-            box = t && t.down('.add-note-here'),
+	mouseOver: function(view, record, item, index, e){
+        var box = item && item.querySelector('.add-note-here'),
+        	add = Ext.get(box),
             currentDivs = this.el.query('.add-note-here:not(.hidden)');
 
-        if(this.suspendMoveEvents || !t || !box){ return; }
+        if(this.suspendMoveEvents || !item || !add){ return; }
 
         clearTimeout(this.mouseEnterTimeout);
 
         this.mouseLeaveTimeout = setTimeout(function () {
-            box.removeCls('hidden');
+            add.removeCls('hidden');
 
             Ext.each(currentDivs, function(cur){
-                if(cur !== box.dom){
+                if(cur !== add.dom){
                     Ext.fly(cur).addCls('hidden');
                 }
             });
@@ -437,16 +429,16 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	mouseOut: function(e){
-        var target = e.getTarget('.cue', null, true),
-            box = target && target.down('.add-note-here');
+	mouseOut: function(view, record, item, index, e){
+        var box = item && item.querySelector('.add-note-here'),
+        	add = Ext.get(box);
 
-        if(this.suspendMoveEvents || !target || !box){ return; }
+        if(this.suspendMoveEvents || !item || !add){ return; }
 
-        if(!box.hasCls('hidden')){
+        if(!add.hasCls('hidden')){
             this.mouseEnterTimeout = setTimeout(function(){
-                if(box && !box.hasCls('hidden')){
-                    box.addCls('hidden');
+                if(add && !add.hasCls('hidden')){
+                    add.addCls('hidden');
                 }
             }, 500);
         }
