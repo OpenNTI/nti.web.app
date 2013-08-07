@@ -54,8 +54,8 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 		}]}
 	]), {
         toTimeFormat: function(values, out){
-            var min = Math.round((values.startTime || 0)/60),
-                sec = Math.round((values.startTime || 0)%60);
+            var min = Math.floor((values.startTime || 0)/60),
+                sec = Math.floor((values.startTime || 0)%60);
 
             if(sec < 10){ sec = '0'+sec; }
             out.push(min+':'+sec);
