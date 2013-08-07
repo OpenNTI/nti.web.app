@@ -1200,8 +1200,9 @@ $experimental-support-for-svg: true;
 	}
 
 	.x-component-slide{
-		width: 860px;
-		padding: 50px 60px 0 110px;
+        //Only set the max, if it's smaller, adjust.
+		max-width: 860px;
+        padding: 50px 90px 0 90px;
 
 		.image-wrap{
 			position: relative;

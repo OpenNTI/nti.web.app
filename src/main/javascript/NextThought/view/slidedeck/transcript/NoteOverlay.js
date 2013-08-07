@@ -36,7 +36,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline':'showEditorAtPosition',
 			'register-records': 'registerGutterRecords',
-			'unregister-records':'unRegisterGutterRecords'
+			'unregister-records':'unRegisterGutterRecords',
+            'presentation-parts-ready': 'adjustAnnotationOverlayPosition',
+            'sync-height': 'adjustAnnotationOverlayPosition'
 		});
 
 		this.mon(this.annotationManager, {
@@ -100,8 +102,17 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	insertOverlay: function(){
-		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
+		 this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
 	},
+
+
+    adjustAnnotationOverlayPosition: function(){
+        if(!this.annotationOverlay){ return; }
+
+        var w = this.reader.getWidth(), maxWidth = 860;
+        w = w < maxWidth ? w - 75 : maxWidth - 75;
+        this.annotationOverlay.setStyle('left', w +'px');
+    },
 
 
 	editorSaved: function(e){
