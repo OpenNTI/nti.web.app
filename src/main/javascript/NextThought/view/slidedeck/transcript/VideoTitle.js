@@ -41,7 +41,7 @@ Ext.define('NextThought.view.slidedeck.transcript.VideoTitle',{
 		this.callParent(arguments);
 		this.notifyReady();
 
-		this.mon(this.el.select('.title'), {
+		this.mon(this.el, {
 			scope: this,
 			'mouseover':'mouseOver',
 			'mouseout':'mouseOut'
@@ -54,33 +54,35 @@ Ext.define('NextThought.view.slidedeck.transcript.VideoTitle',{
 	},
 
 	mouseOver: function(e){
-		var t = e.getTarget('.title', null, true),
-			box = t && this.el.down('.add-note-here'),
-			currentDivs = this.el.query('.add-note-here:not(.hidden)');
+		var t = e.getTarget('.x-component-video-title', null, true),
+			box = t && this.el.down('.add-note-here');
 
-		if(this.suspendMoveEvents || !t || !box){ return; }
-		clearTimeout(this.mouseEnterTimeout);
+		if(this.suspendMoveEvents || !t || !box){
+			return;
+		}
 
-		this.mouseLeaveTimeout = setTimeout(function () {
+		clearTimeout(this.mouseLeavingTimeout);
+
+		box.removeCls('hidden');
+
+		this.mouseEnteringTimeout = setTimeout(function () {
 			box.removeCls('hidden');
-
-			Ext.each(currentDivs, function(cur){
-				if(cur !== box.dom){
-					Ext.fly(cur).addCls('hidden');
-				}
-			});
 		}, 100);
 	},
 
 
 	mouseOut: function(e){
-		var target = e.getTarget('.title', null, true),
+		var target = e.getTarget('.x-component-video-title', null, true),
 			box = target && this.el.down('.add-note-here');
 
-		if(this.suspendMoveEvents || !target || !box){ return; }
+		if(this.suspendMoveEvents || !target || !box){
+			return;
+		}
+
+		clearTimeout(this.mouseEnteringTimeout);
 
 		if(!box.hasCls('hidden')){
-			this.mouseEnterTimeout = setTimeout(function(){
+			this.mouseLeavingTimeout = setTimeout(function(){
 				if(box && !box.hasCls('hidden')){
 					box.addCls('hidden');
 				}
@@ -102,8 +104,9 @@ Ext.define('NextThought.view.slidedeck.transcript.VideoTitle',{
 	},
 
 	wantsRecord: function(rec){
-		return false;
-		//return rec.get('ContainerId') === this.video.get('NTIID');
+		var container = rec.get('ContainerId'),
+			desc = rec.get('applicableRange');
+		return desc.isEmpty && container === this.video.get('NTIID')
 	},
 
 
