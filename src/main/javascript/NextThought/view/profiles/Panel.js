@@ -154,9 +154,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		t =  tab ? this.down('[title="'+tab+'"]') : null;
 		if(t !== this.tabs.activeTab){
-			this.tabs.suspendEvents(false);
 			this.tabs.setActiveTab(t||0);
-			this.tabs.resumeEvents();
 		}
 
 		if( t && t.setParams ){
