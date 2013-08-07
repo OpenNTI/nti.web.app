@@ -173,7 +173,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 	resetClicked: function(e){
 		if(this.isSubmitted()){
-			return resetBasedOnButtonClick(e);
+			return this.resetBasedOnButtonClick(e);
 		}
 
 		this.maybeDoReset(false);
