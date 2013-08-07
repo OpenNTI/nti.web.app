@@ -4,10 +4,12 @@ Ext.define('NextThought.view.account.Identity',{
 	alias: 'widget.identity',
 
     requires: [
-        'NextThought.view.menus.Settings'
+        'NextThought.view.menus.Settings',
+        'NextThought.modules.TouchSender'
     ],
 	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks'
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
+        moduleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
 	profileLinkCard: false,
@@ -25,6 +27,8 @@ Ext.define('NextThought.view.account.Identity',{
 		avatar: 'img.avatar',
 		presence: '.presence'
 	},
+
+    menuOpen: false,
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -71,8 +75,41 @@ Ext.define('NextThought.view.account.Identity',{
 	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
 
 	    this.enableProfileClicks(this.avatar);
+
+        if(Ext.is.iPad){
+            this.setupTouch();
+        }
     },
 
+    setupTouch: function(){
+        this.buildModule('modules', 'touchSender');
+
+        var container = this;
+
+        container.on('touchTap', function(ele) {
+            console.log('TOUCHTAPPED');
+            ele.click();
+        });
+
+        container.on('touchElementAt', function(x, y, callback){
+            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            callback(element);
+        });
+
+        container.on('touchLongPress', function(ele, pageX, pageY){
+            console.log("LONG PRESS");
+            if(this.menuOpen){
+                this.menuOpen = false;
+                this.startToHideMenu();
+            }
+            else{
+                this.menuOpen = true;
+                this.startToShowMenu();
+            }
+        });
+
+
+    },
 
 	cancelHideShowEvents: function(){
 		clearTimeout(this.showTimout);
@@ -81,6 +118,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 
 	startToShowMenu: function(){
+        console.log("startToShowMenu");
 		var me = this;
 
 		this.cancelHideShowEvents();
@@ -92,6 +130,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 
 	startToHideMenu: function(){
+        console.log("startToHideMenu");
 		var me = this;
 
 		this.cancelHideShowEvents();

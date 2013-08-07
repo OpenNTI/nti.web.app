@@ -305,13 +305,11 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!Ext.isEmpty(viewId) || e.getTarget('')){
 			if( viewId === 'library'){
-                console.log("library");
 				this.startShow.call(this.libraryMenu);
 				return;
 			}
 
 			if(viewId === 'search'){
-                console.log("search");
 				this.startShow.call(this.searchMenu);
 			}
 		}
