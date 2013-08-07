@@ -158,10 +158,17 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
+	escapeGroupName: function(name){
+		//Dataserver blows chunks if on @@ or @( at the beginning
+		//look for these things and yank them out.  This was happening
+		//when manipulating the list by the object url (say for deletion).
+		name = name.replace(/@@|@\(/ig, '');
+		return name.replace(/[^0-9A-Z\-@\+\._]/ig, '');
+	},
+
+
 	generateUsername: function(newGroupName){
-		return newGroupName
-				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
-				+'-'+ $AppConfig.username+'_'+guidGenerator();
+		return this.escapeGroupName(newGroupName)+'-'+ $AppConfig.username+'_'+guidGenerator();
 	},
 
 
