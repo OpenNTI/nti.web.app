@@ -89,7 +89,7 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 	loadRecords: function(records, options){
-		console.log('load records called with', arguments);
+		//console.log('load records called with', arguments); <-- this log message kills firefox's native tools
 		if(options && options.merge){
 			this.mergeRecords(records);
 		}
