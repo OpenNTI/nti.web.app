@@ -740,6 +740,22 @@ $experimental-support-for-svg: true;
 	.x-container-transcript{
 		background-color: #282828 !important;
 	}
+
+	.x-component-video-title{
+		& > div{
+			position: relative;
+		}
+		padding-left: 108px;
+		width: 860px;
+		color: $secondary-grey;
+		font: 14px normal $font;
+
+		.control-container{
+			right: -20px !important;
+			display: none;
+		}
+	}
+
 }
 
 .x-container-media{
@@ -1195,21 +1211,6 @@ $experimental-support-for-svg: true;
 				width: 100%;
 				box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
 			}
-		}
-	}
-
-
-	.x-component-video-title{
-		& > div{
-			position: relative;
-		}
-		padding-left: 108px;
-		width: 860px;
-		color: $secondary-grey;
-		font: 14px normal $font;
-
-		.control-container{
-			right: -20px !important;
 		}
 	}
 
