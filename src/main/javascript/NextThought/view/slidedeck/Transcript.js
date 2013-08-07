@@ -121,10 +121,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	setupSingleTranscript: function(transcript){
 		var items = [];
 		items.push({
-			xtype: 'box',
-			cls: 'video-title',
-			renderTpl: Ext.DomHelper.markup({html: '{t}'}),
-			renderData: {t: this.videoPlaylist[0].get('title')}
+			xtype: 'video-title-component',
+			video: this.videoPlaylist[0]
 		});
 		items.push(
 			{
@@ -438,24 +436,15 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return s && s.findRecord('NTIID', r.get('NTIID'));
 		}
 
-		var cmps = Ext.Array.filter(this.items.items, fn),
-			domFrag, slide, utils, b, node;
+		var cmps = Ext.Array.filter(this.items.items, fn), node = null;
 
 		Ext.each(cmps, function(cmp){
-			utils = cmp.getAnchorResolver();
-			if(cmp.slide){
-				domFrag = cmp.slide.get('dom-clone');
-				b = utils.doesContentRangeDescriptionResolve(r.get('applicableRange'), domFrag);
-				if(b){
-					node = cmp.getContextDomNode();
-					return false;
-				}
+
+			if(Ext.isFunction(cmp.getDomContextForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(r))){
+				node = cmp.getDomContextForRecord(r);
 			}
-			else{
-				node = RangeUtils.getContextAroundRange(r.get('applicableRange'), cmp.getDocumentElement(), cmp.getCleanContent(), r.get('ContainerId'));
-				if(node){ return false; }
-			}
-			return true;
+
+			return !node;
 		});
 
 		return node;

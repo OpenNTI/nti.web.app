@@ -545,6 +545,11 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver;
 
 		return anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, this.el);
+	},
+
+
+	getDomContextForRecord: function(r){
+		return RangeUtils.getContextAroundRange(r.get('applicableRange'), this.getDocumentElement(), this.getCleanContent(), r.get('ContainerId'));
 	}
 
 });
