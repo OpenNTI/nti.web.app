@@ -136,7 +136,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		if(!Ext.isFunction(this[handlerName])){
-			console.warn('Player does not handle: '+handlerName);
+			console.warn('Player does not handle: '+handlerName, eventData);
 			return;
 		}
 
