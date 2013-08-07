@@ -296,7 +296,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 				if(!item){ return; }
 
 				items.push(item);
-				UserRepository.getUser(item.name, function(u){
+				UserRepository.getUser(item.record && item.record.get('Creator'), function(u){
 					item.name = u.getName();
 					maybeFinish();
 
