@@ -108,10 +108,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 		}
 
 		function notMe(r){
-			return !isMe(r);
+			return !isMe(r.user||r.Username);
 		}
 
-		Ext.each(Ext.Array.filter(items,notMe),pluckUsers);
+		//comment this out to allow your user in
+		items = Ext.Array.filter(items,notMe);
+
+		Ext.each(items,pluckUsers);
 
 //		if(users.length === 0){
 			//
