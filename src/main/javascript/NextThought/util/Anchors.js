@@ -47,6 +47,16 @@ Ext.define('NextThought.util.Anchors', {
 		return safeFilter;
 	},
 
+	//Is this a content range description we know how to deal with.
+	//We handle non nil values that are empty or dom content range descriptions
+	supportedContentRange: function(contentRangeDescription){
+		if(!contentRangeDescription){
+			return false;
+		}
+
+		return contentRangeDescription.isEmpty || contentRangeDescription.isDomContentRangeDescription;
+	},
+
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
@@ -82,7 +92,7 @@ Ext.define('NextThought.util.Anchors', {
 			if(!containerId){
 				console.warn('No container id provided will assume root without validating container');
 			}
-			if(!desc || !desc.isDomContentRangeDescription){
+			if(!Anchors.supportedContentRange(desc)){
 				console.warn('nothing to parse?');
 				return;
 			}
@@ -133,7 +143,7 @@ Ext.define('NextThought.util.Anchors', {
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
 		var ancestorNode, resultRange, searchWithin, locator;
 
-		if(!contentRangeDescription || !contentRangeDescription.isDomContentRangeDescription){
+		if(!Anchors.supportedContentRange(contentRangeDescription)){
 			console.warn('nothing to parse?');
 			return null;
 		}
@@ -240,7 +250,7 @@ Ext.define('NextThought.util.Anchors', {
 		var ancestorNode, resultRange, searchWithin, containerId, docElementContainerId,
 			docElement  = (cleanRoot ? cleanRoot.ownerDocument : null) || doc, locator;
 
-		if(!contentRangeDescription || !contentRangeDescription.isDomContentRangeDescription){
+		if(!Anchors.supportedContentRange(contentRangeDescription)){
 			console.warn('nothing to parse?');
 			return null;
 		}
