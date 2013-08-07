@@ -95,11 +95,6 @@ Ext.define('NextThought.view.course.outline.View',{
         var m = Ext.createByAlias(ns+'.'+name,Ext.apply(config)),
             getterName = 'get'+Ext.String.capitalize(name);
 
-        if(this[getterName]){
-            console.error('Module getter name taken: '+getterName);
-            return;
-        }
-
         this[getterName] = function(){return m;};
     },
 

@@ -3,8 +3,13 @@ Ext.define('NextThought.view.Navigation',{
 	alias: 'widget.main-navigation',
 	requires: [
 		'NextThought.view.menus.Navigation',
-		'NextThought.view.library.menus.Collection'
+		'NextThought.view.library.menus.Collection',
+        'NextThought.modules.TouchSender'
 	],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	cls: 'main-navigation',
 
@@ -77,7 +82,7 @@ Ext.define('NextThought.view.Navigation',{
 		}
 	},
 
-
+    touchLibraryOpen: false,
 
 
 	afterRender: function(){
@@ -89,6 +94,10 @@ Ext.define('NextThought.view.Navigation',{
 		if(!$AppConfig.service.canShare()){
 			this.el.down('.contacts').remove();
 		}
+
+        if(Ext.is.iPad){
+            this.setupTouch();
+        }
 	},
 
 
@@ -144,6 +153,37 @@ Ext.define('NextThought.view.Navigation',{
 		});
 	},
 
+    setupTouch: function(){
+
+        this.buildModule('modules', 'touchSender');
+
+        var container = this;
+
+        container.on('touchTap', function(ele) {
+            console.log('touchTapped');
+            this.onClickTouch(ele);
+
+        });
+
+        container.on('touchElementAt', function(x, y, callback){
+            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            callback(element);
+        });
+
+        container.on('touchLongPress', function(ele, pageX, pageY){
+
+            if(this.touchLibraryOpen){
+                this.touchLibraryOpen = false;
+                this.onMouseOutTouch(ele);
+            }
+            else{
+                this.touchLibraryOpen = true;
+                this.onMouseOverTouch(ele);
+            }
+
+        });
+
+    },
 
 	showCoursesCollection: function(){
 		this.libraryMenu.child('[courseList]').show();
@@ -222,6 +262,23 @@ Ext.define('NextThought.view.Navigation',{
 		}
 	},
 
+    onClickTouch: function(ele){
+        var viewId = this.getViewId(ele);
+
+        if(!Ext.isEmpty(viewId)){
+            if(viewId === 'library'){
+                this.stopShowHide.call(this.libraryMenu);
+            }
+
+            if(viewId === 'search'){
+                return;
+            }
+
+            if(this.fireEvent('view-selected', viewId)){
+                this.setActive(t);
+            }
+        }
+    },
 
 	stopShowHide: function(){
 		clearTimeout(this.showTimeout);
@@ -248,15 +305,52 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!Ext.isEmpty(viewId) || e.getTarget('')){
 			if( viewId === 'library'){
+                console.log("library");
 				this.startShow.call(this.libraryMenu);
 				return;
 			}
 
 			if(viewId === 'search'){
+                console.log("search");
 				this.startShow.call(this.searchMenu);
 			}
 		}
 	},
+
+    getViewId: function(ele){
+        var e = Ext.get(ele),
+            t = e,
+            viewId = e.getAttribute('data-view');
+
+        if(Ext.isEmpty(viewId)){
+            t = e.down('[data-view]');
+        }
+
+        if(!t){
+            t = e.up('[data-view]');
+        }
+
+        viewId = t && t.getAttribute('data-view');
+        return viewId;
+    },
+
+    onMouseOverTouch: function(ele){
+        var viewId = this.getViewId(ele);
+
+        if(!Ext.isEmpty(viewId)){
+            if( viewId === 'library'){
+                console.log("library");
+                this.startShow.call(this.libraryMenu);
+                return;
+            }
+
+            if(viewId === 'search'){
+                console.log("search");
+                this.startShow.call(this.searchMenu);
+            }
+        }
+
+    },
 
 	onMouseOut: function(e){
 		var t = e.getTarget('[data-view]'),
@@ -272,5 +366,20 @@ Ext.define('NextThought.view.Navigation',{
 				this.startHide.call(this.searchMenu);
 			}
 		}
-	}
+	},
+
+    onMouseOutTouch: function(ele){
+        var viewId = this.getViewId(ele);
+
+        if(!Ext.isEmpty(viewId)){
+
+            if(viewId === 'library'){
+                this.startHide.call(this.libraryMenu);
+            }
+
+            if(viewId === 'search'){
+                this.startHide.call(this.searchMenu);
+            }
+        }
+    }
 });
