@@ -111,7 +111,7 @@ Ext.define('NextThought.view.content.overlay.Panel',{
 			margin: '30px auto',
 			opacity: 0,
 			'white-space': 'nowrap'
-		});
+		}).addCls('overlayed');
 
 		this.removeContent('.hidden,INPUT,object,param');
 	},

@@ -60,6 +60,10 @@ body.x-body {margin:0;}
 		line-height: normal;
 	}
 
+	.overlayed *{
+		display: none;
+	}
+
 	pre {
 		width: 100%;
 		font-size: 90%;
