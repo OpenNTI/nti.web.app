@@ -88,6 +88,7 @@ Ext.define('NextThought.view.MessageBox',{
 
 		cfg.msg = cfg.title+'<div class="message">'+cfg.msg+'</div>';
 		cfg.msg = cfg.msg.replace(/\n/,'<br/>');
+		Ext.defer(this.toFront,10,this);
 		return this.callParent([cfg]);
 	}
 
