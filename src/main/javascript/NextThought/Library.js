@@ -388,6 +388,8 @@ Ext.define('NextThought.Library', {
 		// add units to this list
 		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'unit' )));
 		elts = elts.concat(EA.toArray(toc.getElementsByTagName( 'object' )));
+		elts = elts.concat(EA.toArray(toc.getElementsByTagNameNS( 'http://www.nextthought.com/toc','related' )));
+
 		for( ix=elts.length-1; ix >= 0; ix-- ) {
 			topic = elts[ix];
 			if( topic && topic.getAttribute( 'ntiid' ) === containerId ) {
