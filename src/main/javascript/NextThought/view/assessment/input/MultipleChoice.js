@@ -82,10 +82,12 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 			checkedIndexes = [checkedIndexes];
 		}
 
+		this.getEl().select('.choice').removeCls(['correct','incorrect']);
+		this.getEl().select('.control').removeCls('checked');
+
 		Ext.each(this.getEl().query('.control'),function(e){
-			if(Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'),10))) {
-				Ext.fly(e).addCls('checked');
-			}
+			var check = (Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'),10)));
+			Ext.fly(e)[check?'addCls':'removeCls']('checked');
 		});
 	},
 
@@ -119,8 +121,8 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 		this.getEl().select('.choice').removeCls(['correct','incorrect']);
 
 		Ext.each(this.getEl().query('.control.checked'),function(e){
-			var x = parseInt(e.getAttribute('data-index'),10);
-			var cls = c[x]===true?'correct':'incorrect';
+			var x = parseInt(e.getAttribute('data-index'),10),
+				cls = c[x]===true?'correct':'incorrect';
 
 			Ext.fly(e).up('.choice').addCls(cls);
 		});

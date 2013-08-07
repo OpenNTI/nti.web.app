@@ -364,9 +364,11 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var parts = assessedQuestion.get('parts'),
 			part = parts[this.ordinal], id;
 
+		this.setValue(part.get('submittedResponse'));
+
 		if (part.isCorrect()) { this.markCorrect(); }
 		else {this.markIncorrect(); }
-		this.setValue(part.get('submittedResponse'));
+
 		if(this.canHaveAnswerHistory()){
 			if(!this.historyMenuEl.isVisible()){
 				this.shouldShowAnswerHistory();
