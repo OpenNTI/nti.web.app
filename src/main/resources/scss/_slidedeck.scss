@@ -1201,7 +1201,28 @@ $experimental-support-for-svg: true;
 	.x-component-video-title{
 		margin-top: 20px;
 		color: $secondary-grey;
-		font: 14px normal $font
+		font: 14px normal $font;
+
+		.control-container{
+			position: absolute;
+			right: 0 !important;
+			width: 60px;
+			height: 28px;
+
+			@include note-control-box;
+			.note-here-control-box{
+				left: 20px;
+				top: -16px;
+
+				&.hidden{
+					display: none;
+				}
+
+				@include icon('comment-small-dark',$position: absolute, $top:-4px);
+				&:hover::after { @include sprite($icons,'comment-small-dark_hover'); }
+			}
+		}
+
 	}
 }
 
