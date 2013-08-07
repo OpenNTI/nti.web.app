@@ -18,7 +18,8 @@ Ext.define('NextThought.view.content.reader.Location', {
 				'beforeNavigate',
 				'beginNavigate',
 				'navigate',
-	            'navigateAbort',
+	            'navigateAbort',//From error (navigation started and must recover)
+				'navigateCanceled',//From blocking UI (open editor) -- navigation never started.
 				'navigateComplete',
 				'change'
 			]));
@@ -51,6 +52,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		rootId = rootId && rootId.last();
 
 		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory) || me.currentNTIID === ntiid){
+			me.fireEvent('navigateCanceled',ntiid, me.currentNTIID === ntiid, fromHistory);
 			Ext.callback(callback);
 			return;
 		}
