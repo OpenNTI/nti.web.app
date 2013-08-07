@@ -249,6 +249,6 @@ Ext.define( 'NextThought.view.Views', {
 		var layout = this.getLayout(),
 			activeItem = layout.getActiveItem();
 
-		return !activeItem || activeItem.fireEvent('beforedeactivate',activeItem,{});
+		return !activeItem || activeItem.id === id || activeItem.fireEvent('beforedeactivate',activeItem,{});
 	}
 });
