@@ -28,6 +28,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	refs: [
+		{ref: 'mainNav', selector: 'main-navigation'},
 		{ref: 'libraryView', selector: 'library-view-container'},
 		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
 		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
@@ -59,6 +60,7 @@ Ext.define('NextThought.controller.Reader', {
 				},
 				'library-view-container reader-content':{
 					'beforeNavigate':'beforeSetLocation',
+					'navigateCanceled':'resetNavigationMenuBar',
 					'set-content':'updateLibraryControls',
 					'page-previous':'goPagePrevious',
 					'page-next':'goPageNext'
@@ -99,6 +101,14 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		return canNav;
+	},
+
+
+	resetNavigationMenuBar: function(ntiidCancled, isCurrent, fromHistory){
+		if(!isCurrent && !fromHistory){
+			console.debug('reset?',arguments);
+			this.getMainNav().updateCurrent(true);
+		}
 	},
 
 

@@ -23,6 +23,8 @@ Ext.define('NextThought.view.Navigation',{
 		}
 	},
 
+	recordHistory: [],
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'branding' },
 		{
@@ -167,8 +169,22 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
-	updateCurrent: function(s, rec){
+	updateCurrent: function(pop, rec){
 		var cls = 'is-book';
+
+		if(pop!==true){
+			if(this.currentRecord){
+				this.recordHistory.push(this.currentRecord);
+				if(this.recordHistory.length>5){
+					this.recordHistory.shift();
+				}
+			}
+		}
+		else {
+			rec = this.recordHistory.pop();
+		}
+
+		this.currentRecord = rec;
 
 		if(!rec){ console.error("No record attached"); return; }
 
