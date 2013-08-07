@@ -20,7 +20,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		publishEl: '.action.publish',
 		titleWrapEl: '.title',
 		footerEl: '.footer',
-		editorBodyEl: '.content'
+		editorBodyEl: '.content',
+		editorEl: '.editor'
 	},
 
     requires: [
@@ -43,6 +44,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		var r = this.record,
 			h,
 			profileEl = Ext.get('profile'),
+			titleEl = this.titleEl,
 			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
 		this.mon(this.tags,'new-tag', this.syncHeight,this);
@@ -55,10 +57,13 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 			this.setSharedWith(r.getSharingInfo());
 		}
 
+		this.sizer = Ext.DomHelper.insertAfter(this.el,{},true);
+		this.sizer.setHeight(1000);
+
 		this.mon(this.titleWrapEl,'keyup',function(){ this.clearError(this.titleWrapEl); },this);
-		profileEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':'')).scrollTo(0);
+		profileEl.addCls('scroll-lock'+ (hasScrollBar? ' scroll-padding-right':''));
+
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
-		Ext.defer(this.syncHeight,1,this);
 
         if(Ext.is.iPad){
             var navigation = Ext.Element.select('.main-navigation');
@@ -75,7 +80,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
             }, this);
 
-            this.titleEl.on('focus', function(){
+            titleEl.on('focus', function(){
                 this.keyboardUp = true;
             }, this);
 
@@ -84,7 +89,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
             }, this);
 
-            this.titleEl.on('blur', function(){
+            titleEl.on('blur', function(){
                 this.keyboardUp = false;
             }, this);
 
@@ -97,20 +102,30 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
                 Ext.Element.select('.x-panel-navigation-menu').hide();
             }, this, {delay:1000});
 
-            this.titleEl.on('focus', function(){
+            titleEl.on('focus', function(){
                 console.log("title focused");
                 Ext.Element.select('.x-panel-navigation-menu').hide();
             }, this, {delay:1000});
         }
 
+
+		Ext.defer(Ext.Function.createSequence(this.syncHeight,this.focus,this),500,this);//let the animation finish
+	},
+
+
+	focus: function focus(){
 		this.titleEl.focus();
 		this.moveCursorToEnd(this.titleEl);
 
-        if(Ext.is.iPad){
+		if(Ext.is.iPad){
             Ext.Element.select('.x-panel-navigation-menu').hide();
-            this.setUpTouch();
+			if(!focus.setup){
+				focus.setup = true;
+                this.setUpTouch();
+			}
         }
 	},
+
 
     setUpTouch: function(){
         var me = this;
@@ -226,7 +241,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	destroy: function(){
 		Ext.get('profile').removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
-
+		Ext.destroy(this.sizer);
 		return this.callParent(arguments);
 	},
 
@@ -247,15 +262,30 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	syncHeight: function(){
-        console.log("syncHeight");
-		var el = this.editorBodyEl,
-			top;
+		var pEl = Ext.get('profile'),
+			el = this.editorBodyEl,
+			footEl = this.footerEl,
+			vpH = Ext.Element.getViewportHeight(),
+			top,
+			containerTop = pEl.down('.profile-items').getY() + pEl.getScroll().top,
+			scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
+			newHeight;
+
 		if(!el){
 			return;
 		}
-		top = el.getTop();
 
-		el.setHeight(Ext.dom.Element.getViewportHeight() - top - this.footerEl.getHeight() - 10);
+		top = el.getY() + pEl.getScroll().top - scrollPos;
+
+		newHeight = ((vpH - top) - footEl.getHeight()) - 8;
+		this.sizer.setHeight(newHeight);
+
+		el.setHeight(newHeight);
+
+		Ext.defer(function(){
+			pEl.scrollTo('top',scrollPos);
+		},100);
+
 		Ext.defer(this.updateLayout,700,this,[]);
 	},
 

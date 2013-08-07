@@ -371,7 +371,7 @@
 					}
 				}
 				.content{
-					min-height: auto;
+					min-height: 0;
 					max-height: none;
 					height: 200px;
 					padding: 5px 13px;
@@ -483,7 +483,7 @@
 
 			.content {
 				max-height: none;
-				min-height: auto;
+				min-height: 0;
 				padding: 20px 15px 0;
 				font-family: $font;
 				font-size: 12px;
