@@ -1,0 +1,57 @@
+CACHE MANIFEST
+# 2013-08-07 09:32
+
+#example manifest. We would need a tool to parse the html file and add all src links and parse css for all url()
+strings to generate this list.
+CACHE:
+/socket.io/static/socket.io.js
+javascript/libs.js
+https://js.stripe.com/v1/
+https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,greek,greek-ext,latin-ext,cyrillic,cyrillic-ext
+ext-4.2/resources/css/ext-all-gray.css
+ext-4.2/resources/ext-theme-gray/ext-theme-gray-all.css
+resources/lib/swfobject.js
+resources/lib/detect-zoom.js
+resources/lib/jQuery-1.8.0min.js
+resources/lib/jQuery-noconflict.js
+resources/lib/mathquill/mathquill.min.js
+resources/lib/jquery.payment.js
+resources/lib/rangy-1.3alpha.681/rangy-core.js
+resources/lib/rangy-1.3alpha.681/rangy-textrange.js
+resources/images/favicon.ico
+resources/images/chalkboard_bg.png
+resources/images/elements-s3a7b090883.png
+resources/images/elements/folding_logo.gif
+resources/images/elements/spinning_logo.png
+resources/images/old_sprites/spr_modal_dialogue.png
+resources/images/old_sprites/spr_like_controls.png
+resources/css/main.css
+resources/css/main-blessed1.css?z=1375852212720
+resources/css/main-blessed2.css?z=1375852212720
+resources/css/main-blessed3.css?z=1375852212720
+resources/css/nti-override.css
+resources/lib/mathquill/mathquill.css
+resources/strings/strings.js
+resources/strings/site.js
+resources/images/backdrops/whiteboard_error_unknown.png
+resources/images/backdrops/whiteboard_error_loading_image.png
+resources/images/icons-s2ef278c2e0.png
+config.js
+javascript/app.min.js
+index.html
+
+
+NETWORK:
+/login
+/dataserver2
+/content
+/socket.io
+http://www.youtube.com/iframe_api
+http://www.gravatar.com
+https://secure.gravatar.com
+*
+
+
+FALLBACK:
+/dataserver2 resources/misc/offline.json
+*.gravatar.com* resources/images/icons/unresolved-user.png
