@@ -155,6 +155,19 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
     getElementAtTime: function(time){
         return this.slideImage;
-    }
+    },
+
+
+	wantsRecord: function(rec){
+		var anchorResolver = this.getAnchorResolver(),
+			domFrag = this.slide.get('dom-clone');
+
+		return anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
+	},
+
+
+	domRangeForRecord: function(rec){
+		return this.createDomRange();
+	}
 
 });

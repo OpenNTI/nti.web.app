@@ -228,28 +228,15 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			cueStore = cmp.getCueStore && cmp.getCueStore(),
 			domRange, rect, line, domFrag, b, d;
 
+		//Why are we doing this?
 		rec = recStore.getById(rec.getId()) || rec;
 
-		if(!anchorResolver){ anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver; }
-
-		if(cmp.slide){
-			domFrag = cmp.slide.get('dom-clone');
-
-			if(rec.get('applicableRange') && rec.get('applicableRange').start){
-				console.log('Resolving', rec.get('applicableRange').start.elementId, 'into', cmp.slide.get('dom-clone').firstChild.getAttribute('data-ntiid'));
-			}
-			// NOTE: In order to be able to resolve a line in the presentation we need a dom range.
-			// the range we get from the dom range will be with reference to the raw content,
-			// since we're taking a portion of the content and slide are nothing but the image,
-			// we will create a dom range off the img element that we have in this cmp.
-			b = anchorResolver.doesContentRangeDescriptionResolve(rec.get('applicableRange'), domFrag);
-			console.log('Found a match?'+(b? 'YES' : 'NO'));
-			if(b){
-				domRange = cmp.createDomRange();
-			}
+		if(!rec){
+			return;
 		}
-		else{
-			domRange = anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, cmp.el);
+
+		if(Ext.isFunction(cmp.domRangeForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(rec))){
+			domRange = cmp.domRangeForRecord(rec);
 		}
 
 		return domRange;

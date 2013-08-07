@@ -537,6 +537,14 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	getCleanContent: function(){
 		return this.el.dom;
+	},
+
+
+	domRangeForRecord: function(rec){
+		var cueStore = this.getCueStore(),
+			anchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver;
+
+		return anchorResolver.fromTimeRangeToDomRange(rec.get('applicableRange'), cueStore, this.el);
 	}
 
 });
