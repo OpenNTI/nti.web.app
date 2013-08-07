@@ -243,7 +243,7 @@ span.tab{
 					.popover{
 						position: relative;
 						height: 34px;
-						left: -50%;
+						left: -25%;
 						background-color: #fff;
 						box-shadow: 1px 2px 3px -1px rgba(0,0,0,.3);
 						border: 1px solid #f8f8f8;
@@ -256,8 +256,8 @@ span.tab{
 							content: '';
 							position: absolute;
 							top:32px;
-							left: 40%;//safar5
-							@include experimental-value(left, calc(50% - 6px));
+							left: 16%;//safar5
+							@include experimental-value(left, calc(25% - 6px));
 							background: $icons no-repeat;
 							@include sprite($icons,'font_style_pointer',$dimensions: true);
 						}
