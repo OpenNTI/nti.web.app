@@ -109,9 +109,20 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
     adjustAnnotationOverlayPosition: function(){
         if(!this.annotationOverlay){ return; }
 
-        var w = this.reader.getWidth(), maxWidth = 860;
+        var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
+            w = this.reader.getWidth(),
+            maxWidth = 860,
+            me = this;
+
         w = w < maxWidth ? w - 75 : maxWidth - 75;
         this.annotationOverlay.setStyle('left', w +'px');
+
+        Ext.each(cmps, function(cmp){
+            if(Ext.isFunction(cmp.positionAnnotationNibs)){
+                cmp.positionAnnotationNibs(me.reader.el);
+            }
+        });
+
     },
 
 
@@ -183,9 +194,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			if(Ext.isFunction(cmp.registerAnnotations)){
 				cmp.registerAnnotations();
 			}
-            if(Ext.isFunction(cmp.positionAnnotationNibs)){
-                cmp.positionAnnotationNibs();
-            }
 		});
 	},
 

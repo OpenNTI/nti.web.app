@@ -262,40 +262,30 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	onViewReady: function(){
-		var me = this, desc;
+		var me = this;
 		me.transcriptReady = true;
 
 		me.mon(me.el.select('.timestamp-container'),{
 			scope: me,
-			'click': me.timePointerClicked
+			'click': 'timePointerClicked'
 		});
 
 		me.mon(me.el, {
 			scope: me,
 			'mouseup':'showContextMenu'
 		});
-
-        Ext.defer( this.positionAnnotationNibs, 1, this);
-
-		// FIXME: since we need to be able to resolve a dom range given a timeRange a
-		// nd sometimes we don't have access to the cueStore,
-		// we're going to set an attribute made of the containerId on the transcript dom.
-		// This will help us locate a time range given its containerID and cue start and end time.
-		// This could be done several other ways but this is a quick solution for now.
-		desc = this.transcript.get('associatedVideoId') + '-cues';
-		me.el.set({'data-desc': desc});
 	},
 
 
-    positionAnnotationNibs: function(){
+    positionAnnotationNibs: function(parentEl){
         var me = this;
+
         // Set the top position of note widget nibs.
         Ext.each(this.el.query('.cue .add-note-here'), function(nib){
             var cueEl = Ext.fly(nib).up('.cue'),
-            // NOTE: this should be coming from the config or ownerCt, hard code it for now.
-                parentCmpTopOffset = 75,
-                innerOffset = 10,
-                y = cueEl.getY() - parentCmpTopOffset - innerOffset;
+                outerOffset = parentEl ?  parentEl.dom.offsetTop : 0,
+                innerOffset = me.el.dom.offsetTop,
+                y = cueEl.getY() - outerOffset - innerOffset;
 
             y = y + 'px';
             Ext.fly(nib).up('.control-container').setStyle({'top':y});
