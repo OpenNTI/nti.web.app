@@ -44,12 +44,14 @@ Ext.define('NextThought.view.cards.Card',{
 
 
 	shouldOpenInApp: function(ntiid, url, basePath){
-		var isNTIID = ParseUtils.parseNtiid(url) !== null,
+		var isTargetAnNTIID = ParseUtils.isNTIID(url),
 			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
 			pdf = (/\.pdf$/i).test((url||'').split('?')[0]);
 
-		//if there is no NTIID, it cannot open in the app.
-		return isNTIID || (ntiid && pdf);
+		//if the target is an NTIID, must open in the app. OR
+		//if we have an NTIID AND the target is a PDF open in the app.
+		// otherwise it cannot open in the app.
+		return isTargetAnNTIID || (ntiid && pdf);
 	},
 
 
@@ -87,7 +89,7 @@ Ext.define('NextThought.view.cards.Card',{
 			return undefined;
 		}
 
-		if(ParseUtils.parseNtiid(this.target) !== null){
+		if(ParseUtils.isNTIID(this.target)){
 			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {

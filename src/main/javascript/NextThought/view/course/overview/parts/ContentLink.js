@@ -30,15 +30,9 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 	},
 
 
-	shouldOpenInApp: function(ntiid, url, basePath){
-		return true;
-	},
-
-
 	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls:'comment', cn:[
-			{tag:'tpl', 'if':'count',cn:{ cls:'', html:'{count:plural("Comment")}'}},
-			{ cls:'', html:'Add a Comment'}
+			{ html:'{count:plural("Comment")}'}
 		]
 	})),
 
@@ -83,6 +77,14 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		}
 
 		this.commentTpl.append(this.meta,{count:total});
-	}
+	},
 
+
+	onCardClicked: function(e){
+		if(e.getTarget('.comment')){
+			e.stopEvent();
+			this.bypassEvent = false;
+		}
+		return this.callParent(arguments);
+	}
 });
