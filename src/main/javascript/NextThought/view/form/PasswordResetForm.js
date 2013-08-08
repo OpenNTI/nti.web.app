@@ -60,8 +60,18 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 					name: 'password-verify',
 					placeholder: 'Verify New Password',
 					allowBlank: true,
+					listeners: {
+						focus: function(field){
+							field.hasBeenFocused = true;
+						}
+					},
 					validator: function(value) {
 						var password = this.previousSibling('[name=password]').getValue();
+
+						if(!this.hasBeenFocused){
+							return false;
+						}
+
 						if (value === password) {
 							return true;
 						}
