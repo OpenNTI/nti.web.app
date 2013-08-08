@@ -72,6 +72,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		me.editorEl = me.editor.el;
 		me.editor.setWidth(325);
 		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
+		me.mon(me.editorEl.down('.cancel'),{ scope: me, click: me.editorCanceled });
 		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		me.reader.relayEvents(me,['save-new-note', 'save-new-series-note']);
@@ -178,6 +179,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		return false;
 	},
 
+	editorCanceled: function(e){
+		if(this.editor.closeCallback){
+			Ext.callback(this.editor.closeCallback);
+		}
+	},
+
 
 	noteHere: function(){
 		console.log('To Be Implemented');
@@ -203,21 +210,30 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	activateEditor: function(info){
+	activateEditor: function(info, cb){
 		if(this.editor){
 			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
+			
+			if(Ext.isFunction(cb)){
+				this.editor.closeCallback = cb;
+			}
+
 			this.editor.activate();
 		}
 	},
 
 	deactivateEditor: function(){
+		if(this.editor.closeCallback){
+			Ext.callback(this.editor.closeCallback);
+			delete this.editor.closeCallback;
+		}
 		this.editor.deactivate();
 	},
 
 
-	showEditorByEl: function(cueInfo, el){
-		this.activateEditor(cueInfo);
+	showEditorByEl: function(cueInfo, el, cb){
+		this.activateEditor(cueInfo, cb);
 		this.editor.alignTo( el,'tl-tr?');
 		this.editor.show();
 	},

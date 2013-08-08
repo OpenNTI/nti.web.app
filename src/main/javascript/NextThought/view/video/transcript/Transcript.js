@@ -300,9 +300,12 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			cueEnd = record.get('endTime'),
 			sid = record.get('identifier'),
 			cid = this.transcript.get('associatedVideoId'), data;
-
+		
+		cueEl.addCls('active');
 		data = { startTime:cueStart, endTime:cueEnd, startCueId:sid, endCueId:sid, containerId: cid, userDataStore: this.userDataStore };
-		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'));
+		this.fireEvent('show-editor', data, cueEl.down('.add-note-here'),function(){
+			cueEl.removeCls('active');
+		});
 	},
 
 
