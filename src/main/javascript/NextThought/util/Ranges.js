@@ -425,6 +425,10 @@ Ext.define('NextThought.util.Ranges',{
 				node = r.startContainer.childNodes[r.startOffset];
 				rect = node.getBoundingClientRect();
 			}
+            else if(rect && !r.collapsed && RectUtils.isZeroRect(rect) && r.toString() !== '' && !Ext.isTextNode(r.startContainer)){
+                console.log('No rect information... attempting to use the start container\'s rect instead.');
+                rect = r.startContainer.getBoundingClientRect();
+            }
 		}
 		catch(er){
 			console.error(Globals.getError(er));
