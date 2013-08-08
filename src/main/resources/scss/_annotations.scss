@@ -223,6 +223,8 @@
 		}
 		.snippet {
 			min-height: 50px;
+			max-height: 5em;
+			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
 			font: italic 400 16px/25px $font;
 			margin: 0 0 10px 0;
 			color: $primary-grey;
@@ -285,7 +287,7 @@
 		font-size: 8pt;
 		color: $tertiary-grey;
 		padding: 0 0 0 25px;
-		//TODO: fix these references to use the spr_activity_icons.png sprite.
+
 		.comment & {
 			@include icon('activity-comment', $left: 2px);
 		}
