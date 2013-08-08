@@ -137,20 +137,31 @@ Ext.define('NextThought.view.chat.History',{
 			this.prefetchNext();
 		}
 
-		this.add({
-			xtype:'box',
-			autoEl: {
-				cls: 'more',
-				html: 'Load More'
-			},
-			listeners: {
-				click: {
-					scope: this,
-					fn: 'prefetchNext',
-					element: 'el'
+		if(l && l['batch-next']){
+			this.add({
+				xtype:'box',
+				autoEl: {
+					cls: 'more',
+					html: 'Load More'
+				},
+				listeners: {
+					click: {
+						scope: this,
+						fn: 'prefetchNext',
+						element: 'el'
+					}
 				}
-			}
-		});
+			});
+		}
+		else if(this.items.length < 1){
+			this.add({
+				xtype: 'box',
+				autoEl: {
+					cls: 'no-history',
+					html: 'No chat History'
+				}
+			});
+		}
 
 		if(this.loadingMore){
 			body = this.ownerCt.el.down('#chat-dock-body');
