@@ -53,6 +53,13 @@ Ext.define('NextThought.view.content.Reader', {
         this.buildModule('reader','touchHandler',rRef);
         this.buildModule('reader','touchHighlight',rRef);
 
+		//For search hit highlighting we own the search overlay, but we
+		//need to forward some of the logic onto the proper module.  Note we
+		//do this at init time because we need access to the mixed in module mixins
+		//as well as this.
+		this.getRangePositionAdjustments = this.forwardToModule('annotations', 'getRangePositionAdjustments');
+		this.rangesForSearchHits = this.forwardToModule('annotations', 'rangesForSearchHits');
+
 		this.mon(this.getAnnotations(),'rendered','fireReady',this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
 

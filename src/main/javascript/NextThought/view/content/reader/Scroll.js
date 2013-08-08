@@ -183,12 +183,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	toSearchHit: function(result, fragment) {
 		var me = this, pos;
 
-		me.clearSearchHit();
+		this.reader.getAnnotations().clearSearchHit();
 		if (!result) {
 			return;
 		}
 		//show all the search hits
-		me.showSearchHit(result.hit);
+		this.reader.getAnnotations().showSearchHit(result.hit);
 		if(fragment){
 			console.time('Fragment location');
 			pos = me.getFragmentLocation(fragment, result.hit.get('PhraseSearch'));

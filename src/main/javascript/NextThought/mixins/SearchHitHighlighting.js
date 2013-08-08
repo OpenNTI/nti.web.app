@@ -18,7 +18,7 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
 	getRangePositionAdjustments: function(key){
-		return {top: -1*this.el.getTop(), left: -1*this.el.getLeft()};
+		return {top: -1*this.el.getY(), left: -1*this.el.getX()};
 	},
 
 

@@ -1,8 +1,13 @@
 Ext.define('NextThought.mixins.ModuleContainer', {
 
+	getterNameForModule: function(name){
+		return 	'get'+Ext.String.capitalize(name);
+	},
+
+
     buildModule: function(ns, name,config){
         var m = Ext.createByAlias(ns+'.'+name,Ext.apply({container:this},config)),
-            getterName = 'get'+Ext.String.capitalize(name);
+            getterName = this.getterNameForModule(name);
 
         if(this[getterName]){
             console.error('Module getter name taken: '+getterName);
@@ -10,5 +15,20 @@ Ext.define('NextThought.mixins.ModuleContainer', {
         }
 
         this[getterName] = function(){return m;};
-    }
+    },
+
+	//Returns a function that will forward the function specified by fnName
+	//to the given module
+	forwardToModule: function(name, fnName){
+		var getter = this.getterNameForModule(name),
+			module = Ext.isFunction(this[getter]) && this[getter]();
+		if(!module || !Ext.isFunction(module[fnName])){
+			console.error('No module named ', name, ' or the module has no function named', fnName);
+			return Ext.emptyFn;
+		}
+
+		return function(){
+			return module[fnName].apply(module, arguments);
+		};
+	}
 });
