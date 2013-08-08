@@ -106,11 +106,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.iframe = this.el.down('iframe');
 
 		window.addEventListener("message", this.handleMessage, false);
-		doc = this.getPlayerContextDocument();
-		doc.open();
-		doc.write(this.PLAYER_BODY_TPL.apply(data));
-		doc.close();
-
+		try{
+			this.getPlayerContext().onerror = Ext.bind(this.playerErrorHandler,this);
+			doc = this.getPlayerContextDocument();
+			doc.open();
+			doc.write(this.PLAYER_BODY_TPL.apply(data));
+			doc.close();
+		}
+		catch(e){
+			this.playerErrorHandler(e);
+		}
 		console.log(this.id);
 	},
 
@@ -146,7 +151,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	sendMessage: function(type,name,data){
         var context = this.getPlayerContext();
-        if(!context){ return; }
+        if(!context){
+	        console.warn('No Kaltura Player Context!');
+	        return;
+        }
 
 		context.postMessage({
 			type: type,
@@ -237,6 +245,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	cleanup: function(){
+		window.removeEventListener("message", this.handleMessage, false);
 		var el = Ext.get(this.id);
 		this.isReady = false;
 		el.clearListeners();
