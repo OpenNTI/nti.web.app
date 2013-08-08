@@ -9,6 +9,7 @@ Ext.define('NextThought.controller.State', {
 	],
 
 	requires: [
+		'NextThought.cache.AbstractStorage',
 		'Ext.state.Manager',
 		'Ext.state.LocalStorageProvider',
 		'Ext.state.CookieProvider'
@@ -68,10 +69,9 @@ Ext.define('NextThought.controller.State', {
 			},
 			SEVEN_DAYS = 604800000,
 			p = me.getStateKey() + 'non-history-state-',
-			provider = window.localStorage
+			provider = Ext.supports.LocalStorage
 				? new Ext.state.LocalStorageProvider({prefix: p})
-				: new Ext.state.CookieProvider({prefix: p,
-				expires: new Date(new Date().getTime() + SEVEN_DAYS) });
+				: new Ext.state.CookieProvider({prefix: p, expires: new Date(new Date().getTime() + SEVEN_DAYS) });
 
 		Ext.state.Manager.setProvider(provider);
 
@@ -113,7 +113,7 @@ Ext.define('NextThought.controller.State', {
 			//The only thing listening to this event is the Google Hangout controller.
 			if (diff && me.fireEvent('stateChange', s)) {
 				Ext.Object.merge(current, s);
-				window.localStorage.setItem(me.getStateKey(), JSON.stringify(current));
+				PersistentStorage.set(me.getStateKey(), current);
 				return true;
 			}
 
@@ -446,9 +446,9 @@ Ext.define('NextThought.controller.State', {
 			result;
 
 		try {
-			previousState = window.localStorage.getItem(this.getStateKey());
+			previousState = PersistentStorage.get(this.getStateKey());
 			console.log('local state found?', previousState);
-			lastLocation = previousState ? Ext.decode(previousState): null;
+			lastLocation = previousState || null;
 
 			if(!lastLocation){
 				return defaultState;
@@ -469,7 +469,7 @@ Ext.define('NextThought.controller.State', {
 		}
 		catch (e) {
 			console.error('failed to decode local state, use default.', Globals.getError(e));
-			window.localStorage.removeItem(this.getStateKey());
+			PersistentStorage.remove(this.getStateKey());
 			return defaultState;
 		}
 	},

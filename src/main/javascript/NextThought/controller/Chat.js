@@ -1,6 +1,7 @@
 Ext.define('NextThought.controller.Chat', {
 	extend: 'Ext.app.Controller',
 	requires: [
+		'NextThought.cache.AbstractStorage',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Annotations',
 		'NextThought.util.Classrooms',
@@ -1560,7 +1561,7 @@ Ext.define('NextThought.controller.Chat', {
 	 * @return {*}
 	 */
 	getSessionObject: function (key) {
-		var o = Ext.JSON.decode(sessionStorage.getItem('chats') || '{}');
+		var o = TemporaryStorage.get('chats') || {};
 		if (!Ext.isEmpty(key)) {
 			return o[key];
 		}
@@ -1581,10 +1582,7 @@ Ext.define('NextThought.controller.Chat', {
 			o[key] = leaf;
 		}
 
-//		if(o.hasOwnProperty('Class')){
-//			debugger;
-//		}
-		sessionStorage.setItem('chats', Ext.JSON.encode(o));
+		TemporaryStorage.set('chats', o);
 	},
 
 
@@ -1599,7 +1597,7 @@ Ext.define('NextThought.controller.Chat', {
 			this.setSessionObject(o);
 			return;
 		}
-		sessionStorage.removeItem('chats');
+		TemporaryStorage.remove('chats');
 	}
 
 });
