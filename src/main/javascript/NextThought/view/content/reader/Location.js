@@ -3,6 +3,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	mixins: { observable: 'Ext.util.Observable' },
 	requires: [
 		'NextThought.Library',
+		'NextThought.cache.AbstractStorage',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.view.video.Window',
 		'NextThought.util.Content'
@@ -97,7 +98,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 			//remember last ntiid for this book if it is truthy
 			if(ntiid){
-				localStorage[rootId] = ntiid;
+				PersistentStorage.updateProperty('last-location-map',rootId,ntiid);
 			}
 		}
 
@@ -124,7 +125,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 	getFragment: function(ntiid) {
-		var o = ParseUtils.parseNtiid(ntiid);
+		var o = ParseUtils.parseNTIID(ntiid);
 		return o? o.toURLSuffix() : '';
 	},
 

@@ -5,6 +5,9 @@
 Ext.define('NextThought.controller.Reader', {
 	extend: 'Ext.app.Controller',
 
+	requires:[
+		'NextThought.cache.AbstractStorage'
+	],
 
 	models: [
 		'PageInfo',
@@ -129,8 +132,8 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	setLastLocation: function(ntiid, callback, silent){
-		var lastNtiid = localStorage[ntiid] || ntiid;
-		if(!ParseUtils.parseNtiid(lastNtiid)){
+		var lastNtiid = PersistentStorage.getProperty('last-location-map',ntiid, ntiid);
+		if(!ParseUtils.isNTIID(lastNtiid)){
 			lastNtiid = ntiid;
 		}
 
@@ -138,7 +141,7 @@ Ext.define('NextThought.controller.Reader', {
 		function call(a, errorDetails){
 			var error = (errorDetails||{}).error;
 			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
-				delete localStorage[ntiid];
+				PersistentStorage.removeProperty('last-location-map',ntiid);
 			}
 			
 			if( Ext.isFunction(callback) ){
