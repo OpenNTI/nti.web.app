@@ -11,7 +11,7 @@ Ext.define('NextThought.view.annotations.View',{
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'row', cn:[
 			{cls: 'name', html: '{Creator}'},
-			{cls: 'snipet', html: '{preview}'},
+			{cls: 'snippet', html: '{preview}'},
 			{cls: 'footer', cn:[
 				{tag:'span', html: '{ReplyCount:plural("Comment")}'},
 				{tag:'span', html: '{CreatedTime:timeDifference}'}
