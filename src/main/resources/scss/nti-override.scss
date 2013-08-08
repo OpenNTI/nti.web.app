@@ -159,7 +159,11 @@ body.x-body {margin:0;}
 		height: 200px;
 
 		&.video {
-			background: url(../images/backdrops/whiteboard_error_loading_image.png) center 10 no-repeat;
+			background: {
+				image: url(../images/backdrops/whiteboard_error_loading_image.png);
+				repeat: no-repeat;
+				position: center 10px;
+			}
 			height: 360px;
 		}
 	}
