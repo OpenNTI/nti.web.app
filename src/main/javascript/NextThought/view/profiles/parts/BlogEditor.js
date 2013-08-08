@@ -96,18 +96,14 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
             //Close navigation menu when clicking on title
             //TODO find a way to keep it from popping up in the first place.
-            //var titleInput = this.getEl().down('.title > :first');
             titleInput.on('focus', function(){
-                console.log("titleInput focused");
                 Ext.Element.select('.x-panel-navigation-menu').hide();
             }, this, {delay:1000});
 
             titleEl.on('focus', function(){
-                console.log("title focused");
                 Ext.Element.select('.x-panel-navigation-menu').hide();
             }, this, {delay:1000});
         }
-
 
 		Ext.defer(Ext.Function.createSequence(this.syncHeight,this.focus,this),500,this);//let the animation finish
 	},
@@ -129,7 +125,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
     setUpTouch: function(){
         var me = this;
-        me.buildModule('modules', 'touchSender');
 
         var firstY =  me.getEl().parent('.x-container-profile').dom.getY();
         console.log("firstY:" + firstY);
@@ -138,17 +133,14 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             saveButton = this.getEl().down('.save');
 
         cancelButton.dom.addEventListener('touchstart', function(e){
-            me.getEl().parent('.x-container-profile').setY(firstY);
             cancelButton.dom.click();
         }, this);
 
         saveButton.dom.addEventListener('touchstart', function(e){
-            me.getEl().parent('.x-container-profile').setY(firstY);
             saveButton.dom.click();
         }, this);
 
-        var container = this,
-            initialY = false;
+        var container = this;
 
 
         var addPeopleField = Ext.get(Ext.query('.recipients')[0]).down('input'),
@@ -179,43 +171,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             this.keyboardUp = false;
         }, this);
 
-        //TODO allow only scrolling as far as needed to see full editor.
-        container.on('touchScroll', function(ele, deltaY) {
-
-            var panel = this.getEl().parent().parent().parent().parent().parent().parent().parent().parent();
-
-            var currentY = panel.getY(),
-                newY = currentY - deltaY,
-                containerHeight = panel.getHeight(),
-                parentHeight = panel.parent().getHeight(),
-                minY;
-
-           // if (containerHeight <= parentHeight) {
-           //     panel.setY(initialY, false);
-           //     return;
-           // }
-
-            if (initialY === false){
-                initialY = currentY;
-            }
-
-            minY  = initialY-(containerHeight-parentHeight);
-
-            // Clamp scroll
-            /*if(newY < minY){
-                newY = minY;
-            }
-            else if (newY > initialY){
-                newY = initialY;
-            }  */
-            panel.setY(newY, false);
-
-            this.amountScrolled += deltaY;
-
-        }, this);
-
         container.on('touchElementIsScrollable', function(ele, callback) {
-            callback(true);
+            callback(false);
         });
 
         container.on('touchElementAt', function(x,y, callback) {
@@ -223,13 +180,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
             var element;
             console.log("x:" + x + " y:" + y);
             if(this.keyboardUp){
-                console.log("keyboard is up");
-                //debugger;
                 element = Ext.getDoc().dom.elementFromPoint(x, y-396);
             }
             else{
-                console.log("keyboard is down");
-                //debugger;
                 element = Ext.getDoc().dom.elementFromPoint(x, y);
             }
             callback(element);
@@ -242,6 +195,14 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		Ext.get('profile').removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 		Ext.destroy(this.sizer);
+
+        //after iPad version goes back to Thoughts, can't scroll down to see
+        //profile, so set height back to normal when quitting editor
+        if(Ext.is.iPad){//pushes the profile up
+            var pEl = Ext.get('profile');
+            pEl.scrollBy(0, -400, true);
+        }
+
 		return this.callParent(arguments);
 	},
 
@@ -361,7 +322,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	onCancel: function(e){
-        console.log("onCancel");
 		e.stopEvent();
 
 		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.
