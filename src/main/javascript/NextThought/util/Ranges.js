@@ -425,9 +425,18 @@ Ext.define('NextThought.util.Ranges',{
 				node = r.startContainer.childNodes[r.startOffset];
 				rect = node.getBoundingClientRect();
 			}
-            else if(rect && !r.collapsed && RectUtils.isZeroRect(rect) && r.toString() !== '' && !Ext.isTextNode(r.startContainer)){
-                console.log('No rect information... attempting to use the start container\'s rect instead.');
-                rect = r.startContainer.getBoundingClientRect();
+            else if(rect && !r.collapsed && RectUtils.isZeroRect(rect)){
+                if(r.startContainer === r.endContainer && r.startContainer.nodeType !== Node.TEXT_NODE){
+                    if(r.startOffset + 1 === r.endOffset){
+                        console.debug('No rect information... the range contains just one node, use that instead.');
+                        node = r.startContainer.childNodes[r.startOffset];
+                    }
+                    else if(r.startOffset === 0 && r.endOffset === r.endContainer.childNodes.length){
+                        console.debug('No rect information... the range contains all all contents of the object/doc, use the startContainer.');
+                        node = r.startContainer;
+                    }
+                }
+                rect = node.getBoundingClientRect();
             }
 		}
 		catch(er){
