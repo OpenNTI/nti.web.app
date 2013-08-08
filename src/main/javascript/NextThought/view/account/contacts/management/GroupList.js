@@ -61,7 +61,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.store.loadData(fstore.getRange());
 
 		this.store.mon(fstore, 'add', function(store, record, i){
-			me.store.add(record);
+			if(me.store){
+                me.store.add(record);
+            }
 		}, this);
 
 	},
