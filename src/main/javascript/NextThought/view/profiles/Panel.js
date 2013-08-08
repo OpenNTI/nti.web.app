@@ -10,7 +10,8 @@ Ext.define('NextThought.view.profiles.Panel',{
 		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.layout.component.Natural',
         'NextThought.modules.TouchSender',
-        'NextThought.modules.TouchHandler'
+        'NextThought.modules.TouchHandler',
+        'NextThought.view.SideBar'
 	],
 
 	mixins:{
@@ -115,8 +116,21 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 		UserRepository.getUser(this.username,this.setUser, this, true);
 
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('modules', 'touchHandler');
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('modules', 'touchHandler');
+
+            this.on('touchStart', function(){
+                var ele = Ext.get(Ext.query('.sidebar')[0]),
+                    sbID, sb;
+
+                if(ele){
+                    sbID = ele.getAttribute('id');
+                    sb = Ext.ComponentManager.get(sbID);
+                    sb.startHide();
+                }
+            });
+        }
 	},
 
 	trackTabs: function(tabPanel, newTab){

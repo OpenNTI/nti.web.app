@@ -8,8 +8,13 @@ Ext.define('NextThought.view.SideBar',{
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
         'NextThought.view.account.history.View',
-		'NextThought.view.chat.Dock'
+		'NextThought.view.chat.Dock',
+        'NextThought.modules.TouchSender'
 	],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	width: 260,
 	height: 100,
@@ -138,8 +143,32 @@ Ext.define('NextThought.view.SideBar',{
 		if(!$AppConfig.service.canChat()){
 			this.down('chat-dock').destroy();
 		}
+
+        if(Ext.is.iPad){
+            this.setupTouch();
+        }
+
 	},
 
+    setupTouch: function(){
+        this.buildModule('modules', 'touchSender');
+
+        var container = this;
+
+        this.on('touchStart', function(){
+            this.startShow();
+        });
+
+        container.on('touchTap', function(ele) {
+            ele.click();
+        });
+
+        container.on('touchElementAt', function(x, y, callback){
+            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            callback(element);
+        });
+
+    },
 
 	maybeCancelHide: function(e){
 		var l = e.getTarget('.x-layer'),
