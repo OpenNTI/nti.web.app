@@ -379,7 +379,12 @@
 				padding: 7px 14px;
 
 			}
+
+			&.textarea .x-form-item-body{
+				overflow: hidden;
+			}
 		}
+
 
 		.combo-box {
 			input {
