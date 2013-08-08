@@ -213,6 +213,9 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	setRenderedTitle: function(record){
+		if(record.isModel){
+			return record.get('title');
+		}
 		return record.title;
 	},
 
