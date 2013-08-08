@@ -145,7 +145,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	sendMessage: function(type,name,data){
-		this.getPlayerContext().postMessage({
+        var context = this.getPlayerContext();
+        if(!context){ return; }
+
+		context.postMessage({
 			type: type,
 			name: name,
 			data: data
