@@ -282,6 +282,10 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			});
 		}
 
+		if(Ext.isEmpty(items)){
+			return null;
+		}
+
 		return Ext.widget('menu',{
 			items: items,
 			ui: 'nt',
