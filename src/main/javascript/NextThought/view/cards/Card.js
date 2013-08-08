@@ -93,7 +93,7 @@ Ext.define('NextThought.view.cards.Card',{
 			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {
-			status = this.fireEvent('show-target',this,this.data, !e);
+			status = this.fireEvent('show-target',this,this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/);
 		}
 
 		return status;

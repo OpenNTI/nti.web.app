@@ -160,7 +160,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	showCardTarget: function(card, data, silent){
+	showCardTarget: function(card, data, silent, callback){
 		var reader = card.up('reader-content')||ReaderPanel.get(),//for now, lets just get the default reader.
 			ntiid = data.ntiid,
 			postfix = data.notTarget ? '' : '-target',
@@ -202,7 +202,7 @@ Ext.define('NextThought.controller.Reader', {
 		pi.contentOrig = reader.getLocation().NTIID;
 		pi.hideControls = true;
 
-		reader.setLocation(pi, null, !!silent);
+		reader.setLocation(pi, callback, !!silent);
 	},
 
 
