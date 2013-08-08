@@ -21,16 +21,16 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		this.mixins.observable.constructor.apply(this);
 
 		reader.on('destroy','destroy',
-			reader.relayEvents(this,[
-				'dismiss-popover',
-				'display-popover',
-				'iframe-ready',
-				'sync-height',
-				'content-updated',
-				'content-updated-with',
-				'page-previous',
-				'page-next'
-			]));
+				reader.relayEvents(this,[
+					'dismiss-popover',
+					'display-popover',
+					'iframe-ready',
+					'sync-height',
+					'content-updated',
+					'content-updated-with',
+					'page-previous',
+					'page-next'
+				]));
 
 		Ext.apply(reader,{
 			getDocumentElement: Ext.bind(this.getDocumentElement,this),
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
-                scrolling: 'no',
+				scrolling: 'no',
 				seamless: true,
 				style: 'overflow: hidden; z-index: 1;'
 			},
@@ -217,12 +217,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		tip = Ext.tip.QuickTipManager.getQuickTip();
 		tip.mon(Ext.fly(doc.body,'__reader_body_'+me.prefix), {
-            mouseover: tip.onTargetOver,
-            mouseout: tip.onTargetOut,
-            mousemove: tip.onMouseMove,
-            scope: tip,
+			mouseover: tip.onTargetOver,
+			mouseout: tip.onTargetOut,
+			mousemove: tip.onMouseMove,
+			scope: tip,
 			reader: me.reader
-        });
+		});
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
@@ -235,8 +235,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				highlight = evt.target.classList.contains('application-highlight');
 
 			//while the target is not an anchor that is not in a highlight
-			while(target && (target.tagName !== 'A' || target.parentNode.classList.contains('application-highlight'))) { 
-				target = target.parentNode; 
+			while(target && (target.tagName !== 'A' || target.parentNode.classList.contains('application-highlight'))) {
+				target = target.parentNode;
 			}
 
 			//if we are not in a hightlight
@@ -248,7 +248,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				t = me.reader.getScroll().get().top,
 				s = me.get().win.getSelection();
 
-			if(!fakeEvent.getTarget('a') || !s.isCollapsed){ 
+			if(!fakeEvent.getTarget('a') || !s.isCollapsed){
 				me.reader.onContextMenuHandler({
 					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 					preventDefault: function(){ fakeEvent.preventDefault(); },
@@ -266,50 +266,50 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		forward(['mousedown','mouseup','mousemove','mouseout']);
 
 
-        function shouldDismissPopover(){
-	        me.fireEvent('dismiss-popover');
-        }
-        on(doc, 'mouseout', function(e){
-            var evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
+		function shouldDismissPopover(){
+			me.fireEvent('dismiss-popover');
+		}
+		on(doc, 'mouseout', function(e){
+			var evt = Ext.EventObject.setEvent(e||event),
+				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
-               if(target){
-                   shouldDismissPopover();
-               }
-        });
+			if(target){
+				shouldDismissPopover();
+			}
+		});
 
-        me.reader.getScroll().registerHandler(shouldDismissPopover);
+		me.reader.getScroll().registerHandler(shouldDismissPopover);
 
 
-        on(doc, 'mouseover', function(e){
-            var d = doc,
-                evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
-	            targetType, href, popContent;
+		on(doc, 'mouseover', function(e){
+			var d = doc,
+				evt = Ext.EventObject.setEvent(e||event),
+				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
+				targetType, href, popContent;
 
-            function getId(e, type){
-                if(!Ext.fly(e).hasCls(type)){
-                    e = Ext.fly(e).up('.'+type);
-                }
-                return e.getAttribute('href');
-            }
+			function getId(e, type){
+				if(!Ext.fly(e).hasCls(type)){
+					e = Ext.fly(e).up('.'+type);
+				}
+				return e.getAttribute('href');
+			}
 
-            function getPopoverContent(href){
-                var fn, clonedFn, redactedPlaceholder;
-                try{fn = d.querySelector(href);}
-                catch (e){fn = d.getElementById(href.substring(1));}
+			function getPopoverContent(href){
+				var fn, clonedFn, redactedPlaceholder;
+				try{fn = d.querySelector(href);}
+				catch (e){fn = d.getElementById(href.substring(1));}
 
-	            if(!fn){ return; }
+				if(!fn){ return; }
 				clonedFn = fn.cloneNode(true);
 
-                Ext.each(Ext.fly(clonedFn).query('a'),
-                    function(d){
-                        var href = d.getAttribute ? d.getAttribute('href') : '';
-                        if(href.indexOf('#m') >= 0){
-                            clonedFn.removeChild(d);
-                        }
-                    }
-                );
+				Ext.each(Ext.fly(clonedFn).query('a'),
+						function(d){
+							var href = d.getAttribute ? d.getAttribute('href') : '';
+							if(href.indexOf('#m') >= 0){
+								clonedFn.removeChild(d);
+							}
+						}
+				);
 
 				//Strip out the redacted text.  Note we look based on class
 				//here which is failry tightly coupled to annotations/Redaction.js/
@@ -320,19 +320,19 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 					redactedPlaceholder.remove();
 				}
 
-                return clonedFn;
-            }
+				return clonedFn;
+			}
 
-            if (!target){return;}
+			if (!target){return;}
 			targetType = Ext.fly(target).hasCls('footnote') ? 'footnote' : 'ntiglossaryentry';
-            href = getId(target, targetType);
-	        popContent = getPopoverContent(href);
-	        if(!popContent){
-		        console.log('Error: Could not find popover content for id:'+href+ ' from target: '+target);
-		        return;
-	        }
-            me.fireEvent('display-popover', me, href, popContent, target);
-        });
+			href = getId(target, targetType);
+			popContent = getPopoverContent(href);
+			if(!popContent){
+				console.log('Error: Could not find popover content for id:'+href+ ' from target: '+target);
+				return;
+			}
+			me.fireEvent('display-popover', me, href, popContent, target);
+		});
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
@@ -376,7 +376,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 	syncFrame: function(content){
 		var i = this.get(), h, contentHeight = 150, ii;
-			//We need the buffer because otherwise the end of the doc would go offscreen
+		//We need the buffer because otherwise the end of the doc would go offscreen
 
 		if(!i){
 			console.warn('Cannot syncFrame, the iFrame is not ready');
@@ -479,8 +479,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		if(html!==false){
 			this.fireEvent('content-updated-with',body,doc);
-            this.cleanContent = body.dom.cloneNode(true);
-        }
+			this.cleanContent = body.dom.cloneNode(true);
+		}
 		this.fireEvent('content-updated');
 
 		clearInterval(this.syncInterval);
@@ -489,120 +489,122 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	},
 
 
-    getCleanContent: function(){
-        return this.cleanContent;
-    },
+	getCleanContent: function(){
+		return this.cleanContent;
+	},
 
-    /**
-     * Makes pointer events go through the iframe so that all the
-     * interactions can be handled manually.
-     * @param should
-     */
-    setClickthrough: function(should) {
-	    var el = this.get();
-	    if (!el){
-		    return;
-	    }
+	/**
+	 * Makes pointer events go through the iframe so that all the
+	 * interactions can be handled manually.
+	 * @param should
+	 */
+	setClickthrough: function(should) {
+		var el = this.get();
+		if (!el){
+			return;
+		}
 
-	    if(should){
-		    el.addCls('clickthrough');
-	    }
-	    else {
-		    el.removeCls('clickthrough');
-	    }
-    },
+		if(should){
+			el.addCls('clickthrough');
+		}
+		else {
+			el.removeCls('clickthrough');
+		}
+	},
 
-    hasClickthrough: function() {
-        return this.get().hasCls('clickthrough');
-    },
+	hasClickthrough: function() {
+		return this.get().hasCls('clickthrough');
+	},
 
-    /**
-     * @param x relative to the window's top left corner
-     * @param y relative to the window's top left corner
-     */
-    elementAt: function(x, y) {
-        var reader = this.reader,
-            iFrameDoc = this.getDocumentElement(),
-            outerDoc = Ext.getDoc().dom,
-            hasClickthrough = this.hasClickthrough(),
-            framePos = reader.getPosition(),
-            scrolledY = reader.getScroll().top(),
-            pickedElement,
-            localX = x-framePos[0],
-            localY = y-framePos[1]+scrolledY;
+	/**
+	 * @param x relative to the window's top left corner
+	 * @param y relative to the window's top left corner
+	 */
+	elementAt: function(x, y) {
+		var reader = this.reader,
+			iFrameDoc = this.getDocumentElement(),
+			outerDoc = Ext.getDoc().dom,
+			hasClickthrough = this.hasClickthrough(),
+			framePos = reader.getPosition(),
+			scrolledY = reader.getScroll().top(),
+			pickedElement,
+			localX = x-framePos[0],
+			localY = y-framePos[1]+scrolledY;
 
-        this.setClickthrough(false);
-        pickedElement = iFrameDoc.elementFromPoint(localX, localY);
+		this.setClickthrough(false);
+		pickedElement = iFrameDoc.elementFromPoint(localX, localY);
 
-        function hasOverlay(element) {
-            if (!element || !element.tagName){
-                return false;
-            }
+		function hasOverlay(element) {
+			if (!element || !element.tagName){
+				return false;
+			}
 
-            var types = [ 'application/vnd.nextthought.ntislidedeck',
-                          'application/vnd.nextthought.naquestion',
-                          'application/vnd.nextthought.ntivideo' ],
-                hasObjectTag = element.tagName === 'OBJECT',
-                type;
+			var types = [
+						'application/vnd.nextthought.ntislidedeck',
+						'application/vnd.nextthought.naquestion',
+						'application/vnd.nextthought.ntivideo'
+					],
+					hasObjectTag = element.tagName === 'OBJECT',
+					type;
 
-            if (!hasObjectTag) {
-                element = Ext.get(element).up('object');
-            }
-            if (!element) {
-                return false;
-            }
+			if (!hasObjectTag) {
+				element = Ext.get(element).up('object');
+			}
+			if (!element) {
+				return false;
+			}
 
-            type = element.dom? element.dom.type : element.type;
-            return Ext.Array.contains(types, type);
-        }
+			type = element.dom? element.dom.type : element.type;
+			return Ext.Array.contains(types, type);
+		}
 
-        // If it picked an object element or an object element child
-        // and has an overlay outside the iFrame, use that.
-        if (hasOverlay(pickedElement)) {
-            pickedElement = outerDoc.elementFromPoint(x, y);
-        }
+		// If it picked an object element or an object element child
+		// and has an overlay outside the iFrame, use that.
+		if (hasOverlay(pickedElement)) {
+			pickedElement = outerDoc.elementFromPoint(x, y);
+		}
 
-        if (pickedElement) {
-            console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
-        }
+		if (pickedElement) {
+			console.log('picking: ('+x+','+y+'): '+pickedElement.tagName);
+		}
 
-        this.setClickthrough(hasClickthrough);
+		this.setClickthrough(hasClickthrough);
 
-        return pickedElement;
-    },
+		return pickedElement;
+	},
 
-    /**
-     * Positions relative to the window
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     */
-    makeRangeFrom: function(x1, y1, x2, y2) {
+	/**
+	 * Positions relative to the window
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 */
+	makeRangeFrom: function(x1, y1, x2, y2) {
 
-	    function rangeAtPoint(x,y) {
-            var reader = me.reader,
-                hasClickthrough = me.hasClickthrough(),
-                framePos = reader.getPosition(),
-                scrolledY = reader.getScroll().top(),
-                localX = x-framePos[0],
-                localY = y-framePos[1]+scrolledY,
-                range;
+		function rangeAtPoint(x,y) {
+			var reader = me.reader,
+				hasClickthrough = me.hasClickthrough(),
+				framePos = reader.getPosition(),
+				scrolledY = reader.getScroll().top(),
+				localX = x-framePos[0],
+				localY = y-framePos[1]+scrolledY,
+				range;
 
-            me.setClickthrough(false);
-            range = iFrameDoc.caretRangeFromPoint(localX, localY);
-            me.setClickthrough(hasClickthrough);
-            return range;
-        }
-	    
-        var me = this,
-            iFrameDoc = this.getDocumentElement(),
-            startRange = rangeAtPoint(x1, y1),
-            endRange = rangeAtPoint(x2, y2),
-            range = iFrameDoc.createRange();
-        range.setStart(startRange.startContainer, startRange.startOffset);
-        range.setEnd(endRange.startContainer, endRange.endOffset);
-        return range;
+			me.setClickthrough(false);
+			range = iFrameDoc.caretRangeFromPoint(localX, localY);
+			me.setClickthrough(hasClickthrough);
+			return range;
+		}
 
-    }
+		var me = this,
+				iFrameDoc = this.getDocumentElement(),
+				startRange = rangeAtPoint(x1, y1),
+				endRange = rangeAtPoint(x2, y2),
+				range = iFrameDoc.createRange();
+		range.setStart(startRange.startContainer, startRange.startOffset);
+		range.setEnd(endRange.startContainer, endRange.endOffset);
+		return range;
+
+	}
 });
