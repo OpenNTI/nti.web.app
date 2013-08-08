@@ -294,6 +294,8 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		hide = function(){
 			//Ext.bind(box.hide, box, [false]);
+            // Now that the editor is active, adjust the reply scroll zone.
+            this.setupReplyScrollZone();
 			this.replyBoxEl.hide();
 			this.constrainPopout();
 		};
@@ -327,7 +329,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	constrainPopout: function(){
 		var pop = this.up('.activity-popout');
 
-		Ext.defer(pop.doConstrain,1,pop);
+        pop.doConstrain();
 	},
 
 
@@ -342,11 +344,10 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	showEditor: function () {
-		Ext.defer(this.setupReplyScrollZone, 1, this);
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-		this.fireEvent('realign');
+        this.fireEvent('realign');
 	},
 
 

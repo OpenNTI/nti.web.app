@@ -79,7 +79,10 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			this.updateRefEl(el);
 		}else{
 			console.error("RefEl no longer exists");
-			this.destroy();
+            // Why do we destroy the popout here?
+            // it was destroying the popout on every added reply. So it's commented for now.
+            // The refEl might have changed but that doesn't mean the parent (note) rec doesn't exist anymore.
+//			this.destroy();
 		}
 	},
 
