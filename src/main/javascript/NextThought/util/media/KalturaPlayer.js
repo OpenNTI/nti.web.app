@@ -322,7 +322,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					seen[name] = (seen[name]||0) + 1;
 
 					if(/error/i.test(name) && seen[name] < 2){
-						console.warn('Ignoring intial erros about no source',name, arguments);
+						console.warn('Ignoring intial errors about no source',name, arguments);
 						return;
 					}
 
