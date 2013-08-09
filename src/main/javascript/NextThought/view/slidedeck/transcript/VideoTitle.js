@@ -106,7 +106,7 @@ Ext.define('NextThought.view.slidedeck.transcript.VideoTitle',{
 	wantsRecord: function(rec){
 		var container = rec.get('ContainerId'),
 			desc = rec.get('applicableRange');
-		return desc.isEmpty && container === this.video.get('NTIID')
+		return desc.isEmpty && container === this.video.get('NTIID');
 	},
 
 

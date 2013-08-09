@@ -253,7 +253,7 @@ Ext.define('NextThought.util.Ranges',{
 			r;
 
 		if(!object){
-			if(range.startContainer == range.endContainer
+			if(range.startContainer === range.endContainer
 				&& range.startContainer.nodeType !== Node.TEXT_NODE
 				&& range.startOffset + 1 === range.endOffset){
 				object = this.nodeIfObjectOrInObject(range.startContainer.childNodes[range.startOffset]);

@@ -104,7 +104,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 				}else{
 					me.on('afterrender',function(){
 						item.setChecked(checked);
-					}, me)
+					}, me);
 				}
 			});
 

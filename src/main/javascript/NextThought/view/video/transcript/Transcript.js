@@ -53,15 +53,15 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 				}
 		}]}
 	]), {
-        toTimeFormat: function(values, out){
-            var min = Math.floor((values.startTime || 0)/60),
-                sec = Math.floor((values.startTime || 0)%60);
+		toTimeFormat: function(values, out){
+			var min = Math.floor((values.startTime || 0)/60),
+				sec = Math.floor((values.startTime || 0)%60);
 
-            if(sec < 10){ sec = '0'+sec; }
-            out.push(min+':'+sec);
-            return out;
-        }
-    }),
+			if(sec < 10){ sec = '0'+sec; }
+			out.push(min+':'+sec);
+			return out;
+		}
+	}),
 
 
 	initComponent: function(){
@@ -254,9 +254,9 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			'itemmouseenter': 'mouseOver',
 			'itemmouseleave': 'mouseOut',
 			'itemclick': 'openEditor',
-            'beforeitemclick': function(sel, rec){
-                return rec.get('type') !== 'section';
-            }
+			'beforeitemclick': function(sel, rec){
+				return rec.get('type') !== 'section';
+			}
 		});
 	},
 
@@ -277,20 +277,20 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-    positionAnnotationNibs: function(parentEl){
-        var me = this;
+	positionAnnotationNibs: function(parentEl){
+		var me = this;
 
-        // Set the top position of note widget nibs.
-        Ext.each(this.el.query('.cue .add-note-here'), function(nib){
-            var cueEl = Ext.fly(nib).up('.cue'),
-                outerOffset = parentEl ?  parentEl.dom.offsetTop : 0,
-                innerOffset = me.el.dom.offsetTop,
-                y = cueEl.getY() - outerOffset - innerOffset;
+		// Set the top position of note widget nibs.
+		Ext.each(this.el.query('.cue .add-note-here'), function(nib){
+			var cueEl = Ext.fly(nib).up('.cue'),
+				outerOffset = parentEl ?  parentEl.dom.offsetTop : 0,
+				innerOffset = me.el.dom.offsetTop,
+				y = cueEl.getY() - outerOffset - innerOffset;
 
-            y = y + 'px';
-            Ext.fly(nib).up('.control-container').setStyle({'top':y});
-        });
-    },
+			y = y + 'px';
+			Ext.fly(nib).up('.control-container').setStyle({'top':y});
+		});
+	},
 
 
 	openEditor: function(view, record, item, index, e){
@@ -405,39 +405,39 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 
 	mouseOver: function(view, record, item, index, e){
-        var box = item && item.querySelector('.add-note-here'),
-        	add = Ext.get(box),
-            currentDivs = this.el.query('.add-note-here:not(.hidden)');
+		var box = item && item.querySelector('.add-note-here'),
+			add = Ext.get(box),
+			currentDivs = this.el.query('.add-note-here:not(.hidden)');
 
-        if(this.suspendMoveEvents || !item || !add){ return; }
+		if(this.suspendMoveEvents || !item || !add){ return; }
 
-        clearTimeout(this.mouseEnterTimeout);
+		clearTimeout(this.mouseEnterTimeout);
 
-        this.mouseLeaveTimeout = setTimeout(function () {
-            add.removeCls('hidden');
+		this.mouseLeaveTimeout = setTimeout(function () {
+			add.removeCls('hidden');
 
-            Ext.each(currentDivs, function(cur){
-                if(cur !== add.dom){
-                    Ext.fly(cur).addCls('hidden');
-                }
-            });
-        }, 100);
+			Ext.each(currentDivs, function(cur){
+				if(cur !== add.dom){
+					Ext.fly(cur).addCls('hidden');
+				}
+			});
+		}, 100);
 	},
 
 
 	mouseOut: function(view, record, item, index, e){
-        var box = item && item.querySelector('.add-note-here'),
-        	add = Ext.get(box);
+		var box = item && item.querySelector('.add-note-here'),
+			add = Ext.get(box);
 
-        if(this.suspendMoveEvents || !item || !add){ return; }
+		if(this.suspendMoveEvents || !item || !add){ return; }
 
-        if(!add.hasCls('hidden')){
-            this.mouseEnterTimeout = setTimeout(function(){
-                if(add && !add.hasCls('hidden')){
-                    add.addCls('hidden');
-                }
-            }, 500);
-        }
+		if(!add.hasCls('hidden')){
+			this.mouseEnterTimeout = setTimeout(function(){
+				if(add && !add.hasCls('hidden')){
+					add.addCls('hidden');
+				}
+			}, 500);
+		}
 	},
 
 
@@ -466,39 +466,39 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-    isTimeWithinTimeRange: function(time){
-        var tRange = this.getTimeRange();
-        return tRange.start <= time && time <= tRange.end;
-    },
+	isTimeWithinTimeRange: function(time){
+		var tRange = this.getTimeRange();
+		return tRange.start <= time && time <= tRange.end;
+	},
 
 
 
-    getElementAtTime: function(seconds){
-        var cueStore = this.getCueStore(),
-            cues = cueStore && cueStore.queryBy(function(rec){
-                return rec.get('startTime') <= seconds && seconds <= rec.get('endTime');
-            }), sEl, cue;
+	getElementAtTime: function(seconds){
+		var cueStore = this.getCueStore(),
+			cues = cueStore && cueStore.queryBy(function(rec){
+				return rec.get('startTime') <= seconds && seconds <= rec.get('endTime');
+			}), sEl, cue;
 
-        if(!cues || cues.getCount() === 0){
-            return null;
-        }
-        cue = cues.getAt(0);
-        sEl = this.el.down('.cue[cue-start='+cue.get('startTime')+']');
-        return sEl;
-    },
+		if(!cues || cues.getCount() === 0){
+			return null;
+		}
+		cue = cues.getAt(0);
+		sEl = this.el.down('.cue[cue-start='+cue.get('startTime')+']');
+		return sEl;
+	},
 
 
-    getTimeRange: function(){
-        var t = this.transcript,
-            start = t.get('desired-time-start'),
-            end = t.get('desired-time-end');
+	getTimeRange: function(){
+		var t = this.transcript,
+			start = t.get('desired-time-start'),
+			end = t.get('desired-time-end');
 
-        // if the end is not set, set it to be the endTime of the last cue. CueStore should be sorted.
-        if(Ext.isEmpty(end) || end <= 0){
-            end = this.getCueStore().last().get('endTime');
-        }
-        return {start:start, end:end};
-    },
+		// if the end is not set, set it to be the endTime of the last cue. CueStore should be sorted.
+		if(Ext.isEmpty(end) || end <= 0){
+			end = this.getCueStore().last().get('endTime');
+		}
+		return {start:start, end:end};
+	},
 
 
 	selectNewCue: function(newCue){

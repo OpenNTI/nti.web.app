@@ -100,14 +100,14 @@ Ext.define('NextThought.view.menus.Presence',{
 			current[key] = {};
 		}
 
-		current[key]['type'] = type;
+		current[key].type = type;
 
 		if(show !== null){
-			current[key]['show'] = show;
+			current[key].show = show;
 		}
 
 		if(status !== null){
-			current[key]['status'] = status;
+			current[key].status = status;
 		}
 
 		if(active){

@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-        'NextThought.cache.LocationMeta',
+		'NextThought.cache.LocationMeta',
 		'NextThought.util.Views',
 		'NextThought.filter.FilterGroup',
 		'NextThought.filter.Filter'
@@ -265,10 +265,12 @@ Ext.define('NextThought.controller.Search', {
 
 	searchTranscriptResultClicked: function(result, fragIdx){
 		var videoObject = result.videoObject;
+		
+		function callback(mediaViewer){
+			//TODO highlight fragment here.
+		}
+
 		if(videoObject){
-			function callback(mediaViewer){
-				//TODO highlight fragment here.
-			}
 			this.fireEvent('show-object', videoObject, null, null, {
 				startAtMillis: result.hit.get('StartMilliSecs'),
 				callback: callback

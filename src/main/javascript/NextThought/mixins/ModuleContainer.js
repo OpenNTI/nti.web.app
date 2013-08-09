@@ -1,7 +1,7 @@
 Ext.define('NextThought.mixins.ModuleContainer', {
 
 	getterNameForModule: function(name){
-		return 	'get'+Ext.String.capitalize(name);
+		return 'get'+Ext.String.capitalize(name);
 	},
 
 

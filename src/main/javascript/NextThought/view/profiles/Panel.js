@@ -206,14 +206,14 @@ Ext.define('NextThought.view.profiles.Panel',{
 
 
     removeTouchListeners: function(){
-        var v = this['getPanelTouchHandler']();
+        var v = this.getPanelTouchHandler();
         v.removeListeners();
         this.setY(this.initialY);
     },
 
 
     readdTouchListeners: function(){
-        var v = this['getPanelTouchHandler']();
+        var v = this.getPanelTouchHandler();
         v.addListeners();
     },
 

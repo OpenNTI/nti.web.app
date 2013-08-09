@@ -482,7 +482,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//container rather than the common ancestor.
 		if(range.startContainer === range.endContainer
 			&& range.startContainer.nodeType !== Node.TEXT_NODE
-			&& range.startOffset + 1 == range.endOffset){
+			&& range.startOffset + 1 === range.endOffset){
 			maybeContainer = Ext.fly(range.startContainer.childNodes[range.startOffset]);
 		}
 
