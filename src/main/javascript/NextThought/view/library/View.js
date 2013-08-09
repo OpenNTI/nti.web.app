@@ -7,6 +7,7 @@ Ext.define('NextThought.view.library.View', {
 
 	items:[{
 		ui: 'library-collection',
+		cls: 'courses',
 		courseList:true,
 		xtype:'library-collection',
 		name: getString('My Courses'),
@@ -14,6 +15,7 @@ Ext.define('NextThought.view.library.View', {
 		hidden: true
 	},{
 		ui: 'library-collection',
+		cls: 'books',
 		xtype:'library-collection',
 		name: getString('My Books')
 	}],

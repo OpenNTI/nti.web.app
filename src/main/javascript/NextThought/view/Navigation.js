@@ -92,6 +92,7 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!isFeature('new-library')){
 			this.libraryMenu = Ext.widget({
+				viewId: 'content',
 				xtype: 'navigation-menu',
 				renderTo: Ext.getBody(),
 				items:[{
@@ -109,25 +110,16 @@ Ext.define('NextThought.view.Navigation',{
 						scope: this,
 						select:'updateCurrent'
 				   }
-				}],
-				listeners:{
-					scope: null, //execute from the context of the widget
-					hide: this.stopShowHide,
-					show: this.stopShowHide
-				}
+				}]
 			});
 			Library.on('show-courses',function(){
 					this.libraryMenu.child('[courseList]').show(); },this);
 
-			this.mon(this.libraryMenu,{
-				scope: this.libraryMenu,
-				mouseleave: this.startHide,
-				mouseenter: this.startShow
-			});
 			this.items.push(this.libraryMenu);
 		}
 
 		this.searchMenu = Ext.widget({
+				viewId: 'search',
 				xtype: 'navigation-menu',
 				layout: {type: 'vbox', align: 'stretch'},
 				overflowX: 'hidden',
@@ -276,8 +268,10 @@ Ext.define('NextThought.view.Navigation',{
 
 
 	onMouseOver: function(e){
-//		var viewId = this.getViewId(e.getTarget('[data-view]'));
-//		if(!Ext.isEmpty(viewId)){}
+		var viewId = this.getViewId(e.getTarget('[data-view]'));
+		if(!Ext.isEmpty(viewId)){
+			this.ownerCt.down('[viewId="'+viewId+'"]').show();
+		}
 	},
 
 

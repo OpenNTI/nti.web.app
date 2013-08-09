@@ -26,7 +26,8 @@ Ext.define('NextThought.controller.Store', {
 	],
 
 	refs: [
-		{ ref: 'navigationMenu', selector: 'navigation-menu'},
+		{ ref: 'navigationMenu', selector: 'navigation-menu'},//drop after we switch to new library
+		{ ref: 'libraryView', selector: 'library-view-container'},
 		{ ref: 'purchaseWindow', selector: 'purchase-window'}
 	],
 
@@ -95,7 +96,12 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		this.getNavigationMenu().add({
+		var view = this.getLibraryView();
+		if(!isFeature('new-library')){
+			view = this.getNavigationMenu();
+		}
+
+		view.add({
 			xtype: 'purchasable-collection',
 			store: this.getPurchasableStore(),
 			name: 'Available for Purchase'

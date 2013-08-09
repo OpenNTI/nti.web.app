@@ -18,7 +18,7 @@ Ext.define('NextThought.view.library.menus.Collection',{
 	]),
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: 'grid-item item {featured} row-{rows} col-{cols}', cn:[
+		cls: '{inGrid} item {featured} row-{rows} col-{cols}', cn:[
 			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
 			{ cls: 'meta', cn:[
 				{ cls: 'section', html: '{section}' },  //course section
@@ -42,10 +42,13 @@ Ext.define('NextThought.view.library.menus.Collection',{
 
 	collectData: function(){
 		var rows = this.rowSpan,
-			data = this.callParent(arguments);
+			data = this.callParent(arguments),
+			isNew = isFeature('new-library');
 
 		Ext.each(data.items,function(i,x){
 			var cols= 2;
+
+			i.inGrid = isNew ? 'grid-item':'stratum';
 
 			if(rows > 1 && x===0){
 				i.featured = 'featured';
