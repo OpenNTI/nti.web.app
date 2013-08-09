@@ -30,12 +30,6 @@
 			z-index: 3;
 		}
 
-		&:hover,&.active {
-			.box {
-				background: #ffffff;
-			}
-		}
-
 		//etch
 		&::before {
 			content: '';
@@ -48,8 +42,9 @@
 			box-shadow: -1px 0 0 0 #e2e2e2;
 		}
 
-		&:hover .box{
+		&.active .box{
 			$width: 10px;
+			background: #ffffff;
 
 			&::before, &::after {
 				content: '';
@@ -143,11 +138,21 @@
 	}
 
 	.library {
+		@include icon('course-nav-library',$top: 14px, $left: 20px);
+		&:hover::after{
+			@include sprite($icons,'course-nav-library_hover');
+		}
+		&.active::after{
+			@include sprite($icons,'course-nav-library_active');
+		}
 	}
 
 	.forums {
 		@include icon('course-nav-forum',$top: 14px, $left: 20px);
 
+		&:hover::after{
+			@include sprite($icons,'course-nav-forum_hover');
+		}
 		&.active::after{
 			@include sprite($icons,'course-nav-forum_active');
 		}
@@ -157,16 +162,24 @@
 	.contacts {
 		@include icon('course-nav-contacts',$top: 16px, $left: 17px);
 
-		&.active::after{
+		&:hover::after{
 			@include sprite($icons,'course-nav-contacts_hover');
+		}
+
+		&.active::after{
+			@include sprite($icons,'course-nav-contacts_active');
 		}
 	}
 
 	.search {
 		@include icon('course-nav-search',$top: 15px, $left: 22px);
 
-		&.active::after{
+		&:hover::after{
 			@include sprite($icons,'course-nav-search_hover');
+		}
+
+		&.active::after{
+			@include sprite($icons,'course-nav-search_active');
 		}
 	}
 }
