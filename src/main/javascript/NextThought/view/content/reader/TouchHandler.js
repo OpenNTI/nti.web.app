@@ -12,7 +12,7 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
 
     constructor: function(config) {
         // Only support touch on iPad devices
-        if (!Ext.is.iPad){
+        if (!Ext.is.iPad) {
             return;
         }
 
@@ -48,8 +48,8 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
         });
 
         // singles
-        reader.on('touchElementAt', function(x,y, callback) {
-            callback(iFrame.elementAt(x,y));
+        reader.on('touchElementAt', function(x, y, callback) {
+            callback(iFrame.elementAt(x, y));
         });
         reader.on('touchElementIsDraggable', this.draggableAreasAreDraggable);
         reader.on('touchElementIsSelectable', function(ele, callback) {
