@@ -1,5 +1,5 @@
-Ext.define('NextThought.view.library.menus.Collection',{
-	extend: 'NextThought.view.menus.navigation.Collection',
+Ext.define('NextThought.view.library.Collection',{
+	extend: 'NextThought.view.navigation.Collection',
 	alias: 'widget.library-collection',
 
 	mixins: {

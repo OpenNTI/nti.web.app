@@ -3,7 +3,7 @@ Ext.define('NextThought.view.Navigation',{
 	alias: 'widget.main-navigation',
 	requires: [
 		'NextThought.view.menus.Navigation',
-		'NextThought.view.library.menus.Collection',
+		'NextThought.view.library.Collection',
         'NextThought.modules.TouchSender'
 	],
 

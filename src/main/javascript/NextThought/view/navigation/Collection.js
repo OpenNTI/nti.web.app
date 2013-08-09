@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.navigation.Collection',{
+Ext.define('NextThought.view.navigation.Collection',{
 	extend: 'Ext.view.View',
 	//disabling invoking this directly. Only use this through subclasses
 	//alias: 'widget.navigation-collection',

@@ -12,8 +12,8 @@ Ext.define('NextThought.controller.Navigation', {
 		'Views',
         'UserDataPanel',
 		'menus.Navigation',
-		'menus.navigation.Collection',
-		'library.menus.Collection',
+		'navigation.Collection',
+		'library.Collection',
 		'account.history.Panel'
 	],
 

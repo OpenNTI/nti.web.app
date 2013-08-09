@@ -22,7 +22,7 @@ Ext.define('NextThought.controller.Store', {
 		'store.purchase.History',
 		'store.purchase.Confirm',
 		'store.purchase.Complete',
-		'store.menus.Collection'
+		'store.Collection'
 	],
 
 	refs: [
