@@ -102,9 +102,10 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		view.add({
+			cls: 'purchasables',
 			xtype: 'purchasable-collection',
 			store: this.getPurchasableStore(),
-			name: 'Available for Purchase'
+			name: getString('Available for Purchase')
 		});
 
 		//TODO Ok they want to identify the sample content
