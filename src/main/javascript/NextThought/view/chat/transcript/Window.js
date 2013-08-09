@@ -55,6 +55,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
                     text: 'Report',
                     scale: 'large',
                      disabled: true,
+					margin: '0 3 0 0 ',
                     handler: function(){
                         this.up('window').flagMessages();
                     }
