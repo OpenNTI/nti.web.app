@@ -730,10 +730,19 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadForum: function(selModel, record, silent){
 		if( Ext.isArray(record) ){ record = record[0]; }
-		this.showLevel(selModel, 'topic', record, {stateKey: 'forum'});
-		if(silent !== true){
-			this.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
+		var me = this;
+
+		function finish(){
+			me.showLevel(selModel, 'topic', record, {stateKey: 'forum'});
+			if(silent !== true){
+				me.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
+			}
 		}
+
+		UserRepository.getUser(record.get('Creator'), function(c){
+			record.set('Creator', c);
+			finish();
+		});
 	},
 
 
