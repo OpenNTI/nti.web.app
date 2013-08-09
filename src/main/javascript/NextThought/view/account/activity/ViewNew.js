@@ -51,7 +51,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		{me: true, text: 'Highlights & Notes', filter: 'notes', type: 'menotes'},
 		{contacts: true, community: true, text: 'Notes', filter: 'notes', type: 'communitynotes' },
 		{me: true, text: 'Bookmarks', filter: 'bookmarks', type: 'bookmarks'},
-		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact', type: 'contactrequests'}
+		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact', type: 'contactrequests', hideIfCoppa: true }
 	],
 
 	layout: {
@@ -108,6 +108,9 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 		});
 
 		Ext.Array.each(this.typesFilterArray, function(item){
+			if(!$AppConfig.service.canFriend() && item.hideIfCoppa){
+				return;
+			}
 			if(item.me){
 				history.addFilterItem(item.text, item.filter, item.type);
 			}
