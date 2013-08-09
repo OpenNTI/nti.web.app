@@ -76,9 +76,15 @@ Ext.define('NextThought.view.Main', {
 
 
 	detectZoom: function(){
-		var z = DetectZoom.zoom(),
+		var z = 1,
 			currentBar;
-		console.log("Zoom:",z);
+		try{
+			z = DetectZoom.zoom();
+			console.log("Zoom:",z);
+		}
+		catch(e){
+			console.error('Detect Zoom failed to load');
+		}
 
 		//IEs returns jacked up coordinates when zoom is applied.  Scold if they are in
 		//IE and a zoom level other than 1
@@ -91,6 +97,7 @@ Ext.define('NextThought.view.Main', {
 				});
 			}
 			else{
+				//todo: Find another way to do this: (probably move it into the bar itself)
 				currentBar = Ext.ComponentQuery.query('message-bar');
 				if(!Ext.isEmpty(currentBar)){
 					currentBar[0].destroy();
