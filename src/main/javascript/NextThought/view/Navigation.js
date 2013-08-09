@@ -34,8 +34,8 @@ Ext.define('NextThought.view.Navigation',{
 		{ cls: 'branding' },
 		{
 			'data-view': 'content',
-			'data-qtip':'Library',
-			cls: 'library x-menu',
+			'data-qtip':'Content',
+			cls: 'content x-menu',
 			cn:[
 				{ cls: 'image' },
 				{
@@ -47,15 +47,16 @@ Ext.define('NextThought.view.Navigation',{
 				}
 			]
 		},
+		{ cls: 'library', 'data-qtip':'Library', 'data-view':'library', cn:[{}]},
 		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums' },
 		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts' },
 		{ cls: 'search x-menu', 'data-qtip':'Search','data-view': 'search' }
 	]),
 
 	renderSelectors:{
-		imgEl: '.library .image',
-		providerEl: '.library .wrap .provider',
-		titleEl: '.library .wrap .title'
+		imgEl: '.content .image',
+		providerEl: '.content .wrap .provider',
+		titleEl: '.content .wrap .title'
 	},
 
 	searchMenu: {
@@ -93,6 +94,10 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!$AppConfig.service.canShare()){
 			this.el.down('.contacts').remove();
+		}
+
+		if(!isFeature('new-library')){
+			this.el.down('.library').remove();
 		}
 
         if(Ext.is.iPad){
@@ -237,8 +242,16 @@ Ext.define('NextThought.view.Navigation',{
 		this.titleEl.update(rec.get('title'));
 	},
 
-	setActive: function(el){
 
+	setActive: function(view){
+		var id = view && view.id;
+		if(!this.el){
+			console.trace();console.log('too soon');
+			return;
+		}
+
+		this.el.select('[data-view]').removeCls('active');
+		this.el.select('[data-view="'+id+'"]').addCls('active');
 	},
 
 
@@ -256,9 +269,7 @@ Ext.define('NextThought.view.Navigation',{
 				return;
 			}
 
-			if(this.fireEvent('view-selected', viewId)){
-				this.setActive(t);
-			}
+			this.fireEvent('view-selected', viewId);
 		}
 	},
 
@@ -279,6 +290,7 @@ Ext.define('NextThought.view.Navigation',{
             }
         }
     },
+
 
 	stopShowHide: function(){
 		clearTimeout(this.showTimeout);

@@ -18,7 +18,8 @@ Ext.define('NextThought.controller.Navigation', {
 	],
 
 	refs: [
-		{ref: 'viewport', selector: 'master-view'}
+		{ref: 'viewport', selector: 'master-view'},
+		{ref: 'navigationBar', selector: 'main-navigation'}
 	],
 
 
@@ -38,6 +39,9 @@ Ext.define('NextThought.controller.Navigation', {
 					'navigation-failed': 'readerNavigationFailed',
 					'view-selected': 'setView',
 					'navigate-to-course-discussion': 'goToCourseForum'
+				},
+				'view-container':{
+					'activate':'trackActiveNavTab'
 				}
 			},
 			controller:{
@@ -48,6 +52,11 @@ Ext.define('NextThought.controller.Navigation', {
 				}
 			}
 		});
+	},
+
+
+	trackActiveNavTab: function(to){
+		this.getNavigationBar().setActive(to);
 	},
 
 

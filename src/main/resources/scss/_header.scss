@@ -1,9 +1,3 @@
-@mixin view-button-def {
-	background: none;
-	width: 69px !important;
-	height: 78px;
-}
-
 .browser-warning {
     .x-panel-body{
         height: auto;
@@ -21,9 +15,27 @@
 	height: 57px;
 
 	& > div:not(.branding) {
+		width: 70px;
 		height: 57px;
 		cursor: pointer;
 		float: left;
+		position: relative;
+
+		&:hover,&.active {
+			background: #ffffff;
+		}
+
+		//etch
+		&::before {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 0; bottom: 0;
+			width: 1px;
+
+			background: #f6f6f6;
+			box-shadow: -1px 0 0 0 #e2e2e2;
+		}
 	}
 
 	&::after {
@@ -49,25 +61,13 @@
 		width: 100px;
 	}
 
-	.library {
+	& > div.content {//make rule more specific than the above.
+		width: initial;
 		max-width: 400px;
-		position: relative;
-		margin-right: 15px;
+		margin-right: 0;
 		padding-right: 40px;
 
 		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
-
-		//etch
-		&::before {
-			content: '';
-			position: absolute;
-			right: 0;
-			top: 7px;
-			width: 1px;
-			height: 43px;
-			background: #f6f6f6;
-			box-shadow: -1px 0 0 0 #e2e2e2;
-		}
 
 		.image {
 			position: absolute;
@@ -104,31 +104,30 @@
 		}
 	}
 
+	.library {
+	}
 
 	.forums {
-		@include icon('course-nav-forum',$top: 14px, $left: 15px);
-		width: 60px;
+		@include icon('course-nav-forum',$top: 14px, $left: 20px);
 
-		&:hover::after{
+		&.active::after{
 			@include sprite($icons,'course-nav-forum_active');
 		}
 	}
 
 
 	.contacts {
-		@include icon('course-nav-contacts',$top: 16px, $left: 12px);
-		width: 60px;
+		@include icon('course-nav-contacts',$top: 16px, $left: 17px);
 
-		&:hover::after{
+		&.active::after{
 			@include sprite($icons,'course-nav-contacts_hover');
 		}
 	}
 
 	.search {
-		@include icon('course-nav-search',$top: 15px, $left: 17px);
-		width: 60px;
+		@include icon('course-nav-search',$top: 15px, $left: 22px);
 
-		&:hover::after{
+		&.active::after{
 			@include sprite($icons,'course-nav-search_hover');
 		}
 	}
