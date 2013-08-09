@@ -14,12 +14,49 @@
 	padding-left: 100px;
 	height: 57px;
 
-	& > div:not(.branding) {
+	@include icon('top-nav-logo', $sprite:$elements, $position:absolute);
+
+	&::after{
+	//	width: 100px;
+		z-index: 0;
+	}
+
+	&::before {
+		content: '';
+		display: block;
+		position: absolute;
+
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		z-index: 1;
+		height: 10px;
+		overflow: hidden;
+
+		//border-radius: 10% / 10px;
+		background: #ccc;
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+		clip: rect(10px, auto, 20px, auto);
+	}
+
+	& > div {
 		width: 70px;
 		height: 57px;
 		cursor: pointer;
 		float: left;
 		position: relative;
+		//the wrapper div of the content menu and the branding badge
+		&:first-child {
+			position: relative;
+			width: auto;
+			&:hover {
+				.branding {
+					left: -5px;
+					z-index: 1;
+				}
+			}
+		}
 
 		.box {
 			position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -68,34 +105,25 @@
 		}
 	}
 
-	&::after {
-		content: '';
-		display: block;
-		position: absolute;
-
-		bottom: -1px;
-		left: 0;
-		right: 0;
-		height: 10px;
-		overflow: hidden;
-
-		box-shadow: 0 3px 3px -3px rgba(0,0,0,0.2);
-	}
 
 	.branding {
-		@include icon('top-nav-logo',$sprite:$elements);
+		display: none;//require site.css to override (Selector: ".main-navigation .branding", targets the sqare)
 		position: absolute;
 		top: 0;
 		bottom: 0;
 		left: 0;
-		width: 100px;
+		width: 60px;
+		//background: red;
+		z-index: 10;
 	}
 
-	& > div.content {//make rule more specific than the above.
+	.content {
+
 		width: initial;
 		max-width: 400px;
 		margin-right: 0;
 		padding-right: 40px;
+		z-index: 2;
 
 		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
 

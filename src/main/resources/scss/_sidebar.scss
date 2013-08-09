@@ -14,8 +14,6 @@
 	}
 
 	overflow: visible;
-	box-shadow: inset 0 1px 0 1px white;
-	//border: 1px solid #cacaca;
 	border-bottom-width: 0;
 
 	.x-tab-button {
@@ -46,6 +44,7 @@
 .sidebar-tab-bar-sidebar {
 	.x-panel-sidebar.down & {
 		background: #f3f3f3;
+		box-shadow: inset 0 -1px 0 0 #f7f7f7;
 	}
 	background: #ebebec;
 	padding: 0 0 0 10px;
@@ -53,7 +52,7 @@
 	border-left-width: 0;
 	border-right-width: 0;
 	border-bottom-width: 1px !important;
-	box-shadow: inset 0 -1px 0 0 #f7f7f7;
+
 
 	&::after {
 	    content: '';
@@ -72,7 +71,7 @@
 	div.x-tab {
 		margin: 0 9px 0 0;
 		width: 40px;
-		height: 55px;
+		height: 56px;
 
 		.x-tab-wrap {
 			padding: 0;

@@ -2,10 +2,17 @@ Ext.define('NextThought.view.library.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.library-view-container',
 
+	requires:[
+		'NextThought.view.library.Branding'
+	],
+
 	cls: 'library-view',
 	layout: 'auto',
 
 	items:[{
+		cls: 'branding',
+		xtype: 'library-branding-box'
+	},{
 		ui: 'library-collection',
 		cls: 'courses',
 		courseList:true,
@@ -28,12 +35,8 @@ Ext.define('NextThought.view.library.View', {
 	},
 
 
-	showCourses: function(){
-		this.down('[courseList]').show();
-	},
+	showCourses: function(){ this.down('[courseList]').show(); },
 
 
-	restore: function(state){
-		this.fireEvent('finished-restore');
-	}
+	restore: function(state){ this.fireEvent('finished-restore'); }
 });

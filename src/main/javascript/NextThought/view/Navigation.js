@@ -31,23 +31,25 @@ Ext.define('NextThought.view.Navigation',{
 	recordHistory: [],
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'branding' },
-		{
-			'data-view': 'content',
-			'data-qtip':'Content',
-			cls: 'content x-menu',
-			cn:[
-				{cls:'box'},
-				{ cls: 'image' },
-				{
-					cls: 'wrap',
-					cn:[
-						{ cls: 'provider'},
-						{ cls: 'title'}
-					]
-				}
-			]
-		},
+		{cn:[
+			{ cls: 'branding' },
+			{
+				'data-view': 'content',
+				'data-qtip':'Content',
+				cls: 'content x-menu',
+				cn:[
+					{cls:'box'},
+					{ cls: 'image' },
+					{
+						cls: 'wrap',
+						cn:[
+							{ cls: 'provider'},
+							{ cls: 'title'}
+						]
+					}
+				]
+			}
+		]},
 		{ cls: 'library', 'data-qtip':'Library', 'data-view':'library', cn:[{cls:'box'}]},
 		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums', cn:[{cls:'box'}] },
 		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts', cn:[{cls:'box'}] },
