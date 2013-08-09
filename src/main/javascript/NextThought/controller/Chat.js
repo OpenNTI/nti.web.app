@@ -188,7 +188,7 @@ Ext.define('NextThought.controller.Chat', {
 		console.log("Chat onSessionReady");//card 1768
 		var me = this,
 			roomInfos = me.getAllRoomInfosFromSession(),
-			w;
+			w, presenceState, active;
 		Ext.each(roomInfos, function (ri) {
 			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
@@ -220,9 +220,15 @@ Ext.define('NextThought.controller.Chat', {
 
 		});
 
-		//Change presence to available
-		console.log("Make user avialable");
-		this.changePresence("available");
+		//restore the presence or change presence to available
+		presenceState = TemporaryStorage.get('presence-state');
+		active = presenceState && presenceState.active && presenceState[presenceState.active];
+
+		if(active){
+			this.changePresence(active.type, active.show, active.status);
+		}else{
+			this.changePresence("available");
+		}
 
 		Socket.on('socket-new-sessionid', function(){
 			console.log("New Socket Id, rebroadcasting presence");

@@ -4,11 +4,13 @@ Ext.define('NextThought.view.menus.Presence',{
 	alias: 'widget.presence-menu',
 
 	requires: [
-		'NextThought.view.menus.PresenceEditor'
+		'NextThought.view.menus.PresenceEditor',
+		'NextThought.cache.AbstractStorage'
 	],
 
 	cls: 'presence-menu',
 	ui: 'presence-menu',
+	sessionKey: 'presence-state',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', html: 'MY STATUS'},
@@ -28,6 +30,18 @@ Ext.define('NextThought.view.menus.Presence',{
 		'awayEl': '.list .away',
 		'dndEl': '.list .dnd',
 		'offlineEl': '.list .offline'
+	},
+
+	defaultStates: {
+		'available': 'Available',
+		'away': 'Away',
+		'dnd': 'Do not disturb',
+		'offline': 'Offline'
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.restoreState();
 	},
 
 	beforeRender: function(){
@@ -69,6 +83,56 @@ Ext.define('NextThought.view.menus.Presence',{
 
 	deferHideParentMenus: function() {
 		Ext.menu.Manager.hideAll();
+	},
+
+	saveState: function(type, show, status, active){
+		var key, current = TemporaryStorage.get(this.sessionKey) || {};
+
+		key = type;
+
+		if(type === 'available'){
+			if(show !== 'chat'){
+				key = 'away';
+			}
+		}
+
+		if(!current[key]){
+			current[key] = {};
+		}
+
+		current[key]['type'] = type;
+
+		if(show !== null){
+			current[key]['show'] = show;
+		}
+
+		if(status !== null){
+			current[key]['status'] = status;
+		}
+
+		if(active){
+			current.active = key;
+		}
+
+		TemporaryStorage.set(this.sessionKey, current);
+	},
+
+	restoreState: function(){
+		var me = this,
+			state = TemporaryStorage.get(this.sessionKey) || {};
+
+		function update(){
+			Ext.Object.each(me.defaultStates, function(key, value){
+				var status = (state[key] && state[key].status) || me.defaultStates[key];
+				me.el.down('.'+key).down('.label').update(status);
+			});
+		}
+
+		if(me.rendered){
+			update();
+		}else{
+			me.on('afterrender', update, me);
+		}
 	},
 
 
@@ -172,6 +236,7 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		if(this.isNewPresence(presence)){
 			this.fireEvent('set-chat-presence', presence);
+			this.saveState(type, show, status, true);
 		}
 
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
@@ -212,6 +277,7 @@ Ext.define('NextThought.view.menus.Presence',{
 			//somethings different update the presence
 			console.log(newPresence);
 			this.fireEvent('set-chat-presence', newPresence);
+			this.saveState(type,show,status,true);
 		}else{
 			this.setPresence($AppConfig.username, newPresence);
 			console.log("No presence change");
