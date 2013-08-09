@@ -221,5 +221,9 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		}
 
 		this.setRecordTitle();
+	},
+
+	showReplies: function(){
+		this.navigateToItem();
 	}
 });
