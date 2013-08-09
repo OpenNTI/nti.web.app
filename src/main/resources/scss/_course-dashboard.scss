@@ -391,6 +391,7 @@
 			text-decoration: none;
 		}
 
+
 		.thumbnail {
 			position: absolute;
 			width: 60px;
@@ -402,6 +403,11 @@
 				position: center center;
 				repeat: no-repeat;
 			}
+		}
+
+		a .thumbnail { @include icon('extern-link',$top:0,$left:auto,$right:0,$position:absolute); }
+		&:hover a .thumbnail::after {
+			@include sprite($icons,'extern-link_hover');
 		}
 
 		.meta {
