@@ -18,7 +18,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		config.data = {
 			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('creator'),
-			description: n.getAttribute('desc'),
+			description: Ext.String.ellipsis(n.getAttribute('desc'),180,true),
 			thumbnail: getURL(i.root+n.getAttribute('icon')),
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
