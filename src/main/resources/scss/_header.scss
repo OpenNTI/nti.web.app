@@ -21,8 +21,19 @@
 		float: left;
 		position: relative;
 
+		.box {
+			position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+			z-index: 1;
+		}
+
+		&::after{
+			z-index: 3;
+		}
+
 		&:hover,&.active {
-			background: #ffffff;
+			.box {
+				background: #ffffff;
+			}
 		}
 
 		//etch
@@ -30,11 +41,35 @@
 			content: '';
 			position: absolute;
 			right: 0;
-			top: 0; bottom: 0;
+			top: 10px; bottom: 10px;
 			width: 1px;
 
 			background: #f6f6f6;
 			box-shadow: -1px 0 0 0 #e2e2e2;
+		}
+
+		&:hover .box{
+			$width: 10px;
+
+			&::before, &::after {
+				content: '';
+				position: absolute;
+				top: 0; bottom: 0;
+				width: $width;
+				z-index: 1;
+
+				border-radius: 3px / 50%;
+				box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.8);
+			}
+
+			&::before{
+				clip: rect(0px, ($width*2), auto, $width);
+				right: 0;
+			}
+			&::after{
+				clip: rect(0px, 0px, auto, -$width);
+				left: 0;
+			}
 		}
 	}
 
@@ -73,6 +108,7 @@
 			position: absolute;
 			top: 0; bottom: 0; left: 0;
 			width: 60px;
+			z-index: 2;
 			background-size: cover;
 			background-position: center;
 
@@ -83,6 +119,8 @@
 		}
 
 		.wrap {
+			z-index: 2;
+			position: relative;
 			margin-left: 70px;
 			padding-top: 10px;
 

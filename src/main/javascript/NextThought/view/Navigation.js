@@ -37,6 +37,7 @@ Ext.define('NextThought.view.Navigation',{
 			'data-qtip':'Content',
 			cls: 'content x-menu',
 			cn:[
+				{cls:'box'},
 				{ cls: 'image' },
 				{
 					cls: 'wrap',
@@ -47,10 +48,10 @@ Ext.define('NextThought.view.Navigation',{
 				}
 			]
 		},
-		{ cls: 'library', 'data-qtip':'Library', 'data-view':'library', cn:[{}]},
-		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums' },
-		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts' },
-		{ cls: 'search x-menu', 'data-qtip':'Search','data-view': 'search' }
+		{ cls: 'library', 'data-qtip':'Library', 'data-view':'library', cn:[{cls:'box'}]},
+		{ cls: 'forums', 'data-qtip':'Forums', 'data-view': 'forums', cn:[{cls:'box'}] },
+		{ cls: 'contacts', 'data-qtip':'Contacts','data-view': 'contacts', cn:[{cls:'box'}] },
+		{ cls: 'search x-menu', 'data-qtip':'Search','data-view': 'search', cn:[{cls:'box'}] }
 	]),
 
 	renderSelectors:{
