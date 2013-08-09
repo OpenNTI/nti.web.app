@@ -172,7 +172,6 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 	removeMask: function(width, height){
-		debugger;
 		if(this.el){ this.el.unmask(); }
 	},
 
