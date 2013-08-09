@@ -18,13 +18,16 @@ Ext.define('NextThought.view.library.menus.Collection',{
 	]),
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: 'grid-item item {featured} row-{rows} col-{cols}', 'data-qtip': '{title}', cn:[
-			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'cover', style: {backgroundImage: 'url({icon})'}},
-			{ cls: 'wrap', cn:[
+		cls: 'grid-item item {featured} row-{rows} col-{cols}', cn:[
+			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
+			{ cls: 'meta', cn:[
 				{ cls: 'section', html: '{section}' },  //course section
-				{ cls: 'title', html: '{title}' },      //generic
-				{ cls: 'author', html: '{author}' },    //generic
-				{ cls:'description', html:'{description}' }, //generic
+				{ cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
+					'data-qtip': '{[values.title.length>50?values.title:""]}' },
+				{ cls: 'author', html: '{author}',
+					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
+					'data-qtip':'{[values.author.length>20?values.author:""]}' },
+				{ cls:'description', html:'{description}' },
 				{ tag:'tpl', 'if':'sample', cn:{ cls:'sample', html:'Sample' }} //store - sample flag
 			]}
 		]

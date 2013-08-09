@@ -20,8 +20,8 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 
 	menuItemTpl: Ext.DomHelper.markup({
 		cls: 'item', 'data-qtip': '{title}', cn:[
-			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'cover', style: {backgroundImage: 'url({icon})'}},
-			{ cls: 'wrap', cn:[
+			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
+			{ cls: 'meta', cn:[
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'author', html: '{author}' },
 				{ tag:'tpl', 'if':'sample', cn:{ cls:'sample', html:'Sample' }}
