@@ -201,17 +201,6 @@ Ext.define('NextThought.view.profiles.Panel',{
             this.buildModule('modules', 'touchHandler', {moduleName:'panelTouchHandler'});
 
             this.initialY = this.getY();
-
-            this.on('touchStart', function(){
-                var ele = Ext.get(Ext.query('.sidebar')[0]),
-                    sbID, sb;
-
-                if(ele){
-                    sbID = ele.getAttribute('id');
-                    sb = Ext.ComponentManager.get(sbID);
-                    sb.startHide();
-                }
-            });
         }
 	},
 

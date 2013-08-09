@@ -190,8 +190,10 @@ Ext.define('NextThought.view.forums.Forum',{
 			'itemupdate':'itemUpdate'
 		});
 
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('forums', 'touchHandler', {topics:true});
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('forums', 'touchHandler', {topics:true});
+        }
 	},
 
 

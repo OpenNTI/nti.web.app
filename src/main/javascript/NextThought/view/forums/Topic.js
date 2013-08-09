@@ -242,9 +242,10 @@ Ext.define('NextThought.view.forums.Topic',{
 				return false;
 			}
 		});
-
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('forums', 'touchHandler', {topics:false});
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('forums', 'touchHandler', {topics:false});
+        }
 
 	},
 

@@ -81,6 +81,13 @@ Ext.define('NextThought.modules.TouchSender', {
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
 
+           if(dom.getAttribute('id').indexOf("main-sidebar") == -1){
+                var ele = Ext.get(Ext.query('.sidebar')[0]);
+                if(ele){
+                    Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                }
+            }
+
             var touch = e.touches[0];
 
             container.fireEvent('touchStart', touch.pageX, touch.pageY);

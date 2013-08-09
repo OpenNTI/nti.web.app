@@ -46,9 +46,12 @@ Ext.define( 'NextThought.view.contacts.View', {
 			me.tabs.setHeight(me.getHeight());
 		});
 
-        me.buildModule('modules', 'touchSender');
-        me.buildModule('contacts', 'touchHandler');
+        if(Ext.is.iPad){
+            me.buildModule('modules', 'touchSender');
+            me.buildModule('contacts', 'touchHandler');
+        }
 	},
+
 
 	monitorTabs: function(panel,newTab,oldTab){
 		if(this.restoring){return;}
