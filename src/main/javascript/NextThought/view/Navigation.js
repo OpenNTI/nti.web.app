@@ -99,17 +99,9 @@ Ext.define('NextThought.view.Navigation',{
 					courseList:true,
 					xtype:'library-collection', name: 'Courses',
 					store: 'courses',
-					hidden: true,
-					listeners:{
-						scope: this,
-						select:'updateCurrent'
-					   }
-					},{
-					xtype:'library-collection', name: 'All Books',
-					listeners:{
-						scope: this,
-						select:'updateCurrent'
-				   }
+					hidden: true
+				},{
+					xtype:'library-collection', name: 'All Books'
 				}]
 			});
 			Library.on('show-courses',function(){
