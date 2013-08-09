@@ -36,6 +36,10 @@
 		font-size: 101%;
 }
 
+#NTIContent .itemize, .enumerate{
+	z-index: 4;
+}
+
 body.x-body {margin:0;}
 #NTIContent {
 	padding-bottom: 10em;
