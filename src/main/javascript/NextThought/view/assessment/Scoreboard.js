@@ -81,6 +81,15 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 		//Ask header to add menu items for each:
 		this.down('assessment-scoreboard-header').setPriorResults(sortedSets);
+
+		/*
+		* Wrapping it in an if, so we can keep it from automatically setting it graded
+		* from a config if we want to.  
+		*/
+		//if(){
+			this.show();
+			this.questionSet.fireEvent('graded', assessedQuestionSet[0], {orgin: this});
+		//}
 	},
 
 	afterRender: function(){
