@@ -90,8 +90,8 @@ Ext.define('NextThought.view.account.activity.Preview', {
 				{
 					cls: 'foot',
 					cn: [
-						{ cls: 'comments', 'data-label': ' Comments',
-							html: '{CommentCount} Comment{[values.CommentCount===1?"":"s"]}' }
+						{ cls: 'comments', 'data-label': ' Comment',
+							html: '{CommentCount:plural("Comment")}' }
 					]
 				}
 			]

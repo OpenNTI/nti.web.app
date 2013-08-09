@@ -11,7 +11,8 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 
 			//Set comments count
 			if (me.commentsEl) {
-				me.commentsEl.update(count + me.commentsEl.getAttribute('data-label'));
+				me.commentsEl.update(Ext.util.Format.plural(count,
+						me.commentsEl.getAttribute('data-label')));
 				if (count === 0 || count === 1) {
 					delete me.commentsEl;
 				}
