@@ -301,6 +301,10 @@
 
 		.hidden {display: none;}
 
+		textarea.input-box.error{
+			box-shadow: -4px 0 0 0 $primary-red;
+		}
+
 		.input-box, .combo-box {
 			margin: 5px 0;
 			&, input, .x-form-item { font-size: 14px;}
@@ -310,7 +314,7 @@
 			}
 
 			&.error {
-				textarea, input, input:focus {
+				input, input:focus {
 					box-shadow: -4px 0 0 0 $primary-red;
 				}
 			}
@@ -319,45 +323,6 @@
 			padding-right: 30px;
 			background: #ffffff;
 
-			textarea,
-			input {
-
-				&::-ms-clear{
-					display: none;
-				}
-
-				&:focus {
-					outline: none;
-					box-shadow: -4px 0 0 0 $primary-blue;
-				}
-
-				&.empty,
-				&.x-form-empty-field {
-					font-style: italic !important;
-				}
-
-				//vertical-align: bottom;
-				color: $secondary-grey;
-				font-size: 14px;
-				font-weight: 500;
-				line-height: 25px;
-
-				border: 0;
-
-				background: #ffffff;
-				padding: 6px 10px;
-				margin: 0;
-				min-height: 39px;
-				@include experimental-value(width, calc(100% - 8px));
-				.x-opera &,
-				.x-safari5 & {
-					width: 291px;
-					&[placeholder$="Name"] { width: 145px; }
-				}
-				position: relative;
-				left: 4px;
-				box-shadow: -4px 0 0 0 $border-grey;
-			}
 			.clear {
 				top: 10px;
 				right: 15px;
@@ -379,12 +344,45 @@
 				padding: 7px 14px;
 
 			}
-
-			&.textarea .x-form-item-body{
-				overflow: hidden;
-			}
 		}
 
+		textarea.input-box, .input-box input, textarea.combo-box, .combo-box input{
+			&::-ms-clear{
+				display: none;
+			}
+
+			&:focus {
+				outline: none;
+				box-shadow: -4px 0 0 0 $primary-blue;
+			}
+
+			&.empty,
+			&.x-form-empty-field {
+				font-style: italic !important;
+			}
+
+			//vertical-align: bottom;
+			color: $secondary-grey;
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 25px;
+
+			border: 0;
+
+			background: #ffffff;
+			padding: 6px 10px;
+			margin: 0;
+			min-height: 39px;
+			@include experimental-value(width, calc(100% - 8px));
+			.x-opera &,
+			.x-safari5 & {
+				width: 291px;
+				&[placeholder$="Name"] { width: 145px; }
+			}
+			position: relative;
+			left: 4px;
+			box-shadow: -4px 0 0 0 $border-grey;
+		}
 
 		.combo-box {
 			input {
@@ -457,12 +455,25 @@
 		textarea,
 
 		.input-box {
-			textarea, input {
+			input {
 				outline: none;
 				box-shadow: -4px 0 0 0 $border-grey;
 				&:focus{
 					box-shadow: -4px 0 0 0 $border-grey;
 				}
+			}
+		}
+
+		textarea.input-box{
+			resize: none;
+			width: 402px;
+			height: 134px;
+			outline: none;
+			box-shadow: -4px 0 0 0 $border-grey;
+			border: solid 1px $border-grey;
+			border-left: 0px;
+			&:focus{
+				box-shadow: -4px 0 0 0 $border-grey;
 			}
 		}
 	}

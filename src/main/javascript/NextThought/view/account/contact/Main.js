@@ -10,7 +10,7 @@ Ext.define('NextThought.view.account.contact.Main',{
     items: [
         {xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
             {xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder:'Email'},
-            {xtype: 'textarea', name: 'message', cls: 'input-box textarea', emptyText: 'Your message...'}
+            {xtype: 'box', autoEl: {tag: 'textarea', name: 'message', placeholder: 'Your message...'}, name: 'message', cls: 'input-box textarea', emptyText: 'Your message...'}
         ]},
         {xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
             cn:[
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.contact.Main',{
 
     getValues: function(){
         var email = this.down('[name=email]').getValue(),
-            message = this.down('[name=message]').getValue();
+            message = this.down('[name=message]').getEl().getValue();
 
         return {
             //email: email,

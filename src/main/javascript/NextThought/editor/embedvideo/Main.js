@@ -9,7 +9,7 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
-			{xtype: 'textarea', name: 'embed', cls: 'input-box textarea', emptyText: 'Video URL...'}
+			{xtype: 'box', autoEl: {tag: 'textarea', name: 'embed', placeholder: 'Video URL...'}, name: 'embed', cls: 'input-box textarea', emptyText: 'Video URL...'}
 		]},
 		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
 			cn:[
@@ -32,13 +32,13 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 		this.callParent(arguments);
 		var url = this.up('window').getUrl();
 		if( url ){
-			this.down('textarea[name=embed]').setValue(url);
+			this.down('[name=embed]').getEl().dom.value = url;
 		}
 	},
 
 
 	getValues: function(){
-		var raw = this.down('[name=embed]').getValue(), id,
+		var raw = this.down('[name=embed]').getEl().getValue(), id,
 			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
 			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
 			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i, match;
