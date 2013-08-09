@@ -102,7 +102,6 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		view.add({
-			cls: 'purchasables',
 			ui: isFeature('new-library')?'library-collection':'navigation-collection',
 			xtype: 'purchasable-collection',
 			store: this.getPurchasableStore(),

@@ -60,6 +60,41 @@
 					text-transform: uppercase;
 					font: normal 700 18px/20px "Open Sans Condensed", $font;
 				}
+
+				.description,.author {
+					display: none;
+				}
+			}
+
+			&.featured {
+				.meta{
+					.description {
+						display: block;
+					}
+				}
+			}
+
+			&:not(.row-1){
+				.meta {
+					min-height: 95px;
+					background: #fff;
+					color: $secondary-grey;
+					.section {
+						color: $tertiary-grey;
+					}
+					.author{display:block;}
+				}
+
+				&.featured {
+					.cover {
+						right: auto;
+						width: 200px;
+					}
+					.meta{
+						top: 0;
+						left: 200px;
+					}
+				}
 			}
 		}
 
@@ -74,13 +109,18 @@
 					.meta {
 						top: 0;
 						left: 60px;
-
+						.author { display: block; }
 						.title{
 							font-size: 14px;
 						}
 					}
 				}
 			}
+		}
+
+
+		&.purchasables {
+
 		}
 	}
 }

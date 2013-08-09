@@ -4,7 +4,8 @@ Ext.define('NextThought.view.store.Collection',{
 
 	overItemCls: 'over',
 
-	rowSpan: 1,
+	cls: 'purchasables',
+	rowSpan: 3,
 
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'stratum collection-name', cn: [
