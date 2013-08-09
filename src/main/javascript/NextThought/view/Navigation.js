@@ -60,29 +60,6 @@ Ext.define('NextThought.view.Navigation',{
 		titleEl: '.content .wrap .title'
 	},
 
-	searchMenu: {
-		xtype: 'navigation-menu',
-		layout: {type: 'vbox', align: 'stretch'},
-		overflowX: 'hidden',
-		overflowY: 'hidden',
-		cls: 'search-menu',
-		items:[
-			{ xtype: 'searchfield' },
-			{ 
-				xtype: 'container',
-				overflowX: 'hidden',
-				overflowY: 'scroll',
-				id: 'search-results',
-				hideMode: 'display',
-				flex: 1 
-			}
-		],
-		listeners:{
-			show: function(m){
-				m.down('searchfield').focus(true, true);
-			}
-		}
-	},
 
     touchLibraryOpen: false,
 
@@ -111,53 +88,85 @@ Ext.define('NextThought.view.Navigation',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.libraryMenu = Ext.widget({
-			xtype: 'navigation-menu',
-			renderTo: Ext.getBody(),
-			items:[{
-				courseList:true,
-				xtype:'library-collection', name: 'Courses',
-				store: 'courses',
-				hidden: true,
-				listeners:{
-					scope: this,
-					select:'updateCurrent'
+		this.items = [];
+
+		if(!isFeature('new-library')){
+			this.libraryMenu = Ext.widget({
+				xtype: 'navigation-menu',
+				renderTo: Ext.getBody(),
+				items:[{
+					courseList:true,
+					xtype:'library-collection', name: 'Courses',
+					store: 'courses',
+					hidden: true,
+					listeners:{
+						scope: this,
+						select:'updateCurrent'
+					   }
+					},{
+					xtype:'library-collection', name: 'All Books',
+					listeners:{
+						scope: this,
+						select:'updateCurrent'
 				   }
-				},{
-				xtype:'library-collection', name: 'All Books',
+				}],
 				listeners:{
-					scope: this, 
-					select:'updateCurrent'
-			   }
-			}],
-			listeners:{
-				scope: null, //execute from the context of the widget
-				hide: this.stopShowHide,
-				show: this.stopShowHide
-			}
-		});
+					scope: null, //execute from the context of the widget
+					hide: this.stopShowHide,
+					show: this.stopShowHide
+				}
+			});
+			Library.on('show-courses',function(){
+					this.libraryMenu.child('[courseList]').show(); },this);
 
-		this.searchMenu = Ext.widget(this.searchMenu);
+			this.mon(this.libraryMenu,{
+				scope: this.libraryMenu,
+				mouseleave: this.startHide,
+				mouseenter: this.startShow
+			});
+			this.items.push(this.libraryMenu);
+		}
 
-		Library.on('show-courses','showCoursesCollection',this);
-
-		this.items = [
-			this.libraryMenu,
-			this.searchMenu
-		];
-
-		this.mon(this.libraryMenu,{
-			scope: this.libraryMenu,
-			mouseleave: this.startHide,
-			mouseenter: this.startShow
-		});
-
-		this.mon(this.searchMenu,{
-			scope: this.searchMenu,
-			mouseleave: this.startHide,
-			mouseenter: this.startShow
-		});
+		this.searchMenu = Ext.widget({
+				xtype: 'navigation-menu',
+				layout: {type: 'vbox', align: 'stretch'},
+				overflowX: 'hidden',
+				overflowY: 'hidden',
+				cls: 'search-menu',
+				items:[
+					{ xtype: 'searchfield' },
+					{
+						xtype: 'container',
+						autoScroll: true,
+						id: 'search-results',
+						hideMode: 'display',
+						flex: 1
+					}
+				],
+				listeners:{
+					show: function(m){
+						m.down('searchfield').focus(true, true);
+					}
+				}
+			});
+		this.items.push(this.searchMenu);
 	},
+
+
+	getViewId: function(el){
+        var e = Ext.get(el),
+		    attr = 'data-view',
+		    q = '['+attr+']',
+            viewId = e && e.getAttribute(attr);
+
+        if(Ext.isEmpty(viewId)){
+            e = e && (e.down(q) || e.up(q));
+            viewId = e && e.getAttribute(attr);
+        }
+
+        return viewId;
+    },
+
 
     setupTouch: function(){
 
@@ -165,14 +174,14 @@ Ext.define('NextThought.view.Navigation',{
 
         var container = this;
 
-        container.on('touchTap', function(ele) {
+        container.on('touchTap', function(el) {
             console.log('touchTapped');
-            this.onClickTouch(ele);
+            this.onClickTouch(el);
 
         });
 
         container.on('touchElementAt', function(x, y, callback){
-            var element = Ext.getDoc().dom.elementFromPoint(x, y);
+            var element = document.elementFromPoint(x, y);
             callback(element);
         });
 
@@ -190,10 +199,6 @@ Ext.define('NextThought.view.Navigation',{
         });
 
     },
-
-	showCoursesCollection: function(){
-		this.libraryMenu.child('[courseList]').show();
-	},
 
 
 	getRefItems: function(deep){
@@ -257,14 +262,9 @@ Ext.define('NextThought.view.Navigation',{
 
 
 	onClick: function(e){
-		var t = e.getTarget('[data-view]'),
-			viewId = t && t.getAttribute('data-view');
+		var viewId = this.getViewId(e.getTarget('[data-view]'));
 
-		
 		if(!Ext.isEmpty(viewId)){
-			if(viewId === 'content'){
-				this.stopShowHide.call(this.libraryMenu);
-			}
 
 			if(viewId === 'search'){
 				return;
@@ -274,122 +274,17 @@ Ext.define('NextThought.view.Navigation',{
 		}
 	},
 
-    onClickTouch: function(ele){
-        var viewId = this.getViewId(ele);
-
-        if(!Ext.isEmpty(viewId)){
-            if(viewId === 'content'){
-                this.stopShowHide.call(this.libraryMenu);
-            }
-
-            if(viewId === 'search'){
-                return;
-            }
-
-            if(this.fireEvent('view-selected', viewId)){
-                this.setActive(t);
-            }
-        }
-    },
-
-
-	stopShowHide: function(){
-		clearTimeout(this.showTimeout);
-		clearTimeout(this.hideTimeout);
-	},
-
-
-	startHide: function(){
-		clearTimeout(this.showTimeout);
-		clearTimeout(this.hideTimeout);
-		this.hideTimeout = Ext.defer(this.hide, 500, this);
-	},
-
-	startShow: function(){
-		clearTimeout(this.showTimeout);
-		clearTimeout(this.hideTimeout);
-		this.showTimeout = Ext.defer(this.show, 500, this);
-	},
-
 
 	onMouseOver: function(e){
-		var t = e.getTarget('[data-view]'),
-			viewId = t && t.getAttribute('data-view');
-
-		if(!Ext.isEmpty(viewId) || e.getTarget('')){
-			if( viewId === 'content'){
-				this.startShow.call(this.libraryMenu);
-				return;
-			}
-
-			if(viewId === 'search'){
-				this.startShow.call(this.searchMenu);
-			}
-		}
+//		var viewId = this.getViewId(e.getTarget('[data-view]'));
+//		if(!Ext.isEmpty(viewId)){}
 	},
 
-    getViewId: function(ele){
-        var e = Ext.get(ele),
-            t = e,
-            viewId = e.getAttribute('data-view');
 
-        if(Ext.isEmpty(viewId)){
-            t = e.down('[data-view]');
-        }
+	onMouseOut: function(e){},
 
-        if(!t){
-            t = e.up('[data-view]');
-        }
 
-        viewId = t && t.getAttribute('data-view');
-        return viewId;
-    },
-
-    onMouseOverTouch: function(ele){
-        var viewId = this.getViewId(ele);
-
-        if(!Ext.isEmpty(viewId)){
-            if( viewId === 'content'){
-                this.startShow.call(this.libraryMenu);
-                return;
-            }
-
-            if(viewId === 'search'){
-                console.log("search");
-                this.startShow.call(this.searchMenu);
-            }
-        }
-
-    },
-
-	onMouseOut: function(e){
-		var t = e.getTarget('[data-view]'),
-			viewId= t && t.getAttribute('data-view');
-
-		if(!Ext.isEmpty(viewId)){
-
-			if(viewId === 'content'){
-				this.startHide.call(this.libraryMenu);
-			}
-
-			if(viewId === 'search'){
-				this.startHide.call(this.searchMenu);
-			}
-		}
-	},
-
-    onMouseOutTouch: function(ele){
-        var viewId = this.getViewId(ele);
-
-        if(!Ext.isEmpty(viewId)){
-
-            if(viewId === 'content'){
-                this.startHide.call(this.libraryMenu);
-            }
-
-            if(viewId === 'search'){
-                this.startHide.call(this.searchMenu);
-            }
-        }
-    }
+    onClickTouch: function(el){ return this.onClick({getTarget:function(){return el;}}); },
+    onMouseOverTouch: function(el){ return this.onMouseOver({getTarget:function(){return el;}}); },
+    onMouseOutTouch: function(el){ return this.onMouseOut({getTarget:function(){return el;}}); }
 });

@@ -7,32 +7,24 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 
 	trackOver: true,
 	overItemCls: 'selected',
-	itemSelector: '.stratum.item',
+	itemSelector: '.item',
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'stratum collection-name', cn: [
-			/*{ cls: 'settings' },*/
 			'{name}',
-			{cls:'count',html: '&nbsp;'}
+			{cls:'count',html: '{count}'}
 		]},
 
-		{ tag: 'tpl', 'for':'items', cn:['{menuitem}']}//,
-
-//		{ cls: 'stratum drawer documents', cn:['Course Documents',{cls:'count',html: '&nbsp;'}] },
-//		{ cls: 'stratum drawer dashboard', cn:['Dashboard',{cls:'count',html: '&nbsp;'}] }
+		{ tag: 'tpl', 'for':'items', cn:['{menuitem}']}
 	]),
 
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: 'stratum item', 'data-qtip': '{title}', cn:[
-			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'bookcover', style: {
-				backgroundImage: 'url({icon})'
-			}},
+		cls: 'item', 'data-qtip': '{title}', cn:[
+			{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'cover', style: {backgroundImage: 'url({icon})'}},
 			{ cls: 'wrap', cn:[
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'author', html: '{author}' },
-				{tag:'tpl', 'if':'sample', cn:{
-					cls:'sample', html:'Sample'
-				}}
+				{ tag:'tpl', 'if':'sample', cn:{ cls:'sample', html:'Sample' }}
 			]}
 		]
 	}),
@@ -41,9 +33,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	onClassExtended: function(cls, data) {
 		data.menuItemTpl = data.menuItemTpl || cls.superclass.menuItemTpl || false;
 
-		//merge in subclass's templates
-		var tpl = this.prototype.tpl
-				.replace('{menuitem}',data.menuItemTpl||'');
+		var tpl = this.prototype.tpl;
 
 		if(!data.tpl){
 			data.tpl = tpl;
@@ -52,12 +42,22 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		else {
 			data.tpl = data.tpl.replace('{super}',tpl);
 		}
+
+		//merge in subclass's templates
+		data.tpl = data.tpl.replace('{menuitem}',data.menuItemTpl||'');
+	},
+
+
+	initComponent: function(){
+		this.enableBubble('select');
+		this.callParent(arguments);
 	},
 
 
 	collectData: function(){
 		var data = {items: this.callParent(arguments)};
 		data.name = this.name;
+		data.count = this.store.getCount();//getTotalCount?
 		return data;
 	},
 
@@ -70,8 +70,5 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 
 	handleSelect: function(selModel, record){
 		selModel.deselect(record);
-
-		Ext.menu.Manager.hideAll();
-		this.up('menu').hide();
 	}
 });

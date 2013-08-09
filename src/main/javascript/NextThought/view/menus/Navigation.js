@@ -23,6 +23,7 @@ Ext.define('NextThought.view.menus.Navigation',{
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 		//set up other handlers for closing:
 		this.on({
+			select: 'hide',
 			mouseleave: 'startHide',
 			mouseenter: 'cancelDeferHide',
 			show: 'viewportMonitor'

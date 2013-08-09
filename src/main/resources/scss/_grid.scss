@@ -1,29 +1,45 @@
-.grid {
-	position: relative;
-	margin-right: -20px;//scrollbar buffer
+//@mixin grid-def($useParent:false, $gridSpacing: 10px){
+@mixin grid-def($gridSpacing: 10px){
+	$selector: '.grid';
 
-	//1024 - 1165 width (200 - 233)
-	$gridSpacing: 10px;
+	//@if $useParent == true {
+	//	$selector: '&.editor';
+	//}
 
-	.grid-item {
-		box-shadow: 0 0 3px rgba(0,0,0,0.5);
+	#{$selector} {
 		position: relative;
-		float: left;
-		margin: 0 $gridSpacing $gridSpacing 0;
-		//to see WIP cells.
-		background: rgba(255,0,0,0.6);
+		margin-right: -20px;//scrollbar buffer
 
-		@for $i from 1 through 8 {
-			$s: (128px * $i) - $gridSpacing;
-			$h: (100px * $i);
-			//$m: (145px * $i) - $gridSpacing;
+		&::after, &::before {
+			content: '';
+			display: block;
+			clear: both;
+		}
 
-			&.col-#{$i} {
-				width: $s;
-				//max-width: $m;
-				//@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
+		.grid-item {
+			box-shadow: 0 0 3px rgba(0,0,0,0.5);
+			position: relative;
+			float: left;
+			margin: 0 $gridSpacing $gridSpacing 0;
+			//to see WIP cells.
+			background: rgba(255,0,0,0.6);
+
+			@for $i from 1 through 8 {
+				$s: (128px * $i) - $gridSpacing;
+				$h: (100px * $i);
+				$m: (145px * $i) - $gridSpacing;
+
+				&.col-#{$i} { width: $s; }
+
+				&.allow-flex.col-#{$i}{
+					max-width: $m;
+					@include experimental-value(width, calc(#{(12.5% * $i)} - #{$gridSpacing}));
+				}
+
+				&.row-#{$i} { height: $h; }
 			}
-			&.row-#{$i} { height: $h; }
 		}
 	}
 }
+
+@include grid-def();
