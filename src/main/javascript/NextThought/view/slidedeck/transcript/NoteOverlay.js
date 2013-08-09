@@ -37,9 +37,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			'show-editor-inline':'showEditorAtPosition',
 			'register-records': 'registerGutterRecords',
 			'unregister-records':'unRegisterGutterRecords',
-            'presentation-parts-ready': 'adjustAnnotationOverlayPosition',
-            'sync-height': 'adjustAnnotationOverlayPosition'
+            'presentation-parts-ready': 'adjustAnnotationOverlayPosition'
 		});
+
+        this.mon(this.reader, {
+            scope:this,
+            'sync-height': 'adjustAnnotationOverlayPosition'
+        });
 
 		this.mon(this.annotationManager, {
 			'add': 'onAnnotationAdded',
