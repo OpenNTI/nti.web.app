@@ -5,37 +5,14 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
-			var DQ = Ext.DomQuery,
-				items = this.getChildrenNodes(courseNodeRecord),
-				refs = DQ.filter(items||[],'[mimeType$=discussion]'),
-				i, id, k, m = {};
+			var board = course.getAttribute('discussionBoard');
 
-			if(Ext.isEmpty(refs)){
+			if(!board || !ParseUtils.isNTIID(board)){
 				Ext.callback(finish);
 				return;
 			}
 
-			//lets figure out how many forums we have...
-			for(i in refs){
-				if(refs.hasOwnProperty(i)){
-
-				i = refs[i];
-				id = i.getAttribute('ntiid');
-
-				//normalize the fake-parent id so we can bin. (this key is not a real id!)
-				k = ParseUtils.parseNtiid(id);
-				if(!k){continue;}
-				k.specific.typeSpecific = k.specific.typeSpecific.split('.')[0];
-				k = k.toString();
-
-				if(!m[k]){
-					m[k] = this.create({locationInfo: locationInfo, topicNtiid: id, lastModified: courseNodeRecord.get('date')});
-				}
-
-				}
-			}
-
-			Ext.callback(finish,null,[ Ext.Object.getValues(m) ]);
+			Ext.callback(finish,null,[ this.create({locationInfo: locationInfo, boardNtiid: board, lastModified: courseNodeRecord.get('date')}) ]);
 		}
 
 	},
@@ -43,7 +20,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	cls: 'course-dashboard-discussion-item-list',
 
 	config: {
-		topicNtiid: '',
+		boardNtiid: '',
 		weight:1.01
 	},
 
@@ -82,8 +59,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			}
 		});
 
-		$AppConfig.service.getObject(this.getTopicNtiid(),
-				this.onTopicResolved,
+		$AppConfig.service.getObject(this.getBoardNtiid(),
+				this.onBoardResolved,
 				this.onResolveFailure,
 				this,
 				true
@@ -96,34 +73,14 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	},
 
 
-	onForumResolved: function(forum){
-		var sId = 'dashboard-'+forum.getContentsStoreId(),
-			store = Ext.getStore(sId) || forum.buildContentsStore({storeId:sId,pageSize: 4});
-
+	onBoardResolved: function(board){
+		var sId = 'dashboard-'+board.getContentsStoreId(),
+			store = Ext.getStore(sId) || board.buildContentsStore({storeId:sId,pageSize: 4, url: board.getLink('TopTopics')});
 
 		this.view.bindStore(store);
 		if(!store.loaded){
 			store.load();
 		}
-	},
-
-
-	onTopicResolved: function(topic){
-		if(!/topic$/i.test(topic.get('Class'))){
-			if(!/forum$/i.test(topic.get('Class'))){
-				console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
-				return;
-			}
-			this.onForumResolved(topic);
-			return;
-		}
-
-		$AppConfig.service.getObject(
-				topic.get('ContainerId'),
-				this.onForumResolved,
-				this.onResolveFailure,
-				this,
-				true );
 	},
 
 
