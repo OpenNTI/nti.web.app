@@ -282,7 +282,7 @@ Ext.define('NextThought.controller.Navigation', {
 		var callback = Ext.emptyFn(),
 			reply, targets;
 
-		if(!this.fireEvent('show-view','library',true)){
+		if(!this.fireEvent('show-view','content',true)){
 			return;
 		}
 
@@ -336,7 +336,7 @@ Ext.define('NextThought.controller.Navigation', {
 			console.log('test:',arguments);
 			if(error){return;}
 
-			var cmp = Ext.ComponentQuery.query('library-view-container')[0];
+			var cmp = Ext.ComponentQuery.query('content-view-container')[0];
 			if(!course){
 				return;
 			}

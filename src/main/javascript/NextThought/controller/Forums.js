@@ -101,7 +101,7 @@ Ext.define('NextThought.controller.Forums', {
 					'save': this.saveTopicComment
 				},
 
-				'#library > course-forum nti-editor':{
+				'#content > course-forum nti-editor':{
 					'save': this.saveTopicComment
 				},
 

@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.State', {
 			var current = me.currentState,
 				diff = isDiff(current, s);
 			console.debug('update state', arguments);
-			Ext.applyIf(s, {active: current.active});
+			Ext.applyIf(s, {active: current.active, version:3});
 
 			console.debug('Will state change?', diff);
 
@@ -306,7 +306,7 @@ Ext.define('NextThought.controller.State', {
 			result = this.fragmentInterpreterMap[root](fragment, query);
 		}
 		else if (ntiid) {
-			result = {active: 'library', library:{location: ntiid}};
+			result = {active: 'content', content:{location: ntiid}};
 		}
 
 		console.debug('Fragment interpreted:', result);
@@ -386,7 +386,9 @@ Ext.define('NextThought.controller.State', {
 		// c equals false means that we got cancelled in beforedeactivate event.
 		// i.e we can get cancelled if the activeView has blog editor open.
 		if (c === false) {
-			history.back();
+			if(NextThought.isInitialized){
+				history.back();
+			}
 			this.restoringState = false;
 			return;
 		}
@@ -420,14 +422,13 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = false;
 	},
 
-	//Current default state is to load the library on either the nti.landing_page or the first page in the
-	//library. And to put the profile on the app user.  The library will be the active view if the location came
-	//from the ds, otherwise we will show the company
+	//Current default state is to load the content viewer on either the nti.landing_page or the first page in the
+	//library. And to put the profile on the app user.
 	buildDefaultState: function () {
 		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
 		return {
 			active: dsLandingPage ? 'library' : 'profile',
-			library: { location: dsLandingPage || Library.getFirstPage() || undefined },
+			content: { location: dsLandingPage || Library.getFirstPage() || undefined },
 			profile: { username: $AppConfig.username }
 		};
 	},
@@ -438,8 +439,6 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
-		// Default to the landing page of the first book if available,
-		// rather than the library landing page.
 		var defaultState = this.buildDefaultState(),
 			lastLocation,
 			previousState,
@@ -456,8 +455,17 @@ Ext.define('NextThought.controller.State', {
 
 			//migrate
 			if(lastLocation.location){
-				lastLocation.library = {location:lastLocation.location};
+				lastLocation.content = {location:lastLocation.location};
 				delete lastLocation.location;
+			}
+
+			//migrate
+			if(lastLocation.library && lastLocation.library.location){
+				lastLocation.content = lastLocation.library;
+				delete lastLocation.library;
+				if(lastLocation.active==='library'){
+					lastLocation.active='content';
+				}
 			}
 
 			result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;

@@ -46,7 +46,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	setLocation: function(ntiidOrPageInfo, callback, fromHistory){
 
 		var me = this,
-			e = Ext.get('library') || Ext.getBody(),
+			e = Ext.get('content') || Ext.getBody(),
 			ntiid = ntiidOrPageInfo && ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
 			rootId = ContentUtils.getLineage(ntiid);
 
@@ -76,7 +76,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 			Ext.callback(callback,null,args);
 
 			if(fromHistory!==true){
-				history.pushState({library:{location: ntiid}, active:'library'}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
+				history.pushState({
+					content:{location: ntiid},
+					active:'content'
+				}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 			}
 			if(error){
 				delete me.currentNTIID;

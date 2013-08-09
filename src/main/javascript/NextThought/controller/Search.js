@@ -356,7 +356,7 @@ Ext.define('NextThought.controller.Search', {
 			return;
 		}
 
-		nav.setView('library');
+		nav.setView('content');//Shouldn't this check if it was successfull in switching?
 		if(cat==='Books'){
 			nav.navigateAndScrollToSearchHit(cid, result, clickedFragment);
 			return;

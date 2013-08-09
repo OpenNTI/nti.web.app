@@ -33,7 +33,7 @@ Ext.define('NextThought.view.Navigation',{
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'branding' },
 		{
-			'data-view': 'library',
+			'data-view': 'content',
 			'data-qtip':'Library',
 			cls: 'library x-menu',
 			cn:[
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.Navigation',{
 					select:'updateCurrent'
 				   }
 				},{
-				xtype:'library-collection', name: 'All Books', 
+				xtype:'library-collection', name: 'All Books',
 				listeners:{
 					scope: this, 
 					select:'updateCurrent'
@@ -248,7 +248,7 @@ Ext.define('NextThought.view.Navigation',{
 
 		
 		if(!Ext.isEmpty(viewId)){
-			if(viewId === 'library'){
+			if(viewId === 'content'){
 				this.stopShowHide.call(this.libraryMenu);
 			}
 
@@ -266,7 +266,7 @@ Ext.define('NextThought.view.Navigation',{
         var viewId = this.getViewId(ele);
 
         if(!Ext.isEmpty(viewId)){
-            if(viewId === 'library'){
+            if(viewId === 'content'){
                 this.stopShowHide.call(this.libraryMenu);
             }
 
@@ -304,7 +304,7 @@ Ext.define('NextThought.view.Navigation',{
 			viewId = t && t.getAttribute('data-view');
 
 		if(!Ext.isEmpty(viewId) || e.getTarget('')){
-			if( viewId === 'library'){
+			if( viewId === 'content'){
 				this.startShow.call(this.libraryMenu);
 				return;
 			}
@@ -336,8 +336,7 @@ Ext.define('NextThought.view.Navigation',{
         var viewId = this.getViewId(ele);
 
         if(!Ext.isEmpty(viewId)){
-            if( viewId === 'library'){
-                console.log("library");
+            if( viewId === 'content'){
                 this.startShow.call(this.libraryMenu);
                 return;
             }
@@ -356,7 +355,7 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!Ext.isEmpty(viewId)){
 
-			if(viewId === 'library'){
+			if(viewId === 'content'){
 				this.startHide.call(this.libraryMenu);
 			}
 
@@ -371,7 +370,7 @@ Ext.define('NextThought.view.Navigation',{
 
         if(!Ext.isEmpty(viewId)){
 
-            if(viewId === 'library'){
+            if(viewId === 'content'){
                 this.startHide.call(this.libraryMenu);
             }
 

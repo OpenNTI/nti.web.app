@@ -4,6 +4,7 @@ Ext.define( 'NextThought.view.Views', {
 	requires: [
 		'Ext.layout.container.Card',
 		'NextThought.view.contacts.View',
+		'NextThought.view.content.View',
 		'NextThought.view.forums.View',
 		'NextThought.view.library.View',
 		'NextThought.view.profiles.View'
@@ -26,6 +27,7 @@ Ext.define( 'NextThought.view.Views', {
 	items:[
 		{id: 'profile', xtype: 'profile-view-container'},
 		{id: 'library', xtype: 'library-view-container'},
+		{id: 'content', xtype: 'content-view-container'},
 		{id: 'forums', xtype: 'forums-view-container'},
 		{id: 'contacts', xtype: 'contacts-view-container'}
 	],

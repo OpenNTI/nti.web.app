@@ -32,11 +32,11 @@ Ext.define('NextThought.controller.Reader', {
 
 	refs: [
 		{ref: 'mainNav', selector: 'main-navigation'},
-		{ref: 'libraryView', selector: 'library-view-container'},
-		{ref: 'libraryNavigation', selector: 'library-view-container content-toolbar content-navigation'},
-		{ref: 'libraryPager', selector: 'library-view-container content-toolbar content-pager'},
-		{ref: 'libraryPageWidgets', selector: 'library-view-container content-page-widgets'},
-		{ref: 'libraryReader', selector: 'library-view-container reader-content'}
+		{ref: 'contentView', selector: 'content-view-container'},
+		{ref: 'contentNavigation', selector: 'content-view-container content-toolbar content-navigation'},
+		{ref: 'contentPager', selector: 'content-view-container content-toolbar content-pager'},
+		{ref: 'contentPageWidgets', selector: 'content-view-container content-page-widgets'},
+		{ref: 'contentReader', selector: 'content-view-container reader-content'}
 	],
 
 
@@ -61,10 +61,10 @@ Ext.define('NextThought.controller.Reader', {
 					'suspend-annotation-manager': 'suspendManager',
 					'resume-annotation-manager': 'resumeManager'
 				},
-				'library-view-container reader-content':{
+				'content-view-container reader-content':{
 					'beforeNavigate':'beforeSetLocation',
 					'navigateCanceled':'resetNavigationMenuBar',
-					'set-content':'updateLibraryControls',
+					'set-content':'updateControls',
 					'page-previous':'goPagePrevious',
 					'page-next':'goPageNext'
 				},
@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Reader', {
 				},
 
 				'note-window':{
-					'before-new-note-viewer':'maybeSwitchLibrarySubTabs'
+					'before-new-note-viewer':'maybeSwitchContentSubTabs'
 				}
 			}
 		});
@@ -81,19 +81,20 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	resumeManager: function(){
-		var reader = this.getLibraryReader();
+		var reader = this.getContentReader();
 		reader.getAnnotations().getManager().resume();
 	},
 
 
 	suspendManager: function(){
-		var reader = this.getLibraryReader();
+		var reader = this.getContentReader();
 		reader.getAnnotations().getManager().suspend();
 	},
 
 
 	beforeSetLocation: function(){
 		var canNav = true,
+		//todo: lets not use query!
 			n = Ext.ComponentQuery.query('note-window')||[];
 
 		try{
@@ -116,9 +117,9 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	setLocation: function(){
-		var r = this.getLibraryReader();
+		var r = this.getContentReader();
 
-		if(this.fireEvent('show-view','library',true)===false){
+		if(this.fireEvent('show-view','content',true)===false){
 			return;
 		}
 
@@ -154,12 +155,12 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	goPagePrevious: function(){
-		this.getLibraryPager().goPrev();
+		this.getContentPager().goPrev();
 	},
 
 
 	goPageNext: function(){
-		this.getLibraryPager().goNext();
+		this.getContentPager().goNext();
 	},
 
 
@@ -211,7 +212,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	onBookmark: function(rec){
 		try{
-			this.getLibraryPageWidgets().onBookmark(rec);
+			this.getContentPageWidgets().onBookmark(rec);
 		}
 		catch(e){
 			console.error(e.stack||e.message);
@@ -219,11 +220,12 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	updateLibraryControls: function(reader, doc, assesments, pageInfo){
+	updateControls: function(reader, doc, assesments, pageInfo){
 		var fn = (pageInfo && pageInfo.hideControls)? 'hideControls':'showControls',
-			pg = this.getLibraryPager(),
+			pg = this.getContentPager(),
+		//todo: stop using query
 			lm = Ext.ComponentQuery.query('library-collection'),
-			pw = this.getLibraryPageWidgets(),
+			pw = this.getContentPageWidgets(),
 			origin = pageInfo && pageInfo.contentOrig,
 			t = pageInfo && pageInfo.get('NTIID');
 
@@ -237,19 +239,19 @@ Ext.define('NextThought.controller.Reader', {
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
-		this.getLibraryNavigation().updateLocation(origin||t);
+		this.getContentNavigation().updateLocation(origin||t);
 	},
 
 
-	maybeSwitchLibrarySubTabs: function(viwer, ownerCmp){
-		var view = this.getLibraryView(),
+	maybeSwitchContentSubTabs: function(viwer, ownerCmp){
+		var view = this.getContentView(),
 			subView;
-		if(ownerCmp !== this.getLibraryReader()){
+		if(ownerCmp !== this.getContentReader()){
 			//this event doen't concern us.
 			return true;
 		}
 
-		if(this.fireEvent('show-view','library',true)===false){
+		if(this.fireEvent('show-view','content',true)===false){
 			return false;
 		}
 
