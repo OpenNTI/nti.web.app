@@ -226,8 +226,8 @@ Ext.define( 'NextThought.view.content.View', {
 
 		this.tabs = pageInfo.isPartOfCourse();
 		this.fireEvent('update-tabs',this);
-
-		if(userInitiatedNav){
+		debugger;
+		if(userInitiatedNav || !this.tabs){
 			try {
 				this.getLayout().setActiveItem(this.courseBook);
 			}catch(e){
