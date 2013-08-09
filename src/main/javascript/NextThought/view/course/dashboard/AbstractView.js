@@ -16,7 +16,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	items:{
 		layout: 'auto',
 		ui: 'course',
-		cls: 'course-dashboard',
+		cls: 'course-dashboard grid',
 		xtype: 'container',
 		defaultType: 'box',
 		items:[]
