@@ -9,6 +9,10 @@ Ext.define('NextThought.mixins.ModuleContainer', {
         var m = Ext.createByAlias(ns+'.'+name,Ext.apply({container:this},config)),
             getterName = this.getterNameForModule(name);
 
+        if(config && config.hasOwnProperty('moduleName')){
+            getterName = this.getterNameForModule(config.moduleName);
+        }
+
         if(this[getterName]){
             console.error('Module getter name taken: '+getterName);
             return;

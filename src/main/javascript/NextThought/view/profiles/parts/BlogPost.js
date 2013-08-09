@@ -3,8 +3,14 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	alias: 'widget.profile-blog-post',
 
 	requires:[
-		'NextThought.view.profiles.parts.BlogComment'
+		'NextThought.view.profiles.parts.BlogComment',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
+
+    mixins:[
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
@@ -24,6 +30,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			path:'Thoughts',
 			showPermissions: true
 		});
+        if(Ext.is.iPad){
+            var v = Ext.get('profile').down('.x-container-profile'),
+                w = Ext.ComponentManager.get(v.getAttribute('id'));
+            w.removeTouchListeners();
+        }
 	},
 
 	renderSelectors:{
@@ -75,7 +86,27 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
+
+        if(Ext.is.iPad){
+            this.setupTouch();
+        }
 	},
+
+
+    setupTouch: function(){
+        this.buildModule('modules', 'touchSender',{container:this,moduleName:'blogPostTouchSender'});
+        this.buildModule('modules', 'touchHandler',
+            {container:this, moduleName:'blogPostTouchHandler',getPanel: function(){
+                return Ext.get('profile');
+            }});
+
+        var container = this;
+
+        container.on('touchScroll', function(ele, deltaY) {
+            var profile = Ext.get('profile');
+            profile.scrollBy(0, Math.ceil(deltaY*0.4), false);
+        });
+    },
 
 
 	closeView: function(){
@@ -92,6 +123,12 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 //		}
 
 		this.getMainView().scrollTo('top',0,true);
+
+        if(Ext.is.iPad){
+            var v = Ext.get('profile').down('.x-container-profile'),
+                w = Ext.ComponentManager.get(v.getAttribute('id'));
+            w.readdTouchListeners();
+        }
 
 		if(!this.destroying){
 			this.destroy();

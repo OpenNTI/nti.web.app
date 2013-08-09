@@ -6,6 +6,10 @@ Ext.define('NextThought.modules.TouchHandler', {
         'NextThought.modules.TouchSender'
     ],
 
+    mixins: [
+        'Ext.util.Observable'
+    ],
+
     constructor: function(config) {
         // Only support touch on iPad devices
         if (!Ext.is.iPad){
@@ -17,6 +21,15 @@ Ext.define('NextThought.modules.TouchHandler', {
         this.container.on('afterrender', function() {
             this.setupHandlers();
         }, this);
+    },
+
+    removeListeners: function(){
+        console.log('destroyed');
+        this.clearListeners();
+    },
+
+    addListeners: function(){
+        this.setupHandlers();
     },
 
     /**
@@ -50,7 +63,7 @@ Ext.define('NextThought.modules.TouchHandler', {
         container.on('touchDrop', function(ele, pageX, pageY) {
             // Drop specific logic
         });
-        container.on('touchScroll', function(ele, deltaY) {
+        this.mon(container,'touchScroll', function(ele, deltaY) {
             initialY = this.scroll(ele, deltaY, initialY);
         }, this);
         container.on('touchHighlight', function(x1, y1, x2, y2) {
