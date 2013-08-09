@@ -62,5 +62,25 @@
 				}
 			}
 		}
+
+		&.books {
+			.grid {
+				.item {
+					&.grid-item.row-1{ height: 80px; }
+					.cover {
+						width: 60px;
+						right: auto;
+					}
+					.meta {
+						top: 0;
+						left: 60px;
+
+						.title{
+							font-size: 14px;
+						}
+					}
+				}
+			}
+		}
 	}
 }
