@@ -398,10 +398,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.reflectFlagged(this.record);
 	},
 
-
-	recordUpdated: function(newRec){
+    // In the future, we will want fieldName to be an array of all the fields that changed.
+	recordUpdated: function(newRec, fieldName){
 		this.recordEvent = 'updated';
-		var r = this.updateFromRecord(newRec);
+		var r = this.updateFromRecord(newRec, fieldName);
 		delete this.recordEvent;
 		return r;
 	},
@@ -418,10 +418,20 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
-	updateFromRecord: function(newRecord){
+	updateFromRecord: function(newRecord, modifiedFieldName){
 		var r = newRecord || this.record;
 
 		try {
+            // Update only fields that changed. no point in redrawing everything.
+            if(!Ext.isEmpty(modifiedFieldName)){
+                if(modifiedFieldName === 'LikeCount'){
+                    this.updateLikeCount(r);
+                }
+                if(modifiedFieldName === 'favorite'){
+                    this.markAsFavorited(modifiedFieldName, r.isFavorited());
+                }
+                return;
+            }
 			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 
 			if(this.sharedTo){

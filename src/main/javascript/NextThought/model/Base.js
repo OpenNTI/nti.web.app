@@ -444,7 +444,7 @@ Ext.define('NextThought.model.Base', {
 				Ext.callback(widget.markAsFavorited,widget,[currentValue]);
 			}
 			me.set('favoriteState',s);//it doesn't matter what we pass as the value, the converter returns its own value
-		});
+		}, 'favorite');
 	},
 
 
@@ -478,11 +478,11 @@ Ext.define('NextThought.model.Base', {
 				}
 			}
 			me.set('likeState',s);//it doesn't matter what we pass as the value, the converter returns its own value
-		});
+		}, 'LikeCount');
 	},
 
 
-	postTo: function(link, callback){
+	postTo: function(link, callback, modifiedFieldName){
 		this.activePostTos = this.activePostTos || {};
 		var me = this, req,
 			l = this.getLink(link);
@@ -504,7 +504,7 @@ Ext.define('NextThought.model.Base', {
 					delete me.activePostTos[link];
 					Ext.callback(callback, null, [s]);
 					if(s){
-						this.fireEvent('updated',me);
+						this.fireEvent('updated',me, modifiedFieldName);
 					}
 				}
 			};
