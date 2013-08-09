@@ -56,7 +56,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 			msg = '';
 
 		try {
-			msg = NTIString('question_set_scoreboard_'+messageBucket, NTIString('default_scoreboard_message'));
+			msg = getString('question_set_scoreboard_'+messageBucket, getString('default_scoreboard_message'));
 		}
 		catch(e){
 			console.error('Error getting message: '+ e.message, Globals.getError(e));

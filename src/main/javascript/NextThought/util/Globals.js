@@ -498,5 +498,5 @@ function(){
 	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
 	makeImage('CANVAS_BROKEN_IMAGE');
 
-	window.NTIString = this.getExternalizedString;
+	window.getString = this.getExternalizedString;
 });
