@@ -81,10 +81,24 @@ Ext.define('NextThought.modules.TouchSender', {
         dom.addEventListener('touchstart', function(e) {
             e.preventDefault();
 
-           if(dom.getAttribute('id').indexOf("main-sidebar") === -1){
+            //if touching something besides sidebar, close it
+            if(dom.getAttribute('id').indexOf("main-sidebar") === -1){
                 var ele = Ext.get(Ext.query('.sidebar')[0]);
                 if(ele){
                     Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                }
+                var updock = Ext.get('chat-dock_header_hd');
+
+            }
+
+            //If click outside chatdock, close chatdock
+            var aboveDock = container.el.down('#chat-dock'),
+                dock = container.el.dom.getAttribute('id'),
+                belowDock = container.el.up('#chat-dock');
+            if(aboveDock == null && dock != 'chat-dock' && belowDock == null){
+                var dockEl = Ext.ComponentManager.get('chat-dock');
+                if(dockEl.el.dom.getAttribute('class').indexOf("open") != -1){
+                    dockEl.floatCollapsedPanel();
                 }
             }
 

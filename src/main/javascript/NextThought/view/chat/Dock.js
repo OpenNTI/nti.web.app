@@ -49,16 +49,17 @@ Ext.define('NextThought.view.chat.Dock',{
 		this.mon(this.down('header'),'click','slideOutFloatedPanel',this);
 		this.placeholder.focus = Ext.emptyFn;
 
-		//remove the default click handler
-		this.placeholder.getEl().un('click',this.floatCollapsedPanel,this);
+        if(!Ext.is.iPad){
+            //remove the default click handler
+            this.placeholder.getEl().un('click',this.floatCollapsedPanel,this);
 
-		//add hover instead
-		this.mon(this.placeholder.getEl(),{
-			scope: this,
-			mouseover:'maybeExpand',
-			mouseout: 'stopExpand'
-		});
-
+            //add hover instead
+            this.mon(this.placeholder.getEl(),{
+                scope: this,
+                mouseover:'maybeExpand',
+                mouseout: 'stopExpand'
+            });
+        }
 		Ext.EventManager.onWindowResize(function(){
 			this.maxHeight = Math.min(300, Ext.Element.getViewportHeight()*0.6);
 		}, this, null);
