@@ -44,10 +44,10 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 	
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag:'tpl', 'if':'length==0', cn:[{
+		/*{tag:'tpl', 'if':'length==0', cn:[{
 			cls:"activity nothing rhp-empty-list",
 			cn: [' No Activity Yet']
-		}]},
+		}]},*/
 		{tag:'tpl', 'for':'.', cn:[
 			{tag:'tpl', 'if':'activity', cn:[{
 				cls:'activity {type}',
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			scope: this,
 			datachanged: this.maybeReload,
 			//load: this.maybeReload,
-			load: function(){ this.removeMask(); },
+			//load: function(){ this.removeMask(); },
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
@@ -172,6 +172,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 	removeMask: function(width, height){
+		debugger;
 		if(this.el){ this.el.unmask(); }
 	},
 
@@ -247,23 +248,6 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			return Ext.data.Types.GROUPBYTIME.groupTitle(name, false);
 		}
 
-		function maybeAddMoreButton(){
-			var s=me.store, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
-			if(s.hasAdditionalPagesToLoad()){
-				/*Ext.widget('button', {
-					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
-					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
-					scale: 'medium',
-					ui: 'secondary',
-					cls: 'more-button',
-					handler: function(){
-						me.fetchMore();
-					}});*/
-				return true;
-			}
-			return false;
-		}
-
 		function doGroup(group){
 			var label = groupToLabel(group.name);
 
@@ -304,10 +288,10 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 			},this);
 		}
-
+		
 		if(store.getGroups().length === 0){
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
-			if(!maybeAddMoreButton()){
+			if(!store.mayHaveAdditionalPages){
 				Ext.DomHelper.overwrite(container.getEl(), {
 					cls:"activity nothing rhp-empty-list",
 					cn: [' No Activity Yet']
@@ -316,7 +300,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 			container.updateLayout();
 		}
 
-		if(store.getCount() === 0){
+		if(store.getCount() === 0 && !store.mayHaveAdditionalPages){
 			Ext.DomHelper.overwrite(container.getEl(),{
 				cls:"activity nothing rhp-empty-list",
 				cn: ['No Activity Yet']
@@ -326,7 +310,7 @@ Ext.define('NextThought.view.account.activity.Panel',{
 
 		Ext.each(store.getGroups(),doGroup,this);
 
-		this.removeMask();
+		if(store.getCount() > 0 || !store.mayHaveAdditionalPages){ this.removeMask(); }
 	},
 
 	passesFilter: function(item){
