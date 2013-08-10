@@ -5,11 +5,56 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
-			Ext.callback(finish,null,[ this.create({
-				lastModified: courseNodeRecord.get('date'),
-				locationInfo: locationInfo,
-				courseNodeRecord: courseNodeRecord
-			}) ]);
+
+			function onSummaryFailed(){
+				console.error('Summary failed to load:',arguments);
+				Ext.callback(finish);
+			}
+
+			function onSummaryLoad(resp){
+				var items = (Ext.decode(resp.responseText,true) || {}).Items || [];
+				function notMe(r){
+					return !isMe(r.user||r.Username);
+				}
+
+				//comment this out to allow your user in
+				items = Ext.Array.filter(items,notMe);
+
+				if(items.length===0){
+					Ext.callback(finish);
+					return;
+				}
+
+				Ext.callback(finish,null,[ this.create({
+					lastModified: courseNodeRecord.get('date'),
+					locationInfo: locationInfo,
+					courseNodeRecord: courseNodeRecord,
+					JSONData: items
+				}) ]);
+			}
+
+
+			function loadSummary(){
+				var rec = courseNodeRecord,
+					pi = rec.get('pageInfo'),
+					req;
+
+				if(!pi){
+					rec.listenForFieldChange('pageInfo',loadSummary,this,true);
+					return;
+				}
+
+				req = {
+					url: pi.getLink('TopUserSummaryData'),
+					scope: this,
+					success: onSummaryLoad,
+					failure: onSummaryFailed
+				};
+
+				Ext.Ajax.request(req);
+			}
+
+			loadSummary();
 		}
 
 	},
@@ -17,7 +62,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	config: {
 		cols: 2,
 		rows: 4,
-		weight: 9
+		weight: 9,
+		JSONData: null
 	},
 
 
@@ -58,39 +104,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			cls: 'user-container-body'
 		});
 
-		this.loadSummary();
+		this.onSummaryLoad(this.getJSONData());
 	},
 
 
-	loadSummary: function(){
-		var rec = this.getCourseNodeRecord(),
-			pi = rec.get('pageInfo'),
-			req;
-
-		if(!pi){
-			rec.listenForFieldChange('pageInfo','loadSummary',this,true);
-			return;
-		}
-
-		req = {
-			url: pi.getLink('TopUserSummaryData'),
-			scope: this,
-			success: this.onSummaryLoad,
-			failure: this.onSummaryFailed
-		};
-
-		Ext.Ajax.request(req);
-	},
-
-
-	onSummaryFailed: function(){
-		console.error('Summary failed to load:',arguments);
-	},
-
-
-	onSummaryLoad: function(resp){
-		var items = (Ext.decode(resp.responseText,true) || {}).Items || [],
-			users = [],
+	onSummaryLoad: function(items){
+		var users = [],
 			me = this;
 
 		function pluckUsers(i){ if(i){users.push(i.user||i.Username);} }
@@ -107,18 +126,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 			return aN.localeCompare(bN);
 		}
 
-		function notMe(r){
-			return !isMe(r.user||r.Username);
-		}
-
-		//comment this out to allow your user in
-		items = Ext.Array.filter(items,notMe);
-
 		Ext.each(items,pluckUsers);
-
-//		if(users.length === 0){
-			//
-//		}
 
 		UserRepository.getUser(users, function(u){
 			function apply(i,x){
