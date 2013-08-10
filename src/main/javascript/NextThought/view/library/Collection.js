@@ -21,7 +21,7 @@ Ext.define('NextThought.view.library.Collection',{
 		cls: '{inGrid} item {featured} row-{rows} col-{cols}', cn:[
 			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
 			{ cls: 'meta', cn:[
-				{ cls: 'section', html: '{section}' },  //course section
+				{ cls: 'courseName', html: '{courseName}' },  //course name/id
 				{ cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
 					'data-qtip': '{[values.title.length>50?values.title:""]}' },
 				{ cls: 'author', html: '{author}',

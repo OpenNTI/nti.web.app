@@ -6,6 +6,7 @@ Ext.define('NextThought.model.Title', {
 	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },
+		{ name: 'courseName', type: 'string', defaultValue: ''},
 		{ name: 'icon', type: 'string' },
 		{ name: 'index', type: 'string' },
 		{ name: 'index_jsonp', type: 'string' },

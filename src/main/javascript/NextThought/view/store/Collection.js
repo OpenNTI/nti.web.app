@@ -18,6 +18,7 @@ Ext.define('NextThought.view.store.Collection',{
 		cls: '{inGrid} purchasable item {featured} row-{rows} col-{cols}', 'data-qtip': '{Title}', cn:[
 			{ cls:'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn:[
+				{ cls: 'courseName', html: '{courseName}' },
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
 				{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'},
