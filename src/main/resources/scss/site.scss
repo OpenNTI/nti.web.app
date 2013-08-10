@@ -1,10 +1,14 @@
 // placeholder & defaults
 
 .x-component-branding {
-	//display: none;
+	//in the library view, turn this on to show the logo/message box
+	//display: block;
 }
 
 
 .main-navigation .branding{
-	display: none;//require site.css to override
+	//display: block;
+
+	//set this to something to show branding over the nav bar icon.
+	//background: crimson;
 }
