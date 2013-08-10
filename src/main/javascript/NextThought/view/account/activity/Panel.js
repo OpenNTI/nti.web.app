@@ -205,6 +205,14 @@ Ext.define('NextThought.view.account.activity.Panel',{
 	},
 
 
+	forceRefresh: function(cb){
+		if (this.isVisible() && this.rendered){
+			this.store.on('load', cb, this, {single: true});
+			delete this.currentCount;
+			this.store.load();
+		}
+	},
+
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
 			totalExpected,
