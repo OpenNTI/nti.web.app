@@ -2,10 +2,12 @@
 	position: relative;
 
 	.logo{
-		width: 100px;
-		height: 60px;
 		top: 25%;
-		@include element('top-nav-logo',$position: absolute);
+		position: absolute;
+		//example image
+		//&::after {
+		//	content: url(../images/elements/top-nav-logo.png);
+		//}
 	}
 
 	.box {
