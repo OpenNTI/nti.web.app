@@ -7,12 +7,32 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var board = course.getAttribute('discussionBoard');
 
+			function onResolveFailure(){
+				console.warn('Could not load the course board', board);
+				Ext.callback(finish);
+			}
+
+			function onBoardResolved(boardObject){
+				Ext.callback(finish,null,[
+					this.create({
+						locationInfo: locationInfo,
+						board: boardObject,
+						lastModified:
+						boardObject.get('Last Modified')})
+				]);
+			}
+
 			if(!board || !ParseUtils.isNTIID(board)){
 				Ext.callback(finish);
 				return;
 			}
 
-			Ext.callback(finish,null,[ this.create({locationInfo: locationInfo, boardNtiid: board, lastModified: courseNodeRecord.get('date')}) ]);
+			$AppConfig.service.getObject(board,
+					onBoardResolved,
+					onResolveFailure,
+					this,
+					true
+			);
 		}
 
 	},
@@ -20,7 +40,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	cls: 'course-dashboard-discussion-item-list',
 
 	config: {
-		boardNtiid: '',
+		board: null,
 		weight:1.01
 	},
 
@@ -59,12 +79,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			}
 		});
 
-		$AppConfig.service.getObject(this.getBoardNtiid(),
-				this.onBoardResolved,
-				this.onResolveFailure,
-				this,
-				true
-		);
+		this.setBoard(this.getBoard());
 	},
 
 
@@ -73,7 +88,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	},
 
 
-	onBoardResolved: function(board){
+	setBoard: function(board){
 		var sId = board && ('dashboard-'+board.getContentsStoreId()),
 			url = board && board.getLink('TopTopics'),
 			store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url}));
@@ -81,7 +96,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 		store.sorters.removeAll();
 
 		if(Ext.isEmpty(url)){
-			console.error('Not top topic link for ', this.getBoardNtiid());
+			console.error('No top topic link for ', board.getId());
 			return;
 		}
 
@@ -89,11 +104,5 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 		if(!store.loaded){
 			store.load();
 		}
-	},
-
-
-	onResolveFailure: function(){
-		console.warn('Could not load the course board', this.getBoardNtiid());
 	}
-
 });
