@@ -29,6 +29,9 @@ Ext.define('NextThought.view.forums.Board',{
 	headerTpl: Ext.DomHelper.createTemplate({
 		cls: 'header-container', cn: {
 			cls: 'forum-forum-list header', cn:[
+				{ cls: 'controls', cn:[
+					{ cls: 'new-forum', html: 'New Forum'}
+				]},
 				{ cls: 'path', cn:['{path} / ',{tag:'span',cls:'title-part', html:'{title}'}]}
 			]
 		}
@@ -61,6 +64,11 @@ Ext.define('NextThought.view.forums.Board',{
 		var r = this.callParent(arguments);
 		r.kind = 'Discussion';
 		return r;
+	},
+
+
+	canCreateForum: function(){
+		return isFeature('forum-creation') && this.record.getLink('add');
 	},
 
 
@@ -116,11 +124,20 @@ Ext.define('NextThought.view.forums.Board',{
 
 
 	afterRender: function(){
+		var newForum;
 		this.callParent(arguments);
 
 		if(!this.isRoot){
 			this.headerElContainer = this.headerTpl.append(this.el,{ path: this.record.get('Creator'), title: this.record.get('title') },true);
 			this.headerEl = this.headerElContainer.down('.header');
+
+			if(!this.canCreateForum()){
+				newForum = this.headerEl.down('.new-forum');
+				if(newForum){
+					newForum.remove();
+				}
+			}
+
 			this.mon(this.headerEl,'click',this.onHeaderClick,this);
 
 			this.on({
@@ -140,6 +157,9 @@ Ext.define('NextThought.view.forums.Board',{
 	onHeaderClick: function(e){
 		if(e.getTarget('.path')){
 			this.fireEvent('pop-view', this);
+		}
+		else if(e.getTarget('.new-forum')){
+			this.fireEvent('new-forum', this);
 		}
 	},
 

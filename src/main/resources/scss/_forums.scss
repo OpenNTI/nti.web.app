@@ -225,7 +225,7 @@
 		margin-right: 150px;
 	}
 
-	.new-topic {
+	.new-forum, .new-topic {
 		@include new-post;
 		display: block;
 	}

@@ -60,7 +60,8 @@ Ext.define('NextThought.controller.Forums', {
 					'select': this.loadBoard
 				},
 				'forums-board': {
-					'select':this.loadForum
+					'select': this.loadForum,
+					'new-forum': this.showForumEditor
 				},
 				'forums-forum': {
 					'new-topic':this.showTopicEditor,
@@ -810,6 +811,11 @@ Ext.define('NextThought.controller.Forums', {
 			unmask();
 		}
 
+	},
+
+
+	showForumEditor: function(cmp){
+		console.log('Need to launch forum creation from ', cmp);
 	},
 
 
