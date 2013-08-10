@@ -78,6 +78,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			url = board && board.getLink('TopTopics'),
 			store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url}));
 
+		store.sorters.removeAll();
+
 		if(Ext.isEmpty(url)){
 			console.error('Not top topic link for ', this.getBoardNtiid());
 			return;
