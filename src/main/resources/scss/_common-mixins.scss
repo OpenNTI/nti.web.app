@@ -95,6 +95,15 @@
 	}
 }
 
+@mixin element($name,$top:0,$left:0,$right:auto,$side:'after',$position:relative){
+	@include icon($name:$name,
+				$top:$top,
+				$left:$left,
+				$right:$right,$side:$side,
+				$position:$position,$sprite:$elements);
+}
+
+
 @mixin ellipse{
 	white-space: nowrap;
 	-moz-text-overflow: ellipsis;

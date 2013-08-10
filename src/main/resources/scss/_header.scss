@@ -14,7 +14,7 @@
 	padding-left: 100px;
 	height: 57px;
 
-	@include icon('top-nav-logo', $sprite:$elements, $position:absolute);
+	@include element('top-nav-logo', $position:absolute);
 
 	&::after{
 	//	width: 100px;

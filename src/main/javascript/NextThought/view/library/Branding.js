@@ -19,9 +19,9 @@ Ext.define('NextThought.view.library.Branding',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
-			'logo-alt-text': getString('library:branding logo-alt-text',' '),
-			'title': getString('library:branding message-title',' '),
-			'message': getString('library:branding message',' ')
+			'logo-alt-text': getString('library:branding logo-alt-text'),
+			'title': getString('library:branding message-title'),
+			'message': getString('library:branding message')
 		});
 	}
 });

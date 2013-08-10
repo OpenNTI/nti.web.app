@@ -1,5 +1,65 @@
 .x-component-branding {
-	display: none;
+	position: relative;
+
+	.logo{
+		width: 100px;
+		height: 60px;
+		top: 25%;
+		@include element('top-nav-logo',$position: absolute);
+	}
+
+	.box {
+		position: relative;
+		color: #fff;
+		padding: 15px;
+		margin: 50px 0 50px 50%;
+		background: rgba(0,0,0,0.2);
+
+		.flourish1, .flourish2 {
+			display: none;
+		}
+
+		&::before,&::after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: -20px;
+			bottom: -20px;
+		}
+
+		&::before{
+			left: -1px;
+			width: 1px;
+			opacity: 0.2;
+			//background: #fff;
+
+			$experimental-support-for-svg: true;
+			@include background-image(linear-gradient(top,
+				rgba(255,255,255,0.5) 0%,
+				rgba(255,255,255,1) 30%,
+				rgba(255,255,255,1) 70%,
+				rgba(255,255,255,0.5) 100%));
+
+		}
+
+		&::after {
+			left: -96px;
+			width: 100px;
+			background: rgba(0,0,0,0.5);
+			box-shadow: 0 0 10px black;
+			border-radius: 10px / 50%;
+			clip: rect(auto, 110px, auto, 96px);
+		}
+
+		.title {
+			font: italic 300 24px $font;
+		}
+
+		.message {
+			color: $tertiary-grey;
+			font: normal 400 14px/26px $font;
+		}
+	}
 }
 
 
