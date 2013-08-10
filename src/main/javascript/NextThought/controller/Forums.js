@@ -32,7 +32,8 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.Comment',
 		'forums.Forum',
 		'forums.Topic',
-		'forums.View'
+		'forums.View',
+		'forums.forumcreation.Window'
 	],
 
 	refs: [
@@ -814,8 +815,15 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showForumEditor: function(cmp){
-		console.log('Need to launch forum creation from ', cmp);
+	createForum: function(cmp, beneathBoard, title, description, permissions){
+	},
+
+
+	showForumEditor: function(cmp, record){
+		Ext.widget('forumcreation-window', {
+			board: cmp.record,
+			record: record
+		}).show();
 	},
 
 

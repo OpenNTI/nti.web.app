@@ -8,6 +8,7 @@
 .coderetrieval-window,
 .recovery-email-window,
 .embedvideo-window,
+.forumcreation-window,
 .coppa-window {
 	@extend .nti-window;
 
@@ -274,6 +275,7 @@
 	.recovery-email-view,
 	.contact-main-view,
 	.embedvideo-main-view,
+	.forumcreation-main-view,
 	.coppa-main-view {
 		color: $secondary-grey;
 
@@ -447,6 +449,7 @@
 	.coderetrieval-main-view,
 	.createlist-main-view,
 	.embedvideo-main-view,
+	.forumcreation-main-view,
 	.contact-main-view {
 		.input-wrapper {
 			margin-left: 34px;
@@ -479,6 +482,7 @@
 	}
 
 	.contact-main-view,
+	.forumcreation-main-view,
 	.embedvideo-main-view{
 		.input-box{
 			width: 99%;

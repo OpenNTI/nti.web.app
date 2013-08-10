@@ -68,7 +68,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 
 	canCreateForum: function(){
-		return isFeature('forum-creation') && this.record.getLink('add');
+		return isFeature('mutable-forums') && this.record.getLink('add');
 	},
 
 
