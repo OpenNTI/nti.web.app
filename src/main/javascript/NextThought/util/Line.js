@@ -25,7 +25,7 @@ Ext.define('NextThought.util.Line',{
 		doc = doc || document;
 
 		var range,
-			ancestor, questionObject;
+			ancestor, questionObject, parentObject, t;
 
 		//The "IE" search is actually more accurate for assessment pages
 		if (Ext.isIE || Ext.isGecko) {
@@ -74,20 +74,24 @@ Ext.define('NextThought.util.Line',{
 			}
 		}
 
-        try{
-            //ranges created next to videos sometimes require massaging to be anchorable, do that now.
-            if(!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')){
-                range.setStartBefore(range.startContainer);
-                range.setEndAfter(range.endContainer);
+
+        range = this.getAnchorableRange(range, doc);
+
+        if(!range && ancestor){
+            // NOTE: if we have no range but we do have an ancestor that's an object,
+            // let's use that to create the anchorable range.
+            if(Ext.fly(ancestor).is('object') || Ext.fly(ancestor).up('object')){
+                parentObject = !Ext.fly(ancestor).is('object') ?  Ext.fly(ancestor).up('object') : ancestor ;
+                if(parentObject){
+                    t = parentObject.dom ? parentObject.dom : parentObject;
+                    if(t){
+                        range = doc.createRange();
+                        range.selectNodeContents(t);
+                        range = this.getAnchorableRange(range, doc);
+                    }
+                }
             }
-			//Note this is being abused here.  Just because this returns null doesn't mean we can't anchor the range.
-			//Case in point for ranges within a question we can always anchor them, but this may return null.  The correct thing
-			//to do is actually call createDomContentPointer and see if it returns something, but that will have performance implications
-			//so we need to figure something else out
-            range = Anchors.makeRangeAnchorable(range, doc);
-        }
-        catch (e){
-            range = null;
+
         }
 		if(range){
 			return { rect: range.getBoundingClientRect(), range: range };
@@ -96,10 +100,31 @@ Ext.define('NextThought.util.Line',{
 		return null;
 	},
 
+
+
+    getAnchorableRange: function(range, doc){
+        try{
+            //ranges created next to videos sometimes require massaging to be anchorable, do that now.
+            if(!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')){
+                range.setStartBefore(range.startContainer);
+                range.setEndAfter(range.endContainer);
+            }
+            //Note this is being abused here.  Just because this returns null doesn't mean we can't anchor the range.
+            //Case in point for ranges within a question we can always anchor them, but this may return null.  The correct thing
+            //to do is actually call createDomContentPointer and see if it returns something, but that will have performance implications
+            //so we need to figure something else out
+            range = Anchors.makeRangeAnchorable(range, doc);
+        }
+        catch (e){
+            range = null;
+        }
+        return range;
+    },
+
 	/** @private */
 	//IE
 	rangeByRecursiveSearch: function(y,doc) {
-		y -= 30; //Correction
+//		y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
 		//First text node ending past y
 		var i, cn;
