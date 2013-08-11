@@ -126,9 +126,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
     setUpTouch: function(){
         var me = this;
 
-        var firstY =  me.getEl().parent('.x-container-profile').dom.getY();
-        console.log("firstY:" + firstY);
-
         var cancelButton = this.getEl().down('.cancel'),
             saveButton = this.getEl().down('.save');
 

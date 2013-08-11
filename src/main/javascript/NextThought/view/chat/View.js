@@ -85,8 +85,33 @@ Ext.define('NextThought.view.chat.View', {
 	    this.on('status-change', this.trackChatState, this);
         this.maybeShowFlagIcon();
 
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('chat', 'touchHandler');
+        if(Ext.is.iPad){
+            var me = this;
+
+            me.el.down('input').on('touchstart', function(){
+                me.el.down('input').dom.click();
+            });
+
+            me.el.down('input').on('focus', function(){
+                console.log('input focused');
+                if(!me.hasOwnProperty('initialY')){
+                    me.initialY = me.el.up('.x-window-chat-window').getY();
+                    console.log('initialY:' + me.initialY);
+                }
+            }, me);
+
+            me.el.down('input').on('blur', function(){
+                console.log("input blurred");
+                Ext.Function.defer(function(){
+                    console.log("deferred function");
+                    var topWindow = me.el.up('.x-window-chat-window');
+                    if(me.hasOwnProperty('initialY')){
+                        topWindow.setY(me.initialY);
+                    }
+                },3000);
+            },me);
+
+        }
     },
 
 
