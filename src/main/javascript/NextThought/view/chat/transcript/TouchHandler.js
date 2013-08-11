@@ -7,7 +7,7 @@ Ext.define('NextThought.view.chat.transcript.TouchHandler', {
         var container = this.container;
 
         container.on('touchScroll', function(ele, deltaY) {
-            this.getPanel.scrollBy(0, deltaY, false);
+            this.getPanel().scrollBy(0, deltaY, false);
         }, this);
 
         container.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);

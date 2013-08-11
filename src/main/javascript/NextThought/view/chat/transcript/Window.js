@@ -81,8 +81,10 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 			btn.show();
 		}
 
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('chat.transcript', 'touchHandler');
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('chat.transcript', 'touchHandler');
+        }
     },
 
 
