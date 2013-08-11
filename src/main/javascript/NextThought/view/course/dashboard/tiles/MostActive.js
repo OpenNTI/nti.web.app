@@ -5,6 +5,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
+			var me = this;
 
 			function onSummaryFailed(){
 				console.error('Summary failed to load:',arguments);
@@ -25,7 +26,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 					return;
 				}
 
-				Ext.callback(finish,null,[ this.create({
+				Ext.callback(finish,null,[ me.create({
 					lastModified: courseNodeRecord.get('date'),
 					locationInfo: locationInfo,
 					courseNodeRecord: courseNodeRecord,
