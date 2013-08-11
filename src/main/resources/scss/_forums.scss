@@ -131,9 +131,19 @@
 			font: normal 600 12px $font;
 			color: $tertiary-grey;
 
-			.count, .name, .link {
+			.count, .name, .link, .edit {
 				color: $primary-blue;
 			}
+
+			.edit{
+				display: none;
+			}
+
+			.descendant{
+				&::after{
+					display: none;
+				}
+			}	
 
 			span {
 				display: inline-block;
@@ -151,6 +161,20 @@
 				&:last-of-type::after {
 					content: '';
 					display: none;
+				}
+			}
+		}
+
+		&:hover{
+			.meta{
+				.edit{
+					display: inline-block !important;
+				}
+
+				.descendant{
+					&::after{
+						display: inline !important;
+					}
 				}
 			}
 		}

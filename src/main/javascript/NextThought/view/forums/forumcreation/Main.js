@@ -20,7 +20,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
 				b.up('window').close();
 			}},
-			{xtype: 'button', cls: 'submitBtn', ui: 'primary', scale: 'large', name: 'submit', text:'Create'}
+			{xtype: 'button', cls: 'submitBtn', ui: 'primary', scale: 'large', name: 'submit', text:'Save'}
 		]}
 	],
 
@@ -28,7 +28,13 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		var record = this.getRecord();
+
 		//If we are editing inintialize here
+		if(record){
+			this.down('[name=title]').update(record.get('title'));
+			this.down('[name=description]').el.update(record.get('description'));
+		}
 
 		this.mon(this.el, 'click', 'handleClick', this);
 	},
@@ -40,7 +46,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		if(target){
 			values = this.getValues();
 
-			if(values.title.length < 140){
+			if(values.title.length > 140){
 				//the title is too long
 				this.setError({
 					field: 'title',

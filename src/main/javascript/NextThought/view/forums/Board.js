@@ -53,6 +53,9 @@ Ext.define('NextThought.view.forums.Board',{
 							'Last Active {[TimeUtils.timeDifference(new Date(), values["NewestDescendant"].get("Last Modified"))]} by ',
 							{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'}
 						]}
+					]},
+					{ tag: 'tpl', 'if': 'isFeature(\'mutable-forums\') && values.Links.getLinksForRel(\'edit\')', cn: [
+						{ tag: 'span', cls: 'edit', html: 'Edit'}
 					]}
 				]}
 			]}
@@ -142,6 +145,7 @@ Ext.define('NextThought.view.forums.Board',{
 
 			this.on({
 				'activate':'onActivate',
+				'itemclick': 'onItemClick',
 				'beforeitemclick':'onBeforeItemClick'
 			});
 		}
@@ -164,10 +168,18 @@ Ext.define('NextThought.view.forums.Board',{
 	},
 
 
+
 	onBeforeItemClick: function(record, item, idx, event, opts){
 		var t = event && event.getTarget && event.getTarget(),
+			edit = t && event.getTarget('.edit'),
 			d = record.get && record.get('NewestDescendant'),
 			topicHref;
+
+		if(edit){ 
+			event && event.stopEvent && event.stopEvent();
+			this.fireEvent('new-forum', this, record);
+			return false;
+		}
 
 		function isDescendantClick(tar){
 			if(!tar){

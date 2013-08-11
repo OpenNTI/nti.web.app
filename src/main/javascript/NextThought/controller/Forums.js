@@ -1015,7 +1015,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	
 	saveForum: function(editorCmp, record, title, description){
-		var isEdit = Boolean(forum),
+		var isEdit = Boolean(record),
 			cmp = editorCmp.up('forumcreation-window').ownerCmp,
 			forum = isEdit? record : NextThought.model.forums.Forum.create(),
 			board = cmp.record;
