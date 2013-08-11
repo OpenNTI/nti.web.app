@@ -916,7 +916,7 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 		//make sure the content el gets focus when you click it, specifically trying to
 		//fix an issue with clicking from the sharing field taking two clicks to get focus.
-		this.focus(true);
+		//this.focus(true);
 		
 		if (t) {
 			guid = t.getAttribute('id');
