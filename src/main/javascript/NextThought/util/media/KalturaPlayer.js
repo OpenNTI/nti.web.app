@@ -50,7 +50,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		{tag:'html', lang:'en', cn:[
 			{tag:'head',cn:[
 				{tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js')},
-				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.5/mwEmbedLoader.php')},
+				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapi.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
 				{tag:'script', type:'text/javascript', html:'\n{code}\n'},
 				{tag:'style', type:'text/css', cn:[
 					'body, html { margin: 0; padding: 0; }'
@@ -356,7 +356,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+//			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
@@ -375,6 +375,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					"externalInterfaceDisabled": false,
 					"autoPlay": false
 				},
+				"entry_id": "0_nmgd4bvw",
 				params:{
 					wmode: 'transparent'
 				},
