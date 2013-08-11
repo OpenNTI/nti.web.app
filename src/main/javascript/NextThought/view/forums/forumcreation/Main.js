@@ -49,17 +49,65 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		if(target){
 			values = this.getValues();
 
-			if(values.title.length > 140){
-				//the title is too long
-				this.setError({
-					field: 'title',
-					message: "Could not save your Discussion. The title is too long. It can only be 140 characters or less"
-				});
-				return;
+			if(this.validateTitle(values.title) && this.validateDescription(values.description)){
+				this.fireEvent('save-forum', this, this.getRecord(), values.title, values.description, values.open);
 			}
-
-			this.fireEvent('save-forum', this, this.getRecord(), values.title, values.description, values.open);
 		}
+	},
+
+	validateTitle: function(title){
+		var baseMsg = 'Could not save your forum.';
+		if(title.length > 140){
+			this.setError({
+				field: 'title',
+				message: baseMsg + ' The title is too long. It can only be 140 characters or less.'
+			});
+
+			return false;
+		}
+
+		if(title.length === 0){
+			this.setError({
+				field: 'title',
+				message: baseMsg + ' The title can not be empty.'
+			});
+
+			return false;
+		}
+
+		if(title.trim().length === 0){
+			this.setError({
+				field: 'title',
+				message: baseMsg + ' The title can not be all whitespace.'
+			});
+
+			return false;
+		}
+
+		return true;
+	},
+
+	validateDescription: function(description){
+		var baseMsg = 'Could not save your forum.'
+		if(description.length === 0){
+			this.setError({
+				field: 'description',
+				message: baseMsg + ' The description can not be empty.'
+			});
+
+			return false;
+		}
+
+		if(description.trim().length === 0){
+			this.setError({
+				field: 'description',
+				message: baseMsg + ' The description can not be all whitespace.'
+			});
+
+			return false;
+		}
+
+		return true;
 	},
 
 	//go up to the window to get the record we are editing
