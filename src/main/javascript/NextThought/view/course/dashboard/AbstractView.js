@@ -199,7 +199,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	countRows: function(items,columns){
 		var area = 0, rows;
 		Ext.each(items,function(i){ area += i.cols * i.rows; });
-		rows = Math.ceil(area/columns)+1;
+		rows = Math.ceil(area/columns)*2;
 		return rows;
 	},
 
