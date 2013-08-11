@@ -87,12 +87,11 @@ Ext.define('NextThought.view.menus.Presence',{
 
 	saveState: function(type, show, status, active){
 		var key, current = TemporaryStorage.get(this.sessionKey) || {};
-
 		key = type;
 
 		if(type === 'available'){
 			if(show !== 'chat'){
-				key = 'away';
+				key = show;
 			}
 		}
 
