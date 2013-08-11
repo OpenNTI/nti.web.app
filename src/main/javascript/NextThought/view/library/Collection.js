@@ -37,6 +37,12 @@ Ext.define('NextThought.view.library.Collection',{
 	constructor: function(){
 		this.callParent(arguments);
 		this.trackThis();
+
+		if(this.store){
+			this.bindStore(this.store);//force the selection model to construct now. & bind the store... don't wait
+			// until render.
+			// Fixes an initialization bug where the nav bar remains 'empty' after a refresh.
+		}
 	},
 
 
