@@ -31,7 +31,7 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 	fallbackURL: '/dictionary/',
-	xslUrl: '/dictionary/static/style.xsl',
+	xslUrl: 'resources/xsl/dictionary.xsl',
 
 	initComponent: function(){
 		var me = this, p, nib = 20, top, y, x;
@@ -165,7 +165,7 @@ Ext.define('NextThought.view.definition.Window', {
 		}
 
 		req = {
-			url: getURL(me.xslUrl),
+			url: me.xslUrl,
 			async: true,
 			scope: me,
 			callback: function(q,s,r){
