@@ -304,9 +304,7 @@ Ext.define( 'NextThought.view.content.View', {
 			this.courseForum.restoreState(forum, topic);
 
 			this.reader.setLocation(ntiid,null,true);
-			if(this.reader.ntiidOnFrameReady){
-				this.up('master-view').down('library-collection').updateSelection(ntiid,true);
-			}
+			this.up('master-view').down('library-collection').updateSelection(ntiid,true);
 		}
 		catch(e){
 			console.error(e.message,'\n\n',e.stack|| e.stacktrace || e,'\n\n');
