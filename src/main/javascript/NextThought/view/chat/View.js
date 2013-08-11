@@ -88,6 +88,12 @@ Ext.define('NextThought.view.chat.View', {
         if(Ext.is.iPad){
             var me = this;
 
+            this.attachSenders();
+
+            me.on('onscroll', function(){
+                console.log('trying to scoll');
+            });
+
             me.el.down('input').on('touchstart', function(){
                 me.el.down('input').dom.click();
             });
@@ -112,6 +118,68 @@ Ext.define('NextThought.view.chat.View', {
             },me);
 
         }
+    },
+
+
+    attachSenders: function(){
+        var me = this,
+            s = {
+                NONE: 0,
+                DOWN: 1,
+                SCROLLING: 3,
+                SELECTING: 4,
+                DRAGGING: 5
+            },
+            state = s.NONE,
+
+            initialTime,
+            initialX, initialY,
+            lastX, lastY,
+            vel;
+
+        var mainDom = this.down('.chat-log-view').el.dom;
+
+        mainDom.addEventListener('touchstart', function(e){
+            console.log('touchStart');
+            var touch = e.touches[0];
+
+            if(state !== s.NONE){
+                return;
+            }
+            state = s.DOWN;
+
+            initialTime = Date.now();
+            initialY = touch.pageY;
+            initialX = touch.pageX;
+            lastY = initialY;
+            vel = 0;
+
+        });
+
+        mainDom.addEventListener('touchmove', function(e){
+            console.log('touchmove');
+
+            var touch = e.touches[0];
+
+            if(state === s.DOWN || state === s.SCROLLING){
+                console.log('should be scrolling?');
+                vel = lastY - touch.pageY;
+                lastY = touch.pageY;
+                lastX = touch.pageX;
+
+                var ele = me.down('.chat-log-view').el;
+                console.log(me);
+                ele.scrollBy(0, vel, false);
+
+                state = s.SCROLLING;
+            }
+        });
+
+        mainDom.addEventListener('touchend', function(e){
+            console.log('touchend');
+            state = s.NONE;
+        });
+
     },
 
 
