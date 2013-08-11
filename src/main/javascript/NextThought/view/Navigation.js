@@ -91,6 +91,7 @@ Ext.define('NextThought.view.Navigation',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.items = [];
+		this.timers = {};
 
 		if(!isFeature('new-library')){
 			this.libraryMenu = Ext.widget({
@@ -262,14 +263,32 @@ Ext.define('NextThought.view.Navigation',{
 
 
 	onMouseOver: function(e){
-		var viewId = this.getViewId(e.getTarget('[data-view]'));
+		var viewId = this.getViewId(e.getTarget('[data-view]')),
+			menu, hideTimer, handlers;
 		if(!Ext.isEmpty(viewId)){
-			this.ownerCt.down('[viewId="'+viewId+'"]').show();
+			clearTimeout(this.timers[viewId]);
+			menu = this.ownerCt.down('[viewId="'+viewId+'"]');
+			if( menu ){
+				this.timers[viewId] = Ext.defer(menu.show,500,menu);
+				handlers = this.mon(menu,{
+					destroyable: true,
+					single: true,
+					'show':function(){hideTimer = Ext.defer(menu.hide,1500,menu);},
+					'mouseover':function(){clearTimeout(hideTimer);},
+					'hide':function(){handlers.destroy();}
+				});
+			}
 		}
 	},
 
 
-	onMouseOut: function(e){},
+	onMouseOut: function(e){
+		var viewId = this.getViewId(e.getTarget('[data-view]'));
+		if(!Ext.isEmpty(viewId)){
+			clearTimeout(this.timers[viewId]);
+			delete this.timers[viewId];
+		}
+	},
 
 
     onClickTouch: function(el){ return this.onClick({getTarget:function(){return el;}}); },
