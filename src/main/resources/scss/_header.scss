@@ -1,3 +1,50 @@
+@mixin content-item-row{
+	height: 57px;
+	cursor: pointer;
+	margin-right: 0;
+	padding-right: 40px;
+	position: relative;
+
+	.image {
+		position: absolute;
+		top: 0; bottom: 0; left: 0;
+		width: 60px;
+		z-index: 2;
+		background-size: cover;
+		background-position: center;
+
+		&.is-book{
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+	}
+
+	.wrap {
+		z-index: 2;
+		position: relative;
+		margin-left: 70px;
+		padding-top: 5px;
+
+		.courseName,
+		.provider {
+			text-transform: uppercase;
+			font: normal bold 10px/12px $font;
+			color: $secondary-grey;
+			overflow: hidden;
+			@include ellipse();
+		}
+
+		.title {
+			margin-top: -4px;
+			font: normal 300 26px/35px 'Open Sans Condensed', $font;
+			color: $primary-grey;
+			overflow: hidden;
+			@include ellipse();
+		}
+	}
+}
+
+
 .browser-warning {
     .x-panel-body{
         height: auto;
@@ -79,7 +126,8 @@
 			box-shadow: -1px 0 0 0 #e2e2e2;
 		}
 
-		&.active .box{
+		&.active .box,
+		 .active .box{
 			$width: 10px;
 			background: #ffffff;
 
@@ -117,57 +165,19 @@
 	}
 
 	.content {
+		@include content-item-row;
+		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
 		height: 57px;
-		cursor: pointer;
 		width: initial;
 		max-width: 400px;
-		margin-right: 0;
-		padding-right: 40px;
 		z-index: 2;
-
-		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
 
 		opacity: 0.5;
 		&.active, &:hover {
 			opacity: 1;
 		}
 
-		.image {
-			position: absolute;
-			top: 0; bottom: 0; left: 0;
-			width: 60px;
-			z-index: 2;
-			background-size: cover;
-			background-position: center;
 
-			&.is-book{
-				background-size: contain;
-				background-repeat: no-repeat;
-			}
-		}
-
-		.wrap {
-			z-index: 2;
-			position: relative;
-			margin-left: 70px;
-			padding-top: 10px;
-
-			.provider {
-				text-transform: uppercase;
-				font: normal bold 10px/12px $font;
-				color: $secondary-grey;
-				overflow: hidden;
-				@include ellipse();
-			}
-
-			.title {
-				margin-top: -4px;
-				font: normal 300 26px/35px 'Open Sans Condensed', $font;
-				color: $primary-grey;
-				overflow: hidden;
-				@include ellipse();
-			}
-		}
 	}
 
 	.library {
@@ -213,6 +223,46 @@
 
 		&.active::after{
 			@include sprite($icons,'course-nav-search_active');
+		}
+	}
+}
+
+.x-panel-content-switcher{
+	box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+	.x-menu-body{ padding: 0; background: #eae9e9; }
+
+	.item {
+		@include content-item-row;
+		border-bottom: 1px solid #eae9e9;
+
+		&:first-of-type {
+			background: #fff;
+			@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
+		}
+
+		&:not(:first-of-type){
+			background: #fff;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+	}
+
+	.more {
+		height: 37px;
+		text-align: center;
+		cursor: pointer;
+
+		div {
+			display: inline-block;
+			background: $secondary-grey;
+			border-radius: 5px;
+			width: 5px;
+			height: 5px;
+			margin: 15px 3px;
 		}
 	}
 }

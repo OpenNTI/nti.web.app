@@ -3,6 +3,7 @@ Ext.define('NextThought.view.Navigation',{
 	alias: 'widget.main-navigation',
 	requires: [
 		'NextThought.view.menus.Navigation',
+        'NextThought.view.menus.MostRecentContent',
 		'NextThought.view.library.Collection',
         'NextThought.modules.TouchSender'
 	],
@@ -78,6 +79,13 @@ Ext.define('NextThought.view.Navigation',{
 
 		if(!isFeature('new-library')){
 			this.el.down('.library').remove();
+		} else {
+			this.contentSwitcher = Ext.widget({
+				viewId: 'content',
+				xtype: 'most-recent-content-switcher',
+				ownerNode: this.el.down('.content')
+			});
+			this.items.push(this.contentSwitcher);
 		}
 
         if(Ext.is.iPad){
@@ -136,6 +144,7 @@ Ext.define('NextThought.view.Navigation',{
 					}
 				}
 			});
+
 		this.items.push(this.searchMenu);
 	},
 
@@ -188,6 +197,28 @@ Ext.define('NextThought.view.Navigation',{
     },
 
 
+	track: function(rec, pop){
+		if( pop ){
+			rec = this.currentRecord = this.recordHistory.pop();
+			return rec;
+		}
+
+		if(this.currentRecord){
+			this.recordHistory.push(this.currentRecord);
+			if(this.recordHistory.length>5){
+				this.recordHistory.shift();
+			}
+		}
+
+		if( this.contentSwitcher ){
+			this.contentSwitcher.track(rec);
+		}
+
+		this.currentRecord = rec;
+		return rec;
+	},
+
+
 	getRefItems: function(deep){
 		var items = this.items,
 	        len = items.length,
@@ -210,19 +241,7 @@ Ext.define('NextThought.view.Navigation',{
 	updateCurrent: function(pop, rec){
 		var cls = 'is-book';
 
-		if(pop!==true){
-			if(this.currentRecord){
-				this.recordHistory.push(this.currentRecord);
-				if(this.recordHistory.length>5){
-					this.recordHistory.shift();
-				}
-			}
-		}
-		else {
-			rec = this.recordHistory.pop();
-		}
-
-		this.currentRecord = rec;
+		rec = this.track(rec,pop===true);
 
 		if(!rec){ console.error("No record attached"); return; }
 
@@ -231,7 +250,7 @@ Ext.define('NextThought.view.Navigation',{
 		this.imgEl[rec.get('isCourse')?'removeCls':'addCls'](cls);
 
 		this.imgEl.setStyle('background-image', 'url('+rec.get('icon')+')');
-		this.providerEl.update(rec.get('Creator'));
+		this.providerEl.update(rec.get('courseName')||rec.get('Creator'));
 		this.titleEl.update(rec.get('title'));
 	},
 
