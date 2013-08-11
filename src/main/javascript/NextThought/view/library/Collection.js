@@ -67,7 +67,7 @@ Ext.define('NextThought.view.library.Collection',{
 			this.fireEvent('set-last-location-or-root',record.get('NTIID'));
 		}
 		delete this.suppressSetLocation;
-		this.callParent(arguments);
+		return this.callParent(arguments);
 	},
 
 
