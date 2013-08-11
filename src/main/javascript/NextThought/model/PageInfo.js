@@ -56,5 +56,14 @@ Ext.define('NextThought.model.PageInfo', {
 				/^toc$/i.test(l.location.nodeName) ||
 				toc.querySelector('unit'+ntiid) ||
 				toc.querySelector('lesson'+ntiid.replace(/^\[/,'[topic-')));
-	}
+	},
+
+
+    getPublicScope: function(){
+        var l = ContentUtils.getLocation(this.getId()),
+            toc = l && l.toc;
+
+        // FIXME: waiting on content for the right field name. Needs testing too.
+        return toc.querySelector('[publicScope]') || [];
+    }
 });

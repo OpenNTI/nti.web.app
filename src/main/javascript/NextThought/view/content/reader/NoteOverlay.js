@@ -123,7 +123,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			sharedWith = sharing && sharing.sharedWith,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			shareInfo =  SharingUtils.sharedWithToSharedInfo(
-							SharingUtils.resolveValue(sharedWith));
+							SharingUtils.resolveValue(sharedWith), this.reader.getLocation().pageInfo);
 
 		if( this.editor && !this.editor.isDestroyed ){
 			return false;
@@ -206,7 +206,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var me = this,
 			note = v.body,
 			title = v.title,
-			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo),
+            pageInfo = this.reader.getLocation().pageInfo,
+			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo, pageInfo),
 			style = editor.lineInfo.style || 'suppressed',
 			rangeInfo;
 

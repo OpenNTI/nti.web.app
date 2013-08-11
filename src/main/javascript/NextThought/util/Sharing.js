@@ -62,17 +62,27 @@ Ext.define('NextThought.util.Sharing',{
 	},
 
 	//TODO need to check published status for the case of blogs NO?
-	isPublic: function(sharedWith){
-		//NOTE: An object is public, if it's shared with all communities that the user belong to.
+	isPublic: function(sharedWith, pageInfo){
+        if(Ext.isEmpty(sharedWith)){ return false; }
 
-		if(Ext.isEmpty(sharedWith)){ return false; }
-		var communities = [], sharedWithIds;
 
-		sharedWithIds = Ext.Array.map(sharedWith, function(u){
-			return u.getId ? u.getId() : u;
-		});
+		var communities = [], sharedWithIds,
+            publicScope;
 
-		Ext.each(this.getAppUserCommunities(), function(rec){
+        if(!pageInfo){
+            pageInfo = this.getCurrentPageInfo();
+        }
+
+        publicScope = pageInfo && pageInfo.getPublicScope() || [];
+        sharedWithIds = Ext.Array.map(sharedWith, function(u){
+            return u.getId ? u.getId() : u;
+        });
+
+        if(!Ext.isEmpty(publicScope)){
+            return Ext.isEmpty(Ext.Array.difference(publicScope, sharedWithIds));
+        }
+
+        Ext.each(this.getAppUserCommunities(), function(rec){
 			communities.push(rec.getId());
 		});
 
@@ -81,22 +91,41 @@ Ext.define('NextThought.util.Sharing',{
 	},
 
 
-	sharedWithForSharingInfo: function(sharingInfo){
-		if(Ext.isEmpty(sharingInfo)){ return []; }
+    getCurrentPageInfo: function(){
+        // FIXME: better way to get pageInfo without DQ search?
+        var reader = Ext.ComponentQuery.query('content-reader');
+        return !Ext.isEmpty(reader) && reader[0].getLocation().pageInfo;
+    },
+
+	sharedWithForSharingInfo: function(sharingInfo, pageInfo){
+        if(Ext.isEmpty(sharingInfo)){ return []; }
 		var isPublic = sharingInfo.publicToggleOn,
-			entities = sharingInfo.entities || [];
+			entities = sharingInfo.entities || [],
+            targets;
+
+        if(!pageInfo){
+            pageInfo = this.getCurrentPageInfo();
+        }
 
 		if(isPublic){
-			Ext.each(this.getAppUserCommunities(), function(rec){
-				entities.push(rec.getId());
-			});
+            targets = pageInfo && pageInfo.getPublicScope() || [];
+
+            // Use publicScope if defined, otherwise assume public means all communities that a user belongs in.
+            if( !Ext.isEmpty(targets)){
+                 entities.concat(targets);
+            }
+            else {
+                Ext.each(this.getAppUserCommunities(), function(rec){
+                    entities.push(rec.getId());
+                });
+            }
 		}
 		return Ext.Array.unique(entities);
 	},
 
 
-	sharedWithToSharedInfo: function(sharedWith){
-		var isPublic = this.isPublic(sharedWith),
+	sharedWithToSharedInfo: function(sharedWith, pageInfo){
+		var isPublic = this.isPublic(sharedWith, pageInfo),
 			communities =[],
 			list = [],
 			shareInfo = {publicToggleOn: isPublic};
