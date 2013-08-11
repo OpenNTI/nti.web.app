@@ -269,14 +269,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	doPlayHandler: function(){
-		console.warn(this.currentState);
+		console.warn('doPlay', this.currentState, arguments);
 		this.currentState = 1;
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
 
 	doPauseHandler: function(){
-		console.warn(this.currentState);
+		console.warn('doPause', this.currentState);
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
