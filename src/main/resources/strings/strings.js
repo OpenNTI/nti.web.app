@@ -7,3 +7,5 @@ NTIStrings['default_scoreboard_message'] = 'Results';
 
 NTIStrings['Apologies'] = 'Our Apologies!';
 NTIStrings['Cannot load page.'] = 'Cannot load page. Please try again later.'
+
+NTIStrings['forum_sharing_label'] = 'Everyone including the lame kids'

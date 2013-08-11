@@ -491,6 +491,16 @@
 
 }
 
+.forumcreation-main-view{
+	.submit{
+		.sharing-checkbox{
+			position: absolute;
+			top: 8px !important;
+			left: 5px !important;
+		}
+	}
+}
+
 .x-menu{
 	&.month-picker-list{
 		.x-menu-item{

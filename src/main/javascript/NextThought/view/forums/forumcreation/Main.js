@@ -17,6 +17,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 			]}
 		},
 		{xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
+			{xtype: 'checkbox', cls: 'sharing-checkbox', name:'sharing', boxLabel: NTIStrings['forum_sharing_label']},
 			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
 				b.up('window').close();
 			}},
@@ -34,6 +35,8 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		if(record){
 			this.down('[name=title]').update(record.get('title'));
 			this.down('[name=description]').el.update(record.get('description'));
+			//we don't allow changing the ACL after the forum is created.
+			this.down('[name=sharing]').destroy();
 		}
 
 		this.mon(this.el, 'click', 'handleClick', this);
@@ -55,7 +58,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 				return;
 			}
 
-			this.fireEvent('save-forum', this, this.getRecord(), values.title, values.description);
+			this.fireEvent('save-forum', this, this.getRecord(), values.title, values.description, values.open);
 		}
 	},
 
@@ -69,7 +72,8 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		//Pull data out of the forum and return it here
 		return {
 			title: this.down('[name=title]').getValue(),
-			description: this.down('[name=description]').el.getValue()
+			description: this.down('[name=description]').el.getValue(),
+			open: this.down('[name=sharing]') && this.down('[name=sharing]').getValue()
 		}
 	},
 
@@ -87,7 +91,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		box.show();
 
 		//set error state on specific field
-		field.addCls('error');
+		field && field.addCls('error');
 
 		this.up('window').updateLayout();
 	},
@@ -111,6 +115,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		}
 
 		this.setError(msg);
+		this.el.unmask();
 		console.debug(arguments);
 	}
 });

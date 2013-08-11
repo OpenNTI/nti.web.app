@@ -1014,7 +1014,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 	
-	saveForum: function(editorCmp, record, title, description){
+	saveForum: function(editorCmp, record, title, description, open){
 		var isEdit = Boolean(record),
 			cmp = editorCmp.up('forumcreation-window').ownerCmp,
 			forum = isEdit? record : NextThought.model.forums.Forum.create(),
@@ -1045,6 +1045,24 @@ Ext.define('NextThought.controller.Forums', {
 		if(editorCmp.el){
 			editorCmp.el.mask('Saving...');
 		}
+		//If we are creating a course and the forum is for enrolled students only
+		if(!open && !isEdit){
+			Library.courseStore.each(function(rec){
+				if(board.getId() === rec.getBoard()){
+					//set the forums ACL to restricted
+					forum.set('ACL',[{
+			            "Action": "Allow", 
+			            "Class": "ForumACE", 
+			            "Entities": rec.getScope('restricted'), 
+			            "MimeType": "application/vnd.nextthought.forums.ace", 
+			            "Permissions": [
+			                "Read", 
+			                "Create"
+			            ]
+			        }]);
+				}		
+			});
+		}
 
 		forum.set({
 			title: title,
@@ -1070,7 +1088,7 @@ Ext.define('NextThought.controller.Forums', {
 					console.debug('Failed to save new/edited forum', arguments);
 					unmask();
 				}
-			})
+			});
 		}catch(e){
 			console.error('An error occurred saving forum', Globals.getError(e));
 			unmask();

@@ -7,7 +7,8 @@ Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'description', type: 'string' },
 		{ name: 'title', type: 'string' },
 		{ name: 'TopicCount', type: 'int', persist: false },
-		{ name: 'NewestDescendant', type: 'singleitem'}
+		{ name: 'NewestDescendant', type: 'singleitem'},
+		{ name: 'ACL', type: 'auto'}
 	],
 
 	buildContentsStore: function(cfg, extraParams){
