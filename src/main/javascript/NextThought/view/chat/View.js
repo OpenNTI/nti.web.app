@@ -108,7 +108,7 @@ Ext.define('NextThought.view.chat.View', {
                     if(me.hasOwnProperty('initialY')){
                         topWindow.setY(me.initialY);
                     }
-                },3000);
+                },100);
             },me);
 
         }

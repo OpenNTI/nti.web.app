@@ -129,7 +129,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		this.cancelPopupTimeout();
 		this.fireEvent('chat', record);
-		this.startPopupTimeout(view,record,item,2000);
+        if(!Ext.is.iPad){
+            this.startPopupTimeout(view,record,item,2000);
+        }
 	},
 
 
@@ -310,8 +312,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 			this.buttonRow.addCls('no-group-chat');
 		}
 
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('account.contacts', 'touchHandler');
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('account.contacts', 'touchHandler');
+        }
 	},
 
 
