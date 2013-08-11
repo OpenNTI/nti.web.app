@@ -19,5 +19,35 @@ Ext.define('NextThought.model.Title', {
 		{ name: 'PresentationProperties', type: 'auto'},
 		{ name: 'path', type: 'string', defaultValue: ''},
 		{ name: 'sample', type: 'bool', defaultValue: false, persist: false}
-	]
+	],
+
+	getBoard: function(){
+		return this.board || this.findBoard();
+	},
+
+	findBoard: function(){
+		if(this.get('isCourse')){
+			this.board = this.getToc().querySelector('course').getAttribute('discussionBoard');
+		}else{
+			this.board = null;
+		}
+		
+		return this.board;
+	},
+
+	getScope: function(scope){
+		var toc = this.getToc(),
+			entities = toc && toc.querySelectorAll('scope[type="'+scope+'"] entry'),
+			values = [];
+
+		Ext.each(entities, function(entity){
+			values.push(entity.textContent.trim());
+		});
+
+		return values;
+	},
+
+	getToc: function(){
+		return this.toc || (this.toc = Library.getToc(this));
+	}
 });

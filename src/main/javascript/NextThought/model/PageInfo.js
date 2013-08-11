@@ -29,7 +29,7 @@ Ext.define('NextThought.model.PageInfo', {
 		var maybe = this.isCourse;
 
 		if(!Ext.isDefined(maybe)){
-			maybe = ContentUtils.getLocation(this.getId());
+			maybe = this.getLocationInfo();
 			if(maybe){
 				maybe = maybe.isCourse || false; //false instead of undefined
 				this.isCourse = maybe;
@@ -41,7 +41,7 @@ Ext.define('NextThought.model.PageInfo', {
 
 
 	isPartOfCourseNav: function(){
-		var l = ContentUtils.getLocation(this.getId()),
+		var l = this.getLocationInfo(),
 			toc = l && l.toc,
 			ntiid = (l && l.NTIID) || '--';
 
@@ -58,12 +58,23 @@ Ext.define('NextThought.model.PageInfo', {
 				toc.querySelector('lesson'+ntiid.replace(/^\[/,'[topic-')));
 	},
 
+	getLocationInfo: function(){
+		return this.locationInfo || (this.locationInfo = ContentUtils.getLocation(this));
+	},
+
 
     getPublicScope: function(){
-        var l = ContentUtils.getLocation(this.getId()),
-            toc = l && l.toc;
+        var l = this.getLocationInfo(),
+            title = l && l.title;
 
         // FIXME: waiting on content for the right field name. Needs testing too.
-        return toc.querySelector('[publicScope]') || [];
+        return (title && title.getScope('public')) || [];
+    },
+
+    getRestrictedScope: function(){
+    	var l = this.getLocationInfo(),
+    		title = l && l.title;
+
+    	return (title && title.getScope('restricted')) || [];
     }
 });
