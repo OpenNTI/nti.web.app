@@ -45,7 +45,12 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 					]
 				}},
 				{ cls: 'more', cn: [{},{},{}]}
-			])
+			]),
+			listeners:{
+				scope: this,
+				select: 'onSelected',
+				containerclick: 'onFramedClicked'
+			}
 		});
 	},
 
@@ -87,5 +92,21 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		s.remove(rec);
 		rec.lastTracked = new Date();
 		s.add(rec);
+
+		console.log(s.getCount());
+	},
+
+
+	onSelected: function(selModel,record){
+		selModel.deselect(record);
+		this.fireEvent('set-last-location-or-root',record.get('NTIID'));
+		this.hide();
+	},
+
+
+	onFramedClicked: function(){
+		this.fireEvent('go-to-library');
+		this.hide();
 	}
+
 });
