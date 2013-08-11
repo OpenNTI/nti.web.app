@@ -188,7 +188,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			nW = w + 65;
 		if(!edEl){return;}
 
-		minW = parseInt(edEl.getStyle('min-width'),10);
+		minW = parseInt(edEl.getStyle('min-width'),10) || nW;//if edEl reads NaN, default it
 		this.editor.setWidth( minW > nW ? minW : nW );
 		this.editor.fireEvent('grew');
 	},
