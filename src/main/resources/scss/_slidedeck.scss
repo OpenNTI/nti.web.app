@@ -761,6 +761,9 @@ $experimental-support-for-svg: true;
     }
 
     .x-mask-msg{
+        left: 50% !important;
+        top: 40% !important;
+
         .x-mask-msg-text{
             color: white !important;
         }
