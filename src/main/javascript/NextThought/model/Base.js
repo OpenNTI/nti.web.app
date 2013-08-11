@@ -801,11 +801,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	addObserverForField: function(observer, field, fn, scope){
+	addObserverForField: function(observer, field, fn, scope, options){
 		if(!observer){
 			return;
 		}
-		observer.mon(this, this.fieldEvent(field), fn, scope);
+		observer.mon(this, this.fieldEvent(field), fn, scope, options);
 	},
 
 

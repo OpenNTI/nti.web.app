@@ -80,22 +80,48 @@ Ext.define('NextThought.store.FlatPage',{
 
 
 		function add(s,rec){
+
+            function doesRecordPassFilters(rec){
+                return Ext.Array.every(currentFilters, function(f){
+                    if(f.filterFn){ return f.filterFn.apply(f, [rec]); }
+                    return true;
+                });
+            }
+
+
+            function addMe(r){
+                var i = me.findExact('NTIID', r.get('NTIID'));
+                if(!r || !(r instanceof NextThought.model.Note)){ return; }
+
+                if(i !== -1 && r !== me.getAt(i)){
+                    console.warn('DUPLICATE NTIID', r, me.getAt(i));
+                    return;
+                }
+
+                if(!r.parent){
+                    //If the rec passes current filters, add it.
+                    if(doesRecordPassFilters(r)){
+                        me.add(r);//add one at a time to get insertion sort.
+                    }
+                    else{
+                        // If the lineFilter is set on the flatPage store,
+                        // wait until we set the line property on the new rec,
+                        // then check it and add it.
+                        r.addObserverForField(me, 'line', function(){
+                            me.suspendEvents(false);
+                            me.add(r);
+                            me.filter(me.filters.getRange());
+                            me.resumeEvents();
+                        }, {single:true});
+                    }
+                }
+            }
+
 			var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
-				records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders);
+				records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders),
+                currentFilters = me.filters.getRange();
 
-			Ext.each(records,function(r){
-				var i = me.findExact('NTIID', r.get('NTIID'));
-				if(!r || !(r instanceof NextThought.model.Note)){ return; }
-
-				if(i !== -1 && r !== me.getAt(i)){
-					console.warn('DUPLICATE NTIID', r, me.getAt(i));
-					return;
-				}
-
-				if(!r.parent){
-					me.add(r);//add one at a time to get insertion sort.
-				}
-			});
+			Ext.each(records, addMe);
 		}
 
 		function load(s,rec){

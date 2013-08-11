@@ -115,6 +115,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		var g = this.gutter;
 
+        if(this.gutter.down('.active')){
+            this.selectedLine = this.gutter.down('.active').getAttribute('data-line');
+        }
 		clear(g.controls.dom);
 
 		if( this.buckets ){
@@ -202,7 +205,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	render: function(){
 		var me = this, containers = {}, renderedCount = 0,
 			cleanContent, rootContainerId,
-			cloned, descs = [], cids = [], doc = null;
+			cloned, descs = [], cids = [], doc = null, selectedEl;
 
 		if(me.rendering){
 			console.warn('Render called while rendering...');
@@ -293,6 +296,12 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		if(console.timeEnd){
 			console.timeEnd('Annotation render loop');
 		}
+        if(this.selectedLine){
+            selectedEl = this.gutter.down('[data-line='+this.selectedLine+']');
+            if(selectedEl){
+                selectedEl.addCls('active');
+            }
+        }
 	}
 
 }, function(){
