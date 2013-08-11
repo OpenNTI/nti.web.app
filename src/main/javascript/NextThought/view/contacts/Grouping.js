@@ -97,6 +97,8 @@ Ext.define('NextThought.view.contacts.Grouping',{
 		}, this);
 
 		this.chatTool.assignExtAction(this.groupChatAction);
+		//set the settings disabled if there is no menu or it doens't have any items
+		this.settingsTool.setDisabled(!(this.menu && this.menu.items && this.menu.items.length > 0));
 		if(this.groupChatAction.isHidden()){
 			this.chatTool.hide();
 		}

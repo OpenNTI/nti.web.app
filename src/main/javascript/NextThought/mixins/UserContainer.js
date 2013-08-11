@@ -21,7 +21,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 	setupActions: function(group, ignoreChatOption){
-		var items, listOrGroup = group && Ext.String.capitalize(group.readableType),
+		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
 				ui: 'nt',
 				plain: true,
@@ -97,6 +97,14 @@ Ext.define('NextThought.mixins.UserContainer', {
 				this.groupChatAction,
 				this.getGroupCodeAction
 			];
+		}
+		//don't set up the menu if all the items are hidden
+		Ext.each(items, function(i){
+			allHidden = allHidden? i.isHidden() : allHidden;
+		});
+
+		if(allHidden){
+			return;
 		}
 
 		this.menu = Ext.widget('menu',Ext.apply({
