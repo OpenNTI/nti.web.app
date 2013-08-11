@@ -64,6 +64,9 @@ Ext.define('NextThought.controller.Forums', {
 					'select': this.loadForum,
 					'new-forum': this.showForumEditor
 				},
+				'forumcreation-main-view':{
+					'save-forum': this.saveForum
+				},
 				'forums-forum': {
 					'new-topic':this.showTopicEditor,
 					'select':this.loadTopic
@@ -821,7 +824,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	showForumEditor: function(cmp, record){
 		Ext.widget('forumcreation-window', {
-			board: cmp.record,
+			ownerCmp: cmp,
 			record: record
 		}).show();
 	},
@@ -1006,6 +1009,70 @@ Ext.define('NextThought.controller.Forums', {
 		}
 		catch(e){
 			console.error('An error occurred saving blog', Globals.getError(e));
+			unmask();
+		}
+	},
+
+	
+	saveForum: function(editorCmp, record, title, description){
+		var isEdit = Boolean(forum),
+			cmp = editorCmp.up('forumcreation-window').ownerCmp,
+			forum = isEdit? record : NextThought.model.forums.Forum.create(),
+			board = cmp.record;
+		
+		function finish(entry){
+			//add the entry into the appropiate stores?
+			if(!isEdit){
+				try {
+					if(cmp.store){
+						cmp.store.insert(0,entry);
+					}
+				}
+				catch(e){
+					console.error('Could not insert post into widget',Globals.getError(e));
+				}
+			}
+			unmask();
+			editorCmp.onSaveSuccess();
+		}
+
+		function unmask(){
+			if(editorCmp.el){
+				editorCmp.el.unmask();
+			}
+		}
+
+		if(editorCmp.el){
+			editorCmp.el.mask('Saving...');
+		}
+
+		forum.set({
+			title: title,
+			description: description
+		});
+
+		if(!isEdit){
+			forum.set({
+				ContainerId: board.getId()
+			});
+		}
+
+		try{
+			forum.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single:true});
+			forum.save({
+				url: isEdit? undefined : board && board.getLink('add'),
+				success: function(post, operation){
+					var entry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
+
+					finish(entry);
+				},
+				failure: function(){
+					console.debug('Failed to save new/edited forum', arguments);
+					unmask();
+				}
+			})
+		}catch(e){
+			console.error('An error occurred saving forum', Globals.getError(e));
 			unmask();
 		}
 	},
