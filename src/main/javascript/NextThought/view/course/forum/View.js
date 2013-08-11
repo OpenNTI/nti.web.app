@@ -238,7 +238,13 @@ Ext.define('NextThought.view.course.forum.Board',{
 		}
 	},
 
-	onHeaderClick: function(e){}
+	onHeaderClick: function(e){
+		if(e.getTarget('.new-forum')){
+			e.stopEvent();
+			this.fireEvent('new-forum', this);
+			return false;
+		}
+	}
 });
 
 Ext.define('NextThought.view.course.forum.ForumList',{
