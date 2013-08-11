@@ -57,12 +57,18 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 
 
 	unlockHeader: function(){
+		if(!this.headerLocked){
+			return;
+		}
 		this.headerEl.setStyle({left: 0, top: 0}).removeCls(this.LOCKED_HEADER_CLS).appendTo(this.headerElContainer);
 		delete this.headerLocked;
 	},
 
 
 	lockHeader: function(){
+		if(this.headerLocked){
+			return;
+		}
 		this.headerEl.addCls(this.LOCKED_HEADER_CLS).appendTo(Ext.get('view'));
 		this.headerLocked = true;
 		this.handleWindowResize();

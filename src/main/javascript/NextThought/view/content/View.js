@@ -94,7 +94,8 @@ Ext.define( 'NextThought.view.content.View', {
 			'switch-to-reader':'switchViewToReader',
 			'beforeactivate':'onBeforeActivation',
             'beforedeactivate': 'onBeforeDeActivation',
-			'deactivate':'onDeactivated'
+			'deactivate':'onDeactivated',
+			'activate': 'onActivated'
 		});
 	},
 
@@ -184,6 +185,11 @@ Ext.define( 'NextThought.view.content.View', {
 					.concat(CQ.query('note-window'));
 
 		Ext.Array.map(needsClosing,function(c){c.destroy();});
+
+		var active = this.getLayout().getActiveItem();
+		if(active){
+			active.fireEvent('deactivate', this);
+		}
 	},
 
 
@@ -202,8 +208,24 @@ Ext.define( 'NextThought.view.content.View', {
         // NOTE: we should probably fire this event for all the children of this view,
         // since one could have the editor active (in which case we would want to display appropriate warning).
         // For now, it seems like the reader should be notified and we will add others if we find it necessary.
-        return this.reader.fireEvent('beforedeactivate', this);
+		var result = true;
+        result = this.reader.fireEvent('beforedeactivate', this);
+		if(result){
+			var active = this.getLayout().getActiveItem();
+			if(active){
+				result = active.fireEvent('beforedeactivate', this);
+			}
+		}
+		return result;
     },
+
+
+	onActivated: function(){
+		var active = this.getLayout().getActiveItem();
+		if(active){
+			active.fireEvent('activate', this);
+		}
+	},
 
 
 	onBeforeNavigate: function(ntiid, fromHistory){
