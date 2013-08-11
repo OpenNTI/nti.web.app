@@ -128,9 +128,12 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			eventName = eventData.event||'',
 			handlerName;
 
-		if(!filter.test(eventName) && this.id === eventData.id ){
+		if(!filter.test(eventName) || this.id !== eventData.id ){
+			//console.log('Filtered Out:', this.id, eventData.id);
 			return;
 		}
+
+		//console.warn('Passed Filter:', this.id, eventData.id, eventData);
 
 		eventName = eventName.replace(filter,'');
 		handlerName = eventName+'Handler';
