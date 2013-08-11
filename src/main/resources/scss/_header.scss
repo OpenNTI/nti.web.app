@@ -166,11 +166,15 @@
 
 	.content {
 		@include content-item-row;
-		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
 		height: 57px;
 		width: initial;
 		max-width: 400px;
 		z-index: 2;
+
+		@include icon('arrow-course-dropdown', $top: 25px, $left: auto, $right: 15px);
+		&::after{
+			z-index: 1;
+		}
 
 		opacity: 0.5;
 		&.active, &:hover {
