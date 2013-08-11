@@ -267,14 +267,23 @@ Ext.define('NextThought.view.Navigation',{
 	},
 
 
+	maybeStopTimer: function(viewId){
+		var el = this.el.down('.active');
+		if(el && el.getAttribute('data-view')===viewId){
+			return;
+		}
+
+		clearTimeout(this.timers[viewId]);
+	},
+
+
 	onClick: function(e){
 		var viewId = this.getViewId(e.getTarget('[data-view]'));
 
 		if(!Ext.isEmpty(viewId)){
+			if(viewId === 'search'){ return; }
 
-			if(viewId === 'search'){
-				return;
-			}
+			this.maybeStopTimer(viewId);
 
 			this.fireEvent('view-selected', viewId);
 		}

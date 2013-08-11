@@ -52,6 +52,23 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 				containerclick: 'onFramedClicked'
 			}
 		});
+
+
+		this.on({
+			scope: this,
+			mouseleave: 'startHide',
+			mouseover: 'stopHide'
+		});
+	},
+
+
+	startHide: function(){
+		this.stopHide();
+		this.menuHideTimer = Ext.defer(this.hide,750,this);
+	},
+
+	stopHide: function(){
+		clearTimeout(this.menuHideTimer);
 	},
 
 
@@ -82,6 +99,7 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 			return this.callParent(arguments);
 		}
 		finally{
+			this.fireEvent('mouseover');//trigger the partent from hiding this if the mouse doesn't move.
 			this.alignTo(n,'tl-tl');
 		}
 	},
@@ -93,7 +111,9 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		rec.lastTracked = new Date();
 		s.add(rec);
 
-		console.log(s.getCount());
+		if(s.getCount() > 5){
+			s.remove(s.getRange(5));
+		}
 	},
 
 
