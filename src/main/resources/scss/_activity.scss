@@ -427,6 +427,7 @@
 
 				.meta,.body,.foot {
 					margin-left: 45px;
+					margin-right: 40px;
 				}
 
 				.foot {
@@ -462,6 +463,12 @@
 					font: normal 600 10px $font;
 
 					.name {
+						max-width: 100%;
+						display: inline-block;
+						overflow: hidden;
+						vertical-align: bottom;
+						@include ellipse();
+
 						color: $primary-blue;
 						cursor: pointer;
 						text-transform: uppercase;
