@@ -35,10 +35,19 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 	},
 
 
-	onResponse: function(){
+	onResponse: function(q,s,r){
 		console.log(arguments);
+		if(!s){
+			this.handleError(r.responseText);
+		}
 	},
 
+	enableSubmission: function (enabled) {
+		var win = this.up('window');
+		if (win) {
+			win.setConfirmState(enabled);
+		}
+	},
 
 	handleError: function (msg) {
 		this.enableSubmission(false);
