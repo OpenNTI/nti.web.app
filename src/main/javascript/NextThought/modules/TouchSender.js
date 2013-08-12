@@ -102,6 +102,12 @@ Ext.define('NextThought.modules.TouchSender', {
                 }
             }
 
+            //if touching something besides contact popout, close popout
+            var cPopout = Ext.get(Ext.query('.contact-popout')[0]);
+            if(cPopout){
+                cPopout.destroy();
+            }
+
             var touch = e.touches[0];
 
             container.fireEvent('touchStart', touch.pageX, touch.pageY);
