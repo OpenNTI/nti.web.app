@@ -190,24 +190,12 @@
 			width: 80px; height: 75px;
 			margin-right: 10px;
 
-			&.x-message-box-warning::after{
-				content: " ";
-				width: 52px;
-				height: 44px;
-				position: absolute;
-				top: 9px;
-				left: 14px;
-				background: url(../images/old_sprites/spr_modal_dialogue.png) -67px -1px no-repeat;
+			&.x-message-box-warning {
+				@include icon('modal-yellow-sign',$top: 9px,$left: 14px);
 			}
 
-			&.warning-red::after{
-				content: " ";
-				width: 52px;
-				height: 44px;
-				position: absolute;
-				top: 9px;
-				left: 14px;
-				background: url(../images/old_sprites/spr_modal_dialogue.png) -67px -50px no-repeat;
+			&.warning-red {
+				@include icon('modal-red-sign',$top: 9px,$left: 14px);
 			}
 		}
 	}

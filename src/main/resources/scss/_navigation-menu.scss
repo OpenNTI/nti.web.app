@@ -79,16 +79,6 @@
 		}
 	}
 
-	.settings {
-		cursor: pointer;
-		position: absolute;
-		top: 12px;
-		right: 10px;
-		width: 14px;
-		height: 14px;
-		background: url(../images/old_sprites/spr_library.png) -36px 0 no-repeat;
-	}
-
 	.count {
 		color: #73cdfb;
 		font:{ size: 10px; style: italic; weight: bold; }
@@ -97,28 +87,6 @@
 		position: relative;
 		margin-left: 3px;
 		top: -6px;
-	}
-
-	.drawer {
-		cursor: pointer;
-		position: relative;
-		color: $secondary-grey;
-		font:{ size: 10px; weight: bold; }
-		text-transform: uppercase;
-		padding-left: 36px;
-
-		&::after {
-			position: absolute;
-			content: ' ';
-			width: 18px;
-			height: 13px;
-			background: url(../images/old_sprites/spr_library.png) 0 0 no-repeat;
-			top: 10px;
-			left: 12px;
-		}
-
-		&.documents::after{background-position: -18px 0;}
-		&.dashboard::after{background-position: 0 0;}
 	}
 
 	.collection-name {

@@ -564,11 +564,11 @@
 					width: 16px;
 					height: 16px;
 					position: absolute;
-					top: 4px; left: 5px;
+
 				}
-				&.edit::after{ background-position: 0 0 }
-				&.share::after{ background-position: -16px 0; }
-				&.delete::after{ background-position: -32px 0; }
+				&.edit{ @include icon('redactions-edit',$top: 6px, $left: 6px); }
+				&.share{ @include icon('redactions-share',$top: 6px, $left: 6px); }
+				&.delete{ @include icon('redactions-trashcan',$top: 5px, $left: 7px); }
 
 				&.edit.save{
 					box-shadow: inset 0 0 0 1px #369AD3;
@@ -598,10 +598,10 @@
 					&.delete{
 						background-color: $primary-red;
 						box-shadow: inset 0 0 0 1px #D14646 !important;
-						&::after{ background-position: -32px -16px; }
+						&::after{ @include sprite($icons,'redactions-trashcan_hover'); }
 					}
-					&.edit::after{ background-position: 0 -16px }
-					&.share::after{ background-position: -16px -16px; }
+					&.edit::after{ @include sprite($icons,'redactions-edit_hover'); }
+					&.share::after{ @include sprite($icons,'redactions-share_hover'); }
 
 				}
 			}

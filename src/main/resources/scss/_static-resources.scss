@@ -47,15 +47,7 @@
 
 		}
 
-		&::before{
-			content: " ";
-			width: 52px;
-			height: 44px;
-			position: absolute;
-			top: 12px;
-			left: 20px;
-			background: url(../images/old_sprites/spr_modal_dialogue.png) -67px -1px no-repeat;
-		}
+		@include icon('modal-yellow-sign',$top: 12px,$left: 20px);
 
 		.heading{
 			color: $tertiary-grey;
