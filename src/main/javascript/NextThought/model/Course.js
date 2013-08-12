@@ -13,6 +13,7 @@ Ext.define('NextThought.model.Course', {
 		{ name: 'Discountable', type: 'bool', persist: false },
 		{ name: 'Provider', type: 'string', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
+		{ name: 'Name', type: 'string', persist: false },
 		{ name: 'Icon', type: 'string', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },

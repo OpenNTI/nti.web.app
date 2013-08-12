@@ -20,6 +20,7 @@ Ext.define('NextThought.controller.Store', {
 	views: [
 		'course.enrollment.Window',
 		'course.enrollment.Confirm',
+		'course.enrollment.Complete',
 		'store.purchase.Window',
 		'store.purchase.Form',
 		'store.purchase.History',
@@ -72,6 +73,12 @@ Ext.define('NextThought.controller.Store', {
 
 				'enrollment-detailview':{
 					'show-enrollment-confirmation':'showEnrollmentConfirmation'
+				},
+				'enrollment-confirm':{
+					'show-enrollment-complete':'showEnrollmentComplete'
+				},
+				'enrollment-complete': {
+					'close': 'forceCloseWindow'
 				},
 
 				'*': {
@@ -309,6 +316,17 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		this.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
+	},
+
+
+	showEnrollmentComplete: function(view,course){
+		var win = this.getEnrollmentWindow();
+		if (!win) {
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
 	},
 
 
@@ -740,7 +758,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 	forceCloseWindow: function (cmp, w) {
-		var win = w || this.getPurchaseWindow();
+		var win = w || this.getPurchaseWindow() || this.getEnrollmentWindow();
 
 		if (!win) {
 			console.error('Expected a purchase window', arguments);

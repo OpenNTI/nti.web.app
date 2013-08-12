@@ -7,14 +7,25 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 	ordinal: 1,
 	confirmLabel: 'Continue',
 
-	renderTpl: Ext.DomHelper.markup([{
-		cls:'msg', 'html':'You are about to enroll in this class'
-	}]),
+	renderTpl: Ext.DomHelper.markup([
+			{ tag: 'h3', cls:'gap', html: 'You are about to {enroll}.'},
+			{ html: '...Grey or someone, work your lingustic magic...'},
+			{ cls:'gap', cn: [
+				'Are you sure?'
+			]}
+		]),
 
 
 	renderSelectors: {
 	},
 
+
+	beforeRender: function(){
+		this.callParent(arguments);
+		this.renderData = Ext.apply(this.renderData||{},{
+			enroll: this.record.getLink('unenroll')?'unenroll':'enroll'
+		});
+	},
 
 
 
@@ -36,10 +47,14 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 
 
 	onResponse: function(q,s,r){
-		console.log(arguments);
+
 		if(!s){
-			this.handleError(r.responseText);
+			console.log(arguments);
+			this.handleError(r.statusText);
+			return;
 		}
+
+		this.fireEvent('show-enrollment-complete', this, this.record);
 	},
 
 	enableSubmission: function (enabled) {

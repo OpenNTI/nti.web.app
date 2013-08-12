@@ -31,14 +31,15 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 			{ cls: 'titlebar', cn: [
 				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
 				{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
+				{ cls: 'tab', html: 'Complete', 'data-order': 2 },
 				{ cls: 'close' }
 			]},
 			{ cls: 'info', cn: [
 				{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
 				{ cls: 'meta', cn: [
-					{cls: 'course', html: '{courseName}'},
+					{cls: 'course', html: '{Name}'},
 					{cls: 'title', html: '{Title}'},
-					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'}
+					{tag:'tpl','if':'by', cn:{cls: 'byline', html: 'By {by}'}}
 				]}
 			] }
 		]
@@ -99,6 +100,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	beforeRender: function () {
 		this.callParent(arguments);
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
+		this.renderData.by = this.renderData.Author||this.renderData.Provider;
 	},
 
 
