@@ -98,9 +98,17 @@ Ext.define('NextThought.view.course.forum.View',{
 			console.error("The discussion board failed to load");
 			me.hasBoard = false;
 			me.add({xtype: 'notfound'});
+
+			function setError(){
+				me.el.down('.resource-not-found .body .heading').update(getString('course_forum_empty_header', 'Sorry, this board doesn\'t exist...'));
+				me.el.down('.resource-not-found .body .subtext').update(getString('course_forum_empty_sub', 'This board is currently not available.'));
+			}
 			
-			me.el.down('.resource-not-found .body .heading').update(getString('course_forum_empty_header', 'Sorry, this board doesn\'t exist...'));
-			me.el.down('.resource-not-found .body .subtext').update(getString('course_forum_empty_sub', 'This board is currently not available.'));
+			if(me.rendered){
+				setError();
+			}else{
+				me.on('afterrender', setError, me);
+			}
 		}
 
 		if(ntiid && this.currentNtiid !== ntiid){
