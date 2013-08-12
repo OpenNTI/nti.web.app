@@ -23,6 +23,8 @@ Ext.define('NextThought.view.library.View', {
 	},{
 		ui: 'library-collection',
 		cls: 'books',
+		hidden: true,
+		bookList:true,
 		xtype:'library-collection',
 		name: getString('My Books')
 	}],
@@ -31,11 +33,19 @@ Ext.define('NextThought.view.library.View', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.removeCls('make-white');
-		Library.on('show-courses','showCourses',this);
+		this.mon(Library,{
+			'show-courses':'showCourses',
+			'hide-courses':'hideCourses',
+			'show-books':'showBooks',
+			'hide-books':'hideBooks'
+		});
 	},
 
 
 	showCourses: function(){ this.down('[courseList]').show(); },
+	hideCourses: function(){ this.down('[courseList]').hide(); },
+	showBooks: function(){ this.down('[bookList]').show(); },
+	hideBooks: function(){ this.down('[bookList]').hide(); },
 
 
 	restore: function(state){ this.fireEvent('finished-restore'); }

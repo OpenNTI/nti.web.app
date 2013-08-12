@@ -220,6 +220,12 @@ Ext.define('NextThought.Library', {
 			} else {
 				me.fireEvent('hide-courses');
 			}
+
+			if(me.store.getCount()){
+				me.fireEvent('show-books');
+			} else {
+				me.fireEvent('hide-books');
+			}
 		}
 		
 		var me = this;
