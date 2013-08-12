@@ -38,15 +38,15 @@ Ext.define('NextThought.modules.TouchSender', {
      * @note Built on a fsm that changes state based on the touch events and current state.
      * @param config
      */
-    constructor: function(config) {
+    constructor: function (config) {
         // Only support touch on iPad devices
-        if (!Ext.is.iPad){
+        if (!Ext.is.iPad) {
             return;
         }
 
         Ext.apply(this, config);
 
-        this.container.on('afterrender', function() {
+        this.container.on('afterrender', function () {
             this.setupTouchHandlers();
         }, this);
     },
@@ -55,7 +55,7 @@ Ext.define('NextThought.modules.TouchSender', {
      * Setup the handlers for the various touch events for
      * click and scroll
      */
-    setupTouchHandlers: function() {
+    setupTouchHandlers: function () {
         var me = this,
             s = me.statics(),
             container = me.container,
@@ -66,7 +66,7 @@ Ext.define('NextThought.modules.TouchSender', {
             initialTime,
             initialX, initialY,
             lastX, lastY,
-            //current movement delta
+        //current movement delta
             vel;
 
         /**
@@ -75,10 +75,11 @@ Ext.define('NextThought.modules.TouchSender', {
          * @returns {boolean}
          */
         function withinTapThreshold() {
-            return Math.abs(lastY-initialY) < s.TAP_THRESHOLD;
+            return Math.abs(lastY - initialY) < s.TAP_THRESHOLD;
         }
 
-        dom.addEventListener('touchstart', function(e) {
+        dom.addEventListener('touchstart', function (e) {
+
             //If click outside chatdock, close chatdock
             var aboveDock = container.el.down('#chat-dock'),
                 dock = container.el.dom.getAttribute('id'),
@@ -87,28 +88,36 @@ Ext.define('NextThought.modules.TouchSender', {
 
             e.preventDefault();
 
-            //if touching something besides sidebar, close it
-            if(dom.getAttribute('id').indexOf("main-sidebar") === -1){
+            // If touching something besides sidebar, close it
+            if (dom.getAttribute('id').indexOf("main-sidebar") === -1) {
                 ele = Ext.get(Ext.query('.sidebar')[0]);
-                if(ele){
+                if (ele) {
                     Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
                 }
                 updock = Ext.get('chat-dock_header_hd');
-
             }
 
 
-            if(aboveDock === null && dock !== 'chat-dock' && belowDock === null){
-	            dockEl = Ext.ComponentManager.get('chat-dock');
-                if(dockEl.el.dom.getAttribute('class').indexOf("open") !== -1){
+            if (aboveDock === null && dock !== 'chat-dock' && belowDock === null) {
+                dockEl = Ext.ComponentManager.get('chat-dock');
+                if (dockEl.el.dom.getAttribute('class').indexOf("open") !== -1) {
                     dockEl.floatCollapsedPanel();
                 }
             }
 
-            //if touching something besides contact popout, close popout
+            // If touching something besides contact popout, close popout
             cPopout = Ext.query('.contact-popout')[0];
-            if(cPopout){
+            if (cPopout) {
                 Ext.destroy(Ext.getCmp(cPopout.getAttribute('id')));
+            }
+
+
+            // If touching something besides search, close search
+            if (dom.getAttribute('id').indexOf('search-menu') === -1) {
+                ele = Ext.get(Ext.query('.search-menu')[0]);
+                if (ele) {
+                    Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                }
             }
 
             touch = e.touches[0];
@@ -116,9 +125,10 @@ Ext.define('NextThought.modules.TouchSender', {
             container.fireEvent('touchStart', touch.pageX, touch.pageY);
 
             // Only start a new touch if all touches are off
-            if (state !== s.STATE.NONE){
+            if (state !== s.STATE.NONE) {
                 return;
             }
+
             state = s.STATE.DOWN;
 
             initialTime = Date.now();
@@ -127,22 +137,30 @@ Ext.define('NextThought.modules.TouchSender', {
             lastY = initialY;
             vel = 0;
 
-            container.fireEvent('touchElementAt', e.pageX, e.pageY, function(ele) {
+            container.fireEvent('touchElementAt', e.pageX, e.pageY, function (ele) {
 
                 pickedElement = ele;
 
                 // Set a timer for a long press
-                setTimeout(function() {
-                    if(state !== s.STATE.DOWN) {return;}
+                setTimeout(function () {
+                    if (state !== s.STATE.DOWN) {
+                        return;
+                    }
+
                     state = s.STATE.LONGPRESS;
                     container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
 
-                    container.fireEvent('touchElementIsDraggable', ele, function(is){
-                        if(!is || state !== s.STATE.LONGPRESS) {return;}
+                    container.fireEvent('touchElementIsDraggable', ele, function (isDraggable) {
+                        if (!isDraggable || state !== s.STATE.LONGPRESS) {
+                            return;
+                        }
                         state = s.STATE.DRAGGING;
                     });
-                    container.fireEvent('touchElementIsSelectable', ele, function(is) {
-                        if(!is || state !== s.STATE.LONGPRESS) {return;}
+
+                    container.fireEvent('touchElementIsSelectable', ele, function (isSelectable) {
+                        if (!isSelectable || state !== s.STATE.LONGPRESS) {
+                            return;
+                        }
                         state = s.STATE.SELECTING;
                     });
 
@@ -152,7 +170,8 @@ Ext.define('NextThought.modules.TouchSender', {
 
         }, false);
 
-        dom.addEventListener('touchmove', function(e) {
+
+        dom.addEventListener('touchmove', function (e) {
             e.preventDefault();
 
             var touch = e.touches[0];
@@ -182,12 +201,13 @@ Ext.define('NextThought.modules.TouchSender', {
             container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
 
             if (state === s.STATE.DOWN ||
-                state === s.STATE.LONGPRESS)
-            {
+                state === s.STATE.LONGPRESS) {
                 scrollMove();
                 if (!withinTapThreshold()) {
-                    container.fireEvent('touchElementIsScrollable', pickedElement, function(is) {
-                        if (is) {state = s.STATE.SCROLLING;}
+                    container.fireEvent('touchElementIsScrollable', pickedElement, function (isScrollable) {
+                        if (isScrollable) {
+                            state = s.STATE.SCROLLING;
+                        }
                     });
                 }
             }
@@ -200,17 +220,17 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (state === s.STATE.DRAGGING) {
                 dragMove();
             }
-            else{
+            else {
                 console.warn('Unknown touch state on touchMove!');
             }
 
         }, false);
 
-        dom.addEventListener('touchend', function(e){
+        dom.addEventListener('touchend', function (e) {
             function kineticScroll() {
-                var lt0 = vel< 0,
+                var lt0 = vel < 0,
                     currentTime = Date.now(),
-                    deltaTime = currentTime-lastUpdateTime,
+                    deltaTime = currentTime - lastUpdateTime,
                     aboveThreshold, sameDirection;
                 lastUpdateTime = currentTime;
 
@@ -219,10 +239,10 @@ Ext.define('NextThought.modules.TouchSender', {
                 aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
                 sameDirection = startLt0 === lt0;
 
-                if ( aboveThreshold && sameDirection && state === s.STATE.NONE ){
+                if (aboveThreshold && sameDirection && state === s.STATE.NONE) {
                     // Apply friction in the opposite movement direction
                     // based on the time passed for smoother movement
-                    vel+= (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION)*deltaTime;
+                    vel += (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION) * deltaTime;
 
                     container.fireEvent('touchScroll', pickedElement, vel);
                     setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
@@ -233,7 +253,7 @@ Ext.define('NextThought.modules.TouchSender', {
 
             container.fireEvent('touchEnd', lastX, lastY);
 
-            var startLt0 = vel<0,
+            var startLt0 = vel < 0,
                 lastUpdateTime = Date.now(),
                 tempState = state;
             state = s.STATE.NONE;
@@ -244,18 +264,18 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (tempState === s.STATE.LONGPRESS) {
                 // Don't do anything since the interactions should have
                 // come from either the longpress itself, or scrolling/dragging
-	            Ext.emptyFn();//lint doesn't like empty blocks...perhaps re-write to not need one?
+                Ext.emptyFn(); //lint doesn't like empty blocks...perhaps re-write to not need one?
             }
             else if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
-                if (Math.abs(vel) > s.SCROLL_MAX_SPEED){
-                    vel = startLt0? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+                if (Math.abs(vel) > s.SCROLL_MAX_SPEED) {
+                    vel = startLt0 ? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
                 }
                 kineticScroll();
             }
             else if (tempState === s.STATE.SELECTING) {
                 container.fireEvent('touchMakeRangeFrom', initialX, initialY, lastX, lastY,
-                    function(range) {
+                    function (range) {
                         var xy = [lastX, lastY];
                         container.fireEvent('touchAddAnnotation', range, xy);
                     }
@@ -264,7 +284,7 @@ Ext.define('NextThought.modules.TouchSender', {
             else if (tempState === s.STATE.DRAGGING) {
                 container.fireEvent('touchDrop', pickedElement, lastX, lastY);
             }
-            else{
+            else {
                 console.warn('Unknown touch state on touchEnd!');
             }
 
