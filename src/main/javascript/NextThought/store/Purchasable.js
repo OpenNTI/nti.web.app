@@ -7,6 +7,21 @@ Ext.define('NextThought.store.Purchasable',{
 	model: 'NextThought.model.store.Purchasable',
 	autoLoad: false,
 
+	model: 'NextThought.model.GenericObject',
+
+	proxy: {
+		url: 'tbd',
+		type: 'rest',
+		reader: {
+			type: 'nti',
+			root: 'Items'
+		},
+		headers: {
+			'Accept': 'application/vnd.nextthought.collection+json'
+		},
+		model: 'NextThought.model.GenericObject'
+	},
+
 	/**
 	 * Returns a Purchasable if we have one in the store that looks
 	 * like it would contain the following ntiid.  This is sort of a weird

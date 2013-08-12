@@ -9,7 +9,8 @@ Ext.define('NextThought.controller.Store', {
 		'store.Purchasable',
 		'store.PurchaseAttempt',
 		'store.StripePricedPurchasable',
-		'store.StripePurchaseError'
+		'store.StripePurchaseError',
+		'Course'
 	],
 
 	stores: [
