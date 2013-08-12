@@ -35,9 +35,7 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 			req = {
 				url: getURL(url),
 				method: 'POST',
-				params:{
-					courseId: r.getId()
-				},
+				jsonData: Ext.encode({courseId: r.getId()}),
 				scope: this,
 				callback: this.onResponse
 			};
