@@ -30,7 +30,7 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 		config.data = {
 			title: n.getAttribute('title'),
 			icon: getURL(i.root+n.getAttribute('icon')),
-			ntiid: n.getAttribute('ntiid'),
+			ntiid: n.getAttribute('ntiid').split(' '),
 			label: n.getAttribute('label'),
 			comments: 0
 		};
@@ -42,14 +42,19 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 	beforeRender: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},this.data);
-
-		$AppConfig.service.getObject(this.data.ntiid,
-				this.onTopicResolved,
-				this.onTopicResolveFailure,
-				this,
-				true
-		);
+        this.idsToLookup = Ext.clone(this.data.ntiid) || [];
+        this.loadTopic(this.idsToLookup.shift());
 	},
+
+
+    loadTopic: function(ntiid){
+        $AppConfig.service.getObject(ntiid,
+            this.onTopicResolved,
+            this.onTopicResolveFailure,
+            this,
+            true
+        );
+    },
 
 
 	onTopicResolved: function(topic){
@@ -65,7 +70,11 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
 
 
 	onTopicResolveFailure: function(){
-		console.warn('Could not load the topic object to show the comment count.');
+		console.warn('Could not load the topic object: ', arguments);
+
+        if(!Ext.isEmpty(this.idsToLookup)){
+            this.loadTopic(this.idsToLookup.shift());
+        }
 	},
 
 
