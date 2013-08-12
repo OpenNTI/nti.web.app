@@ -54,7 +54,7 @@ Ext.define('NextThought.view.forums.Board',{
 							{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'}
 						]}
 					]},
-					{ tag: 'tpl', 'if': 'isFeature(\'mutable-forums\') && values.Links.getLinksForRel(\'edit\')', cn: [
+					{ tag: 'tpl', 'if': 'isFeature(\'mutable-forums\') && !Ext.isEmpty(values.Links.getLinksForRel(\'edit\'))', cn: [
 						{ tag: 'span', cls: 'edit', html: 'Edit'}
 					]}
 				]}

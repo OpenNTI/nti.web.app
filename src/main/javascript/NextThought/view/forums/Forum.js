@@ -181,6 +181,11 @@ Ext.define('NextThought.view.forums.Forum',{
 
 		if(Ext.isEmpty(this.record.getLink('add'))){
 			this.headerEl.down('.new-topic').remove();
+			this.emptyText = Ext.DomHelper.markup({
+				cls: 'empty-forum',
+				html: 'No discussions available.',
+				cn: {cn:[ { tag: 'a', html:'Go back', href: '#back'} ]}
+			});
 		}
 
 		this.mon(this.headerEl,'click','onHeaderClick');
