@@ -29,14 +29,28 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		var record = this.getRecord();
+		var board = this.getBoard(),
+			record = this.getRecord(),
+			sharing = this.down('[name=sharing]');
+
+		//if the board is under a course set up the sharing if not get rid of the option
+		if(board && board.belongsToCourse()){
+			sharing.setValue(false);
+		}else{
+			sharing.destroy();
+		}
 
 		//If we are editing inintialize here
 		if(record){
 			this.down('[name=title]').update(record.get('title'));
 			this.down('[name=description]').el.update(record.get('description'));
-			//we don't allow changing the ACL after the forum is created.
-			this.down('[name=sharing]').destroy();
+
+			//if there is no ACL the record is open to the entire DFL
+			if(Ext.isEmpty(record.get('ACL'))){
+				sharing.setValue(true);
+			}
+			//we are editing so we can't toggle the share
+			sharing.disable();
 		}
 
 		this.mon(this.el, 'click', 'handleClick', this);
@@ -108,6 +122,11 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 		}
 
 		return true;
+	},
+
+	//go up to the window to get the board we are in
+	getBoard: function(){
+		return this.up('forumcreation-window').ownerCmp.record;
 	},
 
 	//go up to the window to get the record we are editing

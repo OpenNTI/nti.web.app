@@ -1019,7 +1019,7 @@ Ext.define('NextThought.controller.Forums', {
 			cmp = editorCmp.up('forumcreation-window').ownerCmp,
 			forum = isEdit? record : NextThought.model.forums.Forum.create(),
 			board = cmp.record;
-		
+
 		function finish(entry){
 			//add the entry into the appropiate stores?
 			if(!isEdit){
@@ -1042,18 +1042,18 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
-		if(editorCmp.el){
-			editorCmp.el.mask('Saving...');
-		}
-		//If we are creating a course and the forum is for enrolled students only
-		if(!open && !isEdit){
-			Library.courseStore.each(function(rec){
-				if(board.getId() === rec.getBoard()){
+		try{
+			if(editorCmp.el){
+				editorCmp.el.mask('Saving...');
+			}
+			//If we are creating a course and the forum is for enrolled students only
+			if(!open && !isEdit){
+				if(board.getRelatedCourse()){
 					//set the forums ACL to restricted
 					forum.set('ACL',[{
 			            "Action": "Allow", 
 			            "Class": "ForumACE", 
-			            "Entities": rec.getScope('restricted'), 
+			            "Entities": board.getRelatedCourse().getScope('restricted'), 
 			            "MimeType": "application/vnd.nextthought.forums.ace", 
 			            "Permissions": [
 			                "Read", 
@@ -1061,21 +1061,19 @@ Ext.define('NextThought.controller.Forums', {
 			            ]
 			        }]);
 				}		
-			});
-		}
+			}
 
-		forum.set({
-			title: title,
-			description: description
-		});
-
-		if(!isEdit){
 			forum.set({
-				ContainerId: board.getId()
+				title: title,
+				description: description
 			});
-		}
 
-		try{
+			if(!isEdit){
+				forum.set({
+					ContainerId: board.getId()
+				});
+			}
+			
 			forum.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single:true});
 			forum.save({
 				url: isEdit? undefined : board && board.getLink('add'),
