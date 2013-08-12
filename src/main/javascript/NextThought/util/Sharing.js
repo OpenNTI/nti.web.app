@@ -93,7 +93,7 @@ Ext.define('NextThought.util.Sharing',{
 
     getCurrentPageInfo: function(){
         // FIXME: better way to get pageInfo without DQ search?
-        var reader = Ext.ComponentQuery.query('content-reader');
+        var reader = Ext.ComponentQuery.query('reader-content');
         return !Ext.isEmpty(reader) && reader[0].getLocation().pageInfo;
     },
 
@@ -112,7 +112,7 @@ Ext.define('NextThought.util.Sharing',{
 
             // Use publicScope if defined, otherwise assume public means all communities that a user belongs in.
             if( !Ext.isEmpty(targets)){
-                 entities.concat(targets);
+                entities = Ext.Array.merge(entities, targets);
             }
             else {
                 Ext.each(this.getAppUserCommunities(), function(rec){
