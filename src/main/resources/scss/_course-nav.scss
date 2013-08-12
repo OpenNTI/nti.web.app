@@ -22,6 +22,8 @@
 			right: 0;
 			bottom: 0;
 			top: 50px;
+			margin-left: -50px;
+			padding-left: 50px;
 
 			overflow: {
 				x: visible;
@@ -93,7 +95,6 @@
 				.date{
 					@include hardware-accelerate();
 					display: block;
-					position: fixed;
 				}
 
 				.x-ie &,
