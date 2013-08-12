@@ -15,13 +15,14 @@ Ext.define('NextThought.view.store.Collection',{
 	]),
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} purchasable item {featured} row-{rows} col-{cols}', 'data-qtip': '{Title}', cn:[
+		cls: '{inGrid} purchasable item {Class:lowercase} {featured} row-{rows} col-{cols}', 'data-qtip': '{Title}', cn:[
 			{ cls:'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn:[
 				{ cls: 'courseName', html: '{courseName}' },
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
-				{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'},
+				{tag:'tpl', 'if':'Amount', cn:{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}},
+				{ cls: 'description', html: '{Description}'},
 				{tag: 'tpl', 'if': 'HasHistory', cn: [
 					{ cls: 'history', html: 'Purchase History'}
 				]}
