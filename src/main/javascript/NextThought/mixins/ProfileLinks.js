@@ -20,12 +20,12 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 	}
 
 
-	function showCard(e, el){
+	function showCard(e, el, position){
 		var Popup = NextThought.view.account.contacts.management.Popout,
 			pop,
 			user = this.userObject || this.user;
 
-		if(!el || !el.dom || !user || this instanceof Popup || !Popup.beforeShowPopup(user, el)){ return; }
+		if(!user || this instanceof Popup || !Popup.beforeShowPopup(user, el)){ return; }
 		
 		pop = contactCardPopout;
 
@@ -39,13 +39,18 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 		}
 
 		pop.show();
-		pop.alignTo(el, 'tl-bl?', [0,0]);
+		if( el && el.dom ){
+			pop.alignTo(el, 'tl-bl?', [0,0]);
+		} else {
+			pop.setPosition(position||{});
+		}
 
 		contactCardPopout = canShow? null: pop;
 	}
 
 	function startShowCard(e, el){
-		showCardTimer = Ext.defer(showCard, canShow?0:500, this, [e, el]);
+		var p = el.getAnchorXY('tl');
+		showCardTimer = Ext.defer(showCard, canShow?0:500, this, [e, el,p]);
 	}
 
 	function stopShowCard(){
