@@ -90,10 +90,6 @@ Ext.define('NextThought.view.chat.View', {
 
             this.attachSenders();
 
-            me.on('onscroll', function(){
-                console.log('trying to scoll');
-            });
-
             me.el.down('input').on('touchstart', function(){
                 me.el.down('input').dom.click();
             });

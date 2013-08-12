@@ -511,6 +511,15 @@ Ext.define('NextThought.controller.Account', {
 			this.termsWin = this.createWin('Terms of Service',
 					$AppConfig.links.terms_of_service);
 		}
+
+        if(Ext.is.iPad){
+            this.termsWin.on('afterrender', function(){
+                var iframe = this.el.down('.x-fit-item');
+                iframe.parent().el.setStyle('-webkit-overflow-scrolling','touch');
+                iframe.parent().el.setStyle('overflow','auto');
+            });
+        }
+
 		this.termsWin.show();
 	},
 
