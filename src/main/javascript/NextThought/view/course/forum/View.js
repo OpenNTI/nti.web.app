@@ -92,7 +92,11 @@ Ext.define('NextThought.view.course.forum.View',{
 			});
 		}
 
-		function failure(){}
+		function failure(){
+			console.error("The discussion board failed to load");
+			me.hasBoard = false;
+			me.add({xtype: 'course-forum-empty'});
+		}
 
 		if(ntiid && this.currentNtiid !== ntiid){
 			this.currentNtiid = ntiid;
@@ -214,6 +218,16 @@ Ext.define('NextThought.view.course.forum.View',{
 		
 		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
 	}
+});
+
+Ext.define('NextThought.view.course.forum.Empty',{
+	extend: 'Ext.Component',
+	alias: 'widget.course-forum-empty',
+
+	renderTpl: Ext.DomHelper.markup({
+		cls: 'empty-forum',
+		html: NTIStrings['course_forum_empty']
+	})
 });
 
 Ext.define('NextThought.view.course.forum.Board',{
