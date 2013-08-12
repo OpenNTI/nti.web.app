@@ -62,7 +62,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	initComponent:function(){
-		var me = this;
+		var me = this, keyMap;
         this.on('no-presentation-parts', function(){
 			this.videoOnly = true;
 			me.fireEvent('media-viewer-ready', me);
@@ -88,6 +88,18 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         if(!Ext.isEmpty(this.startAtMillis)){
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
+
+
+
+		keyMap = new Ext.util.KeyMap({
+			target: document,
+			binding: [{
+				key: Ext.EventObject.ESC,
+				fn: this.destroy,
+				scope: this
+			}]
+		});
+		this.on('destroy',function(){keyMap.destroy(false);});
 	},
 
 
