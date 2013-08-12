@@ -25,7 +25,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			width:'{width}px',
 			height:'{height}px'
 		},
-		cn: [{//Globals.loadScript(location.protocol+"//html5.kaltura.org/js");
+		cn: [{
 			tag:'iframe',
 			id: '{id}-iframe',
 			name: '{id}-iframe',
@@ -50,7 +50,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		{tag:'html', lang:'en', cn:[
 			{tag:'head',cn:[
 				{tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js')},
-				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapi.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php')},
+//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapi.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+//				{tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js')},
 				{tag:'script', type:'text/javascript', html:'\n{code}\n'},
 				{tag:'style', type:'text/css', cn:[
 					'body, html { margin: 0; padding: 0; }'
@@ -69,7 +72,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	// We need to externalize these values since they relate to our Kaltura Account.  This is okay for OU since they are paying for it.
 	PARTNER_ID: '1500101',
 	UICONF_ID: '15491291',
-
+	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
 
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
@@ -83,6 +86,15 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.currentPosition = 0;
 		this.currentState = -1;
 		this.isReady = false;
+
+		//This is a hack to intialize the player with the first video in the player's playlist. (Major hack, this is making ALOT of assumptions...but it works for now)
+		try{
+			var source = config.firstMedia.get('sources')[0].source;
+			source = Ext.isArray(source) ? source[0] : source;
+			this.INITIAL_VIDEO = source.split(':')[1];
+		}catch(e){
+			console.warn('hack failure...', e.stack|| e.message || e);
+		}
 
 		this.handleMessage = Ext.bind(this.handleMessage,this);
 		this.playerSetup();
@@ -124,7 +136,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		//console.debug('Message:',event);
 
 		var filter = /^kalturaplayer\./i,
-			eventData = event.data || {},
+			eventData = Ext.decode(event.data,true) || {},
 			eventName = eventData.event||'',
 			handlerName;
 
@@ -159,11 +171,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	        return;
         }
 
-		context.postMessage({
+		context.postMessage(Ext.encode({
 			type: type,
 			name: name,
 			data: data
-		},'*');
+		}),'*');
 	},
 
 
@@ -301,11 +313,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function send(event,data){
 				//console.log('Event: '+event, playerId, data);
-				host.postMessage({
+				host.postMessage(JSON.stringify({
 					event: 'kalturaplayer.'+event,
 					id: playerId,
 					data: data
-				},'*');
+				}),'*');
 			}
 
 			function ensureReady(){
@@ -348,7 +360,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 			function handleMessage(event){
-				var eventData = event.data,
+				var eventData = JSON.parse(event.data),
 					player = document.getElementById(playerId);
 
 				//console.debug('From '+playerId+', to app:', eventData);
@@ -359,7 +371,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-//			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
@@ -378,7 +390,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					"externalInterfaceDisabled": false,
 					"autoPlay": false
 				},
-				"entry_id": "0_nmgd4bvw",
+				"entry_id": "%INITIAL_VIDEO%",
 				params:{
 					wmode: 'transparent'
 				},

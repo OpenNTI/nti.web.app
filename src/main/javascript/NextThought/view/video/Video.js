@@ -196,7 +196,8 @@ Ext.define('NextThought.view.video.Video',{
 				el: Ext.get(me.el.down('.video-wrapper')),
 				parentId: me.id,
 				width: me.playerWidth,
-				height: me.playerHeight
+				height: me.playerHeight,
+				firstMedia: me.playlist[0]
 			});
 
 			me.on('destroy','destroy',
@@ -294,6 +295,7 @@ Ext.define('NextThought.view.video.Video',{
 		return false;
 	},
 
+
 	resumePlayback: function(){
 		if(this.activeVideoService && !this.isPlaying()){
 			this.issueCommand(this.activeVideoService,'play');
@@ -301,6 +303,7 @@ Ext.define('NextThought.view.video.Video',{
 		}
 		return false;
 	},
+
 
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false),
@@ -413,6 +416,7 @@ Ext.define('NextThought.view.video.Video',{
 	playlistPrevious: function(){
 		this.playlistSeek(this.playlistIndex - 1);
 	},
+
 
 	cleanup: function(){
 		var me = this;
