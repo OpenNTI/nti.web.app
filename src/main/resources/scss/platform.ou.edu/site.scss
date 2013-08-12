@@ -2,13 +2,18 @@
 
 .x-component-branding {
 	//in the library view, turn this on to show the logo/message box
-	//display: block;
+	display: block;
+
+	.logo{
+		top: 10%;
+		&::after{
+			content: url(../../images/platform.ou.edu/ou_logo_wordmark.png);
+		}
+	}
 }
 
 
 .main-navigation .branding{
-	//display: block;
-
-	//set this to something to show branding over the nav bar icon.
-	//background: crimson;
+	display: block;
+	background: url(../../images/platform.ou.edu/ou_cover.png) center center no-repeat;
 }
