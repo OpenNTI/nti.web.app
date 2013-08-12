@@ -44,7 +44,7 @@ Ext.define('NextThought.view.forums.forumcreation.Window',{
 
 		if(this.record){
 			header.title.update('Edit Forum');
-			header.detail.update(getString('forum_edit_text', 'To change the forum\'s title or description, edit the fields below.'))
+			header.detail.update(getString('forum_edit_text', 'To change the forum\'s title or description, edit the fields below.'));
 		}
 	}
 });
