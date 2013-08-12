@@ -2,7 +2,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	override: 'Ext.data.Connection',
 	requires: ['Ext.Ajax'],
 
-	disableCaching: true,//Ext.isGecko === true,
+	disableCaching: Ext.isGecko === true,
 	withCredentials: true,
 	useDefaultXhrHeader: false,
 
@@ -40,7 +40,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	Ext.Ajax.cors = true;
 	Ext.Ajax.withCredentials = true;
 
-	Ext.Ajax.disableCaching = true; //Ext.isGecko === true;
+	Ext.Ajax.disableCaching = Ext.isGecko === true;
 	Ext.Ajax.useDefaultXhrHeader = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/json';
