@@ -274,7 +274,6 @@ Ext.define('NextThought.controller.Navigation', {
 
 	navigate: function(cid, rec, options){
 		var me = this;
-
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
@@ -359,18 +358,48 @@ Ext.define('NextThought.controller.Navigation', {
 			}
 
 			if(cmp && cmp.isActive()){
-				cmp.setActiveTab('course-forum');
-				cmp.courseForum.restoreState(forum, topic);
-				history.pushState({library: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+				Ext.defer(function(){
+					cmp.setActiveTab('course-forum');
+					cmp.courseForum.restoreState(forum, topic);
+					history.pushState({library: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+				}, 1);
 			}
 		}
-
 		this.fireEvent('set-last-location-or-root', course, test, true);
 	},
 
 
-	beforeTopicShow: function(){
+	beforeTopicShow: function(topic){
 		console.log('implement beforeTopicShow...about to set the Forums View');
+		var me = this,
+			link = topic && topic.get('href'), r;
+		if(link){
+			//We can get the link to board from the content link
+			//doing this prevents having to to two requests to get the forum, then board. 
+			//assumes the content url looks like base/board/forum/topic
+			if(link.slice(-1) === '/'){
+				link = link.split('/').slice(0,-23).join('/');
+			}else{
+				link = link.split('/').slice(0,-2).join('/');
+			}
+
+			Ext.Ajax.request({
+				url: link,
+				callback: function(request, success, response){
+					if(!success){ return; }
+					var board = ParseUtils.parseItems(response.responseText)[0];
+					if(board.belongsToCourse()){
+						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topic.get('ContainerId'), topic.getId());
+						r = false;
+					}else{
+						r = this.setView('forums');
+					}
+				}
+			});
+
+			return r;
+		}
+
 		return this.setView('forums');
 	},
 
