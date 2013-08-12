@@ -88,6 +88,44 @@ Ext.define('NextThought.view.Navigation',{
 			this.items.push(this.contentSwitcher);
 		}
 
+
+
+		this.searchMenu = Ext.widget({
+			viewId: 'search',
+			xtype: 'navigation-menu',
+			layout: {type: 'vbox', align: 'stretch'},
+			overflowX: 'hidden',
+			overflowY: 'hidden',
+			cls: 'search-menu',
+			containerNode: this.el,
+			ownerNode: this.el.down('.search'),
+			items:[
+				{ xtype: 'searchfield' },
+				{
+					xtype: 'container',
+					autoScroll: true,
+					id: 'search-results',
+					hideMode: 'display',
+					flex: 1
+				}
+			],
+			listeners:{
+				hide: function(){
+					if(this.reactivate && this.ownerNode.hasCls('active')){
+						this.ownerNode.removeCls('active');
+						this.reactivate.addCls('active');
+					}
+				},
+				show: function(m){
+					this.reactivate = this.containerNode.down('.active').removeCls('active');
+					this.ownerNode.addCls('active');
+					m.down('searchfield').focus(true, true);
+				}
+			}
+		});
+
+	this.items.push(this.searchMenu);
+
         if(Ext.is.iPad){
             this.setupTouch();
         }
@@ -120,32 +158,6 @@ Ext.define('NextThought.view.Navigation',{
 
 			this.items.push(this.libraryMenu);
 		}
-
-		this.searchMenu = Ext.widget({
-				viewId: 'search',
-				xtype: 'navigation-menu',
-				layout: {type: 'vbox', align: 'stretch'},
-				overflowX: 'hidden',
-				overflowY: 'hidden',
-				cls: 'search-menu',
-				items:[
-					{ xtype: 'searchfield' },
-					{
-						xtype: 'container',
-						autoScroll: true,
-						id: 'search-results',
-						hideMode: 'display',
-						flex: 1
-					}
-				],
-				listeners:{
-					show: function(m){
-						m.down('searchfield').focus(true, true);
-					}
-				}
-			});
-
-		this.items.push(this.searchMenu);
 	},
 
 
@@ -281,12 +293,16 @@ Ext.define('NextThought.view.Navigation',{
 		var viewId = this.getViewId(e.getTarget('[data-view]'));
 
 		if(!Ext.isEmpty(viewId)){
-			if(viewId === 'search'){ return; }
+			if(viewId === 'search'){
+				return this.onMouseOver(e);
+			}
 
 			this.maybeStopTimer(viewId);
 
 			this.fireEvent('view-selected', viewId);
 		}
+
+		return true;
 	},
 
 
