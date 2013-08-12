@@ -16,4 +16,5 @@ NTIStrings['contact_us_message'] = 'Please use the form below to share your comm
 NTIStrings['alias_request_title'] = 'Request Alias Change...'
 NTIStrings['alias_request_message'] = 'Please use the form below to request an alias change for your account.  Please let us know the desired alias and the reason you are requesting this change.  We will review the request and let you know when the request has been processed.'
 
-NTIStrings['course_forum_empty'] = 'The board is currently unavailable.'
+NTIStrings['course_forum_empty_header'] = 'Sorry, this board doesn\'t exist...'
+NTIStrings['course_forum_empty_sub'] = 'This board is currently not available.'

@@ -3,8 +3,10 @@ Ext.define('NextThought.view.course.forum.View',{
 	alias: 'widget.course-forum',
 	requires: [
 		'NextThought.layout.container.Stack',
-		'NextThought.view.forums.Forum'
+		'NextThought.view.forums.Forum',
+		'NextThought.view.ResourceNotFound'
 	],
+
 	cls: 'course-forum',
 
 	layout: 'stack',
@@ -95,7 +97,10 @@ Ext.define('NextThought.view.course.forum.View',{
 		function failure(){
 			console.error("The discussion board failed to load");
 			me.hasBoard = false;
-			me.add({xtype: 'course-forum-empty'});
+			me.add({xtype: 'notfound'});
+			
+			me.el.down('.resource-not-found .body .heading').update(NTIStrings['course_forum_empty_header']);
+			me.el.down('.resource-not-found .body .subtext').update(NTIStrings['course_forum_empty_sub']);
 		}
 
 		if(ntiid && this.currentNtiid !== ntiid){
@@ -218,16 +223,6 @@ Ext.define('NextThought.view.course.forum.View',{
 		
 		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
 	}
-});
-
-Ext.define('NextThought.view.course.forum.Empty',{
-	extend: 'Ext.Component',
-	alias: 'widget.course-forum-empty',
-
-	renderTpl: Ext.DomHelper.markup({
-		cls: 'empty-forum',
-		html: NTIStrings['course_forum_empty']
-	})
 });
 
 Ext.define('NextThought.view.course.forum.Board',{
