@@ -110,16 +110,18 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		this.getStore().each(function(r){
 			var v = videoIndex[r.getId()];
-			r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
+			if(v){
+				r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
 
-			if(me.curtainEl && selected.contains(r)){
-				me.playBtnEl[r.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
+				if(me.curtainEl && selected.contains(r)){
+					me.playBtnEl[r.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
+				}
+
+				me.playlist.push(reader.read({
+					'mediaId': v.title,
+					'sources': v.sources
+				}).records[0]);
 			}
-
-			me.playlist.push(reader.read({
-				'mediaId': v.title,
-				'sources': v.sources
-			}).records[0]);
 		});
 
 		this.maybeCreatePlayer();
