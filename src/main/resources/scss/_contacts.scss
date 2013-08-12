@@ -1,5 +1,16 @@
 $over-color: #f4f3f3;
 
+.contacts-empty-state{
+	text-align: center;
+	font: normal 300 30px $font;
+	color: $tertiary-grey;
+	margin-top: 30px;
+
+	.sub{
+		font-size: 15px;
+	}
+}
+
 .contact-card {
 	margin: 7px 0 0 10px;
 	overflow: hidden;

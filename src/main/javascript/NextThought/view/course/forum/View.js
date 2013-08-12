@@ -99,8 +99,8 @@ Ext.define('NextThought.view.course.forum.View',{
 			me.hasBoard = false;
 			me.add({xtype: 'notfound'});
 			
-			me.el.down('.resource-not-found .body .heading').update(NTIStrings['course_forum_empty_header']);
-			me.el.down('.resource-not-found .body .subtext').update(NTIStrings['course_forum_empty_sub']);
+			me.el.down('.resource-not-found .body .heading').update(getString('course_forum_empty_header', 'Sorry, this board doesn\'t exist...'));
+			me.el.down('.resource-not-found .body .subtext').update(getString('course_forum_empty_sub', 'This board is currently not available.'));
 		}
 
 		if(ntiid && this.currentNtiid !== ntiid){

@@ -18,7 +18,8 @@ Ext.define('NextThought.store.Contacts',{
 				scope: this,
 				'contacts-added': 'addContacts',
 				'contacts-removed': 'removeContacts',
-				'contacts-refreshed': 'refreshContacts'
+				'contacts-refreshed': 'refreshContacts',
+				'load': 'friendsListStoreLoad'
 			},
 			piListeners = {
 				scope: this,
@@ -44,6 +45,11 @@ Ext.define('NextThought.store.Contacts',{
 		if(this.piStore){
 			this.piStore.on(piListeners);
 		}
+	},
+
+	friendsListStoreLoad: function(store, records){
+		this.parentLoaded = true;
+		this.fireEvent('parent-store-loaded', store, records);
 	},
 
 	onPresenceChange: function(username, rec){

@@ -16,5 +16,9 @@ NTIStrings['contact_us_message'] = 'Please use the form below to share your comm
 NTIStrings['alias_request_title'] = 'Request Alias Change...'
 NTIStrings['alias_request_message'] = 'Please use the form below to request an alias change for your account.  Please let us know the desired alias and the reason you are requesting this change.  We will review the request and let you know when the request has been processed.'
 
-NTIStrings['course_forum_empty_header'] = 'Sorry, this board doesn\'t exist...'
-NTIStrings['course_forum_empty_sub'] = 'This board is currently not available.'
+NTIStrings['no_contact_header'] = 'No Contacts Yet';
+NTIStrings['no_contact_sub'] = 'Click search to find some.';
+NTIStrings['no_list_header'] = 'No Lists Yet';
+NTIStrings['no_list_sub'] = 'Click create list to add one.';
+NTIStrings['no_group_header'] = 'No Groups Yet';
+NTIStrings['no_group_sub'] = 'Click create or join to add some.';

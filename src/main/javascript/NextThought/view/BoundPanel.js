@@ -7,7 +7,6 @@ Ext.define('NextThought.view.BoundPanel',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-
 		this.store = this.store || Ext.getStore(this.storeId||'');
 		if(!this.store){
 			console.warn('No Store!');
@@ -17,6 +16,7 @@ Ext.define('NextThought.view.BoundPanel',{
 		this.mon(this.store,{
 			scope: this,
 			load: 'onBoundStoreLoad',
+			'parent-store-loaded': 'onParentStoreLoad',
 			add: 'onBoundStoreAdd',
 			remove: 'onBoundStoreRemove'
 		});
@@ -31,9 +31,28 @@ Ext.define('NextThought.view.BoundPanel',{
 		return {record: rec, recordId: rec.getId()};
 	},
 
+	showEmptyState: function(){
+		if(this.emptyCmp){
+			this.add(this.emptyCmp);
+		}
+	},
+
+
+	onParentStoreLoad: function(store, records){
+		var total = 0;
+
+		Ext.each(records, function(item){
+			total += item.getFriendCount();
+		});
+
+		if(total === 0){
+			this.showEmptyState();
+		}
+	},
+
 
 	onBoundStoreLoad: function(store,records){
-		var items;
+		var items, total = 0;
 
 		this.removeAll(true);
 		if(this.initialConfig.items){
@@ -41,7 +60,16 @@ Ext.define('NextThought.view.BoundPanel',{
 		}
 
 		items = store.snapshot ? store.snapshot.items : store.data.items;
-		this.onBoundStoreAdd(store,items);
+
+		Ext.each(items, function(item){
+			total += item.getFriendCount()
+		});
+
+		if(total === 0){
+			this.showEmptyState();
+		}else{
+			this.onBoundStoreAdd(store,items);
+		}
 	},
 
 

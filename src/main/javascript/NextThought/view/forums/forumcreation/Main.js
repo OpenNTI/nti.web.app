@@ -17,7 +17,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main',{
 			]}
 		},
 		{xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'checkbox', cls: 'sharing-checkbox', name:'sharing', boxLabel: NTIStrings['forum_sharing_label']},
+			{xtype: 'checkbox', cls: 'sharing-checkbox', name:'sharing', boxLabel: getString('forum_sharing_label', 'Everyone including the lame kids')},
 			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
 				b.up('window').close();
 			}},
