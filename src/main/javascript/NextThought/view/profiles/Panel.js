@@ -35,7 +35,12 @@ Ext.define('NextThought.view.profiles.Panel',{
 			},{
 				cls: 'meta',
 				cn: [
-					{cn:[{tag: 'span', cls: 'name', 'data-field': 'alias' },{ cls: 'add-to-contacts', html: 'ADD'}]},
+					{	cls: 'name-container',
+						cn:[
+						{tag: 'span', cls: 'name', 'data-field': 'alias' },
+						{ cls: 'add-to-contacts', html: 'ADD'},
+						{ tag: 'a', cls: 'request-change', html: 'Request Change'}
+					]},
 					{cn:{tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' }},
 					{ cn: [
 						{tag: 'span', 'data-field':'role', 'data-placeholder': 'Role'},
@@ -72,7 +77,9 @@ Ext.define('NextThought.view.profiles.Panel',{
 		actionsEl: '.profile-head .meta .actions',
 		chatEl: '.profile-head .meta .actions .chat',
 		addToContacts: '.add-to-contacts',
-		errorMsgEl: '.error-msg'
+		errorMsgEl: '.error-msg',
+		requestEl: '.request-change',
+		nameContainerEl: '.name-container'
 	},
 
 
@@ -173,6 +180,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		this.addToContacts.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.editEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorMsgEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		this.requestEl.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 
 		this.mon(this.chatEl,'click',this.onChatWith,this);
 		this.mon(this.editEl,'click',this.onEditAvatar,this);
@@ -491,6 +499,22 @@ Ext.define('NextThought.view.profiles.Panel',{
 		else{
 			this.nameEl.addCls('readonly');
 			this.nameEl.removeCls('editable');
+
+			if(isFeature('request-alias-change')){
+				this.nameContainerEl.on({
+					scope: this,
+					mouseover: function(){
+						this.requestEl.show();
+					},
+					mouseout: function(){
+						this.requestEl.hide();
+					}
+				});
+
+				this.requestEl.on('click', function(){
+					this.fireEvent('request-alias-change', this);
+				}, this);
+			}
 		}
 
 		this.maybeShowChat(this.chatEl);

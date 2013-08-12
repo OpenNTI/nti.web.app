@@ -75,6 +75,10 @@ Ext.define('NextThought.controller.Account', {
 					'click': 'showContactUs'
 				},
 
+				'profile-panel':{
+					'request-alias-change': 'requestAliasChange'
+				},
+
 				'password-reset-form button[save]' : {
 					'click': 'changePassword'
 				},
@@ -150,6 +154,11 @@ Ext.define('NextThought.controller.Account', {
 
         me.contactUsWin.show();
     },
+
+
+	requestAliasChange: function(){
+		Ext.widget('contact-us-window', {role: 'alias', titleKey: 'alias_request_title', detailKey: 'alias_request_message'}).show();
+	},
 
 
 	showPermanantWelcome: function(cmp){
@@ -237,12 +246,31 @@ Ext.define('NextThought.controller.Account', {
     },
 
 
+	contactUsBodyForMessage: function(data){
+		var body = data.email || '[NO EMAIL SUPPLIED]';
+		body += (' wrote: ' + data.message);
+		return body;
+	},
+
+
+	aliasBodyForMessage: function(data){
+		var body = data.email || '[NO EMAIL SUPPLIED]';
+		body += (' has requested an alias change for account '+$AppConfig.username);
+		body += ('. message: ' + data.message);
+		return body;
+	},
+
+
     contactFormSubmit: function(btn){
         var view = btn.up('contact-main-view'),
             data = view.getValues(),
             feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
             url = getURL(feedbackLink),
             w = view.up('window'),
+			bodyFormatters = {
+				contact: this.contactUsBodyForMessage,
+				alias: this.aliasBodyForMessage
+			},
             body;
 
         //first diable the button:
@@ -259,8 +287,14 @@ Ext.define('NextThought.controller.Account', {
             return;
         }
 
-        body = data.email || '[NO EMAIL SUPPLIED]';
-        body += (' wrote: ' + data.message);
+        if(Ext.isFunction(bodyFormatters[w.role])){
+			body = bodyFormatters[w.role](data);
+		}
+		else{
+			console.log('Unknown role for contact window');
+			w.close();
+			return;
+		}
 
         Ext.Ajax.request({
             url: url,

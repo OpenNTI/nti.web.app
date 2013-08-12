@@ -17,6 +17,8 @@ Ext.define('NextThought.view.account.contact.Window',{
     dialog: true,
     closeAction: 'destroy',
 
+	role: 'contact',
+
     width: 480,
 
     layout: {
@@ -28,9 +30,20 @@ Ext.define('NextThought.view.account.contact.Window',{
         {
             xtype: 'account-header-view',
             noIcon: true,
-            title: 'Contact Us...',
-            detail: 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the NextThought Help Center.  We may already have content there to help you.'
+            title: getString('contact_us_title'),
+            detail: getString('contact_us_message')
         },
         {xtype: 'contact-main-view'}
-    ]
+    ],
+
+	constructor: function(args){
+		var header = this.items.first();
+		if(args.titleKey){
+			header.title = getString(args.titleKey);
+		}
+		if(args.detailKey){
+			header.detail = getString(args.detailKey);
+		}
+		this.callParent(arguments);
+	}
 });

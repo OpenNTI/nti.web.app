@@ -112,6 +112,15 @@
 					
 				}
 
+				.request-change{
+					text-transform: uppercase;
+					font: normal 600 12px $font;
+					color: $primary-blue;
+					position: relative;
+					top: -19px;
+					right: 19px;
+				}
+
 				.actions {
 					margin: 20px 0;
 					text-transform: uppercase;
