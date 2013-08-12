@@ -25,15 +25,24 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	constructor: function(config){
 		this.callParent(arguments);
 
-		var me = this,
-			ntiid = me.getNtiid();
+		this.ntiids = this.getNtiid().split(' ');
+
+		this.resolveForum(this.ntiids.shift());
+	},
+
+	resolveForum: function(ntiid){
+		var me = this;
 
 		function failure(){
-			console.error("Failed to get forum: ",ntiid);
-			Ext.callback(me.getFinishCallBack());
+			if(me.ntiids.length === 0){
+				console.error("Failed to get forum: ",ntiid);
+				Ext.callback(me.getFinishCallBack());
+			}else{
+				me.resolveForum(me.ntiids.shift());
+			}
 		}
 
-		$AppConfig.service.getObject(ntiid, me.createView,failure,me);
+		$AppConfig.service.getObject(ntiid, me.createView,failure,me);		
 	},
 
 	createView: function(record){
@@ -61,13 +70,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 			tile = undefined;
 		}
 
-		Ext.callback(this.getFinishCallBack(), null, [tile]);
-
 		this.view = tile && tile.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
 			record: records[0],
 			contentNtiid: this.getLocationInfo().ContentNTIID
 		});
+
+		Ext.callback(this.getFinishCallBack(), null, [tile]);
 	}
 });
 
