@@ -50,7 +50,6 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 
 	ui: 'course-dashboard-tile',
 	layout: 'auto',
-	componentLayout: 'natural',
 
 	initComponent: function(){
 		this.callParent(arguments);
