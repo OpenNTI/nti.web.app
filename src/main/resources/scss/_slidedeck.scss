@@ -983,6 +983,7 @@ $experimental-support-for-svg: true;
 	}
 
 	.body{
+		@include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
 		margin: 10px 0 0 1000px;
 		overflow-y: auto;
 		overflow-x: hidden;
