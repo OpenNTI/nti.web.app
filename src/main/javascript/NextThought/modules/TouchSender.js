@@ -111,10 +111,17 @@ Ext.define('NextThought.modules.TouchSender', {
                 Ext.destroy(Ext.getCmp(cPopout.getAttribute('id')));
             }
 
-
             // If touching something besides search, close search
             if (dom.getAttribute('id').indexOf('search-menu') === -1) {
                 ele = Ext.get(Ext.query('.search-menu')[0]);
+                if (ele) {
+                    Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                }
+            }
+
+            // If touching something besides jump-menu, close the jump-menu
+            if (dom.getAttribute('id').indexOf('jump-menu') === -1) {
+                ele = Ext.get(Ext.query('.jump-menu')[0]);
                 if (ele) {
                     Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
                 }

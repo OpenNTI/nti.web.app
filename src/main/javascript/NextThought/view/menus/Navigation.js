@@ -45,7 +45,13 @@ Ext.define('NextThought.view.menus.Navigation', {
 
     startHide: function (menu, event) {
         this.cancelDeferHide();
-        this.leaveTimer = Ext.defer(this.hide, 500, this);
+        if (Ext.is.iPad) {
+            // If search nav-item clicked while search menu open, needs to hide search menu after show is processed
+            this.leaveTimer = Ext.defer(this.hide, 100, this);
+        }
+        else {
+            this.leaveTimer = Ext.defer(this.hide, 500, this);
+        }
     },
 
     //menus call this on mouseover to their parent menuitems...so we named it to match.

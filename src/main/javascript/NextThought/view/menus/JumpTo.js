@@ -22,14 +22,17 @@ Ext.define('NextThought.view.menus.JumpTo', {
         plain: true
     },
 
+    cls: 'jump-menu',
+
     initComponent: function() {
+        var me = this;
         this.callParent(arguments);
         this.on('click', this.handleClick, this);
 //        if (Ext.is.iPad) {
 //            this.on('hide', function() {
-//                this.showing = false;
+//                clearTimeout(me.leaveTimer);
 //            }, this);
-//        };
+//        }
     },
 
 
@@ -71,7 +74,14 @@ Ext.define('NextThought.view.menus.JumpTo', {
     startHide: function() {
         var me = this;
         me.stopHide();
-        me.leaveTimer = setTimeout(function() { me.hide(); }, 500);
+        if (Ext.is.iPad) {
+            // So stray clicks will hide the menu and the next click on the nav-bar item will show the menu
+            me.showing = false;
+            me.leaveTimer = setTimeout(function() { me.hide(); }, 0);
+        }
+        else {
+            me.leaveTimer = setTimeout(function() { me.hide(); }, 500);
+        }
     },
 
 

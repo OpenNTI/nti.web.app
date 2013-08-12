@@ -1,3 +1,6 @@
+/**
+ * This class describes the navigation bar header for content view
+ */
 Ext.define('NextThought.view.content.Navigation',{
     extend: 'Ext.Component',
     alias: 'widget.content-navigation',
@@ -164,9 +167,9 @@ Ext.define('NextThought.view.content.Navigation',{
                         }
                     }
                     else {
-                        clearTimeout(m.hideTimer);
+//                        clearTimeout(m.hideTimer);
                         m.hide();
-                        clearTimeout(m.hideTimer);
+//                        clearTimeout(m.hideTimer);
                         m.showing = false;
                     }
                 }
