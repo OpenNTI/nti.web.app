@@ -217,6 +217,8 @@ Ext.define('NextThought.Library', {
 			
 			if( me.getCourseStore().getCount()){
 				me.fireEvent('show-courses');
+			} else {
+				me.fireEvent('hide-courses');
 			}
 		}
 		

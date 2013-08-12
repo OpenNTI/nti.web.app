@@ -38,6 +38,11 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 
 		win = this.up('window');
 		win.headerEl.select('.tab').addCls('visited locked');
+
+		//reload the library
+		Library.getStore().load();
+		//Refresh the user
+		$AppConfig.userObject.refresh();
 	},
 
 

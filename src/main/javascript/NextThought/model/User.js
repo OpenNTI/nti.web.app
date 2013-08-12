@@ -157,6 +157,24 @@ Ext.define('NextThought.model.User', {
 			} : null;
 		}
 
+	},
+
+
+	refresh: function(){
+		var req = {
+			url: getURL(this.get('href')),
+			callback: function(q,s,r){
+				if(!s){
+					console.warn('could not refresh user');
+					return;
+				}
+
+				var u = ParseUtils.parseItems(r.responseText);
+				UserRepository.precacheUser(u.first());
+			}
+		};
+
+		Ext.Ajax.request(req);
 	}
 
 }, function () {
