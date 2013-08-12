@@ -79,36 +79,39 @@ Ext.define('NextThought.modules.TouchSender', {
         }
 
         dom.addEventListener('touchstart', function(e) {
+            //If click outside chatdock, close chatdock
+            var aboveDock = container.el.down('#chat-dock'),
+                dock = container.el.dom.getAttribute('id'),
+                belowDock = container.el.up('#chat-dock'),
+                cPopout, updock, ele, touch, dockEl;
+
             e.preventDefault();
 
             //if touching something besides sidebar, close it
             if(dom.getAttribute('id').indexOf("main-sidebar") === -1){
-                var ele = Ext.get(Ext.query('.sidebar')[0]);
+                ele = Ext.get(Ext.query('.sidebar')[0]);
                 if(ele){
                     Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
                 }
-                var updock = Ext.get('chat-dock_header_hd');
+                updock = Ext.get('chat-dock_header_hd');
 
             }
 
-            //If click outside chatdock, close chatdock
-            var aboveDock = container.el.down('#chat-dock'),
-                dock = container.el.dom.getAttribute('id'),
-                belowDock = container.el.up('#chat-dock');
-            if(aboveDock == null && dock != 'chat-dock' && belowDock == null){
-                var dockEl = Ext.ComponentManager.get('chat-dock');
-                if(dockEl.el.dom.getAttribute('class').indexOf("open") != -1){
+
+            if(aboveDock === null && dock !== 'chat-dock' && belowDock === null){
+	            dockEl = Ext.ComponentManager.get('chat-dock');
+                if(dockEl.el.dom.getAttribute('class').indexOf("open") !== -1){
                     dockEl.floatCollapsedPanel();
                 }
             }
 
             //if touching something besides contact popout, close popout
-            var cPopout = Ext.get(Ext.query('.contact-popout')[0]);
+            cPopout = Ext.query('.contact-popout')[0];
             if(cPopout){
-                cPopout.destroy();
+                Ext.destroy(Ext.getCmp(cPopout.getAttribute('id')));
             }
 
-            var touch = e.touches[0];
+            touch = e.touches[0];
 
             container.fireEvent('touchStart', touch.pageX, touch.pageY);
 
