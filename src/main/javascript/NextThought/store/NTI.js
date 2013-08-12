@@ -8,6 +8,7 @@ Ext.define('NextThought.store.NTI',{
 	defaultPageSize: undefined,
 	proxy: {
 		type: 'rest',
+		noCache: true,
 		limitParam: 'batchSize',
 		pageParam: undefined,
 		startParam: 'batchStart',

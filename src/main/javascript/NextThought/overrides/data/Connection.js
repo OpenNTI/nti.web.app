@@ -2,7 +2,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	override: 'Ext.data.Connection',
 	requires: ['Ext.Ajax'],
 
-	disableCaching: Ext.isGecko === true,
+	disableCaching: true,//Ext.isGecko === true,
 	withCredentials: true,
 	useDefaultXhrHeader: false,
 
@@ -11,7 +11,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	},
 
 	setOptions: function(options, scope){
-		var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
+		var i, badParams = ['id', 'page', 'start', 'limit', 'group', 'sort'],//'_dc'
 			params = options.params || {};
         if(Ext.isGecko){
             badParams.shift();
@@ -40,7 +40,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	Ext.Ajax.cors = true;
 	Ext.Ajax.withCredentials = true;
 
-	Ext.Ajax.disableCaching = Ext.isGecko === true;
+	Ext.Ajax.disableCaching = true; //Ext.isGecko === true;
 	Ext.Ajax.useDefaultXhrHeader = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/json';

@@ -30,6 +30,7 @@ Ext.define('NextThought.store.Purchasable',{
 	proxy: {
 		url: 'tbd',
 		type: 'rest',
+		noCache: true,
 		reader: {
 			type: 'nti',
 			root: 'Items'
