@@ -226,7 +226,8 @@
 			max-height: 5em;
 			overflow: hidden;//because this is allowing line wrapping, we can't ellipse the text overflow.
 			font: italic 400 16px/25px $font;
-			margin: 0 0 10px 0;
+			margin: 0 0 10px -10px;
+			padding-left: 10px;
 			color: $primary-grey;
 			word-break: break-word;
 
