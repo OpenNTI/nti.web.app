@@ -117,12 +117,14 @@ Ext.define('NextThought.controller.Store', {
 			view = this.getNavigationMenu();
 		}
 
-		view.add({
-			ui: isFeature('new-library')?'library-collection':'navigation-collection',
-			xtype: 'purchasable-collection',
-			store: this.getPurchasableStore(),
-			name: getString('Available for Purchase')
-		});
+		if(!view.down('purchasable-collection') ){
+			view.add({
+				ui: isFeature('new-library')?'library-collection':'navigation-collection',
+				xtype: 'purchasable-collection',
+				store: this.getPurchasableStore(),
+				name: getString('Available for Purchase')
+			});
+		}
 
 		//TODO Ok they want to identify the sample content
 		//so do a nasty hack here that probably breaks
