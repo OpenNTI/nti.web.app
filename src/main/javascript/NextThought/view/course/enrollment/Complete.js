@@ -5,10 +5,15 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'h3', cls:'gap', html: 'Enrollment Successful!'},
-		{ html: 'Your content has been added to your library.'},
-		{ cls:'gap', cn: [
-			{ tag: 'a', href:'#', html:'View your content now!' }
+		{ tag: 'h3', cls:'gap', html: 'Enrollment change Successful!'},
+		{ tag:'tpl', 'if':'enroll', cn:[
+			{ html: 'Your content has been added to your library.'},
+			{ cls:'gap', cn: [
+				{ tag: 'a', href:'#', html:'View your content now!' }
+			]}
+		]},
+		{ tag:'tpl', 'if':'!enroll', cn:[
+			{ html: 'You have been successfully dropped the course.'}
 		]}
 	]),
 
@@ -28,6 +33,14 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 	},
 
 
+	beforeRender: function(){
+		this.callParent(arguments);
+		this.renderData = Ext.apply(this.renderData||{},{
+			enroll: !Ext.isEmpty(this.record.getLink('enroll'))
+		});
+	},
+
+
 	afterRender: function(){
 		var win;
 		this.callParent(arguments);
@@ -38,6 +51,9 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 
 		win = this.up('window');
 		win.headerEl.select('.tab').addCls('visited locked');
+
+		//reload the store.
+		Ext.getStore('Purchasable').load();
 
 		//reload the library
 		Library.getStore().load();
