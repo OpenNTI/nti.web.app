@@ -18,6 +18,8 @@ Ext.define('NextThought.controller.Store', {
 	],
 
 	views: [
+		'course.enrollment.Window',
+		'course.enrollment.Confirm',
 		'store.purchase.Window',
 		'store.purchase.Form',
 		'store.purchase.History',
@@ -29,7 +31,8 @@ Ext.define('NextThought.controller.Store', {
 	refs: [
 		{ ref: 'navigationMenu', selector: 'navigation-menu'},//drop after we switch to new library
 		{ ref: 'libraryView', selector: 'library-view-container'},
-		{ ref: 'purchaseWindow', selector: 'purchase-window'}
+		{ ref: 'purchaseWindow', selector: 'purchase-window'},
+		{ ref: 'enrollmentWindow', selector: 'enrollment-window'}
 	],
 
 	init: function () {
@@ -66,6 +69,11 @@ Ext.define('NextThought.controller.Store', {
 				'purchase-window *': {
 					'price-purchase': 'pricePurchase'
 				},
+
+				'enrollment-detailview':{
+					'show-enrollment-confirmation':'showEnrollmentConfirmation'
+				},
+
 				'*': {
 					'show-purchasable': 'showPurchaseWindow'
 				}
@@ -154,7 +162,13 @@ Ext.define('NextThought.controller.Store', {
 
 	purhcasableCollectionSelection: function (cmp, record) {
 		Ext.menu.Manager.hideAll();
-		this.showPurchasable(record);
+
+		if(record instanceof NextThought.model.store.Purchasable){
+			this.showPurchasable(record);
+		}
+		else if(record instanceof this.getCourseModel()){
+			this.showEnrollment(record);
+		}
 	},
 
 
@@ -169,6 +183,16 @@ Ext.define('NextThought.controller.Store', {
 			this.showPurchasable(purchasable);
 		}
 		return !purchasable;
+	},
+
+
+	showEnrollment: function(course){
+		var win = this.getEnrollmentWindow();
+		if(win){
+			console.error('Enrollment already in progress.  How did you manage this', win);
+			return null;
+		}
+		return this.getView('course.enrollment.Window').create({record: course});
 	},
 
 
@@ -274,6 +298,17 @@ Ext.define('NextThought.controller.Store', {
 			this.transitionToComponent(win, cfg);
 		}
 
+	},
+
+
+	showEnrollmentConfirmation: function(view,course){
+		var win = this.getEnrollmentWindow();
+		if (!win) {
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		this.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
 	},
 
 
