@@ -6,6 +6,7 @@ Ext.define('NextThought.model.store.Purchasable', {
 	],
 
 	fields: [
+		{ name: 'Featured', type: 'bool', persist: false, defaultValue: false },
 		{ name: 'Activated', type: 'bool', persist: false },
 		{ name: 'Amount', type: 'float', persist: false },
 		{ name: 'Currency', type: 'string', persist: false },
