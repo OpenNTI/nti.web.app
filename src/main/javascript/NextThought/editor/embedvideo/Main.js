@@ -41,9 +41,16 @@ Ext.define('NextThought.editor.embedvideo.Main',{
 		var raw = this.down('[name=embed]').getEl().getValue(), id,
 			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
 			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
-			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i, match;
+			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i,
+			kalturaRegex = /kaltura:\/\/[^\/]+\/[^\/]+\/{0,1}/i,
+			match;
 
 		raw = (raw || '').trim();
+
+		match = kalturaRegex.exec(raw);
+		if(match){
+			return {type: 'kaltura', embedURL: raw};
+		}
 
 		//Is it a youtube embed, we can work with that
 		match = youtubeEmbedFrameRegex.exec(raw);

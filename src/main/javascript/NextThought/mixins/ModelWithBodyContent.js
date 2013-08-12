@@ -102,17 +102,33 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			return null;
 		}
 
+		function parseKalturaInformation(url){
+			var kalturaRegex = /kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
+				match = url.match(kalturaRegex);
+
+			return match ? match[1]+':'+match[2] : null;
+		}
+
 		var p, width = node.getAttribute('data-width'),
 			url = node.getAttribute('data-url'),
 			type = node.getAttribute('data-type'),
 			item = NextThought.model.PlaylistItem.create({mediaId: guidGenerator()}), source,
-			youtubeId = parseYoutubeIdOut(url);
+			youtubeId = parseYoutubeIdOut(url),
+			kalturaSource = parseKalturaInformation(url);
 
+		if(type === 'kaltura' && kalturaSource){
+			source = {
+				service: 'kaltura',
+				source: kalturaSource
+			}
+		}
+		else{
+			source = {
+				service: youtubeId ? 'youtube' : 'html5',
+				source: [youtubeId || url]
+			};
+		}
 
-		source = {
-			service: youtubeId ? 'youtube' : 'html5',
-			source: [youtubeId || url]
-		};
 
 		item.set('sources', [source]);
 		p = Ext.widget({
