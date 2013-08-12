@@ -60,7 +60,9 @@ Ext.define('NextThought.view.BoundPanel',{
 		var total = 0;
 
 		Ext.each(records, function(item){
-			total += item.getFriendCount();
+			if(item.get('ID').indexOf('mycontacts') === 0){
+				total += item.getFriendCount();
+			}
 		});
 
 		if(total === 0){
