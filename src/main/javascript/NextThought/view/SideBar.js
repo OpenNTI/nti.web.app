@@ -204,16 +204,22 @@ Ext.define('NextThought.view.SideBar', {
             this.stopShow();
             this.hideTimeout = Ext.defer(this.syncUp, 500, this);
         }
+        if(Ext.is.iPad){
+            Ext.apply(this, {minHeight:0});
+        }
     },
 
     startShow: function (force) {
         if (this.host.isVisible()) {
             return;
         }
-
+        var initialHeight = this.getHeight();
         if (!this.showTimeout || force) {
             this.stopHide();
             this.showTimeout = Ext.defer(this.rollDown, 500, this);
+        }
+        if(Ext.is.iPad){
+            Ext.apply(this, {minHeight:initialHeight});
         }
     },
 
