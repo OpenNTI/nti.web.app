@@ -799,15 +799,16 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	updatePreferences: function(pi) {
-		if(Ext.isArray(pi)){
-			Ext.each(pi,this.updatePreferences,this);
-			return;
-		}
 
-		if(!Library.loaded){
-			Library.on('loaded',Ext.bind(this.updatePreferences,this,arguments),this,{single:true});
-			return;
-		}
+        if(!Library.loaded){
+            Library.on('loaded',Ext.bind(this.updatePreferences,this,arguments),this,{single:true});
+            return;
+        }
+
+        if(Ext.isArray(pi)){
+            Ext.each(pi,this.updatePreferences,this);
+            return;
+        }
 
 		var sharing = pi.get('sharingPreference'),
             piId = pi.getId(),
@@ -838,8 +839,33 @@ Ext.define('NextThought.controller.UserData', {
 			return null;
 		}
 
-        var lineage = ContentUtils.getLineage(ntiid), result=null;
+        var lineage = ContentUtils.getLineage(ntiid), result=null, sharingIsValid = true,
+            rootId = lineage.last(),
+            i = ContentUtils.getLocation(rootId);
+
         Ext.each(lineage, function(l){result = this.preferenceMap[l]; return !result; }, this);
+
+        if(!Ext.isEmpty(result)){
+            Ext.each(result.sharing.sharedWith || [], function(id){
+                if(!UserRepository.resolveFromStore(id)){
+                    sharingIsValid = false;
+                }
+                return sharingIsValid;
+            });
+        }
+
+
+        if(!result || !sharingIsValid){
+            // if we have no sharing prefs, default to the public scope
+            // or we can't resolve the sharing, the use public scope.
+            result = i.title.getScope('public ');
+            if(Ext.isEmpty(result)){
+                return;
+            }
+            result = {sharing: {sharedWith: result}};
+        }
+
+
         return result;
 	},
 
