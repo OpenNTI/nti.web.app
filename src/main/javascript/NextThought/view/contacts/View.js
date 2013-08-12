@@ -26,6 +26,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 			{xtype:'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'all-contacts-store',
 				emptyCmp: {
 					xtype: 'component',
+					emptyState: true,
 					renderTpl: Ext.DomHelper.markup([
 						{ cls: 'contacts-empty-state', cn: [
 							{cls: 'header', html: '{{{no_contact_header}}}'},
@@ -40,6 +41,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 				items:[ {xtype: 'list-buttons'} ],
 				emptyCmp: {
 					xtype: 'component',
+					emptyState: true,
 					renderTpl: Ext.DomHelper.markup([
 						{ cls: 'contacts-empty-state', cn: [
 							{cls: 'header', html: '{{{no_list_header}}}'},
@@ -54,6 +56,7 @@ Ext.define( 'NextThought.view.contacts.View', {
 				items:[ {xtype: 'group-buttons'} ],
 				emptyCmp: {
 					xtype: 'component',
+					emptyState: true,
 					renderTpl: Ext.DomHelper.markup([
 						{ cls: 'contacts-empty-state', cn: [
 							{cls: 'header', html: '{{{no_group_header}}}'},

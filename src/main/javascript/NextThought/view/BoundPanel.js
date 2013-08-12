@@ -32,9 +32,27 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 	showEmptyState: function(){
-		if(this.emptyCmp){
+		if(this.emptyCmp && !this.emptyState){
 			this.add(this.emptyCmp);
+			this.emptyState = true;
 		}
+	},
+
+	hideEmptyState: function(){
+		if(this.emptyState && this.down('[emptyState=true]')){
+			this.down('[emptyState=true]').destroy();
+			this.emptyState = false;
+		}
+	},
+
+	shouldHide: function(records){
+		var allHidden = true, me = this;
+
+		Ext.each(records, function(item){
+			allHidden = allHidden && (Boolean(item.hidden) || (me.filter && !me.filter(item)));
+		});
+
+		return allHidden;
 	},
 
 
@@ -52,7 +70,7 @@ Ext.define('NextThought.view.BoundPanel',{
 
 
 	onBoundStoreLoad: function(store,records){
-		var items, total = 0;
+		var items;
 
 		this.removeAll(true);
 		if(this.initialConfig.items){
@@ -60,12 +78,8 @@ Ext.define('NextThought.view.BoundPanel',{
 		}
 
 		items = store.snapshot ? store.snapshot.items : store.data.items;
-
-		Ext.each(items, function(item){
-			total += item.getFriendCount()
-		});
-
-		if(total === 0){
+		
+		if(this.shouldHide(items) || Ext.isEmpty(items)){
 			this.showEmptyState();
 		}else{
 			this.onBoundStoreAdd(store,items);
@@ -81,6 +95,10 @@ Ext.define('NextThought.view.BoundPanel',{
 			//Figure out at what point to insert
 			debugger;
 		}*/
+
+		if(!this.shouldHide(records)){
+			this.hideEmptyState();
+		}
 
 		this.insert(insertionPoint,toAdd);
 	},
@@ -98,6 +116,10 @@ Ext.define('NextThought.view.BoundPanel',{
 
 			return !cmp;
 		});
+
+		if(this.shouldHide(store.getRange())){
+			this.showEmptyState();
+		}
 
 		console.debug('should remove ',cmp);
 		if(cmp){
