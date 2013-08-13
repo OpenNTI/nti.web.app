@@ -224,7 +224,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	load: function(source, offset){
-		this.maybeIgnoreNextPause = true;
 		var kalturaData;
 
 		source = Ext.isArray(source) ? source[0] : source;
@@ -253,6 +252,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.log('Firing play event');
 		this.sendCommand('doPlay');
 		if(this.maybeIgnoreNextPause){
+			console.warn('Will ignore next pause');
 			this.ignoreNextPause = true;
 			delete this.maybeIgnoreNextPause;
 		}
@@ -260,6 +260,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	pause: function(){
+		delete this.maybeIgnoreNextPause;
+		delete this.ignoreNextPause;
 		console.log('Firing paush event')
 		this.sendCommand('doPause');
 	},
@@ -301,7 +303,15 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	mediaReadyHandler: function(){
+		var me = this;
 		console.log('Media ready change handler', arguments);
+		this.maybeIgnoreNextPause = true;
+		console.warn('Maybe ignoreing next pause');
+		setTimeout(function(){
+			console.warn('Clearing ignoring next pause');
+			delete me.maybeIgnoreNextPause;
+			delete me.ignoreNextPause;
+		}, 1000);
 		this.readyHandler();
 	},
 
@@ -327,13 +337,17 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	doPauseHandler: function(){
 		console.warn('kaltura fired paused', this.currentState);
-		this.currentState = 2;
-		this.fireEvent('player-event-pause', 'kaltura');
+
 		if(this.ignoreNextPause){
+			console.warn('Ignoring pause by triggering play');
 			//Add a timeout here or something so we only do it just after load
 			this.play();
 			delete this.ignoreNextPause;
+			return;
 		}
+
+		this.currentState = 2;
+		this.fireEvent('player-event-pause', 'kaltura');
 	},
 
 
@@ -429,7 +443,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			// Do not rewrite video tags willy-nilly
 			mw.setConfig( 'EmbedPlayer.RewriteSelector', false );
 
-			mw.setConfig('debug', true);
+			//mw.setConfig('debug', true);
 
 			window.playerId = '%id%';
 			window.host = window.top;
