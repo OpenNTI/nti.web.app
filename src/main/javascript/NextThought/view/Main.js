@@ -73,6 +73,57 @@ Ext.define('NextThought.view.Main', {
         Ext.getDoc().on('touchmove', function (e) {
             e.preventDefault();
         });
+
+        if(Ext.is.iPad){
+            var me = this,
+                optWindow;
+
+            /*If user rotates to portrait, display screen saying to rotate it.
+            * if they rotate back to landscape, destroy screen*/
+            window.addEventListener('orientationchange', function(){
+                if(optWindow){
+                    optWindow.destroy();
+                    optWindow = null;
+                }
+                if(Math.abs(window.orientation) != 90 ){
+                    optWindow = me.createPortraitOrientationScreen();
+                    optWindow.show();
+                }
+            }, true);
+
+            if(Math.abs(window.orientation) != 90){
+                optWindow = this.createPortraitOrientationScreen();
+                optWindow.show();
+            }
+        }
+    },
+
+    createPortraitOrientationScreen: function(){
+        var optWindow = Ext.widget('nti-window',{
+            title: 'Portrait mode unavailabe',
+            closeAction: 'hide',
+            width: '100%',
+            height: '100%',
+            layout: 'fit',
+            modal: true,
+            closable:false,
+            items: {
+                xtype: 'component',
+                cls: 'padded',
+                autoEl: {
+                    tag: 'iframe',
+                    src: 'resources/portraitOrientation.html',
+                    frameBorder: 0,
+                    marginWidth: 0,
+                    marginHeight: 0,
+                    seamless: true,
+                    transparent: true,
+                    allowTransparency: true,
+                    style: 'overflow-x: hidden; overflow-y:auto'
+                }
+            }
+        });
+        return optWindow;
     },
 
 
