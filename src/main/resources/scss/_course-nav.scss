@@ -246,6 +246,11 @@
 				//@include ellipse();
 				height: 64px;
 				margin-bottom: 6px;
+				word-break: break-word;
+
+				.ellipsis{
+					margin-left: 5px;
+				}
 			}
 
 			.comments{

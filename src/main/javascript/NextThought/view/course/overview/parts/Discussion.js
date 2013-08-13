@@ -46,6 +46,24 @@ Ext.define('NextThought.view.course.overview.parts.Discussion',{
         this.loadTopic(this.idsToLookup.shift());
 	},
 
+	afterRender: function(){
+		this.callParent(arguments);
+		this.shrinkText();
+	},
+
+	//if the title is overflowing take characters off until it will fit with the ellipsis
+	shrinkText: function(){
+		var title = this.el && this.el.down('.title'),
+			text = title && title.dom.innerText;
+			
+		if(!text){ return; }
+
+		while(title.getHeight() < title.dom.scrollHeight){
+			text = text.substr(0, text.length - 1);
+			title.update(text + '<div class=\'ellipsis\'><div></div><div></div><div></div></div>');
+		}
+	},
+
 
     loadTopic: function(ntiid){
         $AppConfig.service.getObject(ntiid,
