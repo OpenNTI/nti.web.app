@@ -396,7 +396,7 @@ Ext.define('NextThought.controller.Navigation', {
 						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topic.get('ContainerId'), topic.getId());
 						r = false;
 					}else{
-						r = this.setView('forums');
+						r = me.setView('forums');
 					}
 				}
 			});
