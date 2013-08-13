@@ -168,7 +168,6 @@
 				height: 70px;
 				width: 33%;
 				@include experimental-value(width, calc(100% / 3) );
-				overflow: hidden;
 				border:{
 					color: #000;
 					style: solid;
@@ -202,6 +201,7 @@
 				.comments,.label{
 					@include ellipse();
 					overflow:hidden;
+					max-width: 100%;//force ellipsis
 				}
 
 				.date,.comments {
