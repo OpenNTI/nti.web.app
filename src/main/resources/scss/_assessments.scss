@@ -305,17 +305,12 @@
 				&.incorrect { color: #e95a57; }
 				&.questions{ padding: 0; color: $tertiary-grey; font-weight: 400; }
 
-				&::after{
-					position: absolute;
-					left: 0px; top: 3px;
-					content: ' ';
-					width: 10px;
-					height: 10px;
-					background: url(../images/old_sprites/spr_quiz.png) 0 0 no-repeat;
+				&.correct {
+					@include icon('check_progress_grn',$top: 3px);
 				}
-
-				&.correct::after { background-position: -120px -121px; }
-				&.incorrect::after { background-position: -170px -121px; }
+				&.incorrect {
+					@include icon('red-x-10',$top: 3px);
+				}
 			}
 		}
 
@@ -384,14 +379,10 @@
 				.inputbox {
 					color: $primary-grey;
 					min-height: 38px;
+
+					@include icon('circle-x-red-18',$top: 10px, $left: 10px);
 					&::after{
-						content: ' ';
-						width: 18px;
-						height: 18px;
-						position: absolute;
-						top: 10px; left: 10px;
 						display: none;
-						background: url(../images/old_sprites/spr_quiz.png) -116px -16px no-repeat;
 					}
 
 					.mathquill-editable,
@@ -445,7 +436,7 @@
 						}
 
 						&::after {
-							background-position: -116px -66px;
+							@include sprite($icons,'circle-check-green-18');
 						}
 					}
 
@@ -516,42 +507,55 @@
 						height: 38px;
 						border: none;
 						border-left: 6px solid white;
-						background: url(../images/old_sprites/spr_quiz.png) -1000px -1000px no-repeat;
 						&.checked {
 							border-color: $primary-blue;
 						}
 					}
+				}
 
-					&.correct .control {
-						&,&.checked{
-							border-color: #9ac73c;
-							background-position: -105px -55px !important;
+				.mulit, .single {
+					.choice, .choice:hover {
+
+						&.correct .control {
+							&,&.checked{
+								border-color: #9ac73c;
+								@include icon('circle-check-green-18',$top:10px,$left:9px, $position:absolute);
+							}
 						}
-					}
 
-					&.incorrect .control{
-						&,&.checked{
-							border-color: #f35252;
-							background-position: -105px -5px !important;
+						&.incorrect .control{
+							&,&.checked{
+								border-color: #f35252;
+								@include icon('circle-x-red-18',$top:10px,$left:9px, $position:absolute);
+							}
 						}
 					}
 				}
 
 				.multi .choice {
-					&:hover .control,
 					.control {
-						background-position: -55px -55px;
-						&.checked { background-position: -55px -105px; }
+						@include icon('checkbox-14', $top:12px,$left:20px, $position:absolute);
+						&.checked::after { @include sprite($icons,'checkbox-14_active'); }
 					}
 
-					.control { background-position: -55px -5px; }
+					&:hover .control{
+						&::after { @include sprite($icons,'checkbox-14_hover'); }
+						&.checked::after{
+							@include sprite($icons,'checkbox-14_active');
+						}
+					}
 				}
 
 				.single .choice {
-					&:hover .control{ background-position: -5px -55px; }
 					.control {
-						background-position: -5px -5px;
-						&.checked { background-position: -5px -105px; }
+						@include icon('radio-button-16', $top:10px,$left:10px, $position:absolute);
+						&.checked::after { @include sprite($icons,'radio-button-16_active'); }
+					}
+					&:hover .control{
+						&::after { @include sprite($icons,'radio-button-16_hover'); }
+						&.checked::after{
+							@include sprite($icons,'radio-button-16_active');
+						}
 					}
 				}
 
