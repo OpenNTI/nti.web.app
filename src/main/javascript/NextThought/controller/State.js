@@ -427,7 +427,7 @@ Ext.define('NextThought.controller.State', {
 	buildDefaultState: function () {
 		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
 		return {
-			active: dsLandingPage ? 'library' : 'profile',
+			active: dsLandingPage ? 'content' : 'library',
 			content: { location: dsLandingPage || Library.getFirstPage() || undefined },
 			profile: { username: $AppConfig.username }
 		};
