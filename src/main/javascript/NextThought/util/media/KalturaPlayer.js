@@ -224,6 +224,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	load: function(source, offset){
+		this.maybeIgnoreNextPause = true;
 		var kalturaData;
 
 		source = Ext.isArray(source) ? source[0] : source;
@@ -251,6 +252,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	play: function(){
 		console.log('Firing play event');
 		this.sendCommand('doPlay');
+		if(this.maybeIgnoreNextPause){
+			this.ignoreNextPause = true;
+			delete this.maybeIgnoreNextPause;
+		}
 	},
 
 
@@ -324,6 +329,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.warn('kaltura fired paused', this.currentState);
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
+		if(this.ignoreNextPause){
+			//Add a timeout here or something so we only do it just after load
+			this.play();
+			delete this.ignoreNextPause;
+		}
 	},
 
 
@@ -339,6 +349,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.fireEvent('player-error', 'kaltura');
 	},
 
+
+	mediaErrorHandler: function(){
+		console.error('MEDIA ERROR', arguments);
+	},
+
+	sourceReadyHandler: function(){
+		console.error('SOURCE READY', arguments);
+	},
 
 	playerCode:{
 
@@ -381,7 +399,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function playerReady(){
 				var player = document.getElementById(playerId),
-					events = ['mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError','mediaError'],
+					events = ['sourceReady', 'mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError','mediaError'],
 					i = events.length - 1, o;
 
 				for(i; i>=0; i--){
@@ -405,13 +423,13 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			//mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
 			mw.setConfig( 'EmbedPlayer.RewriteSelector', false );
 
-			//mw.setConfig('debug', true);
+			mw.setConfig('debug', true);
 
 			window.playerId = '%id%';
 			window.host = window.top;
