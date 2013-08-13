@@ -122,7 +122,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			}
 
 			me.clearPageStore();
-			me.resolvePageInfo(ntiidOrPageInfo, finish, Boolean(callback));
+			me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
 		},1);
 	},
 
@@ -133,12 +133,16 @@ Ext.define('NextThought.view.content.reader.Location', {
 	},
 
 
-	resolvePageInfo: function(ntiidOrPageInfo, finish, hasCallback){
+	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback){
 		var me = this,
 			service = $AppConfig.service;
 
 		function success(pageInfo){
-			me.currentPageInfo = pageInfo;
+			if(ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)){
+               // let's cache this on the LocationMeta, if it's not there already.
+                LocationMeta.createAndCacheMeta(rootId, pageInfo);
+            }
+            me.currentPageInfo = pageInfo;
 			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
 		}
@@ -152,6 +156,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 		if(ntiidOrPageInfo.isPageInfo){
 			success(ntiidOrPageInfo);
 		}
+        //If we have the pageInfo cached, used it.
+        else if(ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)){
+            success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
+        }
 		else{
 			service.getPageInfo(ntiidOrPageInfo, success, failure, me);
 		}
