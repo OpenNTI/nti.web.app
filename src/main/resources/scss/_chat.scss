@@ -158,19 +158,22 @@
 
 		&.moderating {
 			.control {
-				position: relative;
 				top: 15px; left: 7px;
 				float: left;
 				display: inline-block;
 				width: 15px;
 				height: 15px;
-				background: url(../images/old_sprites/spr_quiz.png) -68px -18px no-repeat;
+				@include icon('checkbox-14');
 				&:hover {
-					background-position: -68px -68px ;
+					&::after{
+						@include sprite($icons,'checkbox-14_hover');
+					}
 				}
 				&.checked{
 					&,&:hover {
-						background-position: -68px -118px;
+						&::after{
+							@include sprite($icons,'checkbox-14_active');
+						}
 					}
 				}
 				&.confirmFlagged {
@@ -389,13 +392,17 @@
 				display: inline-block;
 				width: 15px;
 				height: 15px;
-				background: url(../images/old_sprites/spr_quiz.png) -68px -18px no-repeat;
+				@include icon('checkbox-14');
 				&:hover {
-					background-position: -68px -68px ;
+					&::after{
+						@include sprite($icons,'checkbox-14_hover');
+					}
 				}
 				&.checked{
 					&,&:hover {
-						background-position: -68px -118px;
+						&::after{
+							@include sprite($icons,'checkbox-14_active');
+						}
 					}
 				}
 				&.confirmFlagged {
