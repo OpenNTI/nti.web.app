@@ -97,6 +97,7 @@ Ext.define('NextThought.view.window.Window', {
         if (this.widthPercent || this.heightPercent) {
             this.resizable = false;
             this.draggable = false;
+            this.syncedSize = true;
             this.syncSize();
             Ext.EventManager.onWindowResize(me.syncSize, me);
             this.on('destroy', function () {
@@ -110,15 +111,25 @@ Ext.define('NextThought.view.window.Window', {
 
     afterRender: function () {
         this.callParent(arguments);
-        if (!this.dialog) {
-            this.fixScroll();
+        var me = this;
+
+        if (!me.dialog) {
+            me.fixScroll();
         }
-        this.mon(this.el, {
+        me.mon(me.el, {
             contextmenu: function (e) {
                 e.stopEvent();
                 return false;
             }
         });
+        
+        if(!me.syncedSize){
+            me.syncHeight();
+            Ext.EventManager.onWindowResize(me.syncHeight, me);
+            me.on('destroy', function(){
+                Ext.EventManager.removeResizeListener(me.syncHeight, me);
+            });
+        }
     },
 
 
@@ -223,6 +234,21 @@ Ext.define('NextThought.view.window.Window', {
         }
 
         return this;
+    },
+
+    syncHeight: function(){
+        var height = this.getHeight(),
+            viewHeight = Ext.Element.getViewportHeight();
+
+        this.desiredHeight = this.desiredHeight || height;
+
+        if(height > viewHeight || this.desiredHeight > viewHeight){
+            this.setHeight(Math.max(viewHeight, 400));
+        }else if(height < this.desiredHeight){
+            this.setHeight(this.desiredHeight);
+        }
+
+        this.center();
     },
 
 
