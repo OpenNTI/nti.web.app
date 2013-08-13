@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Forum',{
 	requires: [
         'NextThought.util.Time',
         'NextThought.modules.TouchSender',
-        'NextThought.view.forums.TouchHandler'
+        'NextThought.modules.TouchHandler'
     ],
 
 	cls: 'topic-list list',
@@ -197,7 +197,9 @@ Ext.define('NextThought.view.forums.Forum',{
 
         if(Ext.is.iPad){
             this.buildModule('modules', 'touchSender');
-            this.buildModule('forums', 'touchHandler', {topics:true});
+            this.buildModule('modules', 'touchHandler', {getPanel: function(){
+                return Ext.get('forums');
+            }});
         }
 	},
 

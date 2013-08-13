@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.ux.SearchHits',
 		'NextThought.layout.component.Natural',
         'NextThought.modules.TouchSender',
-        'NextThought.view.forums.TouchHandler'
+        'NextThought.modules.TouchHandler'
 	],
 
 	onClassExtended: function(cls, data){
@@ -244,7 +244,9 @@ Ext.define('NextThought.view.forums.Topic',{
 		});
         if(Ext.is.iPad){
             this.buildModule('modules', 'touchSender');
-            this.buildModule('forums', 'touchHandler', {topics:false});
+            this.buildModule('modules', 'touchHandler', {getPanel: function(){
+                return Ext.get('forums');
+            }});
         }
 
 	},

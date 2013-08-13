@@ -98,6 +98,13 @@ Ext.define('NextThought.modules.TouchHandler', {
      *          first run when it starts as false)
      */
     scroll: function (ele, deltaY, initialY) {
+
+        var panel = this.getPanel();
+        if(panel.isScrollable()){
+            panel.scrollBy(0,deltaY, false);
+            return initialY+deltaY;
+        }
+
         var panel = this.getPanel(),
             currentY = panel.getY(),
             newY = currentY - deltaY,
