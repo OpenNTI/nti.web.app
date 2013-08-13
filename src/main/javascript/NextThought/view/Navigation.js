@@ -98,6 +98,7 @@ Ext.define('NextThought.view.Navigation', {
 
         this.searchMenu = Ext.widget({
             viewId: 'search',
+            showOnHover: false,
             xtype: 'navigation-menu',
             layout: {type: 'vbox', align: 'stretch'},
             overflowX: 'hidden',
@@ -105,6 +106,7 @@ Ext.define('NextThought.view.Navigation', {
             cls: 'search-menu',
             containerNode: this.el,
             ownerNode: this.el.down('.search'),
+            startHide: Ext.emptyFn,
             items: [
                 { xtype: 'searchfield' },
                 {
@@ -298,16 +300,56 @@ Ext.define('NextThought.view.Navigation', {
         clearTimeout(this.timers[viewId]);
     },
 
+    showMenu: function(menu, delay){
+        if(Ext.is.iPad || !delay){
+            menu.show();
+        }else{
+            this.timers[menu.viewId] = Ext.defer(menu.show, 500, menu);
+        }
+
+        if(menu.viewId === 'search'){ return; }
+
+        handlers = this.mon(menu, {
+            destroyable: true,
+            single: true,
+            'show': function () {
+                if (Ext.is.iPad) {
+                    menu.show();
+                }
+                else {
+                    hideTimer = Ext.defer(menu.hide, 1500, menu);
+                }
+            },
+            'mouseover': function () {
+                if (!Ext.is.iPad) {
+                    clearTimeout(hideTimer);
+                }
+            },
+            'hide': function () {
+                if (!Ext.is.iPad) {
+                    handlers.destroy();
+                }
+            }
+        });
+
+    },
+
 
     onClick: function (e) {
-        var viewId = this.getViewId(e.getTarget('[data-view]'));
+        var menu, target = e.getTarget('[data-view]', null, true), viewId = this.getViewId(target);
 
         if (!Ext.isEmpty(viewId)) {
             if (viewId === 'search') {
-                return this.onMouseOver(e);
+                menu = this.ownerCt.down('[viewId="' + viewId + '"]');
+                
+                if(target.hasCls('active')){
+                    menu.hide()
+                }else{
+                    this.showMenu(menu, false);
+                }
+            }else{
+                this.maybeStopTimer(viewId);
             }
-
-            this.maybeStopTimer(viewId);
 
             this.fireEvent('view-selected', viewId);
         }
@@ -319,38 +361,12 @@ Ext.define('NextThought.view.Navigation', {
     onMouseOver: function (e) {
         var viewId = this.getViewId(e.getTarget('[data-view]')),
             menu, hideTimer, handlers;
+
         if (!Ext.isEmpty(viewId)) {
                 clearTimeout(this.timers[viewId]);
             menu = this.ownerCt.down('[viewId="' + viewId + '"]');
-            if (menu) {
-                if (Ext.is.iPad) {
-                    menu.show();
-                }
-                else {
-                    this.timers[viewId] = Ext.defer(menu.show, 500, menu);
-                }
-                handlers = this.mon(menu, {
-                    destroyable: true,
-                    single: true,
-                    'show': function () {
-                        if (Ext.is.iPad) {
-                            menu.show();
-                        }
-                        else {
-                            hideTimer = Ext.defer(menu.hide, 1500, menu);
-                        }
-                    },
-                    'mouseover': function () {
-                        if (!Ext.is.iPad) {
-                            clearTimeout(hideTimer);
-                        }
-                    },
-                    'hide': function () {
-                        if (!Ext.is.iPad) {
-                            handlers.destroy();
-                        }
-                    }
-                });
+            if (menu && menu.showOnHover !== false) {
+                this.showMenu(menu, true);
             }
         }
     },
