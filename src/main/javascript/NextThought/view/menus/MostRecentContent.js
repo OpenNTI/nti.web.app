@@ -92,6 +92,8 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 
 
 	show: function(){
+		if(this.getStore().getCount()===0){return;}
+
 		var n = this.getOwnerNode();
 		this.setWidth(n.getWidth());
 
