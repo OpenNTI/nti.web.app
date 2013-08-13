@@ -155,6 +155,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 		beforeShowPopup: function(record, el){
 			var id = record.getId(), canShow = true;
+			//TODO: rework this to not use the query
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
 					if(!o.maybeHidePopout()){
