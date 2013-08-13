@@ -407,13 +407,14 @@ Ext.define('NextThought.editor.AbstractEditor',{
 
 
 	setupSharedListEl: function(me, tabTracker, scrollParentEl) {
-		me.sharedListEl = me.el.down('.recipients');
+		var me = this;
+        me.sharedListEl = me.el.down('.recipients');
 		if(me.sharedListEl){
 			if($AppConfig.service.canShare()){
 				me.sharedList = Ext.widget('user-sharing-list', {
 					renderTo: me.sharedListEl,
 					scrollParentEl:scrollParentEl,
-					tabIndex: tabTracker.next(),
+					tabIndex: tabTracker && tabTracker.next(),
 					ownerCls: this.xtype,
 					value: me.sharingValue
 				});

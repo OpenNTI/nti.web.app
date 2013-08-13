@@ -80,6 +80,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		me.reader.relayEvents(me,['save-new-note', 'save-new-series-note']);
+        me.reader.fireEvent('uses-page-preferences', this);
 	},
 
 
@@ -215,14 +216,19 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	activateEditor: function(info, cb){
+        var sharing = this.getDefaultSharingInfo();
+
 		if(this.editor){
 			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
-			
+
 			if(Ext.isFunction(cb)){
 				this.editor.closeCallback = cb;
 			}
 
+            if( sharing && !Ext.isEmpty(sharing.entities)){
+               this.editor.setSharedWith(sharing);
+            }
 			this.editor.activate();
 		}
 	},
@@ -247,6 +253,19 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		this.activateEditor(cueInfo);
 		this.editor.showAt(xy);
 	},
+
+
+    getDefaultSharingInfo: function(){
+        var reader = Ext.ComponentQuery.query('reader-content')[0].getLocation(),
+            pageInfo = reader && reader.pageInfo,
+            prefs = this.getPagePreferences(pageInfo.getId()),
+            sharing = prefs && prefs.sharing,
+            sharedWith = sharing && sharing.sharedWith,
+            shareInfo =  SharingUtils.sharedWithToSharedInfo(
+                SharingUtils.resolveValue(sharedWith), pageInfo);
+
+        return shareInfo;
+    },
 
 
 	registerGutterRecords: function(noteStore, records, view){
