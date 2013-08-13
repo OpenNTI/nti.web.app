@@ -414,7 +414,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			//mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
