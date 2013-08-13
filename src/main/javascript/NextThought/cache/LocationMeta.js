@@ -34,6 +34,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 		meta.baseURI = buildPath(pi.getLink('content'),meta.root);
 		meta.absoluteContentRoot = meta.baseURI + meta.root;
+        meta.pageInfo = pi; // cache the pageInfo as well.
 
 		return meta;
 	},

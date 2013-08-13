@@ -216,8 +216,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	activateEditor: function(info, cb){
-        var sharing = this.getDefaultSharingInfo();
-
 		if(this.editor){
 			this.data = info; //Ext.apply(this.data || {}, cueInfo);
 			this.editor.reset();
@@ -226,9 +224,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 				this.editor.closeCallback = cb;
 			}
 
-            if( sharing && !Ext.isEmpty(sharing.entities)){
-               this.editor.setSharedWith(sharing);
-            }
+            this.setDefaultSharingFor((info|| {}).containerId);
 			this.editor.activate();
 		}
 	},
@@ -255,16 +251,27 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-    getDefaultSharingInfo: function(){
-        var reader = Ext.ComponentQuery.query('reader-content')[0].getLocation(),
-            pageInfo = reader && reader.pageInfo,
-            prefs = this.getPagePreferences(pageInfo.getId()),
-            sharing = prefs && prefs.sharing,
-            sharedWith = sharing && sharing.sharedWith,
-            shareInfo =  SharingUtils.sharedWithToSharedInfo(
-                SharingUtils.resolveValue(sharedWith), pageInfo);
+    setDefaultSharingFor: function(ntiid){
+        function getMeta(meta){
+            var pageInfo = meta && meta.pageInfo,
+                prefs, sharing, shareInfo, sharedWith;
 
-        return shareInfo;
+            if(pageInfo){
+                prefs = me.getPagePreferences(pageInfo.getId());
+                sharing = prefs && prefs.sharing;
+                sharedWith = sharing && sharing.sharedWith;
+                shareInfo =  SharingUtils.sharedWithToSharedInfo(
+                    SharingUtils.resolveValue(sharedWith),
+                    pageInfo
+                );
+            }
+
+            me.editor.setSharedWith(shareInfo);
+            me.reader.pageInfo = pageInfo;
+        }
+
+        var me = this;
+        this.resolveRootPageInfoFor(ntiid, getMeta);
     },
 
 
@@ -421,5 +428,16 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			}
 			return Math.abs(item.line - line) < fudgeFactor;
 		});
-	}
+	},
+
+
+    resolveRootPageInfoFor: function(ntiid, callback){
+        var rootId = ContentUtils.getLineage(ntiid);
+
+        rootId = rootId && rootId.last();
+        if(!rootId){
+            Ext.callback(callback, this);
+        }
+        LocationMeta.getMeta(rootId, callback, this);
+    }
 });
