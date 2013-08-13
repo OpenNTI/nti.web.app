@@ -25,7 +25,7 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 			pop,
 			user = this.userObject || this.user;
 
-		if(!user || this instanceof Popup || !Popup.beforeShowPopup(user, el)){ return; }
+		if(!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))){ return; }
 		
 		pop = contactCardPopout;
 

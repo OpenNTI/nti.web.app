@@ -363,7 +363,7 @@ Ext.define('NextThought.view.Navigation', {
             menu, hideTimer, handlers;
 
         if (!Ext.isEmpty(viewId)) {
-                clearTimeout(this.timers[viewId]);
+            clearTimeout(this.timers[viewId]);
             menu = this.ownerCt.down('[viewId="' + viewId + '"]');
             if (menu && menu.showOnHover !== false) {
                 this.showMenu(menu, true);
