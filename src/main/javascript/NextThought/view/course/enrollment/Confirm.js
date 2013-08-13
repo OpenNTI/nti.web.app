@@ -48,7 +48,7 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 
 		if(!s){
 			console.log(arguments);
-			this.handleError(r.statusText);
+			this.handleError(r.statusText || 'An unknown error occurred.  Please try again later.');
 			return;
 		}
 
