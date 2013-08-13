@@ -29,6 +29,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			tag:'iframe',
 			id: '{id}-iframe',
 			name: '{id}-iframe',
+			allowfullscreen: true,
 			src: Ext.SSL_SECURE_URL,
 			frameBorder: 0,
             scrolling: 'no',
@@ -251,17 +252,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	play: function(){
 		console.log('Firing play event');
 		this.sendCommand('doPlay');
-		if(this.maybeIgnoreNextPause){
-			console.warn('Will ignore next pause');
-			this.ignoreNextPause = true;
-			delete this.maybeIgnoreNextPause;
-		}
 	},
 
 
 	pause: function(){
-		delete this.maybeIgnoreNextPause;
-		delete this.ignoreNextPause;
 		console.log('Firing paush event')
 		this.sendCommand('doPause');
 	},
@@ -303,15 +297,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	mediaReadyHandler: function(){
-		var me = this;
 		console.log('Media ready change handler', arguments);
-		this.maybeIgnoreNextPause = true;
-		console.warn('Maybe ignoreing next pause');
-		setTimeout(function(){
-			console.warn('Clearing ignoring next pause');
-			delete me.maybeIgnoreNextPause;
-			delete me.ignoreNextPause;
-		}, 1000);
 		this.readyHandler();
 	},
 
@@ -337,15 +323,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	doPauseHandler: function(){
 		console.warn('kaltura fired paused', this.currentState);
-
-		if(this.ignoreNextPause){
-			console.warn('Ignoring pause by triggering play');
-			//Add a timeout here or something so we only do it just after load
-			this.play();
-			delete this.ignoreNextPause;
-			return;
-		}
-
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
@@ -437,7 +414,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			//mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
