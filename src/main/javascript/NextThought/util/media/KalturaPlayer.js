@@ -51,7 +51,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			{tag:'head',cn:[
 				{tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php')},
-				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapi.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js')},
 				{tag:'script', type:'text/javascript', html:'\n{code}\n'},
@@ -141,7 +141,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			handlerName;
 
 		if(!filter.test(eventName) || this.id !== eventData.id ){
-			//console.log('Filtered Out:', this.id, eventData.id);
+			console.log('Filtered Out:', this.id, eventData.id);
 			return;
 		}
 
@@ -171,6 +171,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	        return;
         }
 
+		console.log('Posting message to kaltura player', type, name, data);
+
 		context.postMessage(Ext.encode({
 			type: type,
 			name: name,
@@ -179,7 +181,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	sendCommand: function(name,data){
+	sendCommand: function(name,data,force){
 		this.sendMessage('command',name,data);
 	},
 
@@ -226,14 +228,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		source = Ext.isArray(source) ? source[0] : source;
 
-		this.sendCommand('cleanMedia');
+		this.isReady = false;
+
+		this.sendCommand('cleanMedia', undefined, true);
 
 		this.currentSource = source;
 		this.currentStartAt = offset;
 
 		kalturaData = source.split(':');
 		//console.log(kalturaData, source, offset);
-		this.sendCommand('changeMedia', {entryId: kalturaData[1]});
+		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
 		this.currentPosition = 0;
 		this.currentState = -1;
 
@@ -244,10 +248,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	play: function(){ this.sendCommand('doPlay'); },
+	play: function(){
+		console.log('Firing play event');
+		this.sendCommand('doPlay');
+	},
 
 
-	pause: function(){ this.sendCommand('doPause'); },
+	pause: function(){
+		console.log('Firing paush event')
+		this.sendCommand('doPause');
+	},
 
 
 	stop: function(){ this.sendCommand('doStop'); },
@@ -268,8 +278,31 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
+	playerStateChangeHandler: function(event){
+		var state = event.data[0],
+			stateMap = {
+			'playing': 'doPlayHandler',
+			'paused': 'doPauseHandler'
+		};
+
+		if(Ext.isFunction(this[stateMap[state]])){
+			console.log('Handling state', state);
+			this[stateMap[state]]();
+		}
+		else{
+			console.log('Not acting on state', state);
+		}
+	},
+
+
+	mediaReadyHandler: function(){
+		console.log('Media ready change handler', arguments);
+		this.readyHandler();
+	},
+
 
 	readyHandler: function(){
+		console.log('Firing player ready');
 		this.isReady = true;
 		this.fireEvent('player-ready', 'kaltura');
 	},
@@ -281,14 +314,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	doPlayHandler: function(){
-		console.warn('doPlay', this.currentState, arguments);
+		console.warn('kaltura fired play handler called', this.currentState, arguments);
 		this.currentState = 1;
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
 
 	doPauseHandler: function(){
-		console.warn('doPause', this.currentState);
+		console.warn('kaltura fired paused', this.currentState);
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
@@ -296,7 +329,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	playerPlayEndHandler: function(){
 		this.stop();
-		this.currentState = -1;
+		this.currentState = 0;
 		this.fireEvent('player-event-ended', 'kaltura');
 	},
 
@@ -348,14 +381,15 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function playerReady(){
 				var player = document.getElementById(playerId),
-					events = ['playerUpdatePlayhead','doPlay','doPause','playerPlayEnd','mediaLoadError','mediaError'],
-					i = events.length - 1;
+					events = ['mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError','mediaError'],
+					i = events.length - 1, o;
 
-				for(i; i; i--){
+				for(i; i>=0; i--){
 					player.addJsListener(events[i],makeHandler(events[i]));
 				}
 
-				setTimeout(ensureReady,5000);
+				ensureReady();
+				//setTimeout(ensureReady,5000);
 			}
 
 
@@ -371,7 +405,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-//			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			//mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly

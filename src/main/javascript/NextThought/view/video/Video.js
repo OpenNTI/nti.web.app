@@ -225,9 +225,13 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	playerReady: function(player){
-		var q = this.commandQueue[player];
+		var q = this.commandQueue[player],
+			p = this.players[player];
 		while(q && q.length>0){
 			Ext.callback(this.issueCommand,this, q.shift());
+			if(!p.isReady){
+				return;
+			}
 		}
 	},
 
