@@ -106,11 +106,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	afterRender: function(){
 		this.callParent(arguments);
 
-
-		var me = this, h,
-			targetEl = me.getTargetEl(),
-            videoWidth = this.BIGVIDEO.width(this.videoPlayerEl);
-
+		var videoWidth = this.BIGVIDEO.width(this.videoPlayerEl);
         if(this.videoOnly){
             this.el.addCls('video-only');
         }
@@ -139,12 +135,22 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.fireEvent('exited', this);
 		}, this);
 
-        // Dimensions adjustments.
-        h  = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30;
-        h = h + 'px';
-        videoWidth += 80;
-        targetEl.setStyle('height', h);
-        targetEl.setStyle('marginLeft', videoWidth+'px');
+		videoWidth += 80;
+		this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
+		this.adjustOnResize();
+		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
+	},
+
+
+	adjustOnResize: function(){
+
+		// Dimensions adjustments.
+		var h = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30,
+			videoWidth = this.BIGVIDEO.width(this.videoPlayerEl),
+			targetEl = this.getTargetEl();
+		h = h + 'px';
+		targetEl.setStyle('height', h);
+		console.log('Media viewer resizing');
 	},
 
 	addVideoPlayer: function(width){
