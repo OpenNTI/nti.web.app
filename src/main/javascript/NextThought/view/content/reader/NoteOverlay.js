@@ -210,18 +210,25 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
     saveNewNote: function (editor, r, v) {
         var me = this,
+            re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
             note = v.body,
             title = v.title,
             pageInfo = this.reader.getLocation().pageInfo,
             sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo, pageInfo),
             style = editor.lineInfo.style || 'suppressed',
             rangeInfo;
-
+            
         function afterSave(success) {
             editor.unmask();
             if (success) {
                 editor.deactivate();
             }
+        }
+
+        //Avoid saving empty notes or just returns.
+        if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
+            me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
+            return false;
         }
 
         editor.mask('Saving...');
