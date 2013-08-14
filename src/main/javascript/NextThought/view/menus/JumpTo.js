@@ -28,11 +28,6 @@ Ext.define('NextThought.view.menus.JumpTo', {
         var me = this;
         this.callParent(arguments);
         this.on('click', this.handleClick, this);
-//        if (Ext.is.iPad) {
-//            this.on('hide', function() {
-//                clearTimeout(me.leaveTimer);
-//            }, this);
-//        }
     },
 
 
@@ -45,6 +40,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
             this.fireEvent('set-last-location-or-root', item.ntiid);
             return;
         }
+
         this.fireEvent('set-location', item.ntiid);
     },
 
@@ -61,7 +57,13 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
     startShow: function(el, align, offset) {
         this.stopHide();
-        this.showTimeout = Ext.defer(this.showBy, 750, this, [el,  align, offset]);
+        if (Ext.is.iPad) {
+            // Want it to be more responsive to taps
+            this.showBy(el, align, offset);
+        }
+        else {
+            this.showTimeout = Ext.defer(this.showBy, 750, this, [el,  align, offset]);
+        }
     },
 
 

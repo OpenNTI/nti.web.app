@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.content.SimplePopoverWidget',{
+Ext.define('NextThought.view.content.SimplePopoverWidget', {
     extend: 'Ext.container.Container',
 
     alias: 'widget.simple-popover-widget',
-    cls: 'simple-popover-widget' ,
+    cls: 'simple-popover-widget',
 
     renderTo: Ext.getBody(),
     width: 400,
@@ -10,35 +10,39 @@ Ext.define('NextThought.view.content.SimplePopoverWidget',{
 
     layout: 'fit',
 
-    initComponent: function(){
+    initComponent: function () {
         this.callParent(arguments);
         this.add(
             {
                 xtype: 'box',
                 autoScroll: true,
-                autoEl:{
+                autoEl: {
                     cls: 'bubble',
                     cn: [
                         {cls: 'text', html: this.text}
                     ]
                 }
-        });
+            });
     },
 
 
-    afterRender: function(){
+    afterRender: function () {
         var me = this;
         this.callParent(arguments);
         this.mon(this.el, {
-            'mouseenter': function(){clearTimeout(me.closeTimer);},
+            'mouseenter': function () {
+                clearTimeout(me.closeTimer);
+            },
             'mouseleave': me.startCloseTimer,
             scope: me
         });
     },
 
 
-    startCloseTimer: function(){
+    startCloseTimer: function () {
         var me = this;
-        me.closeTimer = setTimeout(function(){me.destroy();}, 1000);
+        me.closeTimer = setTimeout(function () {
+            me.destroy();
+        }, 1000);
     }
 });

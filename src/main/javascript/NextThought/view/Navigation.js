@@ -32,25 +32,27 @@ Ext.define('NextThought.view.Navigation', {
     recordHistory: [],
 
     renderTpl: Ext.DomHelper.markup([
-        {cn: [
-            { cls: 'branding' },
-            {
-                'data-view': 'content',
-                'data-qtip': 'Content',
-                cls: 'content x-menu',
-                cn: [
-                    {cls: 'box'},
-                    { cls: 'image' },
-                    {
-                        cls: 'wrap',
-                        cn: [
-                            { cls: 'provider'},
-                            { cls: 'title'}
-                        ]
-                    }
-                ]
-            }
-        ]},
+        {
+            cn: [
+                { cls: 'branding' },
+                {
+                    'data-view': 'content',
+                    'data-qtip': 'Content',
+                    cls: 'content x-menu',
+                    cn: [
+                        { cls: 'box' },
+                        { cls: 'image' },
+                        {
+                            cls: 'wrap',
+                            cn: [
+                                { cls: 'provider' },
+                                { cls: 'title' }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
         { cls: 'library', 'data-qtip': 'Library', 'data-view': 'library', cn: [
             {cls: 'box'}
         ]},
@@ -100,7 +102,10 @@ Ext.define('NextThought.view.Navigation', {
             viewId: 'search',
             showOnHover: false,
             xtype: 'navigation-menu',
-            layout: {type: 'vbox', align: 'stretch'},
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
             overflowX: 'hidden',
             overflowY: 'hidden',
             cls: 'search-menu',
@@ -108,7 +113,9 @@ Ext.define('NextThought.view.Navigation', {
             ownerNode: this.el.down('.search'),
             startHide: Ext.emptyFn,
             items: [
-                { xtype: 'searchfield' },
+                {
+                    xtype: 'searchfield'
+                },
                 {
                     xtype: 'container',
                     autoScroll: true,
@@ -153,12 +160,14 @@ Ext.define('NextThought.view.Navigation', {
                 items: [
                     {
                         courseList: true,
-                        xtype: 'library-collection', name: 'Courses',
+                        xtype: 'library-collection',
+                        name: 'Courses',
                         store: 'courses',
                         hidden: true
                     },
                     {
-                        xtype: 'library-collection', name: 'All Books'
+                        xtype: 'library-collection',
+                        name: 'All Books'
                     }
                 ]
             });
@@ -300,14 +309,17 @@ Ext.define('NextThought.view.Navigation', {
         clearTimeout(this.timers[viewId]);
     },
 
-    showMenu: function(menu, delay){
-        if(Ext.is.iPad || !delay){
+    showMenu: function (menu, delay) {
+        var hideTimer, handlers;
+        if (Ext.is.iPad || !delay) {
             menu.show();
-        }else{
+        } else {
             this.timers[menu.viewId] = Ext.defer(menu.show, 500, menu);
         }
 
-        if(menu.viewId === 'search'){ return; }
+        if (menu.viewId === 'search') {
+            return;
+        }
 
         handlers = this.mon(menu, {
             destroyable: true,
@@ -341,13 +353,23 @@ Ext.define('NextThought.view.Navigation', {
         if (!Ext.isEmpty(viewId)) {
             if (viewId === 'search') {
                 menu = this.ownerCt.down('[viewId="' + viewId + '"]');
-                
-                if(target.hasCls('active')){
-                    menu.hide()
-                }else{
-                    this.showMenu(menu, false);
+
+                if (Ext.is.iPad) { // hasCls seems to be undefined on iPad -- wasn't sure if I should just replace it
+                    if (target.classList.contains('active')) {
+                        menu.hide();
+                    }
+                    else {
+                        this.showMenu(menu, false);
+                    }
                 }
-            }else{
+                else {
+                    if (target.hasCls('active')) {
+                        menu.hide()
+                    } else {
+                        this.showMenu(menu, false);
+                    }
+                }
+            } else {
                 this.maybeStopTimer(viewId);
             }
 

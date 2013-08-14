@@ -21,13 +21,13 @@ Ext.define('NextThought.view.menus.Navigation', {
     initComponent: function () {
         this.callParent(arguments);
         Ext.EventManager.onWindowResize(this.viewportMonitor, this);
-        if (Ext.is.iPad) {
+        if (Ext.is.iPad) { // Don't need/want the other handlers on iPad
             this.on({
                 show: 'viewportMonitor'
             });
         }
-        else {
-            //set up other handlers for closing:
+        else { // Not iPad
+            // set up other handlers for closing:
             this.on({
                 select: 'hide',
                 mouseleave: 'startHide',
@@ -46,7 +46,8 @@ Ext.define('NextThought.view.menus.Navigation', {
     startHide: function (menu, event) {
         this.cancelDeferHide();
         if (Ext.is.iPad) {
-            // If search nav-item clicked while search menu open, needs to hide search menu after show is processed
+            // If search nav-item clicked while search menu open, needs to hide search menu *after* show is processed
+            // Also want it to close quickly/responsively so that's why not 500
             this.leaveTimer = Ext.defer(this.hide, 100, this);
         }
         else {
@@ -73,9 +74,10 @@ Ext.define('NextThought.view.menus.Navigation', {
         this.setHeight(el && el.getHeight());
         this.setWidth(el && el.getWidth());
 
-        if (Ext.is.iPad) {
-            clearTimeout(this.leaveTimer);
-        }
+        // No timeout on iPad
+//        if (Ext.is.iPad) {
+//            clearTimeout(this.leaveTimer);
+//        }
     },
 
 

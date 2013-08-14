@@ -80,11 +80,11 @@ Ext.define('NextThought.modules.TouchSender', {
 
         dom.addEventListener('touchstart', function (e) {
 
-            //If click outside chatdock, close chatdock
+            // If click outside chatdock, close chatdock
             var aboveDock = container.el.down('#chat-dock'),
                 dock = container.el.dom.getAttribute('id'),
                 belowDock = container.el.up('#chat-dock'),
-                cPopout, updock, ele, touch, dockEl;
+                cPopout, updock, ele, touch, dockEl, eles, i;
 
             e.preventDefault();
 
@@ -112,18 +112,25 @@ Ext.define('NextThought.modules.TouchSender', {
             }
 
             // If touching something besides search, close search
-            if (dom.getAttribute('id').indexOf('search-menu') === -1) {
+            if (dom.getAttribute('id').indexOf('search-menu') === -1
+                && !e.target.classList.contains('search')) {
                 ele = Ext.get(Ext.query('.search-menu')[0]);
                 if (ele) {
-                    Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                    Ext.ComponentManager.get(ele.getAttribute('id')).hide();
                 }
             }
 
-            // If touching something besides jump-menu, close the jump-menu
-            if (dom.getAttribute('id').indexOf('jump-menu') === -1) {
-                ele = Ext.get(Ext.query('.jump-menu')[0]);
-                if (ele) {
-                    Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+            // If touching something besides a jump-menu, close the jump-menu
+            if (dom.getAttribute('id').indexOf('jump-menu') === -1
+                && dom.getAttribute('id').className !== 'part') {
+                eles = Ext.query('.jump-menu');
+                if (eles) {
+                    for (i = 0; i < eles.length; i++) {
+                        ele = Ext.get(eles[i]);
+                        if (ele) {
+                            Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+                        }
+                    }
                 }
             }
 
