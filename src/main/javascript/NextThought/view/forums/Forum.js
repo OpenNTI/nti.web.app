@@ -198,7 +198,7 @@ Ext.define('NextThought.view.forums.Forum',{
         if(Ext.is.iPad){
             this.buildModule('modules', 'touchSender');
             this.buildModule('modules', 'touchHandler', {getPanel: function(){
-                return Ext.get('forums');
+                return this.container.el.parent();
             }});
         }
 	},
