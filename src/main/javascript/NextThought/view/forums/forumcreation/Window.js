@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.forumcreation.Window',{
+Ext.define('NextThought.view.forums.forumcreation.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.forumcreation-window',
 
@@ -33,16 +33,18 @@ Ext.define('NextThought.view.forums.forumcreation.Window',{
 			xtype: 'account-header-view',
 			noIcon: true,
 			title: 'Create Forum',
-			detail: getString('forum_creation_text','To create a new forum fill out the information below.  We\'ll create a new forum for you with the provided title and description')
+			detail: getString('forum_creation_text', 'To create a new forum fill out the information below.  We\'ll create a new forum for you with the provided title and description')
 		},
-		{xtype: 'forumcreation-main-view'}
+		{
+			xtype: 'forumcreation-main-view'
+		}
 	],
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		var header = this.down('account-header-view');
 
-		if(this.record){
+		if (this.record) {
 			header.title.update('Edit Forum');
 			header.detail.update(getString('forum_edit_text', 'To change the forum\'s title or description, edit the fields below.'));
 		}
