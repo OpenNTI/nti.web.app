@@ -3,8 +3,14 @@ Ext.define('NextThought.view.library.View', {
 	alias: 'widget.library-view-container',
 
 	requires:[
-		'NextThought.view.library.Branding'
+		'NextThought.view.library.Branding',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
+
+    mixins:[
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	cls: 'library-view',
 	layout: 'auto',
@@ -39,6 +45,11 @@ Ext.define('NextThought.view.library.View', {
 			'show-books':'showBooks',
 			'hide-books':'hideBooks'
 		});
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('modules', 'touchHandler', {getPanel: function(){
+            return this.container.getEl();
+        }});
 	},
 
 
