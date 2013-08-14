@@ -326,6 +326,7 @@
 		.title {
 			color: $secondary-grey;
 			font: normal 500 14px $font;
+			overflow: hidden;
 			@include ellipse;
 		}
 
