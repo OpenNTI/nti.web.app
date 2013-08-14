@@ -64,21 +64,10 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			req = resp.request;
 			var el = me.context.up('.context'),
 				ntiid = req && req.ntiid,
-				s = Ext.getStore('Purchasable'),
-				p = s && s.purchasableForContentNTIID(ntiid);
+				p = ContentUtils.purchasableForContentNTIID(ntiid);
 
-			if (resp.status === 403 && p) {
-				me.requiresPurchase = true;
-				me.purchasable = p;
-				el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
-				me.needsPurchaseTpl.overwrite(el, p.getData(), true);
-				me.clearManagedListeners();
-				me.mon(el,'click', me.navigateToItem, me);
-
-				Ext.DomHelper.append(me.getEl(), {
-					cls: 'purchasable-mask',
-					style: {top: (me.itemEl.getY() - me.el.getY()) + 'px'}
-				});
+			if ((resp.status === 403 ||resp.status === 404) && p) {
+				me.handlePurchasable(p, el);
 				return;
 			}
 
@@ -142,6 +131,27 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
+	handlePurchasable: function(purchasable, el){
+		var me = this,
+			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
+
+		me.requiresPurchase = true;
+		me.purchasable = purchasable;
+		el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
+
+		if(tpl){
+			me[tpl].overwrite(el, purchasable.getData(), true);
+		}
+		me.clearManagedListeners();
+		me.mon(el,'click', me.navigateToItem, me);
+
+		Ext.DomHelper.append(me.getEl(), {
+			cls: 'purchasable-mask',
+			style: {top: (me.itemEl.getY() - me.el.getY()) + 'px'}
+		});
+	},
+
+
 	setContext: function (doc) {
 		var r = this.record, newContext;
 		try {
@@ -165,7 +175,12 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	navigateToItem: function () {
 		//Show purchase window if we're purchase-able
 		if (this.requiresPurchase) {
-			this.fireEvent('show-purchasable', this, this.purchasable);
+			if(this.purchasable instanceof NextThought.model.Course){
+				this.fireEvent('show-enrollment', this, this.purchasable);
+			}
+			else{
+				this.fireEvent('show-purchasable', this, this.purchasable);
+			}
 			return;
 		}
 

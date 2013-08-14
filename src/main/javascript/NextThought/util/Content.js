@@ -320,6 +320,50 @@ Ext.define('NextThought.util.Content', {
 		}, this);
 	},
 
+	/**
+	 * Returns a Purchasable if we have one in the store that looks
+	 * like it would contain the following ntiid.
+	 * @param ntiid A content ntiid or sub ntiid (question ntiid)
+	 */
+	purchasableForContentNTIID: function(ntiid){
+		function fn(rec){
+			var items = rec.get('Items') || [];
+			return (rec.get('NTIID').indexOf(prefix) === 0) || Ext.Array.contains(items, prefix);
+		}
+
+		function getPrefix(ntiid){
+			var root = ContentUtils.getLineage(ntiid).last();
+
+			// NOTE: A Purchasable could represent both a book, you don't have access to,
+			// or a course you're not enrolled in. Here we try to resolve the root id by
+			// first looking if it's something in our library
+			// if not, we will use what we think the root content should be.
+
+			if(!root){
+				//NOTE this again assumes 1-to-1 purchase to content root.
+				root = ParseUtils.bookPrefixIfQuestionNtiid(ntiid);
+				root = root ? Library.findTitleWithPrefix(root) : null;
+				root = root ? root.get('NTIID') : null;
+
+				// If we still don't have a root,  use what we think the root content should be.
+				root = !root && ContentUtils.contentPrefix(ntiid);
+			}
+
+			return root;
+		}
+
+		var prefix = getPrefix(ntiid),
+			purchasableStore = Ext.getStore('Purchasable'),
+			purchasable, index;
+
+		if(prefix){
+			index = purchasableStore.findBy(fn);
+			purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
+		}
+		console.log('purchasable: ', purchasable);
+		return purchasable;
+	},
+
 
 	getLineage: function(ntiid, justLabels){
 		if(!ntiid){

@@ -82,7 +82,8 @@ Ext.define('NextThought.controller.Store', {
 				},
 
 				'*': {
-					'show-purchasable': 'showPurchaseWindow'
+					'show-purchasable': 'showPurchaseWindow',
+					'show-enrollment': 'showEnrollmentWindow'
 				}
 			},
 			'controller': {
@@ -187,8 +188,12 @@ Ext.define('NextThought.controller.Store', {
 
 
 	maybeShowPurchasableForContent: function (sender, ntiid) {
-		var purchasable = this.getPurchasableStore().purchasableForContentNTIID(ntiid);
+		var purchasable = ContentUtils.purchasableForContentNTIID(ntiid);
 		if (purchasable) {
+			if(purchasable instanceof  this.getCourseModel()){
+				this.showEnrollment(purchasable);
+				return !purchasable;
+			}
 			this.showPurchasable(purchasable);
 		}
 		return !purchasable;
@@ -204,6 +209,10 @@ Ext.define('NextThought.controller.Store', {
 		return this.getView('course.enrollment.Window').create({record: course});
 	},
 
+
+	showEnrollmentWindow: function(sender, course){
+		this.showEnrollment(course);
+	},
 
 	/**
 	 * Show the detail/purchase view for the given purchasable

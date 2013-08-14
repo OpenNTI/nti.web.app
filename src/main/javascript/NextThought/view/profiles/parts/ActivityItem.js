@@ -249,18 +249,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			req = resp.request;
 			var el = me.context.up('.content-callout'),
 				ntiid = req && req.ntiid,
-				s = Ext.getStore('Purchasable'),
-				p = s && s.purchasableForContentNTIID(ntiid);
+				p = ContentUtils.purchasableForContentNTIID(ntiid);
 
-			if(resp.status === 403 && p){
-				me.requiresPurchase = true;
-				me.purchasable = p;
-				el.removeCls('content-callout').addCls('purchase');
-				me.needsPurchaseTpl.overwrite(el, p.getData());
-				Ext.DomHelper.append(me.getEl(), {
-					cls: 'purchasable-mask',
-					style: {top: (me.itemEl.getY() - me.el.getY())+'px'}
-				});
+			if((resp.status === 403 || resp.status === 404) && p){
+				me.handlePurchasable(p, el);
 				return;
 			}
 
@@ -319,13 +311,35 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 
+	handlePurchasable: function(purchasable, el){
+		var me = this,
+			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
+
+		me.requiresPurchase = true;
+		me.purchasable = purchasable;
+		el.removeCls('content-callout').addCls('purchase');
+		if(tpl){
+			me[tpl].overwrite(el, purchasable.getData(), true);
+		}
+
+		Ext.DomHelper.append(me.getEl(), {
+			cls: 'purchasable-mask',
+			style: {top: (me.itemEl.getY() - me.el.getY())+'px'}
+		});
+	},
+
+
 	goToObject: function(){
 		var rec = this.record,
 			cid;
 
 		//Show purchase window if we're purchase-able
 		if(this.requiresPurchase){
-			this.fireEvent('show-purchasable', this, this.purchasable);
+			if(this.purchasable instanceof NextThought.model.Course){
+				this.fireEvent('show-enrollment', this, this.purchasable);
+			}else{
+				this.fireEvent('show-purchasable', this, this.purchasable);
+			}
 			return;
 		}
 

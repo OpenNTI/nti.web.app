@@ -251,7 +251,12 @@ Ext.define('NextThought.controller.Navigation', {
 
     readerNavigationFailed: function (reader, ntiid, response) {
         var notHandled = true;
-        if (response && response.status === 403) {
+
+	    // NOTE: initially we were checking if the response status is a 403,
+	    // but we might also have a 404 that references a course item
+	    // (which is treated as a purchasable) that a user hasn't enrolled in.
+	    // We could check that here or we could let the store controller which listens to this event handle that.
+        if (response) {
             notHandled = this.fireEvent('unauthorized-navigation', this, ntiid);
         }
 
