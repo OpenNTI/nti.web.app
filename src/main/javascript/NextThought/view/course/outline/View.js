@@ -32,9 +32,9 @@ Ext.define('NextThought.view.course.outline.View',{
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
 		{ cls: 'course-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
 			{cls: 'label', html:'{label}'},
-			{tag:'tpl', 'if':'date', cn: {cls:'date', cn:[
-				{html:'{date:date("M")}'},
-				{html:'{date:date("j")}'}
+			{tag:'tpl', 'if':'startDate', cn: {cls:'date', cn:[
+				{html:'{startDate:date("M")}'},
+				{html:'{startDate:date("j")}'}
 			]}}
 		]}
 	]}),{

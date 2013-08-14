@@ -59,8 +59,27 @@ Ext.define('NextThought.model.course.navigation.Node',{
 		{ name:'type', type:'string', mapping:'@nodeName', convert: function(v){return v && v.toLowerCase(); } },
 
 			//due date
-		{ name:'date', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00Z' },
+		{ name:'date', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00+00:00',
+			convert: function(v,m){
+				if(Ext.isEmpty(v)){return null;}
+				if(!m.dates){
+					m.dates = m.parseDates(v,this);
+				}
 
+				return m.dates.first();
+			}
+		},
+
+		{ name:'startDate', type:'date', mapping:'@date', dateFormat:'c', exampleValue:'2013-10-16T00:00:00+00:00',
+			convert: function(v,m){
+				if(Ext.isEmpty(v)){return null;}
+				if(!m.dates){
+					m.dates = m.parseDates(v,this);
+				}
+				return m.dates.last();
+
+			}
+		},
 
 		{ name:'pageInfo', type:'Synthetic', persist: false,
 			fn: function(r){
@@ -77,6 +96,20 @@ Ext.define('NextThought.model.course.navigation.Node',{
 			}
 		}
 	],
+
+
+	parseDates: function(str, fieldScope){
+		if(Ext.isEmpty(str)){
+			return null;
+		}
+
+		var v = str.split(',');
+		v = Ext.Array.map(v,Ext.data.Types.DATE.convert,fieldScope||this);
+		v.sort(function(a,b){return a - b;});
+		this.dates = v;
+
+		return v;
+	},
 
 
 	getAssociatedNode: function(){
