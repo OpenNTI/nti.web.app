@@ -4,8 +4,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 	debugging: false,
 
 	requires:[
-		'NextThought.util.MasonryPacker'
+		'NextThought.util.MasonryPacker',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
+
+    mixins:[
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	GRID_WIDTH: 8,
 
@@ -28,6 +34,12 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 		this.tileContainer = this.items.first();
 
 		this.sorter = this.buildSorter();
+
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('modules', 'touchHandler',
+            {getPanel: function(){
+                return this.container.el;
+            }});
 	},
 
 
