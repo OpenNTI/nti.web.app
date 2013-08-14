@@ -9,7 +9,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		'NextThought.view.slidedeck.transcript.NoteOverlay',
 		'NextThought.view.slidedeck.transcript.Slide',
 		'NextThought.view.annotations.renderer.Manager',
-		'NextThought.view.annotations.View'
+		'NextThought.view.annotations.View',
+		'NextThought.view.slidedeck.transcript.VideoTitle'
 	],
 
 	ui:'transcript',
@@ -435,7 +436,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				discussion:true,
 				store: 'ext-empty-store',
 				anchorComponent: this,
-				anchorComponentHooks: this.getViewerHooks()
+				anchorComponentHooks: this.getViewerHooks(),
+				floatParent: this
 			});
 		}
 
