@@ -27,6 +27,7 @@
 
 		.courseName,
 		.provider {
+			position: relative;
 			text-transform: uppercase;
 			font: normal bold 10px/12px $font;
 			color: $secondary-grey;
@@ -99,7 +100,6 @@
 			width: auto;
 			&:hover {
 				.branding {
-					left: -5px;
 					z-index: 1;
 				}
 			}
@@ -168,6 +168,7 @@
 		@include content-item-row;
 		height: 57px;
 		width: initial;
+		min-width: 275px;
 		max-width: 400px;
 		z-index: 2;
 

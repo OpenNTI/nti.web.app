@@ -13,7 +13,49 @@
 }
 
 
-.main-navigation .branding{
-	display: block;
-	background: url(../../images/platform.ou.edu/ou_cover.png) center center no-repeat;
+.main-navigation {
+
+
+	.branding{
+		display: block;
+		background: url(../../images/platform.ou.edu/ou_cover.png) center center no-repeat;
+	}
+
+	.content {
+		.image::after {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0; left: 0;
+			width: 10px;
+			background: url(../../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
+		}
+		.wrap {
+			.provider {
+				text-indent: -1000px;
+				&::before {content:':';}//force there to be some text (the text indent hides it)
+				&::after {
+					content: 'The University of Oklahoma';
+					position: absolute;
+					left: 0;
+					top: 0;
+					text-indent: 0;
+				}
+			}
+		}
+	}
+}
+
+
+.x-panel-content-switcher {
+	.x-component-content-switcher {
+		div.item:first-of-type {
+			.image::after {
+					content: '';
+					position: absolute;
+					top: 0; bottom: 0; left: 0;
+					width: 10px;
+					background: url(../../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
+				}
+		}
+	}
 }
