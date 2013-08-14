@@ -58,7 +58,7 @@ Ext.define('NextThought.view.navigation.Collection',{
 	collectData: function(){
 		var data = {items: this.callParent(arguments)};
 		data.name = this.name;
-		data.count = this.store.getCount();//getTotalCount?
+		data.count = data.items.length;
 		return data;
 	},
 
