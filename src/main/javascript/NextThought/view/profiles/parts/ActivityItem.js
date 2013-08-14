@@ -335,11 +335,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		//Show purchase window if we're purchase-able
 		if(this.requiresPurchase){
-			if(this.purchasable instanceof NextThought.model.Course){
-				this.fireEvent('show-enrollment', this, this.purchasable);
-			}else{
-				this.fireEvent('show-purchasable', this, this.purchasable);
-			}
+			this.fireEvent('show-purchasable', this, this.purchasable);
 			return;
 		}
 
