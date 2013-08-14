@@ -31,7 +31,13 @@ Ext.define('NextThought.view.cards.CardTarget',{
 			throw 'you must supply a contentElement';
 		}
 
-		var data = DomUtils.parseDomObject(config.contentElement);
+		var version, data = DomUtils.parseDomObject(config.contentElement),
+			nativeSupport = Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'), 'application/pdf'),
+			anchorAttr = 'class=\'link\' target=\'_blank\'',
+			chrome = '<a '+anchorAttr+' href=\'http://www.google.com/chrome\'>Chrome</a>',
+			safari = '<a '+anchorAttr+' href=\'http://www.apple.com/safari/download/\'>Safari 5.0+</a>',
+			ff = '<a '+anchorAttr+' href=\'http://www.getfirefox.com\'>Firefox 5.0+</a>',
+			ie = '<a '+anchorAttr+' href=\'http://www.microsoft.com/ie\'>Internet Explorer 9+</a>';
 
 		//the data-href has the adjusted href.
 		data.href = data['attribute-data-href'];
@@ -44,7 +50,12 @@ Ext.define('NextThought.view.cards.CardTarget',{
 		this.reader.getScroll().lock();
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
 
-		if(Ext.isIE10m || !Ext.Array.contains(Ext.Array.pluck(navigator.mimeTypes,'type'),'application/pdf')){
+		if(Ext.isGecko){
+			version = /Firefox\/(\d+\.\d+)/.exec(navigator.userAgent)[1];
+			version = parseInt(version, 10);
+		}
+		//If we are in IE have them open it in another window
+		if(Ext.isIE10m){
 			this.add({
 				xtype:'box',
 				autoEl: {
@@ -53,7 +64,7 @@ Ext.define('NextThought.view.cards.CardTarget',{
 					target: '_blank',
 					cls: 'no-support',
 					cn: [
-						{ html: 'Your browser does not support viewing this content with this application.' },
+						{ cls: 'message', html: 'Your browser does not support viewing this content with this application.' },
 						{ cn:[
 							{
 								tag: 'span', cls: 'link',
@@ -66,7 +77,23 @@ Ext.define('NextThought.view.cards.CardTarget',{
 			});
 			return;
 		}
-
+		//if we are in FF < v.19 or we don't detect a native support ask them to update
+		//after FF 19 there is a native viewer that is on by default
+		if( (version && version <= 18) || (!nativeSupport && !Ext.isGecko)){
+			this.add({
+				xtype: 'box',
+				renderTpl: Ext.DomHelper.markup({
+					cls: 'no-support', 'data-link': data.href, cn: [
+						{ cls: 'message', html: 'Your browser does not support viewing this content with this application.'},
+						{ cn: [
+							{ html: 'Please try again with the latest version of '+chrome+', '+safari+', '+ff+', or '+ie+'.'}
+						]}
+					]
+				})
+			});
+			return;
+		}
+		//If we are FF 19+ or we detect a native viewer show it
 		this.add({
 			xtype: 'box',
 			autoEl: {

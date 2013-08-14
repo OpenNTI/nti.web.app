@@ -136,17 +136,17 @@ a{
 			position: absolute;
 			top:0; bottom: 0; left:0; right:0;
 
-			&, a { &, &:link, &:hover, &:visited{ text-decoration: none; } }
+			&, a, div a { &, &:link, &:hover, &:visited{ text-decoration: none; } }
 
 			padding: 40% 2em;
 			text-align: center;
 			color: $secondary-grey;
 
-			span.link {
+			.link {
 				color: $primary-blue;
 			}
 
-			div:first-child {
+			.message {
 				color: $tertiary-grey;
 				font: normal 300 2em/4em "Open Sans Condensed", $font;
 			}
