@@ -169,6 +169,7 @@ Ext.define('NextThought.view.video.Video',{
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if(c){
+				console.debug(me.id+' is listening on deactivate on '+ c.id);
 				me.mon(c,'deactivate','pausePlayback',me);
 				stopOnCardChange(c, me);
 			}
@@ -302,6 +303,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	resumePlayback: function(){
 		if(this.activeVideoService && !this.isPlaying()){
+			Ext.ComponentQuery.query('content-video').map(function(i){i.pausePlayback();})
 			this.issueCommand(this.activeVideoService,'play');
 			return true;
 		}
