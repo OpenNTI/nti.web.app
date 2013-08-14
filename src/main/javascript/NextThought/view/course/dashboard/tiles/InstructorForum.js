@@ -36,6 +36,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 		function failure(){
 			if(me.ntiids.length === 0){
 				console.error("Failed to get forum: ",ntiid);
+				Ext.destroy(me);
 				Ext.callback(me.getFinishCallBack());
 			}else{
 				me.resolveForum(me.ntiids.shift());
@@ -46,10 +47,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	},
 
 	createView: function(record){
-		var storeId = 'instructor-forum-topic-'+record.getContentsStoreId(),
+		var me = this,
+			storeId = 'instructor-forum-topic-'+record.getContentsStoreId(),
 			store = Ext.getStore(storeId) || record.buildContentsStore({
 				storeId: storeId, 
-				autoLoad: true,
 				pageSize: 1, 
 				proxyOverride: {
 					extraParams: {
@@ -59,7 +60,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 				}
 			});
 
+		this.mon(store.getProxy(), 'exception', function(){
+			Ext.destroy(me);
+			Ext.callback(me.getFinishCallBack());
+		}, this);
+
 		this.mon(store,'load','addView');
+		store.load();
 	},
 
 

@@ -73,12 +73,16 @@ Ext.define('NextThought.view.course.dashboard.View',{
 		Ext.Object.each(NS,function(clsName,cls){
 			var fn = cls.getTileFor;
 			if(fn){
-				queue.push(Ext.bind(fn,cls));
+				fn = Ext.bind(fn,cls);
+				fn.$test = cls.$className;
+				queue.push(fn);
 			}
 		});
 
 		Ext.each(queue.slice(),function(fn){
+			console.log(fn.$test+" Started");
 			fn(date, course, location, courseNode, function finish(o){
+				console.log(fn.$test+" Finished");
 				queue.pop();
 				if( o ){
 					push[Ext.isArray(o)?'apply':'call'](tiles,o);
