@@ -60,11 +60,11 @@
 				overflow: visible;
 				cursor: default;
 				margin-left: 0.4em;
-				.x-ie &,
-				.x-ie10 &,
-				.x-gecko & {
-					top: -25px;
-				}
+				//.x-ie &,
+				//.x-ie10 &,
+				//.x-gecko & {
+				//	top: -25px;
+				//}
 				&:hover {
 					color: inherit;
 
