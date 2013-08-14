@@ -116,6 +116,11 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		if(s.getCount() > 5){
 			s.remove(s.getRange(5));
 		}
+
+
+		//s = Ext.Array.pluck( Ext.Array.pluck(s.getRange(),'data'), 'index');
+		//Cant save records to local storage...so must save just the id's or the index of the content
+		//Then we can restore the list after content loads. :(
 	},
 
 
