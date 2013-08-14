@@ -407,7 +407,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function playerReady(){
 				var player = document.getElementById(playerId),
-					events = ['sourceReady', 'mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError','mediaError'],
+					events = ['mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError'],
 					i = events.length - 1, o;
 
 				for(i; i>=0; i--){
