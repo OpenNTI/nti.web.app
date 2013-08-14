@@ -448,6 +448,12 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				uiconf_id: '%UICONF_ID%',
 				flashvars: {
 					"externalInterfaceDisabled": false,
+					"akamaiHD": {
+						"loadingPolicy": "preInitialize",
+						"asyncInit": "true"
+					},
+					"twoPhaseManifest": "true",
+					"streamerType": "hdnetworkmanifest",
 					"autoPlay": false
 				},
 				"entry_id": "%INITIAL_VIDEO%",
