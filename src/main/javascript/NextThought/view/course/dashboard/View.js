@@ -17,7 +17,7 @@ Ext.define('NextThought.view.course.dashboard.View',{
 			me = this,
 			toc, course,
 			courseNavStore,
-			date = new Date();//now
+			date = this.self.dateOverride || new Date();//now
 
 		if( l && l !== ContentUtils.NO_LOCATION ){
 			toc = l.toc.querySelector('toc');
