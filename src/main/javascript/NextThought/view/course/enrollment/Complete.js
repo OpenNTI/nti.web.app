@@ -68,7 +68,7 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 
 		//Again with these damn assumptions
 		if(items.length > 1){
-			console.log('More than one item for this purchasable.  Content roulette', items);
+			console.warn('More than one item for this purchasable.  Content roulette', items);
 		}
 
 		items = items.first();

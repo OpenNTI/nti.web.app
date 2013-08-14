@@ -146,7 +146,6 @@ Ext.define('NextThought.view.course.forum.View',{
 
 		if(top.xtype === 'course-forum-topic-list'){
 			if(top.record.getId() === forum){
-				console.log('Forum is already here?!?!?!?!?');
 				this.setForum(undefined, topic);
 				return;
 			}
@@ -154,7 +153,6 @@ Ext.define('NextThought.view.course.forum.View',{
 
 		if(top.xtype === 'forums-topic'){
 			if(top.record.getId() === topic){
-				console.log('Forum and topic are already here?!?!?');
 				return;
 			}
 		}
@@ -181,7 +179,7 @@ Ext.define('NextThought.view.course.forum.View',{
 			me.add(cmp);
 			me.setTopic(topic);
 		}, function(){
-			console.log('Failed to load forum:',forum);
+			console.error('Failed to load forum:',forum);
 		});
 	},
 

@@ -101,7 +101,7 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 	},
 
 	reviewClicked: function(){
-		console.log('navigate to', this.getContainerId());
+		//console.log('navigate to', this.getContainerId());
 		this.fireEvent('navigate-to-href', this, this.getContainerId());
 	}
 });

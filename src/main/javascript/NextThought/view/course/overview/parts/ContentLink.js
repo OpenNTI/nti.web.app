@@ -64,7 +64,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 
 		Ext.Ajax.request(req);
 
-		console.log('Loading:',ntiid);
+//		console.log('Loading:',ntiid);
 
 	},
 

@@ -45,7 +45,7 @@ Ext.define('NextThought.view.course.info.View',{
 				me.fillInPage(r.responseText);
 			},
 			failure: function(r) {
-				console.log('server-side failure with status code ' + r.status+'. Message: '+ r.responseText);
+				console.error('server-side failure with status code ' + r.status+'. Message: '+ r.responseText);
 			}
 		});
 	},

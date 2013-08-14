@@ -125,7 +125,9 @@ Ext.define('NextThought.view.course.overview.View',{
 			return {xtype: type, node:node, locationInfo: info, courseRecord:rec, sectionOverride: section};
 		}
 
-		console.warn('Unknown overview type:', type, node);
+		if(this.self.debug){
+			console.warn('Unknown overview type:', type, node);
+		}
 		return null;
 	}
 
