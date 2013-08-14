@@ -13,7 +13,7 @@ Ext.define('NextThought.view.course.info.View',{
 
 		this.update('');
 
-		Ext.defer(this.el.mask,1,this.el,['Loading...']);
+		Ext.getBody().mask('Loading...','navigation');
 
 		$AppConfig.service.getPageInfo(ntiid, this.loadPage, this.failedToLoad, this);
 	},
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.course.info.View',{
 		root.innerHTML = html;
 
 		body = root.getElementsByTagName('body')[0];
-
+		Ext.getBody().unmask();
 		this.update(body && body.innerHTML);
 	},	
 
