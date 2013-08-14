@@ -142,7 +142,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			handlerName;
 
 		if(!filter.test(eventName) || this.id !== eventData.id ){
-			console.log('Filtered Out:', this.id, eventData.id);
+			//console.log('Filtered Out:', this.id, eventData.id);
 			return;
 		}
 
@@ -257,6 +257,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	pause: function(){
 		console.log('Firing paush event')
+		console.log('Triggered pause unblocks pause blocker');
+		delete this.blockPause;
 		this.sendCommand('doPause');
 	},
 
@@ -315,6 +317,13 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	doPlayHandler: function(){
+		var me = this;
+		console.log('Blocking pause');
+		me.blockPause = true;
+		setTimeout(function(){
+			console.log('Allowing pause to occur from timeout');
+			delete me.blockPause;
+		}, 1000);
 		console.warn('kaltura fired play handler called', this.currentState, arguments);
 		this.currentState = 1;
 		this.fireEvent('player-event-play', 'kaltura');
@@ -323,6 +332,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	doPauseHandler: function(){
 		console.warn('kaltura fired paused', this.currentState);
+
+		if(this.blockPause){
+			console.log('Initating blocked pause');
+			delete this.blockPause;
+			this.play();
+			return;
+		}
+
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
@@ -342,11 +359,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	mediaErrorHandler: function(){
-		console.error('MEDIA ERROR', arguments);
+		console.log('MEDIA ERROR', arguments);
 	},
 
 	sourceReadyHandler: function(){
-		console.error('SOURCE READY', arguments);
+		console.log('SOURCE READY', arguments);
 	},
 
 	playerCode:{
