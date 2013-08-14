@@ -125,7 +125,8 @@ Ext.define('NextThought.util.Sharing',{
 
 
 	sharedWithToSharedInfo: function(sharedWith, pageInfo){
-		var isPublic = this.isPublic(sharedWith, pageInfo),
+		var pi = pageInfo || this.getCurrentPageInfo(),
+			isPublic = this.isPublic(sharedWith, pi),
 			communities =[],
 			list = [],
 			shareInfo = {publicToggleOn: isPublic};
@@ -146,6 +147,7 @@ Ext.define('NextThought.util.Sharing',{
 		 *  If it's private however, we will return the 'sharedWith' parameter.
 		 */
 		if(isPublic){
+			Ext.Array.merge(communities, pi.getPublicScope());
 			Ext.each(sharedWith, function(i){
 				if(!Ext.Array.contains(communities, i.getId ? i.getId() : i)){ list.push(i); }
 			});
