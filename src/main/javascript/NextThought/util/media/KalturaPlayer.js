@@ -256,7 +256,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	pause: function(){
-		console.log('Firing paush event')
+		console.log('Firing pause event');
 		console.log('Triggered pause unblocks pause blocker');
 		delete this.blockPause;
 		this.sendCommand('doPause');
