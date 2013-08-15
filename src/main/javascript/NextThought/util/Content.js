@@ -265,7 +265,7 @@ Ext.define('NextThought.util.Content', {
 	//Returns the prefix of the content ntiid we think this ntiid
 	//would reside beneath
 	contentPrefix: function(id){
-		var ntiid = ParseUtils.parseNtiid(id), title, index;
+		var ntiid = ParseUtils.parseNTIID(id), title, index;
 
 		ntiid.specific.type = 'HTML';
 		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
@@ -371,7 +371,8 @@ Ext.define('NextThought.util.Content', {
 
 	getLineage: function(ntiid, justLabels){
 		if(!ntiid){
-			Ext.Error.raise('No ntiid given');
+//			Ext.Error.raise('No ntiid given');
+			return [];
 		}
 
 		var leaf = this.find(ntiid) || {},
