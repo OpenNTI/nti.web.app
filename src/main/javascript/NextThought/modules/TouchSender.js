@@ -151,7 +151,7 @@ Ext.define('NextThought.modules.TouchSender', {
             lastY = initialY;
             vel = 0;
 
-            container.fireEvent('touchElementAt', e.pageX, e.pageY, function (ele) {
+            container.fireEvent('touchElementAt', e.touches[0].clientX, e.touches[0].clientY, function (ele) {
 
                 pickedElement = ele;
 

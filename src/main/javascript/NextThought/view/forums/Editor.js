@@ -88,6 +88,11 @@ Ext.define('NextThought.view.forums.Editor', {
         this.titleEl.focus();
         this.moveCursorToEnd(this.titleEl);
         window.scrollTo(this.titleEl.top);
+
+        //Don't scroll all the way, to let the input field show on ipad.
+        if(Ext.is.iPad){
+            window.scrollTo(0, 100);
+        }
     },
 
 
