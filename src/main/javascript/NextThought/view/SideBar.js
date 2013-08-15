@@ -92,7 +92,7 @@ Ext.define('NextThought.view.SideBar', {
 
 
     viewportMonitor: function (w) {
-        if (w < 1278) {
+        if (w < 1390) {
             this.host.hide();
         }
         else {
