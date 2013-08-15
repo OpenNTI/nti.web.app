@@ -142,7 +142,7 @@ Ext.define('NextThought.view.course.outline.View',{
 
 				console.warn('Danger! Selection returned a value from different content (should not be possible)');
 			}
-			console.debug('No record selected, defaulting to first lesson',pageInfo);
+			console.debug('No record selected, defaulting to first lesson in: ',root);
 			r = store.findRecord('type','lesson',0,false,false,true);
 		}
 
