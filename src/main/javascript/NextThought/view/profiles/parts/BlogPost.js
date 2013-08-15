@@ -3,14 +3,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	alias: 'widget.profile-blog-post',
 
 	requires:[
-		'NextThought.view.profiles.parts.BlogComment',
-        'NextThought.modules.TouchSender',
-        'NextThought.modules.TouchHandler'
+		'NextThought.view.profiles.parts.BlogComment'
 	],
-
-    mixins:[
-        'NextThought.mixins.ModuleContainer'
-    ],
 
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
@@ -81,27 +75,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		}
 
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
-
-        if(Ext.is.iPad){
-            this.setupTouch();
-        }
 	},
-
-
-    setupTouch: function(){
-        this.buildModule('modules', 'touchSender',{container:this,moduleName:'blogPostTouchSender'});
-        this.buildModule('modules', 'touchHandler',
-            {container:this, moduleName:'blogPostTouchHandler',getPanel: function(){
-                return Ext.get('profile');
-            }});
-
-        var container = this;
-
-        container.on('touchScroll', function(ele, deltaY) {
-            var profile = Ext.get('profile');
-            profile.scrollBy(0, Math.ceil(deltaY*0.4), false);
-        });
-    },
 
 
 	closeView: function(){

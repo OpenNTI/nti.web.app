@@ -315,6 +315,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
 
 		this.maybeEnableSave();
+
+//        this.buildModule('modules', 'touchSender');
+//        this.buildModule('modules', 'touchHandler', {
+//            scroll: function(){
+//                console.log('trying to scroll');
+//                Ext.emptyFn();
+//            }
+//        });
+
 	},
 
 
@@ -456,6 +465,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					me.onFocusChange(e);
 				}
 			});
+            me.mon(me.contentEl, {
+                'click': function(e) {
+                    me.contentEl.focus();
+                }
+            });
 		}
 
 		me.on('destroy', function () {
