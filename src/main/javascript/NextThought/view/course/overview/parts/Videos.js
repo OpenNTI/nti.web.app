@@ -269,7 +269,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			el = this[(c ? 'screen':'curtain')+'El'];
 
 		if(el){
-			el.setVisibilityMode(Ext.Element.DISPLAY)[a]();
+			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
 		}
 	},
 
@@ -280,7 +280,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			el = this[(c ? 'screen':'curtain')+'El'];
 
 		if(el){
-			el.setVisibilityMode(Ext.Element.DISPLAY)[a]();
+			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
 		}
 	},
 
