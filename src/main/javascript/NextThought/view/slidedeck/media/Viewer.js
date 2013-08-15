@@ -159,7 +159,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
-			width: width
+			width: width,
+			floatParent: this
 		});
 
 		if(this.record){

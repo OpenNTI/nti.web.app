@@ -313,12 +313,7 @@ Ext.define('NextThought.view.video.Video',{
 	resumePlayback: function(){
 		var me = this;
 		if(this.activeVideoService && !this.isPlaying()){
-			Ext.ComponentQuery.query('content-video').map(
-					function(i){
-						if(i!==me){
-							i.deactivatePlayer();
-						}
-					});
+			this.pauseAnyOtherVideoPlaying();
 			this.issueCommand(this.activeVideoService,'play');
 			return true;
 		}
@@ -326,10 +321,26 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	pauseAnyOtherVideoPlaying: function(){
+		var me = this;
+
+		// FIXME: Do it better. This is a nasty but
+		// we need to be able to stop any other video playing.
+		Ext.ComponentQuery.query('content-video').map(
+			function(i){
+				if(i!==me){
+					i.deactivatePlayer();
+				}
+			}
+		);
+	},
+
+
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
+		this.pauseAnyOtherVideoPlaying();
 		// Save our the startAt value in case of failover
 		this.currentStartAt = (startAt || 0);
 
