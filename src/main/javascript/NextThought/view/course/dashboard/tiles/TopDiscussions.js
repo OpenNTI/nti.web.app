@@ -119,7 +119,6 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView',{
 		this.callParent(arguments);
 
 		var avatar = this.record.get('Creator').get('avatarURL');
-		debugger;
 		this.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
 	}
 
