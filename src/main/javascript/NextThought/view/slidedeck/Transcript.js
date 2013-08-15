@@ -421,6 +421,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	showAnnotationView: function(store){
+		var me = this;
 		if(!this.annotationView){
 			this.annotationView = this.add({
 				xtype: 'annotation-view',
@@ -438,6 +439,19 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				anchorComponent: this,
 				anchorComponentHooks: this.getViewerHooks(),
 				floatParent: this
+			});
+
+			this.annotationView.show().hide();
+
+			this.mon(this.annotationView, {
+				scope: me,
+				show: function(){ me.fireEvent('will-show-annotation', me.annotationView, this); },
+				hide: function(){
+					if(me.el.down('.count.active')){
+						me.el.down('.count.active').removeCls('active');
+					}
+					me.fireEvent('will-hide-annotation', me.annotationView, this);
+				}
 			});
 		}
 

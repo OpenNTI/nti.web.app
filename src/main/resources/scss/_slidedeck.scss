@@ -977,8 +977,6 @@ $experimental-support-for-svg: true;
 		position: absolute;
 		top: 160px;
 		left: 10px;
-		width: 960px;
-		height: 540px;
         margin: 0 auto;
 	}
 
@@ -987,6 +985,7 @@ $experimental-support-for-svg: true;
 		margin: 10px 0 0 1000px;
 		overflow-y: auto;
 		overflow-x: hidden;
+		position: relative;
 
 		.x-container-transcript{
 			width: auto !important;
@@ -1000,7 +999,7 @@ $experimental-support-for-svg: true;
 
 			.content-video-transcript{
 				margin: 0 !important;
-				width: auto !important;
+				width: 360px !important;
 
 				.row-item{
 					.timestamp{
@@ -1022,6 +1021,7 @@ $experimental-support-for-svg: true;
 			.x-container-transcript{
 				.content-video-transcript{
                     padding-left: 70px !important;
+					width: 720px !important;
 
 					.row-item{
 						.timestamp{
@@ -1127,7 +1127,7 @@ $experimental-support-for-svg: true;
 			cursor: pointer;
 
 			&:hover,
-			&.active {
+			&.active, .active {
 				background: $primary-blue;
 				color: #fff;
 			}

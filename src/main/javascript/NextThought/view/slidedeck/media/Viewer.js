@@ -27,7 +27,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		width: function(el){
 			var screenHeight = Ext.Element.getViewportHeight(),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
-				defaultWidth = 960,
+				defaultWidth = 840,
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = (el && el.getY()) || 0,
 				diff = screenHeight - (y+defaultHeight),
@@ -89,7 +89,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
 
-
+		this.mon(this.down('slidedeck-transcript'), {
+			scope: this,
+			'will-show-annotation': 'willShowAnnotation',
+			'will-hide-annotation': 'willHideAnnotation'
+		});
 
 		keyMap = new Ext.util.KeyMap({
 			target: document,
@@ -190,6 +194,26 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
             transcriptCmp.scrollToStartingTime(startTimeSeconds);
         }
     },
+
+
+	willShowAnnotation: function(annotationView){
+		var nWidth = annotationView.getWidth(),
+			tBox = this.down('slidedeck-transcript').getBox(),
+			vWidth = Ext.dom.Element.getViewportWidth(),
+			aWidth = vWidth - tBox.left - tBox.width,
+			vl = aWidth - nWidth;
+
+		if(vl < 0){
+			this.videoPlayerEl.setStyle('left', vl+'px');
+			this.getTargetEl().setStyle('left', vl + 'px');
+		}
+	},
+
+
+	willHideAnnotation: function(annotationView){
+		this.videoPlayerEl.setStyle('left', '10px');
+		this.getTargetEl().setStyle('left', '0px');
+	},
 
 
 	switchVideoViewer: function(type){

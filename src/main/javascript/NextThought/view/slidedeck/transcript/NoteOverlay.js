@@ -412,6 +412,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			line = t.getAttribute('data-line'), annotations;
 
 		if(!line){ return;}
+		t.addCls('active');
 		line = parseInt(line,10);
 		annotations = this.getAnnotationsAtLine(line);
 		this.reader.showAnnotations(annotations, line);
