@@ -115,7 +115,9 @@ Ext.define('NextThought.view.course.outline.View',{
 	},
 
 	maybeChangeStoreOrSelection: function(pageInfo, store){
-		var r;
+		var r,sel, C = ContentUtils,
+			lineage = C.getLineage(pageInfo.getId()),
+			root = lineage.last();
 
 		if(this.store !== store){
 			this.clear();
@@ -124,8 +126,22 @@ Ext.define('NextThought.view.course.outline.View',{
 			}
 		}
 
-		r = store.findRecord('NTIID', pageInfo.getId(), false, true, true);
+		//start from the page we're on, and go up to find its associated course node...(TODO: look at the course and find the leaf)
+		while(!r && lineage.length){
+			console.log('lineage',lineage);
+			r = store.findRecord('NTIID', lineage.shift(), false, true, true);
+
+		}
+		//if we didn't find one, select the first item IF the page we're on matches the store's content.
 		if(!r){
+			sel = this.getSelectionModel().getSelection()[0];
+			if(sel){
+				if(C.getLineage(sel.getId()).last() === root){
+					return;
+				}
+
+				console.warn('Danger! Selection returned a value from different content (should not be possible)');
+			}
 			console.debug('No record selected, defaulting to first lesson',pageInfo);
 			r = store.findRecord('type','lesson',0,false,false,true);
 		}
