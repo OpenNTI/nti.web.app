@@ -102,6 +102,27 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	}],
 
 
+	constructor: function(){
+		if(!$AppConfig.service.canChangePassword()){
+			console.warn('User can\'t change password');
+			this.items = [{
+				xtype: 'box',
+				cls: 'cant-change',
+				renderTpl: Ext.DomHelper.markup({
+					cn: [{
+						cls: 'title',
+						html: getString('reset-password-not-allowed-title','Resetting your password is not allowed.')
+					},{
+						cls: 'subtext',
+						html: getString('reset-password-not-allowed-subtext', 'You are not allowed to change your password at this time.  Please contact support to request a password change.')
+					}]
+				})
+			}];
+		}
+		this.callParent(arguments);
+	},
+
+
 	setMessage: function(msg,error){
 		var el = this.down('box[message]').getEl().down('.text');
 		el[error?'addCls':'removeCls']('error');

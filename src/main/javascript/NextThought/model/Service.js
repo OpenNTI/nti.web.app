@@ -376,6 +376,10 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.forums.communityforums');
 	},
 
+	canChangePassword: function(){
+		return this.hasCapability('nti.platform.customization.can_change_password');
+	},
+
 
 	//Right now the cabability isn't enough so hack some crap in client
 	//side which I'm sure will break terribly at some point.  Logic is
