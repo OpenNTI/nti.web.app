@@ -127,7 +127,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	},
 
 	detectBlur: function(e){
-		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+ this.refEl && this.refEl.id) && !e.getTarget('.x-menu')){
+		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+ this.refEl && this.refEl.id) && !e.getTarget('.x-menu') && !e.getTarget('.contact-popout')){
 			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
 		}
