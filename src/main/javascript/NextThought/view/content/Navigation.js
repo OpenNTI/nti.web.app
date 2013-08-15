@@ -247,7 +247,13 @@ Ext.define('NextThought.view.content.Navigation', {
                 continue;
             }
 
+	        if(node.getAttribute('suppressed')==='true'){
+	            continue;
+	        }
+
             text = suppress ? node.getAttribute('label') : (this.styleList(num, type) + separate + node.getAttribute('label'));
+
+
             items.push({
                 text: text,
                 ntiid: node.getAttribute('ntiid'),
