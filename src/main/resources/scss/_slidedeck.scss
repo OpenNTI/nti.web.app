@@ -1066,6 +1066,8 @@ $experimental-support-for-svg: true;
 
 .x-component-annotation-view{
 	&.presentation-note-slider{
+		@include animate($name: fadeInRight, $duration: 0.35s, $delay: 0s);
+
 		border-width: 0px;
 		width: 400px;
 		position: absolute !important;
