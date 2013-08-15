@@ -61,7 +61,7 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 
 
 	initComponent: function(){
-		var m;
+		var m, annotationView = this.up && this.up('annotation-view');
 		this.callParent(arguments);
 
 		this.on('profile-link-clicked','destroy',this);
@@ -78,6 +78,15 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		}
         if (this.scrollToId) {
             m.scrollToId = this.scrollToId;
+        }
+
+
+        if(annotationView){
+        	this.mon(annotationView, 'itemclick', function(view, rec){
+        		if(this.record = rec){
+        			this.close();
+        		}
+        	}, this);
         }
 
         m.setRecord(this.record);
