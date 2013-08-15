@@ -559,7 +559,56 @@
 	}
 }
 
-.instructor-forum-view {
+.top-discussion-view{
+	padding: 10px !important;
+
+	.controls{
+		position: absolute;
+		top: 0px;
+		right: 0;
+		z-index: 1;
+	}
+
+	.avatar{
+		background-size: cover;
+		width: 110%;
+		height: 110%;
+		opacity: 0.05;
+		position: absolute;
+		top: -10px;
+		background-repeat: no-repeat;
+		background-position: center center;
+		left: -10px;
+		z-index: 0;
+	}
+
+	.meta{
+		position: relative;
+		z-index: 1;
+		float: left;
+		width: 100%;
+
+		.by{
+			max-width: 150px;
+			overflow: hidden;
+			display: inline-block;
+			margin-right: 0.5em;
+			@include ellipse;
+		}
+
+		.title {
+			margin-right: 55px;
+		}
+	}
+
+	.snippet{
+		clear: both;
+		position: relative;
+		z-index: 1;
+	}
+}
+
+.instructor-forum-view, .top-discussion-view {
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
 	background: #ffffff !important;
@@ -583,7 +632,6 @@
 		overflow: hidden;
 		@include ellipse;
 		color: $primary-grey;
-		width: 100%;
 	}
 
 	.meta{

@@ -5,21 +5,40 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
-			var board = course.getAttribute('discussionBoard');
+			var me = this, board = course.getAttribute('discussionBoard');
 
 			function onResolveFailure(){
 				console.warn('Could not load the course board', board);
 				Ext.callback(finish);
 			}
 
-			function onBoardResolved(boardObject){
-				Ext.callback(finish,null,[
-					this.create({
-						locationInfo: locationInfo,
-						board: boardObject,
-						lastModified:
-						boardObject.get('Last Modified')})
-				]);
+			function onBoardResolved(board){
+				var sId = board && ('dashboard-'+board.getContentsStoreId()),
+					url = board && board.getLink('TopTopics'),
+					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url}));
+				me.board = board;
+				store.sorters.removeAll();
+				if(Ext.isEmpty(url)){
+					console.error('No top topic link for ', board.getId());
+					return;
+				}
+				store.on('load', loadDiscussions, me);
+				//this.bindStore(store);
+				if(!store.loaded){
+					store.load();
+				}else{
+					loadDiscussions(store, store.getRange());
+				}
+			}
+
+			function loadDiscussions(store, records){
+				var tiles = [], me = this;
+
+				Ext.Array.each(records, function(record){
+					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date')}));
+				});
+
+				Ext.callback(finish, null, [tiles]);
 			}
 
 			if(!board || !ParseUtils.isNTIID(board)){
@@ -37,72 +56,71 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 	},
 
-	cls: 'course-dashboard-discussion-item-list',
+	defaultType: 'course-dashboard-tiles-top-discussions-view',
 
 	config: {
 		board: null,
-		weight:1.01
+		weight:1.01,
+		rows: 2
 	},
 
 	constructor: function(config){
-
+		var rec = config.itemNode,
+			l = config.locationInfo;
+			
 		config.items = [
-			{xtype: 'tile-title', heading:'Top Discussions' }
+			{xtype: 'container', defaultType: this.defaultType, items: {
+				record: rec,
+				locationInfo: l
+			}}
 		];
 
 		this.callParent([config]);
-
-		this.view = this.add({
-			xtype: 'dataview',
-			cls:'scrollbody topics-list',
-			ui: 'tile',
-
-			preserveScrollOnRefresh: true,
-			selModel: {
-				allowDeselect: false,
-				deselectOnContainerClick: false
-			},
-			itemSelector:'.row',
-			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
-				cls: 'row',
-				cn: [
-					{ cls: 'title', html: '{title}' },
-					{ tag: 'span', cls: 'byline', cn: [
-						'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'}
-					]}
-				]
-			}]}),
-			listeners: {
-				scope: this,
-				select: function(selModel,record){ selModel.deselect(record); },
-				itemclick: 'onItemClicked'
-			}
-		});
-
-		this.setBoard(this.getBoard());
 	},
 
 
 	onItemClicked: function(view, rec){
 		this.fireEvent('navigate-to-course-discussion', this.locationInfo.ContentNTIID, rec.get('ContainerId'), rec.getId());
-	},
-
-
-	setBoard: function(board){
-		var sId = board && ('dashboard-'+board.getContentsStoreId()),
-			url = board && board.getLink('TopTopics'),
-			store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url}));
-
-		store.sorters.removeAll();
-
-		if(Ext.isEmpty(url)){
-			console.error('No top topic link for ', board.getId());
-			return;
-		}
-
-		this.view.bindStore(store);
-		if(!store.loaded){
-			store.load();
-		}
 	}
 });
+
+Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView',{
+	extend: 'NextThought.view.course.dashboard.widgets.AbstractForumView',
+	alias: 'widget.course-dashboard-tiles-top-discussions-view',
+
+	cls: 'top-discussion-view',
+	ui: 'tile',
+
+	renderTpl: Ext.DomHelper.markup(
+		[
+			{ cls: 'controls', cn: [
+				{ cls: 'favorite {favoriteState}' },
+				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
+			]},
+			{ cls: 'avatar'},
+			{cls: 'meta', cn:[
+				{cls: 'title', html: '{title}'},
+				{tag:'span', cls: 'by', html: 'By {Creator}'},
+				{tag:'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+			]},
+			{cls: 'snippet', html: '{compiledBody}'},
+			{cls: 'count', html: '{PostCount:plural("Comment")}'}
+		]
+	),
+
+	renderSelectors:{
+		'avatar': '.avatar',
+		'liked': '.controls .like',
+		'favorites': '.controls .favorite',
+		'snip': '.snippet'
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var avatar = this.record.get('Creator').get('avatarURL');
+		debugger;
+		this.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
+	}
+
+})

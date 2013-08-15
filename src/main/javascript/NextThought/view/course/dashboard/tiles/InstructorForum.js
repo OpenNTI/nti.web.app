@@ -88,16 +88,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 });
 
 Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
-	extend: 'Ext.Component',
+	extend: 'NextThought.view.course.dashboard.widgets.AbstractForumView',
 	alias: 'widget.course-dashboard-tiles-instructor-forum-view',
 
-	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
-	},
-
 	cls: 'instructor-forum-view',
-	ui: 'tile',
-	
+
 	renderTpl: Ext.DomHelper.markup(
 		[
 			{ cls: 'controls', cn: [
@@ -117,65 +112,8 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 
 	renderSelectors:{
 		'liked': '.controls .like',
-		'favorites': '.controls .favorite'
-	},
-
-	constructor: function(){
-		this.callParent(arguments);
-		this.mixins.likeAndFavoriteActions.constructor.call(this);
-	},
-
-	
-	setBody: function(body){
-		this.renderData.compiledBody = body;
-		if(this.rendered){
-			this.el.down('.snippet').update(body);
-		}
-		this.maybeEllipse();
-	},
-
-	maybeEllipse: function(){
-		if(!this.rendered){
-			this.needToMaybeEllipse = true;
-			return;
-		}
-		var snip = this.el.down('.snippet'),
-			content;
-
-		if(snip.getHeight() < snip.dom.scrollHeight){
-			content = ContentUtils.getHTMLSnippet(snip.getHTML(),150);
-			content = content + "<div class='ellipse'><div></div><div></div><div></div></div>";
-			snip.setHTML(content);
-			snip.addCls('overflowing');
-		}
-	},
-
-	beforeRender: function(){
-		this.callParent(arguments);
-		if(!this.record){
-			return;
-		}
-		var h = this.record.get('headline');
-		this.renderData = Ext.apply(this.renderData||{},this.record.getData());
-
-		h.compileBodyContent(this.setBody,this,null,100);
-	},
-
-	afterRender: function(){
-		this.callParent(arguments);
-
-		this.mon(this.el,'click','handleClick');
-
-		if(this.needToMaybeEllipse){
-			this.maybeEllipse();
-		}
-	},
-
-	handleClick: function(e){
-		if(e.getTarget('.controls')){
-			return;
-		}
-		this.fireEvent('navigate-to-course-discussion', this.contentNtiid, this.record.get('ContainerId'), this.record.getId());
+		'favorites': '.controls .favorite',
+		'snip': '.snippet'
 	}
 });
 

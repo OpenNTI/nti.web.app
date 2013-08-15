@@ -235,7 +235,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 			o.avatarURL = u.get('avatarURL');
 			o.name = Ext.String.ellipsis(u.getName(), 20);
 			if (me.rendered) {
-				me.avatar.setStyle({backgroundImage: 'url(' + o.avatarURL + ');'});
+				me.avatar.setStyle({backgroundImage: 'url(' + o.avatarURL + ')'});
 				me.name.update(me.name.getHTML() + o.name);
 			}
 
