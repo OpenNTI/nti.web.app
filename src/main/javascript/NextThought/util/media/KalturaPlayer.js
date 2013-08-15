@@ -209,11 +209,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	getPlayerContextDocument: function(){
-		var doc = this.playerDocument || (Ext.getDom(this.iframe).contentDocument || this.getPlayerContext().document);
+		var doc = (Ext.getDom(this.iframe).contentDocument || this.getPlayerContext().document);
 		if( doc && !doc.body ){
 			doc.body = doc.getElementsByTagName('body')[0];
 		}
-		this.playerDocument = doc;
 		return doc;
 	},
 
@@ -264,6 +263,15 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	stop: function(){ this.sendCommand('doStop'); },
+
+
+	deactivate: function(){
+		console.log('deactivate');
+		this.fireEvent('player-event-ended', 'kaltura');
+		this.cleanup();
+		this.playerSetup();
+		this.load(this.currentSource);
+	},
 
 
 	seek: function(offset){

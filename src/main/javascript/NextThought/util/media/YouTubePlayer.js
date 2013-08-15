@@ -115,6 +115,12 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		this.player.playVideo();
 	},
 
+
+	deactivate: function(){
+		return this.pause.apply(this,arguments);
+	},
+
+
 	pause: function(){
 		this.player.pauseVideo();
 	},

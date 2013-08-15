@@ -170,7 +170,7 @@ Ext.define('NextThought.view.video.Video',{
 			me = me || cmp;
 			if(c){
 				console.debug(me.id+' is listening on deactivate on '+ c.id);
-				me.mon(c,'deactivate','pausePlayback',me);
+				me.mon(c,'deactivate','deactivatePlayer',me);
 				stopOnCardChange(c, me);
 			}
 		}
@@ -283,6 +283,15 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	deactivatePlayer: function(){
+		if(this.activeVideoService){
+			this.issueCommand(this.activeVideoService,'deactivate');
+			return true;
+		}
+		return false;
+	},
+
+
 	stopPlayback: function(){
 		this.currentVideoId = null;
 
@@ -302,8 +311,14 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	resumePlayback: function(){
+		var me = this;
 		if(this.activeVideoService && !this.isPlaying()){
-			Ext.ComponentQuery.query('content-video').map(function(i){i.pausePlayback();})
+			Ext.ComponentQuery.query('content-video').map(
+					function(i){
+						if(i!==me){
+							i.deactivatePlayer();
+						}
+					});
 			this.issueCommand(this.activeVideoService,'play');
 			return true;
 		}

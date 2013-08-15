@@ -131,6 +131,12 @@ Ext.define('NextThought.util.media.HTML5Player',{
 		this.player.play();
 	},
 
+
+	deactivate: function(){
+		return this.pause.apply(this,arguments);
+	},
+
+
 	pause: function(){
 		this.player.pause();
 	},
