@@ -36,9 +36,13 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		]
 	})),
 
-
 	afterRender: function(){
 		this.callParent(arguments);
+		this.loadContainer();
+//		console.log('Loading:',ntiid);
+	},
+
+	loadContainer: function(){
 		var ntiid = this.data.href,
 			req;
 
@@ -48,7 +52,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 				return;
 			}
 		}
-
+		
 		req = {
 			url: $AppConfig.service.getContainerUrl(ntiid,Globals.USER_GENERATED_DATA),
 			scope: this,
@@ -63,9 +67,10 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 		};
 
 		Ext.Ajax.request(req);
+	},
 
-//		console.log('Loading:',ntiid);
-
+	appendTotal: function(total){
+		this.commentTpl.append(this.meta,{count:total});
 	},
 
 
@@ -76,7 +81,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 			total = json.FilteredTotalItemCount || 0;
 		}
 
-		this.commentTpl.append(this.meta,{count:total});
+		this.appendTotal(total);
 	},
 
 

@@ -7,18 +7,39 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var DQ = Ext.DomQuery, me = this,
 				items = this.getChildrenNodes(courseNodeRecord),
-				refs = [], c = [];
+				refs = [], c = [], recs = [], total = 0;
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )
 						.concat( DQ.filter(items||[],'[type$=content]') );
-						
-			if(!Ext.isEmpty(refs)){
-				Ext.Array.each(refs, function(ref){
-					c.push(me.create({locationInfo: locationInfo, itemNode: ref, lastModified: courseNodeRecord.get('date')}));	
-				});				
+			
+			if(Ext.isEmpty(refs)){
+				Ext.callback(finish);
+				return;
 			}
 
-			Ext.callback(finish,null,[c]);
+
+			function maybeFinish(total,tile){
+				refs.pop();
+
+				tile.commentCount = total;
+				c.push(tile);
+
+				if(!refs.length){
+					c.sort(function(a,b){ return b.commentCount-a.commentCount; });//sort greatest to least
+					Ext.callback(finish,null,[c.splice(0,5)]);//splice returns the items cut from the array 'c' and leaves the remainer in 'c'
+					Ext.destroy(c);//clean up the leftovers
+				}
+			}
+
+
+			Ext.Array.each(refs.slice(), function(ref){
+				me.create({
+					locationInfo: locationInfo, 
+					itemNode: ref, 
+					lastModified: courseNodeRecord.get('date'),
+					callback: maybeFinish
+				});
+			});
 		}
 
 	},
@@ -33,23 +54,23 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 	
 	constructor: function(config){
 		var i = config.locationInfo,
-			n = config.itemNode;
+			n = config.itemNode,
+			me = this;
 			
 		config.items = [
-			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody', items: {
-				node: n,
-				locationInfo: i
-			}}
+			{	
+				xtype: 'container', 
+				defaultType: this.defaultType, 
+				cls:'scrollbody', 
+				items: {
+					node: n,
+					locationInfo: i,
+					callback: function(total){
+						Ext.callback(config.callback,null,[total,me]);
+					}
+				}
+			}
 		];
-
-		// NOTE: For now, since we don't have good way to sort these nodes,
-		// at least, let's make sure, required ones are at the top.
-		// Ext.Array.each(n, function(a){
-		// 	var s = a.getAttribute('section');
-
-		// 	if(s === 'required'){ r.push(a); }
-		// 	else{ o.push(a); }
-		// });
 		
 		this.callParent([config]);
 	}
@@ -61,5 +82,22 @@ Ext.define('NextThought.view.course.dashboard.widgets.SupplementalMaterialItem',
 	alias: 'widget.course-dashboard-supplemental-material-item',
 		
 	ui: 'tile',
-	cls: 'content-link'
+	cls: 'content-link',
+
+	config: {
+		callback: null
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.loadContainer();
+		this.loadContainer = Ext.emptyFn;
+		this.renderTotal = this.appendTotal;
+		this.appendTotal = this.totalLoaded;
+	},
+
+	totalLoaded: function(total){
+		this.on('afterrender',Ext.bind(this.renderTotal,this,[total]));
+		Ext.callback(this.getCallback(),null,[total]);
+	}
 });
