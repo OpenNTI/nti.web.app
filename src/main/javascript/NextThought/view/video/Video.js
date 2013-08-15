@@ -322,13 +322,11 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	pauseAnyOtherVideoPlaying: function(){
-		var me = this;
-
 		// FIXME: Do it better. This is a nasty but
 		// we need to be able to stop any other video playing.
-		Ext.ComponentQuery.query('content-video').map(
+		Ext.each(Ext.ComponentQuery.query('content-video'),
 			function(i){
-				if(i!==me){
+				if(i!==this){
 					i.deactivatePlayer();
 				}
 			}
