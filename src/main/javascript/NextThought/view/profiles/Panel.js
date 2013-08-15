@@ -9,14 +9,11 @@ Ext.define('NextThought.view.profiles.Panel',{
 		'NextThought.view.profiles.ProfileFieldEditor',
 		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.layout.component.Natural',
-        'NextThought.modules.TouchSender',
-        'NextThought.modules.TouchHandler',
         'NextThought.view.SideBar'
 	],
 
 	mixins:{
-		enableChat: 'NextThought.mixins.ChatLinks',
-        moduleContainer: 'NextThought.mixins.ModuleContainer'
+		enableChat: 'NextThought.mixins.ChatLinks'
 	},
 
 	ui: 'profile',
@@ -204,26 +201,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
 		this.on('destroy',function(){Ext.EventManager.removeResizeListener(this.handleWindowResize,this);},this);
 
-        if(Ext.is.iPad){
-            this.buildModule('modules', 'touchSender', {moduleName:'panelTouchSender'});
-            this.buildModule('modules', 'touchHandler', {moduleName:'panelTouchHandler'});
-
-            this.initialY = this.getY();
-        }
 	},
-
-
-    removeTouchListeners: function(){
-        var v = this.getPanelTouchHandler();
-        v.removeListeners();
-        this.setY(this.initialY);
-    },
-
-
-    readdTouchListeners: function(){
-        var v = this.getPanelTouchHandler();
-        v.addListeners();
-    },
 
 
 	handleWindowResize: function(){

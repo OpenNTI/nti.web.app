@@ -30,11 +30,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 			path:'Thoughts',
 			showPermissions: true
 		});
-        if(Ext.is.iPad){
-            var v = Ext.get('profile').down('.x-container-profile'),
-                w = Ext.ComponentManager.get(v.getAttribute('id'));
-            w.removeTouchListeners();
-        }
 	},
 
 	renderSelectors:{
@@ -123,12 +118,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 //		}
 
 		this.getMainView().scrollTo('top',0,true);
-
-        if(Ext.is.iPad){
-            var v = Ext.get('profile').down('.x-container-profile'),
-                w = Ext.ComponentManager.get(v.getAttribute('id'));
-            w.readdTouchListeners();
-        }
 
 		if(!this.destroying){
 			this.destroy();

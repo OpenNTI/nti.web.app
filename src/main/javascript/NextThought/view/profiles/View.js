@@ -3,8 +3,14 @@ Ext.define( 'NextThought.view.profiles.View', {
 	alias:	'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
-		'NextThought.view.ResourceNotFound'
+		'NextThought.view.ResourceNotFound',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 
 	defaultType: 'profile-panel',
@@ -14,6 +20,12 @@ Ext.define( 'NextThought.view.profiles.View', {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+
+        this.buildModule('modules', 'touchSender', {moduleName:'profileTouchSender'});
+        this.buildModule('modules', 'touchHandler',
+            {moduleName:'profileTouchHandler', getPanel: function(){
+                return this.container.el;
+            }});
 	},
 
 
