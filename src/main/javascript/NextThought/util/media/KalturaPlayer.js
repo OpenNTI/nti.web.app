@@ -52,8 +52,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			{tag:'head',cn:[
 				{tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php')},
-				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php')},
-//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapi.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php')},
+				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js')},
 				{tag:'script', type:'text/javascript', html:'\n{code}\n'},
 				{tag:'style', type:'text/css', cn:[
