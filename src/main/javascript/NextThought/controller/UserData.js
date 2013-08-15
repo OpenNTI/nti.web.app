@@ -206,12 +206,13 @@ Ext.define('NextThought.controller.UserData', {
 			block.destroy();
 			sel.deselect(rec);
 		}
-
+		
 		try {
 			me.activeNoteWindow = Ext.widget({
 				xtype: 'note-window',
 				record: rec,
 				reader: anchorCmp,
+				floatParent: sel.view,
 				listeners:{beforedestroy:deselect},
 				xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
 			});

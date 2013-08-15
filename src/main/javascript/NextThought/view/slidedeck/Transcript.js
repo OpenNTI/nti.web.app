@@ -526,7 +526,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				pos[0] += 10;
 				pos[1] += 10;
                 h -= 10;
-				this.setPosition(pos);
+				this.setPagePosition(pos);
 				this.setWidth(w);
 				this.setHeight(h);
 			}
