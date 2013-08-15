@@ -317,23 +317,67 @@ Ext.define('NextThought.controller.Store', {
 
 	},
 
+	toggleEnrollmentStatus: function(rec, callback){
+		var url = rec.getLink('enroll') || rec.getLink('unenroll'),
+			req = {
+				url: getURL(url),
+				method: 'POST',
+				jsonData: Ext.encode({courseId: rec.getId()}),
+				scope: this,
+				callback: callback
+			};
+
+		Ext.Ajax.request(req);
+	},
+
 
 	showEnrollmentConfirmation: function(view,course){
-		var win = this.getEnrollmentWindow();
+		var me = this,
+			win = me.getEnrollmentWindow();
+		
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		this.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
+		if(course.getLink('enroll')){
+			me.toggleEnrollmentStatus(course, function(q,s,r){
+				if(!s){
+					console.log(r.responseText);
+					win.showError('An unknown error occurred.  Please try again later.');
+					win.setConfirmState(false)
+					return;
+				}
+
+				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course})
+			});
+			return;
+		}
+
+		me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
 	},
 
 
 	showEnrollmentComplete: function(view,course){
-		var win = this.getEnrollmentWindow();
+		var me = this,
+			win = this.getEnrollmentWindow();
+		
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
+		}
+
+		if(course.getLink('unenroll')){
+			me.toggleEnrollmentStatus(course, function(q,s,r){
+				if(!s){
+					console.log(r.responseText);
+					win.showError('An unknown error occurred. Please try again later.');
+					win.setConfirmState(false);
+					return;
+				}
+
+				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
+			});
 		}
 
 		this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});

@@ -28,43 +28,7 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 	},
 
 
-
 	onConfirm: function () {
-		var r = this.record,
-			url = r.getLink('enroll') || r.getLink('unenroll'),
-			req = {
-				url: getURL(url),
-				method: 'POST',
-				jsonData: Ext.encode({courseId: r.getId()}),
-				scope: this,
-				callback: this.onResponse
-			};
-
-		Ext.Ajax.request(req);
-	},
-
-
-	onResponse: function(q,s,r){
-
-		if(!s){
-			console.error(r.responseText);
-			this.handleError('An unknown error occurred.  Please try again later.');
-			return;
-		}
-
 		this.fireEvent('show-enrollment-complete', this, this.record);
-	},
-
-	enableSubmission: function (enabled) {
-		var win = this.up('window');
-		if (win) {
-			win.setConfirmState(enabled);
-		}
-	},
-
-	handleError: function (msg) {
-		this.enableSubmission(false);
-		this.up('window').showError(msg);
 	}
-
 });
