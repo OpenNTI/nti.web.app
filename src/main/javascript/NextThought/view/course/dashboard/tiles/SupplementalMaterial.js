@@ -35,7 +35,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 			items = [];
 			
 		config.items = [
-			{xtype: 'tile-title', heading:'Reading' },
+			{xtype: 'tile-title', heading:'Resources' },
 			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody', items: items }
 		];
 		

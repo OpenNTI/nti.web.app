@@ -13,8 +13,8 @@ Ext.define('NextThought.view.course.overview.View',{
 	SECTION_TITLE_MAP: {
 		'video': 'Videos',
 		'discussions': 'Discussions',
-		'additional': 'Additional Reading',
-		'required': 'Required Reading',
+		'additional': 'Additional Resources',
+		'required': 'Required Resources',
 		'assessments': 'Assessments'
 	},
 
