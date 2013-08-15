@@ -268,6 +268,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			a = c? 'hide':'show',
 			el = this[(c ? 'screen':'curtain')+'El'];
 
+		if(this.curtainEl.isMasked()){
+			this.curtainEl.unmask();
+		}
+
 		if(el){
 			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
 		}
@@ -278,6 +282,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		var c = this.getLeaveCurtain(),
 			a = c? 'show':'hide',
 			el = this[(c ? 'screen':'curtain')+'El'];
+
+		if(this.curtainEl.isMasked()){
+			this.curtainEl.unmask();
+		}
 
 		if(el){
 			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
@@ -324,6 +332,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			return;
 		}
 
+		this.curtainEl.mask('Loading...');
 
 		this.player.playlistSeek(t);
 	}

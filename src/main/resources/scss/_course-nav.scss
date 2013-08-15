@@ -353,7 +353,9 @@
 						}
 					}
 				}
-
+				&.x-masked {
+					.ctr, .play {display: none;}
+				}
 			}
 
 			.screen {

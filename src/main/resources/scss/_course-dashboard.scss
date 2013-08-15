@@ -128,6 +128,12 @@
 				}
 			}
 
+			&.x-masked {
+				 & ~ .video-list{
+					 bottom: -100px;
+				 }
+				.ctr, .play {display: none;}
+			}
 		}
 
 		.screen {
@@ -258,7 +264,7 @@
 				display: block;
 				position: absolute;
 				top: 0; left: 0; bottom: 0; right: 0;
-				background: rgba(0,0,0,0.5);
+				background: rgba(0,0,0,0.75);
 			}
 		}
 		.video-list {
