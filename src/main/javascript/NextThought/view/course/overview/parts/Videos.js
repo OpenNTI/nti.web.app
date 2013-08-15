@@ -73,13 +73,15 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	constructor: function(config){
 
 
-		var i = config.items[0],
-			store = config.store = new Ext.data.Store({
+		var i = config.items[0];
+
+		config.store = new Ext.data.Store({
 			fields: [
 				{name:'id', type:'string', mapping: 'ntiid'},
 				{name:'date', type:'date' },
 				{name:'label', type:'string'},
 				{name:'poster', type:'string'},
+				{name:'thumb', type:'string'},
 				{name:'comments', type:'auto'},
 				{name:'hasTranscripts', type:'boolean'}
 			],
@@ -109,13 +111,18 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		me.videoIndex = videoIndex;
 
 		this.getStore().each(function(r){
-			var v = videoIndex[r.getId()];
+			var v = videoIndex[r.getId()],item;
 			if(v){
 				r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
-
 				if(me.curtainEl && selected.contains(r)){
 					me.playBtnEl[r.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
 				}
+
+				item = v.sources[0];
+				r.set({
+					poster: item.poster,
+					thumb: item.thumbnail
+				});
 
 				me.playlist.push(reader.read({
 					'mediaId': v.title,

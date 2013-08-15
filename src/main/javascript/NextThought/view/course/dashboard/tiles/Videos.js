@@ -75,7 +75,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			tpl:Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
 					cls: 'video-row',
 					cn: [
-						{ cls: 'poster', style: { backgroundImage:'url({poster})'} },
+						{ cls: 'poster', style: { backgroundImage:'url({thumb})'} },
 						{ cls: 'meta', cn:[
 							{ cls:'date', html: '{date:date("l, F j")}' },
 							{ cls:'label', html: '{label}', 'data-qtip':'{label}' }
