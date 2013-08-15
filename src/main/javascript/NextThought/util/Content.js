@@ -327,8 +327,12 @@ Ext.define('NextThought.util.Content', {
 	 */
 	purchasableForContentNTIID: function(ntiid){
 		function fn(rec){
-			var items = rec.get('Items') || [];
-			return (rec.get('NTIID').indexOf(prefix) === 0) || Ext.Array.contains(items, prefix);
+			var items = rec.get('Items') || [], found = false;
+			Ext.each(items, function(i){
+				if(i.indexOf(prefix) === 0){ found = true; }
+				return !found;
+			});
+			return found;
 		}
 
 		function getPrefix(ntiid){

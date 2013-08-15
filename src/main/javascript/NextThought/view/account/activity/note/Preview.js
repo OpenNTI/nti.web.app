@@ -66,8 +66,9 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				ntiid = req && req.ntiid,
 				p = ContentUtils.purchasableForContentNTIID(ntiid);
 
-			if ((resp.status === 403 ||resp.status === 404) && p) {
+			if (resp.status === 403 && p) {
 				me.handlePurchasable(p, el);
+				Ext.callback(fin);
 				return;
 			}
 
@@ -104,6 +105,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 					}
 				}
 				else{
+					if(resp === 404 && p){
+						me.handlePurchasable(p, el);
+						Ext.callback(fin);
+						return;
+					}
 					el.remove();
 				}
 				Ext.callback(fin);
