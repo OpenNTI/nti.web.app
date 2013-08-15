@@ -4,7 +4,7 @@
 	width: 620px;
 	.detected-scrollbars & {width: 635px;}
 
-	.back {
+	.goup {
 		@include icon('profile_back_arrow', $top: 23px, $left: 35px);
 		position: absolute;
 		top: 0;

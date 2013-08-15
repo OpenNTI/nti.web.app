@@ -14,7 +14,7 @@ Ext.define('NextThought.view.content.Navigation', {
     breadcrumbTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
 
     renderTpl: Ext.DomHelper.markup([
-        {cls: 'back'},
+        {cls: 'goup', 'data-qtip':'Go up a level'},
         { cls: 'breadcrumb' }
     ]),
 
@@ -24,19 +24,19 @@ Ext.define('NextThought.view.content.Navigation', {
         '1': 'Select a section'
     },
 
-    renderSelectors: { backEl: '.back', breadcrumb: '.breadcrumb' },
+    renderSelectors: { upEl: '.goup', breadcrumb: '.breadcrumb' },
 
     listeners: {
         afterrender: 'hide',
-        click: { element: 'backEl', fn: 'onBack' }
+        click: { element: 'upEl', fn: 'onUp' }
     },
 
 
-    onBack: function (e) {
+    onUp: function (e) {
         e.stopEvent();
 
         // pop up one level.
-        var lineage = ContentUtils.getLineage(this.currentNtiid);
+        var lineage = ContentUtils.getLineage(this.currentNtiid,false,true);
         this.fireEvent('set-location', lineage[1]);
     },
 
@@ -69,7 +69,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
         lineage.pop(); // don't let the book show
         // first was the 2nd item in the array... which is where the 'back' arrow will take you
-        this.backEl[(!lineage.first()) ? 'hide' : 'show']();
+        this.upEl[(!lineage.first()) ? 'hide' : 'show']();
 
         me.cleanupMenus();
 
