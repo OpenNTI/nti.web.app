@@ -279,14 +279,13 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 	positionAnnotationNibs: function(parentEl){
 		var me = this;
-
 		// Set the top position of note widget nibs.
 		Ext.each(this.el.query('.cue .add-note-here'), function(nib){
 			var cueEl = Ext.fly(nib).up('.cue'),
-				outerOffset = parentEl ?  parentEl.dom.offsetTop : 0,
-				innerOffset = me.el.dom.offsetTop,
-				y = cueEl.getY() - outerOffset - innerOffset;
-
+				//outerOffset = parentEl ?  0 : 0,
+				innerOffset = me.el.getY(),
+				//y = cueEl.getY() - outerOffset - innerOffset;
+				y = cueEl.getY() - innerOffset;
 			y = y + 'px';
 			Ext.fly(nib).up('.control-container').setStyle({'top':y});
 		});
