@@ -325,7 +325,7 @@
 
 		.title {
 			color: $secondary-grey;
-			font: normal 500 14px $font;
+			font: normal 300 14px $font;
 			overflow: hidden;
 			@include ellipse;
 		}
@@ -353,7 +353,7 @@
 	}
 
 	&.content-link {
-		min-height: 76px;
+		height: 200px;
 
 		a, a:link, a:visited, a:active {
 			outline: 0;
@@ -386,13 +386,24 @@
 
 			.title{
 				font-style: italic;
+				font: normal 300 28px/30px "Open Sans Condensed", $font;
+				height: 35px;
 				overflow: hidden;
 				@include ellipse();
 			}
 
+			.description{
+				position: absolute;
+				top: 85px;
+				left: 5px;
+				right: 5px;
+				white-space: normal;
+				font-size: 13px;
+			}
+
 			.comment{
 				bottom: 0;
-				left: 75px;
+				left: 5px;
 			}
 		}
 	}

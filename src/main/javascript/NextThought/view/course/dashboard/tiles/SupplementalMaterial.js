@@ -5,15 +5,17 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
-			var DQ = Ext.DomQuery,
+			var DQ = Ext.DomQuery, me = this,
 				items = this.getChildrenNodes(courseNodeRecord),
-				refs = [], c;
+				refs = [], c = [];
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )
 						.concat( DQ.filter(items||[],'[type$=content]') );
 						
 			if(!Ext.isEmpty(refs)){
-				c = this.create({locationInfo: locationInfo, itemNodes: refs, lastModified: courseNodeRecord.get('date')});
+				Ext.Array.each(refs, function(ref){
+					c.push(me.create({locationInfo: locationInfo, itemNode: ref, lastModified: courseNodeRecord.get('date')}));	
+				});				
 			}
 
 			Ext.callback(finish,null,[c]);
@@ -31,25 +33,23 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 	
 	constructor: function(config){
 		var i = config.locationInfo,
-			n = config.itemNodes,
-			items = [], r = [], o = [];
+			n = config.itemNode;
 			
 		config.items = [
-			{xtype: 'tile-title', heading:'Resources' },
-			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody', items: items }
+			{xtype: 'container', defaultType: this.defaultType, cls:'scrollbody', items: {
+				node: n,
+				locationInfo: i
+			}}
 		];
 
 		// NOTE: For now, since we don't have good way to sort these nodes,
 		// at least, let's make sure, required ones are at the top.
-		Ext.Array.each(n, function(a){
-			var s = a.getAttribute('section');
+		// Ext.Array.each(n, function(a){
+		// 	var s = a.getAttribute('section');
 
-			if(s === 'required'){ r.push(a); }
-			else{ o.push(a); }
-		});
-
-		n = r.concat(o);
-		Ext.each(n,function(n){items.push({node:n,locationInfo:i});});
+		// 	if(s === 'required'){ r.push(a); }
+		// 	else{ o.push(a); }
+		// });
 		
 		this.callParent([config]);
 	}
