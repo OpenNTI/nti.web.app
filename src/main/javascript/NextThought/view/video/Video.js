@@ -197,8 +197,7 @@ Ext.define('NextThought.view.video.Video',{
 				el: Ext.get(me.el.down('.video-wrapper')),
 				parentId: me.id,
 				width: me.playerWidth,
-				height: me.playerHeight,
-				firstMedia: me.playlist[0]
+				height: me.playerHeight
 			});
 
 			me.on('destroy','destroy',
@@ -355,6 +354,7 @@ Ext.define('NextThought.view.video.Video',{
 		}
 
 		if(compareSources(this.currentVideoId, videoId)){
+			console.log('Seeking to ',startAt, ' because ', this.currentVideoId, videoId);
 			this.issueCommand(this.activeVideoService,'seek', [startAt,true]);
 		}
 		else {
@@ -366,14 +366,6 @@ Ext.define('NextThought.view.video.Video',{
 				console.log('stopping');
 				this.stopPlayback();
 			}
-		}
-
-		if(state !== false && state !== 1){
-			//This crap doesn't belong here.  If as part of a load we must force a player into a particular state,
-			//b\c for instance it always autoplays or something stupid like that that logic should be hidden
-			//inside that particular player state.
-			if(pause || !videoId){ console.log('Doing uber stupid pause on load.  What is this happening here for.'); this.issueCommand(this.activeVideoService,'pause'); }
-			else{ this.issueCommand(this.activeVideoService,'play'); }
 		}
 	},
 
@@ -441,7 +433,7 @@ Ext.define('NextThought.view.video.Video',{
 				this.maybeSwitchPlayers(this.activeVideoService);
 				this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
 			}
-			return this.resumePlayback();
+			return true;
 		}
 		return false;
 	},

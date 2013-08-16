@@ -130,8 +130,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 				}).records[0]);
 			}
 		});
-
-		this.maybeCreatePlayer();
 	},
 
 
@@ -319,6 +317,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		if(this.player){
 			this.player.stopPlayback();
+			this.player.playlistSeek(this.getSelectedVideoIndex(rec));
 		}
 
 		if( this.curtainEl ){
@@ -334,15 +333,26 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
+	getSelectedVideo: function(){
+		return this.getSelectionModel().getSelection()[0];
+	},
+
+
+	getSelectedVideoIndex: function(r){
+		return this.getStore().indexOf(r || this.getSelectedVideo() || 0);
+	},
+
+
 	onCurtainClicked: function(e){
 		e.stopEvent();
 
-		var m = this.getSelectionModel().getSelection()[0],
-			t = m && this.getStore().indexOf(m), reader;
+		var m = this.getSelectedVideo(),
+			reader;
 
 		this.maybeCreatePlayer();
 
-		if (!m || t<0 || !this.player){
+		if (!m || !this.player){
+			console.warn('Ignoring on curtain click', this, m);
 			return;
 		}
 
@@ -354,7 +364,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		console.log('Masking z curtain');
 		this.curtainEl.mask('Loading...');
-
-		this.player.playlistSeek(t);
+		this.player.resumePlayback();
 	}
 });

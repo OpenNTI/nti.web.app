@@ -53,8 +53,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				{tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php')},
-//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101')},
-				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
+				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101')},
+//				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js')},
 				{tag:'style', type:'text/css', cn:[
 					'body, html { margin: 0; padding: 0; }'
@@ -94,15 +94,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.currentPosition = 0;
 		this.currentState = -1;
 		this.isReady = false;
-
-		//This is a hack to intialize the player with the first video in the player's playlist. (Major hack, this is making ALOT of assumptions...but it works for now)
-		try{
-			var source = config.firstMedia.get('sources')[0].source;
-			source = Ext.isArray(source) ? source[0] : source;
-			this.INITIAL_VIDEO = source.split(':')[1];
-		}catch(e){
-			console.warn('hack failure...', e.stack|| e.message || e);
-		}
 
 		this.handleMessage = Ext.bind(this.handleMessage,this);
 		this.playerSetup();
@@ -285,7 +276,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	stop: function(){ this.sendCommand('doStop'); },
+	stop: function(){
+		this.isReady = false;
+		this.sendCommand('doStop');
+		this.readyHandler();
+	},
 
 
 	deactivate: function(){
@@ -329,20 +324,23 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	mediaReadyHandler: function(){
-		console.log('Media ready change handler', arguments);
+	kdpReadyHandler: function(){
 		this.readyHandler();
 	},
 
 
-	readyHandler: function(){
-		var me = this;
-		setTimeout(function(){
-			console.log('Firing player ready');
-			me.isReady = true;
-			me.fireEvent('player-ready', 'kaltura');
-		},250);
+	kdpEmptyHandler: function(){
+		this.readyHandler();
 	},
+
+
+	readyHandler: (function(){
+		return Ext.Function.createBuffered(function(){
+			console.log('Firing player ready',this);
+			this.isReady = true;
+			this.fireEvent('player-ready', 'kaltura');
+		},250, null, null);
+	}()),
 
 
 	playerUpdatePlayheadHandler: function(data){
@@ -418,6 +416,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		inject: function inject(){
 
+			window.playerId = '%id%';
+			window.host = window.top;
+
 			function send(event,data){
 				//console.log('Event: '+event, playerId, data);
 				host.postMessage(JSON.stringify({
@@ -427,16 +428,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				}),'*');
 			}
 
-			function ensureReady(){
-				if(!ensureReady.called){
-					ensureReady.called = true;
-					setTimeout(function(){send('ready');},1);
-				}
-			}
-
 			function makeHandler(name){
-				ensureReady();
-
 				var newName = '__'+name,
 					seen = {};
 
@@ -455,15 +447,18 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function playerReady(){
 				var player = document.getElementById(playerId),
-					events = ['mediaLoaded', 'entryReady', 'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError'],
+					events = ['kdpReady', 'startup', 'initiateApp', 'kdpEmpty',
+						'layoutReady', 'pluginsLoaded','skinLoaded', 'skinLoadFailed',
+						'singlePluginLoaded', 'singlePluginFailedToLoad','mediaLoaded', 'entryReady',
+						'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange',
+						'playerUpdatePlayhead','playerPlayEnd','mediaLoadError', 'readyToLoad', 'entryFailed', 'entryNotAvailable'],
 					i = events.length - 1, o;
 
 				for(i; i>=0; i--){
 					player.addJsListener(events[i],makeHandler(events[i]));
 				}
 
-				ensureReady();
-				//setTimeout(ensureReady,5000);
+				console.log('Player is ', player.tagName);
 			}
 
 
@@ -479,7 +474,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			//mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
+			mw.setConfig( 'KalturaSupport.LeadWithHTML5', true );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
@@ -489,9 +484,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
 
 			//mw.setConfig('debug', true);
-
-			window.playerId = '%id%';
-			window.host = window.top;
 
 			kWidget.embed({
 				targetId: playerId,
@@ -507,7 +499,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					"streamerType": "hdnetworkmanifest",
 					"autoPlay": false
 				},
-				"entry_id": "%INITIAL_VIDEO%",
 				params:{
 					wmode: 'transparent'
 				},

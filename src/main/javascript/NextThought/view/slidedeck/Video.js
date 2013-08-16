@@ -232,14 +232,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		video = slide.get('media');
 		this.playlistSeek(this.getVideoInfoIndex(video));
-
-		//Hide player?
-		/*
-		if(!video.service){
-			this.hide();
-		} else if(!this.isVisible()){
-			this.show();
-		}
-		*/
+		this.resumePlayback();
 	}
 });
