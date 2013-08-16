@@ -186,33 +186,13 @@ Ext.define('NextThought.controller.Session', {
 
 		// what is the exactly relationships between these windows?
 		// currently above and below are piling on top of one another
-
-		if (this.shouldShowContentFor('content.initial_tos_page')) {
-			var u = $AppConfig.userObject,
-				link = u.getLink('content.initial_tos_page'),
-				created = u.get('CreatedTime'),
-				timeThreshold = 2 * 60 * 1000; //2 minutes in milliseconds
-
-			//Users accepts terms at account creation.  Heres a hueristic to detect
-			//new accounts and delete the tos link automatically (they just accepted it)
-			if((new Date()).getTime() >  created.getTime() + timeThreshold){
-				this.showNewTermsOfService();
-			}
-			else if(link){
-				Ext.Ajax.request({
-					url: link,
-					method: 'DELETE',
-					success: function(r, opts){
-						console.log('Success: ', arguments);
-					},
-					fail: function(r, opts){
-						console.log('Fail: ', arguments);
-					}
-				});
-			}
-		}
 		if (this.shouldShowContentFor('content.initial_welcome_page')) {
 			this.showWelcomePage();
+		}
+
+		//Note we show TOS last so it stacks on top.  Need a better solution for this
+		if (this.shouldShowContentFor('content.initial_tos_page')) {
+			this.showNewTermsOfService();
 		}
 	},
 
