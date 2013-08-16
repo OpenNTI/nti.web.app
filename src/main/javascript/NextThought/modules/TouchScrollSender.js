@@ -1,6 +1,6 @@
-Ext.define('NextThought.modules.TouchSender', {
+Ext.define('NextThought.modules.TouchScrollSender', {
 
-    alias: 'modules.touchSender',
+    alias: 'modules.touchScrollSender',
 
     statics: {
         SCROLL_TIME_STEP: 1,
@@ -10,7 +10,7 @@ Ext.define('NextThought.modules.TouchSender', {
         /**
          * Pixel distance a touch can move to still be considered a tap
          */
-        TAP_THRESHOLD: 1,
+        TAP_THRESHOLD: 15,
         /**
          * Time required for a long press
          */
@@ -151,37 +151,6 @@ Ext.define('NextThought.modules.TouchSender', {
             lastY = initialY;
             vel = 0;
 
-            container.fireEvent('touchElementAt', e.touches[0].clientX, e.touches[0].clientY, function (ele) {
-
-                pickedElement = ele;
-
-                // Set a timer for a long press
-                setTimeout(function () {
-                    if (state !== s.STATE.DOWN) {
-                        return;
-                    }
-
-                    state = s.STATE.LONGPRESS;
-                    container.fireEvent('touchLongPress', pickedElement, initialX, initialY);
-
-                    container.fireEvent('touchElementIsDraggable', ele, function (isDraggable) {
-                        if (!isDraggable || state !== s.STATE.LONGPRESS) {
-                            return;
-                        }
-                        state = s.STATE.DRAGGING;
-                    });
-
-                    container.fireEvent('touchElementIsSelectable', ele, function (isSelectable) {
-                        if (!isSelectable || state !== s.STATE.LONGPRESS) {
-                            return;
-                        }
-                        state = s.STATE.SELECTING;
-                    });
-
-                }, s.TAP_HOLD_TIME);
-
-            });
-
         }, false);
 
 
@@ -196,26 +165,12 @@ Ext.define('NextThought.modules.TouchSender', {
                 container.fireEvent('touchScroll', pickedElement, vel);
             }
 
-            function selectMove() {
-                updatePos();
-                container.fireEvent('touchHighlight', initialX, initialY,
-                    touch.pageX, touch.pageY);
-            }
-
-            function dragMove() {
-                updatePos();
-                container.fireEvent('touchDrag', pickedElement, touch.pageX, touch.pageY);
-            }
-
             function updatePos() {
                 lastY = touch.pageY;
                 lastX = touch.pageX;
             }
 
-            container.fireEvent('touchMove', initialX, initialY, touch.pageX, touch.pageY);
-
-            if (state === s.STATE.DOWN ||
-                state === s.STATE.LONGPRESS) {
+            if (state === s.STATE.DOWN) {
                 scrollMove();
                 if (!withinTapThreshold()) {
                     container.fireEvent('touchElementIsScrollable', pickedElement, function (isScrollable) {
@@ -223,20 +178,10 @@ Ext.define('NextThought.modules.TouchSender', {
                             state = s.STATE.SCROLLING;
                         }
                     });
-                    state = s.STATE.SCROLLING;
                 }
             }
             else if (state === s.STATE.SCROLLING) {
                 scrollMove();
-            }
-            else if (state === s.STATE.SELECTING) {
-                selectMove();
-            }
-            else if (state === s.STATE.DRAGGING) {
-                dragMove();
-            }
-            else {
-                console.warn('Unknown touch state on touchMove!');
             }
 
         }, false);
@@ -266,41 +211,17 @@ Ext.define('NextThought.modules.TouchSender', {
 
             e.preventDefault();
 
-            container.fireEvent('touchEnd', lastX, lastY);
-
             var startLt0 = vel < 0,
                 lastUpdateTime = Date.now(),
                 tempState = state;
             state = s.STATE.NONE;
 
-            if (tempState === s.STATE.DOWN) {
-                container.fireEvent('touchTap', pickedElement);
-            }
-            else if (tempState === s.STATE.LONGPRESS) {
-                // Don't do anything since the interactions should have
-                // come from either the longpress itself, or scrolling/dragging
-                Ext.emptyFn(); //lint doesn't like empty blocks...perhaps re-write to not need one?
-            }
-            else if (tempState === s.STATE.SCROLLING) {
+            if (tempState === s.STATE.SCROLLING) {
                 // Cap the ending velocity at the max speed
                 if (Math.abs(vel) > s.SCROLL_MAX_SPEED) {
                     vel = startLt0 ? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
                 }
                 kineticScroll();
-            }
-            else if (tempState === s.STATE.SELECTING) {
-                container.fireEvent('touchMakeRangeFrom', initialX, initialY, lastX, lastY,
-                    function (range) {
-                        var xy = [lastX, lastY];
-                        container.fireEvent('touchAddAnnotation', range, xy);
-                    }
-                );
-            }
-            else if (tempState === s.STATE.DRAGGING) {
-                container.fireEvent('touchDrop', pickedElement, lastX, lastY);
-            }
-            else {
-                console.warn('Unknown touch state on touchEnd!');
             }
 
         }); // eo touchEnd

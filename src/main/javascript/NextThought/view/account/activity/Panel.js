@@ -13,11 +13,13 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		'NextThought.model.Redaction',
 		'NextThought.model.Note',
 		'NextThought.model.forums.Post',
-		'NextThought.model.forums.HeadlineTopic'
+		'NextThought.model.forums.HeadlineTopic',
+        'NextThought.modules.TouchScrollSender'
 	],
 
 	mixins: {
-		'activityFilter': 'NextThought.mixins.ActivityFilters'
+		'activityFilter': 'NextThought.mixins.ActivityFilters',
+        'moduleContainer': 'NextThought.mixins.ModuleContainer'
 	},
 
 	cls: 'activity-panel',
@@ -132,6 +134,16 @@ Ext.define('NextThought.view.account.activity.Panel',{
 		}, this);
 
 		this.mixins.activityFilter.afterRender.apply(this);
+
+        if(Ext.is.iPad){
+            var me = this;
+            this.buildModule('modules', 'touchScrollSender');
+            this.on('touchScroll', function(ele, deltaY){
+                console.log('touchScroll');
+                me.el.scrollBy(0, deltaY, false);
+            });
+        }
+
 	},
 
 	getState: function(){

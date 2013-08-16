@@ -11,12 +11,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 		'NextThought.view.account.history.mixins.ForumTopic',
 		'NextThought.view.account.history.mixins.BlogEntry',
 		'NextThought.view.account.history.mixins.Highlight',
-		'NextThought.view.account.history.mixins.Bookmark'
+		'NextThought.view.account.history.mixins.Bookmark',
+        'NextThought.modules.TouchScrollSender'
 
 	],
 
 	mixins: {
-		'activityFilter': 'NextThought.mixins.ActivityFilters'
+		'activityFilter': 'NextThought.mixins.ActivityFilters',
+        'moduleContainer': 'NextThought.mixins.ModuleContainer'
 	},
 
 	stateful: true,
@@ -259,6 +261,15 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.getTypesMenu().show().hide();
 		this.mixins.activityFilter.afterRender.apply(this);
+
+        if(Ext.is.iPad){
+            var me = this;
+            this.buildModule('modules', 'touchScrollSender');
+            this.on('touchScroll', function(ele, deltaY){
+                console.log('touchScroll');
+                me.el.scrollBy(0, deltaY, false);
+            });
+        }
 	},
 	
 

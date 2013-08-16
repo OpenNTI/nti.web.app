@@ -13,7 +13,8 @@ Ext.define('NextThought.view.SideBar', {
     ],
 
     mixins: [
-        'NextThought.mixins.ModuleContainer'
+        'NextThought.mixins.ModuleContainer',
+        'Ext.util.Observable'
     ],
 
     width: 260,
@@ -167,6 +168,10 @@ Ext.define('NextThought.view.SideBar', {
             var element = Ext.getDoc().dom.elementFromPoint(x, y);
             callback(element);
         });
+
+        container.on('touchLongPress', function (ele, pageX, pageY) {
+            console.log('long press');
+        }, this);
 
     },
 
