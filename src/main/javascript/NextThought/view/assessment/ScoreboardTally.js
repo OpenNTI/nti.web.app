@@ -46,7 +46,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 			console.warn('Setting a strange talley where total is less than correct. Total:'+total+', Correct: '+correct);
 		}
 
-		var incorrect = Math.max(total-correct,0),
+		var me = this, incorrect = Math.max(total-correct,0),
 			percent = Math.ceil(100*correct/total) || 0,
 			//clamp the bucket id to be an integer between 0-10 inclusive.
 			bucketId = Math.min(
@@ -62,15 +62,23 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 			console.error('Error getting message: '+ e.message, Globals.getError(e));
 		}
 
-		this.correctCount.update(correct||0);
-		this.incorrectCount.update(incorrect);
-		this.questionsCount.update(total);
+		function updateTpl(){		
+			me.correctCount.update(correct||0);
+			me.incorrectCount.update(incorrect);
+			me.questionsCount.update(total);
 
-		this.correctBox[correct === 0?'hide':'show']();
-		this.incorrectBox[noScore||incorrect === 0?'hide':'show']();
-		this.questionsBox[noScore?'show':'hide']();
+			me.correctBox[correct === 0?'hide':'show']();
+			me.incorrectBox[noScore||incorrect === 0?'hide':'show']();
+			me.questionsBox[noScore?'show':'hide']();
 
-		this.message.update( msg );
+			me.message.update( msg );
+		}
+
+		if(me.rendered){
+			updateTpl();
+		}else{
+			this.on('afterrender', updateTpl, this);
+		}
 
 	}
 
