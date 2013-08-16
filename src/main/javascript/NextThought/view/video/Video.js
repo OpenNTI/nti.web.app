@@ -147,6 +147,7 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	afterRender: function(){
+		var item;
 		this.callParent(arguments);
 
 		this.playerSetup();
@@ -156,9 +157,12 @@ Ext.define('NextThought.view.video.Video',{
 
 //		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if(this.loadFirstEntry){
-			this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+			item = this.playlist[this.playlistIndex];
+			this.activeVideoService = item && item.activeSource().service;
 			this.maybeSwitchPlayers(this.activeVideoService);
-			this.setVideoAndPosition(this.playlist[this.playlistIndex].activeSource().source);
+			if( item ){
+				this.setVideoAndPosition(item.activeSource().source);
+			}
 		}
 		else{
 //			Set the curtain as the active player while we figure out which other one to use.
@@ -415,23 +419,24 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	playlistSeek: function(newIndex){
-		var source;
+		var source, item;
 		if ((newIndex >= 0) && (newIndex < this.playlist.length) ){
 			if(this.playlistIndex !== newIndex || this.activeVideoService === 'none'){
 				this.playlistIndex = newIndex;
-				this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
-				while( Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
-					if(!this.playlist[this.playlistIndex].useNextSource()){
+				item = this.playlist[this.playlistIndex];
+				this.activeVideoService = item && item.activeSource().service;
+				while( item && Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
+					if(!item.useNextSource()){
 						this.activeVideoService = 'none';
 						this.currentVideoId = null;
 						this.maybeSwitchPlayers(this.activeVideoService);
-						return;
+						return false;
 					}
-					this.activeVideoService = this.playlist[this.playlistIndex].activeSource().service;
+					this.activeVideoService = item.activeSource().service;
 				}
-				source = this.playlist[this.playlistIndex].activeSource().source;
+				source = item && item.activeSource().source;
 				this.maybeSwitchPlayers(this.activeVideoService);
-				this.setVideoAndPosition(source, this.playlist[this.playlistIndex].get('start'));
+				this.setVideoAndPosition(source, item && item.get('start'));
 			}
 			return true;
 		}
