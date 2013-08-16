@@ -466,7 +466,7 @@ Ext.define('NextThought.util.Content', {
 			id = node.getAttribute? node.getAttribute('ntiid') : null,
 			nodes;
 
-		if(!id || $AppConfig.enableSymbolicLinkingNav){return false;}
+		if(!id || !$AppConfig.enableSymbolicLinkingNav){return false;}
 
 
 		if(!map.hasOwnProperty(id)){
