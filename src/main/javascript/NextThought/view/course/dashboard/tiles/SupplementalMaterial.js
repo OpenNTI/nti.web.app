@@ -7,7 +7,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var DQ = Ext.DomQuery, me = this,
 				items = this.getChildrenNodes(courseNodeRecord),
-				refs = [], c = [], recs = [], total = 0;
+				refs = [], c = [], max = 0;
 				
 			refs = refs	.concat( DQ.filter(items||[],'[type$=externallink]') )
 						.concat( DQ.filter(items||[],'[type$=content]') );
@@ -18,19 +18,25 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 			}
 
 
-			function maybeFinish(total,tile){
+			function maybeFinish(total, tile, node){
 				refs.pop();
 
-				tile.commentCount = total;
+				if(node && node.getAttribute('section') === 'required'){
+					total = total + 10;
+				}
+
+				max = (max > total)? max : total;
+
+				tile.innerWeight = total;
 				c.push(tile);
 
 				if(!refs.length){
-					c.sort(function(a,b){ return b.commentCount-a.commentCount; });//sort greatest to least
+					c.sort(function(a,b){ return b.innerWeight-a.innerWeight; });//sort greatest to least
+					Ext.each(c.slice(0,5), function(item){ item.maxInner = max});//set the max on each tile so we can figure the %
 					Ext.callback(finish,null,[c.splice(0,5)]);//splice returns the items cut from the array 'c' and leaves the remainer in 'c'
 					Ext.destroy(c);//clean up the leftovers
 				}
 			}
-
 
 			Ext.Array.each(refs.slice(), function(ref){
 				me.create({
@@ -66,7 +72,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 					node: n,
 					locationInfo: i,
 					callback: function(total){
-						Ext.callback(config.callback,null,[total,me]);
+						Ext.callback(config.callback,null,[total,me, n]);
 					}
 				}
 			}

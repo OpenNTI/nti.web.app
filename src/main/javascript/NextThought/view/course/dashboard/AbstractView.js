@@ -76,10 +76,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView',{
 
 
 	buildSorter: function(){
+		var today = new Date();
+
 		function get(r){
-			var d = (r.getLastModified && r.getLastModified()) || r.lastModified,
-				w = (r.getWeight && r.getWeight()) || r.weight || 1;
-			return w * (d ? d.getTime() : 1);
+			var base = r.getBaseWeight(), //give more important tiles a higher base weight to keep them on top
+				inner = (r.innerWeight > 0)? r.innerWeight/r.maxInner : 0, //% of the max inner, if the innerWeight is 0 the max might be so make sure we don't divide by zero
+				time = (r.getTimeWeight() / today.getTime()) * 0.001; //how close the record is to today, decreased so it doesn't over turn the inner weight
+
+			return base + inner + time;
 		}
 
 		return function(a,b){

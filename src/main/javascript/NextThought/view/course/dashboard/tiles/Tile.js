@@ -42,11 +42,16 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 	config: {
 		cols:2,
 		rows:2,
-		weight: 1,
+		baseWeight: 1,
 		lastModified: new Date(0),
 		locationInfo: null,
 		courseNodeRecord: null
 	},
+
+	innerWeight: 0,
+	maxInner: 1,
+
+	getTimeWeight: function(){ return 0; },
 
 	ui: 'course-dashboard-tile',
 	layout: 'auto',

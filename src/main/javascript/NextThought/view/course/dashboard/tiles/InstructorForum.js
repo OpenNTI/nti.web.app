@@ -20,6 +20,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 	config:{
 		cols: 3,
 		ntiid: '',
+		baseWeight: 5,
 		finishCallBack: Ext.emptyFn
 	},
 

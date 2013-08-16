@@ -34,11 +34,16 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			}
 
 			function loadDiscussions(store, records){
-				var tiles = [], me = this;
+				var tiles = [], me = this, max = 0;
 
 				Ext.Array.each(records, function(record){
-					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date')}));
+					var comments = record.get('PostCount');
+
+					max = (max > comments)? max : comments;
+					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date'), innerWeight: comments}));
 				});
+				//set the max on each tile so we can figure the %
+				Ext.each(tiles, function(item){ item.maxInner = max});
 
 				Ext.callback(finish, null, [tiles]);
 			}
@@ -62,9 +67,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 
 	config: {
 		board: null,
-		weight:1.01,
 		rows: 2
 	},
+
+	getTimeWeight: function(){  return this.itemNode.get('Last Modified').getTime(); },
 
 	constructor: function(config){
 		var rec = config.itemNode,
