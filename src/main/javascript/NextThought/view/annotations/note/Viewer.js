@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.annotations.note.Viewer',{
+Ext.define('NextThought.view.annotations.note.Viewer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.note-window',
 
@@ -28,15 +28,17 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 					}
 				]
 			},
-			listeners:{
+			listeners: {
 				'click': {
 					element: 'el',
-					fn: 'closeViewer' 
+					fn: 'closeViewer'
 				}
 			},
-			closeViewer: function(e){
-				if(!e.getTarget('.close-note-viewer')){ return; }
-				
+			closeViewer: function (e) {
+				if (!e.getTarget('.close-note-viewer')) {
+					return;
+				}
+
 				this.getRefOwner().close();
 			}
 		},
@@ -53,89 +55,93 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 		}
 	],
 
-	constructor: function(config){
-		this.fireEvent('before-new-note-viewer',this, config && (config.reader||config.ownerCmp||config.floatParent));
-		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.closeOrDie();});
+	constructor: function (config) {
+		this.fireEvent('before-new-note-viewer', this, config && (config.reader || config.ownerCmp || config.floatParent));
+		Ext.each(Ext.ComponentQuery.query('note-window'), function (w) {
+			w.closeOrDie();
+		});
 		this.callParent(arguments);
 	},
 
 
-	initComponent: function(){
+	initComponent: function () {
 		var m, annotationView = this.up && this.up('annotation-view');
 		this.callParent(arguments);
 
-		this.on('profile-link-clicked','destroy',this);
+		this.on('profile-link-clicked', 'destroy', this);
 
 		m = this.down('note-main-view');
-		m.reader = this.reader||this.ownerCmp||this.floatParent;
-	
-		if(this.isEdit){
+		m.reader = this.reader || this.ownerCmp || this.floatParent;
+
+		if (this.isEdit) {
 			m.editMode = this.isEdit;
 		}
 
-		if(this.replyToId){
+		if (this.replyToId) {
 			m.replyToId = this.replyToId;
 		}
-        if (this.scrollToId) {
-            m.scrollToId = this.scrollToId;
-        }
+		if (this.scrollToId) {
+			m.scrollToId = this.scrollToId;
+		}
 
 
-        if(annotationView){
-        	this.mon(annotationView, 'itemclick', function(view, rec){
-        		if(this.record = rec){
-        			this.close();
-        		}
-        	}, this);
-        }
+		if (annotationView) {
+			this.mon(annotationView, 'itemclick', function (view, rec) {
+				if (this.record = rec) {
+					this.close();
+				}
+			}, this);
+		}
 
-        m.setRecord(this.record);
-		m.on('destroy','destroy',this);
+		m.setRecord(this.record);
+		m.on('destroy', 'destroy', this);
 	},
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent();
 
-		function closeOnCardChange(cmp, me){
+		function closeOnCardChange(cmp, me) {
 			var c = cmp.up('{isOwnerLayout("card")}');
-			me = me||cmp;
-			if( c ){
-				me.mon(c,{
-					'beforedeactivate':'close',//attempt to let this veto the deactivate
-					'deactivate':'destroy'//if deactivated, die
+			me = me || cmp;
+			if (c) {
+				me.mon(c, {
+					'beforedeactivate': 'close',//attempt to let this veto the deactivate
+					'deactivate': 'destroy'//if deactivated, die
 				});
-				closeOnCardChange(c,me);
+				closeOnCardChange(c, me);
 			}
 		}
 
-		closeOnCardChange(this.reader,this);
+		closeOnCardChange(this.reader, this);
 
 		this.resizeView();
 		var keyMap = this.keyMap = new Ext.util.KeyMap({
-            target: this.el,
-			binding: [{
-				key: Ext.EventObject.ESC,
-				fn: this.onEsc,
-				scope: this
-			}]
-        });
+			target: this.el,
+			binding: [
+				{
+					key: Ext.EventObject.ESC,
+					fn: this.onEsc,
+					scope: this
+				}
+			]
+		});
 
-		this.on('destroy','destroy',keyMap);
+		this.on('destroy', 'destroy', keyMap);
 	},
 
 
-	onEsc: function(k, e) {
-        e.stopEvent();
-        this.close();
-    },
+	onEsc: function (k, e) {
+		e.stopEvent();
+		this.close();
+	},
 
 
-	resizeView: function(){
+	resizeView: function () {
 		var position, height, width,
 			viewportHeight = Ext.Element.getViewportHeight(),
 			reader = this.reader;
 
-		if(reader){
+		if (reader) {
 			position = reader.getPosition();
 			position[0] -= 10;
 			position[1] += 10;
@@ -149,21 +155,21 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	},
 
 
-	canClose: function(){
+	canClose: function () {
 		return !this.down('note-main-view').editorActive();
 	},
 
 
-	closeOrDie: function(){
-		if(!this.close()){
+	closeOrDie: function () {
+		if (!this.close()) {
 			Ext.Error.raise('Editor open, refusing to close.');
 		}
 	},
 
 
-	close: function(){
+	close: function () {
 		//Only close if the editor is not active.
-		if( this.canClose() ){
+		if (this.canClose()) {
 			this.destroy();
 			return true;
 		}
@@ -173,9 +179,11 @@ Ext.define('NextThought.view.annotations.note.Viewer',{
 	},
 
 
-	warnBeforeDismissingEditor: function(){
-		Ext.defer(alert, 1, null, [{
-			msg: "You are currently creating a reply, please save or cancel it first."
-		}]);
+	warnBeforeDismissingEditor: function () {
+		Ext.defer(alert, 1, null, [
+			{
+				msg: "You are currently creating a reply, please save or cancel it first."
+			}
+		]);
 	}
 });

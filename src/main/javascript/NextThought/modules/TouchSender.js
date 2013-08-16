@@ -71,7 +71,7 @@ Ext.define('NextThought.modules.TouchSender', {
 
         /**
          * Only count touches within the set threshold. Otherwise,
-         * it moves to another state (scroll,select,drag)
+         * it moves to another state (scroll, select, drag)
          * @returns {boolean}
          */
         function withinTapThreshold() {

@@ -5,6 +5,7 @@ Ext.define('NextThought.view.content.Reader', {
         'NextThought.proxy.JSONP',
         'NextThought.util.Base64',
         'NextThought.modules.TouchSender',
+		'NextThought.modules.TouchScrollSender',
         'NextThought.view.ResourceNotFound',
         'NextThought.view.content.PageWidgets',
         'NextThought.view.content.reader.Content',
@@ -50,6 +51,7 @@ Ext.define('NextThought.view.content.Reader', {
         this.buildModule('reader', 'resourceManager', rRef);
         this.buildModule('reader', 'noteOverlay', rRef);
         this.buildModule('modules', 'touchSender');
+		this.buildModule('modules', 'touchScrollSender');
         this.buildModule('reader', 'touchHandler', rRef);
         this.buildModule('reader', 'touchHighlight', rRef);
 
