@@ -15,7 +15,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 			function onBoardResolved(board){
 				var sId = board && ('dashboard-'+board.getContentsStoreId()),
 					url = board && board.getLink('TopTopics'),
-					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url}));
+					instructorForum = course && course.getAttribute('instructorForum'),
+					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url},{ exclude: instructorForum }));
+				
 				me.board = board;
 				store.sorters.removeAll();
 				if(Ext.isEmpty(url)){
@@ -71,7 +73,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions',{
 		config.items = [
 			{xtype: 'container', defaultType: this.defaultType, items: {
 				record: rec,
-				locationInfo: l
+				locationInfo: l,
+				contentNtiid: l.ContentNTIID
 			}}
 		];
 
