@@ -543,12 +543,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				this.setPagePosition(pos);
 				this.setWidth(w);
 				this.setHeight(h);
-			},
-			'itemremove': function(){
-				debugger;
-				if(this.store.getCount() === 0){
-					Ext.defer(this.hide, 1, this);
-				}
 			}
 		};
 	}
