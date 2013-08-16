@@ -9,14 +9,16 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 	renderTpl: Ext.DomHelper.markup({
-		cls:'search-field-wrap',
-		cn: [{
-			cls:'search-field',
-			cn: [
-				{tag:'input', type:'text', placeholder:'Search'},
-				{tag:'a', href:'#', cls:'trigger'}
-			]
-		}]
+		cls: 'search-field-wrap',
+		cn: [
+			{
+				cls: 'search-field',
+				cn: [
+					{tag: 'input', type: 'text', placeholder: 'Search'},
+					{tag: 'a', href: '#', cls: 'trigger'}
+				]
+			}
+		]
 	}),
 
 	renderSelectors: {
@@ -25,31 +27,31 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		triggerEl: 'a'
 	},
 
-	constructor: function(){
+	constructor: function () {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
 		this.mixins.placeholderFix.constructor.call(this);
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.inputEl.selectable();
 
 		var parentMenu = this.up('menu');
 
-		this.triggerEl.on('click',this.triggerMenu,this);
+		this.triggerEl.on('click', this.triggerMenu, this);
 		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
 
-		this.menu = Ext.widget('search-advanced-menu',{width: this.boxEl.getWidth(),
+		this.menu = Ext.widget('search-advanced-menu', {width: this.boxEl.getWidth(),
 			parentMenu: parentMenu,
 			parentItem: parentMenu
 		});
 
-		this.menu.mon(parentMenu,'hide',this.menu.hide,this.menu);
+		this.menu.mon(parentMenu, 'hide', this.menu.hide, this.menu);
 
-		this.mon(this.inputEl,{
+		this.mon(this.inputEl, {
 			scope: this,
 			keypress: this.keyPressed,
 			keydown: this.keyDown //keypress does not always fire for escape
@@ -70,10 +72,10 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	keyDown: function(event) {
+	keyDown: function (event) {
 		var k = event.getKey();
-		if(this.specialKeys[k]){
-			if(k === event.ESC){
+		if (this.specialKeys[k]) {
+			if (k === event.ESC) {
 				this.inputEl.dom.value = '';
 			}
 			event.stopPropagation();
@@ -82,7 +84,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	keyPressed: function(event){
+	keyPressed: function (event) {
 		event.stopPropagation();
 		var k = event.getKey();
 		if (k === event.ENTER || k === event.ESC) {
@@ -94,33 +96,33 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	fireSearchEvent: function(){
+	fireSearchEvent: function () {
 		clearTimeout(this.searchEventDelayId);
 		var val = this.getValue();
-		if(!val){
+		if (!val) {
 			this.fireEvent('clear-search');
 		}
-		else{
+		else {
 			this.fireEvent('search', val);
 		}
 	},
 
-	fireSearchEventBuffered: function(){
+	fireSearchEventBuffered: function () {
 		var me = this;
 		clearTimeout(this.searchEventDelayId);
-		this.searchEventDelayId = setTimeout(function(){
-			if(!me.getValue() || me.getValue().length > 3){
+		this.searchEventDelayId = setTimeout(function () {
+			if (!me.getValue() || me.getValue().length > 3) {
 				me.fireSearchEvent();
 			}
 		}, 500);
 	},
 
-	triggerMenu: function(e){
+	triggerMenu: function (e) {
 		e.stopPropagation();
 		e.preventDefault();
 
-		if(!this.menu.isVisible()){
-			this.menu.showBy(this.boxEl,'tr-br?',[0,5]);
+		if (!this.menu.isVisible()) {
+			this.menu.showBy(this.boxEl, 'tr-br?', [0, 5]);
 		}
 		else {
 			this.menu.hide();
@@ -131,11 +133,11 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		return this.inputEl.getValue();
 	},
 
-	getFocusEl: function(){
+	getFocusEl: function () {
 		return this.inputEl;
 	}
 

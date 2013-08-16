@@ -217,29 +217,28 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	 * Scrolls to the top of the page if a text input field is not focused
 	 */
 	onFocusChange: function (e) {
-        console.log("onFocusChange");
 		var tokenInput;
-        if(this.sharedListEl){
-            tokenInput = this.sharedListEl.down('.user-token-field')
-                .el.down('.tokens')
-                .el.down('.inputArea')
-                .el.down('.token-input-wrap')
-                .el.down('input');
-        }
+		if (this.sharedListEl) {
+			tokenInput = this.sharedListEl.down('.user-token-field')
+				.el.down('.tokens')
+				.el.down('.inputArea')
+				.el.down('.token-input-wrap')
+				.el.down('input');
+		}
 
-        var scrollWindowBack = true;
-        if(this.contentEl && this.contentEl == e.relatedTarget){
-            scrollWindowBack = false;
-        }
-        if(this.titleEl && this.titleEl == e.relatedTarget){
-            scrollWindowBack = false;
-        }
-        if(tokenInput && tokenInput == e.relatedTarget){
-            scrollWindowBack = false;
-        }
-        if(scrollWindowBack){
-            window.scrollTo(0,0);
-        }
+		var scrollWindowBack = true;
+		if (this.contentEl && this.contentEl === e.relatedTarget) {
+			scrollWindowBack = false;
+		}
+		if (this.titleEl && this.titleEl === e.relatedTarget) {
+			scrollWindowBack = false;
+		}
+		if (tokenInput && tokenInput === e.relatedTarget) {
+			scrollWindowBack = false;
+		}
+		if (scrollWindowBack) {
+			window.scrollTo(0, 0);
+		}
 	},
 
 
@@ -468,11 +467,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					me.onFocusChange(e);
 				}
 			});
-            me.mon(me.contentEl, {
-                'click': function(e) {
-                    me.contentEl.focus();
-                }
-            });
+			me.mon(me.contentEl, {
+				'click': function (e) {
+					me.contentEl.focus();
+				}
+			});
 		}
 
 		me.on('destroy', function () {
@@ -482,7 +481,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			});
 			if (Ext.is.iPad) {
-                console.log("On Destroy, scroll 0,0");
+				console.log("On Destroy, scroll 0,0");
 				window.scrollTo(0, 0);
 				document.body.scrollTop = 0;
 			}
@@ -577,7 +576,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.el.addCls(['active', 'disabled']);
 		this.el.down('.content').set({'contenteditable': undefined});
 		if (Ext.is.iPad) {
-            console.log("disable - scroll to top");
+			console.log("disable - scroll to top");
 			window.scrollTo(0, document.activeElement.top);
 		}
 	},
@@ -596,7 +595,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.clearError();
 		this.fireEvent('deactivated-editor', this);
 		if (Ext.is.iPad) {
-            console.log("deactivate, scroll doc to top");
+			console.log("deactivate, scroll doc to top");
 			window.scrollTo(0, document.activeElement.top);
 		}
 	},

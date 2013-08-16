@@ -18,7 +18,7 @@ Ext.define('NextThought.view.course.overview.TouchHandler', {
 		this.container.on('touchTap', this.clickElement);
 		this.container.on('touchElementAt', this.elementAt);
 
-		// Make the videoList scrollable
+		// Ensure the videoList is scrollable
 		videoList.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
 	}
 });

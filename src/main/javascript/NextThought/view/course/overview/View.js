@@ -7,7 +7,6 @@ Ext.define('NextThought.view.course.overview.View', {
 	requires: [
 		'NextThought.view.course.overview.parts.*',
 		'NextThought.modules.TouchSender',
-		'NextThought.modules.TouchScrollSender',
 		'NextThought.view.course.overview.TouchHandler'
 	],
 
@@ -62,7 +61,6 @@ Ext.define('NextThought.view.course.overview.View', {
 
 		if (Ext.is.iPad) {
 			this.buildModule('modules', 'touchSender', {container: this});
-			this.buildModule('modules', 'touchScrollSender', {container: this});
 			this.buildModule('overview', 'touchHandler', {container: this});
 		}
 	},

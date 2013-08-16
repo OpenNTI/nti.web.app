@@ -7,7 +7,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.layout.component.Natural',
 		'NextThought.modules.TouchSender',
-		'NextThought.modules.TouchScrollSender',
 		'NextThought.view.annotations.note.TouchHandler'
 	],
 
@@ -153,7 +152,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		if (Ext.is.iPad) {
 			this.mixins.moduleContainer.buildModule('modules', 'touchSender', {container: this});
-			this.mixins.moduleContainer.buildModule('modules', 'touchScrollSender', {container: this});
 			this.mixins.moduleContainer.buildModule('note', 'touchHandler', {container: this});
 		}
 	},

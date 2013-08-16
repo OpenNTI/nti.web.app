@@ -91,7 +91,7 @@ Ext.define('NextThought.view.course.outline.View', {
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
 		if (Ext.is.iPad) {
 			this.buildModule('modules', 'touchSender', {container: this.up().down('.course-outline')});
-			this.buildModule('outline', 'touchHandler', {container: this.up().down('.course-outline'), left: true});
+			this.buildModule('outline', 'touchHandler', {container: this.up().down('.course-outline')});
 		}
 	},
 
