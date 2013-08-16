@@ -86,7 +86,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink',{
 
 
 	onCardClicked: function(e){
-		if(e.getTarget('.comment')){
+		if(e && e.getTarget('.comment')){
 			e.stopEvent();
 			this.bypassEvent = false;
 		}

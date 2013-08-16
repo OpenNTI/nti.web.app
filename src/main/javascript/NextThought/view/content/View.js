@@ -6,7 +6,8 @@ Ext.define( 'NextThought.view.content.View', {
 		'NextThought.view.course.View',
 		'NextThought.view.course.dashboard.View',
 		'NextThought.view.course.forum.View',
-		'NextThought.view.course.info.View'
+		'NextThought.view.course.info.View',
+		'NextThought.view.course.overview.parts.ContentLink'
 	],
 
 	layout: {
@@ -194,12 +195,43 @@ Ext.define( 'NextThought.view.content.View', {
 
 
 	onNavigationAborted: function(resp, ntiid) {
+		function fin(cid, locationInfo){
+			debugger;
+			if(!cid){
+				me.courseBook.layout.setActiveItem('main-reader-view');
+				me.reader.setSplash();
+				me.reader.relayout();
+				me.down('content-toolbar').hide();
+				me.down('content-page-widgets').hide();
+			}
+			else{
+				// NOTE: For content related item, we have enough info to actually show it, otherwise,
+				// we will navigation to the parent container.
+				if(locationInfo.location && locationInfo.location.tagName === 'content:related'){
+					$AppConfig.service.getPageInfo(cid, function(pi){
+						if(!Ext.isEmpty(pi)){
+							pi = Ext.isArray(pi) ? pi[0] : pi;
+
+							// HACK: when this card is rendered, setting the originalNTIIDRequested of the parent container
+							// will force it to go ahead and show the target card.
+							// Should we reset it back to its original value in the callback?
+							pi.originalNTIIDRequested = locationInfo.NTIID;
+							me.reader.setLocation(pi);
+						}
+					});
+					return;
+				}
+				me.fireEvent('navigation-selected', cid);
+			}
+		}
+
+		var me = this;
 		if(this.fireEvent('navigation-failed', this, ntiid, resp) !== false){
-			this.courseBook.layout.setActiveItem('main-reader-view');
-			this.reader.setSplash();
-			this.reader.relayout();
-			this.down('content-toolbar').hide();
-			this.down('content-page-widgets').hide();
+			if(resp && resp.status === 404){
+				ContentUtils.findRelatedContentObject(ntiid, fin, me);
+				return;
+			}
+			fin();
 		}
 	},
 

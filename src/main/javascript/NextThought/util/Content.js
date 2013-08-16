@@ -320,6 +320,35 @@ Ext.define('NextThought.util.Content', {
 		}, this);
 	},
 
+
+	findRelatedContentObject: function(id, cb, scope){
+		var titleNTiidPrefix = this.contentPrefix(id),
+			title = titleNTiidPrefix ? Library.findTitleWithPrefix(titleNTiidPrefix) : null,
+			toc, locationInfo, container;
+
+		if(!title){
+			Ext.callback(cb, scope);
+			return;
+		}
+
+		toc = Library.getToc(title);
+		locationInfo = Library.resolve(toc, title, id, true);
+		if(locationInfo){
+			container = ContentUtils.getLineage(locationInfo.NTIID);
+			if(!Ext.isEmpty(container) && container.length > 1){
+				container = container[1];
+			}
+			else{
+				container = title.get('NTIID');
+			}
+			Ext.callback(cb, scope, [container, locationInfo]);
+		}
+		else{
+			Ext.callback(cb, scope);
+		}
+		return true;
+	},
+
 	/**
 	 * Returns a Purchasable if we have one in the store that looks
 	 * like it would contain the following ntiid.
