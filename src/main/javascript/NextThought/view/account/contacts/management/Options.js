@@ -37,6 +37,11 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 	afterRender: function(){
 		this.closeEl = Ext.DomHelper.append(this.el, {cls:'close', html:''}, true);
 		this.callParent(arguments);
+
+		if(this.down('[removeContact=true]') && !this.isContact){
+			this.down('[removeContact=true]').setDisabled(true);
+		}
+
 		this.closeEl.on('click', function(){
 			this.stopHideTimeout();
 			this.doDismiss = true;
