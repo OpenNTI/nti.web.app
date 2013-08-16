@@ -61,10 +61,17 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		}
 
 		function error(req, resp) {
+			function filter(item){
+				if(item instanceof NextThought.model.Course){
+					return Boolean(item.getLink('enroll'));
+				}
+				return true;
+			}
+
 			req = resp.request;
 			var el = me.context.up('.context'),
 				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid);
+				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 
 			if (resp.status === 403 && p) {
 				me.handlePurchasable(p, el);

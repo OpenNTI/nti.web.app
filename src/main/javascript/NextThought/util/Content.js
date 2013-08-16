@@ -367,7 +367,7 @@ Ext.define('NextThought.util.Content', {
 		console.log('purchasable: ', purchasable);
 
 		if(Ext.isFunction(wantsItem)){
-			return wantsItem.apply(this, [purchasable]);
+			return wantsItem.apply(this, [purchasable]) ? purchasable : null;
 		}
 		return purchasable;
 	},
