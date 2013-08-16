@@ -252,7 +252,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		this.isReady = false;
 
-		this.sendCommand('cleanMedia', undefined, true);
+		//Removed per sean, seems to help the html5 player
+		//this.sendCommand('cleanMedia', undefined, true);
 
 		this.currentSource = source;
 		this.currentStartAt = offset;
@@ -335,9 +336,12 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	readyHandler: function(){
-		console.log('Firing player ready');
-		this.isReady = true;
-		this.fireEvent('player-ready', 'kaltura');
+		var me = this;
+		setTimeout(function(){
+			console.log('Firing player ready');
+			me.isReady = true;
+			me.fireEvent('player-ready', 'kaltura');
+		},250);
 	},
 
 
