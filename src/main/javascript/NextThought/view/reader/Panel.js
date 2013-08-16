@@ -4,8 +4,14 @@ Ext.define('NextThought.view.reader.Panel',{
 	requires: [
 		'NextThought.view.content.Reader',
 		'NextThought.view.content.Toolbar',
-		'NextThought.view.annotations.View'
+		'NextThought.view.annotations.View',
+        'NextThought.modules.TouchHandler',
+        'NextThought.modules.TouchSender'
 	],
+
+    mixins:[
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	ui: 'reader',
 	cls: 'reader-container',
@@ -55,6 +61,14 @@ Ext.define('NextThought.view.reader.Panel',{
 			'filter-by-line': 'selectDiscussion'
 		});
 		this.down('annotation-view').anchorComponent = this.down('reader-content');
+
+        var me = this;
+        this.buildModule('modules', 'touchSender', {container: me.down('annotation-view')});
+        this.buildModule('modules', 'touchHandler',
+            {container: me.down('annotation-view'), getPanel: function(){
+                    return this.container.el;
+                }
+            });
 	},
 
 
