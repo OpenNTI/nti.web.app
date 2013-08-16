@@ -443,7 +443,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				store: 'ext-empty-store',
 				anchorComponent: this,
 				anchorComponentHooks: this.getViewerHooks(),
-				floatParent: this
+				floatParent: this,
+				listeners: {
+					'itemremove': function(){
+						if(this.getNodes().length === 0){
+							Ext.defer(this.hide, 1, this);
+						}
+					}
+				}
 			});
 
 			this.annotationView.show().hide();
