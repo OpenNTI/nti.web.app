@@ -101,7 +101,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
                 }),
             me = this,
             jsPrefix = 'javascript', //this in var to trick jslint
-            task = { interval: 50 },
+            task = { interval: 50 },g
             doc = me.getDocumentElement();
 
         doc.open();

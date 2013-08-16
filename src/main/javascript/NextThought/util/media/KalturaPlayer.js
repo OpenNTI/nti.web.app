@@ -56,17 +56,23 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101')},
 				{tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php')},
 //				{tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js')},
-				{tag:'script', type:'text/javascript', html:'\n{code}\n'},
 				{tag:'style', type:'text/css', cn:[
 					'body, html { margin: 0; padding: 0; }'
 				]}
 			]},
-			{tag:'body', cn:{
-				id: '{id}', name: '{id}', style: {
-					width:'{width}px',
-					height:'{height}px'
+			{tag:'body', cn:[
+				{
+					id: '{id}', name: '{id}', style: {
+						width:'{width}px',
+						height:'{height}px'
+					}
+				},
+				{
+					tag:'script',
+					type:'text/javascript',
+					html:'\n{code}\n'
 				}
-			}}]
+			]}]
 		}
 	]),
 
@@ -104,33 +110,48 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	playerSetup: function(){
-		var doc,
-			data = {
+
+		if(this.settingUp){
+			return;
+		}
+
+		var data = {
 				id: this.id,
 				height: this.height,
 				width: this.width,
 				basePath: location.protocol+'//'+location.host+location.pathname,
 				code: this.buildWrapperCode()
-			};
+			},
+			playerSetupTask = {interval: 50},
+			me = this;
 
+		this.settingUp = true;
 
-//		Inject Kaltura Player HTML
+		playerSetupTask.run = function () {
+			var doc = me.getPlayerContextDocument();
+			if (doc.body || doc.readyState === 'complete') {
+				delete me.settingUp;
+				Ext.TaskManager.stop(playerSetupTask);
+				try{
+					doc.open();
+					doc.write(me.PLAYER_BODY_TPL.apply(data));
+					doc.close();
+					console.log('Setup done for ', me.id);
+				}
+				catch(e){
+					console.error('Setup died a terrible death', e);
+					me.playerErrorHandler(e);
+				}
+			}
+		};
+
+		//		Inject Kaltura Player HTML
 		this.el = this.PLAYER_TPL.append(
-				this.parentEl, data, true);
+			this.parentEl, data, true);
 		this.iframe = this.el.down('iframe');
 
+		Ext.TaskManager.start(playerSetupTask);
 		window.addEventListener("message", this.handleMessage, false);
-		try{
-			this.getPlayerContext().onerror = Ext.bind(this.playerErrorHandler,this);
-			doc = this.getPlayerContextDocument();
-			doc.open();
-			doc.write(this.PLAYER_BODY_TPL.apply(data));
-			doc.close();
-		}
-		catch(e){
-			this.playerErrorHandler(e);
-		}
-		console.log(this.id);
 	},
 
 
@@ -459,6 +480,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
 			mw.setConfig( 'EmbedPlayer.RewriteSelector', false );
+
+			//Force flash in ie10, mostly because kalturas html5 player sucks
+			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
 
 			//mw.setConfig('debug', true);
 

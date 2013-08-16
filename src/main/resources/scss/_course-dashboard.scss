@@ -39,6 +39,7 @@
 			margin: 0 auto;
 			width: $videoWidth;
 			height: $videoHeight;
+			z-index: 1;
 		}
 
 		.curtain {

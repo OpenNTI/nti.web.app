@@ -273,9 +273,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			this.curtainEl.unmask();
 		}
 
-		if(el){
-			console.log('Showing curtain');
+		console.log('Showing curtain');
+		if(el && !c){
 			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
+		}
+		else if(el){
+			el.setStyle({zIndex: 9});
 		}
 	},
 
@@ -290,9 +293,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			this.curtainEl.unmask();
 		}
 
-		if(el){
+		if(el && !c){
 			console.log('Hiding curtain view');
-			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
+			el.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY)[a]();
+		}
+		else if(el){
+			el.setStyle({zIndex: 0});
 		}
 	},
 
@@ -309,6 +315,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		}
 
 		if( this.curtainEl ){
+			this.showCurtain();
 			this.curtainEl.setStyle({backgroundImage:p});
 			this.playBlurEl.setStyle({backgroundImage:p});
 			this.playLabelEl.update(rec.get('label'));
