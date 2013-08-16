@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.overview.parts.Section',{
+Ext.define('NextThought.view.course.overview.parts.Section', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview-section',
 
@@ -8,26 +8,31 @@ Ext.define('NextThought.view.course.overview.parts.Section',{
 	layout: 'auto',
 	componentLayout: 'natural',
 	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
+	getTargetEl: function () {
+		return this.body;
+	},
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}]
-		},{
+			tag: 'h2', cls: '{type}', cn: [
+			{tag: 'span', html: '{title}'}
+		]
+		},
+		{
 			id: '{id}-body',
-			cn:['{%this.renderContainer(out,values)%}']
+			cn: ['{%this.renderContainer(out,values)%}']
 		}
 	]),
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title || 'Untitled',
 			type: this.type || ''
 		});
 
-		if( this.type ){
+		if (this.type) {
 			this.addCls(this.type);
 		}
 	}

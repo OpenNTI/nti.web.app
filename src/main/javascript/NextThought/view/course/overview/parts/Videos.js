@@ -1,8 +1,8 @@
 /*jslint */
 /*globals $AppConfig, Library, getURL, NextThought  */
-Ext.define('NextThought.view.course.overview.parts.Videos',{
+Ext.define('NextThought.view.course.overview.parts.Videos', {
 	extend: 'Ext.view.View',
-	alias: ['widget.course-overview-video-section','widget.course-overview-ntivideo'],
+	alias: ['widget.course-overview-video-section', 'widget.course-overview-ntivideo'],
 
 	requires: [
 		'NextThought.model.PlaylistItem',
@@ -25,14 +25,19 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'h2', cls:'{type}', cn:[{tag:'span',html: '{title}'}] },
-		{ cls: 'body', cn:[
-			{ cls: 'video-container', cn:[{ cls: 'screen' }]},
-			{ cls: 'curtain', cn:[
-				{ cls:'ctr', cn:[
-					{ cls: 'play', cn:[
-						{cls:'blur-clip',cn:{cls:'blur'}},
-						{ cls: 'label', 'data-qtip': 'Play' },{cls:'launch-player', 'data-qtip': 'Play with transcript'}
+		{ tag: 'h2', cls: '{type}', cn: [
+			{tag: 'span', html: '{title}'}
+		] },
+		{ cls: 'body', cn: [
+			{ cls: 'video-container', cn: [
+				{ cls: 'screen' }
+			]},
+			{ cls: 'curtain', cn: [
+				{ cls: 'ctr', cn: [
+					{ cls: 'play', cn: [
+						{cls: 'blur-clip', cn: {cls: 'blur'}},
+						{ cls: 'label', 'data-qtip': 'Play' },
+						{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
 					] }
 				] }
 			]},
@@ -51,17 +56,21 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	getTargetEl: function(){ return this.frameBodyEl; },
+	getTargetEl: function () {
+		return this.frameBodyEl;
+	},
 
-	overItemCls:'over',
-	itemSelector:'.video-row',
-	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
-		cls: 'video-row',
-		cn: [
-			{ cls:'label', html: '{label}', 'data-qtip':'{label}' }//,
-			//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
-		]
-	}]}),
+	overItemCls: 'over',
+	itemSelector: '.video-row',
+	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+		{
+			cls: 'video-row',
+			cn: [
+				{ cls: 'label', html: '{label}', 'data-qtip': '{label}' }//,
+				//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
+			]
+		}
+	]}),
 
 
 	listeners: {
@@ -70,9 +79,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	constructor: function(config){
-
-
+	constructor: function (config) {
 		var i = config.items[0];
 
 		config.store = new Ext.data.Store({
@@ -96,13 +103,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		this.playlist = [];
 
-		if(i){
-			Library.getVideoIndex(i.title,this.applyVideoData,this);
+		if (i) {
+			Library.getVideoIndex(i.title, this.applyVideoData, this);
 		}
 	},
 
 
-	applyVideoData: function(videoIndex){
+	applyVideoData: function (videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			me = this, selected = this.getSelectionModel().selected;
@@ -110,12 +117,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		//save for later
 		me.videoIndex = videoIndex;
 
-		this.getStore().each(function(r){
+		this.getStore().each(function (r) {
 			var v = videoIndex[r.getId()],item;
-			if(v){
-				r.set('hasTranscripts',!Ext.isEmpty(v.transcripts));
-				if(me.curtainEl && selected.contains(r)){
-					me.playBtnEl[r.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
+			if (v) {
+				r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
+				if (me.curtainEl && selected.contains(r)) {
+					me.playBtnEl[r.get('hasTranscripts') ? 'addCls' : 'removeCls']('transcripts');
 				}
 
 				item = v.sources[0];
@@ -135,16 +142,16 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	convertItems: function(items){
+	convertItems: function (items) {
 		var out = [];
 
-		Ext.each(items,function(item) {
+		Ext.each(items, function (item) {
 			var n = item.node,
 				i = item.locationInfo,
 				r = item.courseRecord;
 
 			out.push({
-				poster: getURL(n.getAttribute('poster'),i.root),
+				poster: getURL(n.getAttribute('poster'), i.root),
 				ntiid: n.getAttribute('ntiid'),
 				label: n.getAttribute('label'),
 				comments: 'Loading... ',
@@ -156,45 +163,45 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title || 'Untitled',
 			type: this.type || ''
 		});
 
-		if( this.type ){
+		if (this.type) {
 			this.addCls(this.type);
 		}
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 		this.getSelectionModel().select(0);
 		//this.bodyEl.mask('Loading...');
 	},
 
 
-	getCommentCount: function(pi){
+	getCommentCount: function (pi) {
 //		var link = pi.getLink('RecursiveUserGeneratedData');
 //		if(link){
-			//load 1 item, filer by notes... read filteredTotal-something-or-other.
+		//load 1 item, filer by notes... read filteredTotal-something-or-other.
 //		}
 		//on failure call resetCommentCount
 	},
 
 
-	pausePlayback: function(){
-		if( this.player && this.player.isPlaying() ){
+	pausePlayback: function () {
+		if (this.player && this.player.isPlaying()) {
 			this.player.pausePlayback();
 		}
 	},
 
 
-	maybeCreatePlayer: function(){
-		if (!this.rendered){
+	maybeCreatePlayer: function () {
+		if (!this.rendered) {
 			this.on({afterRender: Ext.bind(this.maybeCreatePlayer, this, arguments), single: true});
 			return;
 		}
@@ -224,7 +231,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			'player-error':'showCurtain'
 		});
 
-		this.relayEvents(p,[
+		this.relayEvents(p, [
 			'player-command-play',
 			'player-command-stop',
 			'player-command-pause',
@@ -236,37 +243,35 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 	//allow querying using selector PATH (eg: "parent-xtype-container course-overview-ntivideo")
-	getRefItems: function(){
+	getRefItems: function () {
 		var p = this.player;
 		return (p && [p]) || [];
 	},
 
 
-
-
-	resetCommentCount: function(a,r){
+	resetCommentCount: function (a, r) {
 		var req = r && r.request;
-		console.warn('resetting count to 0\n',r && r.responseText);
-		if( req ){
-			r = this.store.findRecord('id',req.ntiid,0,false,true,true);
-			if( r ){
-				r.set('comments',0);
+		console.warn('resetting count to 0\n', r && r.responseText);
+		if (req) {
+			r = this.store.findRecord('id', req.ntiid, 0, false, true, true);
+			if (r) {
+				r.set('comments', 0);
 			}
 		}
 	},
 
 
-	loadPageInfo: function(r){
+	loadPageInfo: function (r) {
 		var ntiid = r.getId();
 
-		$AppConfig.service.getPageInfo(ntiid,this.getCommentCount,this.resetCommentCount,this);
+		$AppConfig.service.getPageInfo(ntiid, this.getCommentCount, this.resetCommentCount, this);
 	},
 
 
-	showCurtain: function(){
+	showCurtain: function () {
 		var c = this.getLeaveCurtain(),
-			a = c? 'hide':'show',
-			el = this[(c ? 'screen':'curtain')+'El'];
+			a = c ? 'hide' : 'show',
+			el = this[(c ? 'screen' : 'curtain') + 'El'];
 
 		if(this.curtainEl.isMasked()){
 			console.log('unmasking curtain');
@@ -283,10 +288,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	hideCurtain: function(){
+	hideCurtain: function () {
 		var c = this.getLeaveCurtain(),
-			a = c? 'show':'hide',
-			el = this[(c ? 'screen':'curtain')+'El'];
+			a = c ? 'show' : 'hide',
+			el = this[(c ? 'screen' : 'curtain') + 'El'];
 
 		if(this.curtainEl.isMasked()){
 			console.log('Unmasking curtain');
@@ -303,14 +308,14 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	onSelectChange: function(s,rec){
+	onSelectChange: function (s, rec) {
 		var p = rec.get('poster') || null;
 
-		if(p){
-			p = 'url('+p+')';
+		if (p) {
+			p = 'url(' + p + ')';
 		}
 
-		if(this.player){
+		if (this.player) {
 			this.player.stopPlayback();
 		}
 
@@ -319,7 +324,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			this.curtainEl.setStyle({backgroundImage:p});
 			this.playBlurEl.setStyle({backgroundImage:p});
 			this.playLabelEl.update(rec.get('label'));
-			this.playBtnEl[rec.get('hasTranscripts')?'addCls':'removeCls']('transcripts');
+			this.playBtnEl[rec.get('hasTranscripts') ? 'addCls' : 'removeCls']('transcripts');
 		}
 		else {
 			console.warn('noes!');
@@ -327,18 +332,18 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 	},
 
 
-	onCurtainClicked: function(e){
+	onCurtainClicked: function (e) {
 		e.stopEvent();
 
 		var m = this.getSelectionModel().getSelection()[0],
 			t = m && this.getStore().indexOf(m), reader;
 
-		if (!m || t<0 || !this.player){
+		if (!m || t < 0 || !this.player) {
 			return;
 		}
 
-		if(e.getTarget('.launch-player')){
-            reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
+		if (e.getTarget('.launch-player')) {
+			reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
 			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), reader.basePath);
 			return;
 		}

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.outline.View',{
+Ext.define('NextThought.view.course.outline.View', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-outline',
 
@@ -6,10 +6,14 @@ Ext.define('NextThought.view.course.outline.View',{
 	cls: 'course-outline',
 	preserveScrollOnRefresh: true,
 
-    requires: [
-        'NextThought.modules.TouchSender',
-        'NextThought.view.course.outline.TouchHandler'
-    ],
+	requires: [
+		'NextThought.modules.TouchSender',
+		'NextThought.view.course.outline.TouchHandler'
+	],
+
+	mixins: [
+		'NextThought.mixins.ModuleContainer'
+	],
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
@@ -23,46 +27,48 @@ Ext.define('NextThought.view.course.outline.View',{
 	},
 
 
-	getTargetEl: function(){
+	getTargetEl: function () {
 		return this.frameBodyEl;
 	},
 
-	overItemCls:'over',
-	itemSelector:'.course-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [
+	overItemCls: 'over',
+	itemSelector: '.course-row',
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'course-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
-			{cls: 'label', html:'{label}'},
-			{tag:'tpl', 'if':'startDate', cn: {cls:'date', cn:[
-				{html:'{startDate:date("M")}'},
-				{html:'{startDate:date("j")}'}
+			{cls: 'label', html: '{label}'},
+			{tag: 'tpl', 'if': 'startDate', cn: {cls: 'date', cn: [
+				{html: '{startDate:date("M")}'},
+				{html: '{startDate:date("j")}'}
 			]}}
 		]}
-	]}),{
-		is: function(values){
+	]}), {
+		is: function (values) {
 		}
 	}),
 
 
 	listeners: {
-		itemclick: function() { this.fromClick = true; },
-		beforeselect: function(s,r){
+		itemclick: function () {
+			this.fromClick = true;
+		},
+		beforeselect: function (s, r) {
 			var pass = r.get('type') !== 'unit',
-				store= s.getStore(),
+				store = s.getStore(),
 				last = s.lastSelected || store.first(), next;
 
-			if(this.fromKey && !pass){
+			if (this.fromKey && !pass) {
 				last = store.indexOf(last);
 				next = store.indexOf(r);
 				next += ((next - last) || 1);
 
 				//do the in the next event pump
-				Ext.defer(s.select,1,s,[next]);
+				Ext.defer(s.select, 1, s, [next]);
 			}
 			return pass;
 
 		},
-		select: function(s,r) {
-			if( this.fromClick || this.fromKey ) {
+		select: function (s, r) {
+			if (this.fromClick || this.fromKey) {
 				this.fireEvent('set-location', r.getId());
 			}
 			delete this.fromClick;
@@ -71,79 +77,71 @@ Ext.define('NextThought.view.course.outline.View',{
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey,function(){me.fromKey=true;});
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
+			me.fromKey = true;
+		});
 	},
 
-	
-	afterRender: function(){
+
+	afterRender: function () {
 		this.callParent(arguments);
-		this.mon(this.frameBodyEl,'scroll','handleScrolling');
-        if(Ext.is.iPad){
-            this.buildModule('modules', 'touchSender', {container:this.up().down('.course-overview')});
-            this.buildModule('modules', 'touchSender', {container:this.up().down('.course-outline')});
-            //this.buildModule('modules', 'touchSender', {containers:[this.up().down('.course-overview'), this.up().down('.course-overview')]});
-
-            this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-outline'), left:true});
-            this.buildModule('outline', 'touchHandler', {container:this.up().down('.course-overview'), left:false});
-        }
+		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
+		if (Ext.is.iPad) {
+			this.buildModule('modules', 'touchSender', {container: this.up().down('.course-outline')});
+			this.buildModule('outline', 'touchHandler', {container: this.up().down('.course-outline'), left: true});
+		}
 	},
 
-    buildModule: function(ns, name,config){
-        var m = Ext.createByAlias(ns+'.'+name,Ext.apply(config)),
-            getterName = 'get'+Ext.String.capitalize(name);
 
-        this[getterName] = function(){return m;};
-    },
-
-	handleScrolling: function(){
+	handleScrolling: function () {
 		var selected = this.getSelectedNodes()[0],
 			selectedEl = Ext.get(selected);
 
-		if(selectedEl.getY() < this.frameBodyEl.getY()){
+		if (selectedEl.getY() < this.frameBodyEl.getY()) {
 			selectedEl.addCls('out-of-view');
-		}else{
+		} else {
 			selectedEl.removeCls('out-of-view');
 		}
 	},
 
 
-	clear: function(){
+	clear: function () {
 		this.bindStore('ext-empty-store');
 	},
 
-	maybeChangeStoreOrSelection: function(pageInfo, store){
-		var r,sel, C = ContentUtils,
+	maybeChangeStoreOrSelection: function (pageInfo, store) {
+		var r, sel, C = ContentUtils,
 			lineage = C.getLineage(pageInfo.getId()),
 			root = lineage.last();
 
-		if(this.store !== store){
+		if (this.store !== store) {
 			this.clear();
-			if( store ){
+			if (store) {
 				this.bindStore(store);
 			}
 		}
 
 		//start from the page we're on, and go up to find its associated course node...(TODO: look at the course and find the leaf)
-		while(!r && lineage.length){
-			console.log('lineage',lineage);
+		while (!r && lineage.length) {
+			console.log('lineage', lineage);
 			r = store.findRecord('NTIID', lineage.shift(), false, true, true);
 
 		}
 		//if we didn't find one, select the first item IF the page we're on matches the store's content.
-		if(!r){
+		if (!r) {
 			sel = this.getSelectionModel().getSelection()[0];
-			if(sel){
-				if(C.getLineage(sel.getId()).last() === root){
+			if (sel) {
+				if (C.getLineage(sel.getId()).last() === root) {
 					return;
 				}
 
 				console.warn('Danger! Selection returned a value from different content (should not be possible)');
 			}
-			console.debug('No record selected, defaulting to first lesson in: ',root);
-			r = store.findRecord('type','lesson',0,false,false,true);
+			console.debug('No record selected, defaulting to first lesson in: ', root);
+			r = store.findRecord('type', 'lesson', 0, false, false, true);
 		}
 
 		this.getSelectionModel().select(r);

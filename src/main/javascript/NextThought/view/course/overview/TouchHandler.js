@@ -3,20 +3,22 @@ Ext.define('NextThought.view.course.overview.TouchHandler', {
 	alias: 'overview.touchHandler',
 
 	setupHandlers: function () {
-		var videoList = this.container.frameBodyEl;
+		var videoList = this.container.down('.course-overview-video-section').getTargetEl();
 
-		this.container.el.dom.on('touchScroll', function (ele, deltaY) {
-			this.container.el.dom.scrollBy(0, deltaY, false);
+		// Make the main overview view and the videoList subview scrollable
+		this.container.on('touchScroll', function (ele, deltaY) {
+			if (videoList.isAncestor(ele)) {
+				videoList.scrollBy(0, deltaY, false);
+			}
+			else {
+				this.container.scrollBy(0, deltaY, false);
+			}
 		}, this);
-		this.container.el.dom.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
-		this.container.el.dom.on('touchTap', this.clickElement);
-		this.container.el.dom.on('touchElementAt', this.elementAt);
+		this.container.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
+		this.container.on('touchTap', this.clickElement);
+		this.container.on('touchElementAt', this.elementAt);
 
-		videoList.on('touchScroll', function (ele, deltaY) {
-			videoList.scrollBy(0, deltaY, false);
-		}, this);
+		// Make the videoList scrollable
 		videoList.on('touchElementIsScrollable', this.elementIsAlwaysScrollable);
-//		videoList.on('touchTap', this.clickElement);
-//		videoList.on('touchElementAt', this.elementAt);
 	}
 });
