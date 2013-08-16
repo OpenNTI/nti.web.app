@@ -5,8 +5,14 @@ Ext.define('NextThought.util.Content', {
 
 	requires:['NextThought.Library'],
 
-	timers: {},
-	cache: {},
+	constructor: function(){
+		this.callParent(arguments);
+		Ext.apply(this,{
+			timers: {},
+			cache: {},
+			SYM_LINK_MAP: {}
+		});
+	},
 
 	spider: function (ids, finish, parse, pageFailure) {
 		if (!Ext.isArray(ids)) {
@@ -411,7 +417,7 @@ Ext.define('NextThought.util.Content', {
 		var leaf = this.find(ntiid) || {},
 			node = leaf.location,
 			lineage = [],
-			id;
+			id, link;
 
 		while(node){
 
@@ -420,12 +426,75 @@ Ext.define('NextThought.util.Content', {
 				lineage.push(id);
 			}
 			else if( node.nodeType !== Node.DOCUMENT_NODE ){
-				console.warn( node, 'no id');
+				console.error( node, 'no id');
+				break;
 			}
-			node = node.parentNode;
+
+			link = this.isSymLinked(node,leaf.toc);
+			if(link){
+				console.warn('Using SymLinked Parent Node as Lineage instead of ACTUAL parentNode for ',node.getAttribute('ntiid'));
+				node = link;
+			}
+			else {
+				node = node.parentNode;
+			}
 		}
 
 		return lineage;
+	},
+
+
+	/**
+	 * A topic is considered symbolically linked to another node IF and ONLY IF we find a related(with content's NS)
+	 * node which is NOT parented by the root(toc) node AND has a SIBLING object tag that links to the related tag.
+	 *
+	 * First find this: (where node-id is the node we are currently examining)
+	 * <content:related ntiid="ref-id" href="node-id" type="application/vnd.nextthought.content"/>
+	 *
+	 * Filter that resulting list by making sure there is an ntiid attribute, and that its parentNode is not the toc AND
+	 * we find one (and only one) object tag where the related tag's ntiid is its ntiid:
+	 * <object mimeType="application/vnd.nextthought.relatedworkref" ntiid="ref-id" />
+	 *
+	 *
+	 * @param node
+	 * @param toc
+	 * @returns {*} Returns the linked parent or false
+	 */
+	isSymLinked: function(node,toc){
+		var EA = Ext.Array,
+			map = this.SYM_LINK_MAP,
+			id = node.getAttribute? node.getAttribute('ntiid') : null,
+			nodes;
+
+		if(!id || $AppConfig.enableSymbolicLinkingNav){return false;}
+
+
+		if(!map.hasOwnProperty(id)){
+			nodes = EA.filter(EA.toArray(toc.getElementsByTagNameNS( 'http://www.nextthought.com/toc','related')),function(a){
+				var pass = false,
+					aId = a.getAttribute && a.getAttribute('ntiid'),
+					type = a.getAttribute && a.getAttribute('type') === 'application/vnd.nextthought.content',
+					p = a.parentNode;
+
+				if(type && p && p.tagName !=='toc' && aId && a.getAttribute('href')===id){
+					pass = !!Ext.fly(a.parentNode).first('object[mimeType$=relatedworkref][ntiid="'+aId+'"]',true);
+				}
+
+				return pass;
+			});
+
+			if(!nodes || nodes.length===0){
+				map[id] = false;
+			}
+			else {
+				map[id] = nodes[0].parentNode;//first occurance
+				if(nodes.length>1){
+					console.error('I am not able to process multi-homed content references! First occurance of ref is being used as home/parent link',id,nodes);
+				}
+			}
+		}
+
+		return map[id];
 	},
 
 
