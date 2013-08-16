@@ -130,8 +130,17 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView', {
 	afterRender: function () {
 		this.callParent(arguments);
 
-		var avatar = this.record.get('Creator').get('avatarURL');
-		this.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
+		function setAvatar(user){
+			avatar = user.get('avatarURL');
+			me.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
+		}
+
+		var creator = this.record.get('Creator'), me = this, avatar;
+		if(creator.isModel){
+			setAvatar(creator);
+			return;
+		}
+		UserRepository.getUser(creator, setAvatar, me);
 	}
 
 })
