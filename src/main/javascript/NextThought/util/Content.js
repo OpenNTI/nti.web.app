@@ -325,7 +325,7 @@ Ext.define('NextThought.util.Content', {
 	 * like it would contain the following ntiid.
 	 * @param ntiid A content ntiid or sub ntiid (question ntiid)
 	 */
-	purchasableForContentNTIID: function(ntiid){
+	purchasableForContentNTIID: function(ntiid, wantsItem){
 		function fn(rec){
 			var items = rec.get('Items') || [], found = false;
 			Ext.each(items, function(i){
@@ -365,6 +365,10 @@ Ext.define('NextThought.util.Content', {
 			purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
 		}
 		console.log('purchasable: ', purchasable);
+
+		if(Ext.isFunction(wantsItem)){
+			return wantsItem.apply(this, [purchasable]);
+		}
 		return purchasable;
 	},
 

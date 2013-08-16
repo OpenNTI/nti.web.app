@@ -105,7 +105,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 					}
 				}
 				else{
-					if(resp === 404 && p){
+					if(resp.status === 404 && p){
 						me.handlePurchasable(p, el);
 						Ext.callback(fin);
 						return;

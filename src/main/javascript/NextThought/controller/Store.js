@@ -191,7 +191,15 @@ Ext.define('NextThought.controller.Store', {
 
 
 	maybeShowPurchasableForContent: function (sender, ntiid) {
-		var purchasable = ContentUtils.purchasableForContentNTIID(ntiid);
+		function filter(item){
+			// For course, we will only care about the ones that we're not enrolled in,
+			// since we want to decide if we should prompt the user with an enroll message.
+			if(item instanceof NextThought.model.Course){
+				return item.getLink('enroll');
+			}
+			return true;
+		}
+		var purchasable = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 		if (purchasable) {
 			if(purchasable instanceof  this.getCourseModel()){
 				this.showEnrollment(purchasable);
