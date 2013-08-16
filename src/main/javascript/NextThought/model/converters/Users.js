@@ -12,15 +12,15 @@ Ext.define('NextThought.model.converters.Users', {
 			try {
 				if(v) {
 					Ext.each(v, function(o){
-						var p =
-							typeof(o)==='string' ?
-								o : o.get ?
-									o.get('Username') : o.Username ?
-										o.Username : null;
+						var p = typeof o ==='string' ? o : ((o.get && o.get('Username')) || o.Username);
 						if(!p) {
 							console.warn("WARNING: Could not handle Object: ", o, a);
 						}
 						else  {
+							if(o.Username){
+								UserRepository.precacheUser(o);
+							}
+
 							u.push(p);
 						}
 					});
