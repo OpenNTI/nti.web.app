@@ -88,12 +88,39 @@ Ext.define('NextThought.view.course.dashboard.widgets.SupplementalMaterialItem',
 		callback: null
 	},
 
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'tile-title', html: 'Resource'},
+		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail})'} },
+//		{ cls: 'controls', cn: [
+//			{ cls: 'favorite' },
+//			{ cls: 'like' }
+//		]},
+		{ cls: 'meta', cn: [
+			{ cls:'title', html:'{title}' },
+			{ cls:'byline', html:'By {creator}' },
+			{ cls:'description', html:'{description}' }
+		]}
+	]),
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.loadContainer();
 		this.loadContainer = Ext.emptyFn;
 		this.renderTotal = this.appendTotal;
 		this.appendTotal = this.totalLoaded;
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		
+		var tileTitle = this.el.down('.tile-title'),
+			section = this.node.getAttribute('section'),
+			textMap = { 'additional': 'additional', 'required': 'required'};
+
+		if(section){
+			tileTitle.update('Resource - '+textMap[section]);
+		}
+
 	},
 
 	totalLoaded: function(total){

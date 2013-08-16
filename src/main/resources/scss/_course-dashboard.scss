@@ -364,6 +364,16 @@
 
 	&.content-link {
 		height: 200px;
+		padding-top: 20px !important;
+
+		.tile-title{
+			color: $secondary-grey;
+			font: normal 700 10px/15px $font;
+			text-transform: uppercase;
+			position: absolute;
+			top: 10px;
+			left: 75px;
+		}
 
 		a, a:link, a:visited, a:active {
 			outline: 0;
@@ -376,7 +386,7 @@
 			position: absolute;
 			width: 60px;
 			height: 80px;
-			top: 0; left: 0;
+			top: 5px; left: 5px;
 			box-shadow: 0 0 4px 0 rgba(0,0,0,0.4);
 			background:{
 				size: cover;
@@ -404,15 +414,15 @@
 
 			.description{
 				position: absolute;
-				top: 85px;
-				left: 5px;
-				right: 5px;
+				top: 90px;
+				left: 10px;
+				right: 10px;
 				white-space: normal;
 				font-size: 13px;
 			}
 
 			.comment{
-				bottom: 0;
+				bottom: 5px;
 				left: 5px;
 			}
 		}
@@ -571,6 +581,11 @@
 
 .top-discussion-view{
 	padding: 10px !important;
+	background: #ffffff !important;
+
+	.tile-title{
+		color: $secondary-grey;
+	}
 
 	.controls{
 		position: absolute;
@@ -597,8 +612,10 @@
 		z-index: 1;
 		float: left;
 		width: 100%;
+		color: $tertiary-grey;
 
 		.by{
+			color: $primary-blue;	
 			max-width: 150px;
 			overflow: hidden;
 			display: inline-block;
@@ -608,49 +625,88 @@
 
 		.title {
 			margin-right: 55px;
+			color: $primary-grey;
 		}
 	}
 
 	.snippet{
+		color: $secondary-grey;
 		clear: both;
 		position: relative;
 		z-index: 1;
+		max-height: 125px !important;
+
+		.ellipse{
+			div{
+				background-color: $primary-blue;
+			}
+		}
+	}
+
+	.count{
+		color: $primary-blue;
 	}
 }
+
+.instructor-forum-tile{
+	background-color: #54b6ba !important;
+
+	.tile-title{
+		margin-top: 10px;
+		color: rgba(255,255,255,0.5);
+	}
+
+	.title{
+		color: rgba(255,255,255,1);
+	}
+
+	.meta{
+		color: rgba(0,0,0,0.3);
+	}
+
+	.snippet{
+		color: rgba(255,255,255,0.7);
+		
+		.ellipse{
+			div{
+				background-color: rgba(255,255,255,0.7);
+			}
+		}
+	}
+
+	.count{
+		color: rgba(0,0,0,0.3);
+	}
+}
+
 
 .instructor-forum-view, .top-discussion-view {
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
-	background: #ffffff !important;
 	padding: 0 25px 25px 25px;
 	overflow: hidden;
 	cursor: pointer;
 
-	.controls{
-		@include like-and-favorite;
+	.tile-title{
+		font: normal 700 10px/15px $font;
+		text-transform: uppercase;
 	}
 
-	.tile-title{
-		margin-top: 15px;
-		font: normal 700 10px/15px $font;
-		color: $tertiary-grey;
-		text-transform: uppercase;
+	.controls{
+		@include like-and-favorite;
 	}
 
 	.title{
 		font: normal 400 25px/30px 'Open Sans Condensed', $font;
 		overflow: hidden;
 		@include ellipse;
-		color: $primary-grey;
 	}
 
 	.meta{
 		font: normal 700 10px/15px $font;
-		color: $tertiary-grey;
 		text-transform: uppercase;
 
-		.by{
-			color: $primary-blue;			
+		.by{		
 			&::after{
 				content: ' ';
 			}
@@ -660,7 +716,6 @@
 	.snippet{
 		margin-top: 5px;
 		font-size: 15px;
-		color: $secondary-grey;
 		overflow: hidden;
 		word-wrap: break-word;
 		max-height: 100px;
@@ -674,7 +729,6 @@
 				width: 3px;
 				height: 3px;
 				border-radius: 3px;
-				background-color: $primary-blue;
 				margin: 0 3px 3px 0;
 			}
 		}
@@ -690,6 +744,5 @@
 		position: absolute;
 		font: normal 600 11px/14px $font;
 		bottom: 5px;
-		color: $primary-blue;
 	}
 }

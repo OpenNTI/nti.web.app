@@ -100,6 +100,7 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView',{
 				{ cls: 'favorite {favoriteState}' },
 				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
 			]},
+			{ cls: 'tile-title', html: 'discussion'},
 			{ cls: 'avatar'},
 			{cls: 'meta', cn:[
 				{cls: 'title', html: '{title}'},
@@ -110,6 +111,8 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView',{
 			{cls: 'count', html: '{PostCount:plural("Comment")}'}
 		]
 	),
+
+	snippetSize: 118,
 
 	renderSelectors:{
 		'avatar': '.avatar',

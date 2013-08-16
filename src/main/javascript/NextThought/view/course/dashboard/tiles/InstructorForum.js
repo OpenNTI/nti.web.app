@@ -14,6 +14,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.InstructorForum',{
 		}
 	},
 
+	cls: 'instructor-forum-tile',
 	defaultType: 'course-dashboard-tiles-instructor-forum-view',
 
 	config:{

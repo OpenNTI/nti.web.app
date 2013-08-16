@@ -30,7 +30,7 @@ Ext.define('NextThought.view.course.dashboard.widgets.AbstractForumView',{
 			content;
 			
 		if(snip.getHeight() < snip.dom.scrollHeight){
-			content = ContentUtils.getHTMLSnippet(snip.getHTML(),150);
+			content = ContentUtils.getHTMLSnippet(snip.getHTML(), this.snippetSize || 150);
 			content = content + "<div class='ellipse'><div></div><div></div><div></div></div>";
 			snip.setHTML(content);
 			snip.addCls('overflowing');
