@@ -1,17 +1,10 @@
-//Animate Mixin Plugin
 
-@mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration:null) {
-	$value: $name $duration $delay $function $iteration $mode;
-	@if $iteration==null {
-		$value: $name $duration $delay $function $mode;
-  	}
-	@include experimental(animation, $value);
-	.disable-animations &,
-	.x-safari5 & {
-		@include experimental(animation, none);
-	}
+@mixin blur-effect() {
+	filter: url(#blur-effect);//moz
+	//filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=8);//IE
+	filter: blur(add = 0, direction = 0, strength = 10);//IE
+	-webkit-filter: blur(8px);
 }
-
 
 @mixin loadingSpinner($top:8px, $left: 10px){
 	display: block;

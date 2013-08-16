@@ -315,8 +315,7 @@
 							size: 512px auto;
 							repeat: no-repeat;
 						}
-						-webkit-filter: blur(8px);
-						filter: url(#blur-effect);
+						@include blur-effect();
 					}
 
 					.launch-player {
