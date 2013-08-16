@@ -196,7 +196,6 @@ Ext.define( 'NextThought.view.content.View', {
 
 	onNavigationAborted: function(resp, ntiid) {
 		function fin(cid, locationInfo){
-			debugger;
 			if(!cid){
 				me.courseBook.layout.setActiveItem('main-reader-view');
 				me.reader.setSplash();
