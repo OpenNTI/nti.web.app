@@ -228,7 +228,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
     enumerateTopicSiblings: function (node, items, parent) {
-        var current = node, num = 1, text,
+        var me = this, current = node, num = 1, text,
             type = '1', separate = '. ', suppress = false, nodes,
             p, n = 'numbering', sep = 'separator', sup = 'suppressed';
 
@@ -253,7 +253,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	            return;
 	        }
 
-            text = suppress ? node.getAttribute('label') : (this.styleList(num, type) + separate + node.getAttribute('label'));
+            text = suppress ? node.getAttribute('label') : (me.styleList(num, type) + separate + node.getAttribute('label'));
 
             items.push({
                 text: text,
