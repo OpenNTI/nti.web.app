@@ -159,6 +159,11 @@ Ext.define('NextThought.view.content.Navigation', {
         this.enumerateTopicSiblings(currentNode, cfg.items, parent);
 //		}
 
+
+	    if(Ext.isEmpty(cfg.items)){
+		    return;
+	    }
+
         m = menus[key] = Ext.widget('jump-menu', Ext.apply({}, cfg));
 
         if (Ext.is.iPad) {
@@ -224,7 +229,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
     enumerateTopicSiblings: function (node, items, parent) {
         var current = node, num = 1, text,
-            type = '1', separate = '. ', suppress = false,
+            type = '1', separate = '. ', suppress = false, nodes,
             p, n = 'numbering', sep = 'separator', sup = 'suppressed';
 
         if (parent) {
@@ -237,26 +242,18 @@ Ext.define('NextThought.view.content.Navigation', {
             }
         }
 
-        if (!current.parentNode) {
-            console.warn('null parentNode in toc');
+	    nodes = ContentUtils.getSiblings(node);
+
+        if (Ext.isEmpty(nodes)) {
             return;
         }
 
-        while (Ext.fly(node).prev()) {
-            node = Ext.fly(node).prev(null, true);
-        }
-
-        for (node; node.nextSibling; node = node.nextSibling) {
-            if (!/topic/i.test(node.tagName)) {
-                continue;
-            }
-
-	        if(node.getAttribute('suppressed')==='true'){
-	            continue;
+        Ext.each(nodes,function(node) {
+            if (!/topic/i.test(node.tagName) || node.getAttribute('suppressed')==='true'){
+	            return;
 	        }
 
             text = suppress ? node.getAttribute('label') : (this.styleList(num, type) + separate + node.getAttribute('label'));
-
 
             items.push({
                 text: text,
@@ -264,7 +261,7 @@ Ext.define('NextThought.view.content.Navigation', {
                 cls: node === current ? 'current' : ''
             });
             num++;
-        }
+        });
     },
 
 

@@ -408,6 +408,55 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	getSiblings:function(node){
+		var p = node && node.parentNode,
+			ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
+			nodes = [],
+			info = this.find(ntiid) || {},
+			link = this.isSymLinked(node,info.toc),
+			children, courseNode;
+
+		courseNode = info.toc.querySelector('unit[ntiid="'+ntiid+'"],lesson[topic-ntiid="'+ntiid+'"]');
+		if(courseNode){
+			p = courseNode.parentNode;
+			link = null;
+		}
+
+		p = link || p;
+		children = p && p.getChildren();
+
+
+		Ext.each(children||[],function(n){
+			var ntiid;
+			if(/topic/i.test(n.tagName)){
+				nodes.push(n);
+				return;
+			}
+
+			if(/content:related/i.test(n.tagName) && /^application\/vnd.nextthought\.content$/i.test(n.getAttribute('type'))){
+				ntiid = n.getAttribute('href');
+			} else if(/lesson/i.test(n.tagName)) {
+				ntiid = n.getAttribute('topic-ntiid');
+			} else {
+				return;
+			}
+
+			if(!ParseUtils.isNTIID(ntiid)){
+				console.warn('bad ntiid in content!!');
+				return;
+			}
+
+			n = info.toc.querySelector('topic[ntiid="'+ntiid+'"]');
+			if( n ) {
+				nodes.push(n);
+			}
+		});
+
+
+		return nodes;
+	},
+
+
 	getLineage: function(ntiid, justLabels){
 		if(!ntiid){
 //			Ext.Error.raise('No ntiid given');
