@@ -47,6 +47,7 @@ Ext.define('NextThought.view.content.Navigation', {
             C = ContentUtils,
             loc = C.getLocation(ntiid),
             lineage = C.getLineage(ntiid),
+            names = C.getLineage(ntiid,true),
             parent = lineage.last(),
             page = lineage[0] ? C.getLocation(lineage[0]) : null,
             path = me.getBreadcrumbPath(), i = 0;
@@ -70,6 +71,9 @@ Ext.define('NextThought.view.content.Navigation', {
         lineage.pop(); // don't let the book show
         // first was the 2nd item in the array... which is where the 'back' arrow will take you
         this.upEl[(!lineage.first()) ? 'hide' : 'show']();
+	    this.upEl.set({
+		    'data-qtip':'Go up to '+names[1]
+	    });
 
         me.cleanupMenus();
 
