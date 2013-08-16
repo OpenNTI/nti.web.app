@@ -237,12 +237,16 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
-	isPlaying: function(){
-		var status = this.queryPlayer(),
-			state;
+	getPlayerState: function(){
+		var status = this.queryPlayer();
 		if(!status) { return false; }
 
-		state = status.state;
+		return status.state;
+	},
+
+
+	isPlaying: function(){
+		var state = this.getPlayerState();
 
 		return state === 1 || state === 3;
 	},
@@ -335,7 +339,7 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	setVideoAndPosition: function(videoId,startAt){
-		var pause = (this.isPlaying() === false),
+		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
 		this.pauseAnyOtherVideoPlaying();
@@ -364,8 +368,13 @@ Ext.define('NextThought.view.video.Video',{
 			}
 		}
 
-		if(pause || !videoId){ console.log('pausing'); this.issueCommand(this.activeVideoService,'pause'); }
-		else{ this.issueCommand(this.activeVideoService,'play'); }
+		if(state !== false && state !== 1){
+			//This crap doesn't belong here.  If as part of a load we must force a player into a particular state,
+			//b\c for instance it always autoplays or something stupid like that that logic should be hidden
+			//inside that particular player state.
+			if(pause || !videoId){ console.log('Doing uber stupid pause on load.  What is this happening here for.'); this.issueCommand(this.activeVideoService,'pause'); }
+			else{ this.issueCommand(this.activeVideoService,'play'); }
+		}
 	},
 
 

@@ -215,9 +215,9 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		});
 
 		this.mon(p,{
-			'player-command-play':'hideCurtain',
-			'player-command-stop':'showCurtain',
-			'player-command-pause':'showCurtain',
+			//'player-command-play':'hideCurtain',
+			//'player-command-stop':'showCurtain',
+			//'player-command-pause':'showCurtain',
 			'player-event-play':'hideCurtain',
 			'player-event-ended':'showCurtain',
 			'player-event-pause':'showCurtain',
@@ -269,10 +269,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			el = this[(c ? 'screen':'curtain')+'El'];
 
 		if(this.curtainEl.isMasked()){
+			console.log('unmasking curtain');
 			this.curtainEl.unmask();
 		}
 
 		if(el){
+			console.log('Showing curtain');
 			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
 		}
 	},
@@ -284,10 +286,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			el = this[(c ? 'screen':'curtain')+'El'];
 
 		if(this.curtainEl.isMasked()){
+			console.log('Unmasking curtain');
 			this.curtainEl.unmask();
 		}
 
 		if(el){
+			console.log('Hiding curtain view');
 			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
 		}
 	},
@@ -332,6 +336,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			return;
 		}
 
+		console.log('Masking z curtain');
 		this.curtainEl.mask('Loading...');
 
 		this.player.playlistSeek(t);

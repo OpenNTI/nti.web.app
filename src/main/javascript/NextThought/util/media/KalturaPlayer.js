@@ -375,6 +375,20 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.log('SOURCE READY', arguments);
 	},
 
+
+	readyToPlayHandler: function(){
+		console.log('This is ready to play');
+		this.readyHandler();
+	},
+
+	entryReadyHandler: function(){
+		console.log('This entry is ready');
+	},
+
+	mediaLoadedHandler: function(){
+		console.log('This media is loaded');
+	},
+
 	playerCode:{
 
 		inject: function inject(){
@@ -416,7 +430,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			function playerReady(){
 				var player = document.getElementById(playerId),
-					events = ['mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError'],
+					events = ['mediaLoaded', 'entryReady', 'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange', 'playerUpdatePlayhead','playerPlayEnd','mediaLoadError'],
 					i = events.length - 1, o;
 
 				for(i; i>=0; i--){
