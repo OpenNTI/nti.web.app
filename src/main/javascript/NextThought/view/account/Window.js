@@ -126,6 +126,9 @@ Ext.define('NextThought.view.account.Window',{
 	},
 
 
+	syncHeight: Ext.emptyFn,
+
+
 	changeView: function(btn){
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
