@@ -125,6 +125,15 @@ Ext.define('NextThought.view.contacts.Search', {
 		Ext.defer(function () {
 			Ext.getBody().on('click', me.detectBlur, me);
 		}, 1);
+
+		// On iPad, window should scroll back to top after keyboard is dismissed
+		if (Ext.is.iPad) {
+			me.mon(me.el.down('input'), {
+				blur: function () {
+					window.scrollTo(0, 0);
+				}
+			});
+		}
 	},
 
 

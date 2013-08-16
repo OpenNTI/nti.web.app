@@ -1,31 +1,31 @@
-Ext.define('NextThought.view.account.contacts.createlist.Window',{
-    extend: 'NextThought.view.window.Window',
-    alias: 'widget.createlist-window',
+Ext.define('NextThought.view.account.contacts.createlist.Window', {
+	extend: 'NextThought.view.window.Window',
+	alias: 'widget.createlist-window',
 
-    requires: [
-        'NextThought.view.account.Header',
-        'NextThought.view.account.contacts.createlist.Main'
-    ],
+	requires: [
+		'NextThought.view.account.Header',
+		'NextThought.view.account.contacts.createlist.Main'
+	],
 
-    cls: 'createlist-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: true,
-    resizable: false,
-    dialog: true,
-    closeAction: 'destroy',
+	cls: 'createlist-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: true,
+	resizable: false,
+	dialog: true,
+	closeAction: 'destroy',
 
-    width: 480,
+	width: 480,
 
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
 
-    items: [
-        {xtype: 'container', layout: {type: 'absolute'}, items: [
+	items: [
+		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
 				xtype: 'account-header-view',
@@ -35,20 +35,27 @@ Ext.define('NextThought.view.account.contacts.createlist.Window',{
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}
 		]},
-        {xtype: 'createlist-main-view'}
-    ],
+		{xtype: 'createlist-main-view'}
+	],
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
-		this.mon( this.el.down('.close'), 'click', this.close, this);
-	    this.el.down('input').focus(200);
-    },
+		this.mon(this.el.down('.close'), 'click', this.close, this);
+		this.el.down('input').focus(200);
+		if (Ext.is.iPad) {
+			this.mon(this.el.down('input'), {
+				blur: function () {
+					window.scrollTo(0, 0);
+				}
+			});
+		}
+	},
 
-	getListName: function(){
+	getListName: function () {
 		return this.query('createlist-main-view')[0].getListName();
 	},
 
-	showError: function(errorText){
+	showError: function (errorText) {
 		return this.query('createlist-main-view')[0].showError(errorText);
 	}
 });

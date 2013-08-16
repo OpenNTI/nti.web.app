@@ -24,7 +24,7 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 				owner.mon(searchButtonEl, 'click', owner.toggleSearch, owner);
 				owner.searchBtn = searchButtonEl;
 
-				//Just in case the kiddos make it through to here don't give them search
+//Just in case the kiddos make it through to here don't give them search
 				if (!$AppConfig.service.canFriend()) {
 					searchButtonEl.hide();
 				}
