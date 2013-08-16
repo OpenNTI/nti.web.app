@@ -2,6 +2,21 @@ Ext.define('NextThought.view.course.info.View',{
 	extend: 'Ext.Component',
 	alias: 'widget.course-info',
 	cls: 'make-white',
+    requires: [
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
+    ],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
+
+    afterRender: function(){
+        this.buildModule('modules', 'touchSender');
+        this.buildModule('modules', 'touchHandler', {getPanel: function(){
+            return this.container.el;
+        }});
+    },
 
 	setPage: function(ntiid){
 		this.hasInfo = !!ntiid;
