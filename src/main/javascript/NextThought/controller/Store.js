@@ -345,11 +345,11 @@ Ext.define('NextThought.controller.Store', {
 				if(!s){
 					console.log(r.responseText);
 					win.showError('An unknown error occurred.  Please try again later.');
-					win.setConfirmState(false)
+					win.setConfirmState(false);
 					return;
 				}
 
-				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course})
+				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
 			});
 			return;
 		}
