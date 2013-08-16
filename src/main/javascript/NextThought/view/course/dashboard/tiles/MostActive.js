@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	statics: {
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
-			var me = this;
+			/*var me = this;
 
 			function onSummaryFailed(){
 				console.error('Summary failed to load:',arguments);
@@ -55,7 +55,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 				Ext.Ajax.request(req);
 			}
 
-			loadSummary();
+			loadSummary();*/
+			Ext.callback(finish);
 		}
 
 	},
