@@ -89,7 +89,7 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		}
 		else {
 			console.warn('The YouTube Player experienced an unrecoverable error.');
-			this.fireEvent('player-error', 'youtube');
+			this.fireEvent('unrecoverable-player-error', 'youtube');
 		}
 	},
 

@@ -211,7 +211,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			playlist: this.playlist,
 			renderTo: this.screenEl,
 			playerWidth: this.getPlayerWidth(),
-			floatParent: this
+			floatParent: this,
+			playlistIndex: this.getSelectedVideoIndex()
 		});
 
 		this.on({
@@ -226,7 +227,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 			'player-event-play':'hideCurtain',
 			'player-event-ended':'showCurtain',
 			'player-event-pause':'showCurtain',
-			'player-error':'showCurtain'
+			'player-error':'onPlayerError'
 		});
 
 		this.relayEvents(p,[
@@ -265,6 +266,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 		var ntiid = r.getId();
 
 		$AppConfig.service.getPageInfo(ntiid,this.getCommentCount,this.resetCommentCount,this);
+	},
+
+
+	onPlayerError: function(){
+		this.showCurtain();
+		alert('An error occurred playing the video.  Please try again later.');
 	},
 
 
@@ -309,7 +316,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 
 	onSelectChange: function(s,rec){
-		var p = rec.get('poster') || null;
+		var p = rec.get('poster') || null, idx;
 
 		if(p){
 			p = 'url('+p+')';
@@ -317,7 +324,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos',{
 
 		if(this.player){
 			this.player.stopPlayback();
-			this.player.playlistSeek(this.getSelectedVideoIndex(rec));
+			idx = this.getSelectedVideoIndex(rec);
+			if(idx >= 0){
+				this.player.playlistSeek(idx);
+			}
+			else{
+				console.error('No playlist index for rec', rec);
+			}
 		}
 
 		if( this.curtainEl ){

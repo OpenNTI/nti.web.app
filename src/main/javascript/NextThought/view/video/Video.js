@@ -16,7 +16,8 @@ Ext.define('NextThought.view.video.Video',{
 	listeners: {
 		destroy: 'cleanup',
 		'player-ready': 'playerReady',
-		'player-error': 'playerError'
+		'player-error': 'playerError',
+		'unrecoverable-player-error': 'unrecoverablePlayerError'
 	},
 
 	ASPECT_RATIO: 0.5625,
@@ -117,7 +118,7 @@ Ext.define('NextThought.view.video.Video',{
 		this.players = {};
 		Ext.applyIf(this.self, {playerBlacklist: []});
 
-		this.playlistIndex = 0;
+		this.playlistIndex = this.playlistIndex || 0;
 
 		this.renderData = Ext.apply(this.renderData||{},this.data);
 
@@ -222,9 +223,14 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
-	playerError: function(player){
+	unrecoverablePlayerError: function(player){
 		this.self.playerBlacklist.push(player);
 		this.playlistSeek(this.playlistIndex);
+	},
+
+
+	playerError: function(){
+		console.error('Player encountered an error');
 	},
 
 
@@ -425,9 +431,11 @@ Ext.define('NextThought.view.video.Video',{
 				this.playlistIndex = newIndex;
 				item = this.playlist[this.playlistIndex];
 				this.activeVideoService = item && item.activeSource().service;
+				console.log('Playlist seek setting active service to ', this.activeVideoService);
 				while( item && Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService) ){
 					if(!item.useNextSource()){
 						this.activeVideoService = 'none';
+						console.log('Active service is none');
 						this.currentVideoId = null;
 						this.maybeSwitchPlayers(this.activeVideoService);
 						return false;

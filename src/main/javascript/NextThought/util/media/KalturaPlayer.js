@@ -237,11 +237,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	load: function(source, offset){
+		console.log('Kaltura load called with source', source);
 		var kalturaData;
 
 		source = Ext.isArray(source) ? source[0] : source;
-
-		this.isReady = false;
 
 		//Removed per sean, seems to help the html5 player
 		//this.sendCommand('cleanMedia', undefined, true);
@@ -250,6 +249,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.currentStartAt = offset;
 
 		kalturaData = source.split(':');
+
+		if(Ext.isEmpty(kalturaData[1])){
+			this.dieOnPlay = true;
+			return;
+		}
+
+		delete this.dieOnPlay;
+
+		this.isReady = false;
+
 		//console.log(kalturaData, source, offset);
 		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
 		this.currentPosition = 0;
@@ -263,6 +272,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	play: function(){
+		if(this.dieOnPlay){
+			console.error('No video id provided with source');
+			this.fireEvent('player-error', 'kaltura');
+			return;
+		}
 		console.log('Firing play event');
 		this.sendCommand('doPlay');
 	},
