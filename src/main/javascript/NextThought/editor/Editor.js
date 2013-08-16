@@ -416,6 +416,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.objectControlsEl = el.down('.action.object-controls');
 		if (me.objectControlsEl) {
+            if(Ext.is.iPad){   //hide options for iPad for now
+                me.objectControlsEl.hide();
+            }
 			me.objectControlsEl.set({'data-tiptext': me.objectControlsEl.getAttribute('data-qtip')});
 			me.mon(me.objectControlsEl, 'click', me.toggleObjectsPopover, me);
 		}
