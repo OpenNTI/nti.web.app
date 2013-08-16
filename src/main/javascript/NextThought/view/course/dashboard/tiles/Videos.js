@@ -71,7 +71,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			renderTo: this.el,
 			items: items,
 			cls: 'dashboard-videos',
-			leaveCurtain: true,
+			//leaveCurtain: true,
 			tpl:Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
 					cls: 'video-row',
 					cn: [
