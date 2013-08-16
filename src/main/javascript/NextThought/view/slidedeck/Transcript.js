@@ -363,6 +363,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	selectSlide: function(slide){
+		if(!slide || !slide.isModel){
+			console.trace();
+			console.error('Unexpected argument, given', slide, 'expected a record');
+			return;
+		}
 		var s = this.query('slide-component'),
 			me = this,
 			targetImageEl;

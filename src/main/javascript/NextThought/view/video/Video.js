@@ -317,9 +317,9 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
-	resumePlayback: function(){
+	resumePlayback: function(force){
 		var me = this;
-		if(this.activeVideoService && !this.isPlaying()){
+		if(this.activeVideoService && (force || !this.isPlaying())){
 			this.pauseAnyOtherVideoPlaying();
 			this.issueCommand(this.activeVideoService,'play');
 			return true;

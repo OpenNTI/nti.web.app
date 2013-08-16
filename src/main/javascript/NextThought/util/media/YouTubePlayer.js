@@ -109,6 +109,7 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 			startSeconds:offset,
 			suggestedQuality:"medium"
 		});
+		this.pause();
 	},
 
 	play: function(){
@@ -128,6 +129,7 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	seek: function(offset, seekAhead){
 		this.currentStartAt = offset;
 		this.player.seekTo(offset, seekAhead);
+		this.pause();
 	},
 
 	stop: function(){

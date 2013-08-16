@@ -54,6 +54,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	initComponent: function(){
 		this.height = (this.playerHeight + 65);
 		this.callParent(arguments);
+		this.firstSelection = true;
 		//default the value
 		if(typeof(this.linkWithSlides) !== 'boolean'){
 			this.linkWithSlides = true;
@@ -220,10 +221,10 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	//called by the event of selecting something in the slide queue.
 	updateVideoFromSelection: function(queueCmp, slide){
-
 		var video,
 			hasNext = Boolean(slide.getSibling(1)),
-			hasPrev = Boolean(slide.getSibling(-1));
+			hasPrev = Boolean(slide.getSibling(-1)),
+			p = this.isPlaying();
 
 		this.nextEl[hasNext?'removeCls':'addCls']('disabled');
 		this.prevEl[hasPrev?'removeCls':'addCls']('disabled');
@@ -232,6 +233,14 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		video = slide.get('media');
 		this.playlistSeek(this.getVideoInfoIndex(video));
-		this.resumePlayback();
+		if(p || this.firstSelection){
+			this.resumePlayback(true);
+		}
+		delete this.firstSelection;
+	},
+
+
+	playOnLaunch: function(){
+		this.resumePlayback(true);
 	}
 });
