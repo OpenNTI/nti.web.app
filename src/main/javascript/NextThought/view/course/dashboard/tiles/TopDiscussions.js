@@ -118,7 +118,7 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView',{
 		]
 	),
 
-	snippetSize: 118,
+	snippetSize: 80,
 
 	renderSelectors:{
 		'avatar': '.avatar',
