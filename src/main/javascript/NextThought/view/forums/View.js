@@ -3,8 +3,14 @@ Ext.define( 'NextThought.view.forums.View', {
 	alias:	'widget.forums-view-container',
 	requires: [
 		'NextThought.layout.container.Stack',
-		'NextThought.view.forums.Board'
+		'NextThought.view.forums.Board',
+        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchHandler'
 	],
+
+    mixins: [
+        'NextThought.mixins.ModuleContainer'
+    ],
 
 	cls: 'forums-view',
 	layout: 'stack',
@@ -15,6 +21,13 @@ Ext.define( 'NextThought.view.forums.View', {
 		this.callParent(arguments);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		this.mon(this, 'beforeactivate', this.onBeforeActivate, this);
+
+        if(Ext.is.iPad){
+            this.buildModule('modules', 'touchSender');
+            this.buildModule('modules', 'touchHandler', {getPanel: function(){
+                return this.container.el.parent();
+            }});
+        }
 	},
 
 	restore: function(state){
