@@ -109,7 +109,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 			return Ext.widget(t);
 		});
 
-		Ext.Array.each(this.tools, function (t) {
+		Ext.each(this.tools, function (t) {
 			if (t.chat) {
 				this.chatTool = t;
 			}
@@ -145,7 +145,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 	afterRender: function () {
 		this.callParent(arguments);
-		Ext.Array.each(this.tools, function (t) {
+		Ext.each(this.tools, function (t) {
 			t.render(this.toolsEl);
 		}, this);
 	},

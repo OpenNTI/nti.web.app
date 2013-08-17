@@ -121,7 +121,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 			allItems = this.typesMenu.query('menuitem');
 
 		function uncheck(items){
-			Ext.Array.each(items, function(i){
+			Ext.each(items, function(i){
 				if(!i.isAll){
 					i.setChecked(false, true);
 				}
@@ -135,7 +135,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 				this.typesMenu.query('[isAll]')[0].setChecked(false, true);
 			}
 		}else{
-			Ext.Array.each(allItems, function(i){
+			Ext.each(allItems, function(i){
 				allUnchecked = allUnchecked && !i.checked;
 			});
 
@@ -165,7 +165,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 
 				if ((everything || item.checked)) {
 					if(mt){
-						Ext.Array.each(Ext.Array.from(mt), function(m){
+						Ext.each(Ext.Array.from(mt), function(m){
 							mimeTypes.push('application/vnd.nextthought.'+m);
 						}, this);
 					}

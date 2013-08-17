@@ -171,7 +171,7 @@ Ext.define('NextThought.util.Sharing',{
 		else{
 			UserRepository.getUser(explicitEntities, function(resolvedUsers){
 				prefix = isPublic ? 'Public and' : 'Shared with';
-				Ext.Array.each(resolvedUsers || [], function(u){
+				Ext.each(resolvedUsers || [], function(u){
 					var dn = isMe(u) ? 'me' : u.getName();
 					names.push(dn);
 					names.join(',');

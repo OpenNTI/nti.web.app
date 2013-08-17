@@ -114,7 +114,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			]
 		});
 
-		Ext.Array.each(this.typesFilterArray, function(item){
+		Ext.each(this.typesFilterArray, function(item){
 			if(!$AppConfig.service.canFriend() && item.hideIfCoppa){
 				return;
 			}

@@ -225,7 +225,7 @@ Ext.define('NextThought.controller.State', {
 			resultParts.push('u');
 			resultParts.push(board.community);
 
-			Ext.Array.each(['forum', 'topic', 'comment'], function (prop) {
+			Ext.each(['forum', 'topic', 'comment'], function (prop) {
 				if (state.hasOwnProperty(prop) && state[prop]) {
 					resultParts.push(state[prop]);
 				}

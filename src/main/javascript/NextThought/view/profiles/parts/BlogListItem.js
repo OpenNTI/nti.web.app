@@ -238,7 +238,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 		if(Ext.isFunction(cb)){
 			cmps = cb(this.bodyEl, this);
-			Ext.Array.each(cmps, function(c){me.on('destroy', c.destroy, c);});
+			Ext.each(cmps, function(c){me.on('destroy', c.destroy, c);});
 		}
 	},
 

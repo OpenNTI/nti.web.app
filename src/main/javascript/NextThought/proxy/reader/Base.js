@@ -9,7 +9,7 @@ Ext.define('NextThought.proxy.reader.Base', {
 
 		if(!Ext.isEmpty(users)){
 			//console.debug('Need to fill cache with userlist for' , record.getId(), field, users);
-			Ext.Array.each(users, function(user){
+			Ext.each(users, function(user){
 				if(user.isModel || Ext.isObject(user)){
 					UserRepository.precacheUser(user);
 				}
@@ -34,7 +34,7 @@ Ext.define('NextThought.proxy.reader.Base', {
 		var result = this.callParent([data]),
 			records = result.records;
 		try{
-			Ext.Array.each(records || [], function(record){
+			Ext.each(records || [], function(record){
 				this.precacheUserLists(record);
 			}, this);
 

@@ -459,7 +459,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		result = Ext.fly(potentials[0]);
 
-		Ext.Array.each(Anchors.containerSelectors, function(sel){
+		Ext.each(Anchors.containerSelectors, function(sel){
 			isContainerNode = Ext.fly(result).is(sel);
 			return !isContainerNode;
 		});
@@ -498,7 +498,7 @@ Ext.define('NextThought.util.Anchors', {
 				return null;
 			}
 
-			Ext.Array.each(Anchors.containerSelectors, function(sel){
+			Ext.each(Anchors.containerSelectors, function(sel){
 				node = ancestorOrSelfMatchingSelector(n, sel);
 				return node === null;
 			}, this);

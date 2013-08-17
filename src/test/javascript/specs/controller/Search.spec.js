@@ -31,7 +31,7 @@ describe('Search Controller Tests', function(){
 
 		function verifyHitsAreType(hits, type){
 
-			Ext.Array.each(hits, function(hit){
+			Ext.each(hits, function(hit){
 				var cmp = componentFromCfg(controller.componentConfigForHit(hit));
 
 				expect(cmp).toBeTruthy();

@@ -86,7 +86,7 @@ Ext.define('NextThought.store.Contacts',{
 	addContacts: function(contacts){
 		var toAdd = [], me = this;
 		UserRepository.getUser(contacts, function(users){
-			Ext.Array.each(users, function(user){
+			Ext.each(users, function(user){
 				if(!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())){
 					toAdd.push(user);
 				}
@@ -99,7 +99,7 @@ Ext.define('NextThought.store.Contacts',{
 
 	removeContacts: function(contacts){
 		var toRemove = [], me = this;
-		Ext.Array.each(contacts, function(contact){
+		Ext.each(contacts, function(contact){
 			var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
 			if(idx >= 0){
 				toRemove.push((me.snapshot||me.data).getAt(idx));

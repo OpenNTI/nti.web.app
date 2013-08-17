@@ -287,7 +287,7 @@ Ext.define('NextThought.model.Note', {
 			return rec.get('ReferencedByCount') + (rec.parent ? 1:0);
 		}
 
-		Ext.Array.each((rec.children || []), function(a){
+		Ext.each((rec.children || []), function(a){
 			sum += rec.sumReferenceByCount(a);
 		});
 

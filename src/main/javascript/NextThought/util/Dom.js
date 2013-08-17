@@ -99,7 +99,7 @@ Ext.define('NextThought.util.Dom',{
 		if(!dom){
 			return;
 		}
-		Ext.Array.each(dom.query('a[href]') || [], function(link){
+		Ext.each(dom.query('a[href]') || [], function(link){
 			var href = Ext.fly(link).getAttribute('href') || '',
 				base = baseUrl.split('#')[0],
 				changeTarget = href.indexOf(base) !== 0;

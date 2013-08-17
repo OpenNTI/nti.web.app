@@ -126,7 +126,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 		function apply(resolvedUser, i){
 			var recs = map[resolvedUser.get('Username')] || [];
-			Ext.Array.each(recs, function(rec){
+			Ext.each(recs, function(rec){
 				var desc = rec.get('NewestDescendant'),
 					recIdx = -1;
 				if(desc){

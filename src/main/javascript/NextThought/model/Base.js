@@ -163,7 +163,7 @@ Ext.define('NextThought.model.Base', {
 					this.set(f.name,  this.get(f.mapping || f.name));
 				};
 
-				Ext.Array.each(affectedBy, function(a){
+				Ext.each(affectedBy, function(a){
 					me.addObserverForField(me.observer, a, me.observer[fnName], me);
 				});
 			}
@@ -189,7 +189,7 @@ Ext.define('NextThought.model.Base', {
 		capitalizedFieldName = Ext.String.capitalize(f);
 		possibleGetters = ['get'+capitalizedFieldName, 'is'+capitalizedFieldName];
 
-		Ext.Array.each(possibleGetters, function(g){
+		Ext.each(possibleGetters, function(g){
 			if(Ext.isFunction(this[g])){
 				val = this[g]();
 				return false;
@@ -796,7 +796,7 @@ Ext.define('NextThought.model.Base', {
 			fn = this[dependentFunctionName];
 		this.notifyObserversOfFieldChange(f);
 		if(Ext.isFunction(fn)){
-			Ext.Array.each(fn.call(this), this.notifyObserversOfFieldChange, this);
+			Ext.each(fn.call(this), this.notifyObserversOfFieldChange, this);
 		}
 	},
 
@@ -819,7 +819,7 @@ Ext.define('NextThought.model.Base', {
 
 	afterEdit: function(fnames){
 		this.callParent(arguments);
-		Ext.Array.each(fnames || [], this.onFieldChanged, this);
+		Ext.each(fnames || [], this.onFieldChanged, this);
 	},
 
 

@@ -154,7 +154,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			cmps.push(lastHighlightContainer);
 		}
 
-		Ext.Array.each(records || [], function(i){
+		Ext.each(records || [], function(i){
 			var c = (i.get('Class')||'default').toLowerCase(),
 				n = 'profile-activity-'+c+'-item',
 				alias = 'widget.'+ n;

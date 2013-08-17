@@ -325,7 +325,7 @@ Ext.define('NextThought.controller.Session', {
 		var items = s.get('Items') || [],
 			w, l;
 
-		Ext.Array.each(items, function(item){
+		Ext.each(items, function(item){
 			var links = item.Links || [];
 			l = s.getLinkFrom(links, 'ResolveSelf');
 			if(l){

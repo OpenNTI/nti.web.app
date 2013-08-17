@@ -236,7 +236,7 @@ Ext.define('NextThought.controller.Search', {
 		Ext.each(allItems, function(item){
 			var models = item.model;
 			if ((everything || item.checked) && models) {
-				Ext.Array.each(Ext.Array.from(models), function(m){
+				Ext.each(Ext.Array.from(models), function(m){
 					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.'+m));
 				}, this);
 			}

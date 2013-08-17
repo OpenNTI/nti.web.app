@@ -69,37 +69,31 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		this.cmpMap[store.containerId] = cmps;
 
-		Ext.Array.each(cmps, function(cmp){
+		Ext.each(cmps, function(cmp){
 			this.fireEvent('register-records', store, store.getRange(), cmp);
 			cmp.bindToStore(store);
 		});
 
 		if(this.record){
-			var r, sEl,
-				m = this.noteOverlay.annotationManager,
-				k = this.record, o, mc;
+			var r, sEl, memoryStore;
+			//Loop the components looking for something that knows where
+			//this.record is
+			Ext.each(cmps, function(cmp){
+				r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
+				return r !== null;
+			}, this);
 
-			// Since we've already added the record when its component registered its records,
-			// let's just get its annotation object.
-			o = m.findBy(function(item){ return item.record.getId() === k.getId(); });
-			if(!o){
-				console.warn('could not find annotation for record', k, ' in annotationManager: ', m);
-				return;
-			}
-
-			r = o.range;
 			if(r){
 				console.log('Need to scroll to range', r);
 				sEl = this.el.getScrollingEl();
 				if(sEl){
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
-
-				mc = new Ext.util.MixedCollection();
-				mc.add(o);
-				this.showAnnotations( mc, o.line);
-				//Select record to open the note viewer.
-				this.annotationView.select(o.record, undefined, false);
+				memoryStore  = NextThought.store.FlatPage.create();
+				memoryStore.add(this.record);
+				this.showAnnotations(memoryStore.data, undefined, memoryStore);
+                //Select record to open the note viewer.
+                this.annotationView.select(this.record, undefined, false);
 				delete this.record;
 			}
 
@@ -109,7 +103,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	onStoreEventsAdd:function(store, records){
 		var cmps = this.cmpMap[store.containerId || ''];
 		if(cmps){
-			Ext.Array.each(cmps, function(c){
+			Ext.each(cmps, function(c){
 				this.fireEvent('register-records', store, records, c);
 			});
 		}
@@ -119,7 +113,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	onStoreEventsRemove: function(store, records){
 		var cmps = this.cmpMap[store.containerId || ''];
 		if(cmps){
-			Ext.Array.each(cmps, function(c){
+			Ext.each(cmps, function(c){
 				this.fireEvent('unregister-records', store, records, c);
 			});
 		}
@@ -156,7 +150,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				return null;
 			}
 
-			Ext.Array.each(list, function(i){
+			Ext.each(list, function(i){
 				if(i.get('NTIID') === id){
 					item = i;
 				}
@@ -302,7 +296,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			}
 		}
 
-		Ext.Array.each(partCmps, function(p){
+		Ext.each(partCmps, function(p){
 
 			//Just in case something we aren't expecting sneaks in.
 			if(p.isPresentationPartReady === undefined){

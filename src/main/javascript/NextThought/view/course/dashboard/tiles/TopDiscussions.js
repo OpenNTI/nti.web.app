@@ -36,7 +36,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 			function loadDiscussions(store, records) {
 				var tiles = [], me = this, max = 0;
 
-				Ext.Array.each(records, function (record) {
+				Ext.each(records, function (record) {
 					var comments = record.get('PostCount');
 
 					max = (max > comments)? max : comments;

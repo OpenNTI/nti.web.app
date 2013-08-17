@@ -334,7 +334,7 @@ Ext.define('NextThought.controller.Forums', {
 		console.log('Show from', base, 'Parts ', parts);
 
 		i = stackOrder.indexOf(recordType);
-		Ext.Array.each(parts, function(part){
+		Ext.each(parts, function(part){
 			toLoad.unshift([stackOrder[i], part]);
 			i--;
 		}, this, true);

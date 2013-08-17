@@ -654,7 +654,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			sharedWith = item.get('sharedWith') || [],
 			foundInCommunities = false;
 
-		Ext.Array.each(sharedWith, function (u) {
+		Ext.each(sharedWith, function (u) {
 			if (Ext.Array.contains(communities, u)) {
 				foundInCommunities = true;
 				return false;
@@ -702,7 +702,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		// Strip away all DFL in communities.
-		Ext.Array.each(communities, function (c) {
+		Ext.each(communities, function (c) {
 			if (c.isCommunity) {
 				communityNames.push(c.get('Username'));
 			}

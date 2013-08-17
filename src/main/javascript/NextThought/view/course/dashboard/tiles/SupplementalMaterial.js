@@ -38,7 +38,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial',{
 				}
 			}
 
-			Ext.Array.each(refs.slice(), function(ref){
+			Ext.each(refs.slice(), function(ref){
 				me.create({
 					locationInfo: locationInfo, 
 					itemNode: ref, 

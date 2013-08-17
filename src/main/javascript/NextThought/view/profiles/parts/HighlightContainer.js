@@ -225,7 +225,7 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 			return;
 		}
 
-		Ext.Array.each(this.items, function(i){
+		Ext.each(this.items, function(i){
 			if(i.getId() === id){
 				item = i;
 				return false;

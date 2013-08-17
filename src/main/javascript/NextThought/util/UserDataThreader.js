@@ -18,7 +18,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 		var data = !Ext.isArray(d) ? [d] : d,
 			tree = {};
 
-		Ext.Array.each(data, function(item){
+		Ext.each(data, function(item){
 			if(item && item.isThreadable){
 				this.buildItemTree(item, tree);
 			}
@@ -75,7 +75,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 			}
 		}
 
-		Ext.Array.each(rawList, function(n){
+		Ext.each(rawList, function(n){
 			flattenNode(n, threadables);
 		});
 

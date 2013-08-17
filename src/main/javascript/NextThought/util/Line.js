@@ -50,7 +50,7 @@ Ext.define('NextThought.util.Line',{
 		function nodeIfObject(n){
 			var node = null;
 
-			Ext.Array.each(this.containerMimeSelectors, function(sel){
+			Ext.each(this.containerMimeSelectors, function(sel){
 				node = ancestorOrSelfMatchingSelector(n, sel);
 				return node === null;
 			}, this);

@@ -341,7 +341,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		//If we are a placholder find a reply to navigate to
 		if(!rec || rec.placeholder){
-			Ext.Array.each(this.down('[record]'), function(cmp){
+			Ext.each(this.down('[record]'), function(cmp){
 				if(cmp.record && !cmp.record.placholder){
 					rec = cmp.record;
 					return false; //break

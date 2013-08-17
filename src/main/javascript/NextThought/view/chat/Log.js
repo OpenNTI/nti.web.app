@@ -235,7 +235,7 @@ Ext.define('NextThought.view.chat.Log', {
 
 	clearChatStatusNotifications: function(){
 		var ns = this.query('chat-notification-status'), me = this;
-		Ext.Array.each(ns, function(n){ me.remove(n); });
+		Ext.each(ns, function(n){ me.remove(n); });
 	},
 
 

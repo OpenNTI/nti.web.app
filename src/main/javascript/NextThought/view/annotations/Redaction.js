@@ -342,7 +342,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
         this.compElements.each(function(e){
             var fns = e.query('a.footnote');
-            Ext.Array.each(fns, function(fn){
+            Ext.each(fns, function(fn){
                 footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
             });
         });

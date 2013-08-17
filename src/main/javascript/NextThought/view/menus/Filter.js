@@ -64,7 +64,7 @@ Ext.define('NextThought.view.menus.Filter',{
 
 		if(!Ext.isEmpty(lists)){
 			items.push({ xtype: 'labeledseparator', text: 'Lists', cls: 'noline'});
-			Ext.Array.each(lists, function(v){
+			Ext.each(lists, function(v){
 				items.push({
 					cls: 'group-filter',
 					text: v.getName(),
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.menus.Filter',{
 
 		if(!Ext.isEmpty(groups)){
 			items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'noline'});
-			Ext.Array.each(groups, function(v){
+			Ext.each(groups, function(v){
 				items.push({
 					cls: 'group-filter',
 					text: v.getName(),

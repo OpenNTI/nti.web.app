@@ -53,7 +53,7 @@ Ext.define('NextThought.store.FriendsList',{
 		matches = this.queryBy(function(rec){
 			var matched = false;
 
-			Ext.Array.each(fieldsToMatch, function(field){
+			Ext.each(fieldsToMatch, function(field){
 				var v = rec.get(field);
 				if(v && regex.test(v)){
 					matched = true;
@@ -103,7 +103,7 @@ Ext.define('NextThought.store.FriendsList',{
 		var oldRecordIds = Ext.Array.map(this.data.items, function(i){return i.getId();}),
 			toAdd = [];
 
-		Ext.Array.each(newRecords, function(rec){
+		Ext.each(newRecords, function(rec){
 			var current = this.getById(rec.getId()),
 				serverTime, localTime;
 
@@ -134,7 +134,7 @@ Ext.define('NextThought.store.FriendsList',{
 		//Any that are left in oldRecordsId no longer exist on the server
 		//so we remove them
 		console.log('Removing records with ids as part of merge', oldRecordIds);
-		Ext.Array.each(oldRecordIds, function(id){
+		Ext.each(oldRecordIds, function(id){
 			this.removeAt(this.indexOfId(id));
 		}, this);
 
@@ -175,11 +175,11 @@ Ext.define('NextThought.store.FriendsList',{
 		//If we remove newFriends from contactsWithDups
 		//if there are any newFriends that no longer exist in contacts withDups
 		//they became contacts with this add
-		Ext.Array.each(newFriends, function(newFriend){
+		Ext.each(newFriends, function(newFriend){
 			contactsWithDups = Ext.Array.remove(contactsWithDups, newFriend);
 		});
 
-		Ext.Array.each(newFriends, function(newFriend){
+		Ext.each(newFriends, function(newFriend){
 			if(!Ext.Array.contains(contactsWithDups, newFriend)){
 				newContacts.push(newFriend);
 			}
@@ -199,7 +199,7 @@ Ext.define('NextThought.store.FriendsList',{
 	contactsMaybeAdded: function(store, records){
 		var newFriends = [];
 
-		Ext.Array.each(records, function(rec){
+		Ext.each(records, function(rec){
 			newFriends = Ext.Array.push(newFriends, rec.get('friends') || []);
 		});
 
@@ -219,7 +219,7 @@ Ext.define('NextThought.store.FriendsList',{
 
 		//If the things we think were removed still exist in contacts they must
 		//exist somewhere else
-		Ext.Array.each(possiblyRemoved, function(maybeRemoved){
+		Ext.each(possiblyRemoved, function(maybeRemoved){
 			if(!Ext.Array.contains(contacts, maybeRemoved)){
 				contactsRemoved.push(maybeRemoved);
 			}
