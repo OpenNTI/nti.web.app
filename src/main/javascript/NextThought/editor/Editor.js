@@ -315,14 +315,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		this.maybeEnableSave();
 
-//        this.buildModule('modules', 'touchSender');
-//        this.buildModule('modules', 'touchHandler', {
-//            scroll: function(){
-//                console.log('trying to scroll');
-//                Ext.emptyFn();
-//            }
-//        });
-
 	},
 
 
@@ -1745,6 +1737,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		if (focus || putCursorAtEnd) {
+            console.log('focus(putCursorAtEnd');
 			this.focus(putCursorAtEnd);
 		}
 	},

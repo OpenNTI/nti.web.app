@@ -65,46 +65,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
-        if(Ext.is.iPad){
-            var navigation = Ext.Element.select('.main-navigation');
-
-            /*navigation.on('mouseover', function(e){
-             console.log("navigation mousehover called");
-             Ext.Element.select('.x-panel-navigation-menu').hide();
-             this.titleEl.focus();
-             }, this, {delay:550});*/
-
-            var titleInput = this.getEl().down('.title > :first');
-            titleInput.on('focus', function(){
-                this.keyboardUp = true;
-
-            }, this);
-
-            titleEl.on('focus', function(){
-                this.keyboardUp = true;
-            }, this);
-
-            titleInput.on('blur', function(){
-                this.keyboardUp = false;
-
-            }, this);
-
-            titleEl.on('blur', function(){
-                this.keyboardUp = false;
-            }, this);
-
-
-            //Close navigation menu when clicking on title
-            //TODO find a way to keep it from popping up in the first place.
-            titleInput.on('focus', function(){
-                Ext.Element.select('.x-panel-navigation-menu').hide();
-            }, this, {delay:1000});
-
-            titleEl.on('focus', function(){
-                Ext.Element.select('.x-panel-navigation-menu').hide();
-            }, this, {delay:1000});
-        }
-
 		Ext.defer(Ext.Function.createSequence(this.syncHeight,this.focus,this),500,this);//let the animation finish
 	},
 
@@ -112,80 +72,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 	focus: function focus(){
 		this.titleEl.focus();
 		this.moveCursorToEnd(this.titleEl);
-
-		if(Ext.is.iPad){
-            Ext.Element.select('.x-panel-navigation-menu').hide();
-			if(!focus.setup){
-				focus.setup = true;
-                this.setUpTouch();
-			}
-        }
 	},
-
-
-    setUpTouch: function(){
-        var me = this;
-
-        var cancelButton = this.getEl().down('.cancel'),
-            saveButton = this.getEl().down('.save');
-
-        cancelButton.dom.addEventListener('touchstart', function(e){
-            cancelButton.dom.click();
-        }, this);
-
-        saveButton.dom.addEventListener('touchstart', function(e){
-            saveButton.dom.click();
-        }, this);
-
-        var container = this;
-
-
-        var addPeopleField = Ext.get(Ext.query('.recipients')[0]).down('input'),
-            tagsField = Ext.get(Ext.query('.post-view')[0]).down('.tags').down('input'),
-            messageField = Ext.get(Ext.get(Ext.query('.content')[0]));
-
-        addPeopleField.on('focus', function(){
-            this.keyboardUp = true;
-        }, this);
-
-        tagsField.on('focus', function(){
-            this.keyboardUp = true;
-        }, this);
-
-        messageField.on('focus', function(){
-            this.keyboardUp = true;
-        }, this);
-
-        addPeopleField.on('blur', function(){
-            this.keyboardUp = false;
-        }, this);
-
-        tagsField.on('blur', function(){
-            this.keyboardUp = false;
-        }, this);
-
-        messageField.on('blur', function(){
-            this.keyboardUp = false;
-        }, this);
-
-        container.on('touchElementIsScrollable', function(ele, callback) {
-            callback(false);
-        });
-
-        container.on('touchElementAt', function(x,y, callback) {
-            Ext.Element.select('.x-panel-navigation-menu').hide();
-            var element;
-            console.log("x:" + x + " y:" + y);
-            if(this.keyboardUp){
-                element = Ext.getDoc().dom.elementFromPoint(x, y-396);
-            }
-            else{
-                element = Ext.getDoc().dom.elementFromPoint(x, y);
-            }
-            callback(element);
-        },this);
-
-    },
 
 
 	destroy: function(){
@@ -220,31 +107,38 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 
 
 	syncHeight: function(){
-		var pEl = Ext.get('profile'),
-			el = this.editorBodyEl,
-			footEl = this.footerEl,
-			vpH = Ext.Element.getViewportHeight(),
-			top,
-			containerTop = pEl.down('.profile-items').getY() + pEl.getScroll().top,
-			scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
-			newHeight;
+        //Run this only once for iPad
+        if(Ext.is.iPad){
+            if(this.ipadSyncedAlready){
+                return;
+            }
+            this.ipadSyncedAlready = true;
+        }
+        var pEl = Ext.get('profile'),
+            el = this.editorBodyEl,
+            footEl = this.footerEl,
+            vpH = Ext.Element.getViewportHeight(),
+            top,
+            containerTop = pEl.down('.profile-items').getY() + pEl.getScroll().top,
+            scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
+            newHeight;
 
-		if(!el){
-			return;
-		}
+        if(!el){
+            return;
+        }
 
-		top = el.getY() + pEl.getScroll().top - scrollPos;
+        top = el.getY() + pEl.getScroll().top - scrollPos;
 
-		newHeight = ((vpH - top) - footEl.getHeight()) - 8;
-		this.sizer.setHeight(newHeight);
+        newHeight = ((vpH - top) - footEl.getHeight()) - 8;
+        this.sizer.setHeight(newHeight);
 
-		el.setHeight(newHeight);
+        el.setHeight(newHeight);
 
-		Ext.defer(function(){
-			pEl.scrollTo('top',scrollPos);
-		},100);
+        Ext.defer(function(){
+            pEl.scrollTo('top',scrollPos);
+        },100);
 
-		Ext.defer(this.updateLayout,700,this,[]);
+        Ext.defer(this.updateLayout,700,this,[]);
 	},
 
 
