@@ -46,6 +46,8 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 		this.callParent(arguments);
 
 		if(this.linkEl){
+			//Hide it until we can do this well.
+			this.linkEl.hide();
 			this.mon(this.linkEl,'click','onNavigateToNewlyEnrolledContentClicked',this);
 		}
 
