@@ -24,6 +24,7 @@ Ext.define('NextThought.view.course.overview.View', {
 		'assessments': 'Assessments'
 	},
 
+
 	SECTION_TYPE_MAP: {
 		'course-overview-ntivideo': 'video',
 		'course-overview-content': 'additional',
@@ -120,7 +121,6 @@ Ext.define('NextThought.view.course.overview.View', {
 
 			}
 		});
-
 
 		me.add([
 			{xtype: 'course-overview-header', record: r}

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.Window',{
+Ext.define('NextThought.view.account.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.account-window',
 
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.Window',{
 	closable: true,
 	modal: true,
 	dialog: true,
-    resizable: false,
+	resizable: false,
 
 	width: 535,
 	y: 80,
@@ -32,43 +32,45 @@ Ext.define('NextThought.view.account.Window',{
 
 	items: [],
 
-	constructor: function(){
+	constructor: function () {
 		var me = $AppConfig.userObject,
-            canUploadAvatar = $AppConfig.service.canUploadAvatar(),
-            availablePanels = canUploadAvatar
-                ? [
-                    { xtype: 'avatar-choices' },
-                    { xtype: 'picture-editor'},
-                    { xtype: 'password-reset-form' }
-                ]
-                : [
-                    { xtype: 'random-gravatar-picker' },
-                    { xtype: 'password-reset-form' }
-            ];
+			canUploadAvatar = $AppConfig.service.canUploadAvatar(),
+			availablePanels = canUploadAvatar
+				? [
+				{ xtype: 'avatar-choices' },
+				{ xtype: 'picture-editor'},
+				{ xtype: 'password-reset-form' }
+			]
+				: [
+				{ xtype: 'random-gravatar-picker' },
+				{ xtype: 'password-reset-form' }
+			];
 
-		this.items = [{
+		this.items = [
+			{
 				xtype: 'box', autoEl: {
-					cls: 'identity',
-					cn:[
-						{ cls: 'close' },
-						{ tag: 'img', cls: 'avatar', src: me.get('avatarURL') },
-						{
-							cls: 'wrap',
-							cn: [
-								{ cls: 'name', html: me.getName()},
-								{ cls: 'affiliation', html: me.get('affiliation')},
-								{
-									cls: 'identities',
-									cn: [
-										{tag: 'span', cls: 'username', html: me.get('Username')},
-										{tag: 'span', cls: 'email', html: me.get('email')}
-									]
-								}
-							]
-						}
-					]
-				}
-			},{
+				cls: 'identity',
+				cn: [
+					{ cls: 'close' },
+					{ tag: 'img', cls: 'avatar', src: me.get('avatarURL') },
+					{
+						cls: 'wrap',
+						cn: [
+							{ cls: 'name', html: me.getName()},
+							{ cls: 'affiliation', html: me.get('affiliation')},
+							{
+								cls: 'identities',
+								cn: [
+									{tag: 'span', cls: 'username', html: me.get('Username')},
+									{tag: 'span', cls: 'email', html: me.get('email')}
+								]
+							}
+						]
+					}
+				]
+			}
+			},
+			{
 				xtype: 'container',
 				defaultType: 'button',
 				defaults: {
@@ -77,9 +79,9 @@ Ext.define('NextThought.view.account.Window',{
 					allowDepress: false,
 					toggleGroup: 'account-buttons',
 					minWidth: 150,
-					listeners:{
-						toggle: function(btn,pressed){
-							if(pressed){
+					listeners: {
+						toggle: function (btn, pressed) {
+							if (pressed) {
 								btn.up('window').changeView(btn);
 							}
 						}
@@ -90,37 +92,39 @@ Ext.define('NextThought.view.account.Window',{
 
 				items: [
 					canUploadAvatar
-                        ? {text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true}
-                        : {text: 'Change Avatar', associatedPanel:'random-gravatar-picker', pressed:true},
+						? {text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed: true}
+						: {text: 'Change Avatar', associatedPanel: 'random-gravatar-picker', pressed: true},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
-					{ disabled:true, flex: 1 }
+					{ disabled: true, flex: 1 }
 				]
-			},{
+			},
+			{
 				name: 'settings',
 				xtype: 'container',
 				layout: {
 					type: 'card'
 				},
 				items: availablePanels
-			}];
+			}
+		];
 
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		var me = this;
 		me.callParent(arguments);
 
-		me.mon( me.el.down('.close'), 'click', me.close, this);
+		me.mon(me.el.down('.close'), 'click', me.close, this);
 
-		me.mon($AppConfig.userObject,{
+		me.mon($AppConfig.userObject, {
 			scope: me,
-			'changed': function(r){
+			'changed': function (r) {
 				var el = me.el;
 				el.down('.identity div.name').update(r.getName());
 				el.down('.identity div.affiliation').update(r.get('affiliation'));
-				el.down('.identity img.avatar').set({src:r.get('avatarURL')});
+				el.down('.identity img.avatar').set({src: r.get('avatarURL')});
 			}
 		});
 	},
@@ -133,9 +137,9 @@ Ext.define('NextThought.view.account.Window',{
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
 
-		if(c.getLayout().getActiveItem() !== p){
+		if (c.getLayout().getActiveItem() !== p) {
 			c.getLayout().setActiveItem(p);
-			c[btn.pressed?'show':'hide']();
+			c[btn.pressed ? 'show' : 'hide']();
 			this.updateLayout();
 		}
 	}

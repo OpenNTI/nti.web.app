@@ -84,7 +84,6 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 			m.scrollToId = this.scrollToId;
 		}
 
-
 		if (annotationView) {
 			this.mon(annotationView, 'itemclick', function (view, rec) {
 				if (this.record = rec) {

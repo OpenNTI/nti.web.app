@@ -31,6 +31,7 @@ Ext.define('NextThought.view.course.outline.View', {
 		return this.frameBodyEl;
 	},
 
+
 	overItemCls: 'over',
 	itemSelector: '.course-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [

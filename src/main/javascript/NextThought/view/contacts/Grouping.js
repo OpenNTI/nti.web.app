@@ -85,6 +85,15 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	},
 
 
+	maybeHideMenu: function (e) {
+		if (!this.menu.el.isAncestor(e.target)) {
+			if (!this.settingsTool.el.isAncestor(e.target)) {
+				this.menu.hide();
+			}
+		}
+	},
+
+
 	initComponent: function () {
 		this.storeId = this.record.storeId;
 		this.mon(this.record.store, 'remove', 'maybeDestroy', this);
@@ -127,6 +136,10 @@ Ext.define('NextThought.view.contacts.Grouping', {
 			buffer: 100
 		});
 		this.mixins.userContainer.constructor.apply(this, arguments);
+
+		if (Ext.is.iPad) {
+			Ext.getBody().on('click', this.maybeHideMenu, this);
+		}
 	},
 
 
@@ -139,7 +152,18 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 
 	showMenu: function (e, cmp) {
-		this.menu.showBy(cmp.getEl(), 'tr-br?', [0, 0]);
+		// settingsTool acts as a toggle on iPad
+		if (Ext.is.iPad) {
+			if (this.menu.isHidden()) {
+				this.menu.showBy(cmp.getEl(), 'tr-br?', [0, 0]);
+			}
+			else {
+				this.menu.hide();
+			}
+		}
+		else {
+			this.menu.showBy(cmp.getEl(), 'tr-br?', [0, 0]);
+		}
 	},
 
 
