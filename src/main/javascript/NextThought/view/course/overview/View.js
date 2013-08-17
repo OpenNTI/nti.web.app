@@ -6,8 +6,7 @@ Ext.define('NextThought.view.course.overview.View', {
 
 	requires: [
 		'NextThought.view.course.overview.parts.*',
-		'NextThought.modules.TouchSender',
-		'NextThought.view.course.overview.TouchHandler'
+		'NextThought.modules.TouchSender'
 	],
 
 	mixins: [
@@ -62,7 +61,22 @@ Ext.define('NextThought.view.course.overview.View', {
 
 		if (Ext.is.iPad) {
 			this.buildModule('modules', 'touchSender', {container: this});
-			this.buildModule('overview', 'touchHandler', {container: this});
+			this.on('touchScroll', function (ele, deltaY) {
+				var videoList = this.down('.course-overview-video-section').getTargetEl();
+				if (videoList.isAncestor(ele)) {
+					videoList.scrollBy(0, deltaY, false);
+				}
+				else {
+					this.scrollBy(0, deltaY, false);
+				}
+			}, this);
+			this.on('touchTap', function (ele) {
+				ele.click();
+			});
+			this.on('touchElementAt', function (x, y, callback) {
+				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+				callback(element);
+			});
 		}
 	},
 
