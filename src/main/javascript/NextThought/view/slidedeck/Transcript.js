@@ -75,13 +75,22 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		if(this.record){
-			var r, sEl, memoryStore;
-			//Loop the components looking for something that knows where
-			//this.record is
-			Ext.Array.each(cmps, function(cmp){
-				r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
-				return r !== null;
-			}, this);
+			var r, sEl,
+				m = this.noteOverlay.annotationManager,
+				k = this.record, o, mc;
+
+			// Since we've already added the record when its component registered its records,
+			// let's just get its annotation object.
+			o = m.findBy(function(item){ return item.record.getId() === k.getId(); });
+			r = o && o.range;
+			if(!r){
+				//Loop the components looking for something that knows where
+				//this.record is
+				Ext.Array.each(cmps, function(cmp){
+					r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
+					return r !== null;
+				}, this);
+			}
 
 			if(r){
 				console.log('Need to scroll to range', r);
@@ -89,11 +98,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				if(sEl){
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
-				memoryStore  = NextThought.store.FlatPage.create();
-				memoryStore.add(this.record);
-				this.showAnnotations(memoryStore.data, undefined, memoryStore);
-                //Select record to open the note viewer.
-                this.annotationView.select(this.record, undefined, false);
+				if(o){
+					mc = new Ext.util.MixedCollection();
+					mc.add(o);
+					this.showAnnotations( mc, o.line);
+					//Select record to open the note viewer.
+					this.annotationView.select(o.record, undefined, false);
+				}
 				delete this.record;
 			}
 
