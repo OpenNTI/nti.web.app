@@ -2,7 +2,7 @@ Ext.define('NextThought.model.User', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
-	resolveUsers: true,
+
 	fields: [
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
@@ -19,9 +19,8 @@ Ext.define('NextThought.model.User', {
 			//The presence isn't always a PresenceInfo in testing
 			if(record.get('Presence') && record.get('Presence').getDisplayText){
 				return record.get('Presence').getDisplayText();
-			}else{
-				return null;
 			}
+			return null;
 		}},
 		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },

@@ -17,10 +17,6 @@ Ext.define('NextThought.model.converters.Users', {
 							console.warn("WARNING: Could not handle Object: ", o, a);
 						}
 						else  {
-							if(o.Username){
-								UserRepository.precacheUser(o);
-							}
-
 							u.push(p);
 						}
 					});

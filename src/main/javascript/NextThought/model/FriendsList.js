@@ -1,6 +1,5 @@
 Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
-	resolveUsers: false,
 
 	requires: [
 		'NextThought.util.Object'

@@ -136,23 +136,37 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	friendsListsLoaded: function(store,records){
-		var me = this, cid = me.getMyContactsId();
+	friendsListsLoaded: function(listStore,records){
+		var me = this,
+			store,
+			cid = me.getMyContactsId();
 
-		Ext.each(records,function(r){
+		function fillStore(friends){
+			store.loadData(friends);
+			store.fireEvent('load',store,friends,true);
+		}
+
+		function forEachGroup(r){
 			if(r.get('Username')===cid){
 				r.hidden = true;
 				return;
 			}
-			var store = me.getListStore(r.get('Username'));
+
+			store = me.getListStore(r.get('Username'));
 
 			r.storeId = store.storeId;
 
-			UserRepository.getUser(r.get('friends'),function(friends){
-				store.loadData(friends);
-				store.fireEvent('load',store,friends,true);
-			});
-		});
+			if(!r.isDFL){
+				console.debug('Resolving users from List:',r.get('Username'),
+						'potentially made # of requests:', r.get('friends').length);
+				UserRepository.getUser(r.get('friends'),fillStore);
+			} else {
+				console.debug('Not resolving users from DFL:',r.get('Username'),
+						'potentially saved # of requests:', r.get('friends').length);
+			}
+		}
+
+		Ext.each(records,forEachGroup);
 
 		this.ensureContactsGroup.apply(this, arguments);
 	},

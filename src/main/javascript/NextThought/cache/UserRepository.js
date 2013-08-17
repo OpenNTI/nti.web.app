@@ -307,6 +307,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				return null;
 			}
 
+			console.debug('\n\n\n\nRequesting '+username,'\n\n\n\n');
 			this.activeRequests[username] = Ext.Ajax.request({
 				url: url,
 				scope: me,
