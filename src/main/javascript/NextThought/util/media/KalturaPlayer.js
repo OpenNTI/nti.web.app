@@ -497,6 +497,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			//Force flash in ie10, mostly because kalturas html5 player sucks
 			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
 
+			//IPad settings
+			//mw.setConfig('EmbedPlayer.EnableIpadHTMLControls', false); //enables native controls with native fullscreen
+			mw.setConfig('EmbedPlayer.EnableIpadNativeFullscreen', true); //Enables HTML5 controls with native full screen
+
 			//mw.setConfig('debug', true);
 
 			kWidget.embed({
