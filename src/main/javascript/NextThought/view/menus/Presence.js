@@ -53,9 +53,9 @@ Ext.define('NextThought.view.menus.Presence',{
 			states: [
 				{state: 'available', label: 'Available', editable: edit},
 				{state: 'away', label: 'Away', editable: edit},
-				{state: 'dnd', label: 'Do not disturb', editable: edit},
+				{state: 'dnd', label: 'Do not disturb', editable: edit}
 				//{state: 'invisible', label: 'Invisible'},
-				{state: 'offline', label: 'Offline'}
+				//{state: 'offline', label: 'Offline'}
 			]
 		});
 	},
@@ -122,8 +122,13 @@ Ext.define('NextThought.view.menus.Presence',{
 
 		function update(){
 			Ext.Object.each(me.defaultStates, function(key, value){
-				var status = (state[key] && state[key].status) || me.defaultStates[key];
-				me.el.down('.'+key).down('.label').update(status);
+				var status = (state[key] && state[key].status) || me.defaultStates[key],
+					row = me.el.down('.'+key),
+					label = row && row.down('.label');
+
+				if(label){
+					label.update(status);
+				}
 			});
 		}
 
@@ -158,7 +163,7 @@ Ext.define('NextThought.view.menus.Presence',{
 					label.update(presence.getDisplayText());
 				}
 			}
-		}else{
+		}else if(this.offlineEl){
 			this.offlineEl.addCls('selected');
 		}
 

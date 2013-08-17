@@ -1,6 +1,7 @@
 Ext.define('NextThought.cache.UserRepository', {
 		alias: 'UserRepository',
 		singleton: true,
+		isDebug: $AppConfig.userRepositoryDebug,
 		requires: [
 			'NextThought.util.Parsing'
 		],
@@ -45,14 +46,18 @@ Ext.define('NextThought.cache.UserRepository', {
 				if ($AppConfig.userObject && isMe(u)) {
 					//If the INSTANCE of the user from the store does not match the instance of the current user object
 					if (u !== $AppConfig.userObject) {
-						//this is strange...why do we get here?
+						/*//this is strange...why do we get here?
 						console.warn('AppConfig user instance is different');
 						//if the user in the store is not the same object as our global reference, then we need to make sure
 						// that we fire changed event just incase someone is listening to it.
 						$AppConfig.userObject.fireEvent('changed', u);
 
 						//Correct the problem
-						$AppConfig.userObject = u;
+						$AppConfig.userObject = u;*/
+						if(this.isDebug){
+							console.log('Asked to precache an appuser that isnt the current $AppConfig.userObject. Dropping');
+						}
+						return;
 					}
 				}
 
@@ -113,7 +118,9 @@ Ext.define('NextThought.cache.UserRepository', {
 					s.remove(fromStore);
 				}
 			}
-			//console.debug('Adding resolved user to store', user.getId(), user);
+			if(this.isDebug){
+				console.debug('Adding resolved user to store', user.getId(), user);
+			}
 			s.add(user);
 			return user;
 		},

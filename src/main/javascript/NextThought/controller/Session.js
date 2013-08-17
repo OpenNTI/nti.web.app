@@ -402,8 +402,8 @@ Ext.define('NextThought.controller.Session', {
 			//we set the user's presence in the chat session-ready controller so we don't need to do it here.
 			//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
 			user.summaryObject = false;
-			UserRepository.cacheUser(user, true);
-			$AppConfig.userObject = user;
+			$AppConfig.userObject = UserRepository.cacheUser(user, true);
+			console.debug('Set app user to ', $AppConfig.userObject);
 			ObjectUtils.defineAttributes($AppConfig,{
 				username: {
 					getter: function(){ try { return this.userObject.getId(); } catch(e){console.error(e.stack);} },
