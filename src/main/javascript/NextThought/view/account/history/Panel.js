@@ -12,7 +12,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		'NextThought.view.account.history.mixins.BlogEntry',
 		'NextThought.view.account.history.mixins.Highlight',
 		'NextThought.view.account.history.mixins.Bookmark',
-		'NextThought.modules.TouchScrollSender'
+		'NextThought.modules.TouchSender'
 
 	],
 
@@ -274,10 +274,19 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		if (Ext.is.iPad) {
 			var me = this;
-			this.buildModule('modules', 'touchScrollSender');
-			this.on('touchScroll', function (ele, deltaY) {
+			me.buildModule('modules', 'touchSender');
+			me.on('touchScroll', function (ele, deltaY) {
 				console.log('touchScroll');
 				me.el.scrollBy(0, deltaY, false);
+			});
+			me.on('touchElementAt', function (x, y, callback) {
+				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+				callback(element);
+			});
+			me.on('touchLongPress', function (ele, pageX, pageY) {
+				var note = Ext.get(ele).up('.history');
+				var record = me.getRecord(note);
+				me.rowHover(me, record, note);
 			});
 		}
 	},
