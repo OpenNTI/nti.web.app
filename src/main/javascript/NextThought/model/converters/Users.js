@@ -52,8 +52,8 @@ Ext.define('NextThought.model.converters.Users', {
 					v = secure(v,i,a);
 				}
 
-				//preload
-				(new Image()).src = v;
+//				//preload
+//				(new Image()).src = v;
 				return v;
 			}
 
