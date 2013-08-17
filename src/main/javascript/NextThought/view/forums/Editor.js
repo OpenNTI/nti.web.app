@@ -162,6 +162,12 @@ Ext.define('NextThought.view.forums.Editor', {
 
 
     syncHeight: function () {
+        if(Ext.is.iPad){
+            if(this.syncedIpad){
+                return;
+            }
+            this.syncedIpad = true;
+        }
         var el = this.editorBodyEl,
             p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
             top;

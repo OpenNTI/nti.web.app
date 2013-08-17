@@ -86,6 +86,9 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 
 	maybeHideMenu: function (e) {
+        if(!this.menu || !this.menu.el){
+            return;
+        }
 		if (!this.menu.el.isAncestor(e.target)) {
 			if (!this.settingsTool.el.isAncestor(e.target)) {
 				this.menu.hide();
