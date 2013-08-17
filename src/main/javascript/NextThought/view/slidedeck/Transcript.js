@@ -82,29 +82,24 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			// Since we've already added the record when its component registered its records,
 			// let's just get its annotation object.
 			o = m.findBy(function(item){ return item.record.getId() === k.getId(); });
-			r = o && o.range;
-			if(!r){
-				//Loop the components looking for something that knows where
-				//this.record is
-				Ext.Array.each(cmps, function(cmp){
-					r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
-					return r !== null;
-				}, this);
+			if(!o){
+				console.warn('could not find annotation for record', k, ' in annotationManager: ', m);
+				return;
 			}
 
+			r = o.range;
 			if(r){
 				console.log('Need to scroll to range', r);
 				sEl = this.el.getScrollingEl();
 				if(sEl){
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
-				if(o){
-					mc = new Ext.util.MixedCollection();
-					mc.add(o);
-					this.showAnnotations( mc, o.line);
-					//Select record to open the note viewer.
-					this.annotationView.select(o.record, undefined, false);
-				}
+
+				mc = new Ext.util.MixedCollection();
+				mc.add(o);
+				this.showAnnotations( mc, o.line);
+				//Select record to open the note viewer.
+				this.annotationView.select(o.record, undefined, false);
 				delete this.record;
 			}
 
