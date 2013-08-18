@@ -20,14 +20,18 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 	SMALLVIDEO:{
-		width: function(){return 512;}
+		width: function(){return 512;},
+		transcriptRatio: 0.55
 	},
 
 	BIGVIDEO:{
-		width: function(el){
+		transcriptRatio: 0.35,
+		width: function(el, transcriptRatio){
 			var screenHeight = Ext.Element.getViewportHeight(),
+				screenWidth = Ext.Element.getViewportWidth(),
+				tWidth = Math.floor(screenWidth * (transcriptRatio || 0.35)),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
-				defaultWidth = Ext.Element.getViewportWidth() - 440,//440 is the min width for the transcript part.
+				defaultWidth = Ext.Element.getViewportWidth() - tWidth,
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = (el && el.getY()) || 0,
 				diff = screenHeight - (y+defaultHeight),
@@ -89,6 +93,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         if(!Ext.isEmpty(this.startAtMillis)){
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
+		this.on('media-viewer-ready', function(){ this.adjustOnResize(); }, this);
 
 		this.mon(this.down('slidedeck-transcript'), {
 			scope: this,
@@ -140,8 +145,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.fireEvent('exited', this);
 		}, this);
 
-		videoWidth += 80;
-		this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
 		this.adjustOnResize();
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 	},
@@ -149,12 +152,24 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	adjustOnResize: function(){
 
-		// Dimensions adjustments.
+		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
+		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
+		// while at the same time making sure we sync with resizes.
+
 		var h = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30,
 			videoWidth = this.BIGVIDEO.width(this.videoPlayerEl),
-			targetEl = this.getTargetEl();
-		h = h + 'px';
-		targetEl.setStyle('height', h);
+			targetEl = this.getTargetEl(),
+			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : this.BIGVIDEO,
+			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
+			tEl = this.el.down('.content-video-transcript');
+
+		targetEl.setStyle('height', h+'px');
+		if(tEl){
+			transcriptWidth -= 80;
+			tEl.setStyle('width', transcriptWidth+'px');
+		}
+		videoWidth += 80;
+		this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
 		console.log('Media viewer resizing');
 	},
 
@@ -236,8 +251,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.addVideoPlayer(dim.width(this.videoPlayerEl));
 		this.el[clsAction]('small-video-player');
 		Ext.defer(function(){
-			me.updateLayout();
-		}, 10, me);
+			me.adjustOnResize();
+		}, 1, me);
 	},
 
 
