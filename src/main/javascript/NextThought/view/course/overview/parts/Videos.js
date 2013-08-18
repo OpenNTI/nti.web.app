@@ -121,10 +121,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			me = this, selected = this.getSelectionModel().selected;
 
 		//save for later
-		me.videoIndex = videoIndex;
+		if(!videoIndex){
+			console.error('No video index provided', this);
+		}
+		me.videoIndex = videoIndex || {};
 
 		this.getStore().each(function (r) {
-			var v = videoIndex[r.getId()], item;
+			var v = me.videoIndex[r.getId()], item;
 			if (v) {
 				r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
 				if (me.curtainEl && selected.contains(r)) {
