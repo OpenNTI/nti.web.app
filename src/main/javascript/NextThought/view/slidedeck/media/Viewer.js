@@ -157,7 +157,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// while at the same time making sure we sync with resizes.
 
 		var h = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30,
-			videoWidth = this.BIGVIDEO.width(this.videoPlayerEl),
+			videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
 			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : this.BIGVIDEO,
 			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
