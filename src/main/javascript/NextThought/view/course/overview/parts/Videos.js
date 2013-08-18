@@ -80,12 +80,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	]}),
 
 
-	listeners: {
-		select: 'onSelectChange',
-		click: {element: 'curtainEl', fn: 'onCurtainClicked'}
-	},
-
-
 	constructor: function (config) {
 		var i = config.items[0];
 
@@ -117,6 +111,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
 		}
 	},
+
+
+	initComponent: function(){
+		this.on('select', 'onSelectChange', this);
+		this.callParent(arguments);
+	},
+
 
 
 	applyVideoData: function (videoIndex) {
@@ -210,6 +211,9 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 	afterRender: function () {
 		this.callParent(arguments);
+
+		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
+
 		this.getSelectionModel().select(0);
 		this.showCurtain();
 		//this.bodyEl.mask('Loading...');
