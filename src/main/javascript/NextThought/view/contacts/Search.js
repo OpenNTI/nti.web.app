@@ -118,20 +118,22 @@ Ext.define('NextThought.view.contacts.Search', {
 			clear: this.clearResults
 		});
 
-		this.buildModule('modules', 'touchSender', {container: this.view});
-		this.mon(this.view, {
-			scope: this,
-			'touchScroll': function (ele, deltaY, deltaX) {
-				this.view.scrollBy(0, deltaY, false);
-			},
-			'touchTap': function (ele) {
-				ele.click();
-			},
-			'touchElementAt': function (x, y, callback) {
-				var element = Ext.getDoc().dom.elementFromPoint(x, y);
-				callback(element);
-			}
-		}, this);
+		if (Ext.is.iPad) {
+			this.buildModule('modules', 'touchSender', {container: this.view});
+			this.mon(this.view, {
+				scope: this,
+				'touchScroll': function (ele, deltaY, deltaX) {
+					this.view.scrollBy(0, deltaY, false);
+				},
+				'touchTap': function (ele) {
+					ele.click();
+				},
+				'touchElementAt': function (x, y, callback) {
+					var element = Ext.getDoc().dom.elementFromPoint(x, y);
+					callback(element);
+				}
+			}, this);
+		}
 	},
 
 

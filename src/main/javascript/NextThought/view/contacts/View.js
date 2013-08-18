@@ -88,11 +88,6 @@ Ext.define('NextThought.view.contacts.View', {
 		me.on('resize', function () {
 			me.tabs.setHeight(me.getHeight());
 		});
-
-		if (Ext.is.iPad) {
-			me.buildModule('modules', 'touchSender');
-			me.buildModule('contacts', 'touchHandler');
-		}
 	},
 
 
@@ -104,6 +99,7 @@ Ext.define('NextThought.view.contacts.View', {
 		state[this.getId()] = {source: newTab.source};
 		history.pushState(state, this.title, location.toString());
 	},
+
 
 	restore: function (state) {
 		this.fireEvent('finished-restore');

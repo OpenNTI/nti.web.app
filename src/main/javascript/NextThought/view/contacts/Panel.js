@@ -1,36 +1,36 @@
-Ext.define('NextThought.view.contacts.Panel',{
+Ext.define('NextThought.view.contacts.Panel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-tabs-panel',
 	requires: ['NextThought.view.contacts.Card'],
 	defaultType: 'contacts-tabs-card',
-	autoScroll:true,
+	autoScroll: true,
 
 	layout: 'auto',
 
 	reactToModelChanges: false,
 
-	mixins:{
+	mixins: {
 		userContainer: 'NextThought.mixins.UserContainer'
 	},
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
 
-	createUserComponent: function(i){
+	createUserComponent: function (i) {
 		return {record: i};
 	},
 
 
-	getModelObject: function(){
+	getModelObject: function () {
 		return this.associatedGroup;
 	},
 
 
-	getUserListFieldName: function(){
+	getUserListFieldName: function () {
 		return 'friends';
 	}
 

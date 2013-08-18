@@ -91,9 +91,9 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 
 	maybeHideMenu: function (e) {
-        if(!this.menu || !this.menu.el){
-            return;
-        }
+		if (!this.menu || !this.menu.el) {
+			return;
+		}
 		if (!this.menu.el.isAncestor(e.target)) {
 			if (!this.settingsTool.el.isAncestor(e.target)) {
 				this.menu.hide();
@@ -146,7 +146,13 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		this.mixins.userContainer.constructor.apply(this, arguments);
 
 		if (Ext.is.iPad) {
-			Ext.getBody().on('click', this.maybeHideMenu, this);
+			Ext.getBody().on('click', function (e) {
+				if (this.menu.el && !this.menu.el.isAncestor(e.target)) {
+					if (this.settingsTool.el && !this.settingsTool.el.isAncestor(e.target)) {
+						this.menu.hide();
+					}
+				}
+			}, this);
 		}
 
 		this.itemsList = [];
@@ -212,29 +218,29 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	},
 
 
-	removeAllItems: function(){
+	removeAllItems: function () {
 		this.itemsList = [];
 		this.callParent();
 	},
 
 
-	insertItem: function(insertAt, toInsert){
-		var spliceArgs = [insertAt,0].concat(toInsert);
-		this.itemsList.splice.apply(this.itemsList,spliceArgs);
+	insertItem: function (insertAt, toInsert) {
+		var spliceArgs = [insertAt, 0].concat(toInsert);
+		this.itemsList.splice.apply(this.itemsList, spliceArgs);
 
 		//update in the next event pump
-		Ext.defer(this.updateList,1,this,[insertAt]);
+		Ext.defer(this.updateList, 1, this, [insertAt]);
 	},
 
 
-	removeItem: function(o, autoDestroy){
+	removeItem: function (o, autoDestroy) {
 		var list = this.itemsList, removed = false;
 
-		this.remove(o,autoDestroy);
+		this.remove(o, autoDestroy);
 
-		Ext.each(list,function(item,i){
-			if(item.getId()=== o.recordId){
-				removed = list.splice(i,1)[0];
+		Ext.each(list, function (item, i) {
+			if (item.getId() === o.recordId) {
+				removed = list.splice(i, 1)[0];
 			}
 			return !removed;
 		});
@@ -274,35 +280,34 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		var last = (this.pageSize * this.currentPage) - 1;//the minus 1 is the more tile
 		this.currentPage++;
 
-		Ext.defer(this.updateList,1,this,[last]);
+		Ext.defer(this.updateList, 1, this, [last]);
 	},
 
 
-	updateList: function(dirtyIndex){
+	updateList: function (dirtyIndex) {
 		console.time('updateList');
 
 		var rendered = this.items.getCount(),
-			limit = this.pageSize*this.currentPage,
+			limit = this.pageSize * this.currentPage,
 			toRender;
 
 
-		if(dirtyIndex >= rendered && rendered>limit){
+		if (dirtyIndex >= rendered && rendered > limit) {
 			console.debug('Nothing to do, item changed beyond rendered index');
 			return;
 		}
 
-		if( dirtyIndex < this.items.getCount() ){
-			Ext.destroy( this.items.getRange(dirtyIndex) );
+		if (dirtyIndex < this.items.getCount()) {
+			Ext.destroy(this.items.getRange(dirtyIndex));
 		}
 
-		toRender = this.itemsList.slice(dirtyIndex,limit);
-		if(limit<this.itemsList.length){
+		toRender = this.itemsList.slice(dirtyIndex, limit);
+		if (limit < this.itemsList.length) {
 			toRender.pop();
 		}
 
 
-
-		this.insert(dirtyIndex,toRender);
+		this.insert(dirtyIndex, toRender);
 		this.updateMore();
 
 		console.timeEnd('updateList');

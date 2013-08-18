@@ -28,6 +28,7 @@ Ext.define('NextThought.view.contacts.GroupButtons', {
 		this.mon(this.el, 'click', this.onClick, this);
 	},
 
+
 	onClick: function (evt) {
 		this.fireEvent('click', evt.getTarget(), this);
 	}
