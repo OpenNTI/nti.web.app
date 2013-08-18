@@ -81,7 +81,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 							{ cls:'label', html: '{label}', 'data-qtip':'{label}' }
 						]}
 					]
-				}]})
+				}]}),
+			listeners: {
+				scope: this,
+				'destroy': 'widgetDestroyed'
+			}
 		});
 
 		this.mon(this.content,{
@@ -93,6 +97,23 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			'player-event-ended':'onPlayerStop',
 			'player-error':'onPlayerStop'
 		});
+	},
+
+	widgetDestroyed: function(){
+		if(!this.isDestroyed && !this.destroying){
+			//WARNING: this is not the #add() you seek. Calling the super only in the error case that our intended view
+			// was destroyed.
+			this.superclass.add.call(this,{
+				xtype:'box',
+				autoEl: {
+					cls: 'no-videos',
+					cn: [
+						{ cls: 'message', html: 'Videos are unavailable at this time.' },
+						{ cls: 'subtext', html: 'Please try again later.'}
+					]
+				}
+			});
+		}
 	},
 
 

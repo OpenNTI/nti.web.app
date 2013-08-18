@@ -304,6 +304,21 @@
 		top: 184px; bottom: 0;
 		left: 0; right: 0;
 	}
+
+	.no-videos {
+		display: block;
+		position: absolute;
+		top:0; bottom: 0; left:0; right:0;
+		padding: 15% 2em;
+		text-align: center;
+		color: $secondary-grey;
+		font: normal 300 14px/18px $font;
+		background: white;
+		.message {
+			color: $tertiary-grey;
+			font: normal 300 2em/4em "Open Sans Condensed", $font;
+		}
+	}
 }
 
 

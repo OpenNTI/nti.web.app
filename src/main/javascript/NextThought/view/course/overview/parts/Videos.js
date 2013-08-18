@@ -21,7 +21,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 	config: {
 		playerWidth: 512,
-		leaveCurtain: false
+		leaveCurtain: false,
+		videoDataLoadedCallback: Ext.emptyFn
 	},
 
 	selModel: {
@@ -112,53 +113,63 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		if (i) {
 			Library.getVideoIndex(i.title, this.applyVideoData, this);
 		}
+		else{
+			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
+		}
 	},
 
 
 	applyVideoData: function (videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			me = this, selected = this.getSelectionModel().selected, toRemove = [];
+			me = this, selected = this.getSelectionModel().selected, toRemove = [], count;
 
-		//save for later
-		if(!videoIndex){
-			console.error('No video index provided', this);
-		}
+		try{
+			//save for later
+			if(!videoIndex){
+				console.error('No video index provided', this);
+			}
 		me.videoIndex = videoIndex || {};
 
-		this.getStore().each(function (r) {
-			var v = me.videoIndex[r.getId()], item;
-			if (v) {
-				r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
-				if (me.curtainEl && selected.contains(r)) {
-					me.playBtnEl[r.get('hasTranscripts') ? 'addCls' : 'removeCls']('transcripts');
+			this.getStore().each(function (r) {
+				var v = me.videoIndex[r.getId()], item;
+				if (v) {
+					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
+					if (me.curtainEl && selected.contains(r)) {
+						me.playBtnEl[r.get('hasTranscripts') ? 'addCls' : 'removeCls']('transcripts');
+					}
+
+					item = v.sources[0];
+					r.set({
+						poster: item.poster,
+						thumb: item.thumbnail
+					});
+
+					me.playlist.push(reader.read({
+						'mediaId': v.title,
+						'sources': v.sources
+					}).records[0]);
 				}
+				else{
+					toRemove.push(r);
+				}
+			});
 
-				item = v.sources[0];
-				r.set({
-					poster: item.poster,
-					thumb: item.thumbnail
-				});
-
-				me.playlist.push(reader.read({
-					'mediaId': v.title,
-					'sources': v.sources
-				}).records[0]);
+			if(!Ext.isEmpty(toRemove)){
+				console.warn('Droping ', toRemove.length, ' records that arent in video index');
+				this.getStore().remove(toRemove);
 			}
-			else{
-				toRemove.push(r);
-			}
-		});
 
-		if(!Ext.isEmpty(toRemove)){
-			console.warn('Droping ', toRemove.length, ' records that arent in video index');
-			this.getStore().remove(toRemove);
+			count = this.getStore().getCount();
+			if(count === 0){
+				console.error('Destroying video widget because there are no videos to play');
+				this.destroy();
+			}
+		}
+		finally{
+			Ext.callback(this.getVideoDataLoadedCallback(), this, [videoIndex, count]);
 		}
 
-		if(this.getStore().getCount() === 0){
-			console.error('Destroying video widget because there are no videos to play');
-			this.destroy();
-		}
 	},
 
 
