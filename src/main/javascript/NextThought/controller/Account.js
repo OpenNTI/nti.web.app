@@ -59,10 +59,6 @@ Ext.define('NextThought.controller.Account', {
 					'click': 'showTerms'
 				},
 
-				'profile-panel':{
-					'edit': 'showAccount'
-				},
-
 				'settings-menu [action=account]' : {
 					'click': 'showAccount'
 				},
@@ -76,7 +72,8 @@ Ext.define('NextThought.controller.Account', {
 				},
 
 				'profile-panel':{
-					'request-alias-change': 'requestAliasChange'
+					'request-alias-change': 'requestAliasChange',
+					'edit': 'showAccount'
 				},
 
 				'password-reset-form button[save]' : {
