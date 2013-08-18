@@ -246,12 +246,19 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		}
 
 		function error(req,resp){
+			function filter(item){
+				if(item instanceof NextThought.model.Course){
+					return Boolean(item.getLink('enroll'));
+				}
+				return true;
+			}
+
 			req = resp.request;
 			var el = me.context.up('.content-callout'),
 				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid);
+				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 
-			if((resp.status === 403 || resp.status === 404) && p){
+			if(resp.status === 403){
 				me.handlePurchasable(p, el);
 				return;
 			}
@@ -290,6 +297,21 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					}
 				}
 				else{
+					if(resp.status === 404){
+						if(p){
+							me.handlePurchasable(p, el);
+							Ext.callback(fin);
+							return;
+						}
+
+						meta = ContentUtils.getLocation(ntiid);
+						if(meta){
+							me.locationEl.update(meta.getPathLabel());
+							me.context.update(meta.location && meta.location.getAttribute('desc'));
+							Ext.callback(fin);
+							return;
+						}
+					}
 					el.remove();
 				}
 				Ext.callback(fin);
