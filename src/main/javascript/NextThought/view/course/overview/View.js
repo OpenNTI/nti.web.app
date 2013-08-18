@@ -61,12 +61,9 @@ Ext.define('NextThought.view.course.overview.View', {
 
 		if (Ext.is.iPad) {
 			this.buildModule('modules', 'touchSender', {container: this});
-			this.on('touchScroll', function (ele, deltaY) {
+			this.on('touchScroll', function (ele, deltaY, deltaX) {
 				var videoList = this.down('.course-overview-video-section').getTargetEl();
-				if (videoList.isAncestor(ele)) {
-					videoList.scrollBy(0, deltaY, false);
-				}
-				else {
+				if (!videoList.isAncestor(ele)) { // Don't want to scroll the whole thing if we're scrolling the videos
 					this.scrollBy(0, deltaY, false);
 				}
 			}, this);

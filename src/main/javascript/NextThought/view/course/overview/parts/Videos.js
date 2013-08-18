@@ -7,7 +7,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	requires: [
 		'NextThought.model.PlaylistItem',
 		'NextThought.view.video.Video',
-		'Ext.data.reader.Json'
+		'Ext.data.reader.Json',
+		'NextThought.modules.TouchSender'
+	],
+
+	mixins: [
+		'NextThought.mixins.ModuleContainer'
 	],
 
 	ui: 'course',
@@ -181,6 +186,19 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		this.getSelectionModel().select(0);
 		this.showCurtain();
 		//this.bodyEl.mask('Loading...');
+		if (Ext.is.iPad) {
+			this.buildModule('modules', 'touchSender', {container: this});
+			this.on('touchScroll', function (ele, deltaY, deltaX) {
+				this.scrollBy(deltaX, deltaY, false);
+			}, this);
+			this.on('touchTap', function (ele) {
+				ele.click();
+			});
+			this.on('touchElementAt', function (x, y, callback) {
+				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+				callback(element);
+			});
+		}
 	},
 
 
