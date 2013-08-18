@@ -152,7 +152,6 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			var me = this;
 			this.buildModule('modules', 'touchScrollSender');
 			this.on('touchScroll', function (ele, deltaY) {
-				console.log('touchScroll');
 				me.el.scrollBy(0, deltaY, false);
 			});
 		}

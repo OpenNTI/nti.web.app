@@ -134,6 +134,10 @@ Ext.define('NextThought.modules.TouchSender', {
 				}
 			}
 
+            //Close recent activity menu popout
+            Ext.get(Ext.query('.from-menu')[0]).hide();
+            Ext.get(Ext.query('.types-menu')[0]).hide();
+
 			touch = e.touches[0];
 
 			container.fireEvent('touchStart', touch.pageX, touch.pageY);

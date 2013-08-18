@@ -276,7 +276,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 			var me = this;
 			me.buildModule('modules', 'touchSender');
 			me.on('touchScroll', function (ele, deltaY) {
-				console.log('touchScroll');
 				me.el.scrollBy(0, deltaY, false);
 			});
 			me.on('touchElementAt', function (x, y, callback) {
