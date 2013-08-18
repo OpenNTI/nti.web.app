@@ -149,39 +149,43 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	updateFromModelObject: function(key, value){
-		var users = value ? value : key,
+		var users = value || key,
 			model = this.getModelObject();
-		console.log('updating user container with new users');
+
+		console.time('updating user container with new users');
 
 		users = users.slice();
+
 		if(model && model.isDFL){
 			users.push(model.get('Creator'));
 		}
 		Ext.Array.remove(users, $AppConfig.username);
+
 		UserRepository.getUser(users, this.setUsers, this);
 	},
 
 
 	setUsers: function(resolvedUsers){
-		var p,usersToAdd = [];
+		var p;
 
 		if(!Ext.isArray(resolvedUsers)) {
-			Ext.Object.each(resolvedUsers, function(n, u){ usersToAdd.push(u); });
-		}
-		else {
-			usersToAdd = resolvedUsers.slice();
+			resolvedUsers = Ext.Object.getValues(resolvedUsers);
 		}
 
-		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
+		resolvedUsers.sort(this.userSorterFunction);
 
-		p = Ext.Array.map(usersToAdd,this.createUserComponent,this);
+		p = Ext.Array.map(resolvedUsers,this.createUserComponent,this);
 
+		console.timeEnd('updating user container with new users');
 
 		if(this.groupChatAction){
 			this.groupChatAction.setHidden(this.groupChatHidden(this.getModelObject()));
 		}
-		this.removeAll(true);
-		this.add(p);
+
+		console.time('Adding Users');
+		this.removeAllItems();
+		this.insertItem(0,p);
+		console.timeEnd('Adding Users');
 	},
 
 
@@ -245,22 +249,25 @@ Ext.define('NextThought.mixins.UserContainer', {
 		return collection.findInsertionIndex(newUser, this.userSorterFunction);
 	},
 
+
 	addCmpInSortedPosition: function(cmp){
-		users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
+		var users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
 		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
 	},
+
 
 	updateCmpPosition: function(cmp){
 		this.remove(cmp, false);
 		this.addCmpInSortedPosition(cmp);
 	},
 
+
 	addUser: function(user){
 		var existing = this.down('[username='+user.get('Username')+']'), users;
 		if(!existing){
 			//Figure out where we need to insert it
 			users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
-			this.insert(this.indexToInsertAt(users, user), this.createUserComponent(user));
+			this.insertItem(this.indexToInsertAt(users, user), this.createUserComponent(user));
 			return true;
 		}
 		return false;
@@ -271,7 +278,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 		var name = (user && user.isModel) ? user.get('Username') : user,
 			existing = this.down('[username='+name+']');
 		if (existing){
-			this.remove(existing, true);
+			this.removeItem(existing, true);
 			return true;
 		}
 		return false;
