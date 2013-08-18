@@ -253,7 +253,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			scope: this,
 			'itemmouseenter': 'mouseOver',
 			'itemmouseleave': 'mouseOut',
-			'itemclick': 'openEditor',
+			'itemclick': 'cueSelected',
 			'beforeitemclick': function(sel, rec){
 				return rec.get('type') !== 'section';
 			}
@@ -292,8 +292,21 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 	},
 
 
-	openEditor: function(view, record, item, index, e){
+	cueSelected: function(view, record, item, index, e){
 		if(!record){ return; }
+		if(e.getTarget('.add-note-here')){
+			this.openEditor.apply(this, arguments);
+			return;
+		}
+
+		var start = record.get('startTime'),
+			videoId = this.transcript.get('associatedVideoId');
+
+		console.log('Jump to video ', videoId,' to : ', start);
+		this.fireEvent('jump-video-to', videoId, start);
+	},
+
+	openEditor: function(view, record, item, index, e){
 		var cueEl = Ext.get(item),
 			cueStart = record.get('startTime'),
 			cueEnd = record.get('endTime'),
