@@ -6,13 +6,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.QuestionSet',{
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var DQ = Ext.DomQuery, me = this,
 				items = this.getChildrenNodes(courseNodeRecord),
-				c = [], req,
-				containerId = courseNodeRecord.getId();
+				c = [], req, containerId;
 
 			items = DQ.filter(items||[],'[mimeType$=naquestionset]');
 
 			if(Ext.isEmpty(items)){
 				Ext.callback(finish);
+				return;
 			}
 			
 			function findFirstUncompleted(ntiids, nodes){
