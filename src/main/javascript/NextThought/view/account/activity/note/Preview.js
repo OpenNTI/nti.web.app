@@ -122,7 +122,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 						meta = ContentUtils.getLocation(ntiid);
 						if(meta){
 							me.locationEl.update(meta.getPathLabel());
-							me.context.update(meta.location.getAttribute('desc'));
+							me.context.update(meta.location && meta.location.getAttribute('desc'));
 							Ext.callback(fin);
 							return;
 						}
