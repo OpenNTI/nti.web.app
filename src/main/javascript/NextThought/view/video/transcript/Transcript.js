@@ -57,6 +57,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 			var min = Math.floor((values.startTime || 0)/60),
 				sec = Math.round((values.startTime || 0)%60);
 
+			if(sec >= 60){ min++; sec = sec - 60; }//make sure seconds doesn't round to 60
 			if(sec < 10){ sec = '0'+sec; }
 			out.push(min+':'+sec);
 			return out;
