@@ -462,6 +462,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			me.mon(me.contentEl, {
 				'click': function (e) {
 					me.contentEl.focus();
+                    me.moveCursorToEnd(me.contentEl);
 				}
 			});
 		}
@@ -480,6 +481,31 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.typingAttributes = [];
 	},
+
+    moveCursorToEnd: function (el) {
+        //this is only for input/textarea elements
+        el = Ext.getDom(el);
+        if (typeof el.selectionStart === "number") {
+            console.log("1");
+            el.selectionStart = el.selectionEnd = el.value.length;
+        }
+        else if (el.createTextRange !== undefined) {
+            el.focus();
+            var range = el.createTextRange();
+            range.collapse(false);
+            range.select();
+        }
+        else if(document.createRange){
+            var range, selection;
+            range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        console.log("4");
+    },
 
 
 	setupSharedListEl: function (me, tabTracker, scrollParentEl) {

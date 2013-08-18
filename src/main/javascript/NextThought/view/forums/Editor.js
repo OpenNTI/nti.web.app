@@ -153,6 +153,15 @@ Ext.define('NextThought.view.forums.Editor', {
             range.collapse(false);
             range.select();
         }
+        else if(document.createRange){
+            var range, selection;
+            range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
     },
 
 

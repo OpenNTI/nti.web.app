@@ -13,8 +13,6 @@ Ext.define('NextThought.mixins.ModuleContainer', {
             getterName = this.getterNameForModule(config.moduleName);
         }
 
-        console.log('getterName:' + getterName + "|");
-
         this[getterName] = function(){return m;};
     },
 
