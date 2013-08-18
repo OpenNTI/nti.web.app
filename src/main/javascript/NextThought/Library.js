@@ -131,6 +131,7 @@ Ext.define('NextThought.Library', {
 
 		function parse(q,s,resp){
 			if(!s){
+				delete me.activeVideoLoad[index];
 				failure(resp);
 				return;
 			}
@@ -142,6 +143,7 @@ Ext.define('NextThought.Library', {
 				try{
 					r = Ext.JSON.decode(r);
 				}catch(e){
+					delete me.activeVideoLoad[index];
 					failure(e);
 					return;
 				}
