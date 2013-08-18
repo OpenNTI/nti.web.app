@@ -1035,16 +1035,8 @@ div.contact-buttons {
 			}
 		}
 
-		&.show-all {
-			//remove our limiter
-			.contact-card-container:nth-of-type(1n+15) { display: block; }
-		}
 
 		.contact-card-container {
-			// 1*0+16=16, 1*1+16=17, 1*2+16=18, 1*n+16=...you get the idea...
-			// Make the 15th and on instance hidden.
-			&:nth-of-type(1n+15) { display: none; }
-
 			float: left;
 			width: 140px;
 			height: 140px;

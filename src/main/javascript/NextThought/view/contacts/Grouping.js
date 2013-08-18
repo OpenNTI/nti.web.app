@@ -18,6 +18,9 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	layout: 'auto',
 	componentLayout: 'natural',
 
+	pageSize: 15,
+	currentPage: 1,
+
 	width: 700,
 	plain: true,
 	frame: false,
@@ -56,6 +59,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		return this.body;
 	},
 
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'grouping-header',
@@ -70,6 +74,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 			cn: ['{%this.renderContainer(out,values)%}']
 		}
 	]),
+
 
 	renderSelectors: {
 		toolsEl: '.grouping-header .tools',
@@ -143,6 +148,8 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		if (Ext.is.iPad) {
 			Ext.getBody().on('click', this.maybeHideMenu, this);
 		}
+
+		this.itemsList = [];
 	},
 
 
@@ -181,7 +188,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		this.initialConfig.title = t;
 		this.nameEl.update(t);
 		this.nameEl.set({'data-qtip': t});
-		this.countEl.update(Ext.String.format('{0}', this.items.getCount()));
+		this.countEl.update(Ext.String.format('{0}', this.itemsList.length));
 	},
 
 
@@ -205,6 +212,35 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	},
 
 
+	removeAllItems: function(){
+		this.itemsList = [];
+		this.callParent();
+	},
+
+
+	insertItem: function(insertAt, toInsert){
+		var spliceArgs = [insertAt,0].concat(toInsert);
+		this.itemsList.splice.apply(this.itemsList,spliceArgs);
+
+		//update in the next event pump
+		Ext.defer(this.updateList,1,this,[insertAt]);
+	},
+
+
+	removeItem: function(o, autoDestroy){
+		var list = this.itemsList, removed = false;
+
+		this.remove(o,autoDestroy);
+
+		Ext.each(list,function(item,i){
+			if(item.getId()=== o.recordId){
+				removed = list.splice(i,1)[0];
+			}
+			return !removed;
+		});
+	},
+
+
 	updateStuff: function () {
 		this.setTitle();
 		this.updateMore();
@@ -217,23 +253,59 @@ Ext.define('NextThought.view.contacts.Grouping', {
 			this.on('afterrender', this.updateMore, this, {single: true});
 			return;
 		}
+
 		if (this.moreEl) {
 			this.moreEl.remove();
 		}
 
-		var c = this.items.getCount() - 14,
+		var c = this.itemsList.length - this.items.getCount() - 1,
 			layout = this.layout || {},
 			el = layout.innerCt;
-		if (c > 0 && (!this.el || !this.el.hasCls('show-all'))) {
+
+
+		if (c > 0) {
 			this.moreEl = this.showMoreTpl.append(el || this.getTargetEl(), {count: c}, true);
-			this.moreEl.on('click', this.showAll, this);
+			this.moreEl.on('click', this.showMore, this);
 		}
 	},
 
 
-	showAll: function () {
-		this.el.addCls('show-all');
+	showMore: function () {
+		var last = (this.pageSize * this.currentPage) - 1;//the minus 1 is the more tile
+		this.currentPage++;
+
+		Ext.defer(this.updateList,1,this,[last]);
+	},
+
+
+	updateList: function(dirtyIndex){
+		console.time('updateList');
+
+		var rendered = this.items.getCount(),
+			limit = this.pageSize*this.currentPage,
+			toRender;
+
+
+		if(dirtyIndex >= rendered && rendered>limit){
+			console.debug('Nothing to do, item changed beyond rendered index');
+			return;
+		}
+
+		if( dirtyIndex < this.items.getCount() ){
+			Ext.destroy( this.items.getRange(dirtyIndex) );
+		}
+
+		toRender = this.itemsList.slice(dirtyIndex,limit);
+		if(limit<this.itemsList.length){
+			toRender.pop();
+		}
+
+
+
+		this.insert(dirtyIndex,toRender);
 		this.updateMore();
+
+		console.timeEnd('updateList');
 	}
 
 });
