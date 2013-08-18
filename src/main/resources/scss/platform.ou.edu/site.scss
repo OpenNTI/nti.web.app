@@ -3,12 +3,17 @@
 .x-component-branding {
 	//in the library view, turn this on to show the logo/message box
 	display: block;
-
+	margin: 30px 0 114px 0;
+	
 	.logo{
 		top: 10%;
 		&::after{
 			content: url(../../images/platform.ou.edu/ou_logo_wordmark.png);
 		}
+	}
+
+	.box{
+		display: none;
 	}
 }
 
