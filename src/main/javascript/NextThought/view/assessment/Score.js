@@ -7,6 +7,15 @@ Ext.define('NextThought.view.assessment.Score',{
 		'NextThought.chart.series.Score'
 	],
 
+	correctColor: '#a5c959',
+	incorrectColor: '#d9d9d9',
+	textColor: '#7fab22',
+	chartStyle: {
+		"stroke-width": 2,
+		"stroke-opacity": 1,
+		stroke: '#fff'
+	},
+
 	initComponent: function(){
 		this.store = Ext.data.JsonStore.create({fields: ['p']});
 		this.callParent(arguments);
@@ -21,7 +30,7 @@ Ext.define('NextThought.view.assessment.Score',{
 			shadow: false,
 			legend: false,
 
-			series: [{ type: 'score', angleField: 'p' }]
+			series: [{ type: 'score', angleField: 'p', correctColor: this.correctColor, incorrectColor: this.incorrectColor, textColor: this.textColor, style: this.chartStyle }]
 		});
 
 		this.setValue(this.value || 80);

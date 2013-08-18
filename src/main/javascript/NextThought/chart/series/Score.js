@@ -5,6 +5,7 @@ Ext.define('NextThought.chart.series.Score',{
 	donut: 65,
 	correctColor: '#a5c959',
 	incorrectColor: '#d9d9d9',
+	textColor: '#7fab22',
 	colorSet: [],
 	style: {
 		"stroke-width": 2,
@@ -39,7 +40,7 @@ Ext.define('NextThought.chart.series.Score',{
 			label = this.scoreLabel = this.chart.surface.add({
 		        type: 'text',
 		        text: '',
-		        fill: '#7fab22',
+		        fill: this.textColor,
 		        font: 'normal 400 14px "Open Sans", Verdana',
 				'text-anchor': 'middle',
 				x: this.centerX + 2,
@@ -50,7 +51,7 @@ Ext.define('NextThought.chart.series.Score',{
 		try {
 			label.setAttributes({
 				text: val+(val>=100?'':'\u008C%'),
-				fill: val===0?'#d9d9d9':'#7fab22',
+				fill: val===0? this.incorrectColor: this.textColor,
 				x: this.centerX + (val>=100? 0:2),
 				y: this.centerY + 1
 			});
