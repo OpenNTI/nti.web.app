@@ -53,6 +53,10 @@ Ext.define('NextThought.view.Views', {
             return;
         }
 
+		if(newUrl.indexOf('//') === 0){
+			newUrl = location.protocol + newUrl;
+		}
+
         var HOST = Globals.HOST_PREFIX_PATTERN,
             currentURL = this.el.getStyle('background-image').slice(4, -1),
             a = HOST.exec(newUrl),

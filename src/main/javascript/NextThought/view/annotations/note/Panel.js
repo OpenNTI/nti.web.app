@@ -306,10 +306,15 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	fillInUser: function (user) {
 		var HOST = Globals.HOST_PREFIX_PATTERN,
 			avatarURL = user.get('avatarURL'),
-			currentURL = this.avatar.getStyle('background-image').slice(4, -1),
-			a = HOST.exec(avatarURL),
-			b = HOST.exec(currentURL),
-			d = HOST.exec(location)[0];//default host
+			currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
+
+		if(avatarURL.indexOf('//') === 0){
+			avatarURL = location.protocol + avatarURL;
+		}
+
+		a = HOST.exec(avatarURL);
+		b = HOST.exec(currentURL);
+		d = HOST.exec(location)[0];//default host
 
 		a = (a && a[0]) || d;
 		b = (b && b[0]) || d;
