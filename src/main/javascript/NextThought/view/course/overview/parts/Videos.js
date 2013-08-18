@@ -118,7 +118,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	applyVideoData: function (videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			me = this, selected = this.getSelectionModel().selected;
+			me = this, selected = this.getSelectionModel().selected, toRemove = [];
 
 		//save for later
 		if(!videoIndex){
@@ -145,7 +145,20 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 					'sources': v.sources
 				}).records[0]);
 			}
+			else{
+				toRemove.push(r);
+			}
 		});
+
+		if(!Ext.isEmpty(toRemove)){
+			console.warn('Droping ', toRemove.length, ' records that arent in video index');
+			this.getStore().remove(toRemove);
+		}
+
+		if(this.getStore().getCount() === 0){
+			console.error('Destroying video widget because there are no videos to play');
+			this.destroy();
+		}
 	},
 
 
