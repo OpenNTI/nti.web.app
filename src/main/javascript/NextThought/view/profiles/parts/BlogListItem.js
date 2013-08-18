@@ -158,7 +158,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 
 
 	updateSharedWith: function(field, value){
-		SharingUtils.getShortSharingDisplayText(value, function(str){
+		/*SharingUtils.getShortSharingDisplayText(value, function(str){
 			if(this.publishStateEl){
 				this.publishStateEl.update(str);
 			}
@@ -167,8 +167,13 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem',{
 			if(this.publishStateEl){
 				this.publishStateEl.set({'data-qtip': str});
 			}
-		}, this);
-		this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls':'addCls']('private');
+		}, this);*/
+		//this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls':'addCls']('private');
+		
+		if(this.publishStateEl){
+			this.publishStateEl[this.record.isPublished() ? 'removeCls':'addCls']('private');
+			this.publishStateEl.update(this.record.isPublished()? 'Public' : 'Private');
+		}
 	},
 
 
