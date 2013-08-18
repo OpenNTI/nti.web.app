@@ -108,7 +108,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		if(this.commentsEl){
 			var c = this.record.getReplyCount() || 0;
 			console.log('count was update to: ', c);
-			this.commentsEl.update(c + ' comments');
+			this.commentsEl.update(Ext.Format.plural(c, 'comment'));
 		}
 	},
 
@@ -412,7 +412,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 					{
 						cls: 'foot',
 						cn: [
-							{ cls: 'comments', 'data-label': ' Comments', html: ' ' },
+							{ cls: 'comments', 'data-label': ' Comment', html: ' ' },
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
 						]
