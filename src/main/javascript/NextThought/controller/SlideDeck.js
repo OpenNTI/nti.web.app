@@ -64,30 +64,91 @@ Ext.define('NextThought.controller.SlideDeck',{
 		// NOTE: this is overly simplified in the future,
 		// instead of just passing the transcript, we will pass all the associated items.
 
-		this.activeMediaPlayer = Ext.widget('media-viewer', {
-			video: video,
-			transcript: transcript,
-			autoShow: true,
-			record: rec,
-			startAtMillis: options && options.startAtMillis
-		});
-		this.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
-		this.activeMediaPlayer.on('destroy', function(){
-			me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
-			me.activeMediaPlayer = null;
-		});
-		this.activeMediaPlayer.on('media-viewer-ready', function(viewer){
-			var fn = options && options.callback,
-				scope = this;
-			if(Ext.isObject(fn)){
-				fn = fn.fn;
-				scope = fn.scope;
-			}
+		function createMediaPlayer(record, scrollToId){
+			me.activeMediaPlayer = Ext.widget('media-viewer', {
+				video: video,
+				transcript: transcript,
+				autoShow: true,
+				record: record,
+				scrollToId: scrollToId,
+				startAtMillis: options && options.startAtMillis
+			});
+			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+			me.activeMediaPlayer.on('destroy', function(){
+				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+				me.activeMediaPlayer = null;
+			});
+			me.activeMediaPlayer.on('media-viewer-ready', function(viewer){
+				var fn = options && options.callback,
+					scope = this;
+				if(Ext.isObject(fn)){
+					fn = fn.fn;
+					scope = fn.scope;
+				}
 
-			Ext.callback(fn, scope, [viewer]);
-		});
+				Ext.callback(fn, scope, [viewer]);
+			});
+		}
+
+		if(!rec || rec.isTopLevel()){
+			createMediaPlayer(rec);
+			return;
+		}
+
+		//Otherwise, will need to load the parent record before we can navigate to it.
+		this.navigateToReply(rec, createMediaPlayer, me);
 	},
 
+
+	navigateToReply: function(rec, callback, scope){
+		var	targets = (rec.get('references') || []).slice(),
+			me = this;
+
+		targets.push(rec.getId());
+
+		function continueLoad() {
+			if(Ext.isEmpty(targets)){
+				console.warn('Targets is empty, so we are done here. (we should not get here!)');
+				Ext.callback(callback, scope, [rec]);
+			}
+			$AppConfig.service.getObject(targets.pop(), loaded, fail, me);
+		}
+
+		function loaded(r){
+			var isTopLevel = r.isTopLevel();
+
+			// We're done here
+			if(isTopLevel){
+				Ext.callback(callback, scope, [r, rec.getId()]);
+				return;
+			}
+
+			// if not, let's load the next object
+			continueLoad();
+		}
+
+		function fail(req, resp) {
+			//FIXME: could not figure out the type of the object. Normally, that's what we want but it's hard to get with info we have.
+			var objDisplayType = 'object',
+				msgCfg = { msg: 'An unexpected error occurred loading the ' + objDisplayType };
+
+			if (resp && resp.status) {
+				if (resp.status === 404) {
+					msgCfg.title = 'Not Found!';
+					msgCfg.msg = 'The ' + objDisplayType + ' you are looking for no longer exists.';
+				}
+				else if (resp.status === 403) {
+					msgCfg.title = 'Unauthorized!';
+					msgCfg.msg = 'You do not have access to this ' + objDisplayType + '.';
+				}
+			}
+			console.log("Could not retrieve rawData for: ", targets);
+			console.log("Error: ", arguments);
+			alert(msgCfg);
+		}
+
+		continueLoad();
+	},
 
 	createStoreForContainer: function(containerId){
 		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),

@@ -76,7 +76,8 @@ Ext.define('NextThought.controller.UserData', {
 					'open-chat-transcript': 'openChatTranscript',
 					'load-transcript': 'onLoadTranscript',
 					'save-new-note' : 'saveNewNote',
-					'save-new-series-note':'saveNewSeriesNote'
+					'save-new-series-note':'saveNewSeriesNote',
+					'register-note-window': 'registerNoteWindow'
 				},
 				'slidedeck-view': {
 					exited: 'presentationExited'
@@ -224,6 +225,10 @@ Ext.define('NextThought.controller.UserData', {
 			}
 			deselect();
 		}
+	},
+
+	registerNoteWindow: function(sender, win){
+		this.activeNoteWindow = win;
 	},
 
 

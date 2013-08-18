@@ -75,28 +75,51 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		if(this.record){
-			var r, sEl, memoryStore;
-			//Loop the components looking for something that knows where
-			//this.record is
-			Ext.each(cmps, function(cmp){
-				r = this.noteOverlay.rangeForDescription(this.record, cmp, cmp.getStore());
-				return r !== null;
-			}, this);
+			var r, sEl,
+				m = this.noteOverlay.annotationManager,
+				k = this.record, o, mc, me = this, win;
 
+			// Since we've already added the record when its component registered its records,
+			// let's just get its annotation object.
+			o = m.findBy(function(item){ return item.record.getId() === k.getId(); });
+			if(!o){
+				console.warn('could not find annotation for record', k, ' in annotationManager: ', m);
+				return;
+			}
+
+			r = o.range;
 			if(r){
 				console.log('Need to scroll to range', r);
 				sEl = this.el.getScrollingEl();
 				if(sEl){
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
-				memoryStore  = NextThought.store.FlatPage.create();
-				memoryStore.add(this.record);
-				this.showAnnotations(memoryStore.data, undefined, memoryStore);
-                //Select record to open the note viewer.
-                this.annotationView.select(this.record, undefined, false);
+
+				mc = new Ext.util.MixedCollection();
+				mc.add(o);
+				this.showAnnotations( mc, o.line);
+				if(this.scrollToId){
+
+					// NOTE: If it's a reply, we're create the note viewer ourselves,
+					// since we want to specify the scrollToId property.
+					win =  Ext.widget({
+						autoShow: true,
+						xtype: 'note-window',
+						record: this.record,
+						reader: this,
+						scrollToId: this.scrollToId,
+						xhooks: this.getViewerHooks()
+					});
+
+					me.fireEvent('register-note-window', this, win);
+					delete this.record;
+					return;
+				}
+
+				//Select record to open the note viewer.
+				this.annotationView.getSelectionModel().select(o.record);
 				delete this.record;
 			}
-
 		}
 	},
 

@@ -74,6 +74,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			xtype:'slidedeck-transcript',
 			transcript: this.transcript,
 			record: this.record,
+			scrollToId: this.scrollToId,
 			videoPlaylist: [this.video],
 			xhooks: {
 				getScrollTarget: function(){
