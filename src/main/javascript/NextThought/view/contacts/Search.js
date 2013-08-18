@@ -131,6 +131,7 @@ Ext.define('NextThought.view.contacts.Search', {
 			me.mon(me.el.down('input'), {
 				blur: function () {
 					window.scrollTo(0, 0);
+                    me.setHeight(Ext.Element.getViewportHeight() - me.getPosition()[1]);
 				}
 			});
 		}
@@ -163,7 +164,6 @@ Ext.define('NextThought.view.contacts.Search', {
 			this.clearResults();
 		}
 		else {
-
 			this.setHeight(Ext.Element.getViewportHeight() - this.getPosition()[1]);
 			this.store.search(value);
 		}

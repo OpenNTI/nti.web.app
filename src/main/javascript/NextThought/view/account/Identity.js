@@ -85,7 +85,6 @@ Ext.define('NextThought.view.account.Identity',{
         var container = this;
 
         container.on('touchTap', function(ele) {
-            console.log('TOUCHTAPPED');
             ele.click();
         });
 
