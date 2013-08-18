@@ -28,8 +28,6 @@ Ext.define('NextThought.view.account.Identity',{
 		presence: '.presence'
 	},
 
-    menuOpen: false,
-
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{}, $AppConfig.userObject.data);
@@ -97,18 +95,24 @@ Ext.define('NextThought.view.account.Identity',{
         });
 
         container.on('touchLongPress', function(ele, pageX, pageY){
-            console.log("LONG PRESS");
-            if(this.menuOpen){
-                this.menuOpen = false;
+            var queryResult = Ext.query('.presence-menu'),
+                menuChild = null,
+                profileMenu = null;
+
+            if(queryResult){
+                menuChild = queryResult[0];
+                if(menuChild){
+                    profileMenu = Ext.get(menuChild).el.up('.x-menu');
+                }
+            }
+
+            if(profileMenu && profileMenu.isVisible()){
                 this.startToHideMenu();
             }
             else{
-                this.menuOpen = true;
                 this.startToShowMenu();
             }
         });
-
-
     },
 
 	cancelHideShowEvents: function(){
@@ -118,7 +122,6 @@ Ext.define('NextThought.view.account.Identity',{
 
 
 	startToShowMenu: function(){
-        console.log("startToShowMenu");
 		var me = this;
 
 		this.cancelHideShowEvents();
@@ -130,7 +133,6 @@ Ext.define('NextThought.view.account.Identity',{
 
 
 	startToHideMenu: function(){
-        console.log("startToHideMenu");
 		var me = this;
 
 		this.cancelHideShowEvents();
