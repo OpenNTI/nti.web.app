@@ -31,12 +31,14 @@ Ext.define('NextThought.view.BoundPanel',{
 		return {record: rec, recordId: rec.getId()};
 	},
 
+
 	showEmptyState: function(){
 		if(this.emptyCmp && !this.emptyState){
 			this.add(this.emptyCmp);
 			this.emptyState = true;
 		}
 	},
+
 
 	hideEmptyState: function(){
 		if(this.emptyState && this.down('[emptyState=true]')){
@@ -45,11 +47,12 @@ Ext.define('NextThought.view.BoundPanel',{
 		}
 	},
 
+
 	shouldHide: function(records){
 		var allHidden = true, me = this;
 
 		Ext.each(records, function(item){
-			allHidden = allHidden && (Boolean(item.hidden) || (me.filter && !me.filter(item)));
+			allHidden = allHidden && (!!item.hidden || (me.filter && !me.filter(item)));
 		});
 
 		return allHidden;
@@ -71,7 +74,7 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 
-	onBoundStoreLoad: function(store,records){
+	onBoundStoreLoad: function(store){
 		var items;
 
 		this.removeAll(true);
@@ -93,39 +96,45 @@ Ext.define('NextThought.view.BoundPanel',{
 		var insertionPoint = this.defaultInsertPoint || index,
 			toAdd = Ext.Array.clean(Ext.Array.map(records,this.getComponentConfigForRecord,this));
 
-		/*if(toAdd.length===1){
-			//Figure out at what point to insert
-			debugger;
-		}*/
-
 		if(!this.shouldHide(records)){
 			this.hideEmptyState();
 		}
 
-		this.insert(insertionPoint,toAdd);
+		this.insertItem(insertionPoint,toAdd);
 	},
 
 
 	onBoundStoreRemove: function(store,record){
 		console.debug('remove',arguments);
 
-		var cmp;
-		this.items.each(function(i){
-
+		var me = this;
+		function itr(i){
 			if(i.recordId === record.getId()){
-				cmp = i;
+				me.removeItem(i,true);
+				return false;
 			}
+			return true;
+		}
 
-			return !cmp;
-		});
+		this.items.each(itr,this);
 
 		if(this.shouldHide(store.getRange())){
 			this.showEmptyState();
 		}
+	},
 
-		console.debug('should remove ',cmp);
-		if(cmp){
-			this.remove(cmp);
-		}
+
+	removeAllItems: function(){
+		this.removeAll(true);
+	},
+
+
+	insertItem: function(insertAt, toInsert){
+		return this.insert(insertAt,toInsert);
+	},
+
+
+	removeItem: function(o,autoDestroy){
+		return this.remove(o,autoDestroy);
 	}
 });
