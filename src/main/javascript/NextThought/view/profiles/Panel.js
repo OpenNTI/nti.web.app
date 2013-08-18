@@ -478,7 +478,7 @@ Ext.define('NextThought.view.profiles.Panel',{
 			this.nameEl.addCls('readonly');
 			this.nameEl.removeCls('editable');
 
-			if(isFeature('request-alias-change')){
+			if(isFeature('request-alias-change') && isMe(user)){
 				this.nameContainerEl.on({
 					scope: this,
 					mouseover: function(){
