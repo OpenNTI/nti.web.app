@@ -999,7 +999,7 @@ $experimental-support-for-svg: true;
 
 			.content-video-transcript{
 				margin: 0 !important;
-				width: 360px !important;
+				max-width: 360px !important;
 
 				.row-item{
 					.timestamp{
@@ -1021,7 +1021,7 @@ $experimental-support-for-svg: true;
 			.x-container-transcript{
 				.content-video-transcript{
                     padding-left: 70px !important;
-					width: 720px !important;
+					max-width: 720px !important;
 
 					.row-item{
 						.timestamp{

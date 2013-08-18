@@ -27,7 +27,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		width: function(el){
 			var screenHeight = Ext.Element.getViewportHeight(),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
-				defaultWidth = 840,
+				defaultWidth = Ext.Element.getViewportWidth() - 440,//440 is the min width for the transcript part.
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = (el && el.getY()) || 0,
 				diff = screenHeight - (y+defaultHeight),
