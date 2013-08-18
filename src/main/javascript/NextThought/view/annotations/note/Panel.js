@@ -308,7 +308,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			avatarURL = user.get('avatarURL'),
 			currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
 
-		if(avatarURL.indexOf('//') === 0){
+		if(avatarURL && avatarURL.indexOf('//') === 0){
 			avatarURL = location.protocol + avatarURL;
 		}
 

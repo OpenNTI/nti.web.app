@@ -53,7 +53,7 @@ Ext.define('NextThought.view.Views', {
             return;
         }
 
-		if(newUrl.indexOf('//') === 0){
+		if(newUrl && newUrl.indexOf('//') === 0){
 			newUrl = location.protocol + newUrl;
 		}
 
