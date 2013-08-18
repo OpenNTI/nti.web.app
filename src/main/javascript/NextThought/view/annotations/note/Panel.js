@@ -331,8 +331,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		var val, names = [], others,
 			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
 
-
-		this.responseBox[sharedWith.length === 0 ? 'removeCls' : 'addCls']('shared');
+		this.responseBox[(sharedWith|| []).length === 0 ? 'removeCls' : 'addCls']('shared');
+		if(Ext.isEmpty(sharedWith)){  return; }
 
 		SharingUtils.getLongSharingDisplayText(sharedWith, function (str) {
 			this.sharedTo.update(str);
