@@ -114,13 +114,8 @@ Ext.define('NextThought.view.forums.Editor', {
         var container = this.ownerCt.getEl();
         container.removeCls('scroll-lock scroll-padding-right');
         Ext.EventManager.onWindowResize(this.syncHeight, this, null);
-
-//        if (Ext.is.iPad) {
-//            window.scrollTo(0, 0);
-//            document.body.scrollTop = 0;
-//        }
-
-        return this.callParent(arguments);
+        console.log(arguments);
+       return this.callParent(arguments);
     },
 
 

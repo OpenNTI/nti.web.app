@@ -17,6 +17,7 @@ Ext.define('NextThought.view.forums.Board',{
 	requires: [
         'NextThought.util.Time',
         'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchScrollSender',
         'NextThought.modules.TouchHandler'
     ],
 
@@ -155,7 +156,7 @@ Ext.define('NextThought.view.forums.Board',{
 			});
 		}
 
-        this.buildModule('modules', 'touchSender');
+        this.buildModule('modules', 'touchScrollSender');
         this.buildModule('modules', 'touchHandler',
             {getPanel: function(){
                 return this.container.el;

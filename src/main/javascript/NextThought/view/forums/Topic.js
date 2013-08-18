@@ -18,6 +18,7 @@ Ext.define('NextThought.view.forums.Topic',{
 		'NextThought.ux.SearchHits',
 		'NextThought.layout.component.Natural',
         'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchScrollSender',
         'NextThought.modules.TouchHandler'
 	],
 
@@ -190,6 +191,15 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	afterRender: function(){
+        console.log("RENDERED TOPIC");
+        if(Ext.is.iPad){
+            if(this.topicOpen){
+                this.destroy();
+                return;
+            }
+            this.topicOpen = true;
+        }
+
 		this.callParent(arguments);
 		var h = this.record.get('headline'),
 			box = this.responseEl;
@@ -243,10 +253,10 @@ Ext.define('NextThought.view.forums.Topic',{
 			}
 		});
         if(Ext.is.iPad){
-            this.buildModule('modules', 'touchSender');
+            this.buildModule('modules', 'touchScrollSender', {moduleName: 'topicTouchSender'});
             this.buildModule('modules', 'touchHandler', {getPanel: function(){
                 return this.container.el.parent();
-            }});
+            }, moduleName: 'topicTouchHandler'});
         }
 
 	},
@@ -394,6 +404,13 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	onDestroy: function(){
+        console.log('destroy!');
+
+        if(Ext.is.iPad){
+            if(this.topicOpen){
+                this.topicOpen = false;
+            }
+        }
 
 		this.bodyEl.select('video').each(function(vid){
 			try{
@@ -451,6 +468,7 @@ Ext.define('NextThought.view.forums.Topic',{
 
 
 	onEditPost: function(e){
+        console.log('onEditPost');
 		e.stopEvent();
 		this.fireEvent('edit-topic', this, this.record);
 	},

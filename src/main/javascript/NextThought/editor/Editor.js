@@ -473,7 +473,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			});
 			if (Ext.is.iPad) {
-				console.log("On Destroy, scroll 0,0");
 				window.scrollTo(0, 0);
 				document.body.scrollTop = 0;
 			}
