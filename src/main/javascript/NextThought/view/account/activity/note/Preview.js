@@ -112,10 +112,20 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 					}
 				}
 				else{
-					if(resp.status === 404 && p){
-						me.handlePurchasable(p, el);
-						Ext.callback(fin);
-						return;
+					if(resp.status === 404){
+						if(p){
+							me.handlePurchasable(p, el);
+							Ext.callback(fin);
+							return;
+						}
+
+						meta = ContentUtils.getLocation(ntiid);
+						if(meta){
+							me.locationEl.update(meta.getPathLabel());
+							me.context.update(meta.location.getAttribute('desc'));
+							Ext.callback(fin);
+							return;
+						}
 					}
 					el.remove();
 				}
