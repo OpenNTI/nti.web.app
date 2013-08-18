@@ -4,8 +4,14 @@ Ext.define('NextThought.view.contacts.Search', {
 	alias: 'widget.contact-search',
 	requires: [
 		'NextThought.view.form.fields.SimpleTextField',
-		'NextThought.view.account.contacts.management.Popout'
+		'NextThought.view.account.contacts.management.Popout',
+		'NextThought.modules.TouchSender'
 	],
+
+	mixins: [
+		'NextThought.mixins.ModuleContainer'
+	],
+
 	floating: true,
 	shadow: false,
 	preventBringToFront: true,
@@ -111,7 +117,23 @@ Ext.define('NextThought.view.contacts.Search', {
 			changed: this.search,
 			clear: this.clearResults
 		});
+
+		this.buildModule('modules', 'touchSender', {container: this.view});
+		this.mon(this.view, {
+			scope: this,
+			'touchScroll': function (ele, deltaY, deltaX) {
+				this.view.scrollBy(0, deltaY, false);
+			},
+			'touchTap': function (ele) {
+				ele.click();
+			},
+			'touchElementAt': function (x, y, callback) {
+				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+				callback(element);
+			}
+		}, this);
 	},
+
 
 	destroy: function () {
 		Ext.getBody().un('click', this.detectBlur, this);
@@ -131,7 +153,7 @@ Ext.define('NextThought.view.contacts.Search', {
 			me.mon(me.el.down('input'), {
 				blur: function () {
 					window.scrollTo(0, 0);
-                    me.setHeight(Ext.Element.getViewportHeight() - me.getPosition()[1]);
+					me.setHeight(Ext.Element.getViewportHeight() - me.getPosition()[1]);
 				}
 			});
 		}
@@ -153,10 +175,12 @@ Ext.define('NextThought.view.contacts.Search', {
 		this.hide();
 	},
 
+
 	itemClicked: function (view, record, item) {
 		var add = Ext.fly(item).down('.add');
 		NextThought.view.account.contacts.management.Popout.popup(record, add, item, [-10, -18]);
 	},
+
 
 	//We buffer this slightly to avoid unecessary searches
 	search: Ext.Function.createBuffered(function (value) {
@@ -168,6 +192,7 @@ Ext.define('NextThought.view.contacts.Search', {
 			this.store.search(value);
 		}
 	}, 250),
+
 
 	clearResults: function () {
 		this.setHeight(52);
