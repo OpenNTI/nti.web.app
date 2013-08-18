@@ -995,6 +995,7 @@ div.contact-buttons {
 				@include ellipse;
 				max-width: 480px;
 				display: inline-block;
+				vertical-align: bottom;
 			}
 
 			span{
