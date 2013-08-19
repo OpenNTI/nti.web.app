@@ -1,0 +1,139 @@
+.contacts-oobe-window {
+	@extend .nti-window;
+	@include reset-window-border-radius(3px);
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
+
+	background: #f8f8f8;
+
+
+	.error {
+		position: absolute;
+		bottom: 45px;
+		left: 0;
+		right: 0;
+		overflow: hidden;
+		background: #f35252;
+		font: normal 600 12px $font;
+
+		.label {
+			float: left;
+			width: 75px;
+			text-align: right;
+			color: #730000;
+			padding: 10px 0;
+		}
+
+		.message {
+			color: #fff;
+			margin: 10px 10px 10px 85px;
+		}
+	}
+
+	.footer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		border: 0 solid #dcdcdc;
+		border-top-width: 1px;
+		text-align: right;
+		border-radius: 0 0 3px 3px;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -8px;
+			left: 0;
+			right: 0;
+			height: 8px;
+			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
+			border-radius: 90px;
+		}
+
+		a.button {
+			cursor: pointer;
+			display: inline-block;
+			height: 45px;
+			width: 85px;
+			line-height: 45px;
+			font-size: 14px;
+			text-align: center;
+			color: $secondary-grey;
+			margin: -1px;
+
+			&.confirm {
+				width: 95px;
+				line-height: 44px;
+				font-weight: 500;
+				font-style: italic;
+				color: #ffffff;
+				outline: 1px solid #69a92b;
+				background: #75bc30;
+
+				&.alt {
+					background: $primary-blue;
+					outline: 1px solid $border-blue;
+				}
+
+				&.disabled {
+					opacity: 0.6;
+					background: #dcdcdc;
+					outline: none;
+				}
+			}
+		}
+
+	}
+
+	.container-body {
+		background: #fff;
+		font: normal 400 14px/25px $font;
+		position: absolute;
+		overflow: hidden;
+		top: 0;
+		bottom: 45px;
+		left: 0;
+		right: 0;
+	}
+
+
+	.oobe-contact-results {
+		position: absolute;
+		top: 0; left: 24px;
+		right: 24px; bottom: 0;
+
+		.item {
+			$size: 140px;
+			float: left;
+			width: $size;
+			height: $size;
+			overflow: hidden;
+			position: relative;
+
+			img {
+				width: $size;
+				height: $size;
+				background: {
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				}
+			}
+
+			.name {
+				position: absolute;
+				bottom: 0; left: 0; right: 0;
+				background: rgba(38, 38, 38, 0.94);
+				color: #ababab;
+				overflow: hidden;
+				@include ellipse();
+
+
+				margin: 0;
+				padding: 0;
+				font: italic 300 16px/27px $font;
+			}
+		}
+	}
+}
