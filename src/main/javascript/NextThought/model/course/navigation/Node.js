@@ -105,7 +105,7 @@ Ext.define('NextThought.model.course.navigation.Node',{
 
 		var v = str.split(',');
 		v = Ext.Array.map(v,Ext.data.Types.DATE.convert,fieldScope||this);
-		v.sort(function(a,b){return a - b;});
+		v.sort(function(a,b){return b - a;});
 		this.dates = v;
 
 		return v;
