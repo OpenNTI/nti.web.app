@@ -203,8 +203,12 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	cleanupActions: function(){
-		this.userMenu.destroy();
-		this.menu.destroy();
+		if( this.userMenu ){
+			this.userMenu.destroy();
+		}
+		if( this.menu ){
+			this.menu.destroy();
+		}
 	},
 
 

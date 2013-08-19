@@ -298,7 +298,11 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		}
 
 		if (dirtyIndex < this.items.getCount()) {
-			Ext.destroy(this.items.getRange(dirtyIndex));
+			try {
+				Ext.destroy(this.items.getRange(dirtyIndex));
+			} catch(e) {
+				console.warn('Trouble cleaning up house', e.stack || e.message || e);
+			}
 		}
 
 		toRender = this.itemsList.slice(dirtyIndex, limit);
