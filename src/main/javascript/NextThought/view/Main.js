@@ -87,12 +87,21 @@ Ext.define('NextThought.view.Main', {
 				}
 				if (Math.abs(window.orientation) != 90) {
 					optWindow = me.createPortraitOrientationScreen();
+                    var iframe = optWindow.el.down('iframe');
+                    iframe.el.dom.contentWindow.addEventListener('touchstart', function(e){
+                        e.preventDefault();
+                    });
 					optWindow.show();
 				}
 			}, true);
 
 			if (Math.abs(window.orientation) != 90) {
 				optWindow = this.createPortraitOrientationScreen();
+                var iframe = optWindow.el.down('iframe');
+                iframe.el.dom.contentWindow.addEventListener('touchstart', function(e){
+                    e.preventDefault();
+                });
+
 				optWindow.show();
 			}
 
@@ -111,9 +120,13 @@ Ext.define('NextThought.view.Main', {
 			layout: 'fit',
 			modal: true,
 			closable: false,
+            draggable: false,
+            resizeable: false,
+            hideParent: true,
+            renderTo: Ext.getBody(),
 			items: {
 				xtype: 'component',
-				cls: 'padded',
+				cls: 'clickthrough',
 				autoEl: {
 					tag: 'iframe',
 					src: 'resources/portraitOrientation.html',

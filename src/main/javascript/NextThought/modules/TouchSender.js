@@ -121,18 +121,18 @@ Ext.define('NextThought.modules.TouchSender', {
 			}
 
 			// If touching something besides a jump-menu, close the jump-menu
-			if (dom.getAttribute('id').indexOf('jump-menu') === -1
-				&& dom.getAttribute('id').className !== 'part') {
-				eles = Ext.query('.jump-menu');
-				if (eles) {
-					for (i = 0; i < eles.length; i++) {
-						ele = Ext.get(eles[i]);
-						if (ele) {
-							Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
-						}
-					}
-				}
-			}
+//			if (dom.getAttribute('id').indexOf('jump-menu') === -1
+//				&& dom.getAttribute('id').className !== 'part') {
+//				eles = Ext.query('.jump-menu');
+//				if (eles) {
+//					for (i = 0; i < eles.length; i++) {
+//						ele = Ext.get(eles[i]);
+//						if (ele) {
+//							Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
+//						}
+//					}
+//				}
+//			}
 
             //Close recent activity menu popout
             if(Ext.get(Ext.query('.from-menu')[0])){
