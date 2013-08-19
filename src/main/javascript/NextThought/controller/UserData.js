@@ -861,15 +861,40 @@ Ext.define('NextThought.controller.UserData', {
 
         var lineage = ContentUtils.getLineage(ntiid), result=null, sharingIsValid = true,
             rootId = lineage.last(),
-            i = ContentUtils.getLocation(rootId);
+            i = ContentUtils.getLocation(rootId),
+			flStore = Ext.getStore('FriendsList');
 
         Ext.each(lineage, function(l){result = this.preferenceMap[l]; return !result; }, this);
 
         if(!Ext.isEmpty(result)){
             Ext.each(result.sharing.sharedWith || [], function(id){
-                if(!UserRepository.resolveFromStore(id)){
+				var entity = UserRepository.resolveFromStore(id),
+					communities, found;
+                if(!entity){
                     sharingIsValid = false;
                 }
+
+				//If its not a user its a fl, or dfl we have to have it in
+				//the fl store.  If its a community it would need to be in  our
+				//community list
+				if(entity.isFriendsList){
+					if(!flStore.getById(entity.getId())){
+						sharingIsValid = false;
+					}
+				}
+				else if(entity.isCommunity){
+					communities = $AppConfig.userObject.getCommunities();
+					found = false;
+					Ext.Array.each(communities, function(com){
+						if(com.getId() === entity.getId()){
+							found = true;
+						}
+						return !found;
+					});
+
+					sharingIsValid = found;
+				}
+
                 return sharingIsValid;
             });
         }

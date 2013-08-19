@@ -10,6 +10,8 @@ Ext.define('NextThought.model.FriendsList', {
 		shareEntity: 'NextThought.mixins.ShareEntity'
 	},
 
+	isFriendsList: true,
+
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
