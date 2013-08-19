@@ -649,7 +649,6 @@
 		clear: both;
 		position: relative;
 		z-index: 1;
-		max-height: 105px !important;
 
 		.ellipse{
 			div{
@@ -729,8 +728,8 @@
 	}
 
 	.snippet{
-		margin-top: 5px;
-		font-size: 15px;
+		padding-top: 8px;
+		font: normal 300 15px/22px "Open Sans", sans-serif;
 		overflow: hidden;
 		word-wrap: break-word;
 		max-height: 100px;
@@ -758,7 +757,7 @@
 	.count{
 		position: absolute;
 		font: normal 600 11px/14px $font;
-		bottom: 5px;
+		bottom: 10px;
 	}
 }
 
