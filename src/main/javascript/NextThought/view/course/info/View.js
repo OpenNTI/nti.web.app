@@ -26,6 +26,7 @@ Ext.define('NextThought.view.course.info.View',{
 			return;
 		}
 
+		this.currentCourseInfoNtiid = ntiid;
 		this.update('');
 
 		Ext.getBody().mask('Loading...','navigation');
@@ -57,6 +58,10 @@ Ext.define('NextThought.view.course.info.View',{
 			expectedContentType: 'text/html',
 			scope: this,
 			success: function(r){
+				if(this.currentCourseInfoNtiid !== pageInfo.getId()){
+					console.warn('Dropping out of order course info', this.currentCourseInfoNtiid, pageInfo);
+					return;
+				}
 				me.fillInPage(r.responseText);
 			},
 			failure: function(r) {
@@ -70,6 +75,7 @@ Ext.define('NextThought.view.course.info.View',{
 	},
 
 	onCourseChanged: function(pageInfo){
+		console.log('Course change being handled by course info', this);
 		var l = ContentUtils.getLocation(pageInfo),
 			toc, course;
 
