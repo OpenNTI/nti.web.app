@@ -31,6 +31,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 		locationIcon: '.icon',
 		itemEl: '.item',
 		commentsEl: '.comments',
+		footEl: '.foot',
+		editEl: '.foot .edit',
 		flagEl: '.foot .flag',
 		deleteEl: '.foot .delete',
 		contextWrapEl: '.content-callout',
@@ -68,6 +70,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 			this.mon( this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		}
 
+		this.mon(this.editEl, 'click', 'onEdit', this);
 		this.mon( this.deleteEl, 'click', this.onDelete, this);
 		this.mon( this.contextWrapEl, 'click', this.goToObject, this);
 		this.on( 'reveal-replies', this.clickedRevealAllReplies);
@@ -190,12 +193,15 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 
 		me.flagEl.setVisibilityMode(D);
 		me.deleteEl.setVisibilityMode(D);
+		me.editEl.setVisibilityMode(D);
+		me.footEl.setVisibilityMode(D);
 
 		if(isMe(me.record.get('Creator'))){
 			me.flagEl.hide();
 		}
 		else {
 			me.deleteEl.hide();
+			me.editEl.hide();
 			me.flagEl.addCls('last');
 		}
 
@@ -212,6 +218,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	},
 
 
+	onEdit: function(){
+		this.callParent(arguments);
+		this.footEl.hide();
+	},
+
+
 	activateReplyEditor: function(){
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
@@ -221,6 +233,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 	deactivateReplyEditor: function(){
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
+		this.footEl.show();
 	},
 
 
@@ -435,8 +448,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem',{
 						cls: 'foot',
 						cn: [
 							{ cls: 'comments', 'data-label': ' Comment', html: ' ' },
+							{ cls: 'edit', html: 'Edit' },
 							{ cls: 'flag', html: 'Report' },
 							{ cls: 'delete', html: 'Delete' }
+
 						]
 					}]
 				}
