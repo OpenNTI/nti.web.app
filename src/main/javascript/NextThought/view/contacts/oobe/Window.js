@@ -37,7 +37,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 		{
 			cls: 'footer', cn: [
 				{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-				{tag: 'a', cls: 'button confirm', role: 'button', html: 'Save'}
+				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Save'}
 			]
 		}
 	]),
@@ -116,7 +116,12 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 						{cls: 'name', html: '{displayName}'}
 					]}
 				]
-			})
+			}),
+
+			listeners:{
+				scope: this,
+				selectionchange: 'onSelectionChange'
+			}
 		});
 
 		Ext.defer(this.reset,1,this);
@@ -170,8 +175,23 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
+	onSelectionChange:function(sel,recs){
+		var e = this.confirmEl;
+		if( e ){
+			e[Ext.isEmpty(recs) ? 'addCls' : 'removeCls']('disabled');
+		}
+	},
+
+
 	onConfirm: function(e){
 		e.stopEvent();
+		var v = this.down('dataview'),
+			selMod = v && v.getSelectionModel(),
+			t = e.getTarget('.confirm:not(.disabled)');
+
+		if( t && selMod ){
+			console.log(selMod.getSelection());
+		}
 	}
 });
 
