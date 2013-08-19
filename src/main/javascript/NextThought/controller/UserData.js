@@ -873,26 +873,27 @@ Ext.define('NextThought.controller.UserData', {
                 if(!entity){
                     sharingIsValid = false;
                 }
-
-				//If its not a user its a fl, or dfl we have to have it in
-				//the fl store.  If its a community it would need to be in  our
-				//community list
-				if(entity.isFriendsList){
-					if(!flStore.getById(entity.getId())){
-						sharingIsValid = false;
-					}
-				}
-				else if(entity.isCommunity){
-					communities = $AppConfig.userObject.getCommunities();
-					found = false;
-					Ext.Array.each(communities, function(com){
-						if(com.getId() === entity.getId()){
-							found = true;
+				else{
+					//If its not a user its a fl, or dfl we have to have it in
+					//the fl store.  If its a community it would need to be in  our
+					//community list
+					if(entity.isFriendsList){
+						if(!flStore.getById(entity.getId())){
+							sharingIsValid = false;
 						}
-						return !found;
-					});
+					}
+					else if(entity.isCommunity){
+						communities = $AppConfig.userObject.getCommunities();
+						found = false;
+						Ext.Array.each(communities, function(com){
+							if(com.getId() === entity.getId()){
+								found = true;
+							}
+							return !found;
+						});
 
-					sharingIsValid = found;
+						sharingIsValid = found;
+					}
 				}
 
                 return sharingIsValid;
