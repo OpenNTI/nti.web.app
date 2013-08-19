@@ -1,8 +1,13 @@
-Ext.define('NextThought.view.whiteboard.Window',{
+Ext.define('NextThought.view.whiteboard.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.wb-window',
 	requires: [
-		'NextThought.view.whiteboard.Editor'
+		'NextThought.view.whiteboard.Editor',
+		'NextThought.view.whiteboard.TouchSender'
+	],
+
+	mixins: [
+		'NextThought.mixins.ModuleContainer'
 	],
 
 	hideMode: 'display',
@@ -12,8 +17,8 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	cls: 'wb-window',
 	ui: 'wb-window',
 	minWidth: 750,
-    maxWidth: 750,
-    minHeight: 400,
+	maxWidth: 750,
+	minHeight: 400,
 
 	resizable: true,
 	maximizable: false,
@@ -21,7 +26,9 @@ Ext.define('NextThought.view.whiteboard.Window',{
 
 	modal: true,
 	layout: 'fit',
-	items: [{ xtype: 'whiteboard-editor' }],
+	items: [
+		{ xtype: 'whiteboard-editor' }
+	],
 
 	isWhiteboardWindow: true,
 
@@ -35,7 +42,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				type: 'hbox',
 				align: 'stretchmax'
 			},
-			defaults:{
+			defaults: {
 				cls: 'footer-region',
 				xtype: 'container',
 				flex: 1,
@@ -45,7 +52,9 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				{
 					defaults: { xtype: 'button', scale: 'medium', enabled: true },
 					items: [
-						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function(b){b.up('window').clearAll();} }
+						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function (b) {
+							b.up('window').clearAll();
+						} }
 					]
 				},
 				{
@@ -54,26 +63,32 @@ Ext.define('NextThought.view.whiteboard.Window',{
 					defaults: { xtype: 'button', scale: 'medium', disabled: true },
 					items: [
 						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo', hidden: true },
-						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo',hidden: true }
+						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo', hidden: true }
 					]
 				},
 				{
 					layout: { type: 'hbox', pack: 'end' },
 					defaults: {xtype: 'button', ui: 'primary', scale: 'large'},
 					items: [
-						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b,e){e.stopEvent();b.up('window').cancel();} },
-						{text: 'Save', action: 'save', handler: function(b,e){e.stopEvent();b.up('window').save(b);} }
+						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function (b, e) {
+							e.stopEvent();
+							b.up('window').cancel();
+						} },
+						{text: 'Save', action: 'save', handler: function (b, e) {
+							e.stopEvent();
+							b.up('window').save(b);
+						} }
 					]
 				}
 			]
 		}
 	],
 
-	constructor: function(config){
-        var vpHeight = Ext.Element.getViewportHeight();
+	constructor: function (config) {
+		var vpHeight = Ext.Element.getViewportHeight();
 
-        //ensure the max height is not bigger than the viewport
-        this.maxHeight = vpHeight;
+		//ensure the max height is not bigger than the viewport
+		this.maxHeight = vpHeight;
 
 		//ensure we're dealing with a local instance copy instead of prototype instance
 		this.items = Ext.clone(this.items);
@@ -82,12 +97,12 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		delete config.height;
 
 		//see parent class as to why there is an extra level of items...
-		Ext.copyTo(this.items[1].items[0],config,'value');
+		Ext.copyTo(this.items[1].items[0], config, 'value');
 
 		this.callParent(arguments);
 
 		//in readonly mode, remove buttons that do stuff, except for cancel, call it close:
-		if(config.readonly){
+		if (config.readonly) {
 			this.down('button[action=save]').destroy();
 			this.down('[action=undo]').destroy();
 			this.down('[action=redo]').destroy();
@@ -95,16 +110,19 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			this.down('button[action=cancel]').setText('Close');
 		}
 
-		this.mon(new Ext.dom.CompositeElement(Ext.query('body > .x-mask')),{
+		this.mon(new Ext.dom.CompositeElement(Ext.query('body > .x-mask')), {
 			scope: this,
 			'click': this.absorbeClick
 		});
+
+		if (Ext.is.iPad) {
+			this.buildModule('whiteboard', 'touchSender', {container: this});
+		}
 	},
 
 
-
-	absorbeClick: function(e){
-		if(this.isVisible()){
+	absorbeClick: function (e) {
+		if (this.isVisible()) {
 			e.stopEvent();
 			return false;
 		}
@@ -121,8 +139,9 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		win.fireEvent('save', win, wb);
 	},
 
-	close: function(){
-		this.close = function(){};
+	close: function () {
+		this.close = function () {
+		};
 		this.cancel();
 		return this.callParent(arguments);
 	},
@@ -130,54 +149,55 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	cancel: function () {
 		this.hide();
 		var e = this.down('whiteboard-editor');
-		if( e ){
+		if (e) {
 			e.reset();
 		}
-		
-		if(this.cancelOnce !== false){
-			this.cancel = function(){};
+
+		if (this.cancelOnce !== false) {
+			this.cancel = function () {
+			};
 		}
 
 		this.fireEvent('cancel', this);
 	},
 
 
-	getEditor: function(){
+	getEditor: function () {
 		return this.down('whiteboard-editor');
 	},
 
 
-	getValue: function(){
+	getValue: function () {
 		return this.down('whiteboard-editor').getValue();
 	},
 
 
-    afterRender: function(){
-        this.callParent(arguments);
-	    var me = this;
-        me.mon(me.el, 'click', me.absorbeClick, this);
-	    me.mon(this.el, 'click', function(){
-		    console.log('WB clicked');
-		    if(me.ownerCmp){
-			    me.ownerCmp.fireEvent('status-change', {status: 'composing'});
-		    }
-	    });
-    },
+	afterRender: function () {
+		this.callParent(arguments);
+		var me = this;
+		me.mon(me.el, 'click', me.absorbeClick, this);
+		me.mon(this.el, 'click', function () {
+			console.log('WB clicked');
+			if (me.ownerCmp) {
+				me.ownerCmp.fireEvent('status-change', {status: 'composing'});
+			}
+		});
+	},
 
-	clearAll: function(){
+	clearAll: function () {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-				msg: 'All your current progress\nwill be lost',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				scope: me,
-				icon: Ext.Msg.WARNING,
-				fn: function(str){
-					if(str === 'ok'){
-						me.down('whiteboard-editor').clear();
-					}
+			msg: 'All your current progress\nwill be lost',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: Ext.Msg.WARNING,
+			fn: function (str) {
+				if (str === 'ok') {
+					me.down('whiteboard-editor').clear();
 				}
-			});
+			}
+		});
 	}
 
 });

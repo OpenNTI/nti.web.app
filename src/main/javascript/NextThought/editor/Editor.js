@@ -407,9 +407,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		me.objectControlsEl = el.down('.action.object-controls');
 		if (me.objectControlsEl) {
-            if(Ext.is.iPad){   //hide options for iPad for now
-                me.objectControlsEl.hide();
-            }
 			me.objectControlsEl.set({'data-tiptext': me.objectControlsEl.getAttribute('data-qtip')});
 			me.mon(me.objectControlsEl, 'click', me.toggleObjectsPopover, me);
 		}
@@ -462,7 +459,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			me.mon(me.contentEl, {
 				'click': function (e) {
 					me.contentEl.focus();
-                    me.moveCursorToEnd(me.contentEl);
+					me.moveCursorToEnd(me.contentEl);
 				}
 			});
 		}
@@ -482,30 +479,30 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.typingAttributes = [];
 	},
 
-    moveCursorToEnd: function (el) {
-        //this is only for input/textarea elements
-        el = Ext.getDom(el);
-        if (typeof el.selectionStart === "number") {
-            console.log("1");
-            el.selectionStart = el.selectionEnd = el.value.length;
-        }
-        else if (el.createTextRange !== undefined) {
-            el.focus();
-            var range = el.createTextRange();
-            range.collapse(false);
-            range.select();
-        }
-        else if(document.createRange){
-            var range, selection;
-            range = document.createRange();
-            range.selectNodeContents(el);
-            range.collapse(false);
-            selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-        }
-        console.log("4");
-    },
+	moveCursorToEnd: function (el) {
+		//this is only for input/textarea elements
+		el = Ext.getDom(el);
+		if (typeof el.selectionStart === "number") {
+			console.log("1");
+			el.selectionStart = el.selectionEnd = el.value.length;
+		}
+		else if (el.createTextRange !== undefined) {
+			el.focus();
+			var range = el.createTextRange();
+			range.collapse(false);
+			range.select();
+		}
+		else if (document.createRange) {
+			var range, selection;
+			range = document.createRange();
+			range.selectNodeContents(el);
+			range.collapse(false);
+			selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+		}
+		console.log("4");
+	},
 
 
 	setupSharedListEl: function (me, tabTracker, scrollParentEl) {
@@ -566,18 +563,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			});
 			if (Ext.is.iPad) {
-                me.mon(me.titleEl, {
-                    'blur': function (e) {
-                        me.onFocusChange(e);
-                    }
-                });
-                me.mon(me.titleEl, {
-                    'focus': function () {
-                        var dom = me.titleEl.el.dom;
-                        var length = dom.value.length;
-                        dom.setSelectionRange(length,length);
-                    }
-                });
+				me.mon(me.titleEl, {
+					'blur': function (e) {
+						me.onFocusChange(e);
+					}
+				});
+				me.mon(me.titleEl, {
+					'focus': function () {
+						var dom = me.titleEl.el.dom;
+						var length = dom.value.length;
+						dom.setSelectionRange(length, length);
+					}
+				});
 			}
 		}
 	},
@@ -1769,7 +1766,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		if (focus || putCursorAtEnd) {
-            console.log('focus(putCursorAtEnd');
+			console.log('focus(putCursorAtEnd');
 			this.focus(putCursorAtEnd);
 		}
 	},
