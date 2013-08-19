@@ -7,16 +7,28 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
 			var f = 'object[mimeType$=ntivideo]',
 				DQ = Ext.DomQuery,
-				videos = [],
+				videos = [],seen = {},
 				store = this.getCourseNavStore(courseNodeRecord), r, i, len, c;
 
 			function addDate(r){
+				if(/^videos$/i.test(r.get('label'))){
+					console.warn('Super HACK filter! dropping VIDEOS "lesson"',r);
+					return Ext.emptyFn;
+				}
+
 				return function(n){
+					var id = n.getAttribute('ntiid');
 					if( r ){
 						//this will only be referenced within THIS class/file. WARNING: VERY PRIVATE
 						n.NTCourseNode = r;
 					}
-					videos.push(n);
+
+					if( !seen[id] ){
+						seen[id] = true;
+						videos.push(n);
+					} else {
+						console.warn(r, 'has dups');
+					}
 				};
 			}
 
