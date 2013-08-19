@@ -11,16 +11,20 @@ Ext.define('NextThought.view.library.Collection',{
 	rowSpan: 1,
 
 	tpl: Ext.DomHelper.markup([
-		{ cls: 'stratum collection-name', cn: [
-			'{name}', {cls:'count',html: '{count}'}
-		]},
-		{ cls: 'grid', cn:{ tag: 'tpl', 'for':'items', cn:['{menuitem}']} }
+		{ cls: 'stratum collection-name', 'aria-label':'{name} {count} items', 'role':'heading', cn: {
+			'aria-hidden':'true', cn: [
+				'{name}', {cls:'count','aria-hidden':'true', html: '{count}'}
+			]
+		}},
+		{ cls: 'grid', 'role':'group', 'aria-label':'{name}', cn:{ 
+			tag: 'tpl', 'for':'items', cn:['{menuitem}']} 
+		}
 	]),
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} item {featured} row-{rows} col-{cols}', cn:[
+		cls: '{inGrid} item {featured} row-{rows} col-{cols}', 'role':'link', 'aria-label':'{title}', cn:[
 			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
-			{ cls: 'meta', cn:[
+			{ cls: 'meta', 'aria-hidden':'true', cn:[
 				{ cls: 'courseName', html: '{courseName}' },  //course name/id
 				{ cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
 					'data-qtip': '{[values.title.length>50?values.title:""]}' },
