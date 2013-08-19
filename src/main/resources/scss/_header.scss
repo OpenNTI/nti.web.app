@@ -36,8 +36,8 @@
 		}
 
 		.title {
-			margin-top: -4px;
-			font: normal 300 26px/35px 'Open Sans Condensed', $font;
+			font: normal 700 18px/20px 'Open Sans Condensed', $font;
+			text-transform: uppercase;
 			color: $primary-grey;
 			overflow: hidden;
 			@include ellipse();
