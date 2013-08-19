@@ -230,7 +230,7 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	playerError: function(){
-		console.error('Player encountered an error');
+		console.error('Player encountered an error', arguments);
 	},
 
 
@@ -345,7 +345,7 @@ Ext.define('NextThought.view.video.Video',{
 		var me = this;
 		Ext.each(Ext.ComponentQuery.query('content-video'),
 			function(i){
-				if(i !== me){
+				if((i !== me) && i.isPlaying()){
 					i.deactivatePlayer();
 				}
 			}

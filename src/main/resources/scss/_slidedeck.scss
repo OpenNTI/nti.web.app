@@ -1150,6 +1150,7 @@ $experimental-support-for-svg: true;
 			padding: 3px;
 			color: $secondary-grey;
 			font: 14px normal $font;
+			cursor: pointer;
 
 			&:first-child{
 				padding-left: 0;
