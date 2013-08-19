@@ -75,10 +75,14 @@ Ext.define('NextThought.view.course.forum.View',{
 			var id = o.getContentsStoreId(),
 				store = Ext.getStore(id) || o.buildContentsStore();
 
+			console.log('Board fetch success returned', o)
+
 			function finish(){
+				console.log('Pushing board for record', o, store);
 				me.store = store;
 				me.add({xtype: 'course-forum-board', record:o, store:store});
 				if(me.currentForum){
+					console.log('Restoring state', me.currentForum, me.currentTopic);
 					me.restoreState(me.currentForum, me.currentTopic);
 				}
 			}
@@ -117,9 +121,11 @@ Ext.define('NextThought.view.course.forum.View',{
 		}
 
 		if(ntiid && this.currentNtiid !== ntiid){
+			console.log('Setting board to ', ntiid);
 			this.currentNtiid = ntiid;
 			$AppConfig.service.getObject(ntiid,success,failure);
 		}else if(!ntiid){
+			console.log('Clearing board ', ntiid);
 			delete this.currentNtiid;
 			this.removeAll(true);
 		}
