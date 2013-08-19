@@ -150,17 +150,21 @@
 
 
 				margin: 0;
-				padding: 0;
-				font: italic 300 16px/27px $font;
+				padding: 1px 2px;
+				font: normal 400 12px/27px $font;
+
+				$value: background 0.5s ease, padding-top 0.4s ease;
+				@include experimental(transition, $value);
 			}
 
 			&.x-item-selected {
-				@include icon('circle-check-green-18',$top:5px,$left:auto,$right:5px);
-				&::before{
-					content: '';
-					position: absolute;
-					top: 0; right: 0; left: 0; bottom: 0;
-					background:rgba(0,0,0,0.6);
+				@include icon('add_contact_check',$top:41px,$left:41px);
+
+				.name {
+					background: rgba(63,179,79,0.85);
+					padding-top: 112px;
+					text-align: center;
+					color: #fff;
 				}
 			}
 		}
