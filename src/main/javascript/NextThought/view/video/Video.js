@@ -298,7 +298,12 @@ Ext.define('NextThought.view.video.Video',{
 
 	deactivatePlayer: function(){
 		if(this.activeVideoService){
-			this.issueCommand(this.activeVideoService,'deactivate');
+			try{
+				this.issueCommand(this.activeVideoService,'deactivate');
+			}
+			catch(e){
+				console.warn('Error caught deactivating video');
+			}
 			return true;
 		}
 		return false;
