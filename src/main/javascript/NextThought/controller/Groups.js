@@ -59,6 +59,7 @@ Ext.define('NextThought.controller.Groups', {
 			component:{
 				'*':{
 					'add-contact': 'addContact',
+					'add-contacts': 'addContacts',
 					'add-group': 'addGroup',
 					'delete-group': 'deleteGroup',
 					'delete-contact': 'deleteContact',
@@ -290,6 +291,39 @@ Ext.define('NextThought.controller.Groups', {
 				finish();
 			}
 		});
+	},
+
+
+	addContacts: function(users, finish){
+		var store = this.getFriendsListStore(),
+			contactsId = this.getMyContactsId(),
+			contacts = store.findRecord('Username',contactsId,0,false,true,true),
+			oldContacts, newContacts;
+
+
+		function revertEditOnError(group, oldValue){
+			return function(){
+				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+				group.set('friends', oldValue);
+				Ext.callback(finish,null,[false]);
+			};
+		}
+
+		if(!Ext.isArray(users)){
+			console.error('This is expecting an array.');
+			Ext.callback(finish,null,[false]);
+			return;
+		}
+
+		Ext.each(users,function(u,i,a){
+			a[i] = (!u || !u.isModel) ? u : u.get('Username'); });
+
+		oldContacts = contacts.get('friends').slice();
+		newContacts = Ext.Array.unique(oldContacts.concat(users));
+
+		contacts.set('friends',newContacts);
+
+		contacts.saveField('friends', undefined ,finish, revertEditOnError(contacts, oldContacts));
 	},
 
 

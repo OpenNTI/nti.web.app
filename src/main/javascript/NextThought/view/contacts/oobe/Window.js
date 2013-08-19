@@ -185,12 +185,25 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 	onConfirm: function(e){
 		e.stopEvent();
-		var v = this.down('dataview'),
+		var me = this,
+			v = me.down('dataview'),
 			selMod = v && v.getSelectionModel(),
 			t = e.getTarget('.confirm:not(.disabled)');
 
+		function finish(success){
+			if( me.el && me.el.dom ){
+				me.el.unmask();
+			}
+
+			if(success!==false){
+				me.close();
+			} else {
+				me.showError('Could not save contacts');
+			}
+		}
 		if( t && selMod ){
-			console.log(selMod.getSelection());
+			me.el.mask('Saving...');
+			me.fireEvent('add-contacts',selMod.getSelection(),finish);
 		}
 	}
 });
