@@ -33,6 +33,7 @@ Ext.define('NextThought.view.Navigation', {
 
     renderTpl: Ext.DomHelper.markup([
         {
+			cls: 'jump-menu',
             cn: [
                 { cls: 'branding' },
                 {
@@ -70,7 +71,8 @@ Ext.define('NextThought.view.Navigation', {
     renderSelectors: {
         imgEl: '.content .image',
         providerEl: '.content .wrap .provider',
-        titleEl: '.content .wrap .title'
+        titleEl: '.content .wrap .title',
+		jumpEl: '.jump-menu'
     },
 
 
@@ -96,6 +98,9 @@ Ext.define('NextThought.view.Navigation', {
                 ownerNode: this.el.down('.content')
             });
             this.items.push(this.contentSwitcher);
+			if(this.jumpEl){
+				this.jumpEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+			}
         }
 
         this.searchMenu = Ext.widget({
@@ -242,6 +247,10 @@ Ext.define('NextThought.view.Navigation', {
         if (this.contentSwitcher) {
             this.contentSwitcher.track(rec);
         }
+
+		if(this.jumpEl){
+			this.jumpEl.show();
+		}
 
         this.currentRecord = rec;
         return rec;
