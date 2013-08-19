@@ -69,6 +69,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				},
 				{
 					tag:'script',
+					defer:'defer',
 					type:'text/javascript',
 					html:'\n{code}\n'
 				}
