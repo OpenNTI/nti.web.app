@@ -832,6 +832,20 @@ Ext.define('NextThought.controller.UserData', {
         }
 		this.preferenceMap[piId] = {sharing: sharing};
 		console.debug('shareing prefs updated', this.preferenceMap[piId]);
+
+		if(sharing && sharing.sharedWith){
+			// Let's pre-resolve the users that are part of the default sharing list.
+			// By the time, we look it up, it should be in the userRepository cache, if it's resolvable.
+			UserRepository.getUser(sharing.sharedWith, function(users){
+				var allResolved = Ext.Array.every(users, function(i){ return Boolean(!i.Unresolved); }),
+					names = [];
+
+				if(allResolved){
+					Ext.each(users, function(u){ names.push(u.getName()); });
+					console.log('default sharing should contain: ', names);
+				}
+			}, this);
+		}
 	},
 
 
@@ -864,7 +878,7 @@ Ext.define('NextThought.controller.UserData', {
         if(!result || !sharingIsValid){
             // if we have no sharing prefs, default to the public scope
             // or we can't resolve the sharing, the use public scope.
-            result = i.title.getScope('public ');
+            result = i.title && i.title.getScope('public');
             if(Ext.isEmpty(result)){
                 return;
             }
