@@ -36,7 +36,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	insertOverlay: function () {
-
 		var me = this,
 			box,
 			container = {
@@ -66,33 +65,51 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		me.reader.getScroll().registerHandler(me.onScroll, me);
 
-		me.reader.on('destroy', 'destroy',
-			me.mon(container.parent(), {
-				scope: me,
-				destroyable: true,
-				mousemove: 'mouseOver',
-				mouseover: 'mouseOver',
-				mouseout: 'mouseOut'
-			}));
+		if (Ext.is.iPad) {
+			me.reader.on('destroy', 'destroy',
+				me.mon(container.parent(), {
+					scope: me,
+					destroyable: true,
+					click: 'trackLineAtEvent'
+				}));
 
-		me.reader.on({
-			//no buffer
-			'iframe-mouseout': 'mouseOut',
-			'iframe-mousedown': 'suspendResolver',
-			'iframe-mouseup': 'resumeResolver',
-			scope: me
-		});
-		me.reader.on({
-			scope: me,
-			'iframe-mousemove': 'mouseOver',
-			buffer: 400
-		});
+			me.reader.on({
+				scope: me,
+				'iframe-click': 'trackLineAtEvent',
+				'iframe-mousedown': 'trackLineAtEvent'
+			});
+		}
+		else {
+			me.reader.on('destroy', 'destroy',
+				me.mon(container.parent(), {
+					scope: me,
+					destroyable: true,
+					mousemove: 'mouseOver',
+					mouseover: 'mouseOver',
+					mouseout: 'mouseOut'
+				}));
+
+			me.reader.on({
+				//no buffer
+				'iframe-mouseout': 'mouseOut',
+				'iframe-mousedown': 'suspendResolver',
+				'iframe-mouseup': 'resumeResolver',
+				scope: me
+			});
+
+			me.reader.on({
+				scope: me,
+				'iframe-mousemove': 'mouseOver',
+				buffer: 400
+			});
+		}
 	},
 
 
 	getAnnotationOffsets: function () {
 		return this.reader.getAnnotationOffsets();
 	},
+
 
 	onNavigation: function () {
 		if (this.editor && this.editor.isActive()) {
@@ -106,6 +123,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		return true;
 	},
+
 
 	onScroll: function (e, dom) {
 	},

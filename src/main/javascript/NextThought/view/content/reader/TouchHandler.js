@@ -50,6 +50,11 @@ Ext.define('NextThought.view.content.reader.TouchHandler', {
 			// singles
 			reader.on('touchElementAt', function (x, y, callback) {
 				callback(iFrame.elementAt(x, y));
+				// Fire a click with coordinate information for range resolution
+				var e = document.createEvent('MouseEvents');
+				e.initMouseEvent('click', true, true, window, 1,
+				x, y, x, y, false, false, false, false, 0, null);
+				iFrame.elementAt(x, y).dispatchEvent(e);
 			});
 			reader.on('touchElementIsDraggable', this.draggableAreasAreDraggable);
 			reader.on('touchElementIsSelectable', function (ele, callback) {
