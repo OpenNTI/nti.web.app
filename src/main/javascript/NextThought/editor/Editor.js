@@ -566,11 +566,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				}
 			});
 			if (Ext.is.iPad) {
-				me.mon(me.titleEl, {
-					'blur': function (e) {
-						me.onFocusChange(e);
-					}
-				});
+                me.mon(me.titleEl, {
+                    'blur': function (e) {
+                        me.onFocusChange(e);
+                    }
+                });
+                me.mon(me.titleEl, {
+                    'focus': function () {
+                        var dom = me.titleEl.el.dom;
+                        var length = dom.value.length;
+                        dom.setSelectionRange(length,length);
+                    }
+                });
 			}
 		}
 	},

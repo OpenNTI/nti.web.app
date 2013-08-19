@@ -105,6 +105,20 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.mon(spEl,'scroll','hide',this.tip);
 			this.mon(spEl,'scroll','alignPicker',this,{buffer:300});
 		}
+
+        if(Ext.is.iPad){
+            var me = this;
+            //When input focused, instead of selecting, put cursor at end
+            this.mon(this.inputEl, 'focus', function(){
+                var dom = me.inputEl.el.dom;
+                var length = dom.value.length;
+                dom.setSelectionRange(length,length);
+            });
+            this.mon(this.inputEl, 'blur', function(e){
+                clearTimeout(me.searchTimeout);
+                me.searchTimeout = Ext.defer(me.search,250,me);
+            });
+        }
 	},
 
 
@@ -328,6 +342,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			val = this.inputEl.getValue(),
             sel = window.getSelection().toString();
 
+        if(Ext.is.iPad){
+            if(key == e.ENTER || key == e.SPACE){
+                return false;
+            }
+        }
+
 		if(key === e.BACKSPACE){
 			if(val === ''){
 				this.removeLastToken();
@@ -369,6 +389,15 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	onKeyDown: function(e){
+        /*Don't do anything for iPad unless it's a space or enter.
+        Without this, the menu comes up with each character, and
+        the keyboard is dismissed, and can't be brought back up
+        programmatically*/
+        if(Ext.is.iPad){
+            if(e.getKey() != e.SPACE && e.getKey() != e.ENTER){
+                return;
+            }
+        }
 		e.stopPropagation();
 		clearTimeout(this.searchTimeout);
 
@@ -450,8 +479,18 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 		picker.showAt(x,y + scrollOffset);
 
-		//Focus the input now
-		this.inputEl.focus(10);
+        if(Ext.is.iPad){
+            //Don't focus the input for iPad, because it won't bring up the beyboard.
+            //But, focus something else, so that the keyboard can be opened on this input.
+            var titleEl = Ext.get(Ext.query('.main .title input')[0]);
+            titleEl.el.dom.focus();
+            titleEl.el.dom.click();
+            this.inputEl.el.dom.click();
+        }
+        else{
+            //Focus the input now
+            this.inputEl.focus(10);
+        }
 	},
 
 	clear: function(){
@@ -508,7 +547,9 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			v = p && p.down('.value').getAttribute('data-value');
 
 		if( v ){ this.removeToken(v, p); }
-		this.inputEl.focus();
+        if(!Ext.is.iPad){ //Don't focus for iPad, won't bring up keyboard
+            this.inputEl.focus();
+        }
 	},
 
 
