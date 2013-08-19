@@ -114,9 +114,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
                 var length = dom.value.length;
                 dom.setSelectionRange(length,length);
             });
-            this.mon(this.inputEl, 'blur', function(e){
-                clearTimeout(me.searchTimeout);
-                me.searchTimeout = Ext.defer(me.search,250,me);
+            //If there's something in the add people field, search if blurred
+            this.mon(this.inputEl, 'blur', function(){
+                console.log(me.inputEl.el.dom.value.length);
+                if(me.inputEl.el.dom.value.length > 0){
+                    clearTimeout(me.searchTimeout);
+                    me.searchTimeout = Ext.defer(me.search,250,me);
+                }
             });
         }
 	},

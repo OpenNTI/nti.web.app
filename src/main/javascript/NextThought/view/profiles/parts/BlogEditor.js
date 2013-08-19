@@ -44,7 +44,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		var r = this.record,
 			h,
 			profileEl = Ext.get('profile'),
-			titleEl = this.titleEl,
 			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
 		this.mon(this.tags,'new-tag', this.syncHeight,this);
@@ -66,6 +65,16 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor',{
 		Ext.EventManager.onWindowResize(this.syncHeight,this,null);
 
 		Ext.defer(Ext.Function.createSequence(this.syncHeight,this.focus,this),500,this);//let the animation finish
+
+        //put focus on cancel button, so the user can focus and bring up keyboard for title element
+        if(Ext.is.iPad){
+            Ext.defer(function(){
+                var query = Ext.query('.right .action.cancel');
+                if(query){
+                    query[0].focus();
+                }
+            }, 500, this);
+        }
 	},
 
 
