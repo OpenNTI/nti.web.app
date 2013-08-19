@@ -107,7 +107,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	onClickRaw: function(e){
 		if(e.getTarget('a.button')){
-			Ext.widget('oobe-contact-window');
+			this.mon(Ext.widget('oobe-contact-window'),'destroy','refresh');
 		}
 	},
 

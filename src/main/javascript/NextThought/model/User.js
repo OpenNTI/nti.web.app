@@ -137,7 +137,7 @@ Ext.define('NextThought.model.User', {
 		getUnresolved: function (username) {
 			var u = new NextThought.model.User({
 				Username: username,
-				alias: 'Anonymous_'+username,
+				alias: username,
 				avatarURL: this.BLANK_AVATAR,
 				affiliation: 'Unknown',
 				status: '',
