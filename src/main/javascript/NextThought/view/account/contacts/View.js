@@ -91,8 +91,11 @@ Ext.define('NextThought.view.account.contacts.View', {
 		});
 
 		this.noContactsEmptyText = Ext.DomHelper.markup({
-			cls: 'empty-list rhp-empty-list',
-			cn:{tag: 'a', cls:'button', role:'button', href:'#', html: 'Add Contacts'}
+			cls: 'rhp-no-contacts',
+			cn:[
+				{ html: 'You don&apos;t have any contacts yet...' },
+				{ tag: 'a', cls:'button', role:'button', href:'#', html: 'Add Contacts' }
+			]
 		});
 
 		this.friendsListStore = Ext.getStore('FriendsList');
@@ -111,7 +114,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	getViewRange: function(){
 		var range = this.callParent(),
-			a = Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+			a = !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
 
 		this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
 

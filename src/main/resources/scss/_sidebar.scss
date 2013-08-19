@@ -1,35 +1,37 @@
 .rhp-empty-list {
 	padding: 20px 0 !important;
 	font: italic 300 14px/28px $font !important;
-	text-align: center !important;
 	color: $tertiary-grey !important;
+	text-align: center !important;
+}
 
-	a {
-		&,&:link{ text-decoration: none; color: $tertiary-grey; }
+.rhp-no-contacts{
+	padding: 15px 0 0 100px;
+	height: 100px;
+	font: italic 300 14px/18px $font !important;
+	color: $tertiary-grey !important;
+	@include element('add_contacts_card');
+
+	* { position: relative; z-index: 1; }
+
+	a,a:link {
+		text-decoration: none;
 	}
 
 	a.button {
-		cursor: pointer;
-		display: inline-block;
-		height: 45px;
-		font-size: 14px;
-		text-align: center;
+		color: $primary-green;
+		font: normal 400 14px/18px $font !important;
 
-		width: 95px;
-		line-height: 44px;
-		font-weight: 500;
-		font-style: italic;
-		color: #ffffff;
-		outline: 1px solid #69a92b;
-		background: #75bc30;
-
-		&.alt {
-			background: $primary-blue;
-			outline: 1px solid $border-blue;
+		&::before {
+			content: '+ ';
+			font-weight: 400;
+			font-size: 20px;
+			vertical-align: bottom;
 		}
-
 	}
 }
+
+
 
 .x-panel-sidebar{
 	&::before {
