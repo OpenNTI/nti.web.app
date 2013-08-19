@@ -302,7 +302,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.fireEvent('player-event-ended', 'kaltura');
 		this.cleanup();
 		this.playerSetup();
-		this.load(this.currentSource);
+		this.sourceForWhenReady = this.currentSource;
 	},
 
 
@@ -424,6 +424,13 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	mediaLoadedHandler: function(){
 		console.log('This media is loaded');
+	},
+
+	readyToLoadHandler: function(){
+		if(this.sourceForWhenReady){
+			this.load(this.sourceForWhenReady);
+			delete this.sourceForWhenReady;
+		}
 	},
 
 	playerCode:{
