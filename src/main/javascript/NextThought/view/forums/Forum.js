@@ -263,7 +263,7 @@ Ext.define('NextThought.view.forums.Forum',{
 				history.go(-1);
 			}
 			else {
-				this.fireEvent('new-topic');
+				this.fireEvent('new-topic', this);
 			}
 		}
 		return !t;
