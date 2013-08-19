@@ -271,6 +271,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 
 	onItemClick: function(record,dom,index,event){
+		var me = this;
 		if(event.getTarget('.controls')){
 			event.stopEvent();
 			if(event.getTarget('.favorite')){
@@ -279,6 +280,15 @@ Ext.define('NextThought.view.forums.Forum',{
 			else if(event.getTarget('.like')){
 				record.like();
 			}
+			return false;
+		}
+
+		if(event.getTarget('.name')){
+			UserRepository.getUser(record.get('Creator'), function(u){
+				if(u && Ext.isFunction(u.getProfileUrl)){
+					me.fireEvent('change-hash', u.getProfileUrl());
+				}
+			});
 			return false;
 		}
 
@@ -300,10 +310,10 @@ Ext.define('NextThought.view.forums.Forum',{
 
 			return target.is(sel) || target.parent(sel, true);
 		}
-
-		if(d && t && isDescendantClick(t)){
-			this.fireEvent('show-topic', record, d.get('ID'));
-			return false;
-		}
+		// Why do we do this? It is currently preventing navigating to the creator's profile upon clicking their name.
+//		if(d && t && isDescendantClick(t)){
+//			this.fireEvent('show-topic', record, d.get('ID'));
+//			return false;
+//		}
 	}
 });
