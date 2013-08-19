@@ -210,7 +210,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		code.push(this.playerCode.inject.toString());
-		code.push('$(inject);');
+		code.push('jQuery(inject);');
 
 		return code.join('\n').replace(/%([^%]+)%/gm,resolve);
 	},
