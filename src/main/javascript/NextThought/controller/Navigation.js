@@ -473,7 +473,8 @@ Ext.define('NextThought.controller.Navigation', {
         }
 
         //Is href an exteranl url whose base does not match the current base (i.e. not in our app)?
-        if (ContentUtils.isExternalUri(href) && newBase.indexOf(currentBase) !== 0) {
+        if (ContentUtils.isExternalUri(href) && (newBase.indexOf(currentBase) !== 0
+		        || (/\/content\//.test(href) && !/\.html$/.test(href)))) {
             try {
                 window.open(href, '_blank');
             }
