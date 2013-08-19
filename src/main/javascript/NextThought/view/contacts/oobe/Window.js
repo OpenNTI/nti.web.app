@@ -8,7 +8,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 	cls: 'contacts-oobe-window',
 	width: 750,
-	height: 500,
+	height: 550,
 	autoShow: true,
 	resizable: false,
 	draggable: false,
@@ -83,6 +83,9 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			]
 		});
 		this.add({
+			xtype:'simpletext',
+			placeholder: 'Search for contacts...'
+		},{
 			xtype: 'dataview',
 			store: store,
 			xtype: 'dataview',
@@ -92,8 +95,9 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			overflowX: 'hidden',
 			overflowY: 'auto',
 
+			simpleSelect: true,
+			multiSelect: true,
 			allowDeselect: true,
-			singleSelect: false,
 
 			cls: 'oobe-contact-results',
 			overItemCls: 'over',

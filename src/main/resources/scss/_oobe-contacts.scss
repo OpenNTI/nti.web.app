@@ -97,11 +97,30 @@
 		right: 0;
 	}
 
+	.textbox-base {
+		margin: 14px 24px 0 24px;
+		padding: 0 24px 5px;
+		border-bottom: 1px solid #ccc;
+		@include icon('search',$top:11px, $left:5px);
+
+		input {
+			background: #ffffff;
+			padding: 5px;
+			color: #757474;
+			font-size: 18px;
+			font-weight: 300;
+			height: auto;
+			//border-radius: 3px;
+			border: 0;
+			box-shadow: none;
+		}
+	}
 
 	.oobe-contact-results {
 		position: absolute;
-		top: 0; left: 24px;
-		right: 24px; bottom: 0;
+		left: 24px;
+		right: 24px; bottom: 20px; height: 420px;
+		margin-right: -20px; //scrollbar buffer
 
 		.item {
 			$size: 140px;
@@ -133,6 +152,16 @@
 				margin: 0;
 				padding: 0;
 				font: italic 300 16px/27px $font;
+			}
+
+			&.x-item-selected {
+				@include icon('circle-check-green-18',$top:5px,$left:auto,$right:5px);
+				&::before{
+					content: '';
+					position: absolute;
+					top: 0; right: 0; left: 0; bottom: 0;
+					background:rgba(0,0,0,0.6);
+				}
 			}
 		}
 	}
