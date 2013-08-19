@@ -53,9 +53,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	getDockedItems: function () {
-		return [];
-	},
+	getDockedItems: function () { return []; },
 
 
 	listeners: {
@@ -65,7 +63,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 	initComponent: function(){
 		this.callParent();
-		var store = new NextThought.store.UserSearch({
+		this.store = new NextThought.store.UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.
 				function (rec) {
@@ -82,22 +80,30 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 				}
 			]
 		});
+
 		this.add({
 			xtype:'simpletext',
-			placeholder: 'Search for contacts...'
+			placeholder: 'Search for contacts...',
+			listeners: {
+				scope: this,
+				buffer: 400,
+				changed: 'onSearch',
+				clear: 'reset'
+			}
 		},{
 			xtype: 'dataview',
-			store: store,
-			xtype: 'dataview',
+			store: this.store,
 			preserveScrollOnRefresh: true,
 			flex: 1,
 
 			overflowX: 'hidden',
 			overflowY: 'auto',
 
-			simpleSelect: true,
-			multiSelect: true,
-			allowDeselect: true,
+			selModel: {
+				allowDeselect : true,
+				mode :'SIMPLE',
+				pruneRemoved:false
+			},
 
 			cls: 'oobe-contact-results',
 			overItemCls: 'over',
@@ -113,7 +119,12 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			})
 		});
 
-		Ext.defer(store.search,1,store,['.']);
+		Ext.defer(this.reset,1,this);
+	},
+
+
+	reset: function(){
+		this.store.search('.');
 	},
 
 
@@ -125,6 +136,11 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 		this.errorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.errorEl.hide();
+	},
+
+
+	onSearch: function(query){
+		this.store.search(query||'.');
 	},
 
 
