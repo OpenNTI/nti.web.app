@@ -83,6 +83,11 @@ Ext.define('NextThought.view.course.forum.View',{
 				}
 			}
 
+			if(me.currentNtiid !== ntiid){
+				console.warn('Dropping mismatched board', ntiid, this.currentNtiid);
+				return;
+			}
+
 			if((o.get('Creator')||{}).isModel){
 				finish();
 				return;
@@ -163,13 +168,17 @@ Ext.define('NextThought.view.course.forum.View',{
 
 	
 	setForum: function(forum, topic){
-		var me = this;
+		var me = this, boardId = this.currentNtiid;
 		if(!forum){
 			this.setTopic(topic);
 			return;
 		}
 
 		$AppConfig.service.getObject(forum, function(record){
+			if(boardId !== me.currentNtiid){
+				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
+				return;
+			}
 			var storeId = record.getContentsStoreId(),
 				store = Ext.getStore(storeId) || record.buildContentsStore(),
 				cmp = Ext.widget('course-forum-topic-list',{
@@ -184,12 +193,16 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 	setTopic: function(topic){
-		var me = this;
+		var me = this, boardId = this.currentNtiid;
 		if(!topic){
 			return;
 		}
 
 		$AppConfig.service.getObject(topic, function(record){
+			if(boardId !== me.currentNtiid){
+				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
+				return;
+			}
 			var storeId = record.getContentsStoreId(),
 				store = Ext.getStore(storeId) || record.buildContentsStore(),
 				top = me.peek(),
