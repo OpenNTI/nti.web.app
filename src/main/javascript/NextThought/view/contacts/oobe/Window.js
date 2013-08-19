@@ -37,7 +37,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 		{
 			cls: 'footer', cn: [
 				{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Save'}
+				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Add Contact'}
 			]
 		}
 	]),
@@ -176,9 +176,11 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 
 	onSelectionChange:function(sel,recs){
-		var e = this.confirmEl;
+		var e = this.confirmEl,
+			plural = (recs||[]).length !== 1;
 		if( e ){
 			e[Ext.isEmpty(recs) ? 'addCls' : 'removeCls']('disabled');
+			e.update('Add Contact'+(plural?'s':''));
 		}
 	},
 

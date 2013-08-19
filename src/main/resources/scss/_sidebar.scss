@@ -3,6 +3,32 @@
 	font: italic 300 14px/28px $font !important;
 	text-align: center !important;
 	color: $tertiary-grey !important;
+
+	a {
+		&,&:link{ text-decoration: none; color: $tertiary-grey; }
+	}
+
+	a.button {
+		cursor: pointer;
+		display: inline-block;
+		height: 45px;
+		font-size: 14px;
+		text-align: center;
+
+		width: 95px;
+		line-height: 44px;
+		font-weight: 500;
+		font-style: italic;
+		color: #ffffff;
+		outline: 1px solid #69a92b;
+		background: #75bc30;
+
+		&.alt {
+			background: $primary-blue;
+			outline: 1px solid $border-blue;
+		}
+
+	}
 }
 
 .x-panel-sidebar{

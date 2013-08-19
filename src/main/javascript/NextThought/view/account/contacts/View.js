@@ -45,6 +45,10 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 
 	listeners: {
+		click:{
+			element:'el',
+			fn: 'onClickRaw'
+		},
 		itemclick: 'rowClicked',
 		itemmouseenter: 'rowHover',
 		select: function (s, record) {
@@ -81,13 +85,37 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 
 	constructor: function () {
-		this.emptyText = Ext.DomHelper.markup({
+		this.normalEmptyText = Ext.DomHelper.markup({
 			cls: 'empty-list rhp-empty-list',
 			html: 'None of your contacts are online.'
 		});
 
+		this.noContactsEmptyText = Ext.DomHelper.markup({
+			cls: 'empty-list rhp-empty-list',
+			cn:{tag: 'a', cls:'button', role:'button', href:'#', html: 'Add Contacts'}
+		});
+
+		this.friendsListStore = Ext.getStore('FriendsList');
+
 		this.doSearch = Ext.Function.createBuffered(this.doSearch, 250, this, null);
 		this.callParent(arguments);
+	},
+
+
+	onClickRaw: function(e){
+		if(e.getTarget('a.button')){
+			Ext.widget('oobe-contact-window');
+		}
+	},
+
+
+	getViewRange: function(){
+		var range = this.callParent(),
+			a = Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+
+		this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
+
+		return range;
 	},
 
 
