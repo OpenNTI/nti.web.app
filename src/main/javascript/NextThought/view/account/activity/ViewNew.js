@@ -109,7 +109,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 			},
 			items: [
 				{cls: 'option', text: 'Only Me', type: 'onlyme', checked: false, isMe: true, tabFilter:'onlyMe'},
-				{cls: 'option', text: 'My Connections', type: 'contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
+				{cls: 'option', text: 'My Contacts', type: 'contacts', checked:false, isContacts: true, tabFilter: 'notInCommunity'},
 				{cls: 'option', text: 'Everyone', type: 'community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
 			]
 		});
