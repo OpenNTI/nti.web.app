@@ -316,8 +316,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		window.removeEventListener("message", this.handleMessage, false);
 		var el = Ext.get(this.id);
 		this.isReady = false;
-		el.clearListeners();
-		Ext.destroy(el);//because we're shelling this thing into an iframe, we can just destroy it.
+		if( el ) {
+			el.clearListeners();
+			Ext.destroy(el);//because we're shelling this thing into an iframe, we can just destroy it.
+		}
 	},
 
 

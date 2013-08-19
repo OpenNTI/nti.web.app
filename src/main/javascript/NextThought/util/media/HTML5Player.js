@@ -158,7 +158,11 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	},
 
 	cleanup: function(){
-		this.stop();
-		this.el.clearListeners();
+		if(this.player){
+			this.stop();
+		}
+		if(this.el){
+			this.el.clearListeners();
+		}
 	}
 });

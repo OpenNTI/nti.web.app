@@ -133,15 +133,22 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	},
 
 	stop: function(){
-		this.player.clearVideo();
+		if( this.player ){
+			this.player.clearVideo();
+		}
 	},
 
 	cleanup: function(){
 		var el = Ext.get(this.id);
+
 		this.stop();
+
 		this.isReady = false;
-		el.clearListeners();
-		Ext.destroy(el);
+
+		if( el ){
+			el.clearListeners();
+			Ext.destroy(el);
+		}
 	}
 }, function(){
 	Globals.loadScript(location.protocol+"//www.youtube.com/iframe_api");
