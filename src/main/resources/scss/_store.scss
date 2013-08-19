@@ -534,6 +534,11 @@
           background: #dcdcdc;
           outline: none;
         }
+
+		&.red{
+			background: $primary-red;
+			outline: 1px solid $border-red;
+		}
       }
     }
 

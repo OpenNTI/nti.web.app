@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 	ui: 'purchase-form',
 
 	ordinal: 1,
-	confirmLabel: 'Continue',
+	confirmLabel: 'Drop',
 
 	renderTpl: Ext.DomHelper.markup([
 			{ tag: 'h3', cls:'gap', html: 'You are about to {enroll} this course.'},

@@ -189,6 +189,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 
 			this.syncTab(ordinal);
 			this.confirmEl.update(confirmLabel);
+			this.confirmEl[confirmLabel === 'Drop' ? 'addCls' : 'removeCls']('red');
 			this.confirmEl[cmp.omitCancel ? 'addCls' : 'removeCls']('alt');
 			this.cancelEl[cmp.omitCancel ? 'hide' : 'show']();
 			Ext.defer(this.updateContentHeight, 1, this);

@@ -678,6 +678,8 @@ Ext.define('NextThought.controller.Forums', {
 			me.loadRootMaybeFinish(urls,boards,store);
 		}
 
+		console.log('Loadroot called', view);
+
 		var communities = $AppConfig.userObject.getCommunities(),
 			urls = Ext.Array.map(communities,makeUrl),
 			boards = [],

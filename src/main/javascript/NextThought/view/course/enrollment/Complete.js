@@ -5,15 +5,16 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'h3', cls:'gap', html: 'Enrollment change Successful!'},
 		{ tag:'tpl', 'if':'enroll', cn:[
-			{ html: 'Your content has been added to your library.'},
+			{ tag: 'h3', cls:'gap', html: 'Congratulations!'},
+			{ html: 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.'},
 			{ cls:'gap', cn: [
 				{ tag: 'a', href:'#', html:'View your content now!' }
 			]}
 		]},
 		{ tag:'tpl', 'if':'!enroll', cn:[
-			{ html: 'You have been successfully dropped the course.'}
+			{ tag: 'h3', cls:'gap', html: 'Goodbye!'},
+			{ html: 'You are no longer enrolled in this course.'}
 		]}
 	]),
 
