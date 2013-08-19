@@ -81,6 +81,8 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			]
 		});
 
+		var me = this;
+
 		this.add({
 			xtype:'simpletext',
 			placeholder: 'Search for contacts...',
@@ -117,6 +119,35 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 					]}
 				]
 			}),
+
+			noContactsEmptyText: Ext.DomHelper.markup({
+				cls: 'empty',
+				cn: [
+					{ tag: 'h3', html: 'No suggestions yet' },
+					{ html: 'Search above to add contacts.' }
+				]
+			}),
+
+			normalEmptyText: Ext.DomHelper.markup({
+				cls: 'empty',
+				cn: [
+					{ tag: 'h3', html: 'No results' },
+					{ html: 'Try again?' }
+				]
+			}),
+
+			friendsListStore: Ext.getStore('FriendsList'),
+
+			xhooks: {
+				getViewRange: function(){
+					var range = this.callParent(),
+						a = me.down('simpletext').getValue() || !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+
+					this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
+
+					return range;
+				}
+			},
 
 			listeners:{
 				scope: this,
