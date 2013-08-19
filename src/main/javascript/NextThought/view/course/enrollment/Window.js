@@ -30,8 +30,13 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 			cls: 'header', cn: [
 			{ cls: 'titlebar', cn: [
 				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
-				{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
-				{ cls: 'tab', html: 'Complete', 'data-order': 2 },
+				{ tag:'tpl', 'if':'enrollProcess', cn:{
+					 cls: 'tab', html: 'Confirmation', 'data-order': 2
+				}},
+				{ tag:'tpl', 'if':'!enrollProcess', cn:[
+					{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
+					{ cls: 'tab', html: 'Complete', 'data-order': 2 }
+				]},
 				{ cls: 'close' }
 			]},
 			{ cls: 'info', cn: [
@@ -99,7 +104,9 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 
 	beforeRender: function () {
 		this.callParent(arguments);
+		var enrolling = this.record.getLink('enroll');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
+		this.renderData = Ext.apply(this.renderData, {enrollProcess:enrolling});
 		this.renderData.by = this.renderData.Author||this.renderData.Provider;
 	},
 
