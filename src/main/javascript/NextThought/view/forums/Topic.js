@@ -279,7 +279,7 @@ Ext.define('NextThought.view.forums.Topic',{
 			}
 		}
 
-		var el, images, me = this;
+		var el, images, me = this, f;
 		if(commentId){
 			images = this.el.query('img');
 			Ext.each(images, function(img){
@@ -288,7 +288,10 @@ Ext.define('NextThought.view.forums.Topic',{
 			scrollIntoView();
 		}
 		else{
-			Ext.get('forums').scrollTo('top', 0, true);
+			f = Ext.get('forums');
+			if(f){
+				f.scrollTo('top', 0, true);
+			}
 		}
 	},
 
