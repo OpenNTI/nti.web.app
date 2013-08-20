@@ -176,6 +176,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			listeners: {
 				'deactivated-editor': 'destroy',
 				grew: function () {
+                    if(Ext.is.iPad){
+                        return;
+                    }
 					var h = this.getHeight(),
 						b = h + this.getY(),
 						v = Ext.Element.getViewportHeight();
