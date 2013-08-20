@@ -557,6 +557,7 @@ $over-color: #f4f3f3;
 
 	.contact-search {
 		display: none;
+		z-index: 1;
 	}
 
 	&.searching {
