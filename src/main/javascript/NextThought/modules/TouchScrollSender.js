@@ -120,20 +120,6 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 				}
 			}
 
-			// If touching something besides a jump-menu, close the jump-menu
-			if (dom.getAttribute('id').indexOf('jump-menu') === -1
-				&& dom.getAttribute('id').className !== 'part') {
-				eles = Ext.query('.jump-menu');
-				if (eles) {
-					for (i = 0; i < eles.length; i++) {
-						ele = Ext.get(eles[i]);
-						if (ele) {
-							Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
-						}
-					}
-				}
-			}
-
 			touch = e.touches[0];
 
 			container.fireEvent('touchStart', touch.pageX, touch.pageY);
