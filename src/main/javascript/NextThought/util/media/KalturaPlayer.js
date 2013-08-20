@@ -303,8 +303,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.log('deactivate');
 		this.fireEvent('player-event-ended', 'kaltura');
 		this.cleanup();
-		this.playerSetup();
 		this.sourceForWhenReady = this.currentSource;
+	},
+
+
+	activate: function(){
+		if(!this.el && !this.settingUp){
+			this.playerSetup();
+		}
 	},
 
 
@@ -318,6 +324,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		window.removeEventListener("message", this.handleMessage, false);
 		var el = Ext.get(this.id);
 		this.isReady = false;
+		delete this.el;
 		if( el ) {
 			el.clearListeners();
 			Ext.destroy(el);//because we're shelling this thing into an iframe, we can just destroy it.

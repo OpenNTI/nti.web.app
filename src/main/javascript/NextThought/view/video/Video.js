@@ -4,6 +4,10 @@ Ext.define('NextThought.view.video.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
 
+	mixins:{
+		instanceTracking: 'NextThought.mixins.InstanceTracking'
+	},
+
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.media.*',
@@ -78,6 +82,8 @@ Ext.define('NextThought.view.video.Video',{
 			height: this.playerHeight
 		});
 		this.callParent([config]);
+
+		this.trackThis();
 	},
 
 
@@ -170,17 +176,44 @@ Ext.define('NextThought.view.video.Video',{
 			this.maybeSwitchPlayers('none');
 		}
 
-		function stopOnCardChange(cmp, me){
+		function monitorCardChange(cmp, me){
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if(c){
 				console.debug(me.id+' is listening on deactivate on '+ c.id);
-				me.mon(c,'deactivate','deactivatePlayer',me);
-				stopOnCardChange(c, me);
+				me.mon(c,{
+					activate:'maybeActivatePlayer',
+					deactivate:'deactivatePlayer',
+					scope:me
+				});
+				monitorCardChange(c, me);
 			}
 		}
 
-		stopOnCardChange(this);
+		monitorCardChange(this);
+		this.maybeActivatePlayer();
+	},
+
+
+	maybeActivatePlayer: function(){
+		var me = this,
+			doActivate = me.isVisible(true);
+
+		console.debug('should reactivate?', doActivate?'yes':'no');
+
+		function deactivateOthers(other){
+			if(other !== me){
+				other.deactivatePlayer();
+			}
+		}
+
+		if(!doActivate){
+			return;
+		}
+
+		Ext.each(me.getInstances(),deactivateOthers);
+
+		me.activatePlayer();
 	},
 
 
@@ -218,8 +251,7 @@ Ext.define('NextThought.view.video.Video',{
 		});
 		this.initializedPlayers = Ext.Object.getKeys(this.players);
 
-		this.players.none = {};
-		this.players.none.isReady = false;
+		this.players.none = {isReady: false};
 	},
 
 
@@ -296,13 +328,27 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	activatePlayer: function(){
+		if(this.activeVideoService){
+			try{
+				this.issueCommand(this.activeVideoService,'activate');
+			}
+			catch(e){
+				console.warn('Error caught activating video', e.stack || e.message || e);
+			}
+			return true;
+		}
+		return false;
+	},
+
+
 	deactivatePlayer: function(){
 		if(this.activeVideoService){
 			try{
 				this.issueCommand(this.activeVideoService,'deactivate');
 			}
 			catch(e){
-				console.warn('Error caught deactivating video');
+				console.warn('Error caught deactivating video', e.stack || e.message || e);
 			}
 			return true;
 		}
@@ -331,7 +377,6 @@ Ext.define('NextThought.view.video.Video',{
 	resumePlayback: function(force){
 		var me = this;
 		if(this.activeVideoService && (force || !this.isPlaying())){
-			this.pauseAnyOtherVideoPlaying();
 			this.issueCommand(this.activeVideoService,'play');
 			return true;
 		}
@@ -339,25 +384,10 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
-	pauseAnyOtherVideoPlaying: function(){
-		// FIXME: Do it better. This is a nasty but
-		// we need to be able to stop any other video playing.
-		var me = this;
-		Ext.each(Ext.ComponentQuery.query('content-video'),
-			function(i){
-				if((i !== me) && i.isPlaying()){
-					i.deactivatePlayer();
-				}
-			}
-		);
-	},
-
-
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
-		this.pauseAnyOtherVideoPlaying();
 		// Save our the startAt value in case of failover
 		this.currentStartAt = (startAt || 0);
 
