@@ -207,7 +207,17 @@
 		padding: 10px 15px;
 		border-bottom: 1px solid #ededed;
 
-		&.x-item-selected,
+		&.x-item-selected{
+			&, &.over{
+				.name,.footer{
+					color: #c5eaff;
+				}
+				.snippet{color: #ffffff;}
+				background: $primary-blue;
+				box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
+			}
+		}
+
 		&.over{
 			background: #fff;
 			border-bottom-color: #cfcfcf;
