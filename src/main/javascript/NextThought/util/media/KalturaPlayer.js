@@ -414,7 +414,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.log(this.id,' Blocking pause');
 		me.blockPause = true;
 		setTimeout(function(){
-			console.log(this.id,' Allowing pause to occur from timeout');
+			console.log(me.id,' Allowing pause to occur from timeout');
 			delete me.blockPause;
 		}, 1000);
 		console.warn(this.id,' kaltura fired play handler called', this.currentState, arguments);

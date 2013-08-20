@@ -450,8 +450,13 @@ Ext.define('NextThought.view.video.Video',{
 		}
 		me.activeVideoService = service;
 
+		//TODO: make each player handle switching.
 		Ext.Object.each(me.playerIds,function(k,id){
 			var v = Ext.get(id);
+			if(!v){
+				console.warn('Skipping '+id+' because dom does not contain it.');
+				return;
+			}
 			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 			if(v.isVisible()){
