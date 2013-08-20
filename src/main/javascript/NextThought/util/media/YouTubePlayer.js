@@ -122,6 +122,9 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	},
 
 
+	activate: Ext.emptyFn,
+
+
 	pause: function(){
 		this.player.pauseVideo();
 	},

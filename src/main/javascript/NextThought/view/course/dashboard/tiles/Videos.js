@@ -97,17 +97,24 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			listeners: {
 				scope: this,
 				'destroy': 'widgetDestroyed'
+			},
+			xhooks: {
+			 	showCurtain: function(){
+					this.callParent(arguments);
+					this.removeCls('hide-list playing');
+				}
 			}
 		});
 
 		this.mon(this.content,{
-			'player-command-play':'onPlayerPlay',
-			'player-command-stop':'onPlayerStop',
-			'player-command-pause':'onPlayerStop',
+			//'player-command-play':'onPlayerPlay',
+			//'player-command-stop':'onPlayerStop',
+			//'player-command-pause':'onPlayerStop',
 			'player-event-play':'onPlayerPlay',
-			'player-event-pause':'onPlayerStop',
+			'player-event-pause':'onPlayerPause',
 			'player-event-ended':'onPlayerStop',
-			'player-error':'onPlayerStop'
+			'player-error':'onPlayerStop',
+			buffer: 10
 		});
 	},
 
@@ -130,11 +137,15 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 
 
 	onPlayerPlay: function(){
-		this.content.addCls('hide-list');
+		this.content.addCls('hide-list playing');
 	},
 
 
-	onPlayerStop: function(){
+	onPlayerPause: function(){
 		this.content.removeCls('hide-list');
+	},
+
+	onPlayerStop: function(){
+		this.content.removeCls('hide-list playing');
 	}
 });

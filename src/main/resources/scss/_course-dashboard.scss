@@ -258,7 +258,15 @@
 		}
 	}
 
-	&.hide-list {
+	&.playing{
+
+		&:not(.hide-list){
+			.video-list{
+				bottom: 31px;
+				//@include experimental(transition, none);
+			}
+		}
+
 		.curtain{
 
 			z-index: 0;
@@ -271,6 +279,9 @@
 				background: rgba(0,0,0,0.75);
 			}
 		}
+	}
+
+	&.hide-list {
 		.video-list {
 			bottom: -100px;
 		}

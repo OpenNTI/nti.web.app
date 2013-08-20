@@ -309,12 +309,13 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
-	issueCommand: function(target, command, args){
+	issueCommand: function(target, command, args, force/*Only to be used internally*/){
 		var t = this.players[target];
-		if(!t || !t.isReady){
+		if(!t || (!t.isReady && !force)){
 			if(!this.commandQueue[target]){
 				this.commandQueue[target] = [];
 			}
+			console.debug(this.id, 'Enqueing command with args', arguments);
 			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
@@ -323,6 +324,7 @@ Ext.define('NextThought.view.video.Video',{
 			if(!o || !Ext.isFunction(fn)){return null;}
 			return fn.apply(o,args);
 		}
+		console.debug(this.id, 'Invoking command ', arguments);
 		this.fireEvent('player-command-'+command);
 		return call(t[command],t,args);
 	},
@@ -331,7 +333,7 @@ Ext.define('NextThought.view.video.Video',{
 	activatePlayer: function(){
 		if(this.activeVideoService){
 			try{
-				this.issueCommand(this.activeVideoService,'activate');
+				this.issueCommand(this.activeVideoService,'activate', this.currentVideoId, true);
 			}
 			catch(e){
 				console.warn('Error caught activating video', e.stack || e.message || e);
@@ -345,7 +347,8 @@ Ext.define('NextThought.view.video.Video',{
 	deactivatePlayer: function(){
 		if(this.activeVideoService){
 			try{
-				this.issueCommand(this.activeVideoService,'deactivate');
+				delete this.commandQueue[this.activeVideoService];
+				this.issueCommand(this.activeVideoService,'deactivate', null, true);
 			}
 			catch(e){
 				console.warn('Error caught deactivating video', e.stack || e.message || e);
@@ -366,6 +369,7 @@ Ext.define('NextThought.view.video.Video',{
 
 
 	pausePlayback: function(){
+		this.maybeActivatePlayer();
 		if(this.activeVideoService && this.isPlaying()){
 			this.issueCommand(this.activeVideoService,'pause');
 			return true;
@@ -376,6 +380,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	resumePlayback: function(force){
 		var me = this;
+		this.maybeActivatePlayer();
 		if(this.activeVideoService && (force || !this.isPlaying())){
 			this.issueCommand(this.activeVideoService,'play');
 			return true;
@@ -387,6 +392,8 @@ Ext.define('NextThought.view.video.Video',{
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
+
+		this.maybeActivatePlayer();
 
 		// Save our the startAt value in case of failover
 		this.currentStartAt = (startAt || 0);
@@ -421,6 +428,8 @@ Ext.define('NextThought.view.video.Video',{
                 return item.get('NTIID') === videoId;
             }),
             id = r && r.activeSource().source;
+
+		this.maybeActivatePlayer();
 
         if(id){
             this.setVideoAndPosition(id, startAt);

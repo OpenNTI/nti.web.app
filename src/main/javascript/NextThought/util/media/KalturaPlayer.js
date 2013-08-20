@@ -95,7 +95,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.height = config.height;
 		this.currentPosition = 0;
 		this.currentState = -1;
-		this.isReady = false;
+		this.makeNotReady();
 
 		this.handleMessage = Ext.bind(this.handleMessage,this);
 		this.playerSetup();
@@ -121,7 +121,17 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.settingUp = true;
 
 		playerSetupTask.run = function () {
-			var doc = me.getPlayerContextDocument();
+			try{
+				var doc = me.getPlayerContextDocument();
+			}
+			catch(e){
+				console.warn(me.id, ' Something tore down the player while it was still setting up.  Canceling setup task');
+				Ext.TaskManager.stop(playerSetupTask);
+				delete me.settingUp;
+				me.deactivate();
+				me.activate();
+				return;
+			}
 			if (doc.body || doc.readyState === 'complete') {
 				delete me.settingUp;
 				Ext.TaskManager.stop(playerSetupTask);
@@ -129,10 +139,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					doc.open();
 					doc.write(me.PLAYER_BODY_TPL.apply(data));
 					doc.close();
-					console.log('Setup done for ', me.id);
+					console.log(me.id,' Setup done for ', me.id);
 				}
 				catch(e){
-					console.error('Setup died a terrible death', e);
+					console.error(me.id,' Setup died a terrible death', e);
 					me.playerErrorHandler(e);
 				}
 			}
@@ -172,7 +182,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		if(!Ext.isFunction(this[handlerName])){
-			console.warn('Player does not handle: '+handlerName, eventData);
+			console.warn(this.id,' Player does not handle: '+handlerName, eventData);
 			return;
 		}
 
@@ -183,11 +193,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	sendMessage: function(type,name,data){
         var context = this.getPlayerContext();
         if(!context){
-	        console.warn('No Kaltura Player Context!');
+	        console.warn(this.id,' No Kaltura Player Context!');
 	        return;
         }
 
-		console.log('Posting message to kaltura player', type, name, data);
+		console.log(this.id,' Posting message to kaltura player', type, name, data);
 
 		context.postMessage(Ext.encode({
 			type: type,
@@ -239,7 +249,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	load: function(source, offset){
-		console.log('Kaltura load called with source', source);
+		console.log(this.id,' Kaltura load called with source', source);
 		var kalturaData;
 
 		source = Ext.isArray(source) ? source[0] : source;
@@ -259,9 +269,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		delete this.dieOnPlay;
 
-		this.isReady = false;
+		this.makeNotReady();
 
-		//console.log(kalturaData, source, offset);
+		//console.log(this.id, kalturaData, source, offset);
 		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
 		this.currentPosition = 0;
 		this.currentState = -1;
@@ -275,11 +285,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	play: function(){
 		if(this.dieOnPlay){
-			console.error('No video id provided with source');
+			console.error(this.id,' No video id provided with source');
 			this.fireEvent('player-error', 'kaltura');
 			return;
 		}
-		console.log('Firing play event');
+		console.log(this.id,' Firing play event');
 		this.sendCommand('doPlay');
 	},
 
@@ -293,7 +303,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	stop: function(){
-		this.isReady = false;
+		this.makeNotReady();
 		this.sendCommand('doStop');
 		this.readyHandler();
 	},
@@ -301,15 +311,28 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	deactivate: function(){
 		console.log('deactivate');
+		this.playerDeactivated = true;
 		this.fireEvent('player-event-ended', 'kaltura');
 		this.cleanup();
-		this.sourceForWhenReady = this.currentSource;
 	},
 
 
-	activate: function(){
+	activate: function(sourceId){
+		console.log(this.id, 'Activate triggered');
+		if(!this.playerDeactivated){
+			return;
+		}
+
+		delete this.playerDeactivated;
+
 		if(!this.el && !this.settingUp){
+			console.log(this.id, 'Performing activate');
 			this.playerSetup();
+			this.onReadyLoadSource = sourceId;
+		}
+		else{
+			console.log(this.id, 'Not doing player setup, but making player ready', this.el, this.settingUp);
+			this.readyHandler();
 		}
 	},
 
@@ -323,7 +346,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	cleanup: function(){
 		window.removeEventListener("message", this.handleMessage, false);
 		var el = Ext.get(this.id);
-		this.isReady = false;
+		this.makeNotReady();
 		delete this.el;
 		if( el ) {
 			el.clearListeners();
@@ -340,11 +363,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		};
 
 		if(Ext.isFunction(this[stateMap[state]])){
-			console.log('Handling state', state);
+			console.log(this.id,' Handling state', state);
 			this[stateMap[state]]();
 		}
 		else{
-			console.log('Not acting on state', state);
+			console.log(this.id,' Not acting on state', state);
 		}
 	},
 
@@ -359,8 +382,21 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
+	makeNotReady: function(){
+		console.log(this.id,' KALTURA player is making self not ready');
+		this.isReady = false;
+	},
+
+
 	readyHandler: (function(){
 		return Ext.Function.createBuffered(function(){
+
+			if(this.onReadyLoadSource){
+				this.load(this.onReadyLoadSource);
+				delete this.onReadyLoadSource;
+				return;
+			}
+
 			console.log('Firing player ready',this);
 			this.isReady = true;
 			this.fireEvent('player-ready', 'kaltura');
@@ -375,23 +411,23 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	doPlayHandler: function(){
 		var me = this;
-		console.log('Blocking pause');
+		console.log(this.id,' Blocking pause');
 		me.blockPause = true;
 		setTimeout(function(){
-			console.log('Allowing pause to occur from timeout');
+			console.log(this.id,' Allowing pause to occur from timeout');
 			delete me.blockPause;
 		}, 1000);
-		console.warn('kaltura fired play handler called', this.currentState, arguments);
+		console.warn(this.id,' kaltura fired play handler called', this.currentState, arguments);
 		this.currentState = 1;
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
 
 	doPauseHandler: function(){
-		console.warn('kaltura fired paused', this.currentState);
+		console.warn(this.id,' kaltura fired paused', this.currentState);
 
 		if(this.blockPause){
-			console.log('Initating blocked pause');
+			console.log(this.id,' Initating blocked pause');
 			delete this.blockPause;
 			this.play();
 			return;
@@ -410,39 +446,39 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	playerErrorHandler: function(){
-		console.error('kaltura error ', arguments);
+		console.error(this.id,' kaltura error ', arguments);
 		this.fireEvent('player-error', 'kaltura');
 	},
 
 
 	mediaErrorHandler: function(){
-		console.log('MEDIA ERROR', arguments);
+		console.log(this.id,' MEDIA ERROR', arguments);
 	},
 
 	sourceReadyHandler: function(){
-		console.log('SOURCE READY', arguments);
+		console.log(this.id,' SOURCE READY', arguments);
 	},
 
 
 	readyToPlayHandler: function(){
-		console.log('This is ready to play');
+		console.log(this.id,' This is ready to play');
 		this.readyHandler();
 	},
 
 	entryReadyHandler: function(){
-		console.log('This entry is ready');
+		console.log(this.id,' This entry is ready');
+		this.readyHandler();
 	},
 
 	mediaLoadedHandler: function(){
-		console.log('This media is loaded');
+		console.log(this.id,' This media is loaded');
+		this.readyHandler();
 	},
 
-	readyToLoadHandler: function(){
-		if(this.sourceForWhenReady){
-			this.load(this.sourceForWhenReady);
-			delete this.sourceForWhenReady;
-		}
+	mediaReadyHandler: function(){
+		this.readyHandler();
 	},
+
 
 	playerCode:{
 
@@ -468,7 +504,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					seen[name] = (seen[name]||0) + 1;
 
 					if(/error/i.test(name) && seen[name] < 2){
-						console.warn('Ignoring intial errors about no source',name, arguments);
+						console.warn(window.playerId+' Ignoring intial errors about no source',name, arguments);
 						return;
 					}
 
@@ -490,7 +526,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					player.addJsListener(events[i],makeHandler(events[i]));
 				}
 
-				console.log('Player is ', player.tagName);
+				console.log(window.playerId, 'Player is ', player.tagName);
 			}
 
 

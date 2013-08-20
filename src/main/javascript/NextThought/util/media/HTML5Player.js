@@ -137,6 +137,9 @@ Ext.define('NextThought.util.media.HTML5Player',{
 	},
 
 
+	activate: Ext.emptyFn,
+
+
 	pause: function(){
 		this.player.pause();
 	},

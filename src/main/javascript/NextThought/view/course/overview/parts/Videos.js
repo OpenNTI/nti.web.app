@@ -283,7 +283,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			//'player-command-pause':'showCurtain',
 			'player-event-play': 'hideCurtain',
 			'player-event-ended': 'showCurtain',
-			'player-event-pause': 'showCurtain',
+			//'player-event-pause': 'showCurtain',
 			'player-error': 'onPlayerError'
 		});
 
