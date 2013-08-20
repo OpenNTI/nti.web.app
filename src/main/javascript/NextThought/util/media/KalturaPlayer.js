@@ -121,18 +121,18 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.settingUp = true;
 
 		playerSetupTask.run = function () {
+			var doc;
 			try{
-				var doc = me.getPlayerContextDocument();
+				doc = me.getPlayerContextDocument();
 			}
 			catch(e){
-				console.warn(me.id, ' Something tore down the player while it was still setting up.  Canceling setup task');
+				console.warn(me.id, ' Something tore down the player while it was still setting up.  Canceling setup task ', e.stack || e.message || e);
 				Ext.TaskManager.stop(playerSetupTask);
 				delete me.settingUp;
-				me.deactivate();
-				me.activate();
 				return;
 			}
-			if (doc.body || doc.readyState === 'complete') {
+
+			if (doc && doc.readyState === 'complete') {
 				delete me.settingUp;
 				Ext.TaskManager.stop(playerSetupTask);
 				try{
@@ -141,9 +141,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					doc.close();
 					console.log(me.id,' Setup done for ', me.id);
 				}
-				catch(e){
-					console.error(me.id,' Setup died a terrible death', e);
-					me.playerErrorHandler(e);
+				catch(er){
+					console.error(me.id,' Setup died a terrible death', er.stack || er.message || er);
+					me.playerErrorHandler(er);
 				}
 			}
 		};
@@ -234,11 +234,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	getPlayerContextDocument: function(){
-		var doc = (Ext.getDom(this.iframe).contentDocument || this.getPlayerContext().document);
-		if( doc && !doc.body ){
-			doc.body = doc.getElementsByTagName('body')[0];
-		}
-		return doc;
+		var f = Ext.getDom(this.iframe),
+			w = this.getPlayerContext();
+
+		return ((f && f.contentDocument) || (w && w.document));
 	},
 
 
@@ -310,6 +309,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	deactivate: function(){
+		if(this.playerDeactivated){
+			console.warn('Attempting to deactivate a deactivated player');
+			return;
+		}
 		console.log('deactivate');
 		this.playerDeactivated = true;
 		this.fireEvent('player-event-ended', 'kaltura');
@@ -531,11 +534,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 			function handleMessage(event){
-				var eventData = JSON.parse(event.data),
+				var eventData, player;
+				try {
+					eventData = JSON.parse(event.data);
 					player = document.getElementById(playerId);
-
-				//console.debug('From '+playerId+', to app:', eventData);
-				player.sendNotification(eventData.name,eventData.data);
+					//console.debug('From '+playerId+', to app:', eventData);
+					player.sendNotification(eventData.name,eventData.data);
+				}
+				catch(er){
+					console.warn(er.stack||er.message||er);
+				}
 			}
 
 
