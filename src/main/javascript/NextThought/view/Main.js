@@ -31,49 +31,116 @@ Ext.define('NextThought.view.Main', {
 		this.callParent(arguments);
 
 		if (Ext.is.iPad) {
-			document.ontouchstart = function (e) {
-				var touch = e.touches[0];
-				if (!touch) {
-					return;
-				}
+			document.ontouchstart = this.onTouchStart;
 
-				var mouseEvent = document.createEvent('MouseEvents');
-				mouseEvent.initMouseEvent('mousedown', true, true, window,
-					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-					false, false, false, false, 0, null);
+			document.ontouchmove = this.onTouchMove;
 
-				touch.target.dispatchEvent(mouseEvent);
-			};
-
-			document.ontouchmove = function (e) {
-				var touch = e.touches[0];
-				if (!touch) {
-					return;
-				}
-
-				var mouseEvent = document.createEvent('MouseEvents');
-				mouseEvent.initMouseEvent('mousemove', true, true, window,
-					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-					false, false, false, false, 0, null);
-
-				touch.target.dispatchEvent(mouseEvent);
-			};
-
-			document.ontouchend = function (e) {
-				var touch = e.changedTouches[0];
-				if (!touch) {
-					return;
-				}
-
-				var mouseEvent = document.createEvent('MouseEvents');
-				mouseEvent.initMouseEvent('mouseup', true, true, window,
-					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-					false, false, false, false, 0, null);
-
-				touch.target.dispatchEvent(mouseEvent);
-			};
+			document.ontouchend = this.onTouchEnd;
 		}
 	},
+
+
+	onTouchStart: function (e) {
+		var touch = e.touches[0];
+		if (!touch) {
+			return;
+		}
+		// Dispatch mouseenter
+		var mouseEnterEvent = document.createEvent('MouseEvents');
+		mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
+			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseEnterEvent);
+
+		// Dispatch mouseover
+		var mouseOverEvent = document.createEvent('MouseEvents');
+		mouseOverEvent.initMouseEvent('mouseover', true, true, window,
+			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseOverEvent);
+
+		// Dispatch mousedown
+		var mouseDownEvent = document.createEvent('MouseEvents');
+		mouseDownEvent.initMouseEvent('mousedown', true, true, window,
+			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseDownEvent);
+	},
+
+
+	onTouchMove: function (e) {
+		var touch = e.touches[0];
+		if (!touch) {
+			return;
+		}
+		// Dispatch mousemove
+		var mouseMoveEvent = document.createEvent('MouseEvents');
+		mouseMoveEvent.initMouseEvent('mousemove', true, true, window,
+			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseMoveEvent);
+
+		// Dispatch leave/enter events if moving onto a different element
+		var changedTouch = e.changedTouches[0];
+		if (changedTouch && changedTouch.target !== touch.target) {
+			// Dispatch mouseleave
+			var mouseLeaveEvent = document.createEvent('MouseEvents');
+			mouseLeaveEvent.initMouseEvent('mouseleave', true, true, window,
+				0, changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
+				false, false, false, false, 0, null);
+			changedTouch.target.dispatchEvent(mouseLeaveEvent);
+
+			// Dispatch mouseout
+			var mouseOutEvent = document.createEvent('MouseEvents');
+			mouseOutEvent.initMouseEvent('mouseout', true, true, window,
+				0, changedTouch.screenX, changedTouch.screenY, changedTouch.clientX, changedTouch.clientY,
+				false, false, false, false, 0, null);
+			changedTouch.target.dispatchEvent(mouseOutEvent);
+
+			// Dispatch mouseenter
+			var mouseEnterEvent = document.createEvent('MouseEvents');
+			mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
+				0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+				false, false, false, false, 0, null);
+			touch.target.dispatchEvent(mouseEnterEvent);
+		}
+	},
+
+
+	onTouchEnd: function (e) {
+		var touch = e.changedTouches[0];
+		if (!touch) {
+			return;
+		}
+		// Dispatch mouseup
+		var mouseUpEvent = document.createEvent('MouseEvents');
+		mouseUpEvent.initMouseEvent('mouseup', true, true, window,
+			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseUpEvent);
+
+		// Dispatch mouseleave
+		var mouseLeaveEvent = document.createEvent('MouseEvents');
+		mouseLeaveEvent.initMouseEvent('mouseleave', true, true, window,
+			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseLeaveEvent);
+
+		// Dispatch mouseout
+		var mouseOutEvent = document.createEvent('MouseEvents');
+		mouseOutEvent.initMouseEvent('mouseout', true, true, window,
+			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(mouseOutEvent);
+
+		// Dispatch click
+		var clickEvent = document.createEvent('MouseEvents');
+		clickEvent.initMouseEvent('click', true, true, window,
+			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+			false, false, false, false, 0, null);
+		touch.target.dispatchEvent(clickEvent);
+	},
+
 
 	afterRender: function () {
 		this.callParent(arguments);
@@ -131,20 +198,20 @@ Ext.define('NextThought.view.Main', {
 				}
 				if (Math.abs(window.orientation) != 90) {
 					optWindow = me.createPortraitOrientationScreen();
-                    var iframe = optWindow.el.down('iframe');
-                    iframe.el.dom.contentWindow.addEventListener('touchstart', function(e){
-                        e.preventDefault();
-                    });
+					var iframe = optWindow.el.down('iframe');
+					iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
+						e.preventDefault();
+					});
 					optWindow.show();
 				}
 			}, true);
 
 			if (Math.abs(window.orientation) != 90) {
 				optWindow = this.createPortraitOrientationScreen();
-                var iframe = optWindow.el.down('iframe');
-                iframe.el.dom.contentWindow.addEventListener('touchstart', function(e){
-                    e.preventDefault();
-                });
+				var iframe = optWindow.el.down('iframe');
+				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
+					e.preventDefault();
+				});
 
 				optWindow.show();
 			}
@@ -155,6 +222,7 @@ Ext.define('NextThought.view.Main', {
 		}
 	},
 
+
 	createPortraitOrientationScreen: function () {
 		var optWindow = Ext.widget('nti-window', {
 			title: 'Portrait mode unavailabe',
@@ -164,10 +232,10 @@ Ext.define('NextThought.view.Main', {
 			layout: 'fit',
 			modal: true,
 			closable: false,
-            draggable: false,
-            resizeable: false,
-            hideParent: true,
-            renderTo: Ext.getBody(),
+			draggable: false,
+			resizeable: false,
+			hideParent: true,
+			renderTo: Ext.getBody(),
 			items: {
 				xtype: 'component',
 				cls: 'clickthrough',
