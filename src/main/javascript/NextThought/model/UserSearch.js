@@ -31,7 +31,11 @@ Ext.define(	'NextThought.model.UserSearch', {
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', convert: function(v,record){
 			var presence = Ext.getStore('PresenceInfo').getPresenceOf(record.get('Username'));
-			console.log(presence, presence&&presence.toString());
+			if( presence ){
+				console.log(presence, presence.toString());
+			} else if($AppConfig.debug){
+				console.log('No presence data for '+record.getId());
+			}
 
 			return presence;
 		}},
