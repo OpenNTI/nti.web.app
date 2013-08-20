@@ -84,19 +84,17 @@ Ext.define('NextThought.modules.TouchSender', {
 			var aboveDock = container.el.down('#chat-dock'),
 				dock = container.el.dom.getAttribute('id'),
 				belowDock = container.el.up('#chat-dock'),
-				cPopout, updock, ele, touch, dockEl, eles, i;
+				ele, touch, dockEl;
 
 			e.preventDefault();
 
-			// If touching something besides sidebar, close it
+//			If touching something besides sidebar, close it
 			if (dom.getAttribute('id').indexOf("main-sidebar") === -1) {
 				ele = Ext.get(Ext.query('.sidebar')[0]);
 				if (ele) {
 					Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
 				}
-				updock = Ext.get('chat-dock_header_hd');
 			}
-
 
 			if (aboveDock === null && dock !== 'chat-dock' && belowDock === null) {
 				dockEl = Ext.ComponentManager.get('chat-dock');
@@ -105,42 +103,13 @@ Ext.define('NextThought.modules.TouchSender', {
 				}
 			}
 
-			// If touching something besides contact popout, close popout
-			cPopout = Ext.query('.contact-popout')[0];
-			if (cPopout) {
-				Ext.destroy(Ext.getCmp(cPopout.getAttribute('id')));
+			//Close recent activity menu popout
+			if (Ext.get(Ext.query('.from-menu')[0])) {
+				Ext.get(Ext.query('.from-menu')[0]).hide();
 			}
-
-			// If touching something besides search, close search
-			if (dom.getAttribute('id').indexOf('search-menu') === -1
-				&& !e.target.classList.contains('search')) {
-				ele = Ext.get(Ext.query('.search-menu')[0]);
-				if (ele) {
-					Ext.ComponentManager.get(ele.getAttribute('id')).hide();
-				}
+			if (Ext.get(Ext.query('.types-menu')[0])) {
+				Ext.get(Ext.query('.types-menu')[0]).hide();
 			}
-
-			// If touching something besides a jump-menu, close the jump-menu
-//			if (dom.getAttribute('id').indexOf('jump-menu') === -1
-//				&& dom.getAttribute('id').className !== 'part') {
-//				eles = Ext.query('.jump-menu');
-//				if (eles) {
-//					for (i = 0; i < eles.length; i++) {
-//						ele = Ext.get(eles[i]);
-//						if (ele) {
-//							Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
-//						}
-//					}
-//				}
-//			}
-
-            //Close recent activity menu popout
-            if(Ext.get(Ext.query('.from-menu')[0])){
-                Ext.get(Ext.query('.from-menu')[0]).hide();
-            }
-            if(Ext.get(Ext.query('.types-menu')[0])){
-                Ext.get(Ext.query('.types-menu')[0]).hide();
-            }
 
 			touch = e.touches[0];
 

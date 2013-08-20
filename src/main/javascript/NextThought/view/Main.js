@@ -29,6 +29,50 @@ Ext.define('NextThought.view.Main', {
 	constructor: function () {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
+
+		if (Ext.is.iPad) {
+			document.ontouchstart = function (e) {
+				var touch = e.touches[0];
+				if (!touch) {
+					return;
+				}
+
+				var mouseEvent = document.createEvent('MouseEvents');
+				mouseEvent.initMouseEvent('mousedown', true, true, window,
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
+
+				touch.target.dispatchEvent(mouseEvent);
+			};
+
+			document.ontouchmove = function (e) {
+				var touch = e.touches[0];
+				if (!touch) {
+					return;
+				}
+
+				var mouseEvent = document.createEvent('MouseEvents');
+				mouseEvent.initMouseEvent('mousemove', true, true, window,
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
+
+				touch.target.dispatchEvent(mouseEvent);
+			};
+
+			document.ontouchend = function (e) {
+				var touch = e.changedTouches[0];
+				if (!touch) {
+					return;
+				}
+
+				var mouseEvent = document.createEvent('MouseEvents');
+				mouseEvent.initMouseEvent('mouseup', true, true, window,
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
+
+				touch.target.dispatchEvent(mouseEvent);
+			};
+		}
 	},
 
 	afterRender: function () {
