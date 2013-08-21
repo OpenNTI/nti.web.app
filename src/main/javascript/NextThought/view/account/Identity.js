@@ -4,12 +4,10 @@ Ext.define('NextThought.view.account.Identity', {
 	alias: 'widget.identity',
 
 	requires: [
-		'NextThought.view.menus.Settings',
-		'NextThought.modules.TouchSender'
+		'NextThought.view.menus.Settings'
 	],
 	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		moduleContainer: 'NextThought.mixins.ModuleContainer'
+		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
 	profileLinkCard: false,
