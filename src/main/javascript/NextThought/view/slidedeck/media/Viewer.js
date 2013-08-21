@@ -21,7 +21,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	SMALLVIDEO:{
 		width: function(){return 512;},
-		transcriptRatio: 0.55
+		transcriptRatio: 0.55,
+		setClasses: function(el){
+			el.removeCls('full-video-player');
+			el.addCls('small-video-player');
+		}
 	},
 
 	BIGVIDEO:{
@@ -45,6 +49,39 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			newWidth = Math.round((1-(Math.abs(diff)/(screenHeight)))*defaultWidth);
 
 			return Math.max(newWidth, 512);
+		},
+		setClasses: function(el){
+			el.removeCls('full-video-player');
+			el.removeCls('small-video-player');
+		}
+	},
+
+	FULLVIDEO:{
+		transcriptRatio: 0,
+		width: function(el){
+			var screenHeight = Ext.Element.getViewportHeight(),
+				screenWidth = Ext.Element.getViewportWidth(),
+				ratio = NextThought.view.video.Video.ASPECT_RATIO,
+				defaultWidth = screenWidth - 20,
+				defaultHeight = Math.round(defaultWidth * ratio),
+				y = (el && el.getY()) || 0,
+				diff = screenHeight - (y + defaultHeight),
+				newWidth;
+				
+			if(diff >= 0){ return defaultWidth; }
+
+			newWidth = Math.round( (screenHeight - y) / ratio);
+
+			return Math.max(newWidth, 512);
+		},
+		left: function(width){
+			var screenWidth = Ext.Element.getViewportWidth();
+
+			return (screenWidth - width) / 2;
+		},
+		setClasses: function(el){
+			el.removeCls('small-video-player');
+			el.addCls('full-video-player');
 		}
 	},
 
@@ -155,25 +192,29 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
 		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
 		// while at the same time making sure we sync with resizes.
-
 		var h = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30,
 			videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
-			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : this.BIGVIDEO,
+			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player'))? this.FULLVIDEO : this.BIGVIDEO,
 			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
 			tEl = this.el.down('.content-video-transcript');
 
 		targetEl.setStyle('height', h+'px');
 		if(tEl){
-			transcriptWidth -= 80;
-			tEl.setStyle('width', transcriptWidth+'px');
+			if(transcriptWidth > 80){
+				transcriptWidth -= 80;
+				tEl.parent('.transcript-view').show();
+				tEl.setStyle('width', transcriptWidth+'px');
+			}else{
+				tEl.parent('.transcript-view').hide();
+			}
 		}
 		videoWidth += 80;
 		this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
 		console.log('Media viewer resizing');
 	},
 
-	addVideoPlayer: function(width){
+	addVideoPlayer: function(width, left){
 		var startTimeSeconds = (this.startAtMillis || 0) / 1000;
 		this.videoplayer = Ext.widget('content-video',{
 			playlist: [this.video],
@@ -182,6 +223,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this
 		});
+
+		this.videoPlayerEl.setLeft(left || 10);
 
 		if(this.record){
 			var range = this.record.get('applicableRange') || {},
@@ -238,18 +281,20 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 		console.log('switch to video viewer type: ', type);
 
-		var me = this,
+		var cls, me = this,
 			isTranscriptCentric = type === 'transcript-focus',
-			clsAction = isTranscriptCentric ? 'addCls':'removeCls',
-			dim = isTranscriptCentric ? this.SMALLVIDEO : this.BIGVIDEO;
+			isFullVideo = type === 'full-video',
+			dim = isTranscriptCentric ? this.SMALLVIDEO : (isFullVideo? this.FULLVIDEO : this.BIGVIDEO),
+			width = dim.width(this.videoPlayerEl),
+			left = Ext.isFunction(dim.left) && dim.left(width);
 
 		// FIXME: This feels wrong, but I don't know if we can resize the video player once it's been created.
 		// For now, naively destroy the current videoPlayer and add a new one with the desired dimensions.
 		// TODO: We may also need to pass about the video in case it was currently playing.
 		this.videoplayer.destroy();
 		this.activeVideoPlayerType = type;
-		this.addVideoPlayer(dim.width(this.videoPlayerEl));
-		this.el[clsAction]('small-video-player');
+		this.addVideoPlayer(width, left);
+		dim.setClasses(this.el);
 		Ext.defer(function(){
 			me.adjustOnResize();
 		}, 1, me);

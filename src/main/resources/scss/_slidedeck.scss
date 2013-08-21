@@ -954,6 +954,18 @@ $experimental-support-for-svg: true;
 							}
 						}
 
+						&.full-video{
+							&::after{
+								@include sprite($icons,'mv-full-view',$dimensions: true);
+							}
+
+							&:hover, &:active {
+								&::after{
+									@include sprite($icons,'mv-full-view_active',$dimensions: true);
+								}
+							}
+						}
+
 					}
 				}
 
@@ -1349,6 +1361,17 @@ $experimental-support-for-svg: true;
 				&:hover, &:active{
 					&::after{
 						@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+					}
+				}
+			}
+			&.full-video{
+				&::after{
+					@include sprite($icons,'mv-full-view',$dimensions: true);
+				}
+
+				&:hover, &:active {
+					&::after{
+						@include sprite($icons,'mv-full-view_active',$dimensions: true);
 					}
 				}
 			}

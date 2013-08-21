@@ -83,7 +83,8 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			type = this.currentType,
 			items = [
 				{ text:'Split Video', cls:'label video-focus', action:'video-focus', checked: type === 'video-focus'},
-				{ text:'Split Transcript', cls:'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'}
+				{ text:'Split Transcript', cls:'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'},
+				{ text:'Full Video', cls: 'label full-video', action:'full-video', checked: type === 'full-video'}
 			];
 
 		//Make selected item is at the top of the list.
