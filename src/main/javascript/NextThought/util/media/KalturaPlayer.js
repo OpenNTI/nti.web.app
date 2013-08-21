@@ -82,8 +82,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	PARTNER_ID: '1500101',
 	UICONF_ID: '15491291',
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	LEAD_HTML5: (!Ext.isIE9).toString(),
-
+	//LEAD_HTML5: (!Ext.isIE9).toString(),
+	  LEAD_HTML5: 'false',
+	
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
 	    this.globals = {};
