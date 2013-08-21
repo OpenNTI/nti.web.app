@@ -75,44 +75,12 @@ Ext.define('NextThought.view.account.Identity', {
 		this.enableProfileClicks(this.avatar);
 
 		if (Ext.is.iPad) {
-			this.setupTouch();
+			this.el.dom.addEventListener('touchstart', function (e) {
+				e.preventDefault();
+			}, false);
 		}
 	},
 
-	setupTouch: function () {
-		this.buildModule('modules', 'touchSender');
-
-		var container = this;
-
-		container.on('touchTap', function (ele) {
-			ele.click();
-		});
-
-		container.on('touchElementAt', function (x, y, callback) {
-			var element = Ext.getDoc().dom.elementFromPoint(x, y);
-			callback(element);
-		});
-
-		container.on('touchLongPress', function (ele, pageX, pageY) {
-			var queryResult = Ext.query('.presence-menu'),
-				menuChild = null,
-				profileMenu = null;
-
-			if (queryResult) {
-				menuChild = queryResult[0];
-				if (menuChild) {
-					profileMenu = Ext.get(menuChild).el.up('.x-menu');
-				}
-			}
-
-			if (profileMenu && profileMenu.isVisible()) {
-				this.startToHideMenu();
-			}
-			else {
-				this.startToShowMenu();
-			}
-		});
-	},
 
 	cancelHideShowEvents: function () {
 		clearTimeout(this.showTimout);
@@ -136,8 +104,10 @@ Ext.define('NextThought.view.account.Identity', {
 
 		this.cancelHideShowEvents();
 
-		this.hideTimout = setTimeout(function () {
-			me.menu.hide();
-		}, 500);
+		if (!Ext.is.iPad || this.menu.isHidden()) { // On iPad, don't hide menu if it's already shown
+			this.hideTimout = setTimeout(function () {
+				me.menu.hide();
+			}, 500);
+		}
 	}
 });
