@@ -19,6 +19,7 @@ Ext.define('NextThought.view.Main', {
 	id: 'viewport',
 	ui: 'nextthought',
 	minWidth: 1024,
+	touchStartTime: -1,
 
 	items: [
 		{xtype: 'main-navigation', id: 'nav', region: 'north'},
@@ -45,6 +46,8 @@ Ext.define('NextThought.view.Main', {
 		if (!touch) {
 			return;
 		}
+		this.touchStartTime = e.timeStamp;
+
 		// Dispatch mouseenter
 		var mouseEnterEvent = document.createEvent('MouseEvents');
 		mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
@@ -133,12 +136,14 @@ Ext.define('NextThought.view.Main', {
 			false, false, false, false, 0, null);
 		touch.target.dispatchEvent(mouseOutEvent);
 
-		// Dispatch click
-		var clickEvent = document.createEvent('MouseEvents');
-		clickEvent.initMouseEvent('click', true, true, window,
-			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-			false, false, false, false, 0, null);
-		touch.target.dispatchEvent(clickEvent);
+		// Dispatch click if touch lasted one second or less in duration
+		if (e.timeStamp - this.touchStartTime <= 1000) {
+			var clickEvent = document.createEvent('MouseEvents');
+			clickEvent.initMouseEvent('click', true, true, window,
+				1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+				false, false, false, false, 0, null);
+			touch.target.dispatchEvent(clickEvent);
+		}
 	},
 
 
