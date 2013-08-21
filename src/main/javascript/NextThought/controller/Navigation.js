@@ -387,6 +387,7 @@ Ext.define('NextThought.controller.Navigation', {
 			//doing this prevents having to to two requests to get the forum, then board. 
 			//assumes the content url looks like base/board/forum/topic
 			if(link.slice(-1) === '/'){
+				//FIXME, wtf is this doing?
 				link = link.split('/').slice(0,-23).join('/');
 			}else{
 				link = link.split('/').slice(0,-2).join('/');
