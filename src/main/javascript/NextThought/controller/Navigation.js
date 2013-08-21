@@ -38,7 +38,8 @@ Ext.define('NextThought.controller.Navigation', {
                     'navigate-to-blog': 'gotoBlog',
                     'navigation-failed': 'readerNavigationFailed',
                     'view-selected': 'setView',
-                    'navigate-to-course-discussion': 'goToCourseForum'
+                    'navigate-to-course-discussion': 'goToCourseForum',
+	                'set-forum-location': 'setForumLocation'
                 },
                 'library-collection': {
                     'select': 'trackContentChange'
@@ -353,7 +354,7 @@ Ext.define('NextThought.controller.Navigation', {
     /**
      *Navigate to the course and push the forum and topic
      */
-    goToCourseForum: function (course, forum, topic) {
+    goToCourseForum: function (course, forum, topic, callback) {
 
         function test(ntiid, reader, error) {
             console.log('test:', arguments);
@@ -369,8 +370,13 @@ Ext.define('NextThought.controller.Navigation', {
 			if(cmp && cmp.isActive()){
 				Ext.defer(function(){
 					cmp.setActiveTab('course-forum');
-					cmp.courseForum.restoreState(forum, topic);
-					history.pushState({library: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+
+					// FIXME: We're running into a case where we call restoreState explicitly passing our callback, however,
+					// since we're pushing state, it also invokes restoreState and we run into this overlapping calls
+					// which can cause a race condition or unwanted behaviors. We can't ignore pushing state either, because if we don't,
+					// the app will still think we're at where we came from( i.e. Profile). Don't know of a best way to fix this.
+					cmp.courseForum.restoreState(forum, topic, callback);
+					history.pushState({ active:'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
 				}, 1);
 			}
 		}
@@ -411,6 +417,52 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		return this.setView('forums');
+	},
+
+
+	// NOTE: unlike beforeTopic, this setForumLocation takes a callback, that gets called at the end.
+	setForumLocation: function(topicRecord, comment, callback, scope){
+		console.log('implement beforeTopicShow...about to set the Forums View');
+
+		var me = this,
+			link = topicRecord && topicRecord.get('href'), r, req;
+
+		if(link){
+			// Get the board url: assumes the content url looks like base/board/forum/topic
+			if(link.slice(-1) === '/'){
+				link = link.split('/').slice(0,-23).join('/');
+			}else{
+				link = link.split('/').slice(0,-2).join('/');
+			}
+
+			req = {
+				url: link,
+				callback: function(request, success, response){
+					if(!success){
+						me.fireEvent('topic-navigation-canceled', topicRecord);
+						console.error('Could not find the board this topic belongs to: ', topicRecord, arguments);
+						Ext.callback(callback, scope);
+						return;
+					}
+
+					var board = ParseUtils.parseItems(response.responseText)[0];
+					if(board.belongsToCourse()){
+						callback = Ext.bind(callback, scope);
+						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), callback);
+					}else{
+						r = me.setView('forums');
+						me.fireEvent('show-topic', topicRecord, comment, callback);
+					}
+				}
+			};
+
+			Ext.Ajax.request(req);
+			return;
+		}
+
+		// Announce this to whoever cares.
+		this.fireEvent('topic-navigation-canceled', topicRecord);
+		Ext.callback(callback, scope);
 	},
 
 

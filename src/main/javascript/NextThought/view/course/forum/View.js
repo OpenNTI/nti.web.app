@@ -133,50 +133,57 @@ Ext.define('NextThought.view.course.forum.View',{
 		this.hasBoard = !!this.currentNtiid;
 	},
 
-	restoreState: function(forum, topic){
+	restoreState: function(forum, topic, cb){
 		//if there is a valid state to restore there has to be a forum
 		if(!forum){
+			Ext.callback(cb);
 			return;
 		}
 		//wait until the board is loaded
 		if(!this.hasBoard){
 			this.currentForum = forum;
 			this.currentTopic = topic;
+			Ext.callback(cb);
 			return;
 		}
 		var top = this.peek();
 
 		if(!top){
+			// FIXME: We should do something here???? otherwise,
+			// we risk running into an infinite loop.
 			console.error("We don't even have a board loaded?!?!?!?!");
-		}
-		
-		if(top.xtype === 'course-forum-board'){
-			this.setForum(forum, topic);
+			this.setForum(forum, topic, cb);
 			return;
 		}
 
-		if(top.xtype === 'course-forum-topic-list'){
+		if(top.xtype === 'course-forum-board'){
+			this.setForum(forum, topic, cb);
+			return;
+		}
+
+		if(top && top.xtype === 'course-forum-topic-list'){
 			if(top.record.getId() === forum){
-				this.setForum(undefined, topic);
+				this.setForum(undefined, topic, cb);
 				return;
 			}
 		}
 
-		if(top.xtype === 'forums-topic'){
+		if(top && top.xtype === 'forums-topic'){
 			if(top.record.getId() === topic){
+				Ext.callback(cb, null, [top]);
 				return;
 			}
 		}
 
 		this.popView();
-		this.restoreState(forum, topic);
+		this.restoreState(forum, topic, cb);
 	},
 
 	
-	setForum: function(forum, topic){
+	setForum: function(forum, topic, cb){
 		var me = this, boardId = this.currentNtiid;
 		if(!forum){
-			this.setTopic(topic);
+			this.setTopic(topic, cb);
 			return;
 		}
 
@@ -192,13 +199,13 @@ Ext.define('NextThought.view.course.forum.View',{
 					store: store
 				});
 			me.add(cmp);
-			me.setTopic(topic);
+			me.setTopic(topic, cb);
 		}, function(){
 			console.error('Failed to load forum:',forum);
 		});
 	},
 
-	setTopic: function(topic){
+	setTopic: function(topic, cb){
 		var me = this, boardId = this.currentNtiid;
 		if(!topic){
 			return;
@@ -219,6 +226,7 @@ Ext.define('NextThought.view.course.forum.View',{
 
 			if(top.xtype === 'course-forum-topic-list'){
 				me.add(cmp);
+				Ext.callback(cb, null, [cmp]);
 			}else{
 				me.topicMonitor = me.mon({
 					destroyable: true,
@@ -228,6 +236,7 @@ Ext.define('NextThought.view.course.forum.View',{
 						if(cmp.xtype === 'course-forum-topic-list'){
 							Ext.destroy(me.topicMonitor);
 							me.add(cmp);
+							Ext.callback(cb, null, [cmp]);
 						}
 					}
 				});
