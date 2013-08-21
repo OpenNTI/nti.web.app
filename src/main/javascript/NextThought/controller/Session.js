@@ -220,7 +220,7 @@ Ext.define('NextThought.controller.Session', {
 				url = $AppConfig.server.login;
 
 			if(location.pathname!=='/'){
-				o.return=location.pathname;
+				o['return']=location.pathname;
 			}
 
 			if($AppConfig.server.host !== ('//'+document.domain)){
