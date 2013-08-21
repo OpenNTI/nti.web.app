@@ -393,8 +393,8 @@ Ext.define('NextThought.controller.Navigation', {
 			//doing this prevents having to to two requests to get the forum, then board. 
 			//assumes the content url looks like base/board/forum/topic
 			if(link.slice(-1) === '/'){
-				//FIXME, wtf is this doing?
-				link = link.split('/').slice(0,-23).join('/');
+				//so we need to get from 0 to the 3rd from the end to avoid the '' from the trailing /
+				link = link.split('/').slice(0,-3).join('/');
 			}else{
 				link = link.split('/').slice(0,-2).join('/');
 			}
@@ -430,7 +430,7 @@ Ext.define('NextThought.controller.Navigation', {
 		if(link){
 			// Get the board url: assumes the content url looks like base/board/forum/topic
 			if(link.slice(-1) === '/'){
-				link = link.split('/').slice(0,-23).join('/');
+				link = link.split('/').slice(0,-3).join('/');
 			}else{
 				link = link.split('/').slice(0,-2).join('/');
 			}
