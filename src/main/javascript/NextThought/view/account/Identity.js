@@ -72,10 +72,9 @@ Ext.define('NextThought.view.account.Identity', {
 
 		this.enableProfileClicks(this.avatar);
 
+		// On iPad, prevent the save/copy image menu from appearing
 		if (Ext.is.iPad) {
-			this.el.dom.addEventListener('touchstart', function (e) {
-				e.preventDefault();
-			}, false);
+			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
 		}
 	},
 
