@@ -4,7 +4,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 	requires: [
 		'NextThought.view.profiles.Panel',
 		'NextThought.view.ResourceNotFound',
-        'NextThought.modules.TouchSender',
+        'NextThought.modules.TouchScrollSender',
         'NextThought.modules.TouchHandler'
 	],
 
@@ -21,7 +21,7 @@ Ext.define( 'NextThought.view.profiles.View', {
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 
-        this.buildModule('modules', 'touchSender', {moduleName:'profileTouchSender'});
+        this.buildModule('modules', 'touchScrollSender', {moduleName:'profileTouchSender'});
         this.buildModule('modules', 'touchHandler',
             {moduleName:'profileTouchHandler', getPanel: function(){
                 return this.container.el;
