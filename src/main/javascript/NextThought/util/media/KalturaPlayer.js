@@ -270,7 +270,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		this.makeNotReady();
 
-		//console.log(this.id, kalturaData, source, offset);
+		console.log(this.id, kalturaData, source, offset);
 		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
 		this.currentPosition = 0;
 		this.currentState = -1;
@@ -302,9 +302,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	stop: function(){
-		this.makeNotReady();
 		this.sendCommand('doStop');
-		this.readyHandler();
+		this.doStopHandler();
 	},
 
 
@@ -321,12 +320,13 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	activate: function(sourceId){
-		console.log(this.id, 'Activate triggered');
 		if(!this.playerDeactivated){
 			return;
 		}
 
 		delete this.playerDeactivated;
+
+		console.log(this.id, 'Activate triggered');
 
 		if(!this.el && !this.settingUp){
 			console.log(this.id, 'Performing activate');
@@ -362,7 +362,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		var state = event.data[0],
 			stateMap = {
 			'playing': 'doPlayHandler',
-			'paused': 'doPauseHandler'
+			'paused': 'doPauseHandler',
+			'stop': 'doStopHandler'
 		};
 
 		if(Ext.isFunction(this[stateMap[state]])){
@@ -438,6 +439,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		this.currentState = 2;
 		this.fireEvent('player-event-pause', 'kaltura');
+	},
+
+
+	doStopHandler: function(){
+		this.deactivate();
 	},
 
 
