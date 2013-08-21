@@ -22,7 +22,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 	            'navigateAbort',//From error (navigation started and must recover)
 				'navigateCanceled',//From blocking UI (open editor) -- navigation never started.
 				'navigateComplete',
-				'change'
+				'change',
+				'begin-state-transaction',
+				'end-state-transaction',
+				'cancel-state-transaction'
 			]));
 
 		reader.fireEvent('uses-page-stores',this);
@@ -71,39 +74,51 @@ Ext.define('NextThought.view.content.reader.Location', {
 				e.unmask();
 			}
 
-			//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-			//Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
-			Ext.callback(callback,null,args);
+			try{
+				//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
+				//Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
+				Ext.callback(callback,null,args);
 
-			if(fromHistory!==true){
-				history.pushState({
-					content:{location: ntiid},
-					active:'content'
-				}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
-			}
-			if(error){
-				delete me.currentNTIID;
-				//Ok no bueno.  The page info request failed.  Ideally whoever
-				//initiated this request handles the error  but we aren't really setup for
-				//that everywhere. Need to work on error handling.
-				console.error('An error occurred from setLocation', errorDetails);
-				if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
-					//We were displaying an alert box here on 403s, but since we don't know why we
-					//are being called we shouldn't do that.  I.E. unless the user triggered this action
-					//an alert box will just be unexpected and they won't know what to do about it. Until
-					//we move the error handling out to the caller the most friendly thing seems to
-					//just log the issue and leave the splash showing.
-					return;//jslint hates empty blocks
+				if(fromHistory!==true){
+					history.pushState({
+						content:{location: ntiid},
+						active:'content'
+					}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 				}
-				return;
-			}
+				else{
+					me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+				}
+				if(error){
+					delete me.currentNTIID;
+					//Ok no bueno.  The page info request failed.  Ideally whoever
+					//initiated this request handles the error  but we aren't really setup for
+					//that everywhere. Need to work on error handling.
+					console.error('An error occurred from setLocation', errorDetails);
+					if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+						//We were displaying an alert box here on 403s, but since we don't know why we
+						//are being called we shouldn't do that.  I.E. unless the user triggered this action
+						//an alert box will just be unexpected and they won't know what to do about it. Until
+						//we move the error handling out to the caller the most friendly thing seems to
+						//just log the issue and leave the splash showing.
+						throw 'error occurred during navigation';
+					}
+					throw 'error occurred during navigation';
+				}
 
 
-			//remember last ntiid for this book if it is truthy
-			if(ntiid){
-				PersistentStorage.updateProperty('last-location-map',rootId,ntiid);
+				//remember last ntiid for this book if it is truthy
+				if(ntiid){
+					PersistentStorage.updateProperty('last-location-map',rootId,ntiid);
+				}
+
+				me.fireEvent('end-state-transaction', 'navigation-transaction');
 			}
+			catch(e){
+				me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+			}
+
 		}
+		finish = Ext.Function.createBuffered(finish, null, 1);
 
 		if(e.isMasked()){
 			console.warn('navigating while busy');
@@ -114,6 +129,8 @@ Ext.define('NextThought.view.content.reader.Location', {
 			e.mask('Loading...','navigation');
 		}
 
+		this.fireEvent('begin-state-transaction', 'navigation-transaction');
+
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
 			if(!me.fireEvent('beginNavigate',ntiid, fromHistory)){
@@ -121,8 +138,13 @@ Ext.define('NextThought.view.content.reader.Location', {
 				return;
 			}
 
-			me.clearPageStore();
-			me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
+			try{
+				me.clearPageStore();
+				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
+			}
+			catch(e){
+				me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+			}
 		},1);
 	},
 

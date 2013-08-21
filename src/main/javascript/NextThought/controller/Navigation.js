@@ -354,7 +354,7 @@ Ext.define('NextThought.controller.Navigation', {
     /**
      *Navigate to the course and push the forum and topic
      */
-    goToCourseForum: function (course, forum, topic, callback) {
+    goToCourseForum: function (course, forum, topic) {
 
         function test(ntiid, reader, error) {
             console.log('test:', arguments);
@@ -370,13 +370,8 @@ Ext.define('NextThought.controller.Navigation', {
 			if(cmp && cmp.isActive()){
 				Ext.defer(function(){
 					cmp.setActiveTab('course-forum');
-
-					// FIXME: We're running into a case where we call restoreState explicitly passing our callback, however,
-					// since we're pushing state, it also invokes restoreState and we run into this overlapping calls
-					// which can cause a race condition or unwanted behaviors. We can't ignore pushing state either, because if we don't,
-					// the app will still think we're at where we came from( i.e. Profile). Don't know of a best way to fix this.
-					cmp.courseForum.restoreState(forum, topic, callback);
-					history.pushState({ active:'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+					cmp.courseForum.restoreState(forum, topic);
+					history.pushState({content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
 				}, 1);
 			}
 		}

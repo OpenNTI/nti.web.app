@@ -133,57 +133,62 @@ Ext.define('NextThought.view.course.forum.View',{
 		this.hasBoard = !!this.currentNtiid;
 	},
 
-	restoreState: function(forum, topic, cb){
+
+	navigateToForumObject: function(forum, topic){
 		//if there is a valid state to restore there has to be a forum
 		if(!forum){
-			Ext.callback(cb);
+			//Ext.callback(cb);
 			return;
 		}
 		//wait until the board is loaded
 		if(!this.hasBoard){
 			this.currentForum = forum;
 			this.currentTopic = topic;
-			Ext.callback(cb);
 			return;
 		}
 		var top = this.peek();
 
 		if(!top){
-			// FIXME: We should do something here???? otherwise,
-			// we risk running into an infinite loop.
 			console.error("We don't even have a board loaded?!?!?!?!");
-			this.setForum(forum, topic, cb);
-			return;
 		}
 
 		if(top.xtype === 'course-forum-board'){
-			this.setForum(forum, topic, cb);
+			this.setForum(forum, topic);
 			return;
 		}
 
-		if(top && top.xtype === 'course-forum-topic-list'){
+		if(top.xtype === 'course-forum-topic-list'){
 			if(top.record.getId() === forum){
-				this.setForum(undefined, topic, cb);
+				this.setForum(undefined, topic);
 				return;
 			}
 		}
 
-		if(top && top.xtype === 'forums-topic'){
+		if(top.xtype === 'forums-topic'){
 			if(top.record.getId() === topic){
-				Ext.callback(cb, null, [top]);
 				return;
 			}
 		}
 
 		this.popView();
-		this.restoreState(forum, topic, cb);
+		this.restoreState(forum, topic);
+	},
+
+
+	restoreState: function(){
+		this.navigateToForumObject.apply(this, arguments);
+	},
+
+
+	pushViewSafely: function(c){
+		this.add(c);
 	},
 
 	
-	setForum: function(forum, topic, cb){
+	setForum: function(forum, topic){
 		var me = this, boardId = this.currentNtiid;
 		if(!forum){
-			this.setTopic(topic, cb);
+			this.setTopic(topic);
 			return;
 		}
 
@@ -198,20 +203,21 @@ Ext.define('NextThought.view.course.forum.View',{
 					record: record,
 					store: store
 				});
-			me.add(cmp);
-			me.setTopic(topic, cb);
+			me.pushViewSafely(cmp);
+			me.setTopic(topic);
 		}, function(){
 			console.error('Failed to load forum:',forum);
 		});
 	},
 
-	setTopic: function(topic, cb){
+	setTopic: function(topic){
 		var me = this, boardId = this.currentNtiid;
 		if(!topic){
 			return;
 		}
 
 		$AppConfig.service.getObject(topic, function(record){
+			delete me.currentTopic;
 			if(boardId !== me.currentNtiid){
 				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
 				return;
@@ -225,8 +231,7 @@ Ext.define('NextThought.view.course.forum.View',{
 				});
 
 			if(top.xtype === 'course-forum-topic-list'){
-				me.add(cmp);
-				Ext.callback(cb, null, [cmp]);
+				me.pushViewSafely(cmp);
 			}else{
 				me.topicMonitor = me.mon({
 					destroyable: true,
@@ -235,8 +240,7 @@ Ext.define('NextThought.view.course.forum.View',{
 					'add': function(v, cmp){
 						if(cmp.xtype === 'course-forum-topic-list'){
 							Ext.destroy(me.topicMonitor);
-							me.add(cmp);
-							Ext.callback(cb, null, [cmp]);
+							me.pushViewSafely(cmp);
 						}
 					}
 				});
@@ -247,14 +251,18 @@ Ext.define('NextThought.view.course.forum.View',{
 
 	onCourseChanged: function(pageInfo){
 		var l = ContentUtils.getLocation(pageInfo),
-			toc, course;
+			toc, course, s = {content: {current_forum: null, current_topic: null}};
 
-
+		console.trace();
 		if( l && l !== ContentUtils.NO_LOCATION ){
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 		}
-		
+
+		if(isFeature('state-transactions')){
+			history.pushState(s);
+		}
+
 		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
 	}
 });

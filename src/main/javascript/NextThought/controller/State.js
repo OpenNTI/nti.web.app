@@ -17,6 +17,10 @@ Ext.define('NextThought.controller.State', {
 
 	hasPushState: Boolean(history.pushState),
 
+	transactions: {},
+
+	enableTransactions: isFeature('state-transactions'),
+
 	constructor: function () {
 		this.callParent(arguments);
 
@@ -47,12 +51,18 @@ Ext.define('NextThought.controller.State', {
 					'activate-view': 'track'
 				},
 				'*': {
-					'change-hash': 'changeHash'
+					'change-hash': 'changeHash',
+					'begin-state-transaction': 'beginTransaction',
+					'end-state-transaction': 'endTransaction',
+					'cancel-state-transaction': 'cancelTransaction'
 				}
 			},
 			controller: {
 				'*': {
-					'change-hash': 'changeHash'
+					'change-hash': 'changeHash',
+					'begin-state-transaction': 'beginTransaction',
+					'end-state-transaction': 'endTransaction',
+					'cancel-state-transaction': 'cancelTransaction'
 				}
 			}
 		});
@@ -122,9 +132,24 @@ Ext.define('NextThought.controller.State', {
 
 
 		history.pushState = function (s, title, url) {
-			console.debug('push state', s);
+			var args;
+
+			if(!me.isPoppingHistory && me.transactions.active){
+				console.log('Applying push state to transaction', me.transactions.active, arguments);
+				me.transactions[me.transactions.active].push({
+					action: 'pushState',
+					payload: s,
+					title: title,
+					url: url
+				});
+				return;
+			}
 
 			if (this.updateState(s) && !me.isPoppingHistory) {
+
+				console.debug('push state', s);
+
+				console.trace();
 
 				if (!url) {
 					url = me.generateFragment(me.currentState);
@@ -135,7 +160,9 @@ Ext.define('NextThought.controller.State', {
 				}
 
 				//updateState already updated current if it returned true
-				push.apply(history, [me.currentState, title, url]);
+				args = [Ext.encode(me.currentState), title, url];
+				console.log('Pushing to history', args);
+				push.apply(history, args);
 
 
 				//me = State controller. (this = window.history) And, we only want to change the fragment if we do not
@@ -152,23 +179,34 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		history.replaceState = function (s, title, url) {
+			var args;
 			console.debug('replace state', s);
-//			console.trace();
+
+			if(me.transactions.active){
+				console.log('Applying replace state to transaction', me.transactions.active, arguments);
+				me.transactions[me.transactions.active].push({
+					action: 'replaceState',
+					payload: s,
+					title: title,
+					url: url
+				});
+				return;
+			}
 
 			if (this.updateState(s)) {
 
-				replace.apply(history, [
-					me.currentState,
+				args = [
+					Ext.encode(me.currentState),
 					title,
 					url || me.generateFragment(me.currentState)
-				]);
+				];
+				replace.apply(history, args);
 			}
 		};
 
 		window.onpopstate = function (e) {
-			console.debug('Browser is popping state', e.state);
-
 			me.isPoppingHistory = true;
+			console.debug('Browser is popping state', e.state);
 			me.onPopState(e);
 			me.isPoppingHistory = false;
 		};
@@ -184,6 +222,116 @@ Ext.define('NextThought.controller.State', {
 				history.replaceState(me.getState(), document.title, location.toString());
 			}
 		};
+	},
+
+
+	closeActiveTransaction: function(){
+		var active = this.transactions.active;
+		delete this.transactions.active;
+		delete this.transactions[active];
+	},
+
+
+	abortActiveTransaction: function(){
+		console.error('Aborting active transaction', this.transactions);
+		this.closeActiveTransaction();
+	},
+
+
+	cancelTransaction: function(tId){
+		if(!this.enableTransactions){
+			return;
+		}
+		var active = this.transactions.active;
+		if(active !== tId){
+			console.warn('Ignoring cancel transaction ', tId, this.transactions);
+			return;
+		}
+		this.closeActiveTransaction();
+	},
+
+
+	beginTransaction: function(transactionId){
+		if(!this.enableTransactions){
+			return;
+		}
+		var active = this.transactions[transactionId];
+
+		if(Ext.isEmpty(transactionId)){
+			Ext.Error.raise('Transaction ID required');
+		}
+
+		if(active){
+			this.abortActiveTransaction();
+			active = null;
+		}
+
+		if(this.transactions.active && this.transactions.active !== transactionId){
+			console.warn('Aborting previous transaction ', this.transactions.active, this.transcations[this.transactions.active]);
+			delete this.transactions[this.transactions.active];
+		}
+
+		this.transactions.active = transactionId;
+		this.transactions[transactionId] = [];
+
+		console.debug('State transaction began with id', transactionId);
+	},
+
+
+	endTransaction: function(transactionId){
+		if(!this.enableTransactions){
+			return;
+		}
+		var active, state, replace=false, title='', url='';
+
+		if(Ext.isEmpty(transactionId)){
+			Ext.Error.raise('Transaction ID required');
+		}
+
+		if(!this.transactions.active || this.transactions.active !== transactionId){
+			console.warn('Ended transaction is not the active transaction ', transactionId,
+				this.transactions.active, this.transcations[this.transactions.active]);
+			return;
+		}
+
+		active = this.transactions[transactionId];
+		this.closeActiveTransaction();
+
+		if(Ext.isEmpty(active)){
+			console.warn('Ignoring end state transaction for', transactionId, 'because it does not exists.  Unbalanced calls to begin/end?');
+			return;
+		}
+
+		console.debug('State transaction ended for id', transactionId);
+
+		try{
+			state = Ext.clone(this.currentState);
+			Ext.each(active, function(activePart){
+				var action = activePart.action || 'pushState',
+					payload = activePart.payload;
+
+				replace = action === 'replaceState';
+				title = activePart.title || '';
+				url = activePart.url || '';
+
+				if(action === 'replaceState'){
+					state = payload;
+				}
+				else if(action === 'pushState'){
+					Ext.Object.merge(state, payload);
+				}
+				else{
+					Ext.Error.raise('Unknown state transaction action', activePart);
+				}
+			});
+		}
+		catch(e){
+			console.error('An error occurred gather state transaction. Aborting transaction',
+				this.transactions, active, e.stack || e.stacktrace || e.message || e);
+			return;
+		}
+
+		history[replace ? 'replaceState' : 'pushState'](state, title, url);
 	},
 
 
@@ -328,7 +476,7 @@ Ext.define('NextThought.controller.State', {
 			console.warn('there is no state to restore??',e);
 			return;
 		}
-		this.fireEvent('restore', s);
+		this.fireEvent('restore', Ext.decode(s, true) || {});
 	},
 
 

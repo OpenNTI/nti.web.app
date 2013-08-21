@@ -285,7 +285,10 @@ Ext.define( 'NextThought.view.content.View', {
 		if(!pageInfo || !pageInfo.isModel){return;}
 
 		this.tabs = pageInfo.isPartOfCourse();
-		this.fireEvent('update-tabs',this);
+
+		if(this.isVisible(true)){
+			this.fireEvent('update-tabs',this);
+		}
 
 		if(userInitiatedNav || !this.tabs){
 			try {
