@@ -11,18 +11,15 @@ Ext.define('NextThought.view.account.history.Panel', {
 		'NextThought.view.account.history.mixins.ForumTopic',
 		'NextThought.view.account.history.mixins.BlogEntry',
 		'NextThought.view.account.history.mixins.Highlight',
-		'NextThought.view.account.history.mixins.Bookmark',
-		'NextThought.modules.TouchSender'
+		'NextThought.view.account.history.mixins.Bookmark'
 
 	],
 
 	mixins: {
-		'activityFilter': 'NextThought.mixins.ActivityFilters',
-		'moduleContainer': 'NextThought.mixins.ModuleContainer'
+		'activityFilter': 'NextThought.mixins.ActivityFilters'
 	},
 
 	stateful: true,
-
 
 	storeId: 'noteHighlightStore',
 	filter: 'onlyMe,Bookmarks',
@@ -143,6 +140,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.mixins.activityFilter.setUpMenu.call(this, 'history');
 	},
 
+
 	getMimeTypes: function () {
 		this.mimeTypes = [];
 		Ext.each(this.mimeType, function (t) {
@@ -215,6 +213,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.bindStore(this.store);
 	},
 
+
 	applyFilterParams: function () {
 		if (this.store) {
 			Ext.apply(this.store.proxy.extraParams, {
@@ -224,6 +223,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			});
 		}
 	},
+
 
 	recordsAdded: function (store, records) {
 		console.debug(' UserDataPanel Store added records:', arguments);
@@ -238,6 +238,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.maybeShowMoreItems();
 	},
+
 
 	maybeShowMoreItems: function () {
 		//if we can't scroll
@@ -271,23 +272,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.getTypesMenu().show().hide();
 		this.mixins.activityFilter.afterRender.apply(this);
-
-		if (Ext.is.iPad) {
-			var me = this;
-			me.buildModule('modules', 'touchSender');
-			me.on('touchScroll', function (ele, deltaY) {
-				me.el.scrollBy(0, deltaY, false);
-			});
-			me.on('touchElementAt', function (x, y, callback) {
-				var element = Ext.getDoc().dom.elementFromPoint(x, y);
-				callback(element);
-			});
-			me.on('touchLongPress', function (ele, pageX, pageY) {
-				var note = Ext.get(ele).up('.history');
-				var record = me.getRecord(note);
-				me.rowHover(me, record, note);
-			});
-		}
 	},
 
 
@@ -373,6 +357,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		return r;
 	},
 
+
 	prefetchNext: function () {
 		var s = this.getStore(), max;
 
@@ -399,6 +384,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		}
 
 	},
+
 
 	applyFilters: function (mimeTypes, filterTypes) {
 		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {
