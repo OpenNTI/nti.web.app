@@ -1,15 +1,15 @@
 //SCSS defined _identity.scss
-Ext.define('NextThought.view.account.Identity',{
+Ext.define('NextThought.view.account.Identity', {
 	extend: 'Ext.Component',
 	alias: 'widget.identity',
 
-    requires: [
-        'NextThought.view.menus.Settings',
-        'NextThought.modules.TouchSender'
-    ],
+	requires: [
+		'NextThought.view.menus.Settings',
+		'NextThought.modules.TouchSender'
+	],
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
-        moduleContainer: 'NextThought.mixins.ModuleContainer'
+		moduleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
 	profileLinkCard: false,
@@ -19,7 +19,7 @@ Ext.define('NextThought.view.account.Identity',{
 	floating: true,
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip':'{displayName}'},
+		{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
 		{ cls: 'presence' }
 	]),
 
@@ -28,21 +28,21 @@ Ext.define('NextThought.view.account.Identity',{
 		presence: '.presence'
 	},
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{}, $AppConfig.userObject.data);
-		this.menu = Ext.widget({xtype:'settings-menu'});
-		this.on('destroy','destroy',this.menu);
+		this.renderData = Ext.apply(this.renderData || {}, $AppConfig.userObject.data);
+		this.menu = Ext.widget({xtype: 'settings-menu'});
+		this.on('destroy', 'destroy', this.menu);
 		this.monitorUser($AppConfig.userObject);
 	},
 
 
-	monitorUser: function(u){
+	monitorUser: function (u) {
 		var me = this, m = {
 			scope: this,
-			'changed': function(r){
+			'changed': function (r) {
 				me.avatar.set({
-					src:r.get('avatarURL'),
+					src: r.get('avatarURL'),
 					'data-qtip': r.getName()
 				});
 
@@ -50,94 +50,94 @@ Ext.define('NextThought.view.account.Identity',{
 			}
 		};
 
-		if( u ){
-			me.mun(me.user,m);
-			me.mon(u,m);
+		if (u) {
+			me.mun(me.user, m);
+			me.mon(u, m);
 			me.user = u;
 		}
 
-		if( me.presence && me.user ){
-			me.presence.set({cls:'presence '+ me.user.getPresence().getName()});
+		if (me.presence && me.user) {
+			me.presence.set({cls: 'presence ' + me.user.getPresence().getName()});
 		}
 	},
 
 
-    afterRender: function(){
-	    this.callParent(arguments);
-	    this.monitorUser(this.user);
-        this.mon(this.el, {
-	        'mouseover':'startToShowMenu',
-	        'mouseout':'startToHideMenu'
-        });
+	afterRender: function () {
+		this.callParent(arguments);
+		this.monitorUser(this.user);
+		this.mon(this.el, {
+			'mouseover': 'startToShowMenu',
+			'mouseout': 'startToHideMenu'
+		});
 
-	    this.mon(this.menu,'mouseenter','cancelHideShowEvents');
+		this.mon(this.menu, 'mouseenter', 'cancelHideShowEvents');
 
-	    this.enableProfileClicks(this.avatar);
+		this.enableProfileClicks(this.avatar);
 
-        if(Ext.is.iPad){
-            this.setupTouch();
-        }
-    },
+		if (Ext.is.iPad) {
+			this.setupTouch();
+		}
+	},
 
-    setupTouch: function(){
-        this.buildModule('modules', 'touchSender');
+	setupTouch: function () {
+		this.buildModule('modules', 'touchSender');
 
-        var container = this;
+		var container = this;
 
-        container.on('touchTap', function(ele) {
-            ele.click();
-        });
+		container.on('touchTap', function (ele) {
+			ele.click();
+		});
 
-        container.on('touchElementAt', function(x, y, callback){
-            var element = Ext.getDoc().dom.elementFromPoint(x, y);
-            callback(element);
-        });
+		container.on('touchElementAt', function (x, y, callback) {
+			var element = Ext.getDoc().dom.elementFromPoint(x, y);
+			callback(element);
+		});
 
-        container.on('touchLongPress', function(ele, pageX, pageY){
-            var queryResult = Ext.query('.presence-menu'),
-                menuChild = null,
-                profileMenu = null;
+		container.on('touchLongPress', function (ele, pageX, pageY) {
+			var queryResult = Ext.query('.presence-menu'),
+				menuChild = null,
+				profileMenu = null;
 
-            if(queryResult){
-                menuChild = queryResult[0];
-                if(menuChild){
-                    profileMenu = Ext.get(menuChild).el.up('.x-menu');
-                }
-            }
+			if (queryResult) {
+				menuChild = queryResult[0];
+				if (menuChild) {
+					profileMenu = Ext.get(menuChild).el.up('.x-menu');
+				}
+			}
 
-            if(profileMenu && profileMenu.isVisible()){
-                this.startToHideMenu();
-            }
-            else{
-                this.startToShowMenu();
-            }
-        });
-    },
+			if (profileMenu && profileMenu.isVisible()) {
+				this.startToHideMenu();
+			}
+			else {
+				this.startToShowMenu();
+			}
+		});
+	},
 
-	cancelHideShowEvents: function(){
+	cancelHideShowEvents: function () {
 		clearTimeout(this.showTimout);
 		clearTimeout(this.hideTimout);
 	},
 
 
-	startToShowMenu: function(){
+	startToShowMenu: function () {
 		var me = this;
 
 		this.cancelHideShowEvents();
 
-		this.showTimout = setTimeout(function(){
-	        me.menu.showBy(me.el, 'tr-br', [0,0]);
-		},500);
-    },
+		this.showTimout = setTimeout(function () {
+			me.menu.showBy(me.el, 'tr-br', [0, 0]);
+		}, 500);
+	},
 
 
-	startToHideMenu: function(){
+	startToHideMenu: function () {
 		var me = this;
 
 		this.cancelHideShowEvents();
 
-		this.hideTimout = setTimeout(function(){
-	        me.menu.hide();
-		},500);
-    }
+		this.hideTimout = setTimeout(function () {
+			me.menu.hide();
+		}, 500);
+	}
 });
