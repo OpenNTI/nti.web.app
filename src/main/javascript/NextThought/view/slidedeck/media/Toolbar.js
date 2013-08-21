@@ -28,7 +28,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 		]},{
 		cls:'right', cn:[
 			{cls:'video-picker', cn:[
-				{cls:'grid-view'},
+				//{cls:'grid-view'},
 				{cls:'selected-mv-type video-focus', html:'split video'}
 			]}
 		]
