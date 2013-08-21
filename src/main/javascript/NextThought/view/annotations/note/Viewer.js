@@ -155,7 +155,8 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 
 	canClose: function () {
-		return !this.down('note-main-view').editorActive();
+		var noteMain = this.down('note-main-view');
+		return !noteMain || !noteMain.editorActive();
 	},
 
 
