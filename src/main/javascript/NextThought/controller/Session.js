@@ -216,11 +216,18 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		function showLogin(timedout){
-			var url = Ext.String.urlAppend(
-					Ext.String.urlAppend(
-						$AppConfig.server.login,
-						"return="+encodeURIComponent(location.toString())),
-					"host=" + encodeURIComponent($AppConfig.server.host));
+			var o = {},
+				url = $AppConfig.server.login;
+
+			if(location.pathname!=='/'){
+				o.return=location.pathname;
+			}
+
+			if($AppConfig.server.host !== ('//'+document.domain)){
+				o.host = $AppConfig.server.host;
+			}
+
+			url = Ext.String.urlAppend( url, Ext.Object.toQueryString(o));
 
 			if(timedout){
 				alert('a request timed out');
