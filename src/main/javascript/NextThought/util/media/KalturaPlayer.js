@@ -82,8 +82,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	PARTNER_ID: '1500101',
 	UICONF_ID: '15491291',
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	//LEAD_HTML5: (!Ext.isIE9).toString(),
-	  LEAD_HTML5: 'false',
+	LEAD_HTML5: (!Ext.isIE9).toString(),
 	
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
@@ -564,6 +563,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			mw.setConfig( 'EmbedPlayer.RewriteSelector', false );
 
 			//Force flash in ie10, mostly because kalturas html5 player sucks
+			//Even with this we were still getting html5 on IE10 and it seemed ok now.
 			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
 
 			//IPad settings
