@@ -19,6 +19,25 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 		}
 	},
 
+	navigateToTopicForEdit: function(e){
+		function openInEditMode(cmp){
+			function onAfterRender(){
+				var me = this;
+				Ext.defer(me.fireEvent, 500, me, ['edit-topic', me, me.record]);
+			}
+
+			if(cmp){
+				if(!cmp.rendered){
+					cmp.on('ready', onAfterRender, cmp, {single:true});
+					return;
+				}
+				cmp.fireEvent('edit-topic', cmp, cmp.record);
+			}
+		}
+
+		this.fireEvent('set-forum-location', this.record,  null, openInEditMode, this);
+	},
+
 
 	forumClickHandlerGoToComment: function(){
 		if(this.fireEvent('before-show-topic', this.record)){

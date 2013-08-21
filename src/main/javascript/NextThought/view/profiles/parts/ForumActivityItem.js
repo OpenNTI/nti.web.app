@@ -52,6 +52,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 						cn: [
 							{ cls: 'comments', 'data-postcount':'{PostCount}' ,'data-label': ' Comments',
 								html: '{PostCount} Comment{[values.PostCount!=1?\'s\':\'\']}' },
+							{tag:'tpl', 'if':'isModifiable', cn:[
+								{cls:'edit', html: 'Edit'}
+							]},
 							{tag:'tpl', 'if':'!isModifiable', cn:[
 								{ cls: 'flag', html: 'Report' }
 							]},
@@ -95,6 +98,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		flagEl: '.foot .flag',
 		deleteEl: '.foot .delete',
+		editEl: '.foot .edit',
 		replyEl: '.reply',
 		replyBoxEl: '.respond > div',
 		respondEl: '.respond',
@@ -247,6 +251,9 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		if(this.commentsEl){
 			this.mon(this.commentsEl,'click',this.forumClickHandlerGoToComments,this);
+		}
+		if(this.editEl){
+			this.mon(this.editEl, 'click', this.navigateToTopicForEdit, this);
 		}
 
 		this.enableProfileClicks(this.avatarEl,this.nameEl);
