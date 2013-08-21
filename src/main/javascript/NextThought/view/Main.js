@@ -137,13 +137,13 @@ Ext.define('NextThought.view.Main', {
 		touch.target.dispatchEvent(mouseOutEvent);
 
 		// Dispatch click if touch lasted one second or less in duration
-		if (e.timeStamp - this.touchStartTime <= 1000) {
-			var clickEvent = document.createEvent('MouseEvents');
-			clickEvent.initMouseEvent('click', true, true, window,
-				1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-				false, false, false, false, 0, null);
-			touch.target.dispatchEvent(clickEvent);
-		}
+//		if (e.timeStamp - this.touchStartTime <= 1000) {
+//			var clickEvent = document.createEvent('MouseEvents');
+//			clickEvent.initMouseEvent('click', true, true, window,
+//				1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+//				false, false, false, false, 0, null);
+//			touch.target.dispatchEvent(clickEvent);
+//		}
 	},
 
 
