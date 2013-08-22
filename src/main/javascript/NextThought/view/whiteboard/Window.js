@@ -121,6 +121,9 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	},
 
 
+	syncHeight: Ext.emptyFn,
+
+
 	absorbeClick: function (e) {
 		if (this.isVisible()) {
 			e.stopEvent();
