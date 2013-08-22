@@ -370,11 +370,18 @@ Ext.define('NextThought.controller.Navigation', {
 				Ext.defer(function(){
 					cmp.setActiveTab('course-forum');
 					cmp.courseForum.restoreState(forum, topic);
-					history.pushState({content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+					history.pushState({active:'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
+
+					// TODO: Here, Terminate the transaction we started. This is not optimal
+					// since something else could be changing states behind us. So we need to investigate other alternatives.
+					me.fireEvent('end-state-transaction', 'navigation-transaction');
 				}, 1);
 			}
 		}
-        this.fireEvent('set-last-location-or-root', course, test, true);
+
+	    var me = this;
+	    this.fireEvent('begin-state-transaction', 'navigation-transaction');
+        this.fireEvent('set-last-location-or-root', course, test);
     },
 
 
