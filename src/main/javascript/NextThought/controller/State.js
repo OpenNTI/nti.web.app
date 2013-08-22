@@ -86,6 +86,12 @@ Ext.define('NextThought.controller.State', {
 		Ext.state.Manager.setProvider(provider);
 
 
+		//TODO: start using history.(*)Transaction functions instead of events. Looks cleaner. Feels better.
+		history.beginTransaction = Ext.bind(this.beginTransaction, this);
+		history.endTransaction = Ext.bind(this.endTransaction, this);
+		history.cancelTransaction = Ext.bind(this.cancelTransaction, this);
+
+
 		/**
 		 * Update the application's state object from various actions in this controller.
 		 *
