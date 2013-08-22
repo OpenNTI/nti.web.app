@@ -290,7 +290,7 @@ Ext.define('NextThought.controller.State', {
 
 		if(!this.transactions.active || this.transactions.active !== transactionId){
 			console.warn('Ended transaction is not the active transaction ', transactionId,
-				this.transactions.active, this.transcations[this.transactions.active]);
+				this.transactions.active, this.transactions[this.transactions.active]);
 			return;
 		}
 
