@@ -170,7 +170,7 @@ Ext.define('NextThought.mixins.ActivityFilters',{
 						}, this);
 					}
 
-					if(ft){
+					if(ft && !Ext.Array.contains(filterTypes, ft)){
 						filterTypes.push(ft);
 					}
 				}

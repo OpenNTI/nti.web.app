@@ -651,7 +651,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	belongsInCommunity: function (change, flStore, communities, noVerify) {
 		var item = change.get('Item'),
 			sharedWith = item.get('sharedWith') || [],
-			foundInCommunities = false;
+			foundInCommunities = false, belongsInContacts;
 
 		Ext.each(sharedWith, function (u) {
 			if (Ext.Array.contains(communities, u)) {
@@ -663,10 +663,13 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		//Just log an error for now so we know there isn't
 		//a missing condition we didn't consider
-		if (!noVerify && !foundInCommunities && !this.belongsInMyContacts(change, flStore, communities, true)) {
+		belongsInContacts = this.belongsInMyContacts(change, flStore, communities, true);
+		if (!noVerify && !foundInCommunities && !belongsInContacts) {
 			console.error('Danger, dropping change that does not pass either filter', change);
 		}
-		return foundInCommunities;
+
+		//If it belongs in our contacts, it's also game.
+		return foundInCommunities || belongsInContacts;
 	},
 
 
@@ -749,6 +752,15 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		var s = this.getStore();
 
+		// Since we want 'Everyone' to imply a combination of things in your contacts
+		// and those that are publicly shared with your community
+		// We'll stop passing the 'inCommunity' filter, since that would only return things that are publicly shared.
+		if(this.filter === 'inCommunity'){
+			Ext.Array.remove(filterTypes, this.filter);
+		}
+
+//		console.debug('current filter', this.filter);
+//		console.debug('Filter types: ', filterTypes);
 		s.removeAll();
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
