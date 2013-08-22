@@ -70,7 +70,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 			finish.called = true;
 
-			if(e.isMasked()){
+			if(e && e.isMasked()){
 				e.unmask();
 			}
 
@@ -120,12 +120,12 @@ Ext.define('NextThought.view.content.reader.Location', {
 		}
 		finish = Ext.Function.createBuffered(finish, null, 1);
 
-		if(e.isMasked()){
+		if(e && e.isMasked()){
 			console.warn('navigating while busy');
 			return;
 		}
 
-		if(me.currentNTIID && ntiid !== me.currentNTIID){
+		if(me.currentNTIID && ntiid !== me.currentNTIID && e){
 			e.mask('Loading...','navigation');
 		}
 
