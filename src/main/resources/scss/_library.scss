@@ -43,6 +43,7 @@
 			}
 			.meta {
 				position: absolute;
+				overflow: hidden;
 				bottom: 0; left: 0; right: 0;
 				background: rgba(0,0,0,0.9);
 				color: #fff;
@@ -63,6 +64,7 @@
 				}
 
 				.description,.author {
+					overflow: hidden;
 					display: none;
 				}
 			}
@@ -71,6 +73,7 @@
 				.meta{
 					.description {
 						display: block;
+
 					}
 				}
 			}

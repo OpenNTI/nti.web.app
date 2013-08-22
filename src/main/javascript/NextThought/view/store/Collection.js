@@ -7,6 +7,8 @@ Ext.define('NextThought.view.store.Collection',{
 	cls: 'purchasables',
 	rowSpan: 3,
 
+	ellipsis: Ext.DomHelper.createTemplate({cls:'ellipsis',cn:[{},{},{}]}).compile(),
+
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'stratum collection-name', cn: [
 			'{name}', {cls:'count',html: '{count}'}
@@ -61,5 +63,67 @@ Ext.define('NextThought.view.store.Collection',{
 		}
 
 		return true;
+	},
+
+
+	onItemUpdate: function(rec,index,node){
+		var desc = Ext.fly(node).down('.description',true),
+			pos, e, texts, bottom,
+			marker = 'This will need to be optimized, bute force is slow. Moving ellipsis took:';
+
+		if(!desc || !Ext.fly(desc).isVisible()){
+			return;
+		}
+
+		pos = Ext.fly(desc).getPositioning(true);
+		pos.bottom = pos.right = pos.left; //dirty... i know
+		pos.position = 'absolute';
+		Ext.fly(desc).setPositioning(pos);
+
+		if(desc.scrollHeight <= desc.offsetHeight){
+			console.log('no need');
+			return;
+		}
+
+		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.bottom,10);
+
+
+		/*
+		TODO: Make this MUCH more efficient.
+		Using a 0px span to binary search the insertion point would be WAY more effcient. As it is now, with Prmia's
+		description, it takes 599 moves to settle on the correct spot. ICK.
+		 */
+
+		//Get all text nodes and split on spaces
+		texts = AnnotationUtils.getTextNodes(desc);
+		Ext.each(texts,function(v){
+			var i;
+			do {
+				i = v.nodeValue.indexOf(' ');
+				if(i>=0){
+					v = v.splitText(i);
+					//split the space
+					v = v.splitText(1);
+				}
+			} while(v && i>=0);
+		});
+
+		//then append the ellipsis node
+		e = this.ellipsis.append(desc);
+
+		//then move it up the sibling links until it peeks into view.
+		console.time(marker);
+		while(e.previousSibling && e.getBoundingClientRect().top > bottom){
+			desc.insertBefore(e,e.previousSibling);
+		}
+		console.timeEnd(marker);
+	},
+
+
+	refresh:function(){
+		this.callParent(arguments);
+
+		console.log('Detecting overflow...');
+		Ext.each(this.getNodes(),function(v){this.onItemUpdate(null,null,v);},this);
 	}
 });
