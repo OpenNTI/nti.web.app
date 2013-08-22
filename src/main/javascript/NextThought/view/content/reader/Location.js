@@ -113,7 +113,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 				me.fireEvent('end-state-transaction', 'navigation-transaction');
 			}
-			catch(e){
+			catch(caughtError){
 				me.fireEvent('cancel-state-transaction', 'navigation-transaction');
 			}
 
