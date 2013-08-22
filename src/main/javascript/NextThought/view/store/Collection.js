@@ -24,10 +24,10 @@ Ext.define('NextThought.view.store.Collection',{
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
 				{tag:'tpl', 'if':'Amount', cn:{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}},
-				{ cls: 'description', html: '{Description}'},
 				{tag: 'tpl', 'if': 'HasHistory', cn: [
 					{ cls: 'history', html: 'Purchase History'}
-				]}
+				]},
+				{ cls: 'description', html: '{Description}'}
 			]}
 		]
 	}),
