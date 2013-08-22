@@ -59,13 +59,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
 	startShow: function (el, align, offset) {
 		this.stopHide();
-		if (Ext.is.iPad) {
-			// Want it to be more responsive to taps
-			this.showBy(el, align, offset);
-		}
-		else {
-			this.showTimeout = Ext.defer(this.showBy, 750, this, [el, align, offset]);
-		}
+		this.showTimeout = Ext.defer(this.showBy, 750, this, [el, align, offset]);
 	},
 
 
