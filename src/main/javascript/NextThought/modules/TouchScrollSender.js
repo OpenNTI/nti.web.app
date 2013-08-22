@@ -67,7 +67,7 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 			initialX, initialY,
 			lastX, lastY,
 		//current movement delta
-			vel;
+			velY, velX;
 
 		/**
 		 * Only count touches within the set threshold. Otherwise,
@@ -86,39 +86,7 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 				belowDock = container.el.up('#chat-dock'),
 				cPopout, updock, ele, touch, dockEl, eles, i;
 
-			e.preventDefault();
-
-			// If touching something besides sidebar, close it
-			if (dom.getAttribute('id').indexOf("main-sidebar") === -1) {
-				ele = Ext.get(Ext.query('.sidebar')[0]);
-				if (ele) {
-					Ext.ComponentManager.get(ele.getAttribute('id')).startHide();
-				}
-				updock = Ext.get('chat-dock_header_hd');
-			}
-
-
-			if (aboveDock === null && dock !== 'chat-dock' && belowDock === null) {
-				dockEl = Ext.ComponentManager.get('chat-dock');
-				if (dockEl.el.dom.getAttribute('class').indexOf("open") !== -1) {
-					dockEl.floatCollapsedPanel();
-				}
-			}
-
-			// If touching something besides contact popout, close popout
-			cPopout = Ext.query('.contact-popout')[0];
-			if (cPopout) {
-				Ext.destroy(Ext.getCmp(cPopout.getAttribute('id')));
-			}
-
-			// If touching something besides search, close search
-			if (dom.getAttribute('id').indexOf('search-menu') === -1
-				&& !e.target.classList.contains('search')) {
-				ele = Ext.get(Ext.query('.search-menu')[0]);
-				if (ele) {
-					Ext.ComponentManager.get(ele.getAttribute('id')).hide();
-				}
-			}
+//			e.preventDefault();
 
 			touch = e.touches[0];
 
@@ -135,20 +103,22 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 			initialY = touch.pageY;
 			initialX = touch.pageX;
 			lastY = initialY;
-			vel = 0;
+			velY = 0;
+			velX = 0;
 
 		}, false);
 
 
 		dom.addEventListener('touchmove', function (e) {
-			e.preventDefault();
+//			e.preventDefault();
 
 			var touch = e.touches[0];
 
 			function scrollMove() {
-				vel = lastY - touch.pageY;
+				velY = lastY - touch.pageY;
+				velX = lastX - touch.pageX;
 				updatePos();
-				container.fireEvent('touchScroll', pickedElement, vel);
+				container.fireEvent('touchScroll', pickedElement, velY, velX);
 			}
 
 			function updatePos() {
@@ -164,6 +134,7 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 							state = s.STATE.SCROLLING;
 						}
 					});
+					state = s.STATE.SCROLLING;
 				}
 			}
 			else if (state === s.STATE.SCROLLING) {
@@ -173,39 +144,56 @@ Ext.define('NextThought.modules.TouchScrollSender', {
 		}, false);
 
 		dom.addEventListener('touchend', function (e) {
-			e.preventDefault();
-			var startLt0 = vel < 0,
-				lastUpdateTime = Date.now(),
-				tempState = state;
+//			e.preventDefault();
 
 			function kineticScroll() {
-				var lt0 = vel < 0,
+				var lt0 = velY < 0,
+					lt1 = velX < 0,
 					currentTime = Date.now(),
 					deltaTime = currentTime - lastUpdateTime,
-					aboveThreshold, sameDirection;
+					aboveThresholdX, aboveThresholdY,
+					sameDirectionX, sameDirectionY;
 				lastUpdateTime = currentTime;
 
 				// Continue scrolling if above the movement threshold
 				// and hasn't changed directions
-				aboveThreshold = (lt0 ? -vel : vel) > s.SCROLL_THRESHOLD_SPEED;
-				sameDirection = startLt0 === lt0;
+				aboveThresholdY = (lt0 ? -velY : velY) > s.SCROLL_THRESHOLD_SPEED;
+				sameDirectionY = startLt0 === lt0;
+				aboveThresholdX = (lt1 ? -velX : velX) > s.SCROLL_THRESHOLD_SPEED;
+				sameDirectionX = startLt1 === lt1;
 
-				if (aboveThreshold && sameDirection && state === s.STATE.NONE) {
+				if (aboveThresholdY && sameDirectionY && state === s.STATE.NONE) {
 					// Apply friction in the opposite movement direction
 					// based on the time passed for smoother movement
-					vel += (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION) * deltaTime;
+					velY += (lt0 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION) * deltaTime;
+				}
 
-					container.fireEvent('touchScroll', pickedElement, vel);
+				if (aboveThresholdX && sameDirectionX && state === s.STATE.NONE) {
+					// Apply friction in the opposite movement direction
+					// based on the time passed for smoother movement
+					velX += (lt1 ? s.SCROLL_FRICTION : -s.SCROLL_FRICTION) * deltaTime;
+				}
+
+				if ((aboveThresholdY && sameDirectionY) || (aboveThresholdX && sameDirectionX)
+					&& state === s.STATE.NONE) {
+					container.fireEvent('touchScroll', pickedElement, velY, velX);
 					setTimeout(kineticScroll, s.SCROLL_TIME_STEP);
 				}
 			}
 
+			var startLt0 = velY < 0,
+				startLt1 = velX < 0,
+				lastUpdateTime = Date.now(),
+				tempState = state;
 			state = s.STATE.NONE;
 
 			if (tempState === s.STATE.SCROLLING) {
 				// Cap the ending velocity at the max speed
-				if (Math.abs(vel) > s.SCROLL_MAX_SPEED) {
-					vel = startLt0 ? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+				if (Math.abs(velY) > s.SCROLL_MAX_SPEED) {
+					velY = startLt0 ? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
+				}
+				if (Math.abs(velX) > s.SCROLL_MAX_SPEED) {
+					velX = startLt1 ? -s.SCROLL_MAX_SPEED : s.SCROLL_MAX_SPEED;
 				}
 				kineticScroll();
 			}

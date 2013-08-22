@@ -115,6 +115,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		}
 	},
 
+
 	clickedRevealAllReplies: function () {
 		this.mun(this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		if (!this.commentsEl) {
@@ -434,7 +435,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		{
 			cls: 'note profile-activity-item',
 			cn: [
-				{ cls: 'content-callout', cn: [
+				{ cls: 'content-callout', onclick: 'void(0)', cn: [
 					{ cls: 'icon' },
 					{ cn: [
 						{ cls: 'location link'},

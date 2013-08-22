@@ -6,8 +6,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		'NextThought.cache.UserRepository',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.layout.component.Natural',
-		'NextThought.modules.TouchSender',
-		'NextThought.view.annotations.note.TouchHandler'
+		'NextThought.modules.TouchScrollSender'
 	],
 
 	mixins: {
@@ -151,8 +150,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
 
 		if (Ext.is.iPad) {
-			this.mixins.moduleContainer.buildModule('modules', 'touchSender', {container: this});
-			this.mixins.moduleContainer.buildModule('note', 'touchHandler', {container: this});
+			this.mixins.moduleContainer.buildModule('modules', 'touchScrollSender', {container: this});
+			this.on('touchScroll', function (ele, deltaY) {
+				this.el.up('.note-content-container.scrollbody').scrollBy(0, deltaY, false);
+			});
+			this.on('touchElementAt', function (x, y, callback) {
+				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+				callback(element);
+			});
 		}
 	},
 
