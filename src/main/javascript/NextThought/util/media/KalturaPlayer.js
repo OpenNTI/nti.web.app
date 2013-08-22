@@ -303,7 +303,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	stop: function(){
 		this.sendCommand('doStop');
-		this.doStopHandler();
 	},
 
 
@@ -321,6 +320,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	activate: function(sourceId){
 		if(!this.playerDeactivated){
+			console.log('Ignoring activate');
 			return;
 		}
 
@@ -442,13 +442,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	doStopHandler: function(){
-		this.deactivate();
-	},
-
-
 	playerPlayEndHandler: function(){
-		this.stop();
+		this.deactivate();
 		this.currentState = 0;
 		this.fireEvent('player-event-ended', 'kaltura');
 	},
