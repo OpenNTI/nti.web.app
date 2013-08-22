@@ -275,7 +275,7 @@ Ext.define( 'NextThought.view.content.View', {
 	},
 
 	onNavigationCanceled: function(ntiid, alreadyThere, fromHistory){
-		if(!alreadyThere){ return ; }
+		if(!alreadyThere || fromHistory){ return ; }
 		this.setActiveTab('course-book');
 		this.pushState({activeTab: 'course-book'});
 	},
