@@ -137,7 +137,6 @@ Ext.define('NextThought.view.course.forum.View',{
 	navigateToForumObject: function(forum, topic){
 		//if there is a valid state to restore there has to be a forum
 		if(!forum){
-			//Ext.callback(cb);
 			return;
 		}
 		//wait until the board is loaded
@@ -175,7 +174,7 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	restoreState: function(){
+	restoreState: function(forum, topic){
 		this.navigateToForumObject.apply(this, arguments);
 	},
 
@@ -193,6 +192,7 @@ Ext.define('NextThought.view.course.forum.View',{
 		}
 
 		$AppConfig.service.getObject(forum, function(record){
+			delete me.currentForum;
 			if(boardId !== me.currentNtiid){
 				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
 				return;

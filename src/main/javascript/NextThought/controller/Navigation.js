@@ -38,8 +38,7 @@ Ext.define('NextThought.controller.Navigation', {
                     'navigate-to-blog': 'gotoBlog',
                     'navigation-failed': 'readerNavigationFailed',
                     'view-selected': 'setView',
-                    'navigate-to-course-discussion': 'goToCourseForum',
-	                'set-forum-location': 'setForumLocation'
+                    'navigate-to-course-discussion': 'goToCourseForum'
                 },
                 'library-collection': {
                     'select': 'trackContentChange'
@@ -412,52 +411,6 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		return this.setView('forums');
-	},
-
-
-	// NOTE: unlike beforeTopic, this setForumLocation takes a callback, that gets called at the end.
-	setForumLocation: function(topicRecord, comment, callback, scope){
-		console.log('implement beforeTopicShow...about to set the Forums View');
-
-		var me = this,
-			link = topicRecord && topicRecord.get('href'), r, req;
-
-		if(link){
-			// Get the board url: assumes the content url looks like base/board/forum/topic
-			if(link.slice(-1) === '/'){
-				link = link.split('/').slice(0,-3).join('/');
-			}else{
-				link = link.split('/').slice(0,-2).join('/');
-			}
-
-			req = {
-				url: link,
-				callback: function(request, success, response){
-					if(!success){
-						me.fireEvent('topic-navigation-canceled', topicRecord);
-						console.error('Could not find the board this topic belongs to: ', topicRecord, arguments);
-						Ext.callback(callback, scope);
-						return;
-					}
-
-					var board = ParseUtils.parseItems(response.responseText)[0];
-					if(board.belongsToCourse()){
-						callback = Ext.bind(callback, scope);
-						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), callback);
-					}else{
-						r = me.setView('forums');
-						me.fireEvent('show-topic', topicRecord, comment, callback);
-					}
-				}
-			};
-
-			Ext.Ajax.request(req);
-			return;
-		}
-
-		// Announce this to whoever cares.
-		this.fireEvent('topic-navigation-canceled', topicRecord);
-		Ext.callback(callback, scope);
 	},
 
 
