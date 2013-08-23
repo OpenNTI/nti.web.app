@@ -2,6 +2,7 @@ Ext.define('NextThought.mixins.store-feature.Purchasable',{
 
 	needsActionTplMap:{
 		"application/vnd.nextthought.course": 'needsEnrollmentTpl',
+		"application/vnd.nextthought.purchasable": 'needsPurchaseTpl',
 		"application/vnd.nextthought.store.purchasable": 'needsPurchaseTpl'
 	},
 
