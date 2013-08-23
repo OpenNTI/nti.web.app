@@ -385,7 +385,7 @@ Ext.define('NextThought.util.Content', {
 				root = root ? root.get('NTIID') : null;
 
 				// If we still don't have a root,  use what we think the root content should be.
-				root = !root && ContentUtils.contentPrefix(ntiid);
+				root = root || ContentUtils.contentPrefix(ntiid);
 			}
 
 			return root;
