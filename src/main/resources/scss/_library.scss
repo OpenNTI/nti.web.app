@@ -41,6 +41,11 @@
 					repeat: no-repeat;
 				}
 			}
+
+			.sample {
+				@include element('sample-banner', $position: absolute);
+			}
+
 			.meta {
 				position: absolute;
 				overflow: hidden;

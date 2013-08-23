@@ -24,6 +24,7 @@ Ext.define('NextThought.view.library.Collection',{
 	menuItemTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} item {featured} row-{rows} col-{cols}', 'role':'link', 'aria-label':'{title}', cn:[
 			{ cls:'cover', style: {backgroundImage: 'url({icon})'}},
+			{ tag:'tpl', 'if':'sample', cn:{ cls:'sample', 'data-qtip':'Sample' }}, //store - sample flag
 			{ cls: 'meta', 'aria-hidden':'true', cn:[
 				{ cls: 'courseName', html: '{courseName}' },  //course name/id
 				{ cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
@@ -31,8 +32,7 @@ Ext.define('NextThought.view.library.Collection',{
 				{ cls: 'author', html: '{author}',
 					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
 					'data-qtip':'{[values.author.length>20?values.author:""]}' },
-				{ cls:'description', html:'{description}' },
-				{ tag:'tpl', 'if':'sample', cn:{ cls:'sample', html:'Sample' }} //store - sample flag
+				{ cls:'description', html:'{description}' }
 			]}
 		]
 	}),
