@@ -69,10 +69,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					}
 				},
 				{
-					tag:'script',
-					defer:'defer',
-					type:'text/javascript',
-					html:'\n{code}\n; inject();'
+					tag: 'script',
+					defer: 'defer',
+					type: 'text/javascript',
+					html: '\n{code}\n'
 				}]
 			}]
 		}
@@ -225,6 +225,12 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		code.push(this.playerCode.inject.toString());
+		if(Ext.isIE9){
+			code.push('setTimeout(inject, 250);');
+		}
+		else{
+			code.push('jQuery(inject());')
+		}
 
 		return code.join('\n').replace(/%([^%]+)%/gm,resolve);
 	},
