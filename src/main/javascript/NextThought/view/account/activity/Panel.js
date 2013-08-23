@@ -651,25 +651,30 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	belongsInCommunity: function (change, flStore, communities, noVerify) {
 		var item = change.get('Item'),
 			sharedWith = item.get('sharedWith') || [],
-			foundInCommunities = false, belongsInContacts;
+			accepted = false, belongsInContacts;
 
 		Ext.each(sharedWith, function (u) {
 			if (Ext.Array.contains(communities, u)) {
-				foundInCommunities = true;
+				accepted = true;
 				return false;
 			}
 			return true;
 		});
 
+		//Topic and posts are PUBLIC. So we'll let them through
+		if(item.isAlwaysPublic){
+			accepted = true;
+		}
+
 		//Just log an error for now so we know there isn't
 		//a missing condition we didn't consider
 		belongsInContacts = this.belongsInMyContacts(change, flStore, communities, true);
-		if (!noVerify && !foundInCommunities && !belongsInContacts) {
+		if (!noVerify && !accepted && !belongsInContacts) {
 			console.error('Danger, dropping change that does not pass either filter', change);
 		}
 
 		//If it belongs in our contacts, it's also game.
-		return foundInCommunities || belongsInContacts;
+		return accepted || belongsInContacts;
 	},
 
 

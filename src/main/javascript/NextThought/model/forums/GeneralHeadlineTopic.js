@@ -1,3 +1,4 @@
 Ext.define('NextThought.model.forums.GeneralHeadlineTopic', {
-	extend: 'NextThought.model.forums.HeadlineTopic'
+	extend: 'NextThought.model.forums.HeadlineTopic',
+	isAlwaysPublic:true
 });
