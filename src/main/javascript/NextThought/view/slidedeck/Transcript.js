@@ -19,7 +19,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	lineFilterId: 'plinefilter',
 
-	bubbleEvents: ['add', 'remove','editor-open'],
+	bubbleEvents: ['add', 'remove','editor-open','editorActivated','editorDeactivated'],
 
 	initComponent: function(){
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
@@ -244,6 +244,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	setupNoteOverlay: function(){
 		var me = this;
 		this.noteOverlay = Ext.widget('presentation-note-overlay', {reader: this, readerHeight: this.getHeight()});
+		this.on('destroy','destroy',this.relayEvents(this.noteOverlay,[ 'editorActivated','editorDeactivated' ]));
+
 		Ext.each(this.items.items, function(vt){
 			me.noteOverlay.registerReaderView(vt);
 		});

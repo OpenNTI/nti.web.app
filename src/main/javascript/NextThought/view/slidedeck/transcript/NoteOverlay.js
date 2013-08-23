@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
-	alias:'widget.presentation-note-overlay',
+	alias:'widget.presentation-note-overlay',//THIS IS NOT A COMPONENT!! IT SHOULD NOT HAVE AN ALIAS, MUCH LESS A **WIDGET.** PREFIX!
 
 	requires:[
 		'NextThought.util.Line',
@@ -60,8 +60,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			enableShareControls: true,
 			enableTitle: true,
 			listeners:{
-				'deactivated-editor': function(){ me.reader.suspendMoveEvents = false; },
-				'activated-editor': function(){ me.reader.suspendMoveEvents = true; },
+				'deactivated-editor': function(){
+					me.fireEvent('editorDeactivated');
+					me.reader.suspendMoveEvents = false;
+				},
+				'activated-editor': function(){
+					me.fireEvent('editorActivated');
+					me.reader.suspendMoveEvents = true;
+				},
 				grew: function(){
 					var h = this.getHeight(),
 						b = h + this.getY(),
