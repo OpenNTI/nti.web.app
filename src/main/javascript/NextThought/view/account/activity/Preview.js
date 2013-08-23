@@ -124,7 +124,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 	initComponent: function () {
 		this.callParent(arguments);
-		this.enableBubble(['resize', 'realign']);
+		this.enableBubble(['resize', 'realign', 'editorActivated', 'editorDeactivated']);
 	},
 
 
@@ -292,18 +292,22 @@ Ext.define('NextThought.view.account.activity.Preview', {
 			this.respondEl.hide(); //Note we just hide this one, since it looks referenced in a lot of places
 		}
 
-		hide = function(){
+
+		//These next two functions seem named backwards...
+		var hide = function(){
 			//Ext.bind(box.hide, box, [false]);
             // Now that the editor is active, adjust the reply scroll zone.
             this.setupReplyScrollZone();
 			this.replyBoxEl.hide();
 			this.constrainPopout();
+			this.fireEvent('editorActivated');
 		};
 
-		show = function(){
+		var show = function(){
 			//Ext.bind(box.show, box, [false]);
 			this.replyBoxEl.show();
 			this.constrainPopout();
+			this.fireEvent('editorDeactivated');
 		};
 
 		this.mon(this.editor, {

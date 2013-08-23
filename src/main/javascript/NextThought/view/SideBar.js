@@ -72,6 +72,18 @@ Ext.define('NextThought.view.SideBar', {
 	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this.host, 'afterlayout', this.syncUp, this);
+
+		this.on('editorActivated', function(){
+			this.lockSideBarOpen=true;
+		}, this);
+		this.on('editorDeactivated', function(){
+			var startHide = this.lockSideBarOpen;
+			delete this.lockSideBarOpen;
+			if(startHide){
+				this.startHide();
+			}
+		});
+
 		Ext.EventManager.onWindowResize(this.viewportMonitor, this, null);
 
 		var contactsView = this.down('contacts-view'),
@@ -179,7 +191,7 @@ Ext.define('NextThought.view.SideBar', {
 
 
 	startHide: function (force) {
-		if (this.host.isVisible()) {
+		if (this.host.isVisible() || this.lockSideBarOpen) {
 			return;
 		}
 
