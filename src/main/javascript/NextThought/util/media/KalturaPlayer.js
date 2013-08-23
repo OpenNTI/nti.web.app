@@ -30,6 +30,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			id: '{id}-iframe',
 			name: '{id}-iframe',
 			allowfullscreen: true,
+			webkitallowfullscreen: true,
 			src: Ext.SSL_SECURE_URL,
 			frameBorder: 0,
             scrolling: 'no',
@@ -556,10 +557,19 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
 			mw.setConfig( 'EmbedPlayer.RewriteSelector', false );
+			// Force HTML5 player on mobile devices
+			mw.setConfig( 'EmbedPlayer.forceMobileHTML5', true );
 
-			//Force flash in ie10, mostly because kalturas html5 player sucks
-			//Even with this we were still getting html5 on IE10 and it seemed ok now.
+			//We need to make the HTML5 video work.
+			// Flash won't work w/o Microsoft's blessing in IE on Windows8. (And we don't have that blessing btw)
 			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
+
+			//This may fix Safari's full screen.
+			mw.setConfig( 'EmbedPlayer.FullScreenZIndex', 999999 );
+			//May make mobile video player less agressive... *shrug*
+			mw.setConfig( 'EmbedPlayer.WebKitPlaysInline', true );
+			//May help with the quality negotiations
+			mw.setConfig('Kaltura.UseAppleAdaptive', true);
 
 			//IPad settings
 			//mw.setConfig('EmbedPlayer.EnableIpadHTMLControls', false); //enables native controls with native fullscreen
@@ -572,6 +582,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				wid: '_%PARTNER_ID%',
 				uiconf_id: '%UICONF_ID%',
 				flashvars: {
+					"mediaProxy.preferedFlavorBR": 1500,//This makes the 1.5Mbps stream preferd
 					"externalInterfaceDisabled": false,
 					"akamaiHD": {
 						"loadingPolicy": "preInitialize",
