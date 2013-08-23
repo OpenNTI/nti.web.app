@@ -54,7 +54,7 @@ Ext.define('NextThought.view.store.Collection',{
 		return data;
 	},
 
-	onBeforeItemClick: function(record, item, idx, event, opts){
+	onBeforeItemClick: function(record, item, idx, event){
 		var t = event && event.getTarget && event.getTarget();
 
 		if(t && Ext.fly(t).hasCls('history')){
@@ -77,11 +77,9 @@ Ext.define('NextThought.view.store.Collection',{
 		}
 
 		pos = Ext.fly(desc).getPositioning(true);
-		pos.right = pos.left; //dirty... i know
+		pos.right = pos.left;
 		pos.position = 'absolute';
-
-		pos.bottom = parseInt(pos.right,10) + ((prev && Ext.fly(prev).getHeight()) || 0);
-		pos.bottom +='px';
+		pos.bottom = (parseInt(pos.right,10) + ((prev && Ext.fly(prev).getHeight()) || 0))+'px';
 
 		Ext.fly(desc).setPositioning(pos);
 
@@ -118,11 +116,17 @@ Ext.define('NextThought.view.store.Collection',{
 
 		//then move it up the sibling links until it peeks into view.
 		console.time(marker);
+		//This assumes that the description is of the form (<heading><textnode>){1,n}
+		// If that changes then this block will not work.
 		while(e.previousSibling && e.getBoundingClientRect().top > bottom){
 			desc.insertBefore(e,e.previousSibling);
 			desc.removeChild(e.nextSibling);
 		}
 		console.timeEnd(marker);
+
+		//Reset the bottom position to auto.
+		pos.bottom = 'auto';//now let the bottom auto flow
+		Ext.fly(desc).setPositioning(pos);
 	},
 
 
