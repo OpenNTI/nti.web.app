@@ -187,7 +187,8 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 	disableMathquillEditable: function(){
 		console.log('disabling');
-		jQuery(this.mathquillSpan).mathquill('revert').mathquill();
+		var latex = this.getValue();
+		jQuery(this.mathquillSpan).mathquill('revert').html(latex).mathquill();
 	},
 
 	focus: function(){
