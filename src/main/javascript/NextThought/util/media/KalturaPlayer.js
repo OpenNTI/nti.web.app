@@ -30,7 +30,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			id: '{id}-iframe',
 			name: '{id}-iframe',
 			allowfullscreen: true,
-			webkitallowfullscreen: true,
+//			webkitallowfullscreen: true,
 			src: Ext.SSL_SECURE_URL,
 			frameBorder: 0,
             scrolling: 'no',
