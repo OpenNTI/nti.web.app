@@ -229,7 +229,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			code.push('setTimeout(inject, 250);');
 		}
 		else{
-			code.push('jQuery(inject());')
+			code.push('jQuery(inject());');
 		}
 
 		return code.join('\n').replace(/%([^%]+)%/gm,resolve);
