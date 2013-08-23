@@ -390,6 +390,15 @@
 	}
 }
 
+.note-window .main-view .context {
+	[itemprop~="nti-data-markupenabled"],[itemprop~="nti-slide-video"]{
+		&:hover {
+			a.zoom {
+				display: none !important;
+			}
+		}
+	}
+}
 
 .note-window .main-view .context,
 #NTIContent {
