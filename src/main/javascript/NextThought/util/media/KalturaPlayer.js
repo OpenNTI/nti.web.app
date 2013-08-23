@@ -51,6 +51,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		'<!DOCTYPE html>',
 		{tag:'html', lang:'en', cn:[
 			{tag:'head',cn:[
+				{ tag:'title', html:'{id}-sandbox' },
+				{ tag:'meta', 'http-equiv':'X-UA-Compatible', 'content':'IE=edge' },
 				{ tag:'script', type:'text/javascript', src:('{basePath}resources/lib/jQuery-1.8.0min.js') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php') },
@@ -70,7 +72,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				},
 				{
 					tag: 'script',
-					defer: 'defer',
+//					defer: 'defer',
 					type: 'text/javascript',
 					html: '\n{code}\n'
 				}]
@@ -231,12 +233,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		code.push(this.playerCode.inject.toString());
-		if(Ext.isIE9){
-			code.push('setTimeout(inject, 250);');
-		}
-		else{
-			code.push('jQuery(inject());');
-		}
+		code.push('window.addEventListener("load",inject,false);');
 
 		return code.join('\n').replace(/%([^%]+)%/gm,resolve);
 	},
