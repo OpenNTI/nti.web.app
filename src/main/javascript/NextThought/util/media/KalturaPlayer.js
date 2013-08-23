@@ -121,24 +121,30 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 		this.settingUp = true;
 
+		function stopTask(msg){
+			console[Ext.isEmpty(msg)?'log':'warn'](me.id, ' Stopping setup task ', msg||'');
+			Ext.TaskManager.stop(playerSetupTask);
+			delete me.settingUp;
+		}
+
 		playerSetupTask.run = function () {
 			var doc;
+
+			if(me.playerDeactivated){
+				stopTask('Deactivated during setup task. Stopping');
+				return;
+			}
+
 			try{
-				if(me.playerDeactivated){
-					throw 'Deactivated during setup task. Stopping';
-				}
 				doc = me.getPlayerContextDocument();
 			}
 			catch(e){
-				console.warn(me.id, ' Something tore down the player while it was still setting up.  Canceling setup task ', e.stack || e.message || e);
-				Ext.TaskManager.stop(playerSetupTask);
-				delete me.settingUp;
+				stopTask(e.stack || e.message || e);
 				return;
 			}
 
 			if (doc && doc.readyState === 'complete') {
-				delete me.settingUp;
-				Ext.TaskManager.stop(playerSetupTask);
+				stopTask();
 				try{
 					doc.open();
 					doc.write(me.PLAYER_BODY_TPL.apply(data));
@@ -211,7 +217,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	sendCommand: function(name,data,force){
+	sendCommand: function(name,data/*,force*/){
 		this.sendMessage('command',name,data);
 	},
 
@@ -280,7 +286,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.makeNotReady();
 
 		console.log(this.id, kalturaData, source, offset);
-		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
+		this.sendCommand('changeMedia', {entryId: kalturaData[1]}/*, true*/);
 		this.currentPosition = 0;
 		this.currentState = -1;
 
@@ -540,8 +546,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 						'layoutReady', 'pluginsLoaded','skinLoaded', 'skinLoadFailed',
 						'singlePluginLoaded', 'singlePluginFailedToLoad','mediaLoaded', 'entryReady',
 						'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange',
-						'playerUpdatePlayhead','playerPlayEnd','mediaLoadError', 'readyToLoad', 'entryFailed', 'entryNotAvailable'],
-					i = events.length - 1, o;
+						'playerUpdatePlayhead','playerPlayEnd','mediaLoadError', 'readyToLoad',
+						'entryFailed', 'entryNotAvailable'],
+					i = events.length - 1;
 
 				for(i; i>=0; i--){
 					player.addJsListener(events[i],makeHandler(events[i]));
@@ -568,7 +575,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			window.addEventListener('message', handleMessage, false);
 
 			// Force HTML5 player over Flash player
-			mw.setConfig( 'KalturaSupport.LeadWithHTML5', '%LEAD_HTML5%' === 'true' );
+			mw.setConfig( 'KalturaSupport.LeadWithHTML5', JSON.parse('%LEAD_HTML5%') );
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
