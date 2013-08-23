@@ -115,6 +115,7 @@ Ext.define('NextThought.view.store.Collection',{
 		console.time(marker);
 		while(e.previousSibling && e.getBoundingClientRect().top > bottom){
 			desc.insertBefore(e,e.previousSibling);
+			desc.removeChild(e.nextSibling);
 		}
 		console.timeEnd(marker);
 	},
