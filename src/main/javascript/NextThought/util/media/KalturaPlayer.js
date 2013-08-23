@@ -585,11 +585,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
 
 			//This may fix Safari's full screen.
-			mw.setConfig( 'EmbedPlayer.FullScreenZIndex', 999999 );
+			//mw.setConfig( 'EmbedPlayer.FullScreenZIndex', 999999 );
 			//May make mobile video player less agressive... *shrug*
-			mw.setConfig( 'EmbedPlayer.WebKitPlaysInline', true );
+			//mw.setConfig( 'EmbedPlayer.WebKitPlaysInline', true );
 			//May help with the quality negotiations
-			mw.setConfig('Kaltura.UseAppleAdaptive', true);
+			//mw.setConfig('Kaltura.UseAppleAdaptive', true);
 
 			//IPad settings
 			//mw.setConfig('EmbedPlayer.EnableIpadHTMLControls', false); //enables native controls with native fullscreen
