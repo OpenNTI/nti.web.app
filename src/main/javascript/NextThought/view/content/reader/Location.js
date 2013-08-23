@@ -22,10 +22,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	            'navigateAbort',//From error (navigation started and must recover)
 				'navigateCanceled',//From blocking UI (open editor) -- navigation never started.
 				'navigateComplete',
-				'change',
-				'begin-state-transaction',
-				'end-state-transaction',
-				'cancel-state-transaction'
+				'change'
 			]));
 
 		reader.fireEvent('uses-page-stores',this);
@@ -86,7 +83,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 					}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
 				}
 				else{
-					me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+					history.cancelTransaction('navigation-transaction');
 				}
 				if(error){
 					delete me.currentNTIID;
@@ -111,10 +108,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 					PersistentStorage.updateProperty('last-location-map',rootId,ntiid);
 				}
 
-				me.fireEvent('end-state-transaction', 'navigation-transaction');
+				history.endTransaction('navigation-transaction');
 			}
 			catch(caughtError){
-				me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+				history.beginTransaction('navigation-transaction');
 			}
 
 		}
@@ -129,7 +126,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			e.mask('Loading...','navigation');
 		}
 
-		this.fireEvent('begin-state-transaction', 'navigation-transaction');
+		history.beginTransaction('navigation-transaction');
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
@@ -143,7 +140,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
 			}
 			catch(e){
-				me.fireEvent('cancel-state-transaction', 'navigation-transaction');
+				history.cancelTransaction('navigation-transaction');
 			}
 		},1);
 	},

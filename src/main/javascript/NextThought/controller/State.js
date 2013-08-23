@@ -51,18 +51,12 @@ Ext.define('NextThought.controller.State', {
 					'activate-view': 'track'
 				},
 				'*': {
-					'change-hash': 'changeHash',
-					'begin-state-transaction': 'beginTransaction',
-					'end-state-transaction': 'endTransaction',
-					'cancel-state-transaction': 'cancelTransaction'
+					'change-hash': 'changeHash'
 				}
 			},
 			controller: {
 				'*': {
-					'change-hash': 'changeHash',
-					'begin-state-transaction': 'beginTransaction',
-					'end-state-transaction': 'endTransaction',
-					'cancel-state-transaction': 'cancelTransaction'
+					'change-hash': 'changeHash'
 				}
 			}
 		});

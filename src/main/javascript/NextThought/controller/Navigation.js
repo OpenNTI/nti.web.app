@@ -375,13 +375,13 @@ Ext.define('NextThought.controller.Navigation', {
 
 					// TODO: Here, Terminate the transaction we started. This is not optimal
 					// since something else could be changing states behind us. So we need to investigate other alternatives.
-					me.fireEvent('end-state-transaction', 'navigation-transaction');
+					history.endTransaction('navigation-transaction');
 				}, 1);
 			}
 		}
 
-	    var me = this;
-	    this.fireEvent('begin-state-transaction', 'navigation-transaction');
+	    //var me = this;
+	    history.beginTransaction('navigation-transaction');
         this.fireEvent('set-last-location-or-root', course, test);
     },
 
