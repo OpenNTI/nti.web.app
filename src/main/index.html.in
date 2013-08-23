@@ -36,7 +36,7 @@
 	</style>
 </head>
 <body><div id="loading-mask"><div id="loading" title="Loading..."><div></div></div></div>
-<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8" /></filter></svg>
+<svg height="0" id="svg-image-blur"><filter id="blur-effect"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter></svg>
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="resources/strings/strings.js"></script>
 	<script type="text/javascript" src="resources/strings/site.js"></script>
