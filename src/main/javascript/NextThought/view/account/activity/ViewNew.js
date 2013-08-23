@@ -47,7 +47,7 @@ Ext.define('NextThought.view.account.activity.ViewNew',{
 	),
 
 	typesFilterArray:[
-		{contacts: true, text: 'Discussions & Thoughts', filter: 'discussions', type: 'discusssions'},
+		{contacts: true, community: true, text: 'Discussions & Thoughts', filter: 'discussions', type: 'discusssions'},
 		{me: true, text: 'Highlights & Notes', filter: 'notes', type: 'menotes'},
 		{contacts: true, community: true, text: 'Notes', filter: 'notes', type: 'communitynotes' },
 		{me: true, text: 'Bookmarks', filter: 'bookmarks', type: 'bookmarks'},
