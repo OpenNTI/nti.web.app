@@ -60,6 +60,7 @@ Ext.define('NextThought.view.chat.Window', function () {
             return manager;
         },
 
+	    syncHeight: Ext.emptyFn, //chat windows won't need this.
 
         initComponent: function () {
             this.callParent(arguments);
