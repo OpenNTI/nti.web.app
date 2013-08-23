@@ -160,7 +160,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 	setValue: function(latex){
 		latex = this.sanitizeForMathquill(latex);
-		//console.log('Setting value to ', latex);
+		console.log('Setting value to ', latex);
 		jQuery(this.mathquillSpan).mathquill('latex', latex);
 		this.adjustSize();
 	},

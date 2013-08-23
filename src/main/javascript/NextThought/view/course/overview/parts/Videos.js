@@ -214,6 +214,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
 
+		if(this.screenEl){
+			this.screenEl.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY);
+		}
+		if(this.curtainEl){
+			this.curtainEl.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY);
+		}
+
 		this.getSelectionModel().select(0);
 		this.showCurtain();
 		//this.bodyEl.mask('Loading...');
@@ -342,7 +349,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 		console.log('Showing curtain');
 		if (el && !c) {
-			el.setVisibilityMode(Ext.Element.VISIBILITY)[a]();
+			el[a]();
 		}
 		else if (el) {
 			el.setStyle({zIndex: 9});
@@ -362,7 +369,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 		if (el && !c) {
 			console.log('Hiding curtain view');
-			el.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY)[a]();
+			el[a]();
 		}
 		else if (el) {
 			el.setStyle({zIndex: 0});
