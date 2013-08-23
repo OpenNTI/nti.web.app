@@ -72,9 +72,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 					tag:'script',
 					defer:'defer',
 					type:'text/javascript',
-					html:'\n{code}\n'
-				}
-			]}]
+					html:'\n{code}\n; inject();'
+				}]
+			}]
 		}
 	]),
 
@@ -225,7 +225,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		code.push(this.playerCode.inject.toString());
-		code.push('jQuery(inject);');
 
 		return code.join('\n').replace(/%([^%]+)%/gm,resolve);
 	},
