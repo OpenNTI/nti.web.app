@@ -24,10 +24,10 @@ Ext.define('NextThought.view.store.Collection',{
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
 				{tag:'tpl', 'if':'Amount', cn:{ cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}},
+				{ cls: 'description', html: '{Description}'},
 				{tag: 'tpl', 'if': 'HasHistory', cn: [
 					{ cls: 'history', html: 'Purchase History'}
-				]},
-				{ cls: 'description', html: '{Description}'}
+				]}
 			]}
 		]
 	}),
@@ -68,6 +68,7 @@ Ext.define('NextThought.view.store.Collection',{
 
 	onItemUpdate: function(rec,index,node){
 		var desc = Ext.fly(node).down('.description',true),
+			prev = Ext.fly(node).down('.history',true),
 			pos, e, texts, bottom,
 			marker = 'This will need to be optimized, bute force is slow. Moving ellipsis took:';
 
@@ -76,8 +77,12 @@ Ext.define('NextThought.view.store.Collection',{
 		}
 
 		pos = Ext.fly(desc).getPositioning(true);
-		pos.bottom = pos.right = pos.left; //dirty... i know
+		pos.right = pos.left; //dirty... i know
 		pos.position = 'absolute';
+
+		pos.bottom = parseInt(pos.right,10) + ((prev && Ext.fly(prev).getHeight()) || 0);
+		pos.bottom +='px';
+
 		Ext.fly(desc).setPositioning(pos);
 
 		if(desc.scrollHeight <= desc.offsetHeight){
@@ -85,7 +90,7 @@ Ext.define('NextThought.view.store.Collection',{
 			return;
 		}
 
-		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.bottom,10);
+		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.right,10);//margin
 
 
 		/*

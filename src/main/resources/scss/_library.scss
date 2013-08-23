@@ -125,6 +125,21 @@
 
 		&.purchasables {
 
+			.history{
+				border-top: 1px solid #e6e6e6;
+				clear: both;
+				text-align: center;
+				padding: 7px;
+				background: white;
+				color: #ababab;
+				font-size: 12px;
+				line-height: 15px;
+				font-weight: bold;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+			}
 		}
 	}
 }
