@@ -417,16 +417,16 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		var m = this.getSelectedVideo(),
 			reader;
 
+		if (e.getTarget('.launch-player')) {
+			reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
+			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), reader.basePath);
+			return;
+		}
+
 		this.maybeCreatePlayer();
 
 		if (!m || !this.player) {
 			console.warn('Ignoring on curtain click', this, m);
-			return;
-		}
-
-		if (e.getTarget('.launch-player')) {
-			reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
-			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), reader.basePath);
 			return;
 		}
 

@@ -124,6 +124,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		playerSetupTask.run = function () {
 			var doc;
 			try{
+				if(me.playerDeactivated){
+					throw 'Deactivated during setup task. Stopping';
+				}
 				doc = me.getPlayerContextDocument();
 			}
 			catch(e){
@@ -444,9 +447,17 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	playerPlayEndHandler: function(){
+		var reactivate = !this.el || !this.el.up('.x-component-course[id^="course-overview-video"]');
 		this.deactivate();
 		this.currentState = 0;
 		this.fireEvent('player-event-ended', 'kaltura');
+
+		//As an optimization if we are a child of the overview-part
+		//(which will activate when necessary) reactivate us so
+		//we are ready to replay
+		if(reactivate){
+			Ext.defer(this.activate, 1, this, [this.currentSource]);
+		}
 	},
 
 
