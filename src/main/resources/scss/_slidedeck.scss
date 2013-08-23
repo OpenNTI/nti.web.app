@@ -1055,10 +1055,6 @@ $experimental-support-for-svg: true;
             left: 0;
         }
 
-        .video-picker{
-            display: none;
-        }
-
         .body{
             display: none;
         }
@@ -1348,7 +1344,7 @@ $experimental-support-for-svg: true;
 
 				&:hover, &:active{
 					&::after{
-						@include sprite($icons,'mv-transcript-focus_active',$dimensions: true);
+						@include sprite($icons,'mv-video-focus_active',$dimensions: true);
 					}
 				}
 			}
