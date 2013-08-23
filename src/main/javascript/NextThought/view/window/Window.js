@@ -124,7 +124,7 @@ Ext.define('NextThought.view.window.Window', {
         });
         
         if(!me.syncedSize){
-            me.syncHeight();
+            Ext.defer(me.syncHeight,1,me);
             Ext.EventManager.onWindowResize(me.syncHeight, me);
             me.on('destroy', function(){
                 Ext.EventManager.removeResizeListener(me.syncHeight, me);
