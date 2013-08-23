@@ -19,6 +19,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	lineFilterId: 'plinefilter',
 
+	bubbleEvents: ['add', 'remove','editor-open'],
 
 	initComponent: function(){
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);

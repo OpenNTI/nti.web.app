@@ -863,6 +863,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				s.addRange(r);
 			}
 		}
+		else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT){
+			//keeps the slides from transitioninng in the presentation view
+			e.stopPropagation();
+		}
 
 		this.hideStylePopover();
 		this.hideObjectsPopover();

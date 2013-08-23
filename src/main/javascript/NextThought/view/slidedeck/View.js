@@ -27,6 +27,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 		exitEl: '.exit-button'
 	},
 
+	bubbleEvents: ['add','remove','show-editor'],
+
 	constructor: function(config){
 		var t, vPlaylist;
 
@@ -265,5 +267,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 		this.on('destroy','destroy',this.identity);
 		this.mon(this.identity,'profile-link-clicked','destroy');
 
+		this.on('editor-open', function(){
+			this.video.pausePlayback();
+		}, this);
 	}
 });

@@ -86,6 +86,7 @@ Ext.define('NextThought.view.slidedeck.transcript.Slide',{
 
 		data.isDomRange = true;
 		this.fireEvent('show-editor', data, e.getTarget('.add-note-here', null, true));
+		this.ownerCt.fireEvent('editor-open');
 	},
 
 
