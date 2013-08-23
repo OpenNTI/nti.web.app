@@ -20,7 +20,7 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 	},
 
 	navigateToTopicForEdit: function(e){
-		function openInEditMode(cmp){
+		function openInEditMode(ready, cmp){
 			function onAfterRender(){
 				var me = this;
 				Ext.defer(me.fireEvent, 500, me, ['edit-topic', me, me.record]);
@@ -35,7 +35,7 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 			}
 		}
 
-		this.fireEvent('set-forum-location', this.record,  null, openInEditMode, this);
+		this.fireEvent('show-topic-with-action', this.record,  null, openInEditMode, this);
 	},
 
 

@@ -119,7 +119,8 @@ Ext.define('NextThought.controller.Forums', {
 			},
 			controller:{
 				'*': {
-					'show-object': this.navigateToForumContent
+					'show-object': this.navigateToForumContent,
+					'show-topic': this.presentTopic
 				}
 			}
 		});
@@ -434,7 +435,7 @@ Ext.define('NextThought.controller.Forums', {
 
 			//callback
 			if(shouldFireCallBack){
-				Ext.callback(cb, scope, [true]);
+				Ext.callback(cb, scope, [true, maybeTopic]);
 			}
 		});
 	},

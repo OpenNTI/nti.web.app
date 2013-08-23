@@ -134,21 +134,22 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	navigateToForumObject: function(forum, topic){
+	navigateToForumObject: function(forum, topic, cb){
+		if(Ext.isFunction(cb)){
+			this.hasTopicCallback = cb;
+		}
 		//if there is a valid state to restore there has to be a forum
 		if(!forum){
+			Ext.callback(this.hasTopicCallback, null, [false]);
+			delete this.hasTopicCallback;
 			return;
 		}
 		//wait until the board is loaded
-		if(!this.hasBoard){
+		var top = this.peek();
+		if(!this.hasBoard || !top){
 			this.currentForum = forum;
 			this.currentTopic = topic;
 			return;
-		}
-		var top = this.peek();
-
-		if(!top){
-			console.error("We don't even have a board loaded?!?!?!?!");
 		}
 
 		if(top.xtype === 'course-forum-board'){
@@ -165,6 +166,8 @@ Ext.define('NextThought.view.course.forum.View',{
 
 		if(top.xtype === 'forums-topic'){
 			if(top.record.getId() === topic){
+				Ext.callback(this.hasTopicCallback, null, [true, top]);
+				delete this.hasTopicCallback;
 				return;
 			}
 		}
@@ -174,7 +177,7 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	restoreState: function(forum, topic){
+	restoreState: function(forum, topic, cb){
 		this.navigateToForumObject.apply(this, arguments);
 	},
 
@@ -232,6 +235,8 @@ Ext.define('NextThought.view.course.forum.View',{
 
 			if(top.xtype === 'course-forum-topic-list'){
 				me.pushViewSafely(cmp);
+				Ext.callback(me.hasTopicCallback, null, [true, cmp]);
+				delete me.hasTopicCallback;
 			}else{
 				me.topicMonitor = me.mon({
 					destroyable: true,

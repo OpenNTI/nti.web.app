@@ -38,7 +38,8 @@ Ext.define('NextThought.controller.Navigation', {
                     'navigate-to-blog': 'gotoBlog',
                     'navigation-failed': 'readerNavigationFailed',
                     'view-selected': 'setView',
-                    'navigate-to-course-discussion': 'goToCourseForum'
+                    'navigate-to-course-discussion': 'goToCourseForum',
+	                'show-topic-with-action': 'navigateToTopicAndCallback'
                 },
                 'library-collection': {
                     'select': 'trackContentChange'
@@ -353,7 +354,7 @@ Ext.define('NextThought.controller.Navigation', {
     /**
      *Navigate to the course and push the forum and topic
      */
-    goToCourseForum: function (course, forum, topic) {
+    goToCourseForum: function (course, forum, topic, callback) {
 
         function test(ntiid, reader, error) {
             console.log('test:', arguments);
@@ -369,7 +370,7 @@ Ext.define('NextThought.controller.Navigation', {
 			if(cmp && cmp.isActive()){
 				Ext.defer(function(){
 					cmp.setActiveTab('course-forum');
-					cmp.courseForum.restoreState(forum, topic);
+					cmp.courseForum.restoreState(forum, topic, callback);
 					history.pushState({active:'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
 
 					// TODO: Here, Terminate the transaction we started. This is not optimal
@@ -418,6 +419,47 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		return this.setView('forums');
+	},
+
+	// TODO: we should move to where we get rid of 'beforeTopicShow' as is, because it was designed to be synchronous
+	// and it's no longer the case, as we're making an server request.
+	// move the code shared with beforeTopicShow into a function
+	// that they can both share rather than just copying.
+	navigateToTopicAndCallback: function(topicRecord, comment, callback, scope){
+		console.log('implement beforeTopicShow...about to set the Forums View');
+
+		var me = this,
+			link = topicRecord && topicRecord.get('href'), r, req;
+
+		if(link){
+			// Get the board url: assumes the content url looks like base/board/forum/topic
+			if(link.slice(-1) === '/'){
+				link = link.split('/').slice(0,-3).join('/');
+			}else{
+				link = link.split('/').slice(0,-2).join('/');
+			}
+
+			req = {
+				url: link,
+				callback: function(request, success, response){
+					if(!success){
+						console.error('Could not find the board this topic belongs to: ', topicRecord, arguments);
+						Ext.callback(callback, scope, [false]);
+						return;
+					}
+
+					var board = ParseUtils.parseItems(response.responseText)[0];
+					if(board.belongsToCourse()){
+						callback = Ext.bind(callback, scope);
+						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), callback);
+					}else{
+						r = me.setView('forums');
+						me.fireEvent('show-topic', topicRecord, comment, callback);
+					}
+				}
+			};
+			Ext.Ajax.request(req);
+		}
 	},
 
 
