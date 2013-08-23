@@ -388,7 +388,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 	beforeTopicShow: function(topic){
 		console.log('implement beforeTopicShow...about to set the Forums View');
-		var me = this,
+		var me = this, request,
 			link = topic && topic.get('href'), r;
 		if(link){
 			//We can get the link to board from the content link
@@ -401,7 +401,7 @@ Ext.define('NextThought.controller.Navigation', {
 				link = link.split('/').slice(0,-2).join('/');
 			}
 
-			Ext.Ajax.request({
+			request = {
 				url: link,
 				callback: function(request, success, response){
 					if(!success){ return; }
@@ -413,9 +413,11 @@ Ext.define('NextThought.controller.Navigation', {
 						r = me.setView('forums');
 					}
 				}
-			});
+			};
 
-			return r;
+			Ext.Ajax.request(request);
+
+			return r;//WTF? asynchonous! this will be undefined. what was this supposed to be?
 		}
 
 		return this.setView('forums');
