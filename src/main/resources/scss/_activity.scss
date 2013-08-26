@@ -71,8 +71,11 @@
 				box-shadow: none;
 			}
 
-			&.loading::after {
-				@include loadingSpinner();
+			&.loading{
+				padding-left: 30px;
+				&::after {
+					@include loadingSpinner($top:12px,$left:0);
+				}
 			}
 
 			//&.user::after{ @include sprite($icons, 'add-contact-14x14', $dimensions: true); }
