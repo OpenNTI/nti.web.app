@@ -97,10 +97,10 @@ Ext.define('NextThought.view.course.dashboard.widget.InstructorForumView',{
 
 	renderTpl: Ext.DomHelper.markup(
 		[
-			{ cls: 'controls', cn: [
-				{ cls: 'favorite {favoriteState}' },
-				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
-			]},
+//			{ cls: 'controls', cn: [
+//				{ cls: 'favorite {favoriteState}' },
+//				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
+//			]},
 			{cls: 'tile-title', html: 'Announcements'},
 			{cls: 'title', html: '{title}'},
 			{cls: 'meta', cn:[
