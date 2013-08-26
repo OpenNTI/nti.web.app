@@ -34,22 +34,18 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	items: [
 		{
 			activitiesHolder: 1,
-			xtype: 'box'//,
-			/*autoEl:{
-			 cn:[{
-			 cls:"activity loading",
-			 cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
-			 }]
-			 }*/
+			xtype: 'box',
+			autoEl:{
+				cn:[{
+					cls:"activity loading",
+					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
+				}]
+			}
 		}
 	],
 
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		/*{tag:'tpl', 'if':'length==0', cn:[{
-		 cls:"activity nothing rhp-empty-list",
-		 cn: [' No Activity Yet']
-		 }]},*/
 		{tag: 'tpl', 'for': '.', cn: [
 			{tag: 'tpl', 'if': 'activity', cn: [
 				{
@@ -325,22 +321,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			}, this);
 		}
 
-		if (store.getGroups().length === 0) {
+		if (store.getGroups().length === 0 || store.getCount() === 0) {
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
 			if (!store.mayHaveAdditionalPages) {
 				Ext.DomHelper.overwrite(container.getEl(), {
 					cls: "activity nothing rhp-empty-list",
-					cn: [' No Activity Yet']
+					cn: ['No Activity, try another filter?']
 				});
 			}
-			container.updateLayout();
-		}
-
-		if (store.getCount() === 0 && !store.mayHaveAdditionalPages) {
-			Ext.DomHelper.overwrite(container.getEl(), {
-				cls: "activity nothing rhp-empty-list",
-				cn: ['No Activity Yet']
-			});
 			container.updateLayout();
 		}
 
