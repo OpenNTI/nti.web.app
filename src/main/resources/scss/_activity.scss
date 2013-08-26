@@ -33,6 +33,7 @@
 
 .activity-view{
 	@include side-panel-view-title;
+	-webkit-overflow-scrolling: touch;
 	.activity-panel {
 		@include scrollbar(#ffffff, $tertiary-grey);
 
@@ -400,6 +401,7 @@
 
 		.replies {
 			overflow: {x: hidden; y: auto;}
+			-webkit-overflow-scrolling: touch;
 
 			.x-component-reply {
 				position: relative;

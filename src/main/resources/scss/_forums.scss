@@ -729,6 +729,7 @@
 		x: hidden;
 		y: auto;
 	}
+	-webkit-overflow-scrolling: touch;
 
 	&.scroll-lock{
 		overflow: hidden;

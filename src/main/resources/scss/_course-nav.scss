@@ -29,6 +29,7 @@
 				x: visible;
 				y: auto;
 			}
+			-webkit-overflow-scrolling: touch;
 			@include scrollbar(#ffffff, $tertiary-grey);
 		}
 
@@ -372,6 +373,7 @@
 				right: 0;
 				bottom: 0;
 				overflow: auto;
+				-webkit-overflow-scrolling: touch;
 				background: #04232c;
 
 				.video-row {
@@ -431,6 +433,7 @@
 		background: #ffffff;
 		padding: 25px 30px;
 		@include scrollbar(#ffffff, $tertiary-grey);
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.overview-naquestionset{

@@ -546,6 +546,7 @@ $over-color: #f4f3f3;
 			x: hidden;
 			y: auto;
 		}
+		-webkit-overflow-scrolling: touch;
 
 		.empty-list {
 			padding: 20px 0;

@@ -92,6 +92,7 @@
 		position: relative;
 		white-space: nowrap;
 		overflow:{ x: auto; y: hidden;}
+        -webkit-overflow-scrolling: touch;
 
 		.item-wrap {
 			position: relative;
