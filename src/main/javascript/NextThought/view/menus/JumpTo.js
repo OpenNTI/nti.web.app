@@ -24,6 +24,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
 	cls: 'jump-menu',
 
+
 	initComponent: function () {
 		var me = this;
 		this.callParent(arguments);

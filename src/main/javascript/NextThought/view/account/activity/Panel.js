@@ -13,13 +13,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		'NextThought.model.Redaction',
 		'NextThought.model.Note',
 		'NextThought.model.forums.Post',
-		'NextThought.model.forums.HeadlineTopic',
-		'NextThought.modules.TouchScrollSender'
+		'NextThought.model.forums.HeadlineTopic'
 	],
 
 	mixins: {
-		'activityFilter': 'NextThought.mixins.ActivityFilters',
-		'moduleContainer': 'NextThought.mixins.ModuleContainer'
+		'activityFilter': 'NextThought.mixins.ActivityFilters'
 	},
 
 	cls: 'activity-panel',
@@ -145,14 +143,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		this.mixins.activityFilter.afterRender.apply(this);
 
 		if (Ext.is.iPad) {
-			var me = this;
-			this.buildModule('modules', 'touchScrollSender');
-			this.on('touchScroll', function (ele, deltaY) {
-				me.el.scrollBy(0, deltaY, false);
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
 			});
 		}
 
 	},
+
 
 	getState: function () {
 		return this.mixins.activityFilter.getState.apply(this, arguments);
@@ -178,9 +176,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 	},
 
+
 	onScrolledToBottom: Ext.Function.createBuffered(function () {
 		this.fetchMore();
 	}, 20),
+
 
 	addMask: function (width, height) {
 		var el = this.el && Ext.get(this.el.dom.firstChild),
@@ -191,11 +191,13 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 	},
 
+
 	removeMask: function (width, height) {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
+
 
 	fetchMore: function () {
 		var s = this.store,
@@ -234,6 +236,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			this.store.load();
 		}
 	},
+
 
 	reloadActivity: function (store) {
 		var container = this.down('box[activitiesHolder]'),
@@ -339,6 +342,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 	},
 
+
 	passesFilter: function (item) {
 		if (!item) {
 			return false;
@@ -348,6 +352,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 		return Ext.Array.contains(this.mimeTypes, item.get('MimeType'));
 	},
+
 
 	changeToActivity: function (c, maybeFinish, extend) {
 		var item = c.get('Item'),
@@ -730,6 +735,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	getActiveView: function () {
 		return this;
 	},
+
 
 	applyFilters: function (mimeTypes, filterTypes) {
 		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {

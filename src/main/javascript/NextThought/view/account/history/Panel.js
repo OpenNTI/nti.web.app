@@ -272,6 +272,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.getTypesMenu().show().hide();
 		this.mixins.activityFilter.afterRender.apply(this);
+
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	},
 
 

@@ -1,40 +1,38 @@
-Ext.define('NextThought.view.course.info.View',{
+Ext.define('NextThought.view.course.info.View', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info',
 	cls: 'make-white',
-    requires: [
-        'NextThought.modules.TouchSender',
-        'NextThought.modules.TouchHandler'
-    ],
 
-    mixins: [
-        'NextThought.mixins.ModuleContainer'
-    ],
 
-    afterRender: function(){
-        this.buildModule('modules', 'touchSender');
-        this.buildModule('modules', 'touchHandler', {getPanel: function(){
-            return this.container.el;
-        }});
-    },
+	afterRender: function () {
+		this.callParent(arguments);
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
+	},
 
-	setPage: function(ntiid){
+
+	setPage: function (ntiid) {
 		this.hasInfo = !!ntiid;
 
-		if(!this.rendered){
-			this.on('afterrender',Ext.bind(this.setPage,this,[ntiid]),this,{single:true});
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.setPage, this, [ntiid]), this, {single: true});
 			return;
 		}
 
 		this.currentCourseInfoNtiid = ntiid;
 		this.update('');
 
-		Ext.getBody().mask('Loading...','navigation');
+		Ext.getBody().mask('Loading...', 'navigation');
 
 		$AppConfig.service.getPageInfo(ntiid, this.loadPage, this.failedToLoad, this);
 	},
 
-	fillInPage: function(html){
+
+	fillInPage: function (html) {
 		var dF = document.createDocumentFragment(),
 			root = document.createElement('html'),
 			body;
@@ -44,9 +42,10 @@ Ext.define('NextThought.view.course.info.View',{
 		body = root.getElementsByTagName('body')[0];
 		Ext.getBody().unmask();
 		this.update(body && body.innerHTML);
-	},	
+	},
 
-	loadPage: function(pageInfo){
+
+	loadPage: function (pageInfo) {
 		var me = this,
 			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
@@ -57,34 +56,36 @@ Ext.define('NextThought.view.course.info.View',{
 			url: pageInfo.getLink('content'),
 			expectedContentType: 'text/html',
 			scope: this,
-			success: function(r){
-				if(this.currentCourseInfoNtiid !== pageInfo.getId()){
+			success: function (r) {
+				if (this.currentCourseInfoNtiid !== pageInfo.getId()) {
 					console.warn('Dropping out of order course info', this.currentCourseInfoNtiid, pageInfo);
 					return;
 				}
 				me.fillInPage(r.responseText);
 			},
-			failure: function(r) {
-				console.error('server-side failure with status code ' + r.status+'. Message: '+ r.responseText);
+			failure: function (r) {
+				console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
 			}
 		});
 	},
 
-	failedToLoad: function(){
+
+	failedToLoad: function () {
 		console.error('Failed to load course info', arguments);
 	},
 
-	onCourseChanged: function(pageInfo){
+
+	onCourseChanged: function (pageInfo) {
 		console.log('Course change being handled by course info', this);
 		var l = ContentUtils.getLocation(pageInfo),
 			toc, course;
 
 
-		if( l && l !== ContentUtils.NO_LOCATION ){
+		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 		}
-		
+
 		this.setPage(pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo'));
 	}
 });

@@ -5,15 +5,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	requires: [
 		'NextThought.cache.UserRepository',
 		'NextThought.view.annotations.note.Templates',
-		'NextThought.layout.component.Natural',
-		'NextThought.modules.TouchScrollSender'
+		'NextThought.layout.component.Natural'
 	],
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions: 'NextThought.mixins.FlagActions',
-		moduleContainer: 'NextThought.mixins.ModuleContainer'
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	enableTitle: false,
@@ -30,7 +28,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	autoFillInReplies: true,
 
 	rootQuery: 'note-panel[root]',
-
 
 	renderTpl: Ext.DomHelper.markup([
 		{
@@ -148,17 +145,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
-
-		if (Ext.is.iPad) {
-			this.mixins.moduleContainer.buildModule('modules', 'touchScrollSender', {container: this});
-			this.on('touchScroll', function (ele, deltaY) {
-				this.el.up('.note-content-container.scrollbody').scrollBy(0, deltaY, false);
-			});
-			this.on('touchElementAt', function (x, y, callback) {
-				var element = Ext.getDoc().dom.elementFromPoint(x, y);
-				callback(element);
-			});
-		}
 	},
 
 	replyIdPrefix: function () {
@@ -195,6 +181,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		me.mon(me.editor, 'droped-whiteboard', me.droppedWhiteboard, me);
 
 		me.setRecord(me.record);
+
+		this.on('scroll', function (e) {
+			Ext.emptyFn();
+		});
+
+		me.noteBody.on('scroll', function (e) {
+			Ext.emptyFn();
+		});
 
 		if (me.record.placeholder) {
 			//me.setPlaceholderContent();
@@ -249,6 +243,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		if (me.replyToId === me.record.getId()) {
 			me.onReply();
+		}
+
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
 		}
 	},
 

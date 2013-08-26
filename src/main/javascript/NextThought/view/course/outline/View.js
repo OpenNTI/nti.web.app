@@ -6,15 +6,6 @@ Ext.define('NextThought.view.course.outline.View', {
 	cls: 'course-outline',
 	preserveScrollOnRefresh: true,
 
-	requires: [
-		'NextThought.modules.TouchSender',
-		'NextThought.view.course.outline.TouchHandler'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
-	],
-
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'Outline'
@@ -91,8 +82,10 @@ Ext.define('NextThought.view.course.outline.View', {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
 		if (Ext.is.iPad) {
-			this.buildModule('modules', 'touchSender', {container: this.up().down('.course-outline')});
-			this.buildModule('outline', 'touchHandler', {container: this.up().down('.course-outline')});
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
 		}
 	},
 
@@ -112,6 +105,7 @@ Ext.define('NextThought.view.course.outline.View', {
 	clear: function () {
 		this.bindStore('ext-empty-store');
 	},
+
 
 	maybeChangeStoreOrSelection: function (pageInfo, store) {
 		var r, sel, C = ContentUtils,

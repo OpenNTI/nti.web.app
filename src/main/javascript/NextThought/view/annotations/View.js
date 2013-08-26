@@ -26,6 +26,17 @@ Ext.define('NextThought.view.annotations.View',{
 			e.preventDefault();
 		}
 		return this.callParent(arguments);
+	},
+
+
+	afterRender: function () {
+		this.callParent(arguments);
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	}
 
 });

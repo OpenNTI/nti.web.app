@@ -6,21 +6,17 @@
  * When a user selects one we will add that view (Topic) onto the stack, suppressing this one. (The stack and impl
  * to be handled in the controller)
  */
-Ext.define('NextThought.view.forums.Forum',{
+Ext.define('NextThought.view.forums.Forum', {
 	extend: 'Ext.view.View',
-	alias: ['widget.forums-forum','widget.forums-topic-list'],
+	alias: ['widget.forums-forum', 'widget.forums-topic-list'],
 
 	mixins: {
-		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock',
-        ModuleContainer: 'NextThought.mixins.ModuleContainer'
+		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
 	},
 
 	requires: [
-        'NextThought.util.Time',
-        'NextThought.modules.TouchSender',
-        'NextThought.modules.TouchScrollSender',
-        'NextThought.modules.TouchHandler'
-    ],
+		'NextThought.util.Time'
+	],
 
 	cls: 'topic-list list',
 	itemSelector: '.topic-list-item',
@@ -29,7 +25,7 @@ Ext.define('NextThought.view.forums.Forum',{
 //	loadingHeight: 300,
 
 	listeners: {
-		select: function(selModel,record){
+		select: function (selModel, record) {
 			//allow reselect since we don't style the selected state, this has no
 			// visual effect other than the ability to click on it again
 			selModel.deselect(record);
@@ -38,8 +34,8 @@ Ext.define('NextThought.view.forums.Forum',{
 
 	headerTpl: Ext.DomHelper.createTemplate({
 		cls: 'header-container', cn: {
-			cls: 'forum-topic-list header', cn:[
-				{ cls: 'controls', cn:[
+			cls: 'forum-topic-list header', cn: [
+				{ cls: 'controls', cn: [
 					{ cls: 'new-topic', html: 'New Discussion'}
 				] },
 				{ cls: 'path', html: '{forumTitle}&nbsp;'}
@@ -48,24 +44,24 @@ Ext.define('NextThought.view.forums.Forum',{
 	}),
 
 	tpl: Ext.DomHelper.markup([
-		{ tag: 'tpl', 'for':'.', cn: [
+		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'topic-list-item', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'favorite {favoriteState}' },
-					{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
+					{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
 				]},
 				{ cls: 'title', html: '{title}' },
-				{ cls: 'meta', cn:[
-					{ tag: 'span', cls:'count', html: '{PostCount:plural(parent.kind)}' },
-					{ tag: 'tpl', 'if':'!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
+				{ cls: 'meta', cn: [
+					{ tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}' },
+					{ tag: 'tpl', 'if': '!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
-							'Posted by ',{tag: 'span', cls: 'name link', html: '{Creator}'},
+							'Posted by ', {tag: 'span', cls: 'name link', html: '{Creator}'},
 							' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
 						]}
 					]},
-					{ tag: 'tpl', 'if':'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
+					{ tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
 						{ tag: 'span', cls: 'descendant', cn: [
-							'Commented on by ',{tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
+							'Commented on by ', {tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
 							' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
 						]}
 					]}
@@ -76,7 +72,7 @@ Ext.define('NextThought.view.forums.Forum',{
 	]),
 
 
-	collectData: function(){
+	collectData: function () {
 		var r = this.callParent(arguments);
 		r.kind = 'Comment';
 		return r;
@@ -87,19 +83,19 @@ Ext.define('NextThought.view.forums.Forum',{
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',
 		html: 'Be the first to start a discussion.',
-		cn: {cn:[
-			{ tag: 'a', html:'Go back', href: '#back'},
+		cn: {cn: [
+			{ tag: 'a', html: 'Go back', href: '#back'},
 			' &middot ',
-			{ tag: 'a', html:'New discussion', href: '#'}
+			{ tag: 'a', html: 'New discussion', href: '#'}
 		]}
 	}),
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 
-		this.mon(this.store,{
+		this.mon(this.store, {
 			scope: this,
 			add: this.incrementTopicCount,
 			remove: this.decrementTopicCount,
@@ -109,28 +105,28 @@ Ext.define('NextThought.view.forums.Forum',{
 	},
 
 
-	fillInNewestDescendant: function(){
+	fillInNewestDescendant: function () {
 		var map = {}, me = this;
-		this.store.each(function(r){
+		this.store.each(function (r) {
 			var desc = r.get('NewestDescendant'),
 				creator = desc ? desc.get('Creator') : undefined;
 
-			if(creator && !creator.isModel){
-				if(Ext.isArray(map[creator])){
+			if (creator && !creator.isModel) {
+				if (Ext.isArray(map[creator])) {
 					map[creator].push(r);
 				}
-				else{
+				else {
 					map[creator] = [r];
 				}
 			}
 		});
 
-		function apply(resolvedUser, i){
+		function apply(resolvedUser, i) {
 			var recs = map[resolvedUser.get('Username')] || [];
-			Ext.each(recs, function(rec){
+			Ext.each(recs, function (rec) {
 				var desc = rec.get('NewestDescendant'),
 					recIdx = -1;
-				if(desc){
+				if (desc) {
 					desc.set('Creator', resolvedUser);
 					//When a field is another model object and one of it's properties change,
 					//the containing object won't see the change right now.  One would think
@@ -138,128 +134,134 @@ Ext.define('NextThought.view.forums.Forum',{
 					//happens.  So, until we have a framework in place for this force this particular
 					//node to update.  We wouldn't get here if it wasn't changing anyway
 					recIdx = me.store.indexOf(rec);
-					if(recIdx >- 0){
+					if (recIdx > -0) {
 						me.refreshNode(recIdx);
 					}
 				}
 			});
 		}
 
-		UserRepository.getUser(Ext.Object.getKeys(map),function(users){
+		UserRepository.getUser(Ext.Object.getKeys(map), function (users) {
 			me.store.suspendEvents(true);
 			Ext.each(users, apply);
 			me.store.resumeEvents();
 		});
 	},
 
-	itemUpdate: function(record, index, node){
+
+	itemUpdate: function (record, index, node) {
 		//this.fillInNewestDescendant();
 		var newestDescendant = record.get('NewestDescendant'),
 			creator = newestDescendant && newestDescendant.get('Creator'), me = this;
 
-		function resolve(user){
+		function resolve(user) {
 			record.get('NewestDescendant').set('Creator', user);
-			if(index >= 0){
+			if (index >= 0) {
 				me.refreshNode(index);
 			}
 		}
-		if(creator && !creator.isModel){
+
+		if (creator && !creator.isModel) {
 			//not an object resolve user
-			UserRepository.getUser(creator,resolve);
+			UserRepository.getUser(creator, resolve);
 		}
 	},
 
-	afterRender: function(){
+
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var title = this.record.get('title');
-		if( title === 'Forum' ){
-			title = this.record.get('Creator')+' / '+title;
+		if (title === 'Forum') {
+			title = this.record.get('Creator') + ' / ' + title;
 		}
 		this.path = title;
-		this.headerElContainer = this.headerTpl.append(this.el,{ forumTitle: title },true);
+		this.headerElContainer = this.headerTpl.append(this.el, { forumTitle: title }, true);
 		this.headerEl = this.headerElContainer.down('.header');
 
-		if(Ext.isEmpty(this.record.getLink('add'))){
+		if (Ext.isEmpty(this.record.getLink('add'))) {
 			this.headerEl.down('.new-topic').remove();
 			this.emptyText = Ext.DomHelper.markup({
 				cls: 'empty-forum',
 				html: 'No discussions available.',
-				cn: {cn:[ { tag: 'a', html:'Go back', href: '#back'} ]}
+				cn: {cn: [
+					{ tag: 'a', html: 'Go back', href: '#back'}
+				]}
 			});
 		}
 
-		this.mon(this.headerEl,'click','onHeaderClick');
+		this.mon(this.headerEl, 'click', 'onHeaderClick');
 
 		this.on({
-			'activate':'onActivate',
-			'itemupdate':'itemUpdate'
+			'activate': 'onActivate',
+			'itemupdate': 'itemUpdate'
 		});
 
-        if(Ext.is.iPad){
-            this.buildModule('modules', 'touchScrollSender');
-            this.buildModule('modules', 'touchHandler', {getPanel: function(){
-                return this.container.el.parent();
-            }});
-        }
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	},
 
 
-	incrementTopicCount: function(store, record){
+	incrementTopicCount: function (store, record) {
 		this.record.set({'TopicCount': (store.totalCount + 1)});
 	},
 
-	decrementTopicCount: function(store, record){
+
+	decrementTopicCount: function (store, record) {
 		this.record.set({'TopicCount': (store.totalCount - 1)});
 	},
 
-	updateTopicCount: function(store, record){
+
+	updateTopicCount: function (store, record) {
 		//Make sure we're in sync with the store.
-		if(this.record.get('TopicCount') !== store.totalCount){
+		if (this.record.get('TopicCount') !== store.totalCount) {
 			this.record.set({'TopicCount': store.totalCount});
 		}
 	},
 
 
-	getPath: function(){
+	getPath: function () {
 		var p = this.path,
 			o = this.ownerCt,
 			l = o && o.getLayout(),
 			items, index, c;
 
-		if(l){
+		if (l) {
 			items = l.getLayoutItems();
-            index = Ext.Array.indexOf(items, this);
-			c = items[index-1];
+			index = Ext.Array.indexOf(items, this);
+			c = items[index - 1];
 			c = c && c.getPath && c.getPath();
 		}
 
-		return c ? [c, p].join(' / '): p;
+		return c ? [c, p].join(' / ') : p;
 	},
 
 
-
-	onActivate: function(){
+	onActivate: function () {
 		console.log('The forum view is activated');
 		this.store.load();
 	},
 
 
-	onHeaderClick: function(e){
-		if(e.getTarget('.path')){
+	onHeaderClick: function (e) {
+		if (e.getTarget('.path')) {
 			this.fireEvent('pop-view', this);
 		}
-		else if(e.getTarget('.new-topic')){
+		else if (e.getTarget('.new-topic')) {
 			this.fireEvent('new-topic');
 		}
 	},
 
 
-	onContainerClick: function(e){
+	onContainerClick: function (e) {
 		var t = e.getTarget('a[href^=#]');
-		if(t){
+		if (t) {
 			e.stopEvent();
-			if(/#back$/i.test(t.href)){
+			if (/#back$/i.test(t.href)) {
 				history.go(-1);
 			}
 			else {
@@ -270,22 +272,22 @@ Ext.define('NextThought.view.forums.Forum',{
 	},
 
 
-	onItemClick: function(record,dom,index,event){
+	onItemClick: function (record, dom, index, event) {
 		var me = this;
-		if(event.getTarget('.controls')){
+		if (event.getTarget('.controls')) {
 			event.stopEvent();
-			if(event.getTarget('.favorite')){
+			if (event.getTarget('.favorite')) {
 				record.favorite();
 			}
-			else if(event.getTarget('.like')){
+			else if (event.getTarget('.like')) {
 				record.like();
 			}
 			return false;
 		}
 
-		if(event.getTarget('.name')){
-			UserRepository.getUser(record.get('Creator'), function(u){
-				if(u && Ext.isFunction(u.getProfileUrl)){
+		if (event.getTarget('.name')) {
+			UserRepository.getUser(record.get('Creator'), function (u) {
+				if (u && Ext.isFunction(u.getProfileUrl)) {
 					me.fireEvent('change-hash', u.getProfileUrl());
 				}
 			});
@@ -295,13 +297,14 @@ Ext.define('NextThought.view.forums.Forum',{
 		return true;
 	},
 
-	onBeforeItemClick: function(record, item, idx, event, opts){
+
+	onBeforeItemClick: function (record, item, idx, event, opts) {
 		var t = event && event.getTarget && event.getTarget(),
 			d = record.get && record.get('NewestDescendant'),
 			topicHref;
 
-		function isDescendantClick(tar){
-			if(!tar){
+		function isDescendantClick(tar) {
+			if (!tar) {
 				return false;
 			}
 
@@ -310,6 +313,7 @@ Ext.define('NextThought.view.forums.Forum',{
 
 			return target.is(sel) || target.parent(sel, true);
 		}
+
 		// Why do we do this? It is currently preventing navigating to the creator's profile upon clicking their name.
 //		if(d && t && isDescendantClick(t)){
 //			this.fireEvent('show-topic', record, d.get('ID'));

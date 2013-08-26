@@ -3,12 +3,7 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 	alias: 'widget.contacts-tabs',
 	requires: [
 		'NextThought.view.contacts.Panel',
-		'NextThought.view.contacts.Search',
-		'NextThought.modules.TouchSender'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.contacts.Search'
 	],
 
 	defaultType: 'contacts-tabs-panel',
@@ -56,24 +51,16 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 		me.on('afterlayout', function () {
 			me.contactSearch.setWidth(me.getWidth());
 		});
+	},
 
+
+	afterRender: function () {
+		this.callParent(arguments);
 		if (Ext.is.iPad) {
-			this.buildModule('modules', 'touchSender', {container: this});
-			this.on({
-				'touchScroll': function (ele, deltaY, deltaX) {
-					var scroller = this.body.down('.x-container');
-					if (scroller.isAncestor(ele)) {
-						scroller.scrollBy(0, deltaY, false);
-					}
-				},
-				'touchTap': function (ele) {
-					ele.click();
-				},
-				'touchElementAt': function (x, y, callback) {
-					var element = Ext.getDoc().dom.elementFromPoint(x, y);
-					callback(element);
-				}
-			}, this);
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
 		}
 	},
 
@@ -102,6 +89,7 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 			p.hide();
 		}
 	},
+
 
 	onSearchShow: function (cmp) {
 		var b = this.searchBtn,

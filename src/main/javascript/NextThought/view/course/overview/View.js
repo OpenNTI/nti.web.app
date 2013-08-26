@@ -5,12 +5,7 @@ Ext.define('NextThought.view.course.overview.View', {
 	cls: 'course-overview',
 
 	requires: [
-		'NextThought.view.course.overview.parts.*',
-		'NextThought.modules.TouchSender'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.course.overview.parts.*'
 	],
 
 	autoScroll: true,
@@ -60,19 +55,9 @@ Ext.define('NextThought.view.course.overview.View', {
 		this.callParent(arguments);
 
 		if (Ext.is.iPad) {
-			this.buildModule('modules', 'touchSender', {container: this});
-			this.on('touchScroll', function (ele, deltaY, deltaX) {
-				var videoList = this.down('.course-overview-video-section').getTargetEl();
-				if (!videoList.isAncestor(ele)) { // Don't want to scroll the whole thing if we're scrolling the videos
-					this.scrollBy(0, deltaY, false);
-				}
-			}, this);
-			this.on('touchTap', function (ele) {
-				ele.click();
-			});
-			this.on('touchElementAt', function (x, y, callback) {
-				var element = Ext.getDoc().dom.elementFromPoint(x, y);
-				callback(element);
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
 			});
 		}
 	},

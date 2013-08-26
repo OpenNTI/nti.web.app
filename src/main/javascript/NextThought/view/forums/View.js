@@ -3,12 +3,7 @@ Ext.define('NextThought.view.forums.View', {
 	alias: 'widget.forums-view-container',
 	requires: [
 		'NextThought.layout.container.Stack',
-		'NextThought.view.forums.Board',
-		'NextThought.modules.TouchSender'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.forums.Board'
 	],
 
 	cls: 'forums-view',
@@ -16,31 +11,29 @@ Ext.define('NextThought.view.forums.View', {
 	title: 'NextThought: Forums',
 	typePrefix: 'forums',
 
+
 	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		this.mon(this, 'beforeactivate', this.onBeforeActivate, this);
+	},
 
+
+	afterRender: function () {
+		this.callParent(arguments);
 		if (Ext.is.iPad) {
-			this.buildModule('modules', 'touchSender', {container: this});
-			this.on({
-				'touchScroll': function (ele, deltaY, deltaX) {
-					this.scrollBy(0, deltaY, false);
-				},
-				'touchTap': function (ele) {
-					ele.click();
-				},
-				'touchElementAt': function (x, y, callback) {
-					var element = Ext.getDoc().dom.elementFromPoint(x, y);
-					callback(element);
-				}
-			}, this);
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
 		}
 	},
+
 
 	restore: function (state) {
 		this.fireEvent('restore-forum-state', state);
 	},
+
 
 	onBeforeDeactivate: function () {
 //		console.log('Forum view received beforeDeactivate event');

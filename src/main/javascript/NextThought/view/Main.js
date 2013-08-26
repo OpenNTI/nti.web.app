@@ -19,7 +19,6 @@ Ext.define('NextThought.view.Main', {
 	id: 'viewport',
 	ui: 'nextthought',
 	minWidth: 1024,
-	touchStartTime: -1,
 
 	items: [
 		{xtype: 'main-navigation', id: 'nav', region: 'north'},
@@ -46,7 +45,6 @@ Ext.define('NextThought.view.Main', {
 		if (!touch) {
 			return;
 		}
-		this.touchStartTime = e.timeStamp;
 
 		// Dispatch mouseenter
 		var mouseEnterEvent = document.createEvent('MouseEvents');
@@ -76,6 +74,9 @@ Ext.define('NextThought.view.Main', {
 		if (!touch) {
 			return;
 		}
+		// If the event wasn't absorbed by a scrollable element, then we don't want scrolling
+		e.preventDefault();
+
 		// Dispatch mousemove
 		var mouseMoveEvent = document.createEvent('MouseEvents');
 		mouseMoveEvent.initMouseEvent('mousemove', true, true, window,
@@ -135,15 +136,6 @@ Ext.define('NextThought.view.Main', {
 			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
 			false, false, false, false, 0, null);
 		touch.target.dispatchEvent(mouseOutEvent);
-
-		// Dispatch click if touch lasted one second or less in duration
-//		if (e.timeStamp - this.touchStartTime <= 1000) {
-//			var clickEvent = document.createEvent('MouseEvents');
-//			clickEvent.initMouseEvent('click', true, true, window,
-//				1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-//				false, false, false, false, 0, null);
-//			touch.target.dispatchEvent(clickEvent);
-//		}
 	},
 
 
@@ -186,13 +178,14 @@ Ext.define('NextThought.view.Main', {
 
 		this.identity = this.sidebar.add({xtype: 'identity'});
 
-		Ext.getDoc().on('touchmove', function (e) {
-			e.preventDefault();
-		});
-
 		if (Ext.is.iPad) {
 			var me = this,
 				optWindow;
+
+			// Prevent two-finger panning
+			Ext.getDoc().on('gesturestart', function (e) {
+				e.preventDefault();
+			});
 
 			/*If user rotates to portrait, display screen saying to rotate it.
 			 * if they rotate back to landscape, destroy screen*/

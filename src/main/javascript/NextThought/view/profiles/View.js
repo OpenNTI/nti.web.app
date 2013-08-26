@@ -3,14 +3,8 @@ Ext.define('NextThought.view.profiles.View', {
 	alias: 'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
-		'NextThought.view.ResourceNotFound',
-		'NextThought.modules.TouchScrollSender'
+		'NextThought.view.ResourceNotFound'
 	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
-	],
-
 
 	defaultType: 'profile-panel',
 	layout: 'auto',
@@ -20,15 +14,17 @@ Ext.define('NextThought.view.profiles.View', {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+	},
 
-		this.buildModule('modules', 'touchScrollSender', {container: this, moduleName: 'profileTouchSender'});
-		this.on('touchScroll', function (ele, deltaY) {
-			this.scrollBy(0, deltaY, false);
-		}, this);
-		this.on('touchElementAt', function (x, y, callback) {
-			var element = Ext.getDoc().dom.elementFromPoint(x, y);
-			callback(element);
-		});
+
+	afterRender: function () {
+		this.callParent(arguments);
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	},
 
 

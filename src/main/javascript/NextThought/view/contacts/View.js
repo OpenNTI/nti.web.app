@@ -2,17 +2,11 @@ Ext.define('NextThought.view.contacts.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.contacts-view-container',
 	requires: [
-		'NextThought.modules.TouchSender',
 		'NextThought.view.BoundPanel',
 		'NextThought.view.contacts.Grouping',
 		'NextThought.view.contacts.TabPanel',
 		'NextThought.view.contacts.GroupButtons',
-		'NextThought.view.contacts.ListButtons',
-		'NextThought.view.contacts.TouchHandler'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.contacts.ListButtons'
 	],
 
 	cls: 'contacts-view',
@@ -88,6 +82,17 @@ Ext.define('NextThought.view.contacts.View', {
 		me.on('resize', function () {
 			me.tabs.setHeight(me.getHeight());
 		});
+	},
+
+
+	afterRender: function () {
+		this.callParent(arguments);
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	},
 
 

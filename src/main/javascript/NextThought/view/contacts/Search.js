@@ -4,12 +4,7 @@ Ext.define('NextThought.view.contacts.Search', {
 	alias: 'widget.contact-search',
 	requires: [
 		'NextThought.view.form.fields.SimpleTextField',
-		'NextThought.view.account.contacts.management.Popout',
-		'NextThought.modules.TouchSender'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.account.contacts.management.Popout'
 	],
 
 	floating: true,
@@ -117,23 +112,6 @@ Ext.define('NextThought.view.contacts.Search', {
 			changed: this.search,
 			clear: this.clearResults
 		});
-
-		if (Ext.is.iPad) {
-			this.buildModule('modules', 'touchSender', {container: this.view});
-			this.mon(this.view, {
-				scope: this,
-				'touchScroll': function (ele, deltaY, deltaX) {
-					this.view.scrollBy(0, deltaY, false);
-				},
-				'touchTap': function (ele) {
-					ele.click();
-				},
-				'touchElementAt': function (x, y, callback) {
-					var element = Ext.getDoc().dom.elementFromPoint(x, y);
-					callback(element);
-				}
-			}, this);
-		}
 	},
 
 
@@ -150,8 +128,13 @@ Ext.define('NextThought.view.contacts.Search', {
 			Ext.getBody().on('click', me.detectBlur, me);
 		}, 1);
 
-		// On iPad, window should scroll back to top after keyboard is dismissed
 		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+
+			// Window should scroll back to top after keyboard is dismissed
 			me.mon(me.el.down('input'), {
 				blur: function () {
 					window.scrollTo(0, 0);
