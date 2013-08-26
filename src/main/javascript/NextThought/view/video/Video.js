@@ -347,6 +347,7 @@ Ext.define('NextThought.view.video.Video',{
 	deactivatePlayer: function(){
 		if(this.activeVideoService){
 			try{
+				console.log('Clearing command queue for ', this.activeVideoService, ' as part of deactivate');
 				delete this.commandQueue[this.activeVideoService];
 				this.issueCommand(this.activeVideoService,'deactivate', null, true);
 			}
@@ -466,6 +467,7 @@ Ext.define('NextThought.view.video.Video',{
 			//not visible
 			else if(k===service){
 				v.show();
+				console.debug('Stopping playback because not visible....');
 				me.stopPlayback();
 			}
 

@@ -86,7 +86,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	UICONF_ID: '15491291',
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
 	LEAD_HTML5: (!Ext.isIE9).toString(),
-	
+
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
 	    this.globals = {};
@@ -263,10 +263,33 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		console.log(this.id,' Kaltura load called with source', source);
 		var kalturaData;
 
-		source = Ext.isArray(source) ? source[0] : source;
+		//We seen the player get confused if you try and changeMedia while
+		//its already changing media.  It doesn't happen always but sometimes
+		//you end up not getting the corresponding finished loading events.
+		//If we are loading buffer this new load request (possibly overwriting a prior
+		//bufferened load) until the current load is done.
+/*		if(this.loadingSource){
+			console.log('Load in process so defering new load of source', arguments);
+			this.bufferedLoad = arguments;
+			//Play on load is now invalid so can it.
+			delete this.playOnLoad;
+			return;
+		}*/
 
-		//Removed per sean, seems to help the html5 player
-		//this.sendCommand('cleanMedia', undefined, true);
+
+/*
+		//If this source is already loaded treat it like a media ready event
+		if(source === this.currentSource){
+			console.log('Short circuiting load because currentSource is already source', source, this.currentSource);
+			this.mediaReadyHandler();
+			if(offset){
+				this.seek(offset);
+			}
+			return;
+		}
+*/
+
+		source = Ext.isArray(source) ? source[0] : source;
 
 		this.currentSource = source;
 		this.currentStartAt = offset;
@@ -279,8 +302,10 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		delete this.dieOnPlay;
+		delete this.playOnLoad;
+		this.loadingSource = true;
 
-		this.makeNotReady();
+//		this.makeNotReady();
 
 		console.log(this.id, kalturaData, source, offset);
 		this.sendCommand('changeMedia', {entryId: kalturaData[1]}/*, true*/);
@@ -294,7 +319,12 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	play: function(){
+	play: function(autoPlay){
+		if(this.loadingSource && !autoPlay){
+			console.log('Defering play until load complete');
+			this.playOnLoad = true;
+			return;
+		}
 		if(this.dieOnPlay){
 			console.error(this.id,' No video id provided with source');
 			this.fireEvent('player-error', 'kaltura');
@@ -388,16 +418,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	kdpReadyHandler: function(){
-		this.readyHandler();
-	},
-
-
-	kdpEmptyHandler: function(){
-		this.readyHandler();
-	},
-
-
 	makeNotReady: function(){
 		console.log(this.id,' KALTURA player is making self not ready');
 		this.isReady = false;
@@ -406,7 +426,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	readyHandler: (function(){
 		return Ext.Function.createBuffered(function(){
-
 			if(this.onReadyLoadSource){
 				this.load(this.onReadyLoadSource);
 				delete this.onReadyLoadSource;
@@ -445,7 +464,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		if(this.blockPause){
 			console.log(this.id,' Initating blocked pause');
 			delete this.blockPause;
-			this.play();
+			this.play(true);
 			return;
 		}
 
@@ -469,9 +488,45 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
+	maybeDoBufferedLoad: function(){
+		console.debug('Maybe performing buffered load of ', this.bufferedLoad);
+		if(!Ext.isEmpty(this.bufferedLoad)){
+			console.log('Kicking off buffered load');
+			var args = this.bufferedLoad;
+			delete this.bufferedLoad;
+			this.load.apply(this, args);
+			return true;
+		}
+		console.log('Nothing buffered to load.')
+		return false;
+	},
+
+
 	playerErrorHandler: function(){
 		console.error(this.id,' kaltura error ', arguments);
 		this.fireEvent('player-error', 'kaltura');
+	},
+
+
+	changeMediaHandler: function(){
+		console.error('****** CHANGE MEDIA HANDLER *****', arguments);
+		delete this.loadingSource;
+		if(!this.maybeDoBufferedLoad() && this.playOnLoad){
+			console.log('Acting on defered play because load complete');
+			delete this.playOnLoad;
+			this.play();
+		}
+	},
+
+
+	kdpReadyHandler: function(){
+		console.log(this.id, 'KDP ready handler fired');
+		this.readyHandler();
+	},
+
+
+	kdpEmptyHandler: function(){
+		this.readyHandler();
 	},
 
 
@@ -489,9 +544,16 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.readyHandler();
 	},
 
-	entryReadyHandler: function(){
-		console.log(this.id,' This entry is ready');
+	entryReadyHandler: function(obj){
+		var data = obj.data || [],
+			vid = data[0] || {};
+		console.log(this.id,' This entry is ready with id', vid.id);
 		this.readyHandler();
+	},
+
+
+	entryFailedHander: function(){
+		console.log('ENTRY Failed handler');
 	},
 
 	mediaLoadedHandler: function(){
@@ -500,6 +562,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 	mediaReadyHandler: function(){
+		console.log(this.id,' MEDIA Ready', arguments);
 		this.readyHandler();
 	},
 
@@ -544,7 +607,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 						'singlePluginLoaded', 'singlePluginFailedToLoad','mediaLoaded', 'entryReady',
 						'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange',
 						'playerUpdatePlayhead','playerPlayEnd','mediaLoadError', 'readyToLoad',
-						'entryFailed', 'entryNotAvailable'],
+						'entryFailed', 'entryNotAvailable', 'changeMedia'],
 					i = events.length - 1;
 
 				for(i; i>=0; i--){
