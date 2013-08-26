@@ -165,8 +165,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.on('destroy','destroy',this.toolbar);
 		this.on('destroy','destroy',this.identity);
-
-		this.mon(this.identity,'profile-link-clicked','destroy');
+		this.on('exit-viewer', 'exitViewer', this);
 
 		this.addVideoPlayer(videoWidth);
 		this.activeVideoPlayerType = 'video-focus';
@@ -176,14 +175,15 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			'switch-video-viewer': 'switchVideoViewer'
 		});
 
-		this.mon(this.toolbar, 'exit-viewer', function(){
-			console.log('about to exit the video viewer');
-			this.destroy();
-			this.fireEvent('exited', this);
-		}, this);
-
 		this.adjustOnResize();
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
+	},
+
+
+	exitViewer: function(){
+		console.log('about to exit the video viewer');
+		this.destroy();
+		this.fireEvent('exited', this);
 	},
 
 

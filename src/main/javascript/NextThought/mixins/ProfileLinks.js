@@ -4,17 +4,29 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 	//the scope is being set by the caller
 	function onUserNameClick(e){
 		if(e){e.stopEvent();}
-		var u = this.userObject || this.user,
-			event = 'profile-link-clicked';
 
-		this.enableBubble(event);
-		this.fireEvent(event,u);
-
-		if(u && Ext.isFunction(u.getProfileUrl)){
-			this.fireEvent('change-hash', u.getProfileUrl());
+		function fin(go){
+			if(go){
+				if(u && Ext.isFunction(u.getProfileUrl)){
+					me.enableBubble('before-profile-navigation');
+					me.fireEvent('before-profile-navigation', u);
+					me.fireEvent('change-hash', u.getProfileUrl());
+				}
+				else {
+					console.error('This (',me,') does not have a user object');
+				}
+			}
 		}
-		else {
-			console.error('This (',this,') does not have a user object');
+
+		var u = this.userObject || this.user,
+			event = 'profile-link-clicked', me = this;
+
+		// NOTE: Here we want to fire the event with a callback,
+		// that way whoever listens to the event will choose
+		// to either cancel the event, or continue the navigation.
+		// If no one does, callback.
+		if(this.fireEvent(event, u, fin, this) !== false){
+			fin(true);
 		}
 		return false;
 	}
@@ -24,9 +36,9 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 		var Popup = NextThought.view.account.contacts.management.Popout,
 			pop,
 			user = this.userObject || this.user;
-			
+
 		if(!user || this instanceof Popup || (!el.parent('.activity-popout') && !Popup.beforeShowPopup(user, el))){ return; }
-		
+
 		pop = contactCardPopout;
 
 		if(!pop || pop.isDestroyed){
@@ -74,7 +86,7 @@ Ext.define('NextThought.mixins.ProfileLinks',function(){
 					click: onUserNameClick
 				};
 
-			
+
 			Ext.each(arguments,function(el){
 				el = Ext.get(el);
 				if(!Ext.isEmpty(el)){

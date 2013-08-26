@@ -42,6 +42,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.currentType = 'video-focus';
+		this.enableBubble('exit-viewer');
 	},
 
 

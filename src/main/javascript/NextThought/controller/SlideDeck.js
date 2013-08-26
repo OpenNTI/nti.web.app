@@ -17,7 +17,8 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.listen({
 			'component':{
 				'*':{
-					'start-media-player': 'launchMediaPlayer'
+					'start-media-player': 'launchMediaPlayer',
+					'profile-link-clicked': 'maybeCloseMediaViewer'
 				},
 				'slidedeck-transcript': {
 					'load-presentation-userdata': 'loadDataForPresentation'
@@ -231,6 +232,29 @@ Ext.define('NextThought.controller.SlideDeck',{
 				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath, rec, options);
 				return false;
 			}
+		}
+		return true;
+	},
+
+
+	maybeCloseMediaViewer: function(user, callback, scope){
+		var me = this;
+		if(this.activeMediaPlayer){
+			Ext.Msg.show({
+				msg: 'You are about to exit the media viewer.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				icon: 'warning-red',
+				buttonText: {'ok': 'caution:Take me anyway'},
+				title: 'Are you sure?',
+				fn: function (str) {
+					if (str === 'ok') {
+						//console.debug('should dismiss the MEDIA VIEWER prior to navigating: ', arguments);
+						me.activeMediaPlayer.fireEvent('exit-viewer');
+						Ext.callback(callback, scope, [true]);
+					}
+				}
+			});
+			return false;
 		}
 		return true;
 	}
