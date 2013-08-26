@@ -483,7 +483,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//this is only for input/textarea elements
 		el = Ext.getDom(el);
 		if (typeof el.selectionStart === "number") {
-			console.log("1");
 			el.selectionStart = el.selectionEnd = el.value.length;
 		}
 		else if (el.createTextRange !== undefined) {
@@ -501,7 +500,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			selection.removeAllRanges();
 			selection.addRange(range);
 		}
-		console.log("4");
 	},
 
 
@@ -597,7 +595,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.el.addCls(['active', 'disabled']);
 		this.el.down('.content').set({'contenteditable': undefined});
 		if (Ext.is.iPad) {
-			console.log("disable - scroll to top");
 			window.scrollTo(0, document.activeElement.top);
 		}
 	},
@@ -610,13 +607,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	deactivate: function () {
+        if(Ext.is.iPad && this.contentEl){
+            this.contentEl.blur();
+        }
 		this.el.removeCls('active');
 		this.lastRange = null;
 		this.cleanTrackedParts();
 		this.clearError();
 		this.fireEvent('deactivated-editor', this);
 		if (Ext.is.iPad) {
-			console.log("deactivate, scroll doc to top");
 			window.scrollTo(0, document.activeElement.top);
 		}
 	},
@@ -1770,7 +1769,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	setValue: function (text, putCursorAtEnd, focus) {
 		this.setHTML(Ext.String.htmlEncode(text));
 		if (focus || putCursorAtEnd) {
-			console.log('focus(putCursorAtEnd');
 			this.focus(putCursorAtEnd);
 		}
 	},
