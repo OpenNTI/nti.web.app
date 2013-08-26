@@ -79,7 +79,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 			return (screenWidth - width) / 2;
 		},
-		setClasses: function(el){
+		setClasses: function(el, cmp){
+			var trans = cmp.down('slidedeck-transcript');
+			if(trans){
+				trans.fireEvent('will-hide-transcript', cmp);
+			}
 			el.removeCls('small-video-player');
 			el.addCls('full-video-player');
 		}
@@ -294,7 +298,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.videoplayer.destroy();
 		this.activeVideoPlayerType = type;
 		this.addVideoPlayer(width, left);
-		dim.setClasses(this.el);
+		dim.setClasses(this.el, this);
 		Ext.defer(function(){
 			me.adjustOnResize();
 		}, 1, me);

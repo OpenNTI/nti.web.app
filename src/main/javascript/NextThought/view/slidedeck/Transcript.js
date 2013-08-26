@@ -265,6 +265,12 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			scope:this,
 			'mousedown': 'mayBeHideAnnotationView'
 		});
+
+		this.on('will-hide-transcript', function(){
+			if(this.annotationView){
+				this.annotationView.hide();
+			}
+		}, this);
 	},
 
 
