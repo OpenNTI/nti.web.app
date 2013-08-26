@@ -194,6 +194,7 @@
 				@include icon('modal-yellow-sign',$top: 9px,$left: 14px);
 			}
 
+			&.x-message-box-error,
 			&.warning-red {
 				@include icon('modal-red-sign',$top: 9px,$left: 14px);
 			}

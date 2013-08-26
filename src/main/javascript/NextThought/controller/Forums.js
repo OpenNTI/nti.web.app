@@ -474,15 +474,23 @@ Ext.define('NextThought.controller.Forums', {
 						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
 					}
 					catch(e){
-						var msgCfg = {};
+						var msgCfg = {
+							icon: Ext.Msg.ERROR,
+							title: 'Oops!',
+							msg: 'There was a problem looking up that resource.\nPlease try again later.'
+						};
 
 						pair[1] = null;
 						console.error('Could not load record',Globals.getError(e));
 						if(resp.status === 404){
 							msgCfg.title = 'Not Found!';
 							msgCfg.msg = 'The object you are looking for no longer exists.';
-							alert(msgCfg);
 						}
+						else if(resp.status === 403){
+							msgCfg.title = 'Sorry.';
+							msgCfg.msg = 'You do not have access to this resource';
+						}
+						alert(msgCfg);
 					}
 					maybeFinish();
 				}
