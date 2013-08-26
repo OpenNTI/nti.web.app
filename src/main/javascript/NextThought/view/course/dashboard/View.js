@@ -1,14 +1,14 @@
-Ext.define('NextThought.view.course.dashboard.View',{
+Ext.define('NextThought.view.course.dashboard.View', {
 	extend: 'NextThought.view.course.dashboard.AbstractView',
 	alias: 'widget.course-dashboard',
 
-	requires:[
+	requires: [
 		'NextThought.view.course.dashboard.tiles.*'
 	],
 
 
-	onCourseChanged: function(pageInfo){
-		if(!pageInfo.isPartOfCourse()){
+	onCourseChanged: function (pageInfo) {
+		if (!pageInfo.isPartOfCourse()) {
 			this.tileContainer.removeAll(true);
 			return;
 		}
@@ -19,27 +19,27 @@ Ext.define('NextThought.view.course.dashboard.View',{
 			courseNavStore,
 			date = this.self.dateOverride || new Date();//now
 
-		if( l && l !== ContentUtils.NO_LOCATION ){
+		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 			courseNavStore = new NextThought.store.course.Navigation({data: toc});
 
-			if( me.el ){
+			if (me.el) {
 				me.el.mask('Loading...');
 			}
 
 			this.queryTiles(
-				date,course,l,
+				date, course, l,
 				courseNavStore.getCurrentBy(date),
-				function(tiles){
-					try{
+				function (tiles) {
+					try {
 						me.setTiles(tiles);
 					}
-					catch(e){
-						console.error(e.stack|| e.message || e);
+					catch (e) {
+						console.error(e.stack || e.message || e);
 					}
-					finally{
-						if( me.el ){
+					finally {
+						if (me.el) {
 							me.el.unmask();
 						}
 					}
@@ -63,33 +63,33 @@ Ext.define('NextThought.view.course.dashboard.View',{
 	 * @param {Function} callback
 	 * @param {Array} callback.tiles
 	 */
-	queryTiles: function(date, course, location, courseNode, callback){
+	queryTiles: function (date, course, location, courseNode, callback) {
 		var NS = NextThought.view.course.dashboard.tiles,
 			tiles = [],
 			queue = [],
 			me = this,
 			push = tiles.push;
 
-		Ext.Object.each(NS,function(clsName,cls){
+		Ext.Object.each(NS, function (clsName, cls) {
 			var fn = cls.getTileFor;
-			if(fn){
-				fn = Ext.bind(fn,cls);
+			if (fn) {
+				fn = Ext.bind(fn, cls);
 				fn.$test = cls.$className;
 				queue.push(fn);
 			}
 		});
 
-		Ext.each(queue.slice(),function(fn){
-			console.log(fn.$test+" Started");
-			fn(date, course, location, courseNode, function finish(o){
-				console.log(fn.$test+" Finished");
+		Ext.each(queue.slice(), function (fn) {
+			console.log(fn.$test + " Started");
+			fn(date, course, location, courseNode, function finish(o) {
+				console.log(fn.$test + " Finished");
 				queue.pop();
-				if( o ){
-					push[Ext.isArray(o)?'apply':'call'](tiles,o);
+				if (o) {
+					push[Ext.isArray(o) ? 'apply' : 'call'](tiles, o);
 				}
 
-				if(queue.length===0){
-					Ext.callback(callback,me,[tiles]);
+				if (queue.length === 0) {
+					Ext.callback(callback, me, [tiles]);
 				}
 			});
 		});
