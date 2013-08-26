@@ -252,6 +252,7 @@ Ext.define('NextThought.view.video.transcript.Transcript',{
 
 		this.on({
 			scope: this,
+			'beforeselect':function(){return false;},
 			'itemmouseenter': 'mouseOver',
 			'itemmouseleave': 'mouseOut',
 			'itemclick': 'cueSelected',
