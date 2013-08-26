@@ -1,6 +1,6 @@
 //Styles defined in _history-view.scss
 //TODO: Delete this once we permanently enable the new 'activity'/history view.
-Ext.define('NextThought.view.account.history.View',{
+Ext.define('NextThought.view.account.history.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.history-view',
 	requires: [
@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.history.View',{
 	],
 
 	title: 'History',
-	tabConfig:{tooltip: 'History'},
+	tabConfig: {tooltip: 'History'},
 	iconCls: 'history',
 	ui: 'history',
 	cls: 'history-view',
@@ -21,9 +21,9 @@ Ext.define('NextThought.view.account.history.View',{
 		type: 'vbox',
 		align: 'stretch'
 	},
-	
-	
-	constructor: function(){
+
+
+	constructor: function () {
 		this.items = [
 			{xtype: 'box', cls: 'view-title', autoEl: {}},
 			{
@@ -36,55 +36,60 @@ Ext.define('NextThought.view.account.history.View',{
 					{
 						xtype: 'secondary-tabpanel',
 						stateId: 'history-side-view',
-						defaults: {xtype:'user-data-panel'},
+						defaults: {xtype: 'user-data-panel'},
 						items: [
-							{ title: 'Notes', mimeType: ['note','highlight'], xtype: isFeature('remove-history-tab')?'user-history-panel':'user-data-panel' },
-							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab')?'user-history-favorite-panel':'user-data-panel' }
+							{ title: 'Notes', mimeType: ['note', 'highlight'], xtype: isFeature('remove-history-tab') ? 'user-history-panel' : 'user-data-panel' },
+							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab') ? 'user-history-favorite-panel' : 'user-data-panel' }
 						]
 					}
 				]
 			}
 		];
-		
+
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var chatTab = this.down('[title=Chats]');
-		if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)){
+		if (!$AppConfig.service.canChat() && !Ext.isEmpty(chatTab)) {
 			chatTab.destroy();
 		}
 	},
 
-	getActiveView: function(){
+
+	getActiveView: function () {
 		return this.down("[title=Notes]").isVisible() ? this.down("[title=Notes]") : this.down("[title=Bookmarks]");
 	},
 
-	applyFilters: function(filter){
-		if(Ext.isEmpty(filter)){
+
+	applyFilters: function (filter) {
+		if (Ext.isEmpty(filter)) {
 			return;
 		}
 
 		var v = this.getActiveView(),
-			s = v  && v.getStore(),
+			s = v && v.getStore(),
 			selectedMimeTypes = [];
 
 		s.removeAll();
 		s.clearFilter();
-		if(filter){
-			Ext.each( filter.value, function(item){
+		if (filter) {
+			Ext.each(filter.value, function (item) {
 				var mt = item.value;
-				if(mt){
+				if (mt) {
 					selectedMimeTypes.push(mt);
 				}
 			});
-			s.filter([{filterFn: function(item) {
-				return filter.test(item); }} ]);
+			s.filter([
+				{filterFn: function (item) {
+					return filter.test(item);
+				}}
+			]);
 		}
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'relevance',
 			sortOrder: 'descending',
 			accept: selectedMimeTypes.join(',')
