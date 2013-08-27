@@ -1051,9 +1051,12 @@ $experimental-support-for-svg: true;
 
         .video-player{
             position: relative;
-            margin: 10px auto;
             top: 70px;
             left: 0;
+
+	        .content-video{
+		        margin: 10px auto;
+	        }
         }
 
         .body{

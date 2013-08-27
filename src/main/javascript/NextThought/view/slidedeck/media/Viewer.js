@@ -62,7 +62,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
-				defaultWidth = screenWidth - 20,
+				defaultWidth = screenWidth - 40,
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = (el && el.getY()) || 0,
 				diff = screenHeight - (y + defaultHeight),
@@ -75,9 +75,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			return Math.max(newWidth, 512);
 		},
 		left: function(width){
-			var screenWidth = Ext.Element.getViewportWidth();
-
-			return (screenWidth - width) / 2;
+			return 0;
 		},
 		setClasses: function(el, cmp){
 			var trans = cmp.down('slidedeck-transcript');
@@ -212,9 +210,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			}else{
 				tEl.parent('.transcript-view').hide();
 			}
+			videoWidth += 80;
+			this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
 		}
-		videoWidth += 80;
-		this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
 		console.log('Media viewer resizing');
 	},
 
@@ -227,8 +225,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this
 		});
-
-		this.videoPlayerEl.setLeft(left || 10);
 
 		if(this.record){
 			var range = this.record.get('applicableRange') || {},
