@@ -273,6 +273,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				this.annotationView.hide();
 			}
 		}, this);
+
+		if (Ext.is.iPad) {
+			// Absorb event for scrolling
+			this.getEl().dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
 	},
 
 
