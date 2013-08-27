@@ -411,6 +411,12 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	canEmbedVideo: function() {
+		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
+		return !!coll;
+	},
+
+
 	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 	//       until permissioning of actions can be accomplished.
 	canShareRedaction: function(){
