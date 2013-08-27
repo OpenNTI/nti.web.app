@@ -998,6 +998,7 @@ $experimental-support-for-svg: true;
 		overflow-y: auto;
 		overflow-x: hidden;
 		position: relative;
+		-webkit-overflow-scrolling: touch;
 
 		.x-container-transcript{
 			width: auto !important;
