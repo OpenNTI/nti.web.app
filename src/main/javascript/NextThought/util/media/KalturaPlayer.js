@@ -341,6 +341,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				}
 				else{
 					console.log('Buffered load short circuited retry');
+					this.fireEvent('player-error', 'kaltura');
 				}
 			}
 			else{
