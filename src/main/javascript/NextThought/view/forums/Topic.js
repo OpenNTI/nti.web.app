@@ -72,7 +72,9 @@ Ext.define('NextThought.view.forums.Topic', {
 				]},
 				{ cls: 'comment-box', cn: [
 					{ cls: 'response', cn: [
-						{ tag: 'span', cls: 'reply link', html: 'Add a Comment' },
+						{ tag: 'tpl', 'if':'canReply', cn: [
+							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
+						]},
 						{ tag: 'span', cls: 'report link', html: 'Report' }
 					]},
 					{ cls: 'editor-box'}
@@ -172,7 +174,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		Ext.apply(r, {
 			path: this.path,
 			showName: true,
-			headerCls: 'forum-topic'
+			headerCls: 'forum-topic',
+			canReply: this.canReply()
 		});
 
 		me.setPath();
@@ -246,19 +249,21 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		if(this.replyLinkEl){
+			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.commentEditorBox});
-		this.mon(this.replyLinkEl, 'click', this.showEditor, this);
-		this.mon(this.editor, {
-			scope: this,
-			'activated-editor': Ext.bind(box.hide, box),
-			'deactivated-editor': Ext.bind(box.show, box),
-			'no-body-content': function (editor, bodyEl) {
-				editor.markError(bodyEl, 'You need to type something');
-				return false;
-			}
-		});
+			this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.commentEditorBox});
+			this.mon(this.replyLinkEl,'click',this.showEditor,this);
+			this.mon(this.editor,{
+				scope: this,
+				'activated-editor':Ext.bind(box.hide,box),
+				'deactivated-editor':Ext.bind(box.show,box),
+				'no-body-content': function(editor,bodyEl){
+					editor.markError(bodyEl,'You need to type something');
+					return false;
+				}
+			});
+		}
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
@@ -269,9 +274,12 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	},
 
-
-	setPublishAndSharingState: function () {
+	canReply: function(){
+		return Boolean(this.record && this.record.getLink('add'));
 	},
+
+
+	setPublishAndSharingState: function(){},
 
 
 	scrollCommentIntoView: function (commentId) {
@@ -438,8 +446,10 @@ Ext.define('NextThought.view.forums.Topic', {
 			}
 		});
 
-		delete this.editor.ownerCt;
-		this.editor.destroy();
+		if(this.editor){
+			delete this.editor.ownerCt;
+			this.editor.destroy();
+		}
 		var h = this.record.get('headline');
 
 		if (this.publishStateEl) {

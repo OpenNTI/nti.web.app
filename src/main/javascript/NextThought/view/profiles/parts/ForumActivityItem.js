@@ -70,13 +70,20 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 			cls: 'topic-replies',
 			cn:['{%this.renderContainer(out,values)%}']
 		},{
-			cls: 'respond', cn: {
-			cn: [ {
-				cls: 'reply-options',
-				cn: [
-					{ cls: 'reply', html: 'Add a comment' }
-				]
-			} ]}
+			tag: 'tpl', 'if': 'canReply', cn: [
+				{cls: 'respond', cn: {
+					cn: [
+						{tag: 'tpl', 'if': 'canReply', cn: [
+							{
+								cls: 'reply-options',
+								cn: [
+									{ cls: 'reply', html: 'Add a comment' }
+								]
+							}
+						]}
+					]
+				}}
+			]
 		}
 	]),
 
@@ -123,7 +130,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		Ext.apply(rd, {
 			'isModifiable': isMe(username),
 			headline: h.getData(),
-			date: Ext.Date.format(h.get('CreatedTime'),'F j, Y')
+			date: Ext.Date.format(h.get('CreatedTime'),'F j, Y'),
+			canReply: Boolean( r && r.getLink('add') )
 		});
 
 		h.compileBodyContent(me.setBody,me);
@@ -240,11 +248,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 
 		var box = this.replyOptions;
 
-
-		this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.replyBoxEl});
-
-		this.mon(this.replyEl,'click',this.showEditor,this);
-
 		if( this.deleteEl ){
 			this.mon(this.deleteEl,'click',this.onDeletePost,this);
 		}
@@ -268,17 +271,21 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		box.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		if(this.replyEl && box){
+			this.mon(this.replyEl,'click',this.showEditor,this);
+			this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.replyBoxEl});
+			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		this.mon(this.editor,{
-			scope: this,
-			'activated-editor':Ext.bind(box.hide,box,[false]),
-			'deactivated-editor':Ext.bind(box.show,box,[false]),
-			'no-body-content': function(editor,bodyEl){
-				editor.markError(bodyEl,'You need to type something');
-				return false;
-			}
-		});
+			this.mon(this.editor,{
+				scope: this,
+				'activated-editor':Ext.bind(box.hide,box,[false]),
+				'deactivated-editor':Ext.bind(box.show,box,[false]),
+				'no-body-content': function(editor,bodyEl){
+					editor.markError(bodyEl,'You need to type something');
+					return false;
+				}
+			});
+		}
 
 		this.mon(this.record,'destroy',this.destroy,this);
 	},
