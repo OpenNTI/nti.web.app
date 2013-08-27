@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.slidedeck.View',{
+Ext.define('NextThought.view.slidedeck.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-view',
 	requires: [
@@ -27,25 +27,28 @@ Ext.define('NextThought.view.slidedeck.View',{
 		exitEl: '.exit-button'
 	},
 
-	bubbleEvents: ['add','remove','show-editor'],
+	bubbleEvents: ['add', 'remove', 'show-editor'],
 
-	constructor: function(config){
+	constructor: function (config) {
 		var t, vPlaylist;
 
-		config.items = [{
-			xtype: 'container',
-			width: 400,
-			plain: true,
-			ui: 'slidedeck-controls',
-			layout: { type: 'vbox', align: 'stretch' }
-		},{
-			flex: 1,
-			xtype: 'slidedeck-slide'
-		}];
+		config.items = [
+			{
+				xtype: 'container',
+				width: 400,
+				plain: true,
+				ui: 'slidedeck-controls',
+				layout: { type: 'vbox', align: 'stretch' }
+			},
+			{
+				flex: 1,
+				xtype: 'slidedeck-slide'
+			}
+		];
 
 		t = config.items[1];
 
-		if(isFeature('transcript-presentation')){
+		if (isFeature('transcript-presentation')) {
 			t.xtype = 'slidedeck-transcript';
 			t.data = config.transcript;
 			this.hasTranscript = true;
@@ -61,7 +64,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 		return this.callParent([config]);
 	},
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		var store = this.store,
 			start = this.startOn,
@@ -82,23 +85,23 @@ Ext.define('NextThought.view.slidedeck.View',{
 		slide.queue = q;
 
 		//wire up
-		this.mon(q,'select', this.maybeSelect, this);
-		this.mon(q,'slide-selected', function(slide){
-            if(this.down('slidedeck-transcript')){
-                this.down('slidedeck-transcript').selectSlide(slide);
-            }
+		this.mon(q, 'select', this.maybeSelect, this);
+		this.mon(q, 'slide-selected', function (slide) {
+			if (this.down('slidedeck-transcript')) {
+				this.down('slidedeck-transcript').selectSlide(slide);
+			}
 		}, this);
-		this.mon(q, 'beforeselect', function(dvm){
+		this.mon(q, 'beforeselect', function (dvm) {
 			this.wasSelected = dvm.getSelection();
 		}, this);
 
-		this.on('editorActivated',function(){
+		this.on('editorActivated', function () {
 			this.pausedForEditing = v.pausePlayback();
 		}, this);
-		this.on('editorDeactivated', function(){
+		this.on('editorDeactivated', function () {
 			//Don't start back up if the user had us paused explictly
 			//only if we paused for the edit
-			if(this.pausedForEditing){
+			if (this.pausedForEditing) {
 				this.pausedForEditing = false;
 				v.resumePlayback();
 			}
@@ -106,37 +109,39 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		// pause and reply video when share overlay opens and closes
 
-		this.mon(NextThought.getApplication(),'showshare', function(evt, target) {
+		this.mon(NextThought.getApplication(), 'showshare', function (evt, target) {
 			this.pausedForSharing = v.pausePlayback();
 		}, this);
-		this.mon(NextThought.getApplication(),'hideshare', function(evt, target) {
+		this.mon(NextThought.getApplication(), 'hideshare', function (evt, target) {
 			if (this.pausedForSharing) {
 				v.resumePlayback();
 			}
 		}, this);
 
-		if(this.hasTranscript){
+		if (this.hasTranscript) {
 			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', Ext.bind(this.video.jumpVideoToLocation, this.video), this);
 			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
 		}
 	},
 
-	getVideoPlayList: function(store){
+	getVideoPlayList: function (store) {
 		var playList = [];
-		store.each(function(s){ playList.push(s.get('media')); },this);
+		store.each(function (s) {
+			playList.push(s.get('media'));
+		}, this);
 		return playList;
 	},
 
 
-	buildTranscriptStore: function(playList){
-		var s = new Ext.data.Store({proxy:'memory'}),
+	buildTranscriptStore: function (playList) {
+		var s = new Ext.data.Store({proxy: 'memory'}),
 			transcripts = [],
 			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
 			videoObjects = this.getUniqueVideoObjects(playList);
 
-		Ext.each(videoObjects, function(v){
+		Ext.each(videoObjects, function (v) {
 			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader.basePath);
-			if(m){
+			if (m) {
 				transcripts.push(m);
 			}
 		});
@@ -146,17 +151,17 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},
 
 
-	getUniqueVideoObjects: function(playList){
-		var vObjects = [], uniqueIds=[];
+	getUniqueVideoObjects: function (playList) {
+		var vObjects = [], uniqueIds = [];
 
-		Ext.each(playList, function(v){
+		Ext.each(playList, function (v) {
 			var frag = v.get('dom-clone'),
 				video = frag.querySelector('object[type$=ntivideo]');
 
 			vObjects.push(video);
 		});
 
-		vObjects = Ext.Array.filter(vObjects, function(i){
+		vObjects = Ext.Array.filter(vObjects, function (i) {
 			var id = Ext.fly(i).getAttribute('data-ntiid'),
 				ret = !Ext.Array.contains(uniqueIds, id);
 
@@ -168,24 +173,24 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},
 
 
-	actOnMediaHeartBeat: function(){
+	actOnMediaHeartBeat: function () {
 		var s = this.video.getState();
 
-		if(this.hasTranscript){
+		if (this.hasTranscript) {
 			this.down('slidedeck-transcript').syncWithVideo(s);
 		}
 	},
 
 
-	getSlide: function(){
+	getSlide: function () {
 		return this.items.getAt(1);
 	},
 
 
-	doSelect: function(){
+	doSelect: function () {
 		var s = this.getSlide();
 		this.video.updateVideoFromSelection.apply(this.video, arguments);
-		if(s.updateSlide){
+		if (s.updateSlide) {
 			s.updateSlide.apply(s, arguments);
 		}
 	},
@@ -195,28 +200,28 @@ Ext.define('NextThought.view.slidedeck.View',{
 	//so detect that, pause the video if necessary. prompt the user and if they
 	//ignore the warning close the editor, play the video if we paused it, and let the update go on
 	//if the click cancel we leave things in a paused state and the editor open
-	maybeSelect: function(v, slide){
+	maybeSelect: function (v, slide) {
 		var slideView = this.getSlide(),
 			destructiveSelection = slideView.editorActive && slideView.editorActive(),
 			wasPlaying,
 			me = this;
 
-		function actOnSelect(){
+		function actOnSelect() {
 			me.doSelect(v, slide);
 		}
 
-		function allowDestructiveAction(){
-			if(wasPlaying){
+		function allowDestructiveAction() {
+			if (wasPlaying) {
 				me.video.resumePlayback();
 			}
-			if(slideView.activeEditorOwner && slideView.activeEditorOwner.deactivateEditor){
+			if (slideView.activeEditorOwner && slideView.activeEditorOwner.deactivateEditor) {
 				slideView.activeEditorOwner.deactivateEditor();
 			}
 
 			actOnSelect();
 		}
 
-		if(!destructiveSelection){
+		if (!destructiveSelection) {
 			actOnSelect();
 			return;
 		}
@@ -230,11 +235,11 @@ Ext.define('NextThought.view.slidedeck.View',{
 			icon: 'warning-red',
 			buttonText: {'ok': 'caution:Continue'},
 			title: 'Are you sure?',
-			fn: function(str){
-				if(str === 'ok'){
+			fn: function (str) {
+				if (str === 'ok') {
 					allowDestructiveAction();
 				}
-				else{
+				else {
 					v.select(me.wasSelected, false, true);
 				}
 				delete me.wasSelected;
@@ -243,28 +248,32 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 	},
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		var me = this;
 
-		function enterFilter(e) { var k = e.getKey(); return (k === e.ENTER || k === e.SPACE); }
-		function close(){
+		function enterFilter(e) {
+			var k = e.getKey();
+			return (k === e.ENTER || k === e.SPACE);
+		}
+
+		function close() {
 			var slide = me.getSlide().slide;
 
-			if(me.fireEvent('beforeexit', me, slide) === false){
+			if (me.fireEvent('beforeexit', me, slide) === false) {
 				return;
 			}
 			me.destroy();
 			me.fireEvent('exited', me, slide);
 		}
 
-		this.mon(this.exitEl,{
+		this.mon(this.exitEl, {
 			click: close,
-			keydown: Ext.Function.createInterceptor(close,enterFilter,null,null)
+			keydown: Ext.Function.createInterceptor(close, enterFilter, null, null)
 		});
-		
-		this.identity = Ext.widget({xtype:'identity',renderTo: this.getEl(), floatParent: this});
-		this.on('destroy','destroy',this.identity);
-		this.mon(this.identity,'before-profile-navigation','destroy');
+
+		this.identity = Ext.widget({xtype: 'identity', renderTo: this.getEl(), floatParent: this});
+		this.on('destroy', 'destroy', this.identity);
+		this.mon(this.identity, 'before-profile-navigation', 'destroy');
 	}
 });

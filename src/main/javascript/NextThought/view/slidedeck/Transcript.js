@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.slidedeck.Transcript', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-transcript',
-	requires:[
+	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Store',
 		'NextThought.view.video.transcript.Transcript',
@@ -13,23 +13,23 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		'NextThought.view.slidedeck.transcript.VideoTitle'
 	],
 
-	ui:'transcript',
-	cls:'transcript-view',
-	items:[],
+	ui: 'transcript',
+	cls: 'transcript-view',
+	items: [],
 
 	lineFilterId: 'plinefilter',
 
-	bubbleEvents: ['add', 'remove','editor-open','editorActivated','editorDeactivated'],
+	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
 
-	initComponent: function(){
+	initComponent: function () {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
 
 		//TODO: this needs to be more centralized.
-		if(this.slideStore){
+		if (this.slideStore) {
 			this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
 			this.hasSlides = true;
 		}
-		if(this.transcript){
+		if (this.transcript) {
 			this.setupSingleTranscript(this.transcript);
 			this.hasSlides = false;
 		}
@@ -37,9 +37,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		this.cmpMap = {};
 
-        if(!this.slideStore && !this.transcript){
-           this.hasNoPresentationParts = true;
-        }
+		if (!this.slideStore && !this.transcript) {
+			this.hasNoPresentationParts = true;
+		}
 		this.fireEvent('uses-page-stores', this);
 
 		this.fireEvent('listens-to-page-stores', this, {
@@ -48,62 +48,64 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			remove: 'onStoreEventsRemove'
 		});
 
-		Ext.EventManager.onWindowResize(function(){
+		Ext.EventManager.onWindowResize(function () {
 			this.fireEvent('sync-height');
-		},this,{buffer: 250});
+		}, this, {buffer: 250});
 
-		this.on('resize', function(){
+		this.on('resize', function () {
 			this.fireEvent('sync-height');
 		}, this);
 	},
 
 
-    beforeRender: function(){
-        this.callParent(arguments);
-        if(this.hasNoPresentationParts){
-            this.fireEvent('no-presentation-parts', this);
-        }
-    },
+	beforeRender: function () {
+		this.callParent(arguments);
+		if (this.hasNoPresentationParts) {
+			this.fireEvent('no-presentation-parts', this);
+		}
+	},
 
 
-	bindStoreToComponents: function(store, cmps){
+	bindStoreToComponents: function (store, cmps) {
 
 		this.cmpMap[store.containerId] = cmps;
 
-		Ext.each(cmps, function(cmp){
+		Ext.each(cmps, function (cmp) {
 			this.fireEvent('register-records', store, store.getRange(), cmp);
 			cmp.bindToStore(store);
 		});
 
-		if(this.record){
+		if (this.record) {
 			var r, sEl,
 				m = this.noteOverlay.annotationManager,
 				k = this.record, o, mc, me = this, win;
 
 			// Since we've already added the record when its component registered its records,
 			// let's just get its annotation object.
-			o = m.findBy(function(item){ return item.record.getId() === k.getId(); });
-			if(!o){
+			o = m.findBy(function (item) {
+				return item.record.getId() === k.getId();
+			});
+			if (!o) {
 				console.warn('could not find annotation for record', k, ' in annotationManager: ', m);
 				return;
 			}
 
 			r = o.range;
-			if(r){
+			if (r) {
 				console.log('Need to scroll to range', r);
 				sEl = this.el.getScrollingEl();
-				if(sEl){
+				if (sEl) {
 					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
 				}
 
 				mc = new Ext.util.MixedCollection();
 				mc.add(o);
-				this.showAnnotations( mc, o.line);
-				if(this.scrollToId){
+				this.showAnnotations(mc, o.line);
+				if (this.scrollToId) {
 
 					// NOTE: If it's a reply, we're create the note viewer ourselves,
 					// since we want to specify the scrollToId property.
-					win =  Ext.widget({
+					win = Ext.widget({
 						autoShow: true,
 						xtype: 'note-window',
 						record: this.record,
@@ -124,26 +126,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 	},
 
-	onStoreEventsAdd:function(store, records){
+	onStoreEventsAdd: function (store, records) {
 		var cmps = this.cmpMap[store.containerId || ''];
-		if(cmps){
-			Ext.each(cmps, function(c){
+		if (cmps) {
+			Ext.each(cmps, function (c) {
 				this.fireEvent('register-records', store, records, c);
 			});
 		}
 	},
 
 
-	onStoreEventsRemove: function(store, records){
+	onStoreEventsRemove: function (store, records) {
 		var cmps = this.cmpMap[store.containerId || ''];
-		if(cmps){
-			Ext.each(cmps, function(c){
+		if (cmps) {
+			Ext.each(cmps, function (c) {
 				this.fireEvent('unregister-records', store, records, c);
 			});
 		}
 	},
 
-	setupSingleTranscript: function(transcript){
+	setupSingleTranscript: function (transcript) {
 		var items = [];
 		items.push({
 			xtype: 'video-title-component',
@@ -151,31 +153,31 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 		items.push(
 			{
-				xtype:'video-transcript',
-				flex:1,
+				xtype: 'video-transcript',
+				flex: 1,
 				transcript: transcript,
-				layout:{
-					type:'vbox',
+				layout: {
+					type: 'vbox',
 					align: 'stretch'
 				}
-		});
+			});
 
 		this.items = items;
 	},
 
 
-	buildPresentationTimeLine: function(slideStore, transcriptStore){
+	buildPresentationTimeLine: function (slideStore, transcriptStore) {
 		var items = [], lastVideoId;
 
-		function itemWithId(list, id){
+		function itemWithId(list, id) {
 			var item = null;
 
-			if(Ext.isEmpty(list) || !id){
+			if (Ext.isEmpty(list) || !id) {
 				return null;
 			}
 
-			Ext.each(list, function(i){
-				if(i.get('NTIID') === id){
+			Ext.each(list, function (i) {
+				if (i.get('NTIID') === id) {
 					item = i;
 				}
 				return !item;
@@ -184,7 +186,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return item;
 		}
 
-		slideStore.each(function(slide){
+		slideStore.each(function (slide) {
 			var m = slide.get('media'),
 				vid = m && m.getAssociatedVideoId(),
 				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
@@ -193,10 +195,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
 
-			if(!lastVideoId || lastVideoId !== vid){
+			if (!lastVideoId || lastVideoId !== vid) {
 				lastVideoId = vid;
 				videoObj = itemWithId(this.videoPlaylist, lastVideoId);
-				if(videoObj){
+				if (videoObj) {
 					items.push({
 						xtype: 'video-title-component',
 						video: videoObj
@@ -205,15 +207,15 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			}
 
 			items.push({
-				xtype:'slide-component',
+				xtype: 'slide-component',
 				slide: slide,
-				layout:{
-					type:'vbox',
+				layout: {
+					type: 'vbox',
 					align: 'stretch'
 				}
 			});
 
-			if(t){
+			if (t) {
 				// NOTE: make a copy of the transcript record,
 				// since many slide can have the same transcript but different start and end time.
 				t = t.copy();
@@ -221,11 +223,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				t.set('desired-time-end', end);
 
 				items.push({
-					xtype:'video-transcript',
-					flex:1,
+					xtype: 'video-transcript',
+					flex: 1,
 					transcript: t,
-					layout:{
-						type:'vbox',
+					layout: {
+						type: 'vbox',
 						align: 'stretch'
 					}
 				});
@@ -236,23 +238,23 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	getTranscriptForVideo: function(id, transcriptStore){
+	getTranscriptForVideo: function (id, transcriptStore) {
 		var s = transcriptStore.findRecord('associatedVideoId', id);
 	},
 
 
-	setupNoteOverlay: function(){
+	setupNoteOverlay: function () {
 		var me = this;
 		this.noteOverlay = Ext.widget('presentation-note-overlay', {reader: this, readerHeight: this.getHeight()});
-		this.on('destroy','destroy',this.relayEvents(this.noteOverlay,[ 'editorActivated','editorDeactivated' ]));
+		this.on('destroy', 'destroy', this.relayEvents(this.noteOverlay, [ 'editorActivated', 'editorDeactivated' ]));
 
-		Ext.each(this.items.items, function(vt){
+		Ext.each(this.items.items, function (vt) {
 			me.noteOverlay.registerReaderView(vt);
 		});
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		this.ownerCt.hasSlides = this.hasSlides;
@@ -262,85 +264,87 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.addMask();
 		this.maybeLoadData();
 		this.mon(this.el, {
-			scope:this,
+			scope: this,
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
-		this.on('will-hide-transcript', function(){
-			if(this.annotationView){
+		this.on('will-hide-transcript', function () {
+			if (this.annotationView) {
 				this.annotationView.hide();
 			}
 		}, this);
 	},
 
 
-	getPartComponents: function(){
-		return Ext.Array.filter(this.items.items, function(p){return p!==undefined;});
+	getPartComponents: function () {
+		return Ext.Array.filter(this.items.items, function (p) {
+			return p !== undefined;
+		});
 	},
 
 
-    getMaskTarget: function(){
-        var  root = this;
-        while(root.ownerCt){
-            root = root.ownerCt;
-        }
+	getMaskTarget: function () {
+		var root = this;
+		while (root.ownerCt) {
+			root = root.ownerCt;
+		}
 
-        return root.el;
-    },
-
-
-    addMask: function(){
-        this.getMaskTarget().mask('Loading...');
-        this.isMasked = true;
-    },
+		return root.el;
+	},
 
 
-    removeMask: function(){
-        this.getMaskTarget().unmask();
-        this.isMasked = false;
-    },
+	addMask: function () {
+		this.getMaskTarget().mask('Loading...');
+		this.isMasked = true;
+	},
 
 
-	maybeLoadData: function(){
+	removeMask: function () {
+		this.getMaskTarget().unmask();
+		this.isMasked = false;
+	},
+
+
+	maybeLoadData: function () {
 		var partCmps = this.getPartComponents(),
 			readyMap = {}, me = this;
 
-		function maybeDone(){
+		function maybeDone() {
 			var done = true;
-			Ext.Object.each(readyMap, function(k, v){
-				if(v === false){
+			Ext.Object.each(readyMap, function (k, v) {
+				if (v === false) {
 					done = false;
 				}
 				return done;
 			});
 
-			if(done){
+			if (done) {
 				me.ownerCt.slidesReady = true;
 
-				if(me.hasSlides){
+				if (me.hasSlides) {
 					me.selectInitialSlide();
 				}
 
 				me.removeMask();
 
-				me.fireEvent('presentation-parts-ready', me,  me.getPartComponents(), me.startOn);
+				me.fireEvent('presentation-parts-ready', me, me.getPartComponents(), me.startOn);
 				me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
 			}
 		}
 
-		Ext.each(partCmps, function(p){
+		Ext.each(partCmps, function (p) {
 
 			//Just in case something we aren't expecting sneaks in.
-			if(p.isPresentationPartReady === undefined){
+			if (p.isPresentationPartReady === undefined) {
 				return;
 			}
 
-			if(!p.$presentationUUID){
+			if (!p.$presentationUUID) {
 				p.$presentationUUID = guidGenerator();
 			}
 			readyMap[p.$presentationUUID] = p.isPresentationPartReady;
-			if(p.isPresentationPartReady === false){
-				this.mon(p, 'presentation-part-ready', function(sender){
+			if (p.isPresentationPartReady === false) {
+				this.mon(p, 'presentation-part-ready', function (sender) {
 					readyMap[sender.$presentationUUID] = true;
 					maybeDone();
 				});
@@ -350,52 +354,52 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	selectInitialSlide: function(){
+	selectInitialSlide: function () {
 		var startOn = this.startOn,
 			s = this.query('slide-component'), me = this,
 			targetImageEl;
 
 
-		Ext.each(s, function(i){
+		Ext.each(s, function (i) {
 			var id = i.slide.get('NTIID'), img;
-			if(id === startOn){
+			if (id === startOn) {
 				targetImageEl = i.el.down('img.slide');
 			}
 		});
 
-		if(targetImageEl){
+		if (targetImageEl) {
 			console.log('should scroll into view: ', targetImageEl.dom);
-			Ext.defer(function(){
-				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+			Ext.defer(function () {
+				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
 			}, 10, me);
 		}
 	},
 
 
-    scrollToStartingTime: function(seconds){
-        var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
+	scrollToStartingTime: function (seconds) {
+		var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
 
-        // scroll the component that contains the given time into view.
-        Ext.each(cmps, function(part){
-            if(part.isTimeWithinTimeRange && part.isTimeWithinTimeRange(seconds)){
-                tEl = part.getElementAtTime(seconds);
-                scrollingEl = this.el.getScrollingEl();
+		// scroll the component that contains the given time into view.
+		Ext.each(cmps, function (part) {
+			if (part.isTimeWithinTimeRange && part.isTimeWithinTimeRange(seconds)) {
+				tEl = part.getElementAtTime(seconds);
+				scrollingEl = this.el.getScrollingEl();
 
-                if(tEl && scrollingEl){
-                    console.log('scrolling into view: ', tEl);
-                    scrollingEl.scrollTo('top', tEl.getBox().top - scrollingEl.getY());
-                    return false;
-                }
-            }
-        });
+				if (tEl && scrollingEl) {
+					console.log('scrolling into view: ', tEl);
+					scrollingEl.scrollTo('top', tEl.getBox().top - scrollingEl.getY());
+					return false;
+				}
+			}
+		});
 
-        //return target element.
-        return tEl;
-    },
+		//return target element.
+		return tEl;
+	},
 
 
-	selectSlide: function(slide){
-		if(!slide || !slide.isModel){
+	selectSlide: function (slide) {
+		if (!slide || !slide.isModel) {
 			console.trace();
 			console.error('Unexpected argument, given', slide, 'expected a record');
 			return;
@@ -404,50 +408,50 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			me = this,
 			targetImageEl;
 
-		Ext.each(s, function(i){
+		Ext.each(s, function (i) {
 			var id = i.slide.get('NTIID');
 
-			if(id === slide.getId()){
+			if (id === slide.getId()) {
 				targetImageEl = i.el.down('img.slide');
 			}
 		});
 
-		if(!this.isMasked && targetImageEl){
-			Ext.defer(function(){
-				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners:{}});
+		if (!this.isMasked && targetImageEl) {
+			Ext.defer(function () {
+				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
 			}, 10, me);
 		}
 	},
 
 
-	syncWithVideo: function(videoState){
+	syncWithVideo: function (videoState) {
 //		this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
 
-	showAnnotations: function(annotations, line, s){
-		if(!annotations || annotations.getCount()=== 0){
+	showAnnotations: function (annotations, line, s) {
+		if (!annotations || annotations.getCount() === 0) {
 			return;
 		}
 
-		if(!s){
+		if (!s) {
 			s = NextThought.store.FlatPage.create({
-				storeId: 'presentation-annotations-'+line
+				storeId: 'presentation-annotations-' + line
 			});
-			annotations.each(function(annotation){
+			annotations.each(function (annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
 				//us bind the same store to it twice.  How convenient..
 				s.bind(annotation.store);
 			});
 		}
 
-		if(line){
+		if (line) {
 			console.log('filtering by line: ', line);
 			s.addFilter({
 				id: this.lineFilterId,
-				filterFn: function(r){
+				filterFn: function (r) {
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
-					return r.get('pline')=== line;
+					return r.get('pline') === line;
 				}
 			});
 		}
@@ -457,28 +461,28 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	showAnnotationView: function(store){
+	showAnnotationView: function (store) {
 		var me = this;
-		if(!this.annotationView){
+		if (!this.annotationView) {
 			this.annotationView = this.add({
 				xtype: 'annotation-view',
-				floating:true,
-				border:false,
-				width:400,
-				shadow:false,
-				constrain:true,
+				floating: true,
+				border: false,
+				width: 400,
+				shadow: false,
+				constrain: true,
 				renderTo: Ext.getBody(),
-				cls:'presentation-note-slider annotation-view',
+				cls: 'presentation-note-slider annotation-view',
 				title: 'Discussion',
 				iconCls: 'discus',
-				discussion:true,
+				discussion: true,
 				store: 'ext-empty-store',
 				anchorComponent: this,
 				anchorComponentHooks: this.getViewerHooks(),
 				floatParent: this,
 				listeners: {
-					'itemremove': function(){
-						if(this.getNodes().length === 0){
+					'itemremove': function () {
+						if (this.getNodes().length === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
 					}
@@ -489,9 +493,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 			this.mon(this.annotationView, {
 				scope: me,
-				show: function(){ me.fireEvent('will-show-annotation', me.annotationView, this); },
-				hide: function(){
-					if(me.el.down('.count.active')){
+				show: function () {
+					me.fireEvent('will-show-annotation', me.annotationView, this);
+				},
+				hide: function () {
+					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
 					}
 					me.fireEvent('will-hide-annotation', me.annotationView, this);
@@ -499,26 +505,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			});
 		}
 
-		if(this.annotationView.store.storeId !== store.storeId){
+		if (this.annotationView.store.storeId !== store.storeId) {
 			// NOTE: Make sure we remove lineFilter before this is unbound.
 			// otherwise, we end up in a funky state.
 			this.annotationView.store.removeFilter(this.lineFilterId);
 			this.annotationView.bindStore(store);
 		}
-		else{
+		else {
 			this.annotationView.refresh();
 		}
 		this.annotationView.show();
-		this.on('resize', function(){
-			if(this.isVisible()){
+		this.on('resize', function () {
+			if (this.isVisible()) {
 				this.toFront();
 			}
 		}, this.annotationView);
 	},
 
 
-	destroy: function(){
-		if(this.annotationView && this.annotationView.store){
+	destroy: function () {
+		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
 			this.annotationView.destroy();
@@ -528,29 +534,29 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	mayBeHideAnnotationView: function(e){
-		if(!this.annotationView || !this.annotationView.isVisible()){
+	mayBeHideAnnotationView: function (e) {
+		if (!this.annotationView || !this.annotationView.isVisible()) {
 			return true;
 		}
-		if(!e.getTarget('.annotation-view') && this.annotationView.isVisible()){
+		if (!e.getTarget('.annotation-view') && this.annotationView.isVisible()) {
 			this.annotationView.hide();
 		}
 		return true;
 	},
 
 
-	getDomContextForRecord: function(r){
+	getDomContextForRecord: function (r) {
 		//Find the cmp with our UGD store.
-		function fn(cmp){
+		function fn(cmp) {
 			var s = cmp.userDataStore;
 			return s && s.findRecord('NTIID', r.get('NTIID'));
 		}
 
 		var cmps = Ext.Array.filter(this.items.items, fn), node = null;
 
-		Ext.each(cmps, function(cmp){
+		Ext.each(cmps, function (cmp) {
 
-			if(Ext.isFunction(cmp.getDomContextForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(r))){
+			if (Ext.isFunction(cmp.getDomContextForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(r))) {
 				node = cmp.getDomContextForRecord(r);
 			}
 
@@ -565,14 +571,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	getCleanContent: Ext.emptyFn,
 
 
-	getScrollTarget: function(){
+	getScrollTarget: function () {
 		return this.getTargetEl().dom || this.el.dom;
 	},
 
 
-	getViewerHooks: function(){
+	getViewerHooks: function () {
 		return {
-			'resizeView': function(){
+			'resizeView': function () {
 				var reader = this.reader,
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
 					h = reader.annotationView.getHeight(),
@@ -583,7 +589,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				pos[0] = (pos[0] - w > 0) ? (pos[0] - w) : 0;
 				pos[0] += 10;
 				pos[1] += 10;
-                h -= 10;
+				h -= 10;
 				this.setPagePosition(pos);
 				this.setWidth(w);
 				this.setHeight(h);
