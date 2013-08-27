@@ -273,7 +273,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.enableVideo = this.enableVideo && $AppConfig.service.canEmbedVideo(); //Need to get our own capability for this
+		this.enableVideo = this.enableVideo && $AppConfig.service.canEmbedVideo();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			cancelLabel: this.cancelButtonLabel,
