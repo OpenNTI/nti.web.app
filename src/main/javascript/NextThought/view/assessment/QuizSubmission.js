@@ -82,6 +82,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		console.log('New status is active');
 		this.state = 'active';
 		this.resetBtn.show();
+		this.statusMessage.show();
 		this.submitBtn.update('I\'m Finished');
 		this.submitBtn.removeCls('disabled');
 	},
@@ -94,8 +95,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		this.state = 'submitted';
 		this.submitted = true;
 		this.resetBtn.hide();
+		this.statusMessage.hide();
 		this.submitBtn.update('Try Again');
-
+		this.submitBtn.removeCls('disabled');
 	},
 
 	moveToReady: function(){
