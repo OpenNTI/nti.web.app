@@ -87,6 +87,17 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
 	LEAD_HTML5: (!Ext.isIE9).toString(),
 
+	//A queue of commands that need to be invoked when the source is actually ready
+	commandQueue: [],
+
+	//A flag that indicates if we are waiting on a changeMedia to finish
+	changingMediaSource: false,
+
+	changeMediaAttempt: 0,
+	maxChangeMediaAttempts: 3,
+	changeMediaAttemptIntervalMillis: 100,
+	changeMediaTimeoutMillis: 1000,
+
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
 	    this.globals = {};
@@ -219,8 +230,14 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	sendCommand: function(name,data/*,force*/){
-		this.sendMessage('command',name,data);
+	sendCommand: function(name,data,force){
+		if(this.changingMediaSource && !force){
+			console.log('Enqueing command ', name, ' because we are chaining sources and it wasnt forced');
+			this.commandQueue.push(['command', name, data]);
+			return;
+		}
+		console.debug('Invoking command ', name, 'with', data);
+		this.sendMessage('command', name, data);
 	},
 
 
@@ -259,27 +276,27 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	getPlayerState: function(){ return this.currentState; },
 
 
-	load: function(source, offset){
+	load: function(source, offset, force){
 		console.log(this.id,' Kaltura load called with source', source);
-		var kalturaData;
+		var kalturaData, me = this, sourceActuallyChanging = source !== this.currentSource ;
 
 		//We seen the player get confused if you try and changeMedia while
 		//its already changing media.  It doesn't happen always but sometimes
 		//you end up not getting the corresponding finished loading events.
 		//If we are loading buffer this new load request (possibly overwriting a prior
 		//bufferened load) until the current load is done.
-/*		if(this.loadingSource){
+		if(this.changingMediaSource && !force){
 			console.log('Load in process so defering new load of source', arguments);
 			this.bufferedLoad = arguments;
-			//Play on load is now invalid so can it.
-			delete this.playOnLoad;
+			//Locally queued commands are now in valid so can them
+			this.commandQueue = [];
 			return;
-		}*/
+		}
 
 
-/*
+
 		//If this source is already loaded treat it like a media ready event
-		if(source === this.currentSource){
+		if(sourceActuallyChanging && !force){
 			console.log('Short circuiting load because currentSource is already source', source, this.currentSource);
 			this.mediaReadyHandler();
 			if(offset){
@@ -287,7 +304,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			}
 			return;
 		}
-*/
+
 
 		source = Ext.isArray(source) ? source[0] : source;
 
@@ -302,13 +319,35 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 
 		delete this.dieOnPlay;
-		delete this.playOnLoad;
-		this.loadingSource = true;
-
-//		this.makeNotReady();
+		if(sourceActuallyChanging){
+			this.commandQueue = [];
+		}
+		this.changingMediaSource = true;
+		this.currentLoadAttempt = [source, offset, true];
+		this.changeMediaAttempts++;
 
 		console.log(this.id, kalturaData, source, offset);
-		this.sendCommand('changeMedia', {entryId: kalturaData[1]}/*, true*/);
+		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
+		clearTimeout(this.changeMediaTimeout);
+		this.changeMediaTimeout = setTimeout(function(){
+			var args;
+			console.error('Change media timed out', me.changeMediaAttempt, me.maxChangeMediaAttempts, me.bufferedLoad);
+			if(me.changeMediaAttempt <= me.maxChangeMediaAttempts){
+				if(!me.maybeDoBufferedLoad(true)){
+					console.log('Attempting retry of load');
+					args = me.currentLoadAttempt.slice();
+					args.push(true);
+					Ext.defer(me.load, me.changeMediaAttemptIntervalMillis, me, args);
+				}
+				else{
+					console.log('Buffered load short circuited retry');
+				}
+			}
+			else{
+				console.error('Media still didnt change after', me.maxChangeMediaAttempts, 'attempts');
+			}
+		}, this.changeMediaTimeoutMillis);
+
 		this.currentPosition = 0;
 		this.currentState = -1;
 
@@ -320,12 +359,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 
 	play: function(autoPlay){
-		if(this.loadingSource && !autoPlay){
-			console.log('Defering play until load complete');
-			this.playOnLoad = true;
-			return;
-		}
-		if(this.dieOnPlay){
+		if(this.dieOnPlay && !this.changingMediaSource){
 			console.error(this.id,' No video id provided with source');
 			this.fireEvent('player-error', 'kaltura');
 			return;
@@ -488,17 +522,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
-	maybeDoBufferedLoad: function(){
-		console.debug('Maybe performing buffered load of ', this.bufferedLoad);
-		if(!Ext.isEmpty(this.bufferedLoad)){
-			console.log('Kicking off buffered load');
-			var args = this.bufferedLoad;
-			delete this.bufferedLoad;
-			this.load.apply(this, args);
-			return true;
+	dequeueCommands: function(){
+		while(this.commandQueue && !Ext.isEmpty(this.commandQueue)){
+			var args = this.commandQueue.shift();
+			this.sendMessage.apply(this, args);
 		}
-		console.log('Nothing buffered to load.')
-		return false;
 	},
 
 
@@ -508,14 +536,28 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	},
 
 
+	maybeDoBufferedLoad: function(force){
+		if(!Ext.isEmpty(this.bufferedLoad)){
+			console.log('Performing bufferedLoad', this.bufferedLoad);
+			var args = this.bufferedLoad;
+			delete this.bufferedLoad;
+			this.load(args[0], args[1], force);
+			return true;
+		}
+		return false;
+	},
+
+
 	changeMediaHandler: function(){
 		console.error('****** CHANGE MEDIA HANDLER *****', arguments);
-		delete this.loadingSource;
-		if(!this.maybeDoBufferedLoad() && this.playOnLoad){
-			console.log('Acting on defered play because load complete');
-			delete this.playOnLoad;
-			this.play();
-		}
+		this.changingMediaSource = false;
+		this.changeMediaAttempt = 0;
+		clearTimeout(this.changeMediaTimeout);
+		this.maybeDoBufferedLoad();
+
+		//For the html5 player we could dequeue here, but the flash player
+		//doesn't like getting the play event until it fires media ready.  That
+		//happens at some time in the future
 	},
 
 
@@ -563,6 +605,9 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	mediaReadyHandler: function(){
 		console.log(this.id,' MEDIA Ready', arguments);
+		if(!this.changingMediaSource){
+			this.dequeueCommands();
+		}
 		this.readyHandler();
 	},
 
