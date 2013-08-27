@@ -315,7 +315,7 @@ Ext.define('NextThought.view.video.Video',{
 			if(!this.commandQueue[target]){
 				this.commandQueue[target] = [];
 			}
-			console.debug(this.id, 'Enqueing command with args', arguments);
+			console.debug(this.id, 'Enqueing command ', arguments[1], arguments);
 			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
@@ -324,7 +324,7 @@ Ext.define('NextThought.view.video.Video',{
 			if(!o || !Ext.isFunction(fn)){return null;}
 			return fn.apply(o,args);
 		}
-		console.debug(this.id, 'Invoking command ', arguments);
+		console.debug(this.id, 'Invoking command ', arguments[1], arguments);
 		this.fireEvent('player-command-'+command);
 		return call(t[command],t,args);
 	},
