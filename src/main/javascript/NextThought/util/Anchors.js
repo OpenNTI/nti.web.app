@@ -1981,7 +1981,6 @@ Ext.define('NextThought.util.Anchors', {
 
 			Anchors.expandRangeToIncludeMath(r);
 			sel.setSingleRange(r);
-			doc.sel = sel; // Fix for iPad where getSelection() returns the selection only once
 		}
 
 	},
