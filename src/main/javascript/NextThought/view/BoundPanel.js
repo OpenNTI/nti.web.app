@@ -95,7 +95,7 @@ Ext.define('NextThought.view.BoundPanel',{
 
 
 	onBoundStoreAdd: function(store,records,index){
-		var insertionPoint = this.defaultInsertPoint || index,
+		var insertionPoint = this.defaultInsertPoint || index || 0,//force number
 			toAdd = Ext.Array.clean(Ext.Array.map(records,this.getComponentConfigForRecord,this));
 
 		if(!this.shouldHide(records)){
