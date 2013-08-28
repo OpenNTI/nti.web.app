@@ -1059,11 +1059,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	handleClick: function (e) {
 		var guid, p, fnName, mime,
+		 	content = e.getTarget('.content'),
 			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
 
-		//make sure the content el gets focus when you click it, specifically trying to
-		//fix an issue with clicking from the sharing field taking two clicks to get focus.
-		//this.focus(true);
+		//make sure the content el gets focus when you click it, if its not already active
+		//fixs issue where it would take two clicks to focus content from the usertokenfield
+		if(content && content !== document.activeElement){ this.focus(true); }
 
 		if (t) {
 			guid = t.getAttribute('id');
