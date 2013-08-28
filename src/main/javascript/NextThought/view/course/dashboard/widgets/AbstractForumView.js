@@ -45,7 +45,12 @@ Ext.define('NextThought.view.course.dashboard.widgets.AbstractForumView',{
 		var h = this.record.get('headline');
 		this.renderData = Ext.apply(this.renderData||{},this.record.getData());
 
-		h.compileBodyContent(this.setBody,this,null,100);
+		if(h){
+			h.compileBodyContent(this.setBody,this,null,100);
+		}
+		else{
+			console.error('Forum has no headline.  Were we given something we didnt expect', this.record, this);
+		}
 	},
 
 	afterRender: function(){
