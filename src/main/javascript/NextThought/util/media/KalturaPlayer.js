@@ -85,7 +85,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 	PARTNER_ID: '1500101',
 	UICONF_ID: '15491291',
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	LEAD_HTML5: (!Ext.isIE9).toString(),
+	LEAD_HTML5: (!Ext.isIE9).toString(), //Note: reset in the constructor
 
 	//A queue of commands that need to be invoked when the source is actually ready
 	commandQueue: [],
@@ -112,7 +112,15 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		this.makeNotReady();
 
 		this.handleMessage = Ext.bind(this.handleMessage,this);
+
+		this.LEAD_HTML5 = this.shouldUseHtml5().toString();
+
 		this.playerSetup();
+	},
+
+
+	shouldUseHtml5: function(){
+		return !Ext.isIE9 && !$AppConfig.kalturaPreferFlash;
 	},
 
 
