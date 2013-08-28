@@ -185,6 +185,6 @@ Ext.define('NextThought.view.account.VideoSettings', {
 	checkboxClicked: function(){
 		$AppConfig.kalturaPreferFlash = !($AppConfig.kalturaPreferFlash);
 		this.updateCheckbox();
-	},
+	}
 });
 
