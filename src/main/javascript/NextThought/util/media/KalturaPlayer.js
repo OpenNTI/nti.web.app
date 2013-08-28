@@ -353,7 +353,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 		this.changingMediaSource = true;
 		this.currentLoadAttempt = [source, offset, true];
-		this.changeMediaAttempts++;
+		this.changeMediaAttempt++;
 
 		console.log(this.id, kalturaData, source, offset);
 		this.sendCommand('changeMedia', {entryId: kalturaData[1]}, true);
