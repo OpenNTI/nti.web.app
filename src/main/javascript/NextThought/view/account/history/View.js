@@ -38,8 +38,8 @@ Ext.define('NextThought.view.account.history.View', {
 						stateId: 'history-side-view',
 						defaults: {xtype: 'user-data-panel'},
 						items: [
-							{ title: 'Notes', mimeType: ['note', 'highlight'], xtype: isFeature('remove-history-tab') ? 'user-history-panel' : 'user-data-panel' },
-							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: isFeature('remove-history-tab') ? 'user-history-favorite-panel' : 'user-data-panel' }
+							{ title: 'Notes', mimeType: ['note', 'highlight'], xtype: 'user-history-panel' },
+							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: 'user-history-favorite-panel' }
 						]
 					}
 				]

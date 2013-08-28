@@ -38,8 +38,7 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 	constructor: function () {
-		var contactsType = 'disabled-contacts-view',
-			history = !isFeature('remove-history-tab');
+		var contactsType = 'disabled-contacts-view';
 
 		if ($AppConfig.service.canFriend()) {
 			contactsType = 'contacts-view';
@@ -56,9 +55,8 @@ Ext.define('NextThought.view.SideBar', {
 						stateId: 'sidebar',
 						items: [
 							{ xtype: contactsType },
-							{ xtype: 'activity-view' + (history ? '' : '-new') },
-							{ xtype: 'history-view' }
-						].slice(0, history ? undefined : -1)
+							{ xtype: 'activity-view-new' }
+						]
 					},
 					{ xtype: 'chat-dock', region: 'south'}
 				]

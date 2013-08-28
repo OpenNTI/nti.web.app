@@ -37,6 +37,7 @@ Ext.define('NextThought.view.account.activity.View',{
 	                stateId: 'activity-side-view',
                     defaults: {xtype:'activity-panel'},
                     items: [
+	                    {xtype: 'history-view'},
                         {title: 'Contacts', filter: 'notInCommunity'},
                         {title: 'Community', filter: 'inCommunity'}
                     ]
@@ -47,12 +48,6 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
     initComponent: function(){
-		var i;
-	    if(isFeature('remove-history-tab')){
-		    i = this.items[1].items[0].items;
-		    i.unshift({ xtype: 'history-view' });
-	    }
-
         this.callParent(arguments);
         this.store = Ext.getStore('Stream');
         this.mon(this.store,{
