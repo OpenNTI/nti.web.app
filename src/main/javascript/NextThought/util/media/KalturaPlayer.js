@@ -102,7 +102,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 	]),
 
-	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
+	//INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
 	LEAD_HTML5: (!Ext.isIE9).toString(), //Note: reset in the constructor
 
 	//A queue of commands that need to be invoked when the source is actually ready
