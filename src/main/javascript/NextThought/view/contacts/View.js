@@ -63,7 +63,7 @@ Ext.define('NextThought.view.contacts.View', {
 
 		if(needsChanging){
 			this.setActiveTab(vId);
-			this.pushState({activeTab: vId});
+//			this.pushState({activeTab: vId});
 		} else if(reset) {
 			console.log('ignore reset');
 		}
