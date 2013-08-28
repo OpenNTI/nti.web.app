@@ -355,11 +355,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			} //allow context on simple texts
 		});
 
-		if (isFeature('rhp-groupchat')) {
-			this.activateGroupChatFeature();
-		} else {
-			this.buttonRow.addCls('no-group-chat');
-		}
+		this.activateGroupChatFeature();
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
