@@ -2,6 +2,7 @@ Ext.define('NextThought.view.contacts.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.contacts-view-container',
 	requires: [
+		'NextThought.view.contacts.SubView',
 		'NextThought.view.BoundPanel',
 		'NextThought.view.contacts.Grouping',
 		'NextThought.view.contacts.TabPanel',
@@ -9,64 +10,35 @@ Ext.define('NextThought.view.contacts.View', {
 		'NextThought.view.contacts.ListButtons'
 	],
 
-	cls: 'contacts-view',
+//	cls: 'contacts-view',
 	title: 'NextThought: Contacts',
 
 
 	items: [
-		{xtype: 'data-bound-panel', title: 'Contacts', defaultType: 'contacts-tabs-card', storeId: 'all-contacts-store',
-			emptyCmp: {
-				xtype: 'component',
-				emptyState: true,
-				renderTpl: Ext.DomHelper.markup([
-					{ cls: 'contacts-empty-state', cn: [
-						{cls: 'header', html: '{{{no_contact_header}}}'},
-						{cls: 'sub', html: '{{{no_contact_sub}}}'}
-					]}
-				])
-			}
-		},
-		{xtype: 'data-bound-panel', title: 'Distribution Lists', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
-			filter: function (group) {
-				return !group.isDFL;
-			},
-			defaultInsertPoint: 1,
-			items: [
-				{xtype: 'list-buttons'}
-			],
-			emptyCmp: {
-				xtype: 'component',
-				emptyState: true,
-				renderTpl: Ext.DomHelper.markup([
-					{ cls: 'contacts-empty-state', cn: [
-						{cls: 'header', html: '{{{no_list_header}}}'},
-						{cls: 'sub', html: '{{{no_list_sub}}}'}
-					]}
-				])
-			}
-		},
-		{xtype: 'data-bound-panel', title: 'Groups', defaultType: 'contacts-tabs-grouping', storeId: 'FriendsList',
+		{ xtype: 'contact-tab-view', id: 'my-contacts' },
+		{ xtype: 'contact-tab-view', id: 'my-groups',
+			subType: 'group',
+			bodyDefaultType: 'contacts-tabs-grouping',
+			storeId: 'FriendsList',
 			filter: function (group) {
 				return group.isDFL;
 			},
-			defaultInsertPoint: 1,
-			items: [
+			bodyItems: [
 				{xtype: 'group-buttons'}
-			],
-			emptyCmp: {
-				xtype: 'component',
-				emptyState: true,
-				renderTpl: Ext.DomHelper.markup([
-					{ cls: 'contacts-empty-state', cn: [
-						{cls: 'header', html: '{{{no_group_header}}}'},
-						{cls: 'sub', html: '{{{no_group_sub}}}'}
-					]}
-				])
-			}
+			]
+		},
+		{ xtype: 'contact-tab-view', id: 'my-lists',
+			subType: 'list',
+			bodyDefaultType: 'contacts-tabs-grouping',
+			storeId: 'FriendsList',
+			filter: function (group) {
+				return !group.isDFL;
+			},
+			bodyItems: [
+				{xtype: 'list-buttons'}
+			]
 		}
 	],
-
-
 
 	layout: {
 		type: 'card',
@@ -77,11 +49,10 @@ Ext.define('NextThought.view.contacts.View', {
 	activeItem: 0,
 
 
-
 	tabSpecs: [
-		{label: 'Contacts', viewId: ''},
-		{label: 'Groups', viewId: ''},
-		{label: 'Distribution Lists', viewId: ''}
+		{label: 'Contacts', viewId: 'my-contacts'},
+		{label: 'Groups', viewId: 'my-groups'},
+		{label: 'Distribution Lists', viewId: 'my-lists'}
 	],
 
 
@@ -128,7 +99,7 @@ Ext.define('NextThought.view.contacts.View', {
 			t.selected = (t.viewId.replace(/\?$/,'')===activeId);
 		});
 
-		return this.tabs? tabs : [];
+		return tabs;
 	},
 
 

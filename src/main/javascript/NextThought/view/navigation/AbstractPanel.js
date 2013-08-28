@@ -35,9 +35,19 @@ Ext.define('NextThought.view.navigation.AbstractPanel',{
 		apply(i,0,'navigation');
 		apply(i,1,'body');
 
-
+		Ext.callback(data.onClassExtended,this,arguments);
 	},
 
+	applyConfigs: function(name,config){
+		var map = {body:1,navigation:0},
+			i = this.items[map[name]];
+
+		if(!i){
+			return;
+		}
+
+		Ext.apply(i, config);
+	},
 
 	constructor: function(){
 		this.callParent(arguments);
