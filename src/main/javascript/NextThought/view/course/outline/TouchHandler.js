@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.outline.TouchHandler', {
 
 	setupHandlers: function () {
 		var leftSide = this.container,
-			panel = this.container.getEl().down('.lesson-list');
+			panel = this.container.getEl().down('.outline-list');
 
 		leftSide.on('touchScroll', function (ele, deltaY) {
 			panel.scrollBy(0, deltaY, false);

@@ -3,18 +3,18 @@ Ext.define('NextThought.view.course.outline.View', {
 	alias: 'widget.course-outline',
 
 	ui: 'course',
-	cls: 'course-outline',
+	cls: 'nav-outline',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'Outline'
 		]},
-		{ cls: 'lesson-list'}
+		{ cls: 'outline-list'}
 	]),
 
 	renderSelectors: {
-		frameBodyEl: '.lesson-list'
+		frameBodyEl: '.outline-list'
 	},
 
 
@@ -24,9 +24,9 @@ Ext.define('NextThought.view.course.outline.View', {
 
 
 	overItemCls: 'over',
-	itemSelector: '.course-row',
+	itemSelector: '.outline-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'course-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
+		{ cls: 'outline-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
 			{cls: 'label', html: '{label}'},
 			{tag: 'tpl', 'if': 'startDate', cn: {cls: 'date', cn: [
 				{html: '{startDate:date("M")}'},

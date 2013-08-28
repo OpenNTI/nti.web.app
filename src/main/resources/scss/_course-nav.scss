@@ -13,50 +13,13 @@
 
 .x-component-course{
 
-	&.course-outline{
-		background: #ffffff;
-
-		.lesson-list {
-			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			top: 50px;
+	&.nav-outline{
+		.outline-list {
 			margin-left: -50px;
 			padding-left: 50px;
-
-			overflow: {
-				x: visible;
-				y: auto;
-			}
-			-webkit-overflow-scrolling: touch;
-			@include scrollbar(#ffffff, $tertiary-grey);
 		}
 
-		.header {
-			background: #ffffff;
-			padding: 0 42px;
-			font: normal 500 14px/50px $font;
-			color: #a1a1a1;
-			box-shadow: inset 0 -1px 0 0 #eaeaea;
-			z-index: 2;
-
-			@include icon('topic', $top:15px, $left: 18px);
-		}
-
-		.course-row {
-			position: relative;
-			background: #ffffff;
-			color: $secondary-grey;
-			font: normal 400 14px/40px $font;
-			padding: 0 5px 0 20px;
-			cursor: pointer;
-
-			.label{
-				overflow: hidden;
-				@include ellipse;
-			}
-
+		.outline-row {
 			.date {
 				pointer-events: none;
 				cursor: default;
@@ -94,63 +57,8 @@
 
 			&.x-item-selected,&.over {
 				.date{
-					@include hardware-accelerate();
 					display: block;
 				}
-
-				.x-ie &,
-				.x-ie10 &,
-				.x-gecko &{
-
-					.date {
-						top: auto !important;
-						left: auto;
-						margin: -32px 0px 0px -60px;
-					}
-
-					&.unit {
-						.date {
-							margin-top: -22px;
-						}
-					}
-				}
-
-
-
-				background: #f0f0f0;
-				box-shadow: inset 3px 0 0 0 #cfcfcf;
-			}
-
-			&.x-item-selected {
-				color: #ffffff;
-				font-weight: 600;
-				background: $primary-blue;
-				box-shadow: inset 3px 0 0 0 #107eed;
-			}
-
-			&.unit {
-				.date {
-					top: -3px;
-				}
-				cursor: default;
-				text-transform: uppercase;
-				background: #fafafa;
-				color: $tertiary-grey;
-				font: normal 400 10px/20px $font;
-				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
-				z-index: 1;
-
-				//&.x-item-selected {
-				//	color: #ffffff;
-				//	font-weight: 600;
-				//	background: $primary-blue;
-				//	box-shadow: inset 2px 0 0 1px #107eed;
-				//}
-				//
-				//&.over {
-				//	background: #f0f0f0;
-				//	box-shadow: inset 2px 0 0 1px #cfcfcf;
-				//}
 			}
 		}
 	}
