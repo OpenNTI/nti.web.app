@@ -374,7 +374,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 			}
 			else{
 				console.error('Media still didnt change after', me.maxChangeMediaAttempts, 'attempts');
-				this.fireEvent('player-error', 'kaltura');
+				me.fireEvent('player-error', 'kaltura');
 				//And reset
 				me.changeMediaAttempt = 0;
 			}
