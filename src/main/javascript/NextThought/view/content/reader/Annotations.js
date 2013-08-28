@@ -339,7 +339,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	addAnnotation: function (range, xy) {
+	addAnnotation:  function (range, xy) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -667,27 +667,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				e.stopPropagation();
 				e.preventDefault();
 				if (origSelection.length > 0) {
-					this.addAnnotation(range, e.getXY());
-				}
-			}
-		}
-		catch (er) {
-			console.error('onContextMenuHandler: ' + er.message);
-		}
-	},
-
-
-	// For compatibility with native highlighting on iPad
-	iOnContextMenuHandler: function (e) {
-		try {
-			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
-					range = this.getSelection();
-
-			if (range && !range.collapsed) {
-				e.stopPropagation();
-				e.preventDefault();
-				if (origSelection.length > 0) {
-					this.iAddAnnotation(range);
+					if (Ext.is.iPad) { // For compatibility with native highlighting on iPad
+						this.iAddAnnotation(range);
+					}
+					else {
+						this.addAnnotation(range, e.getXY());
+					}
 				}
 			}
 		}
