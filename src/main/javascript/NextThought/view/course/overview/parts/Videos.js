@@ -425,8 +425,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			return;
 		}
 
-		console.log('Masking z curtain');
-		this.curtainEl.mask('Loading...');
-		this.player.resumePlayback();
+		if(e && e.shiftKey && this.player.canOpenExternally()){
+			this.player.openExternally();
+		}
+		else{
+			console.log('Masking z curtain');
+			this.curtainEl.mask('Loading...');
+			this.player.resumePlayback();
+		}
 	}
 });

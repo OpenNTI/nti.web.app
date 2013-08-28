@@ -7,6 +7,27 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		type: 'kaltura',
 		valid: function(){
 			return true;
+		},
+		contentForExternalViewer: function(source){
+			var vid = source.split(':'),
+				PARTNER_ID = '1500101', //TODO now these are in two places, clean this up
+				UICONF_ID = '15491291';
+
+			if(!vid[1]){
+				return Ext.DomHelper.markup({
+					tag: 'h1',
+					html: 'An error occurred loading the video'
+				});
+			}
+
+
+			return Ext.DomHelper.markup({
+				tag: 'div',
+				cn: {
+					tag: 'script',
+					src: Ext.String.format('https://cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/{0}/partner_id/{1}?autoembed=true&entry_id={2}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest', UICONF_ID, PARTNER_ID, vid[1])
+				}
+			});
 		}
 	},
 

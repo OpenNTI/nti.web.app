@@ -390,6 +390,46 @@ Ext.define('NextThought.view.video.Video',{
 	},
 
 
+	activeClass: function(){
+		var clazz;
+
+		if(!this.activeVideoService){
+			return null;
+		}
+
+		Ext.Object.each(NextThought.util.media,function(name,cls){
+			if(cls.type === this.activeVideoService){
+				clazz = cls;
+			}
+			return !clazz;
+		}, this);
+		return clazz;
+	},
+
+
+	openExternally: function(){
+		var cls = this.activeClass(),
+			html = cls ? cls.contentForExternalViewer.apply(cls, this.currentVideoId) : '<body><h1>Unable to load video</h1></body>',
+			w;
+
+		w = window.open('', 'nti_external_video', '');
+
+		w.document.body.innerHTML = '';
+
+		w.document.write(Ext.DomHelper.markup({
+			tag: 'div',
+			html: html
+		}));
+		w.focus();
+	},
+
+
+	canOpenExternally: function(){
+		var cls = this.activeClass();
+		return cls && Ext.isFunction(cls.contentForExternalViewer);
+	},
+
+
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
