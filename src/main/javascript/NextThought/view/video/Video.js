@@ -412,7 +412,7 @@ Ext.define('NextThought.view.video.Video',{
 			html = cls ? cls.contentForExternalViewer.apply(cls, this.currentVideoId) : '<body><h1>Unable to load video</h1></body>',
 			w;
 
-		w = window.open('', 'nti_external_video', '');
+		w = window.open('', 'nti_external_video', 'height=768,width=1050,toolbar=no,resizable=no,location=no,status=no,titlebar=no, directories=no');
 
 		w.document.body.innerHTML = '';
 
