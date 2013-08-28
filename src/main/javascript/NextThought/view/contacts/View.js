@@ -15,7 +15,7 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	items: [
-		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white' },
+		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: 'Contacts' },
 		{ xtype: 'contact-tab-view', id: 'my-groups',
 			subType: 'group',
 			filterFn: function (group) { return group.isDFL; }

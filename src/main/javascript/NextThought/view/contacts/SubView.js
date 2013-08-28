@@ -2,10 +2,12 @@ Ext.define('NextThought.view.contacts.SubView', {
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.contact-tab-view',
 
-	navigation: { cls: 'make-white'},
-	body: {
-		xtype: 'data-bound-panel'
-	},
+	requires: [
+		'NextThought.view.contacts.outline.View'
+	],
+
+	navigation: { xtype: 'contacts-outline' },
+	body: { xtype: 'data-bound-panel' },
 
 	ui: 'contacts',
 	cls: 'contact-sub-view',
@@ -49,6 +51,11 @@ Ext.define('NextThought.view.contacts.SubView', {
 				xtype: 'box', emptyState:true,
 				renderTpl: Ext.DomHelper.markup(emptyText)
 			}
+		});
+
+		this.applyConfigs('navigation',{
+			store: config.storeId || this.config.storeId,
+			outlineLabel: config.outlineLabel || ('All '+Ext.String.capitalize(Ext.util.Inflector.pluralize(type)))
 		});
 
 		this.callParent(arguments);
