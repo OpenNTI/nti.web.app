@@ -19,7 +19,7 @@ Ext.define('NextThought.controller.State', {
 
 	transactions: {},
 
-	enableTransactions: isFeature('state-transactions'),
+	enableTransactions: true,
 
 	constructor: function () {
 		this.callParent(arguments);

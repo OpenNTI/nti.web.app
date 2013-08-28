@@ -264,9 +264,7 @@ Ext.define('NextThought.view.course.forum.View',{
 			course = toc && toc.querySelector('course');
 		}
 
-		if(isFeature('state-transactions')){
-			history.pushState(s);
-		}
+		history.pushState(s);
 
 		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
 	}
