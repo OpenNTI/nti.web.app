@@ -438,13 +438,15 @@ Ext.define('NextThought.view.forums.Topic', {
 			}
 		}
 
-		this.bodyEl.select('video').each(function (vid) {
-			try {
-				vid.dom.innerHTML = null;
-				vid.dom.load();
-			} catch (e) {
-			}
-		});
+		if(this.bodyEl){
+			this.bodyEl.select('video').each(function (vid) {
+				try {
+					vid.dom.innerHTML = null;
+					vid.dom.load();
+				} catch (e) {
+				}
+			});
+		}
 
 		if(this.editor){
 			delete this.editor.ownerCt;
@@ -456,10 +458,11 @@ Ext.define('NextThought.view.forums.Topic', {
 			this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
 		}
 
-		h.removeObserverForField(this, 'title', this.updateField, this);
-		h.removeObserverForField(this, 'body', this.updateField, this);
-		h.removeObserverForField(this, 'tags', this.updateField, this);
-
+		if(h){
+			h.removeObserverForField(this, 'title', this.updateField, this);
+			h.removeObserverForField(this, 'body', this.updateField, this);
+			h.removeObserverForField(this, 'tags', this.updateField, this);
+		}
 		if (this.store) {
 			this.store.destroyStore();
 		}
