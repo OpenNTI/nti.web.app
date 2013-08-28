@@ -15,14 +15,12 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	items: [
-		{ xtype: 'contact-tab-view', id: 'my-contacts' },
+		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white' },
 		{ xtype: 'contact-tab-view', id: 'my-groups',
 			subType: 'group',
 			bodyDefaultType: 'contacts-tabs-grouping',
 			storeId: 'FriendsList',
-			filter: function (group) {
-				return group.isDFL;
-			},
+			filterFn: function (group) { return group.isDFL; },
 			bodyItems: [
 				{xtype: 'group-buttons'}
 			]
@@ -31,9 +29,7 @@ Ext.define('NextThought.view.contacts.View', {
 			subType: 'list',
 			bodyDefaultType: 'contacts-tabs-grouping',
 			storeId: 'FriendsList',
-			filter: function (group) {
-				return !group.isDFL;
-			},
+			filterFn: function (group) { return !group.isDFL; },
 			bodyItems: [
 				{xtype: 'list-buttons'}
 			]

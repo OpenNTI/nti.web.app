@@ -39,6 +39,9 @@ Ext.define('NextThought.view.navigation.AbstractPanel',{
 	},
 
 	applyConfigs: function(name,config){
+		if(!this.hasOwnProperty('items')){
+			this.items = Ext.clone(this.items);
+		}
 		var map = {body:1,navigation:0},
 			i = this.items[map[name]];
 

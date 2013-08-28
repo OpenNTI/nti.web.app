@@ -730,7 +730,7 @@ div.add-group-action{
 
 
 div.contact-buttons {
-	@include top-etch();
+	background: #fff;
 	text-transform: uppercase;
 	div.contact-button{
 		cursor: pointer;
@@ -1056,6 +1056,7 @@ div.contact-buttons {
 				.avatar{
 					position: static;
 					top: initial; left: initial;
+					box-shadow: none;
 				}
 
 				&.Offline {
@@ -1151,4 +1152,24 @@ div.contact-buttons {
 			}
 		}
 	}
+
+
+	.contact-sub-view {
+		.empty {
+			background: #fff;
+		}
+
+		.contact {
+			padding: 35px 30px;
+		}
+
+		.contact-grouping {
+			background: #fff;
+			margin: 0 0 5px 0;
+			padding: 35px 30px;
+		}
+	}
 }
+
+
+

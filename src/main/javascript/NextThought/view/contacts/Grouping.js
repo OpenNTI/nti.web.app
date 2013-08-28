@@ -21,7 +21,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	pageSize: 15,
 	currentPage: 1,
 
-	width: 700,
+//	width: 700,
 	plain: true,
 	frame: false,
 	border: false,

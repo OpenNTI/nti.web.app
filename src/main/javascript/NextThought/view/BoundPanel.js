@@ -36,6 +36,7 @@ Ext.define('NextThought.view.BoundPanel',{
 		if(this.emptyCmp && !this.emptyState){
 			this.add(this.emptyCmp);
 			this.emptyState = true;
+			this.addCls('empty');
 		}
 	},
 
@@ -44,6 +45,7 @@ Ext.define('NextThought.view.BoundPanel',{
 		if(this.emptyState && this.down('[emptyState=true]')){
 			this.down('[emptyState=true]').destroy();
 			this.emptyState = false;
+			this.removeCls('empty');
 		}
 	},
 
