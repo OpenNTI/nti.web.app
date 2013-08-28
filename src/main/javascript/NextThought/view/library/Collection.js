@@ -52,13 +52,12 @@ Ext.define('NextThought.view.library.Collection',{
 
 	collectData: function(){
 		var rows = this.rowSpan,
-			data = this.callParent(arguments),
-			isNew = isFeature('new-library');
+			data = this.callParent(arguments);
 
 		Ext.each(data.items,function(i,x){
 			var cols= 2;
 
-			i.inGrid = isNew ? 'grid-item':'stratum';
+			i.inGrid ='grid-item';
 
 			if(rows > 1 && x===0){
 				i.featured = 'featured';

@@ -89,19 +89,15 @@ Ext.define('NextThought.view.Navigation', {
             this.el.down('.contacts').remove();
         }
 
-        if (!isFeature('new-library')) {
-            this.el.down('.library').remove();
-        } else {
-            this.contentSwitcher = Ext.widget({
-                viewId: 'content',
-                xtype: 'most-recent-content-switcher',
-                ownerNode: this.el.down('.content')
-            });
-            this.items.push(this.contentSwitcher);
-			if(this.jumpEl){
-				this.jumpEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
-			}
-        }
+        this.contentSwitcher = Ext.widget({
+            viewId: 'content',
+            xtype: 'most-recent-content-switcher',
+            ownerNode: this.el.down('.content')
+        });
+        this.items.push(this.contentSwitcher);
+		if(this.jumpEl){
+			this.jumpEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		}
 
         this.searchMenu = Ext.widget({
             viewId: 'search',
@@ -156,32 +152,6 @@ Ext.define('NextThought.view.Navigation', {
         this.callParent(arguments);
         this.items = [];
         this.timers = {};
-
-        if (!isFeature('new-library')) {
-            this.libraryMenu = Ext.widget({
-                viewId: 'content',
-                xtype: 'navigation-menu',
-                renderTo: Ext.getBody(),
-                items: [
-                    {
-                        courseList: true,
-                        xtype: 'library-collection',
-                        name: 'Courses',
-                        store: 'courses',
-                        hidden: true
-                    },
-                    {
-                        xtype: 'library-collection',
-                        name: 'All Books'
-                    }
-                ]
-            });
-            Library.on('show-courses', function () {
-                this.libraryMenu.child('[courseList]').show();
-            }, this);
-
-            this.items.push(this.libraryMenu);
-        }
     },
 
 

@@ -113,13 +113,10 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		var view = this.getLibraryView();
-		if(!isFeature('new-library')){
-			view = this.getNavigationMenu();
-		}
 
-		if(!view.down('purchasable-collection') ){
+		if(view && !view.down('purchasable-collection') ){
 			view.add({
-				ui: isFeature('new-library')?'library-collection':'navigation-collection',
+				ui: 'library-collection',
 				xtype: 'purchasable-collection',
 				store: this.getPurchasableStore(),
 				name: getString('Available for Purchase')
