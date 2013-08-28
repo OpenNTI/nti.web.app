@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>embedding unsupported</title>
+	<link rel="shortcut icon" href="resources/images/favicon.ico">
+    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+
+    <style type="text/css">
+		html,body{ font-family: "Open Sans", sans-serif; }
+        .middle{
+            position: absolute;
+            display: table;
+        	width: 100%;
+            height: 80%;
+        }
+
+        .content{
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .unsupported_message {
+        	padding: 0.5em;
+        	font-size: 2em;
+        	color: #494949;
+        }
+
+        .content, .notsupported a {
+        	font-size: 1em;
+        	font-weight: normal;
+        }
+
+        a:active, .notsupported a:link, .notsupported a:visited {
+        	color: #3fb3f6;
+        }
+
+        img {
+        	padding-bottom: 1em;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="middle">
+        <div class="content">
+            <div id="logo"><img src="images/logoWithNoText.png"/></div>
+            <div class="unsupported_message">Embedding is not supported.</div>
+			<div>
+				<script type="text/javascript">
+					document.write('<a href="'+document.referrer+'" target="_blank">Click Here to open in a new window.</a>')
+				</script>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
