@@ -168,12 +168,18 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	onSave: function (e) {
 		e.stopEvent();
 		var v = this.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t;
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t,
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad blog post');
 			this.markError(this.editorBodyEl, 'You need to type something');
 			return;
+		}
+
+		l = v.body.length;
+		if(l > 0 && v.body[l-1].replace){
+			v.body[l-1] = v.body[l-1].replace(trimEndRe, '');
 		}
 
 		if (Ext.isEmpty(v.title)) {

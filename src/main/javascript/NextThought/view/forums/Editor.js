@@ -203,13 +203,19 @@ Ext.define('NextThought.view.forums.Editor', {
     onSave: function (e) {
         e.stopEvent();
         var v = this.getValue(),
-            re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+            re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
+	        trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
         if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
             console.error('bad forum post');
             this.markError(this.editorBodyEl, 'You need to type something');
             return;
         }
+
+	    l = v.body.length;
+	    if(l > 0 && v.body[l-1].replace){
+		    v.body[l-1] = v.body[l-1].replace(trimEndRe, '');
+	    }
 
         if (Ext.isEmpty(v.title)) {
             console.error('You need a title');
