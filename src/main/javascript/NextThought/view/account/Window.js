@@ -44,7 +44,12 @@ Ext.define('NextThought.view.account.Window', {
 				: [
 				{ xtype: 'random-gravatar-picker' },
 				{ xtype: 'password-reset-form' }
-			];
+			],
+			canVideoSetting = isFeature('video-settings');
+
+		if(canVideoSetting){
+			availablePanels.push({xtype: 'video-settings'});
+		}
 
 		this.items = [
 			{
@@ -95,6 +100,7 @@ Ext.define('NextThought.view.account.Window', {
 						? {text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed: true}
 						: {text: 'Change Avatar', associatedPanel: 'random-gravatar-picker', pressed: true},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
+					{text: 'Video Settings', associatedPanel: 'video-settings', hidden: !canVideoSetting},
 					{ disabled: true, flex: 1 }
 				]
 			},
@@ -144,3 +150,41 @@ Ext.define('NextThought.view.account.Window', {
 		}
 	}
 });
+
+//TODO if this becomse permanant use it somewhere else
+Ext.define('NextThought.view.account.VideoSettings', {
+	extend: 'Ext.Component',
+	alias : 'widget.video-settings',
+
+	cls: 'video-settings',
+
+	renderTpl: Ext.DomHelper.markup({
+		cls: 'prefer-flash-checkbox',
+		html: 'Prefer flash video player when possible.',
+		tabIndex: 0,
+		role: 'button'
+	}),
+
+	renderSelectors: {
+		preferFlashEl: '.prefer-flash-checkbox'
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.preferFlashEl,{
+			scope: this,
+			click: this.checkboxClicked
+		});
+		this.updateCheckbox();
+	},
+
+	updateCheckbox: function(){
+		this.preferFlashEl[$AppConfig.kalturaPreferFlash?'addCls':'removeCls']('checked');
+	},
+
+	checkboxClicked: function(){
+		$AppConfig.kalturaPreferFlash = !($AppConfig.kalturaPreferFlash);
+		this.updateCheckbox();
+	},
+});
+

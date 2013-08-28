@@ -329,4 +329,41 @@
 			}
 		}
 	}
+
+
+	.video-settings{
+
+		.prefer-flash-checkbox{
+			padding: 20px;
+			padding-left: 40px;
+			cursor: pointer;
+			color: $secondary-grey;
+			font: {
+				family: $font;
+				size: 14px;
+				weight: normal;
+			}
+			&::after{
+				content: ' ';
+				position: absolute;
+				top: 20px; left: 15px;
+				background: $icons no-repeat;
+				@include sprite($icons, 'checkbox-light-unchecked', $dimensions: true);
+			}
+
+			&:hover::after{
+				@include sprite($icons, 'checkbox-light-unchecked_hover', $dimensions: true);
+			}
+
+			&.checked{
+				&::after{
+					@include sprite($icons, 'checkbox-light-checked', $dimensions: true);
+				}
+				&:hover::after{
+					@include sprite($icons, 'checkbox-light-checked_hover', $dimensions: true);
+				}
+			}
+		}
+	}
+
 }
