@@ -3,15 +3,15 @@
 Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	statics:{
+		PARTNER_ID: '1500101',
+		UICONF_ID: '15491291',
 		kind:'video',
 		type: 'kaltura',
 		valid: function(){
 			return true;
 		},
 		contentForExternalViewer: function(source){
-			var vid = source.split(':'),
-				PARTNER_ID = '1500101', //TODO now these are in two places, clean this up
-				UICONF_ID = '15491291';
+			var vid = source.split(':');
 
 			if(!vid[1]){
 				return Ext.DomHelper.markup({
@@ -25,7 +25,8 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 				tag: 'div',
 				cn: {
 					tag: 'script',
-					src: Ext.String.format('https://cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/{0}/partner_id/{1}?autoembed=true&entry_id={2}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest', UICONF_ID, PARTNER_ID, vid[1])
+					src: Ext.String.format('https://cdnapisec.kaltura.com/p/{0}/sp/150010100/embedIframeJs/uiconf_id/{1}/partner_id/{2}?autoembed=true&entry_id={3}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest&flashvars[autoPlay]=true',
+						this.PARTNER_ID, this.UICONF_ID, this.PARTNER_ID, vid[1])
 				}
 			});
 		}
@@ -101,10 +102,6 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 		}
 	]),
 
-
-	// We need to externalize these values since they relate to our Kaltura Account.  This is okay for OU since they are paying for it.
-	PARTNER_ID: '1500101',
-	UICONF_ID: '15491291',
 	INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
 	LEAD_HTML5: (!Ext.isIE9).toString(), //Note: reset in the constructor
 
@@ -121,6 +118,11 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
+
+		// We need to externalize these values since they relate to our Kaltura Account.  This is okay for OU since they are paying for it.
+		this.PARTNER_ID = NextThought.util.media.KalturaPlayer.PARTNER_ID;
+		this.UICONF_ID = NextThought.util.media.KalturaPlayer.UICONF_ID;
+
 	    this.globals = {};
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
