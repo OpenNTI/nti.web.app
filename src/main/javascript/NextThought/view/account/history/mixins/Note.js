@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 				{cls: 'path', html: '{path}'},
 				{cls: 'location', html: '{location}'},
 				{cls: 'body', cn: [
-					{tag: 'span', html: '{textBodyContent}'}
+					{tag: 'span', html: '{preview}'}
 				]}
 			]
 		}
@@ -44,11 +44,11 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 				location = lineage.shift();
 				lineage.reverse();
 			}
-
+			
 			rec.set({
 				'location': Ext.String.ellipsis(location, 150, false),
-				'path': lineage.join(' / '),
-				'textBodyContent': rec.getBodyText && rec.getBodyText()
+				'path': lineage.join(' / ')//,
+				//'textBodyContent': rec.getBodyText && rec.getBodyText()
 			});
 		});
 
