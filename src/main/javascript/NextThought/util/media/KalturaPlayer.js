@@ -722,7 +722,7 @@ Ext.define('NextThought.util.media.KalturaPlayer',{
 
 			//We need to make the HTML5 video work.
 			// Flash won't work w/o Microsoft's blessing in IE on Windows8. (And we don't have that blessing btw)
-			mw.setConfig( 'Kaltura.ForceFlashOnIE10', true );
+			mw.setConfig( 'Kaltura.ForceFlashOnIE10', false );
 
 			//This may fix Safari's full screen.
 			//mw.setConfig( 'EmbedPlayer.FullScreenZIndex', 999999 );
