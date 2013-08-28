@@ -570,6 +570,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
                 return false;
             }
 
+            if(element.getAttribute('class') === 'overlayed'){
+                return true;
+            }
+
             var types = [
                     'application/vnd.nextthought.ntislidedeck',
                     'application/vnd.nextthought.naquestion',
