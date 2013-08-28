@@ -1058,12 +1058,6 @@ Ext.define('NextThought.controller.Chat', {
 	* @param [c] - function to call when the socket is done
 	*/
 	changePresence: function(type,show,status,c){
-		if(!isFeature('custom-status')){
-			status = '';
-			if(type && type.isPresenceInfo){
-				type.set({'status': ''});
-			}
-		}
 		var username = $AppConfig.username,
 			newPresence = (type && type.isPresenceInfo)? type : NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
 			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
