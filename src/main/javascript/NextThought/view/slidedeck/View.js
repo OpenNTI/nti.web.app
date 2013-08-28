@@ -42,24 +42,20 @@ Ext.define('NextThought.view.slidedeck.View', {
 			},
 			{
 				flex: 1,
-				xtype: 'slidedeck-slide'
+				xtype: 'slidedeck-transcript'
 			}
 		];
 
 		t = config.items[1];
-
-		if (isFeature('transcript-presentation')) {
-			t.xtype = 'slidedeck-transcript';
-			t.data = config.transcript;
-			this.hasTranscript = true;
-			vPlaylist = this.getVideoPlayList(config.store);
-			t.videoPlaylist = vPlaylist;
-			t.transcriptStore = this.buildTranscriptStore(vPlaylist);
-			// NOTE: Slides are a time-series and currently that's what drives the presentation.
-			// We get this store passed to be the one contain a sequence of slides with their associated data.
-			t.slideStore = config.store;
-			t.startOn = config.startOn;
-		}
+		t.data = config.transcript;
+		vPlaylist = this.getVideoPlayList(config.store);
+		t.videoPlaylist = vPlaylist;
+		t.transcriptStore = this.buildTranscriptStore(vPlaylist);
+		// NOTE: Slides are a time-series and currently that's what drives the presentation.
+		// We get this store passed to be the one contain a sequence of slides with their associated data.
+		t.slideStore = config.store;
+		t.startOn = config.startOn;
+		this.hasTranscript = true;
 
 		return this.callParent([config]);
 	},
