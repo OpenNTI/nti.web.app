@@ -18,21 +18,11 @@ Ext.define('NextThought.view.contacts.View', {
 		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white' },
 		{ xtype: 'contact-tab-view', id: 'my-groups',
 			subType: 'group',
-			bodyDefaultType: 'contacts-tabs-grouping',
-			storeId: 'FriendsList',
-			filterFn: function (group) { return group.isDFL; },
-			bodyItems: [
-				{xtype: 'group-buttons'}
-			]
+			filterFn: function (group) { return group.isDFL; }
 		},
 		{ xtype: 'contact-tab-view', id: 'my-lists',
 			subType: 'list',
-			bodyDefaultType: 'contacts-tabs-grouping',
-			storeId: 'FriendsList',
-			filterFn: function (group) { return !group.isDFL; },
-			bodyItems: [
-				{xtype: 'list-buttons'}
-			]
+			filterFn: function (group) { return !group.isDFL; }
 		}
 	],
 
@@ -108,6 +98,11 @@ Ext.define('NextThought.view.contacts.View', {
 				this.layout.setActiveItem(tab);
 			}, this);
 		}
+	},
+
+
+	getTitlePrefix: function(){
+		return '';
 	},
 
 

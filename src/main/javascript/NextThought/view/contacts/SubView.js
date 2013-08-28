@@ -30,6 +30,11 @@ Ext.define('NextThought.view.contacts.SubView', {
 				]
 			};
 
+		if('contact'!==type) {
+			config.bodyDefaultType = config.bodyDefaultType||'contacts-tabs-grouping';
+			config.storeId = config.storeId||'FriendsList';
+		}
+
 		//We can't use the config's helper functions because those get created in the call to the parent...after which,
 		// these applications would become alot more tricky.
 		this.applyConfigs('body',{
