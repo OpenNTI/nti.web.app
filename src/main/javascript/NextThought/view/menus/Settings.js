@@ -34,7 +34,7 @@ Ext.define('NextThought.view.menus.Settings', {
 			childsLink = u.getLink('childrens-privacy');
 
 
-		if (isFeature('presence-menu') && $AppConfig.service.canChat()) {
+		if ($AppConfig.service.canChat()) {
 			items.push({ xtype: 'presence-menu'});
 			items.push({ xtype: 'menuseparator'});
 		}
