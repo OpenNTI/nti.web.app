@@ -80,12 +80,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 							 destroyable: true,
 							 click:       'trackLineAtEvent'
 						 }));
-
-			me.reader.on({
-							 scope:              me,
-							 'iframe-click':     'trackLineAtEvent',
-							 'iframe-mousedown': 'trackLineAtEvent'
-						 });
 		}
 		else {
 			me.reader.on('destroy', 'destroy',

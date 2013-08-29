@@ -300,7 +300,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 						t = me.reader.getScroll().get().top,
 						s = me.get().win.getSelection();
 
-				if (!fakeEvent.getTarget('a') || !s.isCollapsed) {
+				if (!s.isCollapsed) {
 					me.reader.onContextMenuHandler(
 							{
 								getTarget: function () {
@@ -325,10 +325,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			me.selectionTimer = Ext.defer(selectionChange, 300, me, [e]);
 		});
 
-		if (Ext.is.iPad) {
-			forward(['touchstart', 'selectionchange']);
-		}
-		else {
+		if (!Ext.is.iPad) {
 			forward(['mousedown', 'mouseup', 'mousemove', 'mouseout']);
 		}
 
