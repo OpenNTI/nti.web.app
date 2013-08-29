@@ -145,14 +145,9 @@
 .annotation-gutter {
 	position: absolute;
 	top: 0;
-	@media screen and (max-device-width: 768px) { // iPad
-		width: 25px;
-		right: 35px;
-	}
-	@media screen and (min-device-width: 769px) {
-		width: 60px;
-		right: 0;
-	}
+	right: 0;
+	width: 60px;
+
 	overflow: visible;
 	z-index: 4;
 
@@ -164,12 +159,7 @@
 	.column {
 		position: absolute;
 		left: 0;
-		@media screen and (max-device-width: 768px) { // iPad
-			right: 35px;
-		}
-		@media screen and (min-device-width: 769px) {
-			right: 0;
-		}
+		right: 0;
 		top: 0;
 		bottom: 0;
 		overflow: visible;
@@ -205,6 +195,16 @@
 	}
 }
 
+@media screen and (max-device-width: 768px) { // iPad
+	.annotation-gutter{
+		width: 25px;
+		right: 35px;
+
+		.column {
+			right: 35px;
+		}
+	}
+}
 
 .x-component-annotation-view {
 	@include scrollbar(#fbfbfb, $tertiary-grey);
