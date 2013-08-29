@@ -90,12 +90,13 @@ Ext.define('NextThought.mixins.ProfileLinks', function () {
 						click: onUserNameClick
 					};
 
-
 			Ext.each(arguments, function (el) {
+				var user = me.userObject || me.user;
 				el = Ext.get(el);
+				
 				if (!Ext.isEmpty(el)) {
 					//el.addClsOnOver('over');
-					if (me.profileLinkCard !== false) {
+					if ((user && !isMe(user)) && me.profileLinkCard !== false) {
 						events.mouseover = function (e) {
 							return startShowCard.call(me, e, el);
 						};
