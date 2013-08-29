@@ -196,9 +196,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 	onContextMenuHandler: function () {
 		var o = this.getAnnotations();
-		if (Ext.is.iPad) {
-			return o.iOnContextMenuHandler.apply(o, arguments);
-		}
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
