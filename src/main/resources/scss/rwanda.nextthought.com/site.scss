@@ -1,0 +1,66 @@
+// placeholder & defaults
+
+.x-component-branding {
+	//in the library view, turn this on to show the logo/message box
+	display: block;
+	margin: 30px 0 114px 0;
+
+	.logo{
+		top: 10%;
+		&::after{
+			content: url(../../images/rwanda.nextthought.com/cmu_wordmark.png);
+		}
+	}
+
+	.box{
+		display: none;
+	}
+}
+
+
+.main-navigation {
+
+
+	.branding{
+		display: block;
+		background: url(../../images/rwanda.nextthought.com/cmu_cover.png) center center no-repeat;
+	}
+
+	.content {
+		.image::after {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0; left: 0;
+			width: 10px;
+			background: url(../../images/rwanda.nextthought.com/cmu_cover.png) 0 0 no-repeat;
+		}
+		.wrap {
+			.provider {
+				text-indent: -1000px;
+				&::before {content:':';}//force there to be some text (the text indent hides it)
+				&::after {
+					content: 'Carnegie Mellon University';
+					position: absolute;
+					left: 0;
+					top: 0;
+					text-indent: 0;
+				}
+			}
+		}
+	}
+}
+
+
+.x-panel-content-switcher {
+	.x-component-content-switcher {
+		div.item:first-of-type {
+			.image::after {
+				content: '';
+				position: absolute;
+				top: 0; bottom: 0; left: 0;
+				width: 10px;
+				background: url(../../images/rwanda.nextthought.com/cmu_cover.png) 0 0 no-repeat;
+			}
+		}
+	}
+}
