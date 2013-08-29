@@ -3,14 +3,13 @@ var $AppConfig = {
 	"debugSocket": false,
 	"debugSocketVerbosely": false,
 
+	"enableSymbolicLinkingNav": true,
+
 	"features":{
-		"rhp-groupchat": false,
-		"chat-history": false,
-		"presence-menu": true,
-		"custom-status": false
+
 	},
 	"server" : {
-        "host": "http://api.dev",
+        "host": "",
         "data": "/dataserver2/",
 		"login": "/login/",
 		"unsupported": "/login/unsupported.html"
