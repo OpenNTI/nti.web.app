@@ -26,8 +26,10 @@ window.onerror = function(){
 
 
 //frame buster
-if( window.top!==window ){
-	window.top.location.href = location.href;
+//use weak comparison on purpose.
+/*jslint eqeq:true */
+if( top != window ){
+	top.location.href = location.href;
 	//If the frame busting code is blocked, tell them embedding is not supported.
 	location.replace('resources/iframe.html');
 }
