@@ -213,35 +213,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	tabTpl: Ext.DomHelper.createTemplate({html: '\t'}).compile(),
 
 
-	/**
-	 * Scrolls to the top of the page if a text input field is not focused
-	 */
-	onFocusChange: function (e) {
-		var tokenInput,
-				scrollWindowBack = true;
-		if (this.sharedListEl) {
-			tokenInput = this.sharedListEl.down('.user-token-field')
-					.el.down('.tokens')
-					.el.down('.inputArea')
-					.el.down('.token-input-wrap')
-					.el.down('input');
-		}
-
-		if (this.contentEl && this.contentEl === e.relatedTarget) {
-			scrollWindowBack = false;
-		}
-		if (this.titleEl && this.titleEl === e.relatedTarget) {
-			scrollWindowBack = false;
-		}
-		if (tokenInput && tokenInput === e.relatedTarget) {
-			scrollWindowBack = false;
-		}
-		if (scrollWindowBack) {
-			window.scrollTo(0, 0);
-		}
-	},
-
-
 	onClassExtended: function (cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
@@ -450,30 +421,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			mouseup:     me.onMouseUp
 		});
 
-		if (Ext.is.iPad) {
-			me.mon(me.contentEl, {
-				'blur': function (e) {
-					me.onFocusChange(e);
-				}
-			});
-			me.mon(me.contentEl, {
-				'click': function (e) {
-					me.contentEl.focus();
-					me.moveCursorToEnd(me.contentEl);
-				}
-			});
-		}
-
 		me.on('destroy', function () {
 			Ext.Object.each(me.trackedParts, function (k, v) {
 				if (v && v.destroy) {
 					v.destroy();
 				}
 			});
-			if (Ext.is.iPad) {
-				window.scrollTo(0, 0);
-				document.body.scrollTop = 0;
-			}
 		});
 
 		me.typingAttributes = [];
@@ -525,19 +478,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			} else {
 				(me.sharedListEl.up('.aux') || me.sharedListEl).remove();
 			}
-
-			if (Ext.is.iPad) {
-				userTokenField = me.sharedListEl.down('.user-token-field');
-				tokens = userTokenField.el.down('.tokens');
-				inputArea = tokens.el.down('.inputArea');
-				tokenInputWrap = inputArea.down('.token-input-wrap');
-				tokenInput = tokenInputWrap.el.down('input');
-				me.mon(tokenInput, {
-					'blur': function (e) {
-						me.onFocusChange(e);
-					}
-				});
-			}
 		}
 	},
 
@@ -560,20 +500,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					e.stopPropagation();
 				}
 			});
-			if (Ext.is.iPad) {
-				me.mon(me.titleEl, {
-					'blur': function (e) {
-						me.onFocusChange(e);
-					}
-				});
-				me.mon(me.titleEl, {
-					'focus': function () {
-						var dom = me.titleEl.el.dom;
-						var length = dom.value.length;
-						dom.setSelectionRange(length, length);
-					}
-				});
-			}
 		}
 	},
 
@@ -594,9 +520,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.deactivate();
 		this.el.addCls(['active', 'disabled']);
 		this.el.down('.content').set({'contenteditable': undefined});
-		if (Ext.is.iPad) {
-			window.scrollTo(0, document.activeElement.top);
-		}
 	},
 
 
@@ -607,17 +530,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	deactivate: function () {
-		if (Ext.is.iPad && this.contentEl) {
-			this.contentEl.blur();
-		}
 		this.el.removeCls('active');
 		this.lastRange = null;
 		this.cleanTrackedParts();
 		this.clearError();
 		this.fireEvent('deactivated-editor', this);
-		if (Ext.is.iPad) {
-			window.scrollTo(0, document.activeElement.top);
-		}
 	},
 
 
