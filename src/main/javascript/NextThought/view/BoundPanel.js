@@ -1,30 +1,30 @@
-Ext.define('NextThought.view.BoundPanel',{
+Ext.define('NextThought.view.BoundPanel', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.data-bound-panel',
+	alias:  'widget.data-bound-panel',
 
 	overflowX: 'hidden',
 	overflowY: 'auto',
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
-		this.store = this.store || Ext.getStore(this.storeId||'');
-		if(!this.store){
+		this.store = this.store || Ext.getStore(this.storeId || '');
+		if (!this.store) {
 			console.warn('No Store!');
 			return;
 		}
 
-		this.mon(this.store,{
-			scope: this,
-			load: 'onBoundStoreLoad',
+		this.mon(this.store, {
+			scope:                 this,
+			load:                  'onBoundStoreLoad',
 			'parent-store-loaded': 'onParentStoreLoad',
-			add: 'onBoundStoreAdd',
-			remove: 'onBoundStoreRemove'
+			add:                   'onBoundStoreAdd',
+			remove:                'onBoundStoreRemove'
 		});
 	},
 
 
-	getComponentConfigForRecord: function(rec){
-		if(rec.hidden || (this.filter && !this.filter(rec))){
+	getComponentConfigForRecord: function (rec) {
+		if (rec.hidden || (this.filter && !this.filter(rec))) {
 			return null;
 		}
 
@@ -32,8 +32,8 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 
-	showEmptyState: function(){
-		if(this.emptyCmp && !this.emptyState){
+	showEmptyState: function () {
+		if (this.emptyCmp && !this.emptyState) {
 			this.add(this.emptyCmp);
 			this.emptyState = true;
 			this.addCls('empty');
@@ -41,8 +41,8 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 
-	hideEmptyState: function(){
-		if(this.emptyState && this.down('[emptyState=true]')){
+	hideEmptyState: function () {
+		if (this.emptyState && this.down('[emptyState=true]')) {
 			this.down('[emptyState=true]').destroy();
 			this.emptyState = false;
 			this.removeCls('empty');
@@ -50,10 +50,10 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 
-	shouldHide: function(records){
+	shouldHide: function (records) {
 		var allHidden = true, me = this;
 
-		Ext.each(records, function(item){
+		Ext.each(records, function (item) {
 			allHidden = allHidden && (!!item.hidden || (me.filter && !me.filter(item)));
 		});
 
@@ -61,82 +61,83 @@ Ext.define('NextThought.view.BoundPanel',{
 	},
 
 
-	onParentStoreLoad: function(store, records){
+	onParentStoreLoad: function (store, records) {
 		var total = 0;
 
-		Ext.each(records, function(item){
-			if(item.get('ID').indexOf('mycontacts') === 0){
+		Ext.each(records, function (item) {
+			if (item.get('ID').indexOf('mycontacts') === 0) {
 				total += item.getFriendCount();
 			}
 		});
 
-		if(total === 0){
+		if (total === 0) {
 			this.showEmptyState();
 		}
 	},
 
 
-	onBoundStoreLoad: function(store){
+	onBoundStoreLoad: function (store) {
 		var items;
 
 		this.removeAll(true);
-		if(this.initialConfig.items){
+		if (this.initialConfig.items) {
 			this.add(this.initialConfig.items);
 		}
 
 		items = store.snapshot ? store.snapshot.items : store.data.items;
-		
-		if(this.shouldHide(items) || Ext.isEmpty(items)){
+
+		if (this.shouldHide(items) || Ext.isEmpty(items)) {
 			this.showEmptyState();
-		}else{
-			this.onBoundStoreAdd(store,items);
+		} else {
+			this.onBoundStoreAdd(store, items);
 		}
 	},
 
 
-	onBoundStoreAdd: function(store,records,index){
+	onBoundStoreAdd: function (store, records, index) {
 		var insertionPoint = this.defaultInsertPoint || index || 0,//force number
-			toAdd = Ext.Array.clean(Ext.Array.map(records,this.getComponentConfigForRecord,this));
+				toAdd = Ext.Array.clean(Ext.Array.map(records, this.getComponentConfigForRecord, this));
 
-		if(!this.shouldHide(records)){
+		if (!this.shouldHide(records)) {
 			this.hideEmptyState();
 		}
 
-		this.insertItem(insertionPoint,toAdd);
+		this.insertItem(insertionPoint, toAdd);
 	},
 
 
-	onBoundStoreRemove: function(store,record){
-		console.debug('remove',arguments);
+	onBoundStoreRemove: function (store, record) {
+		console.debug('remove', arguments);
 
 		var me = this;
-		function itr(i){
-			if(i.recordId === record.getId()){
-				me.removeItem(i,true);
+
+		function itr(i) {
+			if (i.recordId === record.getId()) {
+				me.removeItem(i, true);
 				return false;
 			}
 			return true;
 		}
 
-		this.items.each(itr,this);
+		this.items.each(itr, this);
 
-		if(this.shouldHide(store.getRange())){
+		if (this.shouldHide(store.getRange())) {
 			this.showEmptyState();
 		}
 	},
 
 
-	removeAllItems: function(){
+	removeAllItems: function () {
 		this.removeAll(true);
 	},
 
 
-	insertItem: function(insertAt, toInsert){
-		return this.insert(insertAt,toInsert);
+	insertItem: function (insertAt, toInsert) {
+		return this.insert(insertAt, toInsert);
 	},
 
 
-	removeItem: function(o,autoDestroy){
-		return this.remove(o,autoDestroy);
+	removeItem: function (o, autoDestroy) {
+		return this.remove(o, autoDestroy);
 	}
 });

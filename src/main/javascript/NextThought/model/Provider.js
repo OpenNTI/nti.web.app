@@ -1,5 +1,5 @@
-Ext.define(	'NextThought.model.Provider', {
-	fields: [
+Ext.define('NextThought.model.Provider', {
+	fields:     [
 		{ name: 'Classes', type: 'collectionItem' },
 		{ name: 'Communities', type: 'UserList' },
 		{ name: 'NotificationCount', type: 'int' },
@@ -14,6 +14,6 @@ Ext.define(	'NextThought.model.Provider', {
 		{ name: 'realname', type: 'string' }
 
 	],
-	extend: 'NextThought.model.Base',
+	extend:     'NextThought.model.Base',
 	idProperty: 'ID'
 });

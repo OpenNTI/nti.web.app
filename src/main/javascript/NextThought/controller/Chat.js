@@ -1,5 +1,5 @@
 Ext.define('NextThought.controller.Chat', {
-	extend: 'Ext.app.Controller',
+	extend:   'Ext.app.Controller',
 	requires: [
 		'NextThought.cache.AbstractStorage',
 		'NextThought.cache.IdCache',
@@ -38,8 +38,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	init: function () {
 		var me = this,
-			store = me.getPresenceInfoStore();
-		
+				store = me.getPresenceInfoStore();
+
 		this.setChannelMap();
 
 		//set up a listener in UserRepository for the presence-changed event
@@ -51,122 +51,122 @@ Ext.define('NextThought.controller.Chat', {
 		this.socket = this.socket || Socket;
 
 		this.socket.register({
-			'disconnect': me.createHandlerForChatEvents(me.onSocketDisconnect, 'disconnect'),
-			'serverkill': me.createHandlerForChatEvents(me.onSocketDisconnect, 'serverkill'),
-			'chat_enteredRoom': me.createHandlerForChatEvents(me.onEnteredRoom, 'chat_enteredRoom'),
-			'chat_exitedRoom': me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
-			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
+								 'disconnect':                 me.createHandlerForChatEvents(me.onSocketDisconnect, 'disconnect'),
+								 'serverkill':                 me.createHandlerForChatEvents(me.onSocketDisconnect, 'serverkill'),
+								 'chat_enteredRoom':           me.createHandlerForChatEvents(me.onEnteredRoom, 'chat_enteredRoom'),
+								 'chat_exitedRoom':            me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
+								 'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
 //			'chat_roomModerationChanged' : me.createHandlerForChatEvents(me.onModerationChange, 'chat_roomMOderationChanged'),
-			/*'chat_presenceOfUserChangedTo': function (user, presesence){
-				UserRepository.presenceChanged(user, presence);
-			},*/
-			'chat_setPresenceOfUsersTo': function () {
-				me.handleSetPresence.apply(me, arguments);
-			},
-			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
+								 /*'chat_presenceOfUserChangedTo': function (user, presesence){
+								  UserRepository.presenceChanged(user, presence);
+								  },*/
+								 'chat_setPresenceOfUsersTo':  function () {
+									 me.handleSetPresence.apply(me, arguments);
+								 },
+								 'chat_recvMessage':           me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
 //			'chat_recvMessageForAttention' : me.createHandlerForChatEvents(me.onMessageForAttention, 'chat_recvMessageForAttention'),
 //			'chat_recvMessageForModeration' : me.createHandlerForChatEvents(me.onModeratedMessage, 'chat_recvMessageForModeration'),
-			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow')
+								 'chat_recvMessageForShadow':  me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow')
 //			'chat_failedToEnterRoom' : me.createHandlerForChatEvents(me.onFailedToEnterRoom, 'chat_failedToEnterRoom')
-		});
+							 });
 
 		this.listen({
-			component: {
+						component: {
 
 //			    'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
 //			    'chat-log-view button[action]':{'click': this.toolClicked},
 //			    'chat-log-view tool[action]':{'click': this.toolClicked},
 
-				'*': {
-					'set-chat-status': 'changeStatus',
-					'set-chat-show': 'changeShow',
-					'set-chat-type': 'changeType',
-					'set-chat-presence': 'changePresence',
-					'group-chat': 'enterRoom',
-					'chat': 'enterRoom',
-					'adhock-chat':'flattenOccupantsAndEnterRoom'
-				},
+							'*': {
+								'set-chat-status':   'changeStatus',
+								'set-chat-show':     'changeShow',
+								'set-chat-type':     'changeType',
+								'set-chat-presence': 'changePresence',
+								'group-chat':        'enterRoom',
+								'chat':              'enterRoom',
+								'adhock-chat':       'flattenOccupantsAndEnterRoom'
+							},
 
-				'chat-view chat-entry': {
-					//'classroom': this.classroom,
-					'send': 'send',
-					'send-whiteboard': 'sendWhiteboard'
-				},
+							'chat-view chat-entry': {
+								//'classroom': this.classroom,
+								'send':            'send',
+								'send-whiteboard': 'sendWhiteboard'
+							},
 
-				'chat-view chat-log-entry': {
-					'reply-to-whiteboard': 'replyToWhiteboard'
-				},
+							'chat-view chat-log-entry': {
+								'reply-to-whiteboard': 'replyToWhiteboard'
+							},
 
-				'chat-view': {
-					'flag-messages': 'flagMessages',
-					'publish-chat-status': 'publishChatStatus'
-				},
-				'chat-log-entry': {
-					'link-clicked': 'linkClicked',
-					'show-whiteboard': 'zoomWhiteboard'
-				},
-				'chat-transcript-window': {
-					'flag-messages': 'flagTranscriptMessages'
-				},
+							'chat-view':              {
+								'flag-messages':       'flagMessages',
+								'publish-chat-status': 'publishChatStatus'
+							},
+							'chat-log-entry':         {
+								'link-clicked':    'linkClicked',
+								'show-whiteboard': 'zoomWhiteboard'
+							},
+							'chat-transcript-window': {
+								'flag-messages': 'flagTranscriptMessages'
+							},
 
-				'chat-transcript': {
-					'link-clicked': 'linkClicked',
-					'show-whiteboard': 'zoomWhiteboard'
-				},
+							'chat-transcript': {
+								'link-clicked':    'linkClicked',
+								'show-whiteboard': 'zoomWhiteboard'
+							},
 
-				'chat-window': {
-					'beforedestroy': function (cmp) {
-						if (!cmp.disableExitRoom) {
-							this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
+							'chat-window': {
+								'beforedestroy': function (cmp) {
+									if (!cmp.disableExitRoom) {
+										this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
+									}
+								},
+
+								'add-people': function (cmp, people) {
+									var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
+											o = ri.data.Occupants;
+
+									if (!Ext.isArray(people)) {
+										people = [people];
+									}
+									o.push.apply(o, people);
+									this.socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
+								}
+							},
+
+							'script-entry': {
+								'script-to-chat': 'send'
+							}
+						},
+
+						controller: {
+							'*': {
+								'set-chat-status': 'changeStatus',
+								'set-chat-show':   'changeShow',
+								'set-chat-type':   'changeType'
+							}
 						}
-					},
-
-					'add-people': function (cmp, people) {
-						var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
-							o = ri.data.Occupants;
-
-						if (!Ext.isArray(people)) {
-							people = [people];
-						}
-						o.push.apply(o, people);
-						this.socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
-					}
-				},
-
-				'script-entry': {
-					'script-to-chat': 'send'
-				}
-			},
-
-			controller:{
-				'*':{
-					'set-chat-status': 'changeStatus',
-					'set-chat-show': 'changeShow',
-					'set-chat-type': 'changeType'
-				}
-			}
-		});
+					});
 
 		//handle some events on session, open existing chat rooms and clear the session on logout.
 
 
-		this.application.on('session-ready', function(){
-			Socket.onSocketAvailable(this.onSessionReady,this);
+		this.application.on('session-ready', function () {
+			Socket.onSocketAvailable(this.onSessionReady, this);
 		}, this);
 		this.application.on('session-closed', this.removeSessionObject, this);
-		this.application.on('will-logout',function(callback){
-			this.changePresence('unavailable',null,null,callback);
-		},this);
+		this.application.on('will-logout', function (callback) {
+			this.changePresence('unavailable', null, null, callback);
+		}, this);
 	},
 
-	createHandlerForChatEvents: function(fn,eventName){
+	createHandlerForChatEvents: function (fn, eventName) {
 		var me = this;
 
-		return function(){
-			if(me.availableForChat){
-				fn.apply(me,arguments);
-			}else if(me.debug){
-				console.log("Dropped "+eventName+" handling");
+		return function () {
+			if (me.availableForChat) {
+				fn.apply(me, arguments);
+			} else if (me.debug) {
+				console.log("Dropped " + eventName + " handling");
 			}
 		};
 	},
@@ -179,7 +179,7 @@ Ext.define('NextThought.controller.Chat', {
 			//			'META': this.onMessageMetaChannel,
 			'DEFAULT': this.onMessageDefaultChannel,
 			'WHISPER': this.onMessageDefaultChannel,
-			'STATE': this.onReceiveStateChannel
+			'STATE':   this.onReceiveStateChannel
 		};
 	},
 
@@ -187,36 +187,36 @@ Ext.define('NextThought.controller.Chat', {
 		//open any rooms we were currently involved in
 		console.log("Chat onSessionReady");//card 1768
 		var me = this,
-			roomInfos = me.getAllRoomInfosFromSession(),
-			w, presenceState, active;
+				roomInfos = me.getAllRoomInfosFromSession(),
+				w, presenceState, active;
 		Ext.each(roomInfos, function (ri) {
 			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
 
 			//This chunk will try to recover the history and insert it into the chat again...
 			ViewUtils.getTranscript(ri.getId(),
-				ri.get('Last Modified'),
-				function (transcript) {
-					var messages = transcript.get('Messages');
-					messages = Ext.Array.sort(messages, function(a, b){
-						var aRaw = a.raw || {CreatedTime: 0},
-							bRaw = b.raw || {CreatedTime: 0};
+									ri.get('Last Modified'),
+									function (transcript) {
+										var messages = transcript.get('Messages');
+										messages = Ext.Array.sort(messages, function (a, b) {
+											var aRaw = a.raw || {CreatedTime: 0},
+													bRaw = b.raw || {CreatedTime: 0};
 
-						return aRaw.CreatedTime - bRaw.CreatedTime;
-					});
+											return aRaw.CreatedTime - bRaw.CreatedTime;
+										});
 
-					Ext.each(messages, function (m) {
-						me.onMessage(m);
-					}, me);
-					if (me.isRoomIdAccepted(ri.getId())) {
-						w.show();
-						w.minimize();
-					}
-				},
-				function () {
-					console.error('Could not recover chat history.');
-					me.onExitedRoom(ri.getData());
-				}, this);
+										Ext.each(messages, function (m) {
+											me.onMessage(m);
+										}, me);
+										if (me.isRoomIdAccepted(ri.getId())) {
+											w.show();
+											w.minimize();
+										}
+									},
+									function () {
+										console.error('Could not recover chat history.');
+										me.onExitedRoom(ri.getData());
+									}, this);
 
 		});
 
@@ -224,13 +224,13 @@ Ext.define('NextThought.controller.Chat', {
 		presenceState = TemporaryStorage.get('presence-state');
 		active = presenceState && presenceState.active && presenceState[presenceState.active];
 
-		if(active){
+		if (active) {
 			this.changePresence(active.type, active.show, active.status);
-		}else{
+		} else {
 			this.changePresence("available");
 		}
 
-		Socket.on('socket-new-sessionid', function(){
+		Socket.on('socket-new-sessionid', function () {
 			console.log("New Socket Id, rebroadcasting presence");
 			this.changePresence(this.getPresenceInfoStore().getPresenceOf($AppConfig.username));
 		}, this);
@@ -250,10 +250,10 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		var rIsString = (typeof r === 'string'),
-			id = IdCache.getIdentifier(rIsString ? r : r.getId()),
-			w = Ext.ComponentQuery.query('chat-window[roomInfoHash=' + id + ']')[0],
-			allRooms = Ext.ComponentQuery.query('chat-window'),
-			xOcc;
+				id = IdCache.getIdentifier(rIsString ? r : r.getId()),
+				w = Ext.ComponentQuery.query('chat-window[roomInfoHash=' + id + ']')[0],
+				allRooms = Ext.ComponentQuery.query('chat-window'),
+				xOcc;
 
 		if (!w) {
 			//see if we have rooms with the same occupants list:
@@ -296,8 +296,8 @@ Ext.define('NextThought.controller.Chat', {
 	existingRoom: function (users, roomId, options) {
 		//Add ourselves to this list
 		var key, rInfo,
-			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username)),
-			chats = this.getSessionObject();
+				allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username)),
+				chats = this.getSessionObject();
 
 		if (options && options.ContainerId && !roomId) {
 			roomId = options.ContainerId;
@@ -313,7 +313,7 @@ Ext.define('NextThought.controller.Chat', {
 					else if (!ClassroomUtils.isClassroomId(rInfo.getId())) {
 
 						if (Ext.Array.difference(rInfo.get('Occupants'), allUsers).length === 0
-							&& Ext.Array.difference(allUsers, rInfo.get('Occupants')).length === 0) {
+								&& Ext.Array.difference(allUsers, rInfo.get('Occupants')).length === 0) {
 							break;//leave rInfo as is, so we can return it
 						}
 					}
@@ -333,7 +333,7 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'},
-			messageRecord;
+				messageRecord;
 
 		if (channel) {
 			m.channel = channel;
@@ -356,24 +356,24 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	flattenOccupantsAndEnterRoom: function(occupants,options){
+	flattenOccupantsAndEnterRoom: function (occupants, options) {
 		if (!$AppConfig.service.canChat()) {
 			console.log('User not permissioned to chat.');
 			return;
 		}
 
 		var flStore = Ext.getStore('FriendsList'),
-			pStore = Ext.getStore('PresenceInfo'),
-			flattened = [],
-			push = Array.prototype.push;
+				pStore = Ext.getStore('PresenceInfo'),
+				flattened = [],
+				push = Array.prototype.push;
 
-		function online(v){
-			return !isMe(v) && pStore.findExact('username',v) > -1;
+		function online(v) {
+			return !isMe(v) && pStore.findExact('username', v) > -1;
 		}
 
-		Ext.each(occupants,function(o){
-			var list = flStore.findExact('Username',o);
-			if(list < 0){
+		Ext.each(occupants, function (o) {
+			var list = flStore.findExact('Username', o);
+			if (list < 0) {
 				push.call(flattened, o);
 				return;
 			}
@@ -382,11 +382,10 @@ Ext.define('NextThought.controller.Chat', {
 			push.apply(flattened, list.getFriends());
 		});
 
-		flattened = Ext.Array.filter(Ext.Array.unique(flattened),online);
+		flattened = Ext.Array.filter(Ext.Array.unique(flattened), online);
 
-		return this.enterRoom(flattened,options);
+		return this.enterRoom(flattened, options);
 	},
-
 
 
 	/*
@@ -396,8 +395,10 @@ Ext.define('NextThought.controller.Chat', {
 	 * the default behaviour is to start a persistent list (this seems backwards but it is the old
 	 * behaviour.
 	 */
-	enterRoom: function (usersOrList, options) {
-		if(!this.availableForChat){ return; }
+	enterRoom:                    function (usersOrList, options) {
+		if (!this.availableForChat) {
+			return;
+		}
 		if (!$AppConfig.service.canChat()) {
 			console.log('User not permissioned to chat.');
 			return;
@@ -405,8 +406,8 @@ Ext.define('NextThought.controller.Chat', {
 
 		options = options || {};
 		var users = [], k, ri, roomCfg,
-			openPersistently = options.persistent !== undefined ? options.persistent : true,
-			isListOrDFL = usersOrList.get && usersOrList.get('friends'), w, me = this;
+				openPersistently = options.persistent !== undefined ? options.persistent : true,
+				isListOrDFL = usersOrList.get && usersOrList.get('friends'), w, me = this;
 
 		//Don't send the persistent option to the ds
 		delete options.persistent;
@@ -499,8 +500,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	showMessage: function (msgCmp) {
 		var log = msgCmp.up('chat-log-view'),
-			tab = log.up('chat-view'),
-			tabpanel = tab.up('tabpanel');
+				tab = log.up('chat-view'),
+				tabpanel = tab.up('tabpanel');
 
 		tabpanel.setActiveTab(tab);
 		log.scroll(msgCmp);
@@ -539,8 +540,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	send: function (f, mid, channel, recipients) {
 		var room = ClassroomUtils.getRoomInfoFromComponent(f),
-			val = f.getValue(),
-			me = this;
+				val = f.getValue(),
+				me = this;
 
 		if (!room || Ext.isEmpty(val, false)) {
 			console.error('Cannot send message, room', room, 'values', val);
@@ -554,8 +555,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	getHashChange: function (href, base) {
 		var hash = href.split('#'),
-			newLocation = hash[0],
-			target = hash[1];
+				newLocation = hash[0],
+				target = hash[1];
 
 		if (newLocation.indexOf(base) === 0 && href !== window.location.href && target.indexOf('!') === 0) {
 			return target;
@@ -566,7 +567,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	linkClicked: function (cmp, href) {
 		var target,
-			whref = window.location.href.split('#')[0];
+				whref = window.location.href.split('#')[0];
 
 		function openHref(link, t) {
 			try {
@@ -611,29 +612,29 @@ Ext.define('NextThought.controller.Chat', {
 
 	showWhiteboard: function (data, cmp, mid, channel, recipients) {
 		var me = this,
-			component = cmp,
-			room = ClassroomUtils.getRoomInfoFromComponent(cmp),
-			wbWin = Ext.widget('wb-window', {width: 802, value: data, chatStatusEvent: 'status-change', ownerCmp: cmp}),
-			wbData,
-			scrollEl = component.up('.chat-view').el.down('.chat-log-view'),
-			scrollTop = scrollEl.getScroll().top;
+				component = cmp,
+				room = ClassroomUtils.getRoomInfoFromComponent(cmp),
+				wbWin = Ext.widget('wb-window', {width: 802, value: data, chatStatusEvent: 'status-change', ownerCmp: cmp}),
+				wbData,
+				scrollEl = component.up('.chat-view').el.down('.chat-log-view'),
+				scrollTop = scrollEl.getScroll().top;
 
 		//hook into the window's save and cancel operations:
 		wbWin.on({
-			save: function (win, wb) {
-				wbData = wb.getValue();
-				me.clearErrorForRoom(room);
-				me.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
-				wbWin.close();
-			},
-			cancel: function () {
-				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
-				wbWin.close();
-				if (scrollEl.getScroll().top === 0) {
-					scrollEl.scrollTo('top', scrollTop);
-				}
-			}
-		});
+					 save:   function (win, wb) {
+						 wbData = wb.getValue();
+						 me.clearErrorForRoom(room);
+						 me.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
+						 wbWin.close();
+					 },
+					 cancel: function () {
+						 //if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+						 wbWin.close();
+						 if (scrollEl.getScroll().top === 0) {
+							 scrollEl.scrollTo('top', scrollTop);
+						 }
+					 }
+				 });
 
 		//show window:
 		wbWin.show();
@@ -786,7 +787,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	updateRoomInfo: function (ri) {
 		var win = this.getChatWindow(ri.getId()),
-			ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
+				ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
 		if (ro) {
 			ro.fireEvent('changed', ri);
 		}
@@ -796,13 +797,13 @@ Ext.define('NextThought.controller.Chat', {
 
 	sendChangeMessages: function (oldRoomInfo, newRoomInfo) {
 		var oldOccupants = oldRoomInfo ? oldRoomInfo.get('Occupants') : [],
-			newOccupants = newRoomInfo.get('Occupants'),
-			oldMods = oldRoomInfo ? oldRoomInfo.get('Moderators') : [],
-			newMods = newRoomInfo.get('Moderators'),
-			left = Ext.Array.difference(oldOccupants, newOccupants),
-			added = Ext.Array.difference(newOccupants, oldOccupants),
-			leftMods = Ext.Array.difference(oldMods, newMods),
-			addedMods = Ext.Array.difference(newMods, oldMods);
+				newOccupants = newRoomInfo.get('Occupants'),
+				oldMods = oldRoomInfo ? oldRoomInfo.get('Moderators') : [],
+				newMods = newRoomInfo.get('Moderators'),
+				left = Ext.Array.difference(oldOccupants, newOccupants),
+				added = Ext.Array.difference(newOccupants, oldOccupants),
+				leftMods = Ext.Array.difference(oldMods, newMods),
+				addedMods = Ext.Array.difference(newMods, oldMods);
 
 		this.onOccupantsChanged(newRoomInfo, left, added, leftMods, addedMods);
 	},
@@ -812,9 +813,9 @@ Ext.define('NextThought.controller.Chat', {
 		var w = this.getChatWindow(roomInfo);
 		if (!w) {
 			w = Ext.widget(
-				'chat-window', {
-					roomInfo: roomInfo
-				});
+					'chat-window', {
+						roomInfo: roomInfo
+					});
 		}
 		return w;
 	},
@@ -829,12 +830,12 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		service.getObject(roomInfoId,
-			success,
-			function () {
-				alert('Could not recover room info');
-				console.error('Could not resolve roomInfo for: ', roomInfoId);
-			},
-			this);
+						  success,
+						  function () {
+							  alert('Could not recover room info');
+							  console.error('Could not resolve roomInfo for: ', roomInfoId);
+						  },
+						  this);
 	},
 
 
@@ -862,34 +863,34 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-		var id = ViewUtils.convertToTranscriptId(room.getId(),room.get('Creator'));
-		
-		function success(obj){
-			var cmp = Ext.getCmp('chat-history'),
-				store = cmp && cmp.getStore();
+		var id = ViewUtils.convertToTranscriptId(room.getId(), room.get('Creator'));
 
-			if(store){
-				store.add(obj);	
+		function success(obj) {
+			var cmp = Ext.getCmp('chat-history'),
+					store = cmp && cmp.getStore();
+
+			if (store) {
+				store.add(obj);
 			}
-			
+
 		}
 
-		function failure(){
+		function failure() {
 			console.log("Failure");
 		}
 
-		$AppConfig.service.getObject(id,success, failure, this);
+		$AppConfig.service.getObject(id, success, failure, this);
 
 		this.deleteRoomIdStatusAccepted(room.getId());
 
 		if (this.isModerator(room)) {
 			console.log('leaving room but I\'m a moderator, relinquish control');
 			this.socket.emit('chat_makeModerated', room.getId(), false,
-				function () {
-					//unmoderate called, now exit
-					console.log('unmoderated, now exiting room');
-					this.socket.emit('chat_exitRoom', room.getId());
-				}
+							 function () {
+								 //unmoderate called, now exit
+								 console.log('unmoderated, now exiting room');
+								 this.socket.emit('chat_exitRoom', room.getId());
+							 }
 			);
 		}
 		else {
@@ -999,49 +1000,49 @@ Ext.define('NextThought.controller.Chat', {
 
 	handleSetPresence: function (msg) {
 		var me = this,
-			store = this.getPresenceInfoStore(),
-			current = $AppConfig.userObject;
+				store = this.getPresenceInfoStore(),
+				current = $AppConfig.userObject;
 
 		Ext.Object.each(msg, function (key, value, object) {
 			var presence = ParseUtils.parseItems([value])[0],
-				prevToast = Ext.getCmp('revertToast');
+					prevToast = Ext.getCmp('revertToast');
 
 			//if its the current user set the flag accordingly
-			if(isMe(key)){
-				if(presence.isOnline()){
+			if (isMe(key)) {
+				if (presence.isOnline()) {
 					me.availableForChat = true;
-					if(prevToast){
+					if (prevToast) {
 						prevToast.destroy();
 					}
 
-				}else{
-					if(!me.setMyselfOffline && store.getPresenceOf(key).isOnline()){
+				} else {
+					if (!me.setMyselfOffline && store.getPresenceOf(key).isOnline()) {
 						console.log("Set offline in another session");
 						me.setMyselfOffline = false;
 
-						if(prevToast){
+						if (prevToast) {
 							prevToast.destroy();
 						}
 						Toaster.makeToast({
-							id: 'revertToast',
-							message: "You are currently unvailable because you went offline in another session.",
-							buttons:[
-								{
-									label: 'Okay'
-								},
-								{
-									label: 'Set to available',
-									callback: function(){
-										presence.set({type: 'available', show: 'chat'});
-										me.changePresence(presence);
-									},
-									scope: me
-								}
-							]
-						});
+											  id:      'revertToast',
+											  message: "You are currently unvailable because you went offline in another session.",
+											  buttons: [
+												  {
+													  label: 'Okay'
+												  },
+												  {
+													  label:    'Set to available',
+													  callback: function () {
+														  presence.set({type: 'available', show: 'chat'});
+														  me.changePresence(presence);
+													  },
+													  scope:    me
+												  }
+											  ]
+										  });
 					}
 
-					me.availableForChat = false; 
+					me.availableForChat = false;
 				}
 			}
 
@@ -1050,56 +1051,57 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	/*
-	* Tells the server to change the presence of the current user
-	*
-	* @param type - the users availability 'available' or 'unavailable' or a PresenceInfo model
-	* @param [show] - show the user as 'chat','away','dnd', or'xa'
-	* @param [status] - message to show if the user is available
-	* @param [c] - function to call when the socket is done
-	*/
-	changePresence: function(type,show,status,c){
+	 * Tells the server to change the presence of the current user
+	 *
+	 * @param type - the users availability 'available' or 'unavailable' or a PresenceInfo model
+	 * @param [show] - show the user as 'chat','away','dnd', or'xa'
+	 * @param [status] - message to show if the user is available
+	 * @param [c] - function to call when the socket is done
+	 */
+	changePresence:    function (type, show, status, c) {
 		var username = $AppConfig.username,
-			newPresence = (type && type.isPresenceInfo)? type : NextThought.model.PresenceInfo.createPresenceInfo(username,type,show,status),
-			callback = (Ext.isFunction(c))? c : Ext.emptyFn;
+				newPresence = (type && type.isPresenceInfo) ? type
+						: NextThought.model.PresenceInfo.createPresenceInfo(username, type, show, status),
+				callback = (Ext.isFunction(c)) ? c : Ext.emptyFn;
 
 
-		if(!newPresence.isOnline()){
+		if (!newPresence.isOnline()) {
 			this.setMyselfOffline = true;
-			Ext.defer(function(){
+			Ext.defer(function () {
 				this.setMyselfOffline = false;
-			}, 5*1000, this);
+			}, 5 * 1000, this);
 		}
 
 		this.socket.emit("chat_setPresence", newPresence.asJSON(), callback);
 	},
 
-	changeType: function(type){
+	changeType: function (type) {
 		var presence = $AppConfig.userObject.get('Presence'),
-			show = presence.get('show'),
-			status = presence.get('status');
+				show = presence.get('show'),
+				status = presence.get('status');
 
 		this.availableForChat = (type !== 'unavailable');
-		this.changePresence(type,show,status);
+		this.changePresence(type, show, status);
 	},
 
-	changeShow: function(show){
+	changeShow: function (show) {
 		var status = $AppConfig.userObject.get('Presence').get('status');
 		//if the user changes show, also set them to available
-		this.changePresence('available',show,status);
+		this.changePresence('available', show, status);
 	},
 
-	changeStatus: function(status){
+	changeStatus: function (status) {
 		var presence = $AppConfig.userObject.get('Presence'),
-			show = presence.get('show'),
-			type = presence.get('type');
-		this.changePresence(type,show,status);
+				show = presence.get('show'),
+				type = presence.get('type');
+		this.changePresence(type, show, status);
 	},
 
 	onMembershipOrModerationChanged: function (msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-			oldRoomInfo = this.getRoomInfoFromSession(newRoomInfo.getId()),
-			occupants = newRoomInfo.get('Occupants'),
-			toast;
+				oldRoomInfo = this.getRoomInfoFromSession(newRoomInfo.getId()),
+				occupants = newRoomInfo.get('Occupants'),
+				toast;
 
 		if (newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
 			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
@@ -1196,10 +1198,10 @@ Ext.define('NextThought.controller.Chat', {
 
 	onMessage: function (msg, opts) {
 		var me = this, args = Array.prototype.slice.call(arguments),
-			m = ParseUtils.parseItems([msg])[0],
-			channel = m.get('channel'),
-			cid = m.get('ContainerId'),
-			w = this.getChatWindow(cid);
+				m = ParseUtils.parseItems([msg])[0],
+				channel = m.get('channel'),
+				cid = m.get('ContainerId'),
+				w = this.getChatWindow(cid);
 
 		if (!w) {
 			this.rebuildWindow(cid, function () {
@@ -1215,11 +1217,11 @@ Ext.define('NextThought.controller.Chat', {
 			// notification counts, only when an actual message is sent should we do this.
 			w.notify(msg);
 			/*if (!w.minimized && !w.isVisible() && w.hasBeenAccepted()) {
-				w.show();
-			}
-			else {
-				w.notify();
-			}*/
+			 w.show();
+			 }
+			 else {
+			 w.notify();
+			 }*/
 		}
 	},
 
@@ -1235,7 +1237,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	onOccupantsChanged: function (newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
 		var win = this.getChatWindow(newRoomInfo.getId()),
-			log = win ? win.down('chat-log-view[moderated=false]') : null;
+				log = win ? win.down('chat-log-view[moderated=false]') : null;
 
 		if (!win) {
 			return;
@@ -1289,10 +1291,10 @@ Ext.define('NextThought.controller.Chat', {
 
 	onReceiveStateChannel: function (msg) {
 		var cid = msg.get('ContainerId'),
-			body = msg.get('body'),
-			sender = msg.get('Creator'),
-			win = this.getChatWindow(cid),
-			isGroupChat = win.roomInfo.get('Occupants').length > 2;
+				body = msg.get('body'),
+				sender = msg.get('Creator'),
+				win = this.getChatWindow(cid),
+				isGroupChat = win.roomInfo.get('Occupants').length > 2;
 
 		if (win && body) {
 			this.updateChatState(sender, body.state, win, isGroupChat);
@@ -1309,18 +1311,18 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 		var room = win.roomInfo,
-			log = win.down('chat-log-view'), gutter = win.down('chat-gutter'), inputStates,
-			wasPreviouslyInactive = room.getRoomState(sender) === 'inactive' || !room.getRoomState(sender);
+				log = win.down('chat-log-view'), gutter = win.down('chat-gutter'), inputStates,
+				wasPreviouslyInactive = room.getRoomState(sender) === 'inactive' || !room.getRoomState(sender);
 
 		room.setRoomState(sender, state);
 		console.log('Update chat state: set to ', state, ' for ', sender);
 
-		if(log){
+		if (log) {
 			log.clearChatStatusNotifications();
 		}
 		inputStates = room.getInputTypeStates();
 		if (inputStates.length > 0) {
-			if(log){
+			if (log) {
 				log.showInputStateNotifications(inputStates);
 			}
 			// NOTE: if the user is typing that means he is active.
@@ -1430,10 +1432,10 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		var me = this,
-			roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
-			w,
-			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2);
+				roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
+				w,
+				occupants = roomInfo.get('Occupants'),
+				isGroupChat = (occupants.length > 2);
 
 		roomInfo.setOriginalOccupants(occupants.slice());
 		me.putRoomInfoIntoSession(roomInfo);
@@ -1451,27 +1453,27 @@ Ext.define('NextThought.controller.Chat', {
 		UserRepository.getUser(roomInfo.get('Creator'), function (u) {
 			//at this point, window has been created but not accepted.
 			Toaster.makeToast({
-				roomId: IdCache.getIdentifier(roomInfo.getId()),
-				title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
-				message: isGroupChat
-					? 'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.'
-					: '<span>' + u.getName() + '</span> would like to chat.',
-				iconCls: 'icons-chat-32',
-				buttons: [
-					{
-						label: 'decline',
-						callback: isDeclined, //see comment about argument in callback
-						scope: me
-					},
-					{
-						label: 'accept',
-						callback: isAcceptedOrTimedOut,
-						scope: this
-					}
-				],
-				callback: isDeclined,
-				scope: me
-			});
+								  roomId:   IdCache.getIdentifier(roomInfo.getId()),
+								  title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
+								  message: isGroupChat
+										  ? 'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.'
+										  : '<span>' + u.getName() + '</span> would like to chat.',
+								  iconCls:  'icons-chat-32',
+								  buttons:  [
+									  {
+										  label:    'decline',
+										  callback: isDeclined, //see comment about argument in callback
+										  scope:    me
+									  },
+									  {
+										  label:    'accept',
+										  callback: isAcceptedOrTimedOut,
+										  scope:    this
+									  }
+								  ],
+								  callback: isDeclined,
+								  scope:    me
+							  });
 		});
 	},
 
@@ -1530,7 +1532,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	setRoomIdStatusAccepted: function (id) {
 		var key = 'roomIdsAccepted',
-			status = this.getSessionObject(key) || {};
+				status = this.getSessionObject(key) || {};
 
 		status[id] = true;
 
@@ -1539,7 +1541,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	deleteRoomIdStatusAccepted: function (id) {
 		var key = 'roomIdsAccepted',
-			status = this.getSessionObject(key);
+				status = this.getSessionObject(key);
 		if (!status) {
 			return;
 		}

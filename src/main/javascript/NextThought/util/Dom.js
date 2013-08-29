@@ -1,18 +1,21 @@
-Ext.define('NextThought.util.Dom',{
+Ext.define('NextThought.util.Dom', {
 	singleton: true,
 
 
-	parseDomObject: function(objectDomEl){
+	parseDomObject: function (objectDomEl) {
 		var obj = {},
-			id = Ext.get(objectDomEl).id,
-			driectChildNodes = function(t){ return objectDomEl.querySelectorAll('#'+id+' > '+t); },
-			addValue = function(o,n,v){ var c = o[n]; o[n] = c? (Ext.isArray(c)? c : [c]).concat(v) : v; };
+				id = Ext.get(objectDomEl).id,
+				driectChildNodes = function (t) { return objectDomEl.querySelectorAll('#' + id + ' > ' + t); },
+				addValue = function (o, n, v) {
+					var c = o[n];
+					o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v;
+				};
 
-		Ext.each(objectDomEl.attributes, function(p){
-			addValue(obj,'attribute-'+p.name, p.value);
+		Ext.each(objectDomEl.attributes, function (p) {
+			addValue(obj, 'attribute-' + p.name, p.value);
 		});
 
-		Ext.each(driectChildNodes('param'), function(p){
+		Ext.each(driectChildNodes('param'), function (p) {
 			addValue(obj, p.name, p.value);
 		});
 
@@ -25,27 +28,29 @@ Ext.define('NextThought.util.Dom',{
 	},
 
 
-	asDomSpec: function(){
-		if(this instanceof Ext.Base){
+	asDomSpec: function () {
+		if (this instanceof Ext.Base) {
 			Ext.Error.raise('Apply this to a simple object not a ext class');
 		}
 
 		var r = /^attribute\-(.*)$/,
-			o = {
+				o = {
 					tag: 'object',
-					cn:[]
+					cn:  []
 				};
 
 
-		Ext.Object.each(this,function(k,v){
-			if(Ext.isFunction(v) || Ext.isEmpty(v)){return;}
+		Ext.Object.each(this, function (k, v) {
+			if (Ext.isFunction(v) || Ext.isEmpty(v)) {
+				return;
+			}
 
-			var n = (r.exec(k)||[])[1];
-			if(!Ext.isEmpty(n)){
+			var n = (r.exec(k) || [])[1];
+			if (!Ext.isEmpty(n)) {
 				o[n] = v;
 			}
 			else {
-				o.cn.push({tag:'param', name:k, value:v});
+				o.cn.push({tag: 'param', name: k, value: v});
 			}
 		});
 		return o;
@@ -54,9 +59,9 @@ Ext.define('NextThought.util.Dom',{
 
 	getVideosFromDom: function getVideosFromDom(contentElement) {
 		var me = this,
-			videoObjects = [];
+				videoObjects = [];
 
-		Ext.each(contentElement.querySelectorAll('object .naqvideo'),function(v){
+		Ext.each(contentElement.querySelectorAll('object .naqvideo'), function (v) {
 			videoObjects.push(me.parseDomObject(v));
 		});
 
@@ -64,19 +69,19 @@ Ext.define('NextThought.util.Dom',{
 	},
 
 
-	getImagesFromDom: function(contentElement){
+	getImagesFromDom: function (contentElement) {
 		var imageObjects = [];
-		Ext.each(contentElement.querySelectorAll('span > img'),function(i){
+		Ext.each(contentElement.querySelectorAll('span > img'), function (i) {
 			var imageObj = {},
-				base,
-				src = i.getAttribute('src'),
-				current = i.getAttribute('data-nti-image-size'),
-				full = i.getAttribute('data-nti-image-full'),
-				half = i.getAttribute('data-nti-image-half'),
-				quarter = i.getAttribute('data-nti-image-quarter');
+					base,
+					src = i.getAttribute('src'),
+					current = i.getAttribute('data-nti-image-size'),
+					full = i.getAttribute('data-nti-image-full'),
+					half = i.getAttribute('data-nti-image-half'),
+					quarter = i.getAttribute('data-nti-image-quarter');
 
-			current = src.indexOf(i.getAttribute('data-nti-image-'+current));
-			base = src.substr(0,current);
+			current = src.indexOf(i.getAttribute('data-nti-image-' + current));
+			base = src.substr(0, current);
 
 			Ext.removeNode(i.parentNode);
 
@@ -95,23 +100,23 @@ Ext.define('NextThought.util.Dom',{
 	 * navigatio in the same tab so if people get clever and insert links to things like profile we
 	 * do the right thing.
 	 */
-	adjustLinks: function(dom, baseUrl){
-		if(!dom){
+	adjustLinks:      function (dom, baseUrl) {
+		if (!dom) {
 			return;
 		}
-		Ext.each(dom.query('a[href]') || [], function(link){
+		Ext.each(dom.query('a[href]') || [], function (link) {
 			var href = Ext.fly(link).getAttribute('href') || '',
-				base = baseUrl.split('#')[0],
-				changeTarget = href.indexOf(base) !== 0;
+					base = baseUrl.split('#')[0],
+					changeTarget = href.indexOf(base) !== 0;
 
 
-			if(changeTarget){
+			if (changeTarget) {
 				Ext.fly(link).set({target: '_blank'});
 			}
 		});
 	}
 
 
-},function(){
+}, function () {
 	window.DomUtils = this;
 });

@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.slidedeck.View', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.slidedeck-view',
+	extend:   'Ext.container.Container',
+	alias:    'widget.slidedeck-view',
 	requires: [
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
@@ -10,17 +10,17 @@ Ext.define('NextThought.view.slidedeck.View', {
 		'NextThought.view.slidedeck.media.Viewer'
 	],
 
-	cls: 'view',
-	ui: 'slidedeck',
-	plain: true,
+	cls:    'view',
+	ui:     'slidedeck',
+	plain:  true,
 	layout: {
-		type: 'hbox',
+		type:  'hbox',
 		align: 'stretch'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		'{%this.renderContainer(out,values)%}',
-		{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]
+										'{%this.renderContainer(out,values)%}',
+										{ cls: 'exit-button', html: 'Exit Presentation', tabIndex: 0, role: 'button' }]
 	),
 
 	renderSelectors: {
@@ -34,14 +34,14 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		config.items = [
 			{
-				xtype: 'container',
-				width: 400,
-				plain: true,
-				ui: 'slidedeck-controls',
+				xtype:  'container',
+				width:  400,
+				plain:  true,
+				ui:     'slidedeck-controls',
 				layout: { type: 'vbox', align: 'stretch' }
 			},
 			{
-				flex: 1,
+				flex:  1,
 				xtype: 'slidedeck-transcript'
 			}
 		];
@@ -63,11 +63,11 @@ Ext.define('NextThought.view.slidedeck.View', {
 	initComponent: function () {
 		this.callParent(arguments);
 		var store = this.store,
-			start = this.startOn,
-			ctrls = this.items.getAt(0),
-			slide = this.getSlide(),
-			vPlaylist = this.getVideoPlayList(store),
-			v, q;
+				start = this.startOn,
+				ctrls = this.items.getAt(0),
+				slide = this.getSlide(),
+				vPlaylist = this.getVideoPlayList(store),
+				v, q;
 
 		//clear the reference, pass it along...
 		delete this.store;
@@ -131,9 +131,9 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 	buildTranscriptStore: function (playList) {
 		var s = new Ext.data.Store({proxy: 'memory'}),
-			transcripts = [],
-			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
-			videoObjects = this.getUniqueVideoObjects(playList);
+				transcripts = [],
+				reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
+				videoObjects = this.getUniqueVideoObjects(playList);
 
 		Ext.each(videoObjects, function (v) {
 			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader.basePath);
@@ -152,14 +152,14 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		Ext.each(playList, function (v) {
 			var frag = v.get('dom-clone'),
-				video = frag.querySelector('object[type$=ntivideo]');
+					video = frag.querySelector('object[type$=ntivideo]');
 
 			vObjects.push(video);
 		});
 
 		vObjects = Ext.Array.filter(vObjects, function (i) {
 			var id = Ext.fly(i).getAttribute('data-ntiid'),
-				ret = !Ext.Array.contains(uniqueIds, id);
+					ret = !Ext.Array.contains(uniqueIds, id);
 
 			uniqueIds.push(id);
 			return ret;
@@ -183,7 +183,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 	},
 
 
-	doSelect: function () {
+	doSelect:    function () {
 		var s = this.getSlide();
 		this.video.updateVideoFromSelection.apply(this.video, arguments);
 		if (s.updateSlide) {
@@ -198,9 +198,9 @@ Ext.define('NextThought.view.slidedeck.View', {
 	//if the click cancel we leave things in a paused state and the editor open
 	maybeSelect: function (v, slide) {
 		var slideView = this.getSlide(),
-			destructiveSelection = slideView.editorActive && slideView.editorActive(),
-			wasPlaying,
-			me = this;
+				destructiveSelection = slideView.editorActive && slideView.editorActive(),
+				wasPlaying,
+				me = this;
 
 		function actOnSelect() {
 			me.doSelect(v, slide);
@@ -225,22 +225,22 @@ Ext.define('NextThought.view.slidedeck.View', {
 		wasPlaying = this.video.pausePlayback();
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'Leaving this slide will cause any unsaved data to be lost.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': 'caution:Continue'},
-			title: 'Are you sure?',
-			fn: function (str) {
-				if (str === 'ok') {
-					allowDestructiveAction();
-				}
-				else {
-					v.select(me.wasSelected, false, true);
-				}
-				delete me.wasSelected;
-			}
-		});
+						 msg:        'Leaving this slide will cause any unsaved data to be lost.',
+						 buttons:    Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+						 scope:      me,
+						 icon:       'warning-red',
+						 buttonText: {'ok': 'caution:Continue'},
+						 title:      'Are you sure?',
+						 fn:         function (str) {
+							 if (str === 'ok') {
+								 allowDestructiveAction();
+							 }
+							 else {
+								 v.select(me.wasSelected, false, true);
+							 }
+							 delete me.wasSelected;
+						 }
+					 });
 
 	},
 
@@ -264,7 +264,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}
 
 		this.mon(this.exitEl, {
-			click: close,
+			click:   close,
 			keydown: Ext.Function.createInterceptor(close, enterFilter, null, null)
 		});
 

@@ -1,10 +1,10 @@
 Ext.define('NextThought.view.profiles.parts.ActivityItem', {
-	extend: 'NextThought.view.annotations.note.Panel',
+	extend:   'NextThought.view.annotations.note.Panel',
 	requires: [
 		'NextThought.mixins.note-feature.GetLatestReply',
 		'NextThought.util.Content'
 	],
-	alias: [
+	alias:    [
 		'widget.profile-activity-item',
 		'widget.profile-activity-default-item',
 		'widget.profile-activity-note-item'
@@ -12,31 +12,30 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	mixins: {
 		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply',
-		purchasable: 'NextThought.mixins.store-feature.Purchasable'
+		purchasable:    'NextThought.mixins.store-feature.Purchasable'
 	},
 
-	defaultType: 'profile-activity-item-reply',
+	defaultType:       'profile-activity-item-reply',
 	autoFillInReplies: false,
 
-
 	renderSelectors: {
-		avatar: '.avatar',
-		liked: '.controls .like',
-		favorites: '.controls .favorite',
+		avatar:          '.avatar',
+		liked:           '.controls .like',
+		favorites:       '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
-		locationEl: '.location',
-		contextEl: '.context',
-		title: '.subject',
-		subjectEl: '.subject',
-		locationIcon: '.icon',
-		itemEl: '.item',
-		commentsEl: '.comments',
-		footEl: '.foot',
-		editEl: '.foot .edit',
-		flagEl: '.foot .flag',
-		deleteEl: '.foot .delete',
-		contextWrapEl: '.content-callout',
-		responseBox: '.respond > div'
+		locationEl:      '.location',
+		contextEl:       '.context',
+		title:           '.subject',
+		subjectEl:       '.subject',
+		locationIcon:    '.icon',
+		itemEl:          '.item',
+		commentsEl:      '.comments',
+		footEl:          '.foot',
+		editEl:          '.foot .edit',
+		flagEl:          '.foot .flag',
+		deleteEl:        '.foot .delete',
+		contextWrapEl:   '.content-callout',
+		responseBox:     '.respond > div'
 	},
 
 
@@ -144,19 +143,19 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'The following action will delete your note',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
-			fn: function (str) {
-				if (str === 'ok') {
-					me.record.destroy();
-					me.adjustRootsReferenceCount(me.record);
-				}
-			}
-		});
+						 msg:        'The following action will delete your note',
+						 buttons:    Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+						 scope:      me,
+						 icon:       'warning-red',
+						 buttonText: {'ok': 'Delete'},
+						 title:      'Are you sure?',
+						 fn:         function (str) {
+							 if (str === 'ok') {
+								 me.record.destroy();
+								 me.adjustRootsReferenceCount(me.record);
+							 }
+						 }
+					 });
 	},
 
 
@@ -184,10 +183,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	maybeFillIn: function () {
 		var me = this,
-			D = Ext.dom.Element.DISPLAY,
-			subject,
-			loaded = me.loaded,
-			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.get('profile'), {bottom: 1000}));
+				D = Ext.dom.Element.DISPLAY,
+				subject,
+				loaded = me.loaded,
+				onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.get('profile'), {bottom: 1000}));
 
 		if (loaded || !onScreen) {
 			return;
@@ -254,11 +253,11 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	loadContext: function (fin) {
 		var me = this,
-			r = me.record,
-			cid = r.get('ContainerId'),
-			metaInfo,
-			C = ContentUtils,
-			metaHandled = true;
+				r = me.record,
+				cid = r.get('ContainerId'),
+				metaInfo,
+				C = ContentUtils,
+				metaHandled = true;
 
 		function parse(content) {
 			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
@@ -275,8 +274,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 			req = resp.request;
 			var el = me.context.up('.content-callout'),
-				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
+					ntiid = req && req.ntiid,
+					p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 
 			if (resp.status === 403) {
 				me.handlePurchasable(p, el);
@@ -356,7 +355,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	handlePurchasable: function (purchasable, el) {
 		var me = this,
-			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
+				tpl = me.needsActionTplMap[purchasable.get('MimeType')];
 
 		me.requiresPurchase = true;
 		me.purchasable = purchasable;
@@ -366,7 +365,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		}
 
 		Ext.DomHelper.append(me.getEl(), {
-			cls: 'purchasable-mask',
+			cls:   'purchasable-mask',
 			style: {top: (me.itemEl.getY() - me.el.getY()) + 'px'}
 		});
 	},
@@ -374,7 +373,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	goToObject: function () {
 		var rec = this.record,
-			cid;
+				cid;
 
 		//Show purchase window if we're purchase-able
 		if (this.requiresPurchase) {
@@ -413,99 +412,99 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 		this.locationEl.update(meta.getPathLabel());
 		this.locationIcon.setStyle({
-			backgroundImage: Ext.String.format('url({0})', meta.getIcon())
-		});
+									   backgroundImage: Ext.String.format('url({0})', meta.getIcon())
+								   });
 
 		this.locationEl.hover(
-			function () {
-				Ext.fly(this).addCls('over');
-			},
-			function () {
-				Ext.fly(this).removeCls('over');
-			});
+				function () {
+					Ext.fly(this).addCls('over');
+				},
+				function () {
+					Ext.fly(this).removeCls('over');
+				});
 
 		this.locationEl.on('click',
-			Ext.bind(this.fireEvent, this, ['navigation-selected', meta.NTIID, null, null]));
+						   Ext.bind(this.fireEvent, this, ['navigation-selected', meta.NTIID, null, null]));
 	}
 
 
 }, function () {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([
-		{
-			cls: 'note profile-activity-item',
-			cn: [
-				{ cls: 'content-callout', onclick: 'void(0)', cn: [
-					{ cls: 'icon' },
-					{ cn: [
-						{ cls: 'location link'},
-						{ cls: 'context', cn: [
-							{tag: 'canvas'},
-							{cls: 'text'}
-						] }
-					]}
-				]},
-				{ cls: 'item', cn: [
-					{ cls: 'avatar' },
-					{ cls: 'controls', cn: [
-						{ cls: 'favorite-spacer' },
-						{ cls: 'favorite' },
-						{ cls: 'like' }
-					]},
-					{ cls: 'meta', cn: [
-						{ cls: 'subject', html: '' },
-						{ cls: 'stamp', cn: [
-							{tag: 'span', cls: 'name link'},
-							{tag: 'span', cls: 'time'},
-							{tag: 'span', cls: 'shared-to link', html: 'Private'}
-						]}
-					]},
-					{ cls: 'body' },
-					{
-						cls: 'foot',
-						cn: [
-							{ cls: 'comments', 'data-label': ' Comment', html: ' ' },
-							{ cls: 'edit', html: 'Edit' },
-							{ cls: 'flag', html: 'Report' },
-							{ cls: 'delete', html: 'Delete' }
+														{
+															cls: 'note profile-activity-item',
+															cn:  [
+																{ cls: 'content-callout', onclick: 'void(0)', cn: [
+																	{ cls: 'icon' },
+																	{ cn: [
+																		{ cls: 'location link'},
+																		{ cls: 'context', cn: [
+																			{tag: 'canvas'},
+																			{cls: 'text'}
+																		] }
+																	]}
+																]},
+																{ cls: 'item', cn: [
+																	{ cls: 'avatar' },
+																	{ cls: 'controls', cn: [
+																		{ cls: 'favorite-spacer' },
+																		{ cls: 'favorite' },
+																		{ cls: 'like' }
+																	]},
+																	{ cls: 'meta', cn: [
+																		{ cls: 'subject', html: '' },
+																		{ cls: 'stamp', cn: [
+																			{tag: 'span', cls: 'name link'},
+																			{tag: 'span', cls: 'time'},
+																			{tag: 'span', cls: 'shared-to link', html: 'Private'}
+																		]}
+																	]},
+																	{ cls: 'body' },
+																	{
+																		cls: 'foot',
+																		cn:  [
+																			{ cls: 'comments', 'data-label': ' Comment', html: ' ' },
+																			{ cls: 'edit', html: 'Edit' },
+																			{ cls: 'flag', html: 'Report' },
+																			{ cls: 'delete', html: 'Delete' }
 
-						]
-					}
-				]
-				}
-			]
-		},
-		{
-			id: '{id}-body',
-			cls: 'note-replies',
-			cn: ['{%this.renderContainer(out,values)%}']
-		},
-		{
-			cls: 'respond', cn: {
-			cn: [
-				{
-					cls: 'reply-options',
-					cn: [
-						{ cls: 'reply', html: 'Add a comment' }
-					]
-				}
-			]}
-		}
-	]);
+																		]
+																	}
+																]
+																}
+															]
+														},
+														{
+															id:  '{id}-body',
+															cls: 'note-replies',
+															cn:  ['{%this.renderContainer(out,values)%}']
+														},
+														{
+															cls: 'respond', cn: {
+															cn: [
+																{
+																	cls: 'reply-options',
+																	cn:  [
+																		{ cls: 'reply', html: 'Add a comment' }
+																	]
+																}
+															]}
+														}
+													]);
 });
 
 
 Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
-	extend: 'NextThought.view.annotations.note.Panel',
-	requires: ['NextThought.util.Content'],
-	alias: 'widget.profile-activity-item-reply',
+	extend:      'NextThought.view.annotations.note.Panel',
+	requires:    ['NextThought.util.Content'],
+	alias:       'widget.profile-activity-item-reply',
 	defaultType: 'profile-activity-item-reply',
 
 	renderSelectors: {
 		noteBody: '.reply',
-		avatar: '.avatar',
-		editEl: '.reply-options .edit',
-		flagEl: '.reply-options .flag',
+		avatar:   '.avatar',
+		editEl:   '.reply-options .edit',
+		flagEl:   '.reply-options .flag',
 		deleteEl: '.reply-options .delete'
 	},
 
@@ -560,39 +559,39 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 }, function () {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([
-		{
-			cls: 'reply profile-activity-reply-item',
-			cn: [
-				{ cls: 'avatar' },
-				{ cls: 'meta', cn: [
-					{ cls: 'controls', cn: [
-						{ cls: 'favorite-spacer' },
-						{ cls: 'like' }
-					]},
-					{ tag: 'span', cls: 'name' },
-					' ',
-					{ tag: 'span', cls: 'time' }
-				]},
-				{ cls: 'body' },
-				{ cls: 'respond',
-					cn: [
-						{
-							cls: 'reply-options',
-							cn: [
-								{ cls: 'reply', html: 'Reply' },
-								{ cls: 'edit', html: 'Edit' },
-								{ cls: 'flag', html: 'Report' },
-								{ cls: 'delete', html: 'Delete' }
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			id: '{id}-body',
-			cls: 'note-replies',
-			cn: ['{%this.renderContainer(out,values)%}']
-		}
-	]);
+														{
+															cls: 'reply profile-activity-reply-item',
+															cn:  [
+																{ cls: 'avatar' },
+																{ cls: 'meta', cn: [
+																	{ cls: 'controls', cn: [
+																		{ cls: 'favorite-spacer' },
+																		{ cls: 'like' }
+																	]},
+																	{ tag: 'span', cls: 'name' },
+																	' ',
+																	{ tag: 'span', cls: 'time' }
+																]},
+																{ cls: 'body' },
+																{ cls:  'respond',
+																	cn: [
+																		{
+																			cls: 'reply-options',
+																			cn:  [
+																				{ cls: 'reply', html: 'Reply' },
+																				{ cls: 'edit', html: 'Edit' },
+																				{ cls: 'flag', html: 'Report' },
+																				{ cls: 'delete', html: 'Delete' }
+																			]
+																		}
+																	]
+																}
+															]
+														},
+														{
+															id:  '{id}-body',
+															cls: 'note-replies',
+															cn:  ['{%this.renderContainer(out,values)%}']
+														}
+													]);
 });

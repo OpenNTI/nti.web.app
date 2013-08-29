@@ -1,26 +1,26 @@
 Ext.define('NextThought.view.forums.forumcreation.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.forumcreation-window',
+	alias:  'widget.forumcreation-window',
 
 	requires: [
 		'NextThought.view.account.Header',
 		'NextThought.view.forums.forumcreation.Main'
 	],
 
-	cls: 'forumcreation-window',
-	ui: 'nt-window',
+	cls:         'forumcreation-window',
+	ui:          'nt-window',
 	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
+	constrain:   true,
+	modal:       true,
+	closable:    true,
+	resizable:   false,
+	dialog:      true,
 	closeAction: 'destroy',
 
 	width: 480,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -30,9 +30,9 @@ Ext.define('NextThought.view.forums.forumcreation.Window', {
 
 	items: [
 		{
-			xtype: 'account-header-view',
+			xtype:  'account-header-view',
 			noIcon: true,
-			title: 'Create Forum',
+			title:  'Create Forum',
 			detail: getString('forum_creation_text', 'To create a new forum fill out the information below.  We\'ll create a new forum for you with the provided title and description')
 		},
 		{

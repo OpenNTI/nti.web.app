@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
@@ -33,109 +32,113 @@ Ext.define('NextThought.controller.Search', {
 
 	refs: [
 		{
-			ref: 'searchField',
+			ref:      'searchField',
 			selector: 'searchfield'
 		},
 		{
-			ref: 'searchMenu',
+			ref:      'searchMenu',
 			selector: 'search-menu'
 		}
 	],
 
-	init: function() {
+	init: function () {
 		this.listen({
-			component:{
-				'searchfield': {
-					'search' : this.searchForValue,
-					'clear-search' : this.clearSearchResults
-				},
-				'search-result' : {
-					'click': this.searchResultClicked,
-					'click-blog-result': this.searchBlogResultClicked,
-					'click-transcript-result': this.searchTranscriptResultClicked
-				},
-				'search-more' : {
-					//'click': this.showAllForCategoryClicked
-				},
-				'search-advanced-menu': {
-					'changed': this.searchFilterChanged
-				},
+						component: {
+							'searchfield':          {
+								'search':       this.searchForValue,
+								'clear-search': this.clearSearchResults
+							},
+							'search-result':        {
+								'click':                   this.searchResultClicked,
+								'click-blog-result':       this.searchBlogResultClicked,
+								'click-transcript-result': this.searchTranscriptResultClicked
+							},
+							'search-more':          {
+								//'click': this.showAllForCategoryClicked
+							},
+							'search-advanced-menu': {
+								'changed': this.searchFilterChanged
+							},
 
-				'profile-blog-post' :{
-					'ready': this.blogPostReady
-				}
-			}
-		});
+							'profile-blog-post': {
+								'ready': this.blogPostReady
+							}
+						}
+					});
 
-		this.getHitStore().on('beforeload', function(){
+		this.getHitStore().on('beforeload', function () {
 			this.getSearchResultsMenu().el.mask('Searching...');
 		}, this);
 	},
 
-	mimeToXType: function(mime){
-		if(Ext.isEmpty(mime)){
+	mimeToXType: function (mime) {
+		if (Ext.isEmpty(mime)) {
 			return 'search-result';
 		}
 
 		mime = mime.replace('application/vnd.nextthought.', '');
 		mime = mime.replace('.', '-');
 
-		return 'search-result-'+mime;
+		return 'search-result-' + mime;
 	},
 
 
-	componentConfigForHit: function(hit){
+	componentConfigForHit: function (hit) {
 		var id = hit.get('ContainerId'),
-			sortIndexes = ContentUtils.getSortIndexes(id),
-			type ='search-result',
-			xtype = this.mimeToXType(hit.get('MimeType'));
+				sortIndexes = ContentUtils.getSortIndexes(id),
+				type = 'search-result',
+				xtype = this.mimeToXType(hit.get('MimeType'));
 
 		sortIndexes.reverse();
-		if(!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.'+xtype))){
+		if (!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.' + xtype))) {
 			//custom component for type exists
 			type = xtype;
 		}
 
 		//Refactor to just pas the hit model a
 		return {
-			xtype: type,
+			xtype:  type,
 			sortId: sortIndexes,
-			hit: hit
+			hit:    hit
 		};
 	},
 
 
-	getSearchResultsMenu: function(){
+	getSearchResultsMenu: function () {
 		return Ext.getCmp('search-results');
 	},
 
 
-	storeLoad: function(store, records, success, opts, searchVal){
+	storeLoad: function (store, records, success, opts, searchVal) {
 		var results = [], menu = this.getSearchResultsMenu(),
-			resultGroups, result, loc, type, alias, me = this;
+				resultGroups, result, loc, type, alias, me = this;
 
 		menu.el.unmask();
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
-			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-error'}]});
+			results.push({xtype: 'search-result-category', category: '', items: [
+				{xtype: 'search-error'}
+			]});
 		}
-		else{
+		else {
 			//get the groups storted by type, cause the display to chunk them.
 			resultGroups = store.getGroups(false);
 
-			if(resultGroups.length === 0){
-				results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
+			if (resultGroups.length === 0) {
+				results.push({xtype: 'search-result-category', category: '', items: [
+					{xtype: 'search-noresults'}
+				]});
 			}
 
-			Ext.each(resultGroups, function(group){
-				result = {xtype:'search-result-category', category: group.name, items:[]};
+			Ext.each(resultGroups, function (group) {
+				result = {xtype: 'search-result-category', category: group.name, items: []};
 				results.push(result);
 				result = result.items;
 
-				Ext.each(group.children, function(hit){
+				Ext.each(group.children, function (hit) {
 					var cfg = this.componentConfigForHit(hit);
 					result.push(cfg);
-				},	this);
+				}, this);
 
 				//result = Ext.Array.sort(result, me.sortByRelevanceScore, me);
 
@@ -149,95 +152,104 @@ Ext.define('NextThought.controller.Search', {
 		menu.hide().show();
 	},
 
-	sortByRelevanceScore: function(a, b){
+	sortByRelevanceScore: function (a, b) {
 		var aScore = a.hit.get('Score') || -Infinity,
-			bScore = b.hit.get('Score') || -Infinity;
+				bScore = b.hit.get('Score') || -Infinity;
 
 		return aScore - bScore;
 	},
 
-	sortSearchHits: function(aa,bb){
+	sortSearchHits: function (aa, bb) {
 
-		function compareIndices(i, j){
-			return i===j ? 0 : i < j ? -1: 1;
+		function compareIndices(i, j) {
+			return i === j ? 0 : i < j ? -1 : 1;
 		}
 
 		var a = aa.sortId,
-			b = bb.sortId,
-			max = (a.length < b.length) ? a.length : b.length,
-			i, r;
+				b = bb.sortId,
+				max = (a.length < b.length) ? a.length : b.length,
+				i, r;
 
-		for(i=0; i<max; i++){
+		for (i = 0; i < max; i++) {
 			r = compareIndices(a[i], b[i]);
-			if(r !== 0) { return r;}
+			if (r !== 0) {
+				return r;
+			}
 		}
 
-		if(a.length === b.length){ return 0;}
-		return a.length > b.length ? 1: -1;
+		if (a.length === b.length) {
+			return 0;
+		}
+		return a.length > b.length ? 1 : -1;
 	},
 
 
-	searchForValue: function(value) {
-		if(!value){return;}
+	searchForValue: function (value) {
+		if (!value) {
+			return;
+		}
 
 		var s = this.getHitStore(),
-			filter = this.modelFilter,
-			partial = this.doPartialSearch,
-			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
-			loc = ReaderPanel.get().getLocation().NTIID || 'noNTIID',
-			url = [
-				rootUrl,
-				loc,
-				'/',
-				value,
-				partial? '*':''
-			], selectedMimeTypes = [], me = this;
+				filter = this.modelFilter,
+				partial = this.doPartialSearch,
+				rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
+				loc = ReaderPanel.get().getLocation().NTIID || 'noNTIID',
+				url = [
+					rootUrl,
+					loc,
+					'/',
+					value,
+					partial ? '*' : ''
+				], selectedMimeTypes = [], me = this;
 
 		//clear old results from both store and search results.
 		this.clearSearchResults();
 		s.removeAll();
 
 		s.clearFilter();
-		if(filter){
-			Ext.each( filter.value, function(item){
+		if (filter) {
+			Ext.each(filter.value, function (item) {
 				var mt = item.value;
-				if(mt){
+				if (mt) {
 					selectedMimeTypes.push(mt);
 				}
 			});
-			s.filter([{filterFn: function(item) {
-				return filter.test(item); }} ]);
+			s.filter([
+						 {filterFn: function (item) {
+							 return filter.test(item);
+						 }}
+					 ]);
 		}
 		s.proxy.url = url.join('');
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'relevance',
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
+			sortOn:    'relevance',
 			sortOrder: 'descending',
-			accept: selectedMimeTypes.join(',')
+			accept:    selectedMimeTypes.join(',')
 		});
 
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
 		s.load();
 	},
 
-	clearSearchResults: function() {
+	clearSearchResults: function () {
 		this.getSearchResultsMenu().removeAll(true);
 	},
 
 
-	searchFilterChanged: function(menu) {
+	searchFilterChanged: function (menu) {
 		var allItems = menu.query('menuitem'),
-			Filter = NextThought.Filter,
-			everything = menu.down('[isEverything]').checked,
-			searchValue = this.getSearchField().getValue();
+				Filter = NextThought.Filter,
+				everything = menu.down('[isEverything]').checked,
+				searchValue = this.getSearchField().getValue();
 
 		this.doPartialSearch = menu.down('[doPartialSearch]').checked;
-		this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
+		this.modelFilter = new NextThought.FilterGroup(menu.getId(), NextThought.FilterGroup.OPERATION_UNION);
 
-		Ext.each(allItems, function(item){
+		Ext.each(allItems, function (item) {
 			var models = item.model;
 			if ((everything || item.checked) && models) {
-				Ext.each(Ext.Array.from(models), function(m){
-					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.'+m));
+				Ext.each(Ext.Array.from(models), function (m) {
+					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.' + m));
 				}, this);
 			}
 		}, this);
@@ -246,9 +258,9 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	fragmentWithIndex: function(hit, fragIdx){
+	fragmentWithIndex: function (hit, fragIdx) {
 		var fragments = hit.get('Fragments');
-		if(fragIdx >= 0 && fragIdx < fragments.length){
+		if (fragIdx >= 0 && fragIdx < fragments.length) {
 			return fragments[fragIdx];
 		}
 
@@ -256,40 +268,40 @@ Ext.define('NextThought.controller.Search', {
 		return null;
 	},
 
-	gotoBlog: function(){
+	gotoBlog: function () {
 		//Some kind of cross controller event we can use instead?
 		var navController = this.getController('Navigation'),
-			args = Array.prototype.slice.call(arguments);
+				args = Array.prototype.slice.call(arguments);
 
 		navController.gotoBlog.apply(navController, args);
 	},
 
-	searchTranscriptResultClicked: function(result, fragIdx){
+	searchTranscriptResultClicked: function (result, fragIdx) {
 		var videoObject = result.videoObject;
-		
-		function callback(mediaViewer){
+
+		function callback(mediaViewer) {
 			//TODO highlight fragment here.
 		}
 
-		if(videoObject){
+		if (videoObject) {
 			this.fireEvent('show-object', videoObject, null, null, {
 				startAtMillis: result.hit.get('StartMilliSecs'),
-				callback: callback
+				callback:      callback
 			});
 		}
-		else{
+		else {
 			alert('The video you are searching for can\'t be found.');
 		}
 	},
 
-	searchBlogResultClicked: function(result, fragIdx, isComment){
-		function clearCallback(){
-			if(me.onReadyCallbacks){
+	searchBlogResultClicked: function (result, fragIdx, isComment) {
+		function clearCallback() {
+			if (me.onReadyCallbacks) {
 				delete me.onReadyCallbacks[qStr];
 			}
 		}
 
-		function onReady(cmp, params){
+		function onReady(cmp, params) {
 			var lookup = params.queryString;
 			clearTimeout(onReady.timeoutTimer);
 			clearCallback();
@@ -297,59 +309,59 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		var u = result.user,
-			r = result.record,
-			postId = r.get('ID'),
-			hit = result.hit,
-			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
-			qStr = this.getHitStore().queryString,
-			commentId, me = this;
+				r = result.record,
+				postId = r.get('ID'),
+				hit = result.hit,
+				frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
+				qStr = this.getHitStore().queryString,
+				commentId, me = this;
 
-		if(isComment){
+		if (isComment) {
 			commentId = hit.get('ID');
 		}
 
-		if(qStr){
-			if(!this.onReadyCallbacks){
+		if (qStr) {
+			if (!this.onReadyCallbacks) {
 				this.onReadyCallbacks = {};
 			}
 			this.onReadyCallbacks[qStr] = onReady;
 			onReady.timeoutTimer = setInterval(clearCallback, 3000);
 		}
 
-		UserRepository.getUser(r.get('Creator'), function(u){
+		UserRepository.getUser(r.get('Creator'), function (u) {
 			me.gotoBlog(u, postId, commentId, {queryString: qStr});
 		});
 	},
 
-	searchResultClicked: function(result, fragIdx){
+	searchResultClicked: function (result, fragIdx) {
 		var nav = this.getController('Navigation'),
-			cid = result.hit.get('ContainerId'),
-			cat = result.up('search-result-category').category,
-			fragments, clickedFragment;
+				cid = result.hit.get('ContainerId'),
+				cat = result.up('search-result-category').category,
+				fragments, clickedFragment;
 
-		if(fragIdx !== undefined){
+		if (fragIdx !== undefined) {
 			clickedFragment = this.fragmentWithIndex(result.hit, fragIdx);
 		}
 
-		function success(obj){
+		function success(obj) {
 			nav.navigate(cid, obj);
 		}
 
-		function failure(req, resp){
+		function failure(req, resp) {
 			var objDisplayType = (result.hit.get('Type') || 'object').toLowerCase(),
-				msgCfg = { msg: 'An unexpected error occurred loading the '+ objDisplayType };
+					msgCfg = { msg: 'An unexpected error occurred loading the ' + objDisplayType };
 
-			if(resp && resp.status){
-				if(resp.status === 404){
+			if (resp && resp.status) {
+				if (resp.status === 404) {
 					msgCfg.title = 'Not Found!';
-					msgCfg.msg = 'The '+objDisplayType+' you are looking for no longer exists.';
+					msgCfg.msg = 'The ' + objDisplayType + ' you are looking for no longer exists.';
 				}
-				else if(resp.status === 403){
+				else if (resp.status === 403) {
 					msgCfg.title = 'Unauthorized!';
-					msgCfg.msg = 'You do not have access to this '+objDisplayType+'.';
+					msgCfg.msg = 'You do not have access to this ' + objDisplayType + '.';
 				}
 			}
-			console.log("Could not retrieve rawData for: ",result.hit.getId());
+			console.log("Could not retrieve rawData for: ", result.hit.getId());
 			console.log("Error: ", arguments);
 			alert(msgCfg);
 		}
@@ -360,7 +372,7 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		nav.setView('content');//Shouldn't this check if it was successfull in switching?
-		if(cat==='Books'){
+		if (cat === 'Books') {
 			nav.navigateAndScrollToSearchHit(cid, result, clickedFragment);
 			return;
 		}
@@ -368,13 +380,13 @@ Ext.define('NextThought.controller.Search', {
 		$AppConfig.service.getObject(result.hit.getId(), success, failure);
 	},
 
-	blogPostReady: function(cmp, params){
+	blogPostReady: function (cmp, params) {
 		var qStr = (params || {}).queryString,
-			fn;
+				fn;
 
-		if(qStr && this.onReadyCallbacks){
+		if (qStr && this.onReadyCallbacks) {
 			fn = this.onReadyCallbacks[qStr];
-			if(Ext.isFunction(fn)){
+			if (Ext.isFunction(fn)) {
 				Ext.callback(fn, this, arguments);
 			}
 		}

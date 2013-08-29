@@ -1,26 +1,26 @@
 Ext.define('NextThought.view.account.codecreation.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.codecreation-window',
+	alias:  'widget.codecreation-window',
 
 	requires: [
 		'NextThought.view.account.Header',
 		'NextThought.view.account.codecreation.Main'
 	],
 
-	cls: 'codecreation-window',
-	ui: 'nt-window',
+	cls:         'codecreation-window',
+	ui:          'nt-window',
 	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
+	constrain:   true,
+	modal:       true,
+	closable:    true,
+	resizable:   false,
+	dialog:      true,
 	closeAction: 'destroy',
 
 	width: 480,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -29,9 +29,9 @@ Ext.define('NextThought.view.account.codecreation.Window', {
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
-				xtype: 'account-header-view',
+				xtype:  'account-header-view',
 				noIcon: true,
-				title: 'Create a New Group...',
+				title:  'Create a New Group...',
 				detail: 'Once your group has been created, you\'ll receive a Group Code that you can share with others who want to join your group.'
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}

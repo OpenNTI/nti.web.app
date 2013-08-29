@@ -1,15 +1,15 @@
-Ext.define('NextThought.store.PageItem',function(){
+Ext.define('NextThought.store.PageItem', function () {
 
 	//TODO: use event domains
 	var coordinator = new Ext.util.Observable();
 
 	return {
-		extend: 'Ext.data.Store',
+		extend:   'Ext.data.Store',
 		requires: [
 			'NextThought.proxy.reader.Json',
 			'NextThought.util.UserDataThreader'
 		],
-		model: 'NextThought.model.GenericObject',
+		model:    'NextThought.model.GenericObject',
 
 		autoLoad: false,
 		pageSize: 20,
@@ -22,34 +22,34 @@ Ext.define('NextThought.store.PageItem',function(){
 		doesNotShareEventsImplicitly: false,
 
 		groupField: 'Class',
-		groupDir  : 'ASC',
-		proxy: {
-			url: 'tbd',
-			type: 'rest',
-			limitParam: 'batchSize',
-			pageParam: undefined,
+		groupDir:   'ASC',
+		proxy:      {
+			url:         'tbd',
+			type:        'rest',
+			limitParam:  'batchSize',
+			pageParam:   undefined,
 			filterParam: undefined,
-			startParam: 'batchStart',
-			reader: {
-				type: 'nti',
-				root: 'Items',
+			startParam:  'batchStart',
+			reader:      {
+				type:          'nti',
+				root:          'Items',
 				totalProperty: 'FilteredTotalItemCount'
 			},
-			headers: {
+			headers:     {
 				'Accept': 'application/vnd.nextthought.collection+json'
 			},
-			model: 'NextThought.model.GenericObject'
+			model:       'NextThought.model.GenericObject'
 		},
 
 
 		statics: {
-			make: function makeFactory(url,id,disablePaging){
+			make: function makeFactory(url, id, disablePaging) {
 				var ps = this.create({
-					clearOnPageLoad: false,
-					containerId: id
-				});
+										 clearOnPageLoad: false,
+										 containerId:     id
+									 });
 				ps.proxy.url = url;
-				if(disablePaging){
+				if (disablePaging) {
 					ps.proxy.limitParam = undefined;
 					ps.proxy.startParam = undefined;
 					delete ps.pageSize;
@@ -58,61 +58,61 @@ Ext.define('NextThought.store.PageItem',function(){
 			},
 
 
-			peek: function(){
+			peek: function () {
 				return coordinator;
 			}
 		},
 
-		onProxyLoad: function(operation) {
-            var resultSet = operation.getResultSet();
+		onProxyLoad: function (operation) {
+			var resultSet = operation.getResultSet();
 			delete this.batchLinks;
-			if( resultSet && resultSet.links ){
+			if (resultSet && resultSet.links) {
 				this.batchLinks = resultSet.links;
 			}
 
 			return this.callParent(arguments);
 		},
 
-		constructor: function(config){
+		constructor: function (config) {
 			//Allow partial overriding the proxy.
-			if(config && config.proxyOverride){
-				this.proxy = Ext.merge(Ext.clone(this.proxy),this.config.proxyOverride);
+			if (config && config.proxyOverride) {
+				this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
 				delete config.proxyOverride;
 			}
-			
+
 			this.callParent(arguments);
 
 			//Allow shortcutting the url setting.
-			if(this.url){
+			if (this.url) {
 				this.proxy.url = this.url;
 				delete this.url;
 			}
-			
 
-			this.mon(coordinator,{
-				delay: 1,//move this handler to the next event pump
-				scope: this,
+
+			this.mon(coordinator, {
+				delay:          1,//move this handler to the next event pump
+				scope:          this,
 				'removed-item': this.removeByIdsFromEvent,
-				'added-item': this.addFromEvent
+				'added-item':   this.addFromEvent
 			});
 		},
 
 		//By default PageItems want things that match the container
-		wantsItem: function(record){
+		wantsItem:   function (record) {
 			return this.containerId === record.get('ContainerId');
 		},
 
 
-		getBins: function(){
+		getBins: function () {
 			var groups = this.getGroups(),
 					bins = {},
-					k,b = null,
+					k, b = null,
 					getters = NextThought.util.UserDataThreader.GETTERS;
 
-			for(k in groups){
-				if(groups.hasOwnProperty(k)) {
+			for (k in groups) {
+				if (groups.hasOwnProperty(k)) {
 					b = groups[k].name;
-					bins[b] = Ext.Array.sort(groups[k].children,Globals.SortModelsBy(k,getters[b]));
+					bins[b] = Ext.Array.sort(groups[k].children, Globals.SortModelsBy(k, getters[b]));
 				}
 			}
 
@@ -120,23 +120,23 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
-		getItems: function(otherBins){
-			var bins = otherBins||this.getBins()|| {},
+		getItems: function (otherBins) {
+			var bins = otherBins || this.getBins() || {},
 					tree = this.buildThreads(bins);
 
-			return Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);
+			return Ext.Object.getValues(tree).concat(bins.Highlight || []).concat(bins.Redaction || []);
 		},
 
 
-		buildThreads: function(bins){
+		buildThreads: function (bins) {
 			var bms = bins.Bookmark;
 
 			//handle bookmarks here:
-			if(bms){
+			if (bms) {
 				if (bms.length !== 1) {
 					console.error('Oops, more than 1 bookmark on this page??', bms);
 				}
-				this.fireEvent('bookmark-loaded',bms[0]);
+				this.fireEvent('bookmark-loaded', bms[0]);
 				delete bins.Bookmark;
 			}
 
@@ -146,36 +146,40 @@ Ext.define('NextThought.store.PageItem',function(){
 
 		//TODO the docs say this can take an array instead of a single instance.  We don't handle
 		//that here
-		add: function(record) {
+		add:          function (record) {
 			this.suspendEvents(true);
 			console.log('Adding record to store', record, this);
 			//get added to the store:
 			this.callParent(arguments);
 
-			if(this.isFiltered()){
-				Ext.defer(this.filter,1,this);
+			if (this.isFiltered()) {
+				Ext.defer(this.filter, 1, this);
 			}
 
-			function adoptChild(parent, child){
+			function adoptChild(parent, child) {
 				//found our parent:
 				child.parent = parent;
-				if (!parent.children){parent.children = [];}
+				if (!parent.children) {
+					parent.children = [];
+				}
 				//Check if we are not already in the children array
-				if(!Ext.Array.contains(parent.children, child)){ parent.children.push(child); }
+				if (!Ext.Array.contains(parent.children, child)) {
+					parent.children.push(child);
+				}
 				//fire events for anyone who cares:
 				parent.fireEvent('child-added', child);
 				child.fireEvent('parent-set', parent);
 			}
 
-			function checkStoreItem(ancestor){
-				return function checkItem(storeItem){
+			function checkStoreItem(ancestor) {
+				return function checkItem(storeItem) {
 					if (ancestor === storeItem.getId()) {
 						adopted = true;
 						adoptChild(storeItem, record);
 						return false;
 					}
 
-					if(!Ext.isEmpty(storeItem.children)){
+					if (!Ext.isEmpty(storeItem.children)) {
 						Ext.each(storeItem.children, checkItem);
 					}
 					return true;
@@ -184,30 +188,30 @@ Ext.define('NextThought.store.PageItem',function(){
 
 			//find my parent if it's there and add myself to it:
 			var adopted,
-				refs = (record.get('references') || []).slice();
+					refs = (record.get('references') || []).slice();
 
-			if(!Ext.isEmpty(refs)){
-				while(!adopted && !Ext.isEmpty(refs) ){
+			if (!Ext.isEmpty(refs)) {
+				while (!adopted && !Ext.isEmpty(refs)) {
 					this.each(checkStoreItem(refs.pop()));
 				}
 
-				if(!adopted){
+				if (!adopted) {
 					console.warn('Unable to parent child', record);
 				}
 			}
 
-		//	coordinator.fireEvent('added-item', [record]);
+			//	coordinator.fireEvent('added-item', [record]);
 
 			this.resumeEvents();
 		},
 
 
-		resolveRange: function(range){
+		resolveRange: function (range) {
 			var i = range.start,
-				length = range.end+ 1,
-				ret = [];
+					length = range.end + 1,
+					ret = [];
 
-			for(i; i<length; i++){
+			for (i; i < length; i++) {
 				ret.push(this.getAt(i));
 			}
 
@@ -215,11 +219,11 @@ Ext.define('NextThought.store.PageItem',function(){
 		},
 
 
-		remove: function(r, isMove, silent){
+		remove: function (r, isMove, silent) {
 			var toActuallyRemove = [],
-				idsToBoradcast = [],
-				args = Array.prototype.slice.call(arguments),
-				records = args[0];
+					idsToBoradcast = [],
+					args = Array.prototype.slice.call(arguments),
+					records = args[0];
 
 			//Prior to ext4.2 remove all did its own thing.  But now it calls
 			//remove passing a range (removeAt also calls this but requires a new second optional
@@ -233,7 +237,7 @@ Ext.define('NextThought.store.PageItem',function(){
 
 			args[0] = toActuallyRemove;
 
-			if(Ext.isEmpty(records)){
+			if (Ext.isEmpty(records)) {
 				console.warn('Remove called with no records', records);
 				return;
 			}
@@ -241,35 +245,37 @@ Ext.define('NextThought.store.PageItem',function(){
 			if (!Ext.isIterable(records)) {
 
 				if (typeof records === 'object' && !records.isModel) {
-		           records = this.resolveRange(records);
-		        }
+					records = this.resolveRange(records);
+				}
 				else {
 					records = [records];
 				}
 			}
 
-			Ext.each(records, function(record){
-				if(Ext.isNumber(record)){
+			Ext.each(records, function (record) {
+				if (Ext.isNumber(record)) {
 					record = this.getAt(record);
 				}
 
-				if(record.placeholder || !record.wouldBePlaceholderOnDelete()){
+				if (record.placeholder || !record.wouldBePlaceholderOnDelete()) {
 					Ext.Array.push(toActuallyRemove, record);
 					Ext.Array.push(idsToBoradcast, record.getId());
 				}
-				else{
+				else {
 					record.convertToPlaceholder();
 				}
 			}, this);
 
-			if(!Ext.isEmpty(toActuallyRemove)){
+			if (!Ext.isEmpty(toActuallyRemove)) {
 				this.callParent(args);
 			}
 
-			Ext.each(toActuallyRemove, function(record){
-				if(record.parent){ record.parent.fireEvent('child-removed', record);}
+			Ext.each(toActuallyRemove, function (record) {
+				if (record.parent) {
+					record.parent.fireEvent('child-removed', record);
+				}
 				record.tearDownLinks();
-				record.fireEvent('destroy',record);
+				record.fireEvent('destroy', record);
 			});
 
 			//FWIW: we may want to suspend (and queue) this event.  When records(instances of Model) are "destroyed" they
@@ -277,52 +283,52 @@ Ext.define('NextThought.store.PageItem',function(){
 			coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 		},
 
-		addFromEvent: function(records){
+		addFromEvent: function (records) {
 			//don't fire more coordinator events
 			coordinator.suspendEvents();
 
 			var me = this;
 
-			try{
-				Ext.each(records, function(rec){
+			try {
+				Ext.each(records, function (rec) {
 					var current,
-						newRecord;
+							newRecord;
 
-					if(!me.wantsItem(rec)){
+					if (!me.wantsItem(rec)) {
 						return;
 					}
 
 					current = me.getById(rec.getId());
 
-					if(!current){
+					if (!current) {
 						//create a new one since the record we were given was already added somewhere
 						newRecord = ParseUtils.parseItems([rec.raw])[0];
-						if(newRecord){
+						if (newRecord) {
 							me.add(newRecord);
 						}
 					}
 				});
 			}
-			catch(er){
+			catch (er) {
 				console.warn(Globals.getError(er));
 			}
 
 			coordinator.resumeEvents();
 		},
 
-		removeByIdsFromEvent: function(ids, isMove, silent){
+		removeByIdsFromEvent: function (ids, isMove, silent) {
 			coordinator.suspendEvents(true);
 			var me = this;
 
-			try{
-				Ext.each(ids,function(id){
+			try {
+				Ext.each(ids, function (id) {
 					var r = me.getById(id);
-					if(r){
-						me.remove(r,isMove, silent);
+					if (r) {
+						me.remove(r, isMove, silent);
 					}
 				});
 			}
-			catch(e){
+			catch (e) {
 				console.warn(Globals.getError(e));
 			}
 

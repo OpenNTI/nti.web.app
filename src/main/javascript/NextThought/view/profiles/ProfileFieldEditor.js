@@ -1,40 +1,44 @@
-Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
+Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 	extend: 'Ext.Editor',
-	alias: 'widget.profile-field-editor',
+	alias:  'widget.profile-field-editor',
 
-	updateEl: false,
-	allowBlur: false,
+	updateEl:     false,
+	allowBlur:    false,
 	cancelOnBlur: true, //Only valid if allowBlur is true this has no effect.  If allowBlur is false this will trigger a blur to cancel edit
 
 	ignoreNoChange: true,
-	revertInvalid: false,
-	alignment: 'l-l',
+	revertInvalid:  false,
+	alignment:      'l-l',
 
 	autoSize: {width: 'boundEl'},
 
 	controlTemplateObj: {
 		cls: 'controls',
-		cn: [{cls: 'cancel', html: 'Cancel'}, {cls: 'save', html: 'Save'}]
+		cn:  [
+			{cls: 'cancel', html: 'Cancel'},
+			{cls: 'save', html: 'Save'}
+		]
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
 		this.mon(this.el.down('.save'), 'click', this.completeEdit, this);
 		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
 	},
 
-	startEdit: function(t,v){
+	startEdit: function (t, v) {
 		var me = this;
 		//Ensure the editor is wide enough to see something...
-		function resetWidth(){ me.autoSize.width='boundEl'; }
-		if(t.getWidth() < 150){
+		function resetWidth() { me.autoSize.width = 'boundEl'; }
+
+		if (t.getWidth() < 150) {
 			me.autoSize.width = 150;
 		}
 
-		this.on({deactivate:resetWidth,single:true});
+		this.on({deactivate: resetWidth, single: true});
 
-		return this.callParent([t,v]);
+		return this.callParent([t, v]);
 	}
 });

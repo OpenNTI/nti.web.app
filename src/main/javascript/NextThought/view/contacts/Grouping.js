@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.contacts.Grouping', {
-	extend: 'NextThought.view.BoundPanel',
-	alias: 'widget.contacts-tabs-grouping',
-	requires: [
+	extend:      'NextThought.view.BoundPanel',
+	alias:       'widget.contacts-tabs-grouping',
+	requires:    [
 		'NextThought.layout.component.Natural',
 		'NextThought.view.tool.Action',
 		'NextThought.view.contacts.Card'
@@ -12,73 +12,73 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		userContainer: 'NextThought.mixins.UserContainer'
 	},
 
-	ui: 'contact-grouping',
+	ui:  'contact-grouping',
 	cls: 'contact-grouping',
 
-	layout: 'auto',
+	layout:          'auto',
 	componentLayout: 'natural',
 
-	pageSize: 15,
+	pageSize:    15,
 	currentPage: 1,
 
 //	width: 700,
-	plain: true,
-	frame: false,
-	border: false,
-	tools: [
+	plain:       true,
+	frame:       false,
+	border:      false,
+	tools:       [
 		{
-			chat: 1,
-			xtype: 'nti-tool-action',
+			chat:    1,
+			xtype:   'nti-tool-action',
 			iconCls: 'chat',
-			label: 'Group Chat'
+			label:   'Group Chat'
 		},
 		{
 			settings: 1,
-			xtype: 'nti-tool-action',
-			iconCls: 'settings',
-			label: 'Settings'
+			xtype:    'nti-tool-action',
+			iconCls:  'settings',
+			label:    'Settings'
 		}
 	],
 
 	titleTpl: Ext.DomHelper.createTemplate(['{0} ', {tag: 'span', html: '{1}'}]),
 
 	showMoreTpl: Ext.DomHelper.createTemplate({
-		cls: 'show-more',
-		cn: [
-			{cls: 'dots', cn: [
-				{},
-				{},
-				{}
-			]},
-			{html: '{count} More'}
-		]
-	}),
+												  cls: 'show-more',
+												  cn:  [
+													  {cls: 'dots', cn: [
+														  {},
+														  {},
+														  {}
+													  ]},
+													  {html: '{count} More'}
+												  ]
+											  }),
 
-	childEls: ['body'],
+	childEls:    ['body'],
 	getTargetEl: function () {
 		return this.body;
 	},
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'grouping-header',
-			cn: [
-				{cls: 'tools'},
-				{tag: 'span', cls: 'name'},
-				{tag: 'span', cls: 'count'}
-			]
-		},
-		{
-			id: '{id}-body',
-			cn: ['{%this.renderContainer(out,values)%}']
-		}
-	]),
+										{
+											cls: 'grouping-header',
+											cn:  [
+												{cls: 'tools'},
+												{tag: 'span', cls: 'name'},
+												{tag: 'span', cls: 'count'}
+											]
+										},
+										{
+											id: '{id}-body',
+											cn: ['{%this.renderContainer(out,values)%}']
+										}
+									]),
 
 
 	renderSelectors: {
 		toolsEl: '.grouping-header .tools',
-		nameEl: '.grouping-header .name',
+		nameEl:  '.grouping-header .name',
 		countEl: '.grouping-header .count'
 	},
 
@@ -138,11 +138,11 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		this.on('destroy', this.cleanupActions, this);
 
 		this.on({
-			scope: this,
-			add: 'updateStuff',
-			remove: 'updateStuff',
-			buffer: 100
-		});
+					scope:  this,
+					add:    'updateStuff',
+					remove: 'updateStuff',
+					buffer: 100
+				});
 		this.mixins.userContainer.constructor.apply(this, arguments);
 
 		if (Ext.is.iPad) {
@@ -265,8 +265,8 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		}
 
 		var c = this.itemsList.length - this.items.getCount() - 1,
-			layout = this.layout || {},
-			el = layout.innerCt;
+				layout = this.layout || {},
+				el = layout.innerCt;
 
 
 		if (c > 0) {
@@ -288,8 +288,8 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		console.time('updateList');
 
 		var rendered = this.items.getCount(),
-			limit = this.pageSize * this.currentPage,
-			toRender;
+				limit = this.pageSize * this.currentPage,
+				toRender;
 
 
 		if (dirtyIndex >= rendered && rendered > limit) {
@@ -300,7 +300,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		if (dirtyIndex < this.items.getCount()) {
 			try {
 				Ext.destroy(this.items.getRange(dirtyIndex));
-			} catch(e) {
+			} catch (e) {
 				console.warn('Trouble cleaning up house', e.stack || e.message || e);
 			}
 		}

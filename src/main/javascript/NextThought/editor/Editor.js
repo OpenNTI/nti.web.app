@@ -14,186 +14,186 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
 	},
 
-	enableShareControls: false,
+	enableShareControls:   false,
 	enablePublishControls: false,
-	enableTextControls: true,
-	enableTags: false,
-	enableTitle: false,
-	enableWhiteboards: true,
-	enableVideo: false,
+	enableTextControls:    true,
+	enableTags:            false,
+	enableTitle:           false,
+	enableWhiteboards:     true,
+	enableVideo:           false,
 
-	saveButtonLabel: 'Save',
+	saveButtonLabel:   'Save',
 	cancelButtonLabel: 'Cancel',
-	placeholderText: 'Type a message...',
+	placeholderText:   'Type a message...',
 
-	ui: 'editor',
+	ui:  'editor',
 	cls: 'editor',
 
 	headerTplOrder: '{toolbar}{title}',
 
 	titleTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'enableTitle', cn: {
-			cls: 'title',
-			cn: [
-				{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
-			]
-		}}
-	]),
+									   {tag: 'tpl', 'if': 'enableTitle', cn: {
+										   cls: 'title',
+										   cn:  [
+											   {tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
+										   ]
+									   }}
+								   ]),
 
 	renderSelectors: {
 		saveButtonEl: '.action.save'
 	},
 
 	toolbarTpl: Ext.DomHelper.markup([
-		{
-			cls: 'aux', cn: [
-			{tag: 'tpl', 'if': 'enableShareControls', cn: {
-				cls: 'recipients'
-			}},
-			{tag: 'tpl', 'if': 'enablePublishControls', cn: {
-				cls: 'action publish on'
-			}},
-			{tag: 'tpl', 'if': 'enableTags', cn: {
-				cls: 'tags'
-			}}
-		]
-		}
-	]),
+										 {
+											 cls: 'aux', cn: [
+											 {tag: 'tpl', 'if': 'enableShareControls', cn: {
+												 cls: 'recipients'
+											 }},
+											 {tag: 'tpl', 'if': 'enablePublishControls', cn: {
+												 cls: 'action publish on'
+											 }},
+											 {tag: 'tpl', 'if': 'enableTags', cn: {
+												 cls: 'tags'
+											 }}
+										 ]
+										 }
+									 ]),
 
 
 	renderTpl: Ext.DomHelper.markup([
-		'{header}',
-		{
-			cls: 'main',
-			cn: [
-				'{extra}',
-				{
-					cls: 'content show-placeholder',
-					'data-placeholder': '{placeholderText}',
-					contentEditable: true,
-					unselectable: 'off',
-					tabIndex: -1,
-					cn: [
-						{ //inner div for IE
-							//default value (allow the cursor in to this placeholder div, but don't take any space)
-							html: '&#8203;'
-						}
-					]
-				}
-			]
-		}
-		, {
-			cls: 'footer',
-			cn: [
-				{
-					cls: 'left',
-					cn: [
-						{
-							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
-							cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
-									{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
-									{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
-								]
-							}
-						}
-						},
-						{
-							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
-							cls: 'popctr', cn: {
-								cls: 'popover', cn: [
-									{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
-									{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
-								]
-							}
-						}
-						}
-					]
-				},
-				{
-					cls: 'right',
-					cn: [
-						{cls: 'action save', html: 'Save'},
-						{cls: 'action cancel', html: 'Cancel'}
-					]
-				}
-			]
-		}
-	]),
+										'{header}',
+										{
+											cls: 'main',
+											cn:  [
+												'{extra}',
+												{
+													cls:                'content show-placeholder',
+													'data-placeholder': '{placeholderText}',
+													contentEditable:    true,
+													unselectable:       'off',
+													tabIndex:           -1,
+													cn:                 [
+														{ //inner div for IE
+															//default value (allow the cursor in to this placeholder div, but don't take any space)
+															html: '&#8203;'
+														}
+													]
+												}
+											]
+										}
+										, {
+											cls: 'footer',
+											cn:  [
+												{
+													cls: 'left',
+													cn:  [
+														{
+															cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
+															cls: 'popctr', cn: {
+																cls: 'popover', cn: [
+																	{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
+																	{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
+																	{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
+																]
+															}
+														}
+														},
+														{
+															cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
+															cls: 'popctr', cn: {
+																cls: 'popover', cn: [
+																	{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
+																	{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
+																]
+															}
+														}
+														}
+													]
+												},
+												{
+													cls: 'right',
+													cn:  [
+														{cls: 'action save', html: 'Save'},
+														{cls: 'action cancel', html: 'Cancel'}
+													]
+												}
+											]
+										}
+									]),
 
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
 
 	//default value (allow the cursor into the placeholder div, but don't take any space)
-	defaultValue: '&#8203;',
+	defaultValue:              '&#8203;',
 
 
-	wbThumbnailTpm: Ext.DomHelper.createTemplate({
-		contentEditable: false,
-		cls: 'whiteboard-divider',
-		unselectable: 'on',
-		cn: [
-			{
-				cls: 'whiteboard-wrapper',
-				cn: [
-					{
-						tag: 'img',
-						src: '{0}',
-						id: '{1}',
-						cls: 'wb-thumbnail object-part',
-						alt: 'Whiteboard Thumbnail',
-						unselectable: 'on',
-						border: 0
-					},
-					{
-						cls: 'fill', unselectable: 'on'
-					},
-					{
-						cls: 'centerer',
-						unselectable: 'on',
-						cn: [
-							{
-								unselectable: 'on',
-								cls: 'edit',
-								html: 'Edit'
-							}
-						]
-					}
-				]
-			}
-		]
-	}).compile(),
+	wbThumbnailTpm:    Ext.DomHelper.createTemplate({
+														contentEditable: false,
+														cls:             'whiteboard-divider',
+														unselectable:    'on',
+														cn:              [
+															{
+																cls: 'whiteboard-wrapper',
+																cn:  [
+																	{
+																		tag:          'img',
+																		src:          '{0}',
+																		id:           '{1}',
+																		cls:          'wb-thumbnail object-part',
+																		alt:          'Whiteboard Thumbnail',
+																		unselectable: 'on',
+																		border:       0
+																	},
+																	{
+																		cls: 'fill', unselectable: 'on'
+																	},
+																	{
+																		cls:          'centerer',
+																		unselectable: 'on',
+																		cn:           [
+																			{
+																				unselectable: 'on',
+																				cls:          'edit',
+																				html:         'Edit'
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}).compile(),
 
 
 	// FIXME: copied from above but we probably don't need all this
 	videoThumbnailTpm: Ext.DomHelper.createTemplate({
-		id: '{1}',
-		cls: 'video-thumbnail object-part body-divider',
-		alt: 'Embedded Video Thumbnail',
-		unselectable: 'on',
-		border: 0
-	}).compile(),
+														id:           '{1}',
+														cls:          'video-thumbnail object-part body-divider',
+														alt:          'Embedded Video Thumbnail',
+														unselectable: 'on',
+														border:       0
+													}).compile(),
 
 
-	unknownPartTemplate: Ext.DomHelper.createTemplate({
-		contentEditable: false,
-		id: '{1}',
-		cls: 'object-part unknown body-divider',
-		unselectable: 'on'
-	}).compile(),
+	unknownPartTemplate:      Ext.DomHelper.createTemplate({
+															   contentEditable: false,
+															   id:              '{1}',
+															   cls:             'object-part unknown body-divider',
+															   unselectable:    'on'
+														   }).compile(),
 
 
 	// TODO: all this part related stuff should end up in mixins or objects or something.
 	// this doesn't seem particularily scalable.
 	objectThumbnailTemplates: {
-		'application/vnd.nextthought.canvas': 'wbThumbnailTpm',
+		'application/vnd.nextthought.canvas':        'wbThumbnailTpm',
 		'application/vnd.nextthought.embeddedvideo': 'videoThumbnailTpm'
 	},
 
 
 	onThumbnailInsertedMap: {
-		'application/vnd.nextthought.canvas': 'onWhiteboardThumbnailInserted',
+		'application/vnd.nextthought.canvas':        'onWhiteboardThumbnailInserted',
 		'application/vnd.nextthought.embeddedvideo': 'onVideoThumbnailInserted'
 	},
 
@@ -205,7 +205,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	partRenderer: {
-		'application/vnd.nextthought.canvas': 'addWhiteboard',
+		'application/vnd.nextthought.canvas':        'addWhiteboard',
 		'application/vnd.nextthought.embeddedvideo': 'addVideo'
 	},
 
@@ -217,16 +217,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	 * Scrolls to the top of the page if a text input field is not focused
 	 */
 	onFocusChange: function (e) {
-		var tokenInput;
+		var tokenInput,
+				scrollWindowBack = true;
 		if (this.sharedListEl) {
 			tokenInput = this.sharedListEl.down('.user-token-field')
-				.el.down('.tokens')
-				.el.down('.inputArea')
-				.el.down('.token-input-wrap')
-				.el.down('input');
+					.el.down('.tokens')
+					.el.down('.inputArea')
+					.el.down('.token-input-wrap')
+					.el.down('input');
 		}
 
-		var scrollWindowBack = true;
 		if (this.contentEl && this.contentEl === e.relatedTarget) {
 			scrollWindowBack = false;
 		}
@@ -253,9 +253,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		//merge in subclass's templates
 		var tpl = this.prototype.renderTpl.replace('{header}', data.headerTpl || ''),
-			o = data.headerTplOrder || this.prototype.headerTplOrder || '',
-			topTpl = o.replace('{title}', data.titleTpl || '')
-				.replace('{toolbar}', data.toolbarTpl || '');
+				o = data.headerTplOrder || this.prototype.headerTplOrder || '',
+				topTpl = o.replace('{title}', data.titleTpl || '')
+						.replace('{toolbar}', data.toolbarTpl || '');
 
 		tpl = tpl.replace('{extra}', topTpl || '');
 
@@ -276,16 +276,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.enableVideo = this.enableVideo && $AppConfig.service.canEmbedVideo();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			cancelLabel: this.cancelButtonLabel,
-			saveLabel: this.saveButtonLabel,
-			enableShareControls: Boolean(this.enableShareControls),
+			cancelLabel:           this.cancelButtonLabel,
+			saveLabel:             this.saveButtonLabel,
+			enableShareControls:   Boolean(this.enableShareControls),
 			enablePublishControls: Boolean(this.enablePublishControls),
-			enableTextControls: Boolean(this.enableTextControls),
-			enableTags: Boolean(this.enableTags),
-			enableTitle: Boolean(this.enableTitle),
-			enableWhiteboards: Boolean(this.enableWhiteboards),
-			enableVideo: Boolean(this.enableVideo),
-			placeholderText: this.placeholderText
+			enableTextControls:    Boolean(this.enableTextControls),
+			enableTags:            Boolean(this.enableTags),
+			enableTitle:           Boolean(this.enableTitle),
+			enableWhiteboards:     Boolean(this.enableWhiteboards),
+			enableVideo:           Boolean(this.enableVideo),
+			placeholderText:       this.placeholderText
 		});
 	},
 
@@ -346,7 +346,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	onSave: function (e) {
 		e.stopEvent();
 		var v = this.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			if (!this.fireEvent('no-body-content', this, this.contentEl)) {
@@ -366,10 +366,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	setupEditor: function () {
 		var me = this,
-			el = me.el,
-			scrollParentEl = null,//me.el.parent(), // -- JSG: This was for V1, in V2 the note window doesn't scroll while its open.
-			Ce = Ext.CompositeElement,
-			tabTracker = new NextThought.util.TabIndexTracker();
+				el = me.el,
+				scrollParentEl = null,//me.el.parent(), // -- JSG: This was for V1, in V2 the note window doesn't scroll while its open.
+				Ce = Ext.CompositeElement,
+				tabTracker = new NextThought.util.TabIndexTracker();
 
 		me.trackedParts = {};
 
@@ -427,9 +427,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 
 		me.mon(el, {
-			scope: me,
+			scope:     me,
 			mousedown: me.editorMouseDown,
-			click: function (e) {
+			click:     function (e) {
 				if (!e.getTarget('.content') && !e.getTarget('.action')) {
 					el.down('.content').focus();
 					me.collapseToEnd();
@@ -441,13 +441,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.contentEl.selectable();
 
 		me.mon(me.contentEl, {
-			scope: me,
-			keydown: me.onKeyDown,
-			keyup: me.onKeyup,
-			paste: me.handlePaste,
-			click: me.handleClick,
+			scope:       me,
+			keydown:     me.onKeyDown,
+			keyup:       me.onKeyup,
+			paste:       me.handlePaste,
+			click:       me.handleClick,
 			contextmenu: me.handleContext,
-			mouseup: me.onMouseUp
+			mouseup:     me.onMouseUp
 		});
 
 		if (Ext.is.iPad) {
@@ -509,11 +509,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (me.sharedListEl) {
 			if ($AppConfig.service.canShare()) {
 				me.sharedList = Ext.widget('user-sharing-list', {
-					renderTo: me.sharedListEl,
+					renderTo:       me.sharedListEl,
 					scrollParentEl: scrollParentEl,
-					tabIndex: tabTracker && tabTracker.next(),
-					ownerCls: this.xtype,
-					value: me.sharingValue
+					tabIndex:       tabTracker && tabTracker.next(),
+					ownerCls:       this.xtype,
+					value:          me.sharingValue
 				});
 				this.on('destroy', 'destroy', me.sharedList);
 				this.mon(me.sharedList, 'cancel-indicated', function () {
@@ -548,13 +548,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			me.titleEl.set({tabIndex: tabTracker.next()});
 			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl, {
-				'click': function (e) {
+				'click':     function (e) {
 					e.stopPropagation();
 				},
 				'mousedown': function (e) {
 					e.stopPropagation();
 				},
-				'keydown': function (e) {
+				'keydown':   function (e) {
 					var t = e.getTarget();
 					Ext.callback((t || {}).setAttribute, t, ['value', t.value]);
 					e.stopPropagation();
@@ -607,9 +607,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	deactivate: function () {
-        if(Ext.is.iPad && this.contentEl){
-            this.contentEl.blur();
-        }
+		if (Ext.is.iPad && this.contentEl) {
+			this.contentEl.blur();
+		}
 		this.el.removeCls('active');
 		this.lastRange = null;
 		this.cleanTrackedParts();
@@ -640,10 +640,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			return false;
 		}
 		var be = e.browserEvent,
-			cd = be ? be.clipboardData : null,
-			sel = window.getSelection(),
-			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
-			offScreenBuffer = document.createElement('div');
+				cd = be ? be.clipboardData : null,
+				sel = window.getSelection(),
+				savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
+				offScreenBuffer = document.createElement('div');
 
 		document.body.appendChild(offScreenBuffer);
 		offScreenBuffer.style.position = 'absolute';
@@ -708,9 +708,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		try {
 			pasteData = pasteData
-				.replace(/\s*(style|class)=".+?"\s*/ig, ' ')
-				.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;')
-				.replace(/<meta.*?>/ig, '');
+					.replace(/\s*(style|class)=".+?"\s*/ig, ' ')
+					.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;')
+					.replace(/<meta.*?>/ig, '');
 
 			frag = range.createContextualFragment(pasteData);
 			range.deleteContents();
@@ -764,7 +764,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	moveCaret: function (n, offset) {
 		var s = window.getSelection(),
-			range = document.createRange();
+				range = document.createRange();
 
 		if (typeof offset !== 'number') {
 			range.selectNodeContents(n);
@@ -782,9 +782,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	detectAndFixDanglingNodes: function () {
 		var s = window.getSelection(),
-			n = s && s.focusNode,
-			c = Ext.getDom(this.contentEl),
-			acted = false;
+				n = s && s.focusNode,
+				c = Ext.getDom(this.contentEl),
+				acted = false;
 		//detect elements that have fallen out of the nest
 		Ext.each(c.childNodes, function (el) {
 			if (!/^div$/i.test(el.tagName)) {
@@ -806,13 +806,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	onKeyDown: function (e) {
 
 		var s = window.getSelection(),
-			a = s && s.anchorNode,
-			n = s && s.focusNode,
-			o = s && s.focusOffset,
-			ao = s && s.anchorOffset,
-			v = n && n.nodeValue, r,
-			modKey = e.altKey || e.ctrlKey,
-			badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
+				a = s && s.anchorNode,
+				n = s && s.focusNode,
+				o = s && s.focusOffset,
+				ao = s && s.anchorOffset,
+				v = n && n.nodeValue, r,
+				modKey = e.altKey || e.ctrlKey,
+				badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
 		this.detectAndFixDanglingNodes();
 		if (badRange) {
@@ -862,7 +862,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				s.addRange(r);
 			}
 		}
-		else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT){
+		else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT) {
 			//keeps the slides from transitioninng in the presentation view
 			e.stopPropagation();
 		}
@@ -890,7 +890,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	maybeResizeContentBox: function () {
 		var p = this.previousEditorHeight || 0,
-			h = this.el.getHeight();
+				h = this.el.getHeight();
 
 		this.previousEditorHeight = h;
 
@@ -909,7 +909,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	syncTypingAttributeButtons: function () {
 		var me = this,
-			buttonsName = ['bold', 'italic', 'underline'];
+				buttonsName = ['bold', 'italic', 'underline'];
 
 		Ext.each(buttonsName, function (bn) {
 			var b = me.el.down('.' + bn);
@@ -941,7 +941,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var actions = this.supportedTypingAttributes, me = this;
 		Ext.each(actions, function (action) {
 			if (document.queryCommandSupported(action)
-				&& document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
+					&& document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
 				document.execCommand(action, false, false);
 			}
 		});
@@ -977,8 +977,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			e.stopPropagation();
 		}
 		var state = el && el.hasCls('selected'),
-			action = state ? 'removeCls' : 'addCls',
-			tip = state ? el.getAttribute('data-tiptext') : undefined;
+				action = state ? 'removeCls' : 'addCls',
+				tip = state ? el.getAttribute('data-tiptext') : undefined;
 
 
 		if (el && !e.getTarget('.control')) {
@@ -1013,7 +1013,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	// better named toggle!
-	showStylePopover: function (e) {
+	showStylePopover:   function (e) {
 		var t = e.getTarget('.action.text-controls', undefined, true);
 
 		this.togglePopover(t, e);
@@ -1059,12 +1059,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	handleClick: function (e) {
 		var guid, p, fnName, mime,
-		 	content = e.getTarget('.content'),
-			t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
+				content = e.getTarget('.content'),
+				t = e.getTarget('.object-part') || e.getTarget('.whiteboard-wrapper');
 
 		//make sure the content el gets focus when you click it, if its not already active
 		//fixs issue where it would take two clicks to focus content from the usertokenfield
-		if(content && content !== document.activeElement){ this.focus(true); }
+		if (content && content !== document.activeElement) {
+			this.focus(true);
+		}
 
 		if (t) {
 			guid = t.getAttribute('id');
@@ -1113,7 +1115,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	removeWhiteboard: function (guid) {
 		var w = this.trackedParts[guid],
-			el = Ext.get(guid);
+				el = Ext.get(guid);
 
 		if (el) {
 			el.parent('.whiteboard-divider').remove();
@@ -1130,12 +1132,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	//This needs to go somewhere else
-	createVideoPart: function (url, type) {
+	createVideoPart:  function (url, type) {
 		return {
-			Class: 'EmbeddedVideo',
+			Class:    'EmbeddedVideo',
 			MimeType: 'application/vnd.nextthought.embeddedvideo',
 			embedURL: url,
-			type: type
+			type:     type
 		};
 	},
 
@@ -1152,7 +1154,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!data || e) {
 			Ext.widget('embedvideo-window', {
-				url: (data || {}).embedURL,
+				url:     (data || {}).embedURL,
 				onEmbed: function (data) {
 					var part = me.createVideoPart(data.embedURL, data.type);
 					me.insertObjectThumbnail(me.el.down('.content'), guid, part, data, append/*, true*/);
@@ -1198,7 +1200,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		//hook into the window's save and cancel operations:
 		this.mon(wbWin, {
-			save: function (win, wb) {
+			save:   function (win, wb) {
 				data = wb.getValue();
 				me.insertObjectThumbnail(content, guid, wb, append, true);
 				if (Ext.query('.nav-helper')[0]) {
@@ -1224,16 +1226,16 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	insertPartAtSelection: function (html) {
 		var sel,
-			range,
-			beforeRange,
-			afterRange,
-			beforeContent,
-			afterContent,
-			el,
-			frag,
-			node,
-			lastNode,
-			content = this.el.down('.content', true);
+				range,
+				beforeRange,
+				afterRange,
+				beforeContent,
+				afterContent,
+				el,
+				frag,
+				node,
+				lastNode,
+				content = this.el.down('.content', true);
 
 		if (window.getSelection) {
 			// IE9 and non-IE
@@ -1295,15 +1297,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	insertObjectThumbnail: function (content, guid, obj, append, scrollIntoView) {
 		var me = this,
-			el = Ext.get(guid),
-			mime = (obj || obj.data).MimeType,
-			placeholder,
-			htmlCfg,
-			handled = false,
-			isSelectionInContent,
-			focusNode,
-			thumbTpl,
-			onInsertedFn;
+				el = Ext.get(guid),
+				mime = (obj || obj.data).MimeType,
+				placeholder,
+				htmlCfg,
+				handled = false,
+				isSelectionInContent,
+				focusNode,
+				thumbTpl,
+				onInsertedFn;
 
 		//We need empty divs to allow to insert text before or after an object.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
@@ -1395,8 +1397,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var me = this;
 		obj.getThumbnail(function (data) {
 			var el = Ext.get(guid).up('.whiteboard-divider'),
-				p = placeholder.insertBefore(el),
-				wbt;
+					p = placeholder.insertBefore(el),
+					wbt;
 
 			el.remove();
 			//recreate image with data
@@ -1445,19 +1447,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	whiteboardPart: function (wp) {
 		var me = this,
-			m = wp.match(/id="(.*?)"/),
-			id = m && m[1],
-			wb = id && me.trackedParts[id],
-			ed = wb && wb.getEditor();
+				m = wp.match(/id="(.*?)"/),
+				id = m && m[1],
+				wb = id && me.trackedParts[id],
+				ed = wb && wb.getEditor();
 		return ed && ed.getValue();
 	},
 
 
 	videoPart: function (vp) {
 		var hrefRegex = /.*?data-href="(.*?)".*?/,
-			typeRegex = /.*?data-type="(.*?)".*?/,
-			href = hrefRegex && hrefRegex.exec(vp)[1],
-			type = typeRegex && typeRegex.exec(vp)[1];
+				typeRegex = /.*?data-type="(.*?)".*?/,
+				href = hrefRegex && hrefRegex.exec(vp)[1],
+				type = typeRegex && typeRegex.exec(vp)[1];
 
 
 		if (!href || !type) {
@@ -1469,8 +1471,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	unknownPart: function (up) {
 		var me = this,
-			m = up.match(/id="(.*?)"/),
-			id = m && m[1];
+				m = up.match(/id="(.*?)"/),
+				id = m && m[1];
 		return id && me.trackedParts[id];
 	},
 
@@ -1492,8 +1494,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	getBody: function (parts) {
 		var r = [],
-			objectPartRegex = /class=".*object-part.*"/i,
-			i, p, part, me = this;
+				objectPartRegex = /class=".*object-part.*"/i,
+				i, p, part, me = this;
 
 
 		function stripTrailingBreak(text) {
@@ -1559,8 +1561,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	collapseToEnd: function () {
 		var s, me = this,
-			c = Ext.getDom(me.el.down('.content')), r,
-			content = c && c.innerHTML;
+				c = Ext.getDom(me.el.down('.content')), r,
+				content = c && c.innerHTML;
 		if (content) {
 			try {
 				s = window.getSelection();
@@ -1590,19 +1592,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	maybeEnableSave: function () {
 		function isNoteBodyEmpty() {
 			var d = Ext.getDom(me.el.down('.content')),
-				html = d && d.innerHTML, v, parts = d.querySelectorAll('.object-part');
+					html = d && d.innerHTML, v, parts = d.querySelectorAll('.object-part');
 
 			html = v = html.replace(/\u200B/g, '').replace(/<div>/g, '').replace(/<\/div>/g, '').replace(/&nbsp;/g, ' ');
 			html = html.replace(/<br\/?>/g, '');
 			return {
 				clearPlaceholder: !Ext.isEmpty(parts) || !Ext.isEmpty(v),
-				enableSave: !Ext.isEmpty(Ext.Object.getKeys(parts)) || !Ext.isEmpty(html.trim())
+				enableSave:       !Ext.isEmpty(Ext.Object.getKeys(parts)) || !Ext.isEmpty(html.trim())
 			};
 		}
 
 		var me = this, body,
-			r = isNoteBodyEmpty(),
-			cls = 'disabled';
+				r = isNoteBodyEmpty(),
+				cls = 'disabled';
 
 		if (r.enableSave && this.saveButtonEl.hasCls(cls)) {
 			this.saveButtonEl.removeCls(cls);
@@ -1624,14 +1626,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	editBody: function (body) {
 		var me = this,
-			c = Ext.getDom(this.el.down('.content'));
+				c = Ext.getDom(this.el.down('.content'));
 
 		if (body && body.length > 0) {
 			c.innerHTML = '';
 		}
 		Ext.each(body, function (part) {
 			var d = document.createElement('div'),
-				mime, fnName;
+					mime, fnName;
 			if (typeof part === 'string') {
 				d.innerHTML += part.replace(/\u200B/g, '');
 				c.appendChild(d);
@@ -1680,7 +1682,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [],
-			sel = this.el.select('.content > *');
+				sel = this.el.select('.content > *');
 
 		sel.each(function (div) {
 			var html, tmp, dom;
@@ -1838,7 +1840,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	Ext.define('NextThought.editor.Editor', {
 		extend: 'NextThought.editor.AbstractEditor',
-		alias: 'widget.nti-editor'
+		alias:  'widget.nti-editor'
 	});
 
 });

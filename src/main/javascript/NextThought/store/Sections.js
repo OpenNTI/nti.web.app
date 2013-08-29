@@ -1,13 +1,13 @@
-Ext.define('NextThought.store.Sections',{
-	extend: 'Ext.data.Store',
+Ext.define('NextThought.store.Sections', {
+	extend:   'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'
 	],
-	model: 'NextThought.model.SectionInfo',
+	model:    'NextThought.model.SectionInfo',
 	autoLoad: false,
-	proxy: {
-		type: 'rest',
-		reader: {
+	proxy:    {
+		type:    'rest',
+		reader:  {
 			type: 'nti',
 			root: 'Items'
 		},

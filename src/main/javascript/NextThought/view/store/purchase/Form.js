@@ -7,7 +7,7 @@
  */
 Ext.define('NextThought.view.store.purchase.Form', {
 	extend: 'Ext.Component',
-	alias: 'widget.purchase-form',
+	alias:  'widget.purchase-form',
 
 	mixins: {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
@@ -15,11 +15,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	ui: 'purchase-form',
 
-	ordinal: 1,
-	showColumns: false,//for debugging in this view
-	confirmLabel: 'Continue',
+	ordinal:        1,
+	showColumns:    false,//for debugging in this view
+	confirmLabel:   'Continue',
 	checkboxAction: 'agreeToTerms',
-	checkboxLabel: Ext.DomHelper.markup(['I have read and agree to the ', {tag: 'a', href: '#', target: '_blank', html: 'licensing terms.'}]),
+	checkboxLabel:  Ext.DomHelper.markup(['I have read and agree to the ', {tag: 'a', href: '#', target: '_blank', html: 'licensing terms.'}]),
 
 	//To use some of stipes test cards we cant send address or cvc but those are required on our form.
 	//Use this flag only for testing locally to make those fields not required.  I miss preprocessor statements...
@@ -41,16 +41,16 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				{tag: 'input', type: 'radio', name: 'quantity', value: 'other'},
 				{cn: [
 					{tag: 'div', cn: ['I want to purchase ', {
-						tag: 'a',
-						cls: 'activation',
+						tag:  'a',
+						cls:  'activation',
 						href: '#',
 						html: 'Activation Keys',
-						cn: [
+						cn:   [
 							{ cls: 'desc', html: 'An activation key is a key code that gives you access to purchased content.'}
 						]
 					}, ' to share with others.']},
-					{tag: 'input', type: 'text', placeholder: '1', name: 'count',
-						'data-width': '1/8', autocomplete: 'off', pattern: '\\d*',
+					{tag:                 'input', type: 'text', placeholder: '1', name: 'count',
+						'data-width':     '1/8', autocomplete: 'off', pattern: '\\d*',
 						'data-formatter': 'restrictNumeric'},
 					'License'
 				]}
@@ -68,16 +68,16 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				{tag: 'input', type: 'text', 'data-required': true, placeholder: 'Name on card', name: 'name'}
 			]},
 			{cn: [
-				{tag: 'input', type: 'text', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number',
-					required: 'required', pattern: '\\d*', autocompletetype: 'cc-number',
-					'data-required': true, 'data-width': '1/2',
+				{tag:                 'input', type: 'text', placeholder: '1234 - 1234 - 1234 - 1234', name: 'number',
+					required:         'required', pattern: '\\d*', autocompletetype: 'cc-number',
+					'data-required':  true, 'data-width': '1/2',
 					'data-validator': 'validateCardNumber', 'data-formatter': 'formatCardNumber', 'data-getter': 'getCardNumberVal' },
-				{tag: 'input', type: 'text', placeholder: 'MM / YY', name: 'exp_',
-					'data-required': true, 'data-width': '1/4', autocomplete: 'off',
-					'data-validator': 'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry',
+				{tag:                  'input', type: 'text', placeholder: 'MM / YY', name: 'exp_',
+					'data-required':   true, 'data-width': '1/4', autocomplete: 'off',
+					'data-validator':  'validateCardExpiry', 'data-getter': 'cardExpiryVal', 'data-formatter': 'formatCardExpiry',
 					'data-cardfields': 'exp_month,exp_year', 'data-cardfields-separator': '/'},
-				{tag: 'input', type: 'text', placeholder: 'Code', name: 'cvc',
-					'data-required': true, 'data-width': '1/4', autocomplete: 'off', required: 'required', pattern: '\\d*',
+				{tag:                 'input', type: 'text', placeholder: 'Code', name: 'cvc',
+					'data-required':  true, 'data-width': '1/4', autocomplete: 'off', required: 'required', pattern: '\\d*',
 					'data-validator': 'validateCardCVC', 'data-formatter': 'formatCardCVC'}
 			]}
 		]},
@@ -96,9 +96,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 				{tag: 'input', type: 'text', placeholder: 'State / Province / Territory / Region', name: 'address_state'}
 			]},
 			{cn: [
-				{tag: 'input', type: 'text', 'data-required': true, 'data-width': '2/3',
+				{tag:            'input', type: 'text', 'data-required': true, 'data-width': '2/3',
 					placeholder: 'Country', name: 'address_country'},
-				{tag: 'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip',
+				{tag:        'input', type: 'text', placeholder: 'ZIP / Postal Code', name: 'address_zip',
 					pattern: '\\d*', 'data-width': '1/3', 'data-formatter': 'restrictNumeric'}
 			]}
 		]}
@@ -106,10 +106,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	renderSelectors: {
-		couponEl: 'input[name=coupon]',
+		couponEl:   'input[name=coupon]',
 		quantityEl: 'input[name=count]',
-		othersEl: 'input[name=quantity][value=other]',
-		selfEl: 'input[name=quantity][value=self]'
+		othersEl:   'input[name=quantity][value=other]',
+		selfEl:     'input[name=quantity][value=self]'
 	},
 
 
@@ -134,10 +134,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		this.fixPlaceholders(this.getEl().query('input'));
 
 		var inputs = this.getEl().select('input'),
-			validator = Ext.bind(this.generateTokenData, this),
-			bufferedValidator = Ext.Function.createBuffered(validator, 250),
-			bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 1000, this),
-			firstRadio = this.getEl().select('input[type=radio]').first();
+				validator = Ext.bind(this.generateTokenData, this),
+				bufferedValidator = Ext.Function.createBuffered(validator, 250),
+				bufferedPricer = Ext.Function.createBuffered(this.pricePurchase, 1000, this),
+				firstRadio = this.getEl().select('input[type=radio]').first();
 
 		if (firstRadio) {
 			firstRadio.set({checked: 'true'});
@@ -145,7 +145,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 		inputs.each(function (input) {
 			var formatter = input.getAttribute('data-formatter'),
-				jqd = jQuery(input.dom);
+					jqd = jQuery(input.dom);
 			if (formatter) {
 				jqd.payment(formatter);
 			}
@@ -158,7 +158,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			});
 			jqd.keypress(function () {
 				jqd.attr('data-visited',
-					(jqd.attr('data-focused') && (jqd.val() || jqd.attr('data-visited'))) ? 'true' : undefined
+						 (jqd.attr('data-focused') && (jqd.val() || jqd.attr('data-visited'))) ? 'true' : undefined
 				);
 			});
 		});
@@ -174,15 +174,15 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}, this);
 		this.getEl().select('input[name=count]').on('blur', this.pricePurchase, this);
 		this.getEl().select('input[name=count]').on({
-			keypress: bufferedPricer,
-			keyup: bufferedPricer,
-			scope: this
-		});
+														keypress: bufferedPricer,
+														keyup:    bufferedPricer,
+														scope:    this
+													});
 		this.couponEl.on({
-			keypress: bufferedPricer,
-			keyup: bufferedPricer,
-			scope: this
-		});
+							 keypress: bufferedPricer,
+							 keyup:    bufferedPricer,
+							 scope:    this
+						 });
 		this.couponEl.on('blur', this.pricePurchase, this);
 
 		this.enableSubmission(false);
@@ -216,8 +216,8 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		inputs.each(function (input) {
 			input = Ext.getDom(input);
 			var fields = input.getAttribute('data-cardfields'),
-				name = input.getAttribute('name'),
-				val, formatter;
+					name = input.getAttribute('name'),
+					val, formatter;
 
 			if (fields) {
 				fields = fields.split(',');
@@ -245,9 +245,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	gatherPricingInfo: function () {
 		var desc = {Purchasable: this.record},
-			wantsCode = this.othersEl.dom.checked,
-			coupon = (this.couponEl.dom.value || '').trim(),
-			quantity = (this.quantityEl.dom.value || '').trim();
+				wantsCode = this.othersEl.dom.checked,
+				coupon = (this.couponEl.dom.value || '').trim(),
+				quantity = (this.quantityEl.dom.value || '').trim();
 
 		if (wantsCode) {
 			quantity = quantity ? parseInt(quantity, 10) : 1;
@@ -264,11 +264,11 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	pricePurchase: function () {
 		var desc = this.gatherPricingInfo(),
-			sendingCoupon = Boolean(desc.Coupon);
+				sendingCoupon = Boolean(desc.Coupon);
 
 		if (this.lastPricingDesc
-			&& desc.Coupon === this.lastPricingDesc.Coupon
-			&& desc.Quantity === this.lastPricingDesc.Quantity) {
+				&& desc.Coupon === this.lastPricingDesc.Coupon
+				&& desc.Quantity === this.lastPricingDesc.Quantity) {
 			return;
 		}
 
@@ -324,7 +324,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	valueForInput: function (input) {
 		var val = input.value,
-			getter = input.getAttribute('data-getter');
+				getter = input.getAttribute('data-getter');
 
 		if (getter) {
 			if (this[getter]) {
@@ -341,7 +341,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	validateForRequired: function (input, val) {
 		var required = input.getAttribute('data-required'),
-			visited = input.getAttribute('data-visited');
+				visited = input.getAttribute('data-visited');
 
 		if (this.ignoreClientSideValidation) {
 			console.warn('Ignoring client side validation this should only be used in specific test cases');
@@ -361,7 +361,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	validateWithValidator: function (input, val) {
 		var validator = input.getAttribute('data-validator'),
-			visited = input.getAttribute('data-visited');
+				visited = input.getAttribute('data-visited');
 
 		if (this.ignoreClientSideValidation) {
 			console.warn('Ignoring client side validation this should only be used in specific test cases');
@@ -381,7 +381,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	validateInput: function (input) {
 		var val, visited = input.getAttribute('data-visited'),
-			auto = input.getAttribute('data-no-autovalidate');
+				auto = input.getAttribute('data-no-autovalidate');
 		input = Ext.getDom(input);
 
 		val = this.valueForInput(input);
@@ -419,7 +419,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	generateTokenData: function () {
 		var inputs = this.getEl().select('input'),
-			data = {}, failed = false;
+				data = {}, failed = false;
 		inputs.each(function (input) {
 			//First we validate
 			var val = this.validateInput(input);
@@ -464,9 +464,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	handleError: function (errorModel) {
 		console.log('Form needs to handle error', errorModel);
 		var el = this.getEl(),
-			msg = errorModel.message || (errorModel.get && errorModel.get('Message')) || 'An unknown error occurred.',
-			p = errorModel.param || (errorModel.get && errorModel.get('Param')) || '',
-			field = el.down('input[name="' + p + '"]') || el.down('input[name^=' + (p.split('_')[0]) + ']');
+				msg = errorModel.message || (errorModel.get && errorModel.get('Message')) || 'An unknown error occurred.',
+				p = errorModel.param || (errorModel.get && errorModel.get('Param')) || '',
+				field = el.down('input[name="' + p + '"]') || el.down('input[name^=' + (p.split('_')[0]) + ']');
 
 		if (field) {
 			field.addCls('invalid');

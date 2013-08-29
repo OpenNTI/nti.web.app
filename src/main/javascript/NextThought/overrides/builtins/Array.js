@@ -1,6 +1,6 @@
-Ext.define('NextThought.overrides.builtins.Array',{});
+Ext.define('NextThought.overrides.builtins.Array', {});
 
-(function(){
+(function () {
 
 	/** @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
 	 *
@@ -8,7 +8,7 @@ Ext.define('NextThought.overrides.builtins.Array',{});
 	 * @param [initialValue]
 	 * @returns {*}
 	 */
-	function reduce(callback, initialValue){
+	function reduce(callback, initialValue) {
 		'use strict';
 		if (null === this || 'undefined' === typeof this) {
 			// At the moment all modern browsers, that support strict mode, have
@@ -25,8 +25,10 @@ Ext.define('NextThought.overrides.builtins.Array',{});
 			value = initialValue;
 			isValueSet = true;
 		}
-		for ( ; length > index; ++index) {
-			if (!this.hasOwnProperty(index)){ continue; }
+		for (; length > index; ++index) {
+			if (!this.hasOwnProperty(index)) {
+				continue;
+			}
 			if (isValueSet) {
 				value = callback(value, this[index], index, this);
 			} else {
@@ -41,19 +43,19 @@ Ext.define('NextThought.overrides.builtins.Array',{});
 	}
 
 
-	(function(o,a){
-		Ext.Object.each(a,function(k,v){
-			if(!o[k]){
+	(function (o, a) {
+		Ext.Object.each(a, function (k, v) {
+			if (!o[k]) {
 				o[k] = v;
-				if(Object.defineProperty){
-					Object.defineProperty(o,k,{enumerable: false});
+				if (Object.defineProperty) {
+					Object.defineProperty(o, k, {enumerable: false});
 				}
 			}
 		});
-	}(Array.prototype,{
-		first: function first(){ return this[0]; },
-		last: function last(){ return this[this.length-1]; },
-		peek: function peek(){ return this[this.length-1]; },
+	}(Array.prototype, {
+		first:  function first() { return this[0]; },
+		last:   function last() { return this[this.length - 1]; },
+		peek:   function peek() { return this[this.length - 1]; },
 		reduce: reduce
 	}));
 

@@ -1,53 +1,53 @@
 //styles in _identity.scss
-Ext.define('NextThought.view.menus.Presence',{
+Ext.define('NextThought.view.menus.Presence', {
 	extend: 'Ext.Component',
-	alias: 'widget.presence-menu',
+	alias:  'widget.presence-menu',
 
 	requires: [
 		'NextThought.view.menus.PresenceEditor',
 		'NextThought.cache.AbstractStorage'
 	],
 
-	cls: 'presence-menu',
-	ui: 'presence-menu',
+	cls:        'presence-menu',
+	ui:         'presence-menu',
 	sessionKey: 'presence-state',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', html: 'MY STATUS'},
-		{cls: 'list', cn:[
-			{tag:'tpl', 'for':'states', cn:[
-				{cls: 'status {state}', cn:[
-					{tag:'tpl', 'if':'editable', cn: {cls: 'edit', 'data-placeholder': '{label}'}},
-					{cls: 'label', html: '{label}'},
-					{cls: 'presence {state}'}				
-				]}
-			]}
-		]}
-	]),
+										{cls: 'header', html: 'MY STATUS'},
+										{cls: 'list', cn: [
+											{tag: 'tpl', 'for': 'states', cn: [
+												{cls: 'status {state}', cn: [
+													{tag: 'tpl', 'if': 'editable', cn: {cls: 'edit', 'data-placeholder': '{label}'}},
+													{cls: 'label', html: '{label}'},
+													{cls: 'presence {state}'}
+												]}
+											]}
+										]}
+									]),
 
 	renderSelectors: {
 		'availableEl': '.list .available',
-		'awayEl': '.list .away',
-		'dndEl': '.list .dnd',
-		'offlineEl': '.list .offline'
+		'awayEl':      '.list .away',
+		'dndEl':       '.list .dnd',
+		'offlineEl':   '.list .offline'
 	},
 
 	defaultStates: {
 		'available': 'Available',
-		'away': 'Away',
-		'dnd': 'Do not disturb',
-		'offline': 'Offline'
+		'away':      'Away',
+		'dnd':       'Do not disturb',
+		'offline':   'Offline'
 	},
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.restoreState();
 	},
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			states: [
 				{state: 'available', label: 'Available', editable: true},
 				{state: 'away', label: 'Away', editable: true},
@@ -58,185 +58,187 @@ Ext.define('NextThought.view.menus.Presence',{
 		});
 	},
 
-    afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var presence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
-			
+
 		this.setPresence($AppConfig.username, presence);
 
 		this.setUpEditor();
-		this.mon(this.el,'click','clicked',this);
+		this.mon(this.el, 'click', 'clicked', this);
 
-		this.mon(Ext.getStore('PresenceInfo'),'presence-changed','setPresence', this);	
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'setPresence', this);
 	},
 
 
-	onDestroy: function() {
-	    //this.cancelDeferHide();
+	onDestroy: function () {
+		//this.cancelDeferHide();
 		clearTimeout(this.deferHideParentMenusTimer);
 		this.callParent(arguments);
 	},
 
 
-	deferHideParentMenus: function() {
+	deferHideParentMenus: function () {
 		Ext.menu.Manager.hideAll();
 	},
 
-	saveState: function(type, show, status, active){
+	saveState: function (type, show, status, active) {
 		var key, current = TemporaryStorage.get(this.sessionKey) || {};
 		key = type;
 
-		if(type === 'available'){
-			if(show !== 'chat'){
+		if (type === 'available') {
+			if (show !== 'chat') {
 				key = show;
 			}
 		}
 
-		if(!current[key]){
+		if (!current[key]) {
 			current[key] = {};
 		}
 
 		current[key].type = type;
 
-		if(show !== null){
+		if (show !== null) {
 			current[key].show = show;
 		}
 
-		if(status !== null){
+		if (status !== null) {
 			current[key].status = status;
 		}
 
-		if(active){
+		if (active) {
 			current.active = key;
 		}
 
 		TemporaryStorage.set(this.sessionKey, current);
 	},
 
-	restoreState: function(){
+	restoreState: function () {
 		var me = this,
-			state = TemporaryStorage.get(this.sessionKey) || {};
+				state = TemporaryStorage.get(this.sessionKey) || {};
 
-		function update(){
-			Ext.Object.each(me.defaultStates, function(key, value){
+		function update() {
+			Ext.Object.each(me.defaultStates, function (key, value) {
 				var status = (state[key] && state[key].status) || me.defaultStates[key],
-					row = me.el.down('.'+key),
-					label = row && row.down('.label');
+						row = me.el.down('.' + key),
+						label = row && row.down('.label');
 
-				if(label){
+				if (label) {
 					label.update(status);
 				}
 			});
 		}
 
-		if(me.rendered){
+		if (me.rendered) {
 			update();
-		}else{
+		} else {
 			me.on('afterrender', update, me);
 		}
 	},
 
 
-	setPresence: function(username, presence){
-		if(!isMe(username) || !presence){ return; }
+	setPresence: function (username, presence) {
+		if (!isMe(username) || !presence) {
+			return;
+		}
 
 		var label, current = this.el.down('.selected'),
-			show = presence.get('show'),
-			name = presence.getName();
+				show = presence.get('show'),
+				name = presence.getName();
 
-		if(current && name){
+		if (current && name) {
 			current.removeCls('selected');
 		}
 
-		if(presence.isOnline() && name){
-			name = this.el.down('.'+name);
+		if (presence.isOnline() && name) {
+			name = this.el.down('.' + name);
 			label = name.down('.label');
-			if(!name){
+			if (!name) {
 				console.log('Element didnt exist');
-			}else{
+			} else {
 				name.addCls('selected');
 				console.log(presence.getDisplayText());
-				if(Ext.isEmpty(label.dom.innerHTML)){
+				if (Ext.isEmpty(label.dom.innerHTML)) {
 					label.update(presence.getDisplayText());
 				}
 			}
-		}else if(this.offlineEl){
+		} else if (this.offlineEl) {
 			this.offlineEl.addCls('selected');
 		}
 
 	},
 
-	setUpEditor: function(){
-		this.editor = Ext.widget('presence-editor',{
-			updateEl: true,
-			renderTo: this.el.down('.list'),
-			offsets: [26,3],
-			field: {
-				xtype: 'textfield',
-				emptyText: '',
+	setUpEditor: function () {
+		this.editor = Ext.widget('presence-editor', {
+			updateEl:  true,
+			renderTo:  this.el.down('.list'),
+			offsets:   [26, 3],
+			field:     {
+				xtype:            'textfield',
+				emptyText:        '',
 				enforceMaxLength: true,
-				maxLength: 140,
-				allowEmpty: true,
-				selectOnFocus: true
+				maxLength:        140,
+				allowEmpty:       true,
+				selectOnFocus:    true
 			},
-			listeners:{
+			listeners: {
 				canceledit: 'cancelEdit',
-				complete: 'saveEditor',
-				scope: this
+				complete:   'saveEditor',
+				scope:      this
 			}
 		});
 	},
 
-	getTarget: function(row){
-		if(row.is('.available')){
+	getTarget: function (row) {
+		if (row.is('.available')) {
 			return 'available';
 		}
-		if(row.is('.away')){
+		if (row.is('.away')) {
 			return 'away';
 		}
-		if(row.is('.dnd')){
+		if (row.is('.dnd')) {
 			return 'dnd';
 		}
-		if(row.is('.offline')){
+		if (row.is('.offline')) {
 			return 'unavailable';
 		}
 
 		return null;
 	},
 
-	clicked: function(e){
+	clicked: function (e) {
 		var show, status, type, presence;
 
-		if(e.getTarget('.edit')){
+		if (e.getTarget('.edit')) {
 			e.stopEvent();
 			this.startEditor(e);
 			return;
 		}
 
-		if(e.getTarget('.available')){
-			status = e.getTarget('.available',10,true).down('.label').dom.innerHTML;
+		if (e.getTarget('.available')) {
+			status = e.getTarget('.available', 10, true).down('.label').dom.innerHTML;
 			show = 'chat';
-			type= 'available';
-		}else if(e.getTarget('.away')){
-			status = e.getTarget('.away',10,true).down('.label').dom.innerHTML;
+			type = 'available';
+		} else if (e.getTarget('.away')) {
+			status = e.getTarget('.away', 10, true).down('.label').dom.innerHTML;
 			show = 'away';
-			type= 'available';
-		}else if(e.getTarget('.dnd')){
-			status = e.getTarget('.dnd',10,true).down('.label').dom.innerHTML;
+			type = 'available';
+		} else if (e.getTarget('.dnd')) {
+			status = e.getTarget('.dnd', 10, true).down('.label').dom.innerHTML;
 			show = 'dnd';
-			type= 'available';
-		}else if(e.getTarget('.offline')){
+			type = 'available';
+		} else if (e.getTarget('.offline')) {
 			show = 'chat';
-			type= 'unavailable';
-		}else{
+			type = 'unavailable';
+		} else {
 			console.log("unhandled click");
 			return;
 		}
 
 		presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
 
-		if(this.isNewPresence(presence)){
+		if (this.isNewPresence(presence)) {
 			this.fireEvent('set-chat-presence', presence);
 			this.saveState(type, show, status, true);
 		}
@@ -244,50 +246,50 @@ Ext.define('NextThought.view.menus.Presence',{
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
 	},
 
-	isNewPresence: function(newPresence){
+	isNewPresence: function (newPresence) {
 		var currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
 
 		return newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status');
 	},
 
-	isStatus: function(value){
+	isStatus: function (value) {
 		var v = value && value.toLowerCase();
 
 		return v && v !== 'available' && v !== 'away' && v !== 'do not disturb';
 	},
 
-	saveEditor: function(cmp, value, oldValue){
+	saveEditor: function (cmp, value, oldValue) {
 		var row = cmp.boundEl.up('.status'),
-			target = this.getTarget(row),
-			newPresence,
-			type = (target === 'unavailable')? 'unavailable' : 'available',
-			show = (target === 'available')? 'chat' : target,
-			status = (this.isStatus(value))? value : '' ;
+				target = this.getTarget(row),
+				newPresence,
+				type = (target === 'unavailable') ? 'unavailable' : 'available',
+				show = (target === 'available') ? 'chat' : target,
+				status = (this.isStatus(value)) ? value : '';
 
 		newPresence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, status);
 
 		row.removeCls('active');
 
-		if(value===oldValue){
+		if (value === oldValue) {
 			return;
 		}
 
-		if(this.isNewPresence(newPresence)){
+		if (this.isNewPresence(newPresence)) {
 			//somethings different update the presence
 			console.log(newPresence);
 			this.fireEvent('set-chat-presence', newPresence);
-			this.saveState(type,show,status,true);
-		}else{
+			this.saveState(type, show, status, true);
+		} else {
 			this.setPresence($AppConfig.username, newPresence);
 			console.log("No presence change");
 		}
 	},
 
-	startEditor: function(e){
-		var row = e.getTarget('.status',null,true),
-			edit = row && row.down('.edit');
+	startEditor: function (e) {
+		var row = e.getTarget('.status', null, true),
+				edit = row && row.down('.edit');
 
-		if(edit){
+		if (edit) {
 			row.addCls('active');
 			this.editor.field.emptyText = edit.getAttribute('data-placeholder');
 			this.editor.startEdit(row.down('.label'));
@@ -295,9 +297,9 @@ Ext.define('NextThought.view.menus.Presence',{
 	},
 
 
-	cancelEdit:function(cmp, value, startValue){
+	cancelEdit: function (cmp, value, startValue) {
 		var activeRow = cmp.boundEl.up('.status.active');
-		if( activeRow ){
+		if (activeRow) {
 			activeRow.removeCls('active');
 		}
 	}

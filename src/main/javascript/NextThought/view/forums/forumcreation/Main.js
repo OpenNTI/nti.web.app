@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.forums.forumcreation.Main', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.forumcreation-main-view',
+	alias:  'widget.forumcreation-main-view',
 
 
 	cls: 'forumcreation-main-view',
@@ -11,7 +11,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 			{xtype: 'box', autoEl: {tag: 'textarea', name: 'description', placeholder: 'Description...'}, name: 'description', cls: 'input-box textarea', emptyText: 'Description...'}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn: [
+			cn:                                                   [
 				{cls: 'error-field'},
 				{cls: 'error-desc'}
 			]}
@@ -30,9 +30,9 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		this.callParent(arguments);
 
 		var board = this.getBoard(),
-			record = this.getRecord(),
-			sharing = this.down('[name=sharing]'),
-			me = this;
+				record = this.getRecord(),
+				sharing = this.down('[name=sharing]'),
+				me = this;
 
 		//if the board is under a course set up the sharing if not get rid of the option
 		if (board && board.belongsToCourse()) {
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		var titleInput = this.down('[name=title]').el.down('input');
 		var descriptionField = this.down('[name=description]').el;
 		if (e.relatedTarget !== titleInput.dom
-			&& e.relatedTarget !== descriptionField.dom) {
+				&& e.relatedTarget !== descriptionField.dom) {
 			window.scrollTo(0, 0);
 		}
 	},
@@ -100,27 +100,27 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		var baseMsg = 'Could not save your forum.';
 		if (title.length > 140) {
 			this.setError({
-				field: 'title',
-				message: baseMsg + ' The title is too long. It can only be 140 characters or less.'
-			});
+							  field:   'title',
+							  message: baseMsg + ' The title is too long. It can only be 140 characters or less.'
+						  });
 
 			return false;
 		}
 
 		if (title.length === 0) {
 			this.setError({
-				field: 'title',
-				message: baseMsg + ' The title can not be empty.'
-			});
+							  field:   'title',
+							  message: baseMsg + ' The title can not be empty.'
+						  });
 
 			return false;
 		}
 
 		if (title.trim().length === 0) {
 			this.setError({
-				field: 'title',
-				message: baseMsg + ' The title can not be all whitespace.'
-			});
+							  field:   'title',
+							  message: baseMsg + ' The title can not be all whitespace.'
+						  });
 
 			return false;
 		}
@@ -132,18 +132,18 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		var baseMsg = 'Could not save your forum.'
 		if (description.length === 0) {
 			this.setError({
-				field: 'description',
-				message: baseMsg + ' The description can not be empty.'
-			});
+							  field:   'description',
+							  message: baseMsg + ' The description can not be empty.'
+						  });
 
 			return false;
 		}
 
 		if (description.trim().length === 0) {
 			this.setError({
-				field: 'description',
-				message: baseMsg + ' The description can not be all whitespace.'
-			});
+							  field:   'description',
+							  message: baseMsg + ' The description can not be all whitespace.'
+						  });
 
 			return false;
 		}
@@ -152,12 +152,12 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	},
 
 	//go up to the window to get the board we are in
-	getBoard: function () {
+	getBoard:            function () {
 		return this.up('forumcreation-window').ownerCmp.record;
 	},
 
 	//go up to the window to get the record we are editing
-	getRecord: function () {
+	getRecord:           function () {
 		return this.up('forumcreation-window').record;
 	},
 
@@ -165,16 +165,16 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	getValues: function () {
 		//Pull data out of the forum and return it here
 		return {
-			title: this.down('[name=title]').getValue(),
+			title:       this.down('[name=title]').getValue(),
 			description: this.down('[name=description]').el.getValue(),
-			open: this.down('[name=sharing]') && this.down('[name=sharing]').getValue()
+			open:        this.down('[name=sharing]') && this.down('[name=sharing]').getValue()
 		}
 	},
 
 	setError: function (error) {
 		var box = this.down('[name=error]'),
-			field = this.down('[name=' + error.field + ']'),
-			allFields = this.query('[name]');
+				field = this.down('[name=' + error.field + ']'),
+				allFields = this.query('[name]');
 
 		//clear all errors:
 		Ext.each(allFields, function (f) {
@@ -199,7 +199,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	onSaveFailure: function (proxy, response, operation) {
 		var msg = {
 			message: 'An unknown error occurred saving your Discussion.',
-			field: ''
+			field:   ''
 		}, error;
 
 		if (response && response.responseText) {

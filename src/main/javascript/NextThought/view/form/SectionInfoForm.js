@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.form.SectionInfoForm', {
-	extend:'Ext.form.FieldSet',
-	alias: 'widget.section-info-form',
+	extend: 'Ext.form.FieldSet',
+	alias:  'widget.section-info-form',
 
 	requires: [
 		'NextThought.model.SectionInfo',
@@ -10,95 +10,96 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		'NextThought.view.form.fields.UserListField'
 	],
 
-	border: false,
+	border:      false,
 	collapsible: true,
-	collapsed: true,
-	layout: 'anchor',
-	title: 'Section',
+	collapsed:   true,
+	layout:      'anchor',
+	title:       'Section',
 
 	defaults: {
 		padding: 5,
-		anchor: '100%',
-		border: false
+		anchor:  '100%',
+		border:  false
 	},
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.add(
-			{
-				xtype: 'panel',
-				layout: 'hbox',
-				items: [
-					{
-						xtype: 'textfield',
-						fieldLabel: 'ID',
-						emptyText: 'ID',
-						labelWidth: 40,
-						labelAlign: 'left',
-						allowBlank: false,
-						name: 'ID',
-						flex: 1,
-						regex: Globals.INVALID_CHARACTERS_PATTERN,
-						regexText: 'Invalid characters'
-					},
-					{width: 5},
-					{
-						xtype: 'datefield',
-						fieldLabel: 'Open',
-						labelAlign: 'left',
-						labelWidth: 40,
-						width: 150,
-						name: 'OpenDate'
-					},
-					{width: 5},
-					{
-						xtype: 'datefield',
-						fieldLabel: 'Closed',
-						labelAlign: 'left',
-						labelWidth: 40,
-						width: 150,
-						name: 'CloseDate'
-					}]
-			},
-			{
-				xtype: 'textarea',
-				fieldLabel: 'Description',
-				emptyText: 'Section Description',
-				allowBlank: false,
-				name: 'Description'
-			},
-			{
-				border: false,
-				margin: '10px 0px',
-				defaults: {
-					padding: 0,
-					margin: '10px 0px',
-					anchor: '100%',
-					layout: 'anchor',
-					xtype:'fieldset',
-					collapsible: true,
-					collapsed: false,
-					border: false,
-					defaults: {
-						padding: 0,
-						margin: '10px 5px',
-						anchor: '100%',
-						layout: 'anchor',
-						border: false,
-						allowBlank: false,
-						xtype: 'user-list'
-					}
+				{
+					xtype:  'panel',
+					layout: 'hbox',
+					items:  [
+						{
+							xtype:      'textfield',
+							fieldLabel: 'ID',
+							emptyText:  'ID',
+							labelWidth: 40,
+							labelAlign: 'left',
+							allowBlank: false,
+							name:       'ID',
+							flex:       1,
+							regex:      Globals.INVALID_CHARACTERS_PATTERN,
+							regexText:  'Invalid characters'
+						},
+						{width: 5},
+						{
+							xtype:      'datefield',
+							fieldLabel: 'Open',
+							labelAlign: 'left',
+							labelWidth: 40,
+							width:      150,
+							name:       'OpenDate'
+						},
+						{width: 5},
+						{
+							xtype:      'datefield',
+							fieldLabel: 'Closed',
+							labelAlign: 'left',
+							labelWidth: 40,
+							width:      150,
+							name:       'CloseDate'
+						}
+					]
 				},
-				items:[
-					{ title: 'Instructors',   items: { emptyText: 'Instructors...', name: 'Instructors' }},
-					{ title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
-				]
-			}
+				{
+					xtype:      'textarea',
+					fieldLabel: 'Description',
+					emptyText:  'Section Description',
+					allowBlank: false,
+					name:       'Description'
+				},
+				{
+					border:   false,
+					margin:   '10px 0px',
+					defaults: {
+						padding:     0,
+						margin:      '10px 0px',
+						anchor:      '100%',
+						layout:      'anchor',
+						xtype:       'fieldset',
+						collapsible: true,
+						collapsed:   false,
+						border:      false,
+						defaults:    {
+							padding:    0,
+							margin:     '10px 5px',
+							anchor:     '100%',
+							layout:     'anchor',
+							border:     false,
+							allowBlank: false,
+							xtype:      'user-list'
+						}
+					},
+					items:    [
+						{ title: 'Instructors', items: { emptyText: 'Instructors...', name: 'Instructors' }},
+						{ title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
+					]
+				}
 		);
 	},
 
 
-	afterRender: function() {
+	afterRender: function () {
 		this.callParent(arguments);
 
 		if (!this.readOnly) {
@@ -109,46 +110,44 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 	},
 
 
-
-	createRemoveTool: function() {
+	createRemoveTool: function () {
 		var me = this,
-			cmp;
+				cmp;
 
 		cmp = Ext.widget('tool', {
-			getElConfig: function() {
+			getElConfig: function () {
 				return {
 					tag: Ext.isGecko3 ? 'span' : 'div',
-					id: cmp.id,
+					id:  cmp.id,
 					cls: cmp.cls
 				};
 			},
-			type: 'minus',
-			handler: function(){me.destroy();},
-			scope: me
+			type:        'minus',
+			handler:     function () {me.destroy();},
+			scope:       me
 		});
 		this.removeTool = cmp;
 		return cmp;
 	},
 
 
-
-	setValue: function(v) {
+	setValue: function (v) {
 		this.value = v;
 		this.initValue();
 	},
 
 
-	getValue: function() {
+	getValue: function () {
 		var r,
-			a = this.down('sharewith[name=Instructors]').getValue(),
-			o = this.value ? this.value.asJSON() : {};
+				a = this.down('sharewith[name=Instructors]').getValue(),
+				o = this.value ? this.value.asJSON() : {};
 
 		o.ID = this.down('textfield[name=ID]').getValue();
 		o.Description = this.down('textarea[name=Description]').getValue();
 		o.OpenDate = this.down('datefield[name=OpenDate]').getValue();
 		o.CloseDate = this.down('datefield[name=CloseDate]').getValue();
 		o.Enrolled = this.down('sharewith[name=Enrolled]').getValue();
-		o.InstructorInfo =  {'Class': 'InstructorInfo', 'Instructors': a};
+		o.InstructorInfo = {'Class': 'InstructorInfo', 'Instructors': a};
 
 		//o.Provider = (o.Provider && o.Provider.ID) ? o.Provider.ID : null;
 		delete o.Provider;
@@ -157,7 +156,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 	},
 
 
-	initValue: function() {
+	initValue: function () {
 		if (!this.value) {
 			return;
 		}
@@ -171,8 +170,8 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		this.down('sharewith[name=Instructors]').setValue(i);
 	},
 
-	setFieldValue: function(fieldName){
-		var rn = this.down('*[name='+fieldName+']');
+	setFieldValue: function (fieldName) {
+		var rn = this.down('*[name=' + fieldName + ']');
 		rn.setValue(this.value.get(fieldName));
 		rn.resetOriginalValue();
 	}

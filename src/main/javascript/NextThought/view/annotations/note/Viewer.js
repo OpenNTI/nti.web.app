@@ -1,37 +1,37 @@
 Ext.define('NextThought.view.annotations.note.Viewer', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.note-window',
+	alias:  'widget.note-window',
 
 	requires: [
 		'Ext.util.KeyMap',
 		'NextThought.view.annotations.note.Main'
 	],
 
-	cls: 'note-window',
-	ui: 'note-window',
-	width: 780,
+	cls:      'note-window',
+	ui:       'note-window',
+	width:    780,
 	floating: true,
-	shadow: false,
+	shadow:   false,
 	//preventBringToFront:true,
-	layout: {
-		type: 'vbox',
+	layout:   {
+		type:  'vbox',
 		align: 'stretch'
 	},
-	items: [
+	items:    [
 		{
-			xtype: 'box',
-			autoEl: {
+			xtype:       'box',
+			autoEl:      {
 				cls: 'title-bar nti-window-header',
-				cn: [
+				cn:  [
 					{
 						cls: 'close-note-viewer'
 					}
 				]
 			},
-			listeners: {
+			listeners:   {
 				'click': {
 					element: 'el',
-					fn: 'closeViewer'
+					fn:      'closeViewer'
 				}
 			},
 			closeViewer: function (e) {
@@ -44,11 +44,11 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		},
 		{
 			noteWindowBody: true,
-			xtype: 'container',
-			cls: 'note-content-container scrollbody',
-			flex: 1,
-			autoScroll: true,
-			items: [
+			xtype:          'container',
+			cls:            'note-content-container scrollbody',
+			flex:           1,
+			autoScroll:     true,
+			items:          [
 				{xtype: 'note-main-view' },
 				{xtype: 'box', cls: 'note-footer'}
 			]
@@ -96,6 +96,7 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		m.on('destroy', 'destroy', this);
 	},
 
+
 	afterRender: function () {
 		this.callParent();
 
@@ -105,7 +106,7 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 			if (c) {
 				me.mon(c, {
 					'beforedeactivate': 'close',//attempt to let this veto the deactivate
-					'deactivate': 'destroy'//if deactivated, die
+					'deactivate':       'destroy'//if deactivated, die
 				});
 				closeOnCardChange(c, me);
 			}
@@ -115,15 +116,15 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 		this.resizeView();
 		var keyMap = this.keyMap = new Ext.util.KeyMap({
-			target: this.el,
-			binding: [
-				{
-					key: Ext.EventObject.ESC,
-					fn: this.onEsc,
-					scope: this
-				}
-			]
-		});
+														   target:  this.el,
+														   binding: [
+															   {
+																   key:   Ext.EventObject.ESC,
+																   fn:    this.onEsc,
+																   scope: this
+															   }
+														   ]
+													   });
 
 		this.on('destroy', 'destroy', keyMap);
 	},
@@ -137,8 +138,8 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 	resizeView: function () {
 		var position, height, width,
-			viewportHeight = Ext.Element.getViewportHeight(),
-			reader = this.reader;
+				viewportHeight = Ext.Element.getViewportHeight(),
+				reader = this.reader;
 
 		if (reader) {
 			position = reader.getPosition();

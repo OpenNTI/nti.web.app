@@ -5,7 +5,7 @@ Ext.define('NextThought.model.QuizQuestion', {
 		{ name: 'Class', type: 'string' },
 		{ name: 'Text', type: 'auto' }
 	],
-	proxy: {
+	proxy:  {
 		type: 'memory'
 	}
 });

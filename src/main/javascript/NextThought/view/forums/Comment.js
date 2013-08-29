@@ -1,57 +1,57 @@
 Ext.define('NextThought.view.forums.Comment', {
-	extend: 'Ext.Component',
-	alias: 'widget.forums-topic-comment',
+	extend:  'Ext.Component',
+	alias:   'widget.forums-topic-comment',
 	require: [
 		'NextThought.editor.Editor'
 	],
 
 	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks',
+		enableProfiles:         'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions: 'NextThought.mixins.FlagActions'
+		flagActions:            'NextThought.mixins.FlagActions'
 	},
 
 	cls: 'topic-comment',
-	ui: 'forum-comment',
+	ui:  'forum-comment',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'controls', cn: [
-			{cls: 'favorite-spacer'},
-			{cls: 'like'}
-		]},
-		{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'}},
-		{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-			{ cls: 'meta', cn: [
-				{ tag: 'span', html: '{displayName}', cls: 'name link'},
-				{ tag: 'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
-			]},
-			{ cls: 'body' },
-			{ cls: 'foot', cn: [
-				{ tag: 'tpl', 'if': 'isModifiable', cn: [
-					{ tag: 'span', cls: 'edit link', html: 'Edit'},
-					{ tag: 'span', cls: 'delete link', html: 'Delete'}
-				]},
-				{ tag: 'tpl', 'if': '!isModifiable', cn: [
-					{ tag: 'span', cls: 'flag link', html: 'Report'}
-				]}
-			]},
-			{ cls: 'editor-box' }
-		] }
-	]),
+										{ cls: 'controls', cn: [
+											{cls: 'favorite-spacer'},
+											{cls: 'like'}
+										]},
+										{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'}},
+										{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
+											{ cls: 'meta', cn: [
+												{ tag: 'span', html: '{displayName}', cls: 'name link'},
+												{ tag: 'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
+											]},
+											{ cls: 'body' },
+											{ cls: 'foot', cn: [
+												{ tag: 'tpl', 'if': 'isModifiable', cn: [
+													{ tag: 'span', cls: 'edit link', html: 'Edit'},
+													{ tag: 'span', cls: 'delete link', html: 'Delete'}
+												]},
+												{ tag: 'tpl', 'if': '!isModifiable', cn: [
+													{ tag: 'span', cls: 'flag link', html: 'Report'}
+												]}
+											]},
+											{ cls: 'editor-box' }
+										] }
+									]),
 
 
 	renderSelectors: {
-		bodyEl: '.body',
-		nameEl: '.name',
-		avatarEl: '.avatar',
-		ctrlEl: '.controls',
-		liked: '.controls .like',
-		editEl: '.foot .edit',
-		deleteEl: '.foot .delete',
-		flagEl: '.foot .flag',
+		bodyEl:      '.body',
+		nameEl:      '.name',
+		avatarEl:    '.avatar',
+		ctrlEl:      '.controls',
+		liked:       '.controls .like',
+		editEl:      '.foot .edit',
+		deleteEl:    '.foot .delete',
+		flagEl:      '.foot .flag',
 		editorBoxEl: '.editor-box',
-		metaEl: '.meta',
-		footEl: '.foot'
+		metaEl:      '.meta',
+		footEl:      '.foot'
 	},
 
 
@@ -89,7 +89,7 @@ Ext.define('NextThought.view.forums.Comment', {
 
 	addUser: function (u) {
 		var me = this, r = me.record,
-			rd = Ext.apply(me.renderData || {}, r.getData());
+				rd = Ext.apply(me.renderData || {}, r.getData());
 		rd.lastModified = rd['Last Modified'];
 		me.userObject = u;
 		Ext.applyIf(rd, u.getData());
@@ -106,10 +106,10 @@ Ext.define('NextThought.view.forums.Comment', {
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
-			ctrlEl = this.ctrlEl,
-			metaEl = this.metaEl,
-			footEl = this.footEl,
-			hide, show;
+				ctrlEl = this.ctrlEl,
+				metaEl = this.metaEl,
+				footEl = this.footEl,
+				hide, show;
 
 		this.record.addObserverForField(this, 'body', this.updateContent, this);
 		this.updateContent();
@@ -156,10 +156,10 @@ Ext.define('NextThought.view.forums.Comment', {
 
 		this.editor = Ext.widget('nti-editor', {record: this.record, ownerCt: this, renderTo: this.editorBoxEl});
 		this.mon(this.editor, {
-			scope: this,
-			'activated-editor': hide,
+			scope:                this,
+			'activated-editor':   hide,
 			'deactivated-editor': show,
-			'no-body-content': function (editor, el) {
+			'no-body-content':    function (editor, el) {
 				editor.markError(el, 'You need to type something');
 				return false;
 			}
@@ -192,7 +192,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	setContent: function (html) {
+	setContent:        function (html) {
 		var el = this.bodyEl, me = this;
 
 		el.update(html);
@@ -254,18 +254,18 @@ Ext.define('NextThought.view.forums.Comment', {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'This will permanently remove this comment.',
-			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-			scope: me,
-			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
-			fn: function (str) {
-				if (str === 'ok') {
-					me.fireDeleteEvent();
-				}
-			}
-		});
+						 msg:        'This will permanently remove this comment.',
+						 buttons:    Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+						 scope:      me,
+						 icon:       'warning-red',
+						 buttonText: {'ok': 'Delete'},
+						 title:      'Are you sure?',
+						 fn:         function (str) {
+							 if (str === 'ok') {
+								 me.fireDeleteEvent();
+							 }
+						 }
+					 });
 	},
 
 

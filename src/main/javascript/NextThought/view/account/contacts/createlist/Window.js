@@ -1,26 +1,26 @@
 Ext.define('NextThought.view.account.contacts.createlist.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.createlist-window',
+	alias:  'widget.createlist-window',
 
 	requires: [
 		'NextThought.view.account.Header',
 		'NextThought.view.account.contacts.createlist.Main'
 	],
 
-	cls: 'createlist-window',
-	ui: 'nt-window',
+	cls:         'createlist-window',
+	ui:          'nt-window',
 	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
+	constrain:   true,
+	modal:       true,
+	closable:    true,
+	resizable:   false,
+	dialog:      true,
 	closeAction: 'destroy',
 
 	width: 480,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -28,9 +28,9 @@ Ext.define('NextThought.view.account.contacts.createlist.Window', {
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
-				xtype: 'account-header-view',
+				xtype:  'account-header-view',
 				noIcon: true,
-				title: 'Create a New List...',
+				title:  'Create a New List...',
 				detail: 'Enter a name for your new list.  Once created, lists can be used to organize your contacts.'
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}

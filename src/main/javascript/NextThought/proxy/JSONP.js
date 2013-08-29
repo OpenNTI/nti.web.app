@@ -1,65 +1,65 @@
-Ext.define('NextThought.proxy.JSONP',{
+Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 	/**
 	 *
 	 * @param options Object with keys:
-	 *	 jsonpUrl
-	 *	 url
-	 *	 expectedContentType
-	 *	 success
-	 *	 failure
+	 *     jsonpUrl
+	 *     url
+	 *     expectedContentType
+	 *     success
+	 *     failure
 	 *   scope
 	 */
-	request: function(options){
+	request: function (options) {
 		var me = this,
-			opts = Ext.apply({},options),
-			script,
-			t;
+				opts = Ext.apply({}, options),
+				script,
+				t;
 
-		function jsonp(script){
+		function jsonp(script) {
 			clearTimeout(t);
 			var resp = {
-				responseText: me.getContent(opts.ntiid,opts.expectedContentType),
-				request: { options: opts }
+				responseText: me.getContent(opts.ntiid, opts.expectedContentType),
+				request:      { options: opts }
 			};
 			console.log("JSONP.request completed", resp.responseText.length);
-			opts.callback.call(opts.scope||window,opts,true,resp);
-			opts.success.call(opts.scope||window,resp);
+			opts.callback.call(opts.scope || window, opts, true, resp);
+			opts.success.call(opts.scope || window, resp);
 			Ext.fly(script).remove();
 		}
 
-		function onError(script){
+		function onError(script) {
 			delete script.onload;
 			clearTimeout(t);
 			Ext.fly(script).remove();
 			console.error('PROBLEMS!', opts);
 
 			var resp = {
-				status: 0,
-				responseText: 'Problem loading jsonp script',
+				status:           0,
+				responseText:     'Problem loading jsonp script',
 				requestedOptions: opts
 			};
 
-			opts.callback.call(opts.scope||window,opts,false,resp);
-			opts.failure.call(opts.scope||window,resp);
+			opts.callback.call(opts.scope || window, opts, false, resp);
+			opts.failure.call(opts.scope || window, resp);
 		}
 
 		//ensure we have callbacks
-		opts.success = opts.success || function emptySuccess(){};
-		opts.failure = opts.failure || function emptyFailure(){};
-		opts.callback = opts.callback || function emptyCallback(){};
+		opts.success = opts.success || function emptySuccess() {};
+		opts.failure = opts.failure || function emptyFailure() {};
+		opts.callback = opts.callback || function emptyCallback() {};
 
-		t = setTimeout(function(){
-			console.warn('Timed out: '+opts.jsonpUrl);
+		t = setTimeout(function () {
+			console.warn('Timed out: ' + opts.jsonpUrl);
 			onError(script);
-		},60000);
+		}, 60000);
 
 		script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
 	},
 
-	getContent: function(ntiid,type){
-		if(!type){
+	getContent: function (ntiid, type) {
+		if (!type) {
 			Ext.Error.raise('Must specify the type you want');
 		}
 		try {
@@ -68,33 +68,33 @@ Ext.define('NextThought.proxy.JSONP',{
 			delete this.bufferedContent[ntiid][type];
 			return content;
 		}
-		catch(err){
-			console.error('Oops...',type,ntiid,err.stack||err.message);
+		catch (err) {
+			console.error('Oops...', type, ntiid, err.stack || err.message);
 		}
 
 		return '';
 	},
 
 
-	receiveContent: function(content){
+	receiveContent: function (content) {
 		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 		var type = content && content['Content-Type'],
-			enc = content && content['Content-Encoding'];
-		if(type==='application/xml'){
+				enc = content && content['Content-Encoding'];
+		if (type === 'application/xml') {
 			type = 'text/xml';
 			console.warn('Forcing content type to text/xml from application/xml', content.ntiid);
 		}
 
-		if(Ext.isEmpty(type)){
-			Ext.Error.raise({msg:'Empty content type!', data: content});
+		if (Ext.isEmpty(type)) {
+			Ext.Error.raise({msg: 'Empty content type!', data: content});
 		}
 
 		//1) decode content
-		if(/base64/i.test(enc)) {
+		if (/base64/i.test(enc)) {
 			content.content = Base64.decode(content.content);
 		}
-		else if(/json/i.test(enc)){
-			if(Ext.isString(content.content)){
+		else if (/json/i.test(enc)) {
+			if (Ext.isString(content.content)) {
 				content.content = Ext.JSON.decode(content.content);
 			}
 		}
@@ -103,7 +103,7 @@ Ext.define('NextThought.proxy.JSONP',{
 		}
 
 		//2) ensure there is a bucket
-		if( !this.bufferedContent[content.ntiid] ){
+		if (!this.bufferedContent[content.ntiid]) {
 			this.bufferedContent[content.ntiid] = {};
 		}
 
@@ -115,7 +115,7 @@ Ext.define('NextThought.proxy.JSONP',{
 	/**
 	 * @deprecated Workaround until content is rerendered.
 	 */
-	receiveContentVTT: function(content){
+	receiveContentVTT: function (content) {
 		content['Content-Type'] = 'text/vtt';
 		content.ntiid = 'webvtt';
 		this.receiveContent(content);
@@ -123,8 +123,8 @@ Ext.define('NextThought.proxy.JSONP',{
 
 
 
-},function(){
-	if(window.JSONP){
+}, function () {
+	if (window.JSONP) {
 		console.warn('JSONP is already defined!!!');
 	}
 
@@ -133,7 +133,7 @@ Ext.define('NextThought.proxy.JSONP',{
 	/** @deprecated */
 	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated */
-	window.jsonpToc     = Ext.bind(JSONP.receiveContent, JSONP);
+	window.jsonpToc = Ext.bind(JSONP.receiveContent, JSONP);
 	/** @deprecated */
-	window.jsonpData     = Ext.bind(JSONP.receiveContentVTT, JSONP);
+	window.jsonpData = Ext.bind(JSONP.receiveContentVTT, JSONP);
 });

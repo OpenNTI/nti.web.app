@@ -5,25 +5,25 @@
  * {@link NextThought.view.whiteboard.Canvas canvas}
  * currentTool : String
  */
-Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
-	requires:[
+Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation', {
+	requires: [
 		'NextThought.view.whiteboard.Matrix',
 		'NextThought.view.whiteboard.Utils'
 	],
 
 
-	initMixin: function(toolbar, canvas){
+	initMixin: function (toolbar, canvas) {
 		this.toolbar = toolbar;
 		this.canvas = canvas;
 
 		this.mon(this.canvas.el, {
-			scope: this,
+			scope:     this,
 			mousedown: this.onCanvasMouseDown,
 			mousemove: this.onCanvasMouseMove,
-			mouseup: this.onCanvasMouseUp,
+			mouseup:   this.onCanvasMouseUp,
 
 			mouseenter: this.onCanvasMouseEnter,
-            mouseout: this.onCanvasMouseLeave
+			mouseout:   this.onCanvasMouseLeave
 		});
 
 		this.mon(this.toolbar.el, {
@@ -32,17 +32,17 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		});
 
 		this.mon(this.toolbar.down('[fillSelectMove]').palette, {
-			scope:this,
+			scope:  this,
 			select: this.onFillColorChange
 		});
 
 		this.mon(this.toolbar.down('[strokeSelectMove]').palette, {
-			scope:this,
+			scope:  this,
 			select: this.onStrokeColorChange
 		});
 
 		this.mon(this.toolbar.down('[editStrokeWidth]'), {
-			scope:this,
+			scope:  this,
 			select: this.onStrokeWidthChange
 		});
 
@@ -53,35 +53,35 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		this.on('turnOnSelection', this.onTurnOnSelection);
 
-		function clearFlag(){ delete this.mouseLeftNoMouseUp;}
+		function clearFlag() { delete this.mouseLeftNoMouseUp;}
 
-		this.mon( Ext.getBody(), {
-			scope: this,
+		this.mon(Ext.getBody(), {
+			scope:     this,
 			mousedown: clearFlag,
-			mouseup: clearFlag,
-			mouseout: function(evt){
+			mouseup:   clearFlag,
+			mouseout:  function (evt) {
 				var e = evt.browserEvent,
-					from = e.relatedTarget || e.toElement;
-			    if (!from || from.nodeName === "HTML") {
+						from = e.relatedTarget || e.toElement;
+				if (!from || from.nodeName === "HTML") {
 //				    if(this.mouseLeftNoMouseUp){
 //				        alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
 //				    }
-			        clearFlag.call(this);
-			    }
+					clearFlag.call(this);
+				}
 			}
 		});
 
 	},
 
 
-	getRelativeXY: function(e, scaled){
+	getRelativeXY: function (e, scaled) {
 		var x = e.getXY().slice(),
-			c = this.canvas.el.getXY();
+				c = this.canvas.el.getXY();
 
 		x[0] -= c[0];
 		x[1] -= c[1];
 
-		if(scaled){
+		if (scaled) {
 			x = this.scalePoint(x);
 		}
 
@@ -89,7 +89,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	scalePoint: function(xy){
+	scalePoint: function (xy) {
 		var w = this.canvas.el.getWidth();
 
 		xy = xy.slice();
@@ -99,56 +99,73 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		return xy;
 	},
 
-	onToolbarClick: function(e){
+	onToolbarClick: function (e) {
 		var action, c, me = this, n;
-		function togglePressed(){
-			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b){ return b.pressed; });
-			if(b.length > 0){ b[0].toggle();}
+
+		function togglePressed() {
+			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function (b) { return b.pressed; });
+			if (b.length > 0) {
+				b[0].toggle();
+			}
 		}
 
-		if( e.getTarget('.move', undefined, true) ){
+		if (e.getTarget('.move', undefined, true)) {
 			e.stopEvent();
 			action = this.toolbar.getCurrentTool().getActionType();
 
-			if(action){
+			if (action) {
 				c = this.moveClickHandlerMap[action];
-				if(!c){ return; }
+				if (!c) {
+					return;
+				}
 				c.apply(this, arguments);
-				setTimeout(function(){
+				setTimeout(function () {
 					togglePressed();
 				}, 100);
 			}
-			if(!this.canvas.hasCls('moveSelected')) { this.canvas.addCls('moveSelected'); }
+			if (!this.canvas.hasCls('moveSelected')) {
+				this.canvas.addCls('moveSelected');
+			}
 		}
 		else {
-			if(this.canvas.hasCls('moveSelected')){ this.canvas.removeCls('moveSelected'); }
+			if (this.canvas.hasCls('moveSelected')) {
+				this.canvas.removeCls('moveSelected');
+			}
 		}
 	},
 
-	onFillColorChange: function(e){
-		if(!e.value || !this.selected){ return; }
-		this.selected.fill = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
+	onFillColorChange: function (e) {
+		if (!e.value || !this.selected) {
+			return;
+		}
+		this.selected.fill = e.value !== 'NONE' ? Color.toRGBA('#' + e.value) : null;
 		this.canvas.drawScene();
 	},
 
-	onStrokeColorChange: function(e){
-		if(!e.value || !this.selected){ return; }
-		this.selected.stroke = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
+	onStrokeColorChange: function (e) {
+		if (!e.value || !this.selected) {
+			return;
+		}
+		this.selected.stroke = e.value !== 'NONE' ? Color.toRGBA('#' + e.value) : null;
 		this.canvas.drawScene();
 	},
 
-	onStrokeWidthChange: function(e){
-		if(!e.value || !this.selected){return;}
+	onStrokeWidthChange: function (e) {
+		if (!e.value || !this.selected) {
+			return;
+		}
 		this.selected.strokeWidth = e.value / this.canvas.el.getWidth();
 		this.canvas.drawScene();
 	},
 
-	onPathStrokeWidthChange: function(e){
-		if(!this.selected){ return; }
+	onPathStrokeWidthChange: function (e) {
+		if (!this.selected) {
+			return;
+		}
 
 		var pressed = this.toolbar.down('[pathSelectStrokeWidth]').query('button[pressed]'), strokeValue = 0, stroke;
-		Ext.each(pressed, function(b){
-			if (b.strokeWidth){
+		Ext.each(pressed, function (b) {
+			if (b.strokeWidth) {
 				strokeValue = b.strokeWidth;
 			}
 			else if (b.stroke) {
@@ -160,15 +177,15 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		this.canvas.drawScene();
 	},
 
-	onTurnOnSelection: function(){
+	onTurnOnSelection: function () {
 		/*
-		*   Occasionally we nay need to turn on selection on demand, rather than when the user clicks
-		*   on the selection tool. i.e when an imageUrl is added to a WB
-		**/
+		 *   Occasionally we nay need to turn on selection on demand, rather than when the user clicks
+		 *   on the selection tool. i.e when an imageUrl is added to a WB
+		 **/
 		var c = this.canvas;
-		if(c.drawData.shapeList.length > 0){
+		if (c.drawData.shapeList.length > 0) {
 			this.toolbar.setCurrentTool('move');
-			if(this.selected !== c.drawData.shapeList[0]){
+			if (this.selected !== c.drawData.shapeList[0]) {
 				this.deselectShape();
 			}
 
@@ -177,58 +194,60 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		}
 	},
 
-	onCanvasMouseEnter: function(e){
-		if(this.mouseLeftNoMouseUp){
+	onCanvasMouseEnter: function (e) {
+		if (this.mouseLeftNoMouseUp) {
 			this.onCanvasMouseDown(e);
 		}
 	},
 
-	onCanvasMouseLeave: function(e){
+	onCanvasMouseLeave: function (e) {
 		var tool = this.toolbar.getCurrentTool();
-		if( tool ){
+		if (tool) {
 			tool = tool.getToolType();
 		}
-		if(!this.clickedNib && /^(move|pencil)$/i.test(tool)){
+		if (!this.clickedNib && /^(move|pencil)$/i.test(tool)) {
 			this.mouseLeftNoMouseUp = this.mouseDown;
 		}
 		this.onCanvasMouseUp(e);
 	},
 
 
-	onCanvasMouseDown: function(e){
-        e.stopEvent();
+	onCanvasMouseDown: function (e) {
+		e.stopEvent();
 		var s = this.selected;
 		this.mouseDown = true;
 		this.mouseInitialPoint = this.getRelativeXY(e);
-		this.clickedNib = s? s.isPointInNib(this.mouseInitialPoint) : false;
+		this.clickedNib = s ? s.isPointInNib(this.mouseInitialPoint) : false;
 
 		//Check selection.
 		this.handleSelection(e);
 	},
 
 
-	onCanvasMouseMove: function(e){
-		if(!this.mouseDown){ return; }
+	onCanvasMouseMove: function (e) {
+		if (!this.mouseDown) {
+			return;
+		}
 		var tool = this.toolbar.getCurrentTool(),
-			c = this.mouseMoveHandlerMap[tool.getToolType()];
-		if(!c){
-			console.warn('No handler for tool: ',tool.getToolType());
+				c = this.mouseMoveHandlerMap[tool.getToolType()];
+		if (!c) {
+			console.warn('No handler for tool: ', tool.getToolType());
 		}
 
-		return c.apply(this,arguments);
+		return c.apply(this, arguments);
 	},
 
 
-	onCanvasMouseUp: function(e){
-        e.stopEvent();
+	onCanvasMouseUp: function (e) {
+		e.stopEvent();
 		delete this.clickedNib;
 		delete this.mouseDown;
 		delete this.mouseInitialPoint;
-		if(this.selected){
+		if (this.selected) {
 			delete this.selected.isNew;
 			this.selected.selected = this.currentTool || true;
 
-			if(this.selected.transform.initial){
+			if (this.selected.transform.initial) {
 				this.deleteSelected();
 			}
 			this.canvas.drawScene();
@@ -236,28 +255,28 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	handleSelection: function(e){
+	handleSelection: function (e) {
 		e.stopEvent();
 		var selectedTool = this.toolbar.getCurrentTool().forTool;
 		this.currentTool = selectedTool === 'move' ? "Hand" : selectedTool;
-		if(this.currentTool==='Hand'){
+		if (this.currentTool === 'Hand') {
 			this.selectShape(e);
 		}
 	},
 
 
-	onDoubleClick: function(e){},
+	onDoubleClick: function (e) {},
 
 
-	onContextMenu: function(e){
+	onContextMenu: function (e) {
 		this.selectShape(e);
 		e.preventDefault();
 		e.stopPropagation();
 		alert('show context menu');
 	},
 
-	deselectShape: function(){
-		if(this.selected){
+	deselectShape: function () {
+		if (this.selected) {
 			delete this.selected.selected;
 			delete this.selected;
 		}
@@ -266,41 +285,46 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	selectShape: function(e){
+	selectShape: function (e) {
 		var c = this.canvas,
-			s = null,
-			cs = this.selected,
-			p = this.getRelativeXY(e),
-			sp = this.scalePoint(p), l,sw, angle = 0;
+				s = null,
+				cs = this.selected,
+				p = this.getRelativeXY(e),
+				sp = this.scalePoint(p), l, sw, angle = 0;
 
-		if(cs && cs.isPointInNib.apply(cs,p)){
+		if (cs && cs.isPointInNib.apply(cs, p)) {
 			return;
 		}
 
 		Ext.each(
 				c.drawData.shapeList,
-				function(o){
-					if(!s && o.isPointInShape(sp[0],sp[1])){
-						s = o; o.selected = this.currentTool || true;
+				function (o) {
+					if (!s && o.isPointInShape(sp[0], sp[1])) {
+						s = o;
+						o.selected = this.currentTool || true;
 					}
-					else { delete o.selected; }
+					else {
+						delete o.selected;
+					}
 				},
 				this);
 
 		this.selected = s;
 
-		if(s){ delete s.isNew; }
+		if (s) {
+			delete s.isNew;
+		}
 
 		//Set toolbar Options.
-		if(this.selected){
+		if (this.selected) {
 			sw = this.selected.strokeWidth;
-			l = Ext.isString(sw) ?  this.selected.strokeWidth.replace('%', '') : sw;
+			l = Ext.isString(sw) ? this.selected.strokeWidth.replace('%', '') : sw;
 			this.toolbar.getCurrentTool().setOptions({
-				fill:this.selected.fill,
-				stroke:this.selected.stroke,
-				strokeWidth: Math.round(l * this.canvas.el.getWidth()),
-				shapeType: this.selected.$className
-			});
+														 fill:        this.selected.fill,
+														 stroke:      this.selected.stroke,
+														 strokeWidth: Math.round(l * this.canvas.el.getWidth()),
+														 shapeType:   this.selected.$className
+													 });
 		}
 
 		c.drawScene();
@@ -323,35 +347,44 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	doMove: function(e){
+	doMove: function (e) {
 		var xy = this.getRelativeXY(e),
-			m = this.mouseDown,
-			w = this.canvas.el.dom.width,
-			s = this.selected,
-			nib = this.clickedNib, dx, dy;
+				m = this.mouseDown,
+				w = this.canvas.el.dom.width,
+				s = this.selected,
+				nib = this.clickedNib, dx, dy;
 
-		if(!m){ return; }
-		if(!s){ this.selectShape(e); return; }
-		if( m === true ){ m = this.mouseDown = this.mouseInitialPoint.slice(); }
+		if (!m) {
+			return;
+		}
+		if (!s) {
+			this.selectShape(e);
+			return;
+		}
+		if (m === true) {
+			m = this.mouseDown = this.mouseInitialPoint.slice();
+		}
 
-		dx = (xy[0]-m[0])/w;
-		dy = (xy[1]-m[1])/w;
+		dx = (xy[0] - m[0]) / w;
+		dy = (xy[1] - m[1]) / w;
 
-		try{
-			if(nib){
+		try {
+			if (nib) {
 				//Corners
-				if(nib === 'b-r' || nib === 'b-l' || nib === 't-l' || nib === 't-r'){
-					s.scaleWithConstraint(nib,	dx,dy);
+				if (nib === 'b-r' || nib === 'b-l' || nib === 't-l' || nib === 't-r') {
+					s.scaleWithConstraint(nib, dx, dy);
 				}
-				else{
-					s.modify(nib,	xy[0]/w,xy[1]/w,	m[0]/w,m[1]/w,	dx,dy);
+				else {
+					s.modify(nib, xy[0] / w, xy[1] / w, m[0] / w, m[1] / w, dx, dy);
 				}
 			}
-			else { s.translate(dx,dy); }
+			else {
+				s.translate(dx, dy);
+			}
 			this.mouseDown = xy;
 		}
-		catch(ex){
-			if(ex!=='stop'){
+		catch (ex) {
+			if (ex !== 'stop') {
 				console.error(ex);
 			}
 		}
@@ -360,24 +393,26 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	doPath: function(e){
+	doPath: function (e) {
 		var s = this.selected,
-			opts = this.toolbar.getCurrentTool().getOptions(),
-			t,xy,w,p;
+				opts = this.toolbar.getCurrentTool().getOptions(),
+				t, xy, w, p;
 
-		if(!this.mouseDown){ return; }
-		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
+		if (!this.mouseDown) {
+			return;
+		}
+		if (!s || s.Class !== 'CanvasPathShape' || !s.isNew) {
 			w = this.canvas.el.getWidth();
 			this.deselectShape();
 			this.currentTool = this.toolbar.getCurrentTool().forTool;
 
 			this.selected = s = this.addShape('path');
-			s.strokeWidth = opts.strokeWidth/w;
+			s.strokeWidth = opts.strokeWidth / w;
 			s.points = [];
 			s.closed = false;
 
 
-			xy = this.getRelativeXY(e,true);
+			xy = this.getRelativeXY(e, true);
 			t = s.transform;
 			t.tx = xy[0];
 			t.ty = xy[1];
@@ -388,31 +423,33 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		t = s.transform;
 		p = this.selected.points;
-		xy = this.getRelativeXY(e,true);
+		xy = this.getRelativeXY(e, true);
 		xy[0] -= t.tx;
 		xy[1] -= t.ty;
-		p.push.apply(p,xy);
+		p.push.apply(p, xy);
 		this.canvas.drawScene();
 	},
 
 
-	doLine: function(e){
+	doLine: function (e) {
 		var tool = this.toolbar.getCurrentTool(),
-			opts = tool.getOptions(),
-			s = this.selected,
-			t,xy,w,p,m;
+				opts = tool.getOptions(),
+				s = this.selected,
+				t, xy, w, p, m;
 
-		if(!this.mouseDown){ return; }
-		if(!s || s.Class !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
+		if (!this.mouseDown) {
+			return;
+		}
+		if (!s || s.Class !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew) {
 			w = this.canvas.el.getWidth();
 
 			this.deselectShape();
 			this.currentTool = this.toolbar.getCurrentTool().forTool;
 
 			this.selected = s = this.addShape('polygon');
-			s.strokeWidth = opts.strokeWidth/w;
+			s.strokeWidth = opts.strokeWidth / w;
 
-			xy = this.getRelativeXY(e,true);
+			xy = this.getRelativeXY(e, true);
 			t = s.transform;
 			t.tx = xy[0];
 			t.ty = xy[1];
@@ -420,33 +457,35 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		}
 
 
-		xy = this.getRelativeXY(e,true);
+		xy = this.getRelativeXY(e, true);
 		t = s.transform;
 		m = new NTMatrix();
 		p = [t.tx, t.ty];
-		p.push(xy[0],xy[1]);
-		m.translate(t.tx,t.ty);
+		p.push(xy[0], xy[1]);
+		m.translate(t.tx, t.ty);
 		m.scale(WBUtils.getDistance(p));
-        m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		s.transform = m.toTransform();
 		this.canvas.drawScene();
 	},
 
 
-	doShape: function(e){
-		if(!this.mouseDown){ return; }
+	doShape: function (e) {
+		if (!this.mouseDown) {
+			return;
+		}
 
 		var tool = this.toolbar.getCurrentTool(),
-			ttype = tool.getToolType(),
-			s = this.selected,
-			w = this.canvas.el.getWidth(),
-			p = this.mouseInitialPoint.slice(),
-			m,
-			x = p[0],
-			y = p[1], max, distY, distX;
+				ttype = tool.getToolType(),
+				s = this.selected,
+				w = this.canvas.el.getWidth(),
+				p = this.mouseInitialPoint.slice(),
+				m,
+				x = p[0],
+				y = p[1], max, distY, distX;
 
-		if(!s || s.Class !== 'Canvas'+Ext.String.capitalize(ttype)+'Shape' || !s.isNew){
+		if (!s || s.Class !== 'Canvas' + Ext.String.capitalize(ttype) + 'Shape' || !s.isNew) {
 			this.deselectShape();
 			this.currentTool = this.toolbar.getCurrentTool().forTool;
 
@@ -454,43 +493,45 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			return;
 		}
 
-		p.push.apply(p,this.getRelativeXY(e));
+		p.push.apply(p, this.getRelativeXY(e));
 
 		m = new NTMatrix();
-		m.translate(x,y);
+		m.translate(x, y);
 
-		if(s.sides === 4){
-			distX = WBUtils.getDistance(p)* 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p)));
-			distY = WBUtils.getDistance(p)* 2 * Math.sin(WBUtils.toRadians(WBUtils.getDegrees(p)));
+		if (s.sides === 4) {
+			distX = WBUtils.getDistance(p) * 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p)));
+			distY = WBUtils.getDistance(p) * 2 * Math.sin(WBUtils.toRadians(WBUtils.getDegrees(p)));
 			max = distX > distY ? distX : distY;
 			m.scale(max);
 		}
-		else{
-			m.scale(WBUtils.getDistance(p)*2);
+		else {
+			m.scale(WBUtils.getDistance(p) * 2);
 		}
 
 		// FIXME: Stop rotating as we draw.
 //		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
-		m.scaleAll(1/w);//do this after
+		m.scaleAll(1 / w);//do this after
 		s.transform = m.toTransform();
 
 		this.canvas.drawScene();
 	},
 
 
-	doText: function(e){
-		if(!this.mouseDown){ return; }
+	doText: function (e) {
+		if (!this.mouseDown) {
+			return;
+		}
 
 		var tool = this.currentTool,
-			s = this.selected,
-			w = this.canvas.el.getWidth(),
-			p = this.mouseInitialPoint.slice(), m,
-			x = p[0],
-			y = p[1],
-			shapeBaseScale = s&&s.bbox? s.bbox.w : 1;
+				s = this.selected,
+				w = this.canvas.el.getWidth(),
+				p = this.mouseInitialPoint.slice(), m,
+				x = p[0],
+				y = p[1],
+				shapeBaseScale = s && s.bbox ? s.bbox.w : 1;
 
-		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
+		if (!s || s.Class !== 'Canvas' + tool + 'Shape' || !s.isNew) {
 			this.deselectShape();
 			this.currentTool = this.toolbar.getCurrentTool().forTool;
 
@@ -498,106 +539,118 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			return;
 		}
 
-		p.push.apply(p,this.getRelativeXY(e));
+		p.push.apply(p, this.getRelativeXY(e));
 
 
 		m = new NTMatrix();
-		m.translate(x,y);
-		m.scale(WBUtils.getDistance(p)*2/shapeBaseScale);
+		m.translate(x, y);
+		m.scale(WBUtils.getDistance(p) * 2 / shapeBaseScale);
 		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
-		m.scaleAll(1/w);//do this after
+		m.scaleAll(1 / w);//do this after
 		s.transform = m.toTransform();
 
 		this.canvas.drawScene();
 	},
 
 
-	clear: function(){
+	clear: function () {
 		this.canvas.updateData(null);
 		this.canvas.drawScene();
 	},
 
 
-	deleteSelected: function(){
+	deleteSelected: function () {
 		var c = this.canvas,
-			l = c.drawData.shapeList,
-			i = l.indexOf(this.selected);
-		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
-		Ext.Array.erase(l,i,1);
+				l = c.drawData.shapeList,
+				i = l.indexOf(this.selected);
+		if (!this.selected || !l || l.length === 0) {
+			console.warn("Nothing is selected.");
+			return;
+		}
+		Ext.Array.erase(l, i, 1);
 		this.deselectShape();
 	},
 
-	sendSelectedBack: function(){
+	sendSelectedBack: function () {
 		var c = this.canvas,
-			l = c.drawData.shapeList,
-			i = l.indexOf(this.selected);
+				l = c.drawData.shapeList,
+				i = l.indexOf(this.selected);
 
-		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
-		Ext.Array.erase(l,i,1);
-        Ext.Array.insert(l, i+1, [this.selected]);
+		if (!this.selected || !l || l.length === 0) {
+			console.warn("Nothing is selected.");
+			return;
+		}
+		Ext.Array.erase(l, i, 1);
+		Ext.Array.insert(l, i + 1, [this.selected]);
 		c.drawScene();
 	},
 
-	sendSelectedFront: function(){
+	sendSelectedFront: function () {
 		var c = this.canvas,
-			l = c.drawData.shapeList,
-			i = l.indexOf(this.selected);
+				l = c.drawData.shapeList,
+				i = l.indexOf(this.selected);
 
-		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
-		Ext.Array.erase(l,i,1);
-        Ext.Array.insert(l, (i-1) >= 0 ? (i-1) : 0, [this.selected]);
+		if (!this.selected || !l || l.length === 0) {
+			console.warn("Nothing is selected.");
+			return;
+		}
+		Ext.Array.erase(l, i, 1);
+		Ext.Array.insert(l, (i - 1) >= 0 ? (i - 1) : 0, [this.selected]);
 		c.drawScene();
 	},
 
-	duplicateSelected: function(){
+	duplicateSelected: function () {
 		var c = this.canvas,
-			l = c.drawData.shapeList, i, s = this.selected, w = this.canvas.el.dom.width, sel;
+				l = c.drawData.shapeList, i, s = this.selected, w = this.canvas.el.dom.width, sel;
 
-		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
+		if (!this.selected || !l || l.length === 0) {
+			console.warn("Nothing is selected.");
+			return;
+		}
 
 		sel = this.selected.selected;
 		this.deselectShape();
 		i = this.copyShape(s);
 		this.selected = i;
 		this.selected.selected = sel;
-		i.translate(40/w, 40/w);
-		setTimeout(function(){ c.drawScene();}, 10);
+		i.translate(40 / w, 40 / w);
+		setTimeout(function () { c.drawScene();}, 10);
 	},
 
-	addShape: function(shape){
+	addShape: function (shape) {
 		var opts = this.toolbar.getCurrentTool().getOptions(),
-			newShape,
-			stroke = opts.strokeWidth/(this.canvas.el.getWidth()),
-			defs = {
-				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-				'fill': opts.fill,
-				'stroke': opts.stroke,
-				'strokeWidth': isFinite(stroke)? stroke : 0,
-				'transform':{
-					initial: true,
-					'Class':'CanvasAffineTransform',
-					'a':1,
-					'b':0,
-					'c':0,
-					'd':1,
-					'tx':0,
-					'ty':0
-				},
-				isNew: true
-			};
+				newShape,
+				stroke = opts.strokeWidth / (this.canvas.el.getWidth()),
+				defs = {
+					'Class':     'Canvas' + Ext.String.capitalize(shape.toLowerCase()) + 'Shape',
+					'fill':      opts.fill,
+					'stroke':    opts.stroke,
+					'strokeWidth': isFinite(stroke) ? stroke : 0,
+					'transform': {
+						initial: true,
+						'Class': 'CanvasAffineTransform',
+						'a':     1,
+						'b':     0,
+						'c':     0,
+						'd':     1,
+						'tx':    0,
+						'ty':    0
+					},
+					isNew:       true
+				};
 
-		if(/poly/i.test(shape)){
+		if (/poly/i.test(shape)) {
 			defs.sides = opts.sides;
 			console.debug('implement path');
 		}
-/*
-		else if(/line/i.test(shape)){
-			defs.sides = 1;
-			defs.Class = 'CanvasPolygonShape';
-		}
-*/
-		else if(/text/i.test(shape)){
+		/*
+		 else if(/line/i.test(shape)){
+		 defs.sides = 1;
+		 defs.Class = 'CanvasPolygonShape';
+		 }
+		 */
+		else if (/text/i.test(shape)) {
 //			defs.text = this.textValueField.getValue();
 			console.debug('implement path');
 		}
@@ -609,39 +662,39 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		return newShape;
 	},
 
-	copyShape: function(shape){
+	copyShape: function (shape) {
 		var newShape,
-			defs = {
-				'Class': shape.Class,
-				'fill': shape.fill,
-				'stroke': shape.stroke,
-				'strokeWidth': shape.strokeWidth,
-				'transform':{
-					'Class':'CanvasAffineTransform',
-					'a':shape.transform.a,
-					'b':shape.transform.b,
-					'c':shape.transform.c,
-					'd':shape.transform.d,
-					'tx':shape.transform.tx,
-					'ty':shape.transform.ty
-				}
-			};
+				defs = {
+					'Class':       shape.Class,
+					'fill':        shape.fill,
+					'stroke':      shape.stroke,
+					'strokeWidth': shape.strokeWidth,
+					'transform':   {
+						'Class': 'CanvasAffineTransform',
+						'a':     shape.transform.a,
+						'b':     shape.transform.b,
+						'c':     shape.transform.c,
+						'd':     shape.transform.d,
+						'tx':    shape.transform.tx,
+						'ty':    shape.transform.ty
+					}
+				};
 
-		if(/poly/i.test(shape.Class)){
+		if (/poly/i.test(shape.Class)) {
 			defs.sides = shape.sides;
 		}
 
 		newShape = this.canvas.makeShape(defs);
 		newShape.cache = {
-			fill: shape.cache.fill,
+			fill:   shape.cache.fill,
 			stroke: shape.cache.stroke
 		};
 
-		if(shape.Class === "CanvasPathShape"){
+		if (shape.Class === "CanvasPathShape") {
 			newShape.points = Ext.clone(shape.points);
 			newShape.closed = shape.closed;
 		}
-		else if(shape.Class === "CanvasUrlShape"){
+		else if (shape.Class === "CanvasUrlShape") {
 			newShape.url = Ext.clone(shape.url);
 		}
 
@@ -649,22 +702,22 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		return newShape;
 	}
 
-}, function(){
+}, function () {
 	var p = this.prototype;
 
 	p.mouseMoveHandlerMap = {
-		'move':		p.doMove,
-		'pencil':	p.doPath,
-		'text':		p.doText,
-		'line':		p.doLine,
-		'circle':	p.doShape,
-		'polygon':	p.doShape
+		'move':    p.doMove,
+		'pencil':  p.doPath,
+		'text':    p.doText,
+		'line':    p.doLine,
+		'circle':  p.doShape,
+		'polygon': p.doShape
 	};
 
 	p.moveClickHandlerMap = {
-		'back':         p.sendSelectedBack,
-		'forward':      p.sendSelectedFront,
-		'duplicate':    p.duplicateSelected,
-		'delete':       p.deleteSelected
+		'back':      p.sendSelectedBack,
+		'forward':   p.sendSelectedFront,
+		'duplicate': p.duplicateSelected,
+		'delete':    p.deleteSelected
 	};
 });

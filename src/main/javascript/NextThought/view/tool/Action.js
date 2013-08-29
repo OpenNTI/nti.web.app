@@ -1,15 +1,15 @@
 Ext.define('NextThought.view.tool.Action', {
 	extend: 'Ext.Component',
-	alias: 'widget.nti-tool-action',
+	alias:  'widget.nti-tool-action',
 
-	ui: 'nti-tool-action',
-	cls: 'nti-tool-action',
+	ui:          'nti-tool-action',
+	cls:         'nti-tool-action',
 	disabledCls: 'disabled',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}'},
-		{cls: 'label', html: '{label}'}
-	]),
+										{cls: 'icon {iconCls}'},
+										{cls: 'label', html: '{label}'}
+									]),
 
 	renderSelectors: {
 		iconEl: '.icon',
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.tool.Action', {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.iconCls || 'defualt',
-			label: this.label || ''
+			label:   this.label || ''
 		});
 	},
 
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.tool.Action', {
 	},
 
 
-	click: function (e, dom) {
+	click:      function (e, dom) {
 		function stop() {
 			e.stopEvent();
 			return false;
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.tool.Action', {
 			}
 			catch (actionError) {
 				console.error('There was an error performing the assigned action, the event chain is now stopping',
-					Globals.getError(actionError));
+							  Globals.getError(actionError));
 				return stop();
 			}
 		}
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.tool.Action', {
 
 	//Ext.Action might call on these, and we don't want to die or change ourself...so map emptyFn
 	setHandler: Ext.emptyFn,
-	setText: Ext.emptyFn,
+	setText:    Ext.emptyFn,
 	setIconCls: Ext.emptyFn,
 
 	assignExtAction: function (action) {

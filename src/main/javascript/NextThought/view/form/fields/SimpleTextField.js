@@ -1,209 +1,209 @@
 Ext.define('NextThought.view.form.fields.SimpleTextField', {
-    extend: 'Ext.Component',
-    alias: 'widget.simpletext',
-    mixins: {
-        placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
-    },
+	extend: 'Ext.Component',
+	alias:  'widget.simpletext',
+	mixins: {
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
 
-    cls: 'textbox-base',
+	cls: 'textbox-base',
 
-    renderTpl: Ext.DomHelper.markup([
-        { tag: 'input', type: '{type}', placeholder: '{placeholder}' },
-        { tag: 'span', cls: 'clear' }
-    ]),
+	renderTpl: Ext.DomHelper.markup([
+										{ tag: 'input', type: '{type}', placeholder: '{placeholder}' },
+										{ tag: 'span', cls: 'clear' }
+									]),
 
-    renderSelectors: {
-        inputEl: 'input',
-        clearEl: '.clear'
-    },
+	renderSelectors: {
+		inputEl: 'input',
+		clearEl: '.clear'
+	},
 
-    silentIsValid: true,
+	silentIsValid: true,
 
-    constructor: function (config) {
-        delete config.autoEl;
-        delete config.renderTpl;
-        delete config.renderSelectors;
-        this.callParent(arguments);
-        this.mixins.placeholderFix.constructor.call(this);
-    },
-
-
-    initComponent: function () {
-        this.renderData = {
-            type: this.inputType || 'text',
-            placeholder: this.placeholder
-        };
-
-        if (Ext.is.iPad) {
-            this.on('focus', function () {
-                window.scrollTo(0, 0);
-                document.body.scrollTop = 0;
-            }, this);
-        }
-    },
+	constructor: function (config) {
+		delete config.autoEl;
+		delete config.renderTpl;
+		delete config.renderSelectors;
+		this.callParent(arguments);
+		this.mixins.placeholderFix.constructor.call(this);
+	},
 
 
-    setError: function () {
-        var e = this.inputEl;
-        e.removeCls('error');//if there is an animation, we have to remove the class before it will play again.
-        e.addCls('error');
-        //this.removeCls('error');
-        //this.addCls('error');
+	initComponent: function () {
+		this.renderData = {
+			type:        this.inputType || 'text',
+			placeholder: this.placeholder
+		};
 
-    },
-
-
-    clearValue: function (silent) {
-        var e = this.inputEl;
-        e.dom.value = '';
-        e.removeCls('error');
-        this.clearEl.hide();
-        this.keyPressed(new Ext.EventObjectImpl());
-        if (!silent) {
-            this.focus();
-            this.fireEvent('clear');
-        }
-    },
+//        if (Ext.is.iPad) {
+//            this.on('focus', function () {
+//                window.scrollTo(0, 0);
+//                document.body.scrollTop = 0;
+//            }, this);
+//        }
+	},
 
 
-    reset: function () {
-        this.clearValue(true);
-    },
+	setError: function () {
+		var e = this.inputEl;
+		e.removeCls('error');//if there is an animation, we have to remove the class before it will play again.
+		e.addCls('error');
+		//this.removeCls('error');
+		//this.addCls('error');
+
+	},
 
 
-    getValue: function () {
-        return this.inputEl.getValue();
-    },
+	clearValue: function (silent) {
+		var e = this.inputEl;
+		e.dom.value = '';
+		e.removeCls('error');
+		this.clearEl.hide();
+		this.keyPressed(new Ext.EventObjectImpl());
+		if (!silent) {
+			this.focus();
+			this.fireEvent('clear');
+		}
+	},
 
 
-    setValue: function (v) {
-        this.update(v);
-    },
-
-    maybeTagEmpty: function (v) {
-        this.inputEl[(Ext.isEmpty(v) ? 'add' : 'remove') + 'Cls']('empty');
-        this[(Ext.isEmpty(v) ? 'add' : 'remove') + 'Cls']('empty');
-    },
-
-    update: function (v) {
-        this.inputEl.dom.value = v;
-        this.maybeTagEmpty(v);
-        if (!this.readOnly) {
-            this.clearEl[ v !== '' ? 'show' : 'hide' ]();
-        }
-        //this.handleBlur();
-    },
+	reset: function () {
+		this.clearValue(true);
+	},
 
 
-    afterRender: function () {
-        this.callParent(arguments);
-        var e = this.inputEl;
-        this.maybeTagEmpty();
-
-        if (this.readOnly) {
-            e.set({readonly: 'readonly'});
-            this.clearEl.hide();
-        }
-
-        this.mon(e, {
-            scope: this,
-            keyup: this.keyPressed,
-            contextmenu: function (e) {
-                e.stopPropagation();
-            } //allow context on simple texts
-        });
-        this.mon(e, Ext.EventManager.getKeyEvent(), this.keyDown, this);
-
-        this.mon(this.clearEl, 'click', function () {
-            this.clearValue();
-        }, this);
-        this.lastValue = this.getValue();
-
-        this.renderPlaceholder(e);
-    },
+	getValue: function () {
+		return this.inputEl.getValue();
+	},
 
 
-    getFocusEl: function () {
-        return this.inputEl;
-    },
+	setValue: function (v) {
+		this.update(v);
+	},
+
+	maybeTagEmpty: function (v) {
+		this.inputEl[(Ext.isEmpty(v) ? 'add' : 'remove') + 'Cls']('empty');
+		this[(Ext.isEmpty(v) ? 'add' : 'remove') + 'Cls']('empty');
+	},
+
+	update: function (v) {
+		this.inputEl.dom.value = v;
+		this.maybeTagEmpty(v);
+		if (!this.readOnly) {
+			this.clearEl[ v !== '' ? 'show' : 'hide' ]();
+		}
+		//this.handleBlur();
+	},
 
 
-    specialKeys: {
-        27: true,	//Ext.EventObject.prototype.ESC
-        8: true,	//Ext.EventObject.prototype.BACKSPACE
-        46: true	//Ext.EventObject.prototype.DELETE
-    },
+	afterRender: function () {
+		this.callParent(arguments);
+		var e = this.inputEl;
+		this.maybeTagEmpty();
+
+		if (this.readOnly) {
+			e.set({readonly: 'readonly'});
+			this.clearEl.hide();
+		}
+
+		this.mon(e, {
+			scope:       this,
+			keyup:       this.keyPressed,
+			contextmenu: function (e) {
+				e.stopPropagation();
+			} //allow context on simple texts
+		});
+		this.mon(e, Ext.EventManager.getKeyEvent(), this.keyDown, this);
+
+		this.mon(this.clearEl, 'click', function () {
+			this.clearValue();
+		}, this);
+		this.lastValue = this.getValue();
+
+		this.renderPlaceholder(e);
+	},
 
 
-    keyDown: function (event) {
-        var k = event.getKey();
-
-        //We need this to fit in more tightly with Ext's Field interface.
-        if (event.isSpecialKey()) {
-            this.fireEvent('specialkey', this, new Ext.EventObjectImpl(event));
-        }
-
-        if (this.specialKeys[k]) {
-            if (k === event.ESC) {
-                if (this.inputEl.dom.value === '') {
-                    return;
-                }
-                this.clearValue();
-            }
-            event.stopPropagation();
-            this.keyPressed(event);
-        }
-    },
+	getFocusEl: function () {
+		return this.inputEl;
+	},
 
 
-    keyPressed: function (event) {
-        var e = this.inputEl,
-            k = event.getKey(),
-            v = this.getValue(),
-            c = this.clearEl;
-
-        if (!this.readOnly) {
-            c[v ? 'show' : 'hide']();
-        }
-
-        e.removeCls('error');
-
-        if (k === event.ENTER || k === event.ESC) {
-            this.fireEvent('commit', v, this);
-        }
-
-        if (this.lastValue !== v) {
-            this.lastValue = v;
-            this.maybeTagEmpty(v);
-            this.fireEvent('changed', v, this);
-        }
-    },
+	specialKeys: {
+		27: true,	//Ext.EventObject.prototype.ESC
+		8:  true,	//Ext.EventObject.prototype.BACKSPACE
+		46: true	//Ext.EventObject.prototype.DELETE
+	},
 
 
-    validate: function (silent) {
-        var valid,
-            val = this.getValue() || '';
+	keyDown: function (event) {
+		var k = event.getKey();
 
-        if (!silent) {
-            this.inputEl.removeCls('error');
-        }
-        valid = (this.allowBlank === false) ? (val.length >= (this.minLength || 1)) : true;
+		//We need this to fit in more tightly with Ext's Field interface.
+		if (event.isSpecialKey()) {
+			this.fireEvent('specialkey', this, new Ext.EventObjectImpl(event));
+		}
 
-        if (valid && this.validator) {
-            //The docs say validator should return true or an error string, both of which are truthy here :/
-            valid = Boolean(this.validator(val));
-        }
+		if (this.specialKeys[k]) {
+			if (k === event.ESC) {
+				if (this.inputEl.dom.value === '') {
+					return;
+				}
+				this.clearValue();
+			}
+			event.stopPropagation();
+			this.keyPressed(event);
+		}
+	},
 
-        if (!silent && !valid) {
-            this.setError();
-        }
 
-        return valid;
-    },
+	keyPressed: function (event) {
+		var e = this.inputEl,
+				k = event.getKey(),
+				v = this.getValue(),
+				c = this.clearEl;
+
+		if (!this.readOnly) {
+			c[v ? 'show' : 'hide']();
+		}
+
+		e.removeCls('error');
+
+		if (k === event.ENTER || k === event.ESC) {
+			this.fireEvent('commit', v, this);
+		}
+
+		if (this.lastValue !== v) {
+			this.lastValue = v;
+			this.maybeTagEmpty(v);
+			this.fireEvent('changed', v, this);
+		}
+	},
 
 
-    isValid: function () {
-        return this.validate(this.silentIsValid);
-    }
+	validate: function (silent) {
+		var valid,
+				val = this.getValue() || '';
+
+		if (!silent) {
+			this.inputEl.removeCls('error');
+		}
+		valid = (this.allowBlank === false) ? (val.length >= (this.minLength || 1)) : true;
+
+		if (valid && this.validator) {
+			//The docs say validator should return true or an error string, both of which are truthy here :/
+			valid = Boolean(this.validator(val));
+		}
+
+		if (!silent && !valid) {
+			this.setError();
+		}
+
+		return valid;
+	},
+
+
+	isValid: function () {
+		return this.validate(this.silentIsValid);
+	}
 });
 

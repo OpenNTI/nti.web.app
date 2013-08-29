@@ -1,24 +1,24 @@
 Ext.define('NextThought.model.TranscriptSummary', {
 	extend: 'NextThought.model.Base',
 
-    requires: [
-        'NextThought.model.converters.GroupByTime'
-    ],
+	requires: [
+		'NextThought.model.converters.GroupByTime'
+	],
 
 	fields: [
 		{ name: 'RoomInfo', type: 'singleItem'},
 		{ name: 'Contributors', type: 'auto' },
 
-        { name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
 	],
 
 //	isThreadable: true,
 
-	getId: function(){
+	getId: function () {
 		try {
 			return this.get('RoomInfo').getId();
 		}
-		catch(e){
+		catch (e) {
 			return null;
 		}
 	}

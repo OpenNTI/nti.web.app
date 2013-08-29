@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.User', {
-	extend: 'NextThought.model.Base',
-	requires: ['NextThought.model.converters.PresenceInfo'],
+	extend:     'NextThought.model.Base',
+	requires:   ['NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 
 	fields: [
@@ -15,9 +15,9 @@ Ext.define('NextThought.model.User', {
 		{ name: 'AvatarURLChoices', type: 'AvatarURLList' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
-		{ name: 'status', type: 'Synthetic', fn: function(record){
+		{ name: 'status', type: 'Synthetic', fn: function (record) {
 			//The presence isn't always a PresenceInfo in testing
-			if(record.get('Presence') && record.get('Presence').getDisplayText){
+			if (record.get('Presence') && record.get('Presence').getDisplayText) {
 				return record.get('Presence').getDisplayText();
 			}
 			return null;
@@ -34,7 +34,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'home_page', type: 'string'}
 	],
 
-	isUser: true,
+	isUser:        true,
 	summaryObject: true,
 
 	getCommunities: function (excludeDFLs) {
@@ -62,20 +62,20 @@ Ext.define('NextThought.model.User', {
 
 		});
 
-		if(excludeDFLs){
-			return Ext.Array.filter(r, function(i){ return i.isCommunity; });
+		if (excludeDFLs) {
+			return Ext.Array.filter(r, function (i) { return i.isCommunity; });
 		}
 		return r;
 	},
 
-	
-	getData: function(){
+
+	getData: function () {
 		var k, v, f = this.callParent(arguments);
 
-		for( k in f){
-			if(f.hasOwnProperty(k)){
+		for (k in f) {
+			if (f.hasOwnProperty(k)) {
 				v = f[k];
-				if( v && v.isModel){
+				if (v && v.isModel) {
 					f[k] = v.getData.apply(v, arguments);
 				}
 			}
@@ -97,7 +97,7 @@ Ext.define('NextThought.model.User', {
 
 	getProfileUrl: function (subPage) {
 		var u = encodeURIComponent(this.get('Username')),
-			subPages = subPage || [];
+				subPages = subPage || [];
 
 		if (!Ext.isArray(subPages) && arguments.length > 0) {
 			subPages = Ext.Array.clone(arguments);
@@ -106,10 +106,10 @@ Ext.define('NextThought.model.User', {
 		return ['#!profile/', u, subPages].join('');
 	},
 
-	getPresence: function(){
+	getPresence: function () {
 		var presence = this.get('Presence');
 
-		return (presence)? presence :  NextThought.model.PresenceInfo.createFromPresenceString('Offline');
+		return (presence) ? presence : NextThought.model.PresenceInfo.createFromPresenceString('Offline');
 	},
 
 	hasBlog: function () {
@@ -119,10 +119,10 @@ Ext.define('NextThought.model.User', {
 
 	save: function (ops) {
 		Ext.Ajax.request(Ext.apply({
-			url: this.getLink('edit'),
-			method: 'PUT',
-			jsonData: this.getData()
-		}, ops));
+									   url:      this.getLink('edit'),
+									   method:   'PUT',
+									   jsonData: this.getData()
+								   }, ops));
 	},
 
 	isUnresolved: function () {
@@ -136,13 +136,13 @@ Ext.define('NextThought.model.User', {
 
 		getUnresolved: function (username) {
 			var u = new NextThought.model.User({
-				Username: username,
-				alias: username,
-				avatarURL: this.BLANK_AVATAR,
-				affiliation: 'Unknown',
-				status: '',
-				Presence: NextThought.model.PresenceInfo.createFromPresenceString("Offline")
-			}, username);
+												   Username:    username,
+												   alias:       username,
+												   avatarURL:   this.BLANK_AVATAR,
+												   affiliation: 'Unknown',
+												   status:      '',
+												   Presence:    NextThought.model.PresenceInfo.createFromPresenceString("Offline")
+											   }, username);
 			u.Unresolved = true;
 			return u;
 		},
@@ -151,7 +151,7 @@ Ext.define('NextThought.model.User', {
 		getProfileStateFromFragment: function (fragment) {
 			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
 			return o ? {
-				username: decodeURIComponent(o[1]),
+				username:  decodeURIComponent(o[1]),
 				activeTab: o[2]
 			} : null;
 		}
@@ -159,11 +159,11 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-	refresh: function(){
+	refresh: function () {
 		var req = {
-			url: getURL(this.get('href')),
-			callback: function(q,s,r){
-				if(!s){
+			url:      getURL(this.get('href')),
+			callback: function (q, s, r) {
+				if (!s) {
 					console.warn('could not refresh user');
 					return;
 				}

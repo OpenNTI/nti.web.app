@@ -2,90 +2,95 @@
  * This layout is essentially a card layout based on the auto layout instead of the fit layout.
  * It also will enforce that the last item is always active.
  */
-Ext.define('NextThought.layout.container.Stack',{
+Ext.define('NextThought.layout.container.Stack', {
 	extend: 'Ext.layout.container.Card',
-	alias: 'layout.stack',
-	type: 'stack',
+	alias:  'layout.stack',
+	type:   'stack',
 
 	requires: [
 		'Ext.layout.container.Card'
 	],
 
-    hideInactive: true,
-    deferredRender : true,
+	hideInactive:   true,
+	deferredRender: true,
 
 
-	calculate: function(ownerContext){
+	calculate: function (ownerContext) {
 		var childItems = ownerContext.childItems;
 
-		Ext.each(childItems,function(i){
-			try{
-				i.setHeight(i.el.getHeight(),false);
-				i.setWidth(i.el.getWidth(),false);
-			}catch(e){}
+		Ext.each(childItems, function (i) {
+			try {
+				i.setHeight(i.el.getHeight(), false);
+				i.setWidth(i.el.getWidth(), false);
+			} catch (e) {
+			}
 		});
 
 		this.done = true;
 	},
 
 
-	enforceStackActiveItem: function(){
-		if(this.suspendStackActiveEvents === true){ return; }
+	enforceStackActiveItem: function () {
+		if (this.suspendStackActiveEvents === true) {
+			return;
+		}
 
 		var last = this.getLayoutItems().last();
-		if( last ){
+		if (last) {
 			this.setActiveItem(last);
 		}
 	},
 
 
-	initLayout: function(){
+	initLayout: function () {
 		this.callParent(arguments);
 		this.enforceStackActiveItem();
 	},
 
 
-	onAdd: function(){ this.enforceStackActiveItem(); },
-	onRemove: function(){ this.enforceStackActiveItem(); },
+	onAdd:    function () { this.enforceStackActiveItem(); },
+	onRemove: function () { this.enforceStackActiveItem(); },
 
-	setOwner: function(owner){
+	setOwner: function (owner) {
 		owner.isStackContainer = true;
 		this.callParent(arguments);
 
-		if(!owner.popView){
-			owner.popView = function(){
+		if (!owner.popView) {
+			owner.popView = function () {
 				var l = this.items.last();
-				if( l ){
+				if (l) {
 					l.destroy();
 				}
 			};
 		}
 
-		if(!owner.pushView){
+		if (!owner.pushView) {
 			owner.pushView = owner.add;
 		}
 
-		if(!owner.peek){
-			owner.peek = function(){
-				if(this.items.getCount() < 1){ return undefined; }
+		if (!owner.peek) {
+			owner.peek = function () {
+				if (this.items.getCount() < 1) {
+					return undefined;
+				}
 				return this.items.getAt(this.items.getCount() - 1);
 			};
 		}
 
-		if(!owner.getStackChildren){
-			owner.getStackChildren = function(){
-				return this.items.getCount() >=1 ? Ext.clone(this.items.items) : [];
+		if (!owner.getStackChildren) {
+			owner.getStackChildren = function () {
+				return this.items.getCount() >= 1 ? Ext.clone(this.items.items) : [];
 			};
 		}
 	},
 
 
-	setActiveItem: function(item){
-		if(!item){
+	setActiveItem: function (item) {
+		if (!item) {
 			console.warn('You did something wrong. This should never be fasley');
 			return false;
 		}
-		if(this.parseActiveItem(item) !== this.getLayoutItems().last()){
+		if (this.parseActiveItem(item) !== this.getLayoutItems().last()) {
 			return false;
 		}
 		return this.callParent(arguments);

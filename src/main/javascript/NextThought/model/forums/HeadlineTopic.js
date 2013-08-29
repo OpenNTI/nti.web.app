@@ -8,7 +8,7 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 	],
 
 
-	getActivityLabel: function(){
+	getActivityLabel: function () {
 		return 'started a discussion:';
 	}
 });

@@ -11,20 +11,20 @@ Ext.define('NextThought.model.Community', {
 	isCommunity: true,
 
 	idProperty: 'Username',
-	fields: [
+	fields:     [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v,r){return r.getName();}}
+		{ name: 'displayName', convert: function (v, r) {return r.getName();}}
 	],
 
 
-	getName: function(){
+	getName: function () {
 		return this.get('alias') || this.get('realname');
 	},
 
-	toString: function(){
+	toString: function () {
 		return this.getName();
 	}
 });

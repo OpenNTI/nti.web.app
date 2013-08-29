@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.history.Panel', {
 	extend: 'Ext.view.View',
-	alias: ['widget.user-history-panel'],
+	alias:  ['widget.user-history-panel'],
 
 	requires: [
 		'NextThought.model.events.Bus',
@@ -21,10 +21,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	stateful: true,
 
-	storeId: 'noteHighlightStore',
-	filter: 'onlyMe,Bookmarks',
+	storeId:        'noteHighlightStore',
+	filter:         'onlyMe,Bookmarks',
 	filterOperator: '0',
-	filterMap: {
+	filterMap:      {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
 	},
 
@@ -40,64 +40,64 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	grouping: 'GroupingField',
 
-	ui: 'history',
-	cls: 'user-data-panel',
+	ui:                      'history',
+	cls:                     'user-data-panel',
 	preserveScrollOnRefresh: true,
 
 	deferEmptyText: true,
 
 	emptyText: Ext.DomHelper.markup([
-		{
-			cls: "history nothing rhp-empty-list",
-			html: 'No Activity Yet'
-		}
-	]),
+										{
+											cls:  "history nothing rhp-empty-list",
+											html: 'No Activity Yet'
+										}
+									]),
 
 
 	itemSelector: '.history',
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'for': '.', cn: [
-			'{%this.insertGroupTitle(values,out)%}',
-			'{%this.getTemplateFor(values,out)%}']
-		}
-	]), {
-		getTemplateFor: function (values, out) {
-			if (!this.subTemplates || !this.subTemplates[values.MimeType]) {
-				return console.log('No tpl for...', values);
-			}
-			return this.subTemplates[values.MimeType].applyOut(values, out);
-		},
+													{tag: 'tpl', 'for': '.', cn: [
+														'{%this.insertGroupTitle(values,out)%}',
+														'{%this.getTemplateFor(values,out)%}']
+													}
+												]), {
+							   getTemplateFor: function (values, out) {
+								   if (!this.subTemplates || !this.subTemplates[values.MimeType]) {
+									   return console.log('No tpl for...', values);
+								   }
+								   return this.subTemplates[values.MimeType].applyOut(values, out);
+							   },
 
-		insertGroupTitle: function (values, out) {
-			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
+							   insertGroupTitle: function (values, out) {
+								   var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
 
-			if (label === 'Today') {
-				this.todayCount = (this.todayCount !== undefined) ? this.todayCount + 1 : 0;
-			}
+								   if (label === 'Today') {
+									   this.todayCount = (this.todayCount !== undefined) ? this.todayCount + 1 : 0;
+								   }
 
-			if (this.todayCount < 2 && this.itemAdded) {
-				this.itemAdded = false;
-			}
+								   if (this.todayCount < 2 && this.itemAdded) {
+									   this.itemAdded = false;
+								   }
 
-			if (this.todayCount === 2 && (this.itemAdded || this.itemAdded !== undefined)) {
-				this.itemAdded = true;
-			}
+								   if (this.todayCount === 2 && (this.itemAdded || this.itemAdded !== undefined)) {
+									   this.itemAdded = true;
+								   }
 
-			if (this.todayCount > 2) {
-				delete this.itemAdded;
-			}
+								   if (this.todayCount > 2) {
+									   delete this.itemAdded;
+								   }
 
-			// Detect if the grouping type change from the previous else and make we insert the new group title.
-			if (!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label || this.alreadyLoaded || (this.itemAdded && label === 'Today'))) {
-				this.previousGrouping = label;
-				return Ext.DomHelper.createTemplate({ cls: 'divider', cn: [
-					{tag: 'span', html: label}
-				] }).applyOut({}, out);
-			}
-			return '';
-		}
-	}),
+								   // Detect if the grouping type change from the previous else and make we insert the new group title.
+								   if (!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label || this.alreadyLoaded || (this.itemAdded && label === 'Today'))) {
+									   this.previousGrouping = label;
+									   return Ext.DomHelper.createTemplate({ cls: 'divider', cn: [
+										   {tag: 'span', html: label}
+									   ] }).applyOut({}, out);
+								   }
+								   return '';
+							   }
+						   }),
 
 
 	registerSubType: function (key, itemTpl) {
@@ -171,20 +171,20 @@ Ext.define('NextThought.view.account.history.Panel', {
 		}
 
 		var s = NextThought.store.PageItem.create({
-			id: this.storeId,
-			groupField: this.grouping,
-			groupDir: 'ASC',
-			sortOnLoad: true,
-			statefulFilters: false,
-			remoteSort: false,
-			remoteFilter: false,
-			remoteGroup: false,
-			filterOnLoad: true,
-			sortOnFilter: true
-		});
+													  id:              this.storeId,
+													  groupField:      this.grouping,
+													  groupDir:        'ASC',
+													  sortOnLoad:      true,
+													  statefulFilters: false,
+													  remoteSort:      false,
+													  remoteFilter:    false,
+													  remoteGroup:     false,
+													  filterOnLoad:    true,
+													  sortOnFilter:    true
+												  });
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
+			sortOn:    'createdTime',
 			sortOrder: 'descending'
 		});
 
@@ -194,8 +194,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.mon(this.store, {
 			scope: this,
-			add: 'recordsAdded',
-			load: 'storeLoaded'
+			add:   'recordsAdded',
+			load:  'storeLoaded'
 		});
 
 		s.filter([function (rec) {
@@ -218,8 +218,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 		if (this.store) {
 			Ext.apply(this.store.proxy.extraParams, {
 				filterOperator: this.filterOperator,
-				filter: this.filter,
-				accept: this.getMimeTypes().join(',')
+				filter:         this.filter,
+				accept:         this.getMimeTypes().join(',')
 			});
 		}
 	},
@@ -259,14 +259,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.callParent(arguments);
 
 		this.on({
-			scope: this,
-			'itemclick': 'rowClicked',
-			'itemmouseenter': 'rowHover',
-			'activate': 'maybeShowMoreItems'
-		});
+					scope:            this,
+					'itemclick':      'rowClicked',
+					'itemmouseenter': 'rowHover',
+					'activate':       'maybeShowMoreItems'
+				});
 
 		this.mon(this.el, {
-			scope: this,
+			scope:  this,
 			scroll: this.onScroll
 		});
 
@@ -301,9 +301,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	rowHover: function (view, record, item, index, e) {
 		var popout = NextThought.view.account.activity.Popout,
-			target = Ext.get(item),
-			me = this,
-			cls = record.get('Class');
+				target = Ext.get(item),
+				me = this,
+				cls = record.get('Class');
 
 		if (!record || me.activeTargetDom === item || cls === 'Highlight' || cls === 'Bookmark') {
 			return;
@@ -319,8 +319,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	showPopup: function (record, item) {
 		var popout,
-			target = Ext.get(item),
-			me = this;
+				target = Ext.get(item),
+				me = this;
 
 		if (record && record.getClassForModel) {
 			popout = record.getClassForModel('widget.activity-popout-', NextThought.view.account.activity.Popout);
@@ -382,9 +382,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	onScroll: function (e, dom) {
 		var el = dom.lastChild,
-			offsets = Ext.get(el).getOffsetsTo(dom),
-			top = offsets[1] + dom.scrollTop,
-			ctBottom = dom.scrollTop + dom.clientHeight;
+				offsets = Ext.get(el).getOffsetsTo(dom),
+				top = offsets[1] + dom.scrollTop,
+				ctBottom = dom.scrollTop + dom.clientHeight;
 
 		if (ctBottom > top) {
 			this.prefetchNext();
@@ -399,8 +399,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 		}
 
 		var me = this,
-			s = me.getStore(),
-			fo = (filterTypes.length > 1) ? '0' : '1';
+				s = me.getStore(),
+				fo = (filterTypes.length > 1) ? '0' : '1';
 
 		if (Ext.isEmpty(filterTypes)) {
 			filterTypes = ['onlyMe', 'Bookmarks'];

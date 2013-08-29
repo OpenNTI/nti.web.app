@@ -1,8 +1,8 @@
 //Styles defined in _history-view.scss
 //TODO: Delete this once we permanently enable the new 'activity'/history view.
 Ext.define('NextThought.view.account.history.View', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.history-view',
+	extend:   'Ext.container.Container',
+	alias:    'widget.history-view',
 	requires: [
 		'NextThought.view.SecondaryTabPanel',
 		'NextThought.view.UserDataPanel',
@@ -10,15 +10,15 @@ Ext.define('NextThought.view.account.history.View', {
 		'NextThought.view.account.history.FavoritePanel'
 	],
 
-	title: 'History',
+	title:     'History',
 	tabConfig: {tooltip: 'History'},
-	iconCls: 'history',
-	ui: 'history',
-	cls: 'history-view',
-	plain: true,
+	iconCls:   'history',
+	ui:        'history',
+	cls:       'history-view',
+	plain:     true,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -27,17 +27,17 @@ Ext.define('NextThought.view.account.history.View', {
 		this.items = [
 			{xtype: 'box', cls: 'view-title', autoEl: {}},
 			{
-				xtype: 'container',
+				xtype:  'container',
 				layout: 'fit',
-				flex: 1,
-				id: 'history-view-panel',
+				flex:   1,
+				id:     'history-view-panel',
 
 				items: [
 					{
-						xtype: 'secondary-tabpanel',
-						stateId: 'history-side-view',
+						xtype:    'secondary-tabpanel',
+						stateId:  'history-side-view',
 						defaults: {xtype: 'user-data-panel'},
-						items: [
+						items:    [
 							{ title: 'Notes', mimeType: ['note', 'highlight'], xtype: 'user-history-panel' },
 							{ title: 'Bookmarks', mimeType: ['favorite'], xtype: 'user-history-favorite-panel' }
 						]
@@ -71,8 +71,8 @@ Ext.define('NextThought.view.account.history.View', {
 		}
 
 		var v = this.getActiveView(),
-			s = v && v.getStore(),
-			selectedMimeTypes = [];
+				s = v && v.getStore(),
+				selectedMimeTypes = [];
 
 		s.removeAll();
 		s.clearFilter();
@@ -84,15 +84,15 @@ Ext.define('NextThought.view.account.history.View', {
 				}
 			});
 			s.filter([
-				{filterFn: function (item) {
-					return filter.test(item);
-				}}
-			]);
+						 {filterFn: function (item) {
+							 return filter.test(item);
+						 }}
+					 ]);
 		}
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'relevance',
+			sortOn:    'relevance',
 			sortOrder: 'descending',
-			accept: selectedMimeTypes.join(',')
+			accept:    selectedMimeTypes.join(',')
 		});
 
 		s.load();

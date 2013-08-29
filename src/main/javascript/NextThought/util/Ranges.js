@@ -9,7 +9,7 @@ Ext.define('NextThought.util.Ranges', {
 
 	customContextGathers: {
 		'object[type$=naquestion]': 'gatherQuestionContext',
-		'object[type$=ntivideo]': 'gatherVideoContext'
+		'object[type$=ntivideo]':   'gatherVideoContext'
 	},
 
 
@@ -19,10 +19,10 @@ Ext.define('NextThought.util.Ranges', {
 		}
 		return{
 			startContainer: r.startContainer,
-			startOffset: r.startOffset,
-			endContainer: r.endContainer,
-			endOffset: r.endOffset,
-			collapsed: r.collapsed
+			startOffset:    r.startOffset,
+			endContainer:   r.endContainer,
+			endOffset:      r.endOffset,
+			collapsed:      r.collapsed
 		};
 	},
 
@@ -35,8 +35,8 @@ Ext.define('NextThought.util.Ranges', {
 
 		return {
 			selectionStart: i.selectionStart,
-			selectionEnd: i.selectionEnd,
-			input: i
+			selectionEnd:   i.selectionEnd,
+			input:          i
 		};
 	},
 
@@ -80,7 +80,7 @@ Ext.define('NextThought.util.Ranges', {
 		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
 		 */
 		var node = range.commonAncestorContainer, r, container,
-			markupSelector = '[itemprop~=nti-data-markupenabled]';
+				markupSelector = '[itemprop~=nti-data-markupenabled]';
 
 		if (!node) {
 			return null;
@@ -114,7 +114,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	gatherVideoContext: function (node) {
+	gatherVideoContext:   function (node) {
 		var title, src, titleNode, sourceNode;
 
 		titleNode = Ext.fly(node).down('param[name=title]');
@@ -163,8 +163,8 @@ Ext.define('NextThought.util.Ranges', {
 		}
 
 		var container = start ? range.startContainer : range.endContainer,
-			offset = start ? range.startOffset : range.endOffset,
-			cont;
+				offset = start ? range.startOffset : range.endOffset,
+				cont;
 
 		//If the container is a textNode look no further, that node is the edge
 		if (Ext.isTextNode(container)) {
@@ -207,12 +207,12 @@ Ext.define('NextThought.util.Ranges', {
 
 	coverAll: function (rangeA) {
 		var range = rangeA ? rangeA.cloneRange() : null,
-			start, end, newStart, newEnd;
+				start, end, newStart, newEnd;
 
 		function test(c) {
 			return c.nodeType === Node.TEXT_NODE
-				|| Anchors.isNodeIgnored(c)
-				|| /^(a|b|i|u|img|li)$/i.test(c.tagName);
+					|| Anchors.isNodeIgnored(c)
+					|| /^(a|b|i|u|img|li)$/i.test(c.tagName);
 //				|| c.childNodes.length === 1;
 		}
 
@@ -222,9 +222,9 @@ Ext.define('NextThought.util.Ranges', {
 			}
 
 			var doc = node.ownerDocument,
-				walker = doc.createTreeWalker(doc, NodeFilter.SHOW_ALL, null, null),
-				nextName = direction === 'start' ? 'previousNode' : 'nextNode',
-				temp, result;
+					walker = doc.createTreeWalker(doc, NodeFilter.SHOW_ALL, null, null),
+					nextName = direction === 'start' ? 'previousNode' : 'nextNode',
+					temp, result;
 
 			walker.currentNode = node;
 			temp = walker.currentNode;
@@ -261,13 +261,13 @@ Ext.define('NextThought.util.Ranges', {
 
 	expandRange: function (range, doc) {
 		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer)
-				|| this.nodeIfObjectOrInObject(range.startContainer),
-			r;
+						|| this.nodeIfObjectOrInObject(range.startContainer),
+				r;
 
 		if (!object) {
 			if (range.startContainer === range.endContainer
-				&& range.startContainer.nodeType !== Node.TEXT_NODE
-				&& range.startOffset + 1 === range.endOffset) {
+					&& range.startContainer.nodeType !== Node.TEXT_NODE
+					&& range.startOffset + 1 === range.endOffset) {
 				object = this.nodeIfObjectOrInObject(range.startContainer.childNodes[range.startOffset]);
 			}
 		}
@@ -289,7 +289,7 @@ Ext.define('NextThought.util.Ranges', {
 
 	expandRangeGetNode: function (range, doc, dontClone) {
 		var tempDiv = doc.createElement('div'),
-			n = this.expandRange(range);
+				n = this.expandRange(range);
 		try {
 			tempDiv.appendChild(n);
 		}
@@ -346,12 +346,12 @@ Ext.define('NextThought.util.Ranges', {
 
 	getSelectedNodes: function (range, doc) {
 		var walker,
-			sc = range.startContainer, ec = range.endContainer,
-			so = range.startOffset, eo = range.endOffset,
-			nodes = [],
-			startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
-			endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
-			node;
+				sc = range.startContainer, ec = range.endContainer,
+				so = range.startOffset, eo = range.endOffset,
+				nodes = [],
+				startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
+				endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
+				node;
 
 		doc = doc || document;
 
@@ -395,8 +395,9 @@ Ext.define('NextThought.util.Ranges', {
 	 * @return {Node}
 	 */
 	getContextAroundRange: function (applicableRange, doc, cleanRoot, containerId) {
-		var utils = Boolean(applicableRange.isTimeRange) ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
-			range = utils.toDomRange.apply(this, arguments);
+		var utils = Boolean(applicableRange.isTimeRange) ? NextThought.view.slidedeck.transcript.AnchorResolver
+						: Anchors,
+				range = utils.toDomRange.apply(this, arguments);
 
 		if (range) {
 			return this.fixUpCopiedContext(this.expandRangeGetNode(range, doc));

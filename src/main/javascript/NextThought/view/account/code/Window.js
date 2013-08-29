@@ -1,26 +1,26 @@
 Ext.define('NextThought.view.account.code.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.code-window',
+	alias:  'widget.code-window',
 
 	requires: [
 		'NextThought.view.account.Header',
 		'NextThought.view.account.code.Main'
 	],
 
-	cls: 'code-window',
-	ui: 'nt-window',
+	cls:         'code-window',
+	ui:          'nt-window',
 	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
+	constrain:   true,
+	modal:       true,
+	closable:    true,
+	resizable:   false,
+	dialog:      true,
 	closeAction: 'destroy',
 
 	width: 480,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -28,9 +28,9 @@ Ext.define('NextThought.view.account.code.Window', {
 		{xtype: 'container', layout: {type: 'absolute'}, items: [
 			{
 				anchor: '100% 100%',
-				xtype: 'account-header-view',
+				xtype:  'account-header-view',
 				noIcon: true,
-				title: 'Enter a Group Code...',
+				title:  'Enter a Group Code...',
 				detail: 'Please enter your code to join a specific group or class.'
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}

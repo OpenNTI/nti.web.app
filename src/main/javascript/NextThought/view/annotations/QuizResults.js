@@ -1,15 +1,15 @@
-Ext.define( 'NextThought.view.annotations.QuizResults', {
-	extend: 'NextThought.view.annotations.Base',
-	alias: 'widget.quizresult',
+Ext.define('NextThought.view.annotations.QuizResults', {
+	extend:       'NextThought.view.annotations.Base',
+	alias:        'widget.quizresult',
 	$displayName: 'Quiz Result',
-	requires:[],
+	requires:     [],
 
-	constructor: function(config){
+	constructor: function (config) {
 		this.callParent(arguments);
 	},
 
 
-	render: function(){
+	render: function () {
 		return this;
 	}
 });

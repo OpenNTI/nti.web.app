@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
+Ext.define('NextThought.view.course.dashboard.tiles.Tile', {
 	extend: 'Ext.container.Container',
 
 	requires: [
@@ -11,7 +11,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		 * @param {NextThought.model.course.navigation.Node} r
 		 * @returns {Node[]}
 		 */
-		getChildrenNodes: function(r){
+		getChildrenNodes: function (r) {
 			return r && r.getChildren && r.getChildren();
 		},
 
@@ -19,7 +19,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		 * @param {NextThought.model.course.navigation.Node} r
 		 * @returns {NextThought.store.course.Navigation}
 		 */
-		getCourseNavStore: function(r){
+		getCourseNavStore: function (r) {
 			return r && r.store;
 		}
 	},
@@ -36,52 +36,52 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		 * @param {Function} finish The callback function that hands you the resolved tile(s)
 		 * @param {NextThought.view.course.dashboard.tiles.Tile|NextThought.view.course.dashboard.tiles.Tile[]} finish.tiles
 		 */
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){ Ext.callback(finish); }
+		getTileFor: function (effectiveDate, course, locationInfo, courseNodeRecord, finish) { Ext.callback(finish); }
 	},
 
 	config: {
-		cols:2,
-		rows:2,
-		baseWeight: 1,
-		lastModified: new Date(0),
-		locationInfo: null,
+		cols:             2,
+		rows:             2,
+		baseWeight:       1,
+		lastModified:     new Date(0),
+		locationInfo:     null,
 		courseNodeRecord: null
 	},
 
 	innerWeight: 0,
-	maxInner: 1,
+	maxInner:    1,
 
-	getTimeWeight: function(){ return 0; },
+	getTimeWeight: function () { return 0; },
 
-	ui: 'course-dashboard-tile',
+	ui:     'course-dashboard-tile',
 	layout: 'auto',
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.addCls([
-			'grid-item',
-			'row-'+this.getRows(),
-			'col-'+this.getCols()
-		]);
+						'grid-item',
+						'row-' + this.getRows(),
+						'col-' + this.getCols()
+					]);
 	}
 });
 
 
 /*
-	# Tiles Needed:
+ # Tiles Needed:
 
-	 - Up Next
-	 - Latest Topic (from teacher's forum)
-	 - Sprinkles:
-		- Most Commented Discussions(forums? or notes?... if the former, isn't that the same as the second one?)
-		- Most Liked
-		- Comments on ??my?? blogs?
-	 - Most Recent Notes
+ - Up Next
+ - Latest Topic (from teacher's forum)
+ - Sprinkles:
+ - Most Commented Discussions(forums? or notes?... if the former, isn't that the same as the second one?)
+ - Most Liked
+ - Comments on ??my?? blogs?
+ - Most Recent Notes
 
-	# From Design:
-	 - Labs (Question Sets)
+ # From Design:
+ - Labs (Question Sets)
 
-	# Later:
-	 - Poll
-	 - Question?
+ # Later:
+ - Poll
+ - Question?
  */

@@ -1,45 +1,45 @@
-Ext.define('NextThought.view.course.dashboard.tiles.Title',{
+Ext.define('NextThought.view.course.dashboard.tiles.Title', {
 	extend: 'Ext.Component',
-	alias: 'widget.tile-title',
-	
+	alias:  'widget.tile-title',
+
 	ui: 'tile',
-	
+
 	cls: 'tile-header',
-	
+
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'tools', cn:[
-			
-		]},
-		{ tag:'tpl', 'if':'heading', cn:{ cls: 'heading {withLabel}', html: '{heading}'} },
-		{ tag:'tpl', 'if':'label',   cn:{ cls: 'label', html: '{label}' } }
-	]),
+										{ cls: 'tools', cn: [
+
+										]},
+										{ tag: 'tpl', 'if': 'heading', cn: { cls: 'heading {withLabel}', html: '{heading}'} },
+										{ tag: 'tpl', 'if': 'label', cn: { cls: 'label', html: '{label}' } }
+									]),
 
 	renderSelectors: {
 		labelEl: '.label'
 	},
 
-	config:{
+	config: {
 		heading: null,
-		label: ''
+		label:   ''
 	},
-	
-	beforeRender: function(){
+
+	beforeRender: function () {
 		this.callParent(arguments);
-		var rd = this.renderData = Ext.apply(this.renderData||{},this.initialConfig);
-		
-		if(!Ext.isEmpty(rd.label)){
+		var rd = this.renderData = Ext.apply(this.renderData || {}, this.initialConfig);
+
+		if (!Ext.isEmpty(rd.label)) {
 			rd.withLabel = 'with-label';
 		}
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 
 		var l = this.labelEl;
-		if(l){
-			if(l.dom.scrollWidth > l.getWidth()){
-				l.set({'data-qtip':this.initialConfig.label});
+		if (l) {
+			if (l.dom.scrollWidth > l.getWidth()) {
+				l.set({'data-qtip': this.initialConfig.label});
 			}
 		}
 	}

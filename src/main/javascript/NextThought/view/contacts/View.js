@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.contacts.View', {
-	extend: 'NextThought.view.Base',
-	alias: 'widget.contacts-view-container',
+	extend:   'NextThought.view.Base',
+	alias:    'widget.contacts-view-container',
 	requires: [
 		'NextThought.view.contacts.SubView',
 		'NextThought.view.BoundPanel',
@@ -11,28 +11,28 @@ Ext.define('NextThought.view.contacts.View', {
 	],
 
 //	cls: 'contacts-view',
-	title: 'NextThought: Contacts',
+	title:    'NextThought: Contacts',
 
 
 	items: [
 		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: 'Contacts' },
-		{ xtype: 'contact-tab-view', id: 'my-groups',
-			subType: 'group',
+		{ xtype:      'contact-tab-view', id: 'my-groups',
+			subType:  'group',
 			filterFn: function (group) { return group.isDFL; }
 		},
-		{ xtype: 'contact-tab-view', id: 'my-lists',
-			subType: 'list',
+		{ xtype:      'contact-tab-view', id: 'my-lists',
+			subType:  'list',
 			filterFn: function (group) { return !group.isDFL; }
 		}
 	],
 
 	layout: {
-		type: 'card',
+		type:           'card',
 		deferredRender: true
 	},
 
 	defaultType: 'box',
-	activeItem: 0,
+	activeItem:  0,
 
 
 	tabSpecs: [
@@ -42,29 +42,29 @@ Ext.define('NextThought.view.contacts.View', {
 	],
 
 
-	updateActiveState: function(type,ntiid){
+	updateActiveState: function (type, ntiid) {
 		var state = {};
-		state['current_'+type] = ntiid;
+		state['current_' + type] = ntiid;
 		this.pushState(state);
 	},
 
 
-	onTabClicked: function(tabSpec){
+	onTabClicked: function (tabSpec) {
 		var active = this.layout.getActiveItem(),
-			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
-			vId = targetView[1],
-			needsChanging = vId!==active.id,
-			//only reset the view if we are already there and the spec flagged that it can be reset.
-			reset = !!targetView[2] && !needsChanging;
+				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
+				vId = targetView[1],
+				needsChanging = vId !== active.id,
+		//only reset the view if we are already there and the spec flagged that it can be reset.
+				reset = !!targetView[2] && !needsChanging;
 
-		if(Ext.isEmpty(vId)){
+		if (Ext.isEmpty(vId)) {
 			return false;
 		}
 
-		if(needsChanging){
+		if (needsChanging) {
 			this.setActiveTab(vId);
 //			this.pushState({activeTab: vId});
-		} else if(reset) {
+		} else if (reset) {
 			console.log('ignore reset');
 		}
 
@@ -76,32 +76,32 @@ Ext.define('NextThought.view.contacts.View', {
 //	},
 
 
-	getTabs: function(){
+	getTabs: function () {
 		var tabs = this.tabSpecs,
-			active = this.layout.getActiveItem(),
-			activeId = active && active.id;
+				active = this.layout.getActiveItem(),
+				activeId = active && active.id;
 
-		Ext.each(tabs,function(t){
-			t.selected = (t.viewId.replace(/\?$/,'')===activeId);
+		Ext.each(tabs, function (t) {
+			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
 		});
 
 		return tabs;
 	},
 
 
-	setActiveTab: function(tab){
-		if(this.rendered) {
-			this.layout.setActiveItem(tab||'course-book');
-			this.setTitle(this.getTitlePrefix()+this.locationTitle);
+	setActiveTab: function (tab) {
+		if (this.rendered) {
+			this.layout.setActiveItem(tab || 'course-book');
+			this.setTitle(this.getTitlePrefix() + this.locationTitle);
 		} else {
-			this.on('afterrender', function(){
+			this.on('afterrender', function () {
 				this.layout.setActiveItem(tab);
 			}, this);
 		}
 	},
 
 
-	getTitlePrefix: function(){
+	getTitlePrefix: function () {
 		return '';
 	},
 
@@ -117,8 +117,6 @@ Ext.define('NextThought.view.contacts.View', {
 //		});
 
 		this.removeCls('make-white');
-
-
 
 
 		//		this.on({

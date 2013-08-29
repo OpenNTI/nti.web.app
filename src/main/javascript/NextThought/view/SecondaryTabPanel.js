@@ -1,37 +1,37 @@
 //TODO: Delete this once we permanently enable the new 'activity'/history view.
 
-Ext.define('NextThought.view.SecondaryTabPanel',{
+Ext.define('NextThought.view.SecondaryTabPanel', {
 	extend: 'Ext.tab.Panel',
-	alias: 'widget.secondary-tabpanel',
+	alias:  'widget.secondary-tabpanel',
 
-	plain: true,
-	ui: 'secondary-tabpanel',
-	flex: 1,
-	stateful: true,
-	stateEvents:['tabchange'],
+	plain:       true,
+	ui:          'secondary-tabpanel',
+	flex:        1,
+	stateful:    true,
+	stateEvents: ['tabchange'],
 
 
 	tabBar: {
-		plain: true,
-		baseCls: 'nti',
-		ui: 'secondary-tabbar',
+		plain:    true,
+		baseCls:  'nti',
+		ui:       'secondary-tabbar',
 		defaults: { plain: true, ui: 'secondary-tab' },
 
 		xhooks: {
-			initComponent: function(){
+			initComponent: function () {
 				this.callParent(arguments);
 				this.layout.pack = 'center';
 			}
 		}
 	},
 
-	applyState: function(state){
-		var t = (state||{}).t||0;
+	applyState: function (state) {
+		var t = (state || {}).t || 0;
 		this.setActiveTab(t);
 	},
 
-	getState: function(){
-		return {t:this.items.indexOf(this.getActiveTab())};
+	getState: function () {
+		return {t: this.items.indexOf(this.getActiveTab())};
 	}
 
 });

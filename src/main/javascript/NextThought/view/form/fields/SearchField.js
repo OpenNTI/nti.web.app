@@ -1,29 +1,29 @@
 Ext.define('NextThought.view.form.fields.SearchField', {
-	extend: 'Ext.Component',
-	alias: 'widget.searchfield',//TODO: Fix Ext collision
+	extend:   'Ext.Component',
+	alias:    'widget.searchfield',//TODO: Fix Ext collision
 	requires: [
 		'NextThought.view.form.fields.SearchAdvancedOptions'
 	],
-	mixins: {
+	mixins:   {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
 	},
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'search-field-wrap',
-		cn: [
-			{
-				cls: 'search-field',
-				cn: [
-					{tag: 'input', type: 'text', placeholder: 'Search'},
-					{tag: 'a', href: '#', cls: 'trigger'}
-				]
-			}
-		]
-	}),
+										cls: 'search-field-wrap',
+										cn:  [
+											{
+												cls: 'search-field',
+												cn:  [
+													{tag: 'input', type: 'text', placeholder: 'Search'},
+													{tag: 'a', href: '#', cls: 'trigger'}
+												]
+											}
+										]
+									}),
 
 	renderSelectors: {
-		boxEl: 'div.search-field',
-		inputEl: 'input',
+		boxEl:     'div.search-field',
+		inputEl:   'input',
 		triggerEl: 'a'
 	},
 
@@ -45,16 +45,16 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
 
 		this.menu = Ext.widget('search-advanced-menu', {width: this.boxEl.getWidth(),
-			parentMenu: parentMenu,
-			parentItem: parentMenu
+			parentMenu:                                        parentMenu,
+			parentItem:                                        parentMenu
 		});
 
 		this.menu.mon(parentMenu, 'hide', this.menu.hide, this.menu);
 
 		this.mon(this.inputEl, {
-			scope: this,
+			scope:    this,
 			keypress: this.keyPressed,
-			keydown: this.keyDown //keypress does not always fire for escape
+			keydown:  this.keyDown //keypress does not always fire for escape
 		});
 
 		this.renderPlaceholder(this.inputEl);
@@ -62,7 +62,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 
 	specialKeys: {
-		8: true,	//Ext.EventObject.BACKSPACE
+		8:  true,	//Ext.EventObject.BACKSPACE
 		13: true,	//Ext.EventObject.ENTER
 		27: true,	//Ext.EventObject.ESC
 		32: true,	//Ext.EventObject.SPACE

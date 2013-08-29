@@ -44,79 +44,80 @@ Ext.define('NextThought.controller.Assessment', {
 
 	refs: [],
 
-	init: function() {
+	init: function () {
 		this.listen({
-			component: {
-				'assessment-question':{
-					'check-answer': this.checkAnswer
-				},
+						component: {
+							'assessment-question': {
+								'check-answer': this.checkAnswer
+							},
 
-				'assessment-quiz-submission': {
-					'grade-it': this.grade
-				}
-			}
-		});
+							'assessment-quiz-submission': {
+								'grade-it': this.grade
+							}
+						}
+					});
 	},
 
 
-	checkAnswer: function(questionWidget,question,answerValues){
+	checkAnswer: function (questionWidget, question, answerValues) {
 
-		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : questionWidget.reader.getLocation().NTIID,
-			submission = this.getAssessmentQuestionSubmissionModel().create({
-			ContainerId:  containerId,
-			questionId: question.getId(),
-			parts: answerValues
-		});
+		var containerId = questionWidget.canSubmitIndividually() ? question.getId()
+						: questionWidget.reader.getLocation().NTIID,
+				submission = this.getAssessmentQuestionSubmissionModel().create({
+																					ContainerId: containerId,
+																					questionId:  question.getId(),
+																					parts:       answerValues
+																				});
 
 		questionWidget.mask('Grading...');
 
 		submission.save({
-			scope: this,
-			callback: function(){questionWidget.unmask();},
-			failure: function(){
-				console.error('FAIL', arguments);
-				alert('There was a problem grading your question');
-			},
-			success: function(self,op){
-				var result = op.getResultSet().records.first();
-				questionWidget.updateWithResults(result);
-			}
-		});
+							scope:    this,
+							callback: function () {questionWidget.unmask();},
+							failure:  function () {
+								console.error('FAIL', arguments);
+								alert('There was a problem grading your question');
+							},
+							success:  function (self, op) {
+								var result = op.getResultSet().records.first();
+								questionWidget.updateWithResults(result);
+							}
+						});
 	},
 
 
-	grade: function(submissionWidget,questionSet,submissionData){
+	grade: function (submissionWidget, questionSet, submissionData) {
 
 		var q = this.getAssessmentQuestionSubmissionModel(),
-			s = this.getAssessmentQuestionSetSubmissionModel(),
-			data = {
-				ContainerId: submissionWidget.reader.getLocation().NTIID,
-				questionSetId: questionSet.getId(),
-				questions: []
-			};
+				s = this.getAssessmentQuestionSetSubmissionModel(),
+				data = {
+					ContainerId:   submissionWidget.reader.getLocation().NTIID,
+					questionSetId: questionSet.getId(),
+					questions:     []
+				};
 
-		Ext.Object.each(submissionData,function(k,v){
+		Ext.Object.each(submissionData, function (k, v) {
 			data.questions.push({
-				'Class':'QuestionSubmission',
-				MimeType:'application/vnd.nextthought.assessment.questionsubmission',
-				ContainerId: data.ContainerId,
-				NTIID: k,
-				questionId: k,
-				parts: v
-			});
+									'Class':     'QuestionSubmission',
+									MimeType:    'application/vnd.nextthought.assessment.questionsubmission',
+									ContainerId: data.ContainerId,
+									NTIID:       k,
+									questionId:  k,
+									parts:       v
+								});
 		});
 
 		s.create(data).save({
-			scope: this,
-			callback: function(){},
-			failure: function(){
-				console.error('FAIL', arguments);
-				alert('There was a problem grading your quiz');
-			},
-			success: function(self,op){
-				var result = op.getResultSet().records.first();
-				submissionWidget.setGradingResult(result);
-			}
-		});
+								scope:    this,
+								callback: function () {},
+								failure:  function () {
+									console.error('FAIL', arguments);
+									alert('There was a problem grading your quiz');
+								},
+								success:  function (self, op) {
+									var result = op.getResultSet().records.first();
+									submissionWidget.setGradingResult(result);
+								}
+							});
 	}
 });

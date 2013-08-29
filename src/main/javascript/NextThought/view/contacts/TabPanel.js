@@ -1,26 +1,26 @@
 Ext.define('NextThought.view.contacts.TabPanel', {
-	extend: 'Ext.tab.Panel',
-	alias: 'widget.contacts-tabs',
+	extend:   'Ext.tab.Panel',
+	alias:    'widget.contacts-tabs',
 	requires: [
 		'NextThought.view.contacts.Panel',
 		'NextThought.view.contacts.Search'
 	],
 
 	defaultType: 'contacts-tabs-panel',
-	plain: true,
-	ui: 'contacts',
-	minWidth: 550,
+	plain:       true,
+	ui:          'contacts',
+	minWidth:    550,
 
 	tabBar: {
-		plain: true,
-		baseCls: 'nti',
-		ui: 'contacts-tabbar',
+		plain:    true,
+		baseCls:  'nti',
+		ui:       'contacts-tabbar',
 		defaults: { plain: true, ui: 'contacts-tab' },
-		xhooks: {
+		xhooks:   {
 			afterRender: function () {
 				this.callParent(arguments);
 				var owner = this.up('contacts-tabs'),
-					searchButtonEl = Ext.DomHelper.append(this.el, {cls: 'search', html: 'Search for contacts'}, true);
+						searchButtonEl = Ext.DomHelper.append(this.el, {cls: 'search', html: 'Search for contacts'}, true);
 				owner.mon(searchButtonEl, 'click', owner.toggleSearch, owner);
 				owner.searchBtn = searchButtonEl;
 
@@ -44,8 +44,8 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 		me.contactSearch = Ext.widget('contact-search', {floatParent: me, cls: 'contact-search large'});
 		me.mon(me.contactSearch, {
 			scope: me,
-			show: me.onSearchShow,
-			hide: me.onSearchHide
+			show:  me.onSearchShow,
+			hide:  me.onSearchHide
 		});
 
 		me.on('afterlayout', function () {
@@ -93,7 +93,7 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 
 	onSearchShow: function (cmp) {
 		var b = this.searchBtn,
-			tab = this.tabBar.activeTab;
+				tab = this.tabBar.activeTab;
 
 		if (!b) {
 			return;

@@ -1,32 +1,32 @@
 Ext.define('NextThought.view.library.View', {
 	extend: 'NextThought.view.Base',
-	alias: 'widget.library-view-container',
+	alias:  'widget.library-view-container',
 
 	requires: [
 		'NextThought.view.library.Branding'
 	],
 
-	cls: 'library-view',
+	cls:    'library-view',
 	layout: 'auto',
 
 	items: [
 		{
-			cls: 'branding',
+			cls:   'branding',
 			xtype: 'library-branding-box'
 		},
 		{
-			ui: 'library-collection',
-			cls: 'courses',
+			ui:         'library-collection',
+			cls:        'courses',
 			courseList: true,
-			xtype: 'library-collection',
-			name: getString('My Courses'),
-			store: 'courses',
-			hidden: true,
-			listeners: {
-				'itemadd': 'updateCount',
+			xtype:      'library-collection',
+			name:       getString('My Courses'),
+			store:      'courses',
+			hidden:     true,
+			listeners:  {
+				'itemadd':    'updateCount',
 				'itemremove': 'updateCount'
 			},
-			xhooks: {
+			xhooks:     {
 				updateCount: function () {
 					if (this.rendered && this.el.down('.count')) {
 						this.el.down('.count').update(this.store.getCount());
@@ -35,12 +35,12 @@ Ext.define('NextThought.view.library.View', {
 			}
 		},
 		{
-			ui: 'library-collection',
-			cls: 'books',
-			hidden: true,
+			ui:       'library-collection',
+			cls:      'books',
+			hidden:   true,
 			bookList: true,
-			xtype: 'library-collection',
-			name: getString('My Books')
+			xtype:    'library-collection',
+			name:     getString('My Books')
 		}
 	],
 
@@ -51,8 +51,8 @@ Ext.define('NextThought.view.library.View', {
 		this.mon(Library, {
 			'show-courses': 'showCourses',
 			'hide-courses': 'hideCourses',
-			'show-books': 'showBooks',
-			'hide-books': 'hideBooks'
+			'show-books':   'showBooks',
+			'hide-books':   'hideBooks'
 		});
 	},
 

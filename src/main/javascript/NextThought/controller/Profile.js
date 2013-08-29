@@ -26,61 +26,61 @@ Ext.define('NextThought.controller.Profile', {
 		{ ref: 'profileActivity', selector: '#profile profile-activity'}
 	],
 
-	init: function() {
+	init: function () {
 
 		this.listen({
-			component:{
-				'profile-panel':{
-					'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
-				},
+						component:  {
+							'profile-panel':               {
+								'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
+							},
 
-				//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
-				'profile-blog-post':{
-					'delete-post': this.deleteBlogPost
-	//				'scroll-to': this.scrollProfileTo
-				},
-				'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
-				'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
-				'activity-preview-blog-reply':{
-					'delete-blog-comment': this.deleteBlogPost
-				},
+							//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
+							'profile-blog-post':           {
+								'delete-post': this.deleteBlogPost
+								//				'scroll-to': this.scrollProfileTo
+							},
+							'profile-blog-comment':        { 'delete-post': this.deleteBlogPost },
+							'profile-blog-list-item':      { 'delete-post': this.deleteBlogPost },
+							'activity-preview-blog-reply': {
+								'delete-blog-comment': this.deleteBlogPost
+							},
 
-				'profile-blog-editor':{
-					'save-post': this.saveBlogPost
-				},
+							'profile-blog-editor': {
+								'save-post': this.saveBlogPost
+							},
 
-				'#profile profile-blog-post nti-editor':{
-					'save': this.saveBlogComment
-				},
+							'#profile profile-blog-post nti-editor': {
+								'save': this.saveBlogComment
+							},
 
-				'activity-preview-personalblogentry > nti-editor':{
-					'save': this.saveBlogComment
-				},
-				'activity-preview-blog-reply > nti-editor':{
-					'save': this.saveBlogComment
-				}
-			},
-			controller: {
-				'#Store': {
-					'purchase-complete': 'redrawActivity'
-				}
-			}
-		});
+							'activity-preview-personalblogentry > nti-editor': {
+								'save': this.saveBlogComment
+							},
+							'activity-preview-blog-reply > nti-editor':        {
+								'save': this.saveBlogComment
+							}
+						},
+						controller: {
+							'#Store': {
+								'purchase-complete': 'redrawActivity'
+							}
+						}
+					});
 	},
 
 
-	fillInActivityPanels: function(){
-		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function(item){
+	fillInActivityPanels: function () {
+		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function (item) {
 			item.maybeFillIn();
 		});
 	},
 
 
-	redrawActivity: function(){
+	redrawActivity: function () {
 		var c = this.getProfileActivity(),
-			s = c && c.getStore();
+				s = c && c.getStore();
 
-		if(c && s){
+		if (c && s) {
 			s.currentPage = 1;
 			c.removeAll(true);
 			s.load();
@@ -88,17 +88,17 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	applyBlogPostToStores: function(entry){
+	applyBlogPostToStores: function (entry) {
 		var recordForStore;
-		this.getController('UserData').applyToStoresThatWantItem(function(id,store){
-			if(store){
+		this.getController('UserData').applyToStoresThatWantItem(function (id, store) {
+			if (store) {
 				console.log(store, entry);
 
-				if(store.findRecord('NTIID',entry.get('NTIID'),0,false,true,true)){
-					console.warn('Store already has item with id: '+entry.get('NTIID'), entry);
+				if (store.findRecord('NTIID', entry.get('NTIID'), 0, false, true, true)) {
+					console.warn('Store already has item with id: ' + entry.get('NTIID'), entry);
 				}
 
-				if(!recordForStore){
+				if (!recordForStore) {
 					//Each store gets its own copy of the record. A null value indicates we already added one to a
 					// store, so we need a new instance.  Read it out of the orginal raw value.
 					recordForStore = ParseUtils.parseItems([entry.raw])[0];
@@ -114,89 +114,89 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogComment: function(editor,record,valueObject, saveCallback){
+	saveBlogComment: function (editor, record, valueObject, saveCallback) {
 		var postCmp = editor.up('[record]'),
-		postRecord = postCmp && postCmp.record,
-		isEdit = Boolean(record),
-		commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+				postRecord = postCmp && postCmp.record,
+				isEdit = Boolean(record),
+				commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
 
-		commentPost.set({ body:valueObject.body });
+		commentPost.set({ body: valueObject.body });
 
-		if(editor.el){
+		if (editor.el) {
 			editor.el.mask('Saving...');
 			editor.el.repaint();
 		}
 
-		function unmask(){
-			if(editor.el){
+		function unmask() {
+			if (editor.el) {
 				editor.el.unmask();
 			}
 		}
 
-		try{
+		try {
 
 			commentPost.save({
-				url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
-				scope: this,
-				success: function(rec){
-					var blogCmp = Ext.ComponentQuery.query('profile-blog-post')[0];
-					unmask();
-					if(!postCmp.isDestroyed){
-						if( !isEdit ){
-							if(postCmp.store){
-								postCmp.store.insert(0,rec);
-							}
-							if(blogCmp && postCmp !== blogCmp && blogCmp.store){
-								blogCmp.store.add(rec);
-							}
-						}
-						editor.deactivate();
-						editor.setValue('');
-						editor.reset();
-					}
+								 url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
+								 scope:   this,
+								 success: function (rec) {
+									 var blogCmp = Ext.ComponentQuery.query('profile-blog-post')[0];
+									 unmask();
+									 if (!postCmp.isDestroyed) {
+										 if (!isEdit) {
+											 if (postCmp.store) {
+												 postCmp.store.insert(0, rec);
+											 }
+											 if (blogCmp && postCmp !== blogCmp && blogCmp.store) {
+												 blogCmp.store.add(rec);
+											 }
+										 }
+										 editor.deactivate();
+										 editor.setValue('');
+										 editor.reset();
+									 }
 
-					Ext.callback(saveCallback, null, [editor, postCmp, rec]);
+									 Ext.callback(saveCallback, null, [editor, postCmp, rec]);
 
-					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
-					if(!isEdit){
-						postRecord.set('PostCount',postRecord.get('PostCount')+1);
-					}
-				},
-				failure: function(){
-					editor.markError(editor.getEl(),'Could not save comment');
-					unmask();
-					console.debug('failure',arguments);
-				}
-			});
+									 //TODO: increment PostCount in postRecord the same way we increment reply count in notes.
+									 if (!isEdit) {
+										 postRecord.set('PostCount', postRecord.get('PostCount') + 1);
+									 }
+								 },
+								 failure: function () {
+									 editor.markError(editor.getEl(), 'Could not save comment');
+									 unmask();
+									 console.debug('failure', arguments);
+								 }
+							 });
 
 		}
-		catch(e){
+		catch (e) {
 			console.error('An error occurred saving comment', Globals.getError(e));
 			unmask();
 		}
 	},
 
-	incomingChange: function(change){
-		if(!change.isModel){
+	incomingChange: function (change) {
+		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
 		var item = change.get('Item'), blogCmp;
 
-		if(item && /personalblogcomment$/.test(item.get('MimeType'))){
+		if (item && /personalblogcomment$/.test(item.get('MimeType'))) {
 			blogCmp = Ext.ComponentQuery.query('profile-blog-post');
 
 			//Add the comment into the view if it is present
-			if(blogCmp.length > 0){
+			if (blogCmp.length > 0) {
 				blogCmp.first().addIncomingComment(item);
 			}
 
 			//See if we can find an item in a store some where
 			//and increment the post count.
-			Ext.StoreManager.each(function(s){
+			Ext.StoreManager.each(function (s) {
 				var found = s.getById(item.get('ContainerId'));
-				if(found){
-					found.set('PostCount', found.get('PostCount')+1);
+				if (found) {
+					found.set('PostCount', found.get('PostCount') + 1);
 					return false; //Note we break here because set will have updated the remaining instances;
 				}
 				return true;
@@ -205,132 +205,135 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogPost: function(editorCmp, record, title, tags, body, sharingInfo){
+	saveBlogPost: function (editorCmp, record, title, tags, body, sharingInfo) {
 
 		var isEdit = Boolean(record),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
-			blogRecord = editorCmp.up('profile-blog') ? editorCmp.up('profile-blog').record : null;
-			me = this;
+				post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
+				blogRecord = editorCmp.up('profile-blog') ? editorCmp.up('profile-blog').record : null;
+		me = this;
 
 		//TODO save old values so we can revert them on error?
 		//See also beginEdit cancelEdit
 
 		post.set({
-			'title':title,
-			'body':body,
-			'tags':tags||[]
-		});
+					 'title': title,
+					 'body':  body,
+					 'tags':  tags || []
+				 });
 
-		if(isEdit){
+		if (isEdit) {
 			//The title is on both the PersonalBlogEntryPost (headline)
 			//and the wrapping PersonalBlogEntry (if we have one)
 			record.set({'title': title});
 		}
 
-		function finish(entry, editorCmp){
+		function finish(entry, editorCmp) {
 			var blogCmp = editorCmp.up('profile-blog');
-			if(!isEdit){
+			if (!isEdit) {
 				try {
-					if(blogCmp.store){
-						blogCmp.store.insert(0,entry);
+					if (blogCmp.store) {
+						blogCmp.store.insert(0, entry);
 					} else {
 						blogCmp.buildBlog(true);
 					}
 					me.applyBlogPostToStores(entry);
 				}
-				catch(e){
-					console.error('Could not insert blog post into blog widget',Globals.getError(e));
+				catch (e) {
+					console.error('Could not insert blog post into blog widget', Globals.getError(e));
 				}
 			}
 
 			unmask();
-			Ext.callback(editorCmp.onSaveSuccess,editorCmp,[]);
+			Ext.callback(editorCmp.onSaveSuccess, editorCmp, []);
 		}
 
-		if(editorCmp.el){
+		if (editorCmp.el) {
 			editorCmp.el.mask('Saving...');
 		}
 
-		function unmask(){
-			if(editorCmp.el){
+		function unmask() {
+			if (editorCmp.el) {
 				editorCmp.el.unmask();
 			}
 		}
 
-		try{
-			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single:true});
+		try {
+			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
 			post.save({
-				url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
-				scope: this,
-				success: function(post,operation){
-					//the first argument is the record...problem is, it was a post, and the response from the server is
-					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-					// one off re-parse of the responseText is necissary to get at what we want.
-					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+						  url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
+						  scope:   this,
+						  success: function (post, operation) {
+							  //the first argument is the record...problem is, it was a post, and the response from the server is
+							  // a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+							  // here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+							  // one off re-parse of the responseText is necissary to get at what we want.
+							  // HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 
-					var blogEntry = isEdit? record : ParseUtils.parseItems(operation.response.responseText)[0];
-					this.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
-				},
-				failure: function(){
-					console.debug('failure',arguments);
-					unmask();
-				}
-			});
+							  var blogEntry = isEdit ? record
+									  : ParseUtils.parseItems(operation.response.responseText)[0];
+							  this.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
+						  },
+						  failure: function () {
+							  console.debug('failure', arguments);
+							  unmask();
+						  }
+					  });
 		}
-		catch(e){
+		catch (e) {
 			console.error('An error occurred saving blog', Globals.getError(e));
 			unmask();
 		}
 	},
 
 
-	handleShareAndPublishState: function(blogEntry, sharingInfo, cb, cmp){
-		function didShareWithChange(a, b){
+	handleShareAndPublishState: function (blogEntry, sharingInfo, cb, cmp) {
+		function didShareWithChange(a, b) {
 			return !(Ext.isEmpty(Ext.Array.difference(a, b)) && Ext.isEmpty(Ext.Array.difference(b, a)));
 		}
 
-		function fin(){
+		function fin() {
 			Ext.callback(cb, undefined, [blogEntry, cmp]);
 		}
 
-		function explicitShare(){
+		function explicitShare() {
 			blogEntry.saveField('sharedWith', SharingUtils.sharedWithForSharingInfo(sharingInfo), fin);
 		}
 
-		if(!blogEntry){ return;}
+		if (!blogEntry) {
+			return;
+		}
 
-		if(!sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)){
+		if (!sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)) {
 			//Move to unpublished
-			if(blogEntry.isPublished()){
-				blogEntry.publish(cmp, fin,this); //Because we're already published, this will un-publish us.
+			if (blogEntry.isPublished()) {
+				blogEntry.publish(cmp, fin, this); //Because we're already published, this will un-publish us.
 			}
-			else if(blogEntry.isExplicit()){
+			else if (blogEntry.isExplicit()) {
 				explicitShare();
 			}
-			else{
+			else {
 				fin();
 			}
 		}
-		else if(sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)){
+		else if (sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)) {
 			//Move to published
-			if(!blogEntry.isPublished()){
-				blogEntry.publish(cmp, fin,this); //Because we're  un-published, this will publish us.
+			if (!blogEntry.isPublished()) {
+				blogEntry.publish(cmp, fin, this); //Because we're  un-published, this will publish us.
 			}
-			else{
+			else {
 				fin();
 			}
 		}
-		else{
+		else {
 			//Move to explicit
-			if(!didShareWithChange(blogEntry.get('sharedWith'), SharingUtils.sharedWithForSharingInfo(sharingInfo))){
+			if (!didShareWithChange(blogEntry.get('sharedWith'), SharingUtils.sharedWithForSharingInfo(sharingInfo))) {
 				fin();
 			}
-			else{
-				if(blogEntry.isPublished()){
-					blogEntry.publish(cmp, explicitShare,this);
+			else {
+				if (blogEntry.isPublished()) {
+					blogEntry.publish(cmp, explicitShare, this);
 				}
-				else{
+				else {
 					explicitShare();
 				}
 			}
@@ -338,19 +341,19 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	deleteBlogPost: function(record, cmp, successCallback){
+	deleteBlogPost: function (record, cmp, successCallback) {
 		var idToDestroy, me = this;
-		if(!record.get('href')){
-			record.set('href',record.getLink('contents').replace(/\/contents$/,'')||'no-luck');
+		if (!record.get('href')) {
+			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
 		}
 		idToDestroy = record.get('NTIID');
 
-		function maybeDeleteFromStore(id, store){
+		function maybeDeleteFromStore(id, store) {
 			var r;
-			if(store){
-				r = store.findRecord('NTIID',idToDestroy,0,false,true,true);
-				if(!r){
-					console.warn('Could not remove, the store did not have item with id: '+idToDestroy, r);
+			if (store) {
+				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
+				if (!r) {
+					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);
 					return;
 				}
 
@@ -360,19 +363,19 @@ Ext.define('NextThought.controller.Profile', {
 		}
 
 		record.destroy({
-			success:function(){
-				me.getController('UserData').applyToStoresThatWantItem(maybeDeleteFromStore, record);
+						   success: function () {
+							   me.getController('UserData').applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
-				//Delete anything left that we know of
-				Ext.StoreManager.each(function(s){
-					maybeDeleteFromStore(null, s);
-				});
+							   //Delete anything left that we know of
+							   Ext.StoreManager.each(function (s) {
+								   maybeDeleteFromStore(null, s);
+							   });
 
-				Ext.callback(successCallback, null, [cmp]);
-			},
-			failure: function(){
-				alert('Sorry, could not delete that');
-			}
-		});
+							   Ext.callback(successCallback, null, [cmp]);
+						   },
+						   failure: function () {
+							   alert('Sorry, could not delete that');
+						   }
+					   });
 	}
 });

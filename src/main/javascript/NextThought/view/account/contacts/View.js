@@ -1,50 +1,50 @@
 Ext.define('NextThought.view.account.contacts.View', {
-	extend: 'Ext.view.View',
-	alias: 'widget.contacts-view',
+	extend:   'Ext.view.View',
+	alias:    'widget.contacts-view',
 	requires: [
 		'NextThought.view.account.contacts.GroupChat'
 	],
 
-	title: 'Chat',
+	title:     'Chat',
 	tabConfig: {
 		tooltip: 'Chat'
 	},
 
 	store: 'online-contacts-store',
 
-	iconCls: 'contacts',
-	ui: 'contacts',
-	cls: 'contacts-view',
+	iconCls:                 'contacts',
+	ui:                      'contacts',
+	cls:                     'contacts-view',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'contact-list'},
-		{ cls: 'button-row', cn: [
-			{cls: 'search', html: 'Search', cn: [
-				{tag: 'input', type: 'text'/*, placeholder:'Search'*/},
-				{cls: 'clear', style: {display: 'none'}}
-			] },
-			{cls: 'group-chat', html: 'Group Chat' }
-		]}
-	]),
+										{ cls: 'contact-list'},
+										{ cls: 'button-row', cn: [
+											{cls: 'search', html: 'Search', cn: [
+												{tag: 'input', type: 'text'/*, placeholder:'Search'*/},
+												{cls: 'clear', style: {display: 'none'}}
+											] },
+											{cls: 'group-chat', html: 'Group Chat' }
+										]}
+									]),
 
 	renderSelectors: {
-		buttonRow: '.button-row',
-		searchButton: '.button-row .search',
+		buttonRow:       '.button-row',
+		searchButton:    '.button-row .search',
 		groupChatButton: '.button-row .group-chat',
-		clearNib: '.button-row .search .clear',
-		searchField: '.button-row .search input',
-		frameBodyEl: '.contact-list'
+		clearNib:        '.button-row .search .clear',
+		searchField:     '.button-row .search input',
+		frameBodyEl:     '.contact-list'
 	},
 
 	listeners: {
-		click:{
-			element:'el',
-			fn: 'onClickRaw'
+		click:                    {
+			element: 'el',
+			fn:      'onClickRaw'
 		},
-		itemclick: 'rowClicked',
-		itemmouseenter: 'rowHover',
-		select: function (s, record) {
+		itemclick:                'rowClicked',
+		itemmouseenter:           'rowHover',
+		select:                   function (s, record) {
 			s.deselect(record);
 		},
 		'chat-dock-update-count': 'updateBadge'
@@ -54,9 +54,9 @@ Ext.define('NextThought.view.account.contacts.View', {
 		return this.frameBodyEl;
 	},
 
-	overItemCls: 'over',
+	overItemCls:  'over',
 	itemSelector: '.contact-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl:          new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
 			{ tag: 'tpl', 'if': 'values.Presence', cn: { cls: 'presence {Presence.name}' }},
 			{ tag: 'tpl', 'if': '!values.Presence', cn: { cls: 'presence' }},
@@ -68,27 +68,28 @@ Ext.define('NextThought.view.account.contacts.View', {
 			]}
 		]}
 	]}), {
-		isContact: function (values) {
-			var a = Ext.getStore('all-contacts-store'),
-				o = Ext.getStore('online-contacts-store');
-			return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username)) ? 'contact' : 'not-contact';
-		}
-	}),
+										isContact: function (values) {
+											var a = Ext.getStore('all-contacts-store'),
+													o = Ext.getStore('online-contacts-store');
+											return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
+													? 'contact' : 'not-contact';
+										}
+									}),
 
 
 	constructor: function () {
 		this.normalEmptyText = Ext.DomHelper.markup({
-			cls: 'empty-list rhp-empty-list',
-			html: 'None of your contacts are online.'
-		});
+														cls:  'empty-list rhp-empty-list',
+														html: 'None of your contacts are online.'
+													});
 
 		this.noContactsEmptyText = Ext.DomHelper.markup({
-			cls: 'rhp-no-contacts',
-			cn:[
-				{ html: 'You don&apos;t have any contacts yet...' },
-				{ tag: 'a', cls:'button', role:'button', href:'#', html: 'Add Contacts' }
-			]
-		});
+															cls: 'rhp-no-contacts',
+															cn:  [
+																{ html: 'You don&apos;t have any contacts yet...' },
+																{ tag: 'a', cls: 'button', role: 'button', href: '#', html: 'Add Contacts' }
+															]
+														});
 
 		this.friendsListStore = Ext.getStore('FriendsList');
 
@@ -97,16 +98,16 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	onClickRaw: function(e){
-		if(e.getTarget('a.button')){
-			this.mon(Ext.widget('oobe-contact-window'),'destroy','refresh');
+	onClickRaw: function (e) {
+		if (e.getTarget('a.button')) {
+			this.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
 		}
 	},
 
 
-	getViewRange: function(){
+	getViewRange: function () {
 		var range = this.callParent(),
-			a = !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+				a = !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
 
 		this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
 
@@ -138,7 +139,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	updateBadge: function (count) {
 		var b = this.getBadge(),
-			v = count || '';
+				v = count || '';
 
 		if (!b) {
 			this.tab.badge = v;
@@ -178,7 +179,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 		}
 
 		var popout = NextThought.view.account.contacts.management.Popout,
-			el = Ext.fly(item).down('.avatar'), me = this;
+				el = Ext.fly(item).down('.avatar'), me = this;
 
 		if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {
 			return;
@@ -248,8 +249,8 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	doSearch: function (v) {
 		var fn = 'removeAll',
-			action = 'removeCls',
-			param = false;
+				action = 'removeCls',
+				param = false;
 
 		if (!Ext.isEmpty(v)) {
 			action = 'addCls';
@@ -264,62 +265,62 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	afterRender: function () {
 		var store = this.store,
-			flStore = Ext.getStore('FriendsList');
+				flStore = Ext.getStore('FriendsList');
 
 		this.callParent(arguments);
 		this.searchStore = new NextThought.store.UserSearch({
-			filters: [
-				//filter out communities, lists, groups and yourself. Just return users.
-				function (rec) {
-					return rec.get('Username') !== $AppConfig.contactsGroupName;
-				},
-				function (rec) {
-					return !rec.isCommunity;
-				},
-				function (rec) {
-					return !isMe(rec);
-				},
-				function (rec) {
-					return rec.get('ContainerId') === 'Users';
-				}
-			],
-			sorters: [
-				{
-					//Put contacts first
-					sorterFn: function (a, b) {
-						var c = store.contains(a.get('Username')),
-							d = store.contains(b.get('Username'));
-						return c === d
-							? 0
-							: c ? -1 : 1;
-					},
-					direction: 'ASC'
-				},
-				{
-					//Sort, next, by displayName
-					property: 'displayName',
-					direction: 'ASC'
-				}
-			]
-		});
+																filters: [
+																	//filter out communities, lists, groups and yourself. Just return users.
+																	function (rec) {
+																		return rec.get('Username') !== $AppConfig.contactsGroupName;
+																	},
+																	function (rec) {
+																		return !rec.isCommunity;
+																	},
+																	function (rec) {
+																		return !isMe(rec);
+																	},
+																	function (rec) {
+																		return rec.get('ContainerId') === 'Users';
+																	}
+																],
+																sorters: [
+																	{
+																		//Put contacts first
+																		sorterFn:  function (a, b) {
+																			var c = store.contains(a.get('Username')),
+																					d = store.contains(b.get('Username'));
+																			return c === d
+																					? 0
+																					: c ? -1 : 1;
+																		},
+																		direction: 'ASC'
+																	},
+																	{
+																		//Sort, next, by displayName
+																		property:  'displayName',
+																		direction: 'ASC'
+																	}
+																]
+															});
 
 		this.clearNib.setVisibilityMode(Ext.Element.DISPLAY);
 		this.mon(this.clearNib, 'click', 'clearClicked', this);
 
 		this.contactSearch = Ext.widget('dataview', {
 			preserveScrollOnRefresh: true,
-			store: this.searchStore,
-			overItemCls: this.overItemCls,
-			itemSelector: this.itemSelector,
-			tpl: this.tpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
-			renderTo: this.el,
-			cls: 'contact-search',
-			listeners: {
-				scope: this,
-				itemclick: 'rowClicked',
+			store:                   this.searchStore,
+			overItemCls:             this.overItemCls,
+			itemSelector:            this.itemSelector,
+			tpl:                     this.tpl,
+			emptyText:               Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
+			renderTo:                this.el,
+			cls:                     'contact-search',
+			listeners:               {
+				scope:          this,
+				itemclick:      'rowClicked',
 				itemmouseenter: 'rowHover',
-				select: function (s, record) {
+				select:         function (s, record) {
 					s.deselect(record);
 				}
 			}
@@ -332,12 +333,12 @@ Ext.define('NextThought.view.account.contacts.View', {
 		}, this);
 
 		this.mon(this.store, {
-			scope: this.contactSearch,
+			scope:       this.contactSearch,
 			datachanged: 'refresh'
 		});
 
 		this.mon(flStore, {
-			scope: this.contactSearch,
+			scope:    this.contactSearch,
 			'update': 'refresh'
 		});
 
@@ -347,9 +348,9 @@ Ext.define('NextThought.view.account.contacts.View', {
 		});
 
 		this.mon(this.searchField, {
-			scope: this,
-			blur: 'onSearchBlur',
-			keyup: 'onSearchKeyPressed',
+			scope:       this,
+			blur:        'onSearchBlur',
+			keyup:       'onSearchKeyPressed',
 			contextmenu: function (e) {
 				e.stopPropagation();
 			} //allow context on simple texts
@@ -368,17 +369,17 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	activateGroupChatFeature: function () {
 		this.groupChat = Ext.widget('contacts-group-chat-initiator', {
-			renderTo: this.el,
-			searchTpl: this.tpl,
-			searchOverItemCls: this.overItemCls,
+			renderTo:           this.el,
+			searchTpl:          this.tpl,
+			searchOverItemCls:  this.overItemCls,
 			searchItemSelector: this.itemSelector
 		});
 
 		this.groupChat.hide();
 		this.mon(this.groupChatButton, 'click', 'show', this.groupChat);
 		this.mon(this.groupChat, {
-			scope: this.groupChat,
-			cancel: 'hide',
+			scope:         this.groupChat,
+			cancel:        'hide',
 			'adhock-chat': 'hide'
 		});
 	}

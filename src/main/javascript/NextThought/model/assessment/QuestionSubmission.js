@@ -1,10 +1,10 @@
 Ext.define('NextThought.model.assessment.QuestionSubmission', {
-	extend: 'NextThought.model.Base',
+	extend:   'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'
 	],
-	fields: [
+	fields:   [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'auto' }
 	]

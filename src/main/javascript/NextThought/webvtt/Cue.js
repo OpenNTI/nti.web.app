@@ -7,25 +7,25 @@
 Ext.define('NextThought.webvtt.Cue', {
 	config: {
 		// ID for the cue
-		identifier: '',
+		identifier:       '',
 		// Rendering options
-		pauseOnExit: false,
+		pauseOnExit:      false,
 		writingDirection: 'horizontal',
-		snapToLines: true,
-		linePosition: 'auto',
-		textPosition: 50,
-		size: 100,
-		alignment: 'middle',
+		snapToLines:      true,
+		linePosition:     'auto',
+		textPosition:     50,
+		size:             100,
+		alignment:        'middle',
 		// The cue payload
-		text: '',
+		text:             '',
 		// Timestamps, measured in seconds
-		startTime: -1,
-		endTime: -1,
+		startTime:        -1,
+		endTime:          -1,
 		// Nested tree of sub-cues, if present
-		cueTree: []
+		cueTree:          []
 	},
 
-	constructor: function(config) {
+	constructor: function (config) {
 		this.subCues = [];
 
 		this.initConfig(config);

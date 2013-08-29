@@ -1,6 +1,6 @@
-Ext.define( 'NextThought.view.content.View', {
-	extend: 'NextThought.view.Base',
-	alias: 'widget.content-view-container',
+Ext.define('NextThought.view.content.View', {
+	extend:   'NextThought.view.Base',
+	alias:    'widget.content-view-container',
 	requires: [
 		'NextThought.view.reader.Panel',
 		'NextThought.view.course.View',
@@ -10,42 +10,47 @@ Ext.define( 'NextThought.view.content.View', {
 		'NextThought.view.course.overview.parts.ContentLink'
 	],
 
-	layout: {
-		type: 'card',
+	layout:      {
+		type:           'card',
 		deferredRender: true
 	},
 	defaultType: 'box',
-	activeItem: 'course-book',
+	activeItem:  'course-book',
 
-	items:[
+	items: [
 		{
 			title: 'Dashboard',
-			id:'course-dashboard',
+			id:    'course-dashboard',
 			xtype: 'course-dashboard'
-		},{
-			id:'course-book',
-			xtype: 'container',
-			layout: {
-				type: 'card',
+		},
+		{
+			id:         'course-book',
+			xtype:      'container',
+			layout:     {
+				type:           'card',
 				deferredRender: true
 			},
 			activeItem: 'main-reader-view',
-			items:[{
-				xtype: 'course',
-				id: 'course-nav'
+			items:      [
+				{
+					xtype: 'course',
+					id:    'course-nav'
 
-			},{
-				id: 'main-reader-view',
-				xtype: 'reader'
-			}]
-		},{
+				},
+				{
+					id:    'main-reader-view',
+					xtype: 'reader'
+				}
+			]
+		},
+		{
 			title: 'Discussion',
-			id:'course-forum',
+			id:    'course-forum',
 			xtype: 'course-forum'
 		},
 		{
 			title: 'Course Info',
-			id: 'course-info',
+			id:    'course-info',
 			xtype: 'course-info'
 		}
 	],
@@ -61,7 +66,7 @@ Ext.define( 'NextThought.view.content.View', {
 	],
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent(arguments);
 		this.reader = this.down('reader-content');
 		this.courseBook = this.down('#course-book');
@@ -73,70 +78,70 @@ Ext.define( 'NextThought.view.content.View', {
 		this.removeCls('make-white');
 
 		this.courseNav.makeListenForCourseChange([
-			this.courseDashboard,
-			this.courseForum,
-			this.courseInfo
-		]);
+													 this.courseDashboard,
+													 this.courseForum,
+													 this.courseInfo
+												 ]);
 
-		this.courseNav.mon(this.reader,{'navigateComplete': 'onNavigateComplete'});
+		this.courseNav.mon(this.reader, {'navigateComplete': 'onNavigateComplete'});
 
-		this.mon(this.reader,{
+		this.mon(this.reader, {
 			'navigateComplete': 'onNavigateComplete',
-			'beforeNavigate': 'onBeforeNavigate',
-			'navigateAbort': 'onNavigationAborted',
+			'beforeNavigate':   'onBeforeNavigate',
+			'navigateAbort':    'onNavigationAborted',
 			'navigateCanceled': 'onNavigationCanceled'
 		});
 
-		this.mon(this.courseForum,{
-			scope: this,
+		this.mon(this.courseForum, {
+			scope:              this,
 			'set-active-state': 'updateActiveState'
 		});
 
 		this.on({
-			'switch-to-reader':'switchViewToReader',
-			'beforeactivate':'onBeforeActivation',
-            'beforedeactivate': 'onBeforeDeActivation',
-			'deactivate':'onDeactivated',
-			'activate': 'onActivated'
-		});
+					'switch-to-reader': 'switchViewToReader',
+					'beforeactivate':   'onBeforeActivation',
+					'beforedeactivate': 'onBeforeDeActivation',
+					'deactivate':       'onDeactivated',
+					'activate':         'onActivated'
+				});
 	},
 
-	updateActiveState: function(type,ntiid){
+	updateActiveState: function (type, ntiid) {
 		var state = {};
-		state['current_'+type] = ntiid;
+		state['current_' + type] = ntiid;
 		this.pushState(state);
 	},
 
 
-	onTabClicked: function(tabSpec){
+	onTabClicked: function (tabSpec) {
 		var active = this.layout.getActiveItem(),
-			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
-			vId = targetView[1],
-			needsChanging = vId!==active.id,
-			//only reset the view if we are already there and the spec flagged that it can be reset.
-			reset = !!targetView[2] && !needsChanging;
+				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
+				vId = targetView[1],
+				needsChanging = vId !== active.id,
+		//only reset the view if we are already there and the spec flagged that it can be reset.
+				reset = !!targetView[2] && !needsChanging;
 
-		if(Ext.isEmpty(vId)){
+		if (Ext.isEmpty(vId)) {
 			return false;
 		}
-		
-		if(needsChanging){
+
+		if (needsChanging) {
 			this.setActiveTab(vId);
 			this.pushState({activeTab: vId});
-		} else if(reset) {
+		} else if (reset) {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
 			active = active.layout.setActiveItem(0);
-			if( active ){
+			if (active) {
 				//hack 2 for demo
-				try{
+				try {
 					active = active.down('course-outline').getSelectionModel().getSelection()[0];
-					if(active){
+					if (active) {
 						this.fireEvent('set-location', active.getId());
 					}
 				}
-				catch(e){
-					console.error('error',e);
+				catch (e) {
+					console.error('error', e);
 				}
 			}
 		}
@@ -144,72 +149,72 @@ Ext.define( 'NextThought.view.content.View', {
 		return true;
 	},
 
-	pushState: function(s){
+	pushState: function (s) {
 		history.pushState({content: s}, this.title, this.getFragment());
 	},
 
 
-	getTabs: function(){
+	getTabs: function () {
 		var tabs = this.tabSpecs,
-			active = this.layout.getActiveItem().id;
+				active = this.layout.getActiveItem().id;
 
-		if(this.tabs){
+		if (this.tabs) {
 
-			if(!this.courseForum.hasBoard){
-				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-forum';});
+			if (!this.courseForum.hasBoard) {
+				tabs = Ext.Array.filter(tabs, function (i) {return i.viewId !== 'course-forum';});
 			}
 
-			if(!this.courseInfo.hasInfo){
-				tabs = Ext.Array.filter(tabs,function(i){return i.viewId!=='course-info';});
+			if (!this.courseInfo.hasInfo) {
+				tabs = Ext.Array.filter(tabs, function (i) {return i.viewId !== 'course-info';});
 			}
 
 		}
 
-		Ext.each(tabs,function(t){
-			t.selected = (t.viewId.replace(/\?$/,'')===active);
+		Ext.each(tabs, function (t) {
+			t.selected = (t.viewId.replace(/\?$/, '') === active);
 		});
 
-		return this.tabs? tabs : [];
+		return this.tabs ? tabs : [];
 	},
 
 
-	onBeforeActivation: function(){
-		if(this.reader.activating){
+	onBeforeActivation: function () {
+		if (this.reader.activating) {
 			this.reader.activating();
 		}
 	},
 
 
-	onDeactivated: function(){
+	onDeactivated: function () {
 		var CQ = Ext.ComponentQuery,
-			needsClosing = []
-					.concat(CQ.query('slidedeck-view'))
-					.concat(CQ.query('note-window'));
+				needsClosing = []
+						.concat(CQ.query('slidedeck-view'))
+						.concat(CQ.query('note-window'));
 
-		Ext.Array.map(needsClosing,function(c){c.destroy();});
+		Ext.Array.map(needsClosing, function (c) {c.destroy();});
 
 		var active = this.getLayout().getActiveItem();
-		if(active){
+		if (active) {
 			active.fireEvent('deactivate', this);
 		}
 	},
 
 
-	onNavigationAborted: function(resp, ntiid) {
-		function fin(cid, locationInfo){
-			if(!cid){
+	onNavigationAborted: function (resp, ntiid) {
+		function fin(cid, locationInfo) {
+			if (!cid) {
 				me.courseBook.layout.setActiveItem('main-reader-view');
 				me.reader.setSplash();
 				me.reader.relayout();
 				me.down('content-toolbar').hide();
 				me.down('content-page-widgets').hide();
 			}
-			else{
+			else {
 				// NOTE: For content related item, we have enough info to actually show it, otherwise,
 				// we will navigation to the parent container.
-				if(locationInfo.location && locationInfo.location.tagName === 'content:related'){
-					$AppConfig.service.getPageInfo(cid, function(pi){
-						if(!Ext.isEmpty(pi)){
+				if (locationInfo.location && locationInfo.location.tagName === 'content:related') {
+					$AppConfig.service.getPageInfo(cid, function (pi) {
+						if (!Ext.isEmpty(pi)) {
 							pi = Ext.isArray(pi) ? pi[0] : pi;
 
 							// HACK: when this card is rendered, setting the originalNTIIDRequested of the parent container
@@ -226,8 +231,8 @@ Ext.define( 'NextThought.view.content.View', {
 		}
 
 		var me = this;
-		if(this.fireEvent('navigation-failed', this, ntiid, resp) !== false){
-			if(resp && resp.status === 404){
+		if (this.fireEvent('navigation-failed', this, ntiid, resp) !== false) {
+			if (resp && resp.status === 404) {
 				ContentUtils.findRelatedContentObject(ntiid, fin, me);
 				return;
 			}
@@ -236,37 +241,37 @@ Ext.define( 'NextThought.view.content.View', {
 	},
 
 
-    onBeforeDeActivation: function(){
-        // NOTE: we should probably fire this event for all the children of this view,
-        // since one could have the editor active (in which case we would want to display appropriate warning).
-        // For now, it seems like the reader should be notified and we will add others if we find it necessary.
+	onBeforeDeActivation: function () {
+		// NOTE: we should probably fire this event for all the children of this view,
+		// since one could have the editor active (in which case we would want to display appropriate warning).
+		// For now, it seems like the reader should be notified and we will add others if we find it necessary.
 		var result = true;
-        result = this.reader.fireEvent('beforedeactivate', this);
-		if(result){
+		result = this.reader.fireEvent('beforedeactivate', this);
+		if (result) {
 			var active = this.getLayout().getActiveItem();
-			if(active){
+			if (active) {
 				result = active.fireEvent('beforedeactivate', this);
 			}
 		}
 		return result;
-    },
+	},
 
 
-	onActivated: function(){
+	onActivated: function () {
 		var active = this.getLayout().getActiveItem();
-		if(active){
+		if (active) {
 			active.fireEvent('activate', this);
 		}
 	},
 
 
-	onBeforeNavigate: function(ntiid, fromHistory){
-		if(!fromHistory){
-			if(this.activate(true) === false){
+	onBeforeNavigate: function (ntiid, fromHistory) {
+		if (!fromHistory) {
+			if (this.activate(true) === false) {
 				return false;
 			}
 		}
-		if(this.reader.iframeReady){
+		if (this.reader.iframeReady) {
 			return true;
 		}
 
@@ -274,125 +279,127 @@ Ext.define( 'NextThought.view.content.View', {
 		return false;
 	},
 
-	onNavigationCanceled: function(ntiid, alreadyThere, fromHistory){
-		if(!alreadyThere || fromHistory){ return ; }
+	onNavigationCanceled: function (ntiid, alreadyThere, fromHistory) {
+		if (!alreadyThere || fromHistory) {
+			return;
+		}
 		this.setActiveTab('course-book');
 		this.pushState({activeTab: 'course-book'});
 	},
 
 
-	onNavigateComplete: function(pageInfo,cb,userInitiatedNav){
-		if(!pageInfo || !pageInfo.isModel){return;}
+	onNavigateComplete: function (pageInfo, cb, userInitiatedNav) {
+		if (!pageInfo || !pageInfo.isModel) {
+			return;
+		}
 
 		this.tabs = pageInfo.isPartOfCourse();
 
-		if(this.isVisible(true)){
-			this.fireEvent('update-tabs',this);
+		if (this.isVisible(true)) {
+			this.fireEvent('update-tabs', this);
 		}
 
-		if(userInitiatedNav || !this.tabs){
+		if (userInitiatedNav || !this.tabs) {
 			try {
 				this.getLayout().setActiveItem(this.courseBook);
-			}catch(e){
+			} catch (e) {
 				console.warn(e.stack || e.message);
 			}
 		}
 
-		this.courseBook.getLayout().setActiveItem(pageInfo.isPartOfCourseNav()?'course-nav':'main-reader-view');
+		this.courseBook.getLayout().setActiveItem(pageInfo.isPartOfCourseNav() ? 'course-nav' : 'main-reader-view');
 
 		var l = ContentUtils.getLocation(pageInfo),
-			toc;
+				toc;
 
 
 		this.down('content-toolbar').show();
 
-		this.locationTitle = ContentUtils.findTitle(pageInfo.getId(),'NextThought');
-		this.setTitle(this.getTitlePrefix()+this.locationTitle);
+		this.locationTitle = ContentUtils.findTitle(pageInfo.getId(), 'NextThought');
+		this.setTitle(this.getTitlePrefix() + this.locationTitle);
 
 
-
-
-		if( l && l !== ContentUtils.NO_LOCATION ){
+		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 		}
 
-		if(toc){
+		if (toc) {
 			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
-			if(this.isActive()){
+			if (this.isActive()) {
 				this.updateBackground();
 			}
 		}
 	},
 
 
-	getTitlePrefix: function(){
+	getTitlePrefix: function () {
 		var prefix = this.getLayout().getActiveItem().title || '';
-		if(!Ext.isEmpty(prefix)){
+		if (!Ext.isEmpty(prefix)) {
 			prefix += ' - ';
 		}
 		return prefix;
 	},
 
 
-	switchViewToReader: function(){
+	switchViewToReader: function () {
 		this.courseBook.layout.setActiveItem('main-reader-view');
 	},
 
 
-	setActiveTab: function(tab){
-		if(this.rendered) {
-			this.layout.setActiveItem(tab||'course-book');
-			this.setTitle(this.getTitlePrefix()+this.locationTitle);
+	setActiveTab: function (tab) {
+		if (this.rendered) {
+			this.layout.setActiveItem(tab || 'course-book');
+			this.setTitle(this.getTitlePrefix() + this.locationTitle);
 		} else {
-			this.on('afterrender', function(){
+			this.on('afterrender', function () {
 				this.layout.setActiveItem(tab);
 			}, this);
 		}
 	},
 
 
-	restore: function(state){
+	restore: function (state) {
 		var ntiid = state.content.location,
-			tab = state.content.activeTab,
-			topic = state.content.current_topic,
-			forum = state.content.current_forum;
-			
-		try{
-			this.setActiveTab((tab === 'null')? null : tab);
-			if(!ntiid){
+				tab = state.content.activeTab,
+				topic = state.content.current_topic,
+				forum = state.content.current_forum;
+
+		try {
+			this.setActiveTab((tab === 'null') ? null : tab);
+			if (!ntiid) {
 				console.warn('There was no ntiid to restore!');
 				return;
 			}
 
 			this.courseForum.restoreState(forum, topic);
 
-			this.reader.setLocation(ntiid,null,true);
-			this.up('master-view').down('library-collection').updateSelection(ntiid,true);
+			this.reader.setLocation(ntiid, null, true);
+			this.up('master-view').down('library-collection').updateSelection(ntiid, true);
 		}
-		catch(e){
-			console.error(e.message,'\n\n',e.stack|| e.stacktrace || e,'\n\n');
+		catch (e) {
+			console.error(e.message, '\n\n', e.stack || e.stacktrace || e, '\n\n');
 		}
-		finally{
+		finally {
 			this.fireEvent('finished-restore');
 		}
 	},
 
 
-	activate: function(){
+	activate: function () {
 		var res = this.callParent(arguments);
-		if(res){
+		if (res) {
 			this.reader.relayout();
 		}
 		return res;
 	},
 
 
-	getFragment: function(){
+	getFragment: function () {
 		var o;
 
-		if(this.layout.getActiveItem().id === 'course-book'){
+		if (this.layout.getActiveItem().id === 'course-book') {
 			o = ParseUtils.parseNTIID(this.reader.getLocation().NTIID);
 		}
-		return o? o.toURLSuffix() : location.pathname;
+		return o ? o.toURLSuffix() : location.pathname;
 	}
 });

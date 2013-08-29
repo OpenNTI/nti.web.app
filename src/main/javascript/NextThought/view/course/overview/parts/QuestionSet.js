@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
+Ext.define('NextThought.view.course.overview.parts.QuestionSet', {
 	extend: 'Ext.Panel',
-	alias: [
+	alias:  [
 		'widget.course-overview-naquestionset'
 	],
 
@@ -11,59 +11,59 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 	],
 
 	cls: 'scoreboard overview-naquestionset',
-	ui: 'assessment',
+	ui:  'assessment',
 
 	layout: {
-		type: 'hbox',
+		type:  'hbox',
 		align: 'middle'
 	},
 
 	items: [
-		{ xtype:'assessment-score' },
+		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
-		{ xtype: 'button',
-			text: 'Review',
-			ui: 'secondary',
-			scale: 'large',
-			handler: function(b){b.up('course-overview-naquestionset').reviewClicked();}
+		{ xtype:     'button',
+			text:    'Review',
+			ui:      'secondary',
+			scale:   'large',
+			handler: function (b) {b.up('course-overview-naquestionset').reviewClicked();}
 		}
 	],
 
 
 	config: {
-		containerId: null,
-		ntiid: null,
-		total: 0,
+		containerId:              null,
+		ntiid:                    null,
+		total:                    0,
 		quetionSetContainerTitle: ''
 	},
 
-	constructor: function(config){
+	constructor: function (config) {
 		var n = config.node,
-			ntiid = n.getAttribute('target-ntiid') || 'no-value',
-			containerId = ContentUtils.getLineage(ntiid)[1],
-			req;
+				ntiid = n.getAttribute('target-ntiid') || 'no-value',
+				containerId = ContentUtils.getLineage(ntiid)[1],
+				req;
 
 		config = {
 			quetionSetContainerTitle: n.getAttribute('label'),
-			ntiid: ntiid,
-			containerId: containerId,
-			total: n.getAttribute('question-count') || 10
+			ntiid:                    ntiid,
+			containerId:              containerId,
+			total:                    n.getAttribute('question-count') || 10
 		};
 
 		this.callParent([config]);
 
 
 		req = {
-			url: $AppConfig.service.getContainerUrl(containerId,Globals.USER_GENERATED_DATA),
-			scope: this,
-			method: 'GET',
-			params: {
-				accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
-				batchStart:0,
-				batchSize:1,
-				sortOn: 'lastModified',
-				sortOrder: 'descending',
-				filter:'TopLevel'
+			url:      $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+			scope:    this,
+			method:   'GET',
+			params:   {
+				accept:     NextThought.model.assessment.AssessedQuestionSet.mimeType,
+				batchStart: 0,
+				batchSize:  1,
+				sortOn:     'lastModified',
+				sortOrder:  'descending',
+				filter:     'TopLevel'
 			},
 			callback: this.containerLoaded
 		};
@@ -71,14 +71,14 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 		Ext.Ajax.request(req);
 	},
 
-	containerLoaded: function(q,s,r){
+	containerLoaded: function (q, s, r) {
 		var correct = NaN, b,
-			json = Ext.decode(r.responseText,true) || {};
+				json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
 //		console.debug('Loaded:', r.status, r.responseText);
 
-		if(!json){
+		if (!json) {
 			b = this.down('button');
 			b.setUI('primary');
 			b.setText('Start');
@@ -92,15 +92,15 @@ Ext.define('NextThought.view.course.overview.parts.QuestionSet',{
 		this.updateWithScore(correct);
 	},
 
-	updateWithScore: function(correct){
+	updateWithScore: function (correct) {
 		var tally = this.down('assessment-tally');
-		tally.setTally(correct||0,this.getTotal(),isNaN(correct));
+		tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
 		tally.message.update(this.getQuetionSetContainerTitle());
-		this.down('assessment-score').setValue(Math.floor(100*correct/this.getTotal())||0);
+		this.down('assessment-score').setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		this.updateLayout();
 	},
 
-	reviewClicked: function(){
+	reviewClicked: function () {
 		//console.log('navigate to', this.getContainerId());
 		this.fireEvent('navigate-to-href', this, this.getContainerId());
 	}

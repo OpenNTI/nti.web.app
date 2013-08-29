@@ -3,8 +3,8 @@ Ext.define('NextThought.model.converters.ContentRangeDescription', {
 	requires: ['Ext.data.SortTypes'],
 
 	CONTENTRANGEDESCRIPTION: {
-		type: 'ContentRangeDescription',
-		convert: function(v,record) {
+		type:    'ContentRangeDescription',
+		convert: function (v, record) {
 			try {
 				if (v) {
 					return NextThought.model.anchorables.ContentRangeDescription.createFromObject(v);
@@ -14,7 +14,7 @@ Ext.define('NextThought.model.converters.ContentRangeDescription', {
 				}
 			}
 			catch (e) {
-				console.error('CRD: Parsing Error: ',e.message, e.stack, arguments);
+				console.error('CRD: Parsing Error: ', e.message, e.stack, arguments);
 				return null;
 			}
 		}

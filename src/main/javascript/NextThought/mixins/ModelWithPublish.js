@@ -1,31 +1,33 @@
 Ext.define('NextThought.mixins.ModelWithPublish', {
 
-	getPublishState: function(){
-		return this.isPublished() ? 'Public':'Only Me';
+	getPublishState: function () {
+		return this.isPublished() ? 'Public' : 'Only Me';
 	},
 
-	isPublished: function(){
+	isPublished: function () {
 		return Boolean(this.getLink('unpublish'));
 	},
 
 
-	publish:function(widget, cb, scope){
+	publish: function (widget, cb, scope) {
 		var me = this,
-			currentValue = this.isPublished(),
-			action = currentValue ? 'unpublish' : 'publish';
+				currentValue = this.isPublished(),
+				action = currentValue ? 'unpublish' : 'publish';
 
-		if ((me.activePostTos && me.activePostTos[action]) || me.phantom){return;}
+		if ((me.activePostTos && me.activePostTos[action]) || me.phantom) {
+			return;
+		}
 
-		widget = widget||{};//default it so we don't blow up if no arg is passed
+		widget = widget || {};//default it so we don't blow up if no arg is passed
 
 		//We will assume it completes and then update it if it actually fails
 		//The callback expects key/value pair as argument.
-		Ext.callback(widget.markAsPublished,widget,['publish', !currentValue]);
+		Ext.callback(widget.markAsPublished, widget, ['publish', !currentValue]);
 
-		me.postTo(action, function(s){
-			Ext.callback(cb,scope||window,[me,s]);
+		me.postTo(action, function (s) {
+			Ext.callback(cb, scope || window, [me, s]);
 			if (!s) {
-				Ext.callback(widget.markAsPublished,widget,['publish', currentValue]);
+				Ext.callback(widget.markAsPublished, widget, ['publish', currentValue]);
 			}
 		});
 

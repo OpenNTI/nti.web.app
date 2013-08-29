@@ -5,21 +5,21 @@
  * @protected
  */
 Ext.define('NextThought.app.domain.Annotation', {
-    extend: 'Ext.app.EventDomain',
-    singleton: true,
+	extend:    'Ext.app.EventDomain',
+	singleton: true,
 
-    requires: [
-        'NextThought.view.annotations.Base'
-    ],
+	requires: [
+		'NextThought.view.annotations.Base'
+	],
 
-    type: 'annotation',
+	type: 'annotation',
 
-    constructor: function() {
-        this.callParent();
-        this.monitor(NextThought.view.annotations.Base);
-    },
+	constructor: function () {
+		this.callParent();
+		this.monitor(NextThought.view.annotations.Base);
+	},
 
-	match: function(target, selector) {
-        return target.is(selector);
-    }
+	match: function (target, selector) {
+		return target.is(selector);
+	}
 });

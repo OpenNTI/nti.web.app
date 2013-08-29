@@ -1,42 +1,42 @@
 /*jslint */
 /*globals SlideDeck */
-Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo',{
+Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo', {
 	extend: 'Ext.Component',
-	alias: 'widget.content-slidevideo',
+	alias:  'widget.content-slidevideo',
 
-	requires:[
+	requires: [
 		'NextThought.webvtt.Transcript',
 		'NextThought.webvtt.Cue'
 	],
 
-	ui: 'content-slidevideo',
+	ui:  'content-slidevideo',
 	cls: 'content-slidevideo',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail})'} },
-		{ cls: 'meta', cn: [
-			{ cls:'title', html:'{title}' },
-			{ cls:'byline', html:'By {creator}' },
-			{ cls:'description', html:'{description}' },
-			{ cls:'presentation-button', html:'View Presentation' }
-		]}
-	]),
+										{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+										{ cls: 'meta', cn: [
+											{ cls: 'title', html: '{title}' },
+											{ cls: 'byline', html: 'By {creator}' },
+											{ cls: 'description', html: '{description}' },
+											{ cls: 'presentation-button', html: 'View Presentation' }
+										]}
+									]),
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},this.data);
+		this.renderData = Ext.apply(this.renderData || {}, this.data);
 		this.target = this.data.href;
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
-		this.mon(this.el,'click','onSlideVideoClicked',this);
+		this.mon(this.el, 'click', 'onSlideVideoClicked', this);
 	},
 
 
-	onSlideVideoClicked: function(e){
+	onSlideVideoClicked: function (e) {
 		SlideDeck.open(this.contentElement, this.reader);
 	}
 });

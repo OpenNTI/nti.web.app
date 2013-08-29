@@ -1,13 +1,13 @@
 Ext.define('NextThought.view.profiles.View', {
-	extend: 'NextThought.view.Base',
-	alias: 'widget.profile-view-container',
+	extend:   'NextThought.view.Base',
+	alias:    'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
 		'NextThought.view.ResourceNotFound'
 	],
 
 	defaultType: 'profile-panel',
-	layout: 'auto',
+	layout:      'auto',
 
 
 	initComponent: function () {
@@ -37,7 +37,7 @@ Ext.define('NextThought.view.profiles.View', {
 	restore: function (state) {
 		state = (state || {});
 		var user = state.username,
-			me = this;
+				me = this;
 
 		if (!me.isActive() || (state.hasOwnProperty('active') && state.active !== this.id)) {
 			me.fireEvent('finished-restore');
@@ -66,8 +66,8 @@ Ext.define('NextThought.view.profiles.View', {
 
 	setUser: function (state, finishCallback) {
 		var current = this.down('profile-panel'),
-			username = state.username,
-			me = this;
+				username = state.username,
+				me = this;
 
 		function fin() {
 			me.unmask();

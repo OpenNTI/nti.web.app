@@ -1,28 +1,28 @@
 //SCSS defined _identity.scss
 Ext.define('NextThought.view.account.Identity', {
 	extend: 'Ext.Component',
-	alias: 'widget.identity',
+	alias:  'widget.identity',
 
 	requires: [
 		'NextThought.view.menus.Settings'
 	],
-	mixins: {
+	mixins:   {
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
 	profileLinkCard: false,
 
-	cls: 'identity',
+	cls:      'identity',
 	autoShow: true,
 	floating: true,
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
-		{ cls: 'presence' }
-	]),
+										{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
+										{ cls: 'presence' }
+									]),
 
 	renderSelectors: {
-		avatar: 'img.avatar',
+		avatar:   'img.avatar',
 		presence: '.presence'
 	},
 
@@ -37,12 +37,12 @@ Ext.define('NextThought.view.account.Identity', {
 
 	monitorUser: function (u) {
 		var me = this, m = {
-			scope: this,
+			scope:     this,
 			'changed': function (r) {
 				me.avatar.set({
-					src: r.get('avatarURL'),
-					'data-qtip': r.getName()
-				});
+								  src:         r.get('avatarURL'),
+								  'data-qtip': r.getName()
+							  });
 
 				me.monitorUser((r !== u) ? r : null);
 			}
@@ -65,7 +65,7 @@ Ext.define('NextThought.view.account.Identity', {
 		this.monitorUser(this.user);
 		this.mon(this.el, {
 			'mouseover': 'startToShowMenu',
-			'mouseout': 'startToHideMenu'
+			'mouseout':  'startToHideMenu'
 		});
 
 		this.mon(this.menu, 'mouseenter', 'cancelHideShowEvents');

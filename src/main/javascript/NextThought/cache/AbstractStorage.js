@@ -1,11 +1,11 @@
-Ext.define('NextThought.cache.AbstractStorage',{
+Ext.define('NextThought.cache.AbstractStorage', {
 
-	constructor: function(storage){
-		if(!storage
-		|| !Ext.isFunction(storage.removeItem)
-		|| !Ext.isFunction(storage.setItem)
-		|| !Ext.isFunction(storage.getItem)
-		|| !Ext.isFunction(storage.clear)) {
+	constructor: function (storage) {
+		if (!storage
+				|| !Ext.isFunction(storage.removeItem)
+				|| !Ext.isFunction(storage.setItem)
+				|| !Ext.isFunction(storage.getItem)
+				|| !Ext.isFunction(storage.clear)) {
 			Ext.Error.raise('Given storage object does not implement Storage api');
 		}
 
@@ -13,25 +13,25 @@ Ext.define('NextThought.cache.AbstractStorage',{
 	},
 
 
-	set: function(key,value){
+	set: function (key, value) {
 		var old = this.get(key);
-		this.backingStore.setItem(key,Ext.encode(value));
+		this.backingStore.setItem(key, Ext.encode(value));
 		return old;
 	},
 
 
-	get: function(key){
-		return Ext.decode(this.backingStore.getItem(key),true);
+	get: function (key) {
+		return Ext.decode(this.backingStore.getItem(key), true);
 	},
 
 
-	getProperty: function(key, property, defaultValue){
-		var o = this.get(key)||{};
+	getProperty: function (key, property, defaultValue) {
+		var o = this.get(key) || {};
 
 		property = property.split('/');
 
 		//comment this loop out if property-paths are causing problems.
-		while(o && property.length > 1) {
+		while (o && property.length > 1) {
 			o = o[property.shift()];
 		}
 
@@ -39,50 +39,50 @@ Ext.define('NextThought.cache.AbstractStorage',{
 	},
 
 
-	updateProperty: function(key,property,value){
-		var o = this.get(key)||{}, v = o;
+	updateProperty: function (key, property, value) {
+		var o = this.get(key) || {}, v = o;
 
 
 		property = property.split('/');
 
 		//comment this loop out if property-paths are causing problems.
-		while(o && property.length > 1) {
+		while (o && property.length > 1) {
 			o = o[property.shift()];
 		}
 
 		o[property[0]] = value;
-		if(value === undefined){
+		if (value === undefined) {
 			delete o[property[0]];
 		}
 
-		return this.set(key,v);
+		return this.set(key, v);
 	},
 
 
-	removeProperty: function(key, property){
-		return this.updateProperty(key,property,undefined);
+	removeProperty: function (key, property) {
+		return this.updateProperty(key, property, undefined);
 	},
 
 
-	remove: function(key){
+	remove: function (key) {
 		this.backingStore.removeItem(key);
 	},
 
 
-	removeAll: function(){
+	removeAll: function () {
 		this.backingStore.clear();
 	}
 
 
-},function(){
+}, function () {
 	var w = window,
-		Cls = this,
-		fallback = {
-			removeItem: Ext.emptyFn,
-			setItem: Ext.emptyFn,
-			getItem: Ext.emptyFn,
-			clear: Ext.emptyFn
-		};
+			Cls = this,
+			fallback = {
+				removeItem: Ext.emptyFn,
+				setItem:    Ext.emptyFn,
+				getItem:    Ext.emptyFn,
+				clear:      Ext.emptyFn
+			};
 
 	window.TemporaryStorage = new Cls(w.sessionStorage || fallback);
 	window.PersistentStorage = new Cls(w.localStorage || fallback);

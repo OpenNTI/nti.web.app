@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.course.info.View', {
 	extend: 'Ext.Component',
-	alias: 'widget.course-info',
-	cls: 'make-white',
+	alias:  'widget.course-info',
+	cls:    'make-white',
 
 
 	afterRender: function () {
@@ -34,8 +34,8 @@ Ext.define('NextThought.view.course.info.View', {
 
 	fillInPage: function (html) {
 		var dF = document.createDocumentFragment(),
-			root = document.createElement('html'),
-			body;
+				root = document.createElement('html'),
+				body;
 
 		root.innerHTML = html;
 
@@ -47,26 +47,26 @@ Ext.define('NextThought.view.course.info.View', {
 
 	loadPage: function (pageInfo) {
 		var me = this,
-			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+				proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		proxy.request({
-			pageInfo: pageInfo,
-			ntiid: pageInfo.getId(),
-			jsonpUrl: pageInfo.getLink('jsonp_content'),
-			url: pageInfo.getLink('content'),
-			expectedContentType: 'text/html',
-			scope: this,
-			success: function (r) {
-				if (this.currentCourseInfoNtiid !== pageInfo.getId()) {
-					console.warn('Dropping out of order course info', this.currentCourseInfoNtiid, pageInfo);
-					return;
-				}
-				me.fillInPage(r.responseText);
-			},
-			failure: function (r) {
-				console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
-			}
-		});
+						  pageInfo:            pageInfo,
+						  ntiid:               pageInfo.getId(),
+						  jsonpUrl:            pageInfo.getLink('jsonp_content'),
+						  url:                 pageInfo.getLink('content'),
+						  expectedContentType: 'text/html',
+						  scope:               this,
+						  success:             function (r) {
+							  if (this.currentCourseInfoNtiid !== pageInfo.getId()) {
+								  console.warn('Dropping out of order course info', this.currentCourseInfoNtiid, pageInfo);
+								  return;
+							  }
+							  me.fillInPage(r.responseText);
+						  },
+						  failure:             function (r) {
+							  console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
+						  }
+					  });
 	},
 
 
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.course.info.View', {
 	onCourseChanged: function (pageInfo) {
 		console.log('Course change being handled by course info', this);
 		var l = ContentUtils.getLocation(pageInfo),
-			toc, course;
+				toc, course;
 
 
 		if (l && l !== ContentUtils.NO_LOCATION) {

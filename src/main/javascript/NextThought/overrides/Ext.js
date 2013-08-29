@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.Ext',{
+Ext.define('NextThought.overrides.Ext', {
 	override: 'Ext',
 
 
@@ -10,22 +10,24 @@ Ext.define('NextThought.overrides.Ext',{
 	 * @param cfg {Object} The values to apply to the object in the first arg.
 	 * @return {*}
 	 */
-	applyRecursively: function applyRecursively(o,cfg){
-		if(!o){return o;}
-
-		if(Ext.isArray(o)){
-			Ext.each(o,function(v,i,a){ a[i] = applyRecursively(v,cfg); });
+	applyRecursively: function applyRecursively(o, cfg) {
+		if (!o) {
+			return o;
 		}
-		else if(Ext.isObject(o)){
-			Ext.Object.each(o,function(k,v){ o[k] = applyRecursively(v,cfg); });
-			o = Ext.apply(o,cfg);
+
+		if (Ext.isArray(o)) {
+			Ext.each(o, function (v, i, a) { a[i] = applyRecursively(v, cfg); });
+		}
+		else if (Ext.isObject(o)) {
+			Ext.Object.each(o, function (k, v) { o[k] = applyRecursively(v, cfg); });
+			o = Ext.apply(o, cfg);
 		}
 
 		return o;
 	}
 
 
-},function(){
+}, function () {
 
 	var get = Ext.getElementById;
 
@@ -55,26 +57,28 @@ Ext.define('NextThought.overrides.Ext',{
 	 *  clear the interval: Ext.Element.collectorThreadId
 	 *  Copy function garbageCollect() from ext/src/dom/Element.js as a starting point, then restart the 30second interval.
 	 */
-	Ext.getElementById = function(id){
-			var el = get.apply(this,arguments);
+	Ext.getElementById = function (id) {
+		var el = get.apply(this, arguments);
 
-			function testFrame(frame){
-				var win = frame.contentWindow || window.frames[frame.name],
+		function testFrame(frame) {
+			var win = frame.contentWindow || window.frames[frame.name],
 					src;
-				try{
-					src = Globals.HOST_PREFIX_PATTERN.exec(frame.getAttribute('src'));
-					if(src[3] === document.domain || src[1]==='javascript'){
-						el = win.document.getElementById(id) || false;
-					}
+			try {
+				src = Globals.HOST_PREFIX_PATTERN.exec(frame.getAttribute('src'));
+				if (src[3] === document.domain || src[1] === 'javascript') {
+					el = win.document.getElementById(id) || false;
+				}
 				//for iframes where we cannot access its content(Cross Origin Content) ignore.
-				} catch(e){ swallow(e); }
-				return !el;
+			} catch (e) {
+				swallow(e);
 			}
+			return !el;
+		}
 
-			if(!el){
-				Ext.each(document.getElementsByTagName('iframe'),testFrame);
-			}
+		if (!el) {
+			Ext.each(document.getElementsByTagName('iframe'), testFrame);
+		}
 
-			return el;
-		};
+		return el;
+	};
 });

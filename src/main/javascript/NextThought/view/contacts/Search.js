@@ -1,76 +1,77 @@
 //CSS in _contact-search.scss
 Ext.define('NextThought.view.contacts.Search', {
-	extend: 'Ext.container.Container',
-	alias: 'widget.contact-search',
+	extend:   'Ext.container.Container',
+	alias:    'widget.contact-search',
 	requires: [
 		'NextThought.view.form.fields.SimpleTextField',
 		'NextThought.view.account.contacts.management.Popout'
 	],
 
-	floating: true,
-	shadow: false,
+	floating:            true,
+	shadow:              false,
 	preventBringToFront: true,
 
 	cls: 'contact-search',
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
 	items: [
 		{
 			xtype: 'container',
-			cls: 'search-field',
+			cls:   'search-field',
 			items: {xtype: 'simpletext', placeholder: 'Search for contacts...' }
 		},
 		{
-			xtype: 'dataview',
+			xtype:                   'dataview',
 			preserveScrollOnRefresh: true,
-			flex: 1,
+			flex:                    1,
 
 			overflowX: 'hidden',
 			overflowY: 'auto',
 
 			allowDeselect: false,
-			singleSelect: true,
+			singleSelect:  true,
 
-			cls: 'search-results',
-			overItemCls: 'over',
+			cls:          'search-results',
+			overItemCls:  'over',
 			itemSelector: 'div.item-wrap',
 
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-				tag: 'tpl', 'for': '.',
-				cn: [
-					{
-						cls: 'item-wrap',
-						cn: [
-							{
-								cls: 'item {[this.isContact(values.Username)]}',
-								cn: [
-									{tag: 'img', src: '{avatarURL}'},
-									{tag: 'img', src: Ext.BLANK_IMAGE_URL, cls: 'add'},
-									{
-										cls: 'text-wrap',
-										cn: [
-											{cls: 'name', html: '{displayName}'},
-											{cls: 'affiliation', html: '{affiliation-dontshowthis}'}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}), {
-				isContact: function (username) {
-					if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
-						this.contactsList = Ext.getStore('FriendsList').getContacts();
-						this.lastUsed = new Date();
-					}
-					return Ext.Array.contains(this.contactsList, username) ? 'my-contact' : 'not-in-contacts';
-				}
-			})
+															tag: 'tpl', 'for': '.',
+															cn:  [
+																{
+																	cls: 'item-wrap',
+																	cn:  [
+																		{
+																			cls: 'item {[this.isContact(values.Username)]}',
+																			cn:  [
+																				{tag: 'img', src: '{avatarURL}'},
+																				{tag: 'img', src: Ext.BLANK_IMAGE_URL, cls: 'add'},
+																				{
+																					cls: 'text-wrap',
+																					cn:  [
+																						{cls: 'name', html: '{displayName}'},
+																						{cls: 'affiliation', html: '{affiliation-dontshowthis}'}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}), {
+									   isContact: function (username) {
+										   if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
+											   this.contactsList = Ext.getStore('FriendsList').getContacts();
+											   this.lastUsed = new Date();
+										   }
+										   return Ext.Array.contains(this.contactsList, username) ? 'my-contact'
+												   : 'not-in-contacts';
+									   }
+								   })
 		}
 	],
 
@@ -78,39 +79,39 @@ Ext.define('NextThought.view.contacts.Search', {
 	initComponent: function () {
 		this.callParent(arguments);
 		this.store = new NextThought.store.UserSearch({
-			filters: [
-				//filter out communities, lists, groups and yourself. Just return users.
-				function (rec) {
-					return rec.get('Username') !== $AppConfig.contactsGroupName;
-				},
-				function (rec) {
-					return !rec.isCommunity;
-				},
-				function (rec) {
-					return !isMe(rec);
-				},
-				function (rec) {
-					return rec.get('ContainerId') === 'Users';
-				}
-			]});
+														  filters: [
+															  //filter out communities, lists, groups and yourself. Just return users.
+															  function (rec) {
+																  return rec.get('Username') !== $AppConfig.contactsGroupName;
+															  },
+															  function (rec) {
+																  return !rec.isCommunity;
+															  },
+															  function (rec) {
+																  return !isMe(rec);
+															  },
+															  function (rec) {
+																  return rec.get('ContainerId') === 'Users';
+															  }
+														  ]});
 		this.view = this.down('dataview');
 		this.view.bindStore(this.store);
 
 		this.mon(this.view, {
-			scope: this,
-			itemclick: this.itemClicked,
+			scope:          this,
+			itemclick:      this.itemClicked,
 			containerclick: this.escape
 		});
 
 		this.mon(Ext.getStore('FriendsList'), {
-			scope: this.view,
+			scope:              this.view,
 			'contacts-updated': this.view.refresh
 		});
 
 		this.mon(this.down('simpletext'), {
-			scope: this,
+			scope:   this,
 			changed: this.search,
-			clear: this.clearResults
+			clear:   this.clearResults
 		});
 	},
 
@@ -168,7 +169,7 @@ Ext.define('NextThought.view.contacts.Search', {
 
 
 	//We buffer this slightly to avoid unecessary searches
-	search: Ext.Function.createBuffered(function (value) {
+	search:      Ext.Function.createBuffered(function (value) {
 		if (!value || value.replace(SearchUtils.trimRe, '').length < 2) {
 			this.clearResults();
 		}

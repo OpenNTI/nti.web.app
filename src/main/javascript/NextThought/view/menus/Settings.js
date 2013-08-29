@@ -1,20 +1,20 @@
 Ext.define('NextThought.view.menus.Settings', {
-	extend: 'Ext.menu.Menu',
-	alias: 'widget.settings-menu',
-	requires: [
+	extend:        'Ext.menu.Menu',
+	alias:         'widget.settings-menu',
+	requires:      [
 		'NextThought.view.menus.Presence'
 	],
-	ui: 'nt',
-	plain: true,
+	ui:            'nt',
+	plain:         true,
 	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
-	width: 260,
+	shadow:        false,
+	frame:         false,
+	border:        false,
+	hideMode:      'display',
+	width:         260,
 
 	defaults: {
-		ui: 'nt-menuitem',
+		ui:    'nt-menuitem',
 		xtype: 'menuitem',
 		plain: true
 	},
@@ -29,9 +29,9 @@ Ext.define('NextThought.view.menus.Settings', {
 
 		//setup fields:
 		var items = [],
-			u = $AppConfig.userObject,
-			welcomeLink = u.getLink('content.permanent_welcome_page'),
-			childsLink = u.getLink('childrens-privacy');
+				u = $AppConfig.userObject,
+				welcomeLink = u.getLink('content.permanent_welcome_page'),
+				childsLink = u.getLink('childrens-privacy');
 
 
 		if ($AppConfig.service.canChat()) {

@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.activity.topic.Preview', {
 	extend: 'NextThought.view.account.activity.Preview',
-	alias: 'widget.activity-preview-topic',
+	alias:  'widget.activity-preview-topic',
 
 	requires: [
 		'NextThought.mixins.forum-feature.Path',
@@ -27,13 +27,13 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 
 	buildStore: function () {
 		this.store = NextThought.store.NTI.create({
-			storeId: 'activity-popout-topic-preview' + guidGenerator(),
-			url: this.record.getLink('contents')
-		});
+													  storeId: 'activity-popout-topic-preview' + guidGenerator(),
+													  url:     this.record.getLink('contents')
+												  });
 
 		this.mon(this.store, {
 			scope: this,
-			load: this.fillInReplies
+			load:  this.fillInReplies
 		});
 
 		this.store.load();
@@ -94,7 +94,7 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 
 Ext.define('NextThought.view.account.activity.topic.Reply', {
 	extend: 'NextThought.view.account.activity.note.Reply',
-	alias: 'widget.activity-preview-topic-reply',
+	alias:  'widget.activity-preview-topic-reply',
 
 
 	deleteComment: function () {
@@ -103,9 +103,9 @@ Ext.define('NextThought.view.account.activity.topic.Reply', {
 
 	navigateToComment: function () {
 		var me = this,
-			rec = this.record,
-			r = this.up('[record]') && this.up('[record]').record,
-			cid = rec.get('ID');
+				rec = this.record,
+				r = this.up('[record]') && this.up('[record]').record,
+				cid = rec.get('ID');
 
 		if (!r) {
 			console.warn('could not find the parent record');

@@ -1,37 +1,37 @@
 Ext.define('NextThought.model.Service', {
-	extend: 'NextThought.model.Base',
+	extend:     'NextThought.model.Base',
 	idProperty: 'Class',
-	fields: [
-		{ name: 'Items', type: 'auto', defaultValue: {Items:[]}},
+	fields:     [
+		{ name: 'Items', type: 'auto', defaultValue: {Items: []}},
 		{ name: 'Class', type: 'string', defaultValue: 'Service'},
 		{ name: 'CapabilityList', type: 'auto'}
 	],
 
-	getUserSearchURL: function(username){
+	getUserSearchURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
-			l = this.getLinkFrom(w.Links||[], Globals.USER_SEARCH_REL);
-		if(!l) {
+				l = this.getLinkFrom(w.Links || [], Globals.USER_SEARCH_REL);
+		if (!l) {
 			return null;
 		}
-		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
+		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
 
 
-	getResolveUserURL: function(username){
+	getResolveUserURL: function (username) {
 		var w = this.getWorkspace('Global') || {},
-			l = this.getLinkFrom(w.Links||[], Globals.USER_RESOLVE_REL);
-		if(!l) {
+				l = this.getLinkFrom(w.Links || [], Globals.USER_RESOLVE_REL);
+		if (!l) {
 			return null;
 		}
-		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
+		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
 	},
 
 
-	getUserUnifiedSearchURL: function(){
+	getUserUnifiedSearchURL: function () {
 		var w = this.getWorkspace($AppConfig.username) || {},
-			l = this.getLinkFrom(w.Links||[], Globals.USER_UNIFIED_SEARCH_REL);
+				l = this.getLinkFrom(w.Links || [], Globals.USER_UNIFIED_SEARCH_REL);
 
-		if(!l) {
+		if (!l) {
 			return null;
 		}
 
@@ -39,19 +39,19 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getPurchasableItemURL: function(){
+	getPurchasableItemURL: function () {
 		//Until we get this hung off some workspace
 		return getURL('/dataserver2/store/get_purchasables');
 	},
 
 
-	getStoreActivationURL: function(){
-		return getURL('/dataserver2/store/redeem_purchase_code')	;
+	getStoreActivationURL: function () {
+		return getURL('/dataserver2/store/redeem_purchase_code');
 	},
 
 
-	forceTrailingSlash: function(uri){
-		if(uri.charAt(uri.length-1)==='/') {
+	forceTrailingSlash: function (uri) {
+		if (uri.charAt(uri.length - 1) === '/') {
 			return uri;
 		}
 
@@ -59,11 +59,11 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getLinkFrom: function(links, rel){
-		var i=links.length-1, o;
-		for(i;i>=0; i--){
+	getLinkFrom: function (links, rel) {
+		var i = links.length - 1, o;
+		for (i; i >= 0; i--) {
 			o = links[i] || {};
-			if(o.rel === rel) {
+			if (o.rel === rel) {
 				return o.href;
 			}
 		}
@@ -72,13 +72,13 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getWorkspace: function(name){
+	getWorkspace: function (name) {
 		var items = this.get('Items') || [],
-			i, workspace = null;
+				i, workspace = null;
 
-		for(i in items){
-			if(items.hasOwnProperty(i)) {
-				if(items[i].Title === name){
+		for (i in items) {
+			if (items.hasOwnProperty(i)) {
+				if (items[i].Title === name) {
 					workspace = items[i];
 					break;
 				}
@@ -89,14 +89,14 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getLibrary: function(name){
+	getLibrary: function (name) {
 		var libs = this.getWorkspace('Library') || {},
-			items = libs.Items || [],
-			i, library = null;
+				items = libs.Items || [],
+				i, library = null;
 
-		for(i in items){
-			if(items.hasOwnProperty(i)) {
-				if(items[i].Title === name){
+		for (i in items) {
+			if (items.hasOwnProperty(i)) {
+				if (items[i].Title === name) {
 					library = items[i];
 					break;
 				}
@@ -107,7 +107,7 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getMainLibrary: function(){
+	getMainLibrary: function () {
 		return this.getLibrary('Main') || {};
 	},
 
@@ -117,19 +117,19 @@ Ext.define('NextThought.model.Service', {
 	 * @param mimeType
 	 * @param [title]
 	 */
-	getCollectionFor: function(mimeType, title){
+	getCollectionFor: function (mimeType, title) {
 		var collection = null;
 
-		Ext.each(this.get('Items') || [], function(workspace){
+		Ext.each(this.get('Items') || [], function (workspace) {
 			var items = workspace.Items || [],
-				i, item;
+					i, item;
 
-			for(i in items){
-				if(items.hasOwnProperty(i)) {
+			for (i in items) {
+				if (items.hasOwnProperty(i)) {
 					item = items[i];
 
-					if(Ext.Array.contains(item.accepts,mimeType)){
-						if(title && item.Title !== title) {
+					if (Ext.Array.contains(item.accepts, mimeType)) {
+						if (title && item.Title !== title) {
 							continue;
 						}
 
@@ -145,16 +145,16 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getCollection: function(title, workspaceName){
+	getCollection: function (title, workspaceName) {
 		var workspace = this.getWorkspace(workspaceName || $AppConfig.username) || {},
-			items = workspace.Items || [],
-			i, item, collection = null;
+				items = workspace.Items || [],
+				i, item, collection = null;
 
-		for(i in items){
-			if(items.hasOwnProperty(i)) {
+		for (i in items) {
+			if (items.hasOwnProperty(i)) {
 				item = items[i];
 
-				if(item.Title === title){
+				if (item.Title === title) {
 					collection = item;
 					break;
 				}
@@ -162,33 +162,33 @@ Ext.define('NextThought.model.Service', {
 
 		}
 
-		return Ext.clone( collection );
+		return Ext.clone(collection);
 	},
 
 
-	getObjectURL: function(ntiid, field){
+	getObjectURL: function (ntiid, field) {
 		var f = '';
 		if (field) {
 			f = Ext.String.format("/++fields++{0}", field);
 		}
 
 		return getURL(Ext.String.format("{0}/{1}{2}",
-			this.getCollection('Objects', 'Global').href,
-			encodeURIComponent(ntiid||''),
-			f));
+										this.getCollection('Objects', 'Global').href,
+										encodeURIComponent(ntiid || ''),
+										f));
 	},
 
 
-	getContainerUrl: function(ntiid, type){
-		var pid = 'Pages('+ntiid+')',
-			u = $AppConfig.userObject.get('href').split('?')[0];
+	getContainerUrl: function (ntiid, type) {
+		var pid = 'Pages(' + ntiid + ')',
+				u = $AppConfig.userObject.get('href').split('?')[0];
 
 		return getURL(Ext.String.format("{0}/{1}/{2}", u, encodeURIComponent(pid || ''), type || ''));
 	},
 
 
-	urlWithQueryParams: function(base, obj){
-		if(!Ext.isObject(obj)){
+	urlWithQueryParams: function (base, obj) {
+		if (!Ext.isObject(obj)) {
 			return base;
 		}
 
@@ -196,69 +196,71 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	appendTypeView: function(base, type){
+	appendTypeView: function (base, type) {
 		return base + '/@@' + type;
 	},
 
 
-	getObjectRaw: function (url, mime, forceMime, success, failure, scope){
+	getObjectRaw: function (url, mime, forceMime, success, failure, scope) {
 		var q = {}, headers = {};
 
-		if(!url){
-			Ext.callback(failure,scope, ['']);
+		if (!url) {
+			Ext.callback(failure, scope, ['']);
 			return null;
 		}
 
-		if(mime){
+		if (mime) {
 			headers.Accept = mime;
 		}
 
-		try{
+		try {
 			//lookup step
 			q.request = Ext.Ajax.request({
-				url: url,
-				scope: scope,
-				headers: headers,
-				callback: function(req,s,resp){
-					//If sent an Accept header the server
-					//may return a 406 if the Accept value is not supported
-					//or it may just return whatever it wants.  If we send
-					//Accept we check the Content-Type to see if that is what
-					//we get back.  If it's not and forceMime is truthy
-					//we call the failure callback
-					var href, contentType;
-					if(s){
-						if(mime && forceMime){
-							contentType = resp.getResponseHeader('Content-Type');
-							if(contentType && contentType.indexOf(mime) < 0){
-								console.info('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
-								Ext.callback(failure, scope, [req, resp]);
-								return;
-							}
-						}
+											 url:      url,
+											 scope:    scope,
+											 headers:  headers,
+											 callback: function (req, s, resp) {
+												 //If sent an Accept header the server
+												 //may return a 406 if the Accept value is not supported
+												 //or it may just return whatever it wants.  If we send
+												 //Accept we check the Content-Type to see if that is what
+												 //we get back.  If it's not and forceMime is truthy
+												 //we call the failure callback
+												 var href, contentType;
+												 if (s) {
+													 if (mime && forceMime) {
+														 contentType = resp.getResponseHeader('Content-Type');
+														 if (contentType && contentType.indexOf(mime) < 0) {
+															 console.info('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
+															 Ext.callback(failure, scope, [req, resp]);
+															 return;
+														 }
+													 }
 
-						Ext.callback(success, scope, [resp]);
-					} else {
-						Ext.callback(failure, scope, [req, resp]);
-					}
-				}
-			});
+													 Ext.callback(success, scope, [resp]);
+												 } else {
+													 Ext.callback(failure, scope, [req, resp]);
+												 }
+											 }
+										 });
 		}
-		catch(e){
-			Ext.callback(failure,scope,[{},e]);
+		catch (e) {
+			Ext.callback(failure, scope, [
+				{},
+				e
+			]);
 		}
 
 		return q;
 	},
 
 
-
-	getPageInfo: function(ntiid, success, failure, scope){
+	getPageInfo: function (ntiid, success, failure, scope) {
 		var url, q,
-			mime = 'application/vnd.nextthought.pageinfo';
+				mime = 'application/vnd.nextthought.pageinfo';
 
-		if(!ParseUtils.parseNtiid(ntiid)){
-			Ext.callback(failure,scope, ['']);
+		if (!ParseUtils.parseNtiid(ntiid)) {
+			Ext.callback(failure, scope, ['']);
 			return null;
 		}
 
@@ -271,112 +273,117 @@ Ext.define('NextThought.model.Service', {
 		//objects back so request them at a special view to influence cache logic
 		//url = this.appendTypeView(url, 'pageinfo+json');
 
-		try{
+		try {
 
-			function onSuccess(resp){
+			function onSuccess(resp) {
 				var pageInfos = ParseUtils.parseItems(resp.responseText),
-					//We claim success but the damn browsers like to give the wrong object
-					//type from cache.  They don't seem to listen to Vary: Accept or any
-					//of the other myriad of caching headers supplied by the server
-					pageInfo = pageInfos.first();
+				//We claim success but the damn browsers like to give the wrong object
+				//type from cache.  They don't seem to listen to Vary: Accept or any
+				//of the other myriad of caching headers supplied by the server
+						pageInfo = pageInfos.first();
 
-				if(pageInfo && pageInfo.get('MimeType') !== mime){
+				if (pageInfo && pageInfo.get('MimeType') !== mime) {
 					console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
-					Ext.callback(failure, scope, [{}, resp]);
+					Ext.callback(failure, scope, [
+						{},
+						resp
+					]);
 					return;
 				}
 
-				Ext.each(pageInfos,function(p){
-					(p||{}).originalNTIIDRequested = ntiid;
+				Ext.each(pageInfos, function (p) {
+					(p || {}).originalNTIIDRequested = ntiid;
 				});
-				this.fireEvent('update-pageinfo-preferences',pageInfos);
+				this.fireEvent('update-pageinfo-preferences', pageInfos);
 				Ext.callback(success, scope, pageInfos);
 			}
 
-			function onFailure(req,resp){
-				Ext.callback(failure,scope, [req,resp]);
+			function onFailure(req, resp) {
+				Ext.callback(failure, scope, [req, resp]);
 			}
 
 
-			q = this.getObjectRaw(url, mime+'+json', true, onSuccess, onFailure, this);
+			q = this.getObjectRaw(url, mime + '+json', true, onSuccess, onFailure, this);
 			q.request.ntiid = ntiid;
 
 		}
-		catch(e){
-			Ext.callback(failure,scope,[{},e]);
+		catch (e) {
+			Ext.callback(failure, scope, [
+				{},
+				e
+			]);
 		}
 
 		return q;
 	},
 
 
-	getObject: function (ntiid, success, failure, scope, safe){
+	getObject: function (ntiid, success, failure, scope, safe) {
 		var url;
 
-		if(!ParseUtils.parseNtiid(ntiid)){
-			Ext.callback(failure,scope, ['']);
+		if (!ParseUtils.parseNtiid(ntiid)) {
+			Ext.callback(failure, scope, ['']);
 			return null;
 		}
 
 		url = this.getObjectURL(ntiid);
 
 		return this.getObjectRaw(url, null, false,
-				function(resp){
-					var arg;
+								 function (resp) {
+									 var arg;
 
-					try{
-						arg = ParseUtils.parseItems(resp.responseText);
-					}catch(e){
-						if(safe){
-							Ext.callback(success, scope);
-						}else{
-							throw e;
-						}
-					}
-					Ext.callback(success, scope, arg);
-				},
-				function(req,resp){
-					Ext.callback(failure,scope, [req, resp]);
-				},
-				this
+									 try {
+										 arg = ParseUtils.parseItems(resp.responseText);
+									 } catch (e) {
+										 if (safe) {
+											 Ext.callback(success, scope);
+										 } else {
+											 throw e;
+										 }
+									 }
+									 Ext.callback(success, scope, arg);
+								 },
+								 function (req, resp) {
+									 Ext.callback(failure, scope, [req, resp]);
+								 },
+								 this
 		);
 	},
-
 
 
 	/*
 	 *	The following methods are for deciding when things can or cannot happen
 	 */
 
-    canUploadAvatar: function() {
-        return this.hasCapability('nti.platform.customization.avatar_upload');
-    },
+	canUploadAvatar: function () {
+		return this.hasCapability('nti.platform.customization.avatar_upload');
+	},
 
 
-	canBlog: function(){
+	canBlog: function () {
 		return this.hasCapability('nti.platform.blogging.createblogentry');
 	},
 
 
-	canChat: function() {
+	canChat: function () {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
 
 
-	canShare: function(){
+	canShare: function () {
 		return this.hasCapability('nti.platform.p2p.sharing');
 	},
 
 
-	canFriend: function(){
+	canFriend: function () {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
-	canHaveForum: function(){
+	canHaveForum: function () {
 		return this.hasCapability('nti.platform.forums.communityforums');
 	},
 
-	canChangePassword: function(){
+	canChangePassword:      function () {
 		return this.hasCapability('nti.platform.customization.can_change_password');
 	},
 
@@ -390,28 +397,28 @@ Ext.define('NextThought.model.Service', {
 	//
 	//Note this already breaks for coppa student accounts that get upgraded to none coppa
 	//status.  Their role changs from student to other.
-	canCreateDynamicGroups: function(){
+	canCreateDynamicGroups: function () {
 		var roleField = $AppConfig.userObject.get('role');
-		if(!this.hasCapability('nti.platform.p2p.dynamicfriendslists')){
+		if (!this.hasCapability('nti.platform.p2p.dynamicfriendslists')) {
 			return false;
 		}
 		return !roleField || roleField.toLowerCase() !== 'student';
 	},
 
 
-	hasCapability: function(c){
+	hasCapability: function (c) {
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
 
 
-	canCanvasURL: function() {
+	canCanvasURL: function () {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
 		return !!coll;
 	},
 
 
-	canEmbedVideo: function() {
+	canEmbedVideo:     function () {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
 		return !!coll;
 	},
@@ -419,19 +426,19 @@ Ext.define('NextThought.model.Service', {
 
 	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 	//       until permissioning of actions can be accomplished.
-	canShareRedaction: function(){
-		var canShare =  /(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
+	canShareRedaction: function () {
+		var canShare = /(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
 		return canShare;
 	},
 
 
-	canRedact: function() {
+	canRedact: function () {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	},
 
 
-	canWorkspaceBlog: function(){
+	canWorkspaceBlog: function () {
 		return Boolean($AppConfig.service.getCollection('Blog'));
 	}
 

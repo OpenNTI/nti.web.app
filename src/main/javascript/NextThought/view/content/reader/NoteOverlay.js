@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
-	alias: 'reader.noteOverlay',
-	mixins: {
+	alias:    'reader.noteOverlay',
+	mixins:   {
 		observable: 'Ext.util.Observable'
 	},
 	requires: [
@@ -14,15 +14,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 		this.mon(this.reader, {
-			scope: this,
-			destroy: 'destroy',
-			afterRender: 'insertOverlay',
-			'content-updated': 'onContentUpdate',
+			scope:                  this,
+			destroy:                'destroy',
+			afterRender:            'insertOverlay',
+			'content-updated':      'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
-			'sync-height': 'syncHeight',
-			'create-note': 'noteHere',
-			'beforenavigate': 'onNavigation',
-			'beforedeactivate': 'onNavigation'
+			'sync-height':          'syncHeight',
+			'create-note':          'noteHere',
+			'beforenavigate':       'onNavigation',
+			'beforedeactivate':     'onNavigation'
 		});
 
 
@@ -39,11 +39,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var me = this,
 				box,
 				container = {
-					cls: 'note-gutter', onclick: 'void(0)',
+					cls:   'note-gutter', onclick: 'void(0)',
 					style: {
 						height: me.reader.getIframe().get().getHeight()
 					},
-					cn: [
+					cn:    [
 						{ cls: 'note-here-control-box', onclick: 'void(0)' }
 					]
 				};
@@ -57,17 +57,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		if (Ext.is.iPad) {
 			me.mon(box, {
-				click: 'openEditor',
-				mouseover: 'overNib',
+				click:     'openEditor',
+				mouseover: 'overNib'
 			});
 		}
 		else {
 			me.mon(box, {
-				click: 'openEditor',
+				click:     'openEditor',
 				mouseover: 'overNib',
 				mousemove: 'overNib',
-				mouseout: 'offNib',
-				scope: me
+				mouseout:  'offNib',
+				scope:     me
 			});
 		}
 
@@ -76,39 +76,39 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',
 						 me.mon(container.parent(), {
-							 scope: me,
+							 scope:       me,
 							 destroyable: true,
-							 click: 'trackLineAtEvent'
+							 click:       'trackLineAtEvent'
 						 }));
 
 			me.reader.on({
-							 scope: me,
-							 'iframe-click': 'trackLineAtEvent',
+							 scope:              me,
+							 'iframe-click':     'trackLineAtEvent',
 							 'iframe-mousedown': 'trackLineAtEvent'
 						 });
 		}
 		else {
 			me.reader.on('destroy', 'destroy',
 						 me.mon(container.parent(), {
-							 scope: me,
+							 scope:       me,
 							 destroyable: true,
-							 mousemove: 'mouseOver',
-							 mouseover: 'mouseOver',
-							 mouseout: 'mouseOut'
+							 mousemove:   'mouseOver',
+							 mouseover:   'mouseOver',
+							 mouseout:    'mouseOut'
 						 }));
 
 			me.reader.on({
 							 //no buffer
-							 'iframe-mouseout': 'mouseOut',
+							 'iframe-mouseout':  'mouseOut',
 							 'iframe-mousedown': 'suspendResolver',
-							 'iframe-mouseup': 'resumeResolver',
-							 scope: me
+							 'iframe-mouseup':   'resumeResolver',
+							 scope:              me
 						 });
 
 			me.reader.on({
-							 scope: me,
+							 scope:              me,
 							 'iframe-mousemove': 'mouseOver',
-							 buffer: 400
+							 buffer:             400
 						 });
 		}
 	},
@@ -173,18 +173,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		tabPanel.mask();
 
 		this.editor = Ext.widget('nti-editor', {
-			lineInfo: lineInfo || {},
-			ownerCmp: this.reader,
-			sharingValue: shareInfo,
-			floating: true,
-			renderTo: targetEl,
+			lineInfo:            lineInfo || {},
+			ownerCmp:            this.reader,
+			sharingValue:        shareInfo,
+			floating:            true,
+			renderTo:            targetEl,
 			enableShareControls: true,
-			enableTitle: true,
+			enableTitle:         true,
 			preventBringToFront: true,
-			listeners: {
+			listeners:           {
 				'deactivated-editor': 'destroy',
-				grew: function () {
-					if(Ext.is.iPad){
+				grew:                 function () {
+					if (Ext.is.iPad) {
 						return;
 					}
 					var h = this.getHeight(),
@@ -340,12 +340,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	copyClientRect: function (rect) {
 		return {
-			top: rect.top,
+			top:    rect.top,
 			bottom: rect.bottom,
 			height: rect.height,
-			left: rect.left,
-			right: rect.right,
-			width: rect.width
+			left:   rect.left,
+			right:  rect.right,
+			width:  rect.width
 		};
 	},
 

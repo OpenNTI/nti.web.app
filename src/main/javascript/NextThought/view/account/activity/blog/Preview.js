@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.activity.blog.Preview', {
 	extend: 'NextThought.view.account.activity.Preview',
-	alias: 'widget.activity-preview-personalblogentry',
+	alias:  'widget.activity-preview-personalblogentry',
 
 	requires: [
 		'NextThought.view.account.activity.note.Reply'
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 
 		this.mon(this.store, {
 			scope: this,
-			load: this.fillInReplies
+			load:  this.fillInReplies
 		});
 
 		this.store.load();
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 
 Ext.define('NextThought.view.account.activity.blog.Reply', {
 	extend: 'NextThought.view.account.activity.note.Reply',
-	alias: 'widget.activity-preview-blog-reply',
+	alias:  'widget.activity-preview-blog-reply',
 
 
 	deleteComment: function () {
@@ -89,8 +89,8 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 
 	navigateToComment: function () {
 		var rec = this.record,
-			containerRecord = this.up('[record]') && this.up('[record]').record,
-			me = this;
+				containerRecord = this.up('[record]') && this.up('[record]').record,
+				me = this;
 		if (!containerRecord) {
 			console.warn('could not find the parent record');
 			return;

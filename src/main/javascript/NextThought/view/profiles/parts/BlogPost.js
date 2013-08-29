@@ -1,75 +1,75 @@
-Ext.define('NextThought.view.profiles.parts.BlogPost',{
+Ext.define('NextThought.view.profiles.parts.BlogPost', {
 	extend: 'NextThought.view.forums.Topic',
-	alias: 'widget.profile-blog-post',
+	alias:  'widget.profile-blog-post',
 
-	requires:[
+	requires: [
 		'NextThought.view.profiles.parts.BlogComment'
 	],
 
-	cls: 'entry',
+	cls:         'entry',
 	defaultType: 'profile-blog-comment',
 
-	constructor: function(){
+	constructor: function () {
 		this.mixins.HeaderLock.disable.call(this);
 		this.callParent(arguments);
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function () {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData||{},{
-			showName: false,
-			headerCls: 'blog-post',
-			path:'Thoughts',
+		this.renderData = Ext.apply(this.renderData || {}, {
+			showName:        false,
+			headerCls:       'blog-post',
+			path:            'Thoughts',
 			showPermissions: true
 		});
 	},
 
-	renderSelectors:{
+	renderSelectors: {
 		publishStateEl: '.meta .state'
 	},
 
 
-	setPath: function(){
+	setPath: function () {
 		var me = this, tpl, title;
-		Ext.defer(function(){
-			if(me.rendered){
+		Ext.defer(function () {
+			if (me.rendered) {
 				tpl = new Ext.XTemplate(me.pathTpl);
 				title = me.record.get('title');
-				tpl.insertFirst(me.headerEl, {path:'Thoughts', title: title}, true);
+				tpl.insertFirst(me.headerEl, {path: 'Thoughts', title: title}, true);
 			}
 		}, 1);
 	},
 
 
-	buildStore: function(){
+	buildStore: function () {
 		this.store = NextThought.store.Blog.create({
-			storeId: this.record.get('Class')+'-'+this.record.get('NTIID')
-		});
+													   storeId: this.record.get('Class') + '-' + this.record.get('NTIID')
+												   });
 		this.store.proxy.url = this.getRecord().getLink('contents');
 
-		this.mon(this.store,{
+		this.mon(this.store, {
 			scope: this,
-			add: this.addComments,
-			load: this.loadComments
+			add:   this.addComments,
+			load:  this.loadComments
 		});
 
 		this.store.load();
 	},
 
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		var commentId;
 
-		if(!Ext.isEmpty(this.selectedSections)){
+		if (!Ext.isEmpty(this.selectedSections)) {
 			commentId = this.selectedSections[1];
-			console.debug('Do something with this/these:',this.selectedSections);
-			if(this.selectedSections[0]==='comments' && !commentId){
+			console.debug('Do something with this/these:', this.selectedSections);
+			if (this.selectedSections[0] === 'comments' && !commentId) {
 				this.scrollToComment = true;
 			}
-			else if(commentId){
+			else if (commentId) {
 				this.scrollToComment = commentId;
 			}
 		}
@@ -78,8 +78,8 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 	},
 
 
-	closeView: function(){
-		if(this.closedPost){
+	closeView: function () {
+		if (this.closedPost) {
 			return;
 		}
 
@@ -91,104 +91,105 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 //			bar.removeCls('animateIn animateOut').addCls('animateOut');
 //		}
 
-		this.getMainView().scrollTo('top',0,true);
+		this.getMainView().scrollTo('top', 0, true);
 
-		if(!this.destroying){
+		if (!this.destroying) {
 			this.destroy();
 		}
 	},
 
 
-	getScrollHeaderCutoff: function(){
+	getScrollHeaderCutoff: function () {
 		return 268;
 	},
 
 
-	navigationClick: function(e){
+	navigationClick: function (e) {
 		e.stopEvent();
 		var direction = Boolean(e.getTarget('.next')),
-			disabled = Boolean(e.getTarget('.disabled'));
+				disabled = Boolean(e.getTarget('.disabled'));
 
-		if(!disabled){
-			this.fireEvent('navigate-post',this, this.record, direction?'next':'prev');
+		if (!disabled) {
+			this.fireEvent('navigate-post', this, this.record, direction ? 'next' : 'prev');
 		}
 
 		return false;
 	},
 
 
-	getMainView: function(){
+	getMainView: function () {
 		return Ext.get('profile');
 	},
 
 
-	onDestroy: function(){
+	onDestroy: function () {
 		this.closeView();
 		this.callParent(arguments);
 	},
 
 
-	fireDeleteEvent: function(){ this.fireEvent('delete-post',this.record, this); },
+	fireDeleteEvent: function () { this.fireEvent('delete-post', this.record, this); },
 
 
-	destroyWarningMessage: function(){
+	destroyWarningMessage: function () {
 		return 'Deleting your thought will permanently remove it and any comments.';
 	},
 
 
-	onEditPost: function(e){
+	onEditPost: function (e) {
 		e.stopEvent();
-		this.fireEvent('show-post',this.record.get('ID'),'edit');
+		this.fireEvent('show-post', this.record.get('ID'), 'edit');
 	},
 
 
-	setPublishAndSharingState: function(){
+	setPublishAndSharingState: function () {
 		this.updateSharedWith('sharedWith', this.record.get('sharedWith'));
 	},
 
 
-	updateSharedWith: function(field, value){
-		SharingUtils.getShortSharingDisplayText(value, function(str){
-			if(this.publishStateEl){
+	updateSharedWith: function (field, value) {
+		SharingUtils.getShortSharingDisplayText(value, function (str) {
+			if (this.publishStateEl) {
 				this.publishStateEl.update(str);
 			}
 		}, this);
-		SharingUtils.getLongSharingDisplayText(value, function(str){
-			if(this.publishStateEl){
+		SharingUtils.getLongSharingDisplayText(value, function (str) {
+			if (this.publishStateEl) {
 				this.publishStateEl.set({'data-qtip': str});
 			}
 		}, this);
-		this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls':'addCls']('private');
+		this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls'
+				: 'addCls']('private');
 	},
 
 
-	addIncomingComment: function(item){
-		if(this.isVisible() && item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))){
+	addIncomingComment: function (item) {
+		if (this.isVisible() && item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))) {
 			this.addComments(this.store, [item]);
 		}
 	},
 
 
-	onReady: function(){
-		function scrollCommentIntoView(){
-			if(typeof(me.scrollToComment)==='boolean'){
+	onReady:            function () {
+		function scrollCommentIntoView() {
+			if (typeof(me.scrollToComment) === 'boolean') {
 				el = me.getTargetEl();
 			}
 			else {
-				el = me.el.down('[data-commentid="'+me.scrollToComment+'"]');
+				el = me.el.down('[data-commentid="' + me.scrollToComment + '"]');
 			}
 
-			if( el ) {
-				Ext.defer(el.scrollIntoView,500,el,[Ext.get('profile'), false, Globals.ANIMATE_NO_FLASH]);
+			if (el) {
+				Ext.defer(el.scrollIntoView, 500, el, [Ext.get('profile'), false, Globals.ANIMATE_NO_FLASH]);
 			}
 		}
 
-		console.debug('ready',arguments);
+		console.debug('ready', arguments);
 		var el, images, me = this;
-		if(this.scrollToComment){
+		if (this.scrollToComment) {
 			images = this.el.query('img');
-			Ext.each(images, function(img){
-				img.onload = function(){ scrollCommentIntoView(); };
+			Ext.each(images, function (img) {
+				img.onload = function () { scrollCommentIntoView(); };
 			});
 			scrollCommentIntoView();
 		}
@@ -196,9 +197,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 
 
 	//Search hit highlighting
-	getSearchHitConfig: function(){
+	getSearchHitConfig: function () {
 		return {
-			key: 'blog',
+			key:        'blog',
 			mainViewId: 'profile'
 		};
 	}

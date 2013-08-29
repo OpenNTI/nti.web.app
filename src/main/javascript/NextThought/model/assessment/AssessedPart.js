@@ -1,15 +1,15 @@
 Ext.define('NextThought.model.assessment.AssessedPart', {
-	extend: 'NextThought.model.Base',
+	extend:   'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'
 	],
-	fields: [
+	fields:   [
 		{ name: 'submittedResponse', type: 'auto' },
 		{ name: 'assessedValue', type: 'int' }
 	],
 
-	isCorrect: function(){
+	isCorrect: function () {
 		return this.get('assessedValue') === 1;
 	}
 });

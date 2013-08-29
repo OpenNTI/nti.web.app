@@ -1,54 +1,54 @@
-Ext.define('NextThought.view.contacts.oobe.Window',{
+Ext.define('NextThought.view.contacts.oobe.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.oobe-contact-window',
+	alias:  'widget.oobe-contact-window',
 
 	requires: [
 		'NextThought.layout.component.Natural'
 	],
 
-	cls: 'contacts-oobe-window',
-	width: 750,
-	height: 550,
-	autoShow: true,
+	cls:       'contacts-oobe-window',
+	width:     750,
+	height:    550,
+	autoShow:  true,
 	resizable: false,
 	draggable: false,
-	modal: true,
-	dialog: true,
+	modal:     true,
+	dialog:    true,
 
 	componentLayout: 'natural',
-	layout: 'auto',
-	items: [],
+	layout:          'auto',
+	items:           [],
 
-	childEls: ['body'],
+	childEls:    ['body'],
 	getTargetEl: function () {
 		return this.body;
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{
-			id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
-		},
-		{
-			cls: 'error', cn: [
-			{cls: 'label'},
-			{cls: 'message'}
-		]
-		},
-		{
-			cls: 'footer', cn: [
-				{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Add Contact'}
-			]
-		}
-	]),
+										{
+											id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
+										},
+										{
+											cls: 'error', cn: [
+											{cls: 'label'},
+											{cls: 'message'}
+										]
+										},
+										{
+											cls: 'footer', cn: [
+											{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+											{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Add Contact'}
+										]
+										}
+									]),
 
 	renderSelectors: {
-		footerEl: '.footer',
-		cancelEl: '.footer a.cancel',
+		footerEl:  '.footer',
+		cancelEl:  '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
 
-		errorEl: '.error',
-		errorLabelEl: '.error .label',
+		errorEl:        '.error',
+		errorLabelEl:   '.error .label',
 		errorMessageEl: '.error .message'
 	},
 
@@ -61,105 +61,105 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function () {
 		this.callParent();
 		this.store = new NextThought.store.UserSearch({
-			filters: [
-				//filter out communities, lists, groups and yourself. Just return users.
-				function (rec) {
-					return rec.get('Username') !== $AppConfig.contactsGroupName;
-				},
-				function (rec) {
-					return !rec.isCommunity;
-				},
-				function (rec) {
-					return !isMe(rec);
-				},
-				function (rec) {
-					return rec.get('ContainerId') === 'Users';
-				}
-			]
-		});
+														  filters: [
+															  //filter out communities, lists, groups and yourself. Just return users.
+															  function (rec) {
+																  return rec.get('Username') !== $AppConfig.contactsGroupName;
+															  },
+															  function (rec) {
+																  return !rec.isCommunity;
+															  },
+															  function (rec) {
+																  return !isMe(rec);
+															  },
+															  function (rec) {
+																  return rec.get('ContainerId') === 'Users';
+															  }
+														  ]
+													  });
 
 		var me = this;
 
 		this.add({
-			xtype:'simpletext',
-			placeholder: 'Search for contacts...',
-			listeners: {
-				scope: this,
-				buffer: 400,
-				changed: 'onSearch',
-				clear: 'reset'
-			}
-		},{
-			xtype: 'dataview',
-			store: this.store,
-			preserveScrollOnRefresh: true,
-			flex: 1,
+					 xtype:       'simpletext',
+					 placeholder: 'Search for contacts...',
+					 listeners:   {
+						 scope:   this,
+						 buffer:  400,
+						 changed: 'onSearch',
+						 clear:   'reset'
+					 }
+				 }, {
+					 xtype:                   'dataview',
+					 store:                   this.store,
+					 preserveScrollOnRefresh: true,
+					 flex:                    1,
 
-			overflowX: 'hidden',
-			overflowY: 'auto',
+					 overflowX: 'hidden',
+					 overflowY: 'auto',
 
-			selModel: {
-				allowDeselect : true,
-				mode :'SIMPLE',
-				pruneRemoved:false
-			},
+					 selModel: {
+						 allowDeselect: true,
+						 mode:          'SIMPLE',
+						 pruneRemoved:  false
+					 },
 
-			cls: 'oobe-contact-results',
-			overItemCls: 'over',
-			itemSelector: '.item',
+					 cls:          'oobe-contact-results',
+					 overItemCls:  'over',
+					 itemSelector: '.item',
 
-			tpl: Ext.DomHelper.markup({
-				tag: 'tpl', 'for': '.', cn: [
-					{ cls: 'item', cn: [
-						{tag: 'img', src: Ext.BLANK_IMAGE_URL, style:{backgroundImage:'url({avatarURL})'}},
-						{cls: 'name', html: '{displayName}'}
-					]}
-				]
-			}),
+					 tpl: Ext.DomHelper.markup({
+												   tag: 'tpl', 'for': '.', cn: [
+							 { cls: 'item', cn: [
+								 {tag: 'img', src: Ext.BLANK_IMAGE_URL, style: {backgroundImage: 'url({avatarURL})'}},
+								 {cls: 'name', html: '{displayName}'}
+							 ]}
+						 ]
+											   }),
 
-			noContactsEmptyText: Ext.DomHelper.markup({
-				cls: 'empty',
-				cn: [
-					{ tag: 'h3', html: 'No suggestions yet' },
-					{ html: 'Search above to add contacts.' }
-				]
-			}),
+					 noContactsEmptyText: Ext.DomHelper.markup({
+																   cls: 'empty',
+																   cn:  [
+																	   { tag: 'h3', html: 'No suggestions yet' },
+																	   { html: 'Search above to add contacts.' }
+																   ]
+															   }),
 
-			normalEmptyText: Ext.DomHelper.markup({
-				cls: 'empty',
-				cn: [
-					{ tag: 'h3', html: 'No results' },
-					{ html: 'Try again?' }
-				]
-			}),
+					 normalEmptyText: Ext.DomHelper.markup({
+															   cls: 'empty',
+															   cn:  [
+																   { tag: 'h3', html: 'No results' },
+																   { html: 'Try again?' }
+															   ]
+														   }),
 
-			friendsListStore: Ext.getStore('FriendsList'),
+					 friendsListStore: Ext.getStore('FriendsList'),
 
-			xhooks: {
-				getViewRange: function(){
-					var range = this.callParent(),
-						a = me.down('simpletext').getValue() || !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+					 xhooks: {
+						 getViewRange: function () {
+							 var range = this.callParent(),
+									 a = me.down('simpletext').getValue() || !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
 
-					this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
+							 this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
 
-					return range;
-				}
-			},
+							 return range;
+						 }
+					 },
 
-			listeners:{
-				scope: this,
-				selectionchange: 'onSelectionChange'
-			}
-		});
+					 listeners: {
+						 scope:           this,
+						 selectionchange: 'onSelectionChange'
+					 }
+				 });
 
-		Ext.defer(this.reset,1,this);
+		Ext.defer(this.reset, 1, this);
 	},
 
 
-	reset: function(){
+	reset: function () {
 		this.store.search('.');
 	},
 
@@ -175,8 +175,8 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	onSearch: function(query){
-		this.store.search(query||'.');
+	onSearch: function (query) {
+		this.store.search(query || '.');
 	},
 
 
@@ -188,10 +188,10 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 
 	showError: function (message, label) {
 		var el = this.getTargetEl(),
-			errorEl = this.errorEl;
+				errorEl = this.errorEl;
 
 		function syncHeight() {
-			if(!errorEl || !errorEl.getY || !el || !el.getY){
+			if (!errorEl || !errorEl.getY || !el || !el.getY) {
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -206,37 +206,38 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	onSelectionChange:function(sel,recs){
+	onSelectionChange: function (sel, recs) {
 		var e = this.confirmEl,
-			plural = (recs||[]).length !== 1;
-		if( e ){
+				plural = (recs || []).length !== 1;
+		if (e) {
 			e[Ext.isEmpty(recs) ? 'addCls' : 'removeCls']('disabled');
-			e.update('Add Contact'+(plural?'s':''));
+			e.update('Add Contact' + (plural ? 's' : ''));
 		}
 	},
 
 
-	onConfirm: function(e){
+	onConfirm: function (e) {
 		e.stopEvent();
 		var me = this,
-			v = me.down('dataview'),
-			selMod = v && v.getSelectionModel(),
-			t = e.getTarget('.confirm:not(.disabled)');
+				v = me.down('dataview'),
+				selMod = v && v.getSelectionModel(),
+				t = e.getTarget('.confirm:not(.disabled)');
 
-		function finish(success){
-			if( me.el && me.el.dom ){
+		function finish(success) {
+			if (me.el && me.el.dom) {
 				me.el.unmask();
 			}
 
-			if(success!==false){
+			if (success !== false) {
 				me.close();
 			} else {
 				me.showError('Could not save contacts');
 			}
 		}
-		if( t && selMod ){
+
+		if (t && selMod) {
 			me.el.mask('Saving...');
-			me.fireEvent('add-contacts',selMod.getSelection(),finish);
+			me.fireEvent('add-contacts', selMod.getSelection(), finish);
 		}
 	}
 });

@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.contacts.GroupButtons', {
-	extend: 'Ext.Component',
-	alias: 'widget.group-buttons',
+	extend:   'Ext.Component',
+	alias:    'widget.group-buttons',
 	requires: [
 	],
 
@@ -14,7 +14,7 @@ Ext.define('NextThought.view.contacts.GroupButtons', {
 
 	renderSelectors: {
 		createEl: '.create-group',
-		joinEl: '.join-group'
+		joinEl:   '.join-group'
 	},
 
 	afterRender: function () {

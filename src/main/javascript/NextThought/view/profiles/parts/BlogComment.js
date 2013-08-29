@@ -1,11 +1,11 @@
-Ext.define('NextThought.view.profiles.parts.BlogComment',{
+Ext.define('NextThought.view.profiles.parts.BlogComment', {
 	extend: 'NextThought.view.forums.Comment',
-	alias: 'widget.profile-blog-comment',
+	alias:  'widget.profile-blog-comment',
 
 	cls: 'blog-comment',
 
 
-	fireDeleteEvent: function(){
+	fireDeleteEvent: function () {
 		this.fireEvent('delete-post', this.record, this);
 	}
 

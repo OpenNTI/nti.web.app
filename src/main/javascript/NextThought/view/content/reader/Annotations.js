@@ -126,7 +126,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		var me = this,
 				container = Ext.DomHelper.insertAfter(
 						me.reader.getInsertionPoint().first(),
-						{ cls: 'annotation-gutter', onclick: 'void(0)', cn: {cls: 'column controls'} },
+						{
+							cls:     'annotation-gutter',
+							onclick: 'void(0)',
+							cn:      {cls: 'column controls'}
+						},
 						true);
 
 		me.gutterEl = container;
@@ -526,7 +530,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				}
 			};
 		}
-
 
 		//TODO - official way of redaction feature enablement:
 		//if($AppConfig.service.canRedact()){

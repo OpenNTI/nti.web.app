@@ -1,18 +1,18 @@
-Ext.define('NextThought.filter.FilterManager',{
+Ext.define('NextThought.filter.FilterManager', {
 	singleton: true,
-	requires: [
+	requires:  [
 		'Ext.util.Observable',
 		'NextThought.filter.Filter',
 		'NextThought.filter.FilterGroup'
 	],
 
-	constructor: function(){
+	constructor: function () {
 		this.scopes = {};
 	},
 
 
-	getScope: function( scope ){
-		if(!this.scopes[scope]){
+	getScope: function (scope) {
+		if (!this.scopes[scope]) {
 			this.scopes[scope] = new Ext.util.Observable();
 			this.scopes[scope].addEvents('change');
 		}
@@ -20,37 +20,39 @@ Ext.define('NextThought.filter.FilterManager',{
 	},
 
 
-	registerFilterListener: function retry(filterScope, fn, fnScope){
+	registerFilterListener: function retry(filterScope, fn, fnScope) {
 		var me = this, o, p, fc;
-		if( filterScope && filterScope.isComponent){
+		if (filterScope && filterScope.isComponent) {
 			p = filterScope.up('view-container');
-			if(p){
+			if (p) {
 				fc = p.down('content-filter');
-				if (fc){filterScope = fc.menu.getId();}
+				if (fc) {
+					filterScope = fc.menu.getId();
+				}
 			}
 			else {
-				setTimeout(function(){ retry.call(me,filterScope,fn,fnScope); },10);
+				setTimeout(function () { retry.call(me, filterScope, fn, fnScope); }, 10);
 				return;
 			}
 		}
 
 		o = this.getScope(filterScope);
-		o.on('change',fn,fnScope);
-		if(o.current){
+		o.on('change', fn, fnScope);
+		if (o.current) {
 			fn.call(fnScope, o.current);
 		}
 	},
 
 
-	setFilter: function(scope, filter){
+	setFilter: function (scope, filter) {
 		var o = this.getScope(scope);
 		o.current = filter;
-		o.fireEvent('change',filter);
+		o.fireEvent('change', filter);
 	},
 
 
-	getCurrentFilter: function(scope){
-		return this.getScope(scope||'default-filter-control').current;
+	getCurrentFilter: function (scope) {
+		return this.getScope(scope || 'default-filter-control').current;
 	},
 
 
@@ -62,10 +64,10 @@ Ext.define('NextThought.filter.FilterManager',{
 	 *
 	 * @param [scope] - id of the filter menu this filter is associated to.
 	 */
-	getServerListParams: function(scope){
+	getServerListParams: function (scope) {
 		var filter = this.getCurrentFilter(scope),
-			list = filter? filter.flatten() : [],
-			params = {};
+				list = filter ? filter.flatten() : [],
+				params = {};
 
 //        list.push({
 //            fieldName: '$className',
@@ -73,43 +75,49 @@ Ext.define('NextThought.filter.FilterManager',{
 //            value: 'NextThought.model.Bookmark'
 //        });
 
-		Ext.each(list,function(f){
+		Ext.each(list, function (f) {
 			var m;
-			if(f.fieldName==='sharedWith'){
+			if (f.fieldName === 'sharedWith') {
 				params.sharedWith = params.sharedWith || [];
 				params.sharedWith.push(f.value.getId ? f.value.getId() : f.value);
 				return;
 			}
-			if(f.fieldName==='Creator'){
-				if(isMe(f.value)){ params.me = true; }
-				else { params.groups = true; }
+			if (f.fieldName === 'Creator') {
+				if (isMe(f.value)) {
+					params.me = true;
+				}
+				else {
+					params.groups = true;
+				}
 				return;
 			}
-			try{
+			try {
 				m = Ext.ClassManager.get(f.value);
-				if(!m || !m.prototype || !m.prototype.mimeType ){return;}
+				if (!m || !m.prototype || !m.prototype.mimeType) {
+					return;
+				}
 				params[f.fieldName] = params[f.fieldName] || [];
 				params[f.fieldName].push(m.prototype.mimeType);
 			}
-			catch(e){
-				console.error(e.message,e);
+			catch (e) {
+				console.error(e.message, e);
 			}
 		});
 
-		if(Ext.isArray(params.$className)){
+		if (Ext.isArray(params.$className)) {
 			params.accept = params.$className.join(',');
 			delete params.$className;
 		}
 
-		if(params.me && params.groups){
+		if (params.me && params.groups) {
 			//both true
 			params.filter = 'IFollowAndMe';
 		}
-		else if(params.groups){
+		else if (params.groups) {
 			//groups true
 			params.filter = 'IFollow';
 		}
-		else if(params.me){
+		else if (params.me) {
 			//only me
 			params.filter = 'MeOnly';
 		}
@@ -120,6 +128,6 @@ Ext.define('NextThought.filter.FilterManager',{
 
 
 
-},function(){
+}, function () {
 	window.FilterManager = this;
 });

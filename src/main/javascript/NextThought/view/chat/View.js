@@ -1,66 +1,66 @@
 Ext.define('NextThought.view.chat.View', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.chat-view',
+	alias:  'widget.chat-view',
 
 	requires: [
 		'NextThought.view.chat.Log',
 		'NextThought.view.chat.Entry'
 	],
 
-	header: false,
-	frame: false,
-	border: false,
+	header:     false,
+	frame:      false,
+	border:     false,
 	autoScroll: false,
-	overflowX: 'hidden',
-	overflowY: 'hidden',
+	overflowX:  'hidden',
+	overflowY:  'hidden',
 
-	cls: 'chat-view',
-	ui: 'chat-view',
-	layout: {
+	cls:      'chat-view',
+	ui:       'chat-view',
+	layout:   {
 		type: 'anchor'
 	},
 	defaults: {anchor: '100%'},
-	items: [
+	items:    [
 		{ xtype: 'chat-log-view', anchor: '0 -51' },
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn: [
+			cn:                                                   [
 				{cls: 'error-desc'}
 			]}
 		},
 		{
-			cls: 'entry-card',
-			border: 0,
+			cls:       'entry-card',
+			border:    0,
 			entryCard: true,
-			layout: 'card',
-			items: [
+			layout:    'card',
+			items:     [
 				{ xtype: 'chat-entry', itemId: 'entry', mainEntry: true },
 				{
-					xtype: 'container',
+					xtype:  'container',
 					layout: {
-						type: 'hbox',
-						pack: 'end',
+						type:  'hbox',
+						pack:  'end',
 						align: 'middle'
 					},
 					itemId: 'buttons',
-					cls: 'mod-buttons',
-					items: [
+					cls:    'mod-buttons',
+					items:  [
 						{
-							xtype: 'button',
-							ui: 'flat',
-							text: 'Cancel',
-							scale: 'large',
+							xtype:   'button',
+							ui:      'flat',
+							text:    'Cancel',
+							scale:   'large',
 							handler: function (btn) {
 								this.up('chat-window').onFlagToolClicked();
 							}
 						},
 						{
-							xtype: 'button',
+							xtype:      'button',
 							flagButton: true,
-							ui: 'caution',
-							text: 'Report',
-							scale: 'large',
-							disabled: true,
-							handler: function () {
+							ui:         'caution',
+							text:       'Report',
+							scale:      'large',
+							disabled:   true,
+							handler:    function () {
 								this.up('chat-view').flagMessages();
 							}
 						}
@@ -115,8 +115,8 @@ Ext.define('NextThought.view.chat.View', {
 		}
 
 		var me = this, activeTimer = 120000,
-			goneTimer = 600000,
-			room = this.up('.chat-window') ? this.up('.chat-window').roomInfo : null;
+				goneTimer = 600000,
+				room = this.up('.chat-window') ? this.up('.chat-window').roomInfo : null;
 		if (!room) {
 			console.log("Error: Cannot find the roomInfo, so we drop the chat status change");
 			return;
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.chat.View', {
 
 	flagMessages: function () {
 		var allEntries = this.query('chat-log-entry'),
-			allFlaggedMessages = [];
+				allFlaggedMessages = [];
 		Ext.each(allEntries, function (e) {
 			if (e.isFlagged()) {
 				allFlaggedMessages.push(e);
@@ -189,8 +189,8 @@ Ext.define('NextThought.view.chat.View', {
 
 	toggleModerationButtons: function () {
 		var layout = this.down('[entryCard]').getLayout(),
-			activeId = layout.getActiveItem().itemId,
-			toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
+				activeId = layout.getActiveItem().itemId,
+				toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
 
 		layout.setActiveItem(toggledId);
 		this.updateLayout();
@@ -199,7 +199,7 @@ Ext.define('NextThought.view.chat.View', {
 
 	showError: function (errorObject) {
 		var box = this.down('[name=error]'),
-			errorText = errorObject.message || 'An unknown error occurred. Please try again.';
+				errorText = errorObject.message || 'An unknown error occurred. Please try again.';
 		//make main error field show up
 		box.el.down('.error-desc').update(errorText);
 		box.show();
@@ -210,7 +210,7 @@ Ext.define('NextThought.view.chat.View', {
 
 	clearError: function () {
 		var box = this.down('[name=error]'),
-			log = this.down('chat-log-view');
+				log = this.down('chat-log-view');
 		log.anchor = log.initialConfig.anchor;
 		box.hide();
 	},
@@ -218,7 +218,7 @@ Ext.define('NextThought.view.chat.View', {
 
 	reanchorLog: function () {
 		var log = this.down('chat-log-view'),
-			foot = 0;
+				foot = 0;
 
 		this.items.each(function (cmp) {
 			if (cmp !== log) {

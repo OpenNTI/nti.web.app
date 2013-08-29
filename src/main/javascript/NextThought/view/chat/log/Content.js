@@ -1,57 +1,57 @@
 Ext.define('NextThought.view.chat.log.Content', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.chat-content-log-entry',
+	alias:  'widget.chat-content-log-entry',
 
 
 	requires: [
-        'NextThought.cache.LocationMeta'
+		'NextThought.cache.LocationMeta'
 	],
 
 
 	renderTpl: new Ext.XTemplate(
-		'<div class="x-chat-content-log-entry">',
+			'<div class="x-chat-content-log-entry">',
 			'<div class="timestamp">{time}</div>',
 			'<img src="{icon}" width=16 height=16"/>',
 			'<div>',
-				'<span class="name">{name}</span> ',
-				'<span class="body-text">sent content {body}</span> ',
-				'<img src="{locationicon}" class="contentimage" width=90%/>',
+			'<span class="name">{name}</span> ',
+			'<span class="body-text">sent content {body}</span> ',
+			'<img src="{locationicon}" class="contentimage" width=90%/>',
 			'</div>',
-		'</div>'
-		),
+			'</div>'
+	),
 
 
 	renderSelectors: {
-		box: 'div.x-chat-content-log-entry',
-		name: '.x-chat-content-log-entry span.name',
-		text: 'span.body-text',
-		time: 'div.timestamp',
-		icon: 'img[width=16]',
+		box:          'div.x-chat-content-log-entry',
+		name:         '.x-chat-content-log-entry span.name',
+		text:         'span.body-text',
+		time:         'div.timestamp',
+		icon:         'img[width=16]',
 		locationicon: 'img.contentimage'
 
 	},
 
 
-	initComponent: function(){
-        var me = this;
+	initComponent: function () {
+		var me = this;
 		me.callParent(arguments);
 
 		//request the location that has been sent, save it for use later
 		me.ntiid = me.message.get('body').ntiid;
 
-        LocationMeta.getMeta(this.ntiid, function(meta){
-            me.location = meta;
-            me.clickable = me.location ? true : false;
-            me.update();
-        });
+		LocationMeta.getMeta(this.ntiid, function (meta) {
+			me.location = meta;
+			me.clickable = me.location ? true : false;
+			me.update();
+		});
 	},
 
-	update: function(){
+	update: function () {
 		var me = this,
-			href,
-			icon, root, username;
+				href,
+				icon, root, username;
 
-		if(this.location){
+		if (this.location) {
 			icon = this.location.icon;
 			root = this.location.root;
 
@@ -73,11 +73,11 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.renderData.body = this.location ? this.location.label || this.location.title : '';
 		me.renderData.locationicon = href;
 
-        if(me.rendered){
-            me.renderTpl.overwrite(me.el, me.renderData);
-            me.applyRenderSelectors();
-            me.attachClick();
-        }
+		if (me.rendered) {
+			me.renderTpl.overwrite(me.el, me.renderData);
+			me.applyRenderSelectors();
+			me.attachClick();
+		}
 
 		username = this.message.get('Creator');
 		UserRepository.getUser(username, me.fillInUser, me);
@@ -85,24 +85,24 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.addCls('nooid');
 	},
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		this.attachClick();
 	},
 
 
-    attachClick: function(){
-        if (this.clickable) {
-            this.el.on('click', function(){this.fireEvent('click', this);}, this);
-        }
-    },
+	attachClick: function () {
+		if (this.clickable) {
+			this.el.on('click', function () {this.fireEvent('click', this);}, this);
+		}
+	},
 
 
-    fillInUser: function(u) {
+	fillInUser: function (u) {
 		var name = u.get('alias') || u.get('Username'),
-			i = u.get('avatarURL');
+				i = u.get('avatarURL');
 
-		if(this.rendered){
+		if (this.rendered) {
 			this.icon.set({src: i});
 			this.name.update(name);
 		}

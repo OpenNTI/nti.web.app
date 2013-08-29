@@ -1,18 +1,18 @@
 Ext.define('NextThought.model.Change', {
-	extend: 'NextThought.model.Base',
+	extend:   'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.GroupByTime'
 	],
 
 	idProperty: 'ID',
-	fields: [
+	fields:     [
 		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
 		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'}
 	],
 
-	getItemValue: function(field) {
+	getItemValue: function (field) {
 		var i = this.get('Item');
 
 		if (!i) {

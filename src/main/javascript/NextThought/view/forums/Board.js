@@ -8,16 +8,16 @@
  * to be handled in the controller)
  */
 Ext.define('NextThought.view.forums.Board', {
-	extend: 'Ext.view.View',
-	alias: ['widget.forums-board', 'widget.forums-forum-list'],
-	mixins: {
+	extend:   'Ext.view.View',
+	alias:    ['widget.forums-board', 'widget.forums-forum-list'],
+	mixins:   {
 		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
 	},
 	requires: [
 		'NextThought.util.Time'
 	],
 
-	cls: 'forum-list list',
+	cls:          'forum-list list',
 	itemSelector: '.forum-list-item',
 
 	listeners: {
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.forums.Board', {
 	},
 
 	headerTpl: Ext.DomHelper.createTemplate({
-		cls: 'header-container', cn: {
+												cls: 'header-container', cn: {
 			cls: 'forum-forum-list header', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'new-forum', html: 'New Forum'}
@@ -37,10 +37,10 @@ Ext.define('NextThought.view.forums.Board', {
 				{ cls: 'path', cn: ['{path} / ', {tag: 'span', cls: 'title-part', html: '{title}'}]}
 			]
 		}
-	}),
+											}),
 
 	tpl: Ext.DomHelper.markup({
-		tag: 'tpl', 'for': '.', cn: [
+								  tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'forum-list-item', cn: [
 				{ tag: 'tpl', 'if': 'title == \'Forum\'', cn: { cls: 'title', html: '{Creator} / {title}' } },
 				{ tag: 'tpl', 'if': 'title != \'Forum\'', cn: { cls: 'title', html: '{title}' } },
@@ -62,7 +62,7 @@ Ext.define('NextThought.view.forums.Board', {
 				]}
 			]}
 		]
-	}),
+							  }),
 
 
 	collectData: function () {
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.forums.Board', {
 		var map = {}, me = this;
 		this.store.each(function (r) {
 			var desc = r.get('NewestDescendant'),
-				creator = desc ? desc.get('Creator') : undefined;
+					creator = desc ? desc.get('Creator') : undefined;
 
 			if (creator && !creator.isModel) {
 				if (Ext.isArray(map[creator])) {
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.forums.Board', {
 			var recs = map[resolvedUser.get('Username')] || [];
 			Ext.each(recs, function (rec) {
 				var desc = rec.get('NewestDescendant'),
-					recIdx = -1;
+						recIdx = -1;
 				if (desc) {
 					desc.set('Creator', resolvedUser);
 					//When a field is another model object and one of it's properties change,
@@ -146,10 +146,10 @@ Ext.define('NextThought.view.forums.Board', {
 			this.mon(this.headerEl, 'click', this.onHeaderClick, this);
 
 			this.on({
-				'activate': 'onActivate',
-				'itemclick': 'onItemClick',
-				'beforeitemclick': 'onBeforeItemClick'
-			});
+						'activate':        'onActivate',
+						'itemclick':       'onItemClick',
+						'beforeitemclick': 'onBeforeItemClick'
+					});
 		}
 
 		if (Ext.is.iPad) {
@@ -179,9 +179,9 @@ Ext.define('NextThought.view.forums.Board', {
 
 	onBeforeItemClick: function (record, item, idx, event, opts) {
 		var t = event && event.getTarget && event.getTarget(),
-			edit = t && event.getTarget('.edit'),
-			d = record.get && record.get('NewestDescendant'),
-			topicHref;
+				edit = t && event.getTarget('.edit'),
+				d = record.get && record.get('NewestDescendant'),
+				topicHref;
 
 		if (edit) {
 			event && event.stopEvent && event.stopEvent();
@@ -195,7 +195,7 @@ Ext.define('NextThought.view.forums.Board', {
 			}
 
 			var target = Ext.fly(tar),
-				sel = '.descendant';
+					sel = '.descendant';
 
 			return target.is(sel) || target.parent(sel, true);
 		}
@@ -208,15 +208,15 @@ Ext.define('NextThought.view.forums.Board', {
 
 			if (d.isPost) {
 				$AppConfig.service.getObject(d.get('ContainerId'),
-					function (o) {
-						this.fireEvent('show-topic', o, d.isComment ? d.get('ID') : undefined);
-						delete this.processingDescendant;
-					},
-					function () {
-						console.error('An error occurred navigating to newest descendant', arguments);
-						delete this.processingDescendant;
-					},
-					this);
+											 function (o) {
+												 this.fireEvent('show-topic', o, d.isComment ? d.get('ID') : undefined);
+												 delete this.processingDescendant;
+											 },
+											 function () {
+												 console.error('An error occurred navigating to newest descendant', arguments);
+												 delete this.processingDescendant;
+											 },
+											 this);
 			}
 			else if (d.isTopic) {
 				this.processingDescendant = true;

@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.course.View', {
-	extend: 'NextThought.view.navigation.AbstractPanel',
-	alias: 'widget.course',
-	ui: 'course',
+	extend:   'NextThought.view.navigation.AbstractPanel',
+	alias:    'widget.course',
+	ui:       'course',
 	requires: [
 		'NextThought.view.course.outline.View',
 		'NextThought.view.course.overview.View'
@@ -9,7 +9,7 @@ Ext.define('NextThought.view.course.View', {
 
 
 	navigation: {xtype: 'course-outline'},
-	body: {xtype: 'course-overview', delegate: ['course course-outline']},
+	body:       {xtype: 'course-overview', delegate: ['course course-outline']},
 
 
 	onNavigateComplete: function (pageInfo) {
@@ -20,8 +20,8 @@ Ext.define('NextThought.view.course.View', {
 		}
 
 		var l = pageInfo && ContentUtils.getLocation(pageInfo),
-			t = l && l.title,
-			course = t && t.getId();
+				t = l && l.title,
+				course = t && t.getId();
 
 		if (this.currentCourse !== course) {
 			this.fireEvent('courseChanged', pageInfo, course);

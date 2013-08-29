@@ -1,24 +1,24 @@
 Ext.define('NextThought.view.menus.JumpTo', {
-	extend: 'Ext.menu.Menu',
-	alias: 'widget.jump-menu',
-	ui: 'nt',
-	plain: true,
+	extend:        'Ext.menu.Menu',
+	alias:         'widget.jump-menu',
+	ui:            'nt',
+	plain:         true,
 	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
-	minWidth: 200,
-	maxWidth: 500,
+	shadow:        false,
+	frame:         false,
+	border:        false,
+	hideMode:      'display',
+	minWidth:      200,
+	maxWidth:      500,
 
 	layout: {
-		type: 'vbox',
-		align: 'stretch',
+		type:            'vbox',
+		align:           'stretch',
 		overflowHandler: 'Scroller'
 	},
 
 	defaults: {
-		ui: 'jumpto-menuitem',
+		ui:    'jumpto-menuitem',
 		plain: true
 	},
 
@@ -50,7 +50,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
 		this.callParent(arguments);
 		if (!Ext.is.iPad) { // iPad doesn't need/want these
 			this.mon(this, {
-				scope: this,
+				scope:        this,
 				'mouseleave': this.startHide,
 				'mouseenter': this.stopHide
 			});

@@ -1,8 +1,8 @@
 Ext.define('NextThought.view.course.overview.View', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-overview',
-	ui: 'course',
-	cls: 'course-overview',
+	alias:  'widget.course-overview',
+	ui:     'course',
+	cls:    'course-overview',
 
 	requires: [
 		'NextThought.view.course.overview.parts.*'
@@ -11,28 +11,28 @@ Ext.define('NextThought.view.course.overview.View', {
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
-		'video': 'Videos',
+		'video':       'Videos',
 		'discussions': 'Discussions',
-		'additional': 'Additional Resources',
-		'required': 'Required Resources',
+		'additional':  'Additional Resources',
+		'required':    'Required Resources',
 		'assessments': 'Assessments'
 	},
 
 
 	SECTION_TYPE_MAP: {
-		'course-overview-ntivideo': 'video',
-		'course-overview-content': 'additional',
-		'course-overview-discussion': 'discussions',
-		'course-overview-externallink': 'additional',
+		'course-overview-ntivideo':      'video',
+		'course-overview-content':       'additional',
+		'course-overview-discussion':    'discussions',
+		'course-overview-externallink':  'additional',
 		'course-overview-naquestionset': 'assessments'
 	},
 
 
 	SECTION_CONTAINER_MAP: {
-		'video': 'course-overview-video-section',
+		'video':       'course-overview-video-section',
 		'discussions': 'course-overview-section',
-		'additional': 'course-overview-section',
-		'required': 'course-overview-section',
+		'additional':  'course-overview-section',
+		'required':    'course-overview-section',
 		'assessments': 'course-overview-section'
 	},
 
@@ -71,12 +71,12 @@ Ext.define('NextThought.view.course.overview.View', {
 
 	onNodeSelected: function (s, r) {
 		var me = this,
-			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
-			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
-			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
-			locInfo,
-			items = [],
-			sections = {};
+				SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
+				SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
+				SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
+				locInfo,
+				items = [],
+				sections = {};
 		//console.debug('Select???',arguments);
 
 		if (!r || r.getId() === me.currentPage) {
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.course.overview.View', {
 					if (!c) {
 						c = sections[t] = {
 							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
-							type: t,
+							type:  t,
 							title: SECTION_TITLE_MAP[t] || 'Section ' + t,
 							items: []
 						};
@@ -119,14 +119,14 @@ Ext.define('NextThought.view.course.overview.View', {
 		});
 
 		me.add([
-			{xtype: 'course-overview-header', record: r}
-		].concat(items));
+				   {xtype: 'course-overview-header', record: r}
+			   ].concat(items));
 	},
 
 
 	getComponentForNode: function (node, info, rec) {
 		var type = node && node.nodeName,
-			section = (node && node.getAttribute('section')) || null;
+				section = (node && node.getAttribute('section')) || null;
 
 		if (/^content:related$/i.test(type) || /^object$/i.test(type)) {
 			type = node.getAttribute('type') || node.getAttribute('mimeType');

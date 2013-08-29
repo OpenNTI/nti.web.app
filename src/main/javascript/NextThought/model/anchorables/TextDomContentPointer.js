@@ -7,24 +7,24 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	],
 
 	config: {
-		ancestor: {},
-		contexts: [],
+		ancestor:   {},
+		contexts:   [],
 		edgeOffset: 0
 	},
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function (o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.TextDomContentPointer.create({
-				role: o.role,
-				contexts: NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
-				edgeOffset:o.edgeOffset,
-				ancestor: cp.createFromObject(o.ancestor)
-			});
+																				  role:       o.role,
+																				  contexts:   NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
+																				  edgeOffset: o.edgeOffset,
+																				  ancestor:   cp.createFromObject(o.ancestor)
+																			  });
 		}
 	},
 
-	constructor: function(o){
+	constructor: function (o) {
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
@@ -33,14 +33,14 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	primaryContext: function(){
-	   if(this.getContexts().length > 0){
-			   return this.getContexts()[0];
-	   }
-	   return null;
+	primaryContext: function () {
+		if (this.getContexts().length > 0) {
+			return this.getContexts()[0];
+		}
+		return null;
 	},
 
-	validateAncestor: function(a) {
+	validateAncestor: function (a) {
 		if (!a || !(a instanceof NextThought.model.anchorables.DomContentPointer)) {
 			Ext.Error.raise('Ancestor must be supplied');
 		}
@@ -50,7 +50,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	validateContexts: function(contexts) {
+	validateContexts: function (contexts) {
 		if (!contexts) {
 			Ext.Error.raise('Must supply TextContexts');
 		}
@@ -60,16 +60,16 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	validateEdgeOffset: function(o) {
+	validateEdgeOffset: function (o) {
 		/*
-		if (!o || o < 0) {
-			Ext.Error.raise('Offset must exist and be 0 or more');
-		}
-		*/
+		 if (!o || o < 0) {
+		 Ext.Error.raise('Offset must exist and be 0 or more');
+		 }
+		 */
 	},
 
 
-	locateRangePointInAncestor: function(ancestorNode, startResult){
+	locateRangePointInAncestor: function (ancestorNode, startResult) {
 		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

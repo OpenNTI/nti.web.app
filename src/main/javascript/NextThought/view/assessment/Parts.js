@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.assessment.Parts',{
+Ext.define('NextThought.view.assessment.Parts', {
 	extend: 'Ext.panel.Panel',
-	alias: 'widget.question-parts',
+	alias:  'widget.question-parts',
 
 	requires: [
 		'NextThought.view.assessment.PartContent',
@@ -16,27 +16,27 @@ Ext.define('NextThought.view.assessment.Parts',{
 	],
 
 	plain: true,
-	cls: 'parts',
-	ui: 'assessment',
+	cls:   'parts',
+	ui:    'assessment',
 
 
-	setQuestionAndPart: function(question,questionSet,individual, tabIndexTracker, answerLabel){
+	setQuestionAndPart: function (question, questionSet, individual, tabIndexTracker, answerLabel) {
 		var parts = question.get('parts'),
-			multiPart = (parts.length > 1);
+				multiPart = (parts.length > 1);
 
 		this.removeAll(true);
 
-		this[individual?'removeCls':'addCls']('part-of-set');
+		this[individual ? 'removeCls' : 'addCls']('part-of-set');
 
-		if(multiPart) {
+		if (multiPart) {
 			this.setMultiPart(question, questionSet, parts, tabIndexTracker);
-			if(individual){
+			if (individual) {
 				this.add(
-					{
-						xtype:'assessment-multipart-submission',
-						question: question,
-						tabIndexTracker: tabIndexTracker
-					}
+						{
+							xtype:           'assessment-multipart-submission',
+							question:        question,
+							tabIndexTracker: tabIndexTracker
+						}
 				);
 			}
 			return;
@@ -46,95 +46,95 @@ Ext.define('NextThought.view.assessment.Parts',{
 	},
 
 
-	setSinglePart: function(question, questionSet, part, tabIndexTracker, answerLabel) {
-		var cls = (part && part.get)? part.get('Class') : 'unsupported',
-			type = 'question-input-'+cls.toLowerCase();
+	setSinglePart: function (question, questionSet, part, tabIndexTracker, answerLabel) {
+		var cls = (part && part.get) ? part.get('Class') : 'unsupported',
+				type = 'question-input-' + cls.toLowerCase();
 
 		//Set the answerLabel on the model.
-		if(answerLabel){
+		if (answerLabel) {
 			part.set('answerLabel', answerLabel);
 		}
-	//	console.log('set answer label to: ', answerLabel);
+		//	console.log('set answer label to: ', answerLabel);
 
 		try {
 			this.add({
-				reader: this.up('[reader]').reader,
-				xtype: type,
-				question: question,
-				part: part,
-				ordinal: 0,
-				questionSet: questionSet,
-				tabIndexTracker: tabIndexTracker
-			});
+						 reader:          this.up('[reader]').reader,
+						 xtype:           type,
+						 question:        question,
+						 part:            part,
+						 ordinal:         0,
+						 questionSet:     questionSet,
+						 tabIndexTracker: tabIndexTracker
+					 });
 		}
-		catch(e){
-			console.warn('missing question type: '+type);
+		catch (e) {
+			console.warn('missing question type: ' + type);
 		}
 	},
 
 
-	setMultiPart: function(question, questionSet, parts, tabIndexTracker) {
+	setMultiPart: function (question, questionSet, parts, tabIndexTracker) {
 		var type, part, items, i;
 
 		this.addCls('multipart');
 
-		for (i=0; i < parts.length; i++){
+		for (i = 0; i < parts.length; i++) {
 			part = parts[i];
 			items = [];
-			type = 'question-input-'+part.get('Class').toLowerCase();
-			items.push({xtype: 'part-content', part: part, ordinal:i});
+			type = 'question-input-' + part.get('Class').toLowerCase();
+			items.push({xtype: 'part-content', part: part, ordinal: i});
 			items.push({
-				xtype: type,
-				reader: this.up('[reader]').reader,
-				question: question,
-				part: part,
-				ordinal: i,
-				questionSet: questionSet,
-				tabIndexTracker: tabIndexTracker
-			});
+						   xtype:           type,
+						   reader:          this.up('[reader]').reader,
+						   question:        question,
+						   part:            part,
+						   ordinal:         i,
+						   questionSet:     questionSet,
+						   tabIndexTracker: tabIndexTracker
+					   });
 
 			try {
 				this.add({
-					xtype: 'container',
-					layout: 'auto',
-					cls: 'part-container',
-					items: items
-				});
+							 xtype:  'container',
+							 layout: 'auto',
+							 cls:    'part-container',
+							 items:  items
+						 });
 			}
-			catch(e){
-				console.warn('missing question type: '+type);
+			catch (e) {
+				console.warn('missing question type: ' + type);
 			}
 		}
 	},
 
 
-	updateWithResults: function(assessedQuestion) {
+	updateWithResults: function (assessedQuestion) {
 		var parts = this.query('[question]');
-		Ext.each(parts, function(part){part.updateWithResults(assessedQuestion);});
+		Ext.each(parts, function (part) {part.updateWithResults(assessedQuestion);});
 	},
 
-	reset: function(keepAnswers){
+	reset: function (keepAnswers) {
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
-		Ext.each(inputs, function(input){
+		Ext.each(inputs, function (input) {
 			var val;
-			if(keepAnswers && input.getValue){
+			if (keepAnswers && input.getValue) {
 				val = input.getValue();
 			}
 			input.reset();
-			if(keepAnswers && input.setValue){
+			if (keepAnswers && input.setValue) {
 				input.setValue(val);
 				input.focus();
 			}
-			if(input.enableSubmission){
+			if (input.enableSubmission) {
 				input.enableSubmission();
 			}
 		});
 	},
 
-	afterRender: function(){
+	afterRender: function () {
 		this.callParent(arguments);
 		var me = this;
 		//updatelayout because sometimes this can render before other things, causing overlap
-		setTimeout(function(){me.updateLayout();}, 500);
+		setTimeout(function () {me.updateLayout();}, 500);
 	}
 });

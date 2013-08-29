@@ -1,80 +1,82 @@
-Ext.define('NextThought.store.Contacts',{
+Ext.define('NextThought.store.Contacts', {
 	extend: 'Ext.data.Store',
-	model: 'NextThought.model.forums.PersonalBlogEntry',
+	model:  'NextThought.model.forums.PersonalBlogEntry',
 
-	proxy: 'memory',
-	remoteSort: false,
+	proxy:        'memory',
+	remoteSort:   false,
 	remoteFilter: false,
-	remoteGroup: false,
+	remoteGroup:  false,
 	sortOnFilter: true,
-	sorters:[{
-		property: 'displayName',
-		direction: 'ASC',
-		transform: function(value) { return value.toLowerCase(); }
-	}],
+	sorters:      [
+		{
+			property:  'displayName',
+			direction: 'ASC',
+			transform: function (value) { return value.toLowerCase(); }
+		}
+	],
 
-	bindFriendsListAndPresence: function(fs, ps){
+	bindFriendsListAndPresence: function (fs, ps) {
 		var flListeners = {
-				scope: this,
-				'contacts-added': 'addContacts',
-				'contacts-removed': 'removeContacts',
-				'contacts-refreshed': 'refreshContacts',
-				'load': 'friendsListStoreLoad'
-			},
-			piListeners = {
-				scope: this,
-				'presence-changed': 'onPresenceChange'
-			};
+					scope:                this,
+					'contacts-added':     'addContacts',
+					'contacts-removed':   'removeContacts',
+					'contacts-refreshed': 'refreshContacts',
+					'load':               'friendsListStoreLoad'
+				},
+				piListeners = {
+					scope:              this,
+					'presence-changed': 'onPresenceChange'
+				};
 
 
-		if(this.flStore){
+		if (this.flStore) {
 			this.flStore.un(flListeners);
 		}
 
-		if(this.piStore){
+		if (this.piStore) {
 			this.piStore.un(piListeners);
 		}
 
 		this.flStore = fs;
 		this.piStore = ps;
 
-		if(this.flStore){
+		if (this.flStore) {
 			this.flStore.on(flListeners);
 		}
 
-		if(this.piStore){
+		if (this.piStore) {
 			this.piStore.on(piListeners);
 		}
 	},
 
-	friendsListStoreLoad: function(store, records){
+	friendsListStoreLoad: function (store, records) {
 		this.parentLoaded = true;
 		this.fireEvent('parent-store-loaded', store, records);
 	},
 
-	onPresenceChange: function(username, rec){
-		if(!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))){
+	onPresenceChange: function (username, rec) {
+		if (!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))) {
 			return;
 		}
 		var fn = rec.isOnline && rec.isOnline() ? 'addContacts' : 'removeContacts';
 		this[fn]([username]);
 	},
 
-	contains: function(id){
+	contains: function (id) {
 		return 0 <= this.indexOfId(id);
 	},
 
-	indexOfId: function(id){
-		return (this.snapshot || this.data).findIndexBy(function(rec){
+	indexOfId: function (id) {
+		return (this.snapshot || this.data).findIndexBy(function (rec) {
 			return rec.isEqual(rec.get('Username'), id);
 		}, this, 0);
 	},
 
-	doesItemPassFilter: function(item){
+	doesItemPassFilter: function (item) {
 		var pass = true;
 
-		this.filters.each(function(filter){
-			if(!filter.filterFn(item)){
+		this.filters.each(function (filter) {
+			if (!filter.filterFn(item)) {
 				pass = false;
 			}
 			return pass;
@@ -83,34 +85,34 @@ Ext.define('NextThought.store.Contacts',{
 		return pass;
 	},
 
-	addContacts: function(contacts){
+	addContacts: function (contacts) {
 		var toAdd = [], me = this;
-		UserRepository.getUser(contacts, function(users){
-			Ext.each(users, function(user){
-				if(!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())){
+		UserRepository.getUser(contacts, function (users) {
+			Ext.each(users, function (user) {
+				if (!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())) {
 					toAdd.push(user);
 				}
 			});
-			if(!Ext.isEmpty(toAdd)){
+			if (!Ext.isEmpty(toAdd)) {
 				me.add(toAdd);
 			}
 		});
 	},
 
-	removeContacts: function(contacts){
+	removeContacts: function (contacts) {
 		var toRemove = [], me = this;
-		Ext.each(contacts, function(contact){
+		Ext.each(contacts, function (contact) {
 			var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
-			if(idx >= 0){
-				toRemove.push((me.snapshot||me.data).getAt(idx));
+			if (idx >= 0) {
+				toRemove.push((me.snapshot || me.data).getAt(idx));
 			}
 		});
-		if(!Ext.isEmpty(toRemove)){
+		if (!Ext.isEmpty(toRemove)) {
 			me.remove(toRemove);
 		}
 	},
 
-	refreshContacts: function(listStore){
+	refreshContacts: function (listStore) {
 		//TODO smarter merge here
 		this.removeAll();
 		this.addContacts(listStore.getContacts());

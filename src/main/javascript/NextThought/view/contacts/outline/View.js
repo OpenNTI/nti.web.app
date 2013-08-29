@@ -1,17 +1,17 @@
 Ext.define('NextThought.view.contacts.outline.View', {
 	extend: 'Ext.view.View',
-	alias: 'widget.contacts-outline',
+	alias:  'widget.contacts-outline',
 
-	ui: 'nav',
-	cls: 'nav-outline make-white',
+	ui:                      'nav',
+	cls:                     'nav-outline make-white',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header', cn: [
-			'{outlineLabel}'
-		]},
-		{ cls: 'outline-list'}
-	]),
+										{ cls: 'header', cn: [
+											'{outlineLabel}'
+										]},
+										{ cls: 'outline-list'}
+									]),
 
 	renderSelectors: {
 		frameBodyEl: '.outline-list'
@@ -28,13 +28,13 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	},
 
 
-	overItemCls: 'over',
+	overItemCls:  'over',
 	itemSelector: '.outline-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl:          new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 
 		{
 			cls: 'outline-row {type}', 'data-qtip': '{displayName}',
-			cn: [
+			cn:  [
 				{ cls: 'label', html: '{displayName}' }
 			]
 		}
@@ -49,39 +49,39 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			me.fromKey = true;
 		});
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			outlineLabel: this.getOutlineLabel()
 		});
 
 		this.on({
-			scope: this,
-			itemclick: function () {
-				this.fromClick = true;
-			},
-			beforeselect: function (s, r) {
-				var pass = r.get('type') !== 'unit',
-						store = s.getStore(),
-						last = s.lastSelected || store.first(), next;
+					scope:        this,
+					itemclick:    function () {
+						this.fromClick = true;
+					},
+					beforeselect: function (s, r) {
+						var pass = r.get('type') !== 'unit',
+								store = s.getStore(),
+								last = s.lastSelected || store.first(), next;
 
-				if (this.fromKey && !pass) {
-					last = store.indexOf(last);
-					next = store.indexOf(r);
-					next += ((next - last) || 1);
+						if (this.fromKey && !pass) {
+							last = store.indexOf(last);
+							next = store.indexOf(r);
+							next += ((next - last) || 1);
 
-					//do the in the next event pump
-					Ext.defer(s.select, 1, s, [next]);
-				}
-				return pass;
+							//do the in the next event pump
+							Ext.defer(s.select, 1, s, [next]);
+						}
+						return pass;
 
-			},
-			select: function (s, r) {
-				if (this.fromClick || this.fromKey) {
-					console.debug('do something with selection');
-				}
-				delete this.fromClick;
-				delete this.fromKey;
-			}
-		});
+					},
+					select:       function (s, r) {
+						if (this.fromClick || this.fromKey) {
+							console.debug('do something with selection');
+						}
+						delete this.fromClick;
+						delete this.fromKey;
+					}
+				});
 	},
 
 

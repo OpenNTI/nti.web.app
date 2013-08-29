@@ -1,26 +1,26 @@
-Ext.define('NextThought.editor.embedvideo.Window',{
+Ext.define('NextThought.editor.embedvideo.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.embedvideo-window',
+	alias:  'widget.embedvideo-window',
 
 	requires: [
 		'NextThought.view.account.Header',
 		'NextThought.editor.embedvideo.Main'
 	],
 
-	cls: 'embedvideo-window',
-	ui: 'nt-window',
+	cls:         'embedvideo-window',
+	ui:          'nt-window',
 	minimizable: false,
-	constrain: true,
-	modal: true,
-	closable: true,
-	resizable: false,
-	dialog: true,
+	constrain:   true,
+	modal:       true,
+	closable:    true,
+	resizable:   false,
+	dialog:      true,
 	closeAction: 'destroy',
 
 	width: 480,
 
 	layout: {
-		type: 'vbox',
+		type:  'vbox',
 		align: 'stretch'
 	},
 
@@ -30,25 +30,25 @@ Ext.define('NextThought.editor.embedvideo.Window',{
 
 	items: [
 		{
-			xtype: 'account-header-view',
+			xtype:  'account-header-view',
 			noIcon: true,
-			title: 'Embed video',
+			title:  'Embed video',
 			detail: 'Just give us the url of the video you want to embed and we\'ll figure out the rest.'
 		},
 		{xtype: 'embedvideo-main-view'}
 	],
 
-	embed: function(){
+	embed: function () {
 		var main = this.down('embedvideo-main-view'),
-			val = main.getValues();
+				val = main.getValues();
 
-		if(val){
-			if(Ext.isFunction(this.onEmbed)){
+		if (val) {
+			if (Ext.isFunction(this.onEmbed)) {
 				Ext.callback(this.onEmbed, this, [val]);
 			}
 			this.close();
 		}
-		else{
+		else {
 			main.setError({field: 'embed', message: 'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url.'});
 		}
 	}

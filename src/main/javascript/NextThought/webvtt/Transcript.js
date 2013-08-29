@@ -4,72 +4,72 @@
  * @author Bryan Hoke
  */
 Ext.define('NextThought.webvtt.Transcript', {
-	requires:['NextThought.model.transcript.Cue'],
+	requires:                  ['NextThought.model.transcript.Cue'],
 
 	/*@private
 	 * RegExps which are used throughout the program.
 	 */
-	regexp: {
+	regexp:                    {
 		// Matches everything except a line break
-		reNotLF: /[^\u000a]*/,
+		reNotLF:               /[^\u000a]*/,
 		// Matches a sequence of line breaks
-		reLF: /(\u000a)*/,
+		reLF:                  /(\u000a)*/,
 		// Matches text that contains "-->"
-		reArrow: /.*-->.*/,
+		reArrow:               /.*-->.*/,
 		// Matches a sequence of white space
-		reWS: /(\s)*/,
+		reWS:                  /(\s)*/,
 		// Matches a digit
-		reDigit: /\d/,
+		reDigit:               /\d/,
 		// Matches a sequence of digits
-		reDigits: /(\d)+/,
+		reDigits:              /(\d)+/,
 		// Matches text that contains a colon
-		reColon: /.*:.*/,
+		reColon:               /.*:.*/,
 		// Matches sequences which contain characters other than -, %, or digits
-		reNotHyPerDigits: /.*[^\u002d\u0025\d].*/,
+		reNotHyPerDigits:      /.*[^\u002d\u0025\d].*/,
 		// Matches sequences which do not contain any digits
-		reNoDigits: /.*\D.*/,
+		reNoDigits:            /.*\D.*/,
 		// Matches sequences in which a character other than the first is a -
-		reFollowingHyphen: /\u002d?.*\u002d.*/,
+		reFollowingHyphen:     /\u002d?.*\u002d.*/,
 		// Matches sequences in which a character other than the last is a %
-		reLeadingPercent: /.*\u0025.*\u0025?/,
+		reLeadingPercent:      /.*\u0025.*\u0025?/,
 		// Matches sequences in which the first character is a -
-		reHyphenFirst: /^\u002d/,
+		reHyphenFirst:         /^\u002d/,
 		// Matches sequences in which the last character is a %
-		rePercentLast: /\u0025$/,
+		rePercentLast:         /\u0025$/,
 		// Matches (possibly signed) numbers without a trailing percent
 		reSignedNumbersNoTail: /-?(\d)*/,
 		// Matches sequences which contain characters other than percents and digits
-		rePerDigits: /.*[^\u0025\d].*/
+		rePerDigits:           /.*[^\u0025\d].*/
 	},
 	/*@private
 	 * Used to store variables used for scratchwork and which are no longer needed after the Transcript is created
 	 */
-	scratch: {
+	scratch:                   {
 		// 2. Pointer into fileContent
-		position: 0,
+		position:             0,
 		// 3. Used to buffer lines
-		line: '',
+		line:                 '',
 		// Used to direct code execution by indicating when certain steps can be skipped
 		alreadyCollectedLine: false,
 		// Indicates when the parser is complete
-		halt: false,
+		halt:                 false,
 		// Indicates the current line number
-		lineNo: 0,
+		lineNo:               0,
 		// Stores the text to be added to a cue
-		cueText: '',
+		cueText:              '',
 		// A cue that is being parsed out
-		cue: null,
+		cue:                  null,
 		// The content of the WebVTT file that is being parsed
-		fileContent: '',
+		fileContent:          '',
 		// Whether line feeds in cue text should be ignored
-		ignoreLFs: false
+		ignoreLFs:            false
 	},
 
 
 	/*@private
 	 * Used to signal that the parser is finished
 	 */
-	signalHalt: function() {
+	signalHalt:                function () {
 		//        console.debug('End');
 		this.scratch.halt = true;
 		return false;
@@ -79,12 +79,12 @@ Ext.define('NextThought.webvtt.Transcript', {
 	/*@private
 	 * Used to signal that an error has occurred
 	 */
-	signalError: function(msg){
+	signalError:               function (msg) {
 		console.error(msg);
 		Ext.Error.raise({
-			message: msg,
-			lineNumber: this.scratch.lineNo
-		});
+							message:    msg,
+							lineNumber: this.scratch.lineNo
+						});
 	},
 
 
@@ -94,9 +94,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param re The RegExp to match
 	 * @param canBeEmpty If this is false, throw an error if there is no match. Otherwise sets line to the empty string.
 	 */
-	scan: function(re, canBeEmpty){
-		var scratch= this.scratch,
-			match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+	scan:                      function (re, canBeEmpty) {
+		var scratch = this.scratch,
+				match = re.exec(scratch.fileContent.substr(scratch.position))[0];
 
 		if (match !== null) {
 			scratch.line = match;
@@ -105,7 +105,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 			if (canBeEmpty) {
 				scratch.line = '';
 			} else {
-				this.signalError('Expected '+re+' at line '+scratch.lineNo);
+				this.signalError('Expected ' + re + ' at line ' + scratch.lineNo);
 			}
 		}
 	},
@@ -117,14 +117,14 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param canBeEmpty If this is false, throw an error if there is no match
 	 * @param re The RegExp to match
 	 */
-	skip: function(re, canBeEmpty){
+	skip:                      function (re, canBeEmpty) {
 		var scratch = this.scratch,
-			match = re.exec(scratch.fileContent.substr(scratch.position))[0];
+				match = re.exec(scratch.fileContent.substr(scratch.position))[0];
 
 		if (match !== null) {
 			scratch.position += match.length;
 		} else if (!canBeEmpty) {
-			this.signalError('Expected '+re+' at line '+scratch.lineNo);
+			this.signalError('Expected ' + re + ' at line ' + scratch.lineNo);
 		}
 	},
 
@@ -137,11 +137,11 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param input The contents of the WebVTT file
 	 * @return The pre-processed contents of the WebVTT file
 	 */
-	preProcess: function(input){
+	preProcess:                function (input) {
 		var output = input, // Unnecessary?
-			reNull = /\u0000/g,
-			reCRLF = /\u000d\u000a/g,
-			reCR = /\u000d/g;
+				reNull = /\u0000/g,
+				reCRLF = /\u000d\u000a/g,
+				reCR = /\u000d/g;
 
 		output = output.replace(reNull, '\ufffd');
 		output = output.replace(reCRLF, '\u000a');
@@ -155,10 +155,10 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Verifies that the WebVTT file has a proper file signature.<br>
 	 * Throws an error if it does not.
 	 */
-	verifySignature: function(){
+	verifySignature:           function () {
 		var regexp = this.regexp,
-			scratch = this.scratch,
-			errMsg = 'Improper file signature: must be "WEBVTT"';
+				scratch = this.scratch,
+				errMsg = 'Improper file signature: must be "WEBVTT"';
 
 		// 4. Collect sequence of characters that are not line feeds
 		this.scan(regexp.reNotLF);
@@ -189,9 +189,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Collects header string(s)
 	 * @return True if this should repeat, false if not
 	 */
-	getHeader: function(){
+	getHeader:                 function () {
 		var regexp = this.regexp,
-			scratch = this.scratch;
+				scratch = this.scratch;
 
 		// 10. Collect header string
 		this.scan(regexp.reNotLF, true);
@@ -223,10 +223,10 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Collects all of the cues in the file
 	 * @return Whether cueLoop should be repeated
 	 */
-	cueLoop: function(){
+	cueLoop:                   function () {
 		var scratch = this.scratch,
-			regexp = this.regexp,
-			loop;
+				regexp = this.regexp,
+				loop;
 
 		// Collect a line if not already collected
 		if (!scratch.alreadyCollectedLine) {
@@ -258,7 +258,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 			// 37. Prepare to collect cue text
 			scratch.cueText = '';
 			// 38. Cue text loop
-			do{
+			do {
 				loop = this.cueTextLoop();
 			} while (loop);
 			// Repeat cueLoop
@@ -267,9 +267,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 
 		// 49. Bad cue -- cue is discarded
 		// 50. Bad cue loop
-		do{
+		do {
 			loop = this.badCueLoop();
-		}while (loop);
+		} while (loop);
 		return !scratch.halt;
 	},
 
@@ -278,9 +278,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Collects a cue identifier or signals parsing to halt
 	 * @return Whether a cue identifier was collected successfully
 	 */
-	 collectIdentifier: function(){
+	collectIdentifier:         function () {
 		var scratch = this.scratch,
-			regexp = this.regexp;
+				regexp = this.regexp;
 
 		// 30. Set the cue's identifier
 		scratch.cue.identifier = scratch.line;
@@ -305,12 +305,12 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param input A sequence containing cue timing and setting information.
 	 * @return The cue with timings/settings added, or false if there was an error
 	 */
-	collectTimingsAndSettings: function(cue, input){
+	collectTimingsAndSettings: function (cue, input) {
 		// 1. input // 2. position
 		var pos = 0,
-			remainder,
-			collected,
-			regexp = this.regexp;
+				remainder,
+				collected,
+				regexp = this.regexp;
 
 		// 3. Skip whitespace
 		pos += regexp.reWS.exec(input)[0].length;
@@ -327,21 +327,21 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 6. Abort if not at a minus
 		if (input.charCodeAt(pos) !== 45) {
 			// return error
-			console.error('collectTimingsAndSettings: 6. should be a minus sign in "'+input+'" at position '+pos);
+			console.error('collectTimingsAndSettings: 6. should be a minus sign in "' + input + '" at position ' + pos);
 			return false;
 		}
 		pos++;
 		// 7. Abort if not at a minus
 		if (input.charCodeAt(pos) !== 45) {
 			// return error
-			console.error('collectTimingsAndSettings: 7. should be a minus sign in "'+input+'" at position '+pos);
+			console.error('collectTimingsAndSettings: 7. should be a minus sign in "' + input + '" at position ' + pos);
 			return false;
 		}
 		pos++;
 		// 8. Abort if not at a greater-than sign
 		if (input.charCodeAt(pos) !== 62) {
 			// return error
-			console.error('collectTimingsAndSettings: 8. should be a greater-than sign in "'+input+'" at position '+pos);
+			console.error('collectTimingsAndSettings: 8. should be a greater-than sign in "' + input + '" at position ' + pos);
 			return false;
 		}
 		pos++;
@@ -369,23 +369,23 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param pos 1. The current position in input.
 	 * @return The timestamp value in seconds and the updated position, or false if the operation failed.
 	 */
-	collectTimestamp: function(input, pos){
+	collectTimestamp:          function (input, pos) {
 		// 2. By default assume minutes are the most significant units of time
 		var mostSigUnits = 'minutes',
-			string, value1, value2, value3, value4,
-			result,
-			regexp = this.regexp;
+				string, value1, value2, value3, value4,
+				result,
+				regexp = this.regexp;
 
 		// 3. Out-of-bounds error
 		if (pos >= input.length) {
 			// return error
-			console.error('collectTimestamp: 3. position '+pos+' is out-of-range in "'+input+'"');
+			console.error('collectTimestamp: 3. position ' + pos + ' is out-of-range in "' + input + '"');
 			return false;
 		}
 		// 4. Make sure we're at a digit
 		if (!regexp.reDigit.test(input.charAt(pos))) {
 			// return error
-			console.error('collectTimestamp: 4. should be a digit at position '+pos+' in "'+input+'"');
+			console.error('collectTimestamp: 4. should be a digit at position ' + pos + ' in "' + input + '"');
 			return false;
 		}
 		// 5. Collect digits in most significant time unit
@@ -401,7 +401,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 8. Abort if past input length or not at a colon
 		if (pos >= input.length || input.charCodeAt(pos) !== 58) {
 			// return error
-			console.error('collectTimestamp: 8. position '+pos+' in "'+input+'" is out-of-range or is not a colon');
+			console.error('collectTimestamp: 8. position ' + pos + ' in "' + input + '" is out-of-range or is not a colon');
 			return false;
 		}
 		pos++;
@@ -411,18 +411,18 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 10.
 		if (string.length !== 2) {
 			// return error
-			console.error('collectTimestamp: 10. the length of "'+string+'" should be exactly 2');
+			console.error('collectTimestamp: 10. the length of "' + string + '" should be exactly 2');
 			return false;
 		}
 		// 11.
 		value2 = parseInt(string, 10);
 		// 12. Parse the hours if necessary
 		if (mostSigUnits === 'hours' ||
-			(pos < input.length && input.charCodeAt(pos) === 58)) {
+				(pos < input.length && input.charCodeAt(pos) === 58)) {
 			// 1.
 			if (pos >= input.length || input.charCodeAt(pos) !== 58) {
 				// return error
-				console.error('collectTimestamp: 12-1. position '+pos+' in "'+input +'" is out-of-range or is not a colon');
+				console.error('collectTimestamp: 12-1. position ' + pos + ' in "' + input + '" is out-of-range or is not a colon');
 				return false;
 			}
 			pos++;
@@ -432,7 +432,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 			// 3.
 			if (string.length !== 2) {
 				// return error
-				console.error('collectTimestamp: 12-3. the length of "'+string+'" should be exactly 2');
+				console.error('collectTimestamp: 12-3. the length of "' + string + '" should be exactly 2');
 				return false;
 			}
 			value3 = parseInt(string, 10);
@@ -444,7 +444,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 13. Abort if past input length or not at a full stop (.)
 		if (pos >= input.length || input.charCodeAt(pos) !== 46) {
 			// return error
-			console.error('collectTimestamp: 13. position '+pos+' in "'+input+'" is out-of-range or is not a period');
+			console.error('collectTimestamp: 13. position ' + pos + ' in "' + input + '" is out-of-range or is not a period');
 			return false;
 		}
 		pos++;
@@ -454,7 +454,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 15.
 		if (string.length !== 3) {
 			// return error
-			console.error('collectTimestamp: 15. the length of "'+string+'" should be exactly 3');
+			console.error('collectTimestamp: 15. the length of "' + string + '" should be exactly 3');
 			return false;
 		}
 		// 16.
@@ -462,15 +462,15 @@ Ext.define('NextThought.webvtt.Transcript', {
 		// 17.
 		if (value2 > 59 || value3 > 59) {
 			// return error
-			console.error('collectTimestamp: 17. the values of '+value2+' and '+value3+' must both be less than or equal to 59');
+			console.error('collectTimestamp: 17. the values of ' + value2 + ' and ' + value3 + ' must both be less than or equal to 59');
 			return false;
 		}
 		// 18.
-		result = value1*60*60 + value2*60 + value3 + value4/1000;
+		result = value1 * 60 * 60 + value2 * 60 + value3 + value4 / 1000;
 		// 19.
 		return {
 			timestamp: result,
-			position: pos
+			position:  pos
 		};
 	},
 
@@ -478,19 +478,19 @@ Ext.define('NextThought.webvtt.Transcript', {
 	/*@private
 	 * Parses the settings for a given cue and a settings string
 	 */
-	parseSettings: function(cue, input){
+	parseSettings:             function (cue, input) {
 		// 1.
 		var settings = input.split(' '),
-			i, setting, name, value, number,
-			regexp = this.regexp,
-			alignValues = ['left', 'middle', 'right', 'start', 'end'];
+				i, setting, name, value, number,
+				regexp = this.regexp,
+				alignValues = ['left', 'middle', 'right', 'start', 'end'];
 
 		// 2.
 		for (i = 0; i < settings.length; i++) {
 			// 1.
 			setting = settings[i];
 			if (!regexp.reColon.test(setting) || setting.indexOf(':') === 0
-				|| setting.indexOf(':') === setting.length - 1) {
+					|| setting.indexOf(':') === setting.length - 1) {
 				continue;
 			}
 			// 2.
@@ -542,7 +542,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 				cue.setSize(number);
 			} else if (name === 'align') {
 				//Do We even need to check if the value is in the array. Can't we just assign it?
-				if(alignValues.contains(value)){
+				if (alignValues.contains(value)) {
 					cue.alignment = value;
 				}
 			}
@@ -554,9 +554,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Collects the text (payload) for the current cue
 	 * @return Whether this should be repeated
 	 */
-	cueTextLoop: function(){
+	cueTextLoop:               function () {
 		var scratch = this.scratch,
-			regexp = this.regexp;
+				regexp = this.regexp;
 
 		// Skip to processing if we've reached the end of file
 		if (scratch.position < scratch.fileContent.length) {
@@ -601,23 +601,23 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param input The cue text to be processed
 	 * @return The processed cue text
 	 */
-	processCueText: function(input){
+	processCueText:            function (input) {
 		// The return string
 		var output = input,
 		// Pointer into input (the cue text)
-			//position = 0,
+		//position = 0,
 		// To remember how many span tags to close
-			spanCount = 0,
+				spanCount = 0,
 		// TO remember how many misformed V tags were encountered
-			badVCount = 0,
+				badVCount = 0,
 		// RegExp for matching <v> tags
-			reV = /<v[^>]*>/gi,
+				reV = /<v[^>]*>/gi,
 		// RegExp for matching </v> tags
-			reEndV = /<\/(v)>/i,
+				reEndV = /<\/(v)>/i,
 		// RegExp for proper form of a <v> tag: remembers ".<classname>"* and "<speakername>"
-			reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
-			scratch = this.scratch;
-			//regexp = this.regexp;
+				reGoodV = /<v((?:\u002e[^\u002e\s]+)*)\s+([^\u000a\u000d\u0026\u003c]+)>/i,
+				scratch = this.scratch;
+		//regexp = this.regexp;
 
 		/*
 		 * Callback for replace which replaces <v> tags with <span> tags, returning a resulting replacement string
@@ -627,7 +627,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 			var replacement;
 			// Check whether this is a valid tag (it must have an annotation), return empty span if not
 			if (!reGoodV.test(str)) {
-				console.error(str+' is not a well-formed voice tag.');
+				console.error(str + ' is not a well-formed voice tag.');
 				badVCount++;
 				return '<span>';
 			}
@@ -647,8 +647,8 @@ Ext.define('NextThought.webvtt.Transcript', {
 		 * @param {String} speakerName eg "<the name of the speaker>"
 		 * @return The replacement string
 		 */
-		function replaceVParts(str,className,speakerName) {
-			var replacement,reClasses,replacementClasses;
+		function replaceVParts(str, className, speakerName) {
+			var replacement, reClasses, replacementClasses;
 
 			// Initialize to the matched string
 			replacement = str;
@@ -660,11 +660,11 @@ Ext.define('NextThought.webvtt.Transcript', {
 				replacementClasses = className;
 				replacementClasses = replacementClasses.replace(/\u002e/g, ' ');
 				replacementClasses = replacementClasses.trim();
-				replacement = replacement.replace(reClasses, ' class=\''+replacementClasses+'\'');
+				replacement = replacement.replace(reClasses, ' class=\'' + replacementClasses + '\'');
 			}
 			// Adds a title attribute with speakerName as its value
-			replacement = replacement.replace(new RegExp(speakerName+'(?=>)'),
-				'title=\'' + speakerName + '\'');
+			replacement = replacement.replace(new RegExp(speakerName + '(?=>)'),
+											  'title=\'' + speakerName + '\'');
 			spanCount++;
 			//            console.debug(str+' replaced with '+replacement);
 
@@ -685,7 +685,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 		output = output.replace(reEndV, replaceEndV);
 
 		// Add additional </span> tags as needed
-		while(spanCount > 0) {
+		while (spanCount > 0) {
 			output += '</span>';
 			spanCount--;
 		}
@@ -711,9 +711,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * Skips over malformed cues
 	 * @return Whether badCueLoop should be repeated
 	 */
-	badCueLoop: function(){
+	badCueLoop:                function () {
 		var scratch = this.scratch,
-			regexp = this.regexp;
+				regexp = this.regexp;
 
 		// Halt if at end of file
 		if (scratch.position >= scratch.fileContent.length) {
@@ -739,7 +739,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 	/*@private
 	 * Extracts the indices of section-title cues from the "sections" header, if specified
 	 */
-	findSections: function(){
+	findSections:              function () {
 		var i, j, hdr;
 		this.sections = [];
 		for (i = 0; i < this.headers.length; i++) {
@@ -756,7 +756,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 	/*@private
 	 * Constructs a tree of nested cues in cueTree, if cues are nested
 	 */
-	buildCueTree: function() {
+	buildCueTree:              function () {
 		var i;
 		this.cueTree = [];
 		for (i = 0; i < this.cueList.length; i++) {
@@ -770,7 +770,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param cue The cue which is being inserted
 	 * @param tree The cueTree into which cue is currently fitting
 	 */
-	cueTreeInsert: function(cue, tree){
+	cueTreeInsert:             function (cue, tree) {
 		var i, tmpCue;
 		for (i = 0; i < tree.length; i++) {
 			tmpCue = cue.cueTree[i];
@@ -785,7 +785,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 	/*
 	 * Transcript constructor
 	 */
-	constructor: function(config) {
+	constructor:               function (config) {
 		var r = this.callParent(config);
 
 		Ext.apply(this, config);
@@ -798,7 +798,6 @@ Ext.define('NextThought.webvtt.Transcript', {
 	},
 
 
-
 	/*
 	 * Parses the WebVTT file contents<br>
 	 * Based on the algorithm described at http://dev.w3.org/html5/webvtt/#parsing<br>
@@ -806,11 +805,11 @@ Ext.define('NextThought.webvtt.Transcript', {
 	 * @param input The contents of the WebVTT file being parsed
 	 * @param ignoreLFs Whether line feeds in cue text should be ignored rather than converted to <br> tags
 	 */
-	parseWebVTT: function(){
+	parseWebVTT:               function () {
 		var s, scratch = this.scratch, loop;
 		// Make sure scratchwork is clear
 		for (s in scratch) {
-			if(scratch.hasOwnProperty(s)){
+			if (scratch.hasOwnProperty(s)) {
 				scratch[s] = 0;
 			}
 		}
@@ -838,9 +837,9 @@ Ext.define('NextThought.webvtt.Transcript', {
 		}
 
 		// Collect and process cues
-		do{
+		do {
 			loop = this.cueLoop();
-		} while(loop);
+		} while (loop);
 
 		this.findSections();
 
@@ -848,7 +847,7 @@ Ext.define('NextThought.webvtt.Transcript', {
 
 		// Clear off scratchwork
 		for (s in scratch) {
-			if(scratch.hasOwnProperty(s)){
+			if (scratch.hasOwnProperty(s)) {
 				scratch[s] = 0;
 			}
 		}

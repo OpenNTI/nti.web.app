@@ -1,11 +1,11 @@
 /*jslint */
 /*globals Globals, NextThought, YT */
-Ext.define('NextThought.util.media.YouTubePlayer',{
+Ext.define('NextThought.util.media.YouTubePlayer', {
 
-	statics:{
-		kind:'video',
-		type: 'youtube',
-		valid: function(){
+	statics: {
+		kind:  'video',
+		type:  'youtube',
+		valid: function () {
 			return Boolean(window.YT);
 		}
 	},
@@ -19,13 +19,13 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	},
 
 	playerTpl: Ext.DomHelper.createTemplate({
-		id: '{id}'
-	}),
+												id: '{id}'
+											}),
 
-	constructor: function(config){
+	constructor: function (config) {
 		this.mixins.observable.constructor.call(this);
 		this.parentEl = Ext.get(config.el);
-		this.id = config.parentId+'-youtube-video';
+		this.id = config.parentId + '-youtube-video';
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;
@@ -34,7 +34,7 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 	},
 
 
-	playerSetup: function(){
+	playerSetup: function () {
 		this.isReady = false;
 
 //		Inject Youtube HTML
@@ -42,34 +42,34 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		console.log(this.id);
 
 		this.player = new YT.Player(this.id, {
-			width: this.width,
-			height: this.height,
+			width:      this.width,
+			height:     this.height,
 			playerVars: {
 				modestbranding: 1,
-				autohide: 1,
-				wmode: 'transparent',
-				rel: 0,
-				showinfo: 0
+				autohide:       1,
+				wmode:          'transparent',
+				rel:            0,
+				showinfo:       0
 			},
-			origin: location.protocol+'//'+location.host,
-			events: {
+			origin:     location.protocol + '//' + location.host,
+			events:     {
 				'onReady': Ext.bind(this.playerReady, this),
 				'onError': Ext.bind(this.playerError, this)
 			}
 		});
 	},
 
-	playerReady: function(){
+	playerReady: function () {
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
 	},
 
-	playerError: function(error){
+	playerError: function (error) {
 		var oldSource;
 		console.warn('YouTube player died with error: ' + error.data);
 
-		if(error.data === 2){
-			console.log('Data Dump: ',this.currentSource,error);
+		if (error.data === 2) {
+			console.log('Data Dump: ', this.currentSource, error);
 			this.cleanup();
 			return;
 		}
@@ -78,7 +78,7 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 //		interaction with the browsers built-in HTML5 player, so lets try, try again.
 //		SAJ: We should probably also give up after X tries and just go to the next source
 //		or playlist entry.
-		if (error.data === 5){
+		if (error.data === 5) {
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
 			this.cleanup();
 			this.playerSetup();
@@ -93,66 +93,66 @@ Ext.define('NextThought.util.media.YouTubePlayer',{
 		}
 	},
 
-	getCurrentTime: function(){
+	getCurrentTime: function () {
 		return this.player.getCurrentTime();
 	},
 
-	getPlayerState: function(){
+	getPlayerState: function () {
 		return this.player.getPlayerState();
 	},
 
-	load: function(source, offset){
+	load: function (source, offset) {
 		this.currentSource = source;
 		this.currentStartAt = offset;
 		this.player.cueVideoById({
-			videoId:source,
-			startSeconds:offset,
-			suggestedQuality:"medium"
-		});
+									 videoId:          source,
+									 startSeconds:     offset,
+									 suggestedQuality: "medium"
+								 });
 		this.pause();
 	},
 
-	play: function(){
+	play: function () {
 		this.player.playVideo();
 	},
 
 
-	deactivate: function(){
-		return this.pause.apply(this,arguments);
+	deactivate: function () {
+		return this.pause.apply(this, arguments);
 	},
 
 
 	activate: Ext.emptyFn,
 
 
-	pause: function(){
+	pause: function () {
 		this.player.pauseVideo();
 	},
 
-	seek: function(offset, seekAhead){
+	seek: function (offset, seekAhead) {
 		this.currentStartAt = offset;
 		this.player.seekTo(offset, seekAhead);
 		this.pause();
 	},
 
-	stop: function(){
-		if( this.player ){
+	stop: function () {
+		if (this.player) {
 			this.player.clearVideo();
 		}
 	},
 
-	cleanup: function(){
+	cleanup: function () {
 		var el = Ext.get(this.id);
 
 		this.stop();
 
 		this.isReady = false;
 
-		if( el ){
+		if (el) {
 			el.clearListeners();
 			Ext.destroy(el);
 		}
 	}
-}, function(){
-	Globals.loadScript(location.protocol+"//www.youtube.com/iframe_api");
+}, function () {
+	Globals.loadScript(location.protocol + "//www.youtube.com/iframe_api");
 });

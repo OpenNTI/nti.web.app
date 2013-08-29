@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.activity.note.Preview', {
 	extend: 'NextThought.view.account.activity.Preview',
-	alias: 'widget.activity-preview-note',
+	alias:  'widget.activity-preview-note',
 
 	requires: [
 		'NextThought.mixins.note-feature.GetLatestReply',
@@ -9,12 +9,12 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 	mixins: {
 		getLatestReply: 'NextThought.mixins.note-feature.GetLatestReply',
-		purchasable: 'NextThought.mixins.store-feature.Purchasable'
+		purchasable:    'NextThought.mixins.store-feature.Purchasable'
 	},
 
 	renderSelectors: {
 		locationEl: '.location',
-		context: '.context .text'
+		context:    '.context .text'
 	},
 
 	defaultType: 'activity-preview-note-reply',
@@ -28,17 +28,17 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 
 	loadContext: function (fin) {
-		if(!this.rendered){
-			this.on('afterrender', Ext.bind(this.loadContext, this, [fin]), this, {single:true});
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.loadContext, this, [fin]), this, {single: true});
 			return;
 		}
 
 		var me = this,
-			r = me.record,
-			cid = r.get('ContainerId'),
-			metaInfo,
-			C = ContentUtils,
-			metaHandled = true;
+				r = me.record,
+				cid = r.get('ContainerId'),
+				metaInfo,
+				C = ContentUtils,
+				metaHandled = true;
 
 		if (r.focusRecord) {
 			this.on('add', function (container, newChild, idx) {
@@ -61,8 +61,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		}
 
 		function error(req, resp) {
-			function filter(item){
-				if(item instanceof NextThought.model.Course){
+			function filter(item) {
+				if (item instanceof NextThought.model.Course) {
 					return Boolean(item.getLink('enroll'));
 				}
 				return true;
@@ -70,8 +70,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 			req = resp.request;
 			var el = me.context.up('.context'),
-				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
+					ntiid = req && req.ntiid,
+					p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 
 			if (resp.status === 403 && p) {
 				me.handlePurchasable(p, el);
@@ -81,16 +81,16 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 			metaHandled = false;
 
-			ContentUtils.findContentObject(cid, function(obj, meta){
+			ContentUtils.findContentObject(cid, function (obj, meta) {
 				//TOOD need a generic framework for various objects here
-				if(obj && /ntivideo/.test(obj.mimeType || obj.MimeType)){
+				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
 					var src, sources, contextEl;
 					console.log('Need to set context being video', obj);
-					if(meta){
+					if (meta) {
 						me.locationEl.update(meta.getPathLabel());
-						if(me.context){
+						if (me.context) {
 							contextEl = me.context.up('.context');
-							if(contextEl){
+							if (contextEl) {
 								contextEl.addCls('video-context');
 							}
 							me.context.setHTML('');
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 						sources = obj.sources;
 
-						if(!Ext.isEmpty(sources)){
+						if (!Ext.isEmpty(sources)) {
 							src = sources.first().thumbnail;
 						}
 
@@ -108,19 +108,20 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 								tag: 'img',
 								cls: 'video-thumbnail',
 								src: src
-							}]);
+							}
+						]);
 					}
 				}
-				else{
-					if(resp.status === 404){
-						if(p){
+				else {
+					if (resp.status === 404) {
+						if (p) {
 							me.handlePurchasable(p, el);
 							Ext.callback(fin);
 							return;
 						}
 
 						meta = ContentUtils.getLocation(ntiid);
-						if(meta){
+						if (meta) {
 							me.locationEl.update(meta.getPathLabel());
 							me.context.update(meta.location && meta.location.getAttribute('desc'));
 							Ext.callback(fin);
@@ -137,13 +138,15 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			metaInfo = meta;
 
 			function upLoc() {
-				if(!me.locationEl){ return; }
+				if (!me.locationEl) {
+					return;
+				}
 
 				if (metaInfo) {
 					me.locationEl.update(metaInfo.getPathLabel());
 					return;
 				}
-				if(metaHandled){
+				if (metaHandled) {
 					me.locationEl.remove();
 					Ext.callback(fin);
 				}
@@ -154,22 +157,22 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
-	handlePurchasable: function(purchasable, el){
+	handlePurchasable: function (purchasable, el) {
 		var me = this,
-			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
+				tpl = me.needsActionTplMap[purchasable.get('MimeType')];
 
 		me.requiresPurchase = true;
 		me.purchasable = purchasable;
 		el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
 
-		if(tpl){
+		if (tpl) {
 			me[tpl].overwrite(el, purchasable.getData(), true);
 		}
 		me.clearManagedListeners();
-		me.mon(el,'click', me.navigateToItem, me);
+		me.mon(el, 'click', me.navigateToItem, me);
 
 		Ext.DomHelper.append(me.getEl(), {
-			cls: 'purchasable-mask',
+			cls:   'purchasable-mask',
 			style: {top: (me.itemEl.getY() - me.el.getY()) + 'px'}
 		});
 	},
@@ -178,11 +181,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	setContext: function (doc) {
 		var r = this.record, newContext;
 		try {
-			if( this.context ){
+			if (this.context) {
 				this.context.setHTML('');
 			}
 			newContext = RangeUtils.getContextAroundRange(
-				r.get('applicableRange'), doc, doc, r.get('ContainerId'));
+					r.get('applicableRange'), doc, doc, r.get('ContainerId'));
 
 			if (newContext) {
 				this.context.appendChild(newContext);
@@ -210,27 +213,27 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		return record.getReplyCount();
 	},
 
-	setRenderedTitle: function(record){},
+	setRenderedTitle: function (record) {},
 
 
-	setRecordTitle: function(){
-		function callback(snip, value){
-			if(snip && snip !== value){
-				me.subjectEl.set({'data-qtip':value});
+	setRecordTitle: function () {
+		function callback(snip, value) {
+			if (snip && snip !== value) {
+				me.subjectEl.set({'data-qtip': value});
 			}
 
 			me.subjectEl.update(snip || 'Subject');
-			if(!snip){
+			if (!snip) {
 				me.subjectEl.addCls('no-subject');
 				me.name.addCls('no-subject');
 			}
-			else{
+			else {
 				me.subjectEl.removeCls('no-subject');
 				me.name.removeCls('no-subject');
 			}
 		}
 
-		var me  = this;
+		var me = this;
 		me.record.resolveNoteTitle(callback, 30);
 	},
 
@@ -256,7 +259,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		this.setRecordTitle();
 	},
 
-	showReplies: function(){
+	showReplies: function () {
 		this.navigateToItem();
 	}
 });

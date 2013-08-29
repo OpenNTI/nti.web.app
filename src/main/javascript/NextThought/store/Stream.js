@@ -16,7 +16,7 @@
  */
 
 Ext.define('NextThought.store.Stream', {
-	extend: 'Ext.data.Store',
+	extend:   'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'
 	],
@@ -27,19 +27,19 @@ Ext.define('NextThought.store.Stream', {
 	pageSize: 100,
 
 	proxy: {
-		type: 'rest',
+		type:       'rest',
 		limitParam: 'batchSize',
-		pageParam: undefined,
+		pageParam:  undefined,
 		startParam: 'batchBefore',
-		reader: {
-			type: 'nti',
-			root: 'Items',
+		reader:     {
+			type:          'nti',
+			root:          'Items',
 			totalProperty: 'FilteredTotalItemCount'
 		},
-		headers: {
+		headers:    {
 			'Accept': 'application/vnd.nextthought.collection+json'
 		},
-		model: 'NextThought.model.Change',
+		model:      'NextThought.model.Change',
 
 		getParams: function () {
 			//Better way? (we basically want callparent but we are replacing instead of
@@ -60,9 +60,9 @@ Ext.define('NextThought.store.Stream', {
 
 	//Note this matches the default sort order
 	//that we get when we request things on the ds
-	sorters: [
+	sorters:    [
 		{
-			property: 'Last Modified',
+			property:  'Last Modified',
 			direction: 'DESC'
 		}
 	],
@@ -108,14 +108,14 @@ Ext.define('NextThought.store.Stream', {
 		}
 
 		options = Ext.apply({
-			start: before
-		}, options);
+								start: before
+							}, options);
 
 		this.callParent([page, options]);
 	},
 
 	load: function (options) {
-		if(!this.proxy.url){
+		if (!this.proxy.url) {
 			return;
 		}
 

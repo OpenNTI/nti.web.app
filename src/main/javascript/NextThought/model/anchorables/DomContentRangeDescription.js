@@ -1,12 +1,12 @@
 Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
-	extend: 'NextThought.model.anchorables.ContentRangeDescription',
+	extend:   'NextThought.model.anchorables.ContentRangeDescription',
 	requires: [
 		'NextThought.model.anchorables.DomContentPointer'
 	],
 
 	config: {
-		start: {},
-		end: {},
+		start:    {},
+		end:      {},
 		ancestor: {}
 	},
 
@@ -15,27 +15,23 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 	isDomContentRangeDescription: true,
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function (o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.DomContentRangeDescription.create({
-				start: cp.createFromObject(o.start),
-				end: cp.createFromObject(o.end),
-				ancestor: cp.createFromObject(o.ancestor)
-			});
+																					   start:    cp.createFromObject(o.start),
+																					   end:      cp.createFromObject(o.end),
+																					   ancestor: cp.createFromObject(o.ancestor)
+																				   });
 		}
 	},
 
-	constructor: function(o){
+	constructor: function (o) {
 		var start = o.start,
-			end = o.end,
-			ancestor = o.ancestor;
+				end = o.end,
+				ancestor = o.ancestor;
 
 		//make sure contents are acceptable
-		if (!start || !end || !ancestor ||
-			!this.isDomContentPointer(start) ||
-			!this.isDomContentPointer(end) ||
-			!this.isDomContentPointer(ancestor))
-		{
+		if (!start || !end || !ancestor || !this.isDomContentPointer(start) || !this.isDomContentPointer(end) || !this.isDomContentPointer(ancestor)) {
 			console.error('Invalid contents', arguments);
 			Ext.Error.raise('Invalid contents');
 		}
@@ -48,7 +44,7 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		this.Class = 'DomContentRangeDescription';
 	},
 
-	isDomContentPointer: function(o) {
+	isDomContentPointer: function (o) {
 		return (o instanceof NextThought.model.anchorables.DomContentPointer);
 	}
 });
