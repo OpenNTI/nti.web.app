@@ -24,3 +24,11 @@ window.onerror = function(){
 	}
 	window.location.replace($AppConfig.server.unsupported);
 };
+
+
+//frame buster
+if( window.top!==window ){
+	window.top.location.href = location.href;
+	//If the frame busting code is blocked, tell them embedding is not supported.
+	location.replace('resources/iframe.html');
+}
