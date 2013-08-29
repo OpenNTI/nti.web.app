@@ -33,15 +33,15 @@ Ext.define('NextThought.view.course.info.View', {
 
 
 	fillInPage: function (html) {
-		var dF = document.createDocumentFragment(),
-				root = document.createElement('html'),
-				body;
+		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i);
 
-		root.innerHTML = html;
-
-		body = root.getElementsByTagName('body')[0];
 		Ext.getBody().unmask();
-		this.update(body && body.innerHTML);
+		if( bodyTag.length > 1){
+			this.update(bodyTag[1]);
+		}
+		else{
+			console.error('info page has no body tag?? ', arguments);
+		}
 	},
 
 
