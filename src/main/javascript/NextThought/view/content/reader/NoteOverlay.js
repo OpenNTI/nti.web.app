@@ -37,16 +37,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	insertOverlay: function () {
 		var me = this,
-			box,
-			container = {
-				cls: 'note-gutter',
-				style: {
-					height: me.reader.getIframe().get().getHeight()
-				},
-				cn: [
-					{ cls: 'note-here-control-box' }
-				]
-			};
+				box,
+				container = {
+					cls: 'note-gutter', onclick: 'void(0)',
+					style: {
+						height: me.reader.getIframe().get().getHeight()
+					},
+					cn: [
+						{ cls: 'note-here-control-box', onclick: 'void(0)' }
+					]
+				};
 
 		me.container = container = Ext.DomHelper.insertAfter(me.reader.getInsertionPoint().first(), container, true);
 
@@ -55,53 +55,61 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		box.setVisibilityMode(Ext.Element.ASCLASS);
 		box.hide();
 
-		me.mon(box, {
-			click: 'openEditor',
-			mouseover: 'overNib',
-			mousemove: 'overNib',
-			mouseout: 'offNib',
-			scope: me
-		});
+		if (Ext.is.iPad) {
+			me.mon(box, {
+				click: 'openEditor',
+				mouseover: 'overNib',
+			});
+		}
+		else {
+			me.mon(box, {
+				click: 'openEditor',
+				mouseover: 'overNib',
+				mousemove: 'overNib',
+				mouseout: 'offNib',
+				scope: me
+			});
+		}
 
 		me.reader.getScroll().registerHandler(me.onScroll, me);
 
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',
-				me.mon(container.parent(), {
-					scope: me,
-					destroyable: true,
-					click: 'trackLineAtEvent'
-				}));
+						 me.mon(container.parent(), {
+							 scope: me,
+							 destroyable: true,
+							 click: 'trackLineAtEvent'
+						 }));
 
 			me.reader.on({
-				scope: me,
-				'iframe-click': 'trackLineAtEvent',
-				'iframe-mousedown': 'trackLineAtEvent'
-			});
+							 scope: me,
+							 'iframe-click': 'trackLineAtEvent',
+							 'iframe-mousedown': 'trackLineAtEvent'
+						 });
 		}
 		else {
 			me.reader.on('destroy', 'destroy',
-				me.mon(container.parent(), {
-					scope: me,
-					destroyable: true,
-					mousemove: 'mouseOver',
-					mouseover: 'mouseOver',
-					mouseout: 'mouseOut'
-				}));
+						 me.mon(container.parent(), {
+							 scope: me,
+							 destroyable: true,
+							 mousemove: 'mouseOver',
+							 mouseover: 'mouseOver',
+							 mouseout: 'mouseOut'
+						 }));
 
 			me.reader.on({
-				//no buffer
-				'iframe-mouseout': 'mouseOut',
-				'iframe-mousedown': 'suspendResolver',
-				'iframe-mouseup': 'resumeResolver',
-				scope: me
-			});
+							 //no buffer
+							 'iframe-mouseout': 'mouseOut',
+							 'iframe-mousedown': 'suspendResolver',
+							 'iframe-mouseup': 'resumeResolver',
+							 scope: me
+						 });
 
 			me.reader.on({
-				scope: me,
-				'iframe-mousemove': 'mouseOver',
-				buffer: 400
-			});
+							 scope: me,
+							 'iframe-mousemove': 'mouseOver',
+							 buffer: 400
+						 });
 		}
 	},
 
@@ -141,12 +149,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	openEditor: function () {
 		var tabPanel, lineInfo = this.data.box.activeLineInfo,
-			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
-			sharing = prefs && prefs.sharing,
-			sharedWith = sharing && sharing.sharedWith,
-			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
-			shareInfo = SharingUtils.sharedWithToSharedInfo(
-				SharingUtils.resolveValue(sharedWith), this.reader.getLocation().pageInfo);
+				prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
+				sharing = prefs && prefs.sharing,
+				sharedWith = sharing && sharing.sharedWith,
+				targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
+				shareInfo = SharingUtils.sharedWithToSharedInfo(
+						SharingUtils.resolveValue(sharedWith), this.reader.getLocation().pageInfo);
 
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
@@ -176,12 +184,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			listeners: {
 				'deactivated-editor': 'destroy',
 				grew: function () {
-                    if(Ext.is.iPad){
-                        return;
-                    }
+					if(Ext.is.iPad){
+						return;
+					}
 					var h = this.getHeight(),
-						b = h + this.getY(),
-						v = Ext.Element.getViewportHeight();
+							b = h + this.getY(),
+							v = Ext.Element.getViewportHeight();
 					if (b > v) {
 						this.setY(v - h);
 					}
@@ -210,8 +218,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	syncEditorWidth: function (c, w) {
 		var edEl = this.editor.getEl(),
-			minW,
-			nW = w + 65;
+				minW,
+				nW = w + 65;
 		if (!edEl) {
 			return;
 		}
@@ -232,13 +240,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	saveNewNote: function (editor, r, v) {
 		var me = this,
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			note = v.body,
-			title = v.title,
-			pageInfo = this.reader.getLocation().pageInfo,
-			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo, pageInfo),
-			style = editor.lineInfo.style || 'suppressed',
-			rangeInfo;
+				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
+				note = v.body,
+				title = v.title,
+				pageInfo = this.reader.getLocation().pageInfo,
+				sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo, pageInfo),
+				style = editor.lineInfo.style || 'suppressed',
+				rangeInfo;
 
 		function afterSave(success) {
 			editor.unmask();
@@ -257,9 +265,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		try {
 			rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
 			me.reader.fireEvent('save-new-note',
-				title, note, rangeInfo.range,
-				rangeInfo.container || me.reader.getLocation().NTIID,
-				sharing, style, afterSave);
+								title, note, rangeInfo.range,
+								rangeInfo.container || me.reader.getLocation().NTIID,
+								sharing, style, afterSave);
 		}
 		catch (error) {
 			console.error('Error saving note - ' + Globals.getError(error));
@@ -282,10 +290,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	contentDefinedAnnotationAction: function (dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-			id = d ? d.id : null, me = this,
-			img = d && d.is('img') ? d.dom : null,
-			doc = dom ? dom.ownerDocument : null,
-			range, offsets, rect;
+				id = d ? d.id : null, me = this,
+				img = d && d.is('img') ? d.dom : null,
+				doc = dom ? dom.ownerDocument : null,
+				range, offsets, rect;
 
 		if (/mark/i.test(action)) {
 			range = doc.createRange();
@@ -357,8 +365,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	lineInfoForY: function (y) {
 		var overlay = this.reader.getComponentOverlay().overlayedPanelAtY(y),
-			result = null,
-			top;
+				result = null,
+				top;
 
 		//If there is an overlay at that position it gets
 		//the decision as to if there is a line there.  After
@@ -389,9 +397,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	trackLineAtEvent: function (e) {
 		var o = this.data,
-			offsets = this.getAnnotationOffsets(),
-			y = e.getY() - offsets.top, lineInfo,
-			box = Ext.get(o.box);
+				offsets = this.getAnnotationOffsets(),
+				y = e.getY() - offsets.top, lineInfo,
+				box = Ext.get(o.box);
 
 		try {
 			clearTimeout(this.mouseLeaveTimeout);
@@ -424,13 +432,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	positionInputBox: function (lineInfo) {
 		var o = this.data,
-			offset = this.getAnnotationOffsets(),
-			box = Ext.get(o.box),
-			oldY = box.getY() - offset.top,
-			newY = 0,
+				offset = this.getAnnotationOffsets(),
+				box = Ext.get(o.box),
+				oldY = box.getY() - offset.top,
+				newY = 0,
 		// occ,
 		//activeY = oldY,
-			line = lineInfo || o.lastLine;
+				line = lineInfo || o.lastLine;
 
 		if (line && line.rect) {
 			newY = Math.round(line.rect.top);
@@ -452,13 +460,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	offNib: function (e) {
-		e.stopEvent();
+		if (!Ext.is.iPad) {
+			e.stopEvent();
+		}
 		this.mouseOut(e);
 	},
 
 
 	overNib: function (e) {
-		e.stopEvent();
+		if (!Ext.is.iPad) {
+			e.stopEvent();
+		}
 		clearTimeout(this.mouseLeaveTimeout);
 		return false;
 	},
@@ -490,7 +502,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		var o = this.data,
-			sel = this.reader.getDocumentElement().parentWindow.getSelection();
+				sel = this.reader.getDocumentElement().parentWindow.getSelection();
 		if (sel) {
 			sel.removeAllRanges();
 		}
@@ -506,9 +518,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	rangeForLineInfo: function (line, style) {
 		var range = line.range,
-			maybeContainer = range.commonAncestorContainer ? Ext.fly(range.commonAncestorContainer) : null,
-			containerSelector = 'object[data-nti-container]',
-			container, c;
+				maybeContainer = range.commonAncestorContainer ? Ext.fly(range.commonAncestorContainer) : null,
+				containerSelector = 'object[data-nti-container]',
+				container, c;
 
 		if (style !== 'suppressed') {
 			return {range: line.range, container: null};
@@ -517,8 +529,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//If we are a single non text node we will check to see if that node is the
 		//container rather than the common ancestor.
 		if (range.startContainer === range.endContainer
-			&& range.startContainer.nodeType !== Node.TEXT_NODE
-			&& range.startOffset + 1 === range.endOffset) {
+				&& range.startContainer.nodeType !== Node.TEXT_NODE
+				&& range.startOffset + 1 === range.endOffset) {
 			maybeContainer = Ext.fly(range.startContainer.childNodes[range.startOffset]);
 		}
 
