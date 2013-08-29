@@ -56,32 +56,32 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 		this.mon(this.el, 'click', 'handleClick', this);
 
-		if (Ext.is.iPad) {
-			me.mon(this.down('[name=title]').el.down('input'), {
-				'blur': function (e) {
-					me.onFocusChange(e);
-				}
-			}, me);
-			me.mon(this.down('[name=description]').el, {
-				'blur': function (e) {
-					me.onFocusChange(e);
-				}
-			}, me);
-		}
+//		if (Ext.is.iPad) {
+//			me.mon(this.down('[name=title]').el.down('input'), {
+//				'blur': function (e) {
+//					me.onFocusChange(e);
+//				}
+//			}, me);
+//			me.mon(this.down('[name=description]').el, {
+//				'blur': function (e) {
+//					me.onFocusChange(e);
+//				}
+//			}, me);
+//		}
 	},
 
 
 	/**
 	 * Scrolls to the top of the page if a text input field is not focused
 	 */
-	onFocusChange: function (e) {
-		var titleInput = this.down('[name=title]').el.down('input');
-		var descriptionField = this.down('[name=description]').el;
-		if (e.relatedTarget !== titleInput.dom
-				&& e.relatedTarget !== descriptionField.dom) {
-			window.scrollTo(0, 0);
-		}
-	},
+//	onFocusChange: function (e) {
+//		var titleInput = this.down('[name=title]').el.down('input');
+//		var descriptionField = this.down('[name=description]').el;
+//		if (e.relatedTarget !== titleInput.dom
+//				&& e.relatedTarget !== descriptionField.dom) {
+//			window.scrollTo(0, 0);
+//		}
+//	},
 
 
 	handleClick: function (e) {

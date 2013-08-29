@@ -11,16 +11,17 @@ Ext.define('NextThought.view.forums.Editor', {
 
 	headerTplOrder: '{title}{toolbar}',
 
-	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'header-container', cn: { cls: 'header', cn: [
-											{ tag: 'tpl', 'if': '!isEdit', cn: { cls: 'controls', cn: [
-												{ cls: 'new-topic disabled', html: 'New Discussion'}
-											] }},
-											{ cls: 'path', cn: ['{path} / ', {tag: 'span', cls: 'title-part', html: '{title}'}]}
-										]}
-										},
-										{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
-									]),
+	renderTpl: Ext.DomHelper.markup(
+			[
+				{ cls: 'header-container', cn: { cls: 'header', cn: [
+					{ tag: 'tpl', 'if': '!isEdit', cn: { cls: 'controls', cn: [
+						{ cls: 'new-topic disabled', html: 'New Discussion'}
+					] }},
+					{ cls: 'path', cn: ['{path} / ', {tag: 'span', cls: 'title-part', html: '{title}'}]}
+				]}
+				},
+				{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
+			]),
 
 
 	renderSelectors: {
@@ -76,37 +77,9 @@ Ext.define('NextThought.view.forums.Editor', {
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 		Ext.defer(this.syncHeight, 1, this);
 
-		if (Ext.is.iPad) {
-			var tokenInput = this.tagsEl.el.down('.token-field .token-input-wrap input');
-			this.mon(tokenInput, {
-				'blur': function (e) {
-					me.onFocusChange(e);
-				}
-			});
-		}
-
 		this.titleEl.focus();
 		this.moveCursorToEnd(this.titleEl);
 		window.scrollTo(this.titleEl.top);
-
-		//Don't scroll all the way, to let the input field show on ipad.
-		if (Ext.is.iPad) {
-			window.scrollTo(0, 100);
-		}
-	},
-
-
-	/**
-	 * Scrolls to the top of the page if a text input field is not focused
-	 */
-	onFocusChange: function (e) {
-		var titleInput = this.titleWrapEl.el.down('input'),
-				tokenInput = this.tagsEl.el.down('.token-field .token-input-wrap input');
-		if (e.relatedTarget !== titleInput.dom
-				&& e.relatedTarget !== tokenInput.dom
-				&& e.relatedTarget !== this.editorBodyEl.dom) {
-			window.scrollTo(0, 0);
-		}
 	},
 
 
