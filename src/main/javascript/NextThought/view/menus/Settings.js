@@ -4,6 +4,7 @@ Ext.define('NextThought.view.menus.Settings', {
 	requires:      [
 		'NextThought.view.menus.Presence'
 	],
+	cls: 'user-settings-menu',
 	ui:            'nt',
 	plain:         true,
 	showSeparator: false,
