@@ -149,6 +149,7 @@ span.tab{
 				max-height: 200px;
 				outline: 0;
 				position: relative;
+				-webkit-overflow-scrolling: touch;
 
 				&.show-placeholder[data-placeholder]::after{
 					display: block;
