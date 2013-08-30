@@ -545,6 +545,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	playerPlayEndHandler: function () {
+		if(this.isFullScreenMode){
+			this.deferDeactivateTillExit = true;
+			return;
+		}
 		var reactivate = !this.el || !this.el.up('.x-component-course[id^="course-overview-video"]');
 		this.deactivate();
 		this.currentState = 0;
@@ -556,6 +560,24 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		if (reactivate) {
 			Ext.defer(this.activate, 1, this, [this.currentSource]);
 		}
+	},
+
+
+	openFullScreenHandler: function(){
+		this.isFullScreenMode = true;
+		console.log('Entered full screen mode: ', arguments);
+	},
+
+
+	closeFullScreenHandler: function(){
+		console.log('Exited fullscreen mode: ', arguments);
+
+		// Do the deactivation we deferred at the end of the video,
+		if(this.isFullScreenMode && this.deferDeactivateTillExit){
+			Ext.defer(this.playerPlayEndHandler, 1, this);
+			delete this.deferDeactivateTillExit;
+		}
+		delete this.isFullScreenMode;
 	},
 
 
@@ -689,7 +711,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 								  'singlePluginLoaded', 'singlePluginFailedToLoad', 'mediaLoaded', 'entryReady',
 								  'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange',
 								  'playerUpdatePlayhead', 'playerPlayEnd', 'mediaLoadError', 'readyToLoad',
-								  'entryFailed', 'entryNotAvailable', 'changeMedia'],
+								  'entryFailed', 'entryNotAvailable', 'changeMedia', 'openFullScreen', 'closeFullScreen'],
 						i = events.length - 1;
 
 				for (i; i >= 0; i--) {
