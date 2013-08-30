@@ -421,6 +421,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			mouseup:     me.onMouseUp
 		});
 
+		if (Ext.is.iPad) {
+			me.contentEl.dom.addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		}
+
 		me.on('destroy', function () {
 			Ext.Object.each(me.trackedParts, function (k, v) {
 				if (v && v.destroy) {
