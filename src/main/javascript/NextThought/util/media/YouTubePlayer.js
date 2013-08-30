@@ -62,6 +62,10 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	playerReady: function () {
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
+		if (this.onReadyLoadSource) {
+			Ext.defer( this.load, 1, this, [this.onReadyLoadSource]);
+			delete this.onReadyLoadSource;
+		}
 	},
 
 	playerError: function (error) {
@@ -124,16 +128,24 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 
-	activate: Ext.emptyFn,
+	activate: function(sourceId){
+		console.log(this.id, 'Activate triggered');
+		// save the source id to be loaded whenever we are ready.
+		if(!this.isReady){
+			this.onReadyLoadSource = sourceId;
+		}
+	},
 
 
 	pause: function () {
+		if(!this.isReady){ return; }
 		if(Ext.isFunction(this.player.pauseVideo)){
 			this.player.pauseVideo();
 		}
 	},
 
 	seek: function (offset, seekAhead) {
+		if(!this.isReady){ return;}
 		this.currentStartAt = offset;
 		this.player.seekTo(offset, seekAhead);
 		this.pause();
