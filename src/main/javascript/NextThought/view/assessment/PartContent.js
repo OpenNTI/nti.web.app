@@ -7,7 +7,7 @@ Ext.define('NextThought.view.assessment.PartContent', {
 	renderTpl: Ext.DomHelper.markup(
 			[
 				{cls: 'ordinal', html: '{ordinal}.'},
-				{cls: 'content', html: '{content}'}
+				{cls: 'content', html: '{content}', style:{verticalAlign:'initial'}}
 			]
 	),
 

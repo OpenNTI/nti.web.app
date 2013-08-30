@@ -163,7 +163,11 @@ Ext.define('NextThought.view.assessment.Question', {
 			c += '<br/>';
 		}
 
-		this.update(ContentUtils.fixReferences(c + p, root));
+		this.update(
+			Ext.DomHelper.markup({
+				 style: {verticalAlign:'initial'},
+				 html: ContentUtils.fixReferences(c + p, root)
+			 }));
 		this.updateLayout();
 	},
 
