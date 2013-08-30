@@ -16,15 +16,17 @@ Ext.define('NextThought.view.account.Identity', {
 	autoShow: true,
 	floating: true,
 
-	renderTpl: Ext.DomHelper.markup([
-										{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
-										{ cls: 'presence' }
-									]),
+	renderTpl: Ext.DomHelper.markup(
+			[
+				{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
+				{ cls: 'presence' }
+			]),
 
 	renderSelectors: {
 		avatar:   'img.avatar',
 		presence: '.presence'
 	},
+
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -61,6 +63,7 @@ Ext.define('NextThought.view.account.Identity', {
 
 
 	afterRender: function () {
+		var me = this;
 		this.callParent(arguments);
 		this.monitorUser(this.user);
 		this.mon(this.el, {
@@ -72,9 +75,13 @@ Ext.define('NextThought.view.account.Identity', {
 
 		this.enableProfileClicks(this.avatar);
 
-		// On iPad, prevent the save/copy image menu from appearing
 		if (Ext.is.iPad) {
+			// Prevent the save/copy image menu from appearing
 			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
+			// Prevent the status menu from appearing after a click
+			this.el.down('img').dom.addEventListener('click', function (e) {
+				me.cancelHideShowEvents();
+			});
 		}
 	},
 
