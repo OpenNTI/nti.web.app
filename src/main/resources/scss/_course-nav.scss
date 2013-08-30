@@ -9,6 +9,7 @@
 #course-info {
 	@extend #NTIContent;
 	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .x-component-course{
