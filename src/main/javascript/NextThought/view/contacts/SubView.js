@@ -3,7 +3,9 @@ Ext.define('NextThought.view.contacts.SubView', {
 	alias:  'widget.contact-tab-view',
 
 	requires: [
-		'NextThought.view.contacts.outline.View'
+		'NextThought.view.contacts.Grouping',
+		'NextThought.view.contacts.outline.View',
+		'NextThought.view.BoundPanel'
 	],
 
 	navigation: { xtype: 'contacts-outline' },
@@ -54,6 +56,8 @@ Ext.define('NextThought.view.contacts.SubView', {
 		});
 
 		this.applyConfigs('navigation', {
+			cls:          type,
+			subType:      type,
 			store:        config.storeId || this.config.storeId,
 			outlineLabel: config.outlineLabel || ('All ' + Ext.String.capitalize(Ext.util.Inflector.pluralize(type)))
 		});

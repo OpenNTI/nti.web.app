@@ -1162,6 +1162,16 @@ div.contact-buttons {
 		.contact {
 			padding: 35px 30px;
 		}
+		.nav-outline{
+			&.contact{
+				padding: 0;
+			}
+			&.list, &.group {
+				.outline-list {
+					margin-bottom: 40px;
+				}
+			}
+		}
 
 		.contact-grouping {
 			background: #fff;

@@ -3,7 +3,6 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	alias:  'widget.contacts-outline',
 
 	ui:                      'nav',
-	cls:                     'nav-outline make-white',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -40,6 +39,12 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		}
 
 	]})),
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.addCls('nav-outline make-white');
+	},
 
 
 	beforeRender: function () {
