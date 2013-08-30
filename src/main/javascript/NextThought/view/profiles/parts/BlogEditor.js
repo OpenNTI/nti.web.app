@@ -138,7 +138,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		top = el.getY() + pEl.getScroll().top - scrollPos;
 
 		newHeight = ((vpH - top) - footEl.getHeight()) - 8;
-		this.sizer.setHeight(newHeight);
+		if(this.sizer){
+			this.sizer.setHeight(newHeight);
+		}
 
 		el.setHeight(newHeight);
 

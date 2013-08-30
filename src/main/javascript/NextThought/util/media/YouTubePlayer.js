@@ -113,7 +113,9 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 	play: function () {
-		this.player.playVideo();
+		if(Ext.isFunction(this.player.playVideo)){
+			this.player.playVideo();
+		}
 	},
 
 
@@ -126,7 +128,9 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	pause: function () {
-		this.player.pauseVideo();
+		if(Ext.isFunction(this.player.pauseVideo)){
+			this.player.pauseVideo();
+		}
 	},
 
 	seek: function (offset, seekAhead) {
