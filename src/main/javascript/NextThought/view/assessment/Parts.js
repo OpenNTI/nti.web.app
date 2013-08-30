@@ -29,7 +29,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 		this[individual ? 'removeCls' : 'addCls']('part-of-set');
 
 		if (multiPart) {
-			this.setMultiPart(question, questionSet, parts, tabIndexTracker);
+			this.setMultiPart(question, questionSet, parts, tabIndexTracker, answerLabel);
 			if (individual) {
 				this.add(
 						{
@@ -73,13 +73,14 @@ Ext.define('NextThought.view.assessment.Parts', {
 	},
 
 
-	setMultiPart: function (question, questionSet, parts, tabIndexTracker) {
+	setMultiPart: function (question, questionSet, parts, tabIndexTracker, answerLabel) {
 		var type, part, items, i;
 
 		this.addCls('multipart');
 
 		for (i = 0; i < parts.length; i++) {
 			part = parts[i];
+			part.set('answerLabel', answerLabel);
 			items = [];
 			type = 'question-input-' + part.get('Class').toLowerCase();
 			items.push({xtype: 'part-content', part: part, ordinal: i});
