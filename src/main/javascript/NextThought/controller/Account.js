@@ -101,7 +101,9 @@ Ext.define('NextThought.controller.Account', {
 							},
 
 							'*': {
-								'resend-consent': 'resendConsent'
+								'resend-consent': 'resendConsent',
+								'set-preference': 'setPreference',
+								'delete-preference': 'delPreference'
 							},
 
 							'group-buttons': {
@@ -549,6 +551,64 @@ Ext.define('NextThought.controller.Account', {
 				}
 			}
 		});
+	},
+	//key either needs to be a string key for value or on object { key1: value, key2: value}
+	setPreference: function(key, value, callback, scope){
+		var req, url = $AppConfig.userObject.getLink('set_preferences'),
+			multi = Ext.isObject(key),
+			object = (multi)? key : {};
+
+		if(!multi){
+			object[key] = value;
+		}
+
+		if(url && !Ext.isEmpty(object)){
+			req = {
+				url: url,
+				scope: this,
+				jsonData: Ext.JSON.encode(object),
+				method: 'POST',
+				callback: function(q, success, r){
+					if(success){
+						$AppConfig.Preferences = Ext.merge($AppConfig.Preference || {}, object); 
+					}
+					Ext.callback(callback, scope);
+				}
+			}
+
+			Ext.Ajax.request(req);
+			return;
+		}
+
+		Ext.callback(callback, scope);
+	},
+	//key can either be an array of strings or one string of key(s) to delete
+	delPreference: function(key, callback, scope){
+		var req, url = $AppConfig.userObject.getLink('delete_preferences'),
+			multi = Ext.isArray(key),
+			object = (multi)? key : [key];
+
+		if(url && !Ext.isEmpty(object)){
+			req = {
+				url: url,
+				scope: this,
+				headers: {
+					keys: object.join(' ')
+				},
+				method: 'DELETE',
+				callback: function(q, success, r){
+					if(success){
+						Ext.each(object, function(key){
+							delete $AppConfig.Preferences[key];
+						});
+					}
+					Ext.callback(callback, scope)
+				}
+			}
+			Ext.Ajax.request(req);
+			return;
+		}
+		Ext.callback(callback, scope);
 	}
 
 });

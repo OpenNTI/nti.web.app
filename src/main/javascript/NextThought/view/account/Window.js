@@ -179,12 +179,12 @@ Ext.define('NextThought.view.account.VideoSettings', {
 	},
 
 	updateCheckbox: function () {
-		this.preferFlashEl[$AppConfig.kalturaPreferFlash ? 'addCls' : 'removeCls']('checked');
+		this.preferFlashEl[$AppConfig.Preferences.kalturaPreferFlash ? 'addCls' : 'removeCls']('checked');
 	},
 
 	checkboxClicked: function () {
-		$AppConfig.kalturaPreferFlash = !($AppConfig.kalturaPreferFlash);
-		this.updateCheckbox();
+		var prefer = !this.preferFlashEl.hasCls('checked'); // the dom hasn't updated with the new class yet
+		this.fireEvent('set-preference', 'kalturaPreferFlash', prefer, this.updateCheckbox, this);
 	}
 });
 

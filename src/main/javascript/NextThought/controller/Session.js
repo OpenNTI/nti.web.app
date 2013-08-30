@@ -421,11 +421,12 @@ Ext.define('NextThought.controller.Session', {
 			failureCallback.call(me);
 		}
 
-		function onSuccess(user) {
+		function onSuccess(user, prefs) {
 			//we set the user's presence in the chat session-ready controller so we don't need to do it here.
 			//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
 			user.summaryObject = false;
 			$AppConfig.userObject = UserRepository.cacheUser(user, true);
+			$AppConfig.Preferences = Ext.merge($AppConfig.Preferences || {}, prefs);
 			console.debug('Set app user to ', $AppConfig.userObject);
 			ObjectUtils.defineAttributes($AppConfig, {
 				username: {
@@ -464,12 +465,13 @@ Ext.define('NextThought.controller.Session', {
 					onFailure(arguments);
 					return;
 				}
+
 				json = Ext.decode(r.responseText, true);
 				user = json ? ParseUtils.parseItems(json) : null;
 				user = user ? user.first() : null;
-
+				
 				if (user && user.get('Username') === workspace.Title) {
-					onSuccess(user);
+					onSuccess(user, json.Preferences);
 				}
 				else {
 					onFailure(arguments);

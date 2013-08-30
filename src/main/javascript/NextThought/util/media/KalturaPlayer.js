@@ -147,7 +147,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	shouldUseHtml5: function () {
-		return !Ext.isIE9 && !$AppConfig.kalturaPreferFlash;
+		return !Ext.isIE9 && !$AppConfig.Preferences.kalturaPreferFlash;
 	},
 
 

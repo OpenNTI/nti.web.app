@@ -13,6 +13,9 @@ var $AppConfig = {
         "data": "/dataserver2/",
 		"login": "/login/",
 		"unsupported": "/login/unsupported.html"
+    },
+    "Preferences":{
+    	"kalturaPreferFlash": false
     }
 };
 
