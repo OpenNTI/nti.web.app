@@ -798,9 +798,10 @@ Ext.define('NextThought.controller.UserData', {
 
 	saveSharingPrefs: function (pageInfoId, prefs, callback) {
 		//TODO - check to see if it's actually different before save...
-		var me = this;
+		var me = this,
+			pi = ContentUtils.getLineage(pageInfoId).last() || pageInfoId;
 		//get parent:
-		$AppConfig.service.getPageInfo(ContentUtils.getLineage(pageInfoId).last(),
+		$AppConfig.service.getPageInfo(pi,
 									   function (topPi) {
 										   if (topPi) {
 											   topPi.saveField('sharingPreference', {sharedWith: prefs}, function (fieldName, sanitizedValue, pi, refreshedPageInfo) {
