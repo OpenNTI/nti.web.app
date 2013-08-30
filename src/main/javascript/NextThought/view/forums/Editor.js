@@ -79,7 +79,7 @@ Ext.define('NextThought.view.forums.Editor', {
 
 		this.titleEl.focus();
 		this.moveCursorToEnd(this.titleEl);
-		window.scrollTo(this.titleEl.top);
+		//window.scrollTo(this.titleEl.top);
 	},
 
 
