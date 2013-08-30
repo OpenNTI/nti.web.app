@@ -15,7 +15,7 @@ var $AppConfig = {
 		"unsupported": "/login/unsupported.html"
     },
     "Preferences":{
-    	"kalturaPreferFlash": false
+    	"webapp_kalturaPreferFlash": false
     }
 };
 
