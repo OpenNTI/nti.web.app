@@ -308,7 +308,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	getDefinitionMenuItem: function (range) {
 		try {
-
 			range = range || this.getSelection();
 			if (!range) {
 				console.error('No range!');
@@ -442,11 +441,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		offset = me.reader.getEl().getXY();
 		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
-		if (!Ext.is.iPad) {
-			xy[0] += offset[0] + innerDocOffset;
-			xy[1] += offset[1];
-		}
-
+		xy[0] += offset[0] + innerDocOffset;
+		xy[1] += offset[1];
 
 		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
 			menu.showAt(xy);
@@ -553,7 +549,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			delete this.reader.creatingAnnotation;
 		}, this);
 
-
 		xy = [
 			range.getBoundingClientRect().right,
 			range.getBoundingClientRect().bottom
@@ -561,7 +556,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		offset = me.reader.getEl().getXY();
 		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
 		xy[0] += offset[0] + innerDocOffset;
-		xy[1] += offset[1];
+		xy[1] += offset[1] - me.reader.getScroll().get().top;
 
 		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
 			menu.showAt(xy);
