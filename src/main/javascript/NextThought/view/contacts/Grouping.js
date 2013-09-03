@@ -43,18 +43,14 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	titleTpl: Ext.DomHelper.createTemplate(['{0} ', {tag: 'span', html: '{1}'}]),
 
 	showMoreTpl: Ext.DomHelper.createTemplate({
-												  cls: 'show-more',
-												  cn:  [
-													  {cls: 'dots', cn: [
-														  {},
-														  {},
-														  {}
-													  ]},
-													  {html: '{count} More'}
-												  ]
-											  }),
+		cls: 'show-more',
+		cn:  [
+			{cls: 'dots', cn: [{},{},{}]},
+			{html: '{count} More'}
+		]
+	}),
 
-	childEls:    ['body'],
+	childEls: ['body'],
 	getTargetEl: function () {
 		return this.body;
 	},

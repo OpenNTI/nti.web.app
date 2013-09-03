@@ -1002,12 +1002,12 @@ div.contact-buttons {
 
 			span{
 				white-space: nowrap;
-				font: normal 500 18px/25px $font;
+				font: normal 300 26px/25px $font;
 				color: $primary-grey;
 			}
 
 			span.count{
-				padding-left: 4px;
+				padding-left: 0.5em;
 				color: #b8b8b8;
 			}
 		}
@@ -1019,7 +1019,7 @@ div.contact-buttons {
 			width: 140px; height: 140px;
 			float: left;
 			text-align: center;
-			color: #b8b8b8;
+			color: $primary-blue;
 			font: italic 300 16px/30px $font;
 
 			.dots {
@@ -1027,7 +1027,7 @@ div.contact-buttons {
 				margin-top: 50px;
 				div {
 					display: inline-block;
-					background: #b8b8b8;
+					background: $primary-blue;
 					border-radius: 90px;
 					width: 7px;
 					height: 7px;
