@@ -9,11 +9,18 @@ Ext.define('NextThought.view.contacts.outline.View', {
 										{ cls: 'header', cn: [
 											'{outlineLabel}'
 										]},
-										{ cls: 'outline-list'}
+										{ cls: 'outline-list'},
+										{ tag:'tpl', 'if':'buttons', cn: { cls:'buttons', cn: [
+											{ tag:'tpl', 'if':'canjoin', cn:{
+												cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
+											{ tag:'tpl', 'if':'cancreate', cn:{
+												cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } }
+										]}}
 									]),
 
 	renderSelectors: {
-		frameBodyEl: '.outline-list'
+		frameBodyEl: '.outline-list',
+		buttonsEl: '.buttons'
 	},
 
 
@@ -29,7 +36,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 
 	overItemCls:  'over',
 	itemSelector: '.outline-row',
-	tpl:          new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl:          Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 
 		{
 			cls: 'outline-row {type}', 'data-qtip': '{displayName}',
@@ -38,7 +45,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			]
 		}
 
-	]})),
+	]}),
 
 
 	initComponent: function(){
@@ -55,7 +62,11 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		});
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			outlineLabel: this.getOutlineLabel()
+			outlineLabel: this.getOutlineLabel(),
+			buttons: Boolean(this.subType!=='contact'),
+			type: this.subType,
+			cancreate: true,//capability?
+			canjoin: this.subType === 'group'
 		});
 
 		this.on({
@@ -93,11 +104,24 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	afterRender: function () {
 		this.callParent(arguments);
 
+		if( this.buttonsEl ){
+			this.mon(this.buttonsEl,'click','onButtonsClicked');
+		}
+
+
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
 			this.getEl().dom.addEventListener('touchmove', function (e) {
 				e.stopPropagation();
 			});
+		}
+	},
+
+
+	onButtonsClicked: function(evt){
+		var b = evt.getTarget('.contact-button');
+		if( b ){
+			this.fireEvent('contact-button-clicked', b, this);
 		}
 	},
 

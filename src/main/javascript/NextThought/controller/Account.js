@@ -106,12 +106,11 @@ Ext.define('NextThought.controller.Account', {
 								'delete-preference': 'delPreference'
 							},
 
-							'group-buttons': {
-								'click': 'groupButtonClicked'
-							},
+							'group-buttons': { 'click': 'groupButtonClicked' },
+							'list-buttons': { 'click': 'groupButtonClicked' },
 
-							'list-buttons': {
-								'click': 'groupButtonClicked'
+							'contacts-outline':{
+								'contact-button-clicked':'groupButtonClicked'
 							}
 
 						}
