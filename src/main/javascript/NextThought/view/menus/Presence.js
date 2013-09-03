@@ -84,7 +84,7 @@ Ext.define('NextThought.view.menus.Presence', {
 	},
 
 	saveState: function (type, show, status, active) {
-		var key, current = TemporaryStorage.get(this.sessionKey) || {};
+		var key, current = $AppConfig.Preferences.presence || TemporaryStorage.get(this.sessionKey) || {};
 		key = type;
 
 		if (type === 'available') {
@@ -110,13 +110,14 @@ Ext.define('NextThought.view.menus.Presence', {
 		if (active) {
 			current.active = key;
 		}
-
+		//Set the presence info on the temp storage and the users preferences
 		TemporaryStorage.set(this.sessionKey, current);
+		this.fireEvent('set-preference', 'presence', current, this.restoreState, this);
 	},
 
 	restoreState: function () {
 		var me = this,
-				state = TemporaryStorage.get(this.sessionKey) || {};
+				state = $AppConfig.Preferences.presence || TemporaryStorage.get(this.sessionKey) || {};
 
 		function update() {
 			Ext.Object.each(me.defaultStates, function (key, value) {

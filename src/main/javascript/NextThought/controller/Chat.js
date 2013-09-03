@@ -220,8 +220,8 @@ Ext.define('NextThought.controller.Chat', {
 
 		});
 
-		//restore the presence or change presence to available
-		presenceState = TemporaryStorage.get('presence-state');
+		//restore the presence (form the preferences of the state object) or change presence to available
+		presenceState = $AppConfig.Preferences.presence || TemporaryStorage.get('presence-state');
 		active = presenceState && presenceState.active && presenceState[presenceState.active];
 
 		if (active) {
