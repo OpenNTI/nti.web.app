@@ -1005,6 +1005,10 @@ $experimental-support-for-svg: true;
 			position: relative;
             overflow-y: hidden !important;
 
+			.searchHit-overlay{
+				pointer-events: none;
+			}
+
 			.note-gutter{
 				left: auto !important;
 				right: 20px !important;

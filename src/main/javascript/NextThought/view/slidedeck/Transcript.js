@@ -21,6 +21,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
 
+	mixins:{
+		searchHitHighlighting:  'NextThought.mixins.SearchHitHighlighting'
+	},
+
 	initComponent: function () {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
 
@@ -577,6 +581,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	getDocumentElement:     Ext.emptyFn,
 	getCleanContent:        Ext.emptyFn,
 
+	// NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
+	// By the time, this function gets called, we are already scrolled at the right location.
+	scrollToHit: Ext.emptyFn,
 
 	getScrollTarget: function () {
 		return this.getTargetEl().dom || this.el.dom;

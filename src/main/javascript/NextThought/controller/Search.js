@@ -279,14 +279,20 @@ Ext.define('NextThought.controller.Search', {
 	searchTranscriptResultClicked: function (result, fragIdx) {
 		var videoObject = result.videoObject;
 
-		function callback(mediaViewer) {
-			//TODO highlight fragment here.
+		function callback(cmp) {
+			var hit = result.hit,
+				frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
+				t = cmp && cmp.down('slidedeck-transcript');
+
+			if(t){
+				t.showSearchHit(hit, frag);
+			}
 		}
 
 		if (videoObject) {
 			this.fireEvent('show-object', videoObject, null, null, {
 				startAtMillis: result.hit.get('StartMilliSecs'),
-				callback:      callback
+				callback: Ext.bind(callback, this)
 			});
 		}
 		else {
