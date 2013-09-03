@@ -75,7 +75,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 						this.fromClick = true;
 					},
 					beforeselect: function (s, r) {
-						var pass = r.get('type') !== 'unit',
+						var pass = r.data.type !== 'unit',
 								store = s.getStore(),
 								last = s.lastSelected || store.first(), next;
 
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 							next = store.indexOf(r);
 							next += ((next - last) || 1);
 
-							//do the in the next event pump
+							//do this in the next event pump
 							Ext.defer(s.select, 1, s, [next]);
 						}
 						return pass;

@@ -119,10 +119,10 @@ Ext.define('NextThought.model.User', {
 
 	save: function (ops) {
 		Ext.Ajax.request(Ext.apply({
-									   url:      this.getLink('edit'),
-									   method:   'PUT',
-									   jsonData: this.getData()
-								   }, ops));
+		   url:      this.getLink('edit'),
+		   method:   'PUT',
+		   jsonData: this.getData()
+	   }, ops));
 	},
 
 	isUnresolved: function () {
@@ -136,13 +136,13 @@ Ext.define('NextThought.model.User', {
 
 		getUnresolved: function (username) {
 			var u = new NextThought.model.User({
-												   Username:    username,
-												   alias:       username,
-												   avatarURL:   this.BLANK_AVATAR,
-												   affiliation: 'Unknown',
-												   status:      '',
-												   Presence:    NextThought.model.PresenceInfo.createFromPresenceString("Offline")
-											   }, username);
+			   Username:    username,
+			   alias:       username,
+			   avatarURL:   this.BLANK_AVATAR,
+			   affiliation: 'Unknown',
+			   status:      '',
+			   Presence:    NextThought.model.PresenceInfo.createFromPresenceString("Offline")
+		   }, username);
 			u.Unresolved = true;
 			return u;
 		},

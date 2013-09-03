@@ -59,7 +59,12 @@ Ext.define('NextThought.view.contacts.SubView', {
 
 
 		store = StoreUtils.newView(config.storeId || this.config.storeId);
-		if( Ext.isFunction(filter) ){
+
+		if(store.model === NextThought.model.User){
+			store.on('datachanged','injectLetterDividers', this);
+		}
+
+		if( Ext.isFunction(filter) ) {
 			store.filter(filter);
 		}
 
@@ -70,7 +75,34 @@ Ext.define('NextThought.view.contacts.SubView', {
 			outlineLabel: config.outlineLabel || ('All ' + Ext.String.capitalize(Ext.util.Inflector.pluralize(type)))
 		});
 
+
 		this.callParent(arguments);
+
+		this.on('destroy','clearListeners',store);
+	},
+
+
+	injectLetterDividers: function(store){
+		var User = NextThought.model.User,
+			pluck = Ext.Array.pluck,
+			letters = {}, toAdd = [];
+
+		Ext.each(pluck(pluck(store.getRange(),'data'),'displayName'),function(v){
+			v = (v||'-')[0] || '-';
+			letters[v.toUpperCase()] = 1;
+		});
+
+		Ext.each(Ext.Object.getKeys(letters), function(v){
+			var m = User.getUnresolved(v);
+			m.set('type','unit');
+			if(store.findBy(function(r){ return r.get('type')==='unit' && r.get('Username')===v; }) < 0){
+				toAdd.push(m);
+			}
+		});
+
+		store.suspendEvents(false);
+		store.add(toAdd);
+		store.resumeEvents();
 	}
 
 });

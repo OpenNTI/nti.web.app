@@ -1,6 +1,6 @@
 Ext.define('NextThought.store.Contacts', {
 	extend: 'Ext.data.Store',
-	model:  'NextThought.model.forums.PersonalBlogEntry',
+	model:  'NextThought.model.User',
 
 	proxy:        'memory',
 	remoteSort:   false,

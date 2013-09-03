@@ -52,10 +52,12 @@ Ext.define('NextThought.util.Store', {
 
 		//probably a more efficient way exists...
 		copy.mon(store,'datachanged',function(){
+			var f = copy.filters.getRange();
+			copy.clearFilter();
 			copy.removeAll();
-			delete copy.snapshot;
 			copy.add(store.getRange());
-			copy.filter();
+			copy.filter(f);
+			copy.sort();
 		});
 
 		return copy;
