@@ -18,15 +18,15 @@ Ext.define('NextThought.view.account.contacts.View', {
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'contact-list'},
-										{ cls: 'button-row', cn: [
-											{cls: 'search', html: 'Search', cn: [
-												{tag: 'input', type: 'text'/*, placeholder:'Search'*/},
-												{cls: 'clear', style: {display: 'none'}}
-											] },
-											{cls: 'group-chat', html: 'Group Chat' }
-										]}
-									]),
+		{ cls: 'contact-list'},
+		{ cls: 'button-row', cn: [
+			{cls: 'search', html: 'Search', cn: [
+				{tag: 'input', type: 'text'/*, placeholder:'Search'*/},
+				{cls: 'clear', style: {display: 'none'}}
+			] },
+			{cls: 'group-chat', html: 'Group Chat' }
+		]}
+	]),
 
 	renderSelectors: {
 		buttonRow:       '.button-row',
@@ -67,29 +67,34 @@ Ext.define('NextThought.view.account.contacts.View', {
 				{ cls: 'status', html: '{status}' }
 			]}
 		]}
-	]}), {
-										isContact: function (values) {
-											var a = Ext.getStore('all-contacts-store'),
-													o = Ext.getStore('online-contacts-store');
-											return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
-													? 'contact' : 'not-contact';
-										}
-									}),
+		]}), {
+			isContact: function (values) {
+				var a = Ext.getStore('all-contacts-store'),
+						o = Ext.getStore('online-contacts-store');
+				return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
+						? 'contact' : 'not-contact';
+			}
+		}),
 
 
 	constructor: function () {
 		this.normalEmptyText = Ext.DomHelper.markup({
-														cls:  'empty-list rhp-empty-list',
-														html: 'None of your contacts are online.'
-													});
+			cls:  'empty-list rhp-empty-list',
+			html: 'None of your contacts are online.'
+		});
 
 		this.noContactsEmptyText = Ext.DomHelper.markup({
-															cls: 'rhp-no-contacts',
-															cn:  [
-																{ html: 'You don&apos;t have any contacts yet...' },
-																{ tag: 'a', cls: 'button', role: 'button', href: '#', html: 'Add Contacts' }
-															]
-														});
+			cls: 'rhp-no-contacts',
+			cn:  [
+				{ html: 'You don&apos;t have any contacts yet...' },
+				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: 'Add Contacts' }
+			]
+		});
+
+		this.offlineEmptyText = Ext.DomHelper.markup({
+			cls: 'empty-list rhp-empty-list',
+			html: 'You are currently offline. Change your status to see contacts who are online'
+		});
 
 		this.friendsListStore = Ext.getStore('FriendsList');
 
@@ -107,9 +112,14 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	getViewRange: function () {
 		var range = this.callParent(),
-				a = !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
+				a = !Ext.isEmpty(this.friendsListStore.getContacts()),
+				online = $AppConfig.userObject.getPresence().isOnline();//This should probably be optimized.
 
-		this.emptyText = a ? this.normalEmptyText : this.noContactsEmptyText;
+		if(a){
+			this.emptyText = online? this.normalEmptyText : this.offlineEmptyText;
+		}else{
+			this.emptyText = this.noContactsEmptyText;
+		}
 
 		return range;
 	},
@@ -269,40 +279,40 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 		this.callParent(arguments);
 		this.searchStore = new NextThought.store.UserSearch({
-																filters: [
-																	//filter out communities, lists, groups and yourself. Just return users.
-																	function (rec) {
-																		return rec.get('Username') !== $AppConfig.contactsGroupName;
-																	},
-																	function (rec) {
-																		return !rec.isCommunity;
-																	},
-																	function (rec) {
-																		return !isMe(rec);
-																	},
-																	function (rec) {
-																		return rec.get('ContainerId') === 'Users';
-																	}
-																],
-																sorters: [
-																	{
-																		//Put contacts first
-																		sorterFn:  function (a, b) {
-																			var c = store.contains(a.get('Username')),
-																					d = store.contains(b.get('Username'));
-																			return c === d
-																					? 0
-																					: c ? -1 : 1;
-																		},
-																		direction: 'ASC'
-																	},
-																	{
-																		//Sort, next, by displayName
-																		property:  'displayName',
-																		direction: 'ASC'
-																	}
-																]
-															});
+			filters: [
+				//filter out communities, lists, groups and yourself. Just return users.
+				function (rec) {
+					return rec.get('Username') !== $AppConfig.contactsGroupName;
+				},
+				function (rec) {
+					return !rec.isCommunity;
+				},
+				function (rec) {
+					return !isMe(rec);
+				},
+				function (rec) {
+					return rec.get('ContainerId') === 'Users';
+				}
+			],
+			sorters: [
+				{
+					//Put contacts first
+					sorterFn:  function (a, b) {
+						var c = store.contains(a.get('Username')),
+								d = store.contains(b.get('Username'));
+						return c === d
+								? 0
+								: c ? -1 : 1;
+					},
+					direction: 'ASC'
+				},
+				{
+					//Sort, next, by displayName
+					property:  'displayName',
+					direction: 'ASC'
+				}
+			]
+		});
 
 		this.clearNib.setVisibilityMode(Ext.Element.DISPLAY);
 		this.mon(this.clearNib, 'click', 'clearClicked', this);
@@ -328,7 +338,11 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function (username, presence) {
 			if (isMe(username)) {
-				this[presence.isOnline() ? 'removeCls' : 'addCls']('offline');
+				if(presence.isOnline()){
+					this.bindStore('online-contacts-store');
+				}else{
+					this.bindStore('ext-empty-store');
+				}
 			}
 		}, this);
 
