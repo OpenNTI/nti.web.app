@@ -26,6 +26,8 @@ Ext.define('NextThought.view.contacts.SubView', {
 
 	constructor: function (config) {
 		var type = config.subType || this.config.subType,
+				store,
+				filter = config.filterFn || this.config.filterFn,
 				bodyItems = config.bodyItems || this.config.bodyItems || [],
 				emptyText = {
 					cls: 'contacts-empty-state', cn: [
@@ -46,7 +48,7 @@ Ext.define('NextThought.view.contacts.SubView', {
 			storeId:            config.storeId || this.config.storeId,
 			defaultInsertPoint: bodyItems.length,
 			items:              bodyItems,
-			filter:             config.filterFn || this.config.filterFn,
+			filter:             filter,
 			ui:                 'contacts-' + type,
 			cls:                (config.bodyCls || this.config.bodyCls) + ' ' + type,
 			emptyCmp:           {
@@ -55,10 +57,16 @@ Ext.define('NextThought.view.contacts.SubView', {
 			}
 		});
 
+
+		store = StoreUtils.newView(config.storeId || this.config.storeId);
+		if( Ext.isFunction(filter) ){
+			store.filter(filter);
+		}
+
 		this.applyConfigs('navigation', {
 			cls:          type,
 			subType:      type,
-			store:        config.storeId || this.config.storeId,
+			store:        store,
 			outlineLabel: config.outlineLabel || ('All ' + Ext.String.capitalize(Ext.util.Inflector.pluralize(type)))
 		});
 

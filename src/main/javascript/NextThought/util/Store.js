@@ -34,7 +34,35 @@ Ext.define('NextThought.util.Store', {
 			store.resumeEvents();
 
 		});
+	},
+
+
+
+	newView: function(store){
+		if( Ext.isString(store) ){
+			store = Ext.getStore(store);
+		}
+
+		var copy = new Ext.data.Store({
+			proxy: 'memory',
+			model: store.model,
+			sorters: store.sorters.getRange(),
+			data: store.getRange()
+		});
+
+		//probably a more efficient way exists...
+		copy.mon(store,'datachanged',function(){
+			copy.removeAll();
+			delete copy.snapshot;
+			copy.add(store.getRange());
+			copy.filter();
+		});
+
+		return copy;
+
 	}
+
+
 }, function () {
 	window.StoreUtils = this;
 });
