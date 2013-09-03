@@ -123,12 +123,22 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 	afterRender: function () {
 		this.callParent(arguments);
+		var me  = this;
+
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
 		if (this.btnNewEntryEl && this.canCreateNewBlog()) {
 			this.btnNewEntryEl.addCls('owner');
 			this.mon(this.btnNewEntryEl, 'click', this.onNewPost, this);
+			this.on({
+				scope: this,
+				'deactivate': function(){ me.btnNewEntryEl.hide(); },
+				'activate': function(){
+					me.btnNewEntryEl.show();
+					me.handleScrollNewEntryBtnLock();
+				}
+			});
 			if (Ext.get('profile')) {
 				this.mon(Ext.get('profile'), 'scroll', this.handleScrollNewEntryBtnLock, this);
 			}
@@ -157,7 +167,8 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	handleScrollNewEntryBtnLock: function (e, profileDom) {
-		//This is only called on scroll for when the btnNewEntryEl is present.
+		profileDom = profileDom || Ext.get('profile').dom;
+		//This is only called when the btnNewEntryEl is present.
 		var wrapperEl, profileEl,
 				btnEl = this.btnNewEntryEl,
 				profileDomParent = profileDom && profileDom.parentNode,
@@ -213,6 +224,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		}
 		catch (e) {
 			//console.warn('Swap failed. ListViewEl and PostViewEl are missing!\n',Globals.getError(e));
+			console.error(e);
 			swallow(e);
 		}
 	},
@@ -518,7 +530,6 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 		Ext.get('profile').scrollTo('top', 0, true);
 		this.activePost = Ext.widget(xtype, cfg);
-		this.fireEvent('deactivate');
 		this.updateLayout();
 	},
 
