@@ -322,7 +322,10 @@
 			&.on{ color: $primary-red; }
 		}
 
-		.comment-count {cursor: pointer;}
+		.comment-count {
+			cursor: pointer;
+			vertical-align: text-top;
+		}
 
 		.comment-box .response > span,
 		& > span{
@@ -332,7 +335,7 @@
 				position: static;
 				content: '\00B7';
 				text-decoration: none !important;
-				vertical-align: middle;
+				vertical-align: text-top;
 				display: inline-block;
 				padding: 0 0.6em;
 				background: none;
@@ -352,7 +355,7 @@
 				white-space: nowrap;
 				border-radius: 90px;
 				padding: 0 15px;
-				margin: 0 5px 10px 0;
+				margin: 0 5px 7px 0;
 				height: 20px;
 				text-transform: uppercase;
 				vertical-align: middle;
