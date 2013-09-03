@@ -83,13 +83,14 @@ Ext.define('NextThought.util.Annotations', {
 				   var text = range.toString(),
 						   contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, root);
 
-				   return NextThought.model.Highlight.create({
-																 style:           style,
-																 applicableRange: contentRangeDescription.description,
-																 ContainerId:     contentRangeDescription.container,
-																 selectedText:    text//,
+				   return NextThought.model.Highlight.create(
+						   {
+							   style:           style,
+							   applicableRange: contentRangeDescription.description,
+							   ContainerId:     contentRangeDescription.container,
+							   selectedText:    text//,
 //			sharedWith: p
-															 });
+						   });
 			   },
 
 

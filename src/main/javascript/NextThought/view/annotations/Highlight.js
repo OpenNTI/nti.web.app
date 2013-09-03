@@ -49,6 +49,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
+
 	cleanup: function () {
 		this.isDestroyed = true;
 		if (this.rendered) {
@@ -164,7 +165,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				boundingTop,
 				boundingLeft,
 				boundingHeight,
-				width = me.content ? me.content.getWidth() : 700,
+				boundingWidth,
+				width = me.content ? me.content.getWidth() : 700, // Didn't seem appropriate for how it was used
 				topOffset = 10,
 				leftOffset = 5,
 				fakeRectRange,
@@ -183,10 +185,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 
 			//don't create counter when suppressed:
-			if (style !== 'suppressed') {
+			// Disabled counters on iPad because 1) their span added width which threw off all the content and could
+			//  break its presentation, and 2) they didn't seem to be doing anything functional anywhere.
+			if (style !== 'suppressed' && !Ext.is.iPad) {
 				me.counter = me.createCounter(me.rendered.last());
 			}
-
 
 			//create a composite element so we can do lots of things at once:
 			me.compElements = new Ext.dom.CompositeElement(me.rendered);
@@ -227,17 +230,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		}
 
-		range = range || me.buildRange();
+		range = (!range || range.collapsed) ? me.buildRange() : range;
 		bounds = range.getBoundingClientRect();
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);
+		boundingWidth = Math.ceil(bounds.width); // Seemed more appropriate than content width
 		Ext.fly(me.canvas).setXY([
 									 boundingLeft - leftOffset,
 									 boundingTop - topOffset
 								 ]);
 		Ext.fly(me.canvas).set({
-								   width:  width + (leftOffset * 2),
+								   width:  boundingWidth + (leftOffset * 2),
 								   height: boundingHeight + (topOffset * 2)
 							   });
 
@@ -307,11 +311,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return el.dom;
 	},
 
+
 	isInlineElement: function (node) {
 		//getComputedStyle === $$$$
 		//return ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
 		return !this.self.blockElementRe.test(node.nodeName);
 	},
+
 
 	validToWrapEntireNodeFaster: function (node) {
 		var ntiInline;
@@ -365,6 +371,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		return valid;
 	},
+
 
 	wrapRange: function (node, range) {
 		var nodeList = [],
@@ -481,6 +488,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return span;
 	},
 
+
 	getScrollPosition: function (currentPosition) {
 		var dh = 100,
 				range = this.getRange(), top;
@@ -492,6 +500,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		return 0;
 	},
+
 
 	unwrap: function (node) {
 		var r, p = node.parentNode;
