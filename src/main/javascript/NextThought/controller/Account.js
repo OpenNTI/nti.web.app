@@ -573,7 +573,7 @@ Ext.define('NextThought.controller.Account', {
 					}
 					Ext.callback(callback, scope);
 				}
-			}
+			};
 
 			Ext.Ajax.request(req);
 			return;
@@ -603,7 +603,8 @@ Ext.define('NextThought.controller.Account', {
 					}
 					Ext.callback(callback, scope)
 				}
-			}
+			};
+			
 			Ext.Ajax.request(req);
 			return;
 		}

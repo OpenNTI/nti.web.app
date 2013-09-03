@@ -35,40 +35,40 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	NOTE_BODY_DIVIDER_TPL: Ext.DomHelper.createTemplate({ id: '{0}', cls: 'body-divider', html: '{1}' }).compile(),
 
 	WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
-															   id:  '{0}',
-															   cls: 'body-divider',
-															   cn:  [
-																   {
-																	   onclick: '{2}',
-																	   cls:     'whiteboard-container',
-																	   cn:      [
-																		   {
-																			   cls: 'whiteboard-wrapper',
-																			   cn:  [
-																				   {
-																					   cls: 'overlay'
-																				   },
-																				   {
-																					   tag:    'img',
-																					   src:    '{1}',
-																					   cls:    'whiteboard-thumbnail',
-																					   alt:    'Whiteboard Thumbnail',
-																					   border: 0,
-																					   width:  '{3}'
-																				   }
-																			   ]
-																		   },
-																		   {
-																			   cls: 'toolbar',
-																			   cn:  [
-																				   { cls: 'reply', html: 'Reply with image' },
-																				   { cls: 'checkbox include', html: 'Include image' }
-																			   ]
-																		   }
-																	   ]
-																   }
-															   ]
-														   }).compile(),
+	   id:  '{0}',
+	   cls: 'body-divider',
+	   cn:  [
+		   {
+			   onclick: '{2}',
+			   cls:     'whiteboard-container',
+			   cn:      [
+				   {
+					   cls: 'whiteboard-wrapper',
+					   cn:  [
+						   {
+							   cls: 'overlay'
+						   },
+						   {
+							   tag:    'img',
+							   src:    '{1}',
+							   cls:    'whiteboard-thumbnail',
+							   alt:    'Whiteboard Thumbnail',
+							   border: 0,
+							   width:  '{3}'
+						   }
+					   ]
+				   },
+				   {
+					   cls: 'toolbar',
+					   cn:  [
+						   { cls: 'reply', html: 'Reply with image' },
+						   { cls: 'checkbox include', html: 'Include image' }
+					   ]
+				   }
+			   ]
+		   }
+	   ]
+   }).compile(),
 
 	whiteboardRenderer: function (o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
@@ -128,7 +128,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 			source = {
 				service: 'kaltura',
 				source:  kalturaSource
-			}
+			};
 		}
 		else {
 			source = {

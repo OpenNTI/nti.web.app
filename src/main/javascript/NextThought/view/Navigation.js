@@ -27,41 +27,41 @@ Ext.define('NextThought.view.Navigation', {
 	recordHistory: [],
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'jump-menu',
-											cn:  [
-												{ cls: 'branding' },
-												{
-													'data-view': 'content',
-													'data-qtip': 'Content',
-													cls:         'content x-menu',
-													cn:          [
-														{ cls: 'box' },
-														{ cls: 'image' },
-														{
-															cls: 'wrap',
-															cn:  [
-																{ cls: 'provider' },
-																{ cls: 'title' }
-															]
-														}
-													]
-												}
-											]
-										},
-										{ cls: 'library', 'data-qtip': 'Library', 'data-view': 'library', cn: [
-											{cls: 'box'}
-										]},
-										{ cls: 'forums', 'data-qtip': 'Forums', 'data-view': 'forums', cn: [
-											{cls: 'box'}
-										] },
-										{ cls: 'contacts', 'data-qtip': 'Contacts', 'data-view': 'contacts', cn: [
-											{cls: 'box'}
-										] },
-										{ cls: 'search x-menu', 'data-qtip': 'Search', 'data-view': 'search', cn: [
-											{cls: 'box'}
-										] }
-									]),
+		{
+			cls: 'jump-menu',
+			cn:  [
+				{ cls: 'branding' },
+				{
+					'data-view': 'content',
+					'data-qtip': 'Content',
+					cls:         'content x-menu',
+					cn:          [
+						{ cls: 'box' },
+						{ cls: 'image' },
+						{
+							cls: 'wrap',
+							cn:  [
+								{ cls: 'provider' },
+								{ cls: 'title' }
+							]
+						}
+					]
+				}
+			]
+		},
+		{ cls: 'library', 'data-qtip': 'Library', 'data-view': 'library', cn: [
+			{cls: 'box'}
+		]},
+		{ cls: 'forums', 'data-qtip': 'Forums', 'data-view': 'forums', cn: [
+			{cls: 'box'}
+		] },
+		{ cls: 'contacts', 'data-qtip': 'Contacts', 'data-view': 'contacts', cn: [
+			{cls: 'box'}
+		] },
+		{ cls: 'search x-menu', 'data-qtip': 'Search', 'data-view': 'search', cn: [
+			{cls: 'box'}
+		] }
+	]),
 
 	renderSelectors: {
 		imgEl:      '.content .image',
@@ -303,7 +303,7 @@ Ext.define('NextThought.view.Navigation', {
 //                }
 //                else {
 				if (target.hasCls('active')) {
-					menu.hide()
+					menu.hide();
 				} else {
 					this.showMenu(menu, false);
 				}

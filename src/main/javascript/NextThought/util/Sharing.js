@@ -75,7 +75,7 @@ Ext.define('NextThought.util.Sharing', {
 			pageInfo = this.getCurrentPageInfo();
 		}
 
-		publicScope = pageInfo && pageInfo.getPublicScope() || [];
+		publicScope = (pageInfo && pageInfo.getPublicScope()) || [];
 		sharedWithIds = Ext.Array.map(sharedWith, function (u) {
 			return u.getId ? u.getId() : u;
 		});
@@ -112,7 +112,7 @@ Ext.define('NextThought.util.Sharing', {
 		}
 
 		if (isPublic) {
-			targets = pageInfo && pageInfo.getPublicScope() || [];
+			targets = (pageInfo && pageInfo.getPublicScope()) || [];
 
 			// Use publicScope if defined, otherwise assume public means all communities that a user belongs in.
 			if (!Ext.isEmpty(targets)) {

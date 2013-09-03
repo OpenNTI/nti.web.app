@@ -194,7 +194,7 @@ Ext.define('NextThought.view.Main', {
 					optWindow.destroy();
 					optWindow = null;
 				}
-				if (Math.abs(window.orientation) != 90) {
+				if (Math.abs(window.orientation) !== 90) {
 					optWindow = me.createPortraitOrientationScreen();
 					var iframe = optWindow.el.down('iframe');
 					iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
@@ -204,7 +204,7 @@ Ext.define('NextThought.view.Main', {
 				}
 			}, true);
 
-			if (Math.abs(window.orientation) != 90) {
+			if (Math.abs(window.orientation) !== 90) {
 				optWindow = this.createPortraitOrientationScreen();
 				var iframe = optWindow.el.down('iframe');
 				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {

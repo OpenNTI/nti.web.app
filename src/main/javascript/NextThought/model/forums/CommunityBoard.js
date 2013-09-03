@@ -17,7 +17,7 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 		var me = this;
 
 		Library.courseStore.each(function (title) {
-			if (me.getId() == title.getBoard()) {
+			if (me.getId() === title.getBoard()) {
 				me.course = title;
 			}
 		});

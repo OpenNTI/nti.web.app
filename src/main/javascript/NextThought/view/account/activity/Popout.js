@@ -201,7 +201,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 					refEl:           Ext.get(el),
 					hidden:          true,
 					viewRef:         viewRef,
-					getBubbleTarget: function () {return viewRef},
+					getBubbleTarget: function () {return viewRef;},
 					listeners:       {
 						realign: align
 					}

@@ -440,18 +440,18 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	moveCursorToEnd: function (el) {
 		//this is only for input/textarea elements
+		var range, selection;
 		el = Ext.getDom(el);
 		if (typeof el.selectionStart === "number") {
 			el.selectionStart = el.selectionEnd = el.value.length;
 		}
 		else if (el.createTextRange !== undefined) {
 			el.focus();
-			var range = el.createTextRange();
+			range = el.createTextRange();
 			range.collapse(false);
 			range.select();
 		}
 		else if (document.createRange) {
-			var range, selection;
 			range = document.createRange();
 			range.selectNodeContents(el);
 			range.collapse(false);
