@@ -121,7 +121,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	ensureContactsGroup: function (store, records, success) {
-		var id = this.getMyContactsId(), rec, contacts;
+		var id = this.getMyContactsId(),
+			rec, contacts, me = this;
 
 		if (!success) {
 			console.log('Store load failed with arguments. Expect empty contacts', arguments);
@@ -130,13 +131,28 @@ Ext.define('NextThought.controller.Groups', {
 
 		rec = store.findRecord('Username', id, 0, false, true, true);
 		if (!rec) {
-			this.createGroupUnguarded('My Contacts', id, store.getContacts(), function (success, rec) {
+			me.createGroupUnguarded('My Contacts', id, store.getContacts(), function (success, rec) {
 				rec.hidden = true;
+				me.setContactGroup(rec);
 			});
 			return;
 		}
 
 		rec.hidden = true;
+		me.setContactGroup(rec);
+	},
+
+
+	setContactGroup: function(record){
+		this.contactGroup = record;
+		this.getFriendsListStore().filter(function(rec){return !rec.hidden;});
+	},
+
+
+	getContactGroup: function(){
+		var contactsId = this.getMyContactsId(),
+			store = this.getFriendsListStore();
+		return this.contactGroup || store.findRecord('Username', contactsId, 0, false, true, true);
 	},
 
 
@@ -248,9 +264,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	addContact: function (username, groupList, callback) {
-		var store = this.getFriendsListStore(),
-				contactsId = this.getMyContactsId(),
-				contacts = store.findRecord('Username', contactsId, 0, false, true, true),
+		var contactsId = this.getMyContactsId(),
+				contacts = this.getContactGroup(),
 				tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
 				oldContacts;
 
@@ -297,10 +312,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	addContacts: function (users, finish) {
-		var store = this.getFriendsListStore(),
-				contactsId = this.getMyContactsId(),
-				contacts = store.findRecord('Username', contactsId, 0, false, true, true),
-				oldContacts, newContacts;
+		var contacts = this.getContactGroup(),
+			oldContacts, newContacts;
 
 
 		function revertEditOnError(group, oldValue) {
@@ -384,35 +397,37 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	fetchGroupCode: function (record, displayName, success, onError) {
-		var link = record.getLink('default-trivial-invitation-code');
+		var link = record.getLink('default-trivial-invitation-code'), req;
 
 		if (!link) {
 			Ext.callback(onError, this, ['Group code cannot be created for ' + displayName]);
 			return;
 		}
 
-		Ext.Ajax.request({
-							 url:      link,
-							 scope:    this,
-							 method:   'GET',
-							 headers:  {
-								 Accept: 'application/json'
-							 },
-							 callback: function (q, s, r) {
-								 console.log(r.responseText);
-								 var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
-								 if (s) {
-									 result = Ext.decode(r.responseText, true);
-									 result = result ? result.invitation_code : null;
-								 }
-								 if (!result) {
-									 Ext.callback(onError, this, [errorText + ' : ' + r.status]);
-								 }
-								 else {
-									 Ext.callback(success, this, [result]);
-								 }
-							 }
-						 });
+		req = {
+			 url:      link,
+			 scope:    this,
+			 method:   'GET',
+			 headers:  {
+				 Accept: 'application/json'
+			 },
+			 callback: function (q, s, r) {
+				 console.log(r.responseText);
+				 var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
+				 if (s) {
+					 result = Ext.decode(r.responseText, true);
+					 result = result ? result.invitation_code : null;
+				 }
+				 if (!result) {
+					 Ext.callback(onError, this, [errorText + ' : ' + r.status]);
+				 }
+				 else {
+					 Ext.callback(success, this, [result]);
+				 }
+			 }
+		 };
+
+		Ext.Ajax.request(req);
 	},
 
 
@@ -528,9 +543,9 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		var me = this,
-				w = btn.up('window'),
-				displayName = w.getListName(),
-				username = this.generateUsername(displayName);
+			w = btn.up('window'),
+			displayName = w.getListName(),
+			username = this.generateUsername(displayName);
 		btn.setDisabled(true);
 		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
 	},
@@ -547,35 +562,37 @@ Ext.define('NextThought.controller.Groups', {
 			alert(errorText);
 		}
 
-		var link = record.getLink('my_membership'),
+		var link = record.getLink('my_membership'), req,
 				dn = record.get('displayName');
 		if (!link) {
 			onError('Unable to leave ' + dn);
 			return;
 		}
 
-		Ext.Ajax.request({
-							 url:      link,
-							 scope:    this,
-							 method:   'DELETE',
-							 headers:  {
-								 Accept: 'application/json'
-							 },
-							 callback: function (q, s, r) {
-								 console.log(r.responseText);
-								 var result, errorText = 'An error occurred leaving  ' + dn;
-								 if (s) {
-									 result = Ext.decode(r.responseText, true);
-									 result = ParseUtils.parseItems(result);
-								 }
-								 if (Ext.isEmpty(result)) {
-									 Ext.callback(onError, this, [errorText + ' : ' + r.status]);
-								 }
-								 else {
-									 Ext.callback(success, this, [result[0]]);
-								 }
-							 }
-						 });
+		req = {
+			url:      link,
+			scope:    this,
+			method:   'DELETE',
+			headers:  {
+				Accept: 'application/json'
+			},
+			callback: function (q, s, r) {
+				console.log(r.responseText);
+				var result, errorText = 'An error occurred leaving  ' + dn;
+				if (s) {
+					result = Ext.decode(r.responseText, true);
+					result = ParseUtils.parseItems(result);
+				}
+				if (Ext.isEmpty(result)) {
+					Ext.callback(onError, this, [errorText + ' : ' + r.status]);
+				}
+				else {
+					Ext.callback(success, this, [result[0]]);
+				}
+			}
+		};
+
+		Ext.Ajax.request(req);
 	}
 
 });

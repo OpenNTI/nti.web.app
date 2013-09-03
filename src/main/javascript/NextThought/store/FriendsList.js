@@ -271,6 +271,20 @@ Ext.define('NextThought.store.FriendsList', {
 	},
 
 
+	eachUnfiltered: function(fn, scope) {
+		var data = this.snapshot? this.snapshot.items : this.data.items,
+			dLen = data.length,
+			record, d;
+
+		for (d = 0; d < dLen; d++) {
+			record = data[d];
+			if (fn.call(scope || record, record, d, dLen) === false) {
+				break;
+			}
+		}
+	},
+
+
 	/**
 	 *
 	 * @param {Boolean} [leaveDuplicates] @private
@@ -278,7 +292,7 @@ Ext.define('NextThought.store.FriendsList', {
 	 */
 	getContacts: function (leaveDuplicates) {
 		var names = [];
-		this.each(function (g) {
+		this.eachUnfiltered(function (g) {
 			//Only people in your lists are your contacts.
 			//skip dfls
 			if (!g.isDFL) {
@@ -304,7 +318,7 @@ Ext.define('NextThought.store.FriendsList', {
 		var names = [];
 
 		//Connections: include all my contacts + people in my dfls.
-		this.each(function (g) {
+		this.eachUnfiltered(function (g) {
 			if (g.isDFL) {
 				names.push(g.get('Creator'));
 			}
