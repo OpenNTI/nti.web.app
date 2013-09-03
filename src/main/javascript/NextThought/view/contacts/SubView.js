@@ -79,6 +79,22 @@ Ext.define('NextThought.view.contacts.SubView', {
 		this.callParent(arguments);
 
 		this.on('destroy','clearListeners',store);
+
+		this.mon(this.navigation,'contact-row-selected','scrollIntoView');
+	},
+
+
+	scrollIntoView: function(rec){
+		var query = Ext.String.format('[recordId="{0}"]',rec.getId()
+									.replace(/:/g, '\\3a ') //no colons
+									.replace(/,/g, '\\2c ')), //no commas
+			cmp = this.body.down(query);
+
+		if(cmp){
+			cmp.getEl().scrollIntoView(this.body.getEl());
+			cmp.getEl().highlight('3fb3f6');
+		}
+		else debugger;
 	},
 
 

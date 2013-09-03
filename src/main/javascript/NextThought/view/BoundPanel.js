@@ -28,7 +28,10 @@ Ext.define('NextThought.view.BoundPanel', {
 			return null;
 		}
 
-		return {record: rec, recordId: rec.getId()};
+		return {record: rec, recordId: rec.getId()
+				.replace(/:/g, '\\3a ') //no colons
+				.replace(/,/g, '\\2c ') //no commas
+		};
 	},
 
 

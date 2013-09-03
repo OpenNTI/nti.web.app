@@ -93,9 +93,12 @@ Ext.define('NextThought.view.contacts.outline.View', {
 					select:       function (s, r) {
 						if (this.fromClick || this.fromKey) {
 							console.debug('do something with selection');
+							this.fireEvent('contact-row-selected',r);
 						}
 						delete this.fromClick;
 						delete this.fromKey;
+
+						s.deselect(r);
 					}
 				});
 	},
