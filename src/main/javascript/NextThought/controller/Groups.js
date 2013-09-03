@@ -56,21 +56,21 @@ Ext.define('NextThought.controller.Groups', {
 		this.allContactsStore.bindFriendsListAndPresence(flStore);
 
 		this.listen({
-						component: {
-							'*': {
-								'add-contact':       'addContact',
-								'add-contacts':      'addContacts',
-								'add-group':         'addGroup',
-								'delete-group':      'deleteGroup',
-								'delete-contact':    'deleteContact',
-								'leave-group':       'leaveGroup',
-								'remove-contact':    'removeContact',
-								'get-group-code':    'getGroupCode',
-								'create-group-code': 'createGroupAndCode',
-								'create-list':       'addList'
-							}
-						}
-					});
+			component: {
+				'*': {
+					'add-contact':       'addContact',
+					'add-contacts':      'addContacts',
+					'add-group':         'addGroup',
+					'delete-group':      'deleteGroup',
+					'delete-contact':    'deleteContact',
+					'leave-group':       'leaveGroup',
+					'remove-contact':    'removeContact',
+					'get-group-code':    'getGroupCode',
+					'create-group-code': 'createGroupAndCode',
+					'create-list':       'addList'
+				}
+			}
+		});
 	},
 
 
@@ -383,7 +383,7 @@ Ext.define('NextThought.controller.Groups', {
 			remove(record);
 		}
 		else {
-			store.each(function (g) {
+			store.eachUnfiltered(function (g) {
 				//Removing a contact shouldn't remove them from dfls
 				if (!g.isDFL) {
 					remove(g);
