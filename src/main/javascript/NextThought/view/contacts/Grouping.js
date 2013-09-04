@@ -234,8 +234,14 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 		this.remove(o, autoDestroy);
 
+		function escapeId(id){
+			return id
+					.replace(/:/g, '\\3a ') //no colons
+					.replace(/,/g, '\\2c '); //no commas
+		}
+
 		Ext.each(list, function (item, i) {
-			if (item.getId() === o.recordId) {
+			if (escapeId(item.getId()) === o.recordId) {
 				removed = list.splice(i, 1)[0];
 			}
 			return !removed;

@@ -15,11 +15,19 @@ Ext.define('NextThought.view.BoundPanel', {
 
 		this.mon(this.store, {
 			scope:                 this,
-			load:                  'onBoundStoreLoad',
+			load: 'onBoundStoreLoad',
+			clear: 'removeAllItems',
 			'parent-store-loaded': 'onParentStoreLoad',
-			add:                   'onBoundStoreAdd',
-			remove:                'onBoundStoreRemove'
+			add: 'onBoundStoreAdd',
+			remove: 'onBoundStoreRemove'
 		});
+	},
+
+
+	escapeId: function(id){
+		return id
+				.replace(/:/g, '\\3a ') //no colons
+				.replace(/,/g, '\\2c '); //no commas
 	},
 
 
@@ -28,10 +36,7 @@ Ext.define('NextThought.view.BoundPanel', {
 			return null;
 		}
 
-		return {record: rec, recordId: rec.getId()
-				.replace(/:/g, '\\3a ') //no colons
-				.replace(/,/g, '\\2c ') //no commas
-		};
+		return {record: rec, recordId: this.escapeId(rec.getId())};
 	},
 
 
@@ -115,7 +120,7 @@ Ext.define('NextThought.view.BoundPanel', {
 		var me = this;
 
 		function itr(i) {
-			if (i.recordId === record.getId()) {
+			if (i.recordId === this.escapeId(record.getId())) {
 				me.removeItem(i, true);
 				return false;
 			}
