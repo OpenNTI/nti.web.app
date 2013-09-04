@@ -2,7 +2,7 @@
 	.nti-#{$ui}-tabbar {
 		border: 0 solid $border-grey;
 		border-width: $border-widths !important;
-		pointer-events: none;
+		pointer-events: auto;
 
 		.x-tab-#{$ui}-tab {
 			background: transparent;
