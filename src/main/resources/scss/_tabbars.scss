@@ -154,4 +154,10 @@
 	}
 }
 
-
+.x-body{
+	&.x-ios{
+		.nti-profile-tabbar{
+			pointer-events: none;
+		}
+	}
+}
