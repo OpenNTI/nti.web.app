@@ -60,6 +60,10 @@ Ext.application({
 		console.debug('launching');
 
 		function start() {
+			if( Ext.is.iOS ){
+				Ext.getBody().addCls('x-ios');
+			}
+
 			Ext.applyIf($AppConfig,{links:{}});
 			
 			me.getController('Session').login(me);
