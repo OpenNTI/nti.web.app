@@ -511,7 +511,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		me.maybeShowChat(me.chatEl);
 
 		function validateAgainstSchema(value) {
-			var editor = me.ownerCt,
+			var editor = this.ownerCt,
 				field = editor.boundEl.getAttribute('data-field');
 			return  me.validate(field, value);
 		}
