@@ -139,11 +139,21 @@ Ext.define('NextThought.view.forums.Editor', {
 
 
 	syncHeight: function () {
+        /*  for ipad, everytime a new input is focused, this runs.
+            and changing the height and top makes the editor too small.
+            only run the first two initial times, and keep height the same*/
 		if (Ext.is.iPad) {
 			if (this.syncedIpad) {
-				return;
+                if(this.syncedIpad > 1){
+                    return;
+                }
+                else{
+                    this.syncedIpad++;
+                }
 			}
-			this.syncedIpad = true;
+            else{
+                this.syncedIpad = 1;
+            }
 		}
 		var el = this.editorBodyEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),

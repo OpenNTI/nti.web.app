@@ -85,6 +85,7 @@ Ext.define('NextThought.view.chat.View', {
 			// Absorb event for scrolling
 			this.getEl().swallowEvent('touchmove');
 
+            //After dismissing keyboard, reset Y to original position
 			me.el.down('input').on('focus', function () {
 				console.log('input focused');
 				if (!me.hasOwnProperty('initialY')) {
@@ -103,6 +104,13 @@ Ext.define('NextThought.view.chat.View', {
 					}
 				}, 100);
 			}, me);
+
+            //pressing key can hide keyboard and move view up. Stop top from changing.
+            var chatWindow = this.el.up('.x-window');
+            chatWindow.on('resize', function(){
+                chatWindow.setTop(me.initialY);
+            })
+
 		}
 	},
 
