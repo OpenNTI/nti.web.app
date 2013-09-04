@@ -237,7 +237,11 @@ div.nt-token-wrapper{
 	}
 
 	&.user-token-field{
-
+		&.readOnly{
+			.control.publish{
+				cursor: default;
+			}
+		}
 		.tokens{
 			position: relative;
 			margin-right: 85px !important;
