@@ -219,10 +219,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		this.showCurtain();
 		//this.bodyEl.mask('Loading...');
 		if (Ext.is.iPad) {
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
-
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

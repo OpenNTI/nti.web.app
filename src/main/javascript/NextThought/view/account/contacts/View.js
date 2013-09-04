@@ -374,9 +374,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

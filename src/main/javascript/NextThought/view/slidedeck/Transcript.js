@@ -280,9 +280,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

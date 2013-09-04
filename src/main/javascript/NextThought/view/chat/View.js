@@ -83,9 +83,7 @@ Ext.define('NextThought.view.chat.View', {
 			var me = this;
 
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 
 			me.el.down('input').on('focus', function () {
 				console.log('input focused');

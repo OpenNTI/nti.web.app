@@ -76,9 +76,7 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 		}
 
 		if (Ext.is.iPad) {
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

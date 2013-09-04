@@ -35,9 +35,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 		this.callParent(arguments);
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

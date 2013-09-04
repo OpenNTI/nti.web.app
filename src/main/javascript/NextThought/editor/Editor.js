@@ -422,9 +422,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 
 		if (Ext.is.iPad) {
-			me.contentEl.dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			me.contentEl.swallowEvent('touchmove');
 		}
 
 		me.on('destroy', function () {

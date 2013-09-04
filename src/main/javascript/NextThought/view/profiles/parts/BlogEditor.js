@@ -62,9 +62,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 
 			//put focus on cancel button, so the user can focus and bring up keyboard for title element
 			Ext.defer(function () {

@@ -131,9 +131,7 @@ Ext.define('NextThought.view.contacts.Search', {
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 
 			// Window should scroll back to top after keyboard is dismissed
             me.mon(me.el.down('input'), {

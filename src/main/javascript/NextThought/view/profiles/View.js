@@ -21,9 +21,7 @@ Ext.define('NextThought.view.profiles.View', {
 		this.callParent(arguments);
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
+			this.getEl().swallowEvent('touchmove');
 		}
 	},
 
