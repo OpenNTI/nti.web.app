@@ -145,7 +145,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	setContactGroup: function(record){
 		this.contactGroup = record;
-		this.getFriendsListStore().filter(function(rec){return !rec.hidden;});
+		this.getFriendsListStore().remove(record,true,true);
 	},
 
 
