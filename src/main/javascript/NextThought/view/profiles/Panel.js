@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.profiles.Panel', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.profile-panel',
+	alias: 'widget.profile-panel',
 
 	requires: [
 		'NextThought.view.profiles.parts.Activity',
@@ -16,54 +16,54 @@ Ext.define('NextThought.view.profiles.Panel', {
 		enableChat: 'NextThought.mixins.ChatLinks'
 	},
 
-	ui:              'profile',
+	ui: 'profile',
 	componentLayout: 'natural',
-	layout:          'auto',
-	childEls:        ['body'],
-	getTargetEl:     function () { return this.body; },
+	layout: 'auto',
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	placeholderTextTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'placeholder', html: '{0}'}),
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'profile-head editable',
-											cn:  [
-												{
-													cls: 'avatar', cn: [
-													{cls: 'edit', html: 'Edit'}
-												]
-												},
-												{
-													cls: 'meta',
-													cn:  [
-														{    cls: 'name-container',
-															cn:   [
-																{tag: 'span', cls: 'name', 'data-field': 'alias' },
-																{ cls: 'add-to-contacts', html: 'ADD'},
-																{ tag: 'a', cls: 'request-change', html: 'Request Change'}
-															]},
-														{cn: {tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' }},
-														{ cn: [
-															{tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role'},
-															{tag: 'span', cls: 'separator', html: ' at '},
-															{tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company'}
-														]},
-														{cn: {tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location'}},
-														{cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page'}},
-														{ cls: 'error-msg' },
-														{ cls: 'actions', cn: [
-															{cls: 'chat', html: 'Chat'}
-														]}
-													]
-												}
-											]
-										},
-										{
-											id:  '{id}-body',
-											cls: 'profile-items',
-											cn:  ['{%this.renderContainer(out,values)%}']
-										}
-									]),
+		{
+			cls: 'profile-head editable',
+			cn:  [
+				{
+					cls: 'avatar', cn: [
+						{ cls: 'edit', html: 'Edit' }
+					]
+				},{
+					cls: 'meta',
+					cn:  [
+						{
+							cls: 'name-container',
+							cn: [
+								{ tag: 'span', cls: 'name', 'data-field': 'alias' },
+								{ cls: 'add-to-contacts', html: 'ADD'},
+								{ tag: 'a', cls: 'request-change', html: 'Request Change'}
+							]},
+						{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } },
+						{ cn: [
+							{ tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' },
+							{ tag: 'span', cls: 'separator', html: ' at '},
+							{ tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' }
+						]},
+						{ cn: {tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } },
+						{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } },
+						{ cls: 'error-msg' },
+						{ cls: 'actions', cn: [
+							{ cls: 'chat', html: 'Chat' }
+						]}
+					]
+				}
+			]
+		},
+		{
+			id:  '{id}-body',
+			cls: 'profile-items',
+			cn:  ['{%this.renderContainer(out,values)%}']
+		}
+	]),
 
 
 	renderSelectors: {
@@ -431,33 +431,33 @@ Ext.define('NextThought.view.profiles.Panel', {
 		}
 
 		function validateAgainstSchema(value) {
-			var editor = this.ownerCt;
-			field = editor.boundEl.getAttribute('data-field');
+			var editor = this.ownerCt,
+				field = editor.boundEl.getAttribute('data-field');
 			return  me.validate(field, value);
 		}
 
 		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
-																				  autoSize:  { width: 'boundEl' },
-																				  cls:       'meta-editor',
-																				  field:     { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
-																				  listeners: {
-																					  complete:   this.onSaveField,
-																					  canceledit: this.clearError,
-																					  scope:      this
-																				  }
-																			  });
+			autoSize: { width: 'boundEl' },
+			cls: 'meta-editor',
+			field: { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			listeners: {
+				complete: this.onSaveField,
+				canceledit: this.clearError,
+				scope: this
+			}
+		});
 	},
 
 
 	updateProfile: function (user, schema) {
-		var profileSchema = (schema || {}).ProfileSchema,
-				nameInfo = this.getMetaInfoForField(user, 'alias', profileSchema),
-				me = this;
+		var me = this,
+			profileSchema = (schema || {}).ProfileSchema,
+			nameInfo = me.getMetaInfoForField(user, 'alias', profileSchema);
 
-		this.userObject = user;
-		this.profileSchema = profileSchema;
+		me.userObject = user;
+		me.profileSchema = profileSchema;
 
-		this.mun(this.nameEl, 'click', this.editName, this);
+		me.mun(me.nameEl, 'click', me.editName, me);
 
 		try {
 			me.mun(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
@@ -471,25 +471,25 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 		//Make more of the UI schema driven
 
-		this.avatarEl.setStyle({backgroundImage: 'url(' + user.get('avatarURL') + ')'});
+		me.avatarEl.setStyle({backgroundImage: 'url(' + user.get('avatarURL') + ')'});
 		if (profileSchema && profileSchema.avatarURL && !profileSchema.avatarURL.readonly) {
-			this.editEl.show();
+			me.editEl.show();
 		}
 		else {
-			this.editEl.hide();
+			me.editEl.hide();
 		}
 
 
-		this.nameEl.update(user.getName());
-		this.nameEl.dom.setAttribute('data-qtip', user.getName());
+		me.nameEl.update(user.getName());
+		me.nameEl.dom.setAttribute('data-qtip', user.getName());
 
 		//If the name is editable it is guarenteed (right now) to be
 		//us.  Given that it is also guarenteed that we won't have the add to contacts
 		//button. so if its not editable we tag it with a class so we can snug the button
 		//up if it exists
 		if (nameInfo.editable) {
-			this.mon(this.nameEl, 'click', this.editName, this);
-			this.nameEl.addCls('editable');
+			me.mon(me.nameEl, 'click', me.editName, me);
+			me.nameEl.addCls('editable');
 		}
 		else {
 			this.nameEl.addCls('readonly');
@@ -497,39 +497,35 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 			if (isFeature('request-alias-change') && isMe(user)) {
 				this.nameContainerEl.on({
-											scope:     this,
-											mouseover: function () {
-												this.requestEl.show();
-											},
-											mouseout:  function () {
-												this.requestEl.hide();
-											}
-										});
+					scope: me,
+					mouseover: function () { me.requestEl.show(); },
+					mouseout: function () { me.requestEl.hide(); }
+				});
 
-				this.requestEl.on('click', function () {
-					this.fireEvent('request-alias-change', this);
-				}, this);
+				me.requestEl.on('click', function () {
+					me.fireEvent('request-alias-change', me);
+				}, me);
 			}
 		}
 
-		this.maybeShowChat(this.chatEl);
+		me.maybeShowChat(me.chatEl);
 
 		function validateAgainstSchema(value) {
-			var editor = this.ownerCt;
-			field = editor.boundEl.getAttribute('data-field');
+			var editor = me.ownerCt,
+				field = editor.boundEl.getAttribute('data-field');
 			return  me.validate(field, value);
 		}
 
 		this.nameEditor = NextThought.view.profiles.ProfileFieldEditor.create({
-																				  cls:       'name-editor',
-																				  updateEl:  true,
-																				  field:     { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
-																				  listeners: {
-																					  complete:   this.onSaveField,
-																					  canceledit: this.clearError,
-																					  scope:      this
-																				  }
-																			  });
+			cls: 'name-editor',
+			updateEl: true,
+			field: { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			listeners: {
+				complete: this.onSaveField,
+				canceledit: this.clearError,
+				scope: this
+			}
+		});
 
 		this.updateProfileDetail(user, profileSchema);
 	},
@@ -562,15 +558,13 @@ Ext.define('NextThought.view.profiles.Panel', {
 				a.update(value);
 			}
 			else {
-				Ext.DomHelper.overwrite(this.homePageEl,
-										{
-											tag:      'a',
-											cls:      'homePageLink',
-											'target': '_blank',
-											'href':   value,
-											html:     value
-										}
-				);
+				Ext.DomHelper.overwrite(this.homePageEl,{
+					tag: 'a',
+					cls: 'homePageLink',
+					'target': '_blank',
+					'href': value,
+					html: value
+				});
 			}
 		}
 	},
@@ -578,7 +572,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	setUser: function (user) {
 		var me = this, profileSchemaUrl,
-				toMask;
+			toMask, req;
 
 		console.timeEnd(this.timeId);
 
@@ -613,20 +607,22 @@ Ext.define('NextThought.view.profiles.Panel', {
 			return;
 		}
 
-		Ext.Ajax.request({
-							 url:      profileSchemaUrl,
-							 scope:    this,
-							 callback: function (q, success, r) {
-								 var schema;
-								 if (!success) {
-									 console.log('Could not get profile schema');
-								 }
-								 else {
-									 schema = Ext.decode(r.responseText, true);
-								 }
-								 onProfileLoaded(user, schema);
-							 }
-						 });
+		req = {
+			 url: profileSchemaUrl,
+			 scope: this,
+			 callback: function (q, success, r) {
+				 var schema;
+				 if (!success) {
+					 console.log('Could not get profile schema');
+				 }
+				 else {
+					 schema = Ext.decode(r.responseText, true);
+				 }
+				 onProfileLoaded(user, schema);
+			 }
+		 };
+
+		Ext.Ajax.request(req);
 	},
 
 
