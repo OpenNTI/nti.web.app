@@ -6,7 +6,8 @@ var $AppConfig = {
 	"enableSymbolicLinkingNav": true,
 
 	"features":{
-
+		"v2contacts":true,
+		"v2profiles":true
 	},
 	"server" : {
         "host": "",
