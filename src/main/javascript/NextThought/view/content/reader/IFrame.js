@@ -290,18 +290,23 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
-		on(doc, 'touchstart', function (e) {
-			Ext.menu.Manager.hideAll();
-		});
+		if(!Ext.is.iPad){
+			forward(['mousedown', 'mouseup', 'mousemove', 'mouseout']);
+		}
+		else{
+			//NOTE: Are we using these listeners for iPad?
+			on(doc, 'touchstart', function (e) {
+				Ext.menu.Manager.hideAll();
+			});
 
-		on(doc, 'selectionchange', function (e) {
-			function selectionChange(e) {
-				var fakeEvent = Ext.EventObject.setEvent(e || event),
+			on(doc, 'selectionchange', function (e) {
+				function selectionChange(e) {
+					var fakeEvent = Ext.EventObject.setEvent(e || event),
 						t = me.reader.getScroll().get().top,
 						s = me.get().win.getSelection();
 
-				if (!s.isCollapsed) {
-					me.reader.onContextMenuHandler(
+					if (!s.isCollapsed) {
+						me.reader.onContextMenuHandler(
 							{
 								getTarget: function () {
 									return fakeEvent.getTarget.apply(fakeEvent, arguments);
@@ -315,18 +320,15 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 									fakeEvent.stopPropagation();
 								}
 							}
-					);
+						);
+					}
 				}
-			}
 
-			if (me.selectionTimer) { // So it doesn't continuously update during highlight-drag
-				clearTimeout(me.selectionTimer);
-			}
-			me.selectionTimer = Ext.defer(selectionChange, 300, me, [e]);
-		});
-
-		if (!Ext.is.iPad) {
-			forward(['mousedown', 'mouseup', 'mousemove', 'mouseout']);
+				if (me.selectionTimer) { // So it doesn't continuously update during highlight-drag
+					clearTimeout(me.selectionTimer);
+				}
+				me.selectionTimer = Ext.defer(selectionChange, 300, me, [e]);
+			});
 		}
 
 		function shouldDismissPopover() {

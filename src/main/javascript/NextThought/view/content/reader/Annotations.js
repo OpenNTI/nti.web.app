@@ -348,6 +348,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return;
 		}
 
+		if( !Boolean(xy[0]) || !Boolean(xy[1])){
+			console.warn('xy are null or undefined: ', xy);
+			return;
+		}
+
 		var me = this,
 				rect2 = RectUtils.getFirstNonBoundingRect(range),
 				record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
