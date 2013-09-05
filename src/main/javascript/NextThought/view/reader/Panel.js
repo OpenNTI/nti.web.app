@@ -7,7 +7,6 @@ Ext.define('NextThought.view.reader.Panel',{
 		'NextThought.view.annotations.View'
 	],
 
-
 	ui: 'reader',
 	cls: 'reader-container',
 	layout:'border',
@@ -56,14 +55,6 @@ Ext.define('NextThought.view.reader.Panel',{
 			'filter-by-line': 'selectDiscussion'
 		});
 		this.down('annotation-view').anchorComponent = this.down('reader-content');
-
-        var me = this;
-        this.buildModule('modules', 'touchSender', {container: me.down('annotation-view')});
-        this.buildModule('modules', 'touchHandler',
-            {container: me.down('annotation-view'), getPanel: function(){
-                    return this.container.el;
-                }
-            });
 	},
 
 
