@@ -2,10 +2,14 @@ Ext.define('NextThought.view.profiles.Panel', {
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.profile-panel',
 
-	navigation: {xtype: 'box'},
+	navigation: {},
+	body:{cls:'make-white'},
 
-	body:{xtype: 'box'},
+	ui:  'profile',
+	cls: 'profile-view',
 
+	config: {
+	},
 
 	constructor: function (config) {
 //		this.applyConfigs('body', {})

@@ -7,16 +7,24 @@ Ext.define('NextThought.view.profiles.View', {
 		'NextThought.view.ResourceNotFound'
 	],
 
-	defaultType: 'profile-panel-old',
-	layout: 'auto',
-	cls: 'scrollable',
+	defaultType: 'profile-panel',
+	layout: 'fit',
+
+	constructor: function(){
+		if(!isFeature('v2profiles')){
+			this.defaultType = 'profile-panel-old';
+			this.layout = 'auto';
+			this.cls = 'scrollable ' + (this.cls||'');
+		}
+		this.callParent(arguments);
+	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		if(isFeature('v2profiles')){
-			this.defaultType = 'profile-panel';
+			this.removeCls('make-white');
 		}
 	},
 

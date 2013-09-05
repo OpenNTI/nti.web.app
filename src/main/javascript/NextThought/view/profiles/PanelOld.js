@@ -21,6 +21,7 @@ Ext.define('NextThought.view.profiles.PanelOld', {
 	layout: 'auto',
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
+	width: 700,
 
 	placeholderTextTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'placeholder', html: '{0}'}),
 
