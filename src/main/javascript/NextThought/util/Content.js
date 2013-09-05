@@ -5,6 +5,10 @@ Ext.define('NextThought.util.Content', {
 
 	requires:['NextThought.Library'],
 
+	CONTENT_VISIBILITY_MAP:{
+		'OU': 'OUID'
+	},
+
 	constructor: function(){
 		this.callParent(arguments);
 		Ext.apply(this,{
@@ -88,7 +92,8 @@ Ext.define('NextThought.util.Content', {
 
 	hasVisibilityForContent: function(cnt){
 		var u = $AppConfig.userObject,
-			visibilityKey = cnt.getAttribute('visibility');
+			visibilityKey = cnt.getAttribute('visibility'),
+			attr = this.CONTENT_VISIBILITY_MAP[visibilityKey] || visibilityKey;
 
 		// NOTE: Some pieces of content within a course may have limited access (mainly on Copyright issues).
 		// i.e only be available for OU students.
@@ -100,7 +105,7 @@ Ext.define('NextThought.util.Content', {
 		// have a 'OUID' on the user record, we will check for its existence.
 		// TODO: we need to define what this 'visibility' means for an AppUser in general (rather than just OU) or
 		// have a convention on how have we resolve it.
-		return Boolean(u.get(visibilityKey));
+		return Boolean(u.get(attr));
 	},
 
 
