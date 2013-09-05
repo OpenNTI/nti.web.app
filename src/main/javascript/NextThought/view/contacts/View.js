@@ -122,15 +122,6 @@ Ext.define('NextThought.view.contacts.View', {
 	},
 
 
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
-	},
-
-
 	monitorTabs: function (panel, newTab, oldTab) {
 		if (this.restoring) {
 			return;
