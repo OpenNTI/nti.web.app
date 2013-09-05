@@ -369,7 +369,7 @@ $over-color: #f4f3f3;
 		left: 0; right: 0;
 		overflow: {
 			x: hidden;
-			y: auto;
+			y: scroll;
 		}
 
 		.contact-row{
@@ -400,7 +400,7 @@ $over-color: #f4f3f3;
 	div[id$=tokens]{
 		background: #fff;
 		position: absolute;
-		overflow: {x:hidden; y: auto;}
+		overflow: {x:hidden; y: scroll;}
 		bottom: 45px;
 		left: 0; right: 0;
 		min-height: 80px;
@@ -544,7 +544,7 @@ $over-color: #f4f3f3;
 
 		overflow: {
 			x: hidden;
-			y: auto;
+			y: scroll;
 		}
 		-webkit-overflow-scrolling: touch;
 

@@ -10,7 +10,7 @@
 	@include scrollbar(transparent, $tertiary-grey);
 	overflow: {
 		x: hidden;
-		y: auto;
+		y: scroll;
 	}
 	-webkit-overflow-scrolling: touch;
 
@@ -159,7 +159,7 @@
 			bottom: 0;
 			z-index: 10;
 			overflow: {
-				x: auto;
+				x: scroll;
 				y: hidden;
 			}
             -webkit-overflow-scrolling: touch;
@@ -303,7 +303,7 @@
 		right: 0;
 
 		position: absolute;
-		overflow:{x: hidden; y: auto;}
+		overflow:{x: hidden; y: scroll;}
 	}
 
 	.tile-header ~ .scrollbody {

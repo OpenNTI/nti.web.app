@@ -8,7 +8,7 @@
 
 #course-info {
 	@extend #NTIContent;
-	overflow: auto;
+	overflow: {x: hidden; y: scroll;};
 	-webkit-overflow-scrolling: touch;
 }
 
@@ -281,7 +281,7 @@
 				top: 0;
 				right: 0;
 				bottom: 0;
-				overflow: auto;
+				overflow: {x: hidden; y: scroll;}
 				-webkit-overflow-scrolling: touch;
 				background: #04232c;
 

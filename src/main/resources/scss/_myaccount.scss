@@ -35,7 +35,7 @@
 		cursor: default;
 
 		.notification-scroll-container {
-			//overflow: auto;
+			//overflow: {x: hidden; y: scroll;}
 			position: relative;
 		}
 

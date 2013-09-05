@@ -142,7 +142,7 @@
 
 	.chat-log-view {
 		overflow-x: hidden;
-		overflow-y: auto;
+		overflow-y: scroll;
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
 		box-shadow: inset  0px -7px 7px -7px #f7f7f7;

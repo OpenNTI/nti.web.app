@@ -143,8 +143,7 @@ span.tab{
 				padding: 2px 5px 0;
 				color: $secondary-grey;
 				font: 14px $font;
-				overflow-x: hidden;
-				overflow-y: auto;
+				overflow:{x: hidden; y: scroll;}
 				min-height: 50px;
 				max-height: 200px;
 				outline: 0;

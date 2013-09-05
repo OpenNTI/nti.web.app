@@ -400,7 +400,7 @@
 		}
 
 		.replies {
-			overflow: {x: hidden; y: auto;}
+			overflow: {x: hidden; y: scroll;}
 			-webkit-overflow-scrolling: touch;
 
 			.x-component-reply {
