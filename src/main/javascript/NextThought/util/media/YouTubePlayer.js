@@ -18,9 +18,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		observable: 'Ext.util.Observable'
 	},
 
-	playerTpl: Ext.DomHelper.createTemplate({
-												id: '{id}'
-											}),
+	playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
 
 	constructor: function (config) {
 		this.mixins.observable.constructor.call(this);
@@ -42,17 +40,17 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		console.log(this.id);
 
 		this.player = new YT.Player(this.id, {
-			width:      this.width,
-			height:     this.height,
+			width: this.width,
+			height: this.height,
 			playerVars: {
 				modestbranding: 1,
-				autohide:       1,
-				wmode:          'transparent',
-				rel:            0,
-				showinfo:       0
+				autohide: 1,
+				wmode: 'transparent',
+				rel: 0,
+				showinfo: 0
 			},
-			origin:     location.protocol + '//' + location.host,
-			events:     {
+			origin: location.protocol + '//' + location.host,
+			events: {
 				'onReady': Ext.bind(this.playerReady, this),
 				'onError': Ext.bind(this.playerError, this),
 				'onStateChange': Ext.bind(this.playerStatusChange, this)
@@ -123,11 +121,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	load: function (source, offset) {
 		this.currentSource = source;
 		this.currentStartAt = offset;
-		this.player.cueVideoById({
-									 videoId:          source,
-									 startSeconds:     offset,
-									 suggestedQuality: "medium"
-								 });
+		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: "medium" });
 		this.isReady = false;
 		this.pause();
 	},

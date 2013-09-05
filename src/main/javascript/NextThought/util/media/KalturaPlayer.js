@@ -3,32 +3,32 @@
 Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	statics: {
-		PARTNER_ID:               '1500101',
-		UICONF_ID:                '15491291',
-		kind:                     'video',
-		type:                     'kaltura',
-		valid:                    function () {
-			return true;
-		},
+		PARTNER_ID: '1500101',
+		UICONF_ID:  '15491291',
+		kind: 'video',
+		type: 'kaltura',
+
+		valid: function () { return true; },
 		contentForExternalViewer: function (source) {
 			var vid = source.split(':');
 
 			if (!vid[1]) {
-				return Ext.DomHelper.markup({
-												tag:  'h1',
-												html: 'An error occurred loading the video'
-											});
+				return Ext.DomHelper.markup({ tag:  'h1', html: 'An error occurred loading the video' });
 			}
 
 
 			return Ext.DomHelper.markup({
-											tag: 'div',
-											cn:  {
-												tag: 'script',
-												src: Ext.String.format('https://cdnapisec.kaltura.com/p/{0}/sp/150010100/embedIframeJs/uiconf_id/{1}/partner_id/{2}?autoembed=true&entry_id={3}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest&flashvars[autoPlay]=true',
-																	   this.PARTNER_ID, this.UICONF_ID, this.PARTNER_ID, vid[1])
-											}
-										});
+				tag: 'div',
+				cn:  {
+					tag: 'script',
+					src: Ext.String.format(
+							'https://cdnapisec.kaltura.com/p/{0}/sp/150010100/embedIframeJs/uiconf_id/{1}/partner_id/{2}?autoembed=true&entry_id={3}&playerId=kaltura_player_1377036702&cache_st=1377036702&width=1024&height=606&flashvars[akamaiHD.loadingPolicy]=preInitialize&flashvars[akamaiHD.asyncInit]=true&flashvars[twoPhaseManifest]=true&flashvars[streamerType]=hdnetworkmanifest&flashvars[autoPlay]=true',
+							this.PARTNER_ID,
+							this.UICONF_ID,
+							this.PARTNER_ID,
+							vid[1])
+				}
+			});
 		}
 	},
 
@@ -41,76 +41,75 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	},
 
 	PLAYER_TPL: Ext.DomHelper.createTemplate({
-												 name:  '{id}',
-												 id:    '{id}',
-												 style: {
-													 width:  '{width}px',
-													 height: '{height}px'
-												 },
-												 cn:    [
-													 {
-														 tag:             'iframe',
-														 id:              '{id}-iframe',
-														 name:            '{id}-iframe',
-														 allowfullscreen: true,
-//			webkitallowfullscreen: true,
-														 src:             Ext.SSL_SECURE_URL,
-														 frameBorder:     0,
-														 scrolling:       'no',
-														 seamless:        true,
-														 width:           '{width}',
-														 height:          '{height}',
-														 style:           {
-															 zIndex:   1,
-															 overflow: 'hidden',
-															 width:    '{width}px',
-															 height:   '{height}px'
-														 }
-													 }
-												 ]
-											 }),
+		name:  '{id}',
+		id:    '{id}',
+		style: {
+			width:  '{width}px',
+			height: '{height}px'
+		},
+		cn: [{
+				tag:             'iframe',
+				id:              '{id}-iframe',
+				name:            '{id}-iframe',
+				allowfullscreen: true,
+				//webkitallowfullscreen: true,
+				src:             Ext.SSL_SECURE_URL,
+				frameBorder:     0,
+				scrolling:       'no',
+				seamless:        true,
+				width:           '{width}',
+				height:          '{height}',
+				style:           {
+					zIndex:   1,
+					overflow: 'hidden',
+					width:    '{width}px',
+					height:   '{height}px'
+				 }
+			 }
+		 ]
+	 }),
 
 
-	PLAYER_BODY_TPL:     Ext.DomHelper.createTemplate([
-														  '<!DOCTYPE html>',
-														  {tag: 'html', lang: 'en', cn: [
-															  {tag: 'head', cn: [
-																  { tag: 'title', html: '{id}-sandbox' },
-																  { tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
-																  { tag: 'script', type: 'text/javascript', src: ('{basePath}resources/lib/jQuery-1.8.0min.js') },
+	PLAYER_BODY_TPL: Ext.DomHelper.createTemplate([
+		'<!DOCTYPE html>',
+		{tag: 'html', lang: 'en', cn: [
+			{tag: 'head', cn: [
+				{ tag: 'title', html: '{id}-sandbox' },
+				{ tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
+				{ tag: 'script', type: 'text/javascript', src: ('{basePath}resources/lib/jQuery-1.8.0min.js') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php') },
-																  { tag: 'script', type: 'text/javascript', src: (location.protocol + '//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101') },
+				{ tag: 'script', type: 'text/javascript', src: (location.protocol + '//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php') },
 //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js') },
-																  { tag: 'style', type: 'text/css', cn: [
-																	  'body, html { margin: 0; padding: 0; overflow:hidden; }'
-																  ]}
-															  ]},
-															  {tag: 'body', cn: [
-																  {
-																	  id: '{id}', name: '{id}', style: {
-																	  width:  '{width}px',
-																	  height: '{height}px'
-																  }
-																  },
-																  {
-																	  tag:  'script',
-//					defer: 'defer',
-																	  type: 'text/javascript',
-																	  html: '\n{code}\n'
-																  }
-															  ]
-															  }
-														  ]
-														  }
-													  ]),
+				{ tag: 'style', type: 'text/css', cn: [
+					'body, html { margin: 0; padding: 0; overflow:hidden; }'
+				]}
+			]},
+			{tag: 'body', cn: [
+				{
+					id: '{id}', name: '{id}', style: {
+					width:  '{width}px',
+					height: '{height}px'
+				}
+				},
+				{
+					tag:  'script',
+					//defer: 'defer',
+					type: 'text/javascript',
+					html: '\n{code}\n'
+				}
+			]
+			}
+		]
+		}
+	]),
 
 	//INITIAL_VIDEO: '0_nmgd4bvw',//This is a 1-frame bogus video to load the player w/ an initial video.
-	LEAD_HTML5:          (!Ext.isIE9).toString(), //Note: reset in the constructor
+	LEAD_HTML5: (!Ext.isIE9).toString(), //Note: reset in the constructor
 
 	//A queue of commands that need to be invoked when the source is actually ready
-	commandQueue:        [],
+	commandQueue: [],
 
 	//A flag that indicates if we are waiting on a changeMedia to finish
 	changingMediaSource: false,
@@ -257,11 +256,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		console.log(this.id, ' Posting message to kaltura player', type, name, data);
 
-		context.postMessage(Ext.encode({
-										   type: type,
-										   name: name,
-										   data: data
-									   }), '*');
+		context.postMessage(Ext.encode({ type: type, name: name, data: data }), '*');
 	},
 
 
@@ -680,11 +675,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			function send(event, data) {
 				//console.log('Event: '+event, playerId, data);
-				host.postMessage(JSON.stringify({
-													event: 'kalturaplayer.' + event,
-													id:    playerId,
-													data:  data
-												}), '*');
+				host.postMessage(JSON.stringify({ event: 'kalturaplayer.' + event, id: playerId, data:  data }), '*');
 			}
 
 			function makeHandler(name) {
@@ -706,12 +697,33 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			function playerReady() {
 				var player = document.getElementById(playerId),
-						events = ['kdpReady', 'startup', 'initiateApp', 'kdpEmpty',
-								  'layoutReady', 'pluginsLoaded', 'skinLoaded', 'skinLoadFailed',
-								  'singlePluginLoaded', 'singlePluginFailedToLoad', 'mediaLoaded', 'entryReady',
-								  'readyToPlay', 'sourceReady', 'mediaReady', 'playerStateChange',
-								  'playerUpdatePlayhead', 'playerPlayEnd', 'mediaLoadError', 'readyToLoad',
-								  'entryFailed', 'entryNotAvailable', 'changeMedia', 'openFullScreen', 'closeFullScreen'],
+						events = [
+							'changeMedia',
+							'closeFullScreen',
+							'entryFailed',
+							'entryNotAvailable',
+							'entryReady',
+							'initiateApp',
+							'kdpEmpty',
+							'kdpReady',
+							'layoutReady',
+							'mediaLoaded',
+							'mediaLoadError',
+							'mediaReady',
+							'openFullScreen',
+							'playerPlayEnd',
+							'playerStateChange',
+							'playerUpdatePlayhead',
+							'pluginsLoaded',
+							'readyToLoad',
+							'readyToPlay',
+							'singlePluginFailedToLoad',
+							'singlePluginLoaded',
+							'skinLoaded',
+							'skinLoadFailed',
+							'sourceReady',
+							'startup'
+						],
 						i = events.length - 1;
 
 				for (i; i >= 0; i--) {
@@ -765,25 +777,25 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			//mw.setConfig('debug', true);
 
 			kWidget.embed({
-							  targetId:      playerId,
-							  wid:           '_%PARTNER_ID%',
-							  uiconf_id:     '%UICONF_ID%',
-							  flashvars:     {
-								  "mediaProxy.preferedFlavorBR": 1500,//This makes the 1.5Mbps stream preferd
-								  "externalInterfaceDisabled":   false,
-								  "akamaiHD":                    {
-									  "loadingPolicy": "preInitialize",
-									  "asyncInit":     "true"
-								  },
-								  "twoPhaseManifest":            "true",
-								  "streamerType":                "hdnetworkmanifest",
-								  "autoPlay":                    false
-							  },
-							  params:        {
-								  wmode: 'transparent'
-							  },
-							  readyCallback: playerReady
-						  });
+				targetId: playerId,
+				wid: '_%PARTNER_ID%',
+				uiconf_id: '%UICONF_ID%',
+				flashvars: {
+					'mediaProxy.preferedFlavorBR': 1500,//This makes the 1.5Mbps stream preferd
+					externalInterfaceDisabled: false,
+					akamaiHD: {
+						loadingPolicy: "preInitialize",
+						asyncInit: "true"
+					},
+					twoPhaseManifest: "true",
+					streamerType: "hdnetworkmanifest",
+					autoPlay: false
+				},
+				params: {
+					wmode: 'transparent'
+				},
+				readyCallback: playerReady
+			});
 		}
 
 
