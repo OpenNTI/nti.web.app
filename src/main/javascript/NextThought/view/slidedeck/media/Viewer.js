@@ -297,6 +297,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		dim.setClasses(this.el, this);
 		Ext.defer(function(){
 			me.adjustOnResize();
+			if(me.down('slidedeck-transcript')){
+				me.down('slidedeck-transcript').fireEvent('sync-height');
+			}
 		}, 1, me);
 	},
 
