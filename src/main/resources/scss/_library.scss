@@ -3,7 +3,7 @@
 	@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
 	overflow: {
 		x: hidden;
-		y: auto;
+		y: scroll;
 	}
 	-webkit-overflow-scrolling: touch;
 	margin-top: -100px;

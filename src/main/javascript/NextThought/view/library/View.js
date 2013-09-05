@@ -6,7 +6,7 @@ Ext.define('NextThought.view.library.View', {
 		'NextThought.view.library.Branding'
 	],
 
-	cls: 'library-view',
+	cls: 'library-view scrollable',
 	layout: 'auto',
 
 	items: [
@@ -54,15 +54,6 @@ Ext.define('NextThought.view.library.View', {
 			'show-books': 'showBooks',
 			'hide-books': 'hideBooks'
 		});
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 
