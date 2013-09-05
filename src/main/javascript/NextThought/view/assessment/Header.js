@@ -1,50 +1,50 @@
-Ext.define('NextThought.view.assessment.Header', {
+Ext.define('NextThought.view.assessment.Header',{
 	extend: 'Ext.Component',
-	alias:  'widget.question-header',
+	alias: 'widget.question-header',
 
 	requires: [
 		'NextThought.ux.VideoPopout'
 	],
 
 	cls: 'header',
-	ui:  'assessment',
+	ui: 'assessment',
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'controls',
-											cn:  [
+		{
+			cls: 'controls',
+			cn: [
 //				{ cls: 'favorite' },
 //				{ cls: 'like' },
-												{ cls: 'video', html: 'Related Videos' }
-											]
-										},
-										{cls: 'title', html: '{title}'},
-										{cls: 'status {status}', html: '{status}'}
-									]),
+				{ cls: 'video', html: 'Related Videos' }
+			]
+		},
+		{cls:'title',html:'{title}'},
+		{cls: 'status {status}',html:'{status}'}
+	]),
 
 	renderSelectors: {
 //		liked: '.controls .like',
 //		favorites: '.controls .favorite',
 		myTitle: '.title',
-		status:  '.status',
-		video:   '.video'
+		status: '.status',
+		video: '.video'
 	},
 
 
-	initComponent: function () {
+	initComponent: function(){
 		this.videos = [];
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function () {
+	afterRender: function(){
 		this.callParent(arguments);
 		var r = this.question,
 //			l = this.liked,
 //			f = this.favorites,
-				v = this.video;
+			v = this.video;
 
-		if (!this.videos.length) {
+		if(!this.videos.length){
 			v.remove();
 		}
 		else {
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.assessment.Header', {
 	},
 
 
-	onAdded: function (assessmentParent) {
+	onAdded: function(assessmentParent){
 		var id = '?unresolved title?';
 
 		try {
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.assessment.Header', {
 
 			this.videos = this.question.getVideos() || [];
 		}
-		catch (e) {
+		catch(e){
 			console.warn(Globals.getError(e));
 		}
 
@@ -80,8 +80,8 @@ Ext.define('NextThought.view.assessment.Header', {
 	},
 
 
-	setTitle: function (title) {
-		if (!this.rendered) {
+	setTitle: function(title){
+		if(!this.rendered){
 			this.renderData.title = title;
 			return;
 		}
@@ -89,23 +89,23 @@ Ext.define('NextThought.view.assessment.Header', {
 	},
 
 
-	markCorrect: function () {
+	markCorrect: function(){
 		this.el.removeCls('incorrect').addCls('correct');
 		this.status.update('Correct!');
 	},
 
-	markIncorrect: function () {
+	markIncorrect: function(){
 		this.el.removeCls('correct').addCls('incorrect');
 		this.status.update('Incorrect');
 	},
 
-	reset: function () {
-		this.el.removeCls(['incorrect', 'correct']);
+	reset: function(){
+		this.el.removeCls(['incorrect','correct']);
 		this.status.update('');
 	},
 
 
-	openVideos: function () {
-		Ext.widget('video-lightbox', { data: this.videos }).show();
+	openVideos: function(){
+		Ext.widget('video-lightbox',{ data: this.videos }).show();
 	}
 });

@@ -1,37 +1,37 @@
 Ext.define('NextThought.view.video.Panel', {
 	extend: 'Ext.panel.Panel',
-	alias:  'widget.video',
+	alias: 'widget.video',
 
-	constructor: function (config) {
+	constructor: function(config) {
 		this.callParent([
-							Ext.applyIf(config, {
-								width:              '100%',
-								height:             '100%',
-								autoplay:           false,
-								controls:           true,
-								bodyStyle:          'background-color:#000;color:#fff',
-								html:               '',
-								suggestChromeFrame: false
-							})]);
+			Ext.applyIf(config, {
+				width	: '100%',
+				height   : '100%',
+				autoplay : false,
+				controls : true,
+				bodyStyle: 'background-color:#000;color:#fff',
+				html	 : '',
+				suggestChromeFrame: false
+			})]);
 
 		this.on({
-					scope:         this,
-					render:        this.videoRender,
-					beforedestroy: function () {
-						this.video = null;
-					},
-					resize:        function (panel, width, height) {
-						if (this.video) {
-							this.video.setSize(width, height);
-						}
-					}
-				});
+			scope		: this,
+			render	   : this.videoRender,
+			beforedestroy: function() {
+				this.video = null;
+			},
+			resize   : function(panel, width, height) {
+				if (this.video) {
+					this.video.setSize(width, height);
+				}
+			}
+		});
 	},
 
-	videoRender: function () {
+	videoRender: function() {
 		var fallback = '',
-				size = this.getSize(),
-				cfg, i, len;
+			size = this.getSize(),
+			cfg, i, len;
 
 		if (this.fallbackHTML) {
 			fallback = this.fallbackHTML;
@@ -55,19 +55,15 @@ Ext.define('NextThought.view.video.Panel', {
 
 		/* match the video size to the panel dimensions */
 		cfg = Ext.copyTo({
-							 tag:    'video',
-							 width:  size.width,
-							 height: size.height
-						 },
-						 this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
+				tag   : 'video',
+				width : size.width,
+				height: size.height
+			},
+			this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
 
 		/* just having the params exist enables them */
-		if (this.autoplay) {
-			cfg.autoplay = 1;
-		}
-		if (this.controls) {
-			cfg.controls = 1;
-		}
+		if (this.autoplay) { cfg.autoplay = 1; }
+		if (this.controls) { cfg.controls = 1; }
 
 		/* handle multiple sources */
 		if (Ext.isArray(this.src)) {
@@ -79,16 +75,16 @@ Ext.define('NextThought.view.video.Panel', {
 				}
 
 				cfg.children.push(
-						Ext.applyIf({tag: 'source'}, this.src[i])
+					Ext.applyIf({tag: 'source'}, this.src[i])
 				);
 			}
 
 			cfg.children.push({
-								  html: fallback
-							  });
+				html: fallback
+			});
 
 		} else {
-			cfg.src = this.src;
+			cfg.src  = this.src;
 			cfg.html = fallback;
 		}
 

@@ -3,8 +3,8 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 
 	getItemReplies: function () {
 		var me = this,
-				r = me.record,
-				focusRecord = me.record.focusRecord;
+			r = me.record,
+			focusRecord = me.record.focusRecord;
 
 		function cb(store, records) {
 			var count = store.getCount(), rec = null, items;
@@ -12,7 +12,7 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 			//Set comments count
 			if (me.commentsEl) {
 				me.commentsEl.update(Ext.util.Format.plural(count,
-															me.commentsEl.getAttribute('data-label')));
+						me.commentsEl.getAttribute('data-label')));
 				if (count === 0 || count === 1) {
 					delete me.commentsEl;
 				}
@@ -30,7 +30,7 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 
 			//Set the latest direct reply
 			store.each(function (r) {
-				if (r.getId() === (focusRecord && focusRecord.getId())) {
+				if(r.getId() === (focusRecord && focusRecord.getId()) ){
 					rec = r;
 				}
 				else if ((!rec || ( (rec.get('CreatedTime')) < r.get('CreatedTime'))) && (r.get('inReplyTo') === me.record.getId())) {

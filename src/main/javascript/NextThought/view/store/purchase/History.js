@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.store.purchase.History', {
 	extend: 'NextThought.view.store.purchase.DetailView',
-	alias:  'widget.purchase-history',
+	alias: 'widget.purchase-history',
 
 	ui: 'purchase-history-panel',
 
@@ -9,34 +9,34 @@ Ext.define('NextThought.view.store.purchase.History', {
 	errorTpl: Ext.DomHelper.createTemplate({cls: 'loading problem', cn: {html: 'Oops!'}}),
 
 	historyTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-														   tag: 'table',
-														   cn:  [
-															   {
-																   tag: 'thead', cn: { tag: 'tr', cn: [
-																   {tag: 'th', cls: 'key', cn: {tag: 'span', html: 'License or Activation Key'}},
-																   {tag: 'th', cls: 'qty', cn: {tag: 'span', html: 'Usage / Qty'}},
-																   {tag: 'th', cls: 'tot', cn: {tag: 'span', html: 'Total'}}
-															   ]}
-															   },
-															   {
-																   tag: 'tbody', cn: { tag: 'tpl', 'for': '.', cn: { tag: 'tr', cls: '{type}', cn: [
-																   {tag: 'td', cls: 'key', cn: [
-																	   {tag: 'span', html: '{key}'},
-																	   {html: '{Action} {Time:date("F j, Y")}'}
-																   ]},
-																   {tag: 'td', cls: 'qty', cn: {tag: 'span', html: '{usage} / {Order.Quantity}'}},
-																   {tag: 'td', cls: 'tot', cn: {tag: 'span', html: '{Price}'}}
-															   ]}}
-															   }
-														   ]
-													   })),
+		tag: 'table',
+		cn: [
+			{
+				tag: 'thead', cn: { tag: 'tr', cn: [
+				{tag: 'th', cls: 'key', cn: {tag: 'span', html: 'License or Activation Key'}},
+				{tag: 'th', cls: 'qty', cn: {tag: 'span', html: 'Usage / Qty'}},
+				{tag: 'th', cls: 'tot', cn: {tag: 'span', html: 'Total'}}
+			]}
+			},
+			{
+				tag: 'tbody', cn: { tag: 'tpl', 'for': '.', cn: { tag: 'tr', cls: '{type}', cn: [
+				{tag: 'td', cls: 'key', cn: [
+					{tag: 'span', html: '{key}'},
+					{html: '{Action} {Time:date("F j, Y")}'}
+				]},
+				{tag: 'td', cls: 'qty', cn: {tag: 'span', html: '{usage} / {Order.Quantity}'}},
+				{tag: 'td', cls: 'tot', cn: {tag: 'span', html: '{Price}'}}
+			]}}
+			}
+		]
+	})),
 
 	ordinal: 'history',
 
 	setupRenderData: function () {
 		var req = {
-			url:     this.record.getLink('history'),
-			scope:   this,
+			url: this.record.getLink('history'),
+			scope: this,
 			success: this.applyHistory,
 			failure: this.failedToLoadHistoy
 		};

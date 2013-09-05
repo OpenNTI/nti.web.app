@@ -1,15 +1,15 @@
 Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 	extend: 'NextThought.view.cards.Card',
-	alias:  [
+	alias: [
 		'widget.course-overview-content',
 		'widget.course-overview-externallink'
 	],
 
 	constructor: function (config) {
 		var n = config.node,
-				i = config.locationInfo,
-				href = n.getAttribute('href'),
-				ntiid = n.getAttribute('ntiid');
+			i = config.locationInfo,
+			href = n.getAttribute('href'),
+			ntiid = n.getAttribute('ntiid');
 
 		if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
 			href = getURL(i.root + href);
@@ -17,13 +17,13 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 
 		config.data = {
 			'attribute-data-href': href, href: href,
-			creator:               n.getAttribute('creator'),
-			description:           Ext.String.ellipsis(n.getAttribute('desc'), 180, true),
-			thumbnail:             getURL(i.root + n.getAttribute('icon')),
-			ntiid:                 ntiid,
-			title:                 n.getAttribute('label'),
-			notTarget:             !NextThought.view.cards.Card.prototype.shouldOpenInApp.call(this, ntiid, href),
-			asDomSpec:             DomUtils.asDomSpec
+			creator: n.getAttribute('creator'),
+			description: Ext.String.ellipsis(n.getAttribute('desc'), 180, true),
+			thumbnail: getURL(i.root + n.getAttribute('icon')),
+			ntiid: ntiid,
+			title: n.getAttribute('label'),
+			notTarget: !NextThought.view.cards.Card.prototype.shouldOpenInApp.call(this, ntiid, href),
+			asDomSpec: DomUtils.asDomSpec
 		};
 
 		this.callParent([config]);
@@ -31,10 +31,10 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 
 
 	commentTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-														   cls: 'comment', cn: [
+		cls: 'comment', cn: [
 			{ html: '{count:plural("Comment")}'}
 		]
-													   })),
+	})),
 
 
 	afterRender: function () {
@@ -46,7 +46,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 
 	loadContainer: function () {
 		var ntiid = this.data.href,
-				req;
+			req;
 
 		if (!ParseUtils.isNTIID(ntiid)) {
 			ntiid = this.data.ntiid;
@@ -56,14 +56,14 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 		}
 
 		req = {
-			url:      $AppConfig.service.getContainerUrl(ntiid, Globals.USER_GENERATED_DATA),
-			scope:    this,
-			method:   'GET',
-			params:   {
-				accept:     NextThought.model.Note.mimeType,
+			url: $AppConfig.service.getContainerUrl(ntiid, Globals.USER_GENERATED_DATA),
+			scope: this,
+			method: 'GET',
+			params: {
+				accept: NextThought.model.Note.mimeType,
 				batchStart: 0,
-				batchSize:  1,
-				filter:     'TopLevel'
+				batchSize: 1,
+				filter: 'TopLevel'
 			},
 			callback: this.containerLoaded
 		};
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 
 	containerLoaded: function (q, s, r) {
 		var total = 0,
-				json = Ext.decode(r && r.responseText, true);
+			json = Ext.decode(r && r.responseText, true);
 		if (s && json) {
 			total = json.FilteredTotalItemCount || 0;
 		}

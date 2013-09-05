@@ -1,16 +1,16 @@
-Ext.define('NextThought.view.whiteboard.editor.Tool', {
-	alias:  'widget.wb-tool',
+Ext.define('NextThought.view.whiteboard.editor.Tool',{
+	alias: 'widget.wb-tool',
 	extend: 'Ext.button.Button',
 
-	scale:        'large',
+	scale: 'large',
 	enableToggle: true,
 	allowDepress: false,
-	toggleGroup:  'whitebard-primary-tools',
+	toggleGroup: 'whitebard-primary-tools',
 
-	ui:      'button',
+	ui: 'button',
 	baseCls: 'whiteboard-tool',
 
-	initComponent: function () {
+	initComponent: function(){
 		this.addCls(this.tool);
 		this.iconCls = this.tool;
 		this.tooltip = Ext.String.capitalize(this.tool);

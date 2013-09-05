@@ -19,16 +19,16 @@ Ext.define('NextThought.model.Course', {
 		{ name: 'Description', type: 'string', persist: false },
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
 		{ name: 'Items', type: 'auto', persist: false },
-		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
-		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
-		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function (v, r) {
+		{ name: 'isCourse', type:'bool', persist: false, defaultValue:false },
+		{ name: 'courseName', type:'string', persist: false, defaultValue:'' },
+		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v,r){
 			return r && r.hasHistory();
 		}}
 	],
 
 	isCourse: true,
 
-	hasHistory: function () {
+	hasHistory: function(){
 		return Boolean(this.getLink('history'));
 	}
 });

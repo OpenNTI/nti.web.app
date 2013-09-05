@@ -1,11 +1,11 @@
 /**
- *    Whatever mixes this needs to implment an applyFilter
- *    function that takes an array of mimetypes, and an array of filters
- */
-Ext.define('NextThought.mixins.ActivityFilters', {
+*	Whatever mixes this needs to implment an applyFilter
+*	function that takes an array of mimetypes, and an array of filters
+*/
+Ext.define('NextThought.mixins.ActivityFilters',{
 
 	mimeTypesMap: {
-		'all':         ['all'],
+		'all': ['all'],
 		'discussions': [
 			'forums.personalblogentry',
 			'forums.personalblogcomment',
@@ -14,67 +14,67 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 			'forums.generalforumcomment',
 			'forums.communityheadlinetopic'
 		],
-		'notes':       ['highlight', 'note'],
-		'contact':     ['user']
+		'notes': ['highlight', 'note'],
+		'contact': ['user']
 	},
 
 	filtersMap: {
-		'all':            'onlyMe',
-		'notes':          'onlyMe',
-		'bookmarks':      'Bookmarks',
-		'inCommunity':    'inCommunity',
+		'all': 'onlyMe',
+		'notes': 'onlyMe',
+		'bookmarks': 'Bookmarks',
+		'inCommunity': 'inCommunity',
 		'notInCommunity': 'notInCommunity'
-	},
+	},	
 
-	setUpMenu: function (key) {
+	setUpMenu: function(key){
 		this.key = key;
-		this.typesMenu = Ext.widget('menu', {
-			ui:            'nt',
-			plain:         true,
+		this.typesMenu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
 			showSeparator: false,
-			shadow:        false,
-			frame:         false,
-			border:        false,
-			hideMode:      'display',
-			title:         'Activity Type',
-			cls:           'menu types-menu',
-			width:         258,
-			defaults:      {
-				ui:        'nt-menuitem',
-				xtype:     'menucheckitem',
-				plain:     true,
-				listeners: {
-					scope:               this,
-					'beforecheckchange': function (item, checked) { return checked || item.allowUncheck !== false; },
-					'checkchange':       'changeFilter'
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			title: 'Activity Type',
+			cls: 'menu types-menu',
+			width: 258,
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				plain: true,
+				listeners:{
+					scope: this,
+					'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
+					'checkchange': 'changeFilter'
 				}
 			},
-			items:         [
+			items: [
 				{cls: 'option', text: 'Show All', type: 'showall', allowUncheck: false, isAll: true, filter: 'all'}
 			]
 		});
 	},
 
-	afterRender: function () {
+	afterRender: function(){
 		var state = {};
-		if (!this.stateApplied) {
-			state['types-' + this.key] = ['showall'];
+		if(!this.stateApplied){
+			state['types-'+this.key] = ['showall'];
 			this.applyState(state);
 		}
 	},
 
-	getTypesMenu: function () {
+	getTypesMenu: function(){
 		return this.typesMenu;
 	},
 
-	addFilterItem: function (text, filter, type) {
+	addFilterItem: function(text, filter, type){
 		var item = {
-			cls:    'option',
-			text:   text,
-			type:   type,
+			cls: 'option',
+			text: text,
+			type: type,
 			filter: filter
 		};
-		if (this.checkedTypes && Ext.Array.contains(this.checkedTypes, item.type)) {
+		if(this.checkedTypes && Ext.Array.contains(this.checkedTypes, item.type)){
 			item.checked = true;
 			Ext.Array.remove(this.checkedTypes, item.type);
 		}
@@ -83,39 +83,39 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 		this.setFilters();
 	},
 
-	getState: function () {
+	getState: function(){
 		var items = this.typesMenu.query('menuitem'),
-				types = [],
-				state = {};
-		Ext.each(items, function (item) {
-			if (item.checked) {
+			types = [],
+			state = {};
+		Ext.each(items, function(item){
+			if(item.checked){
 				types.push(item.type);
 			}
 		});
-		state['types-' + this.key] = types;
+		state['types-'+this.key] = types;
 		return state;
 	},
 
-	applyState: function (state) {
+	applyState: function(state){
 		var me = this,
-				items = me.typesMenu.query('menuitem'),
-				types = state['types-' + me.key];
+			items = me.typesMenu.query('menuitem'),
+			types = state['types-'+me.key];
 
-		if (!Ext.isEmpty(types)) {
+		if(!Ext.isEmpty(types)){
 			me.typesMenu.down('[isAll]').setChecked(false);
-			Ext.each(items, function (item) {
+			Ext.each(items, function(item){
 				var checked = Ext.Array.contains(types, item.type);
-
-				if (me.rendered) {
+				
+				if(me.rendered){
 					item.setChecked(checked);
-				} else {
-					me.on('afterrender', function () {
+				}else{
+					me.on('afterrender',function(){
 						item.setChecked(checked);
 					}, me);
 				}
 			});
 
-			if (!Ext.isEmpty(types)) {
+			if(!Ext.isEmpty(types)){
 				this.checkedTypes = types;
 			}
 
@@ -123,35 +123,35 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 		}
 	},
 
-	changeFilter: function (item) {
+	changeFilter: function(item){
 		var allChecked = true, allUnchecked = true,
-				allItems = this.typesMenu.query('menuitem');
+			allItems = this.typesMenu.query('menuitem');
 
-		function uncheck(items) {
-			Ext.each(items, function (i) {
-				if (!i.isAll) {
+		function uncheck(items){
+			Ext.each(items, function(i){
+				if(!i.isAll){
 					i.setChecked(false, true);
 				}
 			});
 		}
 
-		if (item.checked) {
-			if (item.isAll) {
+		if(item.checked){
+			if(item.isAll){
 				uncheck(allItems);
-			} else {
+			}else{
 				this.typesMenu.query('[isAll]')[0].setChecked(false, true);
 			}
-		} else {
-			Ext.each(allItems, function (i) {
+		}else{
+			Ext.each(allItems, function(i){
 				allUnchecked = allUnchecked && !i.checked;
 			});
 
-			if (allUnchecked) {
-				item.setChecked(true, true);
+			if(allUnchecked){
+				item.setChecked(true,true);
 			}
 		}
 
-		if (this.typesMenu.query('menuitem[checked]').length === 0) {
+		if(this.typesMenu.query('menuitem[checked]').length === 0){
 			this.typesMenu.query('[isAll]')[0].setChecked(true, true);
 		}
 
@@ -159,30 +159,30 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 		this.saveState();
 	},
 
-	setFilters: function () {
+	setFilters: function(){
 		var menu = this.typesMenu,
-				allItems = menu.query('menuitem'),
-				everything = menu.down('[isAll]').checked, me = this,
-				mimeTypes = [],
-				filterTypes = [];
+			allItems = menu.query('menuitem'),
+			everything = menu.down('[isAll]').checked, me = this,
+			mimeTypes = [],
+			filterTypes = [];
 
-		Ext.each(allItems, function (item) {
-			var mt = this.mimeTypesMap[item.filter],
+			Ext.each(allItems, function(item){
+				var mt = this.mimeTypesMap[item.filter],
 					ft = this.filtersMap[item.filter];
 
-			if ((everything || item.checked)) {
-				if (mt) {
-					Ext.each(Ext.Array.from(mt), function (m) {
-						mimeTypes.push('application/vnd.nextthought.' + m);
-					}, this);
-				}
+				if ((everything || item.checked)) {
+					if(mt){
+						Ext.each(Ext.Array.from(mt), function(m){
+							mimeTypes.push('application/vnd.nextthought.'+m);
+						}, this);
+					}
 
-				if (ft && !Ext.Array.contains(filterTypes, ft)) {
-					filterTypes.push(ft);
+					if(ft && !Ext.Array.contains(filterTypes, ft)){
+						filterTypes.push(ft);
+					}
 				}
-			}
-		}, this);
-
+			}, this);
+			
 		this.applyFilters(mimeTypes, filterTypes);
 	}
 });

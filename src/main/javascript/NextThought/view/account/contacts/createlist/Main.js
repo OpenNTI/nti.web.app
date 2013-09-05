@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.account.contacts.createlist.Main', {
-	extend:   'Ext.container.Container',
-	alias:    'widget.createlist-main-view',
+	Ext.define('NextThought.view.account.contacts.createlist.Main',{
+	extend: 'Ext.container.Container',
+	alias: 'widget.createlist-main-view',
 	requires: [
 		'NextThought.view.form.fields.SimpleTextField'
 	],
@@ -8,62 +8,62 @@ Ext.define('NextThought.view.account.contacts.createlist.Main', {
 	cls: 'createlist-main-view',
 
 	items: [
-		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
+		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'List name'},
 			{xtype: 'simpletext', name: 'name', cls: 'input-box name group-name', inputType: 'text', placeholder: 'Choose a name for your list...'}
 		]},
-		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn:                                                   [
+		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
+			cn:[
 				{cls: 'error-desc'}
 			]}
 		},
-		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function (b) {
+		{xtype: 'container', cls: 'submit',	 layout:{type: 'hbox', pack: 'end'}, items: [
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
 				b.up('window').close();
 			}},
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Create', disabled: true, minWidth: 96}
+			{xtype: 'button',  ui: 'primary', scale: 'large', name: 'submit', text: 'Create', disabled: true, minWidth: 96}
 		]}
 	],
 
-	afterRender: function () {
+	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.down('[name=name]'), {
-			scope:      this,
-			changed:    this.changed,
-			click:      this.clearError,
-			specialkey: this.specialkey
-		});
-		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
+            scope: this,
+            changed: this.changed,
+            click: this.clearError,
+            specialkey: this.specialkey
+        });
+        this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
 
-	getListName: function () {
+	getListName: function(){
 		var name = this.down('[name=name]').getValue();
 		return name ? name.trim() : name;
 	},
 
-	specialkey: function (el, event) {
-		var val = el.lastValue,
-				empty = Ext.isEmpty(val);
+    specialkey: function(el, event) {
+        var val = el.lastValue,
+            empty = Ext.isEmpty(val);
 
-		if (event.getKey() === event.RETURN && !empty) {
-			this.submitClicked();
-		}
-	},
+        if (event.getKey() === event.RETURN && !empty) {
+            this.submitClicked();
+        }
+    },
 
-	changed: function (value, t) {
+	changed: function(value, t){
 		var val = value.trim(),
-				empty = Ext.isEmpty(val),
-				btn = this.query('[name=submit]', this)[0];
+			empty = Ext.isEmpty(val),
+			btn = this.query('[name=submit]',this)[0];
 		btn.setDisabled(empty);
-		if (empty) {
+		if(empty){
 			t.getEl().down('input').addCls('empty');
 		}
-		else {
+		else{
 			t.getEl().down('input').removeCls('empty');
 		}
 	},
 
-	showError: function (errorText) {
+	showError: function(errorText){
 		var box = this.down('[name=error]');
 
 		errorText = errorText || 'An unknown error occurred. Please try again.';
@@ -73,12 +73,12 @@ Ext.define('NextThought.view.account.contacts.createlist.Main', {
 		box.show();
 	},
 
-	submitClicked: function () {
-		this.clearError();
-		this.fireEvent("create-list", this.down('[name=submit]'));
-	},
+    submitClicked: function() {
+        this.clearError();
+        this.fireEvent("create-list", this.down('[name=submit]'));
+    },
 
-	clearError: function () {
+	clearError: function(){
 		var box = this.down('[name=error]');
 		box.hide();
 	}

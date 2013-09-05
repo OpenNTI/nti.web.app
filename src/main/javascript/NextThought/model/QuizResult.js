@@ -1,9 +1,9 @@
 Ext.define('NextThought.model.QuizResult', {
-	extend:   'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.QuizQuestionResponse'
 	],
-	fields:   [
+	fields: [
 		{ name: 'QuizID', type: 'string' },
 		{ name: 'Items', type: 'arrayItem' }
 	]

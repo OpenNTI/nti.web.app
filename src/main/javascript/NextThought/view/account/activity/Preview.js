@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		//merge in subclass's templates
 		var tpl = this.prototype.renderTpl
-				.replace('{toolbar}', data.toolbarTpl || '');
+			.replace('{toolbar}', data.toolbarTpl || '');
 
 		if (!data.renderTpl) {
 			data.renderTpl = tpl;
@@ -37,82 +37,82 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 	mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		profileLinks:           'NextThought.mixins.ProfileLinks'
+		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
 
 	componentLayout: 'natural',
-	layout:          'auto',
-	childEls:        ['body'],
-	getTargetEl:     function () {
+	layout: 'auto',
+	childEls: ['body'],
+	getTargetEl: function () {
 		return this.body;
 	},
 
 	cls: 'activity-preview',
 
 	renderSelectors: {
-		avatar:        '.avatar',
-		name:          '.name',
-		liked:         '.controls .like',
-		favorites:     '.controls .favorite',
-		subjectEl:     '.subject',
-		itemEl:        '.item',
-		footEl:        '.foot',
-		commentsEl:    '.comments',
+		avatar: '.avatar',
+		name: '.name',
+		liked: '.controls .like',
+		favorites: '.controls .favorite',
+		subjectEl: '.subject',
+		itemEl: '.item',
+		footEl: '.foot',
+		commentsEl: '.comments',
 		messageBodyEl: '.body',
-		replyEl:       '.respond .reply-options > .reply',
-		replyBoxEl:    '.respond > div',
-		respondEl:     '.respond',
-		topEl:         '.activity-preview-body',
-		timeEl:        '.stamp > .time'
+		replyEl: '.respond .reply-options > .reply',
+		replyBoxEl: '.respond > div',
+		respondEl: '.respond',
+		topEl: '.activity-preview-body',
+		timeEl: '.stamp > .time'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: '{type} activity-preview-body',
-											cn:  [
-												'{toolbar}',
-												{ cls: 'item', cn: [
-													{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
-													{ cls: 'controls', cn: [
-														{ cls: 'favorite' },
-														{ cls: 'like' }
-													]},
-													{ cls: 'meta', cn: [
-														{ cls: 'subject {[values.title? "":"no-subject"]}', html: '{title}' },
-														{ cls: 'stamp', cn: [
-															{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: 'By {name}'},
-															{tag: 'span', cls: 'time', html: '{relativeTime}'}
-														]}
-													]},
-													{ cls: 'body' }
-												]},
-												{
-													cls: 'foot',
-													cn:  [
-														{ cls:    'comments', 'data-label': ' Comment',
-															html: '{CommentCount:plural("Comment")}' }
-													]
-												}
-											]
-										},
-										{
-											id:  '{id}-body',
-											cls: 'replies',
-											cn:  ['{%this.renderContainer(out,values)%}']
-										},
-										{
-											cls: 'respond', cn: {
-											cn: [
-												{
-													cls: 'reply-options',
-													cn:  [
-														{ cls: 'reply', html: 'Add a comment' }
-													]
-												}
-											]}
-										}
-									]),
+		{
+			cls: '{type} activity-preview-body',
+			cn: [
+				'{toolbar}',
+				{ cls: 'item', cn: [
+					{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
+					{ cls: 'controls', cn: [
+						{ cls: 'favorite' },
+						{ cls: 'like' }
+					]},
+					{ cls: 'meta', cn: [
+						{ cls: 'subject {[values.title? "":"no-subject"]}', html: '{title}' },
+						{ cls: 'stamp', cn: [
+							{tag: 'span', cls: 'name link {[values.title? "":"no-subject"]}', html: 'By {name}'},
+							{tag: 'span', cls: 'time', html: '{relativeTime}'}
+						]}
+					]},
+					{ cls: 'body' }
+				]},
+				{
+					cls: 'foot',
+					cn: [
+						{ cls: 'comments', 'data-label': ' Comment',
+							html: '{CommentCount:plural("Comment")}' }
+					]
+				}
+			]
+		},
+		{
+			id: '{id}-body',
+			cls: 'replies',
+			cn: ['{%this.renderContainer(out,values)%}']
+		},
+		{
+			cls: 'respond', cn: {
+			cn: [
+				{
+					cls: 'reply-options',
+					cn: [
+						{ cls: 'reply', html: 'Add a comment' }
+					]
+				}
+			]}
+		}
+	]),
 
 
 	moreTpl: Ext.DomHelper.createTemplate({tag: 'a', cls: 'more', cn: [
@@ -168,10 +168,10 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 	setupReplyScrollZone: function () {
 		var rH = this.respondEl.getHeight(),
-				tH = this.topEl.getHeight(),
-				max = Ext.dom.Element.getViewportHeight()
-						- tH
-						- rH;
+			tH = this.topEl.getHeight(),
+			max = Ext.dom.Element.getViewportHeight()
+				- tH
+				- rH;
 
 		console.log(rH, tH, max, this.body);
 		this.body.setStyle({maxHeight: max + 'px'});
@@ -212,8 +212,8 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	setRenderedTitle: function (record) {
-		if (record.isModel) {
+	setRenderedTitle: function(record){
+		if(record.isModel){
 			return record.get('title');
 		}
 		return record.title;
@@ -223,7 +223,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	/** @private */
 	prepareRenderData: function (record) {
 		var me = this,
-				o = record.getData();
+			o = record.getData();
 		o.type = o.Class.toLowerCase();
 		o.CommentCount = this.getCommentCount(record);
 		o.title = this.setRenderedTitle(record);
@@ -276,7 +276,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.callParent(arguments);
 
 		var DISPLAY = Ext.dom.Element.DISPLAY,
-				box = this.replyBoxEl;
+			box = this.replyBoxEl;
 		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.respondEl, 'saveCallback': this.saveCallback});
 
 		box.setVisibilityMode(DISPLAY);
@@ -294,16 +294,16 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 		//These next two functions seem named backwards...
-		var hide = function () {
+		var hide = function(){
 			//Ext.bind(box.hide, box, [false]);
-			// Now that the editor is active, adjust the reply scroll zone.
-			this.setupReplyScrollZone();
+            // Now that the editor is active, adjust the reply scroll zone.
+            this.setupReplyScrollZone();
 			this.replyBoxEl.hide();
 			this.constrainPopout();
 			this.fireEvent('editorActivated');
 		};
 
-		var show = function () {
+		var show = function(){
 			//Ext.bind(box.show, box, [false]);
 			this.replyBoxEl.show();
 			this.constrainPopout();
@@ -311,14 +311,14 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		};
 
 		this.mon(this.editor, {
-			scope:                this,
-			'activated-editor':   hide,
+			scope: this,
+			'activated-editor': hide,
 			'deactivated-editor': show,
-			'no-body-content':    function (editor, bodyEl) {
+			'no-body-content': function (editor, bodyEl) {
 				editor.markError(bodyEl, 'You need to type something');
 				return false;
 			},
-			'grew':               'constrainPopout'
+			'grew': 'constrainPopout'
 		});
 
 		this.mon(this.editor, 'deactivated-editor', this.setupReplyScrollZone, this, {delay: 1});
@@ -330,10 +330,10 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.enableProfileClicks(this.name, this.avatar);
 	},
 
-	constrainPopout: function () {
+	constrainPopout: function(){
 		var pop = this.up('.activity-popout');
 
-		pop.doConstrain();
+        pop.doConstrain();
 	},
 
 
@@ -351,7 +351,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-		this.fireEvent('realign');
+        this.fireEvent('realign');
 	},
 
 

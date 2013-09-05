@@ -13,11 +13,11 @@ Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'recipients', type: 'auto' }
 	],
 
-	hasBeenModerated: function () {
-		return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
-	},
+    hasBeenModerated: function(){
+        return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
+    },
 
-	hasBeenFlagged: function () {
+	hasBeenFlagged: function(){
 		return Boolean(this.getLink('flag.metoo'));
 	}
 });

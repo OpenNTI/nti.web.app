@@ -9,17 +9,17 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 	GRID_WIDTH: 8,
 
-	ui:     'course',
-	cls:    'course-dashboard-container',
+	ui: 'course',
+	cls: 'course-dashboard-container',
 	layout: 'auto',
 
 	items: {
-		layout:      'auto',
-		ui:          'course',
-		cls:         'course-dashboard grid',
-		xtype:       'container',
+		layout: 'auto',
+		ui: 'course',
+		cls: 'course-dashboard grid',
+		xtype: 'container',
 		defaultType: 'box',
-		items:       []
+		items: []
 	},
 
 	constructor: function (config) {
@@ -77,8 +77,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 		function get(r) {
 			var base = r.getBaseWeight(), //give more important tiles a higher base weight to keep them on top
-					inner = (r.innerWeight > 0) ? r.innerWeight / r.maxInner : 0, //% of the max inner, if the innerWeight is 0 the max might be so make sure we don't divide by zero
-					time = (r.getTimeWeight() / today.getTime()) * 0.001; //how close the record is to today, decreased so it doesn't over turn the inner weight
+				inner = (r.innerWeight > 0) ? r.innerWeight / r.maxInner : 0, //% of the max inner, if the innerWeight is 0 the max might be so make sure we don't divide by zero
+				time = (r.getTimeWeight() / today.getTime()) * 0.001; //how close the record is to today, decreased so it doesn't over turn the inner weight
 
 			return base + inner + time;
 		}
@@ -138,7 +138,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 	needsFitting: function (items, rows, columns) {
 		var m = this.buildMatrix(rows, columns),
-				hasHoles = false;
+			hasHoles = false;
 
 		function fullRow(row) {
 			function andR(row, i) {
@@ -164,8 +164,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 		function fillMatrix(i, j, a) {
 			var p = m.position, x, y,
-					xx = p[0] + i.cols,
-					yy = p[1] + i.rows;
+				xx = p[0] + i.cols,
+				yy = p[1] + i.rows;
 			if (this.debugging) {
 				console.groupCollapsed('Tile ' + j);
 			}
@@ -226,8 +226,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 		//See what's filled
 		function itr(row, i, a) {
 			var o = row.occ = occupied(row),
-					f = row.full = fullRow(row),
-					next = a[i + 1];//we loop over the rows from bottom up (backwards, so "next" has already cashed occ&full)
+				f = row.full = fullRow(row),
+				next = a[i + 1];//we loop over the rows from bottom up (backwards, so "next" has already cashed occ&full)
 
 			if (o && !f && next) {
 				hasHoles = next.occ;
@@ -255,8 +255,8 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 	sortTiles: function (items) {
 		var cols = this.GRID_WIDTH,
-				rows = this.countRows(items, cols),
-				p = new NextThought.util.MasonryPacker(cols, rows);
+			rows = this.countRows(items, cols),
+			p = new NextThought.util.MasonryPacker(cols, rows);
 
 		function adaptColsRowsToWidthHeight(items) {
 			Ext.each(items, function (i) {
@@ -287,9 +287,9 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 			Ext.Array.sort(items, function (a, b) {
 
 				var aR = a.fit.y,
-						aC = a.fit.x,
-						bR = b.fit.y,
-						bC = b.fit.x;
+					aC = a.fit.x,
+					bR = b.fit.y,
+					bC = b.fit.x;
 
 				if (aR !== bR) {
 					return aR > bR ? 1 : -1;
@@ -302,7 +302,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 			if (this.self.isDebug && this.needsFitting(items, rows, cols)) {
 				Ext.each(items, function (i, x, a) {
 					var f = i.fit,
-							p = i.pos, fn = 'log';
+						p = i.pos, fn = 'log';
 
 					if (f.x !== p.x || f.y !== p.y) {
 						fn = 'warn';

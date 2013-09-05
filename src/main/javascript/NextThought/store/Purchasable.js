@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.Purchasable', {
+Ext.define('NextThought.store.Purchasable',{
 	extend: 'NextThought.store.NTI',
 
 	requires: [
@@ -9,36 +9,36 @@ Ext.define('NextThought.store.Purchasable', {
 	model: 'NextThought.model.GenericObject',
 
 	sorters: [
-		function (a, b) {
+		function(a,b){
 			var re = /NTI/;
-			a = re.test(a.get('Provider') || a.get('Title'));
-			b = re.test(b.get('Provider') || b.get('Title'));
-			return a === b ? 0 : a ? 1 : -1;//move NTI items to the end
+			a = re.test(a.get('Provider')|| a.get('Title'));
+			b = re.test(b.get('Provider')|| b.get('Title'));
+			return a===b? 0 : a ? 1 : -1;//move NTI items to the end
 		},
 		{
-			property:  'Featured',
+			property: 'Featured',
 			direction: 'DESC'
 //		},{
 //			property: 'courseName',
 //			direction: 'DESC'
-		}, {
-			property:  'Title',
+		},{
+			property: 'Title',
 			direction: 'DESC'
 		}
 	],
 
 	proxy: {
-		url:     'tbd',
-		type:    'rest',
+		url: 'tbd',
+		type: 'rest',
 		noCache: true,
-		reader:  {
+		reader: {
 			type: 'nti',
 			root: 'Items'
 		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json'
 		},
-		model:   'NextThought.model.GenericObject'
+		model: 'NextThought.model.GenericObject'
 	}
 
 });

@@ -1,6 +1,6 @@
-Ext.define('NextThought.editor.embedvideo.Main', {
-	extend:   'Ext.container.Container',
-	alias:    'widget.embedvideo-main-view',
+Ext.define('NextThought.editor.embedvideo.Main',{
+	extend: 'Ext.container.Container',
+	alias: 'widget.embedvideo-main-view',
 	requires: [
 		'Ext.form.field.TextArea'
 	],
@@ -8,84 +8,85 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 	cls: 'embedvideo-main-view',
 
 	items: [
-		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
+		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
 			{xtype: 'box', autoEl: {tag: 'textarea', name: 'embed', placeholder: 'Video URL...'}, name: 'embed', cls: 'input-box textarea', emptyText: 'Video URL...'}
 		]},
-		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn:                                                   [
+		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
+			cn:[
 				{cls: 'error-field'},
 				{cls: 'error-desc'}
 			]}
 		},
-		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function (b) {
+		{xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
 				b.up('window').close();
 			}},
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Embed', handler: function (b) {
+			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Embed', handler: function(b){
 				b.up('window').embed();
 			}}
 		]}
 	],
 
 
-	afterRender: function () {
+	afterRender: function(){
 		this.callParent(arguments);
 		var url = this.up('window').getUrl();
-		if (url) {
+		if( url ){
 			this.down('[name=embed]').getEl().dom.value = url;
 		}
 	},
 
 
-	getValues: function () {
+	getValues: function(){
 		var raw = this.down('[name=embed]').getEl().getValue(), id,
-				stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
-				youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
-				youtubeEmbedFrameRegex = /<iframe.*src="(.*?)".*?><\/iframe>/i,
-				kalturaRegex = /kaltura:\/\/[^\/]+\/[^\/]+\/{0,1}/i,
-				match;
+			stupidURLRegex = /^(http:\/\/|https:\/\/|\/\/).*/i,
+			youtubeEmbedURLRegex = /^(http:\/\/|https:\/\/|\/\/)www.youtube.com\/embed\/.+/i,
+			youtubeEmbedFrameRegex=/<iframe.*src="(.*?)".*?><\/iframe>/i,
+			kalturaRegex = /kaltura:\/\/[^\/]+\/[^\/]+\/{0,1}/i,
+			match;
 
 		raw = (raw || '').trim();
 
 		match = kalturaRegex.exec(raw);
-		if (match) {
+		if(match){
 			return {type: 'kaltura', embedURL: raw};
 		}
 
 		//Is it a youtube embed, we can work with that
 		match = youtubeEmbedFrameRegex.exec(raw);
-		if (match && youtubeEmbedURLRegex.test(match[1])) {
-			return {type: 'youtube', embedURL: match[1]};
+		if(match && youtubeEmbedURLRegex.test(match[1])){
+			return {type: 'youtube' , embedURL: match[1]};
 		}
 
 		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-		function parseYoutubeIdOut(url) {
+		function parseYoutubeIdOut(url){
 			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
-					match = url.match(regExp);
-			if (match && match[2].length === 11) {
+				match = url.match(regExp);
+			if (match && match[2].length===11){
 				return match[2];
 			}
 			return null;
 		}
 
 		//Ok its not.  Is it a url?
-		if (stupidURLRegex.test(raw)) {
+		if(stupidURLRegex.test(raw)){
 			id = parseYoutubeIdOut(raw);
 
 			return {type: ( id ? 'youtube' : 'html5'), embedURL: raw};
 		}
 
 
+
 		return null;
 	},
 
-	setError: function (error) {
+	setError: function(error) {
 		var box = this.down('[name=error]'),
-				field = this.down('[name=' + error.field + ']'),
-				allFields = this.query('[name]');
+			field = this.down('[name='+error.field+']'),
+			allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function (f) {f.removeCls('error');});
+		Ext.each(allFields, function(f){f.removeCls('error');});
 
 		//make main error field show up
 		box.el.down('.error-field').update('Video');

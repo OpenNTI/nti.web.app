@@ -1,17 +1,17 @@
 Ext.define('NextThought.view.course.outline.View', {
 	extend: 'Ext.view.View',
-	alias:  'widget.course-outline',
+	alias: 'widget.course-outline',
 
-	ui:                      'course',
-	cls:                     'nav-outline',
+	ui: 'course',
+	cls: 'nav-outline',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'header', cn: [
-											'Outline'
-										]},
-										{ cls: 'outline-list'}
-									]),
+		{ cls: 'header', cn: [
+			'Outline'
+		]},
+		{ cls: 'outline-list'}
+	]),
 
 	renderSelectors: {
 		frameBodyEl: '.outline-list'
@@ -23,9 +23,9 @@ Ext.define('NextThought.view.course.outline.View', {
 	},
 
 
-	overItemCls:  'over',
+	overItemCls: 'over',
 	itemSelector: '.outline-row',
-	tpl:          new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'outline-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
 			{cls: 'label', html: '{label}'},
 			{tag: 'tpl', 'if': 'startDate', cn: {cls: 'date', cn: [
@@ -34,19 +34,19 @@ Ext.define('NextThought.view.course.outline.View', {
 			]}}
 		]}
 	]}), {
-										is: function (values) {
-										}
-									}),
+		is: function (values) {
+		}
+	}),
 
 
 	listeners: {
-		itemclick:    function () {
+		itemclick: function () {
 			this.fromClick = true;
 		},
 		beforeselect: function (s, r) {
 			var pass = r.get('type') !== 'unit',
-					store = s.getStore(),
-					last = s.lastSelected || store.first(), next;
+				store = s.getStore(),
+				last = s.lastSelected || store.first(), next;
 
 			if (this.fromKey && !pass) {
 				last = store.indexOf(last);
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.course.outline.View', {
 			return pass;
 
 		},
-		select:       function (s, r) {
+		select: function (s, r) {
 			if (this.fromClick || this.fromKey) {
 				this.fireEvent('set-location', r.getId());
 			}
@@ -90,7 +90,7 @@ Ext.define('NextThought.view.course.outline.View', {
 
 	handleScrolling: function () {
 		var selected = this.getSelectedNodes()[0],
-				selectedEl = Ext.get(selected);
+			selectedEl = Ext.get(selected);
 
 		if (selectedEl.getY() < this.frameBodyEl.getY()) {
 			selectedEl.addCls('out-of-view');
@@ -107,8 +107,8 @@ Ext.define('NextThought.view.course.outline.View', {
 
 	maybeChangeStoreOrSelection: function (pageInfo, store) {
 		var r, sel, C = ContentUtils,
-				lineage = C.getLineage(pageInfo.getId()),
-				root = lineage.last();
+			lineage = C.getLineage(pageInfo.getId()),
+			root = lineage.last();
 
 		if (this.store !== store) {
 			this.clear();

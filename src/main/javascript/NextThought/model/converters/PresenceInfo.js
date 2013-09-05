@@ -1,22 +1,21 @@
-Ext.define('NextThought.model.converters.PresenceInfo', {
+Ext.define('NextThought.model.converters.PresenceInfo',{
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 
 	PRESENCEINFO: {
-		type:     'PresenceInfo',
+		type: 'PresenceInfo',
 		sortType: 'none',
-		convert:  function (v, record) {
-
-			if (!v.isPresenceInfo) {
-				return NextThought.model.PresenceInfo.createPresenceInfo(record.get('username'), 'unavailable');
+		convert: function(v,record){
+			
+			if(!v.isPresenceInfo){
+				return NextThought.model.PresenceInfo.createPresenceInfo(record.get('username'),'unavailable');
 			}
 
 			return v;
 		}
 	}
 
-}, function () {
-	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
-
+}, function(){
+	function set(o){ o.sortType = Ext.data.SortTypes[o.sortType]; }
 	set(this.PRESENCEINFO);
 });

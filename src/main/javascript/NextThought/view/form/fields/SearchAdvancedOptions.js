@@ -1,26 +1,26 @@
-Ext.define('NextThought.view.form.fields.SearchAdvancedOptions', {
-	extend:   'Ext.menu.Menu',
-	alias:    'widget.search-advanced-menu',
+Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
+	extend: 'Ext.menu.Menu',
+	alias: 'widget.search-advanced-menu',
 	requires: [
 		'NextThought.view.menus.LabeledSeparator',
 		'NextThought.model.Hit'
 	],
 
-	ui:            'nt',
-	plain:         true,
+	ui: 'nt',
+	plain: true,
 	showSeparator: false,
-	shadow:        false,
-	frame:         false,
-	border:        false,
-	hideMode:      'display',
-	minWidth:      200,
+	shadow: false,
+	frame: false,
+	border: false,
+	hideMode: 'display',
+	minWidth: 200,
 
 	defaults: {
-		ui:        'nt-menuitem',
-		xtype:     'menucheckitem',
-		plain:     true,
+		ui: 'nt-menuitem',
+		xtype: 'menucheckitem',
+		plain: true,
 		listeners: {
-			'beforecheckchange': function (item, checked) { return checked || item.allowUncheck !== false; }
+			'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; }
 		}
 	},
 
@@ -39,39 +39,37 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions', {
 		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', doPartialSearch: true, hidden: true }
 	],
 
-	initComponent: function () {
+	initComponent: function(){
 		var me = this;
 		this.callParent(arguments);
 
 		this.filterChanged = false;
-		this.on('click', this.handleClick, this);
-		this.on('mouseleave', function (e) {
+		this.on('click',this.handleClick,this);
+		this.on('mouseleave', function(e){
 			me.hide();
 		});
 		this.fireEvent('changed', this);//set the intial filter
 	},
 
-	handleClick: function (menu, item, e) {
-		if (!item) {
-			return;
-		}
+	handleClick: function(menu, item, e){
+		if(!item){return;}
 
 		this.filterChanged = true;
 
-		if (item.checked) {
-			if (item.isEverything) {
-				Ext.each(this.query('[model]'), function (o) {
-					o.setChecked(false, true);
+		if(item.checked){
+			if(item.isEverything){
+				Ext.each(this.query('[model]'),function(o){
+					o.setChecked(false,true);
 				});
 			}
-			else if (item.is('[model]')) {
-				this.query('[isEverything]').first().setChecked(false, true);
+			else if(item.is('[model]')){
+				this.query('[isEverything]').first().setChecked(false,true);
 			}
 		}
 
 	},
 
-	hide: function () {
+	hide: function() {
 		if (this.filterChanged) {
 			this.fireEvent('changed', this);
 			this.filterChanged = false;

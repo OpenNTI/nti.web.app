@@ -1,27 +1,27 @@
 Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	extend: 'NextThought.editor.Editor',
-	alias:  'widget.profile-blog-editor',
+	alias: 'widget.profile-blog-editor',
 
-	enableTags:          true,
-	enableTitle:         true,
-	enableVideo:         true,
+	enableTags: true,
+	enableTitle: true,
+	enableVideo: true,
 	enableShareControls: true,
-	keyboardUp:          false,
-	amountScrolled:      0,
+	keyboardUp: false,
+	amountScrolled: 0,
 
-	cls:            'blog-editor',
+	cls: 'blog-editor',
 	headerTplOrder: '{title}{toolbar}',
 	//TODO: update CSS to not require this nesting.
-	renderTpl:      Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
+	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
 
 	renderSelectors: {
-		cancelEl:     '.action.cancel',
-		saveEl:       '.action.save',
-		publishEl:    '.action.publish',
-		titleWrapEl:  '.title',
-		footerEl:     '.footer',
+		cancelEl: '.action.cancel',
+		saveEl: '.action.save',
+		publishEl: '.action.publish',
+		titleWrapEl: '.title',
+		footerEl: '.footer',
 		editorBodyEl: '.content',
-		editorEl:     '.editor'
+		editorEl: '.editor'
 	},
 
 	initComponent: function () {
@@ -33,9 +33,9 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	afterRender: function () {
 		this.callParent(arguments);
 		var r = this.record,
-				h,
-				profileEl = Ext.get('profile'),
-				hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
+			h,
+			profileEl = Ext.get('profile'),
+			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
 		this.mon(this.tags, 'new-tag', this.syncHeight, this);
 
@@ -121,13 +121,13 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			this.ipadSyncedAlready = true;
 		}
 		var pEl = Ext.get('profile'),
-				el = this.editorBodyEl,
-				footEl = this.footerEl,
-				vpH = Ext.Element.getViewportHeight(),
-				top,
-				containerTop = pEl.down('.profile-items').getY() + pEl.getScroll().top,
-				scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
-				newHeight;
+			el = this.editorBodyEl,
+			footEl = this.footerEl,
+			vpH = Ext.Element.getViewportHeight(),
+			top,
+			containerTop = pEl.down('.profile-items').getY() + pEl.getScroll().top,
+			scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
+			newHeight;
 
 		if (!el) {
 			return;
@@ -168,8 +168,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	onSave: function (e) {
 		e.stopEvent();
 		var v = this.getValue(),
-				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t,
-				trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t,
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad blog post');
@@ -178,8 +178,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		}
 
 		l = v.body.length;
-		if (l > 0 && v.body[l - 1].replace) {
-			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
+		if(l > 0 && v.body[l-1].replace){
+			v.body[l-1] = v.body[l-1].replace(trimEndRe, '');
 		}
 
 		if (Ext.isEmpty(v.title)) {

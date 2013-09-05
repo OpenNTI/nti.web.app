@@ -2,20 +2,20 @@ Ext.define('NextThought.view.slidedeck.TranscriptItem', {
 
 	isPresentationPartReady: false,
 
-	constructor: function () {
+	constructor: function(){
 		this.fireEvent('uses-page-stores', this);
 	},
 
-	getStore: function () {
+	getStore: function(){
 		return this.userDataStore;
 	},
 
-	bindToStore: function (store) {
+	bindToStore: function(store){
 		this.userDataStore = store;
 	},
 
-	notifyReady: function () {
-		if (this.isPresentationPartReady) {
+	notifyReady: function(){
+		if(this.isPresentationPartReady){
 			return;
 		}
 		this.isPresentationPartReady = true;
@@ -23,8 +23,8 @@ Ext.define('NextThought.view.slidedeck.TranscriptItem', {
 	},
 
 
-	registerAnnotations: function () {
-		if (this.userDataStore) {
+	registerAnnotations: function(){
+		if(this.userDataStore){
 			this.fireEvent('register-records', this.userDataStore, this.userDataStore.getRange(), this);
 		}
 	}

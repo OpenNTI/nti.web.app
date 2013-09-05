@@ -5,21 +5,21 @@
  * @protected
  */
 Ext.define('NextThought.app.domain.Model', {
-	extend:    'Ext.app.EventDomain',
-	singleton: true,
+    extend: 'Ext.app.EventDomain',
+    singleton: true,
 
-	requires: [
-		'NextThought.model.Base'
-	],
+    requires: [
+        'NextThought.model.Base'
+    ],
 
-	type: 'model',
+    type: 'model',
 
-	constructor: function () {
-		this.callParent();
-		this.monitor(NextThought.model.Base);
-	},
+    constructor: function() {
+        this.callParent();
+        this.monitor(NextThought.model.Base);
+    },
 
-	match: function (target, selector) {
-		return target.is(selector);
-	}
+	match: function(target, selector) {
+        return target.is(selector);
+    }
 });

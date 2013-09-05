@@ -7,20 +7,20 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 
 	isEmpty: true,
 
-	constructor: function (o) {
+	constructor: function(o) {
 		this.initConfig(o);
 		this.Class = 'ContentRangeDescription';
 		this.MimeType = this.mimeType;
 	},
 
-	onClassExtended: function (data, cls) {
-		var mime = {mimeType: 'application/vnd.nextthought.contentrange.' + data.$className.split('.').pop().toLowerCase()};
-		Ext.applyIf(cls, mime);//Allow overriding
-		Ext.applyIf(data, mime);//Allow overriding
+	onClassExtended: function(data, cls){
+		var mime = {mimeType: 'application/vnd.nextthought.contentrange.'+data.$className.split('.').pop().toLowerCase()};
+		Ext.applyIf(cls,mime);//Allow overriding
+		Ext.applyIf(data,mime);//Allow overriding
 	},
 
 	statics: {
-		createFromObject: function (o) {
+		createFromObject: function(o){
 			var cp = NextThought.model.anchorables[o.Class];
 			//special case if it's a base class
 			if (o.Class === 'ContentRangeDescription') {
@@ -30,20 +30,20 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 		}
 	},
 
-	locatorKey: function () {
+	locatorKey: function(){
 		return '_locator';
 	},
 
-	attachLocator: function (loc) {
-		if (!loc) {
+	attachLocator: function(loc){
+		if(!loc){
 			delete this[this.locatorKey()];
 		}
-		else {
+		else{
 			this[this.locatorKey()] = loc;
 		}
 	},
 
-	locator: function () {
+	locator: function(){
 		return this[this.locatorKey()];
 	}
 });

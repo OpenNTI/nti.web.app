@@ -1,14 +1,14 @@
 Ext.define('NextThought.view.forums.View', {
-	extend:   'NextThought.view.Base',
-	alias:    'widget.forums-view-container',
+	extend: 'NextThought.view.Base',
+	alias: 'widget.forums-view-container',
 	requires: [
 		'NextThought.layout.container.Stack',
 		'NextThought.view.forums.Board'
 	],
 
-	cls:        'forums-view',
-	layout:     'stack',
-	title:      'NextThought: Forums',
+	cls: 'forums-view',
+	layout: 'stack',
+	title: 'NextThought: Forums',
 	typePrefix: 'forums',
 
 

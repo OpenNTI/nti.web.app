@@ -1,37 +1,35 @@
 Ext.define('NextThought.model.anchorables.TextContext', {
 
 	config: {
-		contextText:   '',
+		contextText: '',
 		contextOffset: 1
 	},
 
 	statics: {
-		createFromObjects: function (o) {
+		createFromObjects: function(o){
 			var result = [];
 			//ensure array here
-			if (!Ext.isArray(o)) {
-				o = [o];
-			}
+			if (!Ext.isArray(o)){o = [o];}
 
-			Ext.each(o, function (tc) {
+			Ext.each(o, function(tc){
 				result.push(NextThought.model.anchorables.TextContext.create({
-																				 contextText:   tc.contextText,
-																				 contextOffset: tc.contextOffset
-																			 }));
+					contextText: tc.contextText,
+					contextOffset: tc.contextOffset
+				}));
 			});
 
 			return result;
 		}
 	},
 
-	constructor: function (o) {
+	constructor: function(o){
 		this.validateOffset(o.contextOffset);
 		this.validateText(o.contextText);
 		this.initConfig(o);
 		this.Class = 'TextContext';
 	},
 
-	validateOffset: function (offset) {
+	validateOffset: function(offset) {
 		if (offset === null || offset === undefined) {
 			Ext.Error.raise('No offset supplied');
 		}
@@ -41,7 +39,7 @@ Ext.define('NextThought.model.anchorables.TextContext', {
 	},
 
 
-	validateText: function (text) {
+	validateText: function(text) {
 		if (!text || text.length < 0) {
 			Ext.Error.raise('Text must have one or more characters');
 		}

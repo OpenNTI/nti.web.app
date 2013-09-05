@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.slidedeck.Transcript', {
-	extend:   'Ext.container.Container',
-	alias:    'widget.slidedeck-transcript',
+	extend: 'Ext.container.Container',
+	alias: 'widget.slidedeck-transcript',
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Store',
@@ -13,8 +13,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		'NextThought.view.slidedeck.transcript.VideoTitle'
 	],
 
-	ui:    'transcript',
-	cls:   'transcript-view',
+	ui: 'transcript',
+	cls: 'transcript-view',
 	items: [],
 
 	lineFilterId: 'plinefilter',
@@ -47,8 +47,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.fireEvent('uses-page-stores', this);
 
 		this.fireEvent('listens-to-page-stores', this, {
-			scope:  this,
-			add:    'onStoreEventsAdd',
+			scope: this,
+			add: 'onStoreEventsAdd',
 			remove: 'onStoreEventsRemove'
 		});
 
@@ -81,8 +81,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		if (this.record) {
 			var r, sEl,
-					m = this.noteOverlay.annotationManager,
-					k = this.record, o, mc, me = this, win;
+				m = this.noteOverlay.annotationManager,
+				k = this.record, o, mc, me = this, win;
 
 			// Since we've already added the record when its component registered its records,
 			// let's just get its annotation object.
@@ -110,13 +110,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 					// NOTE: If it's a reply, we're create the note viewer ourselves,
 					// since we want to specify the scrollToId property.
 					win = Ext.widget({
-										 autoShow:   true,
-										 xtype:      'note-window',
-										 record:     this.record,
-										 reader:     this,
-										 scrollToId: this.scrollToId,
-										 xhooks:     this.getViewerHooks()
-									 });
+						autoShow: true,
+						xtype: 'note-window',
+						record: this.record,
+						reader: this,
+						scrollToId: this.scrollToId,
+						xhooks: this.getViewerHooks()
+					});
 
 					me.fireEvent('register-note-window', this, win);
 					delete this.record;
@@ -152,19 +152,19 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	setupSingleTranscript: function (transcript) {
 		var items = [];
 		items.push({
-					   xtype: 'video-title-component',
-					   video: this.videoPlaylist[0]
-				   });
+			xtype: 'video-title-component',
+			video: this.videoPlaylist[0]
+		});
 		items.push(
-				{
-					xtype:      'video-transcript',
-					flex:       1,
-					transcript: transcript,
-					layout:     {
-						type:  'vbox',
-						align: 'stretch'
-					}
-				});
+			{
+				xtype: 'video-transcript',
+				flex: 1,
+				transcript: transcript,
+				layout: {
+					type: 'vbox',
+					align: 'stretch'
+				}
+			});
 
 		this.items = items;
 	},
@@ -192,10 +192,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		slideStore.each(function (slide) {
 			var m = slide.get('media'),
-					vid = m && m.getAssociatedVideoId(),
-					t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
-					start = slide.get('video-start'),
-					end = slide.get('video-end'), videoObj;
+				vid = m && m.getAssociatedVideoId(),
+				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
+				start = slide.get('video-start'),
+				end = slide.get('video-end'), videoObj;
 
 			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
 
@@ -204,20 +204,20 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				videoObj = itemWithId(this.videoPlaylist, lastVideoId);
 				if (videoObj) {
 					items.push({
-								   xtype: 'video-title-component',
-								   video: videoObj
-							   });
+						xtype: 'video-title-component',
+						video: videoObj
+					});
 				}
 			}
 
 			items.push({
-						   xtype:  'slide-component',
-						   slide:  slide,
-						   layout: {
-							   type:  'vbox',
-							   align: 'stretch'
-						   }
-					   });
+				xtype: 'slide-component',
+				slide: slide,
+				layout: {
+					type: 'vbox',
+					align: 'stretch'
+				}
+			});
 
 			if (t) {
 				// NOTE: make a copy of the transcript record,
@@ -227,14 +227,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				t.set('desired-time-end', end);
 
 				items.push({
-							   xtype:      'video-transcript',
-							   flex:       1,
-							   transcript: t,
-							   layout:     {
-								   type:  'vbox',
-								   align: 'stretch'
-							   }
-						   });
+					xtype: 'video-transcript',
+					flex: 1,
+					transcript: t,
+					layout: {
+						type: 'vbox',
+						align: 'stretch'
+					}
+				});
 			}
 		}, this);
 
@@ -268,7 +268,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.addMask();
 		this.maybeLoadData();
 		this.mon(this.el, {
-			scope:       this,
+			scope: this,
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
@@ -316,7 +316,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	maybeLoadData: function () {
 		var partCmps = this.getPartComponents(),
-				readyMap = {}, me = this;
+			readyMap = {}, me = this;
 
 		function maybeDone() {
 			var done = true;
@@ -365,8 +365,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	selectInitialSlide: function () {
 		var startOn = this.startOn,
-				s = this.query('slide-component'), me = this,
-				targetImageEl;
+			s = this.query('slide-component'), me = this,
+			targetImageEl;
 
 
 		Ext.each(s, function (i) {
@@ -414,8 +414,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return;
 		}
 		var s = this.query('slide-component'),
-				me = this,
-				targetImageEl;
+			me = this,
+			targetImageEl;
 
 		Ext.each(s, function (i) {
 			var id = i.slide.get('NTIID');
@@ -445,8 +445,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		if (!s) {
 			s = NextThought.store.FlatPage.create({
-													  storeId: 'presentation-annotations-' + line
-												  });
+				storeId: 'presentation-annotations-' + line
+			});
 			annotations.each(function (annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
 				//us bind the same store to it twice.  How convenient..
@@ -457,12 +457,12 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if (line) {
 			console.log('filtering by line: ', line);
 			s.addFilter({
-							id:       this.lineFilterId,
-							filterFn: function (r) {
-								console.log('rec: ', r.getId(), ' line: ', r.get('line'));
-								return r.get('pline') === line;
-							}
-						});
+				id: this.lineFilterId,
+				filterFn: function (r) {
+					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
+					return r.get('pline') === line;
+				}
+			});
 		}
 		s.sort();
 
@@ -474,38 +474,38 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		var me = this;
 		if (!this.annotationView) {
 			this.annotationView = this.add({
-											   xtype:                'annotation-view',
-											   floating:             true,
-											   border:               false,
-											   width:                400,
-											   shadow:               false,
-											   constrain:            true,
-											   renderTo:             Ext.getBody(),
-											   cls:                  'presentation-note-slider annotation-view',
-											   title:                'Discussion',
-											   iconCls:              'discus',
-											   discussion:           true,
-											   store:                'ext-empty-store',
-											   anchorComponent:      this,
-											   anchorComponentHooks: this.getViewerHooks(),
-											   floatParent:          this,
-											   listeners:            {
-												   'itemremove': function () {
-													   if (this.getNodes().length === 0) {
-														   Ext.defer(this.hide, 1, this);
-													   }
-												   }
-											   }
-										   });
+				xtype: 'annotation-view',
+				floating: true,
+				border: false,
+				width: 400,
+				shadow: false,
+				constrain: true,
+				renderTo: Ext.getBody(),
+				cls: 'presentation-note-slider annotation-view',
+				title: 'Discussion',
+				iconCls: 'discus',
+				discussion: true,
+				store: 'ext-empty-store',
+				anchorComponent: this,
+				anchorComponentHooks: this.getViewerHooks(),
+				floatParent: this,
+				listeners: {
+					'itemremove': function () {
+						if (this.getNodes().length === 0) {
+							Ext.defer(this.hide, 1, this);
+						}
+					}
+				}
+			});
 
 			this.annotationView.show().hide();
 
 			this.mon(this.annotationView, {
 				scope: me,
-				show:  function () {
+				show: function () {
 					me.fireEvent('will-show-annotation', me.annotationView, this);
 				},
-				hide:  function () {
+				hide: function () {
 					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
 					}
@@ -576,8 +576,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 	//For compliance as a reader.
-	getDocumentElement:     Ext.emptyFn,
-	getCleanContent:        Ext.emptyFn,
+	getDocumentElement: Ext.emptyFn,
+	getCleanContent: Ext.emptyFn,
 
 	// NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
 	// By the time, this function gets called, we are already scrolled at the right location.
@@ -592,10 +592,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		return {
 			'resizeView': function () {
 				var reader = this.reader,
-						w = reader.getWidth() - reader.annotationView.getWidth() - 20,
-						h = reader.annotationView.getHeight(),
-						pos = reader.annotationView.getPosition(),
-						minWidth = 575;
+					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
+					h = reader.annotationView.getHeight(),
+					pos = reader.annotationView.getPosition(),
+					minWidth = 575;
 
 				w = w > minWidth ? w : minWidth;
 				pos[0] = (pos[0] - w > 0) ? (pos[0] - w) : 0;

@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.menus.LabeledSeparator', {
+Ext.define('NextThought.view.menus.LabeledSeparator',{
 	extend: 'Ext.menu.Separator',
-	alias:  'widget.labeledseparator',
+	alias: 'widget.labeledseparator',
 
 	renderTpl: [
 		'<div class="label"><span>{text}</span></div>'

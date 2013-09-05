@@ -14,61 +14,59 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'sourceIndex', type: 'int', defaultValue: 0},
 		{name: 'sources', type: 'VideoSources'},
 		{name: 'dom-clone', type: 'auto'},
-		{name: 'NTIID', type: 'string'},
-		{name: 'transcripts', type: 'auto'},
-		{name: 'title', type: 'string'},
+		{name: 'NTIID', type:'string'},
+		{name: 'transcripts', type:'auto'},
+		{name: 'title', type:'string'},
 		{name: 'description', type: 'string'},
-		{name: 'section', type: 'string'}
+		{name: 'section', type:'string'}
 	],
 
 	statics: {
-		compareSources: function (a, b) {
+		compareSources: function(a, b){
 			var i;
-			if (Ext.isArray(a) && Ext.isArray(b)) {
-				if (a.length !== b.length) {
+			if (Ext.isArray(a) && Ext.isArray(b)){
+				if (a.length !== b.length){
 					return false;
 				}
-				for (i = a.length - 1; i >= 0; i--) {
-					if (Ext.isObject(a)) {
-						return Ext.Object.equal(a, b);
+				for (i = a.length-1; i >= 0; i--){
+					if(Ext.isObject(a)){
+						return Ext.Object.equal(a,b);
 					}
 
-					if (a[i] !== b[i]) {
+					if( a[i] !== b[i] ){
 						return false;
 					}
 				}
 				return true;
 			}
 
-			if (!Ext.isArray(a) && !Ext.isArray(b)) {
+			if (!Ext.isArray(a) && !Ext.isArray(b)){
 				return a === b;
 			}
 
 			return false;
 		},
 
-		fromDom: function (dom) {
+		fromDom: function(dom){
 			dom = Ext.getDom(dom);
 			var i,
-					frag = (dom.ownerDocument || document).createDocumentFragment(),
-					el = Ext.get(dom),
-					titleParam = el.down('param[name=title]'),
-					title = titleParam && titleParam.getAttribute('value'),
-					o = {
-						'title':     title,
-						'sources':   el.query('object[type$=videosource]'),
-						'dom-clone': frag,
-						'NTIID':     dom.getAttribute('data-ntiid')
-					},
-					sourceComparator = function (a, b) {
-						var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];
-						if ($a !== $b) {
-							c = $a < $b ? -1 : 1;
-						}
-						return c;
-					};
+				frag = (dom.ownerDocument||document).createDocumentFragment(),
+				el = Ext.get(dom),
+				titleParam = el.down('param[name=title]'),
+				title = titleParam && titleParam.getAttribute('value'),
+				o = {
+					'title': title,
+					'sources': el.query('object[type$=videosource]'),
+					'dom-clone': frag,
+					'NTIID': dom.getAttribute('data-ntiid')
+				},
+				sourceComparator = function(a, b) {
+					var c = 0, $a = a['attribute-data-priority'], $b = b['attribute-data-priority'];
+					if($a !== $b){c = $a < $b? -1 : 1;}
+					return c;
+				};
 
-			for (i = 0; i < o.sources.length; i++) {
+			for (i=0; i< o.sources.length; i++){
 				o.sources[i] = (DomUtils.parseDomObject(o.sources[i]));
 			}
 			Ext.Array.sort(o.sources, sourceComparator);
@@ -80,41 +78,41 @@ Ext.define('NextThought.model.PlaylistItem', {
 	},
 
 
-	usesService: function (service) {
+	usesService: function(service){
 		return Ext.Array.contains(
-				Ext.Array.pluck(this.get('sources'), 'service'),
+				Ext.Array.pluck(this.get('sources'),'service'),
 				service);
 	},
 
 
-	getSources: function (service) {
+	getSources: function(service){
 		var i = [];
-		Ext.each(this.data.sources, function (o) {
-			if (!service || (o && service === o.service)) {
+		Ext.each(this.data.sources,function(o){
+			if(!service || (o && service === o.service)){
 				i.push(o.source);
 			}
 		});
 		return i;
 	},
 
-	activeSource: function () {
+	activeSource: function(){
 		return this.data.sources[this.data.sourceIndex];
 	},
 
-	useNextSource: function () {
-		if (this.data.sourceIndex + 1 < this.data.sources.length) {
+	useNextSource: function(){
+		if (this.data.sourceIndex + 1 < this.data.sources.length){
 			this.data.sourceIndex += 1;
 			return true;
 		}
 		return false;
 	},
 
-	nextSource: function () {},
+	nextSource: function(){},
 
 
-	getAssociatedVideoId: function () {
+	getAssociatedVideoId: function(){
 		var frag = this.get('dom-clone'),
-				video = frag.querySelector('object[type$=ntivideo]');
+			video = frag.querySelector('object[type$=ntivideo]');
 
 		return video && video.getAttribute('data-ntiid');
 	}

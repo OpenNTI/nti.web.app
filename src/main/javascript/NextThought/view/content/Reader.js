@@ -4,12 +4,16 @@ Ext.define('NextThought.view.content.Reader', {
 	requires: [
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
+		'NextThought.modules.TouchSender',
+		'NextThought.modules.TouchScrollSender',
 		'NextThought.view.ResourceNotFound',
 		'NextThought.view.content.PageWidgets',
 		'NextThought.view.content.reader.Content',
 		'NextThought.view.content.reader.IFrame',
 		'NextThought.view.content.reader.Location',
 		'NextThought.view.content.reader.Scroll',
+		'NextThought.view.content.reader.TouchHandler',
+		'NextThought.view.content.reader.TouchHighlight',
 		'NextThought.view.content.reader.ResourceManagement',
 		'NextThought.view.content.reader.ComponentOverlay',
 		'NextThought.view.content.reader.Assessment',
@@ -46,6 +50,20 @@ Ext.define('NextThought.view.content.Reader', {
 		this.buildModule('reader', 'assessment', rRef);
 		this.buildModule('reader', 'resourceManager', rRef);
 		this.buildModule('reader', 'noteOverlay', rRef);
+
+//		if (Ext.is.iPad) {
+//			this.buildModule('reader', 'touchHandler', rRef);
+//			this.buildModule('reader', 'touchHighlight', rRef);
+//			this.buildModule('modules', 'touchSender');
+//			this.buildModule('modules', 'touchScrollSender', {container: this});
+//			this.on('touchScroll', function (ele, deltaY) {
+//				this.getScroll().by(deltaY);
+//			}, this);
+//			this.on('touchElementAt', function (x, y, callback) {
+//				var element = Ext.getDoc().dom.elementFromPoint(x, y);
+//				callback(element);
+//			});
+//		}
 
 		//For search hit highlighting we own the search overlay, but we
 		//need to forward some of the logic onto the proper module.  Note we
@@ -86,7 +104,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.setLocation(l, cb, silent);
 	},
-
 
 	primeReadyEvent: function () {
 		this.readyEventPrimed = true;

@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.assessment.input.Base', {
+Ext.define('NextThought.view.assessment.input.Base',{
 	extend: 'Ext.Component',
-	alias:  'widget.abstract-question-input',
+	alias: 'widget.abstract-question-input',
 
 	requires: [
 		'NextThought.view.menus.AnswerHistory'
@@ -9,94 +9,86 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	cls: 'field',
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'response-container',
-											cn:  [
-												{ cls: 'inputbox', html: '{input}' },
-												{ cls: 'historyMenu x-menu' },
-												{ cls: 'solution', cn: [
-													{ cls: 'close' },
-													{ cls: 'answer', cn: [
-														{tag: 'span'}
-													] },
-													{ cls: 'explanation'}
-												] }
-											]
-										},
-										{
-											cls: 'footer',
-											cn:  [
-												{
-													cls: 'left', html: '{toolbar}'
-												},
-												{
-													cls: 'right',
-													cn:  [
-														{cls: 'action check'},
-														{cls: 'action solution', html: 'Show Solution'}
-													]
-												}
-											]
-										}
-									]),
+		{
+			cls: 'response-container',
+			cn:[
+				{ cls: 'inputbox', html: '{input}' },
+				{ cls:'historyMenu x-menu' },
+				{ cls: 'solution', cn:[
+					{ cls: 'close' },
+					{ cls: 'answer', cn:[{tag: 'span'}] },
+					{ cls: 'explanation'}
+				] }
+			]
+		},{
+			cls: 'footer',
+			cn: [{
+				cls: 'left', html: '{toolbar}'
+			},{
+				cls: 'right',
+				cn: [
+					{cls:'action check'},
+					{cls:'action solution', html: 'Show Solution'}
+				]
+			}]
+		}
+	]),
 
 
 	renderSelectors: {
-		inputBox:               '.response-container .inputbox',
-		historyMenuEl:          '.response-container .historyMenu',
-		solutionBox:            '.response-container .solution',
-		solutionClose:          '.response-container .solution .close',
-		solutionAnswerBox:      '.response-container .solution .answer span',
+		inputBox: '.response-container .inputbox',
+		historyMenuEl:'.response-container .historyMenu',
+		solutionBox: '.response-container .solution',
+		solutionClose: '.response-container .solution .close',
+		solutionAnswerBox: '.response-container .solution .answer span',
 		solutionExplanationBox: '.response-container .solution .explanation',
-		showSolutionBtn:        '.footer .action.solution',
-		checkItBtn:             '.footer .action.check',
-		footer:                 '.footer'
+		showSolutionBtn: '.footer .action.solution',
+		checkItBtn: '.footer .action.check',
+		footer: '.footer'
 	},
 
 
-	onClassExtended: function (cls, data) {
-		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+	onClassExtended: function(cls, data) {
+		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
 
 		data.inputTpl = data.inputTpl || cls.superclass.inputTpl || false;
 		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		//merge in subclass's input template
 		var tpl = this.prototype.renderTpl
-				.replace('{input}', data.inputTpl || '')
-				.replace('{toolbar}', data.toolbarTpl || '');
+				.replace('{input}',data.inputTpl||'')
+				.replace('{toolbar}',data.toolbarTpl||'');
 
-		if (!data.renderTpl) {
+		if(!data.renderTpl){
 			data.renderTpl = tpl;
 		}
 		else {
-			data.renderTpl = data.renderTpl.replace('{super}', tpl);
+			data.renderTpl = data.renderTpl.replace('{super}',tpl);
 		}
 	},
 
 
-	filterHTML: function (html) {
+	filterHTML: function(html){
 		var root = ContentUtils.getRoot(this.reader.getLocation().NTIID);
-
-		function fixRef(original, attr, url) {
-			return (/^data:/i.test(url) || Globals.HOST_PREFIX_PATTERN.test(url))
+		function fixRef(original,attr,url) {
+			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
 					? original
-					: attr + '="' + root + url + '"';
-		}
+					: attr+'="'+root+url+'"'; }
 
-		if (!html.replace) {
+		if(!html.replace){
 			return html;
 		}
 
 		return html.replace(/<\/?(html|head|meta|title|link|body|a|p)((( |\t)[^>]*)?)>/ig, '')
-				.replace(/^\s+/, '')
-				.replace(/\s+$/, '')
+				.replace(/^\s+/,'')
+				.replace(/\s+$/,'')
 				.replace(/(src)="(.*?)"/igm, fixRef);
 	},
 
 
-	getSolutionContent: function (part) {
+	getSolutionContent: function(part) {
 		var solutions = [];
-		Ext.each(part.get('solutions'), function (s) {
+		Ext.each(part.get('solutions'),function(s){
 			solutions.push(s.get('value'));
 		});
 
@@ -104,22 +96,22 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function(){
 		this.callParent(arguments);
 		this.addEvents({
-						   'enable-submission':  true,
-						   'disable-submission': true
-					   });
-		this.enableBubble(['enable-submission', 'disable-submission']);
+			'enable-submission':true,
+			'disable-submission':true
+		});
+		this.enableBubble(['enable-submission','disable-submission']);
 	},
 
-	/*
-	 getBubbleTarget: function(){
-	 return this.up('assessment-question');
-	 },
-	 */
+/*
+	getBubbleTarget: function(){
+		return this.up('assessment-question');
+	},
+*/
 
-	afterRender: function () {
+	afterRender: function(){
 		this.callParent(arguments);
 
 		this.mon(this.showSolutionBtn, {
@@ -127,12 +119,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			click: this.toggleSolution
 		});
 
-		this.mon(this.checkItBtn, {
+		this.mon(this.checkItBtn,{
 			scope: this,
 			click: this.checkit
 		});
 
-		this.mon(this.solutionClose, {
+		this.mon(this.solutionClose,{
 			scope: this,
 			click: this.hideSolution
 		});
@@ -149,19 +141,19 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.historyMenuEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		//if there are images, after they load, update layout.
-		this.solutionBox.select('img').on('load', function () {
-			this.updateLayout();
-			this.syncElementHeight();
-		}, this, {single: true});
+        //if there are images, after they load, update layout.
+        this.solutionBox.select('img').on('load',function(){
+            this.updateLayout();
+            this.syncElementHeight();
+        },this,{single:true});
 
 		this.reset();
 
 		this.disableSubmission();
 
-		if (this.canHaveAnswerHistory()) {
+		if(this.canHaveAnswerHistory()){
 			this.mon(this.historyMenuEl, {
-				scope: this,
+				scope:this,
 				click: this.showHistoryMenu
 			});
 
@@ -173,19 +165,15 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	syncElementHeight: function () {
-		var o = this.up('[syncElementHeight]');
-		if (o) {
-			o.syncElementHeight();
-		}
+	syncElementHeight: function(){
+		var o =this.up('[syncElementHeight]');
+		if(o){o.syncElementHeight();}
 	},
 
 
-	checkit: function () {
-		if (this.submissionDisabled) {
-			return;
-		}
-		if (this.submitted) {
+	checkit: function(){
+		if(this.submissionDisabled){return;}
+		if(this.submitted){
 			this.editAnswer();
 			return;
 		}
@@ -194,9 +182,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.up('assessment-question').checkIt();
 	},
 
-	editAnswer: function () {
+	editAnswer: function(){
 		var ans;
-		if (this.submitted) {
+		if(this.submitted){
 			ans = this.getValue();
 			this.up('assessment-question').reset(true);
 			this.setValue(ans);
@@ -206,52 +194,52 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	setSubmitted: function () {
+	setSubmitted: function(){
 		this.submitted = true;
 		this.checkItBtn.update('Try again');
 	},
 
 
-	getOrdinal: function () {
-		if (!Ext.isNumber(this.ordinal)) {
+	getOrdinal: function(){
+		if(!Ext.isNumber(this.ordinal)){
 			Ext.Error.raise('The question part\'s ordinal was not set or incorrectly set.');
 		}
 		return this.ordinal;
 	},
 
 
-	getValue: function () {
-		console.log(this.$className + ' does not implement the getValue function');
+	getValue: function(){
+		console.log(this.$className+' does not implement the getValue function');
 	},
 
 
-	setValue: function () {
-		console.log(this.$className + ' does not implement the setValue function');
+	setValue: function(){
+		console.log(this.$className+' does not implement the setValue function');
 	},
 
 
-	updateSolutionButton: function () {
+	updateSolutionButton: function(){
 		var p = this.part,
-				a = this.solutionAnswerBox,
-				b = this.showSolutionBtn,
-				e = this.solutionExplanationBox,
-				sol,
-				answer = this.el.down('.answer'),
-				label = b.getHTML().replace(/(solution|hint)$/i, '{0}');
+			a = this.solutionAnswerBox,
+			b = this.showSolutionBtn,
+			e = this.solutionExplanationBox,
+			sol,
+			answer = this.el.down('.answer'),
+			label = b.getHTML().replace(/(solution|hint)$/i,'{0}');
 
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		b.update(label.replace('{0}', this.hintActive ? 'Hint' : 'Solution'));
+		b.update(label.replace('{0}', this.hintActive? 'Hint' : 'Solution'));
 
-		if (this.hintActive) {
+		if(this.hintActive){
 			answer.hide();
-			e.update(this.filterHTML(p.get('hints')[this.currentHint || 0].get('value')));
+			e.update(this.filterHTML( p.get('hints')[this.currentHint || 0].get('value') ));
 		}
-		else if (this.submitted) {
+		else if(this.submitted){
 			answer.show();
 			sol = this.getSolutionContent(p);
-			if (!Ext.isString(sol)) {
-				sol += '';
+			if(!Ext.isString(sol)){
+				sol+='';
 			}
 			a.update(sol);
 			e.update(this.filterHTML(p.get('explanation')));
@@ -261,52 +249,46 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			e.update('');
 		}
 
-		if (e.getHTML() === '' && a.getHTML() === '') {
-			b.hide();
-		} else {
-			b.show();
-		}
+		if(e.getHTML()==='' && a.getHTML()===''){ b.hide(); } else { b.show(); }
 	},
 
 
-	submitOrTabNext: function (dom) {
-		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'), 10) + 1),
-				partLen = this.question.get('parts').length;
-		if (this.questionSet || (partLen > 1 && (partLen - 1) !== this.ordinal)) {
+	submitOrTabNext: function(dom){
+		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'),10)+1),
+            partLen = this.question.get('parts').length;
+		if(this.questionSet || (partLen > 1 && (partLen-1) !== this.ordinal)){
 			i = this.el.up('.component-overlay').query('.tabable');
-			x = i.length - 1;
-			for (x; x >= 0; x--) {
-				if (i[x].getAttribute('tabIndex') === nextTabIndex) {
+			x = i.length-1;
+			for(x; x>=0; x--){
+				if(i[x].getAttribute('tabIndex')===nextTabIndex){
 					next = i[x];
 					break;
 				}
 			}
-			if (!next) {
-				x = i.length - 1;
-				for (x; x >= 0; x--) {
-					if (i[x] === dom) {
-						next = i[x + 1] || i[0];
+			if(!next){
+				x = i.length-1;
+				for(x; x>=0; x--){
+					if(i[x]===dom){
+						next = i[x+1]||i[0];
 						break;
 					}
 				}
 			}
 			next.focus();
 		}
-		else {
+		else{
 			this.checkit();
 		}
 	},
 
-	shouldShowAnswerHistory: function () {
+	shouldShowAnswerHistory: function(){
 		var id = this.up('[question]').question.getId();
-		if (!id) {
-			return false;
-		}
+		if(!id){ return false; }
 
 		this.loadAnswerHistory(id);
 	},
 
-	canHaveAnswerHistory: function () {
+	canHaveAnswerHistory: function(){
 		/**
 		 *  Overridable function to determine whether or not we should have history.
 		 *  The default is no.
@@ -315,58 +297,58 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		return false;
 	},
 
-	setupAnswerHistoryMenu: function () {
+	setupAnswerHistoryMenu: function(){
 		var me = this,
-				id = me.up('[question]').question.getId();
-		if (!me.answerHistStore) {
+			id = me.up('[question]').question.getId();
+		if(!me.answerHistStore){
 			me.answerHistStore = me.buildAnswerHistoryStore(id);
 		}
 		me.historyMenu = Ext.widget('answer-history-menu', {
-			width:        me.inputBox.getWidth(),
-			ownerCmp:     me,
-			store:        me.answerHistStore,
+			width: me.inputBox.getWidth(),
+			ownerCmp: me,
+			store: me.answerHistStore,
 			renderedData: {
-				'partNum':    me.ordinal,
+				'partNum': me.ordinal,
 				menuItemType: me.getPreviousMenuItemType()
 			}
 		});
 	},
 
-	getPreviousMenuItemType: function () {
+	getPreviousMenuItemType: function(){
 		return 'menuitem';
 	},
 
-	showHistoryMenu: function (e) {
-		var me = this,
-				vH = Ext.dom.Element.getViewportHeight(),
-				box = me.inputBox.getBox(),
-				maxHeight = vH - box.bottom,
-				anchor = 'tl-bl';
+	showHistoryMenu: function(e){
+        var me = this,
+		    vH = Ext.dom.Element.getViewportHeight(),
+		    box = me.inputBox.getBox(),
+		    maxHeight = vH - box.bottom,
+		    anchor = 'tl-bl';
 
-		if (maxHeight <= 150) {
+		if(maxHeight<=150){
 			maxHeight = box.y;
 			anchor = 'bl-tl?';
 		}
 
-		if (me.historyMenu && me.historyMenu.isVisible()) {
-			me.historyMenu.destroy();
-			return;
-		}
+        if (me.historyMenu && me.historyMenu.isVisible()){
+            me.historyMenu.destroy();
+            return;
+        }
 		me.setupAnswerHistoryMenu();
 		me.historyMenu.maxHeight = maxHeight;
 
 //		console.log('Viewport height: ', vH,', anchor: ', anchor, ' maxHeight: ', maxHeight, ' box top: ', box.y);
-		me.historyMenu.showBy(me.inputBox, anchor, [0, 0]);
+        me.historyMenu.showBy(me.inputBox,anchor,[0,0]);
 		me.answerHistStore.reload();
 	},
 
-	buildAnswerHistoryStore: function (id) {
-		var s = NextThought.store.PageItem.create({containerid: id}),
-				params = 'application/vnd.nextthought.assessment.assessedquestion', url, root, me = this;
+	buildAnswerHistoryStore: function(id){
+		var s = NextThought.store.PageItem.create({containerid:id}),
+			params = 'application/vnd.nextthought.assessment.assessedquestion', url, root, me = this;
 
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn:    'createdTime',
-			accept:    params,
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'createdTime',
+			accept: params,
 			sortOrder: 'descending'
 		});
 
@@ -378,24 +360,20 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		return s;
 	},
 
-	updateWithResults: function (assessedQuestion) {
+	updateWithResults: function(assessedQuestion){
 		var parts = assessedQuestion.get('parts'),
-				part = parts[this.ordinal], id;
+			part = parts[this.ordinal], id;
 
 		this.setValue(part.get('submittedResponse'));
 
-		if (part.isCorrect()) {
-			this.markCorrect();
-		}
-		else {
-			this.markIncorrect();
-		}
+		if (part.isCorrect()) { this.markCorrect(); }
+		else {this.markIncorrect(); }
 
-		if (this.canHaveAnswerHistory()) {
-			if (!this.historyMenuEl.isVisible()) {
+		if(this.canHaveAnswerHistory()){
+			if(!this.historyMenuEl.isVisible()){
 				this.shouldShowAnswerHistory();
 			}
-			if (!this.answerHistStore) {
+			if(!this.answerHistStore){
 				id = this.up('[question]').question.getId();
 				this.buildAnswerHistoryStore(id);
 			}
@@ -404,7 +382,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	markCorrect: function () {
+	markCorrect: function(){
 		this.hideSolution();
 		this.hintActive = false;
 		this.updateSolutionButton();
@@ -415,7 +393,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	markIncorrect: function () {
+	markIncorrect: function(){
 		this.hideSolution();
 		this.checkItBtn.addCls('wrong');
 		this.hintActive = false;
@@ -423,9 +401,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	reset: function () {
+	reset: function(){
 		this.submitted = false;
-		this.up('question-parts').removeCls(['incorrect', 'correct']);
+		this.up('question-parts').removeCls(['incorrect','correct']);
 		this.hintActive = (this.part.get('hints').length > 0);
 		this.currentHint = 0;
 		this.updateSolutionButton();
@@ -438,28 +416,28 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	enableSubmission: function () {
+	enableSubmission: function(){
 		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
-		if (this.questionSet) {
+		if( this.questionSet ){
 			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()), true);
 		}
 		this.fireEvent('enable-submission', this.ordinal);
 	},
 
 
-	disableSubmission: function () {
+	disableSubmission: function(){
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
-		if (this.questionSet) {
+		if( this.questionSet ){
 			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()), false);
 		}
 		this.fireEvent('disable-submission', this.ordinal);
 	},
 
 
-	toggleSolution: function () {
-		if (this.solutionBox.isVisible()) {
+	toggleSolution: function(){
+		if(this.solutionBox.isVisible()){
 			this.hideSolution();
 		}
 		else {
@@ -468,36 +446,32 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	hideSolution: function () {
+	hideSolution: function(){
 		var label = this.showSolutionBtn.getHTML();
-		this.showSolutionBtn.update(label.replace('Hide', 'Show'));
+		this.showSolutionBtn.update(label.replace('Hide','Show'));
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
-		if (this.canHaveAnswerHistory()) {
-			this.historyMenuEl.show();
-		}
+		if(this.canHaveAnswerHistory()){ this.historyMenuEl.show(); }
 	},
 
 
-	showSolution: function () {
+	showSolution: function(){
 		var label = this.showSolutionBtn.getHTML();
 
 		this.updateSolutionButton();
-		this.currentHint = ((this.currentHint + 1) % (this.part.get('hints').length || 1));
+		this.currentHint = ((this.currentHint+1) % (this.part.get('hints').length || 1));
 
-		//if there are images, after they load, update layout.
-		this.solutionBox.select('img').on('load', function () {
-			this.updateLayout();
-			this.syncElementHeight();
-		}, this, {single: true});
+        //if there are images, after they load, update layout.
+        this.solutionBox.select('img').on('load',function(){
+            this.updateLayout();
+            this.syncElementHeight();
+        },this,{single:true});
 
-		this.showSolutionBtn.update(label.replace('Show', 'Hide'));
+		this.showSolutionBtn.update(label.replace('Show','Hide'));
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
-		if (this.canHaveAnswerHistory()) {
-			this.historyMenuEl.hide();
-		}
+		if(this.canHaveAnswerHistory()){ this.historyMenuEl.hide(); }
 	}
 });

@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.SectionInfo', {
-	extend:     'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 	idProperty: 'OID',
-	fields:     [
+	fields: [
 		{ name: 'CloseDate', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'OpenDate', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Description', type: 'string' },

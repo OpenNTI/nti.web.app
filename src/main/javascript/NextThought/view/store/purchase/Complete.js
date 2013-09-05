@@ -1,83 +1,83 @@
-Ext.define('NextThought.view.store.purchase.Complete', {
+Ext.define('NextThought.view.store.purchase.Complete',{
 	extend: 'Ext.Component',
-	alias:  'widget.purchase-complete',
+	alias: 'widget.purchase-complete',
 
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-										{ tag: 'tpl', 'if': 'activation', cn: [
-											{ tag: 'h3', cls: 'gap', html: 'Activation Successful!'},
-											{ html: 'Your content has been added to your library.'}
-										]},
-										{ tag: 'tpl', 'if': '!activation', cn: [
-											{ tag: 'h3', cls: 'gap', html: 'Thank you for your purchase!'},
-											{ html: '{message} You will receive an emailed receipt shortly. Please store it for your records.'}
-										]},
-										{ cls: 'gap', cn: [
-											{tag: 'tpl', 'if': '!key', cn: { tag: 'a', href: '#', html: 'View your content now!' }},
-											{tag: 'tpl', 'if': 'key', cn: { cls: 'activation-key', html: '{key}', 'data-label': 'Activation Key' }}
-										]}
-									]),
+		{ tag: 'tpl', 'if': 'activation', cn: [
+			{ tag: 'h3', cls:'gap', html: 'Activation Successful!'},
+			{ html: 'Your content has been added to your library.'}
+		]},
+		{ tag: 'tpl', 'if': '!activation', cn: [
+			{ tag: 'h3', cls:'gap', html: 'Thank you for your purchase!'},
+			{ html: '{message} You will receive an emailed receipt shortly. Please store it for your records.'}
+		]},
+		{ cls:'gap', cn: [
+			{tag:'tpl', 'if':'!key', cn:{ tag: 'a', href:'#', html:'View your content now!' }},
+			{tag:'tpl', 'if':'key', cn:{ cls:'activation-key', html:'{key}', 'data-label':'Activation Key' }}
+		]}
+	]),
 
 
-	renderSelectors: {
+	renderSelectors:{
 		linkEl: 'a[href]',
-		keyEl:  '.activation-key'
+		keyEl: '.activation-key'
 	},
 
 
-	ordinal:          3,
-	confirmLabel:     'Close',
-	omitCancel:       true,
+	ordinal: 3,
+	confirmLabel: 'Close',
+	omitCancel: true,
 	closeWithoutWarn: true,
-	showColumns:      true,
-	finalPrice:       true,
+	showColumns: true,
+	finalPrice: true,
 
-	onConfirm: function () {
+	onConfirm: function(){
 		this.fireEvent('close', this);
 	},
 
-	beforeRender: function () {
+	beforeRender: function(){
 		var w;
 		this.callParent(arguments);
 
 		var a = 'Your content has been added to your library.',
-				b = 'Your Activation Key has been created.',
-				code = false;
+			b = 'Your Activation Key has been created.',
+			code = false;
 
-		if (this.purchaseAttempt && this.purchaseAttempt.isPurchaseAttempt) {
+		if(this.purchaseAttempt && this.purchaseAttempt.isPurchaseAttempt){
 			code = this.purchaseAttempt.get('InvitationCode');
-			if (code) {
+			if(code){
 				a = b;
 			}
 		}
 
-		if (!this.purchaseAttempt) {
+		if(!this.purchaseAttempt){
 			w = this.up('window');
-			if (w) {
+			if(w){
 				w.addCls('activation-complete');
 				w.updateTabTitleForChild(this, 'Activated');
 			}
 
 		}
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			message:    a,
-			key:        code,
+		this.renderData = Ext.apply(this.renderData||{},{
+			message: a,
+			key: code,
 			activation: !this.purchaseAttempt
 		});
 	},
 
 
-	afterRender: function () {
+	afterRender: function(){
 		var win;
 		this.callParent(arguments);
 
-		if (this.linkEl) {
-			this.mon(this.linkEl, 'click', 'onNavigateToNewlyPurchasedContentClicked', this);
+		if(this.linkEl){
+			this.mon(this.linkEl,'click','onNavigateToNewlyPurchasedContentClicked',this);
 		}
 
-		if (this.keyEl) {
+		if(this.keyEl){
 			this.keyEl.selectable();
 			this.keyEl.allowContextMenu();
 		}
@@ -87,19 +87,19 @@ Ext.define('NextThought.view.store.purchase.Complete', {
 	},
 
 
-	onNavigateToNewlyPurchasedContentClicked: function (e) {
+	onNavigateToNewlyPurchasedContentClicked: function(e){
 		var purchasable = this.purchaseDescription && this.purchaseDescription.Purchasable,
-				items = purchasable && purchasable.get('Items');
+			items = purchasable && purchasable.get('Items');
 		e.stopEvent();
 
 		//Again with these damn assumptions
-		if (items.length > 1) {
+		if(items.length > 1){
 			console.log('More than one item for this purchasable.  Content roulette', items);
 		}
 
 		items = items.first();
-		if (items) {
-			this.fireEvent('set-location', items);
+		if(items){
+			this.fireEvent('set-location',items);
 			this.up('window').close();
 		}
 

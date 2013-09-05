@@ -1,74 +1,69 @@
-Ext.define('NextThought.store.FlatPage', {
+Ext.define('NextThought.store.FlatPage',{
 	extend: 'Ext.data.Store',
-	model:  'NextThought.model.Base',
-	proxy:  'memory',
+	model: 'NextThought.model.Base',
+	proxy: 'memory',
 
-	buffered:           false,
-	clearOnPageLoad:    true,
+	buffered: false,
+	clearOnPageLoad: true, 
 	clearRemovedOnLoad: true,
-	sortOnLoad:         true,
-	statefulFilters:    false,
-	remoteSort:         false,
-	remoteFilter:       false,
-	remoteGroup:        false,
-	filterOnLoad:       true,
-	sortOnFilter:       true,
+	sortOnLoad: true,
+	statefulFilters: false,
+	remoteSort: false,
+	remoteFilter: false,
+	remoteGroup: false,
+	filterOnLoad: true,
+	sortOnFilter: true,
 
-	sorters: [
+	sorters:[
 		{
-			//	property : 'line',
-			//	direction: 'ASC'
-			//},{
-			property:  'CreatedTime',
+		//	property : 'line',
+		//	direction: 'ASC'
+		//},{
+			property : 'CreatedTime',
 			direction: 'DESC'
 		}
 	],
-	filters: [
-		{filterFn: function (r) {
-			return !r.parent;
-		}, id:     'nochildren'}
+	filters:[
+		{filterFn:function(r){
+			return !r.parent;}, id:'nochildren'}
 	],
 
 
-	remove: function (record, isMove, silent) {
+	remove: function(record,isMove,silent){
 		var r = record || [],
-				args = Array.prototype.slice.call(arguments);
+			args = Array.prototype.slice.call(arguments);
 
-		if (!Ext.isArray(r)) {
+		if(!Ext.isArray(r)){
 			r = [r];
 		}
 
-		if (isMove) {
-			Ext.each(r, function (r, i, a) {
-				if (r.placeholder) {
-					a.splice(i, 1);
-				}
+		if(isMove){
+			Ext.each(r,function(r,i,a){
+				if(r.placeholder){ a.splice(i,1); }
 			}, this, true);
 		}
 
-		if (r.length > 0) {
+		if(r.length>0){
 			args.shift();
 			args.unshift(r);
-			this.callParent(args);
+			this.callParent(args);	
 		}
 	},
 
 
-	bind: function (otherStore) {
+	bind: function(otherStore){
 		var me = this;
 
-		if (!otherStore) {
+		if(!otherStore){
 			return;
 		}
 
-		if (Ext.Array.contains(otherStore.$boundToFlat || [], this)) {
-			return;
-		}
+		if(Ext.Array.contains(otherStore.$boundToFlat || [], this)){ return; }
 
-
-		function remove(s, rec) {
+		
+		function remove(s,rec){
 			var f;
-			if (rec) {
+			if(rec){
 				f = me.filters.getRange();
 				me.clearFilter(true);
 				me.remove(rec, true);
@@ -80,98 +75,92 @@ Ext.define('NextThought.store.FlatPage', {
 
 		function cleanUp(o) {
 			o.clearFilter(true);
-			remove(o, o.getRange());
+			remove(o,o.getRange());
 		}
 
 
-		function add(s, rec) {
+		function add(s,rec){
 
-			function doesRecordPassFilters(rec) {
-				return Ext.Array.every(currentFilters, function (f) {
-					if (f.filterFn) {
-						return f.filterFn.apply(f, [rec]);
-					}
-					return true;
-				});
-			}
+            function doesRecordPassFilters(rec){
+                return Ext.Array.every(currentFilters, function(f){
+                    if(f.filterFn){ return f.filterFn.apply(f, [rec]); }
+                    return true;
+                });
+            }
 
 
-			function addMe(r) {
-				var i = me.findExact('NTIID', r.get('NTIID'));
-				if (!r || !(r instanceof NextThought.model.Note)) {
-					return;
-				}
+            function addMe(r){
+                var i = me.findExact('NTIID', r.get('NTIID'));
+                if(!r || !(r instanceof NextThought.model.Note)){ return; }
 
-				if (i !== -1 && r !== me.getAt(i)) {
-					console.warn('DUPLICATE NTIID', r, me.getAt(i));
-					return;
-				}
+                if(i !== -1 && r !== me.getAt(i)){
+                    console.warn('DUPLICATE NTIID', r, me.getAt(i));
+                    return;
+                }
 
-				if (!r.parent) {
-					//If the rec passes current filters, add it.
-					if (doesRecordPassFilters(r)) {
-						me.add(r);//add one at a time to get insertion sort.
-					}
-					else {
-						// If the lineFilter is set on the flatPage store,
-						// wait until we set the line property on the new rec,
-						// then check it and add it.
-						r.addObserverForField(me, 'line', function () {
-							me.suspendEvents(false);
-							me.add(r);
-							me.filter(me.filters.getRange());
-							me.resumeEvents();
-						}, {single: true});
-					}
-				}
-			}
+                if(!r.parent){
+                    //If the rec passes current filters, add it.
+                    if(doesRecordPassFilters(r)){
+                        me.add(r);//add one at a time to get insertion sort.
+                    }
+                    else{
+                        // If the lineFilter is set on the flatPage store,
+                        // wait until we set the line property on the new rec,
+                        // then check it and add it.
+                        r.addObserverForField(me, 'line', function(){
+                            me.suspendEvents(false);
+                            me.add(r);
+                            me.filter(me.filters.getRange());
+                            me.resumeEvents();
+                        }, {single:true});
+                    }
+                }
+            }
 
-			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
-					records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders),
-					currentFilters = me.filters.getRange();
+			var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
+				records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders),
+                currentFilters = me.filters.getRange();
 
 			Ext.each(records, addMe);
 		}
 
-		function load(s, rec) {
-			var placeholders = Ext.Array.filter(s.getItems(), function (r) {return r.placeholder && !r.parent;}),
-					records = ((rec && (Ext.isArray(rec) ? rec : [rec])) || []).concat(placeholders), me = this;
+		function load(s,rec){
+            var placeholders = Ext.Array.filter(s.getItems(),function(r){return r.placeholder && !r.parent;}),
+                records = ((rec && (Ext.isArray(rec)?rec:[rec])) || []).concat(placeholders), me = this;
 
-			Ext.each(records, function (r) {
-				var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);
-				if (!r || !(r instanceof NextThought.model.Note)) {
-					return;
-				}
+            Ext.each(records,function(r){
+                var i = me.find('NTIID', r.get('NTIID'), 0, false, true, true);
+                if(!r || !(r instanceof NextThought.model.Note)){ return; }
 
-				if (i !== -1 && r !== me.getAt(i)) {
-					me.removeAt(i);
-				}
+                if(i !== -1 && r !== me.getAt(i)){
+                    me.removeAt(i);
+                }
 
-				if (!r.parent) {
-					me.add(r);//add one at a time to get insertion sort.
-				}
-			});
-		}
+                if(!r.parent){
+                    me.add(r);//add one at a time to get insertion sort.
+                }
+            });
+        }
 
-		otherStore.on('cleanup', 'destroy',
-					  me.mon(otherStore, {
-						  scope:       me,
-						  destroyable: true,
-						  add:         add,
-						  load:        load,
-						  bulkremove:  remove,
-						  remove:      remove,
-						  cleanup:     cleanUp
-					  }));
+		otherStore.on('cleanup','destroy',
+				me.mon(otherStore,{
+					scope: me,
+					destroyable: true,
+					add: add,
+					load: load,
+					bulkremove: remove,
+					remove: remove,
+					cleanup: cleanUp
+				}));
 
-		if (Ext.isArray(otherStore.$boundToFlat)) {
+		if(Ext.isArray(otherStore.$boundToFlat)){
 			otherStore.$boundToFlat.push(this);
 		}
-		else {
+		else{
 			otherStore.$boundToFlat = [this];
 		}
 
-		add(otherStore, otherStore.getRange());
+		add(otherStore,otherStore.getRange());
 	}
-
+	
 });

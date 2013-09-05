@@ -611,7 +611,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				return false;
 			}
 
-			if (element.getAttribute('class') === 'overlayed') {
+			if(element.getAttribute('class') === 'overlayed'){
 				return true;
 			}
 

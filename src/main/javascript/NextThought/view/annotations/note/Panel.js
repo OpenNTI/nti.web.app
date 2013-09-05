@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.annotations.note.Panel', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.note-panel',
+	alias: 'widget.note-panel',
 
 	requires: [
 		'NextThought.cache.UserRepository',
@@ -9,20 +9,20 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	],
 
 	mixins: {
-		enableProfiles:         'NextThought.mixins.ProfileLinks',
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
-		flagActions:            'NextThought.mixins.FlagActions'
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	enableTitle: false,
 
-	ui:                'nt',
-	cls:               'note-container',
-	componentLayout:   'natural',
-	layout:            'auto',
-	defaultType:       'note-panel',
-	childEls:          ['body'],
-	getTargetEl:       function () {
+	ui: 'nt',
+	cls: 'note-container',
+	componentLayout: 'natural',
+	layout: 'auto',
+	defaultType: 'note-panel',
+	childEls: ['body'],
+	getTargetEl: function () {
 		return this.body;
 	},
 	autoFillInReplies: true,
@@ -30,76 +30,76 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	rootQuery: 'note-panel[root]',
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											//cls: 'note-reply',
-											cls: 'note',
-											cn:  [
-												{
-													cls: 'avatar',
-													cn:  [
-														{tag: 'img', src: Ext.BLANK_IMAGE_URL}
-													]
-												},
-												{
-													cls: 'meta',
-													cn:  [
-														{
-															cls: 'controls',
-															cn:  [
-																{ cls: 'favorite-spacer' },
-																{ cls: 'favorite' },
-																{ cls: 'like' }
-															]
-														},
-														{ cls: 'title'
-														},
-														{ tag: 'span', cls: 'name'
-														},
-														{ cls: 'shared-to' }
-													]
-												},
-												{ cls: 'body' },
-												{
-													cls: 'respond',
-													cn:  [
-														{
-															cls: 'reply-options',
-															cn:  [
-																{ cls: 'reply', html: 'Reply' },
-																{ cls: 'share', html: 'Share' },
-																{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
-															]
-														},
-														{ tag: 'span', cls: 'time' }
-													]
-												}
-											]
-										},
-										{
-											id:  '{id}-body',
-											cls: 'note-replies',
-											cn:  ['{%this.renderContainer(out,values)%}']
-										}
-									]),
+		{
+			//cls: 'note-reply',
+			cls: 'note',
+			cn: [
+				{
+					cls: 'avatar',
+					cn: [
+						{tag: 'img', src: Ext.BLANK_IMAGE_URL}
+					]
+				},
+				{
+					cls: 'meta',
+					cn: [
+						{
+							cls: 'controls',
+							cn: [
+								{ cls: 'favorite-spacer' },
+								{ cls: 'favorite' },
+								{ cls: 'like' }
+							]
+						},
+						{ cls: 'title'
+						},
+						{ tag: 'span', cls: 'name'
+						},
+						{ cls: 'shared-to' }
+					]
+				},
+				{ cls: 'body' },
+				{
+					cls: 'respond',
+					cn: [
+						{
+							cls: 'reply-options',
+							cn: [
+								{ cls: 'reply', html: 'Reply' },
+								{ cls: 'share', html: 'Share' },
+								{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
+							]
+						},
+						{ tag: 'span', cls: 'time' }
+					]
+				}
+			]
+		},
+		{
+			id: '{id}-body',
+			cls: 'note-replies',
+			cn: ['{%this.renderContainer(out,values)%}']
+		}
+	]),
 
 	renderSelectors: {
-		avatar:          '.avatar img',
-		noteBody:        '.note',
-		liked:           '.meta .controls .like',
-		favorites:       '.meta .controls .favorite',
+		avatar: '.avatar img',
+		noteBody: '.note',
+		liked: '.meta .controls .like',
+		favorites: '.meta .controls .favorite',
 		favoritesSpacer: '.meta .controls .favorite-spacer',
-		title:           '.meta .title',
-		name:            '.meta .name',
-		time:            '.time',
-		text:            '.body',
-		canvas:          '.context canvas',
-		context:         '.context .text',
-		sharedTo:        '.shared-to',
-		responseBox:     '.respond',
-		replyOptions:    '.respond .reply-options',
-		replyButton:     '.respond .reply',
-		shareButton:     '.respond .share',
-		more:            '.respond .reply-options .more'
+		title: '.meta .title',
+		name: '.meta .name',
+		time: '.time',
+		text: '.body',
+		canvas: '.context canvas',
+		context: '.context .text',
+		sharedTo: '.shared-to',
+		responseBox: '.respond',
+		replyOptions: '.respond .reply-options',
+		replyButton: '.respond .reply',
+		shareButton: '.respond .share',
+		more: '.respond .reply-options .more'
 	},
 
 
@@ -221,9 +221,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		me.mon(me.editorEl.down('.save'), 'click', me.editorSaved, me);
 
 		me.mon(me.editorEl.down('.content'), {
-			scope:    me,
+			scope: me,
 			keypress: me.editorKeyPressed,
-			keydown:  me.editorKeyDown
+			keydown: me.editorKeyDown
 		});
 
 		if (me.title) {
@@ -260,9 +260,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	disable: function () {
 		var me = this,
-				e = me.editorEl || {down: Ext.emptyFn},
-				cancel = e.down('.cancel'),
-				save = e.down('.save');
+			e = me.editorEl || {down: Ext.emptyFn},
+			cancel = e.down('.cancel'),
+			save = e.down('.save');
 
 		me.replyOptions.remove();
 
@@ -309,10 +309,10 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	fillInUser: function (user) {
 		var HOST = Globals.HOST_PREFIX_PATTERN,
-				avatarURL = user.get('avatarURL'),
-				currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
+			avatarURL = user.get('avatarURL'),
+			currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
 
-		if (avatarURL && avatarURL.indexOf('//') === 0) {
+		if(avatarURL && avatarURL.indexOf('//') === 0){
 			avatarURL = location.protocol + avatarURL;
 		}
 
@@ -338,12 +338,10 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	fillInShare: function (sharedWith) {
 		var val, names = [], others,
-				tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
+			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
 
-		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
-		if (Ext.isEmpty(sharedWith)) {
-			return;
-		}
+		this.responseBox[(sharedWith|| []).length === 0 ? 'removeCls' : 'addCls']('shared');
+		if(Ext.isEmpty(sharedWith)){  return; }
 
 		SharingUtils.getLongSharingDisplayText(sharedWith, function (str) {
 			this.sharedTo.update(str);
@@ -351,8 +349,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 			this.sharedTo.select('name[data-profile-idx]').on('click', function (e) {
 				var a = e.getTarget('name'),
-						i = a && a.getAttribute('data-profile-idx'),
-						u = a && sharedWith[i];
+					i = a && a.getAttribute('data-profile-idx'),
+					u = a && sharedWith[i];
 
 				e.stopEvent();
 				if (a && !Ext.isEmpty(i) && u && u.getProfileUrl) {
@@ -385,8 +383,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	editorSaved: function () {
 		var v = this.editor.getValue(),
-				me = this,
-				r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+			me = this,
+			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record) {
 			if (me.isDestroyed) {
@@ -410,7 +408,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 				r.save({callback: function (record, request) {
 					var success = request.success,
-							rec = success ? request.records[0] : null;
+						rec = success ? request.records[0] : null;
 					if (success) {
 						r.fireEvent('updated', rec);
 						me.setRecord(rec);
@@ -447,7 +445,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 	// In the future, we will want fieldName to be an array of all the fields that changed.
-	recordUpdated:   function (newRec, fieldName) {
+	recordUpdated: function (newRec, fieldName) {
 		this.recordEvent = 'updated';
 		var r = this.updateFromRecord(newRec, fieldName);
 		delete this.recordEvent;
@@ -455,7 +453,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	recordChanged:    function () {
+	recordChanged: function () {
 		this.recordEvent = 'changed';
 		var r = this.updateFromRecord();
 		delete this.recordEvent;
@@ -510,13 +508,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	getRecord:                       function () {
+	getRecord: function () {
 		return this.record;
 	},
 
 
 	//For subclasses
-	addAdditionalRecordListeners:    function (record) {
+	addAdditionalRecordListeners: function (record) {
 
 	},
 
@@ -525,7 +523,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	},
 
-	setRecord:   function (r) {
+	setRecord: function (r) {
 		//Remove the old listener
 		if (this.record) {
 			this.mun(this.record, 'child-added', this.addNewChild, this);
@@ -569,13 +567,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		this.updateToolState();
 		this.mon(r, {
-			'child-added':   this.addNewChild,
+			'child-added': this.addNewChild,
 			'child-removed': this.removedChild,
-			scope:           this
+			scope: this
 		});
 		this.mon(r, {
-			single:    true,
-			scope:     this,
+			single: true,
+			scope: this,
 			'changed': function () {
 				this.recordChanged();
 			},
@@ -708,20 +706,20 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 
 		Ext.each(this.text.query('.whiteboard-container'),
-				 function (wb) {
-					 Ext.fly(wb).on('click', this.click, this);
+			function (wb) {
+				Ext.fly(wb).on('click', this.click, this);
 
-					 if (!$AppConfig.service.canShare()) {
-						 Ext.fly(wb).select('.overlay').setStyle({bottom: 0});
-						 Ext.fly(wb).select('.toolbar').remove();
-					 }
-				 },
-				 this);
+				if (!$AppConfig.service.canShare()) {
+					Ext.fly(wb).select('.overlay').setStyle({bottom: 0});
+					Ext.fly(wb).select('.toolbar').remove();
+				}
+			},
+			this);
 
 	},
 
 
-	setContext:         function (doc, cleanRoot) {
+	setContext: function (doc, cleanRoot) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
@@ -772,19 +770,18 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	editorActive:         function () {
+	editorActive: function () {
 		return Boolean(this.getRoot().activeEditorOwner);
 	},
 
 
 	//Sets cmp as the component that contains the active editor
-	setEditorActive:      function (cmp) {
+	setEditorActive: function (cmp) {
 		var active = Boolean(cmp),
-				root = this.getRoot();
+			root = this.getRoot();
 		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
 		if (root.editorActive() === active) {
-			console.warn('Panel already has an ' + (active ? 'active'
-					: 'inactive') + ' editor. Unbalanced calls?', cmp);
+			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?', cmp);
 			return;
 		}
 		delete root.activeEditorOwner;
@@ -894,7 +891,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n',
-						r.getId(), '\n', child.get('inReplyTo'), ' <- new child');
+				r.getId(), '\n', child.get('inReplyTo'), ' <- new child');
 		}
 	},
 
@@ -928,15 +925,15 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		recordCollection.addAll(records || []);
 
 		recordCollection.sort({
-								  property:  'CreatedTime',
-								  direction: 'ASC',
-								  transform: Ext.data.SortTypes.asDate,
-								  root:      'data'
-							  });
+			property: 'CreatedTime',
+			direction: 'ASC',
+			transform: Ext.data.SortTypes.asDate,
+			root: 'data'
+		});
 		recordCollection.each(function (record) {
 
 			var guid = IdCache.getComponentId(record, null, prefix),
-					add = true;
+				add = true;
 
 			if (record.getModelName() !== 'Note') {
 				console.warn('can not add item, it is not a note and I am not prepared to handle that.');
@@ -965,7 +962,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	adjustRootsReferenceCount: function (r, added) {
 		var root = r.parent,
-				rootCmp = this.rootToCountComponentsFrom();
+			rootCmp = this.rootToCountComponentsFrom();
 
 		while (root && root.parent) {
 			root = root.parent;
@@ -989,20 +986,20 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		//direct children count:
 		var c = this.items.getCount(),
 		//panels below this panel:
-				children = this.query('note-panel') || [],
-				pluck = Ext.Array.pluck,
-				contains = Ext.Array.contains,
+			children = this.query('note-panel') || [],
+			pluck = Ext.Array.pluck,
+			contains = Ext.Array.contains,
 		//do any have the deleting flag?
-				anyDeleting = contains(pluck(children, 'deleting'), true),
+			anyDeleting = contains(pluck(children, 'deleting'), true),
 		//are any of the remaining panels not placeholders? If so, then we can not safely remove this panel.
 		//safeToCleanMe means all the panels below this one are only placeholder panels.
-				safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children, 'record'), 'placeholder'), Boolean), false),
+			safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children, 'record'), 'placeholder'), Boolean), false),
 		//if the component that was removed from this panel was deleting, or any panel below this was deleting.
-				deleting = cmp.deleting || anyDeleting;
+			deleting = cmp.deleting || anyDeleting;
 
 		console.debug('removed child, it was deleting: ', cmp.deleting,
-					  ', or any child below me is deleting: ', anyDeleting,
-					  ', alse we have ' + c + ' children. Safe to delete: ', safeToCleanMe);
+			', or any child below me is deleting: ', anyDeleting,
+			', alse we have ' + c + ' children. Safe to delete: ', safeToCleanMe);
 
 		if ((c === 0 || safeToCleanMe) && (!this.record || this.record.placeholder)) {
 			this.deleting = Boolean(deleting);

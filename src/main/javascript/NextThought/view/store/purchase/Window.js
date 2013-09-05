@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.store.purchase.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias:  'widget.purchase-window',
+	alias: 'widget.purchase-window',
 
 	mixins: {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
@@ -12,95 +12,95 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		'NextThought.view.store.purchase.History'
 	],
 
-	cls:       'purchase-window',
-	width:     520,
-	height:    690,
-	autoShow:  true,
+	cls: 'purchase-window',
+	width: 520,
+	height: 690,
+	autoShow: true,
 	resizable: false,
 	draggable: false,
-	modal:     true,
-	dialog:    true,
+	modal: true,
+	dialog: true,
 
-	childEls:    ['body'],
+	childEls: ['body'],
 	getTargetEl: function () {
 		return this.body;
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'header', cn: [
-											{ cls: 'titlebar', cn: [
-												{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
-												{ cls: 'tab', html: 'Purchase History', 'data-order': 'history', 'data-no-decoration': true },
-												{ cls: 'tab', html: 'Payment Info', 'data-order': 1 },
-												{ cls: 'tab', html: 'Review Order', 'data-order': 2 },
-												{ cls: 'tab', html: 'Confirmation', 'data-order': 3 },
-												{ cls: 'close' }
-											]},
-											{ cls: 'columns', cn: [
-												{cls: 'a', html: 'Item'},
-												{cls: 'b', html: 'Quantity'},
-												{cls: 'c', html: 'Total Price'}
-											]},
-											{ cls: 'info', cn: [
-												{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
-												{cls: 'price', html: '{[NTIFormat.currency((values.price||values.Amount), values.Currency)]}'},
-												{cls: 'quantity', html: '{quantity}'},
-												{ cls: 'meta', cn: [
-													{cls: 'title', html: '{Title}'},
-													{cls: 'byline', html: 'By {[values.Author||values.Provider]}'},
-													{cls: 'activation-code', cn: [
-														{tag:                'input', type: 'text', name: 'activation', placeholder: 'Activation Code',
-															//To discourage attacks, give no indication that this is a valid/invalid code until submission.
-															'data-required': true, cls: 'required valid'}
-													]}
-												]}
-											] }
-										]
-										},
-										{
-											id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
-										},
-										{
-											cls: 'error', cn: [
-											{cls: 'label'},
-											{cls: 'message'}
-										]
-										},
-										{
-											cls: 'footer', cn: [
-											{tag: 'label', cls: 'agree', cn: [
-												{tag: 'input', type: 'checkbox'},
-												{}
-											]},
-											{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-											{tag: 'a', cls: 'button confirm', role: 'button', html: ''}
-										]
-										}
-									]),
+		{
+			cls: 'header', cn: [
+			{ cls: 'titlebar', cn: [
+				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
+				{ cls: 'tab', html: 'Purchase History', 'data-order': 'history', 'data-no-decoration': true },
+				{ cls: 'tab', html: 'Payment Info', 'data-order': 1 },
+				{ cls: 'tab', html: 'Review Order', 'data-order': 2 },
+				{ cls: 'tab', html: 'Confirmation', 'data-order': 3 },
+				{ cls: 'close' }
+			]},
+			{ cls: 'columns', cn: [
+				{cls: 'a', html: 'Item'},
+				{cls: 'b', html: 'Quantity'},
+				{cls: 'c', html: 'Total Price'}
+			]},
+			{ cls: 'info', cn: [
+				{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
+				{cls: 'price', html: '{[NTIFormat.currency((values.price||values.Amount), values.Currency)]}'},
+				{cls: 'quantity', html: '{quantity}'},
+				{ cls: 'meta', cn: [
+					{cls: 'title', html: '{Title}'},
+					{cls: 'byline', html: 'By {[values.Author||values.Provider]}'},
+					{cls: 'activation-code', cn: [
+						{tag: 'input', type: 'text', name: 'activation', placeholder: 'Activation Code',
+							//To discourage attacks, give no indication that this is a valid/invalid code until submission.
+							'data-required': true, cls: 'required valid'}
+					]}
+				]}
+			] }
+		]
+		},
+		{
+			id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
+		},
+		{
+			cls: 'error', cn: [
+			{cls: 'label'},
+			{cls: 'message'}
+		]
+		},
+		{
+			cls: 'footer', cn: [
+			{tag: 'label', cls: 'agree', cn: [
+				{tag: 'input', type: 'checkbox'},
+				{}
+			]},
+			{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+			{tag: 'a', cls: 'button confirm', role: 'button', html: ''}
+		]
+		}
+	]),
 
 	renderSelectors: {
 		headerEl: '.header',
-		closeEl:  '.header .titlebar .close',
+		closeEl: '.header .titlebar .close',
 
-		footerEl:  '.footer',
-		cancelEl:  '.footer a.cancel',
+		footerEl: '.footer',
+		cancelEl: '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
 
 		activationCodeEl: '.activation-code input',
 
-		errorEl:        '.error',
-		errorLabelEl:   '.error .label',
+		errorEl: '.error',
+		errorLabelEl: '.error .label',
 		errorMessageEl: '.error .message',
 
 		checkboxLabelEl: '.footer label input + div',
-		checkboxEl:      '.footer label input',
-		checkboxBoxEl:   '.footer label'
+		checkboxEl: '.footer label input',
+		checkboxBoxEl: '.footer label'
 	},
 
 	componentLayout: 'natural',
-	layout:          'auto',
-	items:           [],
+	layout: 'auto',
+	items: [],
 
 
 	getDockedItems: function () {
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	publishQuantityAndPrice: function (quantity, price, currency) {
 		this.priceInfo = {
 			quantity: quantity,
-			price:    price
+			price: price
 		};
 
 		if (!this.rendered) {
@@ -169,10 +169,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	updateContentHeight: function () {
 		var el = this.getTargetEl(),
-				footer = this.footerEl,
-				h;
+			footer = this.footerEl,
+			h;
 
-		if (!footer || !el || !footer.getY || !el.getY) {
+		if(!footer || !el || !footer.getY || !el.getY){
 			return;
 		}
 
@@ -190,10 +190,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	showError: function (message, label) {
 		var el = this.getTargetEl(),
-				errorEl = this.errorEl;
+			errorEl = this.errorEl;
 
 		function syncHeight() {
-			if (!errorEl || !errorEl.getY || !el || !el.getY) {
+			if(!errorEl || !errorEl.getY || !el || !el.getY){
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -210,8 +210,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	onAdd: function (cmp) {
 		var ordinal = cmp.ordinal,
-				confirmLabel = cmp.confirmLabel || 'Purchase',
-				checkLabel = cmp.checkboxLabel;
+			confirmLabel = cmp.confirmLabel || 'Purchase',
+			checkLabel = cmp.checkboxLabel;
 
 		this.activeView = cmp;
 
@@ -236,8 +236,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	syncTab: function (ordinal) {
 		var el = this.getEl(),
-				tabs = el.select('.titlebar .tab'),
-				defaultTab = this.started ? 0 : 'detail';
+			tabs = el.select('.titlebar .tab'),
+			defaultTab = this.started ? 0 : 'detail';
 
 		if (ordinal > 0) {
 			this.started = true;
@@ -285,7 +285,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		}
 
 		var checkState = this.checkboxEl.dom.checked,
-				activationCode = this.activationCodeEl.getValue();
+			activationCode = this.activationCodeEl.getValue();
 
 		this.down('[onConfirm]').onConfirm(this, activationCode, checkState);
 	},
@@ -293,9 +293,9 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	onTabClicked: function (e) {
 		var target = e.getTarget('.tab'),
-				cmp = this.activeView,
-				currentOrdinal = cmp ? cmp.ordinal : -1,
-				t = target;
+			cmp = this.activeView,
+			currentOrdinal = cmp ? cmp.ordinal : -1,
+			t = target;
 		t = (t && t.getAttribute('data-order')) || 0;
 
 		if (t >= currentOrdinal) {
@@ -310,10 +310,10 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		console.log('go to page: ' + t);
 		this.fireEvent('show-purchase-view', this, t, {
-						   purchaseDescription: cmp.purchaseDescription,
-						   tokenObject:         cmp.tokenObject,
-						   record:              this.record
-					   }
+				purchaseDescription: cmp.purchaseDescription,
+				tokenObject: cmp.tokenObject,
+				record: this.record
+			}
 		);
 	},
 
@@ -327,8 +327,8 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	onCheckboxClicked: function (e) {
 		var t = e.getTarget(),
-				active = this.activeView,
-				linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
+			active = this.activeView,
+			linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
 
 		if (t.tagName === 'A') {
 			e.stopEvent();
@@ -357,7 +357,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	updateTabTitleForChild: function (cmp, text) {
 		var ordinal = cmp.ordinal,
-				t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
+			t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
 
 		if (t) {
 			t.update(text);
@@ -367,7 +367,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 	agreeToTerms: function () {
 		var c = this.checkboxEl.dom.checked,
-				a = this.activeView;
+			a = this.activeView;
 		Ext.callback(a && a.setAgreementState, a, [c]);
 	}
 });

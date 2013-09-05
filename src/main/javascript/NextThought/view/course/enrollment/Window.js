@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.course.enrollment.Window', {
+Ext.define('NextThought.view.course.enrollment.Window',{
 	extend: 'NextThought.view.window.Window',
-	alias:  'widget.enrollment-window',
+	alias: 'widget.enrollment-window',
 
 	mixins: {
 		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
@@ -11,85 +11,85 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 		'NextThought.view.course.enrollment.DetailView'
 	],
 
-	cls:       'purchase-window',
-	width:     520,
-	height:    690,
-	autoShow:  true,
+	cls: 'purchase-window',
+	width: 520,
+	height: 690,
+	autoShow: true,
 	resizable: false,
 	draggable: false,
-	modal:     true,
-	dialog:    true,
+	modal: true,
+	dialog: true,
 
-	childEls:    ['body'],
+	childEls: ['body'],
 	getTargetEl: function () {
 		return this.body;
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'header', cn: [
-											{ cls: 'titlebar', cn: [
-												{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
-												{ tag: 'tpl', 'if': 'enrollProcess', cn: {
-													cls: 'tab', html: 'Confirmation', 'data-order': 2
-												}},
-												{ tag: 'tpl', 'if': '!enrollProcess', cn: [
-													{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
-													{ cls: 'tab', html: 'Complete', 'data-order': 2 }
-												]},
-												{ cls: 'close' }
-											]},
-											{ cls: 'info', cn: [
-												{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
-												{ cls: 'meta', cn: [
-													{cls: 'course', html: '{Name}'},
-													{cls: 'title', html: '{Title}'},
-													{tag: 'tpl', 'if': 'by', cn: {cls: 'byline', html: 'By {by}'}}
-												]}
-											] }
-										]
-										},
-										{
-											id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
-										},
-										{
-											cls: 'error', cn: [
-											{cls: 'label'},
-											{cls: 'message'}
-										]
-										},
-										{
-											cls: 'footer', cn: [
-											{tag: 'label', cls: 'agree', cn: [
-												{tag: 'input', type: 'checkbox'},
-												{}
-											]},
-											{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-											{tag: 'a', cls: 'button confirm', role: 'button', html: ''}
-										]
-										}
-									]),
+		{
+			cls: 'header', cn: [
+			{ cls: 'titlebar', cn: [
+				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
+				{ tag:'tpl', 'if':'enrollProcess', cn:{
+					 cls: 'tab', html: 'Confirmation', 'data-order': 2
+				}},
+				{ tag:'tpl', 'if':'!enrollProcess', cn:[
+					{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
+					{ cls: 'tab', html: 'Complete', 'data-order': 2 }
+				]},
+				{ cls: 'close' }
+			]},
+			{ cls: 'info', cn: [
+				{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
+				{ cls: 'meta', cn: [
+					{cls: 'course', html: '{Name}'},
+					{cls: 'title', html: '{Title}'},
+					{tag:'tpl','if':'by', cn:{cls: 'byline', html: 'By {by}'}}
+				]}
+			] }
+		]
+		},
+		{
+			id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
+		},
+		{
+			cls: 'error', cn: [
+			{cls: 'label'},
+			{cls: 'message'}
+		]
+		},
+		{
+			cls: 'footer', cn: [
+			{tag: 'label', cls: 'agree', cn: [
+				{tag: 'input', type: 'checkbox'},
+				{}
+			]},
+			{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+			{tag: 'a', cls: 'button confirm', role: 'button', html: ''}
+		]
+		}
+	]),
 
 	renderSelectors: {
 		headerEl: '.header',
-		closeEl:  '.header .titlebar .close',
+		closeEl: '.header .titlebar .close',
 
-		footerEl:  '.footer',
-		cancelEl:  '.footer a.cancel',
+		footerEl: '.footer',
+		cancelEl: '.footer a.cancel',
 		confirmEl: '.footer a.confirm',
 
-		errorEl:        '.error',
-		errorLabelEl:   '.error .label',
+		errorEl: '.error',
+		errorLabelEl: '.error .label',
 		errorMessageEl: '.error .message',
 
 		checkboxLabelEl: '.footer label input + div',
-		checkboxEl:      '.footer label input',
-		checkboxBoxEl:   '.footer label'
+		checkboxEl: '.footer label input',
+		checkboxBoxEl: '.footer label'
 	},
 
 	componentLayout: 'natural',
-	layout:          'auto',
-	items:           [],
+	layout: 'auto',
+	items: [],
 
 
 	getDockedItems: function () {
@@ -106,8 +106,8 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 		this.callParent(arguments);
 		var enrolling = this.record.getLink('enroll');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
-		this.renderData = Ext.apply(this.renderData, {enrollProcess: enrolling});
-		this.renderData.by = this.renderData.Author || this.renderData.Provider;
+		this.renderData = Ext.apply(this.renderData, {enrollProcess:enrolling});
+		this.renderData.by = this.renderData.Author||this.renderData.Provider;
 	},
 
 
@@ -135,10 +135,10 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	updateContentHeight: function () {
 		var el = this.getTargetEl(),
-				footer = this.footerEl,
-				h;
+			footer = this.footerEl,
+			h;
 
-		if (!footer || !el || !footer.getY || !el.getY) {
+		if(!footer || !el || !footer.getY || !el.getY){
 			return;
 		}
 
@@ -156,10 +156,10 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	showError: function (message, label) {
 		var el = this.getTargetEl(),
-				errorEl = this.errorEl;
+			errorEl = this.errorEl;
 
 		function syncHeight() {
-			if (!errorEl || !errorEl.getY || !el || !el.getY) {
+			if(!errorEl || !errorEl.getY || !el || !el.getY){
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -176,8 +176,8 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	onAdd: function (cmp) {
 		var ordinal = cmp.ordinal,
-				confirmLabel = cmp.confirmLabel || 'Enroll',
-				checkLabel = cmp.checkboxLabel;
+			confirmLabel = cmp.confirmLabel || 'Enroll',
+			checkLabel = cmp.checkboxLabel;
 
 		this.activeView = cmp;
 
@@ -199,8 +199,8 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	syncTab: function (ordinal) {
 		var el = this.getEl(),
-				tabs = el.select('.titlebar .tab'),
-				defaultTab = this.started ? 0 : 'detail';
+			tabs = el.select('.titlebar .tab'),
+			defaultTab = this.started ? 0 : 'detail';
 
 		if (ordinal > 0) {
 			this.started = true;
@@ -251,8 +251,8 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	onCheckboxClicked: function (e) {
 		var t = e.getTarget(),
-				active = this.activeView,
-				linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
+			active = this.activeView,
+			linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
 
 		if (t.tagName === 'A') {
 			e.stopEvent();
@@ -268,7 +268,7 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	updateTabTitleForChild: function (cmp, text) {
 		var ordinal = cmp.ordinal,
-				t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
+			t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
 
 		if (t) {
 			t.update(text);
@@ -278,7 +278,7 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	agreeToTerms: function () {
 		var c = this.checkboxEl.dom.checked,
-				a = this.activeView;
+			a = this.activeView;
 		Ext.callback(a && a.setAgreementState, a, [c]);
 	}
 });

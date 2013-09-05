@@ -1,86 +1,82 @@
-Ext.define('NextThought.view.menus.search.Result', {
+Ext.define('NextThought.view.menus.search.Result',{
 	extend: 'Ext.Component',
-	alias:  'widget.search-result',
-	cls:    'search-result',
+	alias: 'widget.search-result',
+	cls: 'search-result',
 
 	requires: ['NextThought.util.Search'],
 
 	renderTpl: Ext.DomHelper.markup([
-										{cls: 'title', html: '{title}', cn: [
-											{tag: 'tpl', 'if': 'chapter', cn: [' / ', {cls: 'chapter', html: '{chapter}'}]},
-											{tag: 'tpl', 'if': 'section', cn: [
-												{cls: 'section', html: '{section}'}
-											]}
-										]},
-										{
-											cls: 'wrap',
-											cn:  [
-												{tag: 'tpl', 'if': 'name', cn: [
-													{cls: 'name', html: '{name}'}
-												]},
-												{cls: 'fragments', cn: [
-													{tag: 'tpl', 'for': 'fragments', cn: [
-														{cls: 'fragment', ordinal: '{#}', html: '{.}'}
-													]}
-												]}
-											]
-										}
-									]),
+		{cls:'title',html:'{title}',cn:[
+			{tag:'tpl', 'if':'chapter',cn:[' / ',{cls:'chapter', html:'{chapter}'}]},
+			{tag:'tpl', 'if':'section',cn:[{cls:'section', html:'{section}'}]}
+		]},
+		{
+			cls:'wrap',
+			cn:[
+				{tag:'tpl', 'if':'name',cn:[{cls:'name',html:'{name}'}]},
+				{cls: 'fragments', cn: [
+					{tag:'tpl', 'for':'fragments', cn:[
+						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
+					]}
+				]}
+			]
+		}
+	]),
 
 	renderSelectors: {
 		'name': '.name'
 	},
 
-	initComponent: function () {
+	initComponent: function(){
 		var hit = this.hit,
-				name = this.hit.get('Creator');
+			name = this.hit.get('Creator');
 
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title:     'Resolving...',
-			chapter:   '',
-			section:   'Resolving...',
-			name:      name,
+		this.renderData = Ext.apply(this.renderData || {},{
+			title: 'Resolving...',
+            chapter: '',
+            section: 'Resolving...',
+			name: name,
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
 		this.fillInData();
 	},
 
-	fillInData: function () {
+	fillInData: function(){
 		var me = this,
-				hit = me.hit,
-				containerId = hit.get('ContainerId'),
-				name = hit.get('Creator');
+			hit = me.hit,
+			containerId = hit.get('ContainerId'),
+			name = hit.get('Creator');
 
-		if (isMe(name)) {
+		if(isMe(name)){
 			me.renderData.name = 'me';
 		}
-		else if (name) {
-			UserRepository.getUser(name, function (user) {
+		else if(name){
+			UserRepository.getUser(name,function(user){
 				me.renderData.name = user.getName();
-				if (me.rendered) {
+				if (me.rendered){
 					me.name.update(user.getName());
 				}
 			});
 		}
 
-		LocationMeta.getMeta(containerId, function (meta) {
-			if (meta) {
+		LocationMeta.getMeta(containerId, function(meta){
+			if(meta){
 				me.fillInContentMeta(meta);
 
-				if (me.rendered) {
+				if (me.rendered){
 					me.renderTpl.overwrite(me.el, me.renderData);
 				}
 			}
-			else {
+			else{
 				console.log('Container maybe a content object?');
-				ContentUtils.findContentObject(containerId, function (obj, meta) {
-					if (obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
+				ContentUtils.findContentObject(containerId, function(obj, meta){
+					if(obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)){
 						me.fillInContentMeta(meta, true);
 						me.renderData.section = obj.title;
-						if (me.rendered) {
+						if (me.rendered){
 							me.renderTpl.overwrite(me.el, me.renderData);
 						}
 					}
@@ -89,19 +85,19 @@ Ext.define('NextThought.view.menus.search.Result', {
 		}, me);
 	},
 
-	fillInContentMeta: function (meta, dontScrewWithLineage) {
+	fillInContentMeta: function(meta, dontScrewWithLineage){
 		var lin = ContentUtils.getLineage(meta.NTIID),
-				chap = [];
+			chap = [];
 
-		lin.pop(); //remove root, we will already have it after resolving "id"
-		if (!dontScrewWithLineage) {
+			lin.pop(); //remove root, we will already have it after resolving "id"
+		if(!dontScrewWithLineage){
 			lin.shift();//remove the first item as its identical as id.
 		}
 
-		Ext.each(lin, function (c) {
+		Ext.each(lin,function(c){
 			var i = ContentUtils.getLocation(c);
-			if (!i) {
-				console.warn(c + " could not be resolved");
+			if(!i){
+				console.warn(c+" could not be resolved");
 				return;
 			}
 			chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
@@ -115,24 +111,24 @@ Ext.define('NextThought.view.menus.search.Result', {
 	},
 
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
-	wrapFragmentHits:  function () {
+	wrapFragmentHits: function(){
 		var fragments = this.hit.get('Fragments'),
-				wrappedFragmentText = [];
-		me = this;
+			wrappedFragmentText = [];
+			me = this;
 
-		Ext.each(fragments, function (fragment, index) {
+		Ext.each(fragments, function(fragment, index){
 			var wrappedText = fragment.text;
-			if (!fragment.matches || fragment.matches.length === 0 || !fragment.text) {
+			if(!fragment.matches || fragment.matches.length === 0 || !fragment.text){
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			}
-			else {
+			else{
 				//Sort the matches backwards so we can do string replaces without invalidating
-				fragment.matches.sort(function (a, b) {return b[0] - a[0];});
-				Ext.each(fragment.matches, function (match, idx) {
+				fragment.matches.sort(function(a, b){return b[0] - a[0];});
+				Ext.each(fragment.matches, function(match, idx){
 					//Attempt to detect bad data from the server
 					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0],
-							newString = '';
-					if (next[1] > match[1]) {
+						newString = '';
+					if(next[1] > match[1]){
 						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
 						return true; //continue
 					}
@@ -152,54 +148,54 @@ Ext.define('NextThought.view.menus.search.Result', {
 
 	},
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.wrapFragmentHits();
 		return this.callParent(arguments);
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.getEl().on({
-							scope:              this,
-							animationend:       this.animationEnd,
-							webkitAnimationEnd: this.animationEnd,
-							click:              this.clicked
-						});
+			scope: this,
+			animationend: this.animationEnd,
+			webkitAnimationEnd: this.animationEnd,
+			click: this.clicked
+		});
 	},
 
 
-	animationEnd: function () {
+	animationEnd: function(){
 		this.getEl().removeCls('pulse');
 	},
 
-	clicked: function (e) {
+	clicked: function(e){
 		var target = Ext.fly(e.target),
-				selector = '.fragment',
-				fragNode = target.is(selector) ? e.target : target.parent(selector, true),
-				fragIdx, toFlash;
+			selector = '.fragment',
+			fragNode = target.is(selector) ? e.target : target.parent(selector, true),
+			fragIdx, toFlash;
 
-		if (fragNode) {
+		if(fragNode){
 			fragIdx = Ext.fly(fragNode).getAttribute('ordinal');
 			fragIdx = fragIdx ? parseInt(fragIdx, 10) : undefined;
 			//Make it 0 indexed
-			if (fragIdx !== undefined) {
+			if(fragIdx !== undefined){
 				fragIdx--;
 			}
 			toFlash = fragNode;
 		}
-		else {
+		else{
 			toFlash = this.getEl();
 		}
 
 		Ext.fly(toFlash).addCls('pulse');
-		Ext.defer(function () {
+		Ext.defer(function(){
 			Ext.fly(toFlash).removeCls('pulse');
 		}, 1000);
 
 		this.doClicked(fragIdx);
 	},
 
-	doClicked: function (fragIdx) {
+	doClicked: function(fragIdx){
 		this.fireEvent('click', this, fragIdx);
 	}
 });

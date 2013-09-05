@@ -1,9 +1,9 @@
-Ext.define('NextThought.util.media.HTML5Player', {
+Ext.define('NextThought.util.media.HTML5Player',{
 
-	statics: {
-		kind:  'audio',
-		type:  'html5',
-		valid: function () {
+	statics:{
+		kind:'audio',
+		type: 'html5',
+		valid: function(){
 			return !!document.createElement('audio').canPlayType;
 		}
 	},
@@ -13,16 +13,16 @@ Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 	playerTpl: Ext.DomHelper.createTemplate({
-												tag:      'audio', cls: 'audio', name: 'audio', id: '{id}',
-												controls: ''
-											}),
+		tag: 'audio', cls: 'audio', name: 'audio', id: '{id}',
+		controls: ''
+	}),
 
 
-	constructor: function (config) {
+	constructor: function(config){
 		this.mixins.observable.constructor.call(this);
 		this.el = null;
 		this.parentEl = Ext.get(config.el);
-		this.id = config.parentId + '-native-' + this.self.kind;
+		this.id = config.parentId+'-native-'+this.self.kind;
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;
@@ -32,17 +32,17 @@ Ext.define('NextThought.util.media.HTML5Player', {
 
 
 //	SAJ: The HTML5 player code is part of the browser and is always ready to load a media source.
-	isReady:     true,
+	isReady: true,
 
-	playerSetup: function () {
+	playerSetup: function(){
 //		Inject HTML5 Player HTML
 		this.playerTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
 		console.log(this.id);
 		this.el = Ext.get(this.id);
 		this.player = Ext.getDom(this.id);
-		this.mon(this.el, {
-			'click': 'togglePlayback',
-			'error': 'playerError',
+		this.mon(this.el,{
+			'click':'togglePlayback',
+			'error':'playerError',
 
 //			'stalled':'',
 //			'waiting':'',
@@ -52,119 +52,119 @@ Ext.define('NextThought.util.media.HTML5Player', {
 //
 //			'timeupdate':'',
 //
-			'ended': 'notify',
-			'pause': 'notify',
+			'ended':'notify',
+			'pause':'notify',
 //			'playing':'',
-			'play':  'notify'
+			'play':'notify'
 		});
 	},
 
 
-	togglePlayback: function (e) {
+	togglePlayback: function(e){
 		var p = this.player, y = e.getY(), rect = p.getBoundingClientRect();
-		if ((rect.bottom - y) > 40) {
-			p[p.paused ? 'play' : 'pause']();
+		if( (rect.bottom - y) > 40 ){
+			p[p.paused?'play':'pause']();
 		}
 	},
 
 
-	notify: function (e) {
+	notify: function(e){
 		console.debug(this.id + ' - ' + e.type);
-		this.fireEvent('player-event-' + e.type, this.id, this);
+		this.fireEvent('player-event-'+e.type,this.id,this);
 	},
 
 
-	playerError: function () {
+	playerError: function(){
 		this.fireEvent('player-error', 'html5');
 	},
 
 
-	getCurrentTime: function () {
+	getCurrentTime: function(){
 		return this.player.currentTime;
 	},
 
-	getPlayerState: function () {
+	getPlayerState: function(){
 		var playerState = -1;
 
-		if (this.player.paused) {
+		if (this.player.paused){
 			playerState = 2;
 		}
-		else if (this.player.ended) {
+		else if (this.player.ended){
 			playerState = 0;
 		}
-		else if (this.player.readyState === 2 || this.player.readyState === 3) {
+		else if (this.player.readyState === 2 || this.player.readyState === 3){
 			playerState = 3;
 		}
-		else {
+		else{
 			playerState = 1;
 		}
 
 		return playerState;
 	},
 
-	load: function (source, offset) {
+	load: function(source, offset){
 		var sourceTpl = Ext.DomHelper.createTemplate({tag: 'source', src: '{src}', type: '{type}'}),
-				player = this.player,
-				i = 0,
-				len = (source && source.length) || 0, src;
+			player = this.player,
+			i = 0,
+			len = (source && source.length) || 0, src;
 
 		// Remove any sources that may be there
-		if (player.innerHTML) {
+		if( player.innerHTML ){
 			player.innerHTML = '';
 			player.load();
 		}
 
-		for (i = 0; i < len; i++) {
+		for(i=0; i<len; i++){
 			src = source[i].source;
-			src = /^\/\//i.test(src) ? (location.protocol + src) : src;
+			src = /^\/\//i.test(src) ? (location.protocol+src) : src;
 			sourceTpl.append(player, {src: src, type: source[i].type}, false);
 		}
 
 		player.load();
 
-		if (offset > 0.0) {
-			this.el.on('loadedmetadata', function () {player.currentTime = offset;}, this, {single: true});
+		if (offset > 0.0){
+			this.el.on('loadedmetadata',function(){player.currentTime = offset;}, this, {single: true});
 		}
 	},
 
-	play: function () {
+	play: function(){
 		this.player.play();
 	},
 
 
-	deactivate: function () {
-		return this.pause.apply(this, arguments);
+	deactivate: function(){
+		return this.pause.apply(this,arguments);
 	},
 
 
 	activate: Ext.emptyFn,
 
 
-	pause: function () {
+	pause: function(){
 		this.player.pause();
 	},
 
-	seek: function (offset) {
+	seek: function(offset){
 		var player = this.player;
-		if (player.readyState === 0) {
-			this.el.on('loadedmetadata', function () {player.currentTime = offset;}, this, {single: true});
+		if (player.readyState === 0){
+			this.el.on('loadedmetadata',function(){player.currentTime = offset;}, this, {single: true});
 		}
-		else {
+		else{
 			player.currentTime = offset;
 		}
 	},
 
-	stop: function () {
+	stop: function(){
 		// Remove the current sources and trigger a load to free the used memory
 		this.player.innerHTML = '';
 		this.player.load();
 	},
 
-	cleanup: function () {
-		if (this.player) {
+	cleanup: function(){
+		if(this.player){
 			this.stop();
 		}
-		if (this.el) {
+		if(this.el){
 			this.el.clearListeners();
 		}
 	}

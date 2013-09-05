@@ -2,69 +2,69 @@
 /*global $AppConfig, Globals, ImageZoomView, NextThought, ReaderPanel, SlideDeck, TemplatesForNotes, UserRepository, WBUtils*/
 Ext.define('NextThought.view.annotations.note.Main', {
 	extend: 'NextThought.view.annotations.note.Panel',
-	alias:  'widget.note-main-view',
+	alias: 'widget.note-main-view',
 
 	requires: [
 		'NextThought.ux.SlideDeck'
 	],
 
-	root:        true,
+	root: true,
 	enableTitle: true,
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'note main-view',
-											cn:  [
-												{
-													cls: 'avatar',
-													tag: 'img', src: Ext.BLANK_IMAGE_URL
-												},
-												{
-													cls: 'meta',
-													cn:  [
-														{ cls: 'controls', cn: [
-															{ cls: 'favorite' },
-															{ cls: 'like' }
-														] },
-														{ cls: 'title'},
-														{ cls: 'name-wrap', cn: [
-															{ tag: 'span', cls: 'name' },
-															{ tag: 'span', cls: 'time'},
-															{ tag: 'span', cls: 'shared-to' }
-														]}
-													]
-												},
-												{ cls: 'clear' },
-												{
-													cls: 'context', cn: [
-													{tag: 'canvas'},
-													{tag: 'span', cls: 'text'}
-												]
-												},
-												{ cls: 'body' },
-												{
-													cls: 'respond',
-													cn:  [
-														{
-															cls: 'reply-options',
-															cn:  [
-																{ cls: 'reply', html: 'Reply' },
-																{ cls: 'share', html: 'Share' },
-																{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
-															]
-														}
-													]
-												}
-											]
-										},
-										{
-											id:  '{id}-body',
-											cls: 'note-replies',
-											cn:  ['{%this.renderContainer(out,values)%}']
-										}
-									]),
+		{
+			cls: 'note main-view',
+			cn: [
+				{
+					cls: 'avatar',
+					tag: 'img', src: Ext.BLANK_IMAGE_URL
+				},
+				{
+					cls: 'meta',
+					cn: [
+						{ cls: 'controls', cn: [
+							{ cls: 'favorite' },
+							{ cls: 'like' }
+						] },
+						{ cls: 'title'},
+						{ cls: 'name-wrap', cn: [
+							{ tag: 'span', cls: 'name' },
+							{ tag: 'span', cls: 'time'},
+							{ tag: 'span', cls: 'shared-to' }
+						]}
+					]
+				},
+				{ cls: 'clear' },
+				{
+					cls: 'context', cn: [
+					{tag: 'canvas'},
+					{tag: 'span', cls: 'text'}
+				]
+				},
+				{ cls: 'body' },
+				{
+					cls: 'respond',
+					cn: [
+						{
+							cls: 'reply-options',
+							cn: [
+								{ cls: 'reply', html: 'Reply' },
+								{ cls: 'share', html: 'Share' },
+								{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			id: '{id}-body',
+			cls: 'note-replies',
+			cn: ['{%this.renderContainer(out,values)%}']
+		}
+	]),
 
 
 	renderSelectors: {
@@ -95,9 +95,9 @@ Ext.define('NextThought.view.annotations.note.Main', {
 	createEditor: function () {
 		this.callParent();
 		this.editor.el.down('.title')
-				.setVisibilityMode(Ext.Element.DISPLAY)
-				.addCls('small')
-				.hide();
+			.setVisibilityMode(Ext.Element.DISPLAY)
+			.addCls('small')
+			.hide();
 	},
 
 	fillInReplies: function () {
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 	fixUpCopiedContext: function (n) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
-				maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
+			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0
 		// when queried at this point.
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 		Ext.each(node.query('iframe'), function (i) {
 			var e = Ext.get(i),
-					w, h, r;
+				w, h, r;
 			if (e.parent('div.externalvideo')) {
 				w = parseInt(e.getAttribute('width'), 10);
 				h = parseInt(e.getAttribute('height'), 10);
@@ -214,8 +214,8 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 		this.replyOptions.show();
 		this.setContext(
-				reader.getDocumentElement(),
-				reader.getCleanContent());
+			reader.getDocumentElement(),
+			reader.getCleanContent());
 	},
 
 
@@ -266,9 +266,9 @@ Ext.define('NextThought.view.annotations.note.Main', {
 	contextAnnotationActions: function (e, dom) {
 		e.stopEvent();
 		var action = (dom.getAttribute('href') || '').replace('#', ''),
-				d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
-				img = d && d.is('img') ? d.dom : null,
-				me = this;
+			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
+			img = d && d.is('img') ? d.dom : null,
+			me = this;
 
 		function openSlideDeck() {
 			me.up('note-window').close();
@@ -287,18 +287,18 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 				/*jslint bitwise: false */ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
-								 msg:        "This will discard the contents of your current message",
-								 scope:      me,
-								 buttons:    Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-								 icon:       'warning-red',
-								 title:      'Are you sure?',
-								 buttonText: {ok: 'caution:OK'},
-								 fn:         function (str) {
-									 if (str === 'ok') {
-										 openSlideDeck();
-									 }
-								 }
-							 });
+					msg: "This will discard the contents of your current message",
+					scope: me,
+					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+					icon: 'warning-red',
+					title: 'Are you sure?',
+					buttonText: {ok: 'caution:OK'},
+					fn: function (str) {
+						if (str === 'ok') {
+							openSlideDeck();
+						}
+					}
+				});
 			}
 			else {
 				openSlideDeck();

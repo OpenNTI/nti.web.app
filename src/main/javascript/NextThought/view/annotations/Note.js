@@ -1,20 +1,20 @@
-Ext.define('NextThought.view.annotations.Note', {
+Ext.define( 'NextThought.view.annotations.Note', {
 	extend: 'NextThought.view.annotations.Highlight',
-	alias:  'widget.note',
+	alias: 'widget.note',
 
 	isNote: true,
 
 
-	constructor: function (config) {
+	constructor: function(config){
 		this.callParent(arguments);
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
 	},
 
 
-	onDestroy: function () {
+	onDestroy: function(){
 		var children = this.getRecord().children || [];
 
-		if (children.length > 0) {
+		if(children.length>0){
 			this.ownerCmp.fireEvent('bubble-replys-up', children);
 		}
 
@@ -22,18 +22,18 @@ Ext.define('NextThought.view.annotations.Note', {
 	},
 
 
-	attachRecord: function (record) {
-		this.mon(record, 'convertedToPlaceholder', 'requestRender');
+	attachRecord: function(record){
+		this.mon(record,'convertedToPlaceholder','requestRender');
 		var r = this.getRecord();
-		if (r) {
-			this.mun(r, 'convertedToPlaceholder', 'requestRender');
+		if( r ){
+			this.mun(r,'convertedToPlaceholder','requestRender');
 		}
 		this.callParent(arguments);
 	},
 
 
-	render: function () {
-		if (this.hasSpecificRange) {
+	render: function(){
+		if(this.hasSpecificRange){
 			return this.callParent(arguments);
 		}
 

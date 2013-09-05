@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.chat.Dock', {
 	extend: 'Ext.panel.Panel',
-	alias:  'widget.chat-dock',
-	id:     'chat-dock', // There should be ONLY ONE instance of this.
+	alias: 'widget.chat-dock',
+	id: 'chat-dock', // There should be ONLY ONE instance of this.
 
 	requires: [
 		'NextThought.view.chat.History'
@@ -9,31 +9,31 @@ Ext.define('NextThought.view.chat.Dock', {
 
 	title: 'Chats',
 
-	ui:           'chat-dock',
-	cls:          'chat-dock',
-	defaultType:  'chat-dock-item',
+	ui: 'chat-dock',
+	cls: 'chat-dock',
+	defaultType: 'chat-dock-item',
 	collapseMode: 'header',
-	collapsible:  true,
-	collapsed:    true,
-	maxHeight:    Math.min(300, Ext.Element.getViewportHeight() * 0.6),
-	overflowX:    'hidden',
-	overflowY:    'auto',
+	collapsible: true,
+	collapsed: true,
+	maxHeight: Math.min(300, Ext.Element.getViewportHeight() * 0.6),
+	overflowX: 'hidden',
+	overflowY: 'auto',
 	animCollapse: false,
-	listeners:    {
+	listeners: {
 		afterRender: 'updateAll',
-		add:         'updateAll',
-		beforeadd:   'synchronizeHeight',
-		remove:      'updateAll'
+		add: 'updateAll',
+		beforeadd: 'synchronizeHeight',
+		remove: 'updateAll'
 	},
 
 
 	constructor: function () {
 		this.items = [
 			{
-				xtype:     'chat-history',
+				xtype: 'chat-history',
 				listeners: {
-					scope:       this,
-					buffer:      100,
+					scope: this,
+					buffer: 100,
 					afterlayout: 'syncHistoryHeight'
 				}
 			}
@@ -63,9 +63,9 @@ Ext.define('NextThought.view.chat.Dock', {
 
 			//add hover instead
 			this.mon(this.placeholder.getEl(), {
-				scope:     this,
+				scope: this,
 				mouseover: 'maybeExpand',
-				mouseout:  'stopExpand'
+				mouseout: 'stopExpand'
 			});
 		}
 		Ext.EventManager.onWindowResize(function () {
@@ -74,9 +74,9 @@ Ext.define('NextThought.view.chat.Dock', {
 
 
 		this.countEl = new Ext.dom.CompositeElement([
-														Ext.DomHelper.append(this.placeholder.getEl(), {cls: 'count', html: '0'}),
-														Ext.DomHelper.append(this.down('header').getEl(), {cls: 'count', html: '0'})
-													]);
+			Ext.DomHelper.append(this.placeholder.getEl(), {cls: 'count', html: '0'}),
+			Ext.DomHelper.append(this.down('header').getEl(), {cls: 'count', html: '0'})
+		]);
 
 		this.placeholder.getSize = function () {
 			return {height: 1};
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.chat.Dock', {
 		}
 
 		var me = this,
-				oldHeight = me.el.getHeight();
+			oldHeight = me.el.getHeight();
 
 		function doSyncHeight() {
 			var h = oldHeight - me.el.getHeight();
@@ -152,15 +152,15 @@ Ext.define('NextThought.view.chat.Dock', {
 		}
 
 		var h = this.getHeight(),
-				d = this.lastKnownHeight;
+			d = this.lastKnownHeight;
 		if (h !== d && Ext.isNumber(d)) {
 			d -= h;
 			if (d && isFinite(d)) {
 				this.animate({
-								 to: {
-									 y: this.getY() + d
-								 }
-							 });
+					to: {
+						y: this.getY() + d
+					}
+				});
 			}
 		}
 
@@ -204,7 +204,7 @@ Ext.define('NextThought.view.chat.Dock', {
 
 	add: function () {
 		var result,
-				args = Ext.Array.slice(arguments);
+			args = Ext.Array.slice(arguments);
 
 		if (this.insertBeforeLast && typeof args[0] !== 'number') {
 			args.unshift(this.items.length - 1);
@@ -227,11 +227,11 @@ Ext.define('NextThought.view.chat.Dock', {
 
 	monitorDockItem: function (cmp) {
 		this.mon(cmp, {
-			scope:           this,
+			scope: this,
 			'count-updated': 'updateCount',
-			'made-visible':  'updateTitle',
-			destroy:         'updateCount',
-			buffer:          1
+			'made-visible': 'updateTitle',
+			destroy: 'updateCount',
+			buffer: 1
 		});
 	},
 
@@ -256,42 +256,42 @@ Ext.define('NextThought.view.chat.Dock', {
 });
 
 Ext.define('NextThought.view.chat.DockItem', {
-	extend:   'Ext.Component',
-	alias:    'widget.chat-dock-item',
+	extend: 'Ext.Component',
+	alias: 'widget.chat-dock-item',
 	requires: [
 		'NextThought.util.Time'
 	],
 
 	cls: 'chat-dock-item',
-	ui:  'chat-dock-item',
+	ui: 'chat-dock-item',
 
 	hidden: true, //start out as hidden
 
 	renderTpl: Ext.DomHelper.markup([
-										{cls: 'close', 'data-qtip': 'Exit Chat'},
-										{cls: 'avatars {avatarCls}', cn: [
-											{cls: 'img1 avatar', style: {backgroundImage: '{img1}'} },
-											{cls: 'img2 avatar', style: {backgroundImage: '{img2}'} },
-											{cls: 'img3 avatar', style: {backgroundImage: '{img3}'} },
-											{cls: 'img4 avatar', style: {backgroundImage: '{img4}'} }
-										]},
-										{cls: 'count'},
-										{cls: 'wrap', cn: [
-											{cls: 'names {namesCls}', html: '{names}', 'data-count': '{count}'},
-											{cls: 'status'}
-										]}
-									]),
+		{cls: 'close', 'data-qtip': 'Exit Chat'},
+		{cls: 'avatars {avatarCls}', cn: [
+			{cls: 'img1 avatar', style: {backgroundImage: '{img1}'} },
+			{cls: 'img2 avatar', style: {backgroundImage: '{img2}'} },
+			{cls: 'img3 avatar', style: {backgroundImage: '{img3}'} },
+			{cls: 'img4 avatar', style: {backgroundImage: '{img4}'} }
+		]},
+		{cls: 'count'},
+		{cls: 'wrap', cn: [
+			{cls: 'names {namesCls}', html: '{names}', 'data-count': '{count}'},
+			{cls: 'status'}
+		]}
+	]),
 
 	renderSelectors: {
-		'countEl':   '.count',
-		'closeEl':   '.close',
-		'namesEl':   '.wrap .names',
-		'statusEl':  '.wrap .status',
+		'countEl': '.count',
+		'closeEl': '.close',
+		'namesEl': '.wrap .names',
+		'statusEl': '.wrap .status',
 		'avatarsEl': '.avatars',
-		'img1':      '.avatars .img1',
-		'img2':      '.avatars .img2',
-		'img3':      '.avatars .img3',
-		'img4':      '.avatars .img4'
+		'img1': '.avatars .img1',
+		'img2': '.avatars .img2',
+		'img3': '.avatars .img3',
+		'img4': '.avatars .img4'
 	},
 
 	constructor: function () {
@@ -348,9 +348,9 @@ Ext.define('NextThought.view.chat.DockItem', {
 
 	fillInInformation: function (roomInfo) {
 		var me = this,
-				occ = roomInfo.get('Occupants'),
-				usernames = [],
-				isGroup = occ.length > 2;
+			occ = roomInfo.get('Occupants'),
+			usernames = [],
+			isGroup = occ.length > 2;
 
 		this.mon(roomInfo, 'changed', 'fillInInformation', this, {single: true});
 
@@ -442,10 +442,10 @@ Ext.define('NextThought.view.chat.DockItem', {
 
 	updateStatus: function () {
 		var display, roomInfo = this.associatedWindow.roomInfo,
-				occ = roomInfo.get('Occupants'),
-				status = this.lastUpdated,
-				cur = new Date().getTime(),
-				tenMinutesAgo = new Date();
+			occ = roomInfo.get('Occupants'),
+			status = this.lastUpdated,
+			cur = new Date().getTime(),
+			tenMinutesAgo = new Date();
 
 		tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
 

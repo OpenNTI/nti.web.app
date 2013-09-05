@@ -1,19 +1,19 @@
 Ext.define('NextThought.view.account.history.mixins.Note', {
-	alias:  'widget.history-item-note',
+	alias: 'widget.history-item-note',
 	keyVal: "application/vnd.nextthought.note",
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-													{
-														cls: 'history note',
-														cn:  [
-															{cls: 'path', html: '{path}'},
-															{cls: 'location', html: '{location}'},
-															{cls: 'body', cn: [
-																{tag: 'span', html: '{preview}'}
-															]}
-														]
-													}
-												])),
+		{
+			cls: 'history note',
+			cn: [
+				{cls: 'path', html: '{path}'},
+				{cls: 'location', html: '{location}'},
+				{cls: 'body', cn: [
+					{tag: 'span', html: '{preview}'}
+				]}
+			]
+		}
+	])),
 
 
 	constructor: function (config) {
@@ -37,19 +37,19 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 	fillInData: function (rec) {
 		LocationMeta.getMeta(rec.get('ContainerId'), function (meta) {
 			var lineage = [],
-					location = '';
+				location = '';
 
 			lineage = ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'), true);
 			if (!Ext.isEmpty(lineage)) {
 				location = lineage.shift();
 				lineage.reverse();
 			}
-
+			
 			rec.set({
-						'location': Ext.String.ellipsis(location, 150, false),
-						'path':     lineage.join(' / ')//,
-						//'textBodyContent': rec.getBodyText && rec.getBodyText()
-					});
+				'location': Ext.String.ellipsis(location, 150, false),
+				'path': lineage.join(' / ')//,
+				//'textBodyContent': rec.getBodyText && rec.getBodyText()
+			});
 		});
 
 		// rec.on("convertedToPlaceholder", function(){

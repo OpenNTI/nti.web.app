@@ -1,13 +1,13 @@
-Ext.define('NextThought.store.Providers', {
-	extend:   'Ext.data.Store',
+Ext.define('NextThought.store.Providers',{
+	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'
 	],
-	model:    'NextThought.model.ClassInfo',
+	model: 'NextThought.model.ClassInfo',
 	autoLoad: false,
-	proxy:    {
-		type:    'nti',
-		reader:  {
+	proxy: {
+		type: 'nti',
+		reader: {
 			type: 'nti',
 			root: 'Items'
 		},

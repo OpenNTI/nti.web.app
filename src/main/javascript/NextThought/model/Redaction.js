@@ -15,18 +15,18 @@ Ext.define('NextThought.model.Redaction', {
 
 		DEFAULT_TEXT: '<big>***</big>',
 
-		createFromHighlight: function (hl, block) {
+		createFromHighlight: function(hl, block){
 			return this.create({
-								   ContainerId:        hl.get('ContainerId'),
-								   sharedWith:         [],
-								   prohibitReSharing:  hl.get('prohibitReSharing'),
-								   tags:               hl.get('tags'),
-								   selectedText:       hl.get('selectedText'),
-								   applicableRange:    hl.get('applicableRange'),
-								   replacementContent: this.DEFAULT_TEXT,
+				ContainerId: hl.get('ContainerId'),
+				sharedWith: [],
+				prohibitReSharing: hl.get('prohibitReSharing'),
+				tags: hl.get('tags'),
+				selectedText: hl.get('selectedText'),
+				applicableRange: hl.get('applicableRange'),
+				replacementContent: this.DEFAULT_TEXT,
 //				style: block? 'block':'inline',
-								   redactionExplanation: block ? 'Why was this redacted?' : null
-							   });
+				redactionExplanation: block? 'Why was this redacted?' : null
+			});
 		}
 	},
 

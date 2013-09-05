@@ -1,17 +1,17 @@
-Ext.define('NextThought.view.profiles.TabPanel', {
+Ext.define('NextThought.view.profiles.TabPanel',{
 	extend: 'Ext.tab.Panel',
-	alias:  'widget.profile-tabs',
+	alias: 'widget.profile-tabs',
 
 	plain: true,
-	ui:    'profile',
-
+	ui: 'profile',
+	
 	componentLayout: 'profiletabpanel',
 
 	tabBar: {
-		plain:    true,
-		baseCls:  'nti',
-		ui:       'profile-tabbar',
-		cls:      'profile-tabs',
+		plain: true,
+		baseCls: 'nti',
+		ui: 'profile-tabbar',
+		cls: 'profile-tabs',
 		defaults: { plain: true, ui: 'profile-tab' }
 	}
 
@@ -26,8 +26,8 @@ Ext.define('NextThought.view.profiles.TabPanel', {
  */
 Ext.define('NextThought.layout.component.ProbileTabPanelLayout', {
 	extend: 'Ext.layout.component.Dock',
-	alias:  'layout.profiletabpanel',
-	type:   'profiletabpanel',
+	alias: 'layout.profiletabpanel',
+	type: 'profiletabpanel',
 
 	/**
 	 * The crux. The layout decideds to re-home the tabbar element if this method returns false.
@@ -37,7 +37,7 @@ Ext.define('NextThought.layout.component.ProbileTabPanelLayout', {
 	 * @param position {Object} Ignored by this override
 	 * @returns {boolean}
 	 */
-	isValidParent: function (item, target, position) {
+	isValidParent: function(item, target, position) {
 		if (target.hasCls('x-panel-profile')) {
 			return true;
 		}

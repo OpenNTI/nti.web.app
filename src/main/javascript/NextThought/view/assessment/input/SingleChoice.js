@@ -1,23 +1,19 @@
-Ext.define('NextThought.view.assessment.input.SingleChoice', {
+Ext.define('NextThought.view.assessment.input.SingleChoice',{
 	extend: 'NextThought.view.assessment.input.MultipleChoice',
-	alias:  'widget.question-input-multiplechoicepart',
+	alias: 'widget.question-input-multiplechoicepart',
 
-	initComponent: function () {
+	initComponent: function(){
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData, {
+		this.renderData = Ext.apply(this.renderData,{
 			'choice-style': 'single'
 		});
 	},
 
-	choiceClicked: function (e) {
-		if (this.submitted) {
-			return;
-		}
+	choiceClicked: function(e){
+		if(this.submitted){return;}
 
-		var c = e.getTarget('.choice', null, true);
-		if (!c) {
-			return;
-		}
+		var c = e.getTarget('.choice',null,true);
+		if(!c){return;}
 
 		this.getEl().select('.choice .control').removeCls('checked');
 
@@ -26,7 +22,7 @@ Ext.define('NextThought.view.assessment.input.SingleChoice', {
 	},
 
 
-	getValue: function () {
+	getValue: function(){
 		var r = this.callParent();
 		return r[0];
 	}

@@ -8,7 +8,7 @@
  */
 Ext.define('NextThought.view.forums.Forum', {
 	extend: 'Ext.view.View',
-	alias:  ['widget.forums-forum', 'widget.forums-topic-list'],
+	alias: ['widget.forums-forum', 'widget.forums-topic-list'],
 
 	mixins: {
 		HeaderLock: 'NextThought.view.forums.mixins.HeaderLock'
@@ -18,10 +18,10 @@ Ext.define('NextThought.view.forums.Forum', {
 		'NextThought.util.Time'
 	],
 
-	cls:                     'topic-list list',
-	itemSelector:            '.topic-list-item',
+	cls: 'topic-list list',
+	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
-	loadMask:                false,
+	loadMask: false,
 //	loadingHeight: 300,
 
 	listeners: {
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 	headerTpl: Ext.DomHelper.createTemplate({
-												cls: 'header-container', cn: {
+		cls: 'header-container', cn: {
 			cls: 'forum-topic-list header', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'new-topic', html: 'New Discussion'}
@@ -41,35 +41,35 @@ Ext.define('NextThought.view.forums.Forum', {
 				{ cls: 'path', html: '{forumTitle}&nbsp;'}
 			]
 		}
-											}),
+	}),
 
 	tpl: Ext.DomHelper.markup([
-								  { tag: 'tpl', 'for': '.', cn: [
-									  { cls: 'topic-list-item', cn: [
-										  { cls: 'controls', cn: [
-											  { cls: 'favorite {favoriteState}' },
-											  { cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
-										  ]},
-										  { cls: 'title', html: '{title}' },
-										  { cls: 'meta', cn: [
-											  { tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}' },
-											  { tag: 'tpl', 'if': '!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
-												  { tag: 'span', cls: 'descendant', cn: [
-													  'Posted by ', {tag: 'span', cls: 'name link', html: '{Creator}'},
-													  ' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
-												  ]}
-											  ]},
-											  { tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
-												  { tag: 'span', cls: 'descendant', cn: [
-													  'Commented on by ', {tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
-													  ' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
-												  ]}
-											  ]}
+		{ tag: 'tpl', 'for': '.', cn: [
+			{ cls: 'topic-list-item', cn: [
+				{ cls: 'controls', cn: [
+					{ cls: 'favorite {favoriteState}' },
+					{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
+				]},
+				{ cls: 'title', html: '{title}' },
+				{ cls: 'meta', cn: [
+					{ tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}' },
+					{ tag: 'tpl', 'if': '!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
+						{ tag: 'span', cls: 'descendant', cn: [
+							'Posted by ', {tag: 'span', cls: 'name link', html: '{Creator}'},
+							' {[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'
+						]}
+					]},
+					{ tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
+						{ tag: 'span', cls: 'descendant', cn: [
+							'Commented on by ', {tag: 'span', cls: 'name link', html: '{[values["NewestDescendant"].get("Creator")]}'},
+							' {[TimeUtils.timeDifference(new Date(),values["NewestDescendant"].get("CreatedTime"))]}'
+						]}
+					]}
 
-										  ]}
-									  ]}
-								  ]}
-							  ]),
+				]}
+			]}
+		]}
+	]),
 
 
 	collectData: function () {
@@ -80,15 +80,15 @@ Ext.define('NextThought.view.forums.Forum', {
 
 
 	//deferEmptyText: false,
-	emptyText:   Ext.DomHelper.markup({
-										  cls:  'empty-forum',
-										  html: 'Be the first to start a discussion.',
-										  cn:   {cn: [
-											  { tag: 'a', html: 'Go back', href: '#back'},
-											  ' &middot ',
-											  { tag: 'a', html: 'New discussion', href: '#'}
-										  ]}
-									  }),
+	emptyText: Ext.DomHelper.markup({
+		cls: 'empty-forum',
+		html: 'Be the first to start a discussion.',
+		cn: {cn: [
+			{ tag: 'a', html: 'Go back', href: '#back'},
+			' &middot ',
+			{ tag: 'a', html: 'New discussion', href: '#'}
+		]}
+	}),
 
 
 	initComponent: function () {
@@ -96,10 +96,10 @@ Ext.define('NextThought.view.forums.Forum', {
 		this.callParent(arguments);
 
 		this.mon(this.store, {
-			scope:  this,
-			add:    this.incrementTopicCount,
+			scope: this,
+			add: this.incrementTopicCount,
 			remove: this.decrementTopicCount,
-			load:   this.updateTopicCount
+			load: this.updateTopicCount
 		});
 		this.on('refresh', this.fillInNewestDescendant, this);
 	},
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		var map = {}, me = this;
 		this.store.each(function (r) {
 			var desc = r.get('NewestDescendant'),
-					creator = desc ? desc.get('Creator') : undefined;
+				creator = desc ? desc.get('Creator') : undefined;
 
 			if (creator && !creator.isModel) {
 				if (Ext.isArray(map[creator])) {
@@ -125,7 +125,7 @@ Ext.define('NextThought.view.forums.Forum', {
 			var recs = map[resolvedUser.get('Username')] || [];
 			Ext.each(recs, function (rec) {
 				var desc = rec.get('NewestDescendant'),
-						recIdx = -1;
+					recIdx = -1;
 				if (desc) {
 					desc.set('Creator', resolvedUser);
 					//When a field is another model object and one of it's properties change,
@@ -152,7 +152,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	itemUpdate: function (record, index, node) {
 		//this.fillInNewestDescendant();
 		var newestDescendant = record.get('NewestDescendant'),
-				creator = newestDescendant && newestDescendant.get('Creator'), me = this;
+			creator = newestDescendant && newestDescendant.get('Creator'), me = this;
 
 		function resolve(user) {
 			record.get('NewestDescendant').set('Creator', user);
@@ -182,20 +182,20 @@ Ext.define('NextThought.view.forums.Forum', {
 		if (Ext.isEmpty(this.record.getLink('add'))) {
 			this.headerEl.down('.new-topic').remove();
 			this.emptyText = Ext.DomHelper.markup({
-													  cls:  'empty-forum',
-													  html: 'No discussions available.',
-													  cn:   {cn: [
-														  { tag: 'a', html: 'Go back', href: '#back'}
-													  ]}
-												  });
+				cls: 'empty-forum',
+				html: 'No discussions available.',
+				cn: {cn: [
+					{ tag: 'a', html: 'Go back', href: '#back'}
+				]}
+			});
 		}
 
 		this.mon(this.headerEl, 'click', 'onHeaderClick');
 
 		this.on({
-					'activate':   'onActivate',
-					'itemupdate': 'itemUpdate'
-				});
+			'activate': 'onActivate',
+			'itemupdate': 'itemUpdate'
+		});
 
 		if (Ext.is.iPad) {
 			// Absorb event for scrolling
@@ -224,9 +224,9 @@ Ext.define('NextThought.view.forums.Forum', {
 
 	getPath: function () {
 		var p = this.path,
-				o = this.ownerCt,
-				l = o && o.getLayout(),
-				items, index, c;
+			o = this.ownerCt,
+			l = o && o.getLayout(),
+			items, index, c;
 
 		if (l) {
 			items = l.getLayoutItems();
@@ -298,8 +298,8 @@ Ext.define('NextThought.view.forums.Forum', {
 
 	onBeforeItemClick: function (record, item, idx, event, opts) {
 		var t = event && event.getTarget && event.getTarget(),
-				d = record.get && record.get('NewestDescendant'),
-				topicHref;
+			d = record.get && record.get('NewestDescendant'),
+			topicHref;
 
 		function isDescendantClick(tar) {
 			if (!tar) {
@@ -307,7 +307,7 @@ Ext.define('NextThought.view.forums.Forum', {
 			}
 
 			var target = Ext.fly(tar),
-					sel = '.descendant';
+				sel = '.descendant';
 
 			return target.is(sel) || target.parent(sel, true);
 		}

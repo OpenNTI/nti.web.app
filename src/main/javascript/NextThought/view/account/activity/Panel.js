@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.activity.Panel', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.activity-panel',
+	alias: 'widget.activity-panel',
 
 	requires: [
 		'NextThought.view.account.activity.Popout',
@@ -32,46 +32,41 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	items: [
 		{
 			activitiesHolder: 1,
-			xtype:            'box',
-			autoEl:           {
-				cn: [
-					{
-						cls: "activity loading",
-						cn:  [
-							{cls: 'name', tag: 'span', html: 'Loading...'},
-							' please wait.'
-						]
-					}
-				]
+			xtype: 'box',
+			autoEl:{
+				cn:[{
+					cls:"activity loading",
+					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
+				}]
 			}
 		}
 	],
 
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-														{tag: 'tpl', 'for': '.', cn: [
-															{tag: 'tpl', 'if': 'activity', cn: [
-																{
-																	cls: 'activity {type}',
-																	id:  '{guid}',
-																	cn:  [
-																		{cls: 'name', tag: 'span', html: '{name}'},
-																		{tag: 'tpl', 'if': 'verb', cn: [
-																			{tag: 'span', cls: 'verb', html: ' {verb} '}
-																		]},
-																		' {message} ',
-																		{tag: 'tpl', 'if': 'with', cn: ['with {with}']}
-																	]
-																}
-															]},
-															{tag: 'tpl', 'if': 'label', cn: [
-																{
-																	cls: 'divider', html: '{label}'
-																}
-															]}
-														]}
+		{tag: 'tpl', 'for': '.', cn: [
+			{tag: 'tpl', 'if': 'activity', cn: [
+				{
+					cls: 'activity {type}',
+					id: '{guid}',
+					cn: [
+						{cls: 'name', tag: 'span', html: '{name}'},
+						{tag: 'tpl', 'if': 'verb', cn: [
+							{tag: 'span', cls: 'verb', html: ' {verb} '}
+						]},
+						' {message} ',
+						{tag: 'tpl', 'if': 'with', cn: ['with {with}']}
+					]
+				}
+			]},
+			{tag: 'tpl', 'if': 'label', cn: [
+				{
+					cls: 'divider', html: '{label}'
+				}
+			]}
+		]}
 
-													])),
+	])),
 
 
 	initComponent: function () {
@@ -81,17 +76,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//FIXME, eww more datachanged listening.
 		//use add, remove, load, and refresh instead like for FLs
 		this.mon(this.store, {
-			scope:       this,
+			scope: this,
 			datachanged: this.maybeReload,
 			//load: this.maybeReload,
 			//load: function(){ this.removeMask(); },
-			clear:       function () {
+			clear: function () {
 				console.log('stream clear', arguments);
 			},
-			remove:      function () {
+			remove: function () {
 				console.log('stream remove', arguments);
 			},
-			update:      function () {
+			update: function () {
 				console.log('stream update', arguments);
 			}
 		});
@@ -102,15 +97,15 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//we don't listen to contacts-updated b/c we don't want to do a lot of work when people add/remove
 		//contacts
 		this.mon(Ext.getStore('FriendsList'), {
-			scope:                this,
+			scope: this,
 			'contacts-refreshed': 'maybeReload'
 		});
 
 		this.on({
-					scope:            this,
-					activate:         'onActivate',
-					'scroll-stopped': 'onScrollStopped'
-				});
+			scope: this,
+			activate: 'onActivate',
+			'scroll-stopped': 'onScrollStopped'
+		});
 
 		this.mixins.activityFilter.setUpMenu.call(this, this.filter);
 	},
@@ -120,19 +115,19 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		this.callParent(arguments);
 
 		this.mon(this.el, {
-			scope:       this,
-			'click':     'itemClick',
+			scope: this,
+			'click': 'itemClick',
 			'mouseover': 'itemHover',
-			'scroll':    'onScroll'
+			'scroll': 'onScroll'
 		});
 
 		this.mon(this.down('box').getEl(), 'scroll', 'viewScrollHandler', this);
 
 		this.itemClickMap = {
-			'personalblogentry':      this.blogEntryClicked,
-			'personalblogcomment':    this.blogCommentItemClicked,
+			'personalblogentry': this.blogEntryClicked,
+			'personalblogcomment': this.blogCommentItemClicked,
 			'communityheadlinetopic': this.forumTopicClicked,
-			'generalforumcomment':    this.forumCommentClicked
+			'generalforumcomment': this.forumCommentClicked
 		};
 
 		this.addMask();
@@ -167,9 +162,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	onScroll: function (e, dom) {
 		var el = dom.lastChild,
-				direction = (this.lastScrollTop || 0) - dom.scrollTop,
-				offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
-				top = offset - dom.scrollTop;
+			direction = (this.lastScrollTop || 0) - dom.scrollTop,
+			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
+			top = offset - dom.scrollTop;
 
 		this.lastScrollTop = dom.scrollTop;
 
@@ -187,7 +182,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	addMask: function (width, height) {
 		var el = this.el && Ext.get(this.el.dom.firstChild),
-				mask = this.el && this.el.mask('Loading...');
+			mask = this.el && this.el.mask('Loading...');
 
 		if (el && el.getHeight() > 0) {
 			mask.setHeight(el.getHeight());
@@ -204,7 +199,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	fetchMore: function () {
 		var s = this.store,
-				centerButton = this.el.down('.center-button');
+			centerButton = this.el.down('.center-button');
 
 		if (!s.hasOwnProperty('data') || s.loading) {
 			return;
@@ -243,8 +238,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	reloadActivity: function (store) {
 		var container = this.down('box[activitiesHolder]'),
-				totalExpected,
-				items = [], oldestRecord, me = this;
+			totalExpected,
+			items = [], oldestRecord, me = this;
 
 		if (store && !store.isStore) {
 			store = null;
@@ -332,7 +327,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			if (!store.mayHaveAdditionalPages) {
 				Ext.DomHelper.overwrite(container.getEl(), {
 					cls: "activity nothing rhp-empty-list",
-					cn:  ['No Activity, try another filter?']
+					cn: ['No Activity, try another filter?']
 				});
 			}
 			container.updateLayout();
@@ -359,9 +354,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	changeToActivity: function (c, maybeFinish, extend) {
 		var item = c.get('Item'),
-				cid = item ? item.get('ContainerId') : undefined,
-				guid = guidGenerator(),
-				activity;
+			cid = item ? item.get('ContainerId') : undefined,
+			guid = guidGenerator(),
+			activity;
 
 		function getType(item) {
 			if (!item) {
@@ -380,14 +375,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return;
 		}
 		activity = this.stream[guid] = Ext.apply({
-													 activity:    true,
-													 guid:        guid,
-													 name:        c.get('Creator'),
-													 record:      item,
-													 type:        getType(item),
-													 ContainerId: cid,
-													 ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
-												 }, this.getMessage(c, cid, guid, maybeFinish, extend));
+			activity: true,
+			guid: guid,
+			name: c.get('Creator'),
+			record: item,
+			type: getType(item),
+			ContainerId: cid,
+			ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
+		}, this.getMessage(c, cid, guid, maybeFinish, extend));
 
 		Ext.callback(extend);
 		UserRepository.getUser(c.get('Creator'), function (u) {
@@ -401,9 +396,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	getMessage: function (change, cid, guid, maybeFinish, extend) {
 		var item = change.get('Item'),
-				type = change.get('ChangeType'),
-				stream = this.stream,
-				result = null;
+			type = change.get('ChangeType'),
+			stream = this.stream,
+			result = null;
 
 		//TODO: XXX: FIX this to be better... if/ifelse/else branches are ugly.
 
@@ -453,14 +448,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		else if (item instanceof NextThought.model.forums.HeadlineTopic) {
 			result = {
 				message: Ext.String.ellipsis(item.get('headline').get('title'), 50, true),
-				verb:    item.getActivityLabel()
+				verb: item.getActivityLabel()
 			};
 		}
 
 		else if (item instanceof NextThought.model.forums.Post) {
 			result = {
 				message: Ext.String.format('&ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(), 50, true)),
-				verb:    'commented'
+				verb: 'commented'
 			};
 		}
 
@@ -473,7 +468,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	itemClick: function (e) {
 		var activityTarget = e.getTarget('div.activity:not(.deleted)', null, true),
-				guid, item, rec, me = this, className;
+			guid, item, rec, me = this, className;
 
 		guid = (activityTarget || {}).id;
 		item = this.stream[guid];
@@ -577,11 +572,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return;
 		}
 		var me = this,
-				target = e.getTarget('div.activity', null, true),
-				guid = (target || {}).id,
-				item = me.stream[guid],
-				rec = (item || {}).record,
-				popout = NextThought.view.account.activity.Popout;
+			target = e.getTarget('div.activity', null, true),
+			guid = (target || {}).id,
+			item = me.stream[guid],
+			rec = (item || {}).record,
+			popout = NextThought.view.account.activity.Popout;
 
 
 		if (rec && rec.getClassForModel) {
@@ -603,7 +598,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	viewScrollHandler:   function (e) {
+	viewScrollHandler: function (e) {
 		//NOTE: we want to avoid trying to display the popup while the user is scrolling.
 		var me = this;
 		clearTimeout(me.scrollingTimer);
@@ -620,10 +615,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	//also belong here.
 	belongsInMyContacts: function (change, flStore, communities, noVerify) {
 		var belongs = false,
-				username = $AppConfig.username,
-				item = change.get('Item'),
-				sharedWith = item.get('sharedWith') || [],
-				creator = item.get('Creator');
+			username = $AppConfig.username,
+			item = change.get('Item'),
+			sharedWith = item.get('sharedWith') || [],
+			creator = item.get('Creator');
 
 		if (/circled/i.test(change.get('ChangeType'))) {
 			belongs = true;
@@ -644,10 +639,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	//If there is a community in the shared with list
 	//it goes in the community tag
-	belongsInCommunity:  function (change, flStore, communities, noVerify) {
+	belongsInCommunity: function (change, flStore, communities, noVerify) {
 		var item = change.get('Item'),
-				sharedWith = item.get('sharedWith') || [],
-				accepted = false, belongsInContacts;
+			sharedWith = item.get('sharedWith') || [],
+			accepted = false, belongsInContacts;
 
 		Ext.each(sharedWith, function (u) {
 			if (Ext.Array.contains(communities, u)) {
@@ -658,7 +653,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		});
 
 		//Topic and posts are PUBLIC. So we'll let them through
-		if (item.isAlwaysPublic) {
+		if(item.isAlwaysPublic){
 			accepted = true;
 		}
 
@@ -676,9 +671,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	filterStore: function (change) {
 		var communities = ($AppConfig.userObject.getCommunities() || []),
-				community = (this.filter === 'inCommunity'),
-				flStore = Ext.getStore('FriendsList'),
-				me = this, communityNames = [];
+			community = (this.filter === 'inCommunity'),
+			flStore = Ext.getStore('FriendsList'),
+			me = this, communityNames = [];
 
 		//Filter out "Modified" change events for community headline
 		//topics.  See trello 1269
@@ -687,12 +682,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				return true;
 			}
 			var type = c.get('ChangeType') || '',
-					item = c.get('Item'), mime;
+				item = c.get('Item'), mime;
 
 			if (item && (/modified/i).test(type)) {
 				mime = item.get('MimeType');
 				if (mime &&
-						((/.*?communityheadlinetopic$/i).test(mime) || (/.*?personalblogentry$/i).test(mime))) {
+					((/.*?communityheadlinetopic$/i).test(mime) || (/.*?personalblogentry$/i).test(mime))) {
 					return false;
 				}
 			}
@@ -757,7 +752,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		// Since we want 'Everyone' to imply a combination of things in your contacts
 		// and those that are publicly shared with your community
 		// We'll stop passing the 'inCommunity' filter, since that would only return things that are publicly shared.
-		if (this.filter === 'inCommunity') {
+		if(this.filter === 'inCommunity'){
 			Ext.Array.remove(filterTypes, this.filter);
 		}
 
@@ -766,11 +761,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		s.removeAll();
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn:    'relevance',
+			sortOn: 'relevance',
 			sortOrder: 'descending',
-			filters:   filterTypes.join(','),
+			filters: filterTypes.join(','),
 			filterOperator: (filterTypes.length > 1) ? '0' : '1',
-			accept:    mimeTypes.join(',')
+			accept: mimeTypes.join(',')
 		});
 
 		this.addMask();

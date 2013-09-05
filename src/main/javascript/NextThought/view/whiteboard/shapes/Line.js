@@ -1,29 +1,29 @@
-Ext.define('NextThought.view.whiteboard.shapes.Line', {
-	extend: 'NextThought.view.whiteboard.shapes.Base',
+Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
+	extend:	'NextThought.view.whiteboard.shapes.Base',
 
 
-	getShapeName: function () {
+	getShapeName: function(){
 		return 'Line';
 	},
 
 
-	draw: function (ctx, renderCallback) {
+	draw: function(ctx,renderCallback){
 		var t = this.transform,
-				xy = this.getEndPoint();
+			xy = this.getEndPoint();
 
-		this.transform = { 'a': 1, 'd': 1, 'tx': t.tx, 'ty': t.ty };
+		this.transform = { 'a':1, 'd':1, 'tx':t.tx, 'ty':t.ty };
 		this.callParent(arguments);
 		this.transform = t;
 
 		ctx.beginPath();
-		ctx.moveTo(0, 0);
-		ctx.lineTo(xy[0], xy[1]);
+		ctx.moveTo(0,0);
+		ctx.lineTo(xy[0],xy[1]);
 		ctx.closePath();
 
 		delete this.cache.fill;
 		this.bbox = {
-			x: 0, w: 1,
-			y: (-ctx.lineWidth * 3 - 40 / ctx.canvas.width) / 2, h: (ctx.lineWidth * 3 + 40 / ctx.canvas.width)
+			x: 0,	w: 1,
+			y: (-ctx.lineWidth*3 - 40/ctx.canvas.width)/2,	h: (ctx.lineWidth*3 + 40/ctx.canvas.width)
 		};
 
 		this.performFillAndStroke(ctx);
@@ -31,10 +31,10 @@ Ext.define('NextThought.view.whiteboard.shapes.Line', {
 	},
 
 
-	getEndPoint: function (m) {
+	getEndPoint: function(m){
 		m = m || new NTMatrix(this.transform);
 		var scale = m.getScale(true),
-				rad = m.getRotation();
+			rad = m.getRotation();
 		return [
 			scale * Math.cos(rad),
 			scale * Math.sin(rad)
@@ -42,16 +42,16 @@ Ext.define('NextThought.view.whiteboard.shapes.Line', {
 	},
 
 
-	modify: function (nib, x1, y1) {
+	modify: function(nib,	x1,y1){
 		var m = new NTMatrix(this.transform),
-				t = m.getTranslation(),
-				p = [t[0], t[1]];
+			t = m.getTranslation(),
+			p = [t[0],t[1]];
 
 
-		p.push(x1, y1);
+		p.push(x1,y1);
 
 		m = new NTMatrix();
-		m.translate(t[0], t[1]);
+		m.translate(t[0],t[1]);
 		m.scale(WBUtils.getDistance(p));
 		//full range 0-2PI not just -PI/2 - PI/2
 		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
@@ -60,11 +60,11 @@ Ext.define('NextThought.view.whiteboard.shapes.Line', {
 	},
 
 
-	showNibs: function (ctx) {
+	showNibs: function(ctx){
 
 		ctx.save();
 
-		var m = new NTMatrix(this.transform), xy, drawMatrix = new NTMatrix(), t, scale, rot;
+		var m = new NTMatrix(this.transform), xy, drawMatrix= new NTMatrix(), t, scale, rot;
 
 		m.scaleAll(ctx.canvas.width);
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.whiteboard.shapes.Line', {
 		drawMatrix.scale(scale[0], scale[1]);
 		drawMatrix.rotate(rot);
 
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		ctx.setTransform(1,0,0,1,0,0);
 
 		ctx.lineWidth = 2;
 		ctx.beginPath();

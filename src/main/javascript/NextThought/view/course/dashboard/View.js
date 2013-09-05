@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.course.dashboard.View', {
 	extend: 'NextThought.view.course.dashboard.AbstractView',
-	alias:  'widget.course-dashboard',
+	alias: 'widget.course-dashboard',
 
 	requires: [
 		'NextThought.view.course.dashboard.tiles.*'
@@ -14,10 +14,10 @@ Ext.define('NextThought.view.course.dashboard.View', {
 		}
 
 		var l = ContentUtils.getLocation(pageInfo),
-				me = this,
-				toc, course,
-				courseNavStore,
-				date = this.self.dateOverride || new Date();//now
+			me = this,
+			toc, course,
+			courseNavStore,
+			date = this.self.dateOverride || new Date();//now
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
@@ -29,21 +29,21 @@ Ext.define('NextThought.view.course.dashboard.View', {
 			}
 
 			this.queryTiles(
-					date, course, l,
-					courseNavStore.getCurrentBy(date),
-					function (tiles) {
-						try {
-							me.setTiles(tiles);
-						}
-						catch (e) {
-							console.error(e.stack || e.message || e);
-						}
-						finally {
-							if (me.el) {
-								me.el.unmask();
-							}
+				date, course, l,
+				courseNavStore.getCurrentBy(date),
+				function (tiles) {
+					try {
+						me.setTiles(tiles);
+					}
+					catch (e) {
+						console.error(e.stack || e.message || e);
+					}
+					finally {
+						if (me.el) {
+							me.el.unmask();
 						}
 					}
+				}
 			);
 		}
 	},
@@ -65,10 +65,10 @@ Ext.define('NextThought.view.course.dashboard.View', {
 	 */
 	queryTiles: function (date, course, location, courseNode, callback) {
 		var NS = NextThought.view.course.dashboard.tiles,
-				tiles = [],
-				queue = [],
-				me = this,
-				push = tiles.push;
+			tiles = [],
+			queue = [],
+			me = this,
+			push = tiles.push;
 
 		Ext.Object.each(NS, function (clsName, cls) {
 			var fn = cls.getTileFor;

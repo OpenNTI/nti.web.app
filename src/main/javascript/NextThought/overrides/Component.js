@@ -1,46 +1,47 @@
 Ext.define('NextThought.overrides.Component', {
 	override: 'Ext.Component',
-	requires: ['NextThought.mixins.Delegation'],
+	requires:['NextThought.mixins.Delegation'],
 
-	afterRender: function () {
+	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
-		if (me.tooltip) {
+		if(me.tooltip){
 			me.setNTTooltip(me.tooltip);
-			me.el.set({title: undefined});
+			me.el.set({title:undefined});
 		}
 	},
 
 
-	setNTTooltip: function (tooltip) {
+	setNTTooltip: function(tooltip) {
 		var me = this;
-		if (!Ext.isObject(tooltip)) {
+		if ( !Ext.isObject(tooltip) ) {
 			Ext.QuickTips.register({
-									   target: me.getEl().id,
-									   text:   tooltip
-								   });
+				target: me.getEl().id,
+				text: tooltip
+			});
 		}
 	},
 
-	constructor: function () {
+	constructor: function(){
 		this.shadow = false;
 		this.callParent(arguments);
 		this.mixins.delegation.constructor.call(this);
 	},
 
 
-	rtlSetLocalX: function (x) {
+	rtlSetLocalX: function(x){
 		var style = this.el.dom.style;
-		style.left = 'auto';
-		style.right = (x === null) ? 'auto' : x + 'px';
+        style.left = 'auto';
+        style.right = (x === null) ? 'auto' : x + 'px';
 	},
 
 
-	isOwnerLayout: function (type) {
+
+	isOwnerLayout: function(type){
 		var o = this.ownerLayout;
 		return o && o.type === type;
 	}
 
-}, function () {
-	Ext.Component.mixin('delegation', NextThought.mixins.Delegation);
+},function(){
+	Ext.Component.mixin('delegation',NextThought.mixins.Delegation);
 });

@@ -1,18 +1,18 @@
 Ext.define('NextThought.controller.Application', {
-	extend:   'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 	requires: [
 		'NextThought.Library'
 	],
 
-	views: ['Main', 'MessageBar'],
+	views: ['Main','MessageBar'],
 
 	launchToken: {},
 
-	init: function () {
+	init: function() {
 		this.application.registerInitializeTask(this.launchToken);
 
 		Library.on('loaded', this.restore, this, {single: true});
-		this.application.on('finished-loading', function () {
+		this.application.on('finished-loading', function(){
 			NextThought.isInitialized = true;
 			Globals.removeLoaderSplash();
 
@@ -22,27 +22,27 @@ Ext.define('NextThought.controller.Application', {
 			//may be a deterent.  Rather do it when we actually need flash (show it when a content page has a video,
 			//when the slide view is launched, etc..  Still this is better than
 			//the hard gate we were imposing...
-			if (!swfobject.hasFlashPlayerVersion("9.0.18") && !Ext.is.iPad) {
+			if(!swfobject.hasFlashPlayerVersion("9.0.18") && !Ext.is.iPad){
 				Ext.widget('message-bar', {
-					renderTo:    Ext.getBody(),
+					renderTo: Ext.getBody(),
 					messageType: 'flash-required',
-					message:     {cls: 'message',
-						tag:           'span',
-						cn:            [
-							'Portions of this application may require Adobe Flash Player to work correctly.',
-							{tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Download it here.', target: '_blank'}
-						]}
+					message: {cls: 'message',
+							  tag: 'span',
+							  cn: [
+								  'Portions of this application may require Adobe Flash Player to work correctly.',
+								  {tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Download it here.', target: '_blank'}
+							  ]}
 				});
 			}
 
 		});
 	},
 
-	restore: function () {
-		try {
-			this.getController('State').fireEvent('restore', PREVIOUS_STATE);
+	restore: function(){
+		try{
+			this.getController('State').fireEvent('restore',PREVIOUS_STATE);
 		}
-		catch (e) {//restoring state
+		catch(e){//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);
 			this.getController('Navigation').setView('profile');
 		}
@@ -51,11 +51,11 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	openViewport: function () {
-		try {
+	openViewport: function(){
+		try{
 			Ext.widget('master-view');
 		}
-		catch (e1) {
+		catch(e1){
 			console.error('Loading View: ', Globals.getError(e1));
 		}
 

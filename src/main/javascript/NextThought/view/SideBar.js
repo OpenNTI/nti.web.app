@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.SideBar', {
 	extend: 'Ext.panel.Panel',
-	alias:  'widget.main-sidebar',
+	alias: 'widget.main-sidebar',
 
 	requires: [
 		'NextThought.view.account.activity.View',
@@ -15,23 +15,23 @@ Ext.define('NextThought.view.SideBar', {
 		'Ext.util.Observable'
 	],
 
-	width:     260,
-	height:    100,
-	layout:    {
-		type:  'vbox',
+	width: 260,
+	height: 100,
+	layout: {
+		type: 'vbox',
 		align: 'stretch'
 	},
-	floating:  true,
-	autoShow:  true,
+	floating: true,
+	autoShow: true,
 	constrain: false,
-	frame:     false,
-	plain:     true,
-	shadow:    false,
-	ui:        'sidebar',
-	cls:       'sidebar',
+	frame: false,
+	plain: true,
+	shadow: false,
+	ui: 'sidebar',
+	cls: 'sidebar',
 
 	preventBringToFront: true,
-	listeners:           {
+	listeners: {
 		activate: function () {
 			Ext.WindowManager.sendToBack(this);
 		}
@@ -46,14 +46,14 @@ Ext.define('NextThought.view.SideBar', {
 
 		this.items = [
 			{
-				xtype:  'container',
+				xtype: 'container',
 				layout: 'border',
-				flex:   1,
-				items:  [
-					{ xtype:     'sidebar-tabpanel',
-						region:  'center',
+				flex: 1,
+				items: [
+					{ xtype: 'sidebar-tabpanel',
+						region: 'center',
 						stateId: 'sidebar',
-						items:   [
+						items: [
 							{ xtype: contactsType },
 							{ xtype: 'activity-view-new' }
 						]
@@ -71,13 +71,13 @@ Ext.define('NextThought.view.SideBar', {
 		this.callParent(arguments);
 		this.mon(this.host, 'afterlayout', this.syncUp, this);
 
-		this.on('editorActivated', function () {
-			this.lockSideBarOpen = true;
+		this.on('editorActivated', function(){
+			this.lockSideBarOpen=true;
 		}, this);
-		this.on('editorDeactivated', function () {
+		this.on('editorDeactivated', function(){
 			var startHide = this.lockSideBarOpen;
 			delete this.lockSideBarOpen;
-			if (startHide) {
+			if(startHide){
 				this.startHide();
 			}
 		});
@@ -85,7 +85,7 @@ Ext.define('NextThought.view.SideBar', {
 		Ext.EventManager.onWindowResize(this.viewportMonitor, this, null);
 
 		var contactsView = this.down('contacts-view'),
-				relayer;
+			relayer;
 
 		if (contactsView) {
 			relayer = contactsView.relayEvents(this.down('chat-dock'), ['update-count'], 'chat-dock-');
@@ -165,7 +165,7 @@ Ext.define('NextThought.view.SideBar', {
 
 	maybeCancelHide: function (e) {
 		var l = e.getTarget('.x-layer'),
-				m = e.getTarget('.x-mask');
+			m = e.getTarget('.x-mask');
 		if (l || m) {
 			this.stopHide();
 			return;
@@ -231,8 +231,8 @@ Ext.define('NextThought.view.SideBar', {
 
 	syncUp: function () {
 		var x = Ext.Element.getViewportWidth() - this.getWidth(),
-				d = this.down('chat-dock'),
-				size = this.host.getSize();
+			d = this.down('chat-dock'),
+			size = this.host.getSize();
 
 		if (!this.host.isVisible()) {
 			if (d) {
@@ -259,36 +259,36 @@ Ext.define('NextThought.view.SideBar', {
 
 Ext.define('NextThought.view.SideBarTab', {
 	extend: 'Ext.tab.Tab',
-	alias:  'widget.sidebar-tab',
+	alias: 'widget.sidebar-tab',
 	mixins: {
 		isListening: 'NextThought.mixins.IsListening'
 	},
-	plain:  true,
-	ui:     'sidebar'
+	plain: true,
+	ui: 'sidebar'
 });
 
 
 Ext.define('NextThought.view.SideBarTabPanel', {
-	extend:      'Ext.tab.Panel',
-	requires:    [
+	extend: 'Ext.tab.Panel',
+	requires: [
 		'NextThought.mixins.IsListening',
 		'Ext.layout.container.boxOverflow.None'
 	],
-	alias:       'widget.sidebar-tabpanel',
-	ui:          'sidebar',
-	plain:       true,
-	cls:         'sidebar-panel-container',
-	stateful:    true,
+	alias: 'widget.sidebar-tabpanel',
+	ui: 'sidebar',
+	plain: true,
+	cls: 'sidebar-panel-container',
+	stateful: true,
 	stateEvents: ['tabchange'],
-	tabBar:      {
+	tabBar: {
 		baseCls: 'sidebar-tab-bar',
-		plain:   true,
-		ui:      'sidebar',
-		xhooks:  {
+		plain: true,
+		ui: 'sidebar',
+		xhooks: {
 			initComponent: function () {
 				this.callParent(arguments);
 				this.layout.overflowHandler =
-						new Ext.layout.container.boxOverflow.None(this.layout, {});
+					new Ext.layout.container.boxOverflow.None(this.layout, {});
 				this.layout.overflowHandler.scrollToItem = Ext.emptyFn;
 			}
 		}

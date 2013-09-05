@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 	extend: 'NextThought.view.course.dashboard.tiles.Tile',
-	alias:  'widget.course-dashboard-top-discussions',
+	alias: 'widget.course-dashboard-top-discussions',
 
 	statics: {
 
@@ -14,10 +14,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 
 			function onBoardResolved(board) {
 				var sId = board && ('dashboard-' + board.getContentsStoreId()),
-						url = board && board.getLink('TopTopics'),
-						instructorForum = course && course.getAttribute('instructorForum'),
-						store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId: sId, pageSize: 4, url: url}, { exclude: instructorForum }));
-
+					url = board && board.getLink('TopTopics'),
+					instructorForum = course && course.getAttribute('instructorForum'),
+					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url},{ exclude: instructorForum }));
+				
 				me.board = board;
 				store.sorters.removeAll();
 				if (Ext.isEmpty(url)) {
@@ -39,11 +39,11 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 				Ext.each(records, function (record) {
 					var comments = record.get('PostCount');
 
-					max = (max > comments) ? max : comments;
+					max = (max > comments)? max : comments;
 					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date'), innerWeight: comments}));
 				});
 				//set the max on each tile so we can figure the %
-				Ext.each(tiles, function (item) { item.maxInner = max});
+				Ext.each(tiles, function(item){ item.maxInner = max});
 
 				Ext.callback(finish, null, [tiles]);
 			}
@@ -54,10 +54,10 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 			}
 
 			$AppConfig.service.getObject(board,
-										 onBoardResolved,
-										 onResolveFailure,
-										 this,
-										 true
+				onBoardResolved,
+				onResolveFailure,
+				this,
+				true
 			);
 		}
 
@@ -67,18 +67,18 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 
 	config: {
 		board: null,
-		rows:  2
+		rows: 2
 	},
 
-	getTimeWeight: function () { return this.itemNode.get('Last Modified').getTime(); },
+	getTimeWeight: function(){  return this.itemNode.get('Last Modified').getTime(); },
 
-	constructor: function (config) {
+	constructor: function(config){
 		var rec = config.itemNode,
-				l = config.locationInfo;
+			l = config.locationInfo;
 
 		config.items = [
 			{xtype: 'container', defaultType: this.defaultType, items: {
-				record:       rec,
+				record: rec,
 				locationInfo: l,
 				contentNtiid: l.ContentNTIID
 			}}
@@ -95,48 +95,48 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 
 Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView', {
 	extend: 'NextThought.view.course.dashboard.widgets.AbstractForumView',
-	alias:  'widget.course-dashboard-tiles-top-discussions-view',
+	alias: 'widget.course-dashboard-tiles-top-discussions-view',
 
 	cls: 'top-discussion-view',
-	ui:  'tile',
+	ui: 'tile',
 
 	renderTpl: Ext.DomHelper.markup(
-			[
-				{ cls: 'controls', cn: [
-					{ cls: 'favorite {favoriteState}' },
-					{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
-				]},
-				{ cls: 'tile-title', html: 'discussion'},
-				{ cls: 'avatar'},
-				{cls: 'meta', cn: [
-					{cls: 'title', html: '{title}'},
-					{tag: 'span', cls: 'by', html: 'By {Creator}'},
-					{tag: 'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
-				]},
-				{cls: 'snippet', html: '{compiledBody}'},
-				{cls: 'count', html: '{PostCount:plural("Comment")}'}
-			]
+		[
+			{ cls: 'controls', cn: [
+				{ cls: 'favorite {favoriteState}' },
+				{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
+			]},
+			{ cls: 'tile-title', html: 'discussion'},
+			{ cls: 'avatar'},
+			{cls: 'meta', cn: [
+				{cls: 'title', html: '{title}'},
+				{tag: 'span', cls: 'by', html: 'By {Creator}'},
+				{tag: 'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+			]},
+			{cls: 'snippet', html: '{compiledBody}'},
+			{cls: 'count', html: '{PostCount:plural("Comment")}'}
+		]
 	),
 
 	snippetSize: 80,
 
-	renderSelectors: {
-		'avatar':    '.avatar',
-		'liked':     '.controls .like',
+	renderSelectors:{
+		'avatar': '.avatar',
+		'liked': '.controls .like',
 		'favorites': '.controls .favorite',
-		'snip':      '.snippet'
+		'snip': '.snippet'
 	},
 
 	afterRender: function () {
 		this.callParent(arguments);
 
-		function setAvatar(user) {
+		function setAvatar(user){
 			avatar = user.get('avatarURL');
 			me.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
 		}
 
 		var creator = this.record.get('Creator'), me = this, avatar;
-		if (creator.isModel) {
+		if(creator.isModel){
 			setAvatar(creator);
 			return;
 		}

@@ -2,33 +2,33 @@
  * The navigation menu bar for content view
  */
 Ext.define('NextThought.view.content.Navigation', {
-	extend:   'Ext.Component',
-	alias:    'widget.content-navigation',
+	extend: 'Ext.Component',
+	alias: 'widget.content-navigation',
 	requires: [
 		'NextThought.view.menus.JumpTo'
 	],
-	ui:       'content-navigation',
-	cls:      'jumpto',
+	ui: 'content-navigation',
+	cls: 'jumpto',
 
 	breadcrumbSepTpl: Ext.DomHelper.createTemplate({tag: 'span', html: ' / '}).compile(),
-	breadcrumbTpl:    Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
+	breadcrumbTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
 
 	renderTpl: Ext.DomHelper.markup([
-										{cls: 'goup', 'data-qtip': 'Go up a level'},
-										{cls: 'breadcrumb'}
-									]),
+		{cls: 'goup', 'data-qtip': 'Go up a level'},
+		{cls: 'breadcrumb'}
+	]),
 
 	levelLabels: {
 		'NaN': '&sect;',
-		'0':   'Select a chapter',
-		'1':   'Select a section'
+		'0': 'Select a chapter',
+		'1': 'Select a section'
 	},
 
 	renderSelectors: {upEl: '.goup', breadcrumb: '.breadcrumb'},
 
 	listeners: {
 		afterrender: 'hide',
-		click:       {element: 'upEl', fn: 'onUp'}
+		click: {element: 'upEl', fn: 'onUp'}
 	},
 
 
@@ -44,18 +44,18 @@ Ext.define('NextThought.view.content.Navigation', {
 	updateLocation: function (ntiid) {
 		this.currentNtiid = ntiid;
 		var me = this,
-				C = ContentUtils,
-				loc = C.getLocation(ntiid),
-				lineage = C.getLineage(ntiid),
-				names = C.getLineage(ntiid, true),
-				parent = lineage.last(),
-				page = lineage[0] ? C.getLocation(lineage[0]) : null,
-				path = me.getBreadcrumbPath(), i = 0;
+			C = ContentUtils,
+			loc = C.getLocation(ntiid),
+			lineage = C.getLineage(ntiid),
+			names = C.getLineage(ntiid, true),
+			parent = lineage.last(),
+			page = lineage[0] ? C.getLocation(lineage[0]) : null,
+			path = me.getBreadcrumbPath(), i = 0;
 
 		function buildPathPart(v, i, a) {
 			var e,
-					l = C.getLocation(v),
-					label = l.label;
+				l = C.getLocation(v),
+				label = l.label;
 
 			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
 
@@ -72,8 +72,8 @@ Ext.define('NextThought.view.content.Navigation', {
 		// first was the 2nd item in the array... which is where the 'back' arrow will take you
 		this.upEl[(!lineage.first()) ? 'hide' : 'show']();
 		this.upEl.set({
-						  'data-qtip': 'Go up to ' + names[1]
-					  });
+			'data-qtip': 'Go up to ' + names[1]
+		});
 
 		me.cleanupMenus();
 
@@ -142,10 +142,10 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	buildMenu: function (pathPartEl, locationInfo, parent) {
 		var me = this, m, k,
-				menus = me.menuMap || {},
-				cfg = { ownerButton: me, items: [] },
-				key = locationInfo ? locationInfo.NTIID : null,
-				currentNode = locationInfo ? locationInfo.location : null;
+			menus = me.menuMap || {},
+			cfg = { ownerButton: me, items: [] },
+			key = locationInfo ? locationInfo.NTIID : null,
+			currentNode = locationInfo ? locationInfo.location : null;
 
 		if (!currentNode) {
 			return pathPartEl;
@@ -168,7 +168,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 		// evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
 		m.mon(pathPartEl, {
-			scope:        m,
+			scope: m,
 			'mouseleave': function maybeStopShow() {
 				if (!Ext.is.iPad || !m.isVisible()) {
 					m.stopShow();
@@ -178,7 +178,7 @@ Ext.define('NextThought.view.content.Navigation', {
 				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getX() + (pathPartEl.getHeight() - 30));
 				m.startShow(pathPartEl, 'tl-bl', [-10, -20]);
 			},
-			'click':      function () {
+			'click': function () {
 				m.stopHide();
 				m.stopShow();
 				me.fireEvent('set-location', key);
@@ -207,8 +207,8 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	enumerateTopicSiblings: function (node, items, parent) {
 		var me = this, current = node, num = 1, text,
-				type = '1', separate = '. ', suppress = false, nodes,
-				p, n = 'numbering', sep = 'separator', sup = 'suppressed';
+			type = '1', separate = '. ', suppress = false, nodes,
+			p, n = 'numbering', sep = 'separator', sup = 'suppressed';
 
 		if (parent) {
 			p = Library.getTitle(parent).get('PresentationProperties');
@@ -231,21 +231,20 @@ Ext.define('NextThought.view.content.Navigation', {
 				return;
 			}
 
-			text = suppress ? node.getAttribute('label')
-					: (me.styleList(num, type) + separate + node.getAttribute('label'));
+			text = suppress ? node.getAttribute('label') : (me.styleList(num, type) + separate + node.getAttribute('label'));
 
 			items.push({
-						   text:  text,
-						   ntiid: node.getAttribute('ntiid'),
-						   cls: node === current ? 'current' : ''
-					   });
+				text: text,
+				ntiid: node.getAttribute('ntiid'),
+				cls: node === current ? 'current' : ''
+			});
 			num++;
 		});
 	},
 
 
 	//num - the number in the list; style - type of numbering '1','a','A','i','I'
-	styleList:              function (num, style) {
+	styleList: function (num, style) {
 		var me = this, formatters = {
 			'a': me.toBase26SansNumbers,
 			'A': function (num) {
@@ -265,13 +264,13 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
-	toRomanNumeral:         function (num) {
+	toRomanNumeral: function (num) {
 		var digits, key, roman, i, m = [];
 
 		digits = String(+num).split('');
 		key = ['', 'C', 'CC', 'CCC', 'CD', 'D', 'DC', 'DCC', 'DCCC', 'CM',
-			   '', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
-			   '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+			'', 'X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC',
+			'', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
 		roman = '';
 		i = 3;
 		while (i--) {
@@ -286,8 +285,8 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	toBase26SansNumbers: function (num) {
 		var val = (num - 1) % 26,
-				letter = String.fromCharCode(97 + val),
-				num2 = Math.floor((num - 1) / 26);
+			letter = String.fromCharCode(97 + val),
+			num2 = Math.floor((num - 1) / 26);
 		if (num2 > 0) {
 			return this.toBase26SansNumbers(num2) + letter;
 		}

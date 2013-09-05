@@ -1,25 +1,25 @@
-Ext.define('NextThought.view.slidedeck.ThreadRoot', {
+Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	extend: 'NextThought.view.annotations.note.Panel',
-	alias:  'widget.slidedeck-slide-note',
+	alias: 'widget.slidedeck-slide-note',
 
-	root:         true,
-	cls:          'dark',
-	rootQuery:    'slidedeck-slide',
+	root: true,
+	cls: 'dark',
+	rootQuery: 'slidedeck-slide',
 	collapsedCls: 'collapsed',
 
 	defaults: {
-		cls:      'dark',
+		cls: 'dark',
 		defaults: { cls: 'dark' }
 	},
 
-	initComponent: function () {
+	initComponent: function(){
 		this.addCls('slide');
-		this.addEvents('beforecollapse', 'beforeexpand');
-		this.enableBubble('beforecollapse', 'beforeexpand');
+		this.addEvents('beforecollapse','beforeexpand');
+		this.enableBubble('beforecollapse','beforeexpand');
 		this.callParent(arguments);
 	},
 
-	afterRender: function () {
+	afterRender: function(){
 
 		this.callParent(arguments);
 
@@ -27,56 +27,56 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot', {
 		this.commentsLink = Ext.DomHelper.insertAfter(this.time, {tag: 'a', cls: 'comment-link', html: this.textForCommentLink()}, true);
 
 		this.updateHasChildren();
-		this.noteBody.on('click', this.toggleCollapse, this);
+		this.noteBody.on('click',this.toggleCollapse,this);
 		this.collapse();
 		this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
 	},
 
 
-	createEditor: function () {
+	createEditor: function(){
 		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.responseBox, enableTitle: true});
-		if (this.editor.el.down('.title')) {
+		if(this.editor.el.down('.title')){
 			this.editor.el.down('.title').addCls('small');
 		}
 	},
 
 
-	addAdditionalRecordListeners: function (record) {
+	addAdditionalRecordListeners: function(record){
 		this.mon(record, 'count-updated', this.updateHasChildren, this);
 		this.mon(record, 'count-updated', this.updateCommentLink, this);
 	},
 
-	removeAdditionalRecordListeners: function (record) {
+	removeAdditionalRecordListeners: function(record){
 		this.mun(record, 'count-updated', this.updateHasChildren, this);
 		this.mon(record, 'count-updated', this.updateCommentLink, this);
 	},
 
-	textForCommentLink: function () {
+	textForCommentLink: function(){
 		var commentLinkText = "No Comments",
-				replyCount;
+			replyCount;
 		replyCount = this.record.getReplyCount();
-		if (replyCount > 0) {
-			commentLinkText = Ext.String.format('{0} {1}', replyCount, replyCount > 1 ? 'Replies' : 'Reply');
+		if(replyCount > 0){
+			commentLinkText = Ext.String.format('{0} {1}', replyCount, replyCount > 1 ? 'Replies': 'Reply');
 		}
 		return commentLinkText;
 	},
 
-	updateCommentLink: function () {
+	updateCommentLink: function(){
 		this.commentsLink.update(this.textForCommentLink());
 	},
 
-	updateHasChildren: function () {
-		if (this.record.getReplyCount() > 0) {
+	updateHasChildren: function(){
+		if(this.record.getReplyCount() > 0){
 			this.addCls('hasChildren');
 		}
 	},
 
-	rootToCountComponentsFrom: function () {
+	rootToCountComponentsFrom: function(){
 		return this;
 	},
 
-	toggleCollapse: function (e) {
-		if (e.getTarget('a[href]')) {
+	toggleCollapse: function(e){
+		if(e.getTarget('a[href]')){
 			return true; //if the user clicked on a url link, let it continue to propagate.
 		}
 
@@ -86,9 +86,9 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot', {
 	},
 
 
-	collapse: function () {
+	collapse: function(){
 		var el = this.getTargetEl();
-		if (this.fireEvent('beforecollapse', this, el) !== false) {
+		if(this.fireEvent('beforecollapse', this, el) !== false){
 			el.addCls(this.collapsedCls);
 			this.addCls(this.collapsedCls);
 			this.updateLayout();
@@ -96,22 +96,22 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot', {
 	},
 
 
-	expand: function () {
+	expand: function(){
 		var el = this.getTargetEl();
-		if (this.fireEvent('beforeexpand', this, el) !== false) {
+		if(this.fireEvent('beforeexpand', this, el) !== false){
 			el.removeCls(this.collapsedCls);
 			this.removeCls(this.collapsedCls);
 			this.updateLayout();
 		}
 	},
 
-	onReply: function () {
+	onReply: function(){
 		this.editorEl.down('.title').hide();
 		this.activateReplyEditor();
 	},
 
 
-	onEdit: function () {
+	onEdit: function(){
 		this.text.hide();
 		this.editMode = true;
 		this.editorEl.down('.title').show();

@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.RoomInfo', {
-	extend:     'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 	idProperty: 'ID',
-	fields:     [
+	fields: [
 		{ name: 'Active', type: 'bool' },
 		{ name: 'MessageCount', type: 'int' },
 		{ name: 'Occupants', type: 'UserList'},
@@ -11,36 +11,32 @@ Ext.define('NextThought.model.RoomInfo', {
 		{ name: 'references', type: 'auto', defaultValue: [] }
 	],
 
-	isGroupChat: function () {
+	isGroupChat: function(){
 		var participants = this.getOriginalOccupants();
 
-		if (Ext.isEmpty(participants, false)) {
+		if( Ext.isEmpty(participants, false) ){
 			participants = this.get('Occupants');
 		}
 		return participants.length > 2;
 	},
 
-	getAllRoomStates: function () { return this.roomStates || {}; },
+	getAllRoomStates: function(){ return this.roomStates || {}; },
 
-	getRoomState: function (user) {
-		if (!this.roomStates) {
-			return null;
-		}
+	getRoomState: function(user){
+		if(!this.roomStates){ return null;}
 		return this.roomStates[user];
 	},
 
-	setRoomState: function (user, state) {
-		if (!this.roomStates) {
-			this.roomStates = {};
-		}
+	setRoomState: function(user, state){
+		if(!this.roomStates) { this.roomStates = {};}
 		this.roomStates[user] = state;
 	},
 
-	getInputTypeStates: function () {
-		var p = [], inputStates = ['composing', 'paused'], me = this;
-		Ext.each(me.get('Occupants'), function (user) {
+	getInputTypeStates: function(){
+		var p =[], inputStates = ['composing', 'paused'], me = this;
+		Ext.each(me.get('Occupants'), function(user){
 			var userState = me.getRoomState(user);
-			if (Ext.Array.contains(inputStates, userState) && !isMe(user)) {
+			if(Ext.Array.contains(inputStates, userState) && !isMe(user)){
 				p.push({user: user, state: userState});
 			}
 		});
@@ -53,11 +49,11 @@ Ext.define('NextThought.model.RoomInfo', {
 	 *  some occupants might have left the chat before, the original occupants will help to compare chat rooms with the same occupants.
 	 */
 
-	setOriginalOccupants: function (occupants) {
+	setOriginalOccupants: function(occupants){
 		this._originalOccupants = occupants;
 	},
 
-	getOriginalOccupants: function () {
+	getOriginalOccupants: function(){
 		return this._originalOccupants || [];
 	}
 });

@@ -1,13 +1,13 @@
 /**
  * TODO: Explain this class.
  */
-Ext.define('NextThought.ContentAPIRegistry', {
+Ext.define('NextThought.ContentAPIRegistry',{
 	singleton: true,
-	mixins:    {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
-	constructor: function () {
+	constructor: function(){
 		this.mixins.observable.constructor.call(this);
 		this.addEvents('update');
 		this.registry = {};
@@ -20,30 +20,30 @@ Ext.define('NextThought.ContentAPIRegistry', {
 	 * @param fn
 	 * @param scope
 	 */
-	register: function (publicName, fn, scope) {
-		if (typeof publicName !== 'string') {
+	register: function(publicName, fn, scope){
+		if(typeof publicName !== 'string'){
 			Ext.Error.raise('publicName must be a string');
 		}
-		else if (!Ext.isFunction(fn)) {
+		else if(!Ext.isFunction(fn)){
 			Ext.Error.raise('fn must be a function');
 		}
-		else if (this.registry[publicName]) {
-			Ext.Error.raise('The function "' + publicName + '" is already registered.');
+		else if(this.registry[publicName]){
+			Ext.Error.raise('The function "'+publicName+'" is already registered.');
 		}
 
-		this.registry[publicName] = function () { return fn.apply(scope || this, arguments); };
-		this.fireEvent('update', this);
+		this.registry[publicName] = function(){ return fn.apply(scope||this,arguments); };
+		this.fireEvent('update',this);
 	},
 
 
 	/**
 	 *
 	 */
-	getAPI: function () {
+	getAPI: function(){
 		return Ext.clone(this.registry);
 	}
 
 
-}, function () {
+},function(){
 	window.ContentAPIRegistry = this;
 });

@@ -1,108 +1,102 @@
-Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
+Ext.define('NextThought.view.profiles.parts.HighlightContainer',{
 	extend: 'Ext.Component',
-	alias:  'widget.profile-activity-highlight-container',
+	alias: 'widget.profile-activity-highlight-container',
 
-	cls:    'activity-highlight-container',
+	cls: 'activity-highlight-container',
 	mixins: {
 		profileLink: 'NextThought.mixins.ProfileLinks'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'header', cn: [
-											{tag: 'span', cls: 'name link', html: '{name}'},
-											' created ',
-											{tag: 'span', cls: 'count', html: '{count}'},
-											' highlight',
-											{tag: 'span', cls: 'plural', html: '{plural}'},
-											' on {date}'
-										]},
-										{ cls: 'box' }
-									]),
+		{ cls: 'header', cn:[
+			{tag: 'span', cls: 'name link', html:'{name}'},
+			' created ', {tag: 'span', cls:'count', html:'{count}'},
+			' highlight',{tag:'span',cls:'plural',html:'{plural}'},
+			' on {date}'
+		]},
+		{ cls: 'box' }
+	]),
 
 
 	renderSelectors: {
 		headerEl: '.header',
-		nameEl:   '.header .name',
-		countEl:  '.header .count',
-		pluralEl: '.header .plural',
-		bodyEl:   '.box'
+		nameEl: '.header .name',
+		countEl: '.header .count',
+		pluralEl:'.header .plural',
+		bodyEl: '.box'
 	},
 
 	selectedTpl: new Ext.XTemplate(Ext.DomHelper.markup(
-			{tag: 'tpl', 'for': '.', cn: [
-				{tag: 'tpl', 'if': '.', cn: [
-					{tag: 'span', html: '{.}' }
+			{tag:'tpl', 'for':'.', cn:[
+				{tag:'tpl', 'if':'.',cn:[
+					{tag:'span', html:'{.}' }
 				]}
 			]}
 	)),
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
-			{ tag: 'tpl', 'for': 'books', cn: [
-				{ cls: 'book', cn: [
-					{ cls: 'icon', style: 'background-image: url({icon});', 'data-ntiid': '{ntiid}' },
-					{ cn: [
-						{ tag: 'tpl', 'for': 'pages', cn: [
-							{ cls: 'page', cn: [
-								{ cls: 'label', html: '{label}', 'data-ntiid': '{ntiid}' },
-								{ tag: 'tpl', 'for': 'items', cn: [
-									{ cls: 'selected-text', 'data-ntiid': '{ntiid}', cn: [
-										{tag: 'span', html: '{text}'},
-										{cls: 'tip'}
-									]}
+		{ tag: 'tpl', 'for': 'books', cn:[
+			{ cls: 'book', cn: [
+				{ cls: 'icon', style: 'background-image: url({icon});', 'data-ntiid':'{ntiid}' },
+				{ cn:[
+					{ tag: 'tpl', 'for': 'pages', cn:[
+						{ cls: 'page', cn: [
+							{ cls: 'label', html: '{label}', 'data-ntiid':'{ntiid}' },
+							{ tag: 'tpl', 'for': 'items', cn:[
+								{ cls: 'selected-text', 'data-ntiid':'{ntiid}', cn:[
+									{tag: 'span', html: '{text}'},{cls:'tip'}
 								]}
 							]}
 						]}
 					]}
 				]}
 			]}
+		]}
 	)),
 
 
-	setupContainerRenderData: function () {
+	setupContainerRenderData: function(){
 		var me = this,
-				c = me.up('[user]'),
-				u = c ? c.user : null,
-				name = u ? u.getName() : '...',
-				items = me.items,
-				count = items.length,
-				books = {},
-				d;
+			c = me.up('[user]'),
+			u = c ? c.user : null,
+			name = u ? u.getName() : '...',
+			items = me.items,
+			count = items.length,
+			books = {},
+			d;
 
-		if (this.rendered) {
-			delete me.renderData;
-		}
+		if(this.rendered){ delete me.renderData; }
 
-		d = Ext.apply(me.renderData || {}, {
+		d = Ext.apply(me.renderData||{},{
 			name: name,
 			count: count === 1 ? 'a' : count,
 			plural: count === 1 ? '' : 's',
-			date: Ext.Date.format(me.date, 'F j, Y')
+			date: Ext.Date.format(me.date,'F j, Y')
 		});
 
-		function byTime(a, b) {
-			function g(x) { return x.get ? x.get('CreatedTime').getTime() : 0; }
-
+		function byTime(a,b){
+			function g(x){ return x.get ? x.get('CreatedTime').getTime() : 0; }
 			a = g(a);
 			b = g(b);
 			return a - b;
 		}
 
-		Ext.Array.sort(this.items, byTime);
+		Ext.Array.sort(this.items,byTime);
 
-		Ext.each(items, function (i) {
-			LocationMeta.getMeta(i.get('ContainerId'), function (meta) {
+		Ext.each(items,function( i ){
+			LocationMeta.getMeta(i.get('ContainerId'),function(meta){
 				i.meta = meta;
 				count--;
 
 				var root = meta.ContentNTIID,
-						page = meta.NTIID;
+					page = meta.NTIID;
 
 				root = (books[root] = books[root] || {});
 				page = (root[page] = root[page] || []);
 				page.push(i);
 
-				if (!count) {
-					me.setupBookRenderData(d, books);
+				if(!count){
+					me.setupBookRenderData(d,books);
 					me.maybeFillIn(d);
 				}
 			});
@@ -116,21 +110,17 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 	 * @param data {Object} the output
 	 * @param groupings {Object} the input
 	 */
-	setupBookRenderData: function (data, groupings) {
+	setupBookRenderData: function(data,groupings){
 		data.books = [];
-		Ext.Object.each(groupings, function (k, root) {
-			var book = {pages: [], ntiid: k};
+		Ext.Object.each(groupings,function(k,root){
+			var book = {pages:[], ntiid: k};
 			data.books.push(book);
-			Ext.Object.each(root, function (k, items) {
-				var page = {items: [], ntiid: k};
+			Ext.Object.each(root,function(k,items){
+				var page = {items:[], ntiid: k};
 				book.pages.push(page);
-				Ext.each(items, function (i) {
-					if (!book.hasOwnProperty('icon')) {
-						book.icon = i.meta.getIcon(true);
-					}
-					if (!page.hasOwnProperty('label')) {
-						page.label = i.meta.getPathLabel();
-					}
+				Ext.each(items,function(i){
+					if(!book.hasOwnProperty('icon')){ book.icon = i.meta.getIcon(true); }
+					if(!page.hasOwnProperty('label')){ page.label = i.meta.getPathLabel(); }
 					page.items.push({text: i.get('selectedText'), ntiid: i.getId()});
 				});
 			});
@@ -138,39 +128,40 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 	},
 
 
-	maybeFillIn: function (data) {
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.maybeFillIn, this, [data]), this, {single: true});
+	maybeFillIn: function(data){
+		if(!this.rendered){
+			this.on('afterrender',Ext.bind(this.maybeFillIn,this,[data]),this,{single:true});
 			return;
 		}
 
-		this.tpl.overwrite(this.bodyEl, data);
+		this.tpl.overwrite(this.bodyEl,data);
 
 		var me = this;
-		this.bodyEl.select('.selected-text > span').each(function (s) {
-			var words = Ext.String.ellipsis(s.dom.innerHTML.trim(), 200, true);
-			me.selectedTpl.overwrite(s, words.split(' '));
+		this.bodyEl.select('.selected-text > span').each(function(s){
+			var words = Ext.String.ellipsis( s.dom.innerHTML.trim(), 200, true);
+			me.selectedTpl.overwrite(s,words.split(' '));
 		});
 	},
+
 
 
 	/**
 	 * @override {Ext.Component#beforeRender}
 	 */
-	beforeRender: function () {
+	beforeRender: function(){
 		this.callParent(arguments);
 		this.setupContainerRenderData();
 	},
 
 
-	afterRender: function () {
+	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
 		me.enableProfileClicks(me.nameEl);
-		me.mon(me.bodyEl, 'click', me.onClick, me);
+		me.mon(me.bodyEl,'click', me.onClick, me);
 
-		me.setupContainerRenderData = Ext.Function.createBuffered(me.setupContainerRenderData, 10, me, null);
-		Ext.each(this.items, function (i) { me.mon(i, 'destroy', me.onHighlightRemoved, me); });
+		me.setupContainerRenderData = Ext.Function.createBuffered(me.setupContainerRenderData,10,me,null);
+		Ext.each(this.items,function(i){ me.mon(i, 'destroy', me.onHighlightRemoved, me); });
 	},
 
 
@@ -180,10 +171,10 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 	 * @param {NextThought.model.Highlight} record
 	 * @returns {boolean} True if it was added, false otherwise.
 	 */
-	collate: function (record) {
+	collate: function(record){
 		var d = record.get('CreatedTime'),
-				n = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-		if (n === this.date.getTime() && /highlight$/i.test(record.get('Class') || '')) {
+			n = new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+		if(n === this.date.getTime() && /highlight$/i.test(record.get('Class')||'')){
 			this.addHighlight(record);
 			return true;
 		}
@@ -192,17 +183,17 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 	},
 
 
-	addHighlight: function (record) {
+	addHighlight: function(record){
 		this.items.unshift(record);
 		this.setupContainerRenderData();
 	},
 
 
-	onHighlightRemoved: function (item) {
-		Ext.Array.remove(this.items, item);
-		this.mun(item, 'destroy', this.onHighlightRemoved, this);
+	onHighlightRemoved: function(item){
+		Ext.Array.remove(this.items,item);
+		this.mun(item,'destroy',this.onHighlightRemoved,this);
 
-		if (this.items.length > 0) {
+		if(this.items.length > 0){
 			this.setupContainerRenderData();
 			return;
 		}
@@ -211,15 +202,13 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 	},
 
 
-	onClick: function (e) {
-		var t = e.getTarget('[data-ntiid]', null, true);
-		if (!t) {
-			return;
-		}
+	onClick: function(e){
+		var t = e.getTarget('[data-ntiid]',null,true);
+		if(!t){ return; }
 
 		e.stopEvent();
 
-		if (t.is('.selected-text')) {
+		if(t.is('.selected-text')){
 			//highlight
 			console.debug('clicked highlight: ', t.getAttribute('data-ntiid'));
 			this.goToObject(t.getAttribute('data-ntiid'));
@@ -229,15 +218,15 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 		this.fireEvent('navigation-selected', t.getAttribute('data-ntiid'), null, null);
 	},
 
-	goToObject: function (id) {
+	goToObject: function(id){
 		var item, cid;
 
-		if (!id) {
+		if(!id){
 			return;
 		}
 
-		Ext.each(this.items, function (i) {
-			if (i.getId() === id) {
+		Ext.each(this.items, function(i){
+			if(i.getId() === id){
 				item = i;
 				return false;
 			}
@@ -246,7 +235,7 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 
 		cid = item.get('ContainerId');
 
-		if (item && cid) {
+		if(item && cid){
 			this.fireEvent('navigation-selected', cid, item, null);
 		}
 	}

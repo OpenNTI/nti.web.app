@@ -1,40 +1,40 @@
-Ext.define('NextThought.view.cards.Card', {
+Ext.define('NextThought.view.cards.Card',{
 	extend: 'Ext.Component',
-	alias:  'widget.content-card',
+	alias: 'widget.content-card',
 
 	mixins: {
 //		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 //		profileLinks: 'NextThought.mixins.ProfileLinks' // For future, maybe?
 	},
 
-	ui:  'content-card',
+	ui: 'content-card',
 	cls: 'content-card',
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
+		{ cls: 'thumbnail', style:{ backgroundImage: 'url({thumbnail})'} },
 //		{ cls: 'controls', cn: [
 //			{ cls: 'favorite' },
 //			{ cls: 'like' }
 //		]},
-										{ cls: 'meta', cn: [
-											{ cls: 'title', html: '{title}' },
-											{ cls: 'byline', html: 'By {creator}' },
-											{ cls: 'description', html: '{description}' }
-										]}
-									]),
+		{ cls: 'meta', cn: [
+			{ cls:'title', html:'{title}' },
+			{ cls:'byline', html:'By {creator}' },
+			{ cls:'description', html:'{description}' }
+		]}
+	]),
 
 
 	renderSelectors: {
-		meta:      '.meta',
-		liked:     '.controls .like',
+		meta: '.meta',
+		liked: '.controls .like',
 		favorites: '.controls .favorite'
 	},
 
 
-	constructor: function (config) {
+	constructor: function(config){
 		var d = (config && config.data) || {};
-		if (!this.shouldOpenInApp(d.ntiid, d.href, d.basePath)) {
-			this.renderTpl = Ext.DomHelper.markup({tag: 'a', target: '_blank', href: d.href, html: this.renderTpl.html || this.renderTpl});
+		if(!this.shouldOpenInApp(d.ntiid, d.href, d.basePath)){
+			this.renderTpl = Ext.DomHelper.markup({tag:'a', target:'_blank', href:d.href, html:this.renderTpl.html || this.renderTpl});
 			this.bypassEvent = true;
 		}
 
@@ -43,10 +43,10 @@ Ext.define('NextThought.view.cards.Card', {
 	},
 
 
-	shouldOpenInApp: function (ntiid, url, basePath) {
+	shouldOpenInApp: function(ntiid, url, basePath){
 		var isTargetAnNTIID = ParseUtils.isNTIID(url),
-		//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
-				pdf = (/\.pdf$/i).test((url || '').split('?')[0]);
+			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
+			pdf = (/\.pdf$/i).test((url||'').split('?')[0]);
 
 		//if the target is an NTIID, must open in the app. OR
 		//if we have an NTIID AND the target is a PDF open in the app.
@@ -56,45 +56,45 @@ Ext.define('NextThought.view.cards.Card', {
 
 
 //	getRecord: function(){
-	//TODO: we need a record to like/favorite.
+		//TODO: we need a record to like/favorite.
 //	},
 
 
-	beforeRender: function () {
+	beforeRender: function(){
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {}, this.data);
+		this.renderData = Ext.apply(this.renderData||{},this.data);
 		this.target = this.data.href;
 	},
 
 
-	afterRender: function () {
+	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.el, 'click', 'onCardClicked', this);
+		this.mon(this.el,'click','onCardClicked',this);
 
-		try {
+		try{
 			this.reader = this.reader || ReaderPanel.get();
-			if (this.reader && this.reader.getLocation().pageInfo.originalNTIIDRequested === this.data.ntiid) {
-				Ext.defer(this.onCardClicked, 1, this);
+			if(this.reader && this.reader.getLocation().pageInfo.originalNTIIDRequested===this.data.ntiid){
+				Ext.defer(this.onCardClicked,1,this);
 			}
 		}
-		catch (er) {
+		catch(er){
 			console.error(er.message);
 		}
 	},
 
 
-	onCardClicked: function (e) {
+	onCardClicked: function(e){
 		var status;
 		//We cannot "stop" the event, or our anchor will not receive it, so bypassing simply prevents us from acting on it.
-		if (this.bypassEvent) {
+		if(this.bypassEvent){
 			return undefined;
 		}
 
-		if (ParseUtils.isNTIID(this.target)) {
-			status = this.fireEvent('navigate-to-href', this, this.target);
+		if(ParseUtils.isNTIID(this.target)){
+			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {
-			status = this.fireEvent('show-target', this, this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/);
+			status = this.fireEvent('show-target',this,this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/);
 		}
 
 		return status;

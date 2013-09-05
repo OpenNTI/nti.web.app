@@ -1,19 +1,17 @@
 Ext.define('NextThought.store.ProfileItem', {
 	extend: 'NextThought.store.PageItem',
 
-	sorters: [
-		{
-			property:  'CreatedTime',
-			direction: 'DESC'
-		}
-	],
+	sorters: [{
+		property: 'CreatedTime',
+		direction: 'DESC'
+	}],
 
 	groupField: null,
-	groupDir:   null,
+	groupDir: null,
 
-	wantsItem: function (rec) {
-		function checkForItem(storeItem, index, count) {
-			if (storeItem.getId() === refId) {
+	wantsItem: function(rec){
+		function checkForItem(storeItem, index, count){
+			if(storeItem.getId() === refId){
 				result = true;
 				foundParent = true;
 				return false;
@@ -22,17 +20,17 @@ Ext.define('NextThought.store.ProfileItem', {
 		}
 
 		var refs, refId, result = false, foundParent, creator = rec.get('Creator');
-		if (!Ext.isString(creator) && creator.isModel) {
+		if(!Ext.isString(creator) && creator.isModel){
 			creator = creator.get('Username');
 		}
 
-		if (rec.isTopLevel()) {
+		if(rec.isTopLevel()){
 			return this.hasOwnProperty('profileStoreFor') && this.profileStoreFor === creator;
 		}
-		else {
+		else{
 			//Check if it's a non-topLevel note whose reference is in my store.
 			refs = (rec.get('references') || []).slice();
-			while (!foundParent && !Ext.isEmpty(refs)) {
+			while(!foundParent && !Ext.isEmpty(refs)){
 				refId = refs.shift();
 				this.each(checkForItem);
 			}
