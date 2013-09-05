@@ -54,7 +54,8 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			origin:     location.protocol + '//' + location.host,
 			events:     {
 				'onReady': Ext.bind(this.playerReady, this),
-				'onError': Ext.bind(this.playerError, this)
+				'onError': Ext.bind(this.playerError, this),
+				'onStateChange': Ext.bind(this.playerStatusChange, this)
 			}
 		});
 	},
@@ -97,6 +98,20 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
+	playerStatusChange: function (event) {
+		var type='';
+		switch(event.data){
+			case -1: type='unstarted'; break;
+			case YT.PlayerState.ENDED: type='ended'; break;
+			case YT.PlayerState.PLAYING: type='play'; break;
+			case YT.PlayerState.PAUSED: type='pause'; break;
+			case YT.PlayerState.BUFFERING: type='buffering'; break;
+			case YT.PlayerState.CUED: type='cued'; this.playerReady(); break;
+			default:  console.log(event.data); return;
+		}
+		this.fireEvent('player-event-' + type, this.id, this);
+	},
+
 	getCurrentTime: function () {
 		return this.player.getCurrentTime();
 	},
@@ -113,6 +128,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 									 startSeconds:     offset,
 									 suggestedQuality: "medium"
 								 });
+		this.isReady = false;
 		this.pause();
 	},
 
