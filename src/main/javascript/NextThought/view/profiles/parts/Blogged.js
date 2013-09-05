@@ -81,15 +81,17 @@ Ext.define('NextThought.view.profiles.parts.Blogged',{
 
 	onClick: function(e){
 		var t = e.getTarget('[data-target]'),
-			u = this.user, fragment,
+			u = this.user,
 			postId = this.record.get('ID'),
 			args=['Thoughts', postId];
 
-		if(!postId || !Ext.isString(postId)){args.pop();}
-		else if(t){ args.push(t.getAttribute('data-target')); }
+		if(!postId || !Ext.isString(postId)){
+			args.pop();
+		}
+		else if(t){
+			args.push(t.getAttribute('data-target'));
+		}
 
-		fragment = u.getProfileUrl.apply(u,args);
-
-		this.fireEvent('change-hash', fragment);
+		this.fireEvent('show-profile', u, args);
 	}
 });

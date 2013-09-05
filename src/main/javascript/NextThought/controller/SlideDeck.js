@@ -13,6 +13,11 @@ Ext.define('NextThought.controller.SlideDeck',{
 		'slidedeck.media.Viewer'
 	],
 
+	refs:[
+		{ ref: 'activeMediaViewer', selector: 'media-viewer' },
+		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' }
+	],
+
 	init: function(){
 		this.listen({
 			'component':{
@@ -26,16 +31,28 @@ Ext.define('NextThought.controller.SlideDeck',{
 			},
 			'controller': {
 				'*': {
-					'show-object': 'maybeShowMediaPlayer'
+					'show-object': 'maybeShowMediaPlayer',
+					 'before-show-profile': 'maybeCloseSlideDeck'
 				}
 			}
 		},this);
 	},
 
+
+	maybeCloseSlideDeck: function(){
+		var v = this.getActiveSlideDeck();
+
+		//TODO: make this query for open editors and return false to abort
+		if(v){
+			v.destroy();
+		}
+	},
+
+
 	launchMediaPlayer: function(v, videoId, basePath, rec, options){
 		//Only allow one media player at a time
 		console.debug('Launching media viewer');
-		if(!Ext.isEmpty(Ext.ComponentQuery.query('media-viewer'))){
+		if (this.getActiveMediaViewer()) {
 			console.warn('Cancelling media player launch because one is already active');
 			return;
 		}
@@ -217,6 +234,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 
 		}, this);
 	},
+
 
 	maybeShowMediaPlayer: function(obj, fragment, rec, options){
 		var mime;

@@ -7,6 +7,10 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		'NextThought.view.annotations.note.Main'
 	],
 
+	mixins: {
+		instanceTracking: 'NextThought.mixins.InstanceTracking'
+	},
+	
 	cls: 'note-window',
 	ui: 'note-window',
 	width: 780,
@@ -57,18 +61,15 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 	constructor: function (config) {
 		this.fireEvent('before-new-note-viewer', this, config && (config.reader || config.ownerCmp || config.floatParent));
-		Ext.each(Ext.ComponentQuery.query('note-window'), function (w) {
-			w.closeOrDie();
-		});
+		Ext.each(this.getInstances(), function(w){ w.closeOrDie(); });
 		this.callParent(arguments);
+		this.trackThis();
 	},
 
 
 	initComponent: function () {
 		var m, annotationView = this.up && this.up('annotation-view');
 		this.callParent(arguments);
-
-		this.on('before-profile-navigation', 'destroy', this);
 
 		m = this.down('note-main-view');
 		m.reader = this.reader || this.ownerCmp || this.floatParent;
@@ -86,7 +87,7 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 		if (annotationView) {
 			this.mon(annotationView, 'itemclick', function (view, rec) {
-				if (this.record = rec) {
+				if (this.record === rec) {
 					this.close();
 				}
 			}, this);

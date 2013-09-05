@@ -53,7 +53,9 @@ Ext.define('NextThought.controller.UserData', {
 	],
 
 
-	refs: [],
+	refs: [
+		{ ref: 'activeNoteViewer', selector: 'note-window'}
+	],
 
 
 	init: function () {
@@ -62,93 +64,93 @@ Ext.define('NextThought.controller.UserData', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.listen({
-						model:     {
-							'*': {
-								'update-pageinfo-preferences': 'updatePreferences',
-								'deleted':                     'onRecordDestroyed'
-							}
-						},
-						component: {
-							'*':              {
-								'uses-page-preferences':  'setupPagePreferences',
-								'uses-page-stores':       'setupPageStoreDelegates',
-								'listens-to-page-stores': 'listenToPageStores',
-								'open-chat-transcript':   'openChatTranscript',
-								'load-transcript':        'onLoadTranscript',
-								'save-new-note':          'saveNewNote',
-								'save-new-series-note':   'saveNewSeriesNote',
-								'register-note-window':   'registerNoteWindow'
-							},
-							'slidedeck-view': {
-								exited: 'presentationExited'
-							},
-							'media-viewer':   {
-								exited: 'presentationExited'
-							},
+			model: {
+				'*': {
+					'update-pageinfo-preferences': 'updatePreferences',
+					'deleted':                     'onRecordDestroyed'
+				}
+			},
+			component: {
+				'*': {
+					'uses-page-preferences':  'setupPagePreferences',
+					'uses-page-stores':       'setupPageStoreDelegates',
+					'listens-to-page-stores': 'listenToPageStores',
+					'open-chat-transcript':   'openChatTranscript',
+					'load-transcript':        'onLoadTranscript',
+					'save-new-note':          'saveNewNote',
+					'save-new-series-note':   'saveNewSeriesNote',
+					'register-note-window':   'registerNoteWindow'
+				},
+				'slidedeck-view': {
+					exited: 'presentationExited'
+				},
+				'media-viewer': {
+					exited: 'presentationExited'
+				},
 
-							'reader-content': {
-								'annotations-load':   'onAnnotationsLoad',
-								'filter-annotations': 'onAnnotationsFilter',
-								'filter-by-line':     'onAnnotationsLineFilter',
-								'removed-from-line':  { fn: 'maybeRemoveLineFilter', buffer: 1 },
+				'reader-content': {
+					'annotations-load':   'onAnnotationsLoad',
+					'filter-annotations': 'onAnnotationsFilter',
+					'filter-by-line':     'onAnnotationsLineFilter',
+					'removed-from-line': { fn: 'maybeRemoveLineFilter', buffer: 1 },
 
-								'share-with':      'shareWith',
-								'define':          'define',
-								'redact':          'redact',
-								'save-phantom':    'savePhantomAnnotation',
-								'display-popover': 'onDisplayPopover',
-								'dismiss-popover': 'onDismissPopover'
-							},
-
-
-							'reader annotation-view': {
-								'refresh':         'onAnnotationViewRefreshed',
-								'viewready':       'onAnnotationViewReady',
-								'scrolled-to-end': { fn: 'onAnnotationViewMayNeedPaging', buffer: 500 }
-							},
+					'share-with':      'shareWith',
+					'define':          'define',
+					'redact':          'redact',
+					'save-phantom':    'savePhantomAnnotation',
+					'display-popover': 'onDisplayPopover',
+					'dismiss-popover': 'onDismissPopover'
+				},
 
 
-							'activity-preview': {
-								'share': 'shareWith',
-								'chat':  'replyAsChat'
-							},
-
-							'activity-preview-note > nti-editor': {
-								'save': 'savePreviewNoteReply'
-							},
-
-							'activity-preview-note > activity-preview-note-reply > nti-editor': {
-								'save': 'savePreviewNoteReply'
-							},
-
-							'activity-preview-note-reply': {
-								'delete-reply': 'deleteNoteReply'
-							},
-
-							'note-panel': {
-								'save-new-reply': 'saveNewReply',
-								'share':          'shareWith',
-								'chat':           'replyAsChat'
-							},
+				'reader annotation-view': {
+					'refresh':         'onAnnotationViewRefreshed',
+					'viewready':       'onAnnotationViewReady',
+					'scrolled-to-end': { fn: 'onAnnotationViewMayNeedPaging', buffer: 500 }
+				},
 
 
-							'share-window[record] button[action=save]': {
-								'click': 'onShareWithSaveClick'
-							},
+				'activity-preview': {
+					'share': 'shareWith',
+					'chat':  'replyAsChat'
+				},
 
-							'content-page-widgets': {
-								'save-new-bookmark': 'saveNewBookmark'
-							},
+				'activity-preview-note > nti-editor': {
+					'save': 'savePreviewNoteReply'
+				},
 
-							'annotation-view': {
-								'select': 'showNoteViewer'
-							}
-						}
-					});
+				'activity-preview-note > activity-preview-note-reply > nti-editor': {
+					'save': 'savePreviewNoteReply'
+				},
+
+				'activity-preview-note-reply': {
+					'delete-reply': 'deleteNoteReply'
+				},
+
+				'note-panel': {
+					'save-new-reply': 'saveNewReply',
+					'share':          'shareWith',
+					'chat':           'replyAsChat'
+				},
+
+
+				'share-window[record] button[action=save]': {
+					'click': 'onShareWithSaveClick'
+				},
+
+				'content-page-widgets': {
+					'save-new-bookmark': 'saveNewBookmark'
+				},
+
+				'annotation-view': {
+					'select': 'showNoteViewer'
+				}
+			}
+		});
 
 		Socket.register({
-							'data_noticeIncomingChange': function (c) {me.incomingChange.apply(me, [c]);}
-						});
+			'data_noticeIncomingChange': function (c) {me.incomingChange.apply(me, [c]);}
+		});
 
 		Ext.apply(this.changeActionMap, {
 			created:  this.incomingCreatedChange,
@@ -190,21 +192,21 @@ Ext.define('NextThought.controller.UserData', {
 
 	showNoteViewer: function (sel, rec) {
 		var me = this,
-				anchorCmp = sel.view.anchorComponent,
-				block = sel.mon(sel, {
-					destroyable:    true,
-					beforeselect:   function () {this.deselectingToSelect = true;},
-					beforedeselect: function (s, r) {
-						var w = me.activeNoteWindow,
-								allow = this.deselectingToSelect && (!w || w.close());
+			anchorCmp = sel.view.anchorComponent,
+			block = sel.mon(sel, {
+				destroyable: true,
+				beforeselect: function () {this.deselectingToSelect = true;},
+				beforedeselect: function (s, r) {
+					var w = me.activeNoteWindow,
+						allow = this.deselectingToSelect && (!w || w.close());
 
-						if (allow) {
-							delete this.deselectingToSelect;
-						}
-
-						return allow || (r !== rec);
+					if (allow) {
+						delete this.deselectingToSelect;
 					}
-				});
+
+					return allow || (r !== rec);
+				}
+			});
 
 		function deselect() {
 			block.destroy();
@@ -213,13 +215,13 @@ Ext.define('NextThought.controller.UserData', {
 
 		try {
 			me.activeNoteWindow = Ext.widget({
-												 xtype:       'note-window',
-												 record:      rec,
-												 reader:      anchorCmp,
-												 floatParent: sel.view,
-												 listeners:   {beforedestroy: deselect},
-												 xhooks:      anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
-											 });
+				 xtype: 'note-window',
+				 record: rec,
+				 reader: anchorCmp,
+				 floatParent: sel.view,
+				 listeners: {beforedestroy: deselect},
+				 xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
+			});
 			me.activeNoteWindow.show();
 		}
 		catch (e) {

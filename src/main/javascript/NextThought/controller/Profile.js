@@ -23,44 +23,53 @@ Ext.define('NextThought.controller.Profile', {
 	],
 
 	refs: [
+		{ ref: 'profileView', selector: '#profile'},
 		{ ref: 'profileActivity', selector: '#profile profile-activity'}
 	],
 
 	init: function() {
 
 		this.listen({
-			component:{
-				'profile-panel':{
+			component:  {
+				'*':{
+					'show-profile': 'showProfile'
+				},
+
+				'profile-panel': {
 					'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
 				},
 
 				//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
-				'profile-blog-post':{
-					'delete-post': this.deleteBlogPost
-	//				'scroll-to': this.scrollProfileTo
+				'profile-blog-post': {
+					'delete-post': 'deleteBlogPost'
+					//'scroll-to': 'scrollProfileTo'
 				},
-				'profile-blog-comment':{ 'delete-post': this.deleteBlogPost },
-				'profile-blog-list-item':{ 'delete-post': this.deleteBlogPost },
-				'activity-preview-blog-reply':{
-					'delete-blog-comment': this.deleteBlogPost
-				},
-
-				'profile-blog-editor':{
-					'save-post': this.saveBlogPost
+				'profile-blog-comment': { 'delete-post': 'deleteBlogPost' },
+				'profile-blog-list-item': { 'delete-post': 'deleteBlogPost' },
+				'activity-preview-blog-reply': {
+					'delete-blog-comment': 'deleteBlogPost'
 				},
 
-				'#profile profile-blog-post nti-editor':{
-					'save': this.saveBlogComment
+				'profile-blog-editor': {
+					'save-post': 'saveBlogPost'
 				},
 
-				'activity-preview-personalblogentry > nti-editor':{
-					'save': this.saveBlogComment
+				'#profile profile-blog-post nti-editor': {
+					'save': 'saveBlogComment'
 				},
-				'activity-preview-blog-reply > nti-editor':{
-					'save': this.saveBlogComment
+
+				'activity-preview-personalblogentry > nti-editor': {
+					'save': 'saveBlogComment'
+				},
+
+				'activity-preview-blog-reply > nti-editor':        {
+					'save': 'saveBlogComment'
 				}
 			},
 			controller: {
+				'*':{
+					'show-profile': 'showProfile'
+				},
 				'#Store': {
 					'purchase-complete': 'redrawActivity'
 				}
@@ -69,16 +78,38 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	fillInActivityPanels: function(){
-		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function(item){
+	showProfile: function(user, args, callback){
+		if(!this.fireEvent('before-show-profile') || !this.fireEvent('show-view','profile')){
+			return false;
+		}
+
+		//TODO: This function may need to move to a shared location. Feels dirty referencing sibling controller.
+		var url = user.getProfileUrl.apply(user,args),
+			o = this.getController('State').interpretFragment(url),
+			v = this.getProfileView();
+
+		v.on('finish-restore',function(){
+			history.pushState(o,document.title,url);
+			Ext.callback(callback,null,[user]);
+		},this,{single: true});
+
+		v.restore(o);
+
+
+		return true;
+	},
+
+
+	fillInActivityPanels: function () {
+		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function (item) {
 			item.maybeFillIn();
 		});
 	},
 
 
-	redrawActivity: function(){
+	redrawActivity: function () {
 		var c = this.getProfileActivity(),
-			s = c && c.getStore();
+				s = c && c.getStore();
 
 		if(c && s){
 			s.currentPage = 1;

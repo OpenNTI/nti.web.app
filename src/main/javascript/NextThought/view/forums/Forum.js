@@ -286,7 +286,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		if (event.getTarget('.name')) {
 			UserRepository.getUser(record.get('Creator'), function (u) {
 				if (u && Ext.isFunction(u.getProfileUrl)) {
-					me.fireEvent('change-hash', u.getProfileUrl());
+					me.fireEvent('show-profile', u);
 				}
 			});
 			return false;

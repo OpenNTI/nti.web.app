@@ -354,7 +354,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 				e.stopEvent();
 				if (a && !Ext.isEmpty(i) && u && u.getProfileUrl) {
-					this.fireEvent('change-hash', u.getProfileUrl());
+					this.fireEvent('show-profile', u);
 				}
 			}, this);
 		}, this, tpl, 150);

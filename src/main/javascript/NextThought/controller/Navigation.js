@@ -23,40 +23,40 @@ Ext.define('NextThought.controller.Navigation', {
     ],
 
 
-    init: function () {
-        this.listen({
-            component: {
-                'slidedeck-view': {
-                    exited: 'slideViewExited'
-                },
-                '*': {
-                    'before-show-topic': 'beforeTopicShow',
-                    'go-to-library': 'goToLibrary',
-                    'go-to-help': 'goToHelp',
-                    'navigation-selected': 'navigate',
-                    'navigate-to-href': 'navigateToHref',
-                    'navigate-to-blog': 'gotoBlog',
-                    'navigation-failed': 'readerNavigationFailed',
-                    'view-selected': 'setView',
-                    'navigate-to-course-discussion': 'goToCourseForum',
-	                'show-topic-with-action': 'navigateToTopicAndCallback'
-                },
-                'library-collection': {
-                    'select': 'trackContentChange'
-                },
-                'view-container': {
-                    'activate': 'trackActiveNavTab'
-                }
-            },
-            controller: {
-                '*': {
-                    'show-ntiid': 'navigateToNtiid',
-                    'show-object': 'navigateToContent',
-                    'show-view': 'setView'
-                }
-            }
-        });
-    },
+	init: function () {
+		this.listen({
+			component:  {
+				'slidedeck-view': {
+					exited: 'slideViewExited'
+				},
+				'*': {
+					'before-show-topic': 'beforeTopicShow',
+					'go-to-library': 'goToLibrary',
+					'go-to-help': 'goToHelp',
+					'navigation-selected': 'navigate',
+					'navigate-to-href': 'navigateToHref',
+					'navigate-to-blog': 'gotoBlog',
+					'navigation-failed': 'readerNavigationFailed',
+					'view-selected': 'setView',
+					'navigate-to-course-discussion': 'goToCourseForum',
+					'show-topic-with-action': 'navigateToTopicAndCallback'
+				},
+				'library-collection': {
+					'select': 'trackContentChange'
+				},
+				'view-container': {
+					'activate': 'trackActiveNavTab'
+				}
+			},
+			controller: {
+				'*': {
+					'show-ntiid':  'navigateToNtiid',
+					'show-object': 'navigateToContent',
+					'show-view':   'setView'
+				}
+			}
+		});
+	},
 
 
     trackActiveNavTab: function (to) {
@@ -343,13 +343,15 @@ Ext.define('NextThought.controller.Navigation', {
             args.push(commentId);
         }
 
-        fragment = user.getProfileUrl.apply(user, args);
-        if (params) {
-            fragment = fragment + '?' + Ext.Object.toQueryString(params);
-        }
+		//fragment = user.getProfileUrl.apply(user, args);
+//		if (params) {
+//			fragment = fragment + '?' + Ext.Object.toQueryString(params);
+//		}
 
-        this.fireEvent('change-hash', fragment);
-    },
+		console.debug('params???',params);
+
+		this.fireEvent('show-profile',user,args);
+	},
 
     /**
      *Navigate to the course and push the forum and topic

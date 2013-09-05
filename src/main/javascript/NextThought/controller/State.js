@@ -67,10 +67,8 @@ Ext.define('NextThought.controller.State', {
 	onSessionReady: function () {
 		var me = this,
 			history = window.history,
-			push = history.pushState || function () {
-			},
-			replace = history.replaceState || function () {
-			},
+			push = history.pushState || function () {},
+			replace = history.replaceState || function () {},
 			SEVEN_DAYS = 604800000,
 			p = me.getStateKey() + 'non-history-state-',
 			provider = Ext.supports.LocalStorage
@@ -493,7 +491,7 @@ Ext.define('NextThought.controller.State', {
 				console.error(Globals.getError(e));
 			}
 
-			location.hash = fragment || '';
+			//location.hash = fragment || '';
 			if (fragment) {
 				path = location.toString();
 			}
@@ -650,6 +648,7 @@ Ext.define('NextThought.controller.State', {
 			return;
 		}
 		console.debug('Modifying window.location.hash', hash);
-		window.location.hash = hash;
+		console.trace();
+		location.hash = hash;
 	}
 });

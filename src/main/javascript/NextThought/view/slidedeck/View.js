@@ -270,6 +270,5 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		this.identity = Ext.widget({xtype: 'identity', renderTo: this.getEl(), floatParent: this});
 		this.on('destroy', 'destroy', this.identity);
-		this.mon(this.identity, 'before-profile-navigation', 'destroy');
 	}
 });

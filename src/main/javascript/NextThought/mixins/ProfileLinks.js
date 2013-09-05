@@ -10,9 +10,7 @@ Ext.define('NextThought.mixins.ProfileLinks', function () {
 		function fin(go) {
 			if (go) {
 				if (u && Ext.isFunction(u.getProfileUrl)) {
-					me.enableBubble('before-profile-navigation');
-					me.fireEvent('before-profile-navigation', u);
-					me.fireEvent('change-hash', u.getProfileUrl());
+					me.fireEvent('show-profile', u);
 				}
 				else {
 					console.error('This (', me, ') does not have a user object');

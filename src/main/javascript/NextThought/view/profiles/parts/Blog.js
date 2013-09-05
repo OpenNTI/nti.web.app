@@ -367,8 +367,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 	updateLocation: function (postId, subsection) {
 		var u = this.user,
-				fragment,
-				args = [this.title, postId, subsection];
+			args = [this.title, postId, subsection];
 
 		if (!subsection || !Ext.isString(subsection)) {
 			args.pop();
@@ -377,9 +376,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			args.pop();
 		}
 
-		fragment = u.getProfileUrl.apply(u, args);
-
-		this.fireEvent('change-hash', fragment);
+		this.fireEvent('show-profile', u, args);
 	},
 
 

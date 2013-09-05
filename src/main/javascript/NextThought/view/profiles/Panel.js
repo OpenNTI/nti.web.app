@@ -146,7 +146,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 		console.debug('new url:' + url);
 
-		this.fireEvent('change-hash', url);
+		//this.fireEvent('change-hash', url);
 	},
 
 
