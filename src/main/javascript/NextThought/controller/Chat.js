@@ -589,7 +589,7 @@ Ext.define('NextThought.controller.Chat', {
 		target = this.getHashChange(href, whref);
 
 		if (target) {
-			window.location.hash = target;
+			this.fireEvent('change-hash',target);
 			return false;
 		}
 
