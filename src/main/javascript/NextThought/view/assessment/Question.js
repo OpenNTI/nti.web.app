@@ -180,13 +180,6 @@ Ext.define('NextThought.view.assessment.Question', {
 		}, this, {single: true});
 		this.getTargetEl().addCls('indexed-content');
 		this.syncTop();
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().dom.addEventListener('touchmove', function (e) {
-				e.stopPropagation();
-			});
-		}
 	},
 
 

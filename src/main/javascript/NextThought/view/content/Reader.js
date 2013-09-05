@@ -21,7 +21,7 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.mixins.ModuleContainer'
 	],
 
-	cls: 'x-reader-pane',
+	cls: 'x-reader-pane scrollable',
 
 	overflowX: 'hidden',
 	overflowY: 'scroll',
@@ -47,19 +47,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.buildModule('reader', 'resourceManager', rRef);
 		this.buildModule('reader', 'noteOverlay', rRef);
 
-//		if (Ext.is.iPad) {
-//			this.buildModule('reader', 'touchHandler', rRef);
-//			this.buildModule('reader', 'touchHighlight', rRef);
-//			this.buildModule('modules', 'touchSender');
-//			this.buildModule('modules', 'touchScrollSender', {container: this});
-//			this.on('touchScroll', function (ele, deltaY) {
-//				this.getScroll().by(deltaY);
-//			}, this);
-//			this.on('touchElementAt', function (x, y, callback) {
-//				var element = Ext.getDoc().dom.elementFromPoint(x, y);
-//				callback(element);
-//			});
-//		}
 
 		//For search hit highlighting we own the search overlay, but we
 		//need to forward some of the logic onto the proper module.  Note we
