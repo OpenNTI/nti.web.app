@@ -35,7 +35,7 @@ Ext.define('NextThought.controller.Profile', {
 					'show-profile': 'showProfile'
 				},
 
-				'profile-panel': {
+				'profile-panel-old': {
 					'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
 				},
 

@@ -71,7 +71,7 @@ Ext.define('NextThought.controller.Account', {
 								'click': 'showContactUs'
 							},
 
-							'profile-panel': {
+							'profile-panel-old': {
 								'request-alias-change': 'requestAliasChange',
 								'edit':                 'showAccount'
 							},

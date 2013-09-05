@@ -3,10 +3,11 @@ Ext.define('NextThought.view.profiles.View', {
 	alias: 'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
+		'NextThought.view.profiles.PanelOld',
 		'NextThought.view.ResourceNotFound'
 	],
 
-	defaultType: 'profile-panel',
+	defaultType: 'profile-panel-old',
 	layout: 'auto',
 	cls: 'scrollable',
 
@@ -14,11 +15,14 @@ Ext.define('NextThought.view.profiles.View', {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
+		if(isFeature('v2profiles')){
+			this.defaultType = 'profile-panel';
+		}
 	},
 
 
 	onBeforeDeactivate: function () {
-		var child = this.down('profile-panel');
+		var child = this.down(this.defaultType);
 		return child && child.fireEvent('beforedeactivate');
 	},
 
@@ -48,13 +52,13 @@ Ext.define('NextThought.view.profiles.View', {
 
 
 	getFragment: function () {
-		var current = this.down('profile-panel');
+		var current = this.down(this.defaultType);
 		return current ? current.userObject.getProfileUrl() : null;
 	},
 
 
 	setUser: function (state, finishCallback) {
-		var current = this.down('profile-panel'),
+		var current = this.down(this.defaultType),
 			username = state.username,
 			me = this;
 
@@ -104,7 +108,7 @@ Ext.define('NextThought.view.profiles.View', {
 
 
 	onDeactivated: function () {
-		var profile = this.down('profile-panel');
+		var profile = this.down(this.defaultType);
 		//save memory/dom by cleaning out the profile object while its not active.
 		if (profile) {
 			//console.debug('Destroying profile widget');
