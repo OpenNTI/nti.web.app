@@ -86,6 +86,24 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	hasVisibilityForContent: function(cnt){
+		var u = $AppConfig.userObject,
+			visibilityKey = cnt.getAttribute('visibility');
+
+		// NOTE: Some pieces of content within a course may have limited access (mainly on Copyright issues).
+		// i.e only be available for OU students.
+		// If the appUser doesn't have the visibility key or whatever it maps to,
+		// then we conclude that they shouldn't have access to that content.
+		// Right now, there is no great way to determine what that visibility key is or maps to.
+
+		// For the short-term, since the request is for OU students and all 4-4 users(OU)
+		// have a 'OUID' on the user record, we will check for its existence.
+		// TODO: we need to define what this 'visibility' means for an AppUser in general (rather than just OU) or
+		// have a convention on how have we resolve it.
+		return Boolean(u.get(visibilityKey));
+	},
+
+
 	parseXML: function (xml) {
 		try {
 			return new DOMParser().parseFromString(xml, "text/html");

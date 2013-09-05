@@ -319,6 +319,11 @@ Ext.define('NextThought.Library', {
 				cb = me.activeLoad[index];
 
 			function strip(e){ Ext.fly(e).remove(); }
+			function permitOrRemove(e){
+				if(!ContentUtils.hasVisibilityForContent(e)){
+					Ext.each(me.getAllNodesReferencingContentID(e.getAttribute('ntiid'), xml), strip);
+				}
+			}
 
 			delete me.tocs[index];
 
@@ -326,6 +331,7 @@ Ext.define('NextThought.Library', {
 				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if(xml){
 					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic[href*=#]', xml), strip);
+					Ext.each(Ext.DomQuery.select('[visibility]', xml), permitOrRemove);
 				}
 				else {
 					console.warn('no data for index: '+url);
@@ -375,6 +381,28 @@ Ext.define('NextThought.Library', {
 		return undefined;
 	},
 
+
+	getAllNodesReferencingContentID: function(ntiid, xml){
+		if(!xml || !ntiid){
+			console.warn('Error: toc/xml or ntiid is empty. Should provide valid toc');
+			return [];
+		}
+
+		function getNodesForKey(keys){
+			var nodes = [];
+			ntiid = ntiid.replace(/:/g,'\\3a ').replace(/,/g,'\\2c ');  //no colons, no commas.
+			Ext.each(keys, function(k){
+				nodes = Ext.Array.merge(nodes, Ext.DomQuery.select(
+					'['+k+'="'+ ntiid +'"]',
+					xml));
+				}
+			);
+
+			return nodes;
+		}
+
+		return getNodesForKey(['ntiid','target-ntiid']);
+	},
 
 	resolve: function(toc, title, containerId, report) {
 		var elts, ix, topic, EA = Ext.Array;
