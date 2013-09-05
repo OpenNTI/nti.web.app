@@ -4,14 +4,9 @@ Ext.define('NextThought.view.reader.Panel',{
 	requires: [
 		'NextThought.view.content.Reader',
 		'NextThought.view.content.Toolbar',
-		'NextThought.view.annotations.View',
-        'NextThought.modules.TouchHandler',
-        'NextThought.modules.TouchSender'
+		'NextThought.view.annotations.View'
 	],
 
-    mixins:[
-        'NextThought.mixins.ModuleContainer'
-    ],
 
 	ui: 'reader',
 	cls: 'reader-container',

@@ -2,12 +2,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.wb-window',
 	requires: [
-		'NextThought.view.whiteboard.Editor',
-		'NextThought.view.whiteboard.TouchSender'
-	],
-
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
+		'NextThought.view.whiteboard.Editor'
 	],
 
 	hideMode: 'display',
