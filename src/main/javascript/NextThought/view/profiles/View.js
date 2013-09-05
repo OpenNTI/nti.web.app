@@ -8,21 +8,12 @@ Ext.define('NextThought.view.profiles.View', {
 
 	defaultType: 'profile-panel',
 	layout: 'auto',
-
+	cls: 'scrollable',
 
 	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 
