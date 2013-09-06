@@ -39,20 +39,17 @@ Ext.define('NextThought.view.account.Identity', {
 
 	monitorUser: function (u) {
 		var me = this, m = {
-			scope:     this,
+			scope: this,
+			destroyable: true,
 			'changed': function (r) {
-				me.avatar.set({
-								  src:         r.get('avatarURL'),
-								  'data-qtip': r.getName()
-							  });
-
+				me.avatar.set({ src: r.get('avatarURL'), 'data-qtip': r.getName() });
 				me.monitorUser((r !== u) ? r : null);
 			}
 		};
 
 		if (u) {
-			me.mun(me.user, m);
-			me.mon(u, m);
+			Ext.destroy(me.userMonitor);
+			me.userMonitor = me.mon(u, m);
 			me.user = u;
 		}
 
