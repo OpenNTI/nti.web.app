@@ -72,11 +72,12 @@ Ext.define('NextThought.view.contacts.View', {
 
 	getTabs: function () {
 		var tabs = this.tabSpecs,
-				active = this.layout.getActiveItem(),
-				activeId = active && active.id;
+			active = this.layout.getActiveItem(),
+			activeId = active && active.id;
 
 		Ext.each(tabs, function (t) {
 			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
+
 		});
 
 		return tabs;
@@ -85,8 +86,8 @@ Ext.define('NextThought.view.contacts.View', {
 
 	setActiveTab: function (tab) {
 		if (this.rendered) {
-			this.layout.setActiveItem(tab || 'course-book');
-			this.setTitle(this.getTitlePrefix() + this.locationTitle);
+			this.layout.setActiveItem(tab || 'my-contacts');
+			this.setTitle(this.getTitlePrefix());
 		} else {
 			this.on('afterrender', function () {
 				this.layout.setActiveItem(tab);
@@ -96,7 +97,7 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	getTitlePrefix: function () {
-		return '';
+		return 'NextThought: Contacts';
 	},
 
 
