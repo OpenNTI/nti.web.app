@@ -33,13 +33,6 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
             type: this.inputType || 'text',
             placeholder: this.placeholder
         };
-
-        if (Ext.is.iPad) {
-            this.on('focus', function () {
-                window.scrollTo(0, 0);
-                document.body.scrollTop = 0;
-            }, this);
-        }
     },
 
 
