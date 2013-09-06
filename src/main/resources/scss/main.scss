@@ -97,3 +97,7 @@ input::-ms-clear { display: none; }
 		background: $primary-blue;
 	}
 }
+
+.scrollable {
+	-webkit-overflow-scrolling: touch;
+}
