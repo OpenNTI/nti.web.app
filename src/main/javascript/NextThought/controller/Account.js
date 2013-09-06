@@ -34,87 +34,95 @@ Ext.define('NextThought.controller.Account', {
 
 	init: function () {
 		this.listen({
-						component: {
-							'contact-card': {
-								'click': 'contactCardClicked'
-							},
+			component: {
+				'contact-card': {
+					'click': 'contactCardClicked'
+				},
 
-							'settings-menu [href]': {
-								'click': 'openHref'
-							},
+				'settings-menu [href]': {
+					'click': 'openHref'
+				},
 
-							'settings-menu [action=privacy]': {
-								'click': 'showPrivacy'
-							},
+				'settings-menu [action=privacy]': {
+					'click': 'showPrivacy'
+				},
 
-							'settings-menu [action=childrens-privacy]': {
-								'click': 'showChildrensPrivacy'
-							},
+				'settings-menu [action=childrens-privacy]': {
+					'click': 'showChildrensPrivacy'
+				},
 
-							'settings-menu [action=help]': {
-								'click': 'openHelp'
-							},
+				'settings-menu [action=help]': {
+					'click': 'openHelp'
+				},
 
-							'settings-menu [action=terms]': {
-								'click': 'showTerms'
-							},
+				'settings-menu [action=terms]': {
+					'click': 'showTerms'
+				},
 
-							'settings-menu [action=account]': {
-								'click': 'showAccount'
-							},
+				'settings-menu [action=account]': {
+					'click': 'showAccount'
+				},
 
-							'settings-menu [action=welcome]': {
-								'click': 'showPermanantWelcome'
-							},
+				'settings-menu [action=welcome]': {
+					'click': 'showPermanantWelcome'
+				},
 
-							'settings-menu [action=contact]': {
-								'click': 'showContactUs'
-							},
+				'settings-menu [action=contact]': {
+					'click': 'showContactUs'
+				},
 
-							'profile-panel-old': {
-								'request-alias-change': 'requestAliasChange',
-								'edit':                 'showAccount'
-							},
+				'profile-panel-old': {
+					'request-alias-change': 'requestAliasChange',
+					'edit':                 'showAccount'
+				},
 
-							'password-reset-form button[save]': {
-								'click': 'changePassword'
-							},
+				'profile-about': {
+					'request-alias-change': 'requestAliasChange',
+					'edit':                 'showAccount'
+				},
+				'profile-outline': {
+					'edit':                 'showAccount'
+				},
 
-							'coppa-main-view button[name=submit]': {
-								'click': 'submitCoppaInfo'
-							},
+				'password-reset-form button[save]': {
+					'click': 'changePassword'
+				},
 
-							'recovery-email-view button[name=submit]': {
-								'click': 'fixEmail'
-							},
+				'coppa-main-view button[name=submit]': {
+					'click': 'submitCoppaInfo'
+				},
 
-							'contact-main-view button[name=submit]': {
-								'click': 'contactFormSubmit'
-							},
+				'recovery-email-view button[name=submit]': {
+					'click': 'fixEmail'
+				},
 
-							'code-main-view button[name=submit]':   {
-								'click': 'groupCodeSubmit'
-							},
-							'code-main-view simpletext[name=code]': {
-								'changed':    'groupCodeChanged',
-								'specialkey': 'groupCodeSpecialKey'
-							},
+				'contact-main-view button[name=submit]': {
+					'click': 'contactFormSubmit'
+				},
 
-							'*': {
-								'resend-consent': 'resendConsent',
-								'set-preference': 'setPreference',
-								'delete-preference': 'delPreference'
-							},
+				'code-main-view button[name=submit]':   {
+					'click': 'groupCodeSubmit'
+				},
+				'code-main-view simpletext[name=code]': {
+					'changed':    'groupCodeChanged',
+					'specialkey': 'groupCodeSpecialKey'
+				},
 
-							'group-buttons': { 'click': 'groupButtonClicked' },
-							'list-buttons': { 'click': 'groupButtonClicked' },
+				'*': {
+					'resend-consent': 'resendConsent',
+					'set-preference': 'setPreference',
+					'delete-preference': 'delPreference'
+				},
 
-							'contacts-outline':{
-								'contact-button-clicked':'groupButtonClicked'
-							}
+				'group-buttons': { 'click': 'groupButtonClicked' },
+				'list-buttons': { 'click': 'groupButtonClicked' },
 
-						}
-					});
+				'contacts-outline':{
+					'contact-button-clicked':'groupButtonClicked'
+				}
+
+			}
+		});
 	},
 
 

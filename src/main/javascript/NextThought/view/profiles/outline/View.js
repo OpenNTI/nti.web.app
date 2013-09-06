@@ -36,6 +36,26 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.monitorUser(this.user);
+
+		this.groupsListMenu = Ext.widget({
+			xtype: 'menu',
+			ui: 'nt',
+			plain: true,
+			shadow: false,
+			width: 255,
+			items: [{xtype:'management-group-list', allowSelect: true}]
+		});
+		this.on('destroy','destroy',this.groupsListMenu);
+
+		this.groupsList = this.groupsListMenu.down('management-group-list');
+
+		this.on({
+			click: {
+			   fn:'onControlsClicked',
+			   scope:this,
+			   element:'controlsEl'
+			}
+		});
 	},
 
 
@@ -45,9 +65,8 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				destroyable: true,
 				scope: this,
 				changed: function (r) {
-					if(!me.rendered){
-						me.applyRenderData(r);
-					} else {
+					me.applyRenderData(r);
+					if( me.rendered){
 						me.avatarEl.setStyle({ backgroundImage: 'url('+r.get('avatarURL')+')' });
 						me.nameEl.update(r.getName());
 					}
@@ -69,10 +88,18 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	//TODO: add a monitor for !isMe users to test if they are a contact or are/are-not available to chat.
 
 	applyRenderData: function(user){
+		this.isContact = Ext.getStore('FriendsList').isContact(this.user);
+		this.groupsList.setUser(user).isContact = this.isContact;
+		if(this.optionsMenu){
+			this.un('destroy','destroy',this.optionsMenu);
+			Ext.destroy(this.optionsMenu);
+		}
+		this.optionsMenu = Ext.widget({xtype:'person-options-menu', width:255, ownerCmp: this, user: this.user, isContact: this.isContact });
+		this.on('destroy','destroy',this.optionsMenu);
 		this.renderData = Ext.apply(this.renderData||{},user.getData());
 		Ext.apply(this.renderData,{
 			isMe: isMe(user),
-			isContact: Ext.getStore('FriendsList').isContact(user),
+			isContact: this.isContact,
 			presence: user.getPresence().getName()
 		});
 	},
@@ -149,6 +176,24 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			});
 
 		this.nav.select(i);
+
+	},
+
+
+	onControlsClicked: function(e){
+		if(e.getTarget('.disabled')){
+			return;
+		}
+
+		if(e.getTarget('.settings')){
+			this.optionsMenu.showBy(this.avatarEl,'tl-bl');
+		}
+		else if(e.getTarget('.lists')){
+			this.groupsListMenu.showBy(this.avatarEl,'tl-bl');
+		}
+		else if(e.getTarget('.edit')){
+			this.fireEvent('edit');
+		}
 
 	}
 
