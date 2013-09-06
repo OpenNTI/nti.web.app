@@ -149,6 +149,7 @@
 		.blogged-event,
 		.joined-event,
 		.note-container,
+		.activity-highlight-container,
 		.transcriptsummary-event{
 			margin-bottom: 5px;
 		}
@@ -157,6 +158,7 @@
 			.blogged-event,
 			.joined-event,
 			.note-container,
+			.activity-highlight-container,
 			.transcriptsummary-event{
 				margin-top: 20px;
 				margin-bottom: 0;
@@ -1021,7 +1023,7 @@
 		}
 
 		.activity-highlight-container {
-			margin: 15px 0 0;
+			background: #fff;
 			border: 1px solid #eaeaea;
 
 			.header {
