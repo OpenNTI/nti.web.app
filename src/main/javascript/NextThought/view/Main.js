@@ -31,17 +31,17 @@ Ext.define('NextThought.view.Main', {
 		this.callParent(arguments);
 
 		if (Ext.is.iOS) {
-			document.ontouchstart = this.onTouchStart;
-
-			document.ontouchmove = this.onTouchMove;
-
-			document.ontouchend = this.onTouchEnd;
+			Ext.getBody().on({
+				touchstart: this.onTouchStart,
+				touchmove: this.onTouchMove,
+				touchend: this.onTouchEnd
+			});
 		}
 	},
 
 
 	onTouchStart: function (e) {
-		var touch = e.touches[0],
+		var touch = e.browserEvent.touches[0],
 			mouseEnterEvent,
 			mouseOverEvent,
 			mouseDownEvent;
@@ -74,7 +74,8 @@ Ext.define('NextThought.view.Main', {
 
 
 	onTouchMove: function (e) {
-		var touch = e.touches[0],
+		var touch = e.browserEvent.touches[0],
+			scrollable = e.getTarget('.scrollable'),
 			mouseMoveEvent, changedTouch,
 			mouseLeaveEvent,
 			mouseOutEvent,
@@ -83,8 +84,11 @@ Ext.define('NextThought.view.Main', {
 		if (!touch) {
 			return;
 		}
-		// If the event wasn't absorbed by a scrollable element, then we don't want scrolling
-		e.preventDefault();
+
+		// If the event target wasn't a scrollable element, then we don't want scrolling
+		if (!scrollable) {
+			e.preventDefault();
+		}
 
 		// Dispatch mousemove
 		mouseMoveEvent = document.createEvent('MouseEvents');
@@ -94,7 +98,7 @@ Ext.define('NextThought.view.Main', {
 		touch.target.dispatchEvent(mouseMoveEvent);
 
 		// Dispatch leave/enter events if moving onto a different element
-		changedTouch = e.changedTouches[0];
+		changedTouch = e.browserEvent.changedTouches[0];
 		if (changedTouch && changedTouch.target !== touch.target) {
 			// Dispatch mouseleave
 			mouseLeaveEvent = document.createEvent('MouseEvents');
@@ -121,7 +125,7 @@ Ext.define('NextThought.view.Main', {
 
 
 	onTouchEnd: function (e) {
-		var touch = e.changedTouches[0],
+		var touch = e.browserEvent.changedTouches[0],
 			mouseUpEvent,
 			mouseLeaveEvent,
 			mouseOutEvent;
@@ -191,7 +195,9 @@ Ext.define('NextThought.view.Main', {
 		this.identity = this.sidebar.add({xtype: 'identity'});
 
 		if (Ext.is.iOS) {
-			this.setupTablet();
+//			this.setupTablet();
+			Ext.getDoc().swallowEvent('gesturestart', true);
+			this.lockOrientation();
 		}
 	},
 
@@ -291,8 +297,8 @@ Ext.define('NextThought.view.Main', {
 
 
 		// Prevent two-finger panning
-		Ext.getDoc().swallowEvent('gesturestart',true)
-					.swallowEvent('touchmove',true);
+		Ext.getDoc().swallowEvent('gesturestart', true)
+			.swallowEvent('touchmove',true);
 
 		// based on http://stackoverflow.com/a/14244680/823158 and http://stackoverflow.com/a/9417931/823158
 		Ext.getBody().on({
