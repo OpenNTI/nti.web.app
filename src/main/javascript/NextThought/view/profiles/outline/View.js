@@ -14,7 +14,11 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			cn: [
 				{ cls: 'lists' },
 				{ cls: 'settings' },
-				{ cls: 'button' }
+				{ tag:'tpl', 'if':'isMe', cn: { cls: 'button edit', html:'Edit' }},
+				{ tag:'tpl', 'if':'!isMe', cn: [
+					{ tag:'tpl', 'if':'isContact', cn: { cls: 'button chat', html:'Chat' }},
+					{ tag:'tpl', 'if':'!isContact', cn: { cls: 'button', html:'Add Contact' }}
+				]}
 			]
 		},
 		{
@@ -62,10 +66,15 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		}
 	},
 
+	//TODO: add a monitor for !isMe users to test if they are a contact or are/are-not available to chat.
 
 	applyRenderData: function(user){
 		this.renderData = Ext.apply(this.renderData||{},user.getData());
-		this.renderData.presence = user.getPresence().getName();
+		Ext.apply(this.renderData,{
+			isMe: isMe(user),
+			isContact: Ext.getStore('FriendsList').isContact(user),
+			presence: user.getPresence().getName()
+		});
 	},
 
 

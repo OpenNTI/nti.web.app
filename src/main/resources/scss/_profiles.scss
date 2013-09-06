@@ -26,10 +26,15 @@
 
 	.x-component-profile {
 		&.outline {
+			overflow: hidden;
+			$control: 45px;
+			$avatar: 255px;
 			.avatar {
 				position: relative;
-				width: 255px;
-				height: 255px;
+				width: $avatar;
+				height: $avatar;
+				box-shadow: 0 0px 3px 0 rgba(0,0,0,0.8);
+				z-index: 2;
 				background: {
 					size: cover;
 					repeat: no-repeat;
@@ -51,6 +56,79 @@
 					font: normal 700 16px/20px 'Open Sans Condensed', $font;
 
 					@include presence-style-sudo($x:15px, $y:17px, $xSide:'right');
+				}
+			}
+
+			.controls {
+				position: relative;
+				height: $control;
+				background: #e6e6e6;
+
+				.settings,
+				.lists {
+					cursor: pointer;
+					background: #fafafa;
+					display: block;
+					width: 58px;
+					height: $control;
+					box-shadow: inset 0 0 0 0 #e6e6e6;
+					top: 0;
+				}
+
+				.lists {
+					left:0;
+					box-shadow: inset 0 1px 0 0 #e6e6e6,
+								inset 0 -1px 0 0 #e6e6e6,
+								inset 1px 0 0 0 #e6e6e6;
+					@include icon('rhp-contact-flyout-lists',$position: absolute, $top:16px, $left:19px);
+				}
+				.settings {
+					left: 59px;
+					box-shadow: inset 0 1px 0 0 #e6e6e6,
+								inset 0 -1px 0 0 #e6e6e6,
+								inset -1px 0 0 0 #e6e6e6;
+					@include icon('rhp-contact-flyout-settings',$position: absolute, $top:14px, $left:20px);
+				}
+
+				.button{
+					position: absolute;
+					top: 0;
+					right: 0;
+					left: 117px;
+					height: $control;
+					text-align: center;
+					cursor: pointer;
+					font: italic 600 14px/45px $font;
+					color: #ffffff;
+					box-shadow: inset 0 0 0 1px #69a92b;
+					background: #75bc30;
+
+					&.disabled{
+						cursor: default !important;
+						box-shadow: inset 0 0 0 1px #d0d0d0 !important;
+						background: rgba(184,184,184,0.5) !important;
+						color: rgba(255,255,255,0.7) !important;
+					}
+
+					&.chat, &.edit{
+						box-shadow: inset 0 0 0 1px $border-blue;
+						background: $primary-blue;
+					}
+				}
+			}
+
+			$head: $avatar + $control;
+
+			.nav {
+				height: 50%;
+				@include experimental-value(height, calc(100% - #{$head}));
+
+				.nav-outline{
+					height: 100%;
+					overflow: {
+						x: hidden;
+						y: scroll;
+					}
 				}
 			}
 		}
