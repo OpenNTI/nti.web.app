@@ -307,7 +307,7 @@ Ext.define('NextThought.controller.Store', {
 				msg: 'Your current progress will be lost.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				icon: 'warning-red',
-				buttonText: {'ok': 'caution:Take me anyway'},
+				buttonText: {'ok': 'caution:Navigate away'},
 				title: 'Are you sure?',
 				fn: function (str) {
 					if (str === 'ok') {

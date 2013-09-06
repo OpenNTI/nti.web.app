@@ -262,7 +262,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 				msg: 'You are about to exit the media viewer.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				icon: 'warning-red',
-				buttonText: {'ok': 'caution:Take me anyway'},
+				buttonText: {'ok': 'caution:Exit'},
 				title: 'Are you sure?',
 				fn: function (str) {
 					if (str === 'ok') {
