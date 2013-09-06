@@ -92,7 +92,7 @@ Ext.define('NextThought.view.contacts.SubView', {
 
 		if(cmp){
 			cmp.getEl().scrollIntoView(this.body.getEl());
-			cmp.getEl().highlight('3fb3f6');
+			cmp.getEl().highlight('88d0f9');
 		}
 	},
 
