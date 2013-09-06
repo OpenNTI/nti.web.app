@@ -7,8 +7,8 @@ Ext.define('NextThought.view.tool.Action', {
 	disabledCls: 'disabled',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}'},
-		{cls: 'label', html: '{label}'}
+		{cls: 'icon {iconCls}', 'data-qtip':'{label}'},
+		{tag:'tpl', 'if':'!hideLabel', cn:{cls: 'label', html: '{label}'}}
 	]),
 
 	renderSelectors: {
@@ -31,7 +31,8 @@ Ext.define('NextThought.view.tool.Action', {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.iconCls || 'defualt',
-			label: this.label || ''
+			label: this.label || '',
+			hideLabel: !!this.hideLabel
 		});
 	},
 

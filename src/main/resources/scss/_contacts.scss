@@ -961,21 +961,14 @@ div.contact-buttons {
 		.x-component-nti-tool-action{
 			margin: 0 0 0 20px;
 			.icon {
-				&.chat::after {
-					top: 4px;
-					@include sprite($icons,'chat-18x12',$dimensions: true);
-				}
-
-				&.settings::after{
-					@include sprite($icons,'settings-28x17',$dimensions: true);
-					width: 18px;//crop off the down-arrow nib
+				&.options::after{
+					@include sprite($icons,'options-menu',$dimensions: true);
 				}
 			}
 			&:hover,&.over {
 				&:not(.disabled){
 					.icon {
-						&.chat::after { @include sprite($icons,'chat-18x12_hover'); }
-						&.settings::after{ @include sprite($icons,'settings-28x17_hover'); }
+						&.options::after{ @include sprite($icons,'options-menu_hover'); }
 					}
 				}
 			}
@@ -983,6 +976,7 @@ div.contact-buttons {
 
 		.grouping-header{
 			margin: 10px 0;
+			white-space: nowrap;
 
 			.tools{
 				margin-top: 3px;
@@ -995,7 +989,7 @@ div.contact-buttons {
 			.name{
 				overflow: hidden;
 				@include ellipse;
-				max-width: 480px;
+				max-width: 600px;
 				display: inline-block;
 				vertical-align: bottom;
 			}

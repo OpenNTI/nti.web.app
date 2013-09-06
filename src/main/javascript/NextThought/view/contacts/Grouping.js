@@ -27,16 +27,10 @@ Ext.define('NextThought.view.contacts.Grouping', {
 	border:      false,
 	tools:       [
 		{
-			chat:    1,
-			xtype:   'nti-tool-action',
-			iconCls: 'chat',
-			label:   'Group Chat'
-		},
-		{
-			settings: 1,
 			xtype:    'nti-tool-action',
-			iconCls:  'settings',
-			label:    'Settings'
+			iconCls:  'options',
+			label:    'Options',
+			hideLabel: true
 		}
 	],
 
@@ -57,19 +51,19 @@ Ext.define('NextThought.view.contacts.Grouping', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-										{
-											cls: 'grouping-header',
-											cn:  [
-												{cls: 'tools'},
-												{tag: 'span', cls: 'name'},
-												{tag: 'span', cls: 'count'}
-											]
-										},
-										{
-											id: '{id}-body',
-											cn: ['{%this.renderContainer(out,values)%}']
-										}
-									]),
+		{
+			cls: 'grouping-header',
+			cn:  [
+				{cls: 'tools'},
+				{tag: 'span', cls: 'name'},
+				{tag: 'span', cls: 'count'}
+			]
+		},
+		{
+			id: '{id}-body',
+			cn: ['{%this.renderContainer(out,values)%}']
+		}
+	]),
 
 
 	renderSelectors: {
@@ -107,27 +101,16 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		this.associatedGroup = this.associatedGroup || this.record;
 
 		this.setTitle(this.associatedGroup.getName());
-		this.setupActions(this.associatedGroup, true);
+		this.setupActions(this.associatedGroup);
 
 		this.tools = Ext.Array.map(this.tools, function (t) {
 			return Ext.widget(t);
 		});
 
-		Ext.each(this.tools, function (t) {
-			if (t.chat) {
-				this.chatTool = t;
-			}
-			else if (t.settings) {
-				this.settingsTool = t;
-			}
-		}, this);
+		this.settingsTool = this.tools[0];//stupid.(this whole tool thing is stupid)
 
-		this.chatTool.assignExtAction(this.groupChatAction);
 		//set the settings disabled if there is no menu or it doens't have any items
 		this.settingsTool.setDisabled(!(this.menu && this.menu.items && this.menu.items.length > 0));
-		if (this.groupChatAction.isHidden()) {
-			this.chatTool.hide();
-		}
 
 		this.mon(this.settingsTool, 'click', this.showMenu, this);
 
@@ -139,6 +122,7 @@ Ext.define('NextThought.view.contacts.Grouping', {
 					remove: 'updateStuff',
 					buffer: 100
 				});
+
 		this.mixins.userContainer.constructor.apply(this, arguments);
 
 		if (Ext.is.iPad) {
