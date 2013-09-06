@@ -11,7 +11,7 @@ Ext.define('NextThought.view.contacts.Search', {
 	shadow: false,
 	preventBringToFront: true,
 
-	cls: 'contact-search scrollable',
+	cls: 'contact-search',
 
 	layout: {
 		type: 'vbox',
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.contacts.Search', {
 			allowDeselect: false,
 			singleSelect: true,
 
-			cls: 'search-results',
+			cls: 'search-results scrollable',
 			overItemCls: 'over',
 			itemSelector: 'div.item-wrap',
 
