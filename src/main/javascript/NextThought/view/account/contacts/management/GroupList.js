@@ -160,6 +160,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		}
 		this.username = user;
 		this.refresh();
+		return this;
 	},
 
 
