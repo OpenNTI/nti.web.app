@@ -418,7 +418,6 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	afterRender: function(){
 		this.callParent(arguments);
 
-		debugger;
 		var optionsEl = this.controlOptions,
 			bodyEl = this.messageBodyEl,
 			metaEl = this.metaEl,
