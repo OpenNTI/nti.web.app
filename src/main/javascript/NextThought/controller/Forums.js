@@ -488,7 +488,7 @@ Ext.define('NextThought.controller.Forums', {
 						}
 						else if(resp.status === 403){
 							msgCfg.title = 'Sorry.';
-							msgCfg.msg = 'You do not have access to this resource';
+							msgCfg.msg = 'You do not have access to this resource.';
 						}
 						alert(msgCfg);
 					}
