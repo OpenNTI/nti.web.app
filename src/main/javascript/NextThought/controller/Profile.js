@@ -88,7 +88,8 @@ Ext.define('NextThought.controller.Profile', {
 			o = this.getController('State').interpretFragment(url),
 			v = this.getProfileView();
 
-		v.on('finish-restore',function(){
+		v.on('finished-restore',function(){
+			console.debug('Finished restore',o);
 			history.pushState(o,document.title,url);
 			Ext.callback(callback,null,[user]);
 		},this,{single: true});
