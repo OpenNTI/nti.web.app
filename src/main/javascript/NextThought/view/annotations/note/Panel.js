@@ -811,6 +811,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			e.stopEvent();
 		}
 
+		this.replyMode = true;
+
 		if (me.noteBody && me.checkAndMarkAsActive(this)) {
 			me.replyToId = null;
 			me.noteBody.addCls('editor-active');
@@ -842,6 +844,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 		this.editor.clearError();
 		delete this.editMode;
+		delete this.replyMode;
 		root.setEditorActive(null);
 	},
 
@@ -970,6 +973,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 	onEdit: function () {
+		if(this.replyMode){ return; }
+
 		this.text.hide();
 		this.editMode = true;
 		this.editor.editBody(this.record.get('body'));
@@ -1080,6 +1085,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 	onReply: function () {
+		this.replyMode = true;
 		this.activateReplyEditor();
 	},
 

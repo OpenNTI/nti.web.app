@@ -529,6 +529,13 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 		this.mon(this.editEl, 'click', this.onEdit, this);
 	},
 
+	onEdit: function(){
+		var parent = this.up('profile-activity-item');
+
+		if(this.replyMode || parent.replyMode){ return; }
+		this.callParent(arguments);
+	},
+
 	shouldRevealReplies: function () {
 		this.mun(this.replyButton, 'click', this.shouldRevealReplies, this);
 
