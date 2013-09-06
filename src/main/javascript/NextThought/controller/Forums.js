@@ -33,7 +33,8 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.Forum',
 		'forums.Topic',
 		'forums.View',
-		'forums.forumcreation.Window'
+		'forums.forumcreation.Window',
+		'profiles.parts.ForumActivityItem'
 	],
 
 	refs: [
@@ -101,6 +102,12 @@ Ext.define('NextThought.controller.Forums', {
 				},
 				'profile-forum-activity-item nti-editor':{
 					'save': this.saveTopicComment
+				},
+				'profile-forum-activity-item-reply > nti-editor':{
+					'save': this.saveTopicComment
+				},
+				'profile-forum-activity-item-reply':{
+					'delete-topic-comment': this.deleteObject
 				},
 				'#forums > forums-topic nti-editor': {
 					'save': this.saveTopicComment

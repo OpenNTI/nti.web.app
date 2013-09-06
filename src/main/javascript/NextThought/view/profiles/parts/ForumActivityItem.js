@@ -336,7 +336,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	alias: 'widget.profile-forum-activity-item-reply',
 
 	mixins: {
-		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
 	renderTpl: Ext.DomHelper.markup({
@@ -350,7 +351,20 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 				{ tag: 'span', cls: 'name link', html: '{Creator}' },' ',
 				{ tag: 'span', cls: 'time', html: '{date}' }
 			]},
-			{ cls: 'body', html: '{body}' }
+			{ cls: 'body', html: '{body}' },
+			{ cls: 'respond', cn: [
+				{cls: 'reply-options', cn:[
+					{tag:'tpl', 'if':'isModifiable', cn:[
+						{cls:'edit', html: 'Edit'}
+					]},
+					{tag:'tpl', 'if':'!isModifiable && !Deleted', cn:[
+						{ cls: 'flag', html: 'Report' }
+					]},
+					{tag:'tpl', 'if': 'isModifiable', cn:[
+						{ cls: 'delete', html: 'Delete' }
+					]}
+				]}
+			]}
 		]
 	}),
 
@@ -358,8 +372,19 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 		avatarEl: '.avatar',
 		nameEl: '.name',
 		messageBodyEl: '.body',
+		deleteEl: '.delete',
+		editEl: '.edit',
+		flagEl: '.flag',
+		liked: '.controls .like',
+		respondEl: '.respond',
+		controlOptions : '.reply-options',
+		metaEl: '.meta'
+	},
 
-		liked: '.controls .like'
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mixins.flagActions.constructor.call(this);
+		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
 	},
 
 	beforeRender: function(){
@@ -386,12 +411,112 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	},
 
 
+	getRefItems: function () {
+		return this.editor ? [this.editor] : [];
+	},
+
 	afterRender: function(){
-		this.callParent();
+		this.callParent(arguments);
+
+		debugger;
+		var optionsEl = this.controlOptions,
+			bodyEl = this.messageBodyEl,
+			metaEl = this.metaEl,
+			avatarEl = this.avatarEl,
+			show, hide;
+
+		this.record.addObserverForField(this, 'body', this.updateContent, this);
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 		this.mon(this.messageBodyEl,'click',this.bodyClickHandler,this);
+		this.respondEl.setVisibilityMode(Ext.Element.DISPLAY);
+
+		if(this.deleteEl){
+			this.mon(this.deleteEl, 'click', this.onDelete, this);
+		}
+
+		if(this.editEl){
+			this.mon(this.editEl, 'click', this.onEdit, this);
+			this.messageBodyEl.setVisibilityMode(Ext.Element.DISPLAY);
+			this.avatarEl.setVisibilityMode(Ext.Element.DISPLAY);
+			this.metaEl.setVisibilityMode(Ext.Element.DISPLAY);
+			this.controlOptions.setVisibilityMode(Ext.Element.DISPLAY);
+
+			hide = function(){
+				optionsEl.hide();
+				bodyEl.hide();
+				metaEl.hide();
+				avatarEl.hide();
+			};
+			show = function(){
+				optionsEl.show();
+				bodyEl.show();
+				metaEl.show();
+				avatarEl.show();
+			};
+
+			this.editor = Ext.widget('nti-editor', { record: this.record, renderTo: this.respondEl, ownerCt: this });
+			this.mon(this.editor, {
+				'activated-editor' : hide,
+				'deactivated-editor' : show,
+				'no-body-content': function (editor, el) {
+					editor.markError(el, 'You need to type something');
+					return false;
+				}
+			});
+		}
+
+		if(this.record.get('Deleted') === true){
+			this.respondEl.hide();
+		}
 	},
+
+
+	onRecordDestroyed: function () {
+		//First remove the delete and edit link listeners followed by the els
+		if (this.deleteEl) {
+			this.mun(this.deleteEl, 'click', this.onDeletePost, this);
+			this.deleteEl.remove();
+		}
+
+		if (this.editEl) {
+			this.mun(this.editEl, 'click', this.onEditPost, this);
+			this.editEl.remove();
+		}
+
+		//Now tear down like, favorites and flagging
+		this.tearDownLikeAndFavorite();
+		this.tearDownFlagging();
+
+		if(this.flagEl){
+			this.flagEl.remove();
+			this.respondEl.remove();
+		}
+
+		//Now clear the rest of our field listeners
+		this.record.removeObserverForField(this, 'body', this.updateContent, this);
+
+		//Now update the body to the same text the server uses.
+		this.messageBodyEl.update('This item has been deleted.');
+		this.addCls('deleted');
+	},
+
+
+	onDelete: function(){
+		this.fireEvent('delete-topic-comment', this.record, this);
+	},
+
+
+	onEdit: function(){
+		this.editor.editBody(this.record.get('body'));
+		this.editor.activate();
+	},
+
+
+	updateContent: function(){
+		this.record.compileBodyContent(this.setBody, this);
+	},
+
 
 	bodyClickHandler: function(event){
 		event.stopEvent();
@@ -406,12 +531,26 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 		}
 	},
 
-	setBody: function(text){
+	setBody: function(html){
 		if(!this.rendered){
 			this.on('afterrender',Ext.bind(this.setBody,this,arguments),this);
 			return;
 		}
-		this.messageBodyEl.update(text);
+
+		var el = this.messageBodyEl, me = this;
+		el.update(html);
+		DomUtils.adjustLinks(el, window.location.href);
+		el.select('img.whiteboard-thumbnail').each(function (el) {
+			el.replace(el.up('.body-divider'));
+		});
+
+		el.select('img').each(function (img) {
+			img.on('load', function () {
+				me.up('[record]').fireEvent('sync-height');
+			});
+		});
+
+
 		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
 		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
 	}
