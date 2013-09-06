@@ -17,6 +17,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	getTargetEl:     function () { return this.body; },
 	hidden:          true,
 
+	uriFrendlyName: 'Thoughts',
 	ui:  'blog',
 	cls: 'blog',
 
@@ -348,7 +349,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 	updateLocation: function (postId, subsection) {
 		var u = this.user,
-			args = [this.title, postId, subsection];
+			args = [this.uriFrendlyName, postId, subsection];
 
 		if (!subsection || !Ext.isString(subsection)) {
 			args.pop();
