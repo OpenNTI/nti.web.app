@@ -586,7 +586,7 @@
 }
 
 #profile {
-
+	.old .blog .entry.list-item{margin: 50px 0;}
 	.blog {
 
 		.post-view .blog-editor{
@@ -629,8 +629,9 @@
 		.entry.list-item {
 			box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06);
 			border: 1px solid #eaeaea;
+			background: #fff;
 			padding: 0;
-			margin: 50px 0;
+			margin: 0 0 5px;
 
 			& > div:not(.controls):not(.foot) {
 				margin-left: 20px;

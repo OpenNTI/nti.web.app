@@ -77,7 +77,12 @@ Ext.define('NextThought.view.profiles.View', {
 
 		if (current && current.username === username) {
 			Ext.apply(current, state);
-			current.setActiveTab(state.activeTab);
+			if(current.setActiveTab){
+				current.setActiveTab(state.activeTab);
+			}
+			else {
+				console.warn('should set this view active:', state.activeTab);
+			}
 			fin();
 			return;
 		}

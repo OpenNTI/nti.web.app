@@ -257,7 +257,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	loadContents: function (resp) {
-		if (this.tab.isHidden()) {
+		if (this.tab && this.tab.isHidden()) {
 			this.tab.show();
 		}
 		if (!this.rendered) {
