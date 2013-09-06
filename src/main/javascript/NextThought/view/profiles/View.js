@@ -95,8 +95,11 @@ Ext.define('NextThought.view.profiles.View', {
 					shouldFireLoaded = true;
 				}
 				else {
-					//TODO pass in the reolved user here so we don't have to pass back through the UserRepository again
-					toAdd = Ext.applyIf({username: username, displayName: user.getName()}, state);
+					toAdd = Ext.applyIf({
+						user: user,
+						username: username,//can be removed once v2profiles is released
+						displayName: user.getName()//can be removed once v2profiles is released
+					}, state);
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: { loaded: fin, scope: this, single: true, delay: 1 }

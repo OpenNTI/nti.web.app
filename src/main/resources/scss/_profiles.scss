@@ -7,6 +7,7 @@
 }
 
 #profile {
+	margin-top: -65px;
 	padding:0;
 	overflow:{
 		x: hidden;
@@ -23,8 +24,47 @@
 		margin: 75px auto;
 	}
 
+	.x-component-profile {
+		&.outline {
+			.avatar {
+				position: relative;
+				width: 255px;
+				height: 255px;
+				background: {
+					size: cover;
+					repeat: no-repeat;
+					position: center center;
+				}
+
+				.name {
+					position: absolute;
+					bottom: 0; left: 0; right: 0;
+					background: rgba(38, 38, 38, 0.94);
+					color: #fff;
+					overflow: hidden;
+					@include ellipse();
+
+
+					margin: 0;
+					padding: 10px 30px 10px 20px;
+					text-transform: uppercase;
+					font: normal 700 16px/20px 'Open Sans Condensed', $font;
+
+					@include presence-style-sudo($x:15px, $y:17px, $xSide:'right');
+				}
+			}
+		}
+	}
+
 	.x-container-profile {
 		margin: 0 auto;
+
+		.blogged-event,
+		.joined-event,
+		.note-container,
+		.transcriptsummary-event{
+			margin-bottom: 5px;
+		}
 
 		&.old {
 			.blogged-event,

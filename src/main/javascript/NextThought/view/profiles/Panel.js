@@ -2,8 +2,19 @@ Ext.define('NextThought.view.profiles.Panel', {
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.profile-panel',
 
-	navigation: {},
-	body:{cls:'make-white'},
+	requires: [
+		'NextThought.view.profiles.outline.View',
+		'NextThought.view.profiles.parts.Blog'
+	],
+
+	navigation: {xtype: 'profile-outline'},
+
+	body:{
+		layout: {
+			type: 'card',
+			deferredRender: true
+		}
+	},
 
 	ui:  'profile',
 	cls: 'profile-view',
@@ -12,8 +23,19 @@ Ext.define('NextThought.view.profiles.Panel', {
 	},
 
 	constructor: function (config) {
-//		this.applyConfigs('body', {})
-//		this.applyConfigs('navigation', {});
+		var u = config.user;
+		if(!u){
+			Ext.Error.raise('No user provided');
+		}
+
+		this.applyConfigs('navigation', {user:u});
+		this.applyConfigs('body', {
+			items:[
+				{ xtype: 'profile-activity', user: u, username: u.getId(), autoScroll:true },
+				{ html: 'profile info', user: u },
+				{ xtype: 'profile-blog', user:u, username: u.getId(), autoScroll: true }
+			]
+		});
 
 		this.callParent(arguments);
 	},

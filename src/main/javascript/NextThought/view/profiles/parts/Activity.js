@@ -19,7 +19,13 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	initComponent: function(){
 		this.fireEvent('uses-page-stores',this);
 		this.callParent(arguments);
-		UserRepository.getUser(this.username,this.setUser, this, true);
+
+		if( this.user ){
+			this.setUser(this.user);
+		}
+		else {
+			UserRepository.getUser(this.username,this.setUser, this, true);
+		}
 	},
 
 
