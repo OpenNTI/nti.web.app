@@ -149,6 +149,7 @@ Ext.define('NextThought.controller.Groups', {
 		store.suspendEvents(false);
 		store.filter(function(rec){return !rec.hidden;});
 		store.resumeEvents();
+		store.fireEvent('refilter');
 	},
 
 

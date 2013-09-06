@@ -6,17 +6,17 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'header', cn: [
-											'{outlineLabel}'
-										]},
-										{ cls: 'outline-list'},
-										{ tag:'tpl', 'if':'buttons', cn: { cls:'buttons', cn: [
-											{ tag:'tpl', 'if':'canjoin', cn:{
-												cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
-											{ tag:'tpl', 'if':'cancreate', cn:{
-												cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } }
-										]}}
-									]),
+		{ cls: 'header', cn: [
+			'{outlineLabel}'
+		]},
+		{ cls: 'outline-list'},
+		{ tag:'tpl', 'if':'buttons', cn: { cls:'buttons', cn: [
+			{ tag:'tpl', 'if':'canjoin', cn:{
+				cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
+			{ tag:'tpl', 'if':'cancreate', cn:{
+				cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } }
+		]}}
+	]),
 
 	renderSelectors: {
 		frameBodyEl: '.outline-list',
