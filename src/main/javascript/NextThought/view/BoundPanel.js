@@ -19,7 +19,8 @@ Ext.define('NextThought.view.BoundPanel', {
 			clear: 'removeAllItems',
 			'parent-store-loaded': 'onParentStoreLoad',
 			add: 'onBoundStoreAdd',
-			remove: 'onBoundStoreRemove'
+			remove: 'onBoundStoreRemove',
+			refresh: 'doRefresh'
 		});
 	},
 
@@ -50,19 +51,18 @@ Ext.define('NextThought.view.BoundPanel', {
 
 
 	hideEmptyState: function () {
-		if (this.emptyState && this.down('[emptyState=true]')) {
+		if (this.down('[emptyState=true]')) {
 			this.down('[emptyState=true]').destroy();
-			this.emptyState = false;
-			this.removeCls('empty');
 		}
+		this.removeCls('empty');
+		this.emptyState = false;
 	},
 
 
 	shouldHide: function (records) {
 		var allHidden = true, me = this;
-
 		Ext.each(records, function (item) {
-			allHidden = allHidden && (!!item.hidden || (me.filter && !me.filter(item)));
+			allHidden = allHidden && !!(item.hidden || (me.filter && !me.filter(item)));
 		});
 
 		return allHidden;
@@ -84,6 +84,12 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
+	doRefresh: function(store){
+		clearTimeout(this.refreshTask);
+		this.refreshTask = Ext.defer(this.onBoundStoreLoad,100,this,[store]);
+	},
+
+
 	onBoundStoreLoad: function (store) {
 		var items;
 
@@ -93,6 +99,12 @@ Ext.define('NextThought.view.BoundPanel', {
 		}
 
 		items = store.snapshot ? store.snapshot.items : store.data.items;
+		if(store.snapshot){
+			items = items.slice();
+			items.sort(store.generateComparator());
+		}
+
+		this.hideEmptyState();
 
 		if (this.shouldHide(items) || Ext.isEmpty(items)) {
 			this.showEmptyState();
@@ -103,8 +115,12 @@ Ext.define('NextThought.view.BoundPanel', {
 
 
 	onBoundStoreAdd: function (store, records, index) {
+
 		var insertionPoint = this.defaultInsertPoint || index || 0,//force number
-				toAdd = Ext.Array.clean(Ext.Array.map(records, this.getComponentConfigForRecord, this));
+			toAdd;
+
+		records.sort(store.generateComparator());
+		toAdd = Ext.Array.clean(Ext.Array.map(records, this.getComponentConfigForRecord, this));
 
 		if (!this.shouldHide(records)) {
 			this.hideEmptyState();
