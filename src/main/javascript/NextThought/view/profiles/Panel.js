@@ -21,6 +21,9 @@ Ext.define('NextThought.view.profiles.Panel', {
 	cls: 'profile-view',
 
 	config: {
+		state: null,
+		user: null,
+		username: ''
 	},
 
 	constructor: function (config) {
@@ -53,12 +56,35 @@ Ext.define('NextThought.view.profiles.Panel', {
 		this.mon(this.navigation,{
 			'show-profile-view':'changeView'
 		});
+
+		this.on('beforedeactivate', 'onBeforeDeactivate');
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.fireEvent('loaded');
+		this.initState();
+	},
+
+
+	initState: function(){
+		//drive initial state restore here
+		this.restoreState(this.getState());
+	},
+
+
+	restoreState: function(state){
+		this.setState(state);
+		console.log(state);
+		this.fireEvent('restored');
+	},
+
+
+	onBeforeDeactivate: function () {
+		console.log('about to deactivate the profile view');
+		return Ext.Array.every(this.body.items.items, function (item) {
+			return item.fireEvent('beforedeactivate');
+		});
 	},
 
 

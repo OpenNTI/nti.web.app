@@ -37,7 +37,7 @@ Ext.define('NextThought.view.profiles.View', {
 
 	restore: function (state) {
 		state = (state || {});
-		var user = state.username,
+		var user = (state.profile||{}).username,
 			me = this;
 
 		if (!me.isActive() || (state.hasOwnProperty('active') && state.active !== this.id)) {
@@ -60,8 +60,9 @@ Ext.define('NextThought.view.profiles.View', {
 
 
 	getFragment: function () {
-		var current = this.down(this.defaultType);
-		return current ? current.userObject.getProfileUrl() : null;
+		var current = this.down(this.defaultType)||{},
+			u = current.userObject || current.user;
+		return u ? u.getProfileUrl() : null;
 	},
 
 
@@ -81,7 +82,7 @@ Ext.define('NextThought.view.profiles.View', {
 				current.setActiveTab(state.activeTab);
 			}
 			else {
-				console.warn('should set this view active:', state.activeTab);
+				current.restoreState(state);//reduce this if/else to just the else body after v2profiles
 			}
 			fin();
 			return;
@@ -103,11 +104,16 @@ Ext.define('NextThought.view.profiles.View', {
 					toAdd = Ext.applyIf({
 						user: user,
 						username: username,//can be removed once v2profiles is released
-						displayName: user.getName()//can be removed once v2profiles is released
-					}, state);
+						displayName: user.getName(),//can be removed once v2profiles is released
+						state: state
+					}, state);//remove the applyIf wrapper once v2profiles is released
 				}
 				toAdd = Ext.apply(toAdd, {
-					listeners: { loaded: fin, scope: this, single: true, delay: 1 }
+					listeners: {
+						loaded: {fn:fin, single: true},//remove after v2profiles
+						restored: {fn:fin, single: true},
+						delay: 1
+					}
 				});
 				current = this.add(toAdd);
 				if (shouldFireLoaded) {
