@@ -302,7 +302,7 @@ Ext.define('NextThought.view.Main', {
 			touchstart: touchStart
 		});
 
-		window.onscroll = function(){window.scrollTo(0,0);};
+		//window.onscroll = function(){window.scrollTo(0,0);};
 		window.onresize = function() { Ext.getBody().setWidth(window.innerWidth).setHeight(window.innerHeight); };
 
 		this.lockOrientation();
