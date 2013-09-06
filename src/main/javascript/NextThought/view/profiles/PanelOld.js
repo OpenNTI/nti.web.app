@@ -111,6 +111,7 @@ Ext.define('NextThought.view.profiles.PanelOld', {
 		this.callParent(arguments);
 		this.addEvents('loaded');
 		this.timeId = 'Resolve User:' + this.username;
+		this.addCls('old');
 
 		this.onSaveMap = {home_page: this.homePageChanged};
 

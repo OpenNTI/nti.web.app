@@ -26,6 +26,16 @@
 	.x-container-profile {
 		margin: 0 auto;
 
+		&.old {
+			.blogged-event,
+			.joined-event,
+			.note-container,
+			.transcriptsummary-event{
+				margin-top: 20px;
+				margin-bottom: 0;
+			}
+		}
+
 		.profile-head{
 			margin-top: 75px;
 			position: relative;
@@ -261,7 +271,6 @@
 			background: $panel-background;
 			border: 0 solid #f2f2f2;
 			border-bottom-width: 1px;
-			margin-top: 20px;
 			min-height: 60px;
 			padding: 10px 25px 10px 10px;
 			cursor: pointer;
@@ -318,7 +327,6 @@
 
 		.blogged-event,
 		.joined-event {
-			margin-top: 20px;
 			background: $panel-background;
 			border: 0 solid #f2f2f2;
 			border-bottom-width: 1px;
@@ -386,7 +394,7 @@
 
 
 		.profile-activity-item {
-			margin: 40px 0 0;
+			margin: 0;
 			padding: 0;
 			z-index: 1;
 			border-bottom-width: 0;
