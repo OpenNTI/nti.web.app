@@ -73,6 +73,9 @@
 					height: $control;
 					box-shadow: inset 0 0 0 0 #e6e6e6;
 					top: 0;
+					&:hover {
+						background: #fff;
+					}
 				}
 
 				.lists {
@@ -81,6 +84,9 @@
 								inset 0 -1px 0 0 #e6e6e6,
 								inset 1px 0 0 0 #e6e6e6;
 					@include icon('rhp-contact-flyout-lists',$position: absolute, $top:16px, $left:19px);
+					&:hover::after{
+						@include sprite($icons,'rhp-contact-flyout-lists_hover');
+					}
 				}
 				.settings {
 					left: 59px;
@@ -88,6 +94,9 @@
 								inset 0 -1px 0 0 #e6e6e6,
 								inset -1px 0 0 0 #e6e6e6;
 					@include icon('rhp-contact-flyout-settings',$position: absolute, $top:14px, $left:20px);
+					&:hover::after{
+						@include sprite($icons,'rhp-contact-flyout-settings_hover');
+					}
 				}
 
 				.button{
