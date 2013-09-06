@@ -8,7 +8,6 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 
 	defaultType: 'contacts-tabs-panel',
 	plain: true,
-	cls: 'scrollable',
 	ui: 'contacts',
 	minWidth: 550,
 

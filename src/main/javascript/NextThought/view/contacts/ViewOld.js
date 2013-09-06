@@ -9,7 +9,7 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 		'NextThought.view.contacts.ListButtons'
 	],
 
-	cls: 'contacts-view scrollable',
+	cls: 'contacts-view',
 	layout: 'auto',
 	title: 'NextThought: Contacts',
 

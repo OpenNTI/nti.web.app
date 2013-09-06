@@ -4,6 +4,7 @@ Ext.define('NextThought.view.BoundPanel', {
 
 	overflowX: 'hidden',
 	overflowY: 'auto',
+	cls: 'scrollable',
 
 	initComponent: function () {
 		this.callParent(arguments);
@@ -46,6 +47,7 @@ Ext.define('NextThought.view.BoundPanel', {
 			this.add(this.emptyCmp);
 			this.emptyState = true;
 			this.addCls('empty');
+			this.removeCls('scrollable');
 		}
 	},
 
@@ -56,6 +58,7 @@ Ext.define('NextThought.view.BoundPanel', {
 		}
 		this.removeCls('empty');
 		this.emptyState = false;
+		this.addCls('scrollable');
 	},
 
 
