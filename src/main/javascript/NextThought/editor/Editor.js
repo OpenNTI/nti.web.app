@@ -1156,7 +1156,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				frag,
 				node,
 				lastNode,
-				content = this.el.down('.content', true);
+				content = this.el.down('.content', true), sameNode;
 
 		if (window.getSelection) {
 			// IE9 and non-IE
@@ -1176,6 +1176,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				afterContent = afterRange.cloneContents();
 				afterRange.detach();
 
+				sameNode = beforeContent.isEqualNode(afterContent);
+
 				range.detach();
 
 				el = document.createElement("div");
@@ -1189,8 +1191,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						lastNode = frag.appendChild(node);
 					}
 				} while (node);
-
-				frag.appendChild(afterContent);
+				//if they are the same node don't add it to prevent defaults
+				if(!sameNode){ frag.appendChild(afterContent); }
 
 				content.innerHTML = '';
 				content.appendChild(frag);
