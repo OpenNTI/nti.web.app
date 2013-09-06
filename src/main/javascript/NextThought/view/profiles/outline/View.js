@@ -83,21 +83,23 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				{name: 'id', type: 'string'},
 				{name: 'label', type: 'string'},
 				{name: 'count', type: 'int', defaultValue: 0},
-				{name: 'type', type: 'string', defaultValue: 'view'}//or filter
+				{name: 'type', type: 'string', defaultValue: 'view'},//or filter
+				{name: 'mapping', type: 'string'}
 			],
 			data: [
-				{id:'about', label:'About' },
-				{id:'activity', label:'Recent Activity' },
-				{id:'blog', label:'Thoughts' },
-				{id:'discussions', label:'Discussions', type:'filter' },
-				{id:'chats', label:'Chats', type:'filter' },
-				{id:'comments', label:'Comments', type:'filter' },
-				{id:'highlights', label:'Highlights', type:'filter' },
-				{id:'bookmarks', label:'Bookmarks', type:'filter' },
-				{id:'like', label:'Likes', type:'filter' }
+				{id:'about', label:'About', mapping:'profile-about' },
+				{id:'activity', label:'Recent Activity', mapping:'profile-activity' },
+				{id:'blog', label:'Thoughts', mapping:'profile-blog' },
+				{id:'discussions', label:'Discussions', type:'filter', mapping:'profile-activity' },
+				{id:'chats', label:'Chats', type:'filter', mapping:'profile-activity' },
+				{id:'comments', label:'Comments', type:'filter', mapping:'profile-activity' },
+				{id:'highlights', label:'Highlights', type:'filter', mapping:'profile-activity' },
+				{id:'bookmarks', label:'Bookmarks', type:'filter', mapping:'profile-activity' },
+				{id:'like', label:'Likes', type:'filter', mapping:'profile-activity' }
 			]
 		});
 
+		this.navStore = store;
 		this.nav = Ext.widget({
 			xtype: 'dataview',
 			ui: 'nav',
@@ -115,8 +117,30 @@ Ext.define('NextThought.view.profiles.outline.View',{
 						{ cls: 'label', html: '{label}' }
 					]
 				}
-			]})
+			]}),
+			listeners: {
+				scope: this,
+				select: 'selectionChanged'
+			}
 		});
+	},
+
+
+	selectionChanged: function(sel,rec){
+		var d = (rec && rec.getData()) ||{};
+
+		this.fireEvent('show-profile-view', d.mapping, d.type, d.id);
+	},
+
+
+	updateSelection: function(active){
+		var view = active.xtype,
+			i = this.navStore.findBy(function(r){
+				return r.get('type')==='view' && r.get('mapping') === view;
+			});
+
+		this.nav.select(i);
+
 	}
 
 });

@@ -21,12 +21,12 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	cls: 'blog',
 
 	renderTpl: Ext.DomHelper.markup([
-										{ cls: 'list-view', cn: [
-											{ tag: 'tpl', 'if': 'canBlog', cn: { cls: 'new-entry-btn header', html: 'New Entry' }},
-											{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
-										]},
-										{ cls: 'post-view' }
-									]),
+		{ cls: 'list-view', cn: [
+			{ tag: 'tpl', 'if': 'canBlog', cn: { cls: 'new-entry-btn header', html: 'New Entry' }},
+			{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
+		]},
+		{ cls: 'post-view' }
+	]),
 
 
 	renderSelectors: {
@@ -230,34 +230,6 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	clearAnimation: function () {
-		this.animateTabs('remove');
-	},
-
-
-	animateTabs: Ext.emptyFn,
-
-
-//	animateTabs: Ext.Function.createBuffered(function(v){
-//
-//		var tabBar = Ext.get(Ext.query('.nti-profile-tabbar-plain-docked-top').first());
-//		if( tabBar ){
-//			tabBar.removeCls('animateProfileTabsLeft animateProfileTabsBack');
-//
-//			if(v!=='remove'){
-//				if(v){
-//					tabBar.addCls('animateProfileTabsBack');
-//					Ext.defer(tabBar.removeCls,1001,tabBar,['animateProfileTabsLeft animateProfileTabsBack']);
-//				}
-//				else{
-//					tabBar.addCls('animateProfileTabsLeft');
-//				}
-//			}
-//
-//		}
-//	},1),
-
-
 	warnBeforeDismissingEditor: function () {
 		var msg = "You are currently editing a thought. Please save or cancel it first.";
 		Ext.defer(function () { alert({msg: msg}); }, 1);
@@ -265,7 +237,6 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	onBeforeDeactivate: function () {
-		this.clearAnimation();
 		var b = Boolean(this.isVisible() && this.el.down('.blog-editor'));
 		if (b) {
 			this.warnBeforeDismissingEditor();
@@ -329,10 +300,20 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	handleNoVisiblePosts: function () {
-		this.noPostPlaceholder = this.add({
-											  xtype:      'no-thought',
-											  userObject: this.user
-										  });
+		var me = this;
+		me.addCls('make-white');
+		me.noPostPlaceholder = me.add({
+			xtype: 'no-thought',
+			userObject: me.user,
+			listeners: {
+				destroy: function(){
+					if(!me.isDestroyed){
+						me.removeCls('make-white');
+					}
+				}
+			}
+		});
+
 		console.log('No visible blog bosts');
 	},
 
@@ -517,12 +498,9 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			xtype = 'profile-blog-editor';
 		}
 		else {
-			clearTimeout(this.animateTabsStart);
 			cfg.listeners.destroy = function () {
 				me.closePost();
-				me.animateTabsStart = Ext.defer(me.animateTabs, 10, me, [true]);
 			};
-			this.animateTabs();
 		}
 
 		Ext.get('profile').scrollTo('top', 0, true);
