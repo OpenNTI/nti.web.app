@@ -4,7 +4,7 @@ Ext.define('NextThought.view.annotations.View',{
 
 	store: 'FlatPage',
 	ui: 'annotation-view',
-	cls: 'annotation-view',
+	cls: 'annotation-view scrollable',
 
 	overItemCls:'over',
 	itemSelector:'.row',
@@ -26,15 +26,5 @@ Ext.define('NextThought.view.annotations.View',{
 			e.preventDefault();
 		}
 		return this.callParent(arguments);
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	}
-
 });

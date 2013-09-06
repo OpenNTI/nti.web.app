@@ -31,96 +31,99 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	headerTplOrder: '{toolbar}{title}',
 
-	titleTpl: Ext.DomHelper.markup([
-									   {tag: 'tpl', 'if': 'enableTitle', cn: {
-										   cls: 'title',
-										   cn:  [
-											   {tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
-										   ]
-									   }}
-								   ]),
+	titleTpl: Ext.DomHelper.markup(
+			[
+				{tag: 'tpl', 'if': 'enableTitle', cn: {
+					cls: 'title',
+					cn:  [
+						{tag: 'input', tabIndex: -1, type: 'text', placeholder: 'Title...'}
+					]
+				}}
+			]),
 
 	renderSelectors: {
 		saveButtonEl: '.action.save'
 	},
 
-	toolbarTpl: Ext.DomHelper.markup([
-										 {
-											 cls: 'aux', cn: [
-											 {tag: 'tpl', 'if': 'enableShareControls', cn: {
-												 cls: 'recipients'
-											 }},
-											 {tag: 'tpl', 'if': 'enablePublishControls', cn: {
-												 cls: 'action publish on'
-											 }},
-											 {tag: 'tpl', 'if': 'enableTags', cn: {
-												 cls: 'tags'
-											 }}
-										 ]
-										 }
-									 ]),
+	toolbarTpl: Ext.DomHelper.markup(
+			[
+				{
+					cls: 'aux', cn: [
+					{tag: 'tpl', 'if': 'enableShareControls', cn: {
+						cls: 'recipients'
+					}},
+					{tag: 'tpl', 'if': 'enablePublishControls', cn: {
+						cls: 'action publish on'
+					}},
+					{tag: 'tpl', 'if': 'enableTags', cn: {
+						cls: 'tags'
+					}}
+				]
+				}
+			]),
 
 
-	renderTpl: Ext.DomHelper.markup([
-										'{header}',
-										{
-											cls: 'main',
-											cn:  [
-												'{extra}',
-												{
-													cls:                'content show-placeholder',
-													'data-placeholder': '{placeholderText}',
-													contentEditable:    true,
-													unselectable:       'off',
-													tabIndex:           -1,
-													cn:                 [
-														{ //inner div for IE
-															//default value (allow the cursor in to this placeholder div, but don't take any space)
-															html: '&#8203;'
-														}
-													]
-												}
-											]
-										}
-										, {
-											cls: 'footer',
-											cn:  [
-												{
-													cls: 'left',
-													cn:  [
-														{
-															cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
-															cls: 'popctr', cn: {
-																cls: 'popover', cn: [
-																	{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
-																	{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
-																	{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
-																]
-															}
-														}
-														},
-														{
-															cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
-															cls: 'popctr', cn: {
-																cls: 'popover', cn: [
-																	{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
-																	{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
-																]
-															}
-														}
-														}
-													]
-												},
-												{
-													cls: 'right',
-													cn:  [
-														{cls: 'action save', html: 'Save'},
-														{cls: 'action cancel', html: 'Cancel'}
-													]
-												}
-											]
-										}
-									]),
+	renderTpl: Ext.DomHelper.markup(
+			[
+				'{header}',
+				{
+					cls: 'main',
+					cn:  [
+						'{extra}',
+						{
+							cls:                'content show-placeholder scrollable',
+							'data-placeholder': '{placeholderText}',
+							contentEditable:    true,
+							unselectable:       'off',
+							tabIndex:           -1,
+							cn:                 [
+								{ //inner div for IE
+									//default value (allow the cursor in to this placeholder div, but don't take any space)
+									html: '&#8203;'
+								}
+							]
+						}
+					]
+				}
+				, {
+					cls: 'footer',
+					cn:  [
+						{
+							cls: 'left',
+							cn:  [
+								{
+									cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
+									cls: 'popctr', cn: {
+										cls: 'popover', cn: [
+											{cls: 'control bold', tabIndex: -1, 'data-qtip': 'Bold'},
+											{cls: 'control italic', tabIndex: -1, 'data-qtip': 'Italic'},
+											{cls: 'control underline', tabIndex: -1, 'data-qtip': 'Underline'}
+										]
+									}
+								}
+								},
+								{
+									cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
+									cls: 'popctr', cn: {
+										cls: 'popover', cn: [
+											{ cls: 'control whiteboard', 'data-qtip': 'Create a whiteboard' },
+											{ tag: 'tpl', 'if': 'enableVideo', cn: { cls: 'control video', 'data-qtip': 'Embed a video' } }
+										]
+									}
+								}
+								}
+							]
+						},
+						{
+							cls: 'right',
+							cn:  [
+								{cls: 'action save', html: 'Save'},
+								{cls: 'action cancel', html: 'Cancel'}
+							]
+						}
+					]
+				}
+			]),
 
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
@@ -129,41 +132,42 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	defaultValue:              '&#8203;',
 
 
-	wbThumbnailTpm:    Ext.DomHelper.createTemplate({
-														contentEditable: false,
-														cls:             'whiteboard-divider',
-														unselectable:    'on',
-														cn:              [
-															{
-																cls: 'whiteboard-wrapper',
-																cn:  [
-																	{
-																		tag:          'img',
-																		src:          '{0}',
-																		id:           '{1}',
-																		cls:          'wb-thumbnail object-part',
-																		alt:          'Whiteboard Thumbnail',
-																		unselectable: 'on',
-																		border:       0
-																	},
-																	{
-																		cls: 'fill', unselectable: 'on'
-																	},
-																	{
-																		cls:          'centerer',
-																		unselectable: 'on',
-																		cn:           [
-																			{
-																				unselectable: 'on',
-																				cls:          'edit',
-																				html:         'Edit'
-																			}
-																		]
-																	}
-																]
-															}
-														]
-													}).compile(),
+	wbThumbnailTpm:    Ext.DomHelper.createTemplate(
+			{
+				contentEditable: false,
+				cls:             'whiteboard-divider',
+				unselectable:    'on',
+				cn:              [
+					{
+						cls: 'whiteboard-wrapper',
+						cn:  [
+							{
+								tag:          'img',
+								src:          '{0}',
+								id:           '{1}',
+								cls:          'wb-thumbnail object-part',
+								alt:          'Whiteboard Thumbnail',
+								unselectable: 'on',
+								border:       0
+							},
+							{
+								cls: 'fill', unselectable: 'on'
+							},
+							{
+								cls:          'centerer',
+								unselectable: 'on',
+								cn:           [
+									{
+										unselectable: 'on',
+										cls:          'edit',
+										html:         'Edit'
+									}
+								]
+							}
+						]
+					}
+				]
+			}).compile(),
 
 
 	// FIXME: copied from above but we probably don't need all this
@@ -420,10 +424,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			contextmenu: me.handleContext,
 			mouseup:     me.onMouseUp
 		});
-
-		if (Ext.is.iPad) {
-			me.contentEl.swallowEvent('touchmove');
-		}
 
 		me.on('destroy', function () {
 			Ext.Object.each(me.trackedParts, function (k, v) {

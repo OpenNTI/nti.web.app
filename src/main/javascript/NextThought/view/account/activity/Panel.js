@@ -20,7 +20,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		'activityFilter': 'NextThought.mixins.ActivityFilters'
 	},
 
-	cls: 'activity-panel',
+	cls: 'activity-panel scrollable',
 
 	overflowX: 'hidden',
 	overflowY: 'auto',
@@ -141,12 +141,6 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}, this);
 
 		this.mixins.activityFilter.afterRender.apply(this);
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
-
 	},
 
 

@@ -9,7 +9,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		{ cls: 'header', cn: [
 			'{outlineLabel}'
 		]},
-		{ cls: 'outline-list'},
+		{ cls: 'outline-list scrollable'},
 		{ tag:'tpl', 'if':'buttons', cn: { cls:'buttons', cn: [
 			{ tag:'tpl', 'if':'canjoin', cn:{
 				cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
@@ -109,12 +109,6 @@ Ext.define('NextThought.view.contacts.outline.View', {
 
 		if( this.buttonsEl ){
 			this.mon(this.buttonsEl,'click','onButtonsClicked');
-		}
-
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

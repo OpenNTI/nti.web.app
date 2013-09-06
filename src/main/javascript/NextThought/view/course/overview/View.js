@@ -2,7 +2,7 @@ Ext.define('NextThought.view.course.overview.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview',
 	ui: 'course',
-	cls: 'course-overview',
+	cls: 'course-overview scrollable',
 
 	requires: [
 		'NextThought.view.course.overview.parts.*'
@@ -47,16 +47,6 @@ Ext.define('NextThought.view.course.overview.View', {
 		this.mon(s, 'select', 'onNodeSelected', this);
 		if (s.hasSelection()) {
 			this.onNodeSelected(s, s.getSelection()[0]);
-		}
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

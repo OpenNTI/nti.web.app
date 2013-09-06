@@ -10,7 +10,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	GRID_WIDTH: 8,
 
 	ui: 'course',
-	cls: 'course-dashboard-container',
+	cls: 'course-dashboard-container scrollable',
 	layout: 'auto',
 
 	items: {
@@ -28,15 +28,6 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 		this.tileContainer = this.items.first();
 
 		this.sorter = this.buildSorter();
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

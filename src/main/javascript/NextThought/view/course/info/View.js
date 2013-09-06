@@ -1,16 +1,7 @@
 Ext.define('NextThought.view.course.info.View', {
 	extend: 'Ext.Component',
 	alias:  'widget.course-info',
-	cls:    'make-white',
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
-	},
+	cls:    'make-white scrollable',
 
 
 	setPage: function (ntiid) {

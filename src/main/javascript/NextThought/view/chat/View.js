@@ -14,7 +14,7 @@ Ext.define('NextThought.view.chat.View', {
 	overflowX: 'hidden',
 	overflowY: 'hidden',
 
-	cls: 'chat-view',
+	cls: 'chat-view scrollable',
 	ui: 'chat-view',
 	layout: {
 		type: 'anchor'
@@ -81,9 +81,6 @@ Ext.define('NextThought.view.chat.View', {
 
 		if (Ext.is.iPad) {
 			var me = this;
-
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
 
             //After dismissing keyboard, reset Y to original position
 			me.el.down('input').on('focus', function () {

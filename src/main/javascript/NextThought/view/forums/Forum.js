@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		'NextThought.util.Time'
 	],
 
-	cls: 'topic-list list',
+	cls: 'topic-list list scrollable',
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
 	loadMask: false,
@@ -196,11 +196,6 @@ Ext.define('NextThought.view.forums.Forum', {
 			'activate': 'onActivate',
 			'itemupdate': 'itemUpdate'
 		});
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

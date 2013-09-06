@@ -22,7 +22,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 	},
 
-	cls: 'topic-post list',
+	cls: 'topic-post list scrollable',
 	defaultType: 'forums-topic-comment',
 	layout: 'auto',
 	componentLayout: 'natural',
@@ -264,12 +264,6 @@ Ext.define('NextThought.view.forums.Topic', {
 				}
 			});
 		}
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
-
 	},
 
 	canReply: function(){

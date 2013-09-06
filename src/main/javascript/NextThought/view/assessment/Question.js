@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.Question', {
 
 	representsUserDataContainer: true,
 
-	cls: 'question',
+	cls: 'question scrollable',
 	ui:  'assessment',
 
 	dockedItems: [

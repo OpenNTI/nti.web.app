@@ -11,7 +11,7 @@ Ext.define('NextThought.view.contacts.Search', {
 	shadow: false,
 	preventBringToFront: true,
 
-	cls: 'contact-search',
+	cls: 'contact-search scrollable',
 
 	layout: {
 		type: 'vbox',
@@ -129,19 +129,16 @@ Ext.define('NextThought.view.contacts.Search', {
 		}, 1);
 
 		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-
 			// Window should scroll back to top after keyboard is dismissed
-            me.mon(me.el.down('input'), {
-                blur: function () {
-                    window.scrollTo(0, 0);
-                    me.setHeight(Ext.Element.getViewportHeight() - me.getPosition()[1]);
-                },
-                focus: function(){
-                    me.ipadViewportHeight = Ext.Element.getViewportHeight();
-                }
-            });
+			me.mon(me.el.down('input'), {
+				blur:  function () {
+					window.scrollTo(0, 0);
+					me.setHeight(Ext.Element.getViewportHeight() - me.getPosition()[1]);
+				},
+				focus: function () {
+					me.ipadViewportHeight = Ext.Element.getViewportHeight();
+				}
+			});
 		}
 	},
 
@@ -174,12 +171,12 @@ Ext.define('NextThought.view.contacts.Search', {
 			this.clearResults();
 		}
 		else {
-            if(Ext.is.iPad){
-                this.setHeight(this.ipadViewportHeight - this.getPosition()[1]);
-            }
-            else{
-                this.setHeight(Ext.Element.getViewportHeight() - this.getPosition()[1]);
-            }
+			if (Ext.is.iPad) {
+				this.setHeight(this.ipadViewportHeight - this.getPosition()[1]);
+			}
+			else {
+				this.setHeight(Ext.Element.getViewportHeight() - this.getPosition()[1]);
+			}
 			this.store.search(value);
 		}
 	}, 250),

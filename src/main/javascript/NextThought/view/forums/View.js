@@ -6,7 +6,7 @@ Ext.define('NextThought.view.forums.View', {
 		'NextThought.view.forums.Board'
 	],
 
-	cls: 'forums-view',
+	cls: 'forums-view scrollable',
 	layout: 'stack',
 	title: 'NextThought: Forums',
 	typePrefix: 'forums',
@@ -16,15 +16,6 @@ Ext.define('NextThought.view.forums.View', {
 		this.callParent(arguments);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		this.mon(this, 'beforeactivate', this.onBeforeActivate, this);
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

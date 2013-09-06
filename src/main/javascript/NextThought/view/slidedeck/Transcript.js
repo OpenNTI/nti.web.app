@@ -14,7 +14,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	],
 
 	ui: 'transcript',
-	cls: 'transcript-view',
+	cls: 'transcript-view scrollable',
 	items: [],
 
 	lineFilterId: 'plinefilter',
@@ -277,11 +277,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				this.annotationView.hide();
 			}
 		}, this);
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

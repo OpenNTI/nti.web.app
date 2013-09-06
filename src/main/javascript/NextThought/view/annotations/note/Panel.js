@@ -17,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	enableTitle: false,
 
 	ui: 'nt',
-	cls: 'note-container',
+	cls: 'note-container scrollable',
 	componentLayout: 'natural',
 	layout: 'auto',
 	defaultType: 'note-panel',
@@ -243,11 +243,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		if (me.replyToId === me.record.getId()) {
 			me.onReply();
-		}
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

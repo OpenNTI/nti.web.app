@@ -3,7 +3,7 @@ Ext.define('NextThought.view.course.outline.View', {
 	alias: 'widget.course-outline',
 
 	ui: 'course',
-	cls: 'nav-outline',
+	cls: 'nav-outline scrollable',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -81,10 +81,6 @@ Ext.define('NextThought.view.course.outline.View', {
 	afterRender: function () {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

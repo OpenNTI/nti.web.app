@@ -7,7 +7,7 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 		'NextThought.view.chat.Gutter'
 	],
 
-	cls: 'chat-window no-gutter chat-transcript-window',
+	cls: 'chat-window no-gutter chat-transcript-window scrollable',
 	ui:  'chat-window',
 
 	minWidth:  400,
@@ -73,10 +73,6 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 		btn = this.el.down('.flag-for-moderation');
 		if (btn) {
 			btn.show();
-		}
-
-		if (Ext.is.iPad) {
-			this.getEl().swallowEvent('touchmove');
 		}
 	},
 

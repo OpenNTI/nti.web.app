@@ -9,7 +9,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	keyboardUp: false,
 	amountScrolled: 0,
 
-	cls: 'blog-editor',
+	cls: 'blog-editor scrollable',
 	headerTplOrder: '{title}{toolbar}',
 	//TODO: update CSS to not require this nesting.
 	renderTpl: Ext.DomHelper.markup({ cls: 'editor active', html: '{super}' }),
@@ -61,9 +61,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 
 		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-
 			//put focus on cancel button, so the user can focus and bring up keyboard for title element
 			Ext.defer(function () {
 				var query = Ext.query('.right .action.cancel');

@@ -8,6 +8,7 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 
 	defaultType: 'contacts-tabs-panel',
 	plain: true,
+	cls: 'scrollable',
 	ui: 'contacts',
 	minWidth: 550,
 
@@ -51,15 +52,6 @@ Ext.define('NextThought.view.contacts.TabPanel', {
 		me.on('afterlayout', function () {
 			me.contactSearch.setWidth(me.getWidth());
 		});
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

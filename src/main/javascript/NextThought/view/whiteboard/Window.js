@@ -79,6 +79,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 		}
 	],
 
+
 	constructor: function (config) {
 		var vpHeight = Ext.Element.getViewportHeight();
 
@@ -109,10 +110,6 @@ Ext.define('NextThought.view.whiteboard.Window', {
 			scope: this,
 			'click': this.absorbeClick
 		});
-
-		if (Ext.is.iPad) {
-			this.buildModule('whiteboard', 'touchSender', {container: this});
-		}
 	},
 
 

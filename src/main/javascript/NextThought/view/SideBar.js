@@ -119,8 +119,11 @@ Ext.define('NextThought.view.SideBar', {
 
 		if (Ext.is.iPad) {
 			this.mon(this.el, {
-				click: 'startShow'
-			});
+				scope: this,
+				click: function (e) {
+					this.startShow();
+				}
+			}, this);
 		}
 		else {
 			this.mon(this.el, {
@@ -132,7 +135,6 @@ Ext.define('NextThought.view.SideBar', {
 		this.mon(Ext.getBody(), {
 			mouseover: 'maybeCancelHide'
 		});
-
 
 		/**
 		 * There floating point animation is causing some jitters as the side bar is animated up & down.
@@ -209,7 +211,12 @@ Ext.define('NextThought.view.SideBar', {
 		var initialHeight = this.getHeight();
 		if (!this.showTimeout || force) {
 			this.stopHide();
-			this.showTimeout = Ext.defer(this.rollDown, 500, this);
+			if (Ext.is.iPad) { // Want more snappy response on iPad
+				this.rollDown();
+			}
+			else {
+				this.showTimeout = Ext.defer(this.rollDown, 500, this);
+			}
 		}
 		if (Ext.is.iPad) {
 			Ext.apply(this, {minHeight: initialHeight});

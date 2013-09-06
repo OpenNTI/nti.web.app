@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	grouping: 'GroupingField',
 
 	ui: 'history',
-	cls: 'user-data-panel',
+	cls: 'user-data-panel scrollable',
 	preserveScrollOnRefresh: true,
 
 	deferEmptyText: true,
@@ -272,11 +272,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		this.getTypesMenu().show().hide();
 		this.mixins.activityFilter.afterRender.apply(this);
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

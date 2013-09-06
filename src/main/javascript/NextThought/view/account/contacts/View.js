@@ -14,7 +14,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	iconCls:                 'contacts',
 	ui:                      'contacts',
-	cls:                     'contacts-view',
+	cls:                     'contacts-view scrollable',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -371,11 +371,6 @@ Ext.define('NextThought.view.account.contacts.View', {
 		});
 
 		this.activateGroupChatFeature();
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

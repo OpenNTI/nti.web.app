@@ -9,7 +9,7 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 		'NextThought.view.contacts.ListButtons'
 	],
 
-	cls: 'contacts-view',
+	cls: 'contacts-view scrollable',
 	layout: 'auto',
 	title: 'NextThought: Contacts',
 
@@ -82,15 +82,6 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 		me.on('resize', function () {
 			me.tabs.setHeight(me.getHeight());
 		});
-	},
-
-
-	afterRender: function () {
-		this.callParent(arguments);
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

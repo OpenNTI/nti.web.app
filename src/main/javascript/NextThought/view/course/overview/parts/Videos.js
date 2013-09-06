@@ -11,7 +11,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	],
 
 	ui: 'course',
-	cls: 'overview-videos',
+	cls: 'overview-videos scrollable',
 	preserveScrollOnRefresh: true,
 
 	config: {
@@ -219,9 +219,6 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		this.getSelectionModel().select(0);
 		this.showCurtain();
 		//this.bodyEl.mask('Loading...');
-		if (Ext.is.iPad) {
-			this.getEl().swallowEvent('touchmove');
-		}
 	},
 
 

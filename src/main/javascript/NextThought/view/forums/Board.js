@@ -17,7 +17,7 @@ Ext.define('NextThought.view.forums.Board', {
 		'NextThought.util.Time'
 	],
 
-	cls: 'forum-list list',
+	cls: 'forum-list list scrollable',
 	itemSelector: '.forum-list-item',
 
 	listeners: {
@@ -150,11 +150,6 @@ Ext.define('NextThought.view.forums.Board', {
 				'itemclick': 'onItemClick',
 				'beforeitemclick': 'onBeforeItemClick'
 			});
-		}
-
-		if (Ext.is.iPad) {
-			// Absorb event for scrolling
-			this.getEl().swallowEvent('touchmove');
 		}
 	},
 
