@@ -222,6 +222,7 @@ Ext.define('NextThought.model.Note', {
 
 	resolveNoteTitle: function(cb, max){
 		var t = this.get('title'),
+			body = this.get('body'),
 			snip;
 
 		max = max || 36;
@@ -229,7 +230,13 @@ Ext.define('NextThought.model.Note', {
 		if(!Ext.isEmpty(t)){
 			snip = Ext.String.ellipsis(t, max, false);
 		}else{
-			snip = "Untitled";
+
+			if(this.isWhiteboardOnly(body)){
+				snip = "[Image]";
+			}else{
+				this.resolveNotePreview(cb, max);
+				return;
+			}
 		}
 
 		Ext.callback(cb, null, [snip, t]);
@@ -237,7 +244,7 @@ Ext.define('NextThought.model.Note', {
 
 	resolveNotePreview: function(cb, max){
 		var t = this.get('title'),
-			body = this.get('body'),
+			body = this.simplifyBody(this.get('body')),
 			snip;
 
 		max = max || 36;
@@ -254,12 +261,26 @@ Ext.define('NextThought.model.Note', {
 			this.compileBodyContent(function(html){
 				snip = ContentUtils.getHTMLSnippet(html,max);
 				Ext.callback(cb, null, [snip||html,t]);
-			});
+			}, null, null, null, body);
 
 			return;
 		}
 
 		Ext.callback(cb, null, [snip, t]);
+	},
+
+	simplifyBody: function(body){
+		var text = [];
+		
+		Ext.each(body, function(c){
+			if(Ext.isString(c)){
+				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g, ' '));
+			}else{
+				text.push(c);
+			}
+		});
+
+		return text;
 	},
 
 

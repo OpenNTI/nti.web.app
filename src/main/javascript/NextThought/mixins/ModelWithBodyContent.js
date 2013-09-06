@@ -151,10 +151,10 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	},
 
 
-	compileBodyContent: function (result, scope, clickHandlerMaker, size) {
+	compileBodyContent: function (result, scope, clickHandlerMaker, size, bodyOverride) {
 
 		var me = this,
-				body = (me.get('body') || []).slice().reverse(),
+				body = (bodyOverride || me.get('body') || []).slice().reverse(),
 				text = [];
 
 		clickHandlerMaker = clickHandlerMaker || function () {return '';};
