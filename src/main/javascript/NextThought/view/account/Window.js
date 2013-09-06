@@ -3,6 +3,7 @@ Ext.define('NextThought.view.account.Window', {
 	alias:  'widget.account-window',
 
 	requires: [
+		'Ext.toolbar.Spacer',//not sure what below this class needs it, but it synchronously loads if not required. :/
 		'NextThought.view.form.PasswordResetForm',
 		'NextThought.view.account.settings.RandomGravatarPicker',
 		'NextThought.view.account.settings.AvatarChoices',
