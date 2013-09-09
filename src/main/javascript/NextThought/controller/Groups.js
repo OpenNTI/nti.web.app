@@ -12,7 +12,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	stores: [
-		'FriendsList'
+		'FriendsList',
+		'PresenceInfo'
 	],
 
 
@@ -35,24 +36,21 @@ Ext.define('NextThought.controller.Groups', {
 
 	init: function () {
 		var flStore = this.getFriendsListStore(),
-				piStore = Ext.StoreManager.get('PresenceInfo');//reduce this coupling
+			piStore = this.getPresenceInfoStore();//reduce this coupling?
 
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		function onlineFilter(item) { return item.get('Presence') && item.get('Presence').isOnline(); }
+		function onlineFilter(item) {
+			return item.get('Presence') && item.get('Presence').isOnline();
+		}
 
-		//The flStore already has tons of logic in it to fire contact changes
-		//at appropriate times.  So turn our onlineContactStore into a store
-		//that is driven off of those notifications further filtering things appropriately
-		this.onlineContactStore = new NextThought.store.Contacts({
-																	 id:      'online-contacts-store',
-																	 filters: [onlineFilter]
-																 });
+		// The flStore already has tons of logic in it to fire contact changes at appropriate times.  So turn our
+		// onlineContactStore into a store that is driven off of those notifications further filtering things
+		// appropriately
+		this.onlineContactStore = new NextThought.store.Contacts({ id: 'online-contacts-store', filters: [onlineFilter] });
+		this.allContactsStore = new NextThought.store.Contacts({ id: 'all-contacts-store' });
+
 		this.onlineContactStore.bindFriendsListAndPresence(flStore, piStore);
-
-		this.allContactsStore = new NextThought.store.Contacts({
-																   id: 'all-contacts-store'
-															   });
 		this.allContactsStore.bindFriendsListAndPresence(flStore);
 
 		this.listen({
@@ -76,8 +74,8 @@ Ext.define('NextThought.controller.Groups', {
 
 	onSessionReady: function () {
 		var store = this.getFriendsListStore(),
-				mime = (new store.model()).mimeType,
-				coll = $AppConfig.service.getCollectionFor(mime, 'FriendsLists');
+			mime = (new store.model()).mimeType,
+			coll = $AppConfig.service.getCollectionFor(mime, 'FriendsLists');
 
 		$AppConfig.contactsGroupName = this.getMyContactsId();
 
@@ -86,9 +84,9 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		store.on({
-					 scope: this,
-					 load:  'friendsListsLoaded'
-				 });
+			scope: this,
+			load:  'friendsListsLoaded'
+		});
 
 		store.proxy.url = getURL(coll.href);
 
@@ -98,7 +96,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	getListStore: function (id) {
 		var prefix = 'FriendsListStore:',
-				pid = prefix + id;
+			pid = prefix + id;
 
 		if (!this.friendsListStores) {
 			this.friendsListStores = {};
@@ -162,8 +160,8 @@ Ext.define('NextThought.controller.Groups', {
 
 	friendsListsLoaded: function (listStore, records) {
 		var me = this,
-				store,
-				cid = me.getMyContactsId();
+			store,
+			cid = me.getMyContactsId();
 
 		function fillStore(friends) {
 			store.loadData(friends);
@@ -219,8 +217,8 @@ Ext.define('NextThought.controller.Groups', {
 
 	createFriendsListUnguarded: function (displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
-				rec = me.getFriendsListModel().create(),
-				store = me.getFriendsListStore();
+			rec = me.getFriendsListModel().create(),
+			store = me.getFriendsListStore();
 
 		rec.set('Username', username);
 		//We used to set realname here, but we really want alias
@@ -231,22 +229,22 @@ Ext.define('NextThought.controller.Groups', {
 		rec.set('friends', friends || []);
 		rec.set('IsDynamicSharing', !!dynamic);
 		rec.save({
-					 scope:   me,
-					 success: function (record, operation) {
-						 Ext.callback(callback, scope, [true, record, operation]);
-						 var newStore = me.getListStore(username);
-						 record.storeId = newStore.storeId;
-						 Ext.defer(function () {store.add(record);}, 500);
-					 },
-					 failed:  function (record, operation, response) {
-						 if (errorCallback) {
-							 Ext.callback(errorCallback, scope, [record, operation, response]);
-						 }
-						 else {
-							 Ext.callback(callback, scope, [false, response]);
-						 }
-					 }
-				 });
+			scope:   me,
+			success: function (record, operation) {
+				Ext.callback(callback, scope, [true, record, operation]);
+				var newStore = me.getListStore(username);
+				record.storeId = newStore.storeId;
+				Ext.defer(function () {store.add(record);}, 500);
+			},
+			failed:  function (record, operation, response) {
+				if (errorCallback) {
+					Ext.callback(errorCallback, scope, [record, operation, response]);
+				}
+				else {
+					Ext.callback(callback, scope, [false, response]);
+				}
+			}
+		});
 	},
 
 
@@ -269,9 +267,9 @@ Ext.define('NextThought.controller.Groups', {
 
 	addContact: function (username, groupList, callback) {
 		var contactsId = this.getMyContactsId(),
-				contacts = this.getContactGroup(),
-				tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
-				oldContacts;
+			contacts = this.getContactGroup(),
+			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
+			oldContacts;
 
 		if (isMe(username)) {
 			console.warn('You should not add yourself to your groups.');
