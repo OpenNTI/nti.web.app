@@ -63,6 +63,8 @@
 
 @import "pointer";
 
+@import "fullscreen-rules";
+
 @import "static-resources";
 
 .x-panel-default,
@@ -83,6 +85,7 @@ input::-ms-clear { display: none; }
 :-webkit-input-placeholder { @include placeholder-style(); }
 :-moz-placeholder { @include placeholder-style(); }
 :-ms-input-placeholder{ @include placeholder-style(); }
+
 
 .ellipsis {
 	margin: 0 10px;
