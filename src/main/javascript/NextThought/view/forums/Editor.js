@@ -30,7 +30,6 @@ Ext.define('NextThought.view.forums.Editor', {
 		saveEl:       '.action.save',
 		titleWrapEl:  '.title',
 		footerEl:     '.footer',
-		editorBodyEl: '.content',
 		publishEl:    '.action.publish'
 	},
 
@@ -155,7 +154,7 @@ Ext.define('NextThought.view.forums.Editor', {
                 this.syncedIpad = 1;
             }
 		}
-		var el = this.editorBodyEl,
+		var el = this.contentEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
 				top;
 		if (!el || !p) {
@@ -168,13 +167,10 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	onKeyUp: function () {
-		this.clearError(this.editorBodyEl);
-	},
-
-
 	clearError: function (el) {
-		el.removeCls('error-top').set({'data-error-tip': undefined});
+		if(!el){ return; }
+		el.set({'data-error-tip': undefined});
+		Ext.defer(el.removeCls, 1, el, ['error-tip']);
 	},
 
 
@@ -191,7 +187,7 @@ Ext.define('NextThought.view.forums.Editor', {
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
-			this.markError(this.editorBodyEl, 'You need to type something');
+			this.markError(this.contentEl, 'You need to type something');
 			return;
 		}
 

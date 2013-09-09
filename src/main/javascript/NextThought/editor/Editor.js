@@ -300,7 +300,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!el) {
 			return;
 		}
-		el.removeCls('error-top').set({'data-error-tip': undefined});
+		el.set({'data-error-tip': undefined});
+		Ext.defer(el.removeCls, 1, el, ['error-tip']);
 	},
 
 
@@ -795,7 +796,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	onKeyup: function (e) {
-		this.clearError(this.contentEl);
+		if(this.contentEl.hasCls('error-tip')){
+			this.clearError(this.contentEl);
+		}
 
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes(e);
