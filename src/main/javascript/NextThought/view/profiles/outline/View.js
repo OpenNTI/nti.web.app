@@ -114,6 +114,10 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		if(isMe(this.user)){
+			this.controlsEl.select('.lists,.settings').addCls('disabled');
+		}
+
 		var store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string'},
