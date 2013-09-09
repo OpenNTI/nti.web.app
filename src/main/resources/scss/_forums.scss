@@ -731,7 +731,7 @@
 	@include scrollbar(#ffffff, $tertiary-grey);
 	overflow:{
 		x: hidden;
-		y: scroll;
+		y: auto; //scroll;
 	}
 	-webkit-overflow-scrolling: touch;
 

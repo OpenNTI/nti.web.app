@@ -159,7 +159,10 @@
 
 	min-height: 40px;
 	box-shadow: inset 0px 6px 6px -4px rgba(0, 0, 0, 0.2);
-	overflow:{ x: hidden; y: scroll; }
+	overflow:{
+		x: hidden;
+		y: auto; //scroll;
+	}
 
 	.search-result-category{
 		@include animate(fadeInDown, 0.3s);

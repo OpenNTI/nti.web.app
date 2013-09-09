@@ -311,7 +311,10 @@ $experimental-support-for-svg: true;
 			@include hardware-accelerate();
 			@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
 			@include fixIEScrollbarGulf();
-			overflow:{x: hidden; y: scroll;}
+			overflow:{
+				x: hidden;
+			 	y: auto; //scroll;
+			}
 			padding: 14px 0;
 
 			.item-wrap {
@@ -368,7 +371,10 @@ $experimental-support-for-svg: true;
 	.x-container-slide {
 		@include scrollbar($track: $slidedeck-controls-background, $nib: $slidedeck-primary-text-color);
 		@include fixIEScrollbarGulf();
-		overflow:{x: hidden; y: scroll;}
+		overflow:{
+			x: hidden;
+			y: auto; //scroll;
+		}
 		padding: 95px 95px 0 95px;
 
 		.image-wrap {
@@ -994,7 +1000,10 @@ $experimental-support-for-svg: true;
 	.body{
 		@include scrollbar($track:$slidedeck-controls-background, $nib:$secondary-grey);
 		margin: 10px 0 0 1000px;
-		overflow:{y: scroll; x: hidden;}
+		overflow:{
+			y: auto; //scroll;
+			x: hidden;
+		}
 		position: relative;
 		-webkit-overflow-scrolling: touch;
 
@@ -1120,7 +1129,10 @@ $experimental-support-for-svg: true;
 }
 
 .x-container-transcript, .x-panel-transcript{
-	overflow:{y: scroll; x: hidden;}
+	overflow:{
+		y: auto; //scroll;
+		x: hidden;
+	}
 	width: 920px;
 
 	.note-gutter{

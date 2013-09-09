@@ -91,7 +91,10 @@
 		padding: 10px 15px;
 		position: relative;
 		white-space: nowrap;
-		overflow:{ x: scroll; y: hidden;}
+		overflow:{
+			x: auto; //scroll;
+			y: hidden;
+		}
         -webkit-overflow-scrolling: touch;
 
 		.item-wrap {

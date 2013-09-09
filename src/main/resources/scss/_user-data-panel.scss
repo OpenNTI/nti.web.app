@@ -62,7 +62,10 @@
 
 	@include divider;
 
-	overflow:{y: scroll; x: hidden;}
+	overflow:{
+		y: auto; //scroll;
+		x: hidden;
+	}
 	//add some space between all dividers and the first history
 	.divider + .history {
 		padding-top: 12px;
