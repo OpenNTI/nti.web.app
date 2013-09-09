@@ -295,7 +295,7 @@ Ext.define('NextThought.view.chat.Log', {
 			UserRepository.getUser(change.user, function(u){
 				var name = u.getName(),
 					state = change.state === 'composing' ? 'typing' : change.state,
-					txt = name+' '+state+'...';
+					txt = name+' is '+state+'...';//TODO: find a way to put this into external strings
 					if(change.state === 'paused'){
 						this.clearChatStatusNotifications();
 					}else{
