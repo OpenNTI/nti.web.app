@@ -37,7 +37,11 @@ Ext.define('NextThought.view.profiles.Panel', {
 		this.applyConfigs('navigation', {user:u});
 		this.applyConfigs('body', {
 			items:[
-				{ xtype: 'profile-activity', user: u, username: u.getId(), autoScroll:true },
+				{ xtype: 'profile-activity', user: u, username: u.getId(), autoScroll:true,
+					listeners: {
+						afterrender:{ fn:'attachScrollRelay',scope:this, single:true }
+					}
+				},
 				{ xtype: 'profile-about', user: u },
 				{ xtype: 'profile-blog', user:u, username: u.getId(), autoScroll: true }
 			]
@@ -58,6 +62,12 @@ Ext.define('NextThought.view.profiles.Panel', {
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
+	},
+
+
+	attachScrollRelay: function(cmp){
+		this.on('destroy','destroy',
+			this.relayEvents(cmp.getEl(), ['scroll'],'profile-body-'));
 	},
 
 

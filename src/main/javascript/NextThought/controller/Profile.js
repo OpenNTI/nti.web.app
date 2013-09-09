@@ -29,6 +29,8 @@ Ext.define('NextThought.controller.Profile', {
 
 	init: function() {
 
+		this.fillInActivityPanels = Ext.Function.createThrottled(this.fillInActivityPanels, 500, this);
+
 		this.listen({
 			component:  {
 				'*':{
@@ -36,7 +38,10 @@ Ext.define('NextThought.controller.Profile', {
 				},
 
 				'profile-panel-old': {
-					'scroll': Ext.Function.createThrottled(this.fillInActivityPanels, 500, this)
+					'scroll': 'fillInActivityPanels'
+				},
+				'profile-panel': {
+					'profile-body-scroll':'fillInActivityPanels'
 				},
 
 				//bubbled events don't get caught by the controller on bubbleTargets... so listen directly on what is firing
@@ -101,10 +106,12 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	fillInActivityPanels: function () {
-		Ext.each(Ext.ComponentQuery.query('profile-activity-item'), function (item) {
-			item.maybeFillIn();
-		});
+	fillInActivityPanels: function (event,dom) {
+		var cmp = Ext.getCmp(dom.getAttribute('id'));
+
+		function maybeFill(item) { item.maybeFillIn(); }
+
+		Ext.each(cmp.query('profile-activity-item'), maybeFill);
 	},
 
 
