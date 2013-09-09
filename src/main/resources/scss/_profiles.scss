@@ -56,6 +56,9 @@
 					font: normal 700 16px/20px 'Open Sans Condensed', $font;
 
 					@include presence-style-sudo($x:15px, $y:17px, $xSide:'right');
+					&.no-presence::after{
+						display: none !important;
+					}
 				}
 			}
 

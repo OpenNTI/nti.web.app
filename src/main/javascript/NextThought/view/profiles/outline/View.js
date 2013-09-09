@@ -16,7 +16,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				{ cls: 'settings' },
 				{ tag:'tpl', 'if':'isMe', cn: { cls: 'button edit', html:'Edit' }},
 				{ tag:'tpl', 'if':'!isMe', cn: [
-					{ tag:'tpl', 'if':'isContact', cn: { cls: 'button chat', html:'Chat' }},
+					{ tag:'tpl', 'if':'isContact', cn: { cls: 'button chat disabled', html:'Chat' }},
 					{ tag:'tpl', 'if':'!isContact', cn: { cls: 'button', html:'Add Contact' }}
 				]}
 			]
@@ -48,6 +48,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		this.on('destroy','destroy',this.groupsListMenu);
 
 		this.groupsList = this.groupsListMenu.down('management-group-list');
+		this.mon(this.groupsList, 'added-contact', 'convertToContact');
 
 		this.on({
 			click: {
@@ -81,27 +82,99 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		}
 
 		if (me.nameEl && me.user) {
-			me.nameEl.set({cls:'name '+me.user.getPresence().getName()});
+			me.nameEl.set({cls:'name '+me.user.getPresence().getName()+(this.isContact||this.isMe ? '' : ' no-presence')});
+			me.updateButton();
 		}
 	},
 
-	//TODO: add a monitor for !isMe users to test if they are a contact or are/are-not available to chat.
 
 	applyRenderData: function(user){
+		var m;
+		this.isMe = isMe(user);
 		this.isContact = Ext.getStore('FriendsList').isContact(this.user);
 		this.groupsList.setUser(user).isContact = this.isContact;
-		if(this.optionsMenu){
-			this.un('destroy','destroy',this.optionsMenu);
-			Ext.destroy(this.optionsMenu);
-		}
-		this.optionsMenu = Ext.widget({xtype:'person-options-menu', width:255, ownerCmp: this, user: this.user, isContact: this.isContact });
-		this.on('destroy','destroy',this.optionsMenu);
+
+		Ext.destroy(this.optionsMenu);
+		m = this.optionsMenu = Ext.widget({xtype:'person-options-menu', width:255, ownerCmp: this, user: this.user, isContact: this.isContact });
+		m.mon(this,'destroy','destroy');
+		m.on('hide-menu','hide');
+		this.mon(m, 'remove-contact-selected', 'onDeleteContact');
+
+
 		this.renderData = Ext.apply(this.renderData||{},user.getData());
 		Ext.apply(this.renderData,{
-			isMe: isMe(user),
+			isMe: this.isMe,
 			isContact: this.isContact,
-			presence: user.getPresence().getName()
+			presence: user.getPresence().getName() + (this.isContact||this.isMe ? '' : ' no-presence')
 		});
+	},
+
+
+	convertToContact: function(){
+		this.controlsEl.down('.button').set({cls:'button chat disabled'}).update('Chat');
+		this.isContact = true;
+		this.applyRenderData(this.user);
+		this.nameEl.removeCls('no-presence');
+		this.updateButton();
+	},
+
+
+	convertToStranger: function(){
+		this.controlsEl.down('.button').set({cls:'button'}).update('Add Contact');
+		this.isContact = false;
+		this.applyRenderData(this.user);
+		this.nameEl.addCls('no-presence');
+		this.updateButton();
+	},
+
+
+	updateButton: function(){
+		var b = this.controlsEl.down('.button'),
+			pi = this.user.getPresence(),
+			current = $AppConfig.userObject.getPresence(),
+			isOnline = current && current.isOnline() && ((pi && pi.isOnline()) || this.isUserOnline());
+
+		b[(this.isContact && !isOnline)?'addCls':'removeCls']('disabled');
+	},
+
+
+	isUserOnline: function(){
+		var o = Ext.getStore('online-contacts-store'), k = 'Username';
+		return Boolean(o.findRecord(k, this.user.get(k)));
+	},
+
+
+	onAddContact: function(){
+		var me = this,
+			data = this.getSelected(),
+			fin = function(){
+				me.convertToContact();
+			};
+
+		this.fireEvent('add-contact', this.user, data.groups, fin);
+	},
+
+
+	onDeleteContact: function(){
+		var me = this,
+			data = this.getSelected(),
+			fin = function(){ me.convertToStranger(); };
+
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		alert({
+			msg: 'The following action will remove this contact.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					me.fireEvent('delete-contact', me.user, data.groups, fin);
+				}
+			}
+		});
+
 	},
 
 
@@ -114,9 +187,14 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		if(isMe(this.user)){
+		if(isMe(this.user) || !$AppConfig.service.canFriend()){
 			this.controlsEl.select('.lists,.settings').addCls('disabled');
 		}
+		if(!$AppConfig.service.canChat()){
+			this.controlsEl.down('.button').destroy();
+		}
+
+		this.updateButton();
 
 		var store = new Ext.data.Store({
 			fields: [
@@ -184,6 +262,15 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	},
 
 
+	getSelected: function(){
+		var l = this.groupsList;
+		return {
+			user: this.user.getId(),
+			groups: l? l.getSelected() : []
+		};
+	},
+
+
 	onControlsClicked: function(e){
 		if(e.getTarget('.disabled')){
 			return;
@@ -195,8 +282,15 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		else if(e.getTarget('.lists')){
 			this.groupsListMenu.showBy(this.avatarEl,'tl-bl');
 		}
-		else if(e.getTarget('.edit')){
+		//the various states of the action button (default, edit, and chat)
+		else if(e.getTarget('.button.edit')){
 			this.fireEvent('edit');
+		}
+		else if(e.getTarget('.button.chat')){
+			this.fireEvent('chat', this.user);
+		}
+		else if(e.getTarget('.button')) {
+			this.onAddContact();
 		}
 
 	}
