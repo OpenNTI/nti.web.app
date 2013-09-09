@@ -371,6 +371,7 @@ Ext.define('NextThought.util.Content', {
 				container = title.get('NTIID');
 			}
 			Ext.callback(cb, scope, [container, locationInfo]);
+			return false;
 		}
 		else{
 			Ext.callback(cb, scope);

@@ -195,7 +195,7 @@ Ext.define( 'NextThought.view.content.View', {
 	},
 
 
-	onNavigationAborted: function(resp, ntiid) {
+	onNavigationAborted: function(resp, ntiid, finish) {
 		function fin(cid, locationInfo){
 			if(!cid){
 				me.courseBook.layout.setActiveItem('main-reader-view');
@@ -205,31 +205,47 @@ Ext.define( 'NextThought.view.content.View', {
 				me.down('content-page-widgets').hide();
 			}
 			else{
-				// NOTE: For content related item, we have enough info to actually show it, otherwise,
-				// we will navigation to the parent container.
 				if(locationInfo.location && locationInfo.location.tagName === 'content:related'){
+					// NOTE: For content related item, we have enough info to actually show it, otherwise,
+					// we will navigation to the parent container.
 					$AppConfig.service.getPageInfo(cid, function(pi){
 						if(!Ext.isEmpty(pi)){
 							pi = Ext.isArray(pi) ? pi[0] : pi;
 
-							// HACK: when this card is rendered, setting the originalNTIIDRequested of the parent container
-							// will force it to go ahead and show the target card.
-							// Should we reset it back to its original value in the callback?
-							pi.originalNTIIDRequested = locationInfo.NTIID;
-							me.reader.setLocation(pi);
+							me.reader.setLocation(pi, function(s){
+								function fn(){
+									if(!courseNav){ return; }
+									courseNav.fireEvent('select-card-node', locationInfo.NTIID);
+									Ext.callback(finish);
+								}
+								//
+								var courseNav = me.courseNav;
+								if(!courseNav.rendered){
+									courseNav.on('afterrender', fn);
+									return;
+								}
+								fn();
+							});
+							return;
 						}
+
+						//We know the we are trying to navigate to a content card but we couldn't resolve its pageInfo?,
+						// callback and return.
+						Ext.callback(finish);
 					});
-					return;
+
+					// Return false, since we can handle this.
+					return false;
 				}
 				me.fireEvent('navigation-selected', cid);
 			}
+			return true;
 		}
 
 		var me = this;
 		if(this.fireEvent('navigation-failed', this, ntiid, resp) !== false){
 			if(resp && resp.status === 404){
-				ContentUtils.findRelatedContentObject(ntiid, fin, me);
-				return;
+				return ContentUtils.findRelatedContentObject(ntiid, fin, me);
 			}
 			fin();
 		}

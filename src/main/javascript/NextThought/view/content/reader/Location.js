@@ -117,10 +117,13 @@ Ext.define('NextThought.view.content.reader.Location', {
 		}
 		finish = Ext.Function.createBuffered(finish, null, 1);
 
-		if(e && e.isMasked()){
-			console.warn('navigating while busy');
-			return;
-		}
+		// I understand the intent of this, but in a case of an initial failed navigation, where we recover,
+		// if we call setLocation this  will prevent us from continuing because the mask is active.
+		// TODO: We should do define a better solution around this.
+//		if(e && e.isMasked()){
+//			console.warn('navigating while busy');
+//			return;
+//		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID && e){
 			e.mask('Loading...','navigation');
@@ -168,8 +171,12 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
-            Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
-			me.fireEvent('navigateAbort',r, ntiidOrPageInfo);
+			// Give the navigateAbort handler a chance to see if it can resolve and navigate to the correct location.
+			// it will explicitly return false, if it thinks it can handle it, otherwise, we callback.
+			if(me.fireEvent('navigateAbort',r, ntiidOrPageInfo, finish) !== false){
+				Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
+			}
+
 		}
 
 		if(ntiidOrPageInfo.isPageInfo){

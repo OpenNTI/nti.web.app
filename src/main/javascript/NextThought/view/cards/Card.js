@@ -83,20 +83,23 @@ Ext.define('NextThought.view.cards.Card',{
 	},
 
 
-	onCardClicked: function(e){
+	navigateToTarget: function(e){
 		var status;
-		//We cannot "stop" the event, or our anchor will not receive it, so bypassing simply prevents us from acting on it.
-		if(this.bypassEvent){
-			return undefined;
-		}
-
 		if(ParseUtils.isNTIID(this.target)){
 			status = this.fireEvent('navigate-to-href',this,this.target);
 		}
 		else {
 			status = this.fireEvent('show-target',this,this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/);
 		}
-
 		return status;
+	},
+
+
+	onCardClicked: function(e){
+		//We cannot "stop" the event, or our anchor will not receive it, so bypassing simply prevents us from acting on it.
+		if(this.bypassEvent){
+			return undefined;
+		}
+		return this.navigateToTarget(e);
 	}
 });
