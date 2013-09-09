@@ -47,8 +47,6 @@ Ext.define('NextThought.view.course.View', {
 	// Add a way to explicitly select a card node rather
 	// than going through the originalNTIIDRequested Hack
 	openCardNode: function(ntiid){
-		debugger;
-		console.log(arguments);
 		var card, i;
 
 		Ext.each(this.query('content-card'), function(crd){
