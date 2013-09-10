@@ -257,7 +257,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				return r.get('type')==='view' && r.get('mapping') === view;
 			});
 
-		this.nav.select(i);
+		this.nav.getSelectionModel().select(i, false, true);
 
 	},
 
