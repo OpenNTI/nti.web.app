@@ -12,7 +12,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		'NextThought.store.ProfileItem'
 	],
 
-	uriFrendlyName: ['','activity'],
+	uriFriendlyName: ['','activity'],
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
 

@@ -124,7 +124,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 			activeViewData = p.join('/');
 
 		function compareUriName(i){
-			var uri = i.uriFrendlyName||'';
+			var uri = i.uriFriendlyName||'';
 			if(!Ext.isArray(uri)){ uri = [uri]; }
 			if(Ext.Array.contains(uri,activeView)){
 				activeView = i;
