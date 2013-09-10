@@ -2,6 +2,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.profile-panel',
 
+	//<editor-fold desc="Config">
 	requires: [
 		'NextThought.view.profiles.About',
 		'NextThought.view.profiles.outline.View',
@@ -25,6 +26,9 @@ Ext.define('NextThought.view.profiles.Panel', {
 		user: null,
 		username: ''
 	},
+	//</editor-fold>
+
+	//<editor-fold desc="Init">
 
 	constructor: function (config) {
 		var me = this,
@@ -87,7 +91,31 @@ Ext.define('NextThought.view.profiles.Panel', {
 		this.restoreState(this.getStateData());
 	},
 
+	//</editor-fold>
 
+	//<editor-fold desc="Simple Handlers">
+
+	onBeforeDeactivate: function () {
+		console.log('about to deactivate the profile view');
+		return Ext.Array.every(this.body.items.items, function (item) {
+			return item.fireEvent('beforedeactivate');
+		});
+	},
+
+
+	onBeforeViewChanged: function(){
+		console.debug('onBeforeViewChange');
+	},
+
+
+	onViewChanged: function(activeCmp){
+//		console.debug('onViewChange', activeCmp.id);
+		this.navigation.updateSelection(activeCmp);
+	},
+
+	//</editor-fold>
+
+	//<editor-fold desc="Read & Write State">
 	restoreState: function(state){
 		console.log(state);
 		var me = this,
@@ -122,14 +150,6 @@ Ext.define('NextThought.view.profiles.Panel', {
 	},
 
 
-	onBeforeDeactivate: function () {
-		console.log('about to deactivate the profile view');
-		return Ext.Array.every(this.body.items.items, function (item) {
-			return item.fireEvent('beforedeactivate');
-		});
-	},
-
-
 	//This is fired based on USER interaction.
 	// Do not call this to restore the view progamatically. Just call setActiveItem, otherwise you will end up with
 	// bad history.
@@ -152,17 +172,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		//c.getState();
 
 		//set state?
-	},
-
-
-	onBeforeViewChanged: function(){
-		console.debug('onBeforeViewChange');
-	},
-
-
-	onViewChanged: function(activeCmp){
-//		console.debug('onViewChange', activeCmp.id);
-		this.navigation.updateSelection(activeCmp);
 	}
+	//</editor-fold>
 
 });
