@@ -105,7 +105,7 @@ Ext.define('NextThought.view.profiles.View', {
 						user: user,
 						username: username,//can be removed once v2profiles is released
 						displayName: user.getName(),//can be removed once v2profiles is released
-						state: state
+						stateData: state
 					}, state);//remove the applyIf wrapper once v2profiles is released
 				}
 				toAdd = Ext.apply(toAdd, {

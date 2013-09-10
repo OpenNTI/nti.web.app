@@ -153,7 +153,7 @@
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
-					vertical-align: middle;
+					vertical-align: baseline;
 					display: inline;
 					padding: 0 0.5em;
 					background: none;
@@ -223,7 +223,7 @@
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
-					vertical-align: middle;
+					vertical-align: baseline;
 					display: inline;
 					padding: 0 0.5em;
 					background: none;
@@ -267,20 +267,6 @@
 
 	.navigation-bar {
 		@include post-navigation;
-
-		&.animateIn{
-			background: none;
-			.path {
-				@include animate($name: postHeaderIn, $duration: 0.9s, $delay: 0s);
-			}
-		}
-
-		&.animateOut {
-			background: none;
-			.path {
-				@include animate($name: postHeaderOut, $duration: 0.7s, $delay: 0s);
-			}
-		}
 	}
 
 	.controls {
@@ -324,7 +310,7 @@
 
 		.comment-count {
 			cursor: pointer;
-			vertical-align: text-top;
+			vertical-align: baseline;
 		}
 
 		.comment-box .response > span,
@@ -335,7 +321,7 @@
 				position: static;
 				content: '\00B7';
 				text-decoration: none !important;
-				vertical-align: text-top;
+				vertical-align: baseline;
 				display: inline-block;
 				padding: 0 0.6em;
 				background: none;
@@ -358,7 +344,7 @@
 				margin: 0 5px 7px 0;
 				height: 20px;
 				text-transform: uppercase;
-				vertical-align: middle;
+				vertical-align: baseline;
 				color: $secondary-grey;
 				font: normal 700 10px/20px $font;
 			}
@@ -579,7 +565,17 @@
 
 #profile {
 	.old .blog {
-		.entry.list-item{margin: 50px 0;}
+		.entry {
+			padding: 30px 0 30px 20px;
+			&.list-item{margin: 50px 0;}
+
+			.navigation-bar {
+				z-index: 10;
+				position: absolute;
+				top: -52px;
+				left: 0; right: 0;
+			}
+		}
 		.header {
 			@include new-post;
 			position: absolute;
@@ -587,6 +583,11 @@
 			right: 0;
 		}
 	}
+
+	&.scroll-lock .blog .post-view{
+		overflow-y: hidden;
+	}
+
 	.blog {
 
 		.post-view .blog-editor{
@@ -607,11 +608,29 @@
 			text-align: center;
 		}
 
-		.post-view .entry {
-			border-width: 0;
-			.title {
-				cursor: default;
-				white-space: normal;
+		& > .list-view > .body:not(.old) {
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+		}
+
+		.post-view {
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			overflow: {
+				x:hidden;
+				y:auto; //scroll;
+			}
+
+			&.scroll-lock {
+				overflow-y: hidden;
+			}
+
+			.entry {
+				border-width: 0;
+				.title {
+					cursor: default;
+					white-space: normal;
+				}
 			}
 		}
 
@@ -622,13 +641,22 @@
 		}
 
 		.entry {
-			padding: 30px 0 30px 20px;
+			padding: 0;
 			@include post-view;
-			.navigation-bar {
-				z-index: 10;
-				position: absolute;
-				top: -52px;
-				left: 0; right: 0;
+			.navigation-bar:not(.old) {
+				.pager {
+					right: 10px;
+				}
+			}
+
+			& > .wrap {
+				position: relative;
+				padding: 20px;
+				background: #fff;
+				margin: 5px 0 -3px;
+				.controls {
+					overflow: hidden;
+				}
 			}
 		}
 

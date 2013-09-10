@@ -12,6 +12,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		'NextThought.store.ProfileItem'
 	],
 
+	uriFrendlyName: ['','activity'],
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
 
@@ -26,6 +27,24 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		else {
 			UserRepository.getUser(this.username,this.setUser, this, true);
 		}
+	},
+
+
+	performAction: function(action,param){
+
+//		if(action!=='filter'){
+			//clear filter.
+//			return;
+//		}
+
+		//otherwise filter on param:
+
+	},
+
+
+	restore: function(data,finishCallback){
+
+		Ext.callback(finishCallback,null,[this]);
 	},
 
 

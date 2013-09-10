@@ -21,7 +21,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 	cls: 'profile-view',
 
 	config: {
-		state: null,
+		stateData: null,
 		user: null,
 		username: ''
 	},
@@ -56,12 +56,17 @@ Ext.define('NextThought.view.profiles.Panel', {
 			});
 		}
 
-		this.body.items.each(monitor,this);
+		this.forEachView(monitor,this);
 		this.mon(this.navigation,{
 			'show-profile-view':'changeView'
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
+	},
+
+
+	forEachView: function(fn,scope){
+		this.body.items.each(fn,scope||this);
 	},
 
 
@@ -79,14 +84,41 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	initState: function(){
 		//drive initial state restore here
-		this.restoreState(this.getState());
+		this.restoreState(this.getStateData());
 	},
 
 
 	restoreState: function(state){
-		this.setState(state);
 		console.log(state);
-		this.fireEvent('restored');
+		var me = this,
+			p = state.activeTab.split('/'),
+			activeView = p.shift(),
+			activeViewData = p.join('/');
+
+		function compareUriName(i){
+			var uri = i.uriFrendlyName||'';
+			if(!Ext.isArray(uri)){ uri = [uri]; }
+			if(Ext.Array.contains(uri,activeView)){
+				activeView = i;
+			}
+
+			return Ext.isString(activeView);
+		}
+
+		me.setStateData(state);
+
+		me.forEachView(compareUriName);
+		if(Ext.isString(activeView)){
+			console.warn('Could not find view: '+activeView);
+			me.fireEvent('restored');
+			return;
+		}
+
+		this.body.getLayout().setActiveItem(activeView);
+		activeView.restore(activeViewData,function(){
+			me.fireEvent('restored');
+		});
+
 	},
 
 
@@ -98,11 +130,28 @@ Ext.define('NextThought.view.profiles.Panel', {
 	},
 
 
+	//This is fired based on USER interaction.
+	// Do not call this to restore the view progamatically. Just call setActiveItem, otherwise you will end up with
+	// bad history.
 	changeView: function(view, action, data){
+		console.debug('USER Changing Profile View:',view, 'action:',action, 'data:',data);
+
 		var c = this.down(view);
-		if(c){
-			this.body.getLayout().setActiveItem(c);
+		if(!c){
+			console.error('No view selected from query: '+view);
+			return;
 		}
+
+		this.body.getLayout().setActiveItem(c);
+		if( c.performAction ) {
+			c.performAction(action,data);
+		} else if ( action !== 'view' ) {
+			console.warn(c.$className+' does not implement performAction and was requested to '+action+' but it was dropped');
+		}
+
+		//c.getState();
+
+		//set state?
 	},
 
 

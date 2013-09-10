@@ -126,6 +126,10 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		this.callParent(arguments);
 		var me  = this;
 
+		if(!isFeature('v2profiles')){
+			this.body.addCls('old');
+		}
+
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.swapViews('list');
@@ -362,7 +366,27 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	setParams: function (paramsString, queryObject) {
+	restore: function(data,finishCallback){
+		var me = this;
+
+		if(Ext.isEmpty(data)){
+			Ext.callback(finishCallback);
+			return;
+		}
+
+		me.setParams(data,null,function(){
+			var active = me.activePost || new Ext.util.Observable();
+
+			active.on('ready',finishCallback,me,{single:true});
+
+			if(active.xtype !== 'profile-blog-post'){
+				active.fireEvent('ready');
+			}
+		});
+	},
+
+
+	setParams: function (paramsString, queryObject, callback) {
 		var me = this, id, r, s = me.store, sections, args = [];
 
 		if (!me.rendered) {
@@ -386,6 +410,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		if (r) {
 			args[0] = r;
 			me.showPost.apply(me, args);
+			Ext.callback(callback);
 			return;
 		}
 
@@ -393,12 +418,14 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			url:     me.user.getLink('Blog') + '/' + encodeURIComponent(id),
 			scope:   me,
 			failure: function () {
+				Ext.callback(callback);
 				me.setParams();
 				alert('Could not load post');
 			},
 			success: function (resp) {
 				args[0] = ParseUtils.parseItems(resp.responseText).first();
 				me.showPost.apply(me, args);
+				Ext.callback(callback);
 			}
 		};
 
@@ -504,7 +531,11 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			};
 		}
 
-		Ext.get('profile').scrollTo('top', 0, true);
+		if(!isFeature('v2profiles')){
+			Ext.get('profile').scrollTo('top', 0, true);
+		}
+
+		this.postViewEl.scrollTo('top',0);
 		this.activePost = Ext.widget(xtype, cfg);
 		this.updateLayout();
 	},
