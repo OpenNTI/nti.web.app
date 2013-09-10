@@ -522,7 +522,11 @@
 			background: #ffffff;
 			box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
 			clear: both;
-			overflow: hidden;
+			overflow:{
+				x: hidden;
+				y: auto //scroll;
+			}
+			max-height: 30em;
 
 			img {
 				max-width: 520px !important;
