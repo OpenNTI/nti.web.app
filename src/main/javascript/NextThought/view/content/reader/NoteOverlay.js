@@ -205,6 +205,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		this.editor.on('destroy', 'editorCleanup', this);
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 
+
+        if(Ext.is.iPad){
+            var contentEl = this.editor.el.down('.content'),
+                footerEl = this.editor.el.down('.footer'),
+                toSetHeight = window.outerHeight - contentEl.getY() - footerEl.getHeight() - 75;
+
+            console.log('toSetHeight:' + toSetHeight);
+            contentEl.setStyle("max-height",toSetHeight + "px");
+        }
+
 		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		return true;
 	},
