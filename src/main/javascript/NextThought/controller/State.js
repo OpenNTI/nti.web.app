@@ -1,5 +1,4 @@
 PREVIOUS_STATE = 'previous-state';
-BASE_STATE = { active: 'home' };
 
 Ext.define('NextThought.controller.State', {
 	extend: 'Ext.app.Controller',
@@ -394,7 +393,9 @@ Ext.define('NextThought.controller.State', {
 				active: 'profile',
 				profile: user
 			};
-			result.profile.queryObject = query;
+			if( query ){
+				result.profile.queryObject = query;
+			}
 		}
 		return result;
 	},
