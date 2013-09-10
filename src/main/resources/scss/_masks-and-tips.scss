@@ -15,6 +15,10 @@
 		}
 	}
 
+	&.drag-mask .x-mask-msg-text{
+		display: none;
+	}
+
 	.x-mask-msg-inner {
 		background: none;
 		border: none;
