@@ -79,6 +79,13 @@ Ext.define('NextThought.view.course.dashboard.View', {
 			}
 		});
 
+
+		if(!courseNode){
+			console.warn('No course node');
+			Ext.callback(callback,me,[tiles]);
+		}
+
+
 		Ext.each(queue.slice(), function (fn) {
 			console.log(fn.$test + " Started");
 			fn(date, course, location, courseNode, function finish(o) {
