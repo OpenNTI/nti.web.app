@@ -133,7 +133,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 			return Ext.isString(activeView);
 		}
 
-		me.setStateData(state);
+		me.setStateData(Ext.clone(state));
 
 		me.forEachView(compareUriName);
 		if(Ext.isString(activeView)){
@@ -156,7 +156,11 @@ Ext.define('NextThought.view.profiles.Panel', {
 	changeView: function(view, action, data){
 		console.debug('USER Changing Profile View:',view, 'action:',action, 'data:',data);
 
-		var c = this.down(view);
+		var stateData = Ext.clone(this.getStateData()),
+			url,
+			u = this.user,
+			c = this.down(view);
+
 		if(!c){
 			console.error('No view selected from query: '+view);
 			return;
@@ -169,9 +173,15 @@ Ext.define('NextThought.view.profiles.Panel', {
 			console.warn(c.$className+' does not implement performAction and was requested to '+action+' but it was dropped');
 		}
 
-		//c.getState();
+		stateData.activeTab = c.getStateData();
+		//set state
+		url = u.getProfileUrl(
+				Ext.isEmpty(stateData.activeTab)
+						? null
+						: stateData.activeTab.split('/'));
 
-		//set state?
+		console.debug('State Data: ',stateData, url);
+		history.pushState({profile:Ext.clone(stateData)},this.ownerCt.title,url);
 	}
 	//</editor-fold>
 

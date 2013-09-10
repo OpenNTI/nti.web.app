@@ -2,6 +2,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-activity',
 
+	//<editor-fold desc="Config">
+
 	requires: [
 		'NextThought.view.profiles.parts.ActivityItem',
 		'NextThought.view.profiles.parts.HighlightContainer',
@@ -12,9 +14,14 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		'NextThought.store.ProfileItem'
 	],
 
+	DEFAULT_URI: 0,
+	ACTIVE_ACTION_URI: 1,
+
 	uriFriendlyName: ['','activity'],
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
+
+	//</editor-fold>
 
 
 	initComponent: function(){
@@ -39,6 +46,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		//otherwise filter on param:
 
+	},
+
+	getStateData: function(){
+		//if action is active(a la: filter): return [uriFriendlyName[this.ACTIVE_ACTION_URI],action,param].join('/')
+		//else:
+		return this.uriFriendlyName[this.DEFAULT_URI];
 	},
 
 

@@ -366,6 +366,17 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
+	getStateData: function(){
+		var p = this.getParams();
+
+		if( this.restoring ){
+			p = this.restoring===true ? null : this.restoring;
+		}
+
+		return Ext.Array.clean([this.uriFriendlyName,p]).join('/');
+	},
+
+
 	restore: function(data,finishCallback){
 		var me = this;
 
@@ -374,7 +385,9 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			return;
 		}
 
+		me.restoring = data || true;
 		me.setParams(data,null,function(){
+			delete me.restoring;
 			var active = me.activePost || new Ext.util.Observable();
 
 			active.on('ready',finishCallback,me,{single:true});
