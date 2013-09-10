@@ -493,11 +493,11 @@ Ext.define('NextThought.controller.State', {
 			}
 
 			//location.hash = fragment || '';
-			if (fragment) {
-				path = location.toString();
-			}
+//			if (fragment) {
+//				path = location.toString();
+//			}
 
-			history.pushState(state, document.title, path);
+			history.pushState(state, document.title);
 		}
 	},
 
