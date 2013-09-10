@@ -14,7 +14,7 @@ Ext.define('NextThought.view.profiles.View', {
 		if(!isFeature('v2profiles')){
 			this.defaultType = 'profile-panel-old';
 			this.layout = 'auto';
-			this.cls = 'scrollable ' + (this.cls||'');
+			this.cls = 'old scrollable ' + (this.cls||'');
 		}
 		this.callParent(arguments);
 	},

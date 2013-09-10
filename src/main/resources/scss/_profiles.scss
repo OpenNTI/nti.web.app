@@ -8,6 +8,7 @@
 
 #profile {
 	margin-top: -65px;
+	&.old{margin-top:0;}
 	padding:0;
 	overflow:{
 		x: hidden;
