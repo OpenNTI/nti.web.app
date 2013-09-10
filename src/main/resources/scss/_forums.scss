@@ -535,14 +535,6 @@
 	z-index: 103;
 }
 
-.animateProfileTabsLeft {
-	overflow: hidden;
-	& > .nti-body { @include animate($name: profileTabsLeft, $duration: 0.7s, $delay: 0s); }}
-
-.animateProfileTabsBack {
-	overflow: hidden;
-	& > .nti-body { @include animate($name: unProfileTabsLeft, $duration: 0.9s, $delay: 0s); }}
-
 
 #view > .blog-post.navigation-bar {
 	@include post-navigation;
@@ -586,7 +578,15 @@
 }
 
 #profile {
-	.old .blog .entry.list-item{margin: 50px 0;}
+	.old .blog {
+		.entry.list-item{margin: 50px 0;}
+		.header {
+			@include new-post;
+			position: absolute;
+			top: -42px;
+			right: 0;
+		}
+	}
 	.blog {
 
 		.post-view .blog-editor{
@@ -597,8 +597,14 @@
 		.header {
 			@include new-post;
 			position: absolute;
-			top: -42px;
-			right: 0;
+			top: 256px;
+			right: auto;
+			left: -143px;
+			width: 138px;
+			height: 44px;
+			border-radius: 0;
+			line-height: 44px;
+			text-align: center;
 		}
 
 		.post-view .entry {
