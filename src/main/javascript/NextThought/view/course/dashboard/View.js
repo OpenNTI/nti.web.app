@@ -83,6 +83,7 @@ Ext.define('NextThought.view.course.dashboard.View', {
 		if(!courseNode){
 			console.warn('No course node');
 			Ext.callback(callback,me,[tiles]);
+			return;
 		}
 
 
