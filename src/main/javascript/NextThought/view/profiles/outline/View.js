@@ -207,13 +207,13 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			data: [
 				{id:'about', label:'About', mapping:'profile-about' },
 				{id:'activity', label:'Recent Activity', mapping:'profile-activity' },
-				{id:'blog', label:'Thoughts', mapping:'profile-blog' },
+				{id:'blog', label:'Thoughts', mapping:'profile-blog' }/*,
 				{id:'discussions', label:'Discussions', type:'filter', mapping:'profile-activity' },
 				{id:'chats', label:'Chats', type:'filter', mapping:'profile-activity' },
 				{id:'comments', label:'Comments', type:'filter', mapping:'profile-activity' },
 				{id:'highlights', label:'Highlights', type:'filter', mapping:'profile-activity' },
 				{id:'bookmarks', label:'Bookmarks', type:'filter', mapping:'profile-activity' },
-				{id:'like', label:'Likes', type:'filter', mapping:'profile-activity' }
+				{id:'like', label:'Likes', type:'filter', mapping:'profile-activity' }*/
 			]
 		});
 
