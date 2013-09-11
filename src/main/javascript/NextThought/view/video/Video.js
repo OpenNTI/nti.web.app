@@ -409,6 +409,7 @@ Ext.define('NextThought.view.video.Video',{
 
 	openExternally: function(){
 		var cls = this.activeClass(),
+		//Potential BUG: assuming currentVideoId is an array that you can treat as Args. If its an array, you want to pass the entire array as ONE argument!
 			html = cls ? cls.contentForExternalViewer.apply(cls, this.currentVideoId) : '<body><h1>Unable to load video</h1></body>',
 			w;
 
