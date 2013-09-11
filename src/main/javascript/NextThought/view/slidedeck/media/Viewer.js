@@ -194,7 +194,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
 		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
 		// while at the same time making sure we sync with resizes.
-		var h = Ext.Element.getViewportHeight() - this.toolbar.getHeight() - 30,
+		var tbHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
+			h = Ext.Element.getViewportHeight() -  tbHeight - 30,
 			videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
 			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player'))? this.FULLVIDEO : this.BIGVIDEO,
