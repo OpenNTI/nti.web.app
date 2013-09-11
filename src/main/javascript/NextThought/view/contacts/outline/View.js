@@ -5,6 +5,14 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	ui:                      'nav',
 	preserveScrollOnRefresh: true,
 
+	requires: [
+		'NextThought.view.contacts.outline.search.View'
+	],
+
+	mixins:{
+		contactSearching: 'NextThought.view.contacts.outline.search.ContactSearchMixin'
+	},
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'{outlineLabel}'
@@ -14,7 +22,13 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			{ tag:'tpl', 'if':'canjoin', cn:{
 				cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
 			{ tag:'tpl', 'if':'cancreate', cn:{
-				cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } }
+				cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } },
+			{ tag:'tpl', 'if':'hasSearch', cn:{
+				cls: 'contact-button search', html: 'Search', cn: [
+					{tag: 'input', type: 'text'},
+					{cls: 'clear', style: {display: 'none'}}
+				]}
+			}
 		]}}
 	]),
 
@@ -51,6 +65,9 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.addCls('nav-outline make-white');
+		if(this.subType === 'contact'){
+			this.mixins.contactSearching.constructor.apply(this, arguments);
+		}
 	},
 
 
@@ -61,12 +78,15 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			me.fromKey = true;
 		});
 
+		// TODO: We should really create subclasses of this view where we set the correct flags and overrides
+		// rather than checking if the subType is so and so.
 		this.renderData = Ext.apply(this.renderData || {}, {
 			outlineLabel: this.getOutlineLabel(),
-			buttons: Boolean(this.subType!=='contact'),
+			buttons: true,
 			type: this.subType,
-			cancreate: true,//capability?
-			canjoin: this.subType === 'group'
+			cancreate:  this.subType !== 'contact',//capability?
+			canjoin: this.subType === 'group',
+			hasSearch: this.subType === 'contact'
 		});
 
 		this.on({
@@ -115,7 +135,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 
 	onButtonsClicked: function(evt){
 		var b = evt.getTarget('.contact-button');
-		if( b ){
+		if( b && !Ext.fly(b).hasCls('search')){
 			this.fireEvent('contact-button-clicked', b, this);
 		}
 	},
