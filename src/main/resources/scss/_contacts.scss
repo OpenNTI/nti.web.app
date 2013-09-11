@@ -961,6 +961,11 @@ div.contact-buttons {
 		position: relative;
 		overflow: hidden;
 
+		&:hover .x-component-nti-tool-action:not(.disabled) {
+			.icon.options::after{ @include sprite($icons,'options-menu-card_hover'); }
+		}
+
+
 		.x-component-nti-tool-action{
 			margin: 0 0 0 20px;
 			.icon {
