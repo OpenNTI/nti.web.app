@@ -810,7 +810,12 @@
 				.subject, .name.no-subject {
 					display: block;
 					color: $primary-grey;
-					font: normal 300 28px/30px $font;
+					font: normal 300 28px/35px $font;
+					max-width: 570px;
+					overflow: hidden;
+					white-space: nowrap;
+					@include ellipse();
+
 					&::after{
 						content: '';
 						display: none;
