@@ -590,7 +590,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
 					h = reader.annotationView.getHeight(),
 					pos = reader.annotationView.getPosition(),
-					minWidth = 575;
+					minWidth = 724;
 
 				w = w > minWidth ? w : minWidth;
 				pos[0] = (pos[0] - w > 0) ? (pos[0] - w) : 0;
