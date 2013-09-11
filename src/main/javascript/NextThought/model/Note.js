@@ -234,8 +234,7 @@ Ext.define('NextThought.model.Note', {
 			if(this.isWhiteboardOnly(body)){
 				snip = "[Image]";
 			}else{
-				this.resolveNotePreview(cb, max);
-				return;
+				snip = Ext.String.ellipsis(this.simplifyBody(body)[0], max, true);
 			}
 		}
 
@@ -244,7 +243,7 @@ Ext.define('NextThought.model.Note', {
 
 	resolveNotePreview: function(cb, max){
 		var t = this.get('title'),
-			body = this.simplifyBody(this.get('body')),
+			body = this.get('body'),
 			snip;
 
 		max = max || 36;
@@ -261,7 +260,7 @@ Ext.define('NextThought.model.Note', {
 			this.compileBodyContent(function(html){
 				snip = ContentUtils.getHTMLSnippet(html,max);
 				Ext.callback(cb, null, [snip||html,t]);
-			}, null, null, null, body);
+			}, null, null, null);
 
 			return;
 		}
