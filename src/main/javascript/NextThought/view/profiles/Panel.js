@@ -56,7 +56,8 @@ Ext.define('NextThought.view.profiles.Panel', {
 		function monitor(panel){
 			me.mon(panel,{
 				beforeactivate:'onBeforeViewChanged',
-				activate:'onViewChanged'
+				activate:'onViewChanged',
+				destroy:'removeNavigationItem'
 			});
 		}
 
@@ -112,6 +113,12 @@ Ext.define('NextThought.view.profiles.Panel', {
 //		console.debug('onViewChange', activeCmp.id);
 		this.navigation.updateSelection(activeCmp);
 	},
+
+
+	removeNavigationItem: function(cmp){
+		this.navigation.removeNavigationItem(cmp.xtype);
+	},
+
 
 	//</editor-fold>
 
