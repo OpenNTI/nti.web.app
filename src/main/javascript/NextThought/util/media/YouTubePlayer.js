@@ -119,10 +119,11 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 	load: function (source, offset) {
+		source = Ext.isArray(source)? source[0] : source;
 		this.currentSource = source;
 		this.currentStartAt = offset;
+		this.isReady = false;//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/  If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
 		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: "medium" });
-		this.isReady = false;
 		this.pause();
 	},
 
