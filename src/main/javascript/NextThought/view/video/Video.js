@@ -333,7 +333,7 @@ Ext.define('NextThought.view.video.Video',{
 	activatePlayer: function(){
 		if(this.activeVideoService){
 			try{
-				this.issueCommand(this.activeVideoService,'activate', this.currentVideoId, true);
+				this.issueCommand(this.activeVideoService,'activate', [this.currentVideoId], true);
 			}
 			catch(e){
 				console.warn('Error caught activating video', e.stack || e.message || e);
