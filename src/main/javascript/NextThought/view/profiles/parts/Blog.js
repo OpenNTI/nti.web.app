@@ -215,7 +215,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	swapViews: function (viewToShow) {
-		if (this.destroying || this.isDestroyed) {
+		if (!this.rendered || this.destroying || this.isDestroyed) {
 			return;
 		}
 
