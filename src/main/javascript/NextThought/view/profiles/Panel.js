@@ -76,8 +76,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 
 	attachScrollRelay: function(cmp){
-		this.on('destroy','destroy',
-			this.relayEvents(cmp.getEl(), ['scroll'],'profile-body-'));
+		this.relayEvents(cmp.getEl(), ['scroll'],'profile-body-');
 	},
 
 

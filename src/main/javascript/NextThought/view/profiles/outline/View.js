@@ -128,6 +128,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				select: 'selectionChanged'
 			}
 		});
+		this.on('destroy','destroy',this.nav);
 	},
 
 
@@ -310,6 +311,9 @@ Ext.define('NextThought.view.profiles.outline.View',{
 
 	removeNavigationItem: function(navMapping) {
 		var toRemove = [];
+		if(!this.navStore){
+			return;
+		}
 		this.navStore.each(function(r){
 			if(r.get('mapping')===navMapping){
 				toRemove.push(r);
