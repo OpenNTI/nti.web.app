@@ -23,7 +23,18 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 		Ext.DomHelper.append(this.el, this.controlTemplateObj);
 		this.mon(this.el.down('.save'), 'click', this.completeEdit, this);
 		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
+
+		this.on({
+			'complete':'textTransform',
+			'canceledit':'textTransform'
+		});
 	},
+
+
+	textTransform: function(){
+		this.boundEl.setStyle({textTransform:null});
+	},
+
 
 	startEdit: function(t,v){
 		var me = this;
@@ -41,7 +52,7 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 			}
 			t.setVisibilityMode(Ext.Element.VISIBILITY);//ensure we are not mode DISPLAY...otherwise we can't align to it.
 		}
-
+		t.setStyle({textTransform:'none'});//temporarily remove any transforms so we can edit the raw value.
 		return this.callParent([t,v]);
 	}
 });
