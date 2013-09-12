@@ -316,7 +316,7 @@ Ext.define('NextThought.Library', {
 
 		function tocLoaded(q,s,r){
 			var xml,
-				cb = me.activeLoad[index];
+				cb = me.activeLoad[index], n;
 
 			function strip(e){ Ext.fly(e).remove(); }
 			function permitOrRemove(e){
@@ -331,7 +331,8 @@ Ext.define('NextThought.Library', {
 				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if(xml){
 					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic[href*=#]', xml), strip);
-					Ext.each(Ext.DomQuery.select('[visibility]', xml), permitOrRemove);
+					n = Ext.DomQuery.select('[visibility]:not([visibility=everyone])', xml);
+					Ext.each( n, permitOrRemove);
 				}
 				else {
 					console.warn('no data for index: '+url);
