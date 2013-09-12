@@ -35,6 +35,13 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 
 		this.on({deactivate:resetWidth,single:true});
 
+		if( t.getVisibilityMode() === Ext.Element.DISPLAY ){
+			if(!t.isVisible()){
+				t.show();//undo display:none
+			}
+			t.setVisibilityMode(Ext.Element.VISIBILITY);//ensure we are not mode DISPLAY...otherwise we can't align to it.
+		}
+
 		return this.callParent([t,v]);
 	}
 });

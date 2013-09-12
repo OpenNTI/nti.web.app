@@ -175,8 +175,8 @@
 			}
 		}
 
+		.profile-about,
 		.profile-head{
-			margin-top: 75px;
 			position: relative;
 
 			.avatar {
@@ -226,7 +226,6 @@
 			}
 
 			.meta {
-				margin-left: 220px;
 				min-height: 170px;//Ensure the content after the meta is below the avatar
 				font: normal 500 14px/24px $font;
 				color: $secondary-grey;
@@ -352,6 +351,17 @@
 				&.name::after{
 					right: 5px;
 				}
+			}
+		}
+
+		.profile-about {
+			padding: 10px 20px 0;
+		}
+
+		.profile-head {//delete this block after v2profiles
+			margin-top: 75px;
+			.meta {
+				margin-left: 220px;
 			}
 		}
 
