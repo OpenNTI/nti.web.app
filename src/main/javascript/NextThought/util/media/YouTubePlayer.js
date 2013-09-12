@@ -6,7 +6,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		kind:  'video',
 		type:  'youtube',
 		valid: function () {
-			return Boolean(window.YT);
+			return Boolean(window.YT) && this.apiReady;
 		}
 	},
 
@@ -59,12 +59,25 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 	playerReady: function () {
+		var me = this,
+			state = NaN;
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
 		if (this.onReadyLoadSource) {
 			Ext.defer( this.load, 1, this, [this.onReadyLoadSource]);
 			delete this.onReadyLoadSource;
 		}
+
+
+		//Poll the damn thing, if it ever starts firing the event we stop polling.
+		clearInterval(this.stateChangeChecker);
+		this.stateChangeChecker = setInterval(function(){
+			var p = me.player.getPlayerState();
+			if(isNaN(state) || p !== state){
+				me.playerStatusChange({data:p, fromInterval:true});
+				state = p;
+			}
+		},500);
 	},
 
 	playerError: function (error) {
@@ -107,6 +120,12 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			case YT.PlayerState.CUED: type='cued'; this.playerReady(); break;
 			default:  console.log(event.data); return;
 		}
+
+		//This came from an event! stop our poll
+		if(!event.fromInterval){
+			clearInterval(this.stateChangeChecker);//YouTube is sending us what we want.
+		}
+
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
@@ -174,12 +193,20 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.stop();
 
 		this.isReady = false;
-
+		clearInterval(this.stateChangeChecker);
 		if (el) {
 			el.clearListeners();
 			Ext.destroy(el);
 		}
 	}
 }, function () {
+	var me = this;
+
+	function onReady(){
+		console.debug('YouTube API Ready');
+		me.apiReady = true;
+	}
+
+	window.onYouTubeIframeAPIReady = Ext.Function.createSequence(onReady,window.onYouTubeIframeAPIReady,null);
 	Globals.loadScript(location.protocol + "//www.youtube.com/iframe_api");
 });
