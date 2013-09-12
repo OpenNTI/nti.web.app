@@ -101,6 +101,10 @@ input::-ms-clear { display: none; }
 	}
 }
 
+.scroll-lock{
+	overflow: hidden !important;
+}
+
 .scrollable {
 	-webkit-overflow-scrolling: touch;
 }
