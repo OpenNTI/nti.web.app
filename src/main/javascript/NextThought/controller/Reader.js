@@ -243,7 +243,7 @@ Ext.define('NextThought.controller.Reader', {
         //If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
         // to direct the navbar to use the origins' id instead of the current one (because we know th current one will
         // not resolve from our library... its a card)
-        this.getContentNavigation().updateLocation(origin || t);
+        this.getContentNavigation().updateLocation(t || origin);
     },
 
 
