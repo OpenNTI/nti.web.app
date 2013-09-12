@@ -3,14 +3,6 @@ Ext.define('NextThought.view.profiles.About',{
 	alias: 'widget.profile-about',
 
 	//<editor-fold desc="Config">
-	requires: [
-		'NextThought.view.account.contacts.management.Popout'
-	],
-
-	mixins: {
-		enableChat: 'NextThought.mixins.ChatLinks'
-	},
-
 	uriFriendlyName: 'about',
 	html: 'about',
 	ui: 'profile',
@@ -25,13 +17,6 @@ Ext.define('NextThought.view.profiles.About',{
 				{
 					cls: 'meta',
 					cn:  [
-						{
-							cls: 'name-container',
-							cn: [
-								{ tag: 'span', cls: 'name', 'data-field': 'alias' },
-								{ cls: 'add-to-contacts', html: 'ADD'},
-								{ tag: 'a', cls: 'request-change', html: 'Request Change'}
-							]},
 						{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } },
 						{ cn: [
 							{ tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' },
@@ -40,10 +25,7 @@ Ext.define('NextThought.view.profiles.About',{
 						]},
 						{ cn: {tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } },
 						{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } },
-						{ cls: 'error-msg' },
-						{ cls: 'actions', cn: [
-							{ cls: 'chat', html: 'Chat' }
-						]}
+						{ cls: 'error-msg' }
 					]
 				}
 			]
@@ -54,19 +36,13 @@ Ext.define('NextThought.view.profiles.About',{
 	renderSelectors: {
 		profileInfoEl:    '.profile-about',
 		metaEl:           '.profile-about .meta',
-		nameEl:           '.profile-about .meta .name',
 		roleEl:           '.profile-about .meta [data-field=role]',
 		affiliationEl:    '.profile-about .meta [data-field=affiliation]',
 		affiliationSepEl: '.profile-about .meta .separator',
 		locationEl:       '.profile-about .meta [data-field=location]',
 		homePageEl:       '.profile-about .meta [data-field=home_page]',
 		emailEl:          '.profile-about .meta [data-field=email]',
-		actionsEl:        '.profile-about .meta .actions',
-		chatEl:           '.profile-about .meta .actions .chat',
-		addToContacts:    '.add-to-contacts',
-		errorMsgEl:       '.error-msg',
-		requestEl:        '.request-change',
-		nameContainerEl:  '.name-container'
+		errorMsgEl:       '.error-msg'
 	},
 
 	//</editor-fold>
@@ -79,17 +55,25 @@ Ext.define('NextThought.view.profiles.About',{
 		this.onSaveMap = {home_page: this.homePageChanged};
 
 		this.on({
+			'enable-edit': 'onShowEditing',
+			'disable-edit': 'onHideEditing',
 			beforedeactivate:'onBeforeDeactivate',
-			nameEl:{ click:'editName' },
-			metaEl:{ click:'editMeta' },
-			chatEl:{ click:'onChatWith' }
+			metaEl:{ click:'editMeta' }
 		});
 
 		this.setUser(this.user);
 	},
 
 
-	onBeforeDeactivate: function () {},
+	onBeforeDeactivate: function () {
+		if (this.metaEditor.editing) {
+			this.metaEditor.cancelEdit();
+		}
+
+		if (this.nameEditor.editing) {
+			this.nameEditor.cancelEdit();
+		}
+	},
 
 
 	destroy: function () {
@@ -107,7 +91,7 @@ Ext.define('NextThought.view.profiles.About',{
 	afterRender: function () {
 		var elements = [],
 				fields = [],
-				safeFields = ['nameEl'],
+				safeFields = [],//for future
 				me = this;
 
 		me.callParent(arguments);
@@ -124,7 +108,6 @@ Ext.define('NextThought.view.profiles.About',{
 		fields = new Ext.dom.CompositeElement(fields);
 
 		this.errorMsgEl.hide();
-		this.requestEl.hide();
 
 		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
 		// everything but the safeFields (avatar and name)
@@ -164,7 +147,6 @@ Ext.define('NextThought.view.profiles.About',{
 		me.getEl().mask('Loading...');
 
 		me.user = user;
-		me.user.addObserverForField(this, 'Presence', this.presenceChanged, this);
 
 		function onProfileLoaded(u, profile) {
 			me.updateProfile(u, profile);
@@ -335,53 +317,27 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	updateProfile: function (user, schema) {
-		var me = this,
+		var me = this, fn = 'editName',
 			profileSchema = (schema || {}).ProfileSchema,
 			nameInfo = me.getMetaInfoForField(user, 'alias', profileSchema);
 
 		me.userObject = user;
 		me.profileSchema = profileSchema;
 
-		try {
-			me.mun(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
-			me.contactsMaybeChanged();
-			//Maybe this goes in controller?
-			me.mon(Ext.getStore('FriendsList'), {scope: me, 'contacts-updated': me.contactsMaybeChanged});
-		}
-		catch (e) {
-			console.error(Globals.getError(e));
-		}
-
 		//Make more of the UI schema driven
-
-		me.nameEl.update(user.getName());
-		me.nameEl.dom.setAttribute('data-qtip', user.getName());
 
 		//If the name is editable it is guarenteed (right now) to be
 		//us.  Given that it is also guarenteed that we won't have the add to contacts
 		//button. so if its not editable we tag it with a class so we can snug the button
 		//up if it exists
-		if (nameInfo.editable) {
-			me.nameEl.addCls('editable');
-		}
-		else {
-			this.nameEl.addCls('readonly');
-			this.nameEl.removeCls('editable');
 
-			if (isFeature('request-alias-change') && isMe(user)) {
-				this.nameContainerEl.on({
-					scope: me,
-					mouseover: function () { me.requestEl.show(); },
-					mouseout: function () { me.requestEl.hide(); }
-				});
-
-				me.requestEl.on('click', function () {
-					me.fireEvent('request-alias-change', me);
-				}, me);
-			}
+		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
+			fn = Ext.bind(me.fireEvent,me,['request-alias-change', me]);
 		}
 
-		me.maybeShowChat(me.chatEl);
+		if(nameInfo.editable || Ext.isFunction(fn)){
+			this.on('name-clicked',fn);
+		}
 
 		function validateAgainstSchema(value) {
 			var editor = this.ownerCt,
@@ -406,11 +362,13 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="Field Editor">
-	editName: function (e) {
-		e.stopEvent();//don't let the event bubble, editMeta will get invoked if you do...
-		if (!this.nameEditor.isHidden() || !this.nameEl.hasCls('editable')) {
+	editName: function (nameEl) {
+
+		if (!this.nameEditor.isHidden() || this.isHidden() || !this.hasCls('editing')) {
 			return;
 		}
+
+		nameEl.setAttribute('data-field','alias');
 
 		if (this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
@@ -420,7 +378,7 @@ Ext.define('NextThought.view.profiles.About',{
 			this.nameEditor.cancelEdit();
 		}
 
-		this.nameEditor.startEdit(this.nameEl);
+		this.nameEditor.startEdit(Ext.get(nameEl));
 	},
 
 
@@ -496,6 +454,18 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="UI Updaters & Handlers">
+	onShowEditing: function(){
+		this.addCls('editing');
+		console.debug('show edit',arguments);
+	},
+
+
+	onHideEditing: function(){
+		this.removeCls('editing');
+		console.debug('hide edit',arguments);
+	},
+
+
 	showError: function (text) {
 		this.errorMsgEl.update(text);
 		this.errorMsgEl.show();
@@ -525,11 +495,6 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	presenceChanged: function (value) {
-		this.maybeShowChat(this.chatEl);
-	},
-
-
 	homePageChanged: function (value, placeholderText) {
 		var a;
 		if (!value) {
@@ -550,66 +515,6 @@ Ext.define('NextThought.view.profiles.About',{
 					html: value
 				});
 			}
-		}
-	},
-
-
-	contactsMaybeChanged: function () {
-		var me = this;
-		if (me.addToContacts) {
-			me.mun(me.addToContacts, 'click');
-			if (!me.shouldShowAddContact(this.userObject ? this.userObject.getId() : this.username)) {
-				me.addToContacts.hide();
-			}
-			else {
-				me.addToContacts.show();
-				me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
-			}
-		}
-	},
-
-
-	addToContactsClicked: function (e) {
-		var me = this;
-		console.log('Should add to contacts');
-
-		function onResolvedUser(record) {
-			var pop,
-					el = e.target,
-					alignmentEl = e.target,
-					alignment = 'tr-tl?',
-					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
-					id = record.getId(),
-					open = false,
-					offsets = [10, -18];
-
-			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'), function (o) {
-				if (o.record.getId() !== id || record.modelName !== o.record.modelName) {
-					o.destroy();
-				}
-				else {
-					open = true;
-					o.toFront();
-				}
-			});
-
-			if (open) {
-				return;
-			}
-
-			pop = NextThought.view.account.contacts.management.Popout.create({record: record, refEl: Ext.get(el)});
-
-			pop.addCls('profile-add-to-contacts-popout');
-			pop.show();
-			pop.alignTo(alignmentEl, alignment, offsets);
-
-		}
-
-		if (this.userObject) {
-			onResolvedUser(this.userObject);
-		}
-		else {
-			UserRepository.getUser(this.username, onResolvedUser, this);
 		}
 	}
 	//</editor-fold>

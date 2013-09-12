@@ -56,11 +56,9 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		this.mon(this.groupsList, 'added-contact', 'convertToContact');
 
 		this.on({
-			click: {
-			   fn:'onControlsClicked',
-			   scope:this,
-			   element:'controlsEl'
-			}
+			avatarEl:{click:'onControlsClicked'},
+			controlsEl:{click:'onControlsClicked'},
+			nameEl:{click:'onNameClicked'}
 		});
 	},
 
@@ -114,6 +112,11 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			store: store,
 			cls: 'nav-outline make-white',
 			renderTo: this.el.down('.nav'),
+			selModel: {
+				allowDeselect: false,
+				toggleOnClick: false,
+				deselectOnContainerClick: false
+			},
 			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 				{
 					cls: 'outline-row',
@@ -186,6 +189,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 
 
 	onControlsClicked: function(e){
+		e.stopEvent();
 		if(e.getTarget('.disabled')){
 			return;
 		}
@@ -196,9 +200,24 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		else if(e.getTarget('.lists')){
 			this.groupsListMenu.showBy(this.avatarEl,'tl-bl');
 		}
+		else if(e.getTarget('.avatar')){
+			if(this.hasCls('editing')){
+				this.fireEvent('edit');
+			}
+		}
 		//the various states of the action button (default, edit, and chat)
 		else if(e.getTarget('.button.edit')){
-			this.fireEvent('edit');
+			this.nav.mask();
+			this.updateSelection('profile-about',true);//make sure you are on the about panel
+			this.fireEvent('enable-edit');
+			this.addCls('editing');
+			e.getTarget('.button.edit',null,true).update('Done').removeCls('edit').addCls('editing');
+		}
+		else if(e.getTarget('.button.editing')){
+			this.nav.unmask();
+			this.fireEvent('disable-edit');
+			this.removeCls('editing');
+			e.getTarget('.button.editing',null,true).update('Edit').removeCls('editing').addCls('edit');
 		}
 		else if(e.getTarget('.button.chat')){
 			this.fireEvent('chat', this.user);
@@ -207,6 +226,15 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			this.onAddContact();
 		}
 
+	},
+
+
+	onNameClicked: function(e){
+		var t = e.getTarget('.name');
+		e.stopEvent();
+		if( t ) {
+			this.fireEvent('name-clicked', t, this, this.username, this.user);
+		}
 	},
 
 
@@ -251,13 +279,13 @@ Ext.define('NextThought.view.profiles.outline.View',{
 	},
 
 
-	updateSelection: function(active){
-		var view = active.xtype,
+	updateSelection: function(active, fromUser){
+		var view = active.xtype || active,
 			i = this.navStore.findBy(function(r){
 				return r.get('type')==='view' && r.get('mapping') === view;
 			});
 
-		this.nav.getSelectionModel().select(i, false, true);
+		this.nav.getSelectionModel().select(i, false, fromUser!==true);
 
 	},
 	//</editor-fold>

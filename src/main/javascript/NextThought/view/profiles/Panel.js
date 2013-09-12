@@ -54,6 +54,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		this.callParent(arguments);
 
 		function monitor(panel){
+			panel.relayEvents(me.navigation,['name-clicked','enable-edit','disable-edit']);
 			me.mon(panel,{
 				beforeactivate:'onBeforeViewChanged',
 				activate:'onViewChanged',

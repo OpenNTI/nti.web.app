@@ -1152,6 +1152,7 @@
 .name-editor{
 	overflow: visible;
 	border: 1px solid #dbdbdb;
+	background: #fff;
 
 	.input-wrap, .textbox-base {
 		input {
@@ -1201,7 +1202,7 @@
 .name-editor {
 	.input-wrap, .textbox-base{
 		input{
-			font: italic 300 30px/36px $font;
+			font: normal 300 30px/normal "Open Sans Condensed", $font;
 			height: auto;
 			padding-left: 10px;
 			padding-right: 30px;
