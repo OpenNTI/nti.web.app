@@ -103,6 +103,7 @@ Ext.define('NextThought.view.profiles.About',{
 		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
 		// everything but the safeFields (avatar and name)
 		if ($AppConfig.disableProfiles === true) {
+			this.showEmptyState();
 		}
 	},
 	//</editor-fold>
@@ -441,6 +442,18 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="UI Updaters & Handlers">
+	showEmptyState: function(){
+		this.profileInfoEl.remove();
+		this.addCls('empty');
+		Ext.DomHelper.append(this.el, {
+					cls: 'empty-state', cn: [
+						{cls: 'header', html: 'header'},
+						{cls: 'sub', html: 'sub'}
+					]
+				});
+	},
+
+
 	onShowEditing: function(){
 		this.addCls('editing');
 		console.debug('show edit',arguments);

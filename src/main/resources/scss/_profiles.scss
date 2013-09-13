@@ -21,6 +21,12 @@
 	}
 
 	.x-component-profile {
+		&.empty {
+			background: #fff;
+			overflow: hidden;
+			position: relative;
+		}
+
 		&.outline {
 			overflow: hidden;
 			$control: 45px;
