@@ -74,6 +74,9 @@ Ext.define('NextThought.view.profiles.outline.View',{
 
 		if(isMe(this.user) || !$AppConfig.service.canFriend()){
 			this.controlsEl.select('.lists,.settings').addCls('disabled');
+			if($AppConfig.disableProfiles === true){
+				this.controlsEl.down('.button').hide();
+			}
 		}
 		if(!$AppConfig.service.canChat()){
 			this.controlsEl.down('.button').destroy();
