@@ -528,6 +528,10 @@
 			}
 			max-height: 30em;
 
+			&.slide {
+				max-height: 42em;
+			}
+
 			img {
 				max-width: 520px !important;
 			}

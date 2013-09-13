@@ -190,6 +190,10 @@ Ext.define('NextThought.view.annotations.note.Main', {
 			Ext.fly(c).remove();
 		});
 
+		if(node.query('object[type$=slide]').length){
+			this.context.up('.context').addCls('slide');
+		}
+
 		return node.dom;
 	},
 
