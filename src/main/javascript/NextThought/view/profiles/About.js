@@ -61,11 +61,7 @@ Ext.define('NextThought.view.profiles.About',{
 	renderSelectors: {
 		profileInfoEl:    '.profile-about',
 		metaEl:           '.profile-about .meta',
-		roleEl:           '.profile-about .meta [data-field=role]',
-		affiliationEl:    '.profile-about .meta [data-field=affiliation]',
-		locationEl:       '.profile-about .meta [data-field=location]',
 		homePageEl:       '.profile-about .meta [data-field=home_page]',
-		emailEl:          '.profile-about .meta [data-field=email]',
 		errorMsgEl:       '.error-msg'
 	},
 
@@ -100,43 +96,13 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	destroy: function () {
-		if (this.metaEditor) {
-			this.metaEditor.destroy();
-		}
-		if (this.nameEditor) {
-			this.nameEditor.destroy();
-		}
-
-		this.callParent(arguments);
-	},
-
-
 	afterRender: function () {
-		var elements = [],
-				fields = [],
-				safeFields = [],//for future
-				me = this;
-
-		me.callParent(arguments);
-
-		Ext.each(Ext.Object.getKeys(me.renderSelectors),function(k){
-			elements.push(me[k]);
-			if(!Ext.Array.contains(safeFields,k)){
-				fields.push(me[k]);
-			}
-			me[k].setVisibilityMode(Ext.dom.Element.DISPLAY);
-		});
-
-		elements = new Ext.dom.CompositeElement(elements);
-		fields = new Ext.dom.CompositeElement(fields);
-
-		this.errorMsgEl.hide();
+		this.callParent(arguments);
+		this.errorMsgEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
 
 		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
 		// everything but the safeFields (avatar and name)
 		if ($AppConfig.disableProfiles === true) {
-			fields.hide();
 		}
 	},
 	//</editor-fold>
@@ -304,16 +270,27 @@ Ext.define('NextThought.view.profiles.About',{
 
 		Ext.each(this.el.query('[data-field]'),setupMeta);
 
-		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
+		if( this.el.query('.field').length === 0 ){
+			this.showEmptyState();
+		}
+
+		this.metaEditor = Ext.widget({
+			xtype: 'profile-field-editor',
 			autoSize: { width: 'boundEl' },
 			cls: 'meta-editor',
-			field: { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			field: {
+				xtype: 'simpletext',
+				allowBlank: true,
+				validator: validateAgainstSchema,
+				silentIsValid: false
+			},
 			listeners: {
 				complete: this.onSaveField,
 				canceledit: this.clearError,
 				scope: this
 			}
 		});
+		this.on('destroy','destroy',this.metaEditor);
 	},
 
 
@@ -346,16 +323,23 @@ Ext.define('NextThought.view.profiles.About',{
 			return  me.validate(field, value);
 		}
 
-		this.nameEditor = NextThought.view.profiles.ProfileFieldEditor.create({
+		this.nameEditor = Ext.widget({
+			xtype: 'profile-field-editor',
 			cls: 'name-editor',
 			updateEl: true,
-			field: { xtype: 'simpletext', allowBlank: true, validator: validateAgainstSchema, silentIsValid: false },
+			field: {
+				xtype: 'simpletext',
+				allowBlank: true,
+				validator: validateAgainstSchema,
+				silentIsValid: false
+			},
 			listeners: {
 				complete: this.onSaveField,
 				canceledit: this.clearError,
 				scope: this
 			}
 		});
+		this.on('destroy','destroy',this.nameEditor);
 
 		this.updateProfileDetail(user, profileSchema);
 	},
@@ -499,25 +483,17 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	homePageChanged: function (value, placeholderText) {
-		var a;
 		if (!value) {
 			this.homePageEl.update(placeholderText);
 		}
 		else {
-			a = this.homePageEl.down('a');
-			if (a) {
-				a.set({href: value});
-				a.update(value);
-			}
-			else {
-				Ext.DomHelper.overwrite(this.homePageEl,{
-					tag: 'a',
-					cls: 'homePageLink',
-					'target': '_blank',
-					'href': value,
-					html: value
-				});
-			}
+			Ext.DomHelper.overwrite(this.homePageEl,{
+				tag: 'a',
+				cls: 'homePageLink',
+				'target': '_blank',
+				'href': value,
+				html: value
+			});
 		}
 	}
 	//</editor-fold>
