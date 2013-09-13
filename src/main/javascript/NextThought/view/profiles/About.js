@@ -86,11 +86,11 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	onBeforeDeactivate: function () {
-		if (this.metaEditor.editing) {
+		if (this.metaEditor && this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
 		}
 
-		if (this.nameEditor.editing) {
+		if (this.nameEditor && this.nameEditor.editing) {
 			this.nameEditor.cancelEdit();
 		}
 	},
@@ -356,7 +356,7 @@ Ext.define('NextThought.view.profiles.About',{
 
 		nameEl.setAttribute('data-field','alias');
 
-		if (this.metaEditor.editing) {
+		if (this.metaEditor && this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
 		}
 
