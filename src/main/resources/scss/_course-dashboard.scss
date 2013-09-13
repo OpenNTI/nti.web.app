@@ -645,6 +645,11 @@
 		width: 100%;
 		color: $tertiary-grey;
 
+		span {
+			vertical-align: bottom;
+			display: inline-block;
+		}
+
 		.by{
 			color: $primary-blue;
 			max-width: 150px;
