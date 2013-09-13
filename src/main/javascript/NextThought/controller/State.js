@@ -480,24 +480,10 @@ Ext.define('NextThought.controller.State', {
 
 
 	track: function (viewId, silent) {
-		var fragment, state = {active: viewId},
-			path = location.pathname;
+		var state = {active: viewId};
 
 		if (!silent && this.currentState.active !== viewId && NextThought.isInitialized) {
-
-			try {
-				fragment = Ext.getCmp(viewId).getFragment();
-			}
-			catch (e) {
-				console.error(Globals.getError(e));
-			}
-
-			//location.hash = fragment || '';
-//			if (fragment) {
-//				path = location.toString();
-//			}
-
-			history.pushState(state, document.title);
+			history.pushState(state, document.title,'./');
 		}
 	},
 
