@@ -697,7 +697,7 @@
 						content: ' ';
 						overflow: hidden;
 						position: absolute;
-						top: 4px; left: 30px;
+						top: 4px; left: 22%;
 						background: transparent $icons no-repeat;
 						@include sprite($icons,'ldquo',$dimensions: true);
 					}
