@@ -67,13 +67,14 @@ Ext.define('NextThought.view.profiles.View', {
 
 
 	setUser: function (state, finishCallback) {
-		var current = this.down(this.defaultType),
+		var t = this.defaultType,
+			current = this.down(t),
 			username = state.username,
 			me = this;
 
 		function fin() {
 			me.unmask();
-			Ext.callback(finishCallback, this, [current]);
+			Ext.callback(finishCallback, this, [me.down(t)]);
 		}
 
 		if (current && current.username === username) {
@@ -115,7 +116,7 @@ Ext.define('NextThought.view.profiles.View', {
 						delay: 1
 					}
 				});
-				current = this.add(toAdd);
+				this.add(toAdd);
 				if (shouldFireLoaded) {
 					fin();
 				}
