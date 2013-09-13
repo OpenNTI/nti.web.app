@@ -30,7 +30,7 @@ Ext.define('NextThought.view.contacts.SubView', {
 				filter = config.filterFn || this.config.filterFn,
 				bodyItems = config.bodyItems || this.config.bodyItems || [],
 				emptyText = {
-					cls: 'contacts-empty-state', cn: [
+					cls: 'empty-state', cn: [
 						{cls: 'header', html: '{{{no_' + type + '_header}}}'},
 						{cls: 'sub', html: '{{{no_' + type + '_sub}}}'}
 					]

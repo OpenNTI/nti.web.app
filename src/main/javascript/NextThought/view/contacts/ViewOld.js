@@ -23,7 +23,7 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 						xtype: 'component',
 						emptyState: true,
 						renderTpl: Ext.DomHelper.markup([
-							{ cls: 'contacts-empty-state', cn: [
+							{ cls: 'empty-state', cn: [
 								{cls: 'header', html: '{{{no_contact_header}}}'},
 								{cls: 'sub', html: '{{{no_contact_sub}}}'}
 							]}
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 						xtype: 'component',
 						emptyState: true,
 						renderTpl: Ext.DomHelper.markup([
-							{ cls: 'contacts-empty-state', cn: [
+							{ cls: 'empty-state', cn: [
 								{cls: 'header', html: '{{{no_list_header}}}'},
 								{cls: 'sub', html: '{{{no_list_sub}}}'}
 							]}
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.contacts.ViewOld', {
 						xtype: 'component',
 						emptyState: true,
 						renderTpl: Ext.DomHelper.markup([
-							{ cls: 'contacts-empty-state', cn: [
+							{ cls: 'empty-state', cn: [
 								{cls: 'header', html: '{{{no_group_header}}}'},
 								{cls: 'sub', html: '{{{no_group_sub}}}'}
 							]}
