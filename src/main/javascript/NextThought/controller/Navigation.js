@@ -356,7 +356,7 @@ Ext.define('NextThought.controller.Navigation', {
     /**
      *Navigate to the course and push the forum and topic
      */
-    goToCourseForum: function (course, forum, topic, callback) {
+    goToCourseForum: function (course, forum, topic, comment, callback) {
 
         function test(ntiid, reader, error) {
             console.log('test:', arguments);
@@ -372,7 +372,7 @@ Ext.define('NextThought.controller.Navigation', {
 			if(cmp && cmp.isActive()){
 				Ext.defer(function(){
 					cmp.setActiveTab('course-forum');
-					cmp.courseForum.restoreState(forum, topic, callback);
+					cmp.courseForum.applyState(forum, topic, comment, callback);
 					history.pushState({active:'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
 
 					// TODO: Here, Terminate the transaction we started. This is not optimal
@@ -455,7 +455,7 @@ Ext.define('NextThought.controller.Navigation', {
 					var board = ParseUtils.parseItems(response.responseText)[0];
 					if(board.belongsToCourse()){
 						callback = Ext.bind(callback, scope);
-						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), callback);
+						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), comment, callback);
 					}else{
 						r = me.setView('forums');
 						me.fireEvent('show-topic', topicRecord, comment, callback);

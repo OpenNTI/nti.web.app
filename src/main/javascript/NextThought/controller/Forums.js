@@ -1190,8 +1190,8 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	//Search functions
-	highlightSearchResult: function(result, fragIdx){
-		var topicView = this.getForumViewContainer().peek(),
+	highlightSearchResult: function(result, fragIdx, cmp){
+		var topicView = cmp || this.getForumViewContainer().peek(),
 			hit = result.hit,
 			frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined;
 

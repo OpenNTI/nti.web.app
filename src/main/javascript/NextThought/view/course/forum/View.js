@@ -134,7 +134,7 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	navigateToForumObject: function(forum, topic, cb){
+	navigateToForumObject: function(forum, topic, comment, cb){
 		if(Ext.isFunction(cb)){
 			this.hasTopicCallback = cb;
 		}
@@ -149,23 +149,27 @@ Ext.define('NextThought.view.course.forum.View',{
 		if(!this.hasBoard || !top){
 			this.currentForum = forum;
 			this.currentTopic = topic;
+			this.currentComment = comment;
 			return;
 		}
 
 		if(top.xtype === 'course-forum-board'){
-			this.setForum(forum, topic);
+			this.setForum(forum, topic, comment);
 			return;
 		}
 
 		if(top.xtype === 'course-forum-topic-list'){
 			if(top.record.getId() === forum){
-				this.setForum(undefined, topic);
+				this.setForum(undefined, topic, comment);
 				return;
 			}
 		}
 
 		if(top.xtype === 'forums-topic'){
 			if(top.record.getId() === topic){
+				if(comment){
+					top.goToComment(comment);
+				}
 				Ext.callback(this.hasTopicCallback, null, [true, top]);
 				delete this.hasTopicCallback;
 				return;
@@ -177,7 +181,18 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 
-	restoreState: function(forum, topic, cb){
+	restoreState: function(forum, topic, comment, cb){
+		if(this.stateApplied){ return; }
+		this.navigateToForumObject.apply(this, arguments);
+	},
+
+	applyState: function(forum, topic, comment, cb){
+		this.stateApplied = true;
+		this.state = {
+			forum: forum,
+			topic: topic,
+			comment: comment
+		};
 		this.navigateToForumObject.apply(this, arguments);
 	},
 
@@ -187,10 +202,15 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 	
-	setForum: function(forum, topic){
+	setForum: function(forum, topic, comment){
 		var me = this, boardId = this.currentNtiid;
+
+		forum = forum || (this.state && this.state.forum);
+		topic = topic || (this.state && this.state.topic);
+		comment = comment || (this.state && this.state.comment);
+
 		if(!forum){
-			this.setTopic(topic);
+			this.setTopic(topic, comment);
 			return;
 		}
 
@@ -207,17 +227,20 @@ Ext.define('NextThought.view.course.forum.View',{
 					store: store
 				});
 			me.pushViewSafely(cmp);
-			me.setTopic(topic);
+			me.setTopic(topic, comment);
 		}, function(){
 			console.error('Failed to load forum:',forum);
 		});
 	},
 
-	setTopic: function(topic){
+	setTopic: function(topic, comment){
 		var me = this, boardId = this.currentNtiid;
 		if(!topic){
 			return;
 		}
+
+		topic = topic || (this.state && this.state.topic);
+		comment = comment || (this.state && this.state.comment);
 
 		$AppConfig.service.getObject(topic, function(record){
 			delete me.currentTopic;
@@ -225,6 +248,7 @@ Ext.define('NextThought.view.course.forum.View',{
 				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
 				return;
 			}
+			console.log(comment);
 			var storeId = record.getContentsStoreId(),
 				store = Ext.getStore(storeId) || record.buildContentsStore(),
 				top = me.peek(),
@@ -233,7 +257,14 @@ Ext.define('NextThought.view.course.forum.View',{
 					store: store
 				});
 
+			function setComment(){
+				cmp.goToComment(comment);
+			}
 			if(top.xtype === 'course-forum-topic-list'){
+				if(comment){
+					//Ext.defer(setComment, 10000, this);
+					setComment();
+				}
 				me.pushViewSafely(cmp);
 				Ext.callback(me.hasTopicCallback, null, [true, cmp]);
 				delete me.hasTopicCallback;
@@ -244,6 +275,10 @@ Ext.define('NextThought.view.course.forum.View',{
 					scope: me,
 					'add': function(v, cmp){
 						if(cmp.xtype === 'course-forum-topic-list'){
+							if(comment){
+								//Ext.defer(setComment, 10000, this);
+								setComment();
+							}
 							Ext.destroy(me.topicMonitor);
 							me.pushViewSafely(cmp);
 						}

@@ -276,6 +276,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	scrollCommentIntoView: function (commentId) {
 		function scrollIntoView() {
+			var cmp = Ext.get('forums') || Ext.get('course-forum');
 			if (Ext.isBoolean(commentId)) {
 				el = me.getTargetEl();
 			}
@@ -284,7 +285,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			}
 
 			if (el) {
-				Ext.defer(el.scrollIntoView, 500, el, [Ext.get('forums'), false, Globals.ANIMATE_NO_FLASH]);
+				Ext.defer(el.scrollIntoView, 500, el, [cmp.dom, false, Globals.ANIMATE_NO_FLASH]);
 			}
 		}
 

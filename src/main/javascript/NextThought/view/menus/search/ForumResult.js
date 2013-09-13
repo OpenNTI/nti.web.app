@@ -16,12 +16,18 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 			this.displayNavigationError();
 		}
 
-		if(this.fireEvent('before-show-topic', this.record)){
-			this.fireEvent('show-topic', this.record, me.comment ? this.hit.get('ID'): undefined, function(success){
-				if(success){
-					me.fireEvent('highlight-topic-hit', me, fragIdx);
+		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID'): undefined, function(success, cmp){
+			if(success){
+				function highlight(){
+					me.fireEvent('highlight-topic-hit', me, fragIdx, cmp);
 				}
-			});
-		}
+
+				if(cmp.ready){
+					highlight()
+				}else{
+					me.mon(cmp,'commentReady', highlight, me);
+				}
+			}
+		});
 	}
 });
