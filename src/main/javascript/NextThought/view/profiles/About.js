@@ -71,6 +71,11 @@ Ext.define('NextThought.view.profiles.About',{
 	//<editor-fold desc="Init">
 	initComponent: function () {
 		this.callParent(arguments);
+		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
+		// everything but the safeFields (avatar and name)
+		if ($AppConfig.disableProfiles === true) {
+			Ext.defer(this.destroy,1,this);
+		}
 
 		this.onSaveMap = {home_page: this.homePageChanged};
 
@@ -99,12 +104,6 @@ Ext.define('NextThought.view.profiles.About',{
 	afterRender: function () {
 		this.callParent(arguments);
 		this.errorMsgEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
-
-		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
-		// everything but the safeFields (avatar and name)
-		if ($AppConfig.disableProfiles === true) {
-			this.showEmptyState();
-		}
 	},
 	//</editor-fold>
 
