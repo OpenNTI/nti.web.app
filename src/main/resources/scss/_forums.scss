@@ -697,22 +697,20 @@
 				&.others{
 					position: relative;
 
-					&::before {
-						content: ' ';
-						overflow: hidden;
-						position: absolute;
-						top: 4px; left: 22%;
-						background: transparent $icons no-repeat;
-						@include sprite($icons,'ldquo',$dimensions: true);
-					}
-
-					&::after{
+					&::after,&::before{
 						content: ' ';
 						position: relative;
 						top: -9px;
 						display: inline-block;
-						margin-left: 5px;
+						margin: 0 5px;
 						background: transparent $icons no-repeat;
+					}
+
+					&::before {
+						@include sprite($icons,'ldquo',$dimensions: true);
+					}
+
+					&::after{
 						@include sprite($icons,'rdquo',$dimensions: true);
 					}
 				}
