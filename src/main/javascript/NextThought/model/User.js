@@ -28,6 +28,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'displayName', convert: function (v, r) {
 			return r.getName();
 		}},
+		{ name: 'about', type: 'string'},
 		{ name: 'affiliation', type: 'string'},
 		{ name: 'role', type: 'string'},
 		{ name: 'location', type: 'string'},
