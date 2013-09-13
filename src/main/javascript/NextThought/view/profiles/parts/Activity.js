@@ -20,6 +20,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	uriFriendlyName: ['','activity'],
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
+	ui: 'profile-activity',
+	cls: 'activity',
 
 	//</editor-fold>
 

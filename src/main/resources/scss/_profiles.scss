@@ -15,6 +15,13 @@
 		y: auto; //scroll;
 	}
 
+	.x-container-profile-activity{
+		overflow: {
+			x: hidden;
+			y: auto; //scroll;
+		}
+	}
+
 	.x-component-resource-not-found{
 		width: 700px;
 		margin: 75px auto;
@@ -25,6 +32,13 @@
 			background: #fff;
 			overflow: hidden;
 			position: relative;
+		}
+
+		&.about {
+			overflow: {
+				x: hidden;
+				y: auto; //scroll;
+			}
 		}
 
 		&.outline {

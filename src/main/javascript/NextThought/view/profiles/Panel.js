@@ -41,13 +41,13 @@ Ext.define('NextThought.view.profiles.Panel', {
 		this.applyConfigs('navigation', {user:u});
 		this.applyConfigs('body', {
 			items:[
-				{ xtype: 'profile-activity', user: u, username: u.getId(), autoScroll:true,
+				{ xtype: 'profile-activity', user: u, username: u.getId(),
 					listeners: {
 						afterrender:{ fn:'attachScrollRelay',scope:this, single:true }
 					}
 				},
 				{ xtype: 'profile-about', user: u },
-				{ xtype: 'profile-blog', user:u, username: u.getId(), autoScroll: true }
+				{ xtype: 'profile-blog', user:u, username: u.getId() }
 			]
 		});
 
