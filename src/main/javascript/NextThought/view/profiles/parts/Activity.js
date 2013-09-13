@@ -34,6 +34,10 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		else {
 			UserRepository.getUser(this.username,this.setUser, this, true);
 		}
+
+		this.on({
+			el:{scroll:'onScroll'}
+		});
 	},
 
 
@@ -320,6 +324,16 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		if(minCount > this.items.getCount()){
 			console.log('loading the next page. ', minCount, this.items.getCount());
 			me.prefetchNext();
+		}
+	},
+
+
+	onScroll: function(e){
+		var el = e.getTarget(),
+			height = Ext.fly(el).getHeight();
+
+		if (el.scrollTop + height >= el.scrollHeight) {
+			this.onScrolledToBottom();
 		}
 	},
 
