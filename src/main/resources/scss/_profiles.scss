@@ -1274,6 +1274,10 @@
 		padding: 20px;
 		margin: 0 !important;
 		min-height: 186px;
+
+		.label + div.content {
+			font: italic 300 29px/normal $font;
+		}
 	}
 
 	.fold {
