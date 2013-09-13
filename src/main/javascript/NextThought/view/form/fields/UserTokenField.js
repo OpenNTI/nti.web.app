@@ -346,12 +346,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			val = this.inputEl.getValue(),
             sel = window.getSelection().toString();
 
-        if(Ext.is.iPad){
-            if(key == e.ENTER || key == e.SPACE){
-                return false;
-            }
-        }
-
 		if(key === e.BACKSPACE){
 			if(val === ''){
 				this.removeLastToken();
@@ -393,16 +387,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	onKeyDown: function(e){
-        /*Don't do anything for iPad unless it's a space or enter.
-        Without this, the menu comes up with each character, and
-        the keyboard is dismissed, and can't be brought back up
-        programmatically*/
+		e.stopPropagation();
+
         if(Ext.is.iPad){
-            if(e.getKey() != e.SPACE && e.getKey() != e.ENTER){
-                return;
+            if(this.inputEl.dom.value.length == 1 && e.getKey() == e.BACKSPACE){
+                this.hidePicker();
             }
         }
-		e.stopPropagation();
 		clearTimeout(this.searchTimeout);
 
 		if(this.handledSpecialKey(e)){ return; }
@@ -415,7 +406,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		if(!this.inputEl){
 			return;
 		}
-
 		var value = this.inputEl.getValue(),
 			w = this.getWidth();
 
@@ -478,24 +468,32 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		y = picker.getAlignToXY(this.inputEl, align,[0,padding])[1] - cordinateRootY;
 
 		if(pickerScrollHeight === 0){
-			Ext.defer(this.alignPicker, 1, this);
+            if(!(Ext.is.iPad && document.activeElement != this.inputEl.dom)){
+                Ext.defer(this.alignPicker, 1, this);
+            }
 		}
 
-		picker.showAt(x,y + scrollOffset);
-
         if(Ext.is.iPad){
-            //Don't focus the input for iPad, because it won't bring up the beyboard.
-            //But, focus something else, so that the keyboard can be opened on this input.
-            var titleEl = Ext.get(Ext.query('.main .title input')[0]);
-            titleEl.el.dom.focus();
-            titleEl.el.dom.click();
-            this.inputEl.el.dom.click();
+            if(this.inputEl.dom.value == '' || document.activeElement != this.inputEl.dom){
+                me.hidePicker();
+            }
+            else{
+                picker.el.setStyle('display', '');
+                picker.el.setStyle('height', 'auto');
+                picker.el.setStyle('width', '303px');
+                picker.el.setStyle('right', 'auto');
+                picker.el.setStyle('left', x + 'px');
+                picker.el.setStyle('top', y + 'px');
+            }
         }
         else{
-            //Focus the input now
-            this.inputEl.focus(10);
+            picker.showAt(x,y + scrollOffset);
         }
 	},
+
+    hidePicker: function(){
+        this.getPicker().el.setStyle('display', 'none');
+    },
 
 	clear: function(){
 		Ext.each(this.el.query('.token'), function(t){ Ext.fly(t).remove(); }, this);
