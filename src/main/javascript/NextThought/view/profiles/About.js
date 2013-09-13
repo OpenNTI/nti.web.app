@@ -21,7 +21,7 @@ Ext.define('NextThought.view.profiles.About',{
 							cls: 'about field',
 							cn:[
 								{ cls: 'label', html:'About' },
-								{ cls: 'content', cn:{ tag: 'span', 'data-field': 'about', 'data-placeholder': 'Write something about your self.', 'data-multiline':true } }
+								{ cls: 'content', 'data-field': 'about', 'data-placeholder': 'Write something about your self.', 'data-multiline':true }
 							]
 						},
 						{
