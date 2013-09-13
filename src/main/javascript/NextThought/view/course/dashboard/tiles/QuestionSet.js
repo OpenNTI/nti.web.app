@@ -171,7 +171,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.add(this.headerTpl);
-		this.add(this.emptyTpl);
+		this.add(this.emptyTpl);//wtf? not defined??
 		this.add(this.lastAttemptTpl);
 		this.add(this.progressTpl);
 	},
