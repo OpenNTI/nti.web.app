@@ -154,7 +154,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 
 	clearError: function (el) {
-		el.removeCls('error-top').set({'data-error-tip': undefined});
+		el.removeCls('error-tip').set({'data-error-tip': undefined});
+		this.el.repaint();
 	},
 
 
