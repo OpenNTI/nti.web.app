@@ -32,7 +32,8 @@ Ext.define('NextThought.model.User', {
 		{ name: 'affiliation', type: 'string'},
 		{ name: 'role', type: 'string'},
 		{ name: 'location', type: 'string'},
-		{ name: 'home_page', type: 'string'}
+		{ name: 'home_page', type: 'string'},
+		{ name: 'OUID', type: 'string'}
 	],
 
 	isUser:        true,
