@@ -13,18 +13,43 @@ Ext.define('NextThought.view.profiles.About',{
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'profile-about editable make-white',
-			cn:  [
+			cn: [
 				{
 					cls: 'meta',
 					cn:  [
-						{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } },
-						{ cn: [
-							{ tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' },
-							{ tag: 'span', cls: 'separator', html: ' at '},
-							{ tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' }
-						]},
-						{ cn: {tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } },
-						{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } },
+						{
+							cls: 'about field',
+							cn:[
+								{ cls: 'label', html:'About' },
+								{ cls: 'content', cn:{ tag: 'span', 'data-field': 'about', 'data-placeholder': 'Write something about your self.', 'data-multiline':true } }
+							]
+						},
+						{
+							cls: 'fold', cn: [
+
+								{ cls: 'field', cn:[
+									{ cls: 'label', cn:{ tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' } },
+									{ cn:{ tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' } }
+								]},
+
+								{ cls: 'field', cn:[
+									{ cls:'label', html: 'Location' },
+									{ cn:{ tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } }
+								]},
+
+								{ cls: 'field', cn:[
+									{ cls:'label', html: 'Homepage' },
+									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } }
+								]},
+
+								{ cls: 'field', cn:[
+									{ cls:'label', html: 'Email' },
+									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } }
+								]}
+
+							]
+						},
+
 						{ cls: 'error-msg' }
 					]
 				}
@@ -38,7 +63,6 @@ Ext.define('NextThought.view.profiles.About',{
 		metaEl:           '.profile-about .meta',
 		roleEl:           '.profile-about .meta [data-field=role]',
 		affiliationEl:    '.profile-about .meta [data-field=affiliation]',
-		affiliationSepEl: '.profile-about .meta .separator',
 		locationEl:       '.profile-about .meta [data-field=location]',
 		homePageEl:       '.profile-about .meta [data-field=home_page]',
 		emailEl:          '.profile-about .meta [data-field=email]',
@@ -128,14 +152,7 @@ Ext.define('NextThought.view.profiles.About',{
 	//</editor-fold>
 
 
-	shouldShowAddContact: function (username) {
-		if (!$AppConfig.service.canFriend()) {
-			return false;
-		}
-		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
-	},
-
-
+	//<editor-fold desc="Profile Schema Logic">
 	setUser: function (user) {
 		var me = this, profileSchemaUrl, req;
 
@@ -179,7 +196,6 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	//<editor-fold desc="Profile Schema Logic">
 	/**
 	 * Returns an object with two fields, shouldBeShown and editable that describe how (if at all) the profided profile
 	 * field should be shown
@@ -256,45 +272,28 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	updateProfileDetail: function (user, profileSchema) {
+		var me = this;
+
 		//Don't do anything if we are disabled in the config
 		if ($AppConfig.disableProfiles === true) {
 			return;
 		}
-		var affiliationInfo = this.getMetaInfoForField(user, 'affiliation', profileSchema),
-			locationInfo = this.getMetaInfoForField(user, 'location', profileSchema),
-			roleInfo = this.getMetaInfoForField(user, 'role', profileSchema),
-			homePageInfo = this.getMetaInfoForField(user, 'home_page', profileSchema),
-			emailInfo = this.getMetaInfoForField(user, 'email', profileSchema),
-			roleResult, affiliationResult, homePageValue,
-			me = this;
 
+		function setupMeta(el) {
+			var field = el.getAttribute('data-field'),
+				info = me.getMetaInfoForField(user, field, profileSchema),
+				box;
 
-		function setupMeta(el, info) {
+			el = Ext.get(el);
+
 			if (info.shouldBeShown) {
 				me.updateField(el, info.field, user.get(info.field));
-				if (info.editable) {
-					el.addCls('editable');
-				}
-				else {
-					el.removeCls('editable');
-				}
-				return true;
+				el[(info.editable?'add':'remove')+'Cls']('editable');
+				return;
 			}
-			el.remove();
-			return false;
-		}
 
-		affiliationResult = setupMeta(this.affiliationEl, affiliationInfo);
-		setupMeta(this.emailEl, emailInfo);
-		roleResult = setupMeta(this.roleEl, roleInfo);
-		setupMeta(this.locationEl, locationInfo);
-		setupMeta(this.homePageEl, homePageInfo);
-
-		if (!roleResult || !affiliationResult) {
-			this.affiliationSepEl.hide();
-		}
-		else {
-			this.affiliationSepEl.show();
+			box = el.parent('.field');
+			Ext.destroy(el,box);
 		}
 
 		function validateAgainstSchema(value) {
@@ -302,6 +301,8 @@ Ext.define('NextThought.view.profiles.About',{
 					field = editor.boundEl.getAttribute('data-field');
 			return  me.validate(field, value);
 		}
+
+		Ext.each(this.el.query('[data-field]'),setupMeta);
 
 		this.metaEditor = NextThought.view.profiles.ProfileFieldEditor.create({
 			autoSize: { width: 'boundEl' },
@@ -388,9 +389,11 @@ Ext.define('NextThought.view.profiles.About',{
 			value = (field && this.userObject.get(field)) || '',
 			ed = this.metaEditor;
 
-		if (e.getTarget('a[href]') || !t || this.savingField) {
+		if (!t || this.savingField || !this.hasCls('editing')) {//e.getTarget('a[href]') (the link will work as normal while we are not in edit mode)
 			return;
 		}
+
+		e.stopEvent();//prevent link from working in edit mode
 
 		if (this.nameEditor.editing) {
 			this.nameEditor.cancelEdit();

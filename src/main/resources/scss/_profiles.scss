@@ -14,7 +14,6 @@
 		x: hidden;
 		y: auto; //scroll;
 	}
-	-webkit-overflow-scrolling: touch;
 
 	.x-component-resource-not-found{
 		width: 700px;
@@ -55,6 +54,21 @@
 					@include presence-style-sudo($x:15px, $y:17px, $xSide:'right');
 					&.no-presence::after{
 						display: none !important;
+					}
+				}
+			}
+			&.editing {
+				.avatar {
+					cursor: pointer;
+					@include icon('edit-15_hover', $left:auto, $top: 5px, $right: 5px);
+
+					.name{
+						cursor: pointer;
+						color: $primary-grey;
+						z-index: 1000;
+						background: #f4f4f4;
+
+						@include icon('edit-15_hover', $left:auto, $top: 12px, $right: 5px, $position: absolute);
 					}
 				}
 			}
@@ -144,6 +158,7 @@
 
 				.nav-outline{
 					max-height: 100%;
+					padding-top: 5px;
 					overflow: {
 						x: hidden;
 						y: auto; //scroll;
@@ -175,9 +190,8 @@
 			}
 		}
 
-		.profile-about,
-		.profile-head{
-			position: relative;
+		.profile-head {//delete this block after v2profiles
+			margin-top: 75px;
 
 			.avatar {
 				top: -45px;
@@ -227,24 +241,7 @@
 
 			.meta {
 				min-height: 170px;//Ensure the content after the meta is below the avatar
-				font: normal 500 14px/24px $font;
-				color: $secondary-grey;
-
-				.placeholder{
-					color: $tertiary-grey !important;
-					font-style: italic !important;
-				}
-
-				.separator{
-					vertical-align: inherit;
-					position:relative;
-					//z-index: -2;
-				}
-
-				[data-field=role], [data-field=affiliation] {
-					display: inline-block;
-					white-space: nowrap;
-				}
+				margin-left: 220px;
 
 				.name {
 					font: italic 300 30px/36px $font;
@@ -257,7 +254,7 @@
 					padding: 0 27px 0 2px;
 					@include ellipse;
 
-					
+
 				}
 
 				.request-change{
@@ -311,57 +308,6 @@
 				}
 
 				@include add-to-contacts;
-
-				.error-msg{
-					margin-top: 4px;
-					color: red;
-					font-style: italic;
-					margin-top: 4px;
-					font-weight: 300;
-					&::before{
-						content: '*'
-					}
-				}
-			}
-
-			[data-field].editable:hover {
-				color: $primary-grey;
-				position: relative;
-				z-index: 1000;
-
-				&::before {
-					content: ' ';
-					overflow: hidden;
-					position: absolute;
-					top: -2px; left: -5px; bottom:-2px; right: -28px;
-					background: #f4f4f4;
-					border: 0 solid #dcdcdc;
-					border-bottom-width: 1px;
-					z-index: -1;
-				}
-				&::after{
-					content: ' ';
-					overflow: hidden;
-					position: absolute;
-					background: $icons no-repeat;
-					top: 3px; right: -24px;
-					@include sprite($icons,'edit-15_hover',$dimensions: true);
-				}
-
-				&.name::after{
-					right: 5px;
-				}
-			}
-		}
-
-		.profile-about {
-			padding: 10px 20px 0;
-		}
-
-		.profile-head {//delete this block after v2profiles
-			margin-top: 75px;
-			.meta {
-				margin-left: 220px;
 			}
 		}
 
@@ -1160,10 +1106,10 @@
 			border-width: 0;
 			box-shadow: none;
 			color: $primary-grey;
-			font-style: italic;
+			font: normal 300 20px/normal $font;
 			padding-top: 0;
 			padding-bottom: 0;
-			height: 25px;
+			//height: 25px;
 		}
 		.clear {
 			top: 5px;
@@ -1200,15 +1146,18 @@
 }
 
 .name-editor {
+	border-right-width: 0;
+	margin-left: -1px;
+
 	.input-wrap, .textbox-base{
 		input{
-			font: normal 300 30px/normal "Open Sans Condensed", $font;
-			height: auto;
-			padding-left: 10px;
+			font: normal 700 16px/20px "Open Sans Condensed", $font;
+			height: 40px;
+			padding-left: 20px;
 			padding-right: 30px;
 		}
 		.clear {
-			top: 14px;
+			top: 12px;
 			right: 10px;
 		}
 	}
@@ -1216,7 +1165,123 @@
 	.controls{
 		.save,
 		.cancel{
-			line-height: 46px;
+			line-height: 40px;
+		}
+	}
+}
+
+
+.profile-about,
+.profile-head{
+	position: relative;
+
+	.meta {
+		font: normal 500 14px/24px $font;
+		color: $secondary-grey;
+
+		.placeholder{
+			color: $tertiary-grey !important;
+			font-style: italic !important;
+		}
+
+		.separator{
+			vertical-align: inherit;
+			position:relative;
+			//z-index: -2;
+		}
+
+		[data-field=role], [data-field=affiliation] {
+			display: inline-block;
+			white-space: nowrap;
+		}
+
+		.error-msg{
+			margin-top: 4px;
+			color: red;
+			font-style: italic;
+			margin-top: 4px;
+			font-weight: 300;
+			&::before{
+				content: '*'
+			}
+		}
+	}
+
+	.editing & {
+
+		[data-field].editable {
+			color: $primary-grey;
+			z-index: 1000;
+			cursor: pointer;
+
+			@include icon('edit-15_hover', $left:auto, $top: 3px, $right: -24px);
+
+			&::before {
+				content: ' ';
+				overflow: hidden;
+				position: absolute;
+				top: -2px; left: -5px; bottom:-2px; right: -28px;
+				background: #f4f4f4;
+				border: 0 solid #dcdcdc;
+				border-bottom-width: 1px;
+				z-index: -1;
+			}
+
+			&.name::after{
+				right: 5px;
+			}
+		}
+	}
+
+	.label {
+		[data-field].editable::after {
+			top: -1px;
+		}
+	}
+}
+
+
+.profile-about {
+	backrgound: #fff;
+
+	.label {
+		text-transform: uppercase;
+		font: normal 600 10px/normal $font;
+		color: $tertiary-grey;
+	}
+
+	.label + div {
+		margin-top: 5px;
+		font: normal 300 21px/normal $font;
+		color: $secondary-grey;
+
+		a, a:active, a:hover, a:visited {
+			text-decoration: none;
+			color: $primary-blue;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: normal;
+		}
+	}
+
+	.about {
+		padding: 20px;
+		margin: 0 !important;
+		min-height: 186px;
+	}
+
+	.fold {
+		overflow: hidden;
+		position: relative;
+		background: #fafafa;
+		box-shadow: 0 -1px 0 0 #f1f1f1,
+					inset 0 1px 0 0 #ffffff;
+	}
+
+	.field {
+		margin: 20px;
+		&:first-child {
+			margin-top: 15px;
 		}
 	}
 }

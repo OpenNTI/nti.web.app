@@ -37,9 +37,9 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 
 
 	startEdit: function(t,v){
-		var me = this;
+		var me = this, oldWidth = me.autoSize.width;
 		//Ensure the editor is wide enough to see something...
-		function resetWidth(){ me.autoSize.width='boundEl'; }
+		function resetWidth(){ me.autoSize.width=oldWidth; }
 		if(t.getWidth() < 150){
 			me.autoSize.width = 150;
 		}
