@@ -207,17 +207,10 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		}
 		//the various states of the action button (default, edit, and chat)
 		else if(e.getTarget('.button.edit')){
-			this.nav.mask();
-			this.updateSelection('profile-about',true);//make sure you are on the about panel
-			this.fireEvent('enable-edit');
-			this.addCls('editing');
-			e.getTarget('.button.edit',null,true).update('Done').removeCls('edit').addCls('editing');
+			this.enableEditing();
 		}
 		else if(e.getTarget('.button.editing')){
-			this.nav.unmask();
-			this.fireEvent('disable-edit');
-			this.removeCls('editing');
-			e.getTarget('.button.editing',null,true).update('Edit').removeCls('editing').addCls('edit');
+			this.enableEditing(false);
 		}
 		else if(e.getTarget('.button.chat')){
 			this.fireEvent('chat', this.user);
@@ -285,6 +278,9 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				return r.get('type')==='view' && r.get('mapping') === view;
 			});
 
+		if( this.hasCls('editing') ) {
+			this.enableEditing(false);
+		}
 		this.nav.getSelectionModel().select(i, false, fromUser!==true);
 
 	},
@@ -307,6 +303,27 @@ Ext.define('NextThought.view.profiles.outline.View',{
 		this.applyRenderData(this.user);
 		this.nameEl.addCls('no-presence');
 		this.updateButton();
+	},
+
+
+	enableEditing: function(enable){
+		enable = enable!==false;
+
+		var event = (enable ? 'en':'dis') + 'able-edit',
+			mask = (enable?'':'un')+'mask',
+			cls = (enable? 'add':'remove')+'Cls',
+			ucls = (enable? 'remove':'add')+'Cls',
+			label = enable ? 'Done' : 'Edit',
+			button = this.controlsEl.down('.button');
+
+		if(enable){
+			this.updateSelection('profile-about',true);//make sure you are on the about panel
+		}
+
+		this.nav[mask]();
+		this.fireEvent(event);
+		this[cls]('editing');
+		button.update(label)[ucls]('edit')[cls]('editing');
 	},
 
 
