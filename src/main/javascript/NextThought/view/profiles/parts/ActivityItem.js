@@ -227,7 +227,9 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 	onEdit: function () {
 		this.callParent(arguments);
-		this.footEl.hide();
+		if(!this.replyMode){
+			this.footEl.hide();
+		}
 	},
 
 
