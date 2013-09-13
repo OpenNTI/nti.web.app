@@ -335,8 +335,9 @@ Ext.define('NextThought.view.profiles.outline.View',{
 			pi = this.user.getPresence(),
 			current = $AppConfig.userObject.getPresence(),
 			isOnline = current && current.isOnline() && ((pi && pi.isOnline()) || this.isUserOnline());
-
-		b[(this.isContact && !isOnline)?'addCls':'removeCls']('disabled');
+		if( b ){
+			b[(this.isContact && !isOnline)?'addCls':'removeCls']('disabled');
+		}
 	},
 	//</editor-fold>
 
