@@ -447,8 +447,8 @@ Ext.define('NextThought.view.profiles.About',{
 		this.addCls('empty');
 		Ext.DomHelper.append(this.el, {
 					cls: 'empty-state', cn: [
-						{cls: 'header', html: 'header'},
-						{cls: 'sub', html: 'sub'}
+						{cls: 'header', html: 'Empty Profile :('},
+						{cls: 'sub', html: 'This user has not filled out their profile'}
 					]
 				});
 	},
