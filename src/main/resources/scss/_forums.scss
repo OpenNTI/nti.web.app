@@ -682,10 +682,10 @@
 
 		.entry.no-blog {
 			padding-top: 65px;
+			text-align: center;
 
 			.title{
 				margin-bottom: 15px;
-				padding-left: 60px;
 				color: $tertiary-grey;
 				cursor: default;
 				font-size: 30px;
@@ -713,8 +713,6 @@
 					}
 				}
 			}
-
-			.meta{ margin-left: 39%; }
 		}
 	}
 }
