@@ -107,7 +107,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	initComponent:function(){
 		var me = this, keyMap;
         this.on('no-presentation-parts', function(){
-			this.videoOnly = true;
+			me.videoOnly = true;
 			me.fireEvent('media-viewer-ready', me);
 		}, this);
 
