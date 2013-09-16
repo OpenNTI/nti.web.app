@@ -321,7 +321,7 @@ Ext.define('NextThought.Library', {
 			function strip(e){ Ext.fly(e).remove(); }
 			function permitOrRemove(e){
 				if(!ContentUtils.hasVisibilityForContent(e)){
-					Ext.each(me.getAllNodesReferencingContentID(e.getAttribute('ntiid'), xml), strip);
+					Ext.each(me.getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), xml), strip);
 				}
 			}
 
