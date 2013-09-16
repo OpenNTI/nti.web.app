@@ -635,6 +635,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;')
 				.replace(/<meta.*?>/ig, '');
 
+			pasteData = this.sanitizeHTML(pasteData);
 			frag = range.createContextualFragment(pasteData);
 			range.deleteContents();
 			range.insertNode(frag);
@@ -649,6 +650,28 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		elem.focus();
 		document.body.removeChild(offScreenBuffer);
+	},
+
+
+	// NOTE: since users can copy and paste HTML into the editor,
+	// sanitize it to avoid allowing to insert client-side script (i.e <script></script>)
+	// which can lead to security holes.
+	sanitizeHTML: function(str){
+		var tagsToReplace = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;'
+		};
+
+		function replaceTag(tag) {
+			return tagsToReplace[tag] || tag;
+		}
+
+		function safe_tags_replace(str) {
+			return str.replace(/[&<>]/g, replaceTag);
+		}
+
+		return safe_tags_replace(str);
 	},
 
 
