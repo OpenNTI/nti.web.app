@@ -7,17 +7,31 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		'NextThought.view.video.Video'
 	],
 
+
+	//<editor-fold desc="Config">
 	ui: 'media',
 	floating: true,
 	border: false,
 	plain: true,
 	frame: false,
 	layout: 'auto',
+	componentLayout: 'natural',
+	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
+
 	defaults:{
 		border: false,
 		plain:true,
 		hideOnClick:true
 	},
+
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls:'header'},
+		{cls:'video-player'},
+		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']}
+	]),
+
 
 	SMALLVIDEO:{
 		width: function(){return 512;},
@@ -27,6 +41,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			el.addCls('small-video-player');
 		}
 	},
+
 
 	BIGVIDEO:{
 		transcriptRatio: 0.35,
@@ -55,6 +70,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			el.removeCls('small-video-player');
 		}
 	},
+
 
 	FULLVIDEO:{
 		transcriptRatio: 0,
@@ -87,21 +103,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 	},
 
-	renderTpl: Ext.DomHelper.markup([
-		{cls:'header'},
-		{cls:'video-player'},
-		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']}
-	]),
-
-
-	componentLayout: 'natural',
-	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
 
 	renderSelectors: {
 		headerEl:'.header',
 		videoPlayerEl: '.video-player'
 	},
+	//</editor-fold>
 
 
 	initComponent:function(){
@@ -132,10 +139,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         if(!Ext.isEmpty(this.startAtMillis)){
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
-		this.on('media-viewer-ready', function(){ this.adjustOnResize(); }, this);
+		this.on('media-viewer-ready', 'adjustOnResize');
 
 		this.mon(this.down('slidedeck-transcript'), {
-			scope: this,
 			'will-show-annotation': 'willShowAnnotation',
 			'will-hide-annotation': 'willHideAnnotation'
 		});
@@ -167,15 +173,13 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.on('destroy','destroy',this.toolbar);
 		this.on('destroy','destroy',this.identity);
+		this.on('destroy', function(){Ext.getBody().removeCls('media-viewer-open');});
 		this.on('exit-viewer', 'exitViewer', this);
 
 		this.addVideoPlayer(videoWidth);
 		this.activeVideoPlayerType = 'video-focus';
 
-		this.mon(this.toolbar, {
-			scope: this,
-			'switch-video-viewer': 'switchVideoViewer'
-		});
+		this.mon(this.toolbar, { 'switch-video-viewer': 'switchVideoViewer' });
 
 		this.adjustOnResize();
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
@@ -194,7 +198,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
 		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
 		// while at the same time making sure we sync with resizes.
-		var tbHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
+		var tbHeight = (this.toolbar.el && this.toolbar.getHeight()) || 0,
 			h = Ext.Element.getViewportHeight() -  tbHeight - 30,
 			videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
@@ -217,8 +221,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		console.log('Media viewer resizing');
 	},
 
+
 	addVideoPlayer: function(width, left){
-		var startTimeSeconds = (this.startAtMillis || 0) / 1000;
+		var startTimeSeconds = (this.startAtMillis || 0) / 1000,
+			range, pointer;
+
 		this.videoplayer = Ext.widget('content-video',{
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
@@ -228,8 +235,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		});
 
 		if(this.record){
-			var range = this.record.get('applicableRange') || {},
-				pointer = range.start || {};
+			range = this.record.get('applicableRange') || {};
+			pointer = range.start || {};
 
 			startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
 		}
@@ -302,13 +309,5 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				me.down('slidedeck-transcript').fireEvent('sync-height');
 			}
 		}, 1, me);
-	},
-
-
-	destroy: function(){
-		this.toolbar.destroy();
-		this.videoplayer.destroy();
-		this.callParent(arguments);
-		Ext.getBody().removeCls('media-viewer-open');
 	}
 });
