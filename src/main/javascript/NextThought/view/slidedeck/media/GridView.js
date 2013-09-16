@@ -2,10 +2,20 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 
+
+	//<editor-fold desc="Config">
 	config: {
 		source: null,
 		locationInfo: null
 	},
+
+	selModel: {
+		allowDeselect: false,
+		toggleOnClick: false,
+		deselectOnContainerClick: false
+	},
+
+	preserveScrollOnRefresh: true,
 
 	ui: 'media-viewer-grid',
 	trackOver: true,
@@ -37,7 +47,10 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 			return sources[0].thumbnail;
 		}
 	}),
+	//</editor-fold>
 
+
+	//<editor-fold desc="Setup">
 	initComponent: function(){
 		this.callParent(arguments);
 
@@ -47,6 +60,59 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 		this.setLocationInfo(location);
 		Library.getVideoIndex(title,this.applyVideoData,this);
+
+
+		this.on({
+			itemclick: function () {
+				this.fromClick = true;
+			},
+			beforeselect: function (s, r) {
+				var pass = r.get('sources').length > 0,
+					store = s.getStore(),
+					last = s.lastSelected || store.first(),
+					next;
+
+				if (this.fromKey && !pass) {
+					last = store.indexOf(last);
+					next = store.indexOf(r);
+					next += ((next - last) || 1);
+
+					//do the in the next event pump
+					Ext.defer(s.select, 1, s, [next]);
+				}
+				return pass;
+
+			},
+			select: function (s, r) {
+				var node = this.getNodeByRecord(r),
+					ct = this.el.getScrollingEl();
+				if( node && Ext.fly(node).needsScrollIntoView(ct)){
+					node.scrollIntoView(ct,false,{});
+				}
+				if (this.fromClick) {
+					this.fireSelection();
+				}
+				delete this.fromClick;
+				delete this.fromKey;
+			}
+		});
+	},
+
+
+	processSpecialEvent: function(e){
+		var k = e.getKey();
+		if(k === e.SPACE || k === e.ENTER){
+			this.fireSelection();
+		}
+	},
+
+
+	beforeRender: function () {
+		this.callParent();
+		var me = this, s = this.getSelectionModel();
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
+			me.fromKey = true;
+		});
 	},
 
 
@@ -103,5 +169,13 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 		if(!Ext.isString(selected)){
 			this.getSelectionModel().select(selected,false,true);
 		}
+	},
+	//</editor-fold>
+
+
+	fireSelection: function(){
+		var rec = this.getSelectionModel().getSelection();
+
+		console.log('Change video to:', rec);
 	}
 });
