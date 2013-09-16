@@ -67,7 +67,12 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 
 
 	showGridPicker: function(){
-		this.gridEl.toggleCls('active');
+		var el = this.gridEl,
+			cls = 'active',
+			action = el.hasCls(cls)? 'hide' : 'show';//because we haven't toggled yet, we flip the actions.
+
+		el.toggleCls(cls);
+		this.fireEvent(action + '-grid-viewer');
 	},
 
 

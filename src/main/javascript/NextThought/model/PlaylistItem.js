@@ -18,7 +18,13 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'transcripts', type:'auto'},
 		{name: 'title', type:'string'},
 		{name: 'description', type: 'string'},
-		{name: 'section', type:'string'}
+		{name: 'section', type:'string'},
+		{name: 'diration', type:'Synthetic', persist: false,
+			fn:function(r){
+				return '';
+			}
+		},
+		{name: 'comments', type:'int', defaultValue: 0}
 	],
 
 	statics: {

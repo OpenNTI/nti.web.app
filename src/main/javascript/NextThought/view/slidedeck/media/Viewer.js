@@ -2,6 +2,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-viewer',
 	requires:[
+		'NextThought.view.slidedeck.media.GridView',
 		'NextThought.view.slidedeck.media.Toolbar',
 		'NextThought.view.slidedeck.Transcript',
 		'NextThought.view.video.Video'
@@ -28,11 +29,17 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'header'},
-		{cls:'grid-view'},
+		{cls:'grid-view-body'},
 		{cls:'video-player'},
 		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']}
 	]),
 
+
+	renderSelectors: {
+		headerEl:'.header',
+		gridViewEl:'.grid-view-body',
+		videoPlayerEl: '.video-player'
+	},
 
 	SMALLVIDEO:{
 		width: function(){return 512;},
@@ -103,16 +110,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			el.addCls('full-video-player');
 		}
 	},
-
-
-	renderSelectors: {
-		headerEl:'.header',
-		gridViewEl:'.grid-view',
-		videoPlayerEl: '.video-player'
-	},
 	//</editor-fold>
 
 
+	//<editor-fold desc="Init">
 	initComponent:function(){
 		var me = this, keyMap;
         this.on('no-presentation-parts', function(){
@@ -172,7 +173,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:this.headerEl, video: this.video, floatParent:this});
 		this.identity = Ext.widget({xtype:'identity',renderTo: this.toolbar.getEl(), floatParent: this.toolbar});
-		this.gridView = Ext.widget({xtype:'media-grid-view',renderTo: this.gridViewEl, floatParent: this});
+		this.gridView = Ext.widget({xtype:'media-grid-view',renderTo: this.gridViewEl, floatParent: this, source: this.video});
 
 		this.on('destroy','destroy',this.toolbar);
 		this.on('destroy','destroy',this.gridView);
@@ -183,46 +184,14 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.addVideoPlayer(videoWidth);
 		this.activeVideoPlayerType = 'video-focus';
 
-		this.mon(this.toolbar, { 'switch-video-viewer': 'switchVideoViewer' });
+		this.mon(this.toolbar, {
+			'switch-video-viewer': 'switchVideoViewer',
+			'hide-grid-viewer': 'hideGridViewer',
+			'show-grid-viewer': 'showGridViewer'
+		});
 
 		this.adjustOnResize();
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
-	},
-
-
-	exitViewer: function(){
-		console.log('about to exit the video viewer');
-		this.destroy();
-		this.fireEvent('exited', this);
-	},
-
-
-	adjustOnResize: function(){
-
-		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
-		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
-		// while at the same time making sure we sync with resizes.
-		var tbHeight = (this.toolbar.el && this.toolbar.getHeight()) || 0,
-			h = Ext.Element.getViewportHeight() -  tbHeight - 30,
-			videoWidth = this.videoPlayerEl.getWidth(),
-			targetEl = this.getTargetEl(),
-			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player'))? this.FULLVIDEO : this.BIGVIDEO,
-			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
-			tEl = this.el.down('.content-video-transcript');
-
-		targetEl.setStyle('height', h+'px');
-		if(tEl){
-			if(transcriptWidth > 80){
-				transcriptWidth -= 80;
-				tEl.parent('.transcript-view').show();
-				tEl.setStyle('width', transcriptWidth+'px');
-			}else{
-				tEl.parent('.transcript-view').hide();
-			}
-			videoWidth += 80;
-			this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
-		}
-		console.log('Media viewer resizing');
 	},
 
 
@@ -253,19 +222,57 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 
-    startAtSpecificTime: function(time, isSeconds){
-        var startTimeSeconds = !isSeconds ? (time || 0)/1000 : time,
-            transcriptCmp =  this.down('slidedeck-transcript');
+	startAtSpecificTime: function(time, isSeconds){
+		var startTimeSeconds = !isSeconds ? (time || 0)/1000 : time,
+			transcriptCmp =  this.down('slidedeck-transcript');
 
-        console.debug('Should scroll cmps to time: ', startTimeSeconds);
-        if(this.videoplayer){
-            this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
-        }
+		console.debug('Should scroll cmps to time: ', startTimeSeconds);
+		if(this.videoplayer){
+			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+		}
 
-        if(transcriptCmp){
-            transcriptCmp.scrollToStartingTime(startTimeSeconds);
-        }
-    },
+		if(transcriptCmp){
+			transcriptCmp.scrollToStartingTime(startTimeSeconds);
+		}
+	},
+	//</editor-fold>
+
+
+	exitViewer: function(){
+		console.log('about to exit the video viewer');
+		this.destroy();
+		this.fireEvent('exited', this);
+	},
+
+
+	//<editor-fold desc="Handlers">
+	adjustOnResize: function(){
+
+		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
+		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
+		// while at the same time making sure we sync with resizes.
+		var tbHeight = (this.toolbar.el && this.toolbar.getHeight()) || 0,
+			h = Ext.Element.getViewportHeight() -  tbHeight - 30,
+			videoWidth = this.videoPlayerEl.getWidth(),
+			targetEl = this.getTargetEl(),
+			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player'))? this.FULLVIDEO : this.BIGVIDEO,
+			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
+			tEl = this.el.down('.content-video-transcript');
+
+		targetEl.setStyle('height', h+'px');
+		if(tEl){
+			if(transcriptWidth > 80){
+				transcriptWidth -= 80;
+				tEl.parent('.transcript-view').show();
+				tEl.setStyle('width', transcriptWidth+'px');
+			}else{
+				tEl.parent('.transcript-view').hide();
+			}
+			videoWidth += 80;
+			this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
+		}
+		console.log('Media viewer resizing');
+	},
 
 
 	willShowAnnotation: function(annotationView){
@@ -314,5 +321,21 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				me.down('slidedeck-transcript').fireEvent('sync-height');
 			}
 		}, 1, me);
+	},
+
+
+	hideGridViewer: function(){
+		if( this.gridViewEl ){
+			this.gridViewEl.removeCls('active');
+		}
+	},
+
+
+	showGridViewer: function(){
+		if( !this.gridViewEl ){
+			return;
+		}
+		this.gridViewEl.addCls('active');
 	}
+	//</editor-fold>
 });
