@@ -892,6 +892,12 @@ $experimental-support-for-svg: true;
 							background: $icons no-repeat;
 							@include sprite($icons, 'mv-grid-view', $dimensions:true);
 						}
+						&.active::after,
+						&:hover::after{
+							@include sprite($icons, 'mv-grid-view_active', $dimensions:true);
+						}
+						&:not(.active):hover{ opacity: 0.8; }
+						&.active:hover{ opacity: 1; }
 					}
 
 					.selected-mv-type{

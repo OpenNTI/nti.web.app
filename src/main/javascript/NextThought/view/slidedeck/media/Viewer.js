@@ -28,6 +28,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'header'},
+		{cls:'grid-view'},
 		{cls:'video-player'},
 		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']}
 	]),
@@ -106,6 +107,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	renderSelectors: {
 		headerEl:'.header',
+		gridViewEl:'.grid-view',
 		videoPlayerEl: '.video-player'
 	},
 	//</editor-fold>
@@ -170,8 +172,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:this.headerEl, video: this.video, floatParent:this});
 		this.identity = Ext.widget({xtype:'identity',renderTo: this.toolbar.getEl(), floatParent: this.toolbar});
+		this.gridView = Ext.widget({xtype:'media-grid-view',renderTo: this.gridViewEl, floatParent: this});
 
 		this.on('destroy','destroy',this.toolbar);
+		this.on('destroy','destroy',this.gridView);
 		this.on('destroy','destroy',this.identity);
 		this.on('destroy', function(){Ext.getBody().removeCls('media-viewer-open');});
 		this.on('exit-viewer', 'exitViewer', this);

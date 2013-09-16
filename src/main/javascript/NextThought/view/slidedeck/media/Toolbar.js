@@ -28,21 +28,29 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 		]},{
 		cls:'right', cn:[
 			{cls:'video-picker', cn:[
-				//{cls:'grid-view'},
+				{cls:'grid-view'},
 				{cls:'selected-mv-type video-focus', html:'split video'}
 			]}
 		]
 	}]),
 
 	renderSelectors:{
+		gridEl: '.grid-view',
 		pickerEl: '.selected-mv-type',
 		exitEl: '.back-button'
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.currentType = 'video-focus';
-		this.enableBubble('exit-viewer');
+		var me = this;
+		me.callParent(arguments);
+		me.currentType = 'video-focus';
+		me.enableBubble('exit-viewer');
+
+		me.on({
+			pickerEl: { click: 'showVideoPlayerPicker' },
+			gridEl: { click: 'showGridPicker' },
+			exitEl: { click: function(){ me.fireEvent('exit-viewer'); } }
+		});
 	},
 
 
@@ -58,17 +66,8 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 	},
 
 
-	afterRender: function(){
-		this.callParent(arguments);
-		this.mon(this.pickerEl, {
-			scope: this,
-			click: 'showVideoPlayerPicker'
-		});
-
-		this.mon(this.exitEl, {
-			scope: this,
-			click: function(){ this.fireEvent('exit-viewer'); }
-		});
+	showGridPicker: function(){
+		this.gridEl.toggleCls('active');
 	},
 
 
@@ -131,7 +130,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 			});
 			item.setChecked(true, true);
 			this.fireEvent('switch-video-viewer', item.action);
-			menu.destroy();
+			menu.destroy();//why is this always destroying?
 		}
 		return false;
 	}
