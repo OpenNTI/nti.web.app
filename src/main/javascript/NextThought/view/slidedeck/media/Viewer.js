@@ -233,6 +233,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this
 		});
+		this.on('destroy','destroy',this.videoplayer);
 
 		if(this.record){
 			range = this.record.get('applicableRange') || {};
