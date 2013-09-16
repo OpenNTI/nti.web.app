@@ -169,14 +169,14 @@ describe('Search Controller Tests', function(){
 				controller.storeLoad(controller.getHitStore(), hits, true);
 
 				categories = menu.query('search-result-category');
-			})
+			});
 
 			it('Known groups get shown', function(){
 				var names = [];
 
 				//Should have six groups.  Books, Highlights, Notes
 				//Chats, Forums, Blos
-				expect(categories.length).toBe(6);
+				expect((categories || []).length).toBe(6);
 				names = Ext.Array.pluck(categories, 'category');
 
 				expect(Ext.Array.sort(names)).toEqual(['Books', 'Chats', 'Forums', 'Highlights', 'Notes', 'Thoughts']);

@@ -200,6 +200,7 @@ Ext.application({
 			'javascript/specs/view/content/Navigation.spec.js',
 			'javascript/specs/view/forums/Comment.spec.js',
 			'javascript/specs/view/store/purchase/Form.js',
+			'javascript/specs/editor/Editor.spec.js',
 			'javascript/specs/controller/Chat.spec.js',
 			'javascript/specs/controller/Forums.spec.js',
 			'javascript/specs/controller/Groups.spec.js',

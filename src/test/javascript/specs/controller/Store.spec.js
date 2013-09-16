@@ -26,6 +26,7 @@ describe('Store controller', function () {
 			pCollection = Ext.ComponentManager.create({
 				xtype: 'purchasable-collection',
 				name: 'Available for Purchase',
+				handleSelect: Ext.emptyFn,
 				listeners: {'select': Ext.emptyFn}
 			});
 			pCollection.fireEvent('select', pCollection, rec);
