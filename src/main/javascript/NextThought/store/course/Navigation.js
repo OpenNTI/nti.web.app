@@ -6,8 +6,10 @@ Ext.define('NextThought.store.course.Navigation',{
 	model: 'NextThought.model.course.navigation.Node',
 	sorters:[
 		{
-			property: 'position',
-			direction: 'asc'
+			fn: function(a,b){
+				var sa = a.get('position'), sb = b.get('position');
+				return Globals.naturalSortComparator(sa,sb);
+			}
 		}//We are assuming the dates are in order?
 	],
 
