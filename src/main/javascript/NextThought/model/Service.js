@@ -167,13 +167,14 @@ Ext.define('NextThought.model.Service', {
 
 
 	getObjectURL: function(ntiid, field){
-		var f = '';
+		var f = '',
+			collection = this.getCollection('Objects', 'Global') || {};
 		if (field) {
 			f = Ext.String.format("/++fields++{0}", field);
 		}
 
 		return getURL(Ext.String.format("{0}/{1}{2}",
-			this.getCollection('Objects', 'Global').href,
+			collection.href || '',
 			encodeURIComponent(ntiid||''),
 			f));
 	},
