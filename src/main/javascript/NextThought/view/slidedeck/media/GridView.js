@@ -24,7 +24,11 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 	itemSelector: '.item',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-			{ tag: 'tpl', 'if': 'this.is(values)', cn: { cls: 'item heading', cn:'{section}' } },
+			{ tag: 'tpl', 'if': 'this.is(values)', cn: { cls: 'item heading', cn:[
+				{ tag: 'tpl', 'if': 'this.splitNumber(values)', cn:''},
+				{ tag:'span', cls:'number', html:'{number}'},
+				{ tag:'span', cls:'name', html:'{section}'}
+			] } },
 			{ tag: 'tpl', 'if': '!this.is(values)', cn: [
 				{ cls: 'item video', cn: [
 					{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
@@ -41,6 +45,18 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 	), {
 		is: function (values) {
 			return values.sources.length===0;
+		},
+
+		splitNumber: function(values){
+			var s = (values.section||'').split(' '),
+				number = s.shift(),
+				numberVal = parseFloat(number),
+				section = s.join(' ');
+
+			if(!isNaN(numberVal) && isFinite(numberVal)){
+				values.number = number;
+				values.section = section;
+			}
 		},
 
 		thumb: function(sources){

@@ -827,16 +827,15 @@ $experimental-support-for-svg: true;
 					height: 75px;
 
 					.section-number{
-						width: 70px;
-						//height: 72px;
+						min-width: 75px;
 						float: left;
-						padding: 10px 15px;
+						padding: 10px 0 10px 15px;
 						font: 200 normal 44px/46px $font;
 						color: $secondary-grey;
 					}
 
 					.wrap{
-						margin-left: 10px;
+						margin-left: 80px;
 						max-width: 600px;
 						overflow: hidden;
 						padding: 16px 10px 10px 0;
@@ -1019,15 +1018,27 @@ $experimental-support-for-svg: true;
 	.x-component-media-viewer-grid{
 		position: relative;
 		overflow: hidden;
-		padding: 0 110px;
+		padding: 0 145px;
 
 		.heading {
-			margin: 50px 0 0 -75px;
+			$indent: 75px;
+			margin: 50px 0 0 (-$indent);
 			display: block;
 			font: normal 300 24px/50px $font;
 			color: $tertiary-grey;
 			clear: both;
 			float: none;
+
+			span{
+				display: inline-block;
+				padding: 0 0.5em 0 0;
+
+				&.number {
+					color: $secondary-grey;
+					width: $indent;
+					text-align: right;
+				}
+			}
 		}
 
 		.video {

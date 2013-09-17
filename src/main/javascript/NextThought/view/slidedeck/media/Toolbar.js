@@ -10,10 +10,11 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 	plain: true,
 	cls: 'media-toolbar',
 
-	renderTpl: Ext.DomHelper.markup([{
+	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([{
 		cls:'left', cn:[
 			{cls:'control back-button', 'data-qtip':'Exit'},
 			{cls:'navigation', cn:[
+				'{[this.splitNumberFromTitle(values)]}',
 				{tag:'tpl', 'if':'sectionNumber', cn:[
 					{ cls: 'section-number', html:'{sectionNumber}' }
 				]},
@@ -32,7 +33,19 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 				{cls:'selected-mv-type video-focus', html:'split video'}
 			]}
 		]
-	}]),
+	}]),{
+		splitNumberFromTitle: function(values){
+			var s = (values.title||'').split(' '),
+				number = s.shift(),
+				numberVal = parseFloat(number),
+				title = s.join(' ');
+
+			if(!values.sectionNumber && !isNaN(numberVal) && isFinite(numberVal)){
+				values.sectionNumber = number;
+				values.title = title;
+			}
+		}
+	}),
 
 	renderSelectors:{
 		gridEl: '.grid-view',
