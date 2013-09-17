@@ -542,7 +542,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if (!this.annotationView || !this.annotationView.isVisible()) {
 			return true;
 		}
-		if (!e.getTarget('.annotation-view') && this.annotationView.isVisible()) {
+		if ((!e || !e.getTarget('.annotation-view')) && this.annotationView.isVisible()) {
 			this.annotationView.hide();
 		}
 		return true;

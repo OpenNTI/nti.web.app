@@ -339,6 +339,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if( !this.gridViewEl ){
 			return;
 		}
+
+		var v = this.down('slidedeck-transcript');
+		if( v ){
+			v.mayBeHideAnnotationView();
+		}
+
 		if(this.videoplayer.isPlaying()){
 			this.videoplayer.fireEvent('pause-player', this.videoplayer);
 			this.didPauseVideoPlayer = true;
