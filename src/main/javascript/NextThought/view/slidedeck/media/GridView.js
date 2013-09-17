@@ -191,10 +191,13 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 	fireSelection: function(){
 		var rec = this.getSelectionModel().getSelection().first(),
-			li = this.getLocationInfo();
+			li = this.getLocationInfo(),
+			raw = Ext.clone(rec.raw);
+
+		//we must delete this for now, because the media viewer incorrectly reads this as a "number" field.
+		delete raw.section;
 
 		//console.log('Change video to:', rec);
-
-		this.fireEvent('change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root));
+		this.fireEvent('change-media-in-player', raw, rec.get('NTIID'), getURL(li.root));
 	}
 });
