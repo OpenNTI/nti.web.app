@@ -328,7 +328,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if( this.gridViewEl ){
 			this.gridViewEl.removeCls('active');
 			if(this.didPauseVideoPlayer){
-				this.videoplayer.fireEvent('resume-player', this.videoplayer);
+				this.videoplayer.resumePlayback();
 				delete this.didPauseVideoPlayer;
 			}
 		}
@@ -346,7 +346,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 
 		if(this.videoplayer.isPlaying()){
-			this.videoplayer.fireEvent('pause-player', this.videoplayer);
+			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
 		this.gridViewEl.addCls('active');
