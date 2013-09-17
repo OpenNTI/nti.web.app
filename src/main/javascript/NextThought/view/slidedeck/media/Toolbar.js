@@ -73,7 +73,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar',{
 		var t = this.currentType,
 			title  = this.video && this.video.get('title'),
 			description = this.video && this.video.get('description'),
-			sectionNumber = this.video && this.video.get('section');
+			sectionNumber = null;//this.video && this.video.get('section'); //this isn't what 'section' means.
 
 		this.renderData = Ext.apply(this.renderData || {}, { type:t, title:title, description:description, sectionNumber:sectionNumber });
 	},
