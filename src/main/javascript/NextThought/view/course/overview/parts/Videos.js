@@ -100,6 +100,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		this.playlist = [];
 
 		if (i) {
+			this.locationInfo = i;
 			Library.getVideoIndex(i.title, this.applyVideoData, this);
 		}
 		else{
@@ -404,11 +405,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		e.stopEvent();
 
 		var m = this.getSelectedVideo(),
-			reader;
+			li = this.locationInfo;
 
 		if (e.getTarget('.launch-player')) {
-			reader = Ext.ComponentQuery.query('reader-content')[0].getContent();
-			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), reader.basePath);
+			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
 			return;
 		}
 
