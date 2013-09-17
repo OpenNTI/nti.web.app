@@ -327,6 +327,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	hideGridViewer: function(){
 		if( this.gridViewEl ){
 			this.gridViewEl.removeCls('active');
+			if(this.didPauseVideoPlayer){
+				this.videoplayer.fireEvent('resume-player', this.videoplayer);
+				delete this.didPauseVideoPlayer;
+			}
 		}
 	},
 
@@ -334,6 +338,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	showGridViewer: function(){
 		if( !this.gridViewEl ){
 			return;
+		}
+		if(this.videoplayer.isPlaying()){
+			this.videoplayer.fireEvent('pause-player', this.videoplayer);
+			this.didPauseVideoPlayer = true;
 		}
 		this.gridViewEl.addCls('active');
 	}
