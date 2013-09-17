@@ -29,14 +29,14 @@
 		.provider {
 			position: relative;
 			text-transform: uppercase;
-			font: normal bold 10px/12px $font;
+			font: normal bold 0.6em/1.3em $font;
 			color: $secondary-grey;
 			overflow: hidden;
 			@include ellipse();
 		}
 
 		.title {
-			font: normal 700 18px/20px 'Open Sans Condensed', $font;
+			font: normal 700 1.1em/1em 'Open Sans Condensed';
 			text-transform: uppercase;
 			color: $primary-grey;
 			overflow: hidden;

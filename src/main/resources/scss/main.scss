@@ -75,8 +75,18 @@
 
 .x-form-item,
 .x-form-field,
-.x-body {
-	font-family: $font !important;
+.x-body,
+html,
+body {
+	//reset base font settings
+	line-height: normal;
+	font:{
+		variant: normal;
+		weight: normal;
+		style: normal;
+		size: 1em;
+		family: $font;
+	}
 }
 
 input::-ms-clear { display: none; }
@@ -112,11 +122,11 @@ input::-ms-clear { display: none; }
 
 .empty-state{
 	text-align: center;
-	font: normal 300 30px $font;
+	font: normal 300 2em $font;
 	color: $tertiary-grey;
-	margin-top: 30px;
+	margin-top: 2em;
 
 	.sub{
-		font-size: 15px;
+		font-size: 0.5em;
 	}
 }

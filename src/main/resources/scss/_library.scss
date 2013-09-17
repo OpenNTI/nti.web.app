@@ -16,9 +16,9 @@
 
 
 	.x-component-library-collection{
-		margin: 30px 0 35px;
+		margin: 2em 0 2.5em;
 		.collection-name {
-			font: normal 300 28px/60px $font;
+			font: normal 300 1.75em/2.2em $font;
 			color: #fff;
 			.count {
 				color: $secondary-grey;
@@ -56,7 +56,7 @@
 				padding: 10px;
 
 				.author,.courseName {
-					font: normal 700 10px/15px $font;
+					font: normal 700 0.6em/1.6em $font;
 					text-transform: uppercase;
 					color: $primary-blue;
 					overflow: hidden;
@@ -66,7 +66,7 @@
 				.author:not(:empty)::before{content: 'By ';}
 				.title {
 					text-transform: uppercase;
-					font: normal 700 18px/20px "Open Sans Condensed", $font;
+					font: normal 700 1.1em/1.15em "Open Sans Condensed";
 				}
 
 				.description,.author {
@@ -121,7 +121,8 @@
 						left: 60px;
 						.author { display: block; }
 						.title{
-							font-size: 14px;
+							font-size: 0.9em;
+							line-height: normal;
 						}
 					}
 				}
@@ -138,8 +139,8 @@
 				padding: 7px;
 				background: white;
 				color: #ababab;
-				font-size: 12px;
-				line-height: 15px;
+				font-size: 0.75em;
+				line-height: 1.3em;
 				font-weight: bold;
 				position: absolute;
 				bottom: 0;

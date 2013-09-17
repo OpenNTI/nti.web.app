@@ -43,12 +43,12 @@
 					color: black;
 					border-radius: 0;
 					padding-bottom: 1px;
-					font: normal 700 10px/11px $font;
+					font: normal 700 0.7em/1.1em $font;
 				}
 
 				div:last-child {
 					color: white;
-					font: normal 500 12px/14px $font;
+					font: normal 500 0.8em/1.3em $font;
 					border-radius: 0;
 				}
 			}
@@ -72,12 +72,12 @@
 		
 		.date {
 			color: $tertiary-grey;
-			font: normal 700 10px/11px $font;
+			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
 		}
 		.title {
 			color: $primary-grey;
-			font: normal 300 36px/40px $font;
+			font: normal 300 2.25em/1.15em $font;
 		}
 
 	}
@@ -86,7 +86,7 @@
 		position: relative;
 		cursor: pointer;
 		color: $primary-blue;
-		font: normal 400 16px/50px $font;
+		font: normal 400 1em/3.15em $font;
 		border:{
 			style: solid;
 			color: #ededed;
@@ -145,7 +145,7 @@
 			height: 50%;
 
 			.label {
-				font: normal 600 10px/15px $font;
+				font: normal 600 0.6em/1.6em $font;
 				color: $secondary-grey;
 				text-transform: uppercase;
 				overflow: hidden;
@@ -154,7 +154,7 @@
 
 			.title {
 				color: $primary-grey;
-				font: normal 300 26px/30px 'Open Sans Condensed', $font;
+				font: normal 300 1.6em/1.2em 'Open Sans Condensed', $font;
 				overflow: hidden;
 				//@include ellipse();
 				height: 64px;
@@ -167,7 +167,7 @@
 			}
 
 			.comments{
-				font: normal 600 10px/15px $font;
+				font: normal 600 0.6em/1.6em $font;
 				color: $tertiary-grey;
 			}
 		}
@@ -201,7 +201,7 @@
 					top: 50%;
 					.play {
 						position: relative;
-						top: -24px;//we're fixed to be 48px tall;
+						top: -1.375em;//half the line-height
 						left: -50%;
 					}
 				}
@@ -209,7 +209,7 @@
 				.play {
 					position: relative;
 					border-radius: 5em;
-					font: normal 400 18px/48px 'Open Sans Condensed', $font;
+					font: normal 400 1.1em/2.75em 'Open Sans Condensed', $font;
 					min-height: 48px;
 					min-width: 45px;
 					color: #fff;
@@ -295,7 +295,7 @@
 					cursor: pointer;
 					color: #ebebeb;
 					padding: 8px 10px;
-					font: normal 400 18px 'Open Sans Condensed', $font;
+					font: normal 400 1.1em 'Open Sans Condensed', $font;
 					min-height: 53px;
 					border:{
 						color: #0f2d35;
@@ -310,7 +310,7 @@
 					}
 
 					.comments {
-						font: normal 700 10px/12px $font;
+						font: normal 700 0.6em/1.3em $font;
 						color: $secondary-grey;
 						text-transform: uppercase;
 					}
@@ -346,7 +346,7 @@
 .x-container-course {
 	&.course-overview{
 		background: #ffffff;
-		padding: 25px 30px;
+		padding: 1.5em 1.87em;//25px 30px;
 		@include scrollbar(#ffffff, $tertiary-grey);
 		-webkit-overflow-scrolling: touch;
 	}
@@ -360,8 +360,8 @@
 
 .overview-section{
 	h2 {
-		margin: 50px 0 0 -30px;
-		font: normal 600 10px/20px $font;
+		margin: 5em 0 0 -3.15em;
+		font: normal 600 0.6em/2em $font;
 		color: #fff;
 		text-transform: uppercase;
 
@@ -369,7 +369,7 @@
 			position: relative;
 			display: inline-block;
 			background: #ce78e0;//additional/default
-			padding: 0 10px 0 40px;
+			padding: 0 1em 0 4.15em;
 
 			&::after {
 				content: '';
@@ -377,7 +377,7 @@
 				top: 0;
 				left: 0;
 				bottom: 0;
-				width: 30px;
+				width: 3.15em;
 				background: #fff;
 				opacity: 0.4;
 			}
@@ -433,14 +433,14 @@
 
 			div {
 				display: inline-block;
-				font: normal 700 10px/15px $font;
+				font: normal 700 0.6em/1.6em $font;
 				text-transform: uppercase;
 				color: $primary-blue;
 				cursor: pointer;
 
 				&::after {
 					color: $tertiary-grey;
-					font: normal 500 12px/20px $font;
+					font: normal 500 1.2em $font;
 					text-decoration: none !important;
 					position: static;
 					content: '\00B7';
