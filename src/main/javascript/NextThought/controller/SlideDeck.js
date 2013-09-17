@@ -22,6 +22,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 		this.listen({
 			'component':{
 				'*':{
+					'change-media-in-player': 'changeMediaInPlayer',
 					'start-media-player': 'launchMediaPlayer',
 					'profile-link-clicked': 'maybeCloseMediaViewer'
 				},
@@ -47,6 +48,17 @@ Ext.define('NextThought.controller.SlideDeck',{
 			v.destroy();
 		}
 	},
+
+
+	changeMediaInPlayer: function(v, videoId, basePath, rec, options){
+		var a = this.getActiveMediaViewer();
+		if (a) {
+			a.exitViewer();
+		}
+
+		this.launchMediaPlayer.apply(this,arguments);
+	},
+
 
 
 	launchMediaPlayer: function(v, videoId, basePath, rec, options){

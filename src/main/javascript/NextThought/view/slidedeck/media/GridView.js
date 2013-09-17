@@ -190,8 +190,11 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 
 	fireSelection: function(){
-		var rec = this.getSelectionModel().getSelection();
+		var rec = this.getSelectionModel().getSelection().first(),
+			li = this.getLocationInfo();
 
-		console.log('Change video to:', rec);
+		//console.log('Change video to:', rec);
+
+		this.fireEvent('change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root));
 	}
 });
