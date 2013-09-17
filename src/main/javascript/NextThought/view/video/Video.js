@@ -21,9 +21,7 @@ Ext.define('NextThought.view.video.Video',{
 		destroy: 'cleanup',
 		'player-ready': 'playerReady',
 		'player-error': 'playerError',
-		'unrecoverable-player-error': 'unrecoverablePlayerError',
-		'pause-player': 'pausePlayback',
-		'resume-player': 'resumePlayback'
+		'unrecoverable-player-error': 'unrecoverablePlayerError'
 	},
 
 	ASPECT_RATIO: 0.5625,
