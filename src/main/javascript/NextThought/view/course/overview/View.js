@@ -43,7 +43,7 @@ Ext.define('NextThought.view.course.overview.View', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.mixins.customScroll.constructor.call(this);
+		this.initCustomScrollOn('content');
 	},
 
 

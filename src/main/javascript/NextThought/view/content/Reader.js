@@ -68,7 +68,7 @@ Ext.define('NextThought.view.content.Reader', {
 					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
 
-		this.mixins.customScroll.constructor.call(this);
+		this.initCustomScrollOn('content');
 	},
 
 
