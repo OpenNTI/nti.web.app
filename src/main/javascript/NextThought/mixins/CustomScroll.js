@@ -48,7 +48,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			nH = this.initialReverseViewHeight;
 			nH = bottomMargin ? nH + bottomMargin: nH;
 			Ext.fly(data.reverseMarginEl).setStyle({marginBottom: -bottomMargin + 'px', height: nH+'px'});
-			console.log('setting height to: ', nH);
+//			console.log('setting height to: ', nH);
 		}
 		catch(e){
 			console.error(e.stack || e.stacktrace || e.message || e);
