@@ -17,9 +17,10 @@ Ext.define('NextThought.view.content.Reader', {
 		'NextThought.view.content.reader.NoteOverlay'
 	],
 
-	mixins: [
-		'NextThought.mixins.ModuleContainer'
-	],
+	mixins: {
+		moduleContainer: 'NextThought.mixins.ModuleContainer',
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
 
 	cls: 'x-reader-pane scrollable',
 
@@ -66,6 +67,8 @@ Ext.define('NextThought.view.content.Reader', {
 					navigateComplete:           'onNavigateComplete',
 					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
+
+		this.mixins.customScroll.constructor.call(this);
 	},
 
 
@@ -122,7 +125,7 @@ Ext.define('NextThought.view.content.Reader', {
 	afterRender: function () {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
-				el = this.getTargetEl();
+			el = this.getTargetEl();
 
 		this.splash = DH.doInsert(el, {cls: 'no-content-splash initial'}, true, 'beforeEnd');
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);

@@ -8,6 +8,10 @@ Ext.define('NextThought.view.course.overview.View', {
 		'NextThought.view.course.overview.parts.*'
 	],
 
+	mixins:{
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
+
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
@@ -34,6 +38,12 @@ Ext.define('NextThought.view.course.overview.View', {
 		'additional': 'course-overview-section',
 		'required': 'course-overview-section',
 		'assessments': 'course-overview-section'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mixins.customScroll.constructor.call(this);
 	},
 
 
