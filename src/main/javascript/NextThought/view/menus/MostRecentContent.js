@@ -13,6 +13,9 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 	autoRender: true,
 	renderTo: Ext.getBody(),
 
+	persistenceKey:'recents',
+	persistenceProperty:'navigation/content/switcher',
+
 	config: {
 		ownerNode:null
 	},
@@ -59,6 +62,26 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 			mouseleave: 'startHide',
 			mouseover: 'stopHide'
 		});
+
+		Library.on('loaded','fillStore',this,{buffer:1});
+	},
+
+
+	fillStore: function(){
+		this.allowTracking = true;
+		var s = PersistentStorage.getProperty(this.persistenceKey,this.persistenceProperty,[]);
+		try{
+			s = Ext.Array.map(s, function(o){
+				var t = Library.getTitle(o.index);
+				if(t){t.lastTracked = Ext.Date.parse(o.lastTracked,'timestamp');}
+				return t;
+			});
+
+			this.getStore().loadRecords(Ext.Array.clean(s));
+		}
+		catch(e){
+			console.warn(e.message);
+		}
 	},
 
 
@@ -98,7 +121,7 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		this.setWidth(n.getWidth());
 
 		try {
-			return this.callParent(arguments);
+			this.callParent(arguments);
 		}
 		finally{
 			this.fireEvent('mouseover');//trigger the partent from hiding this if the mouse doesn't move.
@@ -118,9 +141,15 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		}
 
 
-		//s = Ext.Array.pluck( Ext.Array.pluck(s.getRange(),'data'), 'index');
-		//Cant save records to local storage...so must save just the id's or the index of the content
-		//Then we can restore the list after content loads. :(
+		if(this.allowTracking){
+			s = s.getRange();
+			Ext.each(s,function(t,i){
+
+				s[i] = {index: t.get('index'),lastTracked: t.lastTracked};
+			});
+			//Cant save records to local storage...so must save just the id's or the index of the content
+			PersistentStorage.updateProperty(this.persistenceKey,this.persistenceProperty,s);
+		}
 	},
 
 
