@@ -374,20 +374,25 @@ Ext.define('NextThought.util.Globals', {
 	/**
 	 * Returns a sorter function for the Array/Ext.Array sort method.
 	 *
-	 * @param key - String, name of the field to compare.
-	 * @param [dir] - String, Direction "ASC" or "DESC" defaults to "DESC"
-	 * @param [g] - Function, Getter function, where the value in the array is passed, and the getter returns the comparable.
+	 * @param {String} key - name of the field to compare.
+	 * @param {String} [dir] - Direction "ASC" or "DESC" defaults to "DESC"
+	 * @param {Function} [g] - Getter function, where the value in the array is passed, and the getter returns the comparable.
+	 * @param {Boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
 	 */
-	SortModelsBy: function(key,dir,g){
+	SortModelsBy: function(key,dir,g,natural){
 		function $(v){
 			return (g? g(v) : v).get(key);
 		}
+
+		var n = Globals.naturalSortComparator;
 
 		return function(a,b){
 			var c = 0, $a = $(a), $b = $(b);
 
 			if($a !== $b){
-				c = $a < $b? -1 : 1;
+				c = natural && Ext.isString($a)
+						? n($a,$b)
+						: $a < $b? -1 : 1;
 
 				//FIXME this seems backwards. If a < b it would sort to a lower
 				//position and be -1.  That is the proper order for ascending
