@@ -76,14 +76,14 @@ Ext.define('NextThought.view.forums.Topic', {
 							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
 						]},
 						{ tag: 'span', cls: 'report link', html: 'Report' }
-					]},
-					{ cls: 'editor-box'}
+					]}
 				]}
 			]}
 		]},
 		{ cls: 'load-more', html: 'Older Comments'},
 		{ id: '{id}-body', cls: 'comment-container',
-			cn: ['{%this.renderContainer(out,values)%}'] }
+			cn: ['{%this.renderContainer(out,values)%}'] },
+		{ cls: 'editor-box'}
 	]),
 
 
@@ -99,7 +99,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		responseEl: '.comment-box .response',
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
-		commentEditorBox: '.comment-box .editor-box',
+		commentEditorBox: '.editor-box',
 		headerElContainer: '.header-container',
 		headerEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
@@ -267,8 +267,8 @@ Ext.define('NextThought.view.forums.Topic', {
 			this.mon(this.replyLinkEl,'click',this.showEditor,this);
 			this.mon(this.editor,{
 				scope: this,
-				'activated-editor':Ext.bind(box.hide,box),
-				'deactivated-editor':Ext.bind(box.show,box),
+				//'activated-editor':Ext.bind(box.hide,box),
+				//'deactivated-editor':Ext.bind(box.show,box),
 				'no-body-content': function(editor,bodyEl){
 					editor.markError(bodyEl,'You need to type something');
 					return false;
@@ -407,8 +407,10 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	showEditor: function () {
 		this.clearSearchHit();
-		this.editor.reset();
-		this.editor.activate();
+		if(!this.editor.isActive()){
+			this.editor.reset();
+			this.editor.activate();
+		}
 		this.editor.focus(true);
 		this.getMainView().scrollChildIntoView(this.editor.getEl());
 	},

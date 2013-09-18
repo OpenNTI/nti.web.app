@@ -403,6 +403,33 @@
 		}
 	}
 
+	.editor {
+		//margin-right: 5px;
+		border: 1px solid #dcdcdc;
+		.main {
+			.toolbar{
+				.left {
+					margin-left: 13px;
+				}
+			}
+			.content{
+				min-height: 0;
+				max-height: none;
+				height: 200px;
+				padding: 5px 13px;
+
+				&.show-placeholder[data-placeholder]::after{
+					top: 4px;
+					left: 12px;
+				}
+			}
+		}
+
+		.footer{
+			background-color: #fbfbfb;
+		}
+	}
+
 	.load-more{
 		min-width: 160px;
 		margin: 0 auto;
