@@ -15,7 +15,7 @@ Ext.define('NextThought.view.course.overview.View', {
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
-		'video': 'Videos',
+		'video': 'Video',
 		'discussions': 'Discussions',
 		'additional': 'Additional Resources',
 		'required': 'Required Resources',

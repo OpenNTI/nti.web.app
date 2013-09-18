@@ -194,8 +194,15 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	beforeRender: function () {
 		this.callParent(arguments);
 
+		var t = this.title || 'Video';
+
+		if( this.store.getCount() !== 1 ){
+			t = Ext.util.Inflector.pluralize(t);
+		}
+
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title || 'Untitled',
+			title: t,
 			type: this.type || ''
 		});
 
@@ -207,6 +214,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 	afterRender: function () {
 		this.callParent(arguments);
+
+		if( this.store.getCount() === 1 ){
+			this.getTargetEl().hide();
+		}
 
 		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
 
