@@ -39,6 +39,12 @@ Ext.define('NextThought.view.forums.Board', {
 		}
 	}),
 
+	footerTpl: Ext.DomHelper.createTemplate({
+		cls: 'footer-container', cn:[
+			{ cls: 'load-more', html: 'Load More'}
+		]
+	}),
+
 	tpl: Ext.DomHelper.markup({
 		tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'forum-list-item', cn: [
@@ -131,10 +137,12 @@ Ext.define('NextThought.view.forums.Board', {
 	afterRender: function () {
 		var newForum;
 		this.callParent(arguments);
-
 		if (!this.isRoot) {
 			this.headerElContainer = this.headerTpl.append(this.el, { path: this.record.get('Creator'), title: this.record.get('title') }, true);
 			this.headerEl = this.headerElContainer.down('.header');
+
+			this.footerElContainer = this.footerTpl.append(this.el, {}, true);
+			this.loadMoreEl = this.footerElContainer.down('.load-more');
 
 			if (!this.canCreateForum()) {
 				newForum = this.headerEl.down('.new-forum');
@@ -144,6 +152,8 @@ Ext.define('NextThought.view.forums.Board', {
 			}
 
 			this.mon(this.headerEl, 'click', this.onHeaderClick, this);
+
+			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
 
 			this.on({
 				'activate': 'onActivate',
@@ -155,8 +165,29 @@ Ext.define('NextThought.view.forums.Board', {
 
 
 	onActivate: function () {
+		var s = this.store;
 		//console.log('The board view is activated');
-		this.store.load();
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
+			sortOn: 'Last Modified',
+			sortOrder: 'descending'
+		});
+		
+		s.load();
+	},
+
+	
+	fetchNextPage: function(){
+		var s = this.store, max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
+		if (s.currentPage < max && !s.isLoading()) {
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
 	},
 
 

@@ -81,6 +81,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]}
 			]}
 		]},
+		{ cls: 'load-more', html: 'Load More'},
 		{ id: '{id}-body', cls: 'comment-container',
 			cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
@@ -102,7 +103,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		headerElContainer: '.header-container',
 		headerEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
-		prevPostEl: '.navigation-bar .prev'
+		prevPostEl: '.navigation-bar .prev',
+		loadMoreEl: '.load-more'
 	},
 
 
@@ -120,10 +122,18 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	buildStore: function () {
-		this.store = NextThought.store.NTI.create({
+		var s = NextThought.store.NTI.create({
 			storeId: this.getRecord().get('Class') + '-' + this.getRecord().get('NTIID'),
-			url: this.getRecord().getLink('contents')
+			url: this.getRecord().getLink('contents'),
+			pageSize: 2
 		});
+
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
+			sortOn: 'CreatedTime',
+			sortOrder: 'descending'
+		});
+
+		this.store = s;
 
 		this.mon(this.store, {
 			scope: this,
@@ -224,6 +234,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 		this.mon(this.nextPostEl, 'click', this.navigationClick, this);
 		this.mon(this.prevPostEl, 'click', this.navigationClick, this);
+		this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
 
 		this.updateRecord(this.record);
 
@@ -556,6 +567,21 @@ Ext.define('NextThought.view.forums.Topic', {
 		}
 	},
 
+	
+	fetchNextPage: function(){
+		var s = this.store, max;
+		
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
+		if (s.currentPage < max && !s.isLoading()) {
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
+	},
+
 
 	addComments: function (store, records) {
 		if (!Ext.isEmpty(records)) {
@@ -569,11 +595,16 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	loadComments: function (store, records) {
-		this.removeAll(true);
+		var me = this;
+
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
-		this.add(Ext.Array.map(records, function (r) {
-			return {record: r};
-		}));
+		
+		Ext.each(records, function(item, index){
+			me.insert(index, {record: item});
+		});
+		// this.add(Ext.Array.map(records, function (r) {
+		// 	return {record: r};
+		// }));
 
 		this.ready = true;
 		Ext.defer(this.fireEvent, 1, this, ['ready', this, this.queryObject]);

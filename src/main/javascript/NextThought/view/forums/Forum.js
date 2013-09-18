@@ -43,6 +43,12 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 	}),
 
+	footerTpl: Ext.DomHelper.createTemplate({
+		cls: 'footer-container', cn:[
+			{ cls: 'load-more', html: 'Load More'}
+		]
+	}),
+
 	tpl: Ext.DomHelper.markup([
 		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'topic-list-item', cn: [
@@ -179,6 +185,9 @@ Ext.define('NextThought.view.forums.Forum', {
 		this.headerElContainer = this.headerTpl.append(this.el, { forumTitle: title }, true);
 		this.headerEl = this.headerElContainer.down('.header');
 
+		this.footerElContainer = this.footerTpl.append(this.el,{},true);
+		this.footerEl = this.footerElContainer.down('.load-more');
+
 		if (Ext.isEmpty(this.record.getLink('add'))) {
 			this.headerEl.down('.new-topic').remove();
 			this.emptyText = Ext.DomHelper.markup({
@@ -191,6 +200,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 
 		this.mon(this.headerEl, 'click', 'onHeaderClick');
+		this.mon(this.footerEl, 'click', 'fetchNextPage', this);
 
 		this.on({
 			'activate': 'onActivate',
@@ -231,6 +241,21 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 
 		return c ? [c, p].join(' / ') : p;
+	},
+
+	
+	fetchNextPage: function(){
+		var s = this.store, max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
+		if (s.currentPage < max && !s.isLoading()) {
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
 	},
 
 

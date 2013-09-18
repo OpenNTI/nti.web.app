@@ -14,7 +14,8 @@ Ext.define('NextThought.store.NTI',{
 		startParam: 'batchStart',
 		reader: {
 			type: 'nti',
-			root: 'Items'
+			root: 'Items',
+			totalProperty: 'FilteredTotalItemCount'
 		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json'
@@ -51,7 +52,7 @@ Ext.define('NextThought.store.NTI',{
 		if( resultSet && resultSet.links){
 			this.batchLinks = resultSet.links;
 		}
-
+		
 		return this.callParent(arguments);
 	},
 
