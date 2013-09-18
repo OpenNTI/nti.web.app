@@ -79,10 +79,12 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.close = Ext.DomHelper.append(this.el, tpl, true);
 		this.callParent(arguments);
 
-		this.mon(this.close, 'click', function(){
+		this.mon(this.close, 'click', function(e){
+			e.stopEvent();
 			this.isClosing = true;
 			this.doDismiss = true;
 			this.fireEvent('hide-menu');
+			return false;
 		}, this);
 
 		this.mon(this.el,'mouseover', function(e){

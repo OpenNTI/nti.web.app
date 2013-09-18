@@ -42,11 +42,13 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 			this.down('[removeContact=true]').setDisabled(true);
 		}
 
-		this.closeEl.on('click', function(){
+		this.closeEl.on('click', function(e){
+			e.stopEvent();
 			this.stopHideTimeout();
 			this.doDismiss = true;
 			this.isClosing = true;
 			this.fireEvent('hide-menu');
+			return false;
 		}, this);
 
 

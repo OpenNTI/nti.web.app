@@ -88,7 +88,8 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	initComponent: function(){
 		this.callParent(arguments);
 		var me = this;
-		this.groupsListMenu = Ext.widget('menu', {
+		this.groupsListMenu = Ext.widget({
+			xtype: 'menu',
 			ui: 'nt',
 			plain: true,
 			width: 350,
@@ -101,7 +102,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		this.groupsList = this.groupsListMenu.down('management-group-list');
 		this.groupsList.setUser(this.record);
 		this.groupsList.isContact = this.isContact;
-		this.optionsMenu = Ext.widget('person-options-menu', { ownerCmp: me, user: me.user, isContact: this.isContact });
+		this.optionsMenu = Ext.widget({ xtype:'person-options-menu', ownerCmp: me, user: me.user, isContact: this.isContact });
 
 		this.on('adjust-height', this.align);
 		this.on('destroy','destroy',this.optionsMenu);
