@@ -457,6 +457,14 @@
 			display: none;
 		}
 
+		.topic-comment {
+			.like:not(.on) {
+				visibility: hidden;
+			}
+			&:hover .like{
+				visibility: visible;
+			}
+		}
 	}
 
 	.x-component-forum-comment{
