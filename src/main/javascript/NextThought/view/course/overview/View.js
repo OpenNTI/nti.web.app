@@ -43,7 +43,7 @@ Ext.define('NextThought.view.course.overview.View', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+		this.initCustomScrollOn('content', undefined, {reverseMarginEl:'nav-outline'});
 	},
 
 

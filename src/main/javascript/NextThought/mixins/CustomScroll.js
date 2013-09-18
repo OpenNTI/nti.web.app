@@ -2,7 +2,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 	/*
 	 * Mixin to add the fancy scroll that scrolls the whole page.
-	 * This mixin assumes we are mixin into a view(an observable)
+	 * This mixin assumes we are mixed into a view(an observable)
 	 */
 
 	function adjustOnScroll(){
@@ -23,6 +23,32 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 	//		console.log('setting top margin to: ', tMargin, ' and bottom margin to: ', bMargin);
 			parentEl.setStyle({marginTop: tMargin+'px', marginBottom: bMargin+'px'});
+			setReverseMargin.apply(this, [bMargin]);
+		}
+		catch(e){
+			console.error(e.stack || e.stacktrace || e.message || e);
+		}
+	}
+
+
+	function setReverseMargin(bottomMargin){
+		/**
+		 * NOTE: When we modify the top and bottom margin of the parentEl view,
+		 * we sometimes need to also adjust el that depends on it. Specifically,
+		 * in cases where we have sibling view which is scrollable.
+		 */
+		var data = this.mixinData.customScroll, nH;
+
+		if(!data.reverseMarginEl){ return; }
+		if(!this.initialReverseViewHeight){
+			this.initialReverseViewHeight = Ext.fly(data.reverseMarginEl).getHeight();
+		}
+
+		try{
+			nH = this.initialReverseViewHeight;
+			nH = bottomMargin ? nH + bottomMargin: nH;
+			Ext.fly(data.reverseMarginEl).setStyle({marginBottom: -bottomMargin + 'px', height: nH+'px'});
+			console.log('setting height to: ', nH);
 		}
 		catch(e){
 			console.error(e.stack || e.stacktrace || e.message || e);
@@ -31,7 +57,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	function resolve(el, refEl){
-		return Ext.get(el) || Ext.query(el,refEl)[0];
+		return el && (Ext.get(el) || Ext.query(el+',.'+el,refEl)[0]);
 	}
 
 
@@ -40,10 +66,12 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			me = this,
 			data = me.mixinData.customScroll,
 			adjustmentEl = data.adjustmentEl,
-			targetEl = data.targetEl;
+			targetEl = data.targetEl,
+			reverseMarginEl = data.options && data.options.reverseMarginEl;
 
 		data.targetEl = data.targetEl ? resolve(targetEl,parentContainerEl) : me.getTargetEl();
 		data.adjustmentEl = resolve(adjustmentEl,parentContainerEl);
+		data.reverseMarginEl = resolve(reverseMarginEl) || reverseMarginEl;
 
 		if(!data.adjustmentEl){
 			console.error('No adjustment element found for:', adjustmentEl);
@@ -66,10 +94,10 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	return {
-		initCustomScrollOn: function(adjustmentEl, targetEl){
+		initCustomScrollOn: function(adjustmentEl, targetEl, options){
 
 			this.mixinData = this.mixinData||{};
-			this.mixinData.customScroll = {adjustmentEl:adjustmentEl,targetEl:targetEl};
+			this.mixinData.customScroll = {adjustmentEl:adjustmentEl,targetEl:targetEl, options:options};
 
 			var me = this;
 
