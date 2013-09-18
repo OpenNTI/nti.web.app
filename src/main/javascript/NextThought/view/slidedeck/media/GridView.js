@@ -169,15 +169,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 			proxy: 'memory',
 			data: videos,
 			sorters: [
-				{
-					fn: function(a,b){
-						var sa = a.get('section'), sb = b.get('section');
-						return Globals.naturalSortComparator(sa,sb);
-					}
-				},{
-					property: 'title',
-					direction: 'ASC'
-				}
+				Globals.getNaturalSorter('section'),
+				Globals.getNaturalSorter('title')
 			]
 		});
 

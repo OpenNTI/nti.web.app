@@ -363,6 +363,14 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	getNaturalSorter: function(field){
+		return function(a,b){
+			var sa = a.get(field), sb = b.get(field);
+			return Globals.naturalSortComparator(sa,sb);
+		};
+	},
+
+
 	/**
 	 * Returns a sorter function for the Array/Ext.Array sort method.
 	 *
