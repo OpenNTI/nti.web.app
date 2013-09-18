@@ -72,7 +72,7 @@ Ext.define('NextThought.Library', {
 		if(index instanceof Ext.data.Model){
 			index = index.getId();
 		}
-		else if(ParseUtils.parseNtiid(index) !== null){
+		else if(ParseUtils.isNTIID(index)){
 			field = 'NTIID';
 		}
 
