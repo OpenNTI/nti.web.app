@@ -212,7 +212,12 @@ Ext.define('NextThought.view.forums.Forum', {
 
 	updateTopicCount: function (store, record) {
 		//make sure we can scroll
+		if(this.previousLastRecord){
+			this.previousLastRecord.scrollIntoView();
+		}
+
 		this.ownerCt.el.unmask();
+		
 		if(this.getHeight() < this.ownerCt.getHeight()){
 			this.fetchNextPage();
 			return;
@@ -250,6 +255,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		this.lastScrollTop = dom.scrollTop;
 
 		if(top <= 20 && direction < 0){
+			this.previousLastRecord = this.el.dom.lastChild;
 			this.fetchNextPage();
 		}
 	},

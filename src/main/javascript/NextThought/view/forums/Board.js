@@ -165,7 +165,11 @@ Ext.define('NextThought.view.forums.Board', {
 
 		this.mon(s,'load', function(store, records){
 			//make sure we can scroll
+			if(this.previousLastRecord){
+				this.previousLastRecord.scrollIntoView();
+			}
 			this.ownerCt.el.unmask();
+
 			if(this.getHeight() < this.ownerCt.getHeight()){
 				this.fetchNextPage();
 			}
@@ -184,6 +188,7 @@ Ext.define('NextThought.view.forums.Board', {
 		this.lastScrollTop = dom.scrollTop;
 
 		if(top <= 20 && direction < 0){
+			this.previousLastRecord = this.el.dom.lastChild;
 			this.fetchNextPage();
 		}
 	},
