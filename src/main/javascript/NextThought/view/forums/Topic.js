@@ -81,7 +81,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]}
 			]}
 		]},
-		{ cls: 'load-more', html: 'Load More'},
+		{ cls: 'load-more', html: 'Older Comments'},
 		{ id: '{id}-body', cls: 'comment-container',
 			cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
@@ -125,7 +125,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		var s = NextThought.store.NTI.create({
 			storeId: this.getRecord().get('Class') + '-' + this.getRecord().get('NTIID'),
 			url: this.getRecord().getLink('contents'),
-			pageSize: 2
+			pageSize: 10
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
@@ -595,7 +595,13 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	loadComments: function (store, records) {
-		var me = this;
+		var me = this,
+			max = store.getPageFromRecordIndex(store.getTotalCount() - 1);
+
+		if(store.currentPage === max){
+			//there is nothing more to load
+			this.loadMoreEl.remove();
+		}
 
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 		

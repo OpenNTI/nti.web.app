@@ -728,7 +728,7 @@ Ext.define('NextThought.controller.Forums', {
 			community = record.get('Creator');
 
 		function finish(){
-			me.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}), {pageSize: 2});
+			me.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg||{}), {pageSize: 10});
 
 			if(silent !== true){
 				//The communities board we are viewing
@@ -756,7 +756,7 @@ Ext.define('NextThought.controller.Forums', {
 		var me = this;
 
 		function finish(){
-			me.showLevel(selModel, 'topic', record, {stateKey: 'forum'} ,{pageSize: 2});
+			me.showLevel(selModel, 'topic', record, {stateKey: 'forum'} ,{pageSize: 10});
 			if(silent !== true){
 				me.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 			}

@@ -403,6 +403,15 @@
 		}
 	}
 
+	.load-more{
+		min-width: 160px;
+		margin: 0 auto;
+		text-align: center;
+		cursor: pointer;
+		color: $primary-blue;
+		font-size: 14px;
+	}
+
 	.comment-container{
 		position: relative;
 

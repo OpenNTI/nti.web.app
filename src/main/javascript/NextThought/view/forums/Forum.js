@@ -43,12 +43,6 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 	}),
 
-	footerTpl: Ext.DomHelper.createTemplate({
-		cls: 'footer-container', cn:[
-			{ cls: 'load-more', html: 'Load More'}
-		]
-	}),
-
 	tpl: Ext.DomHelper.markup([
 		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'topic-list-item', cn: [
@@ -185,9 +179,6 @@ Ext.define('NextThought.view.forums.Forum', {
 		this.headerElContainer = this.headerTpl.append(this.el, { forumTitle: title }, true);
 		this.headerEl = this.headerElContainer.down('.header');
 
-		this.footerElContainer = this.footerTpl.append(this.el,{},true);
-		this.footerEl = this.footerElContainer.down('.load-more');
-
 		if (Ext.isEmpty(this.record.getLink('add'))) {
 			this.headerEl.down('.new-topic').remove();
 			this.emptyText = Ext.DomHelper.markup({
@@ -200,7 +191,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 
 		this.mon(this.headerEl, 'click', 'onHeaderClick');
-		this.mon(this.footerEl, 'click', 'fetchNextPage', this);
+		this.mon(this.el.parent('.forums-view'),'scroll', 'onScroll', this);
 
 		this.on({
 			'activate': 'onActivate',
@@ -220,6 +211,12 @@ Ext.define('NextThought.view.forums.Forum', {
 
 
 	updateTopicCount: function (store, record) {
+		//make sure we can scroll
+		this.ownerCt.el.unmask();
+		if(this.getHeight() < this.ownerCt.getHeight()){
+			this.fetchNextPage();
+			return;
+		}
 		//Make sure we're in sync with the store.
 		if (this.record.get('TopicCount') !== store.totalCount) {
 			this.record.set({'TopicCount': store.totalCount});
@@ -244,15 +241,30 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 	
+	onScroll: function(e, dom){
+		var el = dom.lastChild,
+			direction = (this.lastScrollTop || 0) - dom.scrollTop,
+			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
+			top = offset - dom.scrollTop;
+
+		this.lastScrollTop = dom.scrollTop;
+
+		if(top <= 20 && direction < 0){
+			this.fetchNextPage();
+		}
+	},
+
+	
 	fetchNextPage: function(){
 		var s = this.store, max;
 
 		if (!s.hasOwnProperty('data')) {
 			return;
 		}
-
+		
 		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
 		if (s.currentPage < max && !s.isLoading()) {
+			this.ownerCt.el.mask('Loading...');
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
@@ -261,7 +273,7 @@ Ext.define('NextThought.view.forums.Forum', {
 
 	onActivate: function () {
 		console.log('The forum view is activated');
-		this.store.load();
+		this.store.loadPage(1);
 	},
 
 

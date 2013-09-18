@@ -19,6 +19,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 	cls: 'forum-list list scrollable',
 	itemSelector: '.forum-list-item',
+	loadMask: false,
 
 	listeners: {
 		select: function (selModel, record) {
@@ -37,12 +38,6 @@ Ext.define('NextThought.view.forums.Board', {
 				{ cls: 'path', cn: ['{path} / ', {tag: 'span', cls: 'title-part', html: '{title}'}]}
 			]
 		}
-	}),
-
-	footerTpl: Ext.DomHelper.createTemplate({
-		cls: 'footer-container', cn:[
-			{ cls: 'load-more', html: 'Load More'}
-		]
 	}),
 
 	tpl: Ext.DomHelper.markup({
@@ -141,9 +136,6 @@ Ext.define('NextThought.view.forums.Board', {
 			this.headerElContainer = this.headerTpl.append(this.el, { path: this.record.get('Creator'), title: this.record.get('title') }, true);
 			this.headerEl = this.headerElContainer.down('.header');
 
-			this.footerElContainer = this.footerTpl.append(this.el, {}, true);
-			this.loadMoreEl = this.footerElContainer.down('.load-more');
-
 			if (!this.canCreateForum()) {
 				newForum = this.headerEl.down('.new-forum');
 				if (newForum) {
@@ -152,8 +144,7 @@ Ext.define('NextThought.view.forums.Board', {
 			}
 
 			this.mon(this.headerEl, 'click', this.onHeaderClick, this);
-
-			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
+			this.mon(this.el.parent('.forums-view'),'scroll','onScroll', this);
 
 			this.on({
 				'activate': 'onActivate',
@@ -171,8 +162,30 @@ Ext.define('NextThought.view.forums.Board', {
 			sortOn: 'Last Modified',
 			sortOrder: 'descending'
 		});
+
+		this.mon(s,'load', function(store, records){
+			//make sure we can scroll
+			this.ownerCt.el.unmask();
+			if(this.getHeight() < this.ownerCt.getHeight()){
+				this.fetchNextPage();
+			}
+		}, this);
 		
-		s.load();
+		s.loadPage(1);
+	},
+
+
+	onScroll: function(e, dom){
+		var el = dom.lastChild,
+			direction = (this.lastScrollTop || 0) - dom.scrollTop,
+			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
+			top = offset - dom.scrollTop;
+
+		this.lastScrollTop = dom.scrollTop;
+
+		if(top <= 20 && direction < 0){
+			this.fetchNextPage();
+		}
 	},
 
 	
@@ -185,6 +198,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
 		if (s.currentPage < max && !s.isLoading()) {
+			this.ownerCt.el.mask('Loading...');
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
