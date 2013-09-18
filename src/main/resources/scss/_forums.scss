@@ -564,25 +564,6 @@
 }
 
 #profile {
-	.old .blog {
-		.entry {
-			padding: 30px 0 30px 20px;
-			&.list-item{margin: 50px 0;}
-
-			.navigation-bar {
-				z-index: 10;
-				position: absolute;
-				top: -52px;
-				left: 0; right: 0;
-			}
-		}
-		.header {
-			@include new-post;
-			position: absolute;
-			top: -42px;
-			right: 0;
-		}
-	}
 
 	&.scroll-lock .blog .post-view{
 		overflow-y: hidden;
@@ -608,7 +589,7 @@
 			text-align: center;
 		}
 
-		& > .list-view > .body:not(.old) {
+		& > .list-view > .body {
 			position: absolute;
 			top: 0; left: 0; right: 0; bottom: 0;
 			overflow: {
@@ -647,7 +628,7 @@
 		.entry {
 			padding: 0;
 			@include post-view;
-			.navigation-bar:not(.old) {
+			.navigation-bar {
 				.pager {
 					right: 10px;
 				}

@@ -64,10 +64,6 @@ Ext.define('NextThought.view.profiles.parts.BlogPost',{
 		this.callParent(arguments);
 		var commentId;
 
-		if(!isFeature('v2profiles')){
-			this.headerEl.addCls('old');
-		}
-
 		if(!Ext.isEmpty(this.selectedSections)){
 			commentId = this.selectedSections[1];
 			console.debug('Do something with this/these:',this.selectedSections);

@@ -3,29 +3,18 @@ Ext.define('NextThought.view.profiles.View', {
 	alias: 'widget.profile-view-container',
 	requires: [
 		'NextThought.view.profiles.Panel',
-		'NextThought.view.profiles.PanelOld',
 		'NextThought.view.ResourceNotFound'
 	],
 
 	defaultType: 'profile-panel',
 	layout: 'fit',
 
-	constructor: function(){
-		if(!isFeature('v2profiles')){
-			this.defaultType = 'profile-panel-old';
-			this.layout = 'auto';
-			this.cls = 'old scrollable ' + (this.cls||'');
-		}
-		this.callParent(arguments);
-	},
 
 	initComponent: function () {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
-		if(isFeature('v2profiles')){
-			this.removeCls('make-white');
-		}
+		this.removeCls('make-white');
 	},
 
 
@@ -79,12 +68,9 @@ Ext.define('NextThought.view.profiles.View', {
 
 		if (current && current.username === username) {
 			Ext.apply(current, state);
-			if(current.setActiveTab){
-				current.setActiveTab(state.activeTab);
-			}
-			else {
-				current.restoreState(state);//reduce this if/else to just the else body after v2profiles
-			}
+
+			current.restoreState(state);
+
 			fin();
 			return;
 		}
@@ -102,16 +88,14 @@ Ext.define('NextThought.view.profiles.View', {
 					shouldFireLoaded = true;
 				}
 				else {
-					toAdd = Ext.applyIf({
+					toAdd = {
 						user: user,
-						username: username,//can be removed once v2profiles is released
-						displayName: user.getName(),//can be removed once v2profiles is released
+						username: username,//TODO: can this be removed?
 						stateData: state
-					}, state);//remove the applyIf wrapper once v2profiles is released
+					};
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: {
-						loaded: {fn:fin, single: true},//remove after v2profiles
 						restored: {fn:fin, single: true},
 						delay: 1
 					}

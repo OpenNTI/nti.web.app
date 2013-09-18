@@ -122,8 +122,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			footEl = this.footerEl,
 			vpH = Ext.Element.getViewportHeight(),
 			top,
-		//delete the pEl.down() part after v2profiles is released
-			containerTop = (pEl.down('.profile-items')||pEl).getY() + pEl.getScroll().top,
+			containerTop = pEl.getY() + pEl.getScroll().top,
 			scrollPos = vpH < 800 ? (containerTop - pEl.getY()) : 0,
 			newHeight;
 
