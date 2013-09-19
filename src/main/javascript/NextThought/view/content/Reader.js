@@ -73,6 +73,18 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	// NOTE: Now that we may have more than one reader, each reader should know how
+	// to resolve dom ranges/nodes of annotations inside it.
+	getDomContextForRecord: function (r, doc, cleanRoot) {
+		var rangeDesc = r.get('applicableRange'),
+				cid = r.get('ContainerId');
+
+		doc = doc || this.getDocumentElement();
+		cleanRoot = cleanRoot && this.getCleanContent();
+		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
+	},
+
+
 	bootstrap: function (loc) {
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.
@@ -91,6 +103,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.setLocation(l, cb, silent);
 	},
+
 
 	primeReadyEvent: function () {
 		this.readyEventPrimed = true;
@@ -212,18 +225,6 @@ Ext.define('NextThought.view.content.Reader', {
 	onNavigationAborted:    function (resp, ntiid) {
 		this.splash.removeCls('initial');
 		delete this.navigating;
-	},
-
-
-	// NOTE: Now that we may have more than one reader, each reader should know how
-	// to resolve dom ranges/nodes of annotations inside it.
-	getDomContextForRecord: function (r, doc, cleanRoot) {
-		var rangeDesc = r.get('applicableRange'),
-				cid = r.get('ContainerId');
-
-		doc = doc || this.getDocumentElement();
-		cleanRoot = cleanRoot && this.getCleanContent();
-		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
 	},
 
 
