@@ -16,43 +16,47 @@ Ext.define('NextThought.view.reader.Panel',{
 		plain: true
 	},
 
-	items:[{
-		region: 'center',
-		layout: {
-			type: 'vbox',
-			align: 'stretch'
-		},
-		items: [
-			{ xtype: 'content-toolbar', hidden: true },
-			{ xtype: 'reader-content', flex: 1 }
-		]
-	},{
-		width: 258,
-		region: 'east',
-		xtype: 'tabpanel',
-		ui: 'notes-and-discussion',
-		tabBar: {
-			plain: true,
-			baseCls: 'nti',
-			ui: 'notes-and-discussion-tabbar',
-			cls: 'notes-and-discussion-tabs',
-			defaults: { plain: true, ui: 'notes-and-discussion-tab' }
-		},
-		defaults: {
-			border: false,
-			plain: true
-		},
-		activeTab: 1,
-		items:[
-			{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad',
-				disabled:!isFeature('notepad'), hidden:!isFeature('notepad') },
-			{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion:true }
-		]
-	}],
-
 
 	initComponent: function(){
 		this.callParent(arguments);
+
+		this.add([{
+				region: 'center',
+				layout: {
+					type: 'vbox',
+					align: 'stretch'
+				},
+				items: [
+					{ xtype: 'content-toolbar', hidden: true },
+					{ xtype: 'reader-content', flex: 1 }
+				]
+			},{
+				width: 258,
+				region: 'east',
+				xtype: 'tabpanel',
+				ui: 'notes-and-discussion',
+				tabBar: {
+					plain: true,
+					baseCls: 'nti',
+					ui: 'notes-and-discussion-tabbar',
+					cls: 'notes-and-discussion-tabs',
+					defaults: { plain: true, ui: 'notes-and-discussion-tab' }
+				},
+				defaults: {
+					border: false,
+					plain: true
+				},
+				activeTab: 1,
+				items:[
+					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
+							{ ref: 'readerRef', selector: '#'+this.id+' reader-content' }
+						],
+						disabled:!isFeature('notepad'), hidden:!isFeature('notepad') },
+					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion:true }
+				]
+			}
+		]);
+
 		this.mon(this.down('reader-content'),{
 			'filter-by-line': 'selectDiscussion'
 		});
