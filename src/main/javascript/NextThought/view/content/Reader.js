@@ -1,6 +1,8 @@
 Ext.define('NextThought.view.content.Reader', {
 	extend:   'NextThought.view.content.Base',
 	alias:    'widget.reader-content',
+
+	//<editor-fold desc="Config">
 	requires: [
 		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64',
@@ -18,6 +20,7 @@ Ext.define('NextThought.view.content.Reader', {
 	],
 
 	mixins: {
+		instanceTracking: 'NextThought.mixins.InstanceTracking',
 		moduleContainer: 'NextThought.mixins.ModuleContainer',
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
@@ -29,9 +32,13 @@ Ext.define('NextThought.view.content.Reader', {
 	ui:        'reader',
 	layout:    'auto',
 	prefix:    'default',
+	//</editor-fold>
 
+
+	//<editor-fold desc="Setup & Init">
 	initComponent: function () {
 		this.callParent(arguments);
+		this.trackThis();
 
 		this.enableBubble(
 				'finished-restore'
@@ -73,15 +80,19 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	// NOTE: Now that we may have more than one reader, each reader should know how
-	// to resolve dom ranges/nodes of annotations inside it.
-	getDomContextForRecord: function (r, doc, cleanRoot) {
-		var rangeDesc = r.get('applicableRange'),
-				cid = r.get('ContainerId');
+	afterRender: function () {
+		this.callParent(arguments);
+		var DH = Ext.DomHelper,
+			el = this.getTargetEl();
 
-		doc = doc || this.getDocumentElement();
-		cleanRoot = cleanRoot && this.getCleanContent();
-		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
+		this.splash = DH.doInsert(el, {cls: 'no-content-splash initial'}, true, 'beforeEnd');
+		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		this.floatingItems.add(
+				Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this}));
+
+		this.floatingItems.add(
+				Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true}));
 	},
 
 
@@ -110,11 +121,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	needsWaitingOnReadyEvent: function () {
-		return Boolean(this.readyEventPrimed);
-	},
-
-
 	fireReady: function () {
 		if (this.navigating) {
 			console.warn('fired ready while navigating');
@@ -129,26 +135,36 @@ Ext.define('NextThought.view.content.Reader', {
 		//console.warn('should-be-ready fired');
 		this.fireEvent('should-be-ready', this);
 	},
+	//</editor-fold>
 
 
-	skipAnnotationsFireReadyOnFinish: function () {
-		this.skippedAnnotations = true;
+	//<editor-fold desc="Getters/Queries">
+	getAnnotationOffsets: function () {
+		return this.calculateNecessaryAnnotationOffsets();
 	},
 
 
-	afterRender: function () {
-		this.callParent(arguments);
-		var DH = Ext.DomHelper,
-			el = this.getTargetEl();
+	// NOTE: Now that we may have more than one reader, each reader should know how
+	// to resolve dom ranges/nodes of annotations inside it.
+	getDomContextForRecord: function (r, doc, cleanRoot) {
+		var rangeDesc = r.get('applicableRange'),
+				cid = r.get('ContainerId');
 
-		this.splash = DH.doInsert(el, {cls: 'no-content-splash initial'}, true, 'beforeEnd');
-		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		doc = doc || this.getDocumentElement();
+		cleanRoot = cleanRoot && this.getCleanContent();
+		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
+	},
 
-		this.floatingItems.add(
-				Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this}));
 
-		this.floatingItems.add(
-				Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true}));
+	needsWaitingOnReadyEvent: function () {
+		return Boolean(this.readyEventPrimed);
+	},
+	//</editor-fold>
+
+
+	//<editor-fold desc="Actions">
+	skipAnnotationsFireReadyOnFinish: function () {
+		this.skippedAnnotations = true;
 	},
 
 
@@ -204,19 +220,17 @@ Ext.define('NextThought.view.content.Reader', {
 			scrollTop: scrollPosition //dynamic
 		};
 	},
+	//</editor-fold>
 
 
-	getAnnotationOffsets: function () {
-		return this.calculateNecessaryAnnotationOffsets();
-	},
-
-
+	//<editor-fold desc="Event Handlers">
 	onContextMenuHandler: function () {
 		var o = this.getAnnotations();
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
 
+	//<editor-fold desc="Navigation Handlers">
 	onBeginNavigate: function (ntiid) {
 		this.navigating = true;
 	},
@@ -292,12 +306,16 @@ Ext.define('NextThought.view.content.Reader', {
 						  });
 		}
 	},
+	//</editor-fold>
+	//</editor-fold>
 
 
+	//<editor-fold desc="Statics">
 	statics: {
 		get: function (prefix) {
-			return Ext.ComponentQuery.query(
-					Ext.String.format('reader-content[prefix={0}]', prefix || 'default'))[0];
+			prefix = prefix || 'default';
+			function search(r){ return r.prefix===prefix; }
+			return Ext.Array.findBy(this.instances,search,this);
 		},
 
 
@@ -320,6 +338,8 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 	}
+	//</editor-fold>
+
 
 }, function () {
 	window.ReaderPanel = this;
