@@ -36,7 +36,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		Ext.each(cmp.delegate,function(v,i,a){
 			var f, c, CQ = Ext.ComponentQuery;
 			if(Ext.isString(v)){
-				c = CQ.query(v,cmp.parent()).first();
+				c = CQ.query(v,cmp.up()).first();
 				if(!c){
 					console.debug('Did not find delegate as a sibling or descendant...trying global');
 					c = CQ.query(v).first();
