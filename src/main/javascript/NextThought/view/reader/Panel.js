@@ -22,7 +22,7 @@ Ext.define('NextThought.view.reader.Panel',{
 			align: 'stretch'
 		},
 		items: [
-			{ xtype: 'content-toolbar', hidden: true, delegate:[ 'content-view-container reader-content' ]},
+			{ xtype: 'content-toolbar', hidden: true },
 			{ xtype: 'reader-content', flex: 1 }
 		]
 	},{
