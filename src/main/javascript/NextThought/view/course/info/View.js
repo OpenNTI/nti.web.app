@@ -10,7 +10,9 @@ Ext.define('NextThought.view.course.info.View', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+		if(isFeature('fancy-scroll')){
+			this.initCustomScrollOn('content');
+		}
 	},
 
 	setPage: function (ntiid) {

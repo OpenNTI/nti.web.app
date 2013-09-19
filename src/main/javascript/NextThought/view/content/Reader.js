@@ -76,7 +76,9 @@ Ext.define('NextThought.view.content.Reader', {
 				});
 
 		// NOTE: check notes on the mixin, as to why we might want to set a reverseMarginEl.
-		this.initCustomScrollOn('content', undefined, {reverseMarginEl:'annotation-view'});
+		if(isFeature('fancy-scroll')){
+			this.initCustomScrollOn('content', undefined, {reverseMarginEl:'annotation-view'});
+		}
 	},
 
 
