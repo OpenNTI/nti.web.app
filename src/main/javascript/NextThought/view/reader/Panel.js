@@ -46,6 +46,10 @@ Ext.define('NextThought.view.reader.Panel',{
 					border: false,
 					plain: true
 				},
+
+				stateful: true,
+				stateId: 'notes-and-discussion',
+
 				activeTab: 1,
 				items:[
 					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
