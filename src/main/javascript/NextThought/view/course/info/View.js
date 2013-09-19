@@ -3,6 +3,15 @@ Ext.define('NextThought.view.course.info.View', {
 	alias:  'widget.course-info',
 	cls:    'make-white scrollable',
 
+	mixins:{
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.initCustomScrollOn('content');
+	},
 
 	setPage: function (ntiid) {
 		this.hasInfo = !!ntiid;

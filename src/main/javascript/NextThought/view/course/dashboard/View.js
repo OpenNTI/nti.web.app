@@ -6,6 +6,15 @@ Ext.define('NextThought.view.course.dashboard.View', {
 		'NextThought.view.course.dashboard.tiles.*'
 	],
 
+	mixins:{
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.initCustomScrollOn('content');
+	},
+
 
 	onCourseChanged: function (pageInfo) {
 		if (!pageInfo.isPartOfCourse()) {

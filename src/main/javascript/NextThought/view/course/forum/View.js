@@ -7,6 +7,11 @@ Ext.define('NextThought.view.course.forum.View',{
 		'NextThought.view.ResourceNotFound'
 	],
 
+
+	mixins:{
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
+
 	cls: 'course-forum',
 
 	layout: 'stack',
@@ -16,6 +21,11 @@ Ext.define('NextThought.view.course.forum.View',{
 		'add': 'onViewPushed',
 		'remove': 'onViewPopped',
 		'beforedeactivate': 'handleDeactivate'
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.initCustomScrollOn('content');
 	},
 
 	handleDeactivate: function(){
