@@ -216,9 +216,14 @@ Ext.define('NextThought.view.forums.Forum', {
 
 
 	updateTopicCount: function (store, record) {
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.updateTopicCount, this, arguments), this);
+			return;
+		}
+
 		//make sure we can scroll
 		this.ownerCt.el.unmask();
-		
+
 		if(this.getHeight() < this.ownerCt.getHeight()){
 			this.fetchNextPage();
 			return;

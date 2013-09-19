@@ -597,6 +597,11 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	loadComments: function (store, records) {
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.loadComments, this, arguments), this);
+			return;
+		}
+
 		var me = this,
 			max = store.getPageFromRecordIndex(store.getTotalCount() - 1);
 

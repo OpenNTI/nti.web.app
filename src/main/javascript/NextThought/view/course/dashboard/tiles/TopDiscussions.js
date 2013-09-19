@@ -70,7 +70,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 		rows: 2
 	},
 
-	getTimeWeight: function(){  return this.itemNode.get('Last Modified').getTime(); },
+	getTimeWeight: function(){  return this.itemNode.get('Last Modified') && this.itemNode.get('Last Modified').getTime(); },
 
 	constructor: function(config){
 		var rec = config.itemNode,
