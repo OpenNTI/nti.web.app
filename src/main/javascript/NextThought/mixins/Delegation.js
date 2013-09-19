@@ -34,14 +34,23 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		}
 
 		Ext.each(cmp.delegate,function(v,i,a){
-			var f;
+			var f, c, CQ = Ext.ComponentQuery;
 			if(Ext.isString(v)){
-				v = Ext.ComponentQuery.query(v)[0] || v;
+				c = CQ.query(v,cmp.parent()).first();
+				if(!c){
+					console.debug('Did not find delegate as a sibling or descendant...trying global');
+					c = CQ.query(v).first();
+				}
+				v = c || v;
 			}
 
 			if(!v || !v.isComponent){
 				console.debug('No component:', cmp.id, a[i], i, a);
 				return;
+			}
+
+			if( a[i] !== v ){
+				a[i] = v;//cache result
 			}
 
 			f = getAgent(v,fn);
