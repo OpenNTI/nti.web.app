@@ -17,7 +17,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 	}
 
 	/** @private */
-	function askDelegate(cmp,fn,args){
+	function askDelegate(cmp,fn,applyAll,args){
 		var result = null,
 			found = false;
 
@@ -58,7 +58,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 				console.warn('The delegate', v.id, 'does not implement', fn);
 			}
 			else {
-				if(found){
+				if(found && !applyAll){
 					console.error('Multiple delegated functions: ', fn, v.id);
 				}
 				found = true;
@@ -76,7 +76,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 		function makeDelegate(k,fn,o){
 			return function(){
 				if(debug){ console.debug('delegating...'+k); }
-				var v = askDelegate.apply(o,[o,k,arguments]);
+				var v = askDelegate.apply(o,[o,k,fn.applyAll,arguments]);
 				if(v === DelegateFactory.PREVENT_DEFAULT){return undefined;}
 				return v || fn.apply(o,arguments);
 			};
@@ -130,11 +130,16 @@ Ext.define('NextThought.mixins.Delegation.Factory',{
 	 *
 	 * @param {Function} [fn] The default behavior if there is no delegate or if the delegate does not return
 	 *                      {@link #PREVENT_DEFAULT}
+	 * @param {Boolean} [applyAll] If more than one delegate offer an implementation, use them all. (Obviously the
+	 * 						return value will be meaningless, so don't use this for functions that need to return
+	 * 						something)
+	 *
 	 * @returns {Function} The delegated function.
 	 */
-	getDelegated: function(fn){
+	getDelegated: function(fn,applyAll){
 		fn = fn || function(){};
 		fn.delegated = true;
+		fn.applyAll = Boolean(applyAll);
 		return fn;
 	}
 },function(){window.DelegateFactory=this;});
