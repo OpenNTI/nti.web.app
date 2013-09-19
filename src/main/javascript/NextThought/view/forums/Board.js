@@ -164,11 +164,13 @@ Ext.define('NextThought.view.forums.Board', {
 	onActivate: function () {
 		var s = this.store;
 		//console.log('The board view is activated');
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'Last Modified',
-			sortOrder: 'descending'
-		});
-
+		//Sort them by last modified
+		// s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
+		//  	sortOn: 'Last Modified',
+		//  	sortOrder: 'descending'
+		// });
+		//Don't sort them by creation time on client side either
+		// s.sorters.clear();
 		this.mon(s,'load', function(store, records){
 			//make sure we can scroll
 			this.ownerCt.el.unmask();
