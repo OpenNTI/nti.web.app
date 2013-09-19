@@ -33,38 +33,43 @@ Ext.define('NextThought.mixins.Delegation',function(){
 			cmp.delegate = [cmp.delegate];
 		}
 
-		Ext.each(cmp.delegate,function(v,i,a){
-			var f, c, CQ = Ext.ComponentQuery;
-			if(Ext.isString(v)){
-				c = CQ.query(v,cmp.up()).first();
-				if(!c){
-					console.debug('Did not find delegate as a sibling or descendant...trying global');
-					c = CQ.query(v).first();
+		try {
+			Ext.each(cmp.delegate,function(v,i,a){
+				var f, c, CQ = Ext.ComponentQuery;
+				if(Ext.isString(v)){
+					c = CQ.query(v,cmp.up()).first();
+					if(!c){
+						console.debug('Did not find delegate as a sibling or descendant...trying global');
+						c = CQ.query(v).first();
+					}
+					v = c || v;
 				}
-				v = c || v;
-			}
 
-			if(!v || !v.isComponent){
-				console.debug('No component:', cmp.id, a[i], i, a);
-				return;
-			}
-
-			if( a[i] !== v ){
-				a[i] = v;//cache result
-			}
-
-			f = getAgent(v,fn);
-			if(!Ext.isFunction(f)){
-				console.warn('The delegate', v.id, 'does not implement', fn);
-			}
-			else {
-				if(found && !applyAll){
-					console.error('Multiple delegated functions: ', fn, v.id);
+				if(!v || !v.isComponent){
+					console.debug('No component:', cmp.id, a[i], i, a);
+					return;
 				}
-				found = true;
-				result = f.apply(v,args);
-			}
-		});
+
+				if( a[i] !== v ){
+					a[i] = v;//cache result
+				}
+
+				f = getAgent(v,fn);
+				if(!Ext.isFunction(f)){
+					console.warn('The delegate', v.id, 'does not implement', fn);
+				}
+				else {
+					if(found && !applyAll){
+						console.error('Multiple delegated functions: ', fn, v.id);
+					}
+					found = true;
+					result = f.apply(v,args);
+				}
+			});
+		}
+		catch(e) {
+			Ext.log.error(e.stack || e.message || e);
+		}
 
 		return result;
 	}
