@@ -95,7 +95,7 @@ Ext.define('NextThought.mixins.Delegation',function(){
 
 
 	return {
-		constructor: function(){
+		initDelegation: function(){
 			if(!this.delegate){ return; }
 			setupDelegates(this);
 		},
