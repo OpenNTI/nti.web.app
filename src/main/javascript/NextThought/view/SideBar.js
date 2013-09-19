@@ -4,7 +4,6 @@ Ext.define('NextThought.view.SideBar', {
 
 	requires: [
 		'NextThought.view.account.activity.View',
-		'NextThought.view.account.activity.ViewNew',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
 		'NextThought.view.account.history.View',
@@ -55,7 +54,7 @@ Ext.define('NextThought.view.SideBar', {
 						stateId: 'sidebar',
 						items: [
 							{ xtype: contactsType },
-							{ xtype: 'activity-view-new' }
+							{ xtype: 'activity-view' }
 						]
 					},
 					{ xtype: 'chat-dock', region: 'south'}
