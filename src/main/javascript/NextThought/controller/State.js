@@ -101,7 +101,7 @@ Ext.define('NextThought.controller.State', {
 							ret = true;
 						}
 					}
-					else if (isDiff(a[key], val)) { //Ok so val is an object do a deep equals
+					else if (!a || isDiff(a[key], val)) { //Ok so val is an object do a deep equals
 						ret = true;
 					}
 
