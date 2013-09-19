@@ -43,9 +43,15 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		this.iframe = this.reader.add(this.getConfig());
 
-		this.mon(this.reader, 'resize', function () {
-			delete this.lastHeight;
-		}, this);
+		this.mon(this.reader, {
+			resize: function() { delete this.lastHeight; },
+			scroll: 'dismissPopover'
+		});
+	},
+
+
+	dismissPopover: function() {
+		this.fireEvent('dismiss-popover');
 	},
 
 
@@ -331,20 +337,16 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			});
 		}
 
-		function shouldDismissPopover() {
-			me.fireEvent('dismiss-popover');
-		}
 
 		on(doc, 'mouseout', function (e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 					target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
 			if (target) {
-				shouldDismissPopover();
+				me.dismissPopover();
 			}
 		});
 
-		me.reader.getScroll().registerHandler(shouldDismissPopover);
 
 		on(doc, 'mouseover', function (e) {
 			var d = doc,

@@ -17,6 +17,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			scope:                  this,
 			destroy:                'destroy',
 			afterRender:            'insertOverlay',
+			'scroll':				'onScroll',
 			'content-updated':      'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
 			'sync-height':          'syncHeight',
@@ -70,8 +71,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				scope:     me
 			});
 		}
-
-		me.reader.getScroll().registerHandler(me.onScroll, me);
 
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',

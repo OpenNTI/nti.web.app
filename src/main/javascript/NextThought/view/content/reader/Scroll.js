@@ -5,30 +5,27 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
     constructor: function (config) {
         Ext.apply(this, config);
-        var me = this;
+        var me = this, reader = me.reader;
 
         function afterReaderRenders() {
-            me.scrollingEl = me.reader.getTargetEl();
-            me.scrollingEl.on('scroll', me.menuHideOnScroll, me);
-        }
+            me.scrollingEl = reader.getTargetEl();
+            reader.on('destroy','destroy',
+					reader.relayEvents(me.scrollingEl, [
+						'scroll'
+					]));
+		}
 
-        me.reader.on('afterrender', afterReaderRenders, me, {single: true});
+        reader.on({
+			afterrender: {fn:afterReaderRenders, single: true},
+			scroll: 'menuHideOnScroll',
+			scope: me
+		});
     },
 
 
     menuHideOnScroll: function () {
         Ext.menu.Manager.hideAll();
         Ext.tip.QuickTipManager.getQuickTip().hide();
-    },
-
-
-    registerHandler: function (fn, scope) {
-        this.scrollingEl.on('scroll', fn, scope);
-    },
-
-
-    unRegisterHandler: function (fn, scope) {
-        this.scrollingEl.un('scroll', fn, scope);
     },
 
 
