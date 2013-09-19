@@ -51,7 +51,6 @@ Ext.define('NextThought.view.SideBar', {
 				items: [
 					{ xtype: 'sidebar-tabpanel',
 						region: 'center',
-						stateId: 'sidebar',
 						items: [
 							{ xtype: contactsType },
 							{ xtype: 'activity-view' }
@@ -285,7 +284,7 @@ Ext.define('NextThought.view.SideBarTabPanel', {
 	plain: true,
 	cls: 'sidebar-panel-container',
 	stateful: true,
-	stateEvents: ['tabchange'],
+	stateId: 'sidebar',
 	tabBar: {
 		baseCls: 'sidebar-tab-bar',
 		plain: true,
@@ -305,15 +304,5 @@ Ext.define('NextThought.view.SideBarTabPanel', {
 			xtype: 'sidebar-tab'
 		});
 		return this.callParent([item, index]);
-	},
-
-	applyState: function (state) {
-		var t = (state || {}).t || 0;
-
-		this.setActiveTab(t);
-	},
-
-	getState: function () {
-		return {t: this.items.indexOf(this.getActiveTab())};
 	}
 });
