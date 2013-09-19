@@ -43,7 +43,8 @@ Ext.define('NextThought.view.reader.Panel',{
 		},
 		activeTab: 1,
 		items:[
-			{ title: 'Notepad', iconCls: 'notepad', disabled:true, hidden:true },
+			{ title: 'Notepad', iconCls: 'notepad',
+				disabled:!isFeature('notepad'), hidden:!isFeature('notepad') },
 			{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion:true }
 		]
 	}],

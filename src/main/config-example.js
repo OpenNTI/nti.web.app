@@ -6,6 +6,7 @@ var $AppConfig = {
 	"enableSymbolicLinkingNav": true,
 
 	"features":{
+		"notepad":true
 	},
 	"server" : {
         "host": "",
