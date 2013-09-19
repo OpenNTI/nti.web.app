@@ -1,5 +1,6 @@
 var $AppConfig = {
 	"debug": false,
+	"debugDelegation": false,
 	"debugSocket": false,
 	"debugSocketVerbosely": false,
 

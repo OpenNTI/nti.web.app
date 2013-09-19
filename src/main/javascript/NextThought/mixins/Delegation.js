@@ -8,7 +8,7 @@
  * component that will be delegated to. (It can also be an array if different components care about different aspects)
  */
 Ext.define('NextThought.mixins.Delegation',function(){
-	var debug = true;
+	var debug = $AppConfig.debugDelegation;
 
 	/** @private */
 	function getInheritedDelegates(cmp){
