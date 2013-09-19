@@ -54,6 +54,10 @@ Ext.define('NextThought.view.course.overview.View', {
 		this.callParent(arguments);
 
 		var s = this.getSelectionModel();
+		if(!s){
+			Ext.log.error('No selection model!');
+			return;
+		}
 		this.mon(s, 'select', 'onNodeSelected', this);
 		if (s.hasSelection()) {
 			this.onNodeSelected(s, s.getSelection()[0]);

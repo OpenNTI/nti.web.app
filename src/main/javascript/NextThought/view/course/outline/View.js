@@ -72,6 +72,10 @@ Ext.define('NextThought.view.course.outline.View', {
 	beforeRender: function () {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
+		if(!s){
+			Ext.log.error('No selection model!');
+			return;
+		}
 		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
 			me.fromKey = true;
 		});
