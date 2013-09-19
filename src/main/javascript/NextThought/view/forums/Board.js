@@ -131,7 +131,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 
 	afterRender: function () {
-		var newForum;
+		var newForum, parent;
 		this.callParent(arguments);
 		if (!this.isRoot) {
 			this.headerElContainer = this.headerTpl.append(this.el, { path: this.record.get('Creator'), title: this.record.get('title') }, true);
@@ -144,13 +144,18 @@ Ext.define('NextThought.view.forums.Board', {
 				}
 			}
 
-			this.mon(this.headerEl, 'click', this.onHeaderClick, this);
-			this.mon(this.el.parent('.forums-view'),'scroll','onScroll', this);
+			parent = this.el.parent('.forums-view');
+			if(parent){
+				this.mon(parent,'scroll','onScroll', this);
+			} else {
+				console.error('Could not listen on scroll for this view.');
+			}
 
 			this.on({
-				'activate': 'onActivate',
-				'itemclick': 'onItemClick',
-				'beforeitemclick': 'onBeforeItemClick'
+				headerEl: {click:'onHeaderClick'},
+				activate: 'onActivate',
+				itemclick: 'onItemClick',
+				beforeitemclick: 'onBeforeItemClick'
 			});
 		}
 	},
