@@ -4,6 +4,7 @@ Ext.define('NextThought.view.reader.Panel',{
 	requires: [
 		'NextThought.view.content.Reader',
 		'NextThought.view.content.Toolbar',
+		'NextThought.view.content.notepad.View',
 		'NextThought.view.annotations.View'
 	],
 
@@ -43,7 +44,7 @@ Ext.define('NextThought.view.reader.Panel',{
 		},
 		activeTab: 1,
 		items:[
-			{ title: 'Notepad', iconCls: 'notepad',
+			{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad',
 				disabled:!isFeature('notepad'), hidden:!isFeature('notepad') },
 			{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion:true }
 		]
