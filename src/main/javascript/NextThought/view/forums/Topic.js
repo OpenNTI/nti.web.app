@@ -81,7 +81,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]}
 			]}
 		]},
-		{ cls: 'load-more', html: 'View Older Comments'},
+		{ cls: 'load-more', html: 'more comments'},
 		{ id: '{id}-body', cls: 'comment-container',
 			cn: ['{%this.renderContainer(out,values)%}'] },
 		{ cls: 'editor-box'}
@@ -105,7 +105,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		headerEl: '.navigation-bar',
 		nextPostEl: '.navigation-bar .next',
 		prevPostEl: '.navigation-bar .prev',
-		loadMoreEl: '.load-more'
+		loadMoreEl: '.load-more',
+		commentContainerEl: '.comment-container'
 	},
 
 
@@ -606,12 +607,16 @@ Ext.define('NextThought.view.forums.Topic', {
 		}
 
 		var me = this,
+			left = store.getTotalCount() - store.getCount(),
 			max = store.getPageFromRecordIndex(store.getTotalCount() - 1);
 
 		if(store.currentPage === max || me.store.getTotalCount() === 0){
 			//there is nothing more to load
 			this.loadMoreEl.remove();
+			this.commentContainerEl.addCls('no-more');
 		}
+
+		this.loadMoreEl.update(Math.min(left, 10) + ' more comments');
 
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 		

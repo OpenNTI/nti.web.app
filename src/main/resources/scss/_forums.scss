@@ -372,7 +372,7 @@
 	}
 
 	.comment-box {
-		margin: 25px 0;
+		margin: 25px 0 10px 0;
 	}
 
 	.comment-box,.x-component-forum-comment {
@@ -432,26 +432,41 @@
 	}
 
 	.load-more{
-		min-width: 160px;
-		margin: 0 auto;
-		text-align: center;
+		position: relative;
+		height: 46px;
+		padding-left: 15px;
 		cursor: pointer;
 		color: $primary-blue;
 		font-size: 14px;
-	}
-
-	.comment-container{
-		position: relative;
+		line-height: 46px;
+		background-color: $panel-background;
 
 		&::after{
 			content: '';
 			position: absolute;
-			top: -5px;
+			top: -8px;
 			left: 0;
 			right: 0;
 			height: 8px;
 			box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
 			border-radius: 90px;
+		}
+	}
+
+	.comment-container{
+		position: relative;
+
+		&.no-more{
+			&::after{
+				content: '';
+				position: absolute;
+				top: -5px;
+				left: 0;
+				right: 0;
+				height: 8px;
+				box-shadow: 0 3px 8px -3px rgba(0, 0, 0, 0.25);
+				border-radius: 90px;
+			}
 		}
 
 		&:empty::after{
