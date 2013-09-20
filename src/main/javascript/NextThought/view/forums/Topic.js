@@ -608,7 +608,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		var me = this,
 			max = store.getPageFromRecordIndex(store.getTotalCount() - 1);
 
-		if(store.currentPage === max){
+		if(store.currentPage === max || me.store.getTotalCount() === 0){
 			//there is nothing more to load
 			this.loadMoreEl.remove();
 		}
