@@ -225,8 +225,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		if (!h) {
 			return;
 		}
-
-		this.scrollParent = this.el.parent(this.scrollParentCls);
+		debugger;
+		this.scrollParent = this.el.parent(this.scrollParentCls) || this.el.parent('.course-forum');
 
 		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
 		h.addObserverForField(this, 'title', this.updateField, this);
