@@ -162,36 +162,42 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	afterRender: function(){
-		this.callParent(arguments);
+		var me = this;
 
-		var videoWidth = this.BIGVIDEO.width(this.videoPlayerEl);
-        if(this.videoOnly){
-            this.el.addCls('video-only');
+		function cleanup(){
+			Ext.getBody().removeCls('media-viewer-open');
+			Ext.EventManager.removeResizeListener(me.adjustOnResize, me);
+		}
+
+		me.callParent(arguments);
+
+        if(me.videoOnly){
+            me.el.addCls('video-only');
         }
 
 		Ext.getBody().addCls('media-viewer-open');
 
-		this.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:this.headerEl, video: this.video, floatParent:this});
-		this.identity = Ext.widget({xtype:'identity',renderTo: this.toolbar.getEl(), floatParent: this.toolbar});
-		this.gridView = Ext.widget({xtype:'media-grid-view',renderTo: this.gridViewEl, floatParent: this, source: this.video});
+		me.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:me.headerEl, video: me.video, floatParent:me});
+		me.identity = Ext.widget({xtype:'identity',renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
+		me.gridView = Ext.widget({xtype:'media-grid-view',renderTo: me.gridViewEl, floatParent: me, source: me.video});
 
-		this.on('destroy','destroy',this.toolbar);
-		this.on('destroy','destroy',this.gridView);
-		this.on('destroy','destroy',this.identity);
-		this.on('destroy', function(){Ext.getBody().removeCls('media-viewer-open');});
-		this.on('exit-viewer', 'exitViewer', this);
+		me.on('destroy','destroy', me.toolbar);
+		me.on('destroy','destroy', me.gridView);
+		me.on('destroy','destroy', me.identity);
+		me.on('exit-viewer', 'exitViewer', me);
+		me.on('destroy', cleanup, me);
 
-		this.addVideoPlayer(videoWidth);
-		this.activeVideoPlayerType = 'video-focus';
+		me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
+		me.activeVideoPlayerType = 'video-focus';
 
-		this.mon(this.toolbar, {
+		me.mon(me.toolbar, {
 			'switch-video-viewer': 'switchVideoViewer',
 			'hide-grid-viewer': 'hideGridViewer',
 			'show-grid-viewer': 'showGridViewer'
 		});
 
-		this.adjustOnResize();
-		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
+		me.adjustOnResize();
+		Ext.EventManager.onWindowResize(me.adjustOnResize, me, {buffer: 250});
 	},
 
 
