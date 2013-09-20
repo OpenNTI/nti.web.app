@@ -1,14 +1,31 @@
 //Animate Mixin Plugin
 
 @mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration:null) {
-	$value: $name $duration $delay $function $iteration $mode;
 	@if $iteration==null {
-		$value: $name $duration $delay $function $mode;
-  	}
-	@include experimental(animation, $value);
+
+	} @else {
+		@include experimental(animation-iteration-count, $iteration);
+		@include experimental(animation-direction, alternate);
+	}
+
+	@include experimental(animation-name, $name);
+	@include experimental(animation-duration, $duration);
+	@include experimental(animation-delay, $delay);
+	@include experimental(animation-timing-function, $function);
+	@include experimental(animation-fill-mode, $mode);
+
+	//animation-name: none
+	//animation-duration: 0s
+	//animation-timing-function: ease
+	//animation-delay: 0s
+	//animation-iteration-count: 1
+	//animation-direction: normal
+	//animation-fill-mode: none
+
 	.disable-animations &,
 	.x-safari5 & {
-		@include experimental(animation, none);
+		-webkit-animation: none;
+		animation: none;
 	}
 }
 
@@ -125,8 +142,21 @@
 }
 
 
+@include keyframes(FullScreenSlideInRight) {
+	0% { @include experimental(transform, translateX(100%)); }
+	100% { @include experimental(transform, translateX(0)); }
 }
+@include keyframes(FullScreenSlideOutRight) {
+	0% { @include experimental(transform, translateX(0)); }
+	100% { @include experimental(transform, translateX(100%)); }
 }
 
 
+@include keyframes(FullScreenSlideInLeft) {
+	0% { @include experimental(transform, translateX(-100%)); }
+	100% { @include experimental(transform, translateX(0)); }
+}
+@include keyframes(FullScreenSlideOutLeft) {
+	0% { @include experimental(transform, translateX(0)); }
+	100% { @include experimental(transform, translateX(-100%)); }
 }

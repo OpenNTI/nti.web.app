@@ -143,6 +143,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
 		this.on('media-viewer-ready', 'adjustOnResize');
+		this.on('media-viewer-ready', 'animateIn');
 
 		this.mon(this.down('slidedeck-transcript'), {
 			'will-show-annotation': 'willShowAnnotation',
@@ -153,7 +154,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			target: document,
 			binding: [{
 				key: Ext.EventObject.ESC,
-				fn: this.destroy,
+				fn: this.exitViewer,
 				scope: this
 			}]
 		});
@@ -165,17 +166,17 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		var me = this;
 
 		function cleanup(){
-			Ext.getBody().removeCls('media-viewer-open');
+			Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
 			Ext.EventManager.removeResizeListener(me.adjustOnResize, me);
 		}
 
 		me.callParent(arguments);
+		me.el.setStyle('visibility','hidden');//layout w/o flicker, animateIn will show it.
 
         if(me.videoOnly){
             me.el.addCls('video-only');
         }
 
-		Ext.getBody().addCls('media-viewer-open');
 
 		me.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:me.headerEl, video: me.video, floatParent:me});
 		me.identity = Ext.widget({xtype:'identity',renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
@@ -244,10 +245,26 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	//</editor-fold>
 
 
+	animateIn: function(){
+		if(!this.rendered){
+			this.on('afterrender','animateIn',this, {buffer:100});
+			return;
+		}
+
+		Ext.getBody().addCls('media-viewer-open');
+		this.addCls('ready');
+		this.el.setStyle('visibility','visible');
+	},
+
+
 	exitViewer: function(){
 		console.log('about to exit the video viewer');
-		this.destroy();
-		this.fireEvent('exited', this);
+
+		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
+		this.removeCls('ready');
+		this.addCls('closing');
+		Ext.defer(this.destroy,1100,this);
+		Ext.defer(this.fireEvent,1100,this,['exited', this]);
 	},
 
 
