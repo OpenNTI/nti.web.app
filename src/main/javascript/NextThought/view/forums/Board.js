@@ -21,6 +21,7 @@ Ext.define('NextThought.view.forums.Board', {
 	itemSelector: '.forum-list-item',
 	preserveScrollOnRefresh: true,
 	loadMask: false,
+	scrollParentCls: '.forums-view',
 
 	listeners: {
 		select: function (selModel, record) {
@@ -131,7 +132,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 
 	afterRender: function () {
-		var newForum, parent;
+		var newForum;
 		this.callParent(arguments);
 		if (!this.isRoot) {
 			this.headerElContainer = this.headerTpl.append(this.el, { path: this.record.get('Creator'), title: this.record.get('title') }, true);
@@ -143,10 +144,10 @@ Ext.define('NextThought.view.forums.Board', {
 					newForum.remove();
 				}
 			}
-
-			parent = this.el.parent('.forums-view');
-			if(parent){
-				this.mon(parent,'scroll','onScroll', this);
+			
+			this.scrollParent = this.el.parent(this.scrollParentCls);
+			if(this.scrollParent){
+				this.mon(this.scrollParent,'scroll','onScroll', this);
 			} else {
 				console.error('Could not listen on scroll for this view.');
 			}

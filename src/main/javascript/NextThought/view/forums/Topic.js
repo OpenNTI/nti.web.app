@@ -26,6 +26,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	defaultType: 'forums-topic-comment',
 	layout: 'auto',
 	componentLayout: 'natural',
+	scrollParentCls: '.forums-view',
 
 	getTargetEl: function () {
 		return this.body;
@@ -224,6 +225,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		if (!h) {
 			return;
 		}
+
+		this.scrollParent = this.el.parent(this.scrollParentCls);
 
 		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
 		h.addObserverForField(this, 'title', this.updateField, this);

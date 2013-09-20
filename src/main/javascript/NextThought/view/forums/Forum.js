@@ -23,6 +23,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	preserveScrollOnRefresh: true,
 	loadMask: false,
 //	loadingHeight: 300,
+	scrollParentCls: '.forums-view',
 
 	listeners: {
 		select: function (selModel, record) {
@@ -189,10 +190,10 @@ Ext.define('NextThought.view.forums.Forum', {
 				]}
 			});
 		}
-
-		parent = this.el.parent('.forums-view');
-		if(parent){
-			this.mon(parent,'scroll', 'onScroll', this);
+		
+		this.scrollParent = this.el.parent(this.scrollParentCls);
+		if(this.scrollParent){
+			this.mon(this.scrollParent,'scroll', 'onScroll', this);
 		} else {
 			console.error('Could not listen on scroll for this view.');
 		}

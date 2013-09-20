@@ -327,6 +327,8 @@ Ext.define('NextThought.view.course.forum.Board',{
 		suppressPushState: true
 	},
 
+	scrollParentCls: '.course-forum',
+
 	afterRender: function(){
 		this.callParent(arguments);
 		var header = this.el.down('.forum-forum-list');
@@ -357,6 +359,8 @@ Ext.define('NextThought.view.course.forum.ForumList',{
 	selModel: {
 		suppressPushState: true
 	},
+
+	scrollParentCls: '.course-forum',
 
 	onHeaderClick: function(e){
 		if(e.getTarget('.path')){

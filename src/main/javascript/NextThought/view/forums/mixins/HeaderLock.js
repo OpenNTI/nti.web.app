@@ -14,15 +14,12 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 
 
 	headerLockPostRenderInit: function(){
-		var container = this.ownerCt.getEl();
-
 		this.on({
-			'beforedeactivate':'onBeforeListDeactivateLockHeader',
 			'destroy': 'headerLockCleanup'
 		});
-
-
-		this.mon(container,'scroll', 'handleScrollHeaderLock');
+		
+		this.mon(this.scrollParent,'scroll', 'handleScrollHeaderLock');
+		this.headerEl.addCls(this.LOCKED_HEADER_CLS);
 
 		Ext.EventManager.onWindowResize(this.handleWindowResize,this);
 	},
@@ -49,54 +46,10 @@ Ext.define('NextThought.view.forums.mixins.HeaderLock',{
 		this.headerEl.setX(left).setStyle('top',undefined);
 	},
 
-	onBeforeListDeactivateLockHeader: function(){
-		if(this.isVisible() && this.headerLocked){
-			this.unlockHeader();
-		}
-	},
 
+	handleScrollHeaderLock: function(e,parentDom){
+		var top = this.scrollParent.getScrollTop();
 
-	unlockHeader: function(){
-		if(!this.headerLocked){
-			return;
-		}
-		this.headerEl.setStyle({left: 0, top: 0}).removeCls(this.LOCKED_HEADER_CLS).appendTo(this.headerElContainer);
-		delete this.headerLocked;
-	},
-
-
-	lockHeader: function(){
-		if(this.headerLocked){
-			return;
-		}
-		this.headerEl.addCls(this.LOCKED_HEADER_CLS).appendTo(Ext.get('view'));
-		this.headerLocked = true;
-		this.handleWindowResize();
-	},
-
-
-	getScrollHeaderCutoff: function(){
-		return 0;
-	},
-
-
-	handleScrollHeaderLock: function(e,forumDom){
-		var headerEl = this.headerEl,
-			domParent = Ext.get('view').dom,
-			scroll = Ext.fly(forumDom).getScroll().top,
-			parent = headerEl && Ext.getDom(headerEl).parentNode,
-			cutoff = this.getScrollHeaderCutoff();
-
-		if( !headerEl || !parent ) {
-			console.error('Nothing to handle, el is falsey');
-			return;
-		}
-
-		if(parent === domParent && (scroll <= cutoff || !this.isVisible())){
-			this.unlockHeader();
-		}
-		else if(parent !== domParent && scroll > cutoff && this.isVisible()) {
-			this.lockHeader();
-		}
+		this.headerEl.setTop(top);
 	}
 });
