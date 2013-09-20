@@ -23,7 +23,7 @@ Ext.define('NextThought.view.forums.Comment', {
 		{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
 			{ cls: 'meta', cn: [
 				{ tag: 'span', html: '{displayName}', cls: 'name link'},
-				{ tag: 'span', cls: 'datetime', html: '{LastModified:date("F j, Y")} at {LastModified:date("g:i A")}'}
+				{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'}
 			]},
 			{ cls: 'body' },
 			{ cls: 'foot', cn: [
