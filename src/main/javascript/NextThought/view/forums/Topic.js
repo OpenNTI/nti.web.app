@@ -81,7 +81,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]}
 			]}
 		]},
-		{ cls: 'load-more', html: 'Older Comments'},
+		{ cls: 'load-more', html: 'View Older Comments'},
 		{ id: '{id}-body', cls: 'comment-container',
 			cn: ['{%this.renderContainer(out,values)%}'] },
 		{ cls: 'editor-box'}
