@@ -171,7 +171,7 @@ Ext.define('NextThought.view.profiles.outline.View',{
 				changed: function (r) {
 					me.applyRenderData(r);
 					if( me.rendered){
-						me.avatarEl.setStyle({ backgroundImage: 'url('+r.get('avatarURL')+')' });
+						me.updateAvatar(r);
 						me.nameEl.update(r.getName());
 					}
 					me.monitorUser((r !== u) ? r : null);
@@ -291,6 +291,30 @@ Ext.define('NextThought.view.profiles.outline.View',{
 
 
 	//<editor-fold desc="UI Manipulations">
+	updateAvatar: function(user){
+		var HOST = Globals.HOST_PREFIX_PATTERN,
+			avatarURL = user.get('avatarURL'),
+			currentURL = this.avatarEl.getStyle('background-image').slice(4, -1), a, b, d;
+
+		if(avatarURL && avatarURL.indexOf('//') === 0){
+			avatarURL = location.protocol + avatarURL;
+		}
+
+		a = HOST.exec(avatarURL);
+		b = HOST.exec(currentURL);
+		d = HOST.exec(location)[0];//default host
+
+		a = (a && a[0]) || d;
+		b = (b && b[0]) || d;
+
+		currentURL = currentURL.replace(HOST, '') === avatarURL.replace(HOST, '');
+
+		if (!currentURL || a !== b) {
+			this.avatarEl.setStyle({backgroundImage: 'url(' + avatarURL + ')'});
+		}
+	},
+
+
 	convertToContact: function(){
 		this.controlsEl.down('.button').set({cls:'button chat disabled'}).update('Chat');
 		this.isContact = true;
