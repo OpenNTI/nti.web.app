@@ -25,9 +25,7 @@ Ext.define('NextThought.view.course.forum.View',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		if(isFeature('fancy-scroll')){
-			this.initCustomScrollOn('content');
-		}
+		this.initCustomScrollOn('content');
 	},
 
 	handleDeactivate: function(){
