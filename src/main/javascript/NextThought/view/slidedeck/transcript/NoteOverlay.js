@@ -32,7 +32,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			scope: this,
 			destroy: 'destroy',
 			'create-note': 'noteHere',
-			'sync-height': 'syncHeight',
+			'sync-height': {fn:'syncHeight', buffer:1},
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline':'showEditorAtPosition',
 			'register-records': 'registerGutterRecords',
