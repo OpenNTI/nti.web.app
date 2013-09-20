@@ -78,7 +78,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	constructor: function (config) {
 		var i = config.items[0];
 
-		config.store = new Ext.data.Store({
+		this.store = config.store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string', mapping: 'ntiid'},
 				{name: 'date', type: 'date' },
