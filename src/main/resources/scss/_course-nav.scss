@@ -176,6 +176,16 @@
 	&.overview-videos {
 		@extend .overview-section;
 
+		&.singular{
+			.body {
+				margin: 0;
+
+				.video-list {
+					display: none;
+				}
+			}
+		}
+
 		.body {
 			position: relative;
 			overflow: hidden;

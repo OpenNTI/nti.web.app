@@ -198,6 +198,8 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 
 		if( this.store.getCount() !== 1 ){
 			t = Ext.util.Inflector.pluralize(t);
+		} else {
+			this.addCls('singular');
 		}
 
 
