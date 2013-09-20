@@ -33,7 +33,7 @@ Ext.define('NextThought.editor.embedvideo.Window',{
 			xtype: 'account-header-view',
 			noIcon: true,
 			title: 'Embed video',
-			detail: 'Just give us the url of the video you want to embed and we\'ll figure out the rest.'
+			detail: 'Just give us the url of the video you want to embed, and we\'ll figure out the rest.'
 		},
 		{xtype: 'embedvideo-main-view'}
 	],
