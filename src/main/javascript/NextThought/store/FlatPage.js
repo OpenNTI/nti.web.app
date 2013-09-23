@@ -24,9 +24,18 @@ Ext.define('NextThought.store.FlatPage',{
 		}
 	],
 	filters:[
-		{filterFn:function(r){
-			return !r.parent;}, id:'nochildren'}
+		{filterFn:function(r){ return !r.parent;}, id:'nochildren'},
+		{filterFn:function(r){ return r.get('Class') !== 'Note' || r.get('sharedWith').length;}, id:'no-private-notes'}
 	],
+
+
+	filter: function(){
+		if(!isFeature('notepad')){
+			this.removeFilter('no-private-notes',false);
+		}
+
+		return this.callParent(arguments);
+	},
 
 
 	remove: function(record,isMove,silent){
