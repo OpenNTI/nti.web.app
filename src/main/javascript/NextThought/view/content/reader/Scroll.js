@@ -46,19 +46,19 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
 
     up: function () {
-        this.by(-50);
+        this.by(50);
     },
 
 
     down: function () {
-        this.by(50);
+        this.by(-50);
     },
 
 
     by: function (delta) {
         var s = this.scrollingEl,
             t = s.getScrollTop();
-        s.setScrollTop(t + delta);
+        s.setScrollTop(t - delta);
     },
 
     top: function () {

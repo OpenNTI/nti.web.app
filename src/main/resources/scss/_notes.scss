@@ -637,9 +637,6 @@
 }
 
 
-//.contact-popout.note-add-to-contacts-popout::after{
-//	background: $elements no-repeat;
-//	@include sprite($elements,'add_contact_pointer_left',$dimensions: true);
-//	top: 26px;
-//	left: -12px;
-//}
+.x-component-reader-notepad {
+	overflow: hidden;
+}
