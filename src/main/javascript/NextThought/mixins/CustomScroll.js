@@ -21,7 +21,8 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			tMargin = -delta,
 			bMargin = -parentContainerPadding + delta;
 
-	//		console.log('setting top margin to: ', tMargin, ' and bottom margin to: ', bMargin);
+			parentContainerEl[delta > 60 ? 'addCls': 'removeCls']('has-drop-menu');
+//			console.log('setting top margin to: ', tMargin, ' and bottom margin to: ', bMargin);
 			parentEl.setStyle({marginTop: tMargin+'px', marginBottom: bMargin+'px'});
 			setReverseMargin.apply(this, [bMargin]);
 		}

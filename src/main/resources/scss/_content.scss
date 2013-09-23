@@ -299,6 +299,30 @@
 			}
 		}
 	}
+
+	&.has-drop-menu{
+		#view-tabs{
+			height: 48px;
+			background: white;
+			z-index: 100;
+			min-width: 1024px;
+			max-width: 1165px;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+
+			@include animate(fadeInDown, 0.3s);
+
+			.main-view-tab{
+				margin: 10px;
+				color: $tertiary-grey;
+
+				&.selected:not(.disabled),
+				&:not(.disabled):hover{
+					background-color: rgba(0, 0, 0, 0.07);
+					color: $primary-grey;
+				}
+			}
+		}
+	}
 }
 
 
