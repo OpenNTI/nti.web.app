@@ -40,6 +40,14 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		var data = this.mixinData.customScroll, nH;
 
 		if(!data.reverseMarginEl){ return; }
+
+		if(Ext.isString(data.reverseMarginEl)){
+			data.reverseMarginEl = resolve(data.reverseMarginEl,data.container) || data.reverseMarginEl;
+			if(Ext.isString(data.reverseMarginEl)){
+				return;//doesn't exist (yet?)
+			}
+		}
+
 		if(!this.initialReverseViewHeight){
 			this.initialReverseViewHeight = Ext.fly(data.reverseMarginEl).getHeight();
 		}
@@ -69,9 +77,10 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			targetEl = data.targetEl,
 			reverseMarginEl = data.options && data.options.reverseMarginEl;
 
+		data.container = parentContainerEl;
 		data.targetEl = data.targetEl ? resolve(targetEl,parentContainerEl) : me.getTargetEl();
 		data.adjustmentEl = resolve(adjustmentEl,parentContainerEl);
-		data.reverseMarginEl = resolve(reverseMarginEl) || reverseMarginEl;
+		data.reverseMarginEl = resolve(reverseMarginEl,parentContainerEl) || reverseMarginEl;
 
 		if(!data.adjustmentEl){
 			console.error('No adjustment element found for:', adjustmentEl);
