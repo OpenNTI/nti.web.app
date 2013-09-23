@@ -14,12 +14,15 @@ Ext.define('NextThought.view.content.notepad.View',{
 	ui: 'reader-notepad',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'scroller' }
+		{ cls: 'scroller', cn:[
+			{ cls: 'note-here' }
+		] }
 	]),
 
 
 	renderSelectors: {
-		scroller: '.scroller'
+		scroller: '.scroller',
+		boxEl: '.note-here'
 	},
 
 
@@ -37,7 +40,11 @@ Ext.define('NextThought.view.content.notepad.View',{
 		this.on({
 			afterRender: 'setupBindsToReaderRef',
 			el: {
+				click: 'onClick',
 				scroll: 'onSyncScroll',
+				contextmenu: function(e){e.stopEvent();return false;},
+				mouseover: 'onMouseTrack',
+				mousemove: 'onMouseTrack',
 				mousewheel: 'onPushScroll',
 				DOMMouseScroll: 'onPushScroll'
 			}
@@ -55,7 +62,6 @@ Ext.define('NextThought.view.content.notepad.View',{
 				'sync-height':'syncHight',
 				'scroll':'syncScroll'
 			});
-			console.log('Done');
 		}
 		catch(e){
 			console.error(e.stack||e.message||e);
@@ -65,6 +71,24 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 	//</editor-fold>
 
+
+	onClick: function(e){
+		console.log('click!');
+	},
+
+
+	onMouseTrack: function(e){
+		var ref = this.getReaderRef(),
+			y = e.getY(),
+			t = ref.getAnnotationOffsets().top,
+			lineY = y - t,
+			lineInfo = ref.getNoteOverlay().lineInfoForY(lineY);
+
+		if( lineInfo ){
+			y = Math.round(lineInfo.rect.top + t);
+			this.boxEl.setY(y-10);
+		}
+	},
 
 
 	//<editor-fold desc="Synchronizing Handlers">

@@ -639,4 +639,16 @@
 
 .x-component-reader-notepad {
 	overflow: hidden;
+	position: relative;
+
+	.note-here{
+		top: -50px;
+		left: 0 !important;
+		right: 0 !important;
+		height: 30px;
+		position: absolute;
+		cursor: text;
+
+		box-shadow: inset 0 -1px 0 0 $tertiary-grey;
+	}
 }
