@@ -232,7 +232,13 @@ Ext.define('NextThought.controller.Session', {
 			url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 
 			if (timedout) {
-				alert('a request timed out');
+				alert({
+					icon:     Ext.Msg.ERROR,
+					title:    'Request Timeout',
+					msg:      'There was some issue preventing us from starting.\nPlease try again in a few minutes.',
+					closable: false,
+					buttons:  null
+				});
 				return;
 			}
 			location.replace(url);

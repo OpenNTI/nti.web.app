@@ -36,6 +36,14 @@ Ext.define('NextThought.overrides.app.Application',{
 		this.initTasks.push(task);
 		task.timerId = setTimeout(function(){
 			console.log('Abandoned init task from: '+ method, task.name || task);
+			Globals.removeLoaderSplash();
+			alert({
+				icon:     Ext.Msg.ERROR,
+				title:    'Timeout',
+				msg:      'There was some issue preventing us from starting',
+				closable: false,
+				buttons:  null
+			});
 		},30000);
 	},
 
