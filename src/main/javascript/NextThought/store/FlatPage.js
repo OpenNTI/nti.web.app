@@ -140,6 +140,8 @@ Ext.define('NextThought.store.FlatPage',{
                     me.add(r);//add one at a time to get insertion sort.
                 }
             });
+			me.filter();//TEST THIS: Have filtered items been seen in the list and we not notice?? Or has it
+			// "just worked" and now that I'm adding a new filter I'm just now noticing it?
         }
 
 		otherStore.on('cleanup','destroy',
