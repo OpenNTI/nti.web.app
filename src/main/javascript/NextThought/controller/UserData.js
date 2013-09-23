@@ -495,7 +495,7 @@ Ext.define('NextThought.controller.UserData', {
 	clearPageStore: function () {
 		var fp = this.flatPageStore;
 		this.currentPageStores = {};//see above defineAttributes call
-		fp.clearFilter();
+		fp.removeFilter('lineFilter');
 		fp.removeAll();
 		if (fp.getRange().length !== 0) {
 			console.error('Flat Page store not empty!!');
