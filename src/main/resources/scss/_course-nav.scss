@@ -12,7 +12,6 @@
 		x: hidden;
 		y: auto; //scroll;
 	}
-	-webkit-overflow-scrolling: touch;
 }
 
 .x-component-course{
@@ -298,7 +297,6 @@
 					x: hidden;
 					y: auto; //scroll;
 				}
-				-webkit-overflow-scrolling: touch;
 				background: #04232c;
 
 				.video-row {
@@ -358,7 +356,6 @@
 		background: #ffffff;
 		padding: 1.5em 1.87em;//25px 30px;
 		@include scrollbar(#ffffff, $tertiary-grey);
-		-webkit-overflow-scrolling: touch;
 	}
 
 	.overview-naquestionset{

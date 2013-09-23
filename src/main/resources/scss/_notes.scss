@@ -620,7 +620,6 @@
 
 	.note-footer, .note-content-container.scrollbody {
 		@include scrollbar(#ffffff, $tertiary-grey);
-		-webkit-overflow-scrolling: touch;
 		//background: #FBFBFB;
 	}
 
