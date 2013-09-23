@@ -17,6 +17,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	enableShareControls: false,
 	enablePublishControls: false,
 	enableTextControls: true,
+	enableObjectControls: true,
 	enableTags: false,
 	enableTitle: false,
 	enableWhiteboards: true,
@@ -91,6 +92,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				{
 					cls: 'left',
 					cn: [
+						{ tag:'tpl', 'if':'enableTextControls', cn:
 						{
 							cls: 'action text-controls', 'data-qtip': 'Formatting Options', cn: {
 							cls: 'popctr', cn: {
@@ -101,7 +103,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 								]
 							}
 						}
-						},
+						}},
+						{ tag:'tpl', 'if':'enableObjectControls', cn:
 						{
 							cls: 'action object-controls', 'data-qtip': 'Insert Object', cn: {
 							cls: 'popctr', cn: {
@@ -111,7 +114,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 								]
 							}
 						}
-						}
+						}}
 					]
 				},
 				{
@@ -257,6 +260,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			enableShareControls: Boolean(this.enableShareControls),
 			enablePublishControls: Boolean(this.enablePublishControls),
 			enableTextControls: Boolean(this.enableTextControls),
+			enableObjectControls: Boolean(this.enableObjectControls),
 			enableTags: Boolean(this.enableTags),
 			enableTitle: Boolean(this.enableTitle),
 			enableWhiteboards: Boolean(this.enableWhiteboards),
@@ -861,7 +865,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		Ext.each(buttonsName, function (bn) {
 			var b = me.el.down('.' + bn);
-			b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
+			if( b ){
+				b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
+			}
 		});
 	},
 
