@@ -4,7 +4,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 	//<editor-fold desc="Config">
 	requires:[
-		'NextThought.ux.ComponentReferencing'
+		'NextThought.ux.ComponentReferencing',
+		'NextThought.view.content.notepad.Item'
 	],
 
 	plugins:[
@@ -246,6 +247,20 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 
 	addOrUpdate: function(annotation, yPlacement){
-		console.debug(arguments);
+		var map = (this.notepadItems = (this.notepadItems || {})),
+			data = {
+				annotation: annotation,
+				record: annotation.getRecord(),
+				placement: yPlacement
+			};
+
+		if(!map.hasOwnProperty(annotation.id) ){
+			map[annotation.id] = Ext.widget({
+				xtype: 'notepad-item',
+				renderTo: this.scroller
+			});
+		}
+
+		map[annotation.id].updateWith(data);
 	}
 });

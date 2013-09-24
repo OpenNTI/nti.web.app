@@ -651,4 +651,12 @@
 
 		box-shadow: inset 0 -1px 0 0 $tertiary-grey;
 	}
+
+	.x-component-notepad-item {
+		left: 0 !important;
+		right: 0 !important;
+		height: 30px;
+		position: absolute;
+		background: rgba(0,0,0,0.4);
+	}
 }
