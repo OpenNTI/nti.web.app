@@ -28,16 +28,54 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	listeners: {
 		afterrender: 'hide',
-		click: {element: 'upEl', fn: 'onUp'}
+		click: {element: 'upEl', fn: 'onUp'},
+		mouseover: {element: 'upEl', fn: 'onUpHover'}
 	},
 
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.enableBubble('main-tab-clicked');
+	},
 
 	onUp: function (e) {
 		e.stopEvent();
 
+		if(this.upMenu){
+			this.upMenu.stopHide();
+			this.upMenu.stopShow();
+		}
 		// pop up one level.
 		var lineage = ContentUtils.getLineage(this.currentNtiid, false, true);
 		this.fireEvent('set-location', lineage[1]);
+	},
+
+
+	onUpHover: function(e){
+		e.stopEvent();
+		if(!e.getTarget('.has-alt-tabbar')){ return; }
+
+		console.log('Should show a menu');
+		if(!this.upMenu){
+			this.upMenu = Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: [
+				{text: 'Lessons', viewId: 'course-book?', cls: 'current'},
+				{text: 'Dashboard', viewId: 'course-dashboard'},
+				{text: 'Discussions', viewId: 'course-forum'},
+				{text: 'Course Info', viewId: 'course-info'}
+			] }));
+
+			this.mon(this.upMenu, {
+				scope: this,
+				click: function(menu, item){
+					console.log('tab item clicked: ', arguments);
+					this.fireEvent('main-tab-clicked', item);
+				}
+			});
+
+			this.on('destroy', 'destroy', this.upMenu);
+		}
+
+		this.upMenu.startShow(this.upEl, 'tl-bl', [-10, -20]);
 	},
 
 

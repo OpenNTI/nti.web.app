@@ -12,8 +12,8 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		 * we will are handling it by manipulating top and bottom margin.
 		 **/
 		try{
-		var parentContainerEl = Ext.get('view'),
-			data = this.mixinData.customScroll,
+		var data = this.mixinData.customScroll,
+			parentContainerEl = data.container,
 			parentContainerPadding = parentContainerEl && parentContainerEl.getPadding('t'),
 			parentEl = data.adjustmentEl,
 			currentScroll = data.targetEl.getScrollTop(),
@@ -21,10 +21,22 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			tMargin = -delta,
 			bMargin = -parentContainerPadding + delta;
 
-			parentContainerEl[delta > 60 ? 'addCls': 'removeCls']('has-drop-menu');
-//			console.log('setting top margin to: ', tMargin, ' and bottom margin to: ', bMargin);
+			// NOTE: If we have a reader, we don't want to show the alternate tabbar,
+			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
+			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls': 'removeCls']('reader-in-view');
+
+			parentContainerEl[delta > 60 ? 'addCls': 'removeCls']('has-alt-tabbar');
 			parentEl.setStyle({marginTop: tMargin+'px', marginBottom: bMargin+'px'});
 			setReverseMargin.apply(this, [bMargin]);
+
+			// NOTE: we need to make sure the main tabbar width matches the parentEl width
+			// since we will show the main tabbar on top of it. Better way to do this?
+			if(!data.mainTabbar){
+				data.mainTabbar = Ext.get('view-tabs');
+			}
+			if(data.mainTabbar.getWidth() != parentEl.getWidth()){
+				data.mainTabbar.setStyle({width: parentEl.getWidth() + 'px'});
+			}
 		}
 		catch(e){
 			console.error(e.stack || e.stacktrace || e.message || e);
@@ -100,6 +112,18 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll,me);
 		me.mon(me.up('{isOwnerLayout("card")}'),'activate',adjustOnScroll,me);
+		me.mon(me.up('{isOwnerLayout("card")}'),'deactivate', handleDeactivate,me);
+		me.on('deactivate', handleDeactivate, me);
+	}
+
+	function handleDeactivate(){
+		debugger;
+		var data = this.mixinData.customScroll;
+
+		if(data.container){
+			data.container.removeCls('reader-in-view').removeCls('has-alt-tabbar');
+		}
+		console.log('Current view with fancy scroll is deactivated');
 	}
 
 

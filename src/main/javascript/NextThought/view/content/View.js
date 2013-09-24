@@ -97,7 +97,8 @@ Ext.define( 'NextThought.view.content.View', {
 			'beforeactivate':'onBeforeActivation',
             'beforedeactivate': 'onBeforeDeActivation',
 			'deactivate':'onDeactivated',
-			'activate': 'onActivated'
+			'activate': 'onActivated',
+			'main-tab-clicked': 'onTabClicked'
 		});
 	},
 

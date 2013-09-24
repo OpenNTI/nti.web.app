@@ -300,25 +300,67 @@
 		}
 	}
 
-	&.has-drop-menu{
-		#view-tabs{
-			height: 48px;
-			background: white;
-			z-index: 100;
-			min-width: 1024px;
-			max-width: 1165px;
-			box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+	&.has-alt-tabbar{
+		&:not(.reader-in-view){
+			#view-tabs{
+				height: 48px;
+				background: white;
+				z-index: 100;
+				min-width: 1024px;
+				max-width: 1165px;
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 
-			@include animate(fadeInDown, 0.3s);
+				@include animate(fadeInDown, 0.3s);
 
-			.main-view-tab{
-				margin: 10px;
-				color: $tertiary-grey;
+				.main-view-tab{
+					margin: 10px;
+					color: $tertiary-grey;
 
-				&.selected:not(.disabled),
-				&:not(.disabled):hover{
-					background-color: rgba(0, 0, 0, 0.07);
-					color: $primary-grey;
+					&.selected:not(.disabled),
+					&:not(.disabled):hover{
+						background-color: rgba(0, 0, 0, 0.07);
+						color: $primary-grey;
+					}
+				}
+			}
+		}
+
+		#content{
+			.content-toolbar{
+				.goup{
+					width: 124px;
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					cursor: pointer;
+
+					&::before {
+						background: none;
+						content: 'LESSONS';
+						width: 120px;
+						top: 0px;
+						left: 35px;
+						position: absolute;
+						color: #b8b8b8;
+						font: normal normal 14px/60px "Open Sans", sans-serif;
+					}
+					&::after {
+						background: none;
+						content: '/';
+						width: 20px;
+						left: 108px;
+						top: 21px;
+						color: #b8b8b8;
+					}
+
+					&:hover{
+						&::after{
+							background:none;
+						}
+					}
+				}
+				.breadcrumb{
+					margin-left: 124px;
 				}
 			}
 		}
