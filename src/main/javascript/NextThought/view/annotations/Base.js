@@ -29,7 +29,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			if(Ext.isArray(t)){
 				return Ext.Array.map(t,getType);
 			}
-			return (t||'').replace(/^annotations\./i,'');
+			return (t||'').replace(/^annotations\./i,'').replace(/^widget\./i,'');//TODO: stop aliasing these as 'widget.'s!
 		}
 
 		a = data.annotationsType = (cls.prototype.annotationsType || []).slice();
@@ -99,8 +99,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 	is: function(selector){
-		console.log(this.annotationsType);
-		return Ext.Array.contains(this.annotationsType,selector);
+//		console.log(this.annotationsType,[selector]);
+		return Ext.Array.contains(this.annotationsType,selector) || selector==='*';
 	},
 
 	getBubbleTarget: function(){return this.ownerCmp; },
@@ -192,6 +192,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	cleanup: function(){
 		this.cleanup = Ext.emptyFn;
+		this.fireEvent('cleanup',this);
 		var me = this,
 			r = me.record,
 			id = r.getId(),
