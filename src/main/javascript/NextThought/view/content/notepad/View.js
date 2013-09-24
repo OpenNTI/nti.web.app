@@ -73,6 +73,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 	//</editor-fold>
 
 
+	//<editor-fold desc="Editor">
 	editorCleanup: function(){
 		if( this.editor ){
 			this.editor.destroy();
@@ -178,6 +179,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 		}
 		return false;
 	},
+	//</editor-fold>
 
 
 	//<editor-fold desc="Mouse Event Handlers">
