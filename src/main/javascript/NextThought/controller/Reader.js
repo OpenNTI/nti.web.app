@@ -92,6 +92,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		console.debug('Private Note Annoucement:',arguments);
 
+		notepad.addOrUpdate(annotation,y);
 	},
 
 

@@ -59,6 +59,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 		try{
 			this.syncHight();
 
+			ref.notepadRef = this;
+
 			this.mon(ref,{
 				'sync-height':'syncHight',
 				'scroll':'syncScroll'
@@ -239,7 +241,11 @@ Ext.define('NextThought.view.content.notepad.View',{
 			h = (this.scroller.getHeight()/this.getHeight())/2; //make sure the scale kinda matches
 
 		this.getReaderRef().getScroll().by(d*h);
-	}
+	},
 	//</editor-fold>
 
+
+	addOrUpdate: function(annotation, yPlacement){
+		console.debug(arguments);
+	}
 });
