@@ -111,6 +111,10 @@ input::-ms-clear { display: none; }
 	}
 }
 
+.x-repaint {
+	display: none !important;
+}
+
 .scroll-lock{
 	overflow: hidden !important;
 }

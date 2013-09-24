@@ -172,8 +172,8 @@ body.x-body {margin:0;}
 		}
 	}
 
-	&.x-repaint {
-		display: none;
+	.x-repaint {
+		display: none !important;
 	}
 
 	.injected-related-items {
