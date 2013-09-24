@@ -182,8 +182,8 @@ Ext.define('NextThought.view.Main', {
 			}
 		});
 
-		Ext.EventManager.onWindowResize(this.detectZoom, this);
-		this.detectZoom();
+		Ext.EventManager.onWindowResize(this.onWindowResize, this);
+		this.onWindowResize();
 		this.views = this.down('main-views');
 
 		this.sidebar = this.add({
@@ -390,10 +390,19 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	detectZoom: function () {
+	onWindowResize: function onWindowResize() {
 		var z = 1,
+			bodyEl = Ext.getBody(),
+			body = Ext.getDom(bodyEl),
+			fn = onWindowResize,
 			currentBar;
 		try {
+			clearTimeout(fn.repaintTimer);
+			if( body.scrollWidth !== body.offsetWidth || body.scrollHeight !== body.offsetHeight ){
+				//fix body scrollbars
+				fn.repaintTimer = Ext.defer(bodyEl.repaint,100,bodyEl);
+			}
+
 			z = DetectZoom.zoom();
 			console.log("Zoom:", z);
 		}
