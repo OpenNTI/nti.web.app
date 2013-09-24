@@ -43,7 +43,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		}
 
 		if(this.privateNote){
-			this.fireEvent('annouce-private-note',this, y, this.prefix);
+			this.fireEvent('annouce-private-note',this, y);
 			y = -1;
 		}
 

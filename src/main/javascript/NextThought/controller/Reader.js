@@ -86,8 +86,12 @@ Ext.define('NextThought.controller.Reader', {
     },
 
 
-	onPrivateNoteAnnouned:function(annotation,y,readerPrefix){
-		console.debug('Private Note Annoucement:',[annotation],y,readerPrefix);
+	onPrivateNoteAnnouned:function(annotation,y){
+		var reader = annotation && annotation.ownerCmp,
+			notepad = reader && reader.notepadRef;
+
+		console.debug('Private Note Annoucement:',arguments);
+
 	},
 
 
