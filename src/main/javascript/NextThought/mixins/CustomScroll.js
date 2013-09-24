@@ -23,6 +23,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 			// NOTE: If we have a reader, we don't want to show the alternate tabbar,
 			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
+			// TODO: Move this logic into a callback.
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls': 'removeCls']('reader-in-view');
 
 			parentContainerEl[delta > 60 ? 'addCls': 'removeCls']('has-alt-tabbar');
@@ -112,18 +113,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll,me);
 		me.mon(me.up('{isOwnerLayout("card")}'),'activate',adjustOnScroll,me);
-		me.mon(me.up('{isOwnerLayout("card")}'),'deactivate', handleDeactivate,me);
-		me.on('deactivate', handleDeactivate, me);
-	}
-
-	function handleDeactivate(){
-		debugger;
-		var data = this.mixinData.customScroll;
-
-		if(data.container){
-			data.container.removeCls('reader-in-view').removeCls('has-alt-tabbar');
-		}
-		console.log('Current view with fancy scroll is deactivated');
+		me.on('activate', adjustOnScroll, me);
 	}
 
 

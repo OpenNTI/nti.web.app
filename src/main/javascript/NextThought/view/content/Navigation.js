@@ -53,16 +53,14 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	onUpHover: function(e){
 		e.stopEvent();
-		if(!e.getTarget('.has-alt-tabbar')){ return; }
+		if(!e.getTarget('.has-alt-tabbar') || this.hasNoTabbar){ return; }
 
-		console.log('Should show a menu');
-		if(!this.upMenu){
-			this.upMenu = Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: [
-				{text: 'Lessons', viewId: 'course-book?', cls: 'current'},
-				{text: 'Dashboard', viewId: 'course-dashboard'},
-				{text: 'Discussions', viewId: 'course-forum'},
-				{text: 'Course Info', viewId: 'course-info'}
-			] }));
+		if(!this.upMenu && !this.hasNoTabbar){
+			this.upMenu = this.buildMainTabbarMenu();
+			if(!this.upMenu){
+				this.hasNoTabbar = true;
+				return;
+			}
 
 			this.mon(this.upMenu, {
 				scope: this,
@@ -174,7 +172,35 @@ Ext.define('NextThought.view.content.Navigation', {
 		Ext.Object.each(m, function (k, v) {
 			return (v && v.destroy && v.destroy()) || true;
 		});
+
+		delete this.hasNoTabbar;
+		if(this.upMenu){
+			this.upMenu.destroy();
+			delete this.upMenu;
+		}
 		//TODO: clean them out
+	},
+
+
+	buildMainTabbarMenu: function(){
+		var tabView = Ext.get('view-tabs').dom,
+			children = tabView && tabView.children,
+			items = [];
+
+
+		Ext.each(children, function(item){
+			items.push({
+				text: item.innerText,
+				viewId: item.getAttribute('data-view-id'),
+				cls: /Lessons/i.test(item.innerText) ? 'current' : ''
+			});
+		});
+
+		if(Ext.isEmpty(items)){
+			return;
+		}
+
+		return Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: items }));
 	},
 
 
