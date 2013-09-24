@@ -8,7 +8,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	constructor: function(config){
 		this.callParent(arguments);
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
-		this.privateNote = this.getRecord().get('sharedWith').length === 0;
+		this.privateNote = this.getRecord().get('sharedWith').length === 0
+				&& isFeature('notepad');
 	},
 
 
@@ -41,7 +42,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			y = this.resolveVerticalLocation();
 		}
 
-		if(this.privateNote && isFeature('notepad')){
+		if(this.privateNote){
+			this.fireEvent('annouce-private-note',this, y, this.prefix);
 			y = -1;
 		}
 
