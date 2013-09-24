@@ -6,6 +6,7 @@ Ext.define('NextThought.controller.Reader', {
     extend: 'Ext.app.Controller',
 
     requires: [
+		'NextThought.app.domain.Annotation',
         'NextThought.cache.AbstractStorage'
     ],
 
@@ -42,6 +43,11 @@ Ext.define('NextThought.controller.Reader', {
 
     init: function () {
         this.listen({
+			annotation: {
+				'note': {
+					'annouce-private-note':'onPrivateNoteAnnouned'
+				}
+			},
             controller: {
                 '*': {
                     'set-location': 'setLocation',
@@ -78,6 +84,11 @@ Ext.define('NextThought.controller.Reader', {
             }
         });
     },
+
+
+	onPrivateNoteAnnouned:function(annotation,y,readerPrefix){
+		console.debug('Private Note Annoucement:',[annotation],y,readerPrefix);
+	},
 
 
     resumeManager: function () {
