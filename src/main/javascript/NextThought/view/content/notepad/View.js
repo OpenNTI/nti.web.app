@@ -43,12 +43,17 @@ Ext.define('NextThought.view.content.notepad.View',{
 			el: {
 				click: 'onClick',
 				scroll: 'onSyncScroll',
-				contextmenu: function(e){e.stopEvent();return false;},
+				contextmenu: 'eat',
 				mousemove: 'onMouseTrack',
 				mouseover: 'onMouseTrack',
 				mouseout: 'onMouseOut',
 				mousewheel: 'onPushScroll',
 				DOMMouseScroll: 'onPushScroll'
+			},
+			boxEl: {
+				   mouseover:'eat',
+				   mousemove:'eat',
+				   contextmenu: 'noteHereMenu'
 			}
 		});
 	},
@@ -192,6 +197,13 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
+	eat: function(e){
+		clearTimeout(this.hideTimer);
+		e.stopEvent();
+		return false;
+	},
+
+
 	onClick: function(e){
 		if(this.suspendMoveEvents){return;}
 		this.openEditor(this.lastLine);
@@ -244,6 +256,11 @@ Ext.define('NextThought.view.content.notepad.View',{
 		this.getReaderRef().getScroll().by(d*h);
 	},
 	//</editor-fold>
+
+
+	noteHereMenu: function(e){
+		return this.eat(e);//maybe show a context menu?
+	},
 
 
 	addOrUpdate: function(annotation, yPlacement){

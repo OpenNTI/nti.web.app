@@ -638,25 +638,31 @@
 
 
 .x-component-reader-notepad {
+	cursor: text;
 	overflow: hidden;
 	position: relative;
 
 	.note-here{
 		top: -50px;
+		height: 2em;
 		left: 0 !important;
 		right: 0 !important;
-		height: 30px;
 		position: absolute;
-		cursor: text;
+		font: italic 400 1em/normal $font;
+		padding: 0.3em 0.5em;
+		margin: 0.3em 0 0 0;
 
+		background: rgba(127,127,127,0.05);
 		box-shadow: inset 0 -1px 0 0 $tertiary-grey;
 	}
 
 	.x-component-notepad-item {
 		left: 0 !important;
 		right: 0 !important;
-		height: 30px;
+		background: #fbfbfb;
 		position: absolute;
-		background: rgba(0,0,0,0.4);
+		font: italic 400 1em/normal $font;
+		padding: 0.3em 0.5em;
+		margin: -0.6em 0 0 0;
 	}
 }

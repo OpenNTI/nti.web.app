@@ -10,6 +10,25 @@ Ext.define('NextThought.view.content.notepad.Item',{
 	]),
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.on({
+			el: {
+				contextmenu: 'contextMenu',
+				mouseover:'eat',
+				mousemove:'eat',
+				click: 'edit'
+			}
+		});
+	},
+
+
+	eat: function(e){
+		e.stopEvent();
+		return false;
+	},
+
+
 	updateAnnotationMonitors: function(annotation){
 		Ext.destroy(this.annotationMonitors);
 		this.annotation = annotation;
@@ -52,5 +71,16 @@ Ext.define('NextThought.view.content.notepad.Item',{
 				Ext.each(cb(el, me), function (c) { me.on('destroy', 'destroy', c); });
 			}
 		});
+	},
+
+
+	contextMenu: function(e){
+		alert('context menu?');
+	},
+
+
+	edit: function(e){
+		alert('implement edit...');
+		return this.eat(e);
 	}
 });
