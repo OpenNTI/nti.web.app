@@ -69,7 +69,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 			this.mon(ref,{
 				'sync-height':'syncHight',
-				'scroll':'syncScroll'
+				'scroll':'syncScroll',
+				'set-content':'updateBuckets'
 			});
 		}
 		catch(e){
@@ -219,17 +220,22 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 	onMouseTrack: function(e){
 		if(this.suspendMoveEvents){return;}
-		var ref = this.getReaderRef(),
-			y = e.getY(),
-			t = ref.getAnnotationOffsets().top,
-			lineY = y - t,
-			lineInfo = ref.getNoteOverlay().lineInfoForY(lineY);
+
+		var y,
+			lineInfo = this.getLineInfo(e.getY()),
+			bucketInfo;
 
 		if( lineInfo ){
 			clearTimeout(this.hideTimer);
-			y = Math.round(lineInfo.rect.top + t);
-			this.boxEl.setY(y-10).show();
-			this.lastLine = lineInfo;
+			y = lineInfo.rect && Math.round(lineInfo.rect.top);// + lineInfo.topDelta);
+			bucketInfo = this.resolveBucket(lineInfo);
+			//console.log(y,bucketInfo);
+			if(bucketInfo){
+				this.boxEl.show()
+						.setHeight(bucketInfo.height)
+						.setLocalY(bucketInfo.top);
+				this.lastLine = lineInfo;
+			}
 		}
 	},
 	//</editor-fold>
@@ -258,18 +264,82 @@ Ext.define('NextThought.view.content.notepad.View',{
 	//</editor-fold>
 
 
+	getLineInfo: function(y){
+		var ref = this.getReaderRef(),
+			t = ref.getAnnotationOffsets().top,
+			lineY = y - t;
+
+		return Ext.apply({ topDelta: t },ref.getNoteOverlay().lineInfoForY(lineY));
+	},
+
+
+	getStartingNode: function(range){
+		var start = range.startContainer,
+			offset = range.startOffset;
+
+		if(!Ext.isTextNode(start)){
+			start = start.firstChild;
+			while(offset--){
+				start = start.nextSibling;
+			}
+		}
+
+		return start;
+	},
+
+
+	resolveBucket: function(lineInfo){
+		var start, rect;
+
+		if(Ext.isNumber(lineInfo)){
+			lineInfo = this.getLineInfo(lineInfo);
+		}
+
+		if(!lineInfo || !lineInfo.range){
+			return null;
+		}
+
+		try {
+			start = this.getStartingNode(lineInfo.range);
+			while(start && !AnnotationUtils.isBlockNode(start)) {
+				start = start.parentNode;
+			}
+			rect = start.getBoundingClientRect();
+			return {
+				top: rect.top,
+				height: rect.bottom - rect.top,
+				container: start
+			};
+		}
+		catch( e ) {
+			console.error(e.stack || e.stacktrace || e.message || e);
+		}
+		return null;
+	},
+
+
+	updateBuckets: function(){
+
+	},
+
+
 	noteHereMenu: function(e){
 		return this.eat(e);//maybe show a context menu?
 	},
 
 
 	addOrUpdate: function(annotation, yPlacement){
+		yPlacement = Math.round(yPlacement);
+
 		var map = (this.notepadItems = (this.notepadItems || {})),
+//			binSize = 30,
+//			bucket = Math.ceil(yPlacement/binSize)*binSize,
 			data = {
 				annotation: annotation,
 				record: annotation.getRecord(),
 				placement: yPlacement
 			};
+
 
 		if(!map.hasOwnProperty(annotation.id) ){
 			map[annotation.id] = Ext.widget({
