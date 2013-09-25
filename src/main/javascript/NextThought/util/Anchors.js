@@ -315,7 +315,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 		createEmptyContentRangeDescription: function (docElement, containerId, rootId) {
-			var searchWithin = Anchors.scopedContainerNode(docElement, containerId, rootId);
+			var searchWithin = Anchors.scopedContainerNode(docElement, containerId, rootId), resultRange;
 
 			if (!searchWithin) {
 				Ext.Error.raise('Unable to find container ' + containerId + ' in provided docElement');
