@@ -25,6 +25,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
 			// TODO: Move this logic into a callback.
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls': 'removeCls']('reader-in-view');
+			parentContainerEl[data.targetEl.is('.course-forum') ? 'addCls': 'removeCls']('forum-in-view');//really needs to be in callback
 
 			parentContainerEl[delta > 60 ? 'addCls': 'removeCls']('has-alt-tabbar');
 			parentEl.setStyle({marginTop: tMargin+'px', marginBottom: bMargin+'px'});
@@ -35,7 +36,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			if(!data.mainTabbar){
 				data.mainTabbar = Ext.get('view-tabs');
 			}
-			if(data.mainTabbar.getWidth() != parentEl.getWidth()){
+			if(data.mainTabbar.getWidth() !== parentEl.getWidth()){
 				data.mainTabbar.setStyle({width: parentEl.getWidth() + 'px'});
 			}
 		}

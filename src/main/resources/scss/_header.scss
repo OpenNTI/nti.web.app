@@ -61,7 +61,7 @@
 	background: #ebebec;
 	padding-left: 100px;
 	height: 57px;
-	z-index: 1;
+	z-index: 150;//keep this above dashboard
 
 	@include element('top-nav-logo', $position:absolute);
 

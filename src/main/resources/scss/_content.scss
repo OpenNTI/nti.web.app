@@ -301,7 +301,8 @@
 	}
 
 	&.has-alt-tabbar{
-		&:not(.reader-in-view){
+
+		&:not(.forum-in-view):not(.reader-in-view){
 			#view-tabs{
 				height: 48px;
 				background: white;
@@ -325,6 +326,21 @@
 			}
 		}
 
+		&.forum-in-view{
+			#view-tabs {
+				z-index: 100;
+				display: inline-block;
+				width: auto !important;
+
+				.main-view-tab{
+					display: block;
+					&.selected:not(.disabled),
+					&:not(.disabled):hover{
+						background: rgba(0,0,0,0.1);
+					}
+				}
+			}
+		}
 		#content{
 			.content-toolbar{
 				.goup{
