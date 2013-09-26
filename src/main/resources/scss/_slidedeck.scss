@@ -1519,16 +1519,9 @@ $experimental-support-for-svg: true;
 //Make sure the identity el is on top of the mv.
 body.media-viewer-open{
 
-	.main-navigation,
-	#view,
-	#view + div{
+	& > div.viewport {
 		@include animate(FullScreenSlideOutLeft);
 	}
-	.sidebar {
-		@include animate(fadeOut);
-	}
-
-	.x-component.identity {display: none;}
 
 	.media-toolbar .x-component.identity{
 		display: block;
@@ -1537,13 +1530,8 @@ body.media-viewer-open{
 }
 
 body.media-viewer-closing {
-	.main-navigation,
-	#view,
-	#view + div{
+	& > div.viewport {
 		@include animate(FullScreenSlideInLeft);
-	}
-	.sidebar {
-		@include animate(fadeIn);
 	}
 }
 

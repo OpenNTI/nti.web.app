@@ -26,6 +26,14 @@ Ext.define('NextThought.view.Main', {
 		{xtype: 'box', hostTo: 'sidebar', region: 'east', weight: 30, minWidth: 260}
 	],
 
+
+	initComponent: function(){
+		this.callParent();
+		this.el = Ext.DomHelper.insertFirst(Ext.getBody(),{ cls:'viewport' }, true);
+		this.renderTo = this.el;
+	},
+
+
 	constructor: function () {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
@@ -158,7 +166,7 @@ Ext.define('NextThought.view.Main', {
 
 	afterRender: function () {
 		this.callParent(arguments);
-		var map = {
+		var me = this, map = {
 			width: 'right',
 			height: 'bottom',
 			widthp: 'left',
@@ -189,10 +197,24 @@ Ext.define('NextThought.view.Main', {
 		this.sidebar = this.add({
 			xtype: 'main-sidebar',
 			host: this.down('[region=east][hostTo=sidebar]'),
-			hidden: this.hidden
+			hidden: this.hidden,
+			listeners: {
+				afterRender: function(){
+					//don't force a render by setting renderTo ...bad things happen. Just move the node after render.
+					me.el.appendChild(me.sidebar.el);
+				}
+			}
 		});
 
-		this.identity = this.sidebar.add({xtype: 'identity'});
+		this.identity = this.sidebar.add({
+			xtype: 'identity',
+			listeners: {
+				afterRender: function(){
+					//don't force a render by setting renderTo ...bad things happen. Just move the node after render
+					me.el.appendChild(me.identity.el);
+				}
+			}
+		});
 
 		if (Ext.is.iOS) {
 //			this.setupTablet();
