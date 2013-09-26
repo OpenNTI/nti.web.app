@@ -53,7 +53,7 @@ Ext.define('NextThought.controller.SlideDeck',{
 	changeMediaInPlayer: function(v, videoId, basePath, rec, options){
 		var a = this.getActiveMediaViewer();
 		if (a) {
-			a.exitViewer();
+			a.destroy();
 		}
 
 		this.launchMediaPlayer.apply(this,arguments);

@@ -187,6 +187,6 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 			li = this.getLocationInfo();
 
 		//console.log('Change video to:', rec);
-		this.fireEvent('change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root));
+		Ext.defer(this.fireEvent,1,this,['change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root)]);
 	}
 });

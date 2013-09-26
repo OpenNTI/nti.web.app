@@ -143,7 +143,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
             this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
         }
 		this.on('media-viewer-ready', 'adjustOnResize');
-		this.on('media-viewer-ready', 'animateIn');
+		if(!Ext.getBody().hasCls('media-viewer-open')){
+			this.on('media-viewer-ready', 'animateIn',this,{buffer: 500});
+		}
 
 		this.mon(this.down('slidedeck-transcript'), {
 			'will-show-annotation': 'willShowAnnotation',
@@ -166,18 +168,22 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		var me = this;
 
 		function cleanup(){
-			Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
+			if( Ext.getBody().hasCls('media-viewer-closing')){
+				Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
+			}
 			Ext.EventManager.removeResizeListener(me.adjustOnResize, me);
 		}
 
 		me.callParent(arguments);
-		me.el.setStyle('visibility','hidden');//layout w/o flicker, animateIn will show it.
+		if(!Ext.getBody().hasCls('media-viewer-open')){
+			me.el.setStyle('visibility','hidden');//layout w/o flicker, animateIn will show it.
+		}
 
         if(me.videoOnly){
             me.el.addCls('video-only');
         }
 
-
+		//TODO: redo this. better.
 		me.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:me.headerEl, video: me.video, floatParent:me});
 		me.identity = Ext.widget({xtype:'identity',renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
 		me.gridView = Ext.widget({xtype:'media-grid-view',renderTo: me.gridViewEl, floatParent: me, source: me.video});
@@ -247,7 +253,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	animateIn: function(){
 		if(!this.rendered){
-			this.on('afterrender','animateIn',this, {buffer:100});
+			this.on('afterrender','animateIn',this, {buffer:500});
 			return;
 		}
 
