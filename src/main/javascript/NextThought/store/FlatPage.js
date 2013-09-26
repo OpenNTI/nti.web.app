@@ -24,8 +24,10 @@ Ext.define('NextThought.store.FlatPage',{
 		}
 	],
 	filters:[
-		{filterFn:function(r){ return !r.parent;}, id:'nochildren'},
-		{filterFn:function(r){ return r.get('Class') !== 'Note' || r.get('sharedWith').length;}, id:'no-private-notes'}
+		{ id:'nochildren', filterFn:function(r){ return !r.parent;}},
+		{ id:'no-private-notes', filterFn: function(r){
+			return r.get('Class') !== 'Note' || (r.get('sharedWith').length && Ext.isEmpty(r.get('title')));
+		}}
 	],
 
 
