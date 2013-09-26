@@ -45,6 +45,10 @@ Ext.define('NextThought.model.transcript.TranscriptItem', {
 			//For now, since we only assume there is one transcript per video, we can do this:
 			o = o && o[0];
 
+			if(!o){
+				return null;
+			}
+
 			return this.create({
 				url: o.src,
 				jsonpUrl: o.srcjsonp,
