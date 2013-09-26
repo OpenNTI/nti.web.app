@@ -59,6 +59,12 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		this.boxEl.setVisibilityMode(Ext.Element.ASCLASS).visibilityCls = 'hidden';
+	},
+
+
 	setupBindsToReaderRef: function() {
 		var ref = this.getReaderRef();
 
@@ -221,18 +227,29 @@ Ext.define('NextThought.view.content.notepad.View',{
 	onMouseTrack: function(e){
 		if(this.suspendMoveEvents){return;}
 
-		var y,
-			lineInfo = this.getLineInfo(e.getY()),
-			bucketInfo;
+		var t = e.getTarget('.bucket'),
+			lineY = this.getContentY(e),
+			lineInfo = this.getLineInfo(lineY),
+			cache = this.bucketLineInfoCache = (this.bucketLineInfoCache || {}),
+			bucketInfo,
+			elKey,
+			h;
 
 		if( lineInfo ){
 			clearTimeout(this.hideTimer);
-			y = lineInfo.rect && Math.round(lineInfo.rect.top);// + lineInfo.topDelta);
 			bucketInfo = this.resolveBucket(lineInfo);
-			//console.log(y,bucketInfo);
 			if(bucketInfo){
+				h = bucketInfo.height;
+				elKey = bucketInfo && ('el-'+bucketInfo.top);
+				cache = elKey && cache[elKey];
+				if(t && (!cache || cache.dom !== t)){
+					return;
+				}
+				if(cache){
+					h = cache.getHeight();
+				}
 				this.boxEl.show()
-						.setHeight(bucketInfo.height)
+						.setHeight(h)
 						.setLocalY(bucketInfo.top);
 				this.lastLine = lineInfo;
 			}
@@ -264,12 +281,15 @@ Ext.define('NextThought.view.content.notepad.View',{
 	//</editor-fold>
 
 
-	getLineInfo: function(y){
+	getContentY: function(e){
 		var ref = this.getReaderRef(),
-			t = ref.getAnnotationOffsets().top,
-			lineY = y - t;
+			t = ref.getAnnotationOffsets().top;
+		return e.getY() - t;
+	},
 
-		return Ext.apply({ topDelta: t },ref.getNoteOverlay().lineInfoForY(lineY));
+
+	getLineInfo: function(y){
+		return this.getReaderRef().getNoteOverlay().lineInfoForY(y);
 	},
 
 
@@ -319,7 +339,22 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 
 	updateBuckets: function(){
+		var k, o = this.bucketLineInfoCache || {},
+			m = this.notepadItems || {};
 
+		for(k in m){
+			if(m.hasOwnProperty(k)){
+				Ext.destroy(m[k]);
+				delete m[k];
+			}
+		}
+
+		for(k in o){
+			if(o.hasOwnProperty(k)){
+				Ext.destroy(o[k]);
+				delete o[k];
+			}
+		}
 	},
 
 
@@ -331,20 +366,35 @@ Ext.define('NextThought.view.content.notepad.View',{
 	addOrUpdate: function(annotation, yPlacement){
 		yPlacement = Math.round(yPlacement);
 
-		var map = (this.notepadItems = (this.notepadItems || {})),
-//			binSize = 30,
-//			bucket = Math.ceil(yPlacement/binSize)*binSize,
+		var cache = this.bucketLineInfoCache = (this.bucketLineInfoCache || {}),
+			map = (this.notepadItems = (this.notepadItems || {})),
+			bucket = cache[yPlacement] = (cache[yPlacement] || this.resolveBucket(yPlacement)),
+			elKey = bucket && ('el-'+bucket.top),
 			data = {
 				annotation: annotation,
 				record: annotation.getRecord(),
 				placement: yPlacement
 			};
 
+		if(!elKey){
+			//console.warn('No key for y',yPlacement, annotation.getRecord().getBodyText());
+			return;
+		}
+
+		if(!cache.hasOwnProperty(elKey)){
+			cache[elKey] = Ext.DomHelper.append(this.scroller,{
+				cls:'bucket',style:{
+					top:bucket.top+'px',
+					minHeight: bucket.height+'px',
+					maxHeight: bucket.height+'px'
+				}
+			},true);
+		}
 
 		if(!map.hasOwnProperty(annotation.id) ){
 			map[annotation.id] = Ext.widget({
 				xtype: 'notepad-item',
-				renderTo: this.scroller
+				renderTo: cache[elKey]
 			});
 		}
 

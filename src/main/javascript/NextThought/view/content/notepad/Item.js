@@ -15,8 +15,8 @@ Ext.define('NextThought.view.content.notepad.Item',{
 		this.on({
 			el: {
 				contextmenu: 'contextMenu',
-				mouseover:'eat',
-				mousemove:'eat',
+				//mouseover:'eat',
+				//mousemove:'eat',
 				click: 'edit'
 			}
 		});
@@ -40,6 +40,12 @@ Ext.define('NextThought.view.content.notepad.Item',{
 	},
 
 
+	destroy: function(){
+		console.log('cleaning up');
+		return this.callParent(arguments);
+	},
+
+
 	updateRecordMonitors: function(record){
 		Ext.destroy(this.recordMonitors);
 		this.record = record;
@@ -54,7 +60,7 @@ Ext.define('NextThought.view.content.notepad.Item',{
 	updateWith: function(data){
 		var me = this, el = me.getEl();
 
-		this.setLocalY(data.placement || 0);
+//		this.setLocalY(data.placement || 0);
 
 		if( this.record !== data.record ){
 			this.updateRecordMonitors(data.record);
