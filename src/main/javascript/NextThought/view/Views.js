@@ -158,6 +158,7 @@ Ext.define('NextThought.view.Views', {
         delete this.tabMonitors;
         this.tabs.update('');
         this.tabs.hide();
+		this.removeCls('has-alt-tabbar');//TODO: unify this some how.
     },
 
 
