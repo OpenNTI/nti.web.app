@@ -250,6 +250,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	beforeRender: function () {
+		this.maybeResizeContentBox = Ext.Function.createBuffered(this.maybeResizeContentBox,400);//typical key press spacing?
 		this.callParent(arguments);
 
 		this.enableVideo = this.enableVideo && $AppConfig.service.canEmbedVideo();
@@ -492,21 +493,22 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	stop: function (e) { e.stopPropagation(); },
+
+
 	setupTitleEl: function (me, tabTracker) {
 		me.titleEl = me.el.down('.title input');
 		if (me.titleEl) {
 			me.titleEl.set({tabIndex: tabTracker.next()});
 			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl, {
-				'click': function (e) {
-					e.stopPropagation();
-				},
-				'mousedown': function (e) {
-					e.stopPropagation();
-				},
-				'keydown': function (e) {
+				click: 'stop',
+				mousedown: 'stop',
+				keypress: 'stop',
+				keyup: 'stop',
+				keydown: function (e) {
 					var t = e.getTarget();
-					Ext.callback((t || {}).setAttribute, t, ['value', t.value]);
+					Ext.callback((t || {}).setAttribute, t, ['value', t.value],1);
 					e.stopPropagation();
 				}
 			});
