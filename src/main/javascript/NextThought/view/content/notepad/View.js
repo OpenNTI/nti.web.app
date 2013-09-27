@@ -5,7 +5,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 	//<editor-fold desc="Config">
 	requires:[
 		'NextThought.ux.ComponentReferencing',
-		'NextThought.view.content.notepad.Item'
+		'NextThought.view.content.notepad.Item',
+		'NextThought.view.content.notepad.Editor'
 	],
 
 	plugins:[
@@ -14,11 +15,11 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 	ui: 'reader-notepad',
 
-	renderTpl: Ext.DomHelper.markup([
+	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'scroller', cn:[
-			{ cls: 'note-here' }
+			{ cls: 'note-here', html:'Add a note...' }
 		] }
-	]),
+	])),
 
 
 	renderSelectors: {
@@ -38,10 +39,11 @@ Ext.define('NextThought.view.content.notepad.View',{
 	//<editor-fold desc="Setup & Init">
 	constructor: function() {
 		this.callParent(arguments);
+		this.notepadItems = {};
 		this.on({
+			'detect-overflow': {fn:'detectOverflow', buffer: 100},
 			afterRender: 'setupBindsToReaderRef',
 			el: {
-				click: 'onClick',
 				scroll: 'onSyncScroll',
 				contextmenu: 'eat',
 				mousemove: 'onMouseTrack',
@@ -51,9 +53,10 @@ Ext.define('NextThought.view.content.notepad.View',{
 				DOMMouseScroll: 'onPushScroll'
 			},
 			boxEl: {
-				   mouseover:'eat',
-				   mousemove:'eat',
-				   contextmenu: 'noteHereMenu'
+				click: 'onClick',
+				mouseover:'eat',
+				mousemove:'eat',
+				contextmenu: 'noteHereMenu'
 			}
 		});
 	},
@@ -99,59 +102,29 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 
 	openEditor: function (lineInfo) {
-		var tabPanel,
-			targetEl = this.getEl().up('.x-container-reader.reader-container');
-
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
+		var me = this;
 
 		this.suspendMoveEvents = true;
 
-		tabPanel = targetEl.down('.x-panel-notes-and-discussion');
-		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
-		if (!tabPanel) {
-			console.error('No tab panel!');
-			return false;
-		}
-
-		tabPanel.mask();
-
 		this.editor = Ext.widget({
-			xtype: 'nti-editor',
+			xtype: 'notepad-editor',
 			lineInfo: lineInfo || {},
 			ownerCmp: this,
-			floating: true,
-			renderTo: targetEl,
-			enableObjectControls: false,
-			enableTextControls: false,
-			enableShareControls: false,
-			enableTitle: false,
-			preventBringToFront: true
-		}).addCls('active in-gutter');
+			renderTo: this.scroller
+		});
 
-		this.editor.toFront();
+		this.editor.setLocalY(this.boxEl.getLocalY());
+		this.boxEl.hide();
 		this.editor.focus();
-
-		this.editor.alignTo(this.boxEl, 't-t?');
-		this.editor.rtlSetLocalX(0);
-		if (this.editor.getLocalY() < 59) {
-			this.editor.setLocalY(59);
-		}
 
 
 		this.mon(this.editor,{
-			save: 'saveNewNote',
-			destroy: {fn:'unmask', scope:tabPanel},
-			'deactivated-editor': 'editorCleanup',
-			grew: function () {
-				if (Ext.is.Tablet) { return; }
-				var h = this.getHeight(),
-					b = h + this.getY(),
-					v = Ext.Element.getViewportHeight();
-				if (b > v) {
-					this.setY(v - h);
-				}
+			blur: 'commitEditor',
+			destroy: function(){
+				delete me.suspendMoveEvents;
 			}
 		});
 
@@ -160,10 +133,16 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
-	saveNewNote: function (editor, r, v) {
+	commitEditor: function(editor){
+		console.log(editor.getValue());
+		this.saveNewNote(editor);
+	},
+
+
+	saveNewNote: function (editor) {
 		var me = this,
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-			note = v.body,
+			note = editor.getValue(),
 			reader = me.getReaderRef(),
 			style = editor.lineInfo.style || 'suppressed',
 			rangeInfo;
@@ -171,13 +150,13 @@ Ext.define('NextThought.view.content.notepad.View',{
 		function afterSave(success) {
 			editor.unmask();
 			if (success) {
-				editor.deactivate();
+				editor.destroy();
 			}
 		}
 
 		//Avoid saving empty notes or just returns.
 		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
-			editor.deactivate();
+			editor.destroy();
 			return false;
 		}
 
@@ -227,32 +206,13 @@ Ext.define('NextThought.view.content.notepad.View',{
 	onMouseTrack: function(e){
 		if(this.suspendMoveEvents){return;}
 
-		var t = e.getTarget('.bucket'),
-			lineY = this.getContentY(e),
-			lineInfo = this.getLineInfo(lineY),
-			cache = this.bucketLineInfoCache = (this.bucketLineInfoCache || {}),
-			bucketInfo,
-			elKey,
-			h;
+		var lineY = this.getContentY(e),
+			lineInfo = this.getLineInfo(lineY);
 
 		if( lineInfo ){
 			clearTimeout(this.hideTimer);
-			bucketInfo = this.resolveBucket(lineInfo);
-			if(bucketInfo){
-				h = bucketInfo.height;
-				elKey = bucketInfo && ('el-'+bucketInfo.top);
-				cache = elKey && cache[elKey];
-				if(t && (!cache || cache.dom !== t)){
-					return;
-				}
-				if(cache){
-					h = cache.getHeight();
-				}
-				this.boxEl.show()
-						.setHeight(h)
-						.setLocalY(bucketInfo.top);
-				this.lastLine = lineInfo;
-			}
+			this.boxEl.show().setLocalY(lineInfo.rect.top);
+			this.lastLine = lineInfo;
 		}
 	},
 	//</editor-fold>
@@ -293,66 +253,14 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
-	getStartingNode: function(range){
-		var start = range.startContainer,
-			offset = range.startOffset;
-
-		if(!Ext.isTextNode(start)){
-			start = start.firstChild;
-			while(offset--){
-				start = start.nextSibling;
-			}
-		}
-
-		return start;
-	},
-
-
-	resolveBucket: function(lineInfo){
-		var start, rect;
-
-		if(Ext.isNumber(lineInfo)){
-			lineInfo = this.getLineInfo(lineInfo);
-		}
-
-		if(!lineInfo || !lineInfo.range){
-			return null;
-		}
-
-		try {
-			start = this.getStartingNode(lineInfo.range);
-			while(start && !AnnotationUtils.isBlockNode(start)) {
-				start = start.parentNode;
-			}
-			rect = start.getBoundingClientRect();
-			return {
-				top: rect.top,
-				height: rect.bottom - rect.top,
-				container: start
-			};
-		}
-		catch( e ) {
-			console.error(e.stack || e.stacktrace || e.message || e);
-		}
-		return null;
-	},
-
-
 	updateBuckets: function(){
-		var k, o = this.bucketLineInfoCache || {},
+		var k,
 			m = this.notepadItems || {};
 
 		for(k in m){
 			if(m.hasOwnProperty(k)){
 				Ext.destroy(m[k]);
 				delete m[k];
-			}
-		}
-
-		for(k in o){
-			if(o.hasOwnProperty(k)){
-				Ext.destroy(o[k]);
-				delete o[k];
 			}
 		}
 	},
@@ -363,38 +271,89 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
+	detectOverflow: function(){
+		console.log('overflow detection');
+
+		var collided = {}, els;
+
+		function doesCollide(el, set){
+			var top = el.getLocalY(),
+				height = el.getHeight(),
+				bottom = height + top,
+				id = el.getAttribute('id'),
+				cut = 0;
+
+			console.log(id, top, height, bottom);
+
+			set.each(function(e){
+				var t = e.getLocalY(),
+					h = e.getHeight(),
+					i = e.getAttribute('id'),
+					b = h + t;
+
+				if(i !== id){
+					//overlay
+					if(top === t && bottom === b){
+						//shouldn't be possible with this UI
+						console.warn(id,'is on top of, or below ',i, [top, t], [bottom, b]);
+						cut -2;
+					}
+					//contained
+					else if(top >= t && bottom <= b){
+						//shouldn't be possible with this UI
+						console.warn(id,'is contained within ',i, [top, t], [bottom, b]);
+						cut = -1;
+					}
+					//collided into
+					else if(top <= t && bottom >= t){
+						console.log(id,'collided into',i, [top, t], [bottom, b]);
+						cut = t;
+					}
+					//collided by
+//					else if(top > t && top < b && bottom <= b){
+//						shouldn't be possible with the current sort order
+//						console.log(id,'collided by',i, [top, t], [bottom, b]);
+//						cut = -3;
+//					}
+
+				}
+				return !cut;
+			});
+
+			return cut > 0 ? (cut-top) : cut;
+		}
+
+		els = this.el.select('.scroller > *:not(.note-here)').slice();
+		els.sort(function(a,b){
+			return Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
+		});
+
+		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').each(function(el,c){
+			var i = doesCollide(el,c);
+			if(i>0){
+				el.addCls('collide');
+				el.setHeight(i);
+				el.setStyle({minHeight: i+'px'});
+			}
+		});
+	},
+
+
 	addOrUpdate: function(annotation, yPlacement){
 		yPlacement = Math.round(yPlacement);
 
-		var cache = this.bucketLineInfoCache = (this.bucketLineInfoCache || {}),
-			map = (this.notepadItems = (this.notepadItems || {})),
-			bucket = cache[yPlacement] = (cache[yPlacement] || this.resolveBucket(yPlacement)),
-			elKey = bucket && ('el-'+bucket.top),
+		var map = this.notepadItems,
 			data = {
 				annotation: annotation,
 				record: annotation.getRecord(),
 				placement: yPlacement
 			};
 
-		if(!elKey){
-			//console.warn('No key for y',yPlacement, annotation.getRecord().getBodyText());
-			return;
-		}
-
-		if(!cache.hasOwnProperty(elKey)){
-			cache[elKey] = Ext.DomHelper.append(this.scroller,{
-				cls:'bucket',style:{
-					top:bucket.top+'px',
-					minHeight: bucket.height+'px',
-					maxHeight: bucket.height+'px'
-				}
-			},true);
-		}
-
 		if(!map.hasOwnProperty(annotation.id) ){
 			map[annotation.id] = Ext.widget({
 				xtype: 'notepad-item',
-				renderTo: cache[elKey]
+				floatParent: this,
+				renderTo: this.scroller
 			});
 		}
 

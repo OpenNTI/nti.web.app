@@ -12,11 +12,12 @@ Ext.define('NextThought.view.content.notepad.Item',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.enableBubble(['detect-overflow']);
 		this.on({
 			el: {
 				contextmenu: 'contextMenu',
-				//mouseover:'eat',
-				//mousemove:'eat',
+				mouseover:'eat',
+				mousemove:'eat',
 				click: 'edit'
 			}
 		});
@@ -58,9 +59,10 @@ Ext.define('NextThought.view.content.notepad.Item',{
 
 
 	updateWith: function(data){
-		var me = this, el = me.getEl();
+		var me = this, el = me.getEl(),
+			p = data.placement || 0;
 
-//		this.setLocalY(data.placement || 0);
+		this.setLocalY(p);
 
 		if( this.record !== data.record ){
 			this.updateRecordMonitors(data.record);
@@ -76,6 +78,7 @@ Ext.define('NextThought.view.content.notepad.Item',{
 			if (Ext.isFunction(cb)) {
 				Ext.each(cb(el, me), function (c) { me.on('destroy', 'destroy', c); });
 			}
+			me.fireEvent('detect-overflow');
 		});
 	},
 
