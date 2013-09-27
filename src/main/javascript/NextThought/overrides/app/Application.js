@@ -44,7 +44,7 @@ Ext.define('NextThought.overrides.app.Application',{
 				closable: false,
 				buttons:  null
 			});
-		},30000);
+		},task.timeout||30000);
 	},
 
 	finishInitializeTask: function(task){
