@@ -144,7 +144,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
         }
 		this.on('media-viewer-ready', 'adjustOnResize');
 		if(!Ext.getBody().hasCls('media-viewer-open')){
-			this.on('media-viewer-ready', 'animateIn',this,{buffer: 500});
+			Ext.getBody().mask('Loading...');
+			this.animateIn();//will listen to afterRender
 		}
 
 		this.mon(this.down('slidedeck-transcript'), {
@@ -253,13 +254,14 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	animateIn: function(){
 		if(!this.rendered){
-			this.on('afterrender','animateIn',this, {buffer:500});
+			this.on('afterrender','animateIn',this, {buffer:300});
 			return;
 		}
 
 		Ext.getBody().addCls('media-viewer-open');
 		this.addCls('ready');
 		this.el.setStyle('visibility','visible');
+		Ext.getBody().unmask();
 	},
 
 
