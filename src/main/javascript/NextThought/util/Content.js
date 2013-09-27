@@ -281,11 +281,19 @@ Ext.define('NextThought.util.Content', {
 
 
 	find: function(containerId, reportMiss) {
-		var result = null;
-		Library.each(function(o){
-			result = Library.resolve( Library.getToc( o ), o, containerId, reportMiss);
-			return !result;
-		});
+		var result = null,
+			cache = this.findCache = (this.findCache||{});
+
+		result = cache[containerId];
+		if(!result){
+			Library.each(function(o){
+				result = Library.resolve( Library.getToc( o ), o, containerId, reportMiss);
+				return !result;
+			});
+			if(result){
+				cache[containerId] = result;
+			}
+		}
 
 		return result;
 	},
