@@ -29,9 +29,15 @@ Ext.define('NextThought.view.course.forum.View',{
 	},
 
 	handleDeactivate: function(){
-		var c = this.peek();
+		var c = this.peek(),
+			p = this.el.up('.forum-in-view');
+
 		if(c && c.unlockHeader){
 			c.unlockHeader();
+		}
+
+		if(p){
+			p.removeCls('forum-in-view');
 		}
 	},
 
