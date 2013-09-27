@@ -178,7 +178,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		h = footer.getY() - el.getY();
 		el.setHeight(h);
-		this.getEl().repaint();
+		Ext.defer(this.getEl().repaint,10,this.getEl());
 	},
 
 
