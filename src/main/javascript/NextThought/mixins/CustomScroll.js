@@ -121,7 +121,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 	return {
 		initCustomScrollOn: function(adjustmentEl, targetEl, options){
 
-			if(!isFeature('fancy-scroll') || Ext.isIE10m){ return; }
+			if(!isFeature('fancy-scroll')){ return; }
 
 			this.mixinData = this.mixinData||{};
 			this.mixinData.customScroll = {adjustmentEl:adjustmentEl,targetEl:targetEl, options:options};

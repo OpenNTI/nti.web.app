@@ -262,6 +262,7 @@
 
 #view {
 	@include hardware-accelerate();
+	overflow: hidden;
     background: white;
 	padding: 105px 165px 0 100px;
 	background: #2c2c2c url(../images/chalkboard_bg.png) center no-repeat;
