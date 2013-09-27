@@ -59,11 +59,18 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 
 		this.on({
 			scope: this,
+			afterRender: 'setInitialPosition',
 			mouseleave: 'startHide',
 			mouseover: 'stopHide'
 		});
 
 		Library.on('loaded','fillStore',this,{buffer:1});
+	},
+
+
+	setInitialPosition: function(){
+		this.el.setLocalY(0);
+		this.el.setLocalX(0);
 	},
 
 
