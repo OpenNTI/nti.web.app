@@ -29,7 +29,8 @@ Ext.define('NextThought.overrides.app.Application',{
 		}
 
 
-		method = task.method || method;
+		task.method = method = task.method || method;
+		task.start = new Date();
 
 		this.initTasks = this.initTasks || [];
 
@@ -59,7 +60,7 @@ Ext.define('NextThought.overrides.app.Application',{
 		}
 		if(task.expired){
 			Ext.MessageBox.close();
-			console.debug('Recovering init task...');
+			console.debug('Recovering init task: '+method+'... took: '+((new Date() - task.start)/1000)+'s');
 
 		}
 		clearTimeout(task.timerId);
