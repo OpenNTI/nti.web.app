@@ -91,12 +91,15 @@ Ext.define('NextThought.view.course.forum.View',{
 			var id = o.getContentsStoreId(),
 				store = Ext.getStore(id) || o.buildContentsStore();
 
-			console.log('Board fetch success returned', o)
+			console.log('Board fetch success returned', o);
 
 			function finish(){
 				console.log('Pushing board for record', o, store);
 				me.store = store;
-				me.add({xtype: 'course-forum-board', record:o, store:store});
+				me.add({xtype: 'course-forum-board', record:o, store:store, loadMask:{
+					margin: '100px 0 0 0',
+					msg: 'Loading...'
+				}});
 				if(me.currentForum){
 					console.log('Restoring state', me.currentForum, me.currentTopic);
 					me.restoreState(me.currentForum, me.currentTopic);
