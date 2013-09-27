@@ -75,8 +75,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 			title = location.title;
 
 		this.setLocationInfo(location);
-		Library.getVideoIndex(title,this.applyVideoData,this);
 
+		Ext.defer(this.getVideoData,1,this,[title]);
 
 		this.on({
 			itemclick: function () {
@@ -129,6 +129,11 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
 			me.fromKey = true;
 		});
+	},
+
+
+	getVideoData: function(title){
+		Library.getVideoIndex(title,this.applyVideoData,this);
 	},
 
 
