@@ -35,8 +35,9 @@ Ext.define('NextThought.overrides.app.Application',{
 
 		this.initTasks.push(task);
 		task.timerId = setTimeout(function(){
-			console.log('Abandoned init task from: '+ method, task.name || task);
+			console.debug('Abandoned init task from: '+ method, task.name || task);
 			Globals.removeLoaderSplash();
+			task.expired = true;
 			alert({
 				icon:     Ext.Msg.ERROR,
 				title:    'Timeout',
@@ -55,6 +56,11 @@ Ext.define('NextThought.overrides.app.Application',{
 		if(!task){
 			console.error(method+' called finishInitializeTask without a token');
 			return;
+		}
+		if(task.expired){
+			Ext.MessageBox.close();
+			console.debug('Recovering init task...');
+
 		}
 		clearTimeout(task.timerId);
 		Ext.Array.remove(this.initTasks,task);
