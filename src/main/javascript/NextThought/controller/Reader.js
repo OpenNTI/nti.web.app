@@ -90,9 +90,10 @@ Ext.define('NextThought.controller.Reader', {
 		var reader = annotation && annotation.ownerCmp,
 			notepad = reader && reader.notepadRef;
 
-		console.debug('Private Note Annoucement:',arguments);
-
-		notepad.addOrUpdate(annotation,y);
+		if(notepad){
+			console.debug('Private Note Annoucement:',arguments);
+			notepad.addOrUpdate(annotation,y);
+		}
 	},
 
 
