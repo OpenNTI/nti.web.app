@@ -474,11 +474,11 @@
 		}
 
 		.topic-comment {
-			.like:not(.on) {
+			.like:not(.on):not(.liked) {
 				visibility: hidden;
 			}
 			&:hover .like{
-				visibility: visible;
+				visibility: visible !important;
 			}
 		}
 	}

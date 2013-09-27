@@ -413,7 +413,7 @@
 					top: -5px;
 					right: 0;
 					@include like-and-favorite;
-					.like:not(.on){
+					.like:not(.on):not(.liked){
 						display: none;
 					}
 				}
@@ -461,7 +461,7 @@
 					}
 
 					.controls .like{
-						display: block;
+						display: block !important;;
 					}
 				}
 

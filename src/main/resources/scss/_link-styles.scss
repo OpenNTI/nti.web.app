@@ -15,7 +15,7 @@
 		top: 0;
 		right: 0;
 		@include like-and-favorite;
-		//.like:not(.on){
+		//.like:not(.on):not(.liked){
 		//	display: none;
 		//}
 	}

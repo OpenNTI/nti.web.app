@@ -118,10 +118,13 @@ Ext.define('NextThought.mixins.LikeFavoriteActions',{
 
 
 	updateLikeCount: function(record){
+		var c;
 		if(this.liked){
 			record = record&&record.isModel? record : this.getRecord();
 			if(record){
-				this.liked.update(record.getFriendlyLikeCount());
+				c = record.getFriendlyLikeCount();
+				this.liked.update(c);
+				this.liked[c>0?'addCls':'removeCls']('liked');
 			}
 		}
 	},
