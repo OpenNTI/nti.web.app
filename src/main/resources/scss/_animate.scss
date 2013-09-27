@@ -5,7 +5,7 @@
 
 	} @else {
 		@include experimental(animation-iteration-count, $iteration);
-		@include experimental(animation-direction, alternate);
+		@include experimental(animation-direction, normal);
 	}
 
 	@include experimental(animation-name, $name);
