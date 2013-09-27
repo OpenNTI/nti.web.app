@@ -6,7 +6,7 @@ Ext.define('NextThought.controller.Application', {
 
 	views: ['Main','MessageBar'],
 
-	launchToken: {},
+	launchToken: {timeout:3600000},//hour
 
 	init: function() {
 		this.application.registerInitializeTask(this.launchToken);
