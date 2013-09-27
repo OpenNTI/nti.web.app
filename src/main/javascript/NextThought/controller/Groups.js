@@ -556,7 +556,7 @@ Ext.define('NextThought.controller.Groups', {
 	leaveGroup: function (record) {
 		//onSuccess instead of reloading the whole store
 		//lets try and just remove the one thing we need
-		function success(record) {
+		function success(result) {
 			this.getFriendsListStore().remove(record);
 		}
 
