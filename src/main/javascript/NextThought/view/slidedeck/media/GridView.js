@@ -153,7 +153,7 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 			videos.push(reader.read(Ext.apply(v,{
 				NTIID: v.ntiid,
-				section: ContentUtils.getLineage(key,true)[1]
+				section: section
 			})).records[0]);
 
 			if(key === selected){
