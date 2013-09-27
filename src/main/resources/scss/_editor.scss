@@ -23,6 +23,7 @@ span.tab{
 		&.x-repaint{
 			background: #ffffff;
 			visibility: hidden;
+			display: initial !important;
 		}
 
 		@include animate(fadeIn,0.3s);
