@@ -1263,7 +1263,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			isSelectionInContent,
 			focusNode,
 			thumbTpl,
-			onInsertedFn;
+			onInsertedFn,
+			callback;
 
 		//We need empty divs to allow to insert text before or after an object.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
@@ -1324,7 +1325,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		function callback(node) {
+		callback = Ext.Function.createBuffered(function callback(node) {
 			me.fireEvent('size-changed');
 
 			//Make sure save is enabled
@@ -1339,7 +1340,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 			me.focus(true);
 			Ext.defer(me.maybeResizeContentBox, 1, me);
-		}
+
+		},100,me);
 
 		onInsertedFn = me.onThumbnailInsertedMap[mime];
 		if (onInsertedFn && Ext.isFunction(me[onInsertedFn])) {
