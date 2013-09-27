@@ -10,9 +10,9 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		this.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
 
 		var r = this.getRecord();
-		this.privateNote = r.get('sharedWith').length === 0
-							&& Ext.isEmpty(r.get('title'))
-							&& isFeature('notepad');
+		this.privateNote = isFeature('notepad')
+							&& r.get('sharedWith').length === 0
+							&& Ext.isEmpty(r.get('title'));
 	},
 
 

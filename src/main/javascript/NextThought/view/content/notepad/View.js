@@ -296,7 +296,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 					if(top === t && bottom === b){
 						//shouldn't be possible with this UI
 						console.warn(id,'is on top of, or below ',i, [top, t], [bottom, b]);
-						cut -2;
+						cut = -2;
 					}
 					//contained
 					else if(top >= t && bottom <= b){

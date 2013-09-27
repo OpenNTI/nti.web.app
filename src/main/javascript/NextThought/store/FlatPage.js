@@ -26,17 +26,18 @@ Ext.define('NextThought.store.FlatPage',{
 	filters:[
 		{ id:'nochildren', filterFn:function(r){ return !r.parent;}},
 		{ id:'no-private-notes', filterFn: function(r){
-			return r.get('Class') !== 'Note' || (r.get('sharedWith').length && Ext.isEmpty(r.get('title')));
+			return r.get('Class') !== 'Note' || (r.get('sharedWith').length || !Ext.isEmpty(r.get('title')));
 		}}
 	],
 
-
+	//TODO: remove this overridden function after notepad is deployed.
 	filter: function(){
+		var r = this.callParent(arguments);
 		if(!isFeature('notepad')){
 			this.removeFilter('no-private-notes',false);
 		}
 
-		return this.callParent(arguments);
+		return r;
 	},
 
 
@@ -50,7 +51,9 @@ Ext.define('NextThought.store.FlatPage',{
 
 		if(isMove){
 			Ext.each(r,function(r,i,a){
-				if(r.placeholder){ a.splice(i,1); }
+				if(r.placeholder){
+					console.log('>>???');
+					a.splice(i,1); }
 			}, this, true);
 		}
 
@@ -62,8 +65,20 @@ Ext.define('NextThought.store.FlatPage',{
 	},
 
 
+	removeAll: function(){
+		var f = this.filters.getRange();
+		this.clearFilter(true);
+		try{
+			this.callParent(arguments);
+		}
+		finally{
+			this.filter(f);
+		}
+	},
+
+
 	bind: function(otherStore){
-		var me = this;
+		var me = this, monitors;
 
 		if(!otherStore){
 			return;
@@ -71,20 +86,19 @@ Ext.define('NextThought.store.FlatPage',{
 
 		if(Ext.Array.contains(otherStore.$boundToFlat || [], this)){ return; }
 
-		
+
 		function remove(s,rec){
 			var f;
-			if(rec){
+			if(!Ext.isEmpty(rec)){
 				f = me.filters.getRange();
 				me.clearFilter(true);
-				me.remove(rec, true);
+				me.remove(rec,true);
 				me.filter(f);
 			}
-
-
 		}
 
 		function cleanUp(o) {
+			Ext.destroy(monitors);
 			o.clearFilter(true);
 			remove(o,o.getRange());
 		}
@@ -155,16 +169,15 @@ Ext.define('NextThought.store.FlatPage',{
 			// "just worked" and now that I'm adding a new filter I'm just now noticing it?
         }
 
-		otherStore.on('cleanup','destroy',
-				me.mon(otherStore,{
-					scope: me,
-					destroyable: true,
-					add: add,
-					load: load,
-					bulkremove: remove,
-					remove: remove,
-					cleanup: cleanUp
-				}));
+		monitors = me.mon(otherStore,{
+			scope: me,
+			destroyable: true,
+			add: add,
+			load: load,
+			bulkremove: remove,
+			remove: remove,
+			cleanup: cleanUp
+		});
 
 		if(Ext.isArray(otherStore.$boundToFlat)){
 			otherStore.$boundToFlat.push(this);
