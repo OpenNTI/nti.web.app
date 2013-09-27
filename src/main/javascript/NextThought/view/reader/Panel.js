@@ -47,10 +47,10 @@ Ext.define('NextThought.view.reader.Panel',{
 					plain: true
 				},
 
-				stateful: true,
-				stateId: 'notes-and-discussion',
+				stateful: isFeature('notepad'),
+				stateId: 'notes-and-discussions',
 
-				activeTab: isFeature('notepad') ? 1 : 0,
+				//activeTab: isFeature('notepad') ? 1 : 0,
 				items:[
 					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
 							{ ref: 'readerRef', selector: '#'+this.id+' reader-content' }
