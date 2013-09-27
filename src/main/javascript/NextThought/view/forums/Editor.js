@@ -114,19 +114,19 @@ Ext.define('NextThought.view.forums.Editor', {
 
 
 	moveCursorToEnd: function (el) {
+		var range, selection;
 		//this is only for input/textarea elements
 		el = Ext.getDom(el);
 		if (typeof el.selectionStart === "number") {
 			el.selectionStart = el.selectionEnd = el.value.length;
 		}
-		else if (el.createTextRange !== undefined) {
+		else if (el.createTextRange) {
 			el.focus();
-			var range = el.createTextRange();
+			range = el.createTextRange();
 			range.collapse(false);
 			range.select();
 		}
 		else if (document.createRange) {
-			var range, selection;
 			range = document.createRange();
 			range.selectNodeContents(el);
 			range.collapse(false);
@@ -141,14 +141,13 @@ Ext.define('NextThought.view.forums.Editor', {
         /*  for ipad, everytime a new input is focused, this runs.
             and changing the height and top makes the editor too small.
             only run the first two initial times, and keep height the same*/
-		if (Ext.is.iPad) {
+		if (Ext.is.iOS) {
 			if (this.syncedIpad) {
                 if(this.syncedIpad > 1){
                     return;
                 }
-                else{
-                    this.syncedIpad++;
-                }
+
+				this.syncedIpad++;
 			}
             else{
                 this.syncedIpad = 1;
@@ -160,9 +159,19 @@ Ext.define('NextThought.view.forums.Editor', {
 		if (!el || !p) {
 			return;
 		}
-		top = el.getTop() + p.scrollTop;
+		top = el.getY() + p.scrollTop;
 
-		el.setHeight(Ext.dom.Element.getViewportHeight() - top - this.footerEl.getHeight() - 10);
+		if(!this.footerEl.getHeight() && (!this.syncHeightRetries || this.syncHeightRetries < 10)){
+			this.syncHeightRetries = (this.syncHeightRetries||0) + 1;
+			Ext.defer(this.syncHeight,100,this);
+			return;
+		}
+
+		if(this.syncHeightRetries){
+			console.debug('#syncHeight() Retried '+this.syncHeightRetries+' times');
+			delete this.syncHeightRetries;
+		}
+		el.setHeight(Ext.Element.getViewportHeight() - (top + this.footerEl.getHeight() + 10));
 		Ext.defer(this.updateLayout, 700, this, []);
 	},
 
