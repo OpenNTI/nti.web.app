@@ -432,7 +432,8 @@ Ext.define('NextThought.controller.Session', {
 			//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
 			user.summaryObject = false;
 			$AppConfig.userObject = UserRepository.cacheUser(user, true);
-			$AppConfig.Preferences = Ext.merge($AppConfig.Preferences || {}, prefs);
+			debugger;
+			$AppConfig.Preferences = Ext.create('NextThought.preference.Manager',{href: user.get('href') + '/++preferences++'});
 			console.debug('Set app user to ', $AppConfig.userObject);
 			ObjectUtils.defineAttributes($AppConfig, {
 				username: {
