@@ -26,19 +26,12 @@ Ext.define('NextThought.store.FlatPage',{
 	filters:[
 		{ id:'nochildren', filterFn:function(r){ return !r.parent;}},
 		{ id:'no-private-notes', filterFn: function(r){
-			return r.get('Class') !== 'Note' || (r.get('sharedWith').length || !Ext.isEmpty(r.get('title')));
+			return !isFeature('notepad')
+					|| r.get('Class') !== 'Note'
+					|| (r.get('sharedWith').length
+					|| !Ext.isEmpty(r.get('title')));
 		}}
 	],
-
-	//TODO: remove this overridden function after notepad is deployed.
-	filter: function(){
-		var r = this.callParent(arguments);
-		if(!isFeature('notepad')){
-			this.removeFilter('no-private-notes',false);
-		}
-
-		return r;
-	},
 
 
 	remove: function(record,isMove,silent){
