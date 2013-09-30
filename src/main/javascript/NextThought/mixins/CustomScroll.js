@@ -59,10 +59,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		if(!data.reverseMarginEl){ return; }
 
 		if(Ext.isString(data.reverseMarginEl)){
-			data.reverseMarginEl = resolve(data.reverseMarginEl,data.container) || data.reverseMarginEl;
-			if(Ext.isString(data.reverseMarginEl)){
-				return;//doesn't exist (yet?)
-			}
+			return;//doesn't exist (yet?)
 		}
 
 		if(!this.initialReverseViewHeight){
@@ -78,6 +75,32 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		catch(e){
 			console.error(e.stack || e.stacktrace || e.message || e);
 		}
+	}
+
+
+	function updateCaches(){
+		delete this.initialRefreshInterval;
+		updateSideHeight.call(this);
+	}
+
+
+	function updateSideHeight(){
+		var data = this.mixinData.customScroll, nH,
+			el = data.reverseMarginEl;
+
+		if(!el){ return; }
+
+		if(Ext.isString(el)){
+			el = data.reverseMarginEl = resolve(el,data.container) || el;
+			if(Ext.isString(el)){
+				return;//doesn't exist (yet?)
+			}
+		}
+
+		el = Ext.get(el);
+
+		nH = el.getHeight() - el.getMargin('b');
+		el.setHeight(nH);
 	}
 
 
@@ -117,8 +140,14 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		me.mon(data.targetEl, 'scroll', adjustOnScroll,me);
 		me.on('activate', adjustOnScroll, me);
 		monitorCardChange(me);
+		monitorLayout.call(me);
+		updateCaches.call(me);
 	}
 
+
+	function monitorLayout() {
+		this.mon(this.up(),'afterlayout',updateCaches,this);
+	}
 
 
 	function monitorCardChange(cmp, me){
