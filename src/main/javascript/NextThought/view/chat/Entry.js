@@ -69,7 +69,15 @@ Ext.define('NextThought.view.chat.Entry', {
 			this.inputEl.set({value:''});
 		}
 		else if (e.ENTER === k) {
-			this.fireEvent('send', this, this.replyTo, this.chanel, this.recipients);
+            if(Ext.is.iOS){ //Delay event to allow autocorrect to change word beforehand, instead of after
+                var me = this;
+                Ext.defer(function(){
+                    me.fireEvent('send', me, me.replyTo, me.chanel, me.recipients);
+                },10);
+            }
+            else{
+                this.fireEvent('send', this, this.replyTo, this.chanel, this.recipients);
+            }
 		}
 	},
 
