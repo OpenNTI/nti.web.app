@@ -47,6 +47,8 @@ Ext.define('NextThought.view.reader.Panel',{
 					plain: true
 				},
 
+				deferredRender: false,
+
 				stateful: isFeature('notepad'),
 				stateId: 'notes-and-discussions',
 
