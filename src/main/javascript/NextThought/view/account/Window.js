@@ -180,12 +180,22 @@ Ext.define('NextThought.view.account.VideoSettings', {
 	},
 
 	updateCheckbox: function () {
-		this.preferFlashEl[$AppConfig.Preferences.webapp_kalturaPreferFlash ? 'addCls' : 'removeCls']('checked');
+		var me = this;
+		$AppConfig.Preferences.getPreference('WebApp', function(value){
+			if(value){
+				me.currentPreference = value;
+				me.preferFlashEl[value.get('preferFlashVideo')? 'addCls' : 'removeCls']('checked');
+			}
+		});
 	},
 
 	checkboxClicked: function () {
 		var prefer = !this.preferFlashEl.hasCls('checked'); // the dom hasn't updated with the new class yet
-		this.fireEvent('set-preference', 'webapp_kalturaPreferFlash', prefer, this.updateCheckbox, this);
+		if(this.currentPreference){
+			this.currentPreference.set('preferFlashVideo', prefer);
+			this.currentPreference.save();
+			this.preferFlashEl[prefer? 'addCls' : 'removeCls']('checked');
+		}
 	}
 });
 
