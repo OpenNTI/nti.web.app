@@ -12,6 +12,8 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		 * we will are handling it by manipulating top and bottom margin.
 		 **/
 		try{
+			console.log(this.isVisible());
+
 		var data = this.mixinData.customScroll,
 			parentContainerEl = data.container,
 			parentContainerPadding = parentContainerEl && parentContainerEl.getPadding('t'),
@@ -113,8 +115,22 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			data.adjustmentEl.setStyle({marginBottom: -mb+'px'});
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll,me);
-		me.mon(me.up('{isOwnerLayout("card")}'),'activate',adjustOnScroll,me);
 		me.on('activate', adjustOnScroll, me);
+		monitorCardChange(me);
+	}
+
+
+
+	function monitorCardChange(cmp, me){
+		var c = cmp.up('{isOwnerLayout("card")}');
+		me = me || cmp;
+		if(c){
+			me.mon(c,{
+				activate:adjustOnScroll,
+				scope:me
+			});
+			monitorCardChange(c, me);
+		}
 	}
 
 
