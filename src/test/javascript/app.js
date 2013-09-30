@@ -100,7 +100,8 @@ Ext.application({
 
 		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
-		'NextThought.view.MessageBox'
+		'NextThought.view.MessageBox',
+		'Ext.ux.ajax.SimManager' 
 	],
 
 
@@ -207,7 +208,8 @@ Ext.application({
 			'javascript/specs/controller/Navigation.spec.js',
 			'javascript/specs/controller/State.spec.js',
 			'javascript/specs/controller/Search.spec.js',
-			'javascript/specs/controller/Store.spec.js'
+			'javascript/specs/controller/Store.spec.js',
+			'javascript/specs/preference/Manager.spec.js'
         ],
 		go);
 	}
