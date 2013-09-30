@@ -670,6 +670,20 @@
 		left: 0 !important;
 		right: 0 !important;
 
+		.x-component-notepad-item {
+			position: relative;
+			overflow: visible;
+			margin: 0 0.5em;
+			&.inline-editor {
+				padding-left: 0.5em;
+			}
+		}
+
+		&.edit {
+			background: #fff;
+			padding: 0;
+		}
+
 		overflow-wrap: break-word;
 		word-wrap: break-word;
 		word-break: break-all;
@@ -698,7 +712,7 @@
 				clip: rect(-10px, auto, 2px, auto);
 			}
 
-			&:hover {
+			&.edit,&:hover {
 				overflow: visible;
 				height: auto !important;
 				z-index: 10;
@@ -715,8 +729,14 @@
 		&.inline-editor{
 			background: #fff;
 			z-index: 100;
-			& > div[contenteditable] {
+			padding-left: 1em;
 
+			&:not(.empty){
+				& > div[contenteditable] {
+					margin-left: -0.5em;
+					padding-left: 0.5em;
+					box-shadow: -2px 0 0 0 #ededed;
+				}
 			}
 		}
 	}

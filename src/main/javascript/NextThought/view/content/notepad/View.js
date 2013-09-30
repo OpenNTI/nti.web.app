@@ -41,6 +41,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 		this.callParent(arguments);
 		this.notepadItems = {};
 		this.on({
+			'editor-open':'lock',
+			'editor-closed':'unlock',
 			'detect-overflow': {fn:'detectOverflow', buffer: 100},
 			afterRender: 'setupBindsToReaderRef',
 			el: {
@@ -105,9 +107,8 @@ Ext.define('NextThought.view.content.notepad.View',{
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
-		var me = this;
 
-		this.suspendMoveEvents = true;
+		this.lock();
 
 		this.editor = Ext.widget({
 			xtype: 'notepad-editor',
@@ -123,9 +124,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 		this.mon(this.editor,{
 			blur: 'commitEditor',
-			destroy: function(){
-				delete me.suspendMoveEvents;
-			}
+			destroy: 'unlock'
 		});
 
 
@@ -141,7 +140,6 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 	saveNewNote: function (editor) {
 		var me = this,
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			note = editor.getValue(),
 			reader = me.getReaderRef(),
 			style = editor.lineInfo.style || 'suppressed',
@@ -155,7 +153,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 		}
 
 		//Avoid saving empty notes or just returns.
-		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
+		if (editor.isEmpty()) {
 			editor.destroy();
 			return false;
 		}
@@ -180,6 +178,17 @@ Ext.define('NextThought.view.content.notepad.View',{
 	cleanupLine: function(){
 		this.boxEl.hide();
 		delete this.lastLine;
+	},
+
+
+	lock: function(){
+		this.suspendMoveEvents = true;
+		Ext.defer(this.boxEl.hide,1,this.boxEl);
+	},
+
+
+	unlock: function(){
+		delete this.suspendMoveEvents;
 	},
 
 
@@ -283,7 +292,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 				id = el.getAttribute('id'),
 				cut = 0;
 
-			console.log(id, top, height, bottom);
+			//console.log(id, top, height, bottom);
 
 			set.each(function(e){
 				var t = e.getLocalY(),
@@ -328,7 +337,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 			return Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
 		});
 
-		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').each(function(el,c){
+		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c){
 			var i = doesCollide(el,c);
 			if(i>0){
 				el.addCls('collide');

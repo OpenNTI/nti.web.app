@@ -24,15 +24,44 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 
 
 	initComponent: function(){
-		var me = this;
-		me.callParent(arguments);
-		me.on({
-			afterRender: function(){ me.body.selectable(); },
+		this.callParent(arguments);
+		this.on({
+			afterRender: 'setup',
 			body: {
 				click: 'stop',
-				blur: 'blur'
+				blur: 'blur',
+				keydown: 'onKeyDown'
 			}
 		});
+	},
+
+
+	setup: function(){
+		var v;
+		this.body.selectable();
+		if( !Ext.isEmpty( this.value ) ){
+			v = Ext.Array.map(this.value,function(i){
+				if( Ext.isString(i) ){
+					i = Ext.DomHelper.markup({html:i});
+				}
+				return i;
+			});
+			this.body.setHTML(v.join(''));
+		}
+
+		this[this.isEmpty() ? 'addCls' : 'removeCls']('empty');
+	},
+
+
+	onKeyDown: function(e){
+		if(e.getKey() === e.ESC){
+			this.fireEvent('cancel');
+			this.stop(e);
+			this.destroy();
+			return;
+		}
+		this.fireEvent('keydown',e),
+		Ext.defer(this[this.isEmpty() ? 'addCls' : 'removeCls'],1,this,['empty']);
 	},
 
 
@@ -48,6 +77,14 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 
 	blur: function(){
 		this.fireEvent('blur', this);
+	},
+
+
+	isEmpty: function isEmpty(){
+		var v = this.getValue(),
+			re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g);
+
+		return !Ext.isArray(v) || v.join('').replace(re, '') === ''
 	},
 
 
