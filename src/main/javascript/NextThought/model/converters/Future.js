@@ -6,7 +6,6 @@ Ext.define('NextThought.model.converters.Future',{
 		type: 'Future',
 		sortType: 'none',
 		convert: function(v){
-			debugger;
 			if(v && v.isModel){
 				return v;
 			}

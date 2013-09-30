@@ -8,5 +8,11 @@ Ext.define('NextThought.model.preference.ChatPresence',{
 		{name: 'DND', type: 'Future'}
 	],
 
-	subPreferences: ['Active','Available','Away','DND']
+	subPreferences: ['Active','Available','Away','DND'],
+
+	getResourceUrl: function(){
+		var base = this.callParent(arguments);
+
+		return base + '/ChatPresence';
+	}
 });

@@ -39,12 +39,14 @@ Ext.define('NextThought.view.menus.Presence', {
 		'offline':   'Offline'
 	},
 
+	currentPreference: {},
+
 	initComponent: function () {
 		this.callParent(arguments);
-		this.restoreState();
 	},
 
 	beforeRender: function () {
+		var me = this;
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -55,6 +57,18 @@ Ext.define('NextThought.view.menus.Presence', {
 				//{state: 'invisible', label: 'Invisible'},
 				{state: 'offline', label: 'Offline'}
 			]
+		});
+		$AppConfig.Preferences.getPreference('ChatPresence', function(value){
+			if(value){
+				me.currentPreference.Active = value.get('Active');
+				me.currentPreference.Available = value.get('Available');
+				me.currentPreference.Away = value.get('Away');
+				me.currentPreference.DND = value.get('DND');
+
+				me.restoreState();
+			}else{
+				console.log('No ChatPresence preference returned');
+			}
 		});
 	},
 
@@ -83,57 +97,91 @@ Ext.define('NextThought.view.menus.Presence', {
 		Ext.menu.Manager.hideAll();
 	},
 
-	saveState: function (type, show, status, active) {
-		var key, current = $AppConfig.Preferences.presence || TemporaryStorage.get(this.sessionKey) || {};
-		key = type;
+	updatePreference: function(record, type, show, status){
+		record.set('type', type);
+		record.set('show', show);
+		record.set('status', status);
+		record.save();
+	},
 
-		if (type === 'available') {
-			if (show !== 'chat') {
-				key = show;
-			}
+	savePreferenceValues: function(record, key, type, show, status){
+		var me = this;
+
+		if(record.isFuture){
+			$AppConfig.Preferences.getPreference(key, function(value){
+				if(value){
+					me.updatePreference(value, type, show, status);
+				}
+			});
+		}else{
+			me.updatePreference(record, type, show, status);
+		}
+	},
+
+	saveActive: function(type, show, status){
+		this.savePreferenceValues(this.currentPreference.Active, 'ChatPresence/Active', type, show, status);
+	},
+
+	savePreference: function(type, show, status){
+		var record, key;
+
+
+		if(show === 'chat'){
+			record = this.currentPreference.Available;
+			key = 'ChatPresence/Available';
+			status = (Ext.isEmpty(status))? this.defaultStates.available : status;
+		}else if(show === 'away'){
+			record = this.currentPreference.Away;
+			key = 'ChatPresence/Away';
+			status = (Ext.isEmpty(status))? this.defaultStates.away : status;
+		}else if(show === 'dnd'){
+			record = this.currentPreference.DND;
+			key = 'ChatPresence/DND';
+			status = (Ext.isEmpty(status))? this.defaultStates.dnd : status;
 		}
 
-		if (!current[key]) {
-			current[key] = {};
-		}
+		if(!record || !key){ return; }
 
-		current[key].type = type;
-
-		if (show !== null) {
-			current[key].show = show;
-		}
-
-		if (status !== null) {
-			current[key].status = status;
-		}
-
-		if (active) {
-			current.active = key;
-		}
-		//Set the presence info on the temp storage and the users preferences
-		//TemporaryStorage.set(this.sessionKey, current);
-		this.fireEvent('set-preference', 'presence', current, this.restoreState, this);
+		this.savePreferenceValues(record, key, type, show, status);
+		this.saveActive(type, show, status); 
 	},
 
 	restoreState: function () {
 		var me = this,
-				state = $AppConfig.Preferences.presence || {}; //|| TemporaryStorage.get(this.sessionKey) || {};
+			active = me.currentPreference.Active,
+			type = active.get('type'),
+			show = active.get('show'),
+			available = me.currentPreference.Available,
+			availableStatus,
+			away = me.currentPreference.Away,
+			awayStatus,
+			dnd = me.currentPreference.DND,
+			dndStatus;
 
-		function update() {
-			Ext.Object.each(me.defaultStates, function (key, value) {
-				var status = (state[key] && state[key].status) || me.defaultStates[key],
-						row = me.el.down('.' + key),
-						label = row && row.down('.label');
+		function update(){
 
-				if (label) {
-					label.update(status);
-				}
-			});
+			availableStatus = (available && !available.isFuture)? available.get('status') : me.defaultStates.available;
+			me.availableEl.down('.label').update(availableStatus);
+
+			awayStatus = (away && !away.isFuture)? away.get('status') : me.defaultStates.away;
+			me.awayEl.down('.label').update(awayStatus);
+
+			dndStatus = (dnd && !dnd.isFuture)?  dnd.get('status') : me.defaultStates.dnd;
+			me.dndEl.down('.label').update(dndStatus);
+
+			if(type === 'available'){
+				me.availableEl[( show === 'chat' )? 'addCls' : 'removeCls']('selected');
+				me.awayEl[( show === 'away' )? 'addCls' : 'removeCls']('selected');
+				me.dndEl[( show === 'dnd')? 'addCls' : 'removeCls']('selected');
+				me.offlineEl.removeCls('selected');
+			}else{
+				me.offlineEl.addCls('selected');
+			}
 		}
 
-		if (me.rendered) {
+		if(me.rendered){
 			update();
-		} else {
+		}else{
 			me.on('afterrender', update, me);
 		}
 	},
@@ -241,7 +289,7 @@ Ext.define('NextThought.view.menus.Presence', {
 
 		if (this.isNewPresence(presence)) {
 			this.fireEvent('set-chat-presence', presence);
-			this.saveState(type, show, status, true);
+			this.saveActive(type, show, status, true);
 		}
 
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
@@ -279,7 +327,7 @@ Ext.define('NextThought.view.menus.Presence', {
 			//somethings different update the presence
 			console.log(newPresence);
 			this.fireEvent('set-chat-presence', newPresence);
-			this.saveState(type, show, status, true);
+			this.savePreference(type, show, status, true);
 		} else {
 			this.setPresence($AppConfig.username, newPresence);
 			console.log("No presence change");

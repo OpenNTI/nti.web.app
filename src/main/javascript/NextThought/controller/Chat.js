@@ -220,15 +220,14 @@ Ext.define('NextThought.controller.Chat', {
 
 		});
 
-		//restore the presence (form the preferences of the state object) or change presence to available
-		presenceState = $AppConfig.Preferences.presence;// || TemporaryStorage.get('presence-state');
-		active = presenceState && presenceState.active && presenceState[presenceState.active];
-
-		if(active){
-			this.changePresence(active.type, active.show, active.status);
-		}else{
-			this.changePresence("available");
-		}
+		//restore the active presence form the preferences or chhange presence to available
+		$AppConfig.Preferences.getPreference('ChatPresence/Active', function(value){
+			if(value){
+				me.changePresence(value.get('type'), value.get('show'), value.get('status'));
+			}else{
+				me.changePresence('available');
+			}
+		});
 
 		Socket.on('socket-new-sessionid', function(){
 			console.log("New Socket Id, rebroadcasting presence");
