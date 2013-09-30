@@ -80,7 +80,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	function resolve(el, refEl){
-		return el && (Ext.get(el) || Ext.query(el,refEl)[0]);
+		return el && (Ext.get(el) || Ext.getDom(refEl).querySelector(el));
 	}
 
 
