@@ -433,14 +433,17 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	showAnnotations: function (annotations, line, s) {
+	showAnnotations: function (annotations, line, store) {
+		var s = store;
+
 		if (!annotations || annotations.getCount() === 0) {
 			return;
 		}
 
 		if (!s) {
 			s = NextThought.store.FlatPage.create({
-				storeId: 'presentation-annotations-' + line
+				storeId: 'presentation-annotations-' + line,
+				filters: [{ id:'nochildren', filterFn:function(r){ return !r.parent;}}]//override the base filter set
 			});
 			annotations.each(function (annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
