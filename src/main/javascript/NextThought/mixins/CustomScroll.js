@@ -18,6 +18,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			parentContainerEl = data.container,
 			parentContainerPadding = parentContainerEl && parentContainerEl.getPadding('t'),
 			parentEl = data.adjustmentEl,
+			targetEl = data.targetEl,
 			currentScroll = data.targetEl.getScrollTop(),
 			delta = currentScroll < parentContainerPadding ? currentScroll : parentContainerPadding,
 			tMargin = -delta,
@@ -110,7 +111,7 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	function onAfterRender(){
-		var parentContainerEl = Ext.get('view'), mb,
+		var parentContainerEl = Ext.get('view'), mb, pd,
 			me = this,
 			data = me.mixinData.customScroll,
 			adjustmentEl = data.adjustmentEl,
@@ -135,7 +136,9 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 		if(parentContainerEl){
 			mb = parentContainerEl.getPadding('t');
+			pd = data.targetEl.getPadding('b');
 			data.adjustmentEl.setStyle({marginBottom: -mb+'px'});
+			data.targetEl.setStyle({paddingBottom: (mb+pd)+'px'});
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll,me);
 		me.on('activate', adjustOnScroll, me);
