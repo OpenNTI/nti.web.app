@@ -176,6 +176,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			preventBringToFront: true,
 			listeners:           {
 				'deactivated-editor': 'destroy',
+				'no-title-content': function(){return false;},//require title
 				grew:                 function () {
 					if (Ext.is.iPad) {
 						return;

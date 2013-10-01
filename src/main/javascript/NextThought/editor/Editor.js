@@ -332,12 +332,15 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			if (!this.fireEvent('no-body-content', this, this.contentEl)) {
+				this.markError(this.contentEl, 'You need to type something');
 				return;
 			}
 		}
 
 		if (this.titleEl && Ext.isEmpty(v.title)) {
 			if (!this.fireEvent('no-title-content', this, this.titleEl)) {
+				this.markError(this.titleWrapEl, 'You need a title');
+				this.titleWrapEl.addCls('error-on-bottom');
 				return;
 			}
 		}
@@ -467,7 +470,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	setupSharedListEl: function (me, tabTracker, scrollParentEl) {
+	setupSharedListEl: function (cmp, tabTracker, scrollParentEl) {
 		var me = this, userTokenField, tokens, inputArea, tokenInputWrap, tokenInput;
 		me.sharedListEl = me.el.down('.recipients');
 		if (me.sharedListEl) {
@@ -497,6 +500,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	setupTitleEl: function (me, tabTracker) {
+		me.titleWrapEl = me.el.down('.title');
 		me.titleEl = me.el.down('.title input');
 		if (me.titleEl) {
 			me.titleEl.set({tabIndex: tabTracker.next()});
@@ -510,6 +514,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					var t = e.getTarget();
 					Ext.callback((t || {}).setAttribute, t, ['value', t.value],1);
 					e.stopPropagation();
+					me.clearError(me.titleWrapEl);
 				}
 			});
 		}
