@@ -337,8 +337,15 @@ Ext.define('NextThought.view.content.notepad.View',{
 			return Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
 		});
 
+
 		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c){
-			var i = doesCollide(el,c);
+
+			var d = Ext.getDom(el),
+				i = doesCollide(el,c);
+
+			//make sure nodes are in sorted order by reinserting them into the dom.(moving them)
+			d.parentNode.appendChild(d);
+
 			if(i>0){
 				el.addCls('collide');
 				el.setHeight(i);

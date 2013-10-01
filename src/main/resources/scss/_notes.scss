@@ -653,14 +653,12 @@
 		left: 0 !important;
 		right: 0 !important;
 		position: absolute;
-		font: italic 400 1em/normal $font;
+		font: italic 400 0.9em/2.1em $font;
 		padding: 0.5em;
 		margin: -0.8em 0 0 0;
 		color: $tertiary-grey;
 		background: #fff;
 		@include experimental(box-sizing, content-box);
-		box-shadow: inset 0px -1px 0px 0px #ededed,
-					inset 0px 1px 0px 0px #ededed;
 	}
 
 
@@ -691,14 +689,19 @@
 
 		background: #fbfbfb;
 		color: $secondary-grey;
-		font: italic 400 1em/normal $font;
+		font: italic 400 0.9em/2.1em $font;
 		padding: 0.4em 0.5em;
 		margin: -0.8em 0 0 0;
+
+		&:hover {
+			box-shadow: inset 0px -1px 0px 0px #e3e3e3,
+						inset 0px 1px 0px 0px #e3e3e3;
+		}
 
 
 		&.collide {
 			//@include experimental(transition, height 0.5s);
-			border-bottom: 1px solid #d1d1d1;
+			box-shadow: inset 0px -1px 0px 0px #e3e3e3;
 			&::after {
 				content: '';
 				position: absolute;
@@ -709,7 +712,7 @@
 				z-index: 1;
 				border-radius: 100%;
 				background: rgba(0, 0, 0, 0.1);
-				box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 0.3);
+				box-shadow: 0px 0px 7px -1px rgba(0, 0, 0, 0.45);
 				clip: rect(-10px, auto, 2px, auto);
 			}
 
@@ -718,12 +721,22 @@
 				height: auto !important;
 				z-index: 10;
 
-				@include background-image(linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(255,255,255,1) 70%));
+				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 70%));
 
 				&::after {
-					bottom: -1px;
+					bottom: 1px;
 					clip: rect(8px, auto, 20px, auto);
 				}
+
+				//make sure nodes are sorted
+				& + .x-component-notepad-item {
+					background: none;
+				}
+			}
+
+			//make sure nodes are sorted
+			& + .x-component-notepad-item {
+				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 70%));
 			}
 		}
 
@@ -731,6 +744,8 @@
 			background: #fff;
 			z-index: 100;
 			padding-left: 1em;
+			box-shadow: inset 0px -1px 0px 0px #ededed,
+						inset 0px 1px 0px 0px #ededed;
 
 			&:not(.empty){
 				& > div[contenteditable] {
