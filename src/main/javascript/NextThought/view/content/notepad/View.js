@@ -357,6 +357,9 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 	addOrUpdate: function(annotation, yPlacement){
 		yPlacement = Math.round(yPlacement);
+		if(yPlacement < 5){
+			yPlacement = 5;
+		}
 
 		var map = this.notepadItems,
 			data = {
