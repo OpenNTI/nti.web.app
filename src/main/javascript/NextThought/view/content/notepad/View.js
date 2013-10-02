@@ -283,7 +283,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 	detectOverflow: function(){
 		console.log('overflow detection');
 
-		var collided = {}, els;
+		var collided = {}, els, resort = false;
 
 		function doesCollide(el, set){
 			var top = el.getLocalY(),
@@ -334,9 +334,14 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 		els = this.el.select('.scroller > *:not(.note-here)').slice();
 		els.sort(function(a,b){
-			return Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
+			var c = Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
+			if(c > 0){
+				resort = true;
+			}
+			return c;
 		});
 
+		resort = !this.editor && resort && (new Ext.dom.CompositeElement(els)).filter('.edit').getCount()===0;
 
 		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c){
 
@@ -344,7 +349,9 @@ Ext.define('NextThought.view.content.notepad.View',{
 				i = doesCollide(el,c);
 
 			//make sure nodes are in sorted order by reinserting them into the dom.(moving them)
-			d.parentNode.appendChild(d);
+			if(resort){
+				d.parentNode.appendChild(d);
+			}
 
 			if(i>0){
 				el.addCls('collide');
