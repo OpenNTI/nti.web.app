@@ -50,9 +50,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		this.sizer = Ext.DomHelper.insertAfter(this.el, {}, true);
 		this.sizer.setHeight(1000);
 
-		this.mon(this.titleWrapEl, 'keyup', function () {
-			this.clearError(this.titleWrapEl);
-		}, this);
 		profileEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : ''));
 
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
@@ -144,22 +141,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		}, 100);
 
 		Ext.defer(this.updateLayout, 700, this, []);
-	},
-
-
-	onKeyUp: function () {
-		this.clearError(this.editorBodyEl);
-	},
-
-
-	clearError: function (el) {
-		el.removeCls('error-tip').set({'data-error-tip': undefined});
-		this.el.repaint();
-	},
-
-
-	markError: function (el, message) {
-		el.addCls('error-tip').set({'data-error-tip': message});
 	},
 
 
