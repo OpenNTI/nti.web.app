@@ -1,8 +1,13 @@
 Ext.define('NextThought.preference.Manager',{
 
+	requires:[
+		'NextThought.proxy.Preference',
+		'NextThought.model.preference.*'
+	],
+
 	constructor: function(config){
 		this.baseUrl = config.href;
-		this.root = Ext.create('NextThought.model.preference.Root',{Class: 'preference', href: this.baseUrl});
+		this.root = NextThought.model.preference.Root.create({Class: 'preference', href: this.baseUrl});
 	},
 
 	/*
