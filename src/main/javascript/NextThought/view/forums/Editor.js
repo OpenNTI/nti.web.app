@@ -69,9 +69,6 @@ Ext.define('NextThought.view.forums.Editor', {
 			this.setPublished(r.isPublished());
 		}
 
-		this.mon(this.titleWrapEl, 'keyup', function () {
-			this.clearError(this.titleWrapEl);
-		}, this);
 		parentCtEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : '')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 		Ext.defer(this.syncHeight, 1, this);
@@ -113,30 +110,6 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	moveCursorToEnd: function (el) {
-		var range, selection;
-		//this is only for input/textarea elements
-		el = Ext.getDom(el);
-		if (typeof el.selectionStart === "number") {
-			el.selectionStart = el.selectionEnd = el.value.length;
-		}
-		else if (el.createTextRange) {
-			el.focus();
-			range = el.createTextRange();
-			range.collapse(false);
-			range.select();
-		}
-		else if (document.createRange) {
-			range = document.createRange();
-			range.selectNodeContents(el);
-			range.collapse(false);
-			selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
-		}
-	},
-
-
 	syncHeight: function () {
         /*  for ipad, everytime a new input is focused, this runs.
             and changing the height and top makes the editor too small.
@@ -173,18 +146,6 @@ Ext.define('NextThought.view.forums.Editor', {
 		}
 		el.setHeight(Ext.Element.getViewportHeight() - (top + this.footerEl.getHeight() + 10));
 		Ext.defer(this.updateLayout, 700, this, []);
-	},
-
-
-	clearError: function (el) {
-		if(!el){ return; }
-		el.set({'data-error-tip': undefined});
-		Ext.defer(el.removeCls, 1, el, ['error-tip']);
-	},
-
-
-	markError: function (el, message) {
-		el.addCls('error-tip').set({'data-error-tip': message});
 	},
 
 
