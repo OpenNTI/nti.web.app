@@ -12,7 +12,9 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 		 * we will are handling it by manipulating top and bottom margin.
 		 **/
 		try{
-			console.log(this.isVisible());
+			if(!this.isVisible()){
+				return;
+			}
 
 		var data = this.mixinData.customScroll,
 			parentContainerEl = data.container,
@@ -50,28 +52,8 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	function setReverseMargin(bottomMargin){
-		/**
-		 * NOTE: When we modify the top and bottom margin of the parentEl view,
-		 * we sometimes need to also adjust el that depends on it. Specifically,
-		 * in cases where we have sibling view which is scrollable.
-		 */
-		var data = this.mixinData.customScroll, nH;
-
-		if(!data.reverseMarginEl){ return; }
-
-		if(Ext.isString(data.reverseMarginEl)){
-			return;//doesn't exist (yet?)
-		}
-
-		if(!this.initialReverseViewHeight){
-			this.initialReverseViewHeight = Ext.fly(data.reverseMarginEl).getHeight();
-		}
-
 		try{
-			nH = this.initialReverseViewHeight;
-			nH = bottomMargin ? nH + bottomMargin: nH;
-			Ext.fly(data.reverseMarginEl).setStyle({marginBottom: -bottomMargin + 'px', height: nH+'px'});
-//			console.log('setting height to: ', nH);
+			updateSideHeight.call(this,-bottomMargin);
 		}
 		catch(e){
 			console.error(e.stack || e.stacktrace || e.message || e);
@@ -80,19 +62,25 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 
 	function updateCaches(){
-		delete this.initialRefreshInterval;
+		var data = this.mixinData.customScroll;
+		delete data.cachedTargetHeight;
 		updateSideHeight.call(this);
 	}
 
 
-	function updateSideHeight(){
+	function updateSideHeight(heightAdjustOffset){
 		var data = this.mixinData.customScroll, nH,
-			el = data.reverseMarginEl;
+			el = data.secondaryViewEl,
+//			cmp = data.reverseMarginCmp, f,
+			o = heightAdjustOffset || 0,
+			attr = 'custom-scroll-height-adjustment';
+
+		o = data.lastHeightAdjustOffset = o || data.lastHeightAdjustOffset || 0;
 
 		if(!el){ return; }
 
 		if(Ext.isString(el)){
-			el = data.reverseMarginEl = resolve(el,data.container) || el;
+			el = data.secondaryViewEl = resolve(el,data.container) || el;
 			if(Ext.isString(el)){
 				return;//doesn't exist (yet?)
 			}
@@ -100,8 +88,31 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 
 		el = Ext.get(el);
 
-		nH = el.getHeight() - el.getMargin('b');
+//		if(!cmp ) {
+//			cmp = data.reverseMarginCmp = Ext.getCmp(el.id);
+//			if( cmp ) {
+//				f = Ext.bind(updateCaches,this);
+//				this.mon(cmp,{
+//					resize: f,
+//					afterlayout: f
+//				});
+//			}
+//		}
+
+		if(!Ext.isNumber(data.cachedTargetHeight)){
+			data.cachedTargetHeight = el.getHeight();
+			if(data.cachedTargetHeight === +el.getAttribute(attr)){
+				data.cachedTargetHeight += data.lastHeightAdjustOffset || (o || 0);
+			}
+			//console.debug('data',data.cachedTargetHeight, el.getAttribute(attr));
+		}
+
+		nH = (data.cachedTargetHeight - o);// - data.secondaryViewElInitialMargin;
 		el.setHeight(nH);
+
+		o = {};
+		o[attr]=nH;
+		el.set(o);
 	}
 
 
@@ -116,12 +127,12 @@ Ext.define('NextThought.mixins.CustomScroll', function(){
 			data = me.mixinData.customScroll,
 			adjustmentEl = data.adjustmentEl,
 			targetEl = data.targetEl,
-			reverseMarginEl = data.options && data.options.reverseMarginEl;
+			secondaryViewEl = data.options && data.options.secondaryViewEl;
 
 		data.container = parentContainerEl;
 		data.targetEl = data.targetEl ? resolve(targetEl,parentContainerEl) : me.getTargetEl();
 		data.adjustmentEl = resolve(adjustmentEl,parentContainerEl);
-		data.reverseMarginEl = resolve(reverseMarginEl,parentContainerEl) || reverseMarginEl;
+		data.secondaryViewEl = secondaryViewEl;
 
 		if(!data.adjustmentEl){
 			console.error('No adjustment element found for:', adjustmentEl);

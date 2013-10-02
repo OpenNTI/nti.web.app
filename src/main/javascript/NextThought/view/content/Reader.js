@@ -75,8 +75,8 @@ Ext.define('NextThought.view.content.Reader', {
 					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
 
-		// NOTE: check notes on the mixin, as to why we might want to set a reverseMarginEl.
-		this.initCustomScrollOn('content', undefined, {reverseMarginEl:'.annotation-view'});
+		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
+		this.initCustomScrollOn('content', undefined, {secondaryViewEl:'.annotation-view'});
 	},
 
 
