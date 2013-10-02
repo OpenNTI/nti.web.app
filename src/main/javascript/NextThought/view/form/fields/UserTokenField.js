@@ -76,6 +76,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		this.pickerView = Ext.widget('share-search', {
 			ownerCls: this.ownerCls,
 			store:me.store,
+			focusOnToFront: false,
 			renderTo: spEl || Ext.getBody()
 		});
 		this.mon(this.store, {
@@ -487,7 +488,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
             }
         }
         else{
-            picker.showAt(x,y + scrollOffset);
+			picker.showAt(x,y + scrollOffset);
         }
 	},
 
