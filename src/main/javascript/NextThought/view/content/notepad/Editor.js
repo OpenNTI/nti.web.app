@@ -142,6 +142,10 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			}
 		});
 
+		if(!out.length){
+			out = this.body.getHTML().split(/<br\/?>/);
+		}
+
 		return Ext.Array.filter(join(clean(out)), function (i) {
 			//if we are just whitespace and html whitespace
 			return i && !Ext.isEmpty(i.replace(/<br\/?>|&nbsp;/g, '').trim());
