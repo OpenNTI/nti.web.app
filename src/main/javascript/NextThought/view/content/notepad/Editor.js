@@ -2,6 +2,10 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 	extend: 'Ext.Component',
 	alias: 'widget.notepad-editor',
 
+	requires: [
+		'NextThought.editor.Editor'
+	],
+
 	ui: 'notepad-item',
 	cls: 'inline-editor',
 
@@ -30,7 +34,8 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			body: {
 				click: 'stop',
 				blur: 'blur',
-				keydown: 'onKeyDown'
+				keydown: 'onKeyDown',
+				keypress: 'stop'
 			}
 		});
 	},
@@ -54,9 +59,9 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 
 
 	onKeyDown: function(e){
+		this.stop(e);
 		if(e.getKey() === e.ESC){
 			this.fireEvent('cancel');
-			this.stop(e);
 			this.destroy();
 			return;
 		}
@@ -72,6 +77,7 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 
 	focus: function(){
 		this.body.focus();
+		this.moveCursorToEnd(this.body.last());
 	},
 
 
@@ -141,4 +147,6 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			return i && !Ext.isEmpty(i.replace(/<br\/?>|&nbsp;/g, '').trim());
 		});
 	}
+},function(){
+	this.borrow(NextThought.editor.AbstractEditor,['moveCursorToEnd']);
 });
