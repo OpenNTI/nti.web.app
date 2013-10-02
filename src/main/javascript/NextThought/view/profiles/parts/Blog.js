@@ -38,6 +38,21 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
+	/**
+	 * This allows us to masquerade as a child of a card layout (just incase we are not) because we want our children
+	 * compoents that MAY want to know when theu've been activated/deactiveated or listen to other card-layout-specific
+	 * events.
+	 *
+	 * This may seem dangerous, but {@link Ext.Component#isOwnerLayout} is a function that I injected into the system.
+	 * @see NextThought.overrides.Component#isOwnerLayout
+	 * @param name
+	 * @returns {boolean}
+	 */
+	isOwnerLayout: function(name){
+		return name==="card" || this.callParent(arguments);
+	},
+
+
 	initComponent: function () {
 		this.callParent(arguments);
 
@@ -62,10 +77,12 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		return !isMe(this.username) ? $AppConfig.service.canWorkspaceBlog() : this.canCreateNewBlog();
 	},
 
+
 	canCreateNewBlog: function () {
 		// We will drive showing the newEntry btn based on whether or not the user has the capability.
 		return isMe(this.username) && $AppConfig.service.canBlog();
 	},
+
 
 	buildBlog: function (reresolveUser) {
 		function fail(response) {
@@ -152,6 +169,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		this.on('destroy', function () {Ext.EventManager.removeResizeListener(this.handleWindowResize, this);}, this);
 	},
 
+
 	handleWindowResize: function () {
 		var wrapperEl, profileEl,
 				btnEl = this.btnNewEntryEl,
@@ -216,9 +234,10 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		}
 
 		var fnm = {'true': 'show', 'false': 'hide'},
-				v = viewToShow !== 'post';
+			v = viewToShow !== 'post';
 
 		try {
+			this.fireEvent(v?'activate':'deactivate',this);
 			this.listViewBodyEl[fnm[v]]();
 			this.postViewEl[fnm[!v]]();
 			this.btnNewEntryEl[(v) ? 'removeCls' : 'addCls']('disabled');
@@ -292,6 +311,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		Ext.each(records, function (i) { me.insert(index, {record: i}); }, me, true);
 		me.resumeLayouts(true);
 	},
+
 
 	removedContent: function (store, record, index) {
 		if (store.getCount() === 0) {
