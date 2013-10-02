@@ -25,14 +25,15 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor',{
 		this.mon(this.el.down('.cancel'), 'click', this.cancelEdit, this);
 
 		this.on({
-			'complete':'textTransform',
-			'canceledit':'textTransform'
+			'complete':'resetBoundEl',
+			'canceledit':'resetBoundEl'
 		});
 	},
 
 
-	textTransform: function(){
+	resetBoundEl: function(){
 		this.boundEl.setStyle({textTransform:null});
+		Ext.defer(this.boundEl.repaint,100,this.boundEl);
 	},
 
 
