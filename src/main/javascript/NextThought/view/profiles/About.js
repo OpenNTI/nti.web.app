@@ -462,6 +462,13 @@ Ext.define('NextThought.view.profiles.About',{
 
 	onHideEditing: function(){
 		this.removeCls('editing');
+		if (this.metaEditor && this.metaEditor.editing) {
+			this.metaEditor.cancelEdit();
+		}
+
+		if (this.nameEditor && this.nameEditor.editing) {
+			this.nameEditor.cancelEdit();
+		}
 		console.debug('hide edit',arguments);
 	},
 
