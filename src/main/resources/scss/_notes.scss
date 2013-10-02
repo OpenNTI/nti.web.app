@@ -721,7 +721,7 @@
 				height: auto !important;
 				z-index: 10;
 
-				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 70%));
+				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(251,251,251,0) 70%));
 
 				&::after {
 					bottom: 1px;
@@ -736,7 +736,7 @@
 
 			//make sure nodes are sorted
 			& + .x-component-notepad-item {
-				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 70%));
+				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(251,251,251,0) 70%));
 			}
 		}
 
