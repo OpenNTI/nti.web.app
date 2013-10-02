@@ -119,6 +119,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	changeMediaTimeoutMillis:         1000,
 
 	constructor: function (config) {
+		var me = this;
+
 		this.mixins.observable.constructor.call(this);
 
 		// We need to externalize these values since they relate to our Kaltura Account.  This is okay for OU since they are paying for it.
@@ -138,14 +140,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		this.handleMessage = Ext.bind(this.handleMessage, this);
 
-		this.LEAD_HTML5 = this.shouldUseHtml5().toString();
-
-		this.playerSetup();
-	},
-
-
-	shouldUseHtml5: function () {
-		return !Ext.isIE9 && !$AppConfig.Preferences.webapp_kalturaPreferFlash;
+		$AppConfig.Preferences.getPreference('WebApp', function(value){
+			me.LEAD_HTML5 = (value)? value.get('preferFlashVideo').toString() : 'false';
+			me.playerSetup();
+		});
 	},
 
 
