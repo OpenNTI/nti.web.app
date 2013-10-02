@@ -196,7 +196,7 @@ Ext.define('NextThought.view.course.forum.View',{
 		}
 
 		this.popView();
-		this.restoreState(forum, topic);
+		this.navigateToForumObject.apply(this, arguments);
 	},
 
 
