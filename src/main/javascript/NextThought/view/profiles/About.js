@@ -3,6 +3,10 @@ Ext.define('NextThought.view.profiles.About', {
 	alias: 'widget.profile-about',
 
 	//<editor-fold desc="Config">
+	requires: [
+		'NextThought.view.profiles.ProfileFieldEditor'
+	],
+
 	uriFriendlyName: 'about',
 	html: 'about',
 	ui: 'profile',
