@@ -5,6 +5,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 	//<editor-fold desc="Config">
 	requires: [
 		'NextThought.ux.ComponentReferencing',
+		'NextThought.view.content.notepad.Container',
 		'NextThought.view.content.notepad.Item',
 		'NextThought.view.content.notepad.Editor'
 	],
