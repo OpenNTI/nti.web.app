@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.Activity',{
+Ext.define('NextThought.view.profiles.parts.Activity', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-activity',
 
@@ -17,7 +17,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	DEFAULT_URI: 0,
 	ACTIVE_ACTION_URI: 1,
 
-	uriFriendlyName: ['','activity'],
+	uriFriendlyName: ['', 'activity'],
 	defaultType: 'profile-activity-item',
 	layout: 'auto',
 	ui: 'profile-activity',
@@ -26,68 +26,68 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	//</editor-fold>
 
 
-	initComponent: function(){
-		this.fireEvent('uses-page-stores',this);
+	initComponent: function() {
+		this.fireEvent('uses-page-stores', this);
 		this.callParent(arguments);
 
-		if( this.user ){
+		if (this.user) {
 			this.setUser(this.user);
 		}
 		else {
-			UserRepository.getUser(this.username,this.setUser, this, true);
+			UserRepository.getUser(this.username, this.setUser, this, true);
 		}
 
 		this.on({
-			el:{scroll:'onScroll'}
+			el: {scroll: 'onScroll'}
 		});
 	},
 
 
-	performAction: function(action,param){
+	performAction: function(action,param) {
 
-//		if(action!=='filter'){
+    //		if(action!=='filter'){
 			//clear filter.
-//			return;
-//		}
+    //			return;
+    //		}
 
 		//otherwise filter on param:
 
 	},
 
-	getStateData: function(){
+	getStateData: function() {
 		//if action is active(a la: filter): return [uriFriendlyName[this.ACTIVE_ACTION_URI],action,param].join('/')
 		//else:
 		return this.uriFriendlyName[this.DEFAULT_URI];
 	},
 
 
-	restore: function(data,finishCallback){
+	restore: function(data,finishCallback) {
 
-		Ext.callback(finishCallback,null,[this]);
+		Ext.callback(finishCallback, null, [this]);
 	},
 
 
-	setUser: function(user){
+	setUser: function(user) {
 		var me = this;
 		me.user = user;
 
-		function setupStore(){
+		function setupStore() {
 			var s = me.store = me.getStore();
-			me.mon(s,{
+			me.mon(s, {
 				scope: me,
 				load: me.storeLoaded,
 				beforeload: me.showLoadingBar
 			});
-			if(me.store.getCount()){
+			if (me.store.getCount()) {
 				me.storeLoaded(me.store, me.store.data.items, true);
 			}
-			else{
-				me.store.load({page:1, callback: me.loadCallback, scope: me});
+			else {
+				me.store.load({page: 1, callback: me.loadCallback, scope: me});
 			}
 		}
 
-		if(!me.rendered){
-			me.on('afterrender', setupStore, me, {single:true});
+		if (!me.rendered) {
+			me.on('afterrender', setupStore, me, {single: true});
 			return;
 		}
 
@@ -95,29 +95,29 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	},
 
 
-	getStore: function(){
-		var id = 'profile-activity-'+this.username,
+	getStore: function() {
+		var id = 'profile-activity-' + this.username,
 			s = Ext.getStore(id);
 
-		if(!s){
+		if (!s) {
 			s = NextThought.store.ProfileItem.create({ id: id });
 		}
 
-		if(!this.user){
+		if (!this.user) {
 			Ext.Error.raise('No user object!');
 		}
 
 		s.proxy.url = this.user.getLink('Activity');
-		if(!s.proxy.url){
+		if (!s.proxy.url) {
 			//don't attempt to do anything if no url
 			s.setProxy('memory');
 		}
 
-		function makeMime(v){
-			return 'application/vnd.nextthought.'+ v.toLowerCase();
+		function makeMime(v) {
+			return 'application/vnd.nextthought.' + v.toLowerCase();
 		}
 
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 			filter: 'TopLevel',
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
@@ -127,28 +127,28 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				'forums.PersonalBlogComment',
 				'forums.GeneralForumComment',
 				'assessment.AssessedQuestion'
-			],makeMime).join(',')
+			], makeMime).join(',')
 		});
 
-		if(!this.hasPageStore(s.storeId)){
+		if (!this.hasPageStore(s.storeId)) {
 			s.doesNotClear = true;
 			s.doesNotShareEventsImplicitly = true;
 			s.profileStoreFor = this.username;
-			this.addPageStore(s.storeId,s);
+			this.addPageStore(s.storeId, s);
 		}
 
-		this.mon(s,{
+		this.mon(s, {
 			scope: this,
 			add: this.itemsAddedToStore,
-			remove: function(){console.debug('Removed item(s)');},
-			bulkremove:function(){console.debug('Bulk Removed item(s)');}
+			remove: function() {console.debug('Removed item(s)');},
+			bulkremove: function() {console.debug('Bulk Removed item(s)');}
 		});
 
 		return s;
 	},
 
 
-	showLoadingBar: function(){
+	showLoadingBar: function() {
 		console.log('Show loading bar');
 		//TOOD how to get the height into css.  If we don't specify it here it gets an
 		//inline styled height
@@ -160,8 +160,8 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			frame: false, border: false, plain: true,
 			listeners: {
 				afterrender: {
-					fn: function(cmp){
-						Ext.defer(cmp.el.mask,1,cmp.el,['Loading...']);
+					fn: function(cmp) {
+						Ext.defer(cmp.el.mask, 1, cmp.el, ['Loading...']);
 					},
 					single: true
 				}
@@ -169,43 +169,43 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	},
 
 
-	clearLoadingBar: function(){
+	clearLoadingBar: function() {
 		var bar = this.down('#loadingbar');
 		console.log('Clear loading bar');
-		if(bar){
+		if (bar) {
 			this.remove(bar);
 		}
 	},
 
 
-	cmpsFromRecords: function(records){
+	cmpsFromRecords: function(records) {
 		var cmps = [], lastHighlightContainer;
 
-		function getDate(rec){
-			var d = rec.get('CreatedTime')||new Date(0);
+		function getDate(rec) {
+			var d = rec.get('CreatedTime') || new Date(0);
 			return new Date(
 					d.getFullYear(),
 					d.getMonth(),
 					d.getDate());
 		}
 
-		function newContainer(rec){
+		function newContainer(rec) {
 			lastHighlightContainer = {
 				xtype: 'profile-activity-highlight-container',
 				date: getDate(rec),
-				items:[rec]
+				items: [rec]
 			};
 			cmps.push(lastHighlightContainer);
 		}
 
-		Ext.each(records || [], function(i){
-			var c = (i.get('Class')||'default').toLowerCase(),
-				n = 'profile-activity-'+c+'-item',
-				alias = 'widget.'+ n;
+		Ext.each(records || [], function(i) {
+			var c = (i.get('Class') || 'default').toLowerCase(),
+				n = 'profile-activity-' + c + '-item',
+				alias = 'widget.' + n;
 
-			if(c === 'highlight'){
+			if (c === 'highlight') {
 				//This may simplify to line-item-like activity items in the future
-				if(lastHighlightContainer && lastHighlightContainer.date.getTime() === getDate(i).getTime()){
+				if (lastHighlightContainer && lastHighlightContainer.date.getTime() === getDate(i).getTime()) {
 					lastHighlightContainer.items.push(i);
 				}
 				else {
@@ -214,31 +214,31 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 				return;
 			}
 
-			if(Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias),false)){
-				console.error('Unsupported type: ', n,' record: ',i, ', skipping');
+			if (Ext.isEmpty(Ext.ClassManager.getNameByAlias(alias), false)) {
+				console.error('Unsupported type: ', n, ' record: ', i, ', skipping');
 				return;
 			}
 
-			cmps.push({record: i, root:true, xtype: n});
+			cmps.push({record: i, root: true, xtype: n});
 		},this);
 
 		return cmps;
 	},
 
 
-	loadCallback: function(records, operation, success){
-		if(!success && operation.error && operation.error.status === 404){
+	loadCallback: function(records, operation, success) {
+		if (!success && operation.error && operation.error.status === 404) {
 			//If we don't have a joined-event child add one now
-			if(!this.down('joined-event')){
+			if (!this.down('joined-event')) {
 				this.add({ xtype: 'joined-event', username: this.username });
 			}
 		}
 	},
 
 
-	storeLoaded: function(store, records, successful){
+	storeLoaded: function(store, records, successful) {
 
-		if(!successful){
+		if (!successful) {
 			this.clearLoadingBar();
 			return;
 		}
@@ -246,11 +246,11 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		console.log('loaded ', records.length, ' items ');
 
 		//For now we only do top level stuff
-		records = Ext.Array.filter(records, function(rec){
+		records = Ext.Array.filter(records, function(rec) {
 
 			//If it responds to isTopLevel and it is
 			//not top level we don't want it.
-			if(rec.isTopLevel && !rec.isTopLevel()){
+			if (rec.isTopLevel && !rec.isTopLevel()) {
 				return false;
 			}
 
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 			done = s.currentPage === s.getPageFromRecordIndex(s.getTotalCount()),
 			added, lastAdded;
 
-		if(done){
+		if (done) {
 			add.push({ xtype: 'joined-event', username: this.username });
 		}
 
@@ -275,33 +275,33 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 
 		console.log('Showing', this.items.length, ' objects ');
 		added = this.add(add) || [];
-		if(!Ext.isEmpty(added)){
+		if (!Ext.isEmpty(added)) {
 			lastAdded = added.last();
-			if(lastAdded.rendered){
+			if (lastAdded.rendered) {
 				this.maybeShowMoreItems();
 			}
-			else{
+			else {
 				lastAdded.on('afterrender', this.maybeShowMoreItems, this, {single: true});
 			}
 		}
-		else{
+		else {
 			this.maybeShowMoreItems();
 		}
 
 	},
 
 
-	itemsAddedToStore: function(store, records, index){
+	itemsAddedToStore: function(store, records, index) {
 		var cmps;
 		console.log('Records added at index', index, records);
 
 		//For now we only do top level stuff
-		records = Ext.Array.filter(records, function(rec){
+		records = Ext.Array.filter(records, function(rec) {
 			return !rec.isTopLevel || rec.isTopLevel();
 		});
 
 
-		if(Ext.isEmpty(records)){
+		if (Ext.isEmpty(records)) {
 			return;
 		}
 
@@ -318,19 +318,19 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	},
 
 
-	maybeShowMoreItems: function(){
+	maybeShowMoreItems: function() {
 		var viewportHeight = Ext.Element.getViewportHeight(),
 			minCount = viewportHeight / 100,
 		me = this;
 
-		if(minCount > this.items.getCount()){
+		if (minCount > this.items.getCount()) {
 			console.log('loading the next page. ', minCount, this.items.getCount());
 			me.prefetchNext();
 		}
 	},
 
 
-	onScroll: function(e){
+	onScroll: function(e) {
 		var el = e.getTarget(),
 			height = Ext.fly(el).getHeight();
 
@@ -340,12 +340,12 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 	},
 
 
-	onScrolledToBottom: function(){
+	onScrolledToBottom: function() {
 		this.prefetchNext();
 	},
 
 
-	prefetchNext: function(){
+	prefetchNext: function() {
 		var s = this.store, max;
 
 		if (!s.hasOwnProperty('data')) {
@@ -353,7 +353,7 @@ Ext.define('NextThought.view.profiles.parts.Activity',{
 		}
 
 		max = s.getPageFromRecordIndex(s.getTotalCount());
-		if(s.currentPage < max && !s.isLoading()){
+		if (s.currentPage < max && !s.isLoading()) {
 			console.log('Fetching next page of data', s);
 			s.clearOnPageLoad = false;
 			s.nextPage({callback: this.loadCallback, scope: this});

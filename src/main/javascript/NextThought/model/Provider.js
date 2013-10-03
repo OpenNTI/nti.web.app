@@ -1,4 +1,4 @@
-Ext.define(	'NextThought.model.Provider', {
+Ext.define('NextThought.model.Provider', {
 	fields: [
 		{ name: 'Classes', type: 'collectionItem' },
 		{ name: 'Communities', type: 'UserList' },

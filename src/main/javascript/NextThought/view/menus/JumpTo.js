@@ -25,14 +25,14 @@ Ext.define('NextThought.view.menus.JumpTo', {
 	cls: 'jump-menu',
 
 
-	initComponent: function () {
+	initComponent: function() {
 		var me = this;
 		this.callParent(arguments);
 		this.on('click', this.handleClick, this);
 	},
 
 
-	handleClick: function (menu, item) {
+	handleClick: function(menu, item) {
 		if (!item || !item.ntiid) {
 			return;
 		}
@@ -46,7 +46,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		if (!Ext.is.iPad) { // iPad doesn't need/want these
 			this.mon(this, {
@@ -58,28 +58,28 @@ Ext.define('NextThought.view.menus.JumpTo', {
 	},
 
 
-	startShow: function (el, align, offset) {
+	startShow: function(el, align, offset) {
 		this.stopHide();
 		this.showTimeout = Ext.defer(this.showBy, 750, this, [el, align, offset]);
 	},
 
 
-	stopShow: function () {
+	stopShow: function() {
 		this.startHide();
 		clearTimeout(this.showTimeout);
 	},
 
 
-	startHide: function () {
+	startHide: function() {
 		var me = this;
 		me.stopHide();
-		me.leaveTimer = setTimeout(function () {
+		me.leaveTimer = setTimeout(function() {
 			me.hide();
 		}, 500);
 	},
 
 
-	stopHide: function () {
+	stopHide: function() {
 		clearTimeout(this.leaveTimer);
 	}
 });

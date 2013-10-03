@@ -11,14 +11,14 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 	],
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function(o) {
 			return NextThought.model.anchorables.DomContentPointer.create({
 				role: o.role
 			});
 		}
 	},
 
-	constructor: function(o){
+	constructor: function(o) {
 		this.validateRole(o.role);
 		this.callParent(arguments);
 		this.Class = 'DomContentPointer';
@@ -30,13 +30,13 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 		if (!r) {
 			Ext.Error.raise('Must supply a role');
 		}
-		else if (!Ext.Array.contains(this.validRoles, r)){
+		else if (!Ext.Array.contains(this.validRoles, r)) {
 			Ext.Error.raise('Role must be of the value ' + this.validRoles.join(',') + ', supplied ' + r);
 		}
 	},
 
 
-	locateRangePointInAncestor: function(){
+	locateRangePointInAncestor: function() {
 		return {confidence: 0, node: null};
 	}
 });

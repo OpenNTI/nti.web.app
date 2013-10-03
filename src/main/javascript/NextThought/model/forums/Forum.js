@@ -11,8 +11,8 @@ Ext.define('NextThought.model.forums.Forum', {
 		{ name: 'ACL', type: 'auto'}
 	],
 
-	buildContentsStore: function(cfg, extraParams){
-		return this.callParent([Ext.apply({stateKey:'forum'},cfg),
+	buildContentsStore: function(cfg, extraParams) {
+		return this.callParent([Ext.apply({stateKey: 'forum'},cfg),
 			Ext.apply({
 				sorters: [{
 					property: 'NewestDescendantCreatedTime',

@@ -36,7 +36,7 @@ Ext.define('NextThought.controller.Store', {
 		{ ref: 'enrollmentWindow', selector: 'enrollment-window'}
 	],
 
-	init: function () {
+	init: function() {
 		this.callParent(arguments);
 		this.application.on('session-ready', 'onSessionReady', this);
 
@@ -71,11 +71,11 @@ Ext.define('NextThought.controller.Store', {
 					'price-purchase': 'pricePurchase'
 				},
 
-				'enrollment-detailview':{
-					'show-enrollment-confirmation':'showEnrollmentConfirmation'
+				'enrollment-detailview': {
+					'show-enrollment-confirmation': 'showEnrollmentConfirmation'
 				},
-				'enrollment-confirm':{
-					'show-enrollment-complete':'showEnrollmentComplete'
+				'enrollment-confirm': {
+					'show-enrollment-complete': 'showEnrollmentComplete'
 				},
 				'enrollment-complete': {
 					'close': 'forceCloseWindow'
@@ -94,11 +94,11 @@ Ext.define('NextThought.controller.Store', {
 		});
 	},
 
-	onSessionReady: function () {
+	onSessionReady: function() {
 		var store = this.getPurchasableStore();
 		store.on('load', this.maybeAddPurchasables, this);
 		store.proxy.url = $AppConfig.service.getPurchasableItemURL();
-		Library.on('loaded', function () {
+		Library.on('loaded', function() {
 			store.load();
 		}, this, {single: true});
 	},
@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.Store', {
 
 	//TODO a way to have this collection show up only if there are purchasable
 	//items that have not yet been purchased?
-	maybeAddPurchasables: function () {
+	maybeAddPurchasables: function() {
 
 		if (!this.getPurchasableStore().getCount()) {
 			return;
@@ -114,7 +114,7 @@ Ext.define('NextThought.controller.Store', {
 
 		var view = this.getLibraryView();
 
-		if(view && !view.down('purchasable-collection') ){
+		if (view && !view.down('purchasable-collection')) {
 			view.add({
 				ui: 'library-collection',
 				xtype: 'purchasable-collection',
@@ -134,8 +134,8 @@ Ext.define('NextThought.controller.Store', {
 
 
 	//For marking sample state
-	updateLibraryWithPurchasable: function (p) {
-		Ext.each(p.get('Items') || [], function (itemId) {
+	updateLibraryWithPurchasable: function(p) {
+		Ext.each(p.get('Items') || [], function(itemId) {
 			var title = Library.getTitle(itemId);
 			if (title) {
 				title.set('sample', !p.get('Activated'));
@@ -147,10 +147,10 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	refreshPurchasable: function (p) {
+	refreshPurchasable: function(p) {
 		this.fireEvent('purchase-complete', this, p);
 		$AppConfig.service.getObject(p.getId(),
-			function (newP) {
+			function(newP) {
 				//p should be the instance of the record out of the store
 				//but just in case look for it in the store and merge into that
 				var fromStore = this.getPurchasableStore().getById(p.getId());
@@ -159,27 +159,27 @@ Ext.define('NextThought.controller.Store', {
 					this.updateLibraryWithPurchasable(fromStore);
 				}
 			},
-			function () {
+			function() {
 				console.warn('An error occurred refreshing purchasable', arguments);
 			},
 			this, true);
 	},
 
 
-	purhcasableCollectionSelection: function (cmp, record) {
+	purhcasableCollectionSelection: function(cmp, record) {
 		Ext.menu.Manager.hideAll();
 
-		if(record instanceof NextThought.model.store.Purchasable){
+		if (record instanceof NextThought.model.store.Purchasable) {
 			this.showPurchasable(record);
 		}
-		else if(record instanceof this.getCourseModel()){
+		else if (record instanceof this.getCourseModel()) {
 			this.showEnrollment(record);
 		}
 	},
 
 
-	showPurchaseWindow: function (sender, purchasable) {
-		if(purchasable instanceof  this.getCourseModel()){
+	showPurchaseWindow: function(sender, purchasable) {
+		if (purchasable instanceof this.getCourseModel()) {
 			this.showEnrollment(purchasable);
 			return;
 		}
@@ -187,18 +187,18 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	maybeShowPurchasableForContent: function (sender, ntiid) {
-		function filter(item){
+	maybeShowPurchasableForContent: function(sender, ntiid) {
+		function filter(item) {
 			// For course, we will only care about the ones that we're not enrolled in,
 			// since we want to decide if we should prompt the user with an enroll message.
-			if(item instanceof NextThought.model.Course){
+			if (item instanceof NextThought.model.Course) {
 				return item.getLink('enroll');
 			}
 			return true;
 		}
 		var purchasable = ContentUtils.purchasableForContentNTIID(ntiid, filter);
 		if (purchasable) {
-			if(purchasable instanceof  this.getCourseModel()){
+			if (purchasable instanceof this.getCourseModel()) {
 				this.showEnrollment(purchasable);
 				return !purchasable;
 			}
@@ -208,9 +208,9 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollment: function(course){
+	showEnrollment: function(course) {
 		var win = this.getEnrollmentWindow();
-		if(win){
+		if (win) {
 			console.error('Enrollment already in progress.  How did you manage this', win);
 			return null;
 		}
@@ -223,7 +223,7 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param purchasable The Purchasable object to show
 	 */
-	showPurchasable: function (purchasable, showHistory) {
+	showPurchasable: function(purchasable, showHistory) {
 		var win = this.getPurchaseWindow();
 
 
@@ -238,13 +238,13 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showPurchaseHistory: function (purchasable) {
+	showPurchaseHistory: function(purchasable) {
 		console.log('Need to show purchase history for', purchasable);
 		this.showPurchasable(purchasable, true);
 	},
 
 
-	navigateToPurchasable: function (obj, fragment) {
+	navigateToPurchasable: function(obj, fragment) {
 		var me = this;
 
 		if (obj instanceof NextThought.model.store.Purchasable) {
@@ -255,14 +255,14 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	transitionToComponent: function (win, cfg) {
+	transitionToComponent: function(win, cfg) {
 		win.hideError();
 		win.removeAll(true);
 		return win.add(cfg);
 	},
 
 
-	safelyMaskWindow: function (win, msg) {
+	safelyMaskWindow: function(win, msg) {
 		var el = win ? win.getEl() : undefined;
 		if (el) {
 			el.mask(msg);
@@ -272,7 +272,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	safelyUnmaskWindow: function (win) {
+	safelyUnmaskWindow: function(win) {
 		var el = win ? win.getEl() : undefined;
 		if (el) {
 			el.unmask();
@@ -282,7 +282,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showPurchaseView: function (win, ordinal, data) {
+	showPurchaseView: function(win, ordinal, data) {
 		var views = {
 				history: 'history',
 				detail: 'detailview',
@@ -309,7 +309,7 @@ Ext.define('NextThought.controller.Store', {
 				icon: 'warning-red',
 				buttonText: {'ok': 'caution:Navigate away'},
 				title: 'Are you sure?',
-				fn: function (str) {
+				fn: function(str) {
 					if (str === 'ok') {
 						me.transitionToComponent(win, cfg);
 					}
@@ -322,7 +322,7 @@ Ext.define('NextThought.controller.Store', {
 
 	},
 
-	toggleEnrollmentStatus: function(rec, callback){
+	toggleEnrollmentStatus: function(rec, callback) {
 		var url = rec.getLink('enroll') || rec.getLink('unenroll'),
 			req = {
 				url: getURL(url),
@@ -336,18 +336,18 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollmentConfirmation: function(view,course){
+	showEnrollmentConfirmation: function(view,course) {
 		var me = this,
 			win = me.getEnrollmentWindow();
-		
+
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		if(course.getLink('enroll')){
-			me.toggleEnrollmentStatus(course, function(q,s,r){
-				if(!s){
+		if (course.getLink('enroll')) {
+			me.toggleEnrollmentStatus(course, function(q,s,r) {
+				if (!s) {
 					console.log(r.responseText);
 					win.showError('An unknown error occurred.  Please try again later.');
 					win.setConfirmState(false);
@@ -363,18 +363,18 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollmentComplete: function(view,course){
+	showEnrollmentComplete: function(view,course) {
 		var me = this,
 			win = this.getEnrollmentWindow();
-		
+
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
 			return;
 		}
 
-		if(course.getLink('unenroll')){
-			me.toggleEnrollmentStatus(course, function(q,s,r){
-				if(!s){
+		if (course.getLink('unenroll')) {
+			me.toggleEnrollmentStatus(course, function(q,s,r) {
+				if (!s) {
 					console.log(r.responseText);
 					win.showError('An unknown error occurred. Please try again later.');
 					win.setConfirmState(false);
@@ -389,7 +389,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showPurchaseForm: function (view, purchasable) {
+	showPurchaseForm: function(view, purchasable) {
 		var win = this.getPurchaseWindow();
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
@@ -401,7 +401,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	editPurchase: function (sender, desc, token) {
+	editPurchase: function(sender, desc, token) {
 		var win = this.getPurchaseWindow();
 		if (!win) {
 			console.error('Expected a purchase window', arguments);
@@ -413,7 +413,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	doPricingRequest: function (url, data, callback) {
+	doPricingRequest: function(url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			jsonData: data,
@@ -432,7 +432,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param success The success callback called if the provided coupone is valid
 	 * @param failure The failure callback called if we are unable to validate the coupon for any reason
 	 */
-	pricePurchase: function (sender, desc, success, failure, scope) {
+	pricePurchase: function(sender, desc, success, failure, scope) {
 		var purchaseDesc = desc || {},
 			purchasable = purchaseDesc.Purchasable,
 			data = {},
@@ -472,7 +472,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		try {
-			this.doPricingRequest(purchasable.getLink('pricing'), data, function (r, s, response) {
+			this.doPricingRequest(purchasable.getLink('pricing'), data, function(r, s, response) {
 				if (sender !== this) {
 					delete win.lockPurchaseAction;
 				}
@@ -518,7 +518,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchasable the purchasable object
 	 * @param cardinfo to provide to stripe in exchange for a token
 	 */
-	createPurchase: function (cmp, desc, cardinfo) {
+	createPurchase: function(cmp, desc, cardinfo) {
 		var purchasable = desc.Purchasable || {},
 			connectInfo = purchasable.get('StripeConnectKey') || {},
 			pKey = connectInfo && connectInfo.get('PublicKey'),
@@ -552,13 +552,13 @@ Ext.define('NextThought.controller.Store', {
 			}
 			else {
 				console.log('Stripe token response handler', arguments);
-				me.pricePurchase(me, desc, function (priced) {
+				me.pricePurchase(me, desc, function(priced) {
 						console.log('Final pricing complete', priced, desc);
 						win.publishQuantityAndPrice(priced.get('Quantity'), priced.get('PurchasePrice'), priced.get('Currency'));
 						me.transitionToComponent(win, {xtype: 'purchase-confirm', purchaseDescription: desc, tokenObject: response, pricingInfo: priced});
 						done();
 					},
-					function () {
+					function() {
 						console.error('An error occurred doing final pricing of', desc);
 						if (win && win.showError) {
 							win.showError('Unable to price your purchase.  Please try again later');
@@ -599,7 +599,7 @@ Ext.define('NextThought.controller.Store', {
 	 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
 	 * @param tokenObject the stripe token object
 	 */
-	submitPurchase: function (cmp, purchaseDescription, tokenObject, pricingInfo) {
+	submitPurchase: function(cmp, purchaseDescription, tokenObject, pricingInfo) {
 
 		var purchasable = purchaseDescription.Purchasable,
 			tokenId = (tokenObject || {}).id,
@@ -634,24 +634,24 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		delegate = {
-			purchaseAttemptCompleted: function (helper, purchaseAttempt) {
+			purchaseAttemptCompleted: function(helper, purchaseAttempt) {
 				this.refreshPurchasable(purchasable);
 				this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
 				done();
 			},
-			purchaseAttemptFailed: function (helper, purchaseAttempt) {
+			purchaseAttemptFailed: function(helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, purchaseAttempt.get('Error'), tokenObject);
 				done();
 			},
-			purchaseAttemptTimedOut: function (helper, purchaseAttempt) {
+			purchaseAttemptTimedOut: function(helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, 'Purchase timed out.', tokenObject);
 				done();
 			},
-			purchaseAttemptRequestFailed: function (helper, responseOrMsg, exception) {
+			purchaseAttemptRequestFailed: function(helper, responseOrMsg, exception) {
 				this.showFormWithError(win, cmp, purchasable, responseOrMsg, tokenObject);
 				done();
 			},
-			purchaseAttemptCompletedWithUnknownStatus: function (helper, purchaseAttempt) {
+			purchaseAttemptCompletedWithUnknownStatus: function(helper, purchaseAttempt) {
 				this.showFormWithError(win, cmp, purchasable, 'Unable to complete purchase at this time.', tokenObject);
 				done();
 			}
@@ -671,7 +671,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	processError: function (errorOrString) {
+	processError: function(errorOrString) {
 		var error = errorOrString;
 		if (Ext.isString(error)) {
 			error = NextThought.model.store.StripePurchaseError.create({Message: error});
@@ -686,7 +686,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showFormWithError: function (win, cmp, purchasable, error, tokenObject) {
+	showFormWithError: function(win, cmp, purchasable, error, tokenObject) {
 		var form;
 		form = this.transitionToComponent(win, {xtype: 'purchase-form', record: purchasable, tokenObject: tokenObject});
 		if (error) {
@@ -700,7 +700,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	doActivateWithCode: function (url, data, callback) {
+	doActivateWithCode: function(url, data, callback) {
 		Ext.Ajax.request({
 			url: url,
 			scope: this,
@@ -714,7 +714,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	activateWithCode: function (cmp, purchasable, code) {
+	activateWithCode: function(cmp, purchasable, code) {
 		var url = $AppConfig.service.getStoreActivationURL(),
 			win = this.getPurchaseWindow(),
 			me = this;
@@ -739,7 +739,7 @@ Ext.define('NextThought.controller.Store', {
 
 
 		try {
-			this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function (r, s, response) {
+			this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function(r, s, response) {
 				try {
 					this.safelyUnmaskWindow(win);
 					delete win.lockPurchaseAction;
@@ -773,12 +773,12 @@ Ext.define('NextThought.controller.Store', {
 	 *
 	 * @param btn the button triggering the cancel
 	 */
-	purchaseWindowCancel: function (btn) {
+	purchaseWindowCancel: function(btn) {
 		btn.up('window').close();
 	},
 
 
-	maybeClosePurchaseWindow: function (win) {
+	maybeClosePurchaseWindow: function(win) {
 		//Detect this by looking at what stage in the process we are in.
 		//I.E its safe to close from the detail view, but not once we have started
 		//a purchase process
@@ -804,7 +804,7 @@ Ext.define('NextThought.controller.Store', {
 				buttonText: {'ok': 'caution:Cancel my purchase',
 					'cancel': 'Go back'},
 				title: 'Are you sure?',
-				fn: function (str) {
+				fn: function(str) {
 					if (str === 'ok') {
 						me.forceCloseWindow(null, win);
 					}
@@ -816,7 +816,7 @@ Ext.define('NextThought.controller.Store', {
 		return true;
 	},
 
-	forceCloseWindow: function (cmp, w) {
+	forceCloseWindow: function(cmp, w) {
 		var win = w || this.getPurchaseWindow() || this.getEnrollmentWindow();
 
 		if (!win) {
@@ -849,7 +849,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	maxWaitInMillis: 2 * 60 * 1000, //2 minutes
 	pollingIntervalInMillis: 5 * 1000, //5 seconds
 
-	constructor: function (purchaseDesc, tokenObject, expectedPrice, delegate, scope) {
+	constructor: function(purchaseDesc, tokenObject, expectedPrice, delegate, scope) {
 		var purchasable = purchaseDesc.Purchasable,
 			tokenId = tokenObject.id;
 
@@ -869,7 +869,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	parsePurchaseAttemptResponse: function (response) {
+	parsePurchaseAttemptResponse: function(response) {
 		var result = Ext.JSON.decode(response.responseText, true);
 		if (result) {
 			result = ParseUtils.parseItems(result.Items || result)[0];
@@ -880,7 +880,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 		return result;
 	},
 
-	initiatePurchase: function () {
+	initiatePurchase: function() {
 		var url = this.purchasable.getLink('purchase'),
 			data;
 
@@ -907,7 +907,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 			jsonData: data,
 			method: 'POST',
 			scope: this,
-			callback: function (req, s, resp) {
+			callback: function(req, s, resp) {
 				try {
 					var result;
 					if (!s) {
@@ -935,14 +935,14 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	pollPurchaseAttempt: function (purchaseAttempt) {
+	pollPurchaseAttempt: function(purchaseAttempt) {
 		var url = purchaseAttempt.getLink('get_purchase_attempt');
 		console.log('Polling for purchase attempt', purchaseAttempt);
 		Ext.Ajax.request({
 			url: url,
 			method: 'GET',
 			scope: this,
-			callback: function (req, s, resp) {
+			callback: function(req, s, resp) {
 				try {
 					var result;
 					if (!s) {
@@ -970,7 +970,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 	},
 
 
-	processPurchaseAttempt: function (purchaseAttempt, immediate) {
+	processPurchaseAttempt: function(purchaseAttempt, immediate) {
 		if (purchaseAttempt && purchaseAttempt.isComplete()) {
 			this.handleCompletedPaymentAttempt(purchaseAttempt);
 			return;
@@ -994,7 +994,7 @@ Ext.define('NextThought.controller.store.PurchaseHelper', {
 		}
 	},
 
-	handleCompletedPaymentAttempt: function (purchaseAttempt) {
+	handleCompletedPaymentAttempt: function(purchaseAttempt) {
 		if (purchaseAttempt.isSuccess()) {
 			console.log('Purchase attempt returned success', purchaseAttempt);
 			this.delegate.purchaseAttemptCompleted.call(this.scope, this, purchaseAttempt);

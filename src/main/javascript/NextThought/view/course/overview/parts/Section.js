@@ -8,7 +8,7 @@ Ext.define('NextThought.view.course.overview.parts.Section', {
 	layout: 'auto',
 	componentLayout: 'natural',
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -25,7 +25,7 @@ Ext.define('NextThought.view.course.overview.parts.Section', {
 	]),
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title || 'Untitled',

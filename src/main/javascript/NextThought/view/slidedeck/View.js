@@ -29,7 +29,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 	bubbleEvents: ['add', 'remove', 'show-editor'],
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var t, vPlaylist;
 
 		config.items = [
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 		return this.callParent([config]);
 	},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		var store = this.store,
 			start = this.startOn,
@@ -82,19 +82,19 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		//wire up
 		this.mon(q, 'select', this.maybeSelect, this);
-		this.mon(q, 'slide-selected', function (slide) {
+		this.mon(q, 'slide-selected', function(slide) {
 			if (this.down('slidedeck-transcript')) {
 				this.down('slidedeck-transcript').selectSlide(slide);
 			}
 		}, this);
-		this.mon(q, 'beforeselect', function (dvm) {
+		this.mon(q, 'beforeselect', function(dvm) {
 			this.wasSelected = dvm.getSelection();
 		}, this);
 
-		this.on('editorActivated', function () {
+		this.on('editorActivated', function() {
 			this.pausedForEditing = v.pausePlayback();
 		}, this);
-		this.on('editorDeactivated', function () {
+		this.on('editorDeactivated', function() {
 			//Don't start back up if the user had us paused explictly
 			//only if we paused for the edit
 			if (this.pausedForEditing) {
@@ -105,10 +105,10 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		// pause and reply video when share overlay opens and closes
 
-		this.mon(NextThought.getApplication(), 'showshare', function (evt, target) {
+		this.mon(NextThought.getApplication(), 'showshare', function(evt, target) {
 			this.pausedForSharing = v.pausePlayback();
 		}, this);
-		this.mon(NextThought.getApplication(), 'hideshare', function (evt, target) {
+		this.mon(NextThought.getApplication(), 'hideshare', function(evt, target) {
 			if (this.pausedForSharing) {
 				v.resumePlayback();
 			}
@@ -120,22 +120,22 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}
 	},
 
-	getVideoPlayList: function (store) {
+	getVideoPlayList: function(store) {
 		var playList = [];
-		store.each(function (s) {
+		store.each(function(s) {
 			playList.push(s.get('media'));
 		}, this);
 		return playList;
 	},
 
 
-	buildTranscriptStore: function (playList) {
+	buildTranscriptStore: function(playList) {
 		var s = new Ext.data.Store({proxy: 'memory'}),
 			transcripts = [],
 			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
 			videoObjects = this.getUniqueVideoObjects(playList);
 
-		Ext.each(videoObjects, function (v) {
+		Ext.each(videoObjects, function(v) {
 			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader.basePath);
 			if (m) {
 				transcripts.push(m);
@@ -147,17 +147,17 @@ Ext.define('NextThought.view.slidedeck.View', {
 	},
 
 
-	getUniqueVideoObjects: function (playList) {
+	getUniqueVideoObjects: function(playList) {
 		var vObjects = [], uniqueIds = [];
 
-		Ext.each(playList, function (v) {
+		Ext.each(playList, function(v) {
 			var frag = v.get('dom-clone'),
 				video = frag.querySelector('object[type$=ntivideo]');
 
 			vObjects.push(video);
 		});
 
-		vObjects = Ext.Array.filter(vObjects, function (i) {
+		vObjects = Ext.Array.filter(vObjects, function(i) {
 			var id = Ext.fly(i).getAttribute('data-ntiid'),
 				ret = !Ext.Array.contains(uniqueIds, id);
 
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 	},
 
 
-	actOnMediaHeartBeat: function () {
+	actOnMediaHeartBeat: function() {
 		var s = this.video.getState();
 
 		if (this.hasTranscript) {
@@ -178,12 +178,12 @@ Ext.define('NextThought.view.slidedeck.View', {
 	},
 
 
-	getSlide: function () {
+	getSlide: function() {
 		return this.items.getAt(1);
 	},
 
 
-	doSelect: function () {
+	doSelect: function() {
 		var s = this.getSlide();
 		this.video.updateVideoFromSelection.apply(this.video, arguments);
 		if (s.updateSlide) {
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 	//so detect that, pause the video if necessary. prompt the user and if they
 	//ignore the warning close the editor, play the video if we paused it, and let the update go on
 	//if the click cancel we leave things in a paused state and the editor open
-	maybeSelect: function (v, slide) {
+	maybeSelect: function(v, slide) {
 		var slideView = this.getSlide(),
 			destructiveSelection = slideView.editorActive && slideView.editorActive(),
 			wasPlaying,
@@ -231,7 +231,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 			icon: 'warning-red',
 			buttonText: {'ok': 'caution:Continue'},
 			title: 'Are you sure?',
-			fn: function (str) {
+			fn: function(str) {
 				if (str === 'ok') {
 					allowDestructiveAction();
 				}
@@ -244,7 +244,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 

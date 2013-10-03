@@ -1,6 +1,6 @@
 Ext.define('NextThought.proxy.writer.Json', {
 	extend: 'Ext.data.writer.Json',
-	alias : 'writer.nti',
+	alias: 'writer.nti',
 
 	constructor: function() {
 		this.callParent(arguments);
@@ -12,12 +12,12 @@ Ext.define('NextThought.proxy.writer.Json', {
 			key;
 
 		function getJSON(obj) {
-			var a=[];
+			var a = [];
 			if (obj && Ext.isFunction(obj.asJSON)) {
 				obj = obj.asJSON();
 			}
 			else if (Ext.isArray(obj)) {
-				obj = Ext.Array.map(obj,getJSON);
+				obj = Ext.Array.map(obj, getJSON);
 			}
 			return obj;
 		}

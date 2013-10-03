@@ -27,14 +27,14 @@ Ext.define('NextThought.view.Main', {
 	],
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent();
-		this.el = Ext.DomHelper.insertFirst(Ext.getBody(),{ cls:'viewport' }, true);
+		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
 	},
 
 
-	constructor: function () {
+	constructor: function() {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	onTouchStart: function (e) {
+	onTouchStart: function(e) {
 		var touch = e.browserEvent.touches[0],
 			mouseEnterEvent,
 			mouseOverEvent,
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	onTouchMove: function (e) {
+	onTouchMove: function(e) {
 		var touch = e.browserEvent.touches[0],
 			changedTouch = e.browserEvent.changedTouches[0],
 			scrollable = e.getTarget('.scrollable'),
@@ -132,7 +132,7 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	onTouchEnd: function (e) {
+	onTouchEnd: function(e) {
 		var touch = e.browserEvent.changedTouches[0],
 			mouseUpEvent,
 			mouseLeaveEvent,
@@ -164,7 +164,7 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this, map = {
 			width: 'right',
@@ -173,7 +173,7 @@ Ext.define('NextThought.view.Main', {
 			heightp: 'top'
 		};
 
-		Ext.Object.each(Ext.getScrollbarSize(), function (k, v) {
+		Ext.Object.each(Ext.getScrollbarSize(), function(k, v) {
 			if (v) {
 				Ext.getBody().addCls('detected-scrollbars');
 
@@ -199,7 +199,7 @@ Ext.define('NextThought.view.Main', {
 			host: this.down('[region=east][hostTo=sidebar]'),
 			hidden: this.hidden,
 			listeners: {
-				afterRender: function(){
+				afterRender: function() {
 					//don't force a render by setting renderTo ...bad things happen. Just move the node after render.
 					me.el.appendChild(me.sidebar.el);
 				}
@@ -209,7 +209,7 @@ Ext.define('NextThought.view.Main', {
 		this.identity = this.sidebar.add({
 			xtype: 'identity',
 			listeners: {
-				afterRender: function(){
+				afterRender: function() {
 					//don't force a render by setting renderTo ...bad things happen. Just move the node after render
 					me.el.appendChild(me.identity.el);
 				}
@@ -217,19 +217,19 @@ Ext.define('NextThought.view.Main', {
 		});
 
 		if (Ext.is.iOS) {
-//			this.setupTablet();
+      //			this.setupTablet();
 			Ext.getDoc().swallowEvent('gesturestart', true);
 			this.lockOrientation();
 
-            //keep element under body from shrinking. Can cause the screen to go white
-            Ext.defer(function(){
-                me.el.setStyle('min-height', me.el.getHeight() + 'px');
-            },1000);
+      //keep element under body from shrinking. Can cause the screen to go white
+      Ext.defer(function() {
+        me.el.setStyle('min-height', me.el.getHeight() + 'px');
+      },1000);
 		}
 	},
 
 
-	setupTablet: function () {
+	setupTablet: function() {
 		var me = this,
 			o = { height: '100%', width: '100%', overflow: 'hidden', webkitOverflowScrolling: 'none' },
 			cache = {};
@@ -337,8 +337,8 @@ Ext.define('NextThought.view.Main', {
 			touchstart: touchStart
 		});
 
-		window.onscroll = function(){window.scrollTo(0,window.scrollY);};
-		window.onresize = function () {
+		window.onscroll = function() {window.scrollTo(0, window.scrollY);};
+		window.onresize = function() {
 			Ext.getBody().setWidth(window.innerWidth).setHeight(window.innerHeight);
 		};
 
@@ -346,12 +346,12 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	lockOrientation: function () {
+	lockOrientation: function() {
 		var optWindow, iframe;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
 		 * if they rotate back to landscape, destroy screen*/
-		window.addEventListener('orientationchange', function () {
+		window.addEventListener('orientationchange', function() {
 			var iframe;
 
 			if (optWindow) {
@@ -361,7 +361,7 @@ Ext.define('NextThought.view.Main', {
 			if (Math.abs(window.orientation) !== 90) {
 				optWindow = me.createPortraitOrientationScreen();
 				iframe = optWindow.el.down('iframe');
-				iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
+				iframe.el.dom.contentWindow.addEventListener('touchstart', function(e) {
 					e.preventDefault();
 				});
 				optWindow.show();
@@ -371,20 +371,20 @@ Ext.define('NextThought.view.Main', {
 		if (Math.abs(window.orientation) !== 90) {
 			optWindow = this.createPortraitOrientationScreen();
 			iframe = optWindow.el.down('iframe');
-			iframe.el.dom.contentWindow.addEventListener('touchstart', function (e) {
+			iframe.el.dom.contentWindow.addEventListener('touchstart', function(e) {
 				e.preventDefault();
 			});
 
 			optWindow.show();
 		}
 
-		document.body.onorientationchange = function () {
+		document.body.onorientationchange = function() {
 			window.scrollTo(0, 0);
 		};
 	},
 
 
-	createPortraitOrientationScreen: function () {
+	createPortraitOrientationScreen: function() {
 		var optWindow = Ext.widget('nti-window', {
 			title: 'Portrait mode unavailabe',
 			closeAction: 'hide',
@@ -425,13 +425,13 @@ Ext.define('NextThought.view.Main', {
 			currentBar;
 		try {
 			clearTimeout(fn.repaintTimer);
-			if( body.scrollWidth !== body.offsetWidth || body.scrollHeight !== body.offsetHeight ){
+			if (body.scrollWidth !== body.offsetWidth || body.scrollHeight !== body.offsetHeight) {
 				//fix body scrollbars
-				fn.repaintTimer = Ext.defer(bodyEl.repaint,100,bodyEl);
+				fn.repaintTimer = Ext.defer(bodyEl.repaint, 100, bodyEl);
 			}
 
 			z = DetectZoom.zoom();
-			console.log("Zoom:", z);
+			console.log('Zoom:', z);
 		}
 		catch (e) {
 			console.error('Detect Zoom failed to load');

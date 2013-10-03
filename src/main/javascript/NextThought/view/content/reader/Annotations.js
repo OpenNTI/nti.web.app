@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.content.reader.Annotations', {
-	alias:    'reader.annotations',
+	alias: 'reader.annotations',
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
@@ -19,17 +19,17 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.util.Search',
 		'NextThought.util.TextRangeFinder'
 	],
-	mixins:   {
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
 
-	getBubbleTarget: function () {
+	getBubbleTarget: function() {
 		return this.reader;
 	},
 
 
-	constructor: function (config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 		var me = this,
 				reader = me.reader;
@@ -50,40 +50,40 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				  ]));
 
 		Ext.apply(me, {
-			annotations:       {},
-			filter:            null,
+			annotations: {},
+			filter: null,
 			searchAnnotations: null,
 			annotationManager: new NextThought.view.annotations.renderer.Manager(reader)
 		});
 
 		this.reader.fireEvent('listens-to-page-stores', this, {
-			scope:      this,
-			add:        'storeEventsAdd',
+			scope: this,
+			add: 'storeEventsAdd',
 			'paged-in': 'storeEventsAdd',
-			remove:     'storeEventsRemove',
+			remove: 'storeEventsRemove',
 			bulkremove: 'storeEventsBulkRemove'
 		});
 
 		me.mon(reader, {
-			scope:               this,
+			scope: this,
 			//added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
-			afterRender:         'insertAnnotationGutter',
-			'load-annotations':  'loadAnnotations',
+			afterRender: 'insertAnnotationGutter',
+			'load-annotations': 'loadAnnotations',
 			'clear-annotations': 'clearAnnotations'
 		});
 
-		me.mon(me.annotationManager.events, 'finish', function (c) {
+		me.mon(me.annotationManager.events, 'finish', function(c) {
 			me.fireEvent('rendered', c);
 		}, me, {buffer: 500});
 	},
 
 
-	getDocumentElement: function () {
+	getDocumentElement: function() {
 		return this.reader.getDocumentElement();
 	},
 
 
-	onGutterClicked: function (e) {
+	onGutterClicked: function(e) {
 		var t = e.getTarget('[data-line]', null, true),
 				toggle = t && t.hasCls('active'),
 				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
@@ -96,9 +96,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	storeEventsAdd: function (store, records) {
+	storeEventsAdd: function(store, records) {
 		console.debug('New records in store, adding to page...', store.cacheMapId || store.containerId, records);
-		Ext.each(records, function (r) {
+		Ext.each(records, function(r) {
 			var cls = r.get('Class');
 			if (!this.createAnnotationWidget(cls, r)) {
 				console.warn('Apparently this record didn\'t get added', r);
@@ -110,19 +110,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	storeEventsBulkRemove: function (store, records) {
-		Ext.each(records, function (record) {
+	storeEventsBulkRemove: function(store, records) {
+		Ext.each(records, function(record) {
 			this.remove(record.getId());
 		}, this);
 	},
 
 
-	storeEventsRemove: function (store, record) {
+	storeEventsRemove: function(store, record) {
 		this.remove(record.getId());
 	},
 
 
-	insertAnnotationGutter: function () {
+	insertAnnotationGutter: function() {
 		var me = this,
 				container = Ext.DomHelper.insertAfter(
 						me.reader.getInsertionPoint().first(),
@@ -137,34 +137,34 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	getManager: function () {
+	getManager: function() {
 		return this.annotationManager;
 	},
 
 
-	convertRectToScreen: function (r) {
+	convertRectToScreen: function(r) {
 		var iframe = this.reader.getIframe().get(),
 				result;
 
 		result = {
-			top:    r.top + iframe.getY(),
-			left:   r.left + iframe.getX(),
-			right:  r.right + iframe.getX(),
+			top: r.top + iframe.getY(),
+			left: r.left + iframe.getX(),
+			right: r.right + iframe.getX(),
 			bottom: r.bottom + iframe.getY(),
 			height: r.height,
-			width:  r.width
+			width: r.width
 		};
 		return result;
 	},
 
 
-	loadAnnotations: function (containerId, subContainers) {
+	loadAnnotations: function(containerId, subContainers) {
 		this.clearAnnotations();
 		this.fireEvent('annotations-load', this.reader, containerId, subContainers);
 	},
 
 
-	objectsLoaded: function (items, bins/*, containerId*/) {
+	objectsLoaded: function(items, bins/*, containerId*/) {
 		var me = this;
 
 		me.setAssessedQuestions((bins || {}).AssessedQuestionSet);
@@ -172,14 +172,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	applyFilter: function (newFilter) {
+	applyFilter: function(newFilter) {
 		this.filter = newFilter;
 		this.clearAnnotations();
 		this.fireEvent('filter-annotations', this.reader);
 	},
 
 
-	showSearchHit:               function (hit) {
+	showSearchHit: function(hit) {
 		this.clearSearchHit();
 		if (hit.isContent()) {
 			this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this.reader});
@@ -191,7 +191,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
 	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
-	rangesForSearchHits:         function (hit) {
+	rangesForSearchHits: function(hit) {
 		var phrase = hit.get('PhraseSearch'),
 		//fragments = hit.get('Fragments'),
 				regex, ranges,
@@ -207,11 +207,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		ranges = TextRangeFinderUtils.findTextRanges(contentDoc, contentDoc, regex);
 		result.push({
 						ranges: ranges.slice(),
-						key:    'content'
+						key: 'content'
 					});
 
 		//Now look in assessment overlays
-		indexedOverlayData = TextRangeFinderUtils.indexText(o.componentOverlayEl.dom, function (node) {
+		indexedOverlayData = TextRangeFinderUtils.indexText(o.componentOverlayEl.dom, function(node) {
 			return Ext.fly(node).parent('.indexed-content');
 		});
 
@@ -220,7 +220,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 													 regex, undefined, indexedOverlayData);
 		result.push({
 						ranges: ranges.slice(),
-						key:    'assessment'
+						key: 'assessment'
 					});
 
 		return result;
@@ -230,7 +230,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	//	@returns an object with top and left properties used to adjust the
 	//  coordinate space of the ranges bounding client rects.
 	//  It decides based on the type of container( main content or overlays).
-	getRangePositionAdjustments: function (key) {
+	getRangePositionAdjustments: function(key) {
 		var annotationOffsets, overlayXAdjustment, overlayYAdjustment;
 		if (key === 'content') {
 			return {top: 0, left: 0};
@@ -244,7 +244,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	clearSearchHit: function () {
+	clearSearchHit: function() {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -254,7 +254,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	remove: function (oid) {
+	remove: function(oid) {
 		var v = this.annotations[oid];
 		if (v) {
 			this.annotations[oid] = undefined;
@@ -265,7 +265,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	clearAnnotations: function () {
+	clearAnnotations: function() {
 		var v, oid, leftovers;
 		for (oid in this.annotations) {
 			if (this.annotations.hasOwnProperty(oid)) {
@@ -284,7 +284,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		//hanging like placeholder notes.
 		leftovers = Ext.query('[id*=note-container]');
 		if (leftovers && leftovers.length > 0) {
-			Ext.each(leftovers, function (l) {
+			Ext.each(leftovers, function(l) {
 				Ext.fly(l).destroy();
 			});
 		}
@@ -292,7 +292,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	exists: function (record) {
+	exists: function(record) {
 		var oid = record.getId();
 		if (!oid) {
 			return false;
@@ -302,7 +302,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	getDefinitionMenuItem: function (range) {
+	getDefinitionMenuItem: function(range) {
 		try {
 			range = range || this.getSelection();
 			if (!range) {
@@ -320,8 +320,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 			if (/^\w+$|^\w+[^\w]+\w+$/i.test(text)) {//it is one or two words
 				result = {
-					text:    'Define...',
-					handler: function () {
+					text: 'Define...',
+					handler: function() {
 						me.fireEvent('define', text, boundingBox, me.reader);
 						me.clearSelection();
 					}
@@ -338,13 +338,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	addAnnotation:  function (range, xy) {
+	addAnnotation: function(range, xy) {
 		if (!range) {
 			console.warn('bad range');
 			return;
 		}
 
-		if( !Boolean(xy[0]) || !Boolean(xy[1])){
+		if (!Boolean(xy[0]) || !Boolean(xy[1])) {
 			console.warn('xy are null or undefined: ', xy);
 			return;
 		}
@@ -369,16 +369,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.reader.creatingAnnotation = true;
 
 		menu = Ext.widget('menu', {
-			ui:            'nt',
-			plain:         true,
+			ui: 'nt',
+			plain: true,
 			showSeparator: false,
-			shadow:        false,
-			frame:         false,
-			border:        false,
-			hideMode:      'display',
-			closeAction:   'destroy',
-			minWidth:      150,
-			defaults:      {ui: 'nt-annotaion', plain: true }
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			closeAction: 'destroy',
+			minWidth: 150,
+			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 
 		define = me.getDefinitionMenuItem(range);
@@ -387,16 +387,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		menu.add({
-					 text:    'Save Highlight',
-					 handler: function (el, e) {
+					 text: 'Save Highlight',
+					 handler: function(el, e) {
 						 me.fireEvent('save-phantom', record, false);
 						 me.clearSelection();
 					 }
 				 });
 
 		menu.add({
-					 text:    'Add Note',
-					 handler: function (el, e) {
+					 text: 'Add Note',
+					 handler: function(el, e) {
 						 me.clearSelection();
 						 me.fireEvent('create-note', range, rect2, 'plain');
 					 }
@@ -404,7 +404,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		function redaction(block) {
-			return function () {
+			return function() {
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
 				try {
@@ -423,18 +423,18 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						 text:    'Redact Inline',
+						 text: 'Redact Inline',
 						 handler: redaction(false)
 					 });
 
 			menu.add({
-						 text:    'Redact Block',
+						 text: 'Redact Block',
 						 handler: redaction(true)
 					 });
 		}
 
 		//on close make sure it gets destroyed.
-		menu.on('hide', function () {
+		menu.on('hide', function() {
 			menu.close();
 			delete this.reader.creatingAnnotation;
 		}, this);
@@ -455,7 +455,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	// For compatibility with native scrolling on iPad
-	iAddAnnotation: function (range) {
+	iAddAnnotation: function(range) {
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -485,29 +485,29 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.reader.creatingAnnotation = true;
 
 		menu = Ext.widget('menu', {
-			ui:            'nt',
-			plain:         true,
+			ui: 'nt',
+			plain: true,
 			showSeparator: false,
-			shadow:        false,
-			frame:         false,
-			border:        false,
-			hideMode:      'display',
-			closeAction:   'destroy',
-			minWidth:      150,
-			defaults:      {ui: 'nt-annotaion', plain: true }
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			closeAction: 'destroy',
+			minWidth: 150,
+			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 
 		menu.add({
-					 text:    'Save Highlight',
-					 handler: function (el, e) {
+					 text: 'Save Highlight',
+					 handler: function(el, e) {
 						 createHighlight();
 						 me.fireEvent('save-phantom', record, false);
 					 }
 				 });
 
 		menu.add({
-					 text:    'Add Note',
-					 handler: function (el, e) {
+					 text: 'Add Note',
+					 handler: function(el, e) {
 						 createHighlight();
 						 me.fireEvent('create-note', range, rect2, 'plain');
 					 }
@@ -515,7 +515,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		function redaction(block) {
-			return function () {
+			return function() {
 				createHighlight();
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
@@ -535,18 +535,18 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						 text:    'Redact Inline',
+						 text: 'Redact Inline',
 						 handler: redaction(false)
 					 });
 
 			menu.add({
-						 text:    'Redact Block',
+						 text: 'Redact Block',
 						 handler: redaction(true)
 					 });
 		}
 
 		//on close make sure it gets destroyed.
-		menu.on('hide', function () {
+		menu.on('hide', function() {
 			menu.close();
 			delete this.reader.creatingAnnotation;
 		}, this);
@@ -577,7 +577,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	 * @param [onCreated] - Function
 	 * @return {*}
 	 */
-	createAnnotationWidget: function (type, record, browserRange, onCreated) {
+	createAnnotationWidget: function(type, record, browserRange, onCreated) {
 		var oid = record.getId(),
 				style = record.get('style'),
 				w;
@@ -601,7 +601,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					this.annotations[oid].cleanup();
 					delete this.annotations[oid];
 				}
-				record.on('updated', function (r) {
+				record.on('updated', function(r) {
 					this.annotations[r.get('NTIID')] = this.annotations[oid];
 
 					delete this.annotations[oid];
@@ -624,7 +624,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	setAssessedQuestions: function (sets) {
+	setAssessedQuestions: function(sets) {
 		if (!sets || sets.length === 0) {
 			//do nothing if we have no prior sets
 			return;
@@ -641,9 +641,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	buildAnnotations: function (list) {
+	buildAnnotations: function(list) {
 		var me = this;
-		Ext.each(list || [], function (r) {
+		Ext.each(list || [], function(r) {
 			if (!r) {
 				return;
 			}
@@ -658,7 +658,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	onContextMenuHandler: function (e) {
+	onContextMenuHandler: function(e) {
 		try {
 			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
 					range = this.getSelection();
@@ -682,7 +682,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	getSelection: function () {
+	getSelection: function() {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;
 
@@ -704,14 +704,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	selectRange: function (range) {
+	selectRange: function(range) {
 		var s = this.getDocumentElement().parentWindow.getSelection();
 		s.removeAllRanges();
 		s.addRange(range);
 	},
 
 
-	clearSelection: function () {
+	clearSelection: function() {
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
 		try {

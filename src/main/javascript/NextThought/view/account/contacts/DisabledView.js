@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.contacts.DisabledView',{
+Ext.define('NextThought.view.account.contacts.DisabledView', {
 	extend: 'Ext.Component',
 	alias: 'widget.disabled-contacts-view',
 
@@ -11,12 +11,12 @@ Ext.define('NextThought.view.account.contacts.DisabledView',{
 	ui: 'contacts',
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: "disabled-contacts-view",
+		cls: 'disabled-contacts-view',
 		cn: [
-			{ cls:'disabled-message-div',cn: [
-				{ cls:'disabled-title', html:'Social Features Disabled...'},
+			{ cls: 'disabled-message-div', cn: [
+				{ cls: 'disabled-title', html: 'Social Features Disabled...'},
 				'We need your parent\'s permission to give you more features.  ',
-                {tag: 'span', cls: 'resend-consent', html:'Resend Consent Form'}
+        {tag: 'span', cls: 'resend-consent', html: 'Resend Consent Form'}
 			]}
 		]
 	}),
@@ -29,8 +29,8 @@ Ext.define('NextThought.view.account.contacts.DisabledView',{
 		afterRender: 'attachClickListener'
 	},
 
-	attachClickListener: function(){
+	attachClickListener: function() {
 		var me = this;
-		this.mon(this.resend,'click',function(){me.fireEvent('resend-consent');});
+		this.mon(this.resend, 'click', function() {me.fireEvent('resend-consent');});
 	}
 });

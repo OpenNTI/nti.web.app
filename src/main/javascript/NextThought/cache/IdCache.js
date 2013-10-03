@@ -8,13 +8,13 @@ Ext.define('NextThought.cache.IdCache', {
 
 	getIdentifier: function(id)
 	{
-		if(!id){ return null; }
+		if (!id) { return null; }
 		return Base64.encode(id);
 	},
 
-	getComponentId: function (rec, subRecordField, prefix) {
+	getComponentId: function(rec, subRecordField, prefix) {
 		prefix = prefix || '';
-		if(!rec){ return null; }
+		if (!rec) { return null; }
 
 		var i = (typeof(rec) === 'string') ? rec : rec.getId();
 
@@ -24,7 +24,7 @@ Ext.define('NextThought.cache.IdCache', {
 
 		if (!i) {
 			Ext.Error.raise({
-				msg:'Could not find NTIID in record',
+				msg: 'Could not find NTIID in record',
 				args: arguments
 			});
 		}
@@ -32,6 +32,6 @@ Ext.define('NextThought.cache.IdCache', {
 		return 'cmp-' + prefix + '-' + this.getIdentifier(i);
 	}
 },
-function(){
+function() {
 	window.IdCache = this;
 });

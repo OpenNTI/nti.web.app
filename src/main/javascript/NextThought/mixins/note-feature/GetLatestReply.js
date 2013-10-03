@@ -1,7 +1,7 @@
 Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
-//Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
+  //Mixin assumptions: Mixed into a Container, with a property "record" that has implemented "loadReplies"
 
-	getItemReplies: function () {
+	getItemReplies: function() {
 		var me = this,
 			r = me.record,
 			focusRecord = me.record.focusRecord;
@@ -29,11 +29,11 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 			me.record.children = items;
 
 			//Set the latest direct reply
-			store.each(function (r) {
-				if(r.getId() === (focusRecord && focusRecord.getId()) ){
+			store.each(function(r) {
+				if (r.getId() === (focusRecord && focusRecord.getId())) {
 					rec = r;
 				}
-				else if ((!rec || ( (rec.get('CreatedTime')) < r.get('CreatedTime'))) && (r.get('inReplyTo') === me.record.getId())) {
+				else if ((!rec || ((rec.get('CreatedTime')) < r.get('CreatedTime'))) && (r.get('inReplyTo') === me.record.getId())) {
 					rec = r;
 				}
 

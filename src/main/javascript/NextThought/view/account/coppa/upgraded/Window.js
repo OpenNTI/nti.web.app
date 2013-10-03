@@ -2,7 +2,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.coppa-confirm-window',
 
-	requires:[
+	requires: [
 		'NextThought.view.account.coppa.upgraded.Confirm',
 		'NextThought.view.account.Header'
 	],
@@ -21,7 +21,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Window', {
 	layout: 'auto',
 
 	items: [
-		{xtype: 'account-header-view', title:'It\'s a new school year!', detail:'Please answer the following questions, so we can update our records.'},
+		{xtype: 'account-header-view', title: 'It\'s a new school year!', detail: 'Please answer the following questions, so we can update our records.'},
 		{xtype: 'coppa-birthday-form'}
 	]
 

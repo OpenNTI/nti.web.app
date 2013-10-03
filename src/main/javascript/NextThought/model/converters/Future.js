@@ -1,12 +1,12 @@
-Ext.define('NextThought.model.converters.Future',{
+Ext.define('NextThought.model.converters.Future', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 
 	FUTURE: {
 		type: 'Future',
 		sortType: 'none',
-		convert: function(v){
-			if(v && v.isModel){
+		convert: function(v) {
+			if (v && v.isModel) {
 				return v;
 			}
 
@@ -15,7 +15,7 @@ Ext.define('NextThought.model.converters.Future',{
 			};
 		}
 	}
-}, function(){
-	function set(o){ o.sortType = Ext.data.SortTypes[o.sortType]; }
+}, function() {
+	function set(o) { o.sortType = Ext.data.SortTypes[o.sortType]; }
 	set(this.FUTURE);
 });

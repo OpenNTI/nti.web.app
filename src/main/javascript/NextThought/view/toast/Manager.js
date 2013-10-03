@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.toast.Manager',{
+Ext.define('NextThought.view.toast.Manager', {
 	requires: [
 		'NextThought.view.toast.Window'
 	],
@@ -6,11 +6,11 @@ Ext.define('NextThought.view.toast.Manager',{
 	PADDING: 10,
 
 	/** @private */
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 		this.stack = [];
 
-		Ext.EventManager.onWindowResize(this.adjustStack,this,null);
+		Ext.EventManager.onWindowResize(this.adjustStack, this, null);
 	},
 
 	/**
@@ -48,75 +48,75 @@ Ext.define('NextThought.view.toast.Manager',{
 	 * You cannot stop the main callback from being called.
 	 *
 	 * @param {Object} bread Configuration for {@link NextThought.view.toast.Window}
-	 * @returns {Object} Toast component instance
+	 * @return {Object} Toast component instance
 	 */
-	makeToast: function(bread){
+	makeToast: function(bread) {
 		var size = Ext.dom.Element.getViewSize(),
 			toast,
 			timeout = bread.timeout || false;
 
-		toast = Ext.widget('toast',bread);
+		toast = Ext.widget('toast', bread);
 		this.stack.push(toast);
 
-		toast.setPosition(size.width-(toast.width+10), size.height);
-		toast.on('afterRender',this.popToast,this, {single:true});
-		toast.on('destroy',this.eatToast,this);
+		toast.setPosition(size.width - (toast.width + 10), size.height);
+		toast.on('afterRender', this.popToast, this, {single: true});
+		toast.on('destroy', this.eatToast, this);
 		toast.show();
 
-		if(timeout && timeout > 0){
-			toast.timeoutId = Ext.delay(this.eatToast,timeout,this,[toast]);
+		if (timeout && timeout > 0) {
+			toast.timeoutId = Ext.delay(this.eatToast, timeout, this, [toast]);
 		}
 
 		return toast;
 	},
 
 	/** @private */
-	measure: function(loaf){
+	measure: function(loaf) {
 		var padding = this.PADDING,
 			sum = 0;
-		Ext.each(loaf,function(o){sum+=(o.getHeight()+padding);});
+		Ext.each(loaf, function(o) {sum += (o.getHeight() + padding);});
 		return sum;
 	},
 
 	/** @private */
-	eatToast: function(toast){
-		if(toast.hasOwnProperty('timeoutId')){
+	eatToast: function(toast) {
+		if (toast.hasOwnProperty('timeoutId')) {
 			clearTimeout(toast.timeoutId);
 		}
 
-		var idx = Ext.Array.indexOf(this.stack,toast);
-		if(idx < 0){return;}
+		var idx = Ext.Array.indexOf(this.stack, toast);
+		if (idx < 0) {return;}
 
-		this.stack.splice(idx,1);
+		this.stack.splice(idx, 1);
 		this.adjustStack();
 	},
 
 
-	adjustStack: function(){
-		Ext.each(this.stack,this.popToast,this);
+	adjustStack: function() {
+		Ext.each(this.stack, this.popToast, this);
 	},
 
 
 	/** @private */
-	popToast: function(toast){
+	popToast: function(toast) {
 
 		var vp = Ext.dom.Element.getViewSize(),
-			left = vp.width - (toast.width+10),
+			left = vp.width - (toast.width + 10),
 			top = vp.height,
 			idx;
-		if(this.stack.length > 0){
-			idx = Ext.Array.indexOf(this.stack,toast);
-			top -= this.measure(this.stack.slice(0,idx));
+		if (this.stack.length > 0) {
+			idx = Ext.Array.indexOf(this.stack, toast);
+			top -= this.measure(this.stack.slice(0, idx));
 		}
 
-		top = Math.max(top - (toast.getHeight()+ this.PADDING), 0);
+		top = Math.max(top - (toast.getHeight() + this.PADDING), 0);
 
 		toast.animate({
 			duration: 400,
-			to:{ top: top, left: left }
+			to: { top: top, left: left }
 		});
 	}
 
-}, function(){
+}, function() {
 	window.Toaster = new this();
 });

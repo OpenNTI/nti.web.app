@@ -1,23 +1,23 @@
-Ext.define('NextThought.view.content.notepad.View',{
+Ext.define('NextThought.view.content.notepad.View', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-notepad',
 
 	//<editor-fold desc="Config">
-	requires:[
+	requires: [
 		'NextThought.ux.ComponentReferencing',
 		'NextThought.view.content.notepad.Item',
 		'NextThought.view.content.notepad.Editor'
 	],
 
-	plugins:[
+	plugins: [
 		'component-referencing'
 	],
 
 	ui: 'reader-notepad',
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ cls: 'scroller', cn:[
-			{ cls: 'note-here', html:'Add a note...' }
+		{ cls: 'scroller', cn: [
+			{ cls: 'note-here', html: 'Add a note...' }
 		] }
 	])),
 
@@ -41,9 +41,9 @@ Ext.define('NextThought.view.content.notepad.View',{
 		this.callParent(arguments);
 		this.notepadItems = {};
 		this.on({
-			'editor-open':'lock',
-			'editor-closed':'unlock',
-			'detect-overflow': {fn:'detectOverflow', buffer: 100},
+			'editor-open': 'lock',
+			'editor-closed': 'unlock',
+			'detect-overflow': {fn: 'detectOverflow', buffer: 100},
 			afterRender: 'setupBindsToReaderRef',
 			el: {
 				scroll: 'onSyncScroll',
@@ -56,15 +56,15 @@ Ext.define('NextThought.view.content.notepad.View',{
 			},
 			boxEl: {
 				click: 'onClick',
-				mouseover:'eat',
-				mousemove:'eat',
+				mouseover: 'eat',
+				mousemove: 'eat',
 				contextmenu: 'noteHereMenu'
 			}
 		});
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.boxEl.setVisibilityMode(Ext.Element.ASCLASS).visibilityCls = 'hidden';
 	},
@@ -73,29 +73,29 @@ Ext.define('NextThought.view.content.notepad.View',{
 	setupBindsToReaderRef: function() {
 		var ref = this.getReaderRef();
 
-		try{
+		try {
 			this.syncHight();
 
 			ref.notepadRef = this;
 
-			this.mon(ref,{
-				'sync-height':'syncHight',
-				'scroll':'syncScroll',
-				'set-content':'updateBuckets'
+			this.mon(ref, {
+				'sync-height': 'syncHight',
+				'scroll': 'syncScroll',
+				'set-content': 'updateBuckets'
 			});
 		}
-		catch(e){
-			console.error(e.stack||e.message||e);
+		catch (e) {
+			console.error(e.stack || e.message || e);
 
-			Ext.defer(this.setupBindsToReaderRef,1,this);
+			Ext.defer(this.setupBindsToReaderRef, 1, this);
 		}
 	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Editor">
-	editorCleanup: function(){
-		if( this.editor ){
+	editorCleanup: function() {
+		if (this.editor) {
 			this.editor.destroy();
 		}
 		delete this.suspendMoveEvents;
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
-	openEditor: function (lineInfo) {
+	openEditor: function(lineInfo) {
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 		this.editor.focus();
 
 
-		this.mon(this.editor,{
+		this.mon(this.editor, {
 			blur: 'commitEditor',
 			destroy: 'unlock'
 		});
@@ -132,13 +132,13 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
-	commitEditor: function(editor){
+	commitEditor: function(editor) {
 		console.log(editor.getValue());
 		this.saveNewNote(editor);
 	},
 
 
-	saveNewNote: function (editor) {
+	saveNewNote: function(editor) {
 		var me = this,
 			note = editor.getValue(),
 			reader = me.getReaderRef(),
@@ -175,50 +175,50 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 
 	//<editor-fold desc="Mouse Event Handlers">
-	cleanupLine: function(){
+	cleanupLine: function() {
 		this.boxEl.hide();
 		delete this.lastLine;
 	},
 
 
-	lock: function(){
+	lock: function() {
 		this.suspendMoveEvents = true;
-		Ext.defer(this.boxEl.hide,1,this.boxEl);
+		Ext.defer(this.boxEl.hide, 1, this.boxEl);
 	},
 
 
-	unlock: function(){
+	unlock: function() {
 		delete this.suspendMoveEvents;
 	},
 
 
-	eat: function(e){
+	eat: function(e) {
 		clearTimeout(this.hideTimer);
 		e.stopEvent();
 		return false;
 	},
 
 
-	onClick: function(e){
-		if(this.suspendMoveEvents){return;}
+	onClick: function(e) {
+		if (this.suspendMoveEvents) {return;}
 		this.openEditor(this.lastLine);
 	},
 
 
-	onMouseOut: function(){
-		if(this.suspendMoveEvents){return;}
+	onMouseOut: function() {
+		if (this.suspendMoveEvents) {return;}
 		clearTimeout(this.hideTimer);
-		this.hideTimer = Ext.defer(this.cleanupLine,500,this);
+		this.hideTimer = Ext.defer(this.cleanupLine, 500, this);
 	},
 
 
-	onMouseTrack: function(e){
-		if(this.suspendMoveEvents){return;}
+	onMouseTrack: function(e) {
+		if (this.suspendMoveEvents) {return;}
 
 		var lineY = this.getContentY(e),
 			lineInfo = this.getLineInfo(lineY);
 
-		if( lineInfo ){
+		if (lineInfo) {
 			clearTimeout(this.hideTimer);
 			this.boxEl.show().setLocalY(lineInfo.rect.top);
 			this.lastLine = lineInfo;
@@ -228,46 +228,46 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 
 	//<editor-fold desc="Synchronizing Handlers">
-	syncHight: function(){
+	syncHight: function() {
 		this.scroller.setHeight(this.getReaderRef().getIframe().get().getHeight());
 	},
 
 
-	syncScroll: function(){
-		this.getEl().setScrollTop( this.getReaderRef().getScroll().top() );
+	syncScroll: function() {
+		this.getEl().setScrollTop(this.getReaderRef().getScroll().top());
 	},
 
 
-	onSyncScroll: function(){},
+	onSyncScroll: function() {},
 
 
-	onPushScroll: function pushScroll(e){
+	onPushScroll: function pushScroll(e) {
 		var d = e.getWheelDelta(),
-			h = (this.scroller.getHeight()/this.getHeight())/2; //make sure the scale kinda matches
+			h = (this.scroller.getHeight() / this.getHeight()) / 2; //make sure the scale kinda matches
 
-		this.getReaderRef().getScroll().by(d*h);
+		this.getReaderRef().getScroll().by(d * h);
 	},
 	//</editor-fold>
 
 
-	getContentY: function(e){
+	getContentY: function(e) {
 		var ref = this.getReaderRef(),
 			t = ref.getAnnotationOffsets().top;
 		return e.getY() - t;
 	},
 
 
-	getLineInfo: function(y){
+	getLineInfo: function(y) {
 		return this.getReaderRef().getNoteOverlay().lineInfoForY(y);
 	},
 
 
-	updateBuckets: function(){
+	updateBuckets: function() {
 		var k,
 			m = this.notepadItems || {};
 
-		for(k in m){
-			if(m.hasOwnProperty(k)){
+		for (k in m) {
+			if (m.hasOwnProperty(k)) {
 				Ext.destroy(m[k]);
 				delete m[k];
 			}
@@ -275,17 +275,17 @@ Ext.define('NextThought.view.content.notepad.View',{
 	},
 
 
-	noteHereMenu: function(e){
+	noteHereMenu: function(e) {
 		return this.eat(e);//maybe show a context menu?
 	},
 
 
-	detectOverflow: function(){
+	detectOverflow: function() {
 		console.log('overflow detection');
 
 		var collided = {}, els, resort = false;
 
-		function doesCollide(el, set){
+		function doesCollide(el, set) {
 			var top = el.getLocalY(),
 				height = el.getHeight(),
 				bottom = height + top,
@@ -294,77 +294,77 @@ Ext.define('NextThought.view.content.notepad.View',{
 
 			//console.log(id, top, height, bottom);
 
-			set.each(function(e){
+			set.each(function(e) {
 				var t = e.getLocalY(),
 					h = e.getHeight(),
 					i = e.getAttribute('id'),
 					b = h + t;
 
-				if(i !== id){
+				if (i !== id) {
 					//overlay
-					if(top === t && bottom === b){
+					if (top === t && bottom === b) {
 						//shouldn't be possible with this UI
-						console.warn(id,'is on top of, or below ',i, [top, t], [bottom, b]);
+						console.warn(id, 'is on top of, or below ', i, [top, t], [bottom, b]);
 						cut = -2;
 					}
 					//contained
-					else if(top >= t && bottom <= b){
+					else if (top >= t && bottom <= b) {
 						//shouldn't be possible with this UI
-						console.warn(id,'is contained within ',i, [top, t], [bottom, b]);
+						console.warn(id, 'is contained within ', i, [top, t], [bottom, b]);
 						cut = -1;
 					}
 					//collided into
-					else if(top <= t && bottom >= t){
-						console.log(id,'collided into',i, [top, t], [bottom, b]);
+					else if (top <= t && bottom >= t) {
+						console.log(id, 'collided into', i, [top, t], [bottom, b]);
 						cut = t;
 					}
 					//collided by
-//					else if(top > t && top < b && bottom <= b){
-//						shouldn't be possible with the current sort order
-//						console.log(id,'collided by',i, [top, t], [bottom, b]);
-//						cut = -3;
-//					}
+          //					else if(top > t && top < b && bottom <= b){
+          //						shouldn't be possible with the current sort order
+          //						console.log(id,'collided by',i, [top, t], [bottom, b]);
+          //						cut = -3;
+          //					}
 
 				}
 				return !cut;
 			});
 
-			return cut > 0 ? (cut-top) : cut;
+			return cut > 0 ? (cut - top) : cut;
 		}
 
 		els = this.el.select('.scroller > *:not(.note-here)').slice();
-		els.sort(function(a,b){
+		els.sort(function(a,b) {
 			var c = Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
-			if(c > 0){
+			if (c > 0) {
 				resort = true;
 			}
 			return c;
 		});
 
-		resort = !this.editor && resort && (new Ext.dom.CompositeElement(els)).filter('.edit').getCount()===0;
+		resort = !this.editor && resort && (new Ext.dom.CompositeElement(els)).filter('.edit').getCount() === 0;
 
-		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c){
+		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c) {
 
 			var d = Ext.getDom(el),
-				i = doesCollide(el,c);
+				i = doesCollide(el, c);
 
 			//make sure nodes are in sorted order by reinserting them into the dom.(moving them)
-			if(resort){
+			if (resort) {
 				d.parentNode.appendChild(d);
 			}
 
-			if(i>0){
+			if (i > 0) {
 				el.addCls('collide');
 				el.setHeight(i);
-				el.setStyle({minHeight: i+'px'});
+				el.setStyle({minHeight: i + 'px'});
 			}
 		});
 	},
 
 
-	addOrUpdate: function(annotation, yPlacement){
+	addOrUpdate: function(annotation, yPlacement) {
 		yPlacement = Math.round(yPlacement);
-		if(yPlacement < 5){
+		if (yPlacement < 5) {
 			yPlacement = 5;
 		}
 
@@ -375,7 +375,7 @@ Ext.define('NextThought.view.content.notepad.View',{
 				placement: yPlacement
 			};
 
-		if(!map.hasOwnProperty(annotation.id) ){
+		if (!map.hasOwnProperty(annotation.id)) {
 			map[annotation.id] = Ext.widget({
 				xtype: 'notepad-item',
 				floatParent: this,

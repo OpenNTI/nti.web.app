@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.form.SectionInfoForm', {
-	extend:'Ext.form.FieldSet',
+	extend: 'Ext.form.FieldSet',
 	alias: 'widget.section-info-form',
 
 	requires: [
@@ -22,7 +22,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		border: false
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.add(
 			{
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 					margin: '10px 0px',
 					anchor: '100%',
 					layout: 'anchor',
-					xtype:'fieldset',
+					xtype: 'fieldset',
 					collapsible: true,
 					collapsed: false,
 					border: false,
@@ -89,8 +89,8 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 						xtype: 'user-list'
 					}
 				},
-				items:[
-					{ title: 'Instructors',   items: { emptyText: 'Instructors...', name: 'Instructors' }},
+				items: [
+					{ title: 'Instructors', items: { emptyText: 'Instructors...', name: 'Instructors' }},
 					{ title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
 				]
 			}
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 				};
 			},
 			type: 'minus',
-			handler: function(){me.destroy();},
+			handler: function() {me.destroy();},
 			scope: me
 		});
 		this.removeTool = cmp;
@@ -148,7 +148,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		o.OpenDate = this.down('datefield[name=OpenDate]').getValue();
 		o.CloseDate = this.down('datefield[name=CloseDate]').getValue();
 		o.Enrolled = this.down('sharewith[name=Enrolled]').getValue();
-		o.InstructorInfo =  {'Class': 'InstructorInfo', 'Instructors': a};
+		o.InstructorInfo = {'Class': 'InstructorInfo', 'Instructors': a};
 
 		//o.Provider = (o.Provider && o.Provider.ID) ? o.Provider.ID : null;
 		delete o.Provider;
@@ -171,8 +171,8 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		this.down('sharewith[name=Instructors]').setValue(i);
 	},
 
-	setFieldValue: function(fieldName){
-		var rn = this.down('*[name='+fieldName+']');
+	setFieldValue: function(fieldName) {
+		var rn = this.down('*[name=' + fieldName + ']');
 		rn.setValue(this.value.get(fieldName));
 		rn.resetOriginalValue();
 	}

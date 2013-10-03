@@ -1,20 +1,20 @@
 Ext.define('NextThought.view.account.contacts.View', {
-	extend:   'Ext.view.View',
-	alias:    'widget.contacts-view',
+	extend: 'Ext.view.View',
+	alias: 'widget.contacts-view',
 	requires: [
 		'NextThought.view.account.contacts.GroupChat'
 	],
 
-	title:     'Chat',
+	title: 'Chat',
 	tabConfig: {
 		tooltip: 'Chat'
 	},
 
 	store: 'online-contacts-store',
 
-	iconCls:                 'contacts',
-	ui:                      'contacts',
-	cls:                     'contacts-view scrollable',
+	iconCls: 'contacts',
+	ui: 'contacts',
+	cls: 'contacts-view scrollable',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([
@@ -29,34 +29,34 @@ Ext.define('NextThought.view.account.contacts.View', {
 	]),
 
 	renderSelectors: {
-		buttonRow:       '.button-row',
-		searchButton:    '.button-row .search',
+		buttonRow: '.button-row',
+		searchButton: '.button-row .search',
 		groupChatButton: '.button-row .group-chat',
-		clearNib:        '.button-row .search .clear',
-		searchField:     '.button-row .search input',
-		frameBodyEl:     '.contact-list'
+		clearNib: '.button-row .search .clear',
+		searchField: '.button-row .search input',
+		frameBodyEl: '.contact-list'
 	},
 
 	listeners: {
-		click:                    {
+		click: {
 			element: 'el',
-			fn:      'onClickRaw'
+			fn: 'onClickRaw'
 		},
-		itemclick:                'rowClicked',
-		itemmouseenter:           'rowHover',
-		select:                   function (s, record) {
+		itemclick: 'rowClicked',
+		itemmouseenter: 'rowHover',
+		select: function(s, record) {
 			s.deselect(record);
 		},
 		'chat-dock-update-count': 'updateBadge'
 	},
 
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.frameBodyEl;
 	},
 
-	overItemCls:  'over',
+	overItemCls: 'over',
 	itemSelector: '.contact-row',
-	tpl:          new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
 			{ tag: 'tpl', 'if': 'values.Presence', cn: { cls: 'presence {Presence.name}' }},
 			{ tag: 'tpl', 'if': '!values.Presence', cn: { cls: 'presence' }},
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			]}
 		]}
 		]}), {
-			isContact: function (values) {
+			isContact: function(values) {
 				var a = Ext.getStore('all-contacts-store'),
 						o = Ext.getStore('online-contacts-store');
 				return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
@@ -77,15 +77,15 @@ Ext.define('NextThought.view.account.contacts.View', {
 		}),
 
 
-	constructor: function () {
+	constructor: function() {
 		this.normalEmptyText = Ext.DomHelper.markup({
-			cls:  'empty-list rhp-empty-list',
+			cls: 'empty-list rhp-empty-list',
 			html: 'None of your contacts are online.'
 		});
 
 		this.noContactsEmptyText = Ext.DomHelper.markup({
 			cls: 'rhp-no-contacts',
-			cn:  [
+			cn: [
 				{ html: 'You don&apos;t have any contacts yet...' },
 				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: 'Add Contacts' }
 			]
@@ -103,21 +103,21 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	onClickRaw: function (e) {
+	onClickRaw: function(e) {
 		if (e.getTarget('a.button')) {
 			this.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
 		}
 	},
 
 
-	getViewRange: function () {
+	getViewRange: function() {
 		var range = this.callParent(),
 				a = !Ext.isEmpty(this.friendsListStore.getContacts()),
 				online = $AppConfig.userObject.getPresence().isOnline();//This should probably be optimized.
 
-		if(a){
-			this.emptyText = online? this.normalEmptyText : this.offlineEmptyText;
-		}else{
+		if (a) {
+			this.emptyText = online ? this.normalEmptyText : this.offlineEmptyText;
+		}else {
 			this.emptyText = this.noContactsEmptyText;
 		}
 
@@ -125,7 +125,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	addBadge: function () {
+	addBadge: function() {
 		var tab = this.tab;
 
 		if (!tab.rendered) {
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	getBadge: function () {
+	getBadge: function() {
 		if (!this.badge) {
 			this.addBadge();
 		}
@@ -147,7 +147,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	updateBadge: function (count) {
+	updateBadge: function(count) {
 		var b = this.getBadge(),
 				v = count || '';
 
@@ -160,7 +160,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	rowClicked: function (view, record, item) {
+	rowClicked: function(view, record, item) {
 		var el = Ext.fly(item).down('.avatar');
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		this.cancelPopupTimeout();
@@ -171,19 +171,19 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	rowHover: function (view, record, item, wait) {
+	rowHover: function(view, record, item, wait) {
 		this.startPopupTimeout(view, record, item, 500);
 	},
 
 
-	startPopupTimeout: function (view, record, item, wait) {
+	startPopupTimeout: function(view, record, item, wait) {
 		function fin(pop) {
 			// If the popout is destroyed, clear the activeTargetDom,
 			// that way we will be able to show the popout again.
 			if (!pop) {
 				return;
 			}
-			pop.on('destroy', function () {
+			pop.on('destroy', function() {
 				delete me.activeTargetDom;
 			});
 		}
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 		}
 
 		me.cancelPopupTimeout();
-		me.hoverTimeout = Ext.defer(function () {
+		me.hoverTimeout = Ext.defer(function() {
 			Ext.fly(item).un('mouseout', me.cancelPopupTimeout, me, {single: true});
 			popout.popup(record, el, item, [-1, 0], fin);
 			me.activeTargetDom = Ext.getDom(Ext.fly(item));
@@ -206,18 +206,18 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	cancelPopupTimeout: function () {
+	cancelPopupTimeout: function() {
 		clearTimeout(this.hoverTimeout);
 	},
 
 
-	onSearchClick: function () {
+	onSearchClick: function() {
 		this.buttonRow.addCls('search');
 		this.searchField.focus();
 	},
 
 
-	onSearchBlur: function () {
+	onSearchBlur: function() {
 		var v = this.searchField.getValue();
 		if (Ext.isEmpty(v)) {
 			this.removeCls('searching');
@@ -230,7 +230,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	clearClicked: function (e) {
+	clearClicked: function(e) {
 		if (e) {
 			e.stopEvent();
 		}
@@ -242,7 +242,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	onSearchKeyPressed: function (e) {
+	onSearchKeyPressed: function(e) {
 		if (e.ESC === e.getKey()) {
 			this.clearClicked();
 		}
@@ -257,7 +257,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	doSearch: function (v) {
+	doSearch: function(v) {
 		var fn = 'removeAll',
 				action = 'removeCls',
 				param = false;
@@ -273,7 +273,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var store = this.store,
 				flStore = Ext.getStore('FriendsList');
 
@@ -281,23 +281,23 @@ Ext.define('NextThought.view.account.contacts.View', {
 		this.searchStore = new NextThought.store.UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.
-				function (rec) {
+				function(rec) {
 					return rec.get('Username') !== $AppConfig.contactsGroupName;
 				},
-				function (rec) {
+				function(rec) {
 					return !rec.isCommunity;
 				},
-				function (rec) {
+				function(rec) {
 					return !isMe(rec);
 				},
-				function (rec) {
+				function(rec) {
 					return rec.get('ContainerId') === 'Users';
 				}
 			],
 			sorters: [
 				{
 					//Put contacts first
-					sorterFn:  function (a, b) {
+					sorterFn: function(a, b) {
 						var c = store.contains(a.get('Username')),
 								d = store.contains(b.get('Username'));
 						return c === d
@@ -308,7 +308,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 				},
 				{
 					//Sort, next, by displayName
-					property:  'displayName',
+					property: 'displayName',
 					direction: 'ASC'
 				}
 			]
@@ -319,40 +319,40 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 		this.contactSearch = Ext.widget('dataview', {
 			preserveScrollOnRefresh: true,
-			store:                   this.searchStore,
-			overItemCls:             this.overItemCls,
-			itemSelector:            this.itemSelector,
-			tpl:                     this.tpl,
-			emptyText:               Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
-			renderTo:                this.el,
-			cls:                     'contact-search',
-			listeners:               {
-				scope:          this,
-				itemclick:      'rowClicked',
+			store: this.searchStore,
+			overItemCls: this.overItemCls,
+			itemSelector: this.itemSelector,
+			tpl: this.tpl,
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
+			renderTo: this.el,
+			cls: 'contact-search',
+			listeners: {
+				scope: this,
+				itemclick: 'rowClicked',
 				itemmouseenter: 'rowHover',
-				select:         function (s, record) {
+				select: function(s, record) {
 					s.deselect(record);
 				}
 			}
 		});
 
-		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function (username, presence) {
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (isMe(username)) {
-				if(presence.isOnline()){
+				if (presence.isOnline()) {
 					this.bindStore('online-contacts-store');
-				}else{
+				}else {
 					this.bindStore('ext-empty-store');
 				}
 			}
 		}, this);
 
 		this.mon(this.store, {
-			scope:       this.contactSearch,
+			scope: this.contactSearch,
 			datachanged: 'refresh'
 		});
 
 		this.mon(flStore, {
-			scope:    this.contactSearch,
+			scope: this.contactSearch,
 			'update': 'refresh'
 		});
 
@@ -362,10 +362,10 @@ Ext.define('NextThought.view.account.contacts.View', {
 		});
 
 		this.mon(this.searchField, {
-			scope:       this,
-			blur:        'onSearchBlur',
-			keyup:       'onSearchKeyPressed',
-			contextmenu: function (e) {
+			scope: this,
+			blur: 'onSearchBlur',
+			keyup: 'onSearchKeyPressed',
+			contextmenu: function(e) {
 				e.stopPropagation();
 			} //allow context on simple texts
 		});
@@ -374,19 +374,19 @@ Ext.define('NextThought.view.account.contacts.View', {
 	},
 
 
-	activateGroupChatFeature: function () {
+	activateGroupChatFeature: function() {
 		this.groupChat = Ext.widget('contacts-group-chat-initiator', {
-			renderTo:           this.el,
-			searchTpl:          this.tpl,
-			searchOverItemCls:  this.overItemCls,
+			renderTo: this.el,
+			searchTpl: this.tpl,
+			searchOverItemCls: this.overItemCls,
 			searchItemSelector: this.itemSelector
 		});
 
 		this.groupChat.hide();
 		this.mon(this.groupChatButton, 'click', 'show', this.groupChat);
 		this.mon(this.groupChat, {
-			scope:         this.groupChat,
-			cancel:        'hide',
+			scope: this.groupChat,
+			cancel: 'hide',
 			'adhock-chat': 'hide'
 		});
 	}

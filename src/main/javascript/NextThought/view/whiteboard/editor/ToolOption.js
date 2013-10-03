@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
+Ext.define('NextThought.view.whiteboard.editor.ToolOption', {
 	alias: 'widget.wb-tool-option',
 	extend: 'Ext.button.Split',
 
@@ -11,8 +11,8 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 	baseCls: 'whiteboard-tool-option',
 	menuAlign: 't-b?',
 
-	initComponent: function(){
-		if(!this.options){
+	initComponent: function() {
+		if (!this.options) {
 			this.split = false;
 			delete this.arrowCls;
 		}
@@ -32,7 +32,7 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 	},
 
 
-	onClick : function(e, t) {
+	onClick: function(e, t) {
 		var me = this;
 		if (!me.disabled && me.pressed) {
 			me.overMenuTrigger = true;
@@ -41,15 +41,15 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 	},
 
 
-	toolTipText: function(){
+	toolTipText: function() {
 		return this.tipText || this.option;
 	},
 
 
-	buildOptions: function(){
+	buildOptions: function() {
 		var me = this,
 			menu = {
-			items:[],
+			items: [],
 			ui: 'nt',
 			plain: true,
 			showSeparator: false,
@@ -58,17 +58,17 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 			border: false,
 			minWidth: 70,
 			xhooks: {
-				showBy: function(cmp, pos, off){
+				showBy: function(cmp, pos, off) {
 					off = [0, 5];
-					return this.callParent([cmp,pos,off]);
+					return this.callParent([cmp, pos, off]);
 				}
 			}
 		};
 
-		function builder (o){
+		function builder(o) {
 			var i = o;
-			if(!Ext.isObject(o)){
-				i = { text: o, value: o, handler: function(m){
+			if (!Ext.isObject(o)) {
+				i = { text: o, value: o, handler: function(m) {
 					me.setText(me.value = m.value);
 					me.fireEvent('wb-options-change', me.up('wb-tool-shape-options') || me);
 				}};
@@ -77,19 +77,19 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 			menu.items.push(i);
 		}
 
-		Ext.each(this.options,builder);
+		Ext.each(this.options, builder);
 		return menu;
 	},
 
-	getValue: function(){
+	getValue: function() {
 		return this.value;
 	},
 
-	setValue: function(v){
+	setValue: function(v) {
 		this.toggle(true);
-		if(this.options){
-			this.menu.items.each(function(o){
-				if(o.value === v){
+		if (this.options) {
+			this.menu.items.each(function(o) {
+				if (o.value === v) {
 					o.handler(o);
 					return false;
 				}

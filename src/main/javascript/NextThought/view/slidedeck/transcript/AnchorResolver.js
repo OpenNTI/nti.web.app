@@ -8,14 +8,14 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 	// we think in the future, each type of anchor should have information about how to resolve its range.
 	// These utils deal with time range resolution. This is just a first step.
 
-	createRangeDescriptionFromRange: function(range, docElement, cueInfo){
-		if(!range){
+	createRangeDescriptionFromRange: function(range, docElement, cueInfo) {
+		if (!range) {
 			return this.createRangeDescriptionFromTimeRange(cueInfo);
 		}
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
 		range = Anchors.makeRangeAnchorable(range, docElement);
-		if(!range || range.collapsed){
+		if (!range || range.collapsed) {
 			console.error('Anchorable range for provided range could not be found', range);
 			Ext.Error.raise('Anchorable range for range could not be found');
 		}
@@ -34,8 +34,8 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
-	toDomRange: function(description, doc, cleanRoot, containerId){
-		if(!description || description.isEmpty){
+	toDomRange: function(description, doc, cleanRoot, containerId) {
+		if (!description || description.isEmpty) {
 			return null;
 		}
 
@@ -47,11 +47,11 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 		start = utils.fromMillSecondToSecond(start);
 		end = utils.fromMillSecondToSecond(end);
 
-		if(cleanRoot){
+		if (cleanRoot) {
 			// Since we're anchoring to specific exact cue, we can find the node but checking the cue with the same start as ours.
 			// TODO: we should probably search within time range.
-			targetEl = Ext.fly(cleanRoot).down('.cue[cue-start='+start+']');
-			if(targetEl){
+			targetEl = Ext.fly(cleanRoot).down('.cue[cue-start=' + start + ']');
+			if (targetEl) {
 				range = document.createRange();
 				range.selectNodeContents(targetEl.dom);
 			}
@@ -63,8 +63,8 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
-	fromTimeRangeToDomRange: function(description, cueStore, container, docElement){
-		if(!description || description.isEmpty){
+	fromTimeRangeToDomRange: function(description, cueStore, container, docElement) {
+		if (!description || description.isEmpty) {
 			return;
 		}
 		var start = description.getStart() && description.getStart().seconds,
@@ -79,14 +79,14 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 
 		console.log('Cues within time range: ', start, end, cues);
 		console.log('cues count: ', cues && cues.getCount());
-		if(!cues || cues.getCount() === 0){ return null; }
+		if (!cues || cues.getCount() === 0) { return null; }
 
-		cues.each(function(cue){
-			var el = Ext.fly(container).down('.cue[cue-start='+cue.get('startTime')+']');
-			if(el){ els.push(el); }
+		cues.each(function(cue) {
+			var el = Ext.fly(container).down('.cue[cue-start=' + cue.get('startTime') + ']');
+			if (el) { els.push(el); }
 		});
 
-		if(!Ext.isEmpty(els)){
+		if (!Ext.isEmpty(els)) {
 			resultRange = (docElement || document).createRange();
 			//FIXME: Needs to be smart and select all els but for now.
 			resultRange.selectNodeContents(els[0].dom);
@@ -95,25 +95,25 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 		return resultRange;
 	},
 
-	getCuesWithinRange: function(store, start, end){
-		function fn(item){
-			return (item.get('endTime') > 0) && (start <= item.get('startTime')) && ( item.get('endTime') <= end);
+	getCuesWithinRange: function(store, start, end) {
+		function fn(item) {
+			return (item.get('endTime') > 0) && (start <= item.get('startTime')) && (item.get('endTime') <= end);
 		}
 		return store ? store.queryBy(fn, this) : null;
 	},
 
-	createRangeDescriptionFromTimeRange: function(cueInfo){
+	createRangeDescriptionFromTimeRange: function(cueInfo) {
 		var desc = NextThought.model.anchorables.TimeRangeDescription.create({
 			start: this.createTimePointer('start', cueInfo.startTime),
 			end: this.createTimePointer('end', cueInfo.endTime),
 			seriesId: cueInfo.containerId
 		});
 
-		return {description:desc};
+		return {description: desc};
 	},
 
 
-	createTranscriptPointer: function(rangePointer, role, cueId, time){
+	createTranscriptPointer: function(rangePointer, role, cueId, time) {
 		return NextThought.model.anchorables.TranscriptContentPointer.create({
 			pointer: rangePointer,
 			cueid: cueId,
@@ -122,18 +122,18 @@ Ext.define('NextThought.view.slidedeck.transcript.AnchorResolver', {
 		});
 	},
 
-	createTimePointer: function(role, time){
+	createTimePointer: function(role, time) {
 		return NextThought.model.anchorables.TimeContentPointer.create({
 			seconds: this.toMillSecond(time),
-			role:role
+			role: role
 		});
 	},
 
-	fromMillSecondToSecond: function(millsec){
+	fromMillSecondToSecond: function(millsec) {
 		return millsec / 1000;
 	},
 
-	toMillSecond: function(seconds){
+	toMillSecond: function(seconds) {
 		return seconds * 1000;
 	}
 });

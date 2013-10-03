@@ -40,7 +40,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		if (!this.record || !this.record.isModel) {
 			Ext.Error.raise('We need a record for this component');
 		}
@@ -48,18 +48,18 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	setRecord: function (record) {
+	setRecord: function(record) {
 		this.callParent(arguments);
 		this.maybeFillIn();
 	},
 
 
-	updateFromRecord: function () {
+	updateFromRecord: function() {
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (this.commentsEl && this.commentsEl.dom) {
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 		//NOTE: We run into a case where a reply to one of our replies doesn't trigger opening the reply editor.
 		// It was mainly a timing issue, so now listen to add events.
-		this.on('add', function (cmp, child) {
+		this.on('add', function(cmp, child) {
 			if (this.replyToId && child.record && child.record.getId() === this.replyToId) {
 				Ext.defer(this.maybeOpenReplyEditor, 1, this);
 			}
@@ -85,19 +85,19 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	addAdditionalRecordListeners: function (record) {
+	addAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mon(record, 'convertedToPlaceholder', this.destroy, this);
 	},
 
 
-	removeAdditionalRecordListeners: function (record) {
+	removeAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mun(record, 'convertedToPlaceholder', this.destroy, this);
 	},
 
 
-	onBeforeAdd: function (cmp) {
+	onBeforeAdd: function(cmp) {
 		this.callParent(arguments);
 		if (!this.isExpanded()) {
 			if (this.items.last()) {
@@ -107,7 +107,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	updateCount: function () {
+	updateCount: function() {
 		if (this.commentsEl) {
 			var c = this.record.getReplyCount() || 0;
 			console.log('count was update to: ', c);
@@ -116,7 +116,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	clickedRevealAllReplies: function () {
+	clickedRevealAllReplies: function() {
 		this.mun(this.replyButton, 'click', this.clickedRevealAllReplies, this);
 		if (!this.commentsEl) {
 			return;
@@ -127,12 +127,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	shouldShowReplies: function () {
+	shouldShowReplies: function() {
 		this.suspendLayouts();
 		this.removeAll();
 		this.resumeLayouts();
 
-		Ext.defer(function () {
+		Ext.defer(function() {
 			Ext.suspendLayouts();
 			this.addReplies(this.record.children);
 			Ext.resumeLayouts(true);
@@ -140,7 +140,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	onDelete: function () {
+	onDelete: function() {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
@@ -150,7 +150,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function (str) {
+			fn: function(str) {
 				if (str === 'ok') {
 					me.record.destroy();
 					me.adjustRootsReferenceCount(me.record);
@@ -160,12 +160,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	isExpanded: function () {
+	isExpanded: function() {
 		return !this.commentsEl;
 	},
 
 
-	setRecordTitle: function () {
+	setRecordTitle: function() {
 		function callback(snip, value) {
 			if (snip && snip !== value) {
 				me.subjectEl.set({'data-qtip': value});
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	maybeFillIn: function () {
+	maybeFillIn: function() {
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
 			subject,
@@ -216,7 +216,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		if (me.root) {
 			me.contextEl.show();
 			me.contextEl.mask('Loading...');
-			me.loadContext(function () {
+			me.loadContext(function() {
 				if (me.contextEl) {
 					me.contextEl.unmask();
 				}
@@ -225,28 +225,28 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	onEdit: function () {
+	onEdit: function() {
 		this.callParent(arguments);
-		if(!this.replyMode){
+		if (!this.replyMode) {
 			this.footEl.hide();
 		}
 	},
 
 
-	activateReplyEditor: function () {
+	activateReplyEditor: function() {
 		this.callParent(arguments);
 		this.addCls('has-active-editor');
 	},
 
 
-	deactivateReplyEditor: function () {
+	deactivateReplyEditor: function() {
 		this.callParent(arguments);
 		this.removeCls('has-active-editor');
 		this.footEl.show();
 	},
 
 
-	setContext: function () {
+	setContext: function() {
 		this.callParent(arguments);
 		if (this.context) {
 			this.context.select('iframe').remove();
@@ -254,7 +254,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	loadContext: function (fin) {
+	loadContext: function(fin) {
 		var me = this,
 			r = me.record,
 			cid = r.get('ContainerId'),
@@ -287,7 +287,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 			metaHandled = false;
 
-			ContentUtils.findContentObject(cid, function (obj, meta) {
+			ContentUtils.findContentObject(cid, function(obj, meta) {
 				//TOOD need a generic framework for various objects here
 				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
 					var src, sources, contextEl;
@@ -342,7 +342,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		}
 
 
-		LocationMeta.getMeta(cid, function (meta) {
+		LocationMeta.getMeta(cid, function(meta) {
 			metaInfo = meta;
 
 			function maybeFin() {
@@ -356,7 +356,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	handlePurchasable: function (purchasable, el) {
+	handlePurchasable: function(purchasable, el) {
 		var me = this,
 			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
 
@@ -374,7 +374,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	goToObject: function () {
+	goToObject: function() {
 		var rec = this.record,
 			cid;
 
@@ -386,7 +386,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 
 		//If we are a placholder find a reply to navigate to
 		if (!rec || rec.placeholder) {
-			Ext.each(this.down('[record]'), function (cmp) {
+			Ext.each(this.down('[record]'), function(cmp) {
 				if (cmp.record && !cmp.record.placholder) {
 					rec = cmp.record;
 					return false; //break
@@ -403,7 +403,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	},
 
 
-	setLocation: function (meta) {
+	setLocation: function(meta) {
 		if (!meta) {
 			return;
 		}
@@ -419,10 +419,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 		});
 
 		this.locationEl.hover(
-			function () {
+			function() {
 				Ext.fly(this).addCls('over');
 			},
-			function () {
+			function() {
 				Ext.fly(this).removeCls('over');
 			});
 
@@ -431,7 +431,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 	}
 
 
-}, function () {
+}, function() {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([
 		{
@@ -511,7 +511,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 		deleteEl: '.reply-options .delete'
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		var D = Ext.dom.Element.DISPLAY;
 		this.flagEl.setVisibilityMode(D);
 		this.editEl.setVisibilityMode(D);
@@ -531,14 +531,14 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 		this.mon(this.editEl, 'click', this.onEdit, this);
 	},
 
-	onEdit: function(){
+	onEdit: function() {
 		var parent = this.up('profile-activity-item');
 
-		if(this.replyMode || parent.replyMode){ return; }
+		if (this.replyMode || parent.replyMode) { return; }
 		this.callParent(arguments);
 	},
 
-	shouldRevealReplies: function () {
+	shouldRevealReplies: function() {
 		this.mun(this.replyButton, 'click', this.shouldRevealReplies, this);
 
 		var activityItem = this.up('profile-activity-item');
@@ -549,7 +549,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 		activityItem.fireEvent('reveal-replies');
 	},
 
-	setRecord: function () {
+	setRecord: function() {
 		this.callParent(arguments);
 
 		if (!this.rendered) {
@@ -566,7 +566,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 		}
 	}
 
-}, function () {
+}, function() {
 
 	this.prototype.renderTpl = Ext.DomHelper.markup([
 		{

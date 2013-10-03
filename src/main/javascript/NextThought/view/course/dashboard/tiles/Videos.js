@@ -1,29 +1,29 @@
-Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
+Ext.define('NextThought.view.course.dashboard.tiles.Videos', {
 	extend: 'NextThought.view.course.dashboard.tiles.Tile',
 	alias: 'widget.course-dashboard-videos',
 
 	statics: {
 
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
 			var f = 'object[mimeType$=ntivideo]',
 				DQ = Ext.DomQuery,
-				videos = [],seen = {},
+				videos = [], seen = {},
 				store = this.getCourseNavStore(courseNodeRecord), r, i, len, c;
 
-			function addDate(r){
-				if(/^videos$/i.test(r.get('label'))){
-					console.warn('Super HACK filter! dropping VIDEOS "lesson"',r);
+			function addDate(r) {
+				if (/^videos$/i.test(r.get('label'))) {
+					console.warn('Super HACK filter! dropping VIDEOS "lesson"', r);
 					return Ext.emptyFn;
 				}
 
-				return function(n){
+				return function(n) {
 					var id = n.getAttribute('ntiid');
-					if( r ){
+					if (r) {
 						//this will only be referenced within THIS class/file. WARNING: VERY PRIVATE
 						n.NTCourseNode = r;
 					}
 
-					if( !seen[id] ){
+					if (!seen[id]) {
 						seen[id] = true;
 						videos.push(n);
 					} else {
@@ -32,21 +32,21 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 				};
 			}
 
-			if(store){
+			if (store) {
 				i = store.indexOf(courseNodeRecord);
 				len = store.getCount();
-				for(i; i<len; i++){
+				for (i; i < len; i++) {
 					r = store.getAt(i);
-					Ext.each(DQ.filter(r.getChildren()||[],f),addDate(r));
+					Ext.each(DQ.filter(r.getChildren() || [], f), addDate(r));
 				}
 			}
 
-			if(!Ext.isEmpty(videos)){
+			if (!Ext.isEmpty(videos)) {
 				c = this.create({lastModified: courseNodeRecord.get('date'), sources: videos, locationInfo: locationInfo});
 			}
 
 			//console.debug('Giving dashboard:',c);
-			Ext.callback(finish,null,[c]);
+			Ext.callback(finish, null, [c]);
 		}
 
 	},
@@ -60,20 +60,20 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 
 
 	//Effectively disable, I know we aren't really deprecating them, but rather just blocking them.
-	add:Ext.deprecated('This component is not meant to be handled like a container.'),
-	remove:Ext.deprecated('This component is not meant to be handled like a container.'),
+	add: Ext.deprecated('This component is not meant to be handled like a container.'),
+	remove: Ext.deprecated('This component is not meant to be handled like a container.'),
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var items = [],
 			l = this.getLocationInfo();
 
-		Ext.each(this.getSources(),function(s){
+		Ext.each(this.getSources(), function(s) {
 			var rec = s.NTCourseNode;
 			delete s.NTCourseNode;
-			items.push({node:s, locationInfo: l, courseRecord: rec});
+			items.push({node: s, locationInfo: l, courseRecord: rec});
 		});
 
 		this.content = Ext.widget({
@@ -84,13 +84,13 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 			items: items,
 			cls: 'dashboard-videos',
 			leaveCurtain: true,
-			tpl:Ext.DomHelper.markup({ tag: 'tpl', 'for':'.', cn: [{
+			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [{
 					cls: 'video-row',
 					cn: [
-						{ cls: 'poster', style: { backgroundImage:'url({thumb})'} },
-						{ cls: 'meta', cn:[
-							{ cls:'date', html: '{date:date("l, F j")}' },
-							{ cls:'label', html: '{label}', 'data-qtip':'{label}' }
+						{ cls: 'poster', style: { backgroundImage: 'url({thumb})'} },
+						{ cls: 'meta', cn: [
+							{ cls: 'date', html: '{date:date("l, F j")}' },
+							{ cls: 'label', html: '{label}', 'data-qtip': '{label}' }
 						]}
 					]
 				}]}),
@@ -99,31 +99,31 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 				'destroy': 'widgetDestroyed'
 			},
 			xhooks: {
-			 	showCurtain: function(){
+			 	showCurtain: function() {
 					this.callParent(arguments);
 					this.removeCls('hide-list playing');
 				}
 			}
 		});
 
-		this.mon(this.content,{
+		this.mon(this.content, {
 			//'player-command-play':'onPlayerPlay',
 			//'player-command-stop':'onPlayerStop',
 			//'player-command-pause':'onPlayerStop',
-			'player-event-play':'onPlayerPlay',
-			'player-event-pause':'onPlayerPause',
-			'player-event-ended':'onPlayerStop',
-			'player-error':'onPlayerStop',
+			'player-event-play': 'onPlayerPlay',
+			'player-event-pause': 'onPlayerPause',
+			'player-event-ended': 'onPlayerStop',
+			'player-error': 'onPlayerStop',
 			buffer: 10
 		});
 	},
 
-	widgetDestroyed: function(){
-		if(!this.isDestroyed && !this.destroying){
+	widgetDestroyed: function() {
+		if (!this.isDestroyed && !this.destroying) {
 			//WARNING: this is not the #add() you seek. Calling the super only in the error case that our intended view
 			// was destroyed.
-			this.superclass.add.call(this,{
-				xtype:'box',
+			this.superclass.add.call(this, {
+				xtype: 'box',
 				autoEl: {
 					cls: 'no-videos',
 					cn: [
@@ -136,16 +136,16 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos',{
 	},
 
 
-	onPlayerPlay: function(){
+	onPlayerPlay: function() {
 		this.content.addCls('hide-list playing');
 	},
 
 
-	onPlayerPause: function(){
+	onPlayerPause: function() {
 		this.content.removeCls('hide-list');
 	},
 
-	onPlayerStop: function(){
+	onPlayerStop: function() {
 		this.content.removeCls('hide-list playing');
 	}
 });

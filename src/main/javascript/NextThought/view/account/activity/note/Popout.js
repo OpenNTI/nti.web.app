@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.activity.note.Popout',{
+Ext.define('NextThought.view.account.activity.note.Popout', {
 	extend: 'NextThought.view.account.activity.Popout',
 	alias: ['widget.activity-popout-note'],
 
@@ -9,35 +9,35 @@ Ext.define('NextThought.view.account.activity.note.Popout',{
 
 	statics: {
 
-		popupAfterResolvingParent: function(record, el, viewRef, anchor, cb){
+		popupAfterResolvingParent: function(record, el, viewRef, anchor, cb) {
 
 			var service = $AppConfig.service,
 				me = this,
 				ref = record.get('references').first();
 
-			function load(resolvedRecord){
-				if(resolvedRecord !== record){
+			function load(resolvedRecord) {
+				if (resolvedRecord !== record) {
 					resolvedRecord.focusRecord = record;
 				}
 				me.popupNow(resolvedRecord, el, viewRef, anchor, cb);
 			}
 
-			if(!this.beforeShowPopup(record, el)){
+			if (!this.beforeShowPopup(record, el)) {
 				return;
 			}
 
-			if(!ref){
+			if (!ref) {
 				load(record);
 				return;
 			}
-            service.getObject(ref, load, function failure(){
+      service.getObject(ref, load, function failure() {
 	            var recs = NextThought.util.UserDataThreader.threadUserData(record);
 	            load((recs || []).first());
-            }, me);
+      }, me);
 		}
 
 	}
-},function(){
+},function() {
 	this.popupNow = this.popup;
 	this.popup = this.popupAfterResolvingParent;
 });

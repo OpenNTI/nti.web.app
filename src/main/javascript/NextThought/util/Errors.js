@@ -24,7 +24,7 @@ Ext.define('NextThought.util.Errors', {
 	//error messages
 	errorMsgs: {
 		'FieldContainsCensoredSequence' : {
-			msg : "{name} contains censored {type}.",
+			msg: '{name} contains censored {type}.',
 			defaults: {
 				'name' : 'Item',
 				'type' : 'material'
@@ -34,22 +34,22 @@ Ext.define('NextThought.util.Errors', {
 
 
 	//either returns this.errorMsgs[errCode].msg (with replacements), defaultMsg, or undefined
-	getError: function(errCode,replace,defaultMsg){
+	getError: function(errCode,replace,defaultMsg) {
 		var error = this.errorMsgs[errCode],
 			msg;
 
-		if(!error || !error.msg){
+		if (!error || !error.msg) {
 			return defaultMsg;
 		}
 
-		if(error.defaults){
+		if (error.defaults) {
 			replace = Ext.applyIf(replace || {}, error.defaults);
 		}
 
 		msg = error.msg;
 
-		Ext.Object.each(replace, function(key,value,self){
-			msg = msg.replace("{"+key+"}",value);
+		Ext.Object.each(replace, function(key,value,self) {
+			msg = msg.replace('{' + key + '}', value);
 		});
 
 		return msg;
@@ -57,10 +57,10 @@ Ext.define('NextThought.util.Errors', {
 
 
 	//adds messages to the errorMsgs for testing purposes
-	addMsg: function(msgs){
-		Ext.applyIf(this.errorMsgs,msgs);
+	addMsg: function(msgs) {
+		Ext.applyIf(this.errorMsgs, msgs);
 	}
 
-},function(){
+},function() {
 	window.NTIError = this;
 });

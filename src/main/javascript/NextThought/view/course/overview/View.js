@@ -8,7 +8,7 @@ Ext.define('NextThought.view.course.overview.View', {
 		'NextThought.view.course.overview.parts.*'
 	],
 
-	mixins:{
+	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
@@ -41,20 +41,20 @@ Ext.define('NextThought.view.course.overview.View', {
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content', undefined, {secondaryViewEl:'.nav-outline'});
+		this.initCustomScrollOn('content', undefined, {secondaryViewEl: '.nav-outline'});
 	},
 
 
 	getSelectionModel: DelegateFactory.getDelegated(),
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var s = this.getSelectionModel();
-		if(!s){
+		if (!s) {
 			Ext.log.error('No selection model!');
 			return;
 		}
@@ -65,13 +65,13 @@ Ext.define('NextThought.view.course.overview.View', {
 	},
 
 
-	clear: function () {
+	clear: function() {
 		this.removeAll(true);
 		delete this.currentPage;
 	},
 
 
-	onNodeSelected: function (s, r) {
+	onNodeSelected: function(s, r) {
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
@@ -91,9 +91,9 @@ Ext.define('NextThought.view.course.overview.View', {
 
 		me.currentPage = r.getId();
 
-		Ext.each(r.getChildren(), function (i) {
+		Ext.each(r.getChildren(), function(i) {
 			var c, t;
-			if (i.getAttribute('suppressed') === "true") {
+			if (i.getAttribute('suppressed') === 'true') {
 				return;
 			}
 
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.course.overview.View', {
 	},
 
 
-	getComponentForNode: function (node, info, rec) {
+	getComponentForNode: function(node, info, rec) {
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null;
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.Root',{
+Ext.define('NextThought.model.preference.Root', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [
@@ -8,5 +8,5 @@ Ext.define('NextThought.model.preference.Root',{
 	],
 	//a list of sub preferences to we will get back when we request this from the server
 	//so we can know to go ahead and them out.
-	subPreferences: ['ChatPresence','WebApp']
+	subPreferences: ['ChatPresence', 'WebApp']
 });

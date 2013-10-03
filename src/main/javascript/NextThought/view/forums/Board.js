@@ -24,7 +24,7 @@ Ext.define('NextThought.view.forums.Board', {
 	scrollParentCls: '.forums-view',
 
 	listeners: {
-		select: function (selModel, record) {
+		select: function(selModel, record) {
 			//allow reselect since we don't style the selected state, this has no
 			// visual effect other than the ability to click on it again
 			selModel.deselect(record);
@@ -68,21 +68,21 @@ Ext.define('NextThought.view.forums.Board', {
 	}),
 
 
-	collectData: function () {
+	collectData: function() {
 		var r = this.callParent(arguments);
 		r.kind = 'Discussion';
 		return r;
 	},
 
 
-	canCreateForum: function () {
+	canCreateForum: function() {
 		return isFeature('mutable-forums') && this.record.getLink('add');
 	},
 
 
-	fillInNewestDescendant: function () {
+	fillInNewestDescendant: function() {
 		var map = {}, me = this;
-		this.store.each(function (r) {
+		this.store.each(function(r) {
 			var desc = r.get('NewestDescendant'),
 				creator = desc ? desc.get('Creator') : undefined;
 
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 		function apply(resolvedUser, i) {
 			var recs = map[resolvedUser.get('Username')] || [];
-			Ext.each(recs, function (rec) {
+			Ext.each(recs, function(rec) {
 				var desc = rec.get('NewestDescendant'),
 					recIdx = -1;
 				if (desc) {
@@ -116,7 +116,7 @@ Ext.define('NextThought.view.forums.Board', {
 			});
 		}
 
-		UserRepository.getUser(Ext.Object.getKeys(map), function (users) {
+		UserRepository.getUser(Ext.Object.getKeys(map), function(users) {
 			me.store.suspendEvents(true);
 			Ext.each(users, apply);
 			me.store.resumeEvents();
@@ -124,14 +124,14 @@ Ext.define('NextThought.view.forums.Board', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 		this.on('refresh', this.fillInNewestDescendant, this);
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var newForum;
 		this.callParent(arguments);
 		if (!this.isRoot) {
@@ -144,16 +144,16 @@ Ext.define('NextThought.view.forums.Board', {
 					newForum.remove();
 				}
 			}
-			
+
 			this.scrollParent = this.el.parent(this.scrollParentCls);
-			if(this.scrollParent){
-				this.mon(this.scrollParent,'scroll','onScroll', this);
+			if (this.scrollParent) {
+				this.mon(this.scrollParent, 'scroll', 'onScroll', this);
 			} else {
 				console.error('Could not listen on scroll for this view.');
 			}
 
 			this.on({
-				headerEl: {click:'onHeaderClick'},
+				headerEl: {click: 'onHeaderClick'},
 				activate: 'onActivate',
 				itemclick: 'onItemClick',
 				beforeitemclick: 'onBeforeItemClick'
@@ -162,7 +162,7 @@ Ext.define('NextThought.view.forums.Board', {
 	},
 
 
-	onActivate: function () {
+	onActivate: function() {
 		var s = this.store;
 		//console.log('The board view is activated');
 		//Sort them by last modified
@@ -172,20 +172,20 @@ Ext.define('NextThought.view.forums.Board', {
 		// });
 		//Don't sort them by creation time on client side either
 		// s.sorters.clear();
-		this.mon(s,'load', function(store, records){
+		this.mon(s, 'load', function(store, records) {
 			//make sure we can scroll
 			this.ownerCt.el.unmask();
 
-			if(this.getHeight() < this.ownerCt.getHeight()){
+			if (this.getHeight() < this.ownerCt.getHeight()) {
 				this.fetchNextPage();
 			}
 		}, this);
-		
+
 		s.loadPage(1);
 	},
 
 
-	onScroll: function(e, dom){
+	onScroll: function(e, dom) {
 		var el = dom.lastChild,
 			direction = (this.lastScrollTop || 0) - dom.scrollTop,
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
@@ -193,13 +193,13 @@ Ext.define('NextThought.view.forums.Board', {
 
 		this.lastScrollTop = dom.scrollTop;
 
-		if(top <= 20 && direction < 0){
+		if (top <= 20 && direction < 0) {
 			this.fetchNextPage();
 		}
 	},
 
-	
-	fetchNextPage: function(){
+
+	fetchNextPage: function() {
 		var s = this.store, max;
 
 		if (!s.hasOwnProperty('data')) {
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.forums.Board', {
 	},
 
 
-	onHeaderClick: function (e) {
+	onHeaderClick: function(e) {
 		if (e.getTarget('.path')) {
 			this.fireEvent('pop-view', this);
 		}
@@ -225,7 +225,7 @@ Ext.define('NextThought.view.forums.Board', {
 	},
 
 
-	onBeforeItemClick: function (record, item, idx, event, opts) {
+	onBeforeItemClick: function(record, item, idx, event, opts) {
 		var t = event && event.getTarget && event.getTarget(),
 			edit = t && event.getTarget('.edit'),
 			d = record.get && record.get('NewestDescendant'),
@@ -256,11 +256,11 @@ Ext.define('NextThought.view.forums.Board', {
 
 			if (d.isPost) {
 				$AppConfig.service.getObject(d.get('ContainerId'),
-					function (o) {
+					function(o) {
 						this.fireEvent('show-topic', o, d.isComment ? d.get('ID') : undefined);
 						delete this.processingDescendant;
 					},
-					function () {
+					function() {
 						console.error('An error occurred navigating to newest descendant', arguments);
 						delete this.processingDescendant;
 					},

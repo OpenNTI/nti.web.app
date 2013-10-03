@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.Header',{
+Ext.define('NextThought.view.assessment.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.question-header',
 
@@ -13,55 +13,55 @@ Ext.define('NextThought.view.assessment.Header',{
 		{
 			cls: 'controls',
 			cn: [
-//				{ cls: 'favorite' },
-//				{ cls: 'like' },
+        //				{ cls: 'favorite' },
+        //				{ cls: 'like' },
 				{ cls: 'video', html: 'Related Videos' }
 			]
 		},
-		{cls:'title',html:'{title}'},
-		{cls: 'status {status}',html:'{status}'}
+		{cls: 'title', html: '{title}'},
+		{cls: 'status {status}', html: '{status}'}
 	]),
 
 	renderSelectors: {
-//		liked: '.controls .like',
-//		favorites: '.controls .favorite',
+    //		liked: '.controls .like',
+    //		favorites: '.controls .favorite',
 		myTitle: '.title',
 		status: '.status',
 		video: '.video'
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.videos = [];
 		this.callParent(arguments);
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.question,
-//			l = this.liked,
-//			f = this.favorites,
+        //			l = this.liked,
+        //			f = this.favorites,
 			v = this.video;
 
-		if(!this.videos.length){
+		if (!this.videos.length) {
 			v.remove();
 		}
 		else {
 			this.mon(v, 'click', this.openVideos, this);
 		}
 
-//		this.mon(l, 'click', function(){ r.like(l); }, this);
-//		this.mon(f, 'click', function(){ r.favorite(f); }, this);
-//		l.update(r.getFriendlyLikeCount());
-//		l[(r.isLiked()?'add':'remove')+'Cls']('on');
-//		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
+    //		this.mon(l, 'click', function(){ r.like(l); }, this);
+    //		this.mon(f, 'click', function(){ r.favorite(f); }, this);
+    //		l.update(r.getFriendlyLikeCount());
+    //		l[(r.isLiked()?'add':'remove')+'Cls']('on');
+    //		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
 
 
 	},
 
 
-	onAdded: function(assessmentParent){
+	onAdded: function(assessmentParent) {
 		var id = '?unresolved title?';
 
 		try {
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.assessment.Header',{
 
 			this.videos = this.question.getVideos() || [];
 		}
-		catch(e){
+		catch (e) {
 			console.warn(Globals.getError(e));
 		}
 
@@ -80,8 +80,8 @@ Ext.define('NextThought.view.assessment.Header',{
 	},
 
 
-	setTitle: function(title){
-		if(!this.rendered){
+	setTitle: function(title) {
+		if (!this.rendered) {
 			this.renderData.title = title;
 			return;
 		}
@@ -89,23 +89,23 @@ Ext.define('NextThought.view.assessment.Header',{
 	},
 
 
-	markCorrect: function(){
+	markCorrect: function() {
 		this.el.removeCls('incorrect').addCls('correct');
 		this.status.update('Correct!');
 	},
 
-	markIncorrect: function(){
+	markIncorrect: function() {
 		this.el.removeCls('correct').addCls('incorrect');
 		this.status.update('Incorrect');
 	},
 
-	reset: function(){
-		this.el.removeCls(['incorrect','correct']);
+	reset: function() {
+		this.el.removeCls(['incorrect', 'correct']);
 		this.status.update('');
 	},
 
 
-	openVideos: function(){
-		Ext.widget('video-lightbox',{ data: this.videos }).show();
+	openVideos: function() {
+		Ext.widget('video-lightbox', { data: this.videos }).show();
 	}
 });

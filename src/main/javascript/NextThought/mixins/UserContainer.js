@@ -15,12 +15,12 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	//Should be called from initComponent
-	constructor: function(){
+	constructor: function() {
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
 		this.on('beforeRender', this.onCmpRendered, this);
 	},
 
-	setupActions: function(group, ignoreChatOption){
+	setupActions: function(group, ignoreChatOption) {
 		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
 				ui: 'nt',
@@ -35,36 +35,36 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 		this.deleteGroupAction = new Ext.Action({
-			text: 'Delete '+listOrGroup,
+			text: 'Delete ' + listOrGroup,
 			scope: this,
-			handler: Ext.bind(this.deleteGroup,this,[group]),
+			handler: Ext.bind(this.deleteGroup, this, [group]),
 			itemId: 'delete-group',
 			ui: 'nt-menuitem', plain: true,
 			hidden: group && !group.getLink('edit')
 		});
 
 		this.leaveGroupAction = new Ext.Action({
-			text: 'Leave '+listOrGroup,
+			text: 'Leave ' + listOrGroup,
 			scope: this,
-			handler: Ext.bind(this.leaveGroup,this,[group]),
+			handler: Ext.bind(this.leaveGroup, this, [group]),
 			itemId: 'leave-group',
 			ui: 'nt-menuitem', plain: true,
 			hidden: group && !group.getLink('my_membership')
 		});
 
 		this.groupChatAction = new Ext.Action({
-			text: 'Chat With '+listOrGroup,
+			text: 'Chat With ' + listOrGroup,
 			scope: this,
-			handler: Ext.bind(this.chatWithGroup,this,[group]),
+			handler: Ext.bind(this.chatWithGroup, this, [group]),
 			itemId: 'group-chat',
 			ui: 'nt-menuitem', plain: true,
 			hidden: this.groupChatHidden(group)
 		});
 
-		this.getGroupCodeAction =  new Ext.Action({
+		this.getGroupCodeAction = new Ext.Action({
 			text: 'Group Code',
 			scope: this,
-			handler: Ext.bind(this.getGroupCode,this,[group]),
+			handler: Ext.bind(this.getGroupCode, this, [group]),
 			itemId: 'get-group-code',
 			ui: 'nt-menuitem', plain: true,
 			hidden: !group || !group.getLink('default-trivial-invitation-code')
@@ -73,24 +73,24 @@ Ext.define('NextThought.mixins.UserContainer', {
 		this.forcefullyRemoveUserAction = new Ext.Action({
 			text: 'Remove User',
 			scope: this,
-			handler: Ext.bind(this.forcefullyRemoveUser,this,[group],1),
+			handler: Ext.bind(this.forcefullyRemoveUser, this, [group], 1),
 			itemId: 'remove-user',
 			ui: 'nt-menuitem', plain: true
 		});
 
-		this.userMenu = Ext.widget('menu',Ext.apply({
+		this.userMenu = Ext.widget('menu', Ext.apply({
 			items: [
 				this.forcefullyRemoveUserAction
 			]
 		},menuCfg));
 
-		if(ignoreChatOption){
+		if (ignoreChatOption) {
 			items = [
 				this.leaveGroupAction,
 				this.deleteGroupAction,
 				this.getGroupCodeAction
 			];
-		}else{
+		}else {
 			items = [
 				this.leaveGroupAction,
 				this.deleteGroupAction,
@@ -99,15 +99,15 @@ Ext.define('NextThought.mixins.UserContainer', {
 			];
 		}
 		//don't set up the menu if all the items are hidden
-		Ext.each(items, function(i){
-			allHidden = allHidden? i.isHidden() : allHidden;
+		Ext.each(items, function(i) {
+			allHidden = allHidden ? i.isHidden() : allHidden;
 		});
 
-		if(allHidden){
+		if (allHidden) {
 			return;
 		}
 
-		this.menu = Ext.widget('menu',Ext.apply({
+		this.menu = Ext.widget('menu', Ext.apply({
 			items: items
 		},menuCfg));
 
@@ -118,24 +118,24 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	groupChatHidden: function(group){
+	groupChatHidden: function(group) {
 		return !$AppConfig.service.canChat() || !group || !isMe(group.get('Creator')) || group.getFriendCount() === 0;
 	},
 
-	getUserList: function(){
+	getUserList: function() {
 		var model = this.getModelObject();
-		if(!model){
+		if (!model) {
 			return;
 		}
 		return model.get(this.getUserListFieldName() || '');
 	},
 
 
-	onCmpRendered: function(){
+	onCmpRendered: function() {
 		var model = this.getModelObject(),
 			fn = this.getUserListFieldName(),
 			users;
-		if(this.reactToModelChanges === false || !model || !fn){
+		if (this.reactToModelChanges === false || !model || !fn) {
 			return true;
 		}
 
@@ -148,7 +148,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	updateFromModelObject: function(key, value){
+	updateFromModelObject: function(key, value) {
 		var users = value || key,
 			model = this.getModelObject();
 
@@ -156,7 +156,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 		users = users.slice();
 
-		if(model && model.isDFL){
+		if (model && model.isDFL) {
 			users.push(model.get('Creator'));
 		}
 		Ext.Array.remove(users, $AppConfig.username);
@@ -165,34 +165,34 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	setUsers: function(resolvedUsers){
+	setUsers: function(resolvedUsers) {
 		var p;
 
-		if(!Ext.isArray(resolvedUsers)) {
+		if (!Ext.isArray(resolvedUsers)) {
 			resolvedUsers = Ext.Object.getValues(resolvedUsers);
 		}
 
 		resolvedUsers.sort(this.userSorterFunction);
 
-		p = Ext.Array.map(resolvedUsers,this.createUserComponent,this);
+		p = Ext.Array.map(resolvedUsers, this.createUserComponent, this);
 
 		console.timeEnd('updating user container with new users');
 
-		if(this.groupChatAction){
+		if (this.groupChatAction) {
 			this.groupChatAction.setHidden(this.groupChatHidden(this.getModelObject()));
 		}
 
 		console.time('Adding Users');
 		this.removeAllItems();
-		this.insertItem(0,p);
+		this.insertItem(0, p);
 		console.timeEnd('Adding Users');
 	},
 
 
-	presenceOfComponentChanged: function(cmp){
+	presenceOfComponentChanged: function(cmp) {
 		var users;
 
-		if(this.reactToChildPresenceChanged === false){
+		if (this.reactToChildPresenceChanged === false) {
 			return;
 		}
 
@@ -202,21 +202,21 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	cleanupActions: function(){
-		if( this.userMenu ){
+	cleanupActions: function() {
+		if (this.userMenu) {
 			this.userMenu.destroy();
 		}
-		if( this.menu ){
+		if (this.menu) {
 			this.menu.destroy();
 		}
 	},
 
 
-	getMenuHideHandlers: function(menu){
+	getMenuHideHandlers: function(menu) {
 		var leave;
-		function hide(){menu.hide();}
-		function start(){ stop(); leave = setTimeout(hide, 500); }
-		function stop(){ clearTimeout(leave); }
+		function hide() {menu.hide();}
+		function start() { stop(); leave = setTimeout(hide, 500); }
+		function stop() { clearTimeout(leave); }
 		return {
 			mouseleave: start,
 			mouseenter: stop
@@ -224,19 +224,19 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	updateChatState: function(group){
+	updateChatState: function(group) {
 		var me = this,
 			friends;
 
-		function test(f){ return f.getPresence && f.getPresence().isOnline(); }
+		function test(f) { return f.getPresence && f.getPresence().isOnline(); }
 
 		//Update group chat state.
 		//TODO listen for change events instead of rechecking each time
-		if(group){
+		if (group) {
 			friends = group.get('friends');
-			if(Ext.isEmpty(friends,false)){ this.groupChatAction.setDisabled(true); }
-			else{
-				UserRepository.getUser(friends, function(rFriends){
+			if (Ext.isEmpty(friends, false)) { this.groupChatAction.setDisabled(true); }
+			else {
+				UserRepository.getUser(friends, function(rFriends) {
 					var canGroupChat = Ext.Array.some(rFriends, test);
 					me.groupChatAction.setDisabled(!canGroupChat);
 				});
@@ -246,7 +246,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	//Users isn't very big here so do the naive thing
-	indexToInsertAt: function(users, newUser){
+	indexToInsertAt: function(users, newUser) {
 		var collection = new Ext.util.MixedCollection();
 		collection.addAll(users);
 
@@ -254,23 +254,23 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	addCmpInSortedPosition: function(cmp){
-		var users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
+	addCmpInSortedPosition: function(cmp) {
+		var users = Ext.Array.map(this.query('[username]') || [], function(u) {return u.getUserObject();});
 		this.insert(this.indexToInsertAt(users, cmp.getUserObject()), cmp);
 	},
 
 
-	updateCmpPosition: function(cmp){
+	updateCmpPosition: function(cmp) {
 		this.remove(cmp, false);
 		this.addCmpInSortedPosition(cmp);
 	},
 
 
-	addUser: function(user){
-		var existing = this.down('[username='+user.get('Username')+']'), users;
-		if(!existing){
+	addUser: function(user) {
+		var existing = this.down('[username=' + user.get('Username') + ']'), users;
+		if (!existing) {
 			//Figure out where we need to insert it
-			users = Ext.Array.map(this.query('[username]')||[], function(u){return u.getUserObject();});
+			users = Ext.Array.map(this.query('[username]') || [], function(u) {return u.getUserObject();});
 			this.insertItem(this.indexToInsertAt(users, user), this.createUserComponent(user));
 			return true;
 		}
@@ -280,8 +280,8 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 	removeUser: function(user) {
 		var name = (user && user.isModel) ? user.get('Username') : user,
-			existing = this.down('[username='+name+']');
-		if (existing){
+			existing = this.down('[username=' + name + ']');
+		if (existing) {
 			this.removeItem(existing, true);
 			return true;
 		}
@@ -291,7 +291,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 	//Sort the users first by presense (online, offline) then
 	//alphabetically withing that
-	userSorterFunction: function(a, b){
+	userSorterFunction: function(a, b) {
 		var aPresence = a.getPresence().toString() || '',
 			bPresence = b.getPresence().toString() || '',
 			aName = a.get('displayName') || '',
@@ -299,7 +299,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 			presenceResult, nameResult;
 
 		presenceResult = bPresence.localeCompare(aPresence);
-		if(presenceResult !== 0){
+		if (presenceResult !== 0) {
 			return presenceResult;
 		}
 
@@ -307,43 +307,43 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	deleteGroup: function(group){
+	deleteGroup: function(group) {
 		var me = this,
 			msg = Ext.DomHelper.markup(['The ', group.readableType, ' ',
 									{tag: 'span', cls: 'displayname', html: group.get('displayName')},
 									' will be permanently deleted...']);
-		function cb(str){
-			if(str === 'ok'){
-				me.fireEvent('delete-group',me.associatedGroup);
+		function cb(str) {
+			if (str === 'ok') {
+				me.fireEvent('delete-group', me.associatedGroup);
 			}
 		}
 
-		this.areYouSure(msg,cb);
+		this.areYouSure(msg, cb);
 	},
 
 
-	chatWithGroup: function(group){
-		if(group.getFriendCount() > 0){
-			this.fireEvent('group-chat', group, {persistent:false});
+	chatWithGroup: function(group) {
+		if (group.getFriendCount() > 0) {
+			this.fireEvent('group-chat', group, {persistent: false});
 		}
 	},
 
 
-	getGroupCode: function(group){
-		if(group.getLink('default-trivial-invitation-code')){
+	getGroupCode: function(group) {
+		if (group.getLink('default-trivial-invitation-code')) {
 			this.fireEvent('get-group-code', group);
 		}
 	},
 
 
-	leaveGroup: function(group){
-		if(group.getLink('my_membership')){
+	leaveGroup: function(group) {
+		if (group.getLink('my_membership')) {
 			this.fireEvent('leave-group', group);
 		}
 	},
 
 
-	forcefullyRemoveUser: function(item,group){
+	forcefullyRemoveUser: function(item,group) {
 		var me = this,
 			menu = item && item.up ? item.up('menu') : null,
 			//use the menu's reference, if we called with user instead, use it
@@ -354,17 +354,17 @@ Ext.define('NextThought.mixins.UserContainer', {
 				{tag: 'span', cls: 'displayname', html: group.get('displayName')}
 			]);
 
-		function cb(str){
-			if(str === 'ok'){
+		function cb(str) {
+			if (str === 'ok') {
 				me.fireEvent('remove-contact', group, user.getId());
 			}
 		}
 
-		this.areYouSure(msg,cb);
+		this.areYouSure(msg, cb);
 	},
 
 
-	areYouSure: function(msg,callback){
+	areYouSure: function(msg,callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: msg,

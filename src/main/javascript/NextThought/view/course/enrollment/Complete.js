@@ -1,25 +1,25 @@
-Ext.define('NextThought.view.course.enrollment.Complete',{
+Ext.define('NextThought.view.course.enrollment.Complete', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-complete',
 
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag:'tpl', 'if':'enroll', cn:[
-			{ tag: 'h3', cls:'gap', html: 'Congratulations!'},
+		{ tag: 'tpl', 'if': 'enroll', cn: [
+			{ tag: 'h3', cls: 'gap', html: 'Congratulations!'},
 			{ html: 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.'},
-			{ cls:'gap', cn: [
-				{ tag: 'a', href:'#', html:'View your content now!' }
+			{ cls: 'gap', cn: [
+				{ tag: 'a', href: '#', html: 'View your content now!' }
 			]}
 		]},
-		{ tag:'tpl', 'if':'!enroll', cn:[
-			{ tag: 'h3', cls:'gap', html: 'Goodbye!'},
+		{ tag: 'tpl', 'if': '!enroll', cn: [
+			{ tag: 'h3', cls: 'gap', html: 'Goodbye!'},
 			{ html: 'You are no longer enrolled in this course.'}
 		]}
 	]),
 
 
-	renderSelectors:{
+	renderSelectors: {
 		linkEl: 'a[href]'
 	},
 
@@ -29,27 +29,27 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 	omitCancel: true,
 	closeWithoutWarn: true,
 
-	onConfirm: function(){
+	onConfirm: function() {
 		this.fireEvent('close', this);
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {},{
 			enroll: !Ext.isEmpty(this.record.getLink('enroll'))
 		});
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var win;
 		this.callParent(arguments);
 
-		if(this.linkEl){
+		if (this.linkEl) {
 			//Hide it until we can do this well.
 			this.linkEl.hide();
-			this.mon(this.linkEl,'click','onNavigateToNewlyEnrolledContentClicked',this);
+			this.mon(this.linkEl, 'click', 'onNavigateToNewlyEnrolledContentClicked', this);
 		}
 
 		win = this.up('window');
@@ -65,18 +65,18 @@ Ext.define('NextThought.view.course.enrollment.Complete',{
 	},
 
 
-	onNavigateToNewlyEnrolledContentClicked: function(e){
+	onNavigateToNewlyEnrolledContentClicked: function(e) {
 		var items = this.record.get('Items') || [];
 		e.stopEvent();
 
 		//Again with these damn assumptions
-		if(items.length > 1){
+		if (items.length > 1) {
 			console.warn('More than one item for this purchasable.  Content roulette', items);
 		}
 
 		items = items.first();
-		if(items){
-			this.fireEvent('set-location',items);
+		if (items) {
+			this.fireEvent('set-location', items);
 			this.up('window').close();
 		}
 

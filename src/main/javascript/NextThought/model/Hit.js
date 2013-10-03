@@ -27,19 +27,19 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'EndMilliSecs', type: 'auto' },
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
 		{ name: 'PhraseSearch', type: 'auto'},
-		{ name: 'GroupingField', persist: false, type: 'auto', convert: function(o, r){
+		{ name: 'GroupingField', persist: false, type: 'auto', convert: function(o, r) {
 			var mime = r.get('MimeType'),
 				group, type;
 
-			if(mime){
+			if (mime) {
 				group = NextThought.model.Hit.mimeTypes[mime.replace('application/vnd.nextthought.', '')];
-				if(group){
+				if (group) {
 					return group;
 				}
 			}
 
 			type = r.get('Type');
-			if(type){
+			if (type) {
 				type = Ext.String.capitalize(type);
 				type = Ext.util.Inflector.pluralize(type);
 			}
@@ -49,11 +49,11 @@ Ext.define('NextThought.model.Hit', {
 
 	//We don't use the idProperty because there isn't a unique id,
 	//but for legacy reasons people expect to call getId and get the ntiid
-	getId: function(){
+	getId: function() {
 		return this.get('NTIID');
 	},
 
-	isContent: function(){
+	isContent: function() {
 			return (/content/i).test(this.get('Type'));
 	}
 

@@ -18,7 +18,7 @@ Ext.define('NextThought.view.course.outline.View', {
 	},
 
 
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.frameBodyEl;
 	},
 
@@ -34,16 +34,16 @@ Ext.define('NextThought.view.course.outline.View', {
 			]}}
 		]}
 	]}), {
-		is: function (values) {
+		is: function(values) {
 		}
 	}),
 
 
 	listeners: {
-		itemclick: function () {
+		itemclick: function() {
 			this.fromClick = true;
 		},
-		beforeselect: function (s, r) {
+		beforeselect: function(s, r) {
 			var pass = r.get('type') !== 'unit',
 				store = s.getStore(),
 				last = s.lastSelected || store.first(), next;
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.course.outline.View', {
 			return pass;
 
 		},
-		select: function (s, r) {
+		select: function(s, r) {
 			if (this.fromClick || this.fromKey) {
 				this.fireEvent('set-location', r.getId());
 			}
@@ -69,26 +69,26 @@ Ext.define('NextThought.view.course.outline.View', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
-		if(!s){
+		if (!s) {
 			Ext.log.error('No selection model!');
 			return;
 		}
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
 			me.fromKey = true;
 		});
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
 	},
 
 
-	handleScrolling: function () {
+	handleScrolling: function() {
 		var selected = this.getSelectedNodes()[0],
 			selectedEl = Ext.get(selected);
 
@@ -100,12 +100,12 @@ Ext.define('NextThought.view.course.outline.View', {
 	},
 
 
-	clear: function () {
+	clear: function() {
 		this.bindStore('ext-empty-store');
 	},
 
 
-	maybeChangeStoreOrSelection: function (pageInfo, store) {
+	maybeChangeStoreOrSelection: function(pageInfo, store) {
 		var r, sel, C = ContentUtils,
 			lineage = C.getLineage(pageInfo.getId()),
 			root = lineage.last();

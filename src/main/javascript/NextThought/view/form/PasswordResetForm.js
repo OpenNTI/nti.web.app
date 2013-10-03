@@ -1,13 +1,13 @@
 Ext.define('NextThought.view.form.PasswordResetForm', {
-    extend:'Ext.container.Container',
-    alias: 'widget.password-reset-form',
+  extend: 'Ext.container.Container',
+  alias: 'widget.password-reset-form',
 
-    requires: [
-        'NextThought.view.form.fields.SimpleTextField'
-    ],
+  requires: [
+    'NextThought.view.form.fields.SimpleTextField'
+  ],
 
 	cls: 'reset-password',
-    ui: 'account',
+  ui: 'account',
 
 	layout: {
 		type: 'vbox',
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			type: 'hbox',
 			align: 'stretch'
 		},
-		items:[{
+		items: [{
 			xtype: 'container',
 			flex: 1,
 			defaults: {
@@ -34,8 +34,8 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 					name: 'old_password',
 					placeholder: 'Old Password',
 					allowBlank: true,
-					validator: function(value){
-						if(Ext.isEmpty(value)){
+					validator: function(value) {
+						if (Ext.isEmpty(value)) {
 							throw 'Old password must not be empty';
 						}
 						return true;
@@ -44,14 +44,14 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 					name: 'password',
 					placeholder: 'New Password',
 					//minLength: 6, // validator doesn't get called if this is set, and the value is less than
-					validator: function(value){
-						if(Ext.isEmpty(value)){
+					validator: function(value) {
+						if (Ext.isEmpty(value)) {
 							throw 'New password must not be empty';
 						}
-						if(!Ext.String.trim(value)){
-							throw "New password must not be all whitespace.";
+						if (!Ext.String.trim(value)) {
+							throw 'New password must not be all whitespace.';
 						}
-						if(value.length < 6){
+						if (value.length < 6) {
 							throw 'Password is too short.';
 						}
 						return true;
@@ -61,14 +61,14 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 					placeholder: 'Verify New Password',
 					allowBlank: true,
 					listeners: {
-						focus: function(field){
+						focus: function(field) {
 							field.hasBeenFocused = true;
 						}
 					},
 					validator: function(value) {
 						var password = this.previousSibling('[name=password]').getValue();
 
-						if(!this.hasBeenFocused){
+						if (!this.hasBeenFocused) {
 							return false;
 						}
 
@@ -81,10 +81,10 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		},{
 			flex: 1,
 			xtype: 'box',
-			message:1,
+			message: 1,
 			cls: 'message-box',
 			autoEl: {
-				cn:[{cls:'text'}]
+				cn: [{cls: 'text'}]
 			}
 		}]
 	}, {
@@ -97,13 +97,13 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		},
 		defaultType: 'button',
 		items: [
-			{text: 'Save Password', save:1, ui: 'flat-blue', scale: 'medium', disabled: true }
+			{text: 'Save Password', save: 1, ui: 'flat-blue', scale: 'medium', disabled: true }
 		]
 	}],
 
 
-	constructor: function(){
-		if(!$AppConfig.service.canChangePassword()){
+	constructor: function() {
+		if (!$AppConfig.service.canChangePassword()) {
 			console.warn('User can\'t change password');
 			this.items = [{
 				xtype: 'box',
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 				renderTpl: Ext.DomHelper.markup({
 					cn: [{
 						cls: 'title',
-						html: getString('reset-password-not-allowed-title','Resetting your password is not allowed.')
+						html: getString('reset-password-not-allowed-title', 'Resetting your password is not allowed.')
 					},{
 						cls: 'subtext',
 						html: getString('reset-password-not-allowed-subtext', 'You are not allowed to change your password at this time.  Please contact support to request a password change.')
@@ -123,23 +123,23 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	},
 
 
-	setMessage: function(msg,error){
+	setMessage: function(msg,error) {
 		var el = this.down('box[message]').getEl().down('.text');
-		el[error?'addCls':'removeCls']('error');
-		el.update(msg||'');
+		el[error ? 'addCls' : 'removeCls']('error');
+		el.update(msg || '');
 	},
 
-	setError: function(errorJson){
-		this.setMessage(errorJson.message,true);
-		if(errorJson.field === 'password'){
+	setError: function(errorJson) {
+		this.setMessage(errorJson.message, true);
+		if (errorJson.field === 'password') {
 			this.down('[name=old_password]').setError();
 		}
 	},
 
 
-	setSuccess: function(){
+	setSuccess: function() {
 		this.setMessage('Your password has\nbeen changed.');
-		Ext.each(this.query('simpletext'), function(t){
+		Ext.each(this.query('simpletext'), function(t) {
 			t.suspendEvents();
 			t.clearValue(true);
 			t.resumeEvents(false);
@@ -150,31 +150,31 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	},
 
 
-	getValues: function(){
+	getValues: function() {
 		return {
 			old_password: this.down('[name=old_password]').getValue(),
 			password: this.down('[name=password]').getValue()
 		};
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.inputs = this.query('simpletext');
-		Ext.each(this.inputs,function(i){
-			this.mon(i,'changed',this.checkValidity,this,{buffer: 250});
+		Ext.each(this.inputs, function(i) {
+			this.mon(i, 'changed', this.checkValidity, this, {buffer: 250});
 		},this);
 	},
 
 
-	checkValidity: function(value, input){
+	checkValidity: function(value, input) {
 
-		function val(i,s){
+		function val(i,s) {
 			try {
 				me.setError({message: ''});
 				return i.validate(!!s);
 			}
-			catch(msg){
+			catch (msg) {
 					i.setError();
 					me.setError({message: msg});
 			}
@@ -184,14 +184,14 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		var me = this,
 			v = false;
 
-		if( val(input) ){
+		if (val(input)) {
 			me.setMessage();
-			v = me.inputs.reduce( function(accum,o){ return accum && val(o,true); }, true);
-//			if(input.name === 'password'){
-//			}
+			v = me.inputs.reduce(function(accum,o) { return accum && val(o, true); }, true);
+      //			if(input.name === 'password'){
+      //			}
 		}
 
-		me.down('button[save]')[v?'enable':'disable']();
+		me.down('button[save]')[v ? 'enable' : 'disable']();
 		me.updateLayout();
 	}
 });

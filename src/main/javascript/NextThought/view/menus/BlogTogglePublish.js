@@ -15,12 +15,12 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 		xtype: 'menucheckitem',
 		plain: true,
 		group: 'publish',
-		handler: function(item){
+		handler: function(item) {
 			item.up('.menu').handleClick(item);
 		}
 	},
 
-	items:[{
+	items: [{
 			text: 'Public',
 			published: true
 		},
@@ -30,21 +30,21 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 		}
 	],
 
-	initComponent: function(config){
+	initComponent: function(config) {
 		this.callParent(arguments);
 	},
 
-	updateFromRecord: function(rec){
-		if(rec && rec.isPublished()){
+	updateFromRecord: function(rec) {
+		if (rec && rec.isPublished()) {
 			this.down('[published=true]').setChecked(true, true);
-		}else{
+		}else {
 			this.down('[published=false]').setChecked(true, true);
 		}
 	},
 
-	handleClick: function(item){
+	handleClick: function(item) {
 		var action = item.published;
-		if(this.record.isPublished() === action){ return; }
+		if (this.record.isPublished() === action) { return; }
 
 		this.record.publish(this.owner || this);
 	}

@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.form.fields.ComboBox',{
+Ext.define('NextThought.view.form.fields.ComboBox', {
 	extend: 'Ext.form.field.ComboBox',
-	alias : 'widget.nt-combobox',
+	alias: 'widget.nt-combobox',
 
 	baseCls: 'nt-combobox',
 
@@ -24,7 +24,7 @@ Ext.define('NextThought.view.form.fields.ComboBox',{
 		itemCls: 'x-menu-item no-border',
 		emptyText: '<div class="x-menu-item">No results</div>',
 		xhooks: {
-			initComponent: function(){
+			initComponent: function() {
 				this.callParent(arguments);
 				this.itemSelector = '.x-menu-item';
 			}

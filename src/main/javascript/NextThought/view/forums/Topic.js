@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		'NextThought.layout.component.Natural'
 	],
 
-	onClassExtended: function (cls, data) {
+	onClassExtended: function(cls, data) {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 	},
 
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	componentLayout: 'natural',
 	scrollParentCls: '.forums-view',
 
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -73,7 +73,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]},
 				{ cls: 'comment-box', cn: [
 					{ cls: 'response', cn: [
-						{ tag: 'tpl', 'if':'canReply', cn: [
+						{ tag: 'tpl', 'if': 'canReply', cn: [
 							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
 						]},
 						{ tag: 'span', cls: 'report link', html: 'Report' }
@@ -110,7 +110,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 		this.addEvents(['delete-post', 'show-post', 'ready', 'commentReady']);
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	buildStore: function () {
+	buildStore: function() {
 		var s = NextThought.store.NTI.create({
 			storeId: this.getRecord().get('Class') + '-' + this.getRecord().get('NTIID'),
 			url: this.getRecord().getLink('contents'),
@@ -147,7 +147,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	setPath: function () {
+	setPath: function() {
 		var me = this,
 			containerId = this.record.get('ContainerId');
 
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
@@ -200,7 +200,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		}
 		r.headline = r.headline.getData();
 
-		UserRepository.getUser(r.headline.Creator, function (u) {
+		UserRepository.getUser(r.headline.Creator, function(u) {
 			r.headline.Creator = u;
 			me.user = u;
 			if (me.rendered) {
@@ -210,8 +210,8 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	afterRender: function () {
-		console.log("RENDERED TOPIC");
+	afterRender: function() {
+		console.log('RENDERED TOPIC');
 		if (Ext.is.iPad) {
 			if (this.topicOpen) {
 				this.destroy();
@@ -226,7 +226,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		if (!h) {
 			return;
 		}
-		
+
 		this.scrollParent = this.el.parent(this.scrollParentCls) || this.el.parent('.course-forum');
 
 		//TODO: move this into a mixin so we can share it in the other post widgets (and forum post items)
@@ -264,32 +264,32 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 
-		if(this.replyLinkEl){
+		if (this.replyLinkEl) {
 			box.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-			this.editor = Ext.widget('nti-editor',{ownerCt: this, renderTo:this.commentEditorBox});
-			this.mon(this.replyLinkEl,'click',this.showEditor,this);
-			this.mon(this.editor,{
+			this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.commentEditorBox});
+			this.mon(this.replyLinkEl, 'click', this.showEditor, this);
+			this.mon(this.editor, {
 				scope: this,
 				//'activated-editor':Ext.bind(box.hide,box),
 				//'deactivated-editor':Ext.bind(box.show,box),
-				'no-body-content': function(editor,bodyEl){
-					editor.markError(bodyEl,'You need to type something');
+				'no-body-content': function(editor,bodyEl) {
+					editor.markError(bodyEl, 'You need to type something');
 					return false;
 				}
 			});
 		}
 	},
 
-	canReply: function(){
+	canReply: function() {
 		return Boolean(this.record && this.record.getLink('add'));
 	},
 
 
-	setPublishAndSharingState: function(){},
+	setPublishAndSharingState: function() {},
 
 
-	scrollCommentIntoView: function (commentId) {
+	scrollCommentIntoView: function(commentId) {
 		function scrollIntoView() {
 			var cmp = Ext.get('forums') || Ext.get('course-forum');
 			if (Ext.isBoolean(commentId)) {
@@ -307,8 +307,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		var el, images, me = this, f;
 		if (commentId) {
 			images = this.el.query('img');
-			Ext.each(images, function (img) {
-				img.onload = function () {
+			Ext.each(images, function(img) {
+				img.onload = function() {
 					scrollIntoView();
 				};
 			});
@@ -323,7 +323,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	onReady: function () {
+	onReady: function() {
 		console.debug('ready', arguments);
 		if (this.scrollToComment) {
 			this.scrollCommentIntoView(this.scrollToComment);
@@ -332,7 +332,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	markAsPublished: function (key, value) {
+	markAsPublished: function(key, value) {
 		var val = value ? 'public' : 'only me',
 			removeCls = value ? 'only me' : 'public';
 		this.publishStateEl.addCls(val);
@@ -341,7 +341,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	updateRecord: function (record) {
+	updateRecord: function(record) {
 		function reflectPrevAndNext(cmp, s) {
 			if (!s) {
 				return;
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	navigationClick: function (e) {
+	navigationClick: function(e) {
 		e.stopEvent();
 		var direction = Boolean(e.getTarget('.next')),
 			disabled = Boolean(e.getTarget('.disabled'));
@@ -386,7 +386,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	getRefItems: function () {
+	getRefItems: function() {
 		var ret = this.callParent(arguments) || [];
 		if (this.editor) {
 			ret.push(this.editor);
@@ -395,7 +395,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	getMainView: function () {
+	getMainView: function() {
 		var forum = Ext.get('forums'),
 			course = Ext.get('course-forum');
 
@@ -409,9 +409,9 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	showEditor: function () {
+	showEditor: function() {
 		this.clearSearchHit();
-		if(!this.editor.isActive()){
+		if (!this.editor.isActive()) {
 			this.editor.reset();
 			this.editor.activate();
 		}
@@ -420,7 +420,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	updateField: function (key, value) {
+	updateField: function(key, value) {
 		var el = this.el.down('.' + key);
 		if (el) {
 			el.update(value);
@@ -428,18 +428,18 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	updateContent: function () {
+	updateContent: function() {
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, {'application/vnd.nextthought.embeddedvideo': 640});
 	},
 
 
-	closeView: function () {
+	closeView: function() {
 		this.fireEvent('pop-view', this);
 	},
 
 
-	onDestroy: function () {
+	onDestroy: function() {
 		console.log('destroy!');
 
 		if (Ext.is.iPad) {
@@ -448,8 +448,8 @@ Ext.define('NextThought.view.forums.Topic', {
 			}
 		}
 
-		if(this.bodyEl){
-			this.bodyEl.select('video').each(function (vid) {
+		if (this.bodyEl) {
+			this.bodyEl.select('video').each(function(vid) {
 				try {
 					vid.dom.innerHTML = null;
 					vid.dom.load();
@@ -458,7 +458,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			});
 		}
 
-		if(this.editor){
+		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
 		}
@@ -468,7 +468,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
 		}
 
-		if(h){
+		if (h) {
 			h.removeObserverForField(this, 'title', this.updateField, this);
 			h.removeObserverForField(this, 'body', this.updateField, this);
 			h.removeObserverForField(this, 'tags', this.updateField, this);
@@ -481,17 +481,17 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	fireDeleteEvent: function () {
+	fireDeleteEvent: function() {
 		this.fireEvent('delete-post', this.record, this);
 	},
 
 
-	destroyWarningMessage: function () {
+	destroyWarningMessage: function() {
 		return 'Deleting your topic will permanently remove it and any comments.';
 	},
 
 
-	onDeletePost: function (e) {
+	onDeletePost: function(e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -502,7 +502,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function (str) {
+			fn: function(str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();
 				}
@@ -511,21 +511,21 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	onEditPost: function (e) {
+	onEditPost: function(e) {
 		console.log('onEditPost');
 		e.stopEvent();
 		this.fireEvent('edit-topic', this, this.record);
 	},
 
 
-	getRecord: function () {
+	getRecord: function() {
 		return this.record;
 	},
 
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		if (this.bodyEl) {
-			this.bodyEl.select('video').each(function (v) {
+			this.bodyEl.select('video').each(function(v) {
 				v.dom.innerHTML = null;
 				v.dom.load();
 			});
@@ -533,10 +533,10 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	onBeforeActivate: function () {
+	onBeforeActivate: function() {
 		var href;
 		if (this.bodyEl) {
-			this.bodyEl.select('video').each(function (v) {
+			this.bodyEl.select('video').each(function(v) {
 				if (Ext.isEmpty((v.getHTML() || '').trim())) {
 					href = v.dom.getAttribute('href');
 					Ext.DomHelper.overwrite(v, {
@@ -549,34 +549,34 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	setContent: function (html, cb) {
+	setContent: function(html, cb) {
 		var me = this, cmps;
 		this.bodyEl.update(html);
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
 
-		this.bodyEl.select('img.whiteboard-thumbnail').each(function (el) {
+		this.bodyEl.select('img.whiteboard-thumbnail').each(function(el) {
 			var wrapper = el.up('.body-divider');
 			el.replace(wrapper);
 		});
 
-		this.bodyEl.select('img').each(function (img) {
-			img.on('load', function () {
+		this.bodyEl.select('img').each(function(img) {
+			img.on('load', function() {
 				me.fireEvent('sync-height');
 			});
 		});
 
 		if (Ext.isFunction(cb)) {
 			cmps = cb(this.bodyEl, this);
-			Ext.each(cmps, function (c) {
+			Ext.each(cmps, function(c) {
 				me.on('destroy', c.destroy, c);
 			});
 		}
 	},
 
-	
-	fetchNextPage: function(){
+
+	fetchNextPage: function() {
 		var s = this.store, max;
-		
+
 		if (!s.hasOwnProperty('data')) {
 			return;
 		}
@@ -589,19 +589,19 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	addComments: function (store, records) {
+	addComments: function(store, records) {
 		if (!Ext.isEmpty(records)) {
 			//Umm it renders sorted ASC but we pass DESC
 			records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
-			this.add(Ext.Array.map(records, function (r) {
+			this.add(Ext.Array.map(records, function(r) {
 				return {record: r};
 			}));
 		}
 	},
 
 
-	loadComments: function (store, records) {
-		if(!this.rendered){
+	loadComments: function(store, records) {
+		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.loadComments, this, arguments), this);
 			return;
 		}
@@ -610,7 +610,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			left = store.getTotalCount() - store.getCount(),
 			max = store.getPageFromRecordIndex(store.getTotalCount() - 1);
 
-		if(store.currentPage === max || me.store.getTotalCount() === 0){
+		if (store.currentPage === max || me.store.getTotalCount() === 0) {
 			//there is nothing more to load
 			this.loadMoreEl.remove();
 			this.commentContainerEl.addCls('no-more');
@@ -619,8 +619,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.loadMoreEl.update(Math.min(left, 10) + ' more comments');
 
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
-		
-		Ext.each(records, function(item, index){
+
+		Ext.each(records, function(item, index) {
 			me.insert(index, {record: item});
 		});
 		// this.add(Ext.Array.map(records, function (r) {
@@ -632,7 +632,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	addIncomingComment: function (item) {
+	addIncomingComment: function(item) {
 		if (item.get('ContainerId') === this.record.getId() && isMe(this.record.get('Creator'))) {
 			this.addComments(this.store, [item]);
 
@@ -642,7 +642,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	goToComment: function (commentId) {
+	goToComment: function(commentId) {
 		if (!this.ready) {
 			this.scrollToComment = commentId;
 			return;
@@ -658,7 +658,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	getSearchHitConfig: function () {
+	getSearchHitConfig: function() {
 		return {
 			key: 'forum',
 			mainViewId: 'forums'
@@ -670,7 +670,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	 *  While the parent view( i.e forums view) scrolls, this view doesn't scroll,
 	 *  thus we override it to account for the scrolling from the view that scrolls
 	 */
-	scrollToHit: function (fragment, phrase) {
+	scrollToHit: function(fragment, phrase) {
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			searchIn = this.el.dom,
 			doc = searchIn.ownerDocument,

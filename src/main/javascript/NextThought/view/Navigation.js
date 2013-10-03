@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.Navigation', {
-	extend:   'Ext.Component',
-	alias:    'widget.main-navigation',
+	extend: 'Ext.Component',
+	alias: 'widget.main-navigation',
 	requires: [
 		'NextThought.view.menus.Navigation',
 		'NextThought.view.menus.MostRecentContent',
@@ -10,17 +10,17 @@ Ext.define('NextThought.view.Navigation', {
 	cls: 'main-navigation',
 
 	listeners: {
-		click:     {
+		click: {
 			element: 'el',
-			fn:      'onClick'
+			fn: 'onClick'
 		},
 		mouseover: {
 			element: 'el',
-			fn:      'onMouseOver'
+			fn: 'onMouseOver'
 		},
-		mouseout:  {
+		mouseout: {
 			element: 'el',
-			fn:      'onMouseOut'
+			fn: 'onMouseOut'
 		}
 	},
 
@@ -29,18 +29,18 @@ Ext.define('NextThought.view.Navigation', {
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'jump-menu',
-			cn:  [
+			cn: [
 				{ cls: 'branding' },
 				{
 					'data-view': 'content',
 					'data-qtip': 'Content',
-					cls:         'content x-menu',
-					cn:          [
+					cls: 'content x-menu',
+					cn: [
 						{ cls: 'box' },
 						{ cls: 'image' },
 						{
 							cls: 'wrap',
-							cn:  [
+							cn: [
 								{ cls: 'provider' },
 								{ cls: 'title' }
 							]
@@ -64,17 +64,17 @@ Ext.define('NextThought.view.Navigation', {
 	]),
 
 	renderSelectors: {
-		imgEl:      '.content .image',
+		imgEl: '.content .image',
 		providerEl: '.content .wrap .provider',
-		titleEl:    '.content .wrap .title',
-		jumpEl:     '.jump-menu'
+		titleEl: '.content .wrap .title',
+		jumpEl: '.jump-menu'
 	},
 
 
 	touchLibraryOpen: false,
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		if (!$AppConfig.service.canHaveForum()) {
 			this.el.down('.forums').remove();
@@ -85,8 +85,8 @@ Ext.define('NextThought.view.Navigation', {
 		}
 
 		this.contentSwitcher = Ext.widget({
-											  viewId:    'content',
-											  xtype:     'most-recent-content-switcher',
+											  viewId: 'content',
+											  xtype: 'most-recent-content-switcher',
 											  ownerNode: this.el.down('.content')
 										  });
 		this.items.push(this.contentSwitcher);
@@ -96,39 +96,39 @@ Ext.define('NextThought.view.Navigation', {
 
 		this.searchMenu = Ext.widget(
 				{
-					viewId:        'search',
-					showOnHover:   false,
-					xtype:         'navigation-menu',
-					layout:        {
-						type:  'vbox',
+					viewId: 'search',
+					showOnHover: false,
+					xtype: 'navigation-menu',
+					layout: {
+						type: 'vbox',
 						align: 'stretch'
 					},
-					overflowX:     'hidden',
-					overflowY:     'hidden',
-					cls:           'search-menu',
+					overflowX: 'hidden',
+					overflowY: 'hidden',
+					cls: 'search-menu',
 					containerNode: this.el,
-					ownerNode:     this.el.down('.search'),
-					startHide:     Ext.emptyFn,
-					items:         [
+					ownerNode: this.el.down('.search'),
+					startHide: Ext.emptyFn,
+					items: [
 						{
 							xtype: 'searchfield'
 						},
 						{
-							xtype:      'container',
+							xtype: 'container',
 							autoScroll: true,
-							id:         'search-results',
-							hideMode:   'display',
-							flex:       1
+							id: 'search-results',
+							hideMode: 'display',
+							flex: 1
 						}
 					],
-					listeners:     {
-						hide: function () {
+					listeners: {
+						hide: function() {
 							if (this.reactivate && this.ownerNode.hasCls('active')) {
 								this.ownerNode.removeCls('active');
 								this.reactivate.addCls('active');
 							}
 						},
-						show: function (m) {
+						show: function(m) {
 							this.reactivate = this.containerNode.down('.active').removeCls('active');
 							this.ownerNode.addCls('active');
 							m.down('searchfield').focus(true, true);
@@ -140,13 +140,13 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.items = [];
 		this.timers = {};
 	},
 
-	getViewId: function (el) {
+	getViewId: function(el) {
 		var e = Ext.get(el),
 				attr = 'data-view',
 				q = '[' + attr + ']',
@@ -161,7 +161,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	track: function (rec, pop) {
+	track: function(rec, pop) {
 		if (pop) {
 			rec = this.currentRecord = this.recordHistory.pop();
 			return rec;
@@ -187,7 +187,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	getRefItems: function (deep) {
+	getRefItems: function(deep) {
 		var items = this.items,
 				len = items.length,
 				i = 0,
@@ -206,13 +206,13 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	updateCurrent: function (pop, rec) {
+	updateCurrent: function(pop, rec) {
 		var cls = 'is-book';
 
 		rec = this.track(rec, pop === true);
 
 		if (!rec) {
-			console.error("No record attached");
+			console.error('No record attached');
 			return;
 		}
 
@@ -226,7 +226,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	setActive: function (view) {
+	setActive: function(view) {
 		var id = view && view.id;
 		if (!this.el) {
 			console.trace();
@@ -239,7 +239,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	maybeStopTimer: function (viewId) {
+	maybeStopTimer: function(viewId) {
 		var el = this.el.down('.active');
 		if (el && el.getAttribute('data-view') === viewId) {
 			return;
@@ -248,7 +248,7 @@ Ext.define('NextThought.view.Navigation', {
 		clearTimeout(this.timers[viewId]);
 	},
 
-	showMenu: function (menu, delay) {
+	showMenu: function(menu, delay) {
 		var hideTimer, handlers;
 		if (!delay) {
 			menu.show();
@@ -262,52 +262,52 @@ Ext.define('NextThought.view.Navigation', {
 
 		handlers = this.mon(menu, {
 			destroyable: true,
-			single:      true,
-			'show':      function () {
-//				if (Ext.is.iPad) {
-//					menu.show();
-//				}
-//				else {
+			single: true,
+			'show': function() {
+        //				if (Ext.is.iPad) {
+        //					menu.show();
+        //				}
+        //				else {
 				hideTimer = Ext.defer(menu.hide, 1500, menu);
-//				}
+        //				}
 			},
-			'mouseover': function () {
-//				if (!Ext.is.iPad) {
+			'mouseover': function() {
+        //				if (!Ext.is.iPad) {
 				clearTimeout(hideTimer);
-//				}
+        //				}
 			},
-			'hide':      function () {
-//				if (!Ext.is.iPad) {
+			'hide': function() {
+        //				if (!Ext.is.iPad) {
 				handlers.destroy();
-//				}
+        //				}
 			}
 		});
 
 	},
 
 
-	onClick: function (e) {
+	onClick: function(e) {
 		var menu, target = e.getTarget('[data-view]', null, true), viewId = this.getViewId(target);
 
 		if (!Ext.isEmpty(viewId)) {
 			if (viewId === 'search') {
 				menu = this.ownerCt.down('[viewId="' + viewId + '"]');
 
-//                if (Ext.is.iPad) { // hasCls seems to be undefined on iPad -- wasn't sure if I should just replace it
-//                    if (target.classList.contains('active')) {
-//                        menu.hide();
-//                    }
-//                    else {
-//                        this.showMenu(menu, false);
-//                    }
-//                }
-//                else {
+        //                if (Ext.is.iPad) { // hasCls seems to be undefined on iPad -- wasn't sure if I should just replace it
+        //                    if (target.classList.contains('active')) {
+        //                        menu.hide();
+        //                    }
+        //                    else {
+        //                        this.showMenu(menu, false);
+        //                    }
+        //                }
+        //                else {
 				if (target.hasCls('active')) {
 					menu.hide();
 				} else {
 					this.showMenu(menu, false);
 				}
-//                }
+      //                }
 			} else {
 				this.maybeStopTimer(viewId);
 			}
@@ -319,7 +319,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	onMouseOver: function (e) {
+	onMouseOver: function(e) {
 		var viewId = this.getViewId(e.getTarget('[data-view]')),
 				menu, hideTimer, handlers;
 
@@ -333,7 +333,7 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	onMouseOut: function (e) {
+	onMouseOut: function(e) {
 		var viewId = this.getViewId(e.getTarget('[data-view]'));
 		if (!Ext.isEmpty(viewId)) {
 			clearTimeout(this.timers[viewId]);
@@ -342,22 +342,22 @@ Ext.define('NextThought.view.Navigation', {
 	},
 
 
-	onClickTouch: function (el) {
-		return this.onClick({getTarget: function () {
+	onClickTouch: function(el) {
+		return this.onClick({getTarget: function() {
 			return el;
 		} });
 	},
 
 
-	onMouseOverTouch: function (el) {
-		return this.onMouseOver({getTarget: function () {
+	onMouseOverTouch: function(el) {
+		return this.onMouseOver({getTarget: function() {
 			return el;
 		} });
 	},
 
 
-	onMouseOutTouch: function (el) {
-		return this.onMouseOut({getTarget: function () {
+	onMouseOutTouch: function(el) {
+		return this.onMouseOut({getTarget: function() {
 			return el;
 		} });
 	}

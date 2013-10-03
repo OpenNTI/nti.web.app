@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.Tool',{
+Ext.define('NextThought.view.whiteboard.editor.Tool', {
 	alias: 'widget.wb-tool',
 	extend: 'Ext.button.Button',
 
@@ -10,7 +10,7 @@ Ext.define('NextThought.view.whiteboard.editor.Tool',{
 	ui: 'button',
 	baseCls: 'whiteboard-tool',
 
-	initComponent: function(){
+	initComponent: function() {
 		this.addCls(this.tool);
 		this.iconCls = this.tool;
 		this.tooltip = Ext.String.capitalize(this.tool);

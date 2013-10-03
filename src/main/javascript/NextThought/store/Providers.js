@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.Providers',{
+Ext.define('NextThought.store.Providers', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'

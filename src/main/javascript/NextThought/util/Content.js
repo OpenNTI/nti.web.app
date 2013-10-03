@@ -3,22 +3,22 @@ Ext.define('NextThought.util.Content', {
 
 	NO_LOCATION: {},
 
-	requires:['NextThought.Library'],
+	requires: ['NextThought.Library'],
 
-	CONTENT_VISIBILITY_MAP:{
+	CONTENT_VISIBILITY_MAP: {
 		'OU': 'OUID'
 	},
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
-		Ext.apply(this,{
+		Ext.apply(this, {
 			timers: {},
 			cache: {},
 			SYM_LINK_MAP: {}
 		});
 	},
 
-	spider: function (ids, finish, parse, pageFailure) {
+	spider: function(ids, finish, parse, pageFailure) {
 		if (!Ext.isArray(ids)) {
 			ids = [ids];
 		}
@@ -45,7 +45,7 @@ Ext.define('NextThought.util.Content', {
 			maybeFinish();
 		}
 
-		Ext.each(ids, function (id) {
+		Ext.each(ids, function(id) {
 			function failure(req, resp) {
 				try {
 					Ext.callback(pageFailure, null, arguments);
@@ -63,7 +63,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getContentForPageInfo: function (pageInfo, callback, failure) {
+	getContentForPageInfo: function(pageInfo, callback, failure) {
 		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		function failed(r) {
@@ -90,7 +90,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	hasVisibilityForContent: function(cnt){
+	hasVisibilityForContent: function(cnt) {
 		var u = $AppConfig.userObject,
 			visibilityKey = cnt.getAttribute('visibility'),
 			attr = this.CONTENT_VISIBILITY_MAP[visibilityKey] || visibilityKey;
@@ -109,9 +109,9 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	parseXML: function (xml) {
+	parseXML: function(xml) {
 		try {
-			return new DOMParser().parseFromString(xml, "text/html");
+			return new DOMParser().parseFromString(xml, 'text/html');
 		}
 		catch (e) {
 			console.error('Could not parse content', Globals.getError(e));
@@ -123,11 +123,11 @@ Ext.define('NextThought.util.Content', {
 	/** @private */
 	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
-	isExternalUri: function (r) {
+	isExternalUri: function(r) {
 		return this.externalUriRegex.test(r);
 	},
 
-	bustCorsForResources: function (string, name, value) {
+	bustCorsForResources: function(string, name, value) {
 		//Look for things we know come out of a different domain
 		//and append a query param.  This allows us to, for example,
 		//add a query param related to our location host so that
@@ -150,7 +150,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	fixReferences: function (string, basePath) {
+	fixReferences: function(string, basePath) {
 
 		function fixReferences(original, attr, url) {
 			var firstChar = url.charAt(0),
@@ -212,9 +212,9 @@ Ext.define('NextThought.util.Content', {
 	 *
 	 * @param html {String|Node}
 	 * @param max {int}
-	 * @returns {String}
+	 * @return {String}
 	 */
-	getHTMLSnippet: function (html, max) {
+	getHTMLSnippet: function(html, max) {
 		var i = /[^\.\?!]+[\.\?!]?/,
 			spaces = /(\s{2,})/,
 			df = document.createDocumentFragment(),
@@ -234,17 +234,17 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('IllegalArgument');
 		}
 
-		if(d.firstChild){
+		if (d.firstChild) {
 			r.setStartBefore(d.firstChild);
 		}
 		texts = AnnotationUtils.getTextNodes(d);
 
-		Ext.each(texts, function (t) {
+		Ext.each(texts, function(t) {
 			var o = c + t.length,
 				v = t.nodeValue,
 				offset;
 
-			Ext.each(spaces.exec(v) || [], function (gap) {
+			Ext.each(spaces.exec(v) || [], function(gap) {
 				o -= (gap.length - 1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
 			});
 
@@ -271,10 +271,10 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	findTitle: function(containerId, defaultTitle){
+	findTitle: function(containerId, defaultTitle) {
 		var l = this.find(containerId);
-		if(defaultTitle === undefined){
-			defaultTitle = "Not found";
+		if (defaultTitle === undefined) {
+			defaultTitle = 'Not found';
 		}
 		return l ? l.location.getAttribute('label') : defaultTitle;
 	},
@@ -282,15 +282,15 @@ Ext.define('NextThought.util.Content', {
 
 	find: function(containerId, reportMiss) {
 		var result = null,
-			cache = this.findCache = (this.findCache||{});
+			cache = this.findCache = (this.findCache || {});
 
 		result = cache[containerId];
-		if(!result){
-			Library.each(function(o){
-				result = Library.resolve( Library.getToc( o ), o, containerId, reportMiss);
+		if (!result) {
+			Library.each(function(o) {
+				result = Library.resolve(Library.getToc(o), o, containerId, reportMiss);
 				return !result;
 			});
-			if(result){
+			if (result) {
 				cache[containerId] = result;
 			}
 		}
@@ -301,7 +301,7 @@ Ext.define('NextThought.util.Content', {
 
 	//Returns the prefix of the content ntiid we think this ntiid
 	//would reside beneath
-	contentPrefix: function(id){
+	contentPrefix: function(id) {
 		var ntiid = ParseUtils.parseNTIID(id), title, index;
 
 		ntiid.specific.type = 'HTML';
@@ -313,44 +313,44 @@ Ext.define('NextThought.util.Content', {
 	/**
 	 *  Looks in content for the content object with the given id
 	 */
-	findContentObject: function(id, cb, scope){
+	findContentObject: function(id, cb, scope) {
 		var titleNtiidPrefix = this.contentPrefix(id),
 			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null;
-		if(!title){
+		if (!title) {
 			Ext.callback(cb, scope);
 			return;
 		}
 
 		//One place we can check is the video index
-		Library.getVideoIndex(title, function(index){
+		Library.getVideoIndex(title, function(index) {
 			var vid, container;
-			if(!index){
+			if (!index) {
 				Ext.callback(cb, scope);
 				return;
 			}
 
 			vid = (index)[id];
 
-			if(vid){
+			if (vid) {
 				container = this.getLineage(id);
-				if(!Ext.isEmpty(container) && container.length > 1){
+				if (!Ext.isEmpty(container) && container.length > 1) {
 					container = container[1];
 				}
-				else{
+				else {
 					container = title.get('NTIID');
 				}
 				//We need the base path
-				LocationMeta.getMeta(container, function(meta){
-					if(meta){
+				LocationMeta.getMeta(container, function(meta) {
+					if (meta) {
 						vid.basePath = meta.absoluteContentRoot;
 						Ext.callback(cb, scope, [vid, meta]);
 					}
-					else{
+					else {
 						Ext.callback(cb, scope);
 					}
 				});
 			}
-			else{
+			else {
 				Ext.callback(cb, scope, [vid]);
 			}
 
@@ -358,30 +358,30 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	findRelatedContentObject: function(id, cb, scope){
+	findRelatedContentObject: function(id, cb, scope) {
 		var titleNTiidPrefix = this.contentPrefix(id),
 			title = titleNTiidPrefix ? Library.findTitleWithPrefix(titleNTiidPrefix) : null,
 			toc, locationInfo, container;
 
-		if(!title){
+		if (!title) {
 			Ext.callback(cb, scope);
 			return;
 		}
 
 		toc = Library.getToc(title);
 		locationInfo = Library.resolve(toc, title, id, true);
-		if(locationInfo){
+		if (locationInfo) {
 			container = ContentUtils.getLineage(locationInfo.NTIID);
-			if(!Ext.isEmpty(container) && container.length > 1){
+			if (!Ext.isEmpty(container) && container.length > 1) {
 				container = container[1];
 			}
-			else{
+			else {
 				container = title.get('NTIID');
 			}
 			Ext.callback(cb, scope, [container, locationInfo]);
 			return false;
 		}
-		else{
+		else {
 			Ext.callback(cb, scope);
 		}
 		return true;
@@ -392,17 +392,17 @@ Ext.define('NextThought.util.Content', {
 	 * like it would contain the following ntiid.
 	 * @param ntiid A content ntiid or sub ntiid (question ntiid)
 	 */
-	purchasableForContentNTIID: function(ntiid, wantsItem){
-		function fn(rec){
+	purchasableForContentNTIID: function(ntiid, wantsItem) {
+		function fn(rec) {
 			var items = rec.get('Items') || [], found = false;
-			Ext.each(items, function(i){
-				if(i.indexOf(prefix) === 0){ found = true; }
+			Ext.each(items, function(i) {
+				if (i.indexOf(prefix) === 0) { found = true; }
 				return !found;
 			});
 			return found;
 		}
 
-		function getPrefix(ntiid){
+		function getPrefix(ntiid) {
 			var root = ContentUtils.getLineage(ntiid).last();
 
 			// NOTE: A Purchasable could represent both a book, you don't have access to,
@@ -410,7 +410,7 @@ Ext.define('NextThought.util.Content', {
 			// first looking if it's something in our library
 			// if not, we will use what we think the root content should be.
 
-			if(!root){
+			if (!root) {
 				//NOTE this again assumes 1-to-1 purchase to content root.
 				root = ParseUtils.bookPrefixIfQuestionNtiid(ntiid);
 				root = root ? Library.findTitleWithPrefix(root) : null;
@@ -427,29 +427,29 @@ Ext.define('NextThought.util.Content', {
 			purchasableStore = Ext.getStore('Purchasable'),
 			purchasable, index;
 
-		if(prefix){
+		if (prefix) {
 			index = purchasableStore.findBy(fn);
 			purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
 		}
 		console.log('purchasable: ', purchasable);
 
-		if(Ext.isFunction(wantsItem)){
+		if (Ext.isFunction(wantsItem)) {
 			return wantsItem.apply(this, [purchasable]) ? purchasable : null;
 		}
 		return purchasable;
 	},
 
 
-	getSiblings:function(node){
+	getSiblings: function(node) {
 		var p = node && node.parentNode,
 			ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
 			nodes = [],
 			info = this.find(ntiid) || {},
-			link = this.isSymLinked(node,info.toc),
+			link = this.isSymLinked(node, info.toc),
 			children, courseNode;
 
-		courseNode = info.toc.querySelector('unit[ntiid="'+ntiid+'"],lesson[topic-ntiid="'+ntiid+'"]');
-		if(courseNode){
+		courseNode = info.toc.querySelector('unit[ntiid="' + ntiid + '"],lesson[topic-ntiid="' + ntiid + '"]');
+		if (courseNode) {
 			p = courseNode.parentNode;
 			link = null;
 		}
@@ -458,28 +458,28 @@ Ext.define('NextThought.util.Content', {
 		children = p && p.getChildren();
 
 
-		Ext.each(children||[],function(n){
+		Ext.each(children || [], function(n) {
 			var ntiid;
-			if(/topic/i.test(n.tagName)){
+			if (/topic/i.test(n.tagName)) {
 				nodes.push(n);
 				return;
 			}
 
-			if(/content:related/i.test(n.tagName) && /^application\/vnd.nextthought\.content$/i.test(n.getAttribute('type'))){
+			if (/content:related/i.test(n.tagName) && /^application\/vnd.nextthought\.content$/i.test(n.getAttribute('type'))) {
 				ntiid = n.getAttribute('href');
-			} else if(/lesson/i.test(n.tagName)) {
+			} else if (/lesson/i.test(n.tagName)) {
 				ntiid = n.getAttribute('topic-ntiid');
 			} else {
 				return;
 			}
 
-			if(!ParseUtils.isNTIID(ntiid)){
+			if (!ParseUtils.isNTIID(ntiid)) {
 				console.warn('bad ntiid in content!!');
 				return;
 			}
 
-			n = info.toc.querySelector('topic[ntiid="'+ntiid+'"]');
-			if( n ) {
+			n = info.toc.querySelector('topic[ntiid="' + ntiid + '"]');
+			if (n) {
 				nodes.push(n);
 			}
 		});
@@ -489,9 +489,9 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getLineage: function(ntiid, justLabels){
-		if(!ntiid){
-//			Ext.Error.raise('No ntiid given');
+	getLineage: function(ntiid, justLabels) {
+		if (!ntiid) {
+      //			Ext.Error.raise('No ntiid given');
 			return [];
 		}
 
@@ -500,20 +500,20 @@ Ext.define('NextThought.util.Content', {
 			lineage = [],
 			id, link;
 
-		while(node){
+		while (node) {
 
-			id = node.getAttribute? node.getAttribute(justLabels?'label':'ntiid') : null;
-			if( id ) {
+			id = node.getAttribute ? node.getAttribute(justLabels ? 'label' : 'ntiid') : null;
+			if (id) {
 				lineage.push(id);
 			}
-			else if( node.nodeType !== Node.DOCUMENT_NODE ){
-				console.error( node, 'no id');
+			else if (node.nodeType !== Node.DOCUMENT_NODE) {
+				console.error(node, 'no id');
 				break;
 			}
 
-			link = this.isSymLinked(node,leaf.toc);
-			if(link){
-				console.warn('Using SymLinked Parent Node as Lineage instead of ACTUAL parentNode for ',node.getAttribute('ntiid'));
+			link = this.isSymLinked(node, leaf.toc);
+			if (link) {
+				console.warn('Using SymLinked Parent Node as Lineage instead of ACTUAL parentNode for ', node.getAttribute('ntiid'));
 				node = link;
 			}
 			else {
@@ -539,38 +539,38 @@ Ext.define('NextThought.util.Content', {
 	 *
 	 * @param node
 	 * @param toc
-	 * @returns {*} Returns the linked parent or false
+	 * @return {*} Returns the linked parent or false
 	 */
-	isSymLinked: function(node,toc){
+	isSymLinked: function(node,toc) {
 		var EA = Ext.Array,
 			map = this.SYM_LINK_MAP,
-			id = node.getAttribute? node.getAttribute('ntiid') : null,
+			id = node.getAttribute ? node.getAttribute('ntiid') : null,
 			nodes;
 
-		if(!id || !$AppConfig.enableSymbolicLinkingNav){return false;}
+		if (!id || !$AppConfig.enableSymbolicLinkingNav) {return false;}
 
 
-		if(!map.hasOwnProperty(id)){
-			nodes = EA.filter(EA.toArray(toc.getElementsByTagNameNS( 'http://www.nextthought.com/toc','related')),function(a){
+		if (!map.hasOwnProperty(id)) {
+			nodes = EA.filter(EA.toArray(toc.getElementsByTagNameNS('http://www.nextthought.com/toc', 'related')), function(a) {
 				var pass = false,
 					aId = a.getAttribute && a.getAttribute('ntiid'),
 					type = a.getAttribute && a.getAttribute('type') === 'application/vnd.nextthought.content',
 					p = a.parentNode;
 
-				if(type && p && p.tagName !=='toc' && aId && a.getAttribute('href')===id){
-					pass = !!Ext.fly(a.parentNode).first('object[mimeType$=relatedworkref][ntiid="'+aId+'"]',true);
+				if (type && p && p.tagName !== 'toc' && aId && a.getAttribute('href') === id) {
+					pass = !!Ext.fly(a.parentNode).first('object[mimeType$=relatedworkref][ntiid="' + aId + '"]', true);
 				}
 
 				return pass;
 			});
 
-			if(!nodes || nodes.length===0){
+			if (!nodes || nodes.length === 0) {
 				map[id] = false;
 			}
 			else {
 				map[id] = nodes[0].parentNode;//first occurance
-				if(nodes.length>1){
-					console.error('I am not able to process multi-homed content references! First occurance of ref is being used as home/parent link',id,nodes);
+				if (nodes.length > 1) {
+					console.error('I am not able to process multi-homed content references! First occurance of ref is being used as home/parent link', id, nodes);
 				}
 			}
 		}
@@ -579,12 +579,12 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getSortIndexes: function(ntiid){
-		if(!ntiid){
+	getSortIndexes: function(ntiid) {
+		if (!ntiid) {
 			Ext.Error.raise('No ntiid given');
 		}
 
-        function findByFunction(r){return r.get('NTIID') ===id;}
+    function findByFunction(r) {return r.get('NTIID') === id;}
 
 		var noLeaf = {},
 			leaf = this.find(ntiid) || noLeaf,
@@ -592,30 +592,30 @@ Ext.define('NextThought.util.Content', {
 			indexes = [],
 			id, i, cn, j, t, levelnum;
 
-		if(leaf === noLeaf){ return [0, Infinity];}
+		if (leaf === noLeaf) { return [0, Infinity];}
 
-		while(node){
-			id = node.getAttribute? node.getAttribute('ntiid') : null;
+		while (node) {
+			id = node.getAttribute ? node.getAttribute('ntiid') : null;
 			levelnum = node.getAttribute ? node.getAttribute('levelnum') : null;
-			if( id ) {
-				if( levelnum === "0" ){
+			if (id) {
+				if (levelnum === '0') {
 					j = Library.getStore().findBy(findByFunction);
-					if(j < 0){ j = Infinity ;}
+					if (j < 0) { j = Infinity;}
 				}
-				else if( node.parentNode ){
+				else if (node.parentNode) {
 					cn = node.parentNode.childNodes;
-					i=0; j=0;
-					while( i<cn.length){
-						t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
-						if(t===id){
+					i = 0; j = 0;
+					while (i < cn.length) {
+						t = cn[i].getAttribute ? cn[i].getAttribute('ntiid') : null;
+						if (t === id) {
 							break;
 						}
-						if(t){ j++; }
+						if (t) { j++; }
 						i++;
 					}
 				}
-				else{
-					console.log('Unable to find postion of ', id,' in parents children');
+				else {
+					console.log('Unable to find postion of ', id, ' in parents children');
 					j = Infinity;
 				}
 
@@ -628,51 +628,51 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getRoot: function(ntiid){
-		if(!ntiid){
+	getRoot: function(ntiid) {
+		if (!ntiid) {
 			Ext.Error.raise('No ntiid given');
 		}
 		var bookId = this.getLineage(ntiid).last(),
-			title = Library.getTitle( bookId );
+			title = Library.getTitle(bookId);
 
-		return title? title.get('root') : null;
+		return title ? title.get('root') : null;
 	},
 
 
-	getLocation : function(id){
-		function getAttribute(elements, attr){
-			var i=0, v;
+	getLocation: function(id) {
+		function getAttribute(elements, attr) {
+			var i = 0, v;
 			for (i; i < elements.length; i++) {
 				v = elements[i];
-				try{
+				try {
 					v = v ? v.getAttribute(attr) : null;
 					if (v) {return v;}
 				}
-				catch(e){
+				catch (e) {
 					console.warn('element did not have getAttribute');
 				}
 			}
 			return null;
 		}
 
-		if(id && id.getAttribute){
+		if (id && id.getAttribute) {
 			id = id.getAttribute('ntiid');
-		} else if (id && id.isModel){
+		} else if (id && id.isModel) {
 			id = id.get('containerId') || id.get('NTIID');
 		}
 
 		var me = this, r, l, d, i = id;
-		if(!i){
+		if (!i) {
 			return this.NO_LOCATION;
 		}
 
 		r = me.cache[i];
-		if( !r ) {
+		if (!r) {
 			r = me.find(i);
 
 			//If still not r, it's not locational content...
 			if (!r) {
-				me.find(i,true);
+				me.find(i, true);
 				return null;
 			}
 
@@ -680,21 +680,21 @@ Ext.define('NextThought.util.Content', {
 			l = r.location;
 			r = Ext.apply({
 					NTIID: i,
-					icon: getAttribute([l,d],'icon'),
-					isCourse: (getAttribute([l,d],'isCourse')||'').toLowerCase()==='true',
-					root: getAttribute([l,d],'base'),
-					title: getAttribute([l,d],'title'),
-					label: getAttribute([l,d],'label'),
-					thumbnail: getAttribute([l,d],'thumbnail'),
-					getIcon: function(fromBook){
-						var iconPath = fromBook? this.title.get('icon') : this.icon;
-						if(iconPath.substr(0,this.root.length) !== this.root ){
-							iconPath = this.root+this.icon;
+					icon: getAttribute([l, d], 'icon'),
+					isCourse: (getAttribute([l, d], 'isCourse') || '').toLowerCase() === 'true',
+					root: getAttribute([l, d], 'base'),
+					title: getAttribute([l, d], 'title'),
+					label: getAttribute([l, d], 'label'),
+					thumbnail: getAttribute([l, d], 'thumbnail'),
+					getIcon: function(fromBook) {
+						var iconPath = fromBook ? this.title.get('icon') : this.icon;
+						if (iconPath.substr(0, this.root.length) !== this.root) {
+							iconPath = this.root + this.icon;
 						}
-						return this.baseURI+iconPath;
+						return this.baseURI + iconPath;
 					},
-					getPathLabel: function(ntiid){
-						var lineage = me.getLineage(ntiid||this.NTIID,true),
+					getPathLabel: function(ntiid) {
+						var lineage = me.getLineage(ntiid || this.NTIID, true),
 							sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
 							base = lineage.last(),
 							leaf = lineage.first();
@@ -706,7 +706,7 @@ Ext.define('NextThought.util.Content', {
 		me.cache[i] = r;
 
 		clearTimeout(me.timers[i]);
-		me.timers[i] = setTimeout(function(){delete me.cache[i];},15000);
+		me.timers[i] = setTimeout(function() {delete me.cache[i];},15000);
 
 		return r;
 	},
@@ -714,7 +714,7 @@ Ext.define('NextThought.util.Content', {
 
 
 	getNavigationInfo: function(ntiid) {
-		if(!ntiid){
+		if (!ntiid) {
 			Ext.Error.raise('No NTIID');
 		}
 
@@ -724,8 +724,8 @@ Ext.define('NextThought.util.Content', {
 			slice = Array.prototype.slice;
 
 		//This function returns true if the node submitted matches a regex looking for topic or toc
-		function isTopicOrToc(node){
-			if (!node){return false;}
+		function isTopicOrToc(node) {
+			if (!node) {return false;}
 			var result = false,
 				topicOrToc = topicOrTocRegex.test(node.tagName),
 				href = (node.getAttribute) ? node.getAttribute('href') : null;
@@ -740,34 +740,34 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		//returns the NTIID attribute of the node, or null if it's not there.
-		function getRef(node){
-			if(!node || !node.getAttribute){
+		function getRef(node) {
+			if (!node || !node.getAttribute) {
 				return null;
 			}
 
 			return node.getAttribute('ntiid') || null;
 		}
 
-		function child(n,first){
+		function child(n,first) {
 			var v,
 				topics = n && n.childNodes ? slice.call(n.childNodes) : [];
 
-			if(first){
+			if (first) {
 				topics.reverse();
 			}
 
-			while(topics.length && !isTopicOrToc(topics.peek())){topics.pop();}
-			if(n && topics.length){
+			while (topics.length && !isTopicOrToc(topics.peek())) {topics.pop();}
+			if (n && topics.length) {
 				v = topics.peek();
-				return first? v : child(v,first);
+				return first ? v : child(v, first);
 			}
-			return first? null : n;
+			return first ? null : n;
 		}
 
 		//returns either the previous or next actionable node (topic or toc), or null if
 		//we never find anything, meaning we are at one end or the other...
-		function sibling(node,previous){
-			if (!node){return null;}
+		function sibling(node,previous) {
+			if (!node) {return null;}
 
 			var siblingMethod = previous ? 'previousSibling' : 'nextSibling', //figure direction
 				siblingNode = node[siblingMethod]; //execute directional sibling method
@@ -776,18 +776,18 @@ Ext.define('NextThought.util.Content', {
 			return (isTopicOrToc(siblingNode))
 					? siblingNode
 					//If not, recurse in the same direction
-					: sibling(node[siblingMethod],previous);
+					: sibling(node[siblingMethod], previous);
 		}
 
 		loc = loc ? loc.location : null;
-		if(loc) {
-			info.previous = getRef(child(sibling(loc,true)) || loc.parentNode);
-			info.next = getRef(child(loc,true) || sibling(loc,false) || sibling(loc.parentNode,false));
+		if (loc) {
+			info.previous = getRef(child(sibling(loc, true)) || loc.parentNode);
+			info.next = getRef(child(loc, true) || sibling(loc, false) || sibling(loc.parentNode, false));
 		}
 
 		return info;
 	}
 
-}, function () {
+}, function() {
 	window.ContentUtils = this;
 });

@@ -63,7 +63,7 @@ Ext.define('NextThought.ux.UpdatedTos', {
 						cls: 'yes-checkbox',
 						flex: 1,
 						boxLabel: 'Yes, I agree to the Terms of Service and Privacy Policy.',
-						handler: function (b, e) {
+						handler: function(b, e) {
 							var btn = Ext.getCmp('tos-agree');
 							btn.setDisabled(!btn.disabled);
 							// would prefer to check the button's state, relying on initial state = disabled
@@ -76,7 +76,7 @@ Ext.define('NextThought.ux.UpdatedTos', {
 						action: 'cancel',
 						id: 'tos-agree',
 						disabled: true,
-						handler: function (b, e) {
+						handler: function(b, e) {
 							e.stopEvent();
 							b.up('window').close();
 						}

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
+Ext.define('NextThought.view.whiteboard.editor.TextOptions', {
 	alias: 'widget.wb-tool-text-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
@@ -40,18 +40,18 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			enableToggle: true
 		}
 	]
-}, function(){
+}, function() {
 	this.prototype.items[0].store = Ext.data.Store.create({
 		fields: ['size'],
-		data : [
-			{"size":"12 pt"},
-			{"size":"14 pt"},
-			{"size":"18 pt"},
-			{"size":"24 pt"},
-			{"size":"30 pt"},
-			{"size":"36 pt"},
-			{"size":"48 pt"},
-			{"size":"60 pt"}
+		data: [
+			{'size': '12 pt'},
+			{'size': '14 pt'},
+			{'size': '18 pt'},
+			{'size': '24 pt'},
+			{'size': '30 pt'},
+			{'size': '36 pt'},
+			{'size': '48 pt'},
+			{'size': '60 pt'}
 		]
 	});
 });

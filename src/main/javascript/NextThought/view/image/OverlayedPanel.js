@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.image.OverlayedPanel',{
+Ext.define('NextThought.view.image.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-image-roll',
 
-	requires:[
+	requires: [
 		'NextThought.util.Dom',
 		'NextThought.view.image.Roll'
 	],
@@ -10,13 +10,13 @@ Ext.define('NextThought.view.image.OverlayedPanel',{
 	ui: 'image-roll',
 	cls: 'image-roll',
 
-	constructor: function(config){
-		if(!config || !config.contentElement){
+	constructor: function(config) {
+		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
 		config = Ext.applyIf(config, {
-			layout : 'fit'
+			layout: 'fit'
 		});
 
 		config.items = [{
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.image.OverlayedPanel',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.down('image-roll').selectFirst();
 	}

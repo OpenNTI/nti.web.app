@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.form.ClassInfoForm', {
-	extend:'Ext.form.Panel',
+	extend: 'Ext.form.Panel',
 	alias: 'widget.class-info-form',
 
 
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		allowBlank: false
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.add(
 			{
@@ -83,7 +83,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 				};
 			},
 			type: 'plus',
-			handler: function(){me.addSection();},
+			handler: function() {me.addSection();},
 			scope: me
 		});
 		me.addSectionTool = cmp;
@@ -101,7 +101,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 			v = this.value ? this.value.asJSON() : {};
 
 		//Turn all section values into their json objects
-		Ext.each(this.getSections(), function(s){
+		Ext.each(this.getSections(), function(s) {
 			sections.push(s.getValue().asJSON());
 		}, this);
 
@@ -125,12 +125,12 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 		//populate the section infos, after first clearing any previously existing ones
 		this.down('fieldset[sections]').removeAll(true);
-		Ext.each(sections, function(si){
+		Ext.each(sections, function(si) {
 			this.addSection(si, !this.value.isModifiable());
 		}, this);
 
 		if (!this.value.isModifiable()) {
-			Ext.each(this.query('field'), function(f){f.setReadOnly(true);});
+			Ext.each(this.query('field'), function(f) {f.setReadOnly(true);});
 			this.addSectionTool.hide();
 		}
 	},
@@ -141,7 +141,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 	 * @param [readOnly] tell the sections to be read only
 	 */
 	addSection: function(v, readOnly) {
-		this.down('fieldset[sections]').add({xtype: 'section-info-form', value:v, readOnly:readOnly});
+		this.down('fieldset[sections]').add({xtype: 'section-info-form', value: v, readOnly: readOnly});
 	},
 
 	getSections: function() {

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.chat.GutterEntry',{
+Ext.define('NextThought.view.chat.GutterEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-gutter-entry',
 
@@ -20,8 +20,8 @@ Ext.define('NextThought.view.chat.GutterEntry',{
 
 
 
-	initComponent: function(){
-		this.renderData = Ext.apply(this.renderData||{}, this.user.data);
+	initComponent: function() {
+		this.renderData = Ext.apply(this.renderData || {}, this.user.data);
 
 		Ext.apply(this.renderData, {
 			name: this.user.getName()
@@ -30,12 +30,12 @@ Ext.define('NextThought.view.chat.GutterEntry',{
 		this.callParent(arguments);
 	},
 
-	setStatus: function(state){
-		if(!this.rendered){
-			this.on('afterrender', function(){
-				if(this.status){ this.status.update(state); }
+	setStatus: function(state) {
+		if (!this.rendered) {
+			this.on('afterrender', function() {
+				if (this.status) { this.status.update(state); }
 			});
 		}
-		if(this.status){ this.status.update(state); }
+		if (this.status) { this.status.update(state); }
 	}
 });

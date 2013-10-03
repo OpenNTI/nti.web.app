@@ -9,13 +9,13 @@ Ext.define('NextThought.view.content.reader.Location', {
 		'NextThought.util.Content'
 	],
 
-	constructor: function(config){
-		Ext.apply(this,config);
+	constructor: function(config) {
+		Ext.apply(this, config);
 
 		this.mixins.observable.constructor.call(this);
 		var reader = this.reader;
-		reader.on('destroy','destroy',
-			reader.relayEvents(this,[
+		reader.on('destroy', 'destroy',
+			reader.relayEvents(this, [
 				'beforeNavigate',
 				'beginNavigate',
 				'navigate',
@@ -25,12 +25,12 @@ Ext.define('NextThought.view.content.reader.Location', {
 				'change'
 			]));
 
-		reader.fireEvent('uses-page-stores',this);
+		reader.fireEvent('uses-page-stores', this);
 
-		Ext.apply(reader,{
-			getLocation: Ext.bind(this.getLocation,this),
-			getRelated: Ext.bind(this.getRelated,this),
-			setLocation: Ext.bind(this.setLocation,this)
+		Ext.apply(reader, {
+			getLocation: Ext.bind(this.getLocation, this),
+			getRelated: Ext.bind(this.getRelated, this),
+			setLocation: Ext.bind(this.setLocation, this)
 		});
 
 		this.callParent(arguments);
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	 * @param [callback]
 	 * @param [fromHistory]
 	 */
-	setLocation: function(ntiidOrPageInfo, callback, fromHistory){
+	setLocation: function(ntiidOrPageInfo, callback, fromHistory) {
 
 		var me = this,
 			e = Ext.get('content') || Ext.getBody(),
@@ -52,46 +52,46 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		rootId = rootId && rootId.last();
 
-		if(!me.fireEvent('beforeNavigate',ntiid, fromHistory) || me.currentNTIID === ntiid){
-			me.fireEvent('navigateCanceled',ntiid, me.currentNTIID === ntiid, fromHistory);
+		if (!me.fireEvent('beforeNavigate', ntiid, fromHistory) || me.currentNTIID === ntiid) {
+			me.fireEvent('navigateCanceled', ntiid, me.currentNTIID === ntiid, fromHistory);
 			Ext.callback(callback);
 			return;
 		}
 
-		function finish(a,errorDetails){
-			if(finish.called){
+		function finish(a,errorDetails) {
+			if (finish.called) {
 				console.warn('finish navigation called twice');
 				return;
 			}
-			var args = Array.prototype.slice.call(arguments), error = (errorDetails||{}).error;
+			var args = Array.prototype.slice.call(arguments), error = (errorDetails || {}).error;
 
 			finish.called = true;
 
-			if(e && e.isMasked()){
+			if (e && e.isMasked()) {
 				e.unmask();
 			}
 
-			try{
+			try {
 				//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
 				//Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
-				Ext.callback(callback,null,args);
+				Ext.callback(callback, null, args);
 
-				if(fromHistory!==true){
+				if (fromHistory !== true) {
 					history.pushState({
-						content:{location: ntiid},
-						active:'content'
-					}, ContentUtils.findTitle(ntiid,'NextThought'), me.getFragment(ntiid));
+						content: {location: ntiid},
+						active: 'content'
+					}, ContentUtils.findTitle(ntiid, 'NextThought'), me.getFragment(ntiid));
 				}
-				else{
+				else {
 					history.cancelTransaction('navigation-transaction');
 				}
-				if(error){
+				if (error) {
 					delete me.currentNTIID;
 					//Ok no bueno.  The page info request failed.  Ideally whoever
 					//initiated this request handles the error  but we aren't really setup for
 					//that everywhere. Need to work on error handling.
 					console.error('An error occurred from setLocation', errorDetails);
-					if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+					if (error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 						//We were displaying an alert box here on 403s, but since we don't know why we
 						//are being called we shouldn't do that.  I.E. unless the user triggered this action
 						//an alert box will just be unexpected and they won't know what to do about it. Until
@@ -104,13 +104,13 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 				//remember last ntiid for this book if it is truthy
-				if(ntiid){
-					PersistentStorage.updateProperty('last-location-map',rootId,ntiid);
+				if (ntiid) {
+					PersistentStorage.updateProperty('last-location-map', rootId, ntiid);
 				}
 
 				history.endTransaction('navigation-transaction');
 			}
-			catch(caughtError){
+			catch (caughtError) {
 				history.beginTransaction('navigation-transaction');
 			}
 
@@ -120,29 +120,29 @@ Ext.define('NextThought.view.content.reader.Location', {
 		// I understand the intent of this, but in a case of an initial failed navigation, where we recover,
 		// if we call setLocation this  will prevent us from continuing because the mask is active.
 		// TODO: We should do define a better solution around this.
-//		if(e && e.isMasked()){
-//			console.warn('navigating while busy');
-//			return;
-//		}
+    //		if(e && e.isMasked()){
+    //			console.warn('navigating while busy');
+    //			return;
+    //		}
 
-		if(me.currentNTIID && ntiid !== me.currentNTIID && e){
-			e.mask('Loading...','navigation');
+		if (me.currentNTIID && ntiid !== me.currentNTIID && e) {
+			e.mask('Loading...', 'navigation');
 		}
 
 		history.beginTransaction('navigation-transaction');
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
-		setTimeout(function(){
-			if(!me.fireEvent('beginNavigate',ntiid, fromHistory)){
+		setTimeout(function() {
+			if (!me.fireEvent('beginNavigate', ntiid, fromHistory)) {
 				finish();
 				return;
 			}
 
-			try{
+			try {
 				me.clearPageStore();
 				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
 			}
-			catch(e){
+			catch (e) {
 				history.cancelTransaction('navigation-transaction');
 			}
 		},1);
@@ -151,48 +151,48 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 	getFragment: function(ntiid) {
 		var o = ParseUtils.parseNTIID(ntiid);
-		return o? o.toURLSuffix() : '';
+		return o ? o.toURLSuffix() : '';
 	},
 
 
-	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback){
+	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback) {
 		var me = this,
 			service = $AppConfig.service;
 
-		function success(pageInfo){
-			if(ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)){
-               // let's cache this on the LocationMeta, if it's not there already.
-                LocationMeta.createAndCacheMeta(rootId, pageInfo);
-            }
-            me.currentPageInfo = pageInfo;
+		function success(pageInfo) {
+			if (ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)) {
+        // let's cache this on the LocationMeta, if it's not there already.
+        LocationMeta.createAndCacheMeta(rootId, pageInfo);
+      }
+      me.currentPageInfo = pageInfo;
 			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
 		}
 
-		function failure(q,r){
-			console.error('resolvePageInfo Failure: ',arguments);
+		function failure(q,r) {
+			console.error('resolvePageInfo Failure: ', arguments);
 			// Give the navigateAbort handler a chance to see if it can resolve and navigate to the correct location.
 			// it will explicitly return false, if it thinks it can handle it, otherwise, we callback.
-			if(me.fireEvent('navigateAbort',r, ntiidOrPageInfo, finish) !== false){
-				Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
+			if (me.fireEvent('navigateAbort', r, ntiidOrPageInfo, finish) !== false) {
+				Ext.callback(finish, null, [me, {failure: true, req: q, error: r}]);
 			}
 
 		}
 
-		if(ntiidOrPageInfo.isPageInfo){
+		if (ntiidOrPageInfo.isPageInfo) {
 			success(ntiidOrPageInfo);
 		}
-        //If we have the pageInfo cached, used it.
-        else if(ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)){
-            success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
-        }
-		else{
+  //If we have the pageInfo cached, used it.
+    else if (ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)) {
+      success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
+    }
+		else {
 			service.getPageInfo(ntiidOrPageInfo, success, failure, me);
 		}
 	},
 
 
-	getLocation : function(){
+	getLocation: function() {
 		return Ext.apply({
 			pageInfo: this.currentPageInfo
 		},ContentUtils.getLocation(this.currentNTIID));
@@ -200,7 +200,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 
-	getRelated: function(givenNtiid){
+	getRelated: function(givenNtiid) {
 		var me = this,
 			ntiid = givenNtiid || me.currentNTIID,
 			map = {},
@@ -211,27 +211,27 @@ Ext.define('NextThought.view.content.reader.Location', {
 			return !n ? null : n.getAttribute('icon') || findIcon(n.parentNode) || '';
 		}
 
-		Ext.each(related, function(r){
+		Ext.each(related, function(r) {
 			r = r.firstChild;
-			do{
-				if(!r.tagName) {
+			do {
+				if (!r.tagName) {
 					continue;
 				}
 
-				var tag= r.tagName,
+				var tag = r.tagName,
 					id = r.getAttribute('ntiid'),
 					type = r.getAttribute('type'),
 					qual = r.getAttribute('qualifier'),
 
-					target = tag==='page' ? ContentUtils.find(id) : null,
-					location = target? target.location : null,
+					target = tag === 'page' ? ContentUtils.find(id) : null,
+					location = target ? target.location : null,
 
-					label = location? location.getAttribute('label') : r.getAttribute('title'),
-					href = (location || r ).getAttribute('href');
+					label = location ? location.getAttribute('label') : r.getAttribute('title'),
+					href = (location || r).getAttribute('href');
 
-				if(!map[id]){
-					if(!info || !info.title){
-						console.warn('skipping related item: '+id+' because we could not resolve the ntiid '+ntiid+' to a book');
+				if (!map[id]) {
+					if (!info || !info.title) {
+						console.warn('skipping related item: ' + id + ' because we could not resolve the ntiid ' + ntiid + ' to a book');
 						return;
 					}
 
@@ -247,7 +247,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				}
 				r = r.nextSibling;
 			}
-			while( r );
+			while (r);
 
 		},this);
 
@@ -256,15 +256,15 @@ Ext.define('NextThought.view.content.reader.Location', {
 	},
 
 
-	relatedItemHandler: function(el){
+	relatedItemHandler: function(el) {
 		var m = el.relatedInfo;
 
-		if(m.type==='index'||m.type==='link') {
+		if (m.type === 'index' || m.type === 'link') {
 			console.log('Resolve the reader');
 			//this.setLocation(m.id);
 		}
-		else if (/http...*/.test(m.href)){
-			Ext.widget('window',{
+		else if (/http...*/.test(m.href)) {
+			Ext.widget('window', {
 				title: m.label,
 				closeAction: 'destroy',
 				width: 646,
@@ -283,23 +283,23 @@ Ext.define('NextThought.view.content.reader.Location', {
 				}
 			}).show();
 		}
-		else if(m.type==='video'){
+		else if (m.type === 'video') {
 			Ext.widget('widget.video-window', {
 				title: m.label,
 				modal: true,
-				src:[{
-					src: getURL(m.root+m.href),
+				src: [{
+					src: getURL(m.root + m.href),
 					type: 'video/mp4'
 				}]
 			}).show();
 
 		}
 		else {
-			console.error('No handler for type:',m.type, m);
+			console.error('No handler for type:', m.type, m);
 		}
 	}
 
 
-}, function(){
-//	ContentAPIRegistry.register('NTIRelatedItemHandler',this.relatedItemHandler,this);
+}, function() {
+  //	ContentAPIRegistry.register('NTIRelatedItemHandler',this.relatedItemHandler,this);
 });

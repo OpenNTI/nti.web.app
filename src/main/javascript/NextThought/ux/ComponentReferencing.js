@@ -8,97 +8,97 @@
  * {@see Ext.app.Controller#getRef()}
  * {@see Ext.app.Controller#hasRef()}
  */
-Ext.define('NextThought.ux.ComponentReferencing',{
+Ext.define('NextThought.ux.ComponentReferencing', {
 	extend: 'Ext.AbstractPlugin',
 	alias: 'plugin.component-referencing',
 
-	init: function(){
+	init: function() {
 		this.callParent(arguments);
 		this.ref(this.getCmp().refs);
 		//console.debug('Registered',this.references);
 	},
 
 
-	destroy: function(){
+	destroy: function() {
 		//meh, nothing to cleanup.
 	},
 
 
 	//<editor-fold desc="Code from Ext.app.Controller">
 	ref: function(refs) {
-        var me = this,
+    var me = this,
 			cmp = me.getCmp(),
             i = 0,
             length = refs.length,
             info, ref, fn;
 
-        refs = Ext.Array.from(refs,false);
+    refs = Ext.Array.from(refs, false);
 
-        me.references = me.references || [];
+    me.references = me.references || [];
 
-        for (i; i < length; i++) {
-            info = refs[i];
-            ref  = info.ref;
-            fn   = 'get' + Ext.String.capitalize(ref);
+    for (i; i < length; i++) {
+      info = refs[i];
+      ref = info.ref;
+      fn = 'get' + Ext.String.capitalize(ref);
 
-            if (!me[fn]) {
-                cmp[fn] = Ext.Function.pass(me.getRef, [ref, info], me);
-            }
-            me.references.push(ref.toLowerCase());
-        }
-    },
+      if (!me[fn]) {
+        cmp[fn] = Ext.Function.pass(me.getRef, [ref, info], me);
+      }
+      me.references.push(ref.toLowerCase());
+    }
+  },
 
-    /**
+  /**
      * Registers one or more {@link #refs references}.
      *
      * @param {Object/Object[]} refs
      */
-    addRef: function(refs) {
-        this.ref(refs);
-    },
+  addRef: function(refs) {
+    this.ref(refs);
+  },
 
-    getRef: function(ref, info, config) {
-        var me = this,
+  getRef: function(ref, info, config) {
+    var me = this,
             refCache = me.refCache = (me.refCache || {}),
             cached = refCache[ref];
 
-        info = info || {};
-        config = config || {};
+    info = info || {};
+    config = config || {};
 
-        Ext.apply(info, config);
+    Ext.apply(info, config);
 
-        if (info.forceCreate) {
-            return Ext.ComponentManager.create(info, 'component');
-        }
+    if (info.forceCreate) {
+      return Ext.ComponentManager.create(info, 'component');
+    }
 
-        if (!cached) {
-            if (info.selector) {
-                refCache[ref] = cached = Ext.ComponentQuery.query(info.selector)[0];
-            }
+    if (!cached) {
+      if (info.selector) {
+        refCache[ref] = cached = Ext.ComponentQuery.query(info.selector)[0];
+      }
 
-            if (!cached && info.autoCreate) {
-                refCache[ref] = cached = Ext.ComponentManager.create(info, 'component');
-            }
+      if (!cached && info.autoCreate) {
+        refCache[ref] = cached = Ext.ComponentManager.create(info, 'component');
+      }
 
-            if (cached) {
-                cached.on('beforedestroy', function() {
-                    refCache[ref] = null;
-                });
-            }
-        }
+      if (cached) {
+        cached.on('beforedestroy', function() {
+          refCache[ref] = null;
+        });
+      }
+    }
 
-        return cached;
-    },
+    return cached;
+  },
 
-    /**
+  /**
      * Returns `true` if a {@link #refs reference} is registered.
      *
      * @return {Boolean}
      */
-    hasRef: function(ref) {
-        var references = this.references;
-        return references && Ext.Array.indexOf(references, ref.toLowerCase()) !== -1;
-    }
+  hasRef: function(ref) {
+    var references = this.references;
+    return references && Ext.Array.indexOf(references, ref.toLowerCase()) !== -1;
+  }
 	//</editor-fold>
 
 });

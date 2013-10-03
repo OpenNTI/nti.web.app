@@ -1,32 +1,32 @@
 Ext.define('NextThought.view.contacts.View', {
-	extend:   'NextThought.view.Base',
-	alias:    'widget.contacts-view-container',
+	extend: 'NextThought.view.Base',
+	alias: 'widget.contacts-view-container',
 	requires: [
 		'NextThought.view.contacts.SubView'
 	],
 
-	title:    'NextThought: Contacts',
+	title: 'NextThought: Contacts',
 
 
 	items: [
 		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: 'Contacts' },
-		{ xtype:      'contact-tab-view', id: 'my-groups',
-			subType:  'group',
-			filterFn: function (group) { return group.hidden!==true && group.isDFL; }
+		{ xtype: 'contact-tab-view', id: 'my-groups',
+			subType: 'group',
+			filterFn: function(group) { return group.hidden !== true && group.isDFL; }
 		},
-		{ xtype:      'contact-tab-view', id: 'my-lists',
-			subType:  'list',
-			filterFn: function (group) { return group.hidden!==true && !group.isDFL; }
+		{ xtype: 'contact-tab-view', id: 'my-lists',
+			subType: 'list',
+			filterFn: function(group) { return group.hidden !== true && !group.isDFL; }
 		}
 	],
 
 	layout: {
-		type:           'card',
+		type: 'card',
 		deferredRender: true
 	},
 
 	defaultType: 'box',
-	activeItem:  0,
+	activeItem: 0,
 
 
 	tabSpecs: [
@@ -36,14 +36,14 @@ Ext.define('NextThought.view.contacts.View', {
 	],
 
 
-	updateActiveState: function (type, ntiid) {
+	updateActiveState: function(type, ntiid) {
 		var state = {};
 		state['current_' + type] = ntiid;
 		this.pushState(state);
 	},
 
 
-	onTabClicked: function (tabSpec) {
+	onTabClicked: function(tabSpec) {
 		var active = this.layout.getActiveItem(),
 				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
 				vId = targetView[1],
@@ -57,7 +57,7 @@ Ext.define('NextThought.view.contacts.View', {
 
 		if (needsChanging) {
 			this.setActiveTab(vId);
-//			this.pushState({activeTab: vId});
+    //			this.pushState({activeTab: vId});
 		} else if (reset) {
 			console.log('ignore reset');
 		}
@@ -65,17 +65,17 @@ Ext.define('NextThought.view.contacts.View', {
 		return true;
 	},
 
-//	pushState: function(s){
-//		history.pushState({content: s}, this.title, this.getFragment());
-//	},
+  //	pushState: function(s){
+  //		history.pushState({content: s}, this.title, this.getFragment());
+  //	},
 
 
-	getTabs: function () {
+	getTabs: function() {
 		var tabs = this.tabSpecs,
 			active = this.layout.getActiveItem(),
 			activeId = active && active.id;
 
-		Ext.each(tabs, function (t) {
+		Ext.each(tabs, function(t) {
 			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
 
 		});
@@ -84,32 +84,32 @@ Ext.define('NextThought.view.contacts.View', {
 	},
 
 
-	setActiveTab: function (tab) {
+	setActiveTab: function(tab) {
 		if (this.rendered) {
 			this.layout.setActiveItem(tab || 'my-contacts');
 			this.setTitle(this.getTitlePrefix());
 		} else {
-			this.on('afterrender', function () {
+			this.on('afterrender', function() {
 				this.layout.setActiveItem(tab);
 			}, this);
 		}
 	},
 
 
-	getTitlePrefix: function () {
+	getTitlePrefix: function() {
 		return 'NextThought: Contacts';
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		var me = this;
 
 		me.callParent(arguments);
-//		me.tabs = me.down('contacts-tabs');
-//		me.mon(me.tabs, 'tabchange', me.monitorTabs, me);
-//		me.on('resize', function () {
-//			me.tabs.setHeight(me.getHeight());
-//		});
+    //		me.tabs = me.down('contacts-tabs');
+    //		me.mon(me.tabs, 'tabchange', me.monitorTabs, me);
+    //		me.on('resize', function () {
+    //			me.tabs.setHeight(me.getHeight());
+    //		});
 
 		this.removeCls('make-white');
 
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.contacts.View', {
 	},
 
 
-	monitorTabs: function (panel, newTab, oldTab) {
+	monitorTabs: function(panel, newTab, oldTab) {
 		if (this.restoring) {
 			return;
 		}
@@ -133,17 +133,17 @@ Ext.define('NextThought.view.contacts.View', {
 	},
 
 
-	restore: function (state) {
+	restore: function(state) {
 		this.fireEvent('finished-restore');
 
-//		var myState = state[this.getId()], tab;
-//		if (myState && myState.source) {
-//			tab = this.down('[source="' + myState.source + '"]');
-//			this.restoring = true;
-//			this.tabs.setActiveTab(tab);
-//			delete this.restoring;
-//			this.updateLayout();
-//		}
+    //		var myState = state[this.getId()], tab;
+    //		if (myState && myState.source) {
+    //			tab = this.down('[source="' + myState.source + '"]');
+    //			this.restoring = true;
+    //			this.tabs.setActiveTab(tab);
+    //			delete this.restoring;
+    //			this.updateLayout();
+    //		}
 	}
 });
 

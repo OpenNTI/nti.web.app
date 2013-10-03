@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.store.purchase.DetailView',{
+Ext.define('NextThought.view.store.purchase.DetailView', {
 	extend: 'Ext.Component',
 	alias: 'widget.purchase-detailview',
 
@@ -23,35 +23,35 @@ Ext.define('NextThought.view.store.purchase.DetailView',{
 
 	ordinal: 0,
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.setupRenderData();
 
-		if(this.record.get('Activated')){
+		if (this.record.get('Activated')) {
 			this.checkboxLabel = null;
 		}
 	},
 
 
-	setupRenderData: function(){
+	setupRenderData: function() {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			Description: this.record.get('Description')
 		});
 	},
 
 
-	onConfirm: function(win, activationCode, checkState){
+	onConfirm: function(win, activationCode, checkState) {
 		var code = (activationCode || '').trim();
-		if(checkState && code){
+		if (checkState && code) {
 			this.fireEvent('purchase-with-activation', this, this.record, code);
 		}
-		else{
+		else {
 			this.fireEvent('show-purchase-form', this, this.record);
 		}
 	},
 
 
-	onCheckboxLinkClicked: function(){
+	onCheckboxLinkClicked: function() {
 		console.log('show help for what is an activation key...');
 	}
 });

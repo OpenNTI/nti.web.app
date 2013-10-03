@@ -9,7 +9,7 @@ Ext.define('NextThought.util.Format', {
 	},
 
 
-	currency: function(value, currency){
+	currency: function(value, currency) {
 		var info = this.currencyInfo[currency] || {},
 			sign = info.sign || currency,
 			decimals = info.decimals,
@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Format', {
 		return Ext.util.Format.currency(value, sign, decimals, end);
 	}
 
-},function(){
+},function() {
 	window.NTIFormat = this;
-	Ext.util.Format.ntiCurrency = Ext.bind( NTIFormat.currency, NTIFormat);
+	Ext.util.Format.ntiCurrency = Ext.bind(NTIFormat.currency, NTIFormat);
 });

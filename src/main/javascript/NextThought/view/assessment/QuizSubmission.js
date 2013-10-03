@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.QuizSubmission',{
+Ext.define('NextThought.view.assessment.QuizSubmission', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',
 	requires: [
@@ -17,8 +17,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	 */
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
-			{tag: 'a', href:'#', cls: 'reset', html: 'Cancel'},
-			{tag: 'a', href:'#', cls: 'submit tabable disabled', html: 'I\'m Finished!'}
+			{tag: 'a', href: '#', cls: 'reset', html: 'Cancel'},
+			{tag: 'a', href: '#', cls: 'submit tabable disabled', html: 'I\'m Finished!'}
 		] },
 		{ cls: 'status' }
 	]),
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		submitBtn: '.submit'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		var answeredMap = {};
 
 		this.callParent(arguments);
@@ -41,42 +41,42 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 			'graded': this.graded
 		});
 
-		Ext.each(this.questionSet.get('questions'),function(q){
+		Ext.each(this.questionSet.get('questions'), function(q) {
 			answeredMap[q.getId()] = false;
 		});
 
 		this.answeredMap = answeredMap;
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.resetBtn.hide();
 		this.reflectStateChange();
-		this.mon(this.resetBtn,'click',this.resetClicked,this);
-		this.mon(this.submitBtn,'click',this.submitClicked,this);
+		this.mon(this.resetBtn, 'click', this.resetClicked, this);
+		this.mon(this.submitBtn, 'click', this.submitClicked, this);
 		var r = this.resetBtn,
 			s = this.submitBtn,
 			t = this.tabIndexTracker;
-		setTimeout(function(){
-			s.set({tabIndex:t.getNext()});
-			r.set({tabIndex:t.getNext()});
+		setTimeout(function() {
+			s.set({tabIndex: t.getNext()});
+			r.set({tabIndex: t.getNext()});
 		},1);
 	},
 
-	isActive: function(){
+	isActive: function() {
 		return this.state === 'active';
 	},
 
-	isSubmitted: function(){
+	isSubmitted: function() {
 		return this.state === 'submitted';
 	},
 
-	isReady: function(){
+	isReady: function() {
 		return !this.isActive() && !this.isSubmitted;
 	},
 
-	moveToActive: function(){
-		if(this.isActive()){
+	moveToActive: function() {
+		if (this.isActive()) {
 			return;
 		}
 		console.log('New status is active');
@@ -87,8 +87,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		this.submitBtn.removeCls('disabled');
 	},
 
-	moveToSubmitted: function(){
-		if(this.isSubmitted()){
+	moveToSubmitted: function() {
+		if (this.isSubmitted()) {
 			return;
 		}
 		console.log('New status is submitted');
@@ -100,8 +100,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		this.submitBtn.removeCls('disabled');
 	},
 
-	moveToReady: function(){
-		if(this.isReady()){
+	moveToReady: function() {
+		if (this.isReady()) {
 			return;
 		}
 		console.log('New status is ready');
@@ -109,15 +109,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		delete this.submitted;
 	},
 
-	transitionToActive: function(){
-		if(this.isSubmitted()){
+	transitionToActive: function() {
+		if (this.isSubmitted()) {
 			this.maybeDoReset(true);
 		}
 		this.moveToActive();
 	},
 
-	updateStatus: function(question, part, status, enabling){
-		if(enabling){
+	updateStatus: function(question, part, status, enabling) {
+		if (enabling) {
 			this.transitionToActive();
 		}
 		this.answeredMap[question.getId()] = Boolean(status);
@@ -125,33 +125,33 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	},
 
 
-	reflectStateChange: function(){
+	reflectStateChange: function() {
 		var unanswered = 0;
-		if(!this.rendered){ return; }
+		if (!this.rendered) { return; }
 
-		Ext.Object.each(this.answeredMap,function(k,v){ if(!v){unanswered++;} });
-		this.statusMessage.update(unanswered===0
+		Ext.Object.each(this.answeredMap, function(k,v) { if (!v) {unanswered++;} });
+		this.statusMessage.update(unanswered === 0
 				? 'All questions answered'
-				: Ext.String.format('{0} questions unanswered',unanswered)
+				: Ext.String.format('{0} questions unanswered', unanswered)
 		);
 
-		this.statusMessage[((unanswered===0)?'add':'remove')+'Cls']('ready');
+		this.statusMessage[((unanswered === 0) ? 'add' : 'remove') + 'Cls']('ready');
 	},
 
 
-	reset: function(){
+	reset: function() {
 		this.moveToReady();
 	},
 
 
-	graded: function(){
+	graded: function() {
 		this.moveToSubmitted();
 	},
 
 
-	maybeDoReset: function(keepAnswers){
+	maybeDoReset: function(keepAnswers) {
 		var q = this.questionSet;
-		if( q.fireEvent('beforereset') ){
+		if (q.fireEvent('beforereset')) {
 			q.fireEvent('reset', keepAnswers);
 			console.log('fired reset');
 			return true;
@@ -161,53 +161,53 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		return false;
 	},
 
-	resetBasedOnButtonClick: function(e){
+	resetBasedOnButtonClick: function(e) {
 		//If we are in a submitted state we want to reset things
-		if(this.maybeDoReset(true)){
+		if (this.maybeDoReset(true)) {
 			this.reader.scrollTo(0);
 		}
 
-		if( e ){
+		if (e) {
 			e.stopEvent();
 			return false;
 		}
 	},
 
-	resetClicked: function(e){
-		if(this.isSubmitted()){
+	resetClicked: function(e) {
+		if (this.isSubmitted()) {
 			return this.resetBasedOnButtonClick(e);
 		}
 
 		this.maybeDoReset(false);
 
-		if( e ){
+		if (e) {
 			e.stopEvent();
 			return false;
 		}
 	},
 
 
-	submitClicked: function( e ){
+	submitClicked: function(e ) {
 		var q = this.questionSet,
 			submission = {};
 
-		if(!this.submitBtn || this.submitBtn.hasCls('disabled')){
+		if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
 			e.stopEvent();
 			return false;
 		}
 
-		if(this.isSubmitted()){
+		if (this.isSubmitted()) {
 			return this.resetBasedOnButtonClick(e);
 		}
 
-		if( !q.fireEvent('beforesubmit',q,submission) ){
+		if (!q.fireEvent('beforesubmit', q, submission)) {
 			console.log('submit aborted');
 			return;
 		}
 
-		this.fireEvent('grade-it',this,q,submission);
+		this.fireEvent('grade-it', this, q, submission);
 
-		if( e ){
+		if (e) {
 			e.stopEvent();
 			return false;
 		}
@@ -215,12 +215,12 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 
-	setGradingResult: function(assessedQuestionSet){
-		this.questionSet.fireEvent('graded',assessedQuestionSet);
+	setGradingResult: function(assessedQuestionSet) {
+		this.questionSet.fireEvent('graded', assessedQuestionSet);
 	},
 
 
-	syncTop: function(){
+	syncTop: function() {
 		this.show();
 		this.callParent();
 	}

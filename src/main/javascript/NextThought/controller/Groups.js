@@ -34,7 +34,7 @@ Ext.define('NextThought.controller.Groups', {
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
 
 
-	init: function () {
+	init: function() {
 		var flStore = this.getFriendsListStore(),
 			piStore = this.getPresenceInfoStore();//reduce this coupling?
 
@@ -56,23 +56,23 @@ Ext.define('NextThought.controller.Groups', {
 		this.listen({
 			component: {
 				'*': {
-					'add-contact':       'addContact',
-					'add-contacts':      'addContacts',
-					'add-group':         'addGroup',
-					'delete-group':      'deleteGroup',
-					'delete-contact':    'deleteContact',
-					'leave-group':       'leaveGroup',
-					'remove-contact':    'removeContact',
-					'get-group-code':    'getGroupCode',
+					'add-contact': 'addContact',
+					'add-contacts': 'addContacts',
+					'add-group': 'addGroup',
+					'delete-group': 'deleteGroup',
+					'delete-contact': 'deleteContact',
+					'leave-group': 'leaveGroup',
+					'remove-contact': 'removeContact',
+					'get-group-code': 'getGroupCode',
 					'create-group-code': 'createGroupAndCode',
-					'create-list':       'addList'
+					'create-list': 'addList'
 				}
 			}
 		});
 	},
 
 
-	onSessionReady: function () {
+	onSessionReady: function() {
 		var store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
 			coll = $AppConfig.service.getCollectionFor(mime, 'FriendsLists');
@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		store.on({
 			scope: this,
-			load:  'friendsListsLoaded'
+			load: 'friendsListsLoaded'
 		});
 
 		store.proxy.url = getURL(coll.href);
@@ -94,7 +94,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	getListStore: function (id) {
+	getListStore: function(id) {
 		var prefix = 'FriendsListStore:',
 			pid = prefix + id;
 
@@ -110,7 +110,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	getMyContactsId: function () {
+	getMyContactsId: function() {
 		if (!this.myContactsId) {
 			this.myContactsId = Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN, $AppConfig.username);
 		}
@@ -118,7 +118,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	ensureContactsGroup: function (store, records, success) {
+	ensureContactsGroup: function(store, records, success) {
 		var id = this.getMyContactsId(),
 			rec, contacts, me = this;
 
@@ -129,7 +129,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		rec = store.findRecord('Username', id, 0, false, true, true);
 		if (!rec) {
-			me.createGroupUnguarded('My Contacts', id, store.getContacts(), function (success, rec) {
+			me.createGroupUnguarded('My Contacts', id, store.getContacts(), function(success, rec) {
 				rec.hidden = true;
 				me.setContactGroup(rec);
 			});
@@ -141,24 +141,24 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	setContactGroup: function(record){
+	setContactGroup: function(record) {
 		this.contactGroup = record;
 		var store = this.getFriendsListStore();
 		store.suspendEvents(false);
-		store.filter(function(rec){return !rec.hidden;});
+		store.filter(function(rec) {return !rec.hidden;});
 		store.resumeEvents();
 		store.fireEvent('refilter');
 	},
 
 
-	getContactGroup: function(){
+	getContactGroup: function() {
 		var contactsId = this.getMyContactsId(),
 			store = this.getFriendsListStore();
 		return this.contactGroup || store.findRecord('Username', contactsId, 0, false, true, true);
 	},
 
 
-	friendsListsLoaded: function (listStore, records) {
+	friendsListsLoaded: function(listStore, records) {
 		var me = this,
 			store,
 			cid = me.getMyContactsId();
@@ -194,7 +194,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	escapeGroupName: function (name) {
+	escapeGroupName: function(name) {
 		//Dataserver blows chunks if on @@ or @( at the beginning
 		//look for these things and yank them out.  This was happening
 		//when manipulating the list by the object url (say for deletion).
@@ -203,19 +203,19 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	generateUsername: function (newGroupName) {
+	generateUsername: function(newGroupName) {
 		return this.escapeGroupName(newGroupName) + '-' + $AppConfig.username + '_' + guidGenerator();
 	},
 
 
-	addGroup: function (newGroupName, friends, callback, scope) {
+	addGroup: function(newGroupName, friends, callback, scope) {
 		var username = this.generateUsername(newGroupName);
 
 		this.createGroupUnguarded(newGroupName, username, friends || [], callback, scope || this);
 	},
 
 
-	createFriendsListUnguarded: function (displayName, username, friends, dynamic, callback, errorCallback, scope) {
+	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
 			rec = me.getFriendsListModel().create(),
 			store = me.getFriendsListStore();
@@ -229,14 +229,14 @@ Ext.define('NextThought.controller.Groups', {
 		rec.set('friends', friends || []);
 		rec.set('IsDynamicSharing', !!dynamic);
 		rec.save({
-			scope:   me,
-			success: function (record, operation) {
+			scope: me,
+			success: function(record, operation) {
 				Ext.callback(callback, scope, [true, record, operation]);
 				var newStore = me.getListStore(username);
 				record.storeId = newStore.storeId;
-				Ext.defer(function () {store.add(record);}, 500);
+				Ext.defer(function() {store.add(record);}, 500);
 			},
-			failed:  function (record, operation, response) {
+			failed: function(record, operation, response) {
 				if (errorCallback) {
 					Ext.callback(errorCallback, scope, [record, operation, response]);
 				}
@@ -248,24 +248,24 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	createGroupUnguarded: function (displayName, username, friends, callback, scope, error) {
+	createGroupUnguarded: function(displayName, username, friends, callback, scope, error) {
 		this.createFriendsListUnguarded(displayName, username, friends, false, callback, error, scope);
 	},
 
 
-	createDFLUnguarded: function (displayName, username, friends, callback, error, scope) {
+	createDFLUnguarded: function(displayName, username, friends, callback, error, scope) {
 		this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
 	},
 
 
-	deleteGroup: function (record) {
+	deleteGroup: function(record) {
 		if (record.get('Username') !== this.getMyContactsId()) {
 			record.destroy();
 		}
 	},
 
 
-	addContact: function (username, groupList, callback) {
+	addContact: function(username, groupList, callback) {
 		var contactsId = this.getMyContactsId(),
 			contacts = this.getContactGroup(),
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList), //why not a simple counter here
@@ -283,7 +283,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		function revertEditOnError(group, oldValue) {
-			return function () {
+			return function() {
 				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 				group.set('friends', oldValue);
 			};
@@ -299,7 +299,7 @@ Ext.define('NextThought.controller.Groups', {
 			contacts.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(contacts, oldContacts));
 		}
 
-		Ext.each(groupList, function (g) {
+		Ext.each(groupList, function(g) {
 			var oldValue;
 			if (g.get('Username') !== contactsId && !g.hasFriend(username)) {
 				oldValue = g.get('friends').slice();
@@ -313,13 +313,13 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	addContacts: function (users, finish) {
+	addContacts: function(users, finish) {
 		var contacts = this.getContactGroup(),
 			oldContacts, newContacts;
 
 
 		function revertEditOnError(group, oldValue) {
-			return function () {
+			return function() {
 				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 				group.set('friends', oldValue);
 				Ext.callback(finish, null, [false]);
@@ -332,7 +332,7 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		Ext.each(users, function (u, i, a) {
+		Ext.each(users, function(u, i, a) {
 			a[i] = (!u || !u.isModel) ? u : u.get('Username');
 		});
 
@@ -345,13 +345,13 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	deleteContact: function (user, groups, callback) {
+	deleteContact: function(user, groups, callback) {
 		var username = (user && user.isModel) ? user.get('Username') : user;
 		this.removeContact(null, username, callback);
 	},
 
 
-	removeContact: function (record, contact, callback) {
+	removeContact: function(record, contact, callback) {
 		var store = this.getFriendsListStore(),
 				userId = typeof contact === 'string' ? contact : contact.get('Username'),
 				count = Globals.getAsynchronousTaskQueueForList(store.getCount()); //Again with the funky task queue
@@ -363,7 +363,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		function revertEditOnError(group, oldValue) {
-			return function () {
+			return function() {
 				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 				group.set('friends', oldValue);
 			};
@@ -385,7 +385,7 @@ Ext.define('NextThought.controller.Groups', {
 			remove(record);
 		}
 		else {
-			store.eachUnfiltered(function (g) {
+			store.eachUnfiltered(function(g) {
 				//Removing a contact shouldn't remove them from dfls
 				if (!g.isDFL) {
 					remove(g);
@@ -398,7 +398,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	fetchGroupCode: function (record, displayName, success, onError) {
+	fetchGroupCode: function(record, displayName, success, onError) {
 		var link = record.getLink('default-trivial-invitation-code'), req;
 
 		if (!link) {
@@ -407,13 +407,13 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		req = {
-			 url:      link,
-			 scope:    this,
-			 method:   'GET',
-			 headers:  {
+			 url: link,
+			 scope: this,
+			 method: 'GET',
+			 headers: {
 				 Accept: 'application/json'
 			 },
-			 callback: function (q, s, r) {
+			 callback: function(q, s, r) {
 				 console.log(r.responseText);
 				 var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
 				 if (s) {
@@ -433,7 +433,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	getGroupCode: function (record) {
+	getGroupCode: function(record) {
 		var dn = record.get('displayName');
 
 		function onSuccess(code) {
@@ -449,7 +449,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	createGroupAndCode: function (btn) {
+	createGroupAndCode: function(btn) {
 		function handleError(errorText) {
 			console.error('An error occured', errorText);
 			w.showError(errorText);
@@ -464,7 +464,7 @@ Ext.define('NextThought.controller.Groups', {
 			if (msg) {
 				//get the error from the error util
 				if (field) {
-					msg = msg.replace(field, "Group Name");
+					msg = msg.replace(field, 'Group Name');
 				}
 			}
 
@@ -509,7 +509,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	addList: function (btn) {
+	addList: function(btn) {
 
 		function handleError(errorText) {
 			console.error('An error occured', errorText);
@@ -524,7 +524,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			if (msg) {
 				if (field) {
-					msg = msg.replace(field, "List name");
+					msg = msg.replace(field, 'List name');
 				}
 			}
 			msg = NTIError.getError(code, {'name': 'List name'}, msg);
@@ -553,7 +553,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	leaveGroup: function (record) {
+	leaveGroup: function(record) {
 		//onSuccess instead of reloading the whole store
 		//lets try and just remove the one thing we need
 		function success(result) {
@@ -572,13 +572,13 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		req = {
-			url:      link,
-			scope:    this,
-			method:   'DELETE',
-			headers:  {
+			url: link,
+			scope: this,
+			method: 'DELETE',
+			headers: {
 				Accept: 'application/json'
 			},
-			callback: function (q, s, r) {
+			callback: function(q, s, r) {
 				console.log(r.responseText);
 				var result, errorText = 'An error occurred leaving  ' + dn;
 				if (s) {

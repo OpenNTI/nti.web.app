@@ -1,21 +1,21 @@
 Ext.define('NextThought.view.menus.Settings', {
-	extend:        'Ext.menu.Menu',
-	alias:         'widget.settings-menu',
-	requires:      [
+	extend: 'Ext.menu.Menu',
+	alias: 'widget.settings-menu',
+	requires: [
 		'NextThought.view.menus.Presence'
 	],
 	cls: 'user-settings-menu',
-	ui:            'nt',
-	plain:         true,
+	ui: 'nt',
+	plain: true,
 	showSeparator: false,
-	shadow:        false,
-	frame:         false,
-	border:        false,
-	hideMode:      'display',
-	width:         260,
+	shadow: false,
+	frame: false,
+	border: false,
+	hideMode: 'display',
+	width: 260,
 
 	defaults: {
-		ui:    'nt-menuitem',
+		ui: 'nt-menuitem',
 		xtype: 'menuitem',
 		plain: true
 	},
@@ -25,7 +25,7 @@ Ext.define('NextThought.view.menus.Settings', {
 		'mouseleave': 'startHide'
 	},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		//setup fields:
@@ -67,13 +67,13 @@ Ext.define('NextThought.view.menus.Settings', {
 		this.add(items);
 	},
 
-	startHide: function () {
+	startHide: function() {
 		this.cancelHide();
 
 		this.hideTimeout = Ext.defer(this.hide, 500, this);
 	},
 
-	cancelHide: function () {
+	cancelHide: function() {
 		clearTimeout(this.hideTimeout);
 	}
 

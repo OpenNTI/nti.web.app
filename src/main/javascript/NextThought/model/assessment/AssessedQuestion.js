@@ -11,11 +11,11 @@ Ext.define('NextThought.model.assessment.AssessedQuestion', {
 	],
 
 
-	isCorrect: function(){
-		var p = this.get('parts')||[];
-		var i = p.length-1;
-		for(; i>=0; i--){
-			if(!p[i].isCorrect()){
+	isCorrect: function() {
+		var p = this.get('parts') || [];
+		var i = p.length - 1;
+		for (; i >= 0; i--) {
+			if (!p[i].isCorrect()) {
 				return false;
 			}
 		}

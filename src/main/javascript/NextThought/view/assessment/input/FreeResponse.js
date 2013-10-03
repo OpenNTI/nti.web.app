@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.input.FreeResponse',{
+Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-freeresponsepart',
 
@@ -15,7 +15,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
@@ -24,24 +24,24 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
-	afterRender: function(){
-		this.solutionAnswerBox.insertFirst(['Answer: ',{tag: 'span'}]);
+	afterRender: function() {
+		this.solutionAnswerBox.insertFirst(['Answer: ', {tag: 'span'}]);
 		this.solutionAnswerBox = this.solutionAnswerBox.down('span');
 
 		this.callParent(arguments);
 
 		this.setupAnswerLabel(this.part.get('answerLabel'));
 
-		this.mon(this.inputField,{
+		this.mon(this.inputField, {
 			scope: this,
-			blur: function(e,dom){dom.setAttribute('placeholder','Answer');},
-			focus: function(e,dom){dom.removeAttribute('placeholder');},
-			keyup: function(e,dom){
-				if(dom.value===''){ this.disableSubmission(); }
+			blur: function(e,dom) {dom.setAttribute('placeholder', 'Answer');},
+			focus: function(e,dom) {dom.removeAttribute('placeholder');},
+			keyup: function(e,dom) {
+				if (dom.value === '') { this.disableSubmission(); }
 				else { this.enableSubmission(); }
 			},
 			keydown: this.keyFilter,
-			paste: function(e){
+			paste: function(e) {
 				e.stopEvent();
 				return false;
 			}
@@ -49,47 +49,47 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
-	setupAnswerLabel: function(label){
-		if(!label){return;}
+	setupAnswerLabel: function(label) {
+		if (!label) {return;}
 
 		var i = this.inputField,
 			el = this.answerLabelEl =
-			Ext.DomHelper.append(this.inputBox, {cls:'label',html:label},true);
+			Ext.DomHelper.append(this.inputBox, {cls: 'label', html: label},true);
 
 		el.hide();
 
-		function show(){
+		function show() {
 			var l, m = new Ext.util.TextMetrics();
 			m.bind(i);
-			l = 10+m.getWidth(i.getValue());
+			l = 10 + m.getWidth(i.getValue());
 
 			m.destroy();
-			el.setStyle({left: l+'px'});
+			el.setStyle({left: l + 'px'});
 			el.show();
 		}
 
-		this.mon(i,{
+		this.mon(i, {
 			scope: this,
-			blur: function(){ el.hide(); },
+			blur: function() { el.hide(); },
 			focus: show,
 			keyup: show
 		});
 	},
 
 
-	keyFilter: function(e,dom){
-		if(e.getKey()=== e.ENTER){
+	keyFilter: function(e,dom) {
+		if (e.getKey() === e.ENTER) {
 			this.submitOrTabNext(dom);
 			e.stopEvent();
 			return false;
 		}
 	},
 
-	canHaveAnswerHistory: function(){
+	canHaveAnswerHistory: function() {
 		return this.questionSet ? false : true;
 	},
 
-	getValue: function(){
+	getValue: function() {
 		return this.inputField.getValue();
 	},
 
@@ -99,25 +99,25 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
-	markCorrect: function(){
+	markCorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('incorrect').addCls('correct');
-		this.inputField.set({readOnly:true});
+		this.inputField.set({readOnly: true});
 	},
 
 
-	markIncorrect: function(){
+	markIncorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('correct').addCls('incorrect');
-		this.inputField.set({readOnly:true});
+		this.inputField.set({readOnly: true});
 	},
 
 
-	reset: function(){
+	reset: function() {
 		this.callParent(arguments);
-		this.inputBox.removeCls(['incorrect','correct']);
+		this.inputBox.removeCls(['incorrect', 'correct']);
 		this.inputField.dom.removeAttribute('readOnly');
 		this.inputField.dom.value = '';
-//		this.inputField.focus();
+    //		this.inputField.focus();
 	}
 });

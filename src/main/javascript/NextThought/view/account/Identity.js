@@ -1,18 +1,18 @@
 //SCSS defined _identity.scss
 Ext.define('NextThought.view.account.Identity', {
 	extend: 'Ext.Component',
-	alias:  'widget.identity',
+	alias: 'widget.identity',
 
 	requires: [
 		'NextThought.view.menus.Settings'
 	],
-	mixins:   {
+	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks'
 	},
 
 	profileLinkCard: false,
 
-	cls:      'identity',
+	cls: 'identity',
 	autoShow: true,
 	floating: true,
 
@@ -23,12 +23,12 @@ Ext.define('NextThought.view.account.Identity', {
 			]),
 
 	renderSelectors: {
-		avatar:   'img.avatar',
+		avatar: 'img.avatar',
 		presence: '.presence'
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, $AppConfig.userObject.data);
 		this.menu = Ext.widget({xtype: 'settings-menu'});
@@ -37,11 +37,11 @@ Ext.define('NextThought.view.account.Identity', {
 	},
 
 
-	monitorUser: function (u) {
+	monitorUser: function(u) {
 		var me = this, m = {
 			scope: this,
 			destroyable: true,
-			'changed': function (r) {
+			'changed': function(r) {
 				me.avatar.set({ src: r.get('avatarURL'), 'data-qtip': r.getName() });
 				me.monitorUser((r !== u) ? r : null);
 			}
@@ -59,13 +59,13 @@ Ext.define('NextThought.view.account.Identity', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		this.callParent(arguments);
 		this.monitorUser(this.user);
 		this.mon(this.el, {
 			'mouseover': 'startToShowMenu',
-			'mouseout':  'startToHideMenu'
+			'mouseout': 'startToHideMenu'
 		});
 
 		this.mon(this.menu, 'mouseenter', 'cancelHideShowEvents');
@@ -76,37 +76,37 @@ Ext.define('NextThought.view.account.Identity', {
 			// Prevent the save/copy image menu from appearing
 			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
 			// Prevent the status menu from appearing after a click
-			this.el.down('img').dom.addEventListener('click', function (e) {
+			this.el.down('img').dom.addEventListener('click', function(e) {
 				me.cancelHideShowEvents();
 			});
 		}
 	},
 
 
-	cancelHideShowEvents: function () {
+	cancelHideShowEvents: function() {
 		clearTimeout(this.showTimout);
 		clearTimeout(this.hideTimout);
 	},
 
 
-	startToShowMenu: function () {
+	startToShowMenu: function() {
 		var me = this;
 
 		this.cancelHideShowEvents();
 
-		this.showTimout = setTimeout(function () {
+		this.showTimout = setTimeout(function() {
 			me.menu.showBy(me.el, 'tr-br', [0, 0]);
 		}, 500);
 	},
 
 
-	startToHideMenu: function () {
+	startToHideMenu: function() {
 		var me = this;
 
 		this.cancelHideShowEvents();
 
 		if (!Ext.is.iPad || this.menu.isHidden()) { // On iPad, don't hide menu if it's already shown
-			this.hideTimout = setTimeout(function () {
+			this.hideTimout = setTimeout(function() {
 				me.menu.hide();
 			}, 500);
 		}

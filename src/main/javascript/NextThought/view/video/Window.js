@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.video.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.video-window',
-	requires: [ 'NextThought.view.video.Panel' ],
+	requires: ['NextThought.view.video.Panel'],
 	/*
 		src:
 		[
@@ -18,27 +18,27 @@ Ext.define('NextThought.view.video.Window', {
 		]
 	 */
 
-	constructor: function(config){
-		if(!config || !config.src || !Ext.isArray(config.src)){
+	constructor: function(config) {
+		if (!config || !config.src || !Ext.isArray(config.src)) {
 			throw 'you must supply a src array';
 		}
 
 		config = Ext.applyIf(config, {
-			animCollapse   : false,
-			title  : 'Video Window',
-			width  : 740,
-			height : 480,
-			shim   : false,
-			border : false,
-			layout : 'fit'
+			animCollapse: false,
+			title: 'Video Window',
+			width: 740,
+			height: 480,
+			shim: false,
+			border: false,
+			layout: 'fit'
 		});
 
 		config.items = [{
 			xtype: 'video',
 			src: config.src,
 			autobuffer: true,
-			autoplay : true,
-			controls : true
+			autoplay: true,
+			controls: true
 		}];
 
 		this.callParent([config]);

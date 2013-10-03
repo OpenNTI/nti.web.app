@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.DateMenu',{
+Ext.define('NextThought.view.assessment.DateMenu', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.assessment-date-menu',
 	ui: 'nt',
@@ -18,7 +18,7 @@ Ext.define('NextThought.view.assessment.DateMenu',{
 
 	setResults: function(results) {
 		var items = [];
-		Ext.each(results, function(value, index){
+		Ext.each(results, function(value, index) {
 			items.push(this.getMenuItem(value, (index === 0)));
 		}, this);
 		this.removeAll(true);
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.assessment.DateMenu',{
 	},
 
 
-	addResult: function(assessment){
+	addResult: function(assessment) {
 		//create a new menu item for this:
 		this.insert(0, this.getMenuItem(assessment, true));
 	},
@@ -43,16 +43,16 @@ Ext.define('NextThought.view.assessment.DateMenu',{
 
 
 	formatLabel: function(assessment) {
-		if (assessment){ return Ext.Date.format(assessment.get('Last Modified'), 'm/d/y g:ia'); }
+		if (assessment) { return Ext.Date.format(assessment.get('Last Modified'), 'm/d/y g:ia'); }
 		return '';
 	},
 
 
-	getSelectedText: function(){
+	getSelectedText: function() {
 		return this.formatLabel(this.down('[checked=true]').assessment);
 	},
 
-	getSelectedAssessment: function(item){
-		return (item||this.down('[checked=true]')).assessment;
+	getSelectedAssessment: function(item) {
+		return (item || this.down('[checked=true]')).assessment;
 	}
 });

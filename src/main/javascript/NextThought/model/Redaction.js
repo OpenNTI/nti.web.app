@@ -15,7 +15,7 @@ Ext.define('NextThought.model.Redaction', {
 
 		DEFAULT_TEXT: '<big>***</big>',
 
-		createFromHighlight: function(hl, block){
+		createFromHighlight: function(hl, block) {
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
 				sharedWith: [],
@@ -24,8 +24,8 @@ Ext.define('NextThought.model.Redaction', {
 				selectedText: hl.get('selectedText'),
 				applicableRange: hl.get('applicableRange'),
 				replacementContent: this.DEFAULT_TEXT,
-//				style: block? 'block':'inline',
-				redactionExplanation: block? 'Why was this redacted?' : null
+        //				style: block? 'block':'inline',
+				redactionExplanation: block ? 'Why was this redacted?' : null
 			});
 		}
 	},

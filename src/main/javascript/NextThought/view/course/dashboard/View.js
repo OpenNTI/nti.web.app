@@ -6,17 +6,17 @@ Ext.define('NextThought.view.course.dashboard.View', {
 		'NextThought.view.course.dashboard.tiles.*'
 	],
 
-	mixins:{
+	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.initCustomScrollOn('content');
 	},
 
 
-	onCourseChanged: function (pageInfo) {
+	onCourseChanged: function(pageInfo) {
 		if (!pageInfo.isPartOfCourse()) {
 			this.tileContainer.removeAll(true);
 			return;
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.course.dashboard.View', {
 			this.queryTiles(
 				date, course, l,
 				courseNavStore.getCurrentBy(date),
-				function (tiles) {
+				function(tiles) {
 					try {
 						me.setTiles(tiles);
 					}
@@ -72,14 +72,14 @@ Ext.define('NextThought.view.course.dashboard.View', {
 	 * @param {Function} callback
 	 * @param {Array} callback.tiles
 	 */
-	queryTiles: function (date, course, location, courseNode, callback) {
+	queryTiles: function(date, course, location, courseNode, callback) {
 		var NS = NextThought.view.course.dashboard.tiles,
 			tiles = [],
 			queue = [],
 			me = this,
 			push = tiles.push;
 
-		Ext.Object.each(NS, function (clsName, cls) {
+		Ext.Object.each(NS, function(clsName, cls) {
 			var fn = cls.getTileFor;
 			if (fn) {
 				fn = Ext.bind(fn, cls);
@@ -89,17 +89,17 @@ Ext.define('NextThought.view.course.dashboard.View', {
 		});
 
 
-		if(!courseNode){
+		if (!courseNode) {
 			console.warn('No course node');
-			Ext.callback(callback,me,[tiles]);
+			Ext.callback(callback, me, [tiles]);
 			return;
 		}
 
 
-		Ext.each(queue.slice(), function (fn) {
-			console.log(fn.$test + " Started");
+		Ext.each(queue.slice(), function(fn) {
+			console.log(fn.$test + ' Started');
 			fn(date, course, location, courseNode, function finish(o) {
-				console.log(fn.$test + " Finished");
+				console.log(fn.$test + ' Finished');
 				queue.pop();
 				if (o) {
 					push[Ext.isArray(o) ? 'apply' : 'call'](tiles, o);

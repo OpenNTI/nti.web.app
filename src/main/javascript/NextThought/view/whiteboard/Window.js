@@ -47,7 +47,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 				{
 					defaults: { xtype: 'button', scale: 'medium', enabled: true },
 					items: [
-						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function (b) {
+						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function(b) {
 							b.up('window').clearAll();
 						} }
 					]
@@ -65,11 +65,11 @@ Ext.define('NextThought.view.whiteboard.Window', {
 					layout: { type: 'hbox', pack: 'end' },
 					defaults: {xtype: 'button', ui: 'primary', scale: 'large'},
 					items: [
-						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function (b, e) {
+						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b, e) {
 							e.stopEvent();
 							b.up('window').cancel();
 						} },
-						{text: 'Save', action: 'save', handler: function (b, e) {
+						{text: 'Save', action: 'save', handler: function(b, e) {
 							e.stopEvent();
 							b.up('window').save(b);
 						} }
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	],
 
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var vpHeight = Ext.Element.getViewportHeight();
 
 		//ensure the max height is not bigger than the viewport
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	},
 
 
-	absorbeClick: function (e) {
+	absorbeClick: function(e) {
 		if (this.isVisible()) {
 			e.stopEvent();
 			return false;
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	},
 
 
-	save: function (btn) {
+	save: function(btn) {
 		var win = btn.up('window').hide(),
 			wb = win.down('whiteboard-editor');
 
@@ -131,14 +131,14 @@ Ext.define('NextThought.view.whiteboard.Window', {
 		win.fireEvent('save', win, wb);
 	},
 
-	close: function () {
-		this.close = function () {
+	close: function() {
+		this.close = function() {
 		};
 		this.cancel();
 		return this.callParent(arguments);
 	},
 
-	cancel: function () {
+	cancel: function() {
 		this.hide();
 		var e = this.down('whiteboard-editor');
 		if (e) {
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 		}
 
 		if (this.cancelOnce !== false) {
-			this.cancel = function () {
+			this.cancel = function() {
 			};
 		}
 
@@ -154,21 +154,21 @@ Ext.define('NextThought.view.whiteboard.Window', {
 	},
 
 
-	getEditor: function () {
+	getEditor: function() {
 		return this.down('whiteboard-editor');
 	},
 
 
-	getValue: function () {
+	getValue: function() {
 		return this.down('whiteboard-editor').getValue();
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 		me.mon(me.el, 'click', me.absorbeClick, this);
-		me.mon(this.el, 'click', function () {
+		me.mon(this.el, 'click', function() {
 			console.log('WB clicked');
 			if (me.ownerCmp) {
 				me.ownerCmp.fireEvent('status-change', {status: 'composing'});
@@ -176,7 +176,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 		});
 	},
 
-	clearAll: function () {
+	clearAll: function() {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
@@ -184,7 +184,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: Ext.Msg.WARNING,
-			fn: function (str) {
+			fn: function(str) {
 				if (str === 'ok') {
 					me.down('whiteboard-editor').clear();
 				}

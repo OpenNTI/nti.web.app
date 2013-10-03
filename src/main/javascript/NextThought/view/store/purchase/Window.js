@@ -22,7 +22,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	dialog: true,
 
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	items: [],
 
 
-	getDockedItems: function () {
+	getDockedItems: function() {
 		return [];
 	},
 
@@ -113,19 +113,19 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.closeEl, 'click', 'close', me);
 		me.mon(me.cancelEl, 'click', 'close', me);
 		me.mon(me.confirmEl, 'click', 'onConfirm', me);
-		me.getEl().select('.titlebar .tab').each(function (e) {
+		me.getEl().select('.titlebar .tab').each(function(e) {
 			me.mon(e, 'click', 'onTabClicked', me);
 		});
 
@@ -151,7 +151,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	publishQuantityAndPrice: function (quantity, price, currency) {
+	publishQuantityAndPrice: function(quantity, price, currency) {
 		this.priceInfo = {
 			quantity: quantity,
 			price: price
@@ -167,33 +167,33 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	updateContentHeight: function () {
+	updateContentHeight: function() {
 		var el = this.getTargetEl(),
 			footer = this.footerEl,
 			h;
 
-		if(!footer || !el || !footer.getY || !el.getY){
+		if (!footer || !el || !footer.getY || !el.getY) {
 			return;
 		}
 
 		h = footer.getY() - el.getY();
 		el.setHeight(h);
-		Ext.defer(this.getEl().repaint,10,this.getEl());
+		Ext.defer(this.getEl().repaint, 10, this.getEl());
 	},
 
 
-	hideError: function () {
+	hideError: function() {
 		this.updateContentHeight();
 		this.errorEl.hide();
 	},
 
 
-	showError: function (message, label) {
+	showError: function(message, label) {
 		var el = this.getTargetEl(),
 			errorEl = this.errorEl;
 
 		function syncHeight() {
-			if(!errorEl || !errorEl.getY || !el || !el.getY){
+			if (!errorEl || !errorEl.getY || !el || !el.getY) {
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -208,7 +208,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	onAdd: function (cmp) {
+	onAdd: function(cmp) {
 		var ordinal = cmp.ordinal,
 			confirmLabel = cmp.confirmLabel || 'Purchase',
 			checkLabel = cmp.checkboxLabel;
@@ -234,7 +234,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	syncTab: function (ordinal) {
+	syncTab: function(ordinal) {
 		var el = this.getEl(),
 			tabs = el.select('.titlebar .tab'),
 			defaultTab = this.started ? 0 : 'detail';
@@ -254,7 +254,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			return;
 		}
 
-		tabs.each(function (t, c) {
+		tabs.each(function(t, c) {
 			var i = t.getAttribute('data-order');
 			if (i === 'history') {
 				i = 4;
@@ -272,14 +272,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	onActivationCodeChange: function () {
+	onActivationCodeChange: function() {
 		var code = this.activationCodeEl.getValue();
 		console.log('Code:', code);
 		this.setConfirmState(!Ext.isEmpty(code.trim()));
 	},
 
 
-	onConfirm: function () {
+	onConfirm: function() {
 		if (this.confirmEl.hasCls('disabled')) {
 			return;
 		}
@@ -291,7 +291,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	onTabClicked: function (e) {
+	onTabClicked: function(e) {
 		var target = e.getTarget('.tab'),
 			cmp = this.activeView,
 			currentOrdinal = cmp ? cmp.ordinal : -1,
@@ -318,14 +318,14 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	setConfirmState: function (enabled) {
+	setConfirmState: function(enabled) {
 		if (this.confirmEl) {
 			this.confirmEl[!enabled ? 'addCls' : 'removeCls']('disabled');
 		}
 	},
 
 
-	onCheckboxClicked: function (e) {
+	onCheckboxClicked: function(e) {
 		var t = e.getTarget(),
 			active = this.activeView,
 			linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
@@ -342,7 +342,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	toggleActivationCode: function () {
+	toggleActivationCode: function() {
 		var c = this.checkboxEl.dom.checked;
 		this.confirmEl.update(c ? 'Activate' : this.activeView.confirmLabel);
 		this.headerEl[c ? 'addCls' : 'removeCls']('show-activation-code');
@@ -355,7 +355,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	updateTabTitleForChild: function (cmp, text) {
+	updateTabTitleForChild: function(cmp, text) {
 		var ordinal = cmp.ordinal,
 			t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
 
@@ -365,7 +365,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 	},
 
 
-	agreeToTerms: function () {
+	agreeToTerms: function() {
 		var c = this.checkboxEl.dom.checked,
 			a = this.activeView;
 		Ext.callback(a && a.setAgreementState, a, [c]);

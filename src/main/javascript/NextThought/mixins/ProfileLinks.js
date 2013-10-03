@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.ProfileLinks', function () {
+Ext.define('NextThought.mixins.ProfileLinks', function() {
 	var contactCardPopout, showCardTimer,
 			canShow;
 	//the scope is being set by the caller
@@ -46,9 +46,9 @@ Ext.define('NextThought.mixins.ProfileLinks', function () {
 		if (!pop || pop.isDestroyed) {
 			pop = Popup.create({
 								   renderTo: Ext.getBody(),
-								   record:   user,
-								   refEl:    el,
-								   hidden:   true
+								   record: user,
+								   refEl: el,
+								   hidden: true
 							   });
 		}
 
@@ -81,25 +81,25 @@ Ext.define('NextThought.mixins.ProfileLinks', function () {
 		 * This mixin method assumes we are mixed into a class thta is Observable, and has a userObject property (or a user
 		 * property), where the object is an instance of {NextThought.model.User}.
 		 */
-		enableProfileClicks: function () {
+		enableProfileClicks: function() {
 			var me = this,
 					events = {
 						scope: me,
 						click: onUserNameClick
 					};
 
-			Ext.each(arguments, function (el) {
+			Ext.each(arguments, function(el) {
 				var user = me.userObject || me.user;
 				el = Ext.get(el);
-				
+
 				if (!Ext.isEmpty(el)) {
 					//el.addClsOnOver('over');
 					if ((user && !isMe(user)) && me.profileLinkCard !== false) {
-						events.mouseover = function (e) {
+						events.mouseover = function(e) {
 							return startShowCard.call(me, e, el);
 						};
 
-						events.mouseout = function (e) {
+						events.mouseout = function(e) {
 							return stopShowCard.call(me, e, el);
 						};
 					}

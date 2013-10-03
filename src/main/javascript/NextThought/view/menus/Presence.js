@@ -1,15 +1,15 @@
 //styles in _identity.scss
 Ext.define('NextThought.view.menus.Presence', {
 	extend: 'Ext.Component',
-	alias:  'widget.presence-menu',
+	alias: 'widget.presence-menu',
 
 	requires: [
 		'NextThought.view.menus.PresenceEditor',
 		'NextThought.cache.AbstractStorage'
 	],
 
-	cls:        'presence-menu',
-	ui:         'presence-menu',
+	cls: 'presence-menu',
+	ui: 'presence-menu',
 	sessionKey: 'presence-state',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -27,25 +27,25 @@ Ext.define('NextThought.view.menus.Presence', {
 
 	renderSelectors: {
 		'availableEl': '.list .available',
-		'awayEl':      '.list .away',
-		'dndEl':       '.list .dnd',
-		'offlineEl':   '.list .offline'
+		'awayEl': '.list .away',
+		'dndEl': '.list .dnd',
+		'offlineEl': '.list .offline'
 	},
 
 	defaultStates: {
 		'available': 'Available',
-		'away':      'Away',
-		'dnd':       'Do not disturb',
-		'offline':   'Offline'
+		'away': 'Away',
+		'dnd': 'Do not disturb',
+		'offline': 'Offline'
 	},
 
 	currentPreference: {},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-	beforeRender: function () {
+	beforeRender: function() {
 		var me = this;
 		this.callParent(arguments);
 
@@ -58,21 +58,21 @@ Ext.define('NextThought.view.menus.Presence', {
 				{state: 'offline', label: 'Offline'}
 			]
 		});
-		$AppConfig.Preferences.getPreference('ChatPresence', function(value){
-			if(value){
+		$AppConfig.Preferences.getPreference('ChatPresence', function(value) {
+			if (value) {
 				me.currentPreference.Active = value.get('Active');
 				me.currentPreference.Available = value.get('Available');
 				me.currentPreference.Away = value.get('Away');
 				me.currentPreference.DND = value.get('DND');
 
 				me.restoreState();
-			}else{
+			}else {
 				console.log('No ChatPresence preference returned');
 			}
 		});
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var presence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
@@ -86,67 +86,67 @@ Ext.define('NextThought.view.menus.Presence', {
 	},
 
 
-	onDestroy: function () {
+	onDestroy: function() {
 		//this.cancelDeferHide();
 		clearTimeout(this.deferHideParentMenusTimer);
 		this.callParent(arguments);
 	},
 
 
-	deferHideParentMenus: function () {
+	deferHideParentMenus: function() {
 		Ext.menu.Manager.hideAll();
 	},
 
-	updatePreference: function(record, type, show, status){
+	updatePreference: function(record, type, show, status) {
 		record.set('type', type);
 		record.set('show', show);
 		record.set('status', status);
 		record.save();
 	},
 
-	savePreferenceValues: function(record, key, type, show, status){
+	savePreferenceValues: function(record, key, type, show, status) {
 		var me = this;
 
-		if(record.isFuture){
-			$AppConfig.Preferences.getPreference(key, function(value){
-				if(value){
+		if (record.isFuture) {
+			$AppConfig.Preferences.getPreference(key, function(value) {
+				if (value) {
 					me.updatePreference(value, type, show, status);
 				}
 			});
-		}else{
+		}else {
 			me.updatePreference(record, type, show, status);
 		}
 	},
 
-	saveActive: function(type, show, status){
+	saveActive: function(type, show, status) {
 		this.savePreferenceValues(this.currentPreference.Active, 'ChatPresence/Active', type, show, status);
 	},
 
-	savePreference: function(type, show, status){
+	savePreference: function(type, show, status) {
 		var record, key;
 
 
-		if(show === 'chat'){
+		if (show === 'chat') {
 			record = this.currentPreference.Available;
 			key = 'ChatPresence/Available';
-			status = (Ext.isEmpty(status))? this.defaultStates.available : status;
-		}else if(show === 'away'){
+			status = (Ext.isEmpty(status)) ? this.defaultStates.available : status;
+		}else if (show === 'away') {
 			record = this.currentPreference.Away;
 			key = 'ChatPresence/Away';
-			status = (Ext.isEmpty(status))? this.defaultStates.away : status;
-		}else if(show === 'dnd'){
+			status = (Ext.isEmpty(status)) ? this.defaultStates.away : status;
+		}else if (show === 'dnd') {
 			record = this.currentPreference.DND;
 			key = 'ChatPresence/DND';
-			status = (Ext.isEmpty(status))? this.defaultStates.dnd : status;
+			status = (Ext.isEmpty(status)) ? this.defaultStates.dnd : status;
 		}
 
-		if(!record || !key){ return; }
+		if (!record || !key) { return; }
 
 		this.savePreferenceValues(record, key, type, show, status);
-		this.saveActive(type, show, status); 
+		this.saveActive(type, show, status);
 	},
 
-	restoreState: function () {
+	restoreState: function() {
 		var me = this,
 			active = me.currentPreference.Active,
 			type = active.get('type'),
@@ -158,36 +158,36 @@ Ext.define('NextThought.view.menus.Presence', {
 			dnd = me.currentPreference.DND,
 			dndStatus;
 
-		function update(){
+		function update() {
 
-			availableStatus = (available && !available.isFuture)? available.get('status') : me.defaultStates.available;
+			availableStatus = (available && !available.isFuture) ? available.get('status') : me.defaultStates.available;
 			me.availableEl.down('.label').update(availableStatus);
 
-			awayStatus = (away && !away.isFuture)? away.get('status') : me.defaultStates.away;
+			awayStatus = (away && !away.isFuture) ? away.get('status') : me.defaultStates.away;
 			me.awayEl.down('.label').update(awayStatus);
 
-			dndStatus = (dnd && !dnd.isFuture)?  dnd.get('status') : me.defaultStates.dnd;
+			dndStatus = (dnd && !dnd.isFuture) ? dnd.get('status') : me.defaultStates.dnd;
 			me.dndEl.down('.label').update(dndStatus);
 
-			if(type === 'available'){
-				me.availableEl[( show === 'chat' )? 'addCls' : 'removeCls']('selected');
-				me.awayEl[( show === 'away' )? 'addCls' : 'removeCls']('selected');
-				me.dndEl[( show === 'dnd')? 'addCls' : 'removeCls']('selected');
+			if (type === 'available') {
+				me.availableEl[(show === 'chat') ? 'addCls' : 'removeCls']('selected');
+				me.awayEl[(show === 'away') ? 'addCls' : 'removeCls']('selected');
+				me.dndEl[(show === 'dnd') ? 'addCls' : 'removeCls']('selected');
 				me.offlineEl.removeCls('selected');
-			}else{
+			}else {
 				me.offlineEl.addCls('selected');
 			}
 		}
 
-		if(me.rendered){
+		if (me.rendered) {
 			update();
-		}else{
+		}else {
 			me.on('afterrender', update, me);
 		}
 	},
 
 
-	setPresence: function (username, presence) {
+	setPresence: function(username, presence) {
 		if (!isMe(username) || !presence) {
 			return;
 		}
@@ -218,28 +218,28 @@ Ext.define('NextThought.view.menus.Presence', {
 
 	},
 
-	setUpEditor: function () {
+	setUpEditor: function() {
 		this.editor = Ext.widget('presence-editor', {
-			updateEl:  true,
-			renderTo:  this.el.down('.list'),
-			offsets:   [26, 3],
-			field:     {
-				xtype:            'textfield',
-				emptyText:        '',
+			updateEl: true,
+			renderTo: this.el.down('.list'),
+			offsets: [26, 3],
+			field: {
+				xtype: 'textfield',
+				emptyText: '',
 				enforceMaxLength: true,
-				maxLength:        140,
-				allowEmpty:       true,
-				selectOnFocus:    true
+				maxLength: 140,
+				allowEmpty: true,
+				selectOnFocus: true
 			},
 			listeners: {
 				canceledit: 'cancelEdit',
-				complete:   'saveEditor',
-				scope:      this
+				complete: 'saveEditor',
+				scope: this
 			}
 		});
 	},
 
-	getTarget: function (row) {
+	getTarget: function(row) {
 		if (row.is('.available')) {
 			return 'available';
 		}
@@ -256,7 +256,7 @@ Ext.define('NextThought.view.menus.Presence', {
 		return null;
 	},
 
-	clicked: function (e) {
+	clicked: function(e) {
 		var show, status, type, presence;
 
 		if (e.getTarget('.edit')) {
@@ -281,7 +281,7 @@ Ext.define('NextThought.view.menus.Presence', {
 			show = 'chat';
 			type = 'unavailable';
 		} else {
-			console.log("unhandled click");
+			console.log('unhandled click');
 			return;
 		}
 
@@ -295,19 +295,19 @@ Ext.define('NextThought.view.menus.Presence', {
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
 	},
 
-	isNewPresence: function (newPresence) {
+	isNewPresence: function(newPresence) {
 		var currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
 
 		return newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status');
 	},
 
-	isStatus: function (value) {
+	isStatus: function(value) {
 		var v = value && value.toLowerCase();
 
 		return v && v !== 'available' && v !== 'away' && v !== 'do not disturb';
 	},
 
-	saveEditor: function (cmp, value, oldValue) {
+	saveEditor: function(cmp, value, oldValue) {
 		var row = cmp.boundEl.up('.status'),
 				target = this.getTarget(row),
 				newPresence,
@@ -330,11 +330,11 @@ Ext.define('NextThought.view.menus.Presence', {
 			this.savePreference(type, show, status, true);
 		} else {
 			this.setPresence($AppConfig.username, newPresence);
-			console.log("No presence change");
+			console.log('No presence change');
 		}
 	},
 
-	startEditor: function (e) {
+	startEditor: function(e) {
 		var row = e.getTarget('.status', null, true),
 				edit = row && row.down('.edit');
 
@@ -346,7 +346,7 @@ Ext.define('NextThought.view.menus.Presence', {
 	},
 
 
-	cancelEdit: function (cmp, value, startValue) {
+	cancelEdit: function(cmp, value, startValue) {
 		var activeRow = cmp.boundEl.up('.status.active');
 		if (activeRow) {
 			activeRow.removeCls('active');

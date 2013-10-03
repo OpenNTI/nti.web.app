@@ -23,15 +23,15 @@ Ext.define('NextThought.controller.Stream', {
 		this.application.on('session-ready', this.onSessionReady, this);
 	},
 
-	onSessionReady: function(){
+	onSessionReady: function() {
 		//Load page and root stream stores...
 		var ss = this.getStreamStore();
 
 		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
-			function(pageInfo){
+			function(pageInfo) {
 				var p = ss.getProxy();
-				p.extraParams = Ext.apply(p.extraParams||{},{
+				p.extraParams = Ext.apply(p.extraParams || {},{
 		            exclude: 'application/vnd.nextthought.redaction'
 		        });
 				p.url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
@@ -39,7 +39,7 @@ Ext.define('NextThought.controller.Stream', {
 				ss.load();
 			},
 			//failure:
-			function(){
+			function() {
 				console.error('Could not load Stream Store!', arguments);
 			},
 			this);
@@ -48,7 +48,7 @@ Ext.define('NextThought.controller.Stream', {
 
 
 	incomingChange: function(change) {
-		if(!change.isModel){
+		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
@@ -56,11 +56,11 @@ Ext.define('NextThought.controller.Stream', {
 			store = this.getStreamStore();
 
 		//add it to the root stream store, why the heck not?
-		if(!item || item.mimeType.indexOf('redaction') < 0){
+		if (!item || item.mimeType.indexOf('redaction') < 0) {
 			store.add(change);
 
 			//reapply the stores filters
-			if(store.isFiltered()){
+			if (store.isFiltered()) {
 				store.filter();
 			}
 		}

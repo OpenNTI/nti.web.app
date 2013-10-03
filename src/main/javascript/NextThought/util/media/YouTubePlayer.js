@@ -3,9 +3,9 @@
 Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	statics: {
-		kind:  'video',
-		type:  'youtube',
-		valid: function () {
+		kind: 'video',
+		type: 'youtube',
+		valid: function() {
 			return Boolean(window.YT) && this.apiReady;
 		}
 	},
@@ -20,7 +20,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
 
-	constructor: function (config) {
+	constructor: function(config) {
 		this.mixins.observable.constructor.call(this);
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId + '-youtube-video';
@@ -32,10 +32,10 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 
-	playerSetup: function () {
+	playerSetup: function() {
 		this.isReady = false;
 
-//		Inject Youtube HTML
+    //		Inject Youtube HTML
 		this.playerTpl.append(this.parentEl, {id: this.id});
 		console.log(this.id);
 
@@ -58,29 +58,29 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		});
 	},
 
-	playerReady: function () {
+	playerReady: function() {
 		var me = this,
 			state = NaN;
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
 		if (this.onReadyLoadSource) {
-			Ext.defer( this.load, 1, this, [this.onReadyLoadSource]);
+			Ext.defer(this.load, 1, this, [this.onReadyLoadSource]);
 			delete this.onReadyLoadSource;
 		}
 
 
 		//Poll the damn thing, if it ever starts firing the event we stop polling.
 		clearInterval(this.stateChangeChecker);
-		this.stateChangeChecker = setInterval(function(){
+		this.stateChangeChecker = setInterval(function() {
 			var p = me.player.getPlayerState();
-			if(isNaN(state) || p !== state){
-				me.playerStatusChange({data:p, fromInterval:true});
+			if (isNaN(state) || p !== state) {
+				me.playerStatusChange({data: p, fromInterval: true});
 				state = p;
 			}
 		},500);
 	},
 
-	playerError: function (error) {
+	playerError: function(error) {
 		var oldSource;
 		console.warn('YouTube player died with error: ' + error.data);
 
@@ -90,10 +90,10 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			return;
 		}
 
-//		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
-//		interaction with the browsers built-in HTML5 player, so lets try, try again.
-//		SAJ: We should probably also give up after X tries and just go to the next source
-//		or playlist entry.
+    //		SAJ: If we receive error 5 from YouTube that is mostly likely due to a bad
+    //		interaction with the browsers built-in HTML5 player, so lets try, try again.
+    //		SAJ: We should probably also give up after X tries and just go to the next source
+    //		or playlist entry.
 		if (error.data === 5) {
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
 			this.cleanup();
@@ -109,85 +109,85 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
-	playerStatusChange: function (event) {
-		var type='';
-		switch(event.data){
-			case -1: type='unstarted'; break;
-			case YT.PlayerState.ENDED: type='ended'; break;
-			case YT.PlayerState.PLAYING: type='play'; break;
-			case YT.PlayerState.PAUSED: type='pause'; break;
-			case YT.PlayerState.BUFFERING: type='buffering'; break;
-			case YT.PlayerState.CUED: type='cued'; this.playerReady(); break;
-			default:  console.log(event.data); return;
+	playerStatusChange: function(event) {
+		var type = '';
+		switch (event.data) {
+			case -1: type = 'unstarted'; break;
+			case YT.PlayerState.ENDED: type = 'ended'; break;
+			case YT.PlayerState.PLAYING: type = 'play'; break;
+			case YT.PlayerState.PAUSED: type = 'pause'; break;
+			case YT.PlayerState.BUFFERING: type = 'buffering'; break;
+			case YT.PlayerState.CUED: type = 'cued'; this.playerReady(); break;
+			default: console.log(event.data); return;
 		}
 
 		//This came from an event! stop our poll
-		if(!event.fromInterval){
+		if (!event.fromInterval) {
 			clearInterval(this.stateChangeChecker);//YouTube is sending us what we want.
 		}
 
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
-	getCurrentTime: function () {
+	getCurrentTime: function() {
 		return this.player.getCurrentTime();
 	},
 
-	getPlayerState: function () {
+	getPlayerState: function() {
 		return this.player.getPlayerState();
 	},
 
-	load: function (source, offset) {
-		source = Ext.isArray(source)? source[0] : source;
+	load: function(source, offset) {
+		source = Ext.isArray(source) ? source[0] : source;
 		this.currentSource = source;
 		this.currentStartAt = offset;
 		this.isReady = false;//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/  If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
-		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: "medium" });
+		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: 'medium' });
 		this.pause();
 	},
 
-	play: function () {
-		if(Ext.isFunction(this.player.playVideo)){
+	play: function() {
+		if (Ext.isFunction(this.player.playVideo)) {
 			this.player.playVideo();
 		}
 	},
 
 
-	deactivate: function () {
+	deactivate: function() {
 		return this.pause.apply(this, arguments);
 	},
 
 
-	activate: function(sourceId){
+	activate: function(sourceId) {
 		console.log(this.id, 'Activate triggered');
 		// save the source id to be loaded whenever we are ready.
-		if(!this.isReady){
+		if (!this.isReady) {
 			this.onReadyLoadSource = sourceId;
 		}
 	},
 
 
-	pause: function () {
-		if(!this.isReady){ return; }
-		if(Ext.isFunction(this.player.pauseVideo)){
+	pause: function() {
+		if (!this.isReady) { return; }
+		if (Ext.isFunction(this.player.pauseVideo)) {
 			this.player.pauseVideo();
 		}
 	},
 
-	seek: function (offset, seekAhead) {
-		if(!this.isReady){ return;}
+	seek: function(offset, seekAhead) {
+		if (!this.isReady) { return;}
 		this.currentStartAt = offset;
 		this.player.seekTo(offset, seekAhead);
 		this.pause();
 	},
 
-	stop: function () {
+	stop: function() {
 		if (this.player) {
 			this.player.clearVideo();
 		}
 	},
 
-	cleanup: function () {
+	cleanup: function() {
 		var el = Ext.get(this.id);
 
 		this.stop();
@@ -199,14 +199,14 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			Ext.destroy(el);
 		}
 	}
-}, function () {
+}, function() {
 	var me = this;
 
-	function onReady(){
+	function onReady() {
 		console.debug('YouTube API Ready');
 		me.apiReady = true;
 	}
 
-	window.onYouTubeIframeAPIReady = Ext.Function.createSequence(onReady,window.onYouTubeIframeAPIReady,null);
-	Globals.loadScript(location.protocol + "//www.youtube.com/iframe_api");
+	window.onYouTubeIframeAPIReady = Ext.Function.createSequence(onReady, window.onYouTubeIframeAPIReady, null);
+	Globals.loadScript(location.protocol + '//www.youtube.com/iframe_api');
 });

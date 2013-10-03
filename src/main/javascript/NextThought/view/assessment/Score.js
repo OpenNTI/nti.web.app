@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.Score',{
+Ext.define('NextThought.view.assessment.Score', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-score',
 	requires: [
@@ -11,12 +11,12 @@ Ext.define('NextThought.view.assessment.Score',{
 	incorrectColor: '#d9d9d9',
 	textColor: '#7fab22',
 	chartStyle: {
-		"stroke-width": 2,
-		"stroke-opacity": 1,
+		'stroke-width': 2,
+		'stroke-opacity': 1,
 		stroke: '#fff'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.store = Ext.data.JsonStore.create({fields: ['p']});
 		this.callParent(arguments);
 		this.add({
@@ -37,13 +37,13 @@ Ext.define('NextThought.view.assessment.Score',{
 	},
 
 
-	setValue: function(value){
+	setValue: function(value) {
 		var v = value || 4,
-			data = [{p:v},{p:(100-v)}],
+			data = [{p: v},{p: (100 - v)}],
 			s = this.down('chart').series.first(),
 			store = this.store;
 
-		if( s.setValue ){
+		if (s.setValue) {
 			s.setValue(value);
 		}
 		else {
@@ -52,12 +52,12 @@ Ext.define('NextThought.view.assessment.Score',{
 
 		this.value = value;
 
-//		if(value === 0){
-//			data.shift();
-//		}
+    //		if(value === 0){
+    //			data.shift();
+    //		}
 
-		Ext.defer(function(){
-			store.loadRawData(data,false);
+		Ext.defer(function() {
+			store.loadRawData(data, false);
 		},1);
 	}
 });

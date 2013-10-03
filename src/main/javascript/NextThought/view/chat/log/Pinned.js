@@ -25,7 +25,7 @@ Ext.define('NextThought.view.chat.log.Pinned', {
 		icon: 'img'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var me = this,
@@ -35,16 +35,16 @@ Ext.define('NextThought.view.chat.log.Pinned', {
 		delete me.message;
 
 		me.renderData.name = 'resolving...';
-		m.compileBodyContent(function(content){
+		m.compileBodyContent(function(content) {
 			me.renderData.body = content;
-			if(me.rendered){
+			if (me.rendered) {
 			   me.text.update(me.renderData.body);
 			   me.time.update(me.renderData.time);
 			}
 		});
 
-		if(s){
-			UserRepository.getUser(s, function(u){
+		if (s) {
+			UserRepository.getUser(s, function(u) {
 				if (!u) {
 					console.error('failed to resolve user', s, m);
 					return;
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.chat.log.Pinned', {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
-		if(this.rendered){
+		if (this.rendered) {
 			this.icon.set({src: i});
 			this.name.update(name);
 		}

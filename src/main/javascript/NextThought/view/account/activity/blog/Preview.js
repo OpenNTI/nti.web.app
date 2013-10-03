@@ -11,19 +11,19 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 	toolbarTpl: Ext.DomHelper.markup({ cls: 'thought-label', html: 'Thought'}),
 
 
-	getCommentCount: function (record) {
+	getCommentCount: function(record) {
 		return record.get('PostCount');
 	},
 
-	navigateToItem: function () {
+	navigateToItem: function() {
 		var me = this, rec = this.record;
-		UserRepository.getUser(rec.get('Creator'), function (user) {
+		UserRepository.getUser(rec.get('Creator'), function(user) {
 			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 		});
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.record.get('headline').compileBodyContent(this.setBody, this, null, this.self.WhiteboardSize);
 		//Load the last comment or the this.record.focusRecord (if its set)
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 	},
 
 
-	buildStore: function () {
+	buildStore: function() {
 		//Seems like this might be what Ext.util.Bindable is for...
 		//Note we want our store in the StoreManager so objects in it interact with
 		//objects in other stores.
@@ -49,26 +49,26 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 	},
 
 
-	fillInReplies: function (store, records) {
+	fillInReplies: function(store, records) {
 		if (Ext.isEmpty(records)) {
 			return;
 		}
 
 		this.removeAll(true);
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
-		this.add(Ext.Array.map(records, function (r) {
+		this.add(Ext.Array.map(records, function(r) {
 			return {record: r};
 		}));
 		this.fireEvent('resize');
 	},
 
 
-	showReplies: function () {
+	showReplies: function() {
 		this.callParent(arguments);
 		this.buildStore();
 	},
 
-	destroy: function () {
+	destroy: function() {
 		if (this.store) {
 			this.store.destroyStore();
 		}
@@ -83,11 +83,11 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 	alias: 'widget.activity-preview-blog-reply',
 
 
-	deleteComment: function () {
+	deleteComment: function() {
 		this.fireEvent('delete-blog-comment', this.record, this, Ext.bind(this.onDelete, this));
 	},
 
-	navigateToComment: function () {
+	navigateToComment: function() {
 		var rec = this.record,
 			containerRecord = this.up('[record]') && this.up('[record]').record,
 			me = this;
@@ -96,12 +96,12 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 			return;
 		}
 
-		UserRepository.getUser(containerRecord.get('Creator'), function (user) {
+		UserRepository.getUser(containerRecord.get('Creator'), function(user) {
 			me.fireEvent('navigate-to-blog', user, containerRecord.get('ID'), rec.get('ID'));
 		});
 	},
 
-	handleDestroy: function () {
+	handleDestroy: function() {
 		//First remove the delete and edit link listeners followed by the els
 		if (this.deleteEl) {
 			this.mun(this.deleteEl, 'click', this.onDeletePost, this);

@@ -1,7 +1,7 @@
-Ext.define('NextThought.mixins.InstanceTracking',{
+Ext.define('NextThought.mixins.InstanceTracking', {
 
-	trackThis: function(){
-		if(!this.isComponent){
+	trackThis: function() {
+		if (!this.isComponent) {
 			Ext.Error.raise('Must be mixed into a component!');
 		}
 
@@ -11,11 +11,11 @@ Ext.define('NextThought.mixins.InstanceTracking',{
 
 		self.instances.push(me);
 
-		me.on('destroy',function(){ Ext.Array.remove(self.instances,me); });
+		me.on('destroy', function() { Ext.Array.remove(self.instances, me); });
 	},
 
 
-	getInstances: function(){
+	getInstances: function() {
 		return (this.self.instances || []).slice();
 	}
 

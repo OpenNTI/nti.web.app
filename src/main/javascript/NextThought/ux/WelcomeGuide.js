@@ -2,7 +2,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.welcome-guide',
 
-	cls:'guide-window',
+	cls: 'guide-window',
 	width: 695,
 	height: 640,
 	layout: 'fit',
@@ -23,70 +23,70 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 			style: 'overflow-x: hidden; overflow-y:auto'
 		}
 	}],
-	dockedItems:{
+	dockedItems: {
 		xtype: 'container',
-		dock:'bottom',
+		dock: 'bottom',
 		ui: 'footer',
-		height:55,
+		height: 55,
 		baseCls: 'nti-window',
 		layout: {
 			type: 'hbox',
 			align: 'stretchmax'
 		},
-		defaults:{
+		defaults: {
 			cls: 'footer-region',
 			xtype: 'container',
 			flex: 1,
 			layout: 'hbox'
 		},
-		items:[{
-			layout: {type:'hbox', pack:'end'},
-			defaults: { xtype:'button', ui:'blue', scale:'large'},
-			items:[
+		items: [{
+			layout: {type: 'hbox', pack: 'end'},
+			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
+			items: [
 				//{text: 'Learn More',  action: 'more', ui: 'secondary', handler: function(b, e){ e.stopEvent();b.up('window').learnMore(); } },
-				{text: 'Get Started!', cls:'.x-btn-blue-large dismiss', action: 'cancel', handler: function(b, e){ e.stopEvent(); b.up('window').close();}}
+				{text: 'Get Started!', cls: '.x-btn-blue-large dismiss', action: 'cancel', handler: function(b, e) { e.stopEvent(); b.up('window').close();}}
 			]
 		}]
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.down('component[cls=help-iframe]').autoEl.src = (this.link && this.link.href) || this.link;
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
-		if(this.deleteOnDestroy){
+		if (this.deleteOnDestroy) {
 			this.on('destroy', this.deleteLink, this);
 		}
 	},
 
-	addCustomMask: function(){
+	addCustomMask: function() {
 		var mask = this.zIndexManager.mask;
 		mask.addCls('nti-black-clear');
 	},
 
 
-	removeCustomMask: function(){
+	removeCustomMask: function() {
 		var mask = this.zIndexManager.mask;
-		if(mask){
+		if (mask) {
 			mask.removeCls('nti-black-clear');
 		}
 	},
 
 
-	learnMore: function(){
+	learnMore: function() {
 		console.log('Learn more was clicked');
 		this.fireEvent('go-to-help');
 		this.close();
 	},
 
-	deleteLink: function(){
+	deleteLink: function() {
 		Ext.Ajax.request({
 			url: this.link.href,
 			method: 'DELETE',
-			success: function(r, opts){
+			success: function(r, opts) {
 				console.log('Success: ', arguments);
 			},
-			fail: function(r, opts){
+			fail: function(r, opts) {
 				console.log('Fail: ', arguments);
 			}
 		});

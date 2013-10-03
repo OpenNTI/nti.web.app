@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.history.mixins.Bookmark',{
+Ext.define('NextThought.view.account.history.mixins.Bookmark', {
 	alias: 'widget.history-item-bookmark',
 	keyVal: 'application/vnd.nextthought.bookmark',
 
@@ -6,41 +6,41 @@ Ext.define('NextThought.view.account.history.mixins.Bookmark',{
 		{
 			'data-guid': '{guid}',
 			cls: 'history favorite',
-			cn:[
-				{cls: 'path', html:'{path}'},
-				{cls: 'location', html:'{location}'}
+			cn: [
+				{cls: 'path', html: '{path}'},
+				{cls: 'location', html: '{location}'}
 			]
 		}
 	])),
 
-	constructor: function(config){
+	constructor: function(config) {
 		Ext.apply(this, config);
-		if(!this.panel){ return; }
+		if (!this.panel) { return; }
 
 		this.panel.registerSubType(this.keyVal, this.tpl);
 		this.panel.registerFillData(this.keyVal, this.fillInData);
 		this.panel.registerClickHandler(this.keyVal, this.clicked);
 	},
 
-	clicked: function(view, rec){
+	clicked: function(view, rec) {
 		var cid = rec.get('ContainerId');
 		view.fireEvent('navigation-selected', cid, rec);
 	},
 
-	fillInData: function(rec){
-		LocationMeta.getMeta(rec.get('ContainerId'),function(meta){
+	fillInData: function(rec) {
+		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
 			var lineage = [],
 				location = '';
 
-			if(!meta){
-				console.warn('No meta for '+rec.get('ContainerId'));
+			if (!meta) {
+				console.warn('No meta for ' + rec.get('ContainerId'));
 			}
 			else {
-				lineage = ContentUtils.getLineage(meta.NTIID,true);
+				lineage = ContentUtils.getLineage(meta.NTIID, true);
 				location = lineage.shift();
 				lineage.reverse();
 			}
-			
+
 			rec.set({
 				'location': Ext.String.ellipsis(location, 150, false),
 				'path': lineage.join(' / ')

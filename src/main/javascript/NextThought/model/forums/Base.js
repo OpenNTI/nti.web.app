@@ -1,14 +1,14 @@
-Ext.define('NextThought.model.forums.Base',{
+Ext.define('NextThought.model.forums.Base', {
 	extend: 'NextThought.model.Base',
 
-	requires: [ 'NextThought.util.Store'],
+	requires: ['NextThought.util.Store'],
 
-	getContentsStoreId: function(){
-		return this.get('Class')+'-'+this.get('NTIID');
+	getContentsStoreId: function() {
+		return this.get('Class') + '-' + this.get('NTIID');
 	},
 
 
-	buildContentsStore: function(cfg, extraParams){
+	buildContentsStore: function(cfg, extraParams) {
 		var store = NextThought.store.NTI.create(Ext.apply({
 			storeId: this.getContentsStoreId(),
 			url: this.getLink('contents'),
@@ -34,7 +34,7 @@ Ext.define('NextThought.model.forums.Base',{
 	},
 
 
-	getParentHref: function(){
+	getParentHref: function() {
 		var path = this.get('href');
 		path = path.split('/');
 		path.pop();

@@ -1,25 +1,25 @@
-Ext.define('NextThought.store.course.Navigation',{
+Ext.define('NextThought.store.course.Navigation', {
 	extend: 'Ext.data.Store',
-	requires:[
+	requires: [
 		'NextThought.model.course.navigation.Node'
 	],
 	model: 'NextThought.model.course.navigation.Node',
-	sorters:[
+	sorters: [
 		{
-			fn: function(a,b){
+			fn: function(a,b) {
 				var sa = a.get('position'), sb = b.get('position');
-				return Globals.naturalSortComparator(sa,sb);
+				return Globals.naturalSortComparator(sa, sb);
 			}
 		}//We are assuming the dates are in order?
 	],
 
 
 	/**
-	 * @returns {Integer}
+	 * @return {Integer}
 	 * @private
 	 */
-	findByDate: function(date){
-		return this.findBy(function(o){
+	findByDate: function(date) {
+		return this.findBy(function(o) {
 			return o.get('date') >= date;
 		});
 	},
@@ -28,9 +28,9 @@ Ext.define('NextThought.store.course.Navigation',{
 	/**
 	 *
 	 * @param {Date} date
-	 * @returns {NextThought.model.course.navigation.Node}
+	 * @return {NextThought.model.course.navigation.Node}
 	 */
-	getCurrentBy: function(date){
+	getCurrentBy: function(date) {
 		return this.getAt(this.findByDate(date));
 	}
 });

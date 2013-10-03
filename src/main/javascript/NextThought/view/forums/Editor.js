@@ -1,11 +1,11 @@
 Ext.define('NextThought.view.forums.Editor', {
 	extend: 'NextThought.editor.Editor',
-	alias:  'widget.forums-topic-editor',
+	alias: 'widget.forums-topic-editor',
 
-	cls:    'forums-topic-editor-box',
+	cls: 'forums-topic-editor-box',
 	border: 1,
 
-	enableTags:  true,
+	enableTags: true,
 	enableTitle: true,
 	enableVideo: true,
 
@@ -25,22 +25,22 @@ Ext.define('NextThought.view.forums.Editor', {
 
 
 	renderSelectors: {
-		editor:       '.editor',
-		cancelEl:     '.action.cancel',
-		saveEl:       '.action.save',
-		titleWrapEl:  '.title',
-		footerEl:     '.footer',
-		publishEl:    '.action.publish'
+		editor: '.editor',
+		cancelEl: '.action.cancel',
+		saveEl: '.action.save',
+		titleWrapEl: '.title',
+		footerEl: '.footer',
+		publishEl: '.action.publish'
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		var rd = this.renderData = this.renderData || {};
 
@@ -50,7 +50,7 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 				me = this,
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	destroy: function () {
+	destroy: function() {
 		var container = this.ownerCt.getEl();
 		container.removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
@@ -88,43 +88,43 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		/*
 		 *   NOTE: For now, since forums views aren't destroyed when you go away,
 		 *   and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
 		 *   If we change at some point, just uncomment the following lines to display a warning message.
 		 */
-//		if(this.isVisible()){
-//			this.warnBeforeDismissingEditor();
-//		}
-//		return !this.isVisible();
+    //		if(this.isVisible()){
+    //			this.warnBeforeDismissingEditor();
+    //		}
+    //		return !this.isVisible();
 		return true;
 	},
 
 
-	warnBeforeDismissingEditor: function () {
-		var msg = "You are currently editing or creating a discussion topic. Please save or cancel it first.";
-		Ext.defer(function () {
+	warnBeforeDismissingEditor: function() {
+		var msg = 'You are currently editing or creating a discussion topic. Please save or cancel it first.';
+		Ext.defer(function() {
 			alert({msg: msg});
 		}, 1);
 	},
 
 
-	syncHeight: function () {
-        /*  for ipad, everytime a new input is focused, this runs.
+	syncHeight: function() {
+    /*  for ipad, everytime a new input is focused, this runs.
             and changing the height and top makes the editor too small.
             only run the first two initial times, and keep height the same*/
 		if (Ext.is.iOS) {
 			if (this.syncedIpad) {
-                if(this.syncedIpad > 1){
-                    return;
-                }
+        if (this.syncedIpad > 1) {
+          return;
+        }
 
 				this.syncedIpad++;
 			}
-            else{
-                this.syncedIpad = 1;
-            }
+      else {
+        this.syncedIpad = 1;
+      }
 		}
 		var el = this.contentEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
@@ -134,14 +134,14 @@ Ext.define('NextThought.view.forums.Editor', {
 		}
 		top = el.getY() + p.scrollTop;
 
-		if(!this.footerEl.getHeight() && (!this.syncHeightRetries || this.syncHeightRetries < 10)){
-			this.syncHeightRetries = (this.syncHeightRetries||0) + 1;
-			Ext.defer(this.syncHeight,100,this);
+		if (!this.footerEl.getHeight() && (!this.syncHeightRetries || this.syncHeightRetries < 10)) {
+			this.syncHeightRetries = (this.syncHeightRetries || 0) + 1;
+			Ext.defer(this.syncHeight, 100, this);
 			return;
 		}
 
-		if(this.syncHeightRetries){
-			console.debug('#syncHeight() Retried '+this.syncHeightRetries+' times');
+		if (this.syncHeightRetries) {
+			console.debug('#syncHeight() Retried ' + this.syncHeightRetries + ' times');
 			delete this.syncHeightRetries;
 		}
 		el.setHeight(Ext.Element.getViewportHeight() - (top + this.footerEl.getHeight() + 10));
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	onSave: function (e) {
+	onSave: function(e) {
 		e.stopEvent();
 		var v = this.getValue(),
 				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
@@ -193,18 +193,18 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	onSaveSuccess: function () {
+	onSaveSuccess: function() {
 		this.destroy();
 	},
 
 
-	onSaveFailure: function (proxy, response, operation) {
+	onSaveFailure: function(proxy, response, operation) {
 		var msg = 'An unknown error occurred saving your Discussion.', error;
 
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
-			if (error.code === "TooLong") {
-				msg = "Could not save your Discussion. The title is too long. It can only be 140 characters or less";
+			if (error.code === 'TooLong') {
+				msg = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less';
 			}
 		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});
@@ -212,7 +212,7 @@ Ext.define('NextThought.view.forums.Editor', {
 	},
 
 
-	onCancel: function (e) {
+	onCancel: function(e) {
 		e.stopEvent();
 
 		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.

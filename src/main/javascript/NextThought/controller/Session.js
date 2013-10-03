@@ -27,7 +27,7 @@ Ext.define('NextThought.controller.Session', {
 	sessionTrackerCookie: 'sidt',
 
 
-	init: function () {
+	init: function() {
 		var me = this;
 
 		me.listen({
@@ -48,18 +48,18 @@ Ext.define('NextThought.controller.Session', {
 		me.sessionTracker = Ext.TaskManager.newTask({
 
 														interval: 5000, //5 seconds
-														run:      function () {
+														run: function() {
 															var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
 															if (v !== me.sessionId) {
 																me.sessionTracker.stop();
 																Socket.tearDownSocket();
 
 																alert({
-																		  icon:     Ext.Msg.WARNING,
-																		  title:    'Alert',
-																		  msg:      'You\'re using the application in another tab. This session has been invalidated.',
+																		  icon: Ext.Msg.WARNING,
+																		  title: 'Alert',
+																		  msg: 'You\'re using the application in another tab. This session has been invalidated.',
 																		  closable: false,
-																		  buttons:  null
+																		  buttons: null
 																	  });
 															}
 														}
@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	handleLogout: function (keepTracker) {
+	handleLogout: function(keepTracker) {
 		var me = this, url = getURL(Ext.String.urlAppend(
 				this.logoutURL,
 				'success=' + encodeURIComponent(location.href)));
@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	maybeShowCoppaWindow: function () {
+	maybeShowCoppaWindow: function() {
 		var user = $AppConfig.userObject,
 				showWindow = user.getLink('account.profile.needs.updated'),
 				url = user.getLink('account.profile'),
@@ -101,10 +101,10 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		req = {
-			url:      getURL(url),
-			timeout:  20000,
-			scope:    this,
-			callback: function (q, success, r) {
+			url: getURL(url),
+			timeout: 20000,
+			scope: this,
+			callback: function(q, success, r) {
 				if (!success) {
 					console.log('Could not get acct rel schema for coppa window. Window will not show');
 					return;
@@ -124,40 +124,40 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	showWelcomePage: function () {
+	showWelcomePage: function() {
 		var link = this.linkElementForRel('content.initial_welcome_page');
 		this.guideWin = Ext.widget('welcome-guide', {link: link, deleteOnDestroy: true});
 		this.guideWin.show();
 	},
 
 
-	showCoppaConfirmWindow: function () {
+	showCoppaConfirmWindow: function() {
 		var link = this.linkElementForRel('coppa.upgraded.rollbacked');
 		this.coppaConfirmWin = Ext.widget('coppa-confirm-window', {link: link, deleteOnDestroy: true});
 		this.coppaConfirmWin.show();
 	},
 
 
-	showNewTermsOfService: function () {
+	showNewTermsOfService: function() {
 		var link = this.linkElementForRel('content.initial_tos_page');
 		this.guideWin = Ext.widget('updated-tos', {link: link, deleteOnDestroy: true});
 		this.guideWin.show();
 	},
 
 
-	shouldShowContentFor: function (linkRel) {
+	shouldShowContentFor: function(linkRel) {
 		return !Ext.isEmpty(this.linkElementForRel(linkRel));
 	},
 
 
-	linkElementForRel: function (linkRel) {
+	linkElementForRel: function(linkRel) {
 		var user = $AppConfig.userObject,
 				links = user.get('Links') || {};
 		return links.getLinksForRel ? links.getLinksForRel(linkRel)[0] : null;
 	},
 
 
-	maybeTakeImmediateAction: function (r) {
+	maybeTakeImmediateAction: function(r) {
 		var m = this;
 		if (m.getLink(r, 'account.profile.needs.updated')) {
 			m.coppaWindow = true;
@@ -174,12 +174,12 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	showEmailRecoveryWindow: function (fieldName, linkName) {
+	showEmailRecoveryWindow: function(fieldName, linkName) {
 		Ext.widget('recovery-email-window', {fieldName: fieldName, linkName: linkName}).show();
 	},
 
 
-	immediateAction: function () {
+	immediateAction: function() {
 		if (this.coppaWindow) {
 			this.maybeShowCoppaWindow();
 		}
@@ -207,7 +207,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	login: function (app) {
+	login: function(app) {
 		function success() {
 			Ext.util.Cookies.set(me.sessionTrackerCookie, me.sessionId);
 			me.sessionTracker.start();
@@ -234,11 +234,11 @@ Ext.define('NextThought.controller.Session', {
 
 			if (timedout) {
 				alert({
-					icon:     Ext.Msg.ERROR,
-					title:    'Request Timeout',
-					msg:      'There was some issue preventing us from starting.\nPlease try again in a few minutes.',
+					icon: Ext.Msg.ERROR,
+					title: 'Request Timeout',
+					msg: 'There was some issue preventing us from starting.\nPlease try again in a few minutes.',
 					closable: false,
-					buttons:  null
+					buttons: null
 				});
 				return;
 			}
@@ -272,7 +272,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	attemptLogin: function (successCallback, failureCallback) {
+	attemptLogin: function(successCallback, failureCallback) {
 		var m = this,
 				s = $AppConfig.server,
 				d = s.data, ping = 'logon.ping',
@@ -281,9 +281,9 @@ Ext.define('NextThought.controller.Session', {
 		try {
 
 			r = {
-				timeout:  60000,
-				url:      getURL(d + ping),
-				callback: function (q, s, r) {
+				timeout: 60000,
+				url: getURL(d + ping),
+				callback: function(q, s, r) {
 					var l = m.getLink(r, 'logon.handshake');
 					if (!s || !l) {
 						if (r.timedout) {
@@ -303,7 +303,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	performHandshake: function (link, successCallback, failureCallback) {
+	performHandshake: function(link, successCallback, failureCallback) {
 		var m = this,
 				u = decodeURIComponent(Ext.util.Cookies.get('username')),
 				handshakeTimer = setTimeout(m.handshakeRecovery, 30000),
@@ -312,13 +312,13 @@ Ext.define('NextThought.controller.Session', {
 		//NOTE: handshakeTimer will retry if it doesn't return before 30 seconds because it's been reported that
 		//you can get into a bad state duringn handshake, so we want to interrupt that and try again.
 		r = {
-			method:   'POST',
-			timeout:  60000,
-			url:      getURL(link),
-			params:   {
+			method: 'POST',
+			timeout: 60000,
+			url: getURL(link),
+			params: {
 				username: u
 			},
-			callback: function (q, s, r) {
+			callback: function(q, s, r) {
 				clearTimeout(handshakeTimer);
 				var l = m.getLink(r, 'logon.continue');
 				if (!s || !l) {
@@ -330,8 +330,8 @@ Ext.define('NextThought.controller.Session', {
 
 				Ext.Object.each({
 									'content.permanent_general_privacy_page': 'privacy_policy',
-									'content.permanent_tos_page':             'terms_of_service'
-								}, function (server, local) {
+									'content.permanent_tos_page': 'terms_of_service'
+								}, function(server, local) {
 					$AppConfig.links[local] = m.getLink(r, server);
 				});
 
@@ -344,17 +344,17 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	handshakeRecovery: function () {
+	handshakeRecovery: function() {
 		Ext.util.Cookies.clear('username');
 		location.reload();
 	},
 
 
-	findResolveSelfWorkspace: function (s) {
+	findResolveSelfWorkspace: function(s) {
 		var items = s.get('Items') || [],
 				w = null, l;
 
-		Ext.each(items, function (item) {
+		Ext.each(items, function(item) {
 			var links = item.Links || [];
 			l = s.getLinkFrom(links, 'ResolveSelf');
 			if (l) {
@@ -368,19 +368,19 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	resolveService: function (successFn, failureFn) {
+	resolveService: function(successFn, failureFn) {
 		var m = this,
 				s = $AppConfig.server, r;
 
 		try {
 			r = {
-				url:      getURL(s.data),
-				timeout:  20000,
-				headers:  {
+				url: getURL(s.data),
+				timeout: 20000,
+				headers: {
 					'Accept': 'application/vnd.nextthought.workspace+json'
 				},
-				scope:    this,
-				callback: function (q, success, r) {
+				scope: this,
+				callback: function(q, success, r) {
 					if (!success) {
 						alert({title: getString('Apologies'), msg: getString('Cannot load page.')});
 						m.handleLogout();
@@ -419,7 +419,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	attemptLoginCallback: function (service, successCallback, failureCallback) {
+	attemptLoginCallback: function(service, successCallback, failureCallback) {
 		var me = this, href, workspace, r;
 		Socket.setup();
 
@@ -437,7 +437,7 @@ Ext.define('NextThought.controller.Session', {
 			console.debug('Set app user to ', $AppConfig.userObject);
 			ObjectUtils.defineAttributes($AppConfig, {
 				username: {
-					getter: function () {
+					getter: function() {
 						try {
 							return this.userObject.getId();
 						} catch (e) {
@@ -445,7 +445,7 @@ Ext.define('NextThought.controller.Session', {
 						}
 						return null;
 					},
-					setter: function () { throw 'readonly'; }
+					setter: function() { throw 'readonly'; }
 				}
 			});
 			successCallback.call(me);
@@ -461,12 +461,12 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		r = {
-			url:      getURL(href),
-			scope:    this,
-			headers:  {
+			url: getURL(href),
+			scope: this,
+			headers: {
 				Accept: 'application/json'
 			},
-			callback: function (q, success, r) {
+			callback: function(q, success, r) {
 				var json, user;
 				if (!success) {
 					onFailure(arguments);
@@ -476,7 +476,7 @@ Ext.define('NextThought.controller.Session', {
 				json = Ext.decode(r.responseText, true);
 				user = json ? ParseUtils.parseItems(json) : null;
 				user = user ? user.first() : null;
-				
+
 				if (user && user.get('Username') === workspace.Title) {
 					onSuccess(user, json.Preferences);
 				}

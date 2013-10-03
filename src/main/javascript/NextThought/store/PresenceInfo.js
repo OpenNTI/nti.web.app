@@ -4,21 +4,21 @@ Ext.define('NextThought.store.PresenceInfo', {
 
 	autoLoad: false,
 
-	getPresenceOf: function(user){
-		var username = (user && user.isModel) ?  user.get('Username') : user;
+	getPresenceOf: function(user) {
+		var username = (user && user.isModel) ? user.get('Username') : user;
 
-		if(!username){ return;}
+		if (!username) { return;}
 
 		return this.getById(username);
 	},
 
-	setPresenceOf: function(username,values){
+	setPresenceOf: function(username,values) {
 		var user = this.getPresenceOf(username);
 
-		if(user){
+		if (user) {
 			//user's presence is already in here
 			user.set(values.get('Data'));
-		}else{
+		}else {
 			//user's not in here
 			this.add(values);
 		}

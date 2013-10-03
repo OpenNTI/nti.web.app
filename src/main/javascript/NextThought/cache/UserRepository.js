@@ -6,7 +6,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			'NextThought.util.Parsing'
 		],
 
-		constructor: function () {
+		constructor: function() {
 			Ext.apply(this, {
 				store: null,
 				activeRequests: {}
@@ -14,7 +14,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
-		getStore: function () {
+		getStore: function() {
 			if (!this.store) {
 				this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
 			}
@@ -22,12 +22,12 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
-		setPresenceChangeListener: function(store){
-			store.on('presence-changed',this.presenceChanged,this);
+		setPresenceChangeListener: function(store) {
+			store.on('presence-changed', this.presenceChanged, this);
 		},
 
 
-		precacheUser: function (refreshedUser) {
+		precacheUser: function(refreshedUser) {
 			var s = this.getStore(), uid, u;
 
 			if (refreshedUser.getId === undefined) {
@@ -54,7 +54,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 						//Correct the problem
 						$AppConfig.userObject = u;*/
-						if(this.isDebug){
+						if (this.isDebug) {
 							console.log('Asked to precache an appuser that isnt the current $AppConfig.userObject. Dropping');
 						}
 						return;
@@ -74,16 +74,16 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
-		searchUser: function(query){
+		searchUser: function(query) {
 			var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
 				regex = new RegExp(query),
 				matches;
-			matches = this.getStore().queryBy(function(rec){
+			matches = this.getStore().queryBy(function(rec) {
 				var matched = false;
 
-				Ext.each(fieldsToMatch, function(field){
+				Ext.each(fieldsToMatch, function(field) {
 					var v = rec.get(field);
-					if(v && regex.test(v)){
+					if (v && regex.test(v)) {
 						matched = true;
 					}
 					return !matched;
@@ -95,7 +95,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		},
 
 
-		mergeUser: function (fromStore, newUser) {
+		mergeUser: function(fromStore, newUser) {
 			//Do an in place update so things holding references to us
 			//don't lose their listeners
 			//console.debug('Doing an in place update of ', fromStore, 'with', newUser.raw);
@@ -105,7 +105,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			fromStore.fireEvent('changed', fromStore);
 		},
 
-		cacheUser: function (user, maybeMerge) {
+		cacheUser: function(user, maybeMerge) {
 			var s = this.getStore(),
 				id = user.getId() || user.raw[user.idProperty],
 				fromStore = s.getById(id);
@@ -118,19 +118,19 @@ Ext.define('NextThought.cache.UserRepository', {
 					s.remove(fromStore);
 				}
 			}
-			if(this.isDebug){
+			if (this.isDebug) {
 				console.debug('Adding resolved user to store', user.getId(), user);
 			}
 			s.add(user);
 			return user;
 		},
 
-		resolveFromStore: function (key) {
+		resolveFromStore: function(key) {
 			var s = this.getStore();
 			return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID', key, 0, false, true, true);
 		},
 
-		getUser: function (username, callback, scope, forceFullResolve, cacheBust) {
+		getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
 			if (!Ext.isArray(username)) {
 				username = [username];
 				username.returnSingle = true;
@@ -146,7 +146,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				l -= 1;
 
 				if (l === 0) {
-					result = Ext.Array.map(names, function (n) {
+					result = Ext.Array.map(names, function(n) {
 						return result[n];
 					});
 
@@ -167,7 +167,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 			Ext.each(
 				username,
-				function (o) {
+				function(o) {
 					var name, r;
 
 					if (Ext.isString(o)) {
@@ -201,12 +201,12 @@ Ext.define('NextThought.cache.UserRepository', {
 					result[name] = null;
 					this.makeRequest(name, {
 						scope: this,
-						failure: function () {
+						failure: function() {
 							var unresolved = User.getUnresolved(name);
 							//	console.log('resturning unresolved user', name);
 							maybeFinish(name, unresolved);
 						},
-						success: function (u) {
+						success: function(u) {
 							//Note we recache the user here no matter what
 							//if we requestsd it we cache the new values
 							maybeFinish(name, this.cacheUser(u, true));
@@ -225,7 +225,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		 * @param username
 		 * @param callbacks
 		 */
-		makeRequest: function (username, callbacks, cacheBust) {
+		makeRequest: function(username, callbacks, cacheBust) {
 			var me = this,
 				result = null,
 				url = $AppConfig.service.getResolveUserURL(username),
@@ -246,7 +246,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				delete me.activeRequests[username];
 
 				if (!success) {
-					if( this.debug ){
+					if (this.debug) {
 						console.warn('There was an error resolving user:', username, arguments);
 					}
 					if (callbacks && callbacks.failure) {
@@ -262,15 +262,15 @@ Ext.define('NextThought.cache.UserRepository', {
 					console.warn('many matching users: "', username, '"', list);
 				}
 
-				Ext.each(list, function (u) {
+				Ext.each(list, function(u) {
 					var presence;
 					if (u.get('Username') === username) {
 						result = u;
 
 						//check if we already have a presence info for them
 						presence = Ext.getStore('PresenceInfo').getPresenceOf(result.get('Username'));
-						if(presence){
-							result.set('Presence',presence);
+						if (presence) {
+							result.set('Presence', presence);
 						}
 
 						result.summaryObject = false;
@@ -288,10 +288,10 @@ Ext.define('NextThought.cache.UserRepository', {
 					}
 
 
-					if(this.debug && (!r.loggedWarn || !r.loggedWarn[username])){
-						if(!r.loggedWarn){ r.loggedWarn = {}; }
+					if (this.debug && (!r.loggedWarn || !r.loggedWarn[username])) {
+						if (!r.loggedWarn) { r.loggedWarn = {}; }
 						r.loggedWarn[username] = true;
-						console.warn('{requestID:'+r.requestId+'} result is null', url, r.responseText);
+						console.warn('{requestID:' + r.requestId + '} result is null', url, r.responseText);
 					}
 				}
 			}
@@ -301,13 +301,13 @@ Ext.define('NextThought.cache.UserRepository', {
 				options = this.activeRequests[username].options;
 				options.callback = Ext.Function.createSequence(
 					options.callback,
-					function () {
+					function() {
 						callback.apply(me, arguments);
 					}, me);
 				return null;
 			}
 
-			console.debug('\n\n\n\nRequesting '+username,'\n\n\n\n');
+			console.debug('\n\n\n\nRequesting ' + username, '\n\n\n\n');
 			this.activeRequests[username] = Ext.Ajax.request({
 				url: url,
 				scope: me,
@@ -318,25 +318,25 @@ Ext.define('NextThought.cache.UserRepository', {
 			return result;
 		},
 
-		presenceChanged: function (username, presence) {
-			var u = this.getStore().getById(username),newPresence;
-			if(this.debug){console.log('User repository recieved a presence change for ', username, arguments);}
+		presenceChanged: function(username, presence) {
+			var u = this.getStore().getById(username), newPresence;
+			if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
 			newPresence = (presence && presence.isPresenceInfo)
 					? presence
-					: NextThought.model.PresenceInfo.createFromPresenceString(presence,username);
+					: NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
 
 			if (u) {
-				if( this.debug ){
+				if (this.debug) {
 					console.debug('updating presence for found user', u);
 				}
 				u.set('Presence', newPresence);
 				u.fireEvent('changed', u);
 			}
-			else if(this.debug) {
+			else if (this.debug) {
 				console.debug('no user found to update presence');
 			}
 		}
 	},
-	function () {
+	function() {
 		window.UserRepository = this;
 	});

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Classrooms',{
+Ext.define('NextThought.util.Classrooms', {
 	singleton: true,
 
 	requires: [
@@ -14,7 +14,7 @@ Ext.define('NextThought.util.Classrooms',{
 	},
 
 
-	getRoomInfoFromComponent: function(c){
+	getRoomInfoFromComponent: function(c) {
 		if (!c) {
 			console.error('Cannot get RoomInfo from an undefined component.');
 			return null;
@@ -65,14 +65,14 @@ Ext.define('NextThought.util.Classrooms',{
 	getClassSectionNameFromRoomInfo: function(roomInfo, nameIfNotFound) {
 		var name = null, friendslist;
 		Ext.getStore('Providers').findBy(
-			function(r, id){
+			function(r, id) {
 				var sections = r.get('Sections'),
 					section, key;
 				for (key in sections) {
-					if (sections.hasOwnProperty(key)){
+					if (sections.hasOwnProperty(key)) {
 						section = sections[key];
 						console.log(section, section.getId(), roomInfo.get('ContainerId'));
-						if (section.get('NTIID') === roomInfo.get('ContainerId')){
+						if (section.get('NTIID') === roomInfo.get('ContainerId')) {
 							name = r.get('ID') + ' - ' + section.get('ID');
 						}
 					}
@@ -82,7 +82,7 @@ Ext.define('NextThought.util.Classrooms',{
 		if (!name) {
 			//Okay, not a class, try friends lists
 			friendslist = Ext.getStore('FriendsList').getById(roomInfo.get('ContainerId'));
-			if (friendslist){name = friendslist.get('realname');}
+			if (friendslist) {name = friendslist.get('realname');}
 		}
 		return name || nameIfNotFound;
 	},
@@ -91,13 +91,13 @@ Ext.define('NextThought.util.Classrooms',{
 	getClassSectionNameFromSectionId: function(sectionOid) {
 		var name = null, friendslist;
 		Ext.getStore('Providers').findBy(
-			function(r){
+			function(r) {
 				var sections = r.get('Sections'),
 					section, key;
 				for (key in sections) {
-					if (sections.hasOwnProperty(key)){
+					if (sections.hasOwnProperty(key)) {
 						section = sections[key];
-						if (section.getId() === sectionOid){
+						if (section.getId() === sectionOid) {
 							name = r.get('ID') + ' - ' + section.get('ID');
 						}
 					}
@@ -112,6 +112,6 @@ Ext.define('NextThought.util.Classrooms',{
 
 
 },
-function(){
+function() {
 	window.ClassroomUtils = this;
 });

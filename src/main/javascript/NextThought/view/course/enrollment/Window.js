@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.enrollment.Window',{
+Ext.define('NextThought.view.course.enrollment.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.enrollment-window',
 
@@ -21,7 +21,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	dialog: true,
 
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -30,10 +30,10 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 			cls: 'header', cn: [
 			{ cls: 'titlebar', cn: [
 				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
-				{ tag:'tpl', 'if':'enrollProcess', cn:{
+				{ tag: 'tpl', 'if': 'enrollProcess', cn: {
 					 cls: 'tab', html: 'Confirmation', 'data-order': 2
 				}},
-				{ tag:'tpl', 'if':'!enrollProcess', cn:[
+				{ tag: 'tpl', 'if': '!enrollProcess', cn: [
 					{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
 					{ cls: 'tab', html: 'Complete', 'data-order': 2 }
 				]},
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 				{ cls: 'meta', cn: [
 					{cls: 'course', html: '{Name}'},
 					{cls: 'title', html: '{Title}'},
-					{tag:'tpl','if':'by', cn:{cls: 'byline', html: 'By {by}'}}
+					{tag: 'tpl', 'if': 'by', cn: {cls: 'byline', html: 'By {by}'}}
 				]}
 			] }
 		]
@@ -92,7 +92,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	items: [],
 
 
-	getDockedItems: function () {
+	getDockedItems: function() {
 		return [];
 	},
 
@@ -102,22 +102,22 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		var enrolling = this.record.getLink('enroll');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
-		this.renderData = Ext.apply(this.renderData, {enrollProcess:enrolling});
-		this.renderData.by = this.renderData.Author||this.renderData.Provider;
+		this.renderData = Ext.apply(this.renderData, {enrollProcess: enrolling});
+		this.renderData.by = this.renderData.Author || this.renderData.Provider;
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.closeEl, 'click', 'close');
 		me.mon(me.cancelEl, 'click', 'close');
 		me.mon(me.confirmEl, 'click', 'onConfirm');
-		me.getEl().select('.titlebar .tab').each(function (e) {
+		me.getEl().select('.titlebar .tab').each(function(e) {
 			me.mon(e, 'click', 'onTabClicked');
 		});
 
@@ -133,33 +133,33 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	updateContentHeight: function () {
+	updateContentHeight: function() {
 		var el = this.getTargetEl(),
 			footer = this.footerEl,
 			h;
 
-		if(!footer || !el || !footer.getY || !el.getY){
+		if (!footer || !el || !footer.getY || !el.getY) {
 			return;
 		}
 
 		h = footer.getY() - el.getY();
 		el.setHeight(h);
-		Ext.defer(this.getEl().repaint,10,this.getEl());
+		Ext.defer(this.getEl().repaint, 10, this.getEl());
 	},
 
 
-	hideError: function () {
+	hideError: function() {
 		this.updateContentHeight();
 		this.errorEl.hide();
 	},
 
 
-	showError: function (message, label) {
+	showError: function(message, label) {
 		var el = this.getTargetEl(),
 			errorEl = this.errorEl;
 
 		function syncHeight() {
-			if(!errorEl || !errorEl.getY || !el || !el.getY){
+			if (!errorEl || !errorEl.getY || !el || !el.getY) {
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -174,7 +174,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	onAdd: function (cmp) {
+	onAdd: function(cmp) {
 		var ordinal = cmp.ordinal,
 			confirmLabel = cmp.confirmLabel || 'Enroll',
 			checkLabel = cmp.checkboxLabel;
@@ -197,7 +197,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	syncTab: function (ordinal) {
+	syncTab: function(ordinal) {
 		var el = this.getEl(),
 			tabs = el.select('.titlebar .tab'),
 			defaultTab = this.started ? 0 : 'detail';
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 		tabs.removeCls('active');
 		el.select('.titlebar .tab[data-order="' + (ordinal || defaultTab) + '"]').addCls('active');
 
-		tabs.each(function (t, c) {
+		tabs.each(function(t, c) {
 			var i = t.getAttribute('data-order');
 			if (i === 'detail') {
 				i = 0;
@@ -226,7 +226,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	onConfirm: function () {
+	onConfirm: function() {
 		if (this.confirmEl.hasCls('disabled')) {
 			return;
 		}
@@ -237,19 +237,19 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	onTabClicked: function (e) {
+	onTabClicked: function(e) {
 
 	},
 
 
-	setConfirmState: function (enabled) {
+	setConfirmState: function(enabled) {
 		if (this.confirmEl) {
 			this.confirmEl[!enabled ? 'addCls' : 'removeCls']('disabled');
 		}
 	},
 
 
-	onCheckboxClicked: function (e) {
+	onCheckboxClicked: function(e) {
 		var t = e.getTarget(),
 			active = this.activeView,
 			linkClicked = (active && active.onCheckboxLinkClicked) || Ext.emptyFn;
@@ -266,7 +266,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	updateTabTitleForChild: function (cmp, text) {
+	updateTabTitleForChild: function(cmp, text) {
 		var ordinal = cmp.ordinal,
 			t = this.headerEl.down('.titlebar .tab[data-order=' + ordinal + ']');
 
@@ -276,7 +276,7 @@ Ext.define('NextThought.view.course.enrollment.Window',{
 	},
 
 
-	agreeToTerms: function () {
+	agreeToTerms: function() {
 		var c = this.checkboxEl.dom.checked,
 			a = this.activeView;
 		Ext.callback(a && a.setAgreementState, a, [c]);

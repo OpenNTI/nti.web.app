@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.Base', {
 	extend: 'Ext.panel.Panel',
-	
+
 	overflowX: 'hidden',
 	overflowY: 'auto',
 	frame: false,
@@ -8,18 +8,18 @@ Ext.define('NextThought.view.content.Base', {
 	defaults: {frame: false, border: false},
 
 
-	getInsertionPoint: function(subElPostfix){
-		if (subElPostfix){
-			return Ext.get(this.getEl().id+'-'+subElPostfix);
+	getInsertionPoint: function(subElPostfix) {
+		if (subElPostfix) {
+			return Ext.get(this.getEl().id + '-' + subElPostfix);
 		}
 
 		return this.getTargetEl();
-//		return Ext.get(this.getEl().id+'-innerCt');
-//		return Ext.get(this.getEl().id+'-targetEl');
+    //		return Ext.get(this.getEl().id+'-innerCt');
+    //		return Ext.get(this.getEl().id+'-targetEl');
 	},
 
 
-	relayout: function(){
+	relayout: function() {
 		this.updateLayout();
 		this.fireEvent('resize');
 	}

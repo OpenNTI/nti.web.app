@@ -13,7 +13,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	saveRange: function (r) {
+	saveRange: function(r) {
 		if (!r) {
 			return null;
 		}
@@ -27,7 +27,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	saveInputSelection: function (s) {
+	saveInputSelection: function(s) {
 		if (!s || !s.focusNode || !s.focusNode.firstChild || s.focusNode.firstChild.tagName !== 'INPUT') {
 			return null;
 		}
@@ -41,7 +41,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	restoreSavedRange: function (o) {
+	restoreSavedRange: function(o) {
 		if (!o) {
 			return null;
 		}
@@ -60,7 +60,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	nodeIfObjectOrInObject: function (node) {
+	nodeIfObjectOrInObject: function(node) {
 		var selector = 'object', n;
 		if (!node) {
 			return null;
@@ -73,7 +73,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	rangeIfItemPropSpan: function (range, doc) {
+	rangeIfItemPropSpan: function(range, doc) {
 		/*
 		 * Special case for annototable images: We don't want to expand past the annototable img.
 		 * And since we usually expand by a given number of characters,
@@ -105,7 +105,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	gatherQuestionContext: function (node) {
+	gatherQuestionContext: function(node) {
 		var contents = node.down('.naquestion');
 		if (contents) {
 			return contents.dom.cloneNode(true);
@@ -114,7 +114,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	gatherVideoContext: function (node) {
+	gatherVideoContext: function(node) {
 		var title, src, titleNode, sourceNode;
 
 		titleNode = Ext.fly(node).down('param[name=title]');
@@ -143,10 +143,10 @@ Ext.define('NextThought.util.Ranges', {
 
 	//How about a registry that maps the mimetype of the object
 	//to a handler that knows how to give contents
-	contentsForObjectTag: function (object) {
+	contentsForObjectTag: function(object) {
 		var node = null;
 
-		Ext.Object.each(this.customContextGathers, function (sel, fn) {
+		Ext.Object.each(this.customContextGathers, function(sel, fn) {
 			if (object.is(sel)) {
 				node = this[fn](object);
 			}
@@ -157,7 +157,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	nodeThatIsEdgeOfRange: function (range, start) {
+	nodeThatIsEdgeOfRange: function(range, start) {
 		if (!range) {
 			Ext.Error.raise('Node is not defined');
 		}
@@ -205,7 +205,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	coverAll: function (rangeA) {
+	coverAll: function(rangeA) {
 		var range = rangeA ? rangeA.cloneRange() : null,
 			start, end, newStart, newEnd;
 
@@ -213,7 +213,7 @@ Ext.define('NextThought.util.Ranges', {
 			return c.nodeType === Node.TEXT_NODE
 				|| Anchors.isNodeIgnored(c)
 				|| /^(a|b|i|u|img|li)$/i.test(c.tagName);
-//				|| c.childNodes.length === 1;
+      //				|| c.childNodes.length === 1;
 		}
 
 		function walkOut(node, direction) {
@@ -259,7 +259,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	expandRange: function (range, doc) {
+	expandRange: function(range, doc) {
 		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer)
 				|| this.nodeIfObjectOrInObject(range.startContainer),
 			r;
@@ -287,7 +287,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	expandRangeGetNode: function (range, doc, dontClone) {
+	expandRangeGetNode: function(range, doc, dontClone) {
 		var tempDiv = doc.createElement('div'),
 			n = this.expandRange(range);
 		try {
@@ -296,14 +296,14 @@ Ext.define('NextThought.util.Ranges', {
 		catch (e) {
 			console.error('Could not clone range contents', Globals.getError(e));
 		}
-//		if(!dontClone){
-//			tempDiv = tempDiv.cloneNode(true);
-//		}
+    //		if(!dontClone){
+    //			tempDiv = tempDiv.cloneNode(true);
+    //		}
 		return tempDiv;
 	},
 
 
-	expandRangeGetString: function (range, doc) {
+	expandRangeGetString: function(range, doc) {
 		var tempDiv, str;
 		tempDiv = this.expandRangeGetNode(range, doc, true);
 		str = tempDiv.innerHTML;
@@ -322,9 +322,9 @@ Ext.define('NextThought.util.Ranges', {
 	 *
 	 * @param dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
 	 */
-	clearNonContextualGarbage: function (dom) {
-		Ext.each(this.nonContextWorthySelectors, function (sel) {
-			Ext.each(Ext.fly(dom).query(sel), function (remove) {
+	clearNonContextualGarbage: function(dom) {
+		Ext.each(this.nonContextWorthySelectors, function(sel) {
+			Ext.each(Ext.fly(dom).query(sel), function(remove) {
 				Ext.fly(remove).remove();
 			});
 		});
@@ -336,7 +336,7 @@ Ext.define('NextThought.util.Ranges', {
 	 * Takes a range or a rangy range and returns the bounding rect
 	 * @param r - either a browser range or a rangy range
 	 */
-	getBoundingClientRect: function (r) {
+	getBoundingClientRect: function(r) {
 		if (r.nativeRange) {
 			return r.nativeRange.getBoundingClientRect();
 		}
@@ -344,7 +344,7 @@ Ext.define('NextThought.util.Ranges', {
 	},
 
 
-	getSelectedNodes: function (range, doc) {
+	getSelectedNodes: function(range, doc) {
 		var walker,
 			sc = range.startContainer, ec = range.endContainer,
 			so = range.startOffset, eo = range.endOffset,
@@ -394,7 +394,7 @@ Ext.define('NextThought.util.Ranges', {
 	 * @param containerId {String}
 	 * @return {Node}
 	 */
-	getContextAroundRange: function (applicableRange, doc, cleanRoot, containerId) {
+	getContextAroundRange: function(applicableRange, doc, cleanRoot, containerId) {
 		var utils = Boolean(applicableRange.isTimeRange) ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
 			range = utils.toDomRange.apply(this, arguments);
 
@@ -410,12 +410,12 @@ Ext.define('NextThought.util.Ranges', {
 	 * @param n {Node}
 	 * @return {Node}
 	 */
-	fixUpCopiedContext: function (n) {
+	fixUpCopiedContext: function(n) {
 		var node = Ext.get(n);
-//          firstChild = node.first();
-//        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
-//	        node.setHTML('[...][...]');
-//        }
+    //          firstChild = node.first();
+    //        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){
+    //	        node.setHTML('[...][...]');
+    //        }
 
 		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 		node.select('a[href]:not(.skip-anchor)').set({target: '_blank'});
@@ -431,7 +431,7 @@ Ext.define('NextThought.util.Ranges', {
 	 * but the range is not collapsed we will attempt to get the bounding box
 	 * based on the ranges contents.  We do this because IE sucks.
 	 */
-	safeBoundingBoxForRange: function (r) {
+	safeBoundingBoxForRange: function(r) {
 		var rect = r ? r.getBoundingClientRect(r) : null, node;
 		try {
 			if (rect && !r.collapsed && RectUtils.isZeroRect(rect) && r.toString() === '' && !Ext.isTextNode(r.startContainer)) {
@@ -460,6 +460,6 @@ Ext.define('NextThought.util.Ranges', {
 	}
 
 
-}, function () {
+}, function() {
 	window.RangeUtils = this;
 });

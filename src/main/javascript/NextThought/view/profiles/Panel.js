@@ -11,14 +11,14 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	navigation: {xtype: 'profile-outline'},
 
-	body:{
+	body: {
 		layout: {
 			type: 'card',
 			deferredRender: true
 		}
 	},
 
-	ui:  'profile',
+	ui: 'profile',
 	cls: 'profile-view',
 
 	config: {
@@ -30,64 +30,64 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	//<editor-fold desc="Init">
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var me = this,
 			u = config.user;
 
-		if(!u){
+		if (!u) {
 			Ext.Error.raise('No user provided');
 		}
 
-		this.applyConfigs('navigation', {user:u});
+		this.applyConfigs('navigation', {user: u});
 		this.applyConfigs('body', {
-			items:[
+			items: [
 				{ xtype: 'profile-activity', user: u, username: u.getId(),
 					listeners: {
-						afterrender:{ fn:'attachScrollRelay',scope:this, single:true }
+						afterrender: { fn: 'attachScrollRelay', scope: this, single: true }
 					}
 				},
 				{ xtype: 'profile-about', user: u },
-				{ xtype: 'profile-blog', user:u, username: u.getId() }
+				{ xtype: 'profile-blog', user: u, username: u.getId() }
 			]
 		});
 
 		this.callParent(arguments);
 
-		function monitor(panel){
-			panel.relayEvents(me.navigation,['name-clicked','enable-edit','disable-edit']);
-			me.mon(panel,{
-				beforeactivate:'onBeforeViewChanged',
-				activate:'onViewChanged',
-				destroy:'removeNavigationItem'
+		function monitor(panel) {
+			panel.relayEvents(me.navigation, ['name-clicked', 'enable-edit', 'disable-edit']);
+			me.mon(panel, {
+				beforeactivate: 'onBeforeViewChanged',
+				activate: 'onViewChanged',
+				destroy: 'removeNavigationItem'
 			});
 		}
 
-		this.forEachView(monitor,this);
-		this.mon(this.navigation,{
-			'show-profile-view':'changeView'
+		this.forEachView(monitor, this);
+		this.mon(this.navigation, {
+			'show-profile-view': 'changeView'
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
 	},
 
 
-	forEachView: function(fn,scope){
-		this.body.items.each(fn,scope||this);
+	forEachView: function(fn,scope) {
+		this.body.items.each(fn, scope || this);
 	},
 
 
-	attachScrollRelay: function(cmp){
-		this.relayEvents(cmp.getEl(), ['scroll'],'profile-body-');
+	attachScrollRelay: function(cmp) {
+		this.relayEvents(cmp.getEl(), ['scroll'], 'profile-body-');
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.initState();
 	},
 
 
-	initState: function(){
+	initState: function() {
 		//drive initial state restore here
 		this.restoreState(this.getStateData());
 	},
@@ -96,26 +96,26 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	//<editor-fold desc="Simple Handlers">
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		console.log('about to deactivate the profile view');
-		return Ext.Array.every(this.body.items.items, function (item) {
+		return Ext.Array.every(this.body.items.items, function(item) {
 			return item.fireEvent('beforedeactivate');
 		});
 	},
 
 
-	onBeforeViewChanged: function(){
+	onBeforeViewChanged: function() {
 		console.debug('onBeforeViewChange');
 	},
 
 
-	onViewChanged: function(activeCmp){
-//		console.debug('onViewChange', activeCmp.id);
+	onViewChanged: function(activeCmp) {
+    //		console.debug('onViewChange', activeCmp.id);
 		this.navigation.updateSelection(activeCmp);
 	},
 
 
-	removeNavigationItem: function(cmp){
+	removeNavigationItem: function(cmp) {
 		this.navigation.removeNavigationItem(cmp.xtype);
 	},
 
@@ -123,17 +123,17 @@ Ext.define('NextThought.view.profiles.Panel', {
 	//</editor-fold>
 
 	//<editor-fold desc="Read & Write State">
-	restoreState: function(state){
+	restoreState: function(state) {
 		console.log(state);
 		var me = this,
 			p = state.activeTab.split('/'),
 			activeView = p.shift(),
 			activeViewData = p.join('/');
 
-		function compareUriName(i){
-			var uri = i.uriFriendlyName||'';
-			if(!Ext.isArray(uri)){ uri = [uri]; }
-			if(Ext.Array.contains(uri,activeView)){
+		function compareUriName(i) {
+			var uri = i.uriFriendlyName || '';
+			if (!Ext.isArray(uri)) { uri = [uri]; }
+			if (Ext.Array.contains(uri, activeView)) {
 				activeView = i;
 			}
 
@@ -143,14 +143,14 @@ Ext.define('NextThought.view.profiles.Panel', {
 		me.setStateData(Ext.clone(state));
 
 		me.forEachView(compareUriName);
-		if(Ext.isString(activeView)){
-			console.warn('Could not find view: '+activeView);
+		if (Ext.isString(activeView)) {
+			console.warn('Could not find view: ' + activeView);
 			me.fireEvent('restored');
 			return;
 		}
 
 		this.body.getLayout().setActiveItem(activeView);
-		activeView.restore(activeViewData,function(){
+		activeView.restore(activeViewData, function() {
 			me.fireEvent('restored');
 		});
 
@@ -160,24 +160,24 @@ Ext.define('NextThought.view.profiles.Panel', {
 	//This is fired based on USER interaction.
 	// Do not call this to restore the view progamatically. Just call setActiveItem, otherwise you will end up with
 	// bad history.
-	changeView: function(view, action, data){
-		console.debug('USER Changing Profile View:',view, 'action:',action, 'data:',data);
+	changeView: function(view, action, data) {
+		console.debug('USER Changing Profile View:', view, 'action:', action, 'data:', data);
 
 		var stateData = Ext.clone(this.getStateData()),
 			url,
 			u = this.user,
 			c = this.down(view);
 
-		if(!c){
-			console.error('No view selected from query: '+view);
+		if (!c) {
+			console.error('No view selected from query: ' + view);
 			return;
 		}
 
 		this.body.getLayout().setActiveItem(c);
-		if( c.performAction ) {
-			c.performAction(action,data);
-		} else if ( action !== 'view' ) {
-			console.warn(c.$className+' does not implement performAction and was requested to '+action+' but it was dropped');
+		if (c.performAction) {
+			c.performAction(action, data);
+		} else if (action !== 'view') {
+			console.warn(c.$className + ' does not implement performAction and was requested to ' + action + ' but it was dropped');
 		}
 
 		stateData.activeTab = c.getStateData();
@@ -187,8 +187,8 @@ Ext.define('NextThought.view.profiles.Panel', {
 						? null
 						: stateData.activeTab.split('/'));
 
-		console.debug('State Data: ',stateData, url);
-		history.pushState({profile:Ext.clone(stateData)},this.ownerCt.title,url);
+		console.debug('State Data: ', stateData, url);
+		history.pushState({profile: Ext.clone(stateData)},this.ownerCt.title, url);
 	}
 	//</editor-fold>
 

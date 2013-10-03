@@ -1,4 +1,4 @@
-Ext.define('NextThought.editor.embedvideo.Window',{
+Ext.define('NextThought.editor.embedvideo.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.embedvideo-window',
 
@@ -38,17 +38,17 @@ Ext.define('NextThought.editor.embedvideo.Window',{
 		{xtype: 'embedvideo-main-view'}
 	],
 
-	embed: function(){
+	embed: function() {
 		var main = this.down('embedvideo-main-view'),
 			val = main.getValues();
 
-		if(val){
-			if(Ext.isFunction(this.onEmbed)){
+		if (val) {
+			if (Ext.isFunction(this.onEmbed)) {
 				Ext.callback(this.onEmbed, this, [val]);
 			}
 			this.close();
 		}
-		else{
+		else {
 			main.setError({field: 'embed', message: 'The embedded video should be a youtube embed url, youtube embed code, or an html5 video url.'});
 		}
 	}

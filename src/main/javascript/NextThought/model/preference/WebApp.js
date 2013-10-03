@@ -1,11 +1,11 @@
-Ext.define('NextThought.model.preference.WebApp',{
+Ext.define('NextThought.model.preference.WebApp', {
 	extend: 'NextThought.model.preference.Base',
 
-	fields:[
+	fields: [
 		{name: 'preferFlashVideo', type: 'bool'}
 	],
 
-	getResourceUrl: function(){
+	getResourceUrl: function() {
 		var base = this.callParent(arguments);
 
 		return base + '/WebApp';

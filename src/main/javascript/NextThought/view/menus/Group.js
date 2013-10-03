@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.Group',{
+Ext.define('NextThought.view.menus.Group', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.group-menu',
 	requires: [
@@ -18,17 +18,17 @@ Ext.define('NextThought.view.menus.Group',{
 		xtype: 'menuitem',
 		plain: true,
 		listeners: {
-			'click':function(item){
-				item.ownerCt.fireEvent('selected',item.record, item);
+			'click': function(item) {
+				item.ownerCt.fireEvent('selected', item.record, item);
 			}
 		}
 	},
 
-	listeners:{
-		'mouseleave': function(menu){ menu.hide(); }
+	listeners: {
+		'mouseleave': function(menu) { menu.hide(); }
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('datachanged', this.reload, this);
@@ -38,24 +38,24 @@ Ext.define('NextThought.view.menus.Group',{
 	},
 
 
-	reload: function(){
+	reload: function() {
 		this.removeAll();
 
 		var items = [],
-			special = 'mycontacts-'+$AppConfig.username,
+			special = 'mycontacts-' + $AppConfig.username,
 			hideMyContacts = this.hideMyContacts,
 			check = this.checklist,
 			name = this.username,
 			communities = $AppConfig.userObject.getCommunities(), lists = [], groups = [];
 
-		if(this.actions){
-			items.push.apply(items,this.actions);
+		if (this.actions) {
+			items.push.apply(items, this.actions);
 		}
 
-		if(!this.hideCommunities && communities.length>0){
-			Ext.each(communities,function(c){
+		if (!this.hideCommunities && communities.length > 0) {
+			Ext.each(communities, function(c) {
 				items.push({
-					xtype: check ? 'menucheckitem': undefined,
+					xtype: check ? 'menucheckitem' : undefined,
 					cls: 'share-with group-filter community-menu-item',
 					text: c.getName(),
 					record: c,
@@ -64,20 +64,20 @@ Ext.define('NextThought.view.menus.Group',{
 			});
 		}
 
-		this.store.each(function(v){
-			if(v.get('Username')===special && hideMyContacts){
+		this.store.each(function(v) {
+			if (v.get('Username') === special && hideMyContacts) {
 				return;
 			}
 
 			var dfl = v.isDFL, target = dfl ? groups : lists;
 
 			target.push({
-				xtype: check ? 'menucheckitem': undefined,
-				cls: 'share-with '+v.readableType+'-menu-item',
+				xtype: check ? 'menucheckitem' : undefined,
+				cls: 'share-with ' + v.readableType + '-menu-item',
 				text: v.getName(),
 				record: v,
 				isGroup: true,
-				checked: check && Ext.Array.contains(v.get('friends'),name)
+				checked: check && Ext.Array.contains(v.get('friends'), name)
 			});
 		});
 

@@ -49,7 +49,7 @@ Ext.define('NextThought.view.chat.View', {
 							ui: 'flat',
 							text: 'Cancel',
 							scale: 'large',
-							handler: function (btn) {
+							handler: function(btn) {
 								this.up('chat-window').onFlagToolClicked();
 							}
 						},
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.chat.View', {
 							text: 'Report',
 							scale: 'large',
 							disabled: true,
-							handler: function () {
+							handler: function() {
 								this.up('chat-view').flagMessages();
 							}
 						}
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.chat.View', {
 	],
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
 		this.mon(this.down('chat-log-view'), 'add', this.maybeShowFlagIcon, this);
@@ -82,8 +82,8 @@ Ext.define('NextThought.view.chat.View', {
 		if (Ext.is.iPad) {
 			var me = this;
 
-            //After dismissing keyboard, reset Y to original position
-			me.el.down('input').on('focus', function () {
+      //After dismissing keyboard, reset Y to original position
+			me.el.down('input').on('focus', function() {
 				console.log('input focused');
 				if (!me.hasOwnProperty('initialY')) {
 					me.initialY = me.el.up('.x-window-chat-window').getY();
@@ -91,10 +91,10 @@ Ext.define('NextThought.view.chat.View', {
 				}
 			}, me);
 
-			me.el.down('input').on('blur', function () {
-				console.log("input blurred");
-				Ext.Function.defer(function () {
-					console.log("deferred function");
+			me.el.down('input').on('blur', function() {
+				console.log('input blurred');
+				Ext.Function.defer(function() {
+					console.log('deferred function');
 					var topWindow = me.el.up('.x-window-chat-window');
 					if (me.hasOwnProperty('initialY')) {
 						topWindow.setY(me.initialY);
@@ -102,17 +102,17 @@ Ext.define('NextThought.view.chat.View', {
 				}, 100);
 			}, me);
 
-            //pressing key can hide keyboard and move view up. Stop top from changing.
-            var chatWindow = this.el.up('.x-window');
-            chatWindow.on('resize', function(){
-                chatWindow.setTop(me.initialY);
-            })
+      //pressing key can hide keyboard and move view up. Stop top from changing.
+      var chatWindow = this.el.up('.x-window');
+      chatWindow.on('resize', function() {
+        chatWindow.setTop(me.initialY);
+      });
 
 		}
 	},
 
 
-	trackChatState: function (notification) {
+	trackChatState: function(notification) {
 		if (!notification || !notification.status) {
 			return;
 		}
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.chat.View', {
 			goneTimer = 600000,
 			room = this.up('.chat-window') ? this.up('.chat-window').roomInfo : null;
 		if (!room) {
-			console.log("Error: Cannot find the roomInfo, so we drop the chat status change");
+			console.log('Error: Cannot find the roomInfo, so we drop the chat status change');
 			return;
 		}
 
@@ -129,10 +129,10 @@ Ext.define('NextThought.view.chat.View', {
 		if (notification.status === 'active' || notification.status === 'composing' || notification.status === 'paused') {
 			clearTimeout(me.inactiveTimer);
 			clearTimeout(me.awayTimer);
-			me.inactiveTimer = setTimeout(function () {
+			me.inactiveTimer = setTimeout(function() {
 				me.fireEvent('status-change', {status: 'inactive'});
 			}, activeTimer);
-			me.awayTimer = setTimeout(function () {
+			me.awayTimer = setTimeout(function() {
 				me.fireEvent('status-change', {status: 'gone'});
 			}, goneTimer);
 		}
@@ -143,10 +143,10 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	flagMessages: function () {
+	flagMessages: function() {
 		var allEntries = this.query('chat-log-entry'),
 			allFlaggedMessages = [];
-		Ext.each(allEntries, function (e) {
+		Ext.each(allEntries, function(e) {
 			if (e.isFlagged()) {
 				allFlaggedMessages.push(e);
 			}
@@ -156,7 +156,7 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	maybeShowFlagIcon: function (view, entry) {
+	maybeShowFlagIcon: function(view, entry) {
 		if (this.showFlagIcon) {
 			return;
 		}
@@ -177,7 +177,7 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	maybeEnableButtons: function () {
+	maybeEnableButtons: function() {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	toggleModerationButtons: function () {
+	toggleModerationButtons: function() {
 		var layout = this.down('[entryCard]').getLayout(),
 			activeId = layout.getActiveItem().itemId,
 			toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
@@ -200,7 +200,7 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	showError: function (errorObject) {
+	showError: function(errorObject) {
 		var box = this.down('[name=error]'),
 			errorText = errorObject.message || 'An unknown error occurred. Please try again.';
 		//make main error field show up
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	clearError: function () {
+	clearError: function() {
 		var box = this.down('[name=error]'),
 			log = this.down('chat-log-view');
 		log.anchor = log.initialConfig.anchor;
@@ -219,11 +219,11 @@ Ext.define('NextThought.view.chat.View', {
 	},
 
 
-	reanchorLog: function () {
+	reanchorLog: function() {
 		var log = this.down('chat-log-view'),
 			foot = 0;
 
-		this.items.each(function (cmp) {
+		this.items.each(function(cmp) {
 			if (cmp !== log) {
 				foot += cmp.getHeight();
 			}

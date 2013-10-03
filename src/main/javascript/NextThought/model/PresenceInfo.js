@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.PresenceInfo',{
+Ext.define('NextThought.model.PresenceInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'username',
 	fields: [
@@ -9,17 +9,17 @@ Ext.define('NextThought.model.PresenceInfo',{
 	],
 
 	statics: {
-		createFromPresenceString: function(presence,username){
-			return Ext.create("NextThought.model.PresenceInfo",{
+		createFromPresenceString: function(presence,username) {
+			return Ext.create('NextThought.model.PresenceInfo', {
 				'username': username,
-				'type': (presence.toLowerCase() !== 'online')? 'unavailable' : 'available'
+				'type': (presence.toLowerCase() !== 'online') ? 'unavailable' : 'available'
 			});
 		},
 
-		createPresenceInfo: function(username,type,show,status){
-			return Ext.create("NextThought.model.PresenceInfo",{
+		createPresenceInfo: function(username,type,show,status) {
+			return Ext.create('NextThought.model.PresenceInfo', {
 				'username': username,
-				'type': (type)? type : 'unavailable',
+				'type': (type) ? type : 'unavailable',
 				'show': show,
 				'status': status
 			});
@@ -27,11 +27,11 @@ Ext.define('NextThought.model.PresenceInfo',{
 	},
 
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 
-		ObjectUtils.defineAttributes(this,{
-			name:{
+		ObjectUtils.defineAttributes(this, {
+			name: {
 				getter: this.getName
 			}
 		});
@@ -48,40 +48,40 @@ Ext.define('NextThought.model.PresenceInfo',{
 		'invisible': 'Invisible'
 	},
 
-	isOnline: function(){
+	isOnline: function() {
 		return this.get('type') !== 'unavailable';
 	},
 
-	toString: function(){
+	toString: function() {
 		return (this.isOnline()) ? 'Online' : 'Offline';
 	},
 
-	getDisplayText: function(){
+	getDisplayText: function() {
 		var status = this.get('status');
 
-		if(!this.isOnline()){
+		if (!this.isOnline()) {
 			return '';
 		}
 
-		if(!Ext.isEmpty(status) && status !== 'null'){
+		if (!Ext.isEmpty(status) && status !== 'null') {
 			return this.get('status');
 		}
 
 		return this.nameToDisplay[this.getName()];
 	},
 
-	getName: function(){
+	getName: function() {
 		var show = this.get('show');
-		
-		if(!this.isOnline()){
+
+		if (!this.isOnline()) {
 			return 'unavailable';
 		}
 
-		if(show === 'chat'){
+		if (show === 'chat') {
 			return 'available';
 		}
 
-		if(show === 'xa'){
+		if (show === 'xa') {
 			return 'invisible';
 		}
 

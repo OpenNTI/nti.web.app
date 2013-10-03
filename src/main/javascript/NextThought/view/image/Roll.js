@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.image.Roll',{
+Ext.define('NextThought.view.image.Roll', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.image-roll',
 
@@ -18,34 +18,34 @@ Ext.define('NextThought.view.image.Roll',{
 		}
 	}],
 
-	constructor: function(config){
-		var store = config ? (config.store||undefined) : undefined,
-			data = config ? (config.data||undefined) : undefined,
+	constructor: function(config) {
+		var store = config ? (config.store || undefined) : undefined,
+			data = config ? (config.data || undefined) : undefined,
 			me = this;
 
 		me.callParent(arguments);
 
 		me.image = me.down('box[name=image]');
 
-		me.mon(me.image,'afterrender',function(){
-			me.image.el.dom.onload = function(){
+		me.mon(me.image, 'afterrender', function() {
+			me.image.el.dom.onload = function() {
 				me.updateLayout();
 			};
 		});
 
-		if(!data){
+		if (!data) {
 			data = [{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg'
 			},{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg'
 			},{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg'
 			},{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03180_doorwaytoheaven_1024x768.jpg'
 			},{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03179_bliss_1024x768.jpg'
 			},{
-				url	: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg'
+				url: 'http://interfacelift.com/wallpaper/D47cd523/03178_trollstigen_1024x768.jpg'
 			}];
 		}
 
@@ -53,9 +53,9 @@ Ext.define('NextThought.view.image.Roll',{
 
 		this.store = store || new Ext.data.Store({
 			fields: [
-				{name:'url', type:'string'}
+				{name: 'url', type: 'string'}
 			],
-			data : data
+			data: data
 		});
 
 		this.others = this.add({
@@ -70,77 +70,77 @@ Ext.define('NextThought.view.image.Roll',{
 			overItemCls: 'over',
 			itemSelector: 'div.item-wrap',
 			tpl: Ext.DomHelper.markup({
-				tag:'tpl', 'for':'.',
+				tag: 'tpl', 'for': '.',
 				cn: [{
-					cls:'item-wrap',
-					'data-qtip':'{title}',
-					cn:[{
-						cls:'item',
+					cls: 'item-wrap',
+					'data-qtip': '{title}',
+					cn: [{
+						cls: 'item',
 						tag: 'img',
 						src: Ext.BLANK_IMAGE_URL,
-						style:{ backgroundImage: 'url({url})' }
+						style: { backgroundImage: 'url({url})' }
 					}]
 				}]
 			})
 		});
 
-		this.mon(this.others,'selectionChange',this.selection,this);
+		this.mon(this.others, 'selectionChange', this.selection, this);
 	},
 
 
-	preload: function(data){
+	preload: function(data) {
 		var me = this,
 			loaded = 0,
 			maxAspect = 0;
 
-		function fin(img){
+		function fin(img) {
 			loaded++;
 			var h, w;
 
-			if(img){
+			if (img) {
 				w = img.width;
 				h = img.height;
 
-				maxAspect = Math.max(maxAspect,w/h);
+				maxAspect = Math.max(maxAspect, w / h);
 
-				console.debug('Image Roll Preloaded Image: Width: '+w+', Height: '+h+', Aspect Ratio: '+(w/h)+', Source: '+img.src);
+				console.debug('Image Roll Preloaded Image: Width: ' + w + ', Height: ' + h + ', Aspect Ratio: ' + (w / h) + ', Source: ' + img.src);
 			}
 
-			if(data.length <= loaded){
+			if (data.length <= loaded) {
 				console.debug('Image Roll finished preloading, max aspect ratio:', maxAspect);
 				me.updateAspect(maxAspect);
 			}
 		}
 
-		Ext.each(data,function(i){
+		Ext.each(data, function(i) {
 			var o = i.img = new Image();
-			o.onload = function(){ fin(o); };
-			o.onerror = function(){ fin(); console.warn('Failed to load: '+i.url); };
+			o.onload = function() { fin(o); };
+			o.onerror = function() { fin(); console.warn('Failed to load: ' + i.url); };
 			o.src = i.url;
 		});
 	},
 
 
-	updateAspect: function(aspect){
+	updateAspect: function(aspect) {
 		var w = this.image.getWidth(),
-			h = Math.round(w/(aspect||1));
+			h = Math.round(w / (aspect || 1));
 
-		console.debug('Image Roll: setting new height based on max aspect ratio: ',h);
+		console.debug('Image Roll: setting new height based on max aspect ratio: ', h);
 		this.image.setHeight(h);
 		this.updateLayout();
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
-		Ext.DomHelper.append(this.el,{cls: 'fade-outs', cn: [{cls: 'left'},{cls:'right'}]});
+		Ext.DomHelper.append(this.el, {cls: 'fade-outs', cn: [{cls: 'left'},{cls: 'right'}]});
 	},
 
 
-	selection: function(v,s){
-		if(s && s[0]){
+	selection: function(v,s) {
+		if (s && s[0]) {
 			this.image.el.setStyle({
-				backgroundImage: 'url('+s[0].get('url')+')',
+				backgroundImage: 'url(' + s[0].get('url') + ')',
 				backgroundSize: 'contain',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.image.Roll',{
 	},
 
 
-	selectFirst: function(){
+	selectFirst: function() {
 		this.others.getSelectionModel().select(0);
 	}
 });

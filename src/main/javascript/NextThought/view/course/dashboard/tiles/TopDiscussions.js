@@ -4,7 +4,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 
 	statics: {
 
-		getTileFor: function (effectiveDate, course, locationInfo, courseNodeRecord, finish) {
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
 			var me = this, board = course.getAttribute('discussionBoard');
 
 			function onResolveFailure() {
@@ -16,8 +16,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 				var sId = board && ('dashboard-' + board.getContentsStoreId()),
 					url = board && board.getLink('TopTopics'),
 					instructorForum = course && course.getAttribute('instructorForum'),
-					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId:sId,pageSize: 4, url: url},{ exclude: instructorForum }));
-				
+					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId: sId, pageSize: 4, url: url},{ exclude: instructorForum }));
+
 				me.board = board;
 				store.sorters.removeAll();
 				if (Ext.isEmpty(url)) {
@@ -36,14 +36,14 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 			function loadDiscussions(store, records) {
 				var tiles = [], me = this, max = 0;
 
-				Ext.each(records, function (record) {
+				Ext.each(records, function(record) {
 					var comments = record.get('PostCount');
 
-					max = (max > comments)? max : comments;
+					max = (max > comments) ? max : comments;
 					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date'), innerWeight: comments}));
 				});
 				//set the max on each tile so we can figure the %
-				Ext.each(tiles, function(item){ item.maxInner = max});
+				Ext.each(tiles, function(item) { item.maxInner = max});
 
 				Ext.callback(finish, null, [tiles]);
 			}
@@ -70,9 +70,9 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 		rows: 2
 	},
 
-	getTimeWeight: function(){  return this.itemNode.get('Last Modified') && this.itemNode.get('Last Modified').getTime(); },
+	getTimeWeight: function() { return this.itemNode.get('Last Modified') && this.itemNode.get('Last Modified').getTime(); },
 
-	constructor: function(config){
+	constructor: function(config) {
 		var rec = config.itemNode,
 			l = config.locationInfo;
 
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 	},
 
 
-	onItemClicked: function (view, rec) {
+	onItemClicked: function(view, rec) {
 		this.fireEvent('navigate-to-course-discussion', this.locationInfo.ContentNTIID, rec.get('ContainerId'), rec.getId());
 	}
 });
@@ -120,27 +120,27 @@ Ext.define('NextThought.view.course.dashboard.widget.TopDiscusssionsView', {
 
 	snippetSize: 80,
 
-	renderSelectors:{
+	renderSelectors: {
 		'avatar': '.avatar',
 		'liked': '.controls .like',
 		'favorites': '.controls .favorite',
 		'snip': '.snippet'
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
-		function setAvatar(user){
+		function setAvatar(user) {
 			avatar = user.get('avatarURL');
 			me.avatar.setStyle({backgroundImage: 'url(' + avatar + ')'});
 		}
 
 		var creator = this.record.get('Creator'), me = this, avatar;
-		if(creator.isModel){
+		if (creator.isModel) {
 			setAvatar(creator);
 			return;
 		}
 		UserRepository.getUser(creator, setAvatar, me);
 	}
 
-})
+});

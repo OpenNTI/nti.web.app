@@ -1,45 +1,45 @@
 Ext.define('NextThought.view.sharing.ShareSearchList', {
-	extend:'Ext.view.BoundList',
-	alias:['widget.share-search'],
-	cls:'share-search',
+	extend: 'Ext.view.BoundList',
+	alias: ['widget.share-search'],
+	cls: 'share-search',
 	allowBlank: true,
 	displayField: 'displayName',
 	valueField: 'Username',
-	floating:true,
+	floating: true,
 	singleSelect: true,
 
 	constrainTo: Ext.getBody(),
 	loadingHeight: 40,
 
 	plain: true,
-	ui:'nt',
+	ui: 'nt',
 	baseCls: 'x-menu',
 	itemCls: 'x-menu-item contact-card',
-	itemSelector:'x-menu-item',
+	itemSelector: 'x-menu-item',
 	emptyText: '<div class="x-menu-item no-results">No results found.</div>',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag:'tpl', 'for':'.',
-		cn:[{
+		tag: 'tpl', 'for': '.',
+		cn: [{
 			cls: 'x-menu-item contact-card',
 			cn: [
-				{cls:'avatar {[this.getType(values)]}', style:'{[this.getIcon(values)]}'},
-				{cls:'card-body {[this.getType(values)]}', cn:[
-					{cls:'name', html:'{displayName}'},
-					{cls:'status', html:'{[this.getDisplayTypeValue(values)]}'}
+				{cls: 'avatar {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
+				{cls: 'card-body {[this.getType(values)]}', cn: [
+					{cls: 'name', html: '{displayName}'},
+					{cls: 'status', html: '{[this.getDisplayTypeValue(values)]}'}
 				]}
 			]}
 		]
 	}), {
-		getIcon: function(model){
+		getIcon: function(model) {
 			var t = this.getType(model);
-			return t==='person'? ('background-image: url('+model.avatarURL+')') : '';
+			return t === 'person' ? ('background-image: url(' + model.avatarURL + ')') : '';
 		},
 
-		getType: function(modelData){
+		getType: function(modelData) {
 			return NextThought.model.UserSearch.getType(modelData);
 		},
 
-		getDisplayTypeValue: function(model){
+		getDisplayTypeValue: function(model) {
 			var t = this.getType(model),
 				map = {
 					'list': 'List',
@@ -52,36 +52,36 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 	}),
 
 	listeners: {
-		select:'onSelect'
+		select: 'onSelect'
 	},
 
-	constructor: function(cfg){
+	constructor: function(cfg) {
 		var ownerCls = cfg.ownerCls || '';
 		this.loadMask = {
 			msg: 'Searching...',
-			maskCls: 'share-search-mask '+ownerCls,
-			cls: 'share-search-mask '+ownerCls,
-			msgCls: 'share-search-mask '+ownerCls
+			maskCls: 'share-search-mask ' + ownerCls,
+			cls: 'share-search-mask ' + ownerCls,
+			msgCls: 'share-search-mask ' + ownerCls
 		};
 		this.callParent([cfg]);
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.itemSelector = '.contact-card';
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 	},
 
 
-	onSelect: function(){
+	onSelect: function() {
 		this.hide();
 	},
 
-	destroy: function(){
+	destroy: function() {
 		this.callParent(arguments);
 		console.warn('destorying list view...', arguments);
 	}

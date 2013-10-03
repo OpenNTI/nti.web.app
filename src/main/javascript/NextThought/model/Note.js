@@ -6,7 +6,7 @@ Ext.define('NextThought.model.Note', {
 	},
 
 	statics: {
-		createFromHighlight: function(hl){
+		createFromHighlight: function(hl) {
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
 				sharedWith: [],
@@ -45,45 +45,45 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{ name: 'FavoriteGroupingField', defaultValue:'Note', persist: false},
+		{ name: 'FavoriteGroupingField', defaultValue: 'Note', persist: false},
 
-		{ name: 'line', type:'int', defaultValue:0, persist: false},
-		{ name: 'pline', type:'int', defaultValue:0, persist: false},
-		{ name: 'ReplyCount', type:'Synthetic', persist: false,
-			fn: function(r){
-				if(r.placeholder){
+		{ name: 'line', type: 'int', defaultValue: 0, persist: false},
+		{ name: 'pline', type: 'int', defaultValue: 0, persist: false},
+		{ name: 'ReplyCount', type: 'Synthetic', persist: false,
+			fn: function(r) {
+				if (r.placeholder) {
 					return r.countChildren();
 				}
 
 				return r.get('ReferencedByCount');
 			}
 		},
-		{ name: 'preview', type:'Synthetic', persist: false,
-			affectedBy: ['body','title'],
-			fn: function(r){
-				if(r.placeholder){
+		{ name: 'preview', type: 'Synthetic', persist: false,
+			affectedBy: ['body', 'title'],
+			fn: function(r) {
+				if (r.placeholder) {
 					return '[Deleted]';
 				}
 
-				if(r.data.hasOwnProperty('$preview')){
+				if (r.data.hasOwnProperty('$preview')) {
 					return r.data.$preview;
 				}
 
-				r.resolveNotePreview(function(s){
+				r.resolveNotePreview(function(s) {
 					r.data.$preview = s;
 					r.afterEdit(['preview']);
 				},150);
 
 				return '';
 			},
-			fnSet: function(r){ delete r.data.$preview; }
+			fnSet: function(r) { delete r.data.$preview; }
 		},
 
 
 		//We use these fields in the user-data panel
-		{ name: 'path', type:'string', persist: false},
-		{ name: 'location', type:'string', persist: false},
-		{ name: 'textBodyContent', type:'auto', persist:false}
+		{ name: 'path', type: 'string', persist: false},
+		{ name: 'location', type: 'string', persist: false},
+		{ name: 'textBodyContent', type: 'auto', persist: false}
 	],
 
 	/*
@@ -101,24 +101,24 @@ Ext.define('NextThought.model.Note', {
 	 * maintained in the result.  Doesn't seem like this functions job to muck
 	 * with that stuff.
 	 */
-	getDescendants: function(callback, scope){
+	getDescendants: function(callback, scope) {
 		var resultStore = NextThought.store.PageItem.create(),
 			outstandingChildren = 0, me = this;
 
 
-		function childFinished(childStore){
-			if(childStore){
+		function childFinished(childStore) {
+			if (childStore) {
 				resultStore.loadRecords(childStore.getRange(), {addRecords: true});
 			}
 			outstandingChildren--;
 
-			if(outstandingChildren === 0){
+			if (outstandingChildren === 0) {
 				Ext.callback(callback, scope, [resultStore]);
 			}
 		}
 
-		if(this.placeholder){
-			if(Ext.isEmpty(this.children)){
+		if (this.placeholder) {
+			if (Ext.isEmpty(this.children)) {
 				//A placeholder with no children
 				//that probably shouldn't happen
 				console.warn('Encountered a placeholder with no children when getting descendants', this.children);
@@ -127,8 +127,8 @@ Ext.define('NextThought.model.Note', {
 			}
 
 			outstandingChildren += this.children.length;
-			Ext.each(this.children, function(child){
-				if(!child.placeholder){
+			Ext.each(this.children, function(child) {
+				if (!child.placeholder) {
 					//Note we don't use add here.  PageItem overrides
 					//that to generate threads, which we don't really want
 					resultStore.loadRecords([child], {addRecords: true});
@@ -136,7 +136,7 @@ Ext.define('NextThought.model.Note', {
 				child.getDescendants(childFinished);
 			});
 		}
-		else{
+		else {
 			me.loadReplies(callback, scope);
 		}
 	},
@@ -149,13 +149,13 @@ Ext.define('NextThought.model.Note', {
 	 * @param additionalParams {Object} An optional object describing params to send to the server.
 	 *          Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
 	 */
-	loadReplies: function(callback, scope, additionalParams){
+	loadReplies: function(callback, scope, additionalParams) {
 		var me = this,
 			link = this.getLink('replies'),
 			store,
 			params;
 
-		if(!link){
+		if (!link) {
 			Ext.callback(callback, scope, [NextThought.store.PageItem.create()]);
 			return;
 		}
@@ -163,7 +163,7 @@ Ext.define('NextThought.model.Note', {
 		store = NextThought.store.PageItem.make(link, undefined, true);
 		params = store.proxy.extraParams || {};
 
-		if(additionalParams){
+		if (additionalParams) {
 			params = Ext.apply(params, additionalParams);
 			store.proxy.extraParams = params;
 		}
@@ -176,7 +176,7 @@ Ext.define('NextThought.model.Note', {
 	 * From a note, build its reply
 	 * @return {NextThought.model.Note}
 	 */
-	makeReply: function(){
+	makeReply: function() {
 		var note = this,
 			reply = this.self.create(),
 			parent = note.get('NTIID'),
@@ -192,8 +192,8 @@ Ext.define('NextThought.model.Note', {
 		return reply;
 	},
 
-	getReplyCount: function(){
-		if(this.hasRepliesBeenLoaded(this)){
+	getReplyCount: function() {
+		if (this.hasRepliesBeenLoaded(this)) {
 			return this.countChildren();
 		}
 		return this.sumReferenceByCount();
@@ -205,35 +205,35 @@ Ext.define('NextThought.model.Note', {
 	 */
 	getAdjustedReferenceCount: Ext.emptyFn,
 
-	hasRepliesBeenLoaded: function(rec){
-		if(!rec.placeholder){
+	hasRepliesBeenLoaded: function(rec) {
+		if (!rec.placeholder) {
 			return rec.get('ReferencedByCount') === 0 || ((rec.children || []).length > 0);
 		}
 
 		return Ext.Array.every((rec.children || []), rec.hasRepliesBeenLoaded, this);
 	},
 
-	isWhiteboardOnly: function(body){
-		if(Ext.isEmpty(body)){ return false;}
-		return Ext.Array.every(body, function(i){
+	isWhiteboardOnly: function(body) {
+		if (Ext.isEmpty(body)) { return false;}
+		return Ext.Array.every(body, function(i) {
 			return typeof i !== 'string';
 		});
 	},
 
-	resolveNoteTitle: function(cb, max){
+	resolveNoteTitle: function(cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip;
 
 		max = max || 36;
 
-		if(!Ext.isEmpty(t)){
+		if (!Ext.isEmpty(t)) {
 			snip = Ext.String.ellipsis(t, max, false);
-		}else{
+		}else {
 
-			if(this.isWhiteboardOnly(body)){
-				snip = "[Image]";
-			}else{
+			if (this.isWhiteboardOnly(body)) {
+				snip = '[Image]';
+			}else {
 				snip = Ext.String.ellipsis(this.simplifyBody(body)[0], max, true);
 			}
 		}
@@ -241,7 +241,7 @@ Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-	resolveNotePreview: function(cb, max){
+	resolveNotePreview: function(cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
 			snip;
@@ -250,16 +250,16 @@ Ext.define('NextThought.model.Note', {
 		// NOTE: If there is a title set it.
 		// If the note has no title and the body is Whiteboard only, set it to 'Whiteboard',
 		// If the note has no title, set a snippet of the body.
-		if(!Ext.isEmpty(t)){
+		if (!Ext.isEmpty(t)) {
 			snip = Ext.String.ellipsis(t, max, false);
 		}
-		else{
-			if(this.isWhiteboardOnly(body)){
+		else {
+			if (this.isWhiteboardOnly(body)) {
 				t = 'Whiteboard';
 			}
-			this.compileBodyContent(function(html){
-				snip = ContentUtils.getHTMLSnippet(html,max);
-				Ext.callback(cb, null, [snip||html,t]);
+			this.compileBodyContent(function(html) {
+				snip = ContentUtils.getHTMLSnippet(html, max);
+				Ext.callback(cb, null, [snip || html, t]);
 			}, null, null, null);
 
 			return;
@@ -268,13 +268,13 @@ Ext.define('NextThought.model.Note', {
 		Ext.callback(cb, null, [snip, t]);
 	},
 
-	simplifyBody: function(body){
+	simplifyBody: function(body) {
 		var text = [];
-		
-		Ext.each(body, function(c){
-			if(Ext.isString(c)){
+
+		Ext.each(body, function(c) {
+			if (Ext.isString(c)) {
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/g, ' '));
-			}else{
+			}else {
 				text.push(c);
 			}
 		});
@@ -283,8 +283,8 @@ Ext.define('NextThought.model.Note', {
 	},
 
 
-	countChildren: function(){
-		function allDescendants (rec) {
+	countChildren: function() {
+		function allDescendants(rec) {
 			var i, child;
 			for (i = 0; i < (rec.children || []).length; i++) {
 				child = rec.children[i];
@@ -297,50 +297,50 @@ Ext.define('NextThought.model.Note', {
 		return sum;
 	},
 
-	sumReferenceByCount: function(rec){
+	sumReferenceByCount: function(rec) {
 		var sum = 0;
-		if(!rec){
+		if (!rec) {
 			rec = this;
 		}
 
-		if(rec.raw && rec.raw.hasOwnProperty('ReferencedByCount')){
-			return rec.get('ReferencedByCount') + (rec.parent ? 1:0);
+		if (rec.raw && rec.raw.hasOwnProperty('ReferencedByCount')) {
+			return rec.get('ReferencedByCount') + (rec.parent ? 1 : 0);
 		}
 
-		Ext.each((rec.children || []), function(a){
+		Ext.each((rec.children || []), function(a) {
 			sum += rec.sumReferenceByCount(a);
 		});
 
 		return sum;
 	},
 
-	debugString: function(){
+	debugString: function() {
 		var bs = (this.get('body') || []).toString(), cs;
 
-		if(this.placeholder){
+		if (this.placeholder) {
 			bs = '_';
 		}
 
-		if(Ext.isEmpty(this.children)){
-			return '['+bs+']';
+		if (Ext.isEmpty(this.children)) {
+			return '[' + bs + ']';
 		}
 
-		cs = Ext.Array.map(this.children, function(c){return c.debugString();});
+		cs = Ext.Array.map(this.children, function(c) {return c.debugString();});
 
-		return '['+bs+' ('+cs.join(',')+') ]';
+		return '[' + bs + ' (' + cs.join(',') + ') ]';
 	},
 
-	getTotalLikeCount: function(){
-		if(this.raw && this.raw.hasOwnProperty('RecursiveLikeCount') ){
+	getTotalLikeCount: function() {
+		if (this.raw && this.raw.hasOwnProperty('RecursiveLikeCount')) {
 			return this.get('RecursiveLikeCount') || 0;
 		}
 
-		return (this.children||[]).reduce(function(sum,child){
-			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount()||0) : 0);
+		return (this.children || []).reduce(function(sum,child) {
+			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount() || 0) : 0);
 		}, (this.isLiked() ? 1 : 0));
 	},
 
-	convertToPlaceholder: function(){
+	convertToPlaceholder: function() {
 		var me = this,
 			data = this.getData(false);
 		me.suspendEvents(true);
@@ -350,10 +350,10 @@ Ext.define('NextThought.model.Note', {
 		me.set('Last Modified', new Date());
 		me.set('Creator', User.getUnresolved('Unknown'));
 		me.set('applicableRange', data.applicableRange);
-		me.set('selectedText',data.selectedText);
+		me.set('selectedText', data.selectedText);
 		me.set('inReplyTo', data.inReplyTo);
 		me.set('references', data.references);
-		me.set('style',data.style);
+		me.set('style', data.style);
 		me.set('ReferencedByCount', data.ReferencedByCount);
 		me.resumeEvents();
 	}

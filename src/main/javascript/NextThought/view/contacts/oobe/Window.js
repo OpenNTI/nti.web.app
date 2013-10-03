@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.contacts.oobe.Window',{
+Ext.define('NextThought.view.contacts.oobe.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.oobe-contact-window',
 
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	items: [],
 
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	getDockedItems: function () { return []; },
+	getDockedItems: function() { return []; },
 
 
 	listeners: {
@@ -61,21 +61,21 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent();
 		this.store = new NextThought.store.UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.
-				function (rec) {
+				function(rec) {
 					return rec.get('Username') !== $AppConfig.contactsGroupName;
 				},
-				function (rec) {
+				function(rec) {
 					return !rec.isCommunity;
 				},
-				function (rec) {
+				function(rec) {
 					return !isMe(rec);
 				},
-				function (rec) {
+				function(rec) {
 					return rec.get('ContainerId') === 'Users';
 				}
 			]
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 		var me = this;
 
 		this.add({
-			xtype:'simpletext',
+			xtype: 'simpletext',
 			placeholder: 'Search for contacts...',
 			listeners: {
 				scope: this,
@@ -102,9 +102,9 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			overflowY: 'auto',
 
 			selModel: {
-				allowDeselect : true,
-				mode :'SIMPLE',
-				pruneRemoved:false
+				allowDeselect: true,
+				mode: 'SIMPLE',
+				pruneRemoved: false
 			},
 
 			cls: 'oobe-contact-results',
@@ -114,7 +114,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			tpl: Ext.DomHelper.markup({
 				tag: 'tpl', 'for': '.', cn: [
 					{ cls: 'item', cn: [
-						{tag: 'img', src: Ext.BLANK_IMAGE_URL, style:{backgroundImage:'url({avatarURL})'}},
+						{tag: 'img', src: Ext.BLANK_IMAGE_URL, style: {backgroundImage: 'url({avatarURL})'}},
 						{cls: 'name', html: '{displayName}'}
 					]}
 				]
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 			friendsListStore: Ext.getStore('FriendsList'),
 
 			xhooks: {
-				getViewRange: function(){
+				getViewRange: function() {
 					var range = this.callParent(),
 						a = me.down('simpletext').getValue() || !Ext.isEmpty(this.friendsListStore.getContacts());//This should probably be optimized.
 
@@ -149,22 +149,22 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 				}
 			},
 
-			listeners:{
+			listeners: {
 				scope: this,
 				selectionchange: 'onSelectionChange'
 			}
 		});
 
-		Ext.defer(this.reset,1,this);
+		Ext.defer(this.reset, 1, this);
 	},
 
 
-	reset: function(){
+	reset: function() {
 		this.store.search('.');
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.cancelEl, 'click', 'close');
@@ -175,23 +175,23 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	onSearch: function(query){
-		this.store.search(query||'.');
+	onSearch: function(query) {
+		this.store.search(query || '.');
 	},
 
 
-	hideError: function () {
+	hideError: function() {
 		this.updateContentHeight();
 		this.errorEl.hide();
 	},
 
 
-	showError: function (message, label) {
+	showError: function(message, label) {
 		var el = this.getTargetEl(),
 			errorEl = this.errorEl;
 
 		function syncHeight() {
-			if(!errorEl || !errorEl.getY || !el || !el.getY){
+			if (!errorEl || !errorEl.getY || !el || !el.getY) {
 				return;
 			}
 			var h = errorEl.getY() - el.getY();
@@ -206,37 +206,37 @@ Ext.define('NextThought.view.contacts.oobe.Window',{
 	},
 
 
-	onSelectionChange:function(sel,recs){
+	onSelectionChange: function(sel,recs) {
 		var e = this.confirmEl,
-			plural = (recs||[]).length !== 1;
-		if( e ){
+			plural = (recs || []).length !== 1;
+		if (e) {
 			e[Ext.isEmpty(recs) ? 'addCls' : 'removeCls']('disabled');
-			e.update('Add Contact'+(plural?'s':''));
+			e.update('Add Contact' + (plural ? 's' : ''));
 		}
 	},
 
 
-	onConfirm: function(e){
+	onConfirm: function(e) {
 		e.stopEvent();
 		var me = this,
 			v = me.down('dataview'),
 			selMod = v && v.getSelectionModel(),
 			t = e.getTarget('.confirm:not(.disabled)');
 
-		function finish(success){
-			if( me.el && me.el.dom ){
+		function finish(success) {
+			if (me.el && me.el.dom) {
 				me.el.unmask();
 			}
 
-			if(success!==false){
+			if (success !== false) {
 				me.close();
 			} else {
 				me.showError('Could not save contacts');
 			}
 		}
-		if( t && selMod ){
+		if (t && selMod) {
 			me.el.mask('Saving...');
-			me.fireEvent('add-contacts',selMod.getSelection(),finish);
+			me.fireEvent('add-contacts', selMod.getSelection(), finish);
 		}
 	}
 });

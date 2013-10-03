@@ -12,13 +12,13 @@ Ext.define('NextThought.view.course.View', {
 	body: {xtype: 'course-overview', delegate: ['course course-outline']},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.on('select-card-node', 'openCardNode', this);
 	},
 
 
-	onNavigateComplete: function (pageInfo) {
+	onNavigateComplete: function(pageInfo) {
 		if (!pageInfo || !pageInfo.isPartOfCourse()) {
 			this.navigation.clear();
 			this.body.clear();
@@ -38,26 +38,26 @@ Ext.define('NextThought.view.course.View', {
 		this.navigation.maybeChangeStoreOrSelection(pageInfo, this.store);
 	},
 
-	makeListenForCourseChange: function (monitors) {
-		Ext.each(monitors, function (m) {
+	makeListenForCourseChange: function(monitors) {
+		Ext.each(monitors, function(m) {
 			m.mon(this, 'courseChanged', 'onCourseChanged');
 		}, this);
 	},
 
 	// Add a way to explicitly select a card node rather
 	// than going through the originalNTIIDRequested Hack
-	openCardNode: function(ntiid){
+	openCardNode: function(ntiid) {
 		var card, i;
 
-		Ext.each(this.query('content-card'), function(crd){
+		Ext.each(this.query('content-card'), function(crd) {
 			i = crd.data && crd.data.ntiid;
-			if(i === ntiid){
+			if (i === ntiid) {
 				card = crd;
 				return false;
 			}
 		});
 
-		if(card && card.navigateToTarget){
+		if (card && card.navigateToTarget) {
 			card.navigateToTarget();
 		}
 

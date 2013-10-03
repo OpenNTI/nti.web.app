@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.history.mixins.Note', {
 	alias: 'widget.history-item-note',
-	keyVal: "application/vnd.nextthought.note",
+	keyVal: 'application/vnd.nextthought.note',
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 	])),
 
 
-	constructor: function (config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 		if (!this.panel) {
 			return;
@@ -28,14 +28,14 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 	},
 
 
-	clicked: function (view, rec) {
+	clicked: function(view, rec) {
 		var cid = rec.get('ContainerId');
 		view.fireEvent('navigation-selected', cid, rec);
 	},
 
 
-	fillInData: function (rec) {
-		LocationMeta.getMeta(rec.get('ContainerId'), function (meta) {
+	fillInData: function(rec) {
+		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
 			var lineage = [],
 				location = '';
 
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 				location = lineage.shift();
 				lineage.reverse();
 			}
-			
+
 			rec.set({
 				'location': Ext.String.ellipsis(location, 150, false),
 				'path': lineage.join(' / ')//,

@@ -1,6 +1,6 @@
 /*jslint continue: true*/
 /*globals console, document, DOMParser */
-Ext.define('NextThought.util.Parsing',{
+Ext.define('NextThought.util.Parsing', {
 	singleton: true,
 
 	requires: [
@@ -12,16 +12,16 @@ Ext.define('NextThought.util.Parsing',{
 	 * @param items
 	 * @param [supplemental] Properties to add to the parsed items (such as flags)
 	 */
-	parseItems: function(items, supplemental){
+	parseItems: function(items, supplemental) {
 		var key, item, reader, results = [];
 
 		if (!Ext.isArray(items)) {items = [items];}
 
-		for(key in items){
-			if(items.hasOwnProperty(key)) {
+		for (key in items) {
+			if (items.hasOwnProperty(key)) {
 				item = items[key] || {};
 
-				if (typeof item === 'string'){item = Ext.JSON.decode(item);}
+				if (typeof item === 'string') {item = Ext.JSON.decode(item);}
 
 				if (item instanceof Ext.data.Model) {
 					results.push(item);
@@ -29,16 +29,16 @@ Ext.define('NextThought.util.Parsing',{
 				}
 
 				reader = this.getReaderForModel(item.Class);
-				if(!reader) {
+				if (!reader) {
 					console.error('No reader for item: ', item);
 					continue;
 				}
 
-				if(supplemental){
+				if (supplemental) {
 					Ext.applyIf(item, supplemental);
 				}
 
-				results.push( reader.read(item).records[0] );
+				results.push(reader.read(item).records[0]);
 			}
 		}
 
@@ -46,19 +46,19 @@ Ext.define('NextThought.util.Parsing',{
 	},
 
 
-	findModel: function(name){
+	findModel: function(name) {
 		function recurse(dir, modelName) {
 			var sub, o = dir[modelName];
 
-			if(o) {
+			if (o) {
 				return o;
 			}
 
-			for( sub in dir ) {
-				if( dir.hasOwnProperty(sub) ){
-					if(!dir[sub].$isClass && !dir[sub].singleton) {
+			for (sub in dir) {
+				if (dir.hasOwnProperty(sub)) {
+					if (!dir[sub].$isClass && !dir[sub].singleton) {
 						o = recurse(dir[sub], modelName);
-						if(o){return o;}
+						if (o) {return o;}
 					}
 				}
 			}
@@ -66,7 +66,7 @@ Ext.define('NextThought.util.Parsing',{
 			return null;
 		}
 
-		return recurse(NextThought.model,name);
+		return recurse(NextThought.model, name);
 	},
 
 
@@ -89,7 +89,7 @@ Ext.define('NextThought.util.Parsing',{
 
 	},
 
-	isNTIID: function(id){
+	isNTIID: function(id) {
 		return Boolean(this.parseNTIID(id));
 	},
 
@@ -98,14 +98,14 @@ Ext.define('NextThought.util.Parsing',{
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
 	 * @param id
-	 * @returns {Object} an object containing the components of the id
+	 * @return {Object} an object containing the components of the id
 	 */
 	parseNTIID: function(id) {
-		var parts = (typeof id !== 'string' ? (id||'').toString() : id ).split(':'),
+		var parts = (typeof id !== 'string' ? (id || '').toString() : id).split(':'),
 			authority, specific,
 			result = {};
 
-		if(parts.length < 3 || parts[0] !== 'tag'){
+		if (parts.length < 3 || parts[0] !== 'tag') {
 			//console.warn('"'+id+'" is not an NTIID');
 			return null;
 		}
@@ -114,7 +114,7 @@ Ext.define('NextThought.util.Parsing',{
 
 		//authority gets split by comma into name and date
 		authority = parts[1].split(',');
-		if(authority.length !== 2){
+		if (authority.length !== 2) {
 			//invalid authority chunk
 			return null;
 		}
@@ -138,10 +138,10 @@ Ext.define('NextThought.util.Parsing',{
 		//Define a setter on provider property so we can match the ds escaping of '-' to '_'
 		ObjectUtils.defineAttributes(result.specific, {
 			provider: {
-				getter: function(){return this.$$provider;},
-				setter: function(p){
-					if(p && p.replace){
-						p = p.replace(/-/g,'_');
+				getter: function() {return this.$$provider;},
+				setter: function(p) {
+					if (p && p.replace) {
+						p = p.replace(/-/g, '_');
 					}
 					this.$$provider = p;
 				}
@@ -169,17 +169,17 @@ Ext.define('NextThought.util.Parsing',{
 		};
 
 		//FIXME include authority?
-		result.toURLSuffix = function(){
+		result.toURLSuffix = function() {
 			//#!html/mathcounts/mathcounts2013.warm_up_7
 			var m = this, components = [];
 
 			components.push(m.specific.type);
-			if(m.specific.provider){
+			if (m.specific.provider) {
 				components.push(m.specific.provider);
 			}
 			components.push(m.specific.typeSpecific);
 
-			return '#!'+Ext.Array.map(components,encodeURIComponent).join('/');
+			return '#!' + Ext.Array.map(components, encodeURIComponent).join('/');
 		};
 
 		return result;
@@ -187,14 +187,14 @@ Ext.define('NextThought.util.Parsing',{
 
 
 	/** @deprecated */
-	parseNtiid: function(id){
+	parseNtiid: function(id) {
 		return this.parseNTIID(id);
 	},
 
 
-	bookPrefixIfQuestionNtiid: function(id){
+	bookPrefixIfQuestionNtiid: function(id) {
 		var ntiid = this.parseNtiid(id);
-		if(!ntiid || ntiid.specific.type !== 'NAQ'){
+		if (!ntiid || ntiid.specific.type !== 'NAQ') {
 			return null;
 		}
 
@@ -205,16 +205,16 @@ Ext.define('NextThought.util.Parsing',{
 	},
 
 
-	parseNtiFragment: function(fragment){
+	parseNtiFragment: function(fragment) {
 		var authority = 'nextthought.com,2011-10',
 			parts, type, provider, typeSpecific, s;
 
-		if(Ext.isEmpty(fragment) || fragment.indexOf('#!') !== 0){
+		if (Ext.isEmpty(fragment) || fragment.indexOf('#!') !== 0) {
 			return null;
 		}
 		fragment = fragment.slice(2);
 		parts = fragment.split('/');
-		if(parts.length < 2 || parts.length > 3){
+		if (parts.length < 2 || parts.length > 3) {
 			return null;
 		}
 
@@ -222,8 +222,8 @@ Ext.define('NextThought.util.Parsing',{
 		provider = parts.length === 3 ? parts[1] : '';
 		typeSpecific = parts.length === 3 ? parts[2] : parts[1];
 
-		s = Ext.Array.map([provider,type,typeSpecific],decodeURIComponent);
-		if(Ext.isEmpty(provider)){
+		s = Ext.Array.map([provider, type, typeSpecific], decodeURIComponent);
+		if (Ext.isEmpty(provider)) {
 			s.splice(0, 1);
 		}
 
@@ -231,22 +231,22 @@ Ext.define('NextThought.util.Parsing',{
 	},
 
 
-	parseQueryString: function (qStr) {
+	parseQueryString: function(qStr) {
 		if (Ext.isEmpty(qStr)) {
 			return null;
 		}
 		var r = {};
 
-		Ext.each(qStr.split('&'), function (kv) {
+		Ext.each(qStr.split('&'), function(kv) {
 			kv = kv.split('=');
 			r[kv[0]] = decodeURIComponent(kv[1]);
 		});
 
-		r.toString = function(){
+		r.toString = function() {
 			var out = [], k;
-			for(k in this){
-				if(this.hasOwnProperty(k)){
-					out.push([k,encodeURIComponent(this[k])].join('='));
+			for (k in this) {
+				if (this.hasOwnProperty(k)) {
+					out.push([k, encodeURIComponent(this[k])].join('='));
 				}
 			}
 			return out.join('&');
@@ -254,7 +254,7 @@ Ext.define('NextThought.util.Parsing',{
 		return r;
 	}
 
-},function(){
+},function() {
 	window.ParseUtils = this;
 
 
@@ -269,9 +269,9 @@ Ext.define('NextThought.util.Parsing',{
 
 	/*! @source https://gist.github.com/1129031 */
 	(function(DOMParser) {
-	    "use strict";
+	    'use strict';
 	    var DOMParser_proto = DOMParser.prototype
-	      , real_parseFromString = DOMParser_proto.parseFromString;
+, real_parseFromString = DOMParser_proto.parseFromString;
 
 	    // Firefox/Opera/IE throw errors on unsupported types
 	    try {
@@ -288,7 +288,7 @@ Ext.define('NextThought.util.Parsing',{
 				    doc_elt = doc.documentElement,
 				    first_elt;
 
-			    try{
+			    try {
 				    doc_elt.innerHTML = markup;
 				    first_elt = doc_elt.firstElementChild;
 
@@ -297,7 +297,7 @@ Ext.define('NextThought.util.Parsing',{
 					    doc.replaceChild(first_elt, doc_elt);
 				    }
 			    }
-			    catch(IE_SUCKS){
+			    catch (IE_SUCKS) {
 				    console.warn('Head tags may not be returned from queries, due to polyfill/browser shortcomings');
 				    doc.body.innerHTML = markup;
 			    }

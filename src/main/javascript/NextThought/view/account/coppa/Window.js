@@ -1,36 +1,36 @@
-Ext.define('NextThought.view.account.coppa.Window',{
-    extend: 'NextThought.view.window.Window',
-    alias: 'widget.coppa-window',
+Ext.define('NextThought.view.account.coppa.Window', {
+	extend: 'NextThought.view.window.Window',
+	alias: 'widget.coppa-window',
 
-    requires: [
-        'NextThought.view.account.Header',
-        'NextThought.view.account.coppa.Main'
-    ],
+	requires: [
+		'NextThought.view.account.Header',
+		'NextThought.view.account.coppa.Main'
+	],
 
-    cls: 'coppa-window',
-    ui: 'nt-window',
-    minimizable: false,
-    constrain: true,
-    modal: true,
-    closable: false,
-    resizable: false,
-    dialog: true,
+	cls: 'coppa-window',
+	ui: 'nt-window',
+	minimizable: false,
+	constrain: true,
+	modal: true,
+	closable: false,
+	resizable: false,
+	dialog: true,
 
-    width: 480,
+	width: 480,
 
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
 
-    items: [
-        {xtype: 'account-header-view'},
-        {xtype: 'coppa-main-view'}
-    ],
+	items: [
+		{xtype: 'account-header-view'},
+		{xtype: 'coppa-main-view'}
+	],
 
-    initComponent: function(){
-        this.callParent(arguments);
+	initComponent: function() {
+		this.callParent(arguments);
 
-        this.down('coppa-main-view').setSchema(this.schema);
-    }
+		this.down('coppa-main-view').setSchema(this.schema);
+	}
 });

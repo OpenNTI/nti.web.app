@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
+Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 	alias: 'widget.wb-tool-image-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
@@ -39,33 +39,33 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	],
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		var file = this.down('file-browser-menu-item');
 
 		this.doUpload = this.readFile;
-		file.target=this;
-		file[(window.FileReader===undefined)?'disable':'enable']();
+		file.target = this;
+		file[(window.FileReader === undefined) ? 'disable' : 'enable']();
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		//only enable canvas dropping if allowed...
-		if($AppConfig.service.canCanvasURL()){
+		if ($AppConfig.service.canCanvasURL()) {
 			this.enableImageDropping();
 		}
 	},
 
 
-	enableImageDropping: function(){
+	enableImageDropping: function() {
 		var me = this,
 			el = me.up('whiteboard-editor').canvas.el,
 			t;
 
-		if (!el){
-			setTimeout(function(){
+		if (!el) {
+			setTimeout(function() {
 
 				me.enableImageDropping();
 			},
@@ -77,12 +77,12 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			el.addCls('drop-over');
 			e.stopPropagation();
 			e.preventDefault();
-			if(t){ clearTimeout(t); }
-			t = setTimeout(function(){el.removeCls('drop-over');}, 100);
+			if (t) { clearTimeout(t); }
+			t = setTimeout(function() {el.removeCls('drop-over');}, 100);
 			return false; //for IE
 		}
 
-		me.mon(el,{
+		me.mon(el, {
 			'scope': me,
 			'drop': me.dropImage,
 			'dragenter': over,
@@ -91,13 +91,13 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	},
 
 
-	dropImage: function(e){
+	dropImage: function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 
 		var dt = e.browserEvent.dataTransfer;
 
-		if(!dt){
+		if (!dt) {
 			alert('Please use the toolbar, your browser does not support drag & drop file uploads.');
 		}
 		else {
@@ -109,32 +109,32 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 
 	//TODO - should fire when menuitem is selected, override in initComponent of this toolbar
-	selectImage: function(inputField){
+	selectImage: function(inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
 
-	readFile: function(files){
+	readFile: function(files) {
 		var me = this,
 			file = files[0],
 			reader;
 
 		//file.size
-		if(!file || !(/image\/.*/i).test(file.type)){
+		if (!file || !(/image\/.*/i).test(file.type)) {
 			//TODO: alert user
-            cfg = {
-                title: 'Sorry.',
-                icon: 'warning-red',
-                msg:"You can't upload that type of file."
+      cfg = {
+        title: 'Sorry.',
+        icon: 'warning-red',
+        msg: "You can't upload that type of file."
             };
-            alert(cfg);
+      alert(cfg);
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
 
-		if(window.FileReader){
+		if (window.FileReader) {
 			reader = new FileReader();
 			reader.onload = function(event) { me.insertImage(event.target.result); };
 			reader.readAsDataURL(file);
@@ -143,7 +143,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 
 
-	handlePaste:function(event){
+	handlePaste: function(event) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
@@ -162,33 +162,33 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	},
 
 
-	insertImage: function(dataUrl){
+	insertImage: function(dataUrl) {
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
 			c = e.canvas,
             width,
             height;
 
-		function addImageToWhiteboard(){
+		function addImageToWhiteboard() {
 			var m = new NTMatrix(),
 				canvasWidth = c.getWidth(),
 				canvasHeight = c.getHeight(),
 				s = e.addShape('Url'),
-				max = Math.max(width,height), scale;
+				max = Math.max(width, height), scale;
 
-			if(max === height && max > canvasHeight){
+			if (max === height && max > canvasHeight) {
 				scale = canvasHeight * 0.90 / max;
-			}else if(max === width && max > canvasWidth){
+			}else if (max === width && max > canvasWidth) {
 				scale = canvasWidth * 0.90 / max;
-			}else{
+			}else {
 				scale = 1.0;
 			}
 
 			s.url = dataUrl;
-			m.translate(canvasWidth/2, canvasHeight/2);
+			m.translate(canvasWidth / 2, canvasHeight / 2);
 			m.scale(scale);
 
-			m.scaleAll(1/canvasWidth);//do this after
+			m.scaleAll(1 / canvasWidth);//do this after
 
 			s.transform = m.toTransform();
 
@@ -196,57 +196,57 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			c.drawScene();
 		}
 
-        function scaleImage (maxW, maxH) {
-            var aspectRatio = 1.0,
-                nw, nh,
-                cs = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}}),
-                ctx = cs.getContext('2d');
+    function scaleImage(maxW, maxH) {
+      var aspectRatio = 1.0,
+          nw, nh,
+          cs = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}}),
+          ctx = cs.getContext('2d');
 
-            if(width > height) {
-                aspectRatio = width/height;
-                nw = maxW;
-                nh = Math.round(maxH/aspectRatio);
-            }
-            else{
-                aspectRatio = height/width;
-                nw = Math.round(maxW/aspectRatio);
-                nh = maxH;
-            }
+      if (width > height) {
+        aspectRatio = width / height;
+        nw = maxW;
+        nh = Math.round(maxH / aspectRatio);
+      }
+      else {
+        aspectRatio = height / width;
+        nw = Math.round(maxW / aspectRatio);
+        nh = maxH;
+      }
 
-            //Now we want to create a new scaled image
-            cs.width = nw;
-            cs.height = nh;
-            ctx.drawImage(image, 0, 0, width, height, 0, 0, nw, nh);
+      //Now we want to create a new scaled image
+      cs.width = nw;
+      cs.height = nh;
+      ctx.drawImage(image, 0, 0, width, height, 0, 0, nw, nh);
 
-            width = nw;
-            height = nh;
-            dataUrl = cs.toDataURL("image/png");
-            Ext.fly(cs).remove();    //clean up
+      width = nw;
+      height = nh;
+      dataUrl = cs.toDataURL('image/png');
+      Ext.fly(cs).remove();    //clean up
 
-        }
+    }
 
-        image.onload = function () {
-            var maxImgH = 500,
-                maxImgW = 500;
+    image.onload = function() {
+      var maxImgH = 500,
+          maxImgW = 500;
 
-            width = image.width;
-            height = image.height;
+      width = image.width;
+      height = image.height;
 
-            if(width > maxImgW || height > maxImgH){
-                scaleImage(maxImgW, maxImgH);
-            }
+      if (width > maxImgW || height > maxImgH) {
+        scaleImage(maxImgW, maxImgH);
+      }
 
-            addImageToWhiteboard();
-        };
+      addImageToWhiteboard();
+    };
 
-        image.src = dataUrl;
+    image.src = dataUrl;
 	},
 
 	getOptions: function() {
 		return {};
 	},
 
-	setOptions: function(){
+	setOptions: function() {
 		console.warn('no need to set options on image toolbar');
 	},
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.Blog',{
+Ext.define('NextThought.store.Blog', {
 	extend: 'Ext.data.Store',
 	alias: 'store.blog',
 
@@ -15,7 +15,7 @@ Ext.define('NextThought.store.Blog',{
 			root: 'Items',
 			totalProperty: 'TopicCount'
 		},
-		extraParams:{
+		extraParams: {
 			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		},
@@ -23,11 +23,11 @@ Ext.define('NextThought.store.Blog',{
 		model: 'NextThought.model.forums.PersonalBlogEntry'
 	},
 
-	remove: function(records){
+	remove: function(records) {
 		this.callParent(arguments);
 
-		Ext.each(records, function(record){
-			record.fireEvent('destroy',record);
+		Ext.each(records, function(record) {
+			record.fireEvent('destroy', record);
 		});
 
 	}

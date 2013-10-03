@@ -47,7 +47,7 @@ Ext.define('NextThought.controller.Assessment', {
 	init: function() {
 		this.listen({
 			component: {
-				'assessment-question':{
+				'assessment-question': {
 					'check-answer': this.checkAnswer
 				},
 
@@ -59,11 +59,11 @@ Ext.define('NextThought.controller.Assessment', {
 	},
 
 
-	checkAnswer: function(questionWidget,question,answerValues){
+	checkAnswer: function(questionWidget,question,answerValues) {
 
 		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : questionWidget.reader.getLocation().NTIID,
 			submission = this.getAssessmentQuestionSubmissionModel().create({
-			ContainerId:  containerId,
+			ContainerId: containerId,
 			questionId: question.getId(),
 			parts: answerValues
 		});
@@ -72,12 +72,12 @@ Ext.define('NextThought.controller.Assessment', {
 
 		submission.save({
 			scope: this,
-			callback: function(){questionWidget.unmask();},
-			failure: function(){
+			callback: function() {questionWidget.unmask();},
+			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem grading your question');
 			},
-			success: function(self,op){
+			success: function(self,op) {
 				var result = op.getResultSet().records.first();
 				questionWidget.updateWithResults(result);
 			}
@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Assessment', {
 	},
 
 
-	grade: function(submissionWidget,questionSet,submissionData){
+	grade: function(submissionWidget,questionSet,submissionData) {
 
 		var q = this.getAssessmentQuestionSubmissionModel(),
 			s = this.getAssessmentQuestionSetSubmissionModel(),
@@ -95,10 +95,10 @@ Ext.define('NextThought.controller.Assessment', {
 				questions: []
 			};
 
-		Ext.Object.each(submissionData,function(k,v){
+		Ext.Object.each(submissionData, function(k,v) {
 			data.questions.push({
-				'Class':'QuestionSubmission',
-				MimeType:'application/vnd.nextthought.assessment.questionsubmission',
+				'Class': 'QuestionSubmission',
+				MimeType: 'application/vnd.nextthought.assessment.questionsubmission',
 				ContainerId: data.ContainerId,
 				NTIID: k,
 				questionId: k,
@@ -108,12 +108,12 @@ Ext.define('NextThought.controller.Assessment', {
 
 		s.create(data).save({
 			scope: this,
-			callback: function(){},
-			failure: function(){
+			callback: function() {},
+			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem grading your quiz');
 			},
-			success: function(self,op){
+			success: function(self,op) {
 				var result = op.getResultSet().records.first();
 				submissionWidget.setGradingResult(result);
 			}

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.ColorPicker',{
+Ext.define('NextThought.view.whiteboard.editor.ColorPicker', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.color-picker',
 	requires: [
@@ -15,9 +15,9 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPicker',{
 	defaultAlign: 't-b?',
 	hideMode: 'display',
 
-	items : [{xtype: 'color-palette'}],
+	items: [{xtype: 'color-palette'}],
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents('select');
 		this.relayEvents(this.down('color-palette'), ['select']);

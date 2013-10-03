@@ -36,10 +36,10 @@ Ext.define('NextThought.model.assessment.Question', {
 		{ name: 'parts', type: 'arrayItem' }
 	],
 
-	getVideos: function(){
+	getVideos: function() {
 		var all = NextThought.model.assessment.Part.prototype.getVideos.call(this);
-		Ext.each(this.get('parts'),function(p){
-			all.push.apply(all,p.getVideos());
+		Ext.each(this.get('parts'), function(p) {
+			all.push.apply(all, p.getVideos());
 		});
 		return all;
 	}

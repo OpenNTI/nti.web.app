@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.User', {
-	extend:     'NextThought.model.Base',
-	requires:   ['NextThought.model.converters.PresenceInfo'],
+	extend: 'NextThought.model.Base',
+	requires: ['NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 
 	fields: [
@@ -15,7 +15,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'AvatarURLChoices', type: 'AvatarURLList' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
-		{ name: 'status', type: 'Synthetic', fn: function (record) {
+		{ name: 'status', type: 'Synthetic', fn: function(record) {
 			//The presence isn't always a PresenceInfo in testing
 			if (record.get('Presence') && record.get('Presence').getDisplayText) {
 				return record.get('Presence').getDisplayText();
@@ -25,7 +25,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
-		{ name: 'displayName', convert: function (v, r) {
+		{ name: 'displayName', convert: function(v, r) {
 			return r.getName();
 		}},
 		{ name: 'about', type: 'string'},
@@ -35,13 +35,13 @@ Ext.define('NextThought.model.User', {
 		{ name: 'home_page', type: 'string'}
 	],
 
-	isUser:        true,
+	isUser: true,
 	summaryObject: true,
 
-	getCommunities: function (excludeDFLs) {
+	getCommunities: function(excludeDFLs) {
 		var r = [], u;
 
-		Ext.each(this.get('Communities'), function (c) {
+		Ext.each(this.get('Communities'), function(c) {
 			var field = 'Username';
 
 			if (/^everyone$/i.test(c)) {
@@ -64,13 +64,13 @@ Ext.define('NextThought.model.User', {
 		});
 
 		if (excludeDFLs) {
-			return Ext.Array.filter(r, function (i) { return i.isCommunity; });
+			return Ext.Array.filter(r, function(i) { return i.isCommunity; });
 		}
 		return r;
 	},
 
 
-	getData: function () {
+	getData: function() {
 		var k, v, f = this.callParent(arguments);
 
 		for (k in f) {
@@ -86,17 +86,17 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-	toString: function () {
+	toString: function() {
 		return this.getName();
 	},
 
 
-	getName: function () {
+	getName: function() {
 		return this.get('alias') || this.get('realname') || this.get('Username');
 	},
 
 
-	getProfileUrl: function (subPage) {
+	getProfileUrl: function(subPage) {
 		var u = encodeURIComponent(this.get('Username')),
 				subPages = subPage || [];
 
@@ -107,25 +107,25 @@ Ext.define('NextThought.model.User', {
 		return ['#!profile/', u, subPages].join('');
 	},
 
-	getPresence: function () {
+	getPresence: function() {
 		var presence = this.get('Presence');
 		return presence || NextThought.model.PresenceInfo.createFromPresenceString('Offline');
 	},
 
-	hasBlog: function () {
+	hasBlog: function() {
 		return Boolean(this.getLink('Blog'));
 	},
 
 
-	save: function (ops) {
+	save: function(ops) {
 		Ext.Ajax.request(Ext.apply({
-		   url:      this.getLink('edit'),
-		   method:   'PUT',
+		   url: this.getLink('edit'),
+		   method: 'PUT',
 		   jsonData: this.getData()
 	   }, ops));
 	},
 
-	isUnresolved: function () {
+	isUnresolved: function() {
 		return this.Unresolved === true;
 	},
 
@@ -134,39 +134,39 @@ Ext.define('NextThought.model.User', {
 
 		BLANK_AVATAR: 'resources/images/icons/unresolved-user.png',
 
-		getUnresolved: function (username) {
+		getUnresolved: function(username) {
 			var u = new NextThought.model.User({
-			   Username:    username,
-			   alias:       username,
-			   avatarURL:   this.BLANK_AVATAR,
+			   Username: username,
+			   alias: username,
+			   avatarURL: this.BLANK_AVATAR,
 			   affiliation: 'Unknown',
-			   status:      '',
-			   Presence:    NextThought.model.PresenceInfo.createFromPresenceString("Offline")
+			   status: '',
+			   Presence: NextThought.model.PresenceInfo.createFromPresenceString('Offline')
 		   }, username);
 			u.Unresolved = true;
 			return u;
 		},
 
 
-		getProfileStateFromFragment: function (fragment) {
+		getProfileStateFromFragment: function(fragment) {
 			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
 			return o ? {
-				username:  decodeURIComponent(o[1]),
+				username: decodeURIComponent(o[1]),
 				activeTab: o[2]
 			} : null;
 		}
 
 	},
 
-	hasVisibilityField: function(field){
+	hasVisibilityField: function(field) {
 		return Boolean(this.raw && this.raw[field]);
 	},
 
 
-	refresh: function () {
+	refresh: function() {
 		var req = {
-			url:      getURL(this.get('href')),
-			callback: function (q, s, r) {
+			url: getURL(this.get('href')),
+			callback: function(q, s, r) {
 				if (!s) {
 					console.warn('could not refresh user');
 					return;
@@ -180,6 +180,6 @@ Ext.define('NextThought.model.User', {
 		Ext.Ajax.request(req);
 	}
 
-}, function () {
+}, function() {
 	window.User = this;
 });

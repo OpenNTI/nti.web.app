@@ -13,16 +13,16 @@ Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 	],
 
 
-	getTotalCount: function(){
-		return (this.get('questions')||[]).length;
+	getTotalCount: function() {
+		return (this.get('questions') || []).length;
 	},
 
 
-	getCorrectCount: function(){
+	getCorrectCount: function() {
 
 		var correct = 0;
-		Ext.each(this.get('questions'),function(q){
-			if(q.isCorrect()){correct++;}
+		Ext.each(this.get('questions'), function(q) {
+			if (q.isCorrect()) {correct++;}
 		});
 
 		return correct;

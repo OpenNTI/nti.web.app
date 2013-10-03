@@ -1,4 +1,4 @@
-Ext.define('NextThought.chart.series.Score',{
+Ext.define('NextThought.chart.series.Score', {
 	extend: 'Ext.chart.series.Pie',
 	alias: 'series.score',
 
@@ -8,26 +8,26 @@ Ext.define('NextThought.chart.series.Score',{
 	textColor: '#7fab22',
 	colorSet: [],
 	style: {
-		"stroke-width": 2,
-		"stroke-opacity": 1,
+		'stroke-width': 2,
+		'stroke-opacity': 1,
 		stroke: '#fff'
 	},
 
 
-	setValue: function(value){
+	setValue: function(value) {
 		this.scoreValue = value;
 	},
 
 
-	drawSeries: function(){
+	drawSeries: function() {
 		//TODO: try to figure out why animations mess up the overridden getSegment values :/
 		this.chart.animate = false;
 
-		if(this.chart.getChartStore().getCount()<2){
+		if (this.chart.getChartStore().getCount() < 2) {
 			this.colorSet = [this.incorrectColor];
 		}
 		else {
-			this.colorSet = [this.correctColor,this.incorrectColor];
+			this.colorSet = [this.correctColor, this.incorrectColor];
 		}
 
 		delete this.correctionOffset;
@@ -36,7 +36,7 @@ Ext.define('NextThought.chart.series.Score',{
 		var val = this.scoreValue,
 			label = this.scoreLabel;
 
-		if(!label){
+		if (!label) {
 			label = this.scoreLabel = this.chart.surface.add({
 		        type: 'text',
 		        text: '',
@@ -50,21 +50,21 @@ Ext.define('NextThought.chart.series.Score',{
 
 		try {
 			label.setAttributes({
-				text: val+(val>=100?'':'\u008C%'),
-				fill: val===0? this.incorrectColor: this.textColor,
-				x: this.centerX + (val>=100? 0:2),
+				text: val + (val >= 100 ? '' : '\u008C%'),
+				fill: val === 0 ? this.incorrectColor : this.textColor,
+				x: this.centerX + (val >= 100 ? 0 : 2),
 				y: this.centerY + 1
 			});
 
 			label.show(true);
 		}
-		catch(er){
+		catch (er) {
 			console.error(er.message);
 		}
 	},
 
 
-	getSegment: function(opt){
+	getSegment: function(opt) {
 		var desiredAngle,
 			r,
 			abs,
@@ -72,24 +72,24 @@ Ext.define('NextThought.chart.series.Score',{
 			//key = 'angles adjusted to start at -PI/2',
 			delta = this.correctionOffset;
 
-		if(delta === undefined){
-			desiredAngle = Math.PI/2;
+		if (delta === undefined) {
+			desiredAngle = Math.PI / 2;
 			r = opt.endAngle * this.rad;
 			abs = Math.abs(r);
-			sign = r/abs;
-			delta = (sign*(abs - desiredAngle)/this.rad) || desiredAngle;
+			sign = r / abs;
+			delta = (sign * (abs - desiredAngle) / this.rad) || desiredAngle;
 			this.correctionOffset = delta;
 		}
 
-		if(this.scoreValue===0 && this.chart.getChartStore().getCount()>1){
+		if (this.scoreValue === 0 && this.chart.getChartStore().getCount() > 1) {
 			delta += 1500;
 		}
 
-//		if(delta && !opt.hasOwnProperty(key)){
-//			opt[key] = true;
+    //		if(delta && !opt.hasOwnProperty(key)){
+    //			opt[key] = true;
 			opt.endAngle -= delta;
 			opt.startAngle -= delta;
-//		}
+    //		}
 
 		return this.callParent(arguments);
 	}

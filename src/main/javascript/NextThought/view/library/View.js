@@ -27,7 +27,7 @@ Ext.define('NextThought.view.library.View', {
 				'itemremove': 'updateCount'
 			},
 			xhooks: {
-				updateCount: function () {
+				updateCount: function() {
 					if (this.rendered && this.el.down('.count')) {
 						this.el.down('.count').update(this.store.getCount());
 					}
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.library.View', {
 	],
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.removeCls('make-white');
 		this.mon(Library, {
@@ -57,27 +57,27 @@ Ext.define('NextThought.view.library.View', {
 	},
 
 
-	showCourses: function () {
+	showCourses: function() {
 		this.down('[courseList]').show();
 	},
 
 
-	hideCourses: function () {
+	hideCourses: function() {
 		this.down('[courseList]').hide();
 	},
 
 
-	showBooks: function () {
+	showBooks: function() {
 		this.down('[bookList]').show();
 	},
 
 
-	hideBooks: function () {
+	hideBooks: function() {
 		this.down('[bookList]').hide();
 	},
 
 
-	restore: function (state) {
+	restore: function(state) {
 		this.fireEvent('finished-restore');
 	}
 });

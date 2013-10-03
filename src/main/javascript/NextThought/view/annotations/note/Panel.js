@@ -22,7 +22,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	layout: 'auto',
 	defaultType: 'note-panel',
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 	autoFillInReplies: true,
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onClassExtended: function (cls, data, hooks) {
+	onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		//merge with subclass's render selectors
@@ -112,7 +112,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
 
-		hooks.onBeforeCreated = function (cls, data) {
+		hooks.onBeforeCreated = function(cls, data) {
 			if (data.cls) {
 				data.cls = [cls.superclass.cls, data.cls].join(' ');
 			}
@@ -121,14 +121,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	findWithRecordId: function (ntiid) {
+	findWithRecordId: function(ntiid) {
 		var o = null;
 
 		if (this.record && this.record.getId() === ntiid) {
 			return this;
 		}
 
-		this.items.each(function (c) {
+		this.items.each(function(c) {
 			o = c.findWithRecordId(ntiid);
 			return !o;
 		});
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.wbData = {};
 		this.addEvents('chat', 'share', 'save-new-reply', 'editorActivated', 'editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
@@ -147,12 +147,12 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
 	},
 
-	replyIdPrefix: function () {
+	replyIdPrefix: function() {
 		return [this.xtype, 'reply'].join('-');
 	},
 
 
-	onBeforeDestroyCheck: function () {
+	onBeforeDestroyCheck: function() {
 		if (this.editor && this.editor.isActive()) {
 			this.setPlaceholderContent();
 			return false;//stop the destroy
@@ -161,7 +161,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
@@ -182,11 +182,11 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		me.setRecord(me.record);
 
-		this.on('scroll', function (e) {
+		this.on('scroll', function(e) {
 			Ext.emptyFn();
 		});
 
-		me.noteBody.on('scroll', function (e) {
+		me.noteBody.on('scroll', function(e) {
 			Ext.emptyFn();
 		});
 
@@ -227,7 +227,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		});
 
 		if (me.title) {
-			me.mon(me.title, 'click', function (e) {
+			me.mon(me.title, 'click', function(e) {
 				var a = e.getTarget('a[href]');
 
 				if (a) {
@@ -247,13 +247,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	createEditor: function () {
+	createEditor: function() {
 		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
 		this.editor = Ext.widget({xtype: 'nti-editor', ownerCt: this, renderTo: this.responseBox, enableTitle: this.enableTitle});
 	},
 
 
-	disable: function () {
+	disable: function() {
 		var me = this,
 			e = me.editorEl || {down: Ext.emptyFn},
 			cancel = e.down('.cancel'),
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			me.editor.disable();
 
 			me.mun(save, 'click', me.editorSaved, me);
-			me.mon(cancel, 'click', function () {
+			me.mon(cancel, 'click', function() {
 				me.deactivateReplyEditor();
 				//if we didn't get a placeholder, then just let this leaf go
 				if (!me.record.placeholder) {
@@ -278,17 +278,17 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onMouseOver: function () {
+	onMouseOver: function() {
 		this.noteBody.addCls('hover');
 	},
 
 
-	onMouseOut: function () {
+	onMouseOut: function() {
 		this.noteBody.removeCls('hover');
 	},
 
 
-	fillInTitle: function () {
+	fillInTitle: function() {
 		var me = this;
 
 		function callback(snip, value) {
@@ -302,12 +302,12 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	fillInUser: function (user) {
+	fillInUser: function(user) {
 		var HOST = Globals.HOST_PREFIX_PATTERN,
 			avatarURL = user.get('avatarURL'),
 			currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
 
-		if(avatarURL && avatarURL.indexOf('//') === 0){
+		if (avatarURL && avatarURL.indexOf('//') === 0) {
 			avatarURL = location.protocol + avatarURL;
 		}
 
@@ -331,18 +331,18 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	fillInShare: function (sharedWith) {
+	fillInShare: function(sharedWith) {
 		var val, names = [], others,
 			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
 
-		this.responseBox[(sharedWith|| []).length === 0 ? 'removeCls' : 'addCls']('shared');
-		if(Ext.isEmpty(sharedWith)){  return; }
+		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
+		if (Ext.isEmpty(sharedWith)) { return; }
 
-		SharingUtils.getLongSharingDisplayText(sharedWith, function (str) {
+		SharingUtils.getLongSharingDisplayText(sharedWith, function(str) {
 			this.sharedTo.update(str);
 			this.sharedTo.set({'data-qtip': str});
 
-			this.sharedTo.select('name[data-profile-idx]').on('click', function (e) {
+			this.sharedTo.select('name[data-profile-idx]').on('click', function(e) {
 				var a = e.getTarget('name'),
 					i = a && a.getAttribute('data-profile-idx'),
 					u = a && sharedWith[i];
@@ -356,7 +356,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	scrollIntoView: function () {
+	scrollIntoView: function() {
 		var scroller = this.el.up('.note-content-container.scrollbody');
 		if (this.noteBody) {
 			this.noteBody.addCls('hover');
@@ -365,7 +365,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	droppedWhiteboard: function (guid) {
+	droppedWhiteboard: function(guid) {
 		try {
 			guid = guid.replace('-reply', '');
 			Ext.get(guid).down('.include').removeCls('checked');
@@ -376,7 +376,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	editorSaved: function () {
+	editorSaved: function() {
 		var v = this.editor.getValue(),
 			me = this,
 			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
@@ -401,7 +401,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 				r.set('body', v.body);
 				r.set('title', v.title);
 
-				r.save({callback: function (record, request) {
+				r.save({callback: function(record, request) {
 					var success = request.success,
 						rec = success ? request.records[0] : null;
 					if (success) {
@@ -434,13 +434,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	updateToolState: function () {
+	updateToolState: function() {
 		this.reflectLikeAndFavorite(this.record);
 		this.reflectFlagged(this.record);
 	},
 
 	// In the future, we will want fieldName to be an array of all the fields that changed.
-	recordUpdated: function (newRec, fieldName) {
+	recordUpdated: function(newRec, fieldName) {
 		this.recordEvent = 'updated';
 		var r = this.updateFromRecord(newRec, fieldName);
 		delete this.recordEvent;
@@ -448,7 +448,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	recordChanged: function () {
+	recordChanged: function() {
 		this.recordEvent = 'changed';
 		var r = this.updateFromRecord();
 		delete this.recordEvent;
@@ -459,7 +459,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
-	updateFromRecord: function (newRecord, modifiedFieldName) {
+	updateFromRecord: function(newRecord, modifiedFieldName) {
 		var r = newRecord || this.record;
 
 		try {
@@ -481,7 +481,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 			this.time.update(r.getRelativeTimeString());
-			this.noteBody.removeCls("deleted-reply");
+			this.noteBody.removeCls('deleted-reply');
 
 			if (r.placeholder) {
 				this.setPlaceholderContent();
@@ -503,22 +503,22 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	getRecord: function () {
+	getRecord: function() {
 		return this.record;
 	},
 
 
 	//For subclasses
-	addAdditionalRecordListeners: function (record) {
+	addAdditionalRecordListeners: function(record) {
 
 	},
 
 	//For subclasses
-	removeAdditionalRecordListeners: function (record) {
+	removeAdditionalRecordListeners: function(record) {
 
 	},
 
-	setRecord: function (r) {
+	setRecord: function(r) {
 		//Remove the old listener
 		if (this.record) {
 			this.mun(this.record, 'child-added', this.addNewChild, this);
@@ -569,7 +569,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.mon(r, {
 			single: true,
 			scope: this,
-			'changed': function () {
+			'changed': function() {
 				this.recordChanged();
 			},
 			'updated': this.recordUpdated,
@@ -586,7 +586,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	//Subclass can override it they care.
 	updateCount: Ext.emptyFn,
 
-	loadReplies: function (record) {
+	loadReplies: function(record) {
 		var me = this, toMask = me.el ? me.el.down('.note-replies') : null;
 		if (toMask) {
 			toMask.mask('Loading...');
@@ -611,7 +611,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			console.log('Setting replies to ', items);
 
 			record.children = items;
-			Ext.each(items, function (i) {
+			Ext.each(items, function(i) {
 				i.parent = record;
 			});
 
@@ -636,7 +636,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	fillInReplies: function () {
+	fillInReplies: function() {
 		var r = this.record;
 		this.removeAll(true);
 
@@ -644,7 +644,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		//So notice we do the bulkiest suspend resume
 		//we can. Also getting this onto the next event pump
 		//helps the app not seem like it is hanging
-		Ext.defer(function () {
+		Ext.defer(function() {
 			if (this.isDestroyed) {
 				return;
 			}
@@ -659,7 +659,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	maybeOpenReplyEditor: function () {
+	maybeOpenReplyEditor: function() {
 		if (!this.getRoot()) {
 			return;
 		}
@@ -682,7 +682,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	setContent: function (text) {
+	setContent: function(text) {
 		var search = this.up('[getSearchTerm]'), re;
 		if (search) {
 			search = search.getSearchTerm();
@@ -701,7 +701,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 
 		Ext.each(this.text.query('.whiteboard-container'),
-			function (wb) {
+			function(wb) {
 				Ext.fly(wb).on('click', this.click, this);
 
 				if (!$AppConfig.service.canShare()) {
@@ -714,7 +714,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	setContext: function (doc, cleanRoot) {
+	setContext: function(doc, cleanRoot) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
@@ -746,17 +746,17 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 	//for subclasses
-	fixUpCopiedContext: function (n) {
+	fixUpCopiedContext: function(n) {
 		return n;
 	},
 
 
-	generateClickHandler: function (id, data) {
+	generateClickHandler: function(id, data) {
 		this.wbData[id] = data;
 	},
 
 
-	getRoot: function () {
+	getRoot: function() {
 		var cmp = this.is(this.rootQuery) ? this : this.up(this.rootQuery);
 		if (!cmp) {
 			console.error('No root found');
@@ -765,13 +765,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	editorActive: function () {
+	editorActive: function() {
 		return Boolean(this.getRoot().activeEditorOwner);
 	},
 
 
 	//Sets cmp as the component that contains the active editor
-	setEditorActive: function (cmp) {
+	setEditorActive: function(cmp) {
 		var active = Boolean(cmp),
 			root = this.getRoot();
 		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor', cmp);
@@ -790,7 +790,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	//Checks to see if an editor is active for our root
 	//and sets the active editor to be the one owned by the provided
 	//cmp.  A cmp of null means the editor is no longer active
-	checkAndMarkAsActive: function (cmp) {
+	checkAndMarkAsActive: function(cmp) {
 		var root = this.getRoot();
 		if (!root.editorActive()) {
 			root.setEditorActive(cmp);
@@ -800,12 +800,12 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	deactivateEditor: function () {
-		console.trace("Who called this?");
+	deactivateEditor: function() {
+		console.trace('Who called this?');
 		this.deactivateReplyEditor.apply(this, arguments);
 	},
 
-	activateReplyEditor: function (e) {
+	activateReplyEditor: function(e) {
 		var me = this;
 		if (e) {
 			e.stopEvent();
@@ -818,7 +818,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			me.noteBody.addCls('editor-active');
 			me.editor.activate();
 			me.scrollIntoView();
-			setTimeout(function () {
+			setTimeout(function() {
 				me.editor.focus(true);
 			}, 300);
 			return true;
@@ -827,7 +827,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	deactivateReplyEditor: function () {
+	deactivateReplyEditor: function() {
 		var root = this.getRoot();
 		if (!root.editorActive()) {
 			return;
@@ -849,7 +849,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	editorKeyDown: function (event) {
+	editorKeyDown: function(event) {
 		event.stopPropagation();
 		var k = event.getKey();
 		if (k === event.ESC) {
@@ -859,12 +859,12 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	editorKeyPressed: function (event) {
+	editorKeyPressed: function(event) {
 		event.stopPropagation();
 	},
 
 
-	canDelete: function () {
+	canDelete: function() {
 		var r = this.record;
 		if (!r) {
 			return true;
@@ -874,7 +874,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	addNewChild: function (child) {
+	addNewChild: function(child) {
 		var r = this.record;
 		if (child.get('inReplyTo') === r.getId()) {
 			this.addReplies([child]);
@@ -894,14 +894,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	removedChild: function (child) {
+	removedChild: function(child) {
 		if (child.get('inReplyTo') === this.record.getId()) {
 			this.adjustRootsReferenceCount(child, false);
 		}
 	},
 
 
-	onBeforeAdd: function (cmp) {
+	onBeforeAdd: function(cmp) {
 		this.callParent(arguments);
 		cmp.addCls('child');
 		//decide if it is the first in this container's list:
@@ -911,7 +911,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	addReplies: function (records) {
+	addReplies: function(records) {
 		var toAdd = [], recordCollection, prefix = this.getRoot() ? this.getRoot().replyIdPrefix() : null;
 
 		//Shortcircuit. Also check if we've been destroyed before adding replies.
@@ -928,7 +928,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			transform: Ext.data.SortTypes.asDate,
 			root: 'data'
 		});
-		recordCollection.each(function (record) {
+		recordCollection.each(function(record) {
 
 			var guid = IdCache.getComponentId(record, null, prefix),
 				add = true;
@@ -953,12 +953,12 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	rootToCountComponentsFrom: function () {
+	rootToCountComponentsFrom: function() {
 		return this.getRoot();
 	},
 
 
-	adjustRootsReferenceCount: function (r, added) {
+	adjustRootsReferenceCount: function(r, added) {
 		var root = r.parent,
 			rootCmp = this.rootToCountComponentsFrom();
 
@@ -972,8 +972,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onEdit: function () {
-		if(this.replyMode){ return; }
+	onEdit: function() {
+		if (this.replyMode) { return; }
 
 		this.text.hide();
 		this.editMode = true;
@@ -982,7 +982,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onRemove: function (cmp) {
+	onRemove: function(cmp) {
 		//direct children count:
 		var c = this.items.getCount(),
 		//panels below this panel:
@@ -1009,11 +1009,11 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onDelete: function () {
+	onDelete: function() {
 		this.record.destroy();
 	},
 
-	onDestroy: function () {
+	onDestroy: function() {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
@@ -1022,17 +1022,17 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	wasDeleted: function () {
+	wasDeleted: function() {
 		console.log('Deleting panel from record destroy, marking deleteing=true');
 		this.deleting = true;
 		this.destroy();
 	},
 
 
-	setPlaceholderContent: function () {
+	setPlaceholderContent: function() {
 		var fromUpdatedRecord = Boolean(this.recordEvent);
-		this.time.update("This message has been deleted");
-		this.noteBody.addCls("deleted-reply");
+		this.time.update('This message has been deleted');
+		this.noteBody.addCls('deleted-reply');
 
 		if (fromUpdatedRecord) {
 			console.debug('This record was updated to be a placeholder...references are now dirty, and disabling replys for all children');
@@ -1042,17 +1042,17 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onChat: function () {
+	onChat: function() {
 		this.fireEvent('chat', this.record);
 	},
 
 
-	onFlag: function () {
+	onFlag: function() {
 		this.record.flag(this);
 	},
 
 
-	click: function (e) {
+	click: function(e) {
 		var t = e.getTarget('.whiteboard-container', null, true), guid;
 		if (!t) {
 			return;
@@ -1084,13 +1084,13 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 	},
 
-	onReply: function () {
+	onReply: function() {
 		this.replyMode = true;
 		this.activateReplyEditor();
 	},
 
 
-	onShare: function () {
+	onShare: function() {
 		this.fireEvent('share', this.record);
 	}
 

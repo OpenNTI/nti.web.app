@@ -40,7 +40,7 @@ Ext.define('NextThought.view.forums.forumcreation.Window', {
 		}
 	],
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var header = this.down('account-header-view');
 

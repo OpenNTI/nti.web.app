@@ -9,6 +9,6 @@ Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
 		},
 		sortType: 'none'
 	}
-}, function(){
+}, function() {
 	this.DCCREATORTOAUTHOR.sortType = Ext.data.SortTypes.none;
 });

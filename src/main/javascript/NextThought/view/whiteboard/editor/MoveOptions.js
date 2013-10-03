@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
+Ext.define('NextThought.view.whiteboard.editor.MoveOptions', {
 	alias: 'widget.wb-tool-move-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
@@ -10,7 +10,7 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 
 	ui: 'options',
 	layout: {
-		type:'hbox',
+		type: 'hbox',
 		align: 'stretchmax'
 	},
 	items: [{
@@ -22,9 +22,9 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			toggleGroup: 'move-selected-'
 		},
 		items: [
-			{ option: 'move back', isEditAction:true},
-			{ option: 'move forward', isEditAction:true},
-			{ option: 'move duplicate', tipText: 'duplicate', isEditAction:true},
+			{ option: 'move back', isEditAction: true},
+			{ option: 'move forward', isEditAction: true},
+			{ option: 'move duplicate', tipText: 'duplicate', isEditAction: true},
 			{ option: 'move delete', tipText: 'delete', isEditAction: true}
 			//		{ text: 'Edit Object'},'-',
 		]
@@ -61,24 +61,24 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		}
 	],
 
-	initComponent: function(){
+	initComponent: function() {
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
 		this.callParent(arguments);
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
 
-		Ext.each( me.query('color-picker-button'), function(i){
-			me.mon(i.palette, { select: function(){	me.fireEvent('wb-options-change', me);} });
+		Ext.each(me.query('color-picker-button'), function(i) {
+			me.mon(i.palette, { select: function() {	me.fireEvent('wb-options-change', me);} });
 		});
 
 		me.mon(me.down('stroke-select'), {
 			scope: this,
-			select: function(){ me.fireEvent('wb-options-change', me); },
-			change: function(){ me.fireEvent('wb-options-change', me); }
+			select: function() { me.fireEvent('wb-options-change', me); },
+			change: function() { me.fireEvent('wb-options-change', me); }
 		});
 
 		//By Default hide the path stroke picker
@@ -89,9 +89,9 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		return 'move';
 	},
 
-	getActionType: function(){
-		var b = Ext.Array.filter(this.query('[isEditAction]'), function(x){ return x.pressed; });
-		if(!b || b.length === 0){ return; }
+	getActionType: function() {
+		var b = Ext.Array.filter(this.query('[isEditAction]'), function(x) { return x.pressed; });
+		if (!b || b.length === 0) { return; }
 		return b[0].option.replace('move', '').trim();
 	},
 
@@ -100,17 +100,17 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'), val, s, hex;
 
-		if(!options){ return; }
-		if(options.shapeType){
+		if (!options) { return; }
+		if (options.shapeType) {
 			s = options.shapeType.split('.').pop().toLowerCase();
 
-			if(s === 'path'){
+			if (s === 'path') {
 				this.down('[fillLabel]').hide();
 				this.down('[fillSelectMove]').hide();
 				this.down('[editStrokeWidth]').hide();
 
 				this.down('toolbar[cls=pencil-stroke-options]').show();
-			}else{
+			}else {
 				this.down('[fillLabel]').show();
 				this.down('[fillSelectMove]').show();
 				this.down('[editStrokeWidth]').show();
@@ -119,46 +119,46 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			}
 		}
 
-		if(options.stroke){
-            val = null;
-            if (options.stroke !== 'NONE'){
+		if (options.stroke) {
+      val = null;
+      if (options.stroke !== 'NONE') {
 	            hex = Color.rgbaToHex(options.stroke);
 	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-            }
-            strokeButton.setValue(val);
+      }
+      strokeButton.setValue(val);
 		}
-		if(options.fill) {
-            val = null;
-            if (options.fill !== 'NONE'){
+		if (options.fill) {
+      val = null;
+      if (options.fill !== 'NONE') {
 	            hex = Color.rgbaToHex(options.fill);
 	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
-            }
+      }
 			fillButton.setValue(val);
 		}
 
 		this.setStrokeWidthValue(options.strokeWidth, options.shapeType);
 	},
 
-	setStrokeWidthValue: function(strokeValue, shapeType){
-		if(!shapeType){ return;}
+	setStrokeWidthValue: function(strokeValue, shapeType) {
+		if (!shapeType) { return;}
 		var s = shapeType.split('.').pop().toLowerCase(), a, sel, btn;
 
-		if(s !== 'path'){
-			this.down('[editStrokeWidth]').setSelected( strokeValue);
+		if (s !== 'path') {
+			this.down('[editStrokeWidth]').setSelected(strokeValue);
 		}
 		else {
 			a = this.query('[strokeWidth]');
-			Ext.each(a, function(i){
-				if(i.pressed){ i.toggle(); }
+			Ext.each(a, function(i) {
+				if (i.pressed) { i.toggle(); }
 			});
 
-			sel = '[strokeWidth='+strokeValue+']';
+			sel = '[strokeWidth=' + strokeValue + ']';
 			btn = this.down(sel);
-			if(btn){ btn.toggle(); }
+			if (btn) { btn.toggle(); }
 		}
 	},
 
-	getOptions: function(){
+	getOptions: function() {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
 			strokeButton = toolbar.down('[strokeSelectMove]'),

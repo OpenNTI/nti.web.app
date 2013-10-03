@@ -1,12 +1,12 @@
 Ext.define('NextThought.view.BoundPanel', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.data-bound-panel',
+	alias: 'widget.data-bound-panel',
 
 	overflowX: 'hidden',
 	overflowY: 'auto',
 	cls: 'scrollable',
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.store = this.store || Ext.getStore(this.storeId || '');
 		if (!this.store) {
@@ -15,7 +15,7 @@ Ext.define('NextThought.view.BoundPanel', {
 		}
 
 		this.mon(this.store, {
-			scope:                 this,
+			scope: this,
 			load: 'onBoundStoreLoad',
 			clear: 'removeAllItems',
 			'parent-store-loaded': 'onParentStoreLoad',
@@ -26,14 +26,14 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	escapeId: function(id){
+	escapeId: function(id) {
 		return id
 				.replace(/:/g, '\\3a ') //no colons
 				.replace(/,/g, '\\2c '); //no commas
 	},
 
 
-	getComponentConfigForRecord: function (rec) {
+	getComponentConfigForRecord: function(rec) {
 		if (rec.hidden || (this.filter && !this.filter(rec))) {
 			return null;
 		}
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	showEmptyState: function () {
+	showEmptyState: function() {
 		if (this.emptyCmp && !this.emptyState) {
 			this.add(this.emptyCmp);
 			this.emptyState = true;
@@ -52,7 +52,7 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	hideEmptyState: function () {
+	hideEmptyState: function() {
 		if (this.down('[emptyState=true]')) {
 			this.down('[emptyState=true]').destroy();
 		}
@@ -62,9 +62,9 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	shouldHide: function (records) {
+	shouldHide: function(records) {
 		var allHidden = true, me = this;
-		Ext.each(records, function (item) {
+		Ext.each(records, function(item) {
 			allHidden = allHidden && !!(item.hidden || (me.filter && !me.filter(item)));
 		});
 
@@ -72,10 +72,10 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	onParentStoreLoad: function (store, records) {
+	onParentStoreLoad: function(store, records) {
 		var total = 0;
 
-		Ext.each(records, function (item) {
+		Ext.each(records, function(item) {
 			if (item.get('ID').indexOf('mycontacts') === 0) {
 				total += item.getFriendCount();
 			}
@@ -87,13 +87,13 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	doRefresh: function(store){
+	doRefresh: function(store) {
 		clearTimeout(this.refreshTask);
-		this.refreshTask = Ext.defer(this.onBoundStoreLoad,100,this,[store]);
+		this.refreshTask = Ext.defer(this.onBoundStoreLoad, 100, this, [store]);
 	},
 
 
-	onBoundStoreLoad: function (store) {
+	onBoundStoreLoad: function(store) {
 		var items;
 
 		this.removeAll(true);
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.BoundPanel', {
 		}
 
 		items = store.snapshot ? store.snapshot.items : store.data.items;
-		if(store.snapshot){
+		if (store.snapshot) {
 			items = items.slice();
 			items.sort(store.generateComparator());
 		}
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	onBoundStoreAdd: function (store, records, index) {
+	onBoundStoreAdd: function(store, records, index) {
 
 		var insertionPoint = this.defaultInsertPoint || index || 0,//force number
 			toAdd;
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	onBoundStoreRemove: function (store, record) {
+	onBoundStoreRemove: function(store, record) {
 		console.debug('remove', arguments);
 
 		var me = this;
@@ -154,17 +154,17 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	removeAllItems: function () {
+	removeAllItems: function() {
 		this.removeAll(true);
 	},
 
 
-	insertItem: function (insertAt, toInsert) {
+	insertItem: function(insertAt, toInsert) {
 		return this.insert(insertAt, toInsert);
 	},
 
 
-	removeItem: function (o, autoDestroy) {
+	removeItem: function(o, autoDestroy) {
 		return this.remove(o, autoDestroy);
 	}
 });

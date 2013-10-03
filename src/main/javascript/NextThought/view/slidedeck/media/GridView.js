@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.slidedeck.media.GridView',{
+Ext.define('NextThought.view.slidedeck.media.GridView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 
@@ -24,42 +24,42 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 	itemSelector: '.item',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-			{ tag: 'tpl', 'if': 'this.is(values)', cn: { cls: 'item heading', cn:[
-				{ tag: 'tpl', 'if': 'this.splitNumber(values)', cn:''},
-				{ tag:'span', cls:'number', html:'{number}'},
-				{ tag:'span', cls:'name', html:'{section}'}
+			{ tag: 'tpl', 'if': 'this.is(values)', cn: { cls: 'item heading', cn: [
+				{ tag: 'tpl', 'if': 'this.splitNumber(values)', cn: ''},
+				{ tag: 'span', cls: 'number', html: '{number}'},
+				{ tag: 'span', cls: 'name', html: '{section}'}
 			] } },
 			{ tag: 'tpl', 'if': '!this.is(values)', cn: [
 				{ cls: 'item video', cn: [
 					{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
-					{ cls: 'meta', cn:[
+					{ cls: 'meta', cn: [
 						{ cls: 'title', html: '{title}' },
 						{ cls: 'info', cn: [
-//							{ tag: 'span', html: '{diration}'},
-//							{ tag: 'span', html: '{comments:plural("Comment")}'}
+            //							{ tag: 'span', html: '{diration}'},
+            //							{ tag: 'span', html: '{comments:plural("Comment")}'}
 						] }
 					] }
 				] }
 			] }
 		] }
 	), {
-		is: function (values) {
-			return values.sources.length===0;
+		is: function(values) {
+			return values.sources.length === 0;
 		},
 
-		splitNumber: function(values){
-			var s = (values.section||'').split(' '),
+		splitNumber: function(values) {
+			var s = (values.section || '').split(' '),
 				number = s.shift(),
 				numberVal = parseFloat(number),
 				section = s.join(' ');
 
-			if(!isNaN(numberVal) && isFinite(numberVal)){
+			if (!isNaN(numberVal) && isFinite(numberVal)) {
 				values.number = number;
 				values.section = section;
 			}
 		},
 
-		thumb: function(sources){
+		thumb: function(sources) {
 			return sources[0].thumbnail;
 		}
 	}),
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 
 	//<editor-fold desc="Setup">
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var lineage = ContentUtils.getLineage(this.getSource().get('NTIID')),
@@ -76,13 +76,13 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 
 		this.setLocationInfo(location);
 
-		Ext.defer(this.getVideoData,1,this,[title]);
+		Ext.defer(this.getVideoData, 1, this, [title]);
 
 		this.on({
-			itemclick: function () {
+			itemclick: function() {
 				this.fromClick = true;
 			},
-			beforeselect: function (s, r) {
+			beforeselect: function(s, r) {
 				var pass = r.get('sources').length > 0,
 					store = s.getStore(),
 					last = s.lastSelected || store.first(),
@@ -99,11 +99,11 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 				return pass;
 
 			},
-			select: function (s, r) {
+			select: function(s, r) {
 				var node = this.getNodeByRecord(r),
 					ct = this.el.getScrollingEl();
-				if( node && Ext.fly(node).needsScrollIntoView(ct)){
-					node.scrollIntoView(ct,false,{});
+				if (node && Ext.fly(node).needsScrollIntoView(ct)) {
+					node.scrollIntoView(ct, false, {});
 				}
 				if (this.fromClick) {
 					this.fireSelection();
@@ -115,58 +115,58 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 	},
 
 
-	processSpecialEvent: function(e){
+	processSpecialEvent: function(e) {
 		var k = e.getKey();
-		if(k === e.SPACE || k === e.ENTER){
+		if (k === e.SPACE || k === e.ENTER) {
 			this.fireSelection();
 		}
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
-		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function () {
+		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
 			me.fromKey = true;
 		});
 	},
 
 
-	getVideoData: function(title){
-		Library.getVideoIndex(title,this.applyVideoData,this);
+	getVideoData: function(title) {
+		Library.getVideoIndex(title, this.applyVideoData, this);
 	},
 
 
-	applyVideoData: function(data){
+	applyVideoData: function(data) {
 		//data is a NTIID->source map
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			selected = this.getSource().get('NTIID'),
 			sections = {},
 			videos = [];
 
-		function iter(key,v){
-			if(key !== v.ntiid){
+		function iter(key,v) {
+			if (key !== v.ntiid) {
 				console.error(key, '!=', v);
 			}
 
-			var section = ContentUtils.getLineage(key,true)[1];
+			var section = ContentUtils.getLineage(key, true)[1];
 
-			if(!sections.hasOwnProperty(section)){
-				sections[section] = NextThought.model.PlaylistItem({section:section,sources:[]});
+			if (!sections.hasOwnProperty(section)) {
+				sections[section] = NextThought.model.PlaylistItem({section: section, sources: []});
 				videos.push(sections[section]);
 			}
 
-			videos.push(reader.read(Ext.apply(v,{
+			videos.push(reader.read(Ext.apply(v, {
 				NTIID: v.ntiid,
 				section: section
 			})).records[0]);
 
-			if(key === selected){
+			if (key === selected) {
 				selected = videos.last();
 			}
 		}
 
-		Ext.Object.each(data,iter);
+		Ext.Object.each(data, iter);
 
 
 		this.store = new Ext.data.Store({
@@ -180,18 +180,18 @@ Ext.define('NextThought.view.slidedeck.media.GridView',{
 		});
 
 		this.bindStore(this.store);
-		if(!Ext.isString(selected)){
-			this.getSelectionModel().select(selected,false,true);
+		if (!Ext.isString(selected)) {
+			this.getSelectionModel().select(selected, false, true);
 		}
 	},
 	//</editor-fold>
 
 
-	fireSelection: function(){
+	fireSelection: function() {
 		var rec = this.getSelectionModel().getSelection().first(),
 			li = this.getLocationInfo();
 
 		//console.log('Change video to:', rec);
-		Ext.defer(this.fireEvent,1,this,['change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root)]);
+		Ext.defer(this.fireEvent, 1, this, ['change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root)]);
 	}
 });

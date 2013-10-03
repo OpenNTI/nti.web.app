@@ -32,7 +32,7 @@ Ext.define('NextThought.controller.Account', {
 
 	refs: [],
 
-	init: function () {
+	init: function() {
 		this.listen({
 			component: {
 				'contact-card': {
@@ -73,15 +73,15 @@ Ext.define('NextThought.controller.Account', {
 
 				'profile-panel-old': {
 					'request-alias-change': 'requestAliasChange',
-					'edit':                 'showAccount'
+					'edit': 'showAccount'
 				},
 
 				'profile-about': {
 					'request-alias-change': 'requestAliasChange',
-					'edit':                 'showAccount'
+					'edit': 'showAccount'
 				},
 				'profile-outline': {
-					'edit':                 'showAccount'
+					'edit': 'showAccount'
 				},
 
 				'password-reset-form button[save]': {
@@ -100,11 +100,11 @@ Ext.define('NextThought.controller.Account', {
 					'click': 'contactFormSubmit'
 				},
 
-				'code-main-view button[name=submit]':   {
+				'code-main-view button[name=submit]': {
 					'click': 'groupCodeSubmit'
 				},
 				'code-main-view simpletext[name=code]': {
-					'changed':    'groupCodeChanged',
+					'changed': 'groupCodeChanged',
 					'specialkey': 'groupCodeSpecialKey'
 				},
 
@@ -117,8 +117,8 @@ Ext.define('NextThought.controller.Account', {
 				'group-buttons': { 'click': 'groupButtonClicked' },
 				'list-buttons': { 'click': 'groupButtonClicked' },
 
-				'contacts-outline':{
-					'contact-button-clicked':'groupButtonClicked'
+				'contacts-outline': {
+					'contact-button-clicked': 'groupButtonClicked'
 				}
 
 			}
@@ -126,7 +126,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	contactCardClicked: function (cmp, username) {
+	contactCardClicked: function(cmp, username) {
 		if ($AppConfig.service.canChat() && !isMe(username)) {
 			this.getController('Chat').enterRoom(username);
 		}
@@ -136,7 +136,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	showAccount: function () {
+	showAccount: function() {
 		var me = this;
 		if (me.acctWin && !me.acctWin.isDestroyed) {
 			me.acctWin.show();
@@ -149,7 +149,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	showContactUs: function () {
+	showContactUs: function() {
 		var me = this;
 		if (me.contactUsWin && !me.contactUsWin.isDestroyed) {
 			me.contactUsWin.show();
@@ -162,18 +162,18 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	requestAliasChange: function () {
+	requestAliasChange: function() {
 		Ext.widget('contact-us-window', {role: 'alias', titleKey: 'alias_request_title', detailKey: 'alias_request_message'}).show();
 	},
 
 
-	showPermanantWelcome: function (cmp) {
+	showPermanantWelcome: function(cmp) {
 		this.guideWin = Ext.widget('welcome-guide', {link: cmp.link});
 		this.guideWin.show();
 	},
 
 
-	changePassword: function (btn) {
+	changePassword: function(btn) {
 		var form = btn.up('password-reset-form'),
 				u = this.getUserPasswordSetModel().fromUser($AppConfig.userObject);
 
@@ -191,7 +191,7 @@ Ext.define('NextThought.controller.Account', {
 		u.save({callback: callback});
 	},
 
-	groupCodeSpecialKey: function (el, event) {
+	groupCodeSpecialKey: function(el, event) {
 		var val = el.lastValue,
 				empty = Ext.isEmpty(val);
 		if (event.getKey() === event.RETURN && !empty) {
@@ -199,7 +199,7 @@ Ext.define('NextThought.controller.Account', {
 		}
 	},
 
-	groupCodeChanged: function (value, t) {
+	groupCodeChanged: function(value, t) {
 		var val = value.trim(),
 				empty = Ext.isEmpty(val),
 				view = t.up('.code-main-view'),
@@ -213,7 +213,7 @@ Ext.define('NextThought.controller.Account', {
 		}
 	},
 
-	groupCodeSubmit: function (btn) {
+	groupCodeSubmit: function(btn) {
 		var view = btn.up('code-main-view'),
 				data = {invitation_codes: [view.getValue().code]},
 				url = $AppConfig.userObject.getLink('accept-invitations'),
@@ -225,14 +225,14 @@ Ext.define('NextThought.controller.Account', {
 		}
 
 		Ext.Ajax.request({
-							 url:      getURL(url),
-							 scope:    this,
+							 url: getURL(url),
+							 scope: this,
 							 jsonData: Ext.encode(data),
-							 method:   'POST',
-							 headers:  {
+							 method: 'POST',
+							 headers: {
 								 Accept: 'application/json'
 							 },
-							 callback: function (q, success, r) {
+							 callback: function(q, success, r) {
 								 var store;
 								 btn.removeCls('disabled');
 								 if (!success) {
@@ -252,14 +252,14 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	contactUsBodyForMessage: function (data) {
+	contactUsBodyForMessage: function(data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 		body += (' wrote: ' + data.message);
 		return body;
 	},
 
 
-	aliasBodyForMessage: function (data) {
+	aliasBodyForMessage: function(data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';
 		body += (' has requested an alias change for account ' + $AppConfig.username);
 		body += ('. message: ' + data.message);
@@ -267,7 +267,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	contactFormSubmit: function (btn) {
+	contactFormSubmit: function(btn) {
 		var view = btn.up('contact-main-view'),
 				data = view.getValues(),
 				feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
@@ -275,7 +275,7 @@ Ext.define('NextThought.controller.Account', {
 				w = view.up('window'),
 				bodyFormatters = {
 					contact: this.contactUsBodyForMessage,
-					alias:   this.aliasBodyForMessage
+					alias: this.aliasBodyForMessage
 				},
 				body;
 
@@ -303,14 +303,14 @@ Ext.define('NextThought.controller.Account', {
 		}
 
 		Ext.Ajax.request({
-							 url:      url,
-							 scope:    this,
+							 url: url,
+							 scope: this,
 							 jsonData: Ext.encode({body: body}),
-							 method:   'POST',
-							 headers:  {
+							 method: 'POST',
+							 headers: {
 								 Accept: 'application/json'
 							 },
-							 callback: function (q, success, r) {
+							 callback: function(q, success, r) {
 								 btn.removeCls('disabled');
 								 if (!success) {
 									 view.setError(Ext.decode(r.responseText));
@@ -323,14 +323,14 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	resendConsent: function () {
+	resendConsent: function() {
 		if ($AppConfig.userObject.getLink('contact-email-sends-consent-request')) {
 			this.getController('Session').showEmailRecoveryWindow('contact_email', 'contact-email-sends-consent-request');
 		}
 	},
 
 
-	groupButtonClicked: function (btn) {
+	groupButtonClicked: function(btn) {
 		var flyBtn = Ext.fly(btn);
 		if (flyBtn.hasCls('join-group')) {
 			this.codeWin = Ext.widget('code-window');
@@ -351,7 +351,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	fixEmail: function (btn) {
+	fixEmail: function(btn) {
 		var view = btn.up('recovery-email-view'),
 				value = view.getValue(),
 				linkToDelete = $AppConfig.userObject.getLink(value.linkName),
@@ -375,11 +375,11 @@ Ext.define('NextThought.controller.Account', {
 				if (linkToDelete) {
 					//we need to delete the link now.
 					Ext.Ajax.request({
-										 url:      getURL(linkToDelete),
-										 timeout:  20000,
-										 scope:    this,
-										 method:   'DELETE',
-										 callback: function (q, success, r) {
+										 url: getURL(linkToDelete),
+										 timeout: 20000,
+										 scope: this,
+										 method: 'DELETE',
+										 callback: function(q, success, r) {
 											 if (!success) {
 												 console.log('Could not delete the needs.updated link');
 												 return;
@@ -396,11 +396,11 @@ Ext.define('NextThought.controller.Account', {
 			if (linkToDelete) {
 				//we need to delete the link now.
 				Ext.Ajax.request({
-									 url:      getURL(linkToDelete),
-									 timeout:  20000,
-									 scope:    this,
-									 method:   'DELETE',
-									 callback: function (q, success, r) {
+									 url: getURL(linkToDelete),
+									 timeout: 20000,
+									 scope: this,
+									 method: 'DELETE',
+									 callback: function(q, success, r) {
 										 if (!success) {
 											 console.log('Could not delete the needs.updated link');
 											 return;
@@ -423,7 +423,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	submitCoppaInfo: function (btn) {
+	submitCoppaInfo: function(btn) {
 		var view = btn.up('coppa-main-view'),
 				values = view.getValues(),
 				linkToDelete = $AppConfig.userObject.getLink('account.profile.needs.updated'),
@@ -438,11 +438,11 @@ Ext.define('NextThought.controller.Account', {
 				if (linkToDelete) {
 					//we need to delete the link now.
 					Ext.Ajax.request({
-										 url:      getURL(linkToDelete),
-										 timeout:  20000,
-										 scope:    this,
-										 method:   'DELETE',
-										 callback: function (q, success, r) {
+										 url: getURL(linkToDelete),
+										 timeout: 20000,
+										 scope: this,
+										 method: 'DELETE',
+										 callback: function(q, success, r) {
 											 if (!success) {
 												 console.log('Could not delete the needs.updated link');
 												 return;
@@ -476,17 +476,17 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	openHref: function (item) {
+	openHref: function(item) {
 		window.open(item.href, item.hrefTarget);
 	},
 
 
-	openHelp: function () {
+	openHelp: function() {
 		this.fireEvent('set-location', 'tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.tableofcontents');
 	},
 
 
-	showChildrensPrivacy: function (item) {
+	showChildrensPrivacy: function(item) {
 		var user = $AppConfig.userObject,
 				link = user.getLink('childrens-privacy');
 
@@ -501,7 +501,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	showPrivacy: function (item) {
+	showPrivacy: function(item) {
 		var user = $AppConfig.userObject,
 				link = user.getLink('content.permanent_general_privacy_page');
 
@@ -516,14 +516,14 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	showTerms: function (item) {
+	showTerms: function(item) {
 		if (!this.termsWin) {
 			this.termsWin = this.createWin('Terms of Service',
 										   $AppConfig.links.terms_of_service);
 		}
 
 		if (Ext.is.iPad) {
-			this.termsWin.on('afterrender', function () {
+			this.termsWin.on('afterrender', function() {
 				var iframe = this.el.down('.x-fit-item');
 				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
 				iframe.parent().el.setStyle('overflow', 'auto');
@@ -534,50 +534,50 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	createWin: function (title, url) {
+	createWin: function(title, url) {
 		return Ext.widget('nti-window', {
-			title:       title,
+			title: title,
 			closeAction: 'hide',
-			width:       '60%',
-			height:      '75%',
-			layout:      'fit',
-			modal:       true,
-			items:       {
-				xtype:  'component',
-				cls:    'padded',
+			width: '60%',
+			height: '75%',
+			layout: 'fit',
+			modal: true,
+			items: {
+				xtype: 'component',
+				cls: 'padded',
 				autoEl: {
-					tag:               'iframe',
-					src:               url,
-					frameBorder:       0,
-					marginWidth:       0,
-					marginHeight:      0,
-					seamless:          true,
-					transparent:       true,
+					tag: 'iframe',
+					src: url,
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0,
+					seamless: true,
+					transparent: true,
 					allowTransparency: true,
-					style:             'overflow-x: hidden; overflow-y:auto'
+					style: 'overflow-x: hidden; overflow-y:auto'
 				}
 			}
 		});
 	},
 	//key either needs to be a string key for value or on object { key1: value, key2: value}
-	setPreference: function(key, value, callback, scope){
+	setPreference: function(key, value, callback, scope) {
 		var req, url = $AppConfig.userObject.getLink('set_preferences'),
 			multi = Ext.isObject(key),
-			object = (multi)? key : {};
+			object = (multi) ? key : {};
 
-		if(!multi){
+		if (!multi) {
 			object[key] = value;
 		}
 
-		if(url && !Ext.isEmpty(object)){
+		if (url && !Ext.isEmpty(object)) {
 			req = {
 				url: url,
 				scope: this,
 				jsonData: Ext.JSON.encode(object),
 				method: 'POST',
-				callback: function(q, success, r){
-					if(success){
-						$AppConfig.Preferences = Ext.merge($AppConfig.Preference || {}, object); 
+				callback: function(q, success, r) {
+					if (success) {
+						$AppConfig.Preferences = Ext.merge($AppConfig.Preference || {}, object);
 					}
 					Ext.callback(callback, scope);
 				}
@@ -590,12 +590,12 @@ Ext.define('NextThought.controller.Account', {
 		Ext.callback(callback, scope);
 	},
 	//key can either be an array of strings or one string of key(s) to delete
-	delPreference: function(key, callback, scope){
+	delPreference: function(key, callback, scope) {
 		var req, url = $AppConfig.userObject.getLink('delete_preferences'),
 			multi = Ext.isArray(key),
-			object = (multi)? key : [key];
+			object = (multi) ? key : [key];
 
-		if(url && !Ext.isEmpty(object)){
+		if (url && !Ext.isEmpty(object)) {
 			req = {
 				url: url,
 				scope: this,
@@ -603,16 +603,16 @@ Ext.define('NextThought.controller.Account', {
 					keys: object.join(' ')
 				},
 				method: 'DELETE',
-				callback: function(q, success, r){
-					if(success){
-						Ext.each(object, function(key){
+				callback: function(q, success, r) {
+					if (success) {
+						Ext.each(object, function(key) {
 							delete $AppConfig.Preferences[key];
 						});
 					}
-					Ext.callback(callback, scope)
+					Ext.callback(callback, scope);
 				}
 			};
-			
+
 			Ext.Ajax.request(req);
 			return;
 		}

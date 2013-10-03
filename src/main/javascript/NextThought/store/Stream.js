@@ -41,12 +41,12 @@ Ext.define('NextThought.store.Stream', {
 		},
 		model: 'NextThought.model.Change',
 
-		getParams: function () {
+		getParams: function() {
 			//Better way? (we basically want callparent but we are replacing instead of
 			//overriding
 			var p = this.self.prototype.getParams.apply(this, arguments);
 
-			Ext.Object.each(p, function (k, v, o) {
+			Ext.Object.each(p, function(k, v, o) {
 				if (v === undefined || v === null) {
 					delete o[k];
 				}
@@ -70,7 +70,7 @@ Ext.define('NextThought.store.Stream', {
 	/**
 	 * Like last but doesn't include any filtering
 	 */
-	unfilteredLast: function () {
+	unfilteredLast: function() {
 		if (this.snapshot) {
 			//Note snapshot is both unfiltered and unsorted.
 			//TODO more efficient way to do this? sorting the mixed collection doesn't seem to work
@@ -80,17 +80,17 @@ Ext.define('NextThought.store.Stream', {
 	},
 
 
-	hasAdditionalPagesToLoad: function () {
+	hasAdditionalPagesToLoad: function() {
 		return this.mayHaveAdditionalPages === undefined || this.mayHaveAdditionalPages;
 	},
 
 
-	previousPage: function () {
+	previousPage: function() {
 		Ext.Error.raise('previousPage not supported for stream store');
 	},
 
 
-	loadPage: function (page, options) {
+	loadPage: function(page, options) {
 		if (page !== 1 && page !== this.currentPage + 1) {
 			Ext.Error.raise('loadPage can only be called for page 1 or n + 1 where n is currentPage');
 		}
@@ -114,8 +114,8 @@ Ext.define('NextThought.store.Stream', {
 		this.callParent([page, options]);
 	},
 
-	load: function (options) {
-		if(!this.proxy.url){
+	load: function(options) {
+		if (!this.proxy.url) {
 			return;
 		}
 

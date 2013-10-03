@@ -6,41 +6,41 @@ Ext.define('NextThought.cache.LocationMeta', {
 	ids: {},
 
 
-	getValue: function(id){
+	getValue: function(id) {
 		return this.meta[this.ids[id]];
 	},
 
 
-	getMeta: function(ntiid, callback, scope){
+	getMeta: function(ntiid, callback, scope) {
 		var maybe = this.getValue(ntiid);
-		if (maybe || !ntiid){
+		if (maybe || !ntiid) {
 			Ext.callback(callback, scope, [maybe]);
 			return;
 		}
 
-		this.loadMeta(ntiid, function(meta){
-			return  Ext.callback(callback, scope, [meta]);
+		this.loadMeta(ntiid, function(meta) {
+			return Ext.callback(callback, scope, [meta]);
 		});
 	},
 
 
-	attachContentRootToMeta: function(meta, pi){
-		function buildPath(s, root){
-			var p = s.split('/'); p.splice(-1,1,'');
+	attachContentRootToMeta: function(meta, pi) {
+		function buildPath(s, root) {
+			var p = s.split('/'); p.splice(-1, 1, '');
 			p = p.join('/');
 			//trim off the root if its present
-			return p.replace(new RegExp(RegExp.escape(root)+'$'),'');
+			return p.replace(new RegExp(RegExp.escape(root) + '$'), '');
 		}
 
-		meta.baseURI = buildPath(pi.getLink('content'),meta.root);
+		meta.baseURI = buildPath(pi.getLink('content'), meta.root);
 		meta.absoluteContentRoot = meta.baseURI + meta.root;
-        meta.pageInfo = pi; // cache the pageInfo as well.
+    meta.pageInfo = pi; // cache the pageInfo as well.
 
 		return meta;
 	},
 
 
-	cacheMeta: function(meta, theId, ntiid, assessmentItems){
+	cacheMeta: function(meta, theId, ntiid, assessmentItems) {
 		var me = this;
 		this.meta[theId] = meta;
 		this.ids[ntiid] = theId;
@@ -49,24 +49,24 @@ Ext.define('NextThought.cache.LocationMeta', {
 		//right now this only works because there is a one-to-one question to
 		//PageInfo mapping.  If I recall that is happening on the server now also
 		//but is probably temporary. IE mashups probably break this
-		Ext.each(assessmentItems||[], function(assessmentItem){
+		Ext.each(assessmentItems || [], function(assessmentItem) {
 			me.ids[assessmentItem.getId()] = theId;
 		});
 	},
 
 
-	createAndCacheMeta: function(ntiid, pi, ignoreCache){
+	createAndCacheMeta: function(ntiid, pi, ignoreCache) {
 		var assessmentItems = pi.get('AssessmentItems') || [],
 				theId = pi.getId(),
 				meta = ContentUtils.getLocation(theId);
 
-		if(!meta){
+		if (!meta) {
 			return null;
 		}
 
 		this.attachContentRootToMeta(meta, pi);
 
-		if(!ignoreCache){
+		if (!ignoreCache) {
 			this.cacheMeta(meta, theId, ntiid, assessmentItems);
 		}
 
@@ -101,20 +101,20 @@ Ext.define('NextThought.cache.LocationMeta', {
 	loadMeta: function(ntiid, cb, ignoreCache) {
 		var me = this;
 
-		function pageIdLoaded(pi){
+		function pageIdLoaded(pi) {
 			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
-			if(!meta){
+			if (!meta) {
 				fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
 			}
 			Ext.callback(cb, me, [meta]);
 		}
 
-		function fail(req, resp){
-			if(resp && resp.status === 403){
+		function fail(req, resp) {
+			if (resp && resp.status === 403) {
 				console.log('Unauthorized when requesting page info', ntiid);
 				me.handleUnauthorized(ntiid, cb);
 			}
-			else{
+			else {
 				//console.error('fail', arguments);
 				Ext.callback(cb, me);
 			}
@@ -123,47 +123,47 @@ Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 
-	handleUnauthorized: function(ntiid, cb){
+	handleUnauthorized: function(ntiid, cb) {
 		var meta = ContentUtils.getLocation(ntiid),
 				bookPrefix;
 
-		if(meta){
-			$AppConfig.service.getPageInfo(meta.ContentNTIID, function(pageInfo){
-				if(pageInfo.isPageInfo){
+		if (meta) {
+			$AppConfig.service.getPageInfo(meta.ContentNTIID, function(pageInfo) {
+				if (pageInfo.isPageInfo) {
 					this.attachContentRootToMeta(meta, pageInfo);
 					this.cacheMeta(meta, ntiid, ntiid);
 					Ext.callback(cb, this, [meta]);
 				}
-				else{
+				else {
 					Ext.callback(cb, this);
 				}
-			}, function(req, resp){
+			}, function(req, resp) {
 				Ext.callback(cb, this);
 			}, this);
 		}
-		else{
+		else {
 			console.log('Looking to see if ntiid is question', ntiid);
 			bookPrefix = this.bookPrefixIfQuestion(ntiid);
 			bookPrefix = bookPrefix ? this.findTitleWithPrefix(bookPrefix) : null;
-			if(bookPrefix){
+			if (bookPrefix) {
 				this.loadMeta(bookPrefix.get('NTIID'), cb);
 			}
-			else{
+			else {
 				Ext.callback(cb, this);
 			}
 		}
 	},
 
 
-	findTitleWithPrefix: function(prefix){
+	findTitleWithPrefix: function(prefix) {
 		return Library.findTitleWithPrefix(prefix);
 	},
 
-	bookPrefixIfQuestion: function(id){
+	bookPrefixIfQuestion: function(id) {
 		return ParseUtils.bookPrefixIfQuestionNtiid(id);
 	}
 
 },
-function(){
+function() {
 	window.LocationMeta = this;
 });

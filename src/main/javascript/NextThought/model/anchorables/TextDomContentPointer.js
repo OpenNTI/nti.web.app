@@ -13,18 +13,18 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.TextDomContentPointer.create({
 				role: o.role,
 				contexts: NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
-				edgeOffset:o.edgeOffset,
+				edgeOffset: o.edgeOffset,
 				ancestor: cp.createFromObject(o.ancestor)
 			});
 		}
 	},
 
-	constructor: function(o){
+	constructor: function(o) {
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
@@ -33,8 +33,8 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	primaryContext: function(){
-	   if(this.getContexts().length > 0){
+	primaryContext: function() {
+	   if (this.getContexts().length > 0) {
 			   return this.getContexts()[0];
 	   }
 	   return null;
@@ -69,7 +69,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	locateRangePointInAncestor: function(ancestorNode, startResult){
+	locateRangePointInAncestor: function(ancestorNode, startResult) {
 		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

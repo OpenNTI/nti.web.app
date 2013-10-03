@@ -57,7 +57,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.frameBodyEl;
 	},
 
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	]}),
 
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var i = config.items[0];
 
 		this.store = config.store = new Ext.data.Store({
@@ -103,32 +103,32 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			this.locationInfo = i;
 			Library.getVideoIndex(i.title, this.applyVideoData, this);
 		}
-		else{
+		else {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);
 		}
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.on('select', 'onSelectChange', this);
 		this.callParent(arguments);
 	},
 
 
 
-	applyVideoData: function (videoIndex) {
+	applyVideoData: function(videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
 			me = this, selected = this.getSelectionModel().selected, toRemove = [], count;
 
-		try{
+		try {
 			//save for later
-			if(!videoIndex){
+			if (!videoIndex) {
 				console.error('No video index provided', this);
 			}
 		me.videoIndex = videoIndex || {};
 
-			this.getStore().each(function (r) {
+			this.getStore().each(function(r) {
 				var v = me.videoIndex[r.getId()], item;
 				if (v) {
 					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
@@ -147,33 +147,33 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 						'sources': v.sources
 					}).records[0]);
 				}
-				else{
+				else {
 					toRemove.push(r);
 				}
 			});
 
-			if(!Ext.isEmpty(toRemove)){
+			if (!Ext.isEmpty(toRemove)) {
 				console.warn('Droping ', toRemove.length, ' records that arent in video index');
 				this.getStore().remove(toRemove);
 			}
 
 			count = this.getStore().getCount();
-			if(count === 0){
+			if (count === 0) {
 				console.error('Destroying video widget because there are no videos to play');
 				this.destroy();
 			}
 		}
-		finally{
+		finally {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [videoIndex, count]);
 		}
 
 	},
 
 
-	convertItems: function (items) {
+	convertItems: function(items) {
 		var out = [];
 
-		Ext.each(items, function (item) {
+		Ext.each(items, function(item) {
 			var n = item.node,
 				i = item.locationInfo,
 				r = item.courseRecord;
@@ -191,12 +191,12 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		var t = this.title || 'Video';
 
-		if( this.store.getCount() !== 1 ){
+		if (this.store.getCount() !== 1) {
 			t = Ext.util.Inflector.pluralize(t);
 		} else {
 			this.addCls('singular');
@@ -214,19 +214,19 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
-		if( this.store.getCount() === 1 ){
+		if (this.store.getCount() === 1) {
 			this.getTargetEl().hide();
 		}
 
 		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
 
-		if(this.screenEl){
+		if (this.screenEl) {
 			this.screenEl.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY);
 		}
-		if(this.curtainEl){
+		if (this.curtainEl) {
 			this.curtainEl.setVisibilityMode(Ext.isIE ? Ext.Element.OFFSETS : Ext.Element.VISIBILITY);
 		}
 
@@ -236,23 +236,23 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	getCommentCount: function (pi) {
-//		var link = pi.getLink('RecursiveUserGeneratedData');
-//		if(link){
+	getCommentCount: function(pi) {
+    //		var link = pi.getLink('RecursiveUserGeneratedData');
+    //		if(link){
 		//load 1 item, filer by notes... read filteredTotal-something-or-other.
-//		}
+    //		}
 		//on failure call resetCommentCount
 	},
 
 
-	pausePlayback: function () {
+	pausePlayback: function() {
 		if (this.player && this.player.isPlaying()) {
 			this.player.pausePlayback();
 		}
 	},
 
 
-	maybeCreatePlayer: function () {
+	maybeCreatePlayer: function() {
 		if (!this.rendered) {
 			this.on({afterRender: Ext.bind(this.maybeCreatePlayer, this, arguments), single: true});
 			return;
@@ -302,13 +302,13 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 	//allow querying using selector PATH (eg: "parent-xtype-container course-overview-ntivideo")
-	getRefItems: function () {
+	getRefItems: function() {
 		var p = this.player;
 		return (p && [p]) || [];
 	},
 
 
-	resetCommentCount: function (a, r) {
+	resetCommentCount: function(a, r) {
 		var req = r && r.request;
 		console.warn('resetting count to 0\n', r && r.responseText);
 		if (req) {
@@ -320,20 +320,20 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	loadPageInfo: function (r) {
+	loadPageInfo: function(r) {
 		var ntiid = r.getId();
 
 		$AppConfig.service.getPageInfo(ntiid, this.getCommentCount, this.resetCommentCount, this);
 	},
 
 
-	onPlayerError: function () {
+	onPlayerError: function() {
 		this.showCurtain();
 		alert('An error occurred playing the video.  Please try again later.');
 	},
 
 
-	showCurtain: function () {
+	showCurtain: function() {
 		var c = this.getLeaveCurtain(),
 			a = c ? 'hide' : 'show',
 			el = this[(c ? 'screen' : 'curtain') + 'El'];
@@ -353,7 +353,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	hideCurtain: function () {
+	hideCurtain: function() {
 		var c = this.getLeaveCurtain(),
 			a = c ? 'show' : 'hide',
 			el = this[(c ? 'screen' : 'curtain') + 'El'];
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	onSelectChange: function (s, rec) {
+	onSelectChange: function(s, rec) {
 		var p = rec.get('poster') || null, idx;
 
 		if (p) {
@@ -404,17 +404,17 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 	},
 
 
-	getSelectedVideo: function () {
+	getSelectedVideo: function() {
 		return this.getSelectionModel().getSelection()[0];
 	},
 
 
-	getSelectedVideoIndex: function (r) {
+	getSelectedVideoIndex: function(r) {
 		return this.getStore().indexOf(r || this.getSelectedVideo() || 0);
 	},
 
 
-	onCurtainClicked: function (e) {
+	onCurtainClicked: function(e) {
 		e.stopEvent();
 
 		var m = this.getSelectedVideo(),
@@ -432,10 +432,10 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 			return;
 		}
 
-		if(e && e.shiftKey && this.player.canOpenExternally()){
+		if (e && e.shiftKey && this.player.canOpenExternally()) {
 			this.player.openExternally();
 		}
-		else{
+		else {
 			console.log('Masking z curtain');
 			this.curtainEl.mask('Loading...');
 			this.player.resumePlayback();

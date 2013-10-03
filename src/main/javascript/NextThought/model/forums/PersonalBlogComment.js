@@ -3,6 +3,6 @@ Ext.define('NextThought.model.forums.PersonalBlogComment', {
 
 	fields: [
 		{ name: 'Deleted', type: 'boolean', persist: false},
-		{name: 'FavoriteGroupingField', defaultValue:'Thoughts', persist: false}
+		{name: 'FavoriteGroupingField', defaultValue: 'Thoughts', persist: false}
 	]
 });

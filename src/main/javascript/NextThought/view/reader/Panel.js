@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.reader.Panel',{
+Ext.define('NextThought.view.reader.Panel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.reader',
 	requires: [
@@ -10,14 +10,14 @@ Ext.define('NextThought.view.reader.Panel',{
 
 	ui: 'reader',
 	cls: 'reader-container',
-	layout:'border',
+	layout: 'border',
 	defaults: {
 		border: false,
 		plain: true
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.add([{
@@ -53,24 +53,24 @@ Ext.define('NextThought.view.reader.Panel',{
 				stateId: 'notes-and-discussions',
 
 				activeTab: isFeature('notepad') ? 0 : 1,
-				items:[
+				items: [
 					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
-							{ ref: 'readerRef', selector: '#'+this.id+' reader-content' }
+							{ ref: 'readerRef', selector: '#' + this.id + ' reader-content' }
 						],
-						disabled:!isFeature('notepad'), hidden:!isFeature('notepad') },
-					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion:true }
+						disabled: !isFeature('notepad'), hidden: !isFeature('notepad') },
+					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion: true }
 				]
 			}
 		]);
 
-		this.mon(this.down('reader-content'),{
+		this.mon(this.down('reader-content'), {
 			'filter-by-line': 'selectDiscussion'
 		});
 		this.down('annotation-view').anchorComponent = this.down('reader-content');
 	},
 
 
-	selectDiscussion: function(){
+	selectDiscussion: function() {
 		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(
 			this.down('annotation-view[discussion]'));
 	}

@@ -9,7 +9,7 @@ Ext.define('NextThought.util.Store', {
 		}
 
 
-		var users = Ext.Array.map(records || [], function (r) {return r.get('Creator');});
+		var users = Ext.Array.map(records || [], function(r) {return r.get('Creator');});
 
 		function apply(r, i) {
 			var u = users[i],
@@ -26,7 +26,7 @@ Ext.define('NextThought.util.Store', {
 			}
 		}
 
-		UserRepository.getUser(users, function (u) {
+		UserRepository.getUser(users, function(u) {
 			users = u;
 
 			store.suspendEvents(true);
@@ -38,8 +38,8 @@ Ext.define('NextThought.util.Store', {
 
 
 
-	newView: function(store){
-		if( Ext.isString(store) ){
+	newView: function(store) {
+		if (Ext.isString(store)) {
 			store = Ext.getStore(store);
 		}
 
@@ -51,7 +51,7 @@ Ext.define('NextThought.util.Store', {
 			data: store.getRange()
 		});
 
-		function refilter(){
+		function refilter() {
 			var f = copy.filters.getRange();
 			copy.clearFilter();
 			copy.removeAll();
@@ -61,13 +61,13 @@ Ext.define('NextThought.util.Store', {
 		}
 
 		//probably a more efficient way exists...
-		copy.mon(store,{datachanged:refilter, refilter:refilter});
+		copy.mon(store, {datachanged: refilter, refilter: refilter});
 
 		return copy;
 
 	}
 
 
-}, function () {
+}, function() {
 	window.StoreUtils = this;
 });

@@ -1,4 +1,4 @@
-Ext.define('NextThought.ux.VideoPopout',{
+Ext.define('NextThought.ux.VideoPopout', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.video-lightbox',
 	requires: [
@@ -18,11 +18,11 @@ Ext.define('NextThought.ux.VideoPopout',{
 	height: 475,
 	layout: 'fit',
 
-	constructor: function(config){
+	constructor: function(config) {
 		var me = this;
 		me.callParent(arguments);
-		Ext.EventManager.onWindowResize(me.syncSize,me,false);
-		this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
+		Ext.EventManager.onWindowResize(me.syncSize, me, false);
+		this.on('destroy', function() { Ext.EventManager.removeResizeListener(me.syncSize, me);});
 
 		me.add({
 			xtype: 'video-roll',
@@ -33,8 +33,8 @@ Ext.define('NextThought.ux.VideoPopout',{
 		me.task = {
 			scope: me,
 			interval: 300,
-			run: function(){
-				var m = Ext.getBody().down('.x-mask',true);
+			run: function() {
+				var m = Ext.getBody().down('.x-mask', true);
 				if (m) {
 					Ext.TaskManager.stop(me.task);
 					Ext.getBody().dom.removeChild(m);
@@ -47,26 +47,26 @@ Ext.define('NextThought.ux.VideoPopout',{
 	},
 
 
-	syncSize: function(){
+	syncSize: function() {
 		this.center();
 	},
 
 
-	destroy: function(){
+	destroy: function() {
 		Ext.TaskManager.stop(this.task);
 		this.callParent(arguments);
 	},
 
-	onShow: function(){
+	onShow: function() {
 		this.down('video-roll').selectFirst();
 		return this.callParent(arguments);
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon( Ext.DomHelper.append(this.el, { cls:'close', 'data-qtip': 'close' }, true),{
+		this.mon(Ext.DomHelper.append(this.el, { cls: 'close', 'data-qtip': 'close' }, true), {
 			scope: this,
 			click: this.close
 		});

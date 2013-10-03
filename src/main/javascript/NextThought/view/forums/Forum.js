@@ -22,11 +22,11 @@ Ext.define('NextThought.view.forums.Forum', {
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
 	loadMask: false,
-//	loadingHeight: 300,
+  //	loadingHeight: 300,
 	scrollParentCls: '.forums-view',
 
 	listeners: {
-		select: function (selModel, record) {
+		select: function(selModel, record) {
 			//allow reselect since we don't style the selected state, this has no
 			// visual effect other than the ability to click on it again
 			selModel.deselect(record);
@@ -73,7 +73,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	]),
 
 
-	collectData: function () {
+	collectData: function() {
 		var r = this.callParent(arguments);
 		r.kind = 'Comment';
 		return r;
@@ -92,7 +92,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	}),
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 
@@ -106,9 +106,9 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	fillInNewestDescendant: function () {
+	fillInNewestDescendant: function() {
 		var map = {}, me = this;
-		this.store.each(function (r) {
+		this.store.each(function(r) {
 			var desc = r.get('NewestDescendant'),
 				creator = desc ? desc.get('Creator') : undefined;
 
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.forums.Forum', {
 
 		function apply(resolvedUser, i) {
 			var recs = map[resolvedUser.get('Username')] || [];
-			Ext.each(recs, function (rec) {
+			Ext.each(recs, function(rec) {
 				var desc = rec.get('NewestDescendant'),
 					recIdx = -1;
 				if (desc) {
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.forums.Forum', {
 			});
 		}
 
-		UserRepository.getUser(Ext.Object.getKeys(map), function (users) {
+		UserRepository.getUser(Ext.Object.getKeys(map), function(users) {
 			me.store.suspendEvents(true);
 			Ext.each(users, apply);
 			me.store.resumeEvents();
@@ -150,7 +150,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	itemUpdate: function (record, index, node) {
+	itemUpdate: function(record, index, node) {
 		//this.fillInNewestDescendant();
 		var newestDescendant = record.get('NewestDescendant'),
 			creator = newestDescendant && newestDescendant.get('Creator'), me = this;
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var title = this.record.get('title'), parent;
@@ -190,34 +190,34 @@ Ext.define('NextThought.view.forums.Forum', {
 				]}
 			});
 		}
-		
+
 		this.scrollParent = this.el.parent(this.scrollParentCls);
-		if(this.scrollParent){
-			this.mon(this.scrollParent,'scroll', 'onScroll', this);
+		if (this.scrollParent) {
+			this.mon(this.scrollParent, 'scroll', 'onScroll', this);
 		} else {
 			console.error('Could not listen on scroll for this view.');
 		}
 
 		this.on({
-			headerEl: {click:'onHeaderClick'},
+			headerEl: {click: 'onHeaderClick'},
 			activate: 'onActivate',
 			itemupdate: 'itemUpdate'
 		});
 	},
 
 
-	incrementTopicCount: function (store, record) {
+	incrementTopicCount: function(store, record) {
 		this.record.set({'TopicCount': (store.totalCount + 1)});
 	},
 
 
-	decrementTopicCount: function (store, record) {
+	decrementTopicCount: function(store, record) {
 		this.record.set({'TopicCount': (store.totalCount - 1)});
 	},
 
 
-	updateTopicCount: function (store, record) {
-		if(!this.rendered){
+	updateTopicCount: function(store, record) {
+		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.updateTopicCount, this, arguments), this);
 			return;
 		}
@@ -225,7 +225,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		//make sure we can scroll
 		this.ownerCt.el.unmask();
 
-		if(this.getHeight() < this.ownerCt.getHeight()){
+		if (this.getHeight() < this.ownerCt.getHeight()) {
 			this.fetchNextPage();
 			return;
 		}
@@ -236,7 +236,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	getPath: function () {
+	getPath: function() {
 		var p = this.path,
 			o = this.ownerCt,
 			l = o && o.getLayout(),
@@ -252,8 +252,8 @@ Ext.define('NextThought.view.forums.Forum', {
 		return c ? [c, p].join(' / ') : p;
 	},
 
-	
-	onScroll: function(e, dom){
+
+	onScroll: function(e, dom) {
 		var el = dom.lastChild,
 			direction = (this.lastScrollTop || 0) - dom.scrollTop,
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
@@ -261,19 +261,19 @@ Ext.define('NextThought.view.forums.Forum', {
 
 		this.lastScrollTop = dom.scrollTop;
 
-		if(top <= 20 && direction < 0){
+		if (top <= 20 && direction < 0) {
 			this.fetchNextPage();
 		}
 	},
 
-	
-	fetchNextPage: function(){
+
+	fetchNextPage: function() {
 		var s = this.store, max;
 
 		if (!s.hasOwnProperty('data')) {
 			return;
 		}
-		
+
 		max = s.getPageFromRecordIndex(s.getTotalCount() - 1);
 		if (s.currentPage < max && !s.isLoading()) {
 			this.ownerCt.el.mask('Loading...');
@@ -283,13 +283,13 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	onActivate: function () {
+	onActivate: function() {
 		console.log('The forum view is activated');
 		this.store.loadPage(1);
 	},
 
 
-	onHeaderClick: function (e) {
+	onHeaderClick: function(e) {
 		if (e.getTarget('.path')) {
 			this.fireEvent('pop-view', this);
 		}
@@ -299,7 +299,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	onContainerClick: function (e) {
+	onContainerClick: function(e) {
 		var t = e.getTarget('a[href^=#]');
 		if (t) {
 			e.stopEvent();
@@ -314,7 +314,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	onItemClick: function (record, dom, index, event) {
+	onItemClick: function(record, dom, index, event) {
 		var me = this;
 		if (event.getTarget('.controls')) {
 			event.stopEvent();
@@ -328,7 +328,7 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 
 		if (event.getTarget('.name')) {
-			UserRepository.getUser(record.get('Creator'), function (u) {
+			UserRepository.getUser(record.get('Creator'), function(u) {
 				if (u && Ext.isFunction(u.getProfileUrl)) {
 					me.fireEvent('show-profile', u);
 				}
@@ -340,7 +340,7 @@ Ext.define('NextThought.view.forums.Forum', {
 	},
 
 
-	onBeforeItemClick: function (record, item, idx, event, opts) {
+	onBeforeItemClick: function(record, item, idx, event, opts) {
 		var t = event && event.getTarget && event.getTarget(),
 			d = record.get && record.get('NewestDescendant'),
 			topicHref;
@@ -357,9 +357,9 @@ Ext.define('NextThought.view.forums.Forum', {
 		}
 
 		// Why do we do this? It is currently preventing navigating to the creator's profile upon clicking their name.
-//		if(d && t && isDescendantClick(t)){
-//			this.fireEvent('show-topic', record, d.get('ID'));
-//			return false;
-//		}
+    //		if(d && t && isDescendantClick(t)){
+    //			this.fireEvent('show-topic', record, d.get('ID'));
+    //			return false;
+    //		}
 	}
 });

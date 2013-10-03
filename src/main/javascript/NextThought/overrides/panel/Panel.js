@@ -1,12 +1,12 @@
-Ext.define('NextThought.overrides.panel.Panel',{
+Ext.define('NextThought.overrides.panel.Panel', {
 	override: 'Ext.panel.Panel',
 
-	render: function(){
+	render: function() {
 		this.callParent(arguments);
-		if(!this.enableSelect){this.el.unselectable();}
-		else{this.el.selectable();}
+		if (!this.enableSelect) {this.el.unselectable();}
+		else {this.el.selectable();}
 	}
 
-},function(){
+},function() {
 	Ext.getBody().unselectable();
 });

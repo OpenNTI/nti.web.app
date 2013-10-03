@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.search.Error',{
+Ext.define('NextThought.view.menus.search.Error', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-error',
 	cls: 'search-noresults search-result error',

@@ -32,28 +32,28 @@ Ext.define('NextThought.controller.Search', {
 
 	refs: [
 		{
-			ref:      'searchField',
+			ref: 'searchField',
 			selector: 'searchfield'
 		},
 		{
-			ref:      'searchMenu',
+			ref: 'searchMenu',
 			selector: 'search-menu'
 		}
 	],
 
-	init: function () {
+	init: function() {
 		this.listen({
 						component: {
-							'searchfield':          {
-								'search':       this.searchForValue,
+							'searchfield': {
+								'search': this.searchForValue,
 								'clear-search': this.clearSearchResults
 							},
-							'search-result':        {
-								'click':                   this.searchResultClicked,
-								'click-blog-result':       this.searchBlogResultClicked,
+							'search-result': {
+								'click': this.searchResultClicked,
+								'click-blog-result': this.searchBlogResultClicked,
 								'click-transcript-result': this.searchTranscriptResultClicked
 							},
-							'search-more':          {
+							'search-more': {
 								//'click': this.showAllForCategoryClicked
 							},
 							'search-advanced-menu': {
@@ -66,12 +66,12 @@ Ext.define('NextThought.controller.Search', {
 						}
 					});
 
-		this.getHitStore().on('beforeload', function () {
+		this.getHitStore().on('beforeload', function() {
 			this.getSearchResultsMenu().el.mask('Searching...');
 		}, this);
 	},
 
-	mimeToXType: function (mime) {
+	mimeToXType: function(mime) {
 		if (Ext.isEmpty(mime)) {
 			return 'search-result';
 		}
@@ -83,7 +83,7 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	componentConfigForHit: function (hit) {
+	componentConfigForHit: function(hit) {
 		var id = hit.get('ContainerId'),
 				sortIndexes = ContentUtils.getSortIndexes(id),
 				type = 'search-result',
@@ -97,19 +97,19 @@ Ext.define('NextThought.controller.Search', {
 
 		//Refactor to just pas the hit model a
 		return {
-			xtype:  type,
+			xtype: type,
 			sortId: sortIndexes,
-			hit:    hit
+			hit: hit
 		};
 	},
 
 
-	getSearchResultsMenu: function () {
+	getSearchResultsMenu: function() {
 		return Ext.getCmp('search-results');
 	},
 
 
-	storeLoad: function (store, records, success, opts, searchVal) {
+	storeLoad: function(store, records, success, opts, searchVal) {
 		var results = [], menu = this.getSearchResultsMenu(),
 				resultGroups, result, loc, type, alias, me = this;
 
@@ -130,12 +130,12 @@ Ext.define('NextThought.controller.Search', {
 				]});
 			}
 
-			Ext.each(resultGroups, function (group) {
+			Ext.each(resultGroups, function(group) {
 				result = {xtype: 'search-result-category', category: group.name, items: []};
 				results.push(result);
 				result = result.items;
 
-				Ext.each(group.children, function (hit) {
+				Ext.each(group.children, function(hit) {
 					var cfg = this.componentConfigForHit(hit);
 					result.push(cfg);
 				}, this);
@@ -152,14 +152,14 @@ Ext.define('NextThought.controller.Search', {
 		menu.hide().show();
 	},
 
-	sortByRelevanceScore: function (a, b) {
+	sortByRelevanceScore: function(a, b) {
 		var aScore = a.hit.get('Score') || -Infinity,
 				bScore = b.hit.get('Score') || -Infinity;
 
 		return aScore - bScore;
 	},
 
-	sortSearchHits: function (aa, bb) {
+	sortSearchHits: function(aa, bb) {
 
 		function compareIndices(i, j) {
 			return i === j ? 0 : i < j ? -1 : 1;
@@ -184,7 +184,7 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	searchForValue: function (value) {
+	searchForValue: function(value) {
 		if (!value) {
 			return;
 		}
@@ -208,35 +208,35 @@ Ext.define('NextThought.controller.Search', {
 
 		s.clearFilter();
 		if (filter) {
-			Ext.each(filter.value, function (item) {
+			Ext.each(filter.value, function(item) {
 				var mt = item.value;
 				if (mt) {
 					selectedMimeTypes.push(mt);
 				}
 			});
 			s.filter([
-						 {filterFn: function (item) {
+						 {filterFn: function(item) {
 							 return filter.test(item);
 						 }}
 					 ]);
 		}
 		s.proxy.url = url.join('');
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn:    'relevance',
+			sortOn: 'relevance',
 			sortOrder: 'descending',
-			accept:    selectedMimeTypes.join(',')
+			accept: selectedMimeTypes.join(',')
 		});
 
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
 		s.load();
 	},
 
-	clearSearchResults: function () {
+	clearSearchResults: function() {
 		this.getSearchResultsMenu().removeAll(true);
 	},
 
 
-	searchFilterChanged: function (menu) {
+	searchFilterChanged: function(menu) {
 		var allItems = menu.query('menuitem'),
 				Filter = NextThought.Filter,
 				everything = menu.down('[isEverything]').checked,
@@ -245,10 +245,10 @@ Ext.define('NextThought.controller.Search', {
 		this.doPartialSearch = menu.down('[doPartialSearch]').checked;
 		this.modelFilter = new NextThought.FilterGroup(menu.getId(), NextThought.FilterGroup.OPERATION_UNION);
 
-		Ext.each(allItems, function (item) {
+		Ext.each(allItems, function(item) {
 			var models = item.model;
 			if ((everything || item.checked) && models) {
-				Ext.each(Ext.Array.from(models), function (m) {
+				Ext.each(Ext.Array.from(models), function(m) {
 					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.' + m));
 				}, this);
 			}
@@ -258,7 +258,7 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	fragmentWithIndex: function (hit, fragIdx) {
+	fragmentWithIndex: function(hit, fragIdx) {
 		var fragments = hit.get('Fragments');
 		if (fragIdx >= 0 && fragIdx < fragments.length) {
 			return fragments[fragIdx];
@@ -268,7 +268,7 @@ Ext.define('NextThought.controller.Search', {
 		return null;
 	},
 
-	gotoBlog: function () {
+	gotoBlog: function() {
 		//Some kind of cross controller event we can use instead?
 		var navController = this.getController('Navigation'),
 				args = Array.prototype.slice.call(arguments);
@@ -276,7 +276,7 @@ Ext.define('NextThought.controller.Search', {
 		navController.gotoBlog.apply(navController, args);
 	},
 
-	searchTranscriptResultClicked: function (result, fragIdx) {
+	searchTranscriptResultClicked: function(result, fragIdx) {
 		var videoObject = result.videoObject;
 
 		function callback(cmp) {
@@ -284,7 +284,7 @@ Ext.define('NextThought.controller.Search', {
 				frag = fragIdx !== undefined ? hit.get('Fragments')[fragIdx] : undefined,
 				t = cmp && cmp.down('slidedeck-transcript');
 
-			if(t){
+			if (t) {
 				t.showSearchHit(hit, frag);
 			}
 		}
@@ -300,7 +300,7 @@ Ext.define('NextThought.controller.Search', {
 		}
 	},
 
-	searchBlogResultClicked: function (result, fragIdx, isComment) {
+	searchBlogResultClicked: function(result, fragIdx, isComment) {
 		function clearCallback() {
 			if (me.onReadyCallbacks) {
 				delete me.onReadyCallbacks[qStr];
@@ -334,12 +334,12 @@ Ext.define('NextThought.controller.Search', {
 			onReady.timeoutTimer = setInterval(clearCallback, 3000);
 		}
 
-		UserRepository.getUser(r.get('Creator'), function (u) {
+		UserRepository.getUser(r.get('Creator'), function(u) {
 			me.gotoBlog(u, postId, commentId, {queryString: qStr});
 		});
 	},
 
-	searchResultClicked: function (result, fragIdx) {
+	searchResultClicked: function(result, fragIdx) {
 		var nav = this.getController('Navigation'),
 				cid = result.hit.get('ContainerId'),
 				cat = result.up('search-result-category').category,
@@ -367,8 +367,8 @@ Ext.define('NextThought.controller.Search', {
 					msgCfg.msg = 'You do not have access to this ' + objDisplayType + '.';
 				}
 			}
-			console.log("Could not retrieve rawData for: ", result.hit.getId());
-			console.log("Error: ", arguments);
+			console.log('Could not retrieve rawData for: ', result.hit.getId());
+			console.log('Error: ', arguments);
 			alert(msgCfg);
 		}
 
@@ -386,7 +386,7 @@ Ext.define('NextThought.controller.Search', {
 		$AppConfig.service.getObject(result.hit.getId(), success, failure);
 	},
 
-	blogPostReady: function (cmp, params) {
+	blogPostReady: function(cmp, params) {
 		var qStr = (params || {}).queryString,
 				fn;
 

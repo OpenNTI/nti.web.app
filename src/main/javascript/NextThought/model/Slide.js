@@ -24,23 +24,23 @@ Ext.define('NextThought.model.Slide', {
 	],
 
 
-	getSibling: function(direction){
+	getSibling: function(direction) {
 		var s = this.store;
 		return s.getAt(s.indexOf(this) + direction);
 	},
 
 
-	statics:{
-		fromDom: function(dom,containerId){
+	statics: {
+		fromDom: function(dom,containerId) {
 
-			function getParam(name){
-				var el = DQ.select('param[name="'+name+'"]',dom)[0];
+			function getParam(name) {
+				var el = DQ.select('param[name="' + name + '"]', dom)[0];
 				return el ? el.getAttribute('value') : null;
 			}
 
-			function getImage(){
-				var el = DQ.select('[itemprop] img',dom)[0], v = null;
-				if(el){
+			function getImage() {
+				var el = DQ.select('[itemprop] img', dom)[0], v = null;
+				if (el) {
 					v = el.getAttribute('data-nti-image-thumbnail')
 						|| el.getAttribute('data-nti-image-quarter');
 				}
@@ -49,7 +49,7 @@ Ext.define('NextThought.model.Slide', {
 
 			var DQ = Ext.DomQuery,
 				el = Ext.get(dom),
-				frag = (dom.ownerDocument||document).createDocumentFragment(),
+				frag = (dom.ownerDocument || document).createDocumentFragment(),
 				root = ContentUtils.getRoot(containerId),
 				nodes,
 				o = {
@@ -71,7 +71,7 @@ Ext.define('NextThought.model.Slide', {
 				};
 
 			nodes = el.select('object[type$=ntivideo]');
-			if (nodes.first()){
+			if (nodes.first()) {
 				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first());
 				o.media.set('mediaId', o.ordinal);
 				o.media.set('start', o['video-start'] || 0.0);

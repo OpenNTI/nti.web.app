@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 		'widget.course-overview-externallink'
 	],
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var n = config.node,
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
@@ -37,14 +37,14 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 	})),
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.loadContainer();
-//		console.log('Loading:',ntiid);
+    //		console.log('Loading:',ntiid);
 	},
 
 
-	loadContainer: function () {
+	loadContainer: function() {
 		var ntiid = this.data.href,
 			req;
 
@@ -72,12 +72,12 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 	},
 
 
-	appendTotal: function (total) {
+	appendTotal: function(total) {
 		this.commentTpl.append(this.meta, {count: total});
 	},
 
 
-	containerLoaded: function (q, s, r) {
+	containerLoaded: function(q, s, r) {
 		var total = 0,
 			json = Ext.decode(r && r.responseText, true);
 		if (s && json) {
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.course.overview.parts.ContentLink', {
 	},
 
 
-	onCardClicked: function (e) {
+	onCardClicked: function(e) {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;

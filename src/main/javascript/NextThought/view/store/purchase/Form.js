@@ -113,7 +113,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		if (!this.record && this.purchaseDescription) {
 			this.record = this.purchaseDescription.Purchasable;
@@ -123,12 +123,12 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	publishQuantityAndPrice: function (quantity, price, currency) {
+	publishQuantityAndPrice: function(quantity, price, currency) {
 		this.up('window').publishQuantityAndPrice(quantity, price, currency);
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.fixPlaceholders(this.getEl().query('input'));
@@ -143,27 +143,27 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			firstRadio.set({checked: 'true'});
 		}
 
-		inputs.each(function (input) {
+		inputs.each(function(input) {
 			var formatter = input.getAttribute('data-formatter'),
 				jqd = jQuery(input.dom);
 			if (formatter) {
 				jqd.payment(formatter);
 			}
 			jqd.blur(validator).keypress(bufferedValidator).keyup(bufferedValidator);
-			jqd.on('paste', function () {
+			jqd.on('paste', function() {
 				setTimeout(validator, 500);
 			});
-			jqd.focus(function () {
+			jqd.focus(function() {
 				jqd.attr('data-focused', 'true');
 			});
-			jqd.keypress(function () {
+			jqd.keypress(function() {
 				jqd.attr('data-visited',
 					(jqd.attr('data-focused') && (jqd.val() || jqd.attr('data-visited'))) ? 'true' : undefined
 				);
 			});
 		});
 
-		this.getEl().select('input[name=quantity]').on('click', function (e) {
+		this.getEl().select('input[name=quantity]').on('click', function(e) {
 			var t = e.getTarget();
 			if (t && Ext.fly(t).is('input')) {
 				this.pricePurchase();
@@ -198,7 +198,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	fillFromDescription: function (desc) {
+	fillFromDescription: function(desc) {
 		this.couponEl.dom.value = desc.Coupon || '';
 		if (desc.Quantity !== undefined) {
 			this.othersEl.dom.checked = true;
@@ -211,9 +211,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	fillFromToken: function (card) {
+	fillFromToken: function(card) {
 		var inputs = this.getEl().select('input');
-		inputs.each(function (input) {
+		inputs.each(function(input) {
 			input = Ext.getDom(input);
 			var fields = input.getAttribute('data-cardfields'),
 				name = input.getAttribute('name'),
@@ -221,10 +221,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 			if (fields) {
 				fields = fields.split(',');
-				val = Ext.Array.map(fields, function (f) {
+				val = Ext.Array.map(fields, function(f) {
 					return card[f];
 				});
-				if (!Ext.Array.some(val, function (v) {
+				if (!Ext.Array.some(val, function(v) {
 					return v === null || v === undefined;
 				})) {
 					val = val.join(input.getAttribute('data-cardfields-separator') || '');
@@ -243,7 +243,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	gatherPricingInfo: function () {
+	gatherPricingInfo: function() {
 		var desc = {Purchasable: this.record},
 			wantsCode = this.othersEl.dom.checked,
 			coupon = (this.couponEl.dom.value || '').trim(),
@@ -262,7 +262,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	pricePurchase: function () {
+	pricePurchase: function() {
 		var desc = this.gatherPricingInfo(),
 			sendingCoupon = Boolean(desc.Coupon);
 
@@ -307,7 +307,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	enableSubmission: function (enabled) {
+	enableSubmission: function(enabled) {
 		var win = this.up('window');
 		if (win) {
 			win.setConfirmState(enabled);
@@ -315,14 +315,14 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	getCardNumberVal: function (input) {
+	getCardNumberVal: function(input) {
 		var val = input.value;
 
 		return val.replace(/[^0-9]/g, '');
 	},
 
 
-	valueForInput: function (input) {
+	valueForInput: function(input) {
 		var val = input.value,
 			getter = input.getAttribute('data-getter');
 
@@ -339,7 +339,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	validateForRequired: function (input, val) {
+	validateForRequired: function(input, val) {
 		var required = input.getAttribute('data-required'),
 			visited = input.getAttribute('data-visited');
 
@@ -359,7 +359,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	validateWithValidator: function (input, val) {
+	validateWithValidator: function(input, val) {
 		var validator = input.getAttribute('data-validator'),
 			visited = input.getAttribute('data-visited');
 
@@ -379,7 +379,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	validateInput: function (input) {
+	validateInput: function(input) {
 		var val, visited = input.getAttribute('data-visited'),
 			auto = input.getAttribute('data-no-autovalidate');
 		input = Ext.getDom(input);
@@ -405,9 +405,9 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	collectVal: function (data, input, val) {
+	collectVal: function(data, input, val) {
 		if (Ext.isObject(val)) {
-			Ext.Object.each(val, function (k, v) {
+			Ext.Object.each(val, function(k, v) {
 				data[input.getAttribute('name') + k] = v;
 			});
 		}
@@ -417,10 +417,10 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	generateTokenData: function () {
+	generateTokenData: function() {
 		var inputs = this.getEl().select('input'),
 			data = {}, failed = false;
-		inputs.each(function (input) {
+		inputs.each(function(input) {
 			//First we validate
 			var val = this.validateInput(input);
 			if (val === null) {
@@ -441,19 +441,19 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	onCheckboxLinkClicked: function () {
+	onCheckboxLinkClicked: function() {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
 		window.open($AppConfig.links.terms_of_service, '_blank');
 	},
 
 
-	setAgreementState: function (state) {
+	setAgreementState: function(state) {
 		this.agreed = state;
 		this.validateForm();
 	},
 
 
-	onConfirm: function () {
+	onConfirm: function() {
 		var data = this.generateTokenData();
 		if (data) {
 			this.fireEvent('create-payment-token', this, this.gatherPricingInfo(), data);
@@ -461,7 +461,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 	},
 
 
-	handleError: function (errorModel) {
+	handleError: function(errorModel) {
 		console.log('Form needs to handle error', errorModel);
 		var el = this.getEl(),
 			msg = errorModel.message || (errorModel.get && errorModel.get('Message')) || 'An unknown error occurred.',
@@ -475,7 +475,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		this.enableSubmission(false);
 		this.up('window').showError(msg);
 	}
-}, function () {
+}, function() {
 	//Alias a poorly named function to make it a bit more readible.  Refactor this..
 	this.prototype.validateForm = this.prototype.generateTokenData;
 });

@@ -1,28 +1,28 @@
 Ext.define('NextThought.util.Annotations', {
-			   requires:           [
+			   requires: [
 				   'NextThought.model.Highlight',
 				   'NextThought.model.Note',
 				   'NextThought.view.whiteboard.Canvas',
 				   'NextThought.util.Anchors'
 			   ],
-			   singleton:          true,
+			   singleton: true,
 
 
 			   // Recursively go up to the root of the a note.
-			   getNoteRoot:        function (rec) {
+			   getNoteRoot: function(rec) {
 				   var root = rec.parent || rec;
 				   while (root.parent) {
 					   root = root.parent;
 				   }
 				   return root;
 			   },
-//needs testing? where did the test go?
+  //needs testing? where did the test go?
 			   /**
 				* From a reply, build its absent parent
 				* @param {NextThought.model.Note} note
 				* @return {NextThought.model.Note}
 				*/
-			   replyToPlaceHolder: function (note) {
+			   replyToPlaceHolder: function(note) {
 				   var holder = new NextThought.model.Note(),
 						   refs = (note.get('references') || []).slice(),
 				   //Make sure we create a new date object so we don't mutate the
@@ -59,7 +59,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   selectionToNote: function (range, documentElement) {
+			   selectionToNote: function(range, documentElement) {
 				   if (range && range.collapsed) {
 					   Ext.Error.raise('Cannot create highlight from null or collapsed range');
 				   }
@@ -69,13 +69,13 @@ Ext.define('NextThought.util.Annotations', {
 
 				   return new NextThought.model.Note({
 														 applicableRange: contentRangeDescription.description,
-														 selectedText:    range.toString(),
-														 ContainerId:     contentRangeDescription.container
+														 selectedText: range.toString(),
+														 ContainerId: contentRangeDescription.container
 													 });
 			   },
 
 
-			   selectionToHighlight: function (range, style, root) {
+			   selectionToHighlight: function(range, style, root) {
 				   if (range && range.collapsed) {
 					   Ext.Error.raise('Cannot create highlight from null or collapsed range');
 				   }
@@ -85,16 +85,16 @@ Ext.define('NextThought.util.Annotations', {
 
 				   return NextThought.model.Highlight.create(
 						   {
-							   style:           style,
+							   style: style,
 							   applicableRange: contentRangeDescription.description,
-							   ContainerId:     contentRangeDescription.container,
-							   selectedText:    text//,
-//			sharedWith: p
+							   ContainerId: contentRangeDescription.container,
+							   selectedText: text//,
+          //			sharedWith: p
 						   });
 			   },
 
 
-			   getBlockParent: function (node, ignoreSpan) {
+			   getBlockParent: function(node, ignoreSpan) {
 				   if (!node || (this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan))) {
 					   return node;
 				   }
@@ -103,7 +103,7 @@ Ext.define('NextThought.util.Annotations', {
 
 
 			   /* tested */
-			   isBlockNode:    function (n) {
+			   isBlockNode: function(n) {
 				   var e = Ext.get(n),
 						   p = /static|relative|^$/i,
 						   d = /block|box/i;
@@ -124,7 +124,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   isDisplayed: function (a, root) {
+			   isDisplayed: function(a, root) {
 				   if (!a || a === root || a.nodeType === Node.DOCUMENT_NODE || Ext.get(a) === null) {
 					   return true;
 				   }
@@ -141,7 +141,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   getTextNodes: function (root) {
+			   getTextNodes: function(root) {
 				   var textNodes = [];
 
 				   function getNodes(node) {
@@ -162,7 +162,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   drawCanvas: function (canvas, content, range, backgroundColor, offset) {
+			   drawCanvas: function(canvas, content, range, backgroundColor, offset) {
 
 				   function getLineHeight(e) {
 					   function getNode(e) { return (e.nodeType === Node.TEXT_NODE) ? e.parentNode : e; }
@@ -216,7 +216,7 @@ Ext.define('NextThought.util.Annotations', {
 				   canvas.cachedLineHeightValue = lineHeight;
 
 
-				   s.sort(function (a, b) { return a.top + a.bottom - b.top - b.bottom; });
+				   s.sort(function(a, b) { return a.top + a.bottom - b.top - b.bottom; });
 				   i = s.length - 1;
 
 				   ctx = canvas.getContext('2d');
@@ -239,11 +239,11 @@ Ext.define('NextThought.util.Annotations', {
 
 					   x = i === 0 || small ? left : 0;
 					   w = last || small
-							   ? (r.width + (x ? 0 : left) + (padding * 2) )
+							   ? (r.width + (x ? 0 : left) + (padding * 2))
 							   : ((width - x) + (x ? (padding * 2) : 0));
 
 					   h = r.height + (padding * 2);
-					   if (!last && (Math.abs(y - lastY) < lineHeight || y > lastY )) {
+					   if (!last && (Math.abs(y - lastY) < lineHeight || y > lastY)) {
 						   continue;
 					   }
 					   if (!last && r.height <= lineHeight) {
@@ -251,7 +251,7 @@ Ext.define('NextThought.util.Annotations', {
 					   }
 
 					   if (last) {
-//                w -= 4;
+        //                w -= 4;
 						   ctx.beginPath();
 						   ctx.moveTo(x + w, y);
 						   ctx.lineTo(x + w, y + h);
@@ -269,7 +269,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   addToHistory: function (rec) {
+			   addToHistory: function(rec) {
 				   try {
 					   var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
 							   clone;
@@ -285,7 +285,7 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   updateHistory: function (rec) {
+			   updateHistory: function(rec) {
 				   var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
 						   found = s.findRecord('NTIID', rec.get('NTIID'), 0, false, false, true),
 						   results;
@@ -298,6 +298,6 @@ Ext.define('NextThought.util.Annotations', {
 				   }
 			   }
 		   },
-		   function () {
+		   function() {
 			   window.AnnotationUtils = this;
 		   });

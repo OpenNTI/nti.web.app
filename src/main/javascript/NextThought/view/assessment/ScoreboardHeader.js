@@ -1,7 +1,7 @@
-Ext.define('NextThought.view.assessment.ScoreboardHeader',{
+Ext.define('NextThought.view.assessment.ScoreboardHeader', {
 	extend: 'Ext.Component',
 
-	requires:[
+	requires: [
 		'NextThought.view.assessment.DateMenu'
 	],
 
@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 	cls: 'score-header',
 	ui: 'assessment',
 
-	renderTpl: Ext.DomHelper.markup([{cls:'time',cn:[{tag:'span'},{cls:'arrow'}]},{cls:'title',html:'Scoreboard'}]),
+	renderTpl: Ext.DomHelper.markup([{cls: 'time', cn: [{tag: 'span'},{cls: 'arrow'}]},{cls: 'title', html: 'Scoreboard'}]),
 
 	renderSelectors: {
 		time: '.time span',
@@ -18,27 +18,27 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.mon(this.questionSet, 'graded', this.addResult, this);
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.time, 'click', this.showMenu, this);
-		this.menu = Ext.widget({ xtype:'assessment-date-menu', ownerButton: this, items: [] });
+		this.menu = Ext.widget({ xtype: 'assessment-date-menu', ownerButton: this, items: [] });
 		this.mon(this.menu, 'click', this.menuItemClicked, this);
 	},
 
 
-	showMenu: function(){
-		this.menu.showBy(this.time,'t-b', [0,0]);
+	showMenu: function() {
+		this.menu.showBy(this.time, 't-b', [0, 0]);
 	},
 
 
-	menuItemClicked: function(menu, item){
+	menuItemClicked: function(menu, item) {
 		this.time.update(this.menu.getSelectedText());
 		this.questionSet.fireEvent('graded', this.menu.getSelectedAssessment(item), {origin: this});
 	},
@@ -61,9 +61,9 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 		this.maybeHideTime();
 	},
 
-	maybeHideTime: function(){
+	maybeHideTime: function() {
 		//only show time if there's a dropdown...
-		if (this.menu.items.length < 2){
+		if (this.menu.items.length < 2) {
 			this.time.hide();
 			this.arrow.hide();
 		}

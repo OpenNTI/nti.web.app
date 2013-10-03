@@ -1,4 +1,4 @@
-Ext.define('NextThought.overrides.picker.Color',{
+Ext.define('NextThought.overrides.picker.Color', {
 	override: 'Ext.picker.Color',
 
 	colorRe: /(?:^|\s)color-([^ ]*)(?:\s|$)/,
@@ -13,6 +13,6 @@ Ext.define('NextThought.overrides.picker.Color',{
 			'</a>',
 		'</tpl>'
 	]
-}, function(){
+}, function() {
 	this.prototype.colors.push('None');
 });

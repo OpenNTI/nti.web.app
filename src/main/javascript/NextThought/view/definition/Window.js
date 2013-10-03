@@ -33,34 +33,34 @@ Ext.define('NextThought.view.definition.Window', {
 	fallbackURL: '/dictionary/',
 	xslUrl: 'resources/xsl/dictionary.xsl',
 
-	initComponent: function(){
+	initComponent: function() {
 		var me = this, p, nib = 20, top, y, x;
 
 		me.pageInfo = me.pageInfo || me.reader.getLocation().pageInfo;
 
-		if(!me.pageInfo || !Ext.isFunction(me.pageInfo.getLink)){
+		if (!me.pageInfo || !Ext.isFunction(me.pageInfo.getLink)) {
 			Ext.Error.raise('Need a PageInfo');
 		}
 
-		if(!me.term){
+		if (!me.term) {
 			Ext.Error.raise('definition term required');
 		}
 
 		//figure out xy
 		p = this.pointTo;
-		if(p){
+		if (p) {
 			top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib);
 			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib);
-			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
+			x = Math.round((p.left + (p.width / 2)) - (this.getWidth() / 2));
 
-			Ext.apply(me,{x:x,y:y});
-			me.addCls(top?'south':'north');
+			Ext.apply(me, {x: x, y: y});
+			me.addCls(top ? 'south' : 'north');
 		}
 
 		me.callParent(arguments);
 		me.on({
 			scope: me,
-			close:function(){ me.dragMaskOff(); },
+			close: function() { me.dragMaskOff(); },
 			show: me.fixMask,
 			destroy: me.unfixMask,
 			afterrender: Ext.bind(me.loadDefinition, me, [me.term])
@@ -68,24 +68,24 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 
-	fixMask: function(){
+	fixMask: function() {
 		var m = this.maskEl = this.zIndexManager.mask;
 		m.addCls('nti-clear');
 	},
 
-	unfixMask: function(){
+	unfixMask: function() {
 		try { this.maskEl.removeCls('nti-clear'); }
-		catch(e){swallow(e);}
+		catch (e) {swallow(e);}
 	},
 
 
-	loadDefinition: function(term){
+	loadDefinition: function(term) {
 		var me = this;
 		me.term = term;
 
-		me.queryDefinition(function(dom){
-			me.getXSLTProcessor(function(processor){
-				if(!processor){
+		me.queryDefinition(function(dom) {
+			me.getXSLTProcessor(function(processor) {
+				if (!processor) {
 					me.close();
 					alert('You do not have a dictionary installed');
 					return;
@@ -93,19 +93,19 @@ Ext.define('NextThought.view.definition.Window', {
 
 				var o, domtree, outputtree, doc;
 				if (window.hasOwnProperty('XSLTProcessor') && window.XMLSerializer && window.DOMParser) {
-					domtree = new DOMParser().parseFromString(dom,"text/xml");
+					domtree = new DOMParser().parseFromString(dom, 'text/xml');
 					outputtree = processor.transformToDocument(domtree);
 					o = new XMLSerializer().serializeToString(outputtree);
 				}
 				else {
-					domtree = new ActiveXObject("Msxml2.DOMDocument");
+					domtree = new ActiveXObject('Msxml2.DOMDocument');
 					domtree.loadXML(dom);
 					processor.input = domtree;
 					processor.transform();
 					o = processor.output;
 				}
 
-				if( o.indexOf('&lt;/a&gt;') >= 0 ){
+				if (o.indexOf('&lt;/a&gt;') >= 0) {
 					o = Ext.String.htmlDecode(o);
 				}
 
@@ -113,13 +113,13 @@ Ext.define('NextThought.view.definition.Window', {
 
 				doc.write(o);
 				doc.close();
-				doc.onclick = function(e){
-					e = Ext.EventObject.setEvent(e||event);
+				doc.onclick = function(e) {
+					e = Ext.EventObject.setEvent(e || event);
 					e.stopEvent();
-					var t = e.getTarget('a[href]',null,true);
+					var t = e.getTarget('a[href]', null, true);
 
-					if(t){
-						me.loadDefinition( decodeURIComponent(t.getAttribute('href')) );
+					if (t) {
+						me.loadDefinition(decodeURIComponent(t.getAttribute('href')));
 					}
 
 					return false;
@@ -130,26 +130,26 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 
-	getDocumentElement: function(){
+	getDocumentElement: function() {
 		var iframe = this.down('[cls=definition]').el.dom;
 		return iframe.contentDocument
 				|| (iframe.contentWindow || window.frames[iframe.name]).document;
 	},
 
 
-	queryDefinition: function(cb, scope){
-        var u = this.pageInfo.getLink('Glossary'), req;
+	queryDefinition: function(cb, scope) {
+    var u = this.pageInfo.getLink('Glossary'), req;
 
-        if (!u){u=this.fallbackURL;}
-        else{u+='/';}
+    if (!u) {u = this.fallbackURL;}
+    else {u += '/';}
 
 		req = {
 			url: getURL(u + encodeURIComponent(this.term)),
 			async: true,
 			scope: this,
-			callback: function(q,s,r){
+			callback: function(q,s,r) {
 				var dom = r.responseText;
-				Ext.callback(cb, scope||this, [dom]);
+				Ext.callback(cb, scope || this, [dom]);
 			}
 		};
 
@@ -157,10 +157,10 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 
-	getXSLTProcessor: function(cb, scope){
+	getXSLTProcessor: function(cb, scope) {
 		var me = this, req;
-		if(me.self.xsltProcessor){
-			Ext.callback(cb, scope || me, [me.self.xsltProcessor ] );
+		if (me.self.xsltProcessor) {
+			Ext.callback(cb, scope || me, [me.self.xsltProcessor]);
 			return;
 		}
 
@@ -168,26 +168,26 @@ Ext.define('NextThought.view.definition.Window', {
 			url: me.xslUrl,
 			async: true,
 			scope: me,
-			callback: function(q,s,r){
+			callback: function(q,s,r) {
 				var xsldoc, xslt, dom, p;
 				if (!window.hasOwnProperty('XSLTProcessor')) {
 					try {
-					xsldoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
+					xsldoc = new ActiveXObject('Msxml2.FreeThreadedDOMDocument');
 					xsldoc.loadXML(r.responseText);
-					xslt = new ActiveXObject("Msxml2.XSLTemplate");
+					xslt = new ActiveXObject('Msxml2.XSLTemplate');
 					xslt.stylesheet = xsldoc;
 					p = xslt.createProcessor();
-					} catch( e ){
+					} catch (e) {
 						console.error('Dictionary may not be installed, or not configured properly.', e.message);
 					}
 				}
 				else {
-					dom = new DOMParser().parseFromString(r.responseText,"text/xml");
+					dom = new DOMParser().parseFromString(r.responseText, 'text/xml');
 					p = new XSLTProcessor();
 					p.importStylesheet(dom);
 				}
 				me.self.xsltProcessor = p;
-				Ext.callback(cb, scope || me, [ p ]);
+				Ext.callback(cb, scope || me, [p]);
 			}
 		};
 

@@ -1,10 +1,10 @@
-Ext.define('NextThought.util.media.HTML5VideoPlayer',{
+Ext.define('NextThought.util.media.HTML5VideoPlayer', {
 	extend: 'NextThought.util.media.HTML5Player',
 
-	statics:{
-		kind:'video',
+	statics: {
+		kind: 'video',
 		type: 'html5',
-		valid: function(){
+		valid: function() {
 			return !!document.createElement('video').canPlayType;
 		}
 	},

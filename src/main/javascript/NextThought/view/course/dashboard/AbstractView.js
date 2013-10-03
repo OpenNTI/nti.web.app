@@ -22,7 +22,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 		items: []
 	},
 
-	constructor: function (config) {
+	constructor: function(config) {
 		delete config.items;//don't replace our inner item
 		this.callParent(arguments);
 		this.tileContainer = this.items.first();
@@ -63,7 +63,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	/* Debug code End */
 
 
-	buildSorter: function () {
+	buildSorter: function() {
 		var today = new Date();
 
 		function get(r) {
@@ -74,15 +74,15 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 			return base + inner + time;
 		}
 
-		return function (a, b) {
+		return function(a, b) {
 			var wA = get(a), wB = get(b);
 			return wA > wB ? -1 : wA === wB ? 0 : 1;
 		};
 	},
 
 
-	adjustWeights: function (items) {
-		Ext.each(items, function (i) {
+	adjustWeights: function(items) {
+		Ext.each(items, function(i) {
 			var w = ((i.getWeight && i.getWeight()) || i.weight || 1);
 			if (i.rows > 2) {
 				w += (i.rows * 0.005);
@@ -101,7 +101,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	},
 
 
-	buildMatrix: function (rows, columns) {
+	buildMatrix: function(rows, columns) {
 		var i = rows, m = [];
 
 		function row(len, val) {
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 			while (--len >= 0) {
 				r[len] = val;
 			}
-			r.toString = function () {
+			r.toString = function() {
 				return this.join(',\t');
 			};
 			return r;
@@ -120,14 +120,14 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 		}
 
 		m.position = [0, 0];
-		m.toString = function () {
+		m.toString = function() {
 			return '\n\t' + this.join('\n\t') + '\n';
 		};
 		return m;
 	},
 
 
-	needsFitting: function (items, rows, columns) {
+	needsFitting: function(items, rows, columns) {
 		var m = this.buildMatrix(rows, columns),
 			hasHoles = false;
 
@@ -234,9 +234,9 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	},
 
 
-	countRows: function (items, columns) {
+	countRows: function(items, columns) {
 		var area = 0, rows;
-		Ext.each(items, function (i) {
+		Ext.each(items, function(i) {
 			area += i.cols * i.rows;
 		});
 		rows = Math.ceil(area / columns) * 2;
@@ -244,19 +244,19 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	},
 
 
-	sortTiles: function (items) {
+	sortTiles: function(items) {
 		var cols = this.GRID_WIDTH,
 			rows = this.countRows(items, cols),
 			p = new NextThought.util.MasonryPacker(cols, rows);
 
 		function adaptColsRowsToWidthHeight(items) {
-			Ext.each(items, function (i) {
+			Ext.each(items, function(i) {
 				Ext.apply(i, {w: i.cols, h: i.rows});
 			});
 		}
 
 		function cleanAdaptionOfColsRowsToWidthHeight(items) {
-			Ext.each(items, function (i) {
+			Ext.each(items, function(i) {
 				delete i.w;
 				delete i.h;
 			});
@@ -275,7 +275,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 			p.fit(items);
 			cleanAdaptionOfColsRowsToWidthHeight(items);
 
-			Ext.Array.sort(items, function (a, b) {
+			Ext.Array.sort(items, function(a, b) {
 
 				var aR = a.fit.y,
 					aC = a.fit.x,
@@ -291,7 +291,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 
 			//debug
 			if (this.self.isDebug && this.needsFitting(items, rows, cols)) {
-				Ext.each(items, function (i, x, a) {
+				Ext.each(items, function(i, x, a) {
 					var f = i.fit,
 						p = i.pos, fn = 'log';
 
@@ -317,7 +317,7 @@ Ext.define('NextThought.view.course.dashboard.AbstractView', {
 	 * @param {NextThought.view.course.dashboard.tiles.Tile[]} items
 	 * @public
 	 */
-	setTiles: function (items) {
+	setTiles: function(items) {
 		this.tileContainer.removeAll(true);
 
 		if (Ext.isEmpty(items)) {

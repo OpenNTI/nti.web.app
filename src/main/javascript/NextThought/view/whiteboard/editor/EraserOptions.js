@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.EraserOptions',{
+Ext.define('NextThought.view.whiteboard.editor.EraserOptions', {
 	alias: 'widget.wb-tool-eraser-options',
 	extend: 'Ext.container.Container',
 	requires: [
@@ -8,7 +8,7 @@ Ext.define('NextThought.view.whiteboard.editor.EraserOptions',{
 
 	ui: 'options',
 	layout: {
-		type:'hbox',
+		type: 'hbox',
 		align: 'middle'
 	},
 	items: [{
@@ -27,7 +27,7 @@ Ext.define('NextThought.view.whiteboard.editor.EraserOptions',{
 		]
 	}],
 
-	constructor:function(){
+	constructor: function() {
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.callParent(arguments);
@@ -41,27 +41,27 @@ Ext.define('NextThought.view.whiteboard.editor.EraserOptions',{
 
 	setOptions: function(options) {
 		if (options.strokeWidth) {
-			this.down('[strokeWidth='+options.strokeWidth+']').toggle(true);
+			this.down('[strokeWidth=' + options.strokeWidth + ']').toggle(true);
 		}
-		if(options.fill) {
+		if (options.fill) {
 			console.error('fill is not supported for pencil');
 		}
 	},
 
 
-	getOptions: function(){
+	getOptions: function() {
 		var pressed = this.query('button[pressed]'),
 			strokeWidth;
 
-		Ext.each(pressed, function(b){
-			if (b.strokeWidth){
+		Ext.each(pressed, function(b) {
+			if (b.strokeWidth) {
 				strokeWidth = b.strokeWidth;
 			}
 		});
 
 		return {
 			fill: null, //TODO - not implemented in design
-			stroke:	"#FFFFFF",
+			stroke:	'#FFFFFF',
 			strokeWidth: strokeWidth
 		};
 	}

@@ -1,10 +1,10 @@
-Ext.define('NextThought.util.Uploads',{
+Ext.define('NextThought.util.Uploads', {
 	singleton: true,
 	requires: [
 		'Ext.ProgressBar'
 	],
 
-	constructor: function(){
+	constructor: function() {
 		//deprefix...
 		window.Blob = window.Blob || window.WebKitBlob || window.MozBlob || window.MSBlob;
 		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
@@ -13,8 +13,8 @@ Ext.define('NextThought.util.Uploads',{
 		var worker, me = this;
 		this.requests = {};
 
-		if(window.Worker && this.enabled){
-			worker = (function(){
+		if (window.Worker && this.enabled) {
+			worker = (function() {
 				var b, bb, result, url, script = [
 					'self.addEventListener("message", function(e){dispatch(e.data);}, false);',
 					'self.postMessage( {message:"started",time:Date.now()} );',
@@ -24,9 +24,9 @@ Ext.define('NextThought.util.Uploads',{
 				];
 				try {
 					try {
-						b = new Blob(script,{type:'text/javascript'});//preferred method
+						b = new Blob(script, {type: 'text/javascript'});//preferred method
 					}
-					catch(e){
+					catch (e) {
 						//depricated (previous) prefered method
 						bb = new BlobBuilder();
 						bb.append(script.join('\n'));
@@ -37,7 +37,7 @@ Ext.define('NextThought.util.Uploads',{
 					URL.revokeObjectURL(url);
 					return result;
 				}
-				catch(er){
+				catch (er) {
 					//fallback, probably shouldn't allow it
 					//return new Worker('data:application/javascript,' + encodeURIComponent(script.join('\n')));
 				}
@@ -45,10 +45,10 @@ Ext.define('NextThought.util.Uploads',{
 			}());
 		}
 
-		if(worker){
-			worker.onmessage = function(e){me.onMessageFromWorker(e.data); };
+		if (worker) {
+			worker.onmessage = function(e) {me.onMessageFromWorker(e.data); };
 			worker.onerror = function(e) {
-				console.error("Error in file: "+e.filename+"\nline: "+e.lineno+"\nDescription: "+e.message);
+				console.error('Error in file: ' + e.filename + '\nline: ' + e.lineno + '\nDescription: ' + e.message);
 			};
 
 			this.worker = worker;
@@ -63,7 +63,7 @@ Ext.define('NextThought.util.Uploads',{
 		else {
 			//console.error("Not able to use Workers for uploads");
 			this.worker = {
-				postMessage: function(data){
+				postMessage: function(data) {
 					me.dispatch(data);
 				}
 			};
@@ -79,9 +79,9 @@ Ext.define('NextThought.util.Uploads',{
 	 * @param finishCallback
 	 * @param scope
 	 */
-	postFile: function (file, url, progressCallback, finishCallback, scope) {
+	postFile: function(file, url, progressCallback, finishCallback, scope) {
 		var id = Globals.guidGenerator(),
-			bar = this.addUpload(id,file),
+			bar = this.addUpload(id, file),
 			req;
 
 		req = this.requests[id] = {
@@ -101,22 +101,22 @@ Ext.define('NextThought.util.Uploads',{
 	},
 
 	//private
-	onMessageFromWorker: function(message){
-		if(message.message === 'beat'){
+	onMessageFromWorker: function(message) {
+		if (message.message === 'beat') {
 			console.debug('worker beat');
 		}
-		else if(message.message === 'started'){
+		else if (message.message === 'started') {
 			//gtg
 			return;
 		}
 
 
-		if(!this.requests.hasOwnProperty(message.id)){
+		if (!this.requests.hasOwnProperty(message.id)) {
 			return;
 		}
 
 		var request = this.requests[message.id],
-//			id = request.id,
+        //			id = request.id,
 			bar = request.bar,
 			file = request.file,
 			scope = request.scope,
@@ -124,16 +124,16 @@ Ext.define('NextThought.util.Uploads',{
 			cb,
 			p = message.progress;
 
-		if(msg === 'progress') {
+		if (msg === 'progress') {
 			cb = request.progress;
-			if(p <= 1) {
+			if (p <= 1) {
 				bar.updateProgress(p);
 			}
 			else {
 				bar.updateProgress(0, p);
 			}
-			if( cb ){
-				cb.call(scope||window, file, message.progress);
+			if (cb) {
+				cb.call(scope || window, file, message.progress);
 			}
 		}
 		/*
@@ -141,12 +141,12 @@ Ext.define('NextThought.util.Uploads',{
 			//don't care
 		}
 		*/
-		else if(msg === 'complete'){
+		else if (msg === 'complete') {
 			cb = request.complete;
 			bar.updateProgress(1);
-			setTimeout(function(){bar.destroy();}, 2000);
-			if( cb ){
-				cb.call(scope||window, file, message.location);
+			setTimeout(function() {bar.destroy();}, 2000);
+			if (cb) {
+				cb.call(scope || window, file, message.location);
 			}
 		}
 		else {
@@ -156,38 +156,38 @@ Ext.define('NextThought.util.Uploads',{
 	},
 
 	//private
-	dispatch: function dispatch(data){
-		if(!data){return;}
+	dispatch: function dispatch(data) {
+		if (!data) {return;}
 
-		var me = self.UploadUtils? this : self;
-		if(data.message==='add') {
+		var me = self.UploadUtils ? this : self;
+		if (data.message === 'add') {
 			me.upload(data.id, data.file, data.url);
 		}
-		else if(data.message==='abort'){
+		else if (data.message === 'abort') {
 			me.abort(data.id);
 		}
 	},
 
 	//private
-	abort: function abort(id){
-		var me = self.UploadUtils? this : self,
+	abort: function abort(id) {
+		var me = self.UploadUtils ? this : self,
 			req = me.requests[id];
 
 		delete me.requests[id];
 
-		if(req && req.xhr){
+		if (req && req.xhr) {
 			req.xhr.onreadystatechange = null;
 			req.xhr.abort();
 		}
 		else {
-			me.postMessage('no request to abort: '+id);
+			me.postMessage('no request to abort: ' + id);
 		}
 	},
 
 	//private
 	upload: function upload(id, file, url) {
 
-		function progress(e){
+		function progress(e) {
 			var p = e.loaded;
 			if (e.lengthComputable) {
 				p = Math.round(p / e.total);
@@ -195,50 +195,50 @@ Ext.define('NextThought.util.Uploads',{
 			me.postMessage({progress: p, id: id, message: e.type});
 		}
 
-		function readyStateChange(r){
-			if(r.readyState !== 4){ return; }
+		function readyStateChange(r) {
+			if (r.readyState !== 4) { return; }
 			me.postMessage({id: id, message: 'complete', location: r.getResponseHeader('Location')});
 			delete me.requests[id];
 		}
 
-		function buildXHR(){
+		function buildXHR() {
 			var xhr = new XMLHttpRequest();
-			xhr.upload.addEventListener("progress", progress, false);
-			xhr.upload.addEventListener("load", progress, false);
+			xhr.upload.addEventListener('progress', progress, false);
+			xhr.upload.addEventListener('load', progress, false);
 
-			xhr.open("POST", url, true);
+			xhr.open('POST', url, true);
 			xhr.withCredentials = true;
 			xhr.setRequestHeader('Slug', file.name || file.fileName);
 			xhr.setRequestHeader('Content-Type', file.type);
-			xhr.onreadystatechange = function(){readyStateChange(xhr);};
+			xhr.onreadystatechange = function() {readyStateChange(xhr);};
 			xhr.overrideMimeType(file.type);
 
 			me.requests = me.requests || {};
-			if(!me.requests[id]) {//if we're in a worker this won't exist yet
+			if (!me.requests[id]) {//if we're in a worker this won't exist yet
 				me.requests[id] = { id: id, file: file, url: url };
 			}
 			me.requests[id].xhr = xhr;
 			return xhr;
 		}
 
-		var me = self.UploadUtils? this : self;
+		var me = self.UploadUtils ? this : self;
 
 		buildXHR().send(file);
 	},
 
 	//private
-	addUpload: function(id,file){
+	addUpload: function(id,file) {
 		var me = this,
 			mgr = me.getUploadManager(),
 			panel,
 			type = file.type;
 
-		function cancel(){
+		function cancel() {
 			panel.destroy();
-			try{
+			try {
 				me.worker.postMessage({message: 'abort', id: id});
 			}
-			catch(e){
+			catch (e) {
 				console.error(e.stack);
 			}
 		}
@@ -248,14 +248,14 @@ Ext.define('NextThought.util.Uploads',{
 			layout: { type: 'hbox', align: 'middle' },
 			anchor: '100%',
 			defaults: { margin: 5 },
-			listeners: { 'remove': function(){panel.destroy();} },
+			listeners: { 'remove': function() {panel.destroy();} },
 			items: [
-				{html: '<div class="upload-icon '+type+'"></div>', width: 32, height: 32, border: false, xtype: 'component'},
+				{html: '<div class="upload-icon ' + type + '"></div>', width: 32, height: 32, border: false, xtype: 'component'},
 				{xtype: 'button', text: 'Cancel', handler: cancel}
 			]
 		});
 
-		return panel.insert(1,{
+		return panel.insert(1, {
 			flex: 1,
 			xtype: 'progressbar',
 			text: file.fileName
@@ -263,10 +263,10 @@ Ext.define('NextThought.util.Uploads',{
 	},
 
 	//private
-	getUploadManager: function(){
+	getUploadManager: function() {
 		var me = this;
-		if(!this.manager) {
-			this.manager = Ext.widget('panel',{
+		if (!this.manager) {
+			this.manager = Ext.widget('panel', {
 				cls: 'file-upload-manager',
 				title: 'Uploads',
 				border: false,
@@ -279,12 +279,12 @@ Ext.define('NextThought.util.Uploads',{
 				height: 0.3 * Ext.getBody().getHeight(),
 				autoScroll: true,
 				listeners: {
-					'destroy': function(){ delete me.manager; },
-					'remove': function(){if(!me.manager.items.getCount()){me.manager.destroy();}}
+					'destroy': function() { delete me.manager; },
+					'remove': function() {if (!me.manager.items.getCount()) {me.manager.destroy();}}
 				}
 			});
 			this.manager.show();
-			this.manager.alignTo(Ext.getBody(), 'br-br', [-10,-10]);
+			this.manager.alignTo(Ext.getBody(), 'br-br', [-10, -10]);
 		}
 
 		this.manager.toFront(true);
@@ -292,6 +292,6 @@ Ext.define('NextThought.util.Uploads',{
 	}
 
 
-}, function(){
+}, function() {
 	window.UploadUtils = this;
 });

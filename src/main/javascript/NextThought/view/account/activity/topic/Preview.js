@@ -20,12 +20,12 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	toolbarTpl: Ext.DomHelper.markup({ cls: 'path'}),
 
 
-	getCommentCount: function (record) {
+	getCommentCount: function(record) {
 		return record.get('PostCount');
 	},
 
 
-	buildStore: function () {
+	buildStore: function() {
 		this.store = NextThought.store.NTI.create({
 			storeId: 'activity-popout-topic-preview' + guidGenerator(),
 			url: this.record.getLink('contents')
@@ -40,34 +40,34 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	},
 
 
-	fillInReplies: function (store, records) {
+	fillInReplies: function(store, records) {
 		if (Ext.isEmpty(records)) {
 			return;
 		}
 
 		this.removeAll(true);
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
-		this.add(Ext.Array.map(records, function (r) {
+		this.add(Ext.Array.map(records, function(r) {
 			return {record: r};
 		}));
 		this.fireEvent('realign');
 	},
 
 
-	showReplies: function () {
+	showReplies: function() {
 		this.callParent(arguments);
 		this.buildStore();
 	},
 
 
-	navigateToItem: function () {
+	navigateToItem: function() {
 		if (this.fireEvent('before-show-topic', this.record)) {
 			this.fireEvent('show-topic', this.record);
 		}
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.record.get('headline').compileBodyContent(this.setBody, this, null, this.self.WhiteboardSize);
 		this.fillInPath();
@@ -77,12 +77,12 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 		}
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.pathEl, 'click', this.navigateToItem, this);
 	},
 
-	destroy: function () {
+	destroy: function() {
 		if (this.store) {
 			this.store.destroyStore();
 		}
@@ -97,11 +97,11 @@ Ext.define('NextThought.view.account.activity.topic.Reply', {
 	alias: 'widget.activity-preview-topic-reply',
 
 
-	deleteComment: function () {
+	deleteComment: function() {
 		this.fireEvent('delete-topic-comment', this.record, this, Ext.bind(this.onDelete, this));
 	},
 
-	navigateToComment: function () {
+	navigateToComment: function() {
 		var me = this,
 			rec = this.record,
 			r = this.up('[record]') && this.up('[record]').record,
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.account.activity.topic.Reply', {
 		}
 	},
 
-	handleDestroy: function () {
+	handleDestroy: function() {
 		//First remove the delete and edit link listeners followed by the els
 		if (this.deleteEl) {
 			this.mun(this.deleteEl, 'click', this.onDeletePost, this);

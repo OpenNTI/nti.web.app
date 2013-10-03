@@ -2,29 +2,29 @@ Ext.define('NextThought.util.TextRangeFinder', {
 	requires: ['NextThought.util.Search'],
 
 
-    rangeIsInsideRedaction: function(r){
-        if (r.dom && r.hasCls('redacted')){return r;}
-        else if (r.commonAncestorContainer){return Ext.fly(r.commonAncestorContainer).up('.redacted');}
-        return false;
-    },
+  rangeIsInsideRedaction: function(r) {
+    if (r.dom && r.hasCls('redacted')) {return r;}
+    else if (r.commonAncestorContainer) {return Ext.fly(r.commonAncestorContainer).up('.redacted');}
+    return false;
+  },
 
 
-    getRedactionActionSpan: function(r){
-        var redactionParent = this.rangeIsInsideRedaction(r),
+  getRedactionActionSpan: function(r) {
+    var redactionParent = this.rangeIsInsideRedaction(r),
             redactionAction, blockRedaction;
-        if (!redactionParent){return null;}
+    if (!redactionParent) {return null;}
 
 
-        redactionAction = redactionParent.prev('.redactionAction');
-        if (!redactionAction){
-            blockRedaction = redactionParent.prev('.block-redaction');
-            if (blockRedaction){
-                redactionAction = blockRedaction.down('.redactionAction');
-            }
-        }
+    redactionAction = redactionParent.prev('.redactionAction');
+    if (!redactionAction) {
+      blockRedaction = redactionParent.prev('.block-redaction');
+      if (blockRedaction) {
+        redactionAction = blockRedaction.down('.redactionAction');
+      }
+    }
 
-        return redactionAction;
-    },
+    return redactionAction;
+  },
 
 	/**
 	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
@@ -44,7 +44,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 	//and text.  If nodeFilterFn is provided it will
 	//be called with each node before it is indexed.  nodes returning
 	//true will be indexed
-	indexText: function(node, nodeFilterFn){
+	indexText: function(node, nodeFilterFn) {
 			// initialize root loop
 		var indices = [],
 			text = [], // will be morphed into a string later
@@ -55,41 +55,41 @@ Ext.define('NextThought.util.TextRangeFinder', {
 			stack = [],
 			child, nChildren;
 		// collect text and index-node pairs
-		for (;;){
-			while (iNode<nNodes){
+		for (;;) {
+			while (iNode < nNodes) {
 				child = node.childNodes[iNode++];
 
 				// text: collect and save index-node pair
-				if(child.nodeType === 3){
+				if (child.nodeType === 3) {
 
-					if(Ext.isFunction(nodeFilterFn) && !nodeFilterFn(child)){
+					if (Ext.isFunction(nodeFilterFn) && !nodeFilterFn(child)) {
 						continue;
 					}
 
-					indices.push({i:textLength, n:child});
+					indices.push({i: textLength, n: child});
 					nodeText = child.nodeValue;
 					text.push(nodeText);
 					textLength += nodeText.length;
 				}
 				// element: collect text of child elements,
 				// except from script or style tags
-				else if( child.nodeType === 1 ){
+				else if (child.nodeType === 1) {
 
 					// skip style/script tags
-					if( child.tagName.search(/^(script|style)$/i) >= 0 ){
+					if (child.tagName.search(/^(script|style)$/i) >= 0) {
 						continue;
 					}
 
 					// add extra space for tags which fall naturally on word boundaries
-					if( child.tagName.search(/^(a|b|basefont|bdo|big|em|font|i|s|small|span|strike|strong|su[bp]|tt|u)$/i) < 0 ){
+					if (child.tagName.search(/^(a|b|basefont|bdo|big|em|font|i|s|small|span|strike|strong|su[bp]|tt|u)$/i) < 0) {
 						text.push(' ');
 						textLength++;
 					}
 
 					// save parent's loop state
 					nChildren = child.childNodes.length;
-					if (nChildren){
-						stack.push({n:node, l:nNodes, i:iNode});
+					if (nChildren) {
+						stack.push({n: node, l: nNodes, i: iNode});
 						// initialize child's loop
 						node = child;
 						nNodes = nChildren;
@@ -99,7 +99,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 			}
 
 			// restore parent's loop state
-			if (!stack.length){
+			if (!stack.length) {
 				break;
 			}
 			state = stack.pop();
@@ -109,7 +109,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		}
 
 		// quit if found nothing
-		if (!indices.length){
+		if (!indices.length) {
 			return null;
 		}
 
@@ -117,33 +117,33 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		text = text.join('');
 
 		// sentinel
-		indices.push({i:text.length});
+		indices.push({i: text.length});
 
 		return {text: text, indices: indices};
 	},
 
 	// find entry in indices array (using binary search)
-	searchForEntry: function(start, end, lookFor, array, endEdge){
+	searchForEntry: function(start, end, lookFor, array, endEdge) {
 		var i;
 		while (start < end) {
 			i = start + end >> 1;
-			if(lookFor < array[i].i + (endEdge ? 1 : 0)){end = i;}
-			else if (lookFor >= array[i+1].i + (endEdge ? 1 : 0) ){start = i + 1;}
+			if (lookFor < array[i].i + (endEdge ? 1 : 0)) {end = i;}
+			else if (lookFor >= array[i + 1].i + (endEdge ? 1 : 0)) {start = i + 1;}
 			else {start = end = i;}
 		}
 		return start;
 	},
 
-	adjustLocatedRange: function(range){
+	adjustLocatedRange: function(range) {
 		return this.rangeIsInsideRedaction(range) || range;
 	},
 
-	mapMatchToTextRange: function(match, whichGroup, textIndex, doc){
+	mapMatchToTextRange: function(match, whichGroup, textIndex, doc) {
 		var iMatch, iTextStart, iTextEnd, iEntryLeft, iEntryRight,
 			entryLeft, entryRight, iNodeTextStart, iNodeTextEnd,
 			indices = textIndex.indices, range;
-		if(!match[whichGroup].length){
-			Ext.error("No match for group", match, whichGroup);
+		if (!match[whichGroup].length) {
+			Ext.error('No match for group', match, whichGroup);
 		}
 
 		// calculate a span from the absolute indices
@@ -152,7 +152,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		//TODO this could be optimized slightly to start with the
 		//offset of the last match
 		iTextStart = match.index;
-		for (iMatch=1; iMatch < whichGroup; iMatch++){
+		for (iMatch = 1; iMatch < whichGroup; iMatch++) {
 			iTextStart += match[iMatch].length;
 		}
 		iTextEnd = iTextStart + match[whichGroup].length;
@@ -181,9 +181,9 @@ Ext.define('NextThought.util.TextRangeFinder', {
 	 * Note cutz: for the which param to work it expects each part of your regex to be captured
 	 * IE if your goal is to have a capture in the middle of the regex you must also capture the first portion prior to it
 	 *
-	 * @returns a list of range objects that represent the portion of text to highlight
+	 * @return a list of range objects that represent the portion of text to highlight
 	 **/
-	findTextRanges: function(node, doc, searchFor, which, textIndex){
+	findTextRanges: function(node, doc, searchFor, which, textIndex) {
 		var iMatch, matchingText,
 			iTextStart, iTextEnd,
 			i, iLeft, iRight,
@@ -198,24 +198,24 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		// normalize search arguments, here is what is accepted:
 		// - single string
 		// - single regex (optionally, a 'which' argument, default to 0)
-		if(Ext.isString(searchFor)) {
+		if (Ext.isString(searchFor)) {
 			// rhill 2012-01-29: escape regex chars first
 			// http://stackoverflow.com/questions/280793/case-insensitive-string-replacement-in-javascript
-			searchFor = new RegExp(searchFor.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&'),'ig');
+			searchFor = new RegExp(searchFor.replace(/[.*+?|()\[\]{}\\$\^]/g, '\\$&'), 'ig');
 		}
 		which = which || 0;
-		if(!Ext.isArray(which)){
+		if (!Ext.isArray(which)) {
 			which = [which];
 		}
 		which = Ext.Array.sort(which);
 
-		function allButObjects(child){
+		function allButObjects(child) {
 			return !Ext.fly(child).parent('object', true);
 		}
 
 		//Index all the text beneath node
 		indexedText = textIndex || this.indexText(node, allButObjects);
-		if(!indexedText){
+		if (!indexedText) {
 			return ranges;
 		}
 
@@ -223,25 +223,25 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		//console.log(text);
 		indices = indexedText.indices;
 
-		function processGroup(whichGroup){
+		function processGroup(whichGroup) {
 				var range;
-				try{
+				try {
 					range = this.mapMatchToTextRange(matchingText, whichGroup, indexedText, doc);
-					if(range){
+					if (range) {
 						ranges.push(range);
 					}
 				}
-				catch(e){
+				catch (e) {
 					quit = true;
 					return false;
 				}
 		}
 
 		// loop until no more matches
-		for (;;){
+		for (;;) {
 			// find matching text, stop if none
 			matchingText = searchFor.exec(text);
-			if(!matchingText || matchingText.length <= which[which.length - 1]){
+			if (!matchingText || matchingText.length <= which[which.length - 1]) {
 				break;
 			}
 			quit = false;
@@ -251,24 +251,24 @@ Ext.define('NextThought.util.TextRangeFinder', {
 			//TODO should we just continue here?  The original
 			//implementation stops all work here but that may
 			//not be what we want
-			if(quit){
+			if (quit) {
 				break;
 			}
-        }
+    }
 		return ranges;
 	},
 
-	findTextRangesForSearchHit: function(hit, node, doc){
+	findTextRangesForSearchHit: function(hit, node, doc) {
 		var fragments, phrase, ranges = [], textIndex;
 
-		if(!hit){
+		if (!hit) {
 			return null;
 		}
 
 		fragments = hit.get('Fragments');
 		phrase = hit.get('PhraseSearch');
 
-		if(Ext.isEmpty(fragments)){
+		if (Ext.isEmpty(fragments)) {
 			return null;
 		}
 
@@ -277,7 +277,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 
 		//For each fragment build are regex string
 		//and grap the ranges
-		Ext.each(fragments, function(frag){
+		Ext.each(fragments, function(frag) {
 			console.log('Working on frag', frag);
 			var re = SearchUtils.contentRegexForFragment(frag, phrase, true);
 
@@ -287,6 +287,6 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		return ranges;
 	}
 
-}, function(){
+}, function() {
 	window.TextRangeFinderUtils = new this();
 });

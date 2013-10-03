@@ -21,11 +21,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
 
-	mixins:{
-		searchHitHighlighting:  'NextThought.mixins.SearchHitHighlighting'
+	mixins: {
+		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
 	},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
 
 		//TODO: this needs to be more centralized.
@@ -52,17 +52,17 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			remove: 'onStoreEventsRemove'
 		});
 
-		Ext.EventManager.onWindowResize(function () {
+		Ext.EventManager.onWindowResize(function() {
 			this.fireEvent('sync-height');
 		}, this, {buffer: 250});
 
-		this.on('resize', function () {
+		this.on('resize', function() {
 			this.fireEvent('sync-height');
 		}, this);
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		if (this.hasNoPresentationParts) {
 			this.fireEvent('no-presentation-parts', this);
@@ -70,11 +70,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	bindStoreToComponents: function (store, cmps) {
+	bindStoreToComponents: function(store, cmps) {
 
 		this.cmpMap[store.containerId] = cmps;
 
-		Ext.each(cmps, function (cmp) {
+		Ext.each(cmps, function(cmp) {
 			this.fireEvent('register-records', store, store.getRange(), cmp);
 			cmp.bindToStore(store);
 		});
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 			// Since we've already added the record when its component registered its records,
 			// let's just get its annotation object.
-			o = m.findBy(function (item) {
+			o = m.findBy(function(item) {
 				return item.record.getId() === k.getId();
 			});
 			if (!o) {
@@ -130,26 +130,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 	},
 
-	onStoreEventsAdd: function (store, records) {
+	onStoreEventsAdd: function(store, records) {
 		var cmps = this.cmpMap[store.containerId || ''];
 		if (cmps) {
-			Ext.each(cmps, function (c) {
+			Ext.each(cmps, function(c) {
 				this.fireEvent('register-records', store, records, c);
 			});
 		}
 	},
 
 
-	onStoreEventsRemove: function (store, records) {
+	onStoreEventsRemove: function(store, records) {
 		var cmps = this.cmpMap[store.containerId || ''];
 		if (cmps) {
-			Ext.each(cmps, function (c) {
+			Ext.each(cmps, function(c) {
 				this.fireEvent('unregister-records', store, records, c);
 			});
 		}
 	},
 
-	setupSingleTranscript: function (transcript) {
+	setupSingleTranscript: function(transcript) {
 		var items = [];
 		items.push({
 			xtype: 'video-title-component',
@@ -170,7 +170,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	buildPresentationTimeLine: function (slideStore, transcriptStore) {
+	buildPresentationTimeLine: function(slideStore, transcriptStore) {
 		var items = [], lastVideoId;
 
 		function itemWithId(list, id) {
@@ -180,7 +180,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				return null;
 			}
 
-			Ext.each(list, function (i) {
+			Ext.each(list, function(i) {
 				if (i.get('NTIID') === id) {
 					item = i;
 				}
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			return item;
 		}
 
-		slideStore.each(function (slide) {
+		slideStore.each(function(slide) {
 			var m = slide.get('media'),
 				vid = m && m.getAssociatedVideoId(),
 				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
@@ -242,23 +242,23 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	getTranscriptForVideo: function (id, transcriptStore) {
+	getTranscriptForVideo: function(id, transcriptStore) {
 		var s = transcriptStore.findRecord('associatedVideoId', id);
 	},
 
 
-	setupNoteOverlay: function () {
+	setupNoteOverlay: function() {
 		var me = this;
 		this.noteOverlay = Ext.widget('presentation-note-overlay', {reader: this, readerHeight: this.getHeight()});
-		this.on('destroy', 'destroy', this.relayEvents(this.noteOverlay, [ 'editorActivated', 'editorDeactivated' ]));
+		this.on('destroy', 'destroy', this.relayEvents(this.noteOverlay, ['editorActivated', 'editorDeactivated']));
 
-		Ext.each(this.items.items, function (vt) {
+		Ext.each(this.items.items, function(vt) {
 			me.noteOverlay.registerReaderView(vt);
 		});
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.ownerCt.hasSlides = this.hasSlides;
@@ -272,7 +272,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
-		this.on('will-hide-transcript', function () {
+		this.on('will-hide-transcript', function() {
 			if (this.annotationView) {
 				this.annotationView.hide();
 			}
@@ -280,14 +280,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	getPartComponents: function () {
-		return Ext.Array.filter(this.items.items, function (p) {
+	getPartComponents: function() {
+		return Ext.Array.filter(this.items.items, function(p) {
 			return p !== undefined;
 		});
 	},
 
 
-	getMaskTarget: function () {
+	getMaskTarget: function() {
 		var root = this;
 		while (root.ownerCt) {
 			root = root.ownerCt;
@@ -297,25 +297,25 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	addMask: function () {
+	addMask: function() {
 		this.getMaskTarget().mask('Loading...');
 		this.isMasked = true;
 	},
 
 
-	removeMask: function () {
+	removeMask: function() {
 		this.getMaskTarget().unmask();
 		this.isMasked = false;
 	},
 
 
-	maybeLoadData: function () {
+	maybeLoadData: function() {
 		var partCmps = this.getPartComponents(),
 			readyMap = {}, me = this;
 
 		function maybeDone() {
 			var done = true;
-			Ext.Object.each(readyMap, function (k, v) {
+			Ext.Object.each(readyMap, function(k, v) {
 				if (v === false) {
 					done = false;
 				}
@@ -336,7 +336,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			}
 		}
 
-		Ext.each(partCmps, function (p) {
+		Ext.each(partCmps, function(p) {
 
 			//Just in case something we aren't expecting sneaks in.
 			if (p.isPresentationPartReady === undefined) {
@@ -348,7 +348,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			}
 			readyMap[p.$presentationUUID] = p.isPresentationPartReady;
 			if (p.isPresentationPartReady === false) {
-				this.mon(p, 'presentation-part-ready', function (sender) {
+				this.mon(p, 'presentation-part-ready', function(sender) {
 					readyMap[sender.$presentationUUID] = true;
 					maybeDone();
 				});
@@ -358,13 +358,13 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	selectInitialSlide: function () {
+	selectInitialSlide: function() {
 		var startOn = this.startOn,
 			s = this.query('slide-component'), me = this,
 			targetImageEl;
 
 
-		Ext.each(s, function (i) {
+		Ext.each(s, function(i) {
 			var id = i.slide.get('NTIID'), img;
 			if (id === startOn) {
 				targetImageEl = i.el.down('img.slide');
@@ -373,18 +373,18 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		if (targetImageEl) {
 			console.log('should scroll into view: ', targetImageEl.dom);
-			Ext.defer(function () {
+			Ext.defer(function() {
 				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
 			}, 10, me);
 		}
 	},
 
 
-	scrollToStartingTime: function (seconds) {
+	scrollToStartingTime: function(seconds) {
 		var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
 
 		// scroll the component that contains the given time into view.
-		Ext.each(cmps, function (part) {
+		Ext.each(cmps, function(part) {
 			if (part.isTimeWithinTimeRange && part.isTimeWithinTimeRange(seconds)) {
 				tEl = part.getElementAtTime(seconds);
 				scrollingEl = this.el.getScrollingEl();
@@ -402,7 +402,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	selectSlide: function (slide) {
+	selectSlide: function(slide) {
 		if (!slide || !slide.isModel) {
 			console.trace();
 			console.error('Unexpected argument, given', slide, 'expected a record');
@@ -412,7 +412,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			me = this,
 			targetImageEl;
 
-		Ext.each(s, function (i) {
+		Ext.each(s, function(i) {
 			var id = i.slide.get('NTIID');
 
 			if (id === slide.getId()) {
@@ -421,19 +421,19 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		});
 
 		if (!this.isMasked && targetImageEl) {
-			Ext.defer(function () {
+			Ext.defer(function() {
 				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
 			}, 10, me);
 		}
 	},
 
 
-	syncWithVideo: function (videoState) {
-//		this.transcriptView.syncTranscriptWithVideo(videoState);
+	syncWithVideo: function(videoState) {
+    //		this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
 
-	showAnnotations: function (annotations, line, store) {
+	showAnnotations: function(annotations, line, store) {
 		var s = store;
 
 		if (!annotations || annotations.getCount() === 0) {
@@ -443,9 +443,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if (!s) {
 			s = NextThought.store.FlatPage.create({
 				storeId: 'presentation-annotations-' + line,
-				filters: [{ id:'nochildren', filterFn:function(r){ return !r.parent;}}]//override the base filter set
+				filters: [{ id: 'nochildren', filterFn: function(r) { return !r.parent;}}]//override the base filter set
 			});
-			annotations.each(function (annotation) {
+			annotations.each(function(annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
 				//us bind the same store to it twice.  How convenient..
 				s.bind(annotation.store);
@@ -456,7 +456,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			console.log('filtering by line: ', line);
 			s.addFilter({
 				id: this.lineFilterId,
-				filterFn: function (r) {
+				filterFn: function(r) {
 					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('pline') === line;
 				}
@@ -468,7 +468,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	showAnnotationView: function (store) {
+	showAnnotationView: function(store) {
 		var me = this;
 		if (!this.annotationView) {
 			this.annotationView = this.add({
@@ -488,7 +488,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				anchorComponentHooks: this.getViewerHooks(),
 				floatParent: this,
 				listeners: {
-					'itemremove': function () {
+					'itemremove': function() {
 						if (this.getNodes().length === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
@@ -500,10 +500,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 			this.mon(this.annotationView, {
 				scope: me,
-				show: function () {
+				show: function() {
 					me.fireEvent('will-show-annotation', me.annotationView, this);
 				},
-				hide: function () {
+				hide: function() {
 					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
 					}
@@ -522,7 +522,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.annotationView.refresh();
 		}
 		this.annotationView.show();
-		this.on('resize', function () {
+		this.on('resize', function() {
 			if (this.isVisible()) {
 				this.toFront();
 			}
@@ -530,7 +530,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	destroy: function () {
+	destroy: function() {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
@@ -541,7 +541,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	mayBeHideAnnotationView: function (e) {
+	mayBeHideAnnotationView: function(e) {
 		if (!this.annotationView || !this.annotationView.isVisible()) {
 			return true;
 		}
@@ -552,7 +552,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	getDomContextForRecord: function (r) {
+	getDomContextForRecord: function(r) {
 		//Find the cmp with our UGD store.
 		function fn(cmp) {
 			var s = cmp.userDataStore;
@@ -561,7 +561,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		var cmps = Ext.Array.filter(this.items.items, fn), node = null;
 
-		Ext.each(cmps, function (cmp) {
+		Ext.each(cmps, function(cmp) {
 
 			if (Ext.isFunction(cmp.getDomContextForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(r))) {
 				node = cmp.getDomContextForRecord(r);
@@ -581,14 +581,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	// By the time, this function gets called, we are already scrolled at the right location.
 	scrollToHit: Ext.emptyFn,
 
-	getScrollTarget: function () {
+	getScrollTarget: function() {
 		return this.getTargetEl().dom || this.el.dom;
 	},
 
 
-	getViewerHooks: function () {
+	getViewerHooks: function() {
 		return {
-			'resizeView': function () {
+			'resizeView': function() {
 				var reader = this.reader,
 					w = reader.getWidth() - reader.annotationView.getWidth() - 20,
 					h = reader.annotationView.getHeight(),

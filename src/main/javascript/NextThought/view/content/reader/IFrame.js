@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.content.reader.IFrame', {
-	alias:    'reader.iframe',
+	alias: 'reader.iframe',
 	requires: [
 		'NextThought.ContentAPIRegistry'
 	],
@@ -8,14 +8,14 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		observable: 'Ext.util.Observable'
 	},
 
-	getBubbleTarget: function () {
+	getBubbleTarget: function() {
 		return this.reader;
 	},
 
 	baseFrameCheckIntervalInMillis: 500,
-	frameCheckRateChangeFactor:     1.5,
+	frameCheckRateChangeFactor: 1.5,
 
-	constructor: function (config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 
 		var reader = this.reader;
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		Ext.apply(reader, {
 			getDocumentElement: Ext.bind(this.getDocumentElement, this),
-			getCleanContent:    Ext.bind(this.getCleanContent, this)
+			getCleanContent: Ext.bind(this.getCleanContent, this)
 		});
 
 		this.checkFrame = Ext.bind(this.checkFrame, this);
@@ -55,33 +55,33 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	applyContentAPI: function () {
+	applyContentAPI: function() {
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
 
-		Ext.Object.each(ContentAPIRegistry.getAPI(), function (f, n) {
+		Ext.Object.each(ContentAPIRegistry.getAPI(), function(f, n) {
 			win[f] = n;
 		});
 
 	},
 
 
-	getConfig: function () {
+	getConfig: function() {
 		var me = this;
 		return {
-			xtype:     'box',
-			autoEl:    {
-				tag:         'iframe',
-				name:        'iframe-' + guidGenerator() + '-content',
-				src:         Globals.EMPTY_WRITABLE_IFRAME_SRC,
+			xtype: 'box',
+			autoEl: {
+				tag: 'iframe',
+				name: 'iframe-' + guidGenerator() + '-content',
+				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
-				scrolling:   'no',
-				seamless:    true,
-				style:       'overflow: hidden; z-index: 1;'
+				scrolling: 'no',
+				seamless: true,
+				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
-				afterRender: function () {
-					me.resetFrame(function () {
+				afterRender: function() {
+					me.resetFrame(function() {
 						var frame = me.get();
 						if (frame) {
 							frame.selectable();
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	resetFrame: function (cb) {
+	resetFrame: function(cb) {
 		// must defer to wait for browser to be ready
 		var BLANK_DOC = '<!DOCTYPE html>' + Ext.DomHelper.markup(
 						{tag: 'html', lang: 'en', cn: [
@@ -116,7 +116,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		delete this.contentDocumentElement;
 
-		task.run = function () {
+		task.run = function() {
 			var doc = me.getDocumentElement();
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				doc.write(BLANK_DOC);
 				doc.close();
 				delete me.contentDocumentElement;
-				setTimeout(function () {
+				setTimeout(function() {
 					me.initContentFrame();
 					if (cb) {
 						Ext.callback(cb, me);
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	initContentFrame: function () {
+	initContentFrame: function() {
 		var me = this,
 				base = location.pathname.toString().replace('index.html', ''),
 				doc = me.getDocumentElement(),
@@ -150,7 +150,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			if (!Ext.isArray(event)) {
 				event = [event];
 			}
-			Ext.each(event, function (event) {
+			Ext.each(event, function(event) {
 				if (dom.addEventListener) {
 					dom.addEventListener(event, fn, false);
 				}
@@ -161,7 +161,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		}
 
 		function forward(name) {
-			on(doc, name, function (e) {
+			on(doc, name, function(e) {
 				e = Ext.EventObject.setEvent(e || event);
 				var o = me.reader.getAnnotationOffsets(),
 						xy = e.getXY().slice();
@@ -172,17 +172,17 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				//console.debug(e.browserEvent,xy, o);
 				me.reader.fireEvent('iframe-' + e.type, {
 					browserEvent: e.browserEvent,
-					type:         e.type,
-					getY:         function () {
+					type: e.type,
+					getY: function() {
 						return xy[1];
 					},
-					getX:         function () {
+					getX: function() {
 						return xy[0];
 					},
-					getXY:        function () {
+					getXY: function() {
 						return xy;
 					},
-					stopEvent:    function () {
+					stopEvent: function() {
 						Ext.EventManager.stopPropagation(this.browserEvent);
 						Ext.EventManager.preventDefault(this.browserEvent);
 					}
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			});
 		}
 
-		me.get().win.onerror = function () {
+		me.get().win.onerror = function() {
 			con.warn('iframe error: ', JSON.stringify(arguments));
 		};
 
@@ -204,10 +204,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		doc.getElementsByTagName('head')[0].appendChild(meta);
 
 		g.loadStyleSheet({
-							 url:      base + document.getElementById('main-stylesheet').getAttribute('href'),
+							 url: base + document.getElementById('main-stylesheet').getAttribute('href'),
 							 document: doc });
 
-		on(doc, ['keypress', 'keydown', 'keyup'], function (e) {
+		on(doc, ['keypress', 'keydown', 'keyup'], function(e) {
 			e = Ext.EventObject.setEvent(e || event);
 			var t = e.getTarget(),
 					k = e.getKey();
@@ -236,22 +236,22 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		tip = Ext.tip.QuickTipManager.getQuickTip();
 		tip.mon(Ext.fly(doc.body, '__reader_body_' + me.prefix), {
 			mouseover: tip.onTargetOver,
-			mouseout:  tip.onTargetOut,
+			mouseout: tip.onTargetOut,
 			mousemove: tip.onMouseMove,
-			scope:     tip,
-			reader:    me.reader
+			scope: tip,
+			reader: me.reader
 		});
 
-		on(doc, 'mousedown', function () {
+		on(doc, 'mousedown', function() {
 			Ext.menu.Manager.hideAll();
 		});
 
-		on(doc, 'contextmenu', function (e) {
+		on(doc, 'contextmenu', function(e) {
 			Ext.EventObject.setEvent(e || event).stopEvent();
 			return false;
 		});
 
-		on(doc, 'click', function (e) {
+		on(doc, 'click', function(e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 					target = evt.getTarget(),
 					highlight = evt.target.classList.contains('application-highlight');
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
-		on(doc, 'mouseup', function (e) {
+		on(doc, 'mouseup', function(e) {
 			var fakeEvent = Ext.EventObject.setEvent(e || event),
 					t = me.reader.getScroll().get().top,
 					s = me.get().win.getSelection();
@@ -275,19 +275,19 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			if (!fakeEvent.getTarget('a') || !s.isCollapsed) {
 				me.reader.onContextMenuHandler(
 						{
-							getTarget: function () {
+							getTarget: function() {
 								return fakeEvent.getTarget.apply(fakeEvent, arguments);
 							},
 
-							preventDefault: function () {
+							preventDefault: function() {
 								fakeEvent.preventDefault();
 							},
 
-							stopPropagation: function () {
+							stopPropagation: function() {
 								fakeEvent.stopPropagation();
 							},
 
-							getXY: function () {
+							getXY: function() {
 								var xy = fakeEvent.getXY();
 								xy[1] -= t;
 								return xy;
@@ -296,16 +296,16 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
-		if(!Ext.is.iPad){
+		if (!Ext.is.iPad) {
 			forward(['mousedown', 'mouseup', 'mousemove', 'mouseout']);
 		}
-		else{
+		else {
 			//NOTE: Are we using these listeners for iPad?
-			on(doc, 'touchstart', function (e) {
+			on(doc, 'touchstart', function(e) {
 				Ext.menu.Manager.hideAll();
 			});
 
-			on(doc, 'selectionchange', function (e) {
+			on(doc, 'selectionchange', function(e) {
 				function selectionChange(e) {
 					var fakeEvent = Ext.EventObject.setEvent(e || event),
 						t = me.reader.getScroll().get().top,
@@ -314,15 +314,15 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 					if (!s.isCollapsed) {
 						me.reader.onContextMenuHandler(
 							{
-								getTarget: function () {
+								getTarget: function() {
 									return fakeEvent.getTarget.apply(fakeEvent, arguments);
 								},
 
-								preventDefault: function () {
+								preventDefault: function() {
 									fakeEvent.preventDefault();
 								},
 
-								stopPropagation: function () {
+								stopPropagation: function() {
 									fakeEvent.stopPropagation();
 								}
 							}
@@ -338,7 +338,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		}
 
 
-		on(doc, 'mouseout', function (e) {
+		on(doc, 'mouseout', function(e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 					target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
@@ -348,7 +348,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		});
 
 
-		on(doc, 'mouseover', function (e) {
+		on(doc, 'mouseover', function(e) {
 			var d = doc,
 					evt = Ext.EventObject.setEvent(e || event),
 					target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
@@ -376,7 +376,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				clonedFn = fn.cloneNode(true);
 
 				Ext.each(Ext.fly(clonedFn).query('a'),
-						 function (d) {
+						 function(d) {
 							 var href = d.getAttribute ? d.getAttribute('href') : '';
 							 if (href.indexOf('#m') >= 0) {
 								 clonedFn.removeChild(d);
@@ -419,7 +419,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	getTopBodyStyles: function () {
+	getTopBodyStyles: function() {
 		var mainBodyStyleString = Ext.getBody().getAttribute('class') || '',
 				mainBodyStyleList = mainBodyStyleString.split(' '),
 				styleBlacklist = [
@@ -433,7 +433,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	checkFrame: function () {
+	checkFrame: function() {
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
 			html = doc.getElementsByTagName('html');
@@ -449,7 +449,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	syncFrame: function (content) {
+	syncFrame: function(content) {
 		var i = this.get(), h, contentHeight = 150, ii;
 		//We need the buffer because otherwise the end of the doc would go offscreen
 
@@ -480,7 +480,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	get: function () {
+	get: function() {
 		var iframe, el = this.iframe.el;
 		if (!el) {
 			return null;
@@ -491,7 +491,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	getDocumentElement: function () {
+	getDocumentElement: function() {
 		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if (!doc) {
@@ -527,7 +527,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	update: function (html, metaData) {
+	update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
 				body = Ext.get(doc.body),
 				head = doc.getElementsByTagName('head')[0],
@@ -538,7 +538,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		//Append some tags to the head
 		if (metaData) {
-			Ext.each(metaNames, function (tag) {
+			Ext.each(metaNames, function(tag) {
 				var meta;
 				if (metaData.hasOwnProperty(tag)) {
 					meta = doc.createElement('meta');
@@ -566,7 +566,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
-	getCleanContent: function () {
+	getCleanContent: function() {
 		return this.cleanContent;
 	},
 
@@ -575,7 +575,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	 * interactions can be handled manually.
 	 * @param should
 	 */
-	setClickthrough: function (should) {
+	setClickthrough: function(should) {
 		var el = this.get();
 		if (!el) {
 			return;
@@ -589,7 +589,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		}
 	},
 
-	hasClickthrough: function () {
+	hasClickthrough: function() {
 		return this.get().hasCls('clickthrough');
 	},
 
@@ -597,7 +597,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	 * @param x relative to the window's top left corner
 	 * @param y relative to the window's top left corner
 	 */
-	elementAt: function (x, y) {
+	elementAt: function(x, y) {
 		var reader = this.reader,
 				iFrameDoc = this.getDocumentElement(),
 				outerDoc = Ext.getDoc().dom,
@@ -613,7 +613,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				return false;
 			}
 
-			if(element.getAttribute('class') === 'overlayed'){
+			if (element.getAttribute('class') === 'overlayed') {
 				return true;
 			}
 
@@ -666,7 +666,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	 * @param x2
 	 * @param y2
 	 */
-	makeRangeFrom: function (x1, y1, x2, y2) {
+	makeRangeFrom: function(x1, y1, x2, y2) {
 
 		function rangeAtPoint(x, y) {
 			var reader = me.reader,

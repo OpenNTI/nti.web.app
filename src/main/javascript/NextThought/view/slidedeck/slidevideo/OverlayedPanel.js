@@ -1,10 +1,10 @@
 /*jslint */
 /*global DomUtils */
-Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
+Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-slidevideo',
 
-	requires:[
+	requires: [
 		'NextThought.util.Dom',
 		'NextThought.view.slidedeck.slidevideo.SlideVideo'
 	],
@@ -13,13 +13,13 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 	cls: 'content-slidevideo-container',
 
 	statics: {
-		getData: function(dom, reader){
+		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
 				description = el.down('span.description'),
 				thumbnail = el.down('img');
 
-			Ext.applyIf(data,{
+			Ext.applyIf(data, {
 				description: (description && description.getHTML()) || '',
 				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
 			});
@@ -27,8 +27,8 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 		}
 	},
 
-	constructor: function(config){
-		if(!config || !config.contentElement){
+	constructor: function(config) {
+		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
@@ -39,15 +39,15 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 			description = el.down('span.description'),
 			thumbnail = el.down('img');
 
-		Ext.applyIf(data,{
+		Ext.applyIf(data, {
 			basePath: reader && reader.basePath,
 			description: (description && description.getHTML()) || '',
 			thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
 		});
 
-		Ext.apply(config,{
-			layout:'fit',
-			items:[{
+		Ext.apply(config, {
+			layout: 'fit',
+			items: [{
 				xtype: 'content-slidevideo',
 				data: data,
 				contentElement: dom,
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.slidedeck.slidevideo.OverlayedPanel',{
 	},
 
 
-	findLine: function(){
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

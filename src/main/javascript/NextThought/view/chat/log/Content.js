@@ -4,7 +4,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 
 
 	requires: [
-        'NextThought.cache.LocationMeta'
+    'NextThought.cache.LocationMeta'
 	],
 
 
@@ -32,26 +32,26 @@ Ext.define('NextThought.view.chat.log.Content', {
 	},
 
 
-	initComponent: function(){
-        var me = this;
+	initComponent: function() {
+    var me = this;
 		me.callParent(arguments);
 
 		//request the location that has been sent, save it for use later
 		me.ntiid = me.message.get('body').ntiid;
 
-        LocationMeta.getMeta(this.ntiid, function(meta){
-            me.location = meta;
-            me.clickable = me.location ? true : false;
-            me.update();
-        });
+    LocationMeta.getMeta(this.ntiid, function(meta) {
+      me.location = meta;
+      me.clickable = me.location ? true : false;
+      me.update();
+    });
 	},
 
-	update: function(){
+	update: function() {
 		var me = this,
 			href,
 			icon, root, username;
 
-		if(this.location){
+		if (this.location) {
 			icon = this.location.icon;
 			root = this.location.root;
 
@@ -73,11 +73,11 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.renderData.body = this.location ? this.location.label || this.location.title : '';
 		me.renderData.locationicon = href;
 
-        if(me.rendered){
-            me.renderTpl.overwrite(me.el, me.renderData);
-            me.applyRenderSelectors();
-            me.attachClick();
-        }
+    if (me.rendered) {
+      me.renderTpl.overwrite(me.el, me.renderData);
+      me.applyRenderSelectors();
+      me.attachClick();
+    }
 
 		username = this.message.get('Creator');
 		UserRepository.getUser(username, me.fillInUser, me);
@@ -85,24 +85,24 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.addCls('nooid');
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.attachClick();
 	},
 
 
-    attachClick: function(){
-        if (this.clickable) {
-            this.el.on('click', function(){this.fireEvent('click', this);}, this);
-        }
-    },
+  attachClick: function() {
+    if (this.clickable) {
+      this.el.on('click', function() {this.fireEvent('click', this);}, this);
+    }
+  },
 
 
-    fillInUser: function(u) {
+  fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
-		if(this.rendered){
+		if (this.rendered) {
 			this.icon.set({src: i});
 			this.name.update(name);
 		}

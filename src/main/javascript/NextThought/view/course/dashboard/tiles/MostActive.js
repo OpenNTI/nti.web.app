@@ -1,10 +1,10 @@
-Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
+Ext.define('NextThought.view.course.dashboard.tiles.MostActive', {
 	extend: 'NextThought.view.course.dashboard.tiles.Tile',
 	alias: 'widget.course-dashboard-most-active',
 
 	statics: {
 
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
 			/*var me = this;
 
 			function onSummaryFailed(){
@@ -69,25 +69,25 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.view = this.add({
 			xtype: 'dataview',
-			cls:'active-users',
+			cls: 'active-users',
 			ui: 'tile',
 
 			store: 'ext-empty-store',
 			emptyText: Ext.DomHelper.markup([{
-				cls:"history nothing rhp-empty-list",
+				cls: 'history nothing rhp-empty-list',
 				html: 'No Activity Yet'
 			}]),
 
-			renderTpl: Ext.DomHelper.markup({tag: 'svg', cls:'fancy-border'}),
+			renderTpl: Ext.DomHelper.markup({tag: 'svg', cls: 'fancy-border'}),
 
 			overItemCls: 'x-item-over',
-			itemSelector:'.user',
+			itemSelector: '.user',
 			tpl: Ext.DomHelper.markup({
-				tag: 'tpl', 'for':'.', cn: [{
+				tag: 'tpl', 'for': '.', cn: [{
 					cls: 'user',
 					'data-qtip': '{displayName}',
 					style: {
@@ -95,7 +95,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 					}
 				}]
 			}),
-			listeners:{
+			listeners: {
 				scope: this,
 				'select': 'onUserSelected'
 			}
@@ -110,47 +110,47 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	onSummaryLoad: function(items){
+	onSummaryLoad: function(items) {
 		var users = [],
 			me = this;
 
-		function pluckUsers(i){ if(i){users.push(i.user||i.Username);} }
+		function pluckUsers(i) { if (i) {users.push(i.user || i.Username);} }
 
-		function byTotals(a,b){
+		function byTotals(a,b) {
 			var aN = a.UsersName || '',
 				bN = b.UsersName || '';
 			a = a.Score || 0;
-			b = b.Score || 0 ;
-			if(a!==b){
-				return a<b ? 1 : -1;
+			b = b.Score || 0;
+			if (a !== b) {
+				return a < b ? 1 : -1;
 			}
 
 			return aN.localeCompare(bN);
 		}
 
-		Ext.each(items,pluckUsers);
+		Ext.each(items, pluckUsers);
 
-		UserRepository.getUser(users, function(u){
-			function apply(i,x){
-				if(!u[x] || i.Username !== u[x].getId()){
+		UserRepository.getUser(users, function(u) {
+			function apply(i,x) {
+				if (!u[x] || i.Username !== u[x].getId()) {
 					console.error('bad mapping');
 					return;
 				}
-				Ext.apply(i,{
+				Ext.apply(i, {
 					user: u[x],
 					usersName: u[x].getName()
 				});
 			}
 
-			Ext.each(items,apply);
-			Ext.Array.sort(items,byTotals);
+			Ext.each(items, apply);
+			Ext.Array.sort(items, byTotals);
 			users = [];
-			Ext.each(items,pluckUsers);
+			Ext.each(items, pluckUsers);
 
 			me.store = Ext.data.Store({
 				model: 'NextThought.model.User',
 				proxy: 'memory',
-				data: users.slice(0,9)//limit 9
+				data: users.slice(0, 9)//limit 9
 			});
 
 			me.view.bindStore(me.store);
@@ -159,7 +159,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	onUserSelected: function(selModel, user){
+	onUserSelected: function(selModel, user) {
 		var v,
 			me = this,
 			box = me.box, req, blog = user.hasBlog();
@@ -167,71 +167,71 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 		me.user = user;
 
 		box.removeAll(true);
-		box.add({xtype: 'tile-title', label:user.getName(), heading:'Thought Leader' });
-		
+		box.add({xtype: 'tile-title', label: user.getName(), heading: 'Thought Leader' });
+
 		v = {
 			xtype: 'dataview',
-			cls:'user-items',
+			cls: 'user-items',
 			ui: 'tile',
 
 			emptyText: Ext.DomHelper.markup([{
-				cls:"history nothing rhp-empty-list",
+				cls: 'history nothing rhp-empty-list',
 				html: 'No Thoughts'
 			}]),
 			deferEmptyText: false,
 			overItemCls: 'x-item-over',
-			itemSelector:'.item',
+			itemSelector: '.item',
 			tpl: Ext.DomHelper.markup({
-				tag: 'tpl', 'for':'.', cn: [{
+				tag: 'tpl', 'for': '.', cn: [{
 					cls: 'item',
-					cn:[
-						{ cls: 'controls', cn: [{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }]},
-						{ cls: 'title', html:'{title}'}
+					cn: [
+						{ cls: 'controls', cn: [{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }]},
+						{ cls: 'title', html: '{title}'}
 					]
 				}]
 			}),
 			listeners: {
 				scope: me,
-				'itemclick':'onItemClicked'
+				'itemclick': 'onItemClicked'
 			}
 		};
 
 
-		function blogLoaded(s,rec){
+		function blogLoaded(s,rec) {
 			var c;
-			if(rec.length>3){
+			if (rec.length > 3) {
 				s.remove(rec.slice(3));
 				c = box.add({
-					xtype:'box', ui:'tile', cls:'more-posts',
+					xtype: 'box', ui: 'tile', cls: 'more-posts',
 					autoEl: { cn: [{},{},{}] },
 					listeners: {
 						click: {
 							element: 'el',
-							fn: function(){ c.fireEvent('navigate-to-blog',user); }
+							fn: function() { c.fireEvent('navigate-to-blog', user); }
 						}
 					}
 				});
 			}
 		}
 
-		function loadContents(r){
-			var record = ParseUtils.parseItems( r.responseText ).first(), //Set the blog record.
+		function loadContents(r) {
+			var record = ParseUtils.parseItems(r.responseText).first(), //Set the blog record.
 				store = NextThought.store.Blog.create({pageSize: 4});
 
 			store.proxy.url = record.getLink('contents');
-			Ext.apply(store.proxy.extraParams,{
-				sortOn:'lastModified',
-				sortOrder:'descending'
+			Ext.apply(store.proxy.extraParams, {
+				sortOn: 'lastModified',
+				sortOrder: 'descending'
 			});
 
 			v.store = store;
 			box.add(v);
-			me.mon(store,'load',blogLoaded);
+			me.mon(store, 'load', blogLoaded);
 			store.load();
 		}
 
 
-		if(!blog){
+		if (!blog) {
 			box.add(v);
 			return;
 		}
@@ -247,18 +247,18 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive',{
 	},
 
 
-	fail: function(){ console.error(':('); },
+	fail: function() { console.error(':('); },
 
 
 
-	onItemClicked: function(view, rec, dom, i, e){
-		if(e.getTarget('.like')){
+	onItemClicked: function(view, rec, dom, i, e) {
+		if (e.getTarget('.like')) {
 			e.stopEvent();
 			rec.like();
 			return;
 		}
 		//debugger;
-		this.fireEvent('navigate-to-blog',this.user, rec.get('ID'));
+		this.fireEvent('navigate-to-blog', this.user, rec.get('ID'));
 	}
 
 });

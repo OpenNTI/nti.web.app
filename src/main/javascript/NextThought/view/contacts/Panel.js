@@ -14,23 +14,23 @@ Ext.define('NextThought.view.contacts.Panel', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.mixins.userContainer.constructor.apply(this, arguments);
 	},
 
 
-	createUserComponent: function (i) {
+	createUserComponent: function(i) {
 		return {record: i};
 	},
 
 
-	getModelObject: function () {
+	getModelObject: function() {
 		return this.associatedGroup;
 	},
 
 
-	getUserListFieldName: function () {
+	getUserListFieldName: function() {
 		return 'friends';
 	}
 

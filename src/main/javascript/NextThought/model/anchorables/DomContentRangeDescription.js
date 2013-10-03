@@ -15,7 +15,7 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 	isDomContentRangeDescription: true,
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.ContentPointer;
 			return NextThought.model.anchorables.DomContentRangeDescription.create({
 				start: cp.createFromObject(o.start),
@@ -25,7 +25,7 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		}
 	},
 
-	constructor: function(o){
+	constructor: function(o) {
 		var start = o.start,
 			end = o.end,
 			ancestor = o.ancestor;

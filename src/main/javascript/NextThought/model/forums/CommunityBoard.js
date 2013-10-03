@@ -5,18 +5,18 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 		{name: 'title', type: 'auto', persist: false}
 	],
 
-	getRelatedCourse: function () {
+	getRelatedCourse: function() {
 		return this.course || this.findCourse();
 	},
 
-	belongsToCourse: function () {
+	belongsToCourse: function() {
 		return !!this.getRelatedCourse();
 	},
 
-	findCourse: function () {
+	findCourse: function() {
 		var me = this;
 
-		Library.courseStore.each(function (title) {
+		Library.courseStore.each(function(title) {
 			if (me.getId() === title.getBoard()) {
 				me.course = title;
 			}

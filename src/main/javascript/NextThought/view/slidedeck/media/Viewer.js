@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-viewer',
-	requires:[
+	requires: [
 		'NextThought.view.slidedeck.media.GridView',
 		'NextThought.view.slidedeck.media.Toolbar',
 		'NextThought.view.slidedeck.Transcript',
@@ -18,42 +18,42 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	layout: 'auto',
 	componentLayout: 'natural',
 	childEls: ['body'],
-	getTargetEl: function () { return this.body; },
+	getTargetEl: function() { return this.body; },
 
-	defaults:{
+	defaults: {
 		border: false,
-		plain:true,
-		hideOnClick:true
+		plain: true,
+		hideOnClick: true
 	},
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls:'header'},
-		{cls:'grid-view-body'},
-		{cls:'video-player'},
-		{id:'{id}-body', cls:'body', cn:['{%this.renderContainer(out, values)%}']}
+		{cls: 'header'},
+		{cls: 'grid-view-body'},
+		{cls: 'video-player'},
+		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
 
 	renderSelectors: {
-		headerEl:'.header',
-		gridViewEl:'.grid-view-body',
+		headerEl: '.header',
+		gridViewEl: '.grid-view-body',
 		videoPlayerEl: '.video-player'
 	},
 
-	SMALLVIDEO:{
-		width: function(){return 512;},
+	SMALLVIDEO: {
+		width: function() {return 512;},
 		transcriptRatio: 0.55,
-		setClasses: function(el){
+		setClasses: function(el) {
 			el.removeCls('full-video-player');
 			el.addCls('small-video-player');
 		}
 	},
 
 
-	BIGVIDEO:{
+	BIGVIDEO: {
 		transcriptRatio: 0.35,
-		width: function(el, transcriptRatio){
+		width: function(el, transcriptRatio) {
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				tWidth = Math.floor(screenWidth * (transcriptRatio || 0.35)),
@@ -61,28 +61,28 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				defaultWidth = Ext.Element.getViewportWidth() - tWidth,
 				defaultHeight = Math.round(defaultWidth * ratio),
 				y = (el && el.getY()) || 0,
-				diff = screenHeight - (y+defaultHeight),
+				diff = screenHeight - (y + defaultHeight),
 				newWidth;
 
 
-			if(diff >= 0){
+			if (diff >= 0) {
 				return defaultWidth;
 			}
 
-			newWidth = Math.round((1-(Math.abs(diff)/(screenHeight)))*defaultWidth);
+			newWidth = Math.round((1 - (Math.abs(diff) / (screenHeight))) * defaultWidth);
 
 			return Math.max(newWidth, 512);
 		},
-		setClasses: function(el){
+		setClasses: function(el) {
 			el.removeCls('full-video-player');
 			el.removeCls('small-video-player');
 		}
 	},
 
 
-	FULLVIDEO:{
+	FULLVIDEO: {
 		transcriptRatio: 0,
-		width: function(el){
+		width: function(el) {
 			var screenHeight = Ext.Element.getViewportHeight(),
 				screenWidth = Ext.Element.getViewportWidth(),
 				ratio = NextThought.view.video.Video.ASPECT_RATIO,
@@ -91,19 +91,19 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				y = (el && el.getY()) || 0,
 				diff = screenHeight - (y + defaultHeight),
 				newWidth;
-				
-			if(diff >= 0){ return defaultWidth; }
 
-			newWidth = Math.round( (screenHeight - y) / ratio);
+			if (diff >= 0) { return defaultWidth; }
+
+			newWidth = Math.round((screenHeight - y) / ratio);
 
 			return Math.max(newWidth, 512);
 		},
-		left: function(width){
+		left: function(width) {
 			return 0;
 		},
-		setClasses: function(el, cmp){
+		setClasses: function(el, cmp) {
 			var trans = cmp.down('slidedeck-transcript');
-			if(trans){
+			if (trans) {
 				trans.fireEvent('will-hide-transcript', cmp);
 			}
 			el.removeCls('small-video-player');
@@ -114,9 +114,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	//<editor-fold desc="Init">
-	initComponent:function(){
+	initComponent: function() {
 		var me = this, keyMap;
-        this.on('no-presentation-parts', function(){
+    this.on('no-presentation-parts', function() {
 			me.videoOnly = true;
 			me.fireEvent('media-viewer-ready', me);
 		}, this);
@@ -124,26 +124,26 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.callParent(arguments);
 
 		this.add({
-			xtype:'slidedeck-transcript',
+			xtype: 'slidedeck-transcript',
 			transcript: this.transcript,
 			record: this.record,
 			scrollToId: this.scrollToId,
 			videoPlaylist: [this.video],
 			xhooks: {
-				getScrollTarget: function(){
+				getScrollTarget: function() {
 					return this.ownerCt.getTargetEl().dom;
 				}
 			},
 			listeners: {
-				'presentation-parts-ready': function(){me.fireEvent('media-viewer-ready', me);}
+				'presentation-parts-ready': function() {me.fireEvent('media-viewer-ready', me);}
 			}
 		});
 
-        if(!Ext.isEmpty(this.startAtMillis)){
-            this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
-        }
+    if (!Ext.isEmpty(this.startAtMillis)) {
+      this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
+    }
 		this.on('media-viewer-ready', 'adjustOnResize');
-		if(!Ext.getBody().hasCls('media-viewer-open')){
+		if (!Ext.getBody().hasCls('media-viewer-open')) {
 			Ext.getBody().mask('Loading...');
 			this.animateIn();//will listen to afterRender
 		}
@@ -161,37 +161,37 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				scope: this
 			}]
 		});
-		this.on('destroy',function(){keyMap.destroy(false);});
+		this.on('destroy', function() {keyMap.destroy(false);});
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 
-		function cleanup(){
-			if( Ext.getBody().hasCls('media-viewer-closing')){
+		function cleanup() {
+			if (Ext.getBody().hasCls('media-viewer-closing')) {
 				Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
 			}
 			Ext.EventManager.removeResizeListener(me.adjustOnResize, me);
 		}
 
 		me.callParent(arguments);
-		if(!Ext.getBody().hasCls('media-viewer-open')){
-			me.el.setStyle('visibility','hidden');//layout w/o flicker, animateIn will show it.
+		if (!Ext.getBody().hasCls('media-viewer-open')) {
+			me.el.setStyle('visibility', 'hidden');//layout w/o flicker, animateIn will show it.
 		}
 
-        if(me.videoOnly){
-            me.el.addCls('video-only');
-        }
+    if (me.videoOnly) {
+      me.el.addCls('video-only');
+    }
 
 		//TODO: redo this. better.
-		me.toolbar = Ext.widget({xtype:'media-toolbar', renderTo:me.headerEl, video: me.video, floatParent:me});
-		me.identity = Ext.widget({xtype:'identity',renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
-		me.gridView = Ext.widget({xtype:'media-grid-view',renderTo: me.gridViewEl, floatParent: me, source: me.video});
+		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, video: me.video, floatParent: me});
+		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
+		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video});
 
-		me.on('destroy','destroy', me.toolbar);
-		me.on('destroy','destroy', me.gridView);
-		me.on('destroy','destroy', me.identity);
+		me.on('destroy', 'destroy', me.toolbar);
+		me.on('destroy', 'destroy', me.gridView);
+		me.on('destroy', 'destroy', me.identity);
 		me.on('exit-viewer', 'exitViewer', me);
 		me.on('destroy', cleanup, me);
 
@@ -209,125 +209,125 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 
-	addVideoPlayer: function(width, left){
+	addVideoPlayer: function(width, left) {
 		var startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
 
-		this.videoplayer = Ext.widget('content-video',{
+		this.videoplayer = Ext.widget('content-video', {
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
 			width: width,
 			floatParent: this
 		});
-		this.on('destroy','destroy',this.videoplayer);
+		this.on('destroy', 'destroy', this.videoplayer);
 
-		if(this.record){
+		if (this.record) {
 			range = this.record.get('applicableRange') || {};
 			pointer = range.start || {};
 
 			startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
 		}
-		if(startTimeSeconds > 0){
+		if (startTimeSeconds > 0) {
 			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
 		}
 
-        this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
+    this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
 
-	startAtSpecificTime: function(time, isSeconds){
-		var startTimeSeconds = !isSeconds ? (time || 0)/1000 : time,
-			transcriptCmp =  this.down('slidedeck-transcript');
+	startAtSpecificTime: function(time, isSeconds) {
+		var startTimeSeconds = !isSeconds ? (time || 0) / 1000 : time,
+			transcriptCmp = this.down('slidedeck-transcript');
 
 		console.debug('Should scroll cmps to time: ', startTimeSeconds);
-		if(this.videoplayer){
+		if (this.videoplayer) {
 			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
 		}
 
-		if(transcriptCmp){
+		if (transcriptCmp) {
 			transcriptCmp.scrollToStartingTime(startTimeSeconds);
 		}
 	},
 	//</editor-fold>
 
 
-	animateIn: function(){
-		if(!this.rendered){
-			this.on('afterrender','animateIn',this, {buffer:300});
+	animateIn: function() {
+		if (!this.rendered) {
+			this.on('afterrender', 'animateIn', this, {buffer: 300});
 			return;
 		}
 
 		Ext.getBody().addCls('media-viewer-open');
 		this.addCls('ready');
-		this.el.setStyle('visibility','visible');
+		this.el.setStyle('visibility', 'visible');
 		Ext.getBody().unmask();
 	},
 
 
-	exitViewer: function(){
+	exitViewer: function() {
 		console.log('about to exit the video viewer');
 
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
-		Ext.defer(this.destroy,1100,this);
-		Ext.defer(this.fireEvent,1100,this,['exited', this]);
+		Ext.defer(this.destroy, 1100, this);
+		Ext.defer(this.fireEvent, 1100, this, ['exited', this]);
 	},
 
 
 	//<editor-fold desc="Handlers">
-	adjustOnResize: function(){
+	adjustOnResize: function() {
 
 		// TODO: this dimensions adjustment stuff is getting nasty. We need to do it the better way.
 		// Part of what's making is harder, is that we need to be aware of the viewport dimensions
 		// while at the same time making sure we sync with resizes.
 		var tbHeight = (this.toolbar.el && this.toolbar.getHeight()) || 0,
-			h = Ext.Element.getViewportHeight() -  tbHeight - 30,
+			h = Ext.Element.getViewportHeight() - tbHeight - 30,
 			videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
-			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player'))? this.FULLVIDEO : this.BIGVIDEO,
+			dim = this.el.hasCls('small-video-player') ? this.SMALLVIDEO : (this.el.hasCls('full-video-player')) ? this.FULLVIDEO : this.BIGVIDEO,
 			transcriptWidth = Math.floor(Ext.Element.getViewportWidth() * dim.transcriptRatio),
 			tEl = this.el.down('.content-video-transcript');
 
-		targetEl.setStyle('height', h+'px');
-		if(tEl){
-			if(transcriptWidth > 80){
+		targetEl.setStyle('height', h + 'px');
+		if (tEl) {
+			if (transcriptWidth > 80) {
 				transcriptWidth -= 80;
 				tEl.parent('.transcript-view').show();
-				tEl.setStyle('width', transcriptWidth+'px');
-			}else{
+				tEl.setStyle('width', transcriptWidth + 'px');
+			}else {
 				tEl.parent('.transcript-view').hide();
 			}
 			videoWidth += 80;
-			this.getTargetEl().setStyle('marginLeft', videoWidth+'px');
+			this.getTargetEl().setStyle('marginLeft', videoWidth + 'px');
 		}
 		console.log('Media viewer resizing');
 	},
 
 
-	willShowAnnotation: function(annotationView){
+	willShowAnnotation: function(annotationView) {
 		var nWidth = annotationView.getWidth(),
 			tBox = this.down('slidedeck-transcript').getBox(),
 			vWidth = Ext.dom.Element.getViewportWidth(),
 			aWidth = vWidth - tBox.left - tBox.width,
 			vl = aWidth - nWidth;
 
-		if(vl < 0){
-			this.videoPlayerEl.setStyle('left', vl+'px');
+		if (vl < 0) {
+			this.videoPlayerEl.setStyle('left', vl + 'px');
 			this.getTargetEl().setStyle('left', vl + 'px');
 		}
 	},
 
 
-	willHideAnnotation: function(annotationView){
+	willHideAnnotation: function(annotationView) {
 		this.videoPlayerEl.setStyle('left', '10px');
 		this.getTargetEl().setStyle('left', '0px');
 	},
 
 
-	switchVideoViewer: function(type){
-		if(!type || this.activeVideoPlayerType === type){
+	switchVideoViewer: function(type) {
+		if (!type || this.activeVideoPlayerType === type) {
 			return;
 		}
 		console.log('switch to video viewer type: ', type);
@@ -335,7 +335,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		var cls, me = this,
 			isTranscriptCentric = type === 'transcript-focus',
 			isFullVideo = type === 'full-video',
-			dim = isTranscriptCentric ? this.SMALLVIDEO : (isFullVideo? this.FULLVIDEO : this.BIGVIDEO),
+			dim = isTranscriptCentric ? this.SMALLVIDEO : (isFullVideo ? this.FULLVIDEO : this.BIGVIDEO),
 			width = dim.width(this.videoPlayerEl),
 			left = Ext.isFunction(dim.left) && dim.left(width);
 
@@ -346,19 +346,19 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.activeVideoPlayerType = type;
 		this.addVideoPlayer(width, left);
 		dim.setClasses(this.el, this);
-		Ext.defer(function(){
+		Ext.defer(function() {
 			me.adjustOnResize();
-			if(me.down('slidedeck-transcript')){
+			if (me.down('slidedeck-transcript')) {
 				me.down('slidedeck-transcript').fireEvent('sync-height');
 			}
 		}, 1, me);
 	},
 
 
-	hideGridViewer: function(){
-		if( this.gridViewEl ){
+	hideGridViewer: function() {
+		if (this.gridViewEl) {
 			this.gridViewEl.removeCls('active');
-			if(this.didPauseVideoPlayer){
+			if (this.didPauseVideoPlayer) {
 				this.videoplayer.resumePlayback();
 				delete this.didPauseVideoPlayer;
 			}
@@ -366,17 +366,17 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 
-	showGridViewer: function(){
-		if( !this.gridViewEl ){
+	showGridViewer: function() {
+		if (!this.gridViewEl) {
 			return;
 		}
 
 		var v = this.down('slidedeck-transcript');
-		if( v ){
+		if (v) {
 			v.mayBeHideAnnotationView();
 		}
 
-		if(this.videoplayer.isPlaying()){
+		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}

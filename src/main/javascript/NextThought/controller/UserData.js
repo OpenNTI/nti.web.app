@@ -58,7 +58,7 @@ Ext.define('NextThought.controller.UserData', {
 	],
 
 
-	init: function () {
+	init: function() {
 		var me = this;
 
 		this.application.on('session-ready', this.onSessionReady, this);
@@ -67,19 +67,19 @@ Ext.define('NextThought.controller.UserData', {
 			model: {
 				'*': {
 					'update-pageinfo-preferences': 'updatePreferences',
-					'deleted':                     'onRecordDestroyed'
+					'deleted': 'onRecordDestroyed'
 				}
 			},
 			component: {
 				'*': {
-					'uses-page-preferences':  'setupPagePreferences',
-					'uses-page-stores':       'setupPageStoreDelegates',
+					'uses-page-preferences': 'setupPagePreferences',
+					'uses-page-stores': 'setupPageStoreDelegates',
 					'listens-to-page-stores': 'listenToPageStores',
-					'open-chat-transcript':   'openChatTranscript',
-					'load-transcript':        'onLoadTranscript',
-					'save-new-note':          'saveNewNote',
-					'save-new-series-note':   'saveNewSeriesNote',
-					'register-note-window':   'registerNoteWindow'
+					'open-chat-transcript': 'openChatTranscript',
+					'load-transcript': 'onLoadTranscript',
+					'save-new-note': 'saveNewNote',
+					'save-new-series-note': 'saveNewSeriesNote',
+					'register-note-window': 'registerNoteWindow'
 				},
 				'slidedeck-view': {
 					exited: 'presentationExited'
@@ -89,30 +89,30 @@ Ext.define('NextThought.controller.UserData', {
 				},
 
 				'reader-content': {
-					'annotations-load':   'onAnnotationsLoad',
+					'annotations-load': 'onAnnotationsLoad',
 					'filter-annotations': 'onAnnotationsFilter',
-					'filter-by-line':     'onAnnotationsLineFilter',
+					'filter-by-line': 'onAnnotationsLineFilter',
 					'removed-from-line': { fn: 'maybeRemoveLineFilter', buffer: 1 },
 
-					'share-with':      'shareWith',
-					'define':          'define',
-					'redact':          'redact',
-					'save-phantom':    'savePhantomAnnotation',
+					'share-with': 'shareWith',
+					'define': 'define',
+					'redact': 'redact',
+					'save-phantom': 'savePhantomAnnotation',
 					'display-popover': 'onDisplayPopover',
 					'dismiss-popover': 'onDismissPopover'
 				},
 
 
 				'reader annotation-view': {
-					'refresh':         'onAnnotationViewRefreshed',
-					'viewready':       'onAnnotationViewReady',
+					'refresh': 'onAnnotationViewRefreshed',
+					'viewready': 'onAnnotationViewReady',
 					'scrolled-to-end': { fn: 'onAnnotationViewMayNeedPaging', buffer: 500 }
 				},
 
 
 				'activity-preview': {
 					'share': 'shareWith',
-					'chat':  'replyAsChat'
+					'chat': 'replyAsChat'
 				},
 
 				'activity-preview-note > nti-editor': {
@@ -129,8 +129,8 @@ Ext.define('NextThought.controller.UserData', {
 
 				'note-panel': {
 					'save-new-reply': 'saveNewReply',
-					'share':          'shareWith',
-					'chat':           'replyAsChat'
+					'share': 'shareWith',
+					'chat': 'replyAsChat'
 				},
 
 
@@ -149,14 +149,14 @@ Ext.define('NextThought.controller.UserData', {
 		});
 
 		Socket.register({
-			'data_noticeIncomingChange': function (c) {me.incomingChange.apply(me, [c]);}
+			'data_noticeIncomingChange': function(c) {me.incomingChange.apply(me, [c]);}
 		});
 
 		Ext.apply(this.changeActionMap, {
-			created:  this.incomingCreatedChange,
-			deleted:  this.incomingDeletedChange,
+			created: this.incomingCreatedChange,
+			deleted: this.incomingDeletedChange,
 			modified: this.incomingModifiedChange,
-			shared:   this.incomingSharedChange
+			shared: this.incomingSharedChange
 			// circled: //do nothing? Thats what we have been doing :P
 		});
 
@@ -164,7 +164,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onSessionReady: function () {
+	onSessionReady: function() {
 		var app = this.application,
 				token = {};
 
@@ -190,13 +190,13 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	showNoteViewer: function (sel, rec) {
+	showNoteViewer: function(sel, rec) {
 		var me = this,
 			anchorCmp = sel.view.anchorComponent,
 			block = sel.mon(sel, {
 				destroyable: true,
-				beforeselect: function () {this.deselectingToSelect = true;},
-				beforedeselect: function (s, r) {
+				beforeselect: function() {this.deselectingToSelect = true;},
+				beforedeselect: function(s, r) {
 					var w = me.activeNoteWindow,
 						allow = this.deselectingToSelect && (!w || w.close());
 
@@ -232,12 +232,12 @@ Ext.define('NextThought.controller.UserData', {
 		}
 	},
 
-	registerNoteWindow: function (sender, win) {
+	registerNoteWindow: function(sender, win) {
 		this.activeNoteWindow = win;
 	},
 
 
-	presentationExited: function () {
+	presentationExited: function() {
 		if (this.activeNoteWindow) {
 			this.activeNoteWindow.destroy();
 		}
@@ -254,11 +254,11 @@ Ext.define('NextThought.controller.UserData', {
 		 *
 		 * these are assigned in the init() above
 		 */
-		created:  Ext.emptyFn,
-		deleted:  Ext.emptyFn,
+		created: Ext.emptyFn,
+		deleted: Ext.emptyFn,
 		modified: Ext.emptyFn,
-		shared:   Ext.emptyFn,
-		circled:  Ext.emptyFn
+		shared: Ext.emptyFn,
+		circled: Ext.emptyFn
 	},
 
 
@@ -323,12 +323,12 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	incomingCreatedChange: function (change, item, meta) {
+	incomingCreatedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
 				actedOn = false,
 				recordForStore = item;
 
-		this.applyToStoresThatWantItem(function (id, store) {
+		this.applyToStoresThatWantItem(function(id, store) {
 			if (store) {
 				actedOn = true;
 				console.log(store, cid);
@@ -357,11 +357,11 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	incomingDeletedChange: function (change, item, meta) {
+	incomingDeletedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
 				actedOn = false;
 
-		this.applyToStoresThatWantItem(function (id, store) {
+		this.applyToStoresThatWantItem(function(id, store) {
 			var r;
 			if (store) {
 				actedOn = true;
@@ -383,11 +383,11 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	incomingModifiedChange: function (change, item, meta) {
+	incomingModifiedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
 				actedOn = false;
 
-		this.applyToStoresThatWantItem(function (id, store) {
+		this.applyToStoresThatWantItem(function(id, store) {
 			var r;
 			if (store) {
 				actedOn = true;
@@ -411,36 +411,36 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	incomingSharedChange: function (change, item, meta) {
+	incomingSharedChange: function(change, item, meta) {
 		console.warn('what would we do here? treading as a create.');
 		this.incomingCreatedChange.apply(this, arguments);
 	},
 
 
-	onRecordDestroyed: function (record) {
+	onRecordDestroyed: function(record) {
 		if (!Ext.isEmpty(record.stores)) {
 			return;
 		}
 
-		this.applyToStoresThatWantItem(function (key, store) {
+		this.applyToStoresThatWantItem(function(key, store) {
 			store.removeByIdsFromEvent(record.getId(), true);
 		}, record);
 	},
 
 
-	listenToPageStores: function (monitor, listeners) {
+	listenToPageStores: function(monitor, listeners) {
 		monitor.mon(this.pageStoreEvents, listeners);
 	},
 
 
-	setupPageStoreDelegates: function (cmp) {
+	setupPageStoreDelegates: function(cmp) {
 		var delegate,
 				delegates = {
-					clearPageStore:            Ext.bind(this.clearPageStore, this),
-					addPageStore:              Ext.bind(this.addPageStore, this),
-					getPageStore:              Ext.bind(this.getPageStore, this),
-					hasPageStore:              Ext.bind(this.hasPageStore, this),
-					applyToStores:             Ext.bind(this.applyToStores, this),
+					clearPageStore: Ext.bind(this.clearPageStore, this),
+					addPageStore: Ext.bind(this.addPageStore, this),
+					getPageStore: Ext.bind(this.getPageStore, this),
+					hasPageStore: Ext.bind(this.hasPageStore, this),
+					applyToStores: Ext.bind(this.applyToStores, this),
 					applyToStoresThatWantItem: Ext.bind(this.applyToStoresThatWantItem, this)
 				};
 
@@ -455,14 +455,14 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	initPageStores: function () {
+	initPageStores: function() {
 		//init the page store.
 		var currentPageStoresMap = {};
 		this.pageStoreEvents = new Ext.util.Observable();
 		ObjectUtils.defineAttributes(this, {
 			currentPageStores: {
-				getter: function () {return currentPageStoresMap;},
-				setter: function (s) {
+				getter: function() {return currentPageStoresMap;},
+				setter: function(s) {
 					var key, o, m = currentPageStoresMap || {};
 					currentPageStoresMap = s;
 					for (key in m) {
@@ -470,7 +470,7 @@ Ext.define('NextThought.controller.UserData', {
 							o = m[key];
 							delete m[key];
 							if (o) {
-								console.debug("Seting currentPageStores:", o.storeId, "Does not clear:", o.doesNotClear);
+								console.debug('Seting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
 								if (!o.doesNotClear) {
 									o.fireEvent('cleanup', o);
 									o.clearListeners();
@@ -492,7 +492,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	clearPageStore: function () {
+	clearPageStore: function() {
 		var fp = this.flatPageStore;
 		this.currentPageStores = {};//see above defineAttributes call
 		fp.removeFilter('lineFilter');
@@ -503,12 +503,12 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	hasPageStore: function (id) {
+	hasPageStore: function(id) {
 		return !id ? false : (this.currentPageStores || {}).hasOwnProperty(id);
 	},
 
 
-	addPageStore: function (id, store) {
+	addPageStore: function(id, store) {
 		var events = this.pageStoreEvents, monitors = events.managedListeners || [];
 		if (this.hasPageStore(id) && this.getPageStore(id) !== store) {
 			console.warn('replacing an existing store??');
@@ -523,8 +523,8 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		store.on({
 					 scope: this,
-					 load:  StoreUtils.fillInUsers,
-					 add:   StoreUtils.fillInUsers
+					 load: StoreUtils.fillInUsers,
+					 add: StoreUtils.fillInUsers
 				 });
 
 		/**
@@ -553,7 +553,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	getPageStore: function (id) {
+	getPageStore: function(id) {
 		var theStore, root;
 		if (!id) {
 			Ext.Error.raise('ID required');
@@ -572,7 +572,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	getStoreForLine: function (line) {
+	getStoreForLine: function(line) {
 		var stores = this.currentPageStores,
 				root = stores.root || {},
 				key, s, potentials = [];
@@ -612,8 +612,8 @@ Ext.define('NextThought.controller.UserData', {
 
 	//Calls the provided fn on all the stores.  Optionally takes a predicate
 	//which skips stores that do not match the predicate
-	applyToStores:   function (fn, predicate) {
-		Ext.Object.each(this.currentPageStores, function (k) {
+	applyToStores: function(fn, predicate) {
+		Ext.Object.each(this.currentPageStores, function(k) {
 			if (k === 'root') {
 				return;
 			}//root is an alisas of the ntiid
@@ -624,7 +624,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	applyToStoresThatWantItem: function (fn, item) {
+	applyToStoresThatWantItem: function(fn, item) {
 		function predicate(id, store) {
 			return store && store.wantsItem(item);
 		}
@@ -633,11 +633,11 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationViewReady: function (view) {
+	onAnnotationViewReady: function(view) {
 		var bufferZone = 2; //two rows
 
 		view.mon(view.el, {
-			scope:  view,
+			scope: view,
 			scroll: function onScroll(e, dom) {
 				var lastItem = dom.lastChild,
 						direction = (onScroll.lastScrollTop || 0) - dom.scrollTop,
@@ -654,7 +654,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationViewRefreshed: function (view) {
+	onAnnotationViewRefreshed: function(view) {
 		//scrollHeight is === to height until its overflown. "<=" just feels safer :P
 		if (this.flatPageStore.filteredLine && view.getEl().dom.scrollHeight <= view.getHeight()) {
 			this.onAnnotationViewMayNeedPaging(view);
@@ -662,7 +662,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationViewMayNeedPaging: function (view) {
+	onAnnotationViewMayNeedPaging: function(view) {
 		var me = this,
 				s = view.getStore();
 
@@ -690,15 +690,15 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationsLineFilter: function (line) {
+	onAnnotationsLineFilter: function(line) {
 		var s = this.flatPageStore;
 
 		s.removeFilter('lineFilter');
 		if (line) {
 			s.filteredLine = line;
 			s.addFilter({
-							id:       'lineFilter',
-							filterFn: function (r) {
+							id: 'lineFilter',
+							filterFn: function(r) {
 								return r.get('line') === line;
 							}
 						});
@@ -708,7 +708,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	maybeRemoveLineFilter: function () {
+	maybeRemoveLineFilter: function() {
 		var s = this.flatPageStore;
 		if (s.getCount() === 0) {
 			delete s.filteredLine;
@@ -717,7 +717,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationsFilter: function (cmp) {
+	onAnnotationsFilter: function(cmp) {
 		var listParams = FilterManager.getServerListParams(),
 				filter = ['TopLevel'];
 
@@ -739,11 +739,11 @@ Ext.define('NextThought.controller.UserData', {
 			return s.hasOwnProperty('containerId');
 		}
 
-		this.applyToStores(function (k, s) {
+		this.applyToStores(function(k, s) {
 			var params = s.proxy.extraParams || {};
 
 			params = Ext.apply(params, {
-				sortOn:    'lastModified',
+				sortOn: 'lastModified',
 				sortOrder: 'descending'
 			});
 
@@ -772,7 +772,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationsLoad: function (cmp, containerId, containers) {
+	onAnnotationsLoad: function(cmp, containerId, containers) {
 		var Store = NextThought.store.PageItem,
 				rel = Globals.USER_GENERATED_DATA,
 				pi = cmp.getLocation().pageInfo,
@@ -789,7 +789,7 @@ Ext.define('NextThought.controller.UserData', {
 			containers.push(containerId);
 		}
 
-		Ext.each(containers, function (id) {
+		Ext.each(containers, function(id) {
 			me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
 								ps : Store.make(pi.getSubContainerURL(rel, id), id));
 		});
@@ -798,22 +798,22 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveSharingPrefs: function (pageInfoId, prefs, callback) {
+	saveSharingPrefs: function(pageInfoId, prefs, callback) {
 		//TODO - check to see if it's actually different before save...
 		var me = this,
 			pi = ContentUtils.getLineage(pageInfoId).last() || pageInfoId;
 		//get parent:
 		$AppConfig.service.getPageInfo(pi,
-									   function (topPi) {
+									   function(topPi) {
 										   if (topPi) {
-											   topPi.saveField('sharingPreference', {sharedWith: prefs}, function (fieldName, sanitizedValue, pi, refreshedPageInfo) {
+											   topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo) {
 												   //always happens if success only:
 												   me.updatePreferences(refreshedPageInfo);
 												   Ext.callback(callback, null, []);
 											   });
 										   }
 									   },
-									   function () {
+									   function() {
 										   console.error('failed to save default sharing');
 									   },
 									   this);
@@ -822,7 +822,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	updatePreferences: function (pi) {
+	updatePreferences: function(pi) {
 
 		if (!Library.loaded) {
 			Library.on('loaded', Ext.bind(this.updatePreferences, this, arguments), this, {single: true});
@@ -856,12 +856,12 @@ Ext.define('NextThought.controller.UserData', {
 		if (sharing && sharing.sharedWith) {
 			// Let's pre-resolve the users that are part of the default sharing list.
 			// By the time, we look it up, it should be in the userRepository cache, if it's resolvable.
-			UserRepository.getUser(sharing.sharedWith, function (users) {
-				var allResolved = Ext.Array.every(users, function (i) { return Boolean(!i.Unresolved); }),
+			UserRepository.getUser(sharing.sharedWith, function(users) {
+				var allResolved = Ext.Array.every(users, function(i) { return Boolean(!i.Unresolved); }),
 						names = [];
 
 				if (allResolved) {
-					Ext.each(users, function (u) { names.push(u.getName()); });
+					Ext.each(users, function(u) { names.push(u.getName()); });
 					console.log('default sharing should contain: ', names);
 				}
 			}, this);
@@ -869,12 +869,12 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	setupPagePreferences: function (cmp) {
+	setupPagePreferences: function(cmp) {
 		cmp.getPagePreferences = Ext.bind(this.getPreferences, this);
 	},
 
 
-	getPreferences: function (ntiid) {
+	getPreferences: function(ntiid) {
 		if (!this.preferenceMap || !ntiid) {
 			return null;
 		}
@@ -884,13 +884,13 @@ Ext.define('NextThought.controller.UserData', {
 				i = ContentUtils.getLocation(rootId),
 				flStore = Ext.getStore('FriendsList');
 
-		Ext.each(lineage, function (l) {
+		Ext.each(lineage, function(l) {
 			result = this.preferenceMap[l];
 			return !result;
 		}, this);
 
 		if (!Ext.isEmpty(result)) {
-			Ext.each(result.sharing.sharedWith || [], function (id) {
+			Ext.each(result.sharing.sharedWith || [], function(id) {
 				var entity = UserRepository.resolveFromStore(id),
 						communities, found;
 				if (!entity) {
@@ -908,7 +908,7 @@ Ext.define('NextThought.controller.UserData', {
 					else if (entity.isCommunity) {
 						communities = $AppConfig.userObject.getCommunities();
 						found = false;
-						Ext.Array.each(communities, function (com) {
+						Ext.Array.each(communities, function(com) {
 							if (com.getId() === entity.getId()) {
 								found = true;
 							}
@@ -939,7 +939,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	define: function (term, boundingScreenBox, reader) {
+	define: function(term, boundingScreenBox, reader) {
 
 		if (this.definition) {
 			this.definition.close();
@@ -947,14 +947,14 @@ Ext.define('NextThought.controller.UserData', {
 		}
 		this.definition = Ext.widget(
 				'definition-window', {
-					term:    term,
+					term: term,
 					pointTo: boundingScreenBox,
-					reader:  reader
+					reader: reader
 				}).show();
 	},
 
 
-	onShareWithSaveClick: function (btn) {
+	onShareWithSaveClick: function(btn) {
 		var win = btn.up('window'),
 				shbx = win.down('user-sharing-list'),
 				v = shbx.getValue(),
@@ -998,7 +998,7 @@ Ext.define('NextThought.controller.UserData', {
 			win.close();
 			return;
 		}
-		SharingUtils.setSharedWith(rec, newSharedWith, function (newRec, op) {
+		SharingUtils.setSharedWith(rec, newSharedWith, function(newRec, op) {
 			if (op.success) {
 				rec.fireEvent('updated', newRec);
 				win.close();
@@ -1012,7 +1012,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onDismissPopover: function () {
+	onDismissPopover: function() {
 		var me = this;
 		if (me.popoverWidget) {
 			me.popoverWidget.startCloseTimer();
@@ -1020,7 +1020,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onDisplayPopover: function (sender, id, html, node) {
+	onDisplayPopover: function(sender, id, html, node) {
 		var offsets = sender.reader.getAnnotationOffsets(),
 				position = Ext.fly(node).getXY(),
 				me = this;
@@ -1074,35 +1074,35 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onLoadTranscript: function (record, cmp) {
+	onLoadTranscript: function(record, cmp) {
 		var model = this.getModel('Transcript'),
 				id = record.get('RoomInfo').getId();
 
 		model.getProxy().url = record.getLink('transcript');
 
 		model.load(id, {
-			scope:   this,
-			failure: function () {
+			scope: this,
+			failure: function() {
 				cmp.failedToLoadTranscript();
 			},
-			success: function (record) {
+			success: function(record) {
 				cmp.insertTranscript(record);
 			}
 		});
 	},
 
 
-	saveNewBookmark: function (reader) {
+	saveNewBookmark: function(reader) {
 		//create a bookmark model
 		var me = this,
 				bm = me.getBookmarkModel().create({
-													  ContainerId:     reader.getLocation().NTIID,
+													  ContainerId: reader.getLocation().NTIID,
 													  applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
 												  });
 
 		//now save this:
 		bm.save({
-					callback: function (record, operation) {
+					callback: function(record, operation) {
 						try {
 							if (operation.success) {
 								me.fireEvent('bookmark-loaded', record);
@@ -1116,9 +1116,9 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	getSaveCallback: function (callback) {
+	getSaveCallback: function(callback) {
 		var me = this;
-		return function (record, operation) {
+		return function(record, operation) {
 			var success = operation.success, rec;
 			console.log('Note save callback', success, operation);
 			try {
@@ -1136,7 +1136,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewNote: function (title, body, range, c, shareWith, style, callback) {
+	saveNewNote: function(title, body, range, c, shareWith, style, callback) {
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1)) {
 			console.error('Note creating a note missing content');
@@ -1180,16 +1180,16 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNote: function (applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
+	saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
 		//define our note object:
 		var noteRecord = this.getNoteModel().create({
 														applicableRange: applicableRange,
-														body:            body,
-														title:           title,
-														selectedText:    selectedText,
-														sharedWith:      shareWith,
-														style:           style,
-														ContainerId:     ContainerId
+														body: body,
+														title: title,
+														selectedText: selectedText,
+														sharedWith: shareWith,
+														style: style,
+														ContainerId: ContainerId
 													});
 
 		console.log('Saving new record', noteRecord);
@@ -1199,7 +1199,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewSeriesNote: function (title, body, range, cueInfo, containerId, shareWith, style, callback) {
+	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
 		console.log(cueInfo);
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 				AnchorResolver = NextThought.view.slidedeck.transcript.AnchorResolver,
@@ -1210,9 +1210,9 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	handleException: function (proxy, response, operation) {
+	handleException: function(proxy, response, operation) {
 		var error,
-				msg = "An unknown error occurred saving your note.";
+				msg = 'An unknown error occurred saving your note.';
 
 		try {
 			//TODO We can get other information from different parts of the response.
@@ -1223,7 +1223,7 @@ Ext.define('NextThought.controller.UserData', {
 			error = {};
 		}
 
-		if (error.code === "TooLong") {
+		if (error.code === 'TooLong') {
 			msg = 'Could not save your note. The title is too long. It should be 140 characters or less.';
 		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});
@@ -1231,7 +1231,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	savePreviewNoteReply: function (editor, record, valueObject, successCallback) {
+	savePreviewNoteReply: function(editor, record, valueObject, successCallback) {
 		var cmp = editor.up('[record]'),
 				isEdit = Boolean(record),
 				replyToRecord = cmp && cmp.record;
@@ -1249,7 +1249,7 @@ Ext.define('NextThought.controller.UserData', {
 			record.set({ body: valueObject.body });
 			try {
 				record.save({
-								callback: function (record, request) {
+								callback: function(record, request) {
 									var success = request.success,
 											rec = success ? request.records[0] : null;
 									if (success) {
@@ -1267,7 +1267,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewReply: function (recordRepliedTo, replyBody, shareWith, callback) {
+	saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
 		//some validation of input:
 		if (!recordRepliedTo) {
 			Ext.Error.raise('Must supply a record to reply to');
@@ -1284,7 +1284,7 @@ Ext.define('NextThought.controller.UserData', {
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
 		if (!root.store) {
-			callback = Ext.Function.createInterceptor(callback, function (s, n) {
+			callback = Ext.Function.createInterceptor(callback, function(s, n) {
 				if (s) {
 					recordRepliedTo.fireEvent('child-added', n);
 				}
@@ -1296,24 +1296,24 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	deleteNoteReply: function (record, cmp, callback) {
+	deleteNoteReply: function(record, cmp, callback) {
 		if (!record) {
 			return;
 		}
 
 		record.destroy({
-						   success: function () {
+						   success: function() {
 							   //TODO: do we need to look through all the store to see who cares about this record? or it's already handled.
 							   Ext.callback(callback, null, [cmp]);
 						   },
-						   failure: function () {
+						   failure: function() {
 							   alert('Sorry, could not delete that');
 						   }
 					   });
 	},
 
 
-	replyAsChat: function (record) {
+	replyAsChat: function(record) {
 		var top = record,
 				people, cId, parent, refs;
 
@@ -1332,7 +1332,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	savePhantomAnnotation: function (record, applySharing, successFn, failureFn) {
+	savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
 		function callback(success, rec) {
 			Ext.callback(success ? successFn : failureFn, null, [record, rec]);
 		}
@@ -1348,7 +1348,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	shareWith: function (record) {
+	shareWith: function(record) {
 		var options = {};
 
 		if (Ext.ComponentQuery.query('share-window[record]').length > 0) {
@@ -1358,7 +1358,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		if (arguments[arguments.length - 1] === true) {
 			options = {
-				btnLabel:   'Discuss',
+				btnLabel: 'Discuss',
 				titleLabel: 'Discuss This...'
 			};
 		}
@@ -1367,7 +1367,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	redact: function (record) {
+	redact: function(record) {
 		if (!record) {
 			return;
 		}
@@ -1375,7 +1375,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	openChatTranscript: function (records, clonedWidgetMarkup) {
+	openChatTranscript: function(records, clonedWidgetMarkup) {
 		if (!Ext.isArray(records)) {
 			records = [records];
 		}

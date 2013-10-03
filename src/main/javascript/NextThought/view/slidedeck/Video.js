@@ -1,6 +1,6 @@
 /*jslint */
 /*globals NextThought */
-Ext.define('NextThought.view.slidedeck.Video',{
+Ext.define('NextThought.view.slidedeck.Video', {
 	extend: 'NextThought.view.video.Video',
 	alias: 'widget.slidedeck-video',
 
@@ -15,10 +15,10 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [
-//			{
-//				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
-//				frameBorder: 0, scrolling: 'no', seamless: true
-//			},
+      //			{
+      //				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
+      //				frameBorder: 0, scrolling: 'no', seamless: true
+      //			},
 			{
 				cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 			}
@@ -51,12 +51,12 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.height = (this.playerHeight + 65);
 		this.callParent(arguments);
 		this.firstSelection = true;
 		//default the value
-		if(typeof(this.linkWithSlides) !== 'boolean'){
+		if (typeof(this.linkWithSlides) !== 'boolean') {
 			this.linkWithSlides = true;
 		}
 
@@ -64,53 +64,53 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		function enterFilter(e) { var k = e.getKey(); return (k === e.ENTER || k === e.SPACE); }
 
 		this.updateCheckbox();
 
-		this.mon(this.nextEl,{
-			scope:this.queue,
-			click:this.queue.nextSlide,
-			keydown: Ext.Function.createInterceptor(this.queue.nextSlide,enterFilter,this,null)
+		this.mon(this.nextEl, {
+			scope: this.queue,
+			click: this.queue.nextSlide,
+			keydown: Ext.Function.createInterceptor(this.queue.nextSlide, enterFilter, this, null)
 		});
 
-		this.mon(this.prevEl,{
-			scope:this.queue,
-			click:this.queue.previousSlide,
-			keydown: Ext.Function.createInterceptor(this.queue.previousSlide,enterFilter,this,null)
+		this.mon(this.prevEl, {
+			scope: this.queue,
+			click: this.queue.previousSlide,
+			keydown: Ext.Function.createInterceptor(this.queue.previousSlide, enterFilter, this, null)
 		});
 
-		this.mon(this.checkboxEl,{
-			scope:this,
-			click:this.checkboxClicked,
-			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
+		this.mon(this.checkboxEl, {
+			scope: this,
+			click: this.checkboxClicked,
+			keydown: Ext.Function.createInterceptor(this.checkboxClicked, enterFilter, this, null)
 		});
 	},
 
 
-	getState:function(){
+	getState: function() {
 		return this.queryPlayer();
 	},
 
 
-	videoQueryTask: function videoQueryTask(){
+	videoQueryTask: function videoQueryTask() {
 		var s = this.queryPlayer(),
-			pl= this.playlist,
-			ix= this.playlistIndex,
-			o= pl[ix],
+			pl = this.playlist,
+			ix = this.playlistIndex,
+			o = pl[ix],
 			newIx;
 
-		if(!s || !this.linkWithSlides){return;}
+		if (!s || !this.linkWithSlides) {return;}
 
-		if(!o || ix < 0) {
-			console.warn("No playlist item", pl, ix);
+		if (!o || ix < 0) {
+			console.warn('No playlist item', pl, ix);
 			return;
 		}
 
-		if(this.queue.justChanged()){
+		if (this.queue.justChanged()) {
 			console.log('Slide just changed');
 			return;
 		}
@@ -129,7 +129,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		 * failing to switch videos on slide change.
 		 */
 
-		if(s.state === this.states.PLAYING){
+		if (s.state === this.states.PLAYING) {
 
 			/*console.log('[video status] service: '+ s.service
 						+', state: '+s.state
@@ -141,15 +141,15 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			//for people who jump around...
 			newIx = this.findPlaylistIndexFor(s.service, s.video, s.time);
 			//console.log('[playlist] new index '+newIx+', old index: '+ix);
-			if(Ext.isArray(newIx)){
-				console.log('Not sure what to do here.',newIx);
+			if (Ext.isArray(newIx)) {
+				console.log('Not sure what to do here.', newIx);
 				return;
 			}
 
-			if(newIx === ix){return;}
+			if (newIx === ix) {return;}
 
-			if(s.time >= o.get('end') || (newIx === -1 && Math.abs(s.time - o.get('end')) < 1)){
-				newIx = ix+1;
+			if (s.time >= o.get('end') || (newIx === -1 && Math.abs(s.time - o.get('end')) < 1)) {
+				newIx = ix + 1;
 				console.log('[End of Video]');
 			}
 
@@ -159,20 +159,20 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	findPlaylistIndexFor: function(service,id,time){
+	findPlaylistIndexFor: function(service,id,time) {
 		var matching = [], len,
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
-//		time = Math.round(time);
+    //		time = Math.round(time);
 
-		Ext.each(this.playlist,function(o,i){
+		Ext.each(this.playlist, function(o,i) {
 			/* slideId, id, service, start, end */
 			var dE = Math.abs(time - o.get('end')),
 				dS = Math.abs(o.get('start') - time);
 
-			if(o && o.activeSource().service === service && compareSources(o.activeSource().source, id)){
+			if (o && o.activeSource().service === service && compareSources(o.activeSource().source, id)) {
 				//console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
-				if((o.get('start') <= time || dS < 1) && (time < o.get('end') && dE > 1)){
+				if ((o.get('start') <= time || dS < 1) && (time < o.get('end') && dE > 1)) {
 					matching.push(i);
 				}
 			}
@@ -189,30 +189,30 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
-	updateCheckbox: function(){
-		this.checkboxEl[this.linkWithSlides?'addCls':'removeCls']('checked');
+	updateCheckbox: function() {
+		this.checkboxEl[this.linkWithSlides ? 'addCls' : 'removeCls']('checked');
 	},
 
 
-	checkboxClicked: function(){
+	checkboxClicked: function() {
 		this.linkWithSlides = !this.linkWithSlides;
 		this.updateCheckbox();
-		if(this.linkWithSlides){
+		if (this.linkWithSlides) {
 			this.videoTriggeredTransition = true;
 			this.queue.selectSlide(this.playlistIndex);
 		}
 	},
 
 
-	getVideoInfoFromSlide: function(slide){
+	getVideoInfoFromSlide: function(slide) {
 		return slide.get('media');
 	},
 
 
-	getVideoInfoIndex: function(videoInfo){
+	getVideoInfoIndex: function(videoInfo) {
 		var index = -1, id = videoInfo.get('mediaId');
-		Ext.each(this.playlist,function(i,ix){
-			if(i.get('mediaId')===id){index=ix;}
+		Ext.each(this.playlist, function(i,ix) {
+			if (i.get('mediaId') === id) {index = ix;}
 			return index < 0;//stop once found
 		});
 		return index;
@@ -220,27 +220,27 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	//called by the event of selecting something in the slide queue.
-	updateVideoFromSelection: function(queueCmp, slide){
+	updateVideoFromSelection: function(queueCmp, slide) {
 		var video,
 			hasNext = Boolean(slide.getSibling(1)),
 			hasPrev = Boolean(slide.getSibling(-1)),
 			p = this.isPlaying();
 
-		this.nextEl[hasNext?'removeCls':'addCls']('disabled');
-		this.prevEl[hasPrev?'removeCls':'addCls']('disabled');
+		this.nextEl[hasNext ? 'removeCls' : 'addCls']('disabled');
+		this.prevEl[hasPrev ? 'removeCls' : 'addCls']('disabled');
 
-		if(!this.linkWithSlides){return;}
+		if (!this.linkWithSlides) {return;}
 
 		video = slide.get('media');
 		this.playlistSeek(this.getVideoInfoIndex(video));
-		if(p || this.firstSelection){
+		if (p || this.firstSelection) {
 			this.resumePlayback(true);
 		}
 		delete this.firstSelection;
 	},
 
 
-	playOnLaunch: function(){
+	playOnLaunch: function() {
 		this.resumePlayback(true);
 	}
 });

@@ -4,7 +4,7 @@ Ext.define('NextThought.layout.component.CustomTemplate', {
 	type: 'customtemplate',
 
 
-	calculateOwnerHeightFromContentHeight: function (ownerContext, contentHeight) {
+	calculateOwnerHeightFromContentHeight: function(ownerContext, contentHeight) {
 		var height = this.callParent(arguments),
 				c = ownerContext.target,
 				m = c.el.getMargin();
@@ -12,7 +12,7 @@ Ext.define('NextThought.layout.component.CustomTemplate', {
 		return height + (c.el.getHeight()) + (m.top + m.bottom);
 	},
 
-	calculateOwnerWidthFromContentWidth: function (ownerContext, contentWidth) {
+	calculateOwnerWidthFromContentWidth: function(ownerContext, contentWidth) {
 		var width = this.callParent(arguments),
 				c = ownerContext.target,
 				m = c.el.getMargin();
@@ -20,7 +20,7 @@ Ext.define('NextThought.layout.component.CustomTemplate', {
 	},
 
 
-	publishInnerWidth: function(ownerContext, width){
+	publishInnerWidth: function(ownerContext, width) {
 		var innerWidth = width - ownerContext.getFrameInfo().width,
 			targetContext = ownerContext.targetContext,
 			m = targetContext.el.getMargin();
@@ -34,7 +34,7 @@ Ext.define('NextThought.layout.component.CustomTemplate', {
 	},
 
 
-	publishInnerHeight: function (ownerContext, height) {
+	publishInnerHeight: function(ownerContext, height) {
 		var innerHeight = height - ownerContext.getFrameInfo().height,
 			targetContext = ownerContext.targetContext,
 			m = targetContext.el.getMargin();

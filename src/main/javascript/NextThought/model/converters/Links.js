@@ -1,13 +1,13 @@
 Ext.define('NextThought.model.converters.Links', {
 	override: 'Ext.data.Types',
-	requires:[
+	requires: [
 		'Ext.data.SortTypes'
 	],
-	LINKS : {
+	LINKS: {
 		type: 'links',
 		sortType: null,
 
-		convert: function(v){
+		convert: function(v) {
 			if (v && v.getRelHref) {
 				//This happens if you set the links field on one record from another.
 				//e.g. calling rec1.copyFields(rec2, 'Links')
@@ -15,12 +15,12 @@ Ext.define('NextThought.model.converters.Links', {
 			}
 			return {
 				links: v,
-				asJSON: function(){return v;},
-				getRelHref: function(rel){
-					var i, c = this.links,len = c.length;
-					if(typeof(c) === 'object'){
-						for(i=len-1; i>=0; i--){
-							if(c[i].rel === rel) {
+				asJSON: function() {return v;},
+				getRelHref: function(rel) {
+					var i, c = this.links, len = c.length;
+					if (typeof(c) === 'object') {
+						for (i = len - 1; i >= 0; i--) {
+							if (c[i].rel === rel) {
 								return c[i].href;
 							}
 						}
@@ -32,11 +32,11 @@ Ext.define('NextThought.model.converters.Links', {
 					return null;
 				},
 				getLinksForRel: function(rel) {
-					var i, c = this.links,len = c.length, results = [];
-					if(typeof(c) === 'object'){
+					var i, c = this.links, len = c.length, results = [];
+					if (typeof(c) === 'object') {
 
-						for(i=len-1; i>=0; i--){
-							if(c[i].rel === rel) {
+						for (i = len - 1; i >= 0; i--) {
+							if (c[i].rel === rel) {
 								results.push(c[i]);
 							}
 						}
@@ -49,7 +49,7 @@ Ext.define('NextThought.model.converters.Links', {
 			};
 		}
 	}
-},function(){
+},function() {
 	this.LINKS.sortType = Ext.data.SortTypes.none;
 });
 

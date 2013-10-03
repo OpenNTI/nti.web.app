@@ -4,7 +4,7 @@ Ext.define('NextThought.view.chat.log.NotificationEntry', {
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'log-notification-wrapper',
-		cn:[{
+		cn: [{
 			cls: 'message',
 			html: '{message}'
 		}]
@@ -14,7 +14,7 @@ Ext.define('NextThought.view.chat.log.NotificationEntry', {
 		message: '.message'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData.message = this.message;
 	}

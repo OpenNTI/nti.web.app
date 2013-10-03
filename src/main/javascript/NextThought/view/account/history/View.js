@@ -23,7 +23,7 @@ Ext.define('NextThought.view.account.history.View', {
 	},
 
 
-	constructor: function () {
+	constructor: function() {
 		this.items = [
 			{xtype: 'box', cls: 'view-title', autoEl: {}},
 			{
@@ -50,7 +50,7 @@ Ext.define('NextThought.view.account.history.View', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var chatTab = this.down('[title=Chats]');
@@ -60,12 +60,12 @@ Ext.define('NextThought.view.account.history.View', {
 	},
 
 
-	getActiveView: function () {
-		return this.down("[title=Notes]").isVisible() ? this.down("[title=Notes]") : this.down("[title=Bookmarks]");
+	getActiveView: function() {
+		return this.down('[title=Notes]').isVisible() ? this.down('[title=Notes]') : this.down('[title=Bookmarks]');
 	},
 
 
-	applyFilters: function (filter) {
+	applyFilters: function(filter) {
 		if (Ext.isEmpty(filter)) {
 			return;
 		}
@@ -77,14 +77,14 @@ Ext.define('NextThought.view.account.history.View', {
 		s.removeAll();
 		s.clearFilter();
 		if (filter) {
-			Ext.each(filter.value, function (item) {
+			Ext.each(filter.value, function(item) {
 				var mt = item.value;
 				if (mt) {
 					selectedMimeTypes.push(mt);
 				}
 			});
 			s.filter([
-				{filterFn: function (item) {
+				{filterFn: function(item) {
 					return filter.test(item);
 				}}
 			]);

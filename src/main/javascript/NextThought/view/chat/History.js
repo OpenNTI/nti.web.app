@@ -17,13 +17,13 @@ Ext.define('NextThought.view.chat.History', {
 	defaultType: 'chat-history-item',
 	border: false,
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.initializeStore();
 	},
 
 
-	initializeStore: function () {
+	initializeStore: function() {
 		if (NextThought.store.PageItem.prototype.proxy.url === 'tbd') {
 			Ext.defer(this.initializeStore, 100, this);
 			return;
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.chat.History', {
 		}
 
 
-		var s = NextThought.store.PageItem.create({ filters: [ mergeChatsFilter ], pageSize: 100 });
+		var s = NextThought.store.PageItem.create({ filters: [mergeChatsFilter], pageSize: 100 });
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
@@ -69,13 +69,13 @@ Ext.define('NextThought.view.chat.History', {
 	},
 
 
-	onAdded: function (ownerCt) {
+	onAdded: function(ownerCt) {
 		this.callParent(arguments);
 		this.relayEvents(ownerCt, ['peek']);
 	},
 
 
-	getStore: function () {
+	getStore: function() {
 		if (!this.store) {
 			this.initializeStore();
 		}
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.chat.History', {
 	},
 
 
-	prefetchNext: function () {
+	prefetchNext: function() {
 		if (!this.rendered) {
 			Ext.log.warn('Not rendered yet');
 			return;
@@ -114,7 +114,7 @@ Ext.define('NextThought.view.chat.History', {
 
 		if (links && links['batch-next'] && !s.isLoading()) {
 			s.clearOnPageLoad = false;
-			s.getProxy().buildUrl = function () {
+			s.getProxy().buildUrl = function() {
 				return links['batch-next'];
 			};
 			s.nextPage();
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.chat.History', {
 	},
 
 
-	storeLoaded: function (s) {
+	storeLoaded: function(s) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.storeLoaded, this, arguments), this, {single: true});
 			return;
@@ -135,7 +135,7 @@ Ext.define('NextThought.view.chat.History', {
 
 		var body, l = s.batchLinks;
 		this.removeAll(true);
-		this.add(Ext.Array.map(s.getRange(), function (a) {
+		this.add(Ext.Array.map(s.getRange(), function(a) {
 			return {record: a, store: s};
 		}));
 
@@ -211,25 +211,25 @@ Ext.define('NextThought.view.chat.HistoryItem', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.fillInInformation();
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onClick', this);
 	},
 
 
-	onClick: function (e) {
+	onClick: function(e) {
 		e.stopEvent();
 		this.getTranscriptsForOccupants();
 	},
 
 
-	getTranscriptsForOccupants: function () {
+	getTranscriptsForOccupants: function() {
 		var records = [],
 			store = this.store,
 			occupants = (this.record.get('Contributors') || []).slice(),
@@ -238,7 +238,7 @@ Ext.define('NextThought.view.chat.HistoryItem', {
 
 		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
 		// paging them in is not really in the cards for now.)
-		store.snapshot.each(function (obj) {
+		store.snapshot.each(function(obj) {
 			var list = (obj.get('Contributors') || []),
 				len = list.length;
 
@@ -254,7 +254,7 @@ Ext.define('NextThought.view.chat.HistoryItem', {
 	},
 
 
-	fillInInformation: function () {
+	fillInInformation: function() {
 		var me = this,
 			record = me.record,
 			roomInfo = record.get('RoomInfo'),
@@ -278,7 +278,7 @@ Ext.define('NextThought.view.chat.HistoryItem', {
 				usernames.push('Empty');
 			}
 
-			Ext.each(users, function (u) {
+			Ext.each(users, function(u) {
 				if (!isMe(u)) {
 					if (userCount <= 4) {
 						if (userCount > 1) {

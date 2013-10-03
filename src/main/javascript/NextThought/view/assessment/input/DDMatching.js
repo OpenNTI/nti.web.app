@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.assessment.input.DDMatching',{
+Ext.define('NextThought.view.assessment.input.DDMatching', {
 	extend: 'NextThought.view.assessment.input.Base',
-//	alias: 'widget.question-input-matchingpart',
+  //	alias: 'widget.question-input-matchingpart',
 
-	require:[
+	require: [
 		'Ext.dd.DragZone',
 		'Ext.dd.DropZone',
 		'Ext.dd.DragSource',
@@ -10,15 +10,15 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 		'Ext.dd.StatusProxy'
 	],
 
-	inputTpl: Ext.DomHelper.markup({ cls: 'dd-matching', cn:[
-		{'tag':'tpl', 'for': 'matches', cn:[{
-			cls: 'match', cn:[
+	inputTpl: Ext.DomHelper.markup({ cls: 'dd-matching', cn: [
+		{'tag': 'tpl', 'for': 'matches', cn: [{
+			cls: 'match', cn: [
 				{ cls: 'control'},
-				{ cls: 'label-part', cn:[
-					{tag:'span', cls:'placeholder', html:'Term'}
+				{ cls: 'label-part', cn: [
+					{tag: 'span', cls: 'placeholder', html: 'Term'}
 				]},
-				{ cls: 'value-part', 'data-part':'{[xindex-1]}', cn:[
-					{ cls: 'text', html:'{value}' }
+				{ cls: 'value-part', 'data-part': '{[xindex-1]}', cn: [
+					{ cls: 'text', html: '{value}' }
 				]}
 			]}
 		]}
@@ -27,19 +27,19 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 
 	solTpl: Ext.DomHelper.createTemplate({
 		cls: 'matching-solution',
-		cn: [{ tag:'span', html:'{0}'},{tag: 'span', cls: 'solution-matching-text', html:'{1}'}]
+		cn: [{ tag: 'span', html: '{0}'},{tag: 'span', cls: 'solution-matching-text', html: '{1}'}]
 	}).compile(),
 
 
 	labelTpl: Ext.DomHelper.createTemplate({
-		tag:'span', cls:'dd-label-token', 'data-part':'{1}', cn:[
-			{tag:'span', cls: 'value', html:'{0}' },
-			{tag:'span', cls:'x'}
+		tag: 'span', cls: 'dd-label-token', 'data-part': '{1}', cn: [
+			{tag: 'span', cls: 'value', html: '{0}' },
+			{tag: 'span', cls: 'x'}
 		]
 	}).compile(),
 
 
-	labelsTpm: Ext.DomHelper.createTemplate({ cls:'labels', html:'{0}' }).compile(),
+	labelsTpm: Ext.DomHelper.createTemplate({ cls: 'labels', html: '{0}' }).compile(),
 
 
 	renderSelectors: {
@@ -48,14 +48,14 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		var values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels')),
-			i=0, m = [], me = this;
+			i = 0, m = [], me = this;
 
-		for(i; i < values.length; i++){
+		for (i; i < values.length; i++) {
 			m.push({
 				value: me.filterHTML(values[i])
 			});
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var me = this;
@@ -75,11 +75,11 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 		this.injectLabels();
 	},
 
-	handleClick: function(e){
-		var t = e.getTarget('.x',null,true),
+	handleClick: function(e) {
+		var t = e.getTarget('.x', null, true),
 			p = t ? t.up('.dd-label-token') : null,
 			l = p ? p.up('.label-part') : null, tid;
-		if( t && p ){
+		if (t && p) {
 			console.log('clicked label token');
 			tid = p.getAttribute('data-part');
 			p.remove();
@@ -89,26 +89,26 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 		}
 	},
 
-	showLabelToken: function(tokenId){
+	showLabelToken: function(tokenId) {
 		var q = this.up('assessment-question'),
-			l = q.el.down('.labels .dd-label-token[data-part='+tokenId+']');
+			l = q.el.down('.labels .dd-label-token[data-part=' + tokenId + ']');
 
-		if(l){l.show();}
+		if (l) {l.show();}
 	},
 
-	injectLabels: function(){
+	injectLabels: function() {
 		var labels = this.filterHTML(Ext.clone(this.part.get('labels'))),
 			q = this.up('assessment-question'),
 			qBodyPart = q && q.getLayout().getRenderTarget(),
 			tpl = this.labelTpl,
 			out = [];
 
-		if(!qBodyPart) {
-			this.mon(q,'afterlayout',this.injectLabels,this,{single:true});
+		if (!qBodyPart) {
+			this.mon(q, 'afterlayout', this.injectLabels, this, {single: true});
 			return;
 		}
 
-		Ext.each(labels, function(l, i){
+		Ext.each(labels, function(l, i) {
 			out.push(tpl.apply([l, i]));
 		});
 
@@ -125,10 +125,10 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	getValue: function(){
+	getValue: function() {
 		var val = {};
 
-		this.el.select('.match').each(function(e){
+		this.el.select('.match').each(function(e) {
 			var p1 = e.down('.label-part'),
 				labelIndex, valueIndex,
 				p2 = e.down('.value-part');
@@ -136,7 +136,7 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 			p1 = p1 && p1.down('.dd-label-token');
 			labelIndex = p1 && parseInt(p1.getAttribute('data-part'), 10);
 			valueIndex = p2 && parseInt(p2.getAttribute('data-part'), 10);
-			if(labelIndex >= 0 ){
+			if (labelIndex >= 0) {
 				val[labelIndex] = valueIndex;
 			}
 		});
@@ -153,14 +153,14 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 
 		values = this.filterHTML(values);
 		labels = this.filterHTML(labels);
-		Ext.each(part.get('solutions'),function(s){
+		Ext.each(part.get('solutions'), function(s) {
 			var x = s.get('value'), i, valueIndex;
 
-			for(i in x){
-				if(x.hasOwnProperty(i)){
+			for (i in x) {
+				if (x.hasOwnProperty(i)) {
 					i = parseInt(i, 10);
 					valueIndex = x[i];
-					out.push( tpl.apply( [labels[i], values[valueIndex]]));
+					out.push(tpl.apply([labels[i], values[valueIndex]]));
 				}
 			}
 		});
@@ -169,19 +169,19 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	mark: function(){
+	mark: function() {
 		var s = this.part.get('solutions')[0],
 			c = s.get('value'),
 			values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels'));
 
-		this.getEl().select('.match').removeCls(['correct','incorrect']);
+		this.getEl().select('.match').removeCls(['correct', 'incorrect']);
 
-		Ext.each(this.getEl().query('.match'),function(match){
+		Ext.each(this.getEl().query('.match'), function(match) {
 			var l = Ext.fly(match).down('.label-part'), labelIndex, d, valueIndex, cls;
 
 			l = l && l.down('.dd-label-token');
-			labelIndex = l && parseInt(l.getAttribute('data-part'),10);
+			labelIndex = l && parseInt(l.getAttribute('data-part'), 10);
 			d = Ext.fly(match).down('.value-part');
 			valueIndex = d && parseInt(d.getAttribute('data-part'), 10);
 			cls = (labelIndex >= 0 && valueIndex === c[labelIndex]) ? 'correct' : 'incorrect';
@@ -190,39 +190,39 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	markCorrect: function(){
+	markCorrect: function() {
 		this.callParent();
 		this.mark();
 	},
 
 
-	markIncorrect: function(){
+	markIncorrect: function() {
 		this.callParent();
 		this.mark();
 	},
 
 
-	reset: function(){
+	reset: function() {
 		var q = this.up('assessment-question');
 
 		q.el.select('.dd-label-token').show();
 		this.el.select('.dd-label-token').remove();
 		this.el.select('.label-part').removeCls('matched');
-		this.el.select('.match').removeCls(['correct','incorrect']);
+		this.el.select('.match').removeCls(['correct', 'incorrect']);
 
 		this.callParent();
 	},
 
 
-	editAnswer: function(){
-		if(this.submitted){
+	editAnswer: function() {
+		if (this.submitted) {
 			this.up('assessment-question').reset();
 			this.disableSubmission();
 		}
 	},
 
 
-	initializeDragZone: function(){
+	initializeDragZone: function() {
 		var me = this,
 			proxy = new Ext.dd.StatusProxy({
 				id: me.el.id + '-drag-status-proxy',
@@ -231,15 +231,15 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 			q = this.up('assessment-question');
 
 		me.dragZone = new Ext.dd.DragZone(q.getEl(), {
-			getDragData: function(e){
+			getDragData: function(e) {
 				var sourceEl = e.getTarget(me.self.DDSELECTOR, undefined, true), d;
 
 				//We want to make it un-draggable when it's in a grade mode.
-				if(e.getTarget('.correct') || e.getTarget('.incorrect')){
+				if (e.getTarget('.correct') || e.getTarget('.incorrect')) {
 					sourceEl = null;
 				}
 
-				if(sourceEl){
+				if (sourceEl) {
 					d = sourceEl.dom.cloneNode(true);
 					d.id = Ext.id();
 
@@ -251,13 +251,13 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 					return me.dragData;
 				}
 			},
-			getRepairXY: function(){
+			getRepairXY: function() {
 				return this.dragData.sourceEl.getXY();
 			},
 
-			repairHighlightColor: "ffffff",
+			repairHighlightColor: 'ffffff',
 
-			afterInvalidDrop: function(){
+			afterInvalidDrop: function() {
 				var s = this.dragData.sourceEl;
 				s.show();
 			},
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 
 			proxy: proxy,
 
-			onStartDrag: function(){
+			onStartDrag: function() {
 				var el = this.getProxy().el.down(me.self.DDSELECTOR),
 					s = this.dragData.sourceEl,
 					w = s.getWidth() + 'px',
@@ -276,8 +276,8 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(0, 20);
 
-				if(el){
-					el.setStyle( {
+				if (el) {
+					el.setStyle({
 						'width': w,
 						'height': h
 					});
@@ -289,26 +289,26 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 		});
 	},
 
-	initializeDropZone: function(){
+	initializeDropZone: function() {
 		var me = this;
 		this.dropZone = new Ext.dd.DropZone(this.getEl(), {
 			getTargetFromEvent: function(e) {
 				return e.getTarget('.match', null, true);
 			},
-			onNodeEnter: function(target, dd, e, data){
+			onNodeEnter: function(target, dd, e, data) {
 				var p = !target.is('.match') ? target.up('.match') : target;
 
-				if(p){
+				if (p) {
 					Ext.fly(p).addCls('target-hover');
 				}
 			},
-			onNodeOut: function(target, dd, e, data){
+			onNodeOut: function(target, dd, e, data) {
 				var p = !target.is('.match') ? target.up('.match') : target;
 
-				if(p){ Ext.fly(p).removeCls('target-hover'); }
+				if (p) { Ext.fly(p).removeCls('target-hover'); }
 			},
-			onNodeOver: function(target, dd, e, data){
-				if(target.dom === dd.dragData.sourceEl.dom){
+			onNodeOver: function(target, dd, e, data) {
+				if (target.dom === dd.dragData.sourceEl.dom) {
 					return false;
 				}
 
@@ -317,18 +317,18 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 				return Ext.dd.DropZone.prototype.dropAllowed;
 			},
 
-			onNodeDrop: function(target, dd, e, data){
+			onNodeDrop: function(target, dd, e, data) {
 				var m = target.down('.label-part'),
 					d = dd.dragData.ddel, tid, t,
 					isDraggedFromSource = !Boolean(dd.dragData.sourceEl.up('.match')), sp;
 
-				if(!isDraggedFromSource){
+				if (!isDraggedFromSource) {
 					sp = dd.dragData.sourceEl.up('.label-part');
 					sp.removeCls('matched');
 					dd.dragData.sourceEl.remove();
 				}
 
-				if(Ext.fly(m).down('.dd-label-token')){
+				if (Ext.fly(m).down('.dd-label-token')) {
 					//Before we drop a new token, make sure we move back the previous token.
 					t = Ext.fly(m).down('.dd-label-token');
 					tid = t && t.getAttribute('data-part');
@@ -339,13 +339,13 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 				m.addCls('matched');
 				m.dom.appendChild(d);
 
-				Ext.defer(function(){
+				Ext.defer(function() {
 					me.updateLayout();
 					me.syncElementHeight();
 				}, 1);
 
 
-				if(me.submissionDisabled && me.shouldEnableSubmission()){
+				if (me.submissionDisabled && me.shouldEnableSubmission()) {
 					me.enableSubmission();
 				}
 				return true;
@@ -354,7 +354,7 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 	},
 
 
-	shouldEnableSubmission: function(){
+	shouldEnableSubmission: function() {
 		var ml = this.el.select('.label-part.matched').elements.length,
 			l = this.el.select('.label-part').elements.length;
 
@@ -362,7 +362,7 @@ Ext.define('NextThought.view.assessment.input.DDMatching',{
 		return ml === l;
 	},
 
-	statics:{
+	statics: {
 		'DDSELECTOR': '.dd-label-token'
 	}
 

@@ -1,10 +1,10 @@
 /*jslint */
 /*global DomUtils */
-Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
+Ext.define('NextThought.view.slidedeck.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-slidedeck',
 
-	requires:[
+	requires: [
 		'NextThought.util.Dom',
 		'NextThought.view.slidedeck.SlideDeck'
 	],
@@ -13,13 +13,13 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 	cls: 'content-slidedeck-container',
 
 	statics: {
-		getData: function(dom, reader){
+		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
 				description = el.down('span.description'),
 				thumbnail = el.down('img');
 
-			Ext.applyIf(data,{
+			Ext.applyIf(data, {
 				description: (description && description.getHTML()) || '',
 				thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
 			});
@@ -27,8 +27,8 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 		}
 	},
 
-	constructor: function(config){
-		if(!config || !config.contentElement){
+	constructor: function(config) {
+		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
@@ -39,15 +39,15 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 			description = el.down('span.description'),
 			thumbnail = el.down('img');
 
-		Ext.applyIf(data,{
+		Ext.applyIf(data, {
 			basePath: reader && reader.basePath,
 			description: (description && description.getHTML()) || '',
 			thumbnail: (thumbnail && thumbnail.getAttribute('src')) || ''
 		});
 
-		Ext.apply(config,{
-			layout:'fit',
-			items:[{
+		Ext.apply(config, {
+			layout: 'fit',
+			items: [{
 				xtype: 'content-slidedeck',
 				data: data,
 				contentElement: dom,
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel',{
 	},
 
 
-	findLine: function(){
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

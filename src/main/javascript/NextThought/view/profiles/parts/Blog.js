@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.profiles.parts.Blog', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.profile-blog',
+	alias: 'widget.profile-blog',
 
 	requires: [
 		'NextThought.view.profiles.parts.BlogEditor',
@@ -10,15 +10,15 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		'NextThought.layout.component.Natural'
 	],
 
-	defaultType:     'profile-blog-list-item',
-	layout:          'auto',
+	defaultType: 'profile-blog-list-item',
+	layout: 'auto',
 	componentLayout: 'natural',
-	childEls:        ['body'],
-	getTargetEl:     function () { return this.body; },
-	hidden:          true,
+	childEls: ['body'],
+	getTargetEl: function() { return this.body; },
+	hidden: true,
 
 	uriFriendlyName: 'Thoughts',
-	ui:  'blog',
+	ui: 'blog',
 	cls: 'blog',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -31,10 +31,10 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	renderSelectors: {
-		listViewEl:     '.list-view',
+		listViewEl: '.list-view',
 		listViewBodyEl: '.list-view .body',
-		postViewEl:     '.post-view',
-		btnNewEntryEl:  '.new-entry-btn'
+		postViewEl: '.post-view',
+		btnNewEntryEl: '.new-entry-btn'
 	},
 
 
@@ -46,14 +46,14 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	 * This may seem dangerous, but {@link Ext.Component#isOwnerLayout} is a function that I injected into the system.
 	 * @see NextThought.overrides.Component#isOwnerLayout
 	 * @param name
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
-	isOwnerLayout: function(name){
-		return name==="card" || this.callParent(arguments);
+	isOwnerLayout: function(name) {
+		return name === 'card' || this.callParent(arguments);
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		if (!this.shouldShowThoughtTab()) {
@@ -70,7 +70,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		this.on('show-post', this.updateLocation, this);
 	},
 
-	shouldShowThoughtTab: function () {
+	shouldShowThoughtTab: function() {
 		// NOTE: we will drive showing the tab or not showing the tab based off the workspace.
 		// Tweak this rule a bit: If the user can't create a blog,
 		// then we should hide this tab for their profile.
@@ -78,13 +78,13 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	canCreateNewBlog: function () {
+	canCreateNewBlog: function() {
 		// We will drive showing the newEntry btn based on whether or not the user has the capability.
 		return isMe(this.username) && $AppConfig.service.canBlog();
 	},
 
 
-	buildBlog: function (reresolveUser) {
+	buildBlog: function(reresolveUser) {
 		function fail(response) {
 			console.warn('No blog object (Status: ' + response.status + '): ' + response.responseText);
 			try {
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		var user = this.user,
 				req = {
 					url: user && user.hasBlog() ? user.getLink('Blog') : null,
-					scope:   this,
+					scope: this,
 					success: this.loadContents,
 					failure: fail
 				},
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 				if (user) {
 					user.summaryObject = user.summaryObject || Boolean(reresolveUser);
 				}
-				UserRepository.getUser(this.username, function (user) {
+				UserRepository.getUser(this.username, function(user) {
 					this.user = user;
 					Ext.defer(this.buildBlog, 1, this);
 				}, this, Boolean(reresolveUser));
@@ -139,9 +139,9 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
-		var me  = this;
+		var me = this;
 
 		this.listViewBodyEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.postViewEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -151,8 +151,8 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			this.mon(this.btnNewEntryEl, 'click', this.onNewPost, this);
 			this.on({
 				scope: this,
-				'deactivate': function(){ me.btnNewEntryEl.hide(); },
-				'activate': function(){
+				'deactivate': function() { me.btnNewEntryEl.hide(); },
+				'activate': function() {
 					me.btnNewEntryEl.show();
 					me.handleScrollNewEntryBtnLock();
 				}
@@ -166,11 +166,11 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		}
 
 		Ext.EventManager.onWindowResize(this.handleWindowResize, this);
-		this.on('destroy', function () {Ext.EventManager.removeResizeListener(this.handleWindowResize, this);}, this);
+		this.on('destroy', function() {Ext.EventManager.removeResizeListener(this.handleWindowResize, this);}, this);
 	},
 
 
-	handleWindowResize: function () {
+	handleWindowResize: function() {
 		var wrapperEl, profileEl,
 				btnEl = this.btnNewEntryEl,
 				profileDom = Ext.get('profile');
@@ -185,7 +185,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	handleScrollNewEntryBtnLock: function (e, profileDom) {
+	handleScrollNewEntryBtnLock: function(e, profileDom) {
 		profileDom = profileDom || Ext.get('profile').dom;
 		//This is only called when the btnNewEntryEl is present.
 		var wrapperEl, profileEl,
@@ -228,7 +228,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	swapViews: function (viewToShow) {
+	swapViews: function(viewToShow) {
 		if (!this.rendered || this.destroying || this.isDestroyed) {
 			return;
 		}
@@ -237,7 +237,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			v = viewToShow !== 'post';
 
 		try {
-			this.fireEvent(v?'activate':'deactivate',this);
+			this.fireEvent(v ? 'activate' : 'deactivate', this);
 			this.listViewBodyEl[fnm[v]]();
 			this.postViewEl[fnm[!v]]();
 			this.btnNewEntryEl[(v) ? 'removeCls' : 'addCls']('disabled');
@@ -250,13 +250,13 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	warnBeforeDismissingEditor: function () {
-		var msg = "You are currently editing a thought. Please save or cancel it first.";
-		Ext.defer(function () { alert({msg: msg}); }, 1);
+	warnBeforeDismissingEditor: function() {
+		var msg = 'You are currently editing a thought. Please save or cancel it first.';
+		Ext.defer(function() { alert({msg: msg}); }, 1);
 	},
 
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		var b = Boolean(this.isVisible() && this.el.down('.blog-editor'));
 		if (b) {
 			this.warnBeforeDismissingEditor();
@@ -268,7 +268,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	onNewPost: function (e) {
+	onNewPost: function(e) {
 		e.stopEvent();
 		if (!this.btnNewEntryEl.hasCls('disabled')) {
 			this.showPost(null, ['edit']);
@@ -276,7 +276,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	loadContents: function (resp) {
+	loadContents: function(resp) {
 		if (this.tab && this.tab.isHidden()) {
 			this.tab.show();
 		}
@@ -291,9 +291,9 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		this.store.proxy.url = j.getLink('contents');
 
 		this.mon(this.store, {
-			scope:  this,
-			add:    this.addedContents,
-			load:   this.loadedContents,
+			scope: this,
+			add: this.addedContents,
+			load: this.loadedContents,
 			remove: this.removedContent
 
 		});
@@ -302,33 +302,33 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	addedContents: function (store, records, index) {
+	addedContents: function(store, records, index) {
 		var me = this;
 		me.suspendLayouts();
 		if (me.noPostPlaceholder) {
 			me.noPostPlaceholder.destroy();
 		}
-		Ext.each(records, function (i) { me.insert(index, {record: i}); }, me, true);
+		Ext.each(records, function(i) { me.insert(index, {record: i}); }, me, true);
 		me.resumeLayouts(true);
 	},
 
 
-	removedContent: function (store, record, index) {
+	removedContent: function(store, record, index) {
 		if (store.getCount() === 0) {
 			this.handleNoVisiblePosts();
 		}
 	},
 
 
-	handleNoVisiblePosts: function () {
+	handleNoVisiblePosts: function() {
 		var me = this;
 		me.addCls('make-white');
 		me.noPostPlaceholder = me.add({
 			xtype: 'no-thought',
 			userObject: me.user,
 			listeners: {
-				destroy: function(){
-					if(!me.isDestroyed){
+				destroy: function() {
+					if (!me.isDestroyed) {
 						me.removeCls('make-white');
 					}
 				}
@@ -339,7 +339,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	loadedContents: function (store, records, success) {
+	loadedContents: function(store, records, success) {
 		var a = this.activePost,
 				r = a && a.record, m;
 
@@ -352,7 +352,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			this.noPostPlaceholder.destroy();
 		}
 
-		m = Ext.Array.map(records, function (i) {
+		m = Ext.Array.map(records, function(i) {
 
 			if (r && i.get('ID') === r.get('ID')) {
 				console.debug('Loaded active record into store...');
@@ -367,7 +367,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	updateLocation: function (postId, subsection) {
+	updateLocation: function(postId, subsection) {
 		var u = this.user,
 			args = [this.uriFriendlyName, postId, subsection];
 
@@ -382,40 +382,40 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	getStateData: function(){
+	getStateData: function() {
 		var p = this.getParams();
 
-		if( this.restoring ){
-			p = this.restoring===true ? null : this.restoring;
+		if (this.restoring) {
+			p = this.restoring === true ? null : this.restoring;
 		}
 
-		return Ext.Array.clean([this.uriFriendlyName,p]).join('/');
+		return Ext.Array.clean([this.uriFriendlyName, p]).join('/');
 	},
 
 
-	restore: function(data,finishCallback){
+	restore: function(data,finishCallback) {
 		var me = this;
 
-		if(Ext.isEmpty(data)){
+		if (Ext.isEmpty(data)) {
 			Ext.callback(finishCallback);
 			return;
 		}
 
 		me.restoring = data || true;
-		me.setParams(data,null,function(){
+		me.setParams(data, null, function() {
 			delete me.restoring;
 			var active = me.activePost || new Ext.util.Observable();
 
-			active.on('ready',finishCallback,me,{single:true});
+			active.on('ready', finishCallback, me, {single: true});
 
-			if(active.xtype !== 'profile-blog-post'){
+			if (active.xtype !== 'profile-blog-post') {
 				active.fireEvent('ready');
 			}
 		});
 	},
 
 
-	setParams: function (paramsString, queryObject, callback) {
+	setParams: function(paramsString, queryObject, callback) {
 		var me = this, id, r, s = me.store, sections, args = [];
 
 		if (!me.rendered) {
@@ -444,14 +444,14 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		}
 
 		r = {
-			url:     me.user.getLink('Blog') + '/' + encodeURIComponent(id),
-			scope:   me,
-			failure: function () {
+			url: me.user.getLink('Blog') + '/' + encodeURIComponent(id),
+			scope: me,
+			failure: function() {
 				Ext.callback(callback);
 				me.setParams();
 				alert('Could not load post');
 			},
-			success: function (resp) {
+			success: function(resp) {
 				args[0] = ParseUtils.parseItems(resp.responseText).first();
 				me.showPost.apply(me, args);
 				Ext.callback(callback);
@@ -462,19 +462,19 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	getParams: function () {
+	getParams: function() {
 		var a = (this.activePost || {}).record;
 		return a ? a.get('ID') : undefined;
 	},
 
 
-	onDestroy: function () {
+	onDestroy: function() {
 		this.cleanPreviousPost();
 		this.callParent(arguments);
 	},
 
 
-	cleanPreviousPost: function () {
+	cleanPreviousPost: function() {
 		var post = this.activePost;
 		delete this.activePost;
 
@@ -487,7 +487,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	nextPrevPost: function (cmp, rec, direction) {
+	nextPrevPost: function(cmp, rec, direction) {
 		var s = this.store,
 				dx = (direction === 'next' ? -1 : 1),
 				r = s && s.find('ID', rec.get('ID'), 0, false, true, true);
@@ -499,7 +499,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	closePost: function (leaveLocation) {
+	closePost: function(leaveLocation) {
 		this.swapViews('list');
 		this.updateLayout();
 
@@ -511,7 +511,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	showPost: function (record, action, query) {
+	showPost: function(record, action, query) {
 		var s = this.store,
 				me = this,
 				r, xtype = 'profile-blog-post', cfg;
@@ -533,18 +533,18 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		}
 
 		cfg = {
-			ownerCt:          this,
-			renderTo:         this.postViewEl,
-			record:           record,
+			ownerCt: this,
+			renderTo: this.postViewEl,
+			record: record,
 			selectedSections: action,
-			queryObject:      query,
-			listeners:        {
-				scope:           this,
-				destroy:         this.closePost,
+			queryObject: query,
+			listeners: {
+				scope: this,
+				destroy: this.closePost,
 				'navigate-post': this.nextPrevPost
 			},
-			xhooks:           {
-				destroy: function () {
+			xhooks: {
+				destroy: function() {
 					delete this.ownerCt;
 					return this.callParent(arguments);
 				}
@@ -555,18 +555,18 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			xtype = 'profile-blog-editor';
 		}
 		else {
-			cfg.listeners.destroy = function () {
+			cfg.listeners.destroy = function() {
 				me.closePost();
 			};
 		}
 
-		this.postViewEl.scrollTo('top',0);
+		this.postViewEl.scrollTo('top', 0);
 		this.activePost = Ext.widget(xtype, cfg);
 		this.updateLayout();
 	},
 
 
-	getRefItems: function () {
+	getRefItems: function() {
 		var items = this.callParent(arguments) || [];
 		if (this.activePost) {
 			items.push(this.activePost);

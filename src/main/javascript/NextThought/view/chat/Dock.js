@@ -27,7 +27,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	constructor: function () {
+	constructor: function() {
 		this.items = [
 			{
 				xtype: 'chat-history',
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		if (Ext.is.iPad) {
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.chat.Dock', {
 				mouseout: 'stopExpand'
 			});
 		}
-		Ext.EventManager.onWindowResize(function () {
+		Ext.EventManager.onWindowResize(function() {
 			this.maxHeight = Math.min(300, Ext.Element.getViewportHeight() * 0.6);
 		}, this, null);
 
@@ -78,46 +78,46 @@ Ext.define('NextThought.view.chat.Dock', {
 			Ext.DomHelper.append(this.down('header').getEl(), {cls: 'count', html: '0'})
 		]);
 
-		this.placeholder.getSize = function () {
+		this.placeholder.getSize = function() {
 			return {height: 1};
 		};
 	},
 
 
-	convertCollapseDir: function () {
+	convertCollapseDir: function() {
 		return 'b';
 	},
 
 
-	maybeExpand: function () {
+	maybeExpand: function() {
 		this.stopExpand();
 		this.expanDelayTimer = Ext.defer(this.floatCollapsedPanel, 750, this);
 	},
 
 
-	stopExpand: function () {
+	stopExpand: function() {
 		clearTimeout(this.expanDelayTimer);
 	},
 
 
-	floatCollapsedPanel: function () {
+	floatCollapsedPanel: function() {
 		if (this.items.length > 0) {
 			this.addCls('open');
-//			if (!Ext.is.iPad) {
+      //			if (!Ext.is.iPad) {
 			this.fireEvent('peek');
-//			}
+      //			}
 			this.callParent();
 		}
 	},
 
 
-	slideOutFloatedPanel: function () {
+	slideOutFloatedPanel: function() {
 		this.removeCls('open');
 		return this.callParent();
 	},
 
 
-	hideOrShowPanel: function () {
+	hideOrShowPanel: function() {
 		if (this.hasCls('open')) {
 			this.slideOutFloatedPanel();
 		}
@@ -127,7 +127,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	synchronizeHeight: function () {
+	synchronizeHeight: function() {
 		if (!this.floated && !this.isSliding) {
 			return;
 		}
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	syncHistoryHeight: function () {
+	syncHistoryHeight: function() {
 		if (!this.floated && !this.isSliding) {
 			return;
 		}
@@ -168,7 +168,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	onRemove: function () {
+	onRemove: function() {
 		this.synchronizeHeight();
 
 		if (this.items.length === 0 && this.slideOutTask) {
@@ -178,7 +178,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	updateAll: function () {
+	updateAll: function() {
 		if (!this.rendered) {
 			return;
 		}
@@ -187,9 +187,9 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	updateTitle: function () {
+	updateTitle: function() {
 		var total = 0;
-		this.items.each(function (o) {
+		this.items.each(function(o) {
 			if (o && o.isPresented) {
 				total++;
 			}
@@ -198,11 +198,11 @@ Ext.define('NextThought.view.chat.Dock', {
 		this[total === 0 ? 'addCls' : 'removeCls']('hide-arrow');
 		this.placeholder[total === 0 ? 'addCls' : 'removeCls']('hide-arrow');
 
-		this.setTitle((total === 0) ? "Chats" : "Chats (" + total + ")");
+		this.setTitle((total === 0) ? 'Chats' : 'Chats (' + total + ')');
 	},
 
 
-	add: function () {
+	add: function() {
 		var result,
 			args = Ext.Array.slice(arguments);
 
@@ -225,7 +225,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	monitorDockItem: function (cmp) {
+	monitorDockItem: function(cmp) {
 		this.mon(cmp, {
 			scope: this,
 			'count-updated': 'updateCount',
@@ -236,10 +236,10 @@ Ext.define('NextThought.view.chat.Dock', {
 	},
 
 
-	updateCount: function () {
+	updateCount: function() {
 		var total = 0;
 
-		this.items.each(function (i) {
+		this.items.each(function(i) {
 			if (i && (i.isDestroying || i.destroyed)) {
 				return;
 			}
@@ -294,7 +294,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 		'img4': '.avatars .img4'
 	},
 
-	constructor: function () {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.fillInInformation(this.associatedWindow.roomInfo);
@@ -303,7 +303,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 		this.unread = 0;
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onClick', this);
 		this.fillInInformation(this.associatedWindow.roomInfo);
@@ -311,20 +311,20 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	onAdded: function (ownerCt) {
+	onAdded: function(ownerCt) {
 		this.callParent(arguments);
 		this.mon(ownerCt, 'peek', 'updateCount', this);
 		this.mon(ownerCt, 'peek', 'updateStatus', this);
-		this.mon(ownerCt, 'peek', function () {
+		this.mon(ownerCt, 'peek', function() {
 			this.fillInInformation(this.associatedWindow.roomInfo);
 		}, this);
 	},
 
 
-	onClick: function (e) {
+	onClick: function(e) {
 		var me = this;
 		e.stopEvent();
-		if (e.getTarget(".close")) {
+		if (e.getTarget('.close')) {
 			this.unread = 0;
 			this.updateCount();
 			this.associatedWindow.close();
@@ -335,7 +335,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 			this.unread = 0;
 			this.updateCount();
 			this.associatedWindow.show();
-			Ext.defer(function () {
+			Ext.defer(function() {
 				me.associatedWindow.focus();
 			}, 500);
 
@@ -346,7 +346,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	fillInInformation: function (roomInfo) {
+	fillInInformation: function(roomInfo) {
 		var me = this,
 			occ = roomInfo.get('Occupants'),
 			usernames = [],
@@ -358,10 +358,10 @@ Ext.define('NextThought.view.chat.DockItem', {
 			return;
 		}
 
-		UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
+		UserRepository.getUser(roomInfo.get('Occupants'), function(users) {
 			var userCount = 1, data = {};
 
-			Ext.each(users, function (u) {
+			Ext.each(users, function(u) {
 				var presence = Ext.getStore('PresenceInfo').getPresenceOf(u.getId());
 				if (!isMe(u)) {
 					if (userCount <= 4) {
@@ -415,7 +415,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	handleWindowNotify: function (msg) {
+	handleWindowNotify: function(msg) {
 		if (!this.associatedWindow.isVisible() && msg && msg.Creator && !isMe(msg.Creator)) {
 			this.unread++;
 			this.updateCount();
@@ -427,7 +427,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	setVisible: function (show) {
+	setVisible: function(show) {
 		var reSetTitle = !this.isPresented;
 		this.callParent(arguments);
 
@@ -440,7 +440,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	updateStatus: function () {
+	updateStatus: function() {
 		var display, roomInfo = this.associatedWindow.roomInfo,
 			occ = roomInfo.get('Occupants'),
 			status = this.lastUpdated,
@@ -451,7 +451,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 
 
 		if (!status) {
-			console.log("No last Active yet");
+			console.log('No last Active yet');
 		}
 
 		display = TimeUtils.getDurationText(status, cur);
@@ -460,9 +460,9 @@ Ext.define('NextThought.view.chat.DockItem', {
 			display = 'Ended';
 		}
 		else if (status > tenMinutesAgo) {
-			display = "In Progress... " + display;
+			display = 'In Progress... ' + display;
 		} else {
-			display = "Last message " + display + " ago";
+			display = 'Last message ' + display + ' ago';
 		}
 
 		if (this.statusEl) {
@@ -472,7 +472,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	},
 
 
-	updateCount: function () {
+	updateCount: function() {
 		if (this.countEl) {
 			this.countEl.update(this.unread || '');
 		}

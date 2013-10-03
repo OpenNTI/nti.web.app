@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.content.Toolbar',{
+Ext.define('NextThought.view.content.Toolbar', {
 	extend: 'Ext.container.Container',
 	requires: [
 		'NextThought.view.content.Navigation',
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.content.Toolbar',{
 	},
 
 	items: [
-		{ xtype: 'content-navigation', flex:1 },
+		{ xtype: 'content-navigation', flex: 1 },
 		{ xtype: 'content-pager' }
 	]
 });

@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.assessment.Question', {
 	extend: 'NextThought.view.content.overlay.Panel',
-	alias:  'widget.assessment-question',
+	alias: 'widget.assessment-question',
 
 	requires: [
 		'NextThought.view.assessment.Header',
@@ -11,7 +11,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	representsUserDataContainer: true,
 
 	cls: 'question scrollable',
-	ui:  'assessment',
+	ui: 'assessment',
 
 	dockedItems: [
 		{ dock: 'top', xtype: 'question-header'},
@@ -19,7 +19,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	],
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		var parts = this.question.get('parts'),
 				multiPart = (parts.length > 1);
@@ -34,14 +34,14 @@ Ext.define('NextThought.view.assessment.Question', {
 
 		if (this.questionSet) {
 			this.mon(this.questionSet, {
-				scope:          this,
+				scope: this,
 				'beforesubmit': this.gatherQuestionResponse,
-				'graded':       this.updateWithResults,
-				'reset':        this.reset
+				'graded': this.updateWithResults,
+				'reset': this.reset
 			});
 		}
 		this.mon(this, {
-			'enable-submission':  this.determineSubmissionState,
+			'enable-submission': this.determineSubmissionState,
 			'disable-submission': this.determineSubmissionState
 		});
 
@@ -49,7 +49,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	findLine: function () {
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 				range = doc.createRange();
 
@@ -58,13 +58,13 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	setupContentElement: function () {
+	setupContentElement: function() {
 		this.callParent(arguments);
 		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox');
 	},
 
 
-	retrieveAnswerLabel: function () {
+	retrieveAnswerLabel: function() {
 		var sln = Ext.get(this.contentElement).select('.naqsolution'),
 				firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
 				firstUnits;
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	determineSubmissionState: function () {
+	determineSubmissionState: function() {
 		var d = this.query('[submissionDisabled=true]'),
 				multi = this.down('assessment-multipart-submission');
 		this.submissionDisabled = (d.length !== 0);
@@ -91,11 +91,11 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	updateWithResults: function (assessedQuestionSet) {
+	updateWithResults: function(assessedQuestionSet) {
 		var q, id = this.question.getId();
 
 		if (assessedQuestionSet.isSet) {
-			Ext.each(assessedQuestionSet.get('questions'), function (i) {
+			Ext.each(assessedQuestionSet.get('questions'), function(i) {
 				if (i.getId() === id) {
 					q = i;
 					return false;
@@ -114,9 +114,9 @@ Ext.define('NextThought.view.assessment.Question', {
 		this.down('question-parts').updateWithResults(q);
 	},
 
-	gatherQuestionResponse: function (questionSet, collection) {
+	gatherQuestionResponse: function(questionSet, collection) {
 		var id = this.question.getId(), values = [];
-		Ext.each(this.query('abstract-question-input'), function (p) {
+		Ext.each(this.query('abstract-question-input'), function(p) {
 			var v = p.getValue();
 			if (v === undefined || v === null) {
 				console.warn('Question has not been answered yet');
@@ -135,7 +135,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	canSubmitIndividually: function () {
+	canSubmitIndividually: function() {
 		var c = this.contentElement;
 
 		function resolve() {
@@ -152,7 +152,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	setQuestionContent: function (part) {
+	setQuestionContent: function(part) {
 		var root = ContentUtils.getRoot(this.reader.getLocation().NTIID), c, p;
 
 		c = this.question.get('content') || '';
@@ -165,16 +165,16 @@ Ext.define('NextThought.view.assessment.Question', {
 
 		this.update(
 			Ext.DomHelper.markup({
-				 style: {verticalAlign:'initial'},
+				 style: {verticalAlign: 'initial'},
 				 html: ContentUtils.fixReferences(c + p, root)
 			 }));
 		this.updateLayout();
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
-		this.getTargetEl().select('img').on('load', function () {
+		this.getTargetEl().select('img').on('load', function() {
 			this.updateLayout();
 			this.syncElementHeight();
 		}, this, {single: true});
@@ -183,7 +183,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	markCorrect: function () {
+	markCorrect: function() {
 		this.down('question-header').markCorrect();
 		var sub = this.down('assessment-multipart-submission');
 		if (sub) {
@@ -192,7 +192,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	markIncorrect: function () {
+	markIncorrect: function() {
 		this.down('question-header').markIncorrect();
 		var sub = this.down('assessment-multipart-submission');
 		if (sub) {
@@ -201,7 +201,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	reset: function (keepAnswers) {
+	reset: function(keepAnswers) {
 		this.down('question-header').reset();
 		this.down('question-parts').reset(keepAnswers);
 		delete this.submitted;
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	checkIt: function () {
+	checkIt: function() {
 		if (this.submissionDisabled) {
 			return;
 		}

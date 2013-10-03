@@ -1,19 +1,19 @@
 Ext.define('NextThought.view.course.info.View', {
 	extend: 'Ext.Component',
-	alias:  'widget.course-info',
-	cls:    'make-white scrollable',
+	alias: 'widget.course-info',
+	cls: 'make-white scrollable',
 
-	mixins:{
+	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.initCustomScrollOn('content');
 	},
 
-	setPage: function (ntiid) {
+	setPage: function(ntiid) {
 		this.hasInfo = !!ntiid;
 
 		if (!this.rendered) {
@@ -30,50 +30,50 @@ Ext.define('NextThought.view.course.info.View', {
 	},
 
 
-	fillInPage: function (html) {
+	fillInPage: function(html) {
 		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i);
 
 		Ext.getBody().unmask();
-		if( bodyTag.length > 1){
+		if (bodyTag.length > 1) {
 			this.update(bodyTag[1]);
 		}
-		else{
+		else {
 			console.error('info page has no body tag?? ', arguments);
 		}
 	},
 
 
-	loadPage: function (pageInfo) {
+	loadPage: function(pageInfo) {
 		var me = this,
 				proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		proxy.request({
-						  pageInfo:            pageInfo,
-						  ntiid:               pageInfo.getId(),
-						  jsonpUrl:            pageInfo.getLink('jsonp_content'),
-						  url:                 pageInfo.getLink('content'),
+						  pageInfo: pageInfo,
+						  ntiid: pageInfo.getId(),
+						  jsonpUrl: pageInfo.getLink('jsonp_content'),
+						  url: pageInfo.getLink('content'),
 						  expectedContentType: 'text/html',
-						  scope:               this,
-						  success:             function (r) {
+						  scope: this,
+						  success: function(r) {
 							  if (this.currentCourseInfoNtiid !== pageInfo.getId()) {
 								  console.warn('Dropping out of order course info', this.currentCourseInfoNtiid, pageInfo);
 								  return;
 							  }
 							  me.fillInPage(r.responseText);
 						  },
-						  failure:             function (r) {
+						  failure: function(r) {
 							  console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
 						  }
 					  });
 	},
 
 
-	failedToLoad: function () {
+	failedToLoad: function() {
 		console.error('Failed to load course info', arguments);
 	},
 
 
-	onCourseChanged: function (pageInfo) {
+	onCourseChanged: function(pageInfo) {
 		console.log('Course change being handled by course info', this);
 		var l = ContentUtils.getLocation(pageInfo),
 				toc, course;

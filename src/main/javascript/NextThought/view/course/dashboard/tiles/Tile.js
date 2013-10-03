@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
+Ext.define('NextThought.view.course.dashboard.tiles.Tile', {
 	extend: 'Ext.container.Container',
 
 	requires: [
@@ -9,17 +9,17 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 
 		/**
 		 * @param {NextThought.model.course.navigation.Node} r
-		 * @returns {Node[]}
+		 * @return {Node[]}
 		 */
-		getChildrenNodes: function(r){
+		getChildrenNodes: function(r) {
 			return r && r.getChildren && r.getChildren();
 		},
 
 		/**
 		 * @param {NextThought.model.course.navigation.Node} r
-		 * @returns {NextThought.store.course.Navigation}
+		 * @return {NextThought.store.course.Navigation}
 		 */
-		getCourseNavStore: function(r){
+		getCourseNavStore: function(r) {
 			return r && r.store;
 		}
 	},
@@ -36,12 +36,12 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 		 * @param {Function} finish The callback function that hands you the resolved tile(s)
 		 * @param {NextThought.view.course.dashboard.tiles.Tile|NextThought.view.course.dashboard.tiles.Tile[]} finish.tiles
 		 */
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish){ Ext.callback(finish); }
+		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) { Ext.callback(finish); }
 	},
 
 	config: {
-		cols:2,
-		rows:2,
+		cols: 2,
+		rows: 2,
 		baseWeight: 1,
 		lastModified: new Date(0),
 		locationInfo: null,
@@ -51,17 +51,17 @@ Ext.define('NextThought.view.course.dashboard.tiles.Tile',{
 	innerWeight: 0,
 	maxInner: 1,
 
-	getTimeWeight: function(){ return 0; },
+	getTimeWeight: function() { return 0; },
 
 	ui: 'course-dashboard-tile',
 	layout: 'auto',
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addCls([
 			'grid-item',
-			'row-'+this.getRows(),
-			'col-'+this.getCols()
+			'row-' + this.getRows(),
+			'col-' + this.getCols()
 		]);
 	}
 });

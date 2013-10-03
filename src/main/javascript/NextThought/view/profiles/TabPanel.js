@@ -1,10 +1,10 @@
-Ext.define('NextThought.view.profiles.TabPanel',{
+Ext.define('NextThought.view.profiles.TabPanel', {
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.profile-tabs',
 
 	plain: true,
 	ui: 'profile',
-	
+
 	componentLayout: 'profiletabpanel',
 
 	tabBar: {
@@ -16,6 +16,7 @@ Ext.define('NextThought.view.profiles.TabPanel',{
 	}
 
 });
+
 
 /**
  * We need to prevent the layout manager from moving the tab panel back into its original dom position because we're
@@ -35,7 +36,7 @@ Ext.define('NextThought.layout.component.ProbileTabPanelLayout', {
 	 * @param item {Ext.Component/HTMLElement/Ext.Element}
 	 * @param target {Element/Ext.Element}
 	 * @param position {Object} Ignored by this override
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	isValidParent: function(item, target, position) {
 		if (target.hasCls('x-panel-profile')) {

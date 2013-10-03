@@ -5,22 +5,22 @@ Ext.define('NextThought.view.video.Panel', {
 	constructor: function(config) {
 		this.callParent([
 			Ext.applyIf(config, {
-				width	: '100%',
-				height   : '100%',
-				autoplay : false,
-				controls : true,
+				width: '100%',
+				height: '100%',
+				autoplay: false,
+				controls: true,
 				bodyStyle: 'background-color:#000;color:#fff',
-				html	 : '',
+				html: '',
 				suggestChromeFrame: false
 			})]);
 
 		this.on({
-			scope		: this,
-			render	   : this.videoRender,
+			scope: this,
+			render: this.videoRender,
 			beforedestroy: function() {
 				this.video = null;
 			},
-			resize   : function(panel, width, height) {
+			resize: function(panel, width, height) {
 				if (this.video) {
 					this.video.setSize(width, height);
 				}
@@ -55,8 +55,8 @@ Ext.define('NextThought.view.video.Panel', {
 
 		/* match the video size to the panel dimensions */
 		cfg = Ext.copyTo({
-				tag   : 'video',
-				width : size.width,
+				tag: 'video',
+				width: size.width,
 				height: size.height
 			},
 			this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.video.Panel', {
 
 			for (i = 0, len = this.src.length; i < len; i++) {
 				if (!Ext.isObject(this.src[i])) {
-					throw "source list passed to video panel must be an array of objects";
+					throw 'source list passed to video panel must be an array of objects';
 				}
 
 				cfg.children.push(
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.video.Panel', {
 			});
 
 		} else {
-			cfg.src  = this.src;
+			cfg.src = this.src;
 			cfg.html = fallback;
 		}
 

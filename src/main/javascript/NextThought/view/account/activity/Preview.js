@@ -14,7 +14,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	onClassExtended: function (cls, data) {
+	onClassExtended: function(cls, data) {
 		//Allow subclasses to override render selectors, but don't drop all of them if they just want to add.
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	componentLayout: 'natural',
 	layout: 'auto',
 	childEls: ['body'],
-	getTargetEl: function () {
+	getTargetEl: function() {
 		return this.body;
 	},
 
@@ -122,13 +122,13 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	]}),
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble(['resize', 'realign', 'editorActivated', 'editorDeactivated']);
 	},
 
 
-	setBody: function (body) {
+	setBody: function(body) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setBody, this, arguments), this);
 			return;
@@ -143,7 +143,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
 
-		this.messageBodyEl.select('img').on('load', function () {
+		this.messageBodyEl.select('img').on('load', function() {
 			me.fireEvent('realign');
 		});
 		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
@@ -155,7 +155,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	maybeShowMoreLink: function () {
+	maybeShowMoreLink: function() {
 		var el = this.messageBodyEl;
 		if (el.dom.scrollHeight <= el.getHeight()) {
 			return;
@@ -166,7 +166,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	setupReplyScrollZone: function () {
+	setupReplyScrollZone: function() {
 		var rH = this.respondEl.getHeight(),
 			tH = this.topEl.getHeight(),
 			max = Ext.dom.Element.getViewportHeight()
@@ -178,12 +178,12 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	navigateToItem: function () {
+	navigateToItem: function() {
 		console.warn('Should be overridden by its children');
 	},
 
 
-	showReplies: function () {
+	showReplies: function() {
 		this.setupReplyScrollZone();
 	},
 
@@ -192,9 +192,9 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	 * Maps the records 'reply/comment/post' counts to a single value.
 	 *
 	 * @param record
-	 * @returns Number
+	 * @return Number
 	 */
-	getCommentCount: function (record) {
+	getCommentCount: function(record) {
 		throw 'Do not use the base class directly. Subclass and implement this';
 	},
 
@@ -203,17 +203,17 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	 * Place to derive fields that should be put into the template.
 	 *
 	 * @param record
-	 * @returns Object
+	 * @return Object
 	 */
-	getDerivedData: function (record) {
+	getDerivedData: function(record) {
 		return {
 			relativeTime: record.getRelativeTimeString()
 		};
 	},
 
 
-	setRenderedTitle: function(record){
-		if(record.isModel){
+	setRenderedTitle: function(record) {
+		if (record.isModel) {
 			return record.get('title');
 		}
 		return record.title;
@@ -221,7 +221,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	/** @private */
-	prepareRenderData: function (record) {
+	prepareRenderData: function(record) {
 		var me = this,
 			o = record.getData();
 		o.type = o.Class.toLowerCase();
@@ -231,7 +231,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		me.ownerCt.addCls(o.type);
 
-		UserRepository.getUser(o.Creator, function (u) {
+		UserRepository.getUser(o.Creator, function(u) {
 			o.avatarURL = u.get('avatarURL');
 			o.name = Ext.String.ellipsis(u.getName(), 20);
 			if (me.rendered) {
@@ -248,7 +248,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	getRefItems: function () {
+	getRefItems: function() {
 		var ret = this.callParent(arguments) || [];
 		if (this.editor) {
 			ret.push(this.editor);
@@ -257,14 +257,14 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.renderData = this.prepareRenderData(this.record);
 	},
 
 
-	saveCallback: function (editor, cmp, replyRecord) {
+	saveCallback: function(editor, cmp, replyRecord) {
 		editor.deactivate();
 		editor.setValue('');
 		editor.reset();
@@ -272,7 +272,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var DISPLAY = Ext.dom.Element.DISPLAY,
@@ -294,16 +294,16 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 		//These next two functions seem named backwards...
-		var hide = function(){
+		var hide = function() {
 			//Ext.bind(box.hide, box, [false]);
-            // Now that the editor is active, adjust the reply scroll zone.
-            this.setupReplyScrollZone();
+      // Now that the editor is active, adjust the reply scroll zone.
+      this.setupReplyScrollZone();
 			this.replyBoxEl.hide();
 			this.constrainPopout();
 			this.fireEvent('editorActivated');
 		};
 
-		var show = function(){
+		var show = function() {
 			//Ext.bind(box.show, box, [false]);
 			this.replyBoxEl.show();
 			this.constrainPopout();
@@ -314,7 +314,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 			scope: this,
 			'activated-editor': hide,
 			'deactivated-editor': show,
-			'no-body-content': function (editor, bodyEl) {
+			'no-body-content': function(editor, bodyEl) {
 				editor.markError(bodyEl, 'You need to type something');
 				return false;
 			},
@@ -330,32 +330,32 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.enableProfileClicks(this.name, this.avatar);
 	},
 
-	constrainPopout: function(){
+	constrainPopout: function() {
 		var pop = this.up('.activity-popout');
 
-        pop.doConstrain();
+    pop.doConstrain();
 	},
 
 
-	handleBeforeDeactivate: function () {
+	handleBeforeDeactivate: function() {
 		if ((this.editor && this.editor.isActive())) {
 			return false;
 		}
-		return    Ext.Array.every(this.items.items, function (item) {
+		return Ext.Array.every(this.items.items, function(item) {
 			return item.fireEvent('beforedeactivate');
 		});
 	},
 
 
-	showEditor: function () {
+	showEditor: function() {
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-        this.fireEvent('realign');
+    this.fireEvent('realign');
 	},
 
 
-	getPointerStyle: function (x, y) {
+	getPointerStyle: function(x, y) {
 		return y >= this.footEl.getY() ? 'grey' : '';
 	}
 

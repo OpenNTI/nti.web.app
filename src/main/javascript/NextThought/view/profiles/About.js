@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.About',{
+Ext.define('NextThought.view.profiles.About', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-about',
 
@@ -17,34 +17,34 @@ Ext.define('NextThought.view.profiles.About',{
 			cn: [
 				{
 					cls: 'meta',
-					cn:  [
+					cn: [
 						{
 							cls: 'about field',
-							cn:[
-								{ cls: 'label', html:'About' },
-								{ cls: 'content', 'data-field': 'about', 'data-placeholder': 'Write something about your self.', 'data-multiline':true }
+							cn: [
+								{ cls: 'label', html: 'About' },
+								{ cls: 'content', 'data-field': 'about', 'data-placeholder': 'Write something about your self.', 'data-multiline': true }
 							]
 						},
 						{
 							cls: 'fold', cn: [
 
-								{ cls: 'field', cn:[
-									{ cls: 'label', cn:{ tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' } },
-									{ cn:{ tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' } }
+								{ cls: 'field', cn: [
+									{ cls: 'label', cn: { tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' } },
+									{ cn: { tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' } }
 								]},
 
-								{ cls: 'field', cn:[
-									{ cls:'label', html: 'Location' },
-									{ cn:{ tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } }
+								{ cls: 'field', cn: [
+									{ cls: 'label', html: 'Location' },
+									{ cn: { tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } }
 								]},
 
-								{ cls: 'field', cn:[
-									{ cls:'label', html: 'Homepage' },
+								{ cls: 'field', cn: [
+									{ cls: 'label', html: 'Homepage' },
 									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } }
 								]},
 
-								{ cls: 'field', cn:[
-									{ cls:'label', html: 'Email' },
+								{ cls: 'field', cn: [
+									{ cls: 'label', html: 'Email' },
 									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } }
 								]}
 
@@ -60,22 +60,22 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	renderSelectors: {
-		profileInfoEl:    '.profile-about',
-		metaEl:           '.profile-about .meta',
-		homePageEl:       '.profile-about .meta [data-field=home_page]',
-		errorMsgEl:       '.error-msg'
+		profileInfoEl: '.profile-about',
+		metaEl: '.profile-about .meta',
+		homePageEl: '.profile-about .meta [data-field=home_page]',
+		errorMsgEl: '.error-msg'
 	},
 
 	//</editor-fold>
 
 
 	//<editor-fold desc="Init">
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
 		// everything but the safeFields (avatar and name)
 		if ($AppConfig.disableProfiles === true) {
-			Ext.defer(this.destroy,1,this);
+			Ext.defer(this.destroy, 1, this);
 		}
 
 		this.onSaveMap = {home_page: this.homePageChanged};
@@ -83,15 +83,15 @@ Ext.define('NextThought.view.profiles.About',{
 		this.on({
 			'enable-edit': 'onShowEditing',
 			'disable-edit': 'onHideEditing',
-			beforedeactivate:'onBeforeDeactivate',
-			metaEl:{ click:'editMeta' }
+			beforedeactivate: 'onBeforeDeactivate',
+			metaEl: { click: 'editMeta' }
 		});
 
 		this.setUser(this.user);
 	},
 
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		if (this.metaEditor && this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
 		}
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.errorMsgEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
 	},
@@ -110,17 +110,17 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="State Management Stubs">
-	getStateData: function(){ return this.uriFriendlyName; },
+	getStateData: function() { return this.uriFriendlyName; },
 
 
-	restore: function(data,finishCallback){
-		Ext.callback(finishCallback,null,[this]);
+	restore: function(data, finishCallback) {
+		Ext.callback(finishCallback, null, [this]);
 	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Profile Schema Logic">
-	setUser: function (user) {
+	setUser: function(user) {
 		var me = this, profileSchemaUrl, req;
 
 		if (!this.rendered) {
@@ -147,7 +147,7 @@ Ext.define('NextThought.view.profiles.About',{
 		req = {
 			url: profileSchemaUrl,
 			scope: this,
-			callback: function (q, success, r) {
+			callback: function(q, success, r) {
 				var schema;
 				if (!success) {
 					console.log('Could not get profile schema');
@@ -167,9 +167,9 @@ Ext.define('NextThought.view.profiles.About',{
 	 * Returns an object with two fields, shouldBeShown and editable that describe how (if at all) the profided profile
 	 * field should be shown
 	 *
-	 * @returns {Object}
+	 * @return {Object}
 	 */
-	getMetaInfoForField: function (user, field, profileSchema) {
+	getMetaInfoForField: function(user, field, profileSchema) {
 		var r = {}, val = (profileSchema || {})[field];
 		r.editable = val && !val.readonly;
 		r.shouldBeShown = r.editable || !Ext.isEmpty(user.get(field));
@@ -178,7 +178,7 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	validate: function (field, value) {
+	validate: function(field, value) {
 		var rules = (this.profileSchema || {})[field], numColons;
 		if (!field || !rules) {
 			console.warn('No rules or field. Treating as valid', field, value, this.profileSchema);
@@ -206,8 +206,8 @@ Ext.define('NextThought.view.profiles.About',{
 		if (rules.base_type === 'string') {
 			//for strings we expect a min and a max length and if they exist our string must fit in
 			//those bounds
-			if (value.length < (rules.min_length || 0 )) {
-				this.showError('Must contain at least ' + (rules.min_length || 0 ) + ' characters.');
+			if (value.length < (rules.min_length || 0)) {
+				this.showError('Must contain at least ' + (rules.min_length || 0) + ' characters.');
 				return false;
 			}
 
@@ -238,7 +238,7 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	updateProfileDetail: function (user, profileSchema) {
+	updateProfileDetail: function(user, profileSchema) {
 		var me = this;
 
 		//Don't do anything if we are disabled in the config
@@ -255,23 +255,23 @@ Ext.define('NextThought.view.profiles.About',{
 
 			if (info.shouldBeShown) {
 				me.updateField(el, info.field, user.get(info.field));
-				el[(info.editable?'add':'remove')+'Cls']('editable');
+				el[(info.editable ? 'add' : 'remove') + 'Cls']('editable');
 				return;
 			}
 
 			box = el.parent('.field');
-			Ext.destroy(el,box);
+			Ext.destroy(el, box);
 		}
 
 		function validateAgainstSchema(value) {
 			var editor = this.ownerCt,
 					field = editor.boundEl.getAttribute('data-field');
-			return  me.validate(field, value);
+			return me.validate(field, value);
 		}
 
-		Ext.each(this.el.query('[data-field]'),setupMeta);
+		Ext.each(this.el.query('[data-field]'), setupMeta);
 
-		if( this.el.query('.field').length === 0 ){
+		if (this.el.query('.field').length === 0) {
 			this.showEmptyState();
 		}
 
@@ -291,11 +291,11 @@ Ext.define('NextThought.view.profiles.About',{
 				scope: this
 			}
 		});
-		this.on('destroy','destroy',this.metaEditor);
+		this.on('destroy', 'destroy', this.metaEditor);
 	},
 
 
-	updateProfile: function (user, schema) {
+	updateProfile: function(user, schema) {
 		var me = this, fn = 'editName',
 			profileSchema = (schema || {}).ProfileSchema,
 			nameInfo = me.getMetaInfoForField(user, 'alias', profileSchema);
@@ -311,17 +311,17 @@ Ext.define('NextThought.view.profiles.About',{
 		//up if it exists
 
 		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
-			fn = Ext.bind(me.fireEvent,me,['request-alias-change', me]);
+			fn = Ext.bind(me.fireEvent, me, ['request-alias-change', me]);
 		}
 
-		if(nameInfo.editable || Ext.isFunction(fn)){
-			this.on('name-clicked',fn);
+		if (nameInfo.editable || Ext.isFunction(fn)) {
+			this.on('name-clicked', fn);
 		}
 
 		function validateAgainstSchema(value) {
 			var editor = this.ownerCt,
 					field = editor.boundEl.getAttribute('data-field');
-			return  me.validate(field, value);
+			return me.validate(field, value);
 		}
 
 		this.nameEditor = Ext.widget({
@@ -340,7 +340,7 @@ Ext.define('NextThought.view.profiles.About',{
 				scope: this
 			}
 		});
-		this.on('destroy','destroy',this.nameEditor);
+		this.on('destroy', 'destroy', this.nameEditor);
 
 		this.updateProfileDetail(user, profileSchema);
 	},
@@ -348,13 +348,13 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="Field Editor">
-	editName: function (nameEl) {
+	editName: function(nameEl) {
 
 		if (!this.nameEditor.isHidden() || this.isHidden() || !this.hasCls('editing')) {
 			return;
 		}
 
-		nameEl.setAttribute('data-field','alias');
+		nameEl.setAttribute('data-field', 'alias');
 
 		if (this.metaEditor && this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
@@ -368,7 +368,7 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	editMeta: function (e) {
+	editMeta: function(e) {
 		var t = e.getTarget('[data-field]', null, true),
 			field = t && Ext.fly(t).getAttribute('data-field'),
 			value = (field && this.userObject.get(field)) || '',
@@ -392,7 +392,7 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	onSaveField: function (cmp, newValue, oldValue) {
+	onSaveField: function(cmp, newValue, oldValue) {
 		var field = cmp.boundEl.getAttribute('data-field'),
 			user = this.userObject,
 			me = this;
@@ -417,7 +417,7 @@ Ext.define('NextThought.view.profiles.About',{
 
 		function failure(rsp) {
 			var resultJson = {};
-			if (/application\/json/.test(rsp.getResponseHeader('Content-Type') || "")) {
+			if (/application\/json/.test(rsp.getResponseHeader('Content-Type') || '')) {
 				resultJson = Ext.JSON.decode(rsp.responseText, true);
 			}
 			//alert('Could not save your '+field);
@@ -442,7 +442,7 @@ Ext.define('NextThought.view.profiles.About',{
 
 
 	//<editor-fold desc="UI Updaters & Handlers">
-	showEmptyState: function(){
+	showEmptyState: function() {
 		this.profileInfoEl.remove();
 		this.addCls('empty');
 		Ext.DomHelper.append(this.el, {
@@ -454,13 +454,13 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	onShowEditing: function(){
+	onShowEditing: function() {
 		this.addCls('editing');
-		console.debug('show edit',arguments);
+		console.debug('show edit', arguments);
 	},
 
 
-	onHideEditing: function(){
+	onHideEditing: function() {
 		this.removeCls('editing');
 		if (this.metaEditor && this.metaEditor.editing) {
 			this.metaEditor.cancelEdit();
@@ -469,22 +469,22 @@ Ext.define('NextThought.view.profiles.About',{
 		if (this.nameEditor && this.nameEditor.editing) {
 			this.nameEditor.cancelEdit();
 		}
-		console.debug('hide edit',arguments);
+		console.debug('hide edit', arguments);
 	},
 
 
-	showError: function (text) {
+	showError: function(text) {
 		this.errorMsgEl.update(text);
 		this.errorMsgEl.show();
 	},
 
 
-	clearError: function () {
+	clearError: function() {
 		this.errorMsgEl.hide();
 	},
 
 
-	updateField: function (el, n, v) {
+	updateField: function(el, n, v) {
 		var placeholderText = this.placeholderTextTpl.apply([el.getAttribute('data-placeholder')]);
 		if (this.onSaveMap.hasOwnProperty(n)) {
 			Ext.callback(this.onSaveMap[n], this, [v, placeholderText]);
@@ -502,12 +502,12 @@ Ext.define('NextThought.view.profiles.About',{
 	},
 
 
-	homePageChanged: function (value, placeholderText) {
+	homePageChanged: function(value, placeholderText) {
 		if (!value) {
 			this.homePageEl.update(placeholderText);
 		}
 		else {
-			Ext.DomHelper.overwrite(this.homePageEl,{
+			Ext.DomHelper.overwrite(this.homePageEl, {
 				tag: 'a',
 				cls: 'homePageLink',
 				'target': '_blank',

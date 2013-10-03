@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.forums.forumcreation.Main', {
 	extend: 'Ext.container.Container',
-	alias:  'widget.forumcreation-main-view',
+	alias: 'widget.forumcreation-main-view',
 
 
 	cls: 'forumcreation-main-view',
@@ -11,14 +11,14 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 			{xtype: 'box', autoEl: {tag: 'textarea', name: 'description', placeholder: 'Description...'}, name: 'description', cls: 'input-box textarea', emptyText: 'Description...'}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
-			cn:                                                   [
+			cn: [
 				{cls: 'error-field'},
 				{cls: 'error-desc'}
 			]}
 		},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
 			{xtype: 'checkbox', cls: 'sharing-checkbox', name: 'sharing', boxLabel: getString('forum_sharing_label', 'Everyone including the lame kids')},
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function (b) {
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function(b) {
 				b.up('window').close();
 			}},
 			{xtype: 'button', cls: 'submitBtn', ui: 'primary', scale: 'large', name: 'submit', text: 'Save'}
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	],
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var board = this.getBoard(),
@@ -56,35 +56,35 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 		this.mon(this.el, 'click', 'handleClick', this);
 
-//		if (Ext.is.iPad) {
-//			me.mon(this.down('[name=title]').el.down('input'), {
-//				'blur': function (e) {
-//					me.onFocusChange(e);
-//				}
-//			}, me);
-//			me.mon(this.down('[name=description]').el, {
-//				'blur': function (e) {
-//					me.onFocusChange(e);
-//				}
-//			}, me);
-//		}
+    //		if (Ext.is.iPad) {
+    //			me.mon(this.down('[name=title]').el.down('input'), {
+    //				'blur': function (e) {
+    //					me.onFocusChange(e);
+    //				}
+    //			}, me);
+    //			me.mon(this.down('[name=description]').el, {
+    //				'blur': function (e) {
+    //					me.onFocusChange(e);
+    //				}
+    //			}, me);
+    //		}
 	},
 
 
 	/**
 	 * Scrolls to the top of the page if a text input field is not focused
 	 */
-//	onFocusChange: function (e) {
-//		var titleInput = this.down('[name=title]').el.down('input');
-//		var descriptionField = this.down('[name=description]').el;
-//		if (e.relatedTarget !== titleInput.dom
-//				&& e.relatedTarget !== descriptionField.dom) {
-//			window.scrollTo(0, 0);
-//		}
-//	},
+  //	onFocusChange: function (e) {
+  //		var titleInput = this.down('[name=title]').el.down('input');
+  //		var descriptionField = this.down('[name=description]').el;
+  //		if (e.relatedTarget !== titleInput.dom
+  //				&& e.relatedTarget !== descriptionField.dom) {
+  //			window.scrollTo(0, 0);
+  //		}
+  //	},
 
 
-	handleClick: function (e) {
+	handleClick: function(e) {
 		var values, target = e.getTarget('.submitBtn');
 
 		if (target) {
@@ -96,11 +96,11 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		}
 	},
 
-	validateTitle: function (title) {
+	validateTitle: function(title) {
 		var baseMsg = 'Could not save your forum.';
 		if (title.length > 140) {
 			this.setError({
-							  field:   'title',
+							  field: 'title',
 							  message: baseMsg + ' The title is too long. It can only be 140 characters or less.'
 						  });
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 		if (title.length === 0) {
 			this.setError({
-							  field:   'title',
+							  field: 'title',
 							  message: baseMsg + ' The title can not be empty.'
 						  });
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 		if (title.trim().length === 0) {
 			this.setError({
-							  field:   'title',
+							  field: 'title',
 							  message: baseMsg + ' The title can not be all whitespace.'
 						  });
 
@@ -128,11 +128,11 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		return true;
 	},
 
-	validateDescription: function (description) {
-		var baseMsg = 'Could not save your forum.'
+	validateDescription: function(description) {
+		var baseMsg = 'Could not save your forum.';
 		if (description.length === 0) {
 			this.setError({
-							  field:   'description',
+							  field: 'description',
 							  message: baseMsg + ' The description can not be empty.'
 						  });
 
@@ -141,7 +141,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 		if (description.trim().length === 0) {
 			this.setError({
-							  field:   'description',
+							  field: 'description',
 							  message: baseMsg + ' The description can not be all whitespace.'
 						  });
 
@@ -152,32 +152,32 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	},
 
 	//go up to the window to get the board we are in
-	getBoard:            function () {
+	getBoard: function() {
 		return this.up('forumcreation-window').ownerCmp.record;
 	},
 
 	//go up to the window to get the record we are editing
-	getRecord:           function () {
+	getRecord: function() {
 		return this.up('forumcreation-window').record;
 	},
 
 
-	getValues: function () {
+	getValues: function() {
 		//Pull data out of the forum and return it here
 		return {
-			title:       this.down('[name=title]').getValue(),
+			title: this.down('[name=title]').getValue(),
 			description: this.down('[name=description]').el.getValue(),
-			open:        this.down('[name=sharing]') && this.down('[name=sharing]').getValue()
-		}
+			open: this.down('[name=sharing]') && this.down('[name=sharing]').getValue()
+		};
 	},
 
-	setError: function (error) {
+	setError: function(error) {
 		var box = this.down('[name=error]'),
 				field = this.down('[name=' + error.field + ']'),
 				allFields = this.query('[name]');
 
 		//clear all errors:
-		Ext.each(allFields, function (f) {
+		Ext.each(allFields, function(f) {
 			f.removeCls('error');
 		});
 
@@ -192,21 +192,21 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		this.up('window').updateLayout();
 	},
 
-	onSaveSuccess: function () {
+	onSaveSuccess: function() {
 		this.up('forumcreation-window').close();
 	},
 
-	onSaveFailure: function (proxy, response, operation) {
+	onSaveFailure: function(proxy, response, operation) {
 		var msg = {
 			message: 'An unknown error occurred saving your Discussion.',
-			field:   ''
+			field: ''
 		}, error;
 
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
-			if (error.code === "TooLong") {
-				msg.message = "Could not save your Discussion. The title is too long. It can only be 140 characters or less";
-				msg.field = 'title'
+			if (error.code === 'TooLong') {
+				msg.message = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less';
+				msg.field = 'title';
 			}
 		}
 

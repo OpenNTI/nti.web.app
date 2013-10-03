@@ -1,14 +1,14 @@
-Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
+Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin', {
 
-	constructor: function(){
+	constructor: function() {
 		this.on('afterrender', 'attachContactSearch', this);
 		this.doSearch = Ext.Function.createBuffered(this.doSearch, 250, this, null);
 	},
 
 
-	attachContactSearch: function(){
+	attachContactSearch: function() {
 		this.searchButton = this.searchButton || this.el.down('.search');
-		if(!this.searchButton){
+		if (!this.searchButton) {
 			console.error('Could not attach contact search. No el provided');
 			return;
 		}
@@ -19,28 +19,28 @@ Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
 		this.clearNib.setVisibilityMode(Ext.Element.DISPLAY);
 		this.mon(this.clearNib, 'click', 'clearClicked', this);
 
-		this.mon(this.searchButton, 'click', 'setSearchOverlay', this, {single:true});
+		this.mon(this.searchButton, 'click', 'setSearchOverlay', this, {single: true});
 		this.mon(this.searchButton, {
 			scope: this,
 			click: 'onSearchClick'
 		});
 
 		this.mon(this.searchField, {
-			scope:       this,
-			blur:        'onSearchBlur',
-			keyup:       'onSearchKeyPressed',
-			contextmenu: function (e) {
+			scope: this,
+			blur: 'onSearchBlur',
+			keyup: 'onSearchKeyPressed',
+			contextmenu: function(e) {
 				e.stopPropagation();
 			} //allow context on simple texts
 		});
 
 	},
 
-	setSearchOverlay: function(){
+	setSearchOverlay: function() {
 		this.contactSearchOverlay = Ext.widget('contact-search-overlay', { renderTo: this.el});
 	},
 
-	onSearchBlur: function () {
+	onSearchBlur: function() {
 		var v = this.searchField.getValue();
 		if (Ext.isEmpty(v)) {
 			this.removeCls('searching');
@@ -53,13 +53,13 @@ Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
 	},
 
 
-	onSearchClick: function () {
+	onSearchClick: function() {
 		this.searchButton.addCls('active');
 		this.searchField.focus();
 	},
 
 
-	clearClicked: function (e) {
+	clearClicked: function(e) {
 		if (e) {
 			e.stopEvent();
 		}
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
 	},
 
 
-	onSearchKeyPressed: function (e) {
+	onSearchKeyPressed: function(e) {
 		if (e.ESC === e.getKey()) {
 			this.clearClicked();
 		}
@@ -86,12 +86,12 @@ Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
 	},
 
 
-	getSearchStore: function(){
+	getSearchStore: function() {
 		return this.contactSearchOverlay.getStore();
 	},
 
 
-	doSearch: function (v) {
+	doSearch: function(v) {
 		var fn = 'removeAll',
 			action = 'removeCls',
 			param = false,
@@ -104,7 +104,7 @@ Ext.define('NextThought.view.contacts.outline.search.ContactSearchMixin',{
 		}
 
 		this[action]('searching');
-		if(searchStore){
+		if (searchStore) {
 			searchStore[fn](param);
 		}
 	}

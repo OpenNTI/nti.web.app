@@ -27,14 +27,14 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		triggerEl: 'a'
 	},
 
-	constructor: function () {
+	constructor: function() {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
 		this.mixins.placeholderFix.constructor.call(this);
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.inputEl.selectable();
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	keyDown: function (event) {
+	keyDown: function(event) {
 		var k = event.getKey();
 		if (this.specialKeys[k]) {
 			if (k === event.ESC) {
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	keyPressed: function (event) {
+	keyPressed: function(event) {
 		event.stopPropagation();
 		var k = event.getKey();
 		if (k === event.ENTER || k === event.ESC) {
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	fireSearchEvent: function () {
+	fireSearchEvent: function() {
 		clearTimeout(this.searchEventDelayId);
 		var val = this.getValue();
 		if (!val) {
@@ -107,17 +107,17 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		}
 	},
 
-	fireSearchEventBuffered: function () {
+	fireSearchEventBuffered: function() {
 		var me = this;
 		clearTimeout(this.searchEventDelayId);
-		this.searchEventDelayId = setTimeout(function () {
+		this.searchEventDelayId = setTimeout(function() {
 			if (!me.getValue() || me.getValue().length > 3) {
 				me.fireSearchEvent();
 			}
 		}, 500);
 	},
 
-	triggerMenu: function (e) {
+	triggerMenu: function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 
@@ -133,11 +133,11 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	},
 
 
-	getValue: function () {
+	getValue: function() {
 		return this.inputEl.getValue();
 	},
 
-	getFocusEl: function () {
+	getFocusEl: function() {
 		return this.inputEl;
 	}
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.search.NoResults',{
+Ext.define('NextThought.view.menus.search.NoResults', {
 	extend: 'Ext.Component',
 	alias: 'widget.search-noresults',
 	cls: 'search-noresults search-result',

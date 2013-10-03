@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.account.View',{
+Ext.define('NextThought.view.account.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.account-view',
 
 	iconCls: 'account',
-	tabConfig:{tooltip: 'My Account'},
+	tabConfig: {tooltip: 'My Account'},
 	ui: 'account',
 	cls: 'account-view',
 	plain: true,
@@ -26,12 +26,12 @@ Ext.define('NextThought.view.account.View',{
 				cls: 'item',
 				isMenuItem: true,
 				listeners: {
-					afterRender: function(i){
-						i.mon(i.el,'click',function(){i.fireEvent('click',i);},i);
+					afterRender: function(i) {
+						i.mon(i.el, 'click', function() {i.fireEvent('click', i);},i);
 					}
 				}
 			},
-			items:[
+			items: [
 			{html: ' ', autoEl: 'div'}
 			]
 		}

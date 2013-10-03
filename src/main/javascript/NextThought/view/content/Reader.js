@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.Reader', {
-	extend:   'NextThought.view.content.Base',
-	alias:    'widget.reader-content',
+	extend: 'NextThought.view.content.Base',
+	alias: 'widget.reader-content',
 
 	//<editor-fold desc="Config">
 	requires: [
@@ -29,14 +29,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 	overflowX: 'hidden',
 	overflowY: 'scroll',
-	ui:        'reader',
-	layout:    'auto',
-	prefix:    'default',
+	ui: 'reader',
+	layout: 'auto',
+	prefix: 'default',
 	//</editor-fold>
 
 
 	//<editor-fold desc="Setup & Init">
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.trackThis();
 
@@ -67,20 +67,20 @@ Ext.define('NextThought.view.content.Reader', {
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
 
 		this.on({
-					scope:                      this,
+					scope: this,
 					//beforeNavigate: 'onBeforeNavigate',
-					beginNavigate:              'onBeginNavigate',
-					navigateAbort:              'onNavigationAborted',
-					navigateComplete:           'onNavigateComplete',
+					beginNavigate: 'onBeginNavigate',
+					navigateAbort: 'onNavigationAborted',
+					navigateComplete: 'onNavigateComplete',
 					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
 
 		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
-		this.initCustomScrollOn('content', undefined, {secondaryViewEl:'.annotation-view'});
+		this.initCustomScrollOn('content', undefined, {secondaryViewEl: '.annotation-view'});
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
 			el = this.getTargetEl();
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	bootstrap: function (loc) {
+	bootstrap: function(loc) {
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.
 		var l = loc || this.getLocation().NTIID,
@@ -116,12 +116,12 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	primeReadyEvent: function () {
+	primeReadyEvent: function() {
 		this.readyEventPrimed = true;
 	},
 
 
-	fireReady: function () {
+	fireReady: function() {
 		if (this.navigating) {
 			console.warn('fired ready while navigating');
 			return;
@@ -139,14 +139,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	//<editor-fold desc="Getters/Queries">
-	getAnnotationOffsets: function () {
+	getAnnotationOffsets: function() {
 		return this.calculateNecessaryAnnotationOffsets();
 	},
 
 
 	// NOTE: Now that we may have more than one reader, each reader should know how
 	// to resolve dom ranges/nodes of annotations inside it.
-	getDomContextForRecord: function (r, doc, cleanRoot) {
+	getDomContextForRecord: function(r, doc, cleanRoot) {
 		var rangeDesc = r.get('applicableRange'),
 				cid = r.get('ContainerId');
 
@@ -156,24 +156,24 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	needsWaitingOnReadyEvent: function () {
+	needsWaitingOnReadyEvent: function() {
 		return Boolean(this.readyEventPrimed);
 	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Actions">
-	skipAnnotationsFireReadyOnFinish: function () {
+	skipAnnotationsFireReadyOnFinish: function() {
 		this.skippedAnnotations = true;
 	},
 
 
-	activating: function () {
+	activating: function() {
 		delete this.annotationOffsetsCache;
 	},
 
 
-	setSplash: function () {
+	setSplash: function() {
 		this.getScroll().to(0, false);
 		this.getIframe().update(false);
 		this.meta = {};
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	calculateNecessaryAnnotationOffsets: function () {
+	calculateNecessaryAnnotationOffsets: function() {
 		var cache = this.annotationOffsetsCache || {},
 				windowSizeStatics = cache.windowSizeStatics || {},
 				scrollStatics = cache.scrollStatics || {},
@@ -215,8 +215,8 @@ Ext.define('NextThought.view.content.Reader', {
 		this.annotationOffsetsCache = cache;
 
 		return {
-			top:       scrollStatics.top, //static by scroll position
-			left:      windowSizeStatics.left, //static based on window size
+			top: scrollStatics.top, //static by scroll position
+			left: windowSizeStatics.left, //static based on window size
 			scrollTop: scrollPosition //dynamic
 		};
 	},
@@ -224,25 +224,25 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	//<editor-fold desc="Event Handlers">
-	onContextMenuHandler: function () {
+	onContextMenuHandler: function() {
 		var o = this.getAnnotations();
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
 
 	//<editor-fold desc="Navigation Handlers">
-	onBeginNavigate: function (ntiid) {
+	onBeginNavigate: function(ntiid) {
 		this.navigating = true;
 	},
 
 
-	onNavigationAborted:    function (resp, ntiid) {
+	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 		delete this.navigating;
 	},
 
 
-	onNavigateComplete: function (pageInfo, finish, hasCallback) {
+	onNavigateComplete: function(pageInfo, finish, hasCallback) {
 		var me = this,
 				proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
@@ -291,14 +291,14 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 
 			proxy.request({
-							  pageInfo:            pageInfo,
-							  ntiid:               pageInfo.getId(),
-							  jsonpUrl:            pageInfo.getLink('jsonp_content'),
-							  url:                 pageInfo.getLink('content'),
+							  pageInfo: pageInfo,
+							  ntiid: pageInfo.getId(),
+							  jsonpUrl: pageInfo.getLink('jsonp_content'),
+							  url: pageInfo.getLink('content'),
 							  expectedContentType: 'text/html',
-							  scope:               this,
-							  success:             success,
-							  failure:             function (r) {
+							  scope: this,
+							  success: success,
+							  failure: function(r) {
 								  console.log('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
 								  me.splash.hide();
 								  me.onNavigationAborted();
@@ -312,26 +312,26 @@ Ext.define('NextThought.view.content.Reader', {
 
 	//<editor-fold desc="Statics">
 	statics: {
-		get: function (prefix) {
+		get: function(prefix) {
 			prefix = prefix || 'default';
-			function search(r){ return r.prefix===prefix; }
-			return Ext.Array.findBy(this.instances,search,this);
+			function search(r) { return r.prefix === prefix; }
+			return Ext.Array.findBy(this.instances, search, this);
 		},
 
 
 		MOCK_PAGE_PROXY: {
-			request: function (req) {
+			request: function(req) {
 				var pageInfo = req.pageInfo,
 						resp = {
 							getAllResponseHeaders: Ext.emptyFn,
-							getResponseHeader:     Ext.emptyFn,
-							requestId:             NaN,
-							responseXML:           null,
-							status:                200,
-							statusText:            'OK',
-							request:               {options: Ext.apply({url: ''}, req)},
+							getResponseHeader: Ext.emptyFn,
+							requestId: NaN,
+							responseXML: null,
+							status: 200,
+							statusText: 'OK',
+							request: {options: Ext.apply({url: ''}, req)},
 							//hack: ---v (getting dynamic content from the pageInfo)
-							responseText:          pageInfo.get('content') || ''
+							responseText: pageInfo.get('content') || ''
 						};
 
 				Ext.callback(req.success, req.scope, [resp]);
@@ -341,13 +341,13 @@ Ext.define('NextThought.view.content.Reader', {
 	//</editor-fold>
 
 
-}, function () {
+}, function() {
 	window.ReaderPanel = this;
 
-//	ContentAPIRegistry.register('NTIHintNavigation',this.setLocation,this);
-	ContentAPIRegistry.register('togglehint', function (e) {
+  //	ContentAPIRegistry.register('NTIHintNavigation',this.setLocation,this);
+	ContentAPIRegistry.register('togglehint', function(e) {
 		e = Ext.EventObject.setEvent(e || event);
-		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
+		Ext.get(e.getTarget().nextSibling).toggleCls('hidden');
 		return false;
 	});
 

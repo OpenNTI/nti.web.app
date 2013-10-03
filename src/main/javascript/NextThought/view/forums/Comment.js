@@ -55,7 +55,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.callParent(arguments);
@@ -65,7 +65,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		var me = this, r = me.record, rd;
 		me.callParent(arguments);
 		rd = me.renderData = Ext.apply(me.renderData || {}, r.getData());
@@ -82,12 +82,12 @@ Ext.define('NextThought.view.forums.Comment', {
 		}
 	},
 
-	loadUser: function (creator) {
+	loadUser: function(creator) {
 		var me = this;
 		UserRepository.getUser(creator, me.addUser, me);
 	},
 
-	addUser: function (u) {
+	addUser: function(u) {
 		var me = this, r = me.record,
 			rd = Ext.apply(me.renderData || {}, r.getData());
 		rd.lastModified = rd['Last Modified'];
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var bodyEl = this.bodyEl,
@@ -141,13 +141,13 @@ Ext.define('NextThought.view.forums.Comment', {
 		metaEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		footEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		hide = function () {
+		hide = function() {
 			bodyEl.hide();
 			ctrlEl.hide();
 			metaEl.hide();
 			footEl.hide();
 		};
-		show = function () {
+		show = function() {
 			bodyEl.show();
 			ctrlEl.show();
 			metaEl.show();
@@ -159,7 +159,7 @@ Ext.define('NextThought.view.forums.Comment', {
 			scope: this,
 			'activated-editor': hide,
 			'deactivated-editor': show,
-			'no-body-content': function (editor, el) {
+			'no-body-content': function(editor, el) {
 				editor.markError(el, 'You need to type something');
 				return false;
 			}
@@ -167,7 +167,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	onDestroy: function () {
+	onDestroy: function() {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
@@ -177,32 +177,32 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	getRefItems: function () {
+	getRefItems: function() {
 		return this.editor ? [this.editor] : [];
 	},
 
 
-	getRecord: function () {
+	getRecord: function() {
 		return this.record;
 	},
 
 
-	updateContent: function () {
+	updateContent: function() {
 		this.record.compileBodyContent(this.setContent, this);
 	},
 
 
-	setContent: function (html) {
+	setContent: function(html) {
 		var el = this.bodyEl, me = this;
 
 		el.update(html);
 		DomUtils.adjustLinks(el, window.location.href);
-		el.select('img.whiteboard-thumbnail').each(function (el) {
+		el.select('img.whiteboard-thumbnail').each(function(el) {
 			el.replace(el.up('.body-divider'));
 		});
 
-		el.select('img').each(function (img) {
-			img.on('load', function () {
+		el.select('img').each(function(img) {
+			img.on('load', function() {
 				me.up('[record]').fireEvent('sync-height');
 			});
 		});
@@ -224,7 +224,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	 * FIXME I don't really like this way of handling this.  I really want to use the placeholder logic but sill have
 	 * the ability for destroy and our store removal logic to kick in.
 	 */
-	onRecordDestroyed: function () {
+	onRecordDestroyed: function() {
 		//First remove the delete and edit link listeners followed by the els
 		if (this.deleteEl) {
 			this.mun(this.deleteEl, 'click', this.onDeletePost, this);
@@ -249,7 +249,7 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	onDeletePost: function (e) {
+	onDeletePost: function(e) {
 		e.stopEvent();
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
@@ -260,7 +260,7 @@ Ext.define('NextThought.view.forums.Comment', {
 			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
-			fn: function (str) {
+			fn: function(str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();
 				}
@@ -269,12 +269,12 @@ Ext.define('NextThought.view.forums.Comment', {
 	},
 
 
-	fireDeleteEvent: function () {
+	fireDeleteEvent: function() {
 		this.fireEvent('delete-topic-comment', this.record, this);
 	},
 
 
-	onEditPost: function (e) {
+	onEditPost: function(e) {
 		e.stopEvent();
 		var parentCmp = this.up('forums-topic');
 		if (parentCmp && parentCmp.clearSearchHit) {

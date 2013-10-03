@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.toast.Window',{
+Ext.define('NextThought.view.toast.Window', {
 	extend: 'Ext.Component',
 	alias: 'widget.toast',
 
@@ -33,49 +33,49 @@ Ext.define('NextThought.view.toast.Window',{
 		buttonRowEl: '.button-row'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {},{
 			title: this.title,
 			message: this.message,
 			iconCls: this.iconCls || undefined
 		});
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
-		this.mon(this.closeEl,'click',this.close,this);
-		if(!this.iconCls){
+		this.mon(this.closeEl, 'click', this.close, this);
+		if (!this.iconCls) {
 			this.icon.remove();
 		}
-		Ext.each(this.buttons,this.renderButton,this);
+		Ext.each(this.buttons, this.renderButton, this);
 	},
 
-	renderButton: function(button){
-		var b = this.buttonTpl.append(this.buttonRowEl,button,true);
-		this.mon(b,'click',
+	renderButton: function(button) {
+		var b = this.buttonTpl.append(this.buttonRowEl, button, true);
+		this.mon(b, 'click',
 				Ext.Function.createSequence(
 						Ext.Function.createSequence(
 							this.setActedOn,
-							this.close,this),
+							this.close, this),
 
 						button.callback,
-						button.scope||this),
+						button.scope || this),
 				this, {buttonCfg: button});
 	},
 
 
-	setActedOn: function(clickEvent,dom,eOpts){
+	setActedOn: function(clickEvent,dom,eOpts) {
 		this.actedOn = eOpts.buttonCfg || true;
 	},
 
 
-	close: function(e){
-		if(e){ e.stopEvent(); }
+	close: function(e) {
+		if (e) { e.stopEvent(); }
 		var size = Ext.dom.Element.getViewSize();
 		this.animate({
-			to:{ top: size.height + 10 },
+			to: { top: size.height + 10 },
 			duration: 200,
 			listeners: {
 	            afteranimate: this.destroy,
@@ -83,7 +83,7 @@ Ext.define('NextThought.view.toast.Window',{
 			}
 		});
 
-		Ext.callback(this.callback,this.scope||this,[this.actedOn||false]);
+		Ext.callback(this.callback, this.scope || this, [this.actedOn || false]);
 		return false;
 	}
 });

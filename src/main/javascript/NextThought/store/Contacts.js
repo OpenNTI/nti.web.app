@@ -1,30 +1,30 @@
 Ext.define('NextThought.store.Contacts', {
 	extend: 'Ext.data.Store',
-	model:  'NextThought.model.User',
+	model: 'NextThought.model.User',
 
-	proxy:        'memory',
-	remoteSort:   false,
+	proxy: 'memory',
+	remoteSort: false,
 	remoteFilter: false,
-	remoteGroup:  false,
+	remoteGroup: false,
 	sortOnFilter: true,
-	sorters:      [
+	sorters: [
 		{
-			property:  'displayName',
+			property: 'displayName',
 			direction: 'ASC',
-			transform: function (value) { return value.toLowerCase(); }
+			transform: function(value) { return value.toLowerCase(); }
 		}
 	],
 
-	bindFriendsListAndPresence: function (fs, ps) {
+	bindFriendsListAndPresence: function(fs, ps) {
 		var flListeners = {
-					scope:                this,
-					'contacts-added':     'addContacts',
-					'contacts-removed':   'removeContacts',
+					scope: this,
+					'contacts-added': 'addContacts',
+					'contacts-removed': 'removeContacts',
 					'contacts-refreshed': 'refreshContacts',
-					'load':               'friendsListStoreLoad'
+					'load': 'friendsListStoreLoad'
 				},
 				piListeners = {
-					scope:              this,
+					scope: this,
 					'presence-changed': 'onPresenceChange'
 				};
 
@@ -49,12 +49,12 @@ Ext.define('NextThought.store.Contacts', {
 		}
 	},
 
-	friendsListStoreLoad: function (store, records) {
+	friendsListStoreLoad: function(store, records) {
 		this.parentLoaded = true;
 		this.fireEvent('parent-store-loaded', store, records);
 	},
 
-	onPresenceChange: function (username, rec) {
+	onPresenceChange: function(username, rec) {
 		if (!rec.isPresenceInfo || (this.flStore && !this.flStore.isContact(username))) {
 			return;
 		}
@@ -62,20 +62,20 @@ Ext.define('NextThought.store.Contacts', {
 		this[fn]([username]);
 	},
 
-	contains: function (id) {
+	contains: function(id) {
 		return 0 <= this.indexOfId(id);
 	},
 
-	indexOfId: function (id) {
-		return (this.snapshot || this.data).findIndexBy(function (rec) {
+	indexOfId: function(id) {
+		return (this.snapshot || this.data).findIndexBy(function(rec) {
 			return rec.isEqual(rec.get('Username'), id);
 		}, this, 0);
 	},
 
-	doesItemPassFilter: function (item) {
+	doesItemPassFilter: function(item) {
 		var pass = true;
 
-		this.filters.each(function (filter) {
+		this.filters.each(function(filter) {
 			if (!filter.filterFn(item)) {
 				pass = false;
 			}
@@ -85,10 +85,10 @@ Ext.define('NextThought.store.Contacts', {
 		return pass;
 	},
 
-	addContacts: function (contacts) {
+	addContacts: function(contacts) {
 		var toAdd = [], me = this;
-		UserRepository.getUser(contacts, function (users) {
-			Ext.each(users, function (user) {
+		UserRepository.getUser(contacts, function(users) {
+			Ext.each(users, function(user) {
 				if (!isMe(user) && me.doesItemPassFilter(user) && !me.contains(user.getId())) {
 					toAdd.push(user);
 				}
@@ -99,9 +99,9 @@ Ext.define('NextThought.store.Contacts', {
 		});
 	},
 
-	removeContacts: function (contacts) {
+	removeContacts: function(contacts) {
 		var toRemove = [], me = this;
-		Ext.each(contacts, function (contact) {
+		Ext.each(contacts, function(contact) {
 			var idx = me.indexOfId(contact.getId ? contact.getId() : contact);
 			if (idx >= 0) {
 				toRemove.push((me.snapshot || me.data).getAt(idx));
@@ -112,7 +112,7 @@ Ext.define('NextThought.store.Contacts', {
 		}
 	},
 
-	refreshContacts: function (listStore) {
+	refreshContacts: function(listStore) {
 		//TODO smarter merge here
 		this.removeAll();
 		this.addContacts(listStore.getContacts());

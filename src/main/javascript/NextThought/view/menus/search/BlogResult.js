@@ -6,7 +6,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'isPost', cn: [
 			{cls: 'title', cn: [
-				{tag: 'span', html: "{title}"},
+				{tag: 'span', html: '{title}'},
 				{tag: 'tpl', 'if': 'name', cn: [
 					{cls: 'by', html: 'By {name}'}
 				]},
@@ -27,8 +27,8 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		]},
 		{tag: 'tpl', 'if': 'isComment', cn: [
 			{cls: 'title', cn: [
-				{cls: 'commenter', html: "{name} commented on:"},
-				{tag: 'span', html: "{title}"}
+				{cls: 'commenter', html: '{name} commented on:'},
+				{tag: 'span', html: '{title}'}
 			]},
 			{cls: 'wrap', cn: [
 				{cls: 'fragments', cn: [
@@ -41,12 +41,12 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 	]),
 
 
-	isComment: function (hit) {
+	isComment: function(hit) {
 		return (/.*?personalblogcomment$/).test(hit.get('MimeType'));
 	},
 
 
-	fillInData: function () {
+	fillInData: function() {
 		var me = this,
 			hit = me.hit,
 			containerId = hit.get('ContainerId'),
@@ -62,13 +62,13 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
-		function fillInName(){
+		function fillInName() {
 			if (isMe(name)) {
 				me.renderData.name = (comment) ? 'I' : 'me';
 				me.user = $AppConfig.userObject;
 			}
 			if (!isMe(name) && name) {
-				UserRepository.getUser(name, function (user) {
+				UserRepository.getUser(name, function(user) {
 					me.user = user;
 					me.renderData.name = user.getName();
 					if (me.rendered) {
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 				tagMsg = false;
 			} else {
 				//comma seperate the tags
-				tagMsg = ((tags.length > 2) ? "Tags" : "Tag") + ": " + tags.join(", ");
+				tagMsg = ((tags.length > 2) ? 'Tags' : 'Tag') + ': ' + tags.join(', ');
 			}
 
 			me.renderData.tags = tagMsg;
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 		function fail(req, resp) {
 			console.log('there was an error retrieving the object.', arguments);
-			if(resp.status === 404){
+			if (resp.status === 404) {
 				me.deleted = true;
 			}
 			fillInName();
@@ -114,17 +114,17 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		$AppConfig.service.getObject(containerId, finish, fail, me);
 	},
 
-	doClicked: function (fragIdx) {
+	doClicked: function(fragIdx) {
 		this.fireEvent('click-blog-result', this, fragIdx, this.comment);
 	},
 
-	displayNavigationError: function(){
+	displayNavigationError: function() {
 		var objDisplayType = 'object',
-			msgCfg = { msg: 'An unexpected error occurred loading the '+ objDisplayType };
+			msgCfg = { msg: 'An unexpected error occurred loading the ' + objDisplayType };
 
-		if(this.deleted ){
+		if (this.deleted) {
 			msgCfg.title = 'Not Found!';
-			msgCfg.msg = 'The '+objDisplayType+' you are looking for no longer exists.';
+			msgCfg.msg = 'The ' + objDisplayType + ' you are looking for no longer exists.';
 		}
 		alert(msgCfg);
 	}

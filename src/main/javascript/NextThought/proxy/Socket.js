@@ -9,7 +9,7 @@ Ext.define('NextThought.proxy.Socket', {
 		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
 			disconnectStats: {
-				count:0
+				count: 0
 			},
 			socket: null,
 			control: {
@@ -17,15 +17,15 @@ Ext.define('NextThought.proxy.Socket', {
 				'serverkill': function() {me.onKill.apply(me, arguments);},
 				'error': function() {me.onError.apply(me, arguments);},
 				'disconnect': function() {me.onDisconnect.apply(me, arguments);},
-				'connecting': function(){me.onConnecting.apply(me, arguments);},
-				'connect': function(){me.onConnected.apply(me, arguments);},
-				'connect_failed': function(){me.onConnectFailed.apply(me, arguments);}
+				'connecting': function() {me.onConnecting.apply(me, arguments);},
+				'connect': function() {me.onConnected.apply(me, arguments);},
+				'connect_failed': function() {me.onConnectFailed.apply(me, arguments);}
 			}
 		});
 
 		window.onbeforeunload = Ext.Function.createSequence(
-			window.onbeforeunload || function(){},
-			function(){ me.tearDownSocket(); });
+			window.onbeforeunload || function() {};,
+			function() { me.tearDownSocket(); });
 	},
 
 	/**
@@ -39,7 +39,7 @@ Ext.define('NextThought.proxy.Socket', {
 		var task;
 
 		task = {
-			run: function(){
+			run: function() {
 				if (window.io) {
 					Ext.TaskManager.stop(task);
 					this.setup();
@@ -53,12 +53,12 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	wrapHandler: function(handler, name){
-		return function(){
-				try{
+	wrapHandler: function(handler, name) {
+		return function() {
+				try {
 					handler.apply(this, arguments);
 				}
-				catch(e){
+				catch (e) {
 					console.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
 				}
 		};
@@ -74,7 +74,7 @@ Ext.define('NextThought.proxy.Socket', {
 				x = this.control[k];
 				this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
 
-				if(this.socket) {
+				if (this.socket) {
 					this.socket.on(k, this.control[k]);
 				}
 			}
@@ -98,28 +98,28 @@ Ext.define('NextThought.proxy.Socket', {
 			socket = io.connect(getURL()),
 			k;
 
-		if(this.isDebug && !socket.emit.chained) {
+		if (this.isDebug && !socket.emit.chained) {
 			socket.emit = Ext.Function.createSequence(
 				socket.emit,
-				function(){console.debug('socket.emit:',arguments);}
+				function() {console.debug('socket.emit:', arguments);}
 			);
 			socket.emit.chained = true;
 
 			socket.onPacket = Ext.Function.createSequence(
-				function(){
-					var o =JSON.stringify(arguments);
-					if((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}'){
-						console.debug('socket.onPacket: args:'+o);
+				function() {
+					var o = JSON.stringify(arguments);
+					if ((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
+						console.debug('socket.onPacket: args:' + o);
 					}
 				},
 				socket.onPacket
 			);
 
-			if(io.Transport.prototype.onHeartbeat){
+			if (io.Transport.prototype.onHeartbeat) {
 				io.Transport.prototype.onHeartbeat = Ext.Function.createSequence(
-					function(){
+					function() {
 						me.lastHeartbeat = new Date();
-						if(me.isDebug && me.isVerbose){
+						if (me.isDebug && me.isVerbose) {
 							console.debug('Recieved heartbeat from server', me.lastHeartbeat);
 						}
 					},
@@ -129,7 +129,7 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		for (k in this.control) {
-			if(this.control.hasOwnProperty(k)) {
+			if (this.control.hasOwnProperty(k)) {
 				socket.on(k, this.control[k]);
 			}
 		}
@@ -139,12 +139,12 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	onSocketAvailable: function(fn,scope){
-		if(this.socket){
-			Ext.callback(fn,scope);
+	onSocketAvailable: function(fn,scope) {
+		if (this.socket) {
+			Ext.callback(fn, scope);
 			return;
 		}
-		this.on('socket-available',fn,scope,{single:true});
+		this.on('socket-available', fn, scope, {single: true});
 	},
 
 
@@ -152,7 +152,7 @@ Ext.define('NextThought.proxy.Socket', {
 		if (this.socket) {
 			this.socket.emit.apply(this.socket, arguments);
 		}
-		else if(this.isDebug) {
+		else if (this.isDebug) {
 			console.debug('dropping emit, socket is down');
 		}
 	},
@@ -160,10 +160,10 @@ Ext.define('NextThought.proxy.Socket', {
 	/**
 	 * Destroy the socket.
 	 */
-	tearDownSocket: function(){
+	tearDownSocket: function() {
 		var s = this.socket;
 
-		if(s) {
+		if (s) {
 			delete this.socket;
 			s.removeAllListeners();
 			s.disconnect();
@@ -175,53 +175,53 @@ Ext.define('NextThought.proxy.Socket', {
 	onError: function() {
 		//TODO if we get called during handshake thats it, the socket is kaput.
 		//Attempt to reconnect with an exponential backoff.
-		if(this.isDebug) {
-			console.error('ERROR: socket error'+JSON.stringify(arguments));
+		if (this.isDebug) {
+			console.error('ERROR: socket error' + JSON.stringify(arguments));
 		}
 	},
 
 	onKill: function() {
-		if(this.isDebug){
-			console.debug( 'server kill' );
+		if (this.isDebug) {
+			console.debug('server kill');
 		}
 		this.tearDownSocket();
 	},
 
 	onDisconnect: function() {
 		var ds = this.disconnectStats;
-		ds.count ++;
-		if(this.isDebug) {
-			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count '+ds.count);
+		ds.count++;
+		if (this.isDebug) {
+			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count ' + ds.count);
 		}
 	},
 
-	onConnecting: function(transportName){
-		if(this.isDebug){
+	onConnecting: function(transportName) {
+		if (this.isDebug) {
 			console.log('Connecting with transport', transportName);
 		}
 	},
 
-	onConnected: function(){
+	onConnected: function() {
 		var socket = this.socket.socket;
 
-		if(this.sid !== socket.sessionid){
-			console.log("New Socket Session Id: "+socket.sessionid);
-			if(this.sid){
+		if (this.sid !== socket.sessionid) {
+			console.log('New Socket Session Id: '+ socket.sessionid);
+			if (this.sid) {
 				this.fireEvent('socket-new-sessionid', this.sid);
 			}
 
 			this.sid = socket.sessionid;
-		
-		}else{
-			console.log("Same Socket Session Id: "+this.sid);
+
+		}else {
+			console.log('Same Socket Session Id: '+ this.sid);
 		}
 
-		if(this.isDebug){
+		if (this.isDebug) {
 			console.log('Connected with transport', socket.transport.name);
 		}
 	},
 
-	onConnectFailed: function(){
+	onConnectFailed: function() {
 		console.error('Socket connection failed', arguments);
 	}
 

@@ -38,24 +38,24 @@ Ext.define('NextThought.view.account.contacts.createlist.Window', {
 		{xtype: 'createlist-main-view'}
 	],
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.el.down('.close'), 'click', this.close, this);
 		this.el.down('input').focus(200);
 		if (Ext.is.iPad) {
 			this.mon(this.el.down('input'), {
-				blur: function () {
+				blur: function() {
 					window.scrollTo(0, 0);
 				}
 			});
 		}
 	},
 
-	getListName: function () {
+	getListName: function() {
 		return this.query('createlist-main-view')[0].getListName();
 	},
 
-	showError: function (errorText) {
+	showError: function(errorText) {
 		return this.query('createlist-main-view')[0].showError(errorText);
 	}
 });

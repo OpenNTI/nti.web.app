@@ -33,9 +33,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		{
 			activitiesHolder: 1,
 			xtype: 'box',
-			autoEl:{
-				cn:[{
-					cls:"activity loading",
+			autoEl: {
+				cn: [{
+					cls: 'activity loading',
 					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
 				}]
 			}
@@ -69,7 +69,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	])),
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.store = Ext.getStore('Stream');
 
@@ -80,13 +80,13 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			datachanged: this.maybeReload,
 			//load: this.maybeReload,
 			//load: function(){ this.removeMask(); },
-			clear: function () {
+			clear: function() {
 				console.log('stream clear', arguments);
 			},
-			remove: function () {
+			remove: function() {
 				console.log('stream remove', arguments);
 			},
-			update: function () {
+			update: function() {
 				console.log('stream update', arguments);
 			}
 		});
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, {
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		this.getTypesMenu().show().hide();
 
-		this.on('resize', function () {
+		this.on('resize', function() {
 			if (this.el.isMasked()) {
 				this.addMask();
 			}
@@ -144,17 +144,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	getState: function () {
+	getState: function() {
 		return this.mixins.activityFilter.getState.apply(this, arguments);
 	},
 
 
-	applyState: function () {
+	applyState: function() {
 		return this.mixins.activityFilter.applyState.apply(this, arguments);
 	},
 
 
-	onScroll: function (e, dom) {
+	onScroll: function(e, dom) {
 		var el = dom.lastChild,
 			direction = (this.lastScrollTop || 0) - dom.scrollTop,
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
@@ -169,12 +169,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	onScrolledToBottom: Ext.Function.createBuffered(function () {
+	onScrolledToBottom: Ext.Function.createBuffered(function() {
 		this.fetchMore();
 	}, 20),
 
 
-	addMask: function (width, height) {
+	addMask: function(width, height) {
 		var el = this.el && Ext.get(this.el.dom.firstChild),
 			mask = this.el && this.el.mask('Loading...');
 
@@ -184,14 +184,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	removeMask: function (width, height) {
+	removeMask: function(width, height) {
 		if (this.el) {
 			this.el.unmask();
 		}
 	},
 
 
-	fetchMore: function () {
+	fetchMore: function() {
 		var s = this.store,
 			centerButton = this.el.down('.center-button');
 
@@ -214,14 +214,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	maybeReload: function () {
+	maybeReload: function() {
 		if (this.isVisible() && this.rendered) {
 			this.reloadActivity();
 		}
 	},
 
 
-	forceRefresh: function (cb) {
+	forceRefresh: function(cb) {
 		if (this.isVisible() && this.rendered) {
 			this.store.on('load', cb, this, {single: true});
 			delete this.currentCount;
@@ -230,7 +230,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	reloadActivity: function (store) {
+	reloadActivity: function(store) {
 		var container = this.down('box[activitiesHolder]'),
 			totalExpected,
 			items = [], oldestRecord, me = this;
@@ -294,7 +294,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				}
 			}
 
-			Ext.each(group.children, function (c) {
+			Ext.each(group.children, function(c) {
 				if (/deleted/i.test(c.get('ChangeType'))) {
 					maybeFinish();
 					return;
@@ -307,7 +307,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				}
 
 				items.push(item);
-				UserRepository.getUser(item.record && item.record.get('Creator'), function (u) {
+				UserRepository.getUser(item.record && item.record.get('Creator'), function(u) {
 					item.name = u.getName();
 					maybeFinish();
 
@@ -320,7 +320,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
 			if (!store.mayHaveAdditionalPages) {
 				Ext.DomHelper.overwrite(container.getEl(), {
-					cls: "activity nothing rhp-empty-list",
+					cls: 'activity nothing rhp-empty-list',
 					cn: ['No Activity, try another filter?']
 				});
 			}
@@ -335,7 +335,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	passesFilter: function (item) {
+	passesFilter: function(item) {
 		if (!item) {
 			return false;
 		}
@@ -346,7 +346,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	changeToActivity: function (c, maybeFinish, extend) {
+	changeToActivity: function(c, maybeFinish, extend) {
 		var item = c.get('Item'),
 			cid = item ? item.get('ContainerId') : undefined,
 			guid = guidGenerator(),
@@ -379,7 +379,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}, this.getMessage(c, cid, guid, maybeFinish, extend));
 
 		Ext.callback(extend);
-		UserRepository.getUser(c.get('Creator'), function (u) {
+		UserRepository.getUser(c.get('Creator'), function(u) {
 			activity.name = u.getName();
 			Ext.callback(maybeFinish);
 		});
@@ -388,7 +388,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	getMessage: function (change, cid, guid, maybeFinish, extend) {
+	getMessage: function(change, cid, guid, maybeFinish, extend) {
 		var item = change.get('Item'),
 			type = change.get('ChangeType'),
 			stream = this.stream,
@@ -460,7 +460,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	itemClick: function (e) {
+	itemClick: function(e) {
 		var activityTarget = e.getTarget('div.activity:not(.deleted)', null, true),
 			guid, item, rec, me = this, className;
 
@@ -490,22 +490,22 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	blogEntryClicked: function (rec) {
+	blogEntryClicked: function(rec) {
 		var me = this;
-		UserRepository.getUser(rec.get('Creator'), function (user) {
+		UserRepository.getUser(rec.get('Creator'), function(user) {
 			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 		});
 	},
 
 
-	forumTopicClicked: function (rec) {
+	forumTopicClicked: function(rec) {
 		if (this.fireEvent('before-show-topic', rec)) {
 			this.fireEvent('show-topic', rec);
 		}
 	},
 
 
-	forumCommentClicked: function (rec) {
+	forumCommentClicked: function(rec) {
 		var me = this;
 
 		function success(r) {
@@ -523,11 +523,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	blogCommentItemClicked: function (rec) {
+	blogCommentItemClicked: function(rec) {
 		var me = this;
 
 		function success(r) {
-			UserRepository.getUser(r.get('Creator'), function (user) {
+			UserRepository.getUser(r.get('Creator'), function(user) {
 				me.fireEvent('navigate-to-blog', user, r.get('ID'), rec.get('ID'));
 			});
 		}
@@ -540,21 +540,21 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	cancelPopupTimeout: function () {
+	cancelPopupTimeout: function() {
 		clearTimeout(this.hoverTimeout);
 	},
 
 
-	onScrollStopped: function () {
+	onScrollStopped: function() {
 		Ext.callback(this.performAfterScrollAction, this);
 		delete this.performAfterScrollAction;
 	},
 
 
-	itemHover: function (e) {
+	itemHover: function(e) {
 		function fn(pop) {
 			if (pop) {
-				pop.on('destroy', function () {
+				pop.on('destroy', function() {
 					delete me.activeTargetDom;
 					console.log('Should have cleared the active target..', me);
 				}, pop);
@@ -582,7 +582,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		me.cancelPopupTimeout();
-		me.hoverTimeout = Ext.defer(function () {
+		me.hoverTimeout = Ext.defer(function() {
 			target.un('mouseout', me.cancelPopupTimeout, me, {single: true});
 			popout.popup(rec, target, me, undefined, fn);
 			me.activeTargetDom = Ext.getDom(target);
@@ -592,12 +592,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	viewScrollHandler: function (e) {
+	viewScrollHandler: function(e) {
 		//NOTE: we want to avoid trying to display the popup while the user is scrolling.
 		var me = this;
 		clearTimeout(me.scrollingTimer);
 		me.isScrolling = true;
-		me.scrollingTimer = Ext.defer(function () {
+		me.scrollingTimer = Ext.defer(function() {
 			me.isScrolling = false;
 			me.fireEvent('scroll-stopped');
 		}, 500);
@@ -607,7 +607,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	//Right now things in the contacts are things shared
 	//directly to you, or creators that are connected to you.  Circled change
 	//also belong here.
-	belongsInMyContacts: function (change, flStore, communities, noVerify) {
+	belongsInMyContacts: function(change, flStore, communities, noVerify) {
 		var belongs = false,
 			username = $AppConfig.username,
 			item = change.get('Item'),
@@ -633,12 +633,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	//If there is a community in the shared with list
 	//it goes in the community tag
-	belongsInCommunity: function (change, flStore, communities, noVerify) {
+	belongsInCommunity: function(change, flStore, communities, noVerify) {
 		var item = change.get('Item'),
 			sharedWith = item.get('sharedWith') || [],
 			accepted = false, belongsInContacts;
 
-		Ext.each(sharedWith, function (u) {
+		Ext.each(sharedWith, function(u) {
 			if (Ext.Array.contains(communities, u)) {
 				accepted = true;
 				return false;
@@ -647,7 +647,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		});
 
 		//Topic and posts are PUBLIC. So we'll let them through
-		if(item.isAlwaysPublic){
+		if (item.isAlwaysPublic) {
 			accepted = true;
 		}
 
@@ -663,7 +663,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	filterStore: function (change) {
+	filterStore: function(change) {
 		var communities = ($AppConfig.userObject.getCommunities() || []),
 			community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
@@ -694,7 +694,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		// Strip away all DFL in communities.
-		Ext.each(communities, function (c) {
+		Ext.each(communities, function(c) {
 			if (c.isCommunity) {
 				communityNames.push(c.get('Username'));
 			}
@@ -708,7 +708,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	onActivate: function () {
+	onActivate: function() {
 		//Suspend events and let the last sort take care of it
 		this.store.suspendEvents();
 		this.store.clearFilter(true);
@@ -719,17 +719,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	getStore: function () {
+	getStore: function() {
 		return this.store;
 	},
 
 
-	getActiveView: function () {
+	getActiveView: function() {
 		return this;
 	},
 
 
-	applyFilters: function (mimeTypes, filterTypes) {
+	applyFilters: function(mimeTypes, filterTypes) {
 		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {
 			return;
 		}
@@ -746,12 +746,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		// Since we want 'Everyone' to imply a combination of things in your contacts
 		// and those that are publicly shared with your community
 		// We'll stop passing the 'inCommunity' filter, since that would only return things that are publicly shared.
-		if(this.filter === 'inCommunity'){
+		if (this.filter === 'inCommunity') {
 			Ext.Array.remove(filterTypes, this.filter);
 		}
 
-//		console.debug('current filter', this.filter);
-//		console.debug('Filter types: ', filterTypes);
+    //		console.debug('current filter', this.filter);
+    //		console.debug('Filter types: ', filterTypes);
 		s.removeAll();
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {

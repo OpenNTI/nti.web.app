@@ -15,7 +15,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	],
 
 
-	initComponent: function(){
+	initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
 		me.xtypes.push('field');
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 			xtype: 'usersearchinput',
 			width: 'auto',
 			xhooks: {
-				alignPicker: function(){
+				alignPicker: function() {
 					var o = this.inputEl,
 						b = this.bodyEl;
 					this.bodyEl = this.inputEl = me.getEl();
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 				}
 			}
 		});
-		me.mon(me.inputField,{
+		me.mon(me.inputField, {
 			scope: me,
 			'select': me.select,
 			'keydown': me.keyPress
@@ -49,32 +49,32 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 		me.callParent();
 		me.inputField.ref = me.el;
-		me.mon(me.el,'click',function(){ me.inputField.focus(); });
+		me.mon(me.el, 'click', function() { me.inputField.focus(); });
 	},
 
 
-	setReadOnly: function(readOnly){
+	setReadOnly: function(readOnly) {
 		this.readOnly = readOnly;
-		this.inputField[readOnly?'hide':'show']();
-		this.items.each(function(token){ token.setReadOnly(readOnly); },this);
+		this.inputField[readOnly ? 'hide' : 'show']();
+		this.items.each(function(token) { token.setReadOnly(readOnly); },this);
 	},
 
 
-	focus: function(){
+	focus: function() {
 		this.callParent(arguments);
-//		this.down('usersearchinput').focus();
+    //		this.down('usersearchinput').focus();
 	},
 
 
-	setValue: function(value){
-		var me = this, i=(value?value.length:0)-1;
+	setValue: function(value) {
+		var me = this, i = (value ? value.length : 0) - 1;
 		me.value = value;
 		//trim empty's...
-		for(i;i>=0;i--){if(!value[i]){value.splice(i,1);}}
+		for (i; i >= 0; i--) {if (!value[i]) {value.splice(i, 1);}}
 		this.clearTokens();
 		me.checkChange();
 		me.initValue();
@@ -82,11 +82,11 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	},
 
 
-	initValue: function(){
+	initValue: function() {
 		var m = this;
 		if (m.value && m.value.length > 0) {
-			UserRepository.getUser(m.value, function(users){
-				Ext.each(users, function(u){
+			UserRepository.getUser(m.value, function(users) {
+				Ext.each(users, function(u) {
 					m.addSelection(u);
 				});
 			});
@@ -95,13 +95,13 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 
 	isValid: function() {
-		return this.allowBlank || this.selections.length>0;
+		return this.allowBlank || this.selections.length > 0;
 	},
 
 
-	getValue: function(){
+	getValue: function() {
 		var m = this, r = [];
-		Ext.each(m.selections, function(u){
+		Ext.each(m.selections, function(u) {
 			r.push(u.get('Username'));
 		});
 		return r;
@@ -114,20 +114,20 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 
 	keyPress: function(field, event) {
-		if (event.keyCode===event.BACKSPACE && !field.getValue()){
+		if (event.keyCode === event.BACKSPACE && !field.getValue()) {
 			this.removeLastToken();
 		}
 	},
 
 
-	containsToken: function(model){
-		if(!model){return true;}
+	containsToken: function(model) {
+		if (!model) {return true;}
 
 		var id = model.getId(), found = false;
 		Ext.each(
 			this.selections,
-			function(o){
-				found=(o.getId()===id);
+			function(o) {
+				found = (o.getId() === id);
 				return !found;
 			},
 			this
@@ -136,29 +136,29 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	},
 
 
-	removeLastToken: function(){
+	removeLastToken: function() {
 		if (this.selections.length > 0) {
 			var lastSelection = this.selections.last();
-			this.down('[modelId='+IdCache.getIdentifier(lastSelection.getId())+']').destroy();
-			this.selections = this.selections.splice(0, this.selections.length -1);
+			this.down('[modelId=' + IdCache.getIdentifier(lastSelection.getId()) + ']').destroy();
+			this.selections = this.selections.splice(0, this.selections.length - 1);
 		}
 	},
 
 
-	clearTokens: function(){
-		Ext.each(this.query('token'), function(t){
+	clearTokens: function() {
+		Ext.each(this.query('token'), function(t) {
 			this.removeToken(t, t.model);
 		}, this);
 	},
 
-	removeToken: function(token, model){
+	removeToken: function(token, model) {
 		token.destroy();
 
 		var id = model.getId(),
 			s = [];
 
-		Ext.each(this.selections, function(o){
-			if(o.getId()===id) {
+		Ext.each(this.selections, function(o) {
+			if (o.getId() === id) {
 				return;
 			}
 
@@ -170,11 +170,11 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	},
 
 
-	addToken: function(model){
+	addToken: function(model) {
 		var c = this.items,
-			text = isMe(model)? "Me" : model.getName();
+			text = isMe(model) ? 'Me' : model.getName();
 
-		this.insert(c.length-1,//indexOf(saerchbox)-1
+		this.insert(c.length - 1,//indexOf(saerchbox)-1
 			{
 				xtype: 'token',
 				readOnly: this.readOnly,
@@ -189,15 +189,15 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	},
 
 
-	addSelection: function(users){
+	addSelection: function(users) {
 		var m = this;
 
-		if(!Ext.isArray(users)){
+		if (!Ext.isArray(users)) {
 			users = [users];
 		}
 
-		Ext.each(users,function(user){
-			if(m.containsToken(user)) { return; }
+		Ext.each(users, function(user) {
+			if (m.containsToken(user)) { return; }
 			m.selections.push(user);
 			m.addToken(user);
 		});

@@ -31,12 +31,12 @@ Ext.define('NextThought.view.SideBar', {
 
 	preventBringToFront: true,
 	listeners: {
-		activate: function () {
+		activate: function() {
 			Ext.WindowManager.sendToBack(this);
 		}
 	},
 
-	constructor: function () {
+	constructor: function() {
 		var contactsType = 'disabled-contacts-view';
 
 		if ($AppConfig.service.canFriend()) {
@@ -65,17 +65,17 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.mon(this.host, 'afterlayout', this.syncUp, this);
 
-		this.on('editorActivated', function(){
-			this.lockSideBarOpen=true;
+		this.on('editorActivated', function() {
+			this.lockSideBarOpen = true;
 		}, this);
-		this.on('editorDeactivated', function(){
+		this.on('editorDeactivated', function() {
 			var startHide = this.lockSideBarOpen;
 			delete this.lockSideBarOpen;
-			if(startHide){
+			if (startHide) {
 				this.startHide();
 			}
 		});
@@ -92,13 +92,13 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	destroy: function () {
+	destroy: function() {
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
 		this.toggle.remove();
 	},
 
 
-	viewportMonitor: function (w) {
+	viewportMonitor: function(w) {
 		if (w < 1390) {
 			this.host.hide();
 		}
@@ -110,7 +110,7 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.viewportMonitor(Ext.Element.getViewportWidth());
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.SideBar', {
 		if (Ext.is.iPad) {
 			this.mon(this.el, {
 				scope: this,
-				click: function (e) {
+				click: function(e) {
 					this.startShow();
 				}
 			}, this);
@@ -143,9 +143,9 @@ Ext.define('NextThought.view.SideBar', {
 		 *
 		 * @param x {Number/Number[]}
 		 * @param y {Number}
-		 * @returns {{x: Number, y: Number}}
+		 * @return {{x: Number, y: Number}}
 		 */
-		this.el.translateXY = function (x, y) {
+		this.el.translateXY = function(x, y) {
 			if (Ext.isArray(x)) {
 				y = x[1];
 				x = x[0];
@@ -163,7 +163,7 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	maybeCancelHide: function (e) {
+	maybeCancelHide: function(e) {
 		var l = e.getTarget('.x-layer'),
 			m = e.getTarget('.x-mask');
 		if (l || m) {
@@ -176,19 +176,19 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	stopShow: function () {
+	stopShow: function() {
 		clearTimeout(this.showTimeout);
 		delete this.showTimeout;
 	},
 
 
-	stopHide: function () {
+	stopHide: function() {
 		clearTimeout(this.hideTimeout);
 		delete this.hideTimeout;
 	},
 
 
-	startHide: function (force) {
+	startHide: function(force) {
 		if (this.host.isVisible() || this.lockSideBarOpen) {
 			return;
 		}
@@ -202,7 +202,7 @@ Ext.define('NextThought.view.SideBar', {
 		}
 	},
 
-	startShow: function (force) {
+	startShow: function(force) {
 		if (this.host.isVisible()) {
 			return;
 		}
@@ -222,7 +222,7 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	rollDown: function () {
+	rollDown: function() {
 		var d = this.down('chat-dock');
 		if (d) {
 			d.show();
@@ -234,7 +234,7 @@ Ext.define('NextThought.view.SideBar', {
 	},
 
 
-	syncUp: function () {
+	syncUp: function() {
 		var x = Ext.Element.getViewportWidth() - this.getWidth(),
 			d = this.down('chat-dock'),
 			size = this.host.getSize();
@@ -290,7 +290,7 @@ Ext.define('NextThought.view.SideBarTabPanel', {
 		plain: true,
 		ui: 'sidebar',
 		xhooks: {
-			initComponent: function () {
+			initComponent: function() {
 				this.callParent(arguments);
 				this.layout.overflowHandler =
 					new Ext.layout.container.boxOverflow.None(this.layout, {});
@@ -299,7 +299,7 @@ Ext.define('NextThought.view.SideBarTabPanel', {
 		}
 	},
 
-	onAdd: function (item, index) {
+	onAdd: function(item, index) {
 		item.tabConfig = Ext.applyIf(item.tabConfig || {}, {
 			xtype: 'sidebar-tab'
 		});

@@ -27,9 +27,9 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	]}),
 
 
-	loadContext: function (fin) {
-		if(!this.rendered){
-			this.on('afterrender', Ext.bind(this.loadContext, this, [fin]), this, {single:true});
+	loadContext: function(fin) {
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.loadContext, this, [fin]), this, {single: true});
 			return;
 		}
 
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			metaHandled = true;
 
 		if (r.focusRecord) {
-			this.on('add', function (container, newChild, idx) {
+			this.on('add', function(container, newChild, idx) {
 				if (newChild.record.getId() !== r.focusRecord.getId()) {
 					console.log('Add focus record');
 				}
@@ -61,8 +61,8 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		}
 
 		function error(req, resp) {
-			function filter(item){
-				if(item instanceof NextThought.model.Course){
+			function filter(item) {
+				if (item instanceof NextThought.model.Course) {
 					return Boolean(item.getLink('enroll'));
 				}
 				return true;
@@ -81,16 +81,16 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 			metaHandled = false;
 
-			ContentUtils.findContentObject(cid, function(obj, meta){
+			ContentUtils.findContentObject(cid, function(obj, meta) {
 				//TOOD need a generic framework for various objects here
-				if(obj && /ntivideo/.test(obj.mimeType || obj.MimeType)){
+				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
 					var src, sources, contextEl;
 					console.log('Need to set context being video', obj);
-					if(meta){
+					if (meta) {
 						me.locationEl.update(meta.getPathLabel());
-						if(me.context){
+						if (me.context) {
 							contextEl = me.context.up('.context');
-							if(contextEl){
+							if (contextEl) {
 								contextEl.addCls('video-context');
 							}
 							me.context.setHTML('');
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 						sources = obj.sources;
 
-						if(!Ext.isEmpty(sources)){
+						if (!Ext.isEmpty(sources)) {
 							src = sources.first().thumbnail;
 						}
 
@@ -111,16 +111,16 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 							}]);
 					}
 				}
-				else{
-					if(resp.status === 404){
-						if(p){
+				else {
+					if (resp.status === 404) {
+						if (p) {
 							me.handlePurchasable(p, el);
 							Ext.callback(fin);
 							return;
 						}
 
 						meta = ContentUtils.getLocation(ntiid);
-						if(meta){
+						if (meta) {
 							me.locationEl.update(meta.getPathLabel());
 							me.context.update(meta.location && meta.location.getAttribute('desc'));
 							Ext.callback(fin);
@@ -133,17 +133,17 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			});
 		}
 
-		LocationMeta.getMeta(cid, function (meta) {
+		LocationMeta.getMeta(cid, function(meta) {
 			metaInfo = meta;
 
 			function upLoc() {
-				if(!me.locationEl){ return; }
+				if (!me.locationEl) { return; }
 
 				if (metaInfo) {
 					me.locationEl.update(metaInfo.getPathLabel());
 					return;
 				}
-				if(metaHandled){
+				if (metaHandled) {
 					me.locationEl.remove();
 					Ext.callback(fin);
 				}
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
-	handlePurchasable: function(purchasable, el){
+	handlePurchasable: function(purchasable, el) {
 		var me = this,
 			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
 
@@ -162,11 +162,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		me.purchasable = purchasable;
 		el = el.up('.content-callout').removeCls('content-callout').addCls('purchase');
 
-		if(tpl){
+		if (tpl) {
 			me[tpl].overwrite(el, purchasable.getData(), true);
 		}
 		me.clearManagedListeners();
-		me.mon(el,'click', me.navigateToItem, me);
+		me.mon(el, 'click', me.navigateToItem, me);
 
 		Ext.DomHelper.append(me.getEl(), {
 			cls: 'purchasable-mask',
@@ -175,10 +175,10 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
-	setContext: function (doc) {
+	setContext: function(doc) {
 		var r = this.record, newContext;
 		try {
-			if( this.context ){
+			if (this.context) {
 				this.context.setHTML('');
 			}
 			newContext = RangeUtils.getContextAroundRange(
@@ -195,7 +195,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
-	navigateToItem: function () {
+	navigateToItem: function() {
 		//Show purchase window if we're purchase-able
 		if (this.requiresPurchase) {
 			this.fireEvent('show-purchasable', this, this.purchasable);
@@ -206,42 +206,42 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	},
 
 
-	getCommentCount: function (record) {
+	getCommentCount: function(record) {
 		return record.getReplyCount();
 	},
 
-	setRenderedTitle: function(record){},
+	setRenderedTitle: function(record) {},
 
 
-	setRecordTitle: function(){
-		function callback(snip, value){
-			if(snip && snip !== value){
-				me.subjectEl.set({'data-qtip':value});
+	setRecordTitle: function() {
+		function callback(snip, value) {
+			if (snip && snip !== value) {
+				me.subjectEl.set({'data-qtip': value});
 			}
 
 			me.subjectEl.update(snip || 'Subject');
-			if(!snip){
+			if (!snip) {
 				me.subjectEl.addCls('no-subject');
 				me.name.addCls('no-subject');
 			}
-			else{
+			else {
 				me.subjectEl.removeCls('no-subject');
 				me.name.removeCls('no-subject');
 			}
 		}
 
-		var me  = this;
+		var me = this;
 		me.record.resolveNoteTitle(callback, 30);
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.loadContext();
 		this.record.compileBodyContent(this.setBody, this, null, this.self.WhiteboardSize);
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.locationEl, 'click', this.navigateToItem, this);
 		this.mon(this.context, 'click', this.navigateToItem, this);
@@ -256,7 +256,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		this.setRecordTitle();
 	},
 
-	showReplies: function(){
+	showReplies: function() {
 		this.navigateToItem();
 	}
 });

@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.State', {
 
 	enableTransactions: true,
 
-	constructor: function () {
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.addEvents('restore');
@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.State', {
 		};
 	},
 
-	init: function () {
+	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.currentState = {};
@@ -63,11 +63,11 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	onSessionReady: function () {
+	onSessionReady: function() {
 		var me = this,
 			history = window.history,
-			push = history.pushState || function () {},
-			replace = history.replaceState || function () {},
+			push = history.pushState || function() {};,
+			replace = history.replaceState || function() {};,
 			SEVEN_DAYS = 604800000,
 			p = me.getStateKey() + 'non-history-state-',
 			provider = Ext.supports.LocalStorage
@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.State', {
 		 *                      and leaving keys it does not have alone.
 		 * @return {Boolean} Returns true if the state was changed, false otherwise.
 		 */
-		history.updateState = function (s) {
+		history.updateState = function(s) {
 			function isDiff(a, b) {
 				var ret = false;
 
@@ -113,7 +113,7 @@ Ext.define('NextThought.controller.State', {
 			var current = me.currentState,
 				diff = isDiff(current, s);
 			console.debug('update state', arguments);
-			Ext.applyIf(s, {active: current.active, version:3});
+			Ext.applyIf(s, {active: current.active, version: 3});
 
 			console.debug('Will state change?', diff);
 
@@ -128,10 +128,10 @@ Ext.define('NextThought.controller.State', {
 		};
 
 
-		history.pushState = function (s, title, url) {
+		history.pushState = function(s, title, url) {
 			var args;
 
-			if(!me.isPoppingHistory && me.transactions.active){
+			if (!me.isPoppingHistory && me.transactions.active) {
 				console.log('Applying push state to transaction', me.transactions.active, arguments);
 				me.transactions[me.transactions.active].push({
 					action: 'pushState',
@@ -175,11 +175,11 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
-		history.replaceState = function (s, title, url) {
+		history.replaceState = function(s, title, url) {
 			var args;
 			console.debug('replace state', s);
 
-			if(me.transactions.active){
+			if (me.transactions.active) {
 				console.log('Applying replace state to transaction', me.transactions.active, arguments);
 				me.transactions[me.transactions.active].push({
 					action: 'replaceState',
@@ -201,14 +201,14 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
-		window.onpopstate = function (e) {
+		window.onpopstate = function(e) {
 			me.isPoppingHistory = true;
 			console.debug('Browser is popping state', e.state);
 			me.onPopState(e);
 			me.isPoppingHistory = false;
 		};
 
-		window.onhashchange = function (e) {
+		window.onhashchange = function(e) {
 			//Hash changes are their own entry in the history... so we do not need to push history, we just need to
 			// handle the change.
 			console.debug('Hash change');
@@ -222,25 +222,25 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	closeActiveTransaction: function(){
+	closeActiveTransaction: function() {
 		var active = this.transactions.active;
 		delete this.transactions.active;
 		delete this.transactions[active];
 	},
 
 
-	abortActiveTransaction: function(){
+	abortActiveTransaction: function() {
 		console.error('Aborting active transaction', this.transactions);
 		this.closeActiveTransaction();
 	},
 
 
-	cancelTransaction: function(tId){
-		if(!this.enableTransactions){
+	cancelTransaction: function(tId) {
+		if (!this.enableTransactions) {
 			return;
 		}
 		var active = this.transactions.active;
-		if(active !== tId){
+		if (active !== tId) {
 			console.warn('Ignoring cancel transaction ', tId, this.transactions);
 			return;
 		}
@@ -248,22 +248,22 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	beginTransaction: function(transactionId){
-		if(!this.enableTransactions){
+	beginTransaction: function(transactionId) {
+		if (!this.enableTransactions) {
 			return;
 		}
 		var active = this.transactions[transactionId];
 
-		if(Ext.isEmpty(transactionId)){
+		if (Ext.isEmpty(transactionId)) {
 			Ext.Error.raise('Transaction ID required');
 		}
 
-		if(active){
+		if (active) {
 			this.abortActiveTransaction();
 			active = null;
 		}
 
-		if(this.transactions.active && this.transactions.active !== transactionId){
+		if (this.transactions.active && this.transactions.active !== transactionId) {
 			console.warn('Aborting previous transaction ', this.transactions.active, this.transcations[this.transactions.active]);
 			delete this.transactions[this.transactions.active];
 		}
@@ -275,17 +275,17 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	endTransaction: function(transactionId){
-		if(!this.enableTransactions){
+	endTransaction: function(transactionId) {
+		if (!this.enableTransactions) {
 			return;
 		}
-		var active, state, replace=false, title='', url='';
+		var active, state, replace = false, title = '', url = '';
 
-		if(Ext.isEmpty(transactionId)){
+		if (Ext.isEmpty(transactionId)) {
 			Ext.Error.raise('Transaction ID required');
 		}
 
-		if(!this.transactions.active || this.transactions.active !== transactionId){
+		if (!this.transactions.active || this.transactions.active !== transactionId) {
 			console.warn('Ended transaction is not the active transaction ', transactionId,
 				this.transactions.active, this.transactions[this.transactions.active]);
 			return;
@@ -294,16 +294,16 @@ Ext.define('NextThought.controller.State', {
 		active = this.transactions[transactionId];
 		this.closeActiveTransaction();
 
-		if(Ext.isEmpty(active)){
+		if (Ext.isEmpty(active)) {
 			console.warn('Ignoring end state transaction for', transactionId, 'because it does not exists.  Unbalanced calls to begin/end?');
 			return;
 		}
 
 		console.debug('State transaction ended for id', transactionId);
 
-		try{
+		try {
 			state = Ext.clone(this.currentState);
-			Ext.each(active, function(activePart){
+			Ext.each(active, function(activePart) {
 				var action = activePart.action || 'pushState',
 					payload = activePart.payload;
 
@@ -311,18 +311,18 @@ Ext.define('NextThought.controller.State', {
 				title = activePart.title || '';
 				url = activePart.url || '';
 
-				if(action === 'replaceState'){
+				if (action === 'replaceState') {
 					state = payload;
 				}
-				else if(action === 'pushState'){
+				else if (action === 'pushState') {
 					Ext.Object.merge(state, payload);
 				}
-				else{
+				else {
 					Ext.Error.raise('Unknown state transaction action', activePart);
 				}
 			});
 		}
-		catch(e){
+		catch (e) {
 			console.error('An error occurred gather state transaction. Aborting transaction',
 				this.transactions, active, e.stack || e.stacktrace || e.message || e);
 			return;
@@ -332,7 +332,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretForumsFragment: function (fragment, query) {
+	interpretForumsFragment: function(fragment, query) {
 		var parts = (fragment || '').split('/').slice(0),
 			result = {}, forums = {};
 
@@ -362,7 +362,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	generateForumsFragment: function (state) {
+	generateForumsFragment: function(state) {
 		var resultParts = [], result,
 			board = state && state.board;
 
@@ -370,7 +370,7 @@ Ext.define('NextThought.controller.State', {
 			resultParts.push('u');
 			resultParts.push(board.community);
 
-			Ext.each(['forum', 'topic', 'comment'], function (prop) {
+			Ext.each(['forum', 'topic', 'comment'], function(prop) {
 				if (state.hasOwnProperty(prop) && state[prop]) {
 					resultParts.push(state[prop]);
 				}
@@ -385,7 +385,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretProfileFragment: function (fragment, query) {
+	interpretProfileFragment: function(fragment, query) {
 		var result = {},
 			user = this.getUserModel().getProfileStateFromFragment(fragment);
 		if (user) {
@@ -393,7 +393,7 @@ Ext.define('NextThought.controller.State', {
 				active: 'profile',
 				profile: user
 			};
-			if( query ){
+			if (query) {
 				result.profile.queryObject = query;
 			}
 		}
@@ -401,7 +401,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretObjectFragment: function (fragment, query) {
+	interpretObjectFragment: function(fragment, query) {
 		var domain,
 			parts = (fragment || '').split('/').slice(0);
 
@@ -420,7 +420,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	generateFragment: function (state) {
+	generateFragment: function(state) {
 		var root = (state.active || '').toLowerCase(),
 			fragment, generated;
 
@@ -440,7 +440,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	interpretFragment: function (fragmentStr) {
+	interpretFragment: function(fragmentStr) {
 		fragmentStr = fragmentStr.split('?');
 		var query = ParseUtils.parseQueryString(fragmentStr[1]),
 			fragment = fragmentStr[0] || '',
@@ -453,7 +453,7 @@ Ext.define('NextThought.controller.State', {
 			result = this.fragmentInterpreterMap[root](fragment, query);
 		}
 		else if (ntiid) {
-			result = {active: 'content', content:{location: ntiid}};
+			result = {active: 'content', content: {location: ntiid}};
 		}
 
 		console.debug('Fragment interpreted:', result);
@@ -461,34 +461,34 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	getState: function () {
+	getState: function() {
 		return Ext.clone(this.currentState);
 	},
 
 
-	onPopState: function (e) {
+	onPopState: function(e) {
 		if (!NextThought.isInitialized || this.isHangout) {
 			return;
 		}
 		var s = e ? e.state : null;
 		if (!s) {
-			console.warn('there is no state to restore??',e);
+			console.warn('there is no state to restore??', e);
 			return;
 		}
 		this.fireEvent('restore', Ext.decode(s, true) || {});
 	},
 
 
-	track: function (viewId, silent) {
+	track: function(viewId, silent) {
 		var state = {active: viewId};
 
 		if (!silent && this.currentState.active !== viewId && NextThought.isInitialized) {
-			history.pushState(state, document.title,'./');
+			history.pushState(state, document.title, './');
 		}
 	},
 
 
-	restoreState: function (stateObject) {
+	restoreState: function(stateObject) {
 		if (this.restoringState) {
 			console.warn('Restoring state while one is already restoring...');
 			return;
@@ -502,7 +502,7 @@ Ext.define('NextThought.controller.State', {
 			var token = {};
 			token[key] = stateFrag;
 			app.registerInitializeTask(token);
-			return function (a) {
+			return function(a) {
 				app.finishInitializeTask(token);
 			};
 		}
@@ -515,11 +515,11 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		c = this.fireEvent('show-view',stateObject.active,true);
+		c = this.fireEvent('show-view', stateObject.active, true);
 		// c equals false means that we got cancelled in beforedeactivate event.
 		// i.e we can get cancelled if the activeView has blog editor open.
 		if (c === false) {
-			if(NextThought.isInitialized){
+			if (NextThought.isInitialized) {
 				history.back();
 			}
 			this.restoringState = false;
@@ -533,7 +533,7 @@ Ext.define('NextThought.controller.State', {
 				c = Ext.getCmp(key);
 				if (c && c.restore) {
 					try {
-						stateScoped = {active:stateObject.active};
+						stateScoped = {active: stateObject.active};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
 						c.on('finished-restore', fin(key, stateScoped), this, { single: true });
 						c.restore(stateScoped);
@@ -557,7 +557,7 @@ Ext.define('NextThought.controller.State', {
 
 	//Current default state is to load the content viewer on either the nti.landing_page or the first page in the
 	//library. And to put the profile on the app user.
-	buildDefaultState: function () {
+	buildDefaultState: function() {
 		var dsLandingPage = Ext.util.Cookies.get('nti.landing_page');
 		return {
 			active: dsLandingPage ? 'content' : 'library',
@@ -566,7 +566,7 @@ Ext.define('NextThought.controller.State', {
 		};
 	},
 
-	loadState: function () {
+	loadState: function() {
 		if (this.isHangout) {
 			console.info('Setting up state for Hangout...');
 			return {};
@@ -582,22 +582,22 @@ Ext.define('NextThought.controller.State', {
 			console.log('local state found?', previousState);
 			lastLocation = previousState || null;
 
-			if(!lastLocation){
+			if (!lastLocation) {
 				return defaultState;
 			}
 
 			//migrate
-			if(lastLocation.location){
-				lastLocation.content = {location:lastLocation.location};
+			if (lastLocation.location) {
+				lastLocation.content = {location: lastLocation.location};
 				delete lastLocation.location;
 			}
 
 			//migrate
-			if(lastLocation.library && lastLocation.library.location){
+			if (lastLocation.library && lastLocation.library.location) {
 				lastLocation.content = lastLocation.library;
 				delete lastLocation.library;
-				if(lastLocation.active==='library'){
-					lastLocation.active='content';
+				if (lastLocation.active === 'library') {
+					lastLocation.active = 'content';
 				}
 			}
 
@@ -616,7 +616,7 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	getStateKey: function () {
+	getStateKey: function() {
 		var username = $AppConfig.username;
 		if (!username) {
 			console.error('unknown username for state mgmt.');
@@ -625,12 +625,12 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	navigatePreviousPage: function () {
+	navigatePreviousPage: function() {
 		history.back();
 		return true;
 	},
 
-	changeHash: function (hash) {
+	changeHash: function(hash) {
 		if (!hash || hash.indexOf('#') !== 0 || window.location.hash === hash) {
 			return;
 		}

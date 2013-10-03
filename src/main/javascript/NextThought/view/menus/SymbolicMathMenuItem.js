@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.SymbolicMathMenuItem',{
+Ext.define('NextThought.view.menus.SymbolicMathMenuItem', {
 	extend: 'Ext.menu.Item',
 	alias: 'widget.symbolicmath-menuitem',
 
@@ -7,14 +7,14 @@ Ext.define('NextThought.view.menus.SymbolicMathMenuItem',{
 		html: '{displayText}'
 	}),
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayText: NextThought.view.assessment.input.SymbolicMath.transformToMathquillInput(this.text)
 		});
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		jQuery(this.el.down('span').dom).mathquill();
 	}

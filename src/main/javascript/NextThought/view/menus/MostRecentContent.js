@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.MostRecentContent',{
+Ext.define('NextThought.view.menus.MostRecentContent', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.most-recent-content-switcher',
 
@@ -13,14 +13,14 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 	autoRender: true,
 	renderTo: Ext.getBody(),
 
-	persistenceKey:'recents',
-	persistenceProperty:'navigation/content/switcher',
+	persistenceKey: 'recents',
+	persistenceProperty: 'navigation/content/switcher',
 
 	config: {
-		ownerNode:null
+		ownerNode: null
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.view = this.add({
 			xtype: 'dataview',
@@ -33,15 +33,15 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 			selectedItemCls: 'selected',
 			itemSelector: '.item',
 			tpl: Ext.DomHelper.markup([
-				{ tag: 'tpl', 'for':'.', cn:{
+				{ tag: 'tpl', 'for': '.', cn: {
 					cls: 'item',
-					cn:[
-						{ cls: 'image', style:{backgroundImage:'url({icon})'} },
+					cn: [
+						{ cls: 'image', style: {backgroundImage: 'url({icon})'} },
 						{
 							cls: 'wrap',
-							cn:[
-								{tag:'tpl', 'if':'courseName', cn:{ cls: 'courseName', html:'{courseName}'}},
-								{tag:'tpl', 'if':'!courseName', cn:{ cls: 'provider', html:'{author}'}},
+							cn: [
+								{tag: 'tpl', 'if': 'courseName', cn: { cls: 'courseName', html: '{courseName}'}},
+								{tag: 'tpl', 'if': '!courseName', cn: { cls: 'provider', html: '{author}'}},
 								{ cls: 'title', html: '{title}'}
 							]
 						}
@@ -49,7 +49,7 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 				}},
 				{ cls: 'more', cn: [{},{},{}]}
 			]),
-			listeners:{
+			listeners: {
 				scope: this,
 				select: 'onSelected',
 				containerclick: 'onFramedClicked'
@@ -64,54 +64,54 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 			mouseover: 'stopHide'
 		});
 
-		Library.on('loaded','fillStore',this,{buffer:1});
+		Library.on('loaded', 'fillStore', this, {buffer: 1});
 	},
 
 
-	setInitialPosition: function(){
+	setInitialPosition: function() {
 		this.el.setLocalY(0);
 		this.el.setLocalX(0);
 	},
 
 
-	fillStore: function(){
+	fillStore: function() {
 		this.allowTracking = true;
-		var s = PersistentStorage.getProperty(this.persistenceKey,this.persistenceProperty,[]);
-		try{
-			s = Ext.Array.map(s, function(o){
+		var s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
+		try {
+			s = Ext.Array.map(s, function(o) {
 				var t = Library.getTitle(o.index);
-				if(t){t.lastTracked = Ext.Date.parse(o.lastTracked,'timestamp');}
+				if (t) {t.lastTracked = Ext.Date.parse(o.lastTracked, 'timestamp');}
 				return t;
 			});
 
 			this.getStore().loadRecords(Ext.Array.clean(s));
 		}
-		catch(e){
+		catch (e) {
 			console.warn(e.message);
 		}
 	},
 
 
-	startHide: function(){
+	startHide: function() {
 		this.stopHide();
-		this.menuHideTimer = Ext.defer(this.hide,750,this);
+		this.menuHideTimer = Ext.defer(this.hide, 750, this);
 	},
 
-	stopHide: function(){
+	stopHide: function() {
 		clearTimeout(this.menuHideTimer);
 	},
 
 
-	getStore: function(){
-		if(!this.store){
+	getStore: function() {
+		if (!this.store) {
 			this.store = new Ext.data.Store({
 				model: NextThought.model.Title,
 				proxy: 'memory',
-				sorters:[
-					function(a,b){
+				sorters: [
+					function(a,b) {
 						a = a.lastTracked.getTime();
 						b = b.lastTracked.getTime();
-						return b-a;
+						return b - a;
 					}
 				]
 			});
@@ -121,8 +121,8 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 	},
 
 
-	show: function(){
-		if(this.getStore().getCount()===0){return;}
+	show: function() {
+		if (this.getStore().getCount() === 0) {return;}
 
 		var n = this.getOwnerNode();
 		this.setWidth(n.getWidth());
@@ -130,44 +130,44 @@ Ext.define('NextThought.view.menus.MostRecentContent',{
 		try {
 			this.callParent(arguments);
 		}
-		finally{
+		finally {
 			this.fireEvent('mouseover');//trigger the partent from hiding this if the mouse doesn't move.
-			this.alignTo(n,'tl-tl');
+			this.alignTo(n, 'tl-tl');
 		}
 	},
 
 
-	track: function(rec){
+	track: function(rec) {
 		var s = this.getStore();
 		s.remove(rec);
 		rec.lastTracked = new Date();
 		s.add(rec);
 
-		if(s.getCount() > 5){
+		if (s.getCount() > 5) {
 			s.remove(s.getRange(5));
 		}
 
 
-		if(this.allowTracking){
+		if (this.allowTracking) {
 			s = s.getRange();
-			Ext.each(s,function(t,i){
+			Ext.each(s, function(t,i) {
 
-				s[i] = {index: t.get('index'),lastTracked: t.lastTracked};
+				s[i] = {index: t.get('index'), lastTracked: t.lastTracked};
 			});
 			//Cant save records to local storage...so must save just the id's or the index of the content
-			PersistentStorage.updateProperty(this.persistenceKey,this.persistenceProperty,s);
+			PersistentStorage.updateProperty(this.persistenceKey, this.persistenceProperty, s);
 		}
 	},
 
 
-	onSelected: function(selModel,record){
+	onSelected: function(selModel,record) {
 		selModel.deselect(record);
-		this.fireEvent('set-last-location-or-root',record.get('NTIID'));
+		this.fireEvent('set-last-location-or-root', record.get('NTIID'));
 		this.hide();
 	},
 
 
-	onFramedClicked: function(){
+	onFramedClicked: function() {
 		this.fireEvent('go-to-library');
 		this.hide();
 	}

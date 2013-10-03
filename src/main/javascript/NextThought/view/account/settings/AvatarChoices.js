@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.settings.AvatarChoices',{
+Ext.define('NextThought.view.account.settings.AvatarChoices', {
 	extend: 'Ext.Component',
 	alias: 'widget.avatar-choices',
 
@@ -16,9 +16,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html:'Custom Photo'},
-						{cn:[
-							{tag: 'span', cls: 'editCustom', cn:[
+						{tag: 'h3', cls: 'title', html: 'Custom Photo'},
+						{cn: [
+							{tag: 'span', cls: 'editCustom', cn: [
 								{tag: 'a', cls: 'editCustom', href: '#edit', html: 'Edit'},
 								' | ']},
 							{tag: 'a', cls: 'uploadCustom', href: '#upload', html: 'Upload New Photo'}
@@ -31,8 +31,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html:'Randomly Generated'},
-						{cn:[
+						{tag: 'h3', cls: 'title', html: 'Randomly Generated'},
+						{cn: [
 							{tag: 'a', cls: 'more-random-choices', href: '#moreRandom', html: 'Show More'}
 						]}
 					]
@@ -44,8 +44,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html:'My Gravatar'},
-						{cn:[
+						{tag: 'h3', cls: 'title', html: 'My Gravatar'},
+						{cn: [
 							{tag: 'a', cls: 'change gravatar', href: 'http://gravatar.com', html: 'Change', target: '_blank'}
 						]}
 					]
@@ -70,32 +70,32 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		var me = this,
 			u = (me.user || $AppConfig.userObject),
 			c = u.get('AvatarURLChoices'),
 			url = u.get('avatarURL'),
 			gravatar;
 
-		Ext.each(c,function(url){
-			if(/#gravatar/i.test(url)){gravatar = url;}
+		Ext.each(c, function(url) {
+			if (/#gravatar/i.test(url)) {gravatar = url;}
 			return !gravatar;
 		});
 
-		if(!/^data:/i.test(url) && !/@@view$/i.test(url)){
+		if (!/^data:/i.test(url) && !/@@view$/i.test(url)) {
 			url = null;
 		}
 
 
-		me.renderData = Ext.apply(me.renderData||{},{
+		me.renderData = Ext.apply(me.renderData || {},{
 			customAvatarUrl: url || NextThought.model.User.getUnresolved().get('avatarURL'),
-			randomAvatarUrl: url? c.last() : u.get('avatarURL'),
+			randomAvatarUrl: url ? c.last() : u.get('avatarURL'),
 			gravatarUrl: gravatar
 		});
 
 		me.hasGravatar = Boolean(gravatar);
 
-		me.moreOptionsMenu = Ext.widget('menu',{
+		me.moreOptionsMenu = Ext.widget('menu', {
 			ui: 'nt',
 			plain: true,
 			showSeparator: false,
@@ -107,20 +107,20 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			layout: 'auto',
 			width: 350,
 			items: [
-				{ xtype:'random-gravatar-picker', cls: 'random-gravatar-picker mini' }
+				{ xtype: 'random-gravatar-picker', cls: 'random-gravatar-picker mini' }
 			]
 		});
 
-		me.mon(me.moreOptionsMenu.down('random-gravatar-picker'),'new-avatar',this.updateRandromSelection,this);
+		me.mon(me.moreOptionsMenu.down('random-gravatar-picker'), 'new-avatar', this.updateRandromSelection, this);
 		me.callParent(arguments);
 
 		me.on('destroy', me.moreOptionsMenu.destroy, me.moreOptionsMenu);
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
-		if(!this.hasGravatar){
+		if (!this.hasGravatar) {
 			this.gravatarChoice.remove();
 			delete this.gravatarChoice;
 			this.updateLayout();
@@ -131,7 +131,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			url = u.get('avatarURL'),
 			selection = me.gravatarChoice || me.randomChoice;
 
-		if(/^data:/i.test(url) || /@@view$/i.test(url)){
+		if (/^data:/i.test(url) || /@@view$/i.test(url)) {
 			selection = me.customChoice;
 		}
 		else {
@@ -141,17 +141,17 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 		me.select(selection);
 
-		me.mon( me.list, 'click', me.clickHandler, me);
+		me.mon(me.list, 'click', me.clickHandler, me);
 
-		me.mon(me.up('window').down('picture-editor'),'saved',function(url){
+		me.mon(me.up('window').down('picture-editor'), 'saved', function(url) {
 			me.select(me.customChoice);
-			me.customChoiceImage.set({src:url});
+			me.customChoiceImage.set({src: url});
 			me.editCustomChoice.show();
 		});
 	},
 
 
-	clickHandler: function(e){
+	clickHandler: function(e) {
 		e.stopEvent();
 		var item = e.getTarget('li', null, true),
 			action = e.getTarget('a', null, true),
@@ -159,22 +159,22 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			changing = false;
 
 
-		if(action){
+		if (action) {
 			action = action.getAttribute('href');
-			if(action && this[action.substring(1)]){
+			if (action && this[action.substring(1)]) {
 				this[action.substring(1)]();
 				return false;
 			}
 		}
 
-		if(item) {
+		if (item) {
 			changing = !item.hasCls('selected');
 			this.select(item);
 		}
 
-		if(changing) {
+		if (changing) {
 			url = item.down('img').getAttribute('src');
-			if(item === this.customChoice && !/^data/i.test(url)){
+			if (item === this.customChoice && !/^data/i.test(url)) {
 				//If we jump back and forth between choices, why can't this be set back to the @@view it was?
 				// UPDATE: if its a new @@view from the response of setting, it couldn't be set back (if the user
 				// toggled back&forth between random and uploaded)
@@ -190,31 +190,31 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 
-	makeAChoice: function(url){
+	makeAChoice: function(url) {
 		var el = this.getEl(),
 			u = $AppConfig.userObject;
-		if(Ext.Array.indexOf(u.get('AvatarURLChoices'), url) >= 0 || /^data/i.test(url) || /@@view$/i.test(url)){
+		if (Ext.Array.indexOf(u.get('AvatarURLChoices'), url) >= 0 || /^data/i.test(url) || /@@view$/i.test(url)) {
 			el.mask('Saving...');
 			u.saveField('avatarURL', url,
-				function good(){ el.unmask(); },
-				function bad(){ el.unmask(); alert({title:'Oops!',msg:'Something went wrong.'}); });
+				function good() { el.unmask(); },
+				function bad() { el.unmask(); alert({title: 'Oops!', msg: 'Something went wrong.'}); });
 		}
 	},
 
 
-	updateRandromSelection: function(url){
-		this.randomChoiceImage.set({src:url});
+	updateRandromSelection: function(url) {
+		this.randomChoiceImage.set({src: url});
 		this.select(this.randomChoice);
 	},
 
 
-	select: function(li){
+	select: function(li) {
 		this.el.select('.selected').removeCls('selected');
 		li.addCls('selected');
 	},
 
 
-	edit: function(){
+	edit: function() {
 		var w = this.up('account-window');
 		w.down('picture-editor').editMode(this.customChoiceImage.getAttribute('src'));
 		w.changeView({
@@ -224,7 +224,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 
-	upload: function(){
+	upload: function() {
 		var w = this.up('account-window');
 		w.down('picture-editor').reset();
 		w.changeView({
@@ -234,9 +234,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 
-	moreRandom: function(){
+	moreRandom: function() {
 		this.moreOptionsMenu.showBy(this.moreOptions);
 	}
-}, function(){
+}, function() {
 	this.prototype.imgToDataUrl = WBUtils.imgToDataUrl;
 });

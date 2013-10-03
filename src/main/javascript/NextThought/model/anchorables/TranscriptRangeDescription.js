@@ -1,12 +1,12 @@
 Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
 	extend: 'NextThought.model.anchorables.TimeRangeDescription',
 
-	requires:[
+	requires: [
 		'NextThought.model.anchorables.TranscriptContentPointer'
 	],
 
 	statics: {
-		createFromObject: function(o){
+		createFromObject: function(o) {
 			var cp = NextThought.model.anchorables.TranscriptContentPointer;
 
 			return NextThought.model.anchorables.TranscriptRangeDescription.create({
@@ -17,7 +17,7 @@ Ext.define('NextThought.model.anchorables.TranscriptRangeDescription', {
 		}
 	},
 
-	constructor: function(o){
+	constructor: function(o) {
 		this.callParent(arguments);
 		this.initConfig(o);
 		this.Class = 'TranscriptRangeDescription';

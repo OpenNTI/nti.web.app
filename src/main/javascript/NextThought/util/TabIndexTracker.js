@@ -1,17 +1,17 @@
-Ext.define('NextThought.util.TabIndexTracker',{
+Ext.define('NextThought.util.TabIndexTracker', {
 
 	current: 1,
 
 
-	getNext: function(skip){
+	getNext: function(skip) {
 		var r = this.current;
-		this.current += 1 + (skip||0);
+		this.current += 1 + (skip || 0);
 		return r;
 	},
 
-	reset: function(seed){
-		this.current = (seed||0);
+	reset: function(seed) {
+		this.current = (seed || 0);
 	}
-}, function(){
+}, function() {
 	this.prototype.next = this.prototype.getNext;
 });

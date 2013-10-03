@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias:  'widget.account-window',
+	alias: 'widget.account-window',
 
 	requires: [
 		'Ext.toolbar.Spacer',//not sure what below this class needs it, but it synchronously loads if not required. :/
@@ -10,20 +10,20 @@ Ext.define('NextThought.view.account.Window', {
 		'NextThought.view.account.settings.PictureEditor'
 	],
 
-	cls:         'account-window',
-	ui:          'account-window',
+	cls: 'account-window',
+	ui: 'account-window',
 	minimizable: false,
-	constrain:   true,
-	closable:    true,
-	modal:       true,
-	dialog:      true,
-	resizable:   false,
+	constrain: true,
+	closable: true,
+	modal: true,
+	dialog: true,
+	resizable: false,
 
 	width: 535,
-	y:     80,
+	y: 80,
 
 	layout: {
-		type:  'vbox',
+		type: 'vbox',
 		align: 'stretch'
 	},
 
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.account.Window', {
 
 	items: [],
 
-	constructor: function () {
+	constructor: function() {
 		var me = $AppConfig.userObject,
 				canUploadAvatar = $AppConfig.service.canUploadAvatar(),
 				availablePanels = canUploadAvatar
@@ -56,17 +56,17 @@ Ext.define('NextThought.view.account.Window', {
 			{
 				xtype: 'box', autoEl: {
 				cls: 'identity',
-				cn:  [
+				cn: [
 					{ cls: 'close' },
 					{ tag: 'img', cls: 'avatar', src: me.get('avatarURL') },
 					{
 						cls: 'wrap',
-						cn:  [
+						cn: [
 							{ cls: 'name', html: me.getName()},
 							{ cls: 'affiliation', html: me.get('affiliation')},
 							{
 								cls: 'identities',
-								cn:  [
+								cn: [
 									{tag: 'span', cls: 'username', html: me.get('Username')},
 									{tag: 'span', cls: 'email', html: me.get('email')}
 								]
@@ -77,16 +77,16 @@ Ext.define('NextThought.view.account.Window', {
 			}
 			},
 			{
-				xtype:       'container',
+				xtype: 'container',
 				defaultType: 'button',
-				defaults:    {
-					ui:           'account',
+				defaults: {
+					ui: 'account',
 					enableToggle: true,
 					allowDepress: false,
-					toggleGroup:  'account-buttons',
-					minWidth:     150,
-					listeners:    {
-						toggle: function (btn, pressed) {
+					toggleGroup: 'account-buttons',
+					minWidth: 150,
+					listeners: {
+						toggle: function(btn, pressed) {
 							if (pressed) {
 								btn.up('window').changeView(btn);
 							}
@@ -106,12 +106,12 @@ Ext.define('NextThought.view.account.Window', {
 				]
 			},
 			{
-				name:   'settings',
-				xtype:  'container',
+				name: 'settings',
+				xtype: 'container',
 				layout: {
 					type: 'card'
 				},
-				items:  availablePanels
+				items: availablePanels
 			}
 		];
 
@@ -119,15 +119,15 @@ Ext.define('NextThought.view.account.Window', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
 		me.mon(me.el.down('.close'), 'click', me.close, this);
 
 		me.mon($AppConfig.userObject, {
-			scope:     me,
-			'changed': function (r) {
+			scope: me,
+			'changed': function(r) {
 				var el = me.el;
 				el.down('.identity div.name').update(r.getName());
 				el.down('.identity div.affiliation').update(r.get('affiliation'));
@@ -140,7 +140,7 @@ Ext.define('NextThought.view.account.Window', {
 	syncHeight: Ext.emptyFn,
 
 
-	changeView: function (btn) {
+	changeView: function(btn) {
 		var c = this.down('[name=settings]'),
 				p = c.down(btn.associatedPanel);
 
@@ -155,22 +155,22 @@ Ext.define('NextThought.view.account.Window', {
 //TODO if this becomse permanant use it somewhere else
 Ext.define('NextThought.view.account.VideoSettings', {
 	extend: 'Ext.Component',
-	alias:  'widget.video-settings',
+	alias: 'widget.video-settings',
 
 	cls: 'video-settings',
 
 	renderTpl: Ext.DomHelper.markup({
-										cls:      'prefer-flash-checkbox',
-										html:     'Prefer flash video player when possible.',
+										cls: 'prefer-flash-checkbox',
+										html: 'Prefer flash video player when possible.',
 										tabIndex: 0,
-										role:     'button'
+										role: 'button'
 									}),
 
 	renderSelectors: {
 		preferFlashEl: '.prefer-flash-checkbox'
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.preferFlashEl, {
 			scope: this,
@@ -179,22 +179,22 @@ Ext.define('NextThought.view.account.VideoSettings', {
 		this.updateCheckbox();
 	},
 
-	updateCheckbox: function () {
+	updateCheckbox: function() {
 		var me = this;
-		$AppConfig.Preferences.getPreference('WebApp', function(value){
-			if(value){
+		$AppConfig.Preferences.getPreference('WebApp', function(value) {
+			if (value) {
 				me.currentPreference = value;
-				me.preferFlashEl[value.get('preferFlashVideo')? 'addCls' : 'removeCls']('checked');
+				me.preferFlashEl[value.get('preferFlashVideo') ? 'addCls' : 'removeCls']('checked');
 			}
 		});
 	},
 
-	checkboxClicked: function () {
+	checkboxClicked: function() {
 		var prefer = !this.preferFlashEl.hasCls('checked'); // the dom hasn't updated with the new class yet
-		if(this.currentPreference){
+		if (this.currentPreference) {
 			this.currentPreference.set('preferFlashVideo', prefer);
 			this.currentPreference.save();
-			this.preferFlashEl[prefer? 'addCls' : 'removeCls']('checked');
+			this.preferFlashEl[prefer ? 'addCls' : 'removeCls']('checked');
 		}
 	}
 });

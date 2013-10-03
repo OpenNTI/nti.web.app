@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
-	alias:    'reader.noteOverlay',
-	mixins:   {
+	alias: 'reader.noteOverlay',
+	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 	requires: [
@@ -10,20 +10,20 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	],
 
 
-	constructor: function (config) {
+	constructor: function(config) {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
 		this.mon(this.reader, {
-			scope:                  this,
-			destroy:                'destroy',
-			afterRender:            'insertOverlay',
-			'scroll':				'onScroll',
-			'content-updated':      'onContentUpdate',
+			scope: this,
+			destroy: 'destroy',
+			afterRender: 'insertOverlay',
+			'scroll':	'onScroll',
+			'content-updated': 'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
-			'sync-height':          'syncHeight',
-			'create-note':          'noteHere',
-			'beforenavigate':       'onNavigation',
-			'beforedeactivate':     'onNavigation'
+			'sync-height': 'syncHeight',
+			'create-note': 'noteHere',
+			'beforenavigate': 'onNavigation',
+			'beforedeactivate': 'onNavigation'
 		});
 
 
@@ -36,15 +36,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	insertOverlay: function () {
+	insertOverlay: function() {
 		var me = this,
 				box,
 				container = {
-					cls:   'note-gutter', onclick: 'void(0)',
+					cls: 'note-gutter', onclick: 'void(0)',
 					style: {
 						height: me.reader.getIframe().get().getHeight()
 					},
-					cn:    [
+					cn: [
 						{ cls: 'note-here-control-box', onclick: 'void(0)' }
 					]
 				};
@@ -58,64 +58,64 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		if (Ext.is.iPad) {
 			me.mon(box, {
-				click:     'openEditor',
+				click: 'openEditor',
 				mouseover: 'overNib'
 			});
 		}
 		else {
 			me.mon(box, {
-				click:     'openEditor',
+				click: 'openEditor',
 				mouseover: 'overNib',
 				mousemove: 'overNib',
-				mouseout:  'offNib',
-				scope:     me
+				mouseout: 'offNib',
+				scope: me
 			});
 		}
 
 		if (Ext.is.iPad) {
 			me.reader.on('destroy', 'destroy',
 						 me.mon(container.parent(), {
-							 scope:       me,
+							 scope: me,
 							 destroyable: true,
-							 click:       'trackLineAtEvent'
+							 click: 'trackLineAtEvent'
 						 }));
 		}
 		else {
 			me.reader.on('destroy', 'destroy',
 						 me.mon(container.parent(), {
-							 scope:       me,
+							 scope: me,
 							 destroyable: true,
-							 mousemove:   'mouseOver',
-							 mouseover:   'mouseOver',
-							 mouseout:    'mouseOut'
+							 mousemove: 'mouseOver',
+							 mouseover: 'mouseOver',
+							 mouseout: 'mouseOut'
 						 }));
 
 			me.reader.on({
 							 //no buffer
-							 'iframe-mouseout':  'mouseOut',
+							 'iframe-mouseout': 'mouseOut',
 							 'iframe-mousedown': 'suspendResolver',
-							 'iframe-mouseup':   'resumeResolver',
-							 scope:              me
+							 'iframe-mouseup': 'resumeResolver',
+							 scope: me
 						 });
 
 			me.reader.on({
-							 scope:              me,
+							 scope: me,
 							 'iframe-mousemove': 'mouseOver',
-							 buffer:             400
+							 buffer: 400
 						 });
 		}
 	},
 
 
-	getAnnotationOffsets: function () {
+	getAnnotationOffsets: function() {
 		return this.reader.getAnnotationOffsets();
 	},
 
 
-	onNavigation: function () {
+	onNavigation: function() {
 		if (this.editor && this.editor.isActive()) {
-			var msg = "You are currently creating a note. Please save or cancel it first.";
-			Ext.defer(function () {
+			var msg = 'You are currently creating a note. Please save or cancel it first.';
+			Ext.defer(function() {
 				alert({msg: msg});
 			}, 1);
 
@@ -126,21 +126,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	onScroll: function (e, dom) {
+	onScroll: function(e, dom) {
 	},
 
 
-	onContentUpdate: function () {
+	onContentUpdate: function() {
 	},
 
 
-	editorCleanup: function () {
+	editorCleanup: function() {
 		delete this.suspendMoveEvents;
 		delete this.editor;
 	},
 
 
-	openEditor: function () {
+	openEditor: function() {
 		var tabPanel, lineInfo = this.data.box.activeLineInfo,
 				prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
 				sharing = prefs && prefs.sharing,
@@ -166,18 +166,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		tabPanel.mask();
 
 		this.editor = Ext.widget('nti-editor', {
-			lineInfo:            lineInfo || {},
-			ownerCmp:            this.reader,
-			sharingValue:        shareInfo,
-			floating:            true,
-			renderTo:            targetEl,
+			lineInfo: lineInfo || {},
+			ownerCmp: this.reader,
+			sharingValue: shareInfo,
+			floating: true,
+			renderTo: targetEl,
 			enableShareControls: true,
-			enableTitle:         true,
+			enableTitle: true,
 			preventBringToFront: true,
-			listeners:           {
+			listeners: {
 				'deactivated-editor': 'destroy',
-				'no-title-content': function(){return false;},//require title
-				grew:                 function () {
+				'no-title-content': function() {return false;},//require title
+				grew: function() {
 					if (Ext.is.iPad) {
 						return;
 					}
@@ -206,24 +206,24 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 
 
-        if(Ext.is.iPad){
-            var me = this;
-            Ext.defer(function(){
-                var contentEl = me.editor.el.down('.content'),
-                    footerHeight = me.editor.el.down('.footer').getHeight(),
+    if (Ext.is.iPad) {
+      var me = this;
+      Ext.defer(function() {
+        var contentEl = me.editor.el.down('.content'),
+            footerHeight = me.editor.el.down('.footer').getHeight(),
                     hiddenAmount = window.innerHeight - 276,
                     contentHeight = contentEl.getY() - (window.outerHeight - window.innerHeight),
                     toSetHeight = window.innerHeight - contentHeight - footerHeight - hiddenAmount;
-                contentEl.setStyle("max-height",toSetHeight + "px");
-            },1000);
-        }
+        contentEl.setStyle('max-height', toSetHeight + 'px');
+      },1000);
+    }
 
 		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		return true;
 	},
 
 
-	syncEditorWidth: function (c, w) {
+	syncEditorWidth: function(c, w) {
 		var edEl = this.editor.getEl(),
 				minW,
 				nW = w + 65;
@@ -237,7 +237,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	syncHeight: function (h) {
+	syncHeight: function(h) {
 		var c = this.container;
 		if (c) {
 			c.setHeight(h);
@@ -245,7 +245,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	saveNewNote: function (editor, r, v) {
+	saveNewNote: function(editor, r, v) {
 		var me = this,
 				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 				note = v.body,
@@ -285,7 +285,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteHere: function (range, rect, style) {
+	noteHere: function(range, rect, style) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 		if (!this.openEditor()) {
 			alert('You already have a note in progress.');
@@ -295,7 +295,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	contentDefinedAnnotationAction: function (dom, action) {
+	contentDefinedAnnotationAction: function(dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
 				id = d ? d.id : null, me = this,
 				img = d && d.is('img') ? d.dom : null,
@@ -308,7 +308,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			rect = img.getBoundingClientRect();
 
 			if (this.noteHere(range, rect)) {
-				WBUtils.createFromImage(img, function (data) {
+				WBUtils.createFromImage(img, function(data) {
 					me.editor.reset();
 					me.editor.setValue('');
 					me.editor.addWhiteboard(data);
@@ -319,7 +319,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	getAnnotationGutter: function () {
+	getAnnotationGutter: function() {
 		if (!this.annotationGutter) {
 			this.annotationGutter = this.reader.el.down('.annotation-gutter');
 		}
@@ -328,36 +328,36 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-//	isOccupied: function(y){
-//		var g = this.getAnnotationGutter(),
-//			r = g && g.select('[data-line]'),
-//			o = false;
-//
-//		if(r){
-//			r.each(function(e){
-//				var i = parseInt(e.getAttribute('data-line'),10);
-//				o = i===y || Math.abs(i-y) < 5;
-//				return !o;
-//			});
-//		}
-//
-//		return o;
-//	},
+  //	isOccupied: function(y){
+  //		var g = this.getAnnotationGutter(),
+  //			r = g && g.select('[data-line]'),
+  //			o = false;
+  //
+  //		if(r){
+  //			r.each(function(e){
+  //				var i = parseInt(e.getAttribute('data-line'),10);
+  //				o = i===y || Math.abs(i-y) < 5;
+  //				return !o;
+  //			});
+  //		}
+  //
+  //		return o;
+  //	},
 
 
-	copyClientRect: function (rect) {
+	copyClientRect: function(rect) {
 		return {
-			top:    rect.top,
+			top: rect.top,
 			bottom: rect.bottom,
 			height: rect.height,
-			left:   rect.left,
-			right:  rect.right,
-			width:  rect.width
+			left: rect.left,
+			right: rect.right,
+			width: rect.width
 		};
 	},
 
 
-	adjustContentRectForTop: function (rect, top) {
+	adjustContentRectForTop: function(rect, top) {
 		var adjusted = this.copyClientRect(rect);
 		adjusted.top += top;
 		adjusted.bottom += top;
@@ -365,12 +365,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	lineInfoForRangeAndRect: function (range, rect, offsets) {
+	lineInfoForRangeAndRect: function(range, rect, offsets) {
 		return {range: range, rect: offsets ? this.adjustContentRectForTop(rect, offsets.top) : rect};
 	},
 
 
-	lineInfoForY: function (y) {
+	lineInfoForY: function(y) {
 		var overlay = this.reader.getComponentOverlay().overlayedPanelAtY(y),
 				result = null,
 				top;
@@ -402,7 +402,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	trackLineAtEvent: function (e) {
+	trackLineAtEvent: function(e) {
 		var o = this.data,
 				offsets = this.getAnnotationOffsets(),
 				y = e.getY() - offsets.top, lineInfo,
@@ -437,7 +437,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	positionInputBox: function (lineInfo) {
+	positionInputBox: function(lineInfo) {
 		var o = this.data,
 				offset = this.getAnnotationOffsets(),
 				box = Ext.get(o.box),
@@ -466,7 +466,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	offNib: function (e) {
+	offNib: function(e) {
 		if (!Ext.is.iPad) {
 			e.stopEvent();
 		}
@@ -474,7 +474,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	overNib: function (e) {
+	overNib: function(e) {
 		if (!Ext.is.iPad) {
 			e.stopEvent();
 		}
@@ -483,17 +483,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	suspendResolver: function () {
+	suspendResolver: function() {
 		this.suspendMoveEvents = true;
 	},
 
 
-	resumeResolver: function () {
+	resumeResolver: function() {
 		delete this.suspendMoveEvents;
 	},
 
 
-	mouseOver: function (evt) {
+	mouseOver: function(evt) {
 		if (Ext.dd.DragDropManager.dragCurrent || this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return false;
 		}
@@ -502,7 +502,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	mouseOut: function (e) {
+	mouseOut: function(e) {
 
 		if (this.suspendMoveEvents || this.reader.creatingAnnotation) {
 			return;
@@ -515,7 +515,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		clearTimeout(this.mouseLeaveTimeout);
-		this.mouseLeaveTimeout = setTimeout(function () {
+		this.mouseLeaveTimeout = setTimeout(function() {
 			delete o.lastLine;
 			delete o.box.activeLineInfo;
 			o.box.hide();
@@ -523,7 +523,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	rangeForLineInfo: function (line, style) {
+	rangeForLineInfo: function(line, style) {
 		var range = line.range,
 				maybeContainer = range.commonAncestorContainer ? Ext.fly(range.commonAncestorContainer) : null,
 				containerSelector = 'object[data-nti-container]',

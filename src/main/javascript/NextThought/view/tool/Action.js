@@ -7,8 +7,8 @@ Ext.define('NextThought.view.tool.Action', {
 	disabledCls: 'disabled',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}', 'data-qtip':'{label}'},
-		{tag:'tpl', 'if':'!hideLabel', cn:{cls: 'label', html: '{label}'}}
+		{cls: 'icon {iconCls}', 'data-qtip': '{label}'},
+		{tag: 'tpl', 'if': '!hideLabel', cn: {cls: 'label', html: '{label}'}}
 	]),
 
 	renderSelectors: {
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.tool.Action', {
 		textEl: '.label'
 	},
 
-	constructor: function (config) {
+	constructor: function(config) {
 		var action;
 		if (config && config.action) {
 			action = config.action;
@@ -27,7 +27,7 @@ Ext.define('NextThought.view.tool.Action', {
 	},
 
 
-	beforeRender: function () {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			iconCls: this.iconCls || 'defualt',
@@ -37,19 +37,19 @@ Ext.define('NextThought.view.tool.Action', {
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		var me = this, el = me.el, c = 'over';
 		me.callParent(arguments);
 		me.mon(el, 'click', me.click, me);
-		el.hover(function () {
+		el.hover(function() {
 			el.addCls(c);
-		}, function () {
+		}, function() {
 			el.removeCls(c);
 		});
 	},
 
 
-	click: function (e, dom) {
+	click: function(e, dom) {
 		function stop() {
 			e.stopEvent();
 			return false;
@@ -90,7 +90,7 @@ Ext.define('NextThought.view.tool.Action', {
 	setText: Ext.emptyFn,
 	setIconCls: Ext.emptyFn,
 
-	assignExtAction: function (action) {
+	assignExtAction: function(action) {
 		var old = this.extAction;
 		this.extAction = action && action.isAction ? action : undefined;
 		if (this.extAction) {

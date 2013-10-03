@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.slidedeck.CommentHeader',{
+Ext.define('NextThought.view.slidedeck.CommentHeader', {
 	extend: 'Ext.Component',
 	alias: 'widget.slide-comment-header',
 
@@ -14,15 +14,15 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			cls: 'comment',
 			cn: [{
 				cls: 'count',
-				cn:[
-					{tag: 'span',  html:'{count}'}
+				cn: [
+					{tag: 'span', html: '{count}'}
 				]
 			},{
 				cls: 'input',
 				html: 'Write a comment'
 			}]
 		},
-		{cls:'respondBox'}
+		{cls: 'respondBox'}
 	]),
 
 	renderSelectors: {
@@ -32,43 +32,43 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {},{
 			count: Ext.util.Format.plural(this.count || 0, 'Comment', 'Comments')
 		});
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 		me.callParent(arguments);
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls:true, renderTo:me.respondBox, enableTitle: true });
+		me.editor = Ext.widget('nti-editor', {ownerCt: this, enableShareControls: true, renderTo: me.respondBox, enableTitle: true });
 		//TODO: clean this up! We should be relying on the editor's events, not digging into its dom.
 		me.editorEl = me.editor.getEl();
 		me.comment.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		me.mon(me.comment,'click',me.activateEditor,me);
+		me.mon(me.comment, 'click', me.activateEditor, me);
 
-		me.mon(me.editorEl.down('.cancel'),{ scope: me, click: me.deactivateEditor });
-		me.mon(me.editorEl.down('.save'),{ scope: me, click: me.editorSaved });
+		me.mon(me.editorEl.down('.cancel'), { scope: me, click: me.deactivateEditor });
+		me.mon(me.editorEl.down('.save'), { scope: me, click: me.editorSaved });
 
-		me.mon(me.editorEl.down('.content'),{
+		me.mon(me.editorEl.down('.content'), {
 			scope: me,
 			keypress: me.editorKeyPressed,
 			keydown: me.editorKeyDown
 		});
 
 		console.log(this.count.getHTML());
-		if(parseInt(this.count.getHTML(),10) > 0){
+		if (parseInt(this.count.getHTML(), 10) > 0) {
 			this.comment.addCls('has-count');
 		}
 	},
 
 
-	updateCount: function(c){
-		if(!this.rendered){
+	updateCount: function(c) {
+		if (!this.rendered) {
 			return;
 		}
 		this.comment[c > 0 ? 'addCls' : 'removeCls']('has-count');
@@ -76,19 +76,19 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
-	getRoot: function(){
+	getRoot: function() {
 		var r = this.rootCache || this.up('slidedeck-slide');
-		if(!this.rootCache){ this.rootCache = r; }
+		if (!this.rootCache) { this.rootCache = r; }
 		return r;
 	},
 
 
-	activateEditor: function(){
+	activateEditor: function() {
 		var me = this;
-		if(me.getRoot().checkAndMarkAsActive(this)){
+		if (me.getRoot().checkAndMarkAsActive(this)) {
 			me.comment.hide();
 			me.editor.activate();
-			setTimeout(function(){
+			setTimeout(function() {
 				me.editor.focus(true);
 				me.el.scrollIntoView(me.el.up('.x-container-slide'));
 			}, 300);
@@ -96,9 +96,9 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
-	deactivateEditor: function(e){
-		if(e){e.stopEvent();}
-		if(this.getRoot().editorActive()){
+	deactivateEditor: function(e) {
+		if (e) {e.stopEvent();}
+		if (this.getRoot().editorActive()) {
 			this.editor.deactivate();
 			this.editor.reset();
 			this.editor.setValue('');
@@ -110,20 +110,20 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
-	editorSaved: function(e){
+	editorSaved: function(e) {
 		e.stopEvent();
 
-		function callback(success, record){
+		function callback(success, record) {
 			me.editorEl.unmask();
-			if(success){
+			if (success) {
 				me.deactivateEditor();
 			}
 		}
 
-		function onError(error){
+		function onError(error) {
 			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
-            alert('There was an error saving your note.');
-            me.editorEl.unmask();
+      alert('There was an error saving your note.');
+      me.editorEl.unmask();
 		}
 
 		var me = this,
@@ -137,19 +137,19 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			container = me.slide.get('ContainerId'),
 			dom = me.slide.get('dom-clone'), img;
 
-		if(v.sharingInfo){
+		if (v.sharingInfo) {
 			sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo);
 		}
 
 		//Avoid saving empty notes or just returns.
-		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
+		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
 			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
 			return false;
 		}
 
 		img = dom.querySelector('img');
 
-		if(!img){
+		if (!img) {
 			onError();
 			return false;
 		}
@@ -158,34 +158,34 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 		range.selectNode(img);
 
 		me.editorEl.mask('Saving...');
-        try {
+    try {
 		    me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
-        }
-        catch (error) {
-            onError(error);
-        }
+    }
+    catch (error) {
+      onError(error);
+    }
 		return false;
 	},
 
 
-	editorKeyDown: function(event){
+	editorKeyDown: function(event) {
 		event.stopPropagation();
 		var k = event.getKey();
-		if(k === event.ESC){
+		if (k === event.ESC) {
 			this.deactivateEditor();
 		}
 	},
 
 
-	onDestroy: function(){
-		if(this.editor){
+	onDestroy: function() {
+		if (this.editor) {
 			this.editor.destroy();
 		}
 		this.callParent(arguments);
 	},
 
 
-	editorKeyPressed: function(event){
+	editorKeyPressed: function(event) {
 		event.stopPropagation();
 	}
 

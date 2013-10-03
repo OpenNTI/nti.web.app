@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.View', {
 	layout: 'fit',
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
@@ -18,15 +18,15 @@ Ext.define('NextThought.view.profiles.View', {
 	},
 
 
-	onBeforeDeactivate: function () {
+	onBeforeDeactivate: function() {
 		var child = this.down(this.defaultType);
 		return child && child.fireEvent('beforedeactivate');
 	},
 
 
-	restore: function (state) {
+	restore: function(state) {
 		state = (state || {});
-		var user = (state.profile||{}).username,
+		var user = (state.profile || {}).username,
 			me = this;
 
 		if (!me.isActive() || (state.hasOwnProperty('active') && state.active !== this.id)) {
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.profiles.View', {
 		}
 
 		console.debug('Setting user in profile:', user);
-		me.setUser(state.profile || {}, function (panel) {
+		me.setUser(state.profile || {}, function(panel) {
 			console.debug('fire finish');
 			me.setTitle('Profile: ' + ((panel && panel.displayName) || user));
 			me.fireEvent('finished-restore');
@@ -43,19 +43,19 @@ Ext.define('NextThought.view.profiles.View', {
 	},
 
 
-	beforeRestore: function () {
+	beforeRestore: function() {
 		return !!(this.el.down('.blog-editor'));
 	},
 
 
-	getFragment: function () {
-		var current = this.down(this.defaultType)||{},
+	getFragment: function() {
+		var current = this.down(this.defaultType) || {},
 			u = current.userObject || current.user;
 		return u ? u.getProfileUrl() : null;
 	},
 
 
-	setUser: function (state, finishCallback) {
+	setUser: function(state, finishCallback) {
 		var t = this.defaultType,
 			current = this.down(t),
 			username = state.username,
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.View', {
 
 		this.mask('Loading...');
 
-		UserRepository.getUser(username, function (user) {
+		UserRepository.getUser(username, function(user) {
 			var toAdd, shouldFireLoaded;
 			this.removeAll(true);
 			try {
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.profiles.View', {
 				}
 				toAdd = Ext.apply(toAdd, {
 					listeners: {
-						restored: {fn:fin, single: true},
+						restored: {fn: fin, single: true},
 						delay: 1
 					}
 				});
@@ -114,7 +114,7 @@ Ext.define('NextThought.view.profiles.View', {
 	},
 
 
-	onDeactivated: function () {
+	onDeactivated: function() {
 		var profile = this.down(this.defaultType);
 		//save memory/dom by cleaning out the profile object while its not active.
 		if (profile) {

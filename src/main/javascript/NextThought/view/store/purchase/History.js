@@ -33,7 +33,7 @@ Ext.define('NextThought.view.store.purchase.History', {
 
 	ordinal: 'history',
 
-	setupRenderData: function () {
+	setupRenderData: function() {
 		var req = {
 			url: this.record.getLink('history'),
 			scope: this,
@@ -45,14 +45,14 @@ Ext.define('NextThought.view.store.purchase.History', {
 	},
 
 
-	applyHistory: function (resp) {
+	applyHistory: function(resp) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.applyHistory, arguments), this, {single: true});
 			return;
 		}
 
 		var data = [], obj = Ext.decode(resp.responseText) || {};
-		Ext.each(ParseUtils.parseItems(obj.Items || ''), function (h) {
+		Ext.each(ParseUtils.parseItems(obj.Items || ''), function(h) {
 			var d = h.getData(), q;
 			d.Order = (d.Order && d.Order.getData()) || {};
 			d.Pricing = (d.Pricing && d.Pricing.getData()) || {};
@@ -83,14 +83,14 @@ Ext.define('NextThought.view.store.purchase.History', {
 		});
 
 		this.historyTpl.overwrite(this.el, data);
-		this.el.select('tr.bulk td:first-of-type span').each(function (i) {
+		this.el.select('tr.bulk td:first-of-type span').each(function(i) {
 			i.allowContextMenu();
 			i.selectable();
 		});
 	},
 
 
-	failedToLoadHistoy: function () {
+	failedToLoadHistoy: function() {
 		console.error(arguments);
 		this.errorTpl.overwrite(this.el);
 		this.up('[showError]').showError('Could not load purchase history. Please try again later.');

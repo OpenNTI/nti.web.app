@@ -1,19 +1,19 @@
-Ext.define('NextThought.view.cards.OverlayedPanel',{
+Ext.define('NextThought.view.cards.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-card',
 
-	requires:[
+	requires: [
 		'NextThought.util.Dom',
 		'NextThought.view.cards.Card'
 	],
 
-	representsUserDataContainer:true,
+	representsUserDataContainer: true,
 	ui: 'content-card',
 	cls: 'content-card-container',
 
 
 	statics: {
-		getData: function(dom, reader){
+		getData: function(dom, reader) {
 			var el = Ext.get(dom),
 				data = DomUtils.parseDomObject(dom),
 				description = el.down('span.description'),
@@ -22,7 +22,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 			//the data-href has the adjusted href.
 			data.href = data['attribute-data-href'];
 
-			Ext.applyIf(data,{
+			Ext.applyIf(data, {
 				ntiid: reader && reader.getLocation().NTIID,
 				basePath: reader && reader.basePath,
 				description: (description && description.getHTML()) || '',
@@ -33,17 +33,17 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 	},
 
 
-	constructor: function(config){
-		if(!config || !config.contentElement){
+	constructor: function(config) {
+		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
-		Ext.apply(config,{
-			layout:'fit',
-			items:[{
+		Ext.apply(config, {
+			layout: 'fit',
+			items: [{
 				xtype: 'content-card',
 				reader: config.reader,
-				data: this.self.getData(config.contentElement,config.reader)
+				data: this.self.getData(config.contentElement, config.reader)
 			}]
 		});
 
@@ -51,7 +51,7 @@ Ext.define('NextThought.view.cards.OverlayedPanel',{
 	},
 
 
-	findLine: function(){
+	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 			range = doc.createRange();
 

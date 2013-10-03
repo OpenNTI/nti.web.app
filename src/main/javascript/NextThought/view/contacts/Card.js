@@ -62,7 +62,7 @@ Ext.define('NextThought.view.contacts.Card', {
 		chatEl: '.actions .chat'
 	},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble('presence-changed');
 		this.userObject = this.record;
@@ -70,7 +70,7 @@ Ext.define('NextThought.view.contacts.Card', {
 		this.userObject.addObserverForField(this, 'Presence', this.presenceChanged, this);
 	},
 
-	beforeRender: function () {
+	beforeRender: function() {
 		var u = this.record;
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, u.getData());
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.contacts.Card', {
 		this.renderData.name = u.getName();
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		this.enableProfileClicks(this.el.down('.avatar'), this.el.down('.name'));
 		this.maybeShowChat(this.chatEl);
@@ -90,7 +90,7 @@ Ext.define('NextThought.view.contacts.Card', {
 	},
 
 
-	clicked: function (e) {
+	clicked: function(e) {
 		var nib = e.getTarget('.nib');
 		try {
 			if (nib) {
@@ -105,7 +105,7 @@ Ext.define('NextThought.view.contacts.Card', {
 		}
 	},
 
-	addToContactsClicked: function (e) {
+	addToContactsClicked: function(e) {
 		var me = this;
 		console.log('Should add to contacts');
 		var pop,
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.contacts.Card', {
 			open = false,
 			offsets = [10, -18], refEl;
 
-		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'), function (o) {
+		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'), function(o) {
 			if (o.record.getId() !== id || me.userObject.modelName !== o.record.modelName) {
 				o.destroy();
 			}
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.contacts.Card', {
 		}
 		pop = NextThought.view.account.contacts.management.Popout.create({record: me.userObject, refEl: refEl, anchor: 'tl-tr?', offsets: offsets});
 
-		pop.on('destroy', function () {
+		pop.on('destroy', function() {
 			refEl.up('.contact-card').removeCls('active');
 		});
 
@@ -146,11 +146,11 @@ Ext.define('NextThought.view.contacts.Card', {
 
 	},
 
-	isOnline: function (val) {
+	isOnline: function(val) {
 		return (val || (this.userObject.getPresence && this.userObject.getPresence().toString())) === 'Online';
 	},
 
-	updatePresenceState: function (value) {
+	updatePresenceState: function(value) {
 		if (!this.cardEl) {
 			return;
 		}
@@ -164,12 +164,12 @@ Ext.define('NextThought.view.contacts.Card', {
 		this.maybeShowChat(this.chatEl);
 	},
 
-	presenceChanged: function (key, value) {
+	presenceChanged: function(key, value) {
 		this.updatePresenceState(value);
 		this.fireEvent('presence-changed', this);
 	},
 
-	getUserObject: function () {
+	getUserObject: function() {
 		return this.userObject;
 	}
 });

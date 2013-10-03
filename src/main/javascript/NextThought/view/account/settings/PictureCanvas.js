@@ -1,22 +1,22 @@
-Ext.define('NextThought.view.account.settings.PictureCanvas',{
-	extend:'Ext.Component',
+Ext.define('NextThought.view.account.settings.PictureCanvas', {
+	extend: 'Ext.Component',
 	alias: 'widget.picture-canvas',
 
 	autoEl: {tag: 'canvas', width: 4, height: 3},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.dragOver = this.dragEnter;
-		this.on('boxready',this.syncSizeAttributes,this);
+		this.on('boxready', this.syncSizeAttributes, this);
 	},
 
-	syncSizeAttributes: function(){
-		var borders = this.el.getStyle(['border-top-width','border-right-width','border-bottom-width','border-left-width']),
+	syncSizeAttributes: function() {
+		var borders = this.el.getStyle(['border-top-width', 'border-right-width', 'border-bottom-width', 'border-left-width']),
 			size = this.getSize();
-		size.width -= (parseInt(borders['border-left-width'],10) + parseInt(borders['border-right-width'],10));
-		size.height-= (parseInt(borders['border-top-width'],10) + parseInt(borders['border-bottom-width'],10));
-		if(size.height < 100){
-			console.log('Canvas did not naturally size, calculating required height, given '+size.height+', will change to 75% of '+size.width);
+		size.width -= (parseInt(borders['border-left-width'], 10) + parseInt(borders['border-right-width'], 10));
+		size.height -= (parseInt(borders['border-top-width'], 10) + parseInt(borders['border-bottom-width'], 10));
+		if (size.height < 100) {
+			console.log('Canvas did not naturally size, calculating required height, given ' + size.height + ', will change to 75% of ' + size.width);
 			size.height = Math.round(size.width * 0.75);
 		}
 
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, {
@@ -42,10 +42,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	onMouseDown: function(e){
-		if(!this.imageInfo){return;}
+	onMouseDown: function(e) {
+		if (!this.imageInfo) {return;}
 
-        e.stopEvent();
+    e.stopEvent();
 		var xy = e.getXY(),
 			start = xy.slice(),
 			origin = this.el.getXY(),
@@ -66,48 +66,48 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		y -= mask[1];
 
 
-		if( x >= 0 && x <= size
-		&&  y >= 0 && y <= size ){
+		if (x >= 0 && x <= size
+		&& y >= 0 && y <= size) {
 			this.mouseDown = true;
 			this.lastPoint = start;
 
 			nearLeft = x <= cornerSize;
-			nearRight = x > (size-cornerSize);
+			nearRight = x > (size - cornerSize);
 			nearTop = y <= cornerSize;
-			nearBottom = y > (size-cornerSize);
+			nearBottom = y > (size - cornerSize);
 
 			delete this.inCorner;
 
 			//Two bit field.  X Y.  The top left corner moves both X and Y, so it has the field of 11 (or 3),
 			// Top right only moves Y so its bit field is 01 (or 1), the bottom left corner only moves X, so 10 (or 2),
 			// and finally the last corner does not move X or Y, so its bit field is 00.
-			if(nearLeft && nearTop){ this.inCorner = 3; }
-			else if(nearRight && nearTop){ this.inCorner = 1; }
-			else if(nearLeft && nearBottom){ this.inCorner = 2; }
-			else if(nearRight && nearBottom){ this.inCorner = 0; }
+			if (nearLeft && nearTop) { this.inCorner = 3; }
+			else if (nearRight && nearTop) { this.inCorner = 1; }
+			else if (nearLeft && nearBottom) { this.inCorner = 2; }
+			else if (nearRight && nearBottom) { this.inCorner = 0; }
 		}
 
 	},
 
 
-	onMouseMove: function(e){
-		if(!this.mouseDown){ return; }
+	onMouseMove: function(e) {
+		if (!this.mouseDown) { return; }
 
-		function clamp(v,min,max){
-			return v<min
+		function clamp(v,min,max) {
+			return v < min
 					? min
 					: v > max
 						? max
 						: v;
 		}
 
-		function doMove(){
+		function doMove() {
 			//clamp values
 			s.x = clamp((s.x - dx), 0, (i.width - s.size));
 			s.y = clamp((s.y - dy), 0, (i.height - s.size));
 		}
 
-		function doSize(corner, anchor){
+		function doSize(corner, anchor) {
 			var mX = Boolean(corner & 2),
 				mY = Boolean(corner & 1),
 				origin = el.getXY().slice(),
@@ -120,11 +120,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 			dx = anchor[0] - origin[0];
 			dy = anchor[1] - origin[1];
-			newSize = Math.max(dx,dy);
+			newSize = Math.max(dx, dy);
 
-			if(!mX && !mY){ newSize *= -1; }
+			if (!mX && !mY) { newSize *= -1; }
 
-			if(newSize < 0){
+			if (newSize < 0) {
 				return;
 			}
 
@@ -133,14 +133,14 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 			s.size = Math.round(clamp(newSize, 32, (Math.min(i.width, i.height))));
 
-			if(mX){ s.x = clamp((s.x + diff), 0, anchor[0] - s.size); }
-			if(mY){ s.y = clamp((s.y + diff), 0, anchor[1] - s.size); }
+			if (mX) { s.x = clamp((s.x + diff), 0, anchor[0] - s.size); }
+			if (mY) { s.y = clamp((s.y + diff), 0, anchor[1] - s.size); }
 		}
 
 
 
 		var xy = e.getXY().slice(),
-			dx,dy,
+			dx, dy,
 			el = this.el,
 			i = this.imageInfo,
 			s = i.selection;
@@ -148,7 +148,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		dx = this.lastPoint[0] - xy[0];
 		dy = this.lastPoint[1] - xy[1];
 
-		if(!this.hasOwnProperty('inCorner')){
+		if (!this.hasOwnProperty('inCorner')) {
 			doMove();
 		}
 		else {
@@ -160,17 +160,17 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	onMouseUp: function(e){
-        e.stopEvent();
+	onMouseUp: function(e) {
+    e.stopEvent();
 		delete this.mouseDown;
 		delete this.mouseLeftNoMouseUp;
 	},
 
 
-	createFileInput : function() {
+	createFileInput: function() {
 		var me = this,
 			old = me.fileInputEl,
-			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.el,{
+			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.el, {
 			name: 'file1',
 			cls: 'file-input',
 			tag: 'input',
@@ -179,7 +179,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			size: 1
 		},true);
 
-		if(old){
+		if (old) {
 			old.remove();
 		}
 
@@ -193,8 +193,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	onFileChange: function(e){
-		if(!e.target.files || !window.FileReader){
+	onFileChange: function(e) {
+		if (!e.target.files || !window.FileReader) {
 			this.doLegacyUpload();
 			return;
 		}
@@ -203,22 +203,22 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	doLegacyUpload: function(){
+	doLegacyUpload: function() {
 		var me = this,
-			form = new Ext.form.Basic(this,{}),
+			form = new Ext.form.Basic(this, {}),
 			fieldCacheKey = '_fields',
 			fields,
-			url = getURL($AppConfig.server.data+'@@image_to_dataurl_extjs');
+			url = getURL($AppConfig.server.data + '@@image_to_dataurl_extjs');
 
 		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
 		fields.add(this);
 
-		Ext.getBody().mask('Uploading...','navigation');
+		Ext.getBody().mask('Uploading...', 'navigation');
 
-		function fin(f,action){
+		function fin(f,action) {
 			Ext.getBody().unmask();
-			var url = ((action||{}).result||{}).dataurl || false;//prevent an error, and force false if its not there.
-			if(url){
+			var url = ((action || {}).result || {}).dataurl || false;//prevent an error, and force false if its not there.
+			if (url) {
 				me.setImage(url);
 			}
 			else {
@@ -227,7 +227,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			form.destroy();
 		}
 
-		Ext.defer(function(){
+		Ext.defer(function() {
 			//sigh...lets try not to lock up the browser with a synchronous submit >.<
 			form.submit({ url: url, success: fin, failure: fin });
 		},1);
@@ -242,8 +242,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	clear: function(){
-		if(!this.el){return;}
+	clear: function() {
+		if (!this.el) {return;}
 
 		var c = this.el.dom,
 			w = c.width;
@@ -258,8 +258,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	rotate: function(){
-		if(!this.imageInfo){
+	rotate: function() {
+		if (!this.imageInfo) {
 			return;
 		}
 
@@ -271,38 +271,38 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			w = img.width;
 
 		c.width = h;
-		c.height= w;
+		c.height = w;
 
-		ctx.rotate(Math.PI/2);
-		ctx.drawImage(img,0,-h);
+		ctx.rotate(Math.PI / 2);
+		ctx.drawImage(img, 0, -h);
 		this.setImage(c.toDataURL('image/png'));
 	},
 
 
-	setImage: function(url){
+	setImage: function(url) {
 		var me = this,
 			img = new Image();
 
-		img.onerror = function(){ me.clear(); };
+		img.onerror = function() { me.clear(); };
 
-		img.onload = function ImageLoaded(){
-			if(me.fileInputEl){
+		img.onload = function ImageLoaded() {
+			if (me.fileInputEl) {
 				me.fileInputEl.remove();
 			}
 			me.addCls('withImage');
 			var size = me.mySize,
 				h = img.height,
 				w = img.width,
-				scale = Math.max(h/size.height, w/size.width),
+				scale = Math.max(h / size.height, w / size.width),
 				x, y;
 
-			if(scale > 1){
-				w = Math.round(w/scale);
-				h = Math.round(h/scale);
+			if (scale > 1) {
+				w = Math.round(w / scale);
+				h = Math.round(h / scale);
 			}
 
-			x = Math.round((size.width - w)/2);
-			y = Math.round((size.height - h)/2);
+			x = Math.round((size.width - w) / 2);
+			y = Math.round((size.height - h) / 2);
 
 			me.imageInfo = {
 				image: img,
@@ -312,11 +312,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 				height: h,
 				selection: {
 					x: 0, y: 0,
-					size: Math.min(w,h)
+					size: Math.min(w, h)
 				}
 			};
 
-			me.fireEvent('image-loaded',me.imageInfo);
+			me.fireEvent('image-loaded', me.imageInfo);
 			me.drawCropTool();
 		};
 
@@ -324,7 +324,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	getOppositeCorner: function(corner){
+	getOppositeCorner: function(corner) {
 		var i = this.imageInfo,
 			s = i.selection,
 			corners = [
@@ -337,45 +337,45 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	getMask: function getMask(size,pixAdj){
+	getMask: function getMask(size,pixAdj) {
 		size = size || 0;
 		pixAdj = pixAdj || 0;
-		var i = this.imageInfo || {selection:{}};
+		var i = this.imageInfo || {selection: {}};
 		return [
 			Math.ceil(i.x + i.selection.x - size) + pixAdj,
 			Math.ceil(i.y + i.selection.y - size) + pixAdj,
-			Math.ceil(i.selection.size + (size*2)),
-			Math.ceil(i.selection.size + (size*2))
+			Math.ceil(i.selection.size + (size * 2)),
+			Math.ceil(i.selection.size + (size * 2))
 		];
 	},
 
 
-	drawCropTool: function(){
+	drawCropTool: function() {
 		var ctx = this.el.dom.getContext('2d'),
 			i = this.imageInfo;
 
 		//erase
 		this.el.dom.width = this.mySize.width;
 
-		function drawCorners(x,y,width,height){
+		function drawCorners(x,y,width,height) {
 			ctx.save();
 			ctx.fillStyle = '#000';
 			ctx.strokeStyle = '#fff';
 			ctx.lineCap = 'round';
 			ctx.lineWidth = 1;
-			var cw = Math.ceil(width/2),
-				ch = Math.ceil(height/2);
+			var cw = Math.ceil(width / 2),
+				ch = Math.ceil(height / 2);
 
-			function nib(){
+			function nib() {
 				ctx.beginPath();
-				ctx.moveTo(-cw,-ch);
-				ctx.lineTo(16-cw,-ch);
-				ctx.lineTo(16-cw,6-ch);
+				ctx.moveTo(-cw, -ch);
+				ctx.lineTo(16 - cw, -ch);
+				ctx.lineTo(16 - cw, 6 - ch);
 
-				ctx.lineTo(6-cw,6-ch);
+				ctx.lineTo(6 - cw, 6 - ch);
 
-				ctx.lineTo(6-cw,16-ch);
-				ctx.lineTo(-cw,16-ch);
+				ctx.lineTo(6 - cw, 16 - ch);
+				ctx.lineTo(-cw, 16 - ch);
 
 				ctx.closePath();
 
@@ -383,19 +383,19 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 				ctx.stroke();
 			}
 
-			ctx.setTransform(1,0,0,1,x+cw,y+ch);
+			ctx.setTransform(1, 0, 0, 1, x + cw, y + ch);
 			nib();
-			ctx.rotate(Math.PI/2);
+			ctx.rotate(Math.PI / 2);
 			nib();
-			ctx.rotate(Math.PI/2);
+			ctx.rotate(Math.PI / 2);
 			nib();
-			ctx.rotate(Math.PI/2);
+			ctx.rotate(Math.PI / 2);
 			nib();
 
 			ctx.restore();
 		}
 
-		ctx.setTransform(1,0,0,1,0,0);
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
 		ctx.lineWidth = 1;
 
 		//mask
@@ -408,7 +408,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		ctx.save();
 		ctx.fillStyle = '#000';
 		ctx.globalCompositeOperation = 'destination-out';
-		ctx.fillRect.apply(ctx,this.getMask());
+		ctx.fillRect.apply(ctx, this.getMask());
 		ctx.restore();
 
 		//draw image under mask
@@ -419,15 +419,15 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 		//draw border
 		ctx.strokeStyle = '#000';
-		ctx.strokeRect.apply(ctx,this.getMask(0,0.5));
+		ctx.strokeRect.apply(ctx, this.getMask(0, 0.5));
 		ctx.strokeStyle = '#fff';
-		ctx.strokeRect.apply(ctx,this.getMask(-1,0.5));
+		ctx.strokeRect.apply(ctx, this.getMask(-1, 0.5));
 
-		drawCorners.apply(this,this.getMask(2,0.5));
+		drawCorners.apply(this, this.getMask(2, 0.5));
 	},
 
 
-	getValue: function(){
+	getValue: function() {
 
 		var i = this.imageInfo,
 			s = i.selection,
@@ -436,22 +436,22 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		c.width = c.height = s.size;
 		ctx = c.getContext('2d');
 		ctx.drawImage(i.image, -s.x, -s.y, i.width, i.height);
-		return c.toDataURL("image/png");
+		return c.toDataURL('image/png');
 	},
 
 
-	selectImage: function(inputField){
+	selectImage: function(inputField) {
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
 		this.readFile(files);
 	},
 
 
-	enableImageDropping: function(){
+	enableImageDropping: function() {
 		var me = this,
 			el = me.el;
 
-		me.mon(el,{
+		me.mon(el, {
 			'scope': me,
 			'drop': me.dropImage,
 			'dragenter': me.dragEnter,
@@ -460,7 +460,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	dragEnter: function(e){
+	dragEnter: function(e) {
 		var b = e.browserEvent,
 			dt = b.dataTransfer;
 		dt.dropEffect = 'copy';
@@ -469,9 +469,9 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	dropImage: function(e){
+	dropImage: function(e) {
 		var dt = e.browserEvent.dataTransfer;
-		if(dt){
+		if (dt) {
 			this.readFile(dt.files);
 		}
 
@@ -481,7 +481,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	handlePaste:function(event, domEl){
+	handlePaste: function(event, domEl) {
 		var clipboardData = event.clipboardData || {},
 			me = this;
 
@@ -502,18 +502,18 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
-	readFile: function(files){
+	readFile: function(files) {
 		var me = this,
 			file = files[0],
 			reader;
 
 		//file.size
-		if(!file || !(/image\/.*/i).test(file.type)){
+		if (!file || !(/image\/.*/i).test(file.type)) {
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
 
-		if(window.FileReader){
+		if (window.FileReader) {
 			reader = new FileReader();
 			reader.onload = function(event) {
 				//http://code.google.com/p/jsjpegmeta/source/browse/jpegmeta.js
@@ -526,9 +526,9 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 
 	//for Legacy
-	isDirty: function(){ return true; },
+	isDirty: function() { return true; },
 	isFormField: true,
 	isFileUpload: function() { return true; },
-	getSubmitData: function(){ return null; },
-	validate: function(){ return Boolean(this.fileInputEl.dom.value); }
+	getSubmitData: function() { return null; },
+	validate: function() { return Boolean(this.fileInputEl.dom.value); }
 });

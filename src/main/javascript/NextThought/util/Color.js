@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Color',{
+Ext.define('NextThought.util.Color', {
 	singleton: true,
 	requires: [
 		'Ext.draw.Color'
@@ -9,11 +9,11 @@ Ext.define('NextThought.util.Color',{
 	rgbaRe: /^rgba?\((.+?)\)$/i,
 	dsRGBARe: /^(\d+(\.\d+)?) (\d+(\.\d+)?) (\d+(\.\d+)?)( (\d+(\.\d+)?))?$/i,
 
-	sources : [],
+	sources: [],
 
 	toRGBA: function(color, alpha) {
 		if (typeof color === 'string') {
-			if(!(color = Ext.draw.Color.fromString(color))) {
+			if (!(color = Ext.draw.Color.fromString(color))) {
 				return 'rgba(255,255,0,1)';
 			}
 		}
@@ -32,47 +32,47 @@ Ext.define('NextThought.util.Color',{
 	 * @param string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param [alpha] If supplied, the float will override or add alpha to this color.
 	 */
-	parse: function(string, alpha){
+	parse: function(string, alpha) {
 		var me = this,
 			color,
 			m;
 
-		function parseHex(cCmp,is8bit){
-			var r,g,b;
+		function parseHex(cCmp,is8bit) {
+			var r, g, b;
 			r = parseInt(cCmp[1], 16) >> 0;
 			g = parseInt(cCmp[2], 16) >> 0;
 			b = parseInt(cCmp[3], 16) >> 0;
-			if(is8bit){
+			if (is8bit) {
 				r += (r * 16);
 				g += (g * 16);
 				b += (b * 16);
 			}
-			return [r,g,b];
+			return [r, g, b];
 		}
 
-		function parseRGBA(c){
-			var i=c.length-1;
-			for(;i>=0;i--){ c[i] = +c[i]; } //ensure they're numbers
+		function parseRGBA(c) {
+			var i = c.length - 1;
+			for (; i >= 0; i--) { c[i] = +c[i]; } //ensure they're numbers
 			return c;
 		}
 
-		if(!!(m = me.dsRGBARe.exec(string))){
+		if (!!(m = me.dsRGBARe.exec(string))) {
 			//console.log('DataServer color value: ',string);
 			m = [
-				+(parseFloat(m[1])*255).toFixed(0),
-				+(parseFloat(m[3])*255).toFixed(0),
-				+(parseFloat(m[5])*255).toFixed(0),
+				+(parseFloat(m[1]) * 255).toFixed(0),
+				+(parseFloat(m[3]) * 255).toFixed(0),
+				+(parseFloat(m[5]) * 255).toFixed(0),
 				+m[8]
 			];
 		}
-		else if(!!(m = me.rgbaRe.exec(string))){
+		else if (!!(m = me.rgbaRe.exec(string))) {
 			m = parseRGBA(m[1].split(','));
 		}
-		else if(!!(m = me.hex16Re.exec(string))){
-			m = parseHex(m,false);
+		else if (!!(m = me.hex16Re.exec(string))) {
+			m = parseHex(m, false);
 		}
-		else if(!!(m = me.hex8Re.exec(string))){
-			m = parseHex(m,true);
+		else if (!!(m = me.hex8Re.exec(string))) {
+			m = parseHex(m, true);
 		}
 		else {
 			Ext.Error.raise({message: 'Could not parse color', color: string});
@@ -84,8 +84,8 @@ Ext.define('NextThought.util.Color',{
 				? m[3]
 				: 1;
 
-		color = Ext.String.format('rgba({0},{1},{2},{3})', m[0],m[1],m[2],m[3]);
-		if(m[3].toFixed(0)==='0'){
+		color = Ext.String.format('rgba({0},{1},{2},{3})', m[0], m[1], m[2], m[3]);
+		if (m[3].toFixed(0) === '0') {
 			color = 'None';
 		}
 
@@ -93,11 +93,11 @@ Ext.define('NextThought.util.Color',{
 				g: m[1],
 				b: m[2],
 				a: m[3],
-				toString: function(){return color;}};
+				toString: function() {return color;}};
 	},
 
 
-	rgbaToHex: function(color){
+	rgbaToHex: function(color) {
 		/**
 		 * Converts rgba to rgb then to Hex. TODO: this func is ignoring the Alpha component.
 		 * assuming that it is always 1 in our case.
@@ -105,15 +105,15 @@ Ext.define('NextThought.util.Color',{
 		 */
 
 		var a = this.rgbaRe.exec(color), c, rgb, hex;
-		if(!a){ return color; }
-		try{
-			c = a[1].split(',').slice(0,3);
-			rgb = "rgb(" + c.join(',')+")";
+		if (!a) { return color; }
+		try {
+			c = a[1].split(',').slice(0, 3);
+			rgb = 'rgb(' + c.join(',') + ')';
 			hex = Ext.draw.Color.toHex(rgb);
 			return hex;
 		}
-		catch(e){
-			console.log("Error: ", e);
+		catch (e) {
+			console.log('Error: ', e);
 		}
 		return color;
 	},
@@ -147,28 +147,28 @@ Ext.define('NextThought.util.Color',{
 	 *
 	 * @param idx - either the known index (a number) or a username with which to look up the index for
 	 */
-	getColor: function(idx){
+	getColor: function(idx) {
 		if (typeof idx === 'string') {
 			this.addSource(idx);
-			idx = Ext.Array.indexOf(this.sources,idx);
+			idx = Ext.Array.indexOf(this.sources, idx);
 		}
 
 		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 100, 50);
 	},
 
-	addSource: function(userId){
-		if(userId && !Ext.Array.contains(this.sources, userId)){
+	addSource: function(userId) {
+		if (userId && !Ext.Array.contains(this.sources, userId)) {
 			this.sources.push(userId);
 			Ext.Array.sort(this.sources);
 
 			//keep the logged in user at index 0
 			var id = $AppConfig.username;
-			Ext.Array.remove(this.sources,id);
+			Ext.Array.remove(this.sources, id);
 			this.sources.unshift(id);
 		}
 	}
 },
-function(){
+function() {
 	window.Color = this;
 }
 );

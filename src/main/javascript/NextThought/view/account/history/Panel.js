@@ -48,7 +48,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	emptyText: Ext.DomHelper.markup([
 		{
-			cls: "history nothing rhp-empty-list",
+			cls: 'history nothing rhp-empty-list',
 			html: 'No Activity Yet'
 		}
 	]),
@@ -62,14 +62,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 			'{%this.getTemplateFor(values,out)%}']
 		}
 	]), {
-		getTemplateFor: function (values, out) {
+		getTemplateFor: function(values, out) {
 			if (!this.subTemplates || !this.subTemplates[values.MimeType]) {
 				return console.log('No tpl for...', values);
 			}
 			return this.subTemplates[values.MimeType].applyOut(values, out);
 		},
 
-		insertGroupTitle: function (values, out) {
+		insertGroupTitle: function(values, out) {
 			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
 
 			if (label === 'Today') {
@@ -100,7 +100,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	}),
 
 
-	registerSubType: function (key, itemTpl) {
+	registerSubType: function(key, itemTpl) {
 		if (!this.tpl.subTemplates) {
 			this.tpl.subTemplates = {};
 		}
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	registerFillData: function (key, fn) {
+	registerFillData: function(key, fn) {
 		if (!this.fillData) {
 			this.fillData = {};
 		}
@@ -116,7 +116,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	registerClickHandler: function (key, fn) {
+	registerClickHandler: function(key, fn) {
 		if (!this.clickHandlers) {
 			this.clickHandlers = {};
 		}
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.noteItem = new NextThought.view.account.history.mixins.Note({panel: this});
@@ -141,9 +141,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	getMimeTypes: function () {
+	getMimeTypes: function() {
 		this.mimeTypes = [];
-		Ext.each(this.mimeType, function (t) {
+		Ext.each(this.mimeType, function(t) {
 			this.mimeTypes.push('application/vnd.nextthought.' + RegExp.escape(t));
 		}, this);
 
@@ -151,7 +151,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	onMaskBeforeShow: function (mask) {
+	onMaskBeforeShow: function(mask) {
 		if (this.getHeight() === 0) {
 			mask.setHeight(0);
 		}
@@ -159,12 +159,12 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	manageMaskSize: function (width, height) {
+	manageMaskSize: function(width, height) {
 		this.loadMask.setHeight(height);
 	},
 
 
-	buildStore: function () {
+	buildStore: function() {
 		if (NextThought.store.PageItem.prototype.proxy.url === 'tbd') {
 			Ext.defer(this.buildStore, 100, this);
 			return;
@@ -198,7 +198,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			load: 'storeLoaded'
 		});
 
-		s.filter([function (rec) {
+		s.filter([function(rec) {
 			if (isMe(rec.get('Creator'))) {
 				return true;
 			}
@@ -214,7 +214,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	applyFilterParams: function () {
+	applyFilterParams: function() {
 		if (this.store) {
 			Ext.apply(this.store.proxy.extraParams, {
 				filterOperator: this.filterOperator,
@@ -225,7 +225,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	recordsAdded: function (store, records) {
+	recordsAdded: function(store, records) {
 		console.debug(' UserDataPanel Store added records:', arguments);
 		delete this.tpl.todayCount;
 		this.tpl.itemAdded = true;
@@ -233,14 +233,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	storeLoaded: function (store) {
+	storeLoaded: function(store) {
 		Ext.each(store.getRange(), this.fillInData, this);
 
 		this.maybeShowMoreItems();
 	},
 
 
-	maybeShowMoreItems: function () {
+	maybeShowMoreItems: function() {
 		//if we can't scroll
 		if (this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight) {
 			this.prefetchNext();
@@ -248,14 +248,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	fillInData: function (rec) {
+	fillInData: function(rec) {
 		if (Ext.isFunction(this.fillData && this.fillData[rec.get('MimeType')])) {
 			this.fillData[rec.get('MimeType')](rec);
 		}
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.on({
@@ -275,24 +275,24 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	getState: function () {
+	getState: function() {
 		return this.mixins.activityFilter.getState.apply(this, arguments);
 	},
 
 
-	applyState: function () {
+	applyState: function() {
 		return this.mixins.activityFilter.applyState.apply(this, arguments);
 	},
 
 
-	rowClicked: function (view, rec, item) {
+	rowClicked: function(view, rec, item) {
 		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
 			this.clickHandlers[rec.get('MimeType')](view, rec);
 		}
 	},
 
 
-	rowHover: function (view, record, item, index, e) {
+	rowHover: function(view, record, item, index, e) {
 		var popout = NextThought.view.account.activity.Popout,
 			target = Ext.get(item),
 			me = this,
@@ -310,7 +310,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	showPopup: function (record, item) {
+	showPopup: function(record, item) {
 		var popout,
 			target = Ext.get(item),
 			me = this;
@@ -325,7 +325,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			if (!pop) {
 				return;
 			}
-			pop.on('destroy', function () {
+			pop.on('destroy', function() {
 				delete me.activeTargetDom;
 				delete me.activeTargetRecord;
 			}, pop);
@@ -341,14 +341,14 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	cancelPopupTimeout: function () {
+	cancelPopupTimeout: function() {
 		delete this.activeTargetDom;
 		delete this.activeTargetRecord;
 		clearTimeout(this.hoverTimeout);
 	},
 
 
-	onUpdate: function (store, record) {
+	onUpdate: function(store, record) {
 		var item, r = this.callParent(arguments);
 		if (this.activeTargetRecord === record) {
 			item = this.getNode(record);
@@ -358,7 +358,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	prefetchNext: function () {
+	prefetchNext: function() {
 		var s = this.getStore(), max;
 
 		if (!s.hasOwnProperty('data')) {
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	onScroll: function (e, dom) {
+	onScroll: function(e, dom) {
 		var el = dom.lastChild,
 			offsets = Ext.get(el).getOffsetsTo(dom),
 			top = offsets[1] + dom.scrollTop,
@@ -386,7 +386,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	applyFilters: function (mimeTypes, filterTypes) {
+	applyFilters: function(mimeTypes, filterTypes) {
 		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {
 			return;
 		}
@@ -402,7 +402,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		me.filter = filterTypes.join(',');
 		me.filterOperator = (filterTypes.length > 1) ? fo : undefined;
-		this.getMimeTypes = function () {
+		this.getMimeTypes = function() {
 			return mimeTypes;
 		};
 
@@ -416,7 +416,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 		me.applyFilterParams();
 
 		s.clearFilter(true);
-		s.addFilter([function (rec) {
+		s.addFilter([function(rec) {
 			if (Ext.Array.contains(filterTypes, 'onlyMe')) {
 				if (isMe(rec.get('Creator'))) {
 					return true;

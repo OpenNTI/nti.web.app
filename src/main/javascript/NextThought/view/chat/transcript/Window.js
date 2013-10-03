@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.chat.transcript.Window', {
 	extend: 'NextThought.view.window.Window',
-	alias:  'widget.chat-transcript-window',
+	alias: 'widget.chat-transcript-window',
 
 	requires: [
 		'NextThought.view.chat.transcript.Main',
@@ -8,49 +8,49 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	],
 
 	cls: 'chat-window no-gutter chat-transcript-window scrollable',
-	ui:  'chat-window',
+	ui: 'chat-window',
 
-	minWidth:  400,
+	minWidth: 400,
 	minHeight: 200,
-	height:    400,
-	width:     400,
-	modal:     true,
+	height: 400,
+	width: 400,
+	modal: true,
 
-	layout:   'auto', autoScroll: true,
+	layout: 'auto', autoScroll: true,
 	titleTpl: '{0} (Chat History)',
 
 	dockedItems: [
 		{xtype: 'chat-gutter', dock: 'left', hidden: true},
 		{
-			xtype:  'container',
+			xtype: 'container',
 			hidden: true,
 			layout: {
-				type:  'hbox',
-				pack:  'end',
+				type: 'hbox',
+				pack: 'end',
 				align: 'middle'
 			},
 			itemId: 'buttons',
-			cls:    'mod-buttons',
-			dock:   'bottom',
-			items:  [
+			cls: 'mod-buttons',
+			dock: 'bottom',
+			items: [
 				{
-					xtype:   'button',
-					ui:      'flat',
-					text:    'Cancel',
-					scale:   'large',
-					handler: function (btn) {
+					xtype: 'button',
+					ui: 'flat',
+					text: 'Cancel',
+					scale: 'large',
+					handler: function(btn) {
 						this.up('window').onFlagToolClicked();
 					}
 				},
 				{
-					xtype:      'button',
+					xtype: 'button',
 					flagButton: true,
-					ui:         'caution',
-					text:       'Report',
-					scale:      'large',
-					disabled:   true,
-					margin:     '0 3 0 0 ',
-					handler:    function () {
+					ui: 'caution',
+					text: 'Report',
+					scale: 'large',
+					disabled: true,
+					margin: '0 3 0 0 ',
+					handler: function() {
 						this.up('window').flagMessages();
 					}
 				}
@@ -61,12 +61,12 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 
 	tools: {
 		'flag-for-moderation': {
-			tip:     'Report',
+			tip: 'Report',
 			handler: 'onFlagToolClicked'
 		}
 	},
 
-	afterRender: function () {
+	afterRender: function() {
 		var btn;
 		this.callParent(arguments);
 		this.mon(this, 'control-clicked', this.maybeEnableButtons);
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	},
 
 
-	maybeEnableButtons: function () {
+	maybeEnableButtons: function() {
 		var b = this.down('[flagButton]');
 		//if there is checked stuff down there, enable button
 		if (this.el.down('.control.checked')) {
@@ -90,12 +90,12 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	},
 
 
-	flagMessages: function () {
+	flagMessages: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				allFlaggedMessages = [],
 				guid, m;
 
-		Ext.each(allFlaggedEntries, function (e) {
+		Ext.each(allFlaggedEntries, function(e) {
 			var arg = {};
 			guid = e.getAttribute('data-guid');
 			m = this.messageMap[guid];
@@ -110,12 +110,12 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	},
 
 
-	onFlagToolClicked: function () {
+	onFlagToolClicked: function() {
 		var transcriptViews = this.query('chat-transcript'),
 				btn = this.el.down('.flag-for-moderation');
 
 		this.el.toggleCls('moderating');
-		Ext.each(transcriptViews, function (v) {
+		Ext.each(transcriptViews, function(v) {
 			v.toggleModerationPanel();
 		});
 		btn.toggleCls('moderating');
@@ -130,38 +130,38 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	},
 
 
-	clearFlagOptions: function () {
+	clearFlagOptions: function() {
 		var allFlaggedEntries = this.el.query('.message.flagged'),
 				checked = this.el.query('.control.checked');
-		Ext.each(allFlaggedEntries, function (f) {
+		Ext.each(allFlaggedEntries, function(f) {
 			Ext.fly(f).toggleCls('flagged');
 			if (!Ext.fly(f).hasCls('confirmFlagged')) {
 				Ext.fly(f).toggleCls('confirmFlagged');
 			}
 		});
-		Ext.each(checked, function (f) {
+		Ext.each(checked, function(f) {
 			Ext.fly(f).toggleCls('checked');
 		});
 		this.maybeEnableButtons();
 	},
 
 
-	failedToLoadTranscript: function () {
+	failedToLoadTranscript: function() {
 		alert({
-				  msg:   'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
+				  msg: 'There was an error loading chat history for:' + (this.errorMsgSupplement || ''),
 				  width: 450
 			  });
 		this.destroy();
 	},
 
 
-	setTitleInfo: function (contributors) {
+	setTitleInfo: function(contributors) {
 		var me = this,
 				list = me.down('chat-gutter');
 
-		UserRepository.getUser(contributors, function (users) {
+		UserRepository.getUser(contributors, function(users) {
 			var names = [];
-			Ext.each(users, function (u) {
+			Ext.each(users, function(u) {
 				if (!isMe(u)) {
 					names.push(u.getName());
 				}
@@ -176,7 +176,7 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 	},
 
 
-	insertTranscript: function (record) {
+	insertTranscript: function(record) {
 		this.setTitleInfo(record.get('Contributors'));
 		var container = this.down('[windowContentWrapper]'),
 				time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
@@ -187,22 +187,22 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 		if (!this.messageMap) {
 			this.messageMap = {};
 		}
-		Ext.each(messages, function (m) {
+		Ext.each(messages, function(m) {
 			this.messageMap[IdCache.getIdentifier(m.getId())] = m;
 		}, this);
 
 		//assume existing is already sorted
-		existing.each(function (v, i) {
+		existing.each(function(v, i) {
 			if (v.time < time) {
 				idx = i + 1;
 			}
-//			console.log(v.time, v, time, i);
+      //			console.log(v.time, v, time, i);
 		}, this);
 
 
 		inserted = container.insert(idx, {
-			xtype:    'chat-transcript',
-			time:     time,
+			xtype: 'chat-transcript',
+			time: time,
 			messages: messages
 		});
 
@@ -221,7 +221,7 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 				this.el.unmask();
 			}
 			//allow the dom to settle, let this execute in the nextish event pump.
-			Ext.defer(function () {
+			Ext.defer(function() {
 				container.getEl().scrollTo('top', container.getEl().dom.scrollHeight);
 			}, 10);
 		}

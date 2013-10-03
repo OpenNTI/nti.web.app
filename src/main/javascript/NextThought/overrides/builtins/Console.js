@@ -1,10 +1,10 @@
-Ext.define('NextThought.overrides.builtins.Console',{});
-(function(){
-	Ext.applyIf(window,{
-		console:{ log: Ext.emptyFn }
+Ext.define('NextThought.overrides.builtins.Console', {});
+(function() {
+	Ext.applyIf(window, {
+		console: { log: Ext.emptyFn }
 	});
 
-	Ext.applyIf(window.console,{
+	Ext.applyIf(window.console, {
 		debug: console.log,
 		info: console.log,
 		warn: console.log,

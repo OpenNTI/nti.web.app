@@ -6,12 +6,12 @@ Ext.define('NextThought.model.anchorables.TextContext', {
 	},
 
 	statics: {
-		createFromObjects: function(o){
+		createFromObjects: function(o) {
 			var result = [];
 			//ensure array here
-			if (!Ext.isArray(o)){o = [o];}
+			if (!Ext.isArray(o)) {o = [o];}
 
-			Ext.each(o, function(tc){
+			Ext.each(o, function(tc) {
 				result.push(NextThought.model.anchorables.TextContext.create({
 					contextText: tc.contextText,
 					contextOffset: tc.contextOffset
@@ -22,7 +22,7 @@ Ext.define('NextThought.model.anchorables.TextContext', {
 		}
 	},
 
-	constructor: function(o){
+	constructor: function(o) {
 		this.validateOffset(o.contextOffset);
 		this.validateText(o.contextText);
 		this.initConfig(o);

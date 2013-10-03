@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Views',{
+Ext.define('NextThought.util.Views', {
 	singleton: true,
 	requires: [
 
@@ -6,13 +6,13 @@ Ext.define('NextThought.util.Views',{
 
 	widgetMap: {},
 
-	constructor: function(){
+	constructor: function() {
 		Ext.apply(this.widgetMap, {
 			'MessageInfo': this.displayTranscript
 		});
 	},
 
-	displayModel: function (m){
+	displayModel: function(m) {
 		var func = this.widgetMap[m.getModelName()];
 		if (func) {
 			func.call(this, m);
@@ -23,13 +23,13 @@ Ext.define('NextThought.util.Views',{
 	},
 
 
-	displayTranscript: function(m){
-		function success(m){
+	displayTranscript: function(m) {
+		function success(m) {
 			var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
 				win = Ext.widget('window', {
 					cls: 'chat-transcript',
 					disableDragDrop: true,
-					title: Ext.String.format('Chat Transcript | {0}',date),
+					title: Ext.String.format('Chat Transcript | {0}', date),
 					closable: true,
 					width: 450,
 					height: 500,
@@ -38,9 +38,9 @@ Ext.define('NextThought.util.Views',{
 				log = win.add({ xtype: 'chat-log-view' }),
 				msgs = m.get('Messages');
 
-			msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified'));
+			msgs = Ext.Array.sort(msgs || [], Globals.SortModelsBy('Last Modified'));
 
-			Ext.each(msgs, function(i){ log.addMessage(i); });
+			Ext.each(msgs, function(i) { log.addMessage(i); });
 			win.show();
 		}
 
@@ -52,9 +52,9 @@ Ext.define('NextThought.util.Views',{
 	},
 
 
-	convertToTranscriptId: function(roomInfoId, uname){
+	convertToTranscriptId: function(roomInfoId, uname) {
 		var id = ParseUtils.parseNtiid(roomInfoId);
-		if(!id){
+		if (!id) {
 			return null;
 		}
 		id.specific.provider = uname;
@@ -68,7 +68,7 @@ Ext.define('NextThought.util.Views',{
 		var id = this.convertToTranscriptId(roomInfoId, $AppConfig.username);
 		scope = scope || this;
 
-		if(!id){
+		if (!id) {
 			Ext.callback(failure, scope);
 			return;
 		}
@@ -79,6 +79,6 @@ Ext.define('NextThought.util.Views',{
 
 
 },
-function(){
+function() {
 	window.ViewUtils = this;
 });

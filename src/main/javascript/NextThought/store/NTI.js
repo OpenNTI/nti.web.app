@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.NTI',{
+Ext.define('NextThought.store.NTI', {
 	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'
@@ -23,23 +23,23 @@ Ext.define('NextThought.store.NTI',{
 	},
 
 
-	constructor: function(config){
+	constructor: function(config) {
 		//Allow partial overriding the proxy.
-		if(config && config.proxyOverride){
-			this.proxy = Ext.merge(Ext.clone(this.proxy),this.config.proxyOverride);
+		if (config && config.proxyOverride) {
+			this.proxy = Ext.merge(Ext.clone(this.proxy), this.config.proxyOverride);
 			delete config.proxyOverride;
 		}
 
 
 		this.callParent(arguments);
-		
+
 		//Allow shortcutting the url setting.
-		if(this.url){
+		if (this.url) {
 			this.proxy.url = this.url;
 			delete this.url;
 		}
 
-		if(!this.pageSize){
+		if (!this.pageSize) {
 			this.proxy.limitParam = undefined;
 			this.proxy.startParam = undefined;
 		}
@@ -47,21 +47,21 @@ Ext.define('NextThought.store.NTI',{
 
 
 	onProxyLoad: function(operation) {
-        var resultSet = operation.getResultSet();
+    var resultSet = operation.getResultSet();
 		delete this.batchLinks;
-		if( resultSet && resultSet.links){
+		if (resultSet && resultSet.links) {
 			this.batchLinks = resultSet.links;
 		}
-		
+
 		return this.callParent(arguments);
 	},
 
 
-	remove: function(records){
+	remove: function(records) {
 		this.callParent(arguments);
 
-		Ext.each(records, function(record){
-			record.fireEvent('destroy',record);
+		Ext.each(records, function(record) {
+			record.fireEvent('destroy', record);
 		});
 
 	}

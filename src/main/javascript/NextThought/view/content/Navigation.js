@@ -33,15 +33,15 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble('main-tab-clicked');
 	},
 
-	onUp: function (e) {
+	onUp: function(e) {
 		e.stopEvent();
 
-		if(this.upMenu){
+		if (this.upMenu) {
 			this.upMenu.stopHide();
 			this.upMenu.stopShow();
 		}
@@ -51,20 +51,20 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	onUpHover: function(e){
+	onUpHover: function(e) {
 		e.stopEvent();
-		if(!e.getTarget('.has-alt-tabbar') || this.hasNoTabbar){ return; }
+		if (!e.getTarget('.has-alt-tabbar') || this.hasNoTabbar) { return; }
 
-		if(!this.upMenu && !this.hasNoTabbar){
+		if (!this.upMenu && !this.hasNoTabbar) {
 			this.upMenu = this.buildMainTabbarMenu();
-			if(!this.upMenu){
+			if (!this.upMenu) {
 				this.hasNoTabbar = true;
 				return;
 			}
 
 			this.mon(this.upMenu, {
 				scope: this,
-				click: function(menu, item){
+				click: function(menu, item) {
 					console.log('tab item clicked: ', arguments);
 					this.fireEvent('main-tab-clicked', item);
 				}
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	updateLocation: function (ntiid) {
+	updateLocation: function(ntiid) {
 		this.currentNtiid = ntiid;
 		var me = this,
 			C = ContentUtils,
@@ -132,7 +132,7 @@ Ext.define('NextThought.view.content.Navigation', {
 				}
 			}
 			else {
-				path.add = Ext.Function.createSequence(path.add, function (e) {
+				path.add = Ext.Function.createSequence(path.add, function(e) {
 					e.addCls('no-children');
 				}, me);
 				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[NaN]], true));
@@ -145,12 +145,12 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	getContentNumericalAddress: function (lineage, loc) {
+	getContentNumericalAddress: function(lineage, loc) {
 		return '';
 	},
 
 
-	getBreadcrumbPath: function () {
+	getBreadcrumbPath: function() {
 		var p = new Ext.CompositeElement();
 
 		if (this.pathPartEls) {
@@ -165,16 +165,16 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	cleanupMenus: function () {
+	cleanupMenus: function() {
 		var m = this.menuMap;
 		delete this.menuMap;
 
-		Ext.Object.each(m, function (k, v) {
+		Ext.Object.each(m, function(k, v) {
 			return (v && v.destroy && v.destroy()) || true;
 		});
 
 		delete this.hasNoTabbar;
-		if(this.upMenu){
+		if (this.upMenu) {
 			this.upMenu.destroy();
 			delete this.upMenu;
 		}
@@ -182,13 +182,13 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	buildMainTabbarMenu: function(){
+	buildMainTabbarMenu: function() {
 		var tabView = Ext.get('view-tabs').dom,
 			children = tabView && tabView.children,
 			items = [];
 
 
-		Ext.each(children, function(item){
+		Ext.each(children, function(item) {
 			items.push({
 				text: item.innerText,
 				viewId: item.getAttribute('data-view-id'),
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			});
 		});
 
-		if(Ext.isEmpty(items)){
+		if (Ext.isEmpty(items)) {
 			return;
 		}
 
@@ -204,7 +204,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	buildMenu: function (pathPartEl, locationInfo, parent) {
+	buildMenu: function(pathPartEl, locationInfo, parent) {
 		var me = this, m, k,
 			menus = me.menuMap || {},
 			cfg = { ownerButton: me, items: [] },
@@ -219,9 +219,9 @@ Ext.define('NextThought.view.content.Navigation', {
 			return pathPartEl;
 			//this.enumerateBookSiblings(locationInfo,cfg.items);
 		}
-//		else {
+    //		else {
 		this.enumerateTopicSiblings(currentNode, cfg.items, parent);
-//		}
+    //		}
 
 		if (Ext.isEmpty(cfg.items)) {
 			return;
@@ -238,17 +238,17 @@ Ext.define('NextThought.view.content.Navigation', {
 					m.stopShow();
 				}
 			},
-			'mouseenter': function () {
+			'mouseenter': function() {
 				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getX() + (pathPartEl.getHeight() - 30));
 				m.startShow(pathPartEl, 'tl-bl', [-10, -20]);
 			},
-			'click': function () {
+			'click': function() {
 				m.stopHide();
 				m.stopShow();
 				me.fireEvent('set-location', key);
 			}
 		});
-//		}
+    //		}
 
 		this.menuMap = menus;
 
@@ -256,20 +256,20 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-//	enumerateBookSiblings: function(locInfo,items){
-//		Library.each(function(o){
-//			var id = o.get('NTIID');
-//			items.push({
-//				rememberLastLocation: true,
-//				text	: o.get('title'),
-//				ntiid	: id,
-//				cls		: id===locInfo.ntiid?'current':''
-//			});
-//		});
-//	},
+  //	enumerateBookSiblings: function(locInfo,items){
+  //		Library.each(function(o){
+  //			var id = o.get('NTIID');
+  //			items.push({
+  //				rememberLastLocation: true,
+  //				text	: o.get('title'),
+  //				ntiid	: id,
+  //				cls		: id===locInfo.ntiid?'current':''
+  //			});
+  //		});
+  //	},
 
 
-	enumerateTopicSiblings: function (node, items, parent) {
+	enumerateTopicSiblings: function(node, items, parent) {
 		var me = this, current = node, num = 1, text,
 			type = '1', separate = '. ', suppress = false, nodes,
 			p, n = 'numbering', sep = 'separator', sup = 'suppressed';
@@ -290,7 +290,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			return;
 		}
 
-		Ext.each(nodes, function (node) {
+		Ext.each(nodes, function(node) {
 			if (!/topic/i.test(node.tagName) || node.getAttribute('suppressed') === 'true') {
 				return;
 			}
@@ -308,13 +308,13 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	//num - the number in the list; style - type of numbering '1','a','A','i','I'
-	styleList: function (num, style) {
+	styleList: function(num, style) {
 		var me = this, formatters = {
 			'a': me.toBase26SansNumbers,
-			'A': function (num) {
+			'A': function(num) {
 				return me.toBase26SansNumbers(num).toUpperCase();
 			},
-			'i': function (num) {
+			'i': function(num) {
 				return me.toRomanNumeral(num).toLowerCase();
 			},
 			'I': me.toRomanNumeral
@@ -328,7 +328,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	//from: http://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter
-	toRomanNumeral: function (num) {
+	toRomanNumeral: function(num) {
 		var digits, key, roman, i, m = [];
 
 		digits = String(+num).split('');
@@ -347,7 +347,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	toBase26SansNumbers: function (num) {
+	toBase26SansNumbers: function(num) {
 		var val = (num - 1) % 26,
 			letter = String.fromCharCode(97 + val),
 			num2 = Math.floor((num - 1) / 26);
@@ -358,7 +358,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	hasChildren: function (n) {
+	hasChildren: function(n) {
 		var num = 0, node;
 
 		node = this.getFirstTopic(n);
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	getFirstTopic: function (n) {
+	getFirstTopic: function(n) {
 		return Ext.fly(n).first('topic', true);
 	}
 });

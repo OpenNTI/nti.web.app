@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.MessageBox',{
+Ext.define('NextThought.view.MessageBox', {
 	extend: 'Ext.window.MessageBox',
 
 	plain: true,
@@ -10,10 +10,10 @@ Ext.define('NextThought.view.MessageBox',{
 	minWidth: 390,
 	maxWidth: 500,
 
-	CANCEL : 1,
-	NO : 2,
-	YES : 4,
-	OK : 8,
+	CANCEL: 1,
+	NO: 2,
+	YES: 4,
+	OK: 8,
 
 	iconHeight: 75,
 	iconWidth: 80,
@@ -45,10 +45,10 @@ Ext.define('NextThought.view.MessageBox',{
 				//we split by ':' and if there are two parts the first
 				//will be used to set the UI and the second will be the
 				//text
-				setText: function(text){
+				setText: function(text) {
 					var parts = text.split(':') || [],
 						newArgs = Array.prototype.slice.call(arguments);
-					if(parts.length > 1){
+					if (parts.length > 1) {
 						this.setUI(parts[0]);
 						newArgs[0] = parts[1];
 						return this.callParent(newArgs);
@@ -56,10 +56,10 @@ Ext.define('NextThought.view.MessageBox',{
 
 					//If there is no formatter do the same
 					//magical stuff we used to do
-					if(/delete/i.test(text) || /report/i.test(text)){
+					if (/delete/i.test(text) || /report/i.test(text)) {
 						this.setUI('caution');
 					}
-					else if(/accept/i.test(text)){
+					else if (/accept/i.test(text)) {
 						this.setUI('primary');
 					}
 					else {
@@ -73,32 +73,32 @@ Ext.define('NextThought.view.MessageBox',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
-		this.bottomTb.layout.pack='end';
+		this.bottomTb.layout.pack = 'end';
 	},
 
 
-	setTitle: function(){ this.callParent(['&#160;']); },
+	setTitle: function() { this.callParent(['&#160;']); },
 
-	show: function(cfg){
-		Ext.applyIf(cfg,{
-			title:'Attention...'
+	show: function(cfg) {
+		Ext.applyIf(cfg, {
+			title: 'Attention...'
 		});
 
-		cfg.msg = cfg.title+'<div class="message">'+cfg.msg+'</div>';
-		cfg.msg = cfg.msg.replace(/\n/,'<br/>');
-		Ext.defer(this.toFront,10,this);
+		cfg.msg = cfg.title + '<div class="message">' + cfg.msg + '</div>';
+		cfg.msg = cfg.msg.replace(/\n/, '<br/>');
+		Ext.defer(this.toFront, 10, this);
 		return this.callParent([cfg]);
 	}
 
-}, function(){
+}, function() {
 	Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
-	window.alert = function(cfg, fn){
+	window.alert = function(cfg, fn) {
 		Globals.removeLoaderSplash();
 		if (!cfg || Ext.isString(cfg)) {
-            cfg = { msg : cfg||'No Message' };
-        }
+      cfg = { msg: cfg || 'No Message' };
+    }
 
 		Ext.applyIf(cfg, {
 			icon: Ext.Msg.WARNING,

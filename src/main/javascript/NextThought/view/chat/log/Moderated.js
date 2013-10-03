@@ -10,7 +10,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		'NextThought.cache.IdCache'
 	],
 
-	preventMark:true,
+	preventMark: true,
 	anchor: '100%',
 	layout: 'anchor',
 	cls: 'chat-entry',
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 			'</div>',
 		'</div>',
 		'<div class="x-chat-replies"></div>',
-//		'<div class="{errorMsgCls}" style="display:none"></div>',
+    //		'<div class="{errorMsgCls}" style="display:none"></div>',
 		'<div id="{id}-errorEl" class="{errorMsgCls} errorEl" style="display:none"></div>',
 		'<div class="{clearCls}" role="presentation"><!-- --></div>',
 		{
@@ -56,7 +56,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		bodyEl: 'div.x-chat-log-entry'
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		Ext.container.Container.prototype.initComponent.apply(this, arguments);
 		this.callParent(arguments);
 		this.update(this.message);
@@ -64,14 +64,14 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		this.$add = this.add;
 
 		//work around a mixin issue... we're mixing in a class that wasn't written as a mixin...
-		this.add = function(){
-			var r = this.$add.apply(this,arguments);
+		this.add = function() {
+			var r = this.$add.apply(this, arguments);
 				reply = this.down('chat-reply-to');
 			//console.debug('r', r);
 
-			if(reply && r!==reply){
+			if (reply && r !== reply) {
 				var ci = this.items.indexOf(reply);
-				this.move(ci, this.items.getCount()-1);
+				this.move(ci, this.items.getCount() - 1);
 				reply.down('textfield').focus();
 			}
 
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		};
 	},
 
-	update: function(m){
+	update: function(m) {
 		var me = this,
 			s = m.get('Creator');
 
@@ -89,16 +89,16 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
 
-		m.compileBodyContent(function(content){
+		m.compileBodyContent(function(content) {
 			me.renderData.body = content;
-			if(me.rendered){
+			if (me.rendered) {
 			   me.text.update(me.renderData.body);
 			   me.time.update(me.renderData.time);
 			}
 		});
 
-		if(s){
-			UserRepository.getUser(s, function(u){
+		if (s) {
+			UserRepository.getUser(s, function(u) {
 				if (!u) {
 					console.error('failed to resolve user', s, m);
 					return;
@@ -117,41 +117,41 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		this.callParent(arguments);
 		this.initializeDragZone(this);
 
-		this.on('change', function(cmp, state){
+		this.on('change', function(cmp, state) {
 			this.box.removeCls('selected');
-			if(state){ this.box.addCls('selected');}
+			if (state) { this.box.addCls('selected');}
 		});
 
 		this.box.on('click', this.click, this);
 	},
 
-	click: function(event, target, eOpts){
+	click: function(event, target, eOpts) {
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target),
-			tag = target? target.tagName : '';
+			tag = target ? target.tagName : '';
 
-		if(inBox){
-			if(target.hasCls('reply-public')){
+		if (inBox) {
+			if (target.hasCls('reply-public')) {
 				this.fireEvent('reply-public', this);
 			}
-			else if(target.hasCls('reply-whisper')){
+			else if (target.hasCls('reply-whisper')) {
 				this.fireEvent('reply-whisper', this);
 			}
-			else if(target.hasCls('pin')){
+			else if (target.hasCls('pin')) {
 				  this.fireEvent('pin', this);
 			}
 		}
-		else if(/whiteboard/i.test(target.getAttribute('class'))){
+		else if (/whiteboard/i.test(target.getAttribute('class'))) {
 			//do lightbox/zoom of whiteboard image
-			if(!target.is('img')){
+			if (!target.is('img')) {
 				target = target.parent().first('img');
 			}
 
 			//open readonly wb editor for now...
-			var w = Ext.widget('wb-window', {height: '75%', width: '50%', value:this.message.get('body')[0], readonly: true});
+			var w = Ext.widget('wb-window', {height: '75%', width: '50%', value: this.message.get('body')[0], readonly: true});
 			w.show();
 		}
-		else if(!/input/i.test(tag)){
+		else if (!/input/i.test(tag)) {
 			this.setValue(!this.getValue());
 		}
 	},
@@ -160,7 +160,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
-		if(this.rendered){
+		if (this.rendered) {
 			this.icon.set({src: i});
 			this.name.update(name);
 		}

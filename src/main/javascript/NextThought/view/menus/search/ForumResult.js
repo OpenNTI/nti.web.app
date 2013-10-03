@@ -3,29 +3,29 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 	alias: ['widget.search-result-forums-communityheadlinepost', 'widget.search-result-forums-generalforumcomment'],
 
 
-	isComment: function(hit){
+	isComment: function(hit) {
 		return (/.*?generalforumcomment$/).test(hit.get('MimeType'));
 	},
 
 
-	doClicked: function(fragIdx){
+	doClicked: function(fragIdx) {
 		var me = this;
-		if(Ext.isEmpty(this.record)){
+		if (Ext.isEmpty(this.record)) {
 			// If we don't have a record that means the record
 			// could have been deleted or an error happened on load.
 			this.displayNavigationError();
 		}
 
-		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID'): undefined, function(success, cmp){
-			if(success){
-				function highlight(){
+		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID') : undefined, function(success, cmp) {
+			if (success) {
+				function highlight() {
 					me.fireEvent('highlight-topic-hit', me, fragIdx, cmp);
 				}
 
-				if(cmp.ready){
-					highlight()
-				}else{
-					me.mon(cmp,'commentReady', highlight, me);
+				if (cmp.ready) {
+					highlight();
+				}else {
+					me.mon(cmp, 'commentReady', highlight, me);
 				}
 			}
 		});

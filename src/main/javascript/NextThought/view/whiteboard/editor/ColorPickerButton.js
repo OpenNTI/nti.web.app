@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton',{
+Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton', {
 	extend: 'Ext.button.Button',
 	alias: 'widget.color-picker-button',
 	requires: [
@@ -14,11 +14,11 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton',{
 	menu: {xtype: 'color-picker'},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
 		this.palette = this.menu.down('color-palette');
-		this.mon( this.menu,{
+		this.mon(this.menu, {
 			scope: this,
 			select: this.selectHandler
 		});
@@ -26,28 +26,28 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton',{
 	},
 
 
-	selectHandler: function(palette,value){
+	selectHandler: function(palette,value) {
 		this.setValue(value);
 	},
 
 
-	getValue: function(){
+	getValue: function() {
 		return this.value || 'NONE';
 	},
 
 
-	setValue: function(color){
+	setValue: function(color) {
 		var me = this, found = false;
-		Ext.each(this.palette.colors,function(c){
-			if(c.value === color){ found=true; me.addCls(c.name); }
+		Ext.each(this.palette.colors, function(c) {
+			if (c.value === color) { found = true; me.addCls(c.name); }
 			else { me.removeCls(c.name); }
 		});
 
-		if(found || !color){
+		if (found || !color) {
 			me.value = color || 'NONE';
 		}
 		else {
-			Ext.Error.raise(Ext.String.format('The color "{0}" is invalid',color));
+			Ext.Error.raise(Ext.String.format('The color "{0}" is invalid', color));
 		}
 
 		return this;

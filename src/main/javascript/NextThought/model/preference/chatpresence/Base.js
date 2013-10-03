@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.preference.chatpresence.Base',{
+Ext.define('NextThought.model.preference.chatpresence.Base', {
 	extend: 'NextThought.model.preference.Base',
 
 	fields: [
@@ -7,7 +7,7 @@ Ext.define('NextThought.model.preference.chatpresence.Base',{
 		{name: 'type', type: 'String'}
 	],
 
-	getResourceUrl: function(){
+	getResourceUrl: function() {
 		var base = this.callParent(arguments);
 
 		return base + '/ChatPresence';

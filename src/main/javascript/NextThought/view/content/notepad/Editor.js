@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.content.notepad.Editor',{
+Ext.define('NextThought.view.content.notepad.Editor', {
 	extend: 'Ext.Component',
 	alias: 'widget.notepad-editor',
 
@@ -24,10 +24,10 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 	}),
 
 
-	childEls:['body'],
+	childEls: ['body'],
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.on({
 			afterRender: 'setup',
@@ -41,13 +41,13 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 	},
 
 
-	setup: function(){
+	setup: function() {
 		var v;
 		this.body.selectable();
-		if( !Ext.isEmpty( this.value ) ){
-			v = Ext.Array.map(this.value,function(i){
-				if( Ext.isString(i) ){
-					i = Ext.DomHelper.markup({html:i});
+		if (!Ext.isEmpty(this.value)) {
+			v = Ext.Array.map(this.value, function(i) {
+				if (Ext.isString(i)) {
+					i = Ext.DomHelper.markup({html: i});
 				}
 				return i;
 			});
@@ -58,53 +58,53 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 	},
 
 
-	onKeyDown: function(e){
+	onKeyDown: function(e) {
 		this.stop(e);
-		if(e.getKey() === e.ESC){
+		if (e.getKey() === e.ESC) {
 			this.fireEvent('cancel');
 			this.destroy();
 			return;
 		}
-		this.fireEvent('keydown',e),
-		Ext.defer(this[this.isEmpty() ? 'addCls' : 'removeCls'],1,this,['empty']);
+		this.fireEvent('keydown', e),
+		Ext.defer(this[this.isEmpty() ? 'addCls' : 'removeCls'], 1, this, ['empty']);
 	},
 
 
-	stop: function(e){
+	stop: function(e) {
 		e.stopPropagation();
 	},
 
 
-	focus: function(){
+	focus: function() {
 		this.body.focus();
 		this.moveCursorToEnd(this.body.last());
 	},
 
 
-	blur: function(){
+	blur: function() {
 		this.fireEvent('blur', this);
 	},
 
 
-	isEmpty: function isEmpty(){
+	isEmpty: function isEmpty() {
 		var v = this.getValue(),
 			re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g);
 
-		return !Ext.isArray(v) || v.join('').replace(re, '') === ''
+		return !Ext.isArray(v) || v.join('').replace(re, '') === '';
 	},
 
 
-	getValue: function(){
+	getValue: function() {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [];
 
 		function stripTrailingBreak(text) {
-			var re = stripTrailingBreak.re = (stripTrailingBreak.re||/<br\/?>$/i);
+			var re = stripTrailingBreak.re = (stripTrailingBreak.re || /<br\/?>$/i);
 			return text.replace(re, '');
 		}
 
-		function clean(o){
+		function clean(o) {
 			var r = [], p, i, len = o.length;
 			for (i = 0; i < len; i++) {
 				p = stripTrailingBreak(o[i]);
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			return r;
 		}
 
-		function join(o){
+		function join(o) {
 			var i, v;
 			for (i = o.length; i >= 0; i--) {
 				v = o[i];
@@ -128,7 +128,7 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			return o;
 		}
 
-		this.el.select('.body > *').each(function (div) {
+		this.el.select('.body > *').each(function(div) {
 			var html, tmp, dom;
 			try {
 				//don't let manipulations here effect the dom
@@ -142,15 +142,15 @@ Ext.define('NextThought.view.content.notepad.Editor',{
 			}
 		});
 
-		if(!out.length){
+		if (!out.length) {
 			out = this.body.getHTML().split(/<br\/?>/);
 		}
 
-		return Ext.Array.filter(join(clean(out)), function (i) {
+		return Ext.Array.filter(join(clean(out)), function(i) {
 			//if we are just whitespace and html whitespace
 			return i && !Ext.isEmpty(i.replace(/<br\/?>|&nbsp;/g, '').trim());
 		});
 	}
-},function(){
-	this.borrow(NextThought.editor.AbstractEditor,['moveCursorToEnd']);
+},function() {
+	this.borrow(NextThought.editor.AbstractEditor, ['moveCursorToEnd']);
 });

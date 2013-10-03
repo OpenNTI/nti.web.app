@@ -1,21 +1,21 @@
-Ext.define('NextThought.overrides.tab.Panel',{
+Ext.define('NextThought.overrides.tab.Panel', {
 	override: 'Ext.tab.Panel',
 
 	stateEvents: ['tabchange'],
 
-	applyState: function (state) {
+	applyState: function(state) {
 		var t = (state || {}).t || 0;
 
-		try{
+		try {
 			this.getLayout().getActiveItem();
 			this.setActiveTab(t);
-		}catch(e){
+		}catch (e) {
 			console.error(e.stack);
 		}
 
 	},
 
-	getState: function () {
+	getState: function() {
 		return {t: this.items.indexOf(this.getActiveTab())};
 	}
 });

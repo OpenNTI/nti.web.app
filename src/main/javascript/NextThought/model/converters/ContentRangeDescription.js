@@ -14,7 +14,7 @@ Ext.define('NextThought.model.converters.ContentRangeDescription', {
 				}
 			}
 			catch (e) {
-				console.error('CRD: Parsing Error: ',e.message, e.stack, arguments);
+				console.error('CRD: Parsing Error: ', e.message, e.stack, arguments);
 				return null;
 			}
 		}

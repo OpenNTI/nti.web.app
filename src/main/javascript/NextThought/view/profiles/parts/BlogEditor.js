@@ -24,13 +24,13 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		editorEl: '.editor'
 	},
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
 	},
 
 
-	afterRender: function () {
+	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record,
 			h,
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 		if (Ext.is.iPad) {
 			//put focus on cancel button, so the user can focus and bring up keyboard for title element
-			Ext.defer(function () {
+			Ext.defer(function() {
 				var query = Ext.query('.right .action.cancel');
 				if (query) {
 					query[0].focus();
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	destroy: function () {
+	destroy: function() {
 		Ext.get('profile').removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 		Ext.destroy(this.sizer);
@@ -91,10 +91,10 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	moveCursorToEnd: function (el) {
+	moveCursorToEnd: function(el) {
 		//this is only for input/textarea elements
 		el = Ext.getDom(el);
-		if (typeof el.selectionStart === "number") {
+		if (typeof el.selectionStart === 'number') {
 			el.selectionStart = el.selectionEnd = el.value.length;
 		}
 		else if (el.createTextRange !== undefined) {
@@ -106,7 +106,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	syncHeight: function () {
+	syncHeight: function() {
 		//Run this only once for iPad
 		if (Ext.is.iPad) {
 			if (this.ipadSyncedAlready) {
@@ -130,13 +130,13 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		top = el.getY() + pEl.getScroll().top - scrollPos;
 
 		newHeight = ((vpH - top) - footEl.getHeight()) - 8;
-		if(this.sizer){
+		if (this.sizer) {
 			this.sizer.setHeight(newHeight);
 		}
 
 		el.setHeight(newHeight);
 
-		Ext.defer(function () {
+		Ext.defer(function() {
 			pEl.scrollTo('top', scrollPos);
 		}, 100);
 
@@ -144,7 +144,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	onSave: function (e) {
+	onSave: function(e) {
 		e.stopEvent();
 		var v = this.getValue(),
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t,
@@ -157,8 +157,8 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		}
 
 		l = v.body.length;
-		if(l > 0 && v.body[l-1].replace){
-			v.body[l-1] = v.body[l-1].replace(trimEndRe, '');
+		if (l > 0 && v.body[l - 1].replace) {
+			v.body[l - 1] = v.body[l - 1].replace(trimEndRe, '');
 		}
 
 		if (Ext.isEmpty(v.title)) {
@@ -190,18 +190,18 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	onSaveSuccess: function () {
+	onSaveSuccess: function() {
 		this.destroy();
 	},
 
 
-	onSaveFailure: function (proxy, response, operation) {
+	onSaveFailure: function(proxy, response, operation) {
 		var msg = 'An unknown error occurred saving your Thought.', error;
 
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
-			if (error.code === "TooLong") {
-				msg = "Could not save your Thought. The title is too long. It can only be 140 characters or less";
+			if (error.code === 'TooLong') {
+				msg = 'Could not save your Thought. The title is too long. It can only be 140 characters or less';
 			}
 		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});
@@ -209,7 +209,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	},
 
 
-	onCancel: function (e) {
+	onCancel: function(e) {
 		e.stopEvent();
 
 		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.

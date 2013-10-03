@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.video.roll.OverlayedPanel',{
+Ext.define('NextThought.view.video.roll.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-video-roll',
 
-	requires:[
+	requires: [
 		'NextThought.util.Dom',
 		'NextThought.view.video.roll.Roll'
 	],
@@ -10,13 +10,13 @@ Ext.define('NextThought.view.video.roll.OverlayedPanel',{
 	ui: 'video-roll',
 	cls: 'video-roll',
 
-	constructor: function(config){
-		if(!config || !config.contentElement){
+	constructor: function(config) {
+		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
 		config = Ext.applyIf(config, {
-			layout : 'fit'
+			layout: 'fit'
 		});
 
 		config.items = [{
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.video.roll.OverlayedPanel',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.down('video-roll').selectFirst();
 	}

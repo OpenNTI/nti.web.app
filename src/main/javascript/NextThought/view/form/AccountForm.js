@@ -2,7 +2,7 @@
  * @deprecated This class heavily needs redesigning. Its filled with bad-practices and hacks.
  */
 Ext.define('NextThought.view.form.AccountForm', {
-	extend:'Ext.form.Panel',
+	extend: 'Ext.form.Panel',
 	alias: 'widget.account-form',
 
 	requires: [
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 			padding: 5,
 			anchor: '100%',
 			border: false,
-			defaults: {ui: 'account',defaults: {ui: 'account'}}
+			defaults: {ui: 'account', defaults: {ui: 'account'}}
 		}
 	},
 
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 				},
 				{
 					flex: 1,
-					items:[
+					items: [
 						{
 							html: 'Username:'
 						},{
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							emptyText: 'Real name',
 							name: 'realname',
 							validator: function(value) {//don't allow "only-whitespace" values
-								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+								return (value || '').replace(/^["'\s]+|["'\s]+$/ig, '').length > 0;
 							}
 						},
 						{
@@ -89,7 +89,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							margin: '10px 10px 10px 0px',
 							anchor: '50%',
 							validator: function(value) {//don't allow "only-whitespace" values
-								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+								return (value || '').replace(/^["'\s]+|["'\s]+$/ig, '').length > 0;
 							}
 						},
 						{
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							margin: '10px 10px 10px 0px',
 							anchor: '50%',
 							validator: function(value) {//don't allow "only-whitespace" values
-								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+								return (value || '').replace(/^["'\s]+|["'\s]+$/ig, '').length > 0;
 							}
 						},
 						{
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							hidden: true,
 							changePassword: true,
 							defaults: { ui: 'account', flex: 1, disabled: true },
-							items:[
+							items: [
 								{
 									xtype: 'textfield',
 									name: 'old_password',
@@ -138,7 +138,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 										var oldpw = this.previousSibling('[name=old_password]').getValue(),
 											sim = this.up('window').down('account-form').similarity;
 										if (value.length < 6) { return 'Password too short'; }
-										else if (sim(oldpw,value) > 0.6) { return 'New password too similar'; }
+										else if (sim(oldpw, value) > 0.6) { return 'New password too similar'; }
 										else { return true; }
 									}
 								}, {
@@ -180,7 +180,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 								margin: '10px 0px',
 								anchor: '100%',
 								layout: 'anchor',
-								xtype:'fieldset',
+								xtype: 'fieldset',
 								border: false,
 								defaults: {
 									layout: 'fit',
@@ -192,11 +192,11 @@ Ext.define('NextThought.view.form.AccountForm', {
 									}
 								}
 							},
-							items:[
-								{ title: 'Following',   items: { items: { name: 'following', readOnly: true  } } },
+							items: [
+								{ title: 'Following', items: { items: { name: 'following', readOnly: true } } },
 								{ title: 'Communities', items: { items: { name: 'Communities', readOnly: true } } },
-								{ title: 'Accepting',   items: { items: { name: 'accepting'  } } },
-								{ title: 'Ignoring',	items: { items: { name: 'ignoring'   } } }
+								{ title: 'Accepting', items: { items: { name: 'accepting' } } },
+								{ title: 'Ignoring',	items: { items: { name: 'ignoring' } } }
 							]
 						}
 					]
@@ -211,28 +211,28 @@ Ext.define('NextThought.view.form.AccountForm', {
 		var table = [], i = 0, j = 0, d = 0;
 		for (i = 0; i <= a.length; i++) {
 			table.push([]);
-			for (j = 0; j <= b.length; j++) { table[table.length-1].push(i+j); }
+			for (j = 0; j <= b.length; j++) { table[table.length - 1].push(i + j); }
 		}
 		for (d = 2; d <= a.length + b.length; d++) {
 			for (j = 1; j < d; j++) {
 				i = d - j;
 				if (i >= 1 && j >= 1 && i <= a.length && j <= b.length) {
-					table[i][j] = Math.min(table[i-1][j-1] + (a[i-1] !== b[j-1]) * 2,table[i][j-1] + 1,table[i-1][j] + 1);
+					table[i][j] = Math.min(table[i - 1][j - 1] + (a[i - 1] !== b[j - 1]) * 2, table[i][j - 1] + 1, table[i - 1][j] + 1);
 				}
 			}
 		}
 		return 1.0 - table[a.length][b.length] / (a.length + b.length);
 	},
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.down('component[username]').update(this.account.get('Username'));
 		this.down('component[avatar]').el.dom.src = this.account.get('avatarURL').replace(/s=\d+/i, 's=128');
-		this.down('component[changePassword]').el.on('click',this.revealPassword,this);
+		this.down('component[changePassword]').el.on('click', this.revealPassword, this);
 
 		this.setFieldValue('realname');
 		this.setFieldValue('alias');
@@ -246,18 +246,18 @@ Ext.define('NextThought.view.form.AccountForm', {
 	},
 
 
-	 revealPassword: function(e){
+	 revealPassword: function(e) {
 		 e.preventDefault();
 
 		 this.down('component[changePassword]').hide();
 		 this.down('panel[changePassword]').show();
 
-		 Ext.each(this.query('textfield[inputType=password]'),function(f){f.enable();});
+		 Ext.each(this.query('textfield[inputType=password]'), function(f) {f.enable();});
 	 },
 
 
-	setFieldValue: function(fieldName){
-		var rn = this.down('*[name='+fieldName+']');
+	setFieldValue: function(fieldName) {
+		var rn = this.down('*[name=' + fieldName + ']');
 		rn.setValue(this.account.get(fieldName));
 		rn.resetOriginalValue();
 	}
