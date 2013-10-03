@@ -46,6 +46,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 			'editor-closed': 'unlock',
 			'detect-overflow': {fn: 'detectOverflow', buffer: 100},
 			afterRender: 'setupBindsToReaderRef',
+			activate: 'syncScroll',
 			el: {
 				scroll: 'onSyncScroll',
 				contextmenu: 'eat',
