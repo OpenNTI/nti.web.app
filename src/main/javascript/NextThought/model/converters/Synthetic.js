@@ -13,12 +13,13 @@ Ext.define('NextThought.model.converters.Synthetic', {
 				data = record[dataName],
 				config = {},
 				fn = this.fn,
-				sn = this.fnSet;
+				sn = this.fnSet,
+				sfn = function(v) { return sn.call(record, record, v); };
 
 			config[this.name] = {
 				getter: function() { return fn.call(record, record);},
-				setter: sn && function(v) { return sn.call(record, record, v);};,
-				configurable: true;
+				setter: sn && sfn,
+				configurable: true
 			};
 
 			delete data[this.name];

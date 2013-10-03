@@ -13,7 +13,7 @@ Ext.define('NextThought.model.Title', {
 		{ name: 'installable', type: 'bool' },
 		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
 		{ name: 'root', type: 'string' },
-		{ name: 'title', type: 'string', convert: function(v,m) { return m.raw.courseTitle || v; } },//if there is a courseTitle use that instead of "title"
+		{ name: 'title', type: 'string', convert: function(v, m) { return m.raw.courseTitle || v; } }, //if there is a courseTitle use that instead of "title"
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator', defaultValue: ['Author Name Here']},
 		{ name: 'version', type: 'string'},
 		{ name: 'PresentationProperties', type: 'auto'},
@@ -48,6 +48,7 @@ Ext.define('NextThought.model.Title', {
 	},
 
 	getToc: function() {
-		return this.toc || (this.toc = Library.getToc(this));
+		this.toc = this.toc || Library.getToc(this);
+		return this.toc;
 	}
 });

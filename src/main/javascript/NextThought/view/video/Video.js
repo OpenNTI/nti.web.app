@@ -222,7 +222,7 @@ Ext.define('NextThought.view.video.Video', {
 		var me = this,
 			blacklist = this.self.playerBlacklist;
 
-		Ext.Object.each(NextThought.util.media, function(name,cls) {
+		Ext.Object.each(NextThought.util.media, function(name, cls) {
 			if (cls.kind !== 'video') {return;}
 			if (!cls.valid() || !me.playlist.usesService(cls.type)) {
 				if (!Ext.Array.contains(blacklist, cls.type)) {
@@ -315,16 +315,16 @@ Ext.define('NextThought.view.video.Video', {
 			if (!this.commandQueue[target]) {
 				this.commandQueue[target] = [];
 			}
-			console.debug(this.id, 'Enqueing command ', arguments[1], arguments);
+			console.debug(this.id, 'Enqueing command ', command, arguments);
 			this.commandQueue[target].push([target, command, args]);
 			return null;
 		}
 
-		function call(fn,o,args) {
+		function call(fn, o, args) {
 			if (!o || !Ext.isFunction(fn)) {return null;}
 			return fn.apply(o, args);
 		}
-		console.debug(this.id, 'Invoking command ', arguments[1], arguments);
+		console.debug(this.id, 'Invoking command ', command, arguments);
 		this.fireEvent('player-command-' + command);
 		return call(t[command], t, args);
 	},
@@ -397,12 +397,13 @@ Ext.define('NextThought.view.video.Video', {
 			return null;
 		}
 
-		Ext.Object.each(NextThought.util.media, function(name,cls) {
+		Ext.Object.each(NextThought.util.media, function(name, cls) {
 			if (cls.type === this.activeVideoService) {
 				clazz = cls;
 			}
 			return !clazz;
 		}, this);
+
 		return clazz;
 	},
 
@@ -431,7 +432,7 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
-	setVideoAndPosition: function(videoId,startAt) {
+	setVideoAndPosition: function(videoId, startAt) {
 		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
@@ -493,7 +494,7 @@ Ext.define('NextThought.view.video.Video', {
 		me.activeVideoService = service;
 
 		//TODO: make each player handle switching.
-		Ext.Object.each(me.playerIds, function(k,id) {
+		Ext.Object.each(me.playerIds, function(k, id) {
 			var v = Ext.get(id);
 			if (!v) {
 				console.warn('Skipping ' + id + ' because dom does not contain it.');

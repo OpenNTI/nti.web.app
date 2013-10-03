@@ -24,8 +24,7 @@ Ext.define('NextThought.proxy.Socket', {
 		});
 
 		window.onbeforeunload = Ext.Function.createSequence(
-			window.onbeforeunload || function() {};,
-			function() { me.tearDownSocket(); });
+			window.onbeforeunload || Ext.emptyFn, function() { me.tearDownSocket(); });
 	},
 
 	/**

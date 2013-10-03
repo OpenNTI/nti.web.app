@@ -107,23 +107,21 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 			this.mon(spEl, 'scroll', 'alignPicker', this, {buffer: 300});
 		}
 
-    if (Ext.is.iPad) {
-      var me = this;
-      //When input focused, instead of selecting, put cursor at end
-      this.mon(this.inputEl, 'focus', function() {
-        var dom = me.inputEl.el.dom;
-        var length = dom.value.length;
-        dom.setSelectionRange(length, length);
-      });
-      //If there's something in the add people field, search if blurred
-      this.mon(this.inputEl, 'blur', function() {
-        console.log(me.inputEl.el.dom.value.length);
-        if (me.inputEl.el.dom.value.length > 0) {
-          clearTimeout(me.searchTimeout);
-          me.searchTimeout = Ext.defer(me.search, 250, me);
-        }
-      });
-    }
+		if (Ext.is.iOS) {
+			//When input focused, instead of selecting, put cursor at end
+			this.mon(this.inputEl, 'focus', function() {
+				var dom = me.inputEl.el.dom, length = dom.value.length;
+				dom.setSelectionRange(length, length);
+			});
+			//If there's something in the add people field, search if blurred
+			this.mon(this.inputEl, 'blur', function() {
+				console.log(me.inputEl.el.dom.value.length);
+				if (me.inputEl.el.dom.value.length > 0) {
+					clearTimeout(me.searchTimeout);
+					me.searchTimeout = Ext.defer(me.search, 250, me);
+				}
+			});
+		}
 	},
 
 
@@ -390,11 +388,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 	onKeyDown: function(e) {
 		e.stopPropagation();
 
-    if (Ext.is.iPad) {
-      if (this.inputEl.dom.value.length == 1 && e.getKey() == e.BACKSPACE) {
-        this.hidePicker();
-      }
-    }
+		if (Ext.is.iOS) {
+			if (this.inputEl.dom.value.length === 1 && e.getKey() === e.BACKSPACE) {
+				this.hidePicker();
+			}
+		}
+
 		clearTimeout(this.searchTimeout);
 
 		if (this.handledSpecialKey(e)) { return; }
@@ -469,32 +468,34 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 		y = picker.getAlignToXY(this.inputEl, align, [0, padding])[1] - cordinateRootY;
 
 		if (pickerScrollHeight === 0) {
-      if (!(Ext.is.iPad && document.activeElement != this.inputEl.dom)) {
-        Ext.defer(this.alignPicker, 1, this);
-      }
+			if (!(Ext.is.iOS && document.activeElement !== this.inputEl.dom)) {
+				Ext.defer(this.alignPicker, 1, this);
+			}
 		}
 
-    if (Ext.is.iPad) {
-      if (this.inputEl.dom.value == '' || document.activeElement != this.inputEl.dom) {
-        me.hidePicker();
-      }
-      else {
-        picker.el.setStyle('display', '');
-        picker.el.setStyle('height', 'auto');
-        picker.el.setStyle('width', '303px');
-        picker.el.setStyle('right', 'auto');
-        picker.el.setStyle('left', x + 'px');
-        picker.el.setStyle('top', y + 'px');
-      }
-    }
-    else {
+		if (Ext.is.iOS) {
+			if (this.inputEl.dom.value === '' || document.activeElement !== this.inputEl.dom) {
+				me.hidePicker();
+			}
+			else {
+				picker.el.setStyle({
+					display: '',
+					height: 'auto',
+					width: '303px',
+					right: 'auto',
+					left: x + 'px',
+					top: y + 'px'
+				});
+			}
+		}
+		else {
 			picker.showAt(x, y + scrollOffset);
-    }
+		}
 	},
 
-  hidePicker: function() {
-    this.getPicker().el.setStyle('display', 'none');
-  },
+	hidePicker: function() {
+		this.getPicker().el.setStyle('display', 'none');
+	},
 
 	clear: function() {
 		Ext.each(this.el.query('.token'), function(t) { Ext.fly(t).remove(); }, this);

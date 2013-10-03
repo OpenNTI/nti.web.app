@@ -151,7 +151,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			b = this.editor.getValue(),
 			oldBody = r.get('body');
 
-		if (b.join() == oldBody.join()) {
+		if (b.join() === oldBody.join()) {
 			this.cleanupEditor();
 			return;
 		}

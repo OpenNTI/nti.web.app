@@ -187,7 +187,9 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		box.show();
 
 		//set error state on specific field
-		field && field.addCls('error');
+		if (field) {
+			field.addCls('error');
+		}
 
 		this.up('window').updateLayout();
 	},

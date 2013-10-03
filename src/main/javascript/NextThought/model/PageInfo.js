@@ -59,22 +59,23 @@ Ext.define('NextThought.model.PageInfo', {
 	},
 
 	getLocationInfo: function() {
-		return this.locationInfo || (this.locationInfo = ContentUtils.getLocation(this));
+		this.locationInfo = this.locationInfo || ContentUtils.getLocation(this);
+		return this.locationInfo;
 	},
 
 
-  getPublicScope: function() {
-    var l = this.getLocationInfo(),
-            title = l && l.title;
+	getPublicScope: function() {
+		var l = this.getLocationInfo(),
+			title = l && l.title;
 
-    // FIXME: waiting on content for the right field name. Needs testing too.
-    return (title && title.getScope('public')) || [];
-  },
+		// FIXME: waiting on content for the right field name. Needs testing too.
+		return (title && title.getScope('public')) || [];
+	},
 
-  getRestrictedScope: function() {
-    	var l = this.getLocationInfo(),
-    		title = l && l.title;
+	getRestrictedScope: function() {
+		var l = this.getLocationInfo(),
+			title = l && l.title;
 
-    	return (title && title.getScope('restricted')) || [];
-  }
+		return (title && title.getScope('restricted')) || [];
+	}
 });

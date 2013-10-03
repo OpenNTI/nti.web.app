@@ -131,17 +131,15 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 
 	navigateToReply: function(rec, callback, scope) {
-		var	targets = (rec.get('references') || []).slice(),
-			me = this;
+		var	targets = (rec.get('references') || []).concat([rec.getId()]);
 
-		targets.push(rec.getId());
 
 		function continueLoad() {
 			if (Ext.isEmpty(targets)) {
 				console.warn('Targets is empty, so we are done here. (we should not get here!)');
 				Ext.callback(callback, scope, [rec]);
 			}
-			$AppConfig.service.getObject(targets.pop(), loaded, fail, me);
+			$AppConfig.service.getObject(targets.pop(), loaded, fail);
 		}
 
 		function loaded(r) {
@@ -204,7 +202,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 			if (Ext.isObject(containerId)) {
 				object = containerId;
 				containerId = object.containerId;
-				Ext.Object.each(object, function(k,v) {
+				Ext.Object.each(object, function(k, v) {
 					if (k !== 'containerId') {
 						props[k] = v;
 					}

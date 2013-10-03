@@ -31,8 +31,8 @@ Ext.define('NextThought.view.course.dashboard.tiles.SupplementalMaterial', {
 				c.push(tile);
 
 				if (!refs.length) {
-					c.sort(function(a,b) { return b.innerWeight - a.innerWeight; });//sort greatest to least
-					Ext.each(c.slice(0, 5), function(item) { item.maxInner = max});//set the max on each tile so we can figure the %
+					c.sort(function(a, b) { return b.innerWeight - a.innerWeight; });//sort greatest to least
+					Ext.each(c.slice(0, 5), function(item) { item.maxInner = max;});//set the max on each tile so we can figure the %
 					Ext.callback(finish, null, [c.splice(0, 5)]);//splice returns the items cut from the array 'c' and leaves the remainer in 'c'
 					Ext.destroy(c);//clean up the leftovers
 				}

@@ -153,7 +153,9 @@ Ext.define('NextThought.util.Sharing', {
 		 *  If it's private however, we will return the 'sharedWith' parameter.
 		 */
 		if (isPublic) {
-			pi && Ext.isFunction(pi.getPublicScope) && Ext.Array.merge(communities, pi.getPublicScope());
+			if(pi && Ext.isFunction(pi.getPublicScope)){
+				Ext.Array.merge(communities, pi.getPublicScope());
+			}
 			Ext.each(sharedWith, function(i) {
 				if (!Ext.Array.contains(communities, i.getId ? i.getId() : i)) {
 					list.push(i);

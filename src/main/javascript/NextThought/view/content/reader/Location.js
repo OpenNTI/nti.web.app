@@ -48,7 +48,8 @@ Ext.define('NextThought.view.content.reader.Location', {
 		var me = this,
 			e = Ext.get('content') || Ext.getBody(),
 			ntiid = ntiidOrPageInfo && ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
-			rootId = ContentUtils.getLineage(ntiid);
+			rootId = ContentUtils.getLineage(ntiid),
+			finish;
 
 		rootId = rootId && rootId.last();
 
@@ -58,7 +59,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			return;
 		}
 
-		function finish(a,errorDetails) {
+		function finishFn(a, errorDetails) {
 			if (finish.called) {
 				console.warn('finish navigation called twice');
 				return;
@@ -115,7 +116,8 @@ Ext.define('NextThought.view.content.reader.Location', {
 			}
 
 		}
-		finish = Ext.Function.createBuffered(finish, null, 1);
+
+		finish = Ext.Function.createBuffered(finishFn, null, 1);
 
 		// I understand the intent of this, but in a case of an initial failed navigation, where we recover,
 		// if we call setLocation this  will prevent us from continuing because the mask is active.

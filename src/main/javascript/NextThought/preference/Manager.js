@@ -120,6 +120,12 @@ Ext.define('NextThought.preference.Manager', {
 			path = cls.split('_'),
 			value = this.root, nextValue;
 
+		function sp(name) {
+			if (json[name]) {
+				me.setSubPreference(json[name]);
+			}
+		}
+
 		for (i = 0; i < path.length; i++) {
 			if (i + 1 < path.length) {
 					if (value.get(path[i])) {
@@ -144,11 +150,7 @@ Ext.define('NextThought.preference.Manager', {
 
 				value = value.get(path[i]);
 				//set any sub preferences while we have them
-				Ext.each(value.subPreferences, function(name) {
-					if (json[name]) {
-						me.setSubPreference(json[name]);
-					}
-				});
+				Ext.each(value.subPreferences, sp);
 
 				return result;
 			}

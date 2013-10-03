@@ -260,6 +260,14 @@ Ext.define('NextThought.view.chat.Window', function() {
 
 			var me = this;
 
+			function getEl(c, sub) { return Ext.get(c.getId() + '-' + sub); }
+
+			function iOSStuff() {
+				//Keep the chat windows from disappearing due to positioning.
+				var target = getEl(this, 'targetEl').setStyle('position', '');
+				Ext.get(target.down('.x-box-layout-ct').id + '-targetEl').setStyle('position', '');
+			}
+
 			this.dropZone = Ext.dd.DropZone.create(this.getEl(), {
 
 				getTargetFromEvent: function(e) {
@@ -285,16 +293,7 @@ Ext.define('NextThought.view.chat.Window', function() {
 			});
 
 			if (Ext.is.iOS) {
-				//Keep the chat windows from disappearing due to positioning.
-				function getEl(c, sub) {
-					return Ext.get(c.getId() + '-' + sub);
-				}
-
-				var target = getEl(this, 'targetEl');
-				target.setStyle('position', '');
-
-				var comp = Ext.get(target.down('.x-box-layout-ct').id + '-targetEl');
-				comp.setStyle('position', '');
+				iOSStuff();
 			}
 		},
 

@@ -323,22 +323,29 @@ Ext.define('NextThought.util.Globals', {
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
 	 */
 	naturalSortComparator: function naturalSort(a, b) {
-	    var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
+
+		function i(s) {
+			s = String(s);
+			return naturalSort.insensitive ? s.toLowerCase() : s;
+		}
+
+		var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
 	        sre = /(^[ ]*|[ ]*$)/g,
 	        dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
 	        hre = /^0x[0-9a-f]+$/i,
 	        ore = /^0/,
-	        i = function(s) { return naturalSort.insensitive && ('' + s).toLowerCase() || '' + s };,
-	        // convert all to strings strip whitespace
+			// convert all to strings strip whitespace
 	        x = i(a).replace(sre, '') || '',
 	        y = i(b).replace(sre, '') || '',
 	        // chunk/tokenize
-	        xN = x.replace(re, '\0$1\0').replace(/\0$/, '').replace(/^\0/, '').split('\0'),
-	        yN = y.replace(re, '\0$1\0').replace(/\0$/, '').replace(/^\0/, '').split('\0'),
+	        xN = x.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
+	        yN = y.replace(re, '\u0000$1\u0000').replace(/\u0000$/, '').replace(/^\u0000/, '').split('\u0000'),
 	        // numeric, hex or date detection
-	        xD = parseInt(x.match(hre), 10) || (xN.length != 1 && x.match(dre) && Date.parse(x)),
-	        yD = parseInt(y.match(hre), 10) || xD && y.match(dre) && Date.parse(y) || null,
+	        xD = parseInt(x.match(hre), 10) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
+	        yD = parseInt(y.match(hre), 10) || (xD && y.match(dre) && Date.parse(y)) || null,
 	        oFxNcL, oFyNcL, cLoc;
+
+
 	    // first try and sort Hex codes or Dates
 	    if (yD) {
 	        if (xD < yD) { return -1; }
@@ -364,7 +371,7 @@ Ext.define('NextThought.util.Globals', {
 
 
 	getNaturalSorter: function(field) {
-		return function(a,b) {
+		return function(a, b) {
 			var sa = a.get(field), sb = b.get(field);
 			return Globals.naturalSortComparator(sa, sb);
 		};

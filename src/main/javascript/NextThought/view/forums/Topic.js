@@ -623,9 +623,9 @@ Ext.define('NextThought.view.forums.Topic', {
 		Ext.each(records, function(item, index) {
 			me.insert(index, {record: item});
 		});
-		// this.add(Ext.Array.map(records, function (r) {
-		// 	return {record: r};
-		// }));
+		//	this.add(Ext.Array.map(records, function (r) {
+		//		return {record: r};
+		//	}));
 
 		this.ready = true;
 		Ext.defer(this.fireEvent, 1, this, ['ready', this, this.queryObject]);

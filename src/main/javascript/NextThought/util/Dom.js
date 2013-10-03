@@ -4,15 +4,21 @@ Ext.define('NextThought.util.Dom', {
 
 	parseDomObject: function(objectDomEl) {
 		var obj = {},
-			id = Ext.get(objectDomEl).id,
-			driectChildNodes = function(t) { return objectDomEl.querySelectorAll('#' + id + ' > ' + t); };,
-			addValue = function(o,n,v) { var c = o[n]; o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v; };
+			id = Ext.get(objectDomEl).id;
+
+		function addValue(o, n, v) {
+			var c = o[n]; o[n] = c ? (Ext.isArray(c) ? c : [c]).concat(v) : v;
+		}
+
+		function directChildNodes(t) {
+			return objectDomEl.querySelectorAll('#' + id + ' > ' + t);
+		}
 
 		Ext.each(objectDomEl.attributes, function(p) {
 			addValue(obj, 'attribute-' + p.name, p.value);
 		});
 
-		Ext.each(driectChildNodes('param'), function(p) {
+		Ext.each(directChildNodes('param'), function(p) {
 			addValue(obj, p.name, p.value);
 		});
 
@@ -37,7 +43,7 @@ Ext.define('NextThought.util.Dom', {
 				};
 
 
-		Ext.Object.each(this, function(k,v) {
+		Ext.Object.each(this, function(k, v) {
 			if (Ext.isFunction(v) || Ext.isEmpty(v)) {return;}
 
 			var n = (r.exec(k) || [])[1];

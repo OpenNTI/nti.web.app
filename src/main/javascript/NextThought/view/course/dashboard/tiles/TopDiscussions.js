@@ -43,7 +43,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.TopDiscussions', {
 					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date'), innerWeight: comments}));
 				});
 				//set the max on each tile so we can figure the %
-				Ext.each(tiles, function(item) { item.maxInner = max});
+				Ext.each(tiles, function(item) { item.maxInner = max;});
 
 				Ext.callback(finish, null, [tiles]);
 			}

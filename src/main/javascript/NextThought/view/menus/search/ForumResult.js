@@ -10,6 +10,11 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 	doClicked: function(fragIdx) {
 		var me = this;
+
+		function highlight() {
+			me.fireEvent('highlight-topic-hit', me, fragIdx, cmp);
+		}
+
 		if (Ext.isEmpty(this.record)) {
 			// If we don't have a record that means the record
 			// could have been deleted or an error happened on load.
@@ -18,10 +23,6 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID') : undefined, function(success, cmp) {
 			if (success) {
-				function highlight() {
-					me.fireEvent('highlight-topic-hit', me, fragIdx, cmp);
-				}
-
 				if (cmp.ready) {
 					highlight();
 				}else {

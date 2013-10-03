@@ -166,10 +166,10 @@ Ext.define('NextThought.view.forums.Board', {
 		var s = this.store;
 		//console.log('The board view is activated');
 		//Sort them by last modified
-		// s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-		//  	sortOn: 'Last Modified',
-		//  	sortOrder: 'descending'
-		// });
+		//	s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
+		//		sortOn: 'Last Modified',
+		//		sortOrder: 'descending'
+		//	});
 		//Don't sort them by creation time on client side either
 		// s.sorters.clear();
 		this.mon(s, 'load', function(store, records) {
@@ -232,7 +232,9 @@ Ext.define('NextThought.view.forums.Board', {
 			topicHref;
 
 		if (edit) {
-			event && event.stopEvent && event.stopEvent();
+			if (event && event.stopEvent) {
+				event.stopEvent();
+			}
 			this.fireEvent('new-forum', this, record);
 			return false;
 		}
