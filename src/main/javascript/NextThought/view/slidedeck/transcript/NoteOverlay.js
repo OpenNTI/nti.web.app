@@ -156,7 +156,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}
 
 		var me = this,
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			style = 'suppressed',
 			v = me.editor.getValue(),
 			note = v.body,
@@ -170,7 +169,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		}
 
 		//Avoid saving empty notes or just returns.
-		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
+		if (DomUtils.isEmpty(note)) {
 			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
 			return false;
 		}
