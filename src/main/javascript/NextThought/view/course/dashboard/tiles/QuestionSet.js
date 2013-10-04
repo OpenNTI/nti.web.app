@@ -137,7 +137,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 		cls: 'attempt',
 		attempt: true,
 		items: [
-			{ xtype: 'assessment-score', cls: 'score', value: 0, correctColor: '#42D2FF', textColor: '#42D2FF'},
+			{ xtype: 'assessment-score', cls: 'score', value: 0, correctColor: '#047091', textColor: '#42D2FF', chartStyle: { 'stroke-width': 0 } },
 			{
 				xtype: 'component',
 				renderTpl: Ext.DomHelper.markup(
@@ -146,8 +146,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 						{ cls: 'meta', cn: [
 							{ tag: 'span', cls: 'question-count'},
 							{ tag: 'span', cls: 'date'}
-						]},
-						{ cls: 'goto', html: 'Try Again'}
+						]}
 					]
 				)
 			}
@@ -164,7 +163,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 					{cls: 'value'}
 				]}
 			]},
-			{cls: 'next complete', html: 'Complete'}
+			{cls: 'next complete', html: 'Try Again'}
 		])
 	},
 
@@ -191,7 +190,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 			title = el.down('.title'),
 			count = el.down('.meta .question-count'),
 			date = el.down('.meta .date'),
-			go = el.down('.goto');
+			go = this.el.down('.next');
 
 		if (!attempt || !node) {
 				total = nextNode.getAttribute('question-count');
@@ -199,7 +198,6 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 				chart.setValue(0);
 				count.update(total + ' question' + ((total > 1) ? 's' : ''));
 				date.destroy();
-				go.update('Take Now');
 
 				this.mon(go, 'click', function(e) {
 					var ntiid = nextNode.getAttribute('target-ntiid') || 'no-value',
@@ -232,6 +230,8 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 			value = progress.down('.bar .value'),
 			next = progressContainer.el.down('.next');
 
+		progress.down('.bar').hide();
+
 		if (attempts && total) {
 			percent = Math.floor(100 * (attempts / total));
 		}
@@ -239,15 +239,15 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 		value.setStyle({width: percent + '%'});
 
 		if (nextNode && attempts < total) {
-			next.update('Take Next');
+			next.update('Start');
 			next.removeCls('complete');
 
-			this.mon(next, 'click', function(e) {
+			/*this.mon(next, 'click', function(e) {
 				var ntiid = nextNode.getAttribute('target-ntiid') || 'no-value',
 					containerId = ContentUtils.getLineage(ntiid)[1];
 
 				this.fireEvent('navigate-to-href', this, containerId);
-			}, this);
+			}, this);*/
 		}
 	}
 
