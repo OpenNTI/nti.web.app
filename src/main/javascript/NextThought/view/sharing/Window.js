@@ -49,7 +49,7 @@ Ext.define('NextThought.view.sharing.Window', {
 							{xtype: 'checkbox', boxLabel: 'make sharing default', name: 'default'}
 						]
 					},
-					{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn,e) {
+					{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn, e) {
 						btn.up('window').close();
 						e.stopEvent();
 					}},
