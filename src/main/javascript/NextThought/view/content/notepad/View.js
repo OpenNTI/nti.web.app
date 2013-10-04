@@ -373,10 +373,13 @@ Ext.define('NextThought.view.content.notepad.View', {
 		}
 
 		var map = this.notepadItems,
+			round = 10,
+			y = (yPlacement < round ? round : yPlacement),
+			groupId = Math.floor((yPlacement < round ? round : yPlacement) / round) * round,
 			data = {
 				annotation: annotation,
 				record: annotation.getRecord(),
-				placement: yPlacement
+				placement: y
 			};
 
 		if (!map.hasOwnProperty(annotation.id)) {
