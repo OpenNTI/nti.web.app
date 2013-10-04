@@ -200,9 +200,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 
+
+		this.editor.on({
+			save: 'saveNewNote',
+			destroy: 'editorCleanup'
+		});
+
 		this.editor.on('destroy', 'unmask', tabPanel);
-		this.editor.on('save', 'saveNewNote', this);
-		this.editor.on('destroy', 'editorCleanup', this);
 		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
 
 
