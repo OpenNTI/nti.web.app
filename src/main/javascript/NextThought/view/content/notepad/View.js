@@ -373,14 +373,11 @@ Ext.define('NextThought.view.content.notepad.View', {
 		}
 
 		var map = this.notepadItems,
-			round = 10,
+			round = 10, data,
 			y = (yPlacement < round ? round : yPlacement),
-			groupId = Math.floor((yPlacement < round ? round : yPlacement) / round) * round,
-			data = {
-				annotation: annotation,
-				record: annotation.getRecord(),
-				placement: y
-			};
+			groupId = (Math.floor((yPlacement < round ? round : yPlacement) / round) * round);
+
+		data = { annotation: annotation, record: annotation.getRecord(), placement: y };
 
 		if (!map.hasOwnProperty(annotation.id)) {
 			map[annotation.id] = Ext.widget({
