@@ -76,7 +76,7 @@ Ext.define('NextThought.model.Note', {
 
 				return '';
 			},
-			fnSet: function(r) { delete r.data.$preview; }
+			fnSet: function(r) { delete r.data.$preview; return r.data.preview; }
 		},
 
 
