@@ -153,7 +153,7 @@ Ext.define('NextThought.util.Sharing', {
 		 *  If it's private however, we will return the 'sharedWith' parameter.
 		 */
 		if (isPublic) {
-			if(pi && Ext.isFunction(pi.getPublicScope)){
+			if (pi && Ext.isFunction(pi.getPublicScope)) {
 				Ext.Array.merge(communities, pi.getPublicScope());
 			}
 			Ext.each(sharedWith, function(i) {
@@ -217,8 +217,9 @@ Ext.define('NextThought.util.Sharing', {
 			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
 		}
 		else if (explicitEntities.length > 1) {
-			str = Ext.String.format('{0} {1}', isPublic ? 'Public and'
-					: 'Shared with', Ext.util.Format.plural(explicitEntities.length, 'other'));
+			str = Ext.String.format('{0} {1}',
+					isPublic ? 'Public and' : 'Shared with',
+					Ext.util.Format.plural(explicitEntities.length, 'other'));
 			Ext.callback(callback, scope, [str]);
 		}
 		else {

@@ -204,7 +204,7 @@ Ext.define('NextThought.proxy.Socket', {
 		var socket = this.socket.socket;
 
 		if (this.sid !== socket.sessionid) {
-			console.log('New Socket Session Id: '+ socket.sessionid);
+			console.log('New Socket Session Id: ' + socket.sessionid);
 			if (this.sid) {
 				this.fireEvent('socket-new-sessionid', this.sid);
 			}
@@ -212,7 +212,7 @@ Ext.define('NextThought.proxy.Socket', {
 			this.sid = socket.sessionid;
 
 		}else {
-			console.log('Same Socket Session Id: '+ this.sid);
+			console.log('Same Socket Session Id: ' + this.sid);
 		}
 
 		if (this.isDebug) {
