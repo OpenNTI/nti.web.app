@@ -1765,6 +1765,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (this.titleEl) {
 			this.titleEl.dom.value = '';
 		}
+		if(this.titleWrapEl){
+			this.clearError(this.titleWrapEl);
+		}
+
 
 		try {
 			this.styleControlsEl.removeCls('selected');
