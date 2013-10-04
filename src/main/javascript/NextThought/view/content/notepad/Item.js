@@ -22,7 +22,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 				contextmenu: 'contextMenu',
 				mouseover: 'eat',
 				mousemove: 'eat',
-				click: 'edit'
+				click: {fn:'edit',buffer:100}
 			}
 		});
 	},
