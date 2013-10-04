@@ -81,9 +81,9 @@ Ext.define('NextThought.view.content.notepad.View', {
 			ref.notepadRef = this;
 
 			this.mon(ref, {
+				scroll: 'syncScroll',
 				'sync-height': 'syncHight',
-				'scroll': 'syncScroll',
-				'set-content': 'updateBuckets'
+				'set-content': 'clearItems'
 			});
 		}
 		catch (e) {
@@ -252,6 +252,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 	//</editor-fold>
 
 
+	//<editor-fold desc="Line Resolving">
 	getContentY: function(e) {
 		var ref = this.getReaderRef(),
 			t = ref.getAnnotationOffsets().top;
@@ -262,9 +263,10 @@ Ext.define('NextThought.view.content.notepad.View', {
 	getLineInfo: function(y) {
 		return this.getReaderRef().getNoteOverlay().lineInfoForY(y);
 	},
+	//</editor-fold>
 
 
-	updateBuckets: function() {
+	clearItems: function() {
 		var k,
 			m = this.notepadItems || {};
 
@@ -335,7 +337,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 		}
 
 		els = this.el.select('.scroller > *:not(.note-here)').slice();
-		els.sort(function(a,b) {
+		els.sort(function(a, b) {
 			var c = Ext.fly(a).getLocalY() - Ext.fly(b).getLocalY();
 			if (c > 0) {
 				resort = true;
@@ -345,7 +347,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 		resort = !this.editor && resort && (new Ext.dom.CompositeElement(els)).filter('.edit').getCount() === 0;
 
-		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el,c) {
+		(new Ext.dom.CompositeElement(els)).removeCls('collide').setHeight('auto').setStyle({minHeight: null}).each(function(el, c) {
 
 			var d = Ext.getDom(el),
 				i = doesCollide(el, c);
