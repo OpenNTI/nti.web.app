@@ -82,7 +82,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		me.editorEl = me.editor.el;
 		me.editor.setWidth(325);
-		me.mon(me.editorEl.down('.save'), { scope: me, click: me.editorSaved });
+		me.mon(me.editor, 'save', 'editorSaved', me);
 		me.mon(me.editorEl.down('.cancel'), { scope: me, click: me.editorCanceled });
 		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
@@ -139,8 +139,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
   },
 
 
-	editorSaved: function(e) {
-		if (e) { e.stopEvent(); }
+	editorSaved: function(editor, r, v) {
 
 		function callback(success, record) {
 			me.editorEl.unmask();
@@ -157,7 +156,6 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		var me = this,
 			style = 'suppressed',
-			v = me.editor.getValue(),
 			note = v.body,
 			title = v.title,
 			sharing = [],
