@@ -658,45 +658,19 @@
 		margin: -0.8em 0 0 0;
 		color: $tertiary-grey;
 		background: #fff;
+		z-index: 2;
 		@include experimental(box-sizing, content-box);
 	}
 
 
-	.x-component-notepad-item {
-		overflow: hidden;
+	.x-component-notepad-item,
+	.x-container-notepad-item {
 		position: absolute;
 		left: 0 !important;
 		right: 0 !important;
-
-		.x-component-notepad-item {
-			position: relative;
-			overflow: visible;
-			margin: 0 0.5em;
-			&.inline-editor {
-				padding-left: 0.5em;
-			}
-		}
-
-		&.edit {
-			background: #fff;
-			padding: 0;
-		}
-
-		text-overflow: ellipsis;
-		overflow-wrap: break-word;
-		word-wrap: break-word;
-		word-break: break-word;
-
+		margin: -0.8em 0 0 0;
 		background: #fbfbfb;
 		color: $secondary-grey;
-		font: italic 400 0.9em/2.1em $font;
-		padding: 0.4em 0.5em;
-		margin: -0.8em 0 0 0;
-
-		&:hover {
-			box-shadow: inset 0px -1px 0px 0px #e3e3e3,
-						inset 0px 1px 0px 0px #e3e3e3;
-		}
 
 
 		&.collide {
@@ -739,13 +713,71 @@
 				@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(251,251,251,0) 70%));
 			}
 		}
+	}
+
+
+	.x-container-notepad-item {
+		overflow: hidden;
+
+		//.x-component-notepad-item:not(.inline-editor) {
+		.x-component-notepad-item {
+			&:hover{
+				box-shadow: none;
+			}
+			&:first-child {
+				box-shadow: inset 0px 1px 0px 0px #e3e3e3;
+			}
+			&:last-of-type {
+				box-shadow: inset 0px -1px 0px 0px #e3e3e3;
+				&.inline-editor{
+					box-shadow: inset 0px 0px 0px 0px #e3e3e3;
+				}
+			}
+		}
+	}
+
+	.x-component-notepad-item {
+
+		.x-component-notepad-item {
+			position: relative;
+			overflow: visible;
+			margin: 1px 0.5em; //0 0.5em;
+			&.inline-editor {
+				padding-left: 0.5em;
+			}
+		}
+
+		&.grouped {
+			top: auto !important;
+			position: relative;
+			margin: 0;
+		}
+
+		&.edit {
+			background: #fff;
+			padding: 0;
+			box-shadow: inset 0px -1px 0px 0px #ededed,
+						inset 0px 1px 0px 0px #ededed;
+		}
+
+		overflow: hidden;
+		text-overflow: ellipsis;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		word-break: break-word;
+		font: italic 400 0.9em/2.1em $font;
+		padding: 0.4em 0.5em;
+
+		&:not(.inline-editor):hover {
+			box-shadow: inset 0px -1px 0px 0px #e3e3e3,
+						inset 0px 1px 0px 0px #e3e3e3;
+		}
 
 		&.inline-editor{
 			background: #fff;
 			z-index: 100;
 			padding-left: 1em;
-			box-shadow: inset 0px -1px 0px 0px #ededed,
-						inset 0px 1px 0px 0px #ededed;
+
 
 			&:not(.empty){
 				& > div[contenteditable] {

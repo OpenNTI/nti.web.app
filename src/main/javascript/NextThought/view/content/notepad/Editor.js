@@ -66,7 +66,14 @@ Ext.define('NextThought.view.content.notepad.Editor', {
 			return;
 		}
 		this.fireEvent('keydown', e);
-		Ext.defer(this[this.isEmpty() ? 'addCls' : 'removeCls'], 1, this, ['empty']);
+		Ext.defer(this.doLater, 1, this, [this.isEmpty() ? 'addCls' : 'removeCls',['empty']]);
+
+	},
+
+
+	doLater: function(fn,args){
+		if(this.isDestroyed){return;}
+		this[fn].apply(this,args);
 	},
 
 

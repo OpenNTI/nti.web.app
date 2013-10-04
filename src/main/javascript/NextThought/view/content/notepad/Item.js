@@ -18,6 +18,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 		this.callParent(arguments);
 		this.enableBubble(['detect-overflow', 'editor-closed', 'editor-open']);
 		this.on({
+			added: 'disableFloating',
 			el: {
 				contextmenu: 'contextMenu',
 				mouseover: 'eat',
@@ -62,9 +63,18 @@ Ext.define('NextThought.view.content.notepad.Item', {
 	},
 
 
+	disableFloating: function(me, ct) {
+		this.setLocalY(null);
+		this.getEl().addCls('grouped').removeCls('collide');
+		delete this.floatParent;
+		this.ownerLayout = ct.getLayout();
+		this.el.appendTo(ct.getLayout().getContentTarget());
+	},
+
+
 	updateWith: function(data) {
 		var me = this, el = me.getEl(),
-			p = data.placement || 0;
+			p = el.hasCls('grouped') ? null : (data.placement || 0);
 
 		if (p !== this.getLocalY()) {
 			this.setLocalY(p);
@@ -113,6 +123,9 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			this.update('');
 			this.fireEvent('editor-open');
 			this.addCls('edit');
+			if (this.ownerCt) {
+				this.ownerCt.addCls('edit');
+			}
 			this.editor = Ext.widget({
 				xtype: 'notepad-editor',
 				ownerCmp: this,
@@ -134,6 +147,9 @@ Ext.define('NextThought.view.content.notepad.Item', {
 
 	cleanupEditor: function() {
 		this.removeCls('edit');
+		if (this.ownerCt) {
+			this.ownerCt.removeCls('edit');
+		}
 		Ext.destroy(this.editor);
 		delete this.editor;
 		this.refresh();

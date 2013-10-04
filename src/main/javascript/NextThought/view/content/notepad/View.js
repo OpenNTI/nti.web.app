@@ -41,6 +41,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 	constructor: function() {
 		this.callParent(arguments);
 		this.notepadItems = {};
+		this.groupedLines = {};
 		this.on({
 			'editor-open': 'lock',
 			'editor-closed': 'unlock',
@@ -268,12 +269,20 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 	clearItems: function() {
 		var k,
-			m = this.notepadItems || {};
+			m = this.notepadItems || {},
+			g = this.groupedLines || {};
 
 		for (k in m) {
 			if (m.hasOwnProperty(k)) {
 				Ext.destroy(m[k]);
 				delete m[k];
+			}
+		}
+
+		for (k in g) {
+			if (g.hasOwnProperty(k)) {
+				Ext.destroy(g[k]);
+				delete g[k];
 			}
 		}
 	},
@@ -373,20 +382,66 @@ Ext.define('NextThought.view.content.notepad.View', {
 		}
 
 		var map = this.notepadItems,
-			round = 10, data,
+			groups = this.groupedLines,
+			round = 10,
 			y = (yPlacement < round ? round : yPlacement),
-			groupId = (Math.floor((yPlacement < round ? round : yPlacement) / round) * round);
+			o = map[annotation.id],
+			groupId = 'item-grouping-' + (Math.floor((yPlacement < round ? round : yPlacement) / round) * round),
+			group = groups[groupId];
 
-		data = { annotation: annotation, record: annotation.getRecord(), placement: y };
-
-		if (!map.hasOwnProperty(annotation.id)) {
-			map[annotation.id] = Ext.widget({
+		if (!o) {
+			o = map[annotation.id] = Ext.widget({
 				xtype: 'notepad-item',
 				floatParent: this,
 				renderTo: this.scroller
 			});
+
+
+			if (!group) {
+				group = [annotation.id];
+			}
+			else if (!this.groupContains(group, annotation.id)) {
+
+				if (!group.isNotepadItemContainer) {
+					group = Ext.widget({
+						xtype: 'notepad-item-container',
+						floatParent: this,
+						renderTo: this.scroller
+					});
+					group.add(this.getItemsReferenced(groups[groupId]));
+					group.on('destroy', function() {
+						delete groups[groupId];
+					});
+				}
+				group.add(o);
+			}
+
+			groups[groupId] = group;
+			if (group.isNotepadItemContainer) {
+				group.setLocalY(y);
+			}
 		}
 
-		map[annotation.id].updateWith(data);
+
+
+		o.updateWith({ annotation: annotation, record: annotation.getRecord(), placement: y });
+	},
+
+
+	getItemsReferenced: function(itemRefs) {
+		var m = this.notepadItems;
+
+		return Ext.Array.map(itemRefs, function(v) {
+			return m[v];
+		});
+	},
+
+
+	groupContains: function(group, value) {
+		if (Ext.isArray(group)) {
+			return Ext.Array.contains(group, value);
+		}
+
+		return group.contains(this.notepadItems[value]);
 	}
 });
