@@ -22,7 +22,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 				contextmenu: 'contextMenu',
 				mouseover: 'eat',
 				mousemove: 'eat',
-				click: {fn:'edit',buffer:100}
+				click: {fn: 'edit', buffer: 100}
 			}
 		});
 	},
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 		}
 
 		//Start with the stupid thing... (always draw)
-		data.record.compileBodyContent(function(html,cb) {
+		data.record.compileBodyContent(function(html, cb) {
 			me.renderTpl.overwrite(el, {body: html});
 			if (Ext.isFunction(cb)) {
 				Ext.each(cb(el, me), function(c) { me.on('destroy', 'destroy', c); });
