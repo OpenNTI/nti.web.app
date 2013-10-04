@@ -250,7 +250,8 @@
 			margin: 0 0 10px -10px;
 			padding-left: 10px;
 			color: $primary-grey;
-			word-break: break-word;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
 
 			.body-divider .whiteboard-container {
 				.whiteboard-wrapper .overlay{bottom: 0;}
