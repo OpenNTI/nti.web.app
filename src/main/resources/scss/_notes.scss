@@ -756,8 +756,8 @@
 		&.edit {
 			background: #fff;
 			padding: 0;
-			box-shadow: inset 0px -1px 0px 0px #ededed,
-						inset 0px 1px 0px 0px #ededed;
+			//box-shadow: inset 0px -1px 0px 0px #ededed,
+			//			inset 0px 1px 0px 0px #ededed;
 		}
 
 		overflow: hidden;
@@ -787,5 +787,10 @@
 				}
 			}
 		}
+	}
+
+	& > div > .x-component-notepad-item.inline-editor {
+		box-shadow: inset 0px -1px 0px 0px #ededed,
+					inset 0px 1px 0px 0px #ededed;
 	}
 }
