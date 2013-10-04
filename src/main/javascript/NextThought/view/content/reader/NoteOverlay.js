@@ -247,7 +247,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	saveNewNote: function(editor, r, v) {
 		var me = this,
-				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 				note = v.body,
 				title = v.title,
 				pageInfo = this.reader.getLocation().pageInfo,
@@ -263,7 +262,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		//Avoid saving empty notes or just returns.
-		if (!Ext.isArray(note) || note.join('').replace(re, '') === '') {
+		if (DomUtils.isEmpty(note)) {
 			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
 			return false;
 		}
