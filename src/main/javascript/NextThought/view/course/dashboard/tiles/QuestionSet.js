@@ -128,7 +128,7 @@ Ext.define('NextThought.view.course.dashboard.widget.QuestionSetView', {
 		cls: 'header',
 		header: true,
 		renderTpl: Ext.DomHelper.markup([
-			{ cls: 'tile-title', html: 'Assesment'}
+			{ cls: 'tile-title', html: 'Assessment'}
 		])
 	},
 
