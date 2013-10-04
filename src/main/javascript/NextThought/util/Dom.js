@@ -115,9 +115,16 @@ Ext.define('NextThought.util.Dom', {
 				Ext.fly(link).set({target: '_blank'});
 			}
 		});
+	},
+
+
+	isEmpty: function isEmpty(value) {
+		var re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g);
+
+		value = (Ext.isArray(value) && value.join('')) || String(value);
+
+		return value.replace(re, '') === '';
 	}
-
-
 },function() {
 	window.DomUtils = this;
 });

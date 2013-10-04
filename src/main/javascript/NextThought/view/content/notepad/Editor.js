@@ -87,10 +87,7 @@ Ext.define('NextThought.view.content.notepad.Editor', {
 
 
 	isEmpty: function isEmpty() {
-		var v = this.getValue(),
-			re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g);
-
-		return !Ext.isArray(v) || v.join('').replace(re, '') === '';
+		return DomUtils.isEmpty(this.getValue());
 	},
 
 
