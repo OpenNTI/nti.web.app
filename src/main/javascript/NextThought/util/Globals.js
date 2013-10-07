@@ -94,7 +94,7 @@ Ext.define('NextThought.util.Globals', {
 			if ($AppConfig.server.host) {
 				console.warn('Bad host config', $AppConfig.server.host, 'using domain', document.domain);
 			}
-			$AppConfig.server.host = '//' + document.domain;
+			$AppConfig.server.host = '//' + location.host;
 		}
 
 		if (!/^\/.+\/$/.test($AppConfig.server.data)) {
