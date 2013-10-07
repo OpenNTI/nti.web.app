@@ -154,7 +154,7 @@ Ext.define('NextThought.util.Sharing', {
 		 */
 		if (isPublic) {
 			if (pi && Ext.isFunction(pi.getPublicScope)) {
-				Ext.Array.merge(communities, pi.getPublicScope());
+				communities = Ext.Array.merge(communities, pi.getPublicScope());
 			}
 			Ext.each(sharedWith, function(i) {
 				if (!Ext.Array.contains(communities, i.getId ? i.getId() : i)) {
