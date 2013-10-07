@@ -45,13 +45,15 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (record) {
 			this.down('[name=title]').update(record.get('title'));
 			this.down('[name=description]').el.update(record.get('description'));
-
-			//if there is no ACL the record is open to the entire DFL
-			if (Ext.isEmpty(record.get('ACL'))) {
-				sharing.setValue(true);
+			
+			if(!sharing.isDestroyed){
+				//if there is no ACL the record is open to the entire DFL
+				if (Ext.isEmpty(record.get('ACL'))) {
+					sharing.setValue(true);
+				}
+				//we are editing so we can't toggle the share
+				sharing.disable();
 			}
-			//we are editing so we can't toggle the share
-			sharing.disable();
 		}
 
 		this.mon(this.el, 'click', 'handleClick', this);
