@@ -126,14 +126,14 @@ Ext.define('NextThought.view.profiles.Panel', {
 	restoreState: function(state) {
 		console.log(state);
 		var me = this,
-			p = state.activeTab.split('/'),
-			activeView = p.shift(),
-			activeViewData = p.join('/');
+			p = state && state.activeTab && state.activeTab.split('/'),
+			activeView = p && p.shift(),
+			activeViewData = p && p.join('/');
 
 		function compareUriName(i) {
 			var uri = i.uriFriendlyName || '';
 			if (!Ext.isArray(uri)) { uri = [uri]; }
-			if (Ext.Array.contains(uri, activeView)) {
+			if (activeView && Ext.Array.contains(uri, activeView)) {
 				activeView = i;
 			}
 
@@ -143,7 +143,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		me.setStateData(Ext.clone(state));
 
 		me.forEachView(compareUriName);
-		if (Ext.isString(activeView)) {
+		if (!activeView || Ext.isString(activeView)) {
 			console.warn('Could not find view: ' + activeView);
 			me.fireEvent('restored');
 			return;
@@ -158,7 +158,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 
 	//This is fired based on USER interaction.
-	// Do not call this to restore the view progamatically. Just call setActiveItem, otherwise you will end up with
+	// Do not call this to restore the view programmatically. Just call setActiveItem, otherwise you will end up with
 	// bad history.
 	changeView: function(view, action, data) {
 		console.debug('USER Changing Profile View:', view, 'action:', action, 'data:', data);
