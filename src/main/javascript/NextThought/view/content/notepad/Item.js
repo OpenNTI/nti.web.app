@@ -26,6 +26,13 @@ Ext.define('NextThought.view.content.notepad.Item', {
 				click: {fn: 'edit', buffer: 100}
 			}
 		});
+
+		this.notepadCmp = this.floatParent;
+	},
+
+
+	destroy: function() {
+		return this.callParent(arguments);
 	},
 
 
@@ -43,12 +50,6 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			//monitors go here...
 			'cleanup': 'destroy'//remove this widget if the annotation is cleaned.
 		});
-	},
-
-
-	destroy: function() {
-		console.log('cleaning up');
-		return this.callParent(arguments);
 	},
 
 
@@ -118,7 +119,11 @@ Ext.define('NextThought.view.content.notepad.Item', {
 	},
 
 
-	edit: function(e) {
+	openEditor: function() {
+		if (this.notepadCmp && this.notepadCmp.savingNewNote) {
+			return;
+		}
+
 		if (!this.editor) {
 			this.update('');
 			this.fireEvent('editor-open');
@@ -140,7 +145,12 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			});
 		}
 		Ext.defer(this.editor.focus, 1, this.editor);
+	},
 
+
+	edit: function(e) {
+		clearTimeout(this.openingEditor);
+		this.openingEditor = Ext.defer(this.openEditor, 10, this);
 		return this.eat(e);
 	},
 
@@ -164,6 +174,9 @@ Ext.define('NextThought.view.content.notepad.Item', {
 
 	commitEdit: function() {
 		var me = this, r = me.record,
+			dom = Ext.getDom(me.getEl()),
+			nextDom = Ext.getDom(me.getEl()).nextSibling,
+			pDom = Ext.getDom(me.getEl().parent()),
 			b = this.editor.getValue(),
 			oldBody = r.get('body');
 
@@ -177,7 +190,20 @@ Ext.define('NextThought.view.content.notepad.Item', {
 		this.cleanupEditor();
 
 		if (Ext.isEmpty(b)) {
-			r.destroy();
+			pDom.removeChild(dom);
+			r.destroy({
+				callback: function(recs, o, success) {
+					if (!success) {// put the node back
+						if (nextDom && nextDom.parentNode === pDom) {
+							pDom.appendChild(dom);
+						} else {
+							pDom.insertBefore(dom, nextDom);
+						}
+
+						me.refresh();
+					}
+				}
+			});
 			return;
 		}
 
@@ -185,6 +211,9 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			failure: function() {
 				console.error('coudn\'t save note');
 				r.set('body', oldBody);
+				if (me.isDestroyed) {
+					return;
+				}
 				me.refresh();
 			}
 		});

@@ -136,7 +136,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 
 	commitEditor: function(editor) {
-		console.log(editor.getValue());
+		this.savingNewNote = true;
 		this.saveNewNote(editor);
 	},
 
@@ -149,6 +149,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 			rangeInfo;
 
 		function afterSave(success) {
+			delete me.savingNewNote;
 			editor.unmask();
 			if (success) {
 				editor.destroy();
