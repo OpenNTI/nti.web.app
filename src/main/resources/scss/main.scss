@@ -87,7 +87,7 @@ body {
 		size: 1em;
 		family: $font;
 	}
-	@include experimental(font-smoothing, antialiased);
+	//@include experimental(font-smoothing, antialiased);
 }
 
 input::-ms-clear { display: none; }
