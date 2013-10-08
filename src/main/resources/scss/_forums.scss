@@ -245,6 +245,18 @@
 	border-top-color: white;
 	z-index: 104;
 
+
+	&::before {
+		background: #fff;
+		content: '';
+		overflow: hidden;
+		z-index: 0;
+		position: absolute;
+		left: -2px; right: -2px;
+		top:  -2px; bottom: 0;
+	}
+
+
 	.path {
 		font-style: normal;
 		margin-right: 150px;
