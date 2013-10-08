@@ -176,7 +176,7 @@ Ext.define('NextThought.view.course.enrollment.Window', {
 
 	onAdd: function(cmp) {
 		var ordinal = cmp.ordinal,
-			confirmLabel = cmp.confirmLabel || 'Get Started',
+			confirmLabel = cmp.confirmLabel || 'Enroll',
 			checkLabel = cmp.checkboxLabel;
 
 		this.activeView = cmp;

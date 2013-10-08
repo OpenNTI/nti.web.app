@@ -7,7 +7,7 @@ Ext.define('NextThought.view.course.enrollment.DetailView', {
 	renderTpl: '{Description}',
 
 	checkboxLabel: null,
-	confirmLabel: 'Get Started',
+	confirmLabel: 'Enroll',
 	closeWithoutWarn: true,
 
 	ordinal: 0,
