@@ -22,3 +22,5 @@ NTIStrings['no_list_header'] = 'No Lists Yet';
 NTIStrings['no_list_sub'] = 'Click create list to add one.';
 NTIStrings['no_group_header'] = 'No Groups Yet';
 NTIStrings['no_group_sub'] = 'Click create or join to add some.';
+
+NTIStrings['course-enrollment-enroll'] = 'Get Started';
