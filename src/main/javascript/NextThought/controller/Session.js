@@ -25,49 +25,59 @@ Ext.define('NextThought.controller.Session', {
 		'NextThought.ux.UpdatedTos'
 	],
 
-	sessionTrackerCookie: 'sidt',
+	sessionTrackerKey: 'sidt',
 
 
 	init: function() {
-		var me = this;
-
-		me.listen({
+		this.listen({
 			component: {
 				'settings-menu [action=logout]': {
-					'click': me.handleLogout
+					'click': this.handleLogout
 				},
 
 				'coppa-birthday-form': {
-					'refresh-service-doc': me.resolveService
+					'refresh-service-doc': this.resolveService
 				}
 			}
 		});
 
 
-		me.sessionId = guidGenerator();
+		this.sessionId = guidGenerator();
 
-		me.sessionTracker = Ext.TaskManager.newTask({
-
-			interval: 5000, //5 seconds
-			run: function() {
-				var v = PersistentStorage.get(me.sessionTrackerCookie);
-				if (v && v !== me.sessionId) {
-					console.error('GUI Session ID missmatch! Should be:', me.sessionId, 'got:', v);
-					me.sessionTracker.stop();
-					Socket.tearDownSocket();
-
-					alert({
-						icon: Ext.Msg.WARNING,
-						title: 'Alert',
-						msg: 'You\'re using the application in another tab. This session has been invalidated.',
-						closable: false,
-						buttons: null
-					});
-				} else if (!v) {
-					console.warn('The GUI Session ID is not set!');
-				}
-			}
+		this.mon(Ext.get(window), {
+			focus: 'onWindowActivated',
+			blur: 'onWindowDeactivated'
 		});
+	},
+
+
+	validate: function() {
+		//checking
+		console.log('Validating Session');
+		var v = PersistentStorage.get(this.sessionTrackerKey);
+		if (v !== this.sessionId && this.sessionStarted) {
+			console.error('GUI Session ID missmatch! Should be:', this.sessionId, 'got:', v);
+			Socket.tearDownSocket();
+
+			alert({
+				icon: Ext.Msg.WARNING,
+				title: 'Alert',
+				msg: 'You\'re using the application in another tab. This session has been invalidated.',
+				closable: false,
+				buttons: null
+			});
+		}
+	},
+
+
+	onWindowActivated: function() {
+		//console.debug('Tab/Window Activated');
+		this.validate();
+	},
+
+
+	onWindowDeactivated: function() {
+		//console.debug('Tab/Window Deactivated');
 	},
 
 
@@ -77,7 +87,7 @@ Ext.define('NextThought.controller.Session', {
 				'success=' + encodeURIComponent(location.href)));
 
 		if (!keepTracker) {
-			PersistentStorage.remove(this.sessionTrackerCookie);
+			PersistentStorage.remove(this.sessionTrackerKey);
 		}
 
 		function finishLoggingOut() {
@@ -213,8 +223,8 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
-			PersistentStorage.set(me.sessionTrackerCookie, me.sessionId);
-			me.sessionTracker.start();
+			PersistentStorage.set(me.sessionTrackerKey, me.sessionId);
+			me.sessionStarted = true;
 			console.log('fireing session-ready');//card 1768
 			app.fireEvent('session-ready');
 			app.on('finished-loading', me.immediateAction, me);
