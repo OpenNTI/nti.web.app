@@ -2,6 +2,7 @@ Ext.define('NextThought.controller.Session', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
+		'NextThought.cache.AbstractStorage',
 		'NextThought.cache.UserRepository',
 		'NextThought.preference.Manager',
 		'NextThought.proxy.Socket',
@@ -49,8 +50,8 @@ Ext.define('NextThought.controller.Session', {
 
 			interval: 5000, //5 seconds
 			run: function() {
-				var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
-				if (v !== me.sessionId) {
+				var v = PersistentStorage.get(me.sessionTrackerCookie);
+				if (v && v !== me.sessionId) {
 					console.error('GUI Session ID missmatch! Should be:', me.sessionId, 'got:', v);
 					me.sessionTracker.stop();
 					Socket.tearDownSocket();
@@ -62,6 +63,8 @@ Ext.define('NextThought.controller.Session', {
 						closable: false,
 						buttons: null
 					});
+				} else if (!v) {
+					console.warn('The GUI Session ID is not set!');
 				}
 			}
 		});
@@ -74,7 +77,7 @@ Ext.define('NextThought.controller.Session', {
 				'success=' + encodeURIComponent(location.href)));
 
 		if (!keepTracker) {
-			Ext.util.Cookies.clear(this.sessionTrackerCookie);
+			PersistentStorage.remove(this.sessionTrackerCookie);
 		}
 
 		function finishLoggingOut() {
@@ -210,7 +213,7 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
-			Ext.util.Cookies.set(me.sessionTrackerCookie, me.sessionId);
+			PersistentStorage.set(me.sessionTrackerCookie, me.sessionId);
 			me.sessionTracker.start();
 			console.log('fireing session-ready');//card 1768
 			app.fireEvent('session-ready');
