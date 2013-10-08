@@ -161,15 +161,15 @@
 	a{
 		margin-left: 0.5em;
 		font-weight: 500;
-		display: inline-block;
-		height: 15px;
+		//display: inline-block;
+		//height: 15px;
 		overflow: hidden;
 		position: relative;
-		top: 3px;
+		//top: 3px;
 		line-height: normal;
 		color: $primary-grey;
-		text-decoration: none;
-		border-bottom: 1px dotted $primary-grey;
+		text-decoration: underline;
+		//border-bottom: 1px dotted $primary-grey;
 	}
 
 	.remember{
