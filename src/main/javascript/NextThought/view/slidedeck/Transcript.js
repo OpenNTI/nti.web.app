@@ -488,7 +488,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				anchorComponentHooks: this.getViewerHooks(),
 				floatParent: this,
 				listeners: {
-					'itemremove': function() {
+					itemremove: function() {
 						if (this.getNodes().length === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
@@ -496,13 +496,22 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				}
 			});
 
+			this.annotationView.on('destroy', 'destroy',
+					this.on({
+						destroyable: true,
+						scope: this.annotationView,
+						resize: function() {
+							if (this.isVisible()) {
+								this.toFront();
+							}
+						}
+					}));
+
 			this.annotationView.show().hide();
 
-			this.mon(this.annotationView, {
-				scope: me,
-				show: function() {
-					me.fireEvent('will-show-annotation', me.annotationView, this);
-				},
+			this.annotationView.on({
+				scope: this,
+				show: function() { me.fireEvent('will-show-annotation', me.annotationView, this); },
 				hide: function() {
 					if (me.el.down('.count.active')) {
 						me.el.down('.count.active').removeCls('active');
@@ -522,11 +531,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.annotationView.refresh();
 		}
 		this.annotationView.show();
-		this.on('resize', function() {
-			if (this.isVisible()) {
-				this.toFront();
-			}
-		}, this.annotationView);
 	},
 
 
