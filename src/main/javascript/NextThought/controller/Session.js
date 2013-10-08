@@ -51,6 +51,7 @@ Ext.define('NextThought.controller.Session', {
 														run: function() {
 															var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
 															if (v !== me.sessionId) {
+																console.error('GUI Session ID missmatch! Should be:', me.sessionId, 'got:', v);
 																me.sessionTracker.stop();
 																Socket.tearDownSocket();
 
