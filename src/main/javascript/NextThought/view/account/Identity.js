@@ -18,7 +18,7 @@ Ext.define('NextThought.view.account.Identity', {
 
 	renderTpl: Ext.DomHelper.markup(
 			[
-				{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName}'},
+				{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName:htmlEncode}'},
 				{ cls: 'presence' }
 			]),
 

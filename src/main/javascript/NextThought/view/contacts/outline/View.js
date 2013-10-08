@@ -53,7 +53,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 
 		{
-			cls: 'outline-row {type}', 'data-qtip': '{displayName}',
+			cls: 'outline-row {type}', 'data-qtip': '{displayName:htmlEncode}',
 			cn: [
 				{ cls: 'label', html: '{displayName}' }
 			]

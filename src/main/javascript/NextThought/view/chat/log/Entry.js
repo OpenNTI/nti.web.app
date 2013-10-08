@@ -13,7 +13,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			{tag: 'img', src: '{avatarURL}', cls: 'avatar', alt: '{name}'},
 			{tag: 'span', cls: 'control'},
 			{cls: 'message-bounding-box', cn: [
-				{cls: 'log-entry {me}', 'data-qtip': '{timestamp}', cn: [
+				{cls: 'log-entry {me}', 'data-qtip': '{timestamp:htmlEncode}', cn: [
 					{cls: 'name', html: '{name}'},' ',
 					{cls: 'body-text', html: '{body}'},' '
 				]}

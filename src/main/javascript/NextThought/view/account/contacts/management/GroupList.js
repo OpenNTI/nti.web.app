@@ -175,7 +175,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList', {
 
 
 	getInnerTpl: function(displayField) {
-		return ['<div class="name" data-qtip="{' + displayField + '}">',
+		return ['<div class="name" data-qtip="{' + displayField + ':htmlEncode}">',
 				'<tpl>',
 				'{' + displayField + '}',
 				'</tpl>',

@@ -17,7 +17,7 @@ Ext.define('NextThought.view.store.Collection', {
 	]),
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} purchasable item {Class:lowercase} {featured} row-{rows} col-{cols}', 'data-qtip': '{Title}', cn: [
+		cls: '{inGrid} purchasable item {Class:lowercase} {featured} row-{rows} col-{cols}', 'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn: [
 				{ cls: 'courseName', html: '{Name}' },

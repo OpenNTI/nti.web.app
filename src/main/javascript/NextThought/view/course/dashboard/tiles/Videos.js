@@ -90,7 +90,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.Videos', {
 						{ cls: 'poster', style: { backgroundImage: 'url({thumb})'} },
 						{ cls: 'meta', cn: [
 							{ cls: 'date', html: '{date:date("l, F j")}' },
-							{ cls: 'label', html: '{label}', 'data-qtip': '{label}' }
+							{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' }
 						]}
 					]
 				}]}),

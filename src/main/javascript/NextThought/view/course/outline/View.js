@@ -26,7 +26,7 @@ Ext.define('NextThought.view.course.outline.View', {
 	overItemCls: 'over',
 	itemSelector: '.outline-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'outline-row {type} {[this.is(values)]}', 'data-qtip': '{label}', cn: [
+		{ cls: 'outline-row {type} {[this.is(values)]}', 'data-qtip': '{label:htmlEncode}', cn: [
 			{cls: 'label', html: '{label}'},
 			{tag: 'tpl', 'if': 'startDate', cn: {cls: 'date', cn: [
 				{html: '{startDate:date("M")}'},

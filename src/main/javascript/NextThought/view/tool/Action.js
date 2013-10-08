@@ -7,7 +7,7 @@ Ext.define('NextThought.view.tool.Action', {
 	disabledCls: 'disabled',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'icon {iconCls}', 'data-qtip': '{label}'},
+		{cls: 'icon {iconCls}', 'data-qtip': '{label:htmlEncode}'},
 		{tag: 'tpl', 'if': '!hideLabel', cn: {cls: 'label', html: '{label}'}}
 	]),
 

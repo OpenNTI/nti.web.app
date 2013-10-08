@@ -19,7 +19,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 
 
 	menuItemTpl: Ext.DomHelper.markup({
-		cls: 'item', 'data-qtip': '{title}', cn: [
+		cls: 'item', 'data-qtip': '{title:htmlEncode}', cn: [
 			{ cls: 'cover', style: {backgroundImage: 'url({icon})'}},
 			{ cls: 'meta', cn: [
 				{ cls: 'title', html: '{title}' },

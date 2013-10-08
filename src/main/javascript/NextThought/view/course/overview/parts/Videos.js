@@ -68,7 +68,7 @@ Ext.define('NextThought.view.course.overview.parts.Videos', {
 		{
 			cls: 'video-row',
 			cn: [
-				{ cls: 'label', html: '{label}', 'data-qtip': '{label}' }//,
+				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' }//,
 				//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
 			]
 		}

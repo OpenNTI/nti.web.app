@@ -6,7 +6,7 @@ Ext.define('NextThought.view.library.Branding', {
 	cls: 'branding',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'logo', 'data-qtip': '{logo-alt-text}'},
+		{cls: 'logo', 'data-qtip': '{logo-alt-text:htmlEncode}'},
 		{cls: 'box', cn: [
 			{ cls: 'flourish1' },
 			{ cls: 'flourish2' },

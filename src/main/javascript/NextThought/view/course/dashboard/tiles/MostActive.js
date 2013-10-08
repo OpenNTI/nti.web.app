@@ -89,7 +89,7 @@ Ext.define('NextThought.view.course.dashboard.tiles.MostActive', {
 			tpl: Ext.DomHelper.markup({
 				tag: 'tpl', 'for': '.', cn: [{
 					cls: 'user',
-					'data-qtip': '{displayName}',
+					'data-qtip': '{displayName:htmlEncode}',
 					style: {
 						backgroundImage: 'url({avatarURL})'
 					}

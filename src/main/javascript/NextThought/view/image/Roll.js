@@ -73,7 +73,7 @@ Ext.define('NextThought.view.image.Roll', {
 				tag: 'tpl', 'for': '.',
 				cn: [{
 					cls: 'item-wrap',
-					'data-qtip': '{title}',
+					'data-qtip': '{title:htmlEncode}',
 					cn: [{
 						cls: 'item',
 						tag: 'img',
