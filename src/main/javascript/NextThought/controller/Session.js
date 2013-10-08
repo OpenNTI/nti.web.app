@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Session', {
 	validate: function() {
 		//checking
 		console.log('Validating Session');
-		var v = PersistentStorage.get(this.sessionTrackerKey);
+		var v = this.sessionStarted && PersistentStorage.get(this.sessionTrackerKey);
 		if (v !== this.sessionId && this.sessionStarted) {
 			console.error('GUI Session ID missmatch! Should be:', this.sessionId, 'got:', v);
 			Socket.tearDownSocket();
