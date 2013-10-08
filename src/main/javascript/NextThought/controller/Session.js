@@ -31,40 +31,40 @@ Ext.define('NextThought.controller.Session', {
 		var me = this;
 
 		me.listen({
-					  component: {
-						  'settings-menu [action=logout]': {
-							  'click': me.handleLogout
-						  },
+			component: {
+				'settings-menu [action=logout]': {
+					'click': me.handleLogout
+				},
 
-						  'coppa-birthday-form': {
-							  'refresh-service-doc': me.resolveService
-						  }
-					  }
-				  });
+				'coppa-birthday-form': {
+					'refresh-service-doc': me.resolveService
+				}
+			}
+		});
 
 
 		me.sessionId = guidGenerator();
 
 		me.sessionTracker = Ext.TaskManager.newTask({
 
-														interval: 5000, //5 seconds
-														run: function() {
-															var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
-															if (v !== me.sessionId) {
-																console.error('GUI Session ID missmatch! Should be:', me.sessionId, 'got:', v);
-																me.sessionTracker.stop();
-																Socket.tearDownSocket();
+			interval: 5000, //5 seconds
+			run: function() {
+				var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
+				if (v !== me.sessionId) {
+					console.error('GUI Session ID missmatch! Should be:', me.sessionId, 'got:', v);
+					me.sessionTracker.stop();
+					Socket.tearDownSocket();
 
-																alert({
-																		  icon: Ext.Msg.WARNING,
-																		  title: 'Alert',
-																		  msg: 'You\'re using the application in another tab. This session has been invalidated.',
-																		  closable: false,
-																		  buttons: null
-																	  });
-															}
-														}
-													});
+					alert({
+						icon: Ext.Msg.WARNING,
+						title: 'Alert',
+						msg: 'You\'re using the application in another tab. This session has been invalidated.',
+						closable: false,
+						buttons: null
+					});
+				}
+			}
+		});
 	},
 
 
@@ -330,9 +330,9 @@ Ext.define('NextThought.controller.Session', {
 
 
 				Ext.Object.each({
-									'content.permanent_general_privacy_page': 'privacy_policy',
-									'content.permanent_tos_page': 'terms_of_service'
-								}, function(server, local) {
+					'content.permanent_general_privacy_page': 'privacy_policy',
+					'content.permanent_tos_page': 'terms_of_service'
+				}, function(server, local) {
 					$AppConfig.links[local] = m.getLink(r, server);
 				});
 
