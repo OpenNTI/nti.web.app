@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.assessment.input.Ordering', {
 	extend: 'NextThought.view.assessment.input.Base',
-	alias: ['widget.question-input-orderingpart','widget.question-input-matchingpart'],
+	alias: 'widget.question-input-orderingpart',
 
 	require: [
 		'Ext.dd.DragZone',
@@ -350,5 +350,9 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 			onNodeDrop: function(target, dd, e, data) { me.swapNodes(target, dd); }
 		});
+	}
+}, function(){
+	if (!isFeature('v3matching')) {
+		this.addXtype('question-input-matchingpart');
 	}
 });
