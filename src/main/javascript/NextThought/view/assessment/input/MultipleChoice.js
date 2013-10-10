@@ -1,7 +1,6 @@
 Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 	extend: 'NextThought.view.assessment.input.Base',
-	alias: ['widget.question-input-waitingforName',
-    'widget.question-input-multiplechoicemultipleanswerpart'],
+	alias: 'widget.question-input-multiplechoicemultipleanswerpart',
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'multi-choice {choice-style}', cn: [{
 		tag: 'tpl', 'for': 'choices', cn: [{
@@ -27,7 +26,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 		this.choices = (this.part.get('choices') || []).slice();
 
 		//clean out markup
-		Ext.each(this.choices, function(v,i,a) {
+		Ext.each(this.choices, function(v, i, a) {
 			a[i] = me.filterHTML(v);
 			//console.debug('Choice pruned HTML:',a[i]);
 		});

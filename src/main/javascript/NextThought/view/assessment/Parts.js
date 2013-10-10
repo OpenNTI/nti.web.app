@@ -5,14 +5,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 	requires: [
 		'NextThought.view.assessment.PartContent',
 		'NextThought.view.assessment.MultiPartSubmission',
-		'NextThought.view.assessment.input.Unsupported',
-		'NextThought.view.assessment.input.FreeResponse',
-		'NextThought.view.assessment.input.Matching',
-		'NextThought.view.assessment.input.MultipleChoice',
-		'NextThought.view.assessment.input.NumericMath',
-		'NextThought.view.assessment.input.SingleChoice',
-		'NextThought.view.assessment.input.SymbolicMath',   //...add all the possible input types here
-		'NextThought.view.assessment.input.DDMatching'
+		'NextThought.view.assessment.input.*'
 	],
 
 	plain: true,
