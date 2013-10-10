@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.assessment.input.Matching', {
+Ext.define('NextThought.view.assessment.input.Ordering', {
 	extend: 'NextThought.view.assessment.input.Base',
-	alias: 'widget.question-input-matchingpart',
+	alias: ['widget.question-input-orderingpart','widget.question-input-matchingpart'],
 
 	require: [
 		'Ext.dd.DragZone',
@@ -10,11 +10,11 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 		'Ext.dd.StatusProxy'
 	],
 
-	inputTpl: Ext.DomHelper.markup({ cls: 'matching-dd-zone', cn: [
-		{'tag': 'tpl', 'for': 'matches', cn: [{
-			cls: 'match', cn: [
+	inputTpl: Ext.DomHelper.markup({ cls: 'ordering-dd-zone', cn: [
+		{'tag': 'tpl', 'for': 'ordinals', cn: [{
+			cls: 'ordinal', cn: [
 				{ cls: 'label', 'data-part': '{[xindex-1]}', html: '{label}' },
-				{ cls: 'draggable-area', 'data-match': '{[xindex-1]}', cn: [
+				{ cls: 'draggable-area', 'data-ordinal': '{[xindex-1]}', cn: [
 					{cls: 'controls', cn: [
 						{ tag: 'span', cls: 'control'},
 						{ tag: 'span', cls: 'drag-control'}
@@ -27,14 +27,14 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 
 
 	solTpl: Ext.DomHelper.createTemplate({
-		cls: 'matching-solution',
-		cn: [{ tag: 'span', html: '{0}'},{tag: 'span', cls: 'solution-matching-text', html: '{1}'}]
+		cls: 'ordering-solution',
+		cn: [{ tag: 'span', html: '{0}'},{tag: 'span', cls: 'solution-ordering-text', html: '{1}'}]
 	}).compile(),
 
 
 	renderSelectors: {
-		draggableEl: '.match .draggable-area',
-		dragzoneEl: '.matching-dd-zone'
+		draggableEl: '.ordinal .draggable-area',
+		dragzoneEl: '.ordering-dd-zone'
 	},
 
 
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			matches: m
+			ordinals: m
 		});
 	},
 
@@ -73,13 +73,13 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 	getValue: function() {
 		var val = {};
 
-		this.el.select('.match').each(function(e) {
+		this.el.select('.ordinal').each(function(e) {
 			var p1 = e.down('.label'),
 				labelIndex, valueIndex,
 				p2 = e.down('.draggable-area');
 
 			labelIndex = p1 && parseInt(p1.getAttribute('data-part'), 10);
-			valueIndex = p2 && parseInt(p2.getAttribute('data-match'), 10);
+			valueIndex = p2 && parseInt(p2.getAttribute('data-ordinal'), 10);
 			val[labelIndex] = valueIndex;
 		});
 		return val;
@@ -121,13 +121,13 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 			values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels'));
 
-		this.getEl().select('.match').removeCls(['correct', 'incorrect']);
+		this.getEl().select('.ordinal').removeCls(['correct', 'incorrect']);
 
-		Ext.each(this.getEl().query('.match'), function(e) {
+		Ext.each(this.getEl().query('.ordinal'), function(e) {
 			var l = Ext.fly(e).down('.label'),
 				labelIndex = parseInt(l.getAttribute('data-part'), 10),
 				d = Ext.fly(e).down('.draggable-area'),
-				valueIndex = parseInt(d.getAttribute('data-match'), 10),
+				valueIndex = parseInt(d.getAttribute('data-ordinal'), 10),
 				cls = (labelIndex === i && valueIndex === c[i]) ? 'correct' : 'incorrect';
 
 			d.addCls(cls);
@@ -164,14 +164,14 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 
 
 	reset: function() {
-		this.el.select('.match .draggable-area').removeCls(['correct', 'incorrect']);
+		this.el.select('.ordinal .draggable-area').removeCls(['correct', 'incorrect']);
     //		this.resetOrder();
 		this.callParent();
 	},
 
 
 	resetOrder: function() {
-		var draggableParts = this.el.select('.match .draggable-area');
+		var draggableParts = this.el.select('.ordinal .draggable-area');
 		this.quickSort(draggableParts.elements);
 	},
 
@@ -203,13 +203,13 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 		}
 
 		function partition(a, begin, end, pivot) {
-			var p = parseInt(a[pivot].getAttribute('data-match'), 10),
+			var p = parseInt(a[pivot].getAttribute('data-ordinal'), 10),
 				s, i, t;
 
 			me.swap(p, end - 1);
 			s = begin;
 			for (i = begin; i < end - 1; i++) {
-				t = parseInt(a[i].getAttribute('data-match'), 10);
+				t = parseInt(a[i].getAttribute('data-ordinal'), 10);
 				if (t <= p) {
 					me.swap(p, end - 1);
 					s++;
@@ -227,10 +227,10 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 
 	swap: function(a, b) {
 		if (a === b) { return; }
-		var ad = this.el.down('.draggable-area[data-match=' + a + ']'),
-			bd = this.el.down('.draggable-area[data-match=' + b + ']'),
-			ap = ad.up('.match'),
-			bp = bd.up('.match');
+		var ad = this.el.down('.draggable-area[data-ordinal=' + a + ']'),
+			bd = this.el.down('.draggable-area[data-ordinal=' + b + ']'),
+			ap = ad.up('.ordinal'),
+			bp = bd.up('.ordinal');
 
     //		console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
@@ -242,9 +242,9 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 
 	swapNodes: function(target, dd) {
 		var sourceDom = dd.dragData.ddel,
-			targetParent = target.up('.match', null, true),
-			a = sourceDom.getAttribute('data-match'),
-			b = target.getAttribute('data-match');
+			targetParent = target.up('.ordinal', null, true),
+			a = sourceDom.getAttribute('data-ordinal'),
+			b = target.getAttribute('data-ordinal');
 
 		dd.dragData.sourceEl.removeCls('selected');
 		Ext.fly(sourceDom).removeCls('selected');
@@ -301,7 +301,7 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 				var el = this.getProxy().el.down('.draggable-area'),
 					w = this.dragData.sourceEl.getWidth() + 'px',
 					h = this.dragData.sourceEl.getHeight() + 'px',
-					m = this.dragData.sourceEl.up('.match'),
+					m = this.dragData.sourceEl.up('.ordinal'),
 					leftMargin = m && m.down('.label').getWidth() + 6;
 
 				//NOTE: We only want to drag vertically
@@ -328,14 +328,14 @@ Ext.define('NextThought.view.assessment.input.Matching', {
 				return e.getTarget('.draggable-area', null, true);
 			},
 			onNodeEnter: function(target, dd, e, data) {
-				var p = target.up('.match');
+				var p = target.up('.ordinal');
 
 				if (p) {
 					Ext.fly(p).addCls('target-hover');
 				}
 			},
 			onNodeOut: function(target, dd, e, data) {
-				var p = target.up('.match');
+				var p = target.up('.ordinal');
 				if (p) { Ext.fly(p).removeCls('target-hover'); }
 			},
 			onNodeOver: function(target, dd, e, data) {

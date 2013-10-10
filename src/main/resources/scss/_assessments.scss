@@ -559,11 +559,11 @@
 					}
 				}
 
-				.matching-dd-zone{
+				.ordering-dd-zone{
 					display: table;
 					table-layout: fixed;
 
-					.match{
+					.ordinal{
 						@extend .assessment-content;
 						position: relative;
 						display: table-row;
@@ -647,115 +647,6 @@
 					}
 				}
 
-				.dd-matching{
-					.match{
-						@extend .assessment-content;
-						position: relative;
-						display: block;
-						color: $primary-grey;
-						vertical-align: middle;
-						background: #ffffff;
-						border: 0 solid $tertiary-grey;
-						border-bottom-width: 1px;
-						&:last-of-type {
-							border-bottom-width: 0px;
-						}
-
-						.value-part{
-							padding-left: 40px;
-							padding-bottom: 10px;
-							line-height: 20px;
-							color: $primary-grey;
-						}
-
-						.label-part{
-							padding: 15px 0 0 40px;
-							color: $tertiary-grey;
-
-							@include draggable-span;
-							.dd-label-token:hover{
-								.x{
-									display: inline-block;
-								}
-							}
-
-							.placeholder{
-								display: inline-block;
-								font-style: normal !important;
-							}
-
-							&.matched{
-								.placeholder{
-									display: none;
-								}
-							}
-						}
-
-						&.target-hover{
-							display: block;
-							outline: 1px solid $primary-blue;
-							border-bottom-color: $primary-blue;
-							@include box-shadow(0 0 5px rgba(63,179,246,.23));
-						}
-
-						.control{
-							position: absolute;
-							top: 10px; left: 10px;
-							width: 20px;
-							height: 38px;
-							border: none;
-							display: none;
-
-							&::after{
-								position: absolute;
-								left: 0px; top: 12px;
-								content: ' ';
-								background: $icons no-repeat;
-								@include sprite($icons,'circle-check-green-18',$dimensions: true);
-							}
-						}
-
-						&.correct, &.incorrect{
-							.control{
-								display: inline-block;
-							}
-						}
-
-						&.correct{
-							.dd-label-token{
-								background: $primary-green;
-								border-color: $primary-green;
-								color: #fff;
-
-								&:hover{
-									background: $primary-green;
-									color: #fff;
-									.x{ display: none; }
-								}
-							}
-						}
-
-						&.incorrect{
-							.dd-label-token{
-								background-color: $primary-red;
-								border-color: #d84343;
-								color: #fff;
-
-								&:hover{
-									background: $primary-red;
-									color: #fff;
-									.x{ display: none; }
-								}
-							}
-						}
-
-						&.incorrect .control{
-							&::after{
-								@include sprite($icons,'circle-x-red-18',$dimensions: true);
-							}
-						}
-					}
-				}
 
 				.solution {
 					@extend .assessment-content;
@@ -781,14 +672,14 @@
 							margin-left: 10px;
 						}
 
-						.matching-solution{
+						.ordering-solution{
 							span{
 								display: inline-block;
 								padding-right: 20px;
 								vertical-align: middle;
 								color: $primary-grey;
 
-								&.solution-matching-text{
+								&.solution-ordering-text{
 									color: $primary-green;
 								}
 							}
