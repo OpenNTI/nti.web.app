@@ -323,11 +323,28 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		this.mon(this.editor, 'deactivated-editor', this.setupReplyScrollZone, this, {delay: 1});
 
-		this.on('beforedeactivate', this.handleBeforeDeactivate, this);
+		this.on({
+			'beforedeactivate': 'handleBeforeDeactivate',
+			'editor-opened': 'maybeAllowEditor',
+			'editor-closed': 'closedEditor'
+		});
 		this.mon(this.messageBodyEl, 'click', this.navigateToItem, this);
 		this.mon(this.subjectEl, 'click', this.navigateToItem, this);
 		this.mon(this.commentsEl, 'click', this.showReplies, this);
 		this.enableProfileClicks(this.name, this.avatar);
+	},
+
+	maybeAllowEditor: function(){
+		//if this has an active editor
+		if((this.editor && this.editor.isActive()) || this.editorOpened){
+			return false;
+		}
+
+		this.editorOpened = true;
+	},
+
+	closedEditor: function(){
+		delete this.editorOpened;
 	},
 
 	constrainPopout: function() {
@@ -348,10 +365,11 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	showEditor: function() {
+		if(this.editorOpened){ return; }
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-    this.fireEvent('realign');
+    	this.fireEvent('realign');
 	},
 
 

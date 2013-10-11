@@ -56,7 +56,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.enableBubble('realign');
+		this.enableBubble(['realign','editor-opened','editor-closed']);
 		this.mon(this.record, 'destroy', this.handleDestroy, this);
 	},
 
@@ -125,6 +125,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 		show = function() {
 			bodyEl.show(); metaEl.show(); footEl.show(); ctrEl.show(); avatarEl.show();
 			this.constrainPopout();
+			this.fireEvent('editor-closed');
 		};
 		this.editor = Ext.widget('nti-editor', {record: this.record, ownerCt: this, renderTo: this.editorBoxEl, 'saveCallback': this.saveCallback});
 		this.mon(this.editor, {
@@ -219,7 +220,9 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 
 	editComment: function(e) {
 		e.stopEvent();
-		this.editor.editBody(this.record.get('body')).activate();
+		if(this.fireEvent('editor-opened')){
+			this.editor.editBody(this.record.get('body')).activate();
+		}
 	},
 
 
