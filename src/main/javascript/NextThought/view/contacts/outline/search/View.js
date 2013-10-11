@@ -41,9 +41,17 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 		this.callParent(arguments);
 	},
 
-	rowClicked: function(view, record, item) {
-		var el = Ext.fly(item).down('.avatar');
+	rowClicked: function(view, record, item, index, e) {
+		var i = Ext.fly(item),
+			el = i.down('.avatar');
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
+		//if they aren't a contact show the card
+		if( i.hasCls('not-contact') && e.getTarget('.nib')){
+			e.stopPropagation();
+			this.startPopupTimeout(view, record, item, 0);
+			return;
+		}
+
 		this.cancelPopupTimeout();
 		this.fireEvent('chat', record);
 		if (!Ext.is.iPad) {
