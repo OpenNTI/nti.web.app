@@ -79,7 +79,14 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 		Ext.defer(this.getVideoData, 1, this, [title]);
 
 		this.on({
-			itemclick: function() {
+			itemclick: function(cmp, record, item) {
+				var selectionChanged = cmp.getSelectedNodes()[0] !== item;
+
+				if(!selectionChanged){
+					cmp.fireEvent('hide-grid');
+					return;
+				}
+
 				this.fromClick = true;
 			},
 			beforeselect: function(s, r) {

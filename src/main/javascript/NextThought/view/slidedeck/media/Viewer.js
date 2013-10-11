@@ -198,6 +198,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
 		me.activeVideoPlayerType = 'video-focus';
 
+		me.mon(me.gridView, {
+			'hide-grid': {fn:'showGridPicker', scope: me.toolbar}
+		});
+
 		me.mon(me.toolbar, {
 			'switch-video-viewer': 'switchVideoViewer',
 			'hide-grid-viewer': 'hideGridViewer',
