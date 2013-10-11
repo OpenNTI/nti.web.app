@@ -2,11 +2,9 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-orderingpart',
 
-	require: [
+	requires: [
 		'Ext.dd.DragZone',
 		'Ext.dd.DropZone',
-		'Ext.dd.DragSource',
-		'Ext.dd.DropTarget',
 		'Ext.dd.StatusProxy'
 	],
 
