@@ -22,6 +22,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		var me = this;
 
+		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition,10);
+		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
+
 		this.insertOverlay();
 		if (!me.noteOverlayManager) {
 			//TODO: we will something more robust to manage different reader views that get added.
@@ -32,12 +35,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			scope: this,
 			destroy: 'destroy',
 			'create-note': 'noteHere',
-			'sync-height': {fn: 'syncHeight', buffer: 1},
+			'sync-height': 'syncHeight',
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline': 'showEditorAtPosition',
 			'register-records': 'registerGutterRecords',
 			'unregister-records': 'unRegisterGutterRecords',
-      'presentation-parts-ready': 'adjustAnnotationOverlayPosition'
+      		'presentation-parts-ready': 'adjustAnnotationOverlayPosition'
 		});
 
     this.mon(this.reader, {
@@ -127,9 +130,14 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
             maxWidth = 860,
             me = this;
 
-    w = w < maxWidth ? w - 75 : maxWidth - 75;
-    this.annotationOverlay.setStyle('left', w + 'px');
+    if ( w === 0 ){
+    	Ext.defer(this.adjustAnnotationOverlayPosition,10,this);//hidden, let the repaint finish
+    	return;
+    }
 
+	w = w < maxWidth ? w - 75 : maxWidth - 75;
+	this.annotationOverlay.setStyle('left', w + 'px');
+	
     Ext.each(cmps, function(cmp) {
       if (Ext.isFunction(cmp.positionAnnotationNibs)) {
         cmp.positionAnnotationNibs(me.reader.el);
@@ -201,11 +209,21 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	syncHeight: function() {
+		var cmps, 
+			r = this.reader, 
+			el = r && r.el;
+
+		if (el && el.isVisible(true)) {
+			Ext.defer(this.syncHeight,10,this);
+			return;
+		}
+
+
 		this.annotationManager.removeAll();
 
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
-		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
+		cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
 		Ext.each(cmps || [], function(cmp) {
 			if (Ext.isFunction(cmp.registerAnnotations)) {
 				cmp.registerAnnotations();
@@ -283,6 +301,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		if (Ext.isEmpty(noteStore)) { return;}
 
 		var me = this;
+		//TODO: This function should be buffered, but doing so would cause
+		// the previous calls to be dropped.
+		if (!me.reader.el.isVisible(true)) {
+			Ext.defer(this.registerGutterRecords,10,this,arguments);
+			return;
+		}
+
 
 		Ext.each(records, function(n) {
 			if (n.isTopLevel && n.isTopLevel()) {
