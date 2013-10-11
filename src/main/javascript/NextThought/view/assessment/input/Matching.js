@@ -13,7 +13,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	inputTpl: Ext.DomHelper.markup([
 		{ cls: 'terms', cn:{ 'tag': 'tpl', 'for': 'terms', cn: [{
 			cls: 'target term drag', 'data-match': '{[xindex]}', cn: [
-				{ cls: 'match', 'data-term':'{.:htmlEncode}',  html: '{.}' },
+				{ cls: 'match', 'data-term':'{.:htmlEncode}',  html: '{.}' }
 			]}
 		]}},
 
@@ -184,7 +184,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	hideSolution: function() {
 		this.callParent();
-	},
+	}
 	//</editor-fold>
 
 
