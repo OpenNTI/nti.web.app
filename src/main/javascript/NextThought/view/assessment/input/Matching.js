@@ -67,8 +67,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		//ownerMain.updateLayout();
 
 
-		this.setupDragZones();
-		this.setupDropZones();
+		this.setupDragging();
+		this.setupDropZone();
 	},
 	//</editor-fold>
 
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			proxy = this.dragProxy = new Ext.dd.StatusProxy({
 				cls: 'dd-matching-proxy-ghost',
 				id: this.id + '-drag-status-proxy',
-				constrain: true
+				repairDuration: 1000
 				//repair : Ext.emptyFn <--to help debug
 			});
 		}
@@ -89,65 +89,96 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	},
 
 
-	setupDragZones: function() {
-		var me = this;
+	setupDragging: function() {
+		var cfg,
+			dragData;
 
-		this.injectionSource.select('.drag').each(function(el) {
-			var cfg,
-				dragData,
-				dragZone;
+		cfg = {
+			animRepair: true,
+			proxy: this.getDragProxy(),
 
-			cfg = {
-				animRepair: true,
-				proxy: me.getDragProxy(),
-
-				getDragData: function(e) {
-					var sourceEl = e.getTarget('.drag', 10), d;
-					if (sourceEl) {
-						d = sourceEl.cloneNode(true);
-						d.id = Ext.id();
-						return (dragData = {
-							sourceEl: sourceEl,
-							repairXY: Ext.fly(sourceEl).getXY(),
-							ddel: d,
-							matchOrdinal: sourceEl.getAttribute('data-match')
-						});
-					}
-				},
-
-				getRepairXY: function() {
-					return this.dragData.repairXY;
-				},
-
-				onStartDrag: function() {
-					var el = this.getProxy().getDragEl(),
-						dx = Math.floor(el.getWidth()/2),
-						dy = -Math.floor(el.getHeight()/2);
-
-					// Center drag and drop proxy on cursor pointer
-					this.setDelta(dx, dy);
-
-					Ext.fly(dragData.sourceEl).addCls('dragging');
-				},
-
-
-				afterValidDrop: function(){
-					Ext.fly(dragData.sourceEl).removeCls('dragging');
-				},
-
-
-				afterInvalidDrop: function(){
-					Ext.fly(dragData.sourceEl).removeCls('dragging');
+			getDragData: function(e) {
+				var sourceEl = e.getTarget('.drag', 10), d;
+				if (sourceEl) {
+					d = sourceEl.cloneNode(true);
+					d.id = Ext.id();
+					return (dragData = {
+						sourceEl: sourceEl,
+						repairXY: Ext.fly(sourceEl).getXY(),
+						ddel: d,
+						matchOrdinal: sourceEl.getAttribute('data-match')
+					});
 				}
-			};
+			},
 
-			dragZone = new Ext.dd.DragZone(el, cfg);
-		});
+			getRepairXY: function() {
+				return this.dragData.repairXY;
+			},
+
+			onStartDrag: function() {
+				var el = this.getProxy().getDragEl(),
+					dx = Math.floor(el.getWidth()/2),
+					dy = -Math.floor(el.getHeight()/2);
+
+				// Center drag and drop proxy on cursor pointer
+				this.setDelta(dx, dy);
+
+				Ext.getBody().addCls('dragging');
+				Ext.fly(dragData.sourceEl).addCls('dragging');
+			},
+
+
+			afterValidDrop: function(){
+				Ext.getBody().removeCls('dragging');
+				Ext.fly(dragData.sourceEl).replaceCls('dragging', 'dropped');
+			},
+
+
+			afterInvalidDrop: function(){
+				Ext.getBody().removeCls('dragging');
+				Ext.fly(dragData.sourceEl).removeCls('dragging');
+			}
+		};
+
+		this.dragZone = new Ext.dd.DragZone(this.injectionSource, cfg);
 	},
 
 
-	setupDropZones: function() {
+	setupDropZone: function() {
+		var id = this.id;
+		this.dropZone = new Ext.dd.DropZone(this.inputBox, {
+			//<editor-fold desc="Boilerplate">
 
+			// If the mouse is over a target node, return that node. This is provided as the "target" parameter in
+			// all "onNodeXXXX" node event handling functions
+			getTargetFromEvent: function(e) {
+				console.log('test','#'+id+' .target.choice',e.getTarget('#'+id+' .target.choice'));
+				return e.getTarget('#'+id+' .target.choice');
+			},
+
+			// On entry into a target node, highlight that node.
+			onNodeEnter : function(target, dd, e, data){
+				Ext.fly(target).addCls('drop-hover');
+			},
+
+			// On exit from a target node, unhighlight that node.
+			onNodeOut : function(target, dd, e, data){
+				Ext.fly(target).removeCls('drop-hover');
+			},
+
+			// While over a target node, return the default drop allowed
+			onNodeOver : function(target, dd, e, data){
+				return Ext.dd.DropZone.prototype.dropAllowed;
+			},
+			//</editor-fold>
+
+
+			onNodeDrop : function(target, dd, e, data){
+
+
+				return true;
+			}
+		});
 	},
 	//</editor-fold>
 

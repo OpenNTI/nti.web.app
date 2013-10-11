@@ -229,6 +229,7 @@
 			@include experimental-value(cursor,grabbing);
 		}
 
+		&.dropped,
 		&.dragging {
 			visibility: hidden;
 		}
