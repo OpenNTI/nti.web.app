@@ -24,8 +24,6 @@ Ext.define('NextThought.view.course.info.View', {
 		this.currentCourseInfoNtiid = ntiid;
 		this.update('');
 
-		Ext.getBody().mask('Loading...', 'navigation');
-
 		$AppConfig.service.getPageInfo(ntiid, this.loadPage, this.failedToLoad, this);
 	},
 
@@ -33,7 +31,6 @@ Ext.define('NextThought.view.course.info.View', {
 	fillInPage: function(html) {
 		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i);
 
-		Ext.getBody().unmask();
 		if (bodyTag.length > 1) {
 			this.update(bodyTag[1]);
 		}
