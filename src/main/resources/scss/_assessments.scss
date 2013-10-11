@@ -147,6 +147,33 @@
 	}
 }
 
+
+.dd-matching-proxy-ghost {
+	overflow: visible;
+	pointer-events: auto;
+
+	.x-dd-drag-ghost{
+		filter: none;
+		opacity: 1;
+		position: relative;
+	}
+
+	.target.drag {
+		font: normal normal 1.3em/2em $font;
+		border: 1px solid $primary-blue;
+		border-radius: 3px;
+		box-shadow: 0px 0px 7px -2px rgba(0, 0, 0, 0.5);
+		display: inline-block;
+		padding: 0 15px;
+
+		color: #fff;
+		background: $primary-blue;
+
+		@include experimental-value(cursor,grabbing);
+	}
+
+}
+
 .x-panel-assessment {
 
 	&.question { //main frame of the question
@@ -202,7 +229,9 @@
 			@include experimental-value(cursor,grabbing);
 		}
 
-
+		&.dragging {
+			visibility: hidden;
+		}
 	}
 
 	&.submission-panel {
