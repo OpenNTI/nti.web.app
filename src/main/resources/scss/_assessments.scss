@@ -168,6 +168,43 @@
 		}
 	}
 
+	.dropzone {
+		color: #e0e0e0;
+		font-weight: 500;
+	}
+
+	.terms {
+		min-height: 30px;
+		margin: 15px 0;
+
+		.drag.target {
+			margin-left: 1em;
+		}
+	}
+
+	.target.drag {
+		color: $primary-blue;
+		border: 1px solid $primary-blue;
+		border-radius: 3px;
+		background: #fff;
+		box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+		display: inline-block;
+		padding: 0 15px;
+		@include experimental-value(cursor,grab);
+
+		&:active,
+		&:hover {
+			color: #fff;
+			background: $primary-blue;
+		}
+
+		&:active {
+			@include experimental-value(cursor,grabbing);
+		}
+
+
+	}
+
 	&.submission-panel {
 		border: 0 solid #ebebeb;
 		border-top-width: 1px;
@@ -511,6 +548,10 @@
 							border-color: $primary-blue;
 						}
 					}
+				}
+
+				.choice.target {
+					padding: 20px 40px;
 				}
 
 				.mulit, .single {

@@ -49,6 +49,12 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
+	getInsertionEl: function() {
+		var l = this.getLayout();
+		return (l && l.innerCt) || this.body;
+	},
+
+
 	findLine: function() {
 		var doc = this.contentElement.ownerDocument,
 				range = doc.createRange();
