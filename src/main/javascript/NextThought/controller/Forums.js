@@ -155,8 +155,9 @@ Ext.define('NextThought.controller.Forums', {
 
 		for (i; i < 2; i++) {
 			href.pop();
-			parts.unshift(getURL(href.join('/')));
+			parts.push(getURL(href.join('/')));
 		}
+		parts.reverse();
 
 
 		function maybeFinish() {
@@ -334,8 +335,9 @@ Ext.define('NextThought.controller.Forums', {
 				Ext.callback(cb, scope, [false]);
 				return;
 			}
-			parts.unshift(pieces.pop());
+			parts.push(pieces.pop());
 		}
+		parts.reverse();
 		base = pieces.join('/');
 
 
@@ -343,10 +345,11 @@ Ext.define('NextThought.controller.Forums', {
 
 		i = stackOrder.indexOf(recordType);
 		Ext.each(parts, function(part) {
-			toLoad.unshift([stackOrder[i], part]);
+			toLoad.push([stackOrder[i], part]);
 			i--;
 		}, this, true);
 
+		toLoad.reverse();
 		//Ok we have built up what we need to show.Show it
 		this.pushViews(base, toLoad, cb, scope);
 

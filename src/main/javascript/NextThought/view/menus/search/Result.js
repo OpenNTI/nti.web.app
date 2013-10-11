@@ -100,12 +100,12 @@ Ext.define('NextThought.view.menus.search.Result', {
 				console.warn(c + ' could not be resolved');
 				return;
 			}
-			chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
+			chap.push(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
 		});
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: meta ? meta.title.get('title') : 'Untitled',
-			chapter: chap.join(' / '),
+			chapter: chap.reverse().join(' / '),
 			section: meta ? meta.label : 'Unlabeled'
 		});
 	},
