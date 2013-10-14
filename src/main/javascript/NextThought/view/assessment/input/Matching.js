@@ -90,8 +90,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	setupDragging: function() {
-		var cfg,
-			dragData;
+		var cfg, el = this.up().getEl(), z;
 
 		cfg = {
 			animRepair: true,
@@ -102,12 +101,12 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
-					return (dragData = {
+					return {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d,
 						matchOrdinal: sourceEl.getAttribute('data-match')
-					});
+					};
 				}
 			},
 
@@ -116,69 +115,106 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			},
 
 			onStartDrag: function() {
-				var el = this.getProxy().getDragEl(),
+				var data = this.dragData,
+					co = Ext.fly(data.sourceEl).up('.component-overlay'),
+					so = data.sourceEl,
+					el = this.getProxy().getDragEl(),
 					dx = Math.floor(el.getWidth()/2),
 					dy = -Math.floor(el.getHeight()/2);
 
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(dx, dy);
 
+				data.sheild = Ext.DomHelper.insertFirst(co, {cls:'sheild'}, true);
 				Ext.getBody().addCls('dragging');
-				Ext.fly(dragData.sourceEl).addCls('dragging');
+				Ext.fly(so).addCls('dragging');
 			},
 
-
-			afterValidDrop: function(){
+			onEndDrag: function(data){
+				Ext.destroy(data.sheild);
 				Ext.getBody().removeCls('dragging');
-				Ext.fly(dragData.sourceEl).replaceCls('dragging', 'dropped');
-			},
-
-
-			afterInvalidDrop: function(){
-				Ext.getBody().removeCls('dragging');
-				Ext.fly(dragData.sourceEl).removeCls('dragging');
+				Ext.fly(data.sourceEl).removeCls('dragging');
+//			},
+//
+//			afterValidDrop: function(){
+//			},
+//
+//			afterInvalidDrop: function(){
 			}
 		};
 
-		this.dragZone = new Ext.dd.DragZone(this.injectionSource, cfg);
+		z = this.dragZones = [];
+		this.injectionSource.select('.target.drag').each(function(e) {
+			z.push( new Ext.dd.DragZone(e, cfg) );
+		});
 	},
 
 
 	setupDropZone: function() {
-		var id = this.id;
-		this.dropZone = new Ext.dd.DropZone(this.inputBox, {
-			//<editor-fold desc="Boilerplate">
+		var id = this.id,
+			me = this,
+			common = {
+				//<editor-fold desc="Boilerplate">
+				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
+				// handling functions
+				getTargetFromEvent: function(e) { return e.getTarget('.target.choice') || e.getTarget('.terms'); },
 
-			// If the mouse is over a target node, return that node. This is provided as the "target" parameter in
-			// all "onNodeXXXX" node event handling functions
-			getTargetFromEvent: function(e) {
-				console.log('test','#'+id+' .target.choice',e.getTarget('#'+id+' .target.choice'));
-				return e.getTarget('#'+id+' .target.choice');
+				// On entry into a target node, highlight that node.
+				onNodeEnter : function(target, dd, e, data){ Ext.fly(target).addCls('drop-hover'); },
+
+				// On exit from a target node, unhighlight that node.
+				onNodeOut : function(target, dd, e, data){ Ext.fly(target).removeCls('drop-hover'); },
+
+				// While over a target node, return the default drop allowed
+				onNodeOver : function(target, dd, e, data){ return Ext.dd.DropZone.prototype.dropAllowed; },
+				//</editor-fzold>
 			},
+			dropOnAnswer = {
+				onNodeDrop : function(target, dd, e, data){
 
-			// On entry into a target node, highlight that node.
-			onNodeEnter : function(target, dd, e, data){
-				Ext.fly(target).addCls('drop-hover');
+					var t = Ext.fly(target).down('.dropzone',true),
+							c = t && t.childNodes,
+							n = c && c[0];
+
+					if (!c || c.length > 1) { //problems
+						return false;
+					}
+
+					if (n) {
+						t.removeChild(n);
+					}
+
+					if (n === data.sourceEl){
+						return true;
+					}
+
+					if (n && !Ext.isTextNode(n)) {
+						me.injectionSource.append(n);
+					}
+
+					t.appendChild(data.sourceEl);
+
+					return true;
+				}
 			},
+			dropOnShelf = {
+				onNodeDrop : function(target, dd, e, data){
 
-			// On exit from a target node, unhighlight that node.
-			onNodeOut : function(target, dd, e, data){
-				Ext.fly(target).removeCls('drop-hover');
-			},
+					var t = Ext.get(target);
 
-			// While over a target node, return the default drop allowed
-			onNodeOver : function(target, dd, e, data){
-				return Ext.dd.DropZone.prototype.dropAllowed;
-			},
-			//</editor-fold>
-
-
-			onNodeDrop : function(target, dd, e, data){
+					if (data.sourceEl.parentNode !== t) {
+						t.appendChild(data.sourceEl);
+					}
+					return true;
+				}
+			};
 
 
-				return true;
-			}
-		});
+
+		this.dropZones = [
+			new Ext.dd.DropZone(this.inputBox, Ext.apply(dropOnAnswer,common)),
+			new Ext.dd.DropZone(this.injectionSource, Ext.apply(dropOnShelf,common))
+		];
 	},
 	//</editor-fold>
 

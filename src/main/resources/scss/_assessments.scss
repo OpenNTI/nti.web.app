@@ -82,7 +82,24 @@
 	}
 }
 
+body.dragging * {
+	cursor: -webkit-grabbing !important;
+	cursor: -moz-grabbing !important;
+	cursor: -ms-grabbing !important;
+	cursor: -o-grabbing !important;
+	cursor: grabbing !important;
+}
+
 .component-overlay {
+	.sheild {
+		position: fixed;
+		height: auto;
+		bottom: 0;
+		top: 0; left: 0; right: 0;
+		background: transparent;
+		z-index: 1;
+	}
+
 	.tabable:active,
 	.tabable:focus {
 
@@ -150,7 +167,7 @@
 
 .dd-matching-proxy-ghost {
 	overflow: visible;
-	pointer-events: auto;
+	//pointer-events: auto;
 
 	.x-dd-drag-ghost{
 		filter: none;
@@ -198,6 +215,12 @@
 	.dropzone {
 		color: #e0e0e0;
 		font-weight: 500;
+	}
+
+	.drop-hover {
+		.dropzone {
+			color: $tertiary-grey;
+		}
 	}
 
 	.terms {
@@ -577,6 +600,12 @@
 						&.checked {
 							border-color: $primary-blue;
 						}
+					}
+
+					&.drop-hover {
+						box-shadow: 0 0 3px 1px $primary-blue;
+						border-color: $primary-blue;
+						z-index: 3;
 					}
 				}
 
