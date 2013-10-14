@@ -151,6 +151,22 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	setupDropZone: function() {
+
+		function moveTerm(el, to){
+			var p = el.parentNode,
+				doc = p && (p.ownerDocument || p.documentElement) || document,
+				term = p && p.getAttribute('data-term');
+			if (p === to) {
+				return;
+			}
+
+			if (p.childNodes.length === 1 && !Ext.isEmpty(term)) {
+				p.appendChild(doc.createTextNode(term));
+			}
+
+			to.appendChild(el);
+		}
+
 		var id = this.id,
 			me = this,
 			common = {
@@ -180,7 +196,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 						return false;
 					}
 
-					if (n) {
+					if (Ext.isTextNode(n)) {
 						t.removeChild(n);
 					}
 
@@ -192,19 +208,14 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 						me.injectionSource.append(n);
 					}
 
-					t.appendChild(data.sourceEl);
+					moveTerm(data.sourceEl,t);
 
 					return true;
 				}
 			},
 			dropOnShelf = {
 				onNodeDrop : function(target, dd, e, data){
-
-					var t = Ext.get(target);
-
-					if (data.sourceEl.parentNode !== t) {
-						t.appendChild(data.sourceEl);
-					}
+					moveTerm(data.sourceEl, Ext.get(target));
 					return true;
 				}
 			};
