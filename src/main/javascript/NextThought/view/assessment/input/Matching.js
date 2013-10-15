@@ -363,7 +363,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	getSolutionContent: function(part) {
 		return '';
-	},
+	}
 
 
 	//</editor-fold>
