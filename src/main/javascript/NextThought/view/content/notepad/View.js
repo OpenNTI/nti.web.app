@@ -271,21 +271,28 @@ Ext.define('NextThought.view.content.notepad.View', {
 	clearItems: function() {
 		var k,
 			m = this.notepadItems || {},
-			g = this.groupedLines || {};
+			g = this.groupedLines || {},
+			el;
 
 		for (k in m) {
 			if (m.hasOwnProperty(k)) {
+				el = m[k].getEl();
 				Ext.destroy(m[k]);
+				Ext.destroy(el);
 				delete m[k];
 			}
 		}
 
 		for (k in g) {
 			if (g.hasOwnProperty(k)) {
+				el = g[k].getEl && g[k].getEl();
 				Ext.destroy(g[k]);
+				Ext.destroy(el);
 				delete g[k];
 			}
 		}
+
+		this.scroller.select('div:not(.note-here)').remove()
 	},
 
 
