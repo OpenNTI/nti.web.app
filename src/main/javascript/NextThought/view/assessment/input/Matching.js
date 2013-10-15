@@ -164,6 +164,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			}
 
 			to.appendChild(el);
+
+			me.maybeChangeSubmitButtonState();
 		}
 
 
@@ -258,6 +260,13 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	//<editor-fold desc="UI State">
+	maybeChangeSubmitButtonState: function() {
+		var allInPlay = !this.shelfEl.down('.term');
+		
+		this[(allInPlay ? 'en':'dis')+'ableSubmission']();
+	},
+
+
 	reset: function() {
 		this.callParent();
 	},
