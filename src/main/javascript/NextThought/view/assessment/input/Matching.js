@@ -212,7 +212,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 					}
 
 					if (n && !Ext.isTextNode(n)) {
-						me.injectionSource.append(n);
+						me.injectionSource.appendChild(n);
 					}
 
 					moveTerm(data.sourceEl,t);
