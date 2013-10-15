@@ -182,7 +182,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 				onNodeOut : function(target, dd, e, data){ Ext.fly(target).removeCls('drop-hover'); },
 
 				// While over a target node, return the default drop allowed
-				onNodeOver : function(target, dd, e, data){ return Ext.dd.DropZone.prototype.dropAllowed; },
+				onNodeOver : function(target, dd, e, data){ return Ext.dd.DropZone.prototype.dropAllowed; }
 				//</editor-fzold>
 			},
 			dropOnAnswer = {
