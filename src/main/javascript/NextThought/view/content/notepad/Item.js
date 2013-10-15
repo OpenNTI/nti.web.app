@@ -192,8 +192,8 @@ Ext.define('NextThought.view.content.notepad.Item', {
 		if (Ext.isEmpty(b)) {
 			pDom.removeChild(dom);
 			r.destroy({
-				callback: function(recs, o, success) {
-					if (!success) {// put the node back
+				callback: function(recs, o) {
+					if (!o.success) {// put the node back
 						if (nextDom && nextDom.parentNode === pDom) {
 							pDom.appendChild(dom);
 						} else {
