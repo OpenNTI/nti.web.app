@@ -212,7 +212,8 @@ body.dragging * {
 		}
 	}
 
-	.dropzone {
+
+	.dropzone:not(.graded) {
 		color: #e0e0e0;
 		font-weight: 500;
 
@@ -289,6 +290,35 @@ body.dragging * {
 			display: none;
 		}
 	}
+
+	.target.choice {
+		cursor: default;
+
+		&.correct {
+			cursor: pointer;
+			@include icon('circle-check-green-18',26px,11px);
+			.target.drag {
+				background: #8eb737;
+				border-color: #8eb737;
+				color: #fff;
+				box-shadow: none;
+				cursor: default;
+			}
+		}
+
+		&.incorrect {
+			cursor: pointer;
+			@include icon('circle-x-red-18',26px,11px);
+			.target.drag {
+				background: #f35252;
+				border-color: #f35252;
+				color: #fff;
+				box-shadow: none;
+				cursor: default;
+			}
+		}
+	}
+
 
 	&.submission-panel {
 		border: 0 solid #ebebeb;

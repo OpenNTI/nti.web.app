@@ -12,13 +12,13 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	//<editor-fold desc="Setup & Config">
 	inputTpl: Ext.DomHelper.markup([
 		{ cls: 'terms', cn:{ 'tag': 'tpl', 'for': 'terms', cn: [{
-			cls: 'target term drag', 'data-match': '{[xindex]}', cn: [
+			cls: 'target term drag', 'data-match': '{[xindex-1]}', cn: [
 				{ cls: 'match', 'data-term':'{.:htmlEncode}',  cn:[{cls:'reset'},'{.}'] }
 			]}
 		]}},
 
 		{'tag': 'tpl', 'for': 'targets', cn: [{
-			cls: 'target choice', 'data-target': '{[xindex]}', cn: [
+			cls: 'target choice', 'data-target': '{[xindex-1]}', cn: [
 				{ cls: 'match dropzone', 'data-term':'{parent.term:htmlEncode}',  html: '{parent.term}' },
 				{ cls: 'text', html: '{.}' }
 			]}
@@ -89,7 +89,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	setupDragging: function() {
-		var cfg, el = this.up().getEl(), z;
+		var cfg, me = this,
+			el = this.up().getEl(), z;
 
 		cfg = {
 			animRepair: true,
@@ -111,6 +112,10 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 			getRepairXY: function() {
 				return this.dragData.repairXY;
+			},
+
+			onBeforeDrag: function() {
+				return !me.submitted;
 			},
 
 			onStartDrag: function() {
@@ -242,19 +247,90 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	//<editor-fold desc="Grading">
-	getValue: function() {},
+	getValue: function() {
+		var val = {};
+
+		function int(e,i){ return e && parseInt(e.getAttribute(i),10); }
+
+		this.el.select('.choice').each(function(e) {
+			val[int(e,'data-target')] = int(e.down('.term'),'data-match');
+		});
+
+		return val;
+	},
 
 
-	//	mark: function() {},
+	setValue: function(value) {
+		var q = '.term',
+			terms = this.shelfEl.query(q).concat(this.inputBox.query(q));
+
+
+		function int(e,i) { return e && parseInt(e.getAttribute(i),10); }
+
+		function toMap(ar,attr) {
+			var m = {};
+			Ext.each(ar,function(e){ m[e.getAttribute(attr)] = e; });
+			return m;
+		}
+
+		function s(bucket) {
+			var key = int(bucket, 'data-target'),
+				t = terms[value[key]];
+
+			bucket = Ext.getDom(bucket.down('.dropzone'));
+			if (Ext.isTextNode(bucket.firstChild)) {
+				bucket.removeChild(bucket.firstChild);
+			}
+
+			if (t) {
+				bucket.appendChild(t);
+			} else {
+				console.warn('Unexpected scenario... no term for bucket found: key:',key, 'map', terms);
+			}
+		}
+
+		console.log('set:',value);
+		terms = toMap(terms,'data-match');
+		this.inputBox.select('.choice').each(s);
+	},
+
+
+	mark: function() {
+		var s = this.part.get('solutions')[0],
+			c = s.get('value'), i = 0, me = this,
+			values = Ext.clone(this.part.get('values')),
+			labels = Ext.clone(this.part.get('labels'));
+
+		function int(e,i){ return e && parseInt(e.getAttribute(i),10); }
+
+		function m(e) {
+			var key = int(e,'data-target'),
+				value = int(Ext.fly(e).down('.term'),'data-match'),
+				cls = (key === i && value === c[i]) ? 'correct' : 'incorrect';
+			e.down('.dropzone').addCls('graded');
+			e.addCls(cls);
+			console.log('marking:', key, i, value, c[i], cls);
+			i++;
+		}
+
+		this.getEl().select('.choice').removeCls('correct incorrect').each(m);
+
+//		Ext.defer(function() {
+//			me.updateLayout();
+//			me.syncElementHeight();
+//		}, 1);
+	},
 
 
 	markCorrect: function() {
 		this.callParent();
+		this.mark();
 	},
 
 
 	markIncorrect: function() {
 		this.callParent();
+		this.mark();
 	},
 	//</editor-fold>
 
@@ -262,25 +338,32 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	//<editor-fold desc="UI State">
 	maybeChangeSubmitButtonState: function() {
 		var allInPlay = !this.shelfEl.down('.term');
-		
 		this[(allInPlay ? 'en':'dis')+'ableSubmission']();
 	},
 
 
 	reset: function() {
+		var el = this.getEl();
+
+		function r(e) {
+			var p = Ext.getDom(e).parentNode,
+				doc = p && (p.ownerDocument || p.documentElement) || document,
+				term = p && p.getAttribute('data-term');
+			if( p && !Ext.isEmpty(term) ){
+				p.appendChild(doc.createTextNode(term));
+			}
+		}
+
+		el.select('.choice').removeCls('correct incorrect');
+		el.select('.choice .dropzone').removeCls('graded').each(r);
+		el.select('.choice .dropzone .term').appendTo(this.shelfEl);
 		this.callParent();
 	},
-
-
-	editAnswer: function() {},
 
 
 	getSolutionContent: function(part) {},
 
 
-	hideSolution: function() {
-		this.callParent();
-	}
 	//</editor-fold>
 
 
