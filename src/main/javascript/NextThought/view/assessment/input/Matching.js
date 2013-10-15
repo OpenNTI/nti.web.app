@@ -13,7 +13,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	inputTpl: Ext.DomHelper.markup([
 		{ cls: 'terms', cn:{ 'tag': 'tpl', 'for': 'terms', cn: [{
 			cls: 'target term drag', 'data-match': '{[xindex]}', cn: [
-				{ cls: 'match', 'data-term':'{.:htmlEncode}',  html: '{.}' }
+				{ cls: 'match', 'data-term':'{.:htmlEncode}',  cn:[{cls:'reset'},'{.}'] }
 			]}
 		]}},
 
@@ -65,7 +65,6 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		el = ownerMain.getInsertionEl();
 		this.injectionSource.appendTo(el);
 		//ownerMain.updateLayout();
-
 
 		this.setupDragging();
 		this.setupDropZone();
@@ -156,7 +155,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			var p = el.parentNode,
 				doc = p && (p.ownerDocument || p.documentElement) || document,
 				term = p && p.getAttribute('data-term');
-			if (p === to) {
+			if (p === Ext.getDom(to)) {
 				return;
 			}
 
@@ -165,6 +164,14 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			}
 
 			to.appendChild(el);
+		}
+
+
+		function resetTerm(e) {
+			var toReset = e.getTarget('.target.drag');
+			if (toReset) {
+				moveTerm(toReset, me.injectionSource);
+			}
 		}
 
 		var id = this.id,
@@ -220,6 +227,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 				}
 			};
 
+
+		this.mon(this.injectionSource.select('.target.drag .reset'), 'click', resetTerm);
 
 
 		this.dropZones = [
