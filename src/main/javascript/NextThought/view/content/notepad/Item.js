@@ -124,7 +124,7 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			return;
 		}
 
-		if (!this.editor) {
+		if (!this.editor || this.isEditorDead()) {
 			this.update('');
 			this.fireEvent('editor-open');
 			this.addCls('edit');
@@ -145,6 +145,18 @@ Ext.define('NextThought.view.content.notepad.Item', {
 			});
 		}
 		Ext.defer(this.editor.focus, 1, this.editor);
+	},
+
+
+	isEditorDead: function() {
+		var o = this,
+			e = ['parentNode', 'dom', 'el', 'editor'];
+
+		do {
+			o = o[e.pop()];
+		} while(o);
+
+		return !o;
 	},
 
 
