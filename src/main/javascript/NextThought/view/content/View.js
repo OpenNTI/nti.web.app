@@ -95,14 +95,14 @@ Ext.define('NextThought.view.content.View', {
 		this.on({
 			'switch-to-reader': 'switchViewToReader',
 			'beforeactivate': 'onBeforeActivation',
-      'beforedeactivate': 'onBeforeDeActivation',
+			'beforedeactivate': 'onBeforeDeActivation',
 			'deactivate': 'onDeactivated',
 			'activate': 'onActivated',
 			'main-tab-clicked': 'onTabClicked'
 		});
 	},
 
-	updateActiveState: function(type,ntiid) {
+	updateActiveState: function(type, ntiid) {
 		var state = {};
 		state['current_' + type] = ntiid;
 		this.pushState(state);
@@ -145,6 +145,7 @@ Ext.define('NextThought.view.content.View', {
 		return true;
 	},
 
+
 	pushState: function(s) {
 		history.pushState({content: s}, this.title, this.getFragment());
 	},
@@ -152,6 +153,7 @@ Ext.define('NextThought.view.content.View', {
 
 	getTabs: function() {
 		var tabs = this.tabSpecs,
+			tabSet = Ext.isArray(this.tabs) ? this.tabs : [],
 			active = this.layout.getActiveItem().id;
 
 		if (this.tabs) {
@@ -164,6 +166,9 @@ Ext.define('NextThought.view.content.View', {
 				tabs = Ext.Array.filter(tabs, function(i) {return i.viewId !== 'course-info';});
 			}
 
+			if (Ext.isArray(this.tabs)) {
+				tabs = Ext.Array.filter(tabs, function(i) { return Ext.Array.contains(tabSet, i.viewId); });
+			}
 		}
 
 		Ext.each(tabs, function(t) {
@@ -182,14 +187,14 @@ Ext.define('NextThought.view.content.View', {
 
 
 	onDeactivated: function() {
-		var CQ = Ext.ComponentQuery,
+		var CQ = Ext.ComponentQuery, active,
 			needsClosing = []
 					.concat(CQ.query('slidedeck-view'))
 					.concat(CQ.query('note-window'));
 
 		Ext.Array.map(needsClosing, function(c) {c.destroy();});
 
-		var active = this.getLayout().getActiveItem();
+		active = this.getLayout().getActiveItem();
 		if (active) {
 			active.fireEvent('deactivate', this);
 		}
@@ -253,20 +258,20 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-  onBeforeDeActivation: function() {
-    // NOTE: we should probably fire this event for all the children of this view,
-    // since one could have the editor active (in which case we would want to display appropriate warning).
-    // For now, it seems like the reader should be notified and we will add others if we find it necessary.
-		var result = true;
-    result = this.reader.fireEvent('beforedeactivate', this);
+	onBeforeDeActivation: function() {
+		// NOTE: we should probably fire this event for all the children of this view,
+		// since one could have the editor active (in which case we would want to display appropriate warning).
+		// For now, it seems like the reader should be notified and we will add others if we find it necessary.
+		var result = true, active;
+		result = this.reader.fireEvent('beforedeactivate', this);
 		if (result) {
-			var active = this.getLayout().getActiveItem();
+			active = this.getLayout().getActiveItem();
 			if (active) {
 				result = active.fireEvent('beforedeactivate', this);
 			}
 		}
 		return result;
-  },
+	},
 
 
 	onActivated: function() {
@@ -291,6 +296,7 @@ Ext.define('NextThought.view.content.View', {
 		return false;
 	},
 
+
 	onNavigationCanceled: function(ntiid, alreadyThere, fromHistory) {
 		if (!alreadyThere || fromHistory) { return; }
 		this.setActiveTab('course-book');
@@ -298,18 +304,28 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	onNavigateComplete: function(pageInfo,cb,userInitiatedNav) {
+	onNavigateComplete: function(pageInfo, cb, userInitiatedNav) {
 		if (!pageInfo || !pageInfo.isModel) {return;}
+		var l = ContentUtils.getLocation(pageInfo), toc;
+
+		if (l && l !== ContentUtils.NO_LOCATION) {
+			toc = l.toc.querySelector('toc');
+		}
 
 		this.tabs = pageInfo.isPartOfCourse();
+		if (this.tabs && !Ext.query('course units', l.toc).length) {
+			this.tabs = ['course-info'];
+		}
 
 		if (this.isVisible(true)) {
 			this.fireEvent('update-tabs', this);
 		}
 
-		if (userInitiatedNav || !this.tabs) {
+		if (userInitiatedNav || !this.tabs || Ext.isArray(this.tabs)) {
 			try {
-				this.getLayout().setActiveItem(this.courseBook);
+				this.getLayout().setActiveItem(
+						Ext.isArray(this.tabs) ? this.courseInfo : this.courseBook);
+
 			}catch (e) {
 				console.warn(e.stack || e.message);
 			}
@@ -317,21 +333,15 @@ Ext.define('NextThought.view.content.View', {
 
 		this.courseBook.getLayout().setActiveItem(pageInfo.isPartOfCourseNav() ? 'course-nav' : 'main-reader-view');
 
-		var l = ContentUtils.getLocation(pageInfo),
-			toc;
-
 
 		this.down('content-toolbar').show();
+
 
 		this.locationTitle = ContentUtils.findTitle(pageInfo.getId(), 'NextThought');
 		this.setTitle(this.getTitlePrefix() + this.locationTitle);
 
 
 
-
-		if (l && l !== ContentUtils.NO_LOCATION) {
-			toc = l.toc.querySelector('toc');
-		}
 
 		if (toc) {
 			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
