@@ -27,7 +27,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	renderSelectors: {
-		injectionSource: '.terms'
+		shelfEl: '.terms'
 	},
 
 
@@ -56,14 +56,14 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 
 	injectMatchTerms: function(){
-		var s = this.injectionSource,
+		var s = this.shelfEl,
 			el, ownerMain;
 		if(this.questionSet){
 			return;
 		}
 		ownerMain = this.up('assessment-question');
 		el = ownerMain.getInsertionEl();
-		this.injectionSource.appendTo(el);
+		this.shelfEl.appendTo(el);
 		//ownerMain.updateLayout();
 
 		this.setupDragging();
@@ -143,7 +143,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		};
 
 		z = this.dragZones = [];
-		this.injectionSource.select('.target.drag').each(function(e) {
+		this.shelfEl.select('.target.drag').each(function(e) {
 			z.push( new Ext.dd.DragZone(e, cfg) );
 		});
 	},
@@ -170,7 +170,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		function resetTerm(e) {
 			var toReset = e.getTarget('.target.drag');
 			if (toReset) {
-				moveTerm(toReset, me.injectionSource);
+				moveTerm(toReset, me.shelfEl);
 			}
 		}
 
@@ -212,7 +212,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 					}
 
 					if (n && !Ext.isTextNode(n)) {
-						me.injectionSource.appendChild(n);
+						me.shelfEl.appendChild(n);
 					}
 
 					moveTerm(data.sourceEl,t);
@@ -228,12 +228,12 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 			};
 
 
-		this.mon(this.injectionSource.select('.target.drag .reset'), 'click', resetTerm);
+		this.mon(this.shelfEl.select('.target.drag .reset'), 'click', resetTerm);
 
 
 		this.dropZones = [
 			new Ext.dd.DropZone(this.inputBox, Ext.apply(dropOnAnswer,common)),
-			new Ext.dd.DropZone(this.injectionSource, Ext.apply(dropOnShelf,common))
+			new Ext.dd.DropZone(this.shelfEl, Ext.apply(dropOnShelf,common))
 		];
 	},
 	//</editor-fold>
