@@ -96,7 +96,7 @@ Ext.define('NextThought.controller.Store', {
 
 	onSessionReady: function() {
 		var store = this.getPurchasableStore();
-		store.on('load', this.maybeAddPurchasables, this);
+		store.on('load', 'maybeAddPurchasables', this);
 		store.proxy.url = $AppConfig.service.getPurchasableItemURL();
 		Library.on('loaded', function() {
 			store.load();
@@ -112,14 +112,32 @@ Ext.define('NextThought.controller.Store', {
 			return;
 		}
 
-		var view = this.getLibraryView();
+		var view = this.getLibraryView(),
+			store = this.getPurchasableStore(),
+			preview = new NextThought.store.Purchasable();
 
-		if (view && !view.down('purchasable-collection')) {
+		preview.loadRecords(store.getRange());
+		store.filter(function(r) { return !!r.raw.preview; });
+		preview.filter(function(r) { return !r.raw.preview; });
+		this.previewStore = preview;
+
+		if (store.getCount() && view && !view.down('purchasable-collection')) {
+
 			view.add({
 				ui: 'library-collection',
 				xtype: 'purchasable-collection',
 				store: this.getPurchasableStore(),
 				name: getString('Available for Purchase')
+			});
+		}
+
+		if (preview.getCount() && view && !view.down('purchasable-collection[preview]')) {
+			view.add({
+				ui: 'library-collection',
+				xtype: 'purchasable-collection',
+				store: preview,
+				name: getString('Available for Review'),
+				preview: true
 			});
 		}
 
@@ -129,7 +147,8 @@ Ext.define('NextThought.controller.Store', {
 		//that if a purchasable item has not been activated, and we find
 		//entries in the library that match the purchasables items list,
 		//those things are samples. Set a sample property as such
-		this.getPurchasableStore().each(this.updateLibraryWithPurchasable, this);
+		store.each(this.updateLibraryWithPurchasable, this);
+		preview.each(this.updateLibraryWithPurchasable, this);
 	},
 
 
@@ -153,7 +172,9 @@ Ext.define('NextThought.controller.Store', {
 			function(newP) {
 				//p should be the instance of the record out of the store
 				//but just in case look for it in the store and merge into that
-				var fromStore = this.getPurchasableStore().getById(p.getId());
+				var fromStore = this.getPurchasableStore().getById(p.getId()) || this.previewStore.getById(p.getId());
+
+
 				if (fromStore && newP.isPurchasable) {
 					fromStore.set(newP.getData());
 					this.updateLibraryWithPurchasable(fromStore);
@@ -322,6 +343,7 @@ Ext.define('NextThought.controller.Store', {
 
 	},
 
+
 	toggleEnrollmentStatus: function(rec, callback) {
 		var url = rec.getLink('enroll') || rec.getLink('unenroll'),
 			req = {
@@ -336,7 +358,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollmentConfirmation: function(view,course) {
+	showEnrollmentConfirmation: function(view, course) {
 		var me = this,
 			win = me.getEnrollmentWindow();
 
@@ -363,7 +385,7 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollmentComplete: function(view,course) {
+	showEnrollmentComplete: function(view, course) {
 		var me = this,
 			win = this.getEnrollmentWindow();
 
@@ -422,6 +444,7 @@ Ext.define('NextThought.controller.Store', {
 			callback: callback
 		});
 	},
+
 
 	/**
 	 *
@@ -511,6 +534,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 	},
 
+
 	/**
 	 * Called to generate a stripe payment token from purchase information
 	 *
@@ -591,6 +615,7 @@ Ext.define('NextThought.controller.Store', {
 			this.safelyUnmaskWindow(win);
 		}
 	},
+
 
 	/**
 	 * Make the purchase for purhcasable using tokenObject
@@ -815,6 +840,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 		return true;
 	},
+
 
 	forceCloseWindow: function(cmp, w) {
 		var win = w || this.getPurchaseWindow() || this.getEnrollmentWindow();
