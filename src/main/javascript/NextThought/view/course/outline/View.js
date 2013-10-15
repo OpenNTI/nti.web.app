@@ -44,7 +44,7 @@ Ext.define('NextThought.view.course.outline.View', {
 			this.fromClick = true;
 		},
 		beforeselect: function(s, r) {
-			var pass = r.get('type') !== 'unit',
+			var pass = r && r.get('type') !== 'unit',
 				store = s.getStore(),
 				last = s.lastSelected || store.first(), next;
 
@@ -137,6 +137,10 @@ Ext.define('NextThought.view.course.outline.View', {
 			r = store.findRecord('type', 'lesson', 0, false, false, true);
 		}
 
-		this.getSelectionModel().select(r);
+		if (r) {
+			this.getSelectionModel().select(r);
+		} else {
+			this.getSelectionModel().deselectAll();
+		}
 	}
 });
