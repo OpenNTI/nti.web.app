@@ -313,7 +313,7 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		this.tabs = pageInfo.isPartOfCourse();
-		if (this.tabs && !Ext.query('course units', l.toc).length) {
+		if (this.tabs && !Ext.query('course unit', l.toc).length) {
 			this.tabs = ['course-info'];
 		}
 
