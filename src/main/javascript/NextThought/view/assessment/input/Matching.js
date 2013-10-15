@@ -1,4 +1,17 @@
-Ext.define('NextThought.view.assessment.input.Matching',{
+Ext.define('NextThought.view.assessment.input.Matching', function() {
+
+	function asInt(e, i){
+		return e && parseInt(e.getAttribute(i), 10);
+	}
+
+	function toMap(ar, attr) {
+		var m = {};
+		Ext.each(ar,function(e){ m[e.getAttribute(attr)] = e; });
+		return m;
+	}
+
+	return {
+
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-matchingpart-v3',
 
@@ -250,10 +263,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	getValue: function() {
 		var val = {};
 
-		function int(e,i){ return e && parseInt(e.getAttribute(i),10); }
-
 		this.el.select('.choice').each(function(e) {
-			val[int(e,'data-target')] = int(e.down('.term'),'data-match');
+			val[asInt(e,'data-target')] = asInt(e.down('.term'),'data-match');
 		});
 
 		return val;
@@ -264,17 +275,8 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 		var q = '.term',
 			terms = this.shelfEl.query(q).concat(this.inputBox.query(q));
 
-
-		function int(e,i) { return e && parseInt(e.getAttribute(i),10); }
-
-		function toMap(ar,attr) {
-			var m = {};
-			Ext.each(ar,function(e){ m[e.getAttribute(attr)] = e; });
-			return m;
-		}
-
 		function s(bucket) {
-			var key = int(bucket, 'data-target'),
+			var key = asInt(bucket, 'data-target'),
 				t = terms[value[key]];
 
 			bucket = Ext.getDom(bucket.down('.dropzone'));
@@ -297,20 +299,19 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 	mark: function() {
 		var s = this.part.get('solutions')[0],
-			c = s.get('value'), i = 0, me = this,
+			c = s.get('value'), me = this,
 			values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels'));
 
-		function int(e,i){ return e && parseInt(e.getAttribute(i),10); }
-
 		function m(e) {
-			var key = int(e,'data-target'),
-				value = int(Ext.fly(e).down('.term'),'data-match'),
-				cls = (key === i && value === c[i]) ? 'correct' : 'incorrect';
+			var key = asInt(e,'data-target'),
+				value = asInt(Ext.fly(e).down('.term'),'data-match'),
+
+				cls = (value === c[key]) ? 'correct' : 'incorrect';
+
 			e.down('.dropzone').addCls('graded');
 			e.addCls(cls);
-			console.log('marking:', key, i, value, c[i], cls);
-			i++;
+			console.log('marking key:', key, 'val:', value, '=?=', c[key], cls);
 		}
 
 		this.getEl().select('.choice').removeCls('correct incorrect').each(m);
@@ -369,6 +370,7 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	//</editor-fold>
 
 
+	};
 }, function(){
 	if (isFeature('v3matching')) {
 		this.addXtype('question-input-matchingpart');
