@@ -140,23 +140,20 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 
 	markCorrect: function() {
-		var me = this;
-
 		//NOTE: The dragZoneEl has a display property of 'table' which allows its child elements to flex the box.
 		// Since marking a question alters the dom, we want to only set the width to 100% only after we've updated the layout.
 		// Otherwise, it will force its child elements to be each have a width of 50%, which alters the flex layout. --Pacifique M.
 		this.dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
-		me.dragzoneEl.setStyle({'width': '100%'});
+		this.dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
 
 	markIncorrect: function() {
-		var me = this;
 		this.dragzoneEl.setStyle({'width': undefined});
 		this.callParent();
-		me.dragzoneEl.setStyle({'width': '100%'});
+		this.dragzoneEl.setStyle({'width': '100%'});
 		this.mark();
 	},
 
