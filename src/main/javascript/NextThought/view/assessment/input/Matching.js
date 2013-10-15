@@ -315,10 +315,10 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 
 		this.getEl().select('.choice').removeCls('correct incorrect').each(m);
 
-//		Ext.defer(function() {
-//			me.updateLayout();
-//			me.syncElementHeight();
-//		}, 1);
+		Ext.defer(function() {
+			me.updateLayout();
+			me.syncElementHeight();
+		}, 1);
 	},
 
 
@@ -361,7 +361,9 @@ Ext.define('NextThought.view.assessment.input.Matching',{
 	},
 
 
-	getSolutionContent: function(part) {},
+	getSolutionContent: function(part) {
+		return '';
+	},
 
 
 	//</editor-fold>
