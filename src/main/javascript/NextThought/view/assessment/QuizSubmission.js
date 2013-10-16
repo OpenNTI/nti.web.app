@@ -164,7 +164,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	resetBasedOnButtonClick: function(e) {
 		//If we are in a submitted state we want to reset things
 		if (this.maybeDoReset(true)) {
-			this.reader.scrollTo(0);
+			this.reader.getScroll().to(0);
 		}
 
 		if (e) {
