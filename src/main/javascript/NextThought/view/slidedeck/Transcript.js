@@ -380,6 +380,23 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
+	highlightAtTime: function(seconds){
+		var cmp = this.down('video-transcript'),
+			cEl = cmp.el && cmp.el.down('.current'),
+			scrollingEl = this.el.getScrollingEl(),
+			tEl = cmp && cmp.getElementAtTime && cmp.getElementAtTime(seconds);
+		//if we have an element for that time and its not the time we just highlighted
+		if(tEl && this.currentTime !== seconds){
+			if(cEl){
+				cEl.removeCls('current');
+			}
+
+			tEl.addCls('current');
+			this.currentTime = seconds;
+		}
+	},
+
+
 	scrollToStartingTime: function(seconds) {
 		var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
 

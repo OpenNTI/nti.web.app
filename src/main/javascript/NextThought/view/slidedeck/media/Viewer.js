@@ -224,7 +224,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this
 		});
+
 		this.on('destroy', 'destroy', this.videoplayer);
+
+		if(isFeature("transcript-follow-video")){
+			this.mon(this.videoplayer, 'media-heart-beat', 'actOnMediaHeartBeat', this);
+		}
 
 		if (this.record) {
 			range = this.record.get('applicableRange') || {};
@@ -254,6 +259,17 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 	},
 	//</editor-fold>
+
+	actOnMediaHeartBeat: function(){
+		var transcriptCmp = this.down('slidedeck-transcript'),
+			state = this.videoplayer.queryPlayer(),
+			time = state && state.time,
+			data = time && time.data;
+		
+		if(!Ext.isEmpty(data)){
+			transcriptCmp.highlightAtTime(data[0]);
+		}
+	},
 
 
 	animateIn: function() {

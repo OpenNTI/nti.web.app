@@ -1303,7 +1303,7 @@ $experimental-support-for-svg: true;
 			&:first-child{
 				padding-left: 0;
 			}
-			&.active, &:active, &:hover{
+			&.active, &.current, &:active, &:hover{
 				background: #313233;
 				border-radius: 3px;
                 color: $tertiary-grey;
