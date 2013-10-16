@@ -492,6 +492,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 				reader = new FileReader();
 				reader.onload = function(evt) {
 					me.setImage(evt.target.result);
+					reader.free();
 				};
 				reader.readAsDataURL(file);
 				return false;
@@ -518,6 +519,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 			reader.onload = function(event) {
 				//http://code.google.com/p/jsjpegmeta/source/browse/jpegmeta.js
 				me.setImage(event.target.result);
+				reader.free();
 			};
 			reader.readAsDataURL(file);
 		}

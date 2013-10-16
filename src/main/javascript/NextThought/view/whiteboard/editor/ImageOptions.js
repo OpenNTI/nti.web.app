@@ -136,7 +136,10 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 
 		if (window.FileReader) {
 			reader = new FileReader();
-			reader.onload = function(event) { me.insertImage(event.target.result); };
+			reader.onload = function(event) {
+				me.insertImage(event.target.result);
+				reader.free();
+			};
 			reader.readAsDataURL(file);
 		}
 	},
@@ -152,7 +155,10 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 			if (type.match(/image\/.*/i)) {
 				file = clipboardData.items[i].getAsFile();
 				reader = new FileReader();
-				reader.onload = function(evt) { me.insertImage(evt.target.result); };
+				reader.onload = function(evt) {
+					me.insertImage(evt.target.result);
+					reader.free();
+				};
 				reader.readAsDataURL(file);
 				return false;
 			}
