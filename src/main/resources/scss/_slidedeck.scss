@@ -786,10 +786,16 @@ $experimental-support-for-svg: true;
 
 	&.ready {
 		@include animate(FullScreenSlideInRight);
+		.x-gecko &{
+			animation: none;
+		}
 	}
 
 	&.closing {
 		@include animate(FullScreenSlideOutRight);
+		.x-gecko &{
+			animation: none;
+		}
 	}
 
 	.header{
