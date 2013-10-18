@@ -176,7 +176,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			preventBringToFront: true,
 			listeners: {
 				'deactivated-editor': 'destroy',
-				'no-title-content': function() {return false;},//require title
+				'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
 				grew: function() {
 					if (Ext.is.iPad) {
 						return;

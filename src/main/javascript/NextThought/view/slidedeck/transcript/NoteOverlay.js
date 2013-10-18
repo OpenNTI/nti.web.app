@@ -71,7 +71,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 					me.fireEvent('editorActivated');
 					me.reader.suspendMoveEvents = true;
 				},
-				'no-title-content': function() {return false;},//require title
+				'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
 				grew: function() {
 					var h = this.getHeight(),
 						b = h + this.getY(),
