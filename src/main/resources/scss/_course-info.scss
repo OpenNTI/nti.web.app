@@ -1,0 +1,76 @@
+
+.course-info-panel {
+	overflow: {
+		x: hidden;
+		y: auto; //scroll;
+	}
+}
+
+.x-component-course-info {
+	&.nav-outline {
+		overflow: hidden;
+	}
+	.outline-menu {
+		margin: 0 0 1em 0;
+	}
+}
+
+.open-course-info {
+	box-shadow: inset 0 1px 0 0 #f1f1f1;
+	background: #fff;
+	padding: 10px 18px 20px;
+	color: $secondary-grey;
+	font: normal 300 0.85em/2em $font;
+
+	.heading {
+		color: $tertiary-grey;
+		text-transform: uppercase;
+		font: { size: 0.7em; weight: 600; }
+	}
+
+	.foot {
+		margin: 0 -18px -20px;
+		padding: 0 18px;
+		position: relative;
+		box-shadow: inset 0 1px 0 0 #f1f1f1;
+		background: #fafafa;
+		line-height: 3.5em;
+
+		.registered {
+			color: $primary-green;
+			font-weight: 500;
+			padding-left: 30px;
+			@include icon('green_check',$top: 1em);
+		}
+
+		.edit {
+			cursor: pointer;
+			color: $primary-blue;
+			position: absolute;
+			right: 1em;
+			top: 0;
+		}
+	}
+
+	ul {
+		list-style: none;
+		margin: 0.1em 0 1.5em;
+		padding: 0;
+
+		li {
+			font-weight: 600;
+			&:before {
+				display: inline-block;
+				margin: 0 0.25em 0 0;
+				content: '\00B7';
+				font-size: 1.4em;
+				line-height: 0.5em;
+				vertical-align: middle;
+			}
+
+			&.red {
+				color: $text-red;
+			}
+		}
+	}
+}
