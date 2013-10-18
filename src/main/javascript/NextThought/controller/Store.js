@@ -117,26 +117,26 @@ Ext.define('NextThought.controller.Store', {
 			preview = new NextThought.store.Purchasable();
 
 		preview.loadRecords(store.getRange());
-		store.filter(function(r) { return !!r.raw.preview; });
-		preview.filter(function(r) { return !r.raw.preview; });
+		store.filter(function(r) { debugger; return !!r.raw.Preview; });
+		preview.filter(function(r) { return !r.raw.Preview; });
 		this.previewStore = preview;
 
-		if (store.getCount() && view && !view.down('purchasable-collection')) {
+		if (preview.getCount() && view && !view.down('purchasable-collection')) {
 
-			view.add({
-				ui: 'library-collection',
-				xtype: 'purchasable-collection',
-				store: this.getPurchasableStore(),
-				name: getString('Available for Purchase')
-			});
-		}
-
-		if (preview.getCount() && view && !view.down('purchasable-collection[preview]')) {
 			view.add({
 				ui: 'library-collection',
 				xtype: 'purchasable-collection',
 				store: preview,
-				name: getString('Available for Review'),
+				name: getString('Available for Purchase')
+			});
+		}
+
+		if (store.getCount() && view && !view.down('purchasable-collection[preview]')) {
+			view.add({
+				ui: 'library-collection',
+				xtype: 'purchasable-collection',
+				store: this.getPurchasableStore(),
+				name: getString('Coming Soon'),
 				preview: true
 			});
 		}
