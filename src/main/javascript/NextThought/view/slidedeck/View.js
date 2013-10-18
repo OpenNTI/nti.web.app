@@ -270,5 +270,6 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		this.identity = Ext.widget({xtype: 'identity', renderTo: this.getEl(), floatParent: this});
 		this.on('destroy', 'destroy', this.identity);
+		this.down('slidedeck-transcript').maybeLoadData();
 	}
 });
