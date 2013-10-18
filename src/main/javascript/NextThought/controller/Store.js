@@ -117,7 +117,7 @@ Ext.define('NextThought.controller.Store', {
 			preview = new NextThought.store.Purchasable();
 
 		preview.loadRecords(store.getRange());
-		store.filter(function(r) { debugger; return !!r.raw.Preview; });
+		store.filter(function(r) { return !!r.raw.Preview; });
 		preview.filter(function(r) { return !r.raw.Preview; });
 		this.previewStore = preview;
 
