@@ -123,23 +123,31 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.callParent(arguments);
 
-		transcript = this.add({
-			xtype: 'slidedeck-transcript',
-			transcript: this.transcript,
-			record: this.record,
-			scrollToId: this.scrollToId,
-			videoPlaylist: [this.video],
-			xhooks: {
-				getScrollTarget: function() {
-					return this.ownerCt.getTargetEl().dom;
+		if(this.transcript){
+			transcript = this.add({
+				xtype: 'slidedeck-transcript',
+				transcript: this.transcript,
+				record: this.record,
+				scrollToId: this.scrollToId,
+				videoPlaylist: [this.video],
+				xhooks: {
+					getScrollTarget: function() {
+						return this.ownerCt.getTargetEl().dom;
+					}
+				},
+				listeners: {
+					'presentation-parts-ready': function() {me.fireEvent('media-viewer-ready', me);}
 				}
-			},
-			listeners: {
-				'presentation-parts-ready': function() {me.fireEvent('media-viewer-ready', me);}
-			}
-		});
+			});
 
-		transcript.mon(this, 'animation-end', 'onAnimationEnd');
+			transcript.mon(this, 'animation-end', 'onAnimationEnd');
+			this.mon(transcript, {
+				'will-show-annotation': 'willShowAnnotation',
+				'will-hide-annotation': 'willHideAnnotation'
+			});
+		}else{
+			this.noTranscript = true;
+		}
 
 		if (!Ext.isEmpty(this.startAtMillis)) {
 			this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
@@ -152,11 +160,6 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}else{
 			this.on('afterrender', Ext.bind(me.fireEvent, me, ['animation-end']), null, {single: true, buffered: 1000});
 		}
-
-		this.mon(this.down('slidedeck-transcript'), {
-			'will-show-annotation': 'willShowAnnotation',
-			'will-hide-annotation': 'willHideAnnotation'
-		});
 
 		keyMap = new Ext.util.KeyMap({
 			target: document,
@@ -190,7 +193,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
     }
 
 		//TODO: redo this. better.
-		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, video: me.video, floatParent: me});
+		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, video: me.video, floatParent: me, noTranscript: me.noTranscript});
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
 		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video});
 
@@ -200,7 +203,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		me.on('exit-viewer', 'exitViewer', me);
 		me.on('destroy', cleanup, me);
 
-		me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
+		if(this.noTranscript){
+			me.switchVideoViewer('full-video');
+		}else{
+			me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
+		}
+
 		me.activeVideoPlayerType = 'video-focus';
 
 		me.mon(me.gridView, {
@@ -271,7 +279,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			time = state && state.time,
 			data = time && time.data;
 		
-		if(!Ext.isEmpty(data)){
+		if(!Ext.isEmpty(data) && transcriptCmp && transcriptCmp.highlightAtTime){
 			transcriptCmp.highlightAtTime(data[0]);
 		}
 	},
@@ -370,7 +378,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// FIXME: This feels wrong, but I don't know if we can resize the video player once it's been created.
 		// For now, naively destroy the current videoPlayer and add a new one with the desired dimensions.
 		// TODO: We may also need to pass about the video in case it was currently playing.
-		this.videoplayer.destroy();
+		if(this.videoplayer){ this.videoplayer.destroy(); }
 		this.activeVideoPlayerType = type;
 		this.addVideoPlayer(width, left);
 		dim.setClasses(this.el, this);

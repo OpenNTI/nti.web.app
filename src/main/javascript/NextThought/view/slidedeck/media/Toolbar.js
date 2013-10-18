@@ -30,7 +30,7 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		cls: 'right', cn: [
 			{cls: 'video-picker', cn: [
 				{cls: 'grid-view'},
-				{cls: 'selected-mv-type video-focus', html: 'split video'}
+				{cls: 'selected-mv-type hasTranscript video-focus', html: 'split video'}
 			]}
 		]
 	}]), {
@@ -76,6 +76,18 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 			sectionNumber = null;//this.video && this.video.get('section'); //this isn't what 'section' means.
 
 		this.renderData = Ext.apply(this.renderData || {}, { type: t, title: title, description: description, sectionNumber: sectionNumber });
+	},
+
+	
+	afterRender: function(){
+		this.callParent(arguments);
+
+		if(this.noTranscript){
+			this.pickerEl.removeCls('hasTranscript');
+			this.pickerEl.removeCls(this.currentType).addCls('full-video');
+			this.pickerEl.update('Full Video');
+			this.showVideoPlayerPicker = Ext.emptyFn;
+		}
 	},
 
 

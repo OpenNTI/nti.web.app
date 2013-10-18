@@ -919,28 +919,32 @@ $experimental-support-for-svg: true;
 						width: 215px;
 						height: 75px;
 						font: 600 normal 12px $font;
-						cursor: pointer;
 						padding-left: 65px;
 						color: #595959;
 						text-transform: uppercase;
 						padding-top: 30px;
 
-						&::before{
-							content: '';
-							overflow: hidden;
-							position: absolute;
-							top: 35px;
-							left: auto;
-							right: 15px;
-							background: $icons no-repeat;
-							@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
-						}
-
-						&:active, &:hover{
-							color: #ababab;
+						
+						&.hasTranscript{
+							cursor: pointer;
 
 							&::before{
-								@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
+								content: '';
+								overflow: hidden;
+								position: absolute;
+								top: 35px;
+								left: auto;
+								right: 15px;
+								background: $icons no-repeat;
+								@include sprite($icons,'arrow-course-dropdown',$dimensions: true);
+							}
+
+							&:active, &:hover{
+								color: #ababab;
+
+								&::before{
+									@include sprite($icons,'arrow-course-dropdown-light',$dimensions: true);
+								}
 							}
 						}
 
@@ -983,9 +987,11 @@ $experimental-support-for-svg: true;
 								@include sprite($icons,'mv-full-view',$dimensions: true);
 							}
 
-							&:hover, &:active {
-								&::after{
-									@include sprite($icons,'mv-full-view_active',$dimensions: true);
+							&.hasTranscript{
+								&:hover, &:active {
+									&::after{
+										@include sprite($icons,'mv-full-view_active',$dimensions: true);
+									}
 								}
 							}
 						}
