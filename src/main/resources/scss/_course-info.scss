@@ -1,3 +1,77 @@
+#course-info {
+	&.info-only {
+		margin: -105px 0 0 0;
+
+		& > .x-container {
+			margin-top: 105px;
+		}
+	}
+}
+
+.course-info-header-bar {
+	position: absolute;
+	top: 25px;
+	left: 0;
+	right: 0;
+
+	& > div {
+		position: absolute;
+		padding: 10px 15px;
+		background: rgba(0,0,0,0.2);
+		height: 61px;
+		color: #fff;
+		font: {
+			size: 1.4em;
+			weight: 300;
+		}
+	}
+
+	.col-left {
+		left: 0;
+		width: 255px;
+		.label {
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			font: { size: 0.45em; weight: 600; }
+		}
+	}
+
+	.col-right {
+		left: 260px;
+		right: 0;
+		line-height: 40px;
+	}
+
+	.registered {
+		padding-left: 50px;
+
+		.edit {
+			font-size: 0.65em;
+			color: $primary-blue;
+			cursor: pointer;
+			font-weight: 300;
+			margin: 0 1em;
+		}
+	}
+
+	a.enroll {
+		position: absolute;
+		display: block;
+		background: $primary-green;
+		color: #fff;
+		right: 10px;
+		top: 11px;
+		padding: 0 1.5em 0 2.5em;
+		line-height: 40px;
+		font: {
+			style: italic;
+			weight: 500;
+			size: 0.65em;
+		}
+		white-space: nowrap;
+		text-decoration: none !important;
+	}
+}
 
 .course-info-panel {
 	overflow: {
@@ -214,6 +288,7 @@
 			position: absolute;
 			right: 1em;
 			top: 0;
+			z-index: 2;
 		}
 	}
 

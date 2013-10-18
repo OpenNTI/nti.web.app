@@ -19,6 +19,10 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 		] }
 	]),
 
+	renderSelectors: {
+		editLink: '.edit'
+	},
+
 	beforeRender: function(){
 
 		this.renderData = Ext.apply(this.renderData||{},{
@@ -29,9 +33,22 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 			'registered': getString('course-info.open-course-widget.registered')
 		});
 
+		this.on({
+			editLink: {
+				click: {
+					fn: 'showEnrollWindow',
+					scope: this
+				}
+			}
+		});
+
 		return this.callParent(arguments);
-	}
+	},
 
 	//</editor-fold>
+
+	showEnrollWindow: function() {
+		console.log(this.info);
+	}
 });
 

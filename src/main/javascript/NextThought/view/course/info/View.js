@@ -18,6 +18,8 @@ Ext.define('NextThought.view.course.info.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+		//we set this up to listen to a node that will not scroll...
+		// so that when this view is activated it will reset the view.
 		this.initCustomScrollOn('content');
 	},
 
@@ -30,9 +32,20 @@ Ext.define('NextThought.view.course.info.View', {
 		function update(info) {
 			me.hasInfo = !!info;
 			me.currentCourseInfoNtiid = Ext.isString(info) ? info : (info && info.ntiid);
+
+			if (info) {
+				info.locationInfo = l;
+			}
+
+			me[me.infoOnly?'addCls':'removeCls']('info-only');
+			me.navigation.margin = (me.infoOnly? '105':'0')+' 5 5 0';
+
 			me.body.setContent(info);
 			me.navigation.setContent(info);
 		}
+
+
+		delete me.infoOnly;
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc && l.toc.querySelector('toc');
@@ -42,7 +55,7 @@ Ext.define('NextThought.view.course.info.View', {
 
 		if (info) {
 			update();//clear the current view while we load.
-			this.parseNode(info, update);
+			me.parseNode(info, course, update);
 			return;
 		}
 
@@ -51,8 +64,9 @@ Ext.define('NextThought.view.course.info.View', {
 	},
 
 
-	parseNode: function(infoNode, callback){
+	parseNode: function(infoNode, courseNode, callback){
 		this.hasInfo = !!infoNode;
+		this.infoOnly = !courseNode.querySelector('unit');
 
 		Ext.callback(callback,this,[{
 			"ntiid": "tag:nextthought.com,2011-10:OU-HTML-SOC1113_GenericCourse.course_info",

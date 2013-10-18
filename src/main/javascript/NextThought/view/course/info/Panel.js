@@ -35,10 +35,15 @@ Ext.define('NextThought.view.course.info.Panel',{
 		}
 
 		if (!Ext.isObject(content)) {
-			console.log('bad info');
 			return;
 		}
 
+		if(this.up('course-info').infoOnly){
+			toAdd.push({
+				xtype: 'course-info-not-started',
+				info: content
+			});
+		}
 
 		toAdd.push({
 			xtype: 'course-info-title',
