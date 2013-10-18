@@ -31,3 +31,5 @@ NTIStrings['course-info.open-course-widget.message'] = 'Get complete access to i
 NTIStrings['course-info.open-course-widget.free-to-anyone'] = 'Free to anyone, anywhere.';
 NTIStrings['course-info.open-course-widget.not-for-credit'] = 'Not for credit.';
 NTIStrings['course-info.open-course-widget.registered'] = 'You are registered.';
+NTIStrings['course-info.description-widget.for-no-credit'] = '(No Credit)';
+NTIStrings['course-info.description-widget.open-enrolled'] = 'You\'re registered for the open course.';

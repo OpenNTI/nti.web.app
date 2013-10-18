@@ -1,9 +1,13 @@
 Ext.define('NextThought.view.course.info.Panel',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-panel',
-	cls: 'course-info-panel make-white scrollable',
+	cls: 'course-info-panel scrollable',
 	ui: 'course',
 	layout: 'auto',
+
+	requires: [
+		'NextThought.view.course.info.parts.*'
+	],
 
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
@@ -12,12 +16,14 @@ Ext.define('NextThought.view.course.info.Panel',{
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+//		this.initCustomScrollOn('content');
 	},
 
 
 	setContent: function(content){
 		this.removeAll(true);
+
+		var toAdd = [];
 
 		if (Ext.isString(content)) {
 			$AppConfig.service.getPageInfo(
@@ -34,9 +40,22 @@ Ext.define('NextThought.view.course.info.Panel',{
 		}
 
 
+		toAdd.push({
+			xtype: 'course-info-title',
+			title: content.title,
+			videoUrl: content.video,
+			width: 764//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
+		},{
+			xtype: 'course-info-description',
+			info: content
+		});
+
+
+		this.add(toAdd);
 	},
 
 
+	//<editor-fold desc="Fallback Code">
 	isCurrent: function(ntiid){
 		var ci = this.up('course-info');
 		return ci && ci.currentCourseInfoNtiid === ntiid;
@@ -94,5 +113,6 @@ Ext.define('NextThought.view.course.info.Panel',{
 
 		this.fillInPage(r.responseText);
 	}
+	//</editor-fold>
 
 });

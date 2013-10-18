@@ -46,6 +46,9 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 
 
 	buildStore: function() {
+		var i = this.info && this.info.instructors,
+			plural = (i && i.length > 1) ? 's' : '';
+
 		return this.menuStore || (this.menuStore = new Ext.data.Store({
 			fields: [
 				{ name: 'hash', type: 'string' },
@@ -53,7 +56,7 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 			],
 			data: [
 				{ hash: 'top', label: 'About' },
-				{ hash: 'course-info-instructors', label: 'Course Instructors' },
+				{ hash: 'course-info-instructors', label: 'Course Instructor'+plural },
 				{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
 				{ hash: 'course-info-support', label: 'Tech Support' }
 			]

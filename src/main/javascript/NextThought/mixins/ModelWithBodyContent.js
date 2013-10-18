@@ -100,52 +100,19 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
 
 	renderVideoComponent: function(node, owner) {
-		//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
-		function parseYoutubeIdOut(url) {
-			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
-					match = url.match(regExp);
-			if (match && match[2].length === 11) {
-				return match[2];
-			}
-			return null;
-		}
 
-		function parseKalturaInformation(url) {
-			var kalturaRegex = /kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
-					match = url.match(kalturaRegex);
-
-			return match ? match[1] + ':' + match[2] : null;
-		}
 
 		var p, width = node.getAttribute('data-width'),
-				url = node.getAttribute('data-url'),
-				type = node.getAttribute('data-type'),
-				item = NextThought.model.PlaylistItem.create({mediaId: guidGenerator()}), source,
-				youtubeId = parseYoutubeIdOut(url),
-				kalturaSource = parseKalturaInformation(url);
+			url = node.getAttribute('data-url'),
+			type = node.getAttribute('data-type');
 
-		if (type === 'kaltura' && kalturaSource) {
-			source = {
-				service: 'kaltura',
-				source: kalturaSource
-			};
-		}
-		else {
-			source = {
-				service: youtubeId ? 'youtube' : 'html5',
-				source: [youtubeId || url]
-			};
-		}
-
-
-		item.set('sources', [source]);
 		p = Ext.widget({
-						   xtype: 'content-video',
-						   playlist: [item],
-						   renderTo: node,
-						   playerWidth: width,
-						   floatParent: owner
-					   });
+			xtype: 'content-video',
+			url: url,
+			renderTo: node,
+			playerWidth: width,
+			floatParent: owner
+		});
 
 		return p;
 	},

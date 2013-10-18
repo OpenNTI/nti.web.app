@@ -80,6 +80,49 @@ Ext.define('NextThought.model.PlaylistItem', {
 			frag.appendChild(dom.cloneNode(true));
 
 			return this.create(o);
+		},
+
+
+		fromURL: function(url){
+
+			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
+			function parseYoutubeIdOut(url) {
+				var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&\?]*).*/,
+						match = url.match(regExp);
+				if (match && match[2].length === 11) {
+					return match[2];
+				}
+				return null;
+			}
+
+			function parseKalturaInformation(url) {
+				var kalturaRegex = /^kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
+						match = url.match(kalturaRegex);
+
+				return match ? match[1] + ':' + match[2] : null;
+			}
+
+			var source,
+				youtubeId = parseYoutubeIdOut(url);
+
+			if (/^kaltura:/i.test(url)) {
+				kalturaSource = parseKalturaInformation(url);
+				if (!kalturaSource) {
+					console.error('Kaltura video specified but did not resolve.', url);
+				}
+				source = {
+					service: 'kaltura',
+					source: kalturaSource
+				};
+			}
+			else {
+				source = {
+					service: youtubeId ? 'youtube' : 'html5',
+					source: [youtubeId || url]
+				};
+			}
+
+			return this.create({mediaId: guidGenerator(), sources:[source]});
 		}
 	},
 

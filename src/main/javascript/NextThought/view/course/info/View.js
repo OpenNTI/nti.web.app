@@ -58,7 +58,7 @@ Ext.define('NextThought.view.course.info.View', {
 			"ntiid": "tag:nextthought.com,2011-10:OU-HTML-SOC1113_GenericCourse.course_info",
 			"id": "ENGR 1510-001",
 			"school": "Civil Engineering",
-			"video": "url",
+			"video": "kaltura://1500101/0_4ol5o04l/",
 			"title": "Introduction to Water",
 			"credit": [
 			{

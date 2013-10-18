@@ -75,7 +75,22 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
+	statics: {
+
+		urlToPlaylist: function(url) {
+			var item = NextThought.model.PlaylistItem.fromURL(url);
+			return item && [item];
+		}
+	},
+
+
 	constructor: function(config) {
+
+		if (!Ext.isEmpty(config.url)){
+			config.playlist = config.playlist || this.self.urlToPlaylist(config.url);
+			delete config.url;
+		}
+
 		this.playerWidth = config.width || config.playerWidth || this.playerWidth;
 		Ext.apply(config, {
 			width: this.playerWidth,

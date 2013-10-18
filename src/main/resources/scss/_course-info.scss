@@ -11,7 +11,93 @@
 		overflow: hidden;
 	}
 	.outline-menu {
-		margin: 0 0 1em 0;
+		margin: 0 0 0.5em 0;
+	}
+
+	&.title-box {
+		background: #000;
+		position: relative;
+		min-height: 1.75em;
+		font: normal 700 2em/normal "Open Sans Condensed" $font;
+
+		.title {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 0 0.625em;
+			text-transform: uppercase;
+			color: #fff;
+			line-height: 1.75em;
+			background: #000;
+		}
+	}
+
+	&.description-fields {
+		background: #fff;
+		padding: 1.5em;
+		color: $secondary-grey;
+		font: normal 400 0.85em/1.95em $font;
+
+		.body {
+			margin: 0 0 4em;
+		}
+
+		.row {
+			overflow: hidden;
+			position: relative;
+			border: 0 solid #f1f1f1;
+			border-top-width: 1px;
+			padding: 0.75em 0 1.5em;
+
+			&:first-child {
+				border-top-width: 0;
+			}
+
+			.cell {
+				display: inline-block;
+				width: 50%;
+				margin: 0;
+				vertical-align: top;
+
+				&.cell1third {
+					width: 33%;
+				}
+
+				&.cell2thirds {
+					white-space: nowrap;
+					width: 67%;
+				}
+			}
+
+
+
+			.label {
+				color: $tertiary-grey;
+				text-transform: uppercase;
+				font: { size: 0.7em; weight: 600; }
+			}
+			.value {
+				font:{size:1.2em; weight: 300;}
+
+				.enroll-for-credit {
+					font: {weight: 600;}
+					a {
+						color: $primary-blue;
+						text-decoration: none;
+					}
+				}
+
+				.open {
+					font: {
+						style: italic;
+					}
+					.red {
+						color: $text-red;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -20,7 +106,7 @@
 	background: #fff;
 	padding: 10px 18px 20px;
 	color: $secondary-grey;
-	font: normal 300 0.85em/2em $font;
+	font: normal 300 0.85em/1.95em $font;
 
 	.heading {
 		color: $tertiary-grey;
@@ -54,7 +140,7 @@
 
 	ul {
 		list-style: none;
-		margin: 0.1em 0 1.5em;
+		margin: 0.5em 0 1.5em;
 		padding: 0;
 
 		li {
