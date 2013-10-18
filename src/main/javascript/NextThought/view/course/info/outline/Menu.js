@@ -39,9 +39,9 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 		this.bindStore(this.buildStore());
 		this.getSelectionModel().select(0);
 		this.on({
-				select: function(s, r) {
-				}
-			});
+			scope: this,
+			select: 'scrollTo'
+		});
 	},
 
 
@@ -57,10 +57,34 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 			data: [
 				{ hash: 'top', label: 'About' },
 				{ hash: 'course-info-instructors', label: 'Course Instructor'+plural },
-				{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
+				//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
 				{ hash: 'course-info-support', label: 'Tech Support' }
 			]
 		}));
+	},
+
+
+	scrollTo: function(selModel, record) {
+		//This is going to be very dirty so that we can just get it done.
+		var hash = record.get('hash'),
+			ci = this.up('course-info'),
+			scrollingThing = ci.down('course-info-panel').getEl(),
+			scrollReference = ci.down('course-info-panel').child().getEl(),
+			scrollTarget = ci.down(hash),
+			scrollTargetY;
+
+		if(hash === 'top') {
+			scrollingThing.scrollTo('top',0,true);
+			return;
+		}
+
+		if(!scrollTarget) {
+			selModel.deselect(record);
+			return;
+		}
+
+		scrollTargetY = scrollTarget.getEl().getOffsetsTo(scrollReference)[1];
+		scrollingThing.scrollTo('top',scrollTargetY,true);
 	}
 
 });

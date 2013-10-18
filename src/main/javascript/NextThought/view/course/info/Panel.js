@@ -52,6 +52,8 @@ Ext.define('NextThought.view.course.info.Panel',{
 			xtype: 'course-info-instructors',
 			info: content
 		},{
+			xtype: 'course-info-support'
+		},{
 			xtype: 'box',
 			ui: 'course-info',
 			cls: 'gutter'

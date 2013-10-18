@@ -31,5 +31,7 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 
 		return this.callParent(arguments);
 	}
+
+	//</editor-fold>
 });
 
