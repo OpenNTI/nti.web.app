@@ -1,11 +1,12 @@
 #course-info {
 	&.info-only {
-		margin: -105px 0 0 0;
+		margin: -105px 0 0 0 !important;
 
 		& > .x-container {
-			margin-top: 105px;
+			margin-top: 105px !important;
 		}
 	}
+
 }
 
 .course-info-header-bar {
