@@ -7,9 +7,20 @@
 }
 
 .x-component-course-info {
+	&.gutter {
+		height: 10em;
+	}
+
 	&.nav-outline {
 		overflow: hidden;
 	}
+
+	.label {
+		color: $tertiary-grey;
+		text-transform: uppercase;
+		font: { size: 0.7em; weight: 600; }
+	}
+
 	.outline-menu {
 		margin: 0 0 0.5em 0;
 	}
@@ -36,7 +47,7 @@
 	&.description-fields {
 		background: #fff;
 		padding: 1.5em;
-		color: $secondary-grey;
+		color: $primary-grey;
 		font: normal 400 0.85em/1.95em $font;
 
 		.body {
@@ -71,12 +82,6 @@
 			}
 
 
-
-			.label {
-				color: $tertiary-grey;
-				text-transform: uppercase;
-				font: { size: 0.7em; weight: 600; }
-			}
 			.value {
 				font:{size:1.2em; weight: 300;}
 
@@ -97,6 +102,52 @@
 					}
 				}
 			}
+		}
+	}
+}
+
+.course-info-instructors {
+	margin: 5px 0 0 0;
+}
+
+.course-info-instructors {
+	background: #fff;
+	color: $tertiary-grey;
+	font: normal 400 0.85em/1.95em $font;
+
+	.instructor {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.name {
+		font: {
+			weight: 300;
+			size: 2em;
+		}
+		color: $primary-grey;
+		position: relative;
+		top: -0.1em;
+	}
+
+	.photo {
+		float: left;
+		background: {
+			color: $primary-grey;
+			size: cover;
+			position: center center;
+			repeat: no-repeat;
+		}
+		width: 160px;
+		height: 160px;
+	}
+
+	.wrap {
+		margin: 0 10px 0 170px;
+		padding: 15px 5px;
+
+		.label {
+
 		}
 	}
 }
