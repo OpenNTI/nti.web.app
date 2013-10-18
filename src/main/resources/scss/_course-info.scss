@@ -151,8 +151,16 @@
 				}
 
 				&.cell2thirds {
-					white-space: nowrap;
 					width: 67%;
+
+					.value {
+						span {
+							white-space: nowrap;
+								&+span {
+								margin-left: 1em;
+							}
+						}
+					}
 				}
 			}
 

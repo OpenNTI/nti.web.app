@@ -49,7 +49,10 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 					]  },
 					{ cls: 'cell cell2thirds', cn: [
 						{ cls: 'label', html: 'Day &amp; Time'},
-						{ cls: 'value', html: '{days} {times}' }
+						{ cls: 'value', cn:[
+							{ tag: 'span', html: '{days}'},
+							{ tag: 'span', html: '{times}'}
+						] }
 					]  }
 				] }
 			]}
