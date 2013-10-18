@@ -115,7 +115,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	//<editor-fold desc="Init">
 	initComponent: function() {
-		var me = this, keyMap;
+		var me = this, keyMap, transcript;
     this.on('no-presentation-parts', function() {
 			me.videoOnly = true;
 			me.fireEvent('media-viewer-ready', me);
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.callParent(arguments);
 
-		this.add({
+		transcript = this.add({
 			xtype: 'slidedeck-transcript',
 			transcript: this.transcript,
 			record: this.record,
@@ -139,13 +139,18 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			}
 		});
 
-    if (!Ext.isEmpty(this.startAtMillis)) {
-      this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
-    }
+		transcript.mon(this, 'animation-end', 'onAnimationEnd');
+
+		if (!Ext.isEmpty(this.startAtMillis)) {
+			this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
+		}
+
 		this.on('media-viewer-ready', 'adjustOnResize');
 		if (!Ext.getBody().hasCls('media-viewer-open')) {
 			Ext.getBody().mask('Loading...');
 			this.animateIn();//will listen to afterRender
+		}else{
+			this.on('afterrender', Ext.bind(me.fireEvent, me, ['animation-end']), null, {single: true, buffered: 1000});
 		}
 
 		this.mon(this.down('slidedeck-transcript'), {
@@ -273,6 +278,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	animateIn: function() {
+		var me = this;
 		if (!this.rendered) {
 			this.on('afterrender', 'animateIn', this, {buffer: 300});
 			return;
@@ -282,6 +288,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.addCls('ready');
 		this.el.setStyle('visibility', 'visible');
 		Ext.getBody().unmask();
+		//TODO use the animationend event for the browsers that support it
+		Ext.defer(this.fireEvent, 1100, this, ['animation-end']);
 	},
 
 

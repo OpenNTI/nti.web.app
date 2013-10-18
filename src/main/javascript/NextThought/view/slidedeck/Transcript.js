@@ -266,7 +266,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.setupNoteOverlay();
 		this.el.unselectable();
 		this.addMask();
-		this.maybeLoadData();
+		//this.maybeLoadData();
 		this.mon(this.el, {
 			scope: this,
 			'mousedown': 'mayBeHideAnnotationView'
@@ -306,6 +306,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	removeMask: function() {
 		this.getMaskTarget().unmask();
 		this.isMasked = false;
+	},
+
+	
+	onAnimationEnd: function(){
+		this.maybeLoadData();
 	},
 
 
