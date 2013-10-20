@@ -45,6 +45,12 @@ Ext.define('NextThought.view.course.info.parts.NotStarted', {
 
 
 	showEnrollWindow: function() {
-		console.log(this.info);
+		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid);
+		if(p){
+			this.fireEvent('show-purchasable', this, p);
+		}
+		else{
+			console.error('No purchasable found for ', this.info);
+		}
 	}
 });
