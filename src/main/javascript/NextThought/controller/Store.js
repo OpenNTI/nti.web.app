@@ -108,18 +108,19 @@ Ext.define('NextThought.controller.Store', {
 	//items that have not yet been purchased?
 	maybeAddPurchasables: function() {
 
-		if (!this.getPurchasableStore().getCount()) {
+		if (!(this.getPurchasableStore().snapshot ? this.getPurchasableStore().snapshot : this.getPurchasableStore()).getCount()) {
 			return;
 		}
 
 		var view = this.getLibraryView(),
 			store = this.getPurchasableStore(),
-			preview = new NextThought.store.Purchasable();
+			preview = this.previewStore || new NextThought.store.Purchasable();
 
-		preview.loadRecords(store.getRange());
+		preview.loadRecords((store.snapshot ? store.snapshot : store).getRange());
+		this.previewStore = preview;
+
 		store.filter(function(r) { return !!r.raw.Preview; });
 		preview.filter(function(r) { return !r.raw.Preview; });
-		this.previewStore = preview;
 
 		if (preview.getCount() && view && !view.down('purchasable-collection')) {
 
@@ -135,7 +136,7 @@ Ext.define('NextThought.controller.Store', {
 			view.add({
 				ui: 'library-collection',
 				xtype: 'purchasable-collection',
-				store: this.getPurchasableStore(),
+				store: store,
 				name: getString('Coming Soon'),
 				preview: true
 			});
