@@ -30,7 +30,9 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 	closeWithoutWarn: true,
 
 	onConfirm: function() {
+		var win = this.up('window') || {};
 		this.fireEvent('close', this);
+		Ext.callback(win.callback, win);
 	},
 
 

@@ -48,9 +48,16 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 	//</editor-fold>
 
 	showEnrollWindow: function() {
-		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid);
+		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid),
+			unenroll = p && p.getLink('unenroll'),
+			me = this;
 		if(p){
-			this.fireEvent('show-purchasable', this, p);
+			this.fireEvent('show-purchasable', this, p, function(){
+				if(unenroll){
+					console.log('Purchasable called back. To the library we go');
+					me.fireEvent('go-to-library', me);
+				}
+			});
 		}
 		else{
 			console.error('No purchasable found for ', this.info);

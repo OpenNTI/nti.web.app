@@ -41,16 +41,8 @@ Ext.define('NextThought.view.course.info.parts.NotStarted', {
 		this.on('destroy',function(){
 			Ext.destroy(el);
 		})
-	},
-
-
-	showEnrollWindow: function() {
-		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid);
-		if(p){
-			this.fireEvent('show-purchasable', this, p);
-		}
-		else{
-			console.error('No purchasable found for ', this.info);
-		}
 	}
+
+}, function() {
+	this.borrow(NextThought.view.course.info.outline.OpenCourseInfo, ['showEnrollWindow']);
 });

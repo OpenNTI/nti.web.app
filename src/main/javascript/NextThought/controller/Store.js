@@ -200,9 +200,9 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showPurchaseWindow: function(sender, purchasable) {
+	showPurchaseWindow: function(sender, purchasable, callback) {
 		if (purchasable instanceof this.getCourseModel()) {
-			this.showEnrollment(purchasable);
+			this.showEnrollment(purchasable, callback);
 			return;
 		}
 		this.showPurchasable(purchasable);
@@ -230,13 +230,13 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	showEnrollment: function(course) {
+	showEnrollment: function(course, callback) {
 		var win = this.getEnrollmentWindow();
 		if (win) {
 			console.error('Enrollment already in progress.  How did you manage this', win);
 			return null;
 		}
-		return this.getView('course.enrollment.Window').create({record: course});
+		return this.getView('course.enrollment.Window').create({record: course, callback: callback});
 	},
 
 
