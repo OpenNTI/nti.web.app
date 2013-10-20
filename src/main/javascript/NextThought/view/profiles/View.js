@@ -36,8 +36,10 @@ Ext.define('NextThought.view.profiles.View', {
 
 		console.debug('Setting user in profile:', user);
 		me.setUser(state.profile || {}, function(panel) {
+			var name = (panel && panel.displayName) || user;
+				name = (panel && panel.user && panel.user.get('displayName')) || name;
 			console.debug('fire finish');
-			me.setTitle('Profile: ' + ((panel && panel.displayName) || user));
+			me.setTitle('Profile: ' + name);
 			me.fireEvent('finished-restore');
 		});
 	},
