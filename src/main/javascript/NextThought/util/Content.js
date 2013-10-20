@@ -425,11 +425,17 @@ Ext.define('NextThought.util.Content', {
 
 		var prefix = getPrefix(ntiid),
 			purchasableStore = Ext.getStore('Purchasable'),
+			purchasableStore = purchasableStore.snapshot || purchasableStore,
 			purchasable, index;
 
 		if (prefix) {
 			index = purchasableStore.findBy(fn);
-			purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
+			if(!Ext.isObject(index)){
+				purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
+			}
+			else{
+				purchasable = index;
+			}
 		}
 		console.log('purchasable: ', purchasable);
 
