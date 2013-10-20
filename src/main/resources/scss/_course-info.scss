@@ -59,6 +59,7 @@
 	a.enroll {
 		@include icon('enroll', $position: absolute, $top: 10px, $left: 10px);
 		display: block;
+		z-index: 10;
 		background: $primary-green;
 		color: #fff;
 		right: 10px;
