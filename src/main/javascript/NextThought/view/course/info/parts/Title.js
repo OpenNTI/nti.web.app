@@ -7,11 +7,19 @@ Ext.define('NextThought.view.course.info.parts.Title',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'video'},
+		{cls:'curtain'},
 		{cls:'title', html: '{title}'}
 	]),
 
 	renderSelectors: {
-		videoEl: '.video'
+		videoEl: '.video',
+		curtainEl: '.curtain'
+	},
+
+	listeners: {
+		curtainEl: {
+			click: 'curtainClicked'
+		}
 	},
 
 	beforeRender: function() {
@@ -27,19 +35,32 @@ Ext.define('NextThought.view.course.info.parts.Title',{
 		this.callParent(arguments);
 
 		if(!Ext.isEmpty(this.videoUrl)){
-			this.on('destroy','destroy',
-					Ext.widget({
-						xtype: 'content-video',
-						url: this.videoUrl,
-						playerWidth: this.getWidth(),
-						renderTo: this.videoEl,
-						floatParent: this,
-						listeners: {
-							beforeRender: function(){
-								me.addCls('has-video');
-							}
-						}
-					}));
+			this.video = Ext.widget({
+				xtype: 'content-video',
+				url: this.videoUrl,
+				playerWidth: this.getWidth(),
+				renderTo: this.videoEl,
+				floatParent: this
+			});
+			this.mon(this.video, {
+				'beforeRender': {
+					fn: function(){
+						me.addCls('has-video');
+					},
+					single: true
+				}
+			});
+			this.on('destroy','destroy', this.video);
+		}
+	},
+
+	curtainClicked: function(e){
+		if (e && e.shiftKey && this.player.canOpenExternally()) {
+			this.video.openExternally();
+		}
+		else {
+			this.addCls('playing');
+			this.video.resumePlayback();
 		}
 	}
 });
