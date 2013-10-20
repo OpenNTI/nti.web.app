@@ -2,6 +2,8 @@ Ext.define('NextThought.view.course.info.parts.NotStarted', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-not-started',
 
+	requires: ['NextThought.view.course.info.outline.OpenCourseInfo'],
+
 	ui: 'course-info',
 
 	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar', cn: [
