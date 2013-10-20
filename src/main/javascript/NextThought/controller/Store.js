@@ -82,7 +82,8 @@ Ext.define('NextThought.controller.Store', {
 				},
 
 				'*': {
-					'show-purchasable': 'showPurchaseWindow'
+					'show-purchasable': 'showPurchaseWindow',
+					'unauthorized-navigation': 'maybeShowPurchasableForContent'
 				}
 			},
 			'controller': {
