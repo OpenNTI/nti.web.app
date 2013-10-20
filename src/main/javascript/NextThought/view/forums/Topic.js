@@ -25,6 +25,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	cls: 'topic-post list scrollable',
 	defaultType: 'forums-topic-comment',
 	layout: 'auto',
+	commentIdPrefix: 'topic-comment',
 	componentLayout: 'natural',
 	scrollParentCls: '.forums-view',
 
@@ -575,7 +576,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	fetchNextPage: function() {
-		var s = this.store, max;
+		var s = this.store, max, me = this;
 
 		if (!s.hasOwnProperty('data')) {
 			return;
@@ -590,11 +591,14 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	addComments: function(store, records) {
+		var prefix = this.commentIdPrefix;
 		if (!Ext.isEmpty(records)) {
 			//Umm it renders sorted ASC but we pass DESC
 			records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 			this.add(Ext.Array.map(records, function(r) {
-				return {record: r};
+				var guid = IdCache.getComponentId(r, null, prefix);
+
+				return {record: r, id: guid};
 			}));
 		}
 	},
@@ -621,7 +625,14 @@ Ext.define('NextThought.view.forums.Topic', {
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 
 		Ext.each(records, function(item, index) {
-			me.insert(index, {record: item});
+			var guid = IdCache.getComponentId(item, null, me.commentIdPrefix);
+
+			if(me.getComponent(guid)){
+				//We might want to update the item, instead of just dropping it.
+				console.log("Record already exists.");
+			}else{
+				me.insert(index, {record: item, id: guid});
+			}
 		});
 		//	this.add(Ext.Array.map(records, function (r) {
 		//		return {record: r};
