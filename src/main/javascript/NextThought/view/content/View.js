@@ -299,8 +299,11 @@ Ext.define('NextThought.view.content.View', {
 
 	onNavigationCanceled: function(ntiid, alreadyThere, fromHistory) {
 		if (!alreadyThere || fromHistory) { return; }
-		this.setActiveTab('course-book');
-		this.pushState({activeTab: 'course-book'});
+
+		var tab = Ext.isArray(this.tabs) ? 'course-info' : 'course-book';
+
+		this.setActiveTab(tab);
+		this.pushState({activeTab: tab});
 	},
 
 
