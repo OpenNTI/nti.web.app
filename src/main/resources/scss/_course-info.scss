@@ -108,6 +108,10 @@
 		min-height: 1.75em;
 		font: normal 700 2em/normal "Open Sans Condensed" $font;
 
+		.video > * {
+			margin: 0 auto;
+		}
+
 		.title {
 			position: absolute;
 			bottom: 0;
@@ -121,11 +125,15 @@
 		}
 
 		.curtain{
-			position: absolute;
 			top: 0;
 			bottom: 0;
 			left: 0;
 			right: 0;
+			@include icon('play',$position: absolute, $top: 50%, $left: 50%);
+			&::after {
+				margin-left: -22px;
+				margin-top: -21px;
+			}
 		}
 
 		&.playing{

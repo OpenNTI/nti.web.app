@@ -48,8 +48,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 		toAdd.push({
 			xtype: 'course-info-title',
 			title: content.title,
-			videoUrl: content.video,
-			width: 764//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
+			videoUrl: content.video
 		},{
 			xtype: 'course-info-description',
 			info: content

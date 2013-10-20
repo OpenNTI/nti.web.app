@@ -38,7 +38,8 @@ Ext.define('NextThought.view.course.info.parts.Title',{
 			this.video = Ext.widget({
 				xtype: 'content-video',
 				url: this.videoUrl,
-				playerWidth: this.getWidth(),
+				width: 764,
+				playerWidth: 764,//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
 				renderTo: this.videoEl,
 				floatParent: this
 			});
