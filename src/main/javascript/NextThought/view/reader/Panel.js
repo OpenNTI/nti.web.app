@@ -16,7 +16,6 @@ Ext.define('NextThought.view.reader.Panel', {
 		plain: true
 	},
 
-
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -67,8 +66,14 @@ Ext.define('NextThought.view.reader.Panel', {
 			'filter-by-line': 'selectDiscussion'
 		});
 		this.down('annotation-view').anchorComponent = this.down('reader-content');
+
+		this.on('beforedeactivate', this.beforeDeactivate, this);
 	},
 
+	beforeDeactivate: function(){
+		var reader = this.down('reader-content');
+		return !reader || reader.getNoteOverlay().onNavigation();
+	},
 
 	selectDiscussion: function() {
 		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(

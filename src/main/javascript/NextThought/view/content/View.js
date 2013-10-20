@@ -37,7 +37,16 @@ Ext.define('NextThought.view.content.View', {
 			},{
 				id: 'main-reader-view',
 				xtype: 'reader'
-			}]
+			}],
+			listeners: {
+				'beforedeactivate': function(){
+					var active = this.layout && this.layout.activeItem;
+					if(active){
+						return active.fireEventArgs('beforedeactivate', arguments);
+					}
+					return true;
+				}
+			}
 		},{
 			title: 'Discussion',
 			id: 'course-forum',
