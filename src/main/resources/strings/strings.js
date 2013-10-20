@@ -34,7 +34,7 @@ NTIStrings['course-info.open-course-widget.registered'] = 'You are registered.';
 NTIStrings['course-info.description-widget.for-no-credit'] = '(No Credit)';
 NTIStrings['course-info.description-widget.open-enrolled'] = 'You\'re registered for the open course.';
 
-NTIStrings['course-info.course-supoprt.photo'] = 'photo';
+NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 NTIStrings['course-info.course-supoprt.phone'] = '(405) 325-HELP';
 NTIStrings['course-info.course-supoprt.link1.Label'] = 'Submit Request';
 NTIStrings['course-info.course-supoprt.link1.URL'] = 'http://ou.edu';

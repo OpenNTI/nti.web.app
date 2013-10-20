@@ -24,7 +24,14 @@ Ext.define('NextThought.view.course.info.parts.Instructors', {
 
 	buildStore: function() {
 		var i = this.info && this.info.instructors,
-			store = new Ext.data.Store({
+			locInfo = this.info && this.info.locationInfo,
+			store;
+
+		Ext.each(i, function(o){
+			o.defaultphoto = getURL(locInfo.root + o.defaultphoto);
+		});
+
+		store = new Ext.data.Store({
 				fields: [
 					{ name: 'username', type: 'string' },
 					{ name: 'hasProfile', type: 'bool', defaultValue: false },

@@ -45,6 +45,7 @@
 
 	.registered {
 		padding-left: 50px;
+		@include icon('circle-check-white-large');
 
 		.edit {
 			font-size: 0.65em;
@@ -56,7 +57,7 @@
 	}
 
 	a.enroll {
-		position: absolute;
+		@include icon('enroll', $position: absolute, $top: 10px, $left: 10px);
 		display: block;
 		background: $primary-green;
 		color: #fff;
@@ -288,7 +289,7 @@
 			color: $primary-green;
 			font-weight: 500;
 			padding-left: 30px;
-			@include icon('green_check',$top: 1em);
+			@include icon('circle-check-green',$top: 1em);
 		}
 
 		.edit {
