@@ -32,6 +32,13 @@ Ext.define('NextThought.view.store.Collection', {
 		]
 	}),
 
+	afterRender: function(){
+		this.callParent(arguments);
+		var container = this.up('library-view-container');
+		if(container){
+			container.on('activate', this.refresh, this);
+		}
+	},
 
 	collectData: function() {
 		var rows = this.rowSpan,
@@ -129,10 +136,15 @@ Ext.define('NextThought.view.store.Collection', {
 	},
 
 
+	detectOverflow: function(){
+		console.log('Detecting overflow...');
+		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(null, null, v);},this);
+	},
+
+
 	refresh: function() {
 		this.callParent(arguments);
 
-		console.log('Detecting overflow...');
-		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(null, null, v);},this);
+		this.detectOverflow();
 	}
 });
