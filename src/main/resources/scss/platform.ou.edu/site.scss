@@ -4,7 +4,7 @@
 	//in the library view, turn this on to show the logo/message box
 	display: block;
 	margin: 30px 0 140px 0;
-	
+
 	.logo{
 		top: 10%;
 		&::after{
@@ -62,5 +62,11 @@
 					background: url(../../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
 				}
 		}
+	}
+}
+
+.x-component-purchasecomplete-panel{
+	a.enrollLink{
+		display: inline;
 	}
 }
