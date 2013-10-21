@@ -30,6 +30,7 @@ Ext.define('NextThought.view.course.info.View', {
 			toc, course, info, content;
 
 		function update(info) {
+
 			me.hasInfo = !!info;
 			me.currentCourseInfoNtiid = Ext.isString(info) ? info : (info && info.ntiid);
 
@@ -55,7 +56,10 @@ Ext.define('NextThought.view.course.info.View', {
 
 		if (info) {
 			update();//clear the current view while we load.
-			me.parseNode(info, course, l, update);
+			me.parseNode(info, course, l, update, function(){
+				var content = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
+				update(content);
+			});
 			return;
 		}
 
@@ -64,7 +68,7 @@ Ext.define('NextThought.view.course.info.View', {
 	},
 
 
-	parseNode: function(infoNode, courseNode, locInfo, callback){
+	parseNode: function(infoNode, courseNode, locInfo, callback, failure){
 		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax,
 			src = getURL(infoNode.getAttribute('src'), locInfo.root);
 
@@ -104,7 +108,7 @@ Ext.define('NextThought.view.course.info.View', {
 			scope: this,
 			success: success,
 			failure: function(){
-				Ext.callback(callback,this,[]);
+				Ext.callback(failure,this,[]);
 			}
 		});
 	}
