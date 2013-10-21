@@ -28,8 +28,8 @@ NTIStrings['course-enrollment-enroll'] = 'Get Started';
 
 NTIStrings['course-info.open-course-widget.heading'] = 'About Open Courses';
 NTIStrings['course-info.open-course-widget.message'] = 'Get complete access to interact with all course content including the lectures, course materials, quizzes, and discussions once class is in session.';
-NTIStrings['course-info.open-course-widget.free-to-anyone'] = 'Free to anyone, anywhere.';
-NTIStrings['course-info.open-course-widget.not-for-credit'] = 'Not for credit.';
+NTIStrings['course-info.open-course-widget.free-to-anyone'] = 'Free to anyone, anywhere';
+NTIStrings['course-info.open-course-widget.not-for-credit'] = 'Not for credit';
 NTIStrings['course-info.open-course-widget.registered'] = 'You are registered.';
 NTIStrings['course-info.description-widget.for-no-credit'] = '(No Credit)';
 NTIStrings['course-info.description-widget.open-enrolled'] = 'You\'re registered for the open course.';

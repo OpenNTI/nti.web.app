@@ -40,7 +40,7 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 			{ cls: 'row', cn:[
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Start Date'},
-					{ cls: 'value', html: '{startDate:date("M j, Y")}' }
+					{ cls: 'value', html: '{startDate:date("F j, Y")}' }
 				]  },
 				{ cls:'cell', cn: [
 					{ cls: 'cell cell1third', cn: [
