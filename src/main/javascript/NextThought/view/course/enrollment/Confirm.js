@@ -9,7 +9,7 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 
 	renderTpl: Ext.DomHelper.markup([
 			{ tag: 'h3', cls: 'gap', html: 'You are about to {enroll} this course.'},
-			{ html: ''},
+			{ html: '{detail}'},
 			{ cls: 'gap', cn: [
 				'Are you sure?'
 			]}
@@ -23,7 +23,8 @@ Ext.define('NextThought.view.course.enrollment.Confirm', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},{
-			enroll: this.record.getLink('unenroll') ? 'drop' : 'enroll in'
+			enroll: this.record.getLink('unenroll') ? 'drop' : 'enroll in',
+			detail: getString(this.record.getLink('unenroll') ? 'drop.detail' : 'enroll.detail')
 		});
 	},
 
