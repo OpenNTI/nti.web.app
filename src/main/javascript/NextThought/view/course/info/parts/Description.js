@@ -50,8 +50,11 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 					{ cls: 'cell cell2thirds', cn: [
 						{ cls: 'label', html: 'Day &amp; Time'},
 						{ cls: 'value', cn:[
-							{ tag: 'span', html: '{days}'},
-							{ tag: 'span', html: '{times}'}
+							{ tag:'tpl', 'if':'days', cn:[
+								{ tag: 'span', html: '{days}'},
+								{ tag: 'span', html: '{times}'}
+							]
+							},{ tag:'tpl', 'if':'!days', cn: 'Fully Online' }
 						] }
 					]  }
 				] }
@@ -65,7 +68,7 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 			s = i.schedule || {},
 			c = (i.credit || [])[0],
 			e = c.enrollment || {},
-			p = Ext.Array.pluck(i.prerequisites,'title');
+			p = Ext.Array.pluck(i.prerequisites||[],'title');
 
 		function fo(d){
 			return Ext.Date.format(d,'g:i a');
@@ -83,7 +86,7 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 			courseId: i.id,
 			title: i.title,
 			school: i.school,
-			schoolLabel: 'School', //Department
+			schoolLabel: 'School / Department', //Department
 			duration: i.duration,
 			startDate: i.startDate,
 			days: (s.days||[]).join('/'),//eww
