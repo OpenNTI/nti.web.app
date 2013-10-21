@@ -24,17 +24,22 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			currentScroll = data.targetEl.getScrollTop(),
 			delta = currentScroll < parentContainerPadding ? currentScroll : parentContainerPadding,
 			tMargin = -delta,
-			bMargin = -parentContainerPadding + delta;
+			bMargin = -parentContainerPadding + delta,
+			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) > Math.abs(bMargin);
 
 			// NOTE: If we have a reader, we don't want to show the alternate tabbar,
 			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
 			// TODO: Move this logic into a callback.
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls' : 'removeCls']('reader-in-view');
 			parentContainerEl[data.targetEl.is('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
-
-			parentContainerEl[delta > 60 ? 'addCls' : 'removeCls']('has-alt-tabbar');
-			parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
-			setReverseMargin.apply(this, [bMargin]);
+			
+			if(shouldScroll){
+				parentContainerEl[delta > 60 ? 'addCls' : 'removeCls']('has-alt-tabbar');
+				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
+				setReverseMargin.apply(this, [bMargin]);
+			}
+			
+			
 
 			// NOTE: we need to make sure the main tabbar width matches the parentEl width
 			// since we will show the main tabbar on top of it. Better way to do this?
@@ -144,12 +149,12 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			return;
 		}
 
-
 		if (parentContainerEl) {
 			mb = parentContainerEl.getPadding('t');
 			pd = data.targetEl.getPadding('b');
 			data.adjustmentEl.setStyle({marginBottom: -mb + 'px'});
 			data.targetEl.setStyle({paddingBottom: (mb + pd) + 'px'});
+			Ext.DomHelper.append(data.targetEl,{style:{height: mb + 'px'}, cls:'scroll-buffer'});
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll, me);
 		me.on('activate', adjustOnScroll, me);
