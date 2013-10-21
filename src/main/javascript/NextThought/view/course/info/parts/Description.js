@@ -12,7 +12,7 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 			{ cls: 'row', cn:[
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Prerequisites' },
-					{ cls: 'value', html: 'There are no prerequisites for this course' }
+					{ cls: 'value', html: 'There are no prerequisites for this course.' }
 				] },
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Credit Hours'},
