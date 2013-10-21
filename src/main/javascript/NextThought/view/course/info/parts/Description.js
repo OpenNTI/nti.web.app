@@ -12,7 +12,7 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 			{ cls: 'row', cn:[
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Prerequisites' },
-					{ cls: 'value', html: 'There are no prerequisites for this course.' }
+					{ cls: 'value', cn: { tag:'tpl', 'for':'prerequisites', cn:{html:'{.}'}} }
 				] },
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Credit Hours'},
@@ -64,15 +64,22 @@ Ext.define('NextThought.view.course.info.parts.Description',{
 		var i = this.info || {},
 			s = i.schedule || {},
 			c = (i.credit || [])[0],
-			e = c.enrollment || {};
+			e = c.enrollment || {},
+			p = Ext.Array.pluck(i.prerequisites,'title');
 
 		function fo(d){
 			return Ext.Date.format(d,'g:i a');
 		}
 
+		if(p.join() === ''){
+			p = ['There are no prerequisites for this course.'];
+		}
+
+
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
 			description: i.description,
+			prerequisites: p,
 			courseId: i.id,
 			title: i.title,
 			school: i.school,
