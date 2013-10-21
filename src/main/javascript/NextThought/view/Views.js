@@ -118,7 +118,7 @@ Ext.define('NextThought.view.Views', {
 				ip = this.initialPadding,
 				natural = ip.left + ip.right,
 				minWidth = 1024,
-				maxWidth = 1165,
+				maxWidth = 1024,
 				d = 0,
 				lp = 0,
 				rp = 0;
