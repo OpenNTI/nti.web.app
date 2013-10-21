@@ -248,7 +248,7 @@ Ext.define('NextThought.Library', {
 	libraryLoaded: function(callback) {
 		var me = this,
 			store = this.getStore(),
-			cources = this.getCourseStore(),
+			courses = this.getCourseStore(),
 			count = this.getStore().getCount(),
 			toRemove = [];
 
@@ -276,7 +276,7 @@ Ext.define('NextThought.Library', {
 
 				if (d.getAttribute('isCourse') === 'true') {
 					o.set('isCourse', true);
-					cources.add(o);
+					courses.add(o);
 				}
 			}
 
