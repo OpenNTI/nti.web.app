@@ -157,6 +157,13 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			Ext.DomHelper.append(data.targetEl,{style:{height: mb + 'px'}, cls:'scroll-buffer'});
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll, me);
+
+		me.on('add', function(container, cmp, index){
+			debugger;
+			data.targetEl.el.down('.scroll-buffer').destroy();
+
+			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
+		});
 		me.on('activate', adjustOnScroll, me);
 		monitorCardChange(me);
 		monitorLayout.call(me);
