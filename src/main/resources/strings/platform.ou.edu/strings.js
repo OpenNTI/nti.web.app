@@ -17,3 +17,6 @@ NTIStrings['course-info.course-supoprt.link2.Label'] = 'platformhelp@ou.edu';
 NTIStrings['course-info.course-supoprt.link2.URL'] = 'mailto:platformhelp@ou.edu';
 NTIStrings['course-info.course-supoprt.link3.Label'] = 'Service Centers';
 NTIStrings['course-info.course-supoprt.link3.URL'] = 'http://www.ou.edu/content/ouit/help/personal.html';
+
+NTIStrings['enroll.detail'] = '';
+NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
