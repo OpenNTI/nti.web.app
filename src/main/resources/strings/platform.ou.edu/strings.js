@@ -20,3 +20,6 @@ NTIStrings['course-info.course-supoprt.link3.URL'] = 'http://www.ou.edu/content/
 
 NTIStrings['enroll.detail'] = '';
 NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
+
+NTIStrings['enrollment.enroll.active.description'] = '{Title} has been added to your library. This open course is already in progress so you can start participating right away. Visit My Courses to access your materials and get started now.';
+NTIStrings['enrollment.enroll.preview.description'] = 'This course has been added your library and will begin on {StartDate:date("F j, Y")}. This course is open, so you will have complete access to all of the course content, discussions, and social features.<br/><br/><b>OU Students:</b> If you are a current OU student, you can enroll in JANUX courses on <a class="enrollLink" href="http://ozone.ou.edu/" target="_blank">oZone</a> to earn credit. The corresponding OU course number is {Name}.<br/><br/>If you are not an OU student but want to enroll for credit, see about becoming a <a class="enrollLink" href="http://www.ou.edu/content/admissions/home/nondegree.html" target="_blank">Special Student</a>.';
