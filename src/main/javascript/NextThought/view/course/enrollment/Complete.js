@@ -57,13 +57,15 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 		win = this.up('window');
 		win.headerEl.select('.tab').addCls('visited locked');
 
-		//reload the store.
-		Ext.getStore('Purchasable').load();
+		win.on('close', function(){
+			//reload the store.
+			Ext.getStore('Purchasable').load();
 
-		//reload the library
-		Library.getStore().load();
-		//Refresh the user
-		$AppConfig.userObject.refresh();
+			//reload the library
+			Library.getStore().load();
+			//Refresh the user
+			$AppConfig.userObject.refresh();
+		}, this, {single: true})
 	},
 
 

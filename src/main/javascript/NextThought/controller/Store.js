@@ -382,8 +382,9 @@ Ext.define('NextThought.controller.Store', {
 			});
 			return;
 		}
-
-		me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
+		else{
+			me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
+		}
 	},
 
 
@@ -408,8 +409,11 @@ Ext.define('NextThought.controller.Store', {
 				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
 			});
 		}
+		else{
+			this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
+		}
 
-		this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
+
 	},
 
 
