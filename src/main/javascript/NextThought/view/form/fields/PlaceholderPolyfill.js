@@ -2,7 +2,7 @@ Ext.define('NextThought.view.form.fields.PlaceholderPolyfill', {
 
 	renderPlaceholder: function(inputEl) {
 		var p = 'Placeholder', t;
-		if (Ext.supports[p] || !inputEl.getAttribute('placeholder')) {return;}
+		if (Ext.supports[p] || !inputEl || !inputEl.getAttribute('placeholder')) {return;}
 
 		function handleBlur() {
 			var v = Ext.getDom(inputEl).value;
