@@ -25,7 +25,7 @@ Ext.define('NextThought.proxy.JSONP', {
 			};
 			console.log('JSONP.request completed', resp.responseText.length);
 			opts.callback.call(opts.scope || window, opts, true, resp);
-			opts.success.call(opts.scope || window, resp);
+			opts.success.call(opts.scope || window, resp, opts);
 			Ext.fly(script).remove();
 		}
 
