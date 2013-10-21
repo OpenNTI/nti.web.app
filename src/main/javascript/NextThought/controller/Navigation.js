@@ -70,12 +70,23 @@ Ext.define('NextThought.controller.Navigation', {
 
 
   setView: function(id, silent) {
-    var cmp = id && (id.isComponent ? id : Ext.getCmp(id));
+    var cmp = id && (id.isComponent ? id : Ext.getCmp(id)), reader, currentNtiid;
     if (!cmp) {
       console.warn('no view', arguments);
       console.trace();
       return false;
     }
+
+	//TODO nasty coupling here
+	reader = cmp.down('reader-content');
+	currentNtiid = reader && reader.getLocation() && reader.getLocation().NTIID;
+	if(!silent && currentNtiid && !Library.getTitle(currentNtiid)){
+		//we are being asked to switch to something which we no longer
+		//have in the library.  We may have recently have lost access to it.
+		//Maybe its a purchasable we can prompt them with
+		this.fireEvent('unauthorized-navigation', this, currentNtiid);
+		return false;
+	}
 
     return cmp.activate(silent);
   },
