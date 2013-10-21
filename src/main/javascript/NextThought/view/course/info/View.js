@@ -27,7 +27,7 @@ Ext.define('NextThought.view.course.info.View', {
 	onCourseChanged: function(pageInfo) {
 		var me = this,
 			l = ContentUtils.getLocation(pageInfo),
-			toc, course, info, content;
+			toc, course, info, content, courseInfoNtiid;
 
 		function update(info) {
 
@@ -54,17 +54,22 @@ Ext.define('NextThought.view.course.info.View', {
 			info = course && course.querySelector('info');
 		}
 
-		if (info) {
-			update();//clear the current view while we load.
+		//We have two paths here.  One path (the plain legacy course info) involves sending update
+		//the ntiid of the course info content.  The second involves loading a json object from
+		//an info node and passing the object to update.  All content will have the courseInfo attribute
+		//but only the new fancy course infos will have the info node. Look for that first
+		if(info){
+			update();
 			me.parseNode(info, course, l, update, function(){
-				var content = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
-				update(content);
+				console.warn('Course has an info node that points to non existent json', course, arguments);
 			});
 			return;
 		}
 
-		content = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
-		update(content);
+		var courseInfoNtiid = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
+		if(courseInfoNtiid){
+			update(courseInfoNtiid)
+		}
 	},
 
 
