@@ -159,7 +159,6 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		me.mon(data.targetEl, 'scroll', adjustOnScroll, me);
 
 		me.on('add', function(container, cmp, index){
-			debugger;
 			data.targetEl.el.down('.scroll-buffer').destroy();
 
 			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
