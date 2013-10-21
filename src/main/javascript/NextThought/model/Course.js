@@ -12,6 +12,7 @@ Ext.define('NextThought.model.Course', {
 		{ name: 'Currency', type: 'string', persist: false },
 		{ name: 'BulkPurchase', type: 'bool', persist: false },
 		{ name: 'Discountable', type: 'bool', persist: false },
+		{ name: 'Preview', type: 'bool', persist: false },
 		{ name: 'Provider', type: 'string', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Name', type: 'string', persist: false },
@@ -20,6 +21,7 @@ Ext.define('NextThought.model.Course', {
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
 		{ name: 'Items', type: 'auto', persist: false },
 		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
+		{ name: 'StartDate', type: 'date', persist: false, dateFormat: 'Y-m-d'},
 		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
 		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v,r) {
 			return r && r.hasHistory();

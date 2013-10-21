@@ -5,22 +5,12 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 	ui: 'purchasecomplete-panel',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'tpl', 'if': 'enroll', cn: [
-			{ tag: 'h3', cls: 'gap', html: 'Congratulations!'},
-			{ html: 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.'},
-			{ cls: 'gap', cn: [
-				{ tag: 'a', href: '#', html: 'View your content now!' }
-			]}
-		]},
-		{ tag: 'tpl', 'if': '!enroll', cn: [
-			{ tag: 'h3', cls: 'gap', html: 'Goodbye!'},
-			{ html: 'You are no longer enrolled in this course.'}
-		]}
+		{ tag: 'h3', cls: 'gap', html: '%headerHtml%'},
+		{ html: '%descriptionHtml%'}
 	]),
 
 
 	renderSelectors: {
-		linkEl: 'a[href]'
 	},
 
 
@@ -37,22 +27,27 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 
 
 	beforeRender: function() {
+		var enroll = !Ext.isEmpty(this.record.getLink('enroll')),
+			prefix = enroll ? 'enroll' : 'unenroll',
+			preview = this.record.get('Preview') ? 'preview' : 'active', tplReplacment;
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {},{
-			enroll: !Ext.isEmpty(this.record.getLink('enroll'))
-		});
+
+		tplReplacement = {
+			headerHtml: getString('enrollment.'+prefix+'.'+preview+'.header', null, true) || getString('enrollment.'+prefix+'.header'),
+			descriptionHtml: getString('enrollment.'+prefix+'.'+preview+'.description', null, true) || getString('enrollment.'+prefix+'.description')
+		};
+
+		Ext.Object.each(tplReplacement, function(key, val){
+			this.renderTpl = this.renderTpl.replace('%'+key+'%', val);
+		}, this);
+
+		this.renderData = Ext.apply(this.renderData || {}, this.record.data);
 	},
 
 
 	afterRender: function() {
 		var win;
 		this.callParent(arguments);
-
-		if (this.linkEl) {
-			//Hide it until we can do this well.
-			this.linkEl.hide();
-			this.mon(this.linkEl, 'click', 'onNavigateToNewlyEnrolledContentClicked', this);
-		}
 
 		win = this.up('window');
 		win.headerEl.select('.tab').addCls('visited locked');

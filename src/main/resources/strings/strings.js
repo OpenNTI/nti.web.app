@@ -36,3 +36,8 @@ NTIStrings['course-info.description-widget.open-enrolled'] = 'You\'re registered
 
 NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
+NTIStrings['enrollment.enroll.header'] = 'Congratulations!';
+NTIStrings['enrollment.enroll.description'] = 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.';
+NTIStrings['enrollment.unenroll.header'] = 'Goodbye!';
+NTIStrings['enrollment.unenroll.description'] = 'You are no longer enrolled in this course.';
+
