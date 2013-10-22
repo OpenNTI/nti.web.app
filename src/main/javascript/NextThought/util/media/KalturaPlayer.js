@@ -118,6 +118,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	changeMediaAttemptIntervalMillis: 100,
 	changeMediaTimeoutMillis: 1000,
 
+	neverQueue: ['getPlayerState', 'getCurrentTime'],
+
 	constructor: function(config) {
 		var me = this;
 
@@ -243,6 +245,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this[handlerName](eventData);
 	},
 
+	setCurrentState: function(s){
+		this.currentState = s;
+	},
 
 	sendMessage: function(type, name, data) {
 		var context = this.getPlayerContext();
@@ -258,7 +263,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	sendCommand: function(name, data, force) {
-		if (this.changingMediaSource && !force) {
+		var buffer = !force && !Ext.Array.contains(this.neverQueue, name);
+		if (this.changingMediaSource && buffer) {
 			console.log('Enqueing command ', name, ' because we are chaining sources and it wasnt forced');
 			this.commandQueue.push(['command', name, data]);
 			return;
@@ -270,7 +276,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	buildWrapperCode: function() {
 		var code = [],
-				me = this;
+			me = this;
 
 		function resolve(m, k) {
 			return me[k] || m;
@@ -378,7 +384,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		}, this.changeMediaTimeoutMillis);
 
 		this.currentPosition = 0;
-		this.currentState = -1;
+		this.setCurrentState(-1);
 
 		if (offset) {
 			this.seek(offset);
@@ -516,7 +522,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			delete me.blockPause;
 		}, 1000);
 		console.warn(this.id, ' kaltura fired play handler called', this.currentState, arguments);
-		this.currentState = 1;
+		this.setCurrentState(1);
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
@@ -528,10 +534,11 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			console.log(this.id, ' Initating blocked pause');
 			delete this.blockPause;
 			this.play(true);
+			this.seek(this.currentStartAt);
 			return;
 		}
 
-		this.currentState = 2;
+		this.setCurrentState(2)
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
 
@@ -542,7 +549,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 		this.deactivate();
-		this.currentState = 0;
+		this.setCurrentState(3)
 		this.fireEvent('player-event-ended', 'kaltura');
 
 		//As an optimization if we are a child of the overview-part
