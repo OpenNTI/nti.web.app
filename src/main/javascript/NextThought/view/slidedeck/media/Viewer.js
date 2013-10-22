@@ -303,10 +303,16 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	exitViewer: function() {
 		console.log('about to exit the video viewer');
+		var annotation = this.down('annotation-view');
 
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
+
+		if(annotation && annotation.destroy()){
+			annotation.destroy();
+		}
+
 		Ext.defer(this.destroy, 1100, this);
 		Ext.defer(this.fireEvent, 1100, this, ['exited', this]);
 	},
