@@ -16,6 +16,7 @@
 			overflow: hidden;
 			@include ellipse;
 			max-width: 340px;
+			vertical-align: text-bottom;
 		}
 
 		.controls {
