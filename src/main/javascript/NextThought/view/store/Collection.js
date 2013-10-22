@@ -35,8 +35,10 @@ Ext.define('NextThought.view.store.Collection', {
 	afterRender: function(){
 		this.callParent(arguments);
 		var container = this.up('library-view-container');
-		if(container){
-			container.on('activate', this.refresh, this);
+		if (container) {
+			this.mon(container, 'activate', 'refresh', this );
+		} else {
+			console.warn('no container?');
 		}
 	},
 
@@ -78,7 +80,7 @@ Ext.define('NextThought.view.store.Collection', {
 			pos, e, texts, bottom,
 			marker = 'This will need to be optimized, bute force is slow. Moving ellipsis took:';
 
-		if (!desc || !Ext.fly(desc).isVisible()) {
+		if (!desc || !Ext.fly(desc).isVisible(true)) {
 			return;
 		}
 
@@ -90,9 +92,11 @@ Ext.define('NextThought.view.store.Collection', {
 		Ext.fly(desc).setPositioning(pos);
 
 		if (desc.scrollHeight <= desc.offsetHeight) {
-			console.log('no need');
-			return;
+//			console.log('no need');
+//			return;
 		}
+
+
 
 		bottom = desc.getBoundingClientRect().bottom - parseInt(pos.right, 10);//margin
 
