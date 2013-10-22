@@ -192,6 +192,24 @@ Ext.define('NextThought.view.content.View', {
 		if (this.reader.activating) {
 			this.reader.activating();
 		}
+
+		//Make sure we still have the content we are trying to get to in the library
+		//If not maybe it's a purchasable we can show
+		//TODO: find a way to let the dataserver fail this action so we go through the
+		//normal 403 handling.  One idea could be to force a PageInfo fetch here?  That's
+		//tricky because its async
+		var location = this.reader.getLocation(),
+			contentNtiid = location.ContentNTIID,
+			title = Library.getTitle(contentNtiid);
+
+		if(contentNtiid && !title){
+			//we are being asked to switch to something which we no longer
+			//have in the library.  We may have recently have lost access to it.
+			//Maybe its a purchasable we can prompt them with
+			this.fireEvent('unauthorized-navigation', this, location.NTIID);
+			return false;
+		}
+		return true;
 	},
 
 
@@ -297,7 +315,6 @@ Ext.define('NextThought.view.content.View', {
 				return false;
 			}
 		}
-
 		if (this.reader.iframeReady) {
 			return true;
 		}
