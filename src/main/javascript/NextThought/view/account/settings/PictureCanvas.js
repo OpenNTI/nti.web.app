@@ -220,7 +220,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 		var me = this,
 			file = fileList[0],
-			form = new Ext.form.Basic(this, {}),
+			form = new Ext.form.Basic(this.ownerCt, {}),
 			fieldCacheKey = '_fields',
 			fields,
 			url = getURL($AppConfig.server.data + '@@image_to_dataurl_extjs');
