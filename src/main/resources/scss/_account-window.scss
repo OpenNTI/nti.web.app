@@ -56,14 +56,29 @@
 		}
 
 
-		.x-box-inner > div::after {
-			content: ' ';
-			position: absolute;
-			top: 50px;
-			left: 66px;
-			background: #ffffff $backdrops no-repeat;
-			@include sprite($backdrops,'choose_file',$dimensions:true);
-			z-index: 0;
+		.x-box-inner > div{
+			&::after {
+				content: ' ';
+				position: absolute;
+				top: 50px;
+				left: 66px;
+				background: #ffffff $backdrops no-repeat;
+				@include sprite($backdrops,'choose_file',$dimensions:true);
+				z-index: 0;
+			}
+
+			&.no-dd::before {
+				content: "";
+				position: absolute;
+				top: 234px;
+				left: 155px;
+				width: 132px;
+				height: 1px;
+				background: #b8b8b8;
+				display: block;
+				overflow: hidden;
+				z-index: 1;
+			}
 		}
 
 		canvas {

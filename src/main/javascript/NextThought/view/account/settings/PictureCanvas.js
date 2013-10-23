@@ -185,6 +185,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 			old.remove();
 		}
 
+		if(!window.FileReader){
+			this.el.parent().addCls('no-dd');
+		}
+
 		file.on({
 			scope: me,
 			'change': me.onFileChange,
@@ -196,7 +200,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 
 	onFileChange: function(e) {
-		if (!e.target.files || !window.FileReader) {
+		if (!window.FileReader) {
 			this.doLegacyUpload(e.target.files);
 			return;
 		}
