@@ -149,7 +149,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 
 	updateSharedWith: function(field, value) {
-		var p = SharingUtils.sharedWithToSharedInfo(value).publicToggleOn,
+		var p = value.length > 0,
 			e = this.publishStateEl;
 
 		e.update(p ? 'Public':'Private')[p ? 'removeCls' : 'addCls']('private');

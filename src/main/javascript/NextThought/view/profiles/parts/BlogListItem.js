@@ -17,7 +17,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		{ cls: 'title', html: '{title}' },
 		{ cls: 'meta', cn: [
 			{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
-			{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
+			{ tag: 'span', cls: 'state link' },
 			{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
 				{ tag: 'span', cls: 'edit link', html: 'Edit'},
 				{ tag: 'span', cls: 'delete link', html: 'Delete'}
@@ -74,7 +74,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, r.getData());
-		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
+//		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
 		r = this.renderData;
 		if (!r.headline || !r.headline.getData) {
 			console.warn('The record does not have a story field or it does not implement getData()', r);
@@ -158,16 +158,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	updateSharedWith: function(field, value) {
-		SharingUtils.getShortSharingDisplayText(value, function(str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.update(str);
-			}
-		}, this);
-		SharingUtils.getLongSharingDisplayText(value, function(str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.set({'data-qtip': str});
-			}
-		}, this);
+		var p = value.length > 0,
+			e = this.publishStateEl;
+
+		e.update(p ? 'Public':'Private')[p ? 'removeCls' : 'addCls']('private');
 	},
 
 
@@ -243,6 +237,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	markAsPublished: function(key, value) {
+		debugger;
 		var val = value ? 'public' : 'only me',
 			removeCls = value ? 'only me' : 'public';
 		this.publishStateEl.addCls(val);
