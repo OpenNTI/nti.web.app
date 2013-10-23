@@ -74,6 +74,10 @@
 //Firefox: make sure we do not outline focusable elements
 .x-gecko [tabindex] { outline: 0; }
 
+//.viewport {
+// position: fixed;
+//}
+
 .x-form-item,
 .x-form-field,
 .x-body,
