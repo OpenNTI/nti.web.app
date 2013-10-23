@@ -119,7 +119,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 
 	getMainView: function() {
-		return Ext.get('profile');
+		return this.getEl().getScrollingEl();
 	},
 
 
