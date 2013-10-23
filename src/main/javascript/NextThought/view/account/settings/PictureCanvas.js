@@ -2,6 +2,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	extend: 'Ext.Component',
 	alias: 'widget.picture-canvas',
 
+	ONE_MEGABYTE: 1048576,//in bytes
+
 	autoEl: {tag: 'canvas', width: 4, height: 3},
 
 	initComponent: function() {
@@ -195,7 +197,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 	onFileChange: function(e) {
 		if (!e.target.files || !window.FileReader) {
-			this.doLegacyUpload();
+			this.doLegacyUpload(e.target.files);
 			return;
 		}
 
@@ -203,12 +205,29 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	},
 
 
-	doLegacyUpload: function() {
+	doLegacyUpload: function(fileList) {
+		if(!fileList || fileList.length===0 || !fileList[0]){
+			alert({
+				title: getString('avatar.upload.unsupported.title','So Sorry :('),
+				msg: getString('avatar.upload.unsupported.message','Unforseen legacy browser issue.')//I don't even know who would see this in our supported browsers list. (they all support FileAPI)
+			});
+			return;
+		}
+
 		var me = this,
+			file = fileList[0],
 			form = new Ext.form.Basic(this, {}),
 			fieldCacheKey = '_fields',
 			fields,
 			url = getURL($AppConfig.server.data + '@@image_to_dataurl_extjs');
+
+		if (file.size > this.ONE_MEGABYTE) {
+			alert({
+				title: getString('avatar.legacy.upload.file.size.too.big.title','We\'re sorry, but...'),
+				msg: getString('avatar.legacy.upload.file.size.too.big.message','the file you selected is too large.')
+			});
+			return;
+		}
 
 		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
 		fields.add(this);
