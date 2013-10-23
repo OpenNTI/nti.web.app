@@ -237,7 +237,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	markAsPublished: function(key, value) {
-		debugger;
 		var val = value ? 'public' : 'only me',
 			removeCls = value ? 'only me' : 'public';
 		this.publishStateEl.addCls(val);
