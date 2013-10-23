@@ -280,7 +280,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			data = time && time.data;
 		
 		if(!Ext.isEmpty(data) && transcriptCmp && transcriptCmp.highlightAtTime){
-			transcriptCmp.highlightAtTime(data[0]);
+			//The heartbeat happens every second, so if the range for a line to be highlighted
+			//doesn't start on an exact second there is a delay with highlighting the next line.
+			//Adding half a second to the time, cuts down on the delay.
+			transcriptCmp.highlightAtTime(data[0] + 0.5);
 		}
 	},
 
