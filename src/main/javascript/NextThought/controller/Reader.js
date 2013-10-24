@@ -140,7 +140,7 @@ Ext.define('NextThought.controller.Reader', {
 		var r = this.getContentReader(),
 			loc = r.getLocation(),
 			ntiid = loc.ContentNTIID;
-		if (Ext.Array.contains(rec.get('Items'), ntiid)) {
+		if (!rec || !ntiid || Ext.Array.contains(rec.get('Items'), ntiid)) {
 			this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
 		}
