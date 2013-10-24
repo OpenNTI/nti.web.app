@@ -43,7 +43,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		this.currentNTIID = null;
 		this.currentPageInfo = null;
 		this.fireEvent('location-cleared',this.reader);
-		this.reader.setSplash();
+		this.reader.setSplash(true);
 	},
 
 

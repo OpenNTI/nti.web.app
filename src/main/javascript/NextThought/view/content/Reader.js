@@ -92,7 +92,7 @@ Ext.define('NextThought.view.content.Reader', {
 				Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this}));
 
 		this.floatingItems.add(
-				Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true}));
+				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
 	},
 
 
@@ -173,11 +173,12 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	setSplash: function() {
+	setSplash: function(hideNotFound) {
 		this.getScroll().to(0, false);
 		this.getIframe().update(false);
 		this.meta = {};
 		this.splash.dom.parentNode.appendChild(this.splash.dom);
+		this.notfound[hideNotFound?'hide':'show']();
 		this.splash.show();
 	},
 
