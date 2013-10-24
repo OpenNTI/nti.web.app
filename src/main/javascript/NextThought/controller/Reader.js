@@ -147,13 +147,18 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	setLocation: function(ntiid) {
-		var r = this.getContentReader();
+		var r = this.getContentReader(),
+			ntiidStr = Ext.isString(ntiid)? ntiid : ntiid
+					&& (ntiid.getId && ntiid.getId());
 
-		if(!Library.getTitle(ntiid)){
+		ntiidStr = ContentUtils.getLineage(ntiidStr)[0];
+
+		if(!Library.getTitle(ntiidStr)){//getTitle requires the ROOT ntiid.
+
 			//we are being asked to switch to something which we no longer
 			//have in the library.  We may have recently have lost access to it.
 			//Maybe its a purchasable we can prompt them with
-			this.fireEvent('unauthorized-navigation', this, ntiid);
+			this.fireEvent('unauthorized-navigation', this, ntiidStr);
 			return false;
 		}
 
