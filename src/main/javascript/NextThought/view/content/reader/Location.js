@@ -16,6 +16,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		var reader = this.reader;
 		reader.on('destroy', 'destroy',
 			reader.relayEvents(this, [
+				'location-cleared',
 				'beforeNavigate',
 				'beginNavigate',
 				'navigate',
@@ -28,12 +29,21 @@ Ext.define('NextThought.view.content.reader.Location', {
 		reader.fireEvent('uses-page-stores', this);
 
 		Ext.apply(reader, {
+			clearLocation: Ext.bind(this.clearLocation, this),
 			getLocation: Ext.bind(this.getLocation, this),
 			getRelated: Ext.bind(this.getRelated, this),
 			setLocation: Ext.bind(this.setLocation, this)
 		});
 
 		this.callParent(arguments);
+	},
+
+
+	clearLocation: function() {
+		this.currentNTIID = null;
+		this.currentPageInfo = null;
+		this.fireEvent('location-cleared',this.reader);
+		this.reader.setSplash();
 	},
 
 
@@ -163,10 +173,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		function success(pageInfo) {
 			if (ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)) {
-        // let's cache this on the LocationMeta, if it's not there already.
-        LocationMeta.createAndCacheMeta(rootId, pageInfo);
-      }
-      me.currentPageInfo = pageInfo;
+				// let's cache this on the LocationMeta, if it's not there already.
+				LocationMeta.createAndCacheMeta(rootId, pageInfo);
+			}
+			me.currentPageInfo = pageInfo;
 			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
 		}
@@ -184,10 +194,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 		if (ntiidOrPageInfo.isPageInfo) {
 			success(ntiidOrPageInfo);
 		}
-  //If we have the pageInfo cached, used it.
-    else if (ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)) {
-      success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
-    }
+		//If we have the pageInfo cached, used it.
+		else if (ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)) {
+			success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
+		}
 		else {
 			service.getPageInfo(ntiidOrPageInfo, success, failure, me);
 		}

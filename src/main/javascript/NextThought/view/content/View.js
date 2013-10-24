@@ -93,7 +93,9 @@ Ext.define('NextThought.view.content.View', {
 			'navigateComplete': 'onNavigateComplete',
 			'beforeNavigate': 'onBeforeNavigate',
 			'navigateAbort': 'onNavigationAborted',
-			'navigateCanceled': 'onNavigationCanceled'
+			'navigateCanceled': 'onNavigationCanceled',
+
+			'location-cleared': 'onLocationCleared'
 		});
 
 		this.mon(this.courseForum, {
@@ -321,6 +323,18 @@ Ext.define('NextThought.view.content.View', {
 
 		this.reader.ntiidOnFrameReady = ntiid;
 		return false;
+	},
+
+
+	onLocationCleared: function(){
+		this.setActiveTab('course-book');
+		this.courseBook.getLayout().setActiveItem('main-reader-view');
+		delete this.tabs;
+		delete this.backgroundUrl;
+		if (this.isVisible(true)) {
+			this.fireEvent('update-tabs', this);
+			this.updateBackground();
+		}
 	},
 
 
