@@ -83,7 +83,9 @@ Ext.define('NextThought.controller.Store', {
 
 				'*': {
 					'show-purchasable': 'showPurchaseWindow',
-					'unauthorized-navigation': 'maybeShowPurchasableForContent'
+					'unauthorized-navigation': 'maybeShowPurchasableForContent',
+					'enrollment-enrolled-complete': 'courseEnrolled',
+					'enrollment-dropped-complete': 'courseDropped'
 				}
 			},
 			'controller': {
@@ -102,6 +104,29 @@ Ext.define('NextThought.controller.Store', {
 		Library.on('loaded', function() {
 			store.load();
 		}, this, {single: true});
+	},
+
+
+	enrollmentChanged: function(){
+		//reload the store.
+		this.getPurchasableStore().load();
+
+		//reload the library
+		Library.getStore().load();
+
+		//Refresh the user
+		$AppConfig.userObject.refresh();
+	},
+
+
+	courseEnrolled: function(win, rec){
+		this.enrollmentChanged();
+	},
+
+
+	courseDropped: function(win, rec){
+		this.enrollmentChanged();
+		this.fireEvent('content-dropped',rec);
 	},
 
 

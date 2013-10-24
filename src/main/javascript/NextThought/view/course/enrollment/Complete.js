@@ -27,9 +27,12 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 
 
 	beforeRender: function() {
-		var enroll = !Ext.isEmpty(this.record.getLink('enroll')),
+		var rec = this.record,
+			enroll = !Ext.isEmpty(this.record.getLink('enroll')),
 			prefix = enroll ? 'enroll' : 'unenroll',
-			preview = this.record.get('Preview') ? 'preview' : 'active', tplReplacment;
+			preview = this.record.get('Preview') ? 'preview' : 'active',
+			tplReplacment, win;
+
 		this.callParent(arguments);
 
 		tplReplacement = {
@@ -42,25 +45,15 @@ Ext.define('NextThought.view.course.enrollment.Complete', {
 		}, this);
 
 		this.renderData = Ext.apply(this.renderData || {}, this.record.data);
-	},
-
-
-	afterRender: function() {
-		var win;
-		this.callParent(arguments);
 
 		win = this.up('window');
 		win.headerEl.select('.tab').addCls('visited locked');
-
-		win.on('close', function(){
-			//reload the store.
-			Ext.getStore('Purchasable').load();
-
-			//reload the library
-			Library.getStore().load();
-			//Refresh the user
-			$AppConfig.userObject.refresh();
-		}, this, {single: true})
+		win.on({
+			single: true,
+			close: function(){
+				win.fireEvent(Ext.String.format('enrollment-{0}ed-complete',enroll?'enroll':'dropp'),win, rec);
+			}
+		});
 	},
 
 
