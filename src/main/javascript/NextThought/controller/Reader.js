@@ -141,6 +141,7 @@ Ext.define('NextThought.controller.Reader', {
 			loc = r.getLocation(),
 			ntiid = loc.ContentNTIID;
 		if (Ext.Array.contains(rec.get('Items'), ntiid)) {
+			this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
 		}
 	},
