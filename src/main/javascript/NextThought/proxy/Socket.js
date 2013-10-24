@@ -107,7 +107,7 @@ Ext.define('NextThought.proxy.Socket', {
 			socket.onPacket = Ext.Function.createSequence(
 				function() {
 					var o = JSON.stringify(arguments);
-					if ((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
+					if ((me.isDebug && me.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}') {
 						console.debug('socket.onPacket: args:' + o);
 					}
 				},
