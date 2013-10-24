@@ -8,7 +8,12 @@
 	.logo{
 		top: 10%;
 		&::after{
-			content: url(../../images/platform.ou.edu/ou_janux_logo.png);
+			//This file isn't publically referenced by its path on the system.
+			// The browsers will see it as "domain/resources/css/site.css" not
+			// "domain/resources/css/domain/site.css" And since CSS paths are
+			// relative to their url, "../.." would make "images" have to be
+			// unnecessarily symlinked at the root.
+			content: url(../images/platform.ou.edu/ou_janux_logo.png);
 		}
 	}
 
@@ -23,7 +28,7 @@
 
 	.branding{
 		display: block;
-		background: url(../../images/platform.ou.edu/ou_cover.png) center center no-repeat;
+		background: url(../images/platform.ou.edu/ou_cover.png) center center no-repeat;
 	}
 
 	.content {
@@ -32,7 +37,7 @@
 			position: absolute;
 			top: 0; bottom: 0; left: 0;
 			width: 10px;
-			background: url(../../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
+			background: url(../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
 		}
 		.wrap {
 			.provider {
@@ -59,7 +64,7 @@
 					position: absolute;
 					top: 0; bottom: 0; left: 0;
 					width: 10px;
-					background: url(../../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
+					background: url(../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
 				}
 		}
 	}
