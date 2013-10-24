@@ -152,7 +152,7 @@ Ext.define('NextThought.controller.Reader', {
 			ntiidStr = Ext.isString(ntiid)? ntiid : ntiid
 					&& (ntiid.getId && ntiid.getId());
 
-		ntiidStr = ContentUtils.getLineage(ntiidStr)[0];
+		ntiidStr = ContentUtils.getLineage(ntiidStr).pop();
 
 		if(!Library.getTitle(ntiidStr)){//getTitle requires the ROOT ntiid.
 
