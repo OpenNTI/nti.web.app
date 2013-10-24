@@ -139,12 +139,23 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 	track: function(rec) {
 		var s = this.getStore();
-		s.remove(rec);
-		rec.lastTracked = new Date();
-		s.add(rec);
+		try {
+			s.remove(rec);
+			rec.lastTracked = new Date();
+			s.add(rec);
+		}
+		catch(e){
+			console.warn('Dropping content tracking... an error occured:', e.stack|| e.message);
+			return;
+		}
 
 		if (s.getCount() > 5) {
-			s.remove(s.getRange(5));
+			try {
+				s.remove(s.getRange(5));
+			} catch(er) {
+				console.warn('An error occured removing the last record from this store, purging just to be safe.', er.stack || er.message);
+				s.removeAll();
+			}
 		}
 
 
