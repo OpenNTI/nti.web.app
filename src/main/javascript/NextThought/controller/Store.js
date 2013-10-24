@@ -108,11 +108,18 @@ Ext.define('NextThought.controller.Store', {
 
 
 	enrollmentChanged: function(){
-		//reload the store.
-		this.getPurchasableStore().load();
+		var purchasables = this.getPurchasableStore().load(),
+			library = Library.getStore();
+
+		library.on({
+			single: true,
+			load: function(){
+				purchasables.load();
+			}
+		});
 
 		//reload the library
-		Library.getStore().load();
+		library.load();
 
 		//Refresh the user
 		$AppConfig.userObject.refresh();
