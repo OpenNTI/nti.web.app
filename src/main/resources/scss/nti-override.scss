@@ -42,6 +42,8 @@
 
 body.x-body {margin:0;}
 #NTIContent {
+	-webkit-font-smoothing: antialiased;
+	
 	padding-bottom: 10em;
 
 	&, * {
