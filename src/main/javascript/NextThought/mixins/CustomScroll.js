@@ -33,12 +33,29 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls' : 'removeCls']('reader-in-view');
 			parentContainerEl[data.targetEl.is('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
 			
+			//If there isn't enough scrolling room to cause the alt-tabbar don't set the margins
+			//to keep the container from only going part of the way up and stopping
 			if(shouldScroll){
 				parentContainerEl[delta > 60 ? 'addCls' : 'removeCls']('has-alt-tabbar');
 				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
-				setReverseMargin.apply(this, [bMargin]);
+				console.log('Scrolling', 'margin top:'+tMargin, 'margin bottom'+ bMargin);
+
+				//If the top is 0 the container is all the way at the bottom, and we don't want to
+				//set the margins, because doing so causes the secondaryViewTarget to jump around.
+				//However if this is the first time through we want to set the margins to get them in
+				//the initial right place.
+				if(top != 0 || !this.alreadySetMargin){
+					this.alreadySetMargin = true;
+					setReverseMargin.apply(this, [bMargin]);
+				}
+			}else{
+				//Even if the container isn't going to move, we want to set the marins
+				//the first time through to get them in the initial right place.
+				if(!this.alreadySetMargin){
+					this.alreadySetMargin = true;
+					setReverseMargin.apply(this, [bMargin]);
+				}
 			}
-			
 			
 
 			// NOTE: we need to make sure the main tabbar width matches the parentEl width
@@ -73,14 +90,16 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 	}
 
 
-	function updateSideHeight(heightAdjustOffset) {
+	function updateSideHeight(heightAdjustOffset, noCache) {
 		var data = this.mixinData.customScroll, nH,
 			el = data.secondaryViewEl,
         //			cmp = data.reverseMarginCmp, f,
 			o = heightAdjustOffset || 0,
 			attr = 'custom-scroll-height-adjustment';
 
-		o = data.lastHeightAdjustOffset = o || data.lastHeightAdjustOffset || 0;
+		if(!noCache){
+			o = data.lastHeightAdjustOffset = o || data.lastHeightAdjustOffset || 0;
+		}
 
 		if (!el) { return; }
 
@@ -93,6 +112,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 		el = Ext.get(el);
 
+		//if the element has a bottom set, use it to drive the height
+		if(el.getStyle('bottom') != 'auto'){
+			updateSideBottom.call(this, el, heightAdjustOffset || 0);
+			return;
+		}
     //		if(!cmp ) {
     //			cmp = data.reverseMarginCmp = Ext.getCmp(el.id);
     //			if( cmp ) {
@@ -118,6 +142,24 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		o = {};
 		o[attr] = nH;
 		el.set(o);
+	}
+
+	function updateSideBottom(el, bMargin){
+		var data = this.mixinData.customScroll,
+			newBottom, oldBottom;
+
+		//Get the bottom that was initially set on the element in CSS
+		//and cache it so we can use it every time
+		if(data.desiredBottom){
+			oldBottom = data.desiredBottom
+		}else{
+			oldBottom = data.desiredBottom = parseInt(el.getStyle('bottom'));//getStyle('bottom') returns '5px'
+		}
+
+		newBottom = Math.abs(bMargin) + oldBottom;
+
+		el.setStyle('bottom', newBottom + 'px');
+		el.setStyle('height', 'auto'); //make sure the bottom is driving the height
 	}
 
 
@@ -167,11 +209,16 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		monitorCardChange(me);
 		monitorLayout.call(me);
 		updateCaches.call(me);
+		updateSideHeight.call(me, mb, true);
 	}
 
 
 	function monitorLayout() {
-		this.mon(this.up(), 'afterlayout', updateCaches, this);
+		this.mon(this.up(), 'afterlayout', function(){
+			//Go through adjustOnScroll like its the first time
+			delete this.alreadySetMargin;
+			adjustOnScroll.call(this);
+		}, this);
 	}
 
 
