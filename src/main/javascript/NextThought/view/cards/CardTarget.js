@@ -108,6 +108,10 @@ Ext.define('NextThought.view.cards.CardTarget', {
 				//seamless:true
 			}
 		});
+
+		this.mon(this.reader,'allow-custom-scrolling', function(){
+			return false;
+		}, this);
 	},
 
 

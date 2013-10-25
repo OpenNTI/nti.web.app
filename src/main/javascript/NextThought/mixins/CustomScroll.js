@@ -12,7 +12,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		 * we will are handling it by manipulating top and bottom margin.
 		 **/
 		try {
-			if (!this.isVisible()) {
+			//give it a chance to prevent the custom scroll after the first time through.
+			if (!this.isVisible() || (this.allowCustomScrolling && !this.allowCustomScrolling() && !this.alreadySetMargin)) {
 				return;
 			}
 

@@ -183,6 +183,11 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	allowCustomScrolling: function(){
+		return this.fireEvent('allow-custom-scrolling');
+	},
+
+
 	calculateNecessaryAnnotationOffsets: function() {
 		var cache = this.annotationOffsetsCache || {},
 				windowSizeStatics = cache.windowSizeStatics || {},
