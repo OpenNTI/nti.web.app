@@ -38,6 +38,15 @@ Ext.define('NextThought.model.User', {
 	isUser: true,
 	summaryObject: true,
 
+
+	equal: function(b){
+		if(Ext.isString(b) && this.getId() === b ){
+			return true;
+		}
+		return this.callParent(arguments);
+	},
+
+
 	getCommunities: function(excludeDFLs) {
 		var r = [], u;
 
@@ -107,10 +116,12 @@ Ext.define('NextThought.model.User', {
 		return ['#!profile/', u, subPages].join('');
 	},
 
+
 	getPresence: function() {
 		var presence = this.get('Presence');
 		return presence || NextThought.model.PresenceInfo.createFromPresenceString('Offline');
 	},
+
 
 	hasBlog: function() {
 		return Boolean(this.getLink('Blog'));
@@ -124,6 +135,7 @@ Ext.define('NextThought.model.User', {
 		   jsonData: this.getData()
 	   }, ops));
 	},
+
 
 	isUnresolved: function() {
 		return this.Unresolved === true;
@@ -157,6 +169,7 @@ Ext.define('NextThought.model.User', {
 		}
 
 	},
+
 
 	hasVisibilityField: function(field) {
 		return Boolean(this.raw && this.raw[field]);
