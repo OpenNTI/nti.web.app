@@ -13,7 +13,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		 **/
 		try {
 			//give it a chance to prevent the custom scroll after the first time through.
-			if (!this.isVisible() || (this.allowCustomScrolling && !this.allowCustomScrolling() && !this.alreadySetMargin)) {
+			if (!this.isVisible() || (this.allowCustomScrolling && !this.allowCustomScrolling() && this.alreadySetMargin)) {
 				return;
 			}
 
@@ -50,10 +50,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 					setReverseMargin.apply(this, [bMargin]);
 				}
 			}else{
-				//Even if the container isn't going to move, we want to set the marins
+				//Even if the container isn't going to move, we want to set the margins
 				//the first time through to get them in the initial right place.
 				if(!this.alreadySetMargin){
 					this.alreadySetMargin = true;
+					parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
 					setReverseMargin.apply(this, [bMargin]);
 				}
 			}
