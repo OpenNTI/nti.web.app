@@ -158,7 +158,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	pushState: function(s) {
-		history.pushState({content: s}, this.title, this.getFragment());
+		history.pushState({active: 'content', content: s}, this.title, this.getFragment());
 	},
 
 
