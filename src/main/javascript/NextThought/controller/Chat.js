@@ -492,6 +492,8 @@ Ext.define('NextThought.controller.Chat', {
 					w.down('chat-entry').focus();
 				}, 500);
 			}
+		}else{
+			alert({title: 'Error', msg: 'Unable to start your chat at this time. Please try again later.', icon: 'warning-red'});
 		}
 	},
 
