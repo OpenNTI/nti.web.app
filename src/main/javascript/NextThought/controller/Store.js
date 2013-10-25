@@ -251,7 +251,12 @@ Ext.define('NextThought.controller.Store', {
 			}
 			return true;
 		}
-		var purchasable = ContentUtils.purchasableForContentNTIID(ntiid, filter);
+		
+		if (!ntiid) {
+			console.error('No ntiid!');
+		}
+		
+		var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid, filter);
 		if (purchasable) {
 			if (purchasable instanceof this.getCourseModel()) {
 				this.showEnrollment(purchasable);
