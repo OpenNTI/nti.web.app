@@ -217,14 +217,23 @@ Ext.define('NextThought.view.Main', {
 		});
 
 		if (Ext.is.iOS) {
-      //			this.setupTablet();
+            //			this.setupTablet();
 			Ext.getDoc().swallowEvent('gesturestart', true);
 			this.lockOrientation();
 
-      //keep element under body from shrinking. Can cause the screen to go white
-      Ext.defer(function() {
-        me.el.setStyle('min-height', me.el.getHeight() + 'px');
-      },1000);
+            //keep element under body from shrinking. Can cause the screen to go white
+            Ext.defer(function() {
+                me.el.setStyle('min-height', me.el.getHeight() + 'px');
+            },1000);
+
+            //assume that after a blurred input or contentEditable div, that the
+            //keyboard is being dismissed. Make sure window is at (0,0) and not misaligned.
+            document.addEventListener('focusout', function(e) {
+                if(e.target.tagName == "INPUT" || e.target.isContentEditable){
+                    window.scrollTo(0,0);
+                }
+            });
+
 		}
 	},
 
