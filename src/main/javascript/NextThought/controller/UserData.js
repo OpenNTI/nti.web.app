@@ -166,7 +166,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onSessionReady: function() {
 		var app = this.application,
-				token = {};
+			token = {};
 
 		function finish() { app.finishInitializeTask(token); }
 
@@ -198,7 +198,7 @@ Ext.define('NextThought.controller.UserData', {
 				beforeselect: function() {this.deselectingToSelect = true;},
 				beforedeselect: function(s, r) {
 					var w = me.activeNoteWindow,
-						allow = this.deselectingToSelect && (!w || w.close());
+							allow = this.deselectingToSelect && (!w || w.close());
 
 					if (allow) {
 						delete this.deselectingToSelect;
@@ -215,12 +215,12 @@ Ext.define('NextThought.controller.UserData', {
 
 		try {
 			me.activeNoteWindow = Ext.widget({
-				 xtype: 'note-window',
-				 record: rec,
-				 reader: anchorCmp,
-				 floatParent: sel.view,
-				 listeners: {beforedestroy: deselect},
-				 xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
+				xtype: 'note-window',
+				record: rec,
+				reader: anchorCmp,
+				floatParent: sel.view,
+				listeners: {beforedestroy: deselect},
+				xhooks: anchorCmp.getViewerHooks && anchorCmp.getViewerHooks()
 			});
 			me.activeNoteWindow.show();
 		}
@@ -281,10 +281,10 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		var me = this,
-				item = change.get('Item'),
-				cid = change.getItemValue('ContainerId'),
-				type = (change.get('ChangeType') || '').toLowerCase(),//ensure lowercase
-				fn;
+			item = change.get('Item'),
+			cid = change.getItemValue('ContainerId'),
+			type = (change.get('ChangeType') || '').toLowerCase(),//ensure lowercase
+			fn;
 
 		//only call this on first call
 		if (!reCalled) {
@@ -325,8 +325,8 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingCreatedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
-				actedOn = false,
-				recordForStore = item;
+			actedOn = false,
+			recordForStore = item;
 
 		this.applyToStoresThatWantItem(function(id, store) {
 			if (store) {
@@ -359,7 +359,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingDeletedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
-				actedOn = false;
+			actedOn = false;
 
 		this.applyToStoresThatWantItem(function(id, store) {
 			var r;
@@ -385,7 +385,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	incomingModifiedChange: function(change, item, meta) {
 		var cid = item.get('ContainerId'),
-				actedOn = false;
+			actedOn = false;
 
 		this.applyToStoresThatWantItem(function(id, store) {
 			var r;
@@ -435,14 +435,14 @@ Ext.define('NextThought.controller.UserData', {
 
 	setupPageStoreDelegates: function(cmp) {
 		var delegate,
-				delegates = {
-					clearPageStore: Ext.bind(this.clearPageStore, this),
-					addPageStore: Ext.bind(this.addPageStore, this),
-					getPageStore: Ext.bind(this.getPageStore, this),
-					hasPageStore: Ext.bind(this.hasPageStore, this),
-					applyToStores: Ext.bind(this.applyToStores, this),
-					applyToStoresThatWantItem: Ext.bind(this.applyToStoresThatWantItem, this)
-				};
+			delegates = {
+				clearPageStore: Ext.bind(this.clearPageStore, this),
+				addPageStore: Ext.bind(this.addPageStore, this),
+				getPageStore: Ext.bind(this.getPageStore, this),
+				hasPageStore: Ext.bind(this.hasPageStore, this),
+				applyToStores: Ext.bind(this.applyToStores, this),
+				applyToStoresThatWantItem: Ext.bind(this.applyToStoresThatWantItem, this)
+			};
 
 		for (delegate in delegates) {
 			if (delegates.hasOwnProperty(delegate)) {
@@ -522,10 +522,10 @@ Ext.define('NextThought.controller.UserData', {
 			this.flatPageStore.bind(store);
 		}
 		store.on({
-					 scope: this,
-					 load: StoreUtils.fillInUsers,
-					 add: StoreUtils.fillInUsers
-				 });
+			scope: this,
+			load: StoreUtils.fillInUsers,
+			add: StoreUtils.fillInUsers
+		});
 
 		/**
 		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
@@ -549,7 +549,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		store.on('cleanup', 'destroy',
-				 events.relayEvents(store, ['add', 'bulkremove', 'remove']));
+				events.relayEvents(store, ['add', 'bulkremove', 'remove']));
 	},
 
 
@@ -574,8 +574,8 @@ Ext.define('NextThought.controller.UserData', {
 
 	getStoreForLine: function(line) {
 		var stores = this.currentPageStores,
-				root = stores.root || {},
-				key, s, potentials = [];
+			root = stores.root || {},
+			key, s, potentials = [];
 
 
 		function testStore(s) {
@@ -664,7 +664,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onAnnotationViewMayNeedPaging: function(view) {
 		var me = this,
-				s = view.getStore();
+			s = view.getStore();
 
 		function maybeFirePagedIn(store, records) {
 			if (records.length) {
@@ -697,11 +697,11 @@ Ext.define('NextThought.controller.UserData', {
 		if (line) {
 			s.filteredLine = line;
 			s.addFilter({
-							id: 'lineFilter',
-							filterFn: function(r) {
-								return r.get('line') === line;
-							}
-						});
+				id: 'lineFilter',
+				filterFn: function(r) {
+					return r.get('line') === line;
+				}
+			});
 		}
 
 		s.sort();
@@ -719,7 +719,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onAnnotationsFilter: function(cmp) {
 		var listParams = FilterManager.getServerListParams(),
-				filter = ['TopLevel'];
+			filter = ['TopLevel'];
 
 		if (listParams.filter) {
 			filter.push(listParams.filter);
@@ -774,10 +774,10 @@ Ext.define('NextThought.controller.UserData', {
 
 	onAnnotationsLoad: function(cmp, containerId, containers) {
 		var Store = NextThought.store.PageItem,
-				rel = Globals.USER_GENERATED_DATA,
-				pi = cmp.getLocation().pageInfo,
-				ps = Store.make(pi.getLink(rel), containerId, true),
-				me = this;
+			rel = Globals.USER_GENERATED_DATA,
+			pi = cmp.getLocation().pageInfo,
+			ps = Store.make(pi.getLink(rel), containerId, true),
+			me = this;
 
 		containers = containers || [];
 
@@ -804,19 +804,19 @@ Ext.define('NextThought.controller.UserData', {
 			pi = ContentUtils.getLineage(pageInfoId).last() || pageInfoId;
 		//get parent:
 		$AppConfig.service.getPageInfo(pi,
-									   function(topPi) {
-										   if (topPi) {
-											   topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo) {
-												   //always happens if success only:
-												   me.updatePreferences(refreshedPageInfo);
-												   Ext.callback(callback, null, []);
-											   });
-										   }
-									   },
-									   function() {
-										   console.error('failed to save default sharing');
-									   },
-									   this);
+				function(topPi) {
+					if (topPi) {
+						topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo) {
+							//always happens if success only:
+							me.updatePreferences(refreshedPageInfo);
+							Ext.callback(callback, null, []);
+						});
+					}
+				},
+				function() {
+					console.error('failed to save default sharing');
+				},
+				this);
 
 
 	},
@@ -880,9 +880,9 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		var lineage = ContentUtils.getLineage(ntiid), result = null, sharingIsValid = true,
-				rootId = lineage.last(),
-				i = ContentUtils.getLocation(rootId),
-				flStore = Ext.getStore('FriendsList');
+			rootId = lineage.last(),
+			i = ContentUtils.getLocation(rootId),
+			flStore = Ext.getStore('FriendsList');
 
 		Ext.each(lineage, function(l) {
 			result = this.preferenceMap[l];
@@ -956,12 +956,12 @@ Ext.define('NextThought.controller.UserData', {
 
 	onShareWithSaveClick: function(btn) {
 		var win = btn.up('window'),
-				shbx = win.down('user-sharing-list'),
-				v = shbx.getValue(),
-				rec = win.record, b, newSharedWith,
-				cb = win.down('checkbox'),
-				saveAsDefault = cb ? cb.checked : false,
-				me = this;
+			shbx = win.down('user-sharing-list'),
+			v = shbx.getValue(),
+			rec = win.record, b, newSharedWith,
+			cb = win.down('checkbox'),
+			saveAsDefault = cb ? cb.checked : false,
+			me = this;
 
 		//extra check here for a close...
 		if (btn.text === 'Close') {
@@ -1022,8 +1022,8 @@ Ext.define('NextThought.controller.UserData', {
 
 	onDisplayPopover: function(sender, id, html, node) {
 		var offsets = sender.reader.getAnnotationOffsets(),
-				position = Ext.fly(node).getXY(),
-				me = this;
+			position = Ext.fly(node).getXY(),
+			me = this;
 
 		function adjustPosition(position) {
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2;
@@ -1076,7 +1076,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onLoadTranscript: function(record, cmp) {
 		var model = this.getModel('Transcript'),
-				id = record.get('RoomInfo').getId();
+			id = record.get('RoomInfo').getId();
 
 		model.getProxy().url = record.getLink('transcript');
 
@@ -1095,24 +1095,24 @@ Ext.define('NextThought.controller.UserData', {
 	saveNewBookmark: function(reader) {
 		//create a bookmark model
 		var me = this,
-				bm = me.getBookmarkModel().create({
-													  ContainerId: reader.getLocation().NTIID,
-													  applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
-												  });
+			bm = me.getBookmarkModel().create({
+				ContainerId: reader.getLocation().NTIID,
+				applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
+			});
 
 		//now save this:
 		bm.save({
-					callback: function(record, operation) {
-						try {
-							if (operation.success) {
-								me.fireEvent('bookmark-loaded', record);
-							}
-						}
-						catch (err) {
-							console.error('Something went teribly wrong... ', err.stack || err.message);
-						}
+			callback: function(record, operation) {
+				try {
+					if (operation.success) {
+						me.fireEvent('bookmark-loaded', record);
 					}
-				});
+				}
+				catch (err) {
+					console.error('Something went teribly wrong... ', err.stack || err.message);
+				}
+			}
+		});
 	},
 
 
@@ -1151,9 +1151,9 @@ Ext.define('NextThought.controller.UserData', {
 
 		//Define our vars and create our content range description:
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-				noteRecord,
-				rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-				container = c, selectedText;
+			noteRecord,
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
+			container = c, selectedText;
 
 		if (!container) {
 			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
@@ -1183,14 +1183,14 @@ Ext.define('NextThought.controller.UserData', {
 	saveNote: function(applicableRange, body, title, ContainerId, shareWith, selectedText, style, callback) {
 		//define our note object:
 		var noteRecord = this.getNoteModel().create({
-														applicableRange: applicableRange,
-														body: body,
-														title: title,
-														selectedText: selectedText,
-														sharedWith: shareWith,
-														style: style,
-														ContainerId: ContainerId
-													});
+			applicableRange: applicableRange,
+			body: body,
+			title: title,
+			selectedText: selectedText,
+			sharedWith: shareWith,
+			style: style,
+			ContainerId: ContainerId
+		});
 
 		console.log('Saving new record', noteRecord);
 		noteRecord.getProxy().on('exception', this.handleException, this, {single: true});
@@ -1212,7 +1212,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	handleException: function(proxy, response, operation) {
 		var error,
-				msg = 'An unknown error occurred saving your note.';
+			msg = 'An unknown error occurred saving your note.';
 
 		try {
 			//TODO We can get other information from different parts of the response.
@@ -1233,8 +1233,8 @@ Ext.define('NextThought.controller.UserData', {
 
 	savePreviewNoteReply: function(editor, record, valueObject, successCallback) {
 		var cmp = editor.up('[record]'),
-				isEdit = Boolean(record),
-				replyToRecord = cmp && cmp.record;
+			isEdit = Boolean(record),
+			replyToRecord = cmp && cmp.record;
 
 		function callback(success, rec) {
 			if (success) {
@@ -1249,14 +1249,14 @@ Ext.define('NextThought.controller.UserData', {
 			record.set({ body: valueObject.body });
 			try {
 				record.save({
-								callback: function(record, request) {
-									var success = request.success,
-											rec = success ? request.records[0] : null;
-									if (success) {
-										Ext.callback(successCallback, null, [editor, cmp, rec]);
-									}
-								}
-							});
+					callback: function(record, request) {
+						var success = request.success,
+								rec = success ? request.records[0] : null;
+						if (success) {
+							Ext.callback(successCallback, null, [editor, cmp, rec]);
+						}
+					}
+				});
 			}
 			catch (e) {
 				console.error('FAIL: could not save the record properly! ', e);
@@ -1302,20 +1302,20 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		record.destroy({
-						   success: function() {
-							   //TODO: do we need to look through all the store to see who cares about this record? or it's already handled.
-							   Ext.callback(callback, null, [cmp]);
-						   },
-						   failure: function() {
-							   alert('Sorry, could not delete that');
-						   }
-					   });
+			success: function() {
+				//TODO: do we need to look through all the store to see who cares about this record? or it's already handled.
+				Ext.callback(callback, null, [cmp]);
+			},
+			failure: function() {
+				alert('Sorry, could not delete that');
+			}
+		});
 	},
 
 
 	replyAsChat: function(record) {
 		var top = record,
-				people, cId, parent, refs;
+			people, cId, parent, refs;
 
 		//go to the top, it has the info we need:
 		while (top.parent) {
