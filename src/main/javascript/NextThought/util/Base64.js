@@ -7,8 +7,38 @@ Ext.define('NextThought.util.Base64', {
 	alternateClassName: 'Base64',
 	singleton: true,
 
+	_isBase64Re: /^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/,
+
 	// private property
 	_keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
+
+	_equalsRe: new RegExp('=+$'),
+	_slashRe: /\//g,
+	_plusRe: /\+/g,
+
+	encodeURLFriendly: function(input) {
+		return this.encode('!@' + input)//to allow us to quickly determine if the value as raw or encoded.
+				.replace(this._plusRe, '-')
+				.replace(this._slashRe, '_')
+				.replace(this._equalsRe, '');
+	},
+
+
+	decodeURLFriendly: function(str) {
+		// reverse to original encoding
+		if (str.length % 4 !== 0) {
+			str += ('===').slice(0, 4 - (str.length % 4));
+		}
+		str = str.replace(/-/g, '+').replace(/_/g, '/');
+		str = this.decode(str);
+		if (!/^!@/.test(str)) {//wasn't encoded by us... abort
+			str = null;
+		} else {
+			str = str.substr(2);
+		}
+		return str;
+	},
+
 
 	// public method for encoding
 	encode: function(input) {
@@ -51,7 +81,7 @@ Ext.define('NextThought.util.Base64', {
 		var enc1, enc2, enc3, enc4;
 		var i = 0;
 
-		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
+		input = input.replace(/[^A-Za-z0-9\+\/=]/g, '');
 
 		while (i < input.length) {
 

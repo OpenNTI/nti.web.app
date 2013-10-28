@@ -110,14 +110,19 @@ Ext.define('NextThought.model.User', {
 
 
 	getProfileUrl: function(subPage) {
-		var u = encodeURIComponent(this.get('Username')),
-				subPages = subPage || [];
+		var id = this.get('Username'),
+			subPages = subPage || [];
+
+
+		if ($AppConfig.obscureUsernames) {
+			id = Base64.encodeURLFriendly(id);
+		}
 
 		if (!Ext.isArray(subPages) && arguments.length > 0) {
 			subPages = Ext.Array.clone(arguments);
 		}
 		subPages = Ext.isEmpty(subPages, false) ? '' : '/' + Ext.Array.map(subPages, encodeURIComponent).join('/');
-		return ['#!profile/', u, subPages].join('');
+		return ['#!profile/', encodeURIComponent(id), subPages].join('');
 	},
 
 
@@ -182,8 +187,16 @@ Ext.define('NextThought.model.User', {
 
 		getProfileStateFromFragment: function(fragment) {
 			var re = /^#!profile\/([^\/]+)\/?(.*)$/i, o = re.exec(fragment);
+
+			function filter(u) {
+				if ($AppConfig.obscureUsernames) {
+					return Base64.decodeURLFriendly(u) || u;
+				}
+				return u;
+			}
+
 			return o ? {
-				username: decodeURIComponent(o[1]),
+				username: filter(decodeURIComponent(o[1])),
 				activeTab: o[2]
 			} : null;
 		}
