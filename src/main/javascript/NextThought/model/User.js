@@ -39,8 +39,8 @@ Ext.define('NextThought.model.User', {
 	summaryObject: true,
 
 
-	equal: function(b){
-		if(Ext.isString(b) && this.getId() === b ){
+	equal: function(b) {
+		if (Ext.isString(b) && this.getId() === b) {
 			return true;
 		}
 		return this.callParent(arguments);
@@ -58,7 +58,7 @@ Ext.define('NextThought.model.User', {
 			}
 
 			//DFLs come back in communities but there usernames are ntiids.
-			if (ParseUtils.parseNtiid(c)) {
+			if (ParseUtils.isNTIID(c)) {
 				field = 'NTIID';
 			}
 
@@ -101,7 +101,7 @@ Ext.define('NextThought.model.User', {
 
 
 	getName: function() {
-		return this.get('alias') || this.get('realname') || this.get('Username');
+		return this.get('alias') || this.get('realname') || this.self.getUsername(this.get('Username'));
 	},
 
 
@@ -147,9 +147,10 @@ Ext.define('NextThought.model.User', {
 		BLANK_AVATAR: 'resources/images/icons/unresolved-user.png',
 
 		getUnresolved: function(username) {
-			var u = new NextThought.model.User({
+			var alias = this.getUsername(username),
+				u = new NextThought.model.User({
 			   Username: username,
-			   alias: username,
+			   alias: alias,
 			   avatarURL: this.BLANK_AVATAR,
 			   affiliation: 'Unknown',
 			   status: '',
@@ -157,6 +158,21 @@ Ext.define('NextThought.model.User', {
 		   }, username);
 			u.Unresolved = true;
 			return u;
+		},
+
+
+		getUsername: function(usernameSeed) {
+			var sitePattern = getString('UnresolvedUsernamePattern', 'username'),
+				// negagitive numbers dont look good. So just Abs() them.  Since we're not
+				// using this other than to display, shouldn't be a problem.
+				hash = Math.abs(usernameSeed.hash()),
+				hashPlaceholder = (/(#+)/g);
+
+			if (/^username$/i.test(sitePattern)) {
+				return usernameSeed;
+			}
+
+			return sitePattern.replace(hashPlaceholder, hash);
 		},
 
 

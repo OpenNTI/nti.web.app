@@ -1,5 +1,7 @@
 window.NTIStrings = window.NTIStrings || {};
 
+
+NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['Available for Purchase'] = 'Available Courses';
 NTIStrings['Coming Soon'] = 'Upcoming Courses';
 NTIStrings['library:branding logo-alt-text'] = 'The University of Oklahoma';

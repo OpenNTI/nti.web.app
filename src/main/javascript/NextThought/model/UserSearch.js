@@ -6,9 +6,9 @@ Ext.define('NextThought.model.UserSearch', {
 
 	mixins: { shareEntity: 'NextThought.mixins.ShareEntity' },
 
-	statics: {getType: function(modelData) {
-		var m = ((modelData && modelData.Class) || '').toLowerCase(),
-				u = modelData.Username.toLowerCase(), type;
+	statics: {
+		getType: function(modelData) {
+			var m = ((modelData && modelData.Class) || '').toLowerCase(), type;
 
 			//Tweak logic slightly if our type is community or
 			//our user is public or everyone make it look public
@@ -23,13 +23,14 @@ Ext.define('NextThought.model.UserSearch', {
 			}
 
 			return type;
-	}},
+		}
+	},
 
 	idProperty: 'Username',
 	homogenous: true,
 	fields: [
 		{ name: 'Username', type: 'string' },
-		{ name: 'Presence', convert: function(v,record) {
+		{ name: 'Presence', convert: function(v, record) {
 			var presence = Ext.getStore('PresenceInfo').getPresenceOf(record.get('Username'));
 			if (presence) {
 				console.log(presence, presence.toString());
@@ -49,12 +50,12 @@ Ext.define('NextThought.model.UserSearch', {
 		}},
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v,r) {return r.getName();}},
+		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
 		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
 
 	getName: function() {
-		return this.get('alias') || this.get('realname') || this.get('Username');
+		return this.get('alias') || this.get('realname') || NextThought.model.User.getUsername(this.get('Username'));
 	},
 
 	getProfileUrl: function(subPage) {
