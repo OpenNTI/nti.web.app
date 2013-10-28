@@ -181,26 +181,9 @@ Ext.define('NextThought.util.Content', {
 				original : attr + '="' + host + url + '"';
 		}
 
-		//We eeed a hash for the location.hostname.  We could
-		//b64 encode it but that seems like overkill, a simple
-		//hash should suffice
-		function stringHash(str) {
-			var hash = 0, i, c;
-			if (Ext.isEmpty(str)) {
-				return hash;
-			}
-
-			for (i = 0; i < str.length; i++) {
-				c = str.charCodeAt(i);
-				hash = ((hash << 5) - hash) + c;
-				hash = hash & hash; // Convert to 32bit integer
-			}
-			return hash;
-		}
-
 		var me = this,
 			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
-			locationHash = stringHash(window.location.hostname + envSalt);
+			locationHash = String.hash(window.location.hostname + envSalt);
 
 		string = this.bustCorsForResources(string, 'h', locationHash);
 		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
@@ -381,9 +364,8 @@ Ext.define('NextThought.util.Content', {
 			Ext.callback(cb, scope, [container, locationInfo]);
 			return false;
 		}
-		else {
-			Ext.callback(cb, scope);
-		}
+
+		Ext.callback(cb, scope);
 		return true;
 	},
 
@@ -547,7 +529,7 @@ Ext.define('NextThought.util.Content', {
 	 * @param toc
 	 * @return {*} Returns the linked parent or false
 	 */
-	isSymLinked: function(node,toc) {
+	isSymLinked: function(node, toc) {
 		var EA = Ext.Array,
 			map = this.SYM_LINK_MAP,
 			id = node.getAttribute ? node.getAttribute('ntiid') : null,
