@@ -101,7 +101,11 @@ Ext.define('NextThought.model.User', {
 
 
 	getName: function() {
-		return this.get('alias') || this.get('realname') || this.self.getUsername(this.get('Username'));
+		return this.get('alias') ||
+			   this.get('realname') ||
+			   //because this implementation is 'borrowed', we cannot assume 'this'
+			   // is anything more than A model. Not necisarily, "this" model.
+			   NextThought.model.User.getUsername(this.get('Username'));
 	},
 
 

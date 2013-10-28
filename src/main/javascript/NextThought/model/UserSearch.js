@@ -1,6 +1,7 @@
 Ext.define('NextThought.model.UserSearch', {
 	extend: 'NextThought.model.Base',
 	requires: [
+		'NextThought.model.User',
 		'NextThought.proxy.UserSearch'
 	],
 
@@ -52,20 +53,7 @@ Ext.define('NextThought.model.UserSearch', {
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
 		{ name: 'IsDynamicSharing', type: 'auto'}
-	],
-
-	getName: function() {
-		return this.get('alias') || this.get('realname') || NextThought.model.User.getUsername(this.get('Username'));
-	},
-
-	getProfileUrl: function(subPage) {
-		var u = encodeURIComponent(this.get('Username')),
-			subPages = subPage || [];
-
-		if (!Ext.isArray(subPages) && arguments.length > 0) {
-			subPages = Ext.Array.clone(arguments);
-		}
-		subPages = Ext.isEmpty(subPages, false) ? '' : '/' + Ext.Array.map(subPages, encodeURIComponent).join('/');
-		return ['#!profile/', u, subPages].join('');
-	}
+	]
+}, function() {
+	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);
 });
