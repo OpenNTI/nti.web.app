@@ -2,7 +2,25 @@ Ext.define('NextThought.util.Object', {
 	alternateClassName: 'ObjectUtils',
 	singleton: true,
 
-	defineAttributes: function(obj,attrs) {
+
+	deleteFunctionProperties: function deleteFunctionsOn(o, allowClassRefs) {
+		var key;
+		//let the functions go, free up some captured scopes
+		for (key in o) {
+			if (o.hasOwnProperty(key)) {
+				if (Ext.isFunction(o[key])) {
+					delete o[key];
+				} else if (o[key] && o[key].$className && allowClassRefs !== true) {
+					o[key] = 'ref to a ' + o[key].$className;
+				} else if (Ext.isObject(o[key]) && !o[key].$className) {
+					deleteFunctionsOn(o[key], allowClassRefs);
+				}
+			}
+		}
+	},
+
+
+	defineAttributes: function(obj, attrs) {
 		var setter = '__defineSetter__',
 			getter = '__defineGetter__',
 			hasDefineProp = Boolean(Object.defineProperty),

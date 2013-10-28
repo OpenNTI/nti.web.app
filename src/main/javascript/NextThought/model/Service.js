@@ -259,6 +259,7 @@ Ext.define('NextThought.model.Service', {
 
 	getPageInfo: function(ntiid, success, failure, scope) {
 		var url, q,
+			cache = this.pageInfoCache = this.pageInfoCache || {},
 			mime = 'application/vnd.nextthought.pageinfo';
 
 		if (!ParseUtils.isNTIID(ntiid)) {
@@ -301,8 +302,37 @@ Ext.define('NextThought.model.Service', {
 				Ext.callback(failure, scope, [req, resp]);
 			}
 
+			function cacheWrapper(resp) {
+				if (resp.status === 200) {
+					ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
+				} else {
+					console.debug('Not caching response because it wasn\'t a 200', resp);
+				}
+				onSuccess.apply(this, arguments);
+			}
 
-			q = this.getObjectRaw(url, mime + '+json', true, onSuccess, onFailure, this);
+			if (!cache.listeningForInvalidations) {
+				cache.listeningForInvalidations = Ext.Ajax.on({
+					destroyable: true,
+					beforerequest: function(connection, options) {
+						var method = options.method,
+							url = options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
+
+						if (method !== 'GET' && cache[url]) {
+							console.debug('Invalidate cache at url' + url);
+							delete cache[url];
+						}
+					}
+				});
+			}
+
+			if (cache.hasOwnProperty(url)) {
+				console.debug('Cache Hit', url, cache[url]);
+				onSuccess.call(this, cache[url]);
+				return null;
+			}
+
+			q = this.getObjectRaw(url, mime + '+json', true, isFeature('cache-pageinfos') ? cacheWrapper : onSuccess, onFailure, this);
 			q.request.ntiid = ntiid;
 
 		}
