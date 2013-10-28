@@ -114,8 +114,8 @@ Ext.define('NextThought.model.Service', {
 
 	/**
 	 *
-	 * @param mimeType
-	 * @param [title]
+	 * @param {String} mimeType
+	 * @param {String} [title]
 	 */
 	getCollectionFor: function(mimeType, title) {
 		var collection = null;
@@ -197,13 +197,13 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	appendTypeView: function(base, type) {
-		return base + '/@@' + type;
-	},
+	//appendTypeView: function(base, type) {
+	//	return base + '/@@' + type;
+	//},
 
 
 	getObjectRaw: function(url, mime, forceMime, success, failure, scope) {
-		var q = {}, headers = {};
+		var q = {}, headers = {}, req;
 
 		if (!url) {
 			Ext.callback(failure, scope, ['']);
@@ -215,19 +215,18 @@ Ext.define('NextThought.model.Service', {
 		}
 
 		try {
-			//lookup step
-			q.request = Ext.Ajax.request({
+			req = {
 				url: url,
 				scope: scope,
 				headers: headers,
-				callback: function(req,s,resp) {
+				callback: function(req, s, resp) {
 					//If sent an Accept header the server
 					//may return a 406 if the Accept value is not supported
 					//or it may just return whatever it wants.  If we send
 					//Accept we check the Content-Type to see if that is what
 					//we get back.  If it's not and forceMime is truthy
 					//we call the failure callback
-					var href, contentType;
+					var contentType;
 					if (s) {
 						if (mime && forceMime) {
 							contentType = resp.getResponseHeader('Content-Type');
@@ -243,7 +242,11 @@ Ext.define('NextThought.model.Service', {
 						Ext.callback(failure, scope, [req, resp]);
 					}
 				}
-			});
+			};
+
+
+			//lookup step
+			q.request = Ext.Ajax.request(req);
 		}
 		catch (e) {
 			Ext.callback(failure, scope, [{},e]);
@@ -258,7 +261,7 @@ Ext.define('NextThought.model.Service', {
 		var url, q,
 			mime = 'application/vnd.nextthought.pageinfo';
 
-		if (!ParseUtils.parseNtiid(ntiid)) {
+		if (!ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
 			return null;
 		}
@@ -294,7 +297,7 @@ Ext.define('NextThought.model.Service', {
 				Ext.callback(success, scope, pageInfos);
 			}
 
-			function onFailure(req,resp) {
+			function onFailure(req, resp) {
 				Ext.callback(failure, scope, [req, resp]);
 			}
 
@@ -314,7 +317,7 @@ Ext.define('NextThought.model.Service', {
 	getObject: function(ntiid, success, failure, scope, safe) {
 		var url;
 
-		if (!ParseUtils.parseNtiid(ntiid)) {
+		if (!ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
 			return null;
 		}
@@ -336,7 +339,7 @@ Ext.define('NextThought.model.Service', {
 					}
 					Ext.callback(success, scope, arg);
 				},
-				function(req,resp) {
+				function(req, resp) {
 					Ext.callback(failure, scope, [req, resp]);
 				},
 				this
@@ -420,9 +423,9 @@ Ext.define('NextThought.model.Service', {
 
 	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 	//       until permissioning of actions can be accomplished.
+	// JSG: 28/10/2013 - Can we remove this yet?
 	canShareRedaction: function() {
-		var canShare = /(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
-		return canShare;
+		return (/(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/).test($AppConfig.username);
 	},
 
 

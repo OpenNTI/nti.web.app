@@ -149,7 +149,7 @@ Ext.define('NextThought.controller.UserData', {
 		});
 
 		Socket.register({
-			'data_noticeIncomingChange': function(c) {me.incomingChange.apply(me, [c]);}
+			'data_noticeIncomingChange': function(c) {me.incomingChange(c);}
 		});
 
 		Ext.apply(this.changeActionMap, {
@@ -177,8 +177,8 @@ Ext.define('NextThought.controller.UserData', {
 
 		function pass(pageInfo) {
 			//console.log('loaded in UserData Controller');
-			NextThought.store.PageItem.prototype.proxy.url
-					= pageInfo.getLink(Globals.RECURSIVE_STREAM).replace(
+			NextThought.store.PageItem.prototype.proxy.url =
+				pageInfo.getLink(Globals.RECURSIVE_STREAM).replace(
 					Globals.RECURSIVE_STREAM,
 					Globals.RECURSIVE_USER_GENERATED_DATA);
 			finish();
@@ -248,9 +248,9 @@ Ext.define('NextThought.controller.UserData', {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
 		 *
-		 *    @param change Object/Ext.data.Model -  the change record.
-		 *    @param item Object/Ext.data.Model - Item the change is about.
-		 *    @param meta Object - Location meta data
+		 *    @param {Object/Ext.data.Model} change the change record.
+		 *    @param {Object/Ext.data.Model} item Item the change is about.
+		 *    @param {Object} meta Location meta data
 		 *
 		 * these are assigned in the init() above
 		 */
@@ -857,7 +857,7 @@ Ext.define('NextThought.controller.UserData', {
 			// Let's pre-resolve the users that are part of the default sharing list.
 			// By the time, we look it up, it should be in the userRepository cache, if it's resolvable.
 			UserRepository.getUser(sharing.sharedWith, function(users) {
-				var allResolved = Ext.Array.every(users, function(i) { return Boolean(!i.Unresolved); }),
+				var allResolved = Ext.Array.every(users, function(i) { return !i.Unresolved; }),
 						names = [];
 
 				if (allResolved) {
@@ -1151,7 +1151,6 @@ Ext.define('NextThought.controller.UserData', {
 
 		//Define our vars and create our content range description:
 		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
-			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
 			container = c, selectedText;
 
@@ -1210,7 +1209,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	handleException: function(proxy, response, operation) {
+	handleException: function(proxy, response/*, operation*/) {
 		var error,
 			msg = 'An unknown error occurred saving your note.';
 
