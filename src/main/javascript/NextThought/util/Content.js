@@ -64,8 +64,6 @@ Ext.define('NextThought.util.Content', {
 
 
 	getContentForPageInfo: function(pageInfo, callback, failure) {
-		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
-
 		function failed(r) {
 			console.log('server-side failure with status code ' + r.status + ': Message: ' + r.responseText);
 			Ext.callback(failure);
@@ -78,7 +76,7 @@ Ext.define('NextThought.util.Content', {
 			Ext.callback(failure);
 		}
 
-		proxy.request({
+		ContentProxy.request({
 			ntiid: pageInfo.getId(),
 			jsonpUrl: pageInfo.getLink('jsonp_content'),
 			url: pageInfo.getLink('content'),

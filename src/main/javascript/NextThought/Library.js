@@ -125,11 +125,10 @@ Ext.define('NextThought.Library', {
 
 		var me = this,
 			title = me.getTitle(index),
-			proxy = $AppConfig.server.jsonp ? JSONP : Ext.Ajax,
 			t = me.getToc(title),
 			url;
 
-		function parse(q,s,resp) {
+		function parse(q, s, resp) {
 			if (!s) {
 				delete me.activeVideoLoad[index];
 				failure(resp);
@@ -186,7 +185,7 @@ Ext.define('NextThought.Library', {
 			}
 
 			me.activeVideoLoad[index] = scope ? Ext.bind(callback, scope) : callback;
-			proxy.request({
+			ContentProxy.request({
 				ntiid: title.get('NTIID'),
 				url: url,
 				jsonpUrl: url + 'p', //todo: make smarter
@@ -288,15 +287,13 @@ Ext.define('NextThought.Library', {
 
 		//Loads TOC async, so once the last one loads, callback if available
 		this.each(function(o) {
-			if (!o.get || !o.get('index') || ($AppConfig.server.jsonp && !o.get('index_jsonp'))) {
+			if (!o.get || !o.get('index')) {
 				toRemove.push(o);
 				count--;
 				return;
 			}
 
-			var url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
-
-			me.loadToc(o, url, o.get('NTIID'), setupToc);
+			me.loadToc(o, o.get('index'), o.get('NTIID'), setupToc);
 		});
 
 		this.getStore().remove(toRemove);
@@ -305,8 +302,7 @@ Ext.define('NextThought.Library', {
 
 	loadToc: function(index, url, ntiid, callback) {
 		var me = this,
-			record = index && index.isModel ? index : null,
-			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+			record = index && index.isModel ? index : null;
 
 		if (!this.loaded && !callback) {
 			Ext.log.warn('The library has not loaded yet');
@@ -314,7 +310,7 @@ Ext.define('NextThought.Library', {
 
 		index = (record && record.get('index')) || index;
 
-		function tocLoaded(q,s,r) {
+		function tocLoaded(q, s, r) {
 			var xml,
 				cb = me.activeLoad[index], n;
 
@@ -356,9 +352,9 @@ Ext.define('NextThought.Library', {
 
 
 			me.activeLoad[index] = callback;
-			proxy.request({
+			ContentProxy.request({
 				ntiid: ntiid,
-				jsonpUrl: url,
+				jsonpUrl: record.get('index_jsonp'),
 				url: url,
 				expectedContentType: 'text/xml',
 				scope: me,

@@ -250,7 +250,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	onNavigateComplete: function(pageInfo, finish, hasCallback) {
 		var me = this,
-				proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+			proxy = ContentProxy;
 
 		function success(resp) {
 			delete me.navigating;
@@ -283,8 +283,8 @@ Ext.define('NextThought.view.content.Reader', {
 			//leave the mask in place and for now we assume something else is handling the
 			//error or presenting it appropriately. We will call anything no
 			if (pageInfo.status !== undefined && Ext.Ajax.isHTTPErrorCode(pageInfo.status)) {
-				console.warn('onNavigationComplete called with pageInfo that looks like an error http response.'
-									 + ' Expecting someone else would have handled the error by now', pageInfo);
+				console.warn('onNavigationComplete called with pageInfo that looks like an error http response.' +
+							 ' Expecting someone else would have handled the error by now', pageInfo);
 			}
 			else {
 				console.warn('onNavigationComplete not called with pageInfo but it doesn\'t look like an error.', pageInfo);

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.info.Panel',{
+Ext.define('NextThought.view.course.info.Panel', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-panel',
 	cls: 'course-info-panel scrollable',
@@ -6,6 +6,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 	layout: 'auto',
 
 	requires: [
+		'NextThought.proxy.JSONP',
 		'NextThought.view.course.info.parts.*'
 	],
 
@@ -16,11 +17,11 @@ Ext.define('NextThought.view.course.info.Panel',{
 
 	initComponent: function() {
 		this.callParent(arguments);
-//		this.initCustomScrollOn('content');
+		//this.initCustomScrollOn('content');
 	},
 
 
-	setContent: function(content){
+	setContent: function(content) {
 		this.removeAll(true);
 
 		var toAdd = [];
@@ -38,7 +39,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 			return;
 		}
 
-		if(this.up('course-info').infoOnly){
+		if (this.up('course-info').infoOnly) {
 			toAdd.push({
 				xtype: 'course-info-not-started',
 				info: content
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 
 
 	//<editor-fold desc="Fallback Code">
-	isCurrent: function(ntiid){
+	isCurrent: function(ntiid) {
 		var ci = this.up('course-info');
 		return ci && ci.currentCourseInfoNtiid === ntiid;
 	},
@@ -84,7 +85,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 			this.add({
 				xtype: 'box',
 				cls: 'course-info-panel-legacy',
-				html:bodyTag[1],
+				html: bodyTag[1],
 				listeners: {
 					destroy: function() {
 						parent.removeCls('make-white');
@@ -99,9 +100,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 
 
 	loadPage: function(pageInfo) {
-		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
-
-		proxy.request({
+		ContentProxy.request({
 			pageInfo: pageInfo,
 			ntiid: pageInfo.getId(),
 			jsonpUrl: pageInfo.getLink('jsonp_content'),
@@ -119,7 +118,7 @@ Ext.define('NextThought.view.course.info.Panel',{
 	},
 
 
-	loadedPage: function(r,req) {
+	loadedPage: function(r, req) {
 		if (!this.isCurrent(req.pageInfo.getId())) {
 			return;
 		}

@@ -167,7 +167,6 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 		}
 
 		var me = this,
-			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax,
 			content = this.transcript && this.transcript.get('content');
 
 		if (!this.transcript) {
@@ -181,7 +180,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 			return;
 		}
 
-		proxy.request({
+		ContentProxy.request({
 			jsonpUrl: this.getTranscriptJsonpUrl(),
 			url: this.getTranscriptUrl(),
 			ntiid: 'webvtt',

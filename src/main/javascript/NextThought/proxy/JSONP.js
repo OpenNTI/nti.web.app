@@ -1,6 +1,48 @@
 Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
+
+	request: function(options) {
+		// an absolute url must be used. Luckily, thats all we use.
+		// and we care about the first 3 parts: [(protocoll:)//domain]/path/to/resource
+		var domain = options.url.split('/').slice(0, 3),
+			protocol = domain[0],
+			gap = domain[1],
+			host = domain[2],
+			postfix = 'p';
+
+		if (Ext.isEmpty(protocol)) {
+			protocol = domain[0] = location.protocol;//protocoless urls inherit ours
+		}
+
+		if (gap !== '' || !Ext.String.endsWith(protocol, ':')) {
+			Ext.Error.raise({msg: 'Bad URL, must be absolute', args: options});
+		}
+
+		//JSONP CORS workaround not needed. (or not enabled)
+		if (host === location.host || $AppConfig.server.jsonp !== true) {
+			return Ext.Ajax.request(options);
+		}
+
+		if (!options.jsonpUrl) {
+			//major assumptions here...
+			//split by query params
+			options.jsonpUrl = options.url.split('?');
+			if (!Ext.String.endsWith(options.url, 'json', true)) {
+				Ext.log.warn('Assuming JSONP is the same name with .jsonp at the end!');
+				postfix = '.jsonp';
+			}
+
+			options.jsonpUrl[0] += postfix;
+			options.jsonpUrl = options.jsonpUrl.join('?');
+
+			console.warn('Assuming jsonp url is: ' + options.jsonpUrl);
+		}
+
+		return this.requestJSONP(options);
+	},
+
+
 	/**
 	 *
 	 * @param options Object with keys:
@@ -11,7 +53,7 @@ Ext.define('NextThought.proxy.JSONP', {
 	 *	 failure
 	 *   scope
 	 */
-	request: function(options) {
+	requestJSONP: function(options) {
 		var me = this,
 			opts = Ext.apply({},options),
 			script,
@@ -58,7 +100,8 @@ Ext.define('NextThought.proxy.JSONP', {
 		script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
 	},
 
-	getContent: function(ntiid,type) {
+
+	getContent: function(ntiid, type) {
 		if (!type) {
 			Ext.Error.raise('Must specify the type you want');
 		}
@@ -128,12 +171,13 @@ Ext.define('NextThought.proxy.JSONP', {
 		console.warn('JSONP is already defined!!!');
 	}
 
-	window.JSONP = new this();
+	window.ContentProxy = window.JSONP = new this();
+
 	window.jsonpReceiveContent = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated */
+	/** @deprecated use jsonpReceiveContent instaed */
 	window.jsonpContent = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated */
+	/** @deprecated use jsonpReceiveContent instaed */
 	window.jsonpToc = Ext.bind(JSONP.receiveContent, JSONP);
-	/** @deprecated */
+	/** @deprecated use jsonpReceiveContent instaed */
 	window.jsonpData = Ext.bind(JSONP.receiveContentVTT, JSONP);
 });

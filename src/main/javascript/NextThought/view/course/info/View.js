@@ -74,8 +74,7 @@ Ext.define('NextThought.view.course.info.View', {
 
 
 	parseNode: function(infoNode, courseNode, locInfo, callback, failure){
-		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax,
-			src = getURL(infoNode.getAttribute('src'), locInfo.root);
+		var src = getURL(infoNode.getAttribute('src'), locInfo.root);
 
 		this.hasInfo = !!infoNode;
 		this.infoOnly = !courseNode.querySelector('unit');
@@ -106,8 +105,7 @@ Ext.define('NextThought.view.course.info.View', {
 			Ext.callback(callback,this,[json]);
 		}
 
-		proxy.request({
-			jsonpUrl: src+'p',
+		ContentProxy.request({
 			url: src,
 			expectedContentType: 'application/json',
 			scope: this,
