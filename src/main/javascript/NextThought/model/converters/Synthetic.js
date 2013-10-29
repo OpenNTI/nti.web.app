@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.converters.Synthetic', {
 	requires: [
+		'Ext.data.Types',
 		'Ext.data.SortTypes',
 		'NextThought.util.Object'
 	],
