@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.info.outline.View',{
+Ext.define('NextThought.view.course.info.outline.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-info-outline',
 	layout: 'auto',
@@ -8,7 +8,7 @@ Ext.define('NextThought.view.course.info.outline.View',{
 		'NextThought.view.course.info.outline.OpenCourseInfo'
 	],
 
-	setContent: function(info){
+	setContent: function(info) {
 		this.removeAll(true);
 
 		if (Ext.isString(info)) {
@@ -24,6 +24,6 @@ Ext.define('NextThought.view.course.info.outline.View',{
 		},{
 			xtype: 'course-info-outline-open-course',
 			info: info
-		})
+		});
 	}
 });

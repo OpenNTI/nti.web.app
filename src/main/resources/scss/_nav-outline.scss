@@ -4,6 +4,12 @@
 	top: 0;
 	bottom: 5px;
 
+	&.static {
+		position: static;
+		top: auto;
+		bottom: auto;
+	}
+
 	.outline-list {
 		position: absolute;
 		left: 0;

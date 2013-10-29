@@ -5,7 +5,7 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 	//<editor-fold desc="Config">
 
 	ui: 'course-info',
-	cls: 'nav-outline',
+	cls: 'nav-outline static',
 	preserveScrollOnRefresh: true,
 
 	renderTpl: Ext.DomHelper.markup([

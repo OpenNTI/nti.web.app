@@ -113,7 +113,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			overItemCls: 'over',
 			itemSelector: '.outline-row',
 			store: store,
-			cls: 'nav-outline make-white',
+			cls: 'nav-outline static make-white',
 			renderTo: this.el.down('.nav'),
 			selModel: {
 				allowDeselect: false,
