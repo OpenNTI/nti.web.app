@@ -131,11 +131,16 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
     //		}
 
 		if (!Ext.isNumber(data.cachedTargetHeight)) {
-			data.cachedTargetHeight = el.getHeight();
+			data.cachedTargetHeight = el.getHeight() || 'not-set-yet';
 			if (data.cachedTargetHeight === +el.getAttribute(attr)) {
 				data.cachedTargetHeight += data.lastHeightAdjustOffset || (o || 0);
 			}
 			//console.debug('data',data.cachedTargetHeight, el.getAttribute(attr));
+		}
+
+		if (!Ext.isNumber(data.cachedTargetHeight)) {
+			//not set yet
+			return;
 		}
 
 		nH = (data.cachedTargetHeight - o);// - data.secondaryViewElInitialMargin;
