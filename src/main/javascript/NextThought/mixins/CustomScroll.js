@@ -45,7 +45,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				//set the margins, because doing so causes the secondaryViewTarget to jump around.
 				//However if this is the first time through we want to set the margins to get them in
 				//the initial right place.
-				if(top != 0 || !this.alreadySetMargin){
+				if (top !== 0 || !this.alreadySetMargin) {
+				//JSG: what is "top" supposed to be? Right now its window.top which is the top most window instance, obviously, not an int...
+				// so this ALWAYS executes
 					this.alreadySetMargin = true;
 					setReverseMargin.apply(this, [bMargin]);
 				}
