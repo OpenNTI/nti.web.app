@@ -42,7 +42,7 @@ Ext.define('NextThought.overrides.app.Application', {
 			alert({
 				icon: Ext.Msg.ERROR,
 				title: 'Timeout',
-				msg: 'There was some issue preventing us from starting',
+				msg: 'There was some issue preventing us from starting.',
 				closable: false,
 				buttons: null
 			});
