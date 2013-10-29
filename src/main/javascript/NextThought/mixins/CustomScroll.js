@@ -41,16 +41,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
 				console.log('Scrolling', 'margin top:' + tMargin, 'margin bottom' + bMargin);
 
-				//If the top is 0 the container is all the way at the bottom, and we don't want to
-				//set the margins, because doing so causes the secondaryViewTarget to jump around.
-				//However if this is the first time through we want to set the margins to get them in
-				//the initial right place.
-				if (top !== 0 || !this.alreadySetMargin) {
-				//JSG: what is "top" supposed to be? Right now its window.top which is the top most window instance, obviously, not an int...
-				// so this ALWAYS executes
-					this.alreadySetMargin = true;
-					setReverseMargin.apply(this, [bMargin]);
-				}
+				this.alreadySetMargin = true;
+				setReverseMargin.apply(this, [bMargin]);
 			} else {
 				//Even if the container isn't going to move, we want to set the margins
 				//the first time through to get them in the initial right place.
@@ -115,7 +107,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		}
 
 		el = Ext.get(el);
-
+		debugger;
 		//if the element has a bottom set, use it to drive the height
 		if (el.getStyle('bottom') !== 'auto') {
 			updateSideBottom.call(this, el, heightAdjustOffset || 0);
