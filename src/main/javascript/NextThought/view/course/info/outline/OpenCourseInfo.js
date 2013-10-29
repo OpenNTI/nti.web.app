@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
+Ext.define('NextThought.view.course.info.outline.OpenCourseInfo', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-open-course',
 
@@ -23,9 +23,9 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 		editLink: '.edit'
 	},
 
-	beforeRender: function(){
+	beforeRender: function() {
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			'heading': getString('course-info.open-course-widget.heading'),
 			'message': getString('course-info.open-course-widget.message'),
 			'pointfree': getString('course-info.open-course-widget.free-to-anyone'),
@@ -51,15 +51,19 @@ Ext.define('NextThought.view.course.info.outline.OpenCourseInfo',{
 		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid),
 			unenroll = p && p.getLink('unenroll'),
 			me = this;
-		if(p){
-			this.fireEvent('show-purchasable', this, p, function(){
-				if(unenroll){
+		if (p) {
+			this.fireEvent('show-purchasable', this, p, function() {
+				if (unenroll) {
 					console.log('Purchasable called back. To the library we go');
 					me.fireEvent('go-to-library', me);
 				}
 			});
 		}
-		else{
+		else {
+			alert({
+				title: getString('missing.purchasable.item.title', 'Oops!'),
+				msg: getString('missing.purchasable.item.message', 'It appears you are trying to edit an item that does not exist.')
+			});
 			console.error('No purchasable found for ', this.info);
 		}
 	}
