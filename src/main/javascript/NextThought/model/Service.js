@@ -332,7 +332,7 @@ Ext.define('NextThought.model.Service', {
 				return null;
 			}
 
-			q = this.getObjectRaw(url, mime + '+json', true, isFeature('cache-pageinfos') ? cacheWrapper : onSuccess, onFailure, this);
+			q = this.getObjectRaw(url, mime + '+json', true, cacheWrapper, onFailure, this);
 			q.request.ntiid = ntiid;
 
 		}
