@@ -11,7 +11,7 @@ Ext.define('NextThought.store.Contacts', {
 		{
 			property: 'displayName',
 			direction: 'ASC',
-			transform: function(value) { return value.toLowerCase(); }
+			transform: function(value) { return value && value.toLowerCase(); }
 		}
 	],
 

@@ -109,7 +109,12 @@ Ext.define('NextThought.view.contacts.SubView', {
 
 		Ext.each(Ext.Object.getKeys(letters), function(v) {
 			var m = User.getUnresolved(v);
-			m.set('type', 'unit');
+			m.set({
+				//if usernames are obscured, this will have been replaced with "Anonymous XXX"...
+				// we want the letter deviders, and since this doesn't represent an actual user...
+				alias: v,
+				type: 'unit'
+			});
 			if (store.findBy(function(r) { return r.get('type') === 'unit' && r.get('Username') === v; }) < 0) {
 				toAdd.push(m);
 			}

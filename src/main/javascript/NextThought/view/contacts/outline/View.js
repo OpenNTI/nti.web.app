@@ -90,37 +90,37 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		});
 
 		this.on({
-					scope: this,
-					itemclick: function() {
-						this.fromClick = true;
-					},
-					beforeselect: function(s, r) {
-						var pass = r.data.type !== 'unit',
-								store = s.getStore(),
-								last = s.lastSelected || store.first(), next;
+			scope: this,
+			itemclick: function() {
+				this.fromClick = true;
+			},
+			beforeselect: function(s, r) {
+				var pass = r.data.type !== 'unit',
+						store = s.getStore(),
+						last = s.lastSelected || store.first(), next;
 
-						if (this.fromKey && !pass) {
-							last = store.indexOf(last);
-							next = store.indexOf(r);
-							next += ((next - last) || 1);
+				if (this.fromKey && !pass) {
+					last = store.indexOf(last);
+					next = store.indexOf(r);
+					next += ((next - last) || 1);
 
-							//do this in the next event pump
-							Ext.defer(s.select, 1, s, [next]);
-						}
-						return pass;
+					//do this in the next event pump
+					Ext.defer(s.select, 1, s, [next]);
+				}
+				return pass;
 
-					},
-					select: function(s, r) {
-						if (this.fromClick || this.fromKey) {
-							console.debug('do something with selection');
-							this.fireEvent('contact-row-selected', r);
-						}
-						delete this.fromClick;
-						delete this.fromKey;
+			},
+			select: function(s, r) {
+				if (this.fromClick || this.fromKey) {
+					console.debug('do something with selection');
+					this.fireEvent('contact-row-selected', r);
+				}
+				delete this.fromClick;
+				delete this.fromKey;
 
-						s.deselect(r);
-					}
-				});
+				s.deselect(r);
+			}
+		});
 	},
 
 
