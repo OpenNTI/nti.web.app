@@ -107,7 +107,6 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		}
 
 		el = Ext.get(el);
-		debugger;
 		//if the element has a bottom set, use it to drive the height
 		if (el.getStyle('bottom') !== 'auto') {
 			updateSideBottom.call(this, el, heightAdjustOffset || 0);
