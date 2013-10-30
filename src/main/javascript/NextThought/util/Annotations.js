@@ -46,7 +46,7 @@ Ext.define('NextThought.util.Annotations', {
 				   holder.beginEdit();
 				   holder.set('CreatedTime', ct);
 				   holder.set('Last Modified', lm);
-				   holder.set('Creator', User.getUnresolved('Unknown'));
+				   holder.set('Creator', User.getUnresolved());
 				   holder.set('references', refs);
 
 				   holder.copyFields(note, 'style', 'applicableRange', 'sharedWith', 'selectedText', 'ContainerId', {'NTIID': 'inReplyTo'});

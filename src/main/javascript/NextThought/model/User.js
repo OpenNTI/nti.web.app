@@ -156,6 +156,7 @@ Ext.define('NextThought.model.User', {
 		BLANK_AVATAR: 'resources/images/icons/unresolved-user.png',
 
 		getUnresolved: function(username) {
+			username = username || 'Unknown';
 			var alias = this.getUsername(username),
 				u = new NextThought.model.User({
 			   Username: username,
@@ -174,7 +175,7 @@ Ext.define('NextThought.model.User', {
 			var sitePattern = getString('UnresolvedUsernamePattern', 'username'),
 				// negagitive numbers dont look good. So just Abs() them.  Since we're not
 				// using this other than to display, shouldn't be a problem.
-				hash = Math.abs(usernameSeed.hash()),
+				hash = (usernameSeed && Math.abs(usernameSeed.hash())) || -1,
 				hashPlaceholder = (/(#+)/g);
 
 			if (/^username$/i.test(sitePattern)) {

@@ -335,7 +335,7 @@ Ext.define('NextThought.model.Note', {
 			return this.get('RecursiveLikeCount') || 0;
 		}
 
-		return (this.children || []).reduce(function(sum,child) {
+		return (this.children || []).reduce(function(sum, child) {
 			return sum + (child.getTotalLikeCount ? (child.getTotalLikeCount() || 0) : 0);
 		}, (this.isLiked() ? 1 : 0));
 	},
@@ -346,15 +346,17 @@ Ext.define('NextThought.model.Note', {
 		me.suspendEvents(true);
 		me.callParent(arguments);
 
-		me.set('CreatedTime', data.CreatedTime);
-		me.set('Last Modified', new Date());
-		me.set('Creator', User.getUnresolved('Unknown'));
-		me.set('applicableRange', data.applicableRange);
-		me.set('selectedText', data.selectedText);
-		me.set('inReplyTo', data.inReplyTo);
-		me.set('references', data.references);
-		me.set('style', data.style);
-		me.set('ReferencedByCount', data.ReferencedByCount);
+		me.set({
+			CreatedTime: data.CreatedTime,
+			'Last Modified': new Date(),
+			Creator: User.getUnresolved(),
+			applicableRange: data.applicableRange,
+			selectedText: data.selectedText,
+			inReplyTo: data.inReplyTo,
+			references: data.references,
+			style: data.style,
+			ReferencedByCount: data.ReferencedByCount
+		});
 		me.resumeEvents();
 	}
 });
