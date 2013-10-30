@@ -631,25 +631,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		return belongs;
 	},
 
+	//FIXME: There is no community tab anymore, it is intended to be everything in the stream.
+	//When we made that change we fixed one place filtering was happening but we didn't ever
+	//Fix the logic here.  This is a quick and dirty fix (setting accepted=true) but the filtering
+	//strategy needs to be cleaned up
 	//If there is a community in the shared with list
 	//it goes in the community tag
 	belongsInCommunity: function(change, flStore, communities, noVerify) {
 		var item = change.get('Item'),
 			sharedWith = item.get('sharedWith') || [],
-			accepted = false, belongsInContacts;
+			accepted = true, belongsInContacts;
 
-		Ext.each(sharedWith, function(u) {
-			if (Ext.Array.contains(communities, u)) {
-				accepted = true;
-				return false;
-			}
-			return true;
-		});
-
-		//Topic and posts are PUBLIC. So we'll let them through
-		if (item.isAlwaysPublic) {
-			accepted = true;
-		}
 
 		//Just log an error for now so we know there isn't
 		//a missing condition we didn't consider
