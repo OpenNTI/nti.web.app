@@ -1,6 +1,7 @@
 /*jslint */
 /*globals Globals, NextThought, ObjectUtils, YT */
 Ext.define('NextThought.view.video.Video', {
+	alternateClassName: 'NextThought.Video',
 	extend: 'Ext.Component',
 	alias: 'widget.content-video',
 
@@ -578,11 +579,37 @@ Ext.define('NextThought.view.video.Video', {
 			me.issueCommand(service, 'cleanup');
 		});
 	}
-},
-	function() {
-		this.ASPECT_RATIO = this.prototype.ASPECT_RATIO;
+}, function() {
+	this.ASPECT_RATIO = this.prototype.ASPECT_RATIO;
 
-		ObjectUtils.defineAttributes(this.prototype, {
-			playerHeight: {getter: this.prototype.playerHeight}});
+	ObjectUtils.defineAttributes(this.prototype, {
+		playerHeight: {getter: this.prototype.playerHeight}});
+
+
+
+
+	//keys that exist mean "maybe" supports.  (Apparently canPlayType doesn't return a "Yes")
+	this.supports = {};
+	var video = document.createElement('video'), i, o,
+		types = [
+			{mime: 'video/ogg', key: 'ogg'},
+			{mime: 'video/ogg; codecs="theora, vorbis"', key: 'ogg'},
+			{mime: 'video/webm', key: 'webm'},
+			{mime: 'video/webm; codecs="vp8, vorbis"', key: 'webm'},
+			{mime: 'video/mp4', key: 'mp4'},
+			{mime: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"', key: 'mp4'},
+			{mime: 'application/vnd.apple.mpegURL', key: 'm3u8'},
+			{mime: 'application/x-mpegURL', key: 'm3u8'},
+			{mime: 'video/x-mpegurl', key: 'm3u8'},
+			{mime: 'audio/x-mpegurl', key: 'm3u8'},
+			{mime: 'video/mpegurl', key: 'm3u8'},
+			{mime: 'audio/mpegurl', key: 'm3u8'}
+		];
+
+	while ((o = types.pop()) !== undefined) {
+		i = !!video.canPlayType(o.mime);
+		this.supports[o.key] = this.supports[o.key] || i;
+		//console.debug('Browser suggests that it ' + (i ? 'might be able to' : 'cannot') + ' play ' + o.key + ' (' + o.mime + ')');
 	}
-);
+
+});

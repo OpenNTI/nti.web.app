@@ -282,8 +282,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return me[k] || m;
 		}
 
-		code.push(this.playerCode.inject.toString());
-		code.push('window.addEventListener("load",inject,false);');
+		code.push(
+			'VideoSupports = ', Ext.encode(NextThought.Video.supports), ';',
+			this.playerCode.inject.toString(),
+			'window.addEventListener("load",inject,false);');
 
 		return code.join('\n').replace(/%([^%]+)%/gm, resolve);
 	},
@@ -631,6 +633,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		console.log(this.id, ' MEDIA ERROR', arguments);
 	},
 
+
 	sourceReadyHandler: function() {
 		console.log(this.id, ' SOURCE READY', arguments);
 	},
@@ -640,6 +643,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		console.log(this.id, ' This is ready to play');
 		this.readyHandler();
 	},
+
 
 	entryReadyHandler: function(obj) {
 		var data = obj.data || [],
@@ -653,10 +657,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		console.log('ENTRY Failed handler');
 	},
 
+
 	mediaLoadedHandler: function() {
 		console.log(this.id, ' This media is loaded');
 		this.readyHandler();
 	},
+
 
 	mediaReadyHandler: function() {
 		console.log(this.id, ' MEDIA Ready', arguments);
@@ -668,6 +674,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	playerCode: {
+
 
 		inject: function inject() {
 
@@ -766,10 +773,14 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			//This may fix Safari's full screen.
 			//mw.setConfig( 'EmbedPlayer.FullScreenZIndex', 999999 );
+
 			//May make mobile video player less agressive... *shrug*
 			//mw.setConfig( 'EmbedPlayer.WebKitPlaysInline', true );
-			//May help with the quality negotiations
-			//mw.setConfig('Kaltura.UseAppleAdaptive', true);
+
+			if (VideoSupports.m3u8) {
+				//May help with the quality negotiations
+				mw.setConfig('Kaltura.UseAppleAdaptive', true);
+			}
 
 			//IPad settings
 			//mw.setConfig('EmbedPlayer.EnableIpadHTMLControls', false); //enables native controls with native fullscreen
