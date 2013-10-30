@@ -239,6 +239,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		initCustomScrollOn: function(adjustmentEl, targetEl, options) {
 
 			if (!isFeature('fancy-scroll')) { return; }
+            if(Ext.is.iOS){return;}
 
 			this.mixinData = this.mixinData || {};
 			this.mixinData.customScroll = {adjustmentEl: adjustmentEl, targetEl: targetEl, options: options};
