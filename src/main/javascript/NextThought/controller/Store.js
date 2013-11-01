@@ -741,8 +741,8 @@ Ext.define('NextThought.controller.Store', {
 
 	processError: function(errorOrString) {
 		var error = errorOrString;
-		if (Ext.isString(error)) {
-			error = NextThought.model.store.StripePurchaseError.create({Message: error});
+		if (!error || Ext.isString(error)) {
+			error = NextThought.model.store.StripePurchaseError.create({Message: error || 'Unknown Error'});
 		}
 		else if (error.get('Type') && /NTIException/i.test(error.get('Type'))) {
 			//Stripe promisses use that message is user presentable, but if the ds blows up internally
