@@ -342,7 +342,7 @@
 				}
 			}
 		}
-		#content{
+		#view-tabs:not(:empty) ~ #content{
 			.content-toolbar{
 				.goup{
 					width: 124px;
