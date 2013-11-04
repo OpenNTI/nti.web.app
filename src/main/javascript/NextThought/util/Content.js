@@ -284,10 +284,11 @@ Ext.define('NextThought.util.Content', {
 	//would reside beneath
 	contentPrefix: function(id) {
 		var ntiid = ParseUtils.parseNTIID(id), title, index;
-
-		ntiid.specific.type = 'HTML';
-		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
-		return ntiid.toString();
+		if (ntiid) {
+			ntiid.specific.type = 'HTML';
+			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
+		}
+		return ntiid && ntiid.toString();
 	},
 
 
