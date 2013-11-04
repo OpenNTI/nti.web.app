@@ -57,14 +57,41 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		Ext.defer(Ext.Function.createSequence(this.syncHeight, this.focus, this), 500, this);//let the animation finish
 
 
-		if (Ext.is.iPad) {
-			//put focus on cancel button, so the user can focus and bring up keyboard for title element
-			Ext.defer(function() {
-				var query = Ext.query('.right .action.cancel');
-				if (query) {
-					query[0].focus();
-				}
-			}, 500, this);
+		if (Ext.is.iOS) {
+            var me = this,
+                el = me.editorBodyEl;
+
+            el.dom.onmouseup = function(e){
+                me.scrollDiv = false;
+                if(e.pageY > 438){
+                    me.scrollDiv = true;
+                }
+            }
+
+            //Shorten the editor body to fit on iPad screen when keyboard up
+            el.on('focus', function(){
+                if(!me.bodyheight){
+                    me.bodyheight = el.getHeight();
+                }
+                Ext.defer(function(){
+                    //Make sure on-screen keyboard is up (and not physical keyboard connected)
+                    if(window.innerHeight < 600){
+                        el.setHeight(window.scrollY - 16);
+                        //scroll div is selected part is no longer visible
+                        Ext.defer(function(){
+                            if(me.scrollDiv){
+                                el.scrollBy(0,100);
+                            }
+                        },250, me);
+                    }
+                },250, me);
+            });
+            el.on('blur', function(){
+                if(me.bodyheight){
+                    el.setHeight(me.bodyheight);
+                }
+            });
+
 		}
 	},
 
@@ -79,13 +106,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		Ext.get('profile').removeCls('scroll-lock scroll-padding-right');
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 		Ext.destroy(this.sizer);
-
-		//after iPad version goes back to Thoughts, can't scroll down to see
-		//profile, so set height back to normal when quitting editor
-		if (Ext.is.iPad) {//pushes the profile up
-			var pEl = Ext.get('profile');
-			pEl.scrollBy(0, -400, true);
-		}
 
 		return this.callParent(arguments);
 	},
