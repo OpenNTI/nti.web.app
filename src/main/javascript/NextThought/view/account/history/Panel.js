@@ -170,6 +170,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 			return;
 		}
 
+		function load() {
+			s.load();
+		}
+
 		var s = NextThought.store.PageItem.create({
 			id: this.storeId,
 			groupField: this.grouping,
@@ -206,9 +210,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 		}]);
 
 		if (this.rendered) {
-			this.store.load();
+			load();
 		} else {
-			this.on('afterrender', 'load', this.store);
+			this.on('afterrender', load);
 		}
 		this.bindStore(this.store);
 	},
