@@ -70,7 +70,7 @@ Ext.define('NextThought.view.reader.Panel', {
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 	},
 
-	beforeDeactivate: function(){
+	beforeDeactivate: function() {
 		var reader = this.down('reader-content');
 		return !reader || reader.getNoteOverlay().onNavigation();
 	},

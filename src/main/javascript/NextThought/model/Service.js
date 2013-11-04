@@ -386,9 +386,9 @@ Ext.define('NextThought.model.Service', {
 	 *	The following methods are for deciding when things can or cannot happen
 	 */
 
-  canUploadAvatar: function() {
-    return this.hasCapability('nti.platform.customization.avatar_upload');
-  },
+	canUploadAvatar: function() {
+		return this.hasCapability('nti.platform.customization.avatar_upload');
+	},
 
 
 	canBlog: function() {

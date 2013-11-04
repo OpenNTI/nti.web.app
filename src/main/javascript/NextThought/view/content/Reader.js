@@ -178,12 +178,12 @@ Ext.define('NextThought.view.content.Reader', {
 		this.getIframe().update(false);
 		this.meta = {};
 		this.splash.dom.parentNode.appendChild(this.splash.dom);
-		this.notfound[hideNotFound?'hide':'show']();
+		this.notfound[hideNotFound ? 'hide' : 'show']();
 		this.splash.show();
 	},
 
 
-	allowCustomScrolling: function(){
+	allowCustomScrolling: function() {
 		return this.fireEvent('allow-custom-scrolling');
 	},
 
@@ -197,9 +197,9 @@ Ext.define('NextThought.view.content.Reader', {
 				scrollPosition = this.body.getScroll().top;
 
 		//Other things are based on the windowSize. left and height
-		if (!windowSizeStatics.hasOwnProperty('windowSize')
-				|| !windowSizeStatics.windowSize.width
-				|| windowSizeStatics.windowSize.width !== currentWindowSize.width) {
+		if (!windowSizeStatics.hasOwnProperty('windowSize') ||
+			!windowSizeStatics.windowSize.width ||
+			windowSizeStatics.windowSize.width !== currentWindowSize.width) {
 
 			windowSizeStatics.windowSize = currentWindowSize;
 			windowSizeStatics.left = f.getX();
@@ -208,9 +208,9 @@ Ext.define('NextThought.view.content.Reader', {
 		cache.windowSizeStatics = windowSizeStatics;
 
 		//some are based on scroll position
-		if (!scrollStatics.hasOwnProperty('lastScroll')
-				|| !scrollStatics.top
-				|| scrollStatics.lastScroll !== scrollPosition) {
+		if (!scrollStatics.hasOwnProperty('lastScroll') ||
+			!scrollStatics.top ||
+			scrollStatics.lastScroll !== scrollPosition) {
 			scrollStatics.lastScroll = scrollPosition;
 			scrollStatics.top = f.getY();
 		}

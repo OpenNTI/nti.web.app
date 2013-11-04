@@ -39,9 +39,9 @@ Ext.define('NextThought.view.content.View', {
 				xtype: 'reader'
 			}],
 			listeners: {
-				'beforedeactivate': function(){
+				'beforedeactivate': function() {
 					var active = this.layout && this.layout.activeItem;
-					if(active){
+					if (active) {
 						return active.fireEventArgs('beforedeactivate', arguments);
 					}
 					return true;
@@ -204,7 +204,7 @@ Ext.define('NextThought.view.content.View', {
 			contentNtiid = location.ContentNTIID,
 			title = Library.getTitle(contentNtiid);
 
-		if(contentNtiid && !title){
+		if (contentNtiid && !title) {
 			//we are being asked to switch to something which we no longer
 			//have in the library.  We may have recently have lost access to it.
 			//Maybe its a purchasable we can prompt them with
@@ -326,7 +326,7 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	onLocationCleared: function(){
+	onLocationCleared: function() {
 		this.setActiveTab('course-book');
 		this.courseBook.getLayout().setActiveItem('main-reader-view');
 		delete this.tabs;

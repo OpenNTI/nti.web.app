@@ -43,7 +43,7 @@ Ext.define('NextThought.store.PageItem', function() {
 
 
 		statics: {
-			make: function makeFactory(url,id,disablePaging) {
+			make: function makeFactory(url, id, disablePaging) {
 				var ps = this.create({
 					clearOnPageLoad: false,
 					containerId: id
@@ -64,7 +64,7 @@ Ext.define('NextThought.store.PageItem', function() {
 		},
 
 		onProxyLoad: function(operation) {
-      var resultSet = operation.getResultSet();
+			var resultSet = operation.getResultSet();
 			delete this.batchLinks;
 			if (resultSet && resultSet.links) {
 				this.batchLinks = resultSet.links;
