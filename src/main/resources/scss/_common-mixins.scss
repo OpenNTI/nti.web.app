@@ -1,9 +1,10 @@
 
 @mixin blur-effect() {
 	filter: url(#blur-effect);//moz
-	//filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=8);//IE
 	filter: blur(add = 0, direction = 0, strength = 10);//IE
-	-webkit-filter: blur(8px);
+	body:not(.x-safari) {
+		-webkit-filter: blur(8px);
+	}
 }
 
 @mixin loadingSpinner($top:8px, $left: 10px){
