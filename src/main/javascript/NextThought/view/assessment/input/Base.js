@@ -351,6 +351,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			sortOrder: 'descending'
 		});
 
+		//TODO: this smells funny. Fix.
 		root = 'tag%3Anextthought.com%2C2011-10%3ARoot';
 		url = s.proxy.url;
 		s.proxy.url = url.replace(root, encodeURIComponent(id));
