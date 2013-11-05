@@ -108,7 +108,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 				model: NextThought.model.Title,
 				proxy: 'memory',
 				sorters: [
-					function(a,b) {
+					function(a, b) {
 						a = a.lastTracked.getTime();
 						b = b.lastTracked.getTime();
 						return b - a;
@@ -144,15 +144,15 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			rec.lastTracked = new Date();
 			s.add(rec);
 		}
-		catch(e){
-			console.warn('Dropping content tracking... an error occured:', e.stack|| e.message);
+		catch (e) {
+			console.warn('Dropping content tracking... an error occured:', e.stack || e.message);
 			return;
 		}
 
 		if (s.getCount() > 5) {
 			try {
 				s.remove(s.getRange(5));
-			} catch(er) {
+			} catch (er) {
 				console.warn('An error occured removing the last record from this store, purging just to be safe.', er.stack || er.message);
 				s.removeAll();
 			}
@@ -161,7 +161,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 		if (this.allowTracking) {
 			s = s.getRange();
-			Ext.each(s, function(t,i) {
+			Ext.each(s, function(t, i) {
 
 				s[i] = {index: t.get('index'), lastTracked: t.lastTracked};
 			});
@@ -171,7 +171,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	},
 
 
-	onSelected: function(selModel,record) {
+	onSelected: function(selModel, record) {
 		selModel.deselect(record);
 		this.fireEvent('set-last-location-or-root', record.get('NTIID'));
 		this.hide();

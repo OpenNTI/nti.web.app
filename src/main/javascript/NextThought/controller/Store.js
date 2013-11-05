@@ -107,13 +107,13 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	enrollmentChanged: function(){
+	enrollmentChanged: function() {
 		var purchasables = this.getPurchasableStore().load(),
 			library = Library.getStore();
 
 		library.on({
 			single: true,
-			load: function(){
+			load: function() {
 				purchasables.load();
 			}
 		});
@@ -126,14 +126,14 @@ Ext.define('NextThought.controller.Store', {
 	},
 
 
-	courseEnrolled: function(win, rec){
+	courseEnrolled: function(win, rec) {
 		this.enrollmentChanged();
 	},
 
 
-	courseDropped: function(win, rec){
+	courseDropped: function(win, rec) {
 		this.enrollmentChanged();
-		this.fireEvent('content-dropped',rec);
+		this.fireEvent('content-dropped', rec);
 	},
 
 
@@ -251,11 +251,11 @@ Ext.define('NextThought.controller.Store', {
 			}
 			return true;
 		}
-		
+
 		if (!ntiid) {
 			console.error('No ntiid!');
 		}
-		
+
 		var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid, filter);
 		if (purchasable) {
 			if (purchasable instanceof this.getCourseModel()) {
@@ -407,7 +407,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		if (course.getLink('enroll')) {
-			me.toggleEnrollmentStatus(course, function(q,s,r) {
+			me.toggleEnrollmentStatus(course, function(q, s, r) {
 				if (!s) {
 					console.log(r.responseText);
 					win.showError('An unknown error occurred.  Please try again later.');
@@ -419,9 +419,8 @@ Ext.define('NextThought.controller.Store', {
 			});
 			return;
 		}
-		else{
-			me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
-		}
+
+		me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
 	},
 
 
@@ -435,7 +434,7 @@ Ext.define('NextThought.controller.Store', {
 		}
 
 		if (course.getLink('unenroll')) {
-			me.toggleEnrollmentStatus(course, function(q,s,r) {
+			me.toggleEnrollmentStatus(course, function(q, s, r) {
 				if (!s) {
 					console.log(r.responseText);
 					win.showError('An unknown error occurred. Please try again later.');
@@ -446,7 +445,7 @@ Ext.define('NextThought.controller.Store', {
 				me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
 			});
 		}
-		else{
+		else {
 			this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
 		}
 

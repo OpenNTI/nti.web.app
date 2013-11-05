@@ -97,7 +97,7 @@ Ext.define('NextThought.Library', {
 	purgeTocs: function() {
 		var me = this;
 
-		Ext.Object.each(this.tocs, function(index,toc,o) {
+		Ext.Object.each(this.tocs, function(index, toc, o) {
 			if (!me.getTitle(index)) {
 				delete o[index];
 			}
@@ -111,7 +111,7 @@ Ext.define('NextThought.Library', {
 		}
 
 		if (index && !this.tocs[index]) {
-			return;
+			return undefined;
 		}
 
 		return this.tocs[index];
@@ -258,7 +258,7 @@ Ext.define('NextThought.Library', {
 			return;
 		}
 
-		function setupToc(o,toc) {
+		function setupToc(o, toc) {
 			var d;
 			count--;
 

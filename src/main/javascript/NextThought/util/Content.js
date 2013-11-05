@@ -191,8 +191,8 @@ Ext.define('NextThought.util.Content', {
 
 	/**
 	 *
-	 * @param html {String|Node}
-	 * @param max {int}
+	 * @param {String|Node} html
+	 * @param {int} max
 	 * @return {String}
 	 */
 	getHTMLSnippet: function(html, max) {
@@ -283,7 +283,7 @@ Ext.define('NextThought.util.Content', {
 	//Returns the prefix of the content ntiid we think this ntiid
 	//would reside beneath
 	contentPrefix: function(id) {
-		var ntiid = ParseUtils.parseNTIID(id), title, index;
+		var ntiid = ParseUtils.parseNTIID(id);
 		if (ntiid) {
 			ntiid.specific.type = 'HTML';
 			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
@@ -311,7 +311,7 @@ Ext.define('NextThought.util.Content', {
 				return;
 			}
 
-			vid = (index)[id];
+			vid = index[id];
 
 			if (vid) {
 				container = this.getLineage(id);
@@ -347,7 +347,7 @@ Ext.define('NextThought.util.Content', {
 
 		if (!title) {
 			Ext.callback(cb, scope);
-			return;
+			return false;
 		}
 
 		toc = Library.getToc(title);
@@ -371,7 +371,8 @@ Ext.define('NextThought.util.Content', {
 	/**
 	 * Returns a Purchasable if we have one in the store that looks
 	 * like it would contain the following ntiid.
-	 * @param ntiid A content ntiid or sub ntiid (question ntiid)
+	 * @param {String} ntiid A content ntiid or sub ntiid (question ntiid)
+	 * @param {Function} wantsItem
 	 */
 	purchasableForContentNTIID: function(ntiid, wantsItem) {
 		function fn(rec) {
@@ -406,15 +407,16 @@ Ext.define('NextThought.util.Content', {
 
 		var prefix = getPrefix(ntiid),
 			purchasableStore = Ext.getStore('Purchasable'),
-			purchasableStore = purchasableStore.snapshot || purchasableStore,
 			purchasable, index;
+
+		purchasableStore = purchasableStore.snapshot || purchasableStore;
 
 		if (prefix) {
 			index = purchasableStore.findBy(fn);
-			if(!Ext.isObject(index)){
+			if (!Ext.isObject(index)) {
 				purchasable = index >= 0 ? purchasableStore.getAt(index) : null;
 			}
-			else{
+			else {
 				purchasable = index;
 			}
 		}
@@ -524,8 +526,8 @@ Ext.define('NextThought.util.Content', {
 	 * <object mimeType="application/vnd.nextthought.relatedworkref" ntiid="ref-id" />
 	 *
 	 *
-	 * @param node
-	 * @param toc
+	 * @param {Element} node
+	 * @param {Document} toc
 	 * @return {*} Returns the linked parent or false
 	 */
 	isSymLinked: function(node, toc) {
@@ -538,7 +540,7 @@ Ext.define('NextThought.util.Content', {
 
 
 		if (!map.hasOwnProperty(id)) {
-			nodes = EA.filter(EA.toArray(toc.getElementsByTagNameNS('http://www.nextthought.com/toc', 'related')), function(a) {
+			nodes = EA.filter(EA.toArray(toc.getElementsByTagNameNS('http://www.nextthought.com/toc', 'related'), 0, 0), function(a) {
 				var pass = false,
 					aId = a.getAttribute && a.getAttribute('ntiid'),
 					type = a.getAttribute && a.getAttribute('type') === 'application/vnd.nextthought.content',
@@ -735,7 +737,7 @@ Ext.define('NextThought.util.Content', {
 			return node.getAttribute('ntiid') || null;
 		}
 
-		function child(n,first) {
+		function child(n, first) {
 			var v,
 				topics = n && n.childNodes ? slice.call(n.childNodes) : [];
 
@@ -753,17 +755,16 @@ Ext.define('NextThought.util.Content', {
 
 		//returns either the previous or next actionable node (topic or toc), or null if
 		//we never find anything, meaning we are at one end or the other...
-		function sibling(node,previous) {
+		function sibling(node, previous) {
 			if (!node) {return null;}
 
 			var siblingMethod = previous ? 'previousSibling' : 'nextSibling', //figure direction
 				siblingNode = node[siblingMethod]; //execute directional sibling method
 
 			//If the sibling is TOC or topic, we are done here...
-			return (isTopicOrToc(siblingNode))
-					? siblingNode
+			return (isTopicOrToc(siblingNode)) ? siblingNode :
 					//If not, recurse in the same direction
-					: sibling(node[siblingMethod], previous);
+					sibling(node[siblingMethod], previous);
 		}
 
 		loc = loc ? loc.location : null;
