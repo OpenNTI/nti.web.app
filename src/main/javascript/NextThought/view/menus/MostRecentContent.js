@@ -137,12 +137,14 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	},
 
 
-	track: function(rec) {
+	track: function(rec, remove) {
 		var s = this.getStore();
 		try {
 			s.remove(rec);
 			rec.lastTracked = new Date();
-			s.add(rec);
+			if (!remove) {
+				s.add(rec);
+			}
 		}
 		catch (e) {
 			console.warn('Dropping content tracking... an error occured:', e.stack || e.message);

@@ -52,9 +52,29 @@ Ext.define('NextThought.controller.Navigation', {
 				'*': {
 					'show-ntiid': 'navigateToNtiid',
 					'show-object': 'navigateToContent',
-					'show-view': 'setView'
+					'show-view': 'setView',
+					'content-dropped': 'dropCachedEntries'
 				}
 			}
+		});
+	},
+
+
+	dropCachedEntries: function(rec) {
+		if (!rec || !rec.getId) {
+			Ext.Error.raise({
+				msg: 'Programmer Error: Invalid Arguments',
+				args: arguments
+			});
+		}
+
+		var EA = Ext.Array,
+			ids = [rec.getId()].concat(rec.get('Items'));
+
+		ids = EA.unique(EA.map(ids, ContentUtils.contentPrefix));
+		Ext.each(ids, function(id) {
+			console.warn('Dropping PageInfos for prefix:', id);
+			$AppConfig.service.dropPageInfosForPrefix(id);
 		});
 	},
 

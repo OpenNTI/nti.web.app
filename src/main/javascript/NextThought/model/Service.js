@@ -256,6 +256,19 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	dropPageInfosForPrefix: function(prefix) {
+		var url = this.getObjectURL(prefix),
+				k, o = this.pageInfoCache;
+
+		for (k in o) {
+			if (o.hasOwnProperty(k)) {
+				if (Ext.String.startsWith(k, url, true)) {
+					delete o[k];
+				}
+			}
+		}
+	},
+
 
 	getPageInfo: function(ntiid, success, failure, scope) {
 		var url, q,

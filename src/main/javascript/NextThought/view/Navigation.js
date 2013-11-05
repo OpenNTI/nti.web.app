@@ -167,7 +167,7 @@ Ext.define('NextThought.view.Navigation', {
 			return rec;
 		}
 
-		if (this.currentRecord) {
+		if (this.currentRecord && this.currentRecord !== rec) {
 			this.recordHistory.push(this.currentRecord);
 			if (this.recordHistory.length > 5) {
 				this.recordHistory.shift();
@@ -211,18 +211,19 @@ Ext.define('NextThought.view.Navigation', {
 
 		rec = this.track(rec, pop === true);
 
-		if (!rec) {
-			console.error('No record attached');
-			return;
+		if (rec) {
+			this.imgEl.removeCls(cls);
+			this.imgEl[rec.get('isCourse') ? 'removeCls' : 'addCls'](cls);
+			this.imgEl.setStyle('background-image', 'url(' + rec.get('icon') + ')');
+			this.providerEl.update(rec.get('courseName') || rec.get('Creator'));
+			this.titleEl.update(rec.get('title'));
 		}
-
-		this.imgEl.removeCls(cls);
-
-		this.imgEl[rec.get('isCourse') ? 'removeCls' : 'addCls'](cls);
-
-		this.imgEl.setStyle('background-image', 'url(' + rec.get('icon') + ')');
-		this.providerEl.update(rec.get('courseName') || rec.get('Creator'));
-		this.titleEl.update(rec.get('title'));
+		else {
+			if (this.jumpEl) {
+				this.jumpEl.hide();
+			}
+		}
+		return this;
 	},
 
 

@@ -33,6 +33,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	refs: [
 		{ref: 'mainNav', selector: 'main-navigation'},
+		{ref: 'switcher', selector: 'most-recent-content-switcher'},
 		{ref: 'contentView', selector: 'content-view-container'},
 		{ref: 'contentNavigation', selector: 'content-view-container content-toolbar content-navigation'},
 		{ref: 'contentPager', selector: 'content-view-container content-toolbar content-pager'},
@@ -140,9 +141,13 @@ Ext.define('NextThought.controller.Reader', {
 		var r = this.getContentReader(),
 			loc = r.getLocation(),
 			ntiid = loc.ContentNTIID;
+
 		if (!rec || !ntiid || Ext.Array.contains(rec.get('Items'), ntiid)) {
+		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
 			this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
+			this.getMainNav().updateCurrent(true);
+			this.getSwitcher().track(loc.title, true);
 		}
 	},
 
