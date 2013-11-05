@@ -87,7 +87,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	onPrivateNoteAnnouned: function(annotation,y) {
+	onPrivateNoteAnnouned: function(annotation, y) {
 		var reader = annotation && annotation.ownerCmp,
 			notepad = reader && reader.notepadRef;
 
@@ -136,7 +136,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	maybeClearLocation: function(rec){
+	maybeClearLocation: function(rec) {
 		var r = this.getContentReader(),
 			loc = r.getLocation(),
 			ntiid = loc.ContentNTIID;

@@ -42,7 +42,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	clearLocation: function() {
 		this.currentNTIID = null;
 		this.currentPageInfo = null;
-		this.fireEvent('location-cleared',this.reader);
+		this.fireEvent('location-cleared', this.reader);
 		this.reader.setSplash(true);
 	},
 
@@ -181,7 +181,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
 		}
 
-		function failure(q,r) {
+		function failure(q, r) {
 			console.error('resolvePageInfo Failure: ', arguments);
 			// Give the navigateAbort handler a chance to see if it can resolve and navigate to the correct location.
 			// it will explicitly return false, if it thinks it can handle it, otherwise, we callback.
