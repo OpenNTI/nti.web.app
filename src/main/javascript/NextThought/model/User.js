@@ -157,7 +157,8 @@ Ext.define('NextThought.model.User', {
 
 		getUnresolved: function(username) {
 			username = username || 'Unknown';
-			var alias = this.getUsername(username),
+			var maybeObfuscate = username !== 'Unknown',
+				alias = maybeObfuscate ? this.getUsername(username) : username,
 				u = new NextThought.model.User({
 			   Username: username,
 			   alias: alias,
