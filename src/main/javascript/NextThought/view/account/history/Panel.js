@@ -269,9 +269,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 			'activate': 'maybeShowMoreItems'
 		});
 
+		this.lastScroll = 0;
 		this.mon(this.el, {
-			scope: this,
-			scroll: this.onScroll
+			scroll: 'onScroll'
 		});
 
 		this.getTypesMenu().show().hide();
@@ -308,7 +308,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		me.cancelPopupTimeout();
 
-		me.hoverTimeout = Ext.defer(this.showPopup, 500, me, [record, item]);
+		me.hoverTimeout = Ext.defer(this.showPopup, 1200, me, [record, item]);//make sure the user wanted it...wait for the pause.
 
 		target.on('mouseout', me.cancelPopupTimeout, me, {single: true});
 	},
@@ -362,7 +362,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	prefetchNext: function() {
+	prefetchNext: Ext.Function.createBuffered(function() {
 		var s = this.getStore(), max;
 
 		if (!s.hasOwnProperty('data')) {
@@ -374,16 +374,22 @@ Ext.define('NextThought.view.account.history.Panel', {
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
-	},
+	}, 500, null, null),
 
 
 	onScroll: function(e, dom) {
-		var el = dom.lastChild,
-			offsets = Ext.get(el).getOffsetsTo(dom),
-			top = offsets[1] + dom.scrollTop,
-			ctBottom = dom.scrollTop + dom.clientHeight;
+		var top = dom.scrollTop,
+			scrollTopMax = dom.scrollHeight - dom.clientHeight,
+		// trigger when the top goes over the a limit value.
+		// That limit value is defined by the max scrollTop can be, minus a buffer zone. (defined here as 10% of the viewable area)
+			triggerZone = scrollTopMax - Math.floor(dom.clientHeight * 0.1),
+			wantedDirection = this.lastScroll < dom.scrollTop; // false(up), true(down)
+		this.lastScroll = dom.scrollTop;
 
-		if (ctBottom > top) {
+		//popouts are annoying when scrolling
+		this.cancelPopupTimeout();
+
+		if (wantedDirection && top > triggerZone) {
 			this.prefetchNext();
 		}
 
