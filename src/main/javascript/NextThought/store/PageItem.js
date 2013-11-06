@@ -182,18 +182,27 @@ Ext.define('NextThought.store.PageItem', function() {
 				};
 			}
 
-			//find my parent if it's there and add myself to it:
-			var adopted,
-				refs = (record.get('references') || []).slice();
+			function updateRef(record) {
+				//find my parent if it's there and add myself to it:
+				var adopted,
+					refs = (record.get('references') || []).slice();
 
-			if (!Ext.isEmpty(refs)) {
-				while (!adopted && !Ext.isEmpty(refs)) {
-					this.each(checkStoreItem(refs.pop()));
-				}
+				if (!Ext.isEmpty(refs)) {
+					while (!adopted && !Ext.isEmpty(refs)) {
+						this.each(checkStoreItem(refs.pop()));
+					}
 
-				if (!adopted) {
-					console.warn('Unable to parent child', record);
+					if (!adopted) {
+						console.warn('Unable to parent child', record);
+					}
 				}
+			}
+
+			if	(Ext.isArray(record)) {
+				Ext.each(record, updateRef, this);
+			}
+			else {
+				updateRef.call(this, record);
 			}
 
 		//	coordinator.fireEvent('added-item', [record]);
