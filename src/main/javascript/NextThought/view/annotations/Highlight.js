@@ -145,7 +145,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			r = this.getRange();
 		}
 
-		rect = RangeUtils.safeBoundingBoxForRange(r);
+		rect = r && RangeUtils.safeBoundingBoxForRange(r);
 		if (!rect) {
 			return NextThought.view.annotations.Base.NOT_FOUND;
 		}
