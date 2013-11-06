@@ -24,7 +24,8 @@ Ext.define('NextThought.util.Annotations', {
 				*/
 			   replyToPlaceHolder: function(note) {
 				   var holder = new NextThought.model.Note(),
-						   refs = (note.get('references') || []).slice(),
+					   creator,
+					   refs = (note.get('references') || []).slice(),
 				   //Make sure we create a new date object so we don't mutate the
 				   //the field in the child record.
 						   ct = new Date(note.get('CreatedTime').getTime()), lm;
@@ -42,11 +43,13 @@ Ext.define('NextThought.util.Annotations', {
 				   //ct.setMinutes(ct.getMinutes()-1);
 				   ct.setSeconds(ct.getSeconds() - 1);
 				   lm = new Date(ct.getTime());
+				   creator = User.getUnresolved();
+				   creator.set('alias', ' ');//yes, its a space.
 
 				   holder.beginEdit();
 				   holder.set('CreatedTime', ct);
 				   holder.set('Last Modified', lm);
-				   holder.set('Creator', User.getUnresolved());
+				   holder.set('Creator', creator);
 				   holder.set('references', refs);
 
 				   holder.copyFields(note, 'style', 'applicableRange', 'sharedWith', 'selectedText', 'ContainerId', {'NTIID': 'inReplyTo'});
