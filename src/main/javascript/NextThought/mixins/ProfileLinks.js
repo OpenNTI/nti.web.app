@@ -21,6 +21,8 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 		var u = this.userObject || this.user,
 				event = 'profile-link-clicked', me = this;
 
+		stopShowCard();
+
 		// NOTE: Here we want to fire the event with a callback,
 		// that way whoever listens to the event will choose
 		// to either cancel the event, or continue the navigation.

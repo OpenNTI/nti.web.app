@@ -266,8 +266,8 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 
 	maybeCloseMediaViewer: function(user, callback, scope) {
-		var me = this;
-		if (this.activeMediaPlayer) {
+		var active = this.getActiveMediaViewer() || this.getActiveSlideDeck();
+		if (active) {
 			Ext.Msg.show({
 				msg: 'You are about to exit the media viewer.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
@@ -277,7 +277,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 				fn: function(str) {
 					if (str === 'ok') {
 						//console.debug('should dismiss the MEDIA VIEWER prior to navigating: ', arguments);
-						me.activeMediaPlayer.fireEvent('exit-viewer');
+						active.fireEvent('exit-viewer');
 						Ext.callback(callback, scope, [true]);
 					}
 				}
