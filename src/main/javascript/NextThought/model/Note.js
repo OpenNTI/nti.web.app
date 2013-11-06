@@ -342,14 +342,17 @@ Ext.define('NextThought.model.Note', {
 
 	convertToPlaceholder: function() {
 		var me = this,
-			data = this.getData(false);
+			data = this.getData(false),
+			p = User.getUnresolved();
 		me.suspendEvents(true);
 		me.callParent(arguments);
+
+		p.set('alias', ' ');
 
 		me.set({
 			CreatedTime: data.CreatedTime,
 			'Last Modified': new Date(),
-			Creator: User.getUnresolved(),
+			Creator: p,
 			applicableRange: data.applicableRange,
 			selectedText: data.selectedText,
 			inReplyTo: data.inReplyTo,
