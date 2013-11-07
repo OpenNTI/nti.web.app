@@ -265,6 +265,11 @@ Ext.define('NextThought.util.Content', {
 		var result = null,
 			cache = this.findCache = (this.findCache || {});
 
+		if (!containerId || !ParseUtils.isNTIID(containerId)) {
+			console.error('Invalid ID');
+			return null;
+		}
+
 		result = cache[containerId];
 		if (!result) {
 			Library.each(function(o) {
@@ -651,7 +656,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		var me = this, r, l, d, i = id;
-		if (!i) {
+		if (!i || !ParseUtils.isNTIID(i)) {
 			return this.NO_LOCATION;
 		}
 
