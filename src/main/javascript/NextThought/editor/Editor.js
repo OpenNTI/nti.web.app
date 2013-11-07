@@ -425,6 +425,19 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.contentEl = el.down('.content');
 		me.contentEl.selectable();
 
+		me.mon(me.el, {
+			keydown: function(e) {
+				var v;
+				if (e.getKey() === e.ESC) {
+					e.stopPropagation();
+					v = me.getValue();
+					if (Ext.isEmpty(v.body) && Ext.isEmpty(v.title)) {
+						me.onCancel(e);
+					}
+				}
+			}
+		});
+
 		me.mon(me.contentEl, {
 			scope: me,
 			keydown: me.onKeyDown,
