@@ -22,7 +22,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		var me = this;
 
-		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition,10);
+		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
 		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
 
 		this.insertOverlay();
@@ -62,6 +62,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			renderTo: Ext.getBody(),
 			enableShareControls: true,
 			enableTitle: true,
+			width: 325,//match the content note window's width...a bit hackish, but this will get it from growing wider for now.
 			listeners: {
 				'deactivated-editor': function() {
 					me.fireEvent('editorDeactivated');
@@ -209,12 +210,12 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	syncHeight: function() {
-		var cmps, 
-			r = this.reader, 
+		var cmps,
+			r = this.reader,
 			el = r && r.el;
 
 		if (el && el.isVisible(true)) {
-			Ext.defer(this.syncHeight,10,this);
+			Ext.defer(this.syncHeight, 10, this);
 			return;
 		}
 
@@ -304,7 +305,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		//TODO: This function should be buffered, but doing so would cause
 		// the previous calls to be dropped.
 		if (!me.reader.el.isVisible(true)) {
-			Ext.defer(this.registerGutterRecords,10,this,arguments);
+			Ext.defer(this.registerGutterRecords, 10, this, arguments);
 			return;
 		}
 
