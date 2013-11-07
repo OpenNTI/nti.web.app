@@ -48,7 +48,7 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 	getError: function(e) {
-		return e.stack || e.stacktrace || e;
+		return e.stack || e;
 	},
 
 	stopBackspace: function(doc) {

@@ -310,7 +310,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 			}
 		}
 		catch (e) {
-			console.error(e.message, e.stack || e.stacktrace);
+			console.error(e.message, e.stack);
 		}
 	},
 

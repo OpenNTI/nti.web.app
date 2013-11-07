@@ -64,7 +64,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			}
 		}
 		catch (e) {
-			console.error(e.stack || e.stacktrace || e.message || e);
+			console.error(e.stack || e.message || e);
 		}
 	}
 
@@ -74,7 +74,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			updateSideHeight.call(this, -bottomMargin);
 		}
 		catch (e) {
-			console.error(e.stack || e.stacktrace || e.message || e);
+			console.error(e.stack || e.message || e);
 		}
 	}
 

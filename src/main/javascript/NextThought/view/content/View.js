@@ -441,7 +441,7 @@ Ext.define('NextThought.view.content.View', {
 			this.up('master-view').down('library-collection').updateSelection(ntiid, true);
 		}
 		catch (e) {
-			console.error(e.message, '\n\n', e.stack || e.stacktrace || e, '\n\n');
+			console.error(e.message, '\n\n', e.stack || e, '\n\n');
 		}
 		finally {
 			this.fireEvent('finished-restore');

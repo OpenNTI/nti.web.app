@@ -324,7 +324,7 @@ Ext.define('NextThought.controller.State', {
 		}
 		catch (e) {
 			console.error('An error occurred gather state transaction. Aborting transaction',
-				this.transactions, active, e.stack || e.stacktrace || e.message || e);
+				this.transactions, active, e.stack || e.message || e);
 			return;
 		}
 

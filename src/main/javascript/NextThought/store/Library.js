@@ -72,7 +72,7 @@ Ext.define('NextThought.store.Library', {
 				this.proxy.url = getURL($AppConfig.service.getMainLibrary().href);
 			}
 			catch (e) {
-				console.error(e.message, e.stack || e.stacktrace || e);
+				console.error(e.message, e.stack || e);
 			}
 		}
 	},

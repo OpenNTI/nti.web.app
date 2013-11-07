@@ -320,7 +320,7 @@ Ext.define('NextThought.model.Service', {
 					try {
 						ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
 					} catch (e) {
-						console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.stacktrace || e.message);
+						console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.message);
 					}
 				} else {
 					console.debug('Not caching response because it wasn\'t a 200', resp);

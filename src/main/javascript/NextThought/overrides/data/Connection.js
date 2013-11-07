@@ -54,7 +54,7 @@ Ext.define('NextThought.overrides.data.Connection', {
 			var loc = null;
 			try { loc.toString(); }//force an error
 			catch (e) {
-				loc = e.stack || e.stacktrace;
+				loc = e.stack;
 				loc = loc.toString().split('\n').slice(6).join('\n');
 
 			}
