@@ -16,9 +16,8 @@
 
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching',
-		window.disableCaching !== undefined
-				? window.disableCaching
-				: false );
+		window.disableCaching !== undefined ?
+		window.disableCaching : false);
 
 Ext.application({
 	name: 'NextThought',
@@ -56,36 +55,36 @@ Ext.application({
 		'Stream'
 	],
 
-	launch: function(){
+	launch: function() {
 		console.debug('launching');
 
 		function start() {
-			if( Ext.is.iOS ){
+			if (Ext.is.iOS) {
 				Ext.getBody().addCls('x-ios');
 			}
 
-			Ext.applyIf($AppConfig,{links:{}});
-			
+			Ext.applyIf($AppConfig, {links: {}});
+
 			me.getController('Session').login(me);
 			NextThought.isReady = true;
 		}
 
-        var me = this,
-			unsupported = [], g, geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent)||[];
+		var me = this,
+			unsupported = [], g, geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-				['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
-			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
+				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
+				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
-		if(unsupported.length!==0 || (!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9 ) && !Ext.isWebKit)){
+		if (unsupported.length !== 0 || (!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9) && !Ext.isWebKit)) {
 			location.replace($AppConfig.server.unsupported);
 		}
 
-		if(Ext.isSafari && Ext.safariVersion <= 6){
+		if (Ext.isSafari && Ext.safariVersion <= 6) {
 			Ext.getBody().addCls('disable-animations');
 		}
 
-		if(!Globals.validateConfig()){
+		if (!Globals.validateConfig()) {
 			return;
 		}
 
@@ -101,7 +100,7 @@ Ext.application({
 		g = me.getController('Google');
 
 
-		if(g.isHangout()){
+		if (g.isHangout()) {
 			g.onHangoutReady(start);
 		}
 		else {
@@ -111,6 +110,6 @@ Ext.application({
 });
 
 //lets not show our dirty lawndry... urls sould be pretty with no "files" in them.
-if( location.toString().indexOf('index.html')>0 ){
-	location.replace(location.toString().replace('index.html',''));
+if (location.toString().indexOf('index.html') > 0) {
+	location.replace(location.toString().replace('index.html', ''));
 }
