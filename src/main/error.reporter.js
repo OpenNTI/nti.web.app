@@ -13,7 +13,6 @@
 			method = postData ? 'POST' : 'GET';
 	    if (!req) { return; }
 	    req.open(method, url, true);
-	    req.setRequestHeader('User-Agent', 'XMLHTTP/1.0');
 	    if (postData) {
 	        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		}
@@ -37,10 +36,19 @@
 
 	window.onerror = function(msg, url, line) {
 		var me = this, args = arguments;
+		function escape(s) {
+			return (s || '').toString().replace(/"/g, '\\"');
+		}
+		try {
 			sendRequest(
-					'/reportCrash',
+					'/dataserver2/@@send-crash-report',
 					function() {onerror.apply(me, args);},
-					'm: ' + msg + '\nf: ' + url + '\nl: ' + line
+					'{"message":"' + escape(msg) +
+					'","file":"' + escape(url) +
+					'","line":"' + escape(line) + '"}'
 			);
+		} catch (e) {
+			onerror.apply(me, args);
+		}
 	};
 }());
