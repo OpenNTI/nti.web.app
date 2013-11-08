@@ -41,13 +41,19 @@ Ext.define('NextThought.view.content.Navigation', {
 	onUp: function(e) {
 		e.stopEvent();
 
+		if (!this.upEl || !this.upEl.isVisible() || this.upEl.hasCls('disabled')) {
+			return;
+		}
+
 		if (this.upMenu) {
 			this.upMenu.stopHide();
 			this.upMenu.stopShow();
 		}
 		// pop up one level.
-		var lineage = ContentUtils.getLineage(this.currentNtiid, false, true);
-		this.fireEvent('set-location', lineage[1]);
+		var up = ContentUtils.getLineage(this.currentNtiid, false, true)[1];
+		if (up) {
+			this.fireEvent('set-location', up);
+		}
 	},
 
 
