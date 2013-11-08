@@ -21,7 +21,7 @@ describe('NumericMath input Tests', function(){
 				reset: noop,
 				disableSolution: noop,
 				part: part,
-				filterHTML: Ext.emptyFn();
+				filterHTML: Ext.emptyFn()
 			});
 
 		solutionContent = nmInput.getSolutionContent(part);
