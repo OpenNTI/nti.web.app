@@ -17,7 +17,8 @@ module.exports = function(config) {
 		'ext-4.2/ext-all-debug.js',
 		'bootstrap.js',
 		'config.js',
-		{pattern: 'resources/**/*.js', include:false},
+		{pattern: 'mock/**/*', included: false},
+		{pattern: 'resources/**/*', included: false},
 		{pattern: 'javascript/libs.js', included: false},
 		{pattern: 'javascript/NextThought/**/*.js', included: false},
 		'karma.paths.js',
@@ -46,7 +47,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_INFO,
 
 
     // enable / disable watching file and executing tests whenever any file changes
