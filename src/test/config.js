@@ -1,5 +1,10 @@
 // Config stubbing
 var $AppConfig = {
+	enableLogging: true,
+	debug: true,
+	debugDelegation: true,
+	debugSocket: true,
+	debugSocketVerbosely: true,
 	server: {
 		host: 'mock',
 		data: '/dataserver/'
@@ -7,81 +12,81 @@ var $AppConfig = {
 };
 
 var mockUser = {
-	"Class": "User",
-	"Links": [
+	'Class': 'User',
+	'Links': [
 		{
-			"href": "fill-this-in",
-			"Class": "Link",
-			"rel": "edit"
+			'href': 'fill-this-in',
+			'Class': 'Link',
+			'rel': 'edit'
 		}
 	],
-	"NTIID": "oid-2",
-	"Presence": "Online",
-	"Username": "test@nextthought.com",
+	'NTIID': 'oid-2',
+	'Presence': 'Online',
+	'Username': 'test@nextthought.com',
 
-	"alias": "John",
-	"realname": "John Doe",
+	'alias': 'John',
+	'realname': 'John Doe',
 
-	"Communities": [
+	'Communities': [
 		{
-			"alias": "Public",
-			"Class": "Community",
-			"Username": "Everyone",
-			"ID": "Everyone",
-			"NTIID": "oid-0"
+			'alias': 'Public',
+			'Class': 'Community',
+			'Username': 'Everyone',
+			'ID': 'Everyone',
+			'NTIID': 'oid-0'
 		}
 	],
-	"accepting": [],
-	"following": [
+	'accepting': [],
+	'following': [
 		{
-			"alias": "NTI",
-			"Class": "Community",
-			"Username": "NextThought",
-			"ID": "NextThought",
-			"NTIID": "oid-1"
+			'alias': 'NTI',
+			'Class': 'Community',
+			'Username': 'NextThought',
+			'ID': 'NextThought',
+			'NTIID': 'oid-1'
 		}
 	],
-	"ignoring": []
+	'ignoring': []
 };
 
 //mock socketio
 var io = {
-	connect: function(){ return {
-		on: function(){},
-		emit: function(){},
-		disconnect: function(){},
-		onPacket: function(){},
+	connect: function() { return {
+		on: function() {},
+		emit: function() {},
+		disconnect: function() {},
+		onPacket: function() {},
 		socket: {
-			disconnectSync: function(){}
+			disconnectSync: function() {}
 		}
 	};}
 };
 
 
 var mockService = {
-	"Items": [
+	'Items': [
 		{
-			"Items": [],
-			"Title": "test@nextthought.com"
+			'Items': [],
+			'Title': 'test@nextthought.com'
 		},
 		{
-			"Items": [
+			'Items': [
 				{
-					"href": "/library/library.json",
-					"accepts": [],
-					"Class": "Collection",
-					"Title": "Main"
+					'href': '/library/library.json',
+					'accepts': [],
+					'Class': 'Collection',
+					'Title': 'Main'
 				}
 			],
-			"Class": "Workspace",
-			"Title": "Library"
+			'Class': 'Workspace',
+			'Title': 'Library'
 		}
 	],
-	"Class": "Service"
+	'Class': 'Service'
 };
 
 var NTITestUtils = {
-	newInstanceOfSingleton: function(singleton){
+	newInstanceOfSingleton: function(singleton) {
 		var obj = {};
 		/*jslint sub:true */ //no way to ignore reserved property if using dot notation
 		obj['__proto__'] = singleton['__proto__'];

@@ -4,7 +4,6 @@ describe('Sanitizing HTML', function(){
 		editor = new NextThought.editor.Editor();
 	});
 	it('escapes script tags', function(){
-		debugger;
 		var str = "<script>setTimeout(function() {alert('Hallo');}, 50);</script>";
 
 		expect(/<script.*?>/g.test(str)).toBeTruthy();
