@@ -18,11 +18,27 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
+		var headline = this.record.get('headline');
+
 		this.renderData = Ext.apply(this.renderData || {},{
 			showName: false,
 			headerCls: 'blog-post',
 			path: 'Thoughts',
 			showPermissions: true
+		});
+
+		r = this.renderData;
+
+		if (!headline || !headline.getData) {
+			console.warn('The record does not have a story field or it does not implement getData()', r);
+
+			Ext.defer(this.destroy, 1, this);
+			return;
+		}
+		
+		r.headline = headline.getData();
+		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t){
+			return !ParseUtils.isNTIID(t);
 		});
 	},
 
