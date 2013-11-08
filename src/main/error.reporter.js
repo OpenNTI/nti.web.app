@@ -5,8 +5,7 @@
 		    function() {return new ActiveXObject('Msxml2.XMLHTTP');},
 		    function() {return new ActiveXObject('Msxml3.XMLHTTP');},
 		    function() {return new ActiveXObject('Microsoft.XMLHTTP');}
-		],
-		onerror = window.onerror || function() {};
+		];
 
 	function sendRequest(url, callback, postData) {
 	    var req = createXMLHTTPObject(),
@@ -34,21 +33,28 @@
 	    return null;
 	}
 
-	window.onerror = function(msg, url, line) {
-		var me = this, args = arguments;
-		function escape(s) {
-			return (s || '').toString().replace(/"/g, '\\"');
-		}
-		try {
-			sendRequest(
-					'/dataserver2/@@send-crash-report',
-					function() {onerror.apply(me, args);},
-					'{"message":"' + escape(msg) +
-					'","file":"' + escape(url) +
-					'","line":"' + escape(line) + '"}'
-			);
-		} catch (e) {
-			onerror.apply(me, args);
-		}
-	};
+	function hook() {
+		var onerror = window.onerror || function() {};
+		window.onerror = function(msg, url, line) {
+			var me = this, args = arguments;
+			function escape(s) {
+				return (s || '').toString().replace(/"/g, '\\"');
+			}
+			try {
+				sendRequest(
+						'/dataserver2/@@send-crash-report',
+						function() {onerror.apply(me, args);},
+						'{"message":"' + escape(msg) +
+						'","file":"' + escape(url) +
+						'","line":"' + escape(line) + '"}'
+				);
+			} catch (e) {
+				onerror.apply(me, args);
+			}
+		};
+	}
+
+	hook();
+
+	window.reportErrorEvent = hook;
 }());
