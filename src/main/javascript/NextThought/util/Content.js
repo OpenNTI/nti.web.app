@@ -248,7 +248,8 @@ Ext.define('NextThought.util.Content', {
 			return out.innerHTML;
 		}
 
-		return null;
+
+		return html && html.replace(/<[^>]/, ' ').substr(0, max);
 	},
 
 
