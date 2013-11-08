@@ -67,7 +67,7 @@ var mockService = {
 		{
 			"Items": [
 				{
-					"href": "/Library/library.json",
+					"href": "/library/library.json",
 					"accepts": [],
 					"Class": "Collection",
 					"Title": "Main"
