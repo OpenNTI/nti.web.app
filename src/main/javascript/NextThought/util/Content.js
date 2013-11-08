@@ -249,7 +249,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 
-		return html && html.replace(/<[^>]/, ' ').substr(0, max);
+		return html && html.replace(/<[^>]+>/, ' ').substr(0, max);
 	},
 
 
