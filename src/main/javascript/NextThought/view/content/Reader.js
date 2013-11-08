@@ -174,6 +174,9 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	setSplash: function(hideNotFound) {
+		if (!this.rendered) {
+			return;
+		}
 		this.getScroll().to(0, false);
 		this.getIframe().update(false);
 		this.meta = {};
