@@ -9,7 +9,7 @@ Ext.application({
 		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox',
-		'Ext.ux.ajax.SimManager' 
+		'Ext.ux.ajax.SimManager'
 	],
 
 
@@ -35,12 +35,12 @@ Ext.application({
 	],
 
 	launch: function() {
-		function go(){
+		function go() {
 			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, 'test@nextthought.com', mockUser);
-			ObjectUtils.defineAttributes($AppConfig,{
+			ObjectUtils.defineAttributes($AppConfig, {
 				username: {
-					getter: function(){ try { return this.userObject.getId(); } catch(e){console.error(e.stack);} },
-					setter: function(){ throw 'readonly'; }
+					getter: function() { try { return this.userObject.getId(); } catch (e) {console.error(e.stack);} },
+					setter: function() { throw 'readonly'; }
 				}
 			});
 			$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
@@ -73,7 +73,7 @@ Ext.application({
 			'javascript/specs/util/Views.spec.js',
 			'javascript/specs/util/Ranges.spec.js',
 			'javascript/specs/util/Dom.spec.js',
-            'javascript/specs/model/Base.spec.js',
+			'javascript/specs/model/Base.spec.js',
 			'javascript/specs/model/Note.spec.js',
 			'javascript/specs/model/Hit.spec.js',
 			'javascript/specs/model/FriendsList.spec.js',
@@ -118,7 +118,25 @@ Ext.application({
 			'javascript/specs/controller/Search.spec.js',
 			'javascript/specs/controller/Store.spec.js',
 			'javascript/specs/preference/Manager.spec.js'
-        ],
+		],
 		go);
 	}
 });
+
+var uxCheck = setInterval(function() {
+	function fail(a, s, b) {
+		if (!s || b.status === 404) {
+			console.error('You need to move or link the <ext>/examples/ux directory to <ext>/src/ux');
+		}
+	}
+
+	var r = {
+		url: Ext.Loader.getPath('Ext') + '/ux/ajax/SimManager.js',
+		callback: fail
+	};
+
+	try {
+		Ext.Ajax.request(r);
+		clearInterval(uxCheck);
+	} catch (e) {}
+},1000);
