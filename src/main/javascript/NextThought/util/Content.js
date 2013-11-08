@@ -215,6 +215,9 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('IllegalArgument');
 		}
 
+		Ext.each(Ext.DomQuery.select('.body-divider .toolbar', d), function(e) { e.parentNode.removeChild(e); });
+		html = d.innerHTML; //filter out whiteboard controls
+
 		if (d.firstChild) {
 			r.setStartBefore(d.firstChild);
 		}
@@ -248,8 +251,8 @@ Ext.define('NextThought.util.Content', {
 			return out.innerHTML;
 		}
 
-
-		return html && html.replace(/<[^>]+>/, ' ').substr(0, max);
+		//wasn't long enough to split
+		return html;
 	},
 
 

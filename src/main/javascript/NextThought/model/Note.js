@@ -244,7 +244,7 @@ Ext.define('NextThought.model.Note', {
 	resolveNotePreview: function(cb, max) {
 		var t = this.get('title'),
 			body = this.get('body'),
-			snip;
+			snip, onlyObject;
 
 		max = max || 36;
 		// NOTE: If there is a title set it.
@@ -254,11 +254,12 @@ Ext.define('NextThought.model.Note', {
 			snip = Ext.String.ellipsis(t, max, false);
 		}
 		else {
-			if (this.isWhiteboardOnly(body)) {
+			onlyObject = this.isWhiteboardOnly(body);
+			if (!t && onlyObject) {
 				t = 'Whiteboard';
 			}
 			this.compileBodyContent(function(html) {
-				snip = ContentUtils.getHTMLSnippet(html, max);
+				snip = onlyObject ? html : ContentUtils.getHTMLSnippet(html, max);
 				Ext.callback(cb, null, [snip || html, t]);
 			}, null, null, null);
 
