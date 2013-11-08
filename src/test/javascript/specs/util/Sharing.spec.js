@@ -98,6 +98,53 @@ describe('Sharing Utils', function(){
 		});
 	});
 
+	describe('getTagSharingInfo', function(){
+		it('public without entities', function(){
+			var sharingInfo = {publicToggleOn: true, entities: []},
+				sharedWith = TestSharingUtils.getTagSharingInfo(sharingInfo,[]);
+
+			expect(Ext.isEmpty(sharedWith.tags)).toBeTruthy();
+			expect(Ext.isEmpty(sharedWith.entities)).toBeTruthy();
+		});
+
+		it('public with entities', function(){
+			var sharingInfo = {publicToggleOn: true, entities: ['a','b']},
+				sharedWith = TestSharingUtils.getTagSharingInfo(sharingInfo,['a','b']),
+				tagsDiff = Ext.Array.difference(sharedWith.tags, ['a','b']);
+
+			expect(Ext.isEmpty(tagsDiff)).toBeTruthy();
+			expect(Ext.isEmpty(sharedWith.entities)).toBeTruthy();
+		});
+	});
+
+	describe('tagShareToSharedInfo', function(){
+		it('No ntiids in the tags is the same as calling sharedWithToSharedInfo', function(){
+			var sharedWith = ['a','b'],
+				tagSharedWith = TestSharingUtils.tagShareToSharedInfo(sharedWith, ['tag1','tag2']),
+				sharingInfo = TestSharingUtils.sharedWithToSharedInfo(sharedWith);
+
+			expect(Ext.Array.equals(tagSharedWith, sharingInfo)).toBeTruthy();
+		});
+
+		it('Some ntiids in the tags', function(){
+			var tagSharedInfo, diff, sharedWith = ['a','b'],
+				ntiids = ['tag:nextthought.com,2011-10:system-NamedEntity:ntiid1'],
+				tags = ['tag1','tag2'],
+				expected = {
+					publicToggleOn: true,
+					entities: ntiids
+				};
+
+			tags.push(ntiids[0]);
+
+			tagSharedInfo = TestSharingUtils.tagShareToSharedInfo(sharedWith, tags);
+
+			diff = Ext.Array.difference(tagSharedInfo, tags);
+
+			expect(Ext.isEmpty(diff)).toBeTruthy();
+		});
+	});
+
 	afterEach(function(){
 		TestSharingUtils.getAppUserCommunities = globalAppUserFunc;
 		document.body.removeChild(testBody);

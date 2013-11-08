@@ -103,7 +103,7 @@ Ext.define('NextThought.util.Sharing', {
 			tags: [],
 			entities: []
 		}
-
+		//if the post is public add the ntiids to the tags
 		if(isPublic){
 			Ext.Array.each(explicitNtiids, function(u){
 				if(ParseUtils.isNTIID(u)){
@@ -113,7 +113,7 @@ Ext.define('NextThought.util.Sharing', {
 
 			return result;
 		}
-
+		//else get the normal sharing info
 		result.entities = this.sharedWithForSharingInfo(sharingInfo);
 
 		return result;
@@ -196,6 +196,8 @@ Ext.define('NextThought.util.Sharing', {
 		return shareInfo;
 	},
 
+
+	//If there are any ntiids in the tags, assume that its public and those ntiids are the entities
 	tagShareToSharedInfo: function(sharedWith, tags){
 		var nts = Ext.Array.filter(tags, function(t){
 			return ParseUtils.isNTIID(t);
@@ -274,6 +276,7 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 
+	//Take the shared with and tags of a post and returns the long sharing text
 	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength){
 		var entities, str;
 
@@ -281,9 +284,11 @@ Ext.define('NextThought.util.Sharing', {
 			return ParseUtils.isNTIID(t);
 		});
 
+		//if there are no ntiids in the tags treat it normally
 		if(Ext.isEmpty(entities)){
 			this.getLongSharingDisplayText(sharedWith, callback, scope);
 		}else{
+			//get all the user objects for the ntiids in the tags
 			$AppConfig.service.getObjects(entities, function(users){
 				var prefix = (published)? 'Public and': 'Shared with',
 					others, names = [];
@@ -318,13 +323,15 @@ Ext.define('NextThought.util.Sharing', {
 		}
 	},	
 
+	//Takes the shared with and the tags of a post and returns the short sharing text
 	getTagSharingShortText: function(sharedWith, tags, published, callback, scope){
 		var entities, str;
 
 		entities = Ext.Array.filter(tags, function(t){
 			return ParseUtils.isNTIID(t);
 		});
-		
+
+		//if there are no ntiids in the tags, treat it normally
 		if(Ext.isEmpty(entities)){
 			this.getShortSharingDisplayText(sharedWith, callback, scope);
 		}else if (entities.length > 1){
@@ -333,6 +340,7 @@ Ext.define('NextThought.util.Sharing', {
 					Ext.util.Format.plural(entities.length, 'other'));
 			Ext.callback(callback, scope, [str]);
 		}else{
+			//get the user objects for first ntiid in the tags
 			$AppConfig.service.getObject(entities.first(), function(user){
 				var str = Ext.String.format('{0} {1}', published ? 'Public and' : 'Shared with', user.getName());
 				Ext.callback(callback, scope, [str]);

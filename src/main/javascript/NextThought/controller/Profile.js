@@ -291,6 +291,7 @@ Ext.define('NextThought.controller.Profile', {
 			post.set({
 				'title': title,
 				'body': body,
+				//merge the tags with the ntiids if there are any
 				'tags': (tags)? Ext.Array.merge(tags, customShare.tags): customShare.tags || []
 			});
 

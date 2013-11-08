@@ -393,33 +393,38 @@ Ext.define('NextThought.model.Service', {
 		);
 	},
 
-
 	getObjects: function(ntiids, success, failure, scope, safe){
 		if(!Ext.isArray(ntiids)){
 			ntiids = [ntiids];
 		}
 
-		var results = [], me = this,
-			nts = Ext.Array.filter(ntiids, function(n){
-				return ParseUtils.isNTIID(n);
-			});
+		var results = {}, me = this, finishedCount = 0;
 
-		if(nts.length < ntiids.length){
-			Ext.callback(failure, scope, ['']);
-			return null;
+		function finish(){
+			//get the results in the order they came in
+			var resultArray = Ext.Array.map(ntiids, function(n){
+				return results[n];
+			});
+			
+			Ext.callback(success, scope, [resultArray]);
 		}
 
-		function maybeFinish(arg){
-			results.push(arg);
+		function maybeFinish(name, rec){
+			results[name] = rec;
+			finishedCount++;
 
-			if(results.length === nts.length){
-				Ext.callback(success, scope, [results]);
+			if(finishedCount === ntiids.length){
+				finish();
 			}
 		}
 
-		Ext.each(nts, function(n){
-			me.getObject(n, maybeFinish, failure, scope, safe);
-		})
+		Ext.each(ntiids, function(n){
+			me.getObject(n, function(u){
+				maybeFinish(n, u);
+			}, function(){
+				maybeFinish(n, null);
+			}, scope, safe);
+		});
 	},
 
 
