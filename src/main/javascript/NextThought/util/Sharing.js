@@ -137,7 +137,7 @@ Ext.define('NextThought.util.Sharing', {
 		if (!pageInfo) {
 			pageInfo = this.getCurrentPageInfo();
 		}
-		
+
 		if (isPublic) {
 			targets = (pageInfo && pageInfo.getPublicScope()) || [];
 
@@ -277,17 +277,12 @@ Ext.define('NextThought.util.Sharing', {
 	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength){
 		var entities, str;
 
-		if(!Ext.isEmpty(sharedWith)){
-			this.getLongSharingDisplayText(sharedWith, callback, scope);
-			return;
-		}
-
 		entities = Ext.Array.filter(tags, function(t){
 			return ParseUtils.isNTIID(t);
 		});
 
 		if(Ext.isEmpty(entities)){
-			Ext.callback(callback, scope, [published? 'Public': 'Only Me']);
+			this.getLongSharingDisplayText(sharedWith, callback, scope);
 		}else{
 			$AppConfig.service.getObjects(entities, function(users){
 				var prefix = (published)? 'Public and': 'Shared with',
@@ -326,17 +321,12 @@ Ext.define('NextThought.util.Sharing', {
 	getTagSharingShortText: function(sharedWith, tags, published, callback, scope){
 		var entities, str;
 
-		if(!Ext.isEmpty(sharedWith)){
-			this.getShortSharingDisplayText(sharedWith, callback, scope);
-			return;
-		}
-
 		entities = Ext.Array.filter(tags, function(t){
 			return ParseUtils.isNTIID(t);
 		});
-
+		
 		if(Ext.isEmpty(entities)){
-			Ext.callback(callback, scope, [published? 'Public' : 'Only Me']);
+			this.getShortSharingDisplayText(sharedWith, callback, scope);
 		}else if (entities.length > 1){
 			str = Ext.String.format('{0} {1}',
 					published? 'Public and' : 'Shared with',

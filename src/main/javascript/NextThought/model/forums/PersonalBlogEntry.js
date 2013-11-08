@@ -32,14 +32,18 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	},
 
 	getSharingInfo: function() {
-		var sharingInfo = {};
+		var sharingInfo = {},
+			entities = Ext.Array.filter(this.get('headline').get('tags'), function(t){
+				return ParseUtils.isNTIID(t);
+			});
+
 		if (this.isExplicit()) {
-			sharingInfo = SharingUtils.sharedWithToSharedInfo(this.get('sharedWith'));
+			sharingInfo = SharingUtils.tagShareToSharedInfo(this.get('sharedWith'), entities);
 		}
 		else if (this.isPublished()) {
-			sharingInfo = {publicToggleOn: true, entities: []};
+			sharingInfo = {publicToggleOn: true, entities: entities};
 		}else if (this.isUnPublished()) {
-			sharingInfo = {publicToggleOn: false, entities: []};
+			sharingInfo = {publicToggleOn: false, entities: entities};
 		}
 		else {
 			console.error('Record is not Published, Unpublished or Explicit ***DANGER, record: ', this);

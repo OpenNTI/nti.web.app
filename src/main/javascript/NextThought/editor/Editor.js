@@ -1721,6 +1721,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	setTags: function(tags) {
+		tags = Ext.Array.filter(tags || [], function(t){
+			return !ParseUtils.isNTIID(t);
+		});
+		
 		if (this.tags) {
 			this.tags.setValue(tags);
 		}

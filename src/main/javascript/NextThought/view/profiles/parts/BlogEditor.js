@@ -32,19 +32,31 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var r = this.record,
-			h,
+		var r = this.record, me = this,
+			h, sharedWidth,
 			profileEl = Ext.get('profile'),
 			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
 		this.mon(this.tags, 'new-tag', this.syncHeight, this);
-
 		if (r) {
 			h = r.get('headline');
 			this.editBody(h.get('body'));
 			this.setTitle(h.get('title'));
 			this.setTags(h.get('tags'));
-			this.setSharedWith(r.getSharingInfo());
+
+			sharedWith = r.getSharingInfo();
+
+			$AppConfig.service.getObjects(sharedWith.entities, function(entities){
+				var names = Ext.Array.map(entities, function(u){
+					return u.get('Username');
+				});
+
+				sharedWith.entities = names;
+
+				me.setSharedWith(sharedWith);
+			}, function(){
+				console.log('failed to resolve:',sharedWith.entities, arguments);
+			}, this);
 		}
 
 		this.sizer = Ext.DomHelper.insertAfter(this.el, {}, true);
