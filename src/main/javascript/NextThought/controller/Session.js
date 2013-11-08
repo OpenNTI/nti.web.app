@@ -91,16 +91,21 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		function finishLoggingOut() {
-			Socket.tearDownSocket();
-			me.application.fireEvent('session-closed');
-			location.replace(url);
+			try {
+				Socket.tearDownSocket();
+				me.application.fireEvent('session-closed');
+			}
+			finally {
+				location.replace(url);
+			}
+
 		}
 
 		Ext.getBody().mask('Signing Out');
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
+		Ext.defer(finishLoggingOut, 6000);//start the timer now just in case 'will-logout' blows up.
 		this.application.fireEvent('will-logout', finishLoggingOut);
-		Ext.defer(finishLoggingOut, 6000);
 	},
 
 

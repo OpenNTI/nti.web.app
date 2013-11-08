@@ -161,12 +161,16 @@ Ext.define('NextThought.proxy.Socket', {
 	 */
 	tearDownSocket: function() {
 		var s = this.socket;
-
-		if (s) {
-			delete this.socket;
-			s.removeAllListeners();
-			s.disconnect();
-			//also can use s.socket.disconnectSync to synchronously disconnect, if you get extra messages after.
+		try {
+			if (s) {
+				delete this.socket;
+				s.removeAllListeners();
+				s.disconnect();
+				//also can use s.socket.disconnectSync to synchronously disconnect, if you get extra messages after.
+			}
+		}
+		catch (e) {
+			console.error('Could not tear down socket... it may not have existed', e.stack || e.message || e);
 		}
 	},
 
