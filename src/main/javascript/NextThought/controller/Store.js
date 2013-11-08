@@ -725,7 +725,7 @@ Ext.define('NextThought.controller.Store', {
 		};
 
 		try {
-			this.paymentProcessor = new NextThought.controller.store.PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, this);
+			this.paymentProcessor = new NextThought.private.controller.PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, this);
 		}
 		catch (e) {
 			//An exception here means we shouldn't have even started the purchase on the ds.
@@ -912,7 +912,7 @@ Ext.define('NextThought.controller.Store', {
  * purchaseAttemptCompletedWithUnknownStatus(this, purchaseAttempt)
  *
  */
-Ext.define('NextThought.controller.store.PurchaseHelper', {
+Ext.define('NextThought.private.controller.PurchaseHelper', {
 
 	maxWaitInMillis: 2 * 60 * 1000, //2 minutes
 	pollingIntervalInMillis: 5 * 1000, //5 seconds
