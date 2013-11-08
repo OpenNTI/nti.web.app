@@ -112,7 +112,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (title.length === 0) {
 			this.setError({
 							  field: 'title',
-							  message: baseMsg + ' The title can not be empty.'
+							  message: baseMsg + ' The title cannot be empty.'
 						  });
 
 			return false;
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (title.trim().length === 0) {
 			this.setError({
 							  field: 'title',
-							  message: baseMsg + ' The title can not be all whitespace.'
+							  message: baseMsg + ' The title cannot be all whitespace.'
 						  });
 
 			return false;
@@ -135,7 +135,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (description.length === 0) {
 			this.setError({
 							  field: 'description',
-							  message: baseMsg + ' The description can not be empty.'
+							  message: baseMsg + ' The description cannot be empty.'
 						  });
 
 			return false;
@@ -144,7 +144,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (description.trim().length === 0) {
 			this.setError({
 							  field: 'description',
-							  message: baseMsg + ' The description can not be all whitespace.'
+							  message: baseMsg + ' The description cannot be all whitespace.'
 						  });
 
 			return false;

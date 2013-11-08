@@ -1142,7 +1142,7 @@ Ext.define('NextThought.controller.Chat', {
   //
   //
   //			if (!cmp || !msg) {
-  //				console.error('can not find messages');
+  //				console.error('cannot find messages');
   //				return;
   //			}
   //

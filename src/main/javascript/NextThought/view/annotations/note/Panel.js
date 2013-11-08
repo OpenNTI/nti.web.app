@@ -934,7 +934,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 				add = true;
 
 			if (record.getModelName() !== 'Note') {
-				console.warn('can not add item, it is not a note and I am not prepared to handle that.');
+				console.warn('cannot add item, it is not a note and I am not prepared to handle that.');
 				add = false;
 			}
 			else if (this.getComponent(guid)) {
@@ -991,7 +991,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			contains = Ext.Array.contains,
 		//do any have the deleting flag?
 			anyDeleting = contains(pluck(children, 'deleting'), true),
-		//are any of the remaining panels not placeholders? If so, then we can not safely remove this panel.
+		//are any of the remaining panels not placeholders? If so, then we cannot safely remove this panel.
 		//safeToCleanMe means all the panels below this one are only placeholder panels.
 			safeToCleanMe = !contains(Ext.Array.map(pluck(pluck(children, 'record'), 'placeholder'), Boolean), false),
 		//if the component that was removed from this panel was deleting, or any panel below this was deleting.
