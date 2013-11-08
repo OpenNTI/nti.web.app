@@ -17,6 +17,7 @@ module.exports = function(config) {
 		'ext-4.2/ext-all-debug.js',
 		'bootstrap.js',
 		'config.js',
+		{pattern: 'ext-4.2/**/*.js', included: false},
 		{pattern: 'mock/**/*', included: false},
 		{pattern: 'resources/**/*', included: false},
 		{pattern: 'javascript/libs.js', included: false},
@@ -62,7 +63,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['ChromeCanary'],
+    browsers: ['Chrome'],
 
 
     // If browser does not capture in given timeout [ms], kill it

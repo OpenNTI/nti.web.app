@@ -1,4 +1,4 @@
-$AppConfig.server.host ='/base/mock';
+$AppConfig.server.host = location.toString().split(/[?#]/)[0].split('/').slice(0, -1).join('/') + '/base/mock';
 window.testRoot = '/base/';
 Ext.Loader.setPath('NextThought', '/base/javascript/NextThought').syncModeEnabled = true;
 Ext.require([
