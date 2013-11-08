@@ -42,6 +42,12 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 				}
 			}
 		});
+        if(Ext.is.iOS){
+            Ext.apply(config, {
+                dismissDelay: 2000,
+                hideDelay: 0
+            });
+        }
 		this.callParent([config]);
 	},
 
