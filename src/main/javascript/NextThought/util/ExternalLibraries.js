@@ -16,6 +16,7 @@
  */
 
 (function(global) {
+	var prefix = global.testRoot || '';
 
 	function finish() { Ext.define('NextThought.util.ExternalLibraries', {}); }
 
@@ -31,7 +32,7 @@
 
 		if (global.libsLoaded) {return;}
 		Ext.each(libs, function(o) {
-			Ext.Object.each(o, function waiting(name,v) {
+			Ext.Object.each(o, function waiting(name, v) {
 				var cb = v && v.cb,
 					url = (v && v.url) || v,
 					waitFor = (v && v.waitFor) || false;
@@ -41,6 +42,10 @@
 				if (waitFor && !global[waitFor]) {
 					Ext.defer(waiting, 10, this, [name, v]);
 					return;
+				}
+
+				if (!/(^http(s)?:)|^\//i.test(url)) {
+					url = prefix + url;
 				}
 
 				Ext.Loader.loadScript({
@@ -56,7 +61,7 @@
 
 	if (!global.libsLoaded) {
 		global.loadExternalLibraries = loadExternalLibraries;
-		Ext.Loader.loadScript('javascript/libs.js');
+		Ext.Loader.loadScript(prefix + 'javascript/libs.js');
 	}
 	else {
 		finish();
