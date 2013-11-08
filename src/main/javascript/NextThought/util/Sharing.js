@@ -92,6 +92,33 @@ Ext.define('NextThought.util.Sharing', {
 		return Ext.isEmpty(Ext.Array.difference(communities, sharedWithIds));
 	},
 
+	
+	//Needs the ntiids of the entities in the sharingInfo
+	getTagSharingInfo: function(sharingInfo, ntiids){
+		var result, explicitNtiids = ntiids || [],
+			explicitEntities = sharingInfo.entities || [],
+			isPublic = sharingInfo.publicToggleOn;
+
+		result = {
+			tags: [],
+			entities: []
+		}
+
+		if(isPublic){
+			Ext.Array.each(explicitNtiids, function(u){
+				if(ParseUtils.isNTIID(u)){
+					result.tags.push(u);
+				}
+			});
+
+			return result;
+		}
+
+		result.entities = this.sharedWithForSharingInfo(sharingInfo);
+
+		return result;
+	},
+
 
 	getCurrentPageInfo: function() {
 		// FIXME: better way to get pageInfo without DQ search?
@@ -110,7 +137,7 @@ Ext.define('NextThought.util.Sharing', {
 		if (!pageInfo) {
 			pageInfo = this.getCurrentPageInfo();
 		}
-
+		
 		if (isPublic) {
 			targets = (pageInfo && pageInfo.getPublicScope()) || [];
 
@@ -167,6 +194,21 @@ Ext.define('NextThought.util.Sharing', {
 
 		shareInfo.entities = sharedWith.slice();
 		return shareInfo;
+	},
+
+	tagShareToSharedInfo: function(sharedWith, tags){
+		var nts = Ext.Array.filter(tags, function(t){
+			return ParseUtils.isNTIID(t);
+		});
+
+		if(Ext.isEmpty(nts)){
+			return this.sharedWithToSharedInfo(sharedWith);
+		}
+
+		return {
+			publicToggleOn: true,
+			entities: nts
+		};
 	},
 
 	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
@@ -228,6 +270,90 @@ Ext.define('NextThought.util.Sharing', {
 				var str = Ext.String.format('{0} {1}', isPublic ? 'Public and' : 'Shared with', resolved.getName());
 				Ext.callback(callback, scope, [str]);
 			});
+		}
+	},
+
+
+	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength){
+		var entities, str;
+
+		if(!Ext.isEmpty(sharedWith)){
+			this.getLongSharingDisplayText(sharedWith, callback, scope);
+			return;
+		}
+
+		entities = Ext.Array.filter(tags, function(t){
+			return ParseUtils.isNTIID(t);
+		});
+
+		if(Ext.isEmpty(entities)){
+			Ext.callback(callback, scope, [published? 'Public': 'Only Me']);
+		}else{
+			$AppConfig.service.getObjects(entities, function(users){
+				var prefix = (published)? 'Public and': 'Shared with',
+					others, names = [];
+
+				Ext.each(users || [], function(u){
+					var dn = isMe(u)? 'me' : u.getName();
+					names.push(dn);
+					return !maxLength || names.length <= maxLength;
+				});
+
+				if(tpl){
+					names = Ext.Array.map(names, function(){ return tpl.apply(arguments); });
+				}
+
+				others = users.length - names.length;
+
+				if(others){
+					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others, 'other')));
+				}else if(names.length > 1){
+					names.push(' and ' + names.pop());
+				}
+
+				str = Ext.String.format('{0} {1}', prefix, names.join(','));
+				Ext.callback(callback, scope, [str]);
+			}, function(){
+				console.log('Failed to resolve users', entities, arguments);
+				var str = Ext.String.format('{0} {1}',
+					published? 'Public and' : 'Shared with',
+					Ext.util.Format.plural(entities.length, 'other'));
+				Ext.callback(callback, scope, [str]);
+			}, this);
+		}
+	},	
+
+	getTagSharingShortText: function(sharedWith, tags, published, callback, scope){
+		var entities, str;
+
+		if(!Ext.isEmpty(sharedWith)){
+			this.getShortSharingDisplayText(sharedWith, callback, scope);
+			return;
+		}
+
+		entities = Ext.Array.filter(tags, function(t){
+			return ParseUtils.isNTIID(t);
+		});
+
+		if(Ext.isEmpty(entities)){
+			Ext.callback(callback, scope, [published? 'Public' : 'Only Me']);
+		}else if (entities.length > 1){
+			str = Ext.String.format('{0} {1}',
+					published? 'Public and' : 'Shared with',
+					Ext.util.Format.plural(entities.length, 'other'));
+			Ext.callback(callback, scope, [str]);
+		}else{
+			$AppConfig.service.getObject(entities.first(), function(user){
+				var str = Ext.String.format('{0} {1}', published ? 'Public and' : 'Shared with', user.getName());
+				Ext.callback(callback, scope, [str]);
+			}, function(){
+				console.log('Failed to resolve users', entities, arguments);
+
+				var str = Ext.String.format('{0} {1}',
+					published? 'Public and' : 'Shared with',
+					Ext.util.Format.plural(entities.length, 'other'));
+				Ext.callback(callback, scope, [str]);
+			}, this);
 		}
 	}
 

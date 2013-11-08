@@ -83,6 +83,9 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 			return;
 		}
 		r.headline = r.headline.getData();
+		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t){
+			return !ParseUtils.isNTIID(t);
+		});
 	},
 
 
@@ -96,6 +99,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
+		this.record.get('headline').addObserverForField(this, 'tags', this.updatePostCount, this);
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
 		this.mon(this.titleEl, 'click', this.goToPost, this);
 		this.mon(this.commentsEl, 'click', this.goToPostComments, this);
@@ -130,6 +134,10 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		if (el) {
 			if (Ext.isArray(value) && key === 'tags') {
 
+				value = Ext.Array.filter(value, function(v){
+					return !ParseUtils.isNTIID(v);
+				});
+
 				el.update(this.tagTpl.apply(value));
 				return;
 			}
@@ -158,16 +166,32 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	updateSharedWith: function(field, value) {
-		SharingUtils.getShortSharingDisplayText(value, function(str) {
+		var sharingInfo, tags,
+			published = !!this.record.getLink('publish');
+
+		if(field === 'sharedWith'){
+			sharingInfo = value;
+			tags = this.record.get('headline').get('tags');
+		}else if(field === 'tags'){
+			sharingInfo = this.record.get('sharedWith');
+			tags = value;
+		}else{
+			sharingInfo = this.record.get('sharedWith');
+			tags = this.record.get('headline').get('tags');
+		}
+
+		SharingUtils.getTagSharingShortText(sharingInfo, tags, published, function(str) {
 			if (this.publishStateEl) {
 				this.publishStateEl.update(str);
 			}
 		}, this);
-		SharingUtils.getLongSharingDisplayText(value, function(str) {
+		SharingUtils.getTagSharingLongText(sharingInfo, tags, published, function(str) {
 			if (this.publishStateEl) {
 				this.publishStateEl.set({'data-qtip': str});
 			}
 		}, this);
+		
+		this.publishStateEl[SharingUtils.tagShareToSharedInfo(sharingInfo, tags).publicToggleOn ? 'removeCls' : 'addCls']('private');
 	},
 
 

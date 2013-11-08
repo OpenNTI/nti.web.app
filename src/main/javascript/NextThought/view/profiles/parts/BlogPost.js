@@ -150,17 +150,31 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 
 	updateSharedWith: function(field, value) {
-		SharingUtils.getShortSharingDisplayText(value, function(str) {
+		var sharingInfo, tags,
+			published = !!this.record.getLink('publish');
+
+		if(field === 'sharedWith'){
+			sharingInfo = value;
+			tags = this.record.get('headline').get('tags');
+		}else if(field === 'tags'){
+			sharingInfo = this.record.get('sharedWith');
+			tags = value;
+		}else{
+			sharingInfo = this.record.get('sharedWith');
+			tags = this.record.get('headline').get('tags');
+		}
+
+		SharingUtils.getTagSharingShortText(sharingInfo, tags, published, function(str) {
 			if (this.publishStateEl) {
 				this.publishStateEl.update(str);
 			}
 		}, this);
-		SharingUtils.getLongSharingDisplayText(value, function(str) {
+		SharingUtils.getTagSharingLongText(sharingInfo, tags, published, function(str) {
 			if (this.publishStateEl) {
 				this.publishStateEl.set({'data-qtip': str});
 			}
 		}, this);
-		this.publishStateEl[SharingUtils.sharedWithToSharedInfo(value).publicToggleOn ? 'removeCls' : 'addCls']('private');
+		this.publishStateEl[SharingUtils.tagShareToSharedInfo(sharingInfo, tags).publicToggleOn ? 'removeCls' : 'addCls']('private');
 	},
 
 

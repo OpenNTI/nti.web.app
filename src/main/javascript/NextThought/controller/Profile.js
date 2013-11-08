@@ -245,7 +245,6 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	saveBlogPost: function(editorCmp, record, title, tags, body, sharingInfo) {
-
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.PersonalBlogEntryPost.create(),
 			blogRecord = editorCmp.up('profile-blog') ? editorCmp.up('profile-blog').record : null;
@@ -253,18 +252,6 @@ Ext.define('NextThought.controller.Profile', {
 
 		//TODO save old values so we can revert them on error?
 		//See also beginEdit cancelEdit
-
-		post.set({
-			'title': title,
-			'body': body,
-			'tags': tags || []
-		});
-
-		if (isEdit) {
-			//The title is on both the PersonalBlogEntryPost (headline)
-			//and the wrapping PersonalBlogEntry (if we have one)
-			record.set({'title': title});
-		}
 
 		function finish(entry, editorCmp) {
 			var blogCmp = editorCmp.up('profile-blog');
@@ -296,35 +283,55 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		try {
-			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
-			post.save({
-				url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
-				scope: this,
-				success: function(post,operation) {
-					//the first argument is the record...problem is, it was a post, and the response from the server is
-					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-					// one off re-parse of the responseText is necissary to get at what we want.
-					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+		UserRepository.getUser(sharingInfo.entities, function(users){
+			var ntiids = Ext.Array.map(users, function(u){
+				return u.get('NTIID');
+			}), customShare = SharingUtils.getTagSharingInfo(sharingInfo, ntiids);
 
-					var blogEntry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
-					this.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
-				},
-				failure: function() {
-					console.debug('failure', arguments);
-					unmask();
-				}
+			post.set({
+				'title': title,
+				'body': body,
+				'tags': (tags)? Ext.Array.merge(tags, customShare.tags): customShare.tags || []
 			});
-		}
-		catch (e) {
-			console.error('An error occurred saving blog', Globals.getError(e));
-			unmask();
-		}
+
+			if (isEdit) {
+				//The title is on both the PersonalBlogEntryPost (headline)
+				//and the wrapping PersonalBlogEntry (if we have one)
+				record.set({'title': title});
+			}
+
+			
+
+			try {
+				post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
+				post.save({
+					url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
+					scope: me,
+					success: function(post,operation) {
+						//the first argument is the record...problem is, it was a post, and the response from the server is
+						// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+						// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+						// one off re-parse of the responseText is necissary to get at what we want.
+						// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+
+						var blogEntry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
+						this.handleShareAndPublishState(blogEntry, sharingInfo, customShare.entities, finish, editorCmp);
+					},
+					failure: function() {
+						console.debug('failure', arguments);
+						unmask();
+					}
+				});
+			}
+			catch (e) {
+				console.error('An error occurred saving blog', Globals.getError(e));
+				unmask();
+			}
+		});
 	},
 
 
-	handleShareAndPublishState: function(blogEntry, sharingInfo, cb, cmp) {
+	handleShareAndPublishState: function(blogEntry, sharingInfo, entities, cb, cmp) {
 		function didShareWithChange(a, b) {
 			return !(Ext.isEmpty(Ext.Array.difference(a, b)) && Ext.isEmpty(Ext.Array.difference(b, a)));
 		}
@@ -334,7 +341,7 @@ Ext.define('NextThought.controller.Profile', {
 		}
 
 		function explicitShare() {
-			blogEntry.saveField('sharedWith', SharingUtils.sharedWithForSharingInfo(sharingInfo), fin);
+			blogEntry.saveField('sharedWith', entities, fin);
 		}
 
 		if (!blogEntry) { return;}

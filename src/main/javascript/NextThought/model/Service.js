@@ -394,6 +394,35 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getObjects: function(ntiids, success, failure, scope, safe){
+		if(!Ext.isArray(ntiids)){
+			ntiids = [ntiids];
+		}
+
+		var results = [], me = this,
+			nts = Ext.Array.filter(ntiids, function(n){
+				return ParseUtils.isNTIID(n);
+			});
+
+		if(nts.length < ntiids.length){
+			Ext.callback(failure, scope, ['']);
+			return null;
+		}
+
+		function maybeFinish(arg){
+			results.push(arg);
+
+			if(results.length === nts.length){
+				Ext.callback(success, scope, [results]);
+			}
+		}
+
+		Ext.each(nts, function(n){
+			me.getObject(n, maybeFinish, failure, scope, safe);
+		})
+	},
+
+
 
 	/*
 	 *	The following methods are for deciding when things can or cannot happen
