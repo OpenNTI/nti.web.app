@@ -99,7 +99,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
 		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
-		this.record.get('headline').addObserverForField(this, 'tags', this.updatePostCount, this);
 		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
 		this.mon(this.titleEl, 'click', this.goToPost, this);
 		this.mon(this.commentsEl, 'click', this.goToPostComments, this);
