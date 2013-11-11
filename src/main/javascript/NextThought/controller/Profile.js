@@ -284,51 +284,46 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		UserRepository.getUser(sharingInfo.entities, function(users) {
-			var ntiids = Ext.Array.map(users, function(u) {
-				return u.get('NTIID');
-			}), customShare = SharingUtils.getTagSharingInfo(sharingInfo, ntiids);
+		
 
-			post.set({
-				'title': title,
-				'body': body,
-				//merge the tags with the ntiids if there are any
-				'tags': tags ? Ext.Array.merge(tags, customShare.tags) : customShare.tags || []
-			});
-
-			if (isEdit) {
-				//The title is on both the PersonalBlogEntryPost (headline)
-				//and the wrapping PersonalBlogEntry (if we have one)
-				record.set({'title': title});
-			}
-
-
-			try {
-				post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
-				post.save({
-					url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
-					scope: me,
-					success: function(post, operation) {
-						//the first argument is the record...problem is, it was a post, and the response from the server is
-						// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
-						// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
-						// one off re-parse of the responseText is necissary to get at what we want.
-						// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
-
-						var blogEntry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
-						me.handleShareAndPublishState(blogEntry, sharingInfo, customShare.entities, finish, editorCmp);
-					},
-					failure: function() {
-						console.debug('failure', arguments);
-						unmask();
-					}
-				});
-			}
-			catch (e) {
-				console.error('An error occurred saving blog', Globals.getError(e));
-				unmask();
-			}
+		post.set({
+			'title': title,
+			'body': body,
+			'tags': tags
 		});
+
+		if (isEdit) {
+			//The title is on both the PersonalBlogEntryPost (headline)
+			//and the wrapping PersonalBlogEntry (if we have one)
+			record.set({'title': title});
+		}
+
+
+		try {
+			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
+			post.save({
+				url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
+				scope: me,
+				success: function(post, operation) {
+					//the first argument is the record...problem is, it was a post, and the response from the server is
+					// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
+					// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
+					// one off re-parse of the responseText is necissary to get at what we want.
+					// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
+
+					var blogEntry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
+					me.handleShareAndPublishState(blogEntry, sharingInfo, finish, editorCmp);
+				},
+				failure: function() {
+					console.debug('failure', arguments);
+					unmask();
+				}
+			});
+		}
+		catch (e) {
+			console.error('An error occurred saving blog', Globals.getError(e));
+			unmask();
+		}
 	},
 
 
@@ -339,23 +334,32 @@ Ext.define('NextThought.controller.Profile', {
 	 * @param {String[]} entities
 	 * @param {Function} cb
 	 * @param {Ext.Component} cmp
+	 * @param {Boolean} resolved
 	 */
-	handleShareAndPublishState: function(blogEntry, sharingInfo, entities, cb, cmp) {
-		var fin = Ext.bind(Ext.callback, this, [cb, undefined, [blogEntry, cmp]]);
-
+	handleShareAndPublishState: function(blogEntry, sharingInfo, cb, cmp, resolved) {
 		if (!blogEntry) {
 			return;
 		}
+		var fin = Ext.bind(Ext.callback, this, [cb, undefined, [blogEntry, cmp]]),
+			isPublic = sharingInfo.publicToggleOn,
+			hasEntities = !Ext.isEmpty(sharingInfo.entities),
+			entityFieldName = isPublic ? 'tags' : 'sharedWith',
+			entityObject = isPublic ? blogEntry.get('headline') : blogEntry,
+			fieldAction = isPublic? Ext.Array.merge : function(a) { return a; },
+			finish = new FinishCallback(fin, this);
 
-		function didShareWithChange(a, b) {
-			return !(Ext.isEmpty(Ext.Array.difference(a, b)) && Ext.isEmpty(Ext.Array.difference(b, a)));
+		if(isPublic && !resolved){
+			fin = Ext.bind(this.handleShareAndPublishState,this, [blogEntry, sharingInfo, cb, cmp, true]);
+			UserRepository.getUser(sharingInfo.entities, function(users) {
+				var ntiids = Ext.Array.map(users, function(u) {
+					return u.get('NTIID');
+				});
+
+				sharingInfo.entities = ntiids;
+				fin();
+			});
+			return;
 		}
-
-
-		function explicitShare() {
-			blogEntry.saveField('sharedWith', entities, fin);
-		}
-
 
 		/* There are four distinct states:
 		 *	1) Private, no entities
@@ -373,43 +377,16 @@ Ext.define('NextThought.controller.Profile', {
 		 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
 		 */
 
+		 if (hasEntities) {
+		 	entityObject.set(entityFieldName,fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
+		 	entityObject.save({ callback: finish.newTask()});
+		 }
 
+		 if(blogEntry.isPublished() !== isPublic){
+		 	blogEntry.publish(cmp, finish.newTask(), this);
+		 }
 
-		if (!sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)) {
-			//Move to unpublished
-			if (blogEntry.isPublished()) {
-				blogEntry.publish(cmp, fin, this); //Because we're already published, this will un-publish us.
-			}
-			else if (blogEntry.isExplicit()) {
-				explicitShare();
-			}
-			else {
-				fin();
-			}
-		}
-		else if (sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)) {
-			//Move to published
-			if (!blogEntry.isPublished()) {
-				blogEntry.publish(cmp, fin, this); //Because we're  un-published, this will publish us.
-			}
-			else {
-				fin();
-			}
-		}
-		else {
-			//Move to explicit
-			if (!didShareWithChange(blogEntry.get('sharedWith'), SharingUtils.sharedWithForSharingInfo(sharingInfo))) {
-				fin();
-			}
-			else {
-				if (blogEntry.isPublished()) {
-					blogEntry.publish(cmp, explicitShare, this);
-				}
-				else {
-					explicitShare();
-				}
-			}
-		}
+		 finish.maybeFinish();
 	},
 
 
