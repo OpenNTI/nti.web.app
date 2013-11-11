@@ -122,7 +122,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
 			this.maybeHidePopout();
 		} else {
-			clearTimout(this.hideTimer);
+			clearTimeout(this.hideTimer);
 		}
 	},
 
