@@ -166,8 +166,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 	updateSharedWith: function(field, value) {
 		var sharingInfo, tags, publicToggleOn,
-			published = !!this.record.getLink('publish');
-			
+			published = this.record.isPublished();
 
 		if(field === 'sharedWith'){
 			sharingInfo = value;
@@ -180,7 +179,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 			tags = this.record.get('headline').get('tags');
 		}
 
-		publicToggleOn = SharingUtils.tagShareToSharedInfo(sharingInfo, tags).publicToggleOn;
 
 		SharingUtils.getTagSharingShortText(sharingInfo, tags, published, function(str) {
 			if (this.publishStateEl) {
@@ -193,9 +191,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 			}
 		}, this);
 
-		this.publishStateEl[publicToggleOn ? 'removeCls' : 'addCls']('private');
-		this.markAsPublished(null, publicToggleOn);
-
+		this.publishStateEl[published ? 'removeCls' : 'addCls']('private');
 	},
 
 
