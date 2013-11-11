@@ -332,20 +332,48 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
+	/**
+	 *
+	 * @param {NextThought.model.forums.PersonalBlogEntry} blogEntry
+	 * @param {Object} sharingInfo
+	 * @param {String[]} entities
+	 * @param {Function} cb
+	 * @param {Ext.Component} cmp
+	 */
 	handleShareAndPublishState: function(blogEntry, sharingInfo, entities, cb, cmp) {
+		var fin = Ext.bind(Ext.callback, this, [cb, undefined, [blogEntry, cmp]]);
+
+		if (!blogEntry) {
+			return;
+		}
+
 		function didShareWithChange(a, b) {
 			return !(Ext.isEmpty(Ext.Array.difference(a, b)) && Ext.isEmpty(Ext.Array.difference(b, a)));
 		}
 
-		function fin() {
-			Ext.callback(cb, undefined, [blogEntry, cmp]);
-		}
 
 		function explicitShare() {
 			blogEntry.saveField('sharedWith', entities, fin);
 		}
 
-		if (!blogEntry) { return;}
+
+		/* There are four distinct states:
+		 *	1) Private, no entities
+		 *	2) Public, no entities
+		 *	3) Private, with entities
+		 *	4) Public, with entities.
+		 *
+		 * The first two are the easiest. Simply toggling publish.  The last two it gets a little dicey.
+		 *
+		 * For #3, we can simply add the entities to the sharedWith field.
+		 * For #4, we add the entities to the TAGS field.
+		 *
+		 * For transitioning we simpley toggle the publish-state, AND:
+		 * If we are going from #3 to #4 we need to move the entities to the tags
+		 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
+		 */
+
+
 
 		if (!sharingInfo.publicToggleOn && Ext.isEmpty(sharingInfo.entities)) {
 			//Move to unpublished

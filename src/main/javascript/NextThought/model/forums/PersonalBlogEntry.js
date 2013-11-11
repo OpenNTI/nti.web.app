@@ -33,7 +33,7 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 
 	getSharingInfo: function() {
 		var sharingInfo = {},
-			entities = Ext.Array.filter(this.get('headline').get('tags'), function(t){
+			entities = Ext.Array.filter(this.get('headline').get('tags'), function(t) {
 				return ParseUtils.isNTIID(t);
 			});
 
