@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	fillInActivityPanels: function(event,dom) {
+	fillInActivityPanels: function(event, dom) {
 		var cmp = Ext.getCmp(dom.getAttribute('id'));
 
 		function maybeFill(item) { item.maybeFillIn(); }
@@ -129,7 +129,7 @@ Ext.define('NextThought.controller.Profile', {
 
 	applyBlogPostToStores: function(entry) {
 		var recordForStore;
-		this.getController('UserData').applyToStoresThatWantItem(function(id,store) {
+		this.getController('UserData').applyToStoresThatWantItem(function(id, store) {
 			if (store) {
 				console.log(store, entry);
 
@@ -153,11 +153,11 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
-	saveBlogComment: function(editor,record,valueObject, saveCallback) {
+	saveBlogComment: function(editor, record, valueObject, saveCallback) {
 		var postCmp = editor.up('[record]'),
 		postRecord = postCmp && postCmp.record,
 		isEdit = Boolean(record),
-		commentPost = record || NextThought.model.forums.PersonalBlogComment.create();
+		commentPost = record || new NextThought.model.forums.PersonalBlogComment();
 
 		commentPost.set({ body: valueObject.body });
 
@@ -215,6 +215,7 @@ Ext.define('NextThought.controller.Profile', {
 		}
 	},
 
+
 	incomingChange: function(change) {
 		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
@@ -239,7 +240,7 @@ Ext.define('NextThought.controller.Profile', {
 					return false; //Note we break here because set will have updated the remaining instances;
 				}
 				return true;
-			});
+			}, this);
 		}
 	},
 
@@ -283,8 +284,8 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		UserRepository.getUser(sharingInfo.entities, function(users){
-			var ntiids = Ext.Array.map(users, function(u){
+		UserRepository.getUser(sharingInfo.entities, function(users) {
+			var ntiids = Ext.Array.map(users, function(u) {
 				return u.get('NTIID');
 			}), customShare = SharingUtils.getTagSharingInfo(sharingInfo, ntiids);
 
@@ -292,7 +293,7 @@ Ext.define('NextThought.controller.Profile', {
 				'title': title,
 				'body': body,
 				//merge the tags with the ntiids if there are any
-				'tags': (tags)? Ext.Array.merge(tags, customShare.tags): customShare.tags || []
+				'tags': tags ? Ext.Array.merge(tags, customShare.tags) : customShare.tags || []
 			});
 
 			if (isEdit) {
@@ -301,14 +302,13 @@ Ext.define('NextThought.controller.Profile', {
 				record.set({'title': title});
 			}
 
-			
 
 			try {
 				post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
 				post.save({
 					url: isEdit ? undefined : blogRecord && blogRecord.getLink('add'),
 					scope: me,
-					success: function(post,operation) {
+					success: function(post, operation) {
 						//the first argument is the record...problem is, it was a post, and the response from the server is
 						// a PersonalBlogEntry. All fine, except instead of parsing the response as a new record and passing
 						// here, it just updates the existing record with the "updated" fields. ..we normally want this, so this
@@ -316,7 +316,7 @@ Ext.define('NextThought.controller.Profile', {
 						// HOWEVER, if we are editing an existing one... we get back what we send (type wise)
 
 						var blogEntry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
-						this.handleShareAndPublishState(blogEntry, sharingInfo, customShare.entities, finish, editorCmp);
+						me.handleShareAndPublishState(blogEntry, sharingInfo, customShare.entities, finish, editorCmp);
 					},
 					failure: function() {
 						console.debug('failure', arguments);
@@ -413,7 +413,7 @@ Ext.define('NextThought.controller.Profile', {
 				//Delete anything left that we know of
 				Ext.StoreManager.each(function(s) {
 					maybeDeleteFromStore(null, s);
-				});
+				}, this);
 
 				Ext.callback(successCallback, null, [cmp]);
 			},
