@@ -167,7 +167,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 	updateSharedWith: function(field, value) {
 		var sharingInfo, tags,
-			published = !!this.record.getLink('publish');
+			published = this.record.isPublished();
 
 		if(field === 'sharedWith'){
 			sharingInfo = value;
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 				this.publishStateEl.set({'data-qtip': str});
 			}
 		}, this);
-		this.publishStateEl[SharingUtils.tagShareToSharedInfo(sharingInfo, tags).publicToggleOn ? 'removeCls' : 'addCls']('private');
+		this.publishStateEl[published ? 'removeCls' : 'addCls']('private');
 	},
 
 
