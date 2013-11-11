@@ -33,7 +33,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.record, me = this,
-			h, sharedWidth,
+			h, sharedWith,
 			profileEl = Ext.get('profile'),
 			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
 
