@@ -391,30 +391,38 @@ Ext.define('NextThought.controller.Forums', {
 		this.getRecords(base, toLoad, function(records) {
 			var j = records.first() ? (stackOrder.indexOf(records.first()[0])) : (stackOrder.length - 1),
 				maybeTopic, shouldFireCallBack = true;
-			Ext.each(records, function(pair, index, allItems) {
-				var rec = pair.last(),
-					type = Ext.String.capitalize(pair.first()),
-					f = me.getForumViewContainer();
 
-				if (!rec) {
-					//Error callback here?
+			Ext.each(records, function(pair, index, allItems) {
+
+				try {
+					var rec = pair.last(),
+						type = Ext.String.capitalize(pair.first()),
+						f = me.getForumViewContainer();
+
+					if (!rec) {
+						//Error callback here?
+						return false;
+					}
+
+					// NOTE: When we push views as a bulk, we only want to activate the last item.
+					// Thus we suspend activating views till we're on the last item.
+					// This allows us to only load store based on 'activate' events
+					if (index < allItems.length - 1) {
+						f.suspendActivateEvents();
+					} else {
+						f.resumeActivateEvents();
+					}
+
+					me['load' + type](null, rec, true);
+					state[pair[0]] = stateForKey(pair[0], pair[1]);
+					j++;
+
+					return true;
+				}
+				catch (e) {
+					console.warn('Something went wrong.', e.stack || e.message || e);
 					return false;
 				}
-
-				// NOTE: When we push views as a bulk, we only want to activate the last item.
-				// Thus we suspend activating views till we're on the last item.
-				// This allows us to only load store based on 'activate' events
-				if (index < allItems.length - 1) {
-					f.suspendActivateEvents();
-				} else {
-					f.resumeActivateEvents();
-				}
-
-				me['load' + type](null, rec, true);
-				state[pair[0]] = stateForKey(pair[0], pair[1]);
-				j++;
-
-				return true;
 			});
 
 			for (j; j < stackOrder.length; j++) {
@@ -900,7 +908,9 @@ Ext.define('NextThought.controller.Forums', {
 		r = s && s.find('ID', record.get('ID'), 0, false, true, true);
 		r = s && s.getAt(r + dx);
 		if (r) {
-			cmp.destroy();
+			if (cmp) {
+				cmp.destroy();
+			}
 			this.loadTopic(null, r);
 		}
 	},
@@ -972,7 +982,7 @@ Ext.define('NextThought.controller.Forums', {
 					entry.set('Creator', $AppConfig.userObject);
 				}
 				try {
-					if (cmp.store) {
+					if (cmp && cmp.store) {
 						cmp.store.insert(0, entry);
 					}
 				}

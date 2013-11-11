@@ -167,14 +167,20 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	setupReplyScrollZone: function() {
-		var rH = this.respondEl.getHeight(),
-			tH = this.topEl.getHeight(),
-			max = Ext.dom.Element.getViewportHeight()
-				- tH
-				- rH;
+		if (!this.rendered || this.isDestroyed) {
+			return;
+		}
+		try {
+			var rH = this.respondEl.getHeight(),
+				tH = this.topEl.getHeight(),
+				max = Ext.dom.Element.getViewportHeight() - tH - rH;
 
-		console.log(rH, tH, max, this.body);
-		this.body.setStyle({maxHeight: max + 'px'});
+			console.log(rH, tH, max, this.body);
+			this.body.setStyle({maxHeight: max + 'px'});
+		}
+		catch (e) {
+			console.warn('Failed to read from the dom.', e.stack || e.message || e);
+		}
 	},
 
 

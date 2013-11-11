@@ -215,7 +215,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation', {
 			console.warn('No handler for tool: ', tool.getToolType());
 		}
 
-		return c.apply(this, arguments);
+		return c && c.apply(this, arguments);
 	},
 
 
