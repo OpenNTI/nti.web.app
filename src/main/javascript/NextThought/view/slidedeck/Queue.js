@@ -102,7 +102,7 @@ Ext.define('NextThought.view.slidedeck.Queue', {
 				'presentation-parts-ready': function(sender, cmps, startOnId) {
 					var start;
 					if (startOnId) {
-						start = me.store.findRecord('NTIID', startOn, 0, false, true, true);
+						start = me.store.findRecord('NTIID', startOnId, 0, false, true, true);
 						if (start) {
 							me.setStartingSlide(start);
 						}
