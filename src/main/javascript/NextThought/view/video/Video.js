@@ -176,7 +176,7 @@ Ext.define('NextThought.view.video.Video', {
 		this.playerSetup();
 		Ext.defer(this.updateLayout, 1, this);
 
-		console.log('Players initialized.');
+		this.log('Players initialized.');
 
 		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.video.Video', {
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if (c) {
-				console.debug(me.id + ' is listening on deactivate on ' + c.id);
+				this.debug(me.id + ' is listening on deactivate on ' + c.id);
 				me.mon(c, {
 					activate: 'maybeActivatePlayer',
 					deactivate: 'deactivatePlayer',
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.video.Video', {
 		var me = this,
 			doActivate = me.isVisible(true);
 
-		console.debug('should reactivate?', doActivate ? 'yes' : 'no');
+		this.debug('should reactivate?', doActivate ? 'yes' : 'no');
 
 		function deactivateOthers(other) {
 			if (other !== me) {
@@ -234,7 +234,7 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	playerSetup: function() {
-		console.log('Initializing the players.');
+		this.log('Initializing the players.');
 		var me = this,
 			blacklist = this.self.playerBlacklist;
 
@@ -331,7 +331,7 @@ Ext.define('NextThought.view.video.Video', {
 			if (!this.commandQueue[target]) {
 				this.commandQueue[target] = [];
 			}
-			console.debug(this.id, 'Enqueing command ', command, arguments);
+			this.debug(this.id, 'Enqueing command ', command, arguments);
 			this.commandQueue[target].push([target, command, args]);
 			return null;
 		}
@@ -340,7 +340,7 @@ Ext.define('NextThought.view.video.Video', {
 			if (!o || !Ext.isFunction(fn)) {return null;}
 			return fn.apply(o, args);
 		}
-		console.debug(this.id, 'Invoking command ', command, arguments);
+		this.debug(this.id, 'Invoking command ', command, arguments);
 		this.fireEvent('player-command-' + command);
 		return call(t[command], t, args);
 	},
@@ -363,7 +363,7 @@ Ext.define('NextThought.view.video.Video', {
 	deactivatePlayer: function() {
 		if (this.activeVideoService) {
 			try {
-				console.log('Clearing command queue for ', this.activeVideoService, ' as part of deactivate');
+				this.log('Clearing command queue for ', this.activeVideoService, ' as part of deactivate');
 				delete this.commandQueue[this.activeVideoService];
 				this.issueCommand(this.activeVideoService, 'deactivate', null, true);
 			}
@@ -466,7 +466,7 @@ Ext.define('NextThought.view.video.Video', {
 		}
 
 		if (compareSources(this.currentVideoId, videoId)) {
-			console.log('Seeking to ', startAt, ' because ', this.currentVideoId, videoId);
+			this.log('Seeking to ', startAt, ' because ', this.currentVideoId, videoId);
 			this.issueCommand(this.activeVideoService, 'seek', [startAt, true]);
 		}
 		else {
@@ -475,7 +475,7 @@ Ext.define('NextThought.view.video.Video', {
 				this.issueCommand(this.activeVideoService, 'load', [videoId, startAt, 'medium']);
 			}
 			else {
-				console.log('stopping');
+				this.log('stopping');
 				this.stopPlayback();
 			}
 		}
@@ -525,7 +525,7 @@ Ext.define('NextThought.view.video.Video', {
 			//not visible
 			else if (k === service) {
 				v.show();
-				console.debug('Stopping playback because not visible....');
+				this.debug('Stopping playback because not visible....');
 				me.stopPlayback();
 			}
 
@@ -541,11 +541,11 @@ Ext.define('NextThought.view.video.Video', {
 				this.playlistIndex = newIndex;
 				item = this.playlist[this.playlistIndex];
 				this.activeVideoService = item && item.activeSource().service;
-				console.log('Playlist seek setting active service to ', this.activeVideoService);
+				this.log('Playlist seek setting active service to ', this.activeVideoService);
 				while (item && Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService)) {
 					if (!item.useNextSource()) {
 						this.activeVideoService = 'none';
-						console.log('Active service is none');
+						this.log('Active service is none');
 						this.currentVideoId = null;
 						this.maybeSwitchPlayers(this.activeVideoService);
 						return false;
@@ -578,7 +578,22 @@ Ext.define('NextThought.view.video.Video', {
 			me.issueCommand(service, 'pause');
 			me.issueCommand(service, 'cleanup');
 		});
+	},
+
+
+	debug: function() {
+		if (this.self.debug) {
+			console.debug.apply(console, arguments);
+		}
+	},
+
+
+	log: function() {
+		if (this.self.debug) {
+			console.log.apply(console, arguments);
+		}
 	}
+
 }, function() {
 	this.ASPECT_RATIO = this.prototype.ASPECT_RATIO;
 
