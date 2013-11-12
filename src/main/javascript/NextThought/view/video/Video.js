@@ -196,7 +196,7 @@ Ext.define('NextThought.view.video.Video', {
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
 			if (c) {
-				this.debug(me.id + ' is listening on deactivate on ' + c.id);
+				me.debug(me.id + ' is listening on deactivate on ' + c.id);
 				me.mon(c, {
 					activate: 'maybeActivatePlayer',
 					deactivate: 'deactivatePlayer',
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.video.Video', {
 		var me = this,
 			doActivate = me.isVisible(true);
 
-		this.debug('should reactivate?', doActivate ? 'yes' : 'no');
+		me.debug('should reactivate?', doActivate ? 'yes' : 'no');
 
 		function deactivateOthers(other) {
 			if (other !== me) {
@@ -525,7 +525,7 @@ Ext.define('NextThought.view.video.Video', {
 			//not visible
 			else if (k === service) {
 				v.show();
-				this.debug('Stopping playback because not visible....');
+				me.debug('Stopping playback because not visible....');
 				me.stopPlayback();
 			}
 
