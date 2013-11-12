@@ -456,21 +456,12 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	setVideoAndPosition: function(videoId, startAt) {
-		var pause = (this.isPlaying() === false), state = this.getPlayerState(),
-			compareSources = NextThought.model.PlaylistItem.compareSources;
+		var compareSources = NextThought.model.PlaylistItem.compareSources;
 
 		this.maybeActivatePlayer();
 
 		// Save our the startAt value in case of failover
 		this.currentStartAt = (startAt || 0);
-
-		if (this.videoTriggeredTransition) {
-			delete this.videoTriggeredTransition;
-			pause = false;
-			if (compareSources(this.currentVideoId, videoId)) {
-				return;
-			}
-		}
 
 		if (compareSources(this.currentVideoId, videoId)) {
 			this.log('Seeking to ', startAt, ' because ', this.currentVideoId, videoId);

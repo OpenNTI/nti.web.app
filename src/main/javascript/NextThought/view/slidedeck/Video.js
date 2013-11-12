@@ -151,6 +151,18 @@ Ext.define('NextThought.view.slidedeck.Video', {
 	},
 
 
+	setVideoAndPosition: function(videoId) {
+		//moved this from video/Video.js... didn't seem to belong in the generic version of the video widget.
+		if (this.videoTriggeredTransition) {
+			delete this.videoTriggeredTransition;
+			if (NextThought.model.PlaylistItem.compareSources(this.currentVideoId, videoId)) {
+				return null;
+			}
+		}
+		return this.callParent(arguments);
+	},
+
+
 	findPlaylistIndexFor: function(service, id, time) {
 		var matching = [], len,
 			compareSources = NextThought.model.PlaylistItem.compareSources;
