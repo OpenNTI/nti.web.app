@@ -6,6 +6,6 @@ Ext.define('NextThought.model.forums.Topic', {
 	fields: [
 		{ name: 'PostCount', type: 'int', persist: false },
 		{ name: 'title', type: 'string' },
-		{ name: 'NewestDescendant', type: 'singleitem'}
+		{ name: 'NewestDescendant', type: 'singleitem', persist: false }
 	]
 });

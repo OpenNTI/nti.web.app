@@ -6,7 +6,7 @@ Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	},
 
 	fields: [
-		{name: 'FavoriteGroupingField', defaultValue: 'Thoughts', persist: false},
+		{ name: 'FavoriteGroupingField', defaultValue: 'Thoughts', persist: false},
 		{ name: 'sharedWith', type: 'UserList' }
 	],
 
