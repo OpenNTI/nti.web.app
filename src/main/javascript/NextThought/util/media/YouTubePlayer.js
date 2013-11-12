@@ -154,8 +154,15 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	load: function(source, offset) {
 		source = Ext.isArray(source) ? source[0] : source;
+		var current = this.currentSource;
+
 		this.currentSource = source;
 		this.currentStartAt = offset;
+
+		if (source === current) {
+			this.seek(offset);
+			return;
+		}
 
 		this.isReady = false;
 		//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/
@@ -167,7 +174,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	play: function() {
-		if (Ext.isFunction(this.player.playVideo)) {
+		if (this.player.playVideo) {
 			this.player.playVideo();
 		}
 	},

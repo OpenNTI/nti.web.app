@@ -56,6 +56,11 @@ Ext.define('NextThought.view.slidedeck.Video', {
 	},
 
 
+	//These two functions do no make sense in the slide deck, and are causing serious issues... so lets just bypass them for now.
+	activatePlayer: function() {},
+	deactivatePlayer: function() {},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
@@ -236,7 +241,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		video = slide.get('media');
 		this.playlistSeek(this.getVideoInfoIndex(video));
 		if (p || this.firstSelection) {
-			this.resumePlayback(true);
+			this.resumePlayback();
 		}
 		delete this.firstSelection;
 	},
