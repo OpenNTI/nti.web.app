@@ -17,7 +17,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		{ cls: 'title', html: '{title}' },
 		{ cls: 'meta', cn: [
 			{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
-			{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'},
+			{ tag: 'span', cls: 'state link', html: '{publish-state}'},
 			{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
 				{ tag: 'span', cls: 'edit link', html: 'Edit'},
 				{ tag: 'span', cls: 'delete link', html: 'Delete'}
@@ -74,7 +74,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, r.getData());
-		this.renderData = Ext.apply(this.renderData, {'publish-state': r.getPublishState()});
 		r = this.renderData;
 		if (!r.headline || !r.headline.getData) {
 			console.warn('The record does not have a story field or it does not implement getData()', r);
@@ -119,13 +118,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
 	},
-
-
-	showPublishMenu: function() {
-		this.publishMenu.updateFromRecord(this.record);
-		this.publishMenu.showBy(this.publishStateEl, 'tl-bl', [0, 0]);
-	},
-
 
 
 	updateField: function(key, value) {
@@ -199,7 +191,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		h.removeObserverForField(this, 'title', this.updateField, this);
 		h.removeObserverForField(this, 'body', this.updateField, this);
 		h.removeObserverForField(this, 'tags', this.updateField, this);
-		this.record.removeObserverForField(this, 'published', this.markAsPublished, this);
 		this.callParent(arguments);
 	},
 
@@ -262,15 +253,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 			cmps = cb(this.bodyEl, this);
 			Ext.each(cmps, function(c) {me.on('destroy', c.destroy, c);});
 		}
-	},
-
-
-	markAsPublished: function(key, value) {
-		var val = value ? 'public' : 'only me',
-			removeCls = value ? 'only me' : 'public';
-		this.publishStateEl.addCls(val);
-		this.publishStateEl.update(Ext.Array.map(val.split(' '), Ext.String.capitalize).join(' '));
-		this.publishStateEl.removeCls(removeCls);
 	},
 
 
