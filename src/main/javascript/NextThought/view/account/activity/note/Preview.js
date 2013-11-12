@@ -113,11 +113,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				}
 				else {
 					if (resp.status === 404) {
-						if (p) {
-							me.handlePurchasable(p, el);
-							Ext.callback(fin);
-							return;
-						}
+//						if (p) {
+//							me.handlePurchasable(p, el);
+//							Ext.callback(fin);
+//							return;
+//						}
 
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
