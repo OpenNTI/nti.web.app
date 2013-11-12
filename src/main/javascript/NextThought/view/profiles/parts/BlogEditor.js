@@ -24,6 +24,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		editorEl: '.editor'
 	},
 
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
@@ -32,37 +33,31 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var r = this.record, me = this,
-			h, sharedWith,
-			profileEl = Ext.get('profile'),
-			hasScrollBar = Ext.getDom(profileEl).scrollHeight !== profileEl.getHeight();
+		var r = this.record,
+			me = this,
+			h, sharedWith;
 
-		this.mon(this.tags, 'new-tag', this.syncHeight, this);
+		me.mon(me.tags, 'new-tag', 'syncHeight');
 		if (r) {
 			h = r.get('headline');
-			this.editBody(h.get('body'));
-			this.setTitle(h.get('title'));
-			this.setTags(h.get('tags'));
+			me.editBody(h.get('body'));
+			me.setTitle(h.get('title'));
+			me.setTags(h.get('tags'));
 
 			sharedWith = r.getSharingInfo();
 
-			$AppConfig.service.getObjects(sharedWith.entities, function(entities){
-				var names = Ext.Array.map(entities, function(u){
+			$AppConfig.service.getObjects(sharedWith.entities, function(entities) {
+				sharedWith.entities = Ext.Array.map(entities, function(u) {
 					return u.get('Username');
 				});
-
-				sharedWith.entities = names;
-
 				me.setSharedWith(sharedWith);
-			}, function(){
-				console.log('failed to resolve:',sharedWith.entities, arguments);
+			}, function() {
+				console.error('failed to resolve:', sharedWith.entities, arguments);
 			}, this);
 		}
 
 		this.sizer = Ext.DomHelper.insertAfter(this.el, {}, true);
 		this.sizer.setHeight(1000);
-
-		profileEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : ''));
 
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 
@@ -70,8 +65,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 
 		if (Ext.is.iOS) {
-            var me = this,
-                el = me.editorBodyEl;
+            var el = me.editorBodyEl;
 
             el.dom.onmouseup = function(e){
                 me.scrollDiv = false;

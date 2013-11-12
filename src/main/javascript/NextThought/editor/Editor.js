@@ -917,8 +917,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	applyTypingAttributesToEditable: function() {
 		var actions = this.supportedTypingAttributes, me = this;
 		Ext.each(actions, function(action) {
-			if (document.queryCommandSupported(action)
-				&& document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
+			if (document.queryCommandSupported(action) &&
+				document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)) {
 				document.execCommand(action, false, false);
 			}
 		});
@@ -1724,10 +1724,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	setTags: function(tags) {
-		tags = Ext.Array.filter(tags || [], function(t){
+		tags = Ext.Array.filter(tags || [], function(t) {
 			return !ParseUtils.isNTIID(t);
 		});
-		
+
 		if (this.tags) {
 			this.tags.setValue(tags);
 		}

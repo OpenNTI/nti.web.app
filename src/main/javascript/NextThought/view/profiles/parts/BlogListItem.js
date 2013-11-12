@@ -83,7 +83,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 			return;
 		}
 		r.headline = r.headline.getData();
-		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t){
+		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t) {
 			return !ParseUtils.isNTIID(t);
 		});
 	},
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		if (el) {
 			if (Ext.isArray(value) && key === 'tags') {
 
-				value = Ext.Array.filter(value, function(v){
+				value = Ext.Array.filter(value, function(v) {
 					return !ParseUtils.isNTIID(v);
 				});
 
@@ -165,33 +165,32 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	updateSharedWith: function(field, value) {
-		var sharingInfo, tags, publicToggleOn,
+		var sharingInfo, tags, el = this.publishStateEl,
 			published = this.record.isPublished();
 
-		if(field === 'sharedWith'){
+		if (field === 'sharedWith') {
 			sharingInfo = value;
 			tags = this.record.get('headline').get('tags');
-		}else if(field === 'tags'){
+		} else if (field === 'tags') {
 			sharingInfo = this.record.get('sharedWith');
 			tags = value;
-		}else{
+		} else {
 			sharingInfo = this.record.get('sharedWith');
 			tags = this.record.get('headline').get('tags');
 		}
 
-
 		SharingUtils.getTagSharingShortText(sharingInfo, tags, published, function(str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.update(str);
+			if (el && el.dom) {
+				el.update(str);
 			}
 		}, this);
 		SharingUtils.getTagSharingLongText(sharingInfo, tags, published, function(str) {
-			if (this.publishStateEl) {
-				this.publishStateEl.set({'data-qtip': str});
+			if (el && el.dom) {
+				el.set({'data-qtip': str});
 			}
 		}, this);
 
-		this.publishStateEl[published ? 'removeCls' : 'addCls']('private');
+		el[published ? 'removeCls' : 'addCls']('private');
 	},
 
 

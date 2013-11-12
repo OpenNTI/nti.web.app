@@ -341,21 +341,17 @@ Ext.define('NextThought.controller.Profile', {
 			return;
 		}
 		var fin = Ext.bind(Ext.callback, this, [cb, undefined, [blogEntry, cmp]]),
+			finish = new FinishCallback(fin, this),
 			isPublic = sharingInfo.publicToggleOn,
 			hasEntities = !Ext.isEmpty(sharingInfo.entities),
 			entityFieldName = isPublic ? 'tags' : 'sharedWith',
 			entityObject = isPublic ? blogEntry.get('headline') : blogEntry,
-			fieldAction = isPublic? Ext.Array.merge : function(a) { return a; },
-			finish = new FinishCallback(fin, this);
+			fieldAction = isPublic ? Ext.Array.merge : function(a) { return a; };
 
-		if(isPublic && !resolved){
-			fin = Ext.bind(this.handleShareAndPublishState,this, [blogEntry, sharingInfo, cb, cmp, true]);
+		if (isPublic && !resolved) {
+			fin = Ext.bind(this.handleShareAndPublishState, this, [blogEntry, sharingInfo, cb, cmp, true]);
 			UserRepository.getUser(sharingInfo.entities, function(users) {
-				var ntiids = Ext.Array.map(users, function(u) {
-					return u.get('NTIID');
-				});
-
-				sharingInfo.entities = ntiids;
+				sharingInfo.entities = Ext.Array.map(users, function(u) { return u.get('NTIID'); });
 				fin();
 			});
 			return;
@@ -377,12 +373,13 @@ Ext.define('NextThought.controller.Profile', {
 		 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
 		 */
 
-		if(blogEntry.isPublished() !== isPublic){
+		if (blogEntry.isPublished() !== isPublic) {
+			// This function (publish) is poorly named. It toggles.
 			blogEntry.publish(cmp, finish.newTask(), this);
 		}
 
 		if (hasEntities) {
-			entityObject.set(entityFieldName,fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
+			entityObject.set(entityFieldName, fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
 			entityObject.save({ callback: finish.newTask()});
 		}
 
