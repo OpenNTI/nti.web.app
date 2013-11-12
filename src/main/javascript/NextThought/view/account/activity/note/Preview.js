@@ -113,11 +113,26 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				}
 				else {
 					if (resp.status === 404) {
-//						if (p) {
-//							me.handlePurchasable(p, el);
-//							Ext.callback(fin);
-//							return;
-//						}
+						/*
+						* JSG:
+						* I do not believe we ever wanted to show the "enroll" nor "purchase" windows if we 404
+						* on getting a PageInfo. That just means we asked for a page that did not exist...not
+						* that we were denied that request. (that would be a 401, or 403)
+						* I believe [this block][the_block] was falsly triggering the "enroll" action.
+						*
+						* Looking at the commit history, this was added Aug 18th, this year (2013).  I seriously
+						* *doubt* the server would ever return 404 for a resourse that was infact denided access.
+						* And lets be clear, we're inspecting the response from the DataServer about a given
+						* PageInfo for the ContainerId. It would not send a 404 unless it did not know of the id
+						* requested.
+						*
+						* the_block:
+						* if (p) {
+						*	me.handlePurchasable(p, el);
+						*	Ext.callback(fin);
+						*	return;
+						* }
+						*/
 
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
