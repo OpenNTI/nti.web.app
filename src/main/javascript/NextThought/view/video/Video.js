@@ -43,15 +43,15 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 	renderTpl: Ext.DomHelper.markup([
-    //		SAJ: Template lines are commented out because the video frame has not been styled yet.
-    //		{ cls: 'meta', cn: [
-    //			{ cls:'title', html:'{title}' },
-    //			{ cls:'description', html:'{description}' }
-    //		]},
+		//		SAJ: Template lines are commented out because the video frame has not been styled yet.
+		//		{ cls: 'meta', cn: [
+		//			{ cls:'title', html:'{title}' },
+		//			{ cls:'description', html:'{description}' }
+		//		]},
 		{ cls: 'video-wrapper', cn: [
-      //			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
-      //				frameBorder: 0, scrolling: 'no', seamless: true
-      //			},
+			//			{ tag: 'iframe', cls:'video', name: 'video', id: '{id}-vimeo-video',
+			//				frameBorder: 0, scrolling: 'no', seamless: true
+			//			},
 			{ cls: 'video placeholder', name: 'video', id: '{id}-curtain'}
 		]}
 	]),
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.video.Video', {
 		this.commandQueue = {};
 
 		this.playerIds = {
-      //			'vimeo': this.id+'-vimeo-video',
+			//			'vimeo': this.id+'-vimeo-video',
 			'none': this.id + '-curtain'
 		};
 
@@ -178,7 +178,7 @@ Ext.define('NextThought.view.video.Video', {
 
 		console.log('Players initialized.');
 
-    //		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
+		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
 			item = this.playlist[this.playlistIndex];
 			this.activeVideoService = item && item.activeSource().service;
@@ -188,7 +188,7 @@ Ext.define('NextThought.view.video.Video', {
 			}
 		}
 		else {
-      //			Set the curtain as the active player while we figure out which other one to use.
+			//			Set the curtain as the active player while we figure out which other one to use.
 			this.maybeSwitchPlayers('none');
 		}
 
@@ -255,13 +255,13 @@ Ext.define('NextThought.view.video.Video', {
 			});
 
 			me.on('destroy', 'destroy',
-				me.relayEvents(p, [
-					'player-ready',
-					'player-error',
-					'player-event-play',
-					'player-event-pause',
-					'player-event-ended'
-				]));
+					me.relayEvents(p, [
+						'player-ready',
+						'player-error',
+						'player-event-play',
+						'player-event-pause',
+						'player-event-ended'
+					]));
 
 			me.playerIds[cls.type] = p.id;
 		});
@@ -482,21 +482,21 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
-  jumpToVideoLocation: function(videoId, startAt) {
-    var r = Ext.Array.findBy(this.playlist, function(item) {
-      return item.get('NTIID') === videoId;
-            }),
-            id = r && r.activeSource().source;
+	jumpToVideoLocation: function(videoId, startAt) {
+		var r = Ext.Array.findBy(this.playlist, function(item) {
+					return item.get('NTIID') === videoId;
+				}),
+				id = r && r.activeSource().source;
 
 		this.maybeActivatePlayer();
 
-    if (id) {
-      this.setVideoAndPosition(id, startAt);
-    }
-    else {
-      console.warn('Could not find video with id: ', videoId, ' in the playlist ', this.playlist);
-    }
-  },
+		if (id) {
+			this.setVideoAndPosition(id, startAt);
+		}
+		else {
+			console.warn('Could not find video with id: ', videoId, ' in the playlist ', this.playlist);
+		}
+	},
 
 
 	maybeSwitchPlayers: function(service) {
@@ -591,20 +591,20 @@ Ext.define('NextThought.view.video.Video', {
 	//keys that exist mean "maybe" supports.  (Apparently canPlayType doesn't return a "Yes")
 	this.supports = {};
 	var video = document.createElement('video'), i, o,
-		types = [
-			{mime: 'video/ogg', key: 'ogg'},
-			{mime: 'video/ogg; codecs="theora, vorbis"', key: 'ogg'},
-			{mime: 'video/webm', key: 'webm'},
-			{mime: 'video/webm; codecs="vp8, vorbis"', key: 'webm'},
-			{mime: 'video/mp4', key: 'mp4'},
-			{mime: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"', key: 'mp4'},
-			{mime: 'application/vnd.apple.mpegURL', key: 'm3u8'},
-			{mime: 'application/x-mpegURL', key: 'm3u8'},
-			{mime: 'video/x-mpegurl', key: 'm3u8'},
-			{mime: 'audio/x-mpegurl', key: 'm3u8'},
-			{mime: 'video/mpegurl', key: 'm3u8'},
-			{mime: 'audio/mpegurl', key: 'm3u8'}
-		];
+			types = [
+				{mime: 'video/ogg', key: 'ogg'},
+				{mime: 'video/ogg; codecs="theora, vorbis"', key: 'ogg'},
+				{mime: 'video/webm', key: 'webm'},
+				{mime: 'video/webm; codecs="vp8, vorbis"', key: 'webm'},
+				{mime: 'video/mp4', key: 'mp4'},
+				{mime: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"', key: 'mp4'},
+				{mime: 'application/vnd.apple.mpegURL', key: 'm3u8'},
+				{mime: 'application/x-mpegURL', key: 'm3u8'},
+				{mime: 'video/x-mpegurl', key: 'm3u8'},
+				{mime: 'audio/x-mpegurl', key: 'm3u8'},
+				{mime: 'video/mpegurl', key: 'm3u8'},
+				{mime: 'audio/mpegurl', key: 'm3u8'}
+			];
 
 	while ((o = types.pop()) !== undefined) {
 		i = !!video.canPlayType(o.mime);
