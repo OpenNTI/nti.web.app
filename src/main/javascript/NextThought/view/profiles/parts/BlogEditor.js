@@ -45,6 +45,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			me.setTags(h.get('tags'));
 
 			sharedWith = r.getSharingInfo();
+			me.setSharedWith(sharedWith);
 
 			$AppConfig.service.getObjects(sharedWith.entities, function(entities) {
 				sharedWith.entities = Ext.Array.map(entities, function(u) {
