@@ -187,6 +187,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 		});
 
 		this.bindStore(this.store);
+
+		this.fireEvent('store-set', this.store);
 		if (!Ext.isString(selected)) {
 			this.getSelectionModel().select(selected, false, true);
 		}

@@ -7,6 +7,8 @@ Ext.define('NextThought.model.PlaylistItem', {
 		'NextThought.model.converters.VideoSources'
 	],
 
+	idProperty: 'NTIID',
+
 	fields: [
 		{name: 'mediaId', type: 'string'},
 		{name: 'start', type: 'float', defaultValue: 0.0},

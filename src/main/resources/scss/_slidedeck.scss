@@ -775,6 +775,155 @@ $experimental-support-for-svg: true;
     }
 }
 
+.content-video-navigation{
+	.navigation{
+		position: absolute;
+		width: 40px;
+		bottom: 40px;
+		top: 0;
+		left: 0;
+
+		&.prev{
+			.nav-container{
+				left: 0;
+				&:hover{
+					.arrow{
+						&::after{
+							@include sprite($icons, 'video-back-arrow_hover', $dimensions:true);
+						}
+					}
+				}
+				.arrow{
+					&::after{
+						background: $icons no-repeat;
+						@include sprite($icons, 'video-back-arrow', $dimensions:true);
+					}
+				}
+			}
+		}
+
+		&.next{
+			right: 0;
+			left: auto;
+
+			.nav-container{
+				right: 0px;
+				&:hover{
+					.arrow{
+						&::after{
+							@include sprite($icons, 'video-next-arrow_hover', $dimensions:true);
+						}
+					}
+				}
+				.arrow{
+					float: right;
+
+					&::after{
+						left: auto;
+						right: 10px;
+						background: $icons no-repeat;
+						@include sprite($icons, 'video-next-arrow', $dimensions:true);
+					}
+				}
+
+				.content{
+					float: left;
+				}
+			}
+		}
+
+		&:hover{
+			.nav-container{
+				display: block;
+
+				.arrow{
+					display: block;
+				}
+			}
+		}
+
+		.nav-container{
+			display: none;
+			position: absolute;
+			top: 50%;
+			margin-top: -35px;
+			height: 70px;
+			width: 275px;
+
+			&:hover{
+				.content{
+					display: block;
+				}
+
+				.arrow{
+					display: block;
+					background-color: rgb(0,0,0);
+				}
+			}
+
+			.arrow{
+				height: 70px;
+				width: 40px;
+				background-color: rgba(0,0,0,0.5);
+				cursor: pointer;
+				float: left;
+				
+				&::after{
+					content: '';
+					position: absolute;
+					top: 17px;
+					left: 10px;
+				}
+			}
+
+			.content{
+				display: none;
+				width: 235px;
+				height: 70px;
+				background-color: rgb(0,0,0);
+				float: right;
+				cursor: pointer;
+
+				.thumbnail{
+					width: 70px;
+					height: 70px;
+					float: left;
+					background-position: center;
+					background-size: cover;
+				}
+
+				.about{
+					width: 165px;
+					float: right;
+					padding: 0 5px 0 5px;
+
+					.pre-title{
+						font: 13px normal "Open Sans", sans-serif;
+						margin-top: 4px;
+						width: 140px;
+						height: 20px;
+						color: rgba(255,255,255,0.7);
+						overflow: hidden;
+						@include ellipsis;
+					}
+
+					.title{
+						font: 13px normal "Open Sans", sans-serif;
+						line-height: 20px;
+						overflow: hidden;
+						width: 140px;
+						height: 20px;
+						color: white;
+						@include ellipsis;
+					}
+				}
+			}
+
+		}
+		
+	}
+}
+
 .x-container-media{
 	position: absolute;
 	top: 0;

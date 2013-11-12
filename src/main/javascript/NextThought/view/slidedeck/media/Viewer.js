@@ -212,7 +212,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		me.activeVideoPlayerType = 'video-focus';
 
 		me.mon(me.gridView, {
-			'hide-grid': {fn:'showGridPicker', scope: me.toolbar}
+			'hide-grid': {fn:'showGridPicker', scope: me.toolbar},
+			'store-set': 'listStoreSet'
 		});
 
 		me.mon(me.toolbar, {
@@ -225,17 +226,39 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		Ext.EventManager.onWindowResize(me.adjustOnResize, me, {buffer: 250});
 	},
 
+	
+	listStoreSet: function(store){
+		if(!store){ return; }
+		var index = store.indexOf(this.video);
+
+		if((index - 1) >= 0){
+			this.previousVideo = store.getAt(index - 1);
+		}
+
+		if((index + 1) < store.getCount()){
+			this.nextVideo = store.getAt(index + 1);
+		}
+
+		if(this.videoplayer){
+			this.videoplayer.setPrev(this.previousVideo);
+			this.videoplayer.setNext(this.nextVideo);
+		}
+	},
+
 
 	addVideoPlayer: function(width, left) {
 		var startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
 
+		//When the navigation stuff is ready switch this to the 'content-video-navigation' widget
 		this.videoplayer = Ext.widget('content-video', {
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
 			width: width,
-			floatParent: this
+			floatParent: this,
+			nextVideo: this.nextVideo,
+			previousVideo: this.previousVideo
 		});
 
 		this.on('destroy', 'destroy', this.videoplayer);
