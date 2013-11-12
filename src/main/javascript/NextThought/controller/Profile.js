@@ -377,16 +377,17 @@ Ext.define('NextThought.controller.Profile', {
 		 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
 		 */
 
-		 if (hasEntities) {
-		 	entityObject.set(entityFieldName,fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
-		 	entityObject.save({ callback: finish.newTask()});
-		 }
+		if(blogEntry.isPublished() !== isPublic){
+			blogEntry.publish(cmp, finish.newTask(), this);
+		}
 
-		 if(blogEntry.isPublished() !== isPublic){
-		 	blogEntry.publish(cmp, finish.newTask(), this);
-		 }
+		if (hasEntities) {
+			entityObject.set(entityFieldName,fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
+			entityObject.save({ callback: finish.newTask()});
+		}
 
-		 finish.maybeFinish();
+
+		finish.maybeFinish();
 	},
 
 
