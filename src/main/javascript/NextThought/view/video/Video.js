@@ -87,7 +87,7 @@ Ext.define('NextThought.view.video.Video', {
 
 	constructor: function(config) {
 
-		if (!Ext.isEmpty(config.url)){
+		if (!Ext.isEmpty(config.url)) {
 			config.playlist = config.playlist || this.self.urlToPlaylist(config.url);
 			delete config.url;
 		}
@@ -311,17 +311,25 @@ Ext.define('NextThought.view.video.Video', {
 
 	queryPlayer: function() {
 		var target = this.activeVideoService,
-			t = this.players[target];
+			t = this.players[target],
+			debug = this.self.debug;
+
 		if (!t || !t.isReady) {
 			return null;
 		}
 
-		return {
-			service: target,
-			video: this.currentVideoId,
-			time: this.issueCommand(target, 'getCurrentTime'),
-			state: this.issueCommand(target, 'getPlayerState')
-		};
+		try {
+			this.self.debug = false;//prevent these two commands from flooding the logs
+			return {
+				service: target,
+				video: this.currentVideoId,
+				time: this.issueCommand(target, 'getCurrentTime'),
+				state: this.issueCommand(target, 'getPlayerState')
+			};
+		}
+		finally {
+			this.self.debug = debug;
+		}
 	},
 
 
@@ -396,7 +404,6 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	resumePlayback: function(force) {
-		var me = this;
 		this.maybeActivatePlayer();
 		if (this.activeVideoService && (force || !this.isPlaying())) {
 			this.issueCommand(this.activeVideoService, 'play');

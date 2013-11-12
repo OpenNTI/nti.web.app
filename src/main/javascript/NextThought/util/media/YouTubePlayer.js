@@ -6,7 +6,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		kind: 'video',
 		type: 'youtube',
 		valid: function() {
-			return Boolean(window.YT) && this.apiReady;
+			return window.YT && this.apiReady;
 		}
 	},
 
@@ -14,11 +14,14 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		'NextThought.util.Globals'
 	],
 
+
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},
 
+
 	playerTpl: Ext.DomHelper.createTemplate({ id: '{id}' }),
+
 
 	constructor: function(config) {
 		this.mixins.observable.constructor.call(this);
@@ -58,27 +61,34 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		});
 	},
 
+
 	playerReady: function() {
 		var me = this,
 			state = NaN;
+
+		console.debug(this.id, 'PlayerReady called', this.onReadyLoadSource, arguments);
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
+
 		if (this.onReadyLoadSource) {
 			Ext.defer(this.load, 1, this, [this.onReadyLoadSource]);
 			delete this.onReadyLoadSource;
 		}
 
 
-		//Poll the damn thing, if it ever starts firing the event we stop polling.
-		clearInterval(this.stateChangeChecker);
-		this.stateChangeChecker = setInterval(function() {
-			var p = me.player.getPlayerState();
-			if (isNaN(state) || p !== state) {
-				me.playerStatusChange({data: p, fromInterval: true});
-				state = p;
-			}
-		},500);
+		if (!this.skipPollingForChanges) {
+			//Poll the damn thing, if it ever starts firing the event we stop polling.
+			clearInterval(this.stateChangeChecker);
+			this.stateChangeChecker = setInterval(function() {
+				var p = me.player.getPlayerState();
+				if (isNaN(state) || p !== state) {
+					me.playerStatusChange({data: p, fromInterval: true});
+					state = p;
+				}
+			},500);
+		}
 	},
+
 
 	playerError: function(error) {
 		var oldSource;
@@ -109,6 +119,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 	},
 
+
 	playerStatusChange: function(event) {
 		var type = '';
 		switch (event.data) {
@@ -123,28 +134,37 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 		//This came from an event! stop our poll
 		if (!event.fromInterval) {
+			this.skipPollingForChanges = true;
 			clearInterval(this.stateChangeChecker);//YouTube is sending us what we want.
 		}
 
 		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
+
 	getCurrentTime: function() {
 		return this.player.getCurrentTime();
 	},
+
 
 	getPlayerState: function() {
 		return this.player.getPlayerState();
 	},
 
+
 	load: function(source, offset) {
 		source = Ext.isArray(source) ? source[0] : source;
 		this.currentSource = source;
 		this.currentStartAt = offset;
-		this.isReady = false;//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/  If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
+
+		this.isReady = false;
+		//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/
+		// If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
+		console.debug(this.id, 'Loading...', source, 'ready=False');
 		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: 'medium' });
-		this.pause();
+		this.pause(); //-- pause has zero effect since "ready is false"
 	},
+
 
 	play: function() {
 		if (Ext.isFunction(this.player.playVideo)) {
@@ -169,10 +189,11 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	pause: function() {
 		if (!this.isReady) { return; }
-		if (Ext.isFunction(this.player.pauseVideo)) {
+		if (this.player.pauseVideo) {
 			this.player.pauseVideo();
 		}
 	},
+
 
 	seek: function(offset, seekAhead) {
 		if (!this.isReady) { return;}
@@ -181,11 +202,13 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.pause();
 	},
 
+
 	stop: function() {
 		if (this.player) {
 			this.player.clearVideo();
 		}
 	},
+
 
 	cleanup: function() {
 		var el = Ext.get(this.id);
@@ -199,6 +222,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			Ext.destroy(el);
 		}
 	}
+
 }, function() {
 	var me = this;
 

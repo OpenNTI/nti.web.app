@@ -14,15 +14,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 	playerWidth: 400,
 
 	renderTpl: Ext.DomHelper.markup([{
-		cls: 'video-wrapper', cn: [
-      //			{
-      //				tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
-      //				frameBorder: 0, scrolling: 'no', seamless: true
-      //			},
-			{
-				cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
-			}
-		]
+		cls: 'video-wrapper', cn: { cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain' }
 	},{
 		cls: 'controls',
 		cn: [{
@@ -150,7 +142,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 
 			if (s.time >= o.get('end') || (newIx === -1 && Math.abs(s.time - o.get('end')) < 1)) {
 				newIx = ix + 1;
-				console.log('[End of Video]');
+				console.log(this.id, this.currentSource, '[End of Video]');
 			}
 
 			this.videoTriggeredTransition = true;
@@ -159,13 +151,13 @@ Ext.define('NextThought.view.slidedeck.Video', {
 	},
 
 
-	findPlaylistIndexFor: function(service,id,time) {
+	findPlaylistIndexFor: function(service, id, time) {
 		var matching = [], len,
 			compareSources = NextThought.model.PlaylistItem.compareSources;
 
     //		time = Math.round(time);
 
-		Ext.each(this.playlist, function(o,i) {
+		Ext.each(this.playlist, function(o, i) {
 			/* slideId, id, service, start, end */
 			var dE = Math.abs(time - o.get('end')),
 				dS = Math.abs(o.get('start') - time);
@@ -181,11 +173,9 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		len = matching.length;
 
 
-		return len > 1
-				? matching
-				: len === 0
-					? -1
-					: matching[0];
+		return len > 1 ?
+			   matching :
+			   len === 0 ? -1 : matching[0];
 	},
 
 
@@ -211,7 +201,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 
 	getVideoInfoIndex: function(videoInfo) {
 		var index = -1, id = videoInfo.get('mediaId');
-		Ext.each(this.playlist, function(i,ix) {
+		Ext.each(this.playlist, function(i, ix) {
 			if (i.get('mediaId') === id) {index = ix;}
 			return index < 0;//stop once found
 		});
