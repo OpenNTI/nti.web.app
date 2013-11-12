@@ -861,6 +861,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	maybeResizeContentBox: function() {
+		if (!this.rendered || this.isDestroyed || !this.el) {
+			return;
+		}
 		var p = this.previousEditorHeight || 0,
 			h = this.el.getHeight();
 
