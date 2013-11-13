@@ -12,12 +12,12 @@ Ext.define('NextThought.controller.Reader', {
 
 	models: [
 		'PageInfo',
-		'course.navigation.Node'
+		'courseware.navigation.Node'
 	],
 
 
 	stores: [
-		'course.Navigation'
+		'courseware.Navigation'
 	],
 
 

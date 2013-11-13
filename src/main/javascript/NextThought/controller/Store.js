@@ -200,9 +200,9 @@ Ext.define('NextThought.controller.Store', function(){
 		],
 
 		views: [
-			'course.enrollment.Window',
-			'course.enrollment.Confirm',
-			'course.enrollment.Complete',
+			'courseware.enrollment.Window',
+			'courseware.enrollment.Confirm',
+			'courseware.enrollment.Complete',
 			'store.purchase.Window',
 			'store.purchase.Form',
 			'store.purchase.History',
@@ -456,7 +456,7 @@ Ext.define('NextThought.controller.Store', function(){
 				console.error('Enrollment already in progress.  How did you manage this', win);
 				return null;
 			}
-			return this.getView('course.enrollment.Window').create({record: course, callback: callback});
+			return this.getView('courseware.enrollment.Window').create({record: course, callback: callback});
 		},
 
 

@@ -3,11 +3,11 @@ Ext.define('NextThought.view.content.View', {
 	alias: 'widget.content-view-container',
 	requires: [
 		'NextThought.view.reader.Panel',
-		'NextThought.view.course.View',
-		'NextThought.view.course.dashboard.View',
-		'NextThought.view.course.forum.View',
-		'NextThought.view.course.info.View',
-		'NextThought.view.course.overview.parts.ContentLink'
+		'NextThought.view.courseware.View',
+		'NextThought.view.courseware.dashboard.View',
+		'NextThought.view.courseware.forum.View',
+		'NextThought.view.courseware.info.View',
+		'NextThought.view.courseware.overview.parts.ContentLink'
 	],
 
 	layout: {
