@@ -40,6 +40,7 @@ Ext.application({
 		'Application',
 		'Assessment',
 		'Chat',
+		'CourseWare',
 		'FilterControl',
 		'Forums',
 		'Google',
