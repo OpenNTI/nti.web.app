@@ -6,10 +6,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
 
-	requires: [
-		'NextThought.view.menus.BlogTogglePublish'
-	],
-
 	cls: 'entry list-item',
 
 	renderTpl: Ext.DomHelper.markup([
