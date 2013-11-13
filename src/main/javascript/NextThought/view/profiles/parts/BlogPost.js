@@ -18,7 +18,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var headline = this.record.get('headline');
+		var r, headline = this.record.get('headline');
 
 		this.renderData = Ext.apply(this.renderData || {},{
 			showName: false,
@@ -35,9 +35,9 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 			Ext.defer(this.destroy, 1, this);
 			return;
 		}
-		
+
 		r.headline = headline.getData();
-		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t){
+		r.headline.tags = Ext.Array.filter(r.headline.tags, function(t) {
 			return !ParseUtils.isNTIID(t);
 		});
 	},
@@ -101,23 +101,11 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 		}
 
 		this.closedPost = true;
-
-		//All of this belongs somewhere else... its animation code (css implements the keyframes)
-    //		var bar = this.headerEl;
-    //		if( bar ) {
-    //			bar.removeCls('animateIn animateOut').addCls('animateOut');
-    //		}
-
 		this.getMainView().scrollTo('top', 0, true);
 
 		if (!this.destroying) {
 			this.destroy();
 		}
-	},
-
-
-	getScrollHeaderCutoff: function() {
-		return 268;
 	},
 
 
@@ -167,15 +155,15 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 	updateSharedWith: function(field, value) {
 		var sharingInfo, tags,
-			published = this.record.isPublished();
+			published = this.record.isPublished() || !this.record.isMine();
 
-		if(field === 'sharedWith'){
+		if (field === 'sharedWith') {
 			sharingInfo = value;
 			tags = this.record.get('headline').get('tags');
-		}else if(field === 'tags'){
+		} else if (field === 'tags') {
 			sharingInfo = this.record.get('sharedWith');
 			tags = value;
-		}else{
+		} else {
 			sharingInfo = this.record.get('sharedWith');
 			tags = this.record.get('headline').get('tags');
 		}
