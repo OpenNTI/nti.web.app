@@ -117,13 +117,17 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	updateField: function(key, value) {
-		var el = this.el.down('.' + key);
+		var el = this.el.down('.' + key), len;
 		if (el) {
 			if (Ext.isArray(value) && key === 'tags') {
-
+				len = value.length;
 				value = Ext.Array.filter(value, function(v) {
 					return !ParseUtils.isNTIID(v);
 				});
+
+				if (len !== value.length) {
+					this.setPublishAndSharingState();
+				}
 
 				el.update(this.tagTpl.apply(value));
 				return;
