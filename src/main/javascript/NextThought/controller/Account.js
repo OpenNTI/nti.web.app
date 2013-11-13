@@ -16,7 +16,6 @@ Ext.define('NextThought.controller.Account', {
 
 	views: [
 		'account.Window',
-		'form.AccountForm',
 		'form.PasswordResetForm',
 		'menus.Settings',
 		'account.coppa.Main',
