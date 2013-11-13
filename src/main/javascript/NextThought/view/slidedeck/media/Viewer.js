@@ -245,13 +245,33 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 	},
 
+	getLocationInfo: function(){
+		var ntiid = this.video && this.video.get('NTIID'),
+			lineage = ntiid && ContentUtils.getLineage(ntiid),
+			location = lineage && lineage.last() && ContentUtils.getLocation(lineage.last());
+
+		return location;
+	},
+
+	videoNavigation: function(video){
+		var li = this.getLocationInfo(),
+			ntiid = video && video.get('NTIID');
+			
+		if(!li || !video.raw || !ntiid){
+			console.log('Dont know how to handle the navigation');
+			return;
+		}
+
+		Ext.defer(this.fireEvent, 1, this, ['change-media-in-player', video.raw, ntiid, getURL(li.root)]);
+	},
+
 
 	addVideoPlayer: function(width, left) {
 		var startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
 
 		//When the navigation stuff is ready switch this to the 'content-video-navigation' widget
-		this.videoplayer = Ext.widget('content-video', {
+		this.videoplayer = Ext.widget('content-video-navigation', {
 			playlist: [this.video],
 			renderTo: this.videoPlayerEl,
 			playerWidth: width,
@@ -266,6 +286,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if(isFeature("transcript-follow-video")){
 			this.mon(this.videoplayer, 'media-heart-beat', 'actOnMediaHeartBeat', this);
 		}
+
+		this.mon(this.videoplayer,{
+			scope: this,
+			'next-navigation-selected': 'videoNavigation',
+			'prev-navigation-selected': 'videoNavigation'
+		});
 
 		if (this.record) {
 			range = this.record.get('applicableRange') || {};

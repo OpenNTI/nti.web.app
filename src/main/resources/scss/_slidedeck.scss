@@ -828,6 +828,14 @@ $experimental-support-for-svg: true;
 
 				.content{
 					float: left;
+
+					.thumbnail{
+						float: left;
+					}
+
+					.about{
+						float: right;
+					}
 				}
 			}
 		}
@@ -887,14 +895,14 @@ $experimental-support-for-svg: true;
 				.thumbnail{
 					width: 70px;
 					height: 70px;
-					float: left;
+					float: right;
 					background-position: center;
 					background-size: cover;
 				}
 
 				.about{
 					width: 165px;
-					float: right;
+					float: left;
 					padding: 0 5px 0 5px;
 
 					.pre-title{
