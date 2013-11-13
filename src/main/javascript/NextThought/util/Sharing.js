@@ -44,7 +44,7 @@ Ext.define('NextThought.util.Sharing', {
 		result = result.slice();
 
 		Ext.each(result, function(r, i, a) {
-			if (ParseUtils.parseNtiid(r)) {
+			if (ParseUtils.isNTIID(r)) {
 				a[i] = UserRepository.getStore().findRecord('NTIID', r, 0, false, true, true) || r; //HACK!!
 				if (!Ext.isString(a[i])) {
 					a[i] = a[i].get('Username');
@@ -92,21 +92,21 @@ Ext.define('NextThought.util.Sharing', {
 		return Ext.isEmpty(Ext.Array.difference(communities, sharedWithIds));
 	},
 
-	
+
 	//Needs the ntiids of the entities in the sharingInfo
-	getTagSharingInfo: function(sharingInfo, ntiids){
+	getTagSharingInfo: function(sharingInfo, ntiids) {
 		var result, explicitNtiids = ntiids || [],
-			explicitEntities = sharingInfo.entities || [],
 			isPublic = sharingInfo.publicToggleOn;
 
 		result = {
 			tags: [],
 			entities: []
-		}
+		};
+
 		//if the post is public add the ntiids to the tags
-		if(isPublic){
-			Ext.Array.each(explicitNtiids, function(u){
-				if(ParseUtils.isNTIID(u)){
+		if (isPublic) {
+			Ext.each(explicitNtiids, function(u) {
+				if (ParseUtils.isNTIID(u)) {
 					result.tags.push(u);
 				}
 			});
@@ -198,12 +198,12 @@ Ext.define('NextThought.util.Sharing', {
 
 
 	//If there are any ntiids in the tags, assume that its public and those ntiids are the entities
-	tagShareToSharedInfo: function(sharedWith, tags){
-		var nts = Ext.Array.filter(tags, function(t){
+	tagShareToSharedInfo: function(sharedWith, tags) {
+		var nts = Ext.Array.filter(tags, function(t) {
 			return ParseUtils.isNTIID(t);
 		});
 
-		if(Ext.isEmpty(nts)){
+		if (Ext.isEmpty(nts)) {
 			return this.sharedWithToSharedInfo(sharedWith);
 		}
 
@@ -277,78 +277,78 @@ Ext.define('NextThought.util.Sharing', {
 
 
 	//Take the shared with and tags of a post and returns the long sharing text
-	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength){
+	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength) {
 		var entities, str;
 
-		entities = Ext.Array.filter(tags, function(t){
+		entities = Ext.Array.filter(tags, function(t) {
 			return ParseUtils.isNTIID(t);
 		});
 
 		//if there are no ntiids in the tags treat it normally
-		if(Ext.isEmpty(entities)){
+		if (Ext.isEmpty(entities)) {
 			this.getLongSharingDisplayText(sharedWith, callback, scope);
-		}else{
+		} else {
 			//get all the user objects for the ntiids in the tags
-			$AppConfig.service.getObjects(entities, function(users){
-				var prefix = (published)? 'Public and': 'Shared with',
+			$AppConfig.service.getObjects(entities, function(users) {
+				var prefix = published ? 'Public and' : 'Shared with',
 					others, names = [];
 
-				Ext.each(users || [], function(u){
-					var dn = isMe(u)? 'me' : u.getName();
+				Ext.each(users || [], function(u) {
+					var dn = isMe(u) ? 'me' : u.getName();
 					names.push(dn);
 					return !maxLength || names.length <= maxLength;
 				});
 
-				if(tpl){
-					names = Ext.Array.map(names, function(){ return tpl.apply(arguments); });
+				if (tpl) {
+					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
 				}
 
 				others = users.length - names.length;
 
-				if(others){
+				if (others) {
 					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others, 'other')));
-				}else if(names.length > 1){
+				} else if (names.length > 1) {
 					names.push(' and ' + names.pop());
 				}
 
 				str = Ext.String.format('{0} {1}', prefix, names.join(','));
 				Ext.callback(callback, scope, [str]);
-			}, function(){
+			}, function() {
 				console.log('Failed to resolve users', entities, arguments);
 				var str = Ext.String.format('{0} {1}',
-					published? 'Public and' : 'Shared with',
+					published ? 'Public and' : 'Shared with',
 					Ext.util.Format.plural(entities.length, 'other'));
 				Ext.callback(callback, scope, [str]);
 			}, this);
 		}
-	},	
+	},
 
 	//Takes the shared with and the tags of a post and returns the short sharing text
-	getTagSharingShortText: function(sharedWith, tags, published, callback, scope){
+	getTagSharingShortText: function(sharedWith, tags, published, callback, scope) {
 		var entities, str;
 
-		entities = Ext.Array.filter(tags, function(t){
+		entities = Ext.Array.filter(tags, function(t) {
 			return ParseUtils.isNTIID(t);
 		});
 
 		//if there are no ntiids in the tags, treat it normally
-		if(Ext.isEmpty(entities)){
+		if (Ext.isEmpty(entities)) {
 			this.getShortSharingDisplayText(sharedWith, callback, scope);
-		}else if (entities.length > 1){
+		} else if (entities.length > 1) {
 			str = Ext.String.format('{0} {1}',
-					published? 'Public and' : 'Shared with',
+					published ? 'Public and' : 'Shared with',
 					Ext.util.Format.plural(entities.length, 'other'));
 			Ext.callback(callback, scope, [str]);
-		}else{
+		} else {
 			//get the user objects for first ntiid in the tags
-			$AppConfig.service.getObject(entities.first(), function(user){
+			$AppConfig.service.getObject(entities.first(), function(user) {
 				var str = Ext.String.format('{0} {1}', published ? 'Public and' : 'Shared with', user.getName());
 				Ext.callback(callback, scope, [str]);
-			}, function(){
+			}, function() {
 				console.log('Failed to resolve users', entities, arguments);
 
 				var str = Ext.String.format('{0} {1}',
-					published? 'Public and' : 'Shared with',
+					published ? 'Public and' : 'Shared with',
 					Ext.util.Format.plural(entities.length, 'other'));
 				Ext.callback(callback, scope, [str]);
 			}, this);

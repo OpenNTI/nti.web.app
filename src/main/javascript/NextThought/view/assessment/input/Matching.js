@@ -171,7 +171,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 		function moveTerm(el, to){
 			var p = el.parentNode,
-				doc = p && (p.ownerDocument || p.documentElement) || document,
+				doc = (p && (p.ownerDocument || p.documentElement)) || document,
 				term = p && p.getAttribute('data-term');
 			if (p === Ext.getDom(to)) {
 				return;
@@ -348,7 +348,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 		function r(e) {
 			var p = Ext.getDom(e).parentNode,
-				doc = p && (p.ownerDocument || p.documentElement) || document,
+				doc = (p && (p.ownerDocument || p.documentElement)) || document,
 				term = p && p.getAttribute('data-term');
 			if( p && !Ext.isEmpty(term) ){
 				p.appendChild(doc.createTextNode(term));

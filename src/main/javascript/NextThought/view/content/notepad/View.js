@@ -203,7 +203,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 	},
 
 
-	onClick: function(e) {
+	onClick: function() {
 		if (this.suspendMoveEvents) {return;}
 		this.openEditor(this.lastLine);
 	},
@@ -292,7 +292,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 			}
 		}
 
-		this.scroller.select('div:not(.note-here)').remove()
+		this.scroller.select('div:not(.note-here)').remove();
 	},
 
 

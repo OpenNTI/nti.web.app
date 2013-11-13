@@ -12,10 +12,10 @@ Ext.define('NextThought.view.course.info.parts.NotStarted', {
 			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
 		] },
 		{ cls: 'col-right', cn: [
-			{ tag: 'a', cls: 'enroll', html: '{enroll}', href:'{enrollUrl}', target:'_blank'},
+			{ tag: 'a', cls: 'enroll', html: '{enroll}', href: '{enrollUrl}', target: '_blank'},
 			{ cls: 'registered', cn: [
 				'{registered}',
-				{ tag: 'span', cls:'edit', html: 'Edit' }
+				{ tag: 'span', cls: 'edit', html: 'Edit' }
 			] }
 		] }
 	] }),
@@ -30,19 +30,19 @@ Ext.define('NextThought.view.course.info.parts.NotStarted', {
 
 		this.callParent(arguments);
 
-		Ext.apply(data||{},{
+		Ext.apply(data || {}, {
 			startDate: i.startDate,
 			enroll: 'Enroll for Credit',
 			enrollUrl: e.url,
 			registered: getString('course-info.description-widget.open-enrolled')
 		});
 
-		el = this.headerTpl.insertFirst('course-info',data,true);
-		this.mon(el.down('.edit'),'click', 'showEnrollWindow');
+		el = this.headerTpl.insertFirst('course-info', data, true);
+		this.mon(el.down('.edit'), 'click', 'showEnrollWindow');
 
-		this.on('destroy',function(){
+		this.on('destroy', function() {
 			Ext.destroy(el);
-		})
+		});
 	}
 
 }, function() {

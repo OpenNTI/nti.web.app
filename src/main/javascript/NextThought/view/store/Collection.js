@@ -32,11 +32,11 @@ Ext.define('NextThought.view.store.Collection', {
 		]
 	}),
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		var container = this.up('library-view-container');
 		if (container) {
-			this.mon(container, 'activate', 'refresh', this );
+			this.mon(container, 'activate', 'refresh', this);
 		} else {
 			console.warn('no container?');
 		}
@@ -46,7 +46,7 @@ Ext.define('NextThought.view.store.Collection', {
 		var rows = this.rowSpan,
 			data = this.callParent(arguments);
 
-		Ext.each(data.items, function(i,x) {
+		Ext.each(data.items, function(i, x) {
 			var cols = 2;
 
 			i.inGrid = 'grid-item';
@@ -74,7 +74,7 @@ Ext.define('NextThought.view.store.Collection', {
 	},
 
 
-	onItemUpdate: function(rec,index,node) {
+	onItemUpdate: function(rec, index, node) {
 		var desc = Ext.fly(node).down('.description', true),
 			prev = Ext.fly(node).down('.history', true),
 			pos, e, texts, bottom,
@@ -91,10 +91,10 @@ Ext.define('NextThought.view.store.Collection', {
 
 		Ext.fly(desc).setPositioning(pos);
 
-		if (desc.scrollHeight <= desc.offsetHeight) {
-//			console.log('no need');
-//			return;
-		}
+		//if (desc.scrollHeight <= desc.offsetHeight) {
+		//	console.log('no need');
+		//	return;
+		//}
 
 
 
@@ -140,7 +140,7 @@ Ext.define('NextThought.view.store.Collection', {
 	},
 
 
-	detectOverflow: function(){
+	detectOverflow: function() {
 		console.log('Detecting overflow...');
 		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(null, null, v);},this);
 	},

@@ -208,8 +208,8 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	/**
 	 * Place to derive fields that should be put into the template.
 	 *
-	 * @param record
-	 * @return Object
+	 * @param {Ext.data.Model} record
+	 * @return {Object} Object
 	 */
 	getDerivedData: function(record) {
 		return {
@@ -247,7 +247,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 			// This allows navigating to the profile of the creator.
 			// Our mixin 'ProfileLinks' expects it.
-			this.user = u;
+			me.user = u;
 		});
 
 		return Ext.apply(this.renderData || {}, o);
@@ -282,7 +282,9 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.callParent(arguments);
 
 		var DISPLAY = Ext.dom.Element.DISPLAY,
-			box = this.replyBoxEl;
+			box = this.replyBoxEl,
+			me = this;
+
 		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.respondEl, 'saveCallback': this.saveCallback});
 
 		box.setVisibilityMode(DISPLAY);
@@ -300,21 +302,21 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 		//These next two functions seem named backwards...
-		var hide = function() {
+		function hide() {
 			//Ext.bind(box.hide, box, [false]);
-      // Now that the editor is active, adjust the reply scroll zone.
-      this.setupReplyScrollZone();
-			this.replyBoxEl.hide();
-			this.constrainPopout();
-			this.fireEvent('editorActivated');
-		};
+			// Now that the editor is active, adjust the reply scroll zone.
+			me.setupReplyScrollZone();
+			me.replyBoxEl.hide();
+			me.constrainPopout();
+			me.fireEvent('editorActivated');
+		}
 
-		var show = function() {
+		function show() {
 			//Ext.bind(box.show, box, [false]);
-			this.replyBoxEl.show();
-			this.constrainPopout();
-			this.fireEvent('editorDeactivated');
-		};
+			me.replyBoxEl.show();
+			me.constrainPopout();
+			me.fireEvent('editorDeactivated');
+		}
 
 		this.mon(this.editor, {
 			scope: this,
@@ -340,16 +342,17 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		this.enableProfileClicks(this.name, this.avatar);
 	},
 
-	maybeAllowEditor: function(){
+	maybeAllowEditor: function() {
 		//if this has an active editor
-		if((this.editor && this.editor.isActive()) || this.editorOpened){
+		if ((this.editor && this.editor.isActive()) || this.editorOpened) {
 			return false;
 		}
 
 		this.editorOpened = true;
+		return undefined;
 	},
 
-	closedEditor: function(){
+	closedEditor: function() {
 		delete this.editorOpened;
 	},
 
@@ -371,11 +374,11 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 
 	showEditor: function() {
-		if(this.editorOpened){ return; }
+		if (this.editorOpened) { return; }
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
-    	this.fireEvent('realign');
+		this.fireEvent('realign');
 	},
 
 

@@ -35,7 +35,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		this.callParent(arguments);
 		var r = this.record,
 			me = this,
-			h, sharedWith;
+			h, sharedWith, el;
 
 		me.mon(me.tags, 'new-tag', 'syncHeight');
 		if (r) {
@@ -69,38 +69,33 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 
 		if (Ext.is.iOS) {
-            var el = me.editorBodyEl;
+			el = me.editorBodyEl;
 
-            el.dom.onmouseup = function(e){
-                me.scrollDiv = false;
-                if(e.pageY > 438){
-                    me.scrollDiv = true;
-                }
-            }
+			el.dom.onmouseup = function(e) { me.scrollDiv = (e.pageY > 438); };
 
-            //Shorten the editor body to fit on iPad screen when keyboard up
-            el.on('focus', function(){
-                if(!me.bodyheight){
-                    me.bodyheight = el.getHeight();
-                }
-                Ext.defer(function(){
-                    //Make sure on-screen keyboard is up (and not physical keyboard connected)
-                    if(window.innerHeight < 600){
-                        el.setHeight(window.scrollY - 16);
-                        //scroll div is selected part is no longer visible
-                        Ext.defer(function(){
-                            if(me.scrollDiv){
-                                el.scrollBy(0,100);
-                            }
-                        },250, me);
-                    }
-                },250, me);
-            });
-            el.on('blur', function(){
-                if(me.bodyheight){
-                    el.setHeight(me.bodyheight);
-                }
-            });
+			//Shorten the editor body to fit on iPad screen when keyboard up
+			el.on('focus', function() {
+				if (!me.bodyheight) {
+					me.bodyheight = el.getHeight();
+				}
+				Ext.defer(function() {
+					//Make sure on-screen keyboard is up (and not physical keyboard connected)
+					if (window.innerHeight < 600) {
+						el.setHeight(window.scrollY - 16);
+						//scroll div is selected part is no longer visible
+						Ext.defer(function() {
+							if (me.scrollDiv) {
+								el.scrollBy(0, 100);
+							}
+						},250, me);
+					}
+				},250, me);
+			});
+			el.on('blur', function() {
+				if (me.bodyheight) {
+					el.setHeight(me.bodyheight);
+				}
+			});
 
 		}
 	},

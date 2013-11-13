@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.course.info.outline.Menu',{
+Ext.define('NextThought.view.course.info.outline.Menu', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-info-outline-menu',
 
@@ -49,18 +49,22 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 		var i = this.info && this.info.instructors,
 			plural = (i && i.length > 1) ? 's' : '';
 
-		return this.menuStore || (this.menuStore = new Ext.data.Store({
-			fields: [
-				{ name: 'hash', type: 'string' },
-				{ name: 'label', type: 'string' }
-			],
-			data: [
-				{ hash: 'top', label: 'About' },
-				{ hash: 'course-info-instructors', label: 'Course Instructor'+plural },
-				//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
-				{ hash: 'course-info-support', label: 'Tech Support' }
-			]
-		}));
+		if (!this.menuStore) {
+			this.menuStore = new Ext.data.Store({
+				fields: [
+					{ name: 'hash', type: 'string' },
+					{ name: 'label', type: 'string' }
+				],
+				data: [
+					{ hash: 'top', label: 'About' },
+					{ hash: 'course-info-instructors', label: 'Course Instructor' + plural },
+					//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
+					{ hash: 'course-info-support', label: 'Tech Support' }
+				]
+			});
+		}
+
+		return this.menuStore;
 	},
 
 
@@ -73,18 +77,18 @@ Ext.define('NextThought.view.course.info.outline.Menu',{
 			scrollTarget = ci.down(hash),
 			scrollTargetY;
 
-		if(hash === 'top') {
-			scrollingThing.scrollTo('top',0,true);
+		if (hash === 'top') {
+			scrollingThing.scrollTo('top', 0, true);
 			return;
 		}
 
-		if(!scrollTarget) {
+		if (!scrollTarget) {
 			selModel.deselect(record);
 			return;
 		}
 
 		scrollTargetY = scrollTarget.getEl().getOffsetsTo(scrollReference)[1];
-		scrollingThing.scrollTo('top',scrollTargetY,true);
+		scrollingThing.scrollTo('top', scrollTargetY, true);
 	}
 
 });

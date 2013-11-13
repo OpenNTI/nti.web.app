@@ -76,11 +76,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				{ tag: 'title', html: '{id}-sandbox' },
 				{ tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
 				{ tag: 'script', type: 'text/javascript', src: ('{basePath}resources/lib/jQuery-1.8.0min.js') },
-        //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php') },
-        //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php') },
-				{ tag: 'script', type: 'text/javascript', src: (location.protocol + '//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101') },
-        //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php') },
-        //				{ tag:'script', type:'text/javascript', src:(location.protocol+'//html5.kaltura.org/js') },
+				{ tag: 'script', type: 'text/javascript', src:
+						(location.protocol + '//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101') },
+						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php') },
+						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php') },
+						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php') },
+						//(location.protocol+'//html5.kaltura.org/js') },
 				{ tag: 'style', type: 'text/css', cn: [
 					'body, html { margin: 0; padding: 0; overflow:hidden; }'
 				]}
@@ -143,7 +144,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.handleMessage = Ext.bind(this.handleMessage, this);
 
 		$AppConfig.Preferences.getPreference('WebApp', function(value) {
-			me.LEAD_HTML5 = (value) ? value.get('preferFlashVideo').toString() : 'false';
+			me.LEAD_HTML5 = value ? value.get('preferFlashVideo').toString() : 'false';
 			me.playerSetup();
 		});
 	},
@@ -245,7 +246,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this[handlerName](eventData);
 	},
 
-	setCurrentState: function(s){
+	setCurrentState: function(s) {
 		this.currentState = s;
 	},
 
@@ -311,9 +312,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	getPlayerState: function() { return this.currentState; },
 
 
-	load: function(source, offset, force) {
-		console.log(this.id, ' Kaltura load called with source', source);
-		var kalturaData, me = this, sourceActuallyChanging = source !== this.currentSource;
+	load: function(src, offset, force) {
+		console.log(this.id, ' Kaltura load called with source', src);
+		var source = src,
+			kalturaData, me = this, sourceActuallyChanging = source !== this.currentSource;
 
 		//We seen the player get confused if you try and changeMedia while
 		//its already changing media.  It doesn't happen always but sometimes
@@ -395,7 +397,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	},
 
 
-	play: function(autoPlay) {
+	play: function(/*autoPlay*/) {
 		if (this.dieOnPlay && !this.changingMediaSource) {
 			console.error(this.id, ' No video id provided with source');
 			this.fireEvent('player-error', 'kaltura');
@@ -540,7 +542,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 
-		this.setCurrentState(2)
+		this.setCurrentState(2);
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
 
@@ -551,7 +553,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 		this.deactivate();
-		this.setCurrentState(3)
+		this.setCurrentState(3);
 		this.fireEvent('player-event-ended', 'kaltura');
 
 		//As an optimization if we are a child of the overview-part

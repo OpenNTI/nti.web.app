@@ -40,13 +40,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			'show-editor-inline': 'showEditorAtPosition',
 			'register-records': 'registerGutterRecords',
 			'unregister-records': 'unRegisterGutterRecords',
-      		'presentation-parts-ready': 'adjustAnnotationOverlayPosition'
+			'presentation-parts-ready': 'adjustAnnotationOverlayPosition'
 		});
 
-    this.mon(this.reader, {
-      scope: this,
-      'sync-height': 'adjustAnnotationOverlayPosition'
-    });
+		this.mon(this.reader, {
+			scope: this,
+			'sync-height': 'adjustAnnotationOverlayPosition'
+		});
 
 		this.mon(this.annotationManager, {
 			'add': 'onAnnotationAdded',
@@ -75,8 +75,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 				'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
 				grew: function() {
 					var h = this.getHeight(),
-						b = h + this.getY(),
-						v = Ext.Element.getViewportHeight();
+							b = h + this.getY(),
+							v = Ext.Element.getViewportHeight();
 					if (b > v) {
 						this.setY(v - h);
 					}
@@ -91,7 +91,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		me.editorEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		me.reader.relayEvents(me, ['save-new-note', 'save-new-series-note']);
-    me.reader.fireEvent('uses-page-preferences', this);
+		me.reader.fireEvent('uses-page-preferences', this);
 	},
 
 
@@ -119,33 +119,33 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	insertOverlay: function() {
-		 this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
+		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
 	},
 
 
-  adjustAnnotationOverlayPosition: function() {
-    if (!this.annotationOverlay) { return; }
+	adjustAnnotationOverlayPosition: function() {
+		if (!this.annotationOverlay) { return; }
 
-    var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
-            w = this.reader.getWidth(),
-            maxWidth = 860,
-            me = this;
+		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
+			w = this.reader.getWidth(),
+			maxWidth = 860,
+			me = this;
 
-    if ( w === 0 ){
-    	Ext.defer(this.adjustAnnotationOverlayPosition,10,this);//hidden, let the repaint finish
-    	return;
-    }
+		if (w === 0) {
+			Ext.defer(this.adjustAnnotationOverlayPosition, 10, this);//hidden, let the repaint finish
+			return;
+		}
 
-	w = w < maxWidth ? w - 75 : maxWidth - 75;
-	this.annotationOverlay.setStyle('left', w + 'px');
-	
-    Ext.each(cmps, function(cmp) {
-      if (Ext.isFunction(cmp.positionAnnotationNibs)) {
-        cmp.positionAnnotationNibs(me.reader.el);
-      }
-    });
+		w = w < maxWidth ? w - 75 : maxWidth - 75;
+		this.annotationOverlay.setStyle('left', w + 'px');
 
-  },
+		Ext.each(cmps, function(cmp) {
+			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
+				cmp.positionAnnotationNibs(me.reader.el);
+			}
+		});
+
+	},
 
 
 	editorSaved: function(editor, r, v) {
@@ -197,7 +197,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		return false;
 	},
 
-	editorCanceled: function(e) {
+	editorCanceled: function() {
 		if (this.editor.closeCallback) {
 			Ext.callback(this.editor.closeCallback);
 		}
@@ -211,8 +211,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	syncHeight: function() {
 		var cmps,
-			r = this.reader,
-			el = r && r.el;
+				r = this.reader,
+				el = r && r.el;
 
 		if (el && el.isVisible(true)) {
 			Ext.defer(this.syncHeight, 10, this);
@@ -247,7 +247,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 				this.editor.closeCallback = cb;
 			}
 
-      this.setDefaultSharingFor((info || {}).containerId);
+			this.setDefaultSharingFor((info || {}).containerId);
 			this.editor.activate();
 		}
 	},
@@ -274,28 +274,28 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-  setDefaultSharingFor: function(ntiid) {
-    function getMeta(meta) {
-      var pageInfo = meta && meta.pageInfo,
-          prefs, sharing, shareInfo, sharedWith;
+	setDefaultSharingFor: function(ntiid) {
+		function getMeta(meta) {
+			var pageInfo = meta && meta.pageInfo,
+					prefs, sharing, shareInfo, sharedWith;
 
-      if (pageInfo) {
-        prefs = me.getPagePreferences(pageInfo.getId());
-        sharing = prefs && prefs.sharing;
-        sharedWith = sharing && sharing.sharedWith;
-        shareInfo = SharingUtils.sharedWithToSharedInfo(
-            SharingUtils.resolveValue(sharedWith),
-            pageInfo
-            );
-      }
+			if (pageInfo) {
+				prefs = me.getPagePreferences(pageInfo.getId());
+				sharing = prefs && prefs.sharing;
+				sharedWith = sharing && sharing.sharedWith;
+				shareInfo = SharingUtils.sharedWithToSharedInfo(
+						SharingUtils.resolveValue(sharedWith),
+						pageInfo
+				);
+			}
 
-      me.editor.setSharedWith(shareInfo);
-      me.reader.pageInfo = pageInfo;
-    }
+			me.editor.setSharedWith(shareInfo);
+			me.reader.pageInfo = pageInfo;
+		}
 
-    var me = this;
-    this.resolveRootPageInfoFor(ntiid, getMeta);
-  },
+		var me = this;
+		this.resolveRootPageInfoFor(ntiid, getMeta);
+	},
 
 
 	registerGutterRecords: function(noteStore, records, view) {
@@ -327,7 +327,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		rec = recStore.getById(rec.getId()) || rec;
 
 		if (!rec) {
-			return;
+			return null;
 		}
 
 		if (Ext.isFunction(cmp.domRangeForRecord) && (!Ext.isFunction(cmp.wantsRecord) || cmp.wantsRecord(rec))) {
@@ -343,7 +343,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
 		var domRange = this.rangeForDescription(rec, cmp, recStore),
-			rect, line, d;
+				rect, line, d;
 
 		if (Ext.isEmpty(domRange)) {
 			return;
@@ -453,7 +453,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		var fudgeFactor = 2;
 		return this.annotationManager.filterBy(function(item) {
 			var rec = item.record,
-				s = item.store.getById(rec.getId());
+					s = item.store.getById(rec.getId());
 			if (s && (s.get('pline') !== rec.get('pline'))) {
 				s.set('pline', rec.get('pline'));
 			}
@@ -462,13 +462,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-  resolveRootPageInfoFor: function(ntiid, callback) {
-    var rootId = ContentUtils.getLineage(ntiid);
+	resolveRootPageInfoFor: function(ntiid, callback) {
+		var rootId = ContentUtils.getLineage(ntiid);
 
-    rootId = rootId && rootId.last();
-    if (!rootId) {
-      Ext.callback(callback, this);
-    }
-    LocationMeta.getMeta(rootId, callback, this);
-  }
+		rootId = rootId && rootId.last();
+		if (!rootId) {
+			Ext.callback(callback, this);
+		}
+		LocationMeta.getMeta(rootId, callback, this);
+	}
 });

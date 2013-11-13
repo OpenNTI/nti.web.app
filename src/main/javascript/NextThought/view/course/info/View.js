@@ -58,29 +58,29 @@ Ext.define('NextThought.view.course.info.View', {
 		//the ntiid of the course info content.  The second involves loading a json object from
 		//an info node and passing the object to update.  All content will have the courseInfo attribute
 		//but only the new fancy course infos will have the info node. Look for that first
-		if(info){
+		if (info) {
 			update();
-			me.parseNode(info, course, l, update, function(){
+			me.parseNode(info, course, l, update, function() {
 				console.warn('Course has an info node that points to non existent json', course, arguments);
 			});
 			return;
 		}
 
-		var courseInfoNtiid = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
-		if(courseInfoNtiid){
-			update(courseInfoNtiid)
+		courseInfoNtiid = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
+		if (courseInfoNtiid) {
+			update(courseInfoNtiid);
 		}
 	},
 
 
-	parseNode: function(infoNode, courseNode, locInfo, callback, failure){
+	parseNode: function(infoNode, courseNode, locInfo, callback, failure) {
 		var src = getURL(infoNode.getAttribute('src'), locInfo.root);
 
 		this.hasInfo = !!infoNode;
 		this.infoOnly = !courseNode.querySelector('unit');
 
 
-		function success(r){
+		function success(r) {
 			var json = Ext.decode(r.responseText,true),
 				startDate;
 
@@ -110,7 +110,7 @@ Ext.define('NextThought.view.course.info.View', {
 			expectedContentType: 'application/json',
 			scope: this,
 			success: success,
-			failure: function(){
+			failure: function() {
 				Ext.callback(failure,this,[]);
 			}
 		});
