@@ -42,15 +42,15 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
-		{ name: 'editied', type: 'bool', persist: false, convert: function(v,r) {
+		{ name: 'editied', type: 'bool', persist: false, convert: function(v, r) {
 			var cd = r.get('CreatedTime'), lm = r.get('Last Modified');
 			return ((cd && cd.getTime()) || 0) !== ((lm && lm.getTime()) || 0);
 		}},
 
 		//For templates
-		{ name: 'isModifiable', persist: false, convert: function(v,r) {return r.phantom || r.getLink('edit') !== null;} },
-		{ name: 'favoriteState', persist: false, type: 'auto', convert: function(o,r) { return r.getLink('unfavorite') ? 'on' : 'off'; }},
-		{ name: 'likeState', persist: false, type: 'auto', convert: function(o,r) { return r.getLink('unlike') ? 'on' : 'off'; }}
+		{ name: 'isModifiable', persist: false, convert: function(v, r) {return r.phantom || r.getLink('edit') !== null;} },
+		{ name: 'favoriteState', persist: false, type: 'auto', convert: function(o, r) { return r.getLink('unfavorite') ? 'on' : 'off'; }},
+		{ name: 'likeState', persist: false, type: 'auto', convert: function(o, r) { return r.getLink('unlike') ? 'on' : 'off'; }}
 	],
 
 	//TODO: move into model event domain??
@@ -79,7 +79,7 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	getClassForModel: function(aliasPrefix,fallback) {
+	getClassForModel: function(aliasPrefix, fallback) {
 		var c = this,
 			cls = null,
 			name;
@@ -110,7 +110,7 @@ Ext.define('NextThought.model.Base', {
 		//If one is an array, to be equal they must both
 		//be arrays and they must contain equal objects in the proper order
 		if (Ext.isArray(a) || Ext.isArray(b)) {
-			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, Ext.Function.bind(this.isEqual, this));
+			return Ext.isArray(a) && Ext.isArray(b) && Globals.arrayEquals(a, b, Ext.bind(this.isEqual, this));
 		}
 
 		//if a defines an equals method return the result of that
@@ -124,10 +124,10 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	constructor: function(data,id,raw) {
+	constructor: function(data, id, raw) {
 		var fs = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			cField = fs.getByKey('Class'), get = this.get, me = this;
+			cField = fs.getByKey('Class'), me = this;
 
 		//Workaround for objects that don't have an NTIID yet.
 		if (data && this.idProperty === 'NTIID' && id && raw) {
@@ -180,7 +180,8 @@ Ext.define('NextThought.model.Base', {
 	//First we look for a traditional field with the given name
 	//Second we look for a properly named getter function. ie. isField or getField
 	get: function(f) {
-		var capitalizedFieldName, possibleGetters, val;
+		var capitalizedFieldName, possibleGetters,
+			val;//undefined
 
 		if (!f || this.fields.map[f]) {
 			return this.callParent(arguments);
@@ -194,6 +195,7 @@ Ext.define('NextThought.model.Base', {
 				val = this[g]();
 				return false;
 			}
+			return true;
 		}, this);
 
 		return val;
@@ -218,8 +220,8 @@ Ext.define('NextThought.model.Base', {
 
 	/**
 	 * Caller should wrap in beginEdit() and endEdit()
-	 * @param recordSrc
-	 * @param fields - [String var args]
+	 * @param {Ext.data.Model} recordSrc
+	 * @param {String...} fields
 	 */
 	copyFields: function(recordSrc, fields) {
 		var me = this, maybeFields = fields;
@@ -230,7 +232,7 @@ Ext.define('NextThought.model.Base', {
 
 		Ext.each(maybeFields, function(f) {
 			if (Ext.isObject(f)) {
-				Ext.Object.each(f, function(dest,src) {
+				Ext.Object.each(f, function(dest, src) {
 					if (me.hasField(dest) && recordSrc.hasField(src)) {
 						me.set(dest, recordSrc.get(src));
 					} else {
@@ -246,7 +248,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	hasField: function(fieldName) {
-		return this[this.persistenceProperty].hasOwnProperty(fieldName);
+		return this.data.hasOwnProperty(fieldName);
 	},
 
 	tearDownLinks: function() {
@@ -381,7 +383,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	isLikeable: function() {
-		return Boolean(this.getLink('like')) || Boolean(this.getLink('unlike'));
+		return Boolean(this.getLink('like') || this.getLink('unlike'));
 	},
 
 
@@ -437,7 +439,7 @@ Ext.define('NextThought.model.Base', {
 		me.postTo(action, function(s) {
 			if (s) {
 				//put "me" in the bookmark view?
-				me.set('favoriteState', (currentValue) ? 'on' : 'off');
+				me.set('favoriteState', currentValue ? 'on' : 'off');
 				NextThought.model.events.Bus.fireEvent('favorite-changed', me);
 			}
 			else {
@@ -529,7 +531,7 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	getFieldEditURL: function(editLink,field) {
+	getFieldEditURL: function(editLink, field) {
 		if (/.*\+\+fields\+\+.*/.test(editLink)) {
 			//edit link is already edit link for that field
 			return editLink;
@@ -538,22 +540,23 @@ Ext.define('NextThought.model.Base', {
 		var f = Ext.String.format('/++fields++{0}', field);
 
 		return getURL(Ext.String.format('{0}{1}',
-			editLink, f));
+				editLink, f));
 	},
 
 
 	/**
 	 * Save a specific field off this model, optionally set a value and save it if value is sent.
 	 *
-	 * @param fieldName - name of the field that we want to save
-	 * @param [value] - if undefined the field from the model will be saved.  If not undefined the field
+	 * @param {String} fieldName - name of the field that we want to save
+	 * @param {*} [value] - if undefined the field from the model will be saved.  If not undefined the field
 	 *					will be set on the model prior to saving
-	 * @param successCallback
-	 * @param failCallback
-	 * @param [optionalLinkName] = provide if you want a specific link other than the edit link
+	 * @param {Function} successCallback
+	 * @param {Function} failCallback
+	 * @param {String} [optionalLinkName] = provide if you want a specific link other than the edit link
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback, optionalLinkName) {
-		var editLink = this.getLink(optionalLinkName || 'edit');
+		var editLink = this.getLink(optionalLinkName || 'edit'),
+			json, me = this, req;
 
 		//special case, pageInfos are not editable (no link), but can take sharedPrefs
 		if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
@@ -575,15 +578,10 @@ Ext.define('NextThought.model.Base', {
 		if (value !== undefined) {
 			this.set(fieldName, value);
 		}
-		else {
-			value = this.get(fieldName);
-		}
 
 		//put together the json we want to save.
-		var json = Ext.JSON.encode(value),
-			me = this;
-
-		Ext.Ajax.request({
+		json = Ext.JSON.encode(value === undefined ? this.get(fieldName) : value);
+		req = {
 			url: this.getFieldEditURL(editLink, fieldName),
 			jsonData: json,
 			method: 'PUT',
@@ -612,37 +610,26 @@ Ext.define('NextThought.model.Base', {
 
 				me.fireEvent('changed', me);
 			}
-		});
+		};
+
+		Ext.Ajax.request(req);
 	},
-
-
-  //	hasField: function(fieldName) {
-  //		var result = false;
-  //		this.fields.each(
-  //			function(f){
-  //				if (f.name === fieldName){
-  //					result = true;
-  //					return false;
-  //				}
-  //		});
-  //
-  //		return result;
-  //	},
 
 
 	/**
 	 * Calls the href and fills in the values missing.
 	 */
 	resolve: function() {
-		console.trace('still called?');
+		console.error('still called?');
 		var me = this,
-			href = this.get('href');
+			href = this.get('href'),
+			req;
 
 		if (!href) {
 			Ext.Error.raise('No HREF!');
 		}
 
-		Ext.Ajax.request({
+		req = {
 			url: getURL(href),
 			async: false,
 			callback: function(req, success, resp) {
@@ -655,7 +642,9 @@ Ext.define('NextThought.model.Base', {
 				me.dirty = false;
 				me.modified = {};
 			}
-		});
+		};
+
+		Ext.Ajax.request(req);
 
 
 	},
@@ -663,7 +652,7 @@ Ext.define('NextThought.model.Base', {
 
 	//Only seems to be called from legacy classroom stuff
 	getParent: function(callback, scope) {
-		var href = this.getLink('parent');
+		var href = this.getLink('parent'), req;
 
 		console.trace('Still called?');
 
@@ -677,7 +666,7 @@ Ext.define('NextThought.model.Base', {
 			return;
 		}
 
-		Ext.Ajax.request({
+		req = {
 			url: href,
 			callback: function(req, success, resp) {
 				if (!success) {
@@ -686,7 +675,9 @@ Ext.define('NextThought.model.Base', {
 				}
 				callback.call(scope || window, ParseUtils.parseItems(Ext.JSON.decode(resp.responseText))[0]);
 			}
-		});
+		};
+
+		Ext.Ajax.request(req);
 
 	},
 
@@ -703,16 +694,16 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		a.fields.each(
-			function(f) {
-				var fa = a.get(f.name),
-					fb = b.get(f.name);
+				function(f) {
+					var fa = a.get(f.name),
+							fb = b.get(f.name);
 
-				if (!a.isEqual(fa, fb)) {
-					r = false;
-					return false;//break
+					if (!a.isEqual(fa, fb)) {
+						r = false;
+						return false;//break
+					}
+					return true;
 				}
-				return true;
-			}
 		);
 
 		return r;
@@ -724,24 +715,24 @@ Ext.define('NextThought.model.Base', {
 			me = this;
 
 		this.fields.each(
-			function(f) {
-				if (!f.persist) {return;}
-				var x = me.get(f.name);
-				if (Ext.isDate(x)) {
-					x = x.getTime() / 1000;
-				}
-				else if (x && x.asJSON) {
-					x = x.asJSON();
-				}
-				else if (x && Ext.isArray(x)) {
-					x = x.slice();
-					Ext.each(x, function(o, i) {
-						x[i] = o && o.asJSON ? o.asJSON() : o;
-					});
-				}
+				function(f) {
+					if (!f.persist) {return;}
+					var x = me.get(f.name);
+					if (Ext.isDate(x)) {
+						x = x.getTime() / 1000;
+					}
+					else if (x && x.asJSON) {
+						x = x.asJSON();
+					}
+					else if (x && Ext.isArray(x)) {
+						x = x.slice();
+						Ext.each(x, function(o, i) {
+							x[i] = o && o.asJSON ? o.asJSON() : o;
+						});
+					}
 
-				data[f.name] = Ext.clone(x);
-			}
+					data[f.name] = Ext.clone(x);
+				}
 		);
 		return data;
 	},
@@ -791,8 +782,7 @@ Ext.define('NextThought.model.Base', {
 			return;
 		}
 
-		var capitalizedFieldName = Ext.String.capitalize(f),
-			dependentFunctionName = 'valuesAffectedBy' + f,
+		var dependentFunctionName = 'valuesAffectedBy' + f,
 			fn = this[dependentFunctionName];
 		this.notifyObserversOfFieldChange(f);
 		if (Ext.isFunction(fn)) {
