@@ -92,6 +92,7 @@ Ext.define('NextThought.view.annotations.note.Main', {
 		}
 	},
 
+
 	createEditor: function() {
 		this.callParent();
 		this.editor.el.down('.title')
@@ -99,6 +100,7 @@ Ext.define('NextThought.view.annotations.note.Main', {
 			.addCls('small')
 			.hide();
 	},
+
 
 	fillInReplies: function() {
 		var r = this.record, me = this;
@@ -198,6 +200,21 @@ Ext.define('NextThought.view.annotations.note.Main', {
 	},
 
 
+	addAdditionalRecordListeners: function(record) {
+		record.addObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
+	},
+
+
+	removeAdditionalRecordListeners: function(record) {
+		record.removeObserverForField(this, 'sharedWith', 'fillInShareFromFieldChange');
+	},
+
+
+	fillInShareFromFieldChange: function(field, value) {
+		UserRepository.getUser(value, this.fillInShare, this);
+	},
+
+
 	setRecord: function(r) {
 		var reader = this.reader;
 
@@ -260,12 +277,14 @@ Ext.define('NextThought.view.annotations.note.Main', {
 		}
 	},
 
+
 	setContext: function() {
 		this.callParent(arguments);
 		if (this.record.placeholder) {
 			this.hideImageCommentLink();
 		}
 	},
+
 
 	contextAnnotationActions: function(e, dom) {
 		e.stopEvent();

@@ -332,11 +332,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 	fillInShare: function(sharedWith) {
-		var val, names = [], others,
-			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
+		var tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
 
 		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
-		if (Ext.isEmpty(sharedWith)) { return; }
+		if (Ext.isEmpty(sharedWith)) {
+			this.sharedTo.update('Private');
+			this.sharedTo.set({'data-qtip': null});
+			return;
+		}
 
 		SharingUtils.getLongSharingDisplayText(sharedWith, function(str) {
 			this.sharedTo.update(str);
