@@ -154,7 +154,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 	updateSharedWith: function(field, value) {
 		var sharingInfo, tags, el = this.publishStateEl,
-			published = this.record.isPublished();
+			published = this.record.isPublished() || !this.record.isMine();
 
 		if (field === 'sharedWith') {
 			sharingInfo = value;
