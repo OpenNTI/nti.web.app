@@ -342,11 +342,18 @@ Ext.define('NextThought.controller.Profile', {
 		}
 		var fin = Ext.bind(Ext.callback, this, [cb, undefined, [blogEntry, cmp]]),
 			finish = new FinishCallback(fin, this),
+			updateEntities,
 			isPublic = sharingInfo.publicToggleOn,
-			hasEntities = !Ext.isEmpty(sharingInfo.entities),
-			entityFieldName = isPublic ? 'tags' : 'sharedWith',
-			entityObject = isPublic ? blogEntry.get('headline') : blogEntry,
-			fieldAction = isPublic ? Ext.Array.merge : function(a) { return a; };
+			hasEntities = !Ext.isEmpty(sharingInfo.entities);
+
+		function handleEntities() {
+			var entityFieldName = isPublic ? 'tags' : 'sharedWith',
+				entityObject = isPublic ? blogEntry.get('headline') : blogEntry,
+				fieldAction = isPublic ? Ext.Array.merge : function(a) { return a; };
+
+			entityObject.set(entityFieldName, fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
+			entityObject.save({ callback: finish.newTask()});
+		}
 
 		if (isPublic && !resolved) {
 			fin = Ext.bind(this.handleShareAndPublishState, this, [blogEntry, sharingInfo, cb, cmp, true]);
@@ -373,17 +380,16 @@ Ext.define('NextThought.controller.Profile', {
 		 * If we are Going from #4 to #3 we need to move the entities to the sharedWith.
 		 */
 
+		updateEntities = new FinishCallback(hasEntities ? handleEntities : Ext.emptyFn, this);
+
 		if (blogEntry.isPublished() !== isPublic) {
 			// This function (publish) is poorly named. It toggles.
-			blogEntry.publish(cmp, finish.newTask(), this);
+			blogEntry.publish(cmp,
+					Ext.Function.createSequence(updateEntities.newTask(), finish.newTask(), this),
+					this);
 		}
 
-		if (hasEntities) {
-			entityObject.set(entityFieldName, fieldAction(sharingInfo.entities, entityObject.get(entityFieldName)));
-			entityObject.save({ callback: finish.newTask()});
-		}
-
-
+		updateEntities.maybeFinish();
 		finish.maybeFinish();
 	},
 
