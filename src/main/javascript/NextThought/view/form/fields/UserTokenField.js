@@ -302,9 +302,13 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	setValue: function(sharingInfo) {
 		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.setValue, this, arguments), this, {single: true});
+			if (this.setValueAfterRenderListener) {
+				Ext.destroy(this.setValueAfterRenderListener);
+			}
+			this.setValueAfterRenderListener = this.on({'afterrender': Ext.bind(this.setValue, this, arguments), scope: this, single: true, destroyable: true});
 			return;
 		}
+		delete this.setValueAfterRenderListener;
 
 		var me = this, explicitEntities;
 		this.clear();

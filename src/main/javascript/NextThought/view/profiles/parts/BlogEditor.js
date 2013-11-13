@@ -45,8 +45,11 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			me.setTags(h.get('tags'));
 
 			sharedWith = r.getSharingInfo();
-			me.setSharedWith(sharedWith);
 
+			//make sure we set the publish button state, even if we don't have entities.
+			me.setSharedWith({publicToggleOn: sharedWith.publicToggleOn, entities: []});
+
+			//if we have entities, the callback will set them... (resolved)
 			$AppConfig.service.getObjects(sharedWith.entities, function(entities) {
 				sharedWith.entities = Ext.Array.map(entities, function(u) {
 					return u.get('Username');
