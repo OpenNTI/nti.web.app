@@ -9,13 +9,17 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 
 	return {
 
-		constructor: function(storage) {
+		constructor: function(storage, noPrefix) {
 			if (!storage ||
 				!Ext.isFunction(storage.removeItem) ||
 				!Ext.isFunction(storage.setItem) ||
 				!Ext.isFunction(storage.getItem) ||
 				!Ext.isFunction(storage.clear)) {
 				Ext.Error.raise('Given storage object does not implement Storage api');
+			}
+
+			if (noPrefix === true) {
+				prefix = function(v) {return v;};
 			}
 
 			this.backingStore = storage;
@@ -101,6 +105,6 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 			clear: Ext.emptyFn
 		};
 
-	window.TemporaryStorage = new Cls(w.sessionStorage || fallback);
+	window.TemporaryStorage = new Cls(w.sessionStorage || fallback, true);
 	window.PersistentStorage = new Cls(w.localStorage || fallback);
 });
