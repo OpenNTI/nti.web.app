@@ -87,6 +87,21 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		}
 	},
 
+	//Make sure all the tokens are also selected in the contacts view
+	addTokensBack: function(){
+		if(!this.fromItemSelect){ return; }//the only time they would be out of sync is if an item had just been selected
+
+		var me = this,
+			tokens = this.tokensEl.query('.token');
+
+		delete this.fromItemSelect;
+
+		Ext.each(tokens, function(t){
+			var username = t.getAttribute('data-username');
+
+			me.selectId(username);
+		});
+	},
 
 	removeToken: function(record) {
 		var el = this.el.down('span[data-username="' + record.get('Username') + '"]');
@@ -103,6 +118,22 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		var id = token && token.getAttribute('data-username');
 		if (!Ext.isEmpty(id)) {
 			this.deselectId(id);
+		}
+	},
+
+	
+	selectId: function(id){
+		var recs = this.contactSearch.getStore().getRange(),
+			rec;
+
+		Ext.each(recs, function(r){
+			if(r.get('Username') === id){
+				rec = r;
+			}
+		});
+
+		if(rec){
+			this.contactSearch.getSelectionModel().select(rec, true, true);
 		}
 	},
 
@@ -204,6 +235,12 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			remove: function(s,r) {this.remove(r);}
 		});
 
+		//Keep the store's selection model up to date with the tokens
+		this.mon(this.searchStore,{
+			'filterchange' : 'addTokensBack',
+			buffer : 100
+		});
+
 
 		this.contactSearch = Ext.widget('dataview', {
 			simpleSelect: true,
@@ -233,6 +270,8 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 
 	itemSelect: function(v,rec) {
 		this.addToken(rec);
+		this.fromItemSelect = true;
+		this.searchStore.search('');//clear out the search results once we select an item
 	},
 
 
