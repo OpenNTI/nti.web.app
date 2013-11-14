@@ -50,7 +50,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			me.setSharedWith({publicToggleOn: sharedWith.publicToggleOn, entities: []});
 
 			//if we have entities, the callback will set them... (resolved)
-			$AppConfig.service.getObjects(sharedWith.entities, function(entities) {
+			UserRepository.getUser(sharedWith.entities, function(entities) {
 				sharedWith.entities = Ext.Array.map(entities, function(u) {
 					return u.get('Username');
 				});

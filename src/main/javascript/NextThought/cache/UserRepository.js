@@ -199,19 +199,30 @@ Ext.define('NextThought.cache.UserRepository', {
 
 					//console.log('Resolving user on server', name);
 					result[name] = null;
-					this.makeRequest(name, {
-						scope: this,
-						failure: function() {
-							var unresolved = User.getUnresolved(name);
-							//	console.log('resturning unresolved user', name);
-							maybeFinish(name, unresolved);
-						},
-						success: function(u) {
-							//Note we recache the user here no matter what
-							//if we requestsd it we cache the new values
+
+					//if we are given an ntiid call getObject instead of makeRequest
+					if(ParseUtils.isNTIID(name)){
+						$AppConfig.service.getObject(name, function(u){
 							maybeFinish(name, this.cacheUser(u, true));
-						}
-					}, cacheBust);
+						}, function(){
+							//failed to get by ntiid
+							maybeFinish(name, unresolved)
+						}, this);
+					}else{
+						this.makeRequest(name, {
+							scope: this,
+							failure: function() {
+								var unresolved = User.getUnresolved(name);
+								//	console.log('resturning unresolved user', name);
+								maybeFinish(name, unresolved);
+							},
+							success: function(u) {
+								//Note we recache the user here no matter what
+								//if we requestsd it we cache the new values
+								maybeFinish(name, this.cacheUser(u, true));
+							}
+						}, cacheBust);
+					}
 				},
 				this);
 		},
