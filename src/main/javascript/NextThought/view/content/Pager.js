@@ -31,8 +31,8 @@ Ext.define('NextThought.view.content.Pager', {
 		var info = ntiid && ContentUtils.getNavigationInfo(ntiid),
 			next = this.nextEl,
 			prev = this.prevEl,
-			nextTitle = info && ContentUtils.findTitle(info.next, null),
-			prevTitle = info && ContentUtils.findTitle(info.previous, null);
+			nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
+			prevTitle = info && info.previous && ContentUtils.findTitle(info.previous, null);
 
 
 		next.set({title: nextTitle ? ('Go forward to "' + nextTitle + '"') : undefined});
