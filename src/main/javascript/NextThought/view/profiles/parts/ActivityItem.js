@@ -321,12 +321,6 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 				}
 				else {
 					if (resp.status === 404) {
-						if (p) {
-							me.handlePurchasable(p, el);
-							Ext.callback(fin);
-							return;
-						}
-
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
 							me.locationEl.update(meta.getPathLabel());
