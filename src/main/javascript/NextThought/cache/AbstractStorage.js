@@ -10,11 +10,11 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 	return {
 
 		constructor: function(storage) {
-			if (!storage
-					   || !Ext.isFunction(storage.removeItem)
-					   || !Ext.isFunction(storage.setItem)
-					   || !Ext.isFunction(storage.getItem)
-					|| !Ext.isFunction(storage.clear)) {
+			if (!storage ||
+				!Ext.isFunction(storage.removeItem) ||
+				!Ext.isFunction(storage.setItem) ||
+				!Ext.isFunction(storage.getItem) ||
+				!Ext.isFunction(storage.clear)) {
 				Ext.Error.raise('Given storage object does not implement Storage api');
 			}
 
@@ -22,7 +22,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		},
 
 
-		set: function(key,value) {
+		set: function(key, value) {
 			var old = this.get(key);
 			this.backingStore.setItem(prefix(key), Ext.encode(value));
 			return old;
@@ -55,7 +55,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		},
 
 
-		updateProperty: function(key,property,value) {
+		updateProperty: function(key, property, value) {
 			var o = this.get(key) || {}, v = o, p;
 
 
