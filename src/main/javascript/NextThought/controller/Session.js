@@ -41,9 +41,6 @@ Ext.define('NextThought.controller.Session', {
 			}
 		});
 
-
-		this.sessionId = Base64.encodeURLFriendly(Ext.util.Cookies.get('nti.auth_tkt'));
-
 		this.mon(Ext.get(window), {
 			focus: 'onWindowActivated',
 			blur: 'onWindowDeactivated'
@@ -227,6 +224,7 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
+			me.sessionId = Base64.encodeURLFriendly($AppConfig.username);//weak obfuscation
 			TemporaryStorage.set(me.sessionTrackerKey, me.sessionId);
 			me.sessionStarted = true;
 			console.log('fireing session-ready');//card 1768
