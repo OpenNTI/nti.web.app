@@ -36,7 +36,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		get: function(key) {
 			//Migrate:
 			var old = this.backingStore.getItem(key);
-			if (old) {
+			if (old && prefix(key) !== key) {
 				this.backingStore.setItem(prefix(key), old);
 				this.backingStore.removeItem(key);
 			}
