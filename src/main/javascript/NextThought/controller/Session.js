@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Session', {
 	validate: function() {
 		//checking
 		console.log('Validating Session');
-		var v = this.sessionStarted && PersistentStorage.get(this.sessionTrackerKey);
+		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
 		if (v !== this.sessionId && this.sessionStarted) {
 			console.error('GUI Session ID missmatch! Should be:', this.sessionId, 'got:', v);
 			Socket.tearDownSocket();
@@ -81,14 +81,13 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	handleLogout: function(keepTracker) {
-		var me = this, url = getURL(Ext.String.urlAppend(
+	handleLogout: function() {
+		var me = this,
+			url = getURL(Ext.String.urlAppend(
 				this.logoutURL,
 				'success=' + encodeURIComponent(location.href)));
 
-		if (!keepTracker) {
-			PersistentStorage.remove(this.sessionTrackerKey);
-		}
+		TemporaryStorage.removeAll();
 
 		function finishLoggingOut() {
 			try {
@@ -228,7 +227,7 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
-			PersistentStorage.set(me.sessionTrackerKey, me.sessionId);
+			TemporaryStorage.set(me.sessionTrackerKey, me.sessionId);
 			me.sessionStarted = true;
 			console.log('fireing session-ready');//card 1768
 			app.fireEvent('session-ready');
