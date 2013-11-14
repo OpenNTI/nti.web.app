@@ -18,6 +18,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		this.mon(this.application, 'session-ready', 'onSessionReady');
 	},
 
+
 	onSessionReady: function() {
 		var s = $AppConfig.service;
 		this.setupAvailableCourses((s.getCollection('AllCourses', 'Courses') || {}).href);
@@ -38,11 +39,18 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	setupAvailableCourses: function(source) {
 		var store = this.__setupStore('courseware.AvailableCourses', source);
+		if (!store) {
+			return;
+		}
 		store.load();
 	},
 
+
 	setupEnrolledCourses: function(source) {
 		var store = this.__setupStore('courseware.EnrolledCourses', source);
+		if (!store) {
+			return;
+		}
 		store.load();
 	}
 });
