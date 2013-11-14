@@ -42,7 +42,7 @@ Ext.define('NextThought.controller.Session', {
 		});
 
 
-		this.sessionId = guidGenerator();
+		this.sessionId = Base64.encodeURLFriendly(Ext.util.Cookies.get('nti.auth_tkt'));
 
 		this.mon(Ext.get(window), {
 			focus: 'onWindowActivated',
@@ -56,7 +56,7 @@ Ext.define('NextThought.controller.Session', {
 		console.log('Validating Session');
 		var v = this.sessionStarted && TemporaryStorage.get(this.sessionTrackerKey);
 		if (v !== this.sessionId && this.sessionStarted) {
-			console.error('GUI Session ID missmatch! Should be:', this.sessionId, 'got:', v);
+			//console.error('GUI Session ID missmatch! Should be:', this.sessionId, 'got:', v);
 			Socket.tearDownSocket();
 
 			alert({
