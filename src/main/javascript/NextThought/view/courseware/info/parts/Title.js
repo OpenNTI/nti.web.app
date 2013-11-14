@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.courseware.info.parts.Title',{
+Ext.define('NextThought.view.courseware.info.parts.Title', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-title',
 
@@ -6,9 +6,9 @@ Ext.define('NextThought.view.courseware.info.parts.Title',{
 	cls: 'title-box',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls:'video'},
-		{cls:'curtain'},
-		{cls:'title', html: '{title}'}
+		{cls: 'video'},
+		{cls: 'curtain'},
+		{cls: 'title', html: '{title}'}
 	]),
 
 	renderSelectors: {
@@ -24,17 +24,17 @@ Ext.define('NextThought.view.courseware.info.parts.Title',{
 
 	beforeRender: function() {
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},{
+		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title
 		});
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 		this.callParent(arguments);
 
-		if(!Ext.isEmpty(this.videoUrl)){
+		if (!Ext.isEmpty(this.videoUrl)) {
 			this.video = Ext.widget({
 				xtype: 'content-video',
 				url: this.videoUrl,
@@ -45,17 +45,17 @@ Ext.define('NextThought.view.courseware.info.parts.Title',{
 			});
 			this.mon(this.video, {
 				'beforeRender': {
-					fn: function(){
+					fn: function() {
 						me.addCls('has-video');
 					},
 					single: true
 				}
 			});
-			this.on('destroy','destroy', this.video);
+			this.on('destroy', 'destroy', this.video);
 		}
 	},
 
-	curtainClicked: function(e){
+	curtainClicked: function(e) {
 		if (e && e.shiftKey && this.player.canOpenExternally()) {
 			this.video.openExternally();
 		}

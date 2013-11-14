@@ -6,57 +6,57 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 	cls: 'description-fields',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls:'body', html: '{description:htmlEncode}' },
+		{ cls: 'body', html: '{description:htmlEncode}' },
 
-		{ cls:'fields', cn:[
-			{ cls: 'row', cn:[
+		{ cls: 'fields', cn: [
+			{ cls: 'row', cn: [
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Prerequisites' },
-					{ cls: 'value', cn: { tag:'tpl', 'for':'prerequisites', cn:{html:'{.}'}} }
+					{ cls: 'value', cn: { tag: 'tpl', 'for': 'prerequisites', cn: {html: '{.}'}} }
 				] },
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Credit Hours'},
 					{ cls: 'value', cn: [
 						{ cls: 'enroll-for-credit', cn: [
 							'{creditHours:plural("Credit")} Available. ',
-							{ tag: 'a', target:'_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
+							{ tag: 'a', target: '_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
 						] },
-						{ cls: 'open', cn:[
-							'{inopen} ', { cls:'red', tag:'span', html:'{nocredit}' }
+						{ cls: 'open', cn: [
+							'{inopen} ', { cls: 'red', tag: 'span', html: '{nocredit}' }
 						] }
 					] }
 				] }
 			]},
-			{ cls: 'row', cn:[
+			{ cls: 'row', cn: [
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: '{courseId}'},
 					{ cls: 'value', html: '{title}' }
-				]  },
+				]},
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: '{schoolLabel}'},
 					{ cls: 'value', html: '{school}' }
-				]  }
+				]}
 			]},
-			{ cls: 'row', cn:[
+			{ cls: 'row', cn: [
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Start Date'},
 					{ cls: 'value', html: '{startDate:date("F j, Y")}' }
-				]  },
-				{ cls:'cell', cn: [
+				]},
+				{ cls: 'cell', cn: [
 					{ cls: 'cell cell1third', cn: [
 						{ cls: 'label', html: 'Duration'},
 						{ cls: 'value', html: '{duration}' }
-					]  },
+					]},
 					{ cls: 'cell cell2thirds', cn: [
 						{ cls: 'label', html: 'Day &amp; Time'},
-						{ cls: 'value', cn:[
-							{ tag:'tpl', 'if':'days', cn:[
+						{ cls: 'value', cn: [
+							{ tag: 'tpl', 'if': 'days', cn: [
 								{ tag: 'span', html: '{days}'},
 								{ tag: 'span', html: '{times}'}
 							]
-							},{ tag:'tpl', 'if':'!days', cn: 'Fully Online' }
+							},{ tag: 'tpl', 'if': '!days', cn: 'Fully Online' }
 						] }
-					]  }
+					]}
 				] }
 			]}
 		] }
