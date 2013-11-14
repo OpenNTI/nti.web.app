@@ -434,7 +434,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		else if (item instanceof NextThought.model.Highlight) {
-			console.trace(); //does this branch (highlight and redaction) get called??
+			console.error('does this branch (highlight and redaction) get called??');
 			Ext.defer(getName, 1, this, [item.getModelName().toLowerCase()]);
 			result = {};
 		}

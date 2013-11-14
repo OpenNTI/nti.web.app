@@ -54,7 +54,8 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 	typePrefix: 'course-forum',
 
-	onViewPushed: function(me,viewPushed) {
+
+	onViewPushed: function(me, viewPushed) {
 		var type;
 
 		if (viewPushed.xtype === 'forums-topic') {
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	onViewPopped: function(me,viewPopped) {
+	onViewPopped: function(me, viewPopped) {
 		var type;
 
 		if (viewPopped.xtype === 'forums-topic') {
@@ -107,7 +108,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 			}
 
 			if (me.currentNtiid !== ntiid) {
-				console.warn('Dropping mismatched board', ntiid, this.currentNtiid);
+				console.warn('Dropping mismatched board', ntiid, me.currentNtiid);
 				return;
 			}
 
@@ -312,7 +313,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var l = ContentUtils.getLocation(pageInfo),
 			toc, course, s = {content: {current_forum: null, current_topic: null}};
 
-		console.trace();
+
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');

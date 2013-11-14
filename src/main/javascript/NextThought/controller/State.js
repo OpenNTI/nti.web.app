@@ -146,8 +146,6 @@ Ext.define('NextThought.controller.State', {
 
 				console.debug('push state', s);
 
-				console.trace();
-
 				if (!url) {
 					url = me.generateFragment(me.currentState);
 				}
@@ -168,7 +166,6 @@ Ext.define('NextThought.controller.State', {
 					//The intention is we only get here for IE9 so lets make sure that is the case
 					if (!Ext.isIE9) {
 						console.error('Why are we getting here?');
-						console.trace();
 					}
 					me.changeHash(url);
 				}
@@ -634,8 +631,7 @@ Ext.define('NextThought.controller.State', {
 		if (!hash || hash.indexOf('#') !== 0 || window.location.hash === hash) {
 			return;
 		}
-		console.debug('Modifying window.location.hash', hash);
-		console.trace();
+		console.error('Modifying window.location.hash', hash);
 		location.hash = hash;
 	}
 });

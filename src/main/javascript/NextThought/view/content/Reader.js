@@ -271,8 +271,7 @@ Ext.define('NextThought.view.content.Reader', {
 		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
 		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
 		if (!pageInfo) {
-			console.warn('onNavigateComplete called with no page info. Shouldnt happen', arguments);
-			console.trace();
+			console.error('onNavigateComplete called with no page info. Shouldnt happen', arguments);
 			me.onNavigationAborted();
 		}
 

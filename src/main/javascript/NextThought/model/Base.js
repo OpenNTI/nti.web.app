@@ -656,7 +656,7 @@ Ext.define('NextThought.model.Base', {
 	getParent: function(callback, scope) {
 		var href = this.getLink('parent'), req;
 
-		console.trace('Still called?');
+		console.error('Still called?');
 
 		if (!callback) {
 			Ext.Error.raise('this method requires a callback');

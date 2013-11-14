@@ -92,8 +92,7 @@ Ext.define('NextThought.controller.Navigation', {
 	setView: function(id, silent) {
 		var cmp = id && (id.isComponent ? id : Ext.getCmp(id));
 		if (!cmp) {
-			console.warn('no view', arguments);
-			console.trace();
+			console.error('no view', arguments);
 			return false;
 		}
 

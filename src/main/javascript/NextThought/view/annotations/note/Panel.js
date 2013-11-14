@@ -804,7 +804,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 	deactivateEditor: function() {
-		console.trace('Who called this?');
+		console.error('Who called this?');
 		this.deactivateReplyEditor.apply(this, arguments);
 	},
 

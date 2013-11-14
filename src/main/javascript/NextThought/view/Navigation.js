@@ -230,8 +230,7 @@ Ext.define('NextThought.view.Navigation', {
 	setActive: function(view) {
 		var id = view && view.id;
 		if (!this.el) {
-			console.trace();
-			console.log('too soon');
+			console.error('too soon');
 			return;
 		}
 

@@ -209,7 +209,6 @@ Ext.define('NextThought.view.Views', {
 
 		if (!cmp) {
 			console.error('We should not ever be here! no active view???');
-			console.trace();
 			return;
 		}
 
