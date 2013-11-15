@@ -197,174 +197,115 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	//If there are any ntiids in the tags, assume that its public and those ntiids are the entities
-	tagShareToSharedInfo: function(sharedWith, tags) {
+	//get the sharedInfo from the sharedWith and the tags
+	tagShareToSharedInfo: function(sharedWith, tags, published) {
 		var nts = Ext.Array.filter(tags, function(t) {
 			return ParseUtils.isNTIID(t);
 		});
 
-		if (Ext.isEmpty(nts)) {
+		//if its not published use the default sharedInfo
+		if(!published){
 			return this.sharedWithToSharedInfo(sharedWith);
 		}
 
+		//else its published and the ntiids from the tags are the entities
 		return {
 			publicToggleOn: true,
 			entities: nts
 		};
 	},
 
-	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
-		var shareInfo = this.sharedWithToSharedInfo(shareWith),
-				explicitEntities = shareInfo.entities,
-				isPublic = shareInfo.publicToggleOn,
-				prefix, str, others, names = [];
+	getLongTextFromShareInfo: function(shareInfo, callback, scope, tpl, maxLength){
+		var explicitEntities = shareInfo.entities,
+			isPublic = shareInfo.publicToggleOn,
+			prefix = isPublic ? 'Public' : 'Only Me',
+			str, others, names=[];
 
-		if (Ext.isEmpty(explicitEntities)) {
-			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
+		if(Ext.isEmpty(explicitEntities)){
+			Ext.callback(callback, scope, [prefix]);
+			return;
 		}
-		else {
-			UserRepository.getUser(explicitEntities, function(resolvedUsers) {
-				prefix = isPublic ? 'Public and' : 'Shared with';
-				Ext.each(resolvedUsers || [], function(u) {
-					var dn = isMe(u) ? 'me' : u.getName();
+
+		UserRepository.getUser(explicitEntities, function(resolvedUsers){
+			Ext.each(resolvedUsers || [], function(u){
+				var dn = isMe(u) ? 'me' : u.getName();
+
+				if (dn.toLowerCase() !== 'unknown') {
 					names.push(dn);
-					names.join(',');
 					return !maxLength || names.length <= maxLength;
-				});
-
-				if (tpl) {
-					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
 				}
-
-				others = resolvedUsers.length - names.length;
-				if (others) {
-					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others, 'other')));
-				}
-				else if (names.length > 1) {
-					names.push(' and ' + names.pop());
-				}
-
-				str = Ext.String.format('{0} {1}', prefix, names.join(', '));
-				Ext.callback(callback, scope, [str]);
 			});
-		}
+
+			if (tpl) {
+				names = Ext.Array.map(names, function(){ return tpl.apply(arguments); });
+			};
+
+			others = resolvedUsers.length - names.length;
+
+			if (others) {
+				names.push(Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other')));
+			} else if (names.length > 1) {
+				names.push(' and ' + names.pop());
+			}
+
+			str = Ext.String.format('{0} {1}', prefix, names.join(','));
+			Ext.callback(callback, scope, [str]);
+		});
 
 	},
 
-	getShortSharingDisplayText: function(shareWith, callback, scope) {
-		var shareInfo = this.sharedWithToSharedInfo(shareWith),
-				explicitEntities = shareInfo.entities,
-				isPublic = shareInfo.publicToggleOn,
-				str;
+	getShortTextFromShareInfo: function(shareInfo, callback, scope){
+		var explicitEntities = shareInfo.entities,
+			isPublic = shareInfo.publicToggleOn,
+			prefix = isPublic ? 'Public and' : 'Shared with',
+			str;
 
-		if (Ext.isEmpty(explicitEntities)) {
+		if(Ext.isEmpty(explicitEntities)){
 			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
-		}
-		else if (explicitEntities.length > 1) {
-			str = Ext.String.format('{0} {1}',
-					isPublic ? 'Public and' : 'Shared with',
-					Ext.util.Format.plural(explicitEntities.length, 'other'));
+		} else if (explicitEntities.length > 1) {
+			str = Ext.String.format('{0} {1}', prefix, Ext.util.Format.plural(explicitEntities.length, 'other'));
 			Ext.callback(callback, scope, [str]);
-		}
-		else {
+		} else {
 			//Exactly one, resolve the user then callback
-			UserRepository.getUser(explicitEntities.first(), function(resolved) {
-				var str = Ext.String.format('{0} {1}', isPublic ? 'Public and' : 'Shared with', resolved.getName());
+			UserRepository.getUser(explicitEntities.first(), function(resolved){
+				var dn = resolved.getName();
+
+				if(dn.toLowerCase() === 'unknown'){
+					str = Ext.String.format('{0} {1}', prefix, '1 other');
+				} else {
+					str = Ext.String.format('{0} {1}', prefix, resolved.getName());
+				}
+
 				Ext.callback(callback, scope, [str]);
 			});
 		}
+	},
+
+	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
+		var shareInfo = this.sharedWithToSharedInfo(shareWith);
+
+		this.getLongTextFromShareInfo(shareInfo, callback, scope, tpl, maxLength);
+	},
+
+	getShortSharingDisplayText: function(shareWith, callback, scope) {
+		var shareInfo = this.sharedWithToSharedInfo(shareWith);
+
+		this.getShortTextFromShareInfo(shareInfo, callback, scope);
 	},
 
 
 	//Take the shared with and tags of a post and returns the long sharing text
 	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength) {
-		var entities, str;
+		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
-		entities = Ext.Array.filter(tags, function(t) {
-			return ParseUtils.isNTIID(t);
-		});
-
-		//if there are no ntiids in the tags treat it normally
-		if (!published) {
-			this.getLongSharingDisplayText(sharedWith, callback, scope);
-			return;
-		}
-
-		if (Ext.isEmpty(entities)) {
-			Ext.callback(callback, scope, ['Public']);
-		} else {
-			//get all the user objects for the ntiids in the tags
-			$AppConfig.service.getObjects(entities, function(users) {
-				users = Ext.Array.clean(users);
-
-				var prefix = published ? 'Public and' : 'Shared with',
-					others, names = [];
-
-				Ext.each(users || [], function(u) {
-					var dn = isMe(u) ? 'me' : u.getName();
-					names.push(dn);
-					return !maxLength || names.length <= maxLength;
-				});
-
-				if (tpl) {
-					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
-				}
-
-				others = users.length - names.length;
-
-				if (others) {
-					names.push(Ext.String.format('and {0}.', Ext.util.Format.plural(others, 'other')));
-				} else if (names.length > 1) {
-					names.push(' and ' + names.pop());
-				}
-
-				str = Ext.String.format('{0} {1}', prefix, names.join(','));
-				Ext.callback(callback, scope, [str]);
-			}, function() {
-				console.log('Failed to resolve users', entities, arguments);
-				var str = Ext.String.format('{0} {1}',
-					published ? 'Public and' : 'Shared with',
-					Ext.util.Format.plural(entities.length, 'other'));
-				Ext.callback(callback, scope, [str]);
-			}, this);
-		}
+		this.getLongTextFromShareInfo(shareInfo, callback, scope, tpl, maxLength);
 	},
 
 	//Takes the shared with and the tags of a post and returns the short sharing text
 	getTagSharingShortText: function(sharedWith, tags, published, callback, scope) {
-		var entities, str;
+		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
-		entities = Ext.Array.filter(tags, function(t) {
-			return ParseUtils.isNTIID(t);
-		});
-
-		//if its private, treat it normally
-		if (!published) {
-			this.getShortSharingDisplayText(sharedWith, callback, scope);
-			return;
-		}
-
-		if (Ext.isEmpty(entities)) {
-			Ext.callback(callback, scope, ['Public']);
-		} else if (entities.length > 1) {
-			str = Ext.String.format('{0} {1}',
-					published ? 'Public and' : 'Shared with',
-					Ext.util.Format.plural(entities.length, 'other'));
-			Ext.callback(callback, scope, [str]);
-		} else {
-			//get the user objects for first ntiid in the tags
-			$AppConfig.service.getObject(entities.first(), function(user) {
-				var str = Ext.String.format('{0} {1}', published ? 'Public and' : 'Shared with', user.getName());
-				Ext.callback(callback, scope, [str]);
-			}, function() {
-				console.log('Failed to resolve users', entities, arguments);
-
-				var str = Ext.String.format('{0} {1}',
-					published ? 'Public and' : 'Shared with',
-					Ext.util.Format.plural(entities.length, 'other'));
-				Ext.callback(callback, scope, [str]);
-			}, this);
-		}
+		this.getShortTextFromShareInfo(shareInfo, callback, scope);
 	}
 
 
