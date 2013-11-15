@@ -124,7 +124,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	adjustAnnotationOverlayPosition: function() {
-		if (!this.annotationOverlay) { return; }
+		if (!this.reader.rendered || !this.annotationOverlay) { return; }
 
 		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
 			w = this.reader.getWidth(),
