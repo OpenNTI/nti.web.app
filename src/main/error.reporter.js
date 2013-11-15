@@ -36,17 +36,21 @@
 	function hook() {
 		var onerror = window.onerror || function() {};
 		window.onerror = function(msg, url, line) {
-			var me = this, args = arguments;
+			var me = this, args = arguments, collectedLog = '[]';
 			function escape(s) {
 				return (s || '').toString().replace(/"/g, '\\"');
 			}
 			try {
+				if (console.getCollected) {
+					collectedLog = console.getCollected();
+				}
 				sendRequest(
 						'/dataserver2/@@send-crash-report',
 						function() {onerror.apply(me, args);},
 						'{"message":"' + escape(msg) +
 						'","file":"' + escape(url) +
-						'","line":"' + escape(line) + '"}'
+						'","line":"' + escape(line) +
+						'","capturedLog":' + collectedLog + '}'
 				);
 			} catch (e) {
 				onerror.apply(me, args);
