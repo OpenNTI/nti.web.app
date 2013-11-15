@@ -25,8 +25,8 @@ Ext.define('NextThought.view.video.navigation.Video', {
 		var prev = this.overlayTpl.append(this.el, {cls: 'prev'}, true),
 			next = this.overlayTpl.append(this.el, {cls: 'next'}, true);
 
-		this.mon(prev,'click','navigationSelected');
-		this.mon(next,'click','navigationSelected');
+		this.mon(prev, 'click', 'navigationSelected');
+		this.mon(next, 'click', 'navigationSelected');
 
 		if (this.prevVideo) {
 			this.setPrev(this.prevVideo);
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.video.navigation.Video', {
 			preEl = aboutEl && aboutEl.down('.pre-title'),
 			titleEl = aboutEl && aboutEl.down('.title');
 
-		if (!titleEl || !video.get('NTIID')) {
+		if (!titleEl || !video || !video.get('NTIID')) {
 			Ext.destroy(el);
 			return;
 		}
