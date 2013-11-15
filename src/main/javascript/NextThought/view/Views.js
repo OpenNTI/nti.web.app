@@ -23,7 +23,7 @@ Ext.define('NextThought.view.Views', {
 		maxWidth: 1165
 	},
 	items: [
-		{id: 'profile', xtype: 'profile-view-container'},
+		{id: 'profile', xtype: 'profile-view-container', associatedParent: 'contacts'},
 		{id: 'library', xtype: 'library-view-container'},
 		{id: 'content', xtype: 'content-view-container'},
 		{id: 'forums', xtype: 'forums-view-container'},

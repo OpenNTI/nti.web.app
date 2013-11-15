@@ -228,7 +228,7 @@ Ext.define('NextThought.view.Navigation', {
 
 
 	setActive: function(view) {
-		var id = view && view.id;
+		var id = view && (view.associatedParent || view.id);
 		if (!this.el) {
 			console.error('too soon');
 			return;
