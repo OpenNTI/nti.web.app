@@ -288,13 +288,15 @@ Ext.define('NextThought.util.Sharing', {
 		if (!published) {
 			this.getLongSharingDisplayText(sharedWith, callback, scope);
 			return;
-		} 
+		}
 
-		if(Ext.isEmpty(entities)){
+		if (Ext.isEmpty(entities)) {
 			Ext.callback(callback, scope, ['Public']);
-		}else {
+		} else {
 			//get all the user objects for the ntiids in the tags
 			$AppConfig.service.getObjects(entities, function(users) {
+				users = Ext.Array.clean(users);
+
 				var prefix = published ? 'Public and' : 'Shared with',
 					others, names = [];
 
@@ -342,7 +344,7 @@ Ext.define('NextThought.util.Sharing', {
 			return;
 		}
 
-		if(Ext.isEmpty(entities)){
+		if (Ext.isEmpty(entities)) {
 			Ext.callback(callback, scope, ['Public']);
 		} else if (entities.length > 1) {
 			str = Ext.String.format('{0} {1}',
