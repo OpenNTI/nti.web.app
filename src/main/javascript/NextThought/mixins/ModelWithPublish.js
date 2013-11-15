@@ -4,8 +4,15 @@ Ext.define('NextThought.mixins.ModelWithPublish', {
 		return this.isPublished() ? 'Public' : 'Only Me';
 	},
 
+
+	isExplicit: function() {
+		return this.hasLink('publish') && !Ext.isEmpty(this.get('sharedWith'));
+	},
+
+
 	isPublished: function() {
-		return Boolean(this.getLink('unpublish'));
+		return this.hasLink('unpublish') ||
+			   this.get('PublicationState') === 'DefaultPublished';
 	},
 
 
@@ -29,5 +36,22 @@ Ext.define('NextThought.mixins.ModelWithPublish', {
 			}
 		});
 
+	},
+
+
+	getSharingInfo: function() {
+		var sharingInfo,
+			entities = Ext.Array.filter(this.get('headline').get('tags'), function(t) {
+				return ParseUtils.isNTIID(t);
+			});
+
+		if (this.isExplicit()) {
+			sharingInfo = SharingUtils.tagShareToSharedInfo(this.get('sharedWith'), entities);
+		}
+		else {
+			sharingInfo = {publicToggleOn: this.isPublished(), entities: entities};
+		}
+
+		return sharingInfo;
 	}
 });
