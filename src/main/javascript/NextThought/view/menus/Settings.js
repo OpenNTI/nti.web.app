@@ -41,7 +41,6 @@ Ext.define('NextThought.view.menus.Settings', {
 		}
 
 		items.push({ action: 'account', text: 'My Account'});
-		items.push({ action: 'profile', text: 'My Profile'});
 
 		if (!Ext.isEmpty(welcomeLink)) {
 			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink});

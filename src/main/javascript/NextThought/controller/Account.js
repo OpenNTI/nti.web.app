@@ -62,10 +62,6 @@ Ext.define('NextThought.controller.Account', {
 					'click': 'showAccount'
 				},
 
-				'settings-menu [action=profile]': {
-					'click': 'showProfile'
-				},
-
 				'settings-menu [action=welcome]': {
 					'click': 'showPermanantWelcome'
 				},
@@ -149,11 +145,6 @@ Ext.define('NextThought.controller.Account', {
 		me.acctWin = Ext.widget('account-window');
 
 		me.acctWin.show();
-	},
-
-
-	showProfile: function() {
-		this.fireEvent('show-profile', $AppConfig.userObject);
 	},
 
 
