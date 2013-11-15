@@ -301,10 +301,11 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	registerGutterRecords: function(noteStore, records, view) {
 		if (Ext.isEmpty(noteStore)) { return;}
 
-		var me = this;
+		var me = this,
+			reader = me.reader;
 		//TODO: This function should be buffered, but doing so would cause
 		// the previous calls to be dropped.
-		if (!me.reader.el.isVisible(true)) {
+		if (!reader.el || !reader.el.isVisible(true)) {
 			Ext.defer(this.registerGutterRecords, 10, this, arguments);
 			return;
 		}
