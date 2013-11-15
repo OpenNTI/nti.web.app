@@ -30,9 +30,9 @@ Ext.define('NextThought.view.menus.Settings', {
 
 		//setup fields:
 		var items = [],
-				u = $AppConfig.userObject,
-				welcomeLink = u.getLink('content.permanent_welcome_page'),
-				childsLink = u.getLink('childrens-privacy');
+			u = $AppConfig.userObject,
+			welcomeLink = u.getLink('content.permanent_welcome_page'),
+			childsLink = u.getLink('childrens-privacy');
 
 
 		if ($AppConfig.service.canChat()) {
@@ -41,6 +41,7 @@ Ext.define('NextThought.view.menus.Settings', {
 		}
 
 		items.push({ action: 'account', text: 'My Account'});
+		items.push({ action: 'profile', text: 'My Profile'});
 
 		if (!Ext.isEmpty(welcomeLink)) {
 			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink});

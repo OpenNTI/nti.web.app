@@ -6,9 +6,6 @@ Ext.define('NextThought.view.account.Identity', {
 	requires: [
 		'NextThought.view.menus.Settings'
 	],
-	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks'
-	},
 
 	profileLinkCard: false,
 
@@ -18,7 +15,10 @@ Ext.define('NextThought.view.account.Identity', {
 
 	renderTpl: Ext.DomHelper.markup(
 			[
-				{ tag: 'img', src: '{avatarURL}', cls: 'avatar', 'data-qtip': '{displayName:htmlEncode}'},
+				{ tag: 'img', src: '{avatarURL}', cls: 'avatar',
+					'data-qtip': '{displayName:htmlEncode}', style: {
+						'-webkit-touch-callout': 'none'
+				}},
 				{ cls: 'presence' }
 			]),
 
@@ -34,6 +34,12 @@ Ext.define('NextThought.view.account.Identity', {
 		this.menu = Ext.widget({xtype: 'settings-menu'});
 		this.on('destroy', 'destroy', this.menu);
 		this.monitorUser($AppConfig.userObject);
+
+		this.on({
+			el: {
+				click: 'showMenu'
+			}
+		});
 	},
 
 
@@ -60,55 +66,12 @@ Ext.define('NextThought.view.account.Identity', {
 
 
 	afterRender: function() {
-		var me = this;
 		this.callParent(arguments);
 		this.monitorUser(this.user);
-		this.mon(this.el, {
-			'mouseover': 'startToShowMenu',
-			'mouseout': 'startToHideMenu'
-		});
-
-		this.mon(this.menu, 'mouseenter', 'cancelHideShowEvents');
-
-		this.enableProfileClicks(this.avatar);
-
-		if (Ext.is.iPad) {
-			// Prevent the save/copy image menu from appearing
-			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
-			// Prevent the status menu from appearing after a click
-			this.el.down('img').dom.addEventListener('click', function(e) {
-				me.cancelHideShowEvents();
-			});
-		}
 	},
 
 
-	cancelHideShowEvents: function() {
-		clearTimeout(this.showTimout);
-		clearTimeout(this.hideTimout);
-	},
-
-
-	startToShowMenu: function() {
-		var me = this;
-
-		this.cancelHideShowEvents();
-
-		this.showTimout = setTimeout(function() {
-			me.menu.showBy(me.el, 'tr-br', [0, 0]);
-		}, 500);
-	},
-
-
-	startToHideMenu: function() {
-		var me = this;
-
-		this.cancelHideShowEvents();
-
-		if (!Ext.is.iPad || this.menu.isHidden()) { // On iPad, don't hide menu if it's already shown
-			this.hideTimout = setTimeout(function() {
-				me.menu.hide();
-			}, 500);
-		}
+	showMenu: function() {
+		this.menu.showBy(this.el, 'tr-br', [0, 0]);
 	}
 });
