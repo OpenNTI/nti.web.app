@@ -83,13 +83,13 @@ Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
 
 		Ext.Array.sort(this.items, byTime);
 
-		Ext.each(items, function(i ) {
+		Ext.each(items, function(i) {
 			LocationMeta.getMeta(i.get('ContainerId'), function(meta) {
 				i.meta = meta;
 				count--;
 
-				var root = meta.ContentNTIID,
-					page = meta.NTIID;
+				var root = meta && meta.ContentNTIID,
+					page = meta && meta.NTIID;
 
 				root = (books[root] = books[root] || {});
 				page = (root[page] = root[page] || []);

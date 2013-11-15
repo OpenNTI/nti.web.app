@@ -73,16 +73,17 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 
 
 	addView: function(store, records) {
-		var tile = this;
+		var tile = this, l;
 		if (Ext.isEmpty(records)) {
 			Ext.destroy(tile);
 			tile = undefined;
 		}
 
+		l = this.getLocationInfo();
 		this.view = tile && tile.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
 			record: records[0],
-			contentNtiid: this.getLocationInfo().ContentNTIID
+			contentNtiid: l && l.ContentNTIID
 		});
 
 		Ext.callback(this.getFinishCallBack(), null, [tile]);

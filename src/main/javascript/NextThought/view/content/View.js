@@ -201,10 +201,10 @@ Ext.define('NextThought.view.content.View', {
 		//normal 403 handling.  One idea could be to force a PageInfo fetch here?  That's
 		//tricky because its async
 		var location = this.reader.getLocation(),
-			contentNtiid = location.ContentNTIID,
+			contentNtiid = location && location.ContentNTIID,
 			title = Library.getTitle(contentNtiid);
 
-		if (contentNtiid && !title) {
+		if (contentNtiid && !title && location) {
 			//we are being asked to switch to something which we no longer
 			//have in the library.  We may have recently have lost access to it.
 			//Maybe its a purchasable we can prompt them with
