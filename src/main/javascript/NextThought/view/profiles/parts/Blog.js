@@ -175,7 +175,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 				btnEl = this.btnNewEntryEl,
 				profileDom = Ext.get('profile');
 
-		if (btnEl.hasCls('locked')) {
+		if (btnEl && btnEl.dom && btnEl.hasCls('locked')) {
 			wrapperEl = Ext.get(this.wrapper);
 			profileEl = Ext.get(profileDom);
 
@@ -270,7 +270,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 	onNewPost: function(e) {
 		e.stopEvent();
-		if (!this.btnNewEntryEl.hasCls('disabled')) {
+		if (this.btnNewEntryEl && !this.btnNewEntryEl.hasCls('disabled')) {
 			this.showPost(null, ['edit']);
 		}
 	},

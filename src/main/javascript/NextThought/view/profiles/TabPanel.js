@@ -39,7 +39,7 @@ Ext.define('NextThought.layout.component.ProbileTabPanelLayout', {
 	 * @return {boolean}
 	 */
 	isValidParent: function(item, target, position) {
-		if (target.hasCls('x-panel-profile')) {
+		if (target && target.hasCls('x-panel-profile')) {
 			return true;
 		}
 
