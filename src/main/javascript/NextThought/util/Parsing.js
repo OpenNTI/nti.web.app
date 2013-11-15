@@ -30,7 +30,7 @@ Ext.define('NextThought.util.Parsing', {
 
 				reader = this.getReaderForModel(item.Class);
 				if (!reader) {
-					console.error('No reader for item: ', item);
+					console.debug('No reader for item: ', item);
 					continue;
 				}
 
