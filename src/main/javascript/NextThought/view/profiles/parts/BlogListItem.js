@@ -53,6 +53,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 
 	initComponent: function() {
+		this.headlineObservers = [];
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.callParent(arguments);
 		this.addEvents(['delete-post', 'show-post']);
@@ -86,17 +87,16 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var h = this.record.get('headline'), me = this;
-		if (!h) {return;}
-
 		this.bodyEl.selectable();
-		h.addObserverForField(this, 'title', this.updateField, this);
-		h.addObserverForField(this, 'tags', this.updateField, this);
-		h.addObserverForField(this, 'body', this.updateContent, this);
-		this.record.addObserverForField(this, 'PostCount', this.updatePostCount, this);
-		this.record.addObserverForField(this, 'sharedWith', this.updateSharedWith, this);
-		this.mon(this.titleEl, 'click', this.goToPost, this);
-		this.mon(this.commentsEl, 'click', this.goToPostComments, this);
+
+		this.updateHeadlineObject();
+
+		this.record.addObserverForField(this, 'headline', 'updateHeadlineObject', this);
+		this.record.addObserverForField(this, 'PostCount', 'updatePostCount', this);
+		this.record.addObserverForField(this, 'sharedWith', 'updateSharedWith', this);
+
+		this.mon(this.titleEl, 'click', 'goToPost');
+		this.mon(this.commentsEl, 'click', 'goToPostComments');
 		this.updateContent();
 
 		if (this.deleteEl) {
@@ -113,6 +113,22 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 		this.reflectLikeAndFavorite(this.record);
 		this.listenForLikeAndFavoriteChanges(this.record);
+	},
+
+
+	updateHeadlineObject: function() {
+		Ext.destroy(this.headlineObservers);
+		var h = this.record.get('headline'),
+			o = this.headlineObservers = [];
+
+		if (!h) {return;}
+
+		o.push(
+			h.addObserverForField(this, 'title', 'updateField'),
+			h.addObserverForField(this, 'tags', 'updateField'),
+			h.addObserverForField(this, 'body', 'updateContent'),
+			h.addObserverForField(this, 'tags', 'setPublishAndSharingState')
+		);
 	},
 
 

@@ -795,9 +795,10 @@ Ext.define('NextThought.model.Base', {
 
 	addObserverForField: function(observer, field, fn, scope, options) {
 		if (!observer) {
-			return;
+			return null;
 		}
-		observer.mon(this, this.fieldEvent(field), fn, scope, options);
+		options = Ext.apply(options || {},{destroyable: true});
+		return observer.mon(this, this.fieldEvent(field), fn, scope, options);
 	},
 
 
