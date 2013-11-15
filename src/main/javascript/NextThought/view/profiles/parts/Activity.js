@@ -161,7 +161,11 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 			listeners: {
 				afterrender: {
 					fn: function(cmp) {
-						Ext.defer(cmp.el.mask, 1, cmp.el, ['Loading...']);
+						Ext.defer(function() {
+							if (cmp.el && cmp.el.dom) {
+								cmp.el.mask('Loading...');
+							}
+						},1);
 					},
 					single: true
 				}
