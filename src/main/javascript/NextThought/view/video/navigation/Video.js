@@ -44,7 +44,7 @@ Ext.define('NextThought.view.video.navigation.Video', {
 	},
 
 	getPreTitle: function(video) {
-		return 'Thursday, August 27';
+		return '';
 	},
 
 	getTitle: function(video) {
