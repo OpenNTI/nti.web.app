@@ -4,6 +4,10 @@ Ext.define('NextThought.mixins.HasLinks', {
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert((this.raw && this.raw.Links) || []),
 			ref = links ? links.getRelHref(rel) : null;
 		return ref ? getURL(ref) : null;
-	}
+	},
 
+
+	hasLink: function(rel) {
+		return !!this.getLink(rel);
+	}
 });
