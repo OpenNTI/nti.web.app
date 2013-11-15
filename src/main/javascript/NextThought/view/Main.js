@@ -190,6 +190,18 @@ Ext.define('NextThought.view.Main', {
 			}
 		});
 
+		//<editor-fold desc="IE9 message">
+		if (Ext.isIE9m) {
+			setTimeout(function() {
+				Ext.widget('message-bar', {
+					renderTo: Ext.getBody(),
+					messageType: 'ie9',
+					message: 'Internet Explorer 9 will not be supported begining January 2014. Please upgrade your browser.'
+				});
+			},1500);//ease in
+		}
+		//</editor-fold>
+
 		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 		this.onWindowResize();
 		this.views = this.down('main-views');
