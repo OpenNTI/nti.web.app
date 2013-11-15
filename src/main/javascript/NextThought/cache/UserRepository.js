@@ -201,14 +201,15 @@ Ext.define('NextThought.cache.UserRepository', {
 					result[name] = null;
 
 					//if we are given an ntiid call getObject instead of makeRequest
-					if(ParseUtils.isNTIID(name)){
-						$AppConfig.service.getObject(name, function(u){
+					if (ParseUtils.isNTIID(name)) {
+						$AppConfig.service.getObject(name, function(u) {
 							maybeFinish(name, this.cacheUser(u, true));
-						}, function(){
+						}, function() {
+							var unresolved = User.getUnresolved('Unknown');//dont show ntiid
 							//failed to get by ntiid
-							maybeFinish(name, unresolved)
+							maybeFinish(name, unresolved);
 						}, this);
-					}else{
+					} else {
 						this.makeRequest(name, {
 							scope: this,
 							failure: function() {
@@ -243,8 +244,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				options;
 
 			if (cacheBust) {
-				url += (url.indexOf('?') < 0 ? '?' : '&')
-					+ '_dc=' + (new Date()).getTime();
+				url += (url.indexOf('?') < 0 ? '?' : '&') + '_dc=' + (new Date()).getTime();
 			}
 
 			if (!username) {
