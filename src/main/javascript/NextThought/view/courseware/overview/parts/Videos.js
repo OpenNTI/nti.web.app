@@ -119,16 +119,21 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	applyVideoData: function(videoIndex) {
 		//console.debug(videoIndex);
 		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			me = this, selected = this.getSelectionModel().selected, toRemove = [], count;
+			me = this, selected = this.getSelectionModel().selected, toRemove = [], count,
+			store = this.getStore();
+
+		if (!store) {
+			return;
+		}
 
 		try {
 			//save for later
 			if (!videoIndex) {
 				console.error('No video index provided', this);
 			}
-		me.videoIndex = videoIndex || {};
+			me.videoIndex = videoIndex || {};
 
-			this.getStore().each(function(r) {
+			store.each(function(r) {
 				var v = me.videoIndex[r.getId()], item;
 				if (v) {
 					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
@@ -157,11 +162,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				this.getStore().remove(toRemove);
 			}
 
-			count = this.getStore().getCount();
+			count = store.getCount();
 			if (count === 0) {
 				console.error('Destroying video widget because there are no videos to play');
 				this.destroy();
 			}
+		}
+		catch (e) {
+			console.warn('Coud not load video index because:', e.stack || e.message || e);
 		}
 		finally {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [videoIndex, count]);
