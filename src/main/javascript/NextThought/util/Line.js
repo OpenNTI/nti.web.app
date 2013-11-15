@@ -29,9 +29,9 @@ Ext.define('NextThought.util.Line', {
 
 		//The "IE" search is actually more accurate for assessment pages
 		if (Ext.isIE || Ext.isGecko) {
-			range = this.rangeByRecursiveSearch(y, doc);
+			//range = this.rangeByRecursiveSearch(y, doc);
 			//Experimental line resolver for IE... seems pretty fast.
-			//range = this.rangeForLineByPointIE(y,doc);
+			range = this.rangeForLineByPointIE(y, doc);
 		}
 		else if (doc.caretRangeFromPoint) {
 			range = this.rangeForLineByPoint(y, doc);
