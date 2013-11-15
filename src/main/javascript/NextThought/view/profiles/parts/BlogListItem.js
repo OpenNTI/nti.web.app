@@ -186,14 +186,6 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 	},
 
 
-	onDestroy: function() {
-		var h = this.record.get('headline');
-		h.removeObserverForField(this, 'title', this.updateField, this);
-		h.removeObserverForField(this, 'body', this.updateField, this);
-		h.removeObserverForField(this, 'tags', this.updateField, this);
-		this.callParent(arguments);
-	},
-
 
 	onDeletePost: function(e) {
 		e.stopEvent();
