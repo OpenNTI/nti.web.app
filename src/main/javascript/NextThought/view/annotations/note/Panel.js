@@ -337,7 +337,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
 		if (Ext.isEmpty(sharedWith)) {
 			this.sharedTo.update('Private');
-			this.sharedTo.set({'data-qtip': null});
+			this.sharedTo.set({'data-qtip': undefined});
 			return;
 		}
 
