@@ -230,7 +230,7 @@ Ext.define('NextThought.util.Sharing', {
 			Ext.each(resolvedUsers || [], function(u){
 				var dn = isMe(u) ? 'me' : u.getName();
 
-				if (dn.toLowerCase() !== 'unknown') {
+				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn)) {
 					names.push(dn);
 					return !maxLength || names.length <= maxLength;
 				}
@@ -270,7 +270,7 @@ Ext.define('NextThought.util.Sharing', {
 			UserRepository.getUser(explicitEntities.first(), function(resolved){
 				var dn = resolved.getName();
 
-				if(dn.toLowerCase() === 'unknown'){
+				if(dn.toLowerCase() === 'unknown' || Ext.isEmpty(dn)){
 					str = Ext.String.format('{0} {1}', prefix, '1 other');
 				} else {
 					str = Ext.String.format('{0} {1}', prefix, resolved.getName());
