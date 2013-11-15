@@ -285,9 +285,14 @@ Ext.define('NextThought.util.Sharing', {
 		});
 
 		//if there are no ntiids in the tags treat it normally
-		if (Ext.isEmpty(entities)) {
+		if (!published) {
 			this.getLongSharingDisplayText(sharedWith, callback, scope);
-		} else {
+			return;
+		} 
+
+		if(Ext.isEmpty(entities)){
+			Ext.callback(callback, scope, ['Public']);
+		}else {
 			//get all the user objects for the ntiids in the tags
 			$AppConfig.service.getObjects(entities, function(users) {
 				var prefix = published ? 'Public and' : 'Shared with',
@@ -331,9 +336,14 @@ Ext.define('NextThought.util.Sharing', {
 			return ParseUtils.isNTIID(t);
 		});
 
-		//if there are no ntiids in the tags, treat it normally
-		if (Ext.isEmpty(entities)) {
+		//if its private, treat it normally
+		if (!published) {
 			this.getShortSharingDisplayText(sharedWith, callback, scope);
+			return;
+		}
+
+		if(Ext.isEmpty(entities)){
+			Ext.callback(callback, scope, ['Public']);
 		} else if (entities.length > 1) {
 			str = Ext.String.format('{0} {1}',
 					published ? 'Public and' : 'Shared with',
