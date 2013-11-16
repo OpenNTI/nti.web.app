@@ -27,6 +27,7 @@ Ext.define('NextThought.proxy.Socket', {
 			window.onbeforeunload || Ext.emptyFn, function() { me.tearDownSocket(); });
 	},
 
+
 	/**
 	 * Set up a task that will check io availability every second until it becomes
 	 * available, then call setupSocket.
@@ -138,7 +139,7 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 
-	onSocketAvailable: function(fn,scope) {
+	onSocketAvailable: function(fn, scope) {
 		if (this.socket) {
 			Ext.callback(fn, scope);
 			return;
@@ -149,7 +150,11 @@ Ext.define('NextThought.proxy.Socket', {
 
 	emit: function() {
 		if (this.socket) {
-			this.socket.emit.apply(this.socket, arguments);
+			try {
+				this.socket.emit.apply(this.socket, arguments);
+			} catch (e) {
+				console.error('No Socket?', e.stack || e.message || e);
+			}
 		}
 		else if (this.isDebug) {
 			console.debug('dropping emit, socket is down');
@@ -187,7 +192,7 @@ Ext.define('NextThought.proxy.Socket', {
 		if (this.isDebug) {
 			console.debug('server kill');
 		}
-		this.tearDownSocket();
+		Ext.defer(this.tearDownSocket, 1, this);//new "thread"
 	},
 
 	onDisconnect: function() {
