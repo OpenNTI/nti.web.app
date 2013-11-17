@@ -1,6 +1,7 @@
 (function() {
 
-	var XMLHttpFactories = [
+	var seenErrors = {}.
+		XMLHttpFactories = [
 		    function() {return new XMLHttpRequest();},
 		    function() {return new ActiveXObject('Msxml2.XMLHTTP');},
 		    function() {return new ActiveXObject('Msxml3.XMLHTTP');},
@@ -36,7 +37,7 @@
 	function hook() {
 		var onerror = window.onerror || function() {};
 		window.onerror = function(msg, url, line) {
-			var me = this, args = arguments, collectedLog = '[]';
+			var me = this, args = arguments, collectedLog = '[]', message, count;
 			function escape(s) {
 				return (s || '').toString().replace(/"/g, '\\"');
 			}
@@ -44,13 +45,23 @@
 				if (console.getCollected) {
 					collectedLog = console.getCollected();
 				}
+
+				message = '{"message":"' + escape(msg) +
+										'","file":"' + escape(url) +
+										'","line":"' + escape(line) +
+										'","capturedLog":' + collectedLog;
+
+				count = seenErrors[message] = (seenErrors[message] || 0) + 1;
+				if (count > 1 && count % 100 !== 0) {
+					return;
+				}
+
+				message += ',"count":' + count + '}';
+
 				sendRequest(
 						'/dataserver2/@@send-crash-report',
 						function() {onerror.apply(me, args);},
-						'{"message":"' + escape(msg) +
-						'","file":"' + escape(url) +
-						'","line":"' + escape(line) +
-						'","capturedLog":' + collectedLog + '}'
+						message
 				);
 			} catch (e) {
 				onerror.apply(me, args);
