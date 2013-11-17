@@ -3,7 +3,7 @@ Ext.define('NextThought.util.Line', {
 
 	containerMimeSelectors: ['object[type$=naquestion]', 'object[type$=ntivideo]'],
 
-	getStyle: function(node,prop) {
+	getStyle: function(node, prop) {
 		if (!node) {return '';}
 		var view = node.ownerDocument.defaultView;
 		return view.getComputedStyle(node, undefined).getPropertyValue(prop);
@@ -27,14 +27,15 @@ Ext.define('NextThought.util.Line', {
 		var range,
 			ancestor, questionObject, parentObject, t;
 
-		//The "IE" search is actually more accurate for assessment pages
-		if (Ext.isIE || Ext.isGecko) {
-			//range = this.rangeByRecursiveSearch(y, doc);
+		if (doc.caretRangeFromPoint) {
+			range = this.rangeForLineByPoint(y, doc);
+		}
+		else if (window.TextRange && window.TextRange.prototype.moveToPoint) {
 			//Experimental line resolver for IE... seems pretty fast.
 			range = this.rangeForLineByPointIE(y, doc);
 		}
-		else if (doc.caretRangeFromPoint) {
-			range = this.rangeForLineByPoint(y, doc);
+		else if (Ext.isGecko) {
+			range = this.rangeByRecursiveSearch(y, doc);
 		}
 		else {
 			range = this.rangeForLineBySelection(y, doc);
@@ -123,7 +124,7 @@ Ext.define('NextThought.util.Line', {
 
 	/** @private */
 	//IE
-	rangeByRecursiveSearch: function(y,doc) {
+	rangeByRecursiveSearch: function(y, doc) {
     //		y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
 		//First text node ending past y
@@ -228,12 +229,12 @@ Ext.define('NextThought.util.Line', {
 	isContent: function isContent(n) {
 		var root = n.ownerDocument.getElementById('NTIContent');
 		//n must be a node, and must be at least 3 levels deep into the content, otherwise, n is just a top level container.
-		return n && n.parentNode && n.parentNode.parentNode
-			&& root !== n
-			&& root !== n.parentNode
-			&& root !== n.parentNode.parentNode
-			&& Ext.fly(root).contains(n)
-			&& !n.getAttribute('data-ntiid');//no containers...it selects too much
+		return n && n.parentNode && n.parentNode.parentNode &&
+			   root !== n &&
+			   root !== n.parentNode &&
+			   root !== n.parentNode.parentNode &&
+			   Ext.fly(root).contains(n) &&
+			   !n.getAttribute('data-ntiid');//no containers...it selects too much
 	},
 
 
