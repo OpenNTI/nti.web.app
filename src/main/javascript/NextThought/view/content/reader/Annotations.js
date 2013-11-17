@@ -685,18 +685,22 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	getSelection: function() {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;
+		try {
+			if (!Ext.is.iPad) { // iPad does this automatically
+				Anchors.snapSelectionToWord(doc);
+			}
 
-		if (!Ext.is.iPad) { // iPad does this automatically
-			Anchors.snapSelectionToWord(doc);
-		}
 
-		selection = doc.parentWindow.getSelection();
-		txt = selection.toString();
+			selection = doc.parentWindow.getSelection();
+			txt = selection.toString();
 
-		if (selection.rangeCount > 0 && !(/^\s*$/).test(txt)) {
-			range = selection.getRangeAt(0);
+			if (selection.rangeCount > 0 && !(/^\s*$/).test(txt)) {
+				range = selection.getRangeAt(0);
 
-			return range;
+				return range;
+			}
+		} catch (e) {
+			console.error(e.stack || e.message || e);
 		}
 		console.warn('skipping getSelection() no viable selection', selection);
 
@@ -705,9 +709,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	selectRange: function(range) {
-		var s = this.getDocumentElement().parentWindow.getSelection();
-		s.removeAllRanges();
-		s.addRange(range);
+		try {
+			var s = this.getDocumentElement().parentWindow.getSelection();
+			s.removeAllRanges();
+			s.addRange(range);
+		}
+		catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 	},
 
 

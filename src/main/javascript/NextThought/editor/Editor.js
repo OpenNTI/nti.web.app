@@ -475,9 +475,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			range = document.createRange();
 			range.selectNodeContents(el);
 			range.collapse(false);
-			selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
+			try {
+				selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+			} catch (e) {
+				console.error(e.stack || e.message || e);
+			}
 		}
 	},
 
@@ -773,67 +777,70 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	onKeyDown: function(e) {
+		try {
+			var s = window.getSelection(),
+				a = s && s.anchorNode,
+				n = s && s.focusNode,
+				o = s && s.focusOffset,
+				ao = s && s.anchorOffset,
+				v = n && n.nodeValue, r,
+				modKey = e.altKey || e.ctrlKey,
+				badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
 
-		var s = window.getSelection(),
-			a = s && s.anchorNode,
-			n = s && s.focusNode,
-			o = s && s.focusOffset,
-			ao = s && s.anchorOffset,
-			v = n && n.nodeValue, r,
-			modKey = e.altKey || e.ctrlKey,
-			badRange = n === a && o === 0 && ao === 0 && n === this.contentEl.dom;
-
-		this.detectAndFixDanglingNodes();
-		if (badRange) {
-			console.warn('Entire content editable area selected');
-			n = AnnotationUtils.getTextNodes(n)[0];
-			v = n && n.nodeValue;
-		}
-
-		if (e.getKey() === e.SPACE) {
-			e.stopPropagation();
-		}
-
-		if (e.getKey() === e.TAB && n) {
-			if (modKey) {
-				//tab next
-				this.el.down('.save').focus();
+			this.detectAndFixDanglingNodes();
+			if (badRange) {
+				console.warn('Entire content editable area selected');
+				n = AnnotationUtils.getTextNodes(n)[0];
+				v = n && n.nodeValue;
 			}
-			else if (e.shiftKey) {
-				//tab back
-				if (this.tags) {//may not be needed
-					this.tags.focus();
+
+			if (e.getKey() === e.SPACE) {
+				e.stopPropagation();
+			}
+
+			if (e.getKey() === e.TAB && n) {
+				if (modKey) {
+					//tab next
+					this.el.down('.save').focus();
+				}
+				else if (e.shiftKey) {
+					//tab back
+					if (this.tags) {//may not be needed
+						this.tags.focus();
+					}
+				}
+				else {
+					e.stopEvent();
+
+					if (v) {
+						v = v.substr(0, o) + '\t' + v.substr(o);
+						n.nodeValue = v;
+					}
+					else if (!badRange) {
+						console.warn('Replacing n from' + n);
+						n = this.tabTpl.overwrite(n).firstChild;
+						o = 0;
+					}
+
+					this.moveCaret(n, o + 1);
+					return false;
 				}
 			}
-			else {
-				e.stopEvent();
+			else if (e.getKey() === e.DELETE || e.getKey() === e.BACKSPACE) {
 
-				if (v) {
-					v = v.substr(0, o) + '\t' + v.substr(o);
-					n.nodeValue = v;
+				if (Ext.isIE && a === n && a.childNodes[ao] === undefined && a.childNodes[ao - 1]) {
+					s.removeAllRanges();
+					r = document.createRange();
+					r.selectNode(a.childNodes[ao - 1]);
+					s.addRange(r);
 				}
-				else if (!badRange) {
-					console.warn('Replacing n from' + n);
-					n = this.tabTpl.overwrite(n).firstChild;
-					o = 0;
-				}
-
-				this.moveCaret(n, o + 1);
-				return false;
 			}
-		}
-		else if (e.getKey() === e.DELETE || e.getKey() === e.BACKSPACE) {
-
-			if (Ext.isIE && a === n && a.childNodes[ao] === undefined && a.childNodes[ao - 1]) {
-				s.removeAllRanges();
-				r = document.createRange();
-				r.selectNode(a.childNodes[ao - 1]);
-				s.addRange(r);
+			else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT) {
+				//keeps the slides from transitioninng in the presentation view
+				e.stopPropagation();
 			}
-		}
-		else if (e.getKey() === e.LEFT || e.getKey() === e.RIGHT) {
-			//keeps the slides from transitioninng in the presentation view
-			e.stopPropagation();
+		} catch (er) {
+			console.error(er.stack || er.message || er);
 		}
 
 		this.hideStylePopover();
