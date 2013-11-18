@@ -229,18 +229,45 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	listStoreSet: function(store) {
 		if (!store) { return; }
-		var index = store.indexOf(this.video);
+		var me = this, index = store.indexOf(this.video);
 
-		if ((index - 1) >= 0) {
-			this.previousVideo = store.getAt(index - 1);
+		function isHeader(video){
+			return video && video.get('sources') && video.get('sources').length === 0;
 		}
 
-		if ((index + 1) < store.getCount()) {
-			this.nextVideo = store.getAt(index + 1);
+		function getPrevFromIndex(i){
+			var prev;
+
+			if((i - 1) >= 0){
+				prev = store.getAt(i - 1);
+			}
+
+			if (isHeader(prev)) {
+				prev = getPrevFromIndex(i - 1);
+			}
+
+			return prev;
 		}
 
+		function getNextFromIndex(i){
+			var next;
+
+			if((i + 1) < store.getCount()){
+				next = store.getAt(i + 1);
+			}
+
+			if (isHeader(next)) {
+				next = getNextFromIndex(i + 1);
+			}
+
+			return next;
+		}
+
+		this.prevVideo = getPrevFromIndex(index);
+		this.nextVideo = getNextFromIndex(index); 
+		
 		if (this.videoplayer) {
-			this.videoplayer.setPrev(this.previousVideo);
+			this.videoplayer.setPrev(this.prevVideo);
 			this.videoplayer.setNext(this.nextVideo);
 		}
 	},
@@ -281,7 +308,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this,
 			nextVideo: this.nextVideo,
-			prevVideo: this.previousVideo
+			prevVideo: this.prevVideo
 		});
 
 		this.on('destroy', 'destroy', this.videoplayer);

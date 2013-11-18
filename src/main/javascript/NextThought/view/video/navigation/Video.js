@@ -22,12 +22,6 @@ Ext.define('NextThought.view.video.navigation.Video', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var prev = this.overlayTpl.append(this.el, {cls: 'prev'}, true),
-			next = this.overlayTpl.append(this.el, {cls: 'next'}, true);
-
-		this.mon(prev, 'click', 'navigationSelected');
-		this.mon(next, 'click', 'navigationSelected');
-
 		this.setPrev(this.prevVideo);
 		this.setNext(this.nextVideo);
 	},
@@ -49,7 +43,7 @@ Ext.define('NextThought.view.video.navigation.Video', {
 
 	updateNav: function(el, video) {
 		var thumb, title, preTitle,
-			navEl = el.down('.nav-container'),
+			navEl = el && el.down('.nav-container'),
 			contentEl = navEl && navEl.down('.content'),
 			iconEl = contentEl && contentEl.down('.thumbnail'),
 			aboutEl = contentEl && contentEl.down('.about'),
@@ -83,30 +77,37 @@ Ext.define('NextThought.view.video.navigation.Video', {
 
 	setPrev: function(video) {
 		this.prevVideo = video;
-
-		if (!this.rendered) {
+		
+		if (!this.rendered || !video) {
 			return;
 		}
 
 		var el = this.el.down('.prev');
 
-		if (el) {
-			this.updateNav(el, video);
+		if (!el) {
+			el = this.overlayTpl.append(this.el, {cls: 'prev'}, true);
+			this.mon(el, 'click', 'navigationSelected');
 		}
+
+		this.updateNav(el, video);
 	},
 
 	setNext: function(video) {
 		this.nextVideo = video;
 
-		if (!this.rendered) {
+		if (!this.rendered || !video) {
 			return;
 		}
 
 		var el = this.el.down('.next');
 
-		if (el) {
-			this.updateNav(el, video);
+
+		if (!el) {
+			el = this.overlayTpl.append(this.el, {cls: 'next'}, true);
+			this.mon(el, 'click', 'navigationSelected');
 		}
+
+		this.updateNav(el, video);
 	},
 
 	navigationSelected: function(e) {
