@@ -174,7 +174,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 
 	afterRender: function() {
-		var me = this;
+		var me = this, playerType;
 
 		function cleanup() {
 			if (Ext.getBody().hasCls('media-viewer-closing')) {
@@ -191,9 +191,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
     if (me.videoOnly) {
       me.el.addCls('video-only');
     }
+    	//check if we need to restore a type or use the default
+		playerType = (me.noTranscript)? 'full-video' : me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
 
 		//TODO: redo this. better.
-		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, video: me.video, floatParent: me, noTranscript: me.noTranscript});
+		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, currentType: playerType, video: me.video, floatParent: me, noTranscript: me.noTranscript});
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
 		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video});
 
@@ -203,13 +205,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		me.on('exit-viewer', 'exitViewer', me);
 		me.on('destroy', cleanup, me);
 
-		if (this.noTranscript) {
-			me.switchVideoViewer('full-video');
-		} else {
-			me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
-		}
-
-		me.activeVideoPlayerType = 'video-focus';
+		me.switchVideoViewer(playerType);
 
 		me.mon(me.gridView, {
 			'hide-grid': {fn: 'showGridPicker', scope: me.toolbar},
@@ -224,6 +220,11 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		me.adjustOnResize();
 		Ext.EventManager.onWindowResize(me.adjustOnResize, me, {buffer: 250});
+	},
+
+
+	getStorageManager: function(){
+		return TemporaryStorage;
 	},
 
 
@@ -265,7 +266,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.prevVideo = getPrevFromIndex(index);
 		this.nextVideo = getNextFromIndex(index); 
-		
+
 		if (this.videoplayer) {
 			this.videoplayer.setPrev(this.prevVideo);
 			this.videoplayer.setNext(this.nextVideo);
@@ -463,6 +464,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width = dim.width(this.videoPlayerEl),
 			left = Ext.isFunction(dim.left) && dim.left(width);
 
+		//store the current type so we can retreive it later
+		me.getStorageManager().set('media-viewer-player-type', type);
 		// FIXME: This feels wrong, but I don't know if we can resize the video player once it's been created.
 		// For now, naively destroy the current videoPlayer and add a new one with the desired dimensions.
 		// TODO: We may also need to pass about the video in case it was currently playing.

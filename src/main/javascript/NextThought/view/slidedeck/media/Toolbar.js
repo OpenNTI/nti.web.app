@@ -53,10 +53,20 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		exitEl: '.back-button'
 	},
 
+	clsToName: function(cls){
+		var map = {
+			'video-focus': 'Split Video',
+			'transcript-focus': 'Split Transcript',
+			'full-video': 'Full Video'
+		}
+
+		return map[cls];
+	},
+
 	initComponent: function() {
 		var me = this;
 		me.callParent(arguments);
-		me.currentType = 'video-focus';
+		me.currentType = me.currentType || 'video-focus';
 		me.enableBubble('exit-viewer');
 
 		me.on({
@@ -81,13 +91,12 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 	
 	afterRender: function(){
 		this.callParent(arguments);
-
+		
 		if(this.noTranscript){
 			this.pickerEl.removeCls('hasTranscript');
-			this.pickerEl.removeCls(this.currentType).addCls('full-video');
-			this.pickerEl.update('Full Video');
-			this.showVideoPlayerPicker = Ext.emptyFn;
 		}
+		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
+		this.pickerEl.update(this.clsToName(this.currentType));
 	},
 
 
@@ -112,9 +121,9 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		var me = this,
 			type = this.currentType,
 			items = [
-				{ text: 'Split Video', cls: 'label video-focus', action: 'video-focus', checked: type === 'video-focus'},
-				{ text: 'Split Transcript', cls: 'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'},
-				{ text: 'Full Video', cls: 'label full-video', action: 'full-video', checked: type === 'full-video'}
+				{ text: me.clsToName('video-focus'), cls: 'label video-focus', action: 'video-focus', checked: type === 'video-focus'},
+				{ text: me.clsToName('transcript-focus'), cls: 'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'},
+				{ text: me.clsToName('full-video'), cls: 'label full-video', action: 'full-video', checked: type === 'full-video'}
 			];
 
 		//Make selected item is at the top of the list.
