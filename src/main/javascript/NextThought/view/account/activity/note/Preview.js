@@ -82,11 +82,14 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			metaHandled = false;
 
 			ContentUtils.findContentObject(cid, function(obj, meta) {
+				if (me.isDestroyed) { return; }
+
 				//TOOD need a generic framework for various objects here
 				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
 					var src, sources, contextEl;
 					console.log('Need to set context being video', obj);
 					if (meta) {
+						try {
 						me.locationEl.update(meta.getPathLabel());
 						if (me.context) {
 							contextEl = me.context.up('.context');
@@ -109,6 +112,9 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 								cls: 'video-thumbnail',
 								src: src
 							}]);
+						} catch (e) {
+							console.error(e.stack || e.message || e);
+						}
 					}
 				}
 				else {
@@ -136,8 +142,12 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
-							me.locationEl.update(meta.getPathLabel());
-							me.context.update(meta.location && meta.location.getAttribute('desc'));
+							try {
+								me.locationEl.update(meta.getPathLabel());
+								me.context.update(meta.location && meta.location.getAttribute('desc'));
+							} catch (e2) {
+								console.error(e2.stack || e2.message || e2);
+							}
 							Ext.callback(fin);
 							return;
 						}

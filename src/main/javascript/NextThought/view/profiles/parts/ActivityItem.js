@@ -288,6 +288,8 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 			metaHandled = false;
 
 			ContentUtils.findContentObject(cid, function(obj, meta) {
+				if (me.isDestroyed) { return; }
+
 				//TOOD need a generic framework for various objects here
 				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
 					var src, sources, contextEl;
@@ -323,8 +325,12 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 					if (resp.status === 404) {
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
-							me.locationEl.update(meta.getPathLabel());
-							me.context.update(meta.location && meta.location.getAttribute('desc'));
+							try {
+								me.locationEl.update(meta.getPathLabel());
+								me.context.update(meta.location && meta.location.getAttribute('desc'));
+							} catch (e) {
+								console.error(e.stack || e.message || e);
+							}
 							Ext.callback(fin);
 							return;
 						}
@@ -407,21 +413,25 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 			return;
 		}
 
-		this.locationEl.update(meta.getPathLabel());
-		this.locationIcon.setStyle({
-			backgroundImage: Ext.String.format('url({0})', meta.getIcon())
-		});
-
-		this.locationEl.hover(
-			function() {
-				Ext.fly(this).addCls('over');
-			},
-			function() {
-				Ext.fly(this).removeCls('over');
+		try {
+			this.locationEl.update(meta.getPathLabel());
+			this.locationIcon.setStyle({
+				backgroundImage: Ext.String.format('url({0})', meta.getIcon())
 			});
 
-		this.locationEl.on('click',
-			Ext.bind(this.fireEvent, this, ['navigation-selected', meta.NTIID, null, null]));
+			this.locationEl.hover(
+				function() {
+					Ext.fly(this).addCls('over');
+				},
+				function() {
+					Ext.fly(this).removeCls('over');
+				});
+
+			this.locationEl.on('click',
+				Ext.bind(this.fireEvent, this, ['navigation-selected', meta.NTIID, null, null]));
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 	}
 
 
