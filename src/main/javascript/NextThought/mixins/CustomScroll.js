@@ -39,7 +39,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			if (shouldScroll) {
 				parentContainerEl[delta > 60 ? 'addCls' : 'removeCls']('has-alt-tabbar');
 				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
-				console.log('Scrolling', 'margin top:' + tMargin, 'margin bottom' + bMargin);
+				//console.log('Scrolling', 'margin top:' + tMargin, 'margin bottom' + bMargin);
 
 				this.alreadySetMargin = true;
 				setReverseMargin.apply(this, [bMargin]);
