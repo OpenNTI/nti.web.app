@@ -69,7 +69,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				return defaultWidth;
 			}
 
-			newWidth = Math.round((1 - (Math.abs(diff) / (screenHeight))) * defaultWidth);
+			newWidth = Math.round((1 - (Math.abs(diff) / screenHeight)) * defaultWidth);
 
 			return Math.max(newWidth, 512);
 		},
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.callParent(arguments);
 
-		if(this.transcript){
+		if (this.transcript) {
 			transcript = this.add({
 				xtype: 'slidedeck-transcript',
 				transcript: this.transcript,
@@ -145,7 +145,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 				'will-show-annotation': 'willShowAnnotation',
 				'will-hide-annotation': 'willHideAnnotation'
 			});
-		}else{
+		} else {
 			this.noTranscript = true;
 		}
 
@@ -157,7 +157,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if (!Ext.getBody().hasCls('media-viewer-open')) {
 			Ext.getBody().mask('Loading...');
 			this.animateIn();//will listen to afterRender
-		}else{
+		} else {
 			this.on('afterrender', Ext.bind(me.fireEvent, me, ['animation-end']), null, {single: true, buffered: 1000});
 		}
 
@@ -203,16 +203,16 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		me.on('exit-viewer', 'exitViewer', me);
 		me.on('destroy', cleanup, me);
 
-		if(this.noTranscript){
+		if (this.noTranscript) {
 			me.switchVideoViewer('full-video');
-		}else{
+		} else {
 			me.addVideoPlayer(me.BIGVIDEO.width(me.videoPlayerEl));
 		}
 
 		me.activeVideoPlayerType = 'video-focus';
 
 		me.mon(me.gridView, {
-			'hide-grid': {fn:'showGridPicker', scope: me.toolbar},
+			'hide-grid': {fn: 'showGridPicker', scope: me.toolbar},
 			'store-set': 'listStoreSet'
 		});
 
@@ -226,38 +226,41 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		Ext.EventManager.onWindowResize(me.adjustOnResize, me, {buffer: 250});
 	},
 
-	
-	listStoreSet: function(store){
-		if(!store){ return; }
+
+	listStoreSet: function(store) {
+		if (!store) { return; }
 		var index = store.indexOf(this.video);
 
-		if((index - 1) >= 0){
+		if ((index - 1) >= 0) {
 			this.previousVideo = store.getAt(index - 1);
 		}
 
-		if((index + 1) < store.getCount()){
+		if ((index + 1) < store.getCount()) {
 			this.nextVideo = store.getAt(index + 1);
 		}
 
-		if(this.videoplayer){
+		if (this.videoplayer) {
 			this.videoplayer.setPrev(this.previousVideo);
 			this.videoplayer.setNext(this.nextVideo);
 		}
 	},
 
-	getLocationInfo: function(){
+	getLocationInfo: function() {
 		var ntiid = this.video && this.video.get('NTIID'),
-			lineage = ntiid && ContentUtils.getLineage(ntiid),
-			location = lineage && lineage.last() && ContentUtils.getLocation(lineage.last());
+			lineage = ntiid && ContentUtils.getLineage(ntiid);
 
-		return location;
+		return lineage && lineage.last() && ContentUtils.getLocation(lineage.last());
 	},
 
-	videoNavigation: function(video){
+	videoNavigation: function(video) {
+		if (!video) {
+			return;
+		}
+
 		var li = this.getLocationInfo(),
 			ntiid = video && video.get('NTIID');
-			
-		if(!li || !video.raw || !ntiid){
+
+		if (!li || !video.raw || !ntiid) {
 			console.log('Dont know how to handle the navigation');
 			return;
 		}
@@ -278,16 +281,16 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			width: width,
 			floatParent: this,
 			nextVideo: this.nextVideo,
-			previousVideo: this.previousVideo
+			prevVideo: this.previousVideo
 		});
 
 		this.on('destroy', 'destroy', this.videoplayer);
 
-		if(isFeature("transcript-follow-video")){
+		if (isFeature('transcript-follow-video')) {
 			this.mon(this.videoplayer, 'media-heart-beat', 'actOnMediaHeartBeat', this);
 		}
 
-		this.mon(this.videoplayer,{
+		this.mon(this.videoplayer, {
 			scope: this,
 			'next-navigation-selected': 'videoNavigation',
 			'prev-navigation-selected': 'videoNavigation'
@@ -322,13 +325,13 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 	//</editor-fold>
 
-	actOnMediaHeartBeat: function(){
+	actOnMediaHeartBeat: function() {
 		var transcriptCmp = this.down('slidedeck-transcript'),
 			state = this.videoplayer.queryPlayer(),
 			time = state && state.time,
 			data = time && time.data;
-		
-		if(!Ext.isEmpty(data) && transcriptCmp && transcriptCmp.highlightAtTime){
+
+		if (!Ext.isEmpty(data) && transcriptCmp && transcriptCmp.highlightAtTime) {
 			//The heartbeat happens every second, so if the range for a line to be highlighted
 			//doesn't start on an exact second there is a delay with highlighting the next line.
 			//Adding half a second to the time, cuts down on the delay.
@@ -361,7 +364,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		this.removeCls('ready');
 		this.addCls('closing');
 
-		if(annotation && annotation.destroy()){
+		if (annotation && annotation.destroy()) {
 			annotation.destroy();
 		}
 
@@ -426,7 +429,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 		console.log('switch to video viewer type: ', type);
 
-		var cls, me = this,
+		var me = this,
 			isTranscriptCentric = type === 'transcript-focus',
 			isFullVideo = type === 'full-video',
 			dim = isTranscriptCentric ? this.SMALLVIDEO : (isFullVideo ? this.FULLVIDEO : this.BIGVIDEO),
@@ -436,7 +439,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		// FIXME: This feels wrong, but I don't know if we can resize the video player once it's been created.
 		// For now, naively destroy the current videoPlayer and add a new one with the desired dimensions.
 		// TODO: We may also need to pass about the video in case it was currently playing.
-		if(this.videoplayer){ this.videoplayer.destroy(); }
+		if (this.videoplayer) { this.videoplayer.destroy(); }
 		this.activeVideoPlayerType = type;
 		this.addVideoPlayer(width, left);
 		dim.setClasses(this.el, this);

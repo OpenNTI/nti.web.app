@@ -28,13 +28,8 @@ Ext.define('NextThought.view.video.navigation.Video', {
 		this.mon(prev, 'click', 'navigationSelected');
 		this.mon(next, 'click', 'navigationSelected');
 
-		if (this.prevVideo) {
-			this.setPrev(this.prevVideo);
-		}
-
-		if (this.nextVideo) {
-			this.setNext(this.nextVideo);
-		}
+		this.setPrev(this.prevVideo);
+		this.setNext(this.nextVideo);
 	},
 
 
@@ -88,7 +83,7 @@ Ext.define('NextThought.view.video.navigation.Video', {
 
 	setPrev: function(video) {
 		this.prevVideo = video;
-		
+
 		if (!this.rendered) {
 			return;
 		}
@@ -102,7 +97,7 @@ Ext.define('NextThought.view.video.navigation.Video', {
 
 	setNext: function(video) {
 		this.nextVideo = video;
-		
+
 		if (!this.rendered) {
 			return;
 		}
@@ -117,19 +112,15 @@ Ext.define('NextThought.view.video.navigation.Video', {
 	navigationSelected: function(e) {
 		var target = e.getTarget('.navigation', null, true);
 
-		if(!target || !target.hasCls){ return; }
+		if (!target || !target.hasCls) { return; }
 
-		if(target.hasCls('next')){
+		e.stopEvent();
+
+		if (target.hasCls('next') && this.nextVideo) {
 			this.fireEvent('next-navigation-selected', this.nextVideo);
-			return;
-		}
-
-		if(target.hasCls('prev')){
+		} else if (target.hasCls('prev') && this.prevVideo) {
 			this.fireEvent('prev-navigation-selected', this.prevVideo);
-			return;
 		}
-
-		console.log('Dont know how to handle this event');		
 	}
 
 });
