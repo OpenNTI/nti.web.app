@@ -42,21 +42,22 @@
 				return (s || '').toString().replace(/"/g, '\\"');
 			}
 			try {
-				if (console.getCollected) {
-					collectedLog = console.getCollected();
-				}
-
 				message = '{"message":"' + escape(msg) +
 										'","file":"' + escape(url) +
-										'","line":"' + escape(line) +
-										'","capturedLog":' + collectedLog;
+										'","line":"' + escape(line);
 
 				count = seenErrors[message] = (seenErrors[message] || 0) + 1;
 				if (count > 1 && count % 100 !== 0) {
 					return;
 				}
 
-				message += ',"count":' + count + '}';
+				message += '","count":' + count;
+				if (console.getCollected) {
+					collectedLog = console.getCollected();
+					message += ',"capturedLog":' + collectedLog
+				}
+
+				message += '}';
 
 				sendRequest(
 						'/dataserver2/@@send-crash-report',
