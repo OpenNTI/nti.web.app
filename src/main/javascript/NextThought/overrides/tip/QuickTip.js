@@ -42,20 +42,21 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 				}
 			}
 		});
-        if(Ext.is.iOS){
-            Ext.apply(config, {
-                dismissDelay: 2000,
-                hideDelay: 0
-            });
-        }
+
+		if (Ext.is.iOS) {
+			Ext.apply(config, {
+				dismissDelay: 2000,
+				hideDelay: 0
+			});
+		}
 		this.callParent([config]);
 	},
 
-	getDockingRefItems: function(deep,items) {
+	getDockingRefItems: function(deep, items) {
 		return items;
 	},
 
-	onTargetOver: function(e,dom,opts) {
+	onTargetOver: function(e, dom, opts) {
 		delete this.readerOffsets;
 		if (opts.reader) {
 			this.readerOffsets = opts.reader.getAnnotationOffsets();
@@ -92,7 +93,7 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 
 		if (Ext.isEmpty(this.anchorTarget)) {
 			console.warn('Tooltip anchorTarget is null. It shouldn\'t be');
-			return null;
+			return [-1000, -1000];//don't return null... its dangerious.
 		}
 		try {
 			r = this.callParent(arguments);
@@ -118,17 +119,30 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 		catch (er) {
 			console.warn(Globals.getError(er));
 		}
+		finally {
+			delete getTargetXY.recursiveCall;
+		}
 
-		delete getTargetXY.recursiveCall;
+		if (!r) {
+			r = [-2000, -2000];
+			console.error('Parent implementation return a bad value');
+		}
 		return r;
 	},
 
 	//Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
 	showAt: function(xy) {
+		if (!xy) {
+			return;
+		}
 		var size = this.el.getSize(),
 			sizeAfter;
 
-		this.callParent(arguments);
+		try {
+			this.callParent(arguments);
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 
 		sizeAfter = this.el.getSize();
 
