@@ -54,7 +54,7 @@
 				message += '","count":' + count;
 				if (console.getCollected) {
 					collectedLog = console.getCollected();
-					message += ',"capturedLog":' + collectedLog
+					message += ',"capturedLog":' + collectedLog;
 				}
 
 				message += '}';
