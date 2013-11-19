@@ -90,7 +90,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			title: i.get('Title'),
 			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: 'School / Department', //Department
-			duration: i.get('Duration'),
+			duration: new Duration(i.get('Duration')).inWeeks() + ' Weeks',
 			startDate: i.get('StartDate'),
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
