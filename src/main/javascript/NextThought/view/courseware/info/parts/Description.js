@@ -71,16 +71,17 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			s = i.get('Schedule') || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
-			p = Ext.Array.pluck(i.prerequisites || [], 'title');
+			p = Ext.Array.pluck(i.prerequisites || [], 'title'),
+			start = i.get('StartDate') || '';
 
 		function fo(d) {
-			return Ext.Date.format(d, 'g:i a');
+			var date = Ext.Date.parse([start, d].join('T'), 'c');
+			return Ext.Date.format(date, 'g:i a');
 		}
 
 		if (p.join() === '') {
 			p = ['There are no prerequisites for this course.'];
 		}
-
 
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -91,7 +92,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: 'School / Department', //Department
 			duration: new Duration(i.get('Duration')).inWeeks() + ' Weeks',
-			startDate: i.get('StartDate'),
+			startDate: start,
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
 			creditHours: c.get('Hours'),
