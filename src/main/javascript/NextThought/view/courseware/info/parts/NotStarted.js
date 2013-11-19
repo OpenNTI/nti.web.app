@@ -21,17 +21,22 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 	] }),
 
 
+	config: {
+		info: null
+	},
+
+
 	afterRender: function() {
-		var i = this.info || {},
-			c = (i.credit || [])[0],
-			e = c.enrollment || {},
+		var i = this.getInfo() || {},
+			c = (i.get('Credit') || [])[0],
+			e = (c && c.get('Enrollment')) || {},
 			data = {},
 			el;
 
 		this.callParent(arguments);
 
 		Ext.apply(data || {}, {
-			startDate: i.startDate,
+			startDate: i.get('StartDate'),
 			enroll: 'Enroll for Credit',
 			enrollUrl: e.url,
 			registered: getString('course-info.description-widget.open-enrolled')

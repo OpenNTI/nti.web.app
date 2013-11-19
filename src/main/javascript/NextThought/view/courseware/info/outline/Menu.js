@@ -15,6 +15,10 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 		{ cls: 'outline-menu'}
 	]),
 
+	config: {
+		info: null
+	},
+
 	renderSelectors: {
 		frameBodyEl: '.outline-menu'
 	},
@@ -46,7 +50,8 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 
 
 	buildStore: function() {
-		var i = this.info && this.info.instructors,
+		var ifo = this.getInfo(),
+			i = ifo && ifo.get('Instructors'),
 			plural = (i && i.length > 1) ? 's' : '';
 
 		if (!this.menuStore) {

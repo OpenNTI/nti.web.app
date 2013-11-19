@@ -14,6 +14,12 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.EnrolledCourses'
 	],
 
+
+	refs: [
+		{ref: 'libraryView', selector: 'library-view-container' }
+	],
+
+
 	init: function() {
 		this.mon(this.application, 'session-ready', 'onSessionReady');
 	},
@@ -51,6 +57,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
+		this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
+	},
+
+
+	onEnrolledCoursesLoaded: function(store) {
 	}
 });

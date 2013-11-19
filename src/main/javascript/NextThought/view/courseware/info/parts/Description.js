@@ -62,36 +62,39 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 		] }
 	]),
 
+	config: {
+		info: null
+	},
 
-	beforeRender: function(){
-		var i = this.info || {},
-			s = i.schedule || {},
-			c = (i.credit || [])[0],
-			e = c.enrollment || {},
-			p = Ext.Array.pluck(i.prerequisites||[],'title');
+	beforeRender: function() {
+		var i = this.getInfo() || {get: Ext.emptyFn},
+			s = i.get('Schedule') || {},
+			c = (i.get('Credit') || [])[0],
+			e = (c && c.get('Enrollment')) || {},
+			p = Ext.Array.pluck(i.prerequisites || [], 'title');
 
-		function fo(d){
-			return Ext.Date.format(d,'g:i a');
+		function fo(d) {
+			return Ext.Date.format(d, 'g:i a');
 		}
 
-		if(p.join() === ''){
+		if (p.join() === '') {
 			p = ['There are no prerequisites for this course.'];
 		}
 
 
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},{
-			description: i.description,
+		this.renderData = Ext.apply(this.renderData || {}, {
+			description: i.get('Description'),
 			prerequisites: p,
-			courseId: i.id,
-			title: i.title,
-			school: i.school,
+			courseId: i.getId(),
+			title: i.get('Title'),
+			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: 'School / Department', //Department
-			duration: i.duration,
-			startDate: i.startDate,
-			days: (s.days||[]).join('/'),//eww
-			times: Ext.Array.map(s.times||[],fo).join(' - '), //eww
-			creditHours: c.hours,
+			duration: i.get('Duration'),
+			startDate: i.get('StartDate'),
+			days: (s.days || []).join('/'),//eww
+			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
+			creditHours: c.get('Hours'),
 			enrollLabel: e.label,
 			enrollUrl: e.url,
 

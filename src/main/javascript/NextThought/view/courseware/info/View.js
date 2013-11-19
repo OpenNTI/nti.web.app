@@ -25,14 +25,12 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 
 	onCourseChanged: function(pageInfo) {
-		var me = this,
+		var me = this, record,
 			l = ContentUtils.getLocation(pageInfo),
 			toc, course, info, content, courseInfoNtiid;
 
 		function update(info) {
-
 			me.hasInfo = !!info;
-			me.currentCourseInfoNtiid = Ext.isString(info) ? info : (info && info.ntiid);
 
 			if (info) {
 				info.locationInfo = l;
@@ -51,68 +49,16 @@ Ext.define('NextThought.view.courseware.info.View', {
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc && l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
-			info = course && course.querySelector('info');
 		}
 
-		//We have two paths here.  One path (the plain legacy course info) involves sending update
-		//the ntiid of the course info content.  The second involves loading a json object from
-		//an info node and passing the object to update.  All content will have the courseInfo attribute
-		//but only the new fancy course infos will have the info node. Look for that first
-		if (info) {
-			update();
-			me.parseNode(info, course, l, update, function() {
-				console.warn('Course has an info node that points to non existent json', course, arguments);
-			});
-			return;
-		}
+		record = Ext.getStore('courseware.AvailableCourses').findRecord(
+					'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true);
 
-		courseInfoNtiid = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
-		if (courseInfoNtiid) {
-			update(courseInfoNtiid);
-		}
-	},
+		this.hasInfo = !!record;
+		this.infoOnly = !course || !course.querySelector('unit');
 
-
-	parseNode: function(infoNode, courseNode, locInfo, callback, failure) {
-		var src = getURL(infoNode.getAttribute('src'), locInfo.root);
-
-		this.hasInfo = !!infoNode;
-		this.infoOnly = !courseNode.querySelector('unit');
-
-
-		function success(r) {
-			var json = Ext.decode(r.responseText,true),
-				startDate;
-
-
-			//<editor-fold desc="Date Parse & Time cleanup">
-			function times(t) {
-				var v = t;
-				if(t.split('T').length === 1){
-					v = startDate+t;
-				}
-
-				return Ext.Date.parse(v,'c');
-			}
-
-			if (json) {
-				json.startDate = Ext.Date.parse(json.startDate,'c');
-				startDate = Ext.Date.format(json.startDate,'Y-m-d\\T');
-				(json.schedule||{}).times = Ext.Array.map((json.schedule||{}).times||[],times);
-			}
-			//</editor-fold>
-
-			Ext.callback(callback,this,[json]);
-		}
-
-		ContentProxy.request({
-			url: src,
-			expectedContentType: 'application/json',
-			scope: this,
-			success: success,
-			failure: function() {
-				Ext.callback(failure,this,[]);
-			}
-		});
+		update(record);
 	}
+
+
 });

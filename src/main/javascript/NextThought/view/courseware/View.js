@@ -30,7 +30,12 @@ Ext.define('NextThought.view.courseware.View', {
 			course = t && t.getId();
 
 		if (this.currentCourse !== course) {
-			this.fireEvent('courseChanged', pageInfo, course);
+			try {
+				this.fireEvent('courseChanged', pageInfo, course);
+			}
+			catch (e) {
+				console.error(e.stack || e.message || e);
+			}
 			this.currentCourse = course;
 			this.store = course ? new NextThought.store.courseware.Navigation({data: l.toc}) : undefined;
 		}

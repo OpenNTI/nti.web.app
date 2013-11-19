@@ -19,6 +19,10 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 		] }
 	]),
 
+	config: {
+		info: null
+	},
+
 	renderSelectors: {
 		editLink: '.edit'
 	},
@@ -48,7 +52,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	//</editor-fold>
 
 	showEnrollWindow: function() {
-		var p = ContentUtils.purchasableForContentNTIID(this.info.ntiid),
+		var p = ContentUtils.purchasableForContentNTIID(this.getInfo().get('ContentPackageNTIID')),
 			unenroll = p && p.getLink('unenroll'),
 			me = this;
 		if (p) {
@@ -64,7 +68,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 				title: getString('missing.purchasable.item.title', 'Oops!'),
 				msg: getString('missing.purchasable.item.message', 'It appears you are trying to edit an item that does not exist.')
 			});
-			console.error('No purchasable found for ', this.info);
+			console.error('No purchasable found for ', this.getInfo());
 		}
 	}
 });
