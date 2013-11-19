@@ -1,8 +1,8 @@
 Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	extend: 'NextThought.model.Base',
 
-	idProperty: '???',
+	idProperty: 'href',
 	fields: [
-		{ name: 'CourseInstance', type: 'arrayItem', persist: false }
+		{ name: 'CourseInstance', type: 'singleItem', persist: false }
 	]
 });
