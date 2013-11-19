@@ -115,6 +115,7 @@ Ext.application({
 			'javascript/specs/controller/Forums.spec.js',
 			'javascript/specs/controller/Groups.spec.js',
 			'javascript/specs/controller/Navigation.spec.js',
+			'javascript/specs/controller/Profile.spec.js',
 			'javascript/specs/controller/State.spec.js',
 			'javascript/specs/controller/Search.spec.js',
 			'javascript/specs/controller/Store.spec.js',
