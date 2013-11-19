@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.content.reader.IFrame', {
 	alias: 'reader.iframe',
 	requires: [
-		'NextThought.ContentAPIRegistry'
+		'NextThought.view.content.reader.ContentAPIRegistry'
 	],
 
 	mixins: {
@@ -56,9 +56,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 	applyContentAPI: function() {
+		//TODO: can we get rid of this?
 		var doc = this.getDocumentElement(),
 				win = doc.parentWindow;
-
 		Ext.Object.each(ContentAPIRegistry.getAPI(), function(f, n) {
 			win[f] = n;
 		});

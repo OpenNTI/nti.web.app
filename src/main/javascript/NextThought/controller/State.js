@@ -59,6 +59,7 @@ Ext.define('NextThought.controller.State', {
 				}
 			}
 		});
+		//TODO: can we get rid of this?
 		ContentAPIRegistry.register('NTIPreviousPage', this.navigatePreviousPage, this);
 	},
 

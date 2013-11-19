@@ -4,7 +4,6 @@ Ext.define('NextThought.view.content.reader.Location', {
 	requires: [
 		'NextThought.Library',
 		'NextThought.cache.AbstractStorage',
-		'NextThought.ContentAPIRegistry',
 		'NextThought.view.video.Window',
 		'NextThought.util.Content'
 	],
@@ -310,8 +309,4 @@ Ext.define('NextThought.view.content.reader.Location', {
 			console.error('No handler for type:', m.type, m);
 		}
 	}
-
-
-}, function() {
-  //	ContentAPIRegistry.register('NTIRelatedItemHandler',this.relatedItemHandler,this);
 });

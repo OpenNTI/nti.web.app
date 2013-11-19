@@ -352,7 +352,7 @@ Ext.define('NextThought.view.content.Reader', {
 }, function() {
 	window.ReaderPanel = this;
 
-  //	ContentAPIRegistry.register('NTIHintNavigation',this.setLocation,this);
+	//TODO: can we get rid of this?
 	ContentAPIRegistry.register('togglehint', function(e) {
 		e = Ext.EventObject.setEvent(e || event);
 		Ext.get(e.getTarget().nextSibling).toggleCls('hidden');
