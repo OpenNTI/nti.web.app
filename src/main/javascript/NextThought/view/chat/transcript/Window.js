@@ -66,6 +66,8 @@ Ext.define('NextThought.view.chat.transcript.Window', {
 		}
 	},
 
+	fixScroll: Ext.emptyFn,//don't "fixScroll" in chat windows.
+
 	afterRender: function() {
 		var btn;
 		this.callParent(arguments);

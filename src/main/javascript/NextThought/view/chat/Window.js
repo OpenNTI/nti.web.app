@@ -85,6 +85,8 @@ Ext.define('NextThought.view.chat.Window', function() {
 		},
 
 
+		fixScroll: Ext.emptyFn,//don't "fixScroll" in chat windows.
+
 		roomInfoChanged: function(roomInfo) {
 			if (!this.roomInfo) {
 				return;
