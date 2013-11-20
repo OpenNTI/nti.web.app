@@ -938,6 +938,7 @@ $experimental-support-for-svg: true;
 	bottom: 0;
 	right: 0 !important;
 	left: 0;
+	min-width: 1024px;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
 
@@ -965,6 +966,7 @@ $experimental-support-for-svg: true;
 
 			.left{
 				position: relative;
+				margin-right: 485px;
 				.back-button{
 					position: relative;
 					float: left;
@@ -1019,6 +1021,9 @@ $experimental-support-for-svg: true;
 							color: $secondary-grey;
 							font: 400 normal 10px/14px $font;
 							text-transform: uppercase;
+							overflow: hidden;
+							white-space: nowrap;
+							@include ellipse;
 						}
 						.title{
 							font: 200 normal 20px/24px $font;
@@ -1026,7 +1031,7 @@ $experimental-support-for-svg: true;
 							text-transform: uppercase;
 							white-space: nowrap;
 							overflow: hidden;
-							text-overflow: ellipsis;
+							@include ellipse;
 						}
 					}
 				}
