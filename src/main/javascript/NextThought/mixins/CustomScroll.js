@@ -26,8 +26,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			delta = currentScroll < parentContainerPadding ? currentScroll : parentContainerPadding,
 			tMargin = -delta,
 			bMargin = -parentContainerPadding + delta,
-			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) > Math.abs(bMargin);
+			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) >= Math.abs(bMargin);
 
+			// console.log(shouldScroll, targetEl.el.dom.scrollHeight, targetEl.getHeight(), bMargin, tMargin);
 			// NOTE: If we have a reader, we don't want to show the alternate tabbar,
 			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
 			// TODO: Move this logic into a callback.
@@ -37,12 +38,23 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			//If there isn't enough scrolling room to cause the alt-tabbar don't set the margins
 			//to keep the container from only going part of the way up and stopping
 			if (shouldScroll) {
-				parentContainerEl[delta > 60 ? 'addCls' : 'removeCls']('has-alt-tabbar');
+				parentContainerEl[delta > 30 ? 'addCls' : 'removeCls']('has-alt-tabbar');
 				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
 				//console.log('Scrolling', 'margin top:' + tMargin, 'margin bottom' + bMargin);
 
 				this.alreadySetMargin = true;
 				setReverseMargin.apply(this, [bMargin]);
+
+				
+				clearTimeout(data.finalCall);
+				if(data.finalTime){
+					delete data.finaltime;
+				}else{
+					data.finalCall = Ext.defer(function (){
+						data.finalTime = true;
+						adjustOnScroll()
+					}, 500, this);
+				}
 			} else {
 				//Even if the container isn't going to move, we want to set the margins
 				//the first time through to get them in the initial right place.
