@@ -2,8 +2,9 @@ Ext.define('NextThought.view.library.Collection', {
 	extend: 'NextThought.view.navigation.Collection',
 	alias: 'widget.library-collection',
 
+	ui: 'library-collection',
 	store: 'library',
-
+	cls: 'books',
 	rowSpan: 1,
 
 	tpl: Ext.DomHelper.markup([

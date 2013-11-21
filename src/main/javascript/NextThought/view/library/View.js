@@ -3,11 +3,14 @@ Ext.define('NextThought.view.library.View', {
 	alias: 'widget.library-view-container',
 
 	requires: [
-		'NextThought.view.library.Branding'
+		'NextThought.view.library.Branding',
+		'NextThought.view.library.Collection',
+		'NextThought.view.courseware.Collection'
 	],
 
 	cls: 'library-view scrollable',
 	layout: 'auto',
+	defaultType: 'library-collection',
 
 	items: [
 		{
@@ -15,20 +18,13 @@ Ext.define('NextThought.view.library.View', {
 			xtype: 'library-branding-box'
 		},
 		{
-			ui: 'library-collection',
-			cls: 'courses',
-			courseList: true,
-			xtype: 'library-collection',
+			hidden: true,
 			name: getString('My Courses'),
-			store: 'courses',
-			hidden: true
+			xtype: 'course-collection'
 		},
 		{
-			ui: 'library-collection',
-			cls: 'books',
 			hidden: true,
 			bookList: true,
-			xtype: 'library-collection',
 			name: getString('My Books')
 		}
 	],
