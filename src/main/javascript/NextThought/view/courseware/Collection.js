@@ -5,6 +5,12 @@ Ext.define('NextThought.view.courseware.Collection', {
 	hidden: true, //don't show this component unless the courseware controller says it can show.
 	courseList: true,
 	store: 'courses',
-	cls: 'courses'
+	cls: 'courses',
 
+
+	prepareData: function(data, index, record) {
+		var i = this.callParent(arguments);
+
+		return i;
+	}
 });

@@ -46,24 +46,22 @@ Ext.define('NextThought.view.library.Collection', {
 	},
 
 
-	collectData: function() {
-		var rows = this.rowSpan,
-			data = this.callParent(arguments);
+	prepareData: function(data, index, record) {
+		var i = this.callParent(arguments),
+			rows = this.rowSpan,
+			cols = 2;
 
-		Ext.each(data.items, function(i, x) {
-			var cols = 2;
+		i.inGrid = 'grid-item';
 
-			i.inGrid = 'grid-item';
+		if (rows > 1 && index === 0) {
+			i.featured = 'featured';
+			cols = 4;
+		}
 
-			if (rows > 1 && x === 0) {
-				i.featured = 'featured';
-				cols = 4;
-			}
+		i.rows = rows;
+		i.cols = cols;
 
-			i.rows = rows;
-			i.cols = cols;
-		});
-		return data;
+		return i;
 	},
 
 
