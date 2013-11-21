@@ -76,15 +76,20 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 	fillStore: function() {
 		this.allowTracking = true;
-		var s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
+		var store,
+			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
 		try {
+			store = this.getStore();
 			s = Ext.Array.map(s, function(o) {
 				var t = Library.getTitle(o.index);
 				if (t) {t.lastTracked = Ext.Date.parse(o.lastTracked, 'timestamp');}
 				return t;
 			});
 
-			this.getStore().loadRecords(Ext.Array.clean(s));
+			store.loadRecords(Ext.Array.clean(s));
+			if (store.getCount()) {
+				this.fireEvent('update-current', store.getAt(0));
+			}
 		}
 		catch (e) {
 			console.warn(e.message);

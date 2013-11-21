@@ -13,10 +13,10 @@ Ext.define('NextThought.view.store.Collection', {
 		{ cls: 'stratum collection-name', cn: [
 			'{name}', {cls: 'count', html: '{count}'}
 		]},
-		{ cls: 'grid', cn: { tag: 'tpl', 'for': 'items', cn: ['{menuitem}']} }
+		{ cls: 'grid', cn: { tag: 'tpl', 'for': 'items', cn: ['{entry}']} }
 	]),
 
-	menuItemTpl: Ext.DomHelper.markup({
+	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} purchasable item {Class:lowercase} {featured} row-{rows} col-{cols}', 'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn: [

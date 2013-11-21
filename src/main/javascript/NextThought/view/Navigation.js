@@ -85,10 +85,13 @@ Ext.define('NextThought.view.Navigation', {
 		}
 
 		this.contentSwitcher = Ext.widget({
-											  viewId: 'content',
-											  xtype: 'most-recent-content-switcher',
-											  ownerNode: this.el.down('.content')
-										  });
+			viewId: 'content',
+			xtype: 'most-recent-content-switcher',
+			ownerNode: this.el.down('.content')
+		});
+
+		this.mon(this.contentSwitcher, 'update-current', 'updateFromRestore');
+
 		this.items.push(this.contentSwitcher);
 		if (this.jumpEl) {
 			this.jumpEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
@@ -207,16 +210,11 @@ Ext.define('NextThought.view.Navigation', {
 
 
 	updateCurrent: function(pop, rec) {
-		var cls = 'is-book';
 
 		rec = this.track(rec, pop === true);
 
 		if (rec) {
-			this.imgEl.removeCls(cls);
-			this.imgEl[rec.get('isCourse') ? 'removeCls' : 'addCls'](cls);
-			this.imgEl.setStyle('background-image', 'url(' + rec.get('icon') + ')');
-			this.providerEl.update(rec.get('courseName') || rec.get('Creator'));
-			this.titleEl.update(rec.get('title'));
+			this.updateUI(rec);
 		}
 		else {
 			if (this.jumpEl) {
@@ -224,6 +222,27 @@ Ext.define('NextThought.view.Navigation', {
 			}
 		}
 		return this;
+	},
+
+
+	updateFromRestore: function(rec) {
+		this.updateUI(rec);
+		if (this.jumpEl) {
+			this.jumpEl.show();
+		}
+	},
+
+
+	updateUI: function(rec) {
+		var cls = 'is-book',
+			img = this.imgEl;
+
+		img.removeCls(cls);
+		img[rec.get('isCourse') ? 'removeCls' : 'addCls'](cls);
+		img.setStyle('background-image', 'url(' + rec.get('icon') + ')');
+
+		this.providerEl.update(rec.get('courseName') || rec.get('Creator'));
+		this.titleEl.update(rec.get('title'));
 	},
 
 

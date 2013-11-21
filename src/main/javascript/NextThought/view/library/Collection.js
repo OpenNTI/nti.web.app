@@ -2,10 +2,6 @@ Ext.define('NextThought.view.library.Collection', {
 	extend: 'NextThought.view.navigation.Collection',
 	alias: 'widget.library-collection',
 
-	mixins: {
-		track: 'NextThought.mixins.InstanceTracking'
-	},
-
 	store: 'library',
 
 	rowSpan: 1,
@@ -17,11 +13,11 @@ Ext.define('NextThought.view.library.Collection', {
 			]
 		}},
 		{ cls: 'grid', 'role': 'group', 'aria-label': '{name}', cn: {
-			tag: 'tpl', 'for': 'items', cn: ['{menuitem}']}
+			tag: 'tpl', 'for': 'items', cn: ['{entry}']}
 		}
 	]),
 
-	menuItemTpl: Ext.DomHelper.markup({
+	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} item {featured} row-{rows} col-{cols}', 'role': 'link', 'aria-label': '{title}', cn: [
 			{ cls: 'cover', style: {backgroundImage: 'url({icon})'}},
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
@@ -40,12 +36,11 @@ Ext.define('NextThought.view.library.Collection', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.trackThis();
 
 		if (this.store) {
-			this.bindStore(this.store);//force the selection model to construct now. & bind the store... don't wait
-			// until render.
+			// Force the selection model to construct now. & bind the store... don't wait until render.
 			// Fixes an initialization bug where the nav bar remains 'empty' after a refresh.
+			this.bindStore(this.store);
 		}
 	},
 
@@ -54,7 +49,7 @@ Ext.define('NextThought.view.library.Collection', {
 		var rows = this.rowSpan,
 			data = this.callParent(arguments);
 
-		Ext.each(data.items, function(i,x) {
+		Ext.each(data.items, function(i, x) {
 			var cols = 2;
 
 			i.inGrid = 'grid-item';
@@ -72,33 +67,7 @@ Ext.define('NextThought.view.library.Collection', {
 
 
 	handleSelect: function(selModel, record) {
-		if (!this.suppressSetLocation) {
-			this.fireEvent('set-last-location-or-root', record.get('NTIID'));
-		}
-		delete this.suppressSetLocation;
-		return this.callParent(arguments);
-	},
-
-
-	updateSelection: function(pageInfo, silent, suppressEvent) {
-		var me = this,
-			ntiid = pageInfo && (pageInfo.isModel ? pageInfo.getId() : pageInfo),
-			last = ContentUtils.getLineage(ntiid).last(),
-			r = me.store.findRecord('NTIID', last, 0, false, true, true);
-
-		if (!suppressEvent) {
-			Ext.each(this.getInstances(), function(cmp) {
-				if (cmp !== me) {
-					cmp.updateSelection(pageInfo, silent, true);
-				}
-			});
-		}
-		if (r) {
-			me.suppressSetLocation = Boolean(silent);
-			me.getSelectionModel().select(r);
-		}
-		else {
-			me.getSelectionModel().deselectAll();
-		}
+		this.fireEvent('set-last-location-or-root', record.get('NTIID'));
+		this.callParent(arguments);
 	}
 });

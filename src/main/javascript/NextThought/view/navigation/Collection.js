@@ -14,11 +14,11 @@ Ext.define('NextThought.view.navigation.Collection', {
 			{cls: 'count', html: '{count}'}
 		]},
 
-		{ tag: 'tpl', 'for': 'items', cn: ['{menuitem}']}
+		{ tag: 'tpl', 'for': 'items', cn: ['{entry}']}
 	]),
 
 
-	menuItemTpl: Ext.DomHelper.markup({
+	entryTpl: Ext.DomHelper.markup({
 		cls: 'item', 'data-qtip': '{title:htmlEncode}', cn: [
 			{ cls: 'cover', style: {backgroundImage: 'url({icon})'}},
 			{ cls: 'meta', cn: [
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 
 
 	onClassExtended: function(cls, data) {
-		data.menuItemTpl = data.menuItemTpl || cls.superclass.menuItemTpl || false;
+		data.entryTpl = data.entryTpl || cls.superclass.entryTpl || false;
 
 		var tpl = this.prototype.tpl;
 
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 		}
 
 		//merge in subclass's templates
-		data.tpl = data.tpl.replace('{menuitem}', data.menuItemTpl || '');
+		data.tpl = data.tpl.replace('{entry}', data.entryTpl || '');
 	},
 
 

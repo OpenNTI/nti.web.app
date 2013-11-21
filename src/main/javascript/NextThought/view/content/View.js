@@ -436,9 +436,7 @@ Ext.define('NextThought.view.content.View', {
 			}
 
 			this.courseForum.restoreState(forum, topic);
-
 			this.reader.setLocation(ntiid, null, true);
-			this.up('master-view').down('library-collection').updateSelection(ntiid, true);
 		}
 		catch (e) {
 			console.error(e.message, '\n\n', e.stack || e, '\n\n');

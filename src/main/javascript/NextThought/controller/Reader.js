@@ -261,8 +261,6 @@ Ext.define('NextThought.controller.Reader', {
 	updateControls: function(reader, doc, assesments, pageInfo) {
 		var fn = (pageInfo && pageInfo.hideControls) ? 'hideControls' : 'showControls',
 			pg = this.getContentPager(),
-		//todo: stop using query
-			lm = Ext.ComponentQuery.query('library-collection'),
 			pw = this.getContentPageWidgets(),
 			origin = pageInfo && pageInfo.contentOrig,
 			t = pageInfo && pageInfo.get('NTIID');
@@ -272,9 +270,6 @@ Ext.define('NextThought.controller.Reader', {
 
 		pw.clearBookmark();
 		pg.updateState(t);
-		Ext.each(lm, function(m) {
-			m.updateSelection(t, true, true);
-		});
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
