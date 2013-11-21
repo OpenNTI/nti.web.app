@@ -16,7 +16,7 @@ Ext.define('NextThought.model.PageInfo', {
 
 	isPageInfo: true,
 
-	getSubContainerURL: function(rel,id) {
+	getSubContainerURL: function(rel, id) {
 		var url = this.getLink(rel),
 			enCi = encodeURIComponent(this.get('NTIID')),
 			enId = encodeURIComponent(id);
@@ -47,8 +47,8 @@ Ext.define('NextThought.model.PageInfo', {
 
 		ntiid = '[ntiid="' + ntiid
 					.replace(/:/g, '\\3a ') //no colons
-					.replace(/,/g, '\\2c ') //no commas
-				 + '"]';
+					.replace(/,/g, '\\2c ') +//no commas
+				'"]';
 
 		if (!l || !toc) {return false;}
 
