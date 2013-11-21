@@ -25,14 +25,14 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 
 	onCourseChanged: function(pageInfo) {
-		var me = this, record,
+		var me = this, recordOrNTIID,
 			l = ContentUtils.getLocation(pageInfo),
-			toc, course, info, content, courseInfoNtiid;
+			toc, course;
 
 		function update(info) {
 			me.hasInfo = !!info;
 
-			if (info) {
+			if (info && !Ext.isString(info)) {
 				info.locationInfo = l;
 			}
 
@@ -51,13 +51,17 @@ Ext.define('NextThought.view.courseware.info.View', {
 			course = toc && toc.querySelector('course');
 		}
 
-		record = Ext.getStore('courseware.AvailableCourses').findRecord(
+		recordOrNTIID = Ext.getStore('courseware.AvailableCourses').findRecord(
 					'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true);
 
-		this.hasInfo = !!record;
+		this.hasInfo = !!recordOrNTIID;
 		this.infoOnly = !course || !course.querySelector('unit');
 
-		update(record);
+		if (!recordOrNTIID) {
+			recordOrNTIID = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
+		}
+
+		update(recordOrNTIID);
 	}
 
 

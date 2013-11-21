@@ -17,6 +17,13 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 		var toAdd = [];
 
 		if (!Ext.isObject(content)) {
+			if (Ext.isString(content)) {
+				$AppConfig.service.getPageInfo(
+						content,
+						this.loadPage,
+						this.loadPageFailed,
+						this);
+			}
 			return;
 		}
 
@@ -47,6 +54,62 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 
 
 		this.add(toAdd);
+	},
+
+
+	//<editor-fold desc="Fallback Code">
+	fillInPage: function(html) {
+		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i),
+			parent = this.up('course-info');
+
+		if (bodyTag.length > 1) {
+			parent.addCls('make-white');
+			this.add({
+				xtype: 'box',
+				cls: 'course-info-panel-legacy',
+				html: bodyTag[1],
+				listeners: {
+					destroy: function() {
+						parent.removeCls('make-white');
+					}
+				}
+			});
+		}
+		else {
+			console.error('info page has no body tag?? ', arguments);
+		}
+	},
+
+
+	loadPage: function(pageInfo) {
+		this.activeRequest = pageInfo.getId();
+		ContentProxy.request({
+			pageInfo: pageInfo,
+			ntiid: pageInfo.getId(),
+			jsonpUrl: pageInfo.getLink('jsonp_content'),
+			url: pageInfo.getLink('content'),
+			expectedContentType: 'text/html',
+			scope: this,
+			success: this.loadedPage,
+			failure: this.loadPageFailed
+		});
+	},
+
+
+	loadPageFailed: function(r) {
+		console.error('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
+	},
+
+
+	loadedPage: function(r, req) {
+		if (this.activeRequest !== req.pageInfo.getId()) {
+			return;
+		}
+
+		this.fillInPage(r.responseText);
+		delete this.activeRequest;
 	}
+	//</editor-fold>
+
 
 });
