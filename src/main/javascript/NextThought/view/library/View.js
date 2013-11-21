@@ -18,7 +18,6 @@ Ext.define('NextThought.view.library.View', {
 			xtype: 'library-branding-box'
 		},
 		{
-			hidden: true,
 			name: getString('My Courses'),
 			xtype: 'course-collection'
 		},
@@ -34,21 +33,9 @@ Ext.define('NextThought.view.library.View', {
 		this.callParent(arguments);
 		this.removeCls('make-white');
 		this.mon(Library, {
-			'show-courses': 'showCourses',
-			'hide-courses': 'hideCourses',
 			'show-books': 'showBooks',
 			'hide-books': 'hideBooks'
 		});
-	},
-
-
-	showCourses: function() {
-		this.down('[courseList]').show();
-	},
-
-
-	hideCourses: function() {
-		this.down('[courseList]').hide();
 	},
 
 

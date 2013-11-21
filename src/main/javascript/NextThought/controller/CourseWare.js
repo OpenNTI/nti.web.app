@@ -16,7 +16,8 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	refs: [
-		{ref: 'libraryView', selector: 'library-view-container' }
+		{ref: 'libraryView', selector: 'library-view-container' },
+		{ref: 'enrolledCoursesView', selector: 'library-view-container course-collection' }
 	],
 
 
@@ -63,5 +64,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onEnrolledCoursesLoaded: function(store) {
+		var cmp = this.getEnrolledCoursesView();
+		cmp[store.getCount() ? 'show' : 'hide']();
 	}
 });
