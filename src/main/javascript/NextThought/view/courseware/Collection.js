@@ -33,13 +33,11 @@ Ext.define('NextThought.view.courseware.Collection', {
 
 	prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			course = this.getCourseCatalogEntry(record),
-			libraryEntry;
+			course = this.getCourseCatalogEntry(record);
 
 		if (course) {
-			libraryEntry = Library.getTitle(course.get('ContentPackageNTIID'));
 			Ext.apply(i, {
-				icon: libraryEntry && libraryEntry.get('icon'),
+				icon: course.get('icon'),
 				title: course.get('Title'),
 				courseName: course.get('ProviderUniqueID')
 			});

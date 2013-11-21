@@ -15,9 +15,14 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'ProviderDepartmentTitle', type: 'string', persist: false },
 		{ name: 'ProviderUniqueID', type: 'string', persist: false },
 		{ name: 'Schedule', type: 'auto', persist: false },
-		{ name: 'StartDate', type: 'string', persist: false },
+		{ name: 'StartDate', type: 'date', dateFormat: 'c', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
-		{ name: 'Video', type: 'string', persist: false }
+		{ name: 'Video', type: 'string', persist: false },
+
+		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableIcon' }, //small
+		{ name: 'thumbnail', type: 'string', mapping: 'LegacyPurchasableThumbnail' }, //small/medium
+		{ name: 'poster', type: 'string' }, //medium (promo)
+		{ name: 'background', type: 'string' } //large
 	]
 });
 
