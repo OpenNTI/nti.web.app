@@ -1,3 +1,5 @@
+//TODO: this needs to become a controller.
+
 Ext.define('NextThought.Library', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
