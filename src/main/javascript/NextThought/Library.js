@@ -22,7 +22,6 @@ Ext.define('NextThought.Library', {
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
 		this.getStore();// pre-init store so we can reference it by id early on
-		this.getCourseStore();
 	},
 
 
@@ -43,17 +42,6 @@ Ext.define('NextThought.Library', {
 			});
 		}
 		return this.store;
-	},
-
-
-	getCourseStore: function() {
-		if (!this.courseStore) {
-			this.courseStore = new NextThought.store.Library({
-				id: 'courses',
-				proxy: 'memory'
-			});
-		}
-		return this.courseStore;
 	},
 
 
@@ -218,12 +206,6 @@ Ext.define('NextThought.Library', {
 			me.loaded = true;
 			me.fireEvent('loaded', me);
 
-			if (me.getCourseStore().getCount()) {
-				me.fireEvent('show-courses');
-			} else {
-				me.fireEvent('hide-courses');
-			}
-
 			if (me.store.getCount()) {
 				me.fireEvent('show-books');
 			} else {
@@ -234,7 +216,6 @@ Ext.define('NextThought.Library', {
 		var me = this;
 
 		me.purgeTocs();
-		me.getCourseStore().removeAll();
 
 		if (success) {
 			me.libraryLoaded(Ext.bind(go, me));
@@ -249,7 +230,6 @@ Ext.define('NextThought.Library', {
 	libraryLoaded: function(callback) {
 		var me = this,
 			store = this.getStore(),
-			courses = this.getCourseStore(),
 			count = this.getStore().getCount(),
 			toRemove = [];
 
@@ -277,7 +257,6 @@ Ext.define('NextThought.Library', {
 
 				if (d.getAttribute('isCourse') === 'true') {
 					o.set('isCourse', true);
-					courses.add(o);
 				}
 			}
 
