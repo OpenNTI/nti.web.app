@@ -41,9 +41,6 @@ Ext.define('NextThought.controller.Navigation', {
 					'navigate-to-course-discussion': 'goToCourseForum',
 					'show-topic-with-action': 'navigateToTopicAndCallback'
 				},
-				'library-collection': {
-					'select': 'trackContentChange'
-				},
 				'view-container': {
 					'activate': 'trackActiveNavTab'
 				}
@@ -81,11 +78,6 @@ Ext.define('NextThought.controller.Navigation', {
 
 	trackActiveNavTab: function(to) {
 		this.getNavigationBar().setActive(to);
-	},
-
-
-	trackContentChange: function(s, r) {
-		this.getNavigationBar().updateCurrent(s, r);
 	},
 
 
