@@ -24,11 +24,11 @@ Ext.define('NextThought.view.library.Collection', {
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
 			{ cls: 'meta', 'aria-hidden': 'true', cn: [
 				{ cls: 'courseName', html: '{courseName}' },  //course name/id
-				{ cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
-					'data-qtip': '{[values.title.length>50?Ext.String.htmlEncode(values.title):""]}' },
-				{ cls: 'author', html: '{author}',
+				{ tag: 'tpl', 'if': 'title', cn: { cls: 'title', html: '{title:ellipsis(50)}',//because multi-line text won't honor ellipsis css, manually do it.
+					'data-qtip': '{[values.title.length>50?Ext.String.htmlEncode(values.title):""]}' } },
+				{ tag: 'tpl', 'if': 'author', cn: { cls: 'author', html: '{author}',
 					//it will likely be clipped if its longer than 20 chars, so add a tip if it is
-					'data-qtip': '{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}' },
+					'data-qtip': '{[values.author.length>20?Ext.String.htmlEncode(values.author):""]}' } },
 				{ cls: 'description', html: '{description}' }
 			]}
 		]
