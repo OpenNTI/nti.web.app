@@ -3,7 +3,7 @@ Ext.define('NextThought.view.store.Collection', {
 	alias: 'widget.purchasable-collection',
 
 	overItemCls: 'over',
-
+	ui: 'library-collection',
 	cls: 'purchasables',
 	rowSpan: 3,
 

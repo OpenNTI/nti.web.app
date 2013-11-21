@@ -334,28 +334,27 @@ Ext.define('NextThought.controller.Store', function(){
 			preview.loadRecords((store.snapshot ? store.snapshot : store).getRange());
 			this.previewStore = preview;
 
-			store.filter(function(r) { return !!r.raw.Preview; });
-			preview.filter(function(r) { return !r.raw.Preview; });
+			store.filter(function(r) { return !r.raw.Preview; });
+			preview.filter(function(r) { return !!r.raw.Preview; });
 
-			if (preview.getCount() && view && !view.down('purchasable-collection')) {
-
+			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
 				view.add({
-					ui: 'library-collection',
+					store: store,
 					xtype: 'purchasable-collection',
-					store: preview,
+					id: 'store-collection',
 					name: getString('Available for Purchase')
 				});
 			}
 
-			if (store.getCount() && view && !view.down('purchasable-collection[preview]')) {
+			if (preview.getCount() && view && !Ext.getCmp('store-preview-collection')) {
 				view.add({
-					ui: 'library-collection',
+					store: preview,
 					xtype: 'purchasable-collection',
-					store: store,
-					name: getString('Coming Soon'),
-					preview: true
+					id: 'store-preview-collection',
+					name: getString('Coming Soon')
 				});
 			}
+
 
 			//TODO Ok they want to identify the sample content
 			//so do a nasty hack here that probably breaks
