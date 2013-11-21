@@ -44,10 +44,10 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 					{ cls: 'value', html: '{startDate:date("F j, Y")}' }
 				]},
 				{ cls: 'cell', cn: [
-					{ cls: 'cell cell1third', cn: [
+					{ tag: 'tpl', 'if': 'duration', cn: { cls: 'cell cell1third', cn: [
 						{ cls: 'label', html: 'Duration'},
-						{ cls: 'value', html: '{duration}' }
-					]},
+						{ cls: 'value', html: '{duration} {durationUnits}' }
+					]}},
 					{ cls: 'cell cell2thirds', cn: [
 						{ cls: 'label', html: 'Day &amp; Time'},
 						{ cls: 'value', cn: [
@@ -92,7 +92,8 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			title: i.get('Title'),
 			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: 'School / Department', //Department
-			duration: new Duration(i.get('Duration')).inWeeks() + ' Weeks',
+			durationUnits: 'Weeks',
+			duration: new Duration(i.get('Duration')).inWeeks(),
 			startDate: start,
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
