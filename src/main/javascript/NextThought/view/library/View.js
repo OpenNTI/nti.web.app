@@ -21,18 +21,7 @@ Ext.define('NextThought.view.library.View', {
 			xtype: 'library-collection',
 			name: getString('My Courses'),
 			store: 'courses',
-			hidden: true,
-			listeners: {
-				'itemadd': 'updateCount',
-				'itemremove': 'updateCount'
-			},
-			xhooks: {
-				updateCount: function() {
-					if (this.rendered && this.el.down('.count')) {
-						this.el.down('.count').update(this.store.getCount());
-					}
-				}
-			}
+			hidden: true
 		},
 		{
 			ui: 'library-collection',

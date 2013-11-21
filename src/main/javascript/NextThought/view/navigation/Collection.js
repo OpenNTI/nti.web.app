@@ -51,7 +51,18 @@ Ext.define('NextThought.view.navigation.Collection', {
 	initComponent: function() {
 		this.enableBubble('select');
 		this.callParent(arguments);
-		this.on('select', 'handleSelect', this);
+		this.on({
+			select: 'handleSelect',
+			itemadd: 'updateCount',
+			itemremove: 'updateCount'
+		});
+	},
+
+
+	updateCount: function() {
+		if (this.rendered && this.el.down('.count')) {
+			this.el.down('.count').update(this.store.getCount());
+		}
 	},
 
 
