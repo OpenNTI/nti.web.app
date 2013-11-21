@@ -293,6 +293,9 @@ Ext.define('NextThought.controller.Store', function(){
 			var purchasables = this.getPurchasableStore().load(),
 				library = Library.getStore();
 
+			//TODO: move all course work into the CourseWare controller.
+			Ext.getStore('courseware.EnrolledCourses').load();
+
 			library.on({
 				single: true,
 				load: function() {
