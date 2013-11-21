@@ -17,10 +17,11 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Credit Hours'},
 					{ cls: 'value', cn: [
-						{ cls: 'enroll-for-credit', cn: [
-							'{creditHours:plural("Credit")} Available. ',
-							{ tag: 'a', target: '_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
-						] },
+						{ tag: 'tpl', 'if': 'creditHours', cn: {
+							cls: 'enroll-for-credit', cn: [
+								'{creditHours:plural("Credit")} Available. ',
+								{ tag: 'a', target: '_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
+							] } },
 						{ cls: 'open', cn: [
 							'{inopen} ', { cls: 'red', tag: 'span', html: '{nocredit}' }
 						] }
@@ -95,7 +96,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			startDate: start,
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
-			creditHours: c.get('Hours'),
+			creditHours: c && c.get('Hours'),
 			enrollLabel: e.label,
 			enrollUrl: e.url,
 
