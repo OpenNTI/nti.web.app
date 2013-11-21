@@ -66,7 +66,12 @@ Ext.define('NextThought.view.library.Collection', {
 
 
 	handleSelect: function(selModel, record) {
-		this.fireEvent('set-last-location-or-root', record.get('NTIID'));
+		this.fireEvent('set-last-location-or-root', this.getContentNTIID(record));
 		this.callParent(arguments);
+	},
+
+
+	getContentNTIID: function(record) {
+		return record.get('NTIID');
 	}
 });
