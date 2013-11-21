@@ -33,7 +33,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 	onClassExtended: function(cls, data) {
 		data.entryTpl = data.entryTpl || cls.superclass.entryTpl || false;
 
-		var tpl = this.prototype.tpl;
+		var tpl = cls.superclass.tpl;
 
 		if (!data.tpl) {
 			data.tpl = tpl;
