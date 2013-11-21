@@ -45,14 +45,14 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				this.alreadySetMargin = true;
 				setReverseMargin.apply(this, [bMargin]);
 
-				
+
 				clearTimeout(data.finalCall);
-				if(data.finalTime){
-					delete data.finaltime;
-				}else{
-					data.finalCall = Ext.defer(function (){
+				if (data.finalTime) {
+					delete data.finalTime;
+				} else {
+					data.finalCall = Ext.defer(function() {
 						data.finalTime = true;
-						adjustOnScroll()
+						adjustOnScroll.call(this);
 					}, 500, this);
 				}
 			} else {
