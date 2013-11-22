@@ -85,72 +85,47 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	setBoard: function(ntiid) {
-		var me = this;
+	setBoard: function(board) {
+		var id, store, me = this;
 
-		function success(o) {
-			var id = o.getContentsStoreId(),
-				store = Ext.getStore(id) || o.buildContentsStore();
-
-			console.log('Board fetch success returned', o);
-
-			function finish() {
-				console.log('Pushing board for record', o, store);
-				me.store = store;
-				me.add({xtype: 'course-forum-board', record: o, store: store, loadMask: {
-					margin: '100px 0 0 0',
-					msg: 'Loading...'
-				}});
-				if (me.currentForum) {
-					console.log('Restoring state', me.currentForum, me.currentTopic);
-					me.restoreState(me.currentForum, me.currentTopic);
-				}
-			}
-
-			if (me.currentNtiid !== ntiid) {
-				console.warn('Dropping mismatched board', ntiid, me.currentNtiid);
-				return;
-			}
-
-			if ((o.get('Creator') || {}).isModel) {
-				finish();
-				return;
-			}
-
-			UserRepository.getUser(o.get('Creator'), function(u) {
-				o.set('Creator', u);
-				finish();
-			});
-		}
-
-		function failure() {
-			console.error('The discussion board failed to load');
-			me.hasBoard = false;
-			me.add({xtype: 'notfound'});
-
-			function setError() {
-				me.el.down('.resource-not-found .body .heading').update(getString('course_forum_empty_header', 'Sorry, this board doesn\'t exist...'));
-				me.el.down('.resource-not-found .body .subtext').update(getString('course_forum_empty_sub', 'This board is currently not available.'));
-			}
-
-			if (me.rendered) {
-				setError();
-			}else {
-				me.on('afterrender', setError, me);
+		function finish() {
+			console.log('Pushing board for record', board, store);
+			me.store = store;
+			me.add({xtype: 'course-forum-board', record: board, store: store, loadMask: {
+				margin: '100px 0 0 0',
+				msg: 'Loading...'
+			}});
+			if (me.currentForum) {
+				console.log('Restoring state', me.currentForum, me.currentTopic);
+				me.restoreState(me.currentForum, me.currentTopic);
 			}
 		}
 
-		if (ntiid && this.currentNtiid !== ntiid) {
-			console.log('Setting board to ', ntiid);
-			this.currentNtiid = ntiid;
-			$AppConfig.service.getObject(ntiid, success, failure);
-		}else if (!ntiid) {
-			console.log('Clearing board ', ntiid);
-			delete this.currentNtiid;
+		this.hasBoard = !!board;
+		if (!board) {
+			console.log('Clearing board ', board);
+			delete this.currentBoard;
 			this.removeAll(true);
+			return;
 		}
 
-		this.hasBoard = !!this.currentNtiid;
+		if (this.currentBoard === board) {
+			return;
+		}
+
+		this.currentBoard = board;
+		id = board.getContentsStoreId();
+		store = Ext.getStore(id) || board.buildContentsStore();
+
+		if ((board.get('Creator') || {}).isModel) {
+			finish();
+			return;
+		}
+
+		UserRepository.getUser(board.get('Creator'), function(u) {
+			board.set('Creator', u);
+			finish();
+		});
 	},
 
 
@@ -206,6 +181,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		this.navigateToForumObject.apply(this, arguments);
 	},
 
+
 	applyState: function(forum, topic, comment, cb) {
 		this.stateApplied = true;
 		this.state = {
@@ -252,6 +228,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 			console.error('Failed to load forum:', forum);
 		});
 	},
+
 
 	setTopic: function(topic, comment) {
 		var me = this, boardId = this.currentNtiid;
@@ -309,21 +286,29 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		});
 	},
 
+
 	onCourseChanged: function(pageInfo) {
-		var l = ContentUtils.getLocation(pageInfo),
-			toc, course, s = {content: {current_forum: null, current_topic: null}};
+		var l = pageInfo.getLocationInfo(),
+			s = {content: {current_forum: null, current_topic: null}},
+			store = Ext.getStore('courseware.EnrolledCourses'),
+			rec = Ext.getStore('courseware.AvailableCourses').findRecord(
+								'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true),
 
+			course = store.findBy(function(r) {
+				var instance = r && r.get('CourseInstance'),
+					links = instance && instance.get('Links'),
+					href = links && links.getRelHref('CourseCatalogEntry');
+				return href === rec.get('href');
+			});
 
-		if (l && l !== ContentUtils.NO_LOCATION) {
-			toc = l.toc.querySelector('toc');
-			course = toc && toc.querySelector('course');
-		}
+		course = (course >= 0) ? store.getAt(course).get('CourseInstance') : null;
 
-		history.pushState(s);
+		history.pushState(s); //history is accumulating at this point in the "transaction"
 
-		this.setBoard(pageInfo.isPartOfCourse() && course && course.getAttribute('discussionBoard'));
+		this.setBoard(pageInfo.isPartOfCourse() && course && course.get('Discussions'));
 	}
 });
+
 
 Ext.define('NextThought.view.courseware.forum.Board', {
 	extend: 'NextThought.view.forums.Board',
@@ -357,6 +342,8 @@ Ext.define('NextThought.view.courseware.forum.Board', {
 		}
 	}
 });
+
+
 
 Ext.define('NextThought.view.courseware.forum.ForumList', {
 	extend: 'NextThought.view.forums.Forum',
