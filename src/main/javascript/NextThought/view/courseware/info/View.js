@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 	onCourseChanged: function(pageInfo) {
 		var me = this, recordOrNTIID,
-			l = ContentUtils.getLocation(pageInfo),
+			l = pageInfo.getLocationInfo(),
 			toc, course;
 
 		function update(info) {
@@ -46,18 +46,17 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 		delete me.infoOnly;
 
-		if (l && l !== ContentUtils.NO_LOCATION) {
-			toc = l.toc && l.toc.querySelector('toc');
-			course = toc && toc.querySelector('course');
-		}
-
 		recordOrNTIID = Ext.getStore('courseware.AvailableCourses').findRecord(
 					'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true);
 
 		this.hasInfo = !!recordOrNTIID;
-		this.infoOnly = !course || !course.querySelector('unit');
+		this.infoOnly = recordOrNTIID && recordOrNTIID.get('Preview') === true;
 
 		if (!recordOrNTIID) {
+			if (l && l !== ContentUtils.NO_LOCATION) {
+				toc = l.toc && l.toc.querySelector('toc');
+				course = toc && toc.querySelector('course');
+			}
 			recordOrNTIID = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
 		}
 
