@@ -9,10 +9,10 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 
 	doClicked: function(fragIdx) {
-		var me = this;
+		var me = this, component;
 
 		function highlight() {
-			me.fireEvent('highlight-topic-hit', me, fragIdx, cmp);
+			me.fireEvent('highlight-topic-hit', me, fragIdx, component);
 		}
 
 		if (Ext.isEmpty(this.record)) {
@@ -23,10 +23,15 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID') : undefined, function(success, cmp) {
 			if (success) {
+				component = cmp;
 				if (cmp.ready) {
 					highlight();
 				}else {
-					me.mon(cmp, 'commentReady', highlight, me);
+					me.mon(cmp, {
+						'commentReady': highlight,
+						'highlight-ready': highlight,
+						scope: me
+					});
 				}
 			}
 		});

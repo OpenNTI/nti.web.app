@@ -326,10 +326,12 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	onReady: function() {
 		console.debug('ready', arguments);
+		
 		if (this.scrollToComment) {
 			this.scrollCommentIntoView(this.scrollToComment);
-			this.fireEvent('commentReady');
 		}
+
+		this.fireEvent('highlight-ready');
 	},
 
 
