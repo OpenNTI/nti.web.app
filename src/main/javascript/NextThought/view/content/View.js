@@ -113,6 +113,7 @@ Ext.define('NextThought.view.content.View', {
 		});
 	},
 
+
 	updateActiveState: function(type, ntiid) {
 		var state = {};
 		state['current_' + type] = ntiid;
@@ -230,6 +231,27 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
+	// Add a way to explicitly select a card node rather
+	// than going through the originalNTIIDRequested Hack
+	openCardNode: function(ntiid) {
+		var card, i;
+
+		Ext.each(this.query('content-card'), function(crd) {
+			i = crd.data && crd.data.ntiid;
+			if (i === ntiid) {
+				card = crd;
+			}
+			return !card;
+		});
+
+		if (card && card.navigateToTarget) {
+			card.navigateToTarget();
+		}
+
+	},
+
+
+
 	onNavigationAborted: function(resp, ntiid, finish) {
 		function fin(cid, locationInfo) {
 			if (!cid) {
@@ -250,7 +272,7 @@ Ext.define('NextThought.view.content.View', {
 							me.reader.setLocation(pi, function(s) {
 								function fn() {
 									if (!courseNav) { return; }
-									courseNav.fireEvent('select-card-node', locationInfo.NTIID);
+									Ext.defer(me.openCardNode, 1, me, [locationInfo.NTIID]);
 									Ext.callback(finish);
 								}
 								//
