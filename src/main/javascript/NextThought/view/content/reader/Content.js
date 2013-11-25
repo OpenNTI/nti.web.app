@@ -70,7 +70,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 	},
 
 
-	insertRelatedLinks: function(body,doc) {
+	insertRelatedLinks: function(body, doc) {
 		var position = body.query('#NTIContent .chapter.title')[0],
 			tpl = this.relatedTemplate, last = null,
 			related = this.reader.getRelated(), c = 0,
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 			this.relatedTemplate = tpl;
 		}
 
-		Ext.Object.each(related, function(key,value) {
+		Ext.Object.each(related, function(key, value) {
 			c++;
 			last = tpl.append(container, [key, value.label, c]);
 			last.relatedInfo = value;
@@ -220,7 +220,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 
 	parseHTML: function(request) {
-		function toObj(a,k,v) {
+		function toObj(a, k, v) {
 			var i = a.length - 1, o = {};
 			for (i; i >= 0; i--) { o[k.exec(a[i])[2]] = Ext.htmlDecode(v.exec(a[i])[1]); }
 			return o;
@@ -243,7 +243,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 				}
 			}
 			//remove resources not used anymore...
-			Ext.Object.each(rc, function(k,v,o) {
+			Ext.Object.each(rc, function(k, v, o) {
 				if (!c[k]) {
 					Ext.fly(v).remove();
 					delete o[k];
