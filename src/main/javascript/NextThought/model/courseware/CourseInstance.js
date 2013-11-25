@@ -25,5 +25,22 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		}
 
 		return course;
+	},
+
+
+	getNavigationStore: function() {
+		var temp;
+		if (!this.store) {
+			//This function is wrapping the temporary stop-gap...
+			temp = this.__getLocationInfo();
+			this.store = new NextThought.store.courseware.Navigation({data: temp.toc});
+		}
+
+		return this.store;
+	},
+
+
+	__getLocationInfo: function() {
+		return ContentUtils.getLocation(this.getCourseCatalogEntry().get('ContentPackageNTIID'));
 	}
 });

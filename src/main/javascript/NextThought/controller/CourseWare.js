@@ -11,18 +11,31 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	stores: [
 		'courseware.AvailableCourses',
-		'courseware.EnrolledCourses'
+		'courseware.EnrolledCourses',
+		'courseware.Navigation'
 	],
 
 
 	refs: [
-		{ref: 'libraryView', selector: 'library-view-container' },
-		{ref: 'enrolledCoursesView', selector: 'library-view-container course-collection' }
+		{ ref: 'mainNav', selector: 'main-navigation'},
+		{ ref: 'contentView', selector: 'content-view-container' },
+		{ ref: 'libraryView', selector: 'library-view-container' },
+		{ ref: 'enrolledCoursesView', selector: 'library-view-container course-collection' }
 	],
 
 
 	init: function() {
 		this.mon(this.application, 'session-ready', 'onSessionReady');
+
+		var control = {
+			component: {
+				'*': {
+					 'course-selected': 'onCourseSelected'
+				}
+			}
+		};
+
+		this.listen(control, this);
 	},
 
 
@@ -66,5 +79,23 @@ Ext.define('NextThought.controller.CourseWare', {
 	onEnrolledCoursesLoaded: function(store) {
 		var cmp = this.getEnrolledCoursesView();
 		cmp[store.getCount() ? 'show' : 'hide']();
+	},
+
+
+	onCourseSelected: function(instance, catalogEntry) {
+
+		if (this.fireEvent('show-view', 'content', true) === false) {
+			return false;
+		}
+
+		history.beginTransaction('navigation-transaction');
+
+		try {
+			this.getMainNav().updateCurrent(false, catalogEntry);
+			this.getContentView().onCourseSelected(instance, catalogEntry);
+			return true;
+		} finally {
+			history.endTransaction('navigation-transaction');
+		}
 	}
 });

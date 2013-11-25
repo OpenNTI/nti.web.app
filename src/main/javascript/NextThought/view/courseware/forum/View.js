@@ -291,25 +291,12 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	onCourseChanged: function(pageInfo) {
-		var l = pageInfo.getLocationInfo(),
-			s = {content: {current_forum: null, current_topic: null}},
-			store = Ext.getStore('courseware.EnrolledCourses'),
-			rec = Ext.getStore('courseware.AvailableCourses').findRecord(
-								'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true),
-
-			course = store.findBy(function(r) {
-				var instance = r && r.get('CourseInstance'),
-					links = instance && instance.get('Links'),
-					href = links && links.getRelHref('CourseCatalogEntry');
-				return href === rec.get('href');
-			});
-
-		course = (course >= 0) ? store.getAt(course).get('CourseInstance') : null;
+	courseChanged: function(courseInstance) {
+		var s = {content: {current_forum: null, current_topic: null}};
 
 		history.pushState(s); //history is accumulating at this point in the "transaction"
 
-		this.setBoard(pageInfo.isPartOfCourse() && course && course.get('Discussions'));
+		this.setBoard(courseInstance && courseInstance.get('Discussions'));
 	}
 });
 

@@ -61,7 +61,7 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		},
 		select: function(s, r) {
 			if (this.fromClick || this.fromKey) {
-				this.fireEvent('set-location', r.getId());
+				//this.fireEvent('set-location', r.getId());
 			}
 			delete this.fromClick;
 			delete this.fromKey;
@@ -105,9 +105,9 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
-	maybeChangeStoreOrSelection: function(pageInfo, store) {
+	maybeChangeStoreOrSelection: function(ntiid, store) {
 		var r, sel, C = ContentUtils,
-			lineage = C.getLineage(pageInfo.getId()),
+			lineage = C.getLineage(ntiid),
 			root = lineage.last();
 
 		if (this.store !== store) {

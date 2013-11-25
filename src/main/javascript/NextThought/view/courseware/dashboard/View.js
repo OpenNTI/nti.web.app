@@ -16,13 +16,13 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	onCourseChanged: function(pageInfo) {
-		if (!pageInfo.isPartOfCourse()) {
+	courseChanged: function(courseInstance, catalogEntry) {
+		if (!courseInstance) {
 			this.tileContainer.removeAll(true);
 			return;
 		}
 
-		var l = ContentUtils.getLocation(pageInfo),
+		var l = courseInstance.__getLocationInfo(),
 			me = this,
 			toc, course,
 			courseNavStore,
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
-			courseNavStore = new NextThought.store.courseware.Navigation({data: toc});
+			courseNavStore = courseInstance.getNavigationStore();
 
 			if (me.el) {
 				me.el.mask('Loading...');

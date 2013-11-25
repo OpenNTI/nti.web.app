@@ -24,17 +24,11 @@ Ext.define('NextThought.view.courseware.info.View', {
 	},
 
 
-	onCourseChanged: function(pageInfo) {
-		var me = this, recordOrNTIID,
-			l = pageInfo.getLocationInfo(),
-			toc, course;
+	courseChanged: function(courseInstance, catalogEntry) {
+		var me = this;
 
 		function update(info) {
 			me.hasInfo = !!info;
-
-			if (info && !Ext.isString(info)) {
-				info.locationInfo = l;
-			}
 
 			me[me.infoOnly?'addCls':'removeCls']('info-only');
 			me.navigation.margin = (me.infoOnly? '105':'0')+' 5 5 0';
@@ -46,21 +40,10 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 		delete me.infoOnly;
 
-		recordOrNTIID = Ext.getStore('courseware.AvailableCourses').findRecord(
-					'ContentPackageNTIID', l.ContentNTIID, 0, false, false, true);
+		this.hasInfo = !!catalogEntry;
+		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
-		this.hasInfo = !!recordOrNTIID;
-		this.infoOnly = recordOrNTIID && recordOrNTIID.get('Preview') === true;
-
-		if (!recordOrNTIID) {
-			if (l && l !== ContentUtils.NO_LOCATION) {
-				toc = l.toc && l.toc.querySelector('toc');
-				course = toc && toc.querySelector('course');
-			}
-			recordOrNTIID = pageInfo.isPartOfCourse() && course && course.getAttribute('courseInfo');
-		}
-
-		update(recordOrNTIID);
+		update(catalogEntry);
 	}
 
 

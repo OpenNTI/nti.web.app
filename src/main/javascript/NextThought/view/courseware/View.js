@@ -12,34 +12,26 @@ Ext.define('NextThought.view.courseware.View', {
 	body: {xtype: 'course-overview', delegate: ['course course-outline']},
 
 
-	onNavigateComplete: function(pageInfo) {
-		if (!pageInfo || !pageInfo.isPartOfCourse()) {
-			this.navigation.clear();
-			this.body.clear();
+	clear: function() {
+		this.navigation.clear();
+		this.body.clear();
+	},
+
+
+	courseChanged: function(courseInstance) {
+		if (this.currentCourse === courseInstance) {
 			return;
 		}
 
-		var l = pageInfo && ContentUtils.getLocation(pageInfo),
-			t = l && l.title,
-			course = t && t.getId();
-
-		if (this.currentCourse !== course) {
-			try {
-				this.fireEvent('courseChanged', pageInfo, course);
-			}
-			catch (e) {
-				console.error(e.stack || e.message || e);
-			}
-			this.currentCourse = course;
-			this.store = course ? new NextThought.store.courseware.Navigation({data: l.toc}) : undefined;
+		this.currentCourse = courseInstance;
+		if (!courseInstance) {
+			delete this.currentCourse;
+			this.clear();
+			return;
 		}
 
-		this.navigation.maybeChangeStoreOrSelection(pageInfo, this.store);
-	},
+		this.store = courseInstance.getNavigationStore();
 
-	makeListenForCourseChange: function(monitors) {
-		Ext.each(monitors, function(m) {
-			m.mon(this, 'courseChanged', 'onCourseChanged');
-		}, this);
+		this.navigation.maybeChangeStoreOrSelection(courseInstance.getId(), this.store);
 	}
 });

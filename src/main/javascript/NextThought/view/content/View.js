@@ -74,20 +74,12 @@ Ext.define('NextThought.view.content.View', {
 		this.callParent(arguments);
 		this.reader = this.down('reader-content');
 		this.courseBook = this.down('#course-book');
-		this.courseDashboard = this.down('course-dashboard');
+		this.courseDash = this.down('course-dashboard');
 		this.courseForum = this.down('course-forum');
 		this.courseNav = this.down('course');
 		this.courseInfo = this.down('course-info');
 
 		this.removeCls('make-white');
-
-		this.courseNav.makeListenForCourseChange([
-			this.courseDashboard,
-			this.courseForum,
-			this.courseInfo
-		]);
-
-		this.courseNav.mon(this.reader, {'navigateComplete': 'onNavigateComplete'});
 
 		this.mon(this.reader, {
 			'navigateComplete': 'onNavigateComplete',
@@ -160,6 +152,22 @@ Ext.define('NextThought.view.content.View', {
 
 	pushState: function(s) {
 		history.pushState({active: 'content', content: s}, this.title, this.getFragment());
+	},
+
+
+	/**
+	 * @param {Boolean|String[]} enable
+	 */
+	enableTabs: function(enable) {
+		this.tabs = enable;
+		this.updateTabs();
+	},
+
+
+	updateTabs: function() {
+		if (this.isVisible(true)) {
+			this.fireEvent('update-tabs', this);
+		}
 	},
 
 
@@ -249,7 +257,6 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 	},
-
 
 
 	onNavigationAborted: function(resp, ntiid, finish) {
@@ -370,50 +377,69 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	onNavigateComplete: function(pageInfo, cb, userInitiatedNav) {
+	onNavigateComplete: function(pageInfo) {
 		if (!pageInfo || !pageInfo.isModel) {return;}
-		var l = ContentUtils.getLocation(pageInfo), toc;
 
-		if (l && l !== ContentUtils.NO_LOCATION) {
-			toc = l.toc.querySelector('toc');
-		}
+		this.activateView(this.courseBook);
 
-		this.tabs = pageInfo.isPartOfCourse();
-		if (this.tabs && !Ext.query('course unit', l.toc).length) {
-			this.tabs = [];
-		}
-
-		if (this.isVisible(true)) {
-			this.fireEvent('update-tabs', this);
-		}
-
-		if (userInitiatedNav || !this.tabs || Ext.isArray(this.tabs)) {
-			try {
-				this.getLayout().setActiveItem(
-						Ext.isArray(this.tabs) ? this.courseInfo : this.courseBook);
-
-			}catch (e) {
-				console.warn(e.stack || e.message);
-			}
-		}
-
-		this.courseBook.getLayout().setActiveItem(pageInfo.isPartOfCourseNav() ? 'course-nav' : 'main-reader-view');
-
-
+		this.courseBook.getLayout().setActiveItem('main-reader-view');
 		this.down('content-toolbar').show();
 
-
-		this.locationTitle = ContentUtils.findTitle(pageInfo.getId(), 'NextThought');
+		this.locationTitle = pageInfo.getTitle('NextThought');
 		this.setTitle(this.getTitlePrefix() + this.locationTitle);
+	},
 
 
+	onCourseSelected: function(instance, catalogEntry) {
+		//Temporary stop gap
+		var info = instance.__getLocationInfo();
+
+		this.reader.clearLocation();
+
+		this.setBackground(getURL(info.toc.querySelector('toc').getAttribute('background'), info.root));
+		this.enableTabs(catalogEntry.get('Preview') ? [] : true);
 
 
-		if (toc) {
-			this.backgroundUrl = getURL(toc.getAttribute('background'), l.root);
-			if (this.isActive()) {
-				this.updateBackground();
+		Ext.each([
+			this.courseNav,
+			this.courseDash,
+			this.courseForum,
+			this.courseInfo
+		], function(e) {
+			if (e.courseChanged) {
+				e.courseChanged(instance, catalogEntry);
 			}
+		});
+
+		this.updateTabs();
+		this.showCourseNavigation();
+
+		history.pushState({content: {
+			location: '',
+			course: instance.getId()
+		}}, catalogEntry.get('Title'));
+	},
+
+
+	showCourseNavigation: function() {
+		this.courseBook.getLayout().setActiveItem('course-nav');
+		this.activateView(this.courseBook);
+	},
+
+
+	activateView: function(view) {
+		try {
+			this.getLayout().setActiveItem(view);
+		} catch (e) {
+			console.warn(e.stack || e.message);
+		}
+	},
+
+
+	setBackground: function(src) {
+		this.backgroundUrl = src;
+		if (this.isActive()) {
+			this.updateBackground();
 		}
 	},
 
