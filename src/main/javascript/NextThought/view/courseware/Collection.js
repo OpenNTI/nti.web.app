@@ -27,6 +27,6 @@ Ext.define('NextThought.view.courseware.Collection', {
 	handleSelect: function(selModel, record) {
 		selModel.deselect(record);
 		var instance = record && record.get('CourseInstance');
-		this.fireEvent('course-selected', instance, record, instance.getCourseCatalogEntry());
+		this.fireEvent('course-selected', instance, instance.getCourseCatalogEntry());
 	}
 });
