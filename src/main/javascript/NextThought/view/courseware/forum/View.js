@@ -23,10 +23,12 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		'beforedeactivate': 'handleDeactivate'
 	},
 
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.initCustomScrollOn('content');
 	},
+
 
 	handleDeactivate: function() {
 		var c = this.peek(),
@@ -41,6 +43,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		}
 	},
 
+
 	onActivate: function() {
 		var c = this.peek();
 		if (c && c.lockHeader && c.isVisible()) {
@@ -51,6 +54,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 			this.store.load();
 		}
 	},
+
 
 	typePrefix: 'course-forum',
 
