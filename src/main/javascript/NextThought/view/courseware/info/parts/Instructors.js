@@ -29,14 +29,13 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 	buildStore: function() {
 		var ifo = this.getInfo(),
 			i = ((ifo && ifo.get('Instructors')) || []).slice(),
-			locInfo = ifo && ifo.locationInfo,
 			store;
 
 		Ext.each(i, function(o, i, a) {
 			try {
 				o = a[i] = o.data || o;
 				if (!/^data:image/i.test(o.defaultphoto)) {
-					o.defaultphoto = getURL(locInfo.root + o.defaultphoto);
+					o.defaultphoto = getURL(o.defaultphoto);
 				}
 			} catch (e) {
 				console.error(e.stack || e.message || e);
