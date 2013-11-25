@@ -25,6 +25,17 @@ Ext.define('NextThought.model.PageInfo', {
 	},
 
 
+	getTitle: function(defaultTitle) {
+		return ContentUtils.findTitle(this.getId(), defaultTitle);
+	},
+
+
+	getLocationInfo: function() {
+		this.locationInfo = this.locationInfo || ContentUtils.getLocation(this);
+		return this.locationInfo;
+	},
+
+
 	isPartOfCourse: function() {
 		var maybe = this.isCourse;
 
@@ -58,11 +69,6 @@ Ext.define('NextThought.model.PageInfo', {
 				toc.querySelector('lesson' + ntiid.replace(/^\[/, '[topic-')));
 	},
 
-	getLocationInfo: function() {
-		this.locationInfo = this.locationInfo || ContentUtils.getLocation(this);
-		return this.locationInfo;
-	},
-
 
 	getPublicScope: function() {
 		var l = this.getLocationInfo(),
@@ -71,6 +77,7 @@ Ext.define('NextThought.model.PageInfo', {
 		// FIXME: waiting on content for the right field name. Needs testing too.
 		return (title && title.getScope('public')) || [];
 	},
+
 
 	getRestrictedScope: function() {
 		var l = this.getLocationInfo(),
