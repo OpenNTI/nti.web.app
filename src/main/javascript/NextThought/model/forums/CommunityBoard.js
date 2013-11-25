@@ -16,9 +16,10 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 	findCourse: function() {
 		var me = this;
 
-		Library.courseStore.each(function(title) {
-			if (me.getId() === title.getBoard()) {
-				me.course = title;
+		Ext.getStore('courseware.EnrolledCourses').each(function(course) {
+			var instance = course.get('CourseInstance');
+			if (me.getId() === instance.get('Discussions').getId()) {
+				me.course = instance;
 			}
 		});
 
