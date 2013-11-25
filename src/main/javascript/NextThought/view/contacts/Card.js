@@ -86,9 +86,21 @@ Ext.define('NextThought.view.contacts.Card', {
 
 		this.mon(this.el, 'click', this.clicked, this);
 
+        if(Ext.is.iOS){
+            this.mon(this.el, 'mouseup', this.mouseup, this);
+        }
+
 		this.updatePresenceState();
 	},
 
+
+    mouseup: function(e){
+        var nib = e.getTarget('.nib'),
+            input = Ext.get('my-contacts').down('input');
+        if(nib && window.innerHeight < 600){
+            input.blur();
+        }
+    },
 
 	clicked: function(e) {
 		var nib = e.getTarget('.nib');

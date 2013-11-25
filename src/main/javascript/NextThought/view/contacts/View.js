@@ -120,6 +120,55 @@ Ext.define('NextThought.view.contacts.View', {
 		//			'deactivate':'onDeactivated',
 		//			'activate': 'onActivated'
 		//		});
+
+        if(Ext.is.iOS){
+            this.on('afterrender', function(){
+                var outline = this.el.down('.contact:nth-child(1)'),
+                    list = this.el.down('.contact:nth-child(2)'),
+                    input = this.el.down('input'),
+                    me = this;
+
+                Ext.defer(function(){
+                    me.outlineY = outline.getY();
+                    me.outlineHeight = outline.getHeight();
+                },100,this);
+
+                //For keyboard, reduce height and adjust position of elements to fit within smaller screen
+                input.on('focus', function(){
+                    Ext.defer(function(){
+                        if(window.innerHeight < 600){
+                            outline.setHeight(window.innerHeight - 15);
+                            outline.setY(window.outerHeight - window.innerHeight);
+                            list.setY(window.outerHeight - window.innerHeight);
+                            list.setHeight(window.innerHeight - 15);
+                            me.keyboardUpScrollY = window.scrollY;
+                        }
+                    },250, this);
+                });
+
+                //Undo resizing and repositioning when keyboard dismissed
+                input.on('blur', function(){
+                    if(this.outlineY){
+                        outline.setY(me.outlineY);
+                        outline.setHeight(me.outlineHeight);
+                        list.setY(me.outlineY);
+                        list.setHeight(me.outlineHeight);
+                        me.keyboardUpScrollY = false;
+                    }
+                }, this);
+
+                //Keep from permanently scrolling content off viewable area
+                window.onscroll = function(){
+                    if(!me.keyboardUpScrollY){
+                        return;
+                    }
+                    if(window.scrollY != me.keyboardUpScrollY){
+                        window.scrollTo(0,me.keyboardUpScrollY);
+                    }
+                };
+
+            });
+        }
 	},
 
 
