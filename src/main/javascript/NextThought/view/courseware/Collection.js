@@ -8,32 +8,9 @@ Ext.define('NextThought.view.courseware.Collection', {
 	cls: 'courses',
 
 
-	getAvailableCourses: function() {
-		if (!this.availableStore) {
-			this.availableStore = Ext.getStore('courseware.AvailableCourses');
-		}
-		return this.availableStore;
-	},
-
-
-	getCourseCatalogEntry: function(record) {
-		var instance = record && record.get('CourseInstance'),
-			links = instance && instance.get('Links'),
-			href = links && links.getRelHref('CourseCatalogEntry'),
-			all = href && this.getAvailableCourses(),
-			course;
-
-		if (href && all) {
-			course = all.findRecord('href', href, 0, false, true, true);
-		}
-
-		return course;
-	},
-
-
 	prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			course = this.getCourseCatalogEntry(record);
+			course = record.getCourseCatalogEntry();
 
 		if (course) {
 			Ext.apply(i, {
@@ -47,13 +24,9 @@ Ext.define('NextThought.view.courseware.Collection', {
 	},
 
 
-	getContentNTIID: function(record) {
-		var course = this.getCourseCatalogEntry(record);
-		if (!course) {
-			alert('An error occured.');
-			Ext.Error.raise('No Course related!?!');
-		}
-
-		return course.get('ContentPackageNTIID');
+	handleSelect: function(selModel, record) {
+		selModel.deselect(record);
+		var instance = record && record.get('CourseInstance');
+		this.fireEvent('course-selected', instance, record, instance.getCourseCatalogEntry());
 	}
 });

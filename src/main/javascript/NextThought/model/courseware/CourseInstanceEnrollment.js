@@ -4,5 +4,10 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	idProperty: 'href',
 	fields: [
 		{ name: 'CourseInstance', type: 'singleItem', persist: false }
-	]
+	],
+
+
+	getCourseCatalogEntry: function() {
+		return this.get('CourseInstance').getCourseCatalogEntry();
+	}
 });
