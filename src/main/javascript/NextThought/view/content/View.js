@@ -357,14 +357,8 @@ Ext.define('NextThought.view.content.View', {
 
 	onLocationCleared: function() {
 		delete this.reader.ntiidOnFrameReady;
-		delete this.tabs;
-		delete this.backgroundUrl;
 		this.setActiveTab('course-book');
 		this.courseBook.getLayout().setActiveItem('main-reader-view');
-		if (this.isVisible(true)) {
-			this.fireEvent('update-tabs', this);
-			this.updateBackground();
-		}
 	},
 
 
