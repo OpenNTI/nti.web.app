@@ -761,6 +761,13 @@
 			}
 		}
 	}
+
+	[itemprop~="nti-data-resizeable"]{
+		img{
+			max-width: 100%;
+			height: auto !important;
+		}
+	}
 }
 
 div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
