@@ -47,13 +47,13 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	getNavigationStore: function() {
 		var temp;
-		if (!this.store) {
+		if (!this.navStore) {
 			//This function is wrapping the temporary stop-gap...
 			temp = this.__getLocationInfo();
-			this.store = new NextThought.store.courseware.Navigation({data: temp.toc});
+			this.navStore = new NextThought.store.courseware.Navigation({data: temp.toc});
 		}
 
-		return this.store;
+		return this.navStore;
 	},
 
 
