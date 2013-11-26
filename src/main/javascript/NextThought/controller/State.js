@@ -430,11 +430,11 @@ Ext.define('NextThought.controller.State', {
 			//We pass it the state for that particular tab
 			generated = this.generateFragmentMap[root](state[root] || {});
 			if (generated) {
-				fragment = [fragment, generated].join('/');
+				return [fragment, generated].join('/');
 			}
 		}
 
-		return fragment;
+		return null;
 	},
 
 
