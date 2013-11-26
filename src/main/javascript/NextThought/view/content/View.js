@@ -434,14 +434,11 @@ Ext.define('NextThought.view.content.View', {
 		this._setCourse(instance);
 
 		var e = instance.getCourseCatalogEntry();
-
-		history.pushState({
-			active: 'content',
-			content: {
-				location: e.get('ContentPackageNTIID'),
-				course: instance.getId()
-			}
-		}, e.get('Title'));
+		this.setTitle(e.get('Title'));
+		this.pushState({
+			location: e.get('ContentPackageNTIID'),
+			course: instance.getId()
+		});
 	},
 
 
