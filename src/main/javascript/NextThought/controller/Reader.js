@@ -153,10 +153,19 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	setLocation: function(ntiid) {
-		var r = this.getContentReader();
+		var r = this.getContentReader(),
+			pi = Ext.isString(ntiid) ?
+				 this.getPageInfoModel().create({ ID: ntiid, NTIID: ntiid }) : ntiid;
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
+		}
+
+		if (pi && pi.isPartOfCourseNav()) {
+			r.clearLocation();
+			this.getContentView().showCourseNavigation();
+			//update state... resolve which legacy course this is and set it.
+			return true;
 		}
 
 		if (!r.ntiidOnFrameReady) {
@@ -165,6 +174,7 @@ Ext.define('NextThought.controller.Reader', {
 		else {
 			r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
 		}
+
 
 		return true;
 	},
