@@ -383,7 +383,13 @@ Ext.define('NextThought.view.content.View', {
 
 		this.down('content-toolbar').show();
 
-		this.showContentReader();
+		//TEMP:
+		if (pageInfo.isPartOfCourseNav()) {
+			this.showCourseNavigation();
+		}
+		else {
+			this.showContentReader();
+		}
 
 		this.locationTitle = pageInfo.getTitle('NextThought');
 		this.setTitle(this.getTitlePrefix() + this.locationTitle);
@@ -391,12 +397,17 @@ Ext.define('NextThought.view.content.View', {
 
 
 	_setCourse: function(instance) {
+		if (this.currentCourse === instance) {
+			return;
+		}
+
 		//Temporary stop gap
 		var info = instance && instance.__getLocationInfo(),
 			catalogEntry = instance && instance.getCourseCatalogEntry(),
 			preview = catalogEntry && catalogEntry.get('Preview'),
 			background = info && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
 
+		this.currentCourse = instance;
 		this.reader.clearLocation();
 
 		this.setBackground(background);
@@ -430,10 +441,13 @@ Ext.define('NextThought.view.content.View', {
 
 		var e = instance.getCourseCatalogEntry();
 
-		history.pushState({content: {
-			location: e.get('ContentPackageNTIID'),
-			course: instance.getId()
-		}}, e.get('Title'));
+		history.pushState({
+			active: 'content',
+			content: {
+				location: e.get('ContentPackageNTIID'),
+				course: instance.getId()
+			}
+		}, e.get('Title'));
 	},
 
 
