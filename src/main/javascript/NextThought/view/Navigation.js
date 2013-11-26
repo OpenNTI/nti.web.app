@@ -211,6 +211,11 @@ Ext.define('NextThought.view.Navigation', {
 
 	updateCurrent: function(pop, rec) {
 
+		if (rec instanceof NextThought.model.Title && rec.get('isCourse')) {
+			//figure out the course record?
+			return this;
+		}
+
 		rec = this.track(rec, pop === true);
 
 		if (rec) {
