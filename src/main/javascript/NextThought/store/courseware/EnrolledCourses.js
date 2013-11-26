@@ -32,13 +32,19 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 
 	constructor: function() {
-		var p = this.promiseToLoaded = new Promise();
+		var p = this.promiseToLoaded = new Promise(),
+			me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			single: true,
-			load: function() { p.fulfill(); }
+			load: function() { p.fulfill(me); }
 		});
+	},
+
+
+	onceLoaded: function() {
+		return this.promiseToLoaded;
 	},
 
 
@@ -46,7 +52,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		var promise = new Promise(),
 			me = this;
 
-		this.promiseToLoaded.then(function() {
+		this.onceLoaded().then(function() {
 			me.each(function(r) {
 				var instance = r.get('CourseInstance');
 				if (instance && instance.getId() === courseInstanceId) {
