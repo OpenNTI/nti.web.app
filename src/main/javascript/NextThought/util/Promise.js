@@ -118,5 +118,77 @@ var Promise = (function() {
 
 	p.State = State;
 
+
+	p.pool = function() {
+		// get promises
+		var promises = [].slice.call(arguments, 0),
+			values = [],
+			state = State.FULFILLED,
+			toGo = promises.length, i,
+		// promise to return
+			promise = Object.create(Promise);
+
+		values.length = promises.length;
+
+		// whenever a promise completes
+		function checkFinished() {
+			// check if all the promises have returned
+			if (toGo) {
+				return;
+			}
+			// set the state with all values if all are complete
+			promise.changeState(state, values);
+		}
+
+		function prime(index) {
+			promises[index].then(function(value) {
+				// on success
+				values[index] = value;
+				toGo--;
+				checkFinished();
+			}, function(value) {
+				// on error
+				values[index] = value;
+				toGo--;
+				// set error state
+				state = State.REJECTED;
+				checkFinished();
+			});
+		}
+
+		// whenever a promise finishes check to see if they're all finished
+		for (i = 0; i < promises.length; i++) {
+			prime(i);
+		}
+
+		// promise at the end
+		return promise;
+	};
+
+	p.toPromise = function(fn) {
+		return function() {
+
+			// promise to return
+			var promise = new Promise();
+
+			//on error we want to reject the promise
+			function errorFn(data) {
+				promise.reject(data);
+			}
+
+			// fulfill on success
+			function successFn(data) {
+				promise.fulfill(data);
+			}
+
+			// run original function with the error and success functions
+			// that will set the promise state when done
+			fn.apply(this,
+					[errorFn, successFn].concat([].slice.call(arguments, 0)));
+
+			return promise;
+		};
+	};
+
 	return p;
 }());
