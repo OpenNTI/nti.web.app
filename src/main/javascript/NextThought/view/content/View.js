@@ -479,24 +479,27 @@ Ext.define('NextThought.view.content.View', {
 
 
 	restore: function(state) {
-		state = state.content;
-
-		var course = state.course,
-			ntiid = state.location,
-			tab = state.activeTab,
-			topic = state.current_topic,
-			forum = state.current_forum,
+		var st = state.content,
+			course = st.course,
+			ntiid = st.location,
+			tab = st.activeTab,
+			topic = st.current_topic,
+			forum = st.current_forum,
 			me = this;
 
-		this.resolveCourse(course, function(instance) {
+		function setupCourseUI(instance) {
 			try {
-				me._setCourse(instance, instance.getCourseCatalogEntry());
+				if (instance) {
+					me._setCourse(instance);
+					me.courseForum.restoreState(forum, topic);
+				}
+
 				me.setActiveTab((tab === 'null') ? null : tab);
 				if (ntiid) {
 					me.reader.setLocation(ntiid, null, true);
+				} else {
+					me.reader.clearLocation();
 				}
-
-				me.courseForum.restoreState(forum, topic);
 			}
 			catch (e) {
 				console.error(e.stack || e.message || e);
@@ -504,18 +507,30 @@ Ext.define('NextThought.view.content.View', {
 			finally {
 				me.fireEvent('finished-restore');
 			}
-		});
+		}
+
+		function noCourse() {
+			console.warn('Dropping state for course that is not accessible.');
+			me.fireEvent('finished-restore');
+			if (state.active === me.id) {
+				me.fireEvent('go-to-library');
+			}
+		}
+
+		me.resolveCourse(course).then(setupCourseUI, noCourse);
 	},
 
 
-	resolveCourse: function(courseInstanceId, callback) {
-		if (!courseInstanceId) {
-			Ext.callback(callback, this, []);
-			return;
+	resolveCourse: function(courseInstanceId) {
+		var promise = new Promise();
+
+		if (courseInstanceId) {
+			promise = Ext.getStore('courseware.EnrolledCourses').getCourse(courseInstanceId);
+		} else {
+			promise.fulfill(undefined);
 		}
 
-		Ext.getStore('courseware.EnrolledCourses').getCourse(courseInstanceId)
-				.then(callback);
+		return promise;
 	},
 
 
