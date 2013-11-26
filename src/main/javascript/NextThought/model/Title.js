@@ -6,37 +6,36 @@ Ext.define('NextThought.model.Title', {
 	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },
-		{ name: 'courseName', type: 'string', defaultValue: ''},
 		{ name: 'icon', type: 'string' },
 		{ name: 'index', type: 'string' },
 		{ name: 'index_jsonp', type: 'string' },
 		{ name: 'installable', type: 'bool' },
-		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
 		{ name: 'root', type: 'string' },
-		{ name: 'title', type: 'string', convert: function(v, m) { return m.raw.courseTitle || v; } }, //if there is a courseTitle use that instead of "title"
+		{ name: 'title', type: 'string' },
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator', defaultValue: ['Author Name Here']},
 		{ name: 'version', type: 'string'},
 		{ name: 'PresentationProperties', type: 'auto'},
 		{ name: 'path', type: 'string', defaultValue: ''},
-		{ name: 'sample', type: 'bool', defaultValue: false, persist: false}
+		{ name: 'sample', type: 'bool', defaultValue: false, persist: false},
+			//for filtering
+		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false}
 	],
 
-	getBoard: function() {
-		return this.board || this.findBoard();
+
+	asUIData: function() {
+		return {
+			id: this.getId(),
+			isCourse: this.get('isCourse'),
+			title: this.get('title'),
+			label: this.get('author'),
+			icon: this.get('icon')
+		};
 	},
 
-	findBoard: function() {
-		if (this.get('isCourse')) {
-			this.board = this.getToc().querySelector('course').getAttribute('discussionBoard');
-		}else {
-			this.board = null;
-		}
 
-		return this.board;
-	},
-
+	/** @deprecated Use {@link NextThought.model.courseware.CourseInstance#getScope()} instead */
 	getScope: function(scope) {
-		var toc = this.getToc(),
+		var toc = (this.toc = this.toc || Library.getToc(this)),
 			entities = toc && toc.querySelectorAll('scope[type="' + scope + '"] entry'),
 			values = [];
 
@@ -47,8 +46,8 @@ Ext.define('NextThought.model.Title', {
 		return values;
 	},
 
-	getToc: function() {
-		this.toc = this.toc || Library.getToc(this);
-		return this.toc;
+
+	fireNavigationEvent: function(eventSource) {
+		eventSource.fireEvent('set-last-location-or-root', this.get('NTIID'));
 	}
 });

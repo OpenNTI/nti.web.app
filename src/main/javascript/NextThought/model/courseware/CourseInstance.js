@@ -2,8 +2,25 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
+		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false }
 	],
+
+
+	asUIData: function() {
+		var me = this;
+		me._uiData = me._uiData || (function() {
+			var e = me.getCourseCatalogEntry();
+			return {
+				id: me.getId(),
+				isCourse: true,
+				title: e.get('Title'),
+				label: e.get('ProviderUniqueID'),
+				icon: e.get('icon')
+			};
+		}());
+		return me._uiData;
+	},
 
 
 	getAvailableCourses: function() {
@@ -42,5 +59,15 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	__getLocationInfo: function() {
 		return ContentUtils.getLocation(this.getCourseCatalogEntry().get('ContentPackageNTIID'));
+	},
+
+
+	getScope: function() {
+		return [];
+	},
+
+
+	fireNavigationEvent: function(eventSource) {
+		eventSource.fireEvent('course-selected', this, this.getCourseCatalogEntry());
 	}
 });

@@ -235,14 +235,15 @@ Ext.define('NextThought.view.Navigation', {
 
 	updateUI: function(rec) {
 		var cls = 'is-book',
-			img = this.imgEl;
+			img = this.imgEl,
+			data = rec.asUIData();
 
 		img.removeCls(cls);
-		img[rec.get('isCourse') ? 'removeCls' : 'addCls'](cls);
-		img.setStyle('background-image', 'url(' + rec.get('icon') + ')');
+		img[data.isCourse ? 'removeCls' : 'addCls'](cls);
+		img.setStyle('background-image', 'url(' + data.icon + ')');
 
-		this.providerEl.update(rec.get('courseName') || rec.get('Creator'));
-		this.titleEl.update(rec.get('title'));
+		this.providerEl.update(data.label);
+		this.titleEl.update(data.title);
 	},
 
 
@@ -266,6 +267,7 @@ Ext.define('NextThought.view.Navigation', {
 
 		clearTimeout(this.timers[viewId]);
 	},
+
 
 	showMenu: function(menu, delay) {
 		var hideTimer, handlers;
