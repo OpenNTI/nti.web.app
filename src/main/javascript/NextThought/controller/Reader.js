@@ -188,6 +188,7 @@ Ext.define('NextThought.controller.Reader', {
 			}
 		}
 
+		this.getContentView()._setCourse(null);
 		this.setLocation(lastNtiid, call, silent === true);
 	},
 
