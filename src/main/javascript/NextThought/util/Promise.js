@@ -126,9 +126,14 @@ var Promise = (function() {
 			state = State.FULFILLED,
 			toGo = promises.length, i,
 		// promise to return
-			promise = Object.create(Promise);
+			promise = new Promise();
+
+		if (Object.prototype.toString.call(promises[0]) === '[object Array]') {
+			promises = promises[0];
+		}
 
 		values.length = promises.length;
+
 
 		// whenever a promise completes
 		function checkFinished() {
