@@ -83,23 +83,47 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 	fillStore: function() {
 		this.allowTracking = true;
+
 		var store,
+			courses = Ext.getStore('courseware.EnrolledCourses'),
 			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
+
+		function getRecord(v, i, a) {
+			var promise = new Promise(),
+				title;
+
+			function f(o) {
+				a[i] = o;
+				if (o) {
+					o.lastTracked = Ext.Date.parse(v.l, 'timestamp');
+				}
+				promise.fulfill(a);
+			}
+
+			if (v.c) {
+				courses.getCourse(v.i).then(f);
+			} else {
+				title = Library.getTitle(v.i);
+
+				if (title) { f(title); }
+				else { promise.reject('Not Found'); }
+			}
+
+			return promise;
+		}
+
 		try {
 			store = this.getStore();
-			s = Ext.Array.map(s, function(o) {
-				var t = Library.getTitle(o.index);
-				if (t) {t.lastTracked = Ext.Date.parse(o.lastTracked, 'timestamp');}
-				return t;
-			});
 
-			store.loadRecords(Ext.Array.clean(s));
-			if (store.getCount()) {
-				this.fireEvent('update-current', store.getAt(0));
-			}
+			Promise.pool(Ext.Array.map(s, getRecord)).then(function(records) {
+				store.loadRecords(Ext.Array.clean(records));
+				if (store.getCount()) {
+					this.fireEvent('update-current', store.getAt(0));
+				}
+			});
 		}
 		catch (e) {
-			console.warn(e.message);
+			console.warn(e.stack || e.message || e);
 		}
 	},
 
