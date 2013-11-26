@@ -91,7 +91,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		history.beginTransaction('navigation-transaction');
 
 		try {
-			this.getMainNav().updateCurrent(false, catalogEntry);
+			this.getMainNav().updateCurrent(false, instance);
 			this.getContentView().onCourseSelected(instance, catalogEntry);
 			return true;
 		} finally {
