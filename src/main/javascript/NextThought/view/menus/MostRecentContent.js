@@ -40,8 +40,8 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 						{
 							cls: 'wrap',
 							cn: [
-								{tag: 'tpl', 'if': 'courseName', cn: { cls: 'courseName', html: '{courseName}'}},
-								{tag: 'tpl', 'if': '!courseName', cn: { cls: 'provider', html: '{author}'}},
+								{ tag: 'tpl', 'if': 'isCourse', cn: { cls: 'courseName', html: '{label}'}},
+								{ tag: 'tpl', 'if': '!isCourse', cn: { cls: 'provider', html: '{label}'}},
 								{ cls: 'title', html: '{title}'}
 							]
 						}
@@ -49,6 +49,13 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 				}},
 				{ cls: 'more', cn: [{},{},{}]}
 			]),
+			xhooks: {
+				prepareData: function(data, index, record) {
+					var i = this.callParent(arguments);
+					Ext.apply(i, record.asUIData());
+					return i;
+				}
+			},
 			listeners: {
 				scope: this,
 				select: 'onSelected',
@@ -110,7 +117,13 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	getStore: function() {
 		if (!this.store) {
 			this.store = new Ext.data.Store({
-				model: NextThought.model.Title,
+				fields: [
+					{ name: 'id', type: 'string' },
+					{ name: 'isCourse', type: 'bool' },
+					{ name: 'title', type: 'string' },
+					{ name: 'label', type: 'string' },
+					{ name: 'icon', type: 'string' }
+				],
 				proxy: 'memory',
 				sorters: [
 					function(a, b) {
@@ -170,7 +183,11 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			s = s.getRange();
 			Ext.each(s, function(t, i) {
 
-				s[i] = {index: t.get('index'), lastTracked: t.lastTracked};
+				s[i] = {
+					c: t.get('isCourse'),
+					i: t.getId(),
+					l: t.lastTracked
+				};
 			});
 			//Cant save records to local storage...so must save just the id's or the index of the content
 			PersistentStorage.updateProperty(this.persistenceKey, this.persistenceProperty, s);
@@ -180,7 +197,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 	onSelected: function(selModel, record) {
 		selModel.deselect(record);
-		this.fireEvent('set-last-location-or-root', record.get('NTIID'));
+		record.fireNavigationEvent(this);
 		this.hide();
 	},
 
