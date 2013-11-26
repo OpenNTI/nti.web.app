@@ -84,7 +84,9 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	showProfile: function(user, args, callback) {
+		history.beginTransaction('showing-profile');
 		if (!this.fireEvent('before-show-profile') || !this.fireEvent('show-view', 'profile')) {
+			history.endTransaction('showing-profile');
 			return false;
 		}
 
@@ -96,6 +98,7 @@ Ext.define('NextThought.controller.Profile', {
 		v.on('finished-restore', function() {
 			console.debug('Finished restore', o);
 			history.pushState(o, document.title, url);
+			history.endTransaction('showing-profile');
 			Ext.callback(callback, null, [user]);
 		},this, {single: true});
 
