@@ -20,6 +20,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 		ownerNode: null
 	},
 
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.view = this.add({
@@ -100,13 +101,16 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 				promise.fulfill(o);
 			}
 
-			if (v.c) {
-				courses.getCourse(v.i).then(f);
+			function reject() {
+				promise.fulfill(null);
+			}
+
+			if (v.c && ParseUtils.isNTIID(v.i)) {
+				courses.getCourse(v.i).then(f, reject);
 			} else {
 				title = Library.getTitle(v.i);
-
-				if (title) { f(title); }
-				else { promise.reject('Not Found'); }
+				if (title && !title.get('isCourse')) { f(title); }
+				else { reject(); }
 			}
 
 			return promise;
