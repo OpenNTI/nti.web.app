@@ -68,6 +68,6 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	fireNavigationEvent: function(eventSource) {
-		eventSource.fireEvent('course-selected', this, this.getCourseCatalogEntry());
+		eventSource.fireEvent('course-selected', this);
 	}
 });

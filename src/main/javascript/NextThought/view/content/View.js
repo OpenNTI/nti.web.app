@@ -96,7 +96,7 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.on({
-			'switch-to-reader': 'switchViewToReader',
+			'switch-to-reader': 'showContentReader',
 			'beforeactivate': 'onBeforeActivation',
 			'beforedeactivate': 'onBeforeDeActivation',
 			'deactivate': 'onDeactivated',
@@ -356,10 +356,11 @@ Ext.define('NextThought.view.content.View', {
 
 
 	onLocationCleared: function() {
-		this.setActiveTab('course-book');
-		this.courseBook.getLayout().setActiveItem('main-reader-view');
+		delete this.reader.ntiidOnFrameReady;
 		delete this.tabs;
 		delete this.backgroundUrl;
+		this.setActiveTab('course-book');
+		this.courseBook.getLayout().setActiveItem('main-reader-view');
 		if (this.isVisible(true)) {
 			this.fireEvent('update-tabs', this);
 			this.updateBackground();
@@ -380,24 +381,26 @@ Ext.define('NextThought.view.content.View', {
 	onNavigateComplete: function(pageInfo) {
 		if (!pageInfo || !pageInfo.isModel) {return;}
 
-		this.activateView(this.courseBook);
-
-		this.courseBook.getLayout().setActiveItem('main-reader-view');
 		this.down('content-toolbar').show();
+
+		this.showContentReader();
 
 		this.locationTitle = pageInfo.getTitle('NextThought');
 		this.setTitle(this.getTitlePrefix() + this.locationTitle);
 	},
 
 
-	_setCourse: function(instance, catalogEntry) {
+	_setCourse: function(instance) {
 		//Temporary stop gap
-		var info = instance.__getLocationInfo();
+		var info = instance && instance.__getLocationInfo(),
+			catalogEntry = instance && instance.getCourseCatalogEntry(),
+			preview = catalogEntry && catalogEntry.get('Preview'),
+			background = info && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
 
 		this.reader.clearLocation();
 
-		this.setBackground(getURL(info.toc.querySelector('toc').getAttribute('background'), info.root));
-		this.enableTabs(catalogEntry.get('Preview') ? [] : true);
+		this.setBackground(background);
+		this.enableTabs(preview ? [] : !!instance);
 
 
 		Ext.each([
@@ -407,22 +410,30 @@ Ext.define('NextThought.view.content.View', {
 			this.courseInfo
 		], function(e) {
 			if (e.courseChanged) {
-				e.courseChanged(instance, catalogEntry);
+				e.courseChanged(instance);
 			}
 		});
 
 		this.updateTabs();
-		this.showCourseNavigation();
+		if (instance) {
+			this.showCourseNavigation();
+		} else {
+			this.showContentReader();
+		}
+
+		this.setActiveTab(preview ? 'course-info' : 'course-book');
 	},
 
 
-	onCourseSelected: function(instance, catalogEntry) {
-		this._setCourse(instance, catalogEntry);
+	onCourseSelected: function(instance) {
+		this._setCourse(instance);
+
+		var e = instance.getCourseCatalogEntry();
 
 		history.pushState({content: {
-			location: '',
+			location: e.get('ContentPackageNTIID'),
 			course: instance.getId()
-		}}, catalogEntry.get('Title'));
+		}}, e.get('Title'));
 	},
 
 
@@ -432,8 +443,9 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	switchViewToReader: function() {
+	showContentReader: function() {
 		this.courseBook.layout.setActiveItem('main-reader-view');
+		this.setActiveTab('course-book');
 	},
 
 

@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	courseChanged: function(courseInstance, catalogEntry) {
+	courseChanged: function(courseInstance) {
 		if (!courseInstance) {
 			this.tileContainer.removeAll(true);
 			return;

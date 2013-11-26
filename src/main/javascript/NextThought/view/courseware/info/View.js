@@ -24,8 +24,9 @@ Ext.define('NextThought.view.courseware.info.View', {
 	},
 
 
-	courseChanged: function(courseInstance, catalogEntry) {
-		var me = this;
+	courseChanged: function(courseInstance) {
+		var me = this,
+			catalogEntry = courseInstance && courseInstance.getCourseCatalogEntry();
 
 		function update(info) {
 			me.hasInfo = !!info;
