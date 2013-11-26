@@ -390,7 +390,7 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	onCourseSelected: function(instance, catalogEntry) {
+	_setCourse: function(instance, catalogEntry) {
 		//Temporary stop gap
 		var info = instance.__getLocationInfo();
 
@@ -413,6 +413,11 @@ Ext.define('NextThought.view.content.View', {
 
 		this.updateTabs();
 		this.showCourseNavigation();
+	},
+
+
+	onCourseSelected: function(instance, catalogEntry) {
+		this._setCourse(instance, catalogEntry);
 
 		history.pushState({content: {
 			location: '',
@@ -473,7 +478,7 @@ Ext.define('NextThought.view.content.View', {
 
 		this.resolveCourse(course, function(instance) {
 			try {
-				me.onCourseSelected(instance, instance.getCourseCatalogEntry());
+				me._setCourse(instance, instance.getCourseCatalogEntry());
 				me.setActiveTab((tab === 'null') ? null : tab);
 				if (ntiid) {
 					me.reader.setLocation(ntiid, null, true);
