@@ -1674,7 +1674,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			sel = this.el.select('.content > *');
 
 		sel.each(function(div) {
-			var html, tmp, dom;
+			var html, parsed, tmp, dom;
 			try {
 				//don't let manipulations here effect the dom
 				dom = Ext.getDom(div).cloneNode(true);
@@ -1698,8 +1698,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
 				}
-				html = html.replace(/\u200B/g, '');
-				out.push(html);
+				parsed = html.replace(/\u200B/g, '');
+				
+				//if the html was only the no width space don't add it to the parts
+				if(!(html.length === 1 && parsed.length === 0)){
+					out.push(html);
+				}
 			}
 			catch (er) {
 				console.warn('Oops, ' + er.message);
