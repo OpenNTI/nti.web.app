@@ -97,7 +97,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 				if (o) {
 					o.lastTracked = Ext.Date.parse(v.l, 'timestamp');
 				}
-				promise.fulfill(a);
+				promise.fulfill(o);
 			}
 
 			if (v.c) {
