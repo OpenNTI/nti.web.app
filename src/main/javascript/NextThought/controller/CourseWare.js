@@ -82,7 +82,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onCourseSelected: function(instance, catalogEntry) {
+	onCourseSelected: function(instance) {
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
@@ -92,7 +92,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		try {
 			this.getMainNav().updateCurrent(false, instance);
-			this.getContentView().onCourseSelected(instance, catalogEntry);
+			this.getContentView().onCourseSelected(instance);
 			return true;
 		} finally {
 			history.endTransaction('navigation-transaction');
