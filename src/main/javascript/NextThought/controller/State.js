@@ -584,24 +584,9 @@ Ext.define('NextThought.controller.State', {
 				return defaultState;
 			}
 
-			//migrate
-			if (lastLocation.location) {
-				lastLocation.content = {location: lastLocation.location};
-				delete lastLocation.location;
-			}
-
-			//migrate
-			if (lastLocation.library && lastLocation.library.location) {
-				lastLocation.content = lastLocation.library;
-				delete lastLocation.library;
-				if (lastLocation.active === 'library') {
-					lastLocation.active = 'content';
-				}
-			}
 
 			result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;
 			if (location.hash) {
-				console.debug('fragment trumps state', location.hash);
 				Ext.apply(result, this.interpretFragment(location.hash));
 			}
 			return result;
