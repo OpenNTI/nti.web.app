@@ -76,7 +76,6 @@ Ext.define('NextThought.view.Views', {
 
 
 	afterRender: function() {
-		console.log('Rendered Views');
 		if (Ext.is.iPad) {
 			Ext.apply(this, { minHeight: 615 });
 		}
@@ -224,13 +223,7 @@ Ext.define('NextThought.view.Views', {
 
 
 	onViewChanged: function(to, from) {
-		function getName(v) {
-			return (v && v.id) || 'null';
-		}
-
-		console.debug('view changed to: ' + getName(to) + ', from: ' + getName(from));
-
-		this.updateTabs(to && to.getTabs && to.getTabs(), to);
+		this.updateTabs(to && to.getTabs && to.getTabs());
 	},
 
 
