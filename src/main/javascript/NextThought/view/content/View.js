@@ -423,16 +423,12 @@ Ext.define('NextThought.view.content.View', {
 
 	showCourseNavigation: function() {
 		this.courseBook.getLayout().setActiveItem('course-nav');
-		this.activateView(this.courseBook);
+		this.setActiveTab('course-book');
 	},
 
 
-	activateView: function(view) {
-		try {
-			this.getLayout().setActiveItem(view);
-		} catch (e) {
-			console.warn(e.stack || e.message);
-		}
+	switchViewToReader: function() {
+		this.courseBook.layout.setActiveItem('main-reader-view');
 	},
 
 
@@ -453,11 +449,6 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	switchViewToReader: function() {
-		this.courseBook.layout.setActiveItem('main-reader-view');
-	},
-
-
 	setActiveTab: function(tab) {
 		if (this.rendered) {
 			this.layout.setActiveItem(tab || 'course-book');
@@ -471,27 +462,43 @@ Ext.define('NextThought.view.content.View', {
 
 
 	restore: function(state) {
-		var ntiid = state.content.location,
-			tab = state.content.activeTab,
-			topic = state.content.current_topic,
-			forum = state.content.current_forum;
+		state = state.content;
 
-		try {
-			this.setActiveTab((tab === 'null') ? null : tab);
-			if (!ntiid) {
-				console.warn('There was no ntiid to restore!');
-				return;
+		var course = state.course,
+			ntiid = state.location,
+			tab = state.activeTab,
+			topic = state.current_topic,
+			forum = state.current_forum,
+			me = this;
+
+		this.resolveCourse(course, function(instance) {
+			try {
+				me.onCourseSelected(instance, instance.getCourseCatalogEntry());
+				me.setActiveTab((tab === 'null') ? null : tab);
+				if (ntiid) {
+					me.reader.setLocation(ntiid, null, true);
+				}
+
+				me.courseForum.restoreState(forum, topic);
 			}
+			catch (e) {
+				console.error(e.stack || e.message || e);
+			}
+			finally {
+				me.fireEvent('finished-restore');
+			}
+		});
+	},
 
-			this.courseForum.restoreState(forum, topic);
-			this.reader.setLocation(ntiid, null, true);
+
+	resolveCourse: function(courseInstanceId, callback) {
+		if (!courseInstanceId) {
+			Ext.callback(callback, this, []);
+			return;
 		}
-		catch (e) {
-			console.error(e.message, '\n\n', e.stack || e, '\n\n');
-		}
-		finally {
-			this.fireEvent('finished-restore');
-		}
+
+		Ext.getStore('courseware.EnrolledCourses').getCourse(courseInstanceId)
+				.then(callback);
 	},
 
 
