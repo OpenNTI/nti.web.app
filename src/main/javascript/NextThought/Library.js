@@ -83,7 +83,6 @@ Ext.define('NextThought.Library', {
 	},
 
 
-
 	purgeTocs: function() {
 		var me = this;
 
@@ -230,8 +229,7 @@ Ext.define('NextThought.Library', {
 	libraryLoaded: function(callback) {
 		var me = this,
 			store = this.getStore(),
-			count = this.getStore().getCount(),
-			toRemove = [];
+			count = this.getStore().getCount();
 
 
 		if (count === 0) {
@@ -269,15 +267,12 @@ Ext.define('NextThought.Library', {
 		//Loads TOC async, so once the last one loads, callback if available
 		this.each(function(o) {
 			if (!o.get || !o.get('index')) {
-				toRemove.push(o);
-				count--;
+				setupToc(o);
 				return;
 			}
 
 			me.loadToc(o, o.get('index'), o.get('NTIID'), setupToc);
 		});
-
-		this.getStore().remove(toRemove);
 	},
 
 
@@ -381,6 +376,7 @@ Ext.define('NextThought.Library', {
 
 		return getNodesForKey(['ntiid', 'target-ntiid']);
 	},
+
 
 	resolve: function(toc, title, containerId, report) {
 		var elts, ix, topic, EA = Ext.Array;
