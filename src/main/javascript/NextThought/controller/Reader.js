@@ -163,7 +163,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		if (pi && pi.isPartOfCourseNav()) {
 			r.clearLocation();
-			this.getContentView().showCourseNavigation();
+			this.getContentView().showCourseNavigationAt(pi);
 			//update state... resolve which legacy course this is and set it.
 			return true;
 		}

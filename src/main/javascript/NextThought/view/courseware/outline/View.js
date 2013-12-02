@@ -61,7 +61,7 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		},
 		select: function(s, r) {
 			if (this.fromClick || this.fromKey) {
-				//this.fireEvent('set-location', r.getId());
+				this.fireEvent('set-location', r.getId());
 			}
 			delete this.fromClick;
 			delete this.fromKey;
@@ -105,24 +105,18 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
-	maybeChangeStoreOrSelection: function(ntiid, store) {
+	maybeChangeSelection: function(ntiid) {
 		var r, sel, C = ContentUtils,
+			store = this.store,
 			lineage = C.getLineage(ntiid),
 			root = lineage.last();
-
-		if (this.store !== store) {
-			this.clear();
-			if (store) {
-				this.bindStore(store);
-			}
-		}
 
 		//start from the page we're on, and go up to find its associated course node...(TODO: look at the course and find the leaf)
 		while (!r && lineage.length) {
 			console.log('lineage', lineage);
 			r = store.findRecord('NTIID', lineage.shift(), false, true, true);
-
 		}
+
 		//if we didn't find one, select the first item IF the page we're on matches the store's content.
 		if (!r) {
 			sel = this.getSelectionModel().getSelection()[0];
@@ -142,5 +136,18 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		} else {
 			this.getSelectionModel().deselectAll();
 		}
+	},
+
+
+	maybeChangeStoreOrSelection: function(ntiid, store) {
+
+		if (this.store !== store) {
+			this.clear();
+			if (store) {
+				this.bindStore(store);
+			}
+		}
+
+		this.maybeChangeSelection(ntiid);
 	}
 });

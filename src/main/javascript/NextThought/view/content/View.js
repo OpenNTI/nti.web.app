@@ -458,6 +458,18 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
+	showCourseNavigationAt: function(pageInfo) {
+		var c = this.courseNav.navigation,
+			id = pageInfo.getId();
+		this.showCourseNavigation();
+		//Temp HACK:
+		c.maybeChangeSelection(id);
+		this.pushState({
+			location: id
+		});
+	},
+
+
 	showContentReader: function() {
 		this.courseBook.layout.setActiveItem('main-reader-view');
 		this.setActiveTab('course-book');
@@ -512,6 +524,8 @@ Ext.define('NextThought.view.content.View', {
 				me.setActiveTab((tab === 'null') ? null : tab);
 				if (ntiid) {
 					me.reader.setLocation(ntiid, null, true);
+					//Temp HACK:
+					me.courseNav.navigation.maybeChangeSelection(ntiid);
 				} else {
 					me.reader.clearLocation();
 				}
@@ -559,10 +573,20 @@ Ext.define('NextThought.view.content.View', {
 
 
 	getFragment: function() {
-		var o;
+		var o,
+			ai = this.layout.getActiveItem(),
+			ntiid;
 
-		if (this.layout.getActiveItem().id === 'course-book') {
-			o = ParseUtils.parseNTIID(this.reader.getLocation().NTIID);
+		if (ai.id === 'course-book') {
+			ai = ai.layout.getActiveItem();
+			if (ai === this.reader) {
+				ntiid = this.reader.getLocation().NTIID;
+			} else if (ai === this.courseNav) {
+				ntiid = ai.navigation.getSelectionModel().getSelection()[0];
+				ntiid = ntiid && ntiid.getId();
+			}
+
+			o = ParseUtils.parseNTIID(ntiid);
 		}
 		return o ? o.toURLSuffix() : location.pathname;
 	}
