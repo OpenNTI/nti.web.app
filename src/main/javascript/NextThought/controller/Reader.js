@@ -198,6 +198,7 @@ Ext.define('NextThought.controller.Reader', {
 			}
 		}
 
+		this.getContentView()._setCourse(null);
 		this.setLocation(lastNtiid, call, silent === true);
 	},
 
@@ -278,7 +279,7 @@ Ext.define('NextThought.controller.Reader', {
 			t = pageInfo && pageInfo.get('NTIID'),
 		//TEMP:
 			cw = this.getController('CourseWare'),
-			trackFn = Ext.bind(mn.updateCurrent, mn, [false], true);
+			trackFn = Ext.bind(mn.updateCurrent, mn, [false], 0);
 
 		pg[fn]();
 		pw[fn]();
