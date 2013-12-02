@@ -103,6 +103,8 @@ Ext.define('NextThought.view.content.View', {
 			'activate': 'onActivated',
 			'main-tab-clicked': 'onTabClicked'
 		});
+
+		this.fireEvent('get-course-hooks', this);
 	},
 
 
@@ -376,6 +378,14 @@ Ext.define('NextThought.view.content.View', {
 		if (!pageInfo || !pageInfo.isModel) {return;}
 
 		this.down('content-toolbar').show();
+
+		//TEMP:
+		var sc = Ext.bind(this._setCourse, this);
+		if (this.isPartOfCourse(pageInfo)) {
+			this.getCourseInstance(pageInfo).then(sc, function(reason) {
+				console.error('Could not set course from pageInfo: ', reason);
+			});
+		}
 
 		//TEMP:
 		if (pageInfo.isPartOfCourseNav()) {

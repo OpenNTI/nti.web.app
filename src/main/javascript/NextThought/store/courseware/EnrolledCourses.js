@@ -66,5 +66,41 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		});
 
 		return promise;
+	},
+
+
+	findCourse: function() {
+		var promise = new Promise(),
+			me = this,
+			args = Ext.Array.clone(arguments);
+
+		this.onceLoaded().then(function() {
+			var instance = me.find.apply(me, args);
+			if (instance >= 0) {
+				promise.fulfill(me.getAt(instance));
+			} else {
+				promise.reject('Not found');
+			}
+		});
+
+		return promise;
+	},
+
+
+	findCourseBy: function() {
+		var promise = new Promise(),
+			me = this,
+			args = Ext.Array.clone(arguments);
+
+		this.onceLoaded().then(function() {
+			var instance = me.findBy.apply(me, args);
+			if (instance >= 0) {
+				promise.fulfill(me.getAt(instance));
+			} else {
+				promise.reject('Not found');
+			}
+		});
+
+		return promise;
 	}
 });

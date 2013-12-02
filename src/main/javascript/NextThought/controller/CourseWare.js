@@ -25,17 +25,29 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	init: function() {
+		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
 		this.mon(this.application, 'session-ready', 'onSessionReady');
 
 		var control = {
 			component: {
+				'content-view-container': {
+					'get-course-hooks': 'applyCourseHooks'
+				},
 				'*': {
-					 'course-selected': 'onCourseSelected'
+					'course-selected': 'onCourseSelected'
 				}
 			}
 		};
 
 		this.listen(control, this);
+	},
+
+
+	applyCourseHooks: function(observable) {
+		Ext.apply(observable, {
+			getCourseInstance: Ext.bind(this.__getCourseInstance, this),
+			isPartOfCourse: Ext.bind(this.__isPartOfCourse, this)
+		});
 	},
 
 
@@ -62,6 +74,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
+		this.mon(store, 'load', 'onAvailableCoursesLoaded');
 		store.load();
 	},
 
@@ -73,6 +86,20 @@ Ext.define('NextThought.controller.CourseWare', {
 		}
 		this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
+	},
+
+
+	onAvailableCoursesLoaded: function(store) {
+		var me = this,
+			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
+		store.each(function(o) {
+			var k = o.get('ContentPackageNTIID');
+			if (!contentMap.hasOwnProperty(k)) {
+				contentMap[k] = o.get('href');
+			} else {
+				console.error('Assertion Failed! There is another mapping to content package: ' + k);
+			}
+		});
 	},
 
 
@@ -97,5 +124,46 @@ Ext.define('NextThought.controller.CourseWare', {
 		} finally {
 			history.endTransaction('navigation-transaction');
 		}
+	},
+
+
+	__isPartOfCourse: function(thing) {
+		return Boolean(this.__getCourseMapping(thing));
+	},
+
+
+	/**
+	 *
+	 * @param {String|NextThought.model.PageInfo} thing A Content NTIID or pageInfo
+	 * @private
+	 */
+	__getCourseMapping: function(thing) {
+		var ifo = ContentUtils.getLocation(thing),
+			title = ifo && ifo.title,
+			ntiid = title && title.get && title.get('NTIID');
+		return this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP[ntiid];
+	},
+
+
+	__getCourseInstance: function(thing) {
+		var s = Ext.getStore('courseware.EnrolledCourses'),
+			m = this.__getCourseMapping(thing),
+			p = new Promise();
+
+
+		s.findCourseBy(function(c) {
+			var i = c.get('CourseInstance'),
+				links = i && i.get('Links'),
+				href = links && links.getRelHref('CourseCatalogEntry');
+			return href === m;
+		}).then(
+				function(enrollemnt) {
+					p.fulfill(enrollemnt.get('CourseInstance'));
+				},
+				function(reason) {
+					p.reject(reason);
+				});
+
+		return p;
 	}
 });
