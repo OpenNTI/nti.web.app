@@ -32,6 +32,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
 			courseNavStore = courseInstance.getNavigationStore();
+			if (!courseNavStore) {
+				return;
+			}
 
 			if (me.el) {
 				me.el.mask('Loading...');
